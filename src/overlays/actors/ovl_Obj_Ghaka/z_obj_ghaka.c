@@ -97,16 +97,15 @@ void func_80B3C39C(ObjGhaka* this, GlobalContext* globalCtx) {
 }
 
 void func_80B3C4E0(ObjGhaka* this, GlobalContext* globalCtx) {
-    s32 temp_v0 = func_80152498(&globalCtx->msgCtx);
+    s32 talkState = func_80152498(&globalCtx->msgCtx);
 
-    if (temp_v0 == 5) {
+    if (talkState == 5) {
         if (func_80147624(globalCtx)) {
             globalCtx->msgCtx.unk11F22 = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             func_80B3C260(this);
         }
-        // Could be fake, but helps match
-    } else if (temp_v0 == 4) {
+    } else if (talkState == 4) {
         if (func_80147624(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:

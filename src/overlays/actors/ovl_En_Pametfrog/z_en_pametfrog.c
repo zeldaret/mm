@@ -99,8 +99,38 @@ const ActorInit En_Pametfrog_InitVars = {
 };
 
 static DamageTable sDamageTable = {
-    0x10, 0x01, 0x00, 0x01, 0x01, 0x01, 0x00, 0x10, 0x01, 0x01, 0x01, 0x22, 0x32, 0x42, 0x01, 0x10,
-    0x01, 0x02, 0x10, 0x50, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01,
+    /* Deku Nut       */ DMG_ENTRY(0, 0x1),
+    /* Deku Stick     */ DMG_ENTRY(1, 0x0),
+    /* Horse trample  */ DMG_ENTRY(0, 0x0),
+    /* Explosives     */ DMG_ENTRY(1, 0x0),
+    /* Zora boomerang */ DMG_ENTRY(1, 0x0),
+    /* Normal arrow   */ DMG_ENTRY(1, 0x0),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
+    /* Hookshot       */ DMG_ENTRY(0, 0x1),
+    /* Goron punch    */ DMG_ENTRY(1, 0x0),
+    /* Sword          */ DMG_ENTRY(1, 0x0),
+    /* Goron pound    */ DMG_ENTRY(1, 0x0),
+    /* Fire arrow     */ DMG_ENTRY(2, 0x2),
+    /* Ice arrow      */ DMG_ENTRY(2, 0x3),
+    /* Light arrow    */ DMG_ENTRY(2, 0x4),
+    /* Goron spikes   */ DMG_ENTRY(1, 0x0),
+    /* Deku spin      */ DMG_ENTRY(0, 0x1),
+    /* Deku bubble    */ DMG_ENTRY(1, 0x0),
+    /* Deku launch    */ DMG_ENTRY(2, 0x0),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x1),
+    /* Zora barrier   */ DMG_ENTRY(0, 0x5),
+    /* Normal shield  */ DMG_ENTRY(0, 0x0),
+    /* Light ray      */ DMG_ENTRY(0, 0x0),
+    /* Thrown object  */ DMG_ENTRY(1, 0x0),
+    /* Zora punch     */ DMG_ENTRY(1, 0x0),
+    /* Spin attack    */ DMG_ENTRY(1, 0x0),
+    /* Sword beam     */ DMG_ENTRY(1, 0x0),
+    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
+    /* Unblockable    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
+    /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[2] = {
@@ -310,11 +340,11 @@ void EnPametfrog_ShakeCamera(EnPametfrog* this, GlobalContext* globalCtx, f32 ma
     s16 y;
     Vec3f eye;
 
-    y = func_800DFCDC(camera) + 0x8000;
-    eye.x = (Math_SinS(y) * magShakeXZ) + camera->focalPoint.x;
-    eye.y = camera->focalPoint.y + magShakeY;
-    eye.z = (Math_CosS(y) * magShakeXZ) + camera->focalPoint.z;
-    func_8016970C(globalCtx, this->camId, &camera->focalPoint, &eye);
+    y = BINANG_ROT180(func_800DFCDC(camera));
+    eye.x = (Math_SinS(y) * magShakeXZ) + camera->at.x;
+    eye.y = camera->at.y + magShakeY;
+    eye.z = (Math_CosS(y) * magShakeXZ) + camera->at.z;
+    func_8016970C(globalCtx, this->camId, &camera->at, &eye);
 }
 
 void EnPametfrog_StopCutscene(EnPametfrog* this, GlobalContext* globalCtx) {
@@ -322,7 +352,7 @@ void EnPametfrog_StopCutscene(EnPametfrog* this, GlobalContext* globalCtx) {
 
     if (this->camId != 0) {
         camera = Play_GetCamera(globalCtx, this->camId);
-        func_8016970C(globalCtx, 0, &camera->focalPoint, &camera->eye);
+        func_8016970C(globalCtx, 0, &camera->at, &camera->eye);
         this->camId = 0;
         ActorCutscene_Stop(this->cutscene);
         func_800B724C(globalCtx, &this->actor, 6);
@@ -340,7 +370,7 @@ void EnPametfrog_PlaceSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
     poly = NULL;
     this->actor.child->world.pos.x = (Math_SinS(this->actor.shape.rot.y) * 300.0f) + this->actor.world.pos.x;
     this->actor.child->world.pos.z = (Math_CosS(this->actor.shape.rot.y) * 300.0f) + this->actor.world.pos.z;
-    this->actor.child->shape.rot.y = this->actor.shape.rot.y + 0x8000;
+    this->actor.child->shape.rot.y = BINANG_ROT180(this->actor.shape.rot.y);
     vec2.x = this->actor.child->world.pos.x;
     vec2.y = this->actor.child->world.pos.y + 50.0f;
     vec2.z = this->actor.child->world.pos.z;
@@ -377,7 +407,7 @@ void func_8086A724(EnPametfrog* this, GlobalContext* globalCtx) {
         this->unk_2C4 = 3.0f;
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG,
                     this->collider.elements[0].info.bumper.hitPos.x, this->collider.elements[0].info.bumper.hitPos.y,
-                    this->collider.elements[0].info.bumper.hitPos.z, 0, 0, 0, 4);
+                    this->collider.elements[0].info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
     } else if (this->actor.colChkInfo.damageEffect == 3) {
         func_8086A024(this);
     }
@@ -482,7 +512,7 @@ void EnPametfrog_SetupFallOffSnapper(EnPametfrog* this, GlobalContext* globalCtx
     this->actor.params = ENPAMETFROG_FALL_OFF_SNAPPER;
     this->actor.speedXZ = 7.0f;
     this->actor.velocity.y = 15.0f;
-    this->actor.world.rot.y = this->actor.child->world.rot.y + 0x8000;
+    this->actor.world.rot.y = BINANG_ROT180(this->actor.child->world.rot.y);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     this->actor.flags |= 1;
     this->timer = 30;
@@ -506,7 +536,7 @@ void EnPametfrog_FallOffSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
         this->timer--;
     }
 
-    sin = sin_rad(this->timer * (M_PI / 3.0f)) * ((0.02f * (this->timer * (1.0f / 6.0f))) + 0.005f) + 1.0f;
+    sin = sin_rad(this->timer * (M_PI / 3)) * ((0.02f * (this->timer * (1.0f / 6.0f))) + 0.005f) + 1.0f;
     EnPametfrog_ShakeCamera(this, globalCtx, 300.0f * sin, 100.0f * sin);
     if (this->actor.bgCheckFlags & 1) {
         EnPametfrog_StopCutscene(this, globalCtx);
@@ -644,7 +674,7 @@ void EnPametfrog_SetupWallPause(EnPametfrog* this) {
     this->actor.speedXZ = 0.0f;
     this->skelAnime.animPlaybackSpeed = 1.5f;
     if (this->timer != 0) {
-        this->wallRotation = this->unk_2E8.y > 0.0f ? (M_PI / 30.0f) : (-M_PI / 30.0f);
+        this->wallRotation = this->unk_2E8.y > 0.0f ? (M_PI / 30) : (-M_PI / 30);
     } else {
         randFloat = Rand_ZeroFloat(0x2000);
         this->wallRotation = (Rand_ZeroOne() < 0.5f ? -1 : 1) * (0x1000 + randFloat) * (M_PI / (15 * 0x8000));
@@ -931,7 +961,7 @@ void EnPametfrog_SetupSpawnFrog(EnPametfrog* this, GlobalContext* globalCtx) {
     static Vec3f sAccel = { 0.0f, -0.5f, 0.0f };
     static Color_RGBA8 primColor = { 250, 250, 250, 255 };
     static Color_RGBA8 envColor = { 180, 180, 180, 255 };
-    s16 yaw = func_800DFCDC(ACTIVE_CAM) + 0x8000;
+    s16 yaw = BINANG_ROT180(func_800DFCDC(ACTIVE_CAM));
     Vec3f vec1;
     Vec3f vel;
     s32 i;
@@ -961,7 +991,7 @@ void EnPametfrog_SpawnFrog(EnPametfrog* this, GlobalContext* globalCtx) {
     f32 magShake;
 
     this->timer--;
-    magShake = (sin_rad(this->timer * (M_PI / 5.0f)) * ((0.04f * (this->timer * 0.1f)) + 0.02f)) + 1.0f;
+    magShake = (sin_rad(this->timer * (M_PI / 5)) * ((0.04f * (this->timer * 0.1f)) + 0.02f)) + 1.0f;
     EnPametfrog_ShakeCamera(this, globalCtx, 75.0f * magShake, 10.0f * magShake);
     if (this->timer == 0) {
         EnPametfrog_StopCutscene(this, globalCtx);
@@ -1099,7 +1129,7 @@ void func_8086CB4C(EnPametfrog* this) {
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_FROG_DAMAGE);
     func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 20);
     func_800BE5CC(&this->actor, &this->collider, 0);
-    this->actor.shape.rot.y = this->actor.world.rot.y + 0x8000;
+    this->actor.shape.rot.y = BINANG_ROT180(this->actor.world.rot.y);
     this->actionFunc = func_8086CC04;
 }
 
@@ -1146,7 +1176,7 @@ void func_8086CD04(EnPametfrog* this, GlobalContext* globalCtx) {
 
 void EnPametfrog_SetupCallSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
     Vec3f eye;
-    Vec3f focalPoint;
+    Vec3f at;
     s16 yawDiff;
 
     SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06001B08, 3.0f);
@@ -1162,15 +1192,15 @@ void EnPametfrog_SetupCallSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
     }
 
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    focalPoint.x = this->actor.world.pos.x;
-    focalPoint.z = this->actor.world.pos.z;
-    focalPoint.y = this->actor.world.pos.y + 45.0f;
-    eye.x = (Math_SinS(this->actor.shape.rot.y) * 90.0f) + focalPoint.x;
-    eye.z = (Math_CosS(this->actor.shape.rot.y) * 90.0f) + focalPoint.z;
-    eye.y = focalPoint.y + 4.0f;
+    at.x = this->actor.world.pos.x;
+    at.z = this->actor.world.pos.z;
+    at.y = this->actor.world.pos.y + 45.0f;
+    eye.x = (Math_SinS(this->actor.shape.rot.y) * 90.0f) + at.x;
+    eye.z = (Math_CosS(this->actor.shape.rot.y) * 90.0f) + at.z;
+    eye.y = at.y + 4.0f;
 
     // Zooms in on Gekko
-    func_8016970C(globalCtx, this->camId, &focalPoint, &eye);
+    func_8016970C(globalCtx, this->camId, &at, &eye);
     this->timer = 0;
     this->actor.hintId = 0x5F;
     this->actionFunc = EnPametfrog_CallSnapper;
@@ -1183,26 +1213,26 @@ void EnPametfrog_CallSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
 }
 
 void EnPametfrog_SetupSnapperSpawn(EnPametfrog* this, GlobalContext* globalCtx) {
-    Vec3f focalPoint;
+    Vec3f at;
     Vec3f eye;
     s16 yaw;
 
     EnPametfrog_PlaceSnapper(this, globalCtx);
-    focalPoint.x = this->actor.child->world.pos.x;
-    focalPoint.z = this->actor.child->world.pos.z;
-    focalPoint.y = this->actor.child->floorHeight + 50.0f;
+    at.x = this->actor.child->world.pos.x;
+    at.z = this->actor.child->world.pos.z;
+    at.y = this->actor.child->floorHeight + 50.0f;
     if ((s16)(Actor_YawToPoint(&this->actor, &this->actor.home.pos) - this->actor.shape.rot.y) > 0) {
         yaw = this->actor.child->shape.rot.y - 0x1000;
     } else {
         yaw = this->actor.child->shape.rot.y + 0x1000;
     }
 
-    eye.x = (Math_SinS(yaw) * 500.0f) + focalPoint.x;
-    eye.y = focalPoint.y + 55.0f;
-    eye.z = (Math_CosS(yaw) * 500.0f) + focalPoint.z;
+    eye.x = (Math_SinS(yaw) * 500.0f) + at.x;
+    eye.y = at.y + 55.0f;
+    eye.z = (Math_CosS(yaw) * 500.0f) + at.z;
 
     // Zooms in on Snapper spawn point
-    func_8016970C(globalCtx, this->camId, &focalPoint, &eye);
+    func_8016970C(globalCtx, this->camId, &at, &eye);
     this->quake = Quake_Add(ACTIVE_CAM, 6);
     Quake_SetSpeed(this->quake, 18000);
     Quake_SetQuakeValues(this->quake, 2, 0, 0, 0);
@@ -1228,7 +1258,7 @@ void EnPametfrog_SetupTransitionGekkoSnapper(EnPametfrog* this, GlobalContext* g
     Quake_RemoveFromIdx(this->quake);
     this->quake = Quake_Add(ACTIVE_CAM, 3);
     Quake_SetSpeed(this->quake, 20000);
-    Quake_SetQuakeValues(this->quake, 0x11, 0, 0, 0);
+    Quake_SetQuakeValues(this->quake, 17, 0, 0, 0);
     Quake_SetCountdown(this->quake, 12);
     func_8013ECE0(this->actor.xyzDistToPlayerSq, 255, 20, 150);
     this->actionFunc = EnPametfrog_TransitionGekkoSnapper;
@@ -1275,7 +1305,8 @@ void EnPametfrog_ApplyDamage(EnPametfrog* this, GlobalContext* globalCtx) {
                         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG,
                                     this->collider.elements[0].info.bumper.hitPos.x,
                                     this->collider.elements[0].info.bumper.hitPos.y,
-                                    this->collider.elements[0].info.bumper.hitPos.z, 0, 0, 0, 4);
+                                    this->collider.elements[0].info.bumper.hitPos.z, 0, 0, 0,
+                                    CLEAR_TAG_LARGE_LIGHT_RAYS);
                     }
                     func_8086CB4C(this);
                 }

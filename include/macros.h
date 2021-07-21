@@ -32,6 +32,8 @@
 
 #define CURRENT_DAY (gSaveContext.day % 5)
 
+#define CLOCK_TIME(hr, min) ((s32)(((hr) * 60 + (min)) * 0x10000 / (24 * 60)))
+
 #define SLOT(item) gItemSlots[item]
 #define AMMO(item) gSaveContext.inventory.ammo[SLOT(item)]
 #define INV_CONTENT(item) gSaveContext.inventory.items[SLOT(item)]
@@ -49,6 +51,11 @@
 
 #define CAPACITY(upg, value) gUpgradeCapacities[upg][value]
 #define CUR_CAPACITY(upg) CAPACITY(upg, CUR_UPG_VALUE(upg) - 4)
+
+#define CONTROLLER1(globalCtx) (&(globalCtx)->state.input[0])
+#define CONTROLLER2(globalCtx) (&(globalCtx)->state.input[1])
+#define CONTROLLER3(globalCtx) (&(globalCtx)->state.input[2])
+#define CONTROLLER4(globalCtx) (&(globalCtx)->state.input[3])
 
 #define CHECK_BTN_ALL(state, combo) (~((state) | ~(combo)) == 0)
 #define CHECK_BTN_ANY(state, combo) (((state) & (combo)) != 0)
