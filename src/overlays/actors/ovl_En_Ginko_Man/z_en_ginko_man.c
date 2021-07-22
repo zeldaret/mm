@@ -36,46 +36,11 @@ const ActorInit En_Ginko_Man_InitVars = {
 };
 
 ActorAnimationEntry animations[] = {
-    {
-        object_ginko_floorsmacking_anim,
-        1.0f,
-        0.0f,
-        0.0f,
-        0,
-        -4.0f,
-    },
-    {
-        object_ginko_sitting_anim,
-        1.0f,
-        0.0f,
-        0.0f,
-        0,
-        -4.0f,
-    },
-    {
-        object_ginko_stamp_reach_anim,
-        1.0f,
-        0.0f,
-        0.0f,
-        2,
-        -4.0f,
-    },
-    {
-        object_ginko_advertising_anim,
-        1.0f,
-        0.0f,
-        0.0f,
-        0,
-        -4.0f,
-    }, // looking around for customers
-    {
-        object_ginko_amazed_anim,
-        1.0f,
-        0.0f,
-        0.0f,
-        0,
-        -4.0f,
-    },
+    { object_ginko_floorsmacking_anim, 1.0f, 0.0f, 0.0f, 0, -4.0f },
+    { object_ginko_sitting_anim, 1.0f, 0.0f, 0.0f, 0, -4.0f },
+    { object_ginko_stamp_reach_anim, 1.0f, 0.0f, 0.0f, 2, -4.0f },
+    { object_ginko_advertising_anim, 1.0f, 0.0f, 0.0f, 0, -4.0f }, // looking around for customers
+    { object_ginko_amazed_anim, 1.0f, 0.0f, 0.0f, 0, -4.0f },
 };
 
 void EnGinkoMan_Init(Actor* thisx, GlobalContext* globalCtx) {
