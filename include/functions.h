@@ -924,7 +924,7 @@ void func_800BE03C(GlobalContext* globalCtx, Gfx* dl);
 // void func_800BE0B8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_800BE184(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6);
 u8 func_800BE22C(Actor* actor);
-// void func_800BE258(void);
+void func_800BE258(Actor* actor, UNK_PTR arg1);
 // void func_800BE2B8(void);
 // void func_800BE33C(void);
 // void func_800BE3D0(void);
