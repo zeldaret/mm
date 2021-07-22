@@ -1,7 +1,7 @@
 /*
  * File: z_en_ma_yts.c
  * Overlay: ovl_En_Ma_Yts
- * Description: Romani. As oposed as EnMa4, this actor is used in conjunction of another actor, like EnMaYto.
+ * Description: Romani. As opposed as EnMa4, this actor is used in conjunction with another actor, like EnMaYto.
  */
 
 #include "z_en_ma_yts.h"

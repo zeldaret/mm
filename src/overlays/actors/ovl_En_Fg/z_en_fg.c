@@ -1,6 +1,6 @@
 /*
  * File: z_en_fg.c
- * Overlay: En_Fg
+ * Overlay: ovl_En_Fg
  * Description: Likely beta frogs, a version where they were all enemies
  */
 

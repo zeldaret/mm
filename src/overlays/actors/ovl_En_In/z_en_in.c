@@ -1,6 +1,6 @@
 /*
  * File z_en_in.c
- * Overlay: ovl_en_in
+ * Overlay: ovl_En_In
  * Description: Gorman Bros
  */
 

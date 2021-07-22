@@ -1,6 +1,6 @@
 /*
  * File z_en_invadepoh.c
- * Overlay: ovl_en_invadepoh
+ * Overlay: ovl_En_Invadepoh
  * Description: Ranch nighttime actors
  */
 
