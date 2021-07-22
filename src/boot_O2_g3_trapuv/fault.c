@@ -1,5 +1,6 @@
 #include <ultra64.h>
 #include <global.h>
+#include "vt.h"
 
 // TODO move out
 #define OS_CLOCK_RATE 62500000LL
@@ -40,7 +41,7 @@ end:
     osSetIntMask(mask);
 
     if (alreadyExists) {
-        osSyncPrintf("\x1B[41;37mfault_AddClient: %08x は既にリスト中にある\n\x1B[m", client);
+        osSyncPrintf(VT_COL(RED, WHITE) "fault_AddClient: %08x は既にリスト中にある\n" VT_RST, client);
     }
 }
 
@@ -78,7 +79,7 @@ void Fault_RemoveClient(FaultClient* client) {
     osSetIntMask(mask);
 
     if (listIsEmpty) {
-        osSyncPrintf("\x1B[41;37mfault_RemoveClient: %08x リスト不整合です\n\x1B[m", client);
+        osSyncPrintf(VT_COL(RED, WHITE) "fault_RemoveClient: %08x リスト不整合です\n" VT_RST, client);
     }
 }
 
@@ -108,7 +109,7 @@ end:
     osSetIntMask(mask);
 
     if (alreadyExists) {
-        osSyncPrintf("\x1B[41;37mfault_AddressConverterAddClient: %08x は既にリスト中にある\n\x1B[m", client);
+        osSyncPrintf(VT_COL(RED, WHITE) "fault_AddressConverterAddClient: %08x は既にリスト中にある\n" VT_RST, client);
     }
 }
 
@@ -146,7 +147,7 @@ void Fault_RemoveAddrConvClient(FaultAddrConvClient* client) {
     osSetIntMask(mask);
 
     if (listIsEmpty) {
-        osSyncPrintf("\x1B[41;37mfault_AddressConverterRemoveClient: %08x は既にリスト中にある\n\x1B[m", client);
+        osSyncPrintf(VT_COL(RED, WHITE) "fault_AddressConverterRemoveClient: %08x は既にリスト中にある\n" VT_RST, client);
     }
 }
 

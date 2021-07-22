@@ -1,5 +1,6 @@
 #include <ultra64.h>
 #include <global.h>
+#include "vt.h"
 
 FaultDrawer* sFaultDrawContext = &sFaultDrawerStruct;
 FaultDrawer sFaultDrawerDefault = {
@@ -89,14 +90,14 @@ void FaultDrawer_UpdatePrintColor() {
     s32 idx;
 
     if (sFaultDrawContext->osSyncPrintfEnabled) {
-        osSyncPrintf("\x1B[m");
+        osSyncPrintf(VT_RST);
         idx = FaultDrawer_ColorToPrintColor(sFaultDrawContext->foreColor);
         if (idx >= 0 && idx < 8) {
-            osSyncPrintf("\x1B[3%dm", idx);
+            osSyncPrintf(VT_SGR("3%d"), idx);
         }
         idx = FaultDrawer_ColorToPrintColor(sFaultDrawContext->backColor);
         if (idx >= 0 && idx < 8) {
-            osSyncPrintf("\x1B[4%dm", idx);
+            osSyncPrintf(VT_SGR("4%d"), idx);
         }
     }
 }
@@ -122,7 +123,7 @@ void FaultDrawer_SetCharPad(s8 padW, s8 padH) {
 
 void FaultDrawer_SetCursor(s32 x, s32 y) {
     if (sFaultDrawContext->osSyncPrintfEnabled) {
-        osSyncPrintf("\x1B[%d;%dH",
+        osSyncPrintf(VT_CUP("%d", "%d"),
                   (y - sFaultDrawContext->yStart) / (sFaultDrawContext->charH + sFaultDrawContext->charHPad),
                   (x - sFaultDrawContext->xStart) / (sFaultDrawContext->charW + sFaultDrawContext->charWPad));
     }
@@ -132,7 +133,7 @@ void FaultDrawer_SetCursor(s32 x, s32 y) {
 
 void FaultDrawer_FillScreen() {
     if (sFaultDrawContext->osSyncPrintfEnabled) {
-        osSyncPrintf("\x1B[2J");
+        osSyncPrintf(VT_CLS);
     }
 
     FaultDrawer_DrawRecImpl(sFaultDrawContext->xStart, sFaultDrawContext->yStart, sFaultDrawContext->xEnd,
