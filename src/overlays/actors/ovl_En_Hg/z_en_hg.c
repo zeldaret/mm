@@ -28,7 +28,7 @@ void func_80BCF8A0(EnHg* this, GlobalContext* globalCtx);
 void func_80BCF93C(EnHg* this);
 void func_80BCF95C(EnHg* this, GlobalContext* globalCtx);
 s32 EnHg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-s32 EnHg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Actor* thisx);
+void EnHg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Actor* thisx);
 
 extern FlexSkeletonHeader D_06008580;
 extern AnimationHeader D_0600260C;
@@ -98,8 +98,8 @@ void EnHg_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     phi_s1 = this->actor.cutscene;
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 36.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06008580, &D_0600260C, &this->limbDrawTbl,
-                     &this->transitionDrawTbl, 0x13);
+    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06008580, &D_0600260C, this->limbDrawTbl, this->transitionDrawTbl,
+                     0x13);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
@@ -126,7 +126,7 @@ void EnHg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80BCF354(EnHg* this) {
-    func_800BDC5C(&this->skelAnime, &animations, 0);
+    func_800BDC5C(&this->skelAnime, animations, 0);
     this->actionFunc = func_80BCF398;
 }
 
@@ -138,7 +138,7 @@ void func_80BCF398(EnHg* this, GlobalContext* globalCtx) {
         }
         if ((gSaveContext.sceneSetupIndex == 0 && globalCtx->csCtx.unk_12 == 0) &&
             (globalCtx->csCtx.frames == 0x14 || globalCtx->csCtx.frames == 0x3C)) {
-            Audio_PlayActorSound2(this, 0x3AB8);
+            Audio_PlayActorSound2(&this->actor, 0x3AB8);
         }
     }
 }
@@ -379,7 +379,7 @@ s32 EnHg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 }
 
 // post limb
-s32 EnHg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Actor* thisx) {
+void EnHg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Actor* thisx) {
     EnHg* this = THIS;
     if (limbIndex == 10) {
         SysMatrix_CopyCurrentState(&this->unk1D8);
