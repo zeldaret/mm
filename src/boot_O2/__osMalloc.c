@@ -16,6 +16,8 @@
 
 extern OSMesg sArenaLockMsg[1];
 
+#pragma GLOBAL_ASM("asm/non_matchings/boot/__osMalloc/D_80099110.s")
+
 void ArenaImpl_LockInit(Arena* arena) {
     osCreateMesgQueue(&arena->lock, sArenaLockMsg, ARRAY_COUNT(sArenaLockMsg));
 }
