@@ -24,9 +24,7 @@ beginseg
     include "build/src/boot_O2_g3/viconfig.o"
     include "build/data/boot/viconfig.data.o"
 
-    include "build/asm/boot/z_std_dma.text.o"
-    include "build/data/boot/z_std_dma.data.o"
-    include "build/data/boot/z_std_dma.rodata.o"
+    include "build/src/boot_O2_g3/z_std_dma.o"
     include "build/data/boot/z_std_dma.bss.o"
 
     include "build/src/boot_O2_g3/yaz0.o"
@@ -43,8 +41,6 @@ beginseg
     include "build/data/boot/fault.bss.o"
 
     include "build/src/boot_O2_g3_trapuv/fault_drawer.o"
-    //include "build/data/boot/fault_drawer.data.o"
-    //include "build/data/boot/fault_drawer.rodata.o"
     include "build/data/boot/fault_drawer.bss.o"
 
     include "build/src/boot_O1/boot_80084940.o"
@@ -52,25 +48,22 @@ beginseg
     include "build/asm/boot/loadfragment.text.o"
     include "build/data/boot/loadfragment.data.o"
 
-    include "build/asm/boot/loadfragment2.text.o"
-    include "build/data/boot/loadfragment2.data.o"
+    include "build/src/boot_O2/loadfragment2.o"
 
-    include "build/asm/boot/padutils.text.o"
+    include "build/src/boot_O2/padutils.o"
 
-    include "build/asm/boot/stackcheck.text.o"
-    include "build/data/boot/stackcheck.data.o"
+    include "build/src/boot_O2/stackcheck.o"
 
-    include "build/asm/boot/gfxprint.text.o"
+    include "build/src/boot_O2/gfxprint.o"
     include "build/data/boot/gfxprint.data.o"
-    include "build/data/boot/gfxprint.rodata.o"
 
-    include "build/asm/boot/mtxuty-cvt.text.o"
+    include "build/src/boot_O2/mtxuty-cvt.o"
 
     include "build/src/boot_O2/assert.o"
 
     include "build/src/boot_O2/boot_800862E0.o"
 
-    include "build/asm/boot/padsetup.text.o"
+    include "build/src/boot_O2/padsetup.o"
 
     include "build/asm/boot/boot_80086760.text.o"
     include "build/data/boot/boot_80086760.rodata.o"
@@ -86,8 +79,7 @@ beginseg
     include "build/data/boot/rand.data.o"
     include "build/data/boot/rand.bss.o"
 
-    include "build/asm/boot/__osMalloc.text.o"
-    include "build/data/boot/__osMalloc.rodata.o"
+    include "build/src/boot_O2/__osMalloc.o"
     include "build/data/boot/__osMalloc.bss.o"
 
     include "build/asm/boot/sprintf.text.o"
