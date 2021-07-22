@@ -1116,11 +1116,7 @@ beginseg
     name "ovl_En_Niw"
     compress
     include "build/src/overlays/actors/ovl_En_Niw/z_en_niw.o"
-#ifdef NON_MATCHING
-    // TODO
-#else
     include "build/data/ovl_En_Niw/ovl_En_Niw.reloc.o"
-#endif
 endseg
 
 beginseg
@@ -2815,7 +2811,6 @@ beginseg
     name "ovl_En_Bji_01"
     compress
     include "build/src/overlays/actors/ovl_En_Bji_01/z_en_bji_01.o"
-    include "build/data/ovl_En_Bji_01/ovl_En_Bji_01.data.o"
     include "build/data/ovl_En_Bji_01/ovl_En_Bji_01.reloc.o"
 endseg
 
@@ -4731,7 +4726,6 @@ beginseg
     name "ovl_En_Ma_Yto"
     compress
     include "build/src/overlays/actors/ovl_En_Ma_Yto/z_en_ma_yto.o"
-    include "build/data/ovl_En_Ma_Yto/ovl_En_Ma_Yto.data.o"
     include "build/data/ovl_En_Ma_Yto/ovl_En_Ma_Yto.reloc.o"
 endseg
 
