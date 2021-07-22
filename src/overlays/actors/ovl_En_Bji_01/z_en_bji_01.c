@@ -12,7 +12,7 @@ void EnBji01_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_809CCE98(EnBji01* this, GlobalContext* globalCtx);     /* Level 1 */
 void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx);     /* Level 2 */
 void func_809CD028(EnBji01* this, GlobalContext* globalCtx);     /* Level 3 */
-void func_809CD328(EnBji01* this, GlobalContext* globalCtx);     /* Level 4 */
+void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx);     /* Level 4 */
 void func_809CCDE0(EnBji01* this, GlobalContext* globalCtx);     /* Level 5 */
 void func_809CD634(EnBji01* this, GlobalContext* globalCtx);     /* Level 5 */
 void EnBji01_DoNothing(EnBji01* this, GlobalContext* globalCtx); /* Level 6 */
@@ -196,10 +196,10 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
             break;
     }
     func_8013E1C8(&this->skelAnime, D_809CDC7C, 2, &this->animationIndex);
-    this->actionFunc = func_809CD328;
+    this->actionFunc = EnBji01_DialogueHandler;
 }
 
-void func_809CD328(EnBji01* this, GlobalContext* globalCtx) {
+void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
     switch (func_80152498(&globalCtx->msgCtx)) {
         case 0:
             Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x444);

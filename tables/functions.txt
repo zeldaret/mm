@@ -9186,7 +9186,7 @@
     0x809CCE98:("func_809CCE98",),
     0x809CCEE8:("func_809CCEE8",),
     0x809CD028:("func_809CD028",),
-    0x809CD328:("func_809CD328",),
+    0x809CD328:("EnBji01_DialogueHandler",),
     0x809CD634:("func_809CD634",),
     0x809CD6B0:("func_809CD6B0",),
     0x809CD6C0:("func_809CD6C0",),
