@@ -2410,9 +2410,9 @@ SECTIONS
     ovl_En_Clear_Tag : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.o(.text)
-        build/asm/overlays/ovl_En_Clear_Tag_data.o(.data)
+        build/src/overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.o(.data)
         build/src/overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.o(.rodata)
-        build/asm/overlays/ovl_En_Clear_Tag_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -3968,9 +3968,9 @@ SECTIONS
     ovl_En_Bji_01 : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Bji_01/z_en_bji_01.o(.text)
-        build/asm/overlays/ovl_En_Bji_01_data.o(.data)
+        build/src/overlays/actors/ovl_En_Bji_01/z_en_bji_01.o(.data)
         build/src/overlays/actors/ovl_En_Bji_01/z_en_bji_01.o(.rodata)
-        build/asm/overlays/ovl_En_Bji_01_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Bji_01/z_en_bji_01_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;

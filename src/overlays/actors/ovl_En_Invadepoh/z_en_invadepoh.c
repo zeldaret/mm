@@ -2307,7 +2307,7 @@ void func_80B479E8(EnInvadepoh* this, GlobalContext* globalCtx) {
     this->counter++;
     if (this->actionTimer == 8) {
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
-                    this->actor.world.pos.y - 10.0f, this->actor.world.pos.z, 0, 0, 3, 200);
+                    this->actor.world.pos.y - 10.0f, this->actor.world.pos.z, 0, 0, 3, CLEAR_TAG_SMOKE);
     }
 
     if (this->actionTimer == 8) {
