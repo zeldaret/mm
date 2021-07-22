@@ -1,3 +1,9 @@
+/*
+ * File: z_en_pamera.c
+ * Overlay: En_Pamera
+ * Description: Pamela
+ */
+
 #include "z_en_pamera.h"
 #include "../ovl_En_Bom/z_en_bom.h"
 #include "../ovl_En_Door/z_en_door.h"
@@ -43,7 +49,7 @@ void func_80BD9928(EnPamera* this, GlobalContext* globalCtx);
 void func_80BD9938(EnPamera* this);
 void func_80BD994C(EnPamera* this, GlobalContext* globalCtx);
 void func_80BD9A9C(EnPamera* this);
-void func_80BD9AB0(EnPamera* this, GlobalContext* globalCtx);
+void EnPamera_HandleDialogue(EnPamera* this, GlobalContext* globalCtx);
 void func_80BD9B4C(EnPamera* this, GlobalContext* globalCtx);
 void func_80BD9C70(EnPamera* this, GlobalContext* globalCtx);
 s32 func_80BD9CB8(EnPamera* this, GlobalContext* globalCtx);
@@ -124,7 +130,7 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
     0, 0, 0, 0, MASS_IMMOVABLE,
 };
 
-static ActorAnimationEntry D_80BDA4B8[] = {
+static ActorAnimationEntry animations[] = {
     { &D_060005BC, 1.0f, 0, 0.0f, 0, -4.0f },
     { &D_06008AE0, 1.0f, 0, 0.0f, 0, -4.0f },
     { &D_06008E38, 1.0f, 0, 0.0f, 0, -4.0f },
@@ -142,20 +148,17 @@ static ActorAnimationEntry D_80BDA4B8[] = {
 
 static Vec3f D_80BDA5F0 = { 1000.0f, 0.0f, 0.0f };
 
-// s32 D_80BDA5FC[] = { 0x060074E8, 0x060078E8 };
 static void* D_80BDA5FC[] = {
     D_060074E8,
     D_060078E8,
 };
 
-// s32 D_80BDA604[] = { 0x060066E8, 0x06006AE8, 0x06006EE8 };
 static void* D_80BDA604[] = {
     D_060066E8,
     D_06006AE8,
     D_06006EE8,
 };
 
-// s32 D_80BDA610[] = { 0x060072E8, 0x060073E8, 0x00000000, 0x00000000 };
 static void* D_80BDA610[] = {
     D_060072E8,
     D_060073E8,
@@ -197,9 +200,9 @@ void EnPamera_Init(Actor* thisx, GlobalContext* globalCtx) {
                 }
                 func_80BD8700(this);
             } else {
-                this->unk_1E0 = this->unk_1E4 - 1;
-                Math_Vec3s_ToVec3f(&this->actor.world.pos, &this->unk_1DC[this->unk_1E0]);
-                Math_Vec3s_ToVec3f(&sp44, &this->unk_1DC[this->unk_1E0 - 1]);
+                this->pathIndex = this->pathPointsCount - 1;
+                Math_Vec3s_ToVec3f(&this->actor.world.pos, &this->pathPoints[this->pathIndex]);
+                Math_Vec3s_ToVec3f(&sp44, &this->pathPoints[this->pathIndex - 1]);
                 this->actor.world.rot.y = this->actor.shape.rot.y = Math_Vec3f_Yaw(&sp44, &this->actor.world.pos);
                 func_80BD8CCC(this);
             }
@@ -214,7 +217,7 @@ s32 func_80BD84F0(EnPamera* this, GlobalContext* globalCtx) {
     Actor* actorPtr = globalCtx->actorCtx.actorList[ACTORCAT_DOOR].first;
 
     while (actorPtr != 0) {
-        if ((actorPtr->id == ACTOR_EN_DOOR) && (Math_Vec3f_DistXZ(&this->actor.world, &actorPtr->world.pos) < 200.0f)) {
+        if ((actorPtr->id == ACTOR_EN_DOOR) && (Math_Vec3f_DistXZ(&this->actor.world.pos, &actorPtr->world.pos) < 200.0f)) {
             this->actor.child = actorPtr;
             return 1;
         }
@@ -231,14 +234,14 @@ void func_80BD8588(EnPamera* this, GlobalContext* globalCtx) {
     if (path == 0) {
         Actor_MarkForDeath(&this->actor);
     }
-    if ((gSaveContext.weekEventReg[61]) & 4) {
+    if (gSaveContext.weekEventReg[61] & 4) {
         path = &globalCtx->setupPathList[(u8)path->unk1];
     }
-    this->unk_1DC = Lib_SegmentedToVirtual(path->points);
-    this->unk_1E0 = 0;
-    this->unk_1E4 = path->count;
+    this->pathPoints = Lib_SegmentedToVirtual(path->points);
+    this->pathIndex = 0;
+    this->pathPointsCount = path->count;
     this->animatedTextures = (u8)path->unk1;
-    Math_Vec3s_ToVec3f(&sp28, this->unk_1DC);
+    Math_Vec3s_ToVec3f(&sp28, this->pathPoints);
     this->actor.world.rot.y = this->actor.shape.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &sp28);
 }
 
@@ -251,7 +254,7 @@ void func_80BD8658(EnPamera* this) {
         if (nextCutscene == -1) {
             break;
         }
-        this->unk_318[i] = nextCutscene;
+        this->cutscenes[i] = nextCutscene;
         nextCutscene = ActorCutscene_GetAdditionalCutscene(nextCutscene);
     }
 }
@@ -265,7 +268,7 @@ void EnPamera_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void func_80BD8700(EnPamera* this) {
     this->unk_31C = 0;
     this->actor.flags &= -2;
-    func_800BDC5C(&this->skelAnime, D_80BDA4B8, 0);
+    func_800BDC5C(&this->skelAnime, animations, 0);
     this->actionFunc = func_80BD8758;
 }
 
@@ -274,21 +277,21 @@ void func_80BD8758(EnPamera* this, GlobalContext* globalCtx) {
 
     this->unk_31C++;
     if (temp) {
-        if (ActorCutscene_GetCanPlayNext(this->unk_318[0]) && (this->unk_318[0] != -1)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->unk_318[0], &this->actor);
-            func_800E02AC(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(this->unk_318[0])), this);
+        if (ActorCutscene_GetCanPlayNext(this->cutscenes[0]) && (this->cutscenes[0] != -1)) {
+            ActorCutscene_StartAndSetUnkLinkFields(this->cutscenes[0], &this->actor);
+            func_800E02AC(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(this->cutscenes[0])), this);
             this->actor.speedXZ = 1.5f;
-            func_800BDC5C(&this->skelAnime, D_80BDA4B8, 1);
+            func_800BDC5C(&this->skelAnime, animations, 1);
             this->actor.shape.rot.y = this->actor.home.rot.y;
             this->actor.world.rot.y = this->actor.home.rot.y;
             func_80BD9338(this, globalCtx);
             func_80BD8908(this);
         } else {
-            if ((this->unk_318[0] != -1) && (this->actor.xzDistToPlayer < 1000.0f)) {
-                ActorCutscene_SetIntentToPlay(this->unk_318[0]);
+            if ((this->cutscenes[0] != -1) && (this->actor.xzDistToPlayer < 1000.0f)) {
+                ActorCutscene_SetIntentToPlay(this->cutscenes[0]);
             } else {
                 this->actor.speedXZ = 1.5f;
-                func_800BDC5C(&this->skelAnime, D_80BDA4B8, 1);
+                func_800BDC5C(&this->skelAnime, animations, 1);
                 this->actor.shape.rot.y = this->actor.home.rot.y;
                 this->actor.world.rot.y = this->actor.home.rot.y;
                 func_80BD9338(this, globalCtx);
@@ -309,27 +312,27 @@ void func_80BD8758(EnPamera* this, GlobalContext* globalCtx) {
 void func_80BD8908(EnPamera* this) {
     this->actor.draw = EnPamera_Draw;
     this->actor.flags |= 1;
-    func_800BDC5C(&this->skelAnime, D_80BDA4B8, 1);
+    func_800BDC5C(&this->skelAnime, animations, 1);
     this->actionFunc = func_80BD8964;
 }
 
 void func_80BD8964(EnPamera* this, GlobalContext* globalCtx) {
     Vec3f vec;
 
-    vec.x = this->unk_1DC->x;
-    vec.y = this->unk_1DC->y;
-    vec.z = this->unk_1DC->z;
+    vec.x = this->pathPoints->x;
+    vec.y = this->pathPoints->y;
+    vec.z = this->pathPoints->z;
 
     if (Math_Vec3f_StepTo(&this->actor.world.pos, &vec, 1.0f) < 5.0f) {
         this->actor.speedXZ = 1.5f;
-        func_800BDC5C(&this->skelAnime, D_80BDA4B8, 1);
+        func_800BDC5C(&this->skelAnime, animations, 1);
         gSaveContext.weekEventReg[59] |= 1;
         func_80BD8B50(this);
     }
 }
 
 void func_80BD8A38(EnPamera* this) {
-    func_800BDC5C(&this->skelAnime, D_80BDA4B8, 1);
+    func_800BDC5C(&this->skelAnime, animations, 1);
     this->actionFunc = func_80BD8A7C;
 }
 
@@ -356,16 +359,16 @@ void func_80BD8B70(EnPamera* this, GlobalContext* globalCtx) {
     Vec3f vec;
     s16 sp32;
 
-    vec.x = this->unk_1DC[this->unk_1E0].x;
-    vec.y = this->unk_1DC[this->unk_1E0].y;
-    vec.z = this->unk_1DC[this->unk_1E0].z;
-    sp32 = Math_Vec3f_Yaw(&this->actor.world, &vec);
-    if (Math_Vec3f_StepToXZ(&this->actor.world, &vec, this->actor.speedXZ) > 10.0f) {
+    vec.x = this->pathPoints[this->pathIndex].x;
+    vec.y = this->pathPoints[this->pathIndex].y;
+    vec.z = this->pathPoints[this->pathIndex].z;
+    sp32 = Math_Vec3f_Yaw(&this->actor.world.pos, &vec);
+    if (Math_Vec3f_StepToXZ(&this->actor.world.pos, &vec, this->actor.speedXZ) > 10.0f) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, sp32, 0xA, 0x3000, 0x100);
         this->actor.world.rot.y = this->actor.shape.rot.y;
     } else {
-        if (this->unk_1E0 < (this->unk_1E4 - 1)) {
-            this->unk_1E0++;
+        if (this->pathIndex < (this->pathPointsCount - 1)) {
+            this->pathIndex++;
         } else {
             func_80BD8CCC(this);
         }
@@ -377,7 +380,7 @@ void func_80BD8B70(EnPamera* this, GlobalContext* globalCtx) {
 void func_80BD8CCC(EnPamera* this) {
     this->unk_31C = 0;
     this->actor.speedXZ = 0.0f;
-    func_800BDC5C(&this->skelAnime, D_80BDA4B8, 3);
+    func_800BDC5C(&this->skelAnime, animations, 3);
     this->actionFunc = func_80BD8D1C;
 }
 
@@ -387,14 +390,14 @@ void func_80BD8D1C(EnPamera* this, GlobalContext* globalCtx) {
     this->unk_31C++;
     if (temp_v0) {
         this->actor.speedXZ = 1.5f;
-        func_800BDC5C(&this->skelAnime, D_80BDA4B8, 1);
+        func_800BDC5C(&this->skelAnime, animations, 1);
         func_80BD8D80(this);
     }
 }
 
 void func_80BD8D80(EnPamera* this) {
-    if (this->unk_1E0 > 0) {
-        this->unk_1E0--;
+    if (this->pathIndex > 0) {
+        this->pathIndex--;
     }
     this->actor.gravity = -2.0f;
     this->actionFunc = func_80BD8DB0;
@@ -404,17 +407,17 @@ void func_80BD8DB0(EnPamera* this, GlobalContext* globalCtx) {
     Vec3f vec;
     s16 sp32;
 
-    vec.x = this->unk_1DC[this->unk_1E0].x;
-    vec.y = this->unk_1DC[this->unk_1E0].y;
-    vec.z = this->unk_1DC[this->unk_1E0].z;
+    vec.x = this->pathPoints[this->pathIndex].x;
+    vec.y = this->pathPoints[this->pathIndex].y;
+    vec.z = this->pathPoints[this->pathIndex].z;
     sp32 = Math_Vec3f_Yaw(&this->actor.world.pos, &vec);
     if (Math_Vec3f_StepToXZ(&this->actor.world.pos, &vec, this->actor.speedXZ) > 10.0f) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, sp32, 0xA, 0x3000, 0x100);
         this->actor.world.rot.y = this->actor.shape.rot.y;
     } else {
 
-        if (this->unk_1E0 > 0) {
-            this->unk_1E0--;
+        if (this->pathIndex > 0) {
+            this->pathIndex--;
         } else {
             func_80BD9338(this, globalCtx);
             func_80BD8A38(this);
@@ -426,14 +429,14 @@ void func_80BD8DB0(EnPamera* this, GlobalContext* globalCtx) {
 
 void func_80BD8F0C(EnPamera* this) {
     func_80BD93CC(this, 1, 1);
-    func_800BDC5C(&this->skelAnime, D_80BDA4B8, 4);
+    func_800BDC5C(&this->skelAnime, animations, 4);
     this->actionFunc = func_80BD8F60;
 }
 
 void func_80BD8F60(EnPamera* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x3000, 0x1000);
     if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) != 0) {
-        func_800BDC5C(&this->skelAnime, D_80BDA4B8, 2);
+        func_800BDC5C(&this->skelAnime, animations, 2);
         this->actor.speedXZ = 3.0f;
         func_80BD93CC(this, 0, 0);
         func_80BD8D80(this);
@@ -444,13 +447,13 @@ void func_80BD8FF0(EnPamera* this) {
     Vec3f pameraPos;
     s16 pameraYaw;
 
-    this->unk_1E0 = this->unk_1E4 - 1;
-    Math_Vec3s_ToVec3f(&this->actor.world.pos, &this->unk_1DC[this->unk_1E4 - 1]);
-    Math_Vec3s_ToVec3f(&pameraPos, &this->unk_1DC[this->unk_1E4 - 2]);
-    pameraYaw = Math_Vec3f_Yaw(&pameraPos, &this->actor.world);
+    this->pathIndex = this->pathPointsCount - 1;
+    Math_Vec3s_ToVec3f(&this->actor.world.pos, &this->pathPoints[this->pathPointsCount - 1]);
+    Math_Vec3s_ToVec3f(&pameraPos, &this->pathPoints[this->pathPointsCount - 2]);
+    pameraYaw = Math_Vec3f_Yaw(&pameraPos, &this->actor.world.pos);
     this->actor.shape.rot.y = pameraYaw;
     this->actor.world.rot.y = pameraYaw;
-    func_800BDC5C(&this->skelAnime, D_80BDA4B8, 3);
+    func_800BDC5C(&this->skelAnime, animations, 3);
     this->actionFunc = func_80BD909C;
 }
 
@@ -462,17 +465,17 @@ void func_80BD90AC(EnPamera* this, GlobalContext* globalCtx) {
 
     if (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK && (this->actionFunc != func_80BD8758) &&
         (this->actionFunc != func_80BD8964) && (this->actionFunc != func_80BD8A7C) &&
-        (this->actionFunc != func_80BD8F60) && ((this->actionFunc != func_80BD8B70) || (this->unk_1E0 != 0)) &&
+        (this->actionFunc != func_80BD8F60) && ((this->actionFunc != func_80BD8B70) || (this->pathIndex)) &&
         ((this->actionFunc != func_80BD8DB0) || (this->actor.speedXZ != 3.0f)) &&
         ((this->actor.xzDistToPlayer < 150.0f) ||
          ((this->actionFunc == func_80BD909C) &&
           (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < 200.0f)))) {
-        if ((ActorCutscene_GetCanPlayNext(this->unk_318[1]) != 0) && ((this->unk_318[1] != -1))) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->unk_318[1], &this->actor);
-            func_800E02AC(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(this->unk_318[1])), this);
+        if ((ActorCutscene_GetCanPlayNext(this->cutscenes[1])) && ((this->cutscenes[1] != -1))) {
+            ActorCutscene_StartAndSetUnkLinkFields(this->cutscenes[1], &this->actor);
+            func_800E02AC(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(this->cutscenes[1])), this);
             func_80BD8F0C(this);
-        } else if (this->unk_318[1] != -1) {
-            ActorCutscene_SetIntentToPlay(this->unk_318[1]);
+        } else if (this->cutscenes[1] != -1) {
+            ActorCutscene_SetIntentToPlay(this->cutscenes[1]);
         } else {
             func_80BD8F0C(this);
         }
@@ -483,7 +486,7 @@ s32 func_80BD9234(EnPamera* this, GlobalContext* globalCtx) {
     Actor* bomb = globalCtx->actorCtx.actorList[ACTORCAT_EXPLOSIVES].first;
 
     while (bomb != NULL) {
-        if ((bomb->id == ACTOR_EN_BOM) && (Math_Vec3f_DistXZ(&this->actor.world, &bomb->world.pos) < 500.0f) &&
+        if ((bomb->id == ACTOR_EN_BOM) && (Math_Vec3f_DistXZ(&this->actor.world.pos, &bomb->world.pos) < 500.0f) &&
             (((EnBom*)bomb)->timer == 0)) {
             return 1;
         } else {
@@ -499,9 +502,9 @@ void func_80BD92D0(EnPamera* this, GlobalContext* globalCtx) {
 
     path = &globalCtx->setupPathList[pathID];
     if (pathID >= 0) {
-        this->unk_1DC = Lib_SegmentedToVirtual(path->points);
-        this->unk_1E0 = 0;
-        this->unk_1E4 = path->count;
+        this->pathPoints = Lib_SegmentedToVirtual(path->points);
+        this->pathIndex = 0;
+        this->pathPointsCount = path->count;
         this->animatedTextures = (u8)path->unk1;
     }
 }
@@ -537,11 +540,11 @@ void func_80BD93F4(EnPamera* this, GlobalContext* globalCtx) {
     if ((this->actionFunc == func_80BD8B70) || (this->actionFunc == func_80BD8DB0) ||
         (this->actionFunc == func_80BD8964) || (this->actionFunc == func_80BD8A7C)) {
         if (this->skelAnime.animCurrentSeg == &D_06008AE0) {
-            if ((func_801378B8(&this->skelAnime, 9.0f) != 0) || (func_801378B8(&this->skelAnime, 18.0f) != 0)) {
+            if (func_801378B8(&this->skelAnime, 9.0f) || func_801378B8(&this->skelAnime, 18.0f)) {
                 Audio_PlayActorSound2(&this->actor, NA_SE_EV_PAMERA_WALK);
             }
         } else if ((this->skelAnime.animCurrentSeg == &D_06008E38) &&
-                   (((func_801378B8(&this->skelAnime, 2.0f) != 0)) || (func_801378B8(&this->skelAnime, 6.0f) != 0))) {
+                   (func_801378B8(&this->skelAnime, 2.0f) || func_801378B8(&this->skelAnime, 6.0f))) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_PAMERA_WALK);
         }
     }
@@ -566,13 +569,12 @@ void EnPamera_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80BD90AC(this, globalCtx);
     func_80BD9384(this, globalCtx);
     func_80BD94E0(this, globalCtx);
-    Collider_UpdateCylinder(this, &this->collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider);
+    Collider_UpdateCylinder(&this->actor, &this->collider);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     func_80BD93F4(this, globalCtx);
 }
 
-// matches -- OverrideLimbDraw
-s32 func_80BD9648(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnPamera_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnPamera* this = THIS;
 
     if (limbIndex == 9) {
@@ -582,8 +584,7 @@ s32 func_80BD9648(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return 0;
 }
 
-// matches -- PostLimbDraw
-void func_80BD9690(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnPamera_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     if (limbIndex == 9) {
         SysMatrix_MultiplyVector3fByState(&D_80BDA5F0, &thisx->focus.pos);
     }
@@ -598,7 +599,7 @@ void EnPamera_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(D_80BDA610[this->unk_314]));
     gSPSegment(POLY_OPA_DISP++, 0x0A, SEGMENTED_TO_VIRTUAL(D_80BDA5FC[this->unk_310]));
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                     func_80BD9648, func_80BD9690, &this->actor);
+                     EnPamera_OverrideLimbDraw, EnPamera_PostLimbDraw, &this->actor);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
@@ -635,25 +636,24 @@ void func_80BD9938(EnPamera* this) {
 
 void func_80BD994C(EnPamera* this, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx) != 0) {
-        if (Player_GetMask(globalCtx) == 0xC) {
-            // Funny memes
+        if (Player_GetMask(globalCtx) == PLAYER_MASK_GIBDO_MASK) {
             if (1) {
                 func_80BD93CC(this, 0, 1);
                 func_801518B0(globalCtx, 0x15A8, &this->actor);
             }
             this->unk_324 = 0x15A8;
-        } else if ((gSaveContext.playerForm != 4) ||
+        } else if ((gSaveContext.playerForm != PLAYER_FORM_HUMAN) ||
                    (((gSaveContext.weekEventReg[52] & 0x20) != 0) && ((gSaveContext.weekEventReg[75] & 0x20) == 0))) {
             func_80BD93CC(this, 1, 0);
-            func_801518B0(globalCtx, 0x158EU, &this->actor);
+            func_801518B0(globalCtx, 0x158E, &this->actor);
             this->unk_324 = 0x158E;
         } else {
             if (!(this->unk_322 & 1)) {
                 this->unk_322 |= 1;
-                func_801518B0(globalCtx, 0x1587U, &this->actor);
+                func_801518B0(globalCtx, 0x1587, &this->actor);
                 this->unk_324 = 0x1587;
             } else {
-                func_801518B0(globalCtx, 0x158CU, &this->actor);
+                func_801518B0(globalCtx, 0x158C, &this->actor);
                 this->unk_324 = 0x158C;
             }
         }
@@ -664,16 +664,17 @@ void func_80BD994C(EnPamera* this, GlobalContext* globalCtx) {
 }
 
 void func_80BD9A9C(EnPamera* this) {
-    this->actionFunc = func_80BD9AB0;
+    this->actionFunc = EnPamera_HandleDialogue;
 }
 
-void func_80BD9AB0(EnPamera* this, GlobalContext* globalCtx) {
+void EnPamera_HandleDialogue(EnPamera* this, GlobalContext* globalCtx) {
     switch (func_80152498(&globalCtx->msgCtx)) {
         case 0:
         case 1:
         case 2:
         case 3:
         case 4:
+            break;
         case 5:
             func_80BD9B4C(this, globalCtx);
             break;
@@ -731,8 +732,8 @@ void func_80BD9C70(EnPamera* this, GlobalContext* globalCtx) {
 s32 func_80BD9CB8(EnPamera* this, GlobalContext* globalCtx) {
     u32 actionIndex;
 
-    if (func_800EE29C(globalCtx, 0x1E5U) != 0) {
-        actionIndex = func_800EE200(globalCtx, 0x1E5U);
+    if (func_800EE29C(globalCtx, 0x1E5) != 0) {
+        actionIndex = func_800EE200(globalCtx, 0x1E5);
         if (this->unk_326 != globalCtx->csCtx.npcActions[actionIndex]->unk0) {
             this->unk_326 = globalCtx->csCtx.npcActions[actionIndex]->unk0;
 
@@ -766,7 +767,7 @@ s32 func_80BD9CB8(EnPamera* this, GlobalContext* globalCtx) {
         return 1;
     }
     if ((globalCtx->csCtx.state == 0) && (((gSaveContext.weekEventReg[75]) & 0x20) != 0)) {
-        if ((this->actionFunc != func_80BD994C) && (this->actionFunc != func_80BD9AB0)) {
+        if ((this->actionFunc != func_80BD994C) && (this->actionFunc != EnPamera_HandleDialogue)) {
             this->actor.shape.rot.y = this->actor.world.rot.y;
             func_80BD9904(this);
             func_80BD9E60(this);
@@ -785,7 +786,7 @@ void func_80BD9E78(EnPamera* this, GlobalContext* globalCtx) {
 }
 
 void func_80BD9E88(EnPamera* this) {
-    func_800BDC5C(&this->skelAnime, D_80BDA4B8, 0);
+    func_800BDC5C(&this->skelAnime, animations, 0);
     this->unk_31E = 0;
     this->setupFunc = func_80BD9ED0;
 }
@@ -794,7 +795,7 @@ void func_80BD9ED0(EnPamera* this, GlobalContext* globalCtx) {
 }
 
 void func_80BD9EE0(EnPamera* this) {
-    func_800BDC5C(&this->skelAnime, D_80BDA4B8, 5);
+    func_800BDC5C(&this->skelAnime, animations, 5);
     func_80BD93CC(this, 1, 0);
     this->unk_31E = 1;
     this->setupFunc = func_80BD9F3C;
@@ -806,19 +807,19 @@ void func_80BD9F3C(EnPamera* this, GlobalContext* globalCtx) {
             func_801378B8(&this->skelAnime, 10.0f) || func_801378B8(&this->skelAnime, 14.0f) ||
             func_801378B8(&this->skelAnime, 18.0f) || func_801378B8(&this->skelAnime, 22.0f) ||
             func_801378B8(&this->skelAnime, 25.0f)) {
-            Audio_PlayActorSound2(this, 0x298B);
+            Audio_PlayActorSound2(&this->actor, 0x298B);
         }
         if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) != 0) {
             this->unk_31E = 0;
             func_80BD93CC(this, 0, 0);
-            func_800BDC5C(&this->skelAnime, D_80BDA4B8, 6);
+            func_800BDC5C(&this->skelAnime, animations, 6);
         }
     }
 }
 
 void func_80BDA038(EnPamera* this) {
     func_80BD93CC(this, 0, 1);
-    func_800BDC5C(&this->skelAnime, D_80BDA4B8, 7);
+    func_800BDC5C(&this->skelAnime, animations, 7);
     this->unk_31E = 0;
     this->setupFunc = func_80BDA090;
 }
@@ -828,7 +829,7 @@ void func_80BDA090(EnPamera* this, GlobalContext* globalCtx) {
 
 void func_80BDA0A0(EnPamera* this) {
     func_80BD93CC(this, 0, 1);
-    func_800BDC5C(&this->skelAnime, D_80BDA4B8, 8);
+    func_800BDC5C(&this->skelAnime, animations, 8);
     this->unk_31E = 1;
     this->setupFunc = func_80BDA0FC;
 }
@@ -838,7 +839,7 @@ void func_80BDA0FC(EnPamera* this, GlobalContext* globalCtx) {
         if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) != 0) {
             this->unk_31E = 0;
             func_80BD93CC(this, 0, 0);
-            func_800BDC5C(&this->skelAnime, D_80BDA4B8, 6);
+            func_800BDC5C(&this->skelAnime, animations, 6);
         }
     }
 }
@@ -846,7 +847,7 @@ void func_80BDA0FC(EnPamera* this, GlobalContext* globalCtx) {
 void func_80BDA170(EnPamera* this) {
     this->unk_31E = 1;
     func_80BD93CC(this, 0, 1);
-    func_800BDC5C(&this->skelAnime, D_80BDA4B8, 9);
+    func_800BDC5C(&this->skelAnime, animations, 9);
     this->setupFunc = func_80BDA1C8;
 }
 
@@ -854,12 +855,12 @@ void func_80BDA1C8(EnPamera* this, GlobalContext* globalCtx) {
     if (this->unk_31E == 1) {
         if (func_801378B8(&this->skelAnime, 2.0f) || func_801378B8(&this->skelAnime, 6.0f) ||
             func_801378B8(&this->skelAnime, 10.0f) || func_801378B8(&this->skelAnime, 14.0f)) {
-            Audio_PlayActorSound2(this, 0x298B);
+            Audio_PlayActorSound2(&this->actor, 0x298B);
         }
         if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
             this->unk_31E = 0;
             func_80BD93CC(this, 0, 0);
-            func_800BDC5C(&this->skelAnime, D_80BDA4B8, 10);
+            func_800BDC5C(&this->skelAnime, animations, 10);
         }
     }
 }
@@ -867,7 +868,7 @@ void func_80BDA1C8(EnPamera* this, GlobalContext* globalCtx) {
 void func_80BDA288(EnPamera* this) {
     this->unk_31E = 1;
     func_80BD93CC(this, 0, 0);
-    func_800BDC5C(&this->skelAnime, D_80BDA4B8, 11);
+    func_800BDC5C(&this->skelAnime, animations, 11);
     this->setupFunc = func_80BDA2E0;
 }
 
@@ -875,7 +876,7 @@ void func_80BDA2E0(EnPamera* this, GlobalContext* globalCtx) {
     if (this->unk_31E == 1) {
         if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) != 0) {
             this->unk_31E = 0;
-            func_800BDC5C(&this->skelAnime, D_80BDA4B8, 12);
+            func_800BDC5C(&this->skelAnime, animations, 12);
         }
     }
 }
@@ -888,7 +889,8 @@ void func_80BDA344(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     func_80BD9384(this, globalCtx);
     if (func_80BD9CB8(this, globalCtx)) {
-        if ((gSaveContext.weekEventReg[59] & 1)) {
+        // Pamela is outside
+        if (gSaveContext.weekEventReg[59] & 1) {
             gSaveContext.weekEventReg[59] &= 0xFE;
         }
         if ((gSaveContext.weekEventReg[61] & 4) == 0) {
