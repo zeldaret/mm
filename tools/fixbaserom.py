@@ -141,12 +141,12 @@ if path.exists("baserom.z64"):
 
 # Determine if we have a ROM file
 romFileName = ""
-if path.exists("baserom_original.z64"):
-    romFileName = "baserom_original.z64"
-elif path.exists("baserom_original.n64"):
-    romFileName = "baserom_original.n64"
-elif path.exists("baserom_original.v64"):
-    romFileName = "baserom_original.v64"
+if path.exists("baserom.mm.us.rev1.z64"):
+    romFileName = "baserom.mm.us.rev1.z64"
+elif path.exists("baserom.mm.us.rev1.n64"):
+    romFileName = "baserom.mm.us.rev1.n64"
+elif path.exists("baserom.mm.us.rev1.v64"):
+    romFileName = "baserom.mm.us.rev1.v64"
 
 # Read in the original ROM
 if romFileName != "":
@@ -186,7 +186,7 @@ if romFileName != "":
         
             print("Byte swapping done.")
 else:
-    print("Error: Could not find baserom_original.z64/baserom_original.n64.")
+    print("Error: Could not find baserom.mm.us.rev1.z64/baserom.mm.us.rev1.n64.")
     sys.exit(1)
 
 # Decompress
