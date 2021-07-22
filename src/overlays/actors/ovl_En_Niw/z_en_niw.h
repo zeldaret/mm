@@ -87,11 +87,4 @@ typedef struct EnNiw {
 // the attacking cuccos are not here, they are a different actor:
 //  ovl_En_Attack_Niw
 
-extern FlexSkeletonHeader D_06002530;
-extern AnimationHeader D_060000E8;
-
-// feather display list?
-extern Gfx D_060023B0[];
-extern Gfx D_06002428[];
-
 #endif // Z_EN_NIW_H
