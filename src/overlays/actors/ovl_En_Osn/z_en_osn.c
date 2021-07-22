@@ -9,8 +9,7 @@ void EnOsn_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnOsn_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnOsn_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Osn_InitVars = {
     ACTOR_EN_OSN,
     ACTORCAT_NPC,
@@ -78,6 +77,11 @@ static InitChainEntry D_80AD2570[] = {
     ICHAIN_U8(targetMode, 0, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_80AD2518;
+extern CollisionCheckInfoInit2 D_80AD2544;
+extern DamageTable D_80AD2550;
+extern InitChainEntry D_80AD2570[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Osn_0x80AD0830/func_80AD0830.asm")

@@ -9,8 +9,7 @@ void EnScopecrow_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnScopecrow_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnScopecrow_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Scopecrow_InitVars = {
     ACTOR_EN_SCOPECROW,
     ACTORCAT_NPC,
@@ -38,6 +37,9 @@ static ColliderJntSphInit D_80BCDB94 = {
     1, D_80BCDB70, // sJntSphElementsInit,
 };
 
+
+extern ColliderJntSphElementInit D_80BCDB70[1];
+extern ColliderJntSphInit D_80BCDB94;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Scopecrow_0x80BCD000/func_80BCD000.asm")

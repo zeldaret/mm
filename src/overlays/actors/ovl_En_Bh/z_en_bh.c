@@ -9,8 +9,7 @@ void EnBh_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBh_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBh_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Bh_InitVars = {
     ACTOR_EN_BH,
     ACTORCAT_ITEMACTION,

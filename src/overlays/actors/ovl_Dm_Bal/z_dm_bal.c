@@ -9,8 +9,7 @@ void DmBal_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmBal_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmBal_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Dm_Bal_InitVars = {
     ACTOR_DM_BAL,
     ACTORCAT_NPC,

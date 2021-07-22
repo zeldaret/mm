@@ -9,8 +9,7 @@ void ObjUm_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjUm_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjUm_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Obj_Um_InitVars = {
     ACTOR_OBJ_UM,
     ACTORCAT_NPC,
@@ -38,6 +37,9 @@ static InitChainEntry D_80B7C254[] = {
     ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_80B7C138;
+extern InitChainEntry D_80B7C254[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B77770.asm")

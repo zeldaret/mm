@@ -9,8 +9,7 @@ void EnFloormas_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFloormas_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFloormas_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Floormas_InitVars = {
     ACTOR_EN_FLOORMAS,
     ACTORCAT_ENEMY,
@@ -80,6 +79,11 @@ static InitChainEntry D_808D38F4[] = {
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_808D38A0;
+extern CollisionCheckInfoInit D_808D38CC;
+extern DamageTable D_808D38D4;
+extern InitChainEntry D_808D38F4[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Floormas_0x808D0680/EnFloormas_Init.asm")

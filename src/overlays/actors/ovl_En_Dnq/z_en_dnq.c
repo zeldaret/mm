@@ -9,8 +9,7 @@ void EnDnq_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDnq_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDnq_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Dnq_InitVars = {
     ACTOR_EN_DNQ,
     ACTORCAT_NPC,
@@ -35,6 +34,9 @@ static ColliderCylinderInit D_80A53464 = {
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80A53490 = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
+
+extern ColliderCylinderInit D_80A53464;
+extern CollisionCheckInfoInit2 D_80A53490;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnq_0x80A52530/func_80A52530.asm")

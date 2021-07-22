@@ -9,8 +9,7 @@ void EnGuardNuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGuardNuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGuardNuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Guard_Nuts_InitVars = {
     ACTOR_EN_GUARD_NUTS,
     ACTORCAT_NPC,
@@ -31,6 +30,8 @@ static ColliderCylinderInit D_80ABBDF0 = {
     { 50, 50, 0, { 0, 0, 0 } },
 };
 
+
+extern ColliderCylinderInit D_80ABBDF0;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Guard_Nuts_0x80ABB0E0/EnGuardNuts_Init.asm")

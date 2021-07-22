@@ -9,8 +9,7 @@ void EnVm_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnVm_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnVm_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Vm_InitVars = {
     ACTOR_EN_VM,
     ACTORCAT_ENEMY,
@@ -106,6 +105,14 @@ static InitChainEntry D_808CD5AC[] = {
     ICHAIN_S8(hintId, 57, ICHAIN_STOP),
 };
 
+
+extern ColliderJntSphElementInit D_808CD4C0[2];
+extern ColliderJntSphInit D_808CD508;
+extern ColliderTrisElementInit D_808CD518[1];
+extern ColliderTrisInit D_808CD554;
+extern DamageTable D_808CD564;
+extern CollisionCheckInfoInit D_808CD584;
+extern InitChainEntry D_808CD5AC[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Vm_0x808CC260/EnVm_Init.asm")

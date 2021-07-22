@@ -9,8 +9,7 @@ void ObjKzsaku_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjKzsaku_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjKzsaku_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Obj_Kzsaku_InitVars = {
     ACTOR_OBJ_KZSAKU,
     ACTORCAT_PROP,

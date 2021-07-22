@@ -9,8 +9,7 @@ void ArrowFire_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ArrowFire_Update(Actor* thisx, GlobalContext* globalCtx);
 void ArrowFire_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 // static ColliderQuadInit sQuadInit = {
 static ColliderQuadInit D_80922230 = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_PLAYER, AC_NONE, OC1_NONE, OC2_TYPE_PLAYER, COLSHAPE_QUAD, },
@@ -31,6 +30,8 @@ const ActorInit Arrow_Fire_InitVars = {
     (ActorFunc)ArrowFire_Draw,
 };
 
+
+extern ColliderQuadInit D_80922230;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Fire_0x80920340/FireArrow_SetUpdateFunc.asm")

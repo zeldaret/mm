@@ -9,8 +9,7 @@ void EnPoSisters_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPoSisters_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Po_Sisters_InitVars = {
     ACTOR_EN_PO_SISTERS,
     ACTORCAT_ENEMY,
@@ -79,6 +78,11 @@ static InitChainEntry D_80B1DAC4[] = {
     ICHAIN_F32(targetArrowOffset, 6000, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_80B1DA70;
+extern CollisionCheckInfoInit D_80B1DA9C;
+extern DamageTable D_80B1DAA4;
+extern InitChainEntry D_80B1DAC4[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Po_Sisters_0x80B1A3B0/EnPoSisters_Init.asm")

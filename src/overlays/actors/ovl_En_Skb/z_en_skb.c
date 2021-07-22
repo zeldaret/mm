@@ -9,8 +9,7 @@ void EnSkb_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSkb_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSkb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 // static ColliderJntSphElementInit sJntSphElementsInit[2] = {
 static ColliderJntSphElementInit D_80997498[2] = {
     {
@@ -86,6 +85,11 @@ static InitChainEntry D_80997548[] = {
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_STOP),
 };
 
+
+extern ColliderJntSphElementInit D_80997498[2];
+extern ColliderJntSphInit D_809974E0;
+extern DamageTable D_809974F0;
+extern InitChainEntry D_80997548[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Skb_0x809947B0/func_809947B0.asm")

@@ -9,8 +9,7 @@ void ObjSpinyroll_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSpinyroll_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjSpinyroll_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Obj_Spinyroll_InitVars = {
     ACTOR_OBJ_SPINYROLL,
     ACTORCAT_PROP,
@@ -65,6 +64,10 @@ static InitChainEntry D_80A1F204[] = {
     ICHAIN_F32(uncullZoneDownward, 500, ICHAIN_STOP),
 };
 
+
+extern ColliderTrisElementInit D_80A1F040[6];
+extern ColliderTrisInit D_80A1F1A8;
+extern InitChainEntry D_80A1F204[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Spinyroll_0x80A1DA50/func_80A1DA50.asm")

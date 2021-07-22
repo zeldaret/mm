@@ -9,8 +9,7 @@ void ObjTokeiTurret_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjTokeiTurret_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjTokeiTurret_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Obj_Tokei_Turret_InitVars = {
     ACTOR_OBJ_TOKEI_TURRET,
     ACTORCAT_BG,
@@ -30,6 +29,8 @@ static InitChainEntry D_80B91EC0[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+
+extern InitChainEntry D_80B91EC0[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Tokei_Turret_0x80B91CC0/ObjTokeiTurret_Init.asm")

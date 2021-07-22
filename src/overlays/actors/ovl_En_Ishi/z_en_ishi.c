@@ -8,8 +8,7 @@ void EnIshi_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnIshi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnIshi_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Ishi_InitVars = {
     ACTOR_EN_ISHI,
     ACTORCAT_PROP,
@@ -62,6 +61,12 @@ static InitChainEntry D_8095F798[] = {
     ICHAIN_F32(uncullZoneDownward, 400, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_8095F6EC;
+extern ColliderCylinderInit D_8095F718;
+extern CollisionCheckInfoInit D_8095F744;
+extern InitChainEntry D_8095F784[];
+extern InitChainEntry D_8095F798[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ishi_0x8095D6E0/func_8095D6E0.asm")

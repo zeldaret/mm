@@ -9,8 +9,7 @@ void DmChar06_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmChar06_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmChar06_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Dm_Char06_InitVars = {
     ACTOR_DM_CHAR06,
     ACTORCAT_ITEMACTION,

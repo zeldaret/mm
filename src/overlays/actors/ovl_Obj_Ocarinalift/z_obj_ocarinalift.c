@@ -9,8 +9,7 @@ void ObjOcarinalift_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjOcarinalift_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjOcarinalift_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Obj_Ocarinalift_InitVars = {
     ACTOR_OBJ_OCARINALIFT,
     ACTORCAT_BG,
@@ -33,6 +32,8 @@ static InitChainEntry D_80AC9D70[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+
+extern InitChainEntry D_80AC9D70[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ocarinalift_0x80AC94C0/func_80AC94C0.asm")

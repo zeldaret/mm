@@ -9,8 +9,7 @@ void ObjHakaisi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjHakaisi_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjHakaisi_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Obj_Hakaisi_InitVars = {
     ACTOR_OBJ_HAKAISI,
     ACTORCAT_PROP,

@@ -8,8 +8,7 @@ void EnTalk_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTalk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTalk_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Talk_InitVars = {
     ACTOR_EN_TALK,
     ACTORCAT_ITEMACTION,

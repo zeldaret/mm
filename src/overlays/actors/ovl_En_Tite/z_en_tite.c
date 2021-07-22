@@ -9,8 +9,7 @@ void EnTite_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTite_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTite_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Tite_InitVars = {
     ACTOR_EN_TITE,
     ACTORCAT_ENEMY,
@@ -81,6 +80,11 @@ static InitChainEntry D_80896B50[] = {
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_STOP),
 };
 
+
+extern ColliderSphereInit D_80896AD0;
+extern DamageTable D_80896AFC;
+extern CollisionCheckInfoInit D_80896B1C;
+extern InitChainEntry D_80896B50[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tite_0x808937F0/EnTite_Init.asm")

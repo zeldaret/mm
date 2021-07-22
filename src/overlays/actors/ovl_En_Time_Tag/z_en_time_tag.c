@@ -8,8 +8,7 @@ void EnTimeTag_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTimeTag_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTimeTag_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Time_Tag_InitVars = {
     ACTOR_EN_TIME_TAG,
     ACTORCAT_ITEMACTION,

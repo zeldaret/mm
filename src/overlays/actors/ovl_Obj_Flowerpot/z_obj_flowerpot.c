@@ -9,8 +9,7 @@ void ObjFlowerpot_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjFlowerpot_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjFlowerpot_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Obj_Flowerpot_InitVars = {
     ACTOR_OBJ_FLOWERPOT,
     ACTORCAT_PROP,
@@ -53,6 +52,10 @@ static InitChainEntry D_80A1D414[] = {
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
 };
 
+
+extern ColliderJntSphElementInit D_80A1D3A0[2];
+extern ColliderJntSphInit D_80A1D3E8;
+extern InitChainEntry D_80A1D414[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Flowerpot_0x80A1B3D0/func_80A1B3D0.asm")

@@ -9,8 +9,7 @@ void EnBb_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBb_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Bb_InitVars = {
     ACTOR_EN_BB,
     ACTORCAT_ENEMY,
@@ -79,6 +78,11 @@ static InitChainEntry D_808C37F4[] = {
     ICHAIN_F32(targetArrowOffset, 10, ICHAIN_STOP),
 };
 
+
+extern ColliderSphereInit D_808C37A0;
+extern DamageTable D_808C37CC;
+extern CollisionCheckInfoInit D_808C37EC;
+extern InitChainEntry D_808C37F4[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bb_0x808C1D40/EnBb_Init.asm")

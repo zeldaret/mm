@@ -9,8 +9,7 @@ void EnKarebaba_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKarebaba_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKarebaba_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Karebaba_InitVars = {
     ACTOR_EN_KAREBABA,
     ACTORCAT_ENEMY,
@@ -87,6 +86,12 @@ static InitChainEntry D_808F2E20[] = {
     ICHAIN_U8(targetMode, 1, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_808F2DA0;
+extern ColliderCylinderInit D_808F2DCC;
+extern CollisionCheckInfoInit D_808F2DF8;
+extern DamageTable D_808F2E00;
+extern InitChainEntry D_808F2E20[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Karebaba_0x808F1200/EnKarebaba_Init.asm")

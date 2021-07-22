@@ -9,8 +9,7 @@ void EnPrz_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPrz_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPrz_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 // static DamageTable sDamageTable = {
 static DamageTable D_80A771C0 = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
@@ -68,6 +67,9 @@ const ActorInit En_Prz_InitVars = {
     (ActorFunc)EnPrz_Draw,
 };
 
+
+extern DamageTable D_80A771C0;
+extern ColliderCylinderInit D_80A771F4;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Prz_0x80A75DC0/EnPrz_Init.asm")

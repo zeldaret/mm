@@ -9,8 +9,7 @@ void EnFu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFu_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Fu_InitVars = {
     ACTOR_EN_FU,
     ACTORCAT_NPC,
@@ -31,6 +30,8 @@ static ColliderCylinderInit D_80964BD8 = {
     { 20, 50, 0, { 0, 0, 0 } },
 };
 
+
+extern ColliderCylinderInit D_80964BD8;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fu_0x809616E0/func_809616E0.asm")

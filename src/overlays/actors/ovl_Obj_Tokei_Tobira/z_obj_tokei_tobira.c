@@ -9,8 +9,7 @@ void ObjTokeiTobira_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjTokeiTobira_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjTokeiTobira_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Obj_Tokei_Tobira_InitVars = {
     ACTOR_OBJ_TOKEI_TOBIRA,
     ACTORCAT_BG,
@@ -32,6 +31,8 @@ static InitChainEntry D_80ABD750[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+
+extern InitChainEntry D_80ABD750[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Tokei_Tobira_0x80ABD1D0/ObjTokeiTobira_Init.asm")

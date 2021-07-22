@@ -9,8 +9,7 @@ void EnGs_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGs_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGs_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Gs_InitVars = {
     ACTOR_EN_GS,
     ACTORCAT_PROP,
@@ -78,6 +77,11 @@ static InitChainEntry D_8099A404[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_8099A3A0;
+extern CollisionCheckInfoInit2 D_8099A3CC;
+extern DamageTable D_8099A3D8;
+extern InitChainEntry D_8099A404[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gs_0x80997A90/func_80997A90.asm")

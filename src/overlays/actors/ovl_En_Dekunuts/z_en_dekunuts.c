@@ -9,8 +9,7 @@ void EnDekunuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDekunuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDekunuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Dekunuts_InitVars = {
     ACTOR_EN_DEKUNUTS,
     ACTORCAT_ENEMY,
@@ -80,6 +79,11 @@ static InitChainEntry D_808BEF84[] = {
     ICHAIN_F32(targetArrowOffset, 2600, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_808BEF30;
+extern CollisionCheckInfoInit D_808BEF5C;
+extern DamageTable D_808BEF64;
+extern InitChainEntry D_808BEF84[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dekunuts_0x808BD1E0/EnDekunuts_Init.asm")

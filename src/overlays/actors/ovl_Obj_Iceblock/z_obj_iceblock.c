@@ -9,8 +9,7 @@ void ObjIceblock_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjIceblock_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjIceblock_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Obj_Iceblock_InitVars = {
     ACTOR_OBJ_ICEBLOCK,
     ACTORCAT_BG,
@@ -43,6 +42,9 @@ static InitChainEntry D_80A26FA4[] = {
     ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_80A26E50;
+extern InitChainEntry D_80A26FA4[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Iceblock_0x80A23090/func_80A23090.asm")

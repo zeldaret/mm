@@ -8,8 +8,7 @@ void EnSob1_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnSob1_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSob1_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Sob1_InitVars = {
     ACTOR_EN_OSSAN,
     ACTORCAT_NPC,
@@ -28,6 +27,8 @@ static InitChainEntry D_80A109E8[] = {
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
 
+
+extern InitChainEntry D_80A109E8[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sob1_0x80A0C810/func_80A0C810.asm")

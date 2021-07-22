@@ -9,8 +9,7 @@ void BgHakaBombwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgHakaBombwall_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgHakaBombwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Bg_Haka_Bombwall_InitVars = {
     ACTOR_BG_HAKA_BOMBWALL,
     ACTORCAT_BG,
@@ -40,6 +39,9 @@ static InitChainEntry D_80BD64D4[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_80BD64A0;
+extern InitChainEntry D_80BD64D4[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Haka_Bombwall_0x80BD5E00/func_80BD5E00.asm")

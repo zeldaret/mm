@@ -9,8 +9,7 @@ void BgIknvDoukutu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIknvDoukutu_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIknvDoukutu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Bg_Iknv_Doukutu_InitVars = {
     ACTOR_BG_IKNV_DOUKUTU,
     ACTORCAT_BG,

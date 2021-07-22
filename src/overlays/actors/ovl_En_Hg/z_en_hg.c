@@ -9,8 +9,7 @@ void EnHg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Hg_InitVars = {
     ACTOR_EN_HG,
     ACTORCAT_PROP,
@@ -72,6 +71,10 @@ static DamageTable D_80BCFFDC = {
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80BCFFFC = { 0, 0, 0, 0, 128 };
 
+
+extern ColliderCylinderInit D_80BCFFB0;
+extern DamageTable D_80BCFFDC;
+extern CollisionCheckInfoInit2 D_80BCFFFC;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hg_0x80BCF1D0/EnHg_Init.asm")

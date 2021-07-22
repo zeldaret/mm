@@ -8,8 +8,7 @@ void EnBigpo_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpo_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Bigpo_InitVars = {
     ACTOR_EN_BIGPO,
     ACTORCAT_ENEMY,
@@ -78,6 +77,11 @@ static InitChainEntry D_80B65064[] = {
     ICHAIN_F32(targetArrowOffset, 3200, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_80B65010;
+extern CollisionCheckInfoInit D_80B6503C;
+extern DamageTable D_80B65044;
+extern InitChainEntry D_80B65064[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpo_0x80B615E0/EnBigpo_Init.asm")

@@ -9,8 +9,7 @@ void EnAz_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnAz_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnAz_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Az_InitVars = {
     ACTOR_EN_AZ,
     ACTORCAT_NPC,
@@ -31,6 +30,8 @@ static ColliderCylinderInit D_80A99110 = {
     { 18, 46, 0, { 0, 0, 0 } },
 };
 
+
+extern ColliderCylinderInit D_80A99110;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Az_0x80A94A30/func_80A94A30.asm")

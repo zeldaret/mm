@@ -8,8 +8,7 @@ void EnTest4_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTest4_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTest4_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Test4_InitVars = {
     ACTOR_EN_TEST4,
     ACTORCAT_SWITCH,

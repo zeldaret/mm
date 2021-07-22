@@ -8,8 +8,7 @@ void ObjBombiwa_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjBombiwa_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjBombiwa_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Obj_Bombiwa_InitVars = {
     ACTOR_OBJ_BOMBIWA,
     ACTORCAT_PROP,
@@ -51,6 +50,11 @@ static InitChainEntry D_8093A9C0[] = {
     ICHAIN_F32(uncullZoneDownward, 500, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_8093A940;
+extern ColliderCylinderInit D_8093A96C;
+extern CollisionCheckInfoInit D_8093A9B8;
+extern InitChainEntry D_8093A9C0[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bombiwa_0x809393B0/func_809393B0.asm")

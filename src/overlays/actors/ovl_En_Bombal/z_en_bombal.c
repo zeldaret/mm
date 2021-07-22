@@ -9,8 +9,7 @@ void EnBombal_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBombal_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBombal_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Bombal_InitVars = {
     ACTOR_EN_BOMBAL,
     ACTORCAT_PROP,
@@ -31,6 +30,8 @@ static ColliderCylinderInit D_80C06460 = {
     { 60, 90, -50, { 0, 0, 0 } },
 };
 
+
+extern ColliderCylinderInit D_80C06460;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bombal_0x80C05A70/EnBombal_Init.asm")

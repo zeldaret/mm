@@ -9,8 +9,7 @@ void BgFuMizu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgFuMizu_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgFuMizu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Bg_Fu_Mizu_InitVars = {
     ACTOR_BG_FU_MIZU,
     ACTORCAT_BG,

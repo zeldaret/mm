@@ -8,8 +8,7 @@ void BgSpoutFire_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgSpoutFire_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgSpoutFire_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Bg_Spout_Fire_InitVars = {
     ACTOR_BG_SPOUT_FIRE,
     ACTORCAT_BG,
@@ -34,6 +33,9 @@ static ColliderCylinderInit D_80A61160 = {
 // sColChkInfoInit
 static CollisionCheckInfoInit D_80A6118C = { 1, 80, 100, MASS_IMMOVABLE };
 
+
+extern ColliderCylinderInit D_80A61160;
+extern CollisionCheckInfoInit D_80A6118C;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Spout_Fire_0x80A60B20/BgSpoutFire_Init.asm")

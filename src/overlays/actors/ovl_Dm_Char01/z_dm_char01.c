@@ -9,8 +9,7 @@ void DmChar01_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmChar01_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmChar01_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Dm_Char01_InitVars = {
     ACTOR_DM_CHAR01,
     ACTORCAT_ITEMACTION,
@@ -29,6 +28,8 @@ static InitChainEntry D_80AAAAB0[] = {
     ICHAIN_F32(uncullZoneScale, 300, ICHAIN_STOP),
 };
 
+
+extern InitChainEntry D_80AAAAB0[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Char01_0x80AA81E0/DmChar01_Init.asm")

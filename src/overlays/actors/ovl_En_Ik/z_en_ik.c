@@ -9,8 +9,7 @@ void EnIk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnIk_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnIk_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Ik_InitVars = {
     ACTOR_EN_IK,
     ACTORCAT_ENEMY,
@@ -144,6 +143,15 @@ static InitChainEntry D_8092C168[] = {
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_8092C01C;
+extern ColliderTrisElementInit D_8092C048[2];
+extern ColliderTrisInit D_8092C0C0;
+extern ColliderQuadInit D_8092C0D0;
+extern DamageTable D_8092C120;
+extern DamageTable D_8092C140;
+extern CollisionCheckInfoInit D_8092C160;
+extern InitChainEntry D_8092C168[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ik_0x80929910/EnIk_Init.asm")

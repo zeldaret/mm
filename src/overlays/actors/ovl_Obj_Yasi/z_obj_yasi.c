@@ -9,8 +9,7 @@ void ObjYasi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjYasi_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjYasi_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Obj_Yasi_InitVars = {
     ACTOR_OBJ_YASI,
     ACTORCAT_PROP,
@@ -32,6 +31,8 @@ static InitChainEntry D_80BB4D90[] = {
     ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_STOP),
 };
 
+
+extern InitChainEntry D_80BB4D90[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Yasi_0x80BB4AF0/ObjYasi_Init.asm")

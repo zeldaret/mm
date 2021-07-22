@@ -9,8 +9,7 @@ void EnBigpamet_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpamet_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpamet_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Bigpamet_InitVars = {
     ACTOR_EN_BIGPAMET,
     ACTORCAT_BOSS,
@@ -82,6 +81,11 @@ static InitChainEntry D_80A29764[] = {
     ICHAIN_U8(targetMode, 5, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_80A29700;
+extern CollisionCheckInfoInit D_80A2972C;
+extern DamageTable D_80A29734;
+extern InitChainEntry D_80A29764[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigpamet_0x80A27520/EnBigpamet_Init.asm")

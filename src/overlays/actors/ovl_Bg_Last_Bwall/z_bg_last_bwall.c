@@ -9,8 +9,7 @@ void BgLastBwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgLastBwall_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgLastBwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Bg_Last_Bwall_InitVars = {
     ACTOR_BG_LAST_BWALL,
     ACTORCAT_BG,
@@ -48,6 +47,10 @@ static InitChainEntry D_80C18AC8[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+
+extern ColliderTrisElementInit D_80C189C0[2];
+extern ColliderTrisInit D_80C18A38;
+extern InitChainEntry D_80C18AC8[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Last_Bwall_0x80C18240/func_80C18240.asm")

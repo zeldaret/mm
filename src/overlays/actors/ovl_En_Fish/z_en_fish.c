@@ -9,8 +9,7 @@ void EnFish_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFish_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFish_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_8091FA60[1] = {
     {
@@ -46,6 +45,10 @@ static InitChainEntry D_8091FAC0[] = {
     ICHAIN_F32(uncullZoneDownward, 40, ICHAIN_STOP),
 };
 
+
+extern ColliderJntSphElementInit D_8091FA60[1];
+extern ColliderJntSphInit D_8091FA84;
+extern InitChainEntry D_8091FAC0[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fish_0x8091D630/func_8091D630.asm")

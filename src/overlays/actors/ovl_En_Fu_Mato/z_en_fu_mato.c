@@ -9,8 +9,7 @@ void EnFuMato_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFuMato_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFuMato_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Fu_Mato_InitVars = {
     ACTOR_EN_FU_MATO,
     ACTORCAT_BG,
@@ -31,6 +30,8 @@ static ColliderSphereInit D_80ACF610 = {
     { 0, { { 0, 0, 0 }, 200 }, 100 },
 };
 
+
+extern ColliderSphereInit D_80ACF610;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fu_Mato_0x80ACE330/EnFuMato_Init.asm")

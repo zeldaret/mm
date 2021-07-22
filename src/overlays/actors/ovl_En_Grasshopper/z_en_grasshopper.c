@@ -9,8 +9,7 @@ void EnGrasshopper_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGrasshopper_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGrasshopper_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 // static DamageTable sDamageTable = {
 static DamageTable D_809A8CDC = {
     /* Deku Nut       */ DMG_ENTRY(1, 0xF),
@@ -79,6 +78,10 @@ static ColliderJntSphInit D_809A8D64 = {
     2, D_809A8D1C, // sJntSphElementsInit,
 };
 
+
+extern DamageTable D_809A8CDC;
+extern ColliderJntSphElementInit D_809A8D1C[2];
+extern ColliderJntSphInit D_809A8D64;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Grasshopper_0x809A6280/EnGrasshopper_Init.asm")

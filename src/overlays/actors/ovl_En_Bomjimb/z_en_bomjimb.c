@@ -9,8 +9,7 @@ void EnBomjimb_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBomjimb_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBomjimb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Bomjimb_InitVars = {
     ACTOR_EN_BOMJIMB,
     ACTORCAT_NPC,
@@ -31,6 +30,8 @@ static ColliderCylinderInit D_80C03194 = {
     { 20, 30, 0, { 0, 0, 0 } },
 };
 
+
+extern ColliderCylinderInit D_80C03194;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bomjimb_0x80C00EA0/EnBomjimb_Init.asm")

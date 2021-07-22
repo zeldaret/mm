@@ -9,8 +9,7 @@ void EnKame_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKame_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKame_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Kame_InitVars = {
     ACTOR_EN_KAME,
     ACTORCAT_ENEMY,
@@ -80,6 +79,11 @@ static InitChainEntry D_80AD8E44[] = {
     ICHAIN_F32(targetArrowOffset, 3500, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_80AD8DE0;
+extern CollisionCheckInfoInit D_80AD8E0C;
+extern DamageTable D_80AD8E14;
+extern InitChainEntry D_80AD8E44[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kame_0x80AD6DD0/EnKame_Init.asm")

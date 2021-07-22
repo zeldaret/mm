@@ -9,8 +9,7 @@ void ObjChikuwa_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjChikuwa_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjChikuwa_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Obj_Chikuwa_InitVars = {
     ACTOR_OBJ_CHIKUWA,
     ACTORCAT_BG,
@@ -32,6 +31,8 @@ static InitChainEntry D_809B1FC0[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+
+extern InitChainEntry D_809B1FC0[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Chikuwa_0x809B1550/func_809B1550.asm")

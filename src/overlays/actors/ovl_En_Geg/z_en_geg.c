@@ -9,8 +9,7 @@ void EnGeg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGeg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGeg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Geg_InitVars = {
     ACTOR_EN_GEG,
     ACTORCAT_NPC,
@@ -80,6 +79,11 @@ static DamageTable D_80BB3ED4 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
+
+extern ColliderSphereInit D_80BB3E70;
+extern ColliderCylinderInit D_80BB3E9C;
+extern CollisionCheckInfoInit2 D_80BB3EC8;
+extern DamageTable D_80BB3ED4;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Geg_0x80BB16D0/func_80BB16D0.asm")

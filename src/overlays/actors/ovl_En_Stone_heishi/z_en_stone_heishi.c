@@ -9,8 +9,7 @@ void EnStoneheishi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnStoneheishi_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnStoneheishi_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Stone_heishi_InitVars = {
     ACTOR_EN_STONE_HEISHI,
     ACTORCAT_NPC,
@@ -31,6 +30,8 @@ static ColliderCylinderInit D_80BCA3A0 = {
     { 15, 70, 0, { 0, 0, 0 } },
 };
 
+
+extern ColliderCylinderInit D_80BCA3A0;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stone_heishi_0x80BC9270/EnStoneheishi_Init.asm")

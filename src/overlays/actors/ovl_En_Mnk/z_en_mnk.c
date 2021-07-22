@@ -9,8 +9,7 @@ void EnMnk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMnk_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMnk_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Mnk_InitVars = {
     ACTOR_EN_MNK,
     ACTORCAT_NPC,
@@ -31,6 +30,8 @@ static ColliderCylinderInit D_80AB9D10 = {
     { 15, 30, 0, { 0, 0, 0 } },
 };
 
+
+extern ColliderCylinderInit D_80AB9D10;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Mnk_0x80AB4D10/func_80AB4D10.asm")

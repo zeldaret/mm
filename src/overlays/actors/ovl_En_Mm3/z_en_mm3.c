@@ -9,8 +9,7 @@ void EnMm3_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMm3_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMm3_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Mm3_InitVars = {
     ACTOR_EN_MM3,
     ACTORCAT_NPC,
@@ -35,6 +34,9 @@ static ColliderCylinderInit D_80A703F0 = {
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80A7041C = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
+
+extern ColliderCylinderInit D_80A703F0;
+extern CollisionCheckInfoInit2 D_80A7041C;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Mm3_0x80A6F0A0/EnMm3_Init.asm")

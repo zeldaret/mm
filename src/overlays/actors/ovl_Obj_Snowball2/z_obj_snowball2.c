@@ -9,8 +9,7 @@ void ObjSnowball2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSnowball2_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjSnowball2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Obj_Snowball2_InitVars = {
     ACTOR_OBJ_SNOWBALL2,
     ACTORCAT_PROP,
@@ -49,6 +48,10 @@ static InitChainEntry D_80B3A93C[] = {
     ICHAIN_VEC3F_DIV1000(scale, 25, ICHAIN_STOP),
 };
 
+
+extern ColliderJntSphElementInit D_80B3A8E0[1];
+extern ColliderJntSphInit D_80B3A904;
+extern InitChainEntry D_80B3A93C[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Snowball2_0x80B38E20/func_80B38E20.asm")

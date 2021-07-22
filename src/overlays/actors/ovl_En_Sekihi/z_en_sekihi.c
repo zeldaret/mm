@@ -8,8 +8,7 @@ void EnSekihi_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnSekihi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSekihi_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Sekihi_InitVars = {
     ACTOR_EN_SEKIHI,
     ACTORCAT_PROP,

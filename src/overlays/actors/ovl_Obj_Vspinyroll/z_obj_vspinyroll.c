@@ -9,8 +9,7 @@ void ObjVspinyroll_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjVspinyroll_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjVspinyroll_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Obj_Vspinyroll_InitVars = {
     ACTOR_OBJ_VSPINYROLL,
     ACTORCAT_PROP,
@@ -38,6 +37,9 @@ static InitChainEntry D_80A3D4D4[] = {
     ICHAIN_F32(uncullZoneDownward, 500, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_80A3D488;
+extern InitChainEntry D_80A3D4D4[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Vspinyroll_0x80A3C4E0/func_80A3C4E0.asm")

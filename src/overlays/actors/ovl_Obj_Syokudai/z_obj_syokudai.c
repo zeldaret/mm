@@ -9,8 +9,7 @@ void ObjSyokudai_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjSyokudai_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Obj_Syokudai_InitVars = {
     ACTOR_OBJ_SYOKUDAI,
     ACTORCAT_PROP,
@@ -48,6 +47,10 @@ static InitChainEntry D_808BCD18[] = {
     ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_808BCCC0;
+extern ColliderCylinderInit D_808BCCEC;
+extern InitChainEntry D_808BCD18[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Syokudai_0x808BC010/ObjSyokudai_Init.asm")

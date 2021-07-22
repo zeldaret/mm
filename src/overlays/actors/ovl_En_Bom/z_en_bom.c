@@ -9,8 +9,7 @@ void EnBom_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBom_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBom_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Bom_InitVars = {
     ACTOR_EN_BOM,
     ACTORCAT_EXPLOSIVES,
@@ -69,6 +68,13 @@ static InitChainEntry D_80872E5C[] = {
     ICHAIN_F32_DIV1000(gravity, -4000, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_80872DC8;
+extern ColliderJntSphElementInit D_80872DF4[1];
+extern ColliderJntSphInit D_80872E18;
+extern ColliderJntSphElementInit D_80872E28[1];
+extern ColliderJntSphInit D_80872E4C;
+extern InitChainEntry D_80872E5C[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bom_0x80870DB0/EnBom_Init.asm")

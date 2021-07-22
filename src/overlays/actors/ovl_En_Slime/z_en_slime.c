@@ -9,8 +9,7 @@ void EnSlime_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSlime_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSlime_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Slime_InitVars = {
     ACTOR_EN_SLIME,
     ACTORCAT_ENEMY,
@@ -79,6 +78,11 @@ static InitChainEntry D_80A31B54[] = {
     ICHAIN_F32(targetArrowOffset, 6000, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_80A31AF0;
+extern DamageTable D_80A31B1C;
+extern CollisionCheckInfoInit D_80A31B3C;
+extern InitChainEntry D_80A31B54[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Slime_0x80A2EDA0/EnSlime_Init.asm")

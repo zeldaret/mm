@@ -8,8 +8,7 @@ void BgUmajump_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgUmajump_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgUmajump_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Bg_Umajump_InitVars = {
     ACTOR_BG_UMAJUMP,
     ACTORCAT_PROP,
@@ -30,6 +29,8 @@ static InitChainEntry D_8091A810[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+
+extern InitChainEntry D_8091A810[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Umajump_0x80919F30/func_80919F30.asm")

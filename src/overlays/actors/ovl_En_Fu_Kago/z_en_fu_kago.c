@@ -9,8 +9,7 @@ void EnFuKago_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFuKago_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFuKago_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Fu_Kago_InitVars = {
     ACTOR_EN_FU_KAGO,
     ACTORCAT_BG,
@@ -31,6 +30,8 @@ static ColliderSphereInit D_80AD05F0 = {
     { 0, { { 0, 0, 0 }, 200 }, 100 },
 };
 
+
+extern ColliderSphereInit D_80AD05F0;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fu_Kago_0x80ACF780/EnFuKago_Init.asm")

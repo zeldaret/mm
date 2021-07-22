@@ -9,8 +9,7 @@ void ObjMine_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjMine_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjMine_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Obj_Mine_InitVars = {
     ACTOR_OBJ_MINE,
     ACTORCAT_PROP,
@@ -47,6 +46,10 @@ static InitChainEntry D_80A845E8[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
+
+extern ColliderJntSphElementInit D_80A84570[1];
+extern ColliderJntSphInit D_80A84594;
+extern InitChainEntry D_80A845E8[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Mine_0x80A811D0/func_80A811D0.asm")

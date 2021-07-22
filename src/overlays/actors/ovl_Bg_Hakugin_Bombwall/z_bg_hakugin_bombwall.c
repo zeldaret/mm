@@ -9,8 +9,7 @@ void BgHakuginBombwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgHakuginBombwall_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgHakuginBombwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Bg_Hakugin_Bombwall_InitVars = {
     ACTOR_BG_HAKUGIN_BOMBWALL,
     ACTORCAT_BG,
@@ -38,6 +37,9 @@ static InitChainEntry D_80ABD040[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_80ABCF80;
+extern InitChainEntry D_80ABD040[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Hakugin_Bombwall_0x80ABBFC0/func_80ABBFC0.asm")

@@ -8,8 +8,7 @@ void EnTrt2_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTrt2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTrt2_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Trt2_InitVars = {
     ACTOR_EN_TRT2,
     ACTORCAT_NPC,
@@ -78,6 +77,11 @@ static InitChainEntry D_80AD5964[] = {
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_80AD58A0;
+extern CollisionCheckInfoInit2 D_80AD58CC;
+extern DamageTable D_80AD58D8;
+extern InitChainEntry D_80AD5964[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Trt2_0x80AD3380/func_80AD3380.asm")

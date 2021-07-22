@@ -8,8 +8,7 @@ void DmTag_Init(Actor* thisx, GlobalContext* globalCtx);
 void DmTag_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmTag_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Dm_Tag_InitVars = {
     ACTOR_DM_TAG,
     ACTORCAT_ITEMACTION,

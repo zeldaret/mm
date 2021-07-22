@@ -9,8 +9,7 @@ void EnSi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSi_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSi_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Si_InitVars = {
     ACTOR_EN_SI,
     ACTORCAT_ITEMACTION,
@@ -72,6 +71,10 @@ static DamageTable D_8098CDB8 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
+
+extern ColliderSphereInit D_8098CD80;
+extern CollisionCheckInfoInit2 D_8098CDAC;
+extern DamageTable D_8098CDB8;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Si_0x8098CA20/func_8098CA20.asm")

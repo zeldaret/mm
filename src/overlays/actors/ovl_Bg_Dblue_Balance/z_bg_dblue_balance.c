@@ -9,8 +9,7 @@ void BgDblueBalance_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgDblueBalance_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgDblueBalance_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Bg_Dblue_Balance_InitVars = {
     ACTOR_BG_DBLUE_BALANCE,
     ACTORCAT_BG,
@@ -30,6 +29,8 @@ static InitChainEntry D_80B83A98[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+
+extern InitChainEntry D_80B83A98[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Dblue_Balance_0x80B823B0/func_80B823B0.asm")

@@ -9,8 +9,7 @@ void BgIkninside_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIkninside_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIkninside_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Bg_Ikninside_InitVars = {
     ACTOR_BG_IKNINSIDE,
     ACTORCAT_BG,
@@ -31,6 +30,8 @@ static ColliderCylinderInit D_80C076A8 = {
     { 32, 32, 0, { 0, 0, 0 } },
 };
 
+
+extern ColliderCylinderInit D_80C076A8;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikninside_0x80C07110/BgIkninside_Init.asm")

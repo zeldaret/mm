@@ -9,8 +9,7 @@ void Boss05_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void Boss05_Update(Actor* thisx, GlobalContext* globalCtx);
 void Boss05_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 // static ColliderJntSphElementInit sJntSphElementsInit[2] = {
 static ColliderJntSphElementInit D_809F1B2C[2] = {
     {
@@ -146,6 +145,15 @@ const ActorInit Boss_05_InitVars = {
     (ActorFunc)Boss05_Draw,
 };
 
+
+extern ColliderJntSphElementInit D_809F1B2C[2];
+extern ColliderJntSphInit D_809F1B74;
+extern ColliderJntSphElementInit D_809F1B84[1];
+extern ColliderJntSphInit D_809F1BA8;
+extern ColliderJntSphElementInit D_809F1BB8[1];
+extern ColliderJntSphInit D_809F1BDC;
+extern DamageTable D_809F1C00;
+extern DamageTable D_809F1C20;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Boss_05_0x809EE4E0/func_809EE4E0.asm")

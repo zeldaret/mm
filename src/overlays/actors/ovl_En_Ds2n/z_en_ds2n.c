@@ -9,8 +9,7 @@ void EnDs2n_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDs2n_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDs2n_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Ds2n_InitVars = {
     ACTOR_EN_DS2N,
     ACTORCAT_NPC,

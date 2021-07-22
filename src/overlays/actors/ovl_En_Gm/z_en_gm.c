@@ -9,8 +9,7 @@ void EnGm_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGm_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGm_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Gm_InitVars = {
     ACTOR_EN_GM,
     ACTORCAT_NPC,
@@ -43,6 +42,10 @@ static ColliderSphereInit D_80951C88 = {
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80951CB4 = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
+
+extern ColliderCylinderInit D_80951C5C;
+extern ColliderSphereInit D_80951C88;
+extern CollisionCheckInfoInit2 D_80951CB4;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gm_0x8094DEE0/func_8094DEE0.asm")

@@ -9,8 +9,7 @@ void ObjHamishi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjHamishi_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjHamishi_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Obj_Hamishi_InitVars = {
     ACTOR_OBJ_HAMISHI,
     ACTORCAT_PROP,
@@ -44,6 +43,10 @@ static InitChainEntry D_809A1AE8[] = {
     ICHAIN_F32(uncullZoneDownward, 500, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_809A1AA0;
+extern CollisionCheckInfoInit D_809A1ACC;
+extern InitChainEntry D_809A1AE8[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Hamishi_0x809A0F20/func_809A0F20.asm")

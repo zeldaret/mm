@@ -9,8 +9,7 @@ void EnTwig_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTwig_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTwig_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Twig_InitVars = {
     ACTOR_EN_TWIG,
     ACTORCAT_MISC,
@@ -32,6 +31,8 @@ static InitChainEntry D_80AC10C0[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
+
+extern InitChainEntry D_80AC10C0[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Twig_0x80AC0830/EnTwig_Init.asm")

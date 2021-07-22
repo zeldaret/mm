@@ -9,8 +9,7 @@ void EnPeehat_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPeehat_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPeehat_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Peehat_InitVars = {
     ACTOR_EN_PEEHAT,
     ACTORCAT_ENEMY,
@@ -112,6 +111,15 @@ static InitChainEntry D_80899548[] = {
     ICHAIN_F32(targetArrowOffset, 700, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_80899430;
+extern ColliderSphereInit D_8089945C;
+extern ColliderTrisElementInit D_80899488[2];
+extern ColliderTrisInit D_80899500;
+extern DamageTable D_80899510;
+extern CollisionCheckInfoInit2 D_80899530;
+extern CollisionCheckInfoInit2 D_8089953C;
+extern InitChainEntry D_80899548[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/EnPeehat_Init.asm")

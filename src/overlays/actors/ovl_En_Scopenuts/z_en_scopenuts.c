@@ -9,8 +9,7 @@ void EnScopenuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnScopenuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnScopenuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Scopenuts_InitVars = {
     ACTOR_EN_SCOPENUTS,
     ACTORCAT_NPC,
@@ -38,6 +37,9 @@ static InitChainEntry D_80BCCCF0[] = {
     ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_80BCCB40;
+extern InitChainEntry D_80BCCCF0[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Scopenuts_0x80BCABF0/func_80BCABF0.asm")

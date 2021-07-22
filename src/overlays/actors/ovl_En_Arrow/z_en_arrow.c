@@ -9,8 +9,7 @@ void EnArrow_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnArrow_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnArrow_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Arrow_InitVars = {
     ACTOR_EN_ARROW,
     ACTORCAT_ITEMACTION,
@@ -37,6 +36,9 @@ static InitChainEntry D_8088C230[] = {
     ICHAIN_F32(minVelocityY, -150, ICHAIN_STOP),
 };
 
+
+extern ColliderQuadInit D_8088C1E0;
+extern InitChainEntry D_8088C230[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Arrow_0x8088A240/EnArrow_Init.asm")

@@ -8,8 +8,7 @@ void EnMinideath_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnMinideath_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMinideath_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Minideath_InitVars = {
     ACTOR_EN_MINIDEATH,
     ACTORCAT_ENEMY,
@@ -93,6 +92,12 @@ static InitChainEntry D_808CBFF4[] = {
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
 };
 
+
+extern ColliderJntSphElementInit D_808CBF50[3];
+extern ColliderJntSphInit D_808CBFBC;
+extern DamageTable D_808CBFCC;
+extern CollisionCheckInfoInit D_808CBFEC;
+extern InitChainEntry D_808CBFF4[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minideath_0x808CA0B0/EnMinideath_Init.asm")

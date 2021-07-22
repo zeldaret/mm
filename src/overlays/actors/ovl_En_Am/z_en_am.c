@@ -9,8 +9,7 @@ void EnAm_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnAm_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnAm_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Am_InitVars = {
     ACTOR_EN_AM,
     ACTORCAT_ENEMY,
@@ -89,6 +88,12 @@ static InitChainEntry D_808B10F0[] = {
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_808B1070;
+extern ColliderCylinderInit D_808B109C;
+extern DamageTable D_808B10C8;
+extern CollisionCheckInfoInit D_808B10E8;
+extern InitChainEntry D_808B10F0[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Am_0x808AFCD0/EnAm_Init.asm")

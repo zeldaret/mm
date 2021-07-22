@@ -9,8 +9,7 @@ void EnAob01_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnAob01_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnAob01_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Aob_01_InitVars = {
     ACTOR_EN_AOB_01,
     ACTORCAT_NPC,
@@ -31,6 +30,8 @@ static ColliderCylinderInit D_809C3820 = {
     { 18, 64, 0, { 0, 0, 0 } },
 };
 
+
+extern ColliderCylinderInit D_809C3820;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Aob_01_0x809C10B0/func_809C10B0.asm")

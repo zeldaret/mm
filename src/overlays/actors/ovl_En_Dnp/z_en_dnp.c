@@ -9,8 +9,7 @@ void EnDnp_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDnp_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDnp_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Dnp_InitVars = {
     ACTOR_EN_DNP,
     ACTORCAT_NPC,
@@ -35,6 +34,9 @@ static ColliderCylinderInit D_80B3DC80 = {
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80B3DCAC = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
+
+extern ColliderCylinderInit D_80B3DC80;
+extern CollisionCheckInfoInit2 D_80B3DCAC;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnp_0x80B3CA20/func_80B3CA20.asm")

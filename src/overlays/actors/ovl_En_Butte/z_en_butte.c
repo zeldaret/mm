@@ -9,8 +9,7 @@ void EnButte_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnButte_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnButte_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_8091D2D0[1] = {
     {
@@ -47,6 +46,10 @@ static InitChainEntry D_8091D3B0[] = {
     ICHAIN_F32(uncullZoneDownward, 60, ICHAIN_STOP),
 };
 
+
+extern ColliderJntSphElementInit D_8091D2D0[1];
+extern ColliderJntSphInit D_8091D2F4;
+extern InitChainEntry D_8091D3B0[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Butte_0x8091C0A0/func_8091C0A0.asm")

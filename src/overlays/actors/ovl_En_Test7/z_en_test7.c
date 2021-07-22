@@ -9,8 +9,7 @@ void EnTest7_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTest7_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTest7_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Test7_InitVars = {
     ACTOR_EN_TEST7,
     ACTORCAT_ITEMACTION,

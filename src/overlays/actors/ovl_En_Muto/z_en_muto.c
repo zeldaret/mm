@@ -9,8 +9,7 @@ void EnMuto_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMuto_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMuto_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Muto_InitVars = {
     ACTOR_EN_MUTO,
     ACTORCAT_NPC,
@@ -31,6 +30,8 @@ static ColliderCylinderInit D_80BE841C = {
     { 20, 60, 0, { 0, 0, 0 } },
 };
 
+
+extern ColliderCylinderInit D_80BE841C;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Muto_0x80BE7B00/EnMuto_Init.asm")

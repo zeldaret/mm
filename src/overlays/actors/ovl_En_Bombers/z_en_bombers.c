@@ -9,8 +9,7 @@ void EnBombers_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBombers_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBombers_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Bombers_InitVars = {
     ACTOR_EN_BOMBERS,
     ACTORCAT_NPC,
@@ -31,6 +30,8 @@ static ColliderCylinderInit D_80C04770 = {
     { 10, 30, 0, { 0, 0, 0 } },
 };
 
+
+extern ColliderCylinderInit D_80C04770;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bombers_0x80C03530/EnBombers_Init.asm")

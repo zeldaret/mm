@@ -9,8 +9,7 @@ void EnSnowman_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSnowman_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSnowman_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Snowman_InitVars = {
     ACTOR_EN_SNOWMAN,
     ACTORCAT_ENEMY,
@@ -88,6 +87,12 @@ static InitChainEntry D_80B19AAC[] = {
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_80B19A00;
+extern ColliderCylinderInit D_80B19A2C;
+extern DamageTable D_80B19A58;
+extern CollisionCheckInfoInit D_80B19A78;
+extern InitChainEntry D_80B19AAC[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Snowman_0x80B16B00/EnSnowman_Init.asm")

@@ -8,8 +8,7 @@ void EnFall_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnFall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFall_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Fall_InitVars = {
     ACTOR_EN_FALL,
     ACTORCAT_ITEMACTION,

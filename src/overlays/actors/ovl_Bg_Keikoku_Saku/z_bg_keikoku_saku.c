@@ -9,8 +9,7 @@ void BgKeikokuSaku_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgKeikokuSaku_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgKeikokuSaku_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Bg_Keikoku_Saku_InitVars = {
     ACTOR_BG_KEIKOKU_SAKU,
     ACTORCAT_ITEMACTION,

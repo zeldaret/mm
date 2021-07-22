@@ -9,8 +9,7 @@ void EnJso2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnJso2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnJso2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 // static DamageTable sDamageTable = {
 static DamageTable D_80A7B4F0 = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x1),
@@ -76,6 +75,10 @@ static ColliderQuadInit D_80A7B634 = {
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
 
+
+extern DamageTable D_80A7B4F0;
+extern ColliderCylinderInit D_80A7B608;
+extern ColliderQuadInit D_80A7B634;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Jso2_0x80A773C0/EnJso2_Init.asm")

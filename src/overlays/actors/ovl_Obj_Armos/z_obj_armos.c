@@ -9,8 +9,7 @@ void ObjArmos_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjArmos_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjArmos_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Obj_Armos_InitVars = {
     ACTOR_OBJ_ARMOS,
     ACTORCAT_PROP,
@@ -33,6 +32,8 @@ static InitChainEntry D_809A5BC0[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
+
+extern InitChainEntry D_809A5BC0[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Armos_0x809A4E00/func_809A4E00.asm")

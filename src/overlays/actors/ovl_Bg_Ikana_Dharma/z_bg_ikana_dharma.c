@@ -9,8 +9,7 @@ void BgIkanaDharma_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaDharma_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaDharma_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Bg_Ikana_Dharma_InitVars = {
     ACTOR_BG_IKANA_DHARMA,
     ACTORCAT_BG,
@@ -40,6 +39,9 @@ static InitChainEntry D_80BECAFC[] = {
     ICHAIN_F32_DIV1000(gravity, -1100, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_80BECAD0;
+extern InitChainEntry D_80BECAFC[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Dharma_0x80BEC240/func_80BEC240.asm")

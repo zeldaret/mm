@@ -9,8 +9,7 @@ void OceffSpot_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void OceffSpot_Update(Actor* thisx, GlobalContext* globalCtx);
 void OceffSpot_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Oceff_Spot_InitVars = {
     ACTOR_OCEFF_SPOT,
     ACTORCAT_ITEMACTION,
@@ -30,6 +29,8 @@ static InitChainEntry D_80973478[] = {
     ICHAIN_F32(uncullZoneForward, 1500, ICHAIN_STOP),
 };
 
+
+extern InitChainEntry D_80973478[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Spot_0x80972680/func_80972680.asm")

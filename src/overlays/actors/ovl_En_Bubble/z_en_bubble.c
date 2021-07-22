@@ -9,8 +9,7 @@ void EnBubble_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBubble_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBubble_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Bubble_InitVars = {
     ACTOR_EN_BUBBLE,
     ACTORCAT_ENEMY,
@@ -46,6 +45,10 @@ static ColliderJntSphInit D_808A0748 = {
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_808A0758 = { 1, 2, 25, 25, MASS_IMMOVABLE };
 
+
+extern ColliderJntSphElementInit D_808A0700[2];
+extern ColliderJntSphInit D_808A0748;
+extern CollisionCheckInfoInit2 D_808A0758;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bubble_0x8089F4E0/func_8089F4E0.asm")

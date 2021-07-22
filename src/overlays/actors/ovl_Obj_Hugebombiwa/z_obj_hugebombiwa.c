@@ -9,8 +9,7 @@ void ObjHugebombiwa_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjHugebombiwa_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjHugebombiwa_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Obj_Hugebombiwa_InitVars = {
     ACTOR_OBJ_HUGEBOMBIWA,
     ACTORCAT_PROP,
@@ -39,6 +38,9 @@ static InitChainEntry D_80A55D7C[] = {
     ICHAIN_F32(uncullZoneDownward, 900, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_80A55D00;
+extern InitChainEntry D_80A55D7C[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Hugebombiwa_0x80A53BE0/func_80A53BE0.asm")

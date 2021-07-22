@@ -9,8 +9,7 @@ void EnFz_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFz_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFz_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Fz_InitVars = {
     ACTOR_EN_FZ,
     ACTORCAT_ENEMY,
@@ -93,6 +92,12 @@ static InitChainEntry D_8093479C[] = {
     ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_809346F8;
+extern ColliderCylinderInit D_80934724;
+extern ColliderCylinderInit D_80934750;
+extern DamageTable D_8093477C;
+extern InitChainEntry D_8093479C[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fz_0x80932490/EnFz_Init.asm")

@@ -9,8 +9,7 @@ void EnRr_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRr_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRr_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Rr_InitVars = {
     ACTOR_EN_RR,
     ACTORCAT_ENEMY,
@@ -90,6 +89,12 @@ static InitChainEntry D_808FC1D0[] = {
     ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_808FC150;
+extern ColliderCylinderInit D_808FC17C;
+extern DamageTable D_808FC1A8;
+extern CollisionCheckInfoInit D_808FC1C8;
+extern InitChainEntry D_808FC1D0[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Rr_0x808F9E00/EnRr_Init.asm")

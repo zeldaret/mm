@@ -9,8 +9,7 @@ void ObjAqua_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjAqua_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjAqua_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Obj_Aqua_InitVars = {
     ACTOR_OBJ_AQUA,
     ACTORCAT_ITEMACTION,
@@ -43,6 +42,9 @@ static InitChainEntry D_80ACC2EC[] = {
     ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_80ACC2C0;
+extern InitChainEntry D_80ACC2EC[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Aqua_0x80ACB6A0/func_80ACB6A0.asm")

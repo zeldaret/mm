@@ -9,8 +9,7 @@ void EnYb_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnYb_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnYb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Yb_InitVars = {
     ACTOR_EN_YB,
     ACTORCAT_NPC,
@@ -31,6 +30,8 @@ static ColliderCylinderInit D_80BFB2B0 = {
     { 20, 40, 0, { 0, 0, 0 } },
 };
 
+
+extern ColliderCylinderInit D_80BFB2B0;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Yb_0x80BFA100/EnYb_Init.asm")

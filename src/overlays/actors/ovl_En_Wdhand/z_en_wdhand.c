@@ -9,8 +9,7 @@ void EnWdhand_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnWdhand_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnWdhand_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Wdhand_InitVars = {
     ACTOR_EN_WDHAND,
     ACTORCAT_ENEMY,
@@ -103,6 +102,11 @@ static DamageTable D_80AF64F4 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
+
+extern ColliderJntSphElementInit D_80AF63E0[7];
+extern ColliderJntSphInit D_80AF64DC;
+extern CollisionCheckInfoInit D_80AF64EC;
+extern DamageTable D_80AF64F4;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wdhand_0x80AF43F0/EnWdhand_Init.asm")

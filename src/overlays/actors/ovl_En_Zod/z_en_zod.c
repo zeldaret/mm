@@ -9,8 +9,7 @@ void EnZod_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnZod_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnZod_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Zod_InitVars = {
     ACTOR_EN_ZOD,
     ACTORCAT_NPC,
@@ -31,6 +30,8 @@ static ColliderCylinderInit D_80BB0540 = {
     { 60, 40, 0, { 0, 0, 0 } },
 };
 
+
+extern ColliderCylinderInit D_80BB0540;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Zod_0x80BAEF70/EnZod_Init.asm")

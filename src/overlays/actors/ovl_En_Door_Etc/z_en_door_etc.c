@@ -8,8 +8,7 @@ void EnDoorEtc_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnDoorEtc_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDoorEtc_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Door_Etc_InitVars = {
     ACTOR_EN_DOOR_ETC,
     ACTORCAT_DOOR,
@@ -39,6 +38,9 @@ static InitChainEntry D_80AC2634[] = {
     ICHAIN_U16(shape.rot.z, 0, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_80AC25A0;
+extern InitChainEntry D_80AC2634[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_Etc_0x80AC1ED0/EnDoorEtc_Init.asm")

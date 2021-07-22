@@ -8,8 +8,7 @@ void EnHitTag_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnHitTag_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHitTag_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Hit_Tag_InitVars = {
     ACTOR_EN_HIT_TAG,
     ACTORCAT_ITEMACTION,
@@ -30,6 +29,8 @@ static ColliderCylinderInit D_80BE21F0 = {
     { 16, 32, 0, { 0, 0, 0 } },
 };
 
+
+extern ColliderCylinderInit D_80BE21F0;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hit_Tag_0x80BE2030/EnHitTag_Init.asm")

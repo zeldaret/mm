@@ -8,8 +8,7 @@ void ObjBean_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjBean_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjBean_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Obj_Bean_InitVars = {
     ACTOR_OBJ_BEAN,
     ACTORCAT_BG,
@@ -47,6 +46,10 @@ static InitChainEntry D_8093902C[] = {
     ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_80938FA0;
+extern ColliderCylinderInit D_80938FCC;
+extern InitChainEntry D_8093902C[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Bean_0x80936CF0/func_80936CF0.asm")

@@ -9,8 +9,7 @@ void EnZob_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnZob_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnZob_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Zob_InitVars = {
     ACTOR_EN_ZOB,
     ACTORCAT_NPC,
@@ -31,6 +30,8 @@ static ColliderCylinderInit D_80BA10D0 = {
     { 30, 40, 0, { 0, 0, 0 } },
 };
 
+
+extern ColliderCylinderInit D_80BA10D0;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Zob_0x80B9F570/EnZob_Init.asm")

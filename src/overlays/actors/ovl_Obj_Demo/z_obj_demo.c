@@ -7,8 +7,7 @@
 void ObjDemo_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjDemo_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Obj_Demo_InitVars = {
     ACTOR_OBJ_DEMO,
     ACTORCAT_PROP,

@@ -8,8 +8,7 @@ void ObjPurify_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjPurify_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjPurify_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Obj_Purify_InitVars = {
     ACTOR_OBJ_PURIFY,
     ACTORCAT_BG,

@@ -9,8 +9,7 @@ void ObjLift_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjLift_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjLift_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Obj_Lift_InitVars = {
     ACTOR_OBJ_LIFT,
     ACTORCAT_BG,
@@ -33,6 +32,8 @@ static InitChainEntry D_8093DD84[] = {
     ICHAIN_F32(uncullZoneDownward, 350, ICHAIN_STOP),
 };
 
+
+extern InitChainEntry D_8093DD84[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lift_0x8093D3C0/func_8093D3C0.asm")

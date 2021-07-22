@@ -9,8 +9,7 @@ void EnBee_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBee_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBee_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Bee_InitVars = {
     ACTOR_EN_BEE,
     ACTORCAT_ENEMY,
@@ -68,6 +67,9 @@ static ColliderCylinderInit D_80B5B234 = {
     { 6, 13, -4, { 0, 0, 0 } },
 };
 
+
+extern DamageTable D_80B5B214;
+extern ColliderCylinderInit D_80B5B234;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bee_0x80B5A720/EnBee_Init.asm")

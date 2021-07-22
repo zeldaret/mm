@@ -9,8 +9,7 @@ void EnBbfall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBbfall_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBbfall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Bbfall_InitVars = {
     ACTOR_EN_BBFALL,
     ACTORCAT_ENEMY,
@@ -94,6 +93,12 @@ static InitChainEntry D_808C0DD4[] = {
     ICHAIN_F32(targetArrowOffset, 10, ICHAIN_STOP),
 };
 
+
+extern ColliderJntSphElementInit D_808C0D30[3];
+extern ColliderJntSphInit D_808C0D9C;
+extern DamageTable D_808C0DAC;
+extern CollisionCheckInfoInit D_808C0DCC;
+extern InitChainEntry D_808C0DD4[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bbfall_0x808BF220/EnBbfall_Init.asm")

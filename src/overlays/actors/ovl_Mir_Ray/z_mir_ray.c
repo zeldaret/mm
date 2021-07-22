@@ -9,8 +9,7 @@ void MirRay_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void MirRay_Update(Actor* thisx, GlobalContext* globalCtx);
 void MirRay_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Mir_Ray_InitVars = {
     ACTOR_MIR_RAY,
     ACTORCAT_ITEMACTION,
@@ -55,6 +54,11 @@ static InitChainEntry D_808E3DB8[] = {
     ICHAIN_F32(uncullZoneDownward, 1000, ICHAIN_STOP),
 };
 
+
+extern ColliderQuadInit D_808E3BF4;
+extern ColliderJntSphElementInit D_808E3C44[1];
+extern ColliderJntSphInit D_808E3C68;
+extern InitChainEntry D_808E3DB8[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Mir_Ray_0x808E2600/func_808E2600.asm")

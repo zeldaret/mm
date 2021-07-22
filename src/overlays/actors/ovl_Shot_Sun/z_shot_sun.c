@@ -8,8 +8,7 @@ void ShotSun_Init(Actor* thisx, GlobalContext* globalCtx);
 void ShotSun_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ShotSun_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Shot_Sun_InitVars = {
     ACTOR_SHOT_SUN,
     ACTORCAT_PROP,
@@ -30,6 +29,8 @@ static ColliderCylinderInit D_80973BA0 = {
     { 30, 60, 0, { 0, 0, 0 } },
 };
 
+
+extern ColliderCylinderInit D_80973BA0;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Shot_Sun_0x80973640/ShotSun_Init.asm")

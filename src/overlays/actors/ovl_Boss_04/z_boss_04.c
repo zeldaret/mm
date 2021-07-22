@@ -9,8 +9,7 @@ void Boss04_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void Boss04_Update(Actor* thisx, GlobalContext* globalCtx);
 void Boss04_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 // static DamageTable sDamageTable = {
 static DamageTable D_809EE150 = {
     /* Deku Nut       */ DMG_ENTRY(1, 0xF),
@@ -90,6 +89,12 @@ static ColliderJntSphInit D_809EE1E8 = {
     1, D_809EE1C4, // sJntSphElementsInit,
 };
 
+
+extern DamageTable D_809EE150;
+extern ColliderJntSphElementInit D_809EE190[1];
+extern ColliderJntSphInit D_809EE1B4;
+extern ColliderJntSphElementInit D_809EE1C4[1];
+extern ColliderJntSphInit D_809EE1E8;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Boss_04_0x809EC040/func_809EC040.asm")

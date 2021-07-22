@@ -9,8 +9,7 @@ void EnHorseLinkChild_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHorseLinkChild_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHorseLinkChild_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Horse_Link_Child_InitVars = {
     ACTOR_EN_HORSE_LINK_CHILD,
     ACTORCAT_BG,
@@ -48,6 +47,11 @@ static InitChainEntry D_808DFF2C[] = {
     ICHAIN_F32(uncullZoneScale, 1200, ICHAIN_STOP),
 };
 
+
+extern ColliderJntSphElementInit D_808DFED4[1];
+extern ColliderJntSphInit D_808DFEF8;
+extern CollisionCheckInfoInit D_808DFF08;
+extern InitChainEntry D_808DFF2C[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Horse_Link_Child_0x808DE5C0/func_808DE5C0.asm")

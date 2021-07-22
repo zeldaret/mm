@@ -8,8 +8,7 @@ void DmAn_Init(Actor* thisx, GlobalContext* globalCtx);
 void DmAn_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmAn_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Dm_An_InitVars = {
     ACTOR_DM_AN,
     ACTORCAT_NPC,

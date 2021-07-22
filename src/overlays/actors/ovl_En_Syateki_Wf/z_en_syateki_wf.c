@@ -9,8 +9,7 @@ void EnSyatekiWf_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiWf_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiWf_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A20E74 = {
     { COLTYPE_HIT5, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
@@ -61,6 +60,12 @@ static InitChainEntry D_80A20FBC[] = {
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_80A20E74;
+extern ColliderJntSphElementInit D_80A20E50[1];
+extern ColliderJntSphInit D_80A20EA0;
+extern ColliderCylinderInit D_80A20EB0;
+extern InitChainEntry D_80A20FBC[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Wf_0x80A1FE50/EnSyatekiWf_Init.asm")

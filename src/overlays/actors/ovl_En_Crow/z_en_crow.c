@@ -9,8 +9,7 @@ void EnCrow_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnCrow_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnCrow_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Crow_InitVars = {
     ACTOR_EN_CROW,
     ACTORCAT_ENEMY,
@@ -88,6 +87,12 @@ static InitChainEntry D_8099C0D0[] = {
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP),
 };
 
+
+extern ColliderJntSphElementInit D_8099C070[1];
+extern ColliderJntSphInit D_8099C094;
+extern CollisionCheckInfoInit D_8099C0A4;
+extern DamageTable D_8099C0AC;
+extern InitChainEntry D_8099C0D0[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Crow_0x8099AB30/EnCrow_Init.asm")

@@ -9,8 +9,7 @@ void ObjHunsui_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjHunsui_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjHunsui_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Obj_Hunsui_InitVars = {
     ACTOR_OBJ_HUNSUI,
     ACTORCAT_BG,

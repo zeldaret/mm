@@ -8,8 +8,7 @@ void EnMttag_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnMttag_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMttag_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Mt_tag_InitVars = {
     ACTOR_EN_MT_TAG,
     ACTORCAT_BG,

@@ -9,8 +9,7 @@ void EnKnight_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKnight_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKnight_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 // static DamageTable sDamageTable = {
 static DamageTable D_809BDB04 = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x1),
@@ -177,6 +176,19 @@ const ActorInit En_Knight_InitVars = {
     (ActorFunc)EnKnight_Draw,
 };
 
+
+extern DamageTable D_809BDB04;
+extern DamageTable D_809BDB24;
+extern ColliderJntSphElementInit D_809BDB44[1];
+extern ColliderJntSphInit D_809BDB8C;
+extern ColliderJntSphElementInit D_809BDB68[1];
+extern ColliderJntSphInit D_809BDB9C;
+extern ColliderJntSphElementInit D_809BDBAC[1];
+extern ColliderJntSphInit D_809BDBD0;
+extern ColliderJntSphElementInit D_809BDBE0[2];
+extern ColliderJntSphInit D_809BDC28;
+extern ColliderCylinderInit D_809BDC38;
+extern ColliderCylinderInit D_809BDC64;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Knight_0x809B20F0/func_809B20F0.asm")

@@ -9,8 +9,7 @@ void EnGb2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGb2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGb2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Gb2_InitVars = {
     ACTOR_EN_GB2,
     ACTORCAT_NPC,
@@ -38,6 +37,9 @@ static InitChainEntry D_80B11AC4[] = {
     ICHAIN_F32(targetArrowOffset, 2200, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_80B11A40;
+extern InitChainEntry D_80B11AC4[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gb2_0x80B0F5E0/func_80B0F5E0.asm")

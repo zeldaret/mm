@@ -9,8 +9,7 @@ void EnBat_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBat_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBat_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Bat_InitVars = {
     ACTOR_EN_BAT,
     ACTORCAT_ENEMY,
@@ -81,6 +80,11 @@ static InitChainEntry D_80A44A54[] = {
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP),
 };
 
+
+extern ColliderSphereInit D_80A44A00;
+extern DamageTable D_80A44A2C;
+extern CollisionCheckInfoInit D_80A44A4C;
+extern InitChainEntry D_80A44A54[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bat_0x80A434E0/EnBat_Init.asm")

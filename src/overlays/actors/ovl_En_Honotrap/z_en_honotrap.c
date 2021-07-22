@@ -9,8 +9,7 @@ void EnHonotrap_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHonotrap_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHonotrap_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Honotrap_InitVars = {
     ACTOR_EN_HONOTRAP,
     ACTORCAT_PROP,
@@ -62,6 +61,12 @@ static InitChainEntry D_809304E0[] = {
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
 };
 
+
+extern ColliderTrisElementInit D_80930424[2];
+extern ColliderTrisInit D_8093049C;
+extern ColliderCylinderInit D_809304AC;
+extern CollisionCheckInfoInit D_809304D8;
+extern InitChainEntry D_809304E0[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Honotrap_0x8092E510/func_8092E510.asm")

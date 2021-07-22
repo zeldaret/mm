@@ -9,8 +9,7 @@ void EnSw_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSw_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSw_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Sw_InitVars = {
     ACTOR_EN_SW,
     ACTORCAT_NPC,
@@ -113,6 +112,12 @@ static DamageTable D_808DBA44 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
+
+extern ColliderSphereInit D_808DB9E0;
+extern CollisionCheckInfoInit2 D_808DBA0C;
+extern DamageTable D_808DBA18;
+extern CollisionCheckInfoInit2 D_808DBA38;
+extern DamageTable D_808DBA44;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sw_0x808D8940/func_808D8940.asm")

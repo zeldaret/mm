@@ -9,8 +9,7 @@ void EnPoComposer_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPoComposer_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPoComposer_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Po_Composer_InitVars = {
     ACTOR_EN_PO_COMPOSER,
     ACTORCAT_ITEMACTION,
@@ -93,6 +92,13 @@ static InitChainEntry D_80BC6958[] = {
     ICHAIN_F32(targetArrowOffset, 3200, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_80BC6780;
+extern ColliderJntSphElementInit D_80BC67AC[1];
+extern ColliderJntSphInit D_80BC67D0;
+extern CollisionCheckInfoInit D_80BC67E0;
+extern DamageTable D_80BC67E8;
+extern InitChainEntry D_80BC6958[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Po_Composer_0x80BC4F30/EnPoComposer_Init.asm")

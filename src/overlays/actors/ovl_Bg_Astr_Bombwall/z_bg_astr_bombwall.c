@@ -9,8 +9,7 @@ void BgAstrBombwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgAstrBombwall_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgAstrBombwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Bg_Astr_Bombwall_InitVars = {
     ACTOR_BG_ASTR_BOMBWALL,
     ACTORCAT_BG,
@@ -48,6 +47,10 @@ static InitChainEntry D_80C0A6A8[] = {
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
 
+
+extern ColliderTrisElementInit D_80C0A620[2];
+extern ColliderTrisInit D_80C0A698;
+extern InitChainEntry D_80C0A6A8[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Astr_Bombwall_0x80C09ED0/func_80C09ED0.asm")

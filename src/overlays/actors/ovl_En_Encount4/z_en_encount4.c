@@ -8,8 +8,7 @@ void EnEncount4_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnEncount4_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnEncount4_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Encount4_InitVars = {
     ACTOR_EN_ENCOUNT4,
     ACTORCAT_PROP,

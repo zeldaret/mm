@@ -9,8 +9,7 @@ void EnDinofos_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDinofos_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDinofos_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Dinofos_InitVars = {
     ACTOR_EN_DINOFOS,
     ACTORCAT_ENEMY,
@@ -128,6 +127,13 @@ static InitChainEntry D_8089E354[] = {
     ICHAIN_VEC3F_DIV1000(scale, 15, ICHAIN_STOP),
 };
 
+
+extern ColliderJntSphElementInit D_8089E170[9];
+extern ColliderJntSphInit D_8089E2B4;
+extern ColliderQuadInit D_8089E2C4;
+extern DamageTable D_8089E314;
+extern CollisionCheckInfoInit D_8089E334;
+extern InitChainEntry D_8089E354[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dinofos_0x8089A6E0/EnDinofos_Init.asm")

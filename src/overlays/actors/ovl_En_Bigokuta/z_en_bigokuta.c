@@ -9,8 +9,7 @@ void EnBigokuta_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBigokuta_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBigokuta_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Bigokuta_InitVars = {
     ACTOR_EN_BIGOKUTA,
     ACTORCAT_BOSS,
@@ -53,6 +52,11 @@ static InitChainEntry D_80AC4590[] = {
     ICHAIN_VEC3F_DIV1000(scale, 33, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_80AC4530;
+extern ColliderCylinderInit D_80AC455C;
+extern CollisionCheckInfoInit D_80AC4588;
+extern InitChainEntry D_80AC4590[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bigokuta_0x80AC26F0/EnBigokuta_Init.asm")

@@ -9,8 +9,7 @@ void EnMs_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMs_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMs_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Ms_InitVars = {
     ACTOR_EN_MS,
     ACTORCAT_NPC,
@@ -38,6 +37,9 @@ static InitChainEntry D_80952BCC[] = {
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_80952BA0;
+extern InitChainEntry D_80952BCC[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ms_0x80952620/EnMs_Init.asm")

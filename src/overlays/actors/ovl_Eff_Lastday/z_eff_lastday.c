@@ -9,8 +9,7 @@ void EffLastday_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EffLastday_Update(Actor* thisx, GlobalContext* globalCtx);
 void EffLastday_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Eff_Lastday_InitVars = {
     ACTOR_EFF_LASTDAY,
     ACTORCAT_ITEMACTION,

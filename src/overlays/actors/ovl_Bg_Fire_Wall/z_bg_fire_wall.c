@@ -8,8 +8,7 @@ void BgFireWall_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgFireWall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgFireWall_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Bg_Fire_Wall_InitVars = {
     ACTOR_BG_FIRE_WALL,
     ACTORCAT_BG,
@@ -34,6 +33,9 @@ static ColliderCylinderInit D_809ACC60 = {
 // sColChkInfoInit
 static CollisionCheckInfoInit D_809ACC8C = { 1, 80, 100, MASS_IMMOVABLE };
 
+
+extern ColliderCylinderInit D_809ACC60;
+extern CollisionCheckInfoInit D_809ACC8C;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Fire_Wall_0x809AC4B0/BgFireWall_Init.asm")

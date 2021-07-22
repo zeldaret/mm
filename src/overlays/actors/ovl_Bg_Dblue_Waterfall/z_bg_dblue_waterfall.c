@@ -9,8 +9,7 @@ void BgDblueWaterfall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgDblueWaterfall_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgDblueWaterfall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Bg_Dblue_Waterfall_InitVars = {
     ACTOR_BG_DBLUE_WATERFALL,
     ACTORCAT_PROP,
@@ -40,6 +39,9 @@ static InitChainEntry D_80B853A8[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_80B85370;
+extern InitChainEntry D_80B853A8[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Dblue_Waterfall_0x80B83C80/func_80B83C80.asm")

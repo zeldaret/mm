@@ -9,8 +9,7 @@ void MirRay2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void MirRay2_Update(Actor* thisx, GlobalContext* globalCtx);
 void MirRay2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Mir_Ray2_InitVars = {
     ACTOR_MIR_RAY2,
     ACTORCAT_ITEMACTION,
@@ -38,6 +37,9 @@ static ColliderJntSphInit D_80AF4374 = {
     1, D_80AF4350, // sJntSphElementsInit,
 };
 
+
+extern ColliderJntSphElementInit D_80AF4350[1];
+extern ColliderJntSphInit D_80AF4374;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Mir_Ray2_0x80AF3F70/func_80AF3F70.asm")

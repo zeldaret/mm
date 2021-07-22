@@ -8,8 +8,7 @@ void DemoGetitem_Init(Actor* thisx, GlobalContext* globalCtx);
 void DemoGetitem_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DemoGetitem_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Demo_Getitem_InitVars = {
     ACTOR_DEMO_GETITEM,
     ACTORCAT_BG,

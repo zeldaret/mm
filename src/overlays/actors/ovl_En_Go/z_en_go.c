@@ -8,8 +8,7 @@ void EnGo_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnGo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGo_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Go_InitVars = {
     ACTOR_EN_GO,
     ACTORCAT_NPC,
@@ -87,6 +86,12 @@ static DamageTable D_80A164C4 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
+
+extern ColliderSphereInit D_80A16434;
+extern ColliderCylinderInit D_80A16460;
+extern ColliderCylinderInit D_80A1648C;
+extern CollisionCheckInfoInit2 D_80A164B8;
+extern DamageTable D_80A164C4;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Go_0x80A10FD0/func_80A10FD0.asm")

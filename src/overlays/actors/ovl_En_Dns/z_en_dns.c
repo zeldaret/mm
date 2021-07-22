@@ -9,8 +9,7 @@ void EnDns_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDns_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDns_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Dns_InitVars = {
     ACTOR_EN_DNS,
     ACTORCAT_NPC,
@@ -35,6 +34,9 @@ static ColliderCylinderInit D_8092DD28 = {
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_8092DD54 = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
+
+extern ColliderCylinderInit D_8092DD28;
+extern CollisionCheckInfoInit2 D_8092DD54;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dns_0x8092C5C0/func_8092C5C0.asm")

@@ -9,8 +9,7 @@ void EnRuppecrow_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRuppecrow_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRuppecrow_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Ruppecrow_InitVars = {
     ACTOR_EN_RUPPECROW,
     ACTORCAT_ENEMY,
@@ -86,6 +85,12 @@ static InitChainEntry D_80BE3A0C[] = {
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP),
 };
 
+
+extern ColliderJntSphElementInit D_80BE39B0[1];
+extern ColliderJntSphInit D_80BE39D4;
+extern CollisionCheckInfoInit D_80BE39E4;
+extern DamageTable D_80BE39EC;
+extern InitChainEntry D_80BE3A0C[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ruppecrow_0x80BE2260/func_80BE2260.asm")

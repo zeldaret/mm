@@ -9,8 +9,7 @@ void BossHakugin_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BossHakugin_Update(Actor* thisx, GlobalContext* globalCtx);
 void BossHakugin_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Boss_Hakugin_InitVars = {
     ACTOR_BOSS_HAKUGIN,
     ACTORCAT_BOSS,
@@ -191,6 +190,16 @@ static InitChainEntry D_80B0EAD8[] = {
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_STOP),
 };
 
+
+extern ColliderJntSphElementInit D_80B0E700[19];
+extern ColliderJntSphInit D_80B0E9AC;
+extern ColliderTrisElementInit D_80B0E9BC[1];
+extern ColliderTrisInit D_80B0E9F8;
+extern ColliderSphereInit D_80B0EA08;
+extern ColliderCylinderInit D_80B0EA34;
+extern DamageTable D_80B0EA60;
+extern CollisionCheckInfoInit D_80B0EA80;
+extern InitChainEntry D_80B0EAD8[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Boss_Hakugin_0x80B05290/BossHakugin_Init.asm")

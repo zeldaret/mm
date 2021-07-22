@@ -9,8 +9,7 @@ void BgDblueMovebg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgDblueMovebg_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgDblueMovebg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Bg_Dblue_Movebg_InitVars = {
     ACTOR_BG_DBLUE_MOVEBG,
     ACTORCAT_BG,

@@ -9,8 +9,7 @@ void EnBjt_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBjt_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBjt_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Bjt_InitVars = {
     ACTOR_EN_BJT,
     ACTORCAT_NPC,
@@ -35,6 +34,9 @@ static ColliderCylinderInit D_80BFDF48 = {
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80BFDF74 = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
+
+extern ColliderCylinderInit D_80BFDF48;
+extern CollisionCheckInfoInit2 D_80BFDF74;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bjt_0x80BFD2E0/func_80BFD2E0.asm")

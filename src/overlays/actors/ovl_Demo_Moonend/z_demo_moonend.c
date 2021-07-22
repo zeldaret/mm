@@ -9,8 +9,7 @@ void DemoMoonend_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DemoMoonend_Update(Actor* thisx, GlobalContext* globalCtx);
 void DemoMoonend_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Demo_Moonend_InitVars = {
     ACTOR_DEMO_MOONEND,
     ACTORCAT_ITEMACTION,

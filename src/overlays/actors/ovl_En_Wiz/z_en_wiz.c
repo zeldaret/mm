@@ -9,8 +9,7 @@ void EnWiz_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnWiz_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnWiz_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Wiz_InitVars = {
     ACTOR_EN_WIZ,
     ACTORCAT_ENEMY,
@@ -156,6 +155,12 @@ static DamageTable D_80A48D14 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
+
+extern ColliderJntSphElementInit D_80A48B50[10];
+extern ColliderJntSphInit D_80A48CB8;
+extern ColliderCylinderInit D_80A48CC8;
+extern DamageTable D_80A48CF4;
+extern DamageTable D_80A48D14;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_0x80A45360/EnWiz_Init.asm")

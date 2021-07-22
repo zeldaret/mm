@@ -9,8 +9,7 @@ void ObjToge_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjToge_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjToge_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit Obj_Toge_InitVars = {
     ACTOR_OBJ_TOGE,
     ACTORCAT_PROP,
@@ -40,6 +39,9 @@ static InitChainEntry D_809A4D14[] = {
     ICHAIN_F32(uncullZoneDownward, 150, ICHAIN_STOP),
 };
 
+
+extern ColliderCylinderInit D_809A4CB0;
+extern InitChainEntry D_809A4D14[];
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Toge_0x809A41C0/func_809A41C0.asm")

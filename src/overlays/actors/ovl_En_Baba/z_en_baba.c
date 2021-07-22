@@ -9,8 +9,7 @@ void EnBaba_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBaba_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBaba_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
-
+#if(0)
 const ActorInit En_Baba_InitVars = {
     ACTOR_EN_BABA,
     ACTORCAT_NPC,
@@ -72,6 +71,10 @@ static DamageTable D_80BAA468 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
+
+extern ColliderCylinderInit D_80BAA430;
+extern CollisionCheckInfoInit2 D_80BAA45C;
+extern DamageTable D_80BAA468;
 #endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Baba_0x80BA8820/func_80BA8820.asm")
