@@ -37,6 +37,8 @@ FaultDrawer sFaultDrawerDefault = {
     NULL, // inputCallback
 };
 
+#pragma GLOBAL_ASM("asm/non_matchings/boot/fault_drawer/sFaultDrawerFont.s")
+
 void FaultDrawer_SetOsSyncPrintfEnabled(u32 enabled) {
     sFaultDrawContext->osSyncPrintfEnabled = enabled;
 }
@@ -87,14 +89,14 @@ void FaultDrawer_UpdatePrintColor() {
     s32 idx;
 
     if (sFaultDrawContext->osSyncPrintfEnabled) {
-        osSyncPrintf(D_80099050);
+        osSyncPrintf("\x1B[m");
         idx = FaultDrawer_ColorToPrintColor(sFaultDrawContext->foreColor);
         if (idx >= 0 && idx < 8) {
-            osSyncPrintf(D_80099054, idx);
+            osSyncPrintf("\x1B[3%dm", idx);
         }
         idx = FaultDrawer_ColorToPrintColor(sFaultDrawContext->backColor);
         if (idx >= 0 && idx < 8) {
-            osSyncPrintf(D_8009905C, idx);
+            osSyncPrintf("\x1B[4%dm", idx);
         }
     }
 }
@@ -120,7 +122,7 @@ void FaultDrawer_SetCharPad(s8 padW, s8 padH) {
 
 void FaultDrawer_SetCursor(s32 x, s32 y) {
     if (sFaultDrawContext->osSyncPrintfEnabled) {
-        osSyncPrintf(D_80099064,
+        osSyncPrintf("\x1B[%d;%dH",
                   (y - sFaultDrawContext->yStart) / (sFaultDrawContext->charH + sFaultDrawContext->charHPad),
                   (x - sFaultDrawContext->xStart) / (sFaultDrawContext->charW + sFaultDrawContext->charWPad));
     }
@@ -130,7 +132,7 @@ void FaultDrawer_SetCursor(s32 x, s32 y) {
 
 void FaultDrawer_FillScreen() {
     if (sFaultDrawContext->osSyncPrintfEnabled) {
-        osSyncPrintf(D_80099070);
+        osSyncPrintf("\x1B[2J");
     }
 
     FaultDrawer_DrawRecImpl(sFaultDrawContext->xStart, sFaultDrawContext->yStart, sFaultDrawContext->xEnd,
@@ -139,6 +141,8 @@ void FaultDrawer_FillScreen() {
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/boot/fault_drawer/FaultDrawer_FormatStringFunc.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/boot/fault_drawer/D_80099080.s")
 
 void FaultDrawer_VPrintf(const char* str, char* args) { // va_list
     _Printf((printf_func)FaultDrawer_FormatStringFunc, sFaultDrawContext, str, args);

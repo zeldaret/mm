@@ -13,17 +13,15 @@ endseg
 beginseg
     name "boot"
     address 0x80080060
-    include "build/asm/boot/boot_main.text.o"
-    include "build/data/boot/rsp_boot.data.o"
-    include "build/data/boot/boot_main.rodata.o"
+    include "build/src/boot_O2_g3/boot_main.o"
     include "build/data/boot/boot_main.bss.o"
 
-    include "build/asm/boot/idle.text.o"
-    include "build/data/boot/idle.data.o"
-    include "build/data/boot/idle.rodata.o"
+    include "build/data/boot/rsp_boot.data.o"
+
+    include "build/src/boot_O2_g3/idle.o"
     include "build/data/boot/idle.bss.o"
 
-    include "build/asm/boot/viconfig.text.o"
+    include "build/src/boot_O2_g3/viconfig.o"
     include "build/data/boot/viconfig.data.o"
 
     include "build/asm/boot/z_std_dma.text.o"
@@ -31,27 +29,22 @@ beginseg
     include "build/data/boot/z_std_dma.rodata.o"
     include "build/data/boot/z_std_dma.bss.o"
 
-    include "build/asm/boot/yaz0.text.o"
-    include "build/data/boot/yaz0.rodata.o"
-    include "build/data/boot/yaz0.bss.o"
+    include "build/src/boot_O2_g3/yaz0.o"
 
-    include "build/asm/boot/irqmgr.text.o"
-    include "build/data/boot/irqmgr.data.o"
-    include "build/data/boot/irqmgr.rodata.o"
+    include "build/src/boot_O2_g3/irqmgr.o"
 
-    include "build/asm/boot/CIC6105.text.o"
-    include "build/data/boot/CIC6105.rodata.o"
+    include "build/src/boot_O2_g3/CIC6105.o"
     include "build/data/boot/CIC6105.bss.o"
 
-    include "build/asm/boot/syncprintf.text.o"
+    include "build/src/boot_O2_g3/syncprintf.o"
 
     include "build/src/boot_O2_g3_trapuv/fault.o"
     include "build/data/boot/fault.data.o"
     include "build/data/boot/fault.bss.o"
 
-    include "build/asm/boot/fault_drawer.text.o"
-    include "build/data/boot/fault_drawer.data.o"
-    include "build/data/boot/fault_drawer.rodata.o"
+    include "build/src/boot_O2_g3_trapuv/fault_drawer.o"
+    //include "build/data/boot/fault_drawer.data.o"
+    //include "build/data/boot/fault_drawer.rodata.o"
     include "build/data/boot/fault_drawer.bss.o"
 
     include "build/src/boot_O1/boot_80084940.o"
@@ -72,9 +65,11 @@ beginseg
     include "build/data/boot/gfxprint.rodata.o"
 
     include "build/asm/boot/mtxuty-cvt.text.o"
-    include "build/asm/boot/assert.text.o"
-    include "build/data/boot/assert.rodata.o"
-    include "build/asm/boot/boot_800862E0.text.o"
+
+    include "build/src/boot_O2/assert.o"
+
+    include "build/src/boot_O2/boot_800862E0.o"
+
     include "build/asm/boot/padsetup.text.o"
 
     include "build/asm/boot/boot_80086760.text.o"
@@ -87,12 +82,9 @@ beginseg
     include "build/data/boot/system_malloc.data.o"
     include "build/data/boot/system_malloc.bss.o"
 
-    include "build/asm/boot/rand.text.o"
+    include "build/src/boot_O2/rand.o"
     include "build/data/boot/rand.data.o"
     include "build/data/boot/rand.bss.o"
-
-
-
 
     include "build/asm/boot/__osMalloc.text.o"
     include "build/data/boot/__osMalloc.rodata.o"
@@ -388,7 +380,7 @@ beginseg
     include "build/asm/boot/setwatchlo.text.o"
     include "build/asm/boot/fmodf.text.o"
     include "build/asm/boot/__osMemset.text.o"
-    include "build/asm/boot/__osMemcmp.text.o"
+    include "build/src/boot_O2_g3/__osMemcmp.o"
     include "build/asm/boot/__osStrcpy.text.o"
     include "build/asm/boot/__osMemcpy.text.o"
 

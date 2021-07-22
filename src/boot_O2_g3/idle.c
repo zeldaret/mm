@@ -35,8 +35,8 @@ void Idle_InitMemory(void) {
     void* memEnd = (void*)(0x80000000 + osMemSize);
 
     Idle_ClearMemory((void*)0x80000400, &gFramebuffer1);
-    Idle_ClearMemory(&D_80025D00, (int*)&boot_text_start);
-    Idle_ClearMemory(&code_bss_end, memEnd);
+    Idle_ClearMemory(&D_80025D00, (int*)&bootproc);
+    Idle_ClearMemory(&gGfxSPTaskYieldBuffer, memEnd);
 }
 
 #ifdef NON_MATCHING
@@ -60,7 +60,7 @@ void Idle_InitCodeAndMemory(void) {
 
     sDmaMgrDmaBuffSize = oldSize;
 
-    Idle_ClearMemory(&code_bss_start, &code_bss_end);
+    Idle_ClearMemory(&code_bss_start, &gGfxSPTaskYieldBuffer);
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/boot/idle/Idle_InitCodeAndMemory.s")
