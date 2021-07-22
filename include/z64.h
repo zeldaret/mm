@@ -1722,7 +1722,6 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ u8 unk0;
-    /* 0x1 */ UNK_TYPE1 unk_1[0x3];
     /* 0x4 */ s32 unk4;
     /* 0x8 */ s32 unk8;
 } struct_80133038_arg2; // size = 0xC

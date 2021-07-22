@@ -528,7 +528,7 @@ s16 func_80BAB698(Path* path, s32 idx, Vec3f* pos, f32* distSQ) {
 }
 
 s32 func_80BAB758(EnSuttari* this, Path* path, s32 arg2) {
-    Vec3s* sp5C;
+    Vec3s* sp5C = Lib_SegmentedToVirtual(path->points);
     s32 sp58;
     f32 sp54;
     s32 ret;
@@ -539,8 +539,7 @@ s32 func_80BAB758(EnSuttari* this, Path* path, s32 arg2) {
     f32 sp3C;
     Vec3f sp30;
 
-    sp5C = Lib_SegmentedToVirtual(path->points);
-    if (sp5C[arg2 - 1].x) {}
+    if (sp5C[arg2].x) {}
     sp58 = path->count;
     ret = false;
     Math_Vec3s_ToVec3f(&sp30, &sp5C[arg2]);
@@ -562,7 +561,7 @@ s32 func_80BAB758(EnSuttari* this, Path* path, s32 arg2) {
 }
 
 s32 func_80BAB8F4(EnSuttari* this, Path* path, s32 arg2) {
-    Vec3s* sp5C;
+    Vec3s* sp5C = Lib_SegmentedToVirtual(path->points);
     s32 sp58;
     f32 sp54;
     s32 ret;
@@ -573,7 +572,6 @@ s32 func_80BAB8F4(EnSuttari* this, Path* path, s32 arg2) {
     f32 sp3C;
     Vec3f sp30;
 
-    sp5C = Lib_SegmentedToVirtual(path->points);
     if (sp5C[arg2 - 1].x) {}
     sp58 = path->count;
     ret = false;
@@ -646,16 +644,13 @@ void func_80BABB90(EnSuttari* this, s32 arg1) {
 }
 
 s32 func_80BABC48(EnSuttari* this, GlobalContext* globalCtx, struct_80133038_arg2* unkStruct) {
-    u16 sp26;
+    u16 sp26 = gSaveContext.time - 0x3FFC;
     u16 pad1;
-    u8 sp23;
+    u8 sp23 = ENSUTTARI_GET_PATH(&this->actor);
     u16 pad2;
-    UNK_TYPE sp1C;
+    UNK_TYPE sp1C = D_80BAE8F8[unkStruct->unk0];
     u16 phi_a0;
 
-    sp26 = gSaveContext.time - 0x3FFC;
-    sp23 = ENSUTTARI_GET_PATH(&this->actor);
-    sp1C = D_80BAE8F8[unkStruct->unk0];
     if (sp1C >= 0) {
         this->unk404 = func_8013BB34(globalCtx, sp23, sp1C);
     }
