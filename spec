@@ -14,30 +14,91 @@ beginseg
     name "boot"
     address 0x80080060
     include "build/asm/boot/boot_main.text.o"  // .text section
+    include "build/data/boot/rsp_boot.data.o"
+    include "build/data/boot/boot_main.rodata.o"
+    include "build/data/boot/boot_main.bss.o"
+
     include "build/asm/boot/idle.text.o"
+    include "build/data/boot/idle.data.o"
+    include "build/data/boot/idle.rodata.o"
+    include "build/data/boot/idle.bss.o"
+
     include "build/asm/boot/viconfig.text.o"
+    include "build/data/boot/viconfig.data.o"
+
     include "build/asm/boot/z_std_dma.text.o"
+    include "build/data/boot/z_std_dma.data.o"
+    include "build/data/boot/z_std_dma.rodata.o"
+    include "build/data/boot/z_std_dma.bss.o"
+
     include "build/asm/boot/yaz0.text.o"
+    include "build/data/boot/yaz0.rodata.o"
+    include "build/data/boot/yaz0.bss.o"
+
     include "build/asm/boot/irqmgr.text.o"
+    include "build/data/boot/irqmgr.data.o"
+    include "build/data/boot/irqmgr.rodata.o"
+
     include "build/asm/boot/CIC6105.text.o"
+    include "build/data/boot/CIC6105.rodata.o"
+    include "build/data/boot/CIC6105.bss.o"
+
     include "build/asm/boot/syncprintf.text.o"
+
     include "build/asm/boot/fault.text.o"
+    include "build/data/boot/fault.data.o"
+    include "build/data/boot/fault.rodata.o"
+    include "build/data/boot/fault.bss.o"
+
     include "build/asm/boot/fault_drawer.text.o"
+    include "build/data/boot/fault_drawer.data.o"
+    include "build/data/boot/fault_drawer.rodata.o"
+    include "build/data/boot/fault_drawer.bss.o"
+
     include "build/src/boot_O1/boot_80084940.o"
+
     include "build/asm/boot/loadfragment.text.o"
+    include "build/data/boot/loadfragment.data.o"
+
     include "build/asm/boot/loadfragment2.text.o"
+    include "build/data/boot/loadfragment2.data.o"
+
     include "build/asm/boot/padutils.text.o"
+
     include "build/asm/boot/stackcheck.text.o"
+    include "build/data/boot/stackcheck.data.o"
+
     include "build/asm/boot/gfxprint.text.o"
+    include "build/data/boot/gfxprint.data.o"
+    include "build/data/boot/gfxprint.rodata.o"
+
     include "build/asm/boot/mtxuty-cvt.text.o"
     include "build/asm/boot/assert.text.o"
+    include "build/data/boot/assert.rodata.o"
     include "build/asm/boot/boot_800862E0.text.o"
     include "build/asm/boot/padsetup.text.o"
+
     include "build/asm/boot/boot_80086760.text.o"
+    include "build/data/boot/boot_80086760.rodata.o"
+    include "build/data/boot/boot_80086760.bss.o"
+
     include "build/asm/boot/fp.text.o"
+
     include "build/asm/boot/system_malloc.text.o"
+    include "build/data/boot/system_malloc.data.o"
+    include "build/data/boot/system_malloc.bss.o"
+
     include "build/asm/boot/rand.text.o"
+    include "build/data/boot/rand.data.o"
+    include "build/data/boot/rand.bss.o"
+
+
+
+
     include "build/asm/boot/__osMalloc.text.o"
+    include "build/data/boot/__osMalloc.rodata.o"
+    include "build/data/boot/__osMalloc.bss.o"
+
     include "build/asm/boot/sprintf.text.o"
     include "build/asm/boot/printutils.text.o"
     include "build/asm/boot/setcause.text.o"
@@ -45,23 +106,54 @@ beginseg
     include "build/asm/boot/pfsfreeblocks.text.o"
     include "build/src/boot_O1/viextend.o"
     include "build/asm/boot/stopthread.text.o"
+
+
+
     include "build/asm/boot/recvmesg.text.o"
+
     include "build/asm/boot/setintmask.text.o"
+    include "build/data/boot/setintmask.rodata.o"
+
     include "build/asm/boot/getintmask.text.o"
     include "build/asm/boot/voicesetword.text.o"
+
+    include "build/data/boot/vimodeHpf.data.o"
+
     include "build/asm/boot/guScale.text.o"
+
     include "build/asm/boot/sinf.text.o"
+    include "build/data/boot/sinf.rodata.o"
+
     include "build/asm/boot/sins.text.o"
+    include "build/data/boot/sins.data.o"
+
     include "build/asm/boot/sptask.text.o"
+    include "build/data/boot/sptask.bss.o"
+
     include "build/asm/boot/ll.text.o"
+
     include "build/asm/boot/exceptasm.text.o"
+    include "build/data/boot/exceptasm.data.o"
+    include "build/data/boot/exceptasm.rodata.o"
+
     include "build/asm/boot/thread.text.o"
+    include "build/data/boot/thread.data.o"
+
     include "build/asm/boot/destroythread.text.o"
     include "build/asm/boot/voicecheckresult.text.o"
     include "build/asm/boot/bzero.text.o"
+
     include "build/asm/boot/rumblepak.text.o"
+    include "build/data/boot/rumblepak.bss.o"
+
     include "build/asm/boot/siacs.text.o"
+    include "build/data/boot/siacs.data.o"
+    include "build/data/boot/siacs.bss.o"
+
     include "build/asm/boot/controller.text.o"
+    include "build/data/boot/controller.data.o"
+    include "build/data/boot/controller.bss.o"
+
     include "build/asm/boot/createthread.text.o"
     include "build/asm/boot/contreaddata.text.o"
     include "build/asm/boot/voicegetreaddata.text.o"
@@ -69,15 +161,24 @@ beginseg
     include "build/asm/boot/getsr.text.o"
     include "build/asm/boot/setsr.text.o"
     include "build/asm/boot/writebackdcache.text.o"
+
+    include "build/data/boot/threadsave.bss.o"
+
     include "build/asm/boot/initialize.text.o"
+    include "build/data/boot/initialize.data.o"
+    include "build/data/boot/initialize.bss.o"
     pad_text
     pad_text
     pad_text
     pad_text
     pad_text
     pad_text
+
     include "build/asm/boot/vigetnextframebuf.text.o"
+
     include "build/asm/boot/perspective.text.o"
+    include "build/data/boot/perspective.rodata.o"
+
     include "build/asm/boot/sprawdma.text.o"
     include "build/asm/boot/sirawdma.text.o"
     include "build/asm/boot/epilinkhandle.text.o"
@@ -96,23 +197,47 @@ beginseg
     include "build/asm/boot/pfsallocatefile.text.o"
     include "build/asm/boot/stoptimer.text.o"
     include "build/asm/boot/probetlb.text.o"
+
     include "build/asm/boot/pimgr.text.o"
+    include "build/data/boot/pimgr.data.o"
+    include "build/data/boot/pimgr.bss.o"
+
+
     include "build/asm/boot/piacs.text.o"
+    include "build/data/boot/piacs.data.o"
+
     pad_text
     include "build/asm/boot/devmgr.text.o"
+    include "build/data/boot/devmgr.rodata.o"
+
     include "build/asm/boot/pirawdma.text.o"
+
     include "build/asm/boot/contpfs.text.o"
+    include "build/data/boot/contpfs.data.o"
+
     include "build/asm/boot/getcount.text.o"
     pad_text
+
+
     include "build/asm/boot/guMtxL2F.text.o"
     include "build/asm/boot/getmemsize.text.o"
     include "build/asm/boot/pfssearchfile.text.o"
+
     include "build/asm/boot/seteventmesg.text.o"
+    include "build/data/boot/seteventmesg.data.o"
+    include "build/data/boot/seteventmesg.bss.o"
+
     include "build/asm/boot/sqrtf.text.o"
     include "build/asm/boot/afterprenmi.text.o"
     include "build/asm/boot/contquery.text.o"
+
     include "build/asm/boot/lookathil.text.o"
+    include "build/data/boot/lookathil.rodata.o"
+
     include "build/asm/boot/xprintf.text.o"
+    include "build/data/boot/xprintf.data.o"
+    include "build/data/boot/xprintf.rodata.o"
+
     include "build/asm/boot/voicecleardictionary.text.o"
     include "build/asm/boot/unmaptlball.text.o"
     include "build/asm/boot/epidma.text.o"
@@ -122,7 +247,13 @@ beginseg
     include "build/asm/boot/createmesgqueue.text.o"
     include "build/asm/boot/invalicache.text.o"
     include "build/asm/boot/invaldcache.text.o"
+
+
+
     include "build/asm/boot/timerintr.text.o"
+    include "build/data/boot/timerintr.data.o"
+    include "build/data/boot/timerintr.bss.o"
+
     include "build/asm/boot/voicecontread36.text.o"
     include "build/asm/boot/sp.text.o"
     include "build/asm/boot/si.text.o"
@@ -132,18 +263,30 @@ beginseg
     include "build/asm/boot/getthreadpri.text.o"
     include "build/asm/boot/epirawread.text.o"
     include "build/asm/boot/viswapbuf.text.o"
+
     include "build/asm/boot/position.text.o"
+    include "build/data/boot/position.data.o"
+
     include "build/asm/boot/epirawdma.text.o"
     include "build/asm/boot/sptaskyielded.text.o"
     include "build/asm/boot/memcmp.text.o"
     include "build/asm/boot/gettime.text.o"
+
     include "build/asm/boot/rotate.text.o"
+    include "build/data/boot/rotate.data.o"
+
     include "build/asm/boot/setglobalintmask.text.o"
+
     include "build/asm/boot/voiceinit.text.o"
+    include "build/data/boot/voiceinit.data.o"
+
     include "build/asm/boot/contchannelreset.text.o"
     include "build/asm/boot/voicesetadconverter.text.o"
     include "build/asm/boot/aisetfreq.text.o"
+
     include "build/asm/boot/contramread.text.o"
+    include "build/data/boot/contramread.data.o"
+
     include "build/asm/boot/voicecontwrite20.text.o"
     include "build/asm/boot/crc.text.o"
     include "build/asm/boot/getactivequeue.text.o"
@@ -157,10 +300,17 @@ beginseg
     include "build/asm/boot/pfsdeletefile.text.o"
     include "build/asm/boot/ortho.text.o"
     include "build/asm/boot/interrupt.text.o"
+
+
     include "build/asm/boot/vi.text.o"
+    include "build/data/boot/vi.data.o"
+
     include "build/asm/boot/viswapcontext.text.o"
     include "build/asm/boot/pigetcmdq.text.o"
+
     include "build/asm/boot/cosf.text.o"
+    include "build/data/boot/cosf.rodata.o"
+
     include "build/asm/boot/epiread.text.o"
     include "build/asm/boot/visetspecial.text.o"
     include "build/asm/boot/coss.text.o"
@@ -169,8 +319,16 @@ beginseg
     include "build/asm/boot/visetevent.text.o"
     include "build/asm/boot/pfsisplug.text.o"
     include "build/asm/boot/voicegetstatus.text.o"
+
     include "build/asm/boot/cartrominit.text.o"
+    include "build/data/boot/cartrominit.data.o"
+    include "build/data/boot/cartrominit.bss.o"
+
     include "build/asm/boot/guS2DInitBg.text.o"
+    include "build/data/boot/guS2DInitBg.data.o"
+
+
+
     include "build/asm/boot/pfsselectbank.text.o"
     include "build/asm/boot/contsetch.text.o"
     include "build/asm/boot/setfpccsr.text.o"
@@ -188,14 +346,26 @@ beginseg
     include "build/asm/boot/contramwrite.text.o"
     include "build/asm/boot/epirawwrite.text.o"
     include "build/asm/boot/settimer.text.o"
+
+    include "build/data/boot/__libm_qnan_f.rodata.o"
+
     include "build/asm/boot/xldtob.text.o"
+    include "build/data/boot/xldtob.data.o"
+    include "build/data/boot/xldtob.rodata.o"
+
     include "build/asm/boot/ldiv.text.o"
     include "build/asm/boot/xlitob.text.o"
     include "build/asm/boot/sirawwrite.text.o"
     include "build/asm/boot/spgetstat.text.o"
     include "build/asm/boot/spsetstat.text.o"
+
     pad_text
     include "build/asm/boot/vimgr.text.o"
+    include "build/data/boot/vimgr.data.o"
+    include "build/data/boot/vimgr.bss.o"
+
+
+
     include "build/asm/boot/vigetcurrcontext.text.o"
     include "build/asm/boot/writebackdcacheall.text.o"
     include "build/asm/boot/getcurrfaultthread.text.o"
@@ -206,6 +376,7 @@ beginseg
     include "build/asm/boot/visetyscale.text.o"
     include "build/asm/boot/visetxscale.text.o"
     include "build/asm/boot/llcvt.text.o"
+    include "build/data/boot/llcvt.rodata.o"
     include "build/asm/boot/voicecheckword.text.o"
     include "build/asm/boot/voicecontrolgain.text.o"
     include "build/asm/boot/voicestartreaddata.text.o"
@@ -221,87 +392,8 @@ beginseg
     include "build/asm/boot/__osMemcmp.text.o"
     include "build/asm/boot/__osStrcpy.text.o"
     include "build/asm/boot/__osMemcpy.text.o"
-    include "build/data/boot/rsp_boot.data.o" // .data section
-    include "build/data/boot/idle.data.o"
-    include "build/data/boot/viconfig.data.o"
-    include "build/data/boot/z_std_dma.data.o"
-    include "build/data/boot/irqmgr.data.o"
-    include "build/data/boot/fault.data.o"
-    include "build/data/boot/fault_drawer.data.o"
-    include "build/data/boot/loadfragment.data.o"
-    include "build/data/boot/loadfragment2.data.o"
-    include "build/data/boot/stackcheck.data.o"
-    include "build/data/boot/gfxprint.data.o"
-    include "build/data/boot/system_malloc.data.o"
-    include "build/data/boot/rand.data.o"
-    include "build/data/boot/vimodeHpf.data.o"
-    include "build/data/boot/sins.data.o"
-    include "build/data/boot/exceptasm.data.o"
-    include "build/data/boot/thread.data.o"
-    include "build/data/boot/siacs.data.o"
-    include "build/data/boot/controller.data.o"
-    include "build/data/boot/initialize.data.o"
-    include "build/data/boot/pimgr.data.o"
-    include "build/data/boot/piacs.data.o"
-    include "build/data/boot/contpfs.data.o"
-    include "build/data/boot/seteventmesg.data.o"
-    include "build/data/boot/xprintf.data.o"
-    include "build/data/boot/timerintr.data.o"
-    include "build/data/boot/position.data.o"
-    include "build/data/boot/rotate.data.o"
-    include "build/data/boot/voiceinit.data.o"
-    include "build/data/boot/contramread.data.o"
-    include "build/data/boot/vi.data.o"
-    include "build/data/boot/cartrominit.data.o"
-    include "build/data/boot/guS2DInitBg.data.o"
-    include "build/data/boot/xldtob.data.o"
-    include "build/data/boot/vimgr.data.o"
-    include "build/data/boot/boot_main.rodata.o" // .rodata section
-    include "build/data/boot/idle.rodata.o"
-    include "build/data/boot/z_std_dma.rodata.o"
-    include "build/data/boot/yaz0.rodata.o"
-    include "build/data/boot/irqmgr.rodata.o"
-    include "build/data/boot/CIC6105.rodata.o"
-    include "build/data/boot/fault.rodata.o"
-    include "build/data/boot/fault_drawer.rodata.o"
-    include "build/data/boot/gfxprint.rodata.o"
-    include "build/data/boot/assert.rodata.o"
-    include "build/data/boot/boot_80086760.rodata.o"
-    include "build/data/boot/__osMalloc.rodata.o"
-    include "build/data/boot/setintmask.rodata.o"
-    include "build/data/boot/sinf.rodata.o"
-    include "build/data/boot/exceptasm.rodata.o"
-    include "build/data/boot/perspective.rodata.o"
-    include "build/data/boot/devmgr.rodata.o"
-    include "build/data/boot/lookathil.rodata.o"
-    include "build/data/boot/xprintf.rodata.o"
-    include "build/data/boot/cosf.rodata.o"
-    include "build/data/boot/__libm_qnan_f.rodata.o"
-    include "build/data/boot/xldtob.rodata.o"
-    include "build/data/boot/llcvt.rodata.o"
+
     include "build/data/boot/build.rodata.o"
-    include "build/data/boot/boot_main.bss.o" // .bss section
-    include "build/data/boot/idle.bss.o"
-    include "build/data/boot/z_std_dma.bss.o"
-    include "build/data/boot/yaz0.bss.o"
-    include "build/data/boot/CIC6105.bss.o"
-    include "build/data/boot/fault.bss.o"
-    include "build/data/boot/fault_drawer.bss.o"
-    include "build/data/boot/boot_80086760.bss.o"
-    include "build/data/boot/system_malloc.bss.o"
-    include "build/data/boot/rand.bss.o"
-    include "build/data/boot/__osMalloc.bss.o"
-    include "build/data/boot/sptask.bss.o"
-    include "build/data/boot/rumblepak.bss.o"
-    include "build/data/boot/siacs.bss.o"
-    include "build/data/boot/controller.bss.o"
-    include "build/data/boot/threadsave.bss.o"
-    include "build/data/boot/initialize.bss.o"
-    include "build/data/boot/pimgr.bss.o"
-    include "build/data/boot/seteventmesg.bss.o"
-    include "build/data/boot/timerintr.bss.o"
-    include "build/data/boot/cartrominit.bss.o"
-    include "build/data/boot/vimgr.bss.o"
 endseg
 
 beginseg
