@@ -8,7 +8,7 @@ void EnOkarinaTag_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnOkarinaTag_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnOkarinaTag_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Okarina_Tag_InitVars = {
     ACTOR_EN_OKARINA_TAG,
     ACTORCAT_SWITCH,

@@ -9,7 +9,7 @@ void EnPoSisters_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPoSisters_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Po_Sisters_InitVars = {
     ACTOR_EN_PO_SISTERS,
     ACTORCAT_ENEMY,

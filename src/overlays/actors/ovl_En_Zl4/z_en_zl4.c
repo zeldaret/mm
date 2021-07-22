@@ -9,7 +9,7 @@ void EnZl4_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnZl4_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnZl4_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Zl4_InitVars = {
     ACTOR_EN_ZL4,
     ACTORCAT_ITEMACTION,

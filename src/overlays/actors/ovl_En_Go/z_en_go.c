@@ -8,7 +8,7 @@ void EnGo_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnGo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGo_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Go_InitVars = {
     ACTOR_EN_GO,
     ACTORCAT_NPC,

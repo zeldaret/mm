@@ -9,7 +9,7 @@ void EnRz_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRz_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRz_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Rz_InitVars = {
     ACTOR_EN_RZ,
     ACTORCAT_NPC,

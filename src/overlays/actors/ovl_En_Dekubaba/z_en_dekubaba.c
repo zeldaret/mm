@@ -9,7 +9,7 @@ void EnDekubaba_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDekubaba_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDekubaba_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Dekubaba_InitVars = {
     ACTOR_EN_DEKUBABA,
     ACTORCAT_ENEMY,

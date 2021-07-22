@@ -9,7 +9,7 @@ void EnFuKago_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFuKago_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFuKago_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Fu_Kago_InitVars = {
     ACTOR_EN_FU_KAGO,
     ACTORCAT_BG,

@@ -9,7 +9,7 @@ void EnBubble_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBubble_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBubble_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Bubble_InitVars = {
     ACTOR_EN_BUBBLE,
     ACTORCAT_ENEMY,

@@ -9,7 +9,7 @@ void EnTalkGibud_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTalkGibud_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTalkGibud_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Talk_Gibud_InitVars = {
     ACTOR_EN_TALK_GIBUD,
     ACTORCAT_ENEMY,

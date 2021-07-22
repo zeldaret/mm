@@ -7,7 +7,7 @@
 void BgBreakwall_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgBreakwall_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Bg_Breakwall_InitVars = {
     ACTOR_BG_BREAKWALL,
     ACTORCAT_ITEMACTION,

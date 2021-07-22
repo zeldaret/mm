@@ -9,7 +9,7 @@ void EnAl_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnAl_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnAl_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Al_InitVars = {
     ACTOR_EN_AL,
     ACTORCAT_NPC,

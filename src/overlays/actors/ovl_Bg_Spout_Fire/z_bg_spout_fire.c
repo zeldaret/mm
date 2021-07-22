@@ -8,7 +8,7 @@ void BgSpoutFire_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgSpoutFire_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgSpoutFire_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Bg_Spout_Fire_InitVars = {
     ACTOR_BG_SPOUT_FIRE,
     ACTORCAT_BG,

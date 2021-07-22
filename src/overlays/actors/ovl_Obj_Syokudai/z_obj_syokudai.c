@@ -9,7 +9,7 @@ void ObjSyokudai_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjSyokudai_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Syokudai_InitVars = {
     ACTOR_OBJ_SYOKUDAI,
     ACTORCAT_PROP,

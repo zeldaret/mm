@@ -9,7 +9,7 @@ void ObjJgameLight_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjJgameLight_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjJgameLight_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Jgame_Light_InitVars = {
     ACTOR_OBJ_JGAME_LIGHT,
     ACTORCAT_PROP,

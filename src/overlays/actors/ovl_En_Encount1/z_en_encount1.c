@@ -7,7 +7,7 @@
 void EnEncount1_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnEncount1_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Encount1_InitVars = {
     ACTOR_EN_ENCOUNT1,
     ACTORCAT_PROP,

@@ -9,7 +9,7 @@ void EnOsk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnOsk_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnOsk_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Osk_InitVars = {
     ACTOR_EN_OSK,
     ACTORCAT_NPC,

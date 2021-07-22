@@ -9,7 +9,7 @@ void BgF40Swlift_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgF40Swlift_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgF40Swlift_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Bg_F40_Swlift_InitVars = {
     ACTOR_BG_F40_SWLIFT,
     ACTORCAT_BG,

@@ -9,7 +9,7 @@ void EnBoom_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBoom_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBoom_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Boom_InitVars = {
     ACTOR_EN_BOOM,
     ACTORCAT_ITEMACTION,

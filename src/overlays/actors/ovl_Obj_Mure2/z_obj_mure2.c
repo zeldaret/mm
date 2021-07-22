@@ -7,7 +7,7 @@
 void ObjMure2_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjMure2_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Mure2_InitVars = {
     ACTOR_OBJ_MURE2,
     ACTORCAT_PROP,

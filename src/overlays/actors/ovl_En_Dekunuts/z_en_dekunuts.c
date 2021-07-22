@@ -9,7 +9,7 @@ void EnDekunuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDekunuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDekunuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Dekunuts_InitVars = {
     ACTOR_EN_DEKUNUTS,
     ACTORCAT_ENEMY,

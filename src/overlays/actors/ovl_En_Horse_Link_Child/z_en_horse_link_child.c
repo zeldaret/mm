@@ -9,7 +9,7 @@ void EnHorseLinkChild_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHorseLinkChild_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHorseLinkChild_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Horse_Link_Child_InitVars = {
     ACTOR_EN_HORSE_LINK_CHILD,
     ACTORCAT_BG,

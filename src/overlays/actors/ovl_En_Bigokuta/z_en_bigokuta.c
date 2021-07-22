@@ -9,7 +9,7 @@ void EnBigokuta_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBigokuta_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBigokuta_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Bigokuta_InitVars = {
     ACTOR_EN_BIGOKUTA,
     ACTORCAT_BOSS,

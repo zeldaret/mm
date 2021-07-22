@@ -9,7 +9,7 @@ void EnEstone_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnEstone_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnEstone_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Estone_InitVars = {
     ACTOR_EN_ESTONE,
     ACTORCAT_PROP,

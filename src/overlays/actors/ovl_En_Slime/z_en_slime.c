@@ -9,7 +9,7 @@ void EnSlime_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSlime_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSlime_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Slime_InitVars = {
     ACTOR_EN_SLIME,
     ACTORCAT_ENEMY,

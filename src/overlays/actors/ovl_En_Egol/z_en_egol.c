@@ -9,7 +9,7 @@ void EnEgol_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnEgol_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnEgol_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 // static ColliderJntSphElementInit sJntSphElementsInit[6] = {
 static ColliderJntSphElementInit D_80A80C64[6] = {
     {

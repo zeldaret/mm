@@ -9,7 +9,7 @@ void ObjToge_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjToge_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjToge_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Toge_InitVars = {
     ACTOR_OBJ_TOGE,
     ACTORCAT_PROP,

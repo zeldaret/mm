@@ -9,7 +9,7 @@ void ObjLightblock_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjLightblock_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjLightblock_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Lightblock_InitVars = {
     ACTOR_OBJ_LIGHTBLOCK,
     ACTORCAT_BG,

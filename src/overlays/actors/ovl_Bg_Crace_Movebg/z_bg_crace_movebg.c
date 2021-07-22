@@ -9,7 +9,7 @@ void BgCraceMovebg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgCraceMovebg_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgCraceMovebg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Bg_Crace_Movebg_InitVars = {
     ACTOR_BG_CRACE_MOVEBG,
     ACTORCAT_BG,

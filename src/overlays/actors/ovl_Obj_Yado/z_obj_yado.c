@@ -9,7 +9,7 @@ void ObjYado_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjYado_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjYado_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Yado_InitVars = {
     ACTOR_OBJ_YADO,
     ACTORCAT_BG,

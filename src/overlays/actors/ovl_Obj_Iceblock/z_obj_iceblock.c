@@ -9,7 +9,7 @@ void ObjIceblock_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjIceblock_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjIceblock_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Iceblock_InitVars = {
     ACTOR_OBJ_ICEBLOCK,
     ACTORCAT_BG,

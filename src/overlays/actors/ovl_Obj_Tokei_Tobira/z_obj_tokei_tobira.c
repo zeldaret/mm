@@ -9,7 +9,7 @@ void ObjTokeiTobira_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjTokeiTobira_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjTokeiTobira_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Tokei_Tobira_InitVars = {
     ACTOR_OBJ_TOKEI_TOBIRA,
     ACTORCAT_BG,

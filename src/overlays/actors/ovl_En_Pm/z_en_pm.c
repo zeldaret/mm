@@ -9,7 +9,7 @@ void EnPm_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPm_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPm_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Pm_InitVars = {
     ACTOR_EN_PM,
     ACTORCAT_NPC,

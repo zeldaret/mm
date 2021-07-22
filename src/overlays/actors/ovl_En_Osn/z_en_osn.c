@@ -9,7 +9,7 @@ void EnOsn_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnOsn_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnOsn_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Osn_InitVars = {
     ACTOR_EN_OSN,
     ACTORCAT_NPC,

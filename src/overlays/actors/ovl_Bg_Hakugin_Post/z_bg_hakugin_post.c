@@ -8,7 +8,7 @@ void BgHakuginPost_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgHakuginPost_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgHakuginPost_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Bg_Hakugin_Post_InitVars = {
     ACTOR_BG_HAKUGIN_POST,
     ACTORCAT_BG,

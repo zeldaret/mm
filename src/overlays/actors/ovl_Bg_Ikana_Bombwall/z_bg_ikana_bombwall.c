@@ -9,7 +9,7 @@ void BgIkanaBombwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaBombwall_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaBombwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Bg_Ikana_Bombwall_InitVars = {
     ACTOR_BG_IKANA_BOMBWALL,
     ACTORCAT_BG,

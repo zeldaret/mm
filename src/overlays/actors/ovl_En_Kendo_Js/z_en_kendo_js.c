@@ -9,7 +9,7 @@ void EnKendoJs_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKendoJs_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKendoJs_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Kendo_Js_InitVars = {
     ACTOR_EN_KENDO_JS,
     ACTORCAT_NPC,

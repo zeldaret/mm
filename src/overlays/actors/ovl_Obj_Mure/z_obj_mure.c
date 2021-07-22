@@ -8,7 +8,7 @@ void ObjMure_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjMure_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjMure_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Mure_InitVars = {
     ACTOR_OBJ_MURE,
     ACTORCAT_ITEMACTION,

@@ -9,7 +9,7 @@ void EnHintSkb_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHintSkb_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHintSkb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Hint_Skb_InitVars = {
     ACTOR_EN_HINT_SKB,
     ACTORCAT_NPC,

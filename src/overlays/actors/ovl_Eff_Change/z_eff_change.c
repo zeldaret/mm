@@ -8,7 +8,7 @@ void EffChange_Init(Actor* thisx, GlobalContext* globalCtx);
 void EffChange_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EffChange_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Eff_Change_InitVars = {
     ACTOR_EFF_CHANGE,
     ACTORCAT_ITEMACTION,

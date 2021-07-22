@@ -9,7 +9,7 @@ void EnPst_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPst_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPst_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Pst_InitVars = {
     ACTOR_EN_PST,
     ACTORCAT_PROP,

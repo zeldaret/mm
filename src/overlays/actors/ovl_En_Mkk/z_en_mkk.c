@@ -9,7 +9,7 @@ void EnMkk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMkk_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMkk_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Mkk_InitVars = {
     ACTOR_EN_MKK,
     ACTORCAT_ENEMY,

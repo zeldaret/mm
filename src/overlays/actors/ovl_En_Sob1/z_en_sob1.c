@@ -8,7 +8,7 @@ void EnSob1_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnSob1_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSob1_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Sob1_InitVars = {
     ACTOR_EN_OSSAN,
     ACTORCAT_NPC,

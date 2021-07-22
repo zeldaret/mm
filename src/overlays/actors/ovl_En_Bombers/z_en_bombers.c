@@ -9,7 +9,7 @@ void EnBombers_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBombers_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBombers_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Bombers_InitVars = {
     ACTOR_EN_BOMBERS,
     ACTORCAT_NPC,

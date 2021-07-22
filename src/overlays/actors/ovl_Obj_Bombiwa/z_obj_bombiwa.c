@@ -8,7 +8,7 @@ void ObjBombiwa_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjBombiwa_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjBombiwa_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Bombiwa_InitVars = {
     ACTOR_OBJ_BOMBIWA,
     ACTORCAT_PROP,

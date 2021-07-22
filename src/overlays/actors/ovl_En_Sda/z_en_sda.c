@@ -9,7 +9,7 @@ void EnSda_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSda_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSda_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Sda_InitVars = {
     ACTOR_EN_SDA,
     ACTORCAT_BOSS,

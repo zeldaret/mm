@@ -9,7 +9,7 @@ void ObjEntotu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjEntotu_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjEntotu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Entotu_InitVars = {
     ACTOR_OBJ_ENTOTU,
     ACTORCAT_PROP,

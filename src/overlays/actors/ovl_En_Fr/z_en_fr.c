@@ -8,7 +8,7 @@ void EnFr_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnFr_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFr_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Fr_InitVars = {
     ACTOR_EN_FR,
     ACTORCAT_ITEMACTION,

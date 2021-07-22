@@ -9,7 +9,7 @@ void DmZl_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmZl_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmZl_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Dm_Zl_InitVars = {
     ACTOR_DM_ZL,
     ACTORCAT_ITEMACTION,

@@ -9,7 +9,7 @@ void ArrowIce_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ArrowIce_Update(Actor* thisx, GlobalContext* globalCtx);
 void ArrowIce_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Arrow_Ice_InitVars = {
     ACTOR_ARROW_ICE,
     ACTORCAT_ITEMACTION,

@@ -9,7 +9,7 @@ void EnDai_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDai_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDai_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Dai_InitVars = {
     ACTOR_EN_DAI,
     ACTORCAT_NPC,

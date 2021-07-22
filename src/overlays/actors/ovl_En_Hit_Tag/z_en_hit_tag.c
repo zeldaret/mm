@@ -8,7 +8,7 @@ void EnHitTag_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnHitTag_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHitTag_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Hit_Tag_InitVars = {
     ACTOR_EN_HIT_TAG,
     ACTORCAT_ITEMACTION,

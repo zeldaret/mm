@@ -9,7 +9,7 @@ void EnPeehat_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPeehat_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPeehat_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Peehat_InitVars = {
     ACTOR_EN_PEEHAT,
     ACTORCAT_ENEMY,

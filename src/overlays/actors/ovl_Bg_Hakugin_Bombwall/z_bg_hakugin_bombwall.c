@@ -9,7 +9,7 @@ void BgHakuginBombwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgHakuginBombwall_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgHakuginBombwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Bg_Hakugin_Bombwall_InitVars = {
     ACTOR_BG_HAKUGIN_BOMBWALL,
     ACTORCAT_BG,

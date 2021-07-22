@@ -9,7 +9,7 @@ void EnHorseGameCheck_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHorseGameCheck_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHorseGameCheck_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Horse_Game_Check_InitVars = {
     ACTOR_EN_HORSE_GAME_CHECK,
     ACTORCAT_BG,

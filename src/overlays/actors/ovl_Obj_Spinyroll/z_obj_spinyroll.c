@@ -9,7 +9,7 @@ void ObjSpinyroll_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSpinyroll_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjSpinyroll_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Spinyroll_InitVars = {
     ACTOR_OBJ_SPINYROLL,
     ACTORCAT_PROP,

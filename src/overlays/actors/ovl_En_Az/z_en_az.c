@@ -9,7 +9,7 @@ void EnAz_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnAz_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnAz_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Az_InitVars = {
     ACTOR_EN_AZ,
     ACTORCAT_NPC,

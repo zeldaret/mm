@@ -9,7 +9,7 @@ void BgAstrBombwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgAstrBombwall_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgAstrBombwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Bg_Astr_Bombwall_InitVars = {
     ACTOR_BG_ASTR_BOMBWALL,
     ACTORCAT_BG,

@@ -9,7 +9,7 @@ void ObjShutter_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjShutter_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjShutter_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Shutter_InitVars = {
     ACTOR_OBJ_SHUTTER,
     ACTORCAT_PROP,

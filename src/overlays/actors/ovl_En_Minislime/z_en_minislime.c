@@ -8,7 +8,7 @@ void EnMinislime_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnMinislime_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMinislime_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Minislime_InitVars = {
     ACTOR_EN_MINISLIME,
     ACTORCAT_BOSS,

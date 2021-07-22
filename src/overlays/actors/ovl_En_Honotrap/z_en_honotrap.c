@@ -9,7 +9,7 @@ void EnHonotrap_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHonotrap_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHonotrap_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Honotrap_InitVars = {
     ACTOR_EN_HONOTRAP,
     ACTORCAT_PROP,

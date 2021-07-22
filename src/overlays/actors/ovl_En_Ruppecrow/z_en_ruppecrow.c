@@ -9,7 +9,7 @@ void EnRuppecrow_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRuppecrow_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRuppecrow_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Ruppecrow_InitVars = {
     ACTOR_EN_RUPPECROW,
     ACTORCAT_ENEMY,

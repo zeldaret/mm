@@ -8,7 +8,7 @@ void ObjMakekinsuta_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjMakekinsuta_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjMakekinsuta_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Makekinsuta_InitVars = {
     ACTOR_OBJ_MAKEKINSUTA,
     ACTORCAT_ITEMACTION,

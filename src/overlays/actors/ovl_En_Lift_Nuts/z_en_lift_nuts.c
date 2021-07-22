@@ -9,7 +9,7 @@ void EnLiftNuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnLiftNuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnLiftNuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Lift_Nuts_InitVars = {
     ACTOR_EN_LIFT_NUTS,
     ACTORCAT_NPC,

@@ -9,7 +9,7 @@ void EnStoneheishi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnStoneheishi_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnStoneheishi_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Stone_heishi_InitVars = {
     ACTOR_EN_STONE_HEISHI,
     ACTORCAT_NPC,

@@ -9,7 +9,7 @@ void EnRu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRu_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Ru_InitVars = {
     ACTOR_EN_RU,
     ACTORCAT_NPC,

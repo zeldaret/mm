@@ -9,7 +9,7 @@ void EnPr2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPr2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPr2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 // static DamageTable sDamageTable = {
 static DamageTable D_80A75BC0 = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),

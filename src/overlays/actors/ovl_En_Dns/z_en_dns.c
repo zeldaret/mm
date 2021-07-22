@@ -9,7 +9,7 @@ void EnDns_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDns_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDns_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Dns_InitVars = {
     ACTOR_EN_DNS,
     ACTORCAT_NPC,

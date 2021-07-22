@@ -9,7 +9,7 @@ void DmAl_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmAl_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmAl_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Dm_Al_InitVars = {
     ACTOR_EN_AL,
     ACTORCAT_NPC,

@@ -8,7 +8,7 @@ void ObjSwprize_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjSwprize_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSwprize_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Swprize_InitVars = {
     ACTOR_OBJ_SWPRIZE,
     ACTORCAT_PROP,

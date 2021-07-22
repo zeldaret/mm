@@ -9,7 +9,7 @@ void EnHeishi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHeishi_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHeishi_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Heishi_InitVars = {
     ACTOR_EN_HEISHI,
     ACTORCAT_NPC,

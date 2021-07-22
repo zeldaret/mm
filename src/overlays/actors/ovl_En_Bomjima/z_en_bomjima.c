@@ -9,7 +9,7 @@ void EnBomjima_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBomjima_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBomjima_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Bomjima_InitVars = {
     ACTOR_EN_BOMJIMA,
     ACTORCAT_NPC,

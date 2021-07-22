@@ -8,7 +8,7 @@ void EnTest5_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTest5_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTest5_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Test5_InitVars = {
     ACTOR_EN_TEST5,
     ACTORCAT_ITEMACTION,

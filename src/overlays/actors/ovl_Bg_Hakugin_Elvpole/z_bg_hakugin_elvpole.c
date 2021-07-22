@@ -9,7 +9,7 @@ void BgHakuginElvpole_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgHakuginElvpole_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgHakuginElvpole_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Bg_Hakugin_Elvpole_InitVars = {
     ACTOR_BG_HAKUGIN_ELVPOLE,
     ACTORCAT_BG,

@@ -9,7 +9,7 @@ void BgLastBwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgLastBwall_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgLastBwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Bg_Last_Bwall_InitVars = {
     ACTOR_BG_LAST_BWALL,
     ACTORCAT_BG,

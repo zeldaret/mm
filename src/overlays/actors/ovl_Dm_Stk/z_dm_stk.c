@@ -9,7 +9,7 @@ void DmStk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmStk_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmStk_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Dm_Stk_InitVars = {
     ACTOR_DM_STK,
     ACTORCAT_ITEMACTION,

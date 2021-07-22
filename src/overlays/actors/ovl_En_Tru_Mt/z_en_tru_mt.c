@@ -9,7 +9,7 @@ void EnTruMt_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTruMt_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTruMt_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Tru_Mt_InitVars = {
     ACTOR_EN_TRU_MT,
     ACTORCAT_NPC,

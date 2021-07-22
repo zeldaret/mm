@@ -9,7 +9,7 @@ void Boss05_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void Boss05_Update(Actor* thisx, GlobalContext* globalCtx);
 void Boss05_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 // static ColliderJntSphElementInit sJntSphElementsInit[2] = {
 static ColliderJntSphElementInit D_809F1B2C[2] = {
     {

@@ -9,7 +9,7 @@ void BossHakugin_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BossHakugin_Update(Actor* thisx, GlobalContext* globalCtx);
 void BossHakugin_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Boss_Hakugin_InitVars = {
     ACTOR_BOSS_HAKUGIN,
     ACTORCAT_BOSS,

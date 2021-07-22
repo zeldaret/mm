@@ -9,7 +9,7 @@ void EnMushi2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMushi2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMushi2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Mushi2_InitVars = {
     ACTOR_EN_MUSHI2,
     ACTORCAT_ITEMACTION,

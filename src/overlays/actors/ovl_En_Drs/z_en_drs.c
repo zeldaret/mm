@@ -8,7 +8,7 @@ void EnDrs_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnDrs_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDrs_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Drs_InitVars = {
     ACTOR_EN_DRS,
     ACTORCAT_PROP,

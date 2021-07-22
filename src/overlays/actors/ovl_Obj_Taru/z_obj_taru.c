@@ -9,7 +9,7 @@ void ObjTaru_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjTaru_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjTaru_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Taru_InitVars = {
     ACTOR_OBJ_TARU,
     ACTORCAT_BG,

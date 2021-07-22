@@ -9,7 +9,7 @@ void EnPamera_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPamera_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPamera_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Pamera_InitVars = {
     ACTOR_EN_PAMERA,
     ACTORCAT_NPC,

@@ -8,7 +8,7 @@ void EnSt_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnSt_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSt_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_St_InitVars = {
     ACTOR_EN_ST,
     ACTORCAT_ENEMY,

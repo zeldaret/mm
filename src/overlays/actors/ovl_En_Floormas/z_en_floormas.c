@@ -9,7 +9,7 @@ void EnFloormas_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFloormas_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFloormas_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Floormas_InitVars = {
     ACTOR_EN_FLOORMAS,
     ACTORCAT_ENEMY,

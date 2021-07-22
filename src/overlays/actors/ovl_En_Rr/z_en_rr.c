@@ -9,7 +9,7 @@ void EnRr_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRr_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRr_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Rr_InitVars = {
     ACTOR_EN_RR,
     ACTORCAT_ENEMY,

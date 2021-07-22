@@ -9,7 +9,7 @@ void ObjTree_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjTree_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjTree_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Tree_InitVars = {
     ACTOR_OBJ_TREE,
     ACTORCAT_PROP,

@@ -8,7 +8,7 @@ void EnIshi_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnIshi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnIshi_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Ishi_InitVars = {
     ACTOR_EN_ISHI,
     ACTORCAT_PROP,

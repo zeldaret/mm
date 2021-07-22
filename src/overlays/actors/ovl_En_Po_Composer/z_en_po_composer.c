@@ -9,7 +9,7 @@ void EnPoComposer_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPoComposer_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPoComposer_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Po_Composer_InitVars = {
     ACTOR_EN_PO_COMPOSER,
     ACTORCAT_ITEMACTION,

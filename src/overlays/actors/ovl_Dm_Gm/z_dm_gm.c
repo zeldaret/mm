@@ -8,7 +8,7 @@ void DmGm_Init(Actor* thisx, GlobalContext* globalCtx);
 void DmGm_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmGm_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Dm_Gm_InitVars = {
     ACTOR_DM_GM,
     ACTORCAT_NPC,

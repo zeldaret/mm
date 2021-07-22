@@ -7,7 +7,7 @@
 void EnTest2_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTest2_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Test2_InitVars = {
     ACTOR_EN_TEST2,
     ACTORCAT_BG,

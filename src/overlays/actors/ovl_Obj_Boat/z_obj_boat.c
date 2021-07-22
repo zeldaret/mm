@@ -9,7 +9,7 @@ void ObjBoat_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjBoat_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjBoat_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Boat_InitVars = {
     ACTOR_OBJ_BOAT,
     ACTORCAT_BG,

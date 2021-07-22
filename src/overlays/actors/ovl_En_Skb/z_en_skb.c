@@ -9,7 +9,7 @@ void EnSkb_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSkb_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSkb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 // static ColliderJntSphElementInit sJntSphElementsInit[2] = {
 static ColliderJntSphElementInit D_80997498[2] = {
     {

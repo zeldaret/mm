@@ -8,7 +8,7 @@ void DemoEffect_Init(Actor* thisx, GlobalContext* globalCtx);
 void DemoEffect_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DemoEffect_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Demo_Effect_InitVars = {
     ACTOR_DEMO_EFFECT,
     ACTORCAT_BG,

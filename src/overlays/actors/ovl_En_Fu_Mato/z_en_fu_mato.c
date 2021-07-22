@@ -9,7 +9,7 @@ void EnFuMato_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFuMato_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFuMato_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Fu_Mato_InitVars = {
     ACTOR_EN_FU_MATO,
     ACTORCAT_BG,

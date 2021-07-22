@@ -8,7 +8,7 @@ void EnElfgrp_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnElfgrp_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnElfgrp_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Elfgrp_InitVars = {
     ACTOR_EN_ELFGRP,
     ACTORCAT_PROP,

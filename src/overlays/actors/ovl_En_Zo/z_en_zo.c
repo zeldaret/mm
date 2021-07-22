@@ -9,7 +9,7 @@ void EnZo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnZo_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnZo_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Zo_InitVars = {
     ACTOR_EN_ZO,
     ACTORCAT_NPC,

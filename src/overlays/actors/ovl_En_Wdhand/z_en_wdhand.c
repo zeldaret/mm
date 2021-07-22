@@ -9,7 +9,7 @@ void EnWdhand_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnWdhand_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnWdhand_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Wdhand_InitVars = {
     ACTOR_EN_WDHAND,
     ACTORCAT_ENEMY,

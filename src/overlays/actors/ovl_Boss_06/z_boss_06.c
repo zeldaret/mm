@@ -9,7 +9,7 @@ void Boss06_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void Boss06_Update(Actor* thisx, GlobalContext* globalCtx);
 void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 // static DamageTable sDamageTable = {
 static DamageTable D_809F4080 = {
     /* Deku Nut       */ DMG_ENTRY(0, 0xF),

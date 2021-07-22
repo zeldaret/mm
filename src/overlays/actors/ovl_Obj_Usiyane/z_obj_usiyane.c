@@ -9,7 +9,7 @@ void ObjUsiyane_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjUsiyane_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjUsiyane_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Usiyane_InitVars = {
     ACTOR_OBJ_USIYANE,
     ACTORCAT_PROP,

@@ -9,7 +9,7 @@ void ObjVspinyroll_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjVspinyroll_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjVspinyroll_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Vspinyroll_InitVars = {
     ACTOR_OBJ_VSPINYROLL,
     ACTORCAT_PROP,

@@ -9,7 +9,7 @@ void EnAnd_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnAnd_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnAnd_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_And_InitVars = {
     ACTOR_EN_AND,
     ACTORCAT_NPC,

@@ -9,7 +9,7 @@ void EnDno_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDno_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDno_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Dno_InitVars = {
     ACTOR_EN_DNO,
     ACTORCAT_NPC,

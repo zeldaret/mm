@@ -9,7 +9,7 @@ void EnBal_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBal_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBal_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Bal_InitVars = {
     ACTOR_EN_BAL,
     ACTORCAT_NPC,

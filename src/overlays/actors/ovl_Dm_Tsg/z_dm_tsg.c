@@ -9,7 +9,7 @@ void DmTsg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmTsg_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmTsg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Dm_Tsg_InitVars = {
     ACTOR_DM_TSG,
     ACTORCAT_ITEMACTION,

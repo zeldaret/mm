@@ -9,7 +9,7 @@ void EnGe3_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGe3_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGe3_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Ge3_InitVars = {
     ACTOR_EN_GE3,
     ACTORCAT_NPC,

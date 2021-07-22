@@ -9,7 +9,7 @@ void EnDnq_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDnq_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDnq_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Dnq_InitVars = {
     ACTOR_EN_DNQ,
     ACTORCAT_NPC,

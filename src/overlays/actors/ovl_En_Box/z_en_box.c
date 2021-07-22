@@ -9,7 +9,7 @@ void EnBox_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBox_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBox_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Box_InitVars = {
     ACTOR_EN_BOX,
     ACTORCAT_CHEST,

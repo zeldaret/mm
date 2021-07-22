@@ -9,7 +9,7 @@ void BgHakaBombwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgHakaBombwall_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgHakaBombwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Bg_Haka_Bombwall_InitVars = {
     ACTOR_BG_HAKA_BOMBWALL,
     ACTORCAT_BG,

@@ -8,7 +8,7 @@ void BgSinkaiKabe_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgSinkaiKabe_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgSinkaiKabe_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Bg_Sinkai_Kabe_InitVars = {
     ACTOR_BG_SINKAI_KABE,
     ACTORCAT_ITEMACTION,

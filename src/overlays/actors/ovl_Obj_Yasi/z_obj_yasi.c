@@ -9,7 +9,7 @@ void ObjYasi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjYasi_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjYasi_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Yasi_InitVars = {
     ACTOR_OBJ_YASI,
     ACTORCAT_PROP,

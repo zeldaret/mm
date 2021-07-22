@@ -9,7 +9,7 @@ void EnSw_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSw_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSw_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Sw_InitVars = {
     ACTOR_EN_SW,
     ACTORCAT_NPC,

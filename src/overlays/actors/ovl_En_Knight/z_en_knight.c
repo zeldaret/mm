@@ -9,7 +9,7 @@ void EnKnight_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKnight_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKnight_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 // static DamageTable sDamageTable = {
 static DamageTable D_809BDB04 = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x1),

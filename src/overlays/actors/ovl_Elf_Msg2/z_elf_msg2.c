@@ -8,7 +8,7 @@ void ElfMsg2_Init(Actor* thisx, GlobalContext* globalCtx);
 void ElfMsg2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ElfMsg2_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Elf_Msg2_InitVars = {
     ACTOR_ELF_MSG2,
     ACTORCAT_BG,

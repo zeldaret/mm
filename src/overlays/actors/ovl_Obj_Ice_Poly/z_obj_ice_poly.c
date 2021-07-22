@@ -9,7 +9,7 @@ void ObjIcePoly_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjIcePoly_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjIcePoly_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Ice_Poly_InitVars = {
     ACTOR_OBJ_ICE_POLY,
     ACTORCAT_ITEMACTION,

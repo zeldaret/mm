@@ -8,7 +8,7 @@ void ObjGrassCarry_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjGrassCarry_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjGrassCarry_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Grass_Carry_InitVars = {
     ACTOR_OBJ_GRASS_CARRY,
     ACTORCAT_PROP,

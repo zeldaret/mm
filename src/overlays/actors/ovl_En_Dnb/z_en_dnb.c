@@ -9,7 +9,7 @@ void EnDnb_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDnb_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDnb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Dnb_InitVars = {
     ACTOR_EN_DNB,
     ACTORCAT_BG,

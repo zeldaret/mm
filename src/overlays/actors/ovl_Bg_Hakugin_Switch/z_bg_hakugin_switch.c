@@ -9,7 +9,7 @@ void BgHakuginSwitch_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgHakuginSwitch_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgHakuginSwitch_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Bg_Hakugin_Switch_InitVars = {
     ACTOR_BG_HAKUGIN_SWITCH,
     ACTORCAT_SWITCH,

@@ -9,7 +9,7 @@ void DemoSyoten_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DemoSyoten_Update(Actor* thisx, GlobalContext* globalCtx);
 void DemoSyoten_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Demo_Syoten_InitVars = {
     ACTOR_DEMO_SYOTEN,
     ACTORCAT_ITEMACTION,

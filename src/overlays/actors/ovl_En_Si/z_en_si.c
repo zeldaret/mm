@@ -9,7 +9,7 @@ void EnSi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSi_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSi_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Si_InitVars = {
     ACTOR_EN_SI,
     ACTORCAT_ITEMACTION,

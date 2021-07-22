@@ -9,7 +9,7 @@ void ObjToudai_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjToudai_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjToudai_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Toudai_InitVars = {
     ACTOR_OBJ_TOUDAI,
     ACTORCAT_PROP,

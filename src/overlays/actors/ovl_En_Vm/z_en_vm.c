@@ -9,7 +9,7 @@ void EnVm_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnVm_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnVm_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Vm_InitVars = {
     ACTOR_EN_VM,
     ACTORCAT_ENEMY,

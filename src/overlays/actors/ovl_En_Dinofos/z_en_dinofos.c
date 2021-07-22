@@ -9,7 +9,7 @@ void EnDinofos_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDinofos_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDinofos_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Dinofos_InitVars = {
     ACTOR_EN_DINOFOS,
     ACTORCAT_ENEMY,

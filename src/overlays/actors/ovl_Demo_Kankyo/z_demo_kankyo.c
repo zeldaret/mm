@@ -9,7 +9,7 @@ void DemoKankyo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DemoKankyo_Update(Actor* thisx, GlobalContext* globalCtx);
 void DemoKankyo_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Demo_Kankyo_InitVars = {
     ACTOR_DEMO_KANKYO,
     ACTORCAT_ITEMACTION,

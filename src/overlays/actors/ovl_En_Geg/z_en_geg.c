@@ -9,7 +9,7 @@ void EnGeg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGeg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGeg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Geg_InitVars = {
     ACTOR_EN_GEG,
     ACTORCAT_NPC,

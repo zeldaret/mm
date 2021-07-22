@@ -9,7 +9,7 @@ void EffStk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EffStk_Update(Actor* thisx, GlobalContext* globalCtx);
 void EffStk_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Eff_Stk_InitVars = {
     ACTOR_EFF_STK,
     ACTORCAT_ITEMACTION,

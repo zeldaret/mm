@@ -9,7 +9,7 @@ void EnCne01_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnCne01_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnCne01_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Cne_01_InitVars = {
     ACTOR_EN_CNE_01,
     ACTORCAT_NPC,

@@ -9,7 +9,7 @@ void EnScopecrow_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnScopecrow_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnScopecrow_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Scopecrow_InitVars = {
     ACTOR_EN_SCOPECROW,
     ACTORCAT_NPC,

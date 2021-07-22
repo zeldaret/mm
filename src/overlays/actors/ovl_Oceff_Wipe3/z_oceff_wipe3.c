@@ -9,7 +9,7 @@ void OceffWipe3_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void OceffWipe3_Update(Actor* thisx, GlobalContext* globalCtx);
 void OceffWipe3_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Oceff_Wipe3_InitVars = {
     ACTOR_OCEFF_WIPE3,
     ACTORCAT_ITEMACTION,

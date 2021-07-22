@@ -9,7 +9,7 @@ void EnSyatekiWf_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiWf_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiWf_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A20E74 = {
     { COLTYPE_HIT5, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },

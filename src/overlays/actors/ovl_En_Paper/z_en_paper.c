@@ -9,7 +9,7 @@ void EnPaper_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPaper_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPaper_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Paper_InitVars = {
     ACTOR_EN_PAPER,
     ACTORCAT_ITEMACTION,

@@ -9,7 +9,7 @@ void EnGrasshopper_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGrasshopper_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGrasshopper_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 // static DamageTable sDamageTable = {
 static DamageTable D_809A8CDC = {
     /* Deku Nut       */ DMG_ENTRY(1, 0xF),

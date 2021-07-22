@@ -9,7 +9,7 @@ void ObjWarpstone_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjWarpstone_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Warpstone_InitVars = {
     ACTOR_OBJ_WARPSTONE,
     ACTORCAT_ITEMACTION,

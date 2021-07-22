@@ -9,7 +9,7 @@ void EnKame_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKame_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKame_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Kame_InitVars = {
     ACTOR_EN_KAME,
     ACTORCAT_ENEMY,

@@ -9,7 +9,7 @@ void ObjDhouse_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjDhouse_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjDhouse_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Dhouse_InitVars = {
     ACTOR_OBJ_DHOUSE,
     ACTORCAT_BG,

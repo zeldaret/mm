@@ -9,7 +9,7 @@ void ObjChikuwa_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjChikuwa_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjChikuwa_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Chikuwa_InitVars = {
     ACTOR_OBJ_CHIKUWA,
     ACTORCAT_BG,

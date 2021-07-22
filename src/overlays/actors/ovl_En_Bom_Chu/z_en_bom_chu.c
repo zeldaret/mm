@@ -9,7 +9,7 @@ void EnBomChu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBomChu_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBomChu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Bom_Chu_InitVars = {
     ACTOR_EN_BOM_CHU,
     ACTORCAT_EXPLOSIVES,

@@ -9,7 +9,7 @@ void BgDblueWaterfall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgDblueWaterfall_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgDblueWaterfall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Bg_Dblue_Waterfall_InitVars = {
     ACTOR_BG_DBLUE_WATERFALL,
     ACTORCAT_PROP,

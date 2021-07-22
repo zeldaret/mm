@@ -9,7 +9,7 @@ void EnScopenuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnScopenuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnScopenuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Scopenuts_InitVars = {
     ACTOR_EN_SCOPENUTS,
     ACTORCAT_NPC,

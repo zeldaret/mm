@@ -9,7 +9,7 @@ void EnMnk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMnk_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMnk_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Mnk_InitVars = {
     ACTOR_EN_MNK,
     ACTORCAT_NPC,

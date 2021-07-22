@@ -9,7 +9,7 @@ void BgF40Block_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgF40Block_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgF40Block_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Bg_F40_Block_InitVars = {
     ACTOR_BG_F40_BLOCK,
     ACTORCAT_BG,

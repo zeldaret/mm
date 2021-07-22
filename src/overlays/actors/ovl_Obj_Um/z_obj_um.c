@@ -9,7 +9,7 @@ void ObjUm_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjUm_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjUm_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Um_InitVars = {
     ACTOR_OBJ_UM,
     ACTORCAT_NPC,

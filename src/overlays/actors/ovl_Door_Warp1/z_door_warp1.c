@@ -9,7 +9,7 @@ void DoorWarp1_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DoorWarp1_Update(Actor* thisx, GlobalContext* globalCtx);
 void DoorWarp1_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Door_Warp1_InitVars = {
     ACTOR_DOOR_WARP1,
     ACTORCAT_ITEMACTION,

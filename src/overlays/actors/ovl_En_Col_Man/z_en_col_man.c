@@ -8,7 +8,7 @@ void EnColMan_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnColMan_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnColMan_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80AFE730 = {
     { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON, OC2_TYPE_1, COLSHAPE_CYLINDER, },

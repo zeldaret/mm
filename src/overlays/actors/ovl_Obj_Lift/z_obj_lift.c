@@ -9,7 +9,7 @@ void ObjLift_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjLift_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjLift_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Lift_InitVars = {
     ACTOR_OBJ_LIFT,
     ACTORCAT_BG,

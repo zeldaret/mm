@@ -9,7 +9,7 @@ void ObjKendoKanban_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjKendoKanban_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjKendoKanban_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Kendo_Kanban_InitVars = {
     ACTOR_OBJ_KENDO_KANBAN,
     ACTORCAT_NPC,

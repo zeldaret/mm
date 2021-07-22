@@ -9,7 +9,7 @@ void OceffSpot_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void OceffSpot_Update(Actor* thisx, GlobalContext* globalCtx);
 void OceffSpot_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Oceff_Spot_InitVars = {
     ACTOR_OCEFF_SPOT,
     ACTORCAT_ITEMACTION,

@@ -8,7 +8,7 @@ void EnRiverSound_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnRiverSound_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRiverSound_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_River_Sound_InitVars = {
     ACTOR_EN_RIVER_SOUND,
     ACTORCAT_ITEMACTION,

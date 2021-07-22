@@ -8,7 +8,7 @@ void EnWarptag_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnWarptag_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnWarptag_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Warp_tag_InitVars = {
     ACTOR_EN_WARP_TAG,
     ACTORCAT_ITEMACTION,

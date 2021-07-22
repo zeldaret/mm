@@ -8,7 +8,7 @@ void DoorShutter_Init(Actor* thisx, GlobalContext* globalCtx);
 void DoorShutter_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DoorShutter_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Door_Shutter_InitVars = {
     ACTOR_DOOR_SHUTTER,
     ACTORCAT_DOOR,

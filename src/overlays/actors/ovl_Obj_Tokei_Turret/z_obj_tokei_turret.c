@@ -9,7 +9,7 @@ void ObjTokeiTurret_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjTokeiTurret_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjTokeiTurret_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Tokei_Turret_InitVars = {
     ACTOR_OBJ_TOKEI_TURRET,
     ACTORCAT_BG,

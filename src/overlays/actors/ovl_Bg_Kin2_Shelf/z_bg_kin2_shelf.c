@@ -9,7 +9,7 @@ void BgKin2Shelf_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgKin2Shelf_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgKin2Shelf_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Bg_Kin2_Shelf_InitVars = {
     ACTOR_BG_KIN2_SHELF,
     ACTORCAT_BG,

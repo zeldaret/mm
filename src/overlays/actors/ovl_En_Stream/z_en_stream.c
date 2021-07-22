@@ -9,7 +9,7 @@ void EnStream_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnStream_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnStream_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Stream_InitVars = {
     ACTOR_EN_STREAM,
     ACTORCAT_BG,

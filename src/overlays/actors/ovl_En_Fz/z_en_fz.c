@@ -9,7 +9,7 @@ void EnFz_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFz_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFz_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Fz_InitVars = {
     ACTOR_EN_FZ,
     ACTORCAT_ENEMY,

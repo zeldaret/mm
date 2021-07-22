@@ -9,7 +9,7 @@ void EnDoor_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDoor_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDoor_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Door_InitVars = {
     ACTOR_EN_DOOR,
     ACTORCAT_DOOR,

@@ -8,7 +8,7 @@ void EnKitan_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnKitan_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKitan_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Kitan_InitVars = {
     ACTOR_EN_KITAN,
     ACTORCAT_NPC,

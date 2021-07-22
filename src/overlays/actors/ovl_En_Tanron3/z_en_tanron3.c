@@ -9,7 +9,7 @@ void EnTanron3_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron3_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron3_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Tanron3_InitVars = {
     ACTOR_EN_TANRON3,
     ACTORCAT_BOSS,

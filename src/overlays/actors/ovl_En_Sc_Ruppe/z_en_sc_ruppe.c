@@ -9,7 +9,7 @@ void EnScRuppe_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnScRuppe_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnScRuppe_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Sc_Ruppe_InitVars = {
     ACTOR_EN_SC_RUPPE,
     ACTORCAT_NPC,

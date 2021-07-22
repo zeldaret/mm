@@ -9,7 +9,7 @@ void ObjArmos_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjArmos_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjArmos_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Armos_InitVars = {
     ACTOR_OBJ_ARMOS,
     ACTORCAT_PROP,

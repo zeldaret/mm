@@ -9,7 +9,7 @@ void BgIkninside_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIkninside_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIkninside_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Bg_Ikninside_InitVars = {
     ACTOR_BG_IKNINSIDE,
     ACTORCAT_BG,

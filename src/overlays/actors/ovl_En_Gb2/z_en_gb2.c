@@ -9,7 +9,7 @@ void EnGb2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGb2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGb2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Gb2_InitVars = {
     ACTOR_EN_GB2,
     ACTORCAT_NPC,

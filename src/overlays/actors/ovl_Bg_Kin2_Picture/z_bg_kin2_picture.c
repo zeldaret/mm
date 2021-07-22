@@ -9,7 +9,7 @@ void BgKin2Picture_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgKin2Picture_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgKin2Picture_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Bg_Kin2_Picture_InitVars = {
     ACTOR_BG_KIN2_PICTURE,
     ACTORCAT_PROP,

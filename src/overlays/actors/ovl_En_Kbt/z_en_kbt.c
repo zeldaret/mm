@@ -9,7 +9,7 @@ void EnKbt_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKbt_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKbt_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Kbt_InitVars = {
     ACTOR_EN_KBT,
     ACTORCAT_NPC,

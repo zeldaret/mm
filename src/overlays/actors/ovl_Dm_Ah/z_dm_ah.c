@@ -9,7 +9,7 @@ void DmAh_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmAh_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmAh_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Dm_Ah_InitVars = {
     ACTOR_DM_AH,
     ACTORCAT_NPC,

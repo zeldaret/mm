@@ -9,7 +9,7 @@ void MirRay3_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void MirRay3_Update(Actor* thisx, GlobalContext* globalCtx);
 void MirRay3_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Mir_Ray3_InitVars = {
     ACTOR_MIR_RAY3,
     ACTORCAT_ITEMACTION,

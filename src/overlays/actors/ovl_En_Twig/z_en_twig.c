@@ -9,7 +9,7 @@ void EnTwig_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTwig_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTwig_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Twig_InitVars = {
     ACTOR_EN_TWIG,
     ACTORCAT_MISC,

@@ -6,7 +6,7 @@
 
 void ObjGrassUnit_Init(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Grass_Unit_InitVars = {
     ACTOR_OBJ_GRASS_UNIT,
     ACTORCAT_BG,

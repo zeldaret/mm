@@ -9,7 +9,7 @@ void EnFu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFu_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Fu_InitVars = {
     ACTOR_EN_FU,
     ACTORCAT_NPC,

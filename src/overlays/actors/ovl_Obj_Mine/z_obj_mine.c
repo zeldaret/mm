@@ -9,7 +9,7 @@ void ObjMine_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjMine_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjMine_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Mine_InitVars = {
     ACTOR_OBJ_MINE,
     ACTORCAT_PROP,

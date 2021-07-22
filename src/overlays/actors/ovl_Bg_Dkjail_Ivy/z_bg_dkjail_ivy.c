@@ -9,7 +9,7 @@ void BgDkjailIvy_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgDkjailIvy_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgDkjailIvy_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Bg_Dkjail_Ivy_InitVars = {
     ACTOR_BG_DKJAIL_IVY,
     ACTORCAT_BG,

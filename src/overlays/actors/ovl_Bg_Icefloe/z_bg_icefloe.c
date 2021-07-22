@@ -9,7 +9,7 @@ void BgIcefloe_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIcefloe_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIcefloe_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Bg_Icefloe_InitVars = {
     ACTOR_BG_ICEFLOE,
     ACTORCAT_BG,

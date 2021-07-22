@@ -9,7 +9,7 @@ void EnKgy_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKgy_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKgy_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Kgy_InitVars = {
     ACTOR_EN_KGY,
     ACTORCAT_NPC,

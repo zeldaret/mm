@@ -9,7 +9,7 @@ void EnDnp_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDnp_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDnp_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Dnp_InitVars = {
     ACTOR_EN_DNP,
     ACTORCAT_NPC,

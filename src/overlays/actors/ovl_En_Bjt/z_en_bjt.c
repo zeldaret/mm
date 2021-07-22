@@ -9,7 +9,7 @@ void EnBjt_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBjt_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBjt_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Bjt_InitVars = {
     ACTOR_EN_BJT,
     ACTORCAT_NPC,

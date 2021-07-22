@@ -8,7 +8,7 @@ void EnBigpo_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpo_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Bigpo_InitVars = {
     ACTOR_EN_BIGPO,
     ACTORCAT_ENEMY,

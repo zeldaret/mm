@@ -9,7 +9,7 @@ void DemoTreLgt_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DemoTreLgt_Update(Actor* thisx, GlobalContext* globalCtx);
 void DemoTreLgt_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Demo_Tre_Lgt_InitVars = {
     ACTOR_DEMO_TRE_LGT,
     ACTORCAT_ITEMACTION,

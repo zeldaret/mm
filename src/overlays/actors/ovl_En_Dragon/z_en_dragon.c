@@ -9,7 +9,7 @@ void EnDragon_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDragon_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDragon_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Dragon_InitVars = {
     ACTOR_EN_DRAGON,
     ACTORCAT_ENEMY,

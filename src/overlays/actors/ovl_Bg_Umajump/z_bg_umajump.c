@@ -8,7 +8,7 @@ void BgUmajump_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgUmajump_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgUmajump_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Bg_Umajump_InitVars = {
     ACTOR_BG_UMAJUMP,
     ACTORCAT_PROP,

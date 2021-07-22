@@ -9,7 +9,7 @@ void ObjBigicicle_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjBigicicle_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjBigicicle_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Bigicicle_InitVars = {
     ACTOR_OBJ_BIGICICLE,
     ACTORCAT_PROP,

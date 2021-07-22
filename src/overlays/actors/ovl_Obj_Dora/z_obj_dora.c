@@ -9,7 +9,7 @@ void ObjDora_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjDora_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjDora_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Dora_InitVars = {
     ACTOR_OBJ_DORA,
     ACTORCAT_NPC,

@@ -9,7 +9,7 @@ void EnFish2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFish2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFish2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Fish2_InitVars = {
     ACTOR_EN_FISH2,
     ACTORCAT_PROP,

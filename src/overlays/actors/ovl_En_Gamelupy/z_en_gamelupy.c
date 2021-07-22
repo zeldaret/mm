@@ -9,7 +9,7 @@ void EnGamelupy_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGamelupy_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGamelupy_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Gamelupy_InitVars = {
     ACTOR_EN_GAMELUPY,
     ACTORCAT_PROP,

@@ -9,7 +9,7 @@ void ObjSkateblock_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSkateblock_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjSkateblock_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Skateblock_InitVars = {
     ACTOR_OBJ_SKATEBLOCK,
     ACTORCAT_BG,

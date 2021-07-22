@@ -8,7 +8,7 @@ void ItemEtcetera_Init(Actor* thisx, GlobalContext* globalCtx);
 void ItemEtcetera_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ItemEtcetera_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Item_Etcetera_InitVars = {
     ACTOR_ITEM_ETCETERA,
     ACTORCAT_PROP,

@@ -9,7 +9,7 @@ void ObjSpidertent_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSpidertent_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjSpidertent_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Spidertent_InitVars = {
     ACTOR_OBJ_SPIDERTENT,
     ACTORCAT_BG,

@@ -8,7 +8,7 @@ void ObjPzlblock_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjPzlblock_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjPzlblock_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Pzlblock_InitVars = {
     ACTOR_OBJ_PZLBLOCK,
     ACTORCAT_PROP,

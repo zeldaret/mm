@@ -9,7 +9,7 @@ void EnAh_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnAh_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnAh_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Ah_InitVars = {
     ACTOR_EN_AH,
     ACTORCAT_NPC,

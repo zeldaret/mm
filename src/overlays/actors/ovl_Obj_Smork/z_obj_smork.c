@@ -9,7 +9,7 @@ void ObjSmork_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSmork_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjSmork_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Smork_InitVars = {
     ACTOR_OBJ_SMORK,
     ACTORCAT_PROP,

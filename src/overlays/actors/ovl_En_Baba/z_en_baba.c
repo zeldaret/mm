@@ -9,7 +9,7 @@ void EnBaba_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBaba_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBaba_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Baba_InitVars = {
     ACTOR_EN_BABA,
     ACTORCAT_NPC,

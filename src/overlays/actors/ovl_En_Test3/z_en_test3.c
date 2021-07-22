@@ -8,7 +8,7 @@ void EnTest3_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTest3_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTest3_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Test3_InitVars = {
     ACTOR_EN_TEST3,
     ACTORCAT_NPC,

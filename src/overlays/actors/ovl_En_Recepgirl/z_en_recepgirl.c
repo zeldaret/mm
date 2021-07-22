@@ -9,7 +9,7 @@ void EnRecepgirl_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRecepgirl_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRecepgirl_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Recepgirl_InitVars = {
     ACTOR_EN_RECEPGIRL,
     ACTORCAT_NPC,

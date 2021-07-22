@@ -9,7 +9,7 @@ void ObjSnowball_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSnowball_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjSnowball_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit Obj_Snowball_InitVars = {
     ACTOR_OBJ_SNOWBALL,
     ACTORCAT_PROP,

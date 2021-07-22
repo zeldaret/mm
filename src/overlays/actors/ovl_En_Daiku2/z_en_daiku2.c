@@ -9,7 +9,7 @@ void EnDaiku2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDaiku2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDaiku2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if(0)
+#if 0
 const ActorInit En_Daiku2_InitVars = {
     ACTOR_EN_DAIKU2,
     ACTORCAT_NPC,
