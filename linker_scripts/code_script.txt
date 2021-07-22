@@ -1043,14 +1043,8 @@ SECTIONS
     {
         build/src/overlays/actors/ovl_En_Niw/z_en_niw.o(.text)
         build/src/overlays/actors/ovl_En_Niw/z_en_niw.o(.data)
-#ifdef NON_EQUIVALENT
-        build/src/overlays/actors/ovl_En_Niw_rodata_overlay.o(.ovl)
-#elseif NON_MATCHING
-        build/src/overlays/actors/ovl_En_Niw_rodata_overlay.o(.ovl)
-#else
         build/src/overlays/actors/ovl_En_Niw/z_en_niw.o(.rodata)
-        build/asm/overlays/ovl_En_Niw_rodata.o(.rodata)
-#endif
+        build/src/overlays/actors/ovl_En_Niw/z_en_niw_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -2169,7 +2163,7 @@ SECTIONS
         build/src/overlays/actors/ovl_En_Tubo_Trap/z_en_tubo_trap.o(.text)
         build/src/overlays/actors/ovl_En_Tubo_Trap/z_en_tubo_trap.o(.data)
         build/src/overlays/actors/ovl_En_Tubo_Trap/z_en_tubo_trap.o(.rodata)
-        build/asm/overlays/ovl_En_Tubo_Trap_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Tubo_Trap/z_en_tubo_trap_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -2635,11 +2629,7 @@ SECTIONS
         build/src/overlays/actors/ovl_En_Weather_Tag/z_en_weather_tag.o(.text)
         build/src/overlays/actors/ovl_En_Weather_Tag/z_en_weather_tag.o(.data)
         build/src/overlays/actors/ovl_En_Weather_Tag/z_en_weather_tag.o(.rodata)
-#ifdef NON_MATCHING
         build/src/overlays/actors/ovl_En_Weather_Tag/z_en_weather_tag_overlay.o(.ovl)
-#else
-        build/asm/overlays/ovl_En_Weather_Tag_rodata.o(.rodata)
-#endif
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
