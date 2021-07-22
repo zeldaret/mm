@@ -13,7 +13,7 @@ endseg
 beginseg
     name "boot"
     address 0x80080060
-    include "build/asm/boot/boot_main.text.o"  // .text section
+    include "build/asm/boot/boot_main.text.o"
     include "build/data/boot/rsp_boot.data.o"
     include "build/data/boot/boot_main.rodata.o"
     include "build/data/boot/boot_main.bss.o"
@@ -45,9 +45,8 @@ beginseg
 
     include "build/asm/boot/syncprintf.text.o"
 
-    include "build/asm/boot/fault.text.o"
+    include "build/src/boot_O2_g3_trapuv/fault.o"
     include "build/data/boot/fault.data.o"
-    include "build/data/boot/fault.rodata.o"
     include "build/data/boot/fault.bss.o"
 
     include "build/asm/boot/fault_drawer.text.o"
