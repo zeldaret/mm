@@ -309,7 +309,7 @@
     0x80122660:"",
     0x801226E0:"z_player_lib",
     0x80129EF0:"z_prenmi",
-    0x8012A080:"", # probably z_quake
+    0x8012A080:"z_quake",
     0x8012BC50:"z_rcp",
     0x8012D510:"z_room",
     0x8012EC80:"",
@@ -351,7 +351,7 @@
     0x801727F0:"TwoHeadGfxArena",
     0x80172A00:"TwoHeadArena",
     0x80172BC0:"",
-    0x80172C30:"",
+    0x80172C30:"audioMgr",
     0x80173130:"game",
     0x80173BF0:"gamealloc",
     0x80173D30:"graph",
