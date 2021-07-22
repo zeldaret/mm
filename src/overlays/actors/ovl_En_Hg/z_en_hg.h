@@ -18,7 +18,7 @@ typedef struct EnHg {
     /* 0x220 */ Vec3s limbDrawTbl[19];
     /* 0x292 */ Vec3s transitionDrawTbl[19];
     /* 0x304 */ char pad304[0xC];
-    /* 0x310 */ u16 unk310[4];
+    /* 0x310 */ u16 cutscenes[4];
 } EnHg; // size = 0x318
 
 extern const ActorInit En_Hg_InitVars;
