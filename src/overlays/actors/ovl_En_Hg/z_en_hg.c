@@ -346,7 +346,7 @@ void func_80BCFC0C(EnHg* this, GlobalContext* globalCtx) {
             }
         } else {
             if (this->actor.xzDistToPlayer < 60.0f && fabsf(this->actor.yDistToPlayer) < 40.0f) {
-                if (this->actionFunc != func_80BCF8A0 && this->actionFunc != func_80BCF95C) {
+                if ((this->actionFunc != func_80BCF8A0) && (this->actionFunc != func_80BCF95C)) {
                     if ((gSaveContext.weekEventReg[61] & 2) == 0) {
                         gSaveContext.weekEventReg[61] |= 2;
                         this->unk218 = NULL;
@@ -354,10 +354,10 @@ void func_80BCFC0C(EnHg* this, GlobalContext* globalCtx) {
                         this->unk218 = 2;
                     }
                     func_80BCF88C(this);
+                    return;
                 }
-            } else {
-                func_80BCF710(this, globalCtx);
             }
+            func_80BCF710(this, globalCtx);
         }
     }
 }
