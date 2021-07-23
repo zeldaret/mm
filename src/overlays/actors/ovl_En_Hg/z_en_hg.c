@@ -74,8 +74,38 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static DamageTable sDamageTable = {
-    0x10, 0xD1, 0x00, 0xF1, 0xC3, 0xC3, 0xF2, 0x10, 0xF2, 0xF1, 0xF1, 0x23, 0x33, 0x41, 0xF2, 0x10,
-    0xD1, 0xF2, 0x10, 0x00, 0x00, 0x00, 0xF1, 0xF1, 0xF1, 0x02, 0x04, 0x00, 0x00, 0x00, 0x00, 0xF1,
+    /* Deku Nut       */ DMG_ENTRY(0, 0x1),
+    /* Deku Stick     */ DMG_ENTRY(1, 0xD),
+    /* Horse trample  */ DMG_ENTRY(0, 0x0),
+    /* Explosives     */ DMG_ENTRY(1, 0xF),
+    /* Zora boomerang */ DMG_ENTRY(3, 0xC),
+    /* Normal arrow   */ DMG_ENTRY(3, 0xC),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(2, 0xF),
+    /* Hookshot       */ DMG_ENTRY(0, 0x1),
+    /* Goron punch    */ DMG_ENTRY(2, 0xF),
+    /* Sword          */ DMG_ENTRY(1, 0xF),
+    /* Goron pound    */ DMG_ENTRY(1, 0xF),
+    /* Fire arrow     */ DMG_ENTRY(3, 0x2),
+    /* Ice arrow      */ DMG_ENTRY(3, 0x3),
+    /* Light arrow    */ DMG_ENTRY(1, 0x4),
+    /* Goron spikes   */ DMG_ENTRY(2, 0xF),
+    /* Deku spin      */ DMG_ENTRY(0, 0x1),
+    /* Deku bubble    */ DMG_ENTRY(1, 0xD),
+    /* Deku launch    */ DMG_ENTRY(2, 0xF),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x1),
+    /* Zora barrier   */ DMG_ENTRY(0, 0x0),
+    /* Normal shield  */ DMG_ENTRY(0, 0x0),
+    /* Light ray      */ DMG_ENTRY(0, 0x0),
+    /* Thrown object  */ DMG_ENTRY(1, 0xF),
+    /* Zora punch     */ DMG_ENTRY(1, 0xF),
+    /* Spin attack    */ DMG_ENTRY(1, 0xF),
+    /* Sword beam     */ DMG_ENTRY(2, 0x0),
+    /* Normal Roll    */ DMG_ENTRY(4, 0x0),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
+    /* Unblockable    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
+    /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
 static CollisionCheckInfoInit2 sColChkInfoInit2 = {
@@ -214,7 +244,7 @@ void func_80BCF778(EnHg* this, GlobalContext* globalCtx) {
 
 void func_80BCF7D8(EnHg* this, GlobalContext* globalCtx) {
     if (this->actor.colChkInfo.health) {
-        if ((this->collider.base.acFlags & AC_HIT)) {
+        if (this->collider.base.acFlags & AC_HIT) {
             this->collider.base.acFlags &= ~AC_HIT;
             func_80BCF68C(this);
         }
@@ -327,7 +357,7 @@ void func_80BCFC0C(EnHg* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
     if (this->actor.colChkInfo.health == 1 && !(fabsf(this->actor.yDistToPlayer) >= 80.0f)) {
-        if ((player->stateFlags2 & 0x08000000)) {
+        if (player->stateFlags2 & 0x08000000) {
             if (D_80BD00C8 == 0) {
                 play_sound(NA_SE_SY_TRE_BOX_APPEAR);
             }
