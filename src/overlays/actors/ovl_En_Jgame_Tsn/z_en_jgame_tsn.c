@@ -9,7 +9,7 @@ void EnJgameTsn_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnJgameTsn_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnJgameTsn_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Jgame_Tsn_InitVars = {
     ACTOR_EN_JGAME_TSN,
     ACTORCAT_NPC,
@@ -21,7 +21,18 @@ const ActorInit En_Jgame_Tsn_InitVars = {
     (ActorFunc)EnJgameTsn_Update,
     (ActorFunc)EnJgameTsn_Draw,
 };
-*/
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_80C15078 = {
+    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_ENEMY, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    { 30, 40, 0, { 0, 0, 0 } },
+};
+
+
+extern ColliderCylinderInit D_80C15078;
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jgame_Tsn/EnJgameTsn_Init.s")
 

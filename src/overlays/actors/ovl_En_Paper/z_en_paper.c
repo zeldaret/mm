@@ -9,7 +9,7 @@ void EnPaper_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPaper_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPaper_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Paper_InitVars = {
     ACTOR_EN_PAPER,
     ACTORCAT_ITEMACTION,
@@ -21,7 +21,8 @@ const ActorInit En_Paper_InitVars = {
     (ActorFunc)EnPaper_Update,
     (ActorFunc)EnPaper_Draw,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Paper/EnPaper_Init.s")
 

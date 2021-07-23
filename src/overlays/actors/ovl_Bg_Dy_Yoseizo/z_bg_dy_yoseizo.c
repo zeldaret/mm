@@ -8,7 +8,7 @@ void BgDyYoseizo_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgDyYoseizo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgDyYoseizo_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Bg_Dy_Yoseizo_InitVars = {
     ACTOR_BG_DY_YOSEIZO,
     ACTORCAT_PROP,
@@ -20,7 +20,8 @@ const ActorInit Bg_Dy_Yoseizo_InitVars = {
     (ActorFunc)BgDyYoseizo_Update,
     (ActorFunc)NULL,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Dy_Yoseizo/BgDyYoseizo_Init.s")
 

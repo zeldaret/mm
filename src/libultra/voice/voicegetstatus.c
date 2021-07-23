@@ -2,6 +2,7 @@
 #include <global.h>
 #include "io/controller.h"
 
+#ifdef NON_MATCHING
 s32 __osVoiceGetStatus(OSMesgQueue* mq, s32 port, u8* status) {
     __OSContRequestHeaderAligned header;
     s32 ret = 0;
@@ -57,3 +58,6 @@ s32 __osVoiceGetStatus(OSMesgQueue* mq, s32 port, u8* status) {
     __osSiRelAccess();
     return (ret);
 }
+#else
+#pragma GLOBAL_ASM("asm/non_matchings/boot/voicegetstatus/__osVoiceGetStatus.s")
+#endif

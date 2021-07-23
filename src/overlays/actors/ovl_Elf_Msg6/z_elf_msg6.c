@@ -8,7 +8,7 @@ void ElfMsg6_Init(Actor* thisx, GlobalContext* globalCtx);
 void ElfMsg6_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ElfMsg6_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Elf_Msg6_InitVars = {
     ACTOR_ELF_MSG6,
     ACTORCAT_ITEMACTION,
@@ -20,7 +20,8 @@ const ActorInit Elf_Msg6_InitVars = {
     (ActorFunc)ElfMsg6_Update,
     (ActorFunc)NULL,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg6/func_80BA15A0.s")
 

@@ -9,7 +9,7 @@ void ArrowIce_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ArrowIce_Update(Actor* thisx, GlobalContext* globalCtx);
 void ArrowIce_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Arrow_Ice_InitVars = {
     ACTOR_ARROW_ICE,
     ACTORCAT_ITEMACTION,
@@ -21,7 +21,16 @@ const ActorInit Arrow_Ice_InitVars = {
     (ActorFunc)ArrowIce_Update,
     (ActorFunc)ArrowIce_Draw,
 };
-*/
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_809241F0[] = {
+    ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_STOP),
+};
+
+
+extern InitChainEntry D_809241F0[];
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/func_80922430.s")
 

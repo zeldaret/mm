@@ -8,7 +8,7 @@ void BgSinkaiKabe_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgSinkaiKabe_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgSinkaiKabe_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Bg_Sinkai_Kabe_InitVars = {
     ACTOR_BG_SINKAI_KABE,
     ACTORCAT_ITEMACTION,
@@ -20,7 +20,8 @@ const ActorInit Bg_Sinkai_Kabe_InitVars = {
     (ActorFunc)BgSinkaiKabe_Update,
     (ActorFunc)NULL,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Sinkai_Kabe/BgSinkaiKabe_Init.s")
 

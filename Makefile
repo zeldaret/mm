@@ -251,3 +251,15 @@ build/src/%.o: src/%.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $^
 #	$(CC_CHECK) $^
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
+
+build/src/libultra/libc/ll.o: src/libultra/libc/ll.c
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
+	$(CC_CHECK) $<
+	python3 tools/set_o32abi_bit.py $@
+	@$(OBJDUMP) -d $@ > $(@:.o=.s)
+
+build/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
+	$(CC_CHECK) $<
+	python3 tools/set_o32abi_bit.py $@
+	@$(OBJDUMP) -d $@ > $(@:.o=.s)

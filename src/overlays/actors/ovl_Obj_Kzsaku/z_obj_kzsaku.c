@@ -9,7 +9,7 @@ void ObjKzsaku_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjKzsaku_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjKzsaku_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Obj_Kzsaku_InitVars = {
     ACTOR_OBJ_KZSAKU,
     ACTORCAT_PROP,
@@ -21,7 +21,8 @@ const ActorInit Obj_Kzsaku_InitVars = {
     (ActorFunc)ObjKzsaku_Update,
     (ActorFunc)ObjKzsaku_Draw,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kzsaku/ObjKzsaku_Init.s")
 

@@ -9,7 +9,7 @@ void EnLight_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnLight_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnLight_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Light_InitVars = {
     ACTOR_EN_LIGHT,
     ACTORCAT_ITEMACTION,
@@ -21,7 +21,8 @@ const ActorInit En_Light_InitVars = {
     (ActorFunc)EnLight_Update,
     (ActorFunc)EnLight_Draw,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Light/EnLight_Init.s")
 

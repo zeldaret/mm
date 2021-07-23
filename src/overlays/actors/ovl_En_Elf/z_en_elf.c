@@ -9,7 +9,7 @@ void EnElf_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnElf_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnElf_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Elf_InitVars = {
     ACTOR_EN_ELF,
     ACTORCAT_ITEMACTION,
@@ -21,7 +21,8 @@ const ActorInit En_Elf_InitVars = {
     (ActorFunc)EnElf_Update,
     (ActorFunc)EnElf_Draw,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elf/func_8088C510.s")
 

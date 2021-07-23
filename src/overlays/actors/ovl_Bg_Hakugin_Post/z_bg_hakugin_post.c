@@ -8,7 +8,7 @@ void BgHakuginPost_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgHakuginPost_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgHakuginPost_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Bg_Hakugin_Post_InitVars = {
     ACTOR_BG_HAKUGIN_POST,
     ACTORCAT_BG,
@@ -20,7 +20,25 @@ const ActorInit Bg_Hakugin_Post_InitVars = {
     (ActorFunc)BgHakuginPost_Update,
     (ActorFunc)NULL,
 };
-*/
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_80A9D8B8 = {
+    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00000100, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+    { 276, 0, 20, { 0, 0, 0 } },
+};
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80A9D8F8[] = {
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
+};
+
+
+extern ColliderCylinderInit D_80A9D8B8;
+extern InitChainEntry D_80A9D8F8[];
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Post/func_80A9ACD0.s")
 

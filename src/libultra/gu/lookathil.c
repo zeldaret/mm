@@ -58,7 +58,7 @@ void guLookAtHiliteF(f32 mf[4][4], LookAt* l, Hilite* h, f32 xEye, f32 yEye, f32
 
     length = sqrtf(SQ(xHilite) + SQ(yHilite) + SQ(zHilite));
 
-    if (length > D_800992F0) {
+    if (length > 0.1) {
         length = 1.0 / length;
         xHilite *= length;
         yHilite *= length;
@@ -81,7 +81,7 @@ void guLookAtHiliteF(f32 mf[4][4], LookAt* l, Hilite* h, f32 xEye, f32 yEye, f32
     yHilite = yl2 + yLook;
     zHilite = zl2 + zLook;
     length = sqrtf(SQ(xHilite) + SQ(yHilite) + SQ(zHilite));
-    if (length > D_800992F8) {
+    if (length > 0.1) {
         length = 1.0 / length;
         xHilite *= length;
         yHilite *= length;

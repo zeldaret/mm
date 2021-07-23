@@ -9,7 +9,7 @@ void EnZl4_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnZl4_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnZl4_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Zl4_InitVars = {
     ACTOR_EN_ZL4,
     ACTORCAT_ITEMACTION,
@@ -21,7 +21,8 @@ const ActorInit En_Zl4_InitVars = {
     (ActorFunc)EnZl4_Update,
     (ActorFunc)EnZl4_Draw,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zl4/func_809A1BB0.s")
 

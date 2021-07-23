@@ -8,7 +8,7 @@ void EnSekihi_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnSekihi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSekihi_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Sekihi_InitVars = {
     ACTOR_EN_SEKIHI,
     ACTORCAT_PROP,
@@ -20,7 +20,8 @@ const ActorInit En_Sekihi_InitVars = {
     (ActorFunc)EnSekihi_Update,
     (ActorFunc)NULL,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sekihi/EnSekihi_Init.s")
 

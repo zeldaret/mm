@@ -8,7 +8,7 @@ void EnRiverSound_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnRiverSound_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRiverSound_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_River_Sound_InitVars = {
     ACTOR_EN_RIVER_SOUND,
     ACTORCAT_ITEMACTION,
@@ -20,7 +20,8 @@ const ActorInit En_River_Sound_InitVars = {
     (ActorFunc)EnRiverSound_Update,
     (ActorFunc)EnRiverSound_Draw,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_River_Sound/EnRiverSound_Init.s")
 

@@ -7,7 +7,7 @@
 void ObjBlockstop_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjBlockstop_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Obj_Blockstop_InitVars = {
     ACTOR_OBJ_BLOCKSTOP,
     ACTORCAT_PROP,
@@ -19,7 +19,8 @@ const ActorInit Obj_Blockstop_InitVars = {
     (ActorFunc)ObjBlockstop_Update,
     (ActorFunc)NULL,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Blockstop/ObjBlockstop_Init.s")
 

@@ -9,7 +9,7 @@ void BgIknvDoukutu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIknvDoukutu_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIknvDoukutu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Bg_Iknv_Doukutu_InitVars = {
     ACTOR_BG_IKNV_DOUKUTU,
     ACTORCAT_BG,
@@ -21,7 +21,8 @@ const ActorInit Bg_Iknv_Doukutu_InitVars = {
     (ActorFunc)BgIknvDoukutu_Update,
     (ActorFunc)BgIknvDoukutu_Draw,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknv_Doukutu/BgIknvDoukutu_Init.s")
 

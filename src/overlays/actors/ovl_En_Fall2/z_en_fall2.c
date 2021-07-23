@@ -9,7 +9,7 @@ void EnFall2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFall2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFall2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Fall2_InitVars = {
     ACTOR_EN_FALL2,
     ACTORCAT_ITEMACTION,
@@ -21,7 +21,8 @@ const ActorInit En_Fall2_InitVars = {
     (ActorFunc)EnFall2_Update,
     (ActorFunc)EnFall2_Draw,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall2/EnFall2_Init.s")
 

@@ -9,7 +9,7 @@ void ObjIceblock_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjIceblock_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjIceblock_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Obj_Iceblock_InitVars = {
     ACTOR_OBJ_ICEBLOCK,
     ACTORCAT_BG,
@@ -21,7 +21,31 @@ const ActorInit Obj_Iceblock_InitVars = {
     (ActorFunc)ObjIceblock_Update,
     (ActorFunc)ObjIceblock_Draw,
 };
-*/
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_80A26E50 = {
+    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_NO_PUSH | OC1_TYPE_PLAYER, OC2_TYPE_2, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00000800, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    { 44, 62, -31, { 0, 0, 0 } },
+};
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80A26FA4[] = {
+    ICHAIN_F32_DIV1000(speedXZ, 16000, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(gravity, -1800, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(minVelocityY, -26000, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 150, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
+};
+
+
+extern ColliderCylinderInit D_80A26E50;
+extern InitChainEntry D_80A26FA4[];
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Iceblock/func_80A23090.s")
 
