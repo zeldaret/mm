@@ -9,7 +9,7 @@ void EnShn_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnShn_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnShn_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Shn_InitVars = {
     ACTOR_EN_SHN,
     ACTORCAT_NPC,
@@ -21,7 +21,8 @@ const ActorInit En_Shn_InitVars = {
     (ActorFunc)EnShn_Update,
     (ActorFunc)EnShn_Draw,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Shn_0x80AE6130/func_80AE6130.asm")
 

@@ -9,7 +9,7 @@ void EnLiftNuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnLiftNuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnLiftNuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Lift_Nuts_InitVars = {
     ACTOR_EN_LIFT_NUTS,
     ACTORCAT_NPC,
@@ -21,7 +21,23 @@ const ActorInit En_Lift_Nuts_InitVars = {
     (ActorFunc)EnLiftNuts_Update,
     (ActorFunc)EnLiftNuts_Draw,
 };
-*/
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_80AEBF28 = {
+    { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
+    { 25, 75, 0, { 0, 0, 0 } },
+};
+
+
+// sColChkInfoInit
+static CollisionCheckInfoInit2 D_80AEBF54 = { 0, 0, 0, 0, MASS_IMMOVABLE };
+
+
+extern ColliderCylinderInit D_80AEBF28;
+extern CollisionCheckInfoInit2 D_80AEBF54;
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Lift_Nuts_0x80AE9A20/func_80AE9A20.asm")
 

@@ -1,7 +1,7 @@
 /*
  * File: z_en_ma_yts.c
  * Overlay: ovl_En_Ma_Yts
- * Description: Romani. As oposed as EnMa4, this actor is used in conjunction of another actor, like EnMaYto.
+ * Description: Romani. As opposed as EnMa4, this actor is used in conjunction with another actor, like EnMaYto.
  */
 
 #include "z_en_ma_yts.h"
@@ -146,7 +146,7 @@ void func_80B8D12C(EnMaYts* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
     s16 flag = this->unk_32C == 2 ? true : false;
 
-    if ((this->unk_32C == 0) || (this->actor.parent == NULL)) {
+    if (this->unk_32C == 0 || this->actor.parent == NULL) {
         this->unk_1D8.unk_18 = player->actor.world.pos;
         this->unk_1D8.unk_18.y -= -10.0f;
     } else {
@@ -218,7 +218,7 @@ s32 EnMaYts_CheckValidSpawn(EnMaYts* this, GlobalContext* globalCtx) {
             // Failing the alien invasion
             if (!(gSaveContext.weekEventReg[0x16] & 1)) {
                 return false;
-            } else if ((gSaveContext.time >= 0xD555) && (CURRENT_DAY == 3)) {
+            } else if (gSaveContext.time >= CLOCK_TIME(20, 0) && CURRENT_DAY == 3) {
                 return false;
             }
             break;

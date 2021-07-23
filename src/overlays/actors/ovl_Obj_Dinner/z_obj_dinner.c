@@ -39,10 +39,11 @@ void ObjDinner_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjDinner_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
-    s32 pad;
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+    func_8012C28C(globalCtx->state.gfxCtx);
 
-    func_8012C28C(gfxCtx);
-    gSPMatrix(gfxCtx->polyOpa.p++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(gfxCtx->polyOpa.p++, D_060011E0);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, D_060011E0);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

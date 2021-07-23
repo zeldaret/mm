@@ -9,7 +9,7 @@ void EnMnk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMnk_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMnk_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Mnk_InitVars = {
     ACTOR_EN_MNK,
     ACTORCAT_NPC,
@@ -21,7 +21,18 @@ const ActorInit En_Mnk_InitVars = {
     (ActorFunc)EnMnk_Update,
     (ActorFunc)EnMnk_Draw,
 };
-*/
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_80AB9D10 = {
+    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x01000200, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    { 15, 30, 0, { 0, 0, 0 } },
+};
+
+
+extern ColliderCylinderInit D_80AB9D10;
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Mnk_0x80AB4D10/func_80AB4D10.asm")
 

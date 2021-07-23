@@ -9,7 +9,7 @@ void EnRecepgirl_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRecepgirl_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRecepgirl_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Recepgirl_InitVars = {
     ACTOR_EN_RECEPGIRL,
     ACTORCAT_NPC,
@@ -21,7 +21,17 @@ const ActorInit En_Recepgirl_InitVars = {
     (ActorFunc)EnRecepgirl_Update,
     (ActorFunc)EnRecepgirl_Draw,
 };
-*/
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80C106C0[] = {
+    ICHAIN_U8(targetMode, 6, ICHAIN_CONTINUE),
+    ICHAIN_F32(targetArrowOffset, 1000, ICHAIN_STOP),
+};
+
+
+extern InitChainEntry D_80C106C0[];
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Recepgirl_0x80C0FFD0/EnRecepgirl_Init.asm")
 

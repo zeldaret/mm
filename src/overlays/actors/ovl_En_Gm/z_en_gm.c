@@ -9,7 +9,7 @@ void EnGm_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGm_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGm_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Gm_InitVars = {
     ACTOR_EN_GM,
     ACTORCAT_NPC,
@@ -21,7 +21,32 @@ const ActorInit En_Gm_InitVars = {
     (ActorFunc)EnGm_Update,
     (ActorFunc)EnGm_Draw,
 };
-*/
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_80951C5C = {
+    { COLTYPE_HIT1, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK1, { 0x00000000, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
+    { 14, 62, 0, { 0, 0, 0 } },
+};
+
+
+// static ColliderSphereInit sSphereInit = {
+static ColliderSphereInit D_80951C88 = {
+    { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_SPHERE, },
+    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
+    { 0, { { 0, 0, 0 }, 20 }, 100 },
+};
+
+
+// sColChkInfoInit
+static CollisionCheckInfoInit2 D_80951CB4 = { 0, 0, 0, 0, MASS_IMMOVABLE };
+
+
+extern ColliderCylinderInit D_80951C5C;
+extern ColliderSphereInit D_80951C88;
+extern CollisionCheckInfoInit2 D_80951CB4;
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Gm_0x8094DEE0/func_8094DEE0.asm")
 
