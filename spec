@@ -3768,45 +3768,40 @@ endseg
 beginseg
     name "ovl_fbdemo_triforce"
     compress
-    include "build/asm/overlays/ovl_fbdemo_triforce/ovl_fbdemo_triforce.text.o"
+    include "build/src/overlays/fbdemos/ovl_fbdemo_triforce/z_fbdemo_triforce.o"
     include "build/data/ovl_fbdemo_triforce/ovl_fbdemo_triforce.data.o"
-    include "build/data/ovl_fbdemo_triforce/ovl_fbdemo_triforce.rodata.o"
     include "build/data/ovl_fbdemo_triforce/ovl_fbdemo_triforce.reloc.o"
 endseg
 
 beginseg
     name "ovl_fbdemo_wipe1"
     compress
-    include "build/asm/overlays/ovl_fbdemo_wipe1/ovl_fbdemo_wipe1.text.o"
+    include "build/src/overlays/fbdemos/ovl_fbdemo_wipe1/z_fbdemo_wipe1.o"
     include "build/data/ovl_fbdemo_wipe1/ovl_fbdemo_wipe1.data.o"
-    include "build/data/ovl_fbdemo_wipe1/ovl_fbdemo_wipe1.rodata.o"
     include "build/data/ovl_fbdemo_wipe1/ovl_fbdemo_wipe1.reloc.o"
 endseg
 
 beginseg
     name "ovl_fbdemo_wipe3"
     compress
-    include "build/asm/overlays/ovl_fbdemo_wipe3/ovl_fbdemo_wipe3.text.o"
+    include "build/src/overlays/fbdemos/ovl_fbdemo_wipe3/z_fbdemo_wipe3.o"
     include "build/data/ovl_fbdemo_wipe3/ovl_fbdemo_wipe3.data.o"
-    include "build/data/ovl_fbdemo_wipe3/ovl_fbdemo_wipe3.rodata.o"
     include "build/data/ovl_fbdemo_wipe3/ovl_fbdemo_wipe3.reloc.o"
 endseg
 
 beginseg
     name "ovl_fbdemo_wipe4"
     compress
-    include "build/asm/overlays/ovl_fbdemo_wipe4/ovl_fbdemo_wipe4.text.o"
+    include "build/src/overlays/fbdemos/ovl_fbdemo_wipe4/z_fbdemo_wipe4.o"
     include "build/data/ovl_fbdemo_wipe4/ovl_fbdemo_wipe4.data.o"
-    include "build/data/ovl_fbdemo_wipe4/ovl_fbdemo_wipe4.rodata.o"
     include "build/data/ovl_fbdemo_wipe4/ovl_fbdemo_wipe4.reloc.o"
 endseg
 
 beginseg
     name "ovl_fbdemo_wipe5"
     compress
-    include "build/asm/overlays/ovl_fbdemo_wipe5/ovl_fbdemo_wipe5.text.o"
+    include "build/src/overlays/fbdemos/ovl_fbdemo_wipe5/z_fbdemo_wipe5.o"
     include "build/data/ovl_fbdemo_wipe5/ovl_fbdemo_wipe5.data.o"
-    include "build/data/ovl_fbdemo_wipe5/ovl_fbdemo_wipe5.rodata.o"
     include "build/data/ovl_fbdemo_wipe5/ovl_fbdemo_wipe5.reloc.o"
 endseg
 
