@@ -28,7 +28,7 @@ void func_80BCF8A0(EnHg* this, GlobalContext* globalCtx);
 void func_80BCF93C(EnHg* this);
 void func_80BCF95C(EnHg* this, GlobalContext* globalCtx);
 s32 EnHg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-void EnHg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Actor* thisx);
+void EnHg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
 extern FlexSkeletonHeader D_06008580;
 extern AnimationHeader D_0600260C;
@@ -409,7 +409,7 @@ s32 EnHg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 }
 
 // post limb
-void EnHg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Actor* thisx) {
+void EnHg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnHg* this = THIS;
     if (limbIndex == 10) {
         SysMatrix_CopyCurrentState(&this->unk1D8);
