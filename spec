@@ -45,7 +45,7 @@ beginseg
 
     include "build/src/boot_O1/boot_80084940.o"
 
-    include "build/asm/boot/loadfragment.text.o"
+    include "build/src/boot/loadfragment.o"
     include "build/data/boot/loadfragment.data.o"
 
     include "build/src/boot_O2/loadfragment2.o"
@@ -65,13 +65,12 @@ beginseg
 
     include "build/src/boot_O2/padsetup.o"
 
-    include "build/asm/boot/boot_80086760.text.o"
-    include "build/data/boot/boot_80086760.rodata.o"
+    include "build/src/boot/boot_80086760.o"
     include "build/data/boot/boot_80086760.bss.o"
 
-    include "build/asm/boot/fp.text.o"
+    include "build/src/boot/fp.o"
 
-    include "build/asm/boot/system_malloc.text.o"
+    include "build/src/boot/system_malloc.o"
     include "build/data/boot/system_malloc.data.o"
     include "build/data/boot/system_malloc.bss.o"
 
@@ -83,24 +82,27 @@ beginseg
     include "build/data/boot/__osMalloc.bss.o"
 
     include "build/src/libultra/rmon/sprintf.o"
-    include "build/asm/boot/printutils.text.o"
-    include "build/asm/boot/setcause.text.o"
+    include "build/src/boot/printutils.o"
+
+    include "build/asm/boot/setcause.text.o" // handwritten probably
+
     include "build/src/libultra/os/sendmesg.o"
-    include "build/asm/boot/pfsfreeblocks.text.o"
+    include "build/src/boot/pfsfreeblocks.o"
     include "build/src/boot_O1/viextend.o"
     include "build/src/libultra/os/stopthread.o"
 
     include "build/src/libultra/os/recvmesg.o"
 
-    include "build/asm/boot/setintmask.text.o"
+    include "build/asm/boot/setintmask.text.o" // handwritten probably
     include "build/data/boot/setintmask.rodata.o"
 
-    include "build/asm/boot/getintmask.text.o"
+    include "build/asm/boot/getintmask.text.o" // handwritten probably
+
     include "build/src/libultra/voice/voicesetword.o"
 
     include "build/data/boot/vimodeHpf.data.o"
 
-    include "build/asm/boot/guScale.text.o"
+    include "build/src/boot/guScale.o"
 
     include "build/src/libultra/gu/sinf.o"
 
@@ -111,7 +113,7 @@ beginseg
 
     include "build/src/libultra/libc/ll.o"
 
-    include "build/asm/boot/exceptasm.text.o"
+    include "build/asm/boot/exceptasm.text.o" // handwritten probably
     include "build/data/boot/exceptasm.data.o"
     include "build/data/boot/exceptasm.rodata.o"
 
@@ -119,9 +121,9 @@ beginseg
 
     include "build/src/libultra/os/destroythread.o"
     include "build/src/libultra/voice/voicecheckresult.o"
-    include "build/asm/boot/bzero.text.o"
+    include "build/src/boot/bzero.o"
 
-    include "build/asm/boot/rumblepak.text.o"
+    include "build/src/boot/rumblepak.o"
     include "build/data/boot/rumblepak.bss.o"
 
     include "build/src/libultra/io/siacs.o"
@@ -134,11 +136,13 @@ beginseg
 
     include "build/src/libultra/io/contreaddata.o"
 
-    include "build/asm/boot/voicegetreaddata.text.o"
+    include "build/src/boot/voicegetreaddata.o"
     include "build/src/libultra/os/virtualtophysical.o"
-    include "build/asm/boot/getsr.text.o"
-    include "build/asm/boot/setsr.text.o"
-    include "build/asm/boot/writebackdcache.text.o"
+
+    include "build/asm/boot/getsr.text.o" // handwritten probably
+    include "build/asm/boot/setsr.text.o" // handwritten probably
+
+    include "build/src/boot/writebackdcache.o"
 
     include "build/data/boot/threadsave.bss.o"
 
@@ -158,70 +162,70 @@ beginseg
 
     include "build/src/libultra/io/sprawdma.o"
     include "build/src/libultra/io/sirawdma.o"
-    include "build/asm/boot/epilinkhandle.text.o"
+    include "build/src/boot/epilinkhandle.o"
     include "build/src/libultra/io/viblack.o"
     include "build/src/libultra/io/sirawread.o"
     include "build/src/libultra/os/getthreadid.o"
     include "build/src/libultra/io/sptaskyield.o"
-    include "build/asm/boot/pfsreadwritefile.text.o"
-    include "build/asm/boot/pfsgetstatus.text.o"
+    include "build/src/boot/pfsreadwritefile.o"
+    include "build/src/boot/pfsgetstatus.o"
     pad_text
-    include "build/asm/boot/guMtxIdentF.text.o"
+    include "build/src/boot/guMtxIdentF.o"
     include "build/src/libultra/io/visetmode.o"
-    include "build/asm/boot/getconfig.text.o"
-    include "build/asm/boot/setconfig.text.o"
+
+    include "build/asm/boot/getconfig.text.o" // handwritten probably
+    include "build/asm/boot/setconfig.text.o" // handwritten probably
+
     include "build/src/libultra/gu/lookat.o"
-    include "build/asm/boot/pfsallocatefile.text.o"
+    include "build/src/boot/pfsallocatefile.o"
     include "build/src/libultra/os/stoptimer.o"
-    include "build/asm/boot/probetlb.text.o"
+
+    include "build/asm/boot/probetlb.text.o" // handwritten probably
 
     include "build/src/libultra/io/pimgr.o"
     include "build/data/boot/pimgr.data.o"
     include "build/data/boot/pimgr.bss.o"
 
-
     include "build/src/libultra/io/piacs.o"
 
     pad_text
-    include "build/asm/boot/devmgr.text.o"
-    include "build/data/boot/devmgr.rodata.o"
+    include "build/src/boot/devmgr.o"
 
     include "build/src/libultra/io/pirawdma.o"
 
-    include "build/asm/boot/contpfs.text.o"
+    include "build/src/boot/contpfs.o"
     include "build/data/boot/contpfs.data.o"
 
-    include "build/asm/boot/getcount.text.o"
+    include "build/asm/boot/getcount.text.o" // handwritten probably
+
     pad_text
 
-
-    include "build/asm/boot/guMtxL2F.text.o"
+    include "build/src/boot/guMtxL2F.o"
     include "build/src/libultra/os/getmemsize.o"
-    include "build/asm/boot/pfssearchfile.text.o"
+    include "build/src/boot/pfssearchfile.o"
 
     include "build/src/libultra/os/seteventmesg.o"
     include "build/data/boot/seteventmesg.bss.o"
 
-    include "build/asm/boot/sqrtf.text.o"
-    include "build/asm/boot/afterprenmi.text.o"
+    include "build/src/boot/sqrtf.o"
+    include "build/src/boot/afterprenmi.o"
     include "build/src/libultra/io/contquery.o"
 
     include "build/src/libultra/gu/lookathil.o"
 
     include "build/src/libultra/rmon/xprintf.o"
 
-    include "build/asm/boot/voicecleardictionary.text.o"
-    include "build/asm/boot/unmaptlball.text.o"
+    include "build/src/boot/voicecleardictionary.o"
+    include "build/asm/boot/unmaptlball.text.o" // handwritten probably
     include "build/src/libultra/io/epidma.o"
-    include "build/asm/boot/voicecontread2.text.o"
-    include "build/asm/boot/voicecrc.text.o"
+    include "build/src/boot/voicecontread2.o"
+    include "build/src/boot/voicecrc.o"
     include "build/src/libultra/libc/string.o"
     include "build/src/libultra/os/createmesgqueue.o"
-    include "build/asm/boot/invalicache.text.o"
-    include "build/asm/boot/invaldcache.text.o"
+    include "build/src/boot/invalicache.o"
+    include "build/src/boot/invaldcache.o"
 
-
-    include "build/asm/boot/timerintr.text.o"
+    include "build/src/boot/timerintr.o"
     include "build/data/boot/timerintr.data.o"
     include "build/data/boot/timerintr.bss.o"
     /*
@@ -230,107 +234,113 @@ beginseg
     //include "build/data/boot/timerintr.bss.o"
     */
 
-    include "build/asm/boot/voicecontread36.text.o"
-    include "build/asm/boot/sp.text.o"
+    include "build/src/boot/voicecontread36.o"
+    include "build/src/boot/sp.o"
     include "build/src/libultra/io/si.o"
-    include "build/asm/boot/guMtxIdent.text.o"
+    include "build/src/boot/guMtxIdent.o"
     include "build/src/libultra/os/jammesg.o"
     include "build/src/libultra/os/setthreadpri.o"
     include "build/src/libultra/os/getthreadpri.o"
-    include "build/asm/boot/epirawread.text.o"
+    include "build/src/boot/epirawread.o"
     include "build/src/libultra/io/viswapbuf.o"
 
-    include "build/asm/boot/position.text.o"
+    include "build/src/boot/position.o"
     include "build/data/boot/position.data.o"
 
-    include "build/asm/boot/epirawdma.text.o"
+    include "build/src/boot/epirawdma.o"
     include "build/src/libultra/io/sptaskyielded.o"
-    include "build/asm/boot/memcmp.text.o"
+    include "build/src/boot/memcmp.o"
     include "build/src/libultra/os/gettime.o"
 
     include "build/src/libultra/gu/rotate.o"
 
-    include "build/asm/boot/setglobalintmask.text.o"
+    include "build/src/boot/setglobalintmask.o"
 
-    include "build/asm/boot/voiceinit.text.o"
+    include "build/src/boot/voiceinit.o"
     include "build/data/boot/voiceinit.data.o"
 
-    include "build/asm/boot/contchannelreset.text.o"
-    include "build/asm/boot/voicesetadconverter.text.o"
-    include "build/asm/boot/aisetfreq.text.o"
+    include "build/src/boot/contchannelreset.o"
+    include "build/src/boot/voicesetadconverter.o"
+    include "build/src/boot/aisetfreq.o"
 
-    include "build/asm/boot/contramread.text.o"
+    include "build/src/boot/contramread.o"
     include "build/data/boot/contramread.data.o"
 
-    include "build/asm/boot/voicecontwrite20.text.o"
-    include "build/asm/boot/crc.text.o"
+    include "build/src/boot/voicecontwrite20.o"
+    include "build/src/boot/crc.o"
     include "build/src/libultra/os/getactivequeue.o"
-    include "build/asm/boot/normalize.text.o"
-    include "build/asm/boot/setcompare.text.o"
-    include "build/asm/boot/getcompare.text.o"
+    include "build/src/boot/normalize.o"
+
+    include "build/asm/boot/setcompare.text.o" // handwritten probably
+
+    include "build/asm/boot/getcompare.text.o" // handwritten probably
+
     include "build/src/libultra/io/dpgetstat.o"
     include "build/src/libultra/io/dpsetstat.o"
-    include "build/asm/boot/bcopy.text.o"
-    include "build/asm/boot/resetglobalintmask.text.o"
-    include "build/asm/boot/pfsdeletefile.text.o"
+    include "build/src/boot/bcopy.o"
+    include "build/src/boot/resetglobalintmask.o"
+    include "build/src/boot/pfsdeletefile.o"
     include "build/src/libultra/gu/ortho.o"
-    include "build/asm/boot/interrupt.text.o"
+
+    include "build/asm/boot/interrupt.text.o" // handwritten probably
 
     include "build/src/libultra/io/vi.o"
     include "build/data/boot/vi.data.o"
 
-    include "build/asm/boot/viswapcontext.text.o"
+    include "build/src/boot/viswapcontext.o"
     include "build/src/libultra/io/pigetcmdq.o"
 
-    include "build/asm/boot/cosf.text.o"
-    include "build/data/boot/cosf.rodata.o"
+    include "build/src/boot/cosf.o"
 
-    include "build/asm/boot/epiread.text.o"
+    include "build/src/boot/epiread.o"
     include "build/src/libultra/io/visetspecial.o"
 
     include "build/src/libultra/gu/coss.o"
 
     include "build/src/libultra/os/settime.o"
-    include "build/asm/boot/voicestopread.text.o"
+    include "build/src/boot/voicestopread.o"
     include "build/src/libultra/gu/visetevent.o"
-    include "build/asm/boot/pfsisplug.text.o"
+    include "build/src/boot/pfsisplug.o"
 
     include "build/src/libultra/voice/voicegetstatus.o"
 
-    include "build/asm/boot/cartrominit.text.o"
+    include "build/src/boot/cartrominit.o"
     include "build/data/boot/cartrominit.data.o"
     include "build/data/boot/cartrominit.bss.o"
 
-    include "build/asm/boot/guS2DInitBg.text.o"
+    include "build/src/boot/guS2DInitBg.o"
     include "build/data/boot/guS2DInitBg.data.o"
 
-    include "build/asm/boot/pfsselectbank.text.o"
+    include "build/src/boot/pfsselectbank.o"
     include "build/src/libultra/io/contsetch.o"
-    include "build/asm/boot/setfpccsr.text.o"
-    include "build/asm/boot/getfpccsr.text.o"
-    include "build/asm/boot/pfsfilestate.text.o"
-    include "build/asm/boot/pfsinitpak.text.o"
-    include "build/asm/boot/pfschecker.text.o"
+    include "build/src/boot/setfpccsr.o"
+    include "build/src/boot/getfpccsr.o"
+    include "build/src/boot/pfsfilestate.o"
+    include "build/src/boot/pfsinitpak.o"
+    include "build/src/boot/pfschecker.o"
     include "build/src/libultra/io/aigetlen.o"
-    include "build/asm/boot/epiwrite.text.o"
-    include "build/asm/boot/maptlbrdb.text.o"
+    include "build/src/boot/epiwrite.o"
+
+    include "build/asm/boot/maptlbrdb.text.o" // handwritten probably
+
     include "build/src/libultra/os/yieldthread.o"
     pad_text
-    include "build/asm/boot/guTranslate.text.o"
-    include "build/asm/boot/getcause.text.o"
-    include "build/asm/boot/contramwrite.text.o"
+    include "build/src/boot/guTranslate.o"
+
+    include "build/asm/boot/getcause.text.o" // handwritten probably
+
+    include "build/src/boot/contramwrite.o"
     include "build/src/libultra/io/epirawwrite.o"
     include "build/src/libultra/os/settimer.o"
 
     include "build/data/boot/__libm_qnan_f.rodata.o"
 
-    include "build/asm/boot/xldtob.text.o"
+    include "build/src/boot/xldtob.o"
     include "build/data/boot/xldtob.data.o"
-    include "build/data/boot/xldtob.rodata.o"
 
     include "build/src/libultra/libc/ldiv.o"
 
-    include "build/asm/boot/xlitob.text.o"
+    include "build/src/boot/xlitob.o"
     include "build/src/libultra/io/sirawwrite.o"
     include "build/src/libultra/io/spgetstat.o"
     include "build/src/libultra/io/spsetstat.o"
@@ -341,11 +351,11 @@ beginseg
     include "build/data/boot/vimgr.bss.o"
 
     include "build/src/libultra/io/vigetcurrcontext.o"
-    include "build/asm/boot/writebackdcacheall.text.o"
+    include "build/src/boot/writebackdcacheall.o"
     include "build/src/libultra/os/getcurrfaultthread.o"
-    include "build/asm/boot/voicemaskdictionary.text.o"
+    include "build/src/boot/voicemaskdictionary.o"
     pad_text
-    include "build/asm/boot/guMtxF2L.text.o"
+    include "build/src/boot/guMtxF2L.o"
     include "build/src/libultra/os/startthread.o"
     include "build/src/libultra/io/visetyscale.o"
 
@@ -353,21 +363,23 @@ beginseg
 
     include "build/src/libultra/libc/llcvt.o"
 
-    include "build/asm/boot/voicecheckword.text.o"
-    include "build/asm/boot/voicecontrolgain.text.o"
-    include "build/asm/boot/voicestartreaddata.text.o"
-    include "build/asm/boot/vigetcurrframebuf.text.o"
-    include "build/asm/boot/spsetpc.text.o"
-    include "build/asm/boot/voicecontwrite4.text.o"
+    include "build/src/boot/voicecheckword.o"
+    include "build/src/boot/voicecontrolgain.o"
+    include "build/src/boot/voicestartreaddata.o"
+    include "build/src/boot/vigetcurrframebuf.o"
+    include "build/src/boot/spsetpc.o"
+    include "build/src/boot/voicecontwrite4.o"
     include "build/src/boot_O1/gethwinterrupt.o"
-    include "build/asm/boot/sethwinterrupt.text.o"
-    include "build/asm/boot/getwatchlo.text.o"
-    include "build/asm/boot/setwatchlo.text.o"
-    include "build/asm/boot/fmodf.text.o"
-    include "build/asm/boot/__osMemset.text.o"
+    include "build/src/boot/sethwinterrupt.o"
+
+    include "build/asm/boot/getwatchlo.text.o" // handwritten probably
+    include "build/asm/boot/setwatchlo.text.o" // handwritten probably
+
+    include "build/src/boot/fmodf.o"
+    include "build/src/boot/__osMemset.o"
     include "build/src/boot_O2_g3/__osMemcmp.o"
-    include "build/asm/boot/__osStrcpy.text.o"
-    include "build/asm/boot/__osMemcpy.text.o"
+    include "build/src/boot/__osStrcpy.o"
+    include "build/src/boot/__osMemcpy.o"
 
     include "build/data/boot/build.rodata.o"
 endseg
