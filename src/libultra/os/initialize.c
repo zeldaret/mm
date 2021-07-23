@@ -52,7 +52,7 @@ void osInitialize(void) {
     D_80097E50 = (D_80097E50 * 3) / 4;
 
     if (osResetType == 0) {
-        _blkclr((u8*)&osAppNmiBuffer, 64);
+        bzero((u8*)&osAppNmiBuffer, 64);
     }
 
     if (osTvType == 0) {

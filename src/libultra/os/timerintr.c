@@ -1,10 +1,12 @@
 #include <ultra64.h>
 #include <global.h>
 
+OSTimer D_8009E590;
 OSTime __osCurrentTime;
 u32 __osBaseCounter;
 u32 __osViIntrCount;
 u32 __osTimerCounter;
+OSPifRam __osPfsPifRam;
 
 extern OSTimer* __osTimerList = &D_8009E590;
 
