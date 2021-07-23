@@ -90,8 +90,6 @@ beginseg
     include "build/src/boot_O1/viextend.o"
     include "build/src/libultra/os/stopthread.o"
 
-
-
     include "build/src/libultra/os/recvmesg.o"
 
     include "build/asm/boot/setintmask.text.o"
@@ -104,14 +102,9 @@ beginseg
 
     include "build/asm/boot/guScale.text.o"
 
-    include "build/asm/boot/sinf.text.o"
-    include "build/data/boot/sinf.rodata.o"
-    /*
     include "build/src/libultra/gu/sinf.o"
-    */
 
-    include "build/asm/boot/sins.text.o"
-    include "build/data/boot/sins.data.o"
+    include "build/src/libultra/gu/sins.o"
 
     include "build/src/libultra/io/sptask.o"
     include "build/data/boot/sptask.bss.o"
@@ -134,21 +127,12 @@ beginseg
     include "build/src/libultra/io/siacs.o"
     include "build/data/boot/siacs.bss.o"
 
-    include "build/asm/boot/controller.text.o"
-    include "build/data/boot/controller.data.o"
-    include "build/data/boot/controller.bss.o"
-    /*
     include "build/src/libultra/io/controller.o"
-    //include "build/data/boot/controller.data.o"
     include "build/data/boot/controller.bss.o"
-    */
 
     include "build/src/libultra/os/createthread.o"
 
-    include "build/asm/boot/contreaddata.text.o"
-    /*
     include "build/src/libultra/io/contreaddata.o"
-    */
 
     include "build/asm/boot/voicegetreaddata.text.o"
     include "build/src/libultra/os/virtualtophysical.o"
@@ -158,14 +142,8 @@ beginseg
 
     include "build/data/boot/threadsave.bss.o"
 
-    include "build/asm/boot/initialize.text.o"
-    include "build/data/boot/initialize.data.o"
-    include "build/data/boot/initialize.bss.o"
-    /*
     include "build/src/libultra/os/initialize.o"
-    //include "build/data/boot/initialize.data.o"
     include "build/data/boot/initialize.bss.o"
-    */
 
     pad_text
     pad_text
@@ -230,13 +208,7 @@ beginseg
 
     include "build/src/libultra/gu/lookathil.o"
 
-    include "build/asm/boot/xprintf.text.o"
-    include "build/data/boot/xprintf.data.o"
-    include "build/data/boot/xprintf.rodata.o"
-    /*
     include "build/src/libultra/rmon/xprintf.o"
-    //include "build/data/boot/xprintf.data.o"
-    */
 
     include "build/asm/boot/voicecleardictionary.text.o"
     include "build/asm/boot/unmaptlball.text.o"
@@ -252,7 +224,6 @@ beginseg
     include "build/asm/boot/timerintr.text.o"
     include "build/data/boot/timerintr.data.o"
     include "build/data/boot/timerintr.bss.o"
-
     /*
     include "build/src/libultra/os/timerintr.o"
     //include "build/data/boot/timerintr.data.o"
@@ -305,7 +276,6 @@ beginseg
     include "build/src/libultra/gu/ortho.o"
     include "build/asm/boot/interrupt.text.o"
 
-
     include "build/src/libultra/io/vi.o"
     include "build/data/boot/vi.data.o"
 
@@ -318,20 +288,14 @@ beginseg
     include "build/asm/boot/epiread.text.o"
     include "build/src/libultra/io/visetspecial.o"
 
-    include "build/asm/boot/coss.text.o"
-    /*
     include "build/src/libultra/gu/coss.o"
-    */
 
     include "build/src/libultra/os/settime.o"
     include "build/asm/boot/voicestopread.text.o"
     include "build/src/libultra/gu/visetevent.o"
     include "build/asm/boot/pfsisplug.text.o"
 
-    include "build/asm/boot/voicegetstatus.text.o"
-    /*
     include "build/src/libultra/voice/voicegetstatus.o"
-    */
 
     include "build/asm/boot/cartrominit.text.o"
     include "build/data/boot/cartrominit.data.o"
@@ -339,8 +303,6 @@ beginseg
 
     include "build/asm/boot/guS2DInitBg.text.o"
     include "build/data/boot/guS2DInitBg.data.o"
-
-
 
     include "build/asm/boot/pfsselectbank.text.o"
     include "build/src/libultra/io/contsetch.o"
@@ -366,11 +328,7 @@ beginseg
     include "build/data/boot/xldtob.data.o"
     include "build/data/boot/xldtob.rodata.o"
 
-    include "build/asm/boot/ldiv.text.o"
-    /*
     include "build/src/libultra/libc/ldiv.o"
-    */
-
 
     include "build/asm/boot/xlitob.text.o"
     include "build/src/libultra/io/sirawwrite.o"
@@ -382,8 +340,6 @@ beginseg
     include "build/data/boot/vimgr.data.o"
     include "build/data/boot/vimgr.bss.o"
 
-
-
     include "build/src/libultra/io/vigetcurrcontext.o"
     include "build/asm/boot/writebackdcacheall.text.o"
     include "build/src/libultra/os/getcurrfaultthread.o"
@@ -393,10 +349,7 @@ beginseg
     include "build/src/libultra/os/startthread.o"
     include "build/src/libultra/io/visetyscale.o"
 
-    include "build/asm/boot/visetxscale.text.o"
-    /*
     include "build/src/libultra/io/visetxscale.o"
-    */
 
     include "build/src/libultra/libc/llcvt.o"
 

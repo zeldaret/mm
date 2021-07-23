@@ -1,6 +1,8 @@
 #include <ultra64.h>
 #include <global.h>
 
+// This file is not included in the spec.
+
 OSTimer D_8009E590;
 OSTime __osCurrentTime;
 u32 __osBaseCounter;
