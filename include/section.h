@@ -1,7 +1,7 @@
 #ifndef _SECTION_H_
 #define _SECTION_H_
 
-#include <PR/ultratypes.h>
+#include "PR/ultratypes.h"
 
 extern u32 boot_text_start;
 extern u32 boot_text_end;

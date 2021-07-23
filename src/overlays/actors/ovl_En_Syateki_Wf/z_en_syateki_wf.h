@@ -1,7 +1,7 @@
 #ifndef Z_EN_SYATEKI_WF_H
 #define Z_EN_SYATEKI_WF_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnSyatekiWf;
 

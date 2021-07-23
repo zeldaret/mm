@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "ultra64.h"
+#include "global.h"
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/c_keyframe/func_801830A0.s")
 

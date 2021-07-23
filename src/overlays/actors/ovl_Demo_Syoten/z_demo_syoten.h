@@ -1,7 +1,7 @@
 #ifndef Z_DEMO_SYOTEN_H
 #define Z_DEMO_SYOTEN_H
 
-#include <global.h>
+#include "global.h"
 
 struct DemoSyoten;
 

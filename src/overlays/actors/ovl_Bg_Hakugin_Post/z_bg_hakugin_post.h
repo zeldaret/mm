@@ -1,7 +1,7 @@
 #ifndef Z_BG_HAKUGIN_POST_H
 #define Z_BG_HAKUGIN_POST_H
 
-#include <global.h>
+#include "global.h"
 
 struct BgHakuginPost;
 

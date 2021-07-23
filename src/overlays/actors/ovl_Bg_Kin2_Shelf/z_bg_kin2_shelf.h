@@ -1,7 +1,7 @@
 #ifndef Z_BG_KIN2_SHELF_H
 #define Z_BG_KIN2_SHELF_H
 
-#include <global.h>
+#include "global.h"
 
 struct BgKin2Shelf;
 

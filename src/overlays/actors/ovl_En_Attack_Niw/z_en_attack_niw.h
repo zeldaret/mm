@@ -1,7 +1,7 @@
 #ifndef Z_EN_ATTACK_NIW_H
 #define Z_EN_ATTACK_NIW_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnAttackNiw;
 

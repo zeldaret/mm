@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "ultra64.h"
+#include "global.h"
 
 void* proutSprintf(void* dst, char* fmt, size_t size) {
     return (char*)memcpy(dst, fmt, size) + size;

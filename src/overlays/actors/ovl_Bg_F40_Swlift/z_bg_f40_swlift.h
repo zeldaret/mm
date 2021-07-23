@@ -1,7 +1,7 @@
 #ifndef Z_BG_F40_SWLIFT_H
 #define Z_BG_F40_SWLIFT_H
 
-#include <global.h>
+#include "global.h"
 
 struct BgF40Swlift;
 

@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "ultra64.h"
+#include "global.h"
 
 long long __ull_rshift(unsigned long long left, unsigned long long right) {
     return left >> right;

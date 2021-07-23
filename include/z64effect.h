@@ -1,11 +1,11 @@
 #ifndef _Z64EFFECT_H_
 #define _Z64EFFECT_H_
 
-#include <PR/ultratypes.h>
-#include <color.h>
-#include <z64light.h>
-#include <z64math.h>
-#include <unk.h>
+#include "PR/ultratypes.h"
+#include "color.h"
+#include "z64light.h"
+#include "z64math.h"
+#include "unk.h"
 
 struct GraphicsContext;
 struct GlobalContext;

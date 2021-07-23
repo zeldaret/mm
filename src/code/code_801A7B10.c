@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "ultra64.h"
+#include "global.h"
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_801A7B10/func_801A7B10.s")
 

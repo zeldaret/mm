@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "ultra64.h"
+#include "global.h"
 
 StackEntry* sStackInfoListStart = NULL;
 StackEntry* sStackInfoListEnd = NULL;

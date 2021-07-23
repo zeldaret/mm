@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "ultra64.h"
+#include "global.h"
 
 void BcCheck3_BgActorInit(DynaPolyActor* actor, UNK_TYPE4 param_2) {
     actor->bgId = -1;

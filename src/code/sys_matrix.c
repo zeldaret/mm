@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "ultra64.h"
+#include "global.h"
 
 void SysMatrix_StateAlloc(GameState* gamestate) {
     sMatrixStack = (MtxF*)THA_AllocEndAlign16(&gamestate->heap, 0x500);

@@ -1,7 +1,7 @@
 #ifndef Z_EN_WIZ_FIRE_H
 #define Z_EN_WIZ_FIRE_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnWizFire;
 

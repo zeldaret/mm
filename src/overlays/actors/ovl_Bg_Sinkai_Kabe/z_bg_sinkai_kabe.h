@@ -1,7 +1,7 @@
 #ifndef Z_BG_SINKAI_KABE_H
 #define Z_BG_SINKAI_KABE_H
 
-#include <global.h>
+#include "global.h"
 
 struct BgSinkaiKabe;
 

@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "ultra64.h"
+#include "global.h"
 
 typedef struct s80862B70_s {
     /* 0 */ u32 unk0;

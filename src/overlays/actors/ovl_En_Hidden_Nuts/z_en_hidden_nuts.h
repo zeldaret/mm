@@ -1,7 +1,7 @@
 #ifndef Z_EN_HIDDEN_NUTS_H
 #define Z_EN_HIDDEN_NUTS_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnHiddenNuts;
 

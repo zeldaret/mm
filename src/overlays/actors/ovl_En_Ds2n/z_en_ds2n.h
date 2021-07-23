@@ -1,7 +1,7 @@
 #ifndef Z_EN_DS2N_H
 #define Z_EN_DS2N_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnDs2n;
 

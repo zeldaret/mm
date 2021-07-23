@@ -1,40 +1,40 @@
 #ifndef _Z64_H_
 #define _Z64_H_
 
-#include <stdarg.h>
-#include <stdbool.h>
-#include <stdint.h>
+#include "stdarg.h"
+#include "stdbool.h"
+#include "stdint.h"
 
-#include <PR/ultratypes.h>
-#include <PR/gbi.h>
-#include <PR/sched.h>
-#include <io/controller.h>
-#include <osint.h>
-#include <viint.h>
-#include <math.h>
-#include <os.h>
-#include <stdlib.h>
-#include <xstdio.h>
-#include <unk.h>
+#include "PR/ultratypes.h"
+#include "PR/gbi.h"
+#include "PR/sched.h"
+#include "io/controller.h"
+#include "osint.h"
+#include "viint.h"
+#include "math.h"
+#include "os.h"
+#include "stdlib.h"
+#include "xstdio.h"
+#include "unk.h"
 
-#include <sfx.h>
-#include <color.h>
-#include <ichain.h>
+#include "sfx.h"
+#include "color.h"
+#include "ichain.h"
 
-#include <z64actor.h>
-#include <z64animation.h>
-#include <z64bgcheck.h>
-#include <z64collision_check.h>
-#include <z64cutscene.h>
-#include <z64dma.h>
-#include <z64effect.h>
-#include <z64item.h>
-#include <z64light.h>
-#include <z64math.h>
-#include <z64object.h>
+#include "z64actor.h"
+#include "z64animation.h"
+#include "z64bgcheck.h"
+#include "z64collision_check.h"
+#include "z64cutscene.h"
+#include "z64dma.h"
+#include "z64effect.h"
+#include "z64item.h"
+#include "z64light.h"
+#include "z64math.h"
+#include "z64object.h"
 #include "z64player.h"
-#include <z64scene.h>
-#include <z64save.h>
+#include "z64scene.h"
+#include "z64save.h"
 
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240

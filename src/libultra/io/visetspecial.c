@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "ultra64.h"
+#include "global.h"
 
 void osViSetSpecialFeatures(u32 func) {
     register u32 saveMask = __osDisableInt();

@@ -1,7 +1,7 @@
 #ifndef Z_EN_WIZ_BROCK_H
 #define Z_EN_WIZ_BROCK_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnWizBrock;
 

@@ -1,7 +1,7 @@
 #ifndef Z_EN_GUARD_NUTS_H
 #define Z_EN_GUARD_NUTS_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnGuardNuts;
 

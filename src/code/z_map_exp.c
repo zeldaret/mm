@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "ultra64.h"
+#include "global.h"
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_map_exp/func_8010A000.s")
 

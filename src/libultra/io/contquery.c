@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "ultra64.h"
+#include "global.h"
 
 s32 osContStartQuery(OSMesgQueue* mq) {
     s32 ret;

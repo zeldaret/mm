@@ -1,7 +1,7 @@
 #ifndef Z_EFF_STK_H
 #define Z_EFF_STK_H
 
-#include <global.h>
+#include "global.h"
 
 struct EffStk;
 

@@ -1,7 +1,7 @@
 #ifndef Z_BG_NUMA_HANA_H
 #define Z_BG_NUMA_HANA_H
 
-#include <global.h>
+#include "global.h"
 
 struct BgNumaHana;
 

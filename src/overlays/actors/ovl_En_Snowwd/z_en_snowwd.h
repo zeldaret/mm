@@ -1,7 +1,7 @@
 #ifndef Z_EN_SNOWWD_H
 #define Z_EN_SNOWWD_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnSnowwd;
 

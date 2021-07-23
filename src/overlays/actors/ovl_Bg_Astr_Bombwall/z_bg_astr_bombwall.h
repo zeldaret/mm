@@ -1,7 +1,7 @@
 #ifndef Z_BG_ASTR_BOMBWALL_H
 #define Z_BG_ASTR_BOMBWALL_H
 
-#include <global.h>
+#include "global.h"
 
 struct BgAstrBombwall;
 

@@ -1,8 +1,8 @@
 #ifndef _Z64CUTSCENE_H_
 #define _Z64CUTSCENE_H_
 
-#include <ultra64.h>
-#include <unk.h>
+#include "ultra64.h"
+#include "unk.h"
 
 typedef struct {
     /* 0x00 */ s8    continueFlag;

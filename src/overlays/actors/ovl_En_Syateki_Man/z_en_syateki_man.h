@@ -1,7 +1,7 @@
 #ifndef Z_EN_SYATEKI_MAN_H
 #define Z_EN_SYATEKI_MAN_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnSyatekiMan;
 

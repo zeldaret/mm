@@ -1,7 +1,7 @@
 #ifndef _FUNCTIONS_H_
 #define _FUNCTIONS_H_
 
-#include <z64.h>
+#include "z64.h"
 
 float fabsf(float f);
 #pragma intrinsic(fabsf)

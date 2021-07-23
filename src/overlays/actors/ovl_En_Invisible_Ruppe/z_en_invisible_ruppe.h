@@ -1,7 +1,7 @@
 #ifndef Z_EN_INVISIBLE_RUPPE_H
 #define Z_EN_INVISIBLE_RUPPE_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnInvisibleRuppe;
 

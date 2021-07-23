@@ -1,7 +1,7 @@
 #ifndef Z_EN_OKUTA_H
 #define Z_EN_OKUTA_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnOkuta;
 

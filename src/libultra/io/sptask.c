@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "ultra64.h"
+#include "global.h"
 
 OSTask* _VirtualToPhysicalTask(OSTask* intp) {
     OSTask* tp = &tmp_task;

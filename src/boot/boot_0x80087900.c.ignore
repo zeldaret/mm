@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "ultra64.h"
+#include "global.h"
 
 UNK_RET PrintUtils_VPrintf(UNK_PTR a0, UNK_TYPE a1, UNK_PTR a2) {
     func_8008E050((UNK_TYPE(*)(UNK_TYPE, UNK_TYPE, UNK_TYPE))(*(u32*)a0), a0, a1, a2);

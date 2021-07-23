@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "ultra64.h"
+#include "global.h"
 
 void osCreateThread(OSThread* t, OSId id, void* entry, void* arg, void* sp, OSPri p) {
     register u32 saveMask;

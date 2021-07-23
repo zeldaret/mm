@@ -1,7 +1,7 @@
 #ifndef Z_EN_TRU_MT_H
 #define Z_EN_TRU_MT_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnTruMt;
 

@@ -1,7 +1,7 @@
 #ifndef Z_EN_FSN_H
 #define Z_EN_FSN_H
 
-#include <global.h>
+#include "global.h"
 #include "overlays/actors/ovl_En_GirlA/z_en_girla.h"
 
 #define ENFSN_IS_BACKROOM(thisx) ((thisx)->params & 1)

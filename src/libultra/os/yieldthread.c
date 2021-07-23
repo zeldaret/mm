@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "ultra64.h"
+#include "global.h"
 
 void osYieldThread(void) {
     register u32 saveMask = __osDisableInt();

@@ -1,9 +1,9 @@
 #ifndef _Z64SCENE_H_
 #define _Z64SCENE_H_
 
-#include <ultra64.h>
-#include <z64dma.h>
-#include <unk.h>
+#include "ultra64.h"
+#include "z64dma.h"
+#include "unk.h"
 
 #define SPAWN_ROT_FLAGS(rotation, flags) (((rotation) << 7) | (flags))
 

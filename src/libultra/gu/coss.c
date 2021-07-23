@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "ultra64.h"
+#include "global.h"
 
 #ifdef NON_MATCHING
 short coss(unsigned short x) {

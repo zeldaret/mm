@@ -1,7 +1,7 @@
 #ifndef Z_EN_KGY_H
 #define Z_EN_KGY_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnKgy;
 

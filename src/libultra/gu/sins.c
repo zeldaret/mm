@@ -1,4 +1,4 @@
-#include <math.h>
+#include "math.h"
 
 static s16 sintable[1024] = {
     0x0000,
