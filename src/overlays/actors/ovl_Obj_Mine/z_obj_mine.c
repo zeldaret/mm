@@ -9,7 +9,7 @@ void ObjMine_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjMine_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjMine_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Obj_Mine_InitVars = {
     ACTOR_OBJ_MINE,
     ACTORCAT_PROP,
@@ -21,7 +21,36 @@ const ActorInit Obj_Mine_InitVars = {
     (ActorFunc)ObjMine_Update,
     (ActorFunc)ObjMine_Draw,
 };
-*/
+
+
+// static ColliderJntSphElementInit sJntSphElementsInit[1] = {
+static ColliderJntSphElementInit D_80A84570[1] = {
+    {
+        { ELEMTYPE_UNK2, { 0x00000000, 0x00, 0x00 }, { 0x01CBFFBE, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        { 0, { { 0, 0, 0 }, 30 }, 100 },
+    },
+};
+
+// static ColliderJntSphInit sJntSphInit = {
+static ColliderJntSphInit D_80A84594 = {
+    { COLTYPE_METAL, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER | OC1_TYPE_1, OC2_TYPE_1, COLSHAPE_JNTSPH, },
+    1, D_80A84570, // sJntSphElementsInit,
+};
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80A845E8[] = {
+    ICHAIN_F32(uncullZoneForward, 1300, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 150, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
+};
+
+
+extern ColliderJntSphElementInit D_80A84570[1];
+extern ColliderJntSphInit D_80A84594;
+extern InitChainEntry D_80A845E8[];
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mine/func_80A811D0.s")
 

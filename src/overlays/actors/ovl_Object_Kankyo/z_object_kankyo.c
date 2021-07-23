@@ -9,7 +9,7 @@ void ObjectKankyo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjectKankyo_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjectKankyo_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Object_Kankyo_InitVars = {
     ACTOR_OBJECT_KANKYO,
     ACTORCAT_ITEMACTION,
@@ -21,7 +21,8 @@ const ActorInit Object_Kankyo_InitVars = {
     (ActorFunc)ObjectKankyo_Update,
     (ActorFunc)ObjectKankyo_Draw,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Object_Kankyo/func_808DBE80.s")
 

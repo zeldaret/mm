@@ -9,7 +9,7 @@ void EnPst_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPst_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPst_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Pst_InitVars = {
     ACTOR_EN_PST,
     ACTORCAT_PROP,
@@ -21,7 +21,23 @@ const ActorInit En_Pst_InitVars = {
     (ActorFunc)EnPst_Update,
     (ActorFunc)EnPst_Draw,
 };
-*/
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_80B2C4B8 = {
+    { COLTYPE_HIT1, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK1, { 0x00000000, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
+    { 28, 72, 0, { 0, 0, 0 } },
+};
+
+
+// sColChkInfoInit
+static CollisionCheckInfoInit2 D_80B2C4E4 = { 1, 0, 0, 0, MASS_IMMOVABLE };
+
+
+extern ColliderCylinderInit D_80B2C4B8;
+extern CollisionCheckInfoInit2 D_80B2C4E4;
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Pst/func_80B2B830.s")
 

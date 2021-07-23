@@ -1,7 +1,7 @@
 /*
  * File: z_bg_ctower_rot.c
  * Overlay: ovl_Bg_CtowerRot
- * Description: Twisting path along with the Doors to Clocktower
+ * Description: Twisting path along with the Doors to Clock Tower
  */
 
 #include "z_bg_ctower_rot.h"

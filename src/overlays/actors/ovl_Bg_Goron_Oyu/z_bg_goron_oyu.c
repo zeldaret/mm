@@ -9,7 +9,7 @@ void BgGoronOyu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgGoronOyu_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgGoronOyu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Bg_Goron_Oyu_InitVars = {
     ACTOR_BG_GORON_OYU,
     ACTORCAT_BG,
@@ -21,7 +21,8 @@ const ActorInit Bg_Goron_Oyu_InitVars = {
     (ActorFunc)BgGoronOyu_Update,
     (ActorFunc)BgGoronOyu_Draw,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Goron_Oyu/func_80B40080.s")
 

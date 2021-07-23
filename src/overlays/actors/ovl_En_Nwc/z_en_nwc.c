@@ -9,7 +9,7 @@ void EnNwc_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnNwc_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnNwc_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Nwc_InitVars = {
     ACTOR_EN_NWC,
     ACTORCAT_PROP,
@@ -21,7 +21,8 @@ const ActorInit En_Nwc_InitVars = {
     (ActorFunc)EnNwc_Update,
     (ActorFunc)EnNwc_Draw,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nwc/EnNwc_Init.s")
 

@@ -9,7 +9,7 @@ void BgFuMizu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgFuMizu_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgFuMizu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Bg_Fu_Mizu_InitVars = {
     ACTOR_BG_FU_MIZU,
     ACTORCAT_BG,
@@ -21,7 +21,8 @@ const ActorInit Bg_Fu_Mizu_InitVars = {
     (ActorFunc)BgFuMizu_Update,
     (ActorFunc)BgFuMizu_Draw,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Fu_Mizu/BgFuMizu_Init.s")
 

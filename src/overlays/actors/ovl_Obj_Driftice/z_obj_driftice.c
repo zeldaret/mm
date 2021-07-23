@@ -9,7 +9,7 @@ void ObjDriftice_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjDriftice_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjDriftice_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Obj_Driftice_InitVars = {
     ACTOR_OBJ_DRIFTICE,
     ACTORCAT_BG,
@@ -21,7 +21,16 @@ const ActorInit Obj_Driftice_InitVars = {
     (ActorFunc)ObjDriftice_Update,
     (ActorFunc)ObjDriftice_Draw,
 };
-*/
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80A676F4[] = {
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_STOP),
+};
+
+
+extern InitChainEntry D_80A676F4[];
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Driftice/func_80A66570.s")
 

@@ -9,7 +9,7 @@ void EnGiant_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGiant_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGiant_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Giant_InitVars = {
     ACTOR_EN_GIANT,
     ACTORCAT_NPC,
@@ -21,7 +21,8 @@ const ActorInit En_Giant_InitVars = {
     (ActorFunc)EnGiant_Update,
     (ActorFunc)EnGiant_Draw,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/func_80B01990.s")
 

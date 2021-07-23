@@ -9,7 +9,7 @@ void DmChar00_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmChar00_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmChar00_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Dm_Char00_InitVars = {
     ACTOR_DM_CHAR00,
     ACTORCAT_ITEMACTION,
@@ -21,7 +21,8 @@ const ActorInit Dm_Char00_InitVars = {
     (ActorFunc)DmChar00_Update,
     (ActorFunc)DmChar00_Draw,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char00/func_80AA5580.s")
 

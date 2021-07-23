@@ -9,7 +9,7 @@ void BgCraceMovebg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgCraceMovebg_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgCraceMovebg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Bg_Crace_Movebg_InitVars = {
     ACTOR_BG_CRACE_MOVEBG,
     ACTORCAT_BG,
@@ -21,7 +21,8 @@ const ActorInit Bg_Crace_Movebg_InitVars = {
     (ActorFunc)BgCraceMovebg_Update,
     (ActorFunc)BgCraceMovebg_Draw,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Crace_Movebg/BgCraceMovebg_Init.s")
 

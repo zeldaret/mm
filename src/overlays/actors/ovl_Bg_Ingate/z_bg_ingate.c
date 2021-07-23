@@ -9,7 +9,7 @@ void BgIngate_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIngate_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIngate_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Bg_Ingate_InitVars = {
     ACTOR_BG_INGATE,
     ACTORCAT_BG,
@@ -21,7 +21,8 @@ const ActorInit Bg_Ingate_InitVars = {
     (ActorFunc)BgIngate_Update,
     (ActorFunc)BgIngate_Draw,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ingate/func_80953A90.s")
 

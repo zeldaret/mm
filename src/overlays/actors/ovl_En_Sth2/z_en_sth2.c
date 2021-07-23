@@ -8,7 +8,7 @@ void EnSth2_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnSth2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSth2_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Sth2_InitVars = {
     ACTOR_EN_STH2,
     ACTORCAT_NPC,
@@ -20,7 +20,8 @@ const ActorInit En_Sth2_InitVars = {
     (ActorFunc)EnSth2_Update,
     (ActorFunc)NULL,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sth2/EnSth2_Init.s")
 

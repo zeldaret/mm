@@ -9,7 +9,7 @@ void EnBubble_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBubble_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBubble_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Bubble_InitVars = {
     ACTOR_EN_BUBBLE,
     ACTORCAT_ENEMY,
@@ -21,7 +21,35 @@ const ActorInit En_Bubble_InitVars = {
     (ActorFunc)EnBubble_Update,
     (ActorFunc)EnBubble_Draw,
 };
-*/
+
+
+// static ColliderJntSphElementInit sJntSphElementsInit[2] = {
+static ColliderJntSphElementInit D_808A0700[2] = {
+    {
+        { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x04 }, { 0xF7CFD757, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        { 0, { { 0, 0, 0 }, 16 }, 100 },
+    },
+    {
+        { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00002820, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_NO_AT_INFO | BUMP_NO_DAMAGE | BUMP_NO_SWORD_SFX | BUMP_NO_HITMARK, OCELEM_NONE, },
+        { 0, { { 0, 0, 0 }, 16 }, 100 },
+    },
+};
+
+// static ColliderJntSphInit sJntSphInit = {
+static ColliderJntSphInit D_808A0748 = {
+    { COLTYPE_HIT6, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
+    2, D_808A0700, // sJntSphElementsInit,
+};
+
+
+// sColChkInfoInit
+static CollisionCheckInfoInit2 D_808A0758 = { 1, 2, 25, 25, MASS_IMMOVABLE };
+
+
+extern ColliderJntSphElementInit D_808A0700[2];
+extern ColliderJntSphInit D_808A0748;
+extern CollisionCheckInfoInit2 D_808A0758;
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bubble/func_8089F4E0.s")
 

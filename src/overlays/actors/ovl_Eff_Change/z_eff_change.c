@@ -8,7 +8,7 @@ void EffChange_Init(Actor* thisx, GlobalContext* globalCtx);
 void EffChange_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EffChange_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Eff_Change_InitVars = {
     ACTOR_EFF_CHANGE,
     ACTORCAT_ITEMACTION,
@@ -20,7 +20,8 @@ const ActorInit Eff_Change_InitVars = {
     (ActorFunc)EffChange_Update,
     (ActorFunc)NULL,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Change/EffChange_Init.s")
 
