@@ -8,7 +8,7 @@ void ObjSwprize_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjSwprize_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSwprize_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Obj_Swprize_InitVars = {
     ACTOR_OBJ_SWPRIZE,
     ACTORCAT_PROP,
@@ -20,7 +20,8 @@ const ActorInit Obj_Swprize_InitVars = {
     (ActorFunc)ObjSwprize_Update,
     (ActorFunc)NULL,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Swprize_0x80C25360/func_80C25360.asm")
 

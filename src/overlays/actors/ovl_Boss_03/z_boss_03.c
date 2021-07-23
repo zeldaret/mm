@@ -9,7 +9,7 @@ void Boss03_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void Boss03_Update(Actor* thisx, GlobalContext* globalCtx);
 void Boss03_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Boss_03_InitVars = {
     ACTOR_BOSS_03,
     ACTORCAT_BOSS,
@@ -21,7 +21,63 @@ const ActorInit Boss_03_InitVars = {
     (ActorFunc)Boss03_Update,
     (ActorFunc)Boss03_Draw,
 };
-*/
+
+
+// static ColliderJntSphElementInit sJntSphElementsInit[2] = {
+static ColliderJntSphElementInit D_809E8ECC[2] = {
+    {
+        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x08 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        { 0, { { 0, 0, 0 }, 70 }, 100 },
+    },
+    {
+        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x08 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        { 1, { { 0, 0, 0 }, 50 }, 100 },
+    },
+};
+
+// static ColliderJntSphInit sJntSphInit = {
+static ColliderJntSphInit D_809E8F14 = {
+    { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
+    2, D_809E8ECC, // sJntSphElementsInit,
+};
+
+
+// static ColliderJntSphElementInit sJntSphElementsInit[5] = {
+static ColliderJntSphElementInit D_809E8F24[5] = {
+    {
+        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x08 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        { 2, { { 0, 0, 0 }, 20 }, 100 },
+    },
+    {
+        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x08 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        { 5, { { 0, 0, 0 }, 20 }, 100 },
+    },
+    {
+        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x08 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        { 6, { { 0, 0, 0 }, 70 }, 100 },
+    },
+    {
+        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x08 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        { 7, { { 0, 0, 0 }, 70 }, 100 },
+    },
+    {
+        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x08 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        { 8, { { 0, 0, 0 }, 30 }, 100 },
+    },
+};
+
+// static ColliderJntSphInit sJntSphInit = {
+static ColliderJntSphInit D_809E8FD8 = {
+    { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
+    5, D_809E8F24, // sJntSphElementsInit,
+};
+
+
+extern ColliderJntSphElementInit D_809E8ECC[2];
+extern ColliderJntSphInit D_809E8F14;
+extern ColliderJntSphElementInit D_809E8F24[5];
+extern ColliderJntSphInit D_809E8FD8;
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Boss_03_0x809E2760/func_809E2760.asm")
 

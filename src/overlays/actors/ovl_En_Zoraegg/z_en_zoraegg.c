@@ -9,7 +9,7 @@ void EnZoraegg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnZoraegg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnZoraegg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Zoraegg_InitVars = {
     ACTOR_EN_ZORAEGG,
     ACTORCAT_ITEMACTION,
@@ -21,7 +21,8 @@ const ActorInit En_Zoraegg_InitVars = {
     (ActorFunc)EnZoraegg_Update,
     (ActorFunc)EnZoraegg_Draw,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Zoraegg_0x80B31590/func_80B31590.asm")
 

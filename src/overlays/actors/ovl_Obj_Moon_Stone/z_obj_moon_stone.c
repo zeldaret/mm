@@ -1,6 +1,6 @@
 /*
  * File z_obj_moon_stone.c
- * Overlay: ovl_obj_moon_stone
+ * Overlay: ovl_Obj_Moon_Stone
  * Description: Moon's Tear
  */
 

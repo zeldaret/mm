@@ -9,7 +9,7 @@ void EnBombf_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBombf_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBombf_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Bombf_InitVars = {
     ACTOR_EN_BOMBF,
     ACTORCAT_PROP,
@@ -21,7 +21,35 @@ const ActorInit En_Bombf_InitVars = {
     (ActorFunc)EnBombf_Update,
     (ActorFunc)EnBombf_Draw,
 };
-*/
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_808AFB20 = {
+    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER | AC_TYPE_OTHER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK2, { 0x00000000, 0x00, 0x00 }, { 0x00013A28, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    { 9, 18, 10, { 0, 0, 0 } },
+};
+
+
+// static ColliderJntSphElementInit sJntSphElementsInit[1] = {
+static ColliderJntSphElementInit D_808AFB4C[1] = {
+    {
+        { ELEMTYPE_UNK0, { 0x00000008, 0x00, 0x08 }, { 0x00000000, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NONE, BUMP_NONE, OCELEM_NONE, },
+        { 0, { { 0, 0, 0 }, 0 }, 100 },
+    },
+};
+
+// static ColliderJntSphInit sJntSphInit = {
+static ColliderJntSphInit D_808AFB70 = {
+    { COLTYPE_NONE, AT_ON | AT_TYPE_ALL, AC_NONE, OC1_NONE, OC2_NONE, COLSHAPE_JNTSPH, },
+    1, D_808AFB4C, // sJntSphElementsInit,
+};
+
+
+extern ColliderCylinderInit D_808AFB20;
+extern ColliderJntSphElementInit D_808AFB4C[1];
+extern ColliderJntSphInit D_808AFB70;
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bombf_0x808AE8C0/func_808AE8C0.asm")
 
