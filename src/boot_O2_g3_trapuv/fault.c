@@ -2,9 +2,6 @@
 #include <global.h>
 #include "vt.h"
 
-// TODO move out
-#define OS_CLOCK_RATE 62500000LL
-
 #pragma GLOBAL_ASM("asm/non_matchings/boot/fault/D_800982B0.s")
 
 void Fault_SleepImpl(u32 duration) {
