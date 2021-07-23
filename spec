@@ -907,25 +907,23 @@ beginseg
     name "ovl_title"
     compress
     address 0x80800000
-    include "build/asm/overlays/ovl_title/ovl_title.text.o"
+    include "build/src/overlays/gamestates/ovl_title/z_title.o"
     include "build/data/ovl_title/ovl_title.data.o"
-    include "build/data/ovl_title/ovl_title.rodata.o"
     include "build/data/ovl_title/ovl_title.reloc.o"
 endseg
 
 beginseg
     name "ovl_select"
     compress
-    include "build/asm/overlays/ovl_select/ovl_select.text.o"
+    include "build/src/overlays/gamestates/ovl_select/z_select.o"
     include "build/data/ovl_select/ovl_select.data.o"
-    include "build/data/ovl_select/ovl_select.rodata.o"
     include "build/data/ovl_select/ovl_select.reloc.o"
 endseg
 
 beginseg
     name "ovl_opening"
     compress
-    include "build/asm/overlays/ovl_opening/ovl_opening.text.o"
+    include "build/src/overlays/gamestates/ovl_opening/z_opening.o"
     include "build/data/ovl_opening/ovl_opening.data.o"
     include "build/data/ovl_opening/ovl_opening.reloc.o"
 endseg
@@ -933,9 +931,8 @@ endseg
 beginseg
     name "ovl_file_choose"
     compress
-    include "build/asm/overlays/ovl_file_choose/ovl_file_choose.text.o"
+    include "build/src/overlays/gamestates/ovl_file_choose/z_file_choose.o"
     include "build/data/ovl_file_choose/ovl_file_choose.data.o"
-    include "build/data/ovl_file_choose/ovl_file_choose.rodata.o"
     include "build/data/ovl_file_choose/ovl_file_choose.bss.o"
     include "build/data/ovl_file_choose/ovl_file_choose.reloc.o"
 endseg
@@ -943,7 +940,7 @@ endseg
 beginseg
     name "ovl_daytelop"
     compress
-    include "build/asm/overlays/ovl_daytelop/ovl_daytelop.text.o"
+    include "build/src/overlays/gamestates/ovl_daytelop/z_daytelop.o"
     include "build/data/ovl_daytelop/ovl_daytelop.data.o"
     include "build/data/ovl_daytelop/ovl_daytelop.reloc.o"
 endseg
@@ -951,9 +948,9 @@ endseg
 beginseg
     name "ovl_kaleido_scope"
     compress
-    include "build/asm/overlays/ovl_kaleido_scope/ovl_kaleido_scope.text.o"
+    include "build/src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.o"
     include "build/data/ovl_kaleido_scope/ovl_kaleido_scope.data.o"
-    include "build/data/ovl_kaleido_scope/ovl_kaleido_scope.rodata.o"
+//    include "build/data/ovl_kaleido_scope/ovl_kaleido_scope.rodata.o"
     include "build/data/ovl_kaleido_scope/ovl_kaleido_scope.bss.o"
     include "build/data/ovl_kaleido_scope/ovl_kaleido_scope.reloc.o"
 endseg
