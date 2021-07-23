@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 
 from os import path
-import io, sys, struct
-
+import io
+import sys
+import struct
 import hashlib
 
 from libyaz0 import decompress
 
 UNCOMPRESSED_SIZE = 0x2F00000
-
-fileContent = None
 
 def as_word(b, off=0):
     return struct.unpack(">I", b[off:off+4])[0]
@@ -52,7 +51,7 @@ def calc_crc(rom_data, cic_type):
             t2 ^= r
         else:
             t2 ^= t6 ^ d
-        
+
         if cic_type == 6105:
             t1 = unsigned_long(t1 + (as_word(rom_data, 0x0750 + (pos & 0xFF)) ^ d))
         else:
@@ -147,47 +146,41 @@ elif path.exists("baserom.mm.us.rev1.n64"):
     romFileName = "baserom.mm.us.rev1.n64"
 elif path.exists("baserom.mm.us.rev1.v64"):
     romFileName = "baserom.mm.us.rev1.v64"
+else:
+    print("Error: Could not find baserom.mm.us.rev1.z64/baserom.mm.us.rev1.n64/baserom.mm.us.rev1.v64.")
+    sys.exit(1)
 
 # Read in the original ROM
-if romFileName != "":
-    print("File '" + romFileName + "' found.")
-    with open(romFileName, mode="rb") as file:
-        fileContent = bytearray(file.read())
+print("File '" + romFileName + "' found.")
+with open(romFileName, mode="rb") as file:
+    fileContent = bytearray(file.read())
 
-        # Check if ROM needs to be byte swapped
-        if fileContent[0] == 0x40:
-            # Byte Swap ROM
-            # TODO: This is pretty slow at the moment. Look into optimizing it later...
-            print("ROM needs to be byte swapped...")
-            i = 0
-            while i < len(fileContent):
-                tmp = struct.unpack_from("BBBB", fileContent, i)
-                struct.pack_into("BBBB", fileContent, i + 0, tmp[1], tmp[0], tmp[3], tmp[2])
-                i += 4
+fileContentLen = len(fileContent)
 
-                perc = float(i) / float(len(fileContent))
+# Check if ROM needs to be byte/word swapped
+# Little-endian
+if fileContent[0] == 0x40:
+    # Word Swap ROM
+    print("ROM needs to be word swapped...")
+    words = str(int(fileContentLen/4))
+    little_byte_format = "<" + words + "I"
+    big_byte_format = ">" + words + "I"
+    tmp = struct.unpack_from(little_byte_format, fileContent, 0)
+    struct.pack_into(big_byte_format, fileContent, 0, *tmp)
 
-                if i % (1024 * 1024 * 4) == 0:
-                    print(str(perc * 100) + "%")
-        
-            print("Byte swapping done.")
-        elif fileContent[0] == 0x37:
-            print("ROM needs to be byte swapped...")
-            i = 0
-            while i < len(fileContent):
-                tmp = struct.unpack_from("BBBB", fileContent, i)
-                struct.pack_into("BBBB", fileContent, i + 0, tmp[1], tmp[0], tmp[3], tmp[2])
-                i += 4
+    print("Word swapping done.")
 
-                perc = float(i) / float(len(fileContent))
+# Byte-swapped
+elif fileContent[0] == 0x37:
+    # Byte Swap ROM
+    print("ROM needs to be byte swapped...")
+    halfwords = str(int(fileContentLen/2))
+    little_byte_format = "<" + halfwords + "H"
+    big_byte_format = ">" + halfwords + "H"
+    tmp = struct.unpack_from(little_byte_format, fileContent, 0)
+    struct.pack_into(big_byte_format, fileContent, 0, *tmp)
 
-                if i % (1024 * 1024 * 4) == 0:
-                    print(str(perc * 100) + "%")
-        
-            print("Byte swapping done.")
-else:
-    print("Error: Could not find baserom.mm.us.rev1.z64/baserom.mm.us.rev1.n64.")
-    sys.exit(1)
+    print("Byte swapping done.")
 
 # Decompress
 FILE_TABLE_OFFSET = 0x1A500 # 0x1C110 for JP1.0, 0x1C050 for JP1.1, 0x24F60 for debug
