@@ -116,7 +116,7 @@ beginseg
     include "build/src/libultra/io/sptask.o"
     include "build/data/boot/sptask.bss.o"
 
-    include "build/asm/boot/ll.text.o"
+    include "build/src/libultra/libc/ll.o"
 
     include "build/asm/boot/exceptasm.text.o"
     include "build/data/boot/exceptasm.data.o"
@@ -398,9 +398,7 @@ beginseg
     include "build/src/libultra/io/visetxscale.o"
     */
 
-    include "build/asm/boot/llcvt.text.o"
-    include "build/data/boot/llcvt.rodata.o"
-    //include "build/src/libultra/libc/llcvt.o"
+    include "build/src/libultra/libc/llcvt.o"
 
     include "build/asm/boot/voicecheckword.text.o"
     include "build/asm/boot/voicecontrolgain.text.o"
