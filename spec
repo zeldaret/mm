@@ -2089,52 +2089,47 @@ endseg
 beginseg
     name "ovl_Effect_Ss_Dust"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_Dust/ovl_Effect_Ss_Dust.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Dust/z_eff_ss_dust.o"
     include "build/data/ovl_Effect_Ss_Dust/ovl_Effect_Ss_Dust.data.o"
-    include "build/data/ovl_Effect_Ss_Dust/ovl_Effect_Ss_Dust.rodata.o"
     include "build/data/ovl_Effect_Ss_Dust/ovl_Effect_Ss_Dust.reloc.o"
 endseg
 
 beginseg
     name "ovl_Effect_Ss_Kirakira"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_Kirakira/ovl_Effect_Ss_Kirakira.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Kirakira/z_eff_ss_kirakira.o"
     include "build/data/ovl_Effect_Ss_Kirakira/ovl_Effect_Ss_Kirakira.data.o"
-    include "build/data/ovl_Effect_Ss_Kirakira/ovl_Effect_Ss_Kirakira.rodata.o"
     include "build/data/ovl_Effect_Ss_Kirakira/ovl_Effect_Ss_Kirakira.reloc.o"
 endseg
 
 beginseg
     name "ovl_Effect_Ss_Bomb2"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_Bomb2/ovl_Effect_Ss_Bomb2.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Bomb2/z_eff_ss_bomb2.o"
     include "build/data/ovl_Effect_Ss_Bomb2/ovl_Effect_Ss_Bomb2.data.o"
-    include "build/data/ovl_Effect_Ss_Bomb2/ovl_Effect_Ss_Bomb2.rodata.o"
     include "build/data/ovl_Effect_Ss_Bomb2/ovl_Effect_Ss_Bomb2.reloc.o"
 endseg
 
 beginseg
     name "ovl_Effect_Ss_Blast"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_Blast/ovl_Effect_Ss_Blast.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Blast/z_eff_ss_blast.o"
     include "build/data/ovl_Effect_Ss_Blast/ovl_Effect_Ss_Blast.data.o"
-    include "build/data/ovl_Effect_Ss_Blast/ovl_Effect_Ss_Blast.rodata.o"
     include "build/data/ovl_Effect_Ss_Blast/ovl_Effect_Ss_Blast.reloc.o"
 endseg
 
 beginseg
     name "ovl_Effect_Ss_G_Spk"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_G_Spk/ovl_Effect_Ss_G_Spk.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_G_Spk/z_eff_ss_g_spk.o"
     include "build/data/ovl_Effect_Ss_G_Spk/ovl_Effect_Ss_G_Spk.data.o"
-    include "build/data/ovl_Effect_Ss_G_Spk/ovl_Effect_Ss_G_Spk.rodata.o"
     include "build/data/ovl_Effect_Ss_G_Spk/ovl_Effect_Ss_G_Spk.reloc.o"
 endseg
 
 beginseg
     name "ovl_Effect_Ss_D_Fire"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_D_Fire/ovl_Effect_Ss_D_Fire.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_D_Fire/z_eff_ss_d_fire.o"
     include "build/data/ovl_Effect_Ss_D_Fire/ovl_Effect_Ss_D_Fire.data.o"
     include "build/data/ovl_Effect_Ss_D_Fire/ovl_Effect_Ss_D_Fire.reloc.o"
 endseg
@@ -2142,34 +2137,31 @@ endseg
 beginseg
     name "ovl_Effect_Ss_Bubble"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_Bubble/ovl_Effect_Ss_Bubble.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Bubble/z_eff_ss_bubble.o"
     include "build/data/ovl_Effect_Ss_Bubble/ovl_Effect_Ss_Bubble.data.o"
-    include "build/data/ovl_Effect_Ss_Bubble/ovl_Effect_Ss_Bubble.rodata.o"
     include "build/data/ovl_Effect_Ss_Bubble/ovl_Effect_Ss_Bubble.reloc.o"
 endseg
 
 beginseg
     name "ovl_Effect_Ss_G_Ripple"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_G_Ripple/ovl_Effect_Ss_G_Ripple.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_G_Ripple/z_eff_ss_g_ripple.o"
     include "build/data/ovl_Effect_Ss_G_Ripple/ovl_Effect_Ss_G_Ripple.data.o"
-    include "build/data/ovl_Effect_Ss_G_Ripple/ovl_Effect_Ss_G_Ripple.rodata.o"
     include "build/data/ovl_Effect_Ss_G_Ripple/ovl_Effect_Ss_G_Ripple.reloc.o"
 endseg
 
 beginseg
     name "ovl_Effect_Ss_G_Splash"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_G_Splash/ovl_Effect_Ss_G_Splash.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_G_Splash/z_eff_ss_g_splash.o"
     include "build/data/ovl_Effect_Ss_G_Splash/ovl_Effect_Ss_G_Splash.data.o"
-    include "build/data/ovl_Effect_Ss_G_Splash/ovl_Effect_Ss_G_Splash.rodata.o"
     include "build/data/ovl_Effect_Ss_G_Splash/ovl_Effect_Ss_G_Splash.reloc.o"
 endseg
 
 beginseg
     name "ovl_Effect_Ss_G_Fire"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_G_Fire/ovl_Effect_Ss_G_Fire.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_G_Fire/z_eff_ss_g_fire.o"
     include "build/data/ovl_Effect_Ss_G_Fire/ovl_Effect_Ss_G_Fire.data.o"
     include "build/data/ovl_Effect_Ss_G_Fire/ovl_Effect_Ss_G_Fire.reloc.o"
 endseg
@@ -2177,61 +2169,55 @@ endseg
 beginseg
     name "ovl_Effect_Ss_Lightning"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_Lightning/ovl_Effect_Ss_Lightning.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Lightning/z_eff_ss_lightning.o"
     include "build/data/ovl_Effect_Ss_Lightning/ovl_Effect_Ss_Lightning.data.o"
-    include "build/data/ovl_Effect_Ss_Lightning/ovl_Effect_Ss_Lightning.rodata.o"
     include "build/data/ovl_Effect_Ss_Lightning/ovl_Effect_Ss_Lightning.reloc.o"
 endseg
 
 beginseg
     name "ovl_Effect_Ss_Dt_Bubble"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_Dt_Bubble/ovl_Effect_Ss_Dt_Bubble.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Dt_Bubble/z_eff_ss_dt_bubble.o"
     include "build/data/ovl_Effect_Ss_Dt_Bubble/ovl_Effect_Ss_Dt_Bubble.data.o"
-    include "build/data/ovl_Effect_Ss_Dt_Bubble/ovl_Effect_Ss_Dt_Bubble.rodata.o"
     include "build/data/ovl_Effect_Ss_Dt_Bubble/ovl_Effect_Ss_Dt_Bubble.reloc.o"
 endseg
 
 beginseg
     name "ovl_Effect_Ss_Hahen"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_Hahen/ovl_Effect_Ss_Hahen.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.o"
     include "build/data/ovl_Effect_Ss_Hahen/ovl_Effect_Ss_Hahen.data.o"
-    include "build/data/ovl_Effect_Ss_Hahen/ovl_Effect_Ss_Hahen.rodata.o"
     include "build/data/ovl_Effect_Ss_Hahen/ovl_Effect_Ss_Hahen.reloc.o"
 endseg
 
 beginseg
     name "ovl_Effect_Ss_Stick"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_Stick/ovl_Effect_Ss_Stick.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Stick/z_eff_ss_stick.o"
     include "build/data/ovl_Effect_Ss_Stick/ovl_Effect_Ss_Stick.data.o"
-    include "build/data/ovl_Effect_Ss_Stick/ovl_Effect_Ss_Stick.rodata.o"
     include "build/data/ovl_Effect_Ss_Stick/ovl_Effect_Ss_Stick.reloc.o"
 endseg
 
 beginseg
     name "ovl_Effect_Ss_Sibuki"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_Sibuki/ovl_Effect_Ss_Sibuki.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Sibuki/z_eff_ss_sibuki.o"
     include "build/data/ovl_Effect_Ss_Sibuki/ovl_Effect_Ss_Sibuki.data.o"
-    include "build/data/ovl_Effect_Ss_Sibuki/ovl_Effect_Ss_Sibuki.rodata.o"
     include "build/data/ovl_Effect_Ss_Sibuki/ovl_Effect_Ss_Sibuki.reloc.o"
 endseg
 
 beginseg
     name "ovl_Effect_Ss_Stone1"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_Stone1/ovl_Effect_Ss_Stone1.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Stone1/z_eff_ss_stone1.o"
     include "build/data/ovl_Effect_Ss_Stone1/ovl_Effect_Ss_Stone1.data.o"
-    include "build/data/ovl_Effect_Ss_Stone1/ovl_Effect_Ss_Stone1.rodata.o"
     include "build/data/ovl_Effect_Ss_Stone1/ovl_Effect_Ss_Stone1.reloc.o"
 endseg
 
 beginseg
     name "ovl_Effect_Ss_Hitmark"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_Hitmark/ovl_Effect_Ss_Hitmark.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.o"
     include "build/data/ovl_Effect_Ss_Hitmark/ovl_Effect_Ss_Hitmark.data.o"
     include "build/data/ovl_Effect_Ss_Hitmark/ovl_Effect_Ss_Hitmark.reloc.o"
 endseg
@@ -2239,79 +2225,71 @@ endseg
 beginseg
     name "ovl_Effect_Ss_Fhg_Flash"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_Fhg_Flash/ovl_Effect_Ss_Fhg_Flash.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Fhg_Flash/z_eff_ss_fhg_flash.o"
     include "build/data/ovl_Effect_Ss_Fhg_Flash/ovl_Effect_Ss_Fhg_Flash.data.o"
-    include "build/data/ovl_Effect_Ss_Fhg_Flash/ovl_Effect_Ss_Fhg_Flash.rodata.o"
     include "build/data/ovl_Effect_Ss_Fhg_Flash/ovl_Effect_Ss_Fhg_Flash.reloc.o"
 endseg
 
 beginseg
     name "ovl_Effect_Ss_K_Fire"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_K_Fire/ovl_Effect_Ss_K_Fire.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_K_Fire/z_eff_ss_k_fire.o"
     include "build/data/ovl_Effect_Ss_K_Fire/ovl_Effect_Ss_K_Fire.data.o"
-    include "build/data/ovl_Effect_Ss_K_Fire/ovl_Effect_Ss_K_Fire.rodata.o"
     include "build/data/ovl_Effect_Ss_K_Fire/ovl_Effect_Ss_K_Fire.reloc.o"
 endseg
 
 beginseg
     name "ovl_Effect_Ss_Solder_Srch_Ball"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_Solder_Srch_Ball/ovl_Effect_Ss_Solder_Srch_Ball.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Solder_Srch_Ball/z_eff_ss_solder_srch_ball.o"
     include "build/data/ovl_Effect_Ss_Solder_Srch_Ball/ovl_Effect_Ss_Solder_Srch_Ball.data.o"
-    include "build/data/ovl_Effect_Ss_Solder_Srch_Ball/ovl_Effect_Ss_Solder_Srch_Ball.rodata.o"
     include "build/data/ovl_Effect_Ss_Solder_Srch_Ball/ovl_Effect_Ss_Solder_Srch_Ball.reloc.o"
 endseg
 
 beginseg
     name "ovl_Effect_Ss_Kakera"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_Kakera/ovl_Effect_Ss_Kakera.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Kakera/z_eff_ss_kakera.o"
     include "build/data/ovl_Effect_Ss_Kakera/ovl_Effect_Ss_Kakera.data.o"
-    include "build/data/ovl_Effect_Ss_Kakera/ovl_Effect_Ss_Kakera.rodata.o"
     include "build/data/ovl_Effect_Ss_Kakera/ovl_Effect_Ss_Kakera.reloc.o"
 endseg
 
 beginseg
     name "ovl_Effect_Ss_Ice_Piece"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_Ice_Piece/ovl_Effect_Ss_Ice_Piece.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Ice_Piece/z_eff_ss_ice_piece.o"
     include "build/data/ovl_Effect_Ss_Ice_Piece/ovl_Effect_Ss_Ice_Piece.data.o"
-    include "build/data/ovl_Effect_Ss_Ice_Piece/ovl_Effect_Ss_Ice_Piece.rodata.o"
     include "build/data/ovl_Effect_Ss_Ice_Piece/ovl_Effect_Ss_Ice_Piece.reloc.o"
 endseg
 
 beginseg
     name "ovl_Effect_Ss_En_Ice"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_En_Ice/ovl_Effect_Ss_En_Ice.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_En_Ice/z_eff_ss_en_ice.o"
     include "build/data/ovl_Effect_Ss_En_Ice/ovl_Effect_Ss_En_Ice.data.o"
-    include "build/data/ovl_Effect_Ss_En_Ice/ovl_Effect_Ss_En_Ice.rodata.o"
     include "build/data/ovl_Effect_Ss_En_Ice/ovl_Effect_Ss_En_Ice.reloc.o"
 endseg
 
 beginseg
     name "ovl_Effect_Ss_Fire_Tail"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_Fire_Tail/ovl_Effect_Ss_Fire_Tail.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Fire_Tail/z_eff_ss_fire_tail.o"
     include "build/data/ovl_Effect_Ss_Fire_Tail/ovl_Effect_Ss_Fire_Tail.data.o"
-    include "build/data/ovl_Effect_Ss_Fire_Tail/ovl_Effect_Ss_Fire_Tail.rodata.o"
     include "build/data/ovl_Effect_Ss_Fire_Tail/ovl_Effect_Ss_Fire_Tail.reloc.o"
 endseg
 
 beginseg
     name "ovl_Effect_Ss_En_Fire"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_En_Fire/ovl_Effect_Ss_En_Fire.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_En_Fire/z_eff_ss_en_fire.o"
     include "build/data/ovl_Effect_Ss_En_Fire/ovl_Effect_Ss_En_Fire.data.o"
-    include "build/data/ovl_Effect_Ss_En_Fire/ovl_Effect_Ss_En_Fire.rodata.o"
     include "build/data/ovl_Effect_Ss_En_Fire/ovl_Effect_Ss_En_Fire.reloc.o"
 endseg
 
 beginseg
     name "ovl_Effect_Ss_Extra"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_Extra/ovl_Effect_Ss_Extra.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Extra/z_eff_ss_extra.o"
     include "build/data/ovl_Effect_Ss_Extra/ovl_Effect_Ss_Extra.data.o"
     include "build/data/ovl_Effect_Ss_Extra/ovl_Effect_Ss_Extra.reloc.o"
 endseg
@@ -2319,27 +2297,24 @@ endseg
 beginseg
     name "ovl_Effect_Ss_Dead_Db"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_Dead_Db/ovl_Effect_Ss_Dead_Db.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Dead_Db/z_eff_ss_dead_db.o"
     include "build/data/ovl_Effect_Ss_Dead_Db/ovl_Effect_Ss_Dead_Db.data.o"
-    include "build/data/ovl_Effect_Ss_Dead_Db/ovl_Effect_Ss_Dead_Db.rodata.o"
     include "build/data/ovl_Effect_Ss_Dead_Db/ovl_Effect_Ss_Dead_Db.reloc.o"
 endseg
 
 beginseg
     name "ovl_Effect_Ss_Dead_Dd"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_Dead_Dd/ovl_Effect_Ss_Dead_Dd.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Dead_Dd/z_eff_ss_dead_dd.o"
     include "build/data/ovl_Effect_Ss_Dead_Dd/ovl_Effect_Ss_Dead_Dd.data.o"
-    include "build/data/ovl_Effect_Ss_Dead_Dd/ovl_Effect_Ss_Dead_Dd.rodata.o"
     include "build/data/ovl_Effect_Ss_Dead_Dd/ovl_Effect_Ss_Dead_Dd.reloc.o"
 endseg
 
 beginseg
     name "ovl_Effect_Ss_Dead_Ds"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_Dead_Ds/ovl_Effect_Ss_Dead_Ds.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Dead_Ds/z_eff_ss_dead_ds.o"
     include "build/data/ovl_Effect_Ss_Dead_Ds/ovl_Effect_Ss_Dead_Ds.data.o"
-    include "build/data/ovl_Effect_Ss_Dead_Ds/ovl_Effect_Ss_Dead_Ds.rodata.o"
     include "build/data/ovl_Effect_Ss_Dead_Ds/ovl_Effect_Ss_Dead_Ds.reloc.o"
 endseg
 
@@ -2515,9 +2490,8 @@ endseg
 beginseg
     name "ovl_Effect_Ss_Ice_Smoke"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_Ice_Smoke/ovl_Effect_Ss_Ice_Smoke.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Ice_Smoke/z_eff_ss_ice_smoke.o"
     include "build/data/ovl_Effect_Ss_Ice_Smoke/ovl_Effect_Ss_Ice_Smoke.data.o"
-    include "build/data/ovl_Effect_Ss_Ice_Smoke/ovl_Effect_Ss_Ice_Smoke.rodata.o"
     include "build/data/ovl_Effect_Ss_Ice_Smoke/ovl_Effect_Ss_Ice_Smoke.reloc.o"
 endseg
 
@@ -2970,9 +2944,8 @@ endseg
 beginseg
     name "ovl_Effect_En_Ice_Block"
     compress
-    include "build/asm/overlays/ovl_Effect_En_Ice_Block/ovl_Effect_En_Ice_Block.text.o"
+    include "build/src/overlays/effects/ovl_Effect_En_Ice_Block/z_eff_en_ice_block.o"
     include "build/data/ovl_Effect_En_Ice_Block/ovl_Effect_En_Ice_Block.data.o"
-    include "build/data/ovl_Effect_En_Ice_Block/ovl_Effect_En_Ice_Block.rodata.o"
     include "build/data/ovl_Effect_En_Ice_Block/ovl_Effect_En_Ice_Block.reloc.o"
 endseg
 
@@ -3797,9 +3770,8 @@ endseg
 beginseg
     name "ovl_Effect_Ss_Sbn"
     compress
-    include "build/asm/overlays/ovl_Effect_Ss_Sbn/ovl_Effect_Ss_Sbn.text.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Sbn/z_eff_ss_sbn.o"
     include "build/data/ovl_Effect_Ss_Sbn/ovl_Effect_Ss_Sbn.data.o"
-    include "build/data/ovl_Effect_Ss_Sbn/ovl_Effect_Ss_Sbn.rodata.o"
     include "build/data/ovl_Effect_Ss_Sbn/ovl_Effect_Ss_Sbn.reloc.o"
 endseg
 
