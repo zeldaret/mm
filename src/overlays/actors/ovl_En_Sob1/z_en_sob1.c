@@ -115,24 +115,24 @@ static f32 sActorScales[] = { 0.01f, 0.01f, 0.01f, 0.01f };
 
 static ShopItem sShops[][3] = {
     {
-        { SI_POTION_RED_4, {1258, 42, 325} },
-        { SI_ARROWS_SMALL_1, {1240, 42, 325} },
-        { SI_SHIELD_HERO_3, {1222, 42, 325} },
+        { SI_POTION_RED_4, { 1258, 42, 325 } },
+        { SI_ARROWS_SMALL_1, { 1240, 42, 325 } },
+        { SI_SHIELD_HERO_3, { 1222, 42, 325 } },
     },
     {
-        { SI_POTION_RED_5, {-57, 42, -62} },
-        { SI_ARROWS_SMALL_2, {-75, 42, -62} },
-        { SI_BOMB_2, {-93, 42, -62} },
+        { SI_POTION_RED_5, { -57, 42, -62 } },
+        { SI_ARROWS_SMALL_2, { -75, 42, -62 } },
+        { SI_BOMB_2, { -93, 42, -62 } },
     },
     {
-        { SI_BOMB_BAG_20_2, {221, -7, 73} },
-        { SI_BOMBCHU, {203, -7, 69} },
-        { SI_BOMB_1, {185, -7, 65} },
+        { SI_BOMB_BAG_20_2, { 221, -7, 73 } },
+        { SI_BOMBCHU, { 203, -7, 69 } },
+        { SI_BOMB_1, { 185, -7, 65 } },
     },
     {
-        { SI_POTION_RED_6, {-57, 42, -62} },
-        { SI_ARROWS_SMALL_3, {-75, 42, -62} },
-        { SI_BOMB_3, {-93, 42, -62} },
+        { SI_POTION_RED_6, { -57, 42, -62 } },
+        { SI_ARROWS_SMALL_3, { -75, 42, -62 } },
+        { SI_BOMB_3, { -93, 42, -62 } },
     },
 };
 
@@ -189,18 +189,18 @@ s32 EnSob1_TestItemSelected(GlobalContext* globalCtx) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
 
     if (msgCtx->unk12020 == 0x10 || msgCtx->unk12020 == 0x11) {
-        return CHECK_BTN_ALL(globalCtx->state.input[0].press.button, BTN_A);
+        return CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_A);
     }
-    return CHECK_BTN_ALL(globalCtx->state.input[0].press.button, BTN_A) ||
-           CHECK_BTN_ALL(globalCtx->state.input[0].press.button, BTN_B) ||
-           CHECK_BTN_ALL(globalCtx->state.input[0].press.button, BTN_CUP);
+    return CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_A) ||
+           CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_B) ||
+           CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_CUP);
 }
 
 u16 EnSob1_GetTalkOption(EnSob1* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
     if (this->shopType == BOMB_SHOP) {
-        if (gSaveContext.day == 1 && gSaveContext.time >= 0x4000) {
+        if (gSaveContext.day == 1 && gSaveContext.time >= CLOCK_TIME(6, 00)) {
             return 0x648;
         } else if (gSaveContext.weekEventReg[33] & 8) {
             return 0x649;
@@ -357,12 +357,13 @@ void EnSob1_EndInteractionBombShop(EnSob1* this, GlobalContext* globalCtx) {
 void EnSob1_SpawnShopItems(EnSob1* this, GlobalContext* globalCtx, ShopItem* shopItem) {
     s32 i;
 
-    for (i = 0; i < 3; i++, shopItem++) {
+    for (i = 0; i < ARRAY_COUNT(this->items); i++, shopItem++) {
         if (shopItem->shopItemId < 0) {
             this->items[i] = NULL;
         } else {
-            this->items[i] = (EnGirlA*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_GIRLA, shopItem->spawnPos.x,
-                                                   shopItem->spawnPos.y, shopItem->spawnPos.z, 0, 0, 0, shopItem->shopItemId);
+            this->items[i] =
+                (EnGirlA*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_GIRLA, shopItem->spawnPos.x,
+                                      shopItem->spawnPos.y, shopItem->spawnPos.z, 0, 0, 0, shopItem->shopItemId);
         }
     }
 }
@@ -464,7 +465,7 @@ void EnSob1_EndInteraction(GlobalContext* globalCtx, EnSob1* this) {
 }
 
 s32 EnSob1_TestEndInteraction(EnSob1* this, GlobalContext* globalCtx, Input* input) {
-    if (CHECK_BTN_ALL(input[0].press.button, BTN_B)) {
+    if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
         if (this->shopType == BOMB_SHOP) {
             EnSob1_EndInteractionBombShop(this, globalCtx);
         } else {
@@ -476,7 +477,7 @@ s32 EnSob1_TestEndInteraction(EnSob1* this, GlobalContext* globalCtx, Input* inp
 }
 
 s32 EnSob1_TestCancelOption(EnSob1* this, GlobalContext* globalCtx, Input* input) {
-    if (CHECK_BTN_ALL(input[0].press.button, BTN_B)) {
+    if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
         this->actionFunc = this->tmpActionFunc;
         func_80151938(globalCtx, this->items[this->cursorIdx]->actor.textId);
         return true;
@@ -566,8 +567,8 @@ void EnSob1_Idle(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_UpdateJoystickInputState(GlobalContext* globalCtx, EnSob1* this) {
-    s8 stickX = globalCtx->state.input[0].rel.stick_x;
-    s8 stickY = globalCtx->state.input[0].rel.stick_y;
+    s8 stickX = CONTROLLER1(globalCtx)->rel.stick_x;
+    s8 stickY = CONTROLLER1(globalCtx)->rel.stick_y;
 
     if (this->stickAccumX == 0) {
         if (stickX > 30 || stickX < -30) {
@@ -628,7 +629,7 @@ void EnSob1_Hello(EnSob1* this, GlobalContext* globalCtx) {
         }
     }
     if ((talkState == 5) && (func_80147624(globalCtx)) &&
-        (!EnSob1_TestEndInteraction(this, globalCtx, globalCtx->state.input))) {
+        (!EnSob1_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx)))) {
         if (this->welcomeTextId == 0x68A) { // Welcome text when wearing Kafei's mask
             EnSob1_EndInteraction(globalCtx, this);
         } else {
@@ -678,7 +679,7 @@ void EnSob1_FaceShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
     } else {
         if (talkState == 4) {
             func_8011552C(globalCtx, 6);
-            if (!EnSob1_TestEndInteraction(this, globalCtx, globalCtx->state.input)) {
+            if (!EnSob1_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx))) {
                 if (!func_80147624(globalCtx) || !EnSob1_FacingShopkeeperDialogResult(this, globalCtx)) {
                     if (this->stickAccumX > 0) {
                         cursorIdx = EnSob1_SetCursorIndexFromNeutral(this, 2);
@@ -934,7 +935,7 @@ void EnSob1_BrowseShelf(EnSob1* this, GlobalContext* globalCtx) {
         EnSob1_UpdateCursorPos(globalCtx, this);
         if (talkState == 5) {
             func_8011552C(globalCtx, 6);
-            if (!EnSob1_HasPlayerSelectedItem(globalCtx, this, globalCtx->state.input)) {
+            if (!EnSob1_HasPlayerSelectedItem(globalCtx, this, CONTROLLER1(globalCtx))) {
                 EnSob1_CursorLeftRight(globalCtx, this);
                 cursorIdx = this->cursorIdx;
                 if (cursorIdx != prevCursorIdx) {
@@ -1042,7 +1043,7 @@ void EnSob1_SelectItem(EnSob1* this, GlobalContext* globalCtx) {
 
     if (EnSob1_TakeItemOffShelf(this) && talkState == 4) {
         func_8011552C(globalCtx, 6);
-        if (!EnSob1_TestCancelOption(this, globalCtx, globalCtx->state.input) && func_80147624(globalCtx)) {
+        if (!EnSob1_TestCancelOption(this, globalCtx, CONTROLLER1(globalCtx)) && func_80147624(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     EnSob1_HandleCanBuyItem(globalCtx, this);
@@ -1143,8 +1144,8 @@ void EnSob1_ResetItemPosition(EnSob1* this) {
 }
 
 /*
-* Returns true when animation has completed
-*/
+ * Returns true when animation has completed
+ */
 s32 EnSob1_TakeItemOffShelf(EnSob1* this) {
     Math_ApproachF(&this->shopItemSelectedTween, 1.0f, 1.0f, 0.15f);
     if (this->shopItemSelectedTween >= 0.85f) {
@@ -1158,8 +1159,8 @@ s32 EnSob1_TakeItemOffShelf(EnSob1* this) {
 }
 
 /*
-* Returns true when animation has completed
-*/
+ * Returns true when animation has completed
+ */
 s32 EnSob1_ReturnItemToShelf(EnSob1* this) {
     Math_ApproachF(&this->shopItemSelectedTween, 0.0f, 1.0f, 0.15f);
     if (this->shopItemSelectedTween <= 0.15f) {
@@ -1177,7 +1178,7 @@ void EnSob1_UpdateItemSelectedProperty(EnSob1* this) {
     EnGirlA* item;
     s32 i;
 
-    for (i = 0; i < 3; i++, items++) {
+    for (i = 0; i < ARRAY_COUNT(this->items); i++, items++) {
         item = *items;
         if (item != NULL) {
             if (this->actionFunc != EnSob1_SelectItem && this->actionFunc != EnSob1_CannotBuy &&
@@ -1657,7 +1658,7 @@ void EnSob1_DrawZoraShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sZoraShopkeeperEyeTextures[this->eyeTextureIdx]));
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
                      EnSob1_OverrideLimbDrawZoraShopkeeper, NULL, &this->actor);
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->items); i++) {
         this->items[i]->actor.scale.x = 0.2f;
         this->items[i]->actor.scale.y = 0.2f;
         this->items[i]->actor.scale.z = 0.2f;
@@ -1678,7 +1679,7 @@ void EnSob1_DrawGoronShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sGoronShopkeeperEyeTextures[this->eyeTextureIdx]));
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, NULL,
                      NULL, &this->actor);
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->items); i++) {
         this->items[i]->actor.scale.x = 0.2f;
         this->items[i]->actor.scale.y = 0.2f;
         this->items[i]->actor.scale.z = 0.2f;
@@ -1699,7 +1700,7 @@ void EnSob1_DrawBombShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&D_06005458));
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
                      EnSob1_OverrideLimbDrawBombShopkeeper, EnSob1_PostLimbDrawBombShopkeeper, &this->actor);
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->items); i++) {
         this->items[i]->actor.scale.x = 0.2f;
         this->items[i]->actor.scale.y = 0.2f;
         this->items[i]->actor.scale.z = 0.2f;
