@@ -1184,8 +1184,8 @@ void EnOssan_ResetItemPosition(EnOssan* this) {
 }
 
 /*
-* Returns true if animation has completed
-*/
+ * Returns true if animation has completed
+ */
 s32 EnOssan_TakeItemOffShelf(EnOssan* this) {
     Math_ApproachF(&this->shopItemSelectedTween, 1.0f, 1.0f, 0.15f);
     if (this->shopItemSelectedTween >= 0.85f) {
@@ -1199,8 +1199,8 @@ s32 EnOssan_TakeItemOffShelf(EnOssan* this) {
 }
 
 /*
-* Returns true if animation has completed
-*/
+ * Returns true if animation has completed
+ */
 s32 EnOssan_ReturnItemToShelf(EnOssan* this) {
     Math_ApproachF(&this->shopItemSelectedTween, 0.0f, 1.0f, 0.15f);
     if (this->shopItemSelectedTween <= 0.15f) {
