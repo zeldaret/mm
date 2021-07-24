@@ -37,7 +37,7 @@ typedef struct EnSob1 {
     /* 0x2E2 */ s16 eyeTextureIdx;
     /* 0x2E4 */ s16 blinkTimer;
     /* 0x2E8 */ EnSob1BlinkFunc blinkFunc;
-    /* 0x2EC */ EnGirlA* items[3]; // Items are indexed as such: /* 2 1 0 */
+    /* 0x2EC */ EnGirlA* items[3]; // Items on shelf are indexed as: /* 2 1 0 */
     /* 0x2F8 */ s32 stickAccumX;
     /* 0x2FC */ s32 stickAccumY;
     /* 0x300 */ f32 cursorX;
