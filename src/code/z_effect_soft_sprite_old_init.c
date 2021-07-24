@@ -1033,5 +1033,5 @@ void EffectSsIceBlock_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocit
     Math_Vec3f_Copy(&initParams.accel, accel);
     initParams.scale = scale;
 
-    EffectSs_Spawn(globalCtx, EFFECT_SS_ICE_BLOCK, 128, &initParams);
+    EffectSs_Spawn(globalCtx, EFFECT_EN_ICE_BLOCK, 128, &initParams);
 }
