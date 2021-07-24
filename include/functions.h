@@ -2556,7 +2556,7 @@ s32 Entrance_GetTransitionFlags(u16 entranceIndex);
 // void func_80132E9C(void);
 // void func_80132FDC(void);
 // void func_80133000(void);
-s32 func_80133038(GlobalContext* globalCtx, UNK_PTR arg1, UNK_PTR arg2);
+s32 func_80133038(GlobalContext* globalCtx, UNK_PTR arg1, struct_80133038_arg2* arg2);
 void SkelAnime_LodDrawLimb(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* limbDrawTable, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, s32 dListIndex);
 void SkelAnime_LodDraw(GlobalContext* globalCtx, void** skeleton, Vec3s* limbDrawTable, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, s32 dListIndex);
 void SkelAnime_LodDrawLimbSV(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* limbDrawTable, OverrideLimbDrawSV overrideLimbDraw, PostLimbDrawSV postLimbDraw, Actor* actor, s32 dListIndex, RSPMatrix** mtx);
