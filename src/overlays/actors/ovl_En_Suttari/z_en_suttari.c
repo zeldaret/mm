@@ -208,9 +208,9 @@ s32 func_80BAA904(EnSuttari* this, GlobalContext* globalCtx) {
     sp2C.y = this->actor.world.pos.y + 100.0f;
     sp2C.z = (Math_CosS(this->actor.world.rot.y) * 50.0f) + this->actor.world.pos.z;
     if (func_800C4000(globalCtx, &globalCtx->colCtx, &sp24, &sp2C) > -500.0f) {
-        return 0;
+        return false;
     }
-    return 1;
+    return true;
 }
 
 void func_80BAA9B4(EnSuttari* this) {
