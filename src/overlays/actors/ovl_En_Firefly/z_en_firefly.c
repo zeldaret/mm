@@ -78,8 +78,38 @@ static ColliderSphereInit sSphereInit = {
 static CollisionCheckInfoInit sColChkInfoInit = { 1, 10, 10, 10 };
 
 static DamageTable sDamageTable = {
-    0x10, 0x01, 0x00, 0x01, 0x01, 0x01, 0x00, 0x01, 0x01, 0x01, 0x01, 0x22, 0x32, 0x42, 0x01, 0x01,
-    0x01, 0x02, 0x10, 0x50, 0x00, 0x00, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01,
+    /* Deku Nut       */ DMG_ENTRY(0, 0x1),
+    /* Deku Stick     */ DMG_ENTRY(1, 0x0),
+    /* Horse trample  */ DMG_ENTRY(0, 0x0),
+    /* Explosives     */ DMG_ENTRY(1, 0x0),
+    /* Zora boomerang */ DMG_ENTRY(1, 0x0),
+    /* Normal arrow   */ DMG_ENTRY(1, 0x0),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
+    /* Hookshot       */ DMG_ENTRY(1, 0x0),
+    /* Goron punch    */ DMG_ENTRY(1, 0x0),
+    /* Sword          */ DMG_ENTRY(1, 0x0),
+    /* Goron pound    */ DMG_ENTRY(1, 0x0),
+    /* Fire arrow     */ DMG_ENTRY(2, 0x2),
+    /* Ice arrow      */ DMG_ENTRY(2, 0x3),
+    /* Light arrow    */ DMG_ENTRY(2, 0x4),
+    /* Goron spikes   */ DMG_ENTRY(1, 0x0),
+    /* Deku spin      */ DMG_ENTRY(1, 0x0),
+    /* Deku bubble    */ DMG_ENTRY(1, 0x0),
+    /* Deku launch    */ DMG_ENTRY(2, 0x0),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x1),
+    /* Zora barrier   */ DMG_ENTRY(0, 0x5),
+    /* Normal shield  */ DMG_ENTRY(0, 0x0),
+    /* Light ray      */ DMG_ENTRY(0, 0x0),
+    /* Thrown object  */ DMG_ENTRY(1, 0x0),
+    /* Zora punch     */ DMG_ENTRY(1, 0x0),
+    /* Spin attack    */ DMG_ENTRY(1, 0x0),
+    /* Sword beam     */ DMG_ENTRY(0, 0x0),
+    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
+    /* Unblockable    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
+    /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
 static InitChainEntry sInitChain[] = {
@@ -321,7 +351,8 @@ void EnFirefly_SetupFall(EnFirefly* this, GlobalContext* globalCtx) {
         this->unk_2E8.x = 4.0f;
         this->unk_2E8.y = 0.55f;
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
-                    this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0, 3);
+                    this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
+                    CLEAR_TAG_SMALL_LIGHT_RAYS);
     } else if (this->actor.colChkInfo.damageEffect == 2) {
         this->unk_18F = 0;
         this->unk_2E8.x = 4.0f;
@@ -788,13 +819,13 @@ void EnFirefly_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPDisplayList(gfx, &sSetupDL[150]);
 
     if (this->currentType == KEESE_FIRE) {
-        gDPSetEnvColor(gfx + 1, 0, 0, 0, 0);
+        gDPSetEnvColor(&gfx[1], 0, 0, 0, 0);
     } else {
-        gDPSetEnvColor(gfx + 1, 0, 0, 0, 255);
+        gDPSetEnvColor(&gfx[1], 0, 0, 0, 255);
     }
 
     gfx = SkelAnime_Draw2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, EnFirefly_OverrideLimbDraw,
-                          EnFirefly_PostLimbDraw, &this->actor, gfx + 2);
+                          EnFirefly_PostLimbDraw, &this->actor, &gfx[2]);
     if (this->isInvisible) {
         POLY_XLU_DISP = gfx;
     } else {

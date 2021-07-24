@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_ending.c
+ * Overlay: ovl_Obj_Ending
+ * Description: The stump and lighting at the end of the credits
+ */
+
 #include "z_obj_ending.h"
 
 #define FLAGS 0x00000030
@@ -8,7 +14,6 @@ void ObjEnding_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjEnding_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjEnding_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
 const ActorInit Obj_Ending_InitVars = {
     ACTOR_OBJ_ENDING,
     ACTORCAT_BG,
@@ -20,34 +25,30 @@ const ActorInit Obj_Ending_InitVars = {
     (ActorFunc)ObjEnding_Update,
     (ActorFunc)ObjEnding_Draw,
 };
-*/
 
-extern InitChainEntry D_80C25CF8[];
-/*
+extern Gfx D_060003D0[];
+extern Gfx D_060031A0[];
+extern Gfx D_06003440[];
+extern AnimatedMaterial D_06001FF8;
+
+static ObjEndingModelInfo sModelInfo[] = {
+    { { D_06003440, D_060031A0 }, NULL },
+    { { NULL, D_060003D0 }, &D_06001FF8 },
+};
+
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
-*/
-
-extern unkStruct D_80C25CE0[];
-/*
-static unkStruct D_80C25CE0[2] = {
-    {0x06003440, 0x060031A0, 0x00000000},
-    {0x00000000, 0x060003D0, 0x06001FF8}
-};
-*/
 
 void ObjEnding_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjEnding* this = THIS;
-    AnimatedMaterial* texture;
+    AnimatedMaterial* animMat;
 
-    Actor_ProcessInitChain(&this->actor, D_80C25CF8);
-    this->unk144 = &D_80C25CE0[this->actor.params];
-    if (false) {}
-    texture = this->unk144->texture;
-
-    if (texture != NULL) {
-        this->texture = Lib_SegmentedToVirtual(texture);
+    Actor_ProcessInitChain(thisx, sInitChain);
+    this->modelInfo = &sModelInfo[thisx->params];
+    animMat = this->modelInfo->animMat;
+    if (animMat != NULL) {
+        this->animMat = (AnimatedMaterial*)Lib_SegmentedToVirtual(animMat);
     }
 }
 
@@ -56,18 +57,18 @@ void ObjEnding_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void ObjEnding_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjEnding* this = THIS;
-    Gfx* dl;
-    Gfx* tempunk4;
+    Gfx* dl1;
+    Gfx* dl2;
 
-    if (this->texture != NULL) {
-        AnimatedMat_Draw(globalCtx, this->texture);
+    if (this->animMat != NULL) {
+        AnimatedMat_Draw(globalCtx, this->animMat);
     }
-    tempunk4 = this->unk144->unk0;
-    if (tempunk4 != 0) {
-        func_800BDFC0(globalCtx, tempunk4);
+    dl1 = this->modelInfo->dLists[0];
+    if (dl1 != NULL) {
+        func_800BDFC0(globalCtx, dl1);
     }
-    dl = this->unk144->dl;
-    if (dl != NULL) {
-        func_800BE03C(globalCtx, dl);
+    dl2 = this->modelInfo->dLists[1];
+    if (dl2 != NULL) {
+        func_800BE03C(globalCtx, dl2);
     }
 }

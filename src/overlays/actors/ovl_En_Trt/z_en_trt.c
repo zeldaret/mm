@@ -10,12 +10,9 @@
 
 #define THIS ((EnTrt*)thisx)
 
-#define CURSOR_INVALID 0xFF
-#define ColChanMix(c1, c2, m) (c1 - (s32)(c2 * m)) & 0xFF
-
-#define ENTRT_IS_FULLY_AWAKE 1
-#define ENTRT_BEEN_GIVEN_MUSHROOM 2
-#define ENTRT_HAVE_MET 4
+#define ENTRT_FULLY_AWAKE 1
+#define ENTRT_GIVEN_MUSHROOM 2
+#define ENTRT_MET 4
 
 void EnTrt_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTrt_Destroy(Actor* thisx, GlobalContext* globalCtx);
@@ -36,17 +33,17 @@ void EnTrt_Hello(EnTrt* this, GlobalContext* globalCtx);
 void EnTrt_FaceShopkeeper(EnTrt* this, GlobalContext* globalCtx);
 void EnTrt_SetupEndInteraction(EnTrt* this, GlobalContext* globalCtx);
 void EnTrt_StartShopping(GlobalContext* globalCtx, EnTrt* this);
-void EnTrt_GiveRedPotion(EnTrt* this, GlobalContext* globalCtx);
+void EnTrt_GiveRedPotionForKoume(EnTrt* this, GlobalContext* globalCtx);
 void EnTrt_EndConversation(EnTrt* this, GlobalContext* globalCtx);
 void EnTrt_TryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx);
 void EnTrt_Surprised(EnTrt* this, GlobalContext* globalCtx);
 void EnTrt_LookToShelf(EnTrt* this, GlobalContext* globalCtx);
-void EnTrt_GivenRedPotion(EnTrt* this, GlobalContext* globalCtx);
+void EnTrt_GivenRedPotionForKoume(EnTrt* this, GlobalContext* globalCtx);
 void EnTrt_TryToGiveRedPotionAfterSurprised(EnTrt* this, GlobalContext* globalCtx);
 void EnTrt_BrowseShelf(EnTrt* this, GlobalContext* globalCtx);
 void EnTrt_SetupTalkToShopkeeper(GlobalContext* globalCtx, EnTrt* this);
 void EnTrt_ContinueShopping(EnTrt* this, GlobalContext* globalCtx);
-void EnTrt_ItemPurchased(EnTrt* this, GlobalContext* globalCtx);
+void EnTrt_ItemGiven(EnTrt* this, GlobalContext* globalCtx);
 void EnTrt_SelectItem(EnTrt* this, GlobalContext* globalCtx);
 void EnTrt_SetupLookToShopkeeperFromShelf(GlobalContext* globalCtx, EnTrt* this);
 void EnTrt_LookToShopkeeperFromShelf(EnTrt* this, GlobalContext* globalCtx);
@@ -54,7 +51,7 @@ void EnTrt_PayForMushroom(EnTrt* this, GlobalContext* globalCtx);
 void EnTrt_CanBuy(EnTrt* this, GlobalContext* globalCtx);
 void EnTrt_CannotBuy(EnTrt* this, GlobalContext* globalCtx);
 void EnTrt_BuyItemWithFanfare(EnTrt* this, GlobalContext* globalCtx);
-void EnTrt_SetupItemPurchased(EnTrt* this, GlobalContext* globalCtx);
+void EnTrt_SetupItemGiven(EnTrt* this, GlobalContext* globalCtx);
 
 void EnTrt_EyesClosed(EnTrt* this);
 void EnTrt_OpenThenCloseEyes(EnTrt* this);
@@ -63,7 +60,7 @@ void EnTrt_CloseEyes(EnTrt* this);
 void EnTrt_OpenEyes(EnTrt* this);
 void EnTrt_Blink(EnTrt* this);
 void EnTrt_OpenEyes2(EnTrt* this);
-void EnTrt_TiredBlink(EnTrt* this);
+void EnTrt_NodOff(EnTrt* this);
 
 
 extern UNK_TYPE D_0401F740;
@@ -83,6 +80,9 @@ extern AnimationHeader D_06000A44;
 extern UNK_TYPE D_0600B0B8;
 extern UNK_TYPE D_0600B8B8;
 extern UNK_TYPE D_0600C0B8;
+
+const char D_80A8FF10[] = "../z_en_trt.c"; // Unused
+const char D_80A8FF20[] = "../z_en_trt.c"; // Unused
 
 static ActorAnimationEntryS sAnimations[] = {
     { &D_0600DE68, 1.0f, 0, -1, 2, 0 }, { &D_0600EE98, 1.0f, 0, -1, 2, 0 }, { &D_0600FD34, 1.0f, 0, -1, 0, 0 },
@@ -106,9 +106,9 @@ const ActorInit En_Trt_InitVars = {
 static f32 sActorScale = 0.008f;
 
 static ShopItem sShop[] = {
-    { SI_POTION_RED_1, 24, 32, -36 },
-    { SI_POTION_GREEN_1, 6, 32, -36 },
-    { SI_POTION_BLUE, -12, 32, -36 },
+    { SI_POTION_RED_1, {24, 32, -36} },
+    { SI_POTION_GREEN_1, {6, 32, -36} },
+    { SI_POTION_BLUE, {-12, 32, -36} },
 };
 
 void EnTrt_ChangeAnim(SkelAnime* skelAnime, ActorAnimationEntryS* animations, s32 idx) {
@@ -128,24 +128,24 @@ s32 EnTrt_TestItemSelected(GlobalContext* globalCtx) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
 
     if (msgCtx->unk12020 == 0x10 || msgCtx->unk12020 == 0x11) {
-        return CHECK_BTN_ALL(globalCtx->state.input[0].press.button, BTN_A);
+        return CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_A);
     }
-    return CHECK_BTN_ALL(globalCtx->state.input[0].press.button, BTN_A) ||
-           CHECK_BTN_ALL(globalCtx->state.input[0].press.button, BTN_B) ||
-           CHECK_BTN_ALL(globalCtx->state.input[0].press.button, BTN_CUP);
+    return CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_A) ||
+           CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_B) ||
+           CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_CUP);
 }
 
 void EnTrt_SpawnShopItems(EnTrt* this, GlobalContext* globalCtx, ShopItem* shopItem) {
     s32 i;
 
-    for (i = 0; i < 3; i++, shopItem++) {
+    for (i = 0; i < ARRAY_COUNT(this->items); i++, shopItem++) {
         if (shopItem->shopItemId < 0) {
             this->items[i] = NULL;
         } else if (shopItem->shopItemId < 0) {
             this->items[i] = NULL;
         } else {
-            this->items[i] = (EnGirlA*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_GIRLA, shopItem->x,
-                                                   shopItem->y, shopItem->z, 0, 0, 0, shopItem->shopItemId);
+            this->items[i] = (EnGirlA*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_GIRLA, shopItem->spawnPos.x,
+                                                   shopItem->spawnPos.y, shopItem->spawnPos.z, 0, 0, 0, shopItem->shopItemId);
         }
     }
 }
@@ -156,8 +156,6 @@ void EnTrt_UpdateCollider(EnTrt* this, GlobalContext* globalCtx) {
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
-#ifdef NON_MATCHING
-// Matches but floats are in late rodata
 void EnTrt_UpdateCursorPos(GlobalContext* globalCtx, EnTrt* this) {
     s16 x;
     s16 y;
@@ -169,9 +167,6 @@ void EnTrt_UpdateCursorPos(GlobalContext* globalCtx, EnTrt* this) {
     this->cursorY = y + yOffset;
     this->cursorZ = 1.2f;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Trt_0x80A8B770/EnTrt_UpdateCursorPos.asm")
-#endif
 
 void EnTrt_SetupGetMushroomCutscene(EnTrt* this) {
     if (this->cutsceneState == 3) {
@@ -198,7 +193,7 @@ void EnTrt_SetupGetMushroomCutscene(EnTrt* this) {
 u16 EnTrt_GetItemTextId(EnTrt* this) {
     EnGirlA* item = this->items[this->cursorIdx];
 
-    if (item->actor.params == SI_POTION_BLUE && !(this->flags & ENTRT_BEEN_GIVEN_MUSHROOM)) {
+    if (item->actor.params == SI_POTION_BLUE && !(this->flags & ENTRT_GIVEN_MUSHROOM)) {
         return 0x880;
     }
     return item->actor.textId;
@@ -233,15 +228,15 @@ void EnTrt_EndInteraction(GlobalContext* globalCtx, EnTrt* this) {
     globalCtx->interfaceCtx.unk_224 = 0;
     this->textId = 0x834;
     this->timer = 80;
-    this->flags |= ENTRT_IS_FULLY_AWAKE;
+    this->flags |= ENTRT_FULLY_AWAKE;
     this->sleepSoundTimer = 10;
     this->actor.textId = 0;
     this->actionFunc = EnTrt_IdleSleeping;
-    this->blinkFunc = EnTrt_TiredBlink;
+    this->blinkFunc = EnTrt_NodOff;
 }
 
 s32 EnTrt_TestEndInteraction(EnTrt* this, GlobalContext* globalCtx, Input* input) {
-    if (CHECK_BTN_ALL(input[0].press.button, BTN_B)) {
+    if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
         EnTrt_EndInteraction(globalCtx, this);
         return true;
     }
@@ -249,7 +244,7 @@ s32 EnTrt_TestEndInteraction(EnTrt* this, GlobalContext* globalCtx, Input* input
 }
 
 s32 EnTrt_TestCancelOption(EnTrt* this, GlobalContext* globalCtx, Input* input) {
-    if (CHECK_BTN_ALL(input[0].press.button, BTN_B)) {
+    if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
         this->actionFunc = this->tmpActionFunc;
         func_80151938(globalCtx, EnTrt_GetItemTextId(this));
         return true;
@@ -275,8 +270,8 @@ void EnTrt_StartShopping(GlobalContext* globalCtx, EnTrt* this) {
 }
 
 void EnTrt_UpdateJoystickInputState(GlobalContext* globalCtx, EnTrt* this) {
-    s8 stickX = globalCtx->state.input[0].rel.stick_x;
-    s8 stickY = globalCtx->state.input[0].rel.stick_y;
+    s8 stickX = CONTROLLER1(globalCtx)->rel.stick_x;
+    s8 stickY = CONTROLLER1(globalCtx)->rel.stick_y;
 
     if (this->stickAccumX == 0) {
         if (stickX > 30 || stickX < -30) {
@@ -338,7 +333,7 @@ void EnTrt_Hello(EnTrt* this, GlobalContext* globalCtx) {
     }
     if (talkState == 5 && func_80147624(globalCtx)) {
         play_sound(NA_SE_SY_MESSAGE_PASS);
-        if (!EnTrt_TestEndInteraction(this, globalCtx, globalCtx->state.input)) {
+        if (!EnTrt_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx))) {
             EnTrt_StartShopping(globalCtx, this);
         }
     }
@@ -387,7 +382,7 @@ void EnTrt_PayForMushroom(EnTrt* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
         func_80123D50(globalCtx, PLAYER, 18, 21);
-        this->actionFunc = EnTrt_SetupItemPurchased;
+        this->actionFunc = EnTrt_SetupItemGiven;
     } else {
         func_800B8A1C(&this->actor, globalCtx, GI_RUPEE_RED, 300.0f, 300.0f);
     }
@@ -418,7 +413,7 @@ void EnTrt_SetupTryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
                 }
                 globalCtx->msgCtx.unk11F22 = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
-                this->actionFunc = EnTrt_GiveRedPotion;
+                this->actionFunc = EnTrt_GiveRedPotionForKoume;
             } else {
                 this->tmpTextId = this->textId;
                 this->textId = 0x88E;
@@ -452,7 +447,7 @@ void EnTrt_SetupTryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnTrt_GiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
+void EnTrt_GiveRedPotionForKoume(EnTrt* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
     if (Actor_HasParent(&this->actor, globalCtx)) {
@@ -462,7 +457,7 @@ void EnTrt_GiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
         }
         gSaveContext.weekEventReg[0x54] |= 0x40;
         player->stateFlags2 &= ~0x20000000;
-        this->actionFunc = EnTrt_GivenRedPotion;
+        this->actionFunc = EnTrt_GivenRedPotionForKoume;
     } else if (gSaveContext.weekEventReg[0x0C] & 0x10) {
         func_800B8A1C(&this->actor, globalCtx, GI_POTION_RED, 300.0f, 300.0f);
     } else {
@@ -470,7 +465,7 @@ void EnTrt_GiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnTrt_GivenRedPotion(EnTrt* this, GlobalContext* globalCtx) {
+void EnTrt_GivenRedPotionForKoume(EnTrt* this, GlobalContext* globalCtx) {
     //! @bug: player is set to NULL not PLAYER
     Player* player = NULL;
 
@@ -479,7 +474,7 @@ void EnTrt_GivenRedPotion(EnTrt* this, GlobalContext* globalCtx) {
             if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
                 ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
                 player->stateFlags2 |= 0x20000000;
-                //! @bug: EnTrt_ContinueShopping gets overwritten by EnTrt_ItemPurchased
+                //! @bug: EnTrt_ContinueShopping gets overwritten by EnTrt_ItemGiven
                 this->actionFunc = EnTrt_ContinueShopping;
                 this->cutsceneState = 3;
             } else {
@@ -491,7 +486,7 @@ void EnTrt_GivenRedPotion(EnTrt* this, GlobalContext* globalCtx) {
             }
         }
         func_800B85E0(&this->actor, globalCtx, 400.0f, -1);
-        this->actionFunc = EnTrt_ItemPurchased;
+        this->actionFunc = EnTrt_ItemGiven;
     }
 }
 
@@ -545,7 +540,7 @@ void EnTrt_FaceShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
     } else {
         if (talkState == 4) {
             func_8011552C(globalCtx, 6);
-            if (!EnTrt_TestEndInteraction(this, globalCtx, globalCtx->state.input)) {
+            if (!EnTrt_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx))) {
                 if (!func_80147624(globalCtx) || !EnTrt_FacingShopkeeperDialogResult(this, globalCtx)) {
                     if (this->stickAccumX > 0) {
                         cursorIdx = EnTrt_SetCursorIndexFromNeutral(this, 2);
@@ -617,7 +612,7 @@ s32 EnTrt_HasPlayerSelectedItem(GlobalContext* globalCtx, EnTrt* this, Input* in
         return true;
     }
     if (EnTrt_TestItemSelected(globalCtx)) {
-        if (item->actor.params != SI_POTION_BLUE || (this->flags & ENTRT_BEEN_GIVEN_MUSHROOM)) {
+        if (item->actor.params != SI_POTION_BLUE || (this->flags & ENTRT_GIVEN_MUSHROOM)) {
             this->tmpActionFunc = this->actionFunc;
             func_80151938(globalCtx, EnTrt_GetItemChoiceTextId(this));
             play_sound(NA_SE_SY_DECIDE);
@@ -649,7 +644,7 @@ void EnTrt_BrowseShelf(EnTrt* this, GlobalContext* globalCtx) {
         EnTrt_UpdateCursorPos(globalCtx, this);
         if (talkState == 5) {
             func_8011552C(globalCtx, 6);
-            if (!EnTrt_HasPlayerSelectedItem(globalCtx, this, globalCtx->state.input)) {
+            if (!EnTrt_HasPlayerSelectedItem(globalCtx, this, CONTROLLER1(globalCtx))) {
                 EnTrt_CursorLeftRight(globalCtx, this);
                 if (this->cursorIdx != prevCursorIdx) {
                     func_80151938(globalCtx, EnTrt_GetItemTextId(this));
@@ -682,14 +677,12 @@ void EnTrt_SetupCanBuy(GlobalContext* globalCtx, EnTrt* this, u16 textId) {
     this->actionFunc = EnTrt_CanBuy;
 }
 
-#ifdef NON_MATCHING
-// Matches but jmptable is in late rodata
 void EnTrt_HandleCanBuyItem(GlobalContext* globalCtx, EnTrt* this) {
     EnGirlA* item = this->items[this->cursorIdx];
     EnGirlA* item2;
 
     switch (item->canBuyFunc(globalCtx, item)) {
-        case CANBUY_RESULT_SUCCESS_FANFARE:
+        case CANBUY_RESULT_SUCCESS_1:
             if (this->cutsceneState == 3) {
                 ActorCutscene_Stop(this->cutscene);
                 this->cutsceneState = 0;
@@ -702,7 +695,7 @@ void EnTrt_HandleCanBuyItem(GlobalContext* globalCtx, EnTrt* this) {
             this->shopItemSelectedTween = 0.0f;
             item->boughtFunc(globalCtx, item);
             break;
-        case CANBUY_RESULT_SUCCESS:
+        case CANBUY_RESULT_SUCCESS_2:
             func_8019F208();
             item->buyFunc(globalCtx, item);
             EnTrt_SetupCanBuy(globalCtx, this, 0x848);
@@ -728,9 +721,6 @@ void EnTrt_HandleCanBuyItem(GlobalContext* globalCtx, EnTrt* this) {
             break;
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Trt_0x80A8B770/EnTrt_HandleCanBuyItem.asm")
-#endif
 
 void EnTrt_SelectItem(EnTrt* this, GlobalContext* globalCtx) {
     EnGirlA* item = this->items[this->cursorIdx];
@@ -739,7 +729,7 @@ void EnTrt_SelectItem(EnTrt* this, GlobalContext* globalCtx) {
     if (EnTrt_TakeItemOffShelf(this)) {
         if (talkState == 4) {
             func_8011552C(globalCtx, 6);
-            if (!EnTrt_TestCancelOption(this, globalCtx, globalCtx->state.input) && func_80147624(globalCtx)) {
+            if (!EnTrt_TestCancelOption(this, globalCtx, CONTROLLER1(globalCtx)) && func_80147624(globalCtx)) {
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 0:
                         EnTrt_HandleCanBuyItem(globalCtx, this);
@@ -775,14 +765,14 @@ void EnTrt_IdleSleeping(EnTrt* this, GlobalContext* globalCtx) {
 
     if ((gSaveContext.weekEventReg[0x55] & 8) && !(gSaveContext.weekEventReg[0x54] & 0x40)) {
         this->textId = 0x88F;
-    } else if (!(this->flags & ENTRT_HAVE_MET)) {
+    } else if (!(this->flags & ENTRT_MET)) {
         this->textId = 0x834;
     } else {
         this->textId = 0x83E;
     }
     if (!(gSaveContext.weekEventReg[0x35] & 8)) {
         this->talkOptionTextId = 0x845;
-    } else if (this->flags & ENTRT_BEEN_GIVEN_MUSHROOM) {
+    } else if (this->flags & ENTRT_GIVEN_MUSHROOM) {
         this->talkOptionTextId = 0x882;
     } else {
         this->talkOptionTextId = 0x885;
@@ -798,7 +788,7 @@ void EnTrt_IdleSleeping(EnTrt* this, GlobalContext* globalCtx) {
     }
     if (func_800B84D0(&this->actor, globalCtx)) {
         if (player->transformation == PLAYER_FORM_HUMAN) {
-            this->flags |= ENTRT_HAVE_MET;
+            this->flags |= ENTRT_MET;
         }
         if (this->cutsceneState == 0) {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -832,7 +822,7 @@ void EnTrt_IdleSleeping(EnTrt* this, GlobalContext* globalCtx) {
 void EnTrt_IdleAwake(EnTrt* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
-    this->flags &= ~ENTRT_IS_FULLY_AWAKE;
+    this->flags &= ~ENTRT_FULLY_AWAKE;
     if (player->transformation == PLAYER_FORM_HUMAN || player->transformation == PLAYER_FORM_FIERCE_DEITY) {
         if (Player_GetMask(globalCtx) == PLAYER_MASK_MASK_OF_SCENTS) {
             this->textId = 0x890;
@@ -853,7 +843,7 @@ void EnTrt_IdleAwake(EnTrt* this, GlobalContext* globalCtx) {
         }
         player->stateFlags2 |= 0x20000000;
         if (player->transformation == PLAYER_FORM_HUMAN) {
-            this->flags |= ENTRT_HAVE_MET;
+            this->flags |= ENTRT_MET;
         }
         EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 2);
         this->blinkFunc = EnTrt_EyesClosed;
@@ -976,7 +966,7 @@ void EnTrt_TryToGiveRedPotionAfterSurprised(EnTrt* this, GlobalContext* globalCt
                 ActorCutscene_Stop(this->cutscene);
                 this->cutsceneState = 0;
             }
-            this->actionFunc = EnTrt_GiveRedPotion;
+            this->actionFunc = EnTrt_GiveRedPotionForKoume;
         } else {
             this->tmpTextId = this->textId;
             this->textId = 0x88E;
@@ -997,7 +987,7 @@ void EnTrt_TryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
                 }
                 globalCtx->msgCtx.unk11F22 = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
-                this->actionFunc = EnTrt_GiveRedPotion;
+                this->actionFunc = EnTrt_GiveRedPotionForKoume;
             } else {
                 this->tmpTextId = this->textId;
                 this->textId = 0x88E;
@@ -1012,7 +1002,7 @@ void EnTrt_TryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnTrt_ItemPurchased(EnTrt* this, GlobalContext* globalCtx) {
+void EnTrt_ItemGiven(EnTrt* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
     if (this->cutsceneState == 0) {
@@ -1105,18 +1095,17 @@ void EnTrt_CanBuy(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_BuyItemWithFanfare(EnTrt* this, GlobalContext* globalCtx) {
-    // The player sets itself as the parent actor to signal that it has obtained the give item request
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
-        this->actionFunc = EnTrt_SetupItemPurchased;
+        this->actionFunc = EnTrt_SetupItemGiven;
     } else {
         func_800B8A1C(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
     }
 }
 
-void EnTrt_SetupItemPurchased(EnTrt* this, GlobalContext* globalCtx) {
+void EnTrt_SetupItemGiven(EnTrt* this, GlobalContext* globalCtx) {
     if (func_80152498(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
-        this->actionFunc = EnTrt_ItemPurchased;
+        this->actionFunc = EnTrt_ItemGiven;
         if (this->cutsceneState == 0) {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
@@ -1139,11 +1128,11 @@ void EnTrt_ContinueShopping(EnTrt* this, GlobalContext* globalCtx) {
             EnTrt_ResetItemPosition(this);
             item = this->items[this->cursorIdx];
             item->restockFunc(globalCtx, item);
-            if (!EnTrt_TestEndInteraction(this, globalCtx, globalCtx->state.input)) {
+            if (!EnTrt_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx))) {
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 0:
                         func_8019F208();
-                        player->actor.shape.rot.y += 0x8000;
+                        player->actor.shape.rot.y = BINANG_ROT180(player->actor.shape.rot.y);
                         player->stateFlags2 |= 0x20000000;
                         func_801518B0(globalCtx, this->textId, &this->actor);
                         EnTrt_SetupStartShopping(globalCtx, this, true);
@@ -1178,9 +1167,7 @@ void EnTrt_PositionSelectedItem(EnTrt* this) {
     shopItem = &sShop[i];
     item = this->items[i];
 
-    worldPos.x = shopItem->x + (sSelectedItemPosition.x - shopItem->x) * this->shopItemSelectedTween;
-    worldPos.y = shopItem->y + (sSelectedItemPosition.y - shopItem->y) * this->shopItemSelectedTween;
-    worldPos.z = shopItem->z + (sSelectedItemPosition.z - shopItem->z) * this->shopItemSelectedTween;
+    VEC3F_LERPIMPDST(&worldPos, &shopItem->spawnPos, &sSelectedItemPosition, this->shopItemSelectedTween);
 
     item->actor.world.pos.x = worldPos.x;
     item->actor.world.pos.y = worldPos.y;
@@ -1192,9 +1179,9 @@ void EnTrt_ResetItemPosition(EnTrt* this) {
     EnTrt_PositionSelectedItem(this);
 }
 
-#ifdef NON_MATCHING
-// Matches but floats are in late rodata
-// Returns true when animation has completed
+/*
+* Returns true when animation has completed
+*/
 s32 EnTrt_TakeItemOffShelf(EnTrt* this) {
     Math_ApproachF(&this->shopItemSelectedTween, 1.0f, 1.0f, 0.15f);
     if (this->shopItemSelectedTween >= 0.85f) {
@@ -1206,13 +1193,10 @@ s32 EnTrt_TakeItemOffShelf(EnTrt* this) {
     }
     return false;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Trt_0x80A8B770/EnTrt_TakeItemOffShelf.asm")
-#endif
 
-#ifdef NON_MATCHING
-// Matches but floats are in laterodata
-// returns true if animation has completed
+/*
+* Returns true when animation has completed
+*/
 s32 EnTrt_ReturnItemToShelf(EnTrt* this) {
     Math_ApproachF(&this->shopItemSelectedTween, 0.0f, 1.0f, 0.15f);
     if (this->shopItemSelectedTween <= 0.15f) {
@@ -1224,16 +1208,13 @@ s32 EnTrt_ReturnItemToShelf(EnTrt* this) {
     }
     return false;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Trt_0x80A8B770/EnTrt_ReturnItemToShelf.asm")
-#endif
 
 void EnTrt_UpdateItemSelectedProperty(EnTrt* this) {
     EnGirlA** items = this->items;
     EnGirlA* item;
     s32 i;
 
-    for (i = 0; i < 3; i++, items++) {
+    for (i = 0; i < ARRAY_COUNT(this->items); i++, items++) {
         item = *items;
         if (item != NULL) {
             if (this->actionFunc != EnTrt_SelectItem && this->actionFunc != EnTrt_CannotBuy && this->drawCursor == 0) {
@@ -1245,8 +1226,6 @@ void EnTrt_UpdateItemSelectedProperty(EnTrt* this) {
     }
 }
 
-#ifdef NON_MATCHING
-// Matches but floats are in laterodata
 void EnTrt_UpdateCursorAnim(EnTrt* this) {
     f32 t;
 
@@ -1264,18 +1243,13 @@ void EnTrt_UpdateCursorAnim(EnTrt* this) {
             this->cursorAnimState = 0;
         }
     }
-    this->cursorColorR = ColChanMix(0, 0.0f, t);
-    this->cursorColorG = ColChanMix(80, 80.0f, t);
-    this->cursorColorB = ColChanMix(255, 0.0f, t);
-    this->cursorColorA = ColChanMix(255, 0.0f, t);
+    this->cursorColorR = COL_CHAN_MIX(0, 0.0f, t);
+    this->cursorColorG = COL_CHAN_MIX(80, 80.0f, t);
+    this->cursorColorB = COL_CHAN_MIX(255, 0.0f, t);
+    this->cursorColorA = COL_CHAN_MIX(255, 0.0f, t);
     this->cursorAnimTween = t;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Trt_0x80A8B770/EnTrt_UpdateCursorAnim.asm")
-#endif
 
-#ifdef NON_MATCHING
-// Matches but floats are in late rodata
 void EnTrt_UpdateStickDirectionPromptAnim(EnTrt* this) {
     f32 arrowAnimTween = this->arrowAnimTween;
     f32 stickAnimTween = this->stickAnimTween;
@@ -1314,15 +1288,15 @@ void EnTrt_UpdateStickDirectionPromptAnim(EnTrt* this) {
 
     this->stickAnimTween = stickAnimTween;
 
-    this->stickLeftPrompt.arrowColorR = ColChanMix(255, 155.0f, arrowAnimTween);
-    this->stickLeftPrompt.arrowColorG = ColChanMix(new_var2, 155.0f, arrowAnimTween);
-    this->stickLeftPrompt.arrowColorB = ColChanMix(0, -100, arrowAnimTween);
-    this->stickLeftPrompt.arrowColorA = ColChanMix(200, 50.0f, arrowAnimTween);
+    this->stickLeftPrompt.arrowColorR = COL_CHAN_MIX(255, 155.0f, arrowAnimTween);
+    this->stickLeftPrompt.arrowColorG = COL_CHAN_MIX(new_var2, 155.0f, arrowAnimTween);
+    this->stickLeftPrompt.arrowColorB = COL_CHAN_MIX(0, -100, arrowAnimTween);
+    this->stickLeftPrompt.arrowColorA = COL_CHAN_MIX(200, 50.0f, arrowAnimTween);
 
     this->stickRightPrompt.arrowColorR = (new_var2 - ((s32)new_var3)) & 0xFF;
     this->stickRightPrompt.arrowColorG = (255 - ((s32)new_var3)) & 0xFF;
-    this->stickRightPrompt.arrowColorB = ColChanMix(0, -100.0f, arrowAnimTween);
-    this->stickRightPrompt.arrowColorA = ColChanMix(200, 50.0f, arrowAnimTween);
+    this->stickRightPrompt.arrowColorB = COL_CHAN_MIX(0, -100.0f, arrowAnimTween);
+    this->stickRightPrompt.arrowColorA = COL_CHAN_MIX(200, 50.0f, arrowAnimTween);
 
     this->stickRightPrompt.arrowTexX = 290.0f;
     this->stickLeftPrompt.arrowTexX = 33.0f;
@@ -1335,9 +1309,6 @@ void EnTrt_UpdateStickDirectionPromptAnim(EnTrt* this) {
     this->stickLeftPrompt.arrowTexY = this->stickRightPrompt.arrowTexY = 91.0f;
     this->stickLeftPrompt.stickTexY = this->stickRightPrompt.stickTexY = 95.0f;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Trt_0x80A8B770/EnTrt_UpdateStickDirectionPromptAnim.asm")
-#endif
 
 void EnTrt_OpenEyes(EnTrt* this) {
     if (this->eyeTextureIdx <= 0) {
@@ -1373,7 +1344,7 @@ void EnTrt_Blink(EnTrt* this) {
     }
 }
 
-void EnTrt_TiredBlink(EnTrt* this) {
+void EnTrt_NodOff(EnTrt* this) {
     s16 decr = this->blinkTimer - 1;
     s16 eyeTextureIdxTemp;
 
@@ -1391,7 +1362,6 @@ void EnTrt_TiredBlink(EnTrt* this) {
     }
 }
 
-//OpenThenShutEyes
 void EnTrt_OpenThenCloseEyes(EnTrt* this) {
     if (this->skelAnime.animCurrentFrame >= 40.0f) {
         EnTrt_CloseEyes(this);
@@ -1410,7 +1380,6 @@ void EnTrt_OpenEyes2(EnTrt* this) {
     EnTrt_OpenEyes(this);
 }
 
-//OpenThenBlink
 void EnTrt_OpenEyesThenSetToBlink(EnTrt* this) {
     if (this->skelAnime.animCurrentFrame >= 7.0f) {
         EnTrt_OpenEyes(this);
@@ -1446,7 +1415,7 @@ void EnTrt_TalkToShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
                 player->unk_A87 = itemGiven;
                 this->actionFunc = EnTrt_GetMushroom;
             } else {
-                if (this->flags & ENTRT_BEEN_GIVEN_MUSHROOM) {
+                if (this->flags & ENTRT_GIVEN_MUSHROOM) {
                     player->actor.textId = 0x88B;
                 } else {
                     player->actor.textId = 0x886;
@@ -1456,7 +1425,7 @@ void EnTrt_TalkToShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
             }
             func_801477B4(globalCtx);
         } else if (itemGiven < 0) {
-            if (this->flags & ENTRT_BEEN_GIVEN_MUSHROOM) {
+            if (this->flags & ENTRT_GIVEN_MUSHROOM) {
                 this->textId = 0x88B;
             } else {
                 this->textId = 0x886;
@@ -1513,10 +1482,7 @@ void EnTrt_InitShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
-// Matches but floats are in late rodata
-// This gets called before needing an update first, but named as such to be consistent with other shopkeepers
-void EnTrt_InitalUpdate(EnTrt* this, GlobalContext* globalCtx) {
+void EnTrt_InitShop(EnTrt* this, GlobalContext* globalCtx) {
     u32 maxcolor = 0xFF;
     EnTrt* this2;
 
@@ -1595,15 +1561,12 @@ void EnTrt_InitalUpdate(EnTrt* this, GlobalContext* globalCtx) {
     this->blinkTimer = 20;
     this->eyeTextureIdx = 0;
     this->blinkFunc = EnTrt_EyesClosed;
-    if (gSaveContext.weekEventReg[0x35] & 8) { //Given Mushroom
-        this->flags |= ENTRT_BEEN_GIVEN_MUSHROOM;
+    if (gSaveContext.weekEventReg[0x35] & 8) {
+        this->flags |= ENTRT_GIVEN_MUSHROOM;
     }
 
     this->actor.flags &= ~1;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Trt_0x80A8B770/EnTrt_InitalUpdate.asm")
-#endif
 
 void EnTrt_GetCutscenes(EnTrt* this, GlobalContext* globalCtx) {
     this->lookForwardCutscene = this->actor.cutscene;
@@ -1725,7 +1688,7 @@ void EnTrt_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnTrt* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    EnTrt_InitalUpdate(this, globalCtx);
+    EnTrt_InitShop(this, globalCtx);
 }
 
 void EnTrt_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -1788,13 +1751,11 @@ void EnTrt_UpdateHeadPosAndRot(s16 pitch, s16 yaw, Vec3f* pos, Vec3s* rot, s32 i
     }
 }
 
-#ifdef NON_MATCHING
-// Matched but floats are in late rodata
 s32 EnTrt_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnTrt* this = THIS;
     s32 i;
 
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->items); i++) {
         this->items[i]->actor.scale.x = 0.2f;
         this->items[i]->actor.scale.y = 0.2f;
         this->items[i]->actor.scale.z = 0.2f;
@@ -1805,17 +1766,13 @@ s32 EnTrt_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     }
     return 0;
 }
-#else
-s32 EnTrt_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Trt_0x80A8B770/EnTrt_OverrideLimbDraw.asm")
-#endif
 
 void EnTrt_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnTrt* this = THIS;
     s32 isFullyAwake;
 
     isFullyAwake = false;
-    if (this->flags & ENTRT_IS_FULLY_AWAKE) {
+    if (this->flags & ENTRT_FULLY_AWAKE) {
         isFullyAwake = true;
     }
     if (limbIndex == 21) {

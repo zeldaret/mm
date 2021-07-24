@@ -9,7 +9,7 @@ void BgHakuginSwitch_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgHakuginSwitch_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgHakuginSwitch_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Bg_Hakugin_Switch_InitVars = {
     ACTOR_BG_HAKUGIN_SWITCH,
     ACTORCAT_SWITCH,
@@ -21,7 +21,37 @@ const ActorInit Bg_Hakugin_Switch_InitVars = {
     (ActorFunc)BgHakuginSwitch_Update,
     (ActorFunc)BgHakuginSwitch_Draw,
 };
-*/
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_80B16860 = {
+    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00000400, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+    { 60, 10, 180, { 0, 0, 0 } },
+};
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80B16904[] = {
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 150, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 130, ICHAIN_STOP),
+};
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80B16910[] = {
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 260, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 360, ICHAIN_STOP),
+};
+
+
+extern ColliderCylinderInit D_80B16860;
+extern InitChainEntry D_80B16904[];
+extern InitChainEntry D_80B16910[];
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Hakugin_Switch_0x80B15790/func_80B15790.asm")
 

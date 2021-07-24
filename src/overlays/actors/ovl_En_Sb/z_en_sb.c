@@ -56,8 +56,38 @@ static ColliderCylinderInitType1 sCylinderInit = {
 };
 
 static DamageTable sDamageTable = {
-    0x00, 0x00, 0x00, 0xF1, 0xF1, 0xF1, 0x00, 0xF1, 0x00, 0x00, 0x00, 0xF1, 0xF1, 0xF1, 0x00, 0x00,
-    0xF1, 0x00, 0x00, 0xF1, 0x00, 0x00, 0x00, 0xF1, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF1,
+    /* Deku Nut       */ DMG_ENTRY(0, 0x0),
+    /* Deku Stick     */ DMG_ENTRY(0, 0x0),
+    /* Horse trample  */ DMG_ENTRY(0, 0x0),
+    /* Explosives     */ DMG_ENTRY(1, 0xF),
+    /* Zora boomerang */ DMG_ENTRY(1, 0xF),
+    /* Normal arrow   */ DMG_ENTRY(1, 0xF),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
+    /* Hookshot       */ DMG_ENTRY(1, 0xF),
+    /* Goron punch    */ DMG_ENTRY(0, 0x0),
+    /* Sword          */ DMG_ENTRY(0, 0x0),
+    /* Goron pound    */ DMG_ENTRY(0, 0x0),
+    /* Fire arrow     */ DMG_ENTRY(1, 0xF),
+    /* Ice arrow      */ DMG_ENTRY(1, 0xF),
+    /* Light arrow    */ DMG_ENTRY(1, 0xF),
+    /* Goron spikes   */ DMG_ENTRY(0, 0x0),
+    /* Deku spin      */ DMG_ENTRY(0, 0x0),
+    /* Deku bubble    */ DMG_ENTRY(1, 0xF),
+    /* Deku launch    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x0),
+    /* Zora barrier   */ DMG_ENTRY(1, 0xF),
+    /* Normal shield  */ DMG_ENTRY(0, 0x0),
+    /* Light ray      */ DMG_ENTRY(0, 0x0),
+    /* Thrown object  */ DMG_ENTRY(0, 0x0),
+    /* Zora punch     */ DMG_ENTRY(1, 0xF),
+    /* Spin attack    */ DMG_ENTRY(0, 0x0),
+    /* Sword beam     */ DMG_ENTRY(0, 0x0),
+    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
+    /* Unblockable    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
+    /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
 static InitChainEntry sInitChain[] = {
@@ -218,7 +248,7 @@ void EnSb_WaitOpen(EnSb* this, GlobalContext* globalCtx) {
 }
 
 void EnSb_TurnAround(EnSb* this, GlobalContext* globalCtx) {
-    s16 invertedYaw = this->yawAngle + 0x8000;
+    s16 invertedYaw = BINANG_ROT180(this->yawAngle);
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, invertedYaw, 1, 0x1F40, 0xA);
     if (this->actor.shape.rot.y == invertedYaw) {
