@@ -68,8 +68,8 @@ typedef struct EnOssan {
 } EnOssan; // size = 0x40C
 
 typedef enum {
-    /* 0 */ CURIOSITY_SHOP_MAN,
-    /* 1 */ PART_TIME_WORKER
+    /* 0 */ ENOSSAN_CURIOSITY_SHOP_MAN,
+    /* 1 */ ENOSSAN_PART_TIME_WORKER
 } EnOssanWorker;
 
 extern const ActorInit En_Ossan_InitVars;

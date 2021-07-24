@@ -45,18 +45,6 @@ void EnOssan_ResetItemPosition(EnOssan* this);
 void EnOssan_Blink(EnOssan* this);
 void EnOssan_GetCutscenes(EnOssan* this, GlobalContext* globalCtx);
 
-const ActorInit En_Ossan_InitVars = {
-    ACTOR_EN_OSSAN,
-    ACTORCAT_NPC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnOssan),
-    (ActorFunc)EnOssan_Init,
-    (ActorFunc)EnOssan_Destroy,
-    (ActorFunc)EnOssan_Update,
-    (ActorFunc)NULL,
-};
-
 extern UNK_TYPE D_0401F740;
 extern UNK_TYPE D_0401F8C0;
 extern UNK_TYPE D_0401F7C0;
@@ -83,6 +71,18 @@ extern UNK_TYPE D_06005BC0;
 extern UNK_TYPE D_06006F18;
 extern UNK_TYPE D_06006B18;
 
+const ActorInit En_Ossan_InitVars = {
+    ACTOR_EN_OSSAN,
+    ACTORCAT_NPC,
+    FLAGS,
+    GAMEPLAY_KEEP,
+    sizeof(EnOssan),
+    (ActorFunc)EnOssan_Init,
+    (ActorFunc)EnOssan_Destroy,
+    (ActorFunc)EnOssan_Update,
+    (ActorFunc)NULL,
+};
+
 static ActorAnimationEntryS sAnimationsCuriosityShopMan[] = {
     { &D_06012C34, 1.0f, 0, -1, 0, 0 },  { &D_060131FC, 1.0f, 0, -1, 0, 0 }, { &D_0600C58C, 1.0f, 0, -1, 2, 0 },
     { &D_0600C58C, -1.0f, 0, -1, 2, 0 }, { &D_0600E3EC, 1.0f, 0, -1, 2, 0 }, { &D_0600F00C, 1.0f, 0, -1, 0, 0 },
@@ -98,7 +98,7 @@ static ActorAnimationEntryS sAnimationsPartTimeWorker[] = {
     { &D_0600A460, 1.0f, 0, -1, 0, -5 },  { &D_06009D34, 1.0f, 0, -1, 2, 0 },   { &D_06009D34, 1.0f, 0, -1, 0, 0 },
 };
 
-static s16 sObjectIds[] = { 0x01AB, 0x00C2 };
+static s16 sObjectIds[] = { OBJECT_FSN, OBJECT_ANI };
 
 static ActorAnimationEntryS* sAnimations[] = { sAnimationsCuriosityShopMan, sAnimationsPartTimeWorker };
 
@@ -174,19 +174,19 @@ void EnOssan_ChooseShopkeeper(EnOssan* this) {
         case 1:
         case 2:
             if (gSaveContext.time <= CLOCK_TIME(21, 30) && gSaveContext.time > CLOCK_TIME(6, 00)) {
-                if (this->actor.params != CURIOSITY_SHOP_MAN) {
+                if (this->actor.params != ENOSSAN_CURIOSITY_SHOP_MAN) {
                     Actor_MarkForDeath(&this->actor);
                 }
-            } else if (this->actor.params == CURIOSITY_SHOP_MAN) {
+            } else if (this->actor.params == ENOSSAN_CURIOSITY_SHOP_MAN) {
                 Actor_MarkForDeath(&this->actor);
             }
             break;
         case 3:
-            if (this->actor.params == CURIOSITY_SHOP_MAN) {
+            if (this->actor.params == ENOSSAN_CURIOSITY_SHOP_MAN) {
                 Actor_MarkForDeath(&this->actor);
             }
             if (!(gSaveContext.time <= CLOCK_TIME(22, 00) && gSaveContext.time >= CLOCK_TIME(6, 00))) {
-                if (this->actor.params != CURIOSITY_SHOP_MAN) {
+                if (this->actor.params != ENOSSAN_CURIOSITY_SHOP_MAN) {
                     Actor_MarkForDeath(&this->actor);
                 }
             }
@@ -197,7 +197,7 @@ void EnOssan_ChooseShopkeeper(EnOssan* this) {
 void EnOssan_RotateHead(EnOssan* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
-    if (this->actor.params == PART_TIME_WORKER) {
+    if (this->actor.params == ENOSSAN_PART_TIME_WORKER) {
         if (player->transformation == PLAYER_FORM_ZORA) {
             Math_SmoothStepToS(&this->headRotYPartTimeWorker, this->headRot.y, 3, 2000, 0);
         } else if (this->flags & LOOKED_AT_PLAYER) {
@@ -211,16 +211,16 @@ void EnOssan_RotateHead(EnOssan* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnOssan_SpawnShopItems(EnOssan* this, GlobalContext* globalCtx, ShopItem* shopItem) {
+void EnOssan_SpawnShopItems(EnOssan* this, GlobalContext* globalCtx, ShopItem* shop) {
     s32 i;
 
-    for (i = 0; i < 8; i++, shopItem++) {
-        if (shopItem->shopItemId < 0) {
+    for (i = 0; i < ARRAY_COUNT(this->items); i++, shop++) {
+        if (shop->shopItemId < 0) {
             this->items[i] = NULL;
         } else {
             this->items[i] =
-                (EnGirlA*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_GIRLA, shopItem->spawnPos.x,
-                                      shopItem->spawnPos.y, shopItem->spawnPos.z, 0, 0, 0, shopItem->shopItemId);
+                (EnGirlA*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_GIRLA, shop->spawnPos.x,
+                                      shop->spawnPos.y, shop->spawnPos.z, 0, 0, 0, shop->shopItemId);
         }
     }
 }
@@ -230,7 +230,7 @@ void EnOssan_Init(Actor* thisx, GlobalContext* globalCtx) {
     s16 id;
 
     //! @bug Condition is impossible
-    if (this->actor.params >= 2 && this->actor.params < 0) {
+    if (this->actor.params > ENOSSAN_PART_TIME_WORKER && this->actor.params < ENOSSAN_CURIOSITY_SHOP_MAN) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -277,7 +277,7 @@ void EnOssan_EndInteraction(GlobalContext* globalCtx, EnOssan* this) {
         ActorCutscene_Stop(this->cutscene);
         this->cutsceneState = 0;
     }
-    if (this->actor.params == CURIOSITY_SHOP_MAN) {
+    if (this->actor.params == ENOSSAN_CURIOSITY_SHOP_MAN) {
         // EnOssan_BeginInteraction includes the animation of him turning around, before being set to idle
         EnOssan_SetupAction(this, EnOssan_BeginInteraction);
     } else {
@@ -346,7 +346,7 @@ void EnOssan_Idle(EnOssan* this, GlobalContext* globalCtx) {
             (player->actor.world.pos.z >= -91.0f && player->actor.world.pos.z <= -60.0f)) {
             func_800B8614(&this->actor, globalCtx, 100.0f);
         }
-        if (this->actor.params == PART_TIME_WORKER) {
+        if (this->actor.params == ENOSSAN_PART_TIME_WORKER) {
             Math_SmoothStepToS(&this->headRotYPartTimeWorker, 8000, 3, 2000, 0);
         }
     }
@@ -371,7 +371,7 @@ void EnOssan_BeginInteraction(EnOssan* this, GlobalContext* globalCtx) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     }
-    if (this->actor.params == CURIOSITY_SHOP_MAN) {
+    if (this->actor.params == ENOSSAN_CURIOSITY_SHOP_MAN) {
         if (curFrame == frameCount) {
             switch (this->animationIdx) {
                 case 1:
@@ -539,7 +539,7 @@ void EnOssan_Hello(EnOssan* this, GlobalContext* globalCtx) {
 
     EnOssan_RotateHead(this, globalCtx);
     if (talkState == 5 && func_80147624(globalCtx)) {
-        if (this->animationIdx == 9 && this->actor.params == PART_TIME_WORKER) {
+        if (this->animationIdx == 9 && this->actor.params == ENOSSAN_PART_TIME_WORKER) {
             this->animationIdx = 1;
             func_8013BC6C(&this->skelAnime, animations, 1);
         }
@@ -557,7 +557,7 @@ void EnOssan_Hello(EnOssan* this, GlobalContext* globalCtx) {
             }
         }
     }
-    if (talkState == 10 && this->actor.params == PART_TIME_WORKER && player->transformation == PLAYER_FORM_ZORA &&
+    if (talkState == 10 && this->actor.params == ENOSSAN_PART_TIME_WORKER && player->transformation == PLAYER_FORM_ZORA &&
         func_80147624(globalCtx)) {
         this->animationIdx = 9;
         func_8013BC6C(&this->skelAnime, animations, 9);
@@ -574,7 +574,7 @@ s32 EnOssan_FacingShopkeeperDialogResult(EnOssan* this, GlobalContext* globalCtx
     switch (globalCtx->msgCtx.choiceIndex) {
         case 0:
             func_8019F208();
-            if (this->actor.params == PART_TIME_WORKER && player->transformation == PLAYER_FORM_ZORA) {
+            if (this->actor.params == ENOSSAN_PART_TIME_WORKER && player->transformation == PLAYER_FORM_ZORA) {
                 this->animationIdx = 9;
                 func_8013BC6C(&this->skelAnime, animations, 9);
             }
@@ -633,7 +633,7 @@ void EnOssan_FaceShopkeeper(EnOssan* this, GlobalContext* globalCtx) {
                 return;
             }
         }
-        if (this->actor.params == PART_TIME_WORKER && player->transformation != PLAYER_FORM_ZORA) {
+        if (this->actor.params == ENOSSAN_PART_TIME_WORKER && player->transformation != PLAYER_FORM_ZORA) {
             Math_SmoothStepToS(&this->headRotYPartTimeWorker, 8000, 3, 2000, 0);
         }
     }
@@ -643,7 +643,7 @@ void EnOssan_TalkToShopkeeper(EnOssan* this, GlobalContext* globalCtx) {
     ActorAnimationEntryS* animations = sAnimations[this->actor.params];
 
     if (func_80152498(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
-        if (this->animationIdx == 9 && this->actor.params == PART_TIME_WORKER) {
+        if (this->animationIdx == 9 && this->actor.params == ENOSSAN_PART_TIME_WORKER) {
             this->animationIdx = 1;
             func_8013BC6C(&this->skelAnime, animations, 1);
         }
@@ -1231,7 +1231,7 @@ void EnOssan_UpdateItemSelectedProperty(EnOssan* this) {
     EnGirlA* item;
     s32 i;
 
-    for (i = 0; i < 8; i++, items++) {
+    for (i = 0; i < ARRAY_COUNT(this->items); i++, items++) {
         item = *items;
         if (item != NULL) {
             if (this->actionFunc != EnOssan_SelectItem && this->actionFunc != EnOssan_CannotBuy &&
@@ -1392,24 +1392,24 @@ s32 EnOssan_GetWelcomeCuriosityShopMan(EnOssan* this, GlobalContext* globalCtx) 
         case PLAYER_FORM_DEKU:
             this->animationIdx = 10;
             if (gSaveContext.weekEventReg[0x12] & 16) {
-                return sWelcomeDekuTextIds[CURIOSITY_SHOP_MAN];
+                return sWelcomeDekuTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
             }
-            return sWelcomeDekuFirstTimeTextIds[CURIOSITY_SHOP_MAN];
+            return sWelcomeDekuFirstTimeTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
         case PLAYER_FORM_ZORA:
             this->animationIdx = 8;
             if (gSaveContext.weekEventReg[0x12] & 8) {
-                return sWelcomeZoraTextIds[CURIOSITY_SHOP_MAN];
+                return sWelcomeZoraTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
             }
-            return sWelcomeZoraFirstTimeTextIds[CURIOSITY_SHOP_MAN];
+            return sWelcomeZoraFirstTimeTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
         case PLAYER_FORM_GORON:
             this->animationIdx = 6;
             if (gSaveContext.weekEventReg[0x12] & 4) {
-                return sWelcomeGoronTextIds[CURIOSITY_SHOP_MAN];
+                return sWelcomeGoronTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
             }
-            return sWelcomeGoronFirstTimeTextIds[CURIOSITY_SHOP_MAN];
+            return sWelcomeGoronFirstTimeTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
     }
     this->animationIdx = 4;
-    return sWelcomeHumanTextIds[CURIOSITY_SHOP_MAN];
+    return sWelcomeHumanTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
 }
 
 s32 EnOssan_GetWelcomePartTimeWorker(EnOssan* this, GlobalContext* globalCtx) {
@@ -1424,21 +1424,21 @@ s32 EnOssan_GetWelcomePartTimeWorker(EnOssan* this, GlobalContext* globalCtx) {
     switch (player->transformation) {
         case PLAYER_FORM_DEKU:
             if (gSaveContext.weekEventReg[0x37] & 16) {
-                return sWelcomeDekuTextIds[PART_TIME_WORKER];
+                return sWelcomeDekuTextIds[ENOSSAN_PART_TIME_WORKER];
             }
-            return sWelcomeDekuFirstTimeTextIds[PART_TIME_WORKER];
+            return sWelcomeDekuFirstTimeTextIds[ENOSSAN_PART_TIME_WORKER];
         case PLAYER_FORM_ZORA:
             if (gSaveContext.weekEventReg[0x37] & 8) {
-                return sWelcomeZoraTextIds[PART_TIME_WORKER];
+                return sWelcomeZoraTextIds[ENOSSAN_PART_TIME_WORKER];
             }
-            return sWelcomeZoraFirstTimeTextIds[PART_TIME_WORKER];
+            return sWelcomeZoraFirstTimeTextIds[ENOSSAN_PART_TIME_WORKER];
         case PLAYER_FORM_GORON:
             if (gSaveContext.weekEventReg[0x37] & 4) {
-                return sWelcomeGoronTextIds[PART_TIME_WORKER];
+                return sWelcomeGoronTextIds[ENOSSAN_PART_TIME_WORKER];
             }
-            return sWelcomeGoronFirstTimeTextIds[PART_TIME_WORKER];
+            return sWelcomeGoronFirstTimeTextIds[ENOSSAN_PART_TIME_WORKER];
     }
-    return sWelcomeHumanTextIds[PART_TIME_WORKER];
+    return sWelcomeHumanTextIds[ENOSSAN_PART_TIME_WORKER];
 }
 
 #ifdef NON_MATCHING
