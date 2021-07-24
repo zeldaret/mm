@@ -22,7 +22,7 @@ void EnOssan_DrawPartTimeWorker(Actor* thisx, GlobalContext* globalCtx);
 
 void EnOssan_InitCuriosityShopMan(EnOssan* this, GlobalContext* globalCtx);
 void EnOssan_InitPartTimeWorker(EnOssan* this, GlobalContext* globalCtx);
-void EnOssan_InitialUpdate(EnOssan* this, GlobalContext* globalCtx);
+void EnOssan_InitShop(EnOssan* this, GlobalContext* globalCtx);
 void EnOssan_Idle(EnOssan* this, GlobalContext* globalCtx);
 void EnOssan_BeginInteraction(EnOssan* this, GlobalContext* globalCtx);
 void EnOssan_Hello(EnOssan* this, GlobalContext* globalCtx);
@@ -245,7 +245,7 @@ void EnOssan_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
     EnOssan_ChooseShopkeeper(this);
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    EnOssan_SetupAction(this, EnOssan_InitialUpdate);
+    EnOssan_SetupAction(this, EnOssan_InitShop);
 }
 
 void EnOssan_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -1441,7 +1441,7 @@ void EnOssan_SetHaveMet(EnOssan* this) {
     }
 }
 
-void EnOssan_InitialUpdate(EnOssan* this, GlobalContext* globalCtx) {
+void EnOssan_InitShop(EnOssan* this, GlobalContext* globalCtx) {
     static EnOssanActionFunc sInitFuncs[] = { EnOssan_InitCuriosityShopMan, EnOssan_InitPartTimeWorker };
     ShopItem* shopItems;
 
@@ -1529,7 +1529,7 @@ void EnOssan_GetCutscenes(EnOssan* this, GlobalContext* globalCtx) {
 void EnOssan_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnOssan* this = THIS;
 
-    if (this->actionFunc != EnOssan_InitialUpdate) {
+    if (this->actionFunc != EnOssan_InitShop) {
         this->blinkFunc(this);
         EnOssan_UpdateJoystickInputState(globalCtx, this);
         EnOssan_UpdateItemSelectedProperty(this);
