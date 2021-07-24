@@ -198,6 +198,7 @@ init:
 	$(MAKE) distclean
 	$(MAKE) setup
 	$(MAKE) disasm
+	$(MAKE) all
 
 diff-init: all
 	$(RM) -rf expected/
