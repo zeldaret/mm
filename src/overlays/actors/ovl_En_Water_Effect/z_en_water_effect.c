@@ -9,7 +9,7 @@ void EnWaterEffect_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnWaterEffect_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnWaterEffect_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Water_Effect_InitVars = {
     ACTOR_EN_WATER_EFFECT,
     ACTORCAT_BOSS,
@@ -21,7 +21,8 @@ const ActorInit En_Water_Effect_InitVars = {
     (ActorFunc)EnWaterEffect_Update,
     (ActorFunc)EnWaterEffect_Draw,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Water_Effect_0x80A587A0/func_80A587A0.asm")
 

@@ -57,8 +57,38 @@ static ColliderJntSphInit sJntSphInit = {
 };
 
 static DamageTable sDamageTable = {
-    0xF0, 0xF0, 0x00, 0xF0, 0xE1, 0xE1, 0x00, 0xE1, 0xF0, 0xF0, 0xF0, 0xE1, 0xE1, 0xE1, 0xF0, 0xF0,
-    0xE1, 0xF0, 0xF0, 0xF0, 0x00, 0x00, 0xE1, 0xF0, 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0,
+    /* Deku Nut       */ DMG_ENTRY(0, 0xF),
+    /* Deku Stick     */ DMG_ENTRY(0, 0xF),
+    /* Horse trample  */ DMG_ENTRY(0, 0x0),
+    /* Explosives     */ DMG_ENTRY(0, 0xF),
+    /* Zora boomerang */ DMG_ENTRY(1, 0xE),
+    /* Normal arrow   */ DMG_ENTRY(1, 0xE),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
+    /* Hookshot       */ DMG_ENTRY(1, 0xE),
+    /* Goron punch    */ DMG_ENTRY(0, 0xF),
+    /* Sword          */ DMG_ENTRY(0, 0xF),
+    /* Goron pound    */ DMG_ENTRY(0, 0xF),
+    /* Fire arrow     */ DMG_ENTRY(1, 0xE),
+    /* Ice arrow      */ DMG_ENTRY(1, 0xE),
+    /* Light arrow    */ DMG_ENTRY(1, 0xE),
+    /* Goron spikes   */ DMG_ENTRY(0, 0xF),
+    /* Deku spin      */ DMG_ENTRY(0, 0xF),
+    /* Deku bubble    */ DMG_ENTRY(1, 0xE),
+    /* Deku launch    */ DMG_ENTRY(0, 0xF),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0xF),
+    /* Zora barrier   */ DMG_ENTRY(0, 0xF),
+    /* Normal shield  */ DMG_ENTRY(0, 0x0),
+    /* Light ray      */ DMG_ENTRY(0, 0x0),
+    /* Thrown object  */ DMG_ENTRY(1, 0xE),
+    /* Zora punch     */ DMG_ENTRY(0, 0xF),
+    /* Spin attack    */ DMG_ENTRY(0, 0xF),
+    /* Sword beam     */ DMG_ENTRY(0, 0x0),
+    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
+    /* Unblockable    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
+    /* Powder Keg     */ DMG_ENTRY(0, 0xF),
 };
 
 void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -125,8 +155,8 @@ void EnEncount2_Popped(EnEncount2* this, GlobalContext* globalCtx) {
 
     Math_Vec3f_Copy(&curPos, &this->dyna.actor.world.pos);
     curPos.y += 60.0f;
-    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, curPos.x, curPos.y, curPos.z, 0xFF, 0xFF, 0xC8,
-                0x0001);
+    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, curPos.x, curPos.y, curPos.z, 255, 255, 200,
+                CLEAR_TAG_LARGE_EXPLOSION);
 
     for (i = 0; i != 100; ++i) {
         EnEncount2_InitParticles(this, &curPos, 10);

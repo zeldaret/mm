@@ -9,7 +9,7 @@ void DmAl_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmAl_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmAl_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Dm_Al_InitVars = {
     ACTOR_EN_AL,
     ACTORCAT_NPC,
@@ -21,7 +21,8 @@ const ActorInit Dm_Al_InitVars = {
     (ActorFunc)DmAl_Update,
     (ActorFunc)DmAl_Draw,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Al_0x80C1BD90/func_80C1BD90.asm")
 

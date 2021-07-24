@@ -1,6 +1,6 @@
 /*
  * File: z_en_jc_mato.c
- * Overlay: ovl_en_jc_mato
+ * Overlay: ovl_En_Jc_Mato
  * Description: Boat Cruise Target
  */
 
@@ -52,9 +52,41 @@ static ColliderSphereInit sSphereInit = {
 };
 
 static DamageTable sDamageTable = {
-    0x01, 0x01, 0x01, 0x01, 0x01, 0xF1, 0x01, 0x01, 0x01, 0x01, 0x01, 0xF1, 0xF1, 0xF1, 0x01, 0x01,
-    0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+    /* Deku Nut       */ DMG_ENTRY(1, 0x0),
+    /* Deku Stick     */ DMG_ENTRY(1, 0x0),
+    /* Horse trample  */ DMG_ENTRY(1, 0x0),
+    /* Explosives     */ DMG_ENTRY(1, 0x0),
+    /* Zora boomerang */ DMG_ENTRY(1, 0x0),
+    /* Normal arrow   */ DMG_ENTRY(1, 0xF),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(1, 0x0),
+    /* Hookshot       */ DMG_ENTRY(1, 0x0),
+    /* Goron punch    */ DMG_ENTRY(1, 0x0),
+    /* Sword          */ DMG_ENTRY(1, 0x0),
+    /* Goron pound    */ DMG_ENTRY(1, 0x0),
+    /* Fire arrow     */ DMG_ENTRY(1, 0xF),
+    /* Ice arrow      */ DMG_ENTRY(1, 0xF),
+    /* Light arrow    */ DMG_ENTRY(1, 0xF),
+    /* Goron spikes   */ DMG_ENTRY(1, 0x0),
+    /* Deku spin      */ DMG_ENTRY(1, 0x0),
+    /* Deku bubble    */ DMG_ENTRY(1, 0x0),
+    /* Deku launch    */ DMG_ENTRY(1, 0x0),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(1, 0x0),
+    /* Zora barrier   */ DMG_ENTRY(1, 0x0),
+    /* Normal shield  */ DMG_ENTRY(1, 0x0),
+    /* Light ray      */ DMG_ENTRY(1, 0x0),
+    /* Thrown object  */ DMG_ENTRY(1, 0x0),
+    /* Zora punch     */ DMG_ENTRY(1, 0x0),
+    /* Spin attack    */ DMG_ENTRY(1, 0x0),
+    /* Sword beam     */ DMG_ENTRY(1, 0x0),
+    /* Normal Roll    */ DMG_ENTRY(1, 0x0),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(1, 0x0),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(1, 0x0),
+    /* Unblockable    */ DMG_ENTRY(1, 0x0),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(1, 0x0),
+    /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
+
+extern Gfx D_06000390[];
 
 s32 EnJcMato_CheckForHit(EnJcMato* this, GlobalContext* globalCtx) {
     this->collider.dim.worldSphere.center.x = this->pos.x;
@@ -122,8 +154,7 @@ void EnJcMato_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-extern Gfx D_06000390[];
-Vec3f movement = { 0.0f, -2500.0f, 0.0f };
+static Vec3f movement = { 0.0f, -2500.0f, 0.0f };
 
 void EnJcMato_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnJcMato* this = THIS;

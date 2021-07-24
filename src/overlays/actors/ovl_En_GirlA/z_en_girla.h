@@ -47,6 +47,18 @@ typedef struct EnGirlA {
     /* 0x1C8 */ EnGirlADrawFunc drawFunc;
 } EnGirlA; // size = 0x1CC
 
+typedef enum {
+    /* 0 */ CANBUY_RESULT_SUCCESS_1,
+    /* 1 */ CANBUY_RESULT_SUCCESS_2,
+    /* 2 */ CANBUY_RESULT_NO_ROOM,
+    /* 3 */ CANBUY_RESULT_NEED_EMPTY_BOTTLE,
+    /* 4 */ CANBUY_RESULT_NEED_RUPEES,
+    /* 5 */ CANBUY_RESULT_CANNOT_GET_NOW,
+    /* 6 */ CANBUY_RESULT_CANNOT_GET_NOW_2,
+    /* 7 */ CANBUY_RESULT_NO_ROOM_2,
+    /* 8 */ CANBUY_RESULT_ALREADY_HAVE,
+    /* 9 */ CANBUY_RESULT_HAVE_BETTER
+} EnGirlACanBuyResult;
 
 typedef enum {
 	/* 00 */ SI_POTION_RED_1,
@@ -94,19 +106,34 @@ typedef enum {
 	/* 42 */ SI_SHIELD_MIRROR,
 } EnGirlAShopItemId;
 
-typedef enum {
-    /* 0 */ CANBUY_RESULT_SUCCESS_FANFARE,
-    /* 1 */ CANBUY_RESULT_SUCCESS,
-    /* 2 */ CANBUY_RESULT_NO_ROOM,
-    /* 3 */ CANBUY_RESULT_NEED_EMPTY_BOTTLE,
-    /* 4 */ CANBUY_RESULT_NEED_RUPEES,
-    /* 5 */ CANBUY_RESULT_CANNOT_GET_NOW,
-    /* 6 */ CANBUY_RESULT_CANNOT_GET_NOW_2,
-    /* 7 */ CANBUY_RESULT_NO_ROOM_2,
-    /* 8 */ CANBUY_RESULT_ALREADY_HAVE,
-    /* 9 */ CANBUY_RESULT_HAVE_BETTER
-} EnGirlACanBuyResult;
-
 extern const ActorInit En_GirlA_InitVars;
+
+/* 
+* Shopkeeper Common Defines 
+*/
+#define CURSOR_INVALID 0xFF
+#define COL_CHAN_MIX(c1, c2, m) (c1 - (s32)(c2 * m)) & 0xFF
+
+typedef struct {
+    /* 0x00 */ u32 stickColorR;
+    /* 0x04 */ u32 stickColorG;
+    /* 0x08 */ u32 stickColorB;
+    /* 0x0C */ u32 stickColorA;
+    /* 0x10 */ f32 stickTexX;
+    /* 0x14 */ f32 stickTexY;
+    /* 0x18 */ u32 arrowColorR;
+    /* 0x1C */ u32 arrowColorG;
+    /* 0x20 */ u32 arrowColorB;
+    /* 0x24 */ u32 arrowColorA;
+    /* 0x28 */ f32 arrowTexX;
+    /* 0x2C */ f32 arrowTexY;
+    /* 0x30 */ f32 texZ; // Used for both stickTexZ and arrowTexZ
+    /* 0x34 */ s32 isEnabled;
+} StickDirectionPrompt; // size = 0x38
+
+typedef struct ShopItem {
+    /* 0x00 */ s16 shopItemId;
+    /* 0x02 */ Vec3s spawnPos;
+} ShopItem; // size = 0x8;
 
 #endif // Z_EN_GIRLA_H

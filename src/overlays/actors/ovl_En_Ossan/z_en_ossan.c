@@ -8,7 +8,7 @@ void EnOssan_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnOssan_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnOssan_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Ossan_InitVars = {
     ACTOR_EN_OSSAN,
     ACTORCAT_NPC,
@@ -20,7 +20,16 @@ const ActorInit En_Ossan_InitVars = {
     (ActorFunc)EnOssan_Update,
     (ActorFunc)NULL,
 };
-*/
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_808AC288[] = {
+    ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
+};
+
+
+extern InitChainEntry D_808AC288[];
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ossan_0x808A80A0/func_808A80A0.asm")
 

@@ -10,21 +10,18 @@
 
 #define THIS ((EnSob1*)thisx)
 
-#define CURSOR_INVALID 0xFF
-#define ColChanMix(c1, c2, m) (c1 - (s32)(c2 * m)) & 0xFF
-
 void EnSob1_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnSob1_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSob1_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void EnSob1_DrawZoraShopkeeper(Actor* thisx, GlobalContext* globalCtx);  // Draw
-void EnSob1_DrawGoronShopkeeper(Actor* thisx, GlobalContext* globalCtx); // Draw
-void EnSob1_DrawBombShopkeeper(Actor* thisx, GlobalContext* globalCtx);  // Draw
+void EnSob1_DrawZoraShopkeeper(Actor* thisx, GlobalContext* globalCtx);
+void EnSob1_DrawGoronShopkeeper(Actor* thisx, GlobalContext* globalCtx);
+void EnSob1_DrawBombShopkeeper(Actor* thisx, GlobalContext* globalCtx);
 
 void EnSob1_Idle(EnSob1* this, GlobalContext* globalCtx);
 void EnSob1_Blink(EnSob1* this);
 void EnSob1_Walk(EnSob1* this, GlobalContext* globalCtx);
-s16 EnSob1_GetAngleAndDistanceSquaredToPoint(Path* path, s32 pointIdx, Vec3f* pos, f32* dist);
+s16 EnSob1_GetXZAngleAndDistanceSqToPoint(Path* path, s32 pointIdx, Vec3f* pos, f32* distSq);
 void EnSob1_Walking(EnSob1* this, GlobalContext* globalCtx);
 void EnSob1_Hello(EnSob1* this, GlobalContext* globalCtx);
 void EnSob1_StartShopping(GlobalContext* globalCtx, EnSob1* this);
@@ -70,6 +67,9 @@ extern UNK_TYPE D_06010438;
 extern UNK_TYPE D_06010C38;
 extern UNK_TYPE D_06011038;
 
+const char filname1[] = "../z_en_soB1.c"; // Unused
+const char filname2[] = "../z_en_soB1.c"; // Unused
+
 static ActorAnimationEntryS sAnimationsBombShopkeeper[] = {
     { &D_06009120, 2.0f, 0, -1, 0, 20 },
     { &D_06008268, 1.0f, 0, -1, 2, 0 },
@@ -89,10 +89,10 @@ const ActorInit En_Sob1_InitVars = {
 };
 
 static s16 sObjectIds[][3] = {
-    { 0x00D0, 0x0283, 0x00D6 },
-    { 0x00A1, 0x0283, 0x00D5 },
-    { 0x012C, 0x0283, 0x0283 },
-    { 0x00A1, 0x0283, 0x00D5 },
+    { OBJECT_ZO, OBJECT_ID_MAX, OBJECT_MASTERZOORA },
+    { OBJECT_OF1D_MAP, OBJECT_ID_MAX, OBJECT_MASTERGOLON },
+    { OBJECT_RS, OBJECT_ID_MAX, OBJECT_ID_MAX },
+    { OBJECT_OF1D_MAP, OBJECT_ID_MAX, OBJECT_MASTERGOLON },
 };
 
 static u16 sFacingShopkeeperTextIds[] = { 0x12D6, 0x0BC0, 0x0640, 0x0BC0 };
@@ -115,24 +115,24 @@ static f32 sActorScales[] = { 0.01f, 0.01f, 0.01f, 0.01f };
 
 static ShopItem sShops[][3] = {
     {
-        { SI_POTION_RED_4, 1258, 42, 325 },
-        { SI_ARROWS_SMALL_1, 1240, 42, 325 },
-        { SI_SHIELD_HERO_3, 1222, 42, 325 },
+        { SI_POTION_RED_4, {1258, 42, 325} },
+        { SI_ARROWS_SMALL_1, {1240, 42, 325} },
+        { SI_SHIELD_HERO_3, {1222, 42, 325} },
     },
     {
-        { SI_POTION_RED_5, -57, 42, -62 },
-        { SI_ARROWS_SMALL_2, -75, 42, -62 },
-        { SI_BOMB_2, -93, 42, -62 },
+        { SI_POTION_RED_5, {-57, 42, -62} },
+        { SI_ARROWS_SMALL_2, {-75, 42, -62} },
+        { SI_BOMB_2, {-93, 42, -62} },
     },
     {
-        { SI_BOMB_BAG_20_2, 221, -7, 73 },
-        { SI_BOMBCHU, 203, -7, 69 },
-        { SI_BOMB_1, 185, -7, 65 },
+        { SI_BOMB_BAG_20_2, {221, -7, 73} },
+        { SI_BOMBCHU, {203, -7, 69} },
+        { SI_BOMB_1, {185, -7, 65} },
     },
     {
-        { SI_POTION_RED_6, -57, 42, -62 },
-        { SI_ARROWS_SMALL_3, -75, 42, -62 },
-        { SI_BOMB_3, -93, 42, -62 },
+        { SI_POTION_RED_6, {-57, 42, -62} },
+        { SI_ARROWS_SMALL_3, {-75, 42, -62} },
+        { SI_BOMB_3, {-93, 42, -62} },
     },
 };
 
@@ -167,10 +167,6 @@ extern Vec3f sPosOffset[] = {
     { 0.0f, 0.0f, 0.0f },
     { 0.0f, -4.0f, 0.0f },
 };
-
-static UNK_PTR sZoraShopkeeperEyeTextures[] = { &D_060050A0, &D_060058A0, &D_060060A0 };
-
-static UNK_PTR sGoronShopkeeperEyeTextures[] = { &D_06010438, &D_06010C38, &D_06011038 };
 
 void EnSob1_ChangeAnim(SkelAnime* skelAnime, ActorAnimationEntryS* animations, s32 idx) {
     f32 frameCount;
@@ -236,8 +232,6 @@ u16 EnSob1_GetTalkOption(EnSob1* this, GlobalContext* globalCtx) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-// Matches but jmptable is in late rodata
 u16 EnSob1_GetWelcome(EnSob1* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
@@ -335,9 +329,6 @@ u16 EnSob1_GetWelcome(EnSob1* this, GlobalContext* globalCtx) {
     }
     return 0;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sob1_0x80A0C810/EnSob1_GetWelcome.asm")
-#endif
 
 u16 EnSob1_GetGoodbyeBombShop(EnSob1* this) {
     if (this->shopType == BOMB_SHOP) {
@@ -370,14 +361,14 @@ void EnSob1_SpawnShopItems(EnSob1* this, GlobalContext* globalCtx, ShopItem* sho
         if (shopItem->shopItemId < 0) {
             this->items[i] = NULL;
         } else {
-            this->items[i] = (EnGirlA*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_GIRLA, shopItem->x,
-                                                   shopItem->y, shopItem->z, 0, 0, 0, shopItem->shopItemId);
+            this->items[i] = (EnGirlA*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_GIRLA, shopItem->spawnPos.x,
+                                                   shopItem->spawnPos.y, shopItem->spawnPos.z, 0, 0, 0, shopItem->shopItemId);
         }
     }
 }
 
 s32 EnSob1_GetObjIndicies(EnSob1* this, GlobalContext* globalCtx, s16* objIds) {
-    if (objIds[1] != 0x283) {
+    if (objIds[1] != OBJECT_ID_MAX) {
         this->objIndicies[1] = Object_GetIndex(&globalCtx->objectCtx, objIds[1]);
         if (this->objIndicies[1] < 0) {
             return false;
@@ -385,7 +376,7 @@ s32 EnSob1_GetObjIndicies(EnSob1* this, GlobalContext* globalCtx, s16* objIds) {
     } else {
         this->objIndicies[1] = -1;
     }
-    if (objIds[2] != 0x283) {
+    if (objIds[2] != OBJECT_ID_MAX) {
         this->objIndicies[2] = Object_GetIndex(&globalCtx->objectCtx, objIds[2]);
         if (this->objIndicies[2] < 0) {
             return false;
@@ -440,8 +431,6 @@ void EnSob1_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-#ifdef NON_MATCHING
-// Matches but floats are in late rodata
 void EnSob1_UpdateCursorPos(GlobalContext* globalCtx, EnSob1* this) {
     s16 x;
     s16 y;
@@ -453,9 +442,6 @@ void EnSob1_UpdateCursorPos(GlobalContext* globalCtx, EnSob1* this) {
     this->cursorY = y + yOffset;
     this->cursorZ = 1.2f;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sob1_0x80A0C810/EnSob1_UpdateCursorPos.asm")
-#endif
 
 void EnSob1_EndInteraction(GlobalContext* globalCtx, EnSob1* this) {
     Player* player = PLAYER;
@@ -536,8 +522,6 @@ void EnSob1_EndingInteraction(EnSob1* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
-// Matches but floats are in late rodata
 void EnSob1_SetupWalk(EnSob1* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
@@ -546,10 +530,6 @@ void EnSob1_SetupWalk(EnSob1* this, GlobalContext* globalCtx) {
         EnSob1_SetupAction(this, EnSob1_Walk);
     }
 }
-#else
-void EnSob1_SetupWalk(EnSob1* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sob1_0x80A0C810/EnSob1_SetupWalk.asm")
-#endif
 
 void EnSob1_Idle(EnSob1* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
@@ -578,7 +558,7 @@ void EnSob1_Idle(EnSob1* this, GlobalContext* globalCtx) {
              player->actor.world.pos.z <= this->posXZRange.zMax)) {
             func_800B8614(&this->actor, globalCtx, 400.0f);
         }
-        if (this->wasTalkedToWhileWalking == 1) {
+        if (this->wasTalkedToWhileWalking == true) {
             this->wasTalkedToWhileWalking = false;
             EnSob1_SetupStartShopping(globalCtx, this, false);
         }
@@ -747,7 +727,7 @@ void EnSob1_LookToShopkeeperFromShelf(EnSob1* this, GlobalContext* globalCtx) {
 
 void EnSob1_EndWalk(EnSob1* this, GlobalContext* globalCtx) {
     s32 pad;
-    f32 dist;
+    f32 distSq;
     s16 sp2E;
     s16 sp2C;
 
@@ -755,11 +735,11 @@ void EnSob1_EndWalk(EnSob1* this, GlobalContext* globalCtx) {
     sp2C = SkelAnime_GetFrameCount(&D_06009120.common) / (s16)this->skelAnime.animPlaybackSpeed;
     Math_SmoothStepToS(
         &this->actor.world.rot.y,
-        EnSob1_GetAngleAndDistanceSquaredToPoint(this->path, this->pathPointsIdx - 1, &this->actor.world.pos, &dist), 4,
+        EnSob1_GetXZAngleAndDistanceSqToPoint(this->path, this->pathPointsIdx - 1, &this->actor.world.pos, &distSq), 4,
         1000, 1);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     Math_ApproachF(&this->actor.speedXZ, 0.5f, 0.2f, 1.0f);
-    if (dist < 12.0f) {
+    if (distSq < 12.0f) {
         this->actor.speedXZ = 0.0f;
         if (sp2C == sp2E) {
             EnSob1_ChangeAnim(&this->skelAnime, sAnimationsBombShopkeeper, 1);
@@ -781,7 +761,7 @@ void EnSob1_SetupIdle(EnSob1* this, GlobalContext* globalCtx) {
 
 void EnSob1_Walk(EnSob1* this, GlobalContext* globalCtx) {
     s32 pad;
-    f32 dist;
+    f32 distSq;
 
     if (this->cutsceneState == 1) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
@@ -794,11 +774,11 @@ void EnSob1_Walk(EnSob1* this, GlobalContext* globalCtx) {
     if (this->path != NULL) {
         Math_SmoothStepToS(
             &this->actor.world.rot.y,
-            EnSob1_GetAngleAndDistanceSquaredToPoint(this->path, this->pathPointsIdx, &this->actor.world.pos, &dist), 4,
+            EnSob1_GetXZAngleAndDistanceSqToPoint(this->path, this->pathPointsIdx, &this->actor.world.pos, &distSq), 4,
             1000, 1);
         this->actor.shape.rot.y = this->actor.world.rot.y;
         this->actor.speedXZ = 2.0f;
-        if (dist < 25.0f) {
+        if (distSq < 25.0f) {
             this->pathPointsIdx++;
             if ((this->path->count - 1) < this->pathPointsIdx) {
                 this->actor.speedXZ = 0.0f;
@@ -988,14 +968,12 @@ void EnSob1_SetupCanBuy(GlobalContext* globalCtx, EnSob1* this, u16 textId) {
     EnSob1_SetupAction(this, EnSob1_CanBuy);
 }
 
-#ifdef NON_MATCHING
-// Matches but jmptable is in late rodata
 void EnSob1_HandleCanBuyItem(GlobalContext* globalCtx, EnSob1* this) {
     EnGirlA* item = this->items[this->cursorIdx];
     EnGirlA* item2;
 
     switch (item->canBuyFunc(globalCtx, item)) {
-        case CANBUY_RESULT_SUCCESS_FANFARE:
+        case CANBUY_RESULT_SUCCESS_1:
             if (this->cutsceneState == 2) {
                 ActorCutscene_Stop(this->cutscene);
                 this->cutsceneState = 0;
@@ -1008,7 +986,7 @@ void EnSob1_HandleCanBuyItem(GlobalContext* globalCtx, EnSob1* this) {
             this->shopItemSelectedTween = 0.0f;
             item->boughtFunc(globalCtx, item);
             break;
-        case CANBUY_RESULT_SUCCESS:
+        case CANBUY_RESULT_SUCCESS_2:
             func_8019F208();
             item->buyFunc(globalCtx, item);
             if ((this->shopType == GORON_SHOP) && (item->actor.params == SI_POTION_RED_5)) {
@@ -1058,9 +1036,6 @@ void EnSob1_HandleCanBuyItem(GlobalContext* globalCtx, EnSob1* this) {
             break;
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sob1_0x80A0C810/EnSob1_HandleCanBuyItem.asm")
-#endif
 
 void EnSob1_SelectItem(EnSob1* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
@@ -1105,7 +1080,6 @@ void EnSob1_CanBuy(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_BuyItemWithFanfare(EnSob1* this, GlobalContext* globalCtx) {
-    // The player sets itself as the parent actor to signal that it has obtained the give item request
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
         EnSob1_SetupAction(this, EnSob1_SetupItemPurchased);
@@ -1156,9 +1130,7 @@ void EnSob1_PositionSelectedItem(EnSob1* this) {
     shopItem = &sShops[this->shopType][i];
     item = this->items[i];
 
-    worldPos.x = shopItem->x + (selectedItemPosition.x - shopItem->x) * this->shopItemSelectedTween;
-    worldPos.y = shopItem->y + (selectedItemPosition.y - shopItem->y) * this->shopItemSelectedTween;
-    worldPos.z = shopItem->z + (selectedItemPosition.z - shopItem->z) * this->shopItemSelectedTween;
+    VEC3F_LERPIMPDST(&worldPos, &shopItem->spawnPos, &selectedItemPosition, this->shopItemSelectedTween);
 
     item->actor.world.pos.x = worldPos.x;
     item->actor.world.pos.y = worldPos.y;
@@ -1170,9 +1142,9 @@ void EnSob1_ResetItemPosition(EnSob1* this) {
     EnSob1_PositionSelectedItem(this);
 }
 
-#ifdef NON_MATCHING
-// Matches but floats are in late rodata
-// Returns true when animation has completed
+/*
+* Returns true when animation has completed
+*/
 s32 EnSob1_TakeItemOffShelf(EnSob1* this) {
     Math_ApproachF(&this->shopItemSelectedTween, 1.0f, 1.0f, 0.15f);
     if (this->shopItemSelectedTween >= 0.85f) {
@@ -1184,13 +1156,10 @@ s32 EnSob1_TakeItemOffShelf(EnSob1* this) {
     }
     return false;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sob1_0x80A0C810/EnSob1_TakeItemOffShelf.asm")
-#endif
 
-#ifdef NON_MATCHING
-// Matches but floats are in late rodata
-// Returns true when animation has completed
+/*
+* Returns true when animation has completed
+*/
 s32 EnSob1_ReturnItemToShelf(EnSob1* this) {
     Math_ApproachF(&this->shopItemSelectedTween, 0.0f, 1.0f, 0.15f);
     if (this->shopItemSelectedTween <= 0.15f) {
@@ -1202,9 +1171,6 @@ s32 EnSob1_ReturnItemToShelf(EnSob1* this) {
     }
     return false;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sob1_0x80A0C810/EnSob1_ReturnItemToShelf.asm")
-#endif
 
 void EnSob1_UpdateItemSelectedProperty(EnSob1* this) {
     EnGirlA** items = this->items;
@@ -1224,8 +1190,6 @@ void EnSob1_UpdateItemSelectedProperty(EnSob1* this) {
     }
 }
 
-#ifdef NON_MATCHING
-// Matches but floats are in laterodata
 void EnSob1_UpdateCursorAnim(EnSob1* this) {
     f32 t;
 
@@ -1243,18 +1207,13 @@ void EnSob1_UpdateCursorAnim(EnSob1* this) {
             this->cursorAnimState = 0;
         }
     }
-    this->cursorColorR = ColChanMix(0, 0.0f, t);
-    this->cursorColorG = ColChanMix(80, 80.0f, t);
-    this->cursorColorB = ColChanMix(255, 0.0f, t);
-    this->cursorColorA = ColChanMix(255, 0.0f, t);
+    this->cursorColorR = COL_CHAN_MIX(0, 0.0f, t);
+    this->cursorColorG = COL_CHAN_MIX(80, 80.0f, t);
+    this->cursorColorB = COL_CHAN_MIX(255, 0.0f, t);
+    this->cursorColorA = COL_CHAN_MIX(255, 0.0f, t);
     this->cursorAnimTween = t;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sob1_0x80A0C810/EnSob1_UpdateCursorAnim.asm")
-#endif
 
-#ifdef NON_MATCHING
-// Matches but floats are in late rodata
 void EnSob1_UpdateStickDirectionPromptAnim(EnSob1* this) {
     f32 arrowAnimTween = this->arrowAnimTween;
     f32 stickAnimTween = this->stickAnimTween;
@@ -1293,15 +1252,15 @@ void EnSob1_UpdateStickDirectionPromptAnim(EnSob1* this) {
 
     this->stickAnimTween = stickAnimTween;
 
-    this->stickLeftPrompt.arrowColorR = ColChanMix(255, 155.0f, arrowAnimTween);
-    this->stickLeftPrompt.arrowColorG = ColChanMix(new_var2, 155.0f, arrowAnimTween);
-    this->stickLeftPrompt.arrowColorB = ColChanMix(0, -100, arrowAnimTween);
-    this->stickLeftPrompt.arrowColorA = ColChanMix(200, 50.0f, arrowAnimTween);
+    this->stickLeftPrompt.arrowColorR = COL_CHAN_MIX(255, 155.0f, arrowAnimTween);
+    this->stickLeftPrompt.arrowColorG = COL_CHAN_MIX(new_var2, 155.0f, arrowAnimTween);
+    this->stickLeftPrompt.arrowColorB = COL_CHAN_MIX(0, -100, arrowAnimTween);
+    this->stickLeftPrompt.arrowColorA = COL_CHAN_MIX(200, 50.0f, arrowAnimTween);
 
     this->stickRightPrompt.arrowColorR = (new_var2 - ((s32)new_var3)) & 0xFF;
     this->stickRightPrompt.arrowColorG = (255 - ((s32)new_var3)) & 0xFF;
-    this->stickRightPrompt.arrowColorB = ColChanMix(0, -100.0f, arrowAnimTween);
-    this->stickRightPrompt.arrowColorA = ColChanMix(200, 50.0f, arrowAnimTween);
+    this->stickRightPrompt.arrowColorB = COL_CHAN_MIX(0, -100.0f, arrowAnimTween);
+    this->stickRightPrompt.arrowColorA = COL_CHAN_MIX(200, 50.0f, arrowAnimTween);
 
     this->stickRightPrompt.arrowTexX = 290.0f;
     this->stickLeftPrompt.arrowTexX = 33.0f;
@@ -1314,13 +1273,8 @@ void EnSob1_UpdateStickDirectionPromptAnim(EnSob1* this) {
     this->stickLeftPrompt.arrowTexY = this->stickRightPrompt.arrowTexY = 91.0f;
     this->stickLeftPrompt.stickTexY = this->stickRightPrompt.stickTexY = 95.0f;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sob1_0x80A0C810/EnSob1_UpdateStickDirectionPromptAnim.asm")
-#endif
 
-#ifdef NON_MATCHING
-// Matches but float is in late rodata
-s16 EnSob1_GetAngleAndDistanceSquaredToPoint(Path* path, s32 pointIdx, Vec3f* pos, f32* dist) {
+s16 EnSob1_GetXZAngleAndDistanceSqToPoint(Path* path, s32 pointIdx, Vec3f* pos, f32* distSq) {
     Vec3s* points;
     f32 diffX;
     f32 diffZ;
@@ -1334,12 +1288,9 @@ s16 EnSob1_GetAngleAndDistanceSquaredToPoint(Path* path, s32 pointIdx, Vec3f* po
         diffX = 0.0f;
         diffZ = 0.0f;
     }
-    *dist = SQ(diffX) + SQ(diffZ);
+    *distSq = SQ(diffX) + SQ(diffZ);
     return Math_Acot2F(diffZ, diffX) * (0x8000 / M_PI);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sob1_0x80A0C810/EnSob1_GetAngleAndDistanceSquaredToPoint.asm")
-#endif
 
 void EnSob1_GetCutscenes(EnSob1* this) {
     this->lookFowardCutscene = this->actor.cutscene;
@@ -1422,8 +1373,6 @@ void EnSob1_InitBombShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
     this->skelAnime.animPlaybackSpeed = 2.0f;
 }
 
-#ifdef NON_MATCHING
-// Matches but floats are in late rodata
 void EnSob1_InitialUpdate(EnSob1* this, GlobalContext* globalCtx) {
     ShopItem* shopItems;
     EnSob1XZRange* unkStruct;
@@ -1528,9 +1477,6 @@ void EnSob1_InitialUpdate(EnSob1* this, GlobalContext* globalCtx) {
         this->actor.flags &= ~1;
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sob1_0x80A0C810/EnSob1_InitialUpdate.asm")
-#endif
 
 void EnSob1_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnSob1ActionFunc actionFunc2;
@@ -1698,9 +1644,8 @@ Gfx* EnSob1_EndDList(GraphicsContext* gfxCtx) {
     return dList;
 }
 
-#ifdef NON_MATCHING
-// Matches but floats are in late rodata
 void EnSob1_DrawZoraShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
+    static UNK_PTR sZoraShopkeeperEyeTextures[] = { &D_060050A0, &D_060058A0, &D_060060A0 };
     EnSob1* this = THIS;
     s32 pad;
     s32 i;
@@ -1721,13 +1666,9 @@ void EnSob1_DrawZoraShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
     EnSob1_DrawStickDirectionPrompt(globalCtx, this);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sob1_0x80A0C810/EnSob1_DrawZoraShopkeeper.asm")
-#endif
 
-#ifdef NON_MATCHING
-// Matches but floats are in late rodata
 void EnSob1_DrawGoronShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
+    static UNK_PTR sGoronShopkeeperEyeTextures[] = { &D_06010438, &D_06010C38, &D_06011038 };
     EnSob1* this = THIS;
     s32 pad;
     s32 i;
@@ -1746,12 +1687,7 @@ void EnSob1_DrawGoronShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
     EnSob1_DrawStickDirectionPrompt(globalCtx, this);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sob1_0x80A0C810/EnSob1_DrawGoronShopkeeper.asm")
-#endif
 
-#ifdef NON_MATCHING
-// Matches but floats are in late rodata
 void EnSob1_DrawBombShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
     EnSob1* this = THIS;
     s32 pad;
@@ -1772,15 +1708,12 @@ void EnSob1_DrawBombShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
     EnSob1_DrawStickDirectionPrompt(globalCtx, this);
     frames = globalCtx->gameplayFrames;
     func_8012C2DC(globalCtx->state.gfxCtx);
-    SysMatrix_NormalizeXYZ(&globalCtx->unk187FC);
+    SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, -frames * 20, 32, 128));
-    gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 0xFF, 0xFF, 0x00, 0xFF);
-    gDPSetEnvColor(POLY_XLU_DISP++, 0xFF, 0x00, 0x00, 0x00);
+    gDPSetPrimColor(POLY_XLU_DISP++, 128, 128, 255, 255, 0, 255);
+    gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sob1_0x80A0C810/EnSob1_DrawBombShopkeeper.asm")
-#endif
