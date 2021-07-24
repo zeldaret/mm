@@ -81,8 +81,8 @@ extern UNK_TYPE D_0600B0B8;
 extern UNK_TYPE D_0600B8B8;
 extern UNK_TYPE D_0600C0B8;
 
-const char D_80A8FF10[] = "../z_en_trt.c"; // Unused
-const char D_80A8FF20[] = "../z_en_trt.c"; // Unused
+const char filename1[] = "../z_en_trt.c"; // Unused
+const char filename2[] = "../z_en_trt.c"; // Unused
 
 static ActorAnimationEntryS sAnimations[] = {
     { &D_0600DE68, 1.0f, 0, -1, 2, 0 }, { &D_0600EE98, 1.0f, 0, -1, 2, 0 }, { &D_0600FD34, 1.0f, 0, -1, 0, 0 },
@@ -1730,11 +1730,11 @@ void EnTrt_UpdateHeadYawAndPitch(EnTrt* this, GlobalContext* globalCtx) {
 
 void EnTrt_UpdateHeadPosAndRot(s16 pitch, s16 yaw, Vec3f* pos, Vec3s* rot, s32 isFullyAwake) {
     Vec3f newPos;
-    Vec3f sp70 = D_801D15B0;
+    Vec3f D_801D15B0tmp = D_801D15B0;
     Vec3s newRot;
     MtxF currentState;
 
-    SysMatrix_MultiplyVector3fByState(&sp70, &newPos);
+    SysMatrix_MultiplyVector3fByState(&D_801D15B0tmp, &newPos);
     SysMatrix_CopyCurrentState(&currentState);
     func_8018219C(&currentState, &newRot, MTXMODE_NEW);
     *pos = newPos;
