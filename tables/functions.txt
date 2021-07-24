@@ -9676,7 +9676,7 @@
     0x80A0F470:("EnSob1_InitZoraShopkeeper",),
     0x80A0F554:("EnSob1_InitGoronShopkeeper",),
     0x80A0F638:("EnSob1_InitBombShopkeeper",),
-    0x80A0F6B0:("EnSob1_InitialUpdate",),
+    0x80A0F6B0:("EnSob1_InitShop",),
     0x80A0FA0C:("EnSob1_Update",),
     0x80A0FADC:("EnSob1_DrawCursor",),
     0x80A0FD4C:("EnSob1_DrawTextRec",),

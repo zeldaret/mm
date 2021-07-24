@@ -45,7 +45,7 @@ s32 EnSob1_TakeItemOffShelf(EnSob1* this);
 void EnSob1_InitZoraShopkeeper(EnSob1* this, GlobalContext* globalCtx);
 void EnSob1_InitGoronShopkeeper(EnSob1* this, GlobalContext* globalCtx);
 void EnSob1_InitBombShopkeeper(EnSob1* this, GlobalContext* globalCtx);
-void EnSob1_InitialUpdate(EnSob1* this, GlobalContext* globalCtx);
+void EnSob1_InitShop(EnSob1* this, GlobalContext* globalCtx);
 
 extern UNK_TYPE D_0401F740;
 extern UNK_TYPE D_0401F8C0;
@@ -423,7 +423,7 @@ void EnSob1_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    EnSob1_SetupAction(this, EnSob1_InitialUpdate);
+    EnSob1_SetupAction(this, EnSob1_InitShop);
 }
 
 void EnSob1_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -1374,7 +1374,7 @@ void EnSob1_InitBombShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
     this->skelAnime.animPlaybackSpeed = 2.0f;
 }
 
-void EnSob1_InitialUpdate(EnSob1* this, GlobalContext* globalCtx) {
+void EnSob1_InitShop(EnSob1* this, GlobalContext* globalCtx) {
     ShopItem* shopItems;
     EnSob1XZRange* unkStruct;
     Vec3f* posOffset;
@@ -1483,7 +1483,7 @@ void EnSob1_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnSob1ActionFunc actionFunc2;
     EnSob1* this = THIS;
 
-    if (this->actionFunc != EnSob1_InitialUpdate) {
+    if (this->actionFunc != EnSob1_InitShop) {
         this->blinkFunc(this);
         EnSob1_UpdateJoystickInputState(globalCtx, this);
         EnSob1_UpdateItemSelectedProperty(this);
