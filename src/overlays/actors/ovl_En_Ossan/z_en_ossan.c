@@ -71,6 +71,10 @@ extern UNK_TYPE D_06005BC0;
 extern UNK_TYPE D_06006F18;
 extern UNK_TYPE D_06006B18;
 
+const char D_808AC2D0[] = "../z_en_oB1.c"; // Unused
+const char D_808AC2E0[] = "../z_en_oB1.c"; // Unused
+const char D_808AC2F0[] = "../z_en_oB1.c"; // Unused
+
 const ActorInit En_Ossan_InitVars = {
     ACTOR_EN_OSSAN,
     ACTORCAT_NPC,
@@ -351,8 +355,6 @@ void EnOssan_Idle(EnOssan* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
-// Matches but jmptable is in laterodata
 void EnOssan_BeginInteraction(EnOssan* this, GlobalContext* globalCtx) {
     ActorAnimationEntryS* animations = sAnimations[this->actor.params];
     s16 curFrame = this->skelAnime.animCurrentFrame;
@@ -416,9 +418,6 @@ void EnOssan_BeginInteraction(EnOssan* this, GlobalContext* globalCtx) {
         EnOssan_SetupStartShopping(globalCtx, this, false);
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ossan_0x808A80A0/EnOssan_BeginInteraction.asm")
-#endif
 
 void EnOssan_UpdateJoystickInputState(GlobalContext* globalCtx, EnOssan* this) {
     s8 stickX = CONTROLLER1(globalCtx)->rel.stick_x;
@@ -976,8 +975,6 @@ void EnOssan_SetupBuy(GlobalContext* globalCtx, EnOssan* this, u16 textId) {
     EnOssan_SetupAction(this, EnOssan_CanBuy);
 }
 
-#ifdef NON_MATCHING
-// Matches but jmptable is in laterodata
 void EnOssan_HandleCanBuyItem(GlobalContext* globalCtx, EnOssan* this) {
     EnGirlA* item;
 
@@ -1026,9 +1023,6 @@ void EnOssan_HandleCanBuyItem(GlobalContext* globalCtx, EnOssan* this) {
             break;
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ossan_0x808A80A0/EnOssan_HandleCanBuyItem.asm")
-#endif
 
 void EnOssan_SelectItem(EnOssan* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
@@ -1189,9 +1183,9 @@ void EnOssan_ResetItemPosition(EnOssan* this) {
     EnOssan_PositionSelectedItem(this);
 }
 
-#ifdef NON_MATCHING
-// Matches but floats are in laterodata
-// returns true if animation has completed
+/*
+* Returns true if animation has completed
+*/
 s32 EnOssan_TakeItemOffShelf(EnOssan* this) {
     Math_ApproachF(&this->shopItemSelectedTween, 1.0f, 1.0f, 0.15f);
     if (this->shopItemSelectedTween >= 0.85f) {
@@ -1203,13 +1197,10 @@ s32 EnOssan_TakeItemOffShelf(EnOssan* this) {
     }
     return false;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ossan_0x808A80A0/EnOssan_TakeItemOffShelf.asm")
-#endif
 
-#ifdef NON_MATCHING
-// Matches but floats are in laterodata
-// returns true if animation has completed
+/*
+* Returns true if animation has completed
+*/
 s32 EnOssan_ReturnItemToShelf(EnOssan* this) {
     Math_ApproachF(&this->shopItemSelectedTween, 0.0f, 1.0f, 0.15f);
     if (this->shopItemSelectedTween <= 0.15f) {
@@ -1221,9 +1212,6 @@ s32 EnOssan_ReturnItemToShelf(EnOssan* this) {
     }
     return false;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ossan_0x808A80A0/EnOssan_ReturnItemToShelf.asm")
-#endif
 
 void EnOssan_UpdateItemSelectedProperty(EnOssan* this) {
     EnGirlA** items = this->items;
@@ -1243,8 +1231,6 @@ void EnOssan_UpdateItemSelectedProperty(EnOssan* this) {
     }
 }
 
-#ifdef NON_MATCHING
-// Matches but floats are in laterodata
 void EnOssan_UpdateCursorAnim(EnOssan* this) {
     f32 t;
 
@@ -1268,12 +1254,7 @@ void EnOssan_UpdateCursorAnim(EnOssan* this) {
     this->cursorColorA = COL_CHAN_MIX(255, 0.0f, t);
     this->cursorAnimTween = t;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ossan_0x808A80A0/EnOssan_UpdateCursorAnim.asm")
-#endif
 
-#ifdef NON_MATCHING
-// Matches but floats are in laterodata
 void EnOssan_UpdateStickDirectionPromptAnim(EnOssan* this) {
     f32 arrowAnimTween = this->arrowAnimTween;
     f32 stickAnimTween = this->stickAnimTween;
@@ -1332,9 +1313,6 @@ void EnOssan_UpdateStickDirectionPromptAnim(EnOssan* this) {
     this->stickLeftPrompt.arrowTexY = this->stickRightPrompt.arrowTexY = 91.0f;
     this->stickLeftPrompt.stickTexY = this->stickRightPrompt.stickTexY = 95.0f;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ossan_0x808A80A0/EnOssan_UpdateStickDirectionPromptAnim.asm")
-#endif
 
 void EnOssan_WaitForBlink(EnOssan* this) {
     s16 decr = this->blinkTimer - 1;
@@ -1440,8 +1418,6 @@ s32 EnOssan_GetWelcomePartTimeWorker(EnOssan* this, GlobalContext* globalCtx) {
     return sWelcomeHumanTextIds[ENOSSAN_PART_TIME_WORKER];
 }
 
-#ifdef NON_MATCHING
-// Matches but jmptable is in laterodata
 void EnOssan_SetHaveMet(EnOssan* this) {
     switch (this->textId) {
         case 0x06A9:
@@ -1464,9 +1440,6 @@ void EnOssan_SetHaveMet(EnOssan* this) {
             break;
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ossan_0x808A80A0/EnOssan_SetHaveMet.asm")
-#endif
 
 void EnOssan_InitialUpdate(EnOssan* this, GlobalContext* globalCtx) {
     static EnOssanActionFunc sInitFuncs[] = { EnOssan_InitCuriosityShopMan, EnOssan_InitPartTimeWorker };

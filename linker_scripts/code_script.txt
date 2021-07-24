@@ -1277,8 +1277,7 @@ SECTIONS
         build/src/overlays/actors/ovl_En_Ossan/z_en_ossan.o(.text)
         build/src/overlays/actors/ovl_En_Ossan/z_en_ossan.o(.data)
         build/src/overlays/actors/ovl_En_Ossan/z_en_ossan.o(.rodata)
-        build/asm/overlays/ovl_En_Ossan_rodata.o(.rodata)
-        build/asm/overlays/ovl_En_Ossan_late_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Ossan/z_en_ossan_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
