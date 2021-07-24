@@ -1,7 +1,7 @@
 #ifndef Z_EN_ENCOUNT3_H
 #define Z_EN_ENCOUNT3_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnEncount3;
 

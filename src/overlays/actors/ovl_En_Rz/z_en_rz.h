@@ -1,7 +1,7 @@
 #ifndef Z_EN_RZ_H
 #define Z_EN_RZ_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnRz;
 

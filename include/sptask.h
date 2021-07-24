@@ -1,7 +1,7 @@
 #ifndef _SPTASK_H_
 #define _SPTASK_H_
 
-#include <PR/ultratypes.h>
+#include "PR/ultratypes.h"
 
 #define OS_YIELD_DATA_SIZE 0xC00
 

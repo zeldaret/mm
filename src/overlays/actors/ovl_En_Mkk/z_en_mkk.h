@@ -1,7 +1,7 @@
 #ifndef Z_EN_MKK_H
 #define Z_EN_MKK_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnMkk;
 

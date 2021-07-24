@@ -1,7 +1,7 @@
 #ifndef Z_EN_PO_COMPOSER_H
 #define Z_EN_PO_COMPOSER_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnPoComposer;
 

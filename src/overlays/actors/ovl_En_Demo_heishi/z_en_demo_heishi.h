@@ -1,7 +1,7 @@
 #ifndef Z_EN_DEMO_HEISHI_H
 #define Z_EN_DEMO_HEISHI_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnDemoheishi;
 

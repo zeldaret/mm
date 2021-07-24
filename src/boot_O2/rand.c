@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "ultra64.h"
+#include "global.h"
 
 #define RAND_MULTIPLIER 1664525
 #define RAND_INCREMENT 1013904223

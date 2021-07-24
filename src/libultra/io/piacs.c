@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "ultra64.h"
+#include "global.h"
 
 UNK_TYPE4 __osPiAccessQueueEnabled = 0;
 

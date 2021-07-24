@@ -1,7 +1,7 @@
 #ifndef Z_EN_FIREFLY2_H
 #define Z_EN_FIREFLY2_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnFirefly2;
 

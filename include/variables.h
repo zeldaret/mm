@@ -1,10 +1,10 @@
 #ifndef _VARIABLES_H_
 #define _VARIABLES_H_
 
-#include <z64.h>
-#include <segment_symbols.h>
-#include <segment.h>
-#include <section.h>
+#include "z64.h"
+#include "segment_symbols.h"
+#include "segment.h"
+#include "section.h"
 
 // pre-boot variables
 extern UNK_TYPE osTvType;

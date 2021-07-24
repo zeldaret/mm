@@ -1,7 +1,7 @@
 #ifndef Z_OBJ_OCARINALIFT_H
 #define Z_OBJ_OCARINALIFT_H
 
-#include <global.h>
+#include "global.h"
 
 struct ObjOcarinalift;
 

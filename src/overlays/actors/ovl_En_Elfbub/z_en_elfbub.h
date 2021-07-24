@@ -1,7 +1,7 @@
 #ifndef Z_EN_ELFBUB_H
 #define Z_EN_ELFBUB_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnElfbub;
 

@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "ultra64.h"
+#include "global.h"
 
 // stubbed in NTSC-U
 void Font_LoadChar(GlobalContext* globalCtx, u16 codePointIndex, s32 offset) {

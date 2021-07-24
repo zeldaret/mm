@@ -1,7 +1,7 @@
 #ifndef Z_OBJ_TSUBO_H
 #define Z_OBJ_TSUBO_H
 
-#include <global.h>
+#include "global.h"
 
 struct ObjTsubo;
 

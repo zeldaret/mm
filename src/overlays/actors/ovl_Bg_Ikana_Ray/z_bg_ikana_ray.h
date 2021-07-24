@@ -1,7 +1,7 @@
 #ifndef Z_BG_IKANA_RAY_H
 #define Z_BG_IKANA_RAY_H
 
-#include <global.h>
+#include "global.h"
 
 struct BgIkanaRay;
 

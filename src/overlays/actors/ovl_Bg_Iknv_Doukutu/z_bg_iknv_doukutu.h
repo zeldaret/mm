@@ -1,7 +1,7 @@
 #ifndef Z_BG_IKNV_DOUKUTU_H
 #define Z_BG_IKNV_DOUKUTU_H
 
-#include <global.h>
+#include "global.h"
 
 struct BgIknvDoukutu;
 

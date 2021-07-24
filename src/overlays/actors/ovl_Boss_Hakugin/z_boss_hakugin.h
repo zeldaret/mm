@@ -1,7 +1,7 @@
 #ifndef Z_BOSS_HAKUGIN_H
 #define Z_BOSS_HAKUGIN_H
 
-#include <global.h>
+#include "global.h"
 
 struct BossHakugin;
 

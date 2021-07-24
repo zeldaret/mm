@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "ultra64.h"
+#include "global.h"
 #include "io/controller.h"
 
 #ifdef NON_MATCHING

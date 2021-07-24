@@ -1,7 +1,7 @@
 #ifndef Z_EN_JGAME_TSN_H
 #define Z_EN_JGAME_TSN_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnJgameTsn;
 

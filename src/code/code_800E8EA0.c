@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "ultra64.h"
+#include "global.h"
 
 void func_800E8EA0(GlobalContext* globalCtx, Actor* actor, u16 textId) {
     func_80151938(globalCtx, textId);

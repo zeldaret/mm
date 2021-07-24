@@ -1,7 +1,7 @@
 #ifndef Z_BG_IKANA_ROTARYROOM_H
 #define Z_BG_IKANA_ROTARYROOM_H
 
-#include <global.h>
+#include "global.h"
 
 struct BgIkanaRotaryroom;
 

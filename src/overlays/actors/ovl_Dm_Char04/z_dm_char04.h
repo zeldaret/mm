@@ -1,7 +1,7 @@
 #ifndef Z_DM_CHAR04_H
 #define Z_DM_CHAR04_H
 
-#include <global.h>
+#include "global.h"
 
 struct DmChar04;
 

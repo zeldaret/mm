@@ -1,7 +1,7 @@
 #ifndef Z_EN_HANABI_H
 #define Z_EN_HANABI_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnHanabi;
 

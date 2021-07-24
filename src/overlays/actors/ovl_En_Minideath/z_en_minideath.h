@@ -1,7 +1,7 @@
 #ifndef Z_EN_MINIDEATH_H
 #define Z_EN_MINIDEATH_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnMinideath;
 

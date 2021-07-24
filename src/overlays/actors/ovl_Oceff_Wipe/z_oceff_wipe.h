@@ -1,7 +1,7 @@
 #ifndef Z_OCEFF_WIPE_H
 #define Z_OCEFF_WIPE_H
 
-#include <global.h>
+#include "global.h"
 
 struct OceffWipe;
 

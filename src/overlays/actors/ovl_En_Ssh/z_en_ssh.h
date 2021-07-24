@@ -1,7 +1,7 @@
 #ifndef Z_EN_SSH_H
 #define Z_EN_SSH_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnSsh;
 

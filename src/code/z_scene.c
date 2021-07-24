@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "ultra64.h"
+#include "global.h"
 
 s32 Object_Spawn(ObjectContext* objectCtx, s16 id) {
     u32 size;

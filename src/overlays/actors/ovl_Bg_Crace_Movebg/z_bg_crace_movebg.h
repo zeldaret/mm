@@ -1,7 +1,7 @@
 #ifndef Z_BG_CRACE_MOVEBG_H
 #define Z_BG_CRACE_MOVEBG_H
 
-#include <global.h>
+#include "global.h"
 
 struct BgCraceMovebg;
 

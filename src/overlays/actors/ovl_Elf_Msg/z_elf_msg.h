@@ -1,7 +1,7 @@
 #ifndef Z_ELF_MSG_H
 #define Z_ELF_MSG_H
 
-#include <global.h>
+#include "global.h"
 
 struct ElfMsg;
 

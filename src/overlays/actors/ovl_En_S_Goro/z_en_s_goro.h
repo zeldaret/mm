@@ -1,7 +1,7 @@
 #ifndef Z_EN_S_GORO_H
 #define Z_EN_S_GORO_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnSGoro;
 

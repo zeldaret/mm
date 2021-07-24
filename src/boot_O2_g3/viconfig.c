@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "ultra64.h"
+#include "global.h"
 
 void ViConfig_UpdateVi(u32 mode) {
     if (mode != 0) {

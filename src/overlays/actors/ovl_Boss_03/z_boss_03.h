@@ -1,7 +1,7 @@
 #ifndef Z_BOSS_03_H
 #define Z_BOSS_03_H
 
-#include <global.h>
+#include "global.h"
 
 struct Boss03;
 

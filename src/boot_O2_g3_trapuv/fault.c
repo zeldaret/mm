@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "ultra64.h"
+#include "global.h"
 #include "vt.h"
 
 #pragma GLOBAL_ASM("asm/non_matchings/boot/fault/D_800982B0.s")

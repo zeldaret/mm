@@ -1,7 +1,7 @@
 #ifndef Z_EN_DOOR_ETC_H
 #define Z_EN_DOOR_ETC_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnDoorEtc;
 

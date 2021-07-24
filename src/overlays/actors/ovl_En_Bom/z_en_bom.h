@@ -1,7 +1,7 @@
 #ifndef Z_EN_BOM_H
 #define Z_EN_BOM_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnBom;
 

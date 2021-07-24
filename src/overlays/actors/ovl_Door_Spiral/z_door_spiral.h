@@ -1,7 +1,7 @@
 #ifndef Z_DOOR_SPIRAL_H
 #define Z_DOOR_SPIRAL_H
 
-#include <global.h>
+#include "global.h"
 
 struct DoorSpiral;
 

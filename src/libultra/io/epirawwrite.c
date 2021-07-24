@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "ultra64.h"
+#include "global.h"
 #include "PR/hardware.h"
 
 s32 __osEPiRawWriteIo(OSPiHandle* handle, u32 devAddr, u32 data) {

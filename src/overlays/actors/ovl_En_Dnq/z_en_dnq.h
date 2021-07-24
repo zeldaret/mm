@@ -1,7 +1,7 @@
 #ifndef Z_EN_DNQ_H
 #define Z_EN_DNQ_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnDnq;
 
