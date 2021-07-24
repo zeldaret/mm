@@ -8,7 +8,7 @@
 struct EnOssan;
 
 typedef void (*EnOssanActionFunc)(struct EnOssan*, GlobalContext*);
-typedef void (*EnOssanUnkFunc)(struct EnOssan*);
+typedef void (*EnOssanBlinkFunc)(struct EnOssan*);
 
 typedef struct EnOssan {
     /* 0x000 */ Actor actor;
@@ -20,9 +20,9 @@ typedef struct EnOssan {
     /* 0x1DE */ s8 objIndex;
     /* 0x1E0 */ s16 eyeTextureIdx;
     /* 0x1E2 */ s16 blinkTimer;
-    /* 0x1E4 */ EnOssanUnkFunc blinkFunc;
+    /* 0x1E4 */ EnOssanBlinkFunc blinkFunc;
     /* 0x1E8 */ EnGirlA *items[8];
-    /* Items are indexed as:
+    /* Items on shelves are indexed as:
      * 7 5  3 1
      * 6 4  2 0 */    
     /* 0x208 */ s32 stickAccumX;
@@ -55,7 +55,7 @@ typedef struct EnOssan {
     /* 0x2C2 */ s16 cutsceneState;
     /* 0x2C4 */ u16 textId;
     /* 0x2C6 */ Vec3s headRot;
-    /* 0x2CC */ Vec3s unk2CC;
+    /* 0x2CC */ Vec3s unk2CC; // Set but never used
     /* 0x2D2 */ s16 limbRotTableY[19];
     /* 0x2F8 */ s16 limbRotTableZ[19];
     /* 0x31E */ Vec3s limbDrawTbl[19];

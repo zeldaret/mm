@@ -9,7 +9,7 @@ void ObjHsblock_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjHsblock_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjHsblock_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Obj_Hsblock_InitVars = {
     ACTOR_OBJ_HSBLOCK,
     ACTORCAT_BG,
@@ -21,7 +21,19 @@ const ActorInit Obj_Hsblock_InitVars = {
     (ActorFunc)ObjHsblock_Update,
     (ActorFunc)ObjHsblock_Draw,
 };
-*/
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_8093E33C[] = {
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
+};
+
+
+extern InitChainEntry D_8093E33C[];
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Hsblock_0x8093DEA0/func_8093DEA0.asm")
 

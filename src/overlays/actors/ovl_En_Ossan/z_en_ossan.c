@@ -71,9 +71,9 @@ extern UNK_TYPE D_06005BC0;
 extern UNK_TYPE D_06006F18;
 extern UNK_TYPE D_06006B18;
 
-const char D_808AC2D0[] = "../z_en_oB1.c"; // Unused
-const char D_808AC2E0[] = "../z_en_oB1.c"; // Unused
-const char D_808AC2F0[] = "../z_en_oB1.c"; // Unused
+const char filename1[] = "../z_en_oB1.c"; // Unused
+const char filename2[] = "../z_en_oB1.c"; // Unused
+const char filename3[] = "../z_en_oB1.c"; // Unused
 
 const ActorInit En_Ossan_InitVars = {
     ACTOR_EN_OSSAN,

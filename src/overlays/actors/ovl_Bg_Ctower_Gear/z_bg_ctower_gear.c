@@ -1,6 +1,6 @@
 /*
  * File: z_bg_ctower_gear.c
- * Overlay: Bg_Ctower_Gear
+ * Overlay: ovl_Bg_Ctower_Gear
  * Description: Different Cogs/Organ inside Clock Tower
  */
 

@@ -9,7 +9,7 @@ void EnGoroiwa_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGoroiwa_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGoroiwa_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Goroiwa_InitVars = {
     ACTOR_EN_GOROIWA,
     ACTORCAT_PROP,
@@ -21,7 +21,42 @@ const ActorInit En_Goroiwa_InitVars = {
     (ActorFunc)EnGoroiwa_Update,
     (ActorFunc)EnGoroiwa_Draw,
 };
-*/
+
+
+// static ColliderJntSphElementInit sJntSphElementsInit[1] = {
+static ColliderJntSphElementInit D_80942DC0[1] = {
+    {
+        { ELEMTYPE_UNK0, { 0x20000000, 0x00, 0x04 }, { 0x01C37BB6, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NONE, BUMP_ON, OCELEM_ON, },
+        { 0, { { 0, 0, 0 }, 58 }, 100 },
+    },
+};
+
+// static ColliderJntSphInit sJntSphInit = {
+static ColliderJntSphInit D_80942DE4 = {
+    { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_JNTSPH, },
+    1, D_80942DC0, // sJntSphElementsInit,
+};
+
+
+// sColChkInfoInit
+static CollisionCheckInfoInit D_80942DF4 = { 0, 12, 60, MASS_HEAVY };
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80942E78[] = {
+    ICHAIN_F32_DIV1000(gravity, -900, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(minVelocityY, -26000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 160, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 350, ICHAIN_STOP),
+};
+
+
+extern ColliderJntSphElementInit D_80942DC0[1];
+extern ColliderJntSphInit D_80942DE4;
+extern CollisionCheckInfoInit D_80942DF4;
+extern InitChainEntry D_80942E78[];
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Goroiwa_0x8093E8A0/func_8093E8A0.asm")
 

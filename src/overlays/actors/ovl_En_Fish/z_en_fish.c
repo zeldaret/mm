@@ -9,7 +9,22 @@ void EnFish_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFish_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFish_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
+// static ColliderJntSphElementInit sJntSphElementsInit[1] = {
+static ColliderJntSphElementInit D_8091FA60[1] = {
+    {
+        { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
+        { 0, { { 0, 0, 0 }, 5 }, 100 },
+    },
+};
+
+// static ColliderJntSphInit sJntSphInit = {
+static ColliderJntSphInit D_8091FA84 = {
+    { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
+    1, D_8091FA60, // sJntSphElementsInit,
+};
+
+
 const ActorInit En_Fish_InitVars = {
     ACTOR_EN_FISH,
     ACTORCAT_ITEMACTION,
@@ -21,7 +36,20 @@ const ActorInit En_Fish_InitVars = {
     (ActorFunc)EnFish_Update,
     (ActorFunc)EnFish_Draw,
 };
-*/
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_8091FAC0[] = {
+    ICHAIN_F32(uncullZoneForward, 720, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 40, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 40, ICHAIN_STOP),
+};
+
+
+extern ColliderJntSphElementInit D_8091FA60[1];
+extern ColliderJntSphInit D_8091FA84;
+extern InitChainEntry D_8091FAC0[];
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fish_0x8091D630/func_8091D630.asm")
 
