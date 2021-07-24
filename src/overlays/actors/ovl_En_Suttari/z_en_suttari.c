@@ -1491,7 +1491,7 @@ s32 EnSuttari_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
         rot->y += (s16)(Math_SinS(this->unk2FA[limbIndex]) * 200.0f);
         rot->z += (s16)(Math_CosS(this->unk31A[limbIndex]) * 200.0f);
     }
-    return 0;
+    return false;
 }
 
 void EnSuttari_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
