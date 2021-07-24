@@ -131,8 +131,8 @@ def get_str_hash(byte_array):
     return str(hashlib.md5(byte_array).hexdigest())
 
 # If the baserom exists and is correct, we don't need to change anything
-if path.exists("baserom.z64"):
-    with open("baserom.z64", mode="rb") as file:
+if path.exists("baserom_uncompressed.z64"):
+    with open("baserom_uncompressed.z64", mode="rb") as file:
         fileContent = bytearray(file.read())
         if get_str_hash(fileContent) == correct_str_hash:
             print("Found valid baserom - exiting early")
@@ -200,8 +200,8 @@ if str_hash != correct_str_hash:
     sys.exit(1)
 
 # Write out our new ROM
-print("Writing new ROM 'baserom.z64'.")
-with open("baserom.z64", "wb") as file:
+print("Writing new ROM 'baserom_uncompressed.z64'.")
+with open("baserom_uncompressed.z64", "wb") as file:
     file.write(bytes(fileContent))
 
 print("Done!")
