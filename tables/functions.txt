@@ -9617,7 +9617,7 @@
     0x80A0C8B8:("EnSob1_TestItemSelected",),
     0x80A0C938:("EnSob1_GetTalkOption",),
     0x80A0CA38:("EnSob1_GetWelcome",),
-    0x80A0CC88:("EnSob1_GetGoodbyeBombShop",),
+    0x80A0CC88:("EnSob1_GetGoodbye",),
     0x80A0CCEC:("EnSob1_EndInteractionBombShop",),
     0x80A0CD48:("EnSob1_SpawnShopItems",),
     0x80A0CE10:("EnSob1_GetObjIndicies",),

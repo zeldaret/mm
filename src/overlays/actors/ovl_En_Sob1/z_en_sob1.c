@@ -330,7 +330,7 @@ u16 EnSob1_GetWelcome(EnSob1* this, GlobalContext* globalCtx) {
     return 0;
 }
 
-u16 EnSob1_GetGoodbyeBombShop(EnSob1* this) {
+u16 EnSob1_GetGoodbye(EnSob1* this) {
     if (this->shopType == BOMB_SHOP) {
         if (gSaveContext.day == 1) {
             return 0x64C;
@@ -349,7 +349,7 @@ void EnSob1_EndInteractionBombShop(EnSob1* this, GlobalContext* globalCtx) {
     this->drawCursor = 0;
     this->stickLeftPrompt.isEnabled = false;
     this->stickRightPrompt.isEnabled = false;
-    this->goodbyeTextId = EnSob1_GetGoodbyeBombShop(this);
+    this->goodbyeTextId = EnSob1_GetGoodbye(this);
     func_801518B0(globalCtx, this->goodbyeTextId, &this->actor);
     EnSob1_SetupAction(this, EnSob1_EndingInteraction);
 }
