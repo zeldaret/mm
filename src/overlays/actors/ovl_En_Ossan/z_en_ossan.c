@@ -199,12 +199,12 @@ void EnOssan_RotateHead(EnOssan* this, GlobalContext* globalCtx) {
 
     if (this->actor.params == ENOSSAN_PART_TIME_WORKER) {
         if (player->transformation == PLAYER_FORM_ZORA) {
-            Math_SmoothStepToS(&this->headRotYPartTimeWorker, this->headRot.y, 3, 2000, 0);
+            Math_SmoothStepToS(&this->headRotPartTimeWorker.y, this->headRot.y, 3, 2000, 0);
         } else if (this->flags & LOOKED_AT_PLAYER) {
-            Math_SmoothStepToS(&this->headRotYPartTimeWorker, 8000, 3, 2000, 0);
+            Math_SmoothStepToS(&this->headRotPartTimeWorker.y, 8000, 3, 2000, 0);
         } else {
-            Math_SmoothStepToS(&this->headRotYPartTimeWorker, this->headRot.y, 3, 2000, 0);
-            if (ABS_ALT(this->headRotYPartTimeWorker - this->headRot.y) < 16) {
+            Math_SmoothStepToS(&this->headRotPartTimeWorker.y, this->headRot.y, 3, 2000, 0);
+            if (ABS_ALT(this->headRotPartTimeWorker.y - this->headRot.y) < 16) {
                 this->flags |= LOOKED_AT_PLAYER;
             }
         }
@@ -218,9 +218,8 @@ void EnOssan_SpawnShopItems(EnOssan* this, GlobalContext* globalCtx, ShopItem* s
         if (shop->shopItemId < 0) {
             this->items[i] = NULL;
         } else {
-            this->items[i] =
-                (EnGirlA*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_GIRLA, shop->spawnPos.x,
-                                      shop->spawnPos.y, shop->spawnPos.z, 0, 0, 0, shop->shopItemId);
+            this->items[i] = (EnGirlA*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_GIRLA, shop->spawnPos.x,
+                                                   shop->spawnPos.y, shop->spawnPos.z, 0, 0, 0, shop->shopItemId);
         }
     }
 }
@@ -347,7 +346,7 @@ void EnOssan_Idle(EnOssan* this, GlobalContext* globalCtx) {
             func_800B8614(&this->actor, globalCtx, 100.0f);
         }
         if (this->actor.params == ENOSSAN_PART_TIME_WORKER) {
-            Math_SmoothStepToS(&this->headRotYPartTimeWorker, 8000, 3, 2000, 0);
+            Math_SmoothStepToS(&this->headRotPartTimeWorker.y, 8000, 3, 2000, 0);
         }
     }
 }
@@ -557,8 +556,8 @@ void EnOssan_Hello(EnOssan* this, GlobalContext* globalCtx) {
             }
         }
     }
-    if (talkState == 10 && this->actor.params == ENOSSAN_PART_TIME_WORKER && player->transformation == PLAYER_FORM_ZORA &&
-        func_80147624(globalCtx)) {
+    if (talkState == 10 && this->actor.params == ENOSSAN_PART_TIME_WORKER &&
+        player->transformation == PLAYER_FORM_ZORA && func_80147624(globalCtx)) {
         this->animationIdx = 9;
         func_8013BC6C(&this->skelAnime, animations, 9);
     }
@@ -634,7 +633,7 @@ void EnOssan_FaceShopkeeper(EnOssan* this, GlobalContext* globalCtx) {
             }
         }
         if (this->actor.params == ENOSSAN_PART_TIME_WORKER && player->transformation != PLAYER_FORM_ZORA) {
-            Math_SmoothStepToS(&this->headRotYPartTimeWorker, 8000, 3, 2000, 0);
+            Math_SmoothStepToS(&this->headRotPartTimeWorker.y, 8000, 3, 2000, 0);
         }
     }
 }
@@ -1111,7 +1110,7 @@ void EnOssan_ContinueShopping(EnOssan* this, GlobalContext* globalCtx) {
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 0:
                         func_8019F208();
-                        player->actor.shape.rot.y += 0x8000;
+                        player->actor.shape.rot.y = BINANG_ROT180(player->actor.shape.rot.y);
                         player->stateFlags2 |= 0x20000000;
                         func_801518B0(globalCtx, this->textId, &this->actor);
                         EnOssan_SetupStartShopping(globalCtx, this, true);
@@ -1129,7 +1128,7 @@ void EnOssan_ContinueShopping(EnOssan* this, GlobalContext* globalCtx) {
         EnOssan_ResetItemPosition(this);
         item = this->items[this->cursorIdx];
         item->restockFunc(globalCtx, item);
-        player->actor.shape.rot.y += 0x8000;
+        player->actor.shape.rot.y = BINANG_ROT180(player->actor.shape.rot.y);
         player->stateFlags2 |= 0x20000000;
         func_801518B0(globalCtx, this->textId, &this->actor);
         EnOssan_SetupStartShopping(globalCtx, this, true);
@@ -1263,10 +1262,10 @@ void EnOssan_UpdateCursorAnim(EnOssan* this) {
             this->cursorAnimState = 0;
         }
     }
-    this->cursorColorR = ColChanMix(0, 0.0f, t);
-    this->cursorColorG = ColChanMix(80, 80.0f, t);
-    this->cursorColorB = ColChanMix(255, 0.0f, t);
-    this->cursorColorA = ColChanMix(255, 0.0f, t);
+    this->cursorColorR = COL_CHAN_MIX(0, 0.0f, t);
+    this->cursorColorG = COL_CHAN_MIX(80, 80.0f, t);
+    this->cursorColorB = COL_CHAN_MIX(255, 0.0f, t);
+    this->cursorColorA = COL_CHAN_MIX(255, 0.0f, t);
     this->cursorAnimTween = t;
 }
 #else
@@ -1312,15 +1311,15 @@ void EnOssan_UpdateStickDirectionPromptAnim(EnOssan* this) {
 
     this->stickAnimTween = stickAnimTween;
 
-    this->stickLeftPrompt.arrowColorR = ColChanMix(255, 155.0f, arrowAnimTween);
-    this->stickLeftPrompt.arrowColorG = ColChanMix(new_var2, 155.0f, arrowAnimTween);
-    this->stickLeftPrompt.arrowColorB = ColChanMix(0, -100, arrowAnimTween);
-    this->stickLeftPrompt.arrowColorA = ColChanMix(200, 50.0f, arrowAnimTween);
+    this->stickLeftPrompt.arrowColorR = COL_CHAN_MIX(255, 155.0f, arrowAnimTween);
+    this->stickLeftPrompt.arrowColorG = COL_CHAN_MIX(new_var2, 155.0f, arrowAnimTween);
+    this->stickLeftPrompt.arrowColorB = COL_CHAN_MIX(0, -100, arrowAnimTween);
+    this->stickLeftPrompt.arrowColorA = COL_CHAN_MIX(200, 50.0f, arrowAnimTween);
 
     this->stickRightPrompt.arrowColorR = (new_var2 - ((s32)new_var3)) & 0xFF;
     this->stickRightPrompt.arrowColorG = (255 - ((s32)new_var3)) & 0xFF;
-    this->stickRightPrompt.arrowColorB = ColChanMix(0, -100.0f, arrowAnimTween);
-    this->stickRightPrompt.arrowColorA = ColChanMix(200, 50.0f, arrowAnimTween);
+    this->stickRightPrompt.arrowColorB = COL_CHAN_MIX(0, -100.0f, arrowAnimTween);
+    this->stickRightPrompt.arrowColorA = COL_CHAN_MIX(200, 50.0f, arrowAnimTween);
 
     this->stickRightPrompt.arrowTexX = 290.0f;
     this->stickLeftPrompt.arrowTexX = 33.0f;
@@ -1391,7 +1390,7 @@ s32 EnOssan_GetWelcomeCuriosityShopMan(EnOssan* this, GlobalContext* globalCtx) 
     switch (player->transformation) {
         case PLAYER_FORM_DEKU:
             this->animationIdx = 10;
-            if (gSaveContext.weekEventReg[0x12] & 16) {
+            if (gSaveContext.weekEventReg[0x12] & 0x10) {
                 return sWelcomeDekuTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
             }
             return sWelcomeDekuFirstTimeTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
@@ -1423,7 +1422,7 @@ s32 EnOssan_GetWelcomePartTimeWorker(EnOssan* this, GlobalContext* globalCtx) {
     }
     switch (player->transformation) {
         case PLAYER_FORM_DEKU:
-            if (gSaveContext.weekEventReg[0x37] & 16) {
+            if (gSaveContext.weekEventReg[0x37] & 0x10) {
                 return sWelcomeDekuTextIds[ENOSSAN_PART_TIME_WORKER];
             }
             return sWelcomeDekuFirstTimeTextIds[ENOSSAN_PART_TIME_WORKER];
@@ -1691,8 +1690,8 @@ s32 EnOssan_OverrideLimbDrawPartTimeWorker(GlobalContext* globalCtx, s32 limbInd
     EnOssan* this = THIS;
 
     if (limbIndex == 15) {
-        SysMatrix_InsertXRotation_s(this->headRotYPartTimeWorker, MTXMODE_APPLY);
-        SysMatrix_InsertZRotation_s(this->headRotXPartTimeWorker, MTXMODE_APPLY);
+        SysMatrix_InsertXRotation_s(this->headRotPartTimeWorker.y, MTXMODE_APPLY);
+        SysMatrix_InsertZRotation_s(this->headRotPartTimeWorker.x, MTXMODE_APPLY);
     }
     return 0;
 }

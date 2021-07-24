@@ -61,9 +61,7 @@ typedef struct EnOssan {
     /* 0x31E */ Vec3s limbDrawTbl[19];
     /* 0x390 */ Vec3s transitionDrawTbl[19];
     /* 0x402 */ s16 animationIdx;
-    /* 0x404 */ s16 headRotXPartTimeWorker;
-    /* 0x406 */ s16 headRotYPartTimeWorker;
-    /* 0x408 */ UNK_TYPE1 pad408[0x2];
+    /* 0x404 */ Vec3s headRotPartTimeWorker;
     /* 0x40A */ u16 flags;
 } EnOssan; // size = 0x40C
 
