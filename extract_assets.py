@@ -44,7 +44,7 @@ def ExtractFunc(fullPath):
     outSourcePath = outPath
     # TODO: remove condition when NBS is merged
     if "overlays" in pathList:
-        basromPath = os.path.join("baserom", *pathList[2:-1])
+        basromPath = os.path.join("baserom", *pathList[2:])
     else:
         basromPath = os.path.join("baserom", "assets", *pathList[2:-1])
 
