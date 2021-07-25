@@ -5,7 +5,7 @@
 #include "global.h"
 
 typedef struct {
-    /* 0x0000 */ char unk_000[0x218]
+    /* 0x0000 */ char unk_000[0x218];
 } TransitionWipe1; // size = 0x218
 
 #endif
