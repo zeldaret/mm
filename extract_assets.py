@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
 
 import argparse
-from multiprocessing import Pool, cpu_count, Event
+from multiprocessing import Pool, cpu_count, Event, Manager
 import os
+import json
+import time
+import signal
 
-# Returns True if outFile doesn't exists
-# or if inFile has been modified after the last modification of outFile
-def checkTouchedFile(inFile: str, outFile: str) -> bool:
-    if not os.path.exists(outFile):
-        return True
-    return os.path.getmtime(inFile) > os.path.getmtime(outFile)
+EXTRACTED_ASSETS_NAMEFILE = ".extracted-assets.json"
+
+def SignalHandler(sig, frame):
+    print(f'Signal {sig} received. Aborting...')
+    mainAbort.set()
+    # Don't exit immediately to update the extracted assets file.
 
 def ExtractFile(xmlPath, basromPath, outputPath, outputSourcePath):
     if globalAbort.is_set():
@@ -17,6 +20,7 @@ def ExtractFile(xmlPath, basromPath, outputPath, outputSourcePath):
         return
 
     execStr = "tools/ZAPD/ZAPD.out e -eh -i %s -b %s -o %s -osf %s -gsf 1 -rconf tools/ZAPDConfigs/MM/Config.xml" % (xmlPath, basromPath, outputPath, outputSourcePath)
+    # execStr = "tools/ZAPD/ZAPD.out e -eh -i %s -b baserom/ -o %s -osf %s -gsf 1 -rconf tools/ZAPDConfigs/MM/Config.xml" % (xmlPath, outputPath, outputSourcePath)
     if globalUnaccounted:
         execStr += " -wu"
 
@@ -33,34 +37,43 @@ def ExtractFunc(fullPath):
     *pathList, xmlName = fullPath.split(os.sep)
     objectName = os.path.splitext(xmlName)[0]
 
-    outPath = os.path.join("assets", *pathList[2:-1], objectName)
+    if "scenes" in pathList:
+        outPath = os.path.join("assets", *pathList[2:])
+    else:
+        outPath = os.path.join("assets", *pathList[2:], objectName)
     outSourcePath = outPath
+    # TODO: remove condition when NBS is merged
     if "overlays" in pathList:
         basromPath = os.path.join("baserom", *pathList[2:-1])
     else:
         basromPath = os.path.join("baserom", "assets", *pathList[2:-1])
 
-    ## MM doesn't have _scene prefixed files, so this check is not necessary.
-    ## This _may_ change in the future, so I wont delete this for now.
-    #isScene = fullPath.startswith("assets/xml/scenes/")
-    #if isScene:
-    #    objectName += "_scene"
-
-    if not globalForce:
-        cFile = os.path.join(outPath, objectName + ".c")
-        hFile = os.path.join(outPath, objectName + ".h")
-        if not checkTouchedFile(fullPath, cFile) and not checkTouchedFile(fullPath, hFile):
+    if fullPath in globalExtractedAssetsTracker:
+        timestamp = globalExtractedAssetsTracker[fullPath]["timestamp"]
+        modificationTime = int(os.path.getmtime(fullPath))
+        if modificationTime < timestamp:
+            # XML has not been modified since last extraction.
             return
+
+    currentTimeStamp = int(time.time())
 
     ExtractFile(fullPath, basromPath, outPath, outSourcePath)
 
-def initializeWorker(force: bool, abort, unaccounted: bool):
-    global globalForce
+    if not globalAbort.is_set():
+        # Only update timestamp on succesful extractions
+        if fullPath not in globalExtractedAssetsTracker:
+            globalExtractedAssetsTracker[fullPath] = globalManager.dict()
+        globalExtractedAssetsTracker[fullPath]["timestamp"] = currentTimeStamp
+
+def initializeWorker(abort, unaccounted: bool, extractedAssetsTracker: dict, manager):
     global globalAbort
     global globalUnaccounted
-    globalForce = force
+    global globalExtractedAssetsTracker
+    global globalManager
     globalAbort = abort
     globalUnaccounted = unaccounted
+    globalExtractedAssetsTracker = extractedAssetsTracker
+    globalManager = manager
 
 def main():
     parser = argparse.ArgumentParser(description="baserom asset extractor")
@@ -69,17 +82,31 @@ def main():
     parser.add_argument("-u", "--unaccounted", help="Enables ZAPD unaccounted detector warning system.", action="store_true")
     args = parser.parse_args()
 
-    abort = Event()
+    global mainAbort
+    mainAbort = Event()
+    manager = Manager()
+    signal.signal(signal.SIGINT, SignalHandler)
+
+    extractedAssetsTracker = manager.dict()
+    if os.path.exists(EXTRACTED_ASSETS_NAMEFILE) and not args.force:
+        with open(EXTRACTED_ASSETS_NAMEFILE, encoding='utf-8') as f:
+            extractedAssetsTracker.update(json.load(f, object_hook=manager.dict))
 
     asset_path = args.single
     if asset_path is not None:
-        # Always force if -s is used.
-        initializeWorker(True, abort, args.unaccounted)
         fullPath = os.path.join("assets", "xml", asset_path + ".xml")
+        if not os.path.exists(fullPath):
+            print(f"Error. File {fullPath} doesn't exists.", file=os.sys.stderr)
+            exit(1)
+
+        initializeWorker(mainAbort, args.unaccounted, extractedAssetsTracker, manager)
+        # Always extract if -s is used.
+        if fullPath in extractedAssetsTracker:
+            del extractedAssetsTracker[fullPath]
         ExtractFunc(fullPath)
     else:
         xmlFiles = []
-        for currentPath, folders, files in os.walk(os.path.join("assets", "xml")):
+        for currentPath, _, files in os.walk(os.path.join("assets", "xml")):
             for file in files:
                 fullPath = os.path.join(currentPath, file)
                 if file.endswith(".xml"):
@@ -87,10 +114,16 @@ def main():
 
         numCores = cpu_count()
         print("Extracting assets with " + str(numCores) + " CPU cores.")
-        with Pool(numCores,  initializer=initializeWorker, initargs=(args.force, abort, args.unaccounted)) as p:
+        with Pool(numCores,  initializer=initializeWorker, initargs=(mainAbort, args.unaccounted, extractedAssetsTracker, manager)) as p:
             p.map(ExtractFunc, xmlFiles)
 
-    if abort.is_set():
+    with open(EXTRACTED_ASSETS_NAMEFILE, 'w', encoding='utf-8') as f:
+        serializableDict = dict()
+        for xml, data in extractedAssetsTracker.items():
+            serializableDict[xml] = dict(data)
+        json.dump(dict(serializableDict), f, ensure_ascii=False, indent=4)
+
+    if mainAbort.is_set():
         exit(1)
 
 if __name__ == "__main__":
