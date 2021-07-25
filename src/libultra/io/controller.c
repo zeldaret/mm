@@ -41,7 +41,6 @@ s32 osContInit(OSMesgQueue* mq, u8* bitpattern, OSContStatus* data) {
     return ret;
 }
 
-#ifdef NON_MATCHING
 void __osContGetInitData(u8* pattern, OSContStatus* data) {
     u8* ptr;
     __OSContRequesFormat requestformat;
@@ -62,11 +61,7 @@ void __osContGetInitData(u8* pattern, OSContStatus* data) {
     }
     *pattern = bits;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/boot/controller/__osContGetInitData.s")
-#endif
 
-#ifdef NON_MATCHING
 void __osPackRequestData(u8 cmd) {
     u8* ptr;
     __OSContRequesFormat requestformat;
@@ -93,6 +88,3 @@ void __osPackRequestData(u8 cmd) {
     }
     *ptr = 254;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/boot/controller/__osPackRequestData.s")
-#endif

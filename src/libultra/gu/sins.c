@@ -1027,7 +1027,6 @@ static s16 sintable[1024] = {
     0x7FFF,
 };
 
-#ifdef NON_MATCHING
 short sins(unsigned short x) {
     short val;
 
@@ -1044,6 +1043,3 @@ short sins(unsigned short x) {
 
     return val;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/boot/sins/sins.s")
-#endif

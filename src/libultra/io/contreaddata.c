@@ -21,7 +21,6 @@ s32 osContStartReadData(OSMesgQueue* mq) {
     return ret;
 }
 
-#ifdef NON_MATCHING
 void osContGetReadData(OSContPad* data) {
     u8* ptr;
     __OSContReadFormat readformat;
@@ -38,11 +37,7 @@ void osContGetReadData(OSContPad* data) {
         }
     };
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/boot/contreaddata/osContGetReadData.s")
-#endif
 
-#ifdef NON_MATCHING
 void __osPackReadData() {
     u8* ptr;
     __OSContReadFormat readformat;
@@ -67,6 +62,3 @@ void __osPackReadData() {
     }
     *ptr = 254;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/boot/contreaddata/__osPackReadData.s")
-#endif

@@ -107,7 +107,6 @@ int _Printf(printf_func pfn, void* arg, const char* fmt, va_list ap) {
     }
 }
 
-#ifdef NON_MATCHING
 void _Putfld(_Pft* px, va_list* pap, unsigned char code, unsigned char* ac) {
     px->n0 = px->nz0 = px->n1 = px->nz1 = px->n2 = px->nz2 = 0;
 
@@ -229,6 +228,3 @@ void _Putfld(_Pft* px, va_list* pap, unsigned char code, unsigned char* ac) {
             break;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/boot/xprintf/_Putfld.s")
-#endif

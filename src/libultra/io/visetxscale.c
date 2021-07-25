@@ -1,8 +1,6 @@
 #include "ultra64.h"
 #include "global.h"
 
-#ifdef NON_MATCHING
-// regalloc
 void osViSetXScale(f32 value) {
     register u32 nomValue;
     register u32 saveMask;
@@ -18,6 +16,3 @@ void osViSetXScale(f32 value) {
 
     __osRestoreInt(saveMask);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/boot/visetxscale/osViSetXScale.s")
-#endif
