@@ -321,7 +321,8 @@ typedef struct {
     /* 0x08 */ u32 rodataSize;
     /* 0x0C */ u32 bssSize;
     /* 0x10 */ u32 nRelocations;
-} OverlayRelocationSection; // size = 0x14
+    /* 0x14 */ u32 relocations[1];
+} OverlayRelocationSection; // size >= 0x18
 
 typedef struct {
     /* 0x00 */ s16 intPart[16];

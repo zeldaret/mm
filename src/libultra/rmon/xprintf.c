@@ -40,8 +40,8 @@ int _Printf(printf_func pfn, void* arg, const char* fmt, va_list ap) {
     x.nchar = 0;
     while (1) {
         const char* s;
-        unsigned char c;
-        unsigned char* t;
+        u8 c;
+        const char* t;
 
         static const char fchar[] = " +-#0";
         static const u32 fbit[] = { FLAGS_SPACE, FLAGS_PLUS, FLAGS_MINUS, FLAGS_HASH, FLAGS_ZERO, 0 };

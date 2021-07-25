@@ -62,7 +62,7 @@ OBJCOPY    := $(MIPS_BINUTILS_PREFIX)objcopy
 OBJDUMP    := $(MIPS_BINUTILS_PREFIX)objdump
 
 # Check code syntax with host compiler
-CHECK_WARNINGS := -Wall -Wextra -Wno-format-security -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-int-conversion
+CHECK_WARNINGS := -Wall -Wextra -Wno-format-security -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-int-conversion -Wno-unused-but-set-variable
 CC_CHECK   := gcc -fno-builtin -fsyntax-only -fsigned-char -std=gnu90 -D _LANGUAGE_C -D NON_MATCHING -Iinclude -Isrc -include stdarg.h $(CHECK_WARNINGS)
 
 CPP        := cpp
@@ -179,31 +179,27 @@ $(ELF): $(TEXTURE_FILES_OUT) $(O_FILES) build/ldscript.txt build/undefined_syms.
 
 ## Cleaning ##
 clean:
-	$(RM) -r $(ROM) $(ELF) build
-
-distclean:
-	$(RM) -r $(ROM) $(ROMC) $(ELF) build asm baserom data
-	$(MAKE) -C tools clean
+	$(RM) -rf $(ROMC) $(ROM) $(ELF) build
 
 assetclean:
 	$(RM) -rf $(ASSET_BIN_DIRS)
 	$(RM) -rf build/assets
 
-disasm:
-	$(RM) -rf asm data
-	python3 tools/disasm/disasm.py
+distclean: assetclean clean
+	$(RM) -rf asm baserom data
+	$(MAKE) -C tools clean
 
+## Extraction step
 setup:
 	$(MAKE) -C tools
 	python3 tools/fixbaserom.py
 	python3 tools/extract_baserom.py
 	python3 extract_assets.py
 
-init:
-	$(MAKE) distclean
-	$(MAKE) setup
-	$(MAKE) disasm
-	$(MAKE) all
+## Assembly generation
+disasm:
+	$(RM) -rf asm data
+	python3 tools/disasm/disasm.py
 
 diff-init: all
 	$(RM) -rf expected/
@@ -211,6 +207,13 @@ diff-init: all
 	cp -r build expected/build
 	cp $(ROM) expected/$(ROM)
 	cp $(ROMC) expected/$(ROMC)
+
+init:
+	$(MAKE) distclean
+	$(MAKE) setup
+	$(MAKE) disasm
+	$(MAKE) all
+	$(MAKE) diff-init
 
 build/assets/%.o: assets/%.c
 	$(CC) -I build/ -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
@@ -236,16 +239,6 @@ build/asm/%.o: asm/%.s
 build/data/%.o: data/%.s
 	iconv --from UTF-8 --to EUC-JP $^ | $(AS) $(ASFLAGS) -o $@
 
-# Build C files from assets
-build/%.inc.c: %.png
-	$(ZAPD) btex -eh -tt $(lastword ,$(subst ., ,$(basename $<))) -i $< -o $@
-
-build/assets/%.bin.inc.c: assets/%.bin
-	$(ZAPD) bblb -eh -i $< -o $@
-
-build/assets/%.jpg.inc.c: assets/%.jpg
-	$(ZAPD) bren -eh -i $< -o $@
-
 build/src/overlays/%.o: src/overlays/%.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $^
 #	$(CC_CHECK) $^
@@ -269,3 +262,13 @@ build/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c
 	$(CC_CHECK) $<
 	python3 tools/set_o32abi_bit.py $@
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
+
+# Build C files from assets
+build/%.inc.c: %.png
+	$(ZAPD) btex -eh -tt $(lastword ,$(subst ., ,$(basename $<))) -i $< -o $@
+
+build/assets/%.bin.inc.c: assets/%.bin
+	$(ZAPD) bblb -eh -i $< -o $@
+
+build/assets/%.jpg.inc.c: assets/%.jpg
+	$(ZAPD) bren -eh -i $< -o $@

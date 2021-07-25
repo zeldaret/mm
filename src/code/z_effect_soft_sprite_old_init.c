@@ -381,7 +381,7 @@ void EffectSsDFire_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, 
     Math_Vec3f_Copy(&initParams.accel, accel);
     initParams.scale = scale;
     initParams.scaleStep = scaleStep;
-    initParams.a = alpha;
+    initParams.alpha = alpha;
     initParams.fadeDelay = fadeDelay;
     initParams.life = life;
 

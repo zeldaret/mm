@@ -47,7 +47,7 @@ void ActorShadow_Draw(Actor* actor, Lights* lights, GlobalContext* globalCtx, Gf
             shadowScale = 1.0f - (dy * 0.0028571428f);
 
             if (color != NULL) {
-                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, color->red, color->green, color->blue,
+                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, color->r, color->g, color->b,
                                 (u8)(actor->shape.shadowAlpha * shadowScale));
             } else {
                 gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, (u8)(actor->shape.shadowAlpha * shadowScale));
