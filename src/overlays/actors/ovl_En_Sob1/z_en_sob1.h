@@ -80,6 +80,8 @@ typedef enum EnSob1ShopType {
     /* 3 */ GORON_SHOP_SPRING
 } EnSob1ShopType;
 
+//! @TODO: Add enum for objIndices index based on what the object is for
+
 extern const ActorInit En_Sob1_InitVars;
 
 #endif // Z_EN_SOB1_H
