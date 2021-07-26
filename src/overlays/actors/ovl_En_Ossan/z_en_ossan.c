@@ -64,12 +64,12 @@ extern AnimationHeader D_060131FC;
 extern AnimationHeader D_0601430C;
 extern AnimationHeader D_060138B0;
 extern AnimationHeader D_0600A460;
-extern Texture D_06006498;
-extern Texture D_06007140;
-extern Texture D_06006D40;
-extern Texture D_06005BC0;
-extern Texture D_06006F18;
-extern Texture D_06006B18;
+extern UNK_TEXPTR D_06006498;
+extern UNK_TEXPTR D_06007140;
+extern UNK_TEXPTR D_06006D40;
+extern UNK_TEXPTR D_06005BC0;
+extern UNK_TEXPTR D_06006F18;
+extern UNK_TEXPTR D_06006B18;
 
 
 const ActorInit En_Ossan_InitVars = {
@@ -1695,7 +1695,7 @@ void EnOssan_PostLimbDrawPartTimeWorker(GlobalContext* globalCtx, s32 limbIndex,
 }
 
 void EnOssan_DrawCuriosityShopMan(Actor* thisx, GlobalContext* globalCtx) {
-    static Texture* sEyeTextures[] = { &D_06005BC0, &D_06006D40, &D_06007140 };
+    static UNK_TEXPTR* sEyeTextures[] = { &D_06005BC0, &D_06006D40, &D_06007140 };
     EnOssan* this = THIS;
     s32 pad;
 
@@ -1710,7 +1710,7 @@ void EnOssan_DrawCuriosityShopMan(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnOssan_DrawPartTimeWorker(Actor* thisx, GlobalContext* globalCtx) {
-    static Texture* sEyeTextures[] = { &D_06006498, &D_06006B18, &D_06006F18 };
+    static UNK_TEXPTR* sEyeTextures[] = { &D_06006498, &D_06006B18, &D_06006F18 };
     EnOssan* this = THIS;
     s32 pad;
 
