@@ -1680,11 +1680,11 @@ void EnTrt_DrawStickDirectionPrompt(GlobalContext* globalCtx, EnTrt* this) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-void EnTrt_Init(Actor* thisx, GlobalContext* globalCtx) {
-    static InitChainEntry sInitChain[] = {
-        ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
-    };
+static InitChainEntry sInitChain[] = {
+    ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
+};
 
+void EnTrt_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnTrt* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
