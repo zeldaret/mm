@@ -24,17 +24,17 @@ typedef struct EnSob1 {
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnSob1ActionFunc actionFunc;
     /* 0x18C */ EnSob1ActionFunc tmpActionFunc; // Used to restore back to correct browsing function
-    /* 0x190 */ EnSob1ActionFunc actionFunc2;
+    /* 0x190 */ EnSob1ActionFunc changeObjectFunc;
     /* 0x194 */ ColliderCylinder collider;
     /* 0x1E0 */ Path* path;
     /* 0x1E4 */ s32 pathPointsIdx;
     /* 0x1E8 */ s16 delayTimer;
-    /* 0x1EA */ s8 objIndicies[3];
+    /* 0x1EA */ s8 objIndices[3];
     /* 0x1EE */ s16 headRot;
     /* 0x1F0 */ s16 headRotTarget;
     /* 0x1F2 */ Vec3s limbDrawTable[20];
     /* 0x26A */ Vec3s transitionDrawTable[20];
-    /* 0x2E2 */ s16 eyeTextureIdx;
+    /* 0x2E2 */ s16 eyeTexIndex;
     /* 0x2E4 */ s16 blinkTimer;
     /* 0x2E8 */ EnSob1BlinkFunc blinkFunc;
     /* 0x2EC */ EnGirlA* items[3]; // Items on shelf are indexed as: /* 2 1 0 */
