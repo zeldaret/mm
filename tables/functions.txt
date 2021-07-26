@@ -15913,7 +15913,7 @@
     0x80BD8D1C:("func_80BD8D1C",),
     0x80BD8D80:("func_80BD8D80",),
     0x80BD8DB0:("func_80BD8DB0",),
-    0x80BD8F0C:("func_80BD8F0C",),
+    0x80BD8F0C:("EnPamera_LookDownWell",),
     0x80BD8F60:("func_80BD8F60",),
     0x80BD8FF0:("func_80BD8FF0",),
     0x80BD909C:("func_80BD909C",),
