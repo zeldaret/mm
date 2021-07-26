@@ -1695,7 +1695,7 @@ void EnOssan_PostLimbDrawPartTimeWorker(GlobalContext* globalCtx, s32 limbIndex,
 }
 
 void EnOssan_DrawCuriosityShopMan(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr* sEyeTextures[] = { &D_06005BC0, &D_06006D40, &D_06007140 };
+    static TexturePtr sEyeTextures[] = { &D_06005BC0, &D_06006D40, &D_06007140 };
     EnOssan* this = THIS;
     s32 pad;
 
@@ -1710,7 +1710,7 @@ void EnOssan_DrawCuriosityShopMan(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnOssan_DrawPartTimeWorker(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr* sEyeTextures[] = { &D_06006498, &D_06006B18, &D_06006F18 };
+    static TexturePtr sEyeTextures[] = { &D_06006498, &D_06006B18, &D_06006F18 };
     EnOssan* this = THIS;
     s32 pad;
 
