@@ -18,13 +18,10 @@ typedef struct EnOssan {
     /* 0x190 */ ColliderCylinder collider;
     /* 0x1DC */ s16 delayTimer;
     /* 0x1DE */ s8 objIndex;
-    /* 0x1E0 */ s16 eyeTextureIdx;
+    /* 0x1E0 */ s16 eyeTexIndex;
     /* 0x1E2 */ s16 blinkTimer;
     /* 0x1E4 */ EnOssanBlinkFunc blinkFunc;
-    /* 0x1E8 */ EnGirlA *items[8];
-    /* Items on shelves are indexed as:
-     * 7 5  3 1
-     * 6 4  2 0 */    
+    /* 0x1E8 */ EnGirlA* items[8];
     /* 0x208 */ s32 stickAccumX;
     /* 0x20C */ s32 stickAccumY;
     /* 0x210 */ u8 moveHorizontal;
@@ -65,10 +62,22 @@ typedef struct EnOssan {
     /* 0x40A */ u16 flags;
 } EnOssan; // size = 0x40C
 
+/* Note: 
+* Items on shelves are indexed as:
+* 7 5  3 1
+* 6 4  2 0 
+*/    
+
 typedef enum {
     /* 0 */ ENOSSAN_CURIOSITY_SHOP_MAN,
     /* 1 */ ENOSSAN_PART_TIME_WORKER
 } EnOssanWorker;
+
+typedef enum {
+    /* 0 */ ENOSSAN_CUTSCENESTATE_STOPPED,
+    /* 1 */ ENOSSAN_CUTSCENESTATE_WAITING,
+    /* 2 */ ENOSSAN_CUTSCENESTATE_PLAYING
+} EnOssanCutsceneState;
 
 extern const ActorInit En_Ossan_InitVars;
 
