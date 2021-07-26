@@ -32,6 +32,8 @@ static InitChainEntry D_8092E470[] = {
 extern InitChainEntry D_8092E470[];
 #endif
 
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg/D_8092E480.s")
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg/func_8092DF90.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg/func_8092DF9C.s")
@@ -47,5 +49,3 @@ extern InitChainEntry D_8092E470[];
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg/func_8092E284.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg/ElfMsg_Update.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg/D_8092E480.s")

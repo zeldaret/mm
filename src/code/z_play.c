@@ -29,6 +29,8 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80165EC0.s")
 
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/D_801DFA18.s")
+
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80166060.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_801660B8.s")
@@ -140,5 +142,3 @@
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_8016A268.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Init.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/D_801DFA18.s")

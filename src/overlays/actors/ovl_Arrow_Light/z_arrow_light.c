@@ -32,6 +32,8 @@ static InitChainEntry D_809260A0[] = {
 extern InitChainEntry D_809260A0[];
 #endif
 
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Light/D_809260B0.s")
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Light/func_80924300.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Light/ArrowLight_Init.s")
@@ -49,5 +51,3 @@ extern InitChainEntry D_809260A0[];
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Light/ArrowLight_Update.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Light/ArrowLight_Draw.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Light/D_809260B0.s")

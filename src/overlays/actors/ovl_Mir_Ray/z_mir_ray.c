@@ -61,6 +61,8 @@ extern ColliderJntSphInit D_808E3C68;
 extern InitChainEntry D_808E3DB8[];
 #endif
 
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray/D_808E3DD0.s")
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray/func_808E2600.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray/func_808E26C8.s")
@@ -82,5 +84,3 @@ extern InitChainEntry D_808E3DB8[];
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray/MirRay_Draw.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray/func_808E3984.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray/D_808E3DD0.s")

@@ -31,6 +31,8 @@ static InitChainEntry D_80A109E8[] = {
 extern InitChainEntry D_80A109E8[];
 #endif
 
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sob1/D_80A10A50.s")
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sob1/func_80A0C810.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sob1/func_80A0C8AC.s")
@@ -182,5 +184,3 @@ extern InitChainEntry D_80A109E8[];
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sob1/func_80A104E4.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sob1/func_80A10608.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sob1/D_80A10A50.s")
