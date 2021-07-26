@@ -279,7 +279,6 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
                     case 0x5F8:
                         func_801477B4(globalCtx);
                         this->actor.flags &= ~0x10000;
-                        ;
                         this->actor.params = ENBJI01_PARAMS_FINISHED_CONVERSATION;
                         func_809CCE98(this, globalCtx);
                         break;
@@ -289,7 +288,6 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
         case 6:
             this->actor.params = ENBJI01_PARAMS_FINISHED_CONVERSATION;
             this->actor.flags &= ~0x10000;
-            ;
             func_809CCE98(this, globalCtx);
             break;
     }
