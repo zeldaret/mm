@@ -62,9 +62,9 @@ typedef struct EnSob1 {
     /* 0x3A2 */ s16 lookFowardCutscene;
     /* 0x3A4 */ s16 lookToShelfCutscene;
     /* 0x3A6 */ s16 lookToShopkeeperCutscene;
-    /* 0x3A8 */ char pad3A8[0x4];
+    /* 0x3A8 */ UNK_TYPE1 pad3A8[0x4];
     /* 0x3AC */ f32 shopItemSelectedTween;
-    /* 0x3B0 */ char pad3B0[0x4];
+    /* 0x3B0 */ UNK_TYPE1 pad3B0[0x4];
     /* 0x3B4 */ u16 welcomeTextId;
     /* 0x3B6 */ u16 talkOptionTextId;
     /* 0x3B8 */ u16 goodbyeTextId;
