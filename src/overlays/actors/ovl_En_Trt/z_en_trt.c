@@ -81,9 +81,6 @@ extern UNK_TYPE D_0600B0B8;
 extern UNK_TYPE D_0600B8B8;
 extern UNK_TYPE D_0600C0B8;
 
-const char filename1[] = "../z_en_trt.c"; // Unused
-const char filename2[] = "../z_en_trt.c"; // Unused
-
 static ActorAnimationEntryS sAnimations[] = {
     { &D_0600DE68, 1.0f, 0, -1, 2, 0 }, { &D_0600EE98, 1.0f, 0, -1, 2, 0 }, { &D_0600FD34, 1.0f, 0, -1, 0, 0 },
     { &D_060030EC, 1.0f, 0, -1, 2, 0 }, { &D_06003D78, 1.0f, 0, -1, 2, 0 }, { &D_0600D52C, 1.0f, 0, -1, 0, 0 },
@@ -1581,6 +1578,7 @@ void EnTrt_DrawCursor(GlobalContext* globalCtx, EnTrt* this, f32 x, f32 y, f32 z
     s32 dsdx;
     s32 pad;
 
+
     OPEN_DISPS(globalCtx->state.gfxCtx);
     if (drawCursor != 0) {
         func_8012C654(globalCtx->state.gfxCtx);
@@ -1606,6 +1604,8 @@ void EnTrt_DrawTextRec(GlobalContext* globalCtx, s32 r, s32 g, s32 b, s32 a, f32
     f32 w, h;
     s32 dsdx, dtdy;
 
+    ((void)"../z_en_trt.c"); // Unreferenced
+
     OPEN_DISPS(globalCtx->state.gfxCtx);
     gDPPipeSync(OVERLAY_DISP++);
     gDPSetPrimColor(OVERLAY_DISP++, 0, 0, r, g, b, a);
@@ -1629,6 +1629,8 @@ void EnTrt_DrawTextRec(GlobalContext* globalCtx, s32 r, s32 g, s32 b, s32 a, f32
 void EnTrt_DrawStickDirectionPrompt(GlobalContext* globalCtx, EnTrt* this) {
     s32 drawStickRightPrompt = this->stickLeftPrompt.isEnabled;
     s32 drawStickLeftPrompt = this->stickRightPrompt.isEnabled;
+
+    ((void)"../z_en_trt.c"); // Unreferenced
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     if (drawStickRightPrompt || drawStickLeftPrompt) {
