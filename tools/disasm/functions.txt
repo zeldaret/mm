@@ -16134,7 +16134,7 @@
     0x80BE71A0:("func_80BE71A0",),
     0x80BE71D8:("func_80BE71D8",),
     0x80BE72A8:("EnDaiku2_Update",),
-    0x80BE738C:("func_80BE738C",),
+    0x80BE738C:("EnDaiku2_PostLimbDraw",),
     0x80BE7474:("EnDaiku2_Draw",),
     0x80BE7504:("func_80BE7504",),
     0x80BE7600:("func_80BE7600",),

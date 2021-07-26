@@ -5,13 +5,40 @@
 
 struct EnDaiku2;
 
-typedef void (*EnDaiku2ActionFunc)(struct EnDaiku2* this, GlobalContext* globalCtx);
+typedef void (*EnDaiku2ActionFunc)(struct EnDaiku2*, GlobalContext*);
+
+typedef struct EnDaiku2Particle {
+    /* 0x00 */ u8 isEnabled;
+    /* 0x04 */ Vec3f unk_04;
+    /* 0x10 */ Vec3f unk_10;
+    /* 0x1C */ Vec3f unk_1C;
+    /* 0x28 */ Vec3s unk_28;
+    /* 0x30 */ f32 unk_30;
+    /* 0x34 */ s16 unk_34;
+} EnDaiku2Particle; // size = 0x38
 
 typedef struct EnDaiku2 {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x110];
-    /* 0x0254 */ EnDaiku2ActionFunc actionFunc;
-    /* 0x0258 */ char unk_258[0xB70];
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ SkelAnime skelAnime;
+    /* 0x188 */ Vec3s jointTable[17];
+    /* 0x1EE */ Vec3s morphTable[17];
+    /* 0x254 */ EnDaiku2ActionFunc actionFunc;
+    /* 0x258 */ Path* unk_258;
+    /* 0x25C */ s16 unk_25C;
+    /* 0x260 */ f32 unk_260;
+    /* 0x264 */ f32 unk_264;
+    /* 0x268 */ Vec3f unk_268;
+    /* 0x274 */ s16 unk_274;
+    /* 0x276 */ s16 unk_276;
+    /* 0x278 */ s16 unk_278;
+    /* 0x27A */ s16 unk_27A;
+    /* 0x27C */ UNK_TYPE1 unk_27C[0x4];
+    /* 0x280 */ s32 unk_280;
+    /* 0x284 */ f32 unk_284;
+    /* 0x288 */ s16 unk_288;
+    /* 0x28A */ s16 unk_28A;
+    /* 0x28C */ EnDaiku2Particle particles[50];
+    /* 0xD7C */ ColliderCylinder collider;
 } EnDaiku2; // size = 0xDC8
 
 extern const ActorInit En_Daiku2_InitVars;
