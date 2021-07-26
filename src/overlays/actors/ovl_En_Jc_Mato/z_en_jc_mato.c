@@ -1,6 +1,6 @@
 /*
  * File: z_en_jc_mato.c
- * Overlay: ovl_en_jc_mato
+ * Overlay: ovl_En_Jc_Mato
  * Description: Boat Cruise Target
  */
 

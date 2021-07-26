@@ -1043,14 +1043,8 @@ SECTIONS
     {
         build/src/overlays/actors/ovl_En_Niw/z_en_niw.o(.text)
         build/src/overlays/actors/ovl_En_Niw/z_en_niw.o(.data)
-#ifdef NON_EQUIVALENT
-        build/src/overlays/actors/ovl_En_Niw_rodata_overlay.o(.ovl)
-#elseif NON_MATCHING
-        build/src/overlays/actors/ovl_En_Niw_rodata_overlay.o(.ovl)
-#else
         build/src/overlays/actors/ovl_En_Niw/z_en_niw.o(.rodata)
-        build/asm/overlays/ovl_En_Niw_rodata.o(.rodata)
-#endif
+        build/src/overlays/actors/ovl_En_Niw/z_en_niw_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -2169,7 +2163,7 @@ SECTIONS
         build/src/overlays/actors/ovl_En_Tubo_Trap/z_en_tubo_trap.o(.text)
         build/src/overlays/actors/ovl_En_Tubo_Trap/z_en_tubo_trap.o(.data)
         build/src/overlays/actors/ovl_En_Tubo_Trap/z_en_tubo_trap.o(.rodata)
-        build/asm/overlays/ovl_En_Tubo_Trap_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Tubo_Trap/z_en_tubo_trap_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -2635,11 +2629,7 @@ SECTIONS
         build/src/overlays/actors/ovl_En_Weather_Tag/z_en_weather_tag.o(.text)
         build/src/overlays/actors/ovl_En_Weather_Tag/z_en_weather_tag.o(.data)
         build/src/overlays/actors/ovl_En_Weather_Tag/z_en_weather_tag.o(.rodata)
-#ifdef NON_MATCHING
         build/src/overlays/actors/ovl_En_Weather_Tag/z_en_weather_tag_overlay.o(.ovl)
-#else
-        build/asm/overlays/ovl_En_Weather_Tag_rodata.o(.rodata)
-#endif
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -7366,9 +7356,9 @@ SECTIONS
     ovl_En_Ma_Yto : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Ma_Yto/z_en_ma_yto.o(.text)
-        build/asm/overlays/ovl_En_Ma_Yto_data.o(.data)
+        build/src/overlays/actors/ovl_En_Ma_Yto/z_en_ma_yto.o(.data)
         build/src/overlays/actors/ovl_En_Ma_Yto/z_en_ma_yto.o(.rodata)
-        build/asm/overlays/ovl_En_Ma_Yto_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Ma_Yto/z_en_ma_yto_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -7694,9 +7684,9 @@ SECTIONS
     ovl_En_Suttari : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Suttari/z_en_suttari.o(.text)
-        build/asm/overlays/ovl_En_Suttari_data.o(.data)
+        build/src/overlays/actors/ovl_En_Suttari/z_en_suttari.o(.data)
         build/src/overlays/actors/ovl_En_Suttari/z_en_suttari.o(.rodata)
-        build/asm/overlays/ovl_En_Suttari_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Suttari/z_en_suttari_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;

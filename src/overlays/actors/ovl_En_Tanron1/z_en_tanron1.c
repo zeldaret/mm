@@ -9,7 +9,7 @@ void EnTanron1_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron1_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron1_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Tanron1_InitVars = {
     ACTOR_EN_TANRON1,
     ACTORCAT_ENEMY,
@@ -21,7 +21,8 @@ const ActorInit En_Tanron1_InitVars = {
     (ActorFunc)EnTanron1_Update,
     (ActorFunc)EnTanron1_Draw,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron1_0x80BB4E00/EnTanron1_Init.asm")
 

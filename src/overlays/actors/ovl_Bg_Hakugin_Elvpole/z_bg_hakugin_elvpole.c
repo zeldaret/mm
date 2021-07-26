@@ -9,7 +9,7 @@ void BgHakuginElvpole_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgHakuginElvpole_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgHakuginElvpole_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Bg_Hakugin_Elvpole_InitVars = {
     ACTOR_BG_HAKUGIN_ELVPOLE,
     ACTORCAT_BG,
@@ -21,7 +21,8 @@ const ActorInit Bg_Hakugin_Elvpole_InitVars = {
     (ActorFunc)BgHakuginElvpole_Update,
     (ActorFunc)BgHakuginElvpole_Draw,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Hakugin_Elvpole_0x80ABD830/BgHakuginElvpole_Init.asm")
 

@@ -1,7 +1,7 @@
 /*
  * File: z_obj_raillift.c
- * Overlay: Obj_Raillift
- * Description: Moving Deku Flower Platform and OOT Water Temple Waterfall Platform
+ * Overlay: ovl_Obj_Raillift
+ * Description: Moving Deku Flower Platform and OoT Water Temple Waterfall Platform
  */
 
 #include "z_obj_raillift.h"

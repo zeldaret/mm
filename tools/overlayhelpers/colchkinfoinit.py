@@ -29,7 +29,7 @@ def main():
     if args.type == "ColChkInfoInit":
         info = list(struct.unpack(">Bx2hB", filedata[file_offset:file_offset+7]))
         NameMass(info)
-        output="// colChkInfoInit\nstatic CollisionCheckInfoInit D_{0:08X} = {{ ".format(args.address) + ", ".join(map(str,info)) + "};"
+        output="// sColChkInfoInit\nstatic CollisionCheckInfoInit D_{0:08X} = {{ ".format(args.address) + ", ".join(map(str,info)) + "};"
     else:
         info = list(struct.unpack(">Bx3hB", filedata[file_offset:file_offset+9]))
         NameMass(info)

@@ -9,7 +9,7 @@ void EnFamos_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFamos_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFamos_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Famos_InitVars = {
     ACTOR_EN_FAMOS,
     ACTORCAT_ENEMY,
@@ -21,7 +21,56 @@ const ActorInit En_Famos_InitVars = {
     (ActorFunc)EnFamos_Update,
     (ActorFunc)EnFamos_Draw,
 };
-*/
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_808AE600 = {
+    { COLTYPE_METAL, AT_NONE | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK2, { 0x20000000, 0x04, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    { 20, 80, 0, { 0, 0, 0 } },
+};
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_808AE62C = {
+    { COLTYPE_NONE, AT_NONE | AT_TYPE_ENEMY, AC_NONE, OC1_NONE, OC2_TYPE_1, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x04, 0x08 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_NONE, },
+    { 70, 10, 0, { 0, 0, 0 } },
+};
+
+
+// static ColliderJntSphElementInit sJntSphElementsInit[2] = {
+static ColliderJntSphElementInit D_808AE658[2] = {
+    {
+        { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00002000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+        { 2, { { 2500, 0, 0 }, 20 }, 100 },
+    },
+    {
+        { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00002000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+        { 2, { { -1500, 0, 0 }, 20 }, 100 },
+    },
+};
+
+// static ColliderJntSphInit sJntSphInit = {
+static ColliderJntSphInit D_808AE6A0 = {
+    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_1, COLSHAPE_JNTSPH, },
+    2, D_808AE658, // sJntSphElementsInit,
+};
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_808AE6B8[] = {
+    ICHAIN_S8(hintId, 15, ICHAIN_CONTINUE),
+    ICHAIN_F32(targetArrowOffset, 3500, ICHAIN_STOP),
+};
+
+
+extern ColliderCylinderInit D_808AE600;
+extern ColliderCylinderInit D_808AE62C;
+extern ColliderJntSphElementInit D_808AE658[2];
+extern ColliderJntSphInit D_808AE6A0;
+extern InitChainEntry D_808AE6B8[];
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Famos_0x808AC920/EnFamos_Init.asm")
 

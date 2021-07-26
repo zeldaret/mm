@@ -7,7 +7,6 @@ struct EnMaYts;
 
 typedef void (*EnMaYtsActionFunc)(struct EnMaYts*, GlobalContext*);
 
-// Limbs of OBJECT_MA1
 typedef enum {
     /* 00 */ MA1_LIMB_NONE,
     /* 01 */ MA1_LIMB_ROOT,

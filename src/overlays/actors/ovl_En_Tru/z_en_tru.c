@@ -9,7 +9,7 @@ void EnTru_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTru_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTru_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Tru_InitVars = {
     ACTOR_EN_TRU,
     ACTORCAT_NPC,
@@ -21,7 +21,23 @@ const ActorInit En_Tru_InitVars = {
     (ActorFunc)EnTru_Update,
     (ActorFunc)EnTru_Draw,
 };
-*/
+
+
+// static ColliderSphereInit sSphereInit = {
+static ColliderSphereInit D_80A8B2A0 = {
+    { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_SPHERE, },
+    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
+    { 0, { { 0, 0, 0 }, 32 }, 100 },
+};
+
+
+// sColChkInfoInit
+static CollisionCheckInfoInit2 D_80A8B2CC = { 1, 20, 0, 0, MASS_IMMOVABLE };
+
+
+extern ColliderSphereInit D_80A8B2A0;
+extern CollisionCheckInfoInit2 D_80A8B2CC;
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tru_0x80A85620/func_80A85620.asm")
 
