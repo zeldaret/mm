@@ -1,3 +1,9 @@
+/*
+ * File: z_en_dai.c
+ * Overlay: ovl_En_Dai
+ * Description: Biggoron
+ */
+
 #include "z_en_dai.h"
 
 #define FLAGS 0x02000039
