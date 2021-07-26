@@ -9,7 +9,7 @@ void ObjOshihiki_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjOshihiki_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjOshihiki_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Obj_Oshihiki_InitVars = {
     ACTOR_OBJ_OSHIHIKI,
     ACTORCAT_PROP,
@@ -21,7 +21,18 @@ const ActorInit Obj_Oshihiki_InitVars = {
     (ActorFunc)ObjOshihiki_Update,
     (ActorFunc)ObjOshihiki_Draw,
 };
-*/
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80918898[] = {
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 500, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 500, ICHAIN_STOP),
+};
+
+
+extern InitChainEntry D_80918898[];
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Oshihiki_0x80917290/func_80917290.asm")
 

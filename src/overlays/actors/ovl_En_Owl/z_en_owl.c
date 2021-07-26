@@ -9,7 +9,7 @@ void EnOwl_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnOwl_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnOwl_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Owl_InitVars = {
     ACTOR_EN_OWL,
     ACTORCAT_NPC,
@@ -21,7 +21,28 @@ const ActorInit En_Owl_InitVars = {
     (ActorFunc)EnOwl_Update,
     (ActorFunc)EnOwl_Draw,
 };
-*/
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_8095D2F0 = {
+    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_ENEMY, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    { 30, 40, 0, { 0, 0, 0 } },
+};
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_8095D31C[] = {
+    ICHAIN_VEC3F_DIV1000(scale, 25, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 1400, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 2000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 2400, ICHAIN_STOP),
+};
+
+
+extern ColliderCylinderInit D_8095D2F0;
+extern InitChainEntry D_8095D31C[];
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Owl_0x8095A510/func_8095A510.asm")
 

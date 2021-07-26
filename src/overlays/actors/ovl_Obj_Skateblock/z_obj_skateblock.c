@@ -9,7 +9,7 @@ void ObjSkateblock_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSkateblock_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjSkateblock_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Obj_Skateblock_InitVars = {
     ACTOR_OBJ_SKATEBLOCK,
     ACTORCAT_BG,
@@ -21,7 +21,21 @@ const ActorInit Obj_Skateblock_InitVars = {
     (ActorFunc)ObjSkateblock_Update,
     (ActorFunc)ObjSkateblock_Draw,
 };
-*/
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80A22AE0[] = {
+    ICHAIN_F32_DIV1000(gravity, -1700, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(minVelocityY, -20000, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 150, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
+};
+
+
+extern InitChainEntry D_80A22AE0[];
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Skateblock_0x80A21150/func_80A21150.asm")
 

@@ -9,7 +9,7 @@ void EnAnd_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnAnd_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnAnd_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_And_InitVars = {
     ACTOR_EN_AND,
     ACTORCAT_NPC,
@@ -21,7 +21,8 @@ const ActorInit En_And_InitVars = {
     (ActorFunc)EnAnd_Update,
     (ActorFunc)EnAnd_Draw,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_And_0x80C18B90/func_80C18B90.asm")
 
