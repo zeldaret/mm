@@ -884,9 +884,8 @@ beginseg
 
     include "build/data/code/code_801D55B0.data.o"
 
-    include "build/asm/code/code_801A51F0.text.o" // jumptable is too big for its own good...
+    include "build/src/code/code_801A51F0.o"
     include "build/data/code/code_801A51F0.data.o"
-    include "build/data/code/code_801A51F0.rodata.o"
     include "build/data/code/code_801A51F0.bss.o"
 
     pad_text
