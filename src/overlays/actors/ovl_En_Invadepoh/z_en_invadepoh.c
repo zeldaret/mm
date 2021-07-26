@@ -5,7 +5,7 @@
  */
 
 #include "z_en_invadepoh.h"
-#include "../ovl_En_Door/z_en_door.h"
+#include "overlays/actors/ovl_En_Door/z_en_door.h"
 
 #define FLAGS 0x00000010
 
