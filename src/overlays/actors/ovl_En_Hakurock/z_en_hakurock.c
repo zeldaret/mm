@@ -8,7 +8,7 @@ void EnHakurock_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnHakurock_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHakurock_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80B21BE0(EnHakurock* this, Vec3f* arg1, s32 arg2);
+void func_80B21BE0(Actor* arg0, Vec3f* arg1, s32 arg2);
 
 void func_80B21FFC(EnHakurock* this);
 void func_80B22040(EnHakurock* this, GlobalContext* globalCtx);
@@ -92,49 +92,57 @@ void EnHakurock_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hakurock_0x80B21B00/func_80B21EA4.asm")
 // void func_80B21EA4(EnHakurock* this, s32 arg1) {
-//     f32 sp50;
 //     Vec3f sp4C;
-//     f32 temp_f20;
-//     s32 temp_s5;
 //     s32 i;
+//     f32 temp_f20;
+//     f32 sp50;
+//     s32 k;
 //     s32 phi_s0_3;
-//     s32 phi_s5;
-//     s32 phi_s0_4;
 
 //     if (arg1 == 0) {
-//         for(i = 0; i < 20; i++){
-//             func_80B21BE0(this->actor.parent, &this->actor.world, arg1);
+//         for (i = 0; i < 20; i++) {
+//             func_80B21BE0(this->actor.parent, &this->actor.world.pos, arg1);
 //         }
 //         return;
 //     }
 //     if (arg1 == 2) {
-//         for(i = 0; i < 10; i++){
-//             func_80B21BE0(this->actor.parent, &this->actor.world, arg1);
+//         for (i = 0; i < 10; i++) {
+//             func_80B21BE0(this->actor.parent, &this->actor.world.pos, arg1);
 //         }
 //         return;
 //     }
 //     Math_Vec3f_Copy(&sp4C, &this->actor.world.pos);
 //     temp_f20 = this->actor.scale.x * 600.0f;
-//     phi_s0_3 = 1;
+//     k = 1;
 //     if (arg1 == 1) {
 //         sp50 -= temp_f20;
-//         phi_s0_3 = 0;
+//         k = 0;
 //     }
-//     if (phi_s0_3 < 3) {
-//         phi_s5 = (phi_s0_3 * 5) + 5;
-//         do {
-//             phi_s0_4 = 0;
-//             if (phi_s5 > 0) {
-//                 do {
-//                     func_80B21BE0(this->actor.parent, &sp4C, arg1);
-//                     phi_s0_4++;
-//                 } while ((phi_s0_4 < phi_s5));
-//             }
-//             temp_s5 = phi_s5 + 5;
-//             sp50 += temp_f20;
-//             phi_s5 = temp_s5;
-//         } while ((temp_s5 < 20));
+
+//     for (k = (k * 5) + 5; k < 0x14; k += 5) {
+
+//         for (i = 0; i < k - 1; i++) {
+//             func_80B21BE0(this->actor.parent, &sp4C, arg1);
+//         }
+//         sp50 += temp_f20;
+
 //     }
+//     // if (phi_s0_3 < 3) {
+//     //     phi_s5 = (phi_s0_3 * 5) + 5;
+//     //     do {
+//     //         phi_s0_4 = 0;
+//     //         if (phi_s5 > 0) {
+//     //             do {
+//     //                 func_80B21BE0(this->actor.parent, &sp4C, arg1);
+//     //                 temp_s0_3 = phi_s0_4 + 1;
+//     //                 phi_s0_4 = temp_s0_3;
+//     //             } while (temp_s0_3 < phi_s5);
+//     //         }
+//     //         temp_s5 = phi_s5 + 5;
+//     //         sp50 += temp_f20;
+//     //         phi_s5 = temp_s5;
+//     //     } while (temp_s5 < 0x14);
+//     // }
 // }
 
 void func_80B21FFC(EnHakurock* this) {
@@ -233,44 +241,37 @@ void func_80B224C0(EnHakurock* this) {
     this->actionFunc = func_80B22500;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hakurock_0x80B21B00/func_80B22500.asm")
-// void func_80B22500(EnHakurock* this, GlobalContext* globalCtx) {
-//     Player* player = PLAYER;
-//     Actor* temp_v0_2;
-//     struct Actor* new_var;
-//     f32 temp;
+void func_80B22500(EnHakurock* this, GlobalContext* globalCtx) {
+    Player* player = PLAYER;
 
-//     if (this->unk_148 > 0) {
-//         this->unk_148--;
-//         if ((this->unk_148 & 1) == 0) {
-//             this->actor.world.pos.y = (sin_rad(this->unk_148 * 0.15707964f) * 4.0f) + this->actor.floorHeight;
-//         } else {
-//             this->actor.world.pos.y = this->actor.floorHeight;
-//         }
-//     }
-//     if ((this->collider.base.ocFlags1 & 2)) {
-//         // temp_v0_2 = this->collider.base.oc;
-//         new_var = this->actor.parent;
-//         if (this->collider.base.oc != new_var) {
-//             if ((this->collider.base.oc->id == 0x1EA) && (this->collider.base.oc->params == 2)) {
-//                 func_80B21EA4(this, 3);
-//                 func_80B21FFC(this);
-//             } else if (((this->collider.base.oc == new_var) && (player->stateFlags3 & 0x81000)) && (player->linearVelocity > 8.0f)) {
-//                 temp = -5.0f;
-//                 player->linearVelocity = temp;
-//                 player->unk_B08[0] = temp;
-//                 player->unk_B08[1] += (temp * 0.05f);
-//                 player->currentYaw = player->actor.world.rot.y;
-//                 player->actor.velocity.y = 5.0f;
-//                 player->actor.home.rot.y = player->actor.world.rot.y;
-//                 player->actor.shape.rot.y = player->actor.world.rot.y;
-//                 player->unk_B8C = 4;
-//             }
-//         }
-//     } else if ((this->actor.xzDistToPlayer > 1000.0f) && (this->actor.projectedPos.z < 0.0f)) {
-//         func_80B21FFC(this);
-//     }
-// }
+    if (this->unk_148 > 0) {
+        this->unk_148--;
+        if ((this->unk_148 & 1) == 0) {
+            this->actor.world.pos.y = (sin_rad(this->unk_148 * 0.15707964f) * 4.0f) + this->actor.floorHeight;
+        } else {
+            this->actor.world.pos.y = this->actor.floorHeight;
+        }
+    }
+    if (this->collider.base.ocFlags1 & 2) {
+        if ((this->collider.base.oc == this->actor.parent) ||
+            ((this->collider.base.oc->id == 0x1EA) && (this->collider.base.oc->params == 2))) {
+            func_80B21EA4(this, 3);
+            func_80B21FFC(this);
+        } else if ((&player->actor == this->collider.base.oc) && ((player->stateFlags3 & 0x81000) != 0) &&
+                   (player->linearVelocity > 8.0f)) {
+            player->unk_B08[0] = player->linearVelocity = -5.0f;
+            player->unk_B08[1] += (player->linearVelocity * 0.05f);
+            player->actor.velocity.y = 5.0f;
+            player->currentYaw = player->actor.world.rot.y;
+            player->actor.home.rot.y = player->actor.world.rot.y;
+            player->actor.shape.rot.y = player->actor.world.rot.y;
+            player->unk_B8C = 4;
+        }
+
+    } else if ((this->actor.xzDistToPlayer > 1000.0f) && (this->actor.projectedPos.z < 0.0f)) {
+        func_80B21FFC(this);
+    }
+}
 
 void func_80B226AC(EnHakurock* this) {
     f32 shiftFactor;
