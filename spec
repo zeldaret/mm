@@ -102,7 +102,7 @@ beginseg
 
     include "build/data/boot/vimodeHpf.data.o"
 
-    include "build/src/boot/guScale.o"
+    include "build/asm/boot/guScale.text.o" // handwritten probably
 
     include "build/src/libultra/gu/sinf.o"
 
@@ -121,7 +121,7 @@ beginseg
 
     include "build/src/libultra/os/destroythread.o"
     include "build/src/libultra/voice/voicecheckresult.o"
-    include "build/src/boot/bzero.o"
+    include "build/asm/boot/bzero.text.o" // handwritten probably
 
     include "build/src/boot/rumblepak.o"
     include "build/data/boot/rumblepak.bss.o"
@@ -170,7 +170,7 @@ beginseg
     include "build/src/boot/pfsreadwritefile.o"
     include "build/src/boot/pfsgetstatus.o"
     pad_text
-    include "build/src/boot/guMtxIdentF.o"
+    include "build/asm/boot/guMtxIdentF.text.o" // handwritten probably
     include "build/src/libultra/io/visetmode.o"
 
     include "build/asm/boot/getconfig.text.o" // handwritten probably
@@ -200,7 +200,7 @@ beginseg
 
     pad_text
 
-    include "build/src/boot/guMtxL2F.o"
+    include "build/asm/boot/guMtxL2F.text.o" // handwritten probably
     include "build/src/libultra/os/getmemsize.o"
     include "build/src/boot/pfssearchfile.o"
 
@@ -237,7 +237,7 @@ beginseg
     include "build/src/boot/voicecontread36.o"
     include "build/src/boot/sp.o"
     include "build/src/libultra/io/si.o"
-    include "build/src/boot/guMtxIdent.o"
+    include "build/asm/boot/guMtxIdent.text.o" // handwritten probably
     include "build/src/libultra/os/jammesg.o"
     include "build/src/libultra/os/setthreadpri.o"
     include "build/src/libultra/os/getthreadpri.o"
@@ -325,7 +325,7 @@ beginseg
 
     include "build/src/libultra/os/yieldthread.o"
     pad_text
-    include "build/src/boot/guTranslate.o"
+    include "build/asm/boot/guTranslate.text.o" // handwritten probably
 
     include "build/asm/boot/getcause.text.o" // handwritten probably
 
@@ -355,7 +355,7 @@ beginseg
     include "build/src/libultra/os/getcurrfaultthread.o"
     include "build/src/boot/voicemaskdictionary.o"
     pad_text
-    include "build/src/boot/guMtxF2L.o"
+    include "build/asm/boot/guMtxF2L.text.o" // handwritten probably
     include "build/src/libultra/os/startthread.o"
     include "build/src/libultra/io/visetyscale.o"
 
