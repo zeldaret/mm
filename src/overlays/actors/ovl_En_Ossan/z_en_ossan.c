@@ -445,21 +445,17 @@ void EnOssan_UpdateJoystickInputState(GlobalContext* globalCtx, EnOssan* this) {
             this->stickAccumY = stickY;
             this->moveVertical = true;
         }
+    } else if (stickY <= 30 && stickY >= -30) {
+        this->stickAccumY = 0;
+    } else if ((this->stickAccumY * stickY) < 0) { // Stick has swapped directions
+        this->stickAccumY = stickY;
+        this->moveVertical = true;
     } else {
-        if (stickY <= 30 && stickY >= -30) {
-            this->stickAccumY = 0;
-        } else {
-            if ((this->stickAccumY * stickY) < 0) { // Stick has swapped directions
-                this->stickAccumY = stickY;
-                this->moveVertical = true;
-            } else {
-                this->stickAccumY += stickY;
-                if (this->stickAccumY > 2000) {
-                    this->stickAccumY = 2000;
-                } else if (this->stickAccumY < -2000) {
-                    this->stickAccumY = -2000;
-                }
-            }
+        this->stickAccumY += stickY;
+        if (this->stickAccumY > 2000) {
+            this->stickAccumY = 2000;
+        } else if (this->stickAccumY < -2000) {
+            this->stickAccumY = -2000;
         }
     }
 }
