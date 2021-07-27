@@ -2,10 +2,10 @@
 #include "global.h"
 #include "initvars.h"
 
-#define ACTOR_OVERLAY(name, allocType)                                                                  \
-    {                                                                                                   \
+#define ACTOR_OVERLAY(name, allocType) \
+    {  \
         (u32) _ovl_##name##SegmentRomStart, (u32)_ovl_##name##SegmentRomEnd, _ovl_##name##SegmentStart, \
-            _ovl_##name##SegmentEnd, NULL, &name##_InitVars, NULL, allocType, 0                         \
+            _ovl_##name##SegmentEnd, NULL, &name##_InitVars, NULL, allocType, 0 \
     }
 
 #define ACTOR_OVERLAY_INTERNAL(name, allocType) \

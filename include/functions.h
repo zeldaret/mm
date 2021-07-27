@@ -3982,7 +3982,7 @@ void func_801A4D00(void);
 // void func_801A5080(void);
 // void func_801A5100(void);
 // void func_801A5118(void);
-// void func_801A51F0(void);
+UNK_TYPE func_801A51F0(UNK_TYPE arg0);
 // void func_801A5228(void);
 // void func_801A5390(void);
 // void func_801A53E8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5);
