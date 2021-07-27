@@ -46,27 +46,26 @@ def GetCsvFilelist(version, filelist):
     with open(path, newline='') as f:
         return list(csv.reader(f, delimiter=','))
 
-def GetRemovableSize(functions_to_count, path):
+def GetRemovableSize(functions_to_count):
     size = 0
 
-    asm_files = GetFiles(path, ".s")
-
-    for asm_file_path in asm_files:
+    for asm_file_path in functions_to_count:
+        if "//" in asm_file_path:
+            raise RuntimeError(f"Invalid file path: {asm_file_path}")
         file_size = 0
-        if asm_file_path in functions_to_count:
-            asm_lines = ReadAllLines(asm_file_path)
-            shouldCount = True
+        asm_lines = ReadAllLines(asm_file_path)
+        shouldCount = True
 
-            for asm_line in asm_lines:
-                if asm_line[0] == ".":
-                    if asm_line.startswith(".text") or asm_line.startswith(".section .text"):
-                        shouldCount = True
-                    elif ".rdata" in asm_line or ".late_rodata" in asm_line:
-                        shouldCount = False
+        for asm_line in asm_lines:
+            if asm_line[0] == ".":
+                if asm_line.startswith(".text") or asm_line.startswith(".section .text"):
+                    shouldCount = True
+                elif ".rdata" in asm_line or ".late_rodata" in asm_line:
+                    shouldCount = False
 
-                if shouldCount:
-                    if (asm_line[0:2] == "/*" and asm_line[28:30] == "*/"):
-                        file_size += 4
+            if shouldCount:
+                if (asm_line[0:2] == "/*" and asm_line[28:30] == "*/"):
+                    file_size += 4
 
         size += file_size
 
@@ -156,14 +155,22 @@ src_boot += src_libultra
 asm_boot += asm_libultra
 
 # Calculate Non-Matching
-non_matching_asm_ovl = GetRemovableSize(non_matching_functions, "asm/non_matchings/overlays")
-non_matching_asm_code = GetRemovableSize(non_matching_functions, "asm/non_matchings/code")
-non_matching_asm_boot = GetRemovableSize(non_matching_functions, "asm/non_matchings/boot")
+non_matching_functions_ovl = list(filter(lambda x: "/overlays/" in x, non_matching_functions))
+non_matching_functions_code = list(filter(lambda x: "/code/" in x, non_matching_functions))
+non_matching_functions_boot = list(filter(lambda x: "/boot/" in x, non_matching_functions))
+
+non_matching_asm_ovl = GetRemovableSize(non_matching_functions_ovl)
+non_matching_asm_code = GetRemovableSize(non_matching_functions_code)
+non_matching_asm_boot = GetRemovableSize(non_matching_functions_boot)
 
 # Calculate Not Attempted
-not_attempted_asm_ovl = GetRemovableSize(not_attempted_functions, "asm/non_matchings/overlays")
-not_attempted_asm_code = GetRemovableSize(not_attempted_functions, "asm/non_matchings/code")
-not_attempted_asm_boot = GetRemovableSize(not_attempted_functions, "asm/non_matchings/boot")
+not_attempted_functions_ovl = list(filter(lambda x: "/overlays/" in x, not_attempted_functions))
+not_attempted_functions_code = list(filter(lambda x: "/code/" in x, not_attempted_functions))
+not_attempted_functions_boot = list(filter(lambda x: "/boot/" in x, not_attempted_functions))
+
+not_attempted_asm_ovl = GetRemovableSize(not_attempted_functions_ovl)
+not_attempted_asm_code = GetRemovableSize(not_attempted_functions_code)
+not_attempted_asm_boot = GetRemovableSize(not_attempted_functions_boot)
 
 # All the non matching asm is the sum of non-matching code
 non_matching_asm = non_matching_asm_ovl + non_matching_asm_code + non_matching_asm_boot
