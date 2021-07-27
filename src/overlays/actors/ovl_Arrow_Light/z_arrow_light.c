@@ -9,7 +9,7 @@ void ArrowLight_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ArrowLight_Update(Actor* thisx, GlobalContext* globalCtx);
 void ArrowLight_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Arrow_Light_InitVars = {
     ACTOR_ARROW_LIGHT,
     ACTORCAT_ITEMACTION,
@@ -21,7 +21,16 @@ const ActorInit Arrow_Light_InitVars = {
     (ActorFunc)ArrowLight_Update,
     (ActorFunc)ArrowLight_Draw,
 };
-*/
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_809260A0[] = {
+    ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_STOP),
+};
+
+
+extern InitChainEntry D_809260A0[];
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Light_0x80924300/func_80924300.asm")
 

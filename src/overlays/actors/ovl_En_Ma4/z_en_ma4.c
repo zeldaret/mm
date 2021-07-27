@@ -1,7 +1,7 @@
 /*
  * File: z_en_ma4.c
  * Overlay: ovl_En_Ma4
- * Description: Romani.
+ * Description: Romani
  */
 
 #include "z_en_ma4.h"

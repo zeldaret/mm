@@ -8,7 +8,7 @@ void ObjMakekinsuta_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjMakekinsuta_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjMakekinsuta_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Obj_Makekinsuta_InitVars = {
     ACTOR_OBJ_MAKEKINSUTA,
     ACTORCAT_ITEMACTION,
@@ -20,7 +20,18 @@ const ActorInit Obj_Makekinsuta_InitVars = {
     (ActorFunc)ObjMakekinsuta_Update,
     (ActorFunc)NULL,
 };
-*/
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_8099FE30[] = {
+    ICHAIN_F32(uncullZoneForward, 1, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 1, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 1, ICHAIN_STOP),
+};
+
+
+extern InitChainEntry D_8099FE30[];
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Makekinsuta_0x8099FA40/func_8099FA40.asm")
 

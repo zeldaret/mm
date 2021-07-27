@@ -9,7 +9,161 @@ void EnKnight_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKnight_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKnight_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
+// static DamageTable sDamageTable = {
+static DamageTable D_809BDB04 = {
+    /* Deku Nut       */ DMG_ENTRY(0, 0x1),
+    /* Deku Stick     */ DMG_ENTRY(1, 0xF),
+    /* Horse trample  */ DMG_ENTRY(0, 0x0),
+    /* Explosives     */ DMG_ENTRY(1, 0xF),
+    /* Zora boomerang */ DMG_ENTRY(0, 0x1),
+    /* Normal arrow   */ DMG_ENTRY(3, 0xF),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
+    /* Hookshot       */ DMG_ENTRY(0, 0xF),
+    /* Goron punch    */ DMG_ENTRY(1, 0xF),
+    /* Sword          */ DMG_ENTRY(1, 0xF),
+    /* Goron pound    */ DMG_ENTRY(0, 0xD),
+    /* Fire arrow     */ DMG_ENTRY(1, 0x2),
+    /* Ice arrow      */ DMG_ENTRY(1, 0x3),
+    /* Light arrow    */ DMG_ENTRY(2, 0x4),
+    /* Goron spikes   */ DMG_ENTRY(1, 0xF),
+    /* Deku spin      */ DMG_ENTRY(0, 0x1),
+    /* Deku bubble    */ DMG_ENTRY(2, 0xF),
+    /* Deku launch    */ DMG_ENTRY(1, 0xF),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x0),
+    /* Zora barrier   */ DMG_ENTRY(0, 0xA),
+    /* Normal shield  */ DMG_ENTRY(0, 0x0),
+    /* Light ray      */ DMG_ENTRY(0, 0xE),
+    /* Thrown object  */ DMG_ENTRY(1, 0xF),
+    /* Zora punch     */ DMG_ENTRY(1, 0xF),
+    /* Spin attack    */ DMG_ENTRY(1, 0xF),
+    /* Sword beam     */ DMG_ENTRY(0, 0x0),
+    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
+    /* Unblockable    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
+    /* Powder Keg     */ DMG_ENTRY(1, 0xF),
+};
+
+
+// static DamageTable sDamageTable = {
+static DamageTable D_809BDB24 = {
+    /* Deku Nut       */ DMG_ENTRY(0, 0x0),
+    /* Deku Stick     */ DMG_ENTRY(1, 0xF),
+    /* Horse trample  */ DMG_ENTRY(0, 0x0),
+    /* Explosives     */ DMG_ENTRY(1, 0xF),
+    /* Zora boomerang */ DMG_ENTRY(1, 0xF),
+    /* Normal arrow   */ DMG_ENTRY(3, 0xF),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
+    /* Hookshot       */ DMG_ENTRY(0, 0xF),
+    /* Goron punch    */ DMG_ENTRY(1, 0xF),
+    /* Sword          */ DMG_ENTRY(1, 0xF),
+    /* Goron pound    */ DMG_ENTRY(1, 0xF),
+    /* Fire arrow     */ DMG_ENTRY(1, 0x2),
+    /* Ice arrow      */ DMG_ENTRY(1, 0x3),
+    /* Light arrow    */ DMG_ENTRY(2, 0x4),
+    /* Goron spikes   */ DMG_ENTRY(1, 0xF),
+    /* Deku spin      */ DMG_ENTRY(1, 0xF),
+    /* Deku bubble    */ DMG_ENTRY(2, 0xF),
+    /* Deku launch    */ DMG_ENTRY(2, 0xF),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x0),
+    /* Zora barrier   */ DMG_ENTRY(0, 0xA),
+    /* Normal shield  */ DMG_ENTRY(0, 0x0),
+    /* Light ray      */ DMG_ENTRY(1, 0xD),
+    /* Thrown object  */ DMG_ENTRY(1, 0xF),
+    /* Zora punch     */ DMG_ENTRY(1, 0xF),
+    /* Spin attack    */ DMG_ENTRY(1, 0xF),
+    /* Sword beam     */ DMG_ENTRY(0, 0x0),
+    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
+    /* Unblockable    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
+    /* Powder Keg     */ DMG_ENTRY(1, 0xF),
+};
+
+
+// static ColliderJntSphElementInit sJntSphElementsInit[1] = {
+static ColliderJntSphElementInit D_809BDB44[1] = {
+    {
+        { ELEMTYPE_UNK2, { 0xF7CFFFFF, 0x00, 0x08 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        { 0, { { 0, 0, 0 }, 27 }, 100 },
+    },
+};
+
+// static ColliderJntSphInit sJntSphInit = {
+static ColliderJntSphInit D_809BDB8C = {
+    { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
+    1, D_809BDB44, // sJntSphElementsInit,
+};
+
+
+// static ColliderJntSphElementInit sJntSphElementsInit[1] = {
+static ColliderJntSphElementInit D_809BDB68[1] = {
+    {
+        { ELEMTYPE_UNK2, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        { 0, { { 0, 0, 0 }, 32 }, 100 },
+    },
+};
+
+// static ColliderJntSphInit sJntSphInit = {
+static ColliderJntSphInit D_809BDB9C = {
+    { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
+    1, D_809BDB68, // sJntSphElementsInit,
+};
+
+
+// static ColliderJntSphElementInit sJntSphElementsInit[1] = {
+static ColliderJntSphElementInit D_809BDBAC[1] = {
+    {
+        { ELEMTYPE_UNK2, { 0xF7CFFFFF, 0x00, 0x08 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        { 0, { { 0, 0, 0 }, 27 }, 100 },
+    },
+};
+
+// static ColliderJntSphInit sJntSphInit = {
+static ColliderJntSphInit D_809BDBD0 = {
+    { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
+    1, D_809BDBAC, // sJntSphElementsInit,
+};
+
+
+// static ColliderJntSphElementInit sJntSphElementsInit[2] = {
+static ColliderJntSphElementInit D_809BDBE0[2] = {
+    {
+        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x08 }, { 0xF7EFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
+        { 0, { { 0, 0, 0 }, 15 }, 100 },
+    },
+    {
+        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x08 }, { 0xF7EFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
+        { 1, { { 0, 0, 0 }, 17 }, 100 },
+    },
+};
+
+// static ColliderJntSphInit sJntSphInit = {
+static ColliderJntSphInit D_809BDC28 = {
+    { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER | OC1_TYPE_1, OC2_TYPE_1, COLSHAPE_JNTSPH, },
+    2, D_809BDBE0, // sJntSphElementsInit,
+};
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_809BDC38 = {
+    { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    { 15, 20, -10, { 0, 0, 0 } },
+};
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_809BDC64 = {
+    { COLTYPE_HIT3, AT_ON | AT_TYPE_ALL, AC_ON | AC_TYPE_PLAYER | AC_TYPE_ENEMY | AC_TYPE_OTHER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x00 }, { 0xF7FFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    { 20, 40, 0, { 0, 0, 0 } },
+};
+
+
 const ActorInit En_Knight_InitVars = {
     ACTOR_EN_KNIGHT,
     ACTORCAT_BOSS,
@@ -21,7 +175,21 @@ const ActorInit En_Knight_InitVars = {
     (ActorFunc)EnKnight_Update,
     (ActorFunc)EnKnight_Draw,
 };
-*/
+
+
+extern DamageTable D_809BDB04;
+extern DamageTable D_809BDB24;
+extern ColliderJntSphElementInit D_809BDB44[1];
+extern ColliderJntSphInit D_809BDB8C;
+extern ColliderJntSphElementInit D_809BDB68[1];
+extern ColliderJntSphInit D_809BDB9C;
+extern ColliderJntSphElementInit D_809BDBAC[1];
+extern ColliderJntSphInit D_809BDBD0;
+extern ColliderJntSphElementInit D_809BDBE0[2];
+extern ColliderJntSphInit D_809BDC28;
+extern ColliderCylinderInit D_809BDC38;
+extern ColliderCylinderInit D_809BDC64;
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Knight_0x809B20F0/func_809B20F0.asm")
 

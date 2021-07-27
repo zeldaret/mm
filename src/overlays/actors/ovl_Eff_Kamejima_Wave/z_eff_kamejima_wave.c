@@ -8,7 +8,7 @@ void EffKamejimaWave_Init(Actor* thisx, GlobalContext* globalCtx);
 void EffKamejimaWave_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EffKamejimaWave_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Eff_Kamejima_Wave_InitVars = {
     ACTOR_EFF_KAMEJIMA_WAVE,
     ACTORCAT_ITEMACTION,
@@ -20,7 +20,8 @@ const ActorInit Eff_Kamejima_Wave_InitVars = {
     (ActorFunc)EffKamejimaWave_Update,
     (ActorFunc)NULL,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Kamejima_Wave_0x80BCEB20/EffKamejimaWave_Init.asm")
 

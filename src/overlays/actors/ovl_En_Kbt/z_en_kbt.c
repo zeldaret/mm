@@ -9,7 +9,7 @@ void EnKbt_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKbt_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKbt_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Kbt_InitVars = {
     ACTOR_EN_KBT,
     ACTORCAT_NPC,
@@ -21,7 +21,8 @@ const ActorInit En_Kbt_InitVars = {
     (ActorFunc)EnKbt_Update,
     (ActorFunc)EnKbt_Draw,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kbt_0x80B33D30/EnKbt_Init.asm")
 
