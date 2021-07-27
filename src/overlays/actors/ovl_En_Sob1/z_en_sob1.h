@@ -80,6 +80,12 @@ typedef enum EnSob1ShopType {
     /* 3 */ GORON_SHOP_SPRING
 } EnSob1ShopType;
 
+typedef enum {
+    /* 0 */ ENSOB1_CUTSCENESTATE_STOPPED,
+    /* 1 */ ENSOB1_CUTSCENESTATE_WAITING,
+    /* 2 */ ENSOB1_CUTSCENESTATE_PLAYING
+} EnSob1CutsceneState;
+
 //! @TODO: Add enum for objIndices index based on what the object is for
 
 extern const ActorInit En_Sob1_InitVars;

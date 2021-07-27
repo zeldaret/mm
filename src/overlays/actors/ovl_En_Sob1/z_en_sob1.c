@@ -18,10 +18,12 @@ void EnSob1_DrawZoraShopkeeper(Actor* thisx, GlobalContext* globalCtx);
 void EnSob1_DrawGoronShopkeeper(Actor* thisx, GlobalContext* globalCtx);
 void EnSob1_DrawBombShopkeeper(Actor* thisx, GlobalContext* globalCtx);
 
+void EnSob1_InitZoraShopkeeper(EnSob1* this, GlobalContext* globalCtx);
+void EnSob1_InitGoronShopkeeper(EnSob1* this, GlobalContext* globalCtx);
+void EnSob1_InitBombShopkeeper(EnSob1* this, GlobalContext* globalCtx);
+void EnSob1_InitShop(EnSob1* this, GlobalContext* globalCtx);
 void EnSob1_Idle(EnSob1* this, GlobalContext* globalCtx);
-void EnSob1_Blink(EnSob1* this);
 void EnSob1_Walk(EnSob1* this, GlobalContext* globalCtx);
-s16 EnSob1_GetXZAngleAndDistanceSqToPoint(Path* path, s32 pointIdx, Vec3f* pos, f32* distSq);
 void EnSob1_Walking(EnSob1* this, GlobalContext* globalCtx);
 void EnSob1_Hello(EnSob1* this, GlobalContext* globalCtx);
 void EnSob1_StartShopping(GlobalContext* globalCtx, EnSob1* this);
@@ -30,7 +32,6 @@ void EnSob1_FaceShopkeeper(EnSob1* this, GlobalContext* globalCtx);
 void EnSob1_LookToShelf(EnSob1* this, GlobalContext* globalCtx);
 void EnSob1_EndingInteraction(EnSob1* this, GlobalContext* globalCtx);
 void EnSob1_BrowseShelf(EnSob1* this, GlobalContext* globalCtx);
-s32 EnSob1_ReturnItemToShelf(EnSob1* this);
 void EnSob1_TalkingToShopkeeper(EnSob1* this, GlobalContext* globalCtx);
 void EnSob1_SelectItem(EnSob1* this, GlobalContext* globalCtx);
 void EnSob1_LookToShopkeeperFromShelf(EnSob1* this, GlobalContext* globalCtx);
@@ -38,14 +39,14 @@ void EnSob1_BuyItemWithFanfare(EnSob1* this, GlobalContext* globalCtx);
 void EnSob1_CanBuy(EnSob1* this, GlobalContext* globalCtx);
 void EnSob1_CannotBuy(EnSob1* this, GlobalContext* globalCtx);
 void EnSob1_SetupItemPurchased(EnSob1* this, GlobalContext* globalCtx);
-void EnSob1_ResetItemPosition(EnSob1* this);
 void EnSob1_ContinueShopping(EnSob1* this, GlobalContext* globalCtx);
-s32 EnSob1_TestCancelOption(EnSob1* this, GlobalContext* globalCtx, Input* input);
+void EnSob1_ResetItemPosition(EnSob1* this);
+
+void EnSob1_Blink(EnSob1* this);
+
 s32 EnSob1_TakeItemOffShelf(EnSob1* this);
-void EnSob1_InitZoraShopkeeper(EnSob1* this, GlobalContext* globalCtx);
-void EnSob1_InitGoronShopkeeper(EnSob1* this, GlobalContext* globalCtx);
-void EnSob1_InitBombShopkeeper(EnSob1* this, GlobalContext* globalCtx);
-void EnSob1_InitShop(EnSob1* this, GlobalContext* globalCtx);
+s32 EnSob1_ReturnItemToShelf(EnSob1* this);
+s16 EnSob1_GetXZAngleAndDistanceSqToPoint(Path* path, s32 pointIdx, Vec3f* pos, f32* distSq);
 
 extern UNK_TYPE D_0401F740;
 extern UNK_TYPE D_0401F8C0;
@@ -444,9 +445,9 @@ void EnSob1_UpdateCursorPos(GlobalContext* globalCtx, EnSob1* this) {
 void EnSob1_EndInteraction(GlobalContext* globalCtx, EnSob1* this) {
     Player* player = PLAYER;
 
-    if (this->cutsceneState == 2) {
+    if (this->cutsceneState == ENSOB1_CUTSCENESTATE_PLAYING) {
         ActorCutscene_Stop(this->cutscene);
-        this->cutsceneState = 0;
+        this->cutsceneState = ENSOB1_CUTSCENESTATE_STOPPED;
     }
     func_800B84D0(&this->actor, globalCtx);
     globalCtx->msgCtx.unk11F22 = 0x43;
@@ -534,13 +535,13 @@ void EnSob1_Idle(EnSob1* this, GlobalContext* globalCtx) {
 
     this->headRotTarget = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
     if (func_800B84D0(&this->actor, globalCtx)) {
-        if (this->cutsceneState == 0) {
+        if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
             }
             this->cutscene = this->lookFowardCutscene;
             ActorCutscene_SetIntentToPlay(this->cutscene);
-            this->cutsceneState = 1;
+            this->cutsceneState = ENSOB1_CUTSCENESTATE_WAITING;
         }
         player->stateFlags2 |= 0x20000000;
         this->welcomeTextId = EnSob1_GetWelcome(this, globalCtx);
@@ -611,10 +612,10 @@ u8 EnSob1_SetCursorIndexFromNeutral(EnSob1* this, u8 shelfOffset) {
 void EnSob1_Hello(EnSob1* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
 
-    if (this->cutsceneState == 1) {
+    if (this->cutsceneState == ENSOB1_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-            this->cutsceneState = 2;
+            this->cutsceneState = ENSOB1_CUTSCENESTATE_PLAYING;
         } else {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
@@ -652,21 +653,21 @@ void EnSob1_FaceShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
     u8 cursorIdx;
 
-    if (this->cutsceneState == 1) {
+    if (this->cutsceneState == ENSOB1_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-            this->cutsceneState = 2;
+            this->cutsceneState = ENSOB1_CUTSCENESTATE_PLAYING;
         } else {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     }
-    if (this->cutsceneState == 0) {
+    if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
         }
         this->cutscene = this->lookFowardCutscene;
         ActorCutscene_SetIntentToPlay(this->cutscene);
-        this->cutsceneState = 1;
+        this->cutsceneState = ENSOB1_CUTSCENESTATE_WAITING;
     } else {
         if (talkState == 4) {
             func_8011552C(globalCtx, 6);
@@ -695,21 +696,21 @@ void EnSob1_TalkingToShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_LookToShopkeeperFromShelf(EnSob1* this, GlobalContext* globalCtx) {
-    if (this->cutsceneState == 2) {
+    if (this->cutsceneState == ENSOB1_CUTSCENESTATE_PLAYING) {
         ActorCutscene_Stop(this->cutscene);
-        this->cutsceneState = 0;
+        this->cutsceneState = ENSOB1_CUTSCENESTATE_STOPPED;
     }
-    if (this->cutsceneState == 0) {
+    if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
         }
         this->cutscene = this->lookToShopkeeperCutscene;
         ActorCutscene_SetIntentToPlay(this->cutscene);
-        this->cutsceneState = 1;
-    } else if (this->cutsceneState == 1) {
+        this->cutsceneState = ENSOB1_CUTSCENESTATE_WAITING;
+    } else if (this->cutsceneState == ENSOB1_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-            this->cutsceneState = 2;
+            this->cutsceneState = ENSOB1_CUTSCENESTATE_PLAYING;
             EnSob1_StartShopping(globalCtx, this);
         } else {
             ActorCutscene_SetIntentToPlay(this->cutscene);
@@ -753,10 +754,10 @@ void EnSob1_Walk(EnSob1* this, GlobalContext* globalCtx) {
     s32 pad;
     f32 distSq;
 
-    if (this->cutsceneState == 1) {
+    if (this->cutsceneState == ENSOB1_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-            this->cutsceneState = 2;
+            this->cutsceneState = ENSOB1_CUTSCENESTATE_PLAYING;
         } else {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
@@ -783,22 +784,22 @@ void EnSob1_Walk(EnSob1* this, GlobalContext* globalCtx) {
 void EnSob1_Walking(EnSob1* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
-    if (this->cutsceneState == 1) {
+    if (this->cutsceneState == ENSOB1_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-            this->cutsceneState = 2;
+            this->cutsceneState = ENSOB1_CUTSCENESTATE_PLAYING;
         } else {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     }
     if (func_800B84D0(&this->actor, globalCtx)) {
-        if (this->cutsceneState == 0) {
+        if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
             }
             this->cutscene = this->lookFowardCutscene;
             ActorCutscene_SetIntentToPlay(this->cutscene);
-            this->cutsceneState = 1;
+            this->cutsceneState = ENSOB1_CUTSCENESTATE_WAITING;
         }
         player->stateFlags2 |= 0x20000000;
         this->welcomeTextId = EnSob1_GetWelcome(this, globalCtx);
@@ -817,12 +818,12 @@ void EnSob1_Walking(EnSob1* this, GlobalContext* globalCtx) {
 void EnSob1_ItemPurchased(EnSob1* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
-    if (this->cutsceneState == 0) {
+    if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
             player->stateFlags2 |= 0x20000000;
             EnSob1_SetupAction(this, EnSob1_ContinueShopping);
-            this->cutsceneState = 2;
+            this->cutsceneState = ENSOB1_CUTSCENESTATE_PLAYING;
         } else {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
@@ -839,21 +840,21 @@ void EnSob1_ItemPurchased(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_LookToShelf(EnSob1* this, GlobalContext* globalCtx) {
-    if (this->cutsceneState == 2) {
+    if (this->cutsceneState == ENSOB1_CUTSCENESTATE_PLAYING) {
         ActorCutscene_Stop(this->cutscene);
-        this->cutsceneState = 0;
+        this->cutsceneState = ENSOB1_CUTSCENESTATE_STOPPED;
     }
-    if (this->cutsceneState == 0) {
+    if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
         }
         this->cutscene = this->lookToShelfCutscene;
         ActorCutscene_SetIntentToPlay(this->cutscene);
-        this->cutsceneState = 1;
-    } else if (this->cutsceneState == 1) {
+        this->cutsceneState = ENSOB1_CUTSCENESTATE_WAITING;
+    } else if (this->cutsceneState == ENSOB1_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene) != 0) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-            this->cutsceneState = 2;
+            this->cutsceneState = ENSOB1_CUTSCENESTATE_PLAYING;
             EnSob1_UpdateCursorPos(globalCtx, this);
             EnSob1_SetupAction(this, EnSob1_BrowseShelf);
             func_80151938(globalCtx, this->items[this->cursorIdx]->actor.textId);
@@ -964,9 +965,9 @@ void EnSob1_HandleCanBuyItem(GlobalContext* globalCtx, EnSob1* this) {
 
     switch (item->canBuyFunc(globalCtx, item)) {
         case CANBUY_RESULT_SUCCESS_1:
-            if (this->cutsceneState == 2) {
+            if (this->cutsceneState == ENSOB1_CUTSCENESTATE_PLAYING) {
                 ActorCutscene_Stop(this->cutscene);
-                this->cutsceneState = 0;
+                this->cutsceneState = ENSOB1_CUTSCENESTATE_STOPPED;
             }
             func_8019F208();
             item2 = this->items[this->cursorIdx];
@@ -1083,7 +1084,7 @@ void EnSob1_SetupItemPurchased(EnSob1* this, GlobalContext* globalCtx) {
         globalCtx->msgCtx.unk11F22 = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         EnSob1_SetupAction(this, EnSob1_ItemPurchased);
-        if (this->cutsceneState == 0) {
+        if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
             }
@@ -1382,7 +1383,7 @@ void EnSob1_InitShop(EnSob1* this, GlobalContext* globalCtx) {
             sShops[this->shopType][0].shopItemId = SI_BOMB_BAG_30_2;
         }
 
-        this->cutsceneState = 0;
+        this->cutsceneState = ENSOB1_CUTSCENESTATE_STOPPED;
         EnSob1_GetCutscenes(this);
         this->cutscene = this->lookFowardCutscene;
         ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
