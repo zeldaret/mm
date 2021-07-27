@@ -63,11 +63,11 @@ void func_80B3C2B0(ObjGhaka* this) {
 
 void func_80B3C2C4(ObjGhaka* this, GlobalContext* globalCtx) {
     if (!(gSaveContext.weekEventReg[20] & 0x20)) {
-        Actor_SpawnAsChildAndCutscene(&globalCtx->actorCtx, globalCtx, ACTOR_BG_GORON_OYU, 0.0f, 25.0f, 261.0f, 0, 0,
-                                         0, 0, this->dyna.actor.cutscene, this->dyna.actor.unk20, 0);
+        Actor_SpawnAsChildAndCutscene(&globalCtx->actorCtx, globalCtx, ACTOR_BG_GORON_OYU, 0.0f, 25.0f, 261.0f, 0, 0, 0,
+                                      0, this->dyna.actor.cutscene, this->dyna.actor.unk20, 0);
     } else {
-        Actor_SpawnAsChildAndCutscene(&globalCtx->actorCtx, globalCtx, ACTOR_BG_GORON_OYU, 0.0f, 25.0f, 261.0f, 0, 0,
-                                         0, 1, -1, this->dyna.actor.unk20, 0);
+        Actor_SpawnAsChildAndCutscene(&globalCtx->actorCtx, globalCtx, ACTOR_BG_GORON_OYU, 0.0f, 25.0f, 261.0f, 0, 0, 0,
+                                      1, -1, this->dyna.actor.unk20, 0);
     }
 }
 

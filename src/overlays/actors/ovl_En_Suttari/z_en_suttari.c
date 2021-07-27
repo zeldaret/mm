@@ -1511,7 +1511,7 @@ void EnSuttari_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
                 if (this->flags1 & 0x100) {
                     bombBag =
                         Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_NIMOTSU,
-                                              curState->mf[3][0], curState->mf[3][1], curState->mf[3][2], 0, 0, 0, -1);
+                                           curState->mf[3][0], curState->mf[3][1], curState->mf[3][2], 0, 0, 0, -1);
                     if (bombBag != NULL) {
                         func_8018219C(curState, &bombBag->shape.rot, 0);
                     }

@@ -214,8 +214,8 @@ void EnPametfrog_Init(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         if (Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_BIGPAMET,
-                                  this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0,
-                                  0) == NULL) {
+                               this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0,
+                               0) == NULL) {
             Actor_MarkForDeath(&this->actor);
         } else {
             this->actor.params = GEKKO_PRE_SNAPPER;
@@ -980,7 +980,8 @@ void EnPametfrog_SetupSpawnFrog(EnPametfrog* this, GlobalContext* globalCtx) {
         vel.x = randPlusMinusPoint5Scaled(5.0f);
         vel.y = Rand_ZeroFloat(3.0f) + 4.0f;
         vel.z = randPlusMinusPoint5Scaled(5.0f);
-        EffectSsHahen_Spawn(globalCtx, &this->actor.world.pos, &vel, &sAccel, 0, Rand_S16Offset(12, 3), HAHEN_OBJECT_DEFAULT, 10, 0);
+        EffectSsHahen_Spawn(globalCtx, &this->actor.world.pos, &vel, &sAccel, 0, Rand_S16Offset(12, 3),
+                            HAHEN_OBJECT_DEFAULT, 10, 0);
     }
 
     this->timer = 40;
@@ -1274,7 +1275,8 @@ void EnPametfrog_TransitionGekkoSnapper(EnPametfrog* this, GlobalContext* global
 void EnPametfrog_ApplyDamageEffect(EnPametfrog* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
-        if ((this->drawEffect != GEKKO_DRAW_EFFECT_FROZEN) || !(this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
+        if ((this->drawEffect != GEKKO_DRAW_EFFECT_FROZEN) ||
+            !(this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
             if (this->actor.params == GEKKO_PRE_SNAPPER) {
                 if (func_800BE22C(&this->actor) == 0) {
                     func_801A2ED8();
@@ -1395,7 +1397,6 @@ static s8 limbPosIndex[] = {
     -1, -1, 0, -1, 1, -1, 2, -1, 3, -1, 4, -1, 5, 6, -1, 7, 8, 9, -1, 10, -1, 11, -1, -1,
 };
 
-
 void EnPametfrog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnPametfrog* this = THIS;
     Vec3f vec;
@@ -1429,6 +1430,6 @@ void EnPametfrog_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Matrix_RotateY(this->spinYaw, MTXMODE_APPLY);
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, NULL,
                      EnPametfrog_PostLimbDraw, &this->actor);
-    func_800BE680(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->unk_2C8, this->unk_2CC, this->unk_2C4,
-                  this->drawEffect);
+    func_800BE680(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->unk_2C8, this->unk_2CC,
+                  this->unk_2C4, this->drawEffect);
 }
