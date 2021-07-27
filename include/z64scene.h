@@ -349,7 +349,6 @@ typedef struct {
     /* 0xA */ u8 unk_A;
     /* 0xB */ u8 drawConfig;
     /* 0xC */ u8 unk_C;
-    /* 0xD */ char pad_D[3];
 } SceneTableEntry; // size = 0x10;
 
 typedef struct {
