@@ -3,7 +3,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_801A51F0/D_801E0EC0.s")
 
-s32 func_801A51F0(s32 arg0) {
+UNK_TYPE func_801A51F0(UNK_TYPE arg0) {
     switch (arg0) {
         case 1:
         case 4:
