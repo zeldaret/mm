@@ -166,7 +166,7 @@ void EnTrt_UpdateCursorPos(GlobalContext* globalCtx, EnTrt* this) {
 }
 
 void EnTrt_SetupGetMushroomCutscene(EnTrt* this) {
-    if (this->cutsceneState == 3) {
+    if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
         if (this->cutscene != this->tmpGetMushroomCutscene) {
             ActorCutscene_Stop(this->cutscene);
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -174,13 +174,13 @@ void EnTrt_SetupGetMushroomCutscene(EnTrt* this) {
             }
             this->cutscene = this->tmpGetMushroomCutscene;
             ActorCutscene_SetIntentToPlay(this->cutscene);
-            this->cutsceneState = 1;
+            this->cutsceneState = ENTRT_CUTSCENESTATE_WAITING;
         }
     }
-    if (this->cutsceneState == 1) {
+    if (this->cutsceneState == ENTRT_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-            this->cutsceneState = 2;
+            this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING_SPECIAL;
         } else {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
@@ -209,9 +209,9 @@ u16 EnTrt_GetItemChoiceTextId(EnTrt* this) {
 void EnTrt_EndInteraction(GlobalContext* globalCtx, EnTrt* this) {
     Player* player = PLAYER;
 
-    if (this->cutsceneState == 3) {
+    if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
         ActorCutscene_Stop(this->cutscene);
-        this->cutsceneState = 0;
+        this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
     }
     func_800B84D0(&this->actor, globalCtx);
     globalCtx->msgCtx.unk11F22 = 0x43;
@@ -314,10 +314,10 @@ u8 EnTrt_SetCursorIndexFromNeutral(EnTrt* this, u8 shelfOffset) {
 void EnTrt_Hello(EnTrt* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
 
-    if (this->cutsceneState == 1) {
+    if (this->cutsceneState == ENTRT_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-            this->cutsceneState = 3;
+            this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING;
         } else {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
@@ -335,9 +335,9 @@ void EnTrt_GetMushroom(EnTrt* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
     this->tmpGetMushroomCutscene = this->getMushroomCutscene;
-    if (this->cutsceneState != 2) {
+    if (this->cutsceneState != ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
         EnTrt_SetupGetMushroomCutscene(this);
-        if (this->cutsceneState == 2) {
+        if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
             player->stateFlags2 &= ~0x20000000;
         }
     } else if (talkState == 5 && func_80147624(globalCtx)) {
@@ -353,16 +353,16 @@ void EnTrt_GetMushroom(EnTrt* this, GlobalContext* globalCtx) {
                 func_801518B0(globalCtx, this->textId, &this->actor);
                 break;
             case 0x889:
-                if (this->cutsceneState == 2) {
+                if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
                     ActorCutscene_Stop(this->cutscene);
-                    this->cutsceneState = 0;
+                    this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
                 }
                 globalCtx->msgCtx.unk11F22 = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->actionFunc = EnTrt_PayForMushroom;
                 break;
             default:
-                this->cutsceneState = 3;
+                this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING;
                 EnTrt_EndInteraction(globalCtx, this);
                 break;
         }
@@ -398,9 +398,9 @@ void EnTrt_SetupTryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
     if (func_80152498(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
         if (this->textId == 0x88F) {
             if (func_80114E90() || !(gSaveContext.weekEventReg[0x0C] & 0x10)) {
-                if (this->cutsceneState == 3) {
+                if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
                     ActorCutscene_Stop(this->cutscene);
-                    this->cutsceneState = 0;
+                    this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
                 }
                 globalCtx->msgCtx.unk11F22 = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
@@ -426,7 +426,7 @@ void EnTrt_SetupTryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
             } else if (gSaveContext.weekEventReg[0x10] & 0x10) {
                 this->timer = 30;
                 this->textId = 0x838;
-                this->cutsceneState = 2;
+                this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING_SPECIAL;
                 this->actionFunc = EnTrt_Surprised;
                 return;
             } else if (gSaveContext.weekEventReg[0x11] & 1) {
@@ -461,13 +461,13 @@ void EnTrt_GivenRedPotionForKoume(EnTrt* this, GlobalContext* globalCtx) {
     Player* player = NULL;
 
     if (func_80152498(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
-        if (this->cutsceneState == 0) {
+        if (this->cutsceneState == ENTRT_CUTSCENESTATE_STOPPED) {
             if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
                 ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
                 player->stateFlags2 |= 0x20000000;
                 //! @bug: EnTrt_ContinueShopping gets overwritten by EnTrt_ItemGiven
                 this->actionFunc = EnTrt_ContinueShopping;
-                this->cutsceneState = 3;
+                this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING;
             } else {
                 if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                     ActorCutscene_Stop(0x7C);
@@ -513,21 +513,21 @@ void EnTrt_FaceShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
     u8 cursorIdx;
 
-    if (this->cutsceneState == 1) {
+    if (this->cutsceneState == ENTRT_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-            this->cutsceneState = 3;
+            this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING;
         } else {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     }
-    if (this->cutsceneState == 0) {
+    if (this->cutsceneState == ENTRT_CUTSCENESTATE_STOPPED) {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
         }
         this->cutscene = this->lookForwardCutscene;
         ActorCutscene_SetIntentToPlay(this->cutscene);
-        this->cutsceneState = 1;
+        this->cutsceneState = ENTRT_CUTSCENESTATE_WAITING;
     } else {
         if (talkState == 4) {
             func_8011552C(globalCtx, 6);
@@ -550,21 +550,21 @@ void EnTrt_FaceShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_LookToShelf(EnTrt* this, GlobalContext* globalCtx) {
-    if (this->cutsceneState == 3) {
+    if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
         ActorCutscene_Stop(this->cutscene);
-        this->cutsceneState = 0;
+        this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
     }
-    if (this->cutsceneState == 0) {
+    if (this->cutsceneState == ENTRT_CUTSCENESTATE_STOPPED) {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
         }
         this->cutscene = this->lookToShelfCutscene;
         ActorCutscene_SetIntentToPlay(this->cutscene);
-        this->cutsceneState = 1;
-    } else if (this->cutsceneState == 1) {
+        this->cutsceneState = ENTRT_CUTSCENESTATE_WAITING;
+    } else if (this->cutsceneState == ENTRT_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-            this->cutsceneState = 3;
+            this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING;
             EnTrt_UpdateCursorPos(globalCtx, this);
             this->actionFunc = EnTrt_BrowseShelf;
             func_80151938(globalCtx, EnTrt_GetItemTextId(this));
@@ -674,9 +674,9 @@ void EnTrt_HandleCanBuyItem(GlobalContext* globalCtx, EnTrt* this) {
 
     switch (item->canBuyFunc(globalCtx, item)) {
         case CANBUY_RESULT_SUCCESS_1:
-            if (this->cutsceneState == 3) {
+            if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
                 ActorCutscene_Stop(this->cutscene);
-                this->cutsceneState = 0;
+                this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
             }
             func_8019F208();
             item2 = this->items[this->cursorIdx];
@@ -737,9 +737,9 @@ void EnTrt_SelectItem(EnTrt* this, GlobalContext* globalCtx) {
                 play_sound(NA_SE_SY_ERROR);
                 EnTrt_SetupCannotBuy(globalCtx, this, 0x846);
             } else {
-                if (this->cutsceneState == 3) {
+                if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
                     ActorCutscene_Stop(this->cutscene);
-                    this->cutsceneState = 0;
+                    this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
                 }
                 EnTrt_SetupBuyItemWithFanfare(globalCtx, this);
                 this->drawCursor = 0;
@@ -781,27 +781,25 @@ void EnTrt_IdleSleeping(EnTrt* this, GlobalContext* globalCtx) {
         if (player->transformation == PLAYER_FORM_HUMAN) {
             this->flags |= ENTRT_MET;
         }
-        if (this->cutsceneState == 0) {
+        if (this->cutsceneState == ENTRT_CUTSCENESTATE_STOPPED) {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
             }
             this->cutscene = this->lookForwardCutscene;
             ActorCutscene_SetIntentToPlay(this->cutscene);
-            this->cutsceneState = 1;
+            this->cutsceneState = ENTRT_CUTSCENESTATE_WAITING;
         }
         player->stateFlags2 |= 0x20000000;
         this->timer = 45;
         this->actionFunc = EnTrt_BeginInteraction;
-    } else {
-        if ((player->actor.world.pos.x >= -50.0f && player->actor.world.pos.x <= -25.0f) &&
+    } else if ((player->actor.world.pos.x >= -50.0f && player->actor.world.pos.x <= -25.0f) &&
             (player->actor.world.pos.z >= -19.0f && player->actor.world.pos.z <= 30.0f)) {
             func_800B8614(&this->actor, globalCtx, 200.0f);
-        }
     }
     if (DECR(this->timer) == 0) {
         this->timer = 40;
         EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 1);
-        this->animationState = 1;
+        this->animationIdx = 1;
         this->actionFunc = EnTrt_IdleAwake;
         this->blinkFunc = EnTrt_OpenThenCloseEyes;
     }
@@ -824,13 +822,13 @@ void EnTrt_IdleAwake(EnTrt* this, GlobalContext* globalCtx) {
         this->textId = 0x850;
     }
     if (func_800B84D0(&this->actor, globalCtx)) {
-        if (this->cutsceneState == 0) {
+        if (this->cutsceneState == ENTRT_CUTSCENESTATE_STOPPED) {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
             }
             this->cutscene = this->lookForwardCutscene;
             ActorCutscene_SetIntentToPlay(this->cutscene);
-            this->cutsceneState = 1;
+            this->cutsceneState = ENTRT_CUTSCENESTATE_WAITING;
         }
         player->stateFlags2 |= 0x20000000;
         if (player->transformation == PLAYER_FORM_HUMAN) {
@@ -849,7 +847,7 @@ void EnTrt_IdleAwake(EnTrt* this, GlobalContext* globalCtx) {
     if (DECR(this->timer) == 0) {
         this->timer = Rand_S16Offset(150, 100);
         EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 2);
-        this->animationState = 2;
+        this->animationIdx = 2;
         this->sleepSoundTimer = 10;
         this->actor.textId = 0;
         this->actionFunc = EnTrt_IdleSleeping;
@@ -861,34 +859,34 @@ void EnTrt_BeginInteraction(EnTrt* this, GlobalContext* globalCtx) {
     s16 sp26 = this->skelAnime.animCurrentFrame / this->skelAnime.animPlaybackSpeed;
     s16 sp28 = SkelAnime_GetFrameCount(&D_060030EC.common) / (s16)this->skelAnime.animPlaybackSpeed;
 
-    if (this->cutsceneState == 1) {
+    if (this->cutsceneState == ENTRT_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-            this->cutsceneState = 2;
+            this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING_SPECIAL;
         } else {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
-    } else if (this->cutsceneState == 2) {
-        if (this->animationState != 5) {
+    } else if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
+        if (this->animationIdx != 5) {
             if (sp26 == sp28) {
                 EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 3);
-                this->animationState = 3;
+                this->animationIdx = 3;
                 this->blinkFunc = EnTrt_OpenEyesThenSetToBlink;
                 this->timer = 10;
-                this->cutsceneState = 3;
+                this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING;
                 Audio_PlayActorSound2(&this->actor, NA_SE_EN_KOTAKE_SURPRISED2);
             }
         } else {
             this->blinkFunc = EnTrt_OpenEyesThenSetToBlink;
             this->timer = 10;
-            this->cutsceneState = 3;
+            this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING;
         }
     } else {
         if (DECR(this->timer) == 0) {
             this->timer = Rand_S16Offset(40, 20);
             EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 5);
             func_801518B0(globalCtx, this->textId, &this->actor);
-            this->animationState = 5;
+            this->animationIdx = 5;
             switch (this->textId) {
                 case 0x834:
                     if (!(gSaveContext.weekEventReg[0x0C] & 8) && !(gSaveContext.weekEventReg[0x54] & 0x40) &&
@@ -920,28 +918,28 @@ void EnTrt_BeginInteraction(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_Surprised(EnTrt* this, GlobalContext* globalCtx) {
-    if (this->cutsceneState == 1) {
+    if (this->cutsceneState == ENTRT_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-            this->cutsceneState = 2;
+            this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING_SPECIAL;
         } else {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
-    } else if (this->cutsceneState == 2) {
+    } else if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
         if (DECR(this->timer) == 0) {
             EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 4);
-            this->animationState = 4;
+            this->animationIdx = 4;
             this->blinkFunc = EnTrt_OpenEyes2;
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_KOTAKE_SURPRISED);
             this->timer = 30;
-            this->cutsceneState = 3;
+            this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING;
         }
     } else {
         if (DECR(this->timer) == 0) {
             this->timer = Rand_S16Offset(40, 20);
             EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 5);
             func_801518B0(globalCtx, this->textId, &this->actor);
-            this->animationState = 5;
+            this->animationIdx = 5;
             this->actionFunc = EnTrt_TryToGiveRedPotionAfterSurprised;
         }
     }
@@ -953,9 +951,9 @@ void EnTrt_TryToGiveRedPotionAfterSurprised(EnTrt* this, GlobalContext* globalCt
     this->blinkFunc = EnTrt_Blink;
     if (talkState == 6 && func_80147624(globalCtx)) {
         if (func_80114E90() || !(gSaveContext.weekEventReg[0x0C] & 0x10)) {
-            if (this->cutsceneState == 3) {
+            if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
                 ActorCutscene_Stop(this->cutscene);
-                this->cutsceneState = 0;
+                this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
             }
             this->actionFunc = EnTrt_GiveRedPotionForKoume;
         } else {
@@ -972,9 +970,9 @@ void EnTrt_TryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
     if (func_80152498(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
         if (this->textId == 0x83C) {
             if (func_80114E90()) {
-                if (this->cutsceneState == 3) {
+                if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
                     ActorCutscene_Stop(this->cutscene);
-                    this->cutsceneState = 0;
+                    this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
                 }
                 globalCtx->msgCtx.unk11F22 = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
@@ -996,12 +994,12 @@ void EnTrt_TryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
 void EnTrt_ItemGiven(EnTrt* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
-    if (this->cutsceneState == 0) {
+    if (this->cutsceneState == ENTRT_CUTSCENESTATE_STOPPED) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
             player->stateFlags2 |= 0x20000000;
             this->actionFunc = EnTrt_ContinueShopping;
-            this->cutsceneState = 3;
+            this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING;
         } else {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
@@ -1097,7 +1095,7 @@ void EnTrt_BuyItemWithFanfare(EnTrt* this, GlobalContext* globalCtx) {
 void EnTrt_SetupItemGiven(EnTrt* this, GlobalContext* globalCtx) {
     if (func_80152498(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
         this->actionFunc = EnTrt_ItemGiven;
-        if (this->cutsceneState == 0) {
+        if (this->cutsceneState == ENTRT_CUTSCENESTATE_STOPPED) {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
             }
@@ -1439,21 +1437,21 @@ void EnTrt_SetupLookToShopkeeperFromShelf(GlobalContext* globalCtx, EnTrt* this)
 }
 
 void EnTrt_LookToShopkeeperFromShelf(EnTrt* this, GlobalContext* globalCtx) {
-    if (this->cutsceneState == 3) {
+    if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
         ActorCutscene_Stop(this->cutscene);
-        this->cutsceneState = 0;
+        this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
     }
-    if (this->cutsceneState == 0) {
+    if (this->cutsceneState == ENTRT_CUTSCENESTATE_STOPPED) {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
         }
         this->cutscene = this->lookToShopkeeperCutscene;
         ActorCutscene_SetIntentToPlay(this->cutscene);
-        this->cutsceneState = 1;
-    } else if (this->cutsceneState == 1) {
+        this->cutsceneState = ENTRT_CUTSCENESTATE_WAITING;
+    } else if (this->cutsceneState == ENTRT_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-            this->cutsceneState = 3;
+            this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING;
             EnTrt_StartShopping(globalCtx, this);
         } else {
             ActorCutscene_SetIntentToPlay(this->cutscene);

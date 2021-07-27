@@ -46,7 +46,7 @@ typedef struct EnTrt {
     /* 0x3FC */ s32 cursorColorA;
     /* 0x400 */ u8 drawCursor;
     /* 0x402 */ s16 timer;
-    /* 0x404 */ s16 animationState;
+    /* 0x404 */ s16 animationIdx;
     /* 0x406 */ u16 textId;
     /* 0x408 */ u16 tmpTextId;
     /* 0x40A */ u16 talkOptionTextId;
@@ -61,6 +61,13 @@ typedef struct EnTrt {
     /* 0x42A */ s16 headYaw;
     /* 0x42C */ u16 flags;
 } EnTrt; // size = 0x430
+
+typedef enum {
+    /* 0 */ ENTRT_CUTSCENESTATE_STOPPED,
+    /* 1 */ ENTRT_CUTSCENESTATE_WAITING,
+    /* 2 */ ENTRT_CUTSCENESTATE_PLAYING_SPECIAL, // Used to do/set extra flags (such as waiting mid animation)
+    /* 3 */ ENTRT_CUTSCENESTATE_PLAYING
+} EnTrtCutsceneState;
 
 extern const ActorInit En_Trt_InitVars;
 
