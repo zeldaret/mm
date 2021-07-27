@@ -282,16 +282,16 @@ elif args.format == 'shield-json':
 elif args.format == 'text':
     adjective = "decompiled" if not args.matching else "matched"
 
-    print(str(total) + " total bytes of decompilable code\n")
-    print(str(src) + " bytes " + adjective + " in src " + str(src_percent) + "%\n")
-    print(str(boot) + "/" + str(boot_size) + " bytes " + adjective + " in boot " + str(boot_percent) + "%\n")
-    print(str(code) + "/" + str(code_size) + " bytes " + adjective + " in code " + str(code_percent) + "%\n")
-    print(str(ovl) + "/" + str(ovl_size) + " bytes " + adjective + " in overlays " + str(ovl_percent) + "%\n")
-    print(str(audio) + "/" + str(audio_size) + " bytes reconstructed in audio " + str(audio_percent) + "%\n")
-    print(str(misc) + "/" + str(misc_size) + " bytes reconstructed in misc " + str(misc_percent) + "%\n")
-    print(str(object_) + "/" + str(object_size) + " bytes reconstructed in objects " + str(object_percent) + "%\n")
-    print(str(scene) + "/" + str(scene_size) + " bytes reconstructed in scenes " + str(scene_percent) + "%\n")
-    print(str(texture) + "/" + str(texture_size) + " bytes reconstructed in textures " + str(texture_percent) + "%\n")
+    print(f"{total} total bytes of decompilable code\n")
+    print(f"{src} bytes {adjective} in src {round(src_percent, 4)}%\n")
+    print(f"{boot}/{boot_size} bytes {adjective} in boot {round(boot_percent, 4)}%\n")
+    print(f"{code}/{code_size} bytes {adjective} in code {round(code_percent, 4)}%\n")
+    print(f"{ovl}/{ovl_size} bytes {adjective} in overlays {round(ovl_percent, 4)}%\n")
+    print(f"{audio}/{audio_size} bytes reconstructed in audio {round(audio_percent, 4)}%\n")
+    print(f"{misc}/{misc_size} bytes reconstructed in misc {round(misc_percent, 4)}%\n")
+    print(f"{object_}/{object_size} bytes reconstructed in objects {round(object_percent, 4)}%\n")
+    print(f"{scene}/{scene_size} bytes reconstructed in scenes {round(scene_percent, 4)}%\n")
+    print(f"{texture}/{texture_size} bytes reconstructed in textures {round(texture_percent, 4)}%\n")
     print("------------------------------------\n")
 
     if (rupees > 0):
