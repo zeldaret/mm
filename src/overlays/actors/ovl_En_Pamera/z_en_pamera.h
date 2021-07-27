@@ -48,14 +48,14 @@ typedef struct EnPamera {
     /* 0x1EC */ s32 unk_1EC;
     /* 0x1F0 */ Vec3s limbDrawTbl[PAMERA_LIMB_MAX];
     /* 0x27A */ Vec3s transitionDrawTbl[PAMERA_LIMB_MAX];
-    /* 0x304 */ Vec3s limb15Rot;
+    /* 0x304 */ Vec3s limb9Rot;
     /* 0x30A */ Vec3s limb8Rot;
     /* 0x310 */ s16 unk_310;
     /* 0x312 */ s16 unk_312;
     /* 0x314 */ s16 unk_314;
     /* 0x316 */ s16 unk_316;
     /* 0x318 */ s16 cutscenes[2];
-    /* 0x31C */ s16 unk_31C;
+    /* 0x31C */ s16 hideInisdeTimer;
     /* 0x31E */ s16 unk_31E;
     /* 0x320 */ UNK_TYPE1 unk_320[0x2];
     /* 0x322 */ s16 unk_322;
