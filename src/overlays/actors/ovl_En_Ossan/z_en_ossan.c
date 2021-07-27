@@ -1136,7 +1136,7 @@ void EnOssan_ItemPurchased(EnOssan* this, GlobalContext* globalCtx) {
         }
     }
     if (func_800B84D0(&this->actor, globalCtx)) {
-        func_80151938(globalCtx, 0x0642);
+        func_80151938(globalCtx, 0x642);
     } else {
         func_800B85E0(&this->actor, globalCtx, 400.0f, -1);
     }
