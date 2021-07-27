@@ -229,132 +229,67 @@ s32 func_8012EE34(s16 arg0) {
     return 0;
 }
 
-/* static */ u16 D_801C2380[12][6] = {
-    {
-        SCENE_00KEIKOKU,
-        SCENE_BOTI,
-        SCENE_13HUBUKINOMITI,
-        SCENE_24KEMONOMITI,
-        SCENE_IKANAMAE,
-        SCENE_TOWN,
-    },
-    {
-        SCENE_ICHIBA,
-        SCENE_BACKTOWN,
-        SCENE_CLOCKTOWER,
-        SCENE_ALLEY,
-        -1,
-    },
-    {
-        SCENE_20SICHITAI,
-        SCENE_20SICHITAI2,
-        SCENE_21MITURINMAE,
-        SCENE_22DEKUCITY,
-        SCENE_DEKU_KING,
-        SCENE_KINSTA1,
-    },
-    { -1 },
-    {
-        SCENE_10YUKIYAMANOMURA,
-        SCENE_10YUKIYAMANOMURA2,
-        SCENE_11GORONNOSATO,
-        SCENE_11GORONNOSATO2,
-        SCENE_16GORON_HOUSE,
-        SCENE_12HAKUGINMAE,
-    },
-    {
-        SCENE_14YUKIDAMANOMITI,
-        SCENE_GORONRACE,
-        SCENE_17SETUGEN,
-        SCENE_17SETUGEN2,
-        -1,
-    },
-    {
-        SCENE_F01,
-        SCENE_ROMANYMAE,
-        SCENE_OMOYA,
-        SCENE_F01C,
-        SCENE_F01_B,
-        SCENE_KOEPONARACE,
-    },
-    { -1 },
-    {
-        SCENE_30GYOSON,
-        SCENE_SINKAI,
-        SCENE_31MISAKI,
-        SCENE_TORIDE,
-        SCENE_KAIZOKU,
-        SCENE_33ZORACITY,
-    },
-    {
-        SCENE_35TAKI,
-        -1,
-    },
-    {
-        SCENE_F40,
-        SCENE_F41,
-        SCENE_CASTLE,
-        SCENE_IKANA,
-        SCENE_REDEAD,
-        -1,
-    },
+static u16 D_801C2380[6][12] = {
+    { SCENE_00KEIKOKU, SCENE_BOTI, SCENE_13HUBUKINOMITI, SCENE_24KEMONOMITI, SCENE_IKANAMAE, SCENE_TOWN, SCENE_ICHIBA,
+      SCENE_BACKTOWN, SCENE_CLOCKTOWER, SCENE_ALLEY, -1 },
+    { SCENE_20SICHITAI, SCENE_20SICHITAI2, SCENE_21MITURINMAE, SCENE_22DEKUCITY, SCENE_DEKU_KING, SCENE_KINSTA1, -1 },
+    { SCENE_10YUKIYAMANOMURA, SCENE_10YUKIYAMANOMURA2, SCENE_11GORONNOSATO, SCENE_11GORONNOSATO2, SCENE_16GORON_HOUSE,
+      SCENE_12HAKUGINMAE, SCENE_14YUKIDAMANOMITI, SCENE_GORONRACE, SCENE_17SETUGEN, SCENE_17SETUGEN2, -1 },
+    { SCENE_F01, SCENE_ROMANYMAE, SCENE_OMOYA, SCENE_F01C, SCENE_F01_B, SCENE_KOEPONARACE, -1 },
+    { SCENE_30GYOSON, SCENE_SINKAI, SCENE_31MISAKI, SCENE_TORIDE, SCENE_KAIZOKU, SCENE_33ZORACITY, SCENE_35TAKI, -1 },
+    { SCENE_F40, SCENE_F41, SCENE_CASTLE, SCENE_IKANA, SCENE_REDEAD, -1 },
 };
 
-#ifdef NON_EQUIVALENT
-// loop seems wrong?
 void func_8012EF0C(s16 arg0) {
-    s16 i;
-    s16 num;
-    s16 sceneIndex;
+    s16 phi_v0 = 0;
+    s16 phi_v1 = 0;
+    u16(*new_var)[] = &D_801C2380[arg0];
 
-    if ((arg0 >= 0) && (arg0 < ARRAY_COUNT(D_801C2380))) {
-        i = 0;
-        num = 0;
-        sceneIndex = D_801C2380[arg0][i];
-
-        while (sceneIndex != 0xFFFF) {
-            sceneIndex = D_801C2380[arg0][i];
-            if (sceneIndex < 0x20) {
-                num = 0;
-            } else if (sceneIndex < 0x40) {
-                num = 1;
-            } else if (sceneIndex < 0x60) {
-                num = 2;
-            } else if (sceneIndex < 0x80) {
-                num = 3;
-            } else if (sceneIndex < 0xA0) {
-                num = 4;
-            } else if (sceneIndex < 0xC0) {
-                num = 5;
-            } else if (sceneIndex < 0xE0) {
-                num = 6;
+    if ((arg0 >= 0) && (arg0 < 6)) {
+        while (true) {
+            if ((*new_var)[phi_v0] == 0xFFFF) {
+                break;
             }
 
-            gSaveContext.roomInf[125][sceneIndex] |= gBitFlags[(-(num << 7)) + num];
-            i++;
+            if (((s16)(*new_var)[phi_v0]) < 0x20) {
+                phi_v1 = 0;
+            } else if (((s16)(*new_var)[phi_v0]) < 0x40) {
+                phi_v1 = 1;
+            } else if (((s16)(*new_var)[phi_v0]) < 0x60) {
+                phi_v1 = 2;
+            } else if (((s16)(*new_var)[phi_v0]) < 0x80) {
+                phi_v1 = 3;
+            } else if (((s16)(*new_var)[phi_v0]) < 0xA0) {
+                phi_v1 = 4;
+            } else if (((s16)(*new_var)[phi_v0]) < 0xC0) {
+                phi_v1 = 5;
+            } else if (((s16)(*new_var)[phi_v0]) < 0xE0) {
+                phi_v1 = 6;
+            }
+
+            // Required to match
+            gSaveContext.roomInf[125][phi_v1] =
+                gSaveContext.roomInf[125][phi_v1] | gBitFlags[(s16)(*new_var)[phi_v0] - (phi_v1 << 5)];
+            phi_v0++;
         }
 
-        if (i == 0) {
+        if ((*new_var) == D_801C2380[0]) {
             gSaveContext.unk_F60 |= 3;
-        } else if (i == 1) {
+        } else if ((*new_var) == D_801C2380[1]) {
             gSaveContext.unk_F60 |= 0x1C;
-        } else if (i == 2) {
+        } else if ((*new_var) == D_801C2380[2]) {
             gSaveContext.unk_F60 |= 0xE0;
-        } else if (i == 3) {
+        } else if ((*new_var) == D_801C2380[3]) {
             gSaveContext.unk_F60 |= 0x100;
-        } else if (i == 4) {
+        } else if ((*new_var) == D_801C2380[4]) {
             gSaveContext.unk_F60 |= 0x1E00;
-        } else if (i == 5) {
+        } else if ((*new_var) == D_801C2380[5]) {
             gSaveContext.unk_F60 |= 0x6000;
         }
     }
 
-    dREG(82) = 0;
+    XREG(95) = 0;
 }
-#else
-void func_8012EF0C(s16 arg0);
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8012EC80/func_8012EF0C.s")
-#endif
 
 void func_8012F0EC(s16 arg0);
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8012EC80/func_8012F0EC.s")

@@ -943,7 +943,9 @@ typedef struct {
     /* 0x12023 */ s8 unk12023;
     /* 0x12024 */ UNK_TYPE1 unk12024[0x6];
     /* 0x1202A */ u16 unk1202A;
-    /* 0x1202C */ UNK_TYPE1 pad1202C[0x18];
+    /* 0x1202C */ UNK_TYPE1 pad1202C[0x2];
+    /* 0x1202E */ u16 unk1202E;
+    /* 0x12030 */ UNK_TYPE1 pad12030[0x14];
     /* 0x12044 */ s16 unk12044;
     /* 0x12046 */ UNK_TYPE1 pad12046[0x24];
     /* 0x1206A */ s16 unk1206A;
@@ -1720,6 +1722,12 @@ typedef struct {
     /* 0x18 */ Vec3f unk_18; // Usually setted to Player's position or Player's focus
     /* 0x24 */ s16 unk_24;
 } struct_800BD888_arg1; // size = 0x28
+
+typedef struct {
+    /* 0x0 */ u8 unk0;
+    /* 0x4 */ s32 unk4;
+    /* 0x8 */ s32 unk8;
+} struct_80133038_arg2; // size = 0xC
 
 typedef struct {
     /* 0x000 */ Actor base;
