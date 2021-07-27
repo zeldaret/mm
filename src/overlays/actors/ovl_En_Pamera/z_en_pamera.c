@@ -264,7 +264,7 @@ void func_80BD8700(EnPamera* this) {
 }
 
 void func_80BD8758(EnPamera* this, GlobalContext* globalCtx) {
-    if (this->hideInisdeTimer++ >= 1800) {
+    if (this->hideInisdeTimer++ > 1800) {
         if (ActorCutscene_GetCanPlayNext(this->cutscenes[0]) && (this->cutscenes[0] != -1)) {
             ActorCutscene_StartAndSetUnkLinkFields(this->cutscenes[0], &this->actor);
             func_800E02AC(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(this->cutscenes[0])), this);
