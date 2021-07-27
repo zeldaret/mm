@@ -574,8 +574,8 @@ void EnSob1_UpdateJoystickInputState(GlobalContext* globalCtx, EnSob1* this) {
     } else if (stickX <= 30 && stickX >= -30) {
         this->stickAccumX = 0;
     } else if ((this->stickAccumX * stickX) < 0) { // Stick has swapped directions
-            this->stickAccumX = stickX;
-     } else {
+        this->stickAccumX = stickX;
+    } else {
         this->stickAccumX += stickX;
         if (this->stickAccumX > 2000) {
             this->stickAccumX = 2000;
