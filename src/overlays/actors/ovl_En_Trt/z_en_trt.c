@@ -77,9 +77,9 @@ extern AnimationHeader D_06002CB0;
 extern AnimationHeader D_0600EE98;
 extern AnimationHeader D_06003D78;
 extern AnimationHeader D_06000A44;
-extern UNK_TYPE D_0600B0B8;
-extern UNK_TYPE D_0600B8B8;
-extern UNK_TYPE D_0600C0B8;
+extern TexturePtr D_0600B0B8;
+extern TexturePtr D_0600B8B8;
+extern TexturePtr D_0600C0B8;
 
 static ActorAnimationEntryS sAnimations[] = {
     { &D_0600DE68, 1.0f, 0, -1, 2, 0 }, { &D_0600EE98, 1.0f, 0, -1, 2, 0 }, { &D_0600FD34, 1.0f, 0, -1, 0, 0 },
@@ -1800,7 +1800,7 @@ void EnTrt_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 }
 
 void EnTrt_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static UNK_PTR sEyeTextures[] = { &D_0600B0B8, &D_0600B8B8, &D_0600C0B8 };
+    static TexturePtr sEyeTextures[] = { &D_0600B0B8, &D_0600B8B8, &D_0600C0B8 };
     EnTrt* this = THIS;
     s32 pad;
 
