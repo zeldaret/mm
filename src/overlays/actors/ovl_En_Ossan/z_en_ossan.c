@@ -313,7 +313,7 @@ void EnOssan_SetupStartShopping(GlobalContext* globalCtx, EnOssan* this, u8 skip
 
 void EnOssan_StartShopping(GlobalContext* globalCtx, EnOssan* this) {
     EnOssan_SetupAction(this, EnOssan_FaceShopkeeper);
-    func_80151938(globalCtx, 0x0640);
+    func_80151938(globalCtx, 0x640);
     func_8011552C(globalCtx, 6);
     this->stickRightPrompt.isEnabled = true;
     this->stickLeftPrompt.isEnabled = true;
