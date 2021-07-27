@@ -1147,17 +1147,13 @@ void EnOssan_PositionSelectedItem(EnOssan* this) {
         { 35.0f, 68.0f, -130.0f },
         { -35.0f, 68.0f, -130.0f },
     };
-
     EnGirlA* item;
-    u8 i;
+    u8 i = this->cursorIdx;
     u8 i2;
-    ShopItem* shopItem;
+    ShopItem* shopItem = &sShops[this->actor.params][i];
     Vec3f worldPos;
-
-    i = this->cursorIdx;
-    shopItem = &sShops[this->actor.params][i];
+    
     item = this->items[i];
-
     i2 = i >> 2;
     VEC3F_LERPIMPDST(&worldPos, &shopItem->spawnPos, &sSelectedItemPosition[i2], this->shopItemSelectedTween);
 
