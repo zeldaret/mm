@@ -573,36 +573,30 @@ void EnSob1_UpdateJoystickInputState(GlobalContext* globalCtx, EnSob1* this) {
         }
     } else if (stickX <= 30 && stickX >= -30) {
         this->stickAccumX = 0;
-    } else {
-        if ((this->stickAccumX * stickX) < 0) { // Stick has swapped directions
+    } else if ((this->stickAccumX * stickX) < 0) { // Stick has swapped directions
             this->stickAccumX = stickX;
-        } else {
-            this->stickAccumX += stickX;
-            if (this->stickAccumX > 2000) {
-                this->stickAccumX = 2000;
-            } else if (this->stickAccumX < -2000) {
-                this->stickAccumX = -2000;
-            }
+     } else {
+        this->stickAccumX += stickX;
+        if (this->stickAccumX > 2000) {
+            this->stickAccumX = 2000;
+        } else if (this->stickAccumX < -2000) {
+            this->stickAccumX = -2000;
         }
     }
     if (this->stickAccumY == 0) {
         if (stickY > 30 || stickY < -30) {
             this->stickAccumY = stickY;
         }
+    } else if (stickY <= 30 && stickY >= -30) {
+        this->stickAccumY = 0;
+    } else if ((this->stickAccumY * stickY) < 0) { // Stick has swapped directions
+        this->stickAccumY = stickY;
     } else {
-        if (stickY <= 30 && stickY >= -30) {
-            this->stickAccumY = 0;
-        } else {
-            if ((this->stickAccumY * stickY) < 0) { // Stick has swapped directions
-                this->stickAccumY = stickY;
-            } else {
-                this->stickAccumY += stickY;
-                if (this->stickAccumY > 2000) {
-                    this->stickAccumY = 2000;
-                } else if (this->stickAccumY < -2000) {
-                    this->stickAccumY = -2000;
-                }
-            }
+        this->stickAccumY += stickY;
+        if (this->stickAccumY > 2000) {
+            this->stickAccumY = 2000;
+        } else if (this->stickAccumY < -2000) {
+            this->stickAccumY = -2000;
         }
     }
 }
@@ -774,7 +768,7 @@ void EnSob1_Walk(EnSob1* this, GlobalContext* globalCtx) {
             1000, 1);
         this->actor.shape.rot.y = this->actor.world.rot.y;
         this->actor.speedXZ = 2.0f;
-        if (distSq < 25.0f) {
+        if (distSq < SQ(5.0f)) {
             this->pathPointsIdx++;
             if ((this->path->count - 1) < this->pathPointsIdx) {
                 this->actor.speedXZ = 0.0f;
@@ -1120,10 +1114,9 @@ void EnSob1_PositionSelectedItem(EnSob1* this) {
     Vec3f selectedItemPosition = sSelectedItemPositions[this->shopType];
     u8 i = this->cursorIdx;
     EnGirlA* item;
-    ShopItem* shopItem;
+    ShopItem* shopItem = &sShops[this->shopType][i];
     Vec3f worldPos;
 
-    shopItem = &sShops[this->shopType][i];
     item = this->items[i];
 
     VEC3F_LERPIMPDST(&worldPos, &shopItem->spawnPos, &selectedItemPosition, this->shopItemSelectedTween);
@@ -1187,9 +1180,8 @@ void EnSob1_UpdateItemSelectedProperty(EnSob1* this) {
 }
 
 void EnSob1_UpdateCursorAnim(EnSob1* this) {
-    f32 t;
+    f32 t = this->cursorAnimTween;
 
-    t = this->cursorAnimTween;
     if (this->cursorAnimState == 0) {
         t += 0.05f;
         if (t >= 1.0f) {
@@ -1285,7 +1277,7 @@ s16 EnSob1_GetXZAngleAndDistanceSqToPoint(Path* path, s32 pointIdx, Vec3f* pos, 
         diffZ = 0.0f;
     }
     *distSq = SQ(diffX) + SQ(diffZ);
-    return Math_Acot2F(diffZ, diffX) * (0x8000 / M_PI);
+    return RADF_TO_BINANG(Math_Acot2F(diffZ, diffX));
 }
 
 void EnSob1_GetCutscenes(EnSob1* this) {
@@ -1395,7 +1387,7 @@ void EnSob1_InitShop(EnSob1* this, GlobalContext* globalCtx) {
         this->cutscene = this->lookFowardCutscene;
         ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
         sInitFuncs[this->shopType](this, globalCtx);
-        this->actor.colChkInfo.mass = 0xFF;
+        this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         this->actor.colChkInfo.cylRadius = 50;
         this->wasTalkedToWhileWalking = false;
         this->pathPointsIdx = 0;
@@ -1645,14 +1637,13 @@ Gfx* EnSob1_EndDList(GraphicsContext* gfxCtx) {
 
 void EnSob1_DrawZoraShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
     static TexturePtr sZoraShopkeeperEyeTextures[] = { &D_060050A0, &D_060058A0, &D_060060A0 };
-    
     EnSob1* this = THIS;
     s32 pad;
     s32 i;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
-    gDPSetEnvColor(POLY_OPA_DISP++, 0x00, 0x00, 0x00, 0xFF);
+    gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
     gSPSegment(POLY_OPA_DISP++, 0x0C, EnSob1_EndDList(globalCtx->state.gfxCtx));
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sZoraShopkeeperEyeTextures[this->eyeTexIndex]));
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
@@ -1669,7 +1660,6 @@ void EnSob1_DrawZoraShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnSob1_DrawGoronShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
     static TexturePtr sGoronShopkeeperEyeTextures[] = { &D_06010438, &D_06010C38, &D_06011038 };
-    
     EnSob1* this = THIS;
     s32 pad;
     s32 i;
