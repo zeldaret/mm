@@ -813,8 +813,10 @@ SECTIONS
     _ovl_Player_ActorSegmentStart = SegmentStart;
     ovl_Player_Actor : AT(RomLocation)
     {
-        build/asm/overlays/ovl_Player_Actor_0x8082DA90.o(.text)
+        build/src/overlays/actors/ovl_Player_Actor/z_player.o(.text)
         build/asm/overlays/ovl_Player_Actor_data.o(.data)
+        build/src/overlays/actors/ovl_Player_Actor/z_player.o(.rodata)
+        build/asm/overlays/ovl_Player_Actor_rodata.o(.rodata)
         ovl_Player_Actor_bss_start = .;
     }
     . += 0x80;
