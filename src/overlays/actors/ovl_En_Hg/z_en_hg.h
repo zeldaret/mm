@@ -14,9 +14,9 @@ typedef enum {
     /* 03 */ HG_LIMB_SHOULDER_LEFT,
     /* 04 */ HG_LIMB_ARM_LEFT,
     /* 05 */ HG_LIMB_HAND_LEFT,
-    /* 06 */ HG_LIMB_SHOULDER_LEFT,
-    /* 07 */ HG_LIMB_ARM_LEFT,
-    /* 08 */ HG_LIMB_HAND_LEFT,
+    /* 06 */ HG_LIMB_SHOULDER_RIGHT,
+    /* 07 */ HG_LIMB_ARM_RIGHT,
+    /* 08 */ HG_LIMB_HAND_RIGHT,
     /* 09 */ HG_LIMB_EYEBROW,
     /* 10 */ HG_LIMB_HEAD,
     /* 11 */ HG_LIMB_PELVIS,
@@ -26,8 +26,9 @@ typedef enum {
     /* 15 */ HG_LIMB_THIGH_RIGHT,
     /* 16 */ HG_LIMB_LEG_RIGHT,
     /* 17 */ HG_LIMB_FOOT_RIGHT,
-    /* 19 */ HG_LIMB_MAX,
-} ObjectMa2Limbs;
+    /* 19 */ HG_LIMB_UNK,
+    /* 20 */ HG_LIMB_MAX,
+} ObjectHgLimbs;
 
 typedef struct EnHg {
     /* 0x000 */ Actor actor;
