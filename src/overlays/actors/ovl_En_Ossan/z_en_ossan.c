@@ -1253,7 +1253,6 @@ void EnOssan_UpdateStickDirectionPromptAnim(EnOssan* this) {
             arrowAnimTween = 1.0f;
             this->arrowAnimState = 1;
         }
-
     } else {
         arrowAnimTween -= 0.05f;
         if (arrowAnimTween < 0.0f) {
