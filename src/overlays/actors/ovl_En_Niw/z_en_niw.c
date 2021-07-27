@@ -1007,15 +1007,13 @@ void EnNiw_DrawFeathers(EnNiw* this, GlobalContext* globalCtx) {
                 isMaterialApplied++;
             }
 
-            SysMatrix_InsertTranslation(feather->pos.x, feather->pos.y, feather->pos.z,
-                                        MTXMODE_NEW);
+            SysMatrix_InsertTranslation(feather->pos.x, feather->pos.y, feather->pos.z, MTXMODE_NEW);
             SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
             Matrix_Scale(feather->scale, feather->scale, 1.0f, MTXMODE_APPLY);
             SysMatrix_InsertZRotation_f(feather->zRot, MTXMODE_APPLY);
             SysMatrix_InsertTranslation(0.0f, -1000.0f, 0.0f, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
             gSPDisplayList(POLY_XLU_DISP++, D_06002428);
         }

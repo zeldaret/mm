@@ -667,7 +667,8 @@ void EffectSsHitMark_SpawnFixedScale(GlobalContext* globalCtx, s32 type, Vec3f* 
 // void EffectSsHitMark_SpawnCustomScale(void);
 // void EffectSsFhgFlash_SpawnShock(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, Vec3f* pzParm3, UNK_TYPE2 uParm4, UNK_TYPE1 param_5);
 // void EffectSsKFire_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE1 param_6);
-// void EffectSsSolderSrchBall_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7);
+void EffectSsSolderSrchBall_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 unused,
+                                  s16* linkDetected, s16 drawFlag);
 void EffectSsKakera_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* arg3, s16 gravity, s16 arg5,
                           s16 arg6, s16 arg7, s16 arg8, s16 scale, s16 arg10, s16 arg11, s32 life, s16 colorIdx,
                           s16 objId, Gfx* dList);
@@ -888,7 +889,7 @@ void func_800BBA88(GlobalContext* globalCtx, Actor* actor);
 void func_800BBB74(s16* arg1, UNK_TYPE1 arg2, UNK_TYPE1 arg3, UNK_TYPE4 arg4);
 // void func_800BBC20(void);
 void func_800BBCEC(Actor* actor, GlobalContext* globalCtx, s16 arg2, Gfx** dList);
-// void func_800BBDAC(GlobalContext* globalCtx, UNK_PTR param_2, UNK_PTR param_3, f32 param_4, UNK_TYPE4 param_5, f32 param_6, s16 param_7, s16 param_8, u8 param_9);
+void func_800BBDAC(GlobalContext* globalCtx, Actor* actor, Vec3f* arg2, f32 arg3, UNK_TYPE4 arg4, f32 arg5, s16 arg6, s16 arg7, u8 arg8);
 void func_800BBFB0(GlobalContext* globalCtx, Vec3f* position, f32 param3, s32 param_4, s16 param_5, s16 param_6, u8 param_7);
 void func_800BC154(GlobalContext* globalCtx, ActorContext* actorCtx, Actor* actor, u8 actorCategory);
 // void func_800BC188(void);
@@ -898,7 +899,7 @@ Actor* func_800BC270(GlobalContext* globalCtx, Actor* actor, f32 arg2, UNK_TYPE4
 // void func_800BC4EC(void);
 // void func_800BC5B8(void);
 // void func_800BC5EC(void);
-// void func_800BC620(void);
+void func_800BC620(Vec3f* arg0, Vec3f* arg1, UNK_TYPE arg2, GlobalContext* globalCtx);
 // void func_800BC770(void);
 // void func_800BC7D8(void);
 // void func_800BC848(void);
@@ -916,7 +917,7 @@ void func_800BD888(Actor*, struct_800BD888_arg1*, s16, s16); // This function is
 // void func_800BD9E0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6);
 // void func_800BDAA0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6);
 // void func_800BDB6C(void);
-void func_800BDC5C(SkelAnime* skelAnime, ActorAnimationEntry animation[], s16 index);
+void func_800BDC5C(SkelAnime* skelAnime, ActorAnimationEntry animation[], s32 index);
 // void func_800BDCF4(void);
 void Actor_Noop(Actor* actor, GlobalContext* globalCtx);
 void func_800BDFC0(GlobalContext* globalCtx, Gfx* dl);
@@ -994,7 +995,7 @@ CollisionHeader* BgCheck_GetActorMeshHeader(CollisionContext* colCtx, s32 index)
 f32 func_800C3D50(s32 arg0, CollisionContext* colCtx, s32 arg2, CollisionPoly** arg3, s32* arg4, Vec3f* pos, Actor* actor, s32 arg7, f32 arg8, s32 arg9);
 // void func_800C3F40(void);
 // void func_800C3FA0(void);
-// void func_800C4000(void);
+f32 func_800C4000(GlobalContext* globalCtx, CollisionContext* colCtx, Vec3s* arg2, Vec3f* arg3);
 // void func_800C4058(void);
 // void func_800C40B4(void);
 f32 func_800C411C(CollisionContext* colCtx, CollisionPoly** arg1, s32* arg2, Actor* actor, Vec3f* pos);
@@ -1670,7 +1671,7 @@ void func_800F0568(GlobalContext* globalCtx, Vec3f* position, s32 param_3, s16 s
 // void func_800F0FF0(void);
 // void func_800F10AC(void);
 // void func_800F112C(void);
-// void func_800F1250(void);
+u16 func_800F1250(GlobalContext* globalCtx, UNK_TYPE arg1);
 void func_800F12D0(GlobalContext* globalCtx);
 void func_800F1304(GlobalContext* globalCtx, s16 param_2);
 void func_800F1374(s32 param_1, s16 param_2);
@@ -2555,7 +2556,7 @@ s32 Entrance_GetTransitionFlags(u16 entranceIndex);
 // void func_80132E9C(void);
 // void func_80132FDC(void);
 // void func_80133000(void);
-// void func_80133038(void);
+s32 func_80133038(GlobalContext* globalCtx, UNK_PTR arg1, struct_80133038_arg2* arg2);
 void SkelAnime_LodDrawLimb(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* limbDrawTable, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, s32 dListIndex);
 void SkelAnime_LodDraw(GlobalContext* globalCtx, void** skeleton, Vec3s* limbDrawTable, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, s32 dListIndex);
 void SkelAnime_LodDrawLimbSV(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* limbDrawTable, OverrideLimbDrawSV overrideLimbDraw, PostLimbDrawSV postLimbDraw, Actor* actor, s32 dListIndex, RSPMatrix** mtx);
@@ -2695,17 +2696,17 @@ s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, 
 // void func_8013A7C0(void);
 // void func_8013A860(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
 // void func_8013AB00(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9);
-// void func_8013AD6C(void);
+s32 func_8013AD6C(GlobalContext* globalCtx);
 // void func_8013AD9C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 void func_8013AED4(u16* param_1, u16 param_2, u16 param_3);
-// void func_8013AF00(void);
+void func_8013AF00(UNK_PTR arg0, UNK_TYPE arg1, UNK_TYPE arg2);
 // void func_8013B010(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
 // void func_8013B0C8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_8013B350(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-// void func_8013B6B0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9);
-// void func_8013B878(void);
-// void func_8013BB34(void);
-// void func_8013BB7C(void);
+s32 func_8013B6B0(Path* path, UNK_PTR arg1, s32* arg2, s32 arg3, s32 arg4, s32* arg5, UNK_PTR arg6, Vec3f* arg7, s16 arg8);
+void func_8013B878(GlobalContext* globalCtx, Path* path, s32 arg2, Vec3f* arg3);
+Path* func_8013BB34(GlobalContext* globalCtx, u8 arg1, UNK_TYPE arg2);
+Actor* func_8013BB7C(Actor* actor, GlobalContext* globalCtx, s32 actorCategory, s32 actorId);
 UNK_TYPE func_8013BC6C(SkelAnime* skelAnime, ActorAnimationEntryS* arg1, s32 arg2);
 // void func_8013BD40(void);
 // void func_8013BEDC(void);
@@ -2719,8 +2720,8 @@ UNK_TYPE func_8013BC6C(SkelAnime* skelAnime, ActorAnimationEntryS* arg1, s32 arg
 // void func_8013D0E0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 void func_8013D2E0(Vec3f* arg0, PosRot* arg1, ActorShape* arg2, s16* arg3, s16* arg4, s16* arg5, s16* arg6);
 UNK_TYPE func_8013D5E8(s16 arg0, UNK_TYPE arg1, s16 arg2);
-u8* func_8013D648(GlobalContext *globalCtx, s16 arg1, s32 arg2);
-UNK_TYPE func_8013D68C(u8* arg0, s16 arg1, UNK_PTR arg2);
+Path* func_8013D648(GlobalContext *globalCtx, s16 arg1, s32 arg2);
+UNK_TYPE func_8013D68C(Path* path, s16 arg1, UNK_PTR arg2);
 // void func_8013D720(void);
 UNK_TYPE func_8013D768(Actor* actor, UNK_PTR arg1, s16 arg2);
 // void func_8013D83C(void);
@@ -3325,7 +3326,7 @@ u32 func_8017AA0C(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3);
 u32 func_8017ABBC(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3);
 // void func_8017AD38(void);
 // void func_8017B68C(void);
-// void func_8017B7F8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+void func_8017B7F8(Vec3f* arg0, s16 arg1, f32* arg2, f32* arg3, f32* arg4);
 void Math3D_UnitNormalVector(Vec3f* a, Vec3f* b, Vec3f* c, f32* normX, f32* normY, f32* normZ, f32* param_7);
 f32 Math3D_SignedDistanceFromPlane(f32 normX, f32 normY, f32 normZ, f32 d, Vec3f* position);
 // void func_8017B9D8(void);
