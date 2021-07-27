@@ -9,16 +9,16 @@ void EnBji01_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBji01_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBji01_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_809CCE98(EnBji01* this, GlobalContext* globalCtx);     /* Level 1 */
-void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx);     /* Level 2 */
-void func_809CD028(EnBji01* this, GlobalContext* globalCtx);     /* Level 3 */
-void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx);     /* Level 4 */
-void func_809CCDE0(EnBji01* this, GlobalContext* globalCtx);     /* Level 5 */
-void func_809CD634(EnBji01* this, GlobalContext* globalCtx);     /* Level 5 */
-void EnBji01_DoNothing(EnBji01* this, GlobalContext* globalCtx); /* Level 6 */
-void func_809CD6C0(EnBji01* this, GlobalContext* globalCtx);     /* Level 3 */
-void func_809CD70C(EnBji01* this, GlobalContext* globalCtx);     /* Level 4 */
-void func_809CD77C(EnBji01* this, GlobalContext* globalCtx);     /* Level 5 */
+void func_809CCE98(EnBji01* this, GlobalContext* globalCtx);
+void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx);
+void func_809CD028(EnBji01* this, GlobalContext* globalCtx);
+void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx);
+void func_809CCDE0(EnBji01* this, GlobalContext* globalCtx);
+void func_809CD634(EnBji01* this, GlobalContext* globalCtx);
+void EnBji01_DoNothing(EnBji01* this, GlobalContext* globalCtx);
+void func_809CD6C0(EnBji01* this, GlobalContext* globalCtx);
+void func_809CD70C(EnBji01* this, GlobalContext* globalCtx);
+void func_809CD77C(EnBji01* this, GlobalContext* globalCtx);
 
 s32 EnBji01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                              Actor* actor);
@@ -278,7 +278,7 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
                     case 0x5F7:
                     case 0x5F8:
                         func_801477B4(globalCtx);
-                        this->actor.flags &= ~0x10000;;
+                        this->actor.flags &= ~0x10000;
                         this->actor.params = ENBJI01_PARAMS_FINISHED_CONVERSATION;
                         func_809CCE98(this, globalCtx);
                         break;
@@ -287,7 +287,7 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
             break;
         case 6:
             this->actor.params = ENBJI01_PARAMS_FINISHED_CONVERSATION;
-            this->actor.flags &= ~0x10000;;
+            this->actor.flags &= ~0x10000;
             func_809CCE98(this, globalCtx);
             break;
     }
@@ -333,7 +333,8 @@ void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBji01* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 30.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600578C, &D_06000FDC, this->jointTable, this->morphTable, BJI_LIMB_MAX);
+    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600578C, &D_06000FDC, this->jointTable, this->morphTable,
+                     BJI_LIMB_MAX);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
