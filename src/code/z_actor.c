@@ -367,29 +367,23 @@ void Actor_SetMovementScale(s32 scale) {
     actorMovementScale = scale * 0.5f;
 }
 
-#ifdef NON_MATCHING
 void Actor_ApplyMovement(Actor* actor) {
-    actor->world.pos.x += ((actor->velocity.x * actorMovementScale) + actor->colChkInfo.displacement.x);
-    actor->world.pos.y += ((actor->velocity.y * actorMovementScale) + actor->colChkInfo.displacement.y);
-    actor->world.pos.z += ((actor->velocity.z * actorMovementScale) + actor->colChkInfo.displacement.z);
+    f32 speedRate = actorMovementScale;
+
+    actor->world.pos.x += ((actor->velocity.x * speedRate) + actor->colChkInfo.displacement.x);
+    actor->world.pos.y += ((actor->velocity.y * speedRate) + actor->colChkInfo.displacement.y);
+    actor->world.pos.z += ((actor->velocity.z * speedRate) + actor->colChkInfo.displacement.z);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_ApplyMovement.s")
-#endif
 
-#if 0
 void Actor_SetVelocityYRotationAndGravity(Actor* actor) {
-    actor->velocity.x = actor->speedXZ * Math_SinS(actor->world.rot.x);
-    actor->velocity.y = actor->velocity.y + actor->gravity;
-    actor->velocity.z = actor->speedXZ * Math_CosS(actor->world.rot.x);
+    actor->velocity.x = actor->speedXZ * Math_SinS(actor->world.rot.y);
+    actor->velocity.z = actor->speedXZ * Math_CosS(actor->world.rot.y);
+    actor->velocity.y += actor->gravity;
 
-    if (actor->velocity.y < actor->minYVelocity) {
-        actor->velocity.y = actor->minYVelocity;
+    if (actor->velocity.y < actor->minVelocityY) {
+        actor->velocity.y = actor->minVelocityY;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_SetVelocityYRotationAndGravity.s")
-#endif
 
 void Actor_SetVelocityAndMoveYRotationAndGravity(Actor* actor) {
     Actor_SetVelocityYRotationAndGravity(actor);
