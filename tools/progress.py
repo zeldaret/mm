@@ -210,12 +210,17 @@ asm += non_matching_asm + not_attempted_asm
 # Calculate the total amount of decompilable code
 total = src + asm
 
+# Calculate assets totals
+assets = audio + misc + object_ + scene + texture
+assets_total = audio_size + misc_size + object_size + scene_size + texture_size
+
 # Convert vaules to percentages
 src_percent = 100 * src / total
 asm_percent = 100 * asm / total
 code_percent = 100 * code / code_size
 boot_percent = 100 * boot / boot_size
 ovl_percent = 100 * ovl / ovl_size
+assets_percent = 100 * assets / assets_total
 audio_percent = 100 * audio / audio_size
 misc_percent = 100 * misc / misc_size
 object_percent = 100 * object_ / object_size
@@ -282,16 +287,18 @@ elif args.format == 'shield-json':
 elif args.format == 'text':
     adjective = "decompiled" if not args.matching else "matched"
 
-    print(f"{total} total bytes of decompilable code\n")
-    print(f"{src} bytes {adjective} in src {round(src_percent, 4)}%\n")
-    print(f"{boot}/{boot_size} bytes {adjective} in boot {round(boot_percent, 4)}%\n")
-    print(f"{code}/{code_size} bytes {adjective} in code {round(code_percent, 4)}%\n")
-    print(f"{ovl}/{ovl_size} bytes {adjective} in overlays {round(ovl_percent, 4)}%\n")
-    print(f"{audio}/{audio_size} bytes reconstructed in audio {round(audio_percent, 4)}%\n")
-    print(f"{misc}/{misc_size} bytes reconstructed in misc {round(misc_percent, 4)}%\n")
-    print(f"{object_}/{object_size} bytes reconstructed in objects {round(object_percent, 4)}%\n")
-    print(f"{scene}/{scene_size} bytes reconstructed in scenes {round(scene_percent, 4)}%\n")
-    print(f"{texture}/{texture_size} bytes reconstructed in textures {round(texture_percent, 4)}%\n")
+    print("src:  {:>9} / {:>8} total bytes {:<13} {:>9.4f}%".format(src, total, adjective, round(src_percent, 4)))
+    print("    boot:     {:>9} / {:>8} bytes {:<13} {:>9.4f}%".format(boot, boot_size, adjective, round(boot_percent, 4)))
+    print("    code:     {:>9} / {:>8} bytes {:<13} {:>9.4f}%".format(code, code_size, adjective, round(code_percent, 4)))
+    print("    overlays: {:>9} / {:>8} bytes {:<13} {:>9.4f}%".format(ovl, ovl_size, adjective, round(ovl_percent, 4)))
+    print()
+    print("assets:     {:>9} / {:>8} bytes reconstructed {:>9.4f}%".format(assets, assets_total, round(assets_percent, 4)))
+    print("    audio:    {:>9} / {:>8} bytes reconstructed {:>9.4f}%".format(audio, audio_size, round(audio_percent, 4)))
+    print("    misc:     {:>9} / {:>8} bytes reconstructed {:>9.4f}%".format(misc, misc_size, round(misc_percent, 4)))
+    print("    objects:  {:>9} / {:>8} bytes reconstructed {:>9.4f}%".format(object_, object_size, round(object_percent, 4)))
+    print("    scenes:   {:>9} / {:>8} bytes reconstructed {:>9.4f}%".format(scene, scene_size, round(scene_percent, 4)))
+    print("    textures: {:>9} / {:>8} bytes reconstructed {:>9.4f}%".format(texture, texture_size, round(texture_percent, 4)))
+    print()
     print("------------------------------------\n")
 
     if (rupees > 0):
