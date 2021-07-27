@@ -1152,7 +1152,6 @@ void EnTrt_PositionSelectedItem(EnTrt* this) {
     u8 i = this->cursorIdx;
     EnGirlA* item;
     ShopItem* shopItem = &sShop[i];
-    ;
     Vec3f worldPos;
 
     item = this->items[i];
@@ -1244,8 +1243,8 @@ void EnTrt_UpdateStickDirectionPromptAnim(EnTrt* this) {
     f32 stickAnimTween = this->stickAnimTween;
 
     // Possbily fake temps
-    s32 new_var2 = 255;
-    f32 new_var3;
+    s32 maxColor = 255;
+    f32 tmp;
 
     if (this->arrowAnimState == 0) {
         arrowAnimTween += 0.05f;
@@ -1273,17 +1272,17 @@ void EnTrt_UpdateStickDirectionPromptAnim(EnTrt* this) {
         this->stickAnimState = 0;
     }
 
-    new_var3 = 155.0f * arrowAnimTween;
+    tmp = 155.0f * arrowAnimTween;
 
     this->stickAnimTween = stickAnimTween;
 
     this->stickLeftPrompt.arrowColorR = COL_CHAN_MIX(255, 155.0f, arrowAnimTween);
-    this->stickLeftPrompt.arrowColorG = COL_CHAN_MIX(new_var2, 155.0f, arrowAnimTween);
+    this->stickLeftPrompt.arrowColorG = COL_CHAN_MIX(maxColor, 155.0f, arrowAnimTween);
     this->stickLeftPrompt.arrowColorB = COL_CHAN_MIX(0, -100, arrowAnimTween);
     this->stickLeftPrompt.arrowColorA = COL_CHAN_MIX(200, 50.0f, arrowAnimTween);
 
-    this->stickRightPrompt.arrowColorR = (new_var2 - ((s32)new_var3)) & 0xFF;
-    this->stickRightPrompt.arrowColorG = (255 - ((s32)new_var3)) & 0xFF;
+    this->stickRightPrompt.arrowColorR = (maxColor - ((s32)tmp)) & 0xFF;
+    this->stickRightPrompt.arrowColorG = (255 - ((s32)tmp)) & 0xFF;
     this->stickRightPrompt.arrowColorB = COL_CHAN_MIX(0, -100.0f, arrowAnimTween);
     this->stickRightPrompt.arrowColorA = COL_CHAN_MIX(200, 50.0f, arrowAnimTween);
 
