@@ -962,7 +962,6 @@ beginseg
     compress
     include "build/src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.o"
     include "build/data/ovl_kaleido_scope/ovl_kaleido_scope.data.o"
-//    include "build/data/ovl_kaleido_scope/ovl_kaleido_scope.rodata.o"
     include "build/data/ovl_kaleido_scope/ovl_kaleido_scope.bss.o"
     include "build/data/ovl_kaleido_scope/ovl_kaleido_scope.reloc.o"
 endseg
