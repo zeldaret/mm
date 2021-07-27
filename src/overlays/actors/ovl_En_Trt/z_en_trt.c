@@ -62,7 +62,6 @@ void EnTrt_Blink(EnTrt* this);
 void EnTrt_OpenEyes2(EnTrt* this);
 void EnTrt_NodOff(EnTrt* this);
 
-
 extern UNK_TYPE D_0401F740;
 extern UNK_TYPE D_0401F8C0;
 extern UNK_TYPE D_0401F7C0;
@@ -103,9 +102,9 @@ const ActorInit En_Trt_InitVars = {
 static f32 sActorScale = 0.008f;
 
 static ShopItem sShop[] = {
-    { SI_POTION_RED_1, {24, 32, -36} },
-    { SI_POTION_GREEN_1, {6, 32, -36} },
-    { SI_POTION_BLUE, {-12, 32, -36} },
+    { SI_POTION_RED_1, { 24, 32, -36 } },
+    { SI_POTION_GREEN_1, { 6, 32, -36 } },
+    { SI_POTION_BLUE, { -12, 32, -36 } },
 };
 
 void EnTrt_ChangeAnim(SkelAnime* skelAnime, ActorAnimationEntryS* animations, s32 idx) {
@@ -141,8 +140,9 @@ void EnTrt_SpawnShopItems(EnTrt* this, GlobalContext* globalCtx, ShopItem* shopI
         } else if (shopItem->shopItemId < 0) {
             this->items[i] = NULL;
         } else {
-            this->items[i] = (EnGirlA*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_GIRLA, shopItem->spawnPos.x,
-                                                   shopItem->spawnPos.y, shopItem->spawnPos.z, 0, 0, 0, shopItem->shopItemId);
+            this->items[i] =
+                (EnGirlA*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_GIRLA, shopItem->spawnPos.x,
+                                      shopItem->spawnPos.y, shopItem->spawnPos.z, 0, 0, 0, shopItem->shopItemId);
         }
     }
 }
@@ -276,36 +276,30 @@ void EnTrt_UpdateJoystickInputState(GlobalContext* globalCtx, EnTrt* this) {
         }
     } else if (stickX <= 30 && stickX >= -30) {
         this->stickAccumX = 0;
+    } else if ((this->stickAccumX * stickX) < 0) { // Stick has swapped directions
+        this->stickAccumX = stickX;
     } else {
-        if ((this->stickAccumX * stickX) < 0) { // Stick has swapped directions
-            this->stickAccumX = stickX;
-        } else {
-            this->stickAccumX += stickX;
-            if (this->stickAccumX > 2000) {
-                this->stickAccumX = 2000;
-            } else if (this->stickAccumX < -2000) {
-                this->stickAccumX = -2000;
-            }
+        this->stickAccumX += stickX;
+        if (this->stickAccumX > 2000) {
+            this->stickAccumX = 2000;
+        } else if (this->stickAccumX < -2000) {
+            this->stickAccumX = -2000;
         }
     }
     if (this->stickAccumY == 0) {
         if (stickY > 30 || stickY < -30) {
             this->stickAccumY = stickY;
         }
+    } else if (stickY <= 30 && stickY >= -30) {
+        this->stickAccumY = 0;
+    } else if ((this->stickAccumY * stickY) < 0) { // Stick has swapped directions
+        this->stickAccumY = stickY;
     } else {
-        if (stickY <= 30 && stickY >= -30) {
-            this->stickAccumY = 0;
-        } else {
-            if ((this->stickAccumY * stickY) < 0) { // Stick has swapped directions
-                this->stickAccumY = stickY;
-            } else {
-                this->stickAccumY += stickY;
-                if (this->stickAccumY > 2000) {
-                    this->stickAccumY = 2000;
-                } else if (this->stickAccumY < -2000) {
-                    this->stickAccumY = -2000;
-                }
-            }
+        this->stickAccumY += stickY;
+        if (this->stickAccumY > 2000) {
+            this->stickAccumY = 2000;
+        } else if (this->stickAccumY < -2000) {
+            this->stickAccumY = -2000;
         }
     }
 }
@@ -1155,13 +1149,12 @@ void EnTrt_ContinueShopping(EnTrt* this, GlobalContext* globalCtx) {
 
 void EnTrt_PositionSelectedItem(EnTrt* this) {
     static Vec3f sSelectedItemPosition = { 6.0f, 35.0f, -12.0f };
-
     u8 i = this->cursorIdx;
     EnGirlA* item;
-    ShopItem* shopItem;
+    ShopItem* shopItem = &sShop[i];
+    ;
     Vec3f worldPos;
 
-    shopItem = &sShop[i];
     item = this->items[i];
 
     VEC3F_LERPIMPDST(&worldPos, &shopItem->spawnPos, &sSelectedItemPosition, this->shopItemSelectedTween);
@@ -1177,8 +1170,8 @@ void EnTrt_ResetItemPosition(EnTrt* this) {
 }
 
 /*
-* Returns true when animation has completed
-*/
+ * Returns true when animation has completed
+ */
 s32 EnTrt_TakeItemOffShelf(EnTrt* this) {
     Math_ApproachF(&this->shopItemSelectedTween, 1.0f, 1.0f, 0.15f);
     if (this->shopItemSelectedTween >= 0.85f) {
@@ -1192,8 +1185,8 @@ s32 EnTrt_TakeItemOffShelf(EnTrt* this) {
 }
 
 /*
-* Returns true when animation has completed
-*/
+ * Returns true when animation has completed
+ */
 s32 EnTrt_ReturnItemToShelf(EnTrt* this) {
     Math_ApproachF(&this->shopItemSelectedTween, 0.0f, 1.0f, 0.15f);
     if (this->shopItemSelectedTween <= 0.15f) {
@@ -1224,9 +1217,8 @@ void EnTrt_UpdateItemSelectedProperty(EnTrt* this) {
 }
 
 void EnTrt_UpdateCursorAnim(EnTrt* this) {
-    f32 t;
+    f32 t = this->cursorAnimTween;
 
-    t = this->cursorAnimTween;
     if (this->cursorAnimState == 0) {
         t += 0.05f;
         if (t >= 1.0f) {
@@ -1487,7 +1479,7 @@ void EnTrt_InitShop(EnTrt* this, GlobalContext* globalCtx) {
     this->cutscene = this->lookForwardCutscene;
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
     EnTrt_InitShopkeeper(this, globalCtx);
-    this->actor.colChkInfo.mass = 0xFF;
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.colChkInfo.cylRadius = 50;
     this->timer = Rand_S16Offset(40, 20);
     if (!(gSaveContext.weekEventReg[0xC] & 8) && !(gSaveContext.weekEventReg[0x54] & 0x40) && gSaveContext.day >= 2) {
@@ -1578,7 +1570,6 @@ void EnTrt_DrawCursor(GlobalContext* globalCtx, EnTrt* this, f32 x, f32 y, f32 z
     s32 dsdx;
     s32 pad;
 
-
     OPEN_DISPS(globalCtx->state.gfxCtx);
     if (drawCursor != 0) {
         func_8012C654(globalCtx->state.gfxCtx);
@@ -1598,7 +1589,7 @@ void EnTrt_DrawCursor(GlobalContext* globalCtx, EnTrt* this, f32 x, f32 y, f32 z
 }
 
 void EnTrt_DrawTextRec(GlobalContext* globalCtx, s32 r, s32 g, s32 b, s32 a, f32 x, f32 y, f32 z, s32 s, s32 t, f32 dx,
-                   f32 dy) {
+                       f32 dy) {
     f32 unk;
     s32 ulx, uly, lrx, lry;
     f32 w, h;
@@ -1647,15 +1638,15 @@ void EnTrt_DrawStickDirectionPrompt(GlobalContext* globalCtx, EnTrt* this) {
         gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 15 * 4, 23 * 4);
         if (drawStickRightPrompt) {
             EnTrt_DrawTextRec(globalCtx, this->stickLeftPrompt.arrowColorR, this->stickLeftPrompt.arrowColorG,
-                          this->stickLeftPrompt.arrowColorB, this->stickLeftPrompt.arrowColorA,
-                          this->stickLeftPrompt.arrowTexX, this->stickLeftPrompt.arrowTexY, this->stickLeftPrompt.texZ,
-                          0, 0, -1.0f, 1.0f);
+                              this->stickLeftPrompt.arrowColorB, this->stickLeftPrompt.arrowColorA,
+                              this->stickLeftPrompt.arrowTexX, this->stickLeftPrompt.arrowTexY,
+                              this->stickLeftPrompt.texZ, 0, 0, -1.0f, 1.0f);
         }
         if (drawStickLeftPrompt) {
             EnTrt_DrawTextRec(globalCtx, this->stickRightPrompt.arrowColorR, this->stickRightPrompt.arrowColorG,
-                          this->stickRightPrompt.arrowColorB, this->stickRightPrompt.arrowColorA,
-                          this->stickRightPrompt.arrowTexX, this->stickRightPrompt.arrowTexY,
-                          this->stickRightPrompt.texZ, 0, 0, 1.0f, 1.0f);
+                              this->stickRightPrompt.arrowColorB, this->stickRightPrompt.arrowColorA,
+                              this->stickRightPrompt.arrowTexX, this->stickRightPrompt.arrowTexY,
+                              this->stickRightPrompt.texZ, 0, 0, 1.0f, 1.0f);
         }
         gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, &D_0401F7C0);
         gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
@@ -1668,15 +1659,15 @@ void EnTrt_DrawStickDirectionPrompt(GlobalContext* globalCtx, EnTrt* this) {
         gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 15 * 4, 15 * 4);
         if (drawStickRightPrompt) {
             EnTrt_DrawTextRec(globalCtx, this->stickLeftPrompt.stickColorR, this->stickLeftPrompt.stickColorG,
-                          this->stickLeftPrompt.stickColorB, this->stickLeftPrompt.stickColorA,
-                          this->stickLeftPrompt.stickTexX, this->stickLeftPrompt.stickTexY, this->stickLeftPrompt.texZ,
-                          0, 0, -1.0f, 1.0f);
+                              this->stickLeftPrompt.stickColorB, this->stickLeftPrompt.stickColorA,
+                              this->stickLeftPrompt.stickTexX, this->stickLeftPrompt.stickTexY,
+                              this->stickLeftPrompt.texZ, 0, 0, -1.0f, 1.0f);
         }
         if (drawStickLeftPrompt) {
             EnTrt_DrawTextRec(globalCtx, this->stickRightPrompt.stickColorR, this->stickRightPrompt.stickColorG,
-                          this->stickRightPrompt.stickColorB, this->stickRightPrompt.stickColorA,
-                          this->stickRightPrompt.stickTexX, this->stickRightPrompt.stickTexY,
-                          this->stickRightPrompt.texZ, 0, 0, 1.0f, 1.0f);
+                              this->stickRightPrompt.stickColorB, this->stickRightPrompt.stickColorA,
+                              this->stickRightPrompt.stickTexX, this->stickRightPrompt.stickTexY,
+                              this->stickRightPrompt.texZ, 0, 0, 1.0f, 1.0f);
         }
     }
     CLOSE_DISPS(globalCtx->state.gfxCtx);
