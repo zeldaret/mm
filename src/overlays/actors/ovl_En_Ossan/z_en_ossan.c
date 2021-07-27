@@ -535,15 +535,13 @@ void EnOssan_Hello(EnOssan* this, GlobalContext* globalCtx) {
         this->flags &= ~LOOKED_AT_PLAYER;
         if (player->transformation == PLAYER_FORM_DEKU) {
             EnOssan_EndInteraction(globalCtx, this);
+        } else if (this->flags & END_INTERACTION) {
+            this->flags &= ~END_INTERACTION;
+            EnOssan_EndInteraction(globalCtx, this);
+        } else if (!EnOssan_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx))) {
+            EnOssan_StartShopping(globalCtx, this);
         } else {
-            if (this->flags & END_INTERACTION) {
-                this->flags &= ~END_INTERACTION;
-                EnOssan_EndInteraction(globalCtx, this);
-            } else if (!EnOssan_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx))) {
-                EnOssan_StartShopping(globalCtx, this);
-            } else {
-                return;
-            }
+            return;
         }
     }
     if (talkState == 10 && this->actor.params == ENOSSAN_PART_TIME_WORKER &&
