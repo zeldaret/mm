@@ -965,9 +965,8 @@ void EnOssan_SetupBuy(GlobalContext* globalCtx, EnOssan* this, u16 textId) {
 }
 
 void EnOssan_HandleCanBuyItem(GlobalContext* globalCtx, EnOssan* this) {
-    EnGirlA* item;
-
-    item = this->items[this->cursorIdx];
+    EnGirlA* item = this->items[this->cursorIdx];
+    
     switch (item->canBuyFunc(globalCtx, item)) {
         case CANBUY_RESULT_SUCCESS_1:
             if (this->cutsceneState == ENOSSAN_CUTSCENESTATE_PLAYING) {
