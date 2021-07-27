@@ -15,6 +15,8 @@ animdict ={
     "func_800B78B8": "Actor_UpdateBgCheckInfo",
     "func_8012403C": "Player_GetMask",
     "func_8012404c": "Player_RemoveMask",
+    "Actor_SpawnWithParentAndCutscene": "Actor_SpawnAsChildAndCutscene",
+    "Actor_SpawnWithParent": "Actor_SpawnAsChild",
 }
 
 def replace_anim(file):

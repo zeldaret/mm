@@ -3217,9 +3217,9 @@ SECTIONS
     ovl_En_Minislime : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Minislime/z_en_minislime.o(.text)
-        build/asm/overlays/ovl_En_Minislime_data.o(.data)
+        build/src/overlays/actors/ovl_En_Minislime/z_en_minislime.o(.data)
         build/src/overlays/actors/ovl_En_Minislime/z_en_minislime.o(.rodata)
-        build/asm/overlays/ovl_En_Minislime_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Minislime/z_en_minislime_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;

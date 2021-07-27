@@ -78,7 +78,7 @@ void ObjRaillift_Init(Actor* thisx, GlobalContext* globalCtx) {
         isColorful = true;
     }
     if (type == DEKU_FLOWER_PLATFORM) {
-        Actor_SpawnWithParent(&globalCtx->actorCtx, thisx, globalCtx, ACTOR_OBJ_ETCETERA, thisx->world.pos.x,
+        Actor_SpawnAsChild(&globalCtx->actorCtx, thisx, globalCtx, ACTOR_OBJ_ETCETERA, thisx->world.pos.x,
                               thisx->world.pos.y, thisx->world.pos.z, thisx->shape.rot.x, thisx->shape.rot.y,
                               thisx->shape.rot.z, 0);
         if (isColorful) {
