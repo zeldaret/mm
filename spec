@@ -969,9 +969,8 @@ endseg
 beginseg
     name "ovl_Player_Actor"
     compress
-    include "build/asm/overlays/ovl_Player_Actor/ovl_Player_Actor.text.o"
+    include "build/src/overlays/actors/ovl_Player_Actor/z_player.o"
     include "build/data/ovl_Player_Actor/ovl_Player_Actor.data.o"
-    include "build/data/ovl_Player_Actor/ovl_Player_Actor.rodata.o"
     include "build/data/ovl_Player_Actor/ovl_Player_Actor.bss.o"
     include "build/data/ovl_Player_Actor/ovl_Player_Actor.reloc.o"
 endseg
@@ -1224,8 +1223,7 @@ beginseg
     name "ovl_En_Ossan"
     compress
     include "build/src/overlays/actors/ovl_En_Ossan/z_en_ossan.o"
-    include "build/data/ovl_En_Ossan/ovl_En_Ossan.data.o"
-    include "build/data/ovl_En_Ossan/ovl_En_Ossan.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Ossan/ovl_En_Ossan_reloc.o"
 endseg
 
 beginseg
@@ -4860,8 +4858,7 @@ beginseg
     name "ovl_En_Suttari"
     compress
     include "build/src/overlays/actors/ovl_En_Suttari/z_en_suttari.o"
-    include "build/data/ovl_En_Suttari/ovl_En_Suttari.data.o"
-    include "build/data/ovl_En_Suttari/ovl_En_Suttari.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Suttari/ovl_En_Suttari_reloc.o"
 endseg
 
 beginseg
@@ -5065,8 +5062,7 @@ beginseg
     name "ovl_En_Hg"
     compress
     include "build/src/overlays/actors/ovl_En_Hg/z_en_hg.o"
-    include "build/data/ovl_En_Hg/ovl_En_Hg.data.o"
-    include "build/data/ovl_En_Hg/ovl_En_Hg.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Hg/ovl_En_Hg_reloc.o"
 endseg
 
 beginseg
