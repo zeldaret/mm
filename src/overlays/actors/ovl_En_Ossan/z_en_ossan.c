@@ -1216,9 +1216,8 @@ void EnOssan_UpdateItemSelectedProperty(EnOssan* this) {
 }
 
 void EnOssan_UpdateCursorAnim(EnOssan* this) {
-    f32 t;
-
-    t = this->cursorAnimTween;
+    f32 t =  this->cursorAnimTween;
+    
     if (this->cursorAnimState == 0) {
         t += 0.05f;
         if (t >= 1.0f) {
