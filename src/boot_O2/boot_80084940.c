@@ -1,9 +1,10 @@
 #include "global.h"
 
 void func_80084940(void) {
-    u32 sp;
-    sp = __osSpGetStatus();
-    osDpGetStatus();
+    u32 spStatus = __osSpGetStatus();
+    u32 dpStatus = osDpGetStatus();
+
+    if (spStatus && dpStatus) {} // stubbed debug prints
 }
 
 void func_80084968(void) {

@@ -34,15 +34,6 @@ extern const ActorInit En_Ginko_Man_InitVars;
 #define GINKOMAN_CHOICE_YES  0
 #define GINKOMAN_CHOICE_NO   1
 
-extern FlexSkeletonHeader object_ginko_skeleton[];
-extern Gfx object_ginko_limb15_dlist[];
-
-extern AnimationHeader object_ginko_floorsmacking_anim[];
-extern AnimationHeader object_ginko_sitting_anim[];
-extern AnimationHeader object_ginko_amazed_anim[];
-extern AnimationHeader object_ginko_stamp_reach_anim[];
-extern AnimationHeader object_ginko_advertising_anim[];
-
 typedef enum {
     /* 0 */ GINKO_FLOORSMACKING,
     /* 1 */ GINKO_SITTING,

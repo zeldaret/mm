@@ -1602,9 +1602,9 @@ extern ActorInit Player_InitVars;
 // extern UNK_TYPE4 D_801D0BB0;
 // extern UNK_TYPE1 D_801D0C80;
 // extern UNK_TYPE1 D_801D0CB0;
-extern UNK_PTR D_801D0CD8;
+extern const TransitionInit TransitionFade_InitVars;
 // extern UNK_TYPE1 D_801D0D00;
-extern UNK_PTR D_801D0D28;
+extern const TransitionInit TransitionCircle_InitVars;
 extern UNK_TYPE4 D_801D0D50;
 // extern UNK_TYPE1 D_801D0D54;
 // extern UNK_TYPE2 D_801D0D58;
@@ -3859,7 +3859,8 @@ extern u8 gGfxSPTaskYieldBuffer[OS_YIELD_DATA_SIZE];
 extern u8 gGfxSPTaskStack[0x400];
 extern GfxPool gGfxPools[2];
 extern u8 gAudioHeap[0x138000];
-extern u32 gSystemHeap[UNK_SIZE];
+extern u8 gSystemHeap[UNK_SIZE];
+
 extern u16 gFramebufferHighRes0[SCREEN_HEIGHT_HIGH_RES][SCREEN_WIDTH_HIGH_RES]; // at 0x80780000
 extern u8 D_80780000[0x4600];
 extern u8 D_80784600[0x56200];

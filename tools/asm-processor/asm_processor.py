@@ -380,7 +380,7 @@ class Failure(Exception):
 
 
 class GlobalState:
-    def __init__(self, min_instr_count, skip_instr_count, use_jtbl_for_rodata, mips1):
+    def __init__(self, min_instr_count, skip_instr_count, use_jtbl_for_rodata):
         # A value that hopefully never appears as a 32-bit rodata constant (or we
         # miscompile late rodata). Increases by 1 in each step.
         self.late_rodata_hex = 0xE0123456
@@ -388,7 +388,6 @@ class GlobalState:
         self.min_instr_count = min_instr_count
         self.skip_instr_count = skip_instr_count
         self.use_jtbl_for_rodata = use_jtbl_for_rodata
-        self.mips1 = mips1
 
     def next_late_rodata_hex(self):
         dummy_bytes = struct.pack('>I', self.late_rodata_hex)
@@ -609,14 +608,12 @@ class GlobalAsmBlock:
             size = self.fn_section_sizes['.late_rodata'] // 4
             skip_next = False
             needs_double = (self.late_rodata_alignment != 0)
-            extra_mips1_nop = False
-            jtbl_size = 11 if state.mips1 else 9
             for i in range(size):
                 if skip_next:
                     skip_next = False
                     continue
-                # Jump tables give 9 instructions (11 with -mips1) for >= 5 words of rodata,
-                # and should be emitted when:
+                # Jump tables give 9 instructions for >= 5 words of rodata, and should be
+                # emitted when:
                 # - -O2 or -O2 -g3 are used, which give the right codegen
                 # - we have emitted our first .float/.double (to ensure that we find the
                 #   created rodata in the binary)
@@ -627,12 +624,11 @@ class GlobalAsmBlock:
                 # - we have at least 10 more instructions to go in this function (otherwise our
                 #   function size computation will be wrong since the delay slot goes unused)
                 if (not needs_double and state.use_jtbl_for_rodata and i >= 1 and
-                        size - i >= 5 and num_instr - len(late_rodata_fn_output) >= jtbl_size + 1):
+                        size - i >= 5 and num_instr - len(late_rodata_fn_output) >= 10):
                     cases = " ".join("case {}:".format(case) for case in range(size - i))
                     late_rodata_fn_output.append("switch (*(volatile int*)0) { " + cases + " ; }")
-                    late_rodata_fn_output.extend([""] * (jtbl_size - 1))
+                    late_rodata_fn_output.extend([""] * 8)
                     jtbl_rodata_size = (size - i) * 4
-                    extra_mips1_nop = i != 2
                     break
                 dummy_bytes = state.next_late_rodata_hex()
                 late_rodata_dummy_bytes.append(dummy_bytes)
@@ -642,19 +638,11 @@ class GlobalAsmBlock:
                     fval, = struct.unpack('>d', dummy_bytes + dummy_bytes2)
                     late_rodata_fn_output.append('*(volatile double*)0 = {};'.format(fval))
                     skip_next = True
-                    needs_double = False
-                    if state.mips1:
-                        # mips1 does not have ldc1/sdc1
-                        late_rodata_fn_output.append('')
-                        late_rodata_fn_output.append('')
-                    extra_mips1_nop = False
+                    needs_double = True
                 else:
                     fval, = struct.unpack('>f', dummy_bytes)
                     late_rodata_fn_output.append('*(volatile float*)0 = {}f;'.format(fval))
-                    extra_mips1_nop = True
                 late_rodata_fn_output.append('')
-                late_rodata_fn_output.append('')
-            if state.mips1 and extra_mips1_nop:
                 late_rodata_fn_output.append('')
 
         text_name = None
@@ -734,7 +722,7 @@ float_regexpr = re.compile(r"[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?f")
 def repl_float_hex(m):
     return str(struct.unpack(">I", struct.pack(">f", float(m.group(0).strip().rstrip("f"))))[0])
 
-def parse_source(f, opt, framepointer, mips1, input_enc, output_enc, out_dependencies, print_source=None):
+def parse_source(f, opt, framepointer, input_enc, output_enc, out_dependencies, print_source=None):
     if opt in ['O2', 'O1']:
         if framepointer:
             min_instr_count = 6
@@ -763,7 +751,7 @@ def parse_source(f, opt, framepointer, mips1, input_enc, output_enc, out_depende
     if opt in ['O2', 'g3'] and not framepointer:
         use_jtbl_for_rodata = True
 
-    state = GlobalState(min_instr_count, skip_instr_count, use_jtbl_for_rodata, mips1)
+    state = GlobalState(min_instr_count, skip_instr_count, use_jtbl_for_rodata)
 
     global_asm = None
     asm_functions = []
@@ -815,7 +803,7 @@ def parse_source(f, opt, framepointer, mips1, input_enc, output_enc, out_depende
                 out_dependencies.append(fname)
                 include_src = StringIO()
                 with open(fname, encoding=input_enc) as include_file:
-                    parse_source(include_file, opt, framepointer, mips1, input_enc, output_enc, out_dependencies, include_src)
+                    parse_source(include_file, opt, framepointer, input_enc, output_enc, out_dependencies, include_src)
                 include_src.write('#line ' + str(line_no + 1) + ' "' + f.name + '"')
                 output_lines[-1] = include_src.getvalue()
                 include_src.close()
@@ -1191,7 +1179,6 @@ def run_wrapped(argv, outfile, functions):
     parser.add_argument('--input-enc', default='latin1', help="Input encoding (default: latin1)")
     parser.add_argument('--output-enc', default='latin1', help="Output encoding (default: latin1)")
     parser.add_argument('-framepointer', dest='framepointer', action='store_true')
-    parser.add_argument('-mips1', dest='mips1', action='store_true')
     parser.add_argument('-g3', dest='g3', action='store_true')
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('-O1', dest='opt', action='store_const', const='O1')
@@ -1203,20 +1190,18 @@ def run_wrapped(argv, outfile, functions):
         if opt != 'O2':
             raise Failure("-g3 is only supported together with -O2")
         opt = 'g3'
-    if args.mips1 and (opt != 'O2' or args.framepointer):
-        raise Failure("-mips1 is only supported together with -O2")
 
     if args.objfile is None:
         with open(args.filename, encoding=args.input_enc) as f:
             deps = []
-            functions = parse_source(f, opt=opt, framepointer=args.framepointer, mips1=args.mips1, input_enc=args.input_enc, output_enc=args.output_enc, out_dependencies=deps, print_source=outfile)
+            functions = parse_source(f, opt=opt, framepointer=args.framepointer, input_enc=args.input_enc, output_enc=args.output_enc, out_dependencies=deps, print_source=outfile)
             return functions, deps
     else:
         if args.assembler is None:
             raise Failure("must pass assembler command")
         if functions is None:
             with open(args.filename, encoding=args.input_enc) as f:
-                functions = parse_source(f, opt=opt, framepointer=args.framepointer, mips1=args.mips1, input_enc=args.input_enc, out_dependencies=[], output_enc=args.output_enc)
+                functions = parse_source(f, opt=opt, framepointer=args.framepointer, input_enc=args.input_enc, out_dependencies=[], output_enc=args.output_enc)
         if not functions:
             return
         asm_prelude = b''

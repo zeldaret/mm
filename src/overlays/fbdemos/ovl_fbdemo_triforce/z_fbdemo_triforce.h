@@ -4,7 +4,9 @@
 #include "global.h"
 
 typedef struct {
-    /* 0x0000 */ char unk_000[0x1E0];
+    /* 0x0000 */ char unk_0[0x1E0];
 } TransitionTriforce; // size = 0x1E0
+
+extern const TransitionInit TransitionTriforce_InitVars;
 
 #endif

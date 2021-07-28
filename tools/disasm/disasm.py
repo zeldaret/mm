@@ -1503,7 +1503,13 @@ for root,dirs,files in os.walk(ASM_OUT):
                             vaddr = first_block_split[0].split(" ")[-1]
                         assert vaddr is not None
                         vaddr = int(vaddr,16)
-                        late_rodata_alignment = f".late_rodata_alignment {'8' if vaddr % 8 == 0 else '4'}\n"
+                        if vaddr not in [0x801E0E28, 0x80C1C2B0, 0x80AA7820, 0x80AA3CC0, 
+                                         0x80AA418C, 0x80BE0160, 0x80B591D8, 0x80B59610, 
+                                         0x80B59780, 0x80964E00, 0x80964F10, 0x80BB40A0, 
+                                         0x80952038, 0x80AFB920, 0x80AFBBFC, 0x80AFBE28, 
+                                         0x80983320]: # hacks for especially badly behaved rodata, TODO this are ALL jumptables associated with
+                                                      # comparatively tiny functions, can we swat these programmatically?
+                            late_rodata_alignment = f".late_rodata_alignment {'8' if vaddr % 8 == 0 else '4'}\n"
 
                 rdata_out = ""
                 if rdata is not None:

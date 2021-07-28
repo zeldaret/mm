@@ -35,6 +35,7 @@
 #include "z64player.h"
 #include "z64scene.h"
 #include "z64save.h"
+#include "z64transition.h"
 
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240

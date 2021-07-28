@@ -1,17 +1,17 @@
 #include "global.h"
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_fbdemo_fade/func_801647D0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_fbdemo_fade/TransitionFade_Start.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_fbdemo_fade/func_8016482C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_fbdemo_fade/TransitionFade_Init.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_fbdemo_fade/func_80164858.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_fbdemo_fade/TransitionFade_Destroy.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_fbdemo_fade/func_80164864.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_fbdemo_fade/TransitionFade_Update.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_fbdemo_fade/func_801649F4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_fbdemo_fade/TransitionFade_Draw.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_fbdemo_fade/func_80164A80.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_fbdemo_fade/TransitionFade_IsDone.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_fbdemo_fade/func_80164A8C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_fbdemo_fade/TransitionFade_SetColor.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_fbdemo_fade/func_80164A98.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_fbdemo_fade/TransitionFade_SetType.s")

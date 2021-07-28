@@ -118,6 +118,11 @@ O_FILES       := $(foreach f,$(S_FILES:.s=.o),build/$f) \
                  $(foreach f,$(wildcard baserom/*),build/$f.o) \
                  $(foreach f,$(C_FILES:.c=.o),build/$f) \
                  $(foreach f,$(ASSET_C_FILES:.c=.o),build/$f)
+
+# Automatic dependency files
+# (Only asm_processor dependencies are handled for now)
+DEP_FILES := $(O_FILES:.o=.asmproc.d)
+
 # create build directories
 $(shell mkdir -p build/baserom $(foreach dir,$(SRC_DIRS) $(ASM_DIRS) $(ASSET_BIN_DIRS),build/$(dir)))
 #$(shell mkdir -p build/linker_scripts build/asm build/asm/boot build/asm/code build/asm/overlays $(foreach dir, $(COMP_DIRS) $(BINARY_DIRS) $(SRC_DIRS) $(ASSET_BIN_DIRS),$(shell mkdir -p build/$(dir))))
@@ -130,18 +135,18 @@ build/src/libultra/libc/ll%: OPTFLAGS := -O1
 build/src/libultra/libc/ll%: MIPS_VERSION := -mips3 -32
 build/src/libultra/gu/%: OPTFLAGS := -O2
 build/src/libultra/rmon/%: OPTFLAGS := -O2
-build/src/boot_O1/%: OPTFLAGS := -O1
 build/src/boot_O2/%: OPTFLAGS := -O2
 build/src/boot_O2_g3/%: OPTFLAGS := -O2 -g3
-build/src/boot_O2_g3_trapuv/%: OPTFLAGS := -O2 -g3
-build/src/boot_O2_g3_trapuv/%: CFLAGS := $(CFLAGS) -trapuv
+
+build/src/boot_O2_g3/fault.o: CFLAGS += -trapuv
+build/src/boot_O2_g3/fault_drawer.o: CFLAGS += -trapuv
 
 build/src/libultra/%: CC := $(CC_OLD)
-build/src/libultra/io/%: CC := ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
-build/src/libultra/os/%: CC := ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
-build/src/libultra/voice/%: CC := ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
+build/src/libultra/io/%: CC := ./tools/asm-processor/build.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
+build/src/libultra/os/%: CC := ./tools/asm-processor/build.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
+build/src/libultra/voice/%: CC := ./tools/asm-processor/build.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
 
-CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
+CC := ./tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
 
 #### Main Targets ###
 
@@ -205,8 +210,6 @@ diff-init: all
 	$(RM) -rf expected/
 	mkdir -p expected/
 	cp -r build expected/build
-	cp $(ROM) expected/$(ROM)
-	cp $(ROMC) expected/$(ROMC)
 
 init:
 	$(MAKE) distclean
@@ -234,21 +237,21 @@ build/baserom/%.o: baserom/%
 	$(OBJCOPY) -I binary -O elf32-big $< $@
 
 build/asm/%.o: asm/%.s
-	$(AS) $(ASFLAGS) $^ -o $@
+	$(AS) $(ASFLAGS) $< -o $@
 
 build/data/%.o: data/%.s
-	iconv --from UTF-8 --to EUC-JP $^ | $(AS) $(ASFLAGS) -o $@
+	iconv --from UTF-8 --to EUC-JP $< | $(AS) $(ASFLAGS) -o $@
 
 build/src/overlays/%.o: src/overlays/%.c
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $^
-#	$(CC_CHECK) $^
-	$(ZAPD) bovl -i $@ -cfg $^ --outputpath $(@D)/$(notdir $(@D))_reloc.s
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
+#	$(CC_CHECK) $<
+	$(ZAPD) bovl -i $@ -cfg $< --outputpath $(@D)/$(notdir $(@D))_reloc.s
 	-test -f $(@D)/$(notdir $(@D))_reloc.s && $(AS) $(ASFLAGS) $(@D)/$(notdir $(@D))_reloc.s -o $(@D)/$(notdir $(@D))_reloc.o
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 
 build/src/%.o: src/%.c
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $^
-#	$(CC_CHECK) $^
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
+#	$(CC_CHECK) $<
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 
 build/src/libultra/libc/ll.o: src/libultra/libc/ll.c
@@ -272,3 +275,5 @@ build/assets/%.bin.inc.c: assets/%.bin
 
 build/assets/%.jpg.inc.c: assets/%.jpg
 	$(ZAPD) bren -eh -i $< -o $@
+
+-include $(DEP_FILES)

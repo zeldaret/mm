@@ -36,14 +36,14 @@ beginseg
 
     include "build/src/boot_O2_g3/syncprintf.o"
 
-    include "build/src/boot_O2_g3_trapuv/fault.o"
+    include "build/src/boot_O2_g3/fault.o"
     include "build/data/boot/fault.data.o"
     include "build/data/boot/fault.bss.o"
 
-    include "build/src/boot_O2_g3_trapuv/fault_drawer.o"
+    include "build/src/boot_O2_g3/fault_drawer.o"
     include "build/data/boot/fault_drawer.bss.o"
 
-    include "build/src/boot_O1/boot_80084940.o"
+    include "build/src/boot_O2/boot_80084940.o"
 
     include "build/src/boot/loadfragment.o"
     include "build/data/boot/loadfragment.data.o"
@@ -84,25 +84,25 @@ beginseg
     include "build/src/libultra/rmon/sprintf.o"
     include "build/src/boot/printutils.o"
 
-    include "build/asm/boot/setcause.text.o" // handwritten probably
+    include "build/asm/boot/setcause.text.o"
 
     include "build/src/libultra/os/sendmesg.o"
     include "build/src/boot/pfsfreeblocks.o"
-    include "build/src/boot_O1/viextend.o"
+    include "build/src/libultra/os/viextend.o"
     include "build/src/libultra/os/stopthread.o"
 
     include "build/src/libultra/os/recvmesg.o"
 
-    include "build/asm/boot/setintmask.text.o" // handwritten probably
+    include "build/asm/boot/setintmask.text.o"
     include "build/data/boot/setintmask.rodata.o"
 
-    include "build/asm/boot/getintmask.text.o" // handwritten probably
+    include "build/asm/boot/getintmask.text.o"
 
     include "build/src/libultra/voice/voicesetword.o"
 
     include "build/data/boot/vimodeHpf.data.o"
 
-    include "build/asm/boot/guScale.text.o" // handwritten probably
+    include "build/asm/boot/guScale.text.o"
 
     include "build/src/libultra/gu/sinf.o"
 
@@ -113,7 +113,7 @@ beginseg
 
     include "build/src/libultra/libc/ll.o"
 
-    include "build/asm/boot/exceptasm.text.o" // handwritten probably
+    include "build/asm/boot/exceptasm.text.o"
     include "build/data/boot/exceptasm.data.o"
     include "build/data/boot/exceptasm.rodata.o"
 
@@ -121,7 +121,7 @@ beginseg
 
     include "build/src/libultra/os/destroythread.o"
     include "build/src/libultra/voice/voicecheckresult.o"
-    include "build/asm/boot/bzero.text.o" // handwritten probably
+    include "build/asm/boot/bzero.text.o"
 
     include "build/src/boot/rumblepak.o"
     include "build/data/boot/rumblepak.bss.o"
@@ -139,8 +139,8 @@ beginseg
     include "build/src/boot/voicegetreaddata.o"
     include "build/src/libultra/os/virtualtophysical.o"
 
-    include "build/asm/boot/getsr.text.o" // handwritten probably
-    include "build/asm/boot/setsr.text.o" // handwritten probably
+    include "build/asm/boot/getsr.text.o"
+    include "build/asm/boot/setsr.text.o"
 
     include "build/src/boot/writebackdcache.o"
 
@@ -170,17 +170,17 @@ beginseg
     include "build/src/boot/pfsreadwritefile.o"
     include "build/src/boot/pfsgetstatus.o"
     pad_text
-    include "build/asm/boot/guMtxIdentF.text.o" // handwritten probably
+    include "build/asm/boot/guMtxIdentF.text.o"
     include "build/src/libultra/io/visetmode.o"
 
-    include "build/asm/boot/getconfig.text.o" // handwritten probably
-    include "build/asm/boot/setconfig.text.o" // handwritten probably
+    include "build/asm/boot/getconfig.text.o"
+    include "build/asm/boot/setconfig.text.o"
 
     include "build/src/libultra/gu/lookat.o"
     include "build/src/boot/pfsallocatefile.o"
     include "build/src/libultra/os/stoptimer.o"
 
-    include "build/asm/boot/probetlb.text.o" // handwritten probably
+    include "build/asm/boot/probetlb.text.o"
 
     include "build/src/libultra/io/pimgr.o"
     include "build/data/boot/pimgr.data.o"
@@ -196,11 +196,11 @@ beginseg
     include "build/src/boot/contpfs.o"
     include "build/data/boot/contpfs.data.o"
 
-    include "build/asm/boot/getcount.text.o" // handwritten probably
+    include "build/asm/boot/getcount.text.o"
 
     pad_text
 
-    include "build/asm/boot/guMtxL2F.text.o" // handwritten probably
+    include "build/asm/boot/guMtxL2F.text.o"
     include "build/src/libultra/os/getmemsize.o"
     include "build/src/boot/pfssearchfile.o"
 
@@ -216,7 +216,7 @@ beginseg
     include "build/src/libultra/rmon/xprintf.o"
 
     include "build/src/boot/voicecleardictionary.o"
-    include "build/asm/boot/unmaptlball.text.o" // handwritten probably
+    include "build/asm/boot/unmaptlball.text.o"
     include "build/src/libultra/io/epidma.o"
     include "build/src/boot/voicecontread2.o"
     include "build/src/boot/voicecrc.o"
@@ -237,7 +237,7 @@ beginseg
     include "build/src/boot/voicecontread36.o"
     include "build/src/boot/sp.o"
     include "build/src/libultra/io/si.o"
-    include "build/asm/boot/guMtxIdent.text.o" // handwritten probably
+    include "build/asm/boot/guMtxIdent.text.o"
     include "build/src/libultra/os/jammesg.o"
     include "build/src/libultra/os/setthreadpri.o"
     include "build/src/libultra/os/getthreadpri.o"
@@ -271,9 +271,9 @@ beginseg
     include "build/src/libultra/os/getactivequeue.o"
     include "build/src/boot/normalize.o"
 
-    include "build/asm/boot/setcompare.text.o" // handwritten probably
+    include "build/asm/boot/setcompare.text.o"
 
-    include "build/asm/boot/getcompare.text.o" // handwritten probably
+    include "build/asm/boot/getcompare.text.o"
 
     include "build/src/libultra/io/dpgetstat.o"
     include "build/src/libultra/io/dpsetstat.o"
@@ -282,7 +282,7 @@ beginseg
     include "build/src/boot/pfsdeletefile.o"
     include "build/src/libultra/gu/ortho.o"
 
-    include "build/asm/boot/interrupt.text.o" // handwritten probably
+    include "build/asm/boot/interrupt.text.o"
 
     include "build/src/libultra/io/vi.o"
     include "build/data/boot/vi.data.o"
@@ -321,13 +321,13 @@ beginseg
     include "build/src/libultra/io/aigetlen.o"
     include "build/src/boot/epiwrite.o"
 
-    include "build/asm/boot/maptlbrdb.text.o" // handwritten probably
+    include "build/asm/boot/maptlbrdb.text.o"
 
     include "build/src/libultra/os/yieldthread.o"
     pad_text
-    include "build/asm/boot/guTranslate.text.o" // handwritten probably
+    include "build/asm/boot/guTranslate.text.o"
 
-    include "build/asm/boot/getcause.text.o" // handwritten probably
+    include "build/asm/boot/getcause.text.o"
 
     include "build/src/boot/contramwrite.o"
     include "build/src/libultra/io/epirawwrite.o"
@@ -355,7 +355,7 @@ beginseg
     include "build/src/libultra/os/getcurrfaultthread.o"
     include "build/src/boot/voicemaskdictionary.o"
     pad_text
-    include "build/asm/boot/guMtxF2L.text.o" // handwritten probably
+    include "build/asm/boot/guMtxF2L.text.o"
     include "build/src/libultra/os/startthread.o"
     include "build/src/libultra/io/visetyscale.o"
 
@@ -369,11 +369,11 @@ beginseg
     include "build/src/boot/vigetcurrframebuf.o"
     include "build/src/boot/spsetpc.o"
     include "build/src/boot/voicecontwrite4.o"
-    include "build/src/boot_O1/gethwinterrupt.o"
+    include "build/src/libultra/os/gethwinterrupt.o"
     include "build/src/boot/sethwinterrupt.o"
 
-    include "build/asm/boot/getwatchlo.text.o" // handwritten probably
-    include "build/asm/boot/setwatchlo.text.o" // handwritten probably
+    include "build/asm/boot/getwatchlo.text.o"
+    include "build/asm/boot/setwatchlo.text.o"
 
     include "build/src/boot/fmodf.o"
     include "build/src/boot/__osMemset.o"

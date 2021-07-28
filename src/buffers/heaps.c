@@ -2,4 +2,4 @@
 
 u8 gAudioHeap[0x138000];
 
-u32 gSystemHeap[UNK_SIZE];
+u8 gSystemHeap[UNK_SIZE];
