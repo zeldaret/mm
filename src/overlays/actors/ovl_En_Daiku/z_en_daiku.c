@@ -82,19 +82,19 @@ void EnDaiku_Init(Actor* thisx, GlobalContext* globalCtx) {
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 40.0f);
     this->actor.targetMode = 0;
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    this->unk_278 = this->actor.params & 0xFF;
-    if (this->unk_278 == 3) {
-        this->unk_288 = (this->actor.params >> 8) & 0xFF;
+    this->unk_278 = ENDAIKU_FF(&this->actor);
+    if (this->unk_278 == ENDAIKU_PARAMS_3) {
+        this->unk_288 = ENDAIKU_FF00(&this->actor);
         this->unk_258 = func_8013D648(globalCtx, this->unk_288, 0x3F);
-    } else if (this->unk_278 == 2) {
-        this->unk_264 = -0x7D0;
+    } else if (this->unk_278 == ENDAIKU_PARAMS_2) {
+        this->unk_264 = -2000;
     }
 
-    if (this->unk_278 == 0) {
-        this->collider.dim.radius = 0x1E;
-        this->collider.dim.height = 0x3C;
+    if (this->unk_278 == ENDAIKU_PARAMS_0) {
+        this->collider.dim.radius = 30;
+        this->collider.dim.height = 60;
         this->collider.dim.yShift = 0;
-        this->actor.flags |= 0x8000000;
+        this->actor.flags |= 0x08000000;
         if ((gSaveContext.weekEventReg[63] & 0x80) || ((gSaveContext.day == 3) && gSaveContext.isNight)) {
             Actor_MarkForDeath(&this->actor);
         }
@@ -107,20 +107,20 @@ void EnDaiku_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.gravity = -3.0f;
 
     switch (this->unk_278) {
-        case 0:
+        case ENDAIKU_PARAMS_0:
             this->unk_27E = this->unk_278 * 4 + 4;
 
-        case 1:
+        case ENDAIKU_PARAMS_1:
             SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600A850, &D_06002FA0, this->jointTable, this->morphTable,
                              17);
             break;
 
-        case 2:
+        case ENDAIKU_PARAMS_2:
             SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600A850, &D_0600B690, this->jointTable, this->morphTable,
                              17);
             break;
 
-        case 3:
+        case ENDAIKU_PARAMS_3:
             SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600A850, &D_06001114, this->jointTable, this->morphTable,
                              17);
             break;
@@ -142,7 +142,7 @@ void func_8094373C(EnDaiku* this, s32 arg1) {
     };
 
     static u8 D_809440C8[] = {
-        0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x02, 0x02,
+        0, 0, 0, 0, 2, 0, 0, 2, 2,
     };
 
     this->unk_284 = SkelAnime_GetFrameCount(&D_809440A4[arg1]->common);
@@ -189,7 +189,7 @@ void func_809438F8(EnDaiku* this, GlobalContext* globalCtx) {
     s32 pad2;
 
     if (Player_GetMask(globalCtx) == PLAYER_MASK_KAFEIS_MASK) {
-        if (this->unk_278 == 1) {
+        if (this->unk_278 == ENDAIKU_PARAMS_1) {
             this->actor.textId = 0x2365;
         } else {
             this->actor.textId = 0x2366;
@@ -204,7 +204,7 @@ void func_809438F8(EnDaiku* this, GlobalContext* globalCtx) {
         return;
     }
 
-    if ((this->unk_278 == 2) && (this->unk_284 <= currentFrame)) {
+    if ((this->unk_278 == ENDAIKU_PARAMS_2) && (this->unk_284 <= currentFrame)) {
         if (Rand_ZeroOne() < 0.5f) {
             func_8094373C(this, 7);
         } else {
@@ -212,13 +212,13 @@ void func_809438F8(EnDaiku* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (this->unk_278 == 3) {
+    if (this->unk_278 == ENDAIKU_PARAMS_3) {
         f32 sq, abs;
         Math_ApproachF(&this->actor.world.pos.x, this->unk_26C.x, 0.5f,
                        fabsf(2.0f * Math_SinS(this->actor.world.rot.y)));
         Math_ApproachF(&this->actor.world.pos.z, this->unk_26C.z, 0.5f,
                        fabsf(2.0f * Math_CosS(this->actor.world.rot.y)));
-        Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_282, 1, 0x7D0, 0xA);
+        Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_282, 1, 2000, 10);
 
         sq = sqrtf(SQ(this->actor.world.pos.x - this->unk_26C.x) + SQ(this->actor.world.pos.z - this->unk_26C.z));
         abs = fabsf(this->actor.world.rot.y - this->unk_282);
@@ -232,10 +232,10 @@ void func_809438F8(EnDaiku* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (this->unk_278 != 0) {
+    if (this->unk_278 != ENDAIKU_PARAMS_0) {
         s16 angle = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.world.rot.y));
         this->unk_280 = this->actor.yawTowardsPlayer;
-        if ((this->unk_278 == 1) || (this->unk_278 == 2) || (angle < 0x2891)) {
+        if ((this->unk_278 == ENDAIKU_PARAMS_1) || (this->unk_278 == ENDAIKU_PARAMS_2) || (angle < 0x2891)) {
             func_800B8614(&this->actor, globalCtx, 100.0f);
         }
     }
@@ -249,7 +249,7 @@ void func_80943BC0(EnDaiku* this) {
 void func_80943BDC(EnDaiku* this, GlobalContext* globalCtx) {
     f32 currentFrame = this->skelAnime.animCurrentFrame;
 
-    if ((this->unk_278 == 2) && (this->unk_284 <= currentFrame)) {
+    if ((this->unk_278 == ENDAIKU_PARAMS_2) && (this->unk_284 <= currentFrame)) {
         if (Rand_ZeroOne() < 0.5f) {
             func_8094373C(this, 7);
         } else {
@@ -271,7 +271,7 @@ void EnDaiku_Update(Actor* thisx, GlobalContext* globalCtx) {
         SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     }
 
-    if ((this->unk_278 == 0) && (gSaveContext.day == 3) && (gSaveContext.isNight)) {
+    if ((this->unk_278 == ENDAIKU_PARAMS_0) && (gSaveContext.day == 3) && (gSaveContext.isNight)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -290,8 +290,8 @@ void EnDaiku_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     Actor_SetHeight(&this->actor, 65.0f);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    Math_SmoothStepToS(&this->unk_260, this->unk_266, 1, 0xBB8, 0);
-    Math_SmoothStepToS(&this->unk_25E, this->unk_264, 1, 0xBB8, 0);
+    Math_SmoothStepToS(&this->unk_260, this->unk_266, 1, 3000, 0);
+    Math_SmoothStepToS(&this->unk_25E, this->unk_264, 1, 3000, 0);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
     this->actor.uncullZoneForward = 650.0f;
     Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -311,7 +311,7 @@ s32 func_80943E18(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 
 void func_80943E60(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Gfx* D_809440D4[] = {
-        D_060070C0, D_06006FB0, D_06006E80, D_06006D70, 0x0,
+        D_060070C0, D_06006FB0, D_06006E80, D_06006D70, NULL,
     };
 
     EnDaiku* this = THIS;
@@ -322,7 +322,7 @@ void func_80943E60(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         gSPDisplayList(POLY_OPA_DISP++, D_809440D4[this->unk_278]);
     }
 
-    if ((this->unk_278 == 3) && (limbIndex == 8)) {
+    if ((this->unk_278 == ENDAIKU_PARAMS_3) && (limbIndex == 8)) {
         gSPDisplayList(POLY_OPA_DISP++, D_06008EC8);
     }
 
