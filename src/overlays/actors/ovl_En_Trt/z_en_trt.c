@@ -397,7 +397,7 @@ void EnTrt_Goodbye(EnTrt* this, GlobalContext* globalCtx) {
 void EnTrt_SetupTryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
     if (func_80152498(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
         if (this->textId == 0x88F) {
-            if (func_80114E90() || !(gSaveContext.weekEventReg[0x0C] & 0x10)) {
+            if (func_80114E90() || !(gSaveContext.weekEventReg[0xC] & 0x10)) {
                 if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
                     ActorCutscene_Stop(this->cutscene);
                     this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
@@ -431,7 +431,7 @@ void EnTrt_SetupTryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
                 return;
             } else if (gSaveContext.weekEventReg[0x11] & 1) {
                 this->textId = 0x835;
-                EnTrt_SetupStartShopping(globalCtx, this, 0);
+                EnTrt_SetupStartShopping(globalCtx, this, false);
             }
             func_801518B0(globalCtx, this->textId, &this->actor);
         }
@@ -443,13 +443,13 @@ void EnTrt_GiveRedPotionForKoume(EnTrt* this, GlobalContext* globalCtx) {
 
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
-        if (!(gSaveContext.weekEventReg[0x0C] & 0x10)) {
-            gSaveContext.weekEventReg[0x0C] |= 0x10;
+        if (!(gSaveContext.weekEventReg[0xC] & 0x10)) {
+            gSaveContext.weekEventReg[0xC] |= 0x10;
         }
         gSaveContext.weekEventReg[0x54] |= 0x40;
         player->stateFlags2 &= ~0x20000000;
         this->actionFunc = EnTrt_GivenRedPotionForKoume;
-    } else if (gSaveContext.weekEventReg[0x0C] & 0x10) {
+    } else if (gSaveContext.weekEventReg[0xC] & 0x10) {
         func_800B8A1C(&this->actor, globalCtx, GI_POTION_RED, 300.0f, 300.0f);
     } else {
         func_800B8A1C(&this->actor, globalCtx, GI_BOTTLE_POTION_RED, 300.0f, 300.0f);
@@ -528,21 +528,18 @@ void EnTrt_FaceShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
         this->cutscene = this->lookForwardCutscene;
         ActorCutscene_SetIntentToPlay(this->cutscene);
         this->cutsceneState = ENTRT_CUTSCENESTATE_WAITING;
-    } else {
-        if (talkState == 4) {
-            func_8011552C(globalCtx, 6);
-            if (!EnTrt_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx))) {
-                if (!func_80147624(globalCtx) || !EnTrt_FacingShopkeeperDialogResult(this, globalCtx)) {
-                    if (this->stickAccumX > 0) {
-                        cursorIdx = EnTrt_SetCursorIndexFromNeutral(this, 2);
-                        if (cursorIdx != CURSOR_INVALID) {
-                            this->cursorIdx = cursorIdx;
-                            this->actionFunc = EnTrt_LookToShelf;
-                            func_8011552C(globalCtx, 6);
-                            this->stickRightPrompt.isEnabled = false;
-                            play_sound(NA_SE_SY_CURSOR);
-                        }
-                    }
+    } else if (talkState == 4) {
+        func_8011552C(globalCtx, 6);
+        if (!EnTrt_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx))) {
+            if ((!func_80147624(globalCtx) || !EnTrt_FacingShopkeeperDialogResult(this, globalCtx)) &&
+                (this->stickAccumX > 0)) {
+                cursorIdx = EnTrt_SetCursorIndexFromNeutral(this, 2);
+                if (cursorIdx != CURSOR_INVALID) {
+                    this->cursorIdx = cursorIdx;
+                    this->actionFunc = EnTrt_LookToShelf;
+                    func_8011552C(globalCtx, 6);
+                    this->stickRightPrompt.isEnabled = false;
+                    play_sound(NA_SE_SY_CURSOR);
                 }
             }
         }
@@ -793,8 +790,8 @@ void EnTrt_IdleSleeping(EnTrt* this, GlobalContext* globalCtx) {
         this->timer = 45;
         this->actionFunc = EnTrt_BeginInteraction;
     } else if ((player->actor.world.pos.x >= -50.0f && player->actor.world.pos.x <= -25.0f) &&
-            (player->actor.world.pos.z >= -19.0f && player->actor.world.pos.z <= 30.0f)) {
-            func_800B8614(&this->actor, globalCtx, 200.0f);
+               (player->actor.world.pos.z >= -19.0f && player->actor.world.pos.z <= 30.0f)) {
+        func_800B8614(&this->actor, globalCtx, 200.0f);
     }
     if (DECR(this->timer) == 0) {
         this->timer = 40;
@@ -838,11 +835,9 @@ void EnTrt_IdleAwake(EnTrt* this, GlobalContext* globalCtx) {
         this->blinkFunc = EnTrt_EyesClosed;
         this->timer = 45;
         this->actionFunc = EnTrt_BeginInteraction;
-    } else {
-        if ((player->actor.world.pos.x >= -50.0f && player->actor.world.pos.x <= -25.0f) &&
-            (player->actor.world.pos.z >= -19.0f && player->actor.world.pos.z <= 30.0f)) {
-            func_800B8614(&this->actor, globalCtx, 200.0f);
-        }
+    } else if ((player->actor.world.pos.x >= -50.0f && player->actor.world.pos.x <= -25.0f) &&
+               (player->actor.world.pos.z >= -19.0f && player->actor.world.pos.z <= 30.0f)) {
+        func_800B8614(&this->actor, globalCtx, 200.0f);
     }
     if (DECR(this->timer) == 0) {
         this->timer = Rand_S16Offset(150, 100);
@@ -881,38 +876,36 @@ void EnTrt_BeginInteraction(EnTrt* this, GlobalContext* globalCtx) {
             this->timer = 10;
             this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING;
         }
-    } else {
-        if (DECR(this->timer) == 0) {
-            this->timer = Rand_S16Offset(40, 20);
-            EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 5);
-            func_801518B0(globalCtx, this->textId, &this->actor);
-            this->animationIdx = 5;
-            switch (this->textId) {
-                case 0x834:
-                    if (!(gSaveContext.weekEventReg[0x0C] & 8) && !(gSaveContext.weekEventReg[0x54] & 0x40) &&
-                        !(gSaveContext.weekEventReg[0x10] & 0x10) && !(gSaveContext.weekEventReg[0x11] & 1)) {
-                        func_8011552C(globalCtx, 6);
-                        this->stickLeftPrompt.isEnabled = false;
-                        this->stickRightPrompt.isEnabled = true;
-                        this->actionFunc = EnTrt_Hello;
-                    } else {
-                        this->actionFunc = EnTrt_SetupTryToGiveRedPotion;
-                    }
-                    break;
-                case 0x83E:
+    } else if (DECR(this->timer) == 0) {
+        this->timer = Rand_S16Offset(40, 20);
+        EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 5);
+        func_801518B0(globalCtx, this->textId, &this->actor);
+        this->animationIdx = 5;
+        switch (this->textId) {
+            case 0x834:
+                if (!(gSaveContext.weekEventReg[0xC] & 8) && !(gSaveContext.weekEventReg[0x54] & 0x40) &&
+                    !(gSaveContext.weekEventReg[0x10] & 0x10) && !(gSaveContext.weekEventReg[0x11] & 1)) {
                     func_8011552C(globalCtx, 6);
                     this->stickLeftPrompt.isEnabled = false;
                     this->stickRightPrompt.isEnabled = true;
-                    this->actionFunc = EnTrt_FaceShopkeeper;
-                    break;
-                case 0x850:
-                case 0x890:
-                    this->actionFunc = EnTrt_SetupEndInteraction;
-                    break;
-                case 0x88F:
+                    this->actionFunc = EnTrt_Hello;
+                } else {
                     this->actionFunc = EnTrt_SetupTryToGiveRedPotion;
-                    break;
-            }
+                }
+                break;
+            case 0x83E:
+                func_8011552C(globalCtx, 6);
+                this->stickLeftPrompt.isEnabled = false;
+                this->stickRightPrompt.isEnabled = true;
+                this->actionFunc = EnTrt_FaceShopkeeper;
+                break;
+            case 0x850:
+            case 0x890:
+                this->actionFunc = EnTrt_SetupEndInteraction;
+                break;
+            case 0x88F:
+                this->actionFunc = EnTrt_SetupTryToGiveRedPotion;
+                break;
         }
     }
 }
@@ -934,14 +927,12 @@ void EnTrt_Surprised(EnTrt* this, GlobalContext* globalCtx) {
             this->timer = 30;
             this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING;
         }
-    } else {
-        if (DECR(this->timer) == 0) {
-            this->timer = Rand_S16Offset(40, 20);
-            EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 5);
-            func_801518B0(globalCtx, this->textId, &this->actor);
-            this->animationIdx = 5;
-            this->actionFunc = EnTrt_TryToGiveRedPotionAfterSurprised;
-        }
+    } else if (DECR(this->timer) == 0) {
+        this->timer = Rand_S16Offset(40, 20);
+        EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 5);
+        func_801518B0(globalCtx, this->textId, &this->actor);
+        this->animationIdx = 5;
+        this->actionFunc = EnTrt_TryToGiveRedPotionAfterSurprised;
     }
 }
 
@@ -950,7 +941,7 @@ void EnTrt_TryToGiveRedPotionAfterSurprised(EnTrt* this, GlobalContext* globalCt
 
     this->blinkFunc = EnTrt_Blink;
     if (talkState == 6 && func_80147624(globalCtx)) {
-        if (func_80114E90() || !(gSaveContext.weekEventReg[0x0C] & 0x10)) {
+        if (func_80114E90() || !(gSaveContext.weekEventReg[0xC] & 0x10)) {
             if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
                 ActorCutscene_Stop(this->cutscene);
                 this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
@@ -1204,7 +1195,8 @@ void EnTrt_UpdateItemSelectedProperty(EnTrt* this) {
     for (i = 0; i < ARRAY_COUNT(this->items); i++, items++) {
         item = *items;
         if (item != NULL) {
-            if (this->actionFunc != EnTrt_SelectItem && this->actionFunc != EnTrt_CannotBuy && this->drawCursor == 0) {
+            if ((this->actionFunc != EnTrt_SelectItem) && (this->actionFunc != EnTrt_CannotBuy) &&
+                (this->drawCursor == 0)) {
                 item->isSelected = false;
             } else {
                 item->isSelected = this->cursorIdx == i ? true : false;
@@ -1461,7 +1453,7 @@ void EnTrt_LookToShopkeeperFromShelf(EnTrt* this, GlobalContext* globalCtx) {
 
 void EnTrt_InitShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600FEF0, &D_0600FD34, NULL, NULL, 0);
-    if (!(gSaveContext.weekEventReg[0x0C] & 8) && !(gSaveContext.weekEventReg[0x54] & 0x40) && gSaveContext.day >= 2) {
+    if (!(gSaveContext.weekEventReg[0xC] & 8) && !(gSaveContext.weekEventReg[0x54] & 0x40) && gSaveContext.day >= 2) {
         this->actor.draw = NULL;
     } else {
         this->actor.draw = EnTrt_Draw;
@@ -1469,7 +1461,7 @@ void EnTrt_InitShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_InitShop(EnTrt* this, GlobalContext* globalCtx) {
-    u32 maxcolor = 0xFF;
+    u32 maxcolor = 255;
     EnTrt* this2;
 
     EnTrt_GetCutscenes(this, globalCtx);
