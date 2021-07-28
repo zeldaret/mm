@@ -23,6 +23,10 @@ const ActorInit Eff_Kamejima_Wave_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06000000;
+extern UNK_TYPE D_06000140;
+extern UNK_TYPE D_06001AF0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Kamejima_Wave/EffKamejimaWave_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Kamejima_Wave/EffKamejimaWave_Destroy.s")

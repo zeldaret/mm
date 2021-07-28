@@ -82,6 +82,8 @@ extern DamageTable D_809A8CDC;
 extern ColliderJntSphElementInit D_809A8D1C[2];
 extern ColliderJntSphInit D_809A8D64;
 
+extern UNK_TYPE D_06000F9C;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Grasshopper/EnGrasshopper_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Grasshopper/EnGrasshopper_Destroy.s")

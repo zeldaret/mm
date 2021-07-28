@@ -89,6 +89,14 @@ extern CollisionCheckInfoInit D_808708F8;
 extern DamageTable D_80870900;
 extern InitChainEntry D_80870920[];
 
+extern UNK_TYPE D_0600044C;
+extern UNK_TYPE D_06003250;
+extern UNK_TYPE D_06003958;
+extern UNK_TYPE D_06003B24;
+extern UNK_TYPE D_06003EE4;
+extern UNK_TYPE D_06004204;
+extern UNK_TYPE D_0600466C;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Okuta/EnOkuta_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Okuta/EnOkuta_Destroy.s")

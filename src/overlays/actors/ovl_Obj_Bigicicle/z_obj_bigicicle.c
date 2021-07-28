@@ -48,6 +48,9 @@ extern ColliderCylinderInit D_80AE9820;
 extern ColliderCylinderInit D_80AE984C;
 extern InitChainEntry D_80AE9888[];
 
+extern UNK_TYPE D_060009B0;
+extern UNK_TYPE D_060014F0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Bigicicle/ObjBigicicle_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Bigicicle/ObjBigicicle_Destroy.s")

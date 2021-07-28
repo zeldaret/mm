@@ -24,6 +24,8 @@ const ActorInit Obj_Hariko_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06000080;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hariko/ObjHariko_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hariko/ObjHariko_Destroy.s")

@@ -33,6 +33,9 @@ static InitChainEntry D_8096F540[] = {
 
 extern InitChainEntry D_8096F540[];
 
+extern UNK_TYPE D_06003B08;
+extern UNK_TYPE D_06003E80;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_F40_Swlift/BgF40Swlift_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_F40_Swlift/BgF40Swlift_Destroy.s")

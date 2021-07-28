@@ -386,6 +386,44 @@ extern ColliderCylinderInit D_80A07E78;
 extern ColliderCylinderInit D_80A07EA4;
 extern ColliderCylinderInit D_80A07ED0;
 
+extern UNK_TYPE D_06000194;
+extern UNK_TYPE D_06000428;
+extern UNK_TYPE D_06000D0C;
+extern UNK_TYPE D_06002C40;
+extern UNK_TYPE D_06002D84;
+extern UNK_TYPE D_06003854;
+extern UNK_TYPE D_06003A64;
+extern UNK_TYPE D_06009C7C;
+extern UNK_TYPE D_06009EA8;
+extern UNK_TYPE D_0600A194;
+extern UNK_TYPE D_0600A400;
+extern UNK_TYPE D_0600AE40;
+extern UNK_TYPE D_0600AFB0;
+extern UNK_TYPE D_0600B020;
+extern UNK_TYPE D_0600C7D8;
+extern UNK_TYPE D_0600CEE8;
+extern UNK_TYPE D_060149A0;
+extern UNK_TYPE D_06019E48;
+extern UNK_TYPE D_0601DEB4;
+extern UNK_TYPE D_06022BB4;
+extern UNK_TYPE D_06023DAC;
+extern UNK_TYPE D_06025018;
+extern UNK_TYPE D_06025878;
+extern UNK_TYPE D_060269EC;
+extern UNK_TYPE D_06026EA0;
+extern UNK_TYPE D_06027270;
+extern UNK_TYPE D_0602EEC8;
+extern UNK_TYPE D_0602EF68;
+extern UNK_TYPE D_0602EFE8;
+extern UNK_TYPE D_0602F640;
+extern UNK_TYPE D_0602F840;
+extern UNK_TYPE D_06033F80;
+extern UNK_TYPE D_0603B330;
+extern UNK_TYPE D_0603CBD0;
+extern UNK_TYPE D_0603D7F0;
+extern UNK_TYPE D_0603DD1C;
+extern UNK_TYPE D_06040930;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_809F4980.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_809F49A0.s")

@@ -24,6 +24,8 @@ const ActorInit Eff_Stk_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06009F60;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Stk/EffStk_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Stk/EffStk_Destroy.s")

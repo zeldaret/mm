@@ -24,6 +24,8 @@ const ActorInit Dm_Char06_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06006868;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char06/func_80AAE680.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char06/DmChar06_Init.s")

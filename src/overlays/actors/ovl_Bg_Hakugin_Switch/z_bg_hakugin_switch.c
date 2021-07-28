@@ -50,6 +50,8 @@ extern ColliderCylinderInit D_80B16860;
 extern InitChainEntry D_80B16904[];
 extern InitChainEntry D_80B16910[];
 
+extern UNK_TYPE D_060005C8;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Switch/func_80B15790.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Switch/func_80B157C4.s")

@@ -24,6 +24,11 @@ const ActorInit Obj_Tokeidai_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_0600B208;
+extern UNK_TYPE D_0600BA78;
+extern UNK_TYPE D_0600CF28;
+extern UNK_TYPE D_0600D388;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB2790.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB27B4.s")

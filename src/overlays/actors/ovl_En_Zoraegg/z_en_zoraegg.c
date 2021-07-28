@@ -24,6 +24,12 @@ const ActorInit En_Zoraegg_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_060005D4;
+extern UNK_TYPE D_06004D20;
+extern UNK_TYPE D_06004FE4;
+extern UNK_TYPE D_06005098;
+extern UNK_TYPE D_06005250;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zoraegg/func_80B31590.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zoraegg/EnZoraegg_Init.s")

@@ -23,6 +23,8 @@ const ActorInit En_Sth2_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_060031F8;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sth2/EnSth2_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sth2/EnSth2_Destroy.s")

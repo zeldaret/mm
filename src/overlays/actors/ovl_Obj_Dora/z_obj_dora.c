@@ -102,6 +102,8 @@ extern ColliderTrisInit D_80B61478;
 extern DamageTable D_80B61488;
 extern CollisionCheckInfoInit2 D_80B614A8;
 
+extern UNK_TYPE D_06004160;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Dora/ObjDora_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Dora/ObjDora_Destroy.s")

@@ -32,6 +32,9 @@ static InitChainEntry D_8091A810[] = {
 
 extern InitChainEntry D_8091A810[];
 
+extern UNK_TYPE D_06001220;
+extern UNK_TYPE D_06001558;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Umajump/func_80919F30.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Umajump/func_80919FC8.s")

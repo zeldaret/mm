@@ -56,6 +56,9 @@ extern ColliderTrisElementInit D_80B6F990[2];
 extern ColliderTrisInit D_80B6FA08;
 extern InitChainEntry D_80B6FA24[];
 
+extern UNK_TYPE D_06000658;
+extern UNK_TYPE D_06000798;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Picture/func_80B6EFA0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Picture/func_80B6EFEC.s")

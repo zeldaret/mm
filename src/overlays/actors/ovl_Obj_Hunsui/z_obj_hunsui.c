@@ -24,6 +24,10 @@ const ActorInit Obj_Hunsui_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06000220;
+extern UNK_TYPE D_06000C74;
+extern UNK_TYPE D_06000EC0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hunsui/func_80B9C450.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hunsui/func_80B9C5E8.s")

@@ -24,6 +24,8 @@ const ActorInit En_Paper_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_0600D5A0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Paper/EnPaper_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Paper/EnPaper_Destroy.s")

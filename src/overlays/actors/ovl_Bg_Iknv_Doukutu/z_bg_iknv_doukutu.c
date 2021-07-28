@@ -24,6 +24,12 @@ const ActorInit Bg_Iknv_Doukutu_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_0600F1C0;
+extern UNK_TYPE D_06010D98;
+extern UNK_TYPE D_060117A0;
+extern UNK_TYPE D_06012728;
+extern UNK_TYPE D_06012788;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknv_Doukutu/BgIknvDoukutu_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Iknv_Doukutu/BgIknvDoukutu_Destroy.s")

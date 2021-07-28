@@ -91,6 +91,8 @@ extern CollisionCheckInfoInit D_8099C0A4;
 extern DamageTable D_8099C0AC;
 extern InitChainEntry D_8099C0D0[];
 
+extern UNK_TYPE D_060000F0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Crow/EnCrow_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Crow/EnCrow_Destroy.s")

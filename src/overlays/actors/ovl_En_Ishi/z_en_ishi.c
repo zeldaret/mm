@@ -64,6 +64,8 @@ extern CollisionCheckInfoInit D_8095F744;
 extern InitChainEntry D_8095F784[];
 extern InitChainEntry D_8095F798[];
 
+extern UNK_TYPE D_060009B0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ishi/func_8095D6E0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ishi/func_8095D758.s")

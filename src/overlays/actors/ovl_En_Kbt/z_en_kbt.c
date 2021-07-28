@@ -24,6 +24,8 @@ const ActorInit En_Kbt_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06004274;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kbt/EnKbt_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kbt/EnKbt_Destroy.s")

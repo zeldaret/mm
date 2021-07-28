@@ -45,6 +45,8 @@ static ColliderJntSphInit D_80B2B360 = {
 extern ColliderJntSphElementInit D_80B2B318[2];
 extern ColliderJntSphInit D_80B2B360;
 
+extern UNK_TYPE D_060013AC;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fish2/func_80B28370.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fish2/func_80B28478.s")

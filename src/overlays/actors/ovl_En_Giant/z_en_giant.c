@@ -24,6 +24,10 @@ const ActorInit En_Giant_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06002168;
+extern UNK_TYPE D_06007610;
+extern UNK_TYPE D_060116E4;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/func_80B01990.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/func_80B01A74.s")

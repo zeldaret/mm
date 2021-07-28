@@ -24,6 +24,9 @@ const ActorInit En_Nwc_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_060000E8;
+extern UNK_TYPE D_060002E8;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nwc/EnNwc_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Nwc/EnNwc_Destroy.s")

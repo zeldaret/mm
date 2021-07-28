@@ -94,6 +94,8 @@ extern ColliderCylinderInit D_80B667C4;
 extern DamageTable D_80B667F0;
 extern CollisionCheckInfoInit2 D_80B66810;
 
+extern UNK_TYPE D_06000180;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban/ObjKendoKanban_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban/ObjKendoKanban_Destroy.s")

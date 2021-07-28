@@ -33,6 +33,9 @@ static ColliderSphereInit D_80ACF610 = {
 
 extern ColliderSphereInit D_80ACF610;
 
+extern UNK_TYPE D_060023D4;
+extern UNK_TYPE D_06002720;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fu_Mato/EnFuMato_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fu_Mato/EnFuMato_Destroy.s")

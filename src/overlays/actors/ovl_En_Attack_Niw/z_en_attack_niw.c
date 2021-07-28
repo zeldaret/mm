@@ -33,6 +33,8 @@ static InitChainEntry D_80959120[] = {
 
 extern InitChainEntry D_80959120[];
 
+extern UNK_TYPE D_060000E8;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Attack_Niw/EnAttackNiw_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Attack_Niw/EnAttackNiw_Destroy.s")

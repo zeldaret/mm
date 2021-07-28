@@ -157,6 +157,14 @@ extern DamageTable D_808792D4;
 extern CollisionCheckInfoInit D_808792F4;
 extern InitChainEntry D_808792FC[];
 
+extern UNK_TYPE D_060013C4;
+extern UNK_TYPE D_06001A44;
+extern UNK_TYPE D_060028F0;
+extern UNK_TYPE D_06003088;
+extern UNK_TYPE D_060042C4;
+extern UNK_TYPE D_06004C20;
+extern UNK_TYPE D_06008B1C;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/EnDodongo_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/EnDodongo_Destroy.s")

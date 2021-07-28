@@ -83,6 +83,8 @@ extern DamageTable D_80A44A2C;
 extern CollisionCheckInfoInit D_80A44A4C;
 extern InitChainEntry D_80A44A54[];
 
+extern UNK_TYPE D_060000A0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bat/EnBat_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bat/EnBat_Destroy.s")

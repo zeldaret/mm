@@ -24,6 +24,8 @@ const ActorInit En_Gg2_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_0600F578;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Gg2/func_80B3AC50.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Gg2/func_80B3AC94.s")

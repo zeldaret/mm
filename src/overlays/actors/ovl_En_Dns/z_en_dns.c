@@ -37,6 +37,9 @@ static CollisionCheckInfoInit2 D_8092DD54 = { 1, 0, 0, 0, MASS_IMMOVABLE };
 extern ColliderCylinderInit D_8092DD28;
 extern CollisionCheckInfoInit2 D_8092DD54;
 
+extern UNK_TYPE D_06002C48;
+extern UNK_TYPE D_06002DD8;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dns/func_8092C5C0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dns/func_8092C63C.s")

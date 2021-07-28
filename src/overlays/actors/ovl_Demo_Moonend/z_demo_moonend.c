@@ -24,6 +24,10 @@ const ActorInit Demo_Moonend_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06001214;
+extern UNK_TYPE D_0600B540;
+extern UNK_TYPE D_060129F0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Moonend/DemoMoonend_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Moonend/DemoMoonend_Destroy.s")

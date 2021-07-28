@@ -51,6 +51,8 @@ extern ColliderTrisElementInit D_80C189C0[2];
 extern ColliderTrisInit D_80C18A38;
 extern InitChainEntry D_80C18AC8[];
 
+extern UNK_TYPE D_06000098;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Last_Bwall/func_80C18240.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Last_Bwall/BgLastBwall_Init.s")

@@ -82,6 +82,17 @@ extern CollisionCheckInfoInit D_80AD8E0C;
 extern DamageTable D_80AD8E14;
 extern InitChainEntry D_80AD8E44[];
 
+extern UNK_TYPE D_060008B4;
+extern UNK_TYPE D_06000AF4;
+extern UNK_TYPE D_06001C68;
+extern UNK_TYPE D_06002510;
+extern UNK_TYPE D_060027D8;
+extern UNK_TYPE D_06002F88;
+extern UNK_TYPE D_060031DC;
+extern UNK_TYPE D_060035EC;
+extern UNK_TYPE D_06004210;
+extern UNK_TYPE D_0600823C;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kame/EnKame_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kame/EnKame_Destroy.s")

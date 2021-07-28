@@ -24,6 +24,8 @@ const ActorInit En_Zl4_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06013328;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zl4/func_809A1BB0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zl4/EnZl4_Init.s")

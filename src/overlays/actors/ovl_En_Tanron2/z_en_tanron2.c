@@ -78,6 +78,8 @@ extern DamageTable D_80BB8170;
 extern ColliderCylinderInit D_80BB8190;
 extern ColliderCylinderInit D_80BB81BC;
 
+extern UNK_TYPE D_06003450;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron2/EnTanron2_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron2/EnTanron2_Destroy.s")

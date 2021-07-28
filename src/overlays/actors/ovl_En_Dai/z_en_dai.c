@@ -24,6 +24,10 @@ const ActorInit En_Dai_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_060002E8;
+extern UNK_TYPE D_0600C538;
+extern UNK_TYPE D_060130D0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dai/func_80B3DFF0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dai/func_80B3E168.s")

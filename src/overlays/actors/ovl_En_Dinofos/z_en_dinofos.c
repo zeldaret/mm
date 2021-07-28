@@ -131,6 +131,20 @@ extern DamageTable D_8089E314;
 extern CollisionCheckInfoInit D_8089E334;
 extern InitChainEntry D_8089E354[];
 
+extern UNK_TYPE D_06000580;
+extern UNK_TYPE D_06000AF0;
+extern UNK_TYPE D_06001040;
+extern UNK_TYPE D_060013C0;
+extern UNK_TYPE D_060017B8;
+extern UNK_TYPE D_06001CCC;
+extern UNK_TYPE D_060025B4;
+extern UNK_TYPE D_06002E40;
+extern UNK_TYPE D_06009B70;
+extern UNK_TYPE D_0600ABD0;
+extern UNK_TYPE D_0600C974;
+extern UNK_TYPE D_0600D21C;
+extern UNK_TYPE D_0600D62C;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dinofos/EnDinofos_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dinofos/EnDinofos_Destroy.s")

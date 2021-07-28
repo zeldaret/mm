@@ -32,6 +32,9 @@ static InitChainEntry D_80B91EC0[] = {
 
 extern InitChainEntry D_80B91EC0[];
 
+extern UNK_TYPE D_060026A0;
+extern UNK_TYPE D_06002A88;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokei_Turret/ObjTokeiTurret_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokei_Turret/ObjTokeiTurret_Destroy.s")

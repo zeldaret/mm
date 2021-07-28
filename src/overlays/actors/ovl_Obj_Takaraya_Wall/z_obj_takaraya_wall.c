@@ -39,6 +39,8 @@ static InitChainEntry D_80ADA2CC[] = {
 extern ColliderCylinderInit D_80ADA2A0;
 extern InitChainEntry D_80ADA2CC[];
 
+extern UNK_TYPE D_06000D60;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Takaraya_Wall/func_80AD9240.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Takaraya_Wall/func_80AD92FC.s")

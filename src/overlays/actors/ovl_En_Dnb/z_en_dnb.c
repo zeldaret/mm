@@ -24,6 +24,10 @@ const ActorInit En_Dnb_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06000020;
+extern UNK_TYPE D_06004638;
+extern UNK_TYPE D_06004D8C;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnb/func_80A4FDD0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnb/func_80A4FEBC.s")

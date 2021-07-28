@@ -96,6 +96,10 @@ extern CollisionCheckInfoInit D_80BC67E0;
 extern DamageTable D_80BC67E8;
 extern InitChainEntry D_80BC6958[];
 
+extern UNK_TYPE D_0600188C;
+extern UNK_TYPE D_06006E08;
+extern UNK_TYPE D_06006FD8;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Po_Composer/EnPoComposer_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Po_Composer/EnPoComposer_Destroy.s")

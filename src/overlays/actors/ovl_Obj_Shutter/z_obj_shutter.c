@@ -24,6 +24,8 @@ const ActorInit Obj_Shutter_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_060011E0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Shutter/ObjShutter_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Shutter/ObjShutter_Destroy.s")

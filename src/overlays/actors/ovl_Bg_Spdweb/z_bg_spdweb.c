@@ -80,6 +80,9 @@ extern ColliderTrisElementInit D_809CF108[4];
 extern ColliderTrisInit D_809CF1F8;
 extern InitChainEntry D_809CF210[];
 
+extern UNK_TYPE D_06000060;
+extern UNK_TYPE D_06002678;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Spdweb/BgSpdweb_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Spdweb/BgSpdweb_Destroy.s")

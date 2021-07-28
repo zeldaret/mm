@@ -24,6 +24,9 @@ const ActorInit Bg_Ingate_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_060006B0;
+extern UNK_TYPE D_060016DC;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ingate/func_80953A90.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ingate/func_80953B40.s")

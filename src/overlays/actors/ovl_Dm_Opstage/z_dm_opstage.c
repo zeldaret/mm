@@ -31,6 +31,9 @@ static InitChainEntry D_80A9FD30[] = {
 
 extern InitChainEntry D_80A9FD30[];
 
+extern UNK_TYPE D_06000978;
+extern UNK_TYPE D_06001C98;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Opstage/func_80A9F950.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Opstage/DmOpstage_Init.s")

@@ -34,6 +34,9 @@ static InitChainEntry D_80BC4E04[] = {
 
 extern InitChainEntry D_80BC4E04[];
 
+extern UNK_TYPE D_06000118;
+extern UNK_TYPE D_06000438;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_F40_Switch/func_80BC47B0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_F40_Switch/BgF40Switch_Init.s")

@@ -33,6 +33,8 @@ static ColliderCylinderInit D_8095A260 = {
 
 extern ColliderCylinderInit D_8095A260;
 
+extern UNK_TYPE D_06001C38;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mk/func_809592E0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mk/EnMk_Init.s")

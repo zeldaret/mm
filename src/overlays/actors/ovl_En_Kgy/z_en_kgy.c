@@ -24,6 +24,9 @@ const ActorInit En_Kgy_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06004B98;
+extern UNK_TYPE D_0600F6A0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kgy/EnKgy_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kgy/EnKgy_Destroy.s")

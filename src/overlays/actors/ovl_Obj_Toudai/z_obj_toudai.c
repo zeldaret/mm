@@ -24,6 +24,9 @@ const ActorInit Obj_Toudai_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_060023B0;
+extern UNK_TYPE D_060024E8;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Toudai/func_80A33B00.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Toudai/func_80A33BB4.s")

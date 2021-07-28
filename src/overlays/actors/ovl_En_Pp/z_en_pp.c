@@ -102,6 +102,8 @@ extern ColliderJntSphElementInit D_80B21698[1];
 extern ColliderJntSphInit D_80B216BC;
 extern ColliderQuadInit D_80B216CC;
 
+extern UNK_TYPE D_0600A844;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Pp/EnPp_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Pp/EnPp_Destroy.s")

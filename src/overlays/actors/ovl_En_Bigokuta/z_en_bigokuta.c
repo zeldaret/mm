@@ -55,6 +55,10 @@ extern ColliderCylinderInit D_80AC455C;
 extern CollisionCheckInfoInit D_80AC4588;
 extern InitChainEntry D_80AC4590[];
 
+extern UNK_TYPE D_06000444;
+extern UNK_TYPE D_06000A74;
+extern UNK_TYPE D_060014B8;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bigokuta/EnBigokuta_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bigokuta/EnBigokuta_Destroy.s")

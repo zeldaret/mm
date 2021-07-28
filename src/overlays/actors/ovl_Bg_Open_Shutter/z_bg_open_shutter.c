@@ -34,6 +34,9 @@ static InitChainEntry D_80ACB140[] = {
 
 extern InitChainEntry D_80ACB140[];
 
+extern UNK_TYPE D_060003E8;
+extern UNK_TYPE D_06001640;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Open_Shutter/func_80ACAB10.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Open_Shutter/func_80ACABA8.s")

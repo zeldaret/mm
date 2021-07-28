@@ -53,6 +53,10 @@ extern ColliderCylinderInit D_8093A96C;
 extern CollisionCheckInfoInit D_8093A9B8;
 extern InitChainEntry D_8093A9C0[];
 
+extern UNK_TYPE D_060009E0;
+extern UNK_TYPE D_06004560;
+extern UNK_TYPE D_06005990;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Bombiwa/func_809393B0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Bombiwa/func_80939470.s")

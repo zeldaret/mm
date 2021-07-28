@@ -74,6 +74,8 @@ extern ColliderCylinderInit D_80B38AFC;
 extern DamageTable D_80B38B28;
 extern CollisionCheckInfoInit2 D_80B38B48;
 
+extern UNK_TYPE D_06002EC0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/EnMaruta_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/EnMaruta_Destroy.s")

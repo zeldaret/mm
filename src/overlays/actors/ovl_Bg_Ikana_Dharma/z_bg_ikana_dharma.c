@@ -42,6 +42,9 @@ static InitChainEntry D_80BECAFC[] = {
 extern ColliderCylinderInit D_80BECAD0;
 extern InitChainEntry D_80BECAFC[];
 
+extern UNK_TYPE D_060008C8;
+extern UNK_TYPE D_06000C50;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Dharma/func_80BEC240.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Dharma/BgIkanaDharma_Init.s")

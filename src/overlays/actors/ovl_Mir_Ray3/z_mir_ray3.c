@@ -41,6 +41,8 @@ static ColliderCylinderInit D_80B9F470 = {
 extern ColliderQuadInit D_80B9F420;
 extern ColliderCylinderInit D_80B9F470;
 
+extern UNK_TYPE D_060003F8;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray3/MirRay3_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray3/MirRay3_Destroy.s")

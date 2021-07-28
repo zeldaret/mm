@@ -82,6 +82,10 @@ extern DamageTable D_80B0137C;
 extern CollisionCheckInfoInit2 D_80B0139C;
 extern InitChainEntry D_80B01448[];
 
+extern UNK_TYPE D_06009298;
+extern UNK_TYPE D_0600ABE0;
+extern UNK_TYPE D_06010B88;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/EnTalkGibud_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/EnTalkGibud_Destroy.s")

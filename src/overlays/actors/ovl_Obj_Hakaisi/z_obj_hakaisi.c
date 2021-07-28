@@ -24,6 +24,11 @@ const ActorInit Obj_Hakaisi_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06001F10;
+extern UNK_TYPE D_060021B0;
+extern UNK_TYPE D_06002650;
+extern UNK_TYPE D_06002FC4;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hakaisi/ObjHakaisi_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hakaisi/ObjHakaisi_Destroy.s")

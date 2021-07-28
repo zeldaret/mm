@@ -40,6 +40,8 @@ static InitChainEntry D_80952BCC[] = {
 extern ColliderCylinderInit D_80952BA0;
 extern InitChainEntry D_80952BCC[];
 
+extern UNK_TYPE D_060005EC;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ms/EnMs_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ms/EnMs_Destroy.s")

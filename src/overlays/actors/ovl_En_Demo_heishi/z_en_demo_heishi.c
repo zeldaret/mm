@@ -33,6 +33,8 @@ static ColliderCylinderInit D_80BE9A50 = {
 
 extern ColliderCylinderInit D_80BE9A50;
 
+extern UNK_TYPE D_06003BFC;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Demo_heishi/EnDemoheishi_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Demo_heishi/EnDemoheishi_Destroy.s")

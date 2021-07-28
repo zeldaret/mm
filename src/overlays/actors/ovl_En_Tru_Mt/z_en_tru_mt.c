@@ -70,6 +70,9 @@ static DamageTable D_80B7753C = {
 extern ColliderSphereInit D_80B77510;
 extern DamageTable D_80B7753C;
 
+extern UNK_TYPE D_060004C8;
+extern UNK_TYPE D_0601AA60;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tru_Mt/func_80B76030.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tru_Mt/func_80B76110.s")

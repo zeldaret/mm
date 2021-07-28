@@ -37,6 +37,9 @@ static CollisionCheckInfoInit2 D_80B27C5C = { 0, 0, 0, 0, MASS_IMMOVABLE };
 extern ColliderCylinderInit D_80B27C30;
 extern CollisionCheckInfoInit2 D_80B27C5C;
 
+extern UNK_TYPE D_0600016C;
+extern UNK_TYPE D_06000F4C;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kendo_Js/EnKendoJs_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kendo_Js/EnKendoJs_Destroy.s")

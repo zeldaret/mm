@@ -90,6 +90,13 @@ extern DamageTable D_80B19A58;
 extern CollisionCheckInfoInit D_80B19A78;
 extern InitChainEntry D_80B19AAC[];
 
+extern UNK_TYPE D_06000404;
+extern UNK_TYPE D_06004628;
+extern UNK_TYPE D_060046D8;
+extern UNK_TYPE D_06004F14;
+extern UNK_TYPE D_0600554C;
+extern UNK_TYPE D_060058CC;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/EnSnowman_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/EnSnowman_Destroy.s")

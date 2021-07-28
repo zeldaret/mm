@@ -31,6 +31,8 @@ static InitChainEntry D_80BA34B0[] = {
 
 extern InitChainEntry D_80BA34B0[];
 
+extern UNK_TYPE D_060001C0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Nozoki/func_80BA2420.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Nozoki/ObjNozoki_Init.s")

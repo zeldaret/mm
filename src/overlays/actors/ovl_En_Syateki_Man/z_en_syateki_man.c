@@ -24,6 +24,11 @@ const ActorInit En_Syateki_Man_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_060062C8;
+extern UNK_TYPE D_0600D2F8;
+extern UNK_TYPE D_0600DFEC;
+extern UNK_TYPE D_0600F2D0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Man/func_809C64C0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Man/EnSyatekiMan_Init.s")

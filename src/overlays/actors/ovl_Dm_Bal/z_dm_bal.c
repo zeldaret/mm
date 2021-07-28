@@ -24,6 +24,9 @@ const ActorInit Dm_Bal_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_060005FC;
+extern UNK_TYPE D_06001804;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Bal/DmBal_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Bal/DmBal_Destroy.s")

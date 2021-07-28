@@ -31,6 +31,9 @@ static InitChainEntry D_80C16420[] = {
 
 extern InitChainEntry D_80C16420[];
 
+extern UNK_TYPE D_06000430;
+extern UNK_TYPE D_060012E8;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Yado/ObjYado_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Yado/ObjYado_Destroy.s")

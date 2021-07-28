@@ -82,6 +82,10 @@ extern CollisionCheckInfoInit2 D_80A63D00;
 extern ColliderJntSphElementInit D_80A63D0C[1];
 extern ColliderJntSphInit D_80A63D30;
 
+extern UNK_TYPE D_060005FC;
+extern UNK_TYPE D_0600CB78;
+extern UNK_TYPE D_0600D530;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/EnBal_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/EnBal_Destroy.s")

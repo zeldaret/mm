@@ -45,6 +45,10 @@ extern ColliderCylinderInit D_80BF3418;
 extern ColliderSphereInit D_80BF3444;
 extern CollisionCheckInfoInit2 D_80BF3470;
 
+extern UNK_TYPE D_06008710;
+extern UNK_TYPE D_0600C538;
+extern UNK_TYPE D_060130D0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ig/func_80BF1150.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ig/func_80BF1200.s")

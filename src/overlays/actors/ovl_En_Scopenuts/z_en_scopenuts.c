@@ -40,6 +40,9 @@ static InitChainEntry D_80BCCCF0[] = {
 extern ColliderCylinderInit D_80BCCB40;
 extern InitChainEntry D_80BCCCF0[];
 
+extern UNK_TYPE D_06001420;
+extern UNK_TYPE D_06005488;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopenuts/func_80BCABF0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopenuts/func_80BCAC40.s")

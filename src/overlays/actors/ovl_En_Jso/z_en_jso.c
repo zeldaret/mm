@@ -77,6 +77,8 @@ extern DamageTable D_809B0F48;
 extern ColliderCylinderInit D_809B0F88;
 extern ColliderQuadInit D_809B0FB4;
 
+extern UNK_TYPE D_060081F4;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jso/EnJso_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jso/EnJso_Destroy.s")

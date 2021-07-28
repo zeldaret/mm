@@ -73,6 +73,8 @@ extern ColliderCylinderInit D_80A521C4;
 extern CollisionCheckInfoInit2 D_80A521F0;
 extern DamageTable D_80A521FC;
 
+extern UNK_TYPE D_06002848;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnk/func_80A514F0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnk/func_80A515C4.s")

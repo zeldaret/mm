@@ -34,6 +34,9 @@ static InitChainEntry D_80C1B540[] = {
 
 extern InitChainEntry D_80C1B540[];
 
+extern UNK_TYPE D_06000180;
+extern UNK_TYPE D_06000BA0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Danpeilift/func_80C1ADC0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Danpeilift/ObjDanpeilift_Init.s")

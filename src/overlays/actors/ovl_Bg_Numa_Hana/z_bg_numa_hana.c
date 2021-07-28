@@ -42,6 +42,9 @@ static InitChainEntry D_80A1B2A8[] = {
 extern ColliderCylinderInit D_80A1B260;
 extern InitChainEntry D_80A1B2A8[];
 
+extern UNK_TYPE D_06009FE0;
+extern UNK_TYPE D_0600B928;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Numa_Hana/func_80A1A500.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Numa_Hana/func_80A1A56C.s")

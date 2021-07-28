@@ -42,6 +42,10 @@ static InitChainEntry D_80BD64D4[] = {
 extern ColliderCylinderInit D_80BD64A0;
 extern InitChainEntry D_80BD64D4[];
 
+extern UNK_TYPE D_06000040;
+extern UNK_TYPE D_06000148;
+extern UNK_TYPE D_06001680;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Haka_Bombwall/func_80BD5E00.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Haka_Bombwall/func_80BD5E6C.s")

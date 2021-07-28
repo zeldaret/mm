@@ -49,6 +49,10 @@ extern ColliderCylinderInit D_80938FA0;
 extern ColliderCylinderInit D_80938FCC;
 extern InitChainEntry D_8093902C[];
 
+extern UNK_TYPE D_06000090;
+extern UNK_TYPE D_060004BC;
+extern UNK_TYPE D_06002208;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Bean/func_80936CF0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Bean/func_80936D58.s")

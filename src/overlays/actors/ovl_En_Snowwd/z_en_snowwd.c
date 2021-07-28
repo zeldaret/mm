@@ -33,6 +33,8 @@ static ColliderCylinderInit D_80AF7A90 = {
 
 extern ColliderCylinderInit D_80AF7A90;
 
+extern UNK_TYPE D_06001AA0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowwd/EnSnowwd_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowwd/EnSnowwd_Destroy.s")

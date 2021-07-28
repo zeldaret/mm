@@ -24,6 +24,8 @@ const ActorInit En_Kujiya_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06006198;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kujiya/EnKujiya_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kujiya/EnKujiya_Destroy.s")

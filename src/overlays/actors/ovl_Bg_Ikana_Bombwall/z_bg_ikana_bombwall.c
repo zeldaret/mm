@@ -50,6 +50,9 @@ extern ColliderCylinderInit D_80BD5270;
 extern ColliderCylinderInit D_80BD529C;
 extern InitChainEntry D_80BD52D0[];
 
+extern UNK_TYPE D_06000288;
+extern UNK_TYPE D_06000488;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Bombwall/func_80BD4720.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Bombwall/func_80BD4A14.s")

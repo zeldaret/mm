@@ -106,6 +106,8 @@ extern DamageTable D_80B605F4;
 extern ColliderJntSphElementInit D_80B60614[8];
 extern ColliderJntSphInit D_80B60734;
 
+extern UNK_TYPE D_060048B8;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/EnDragon_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/EnDragon_Destroy.s")

@@ -24,6 +24,10 @@ const ActorInit En_Fall2_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06005EF4;
+extern UNK_TYPE D_06005F10;
+extern UNK_TYPE D_06008840;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall2/EnFall2_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall2/EnFall2_Destroy.s")

@@ -106,6 +106,12 @@ extern ColliderJntSphInit D_80AF64DC;
 extern CollisionCheckInfoInit D_80AF64EC;
 extern DamageTable D_80AF64F4;
 
+extern UNK_TYPE D_060000F4;
+extern UNK_TYPE D_06000364;
+extern UNK_TYPE D_06000534;
+extern UNK_TYPE D_06000854;
+extern UNK_TYPE D_060014C0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wdhand/EnWdhand_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wdhand/EnWdhand_Destroy.s")

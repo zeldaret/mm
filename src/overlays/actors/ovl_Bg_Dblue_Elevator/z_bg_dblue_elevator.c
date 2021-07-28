@@ -34,6 +34,9 @@ static InitChainEntry D_80B929EC[] = {
 
 extern InitChainEntry D_80B929EC[];
 
+extern UNK_TYPE D_060002C8;
+extern UNK_TYPE D_060005C4;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Dblue_Elevator/func_80B91F20.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Dblue_Elevator/func_80B91F74.s")

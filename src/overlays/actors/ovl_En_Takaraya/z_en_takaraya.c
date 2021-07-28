@@ -32,6 +32,11 @@ static InitChainEntry D_80ADFB20[] = {
 
 extern InitChainEntry D_80ADFB20[];
 
+extern UNK_TYPE D_06001384;
+extern UNK_TYPE D_06009890;
+extern UNK_TYPE D_0600A280;
+extern UNK_TYPE D_0600AD98;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/EnTakaraya_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/EnTakaraya_Destroy.s")

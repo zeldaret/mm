@@ -36,6 +36,8 @@ static CollisionCheckInfoInit D_80B22AAC = { 0, 60, 60, MASS_IMMOVABLE };
 extern ColliderCylinderInit D_80B22A80;
 extern CollisionCheckInfoInit D_80B22AAC;
 
+extern UNK_TYPE D_06011100;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/EnHakurock_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/EnHakurock_Destroy.s")

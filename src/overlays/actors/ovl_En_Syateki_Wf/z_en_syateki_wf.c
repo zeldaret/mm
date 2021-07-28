@@ -64,6 +64,8 @@ extern ColliderJntSphInit D_80A20EA0;
 extern ColliderCylinderInit D_80A20EB0;
 extern InitChainEntry D_80A20FBC[];
 
+extern UNK_TYPE D_0600A3CC;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/EnSyatekiWf_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/EnSyatekiWf_Destroy.s")

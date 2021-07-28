@@ -24,6 +24,8 @@ const ActorInit Dm_Tsg_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06011458;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Tsg/DmTsg_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Tsg/DmTsg_Destroy.s")

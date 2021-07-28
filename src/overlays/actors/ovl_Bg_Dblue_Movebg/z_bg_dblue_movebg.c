@@ -24,6 +24,10 @@ const ActorInit Bg_Dblue_Movebg_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06004848;
+extern UNK_TYPE D_060052B8;
+extern UNK_TYPE D_06008778;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Dblue_Movebg/func_80A29A80.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Dblue_Movebg/BgDblueMovebg_Init.s")

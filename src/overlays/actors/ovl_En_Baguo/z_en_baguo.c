@@ -77,6 +77,8 @@ extern ColliderJntSphElementInit D_80A3C2F0[1];
 extern ColliderJntSphInit D_80A3C314;
 extern DamageTable D_80A3C324;
 
+extern UNK_TYPE D_060020E8;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/EnBaguo_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/EnBaguo_Destroy.s")

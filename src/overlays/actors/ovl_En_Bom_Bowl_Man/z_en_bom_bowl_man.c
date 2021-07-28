@@ -24,6 +24,8 @@ const ActorInit En_Bom_Bowl_Man_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_060064B8;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Bowl_Man/EnBomBowlMan_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Bowl_Man/EnBomBowlMan_Destroy.s")

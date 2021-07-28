@@ -34,6 +34,10 @@ static InitChainEntry D_80B13FB4[] = {
 
 extern InitChainEntry D_80B13FB4[];
 
+extern UNK_TYPE D_06004928;
+extern UNK_TYPE D_06005A78;
+extern UNK_TYPE D_06008040;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Dhouse/ObjDhouse_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Dhouse/ObjDhouse_Destroy.s")

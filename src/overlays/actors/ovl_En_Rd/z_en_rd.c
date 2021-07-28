@@ -78,6 +78,19 @@ extern ColliderCylinderInit D_808D70E0;
 extern DamageTable D_808D710C;
 extern InitChainEntry D_808D712C[];
 
+extern UNK_TYPE D_06006678;
+extern UNK_TYPE D_06006EEC;
+extern UNK_TYPE D_060073A4;
+extern UNK_TYPE D_060081A8;
+extern UNK_TYPE D_06009298;
+extern UNK_TYPE D_06009900;
+extern UNK_TYPE D_0600A450;
+extern UNK_TYPE D_0600ABE0;
+extern UNK_TYPE D_060113EC;
+extern UNK_TYPE D_060118D8;
+extern UNK_TYPE D_06011DB8;
+extern UNK_TYPE D_0601216C;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rd/EnRd_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rd/EnRd_Destroy.s")

@@ -24,6 +24,9 @@ const ActorInit Obj_Entotu_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06000158;
+extern UNK_TYPE D_06001C00;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Entotu/func_80A34700.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Entotu/func_80A349C0.s")

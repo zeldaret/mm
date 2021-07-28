@@ -52,6 +52,8 @@ extern ColliderJntSphElementInit D_80B3A8E0[1];
 extern ColliderJntSphInit D_80B3A904;
 extern InitChainEntry D_80B3A93C[];
 
+extern UNK_TYPE D_06008B90;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B38E20.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B38E88.s")

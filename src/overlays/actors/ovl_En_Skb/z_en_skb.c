@@ -89,6 +89,12 @@ extern ColliderJntSphInit D_809974E0;
 extern DamageTable D_809974F0;
 extern InitChainEntry D_80997548[];
 
+extern UNK_TYPE D_06001D1C;
+extern UNK_TYPE D_06002190;
+extern UNK_TYPE D_06003584;
+extern UNK_TYPE D_0600697C;
+extern UNK_TYPE D_06006D90;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Skb/func_809947B0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Skb/func_8099495C.s")

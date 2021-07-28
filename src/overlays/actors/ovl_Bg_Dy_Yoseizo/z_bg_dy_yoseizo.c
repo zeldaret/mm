@@ -23,6 +23,10 @@ const ActorInit Bg_Dy_Yoseizo_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06008090;
+extern UNK_TYPE D_0600D228;
+extern UNK_TYPE D_0601C6F4;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Dy_Yoseizo/BgDyYoseizo_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Dy_Yoseizo/BgDyYoseizo_Destroy.s")

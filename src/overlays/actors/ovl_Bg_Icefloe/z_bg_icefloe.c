@@ -31,6 +31,9 @@ static InitChainEntry D_80AC4F3C[] = {
 
 extern InitChainEntry D_80AC4F3C[];
 
+extern UNK_TYPE D_060001E0;
+extern UNK_TYPE D_06000C90;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/BgIcefloe_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/BgIcefloe_Destroy.s")

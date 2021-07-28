@@ -50,6 +50,8 @@ extern ColliderJntSphElementInit D_809CB07C[1];
 extern ColliderJntSphInit D_809CB0A0;
 extern InitChainEntry D_809CB0B0[];
 
+extern UNK_TYPE D_060000F0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/EnSyatekiCrow_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/EnSyatekiCrow_Destroy.s")

@@ -24,6 +24,8 @@ const ActorInit En_Dnh_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06002950;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnh/func_80A50D40.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnh/func_80A50DF8.s")

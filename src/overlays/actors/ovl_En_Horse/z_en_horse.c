@@ -68,6 +68,14 @@ extern ColliderJntSphInit D_80888FF0;
 extern CollisionCheckInfoInit D_80889000;
 extern InitChainEntry D_80889010[];
 
+extern UNK_TYPE D_06008C68;
+extern UNK_TYPE D_0600A8DC;
+extern UNK_TYPE D_0600AD08;
+extern UNK_TYPE D_0600B3E0;
+extern UNK_TYPE D_0600BDE0;
+extern UNK_TYPE D_0600D178;
+extern UNK_TYPE D_0600D4E8;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse/func_8087B730.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse/func_8087B784.s")

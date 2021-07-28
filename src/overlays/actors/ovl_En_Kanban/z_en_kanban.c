@@ -33,6 +33,8 @@ static ColliderCylinderInit D_80957300 = {
 
 extern ColliderCylinderInit D_80957300;
 
+extern UNK_TYPE D_06000C30;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kanban/func_80954960.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kanban/EnKanban_Init.s")

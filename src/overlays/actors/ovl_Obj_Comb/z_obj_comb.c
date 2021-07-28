@@ -50,6 +50,9 @@ extern ColliderJntSphElementInit D_8098E440[1];
 extern ColliderJntSphInit D_8098E464;
 extern InitChainEntry D_8098E474[];
 
+extern UNK_TYPE D_06000CB0;
+extern UNK_TYPE D_06001040;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Comb/func_8098CE40.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Comb/func_8098CEAC.s")

@@ -34,6 +34,9 @@ static InitChainEntry D_80BB4D90[] = {
 
 extern InitChainEntry D_80BB4D90[];
 
+extern UNK_TYPE D_06000360;
+extern UNK_TYPE D_06001428;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Yasi/ObjYasi_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Yasi/ObjYasi_Destroy.s")

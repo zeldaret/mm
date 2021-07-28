@@ -115,6 +115,11 @@ extern CollisionCheckInfoInit2 D_80899530;
 extern CollisionCheckInfoInit2 D_8089953C;
 extern InitChainEntry D_80899548[];
 
+extern UNK_TYPE D_06000350;
+extern UNK_TYPE D_060005C4;
+extern UNK_TYPE D_06000844;
+extern UNK_TYPE D_060009C4;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/EnPeehat_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/EnPeehat_Destroy.s")

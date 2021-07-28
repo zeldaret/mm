@@ -33,6 +33,8 @@ const ActorInit En_Kakasi_InitVars = {
 
 extern ColliderCylinderInit D_80971D80;
 
+extern UNK_TYPE D_06000214;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/EnKakasi_Destroy.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/EnKakasi_Init.s")

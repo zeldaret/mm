@@ -34,6 +34,9 @@ static InitChainEntry D_809B1FC0[] = {
 
 extern InitChainEntry D_809B1FC0[];
 
+extern UNK_TYPE D_06000D10;
+extern UNK_TYPE D_06000F00;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Chikuwa/func_809B1550.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Chikuwa/ObjChikuwa_Init.s")

@@ -33,6 +33,10 @@ static ColliderCylinderInit D_8096ABA0 = {
 
 extern ColliderCylinderInit D_8096ABA0;
 
+extern UNK_TYPE D_06010880;
+extern UNK_TYPE D_06016F58;
+extern UNK_TYPE D_06017E98;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/EnJs_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Js/EnJs_Destroy.s")

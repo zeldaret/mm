@@ -67,6 +67,9 @@ extern ColliderJntSphElementInit D_80B82138[1];
 extern ColliderJntSphInit D_80B8215C;
 extern InitChainEntry D_80B82214[];
 
+extern UNK_TYPE D_060048A0;
+extern UNK_TYPE D_06007B68;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Rotaryroom/func_80B802E0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Rotaryroom/func_80B80358.s")

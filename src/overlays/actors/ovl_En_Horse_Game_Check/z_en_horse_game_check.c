@@ -32,6 +32,11 @@ static InitChainEntry D_808F9BDC[] = {
 
 extern InitChainEntry D_808F9BDC[];
 
+extern UNK_TYPE D_060014B0;
+extern UNK_TYPE D_06002FB8;
+extern UNK_TYPE D_06003030;
+extern UNK_TYPE D_06003918;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Game_Check/func_808F8AA0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Game_Check/func_808F8C24.s")

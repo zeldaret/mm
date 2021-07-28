@@ -41,6 +41,9 @@ static InitChainEntry D_80AF3EEC[] = {
 extern ColliderCylinderInit D_80AF3EA0;
 extern InitChainEntry D_80AF3EEC[];
 
+extern UNK_TYPE D_06000178;
+extern UNK_TYPE D_06000B80;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightblock/func_80AF3910.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lightblock/ObjLightblock_Init.s")

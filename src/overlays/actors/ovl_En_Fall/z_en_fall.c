@@ -23,6 +23,15 @@ const ActorInit En_Fall_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06000198;
+extern UNK_TYPE D_060004C0;
+extern UNK_TYPE D_060010E0;
+extern UNK_TYPE D_060011D0;
+extern UNK_TYPE D_06001220;
+extern UNK_TYPE D_06002970;
+extern UNK_TYPE D_06004E38;
+extern UNK_TYPE D_060077F0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6BF90.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fall/func_80A6C1DC.s")

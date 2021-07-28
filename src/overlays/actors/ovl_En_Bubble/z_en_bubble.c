@@ -49,6 +49,8 @@ extern ColliderJntSphElementInit D_808A0700[2];
 extern ColliderJntSphInit D_808A0748;
 extern CollisionCheckInfoInit2 D_808A0758;
 
+extern UNK_TYPE D_06001000;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bubble/func_8089F4E0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bubble/func_8089F59C.s")

@@ -159,6 +159,10 @@ extern ColliderCylinderInit D_80A48CC8;
 extern DamageTable D_80A48CF4;
 extern DamageTable D_80A48D14;
 
+extern UNK_TYPE D_0600211C;
+extern UNK_TYPE D_060025F0;
+extern UNK_TYPE D_060066C0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/EnWiz_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/EnWiz_Destroy.s")

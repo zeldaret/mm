@@ -24,6 +24,8 @@ const ActorInit En_Bh_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06000074;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bh/EnBh_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bh/EnBh_Destroy.s")

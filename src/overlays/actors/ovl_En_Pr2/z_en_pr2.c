@@ -70,6 +70,9 @@ const ActorInit En_Pr2_InitVars = {
 extern DamageTable D_80A75BC0;
 extern ColliderCylinderInit D_80A75BE0;
 
+extern UNK_TYPE D_06003904;
+extern UNK_TYPE D_06004340;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Pr2/EnPr2_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Pr2/EnPr2_Destroy.s")

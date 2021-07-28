@@ -115,6 +115,9 @@ extern DamageTable D_808DBA18;
 extern CollisionCheckInfoInit2 D_808DBA38;
 extern DamageTable D_808DBA44;
 
+extern UNK_TYPE D_06004788;
+extern UNK_TYPE D_06005298;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sw/func_808D8940.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sw/func_808D8B58.s")

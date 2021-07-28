@@ -24,6 +24,12 @@ const ActorInit Door_Warp1_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_060001A0;
+extern UNK_TYPE D_06001374;
+extern UNK_TYPE D_060044D8;
+extern UNK_TYPE D_060076C0;
+extern UNK_TYPE D_06008BD4;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Warp1/func_808B8490.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Warp1/func_808B849C.s")

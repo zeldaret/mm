@@ -49,6 +49,8 @@ extern ColliderCylinderInit D_808AFB20;
 extern ColliderJntSphElementInit D_808AFB4C[1];
 extern ColliderJntSphInit D_808AFB70;
 
+extern UNK_TYPE D_06000340;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bombf/func_808AE8C0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bombf/EnBombf_Init.s")

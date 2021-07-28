@@ -183,6 +183,36 @@ extern ColliderJntSphInit D_809BDC28;
 extern ColliderCylinderInit D_809BDC38;
 extern ColliderCylinderInit D_809BDC64;
 
+extern UNK_TYPE D_060005A8;
+extern UNK_TYPE D_06001CDC;
+extern UNK_TYPE D_06002174;
+extern UNK_TYPE D_06003008;
+extern UNK_TYPE D_060031F0;
+extern UNK_TYPE D_06003650;
+extern UNK_TYPE D_060040E0;
+extern UNK_TYPE D_06004620;
+extern UNK_TYPE D_06004974;
+extern UNK_TYPE D_060079D4;
+extern UNK_TYPE D_06008524;
+extern UNK_TYPE D_06008D80;
+extern UNK_TYPE D_06009538;
+extern UNK_TYPE D_06009D8C;
+extern UNK_TYPE D_0600A530;
+extern UNK_TYPE D_0600AFAC;
+extern UNK_TYPE D_0600B5D4;
+extern UNK_TYPE D_0600BCF4;
+extern UNK_TYPE D_0600CDE0;
+extern UNK_TYPE D_0600DDCC;
+extern UNK_TYPE D_0600EA90;
+extern UNK_TYPE D_0600EF44;
+extern UNK_TYPE D_06010E98;
+extern UNK_TYPE D_06011298;
+extern UNK_TYPE D_06013020;
+extern UNK_TYPE D_06018BC4;
+extern UNK_TYPE D_06020950;
+extern UNK_TYPE D_06022728;
+extern UNK_TYPE D_06022CAC;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Knight/func_809B20F0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Knight/func_809B21F4.s")

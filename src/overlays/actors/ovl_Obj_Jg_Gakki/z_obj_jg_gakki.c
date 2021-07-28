@@ -24,6 +24,8 @@ const ActorInit Obj_Jg_Gakki_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_0601B1E8;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jg_Gakki/ObjJgGakki_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jg_Gakki/ObjJgGakki_Destroy.s")

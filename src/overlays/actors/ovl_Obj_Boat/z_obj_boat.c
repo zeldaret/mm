@@ -34,6 +34,9 @@ static InitChainEntry D_80B9B680[] = {
 
 extern InitChainEntry D_80B9B680[];
 
+extern UNK_TYPE D_06007630;
+extern UNK_TYPE D_06009A88;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boat/func_80B9AF50.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boat/ObjBoat_Init.s")

@@ -36,6 +36,8 @@ static CollisionCheckInfoInit D_809ACC8C = { 1, 80, 100, MASS_IMMOVABLE };
 extern ColliderCylinderInit D_809ACC60;
 extern CollisionCheckInfoInit D_809ACC8C;
 
+extern UNK_TYPE D_06000040;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Fire_Wall/BgFireWall_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Fire_Wall/BgFireWall_Destroy.s")

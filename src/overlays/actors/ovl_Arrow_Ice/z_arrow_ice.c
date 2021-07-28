@@ -31,6 +31,8 @@ static InitChainEntry D_809241F0[] = {
 
 extern InitChainEntry D_809241F0[];
 
+extern UNK_TYPE D_0E0002E0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/D_80924200.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/func_80922430.s")

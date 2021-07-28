@@ -80,6 +80,8 @@ extern CollisionCheckInfoInit2 D_8099A3CC;
 extern DamageTable D_8099A3D8;
 extern InitChainEntry D_8099A404[];
 
+extern UNK_TYPE D_06000950;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Gs/func_80997A90.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Gs/func_80997AFC.s")

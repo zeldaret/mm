@@ -24,6 +24,9 @@ const ActorInit Eff_Lastday_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06000000;
+extern UNK_TYPE D_06000510;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Lastday/EffLastday_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Lastday/EffLastday_Destroy.s")

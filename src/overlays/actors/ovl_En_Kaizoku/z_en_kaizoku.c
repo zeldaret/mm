@@ -77,6 +77,8 @@ extern DamageTable D_80B8AB3C;
 extern ColliderCylinderInit D_80B8AB7C;
 extern ColliderQuadInit D_80B8ABA8;
 
+extern UNK_TYPE D_060058B8;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kaizoku/EnKaizoku_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kaizoku/EnKaizoku_Destroy.s")

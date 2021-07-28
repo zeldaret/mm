@@ -24,6 +24,8 @@ const ActorInit En_Mag_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06011E48;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mag/EnMag_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mag/EnMag_Destroy.s")

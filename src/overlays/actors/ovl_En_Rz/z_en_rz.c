@@ -33,6 +33,9 @@ static ColliderCylinderInit D_80BFCCF4 = {
 
 extern ColliderCylinderInit D_80BFCCF4;
 
+extern UNK_TYPE D_06003A20;
+extern UNK_TYPE D_0600D768;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rz/EnRz_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rz/func_80BFB780.s")

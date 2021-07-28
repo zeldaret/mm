@@ -98,6 +98,19 @@ extern ColliderJntSphElementInit D_8090CD58[12];
 extern ColliderJntSphInit D_8090CF08;
 extern InitChainEntry D_8090D4D0[];
 
+extern UNK_TYPE D_0600007C;
+extern UNK_TYPE D_06003230;
+extern UNK_TYPE D_0600453C;
+extern UNK_TYPE D_060074C8;
+extern UNK_TYPE D_06008678;
+extern UNK_TYPE D_0600B950;
+extern UNK_TYPE D_0600C220;
+extern UNK_TYPE D_060113D0;
+extern UNK_TYPE D_06012160;
+extern UNK_TYPE D_060121F0;
+extern UNK_TYPE D_06014030;
+extern UNK_TYPE D_060153D0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fishing/func_808FC6C0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fishing/func_808FC770.s")

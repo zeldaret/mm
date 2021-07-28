@@ -23,6 +23,9 @@ const ActorInit En_Test3_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_0600EDD0;
+extern UNK_TYPE D_0600F7EC;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test3/func_80A3E7E0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test3/func_80A3E80C.s")

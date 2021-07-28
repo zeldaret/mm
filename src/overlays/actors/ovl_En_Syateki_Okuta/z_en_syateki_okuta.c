@@ -40,6 +40,8 @@ static InitChainEntry D_80A37B88[] = {
 extern ColliderCylinderInit D_80A37570;
 extern InitChainEntry D_80A37B88[];
 
+extern UNK_TYPE D_0600466C;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/EnSyatekiOkuta_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/EnSyatekiOkuta_Destroy.s")

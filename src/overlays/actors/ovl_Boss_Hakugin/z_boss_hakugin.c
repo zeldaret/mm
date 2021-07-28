@@ -195,6 +195,15 @@ extern DamageTable D_80B0EA60;
 extern CollisionCheckInfoInit D_80B0EA80;
 extern InitChainEntry D_80B0EAD8[];
 
+extern UNK_TYPE D_06002054;
+extern UNK_TYPE D_0600319C;
+extern UNK_TYPE D_06010488;
+extern UNK_TYPE D_06011208;
+extern UNK_TYPE D_06012ED0;
+extern UNK_TYPE D_060134D0;
+extern UNK_TYPE D_06013828;
+extern UNK_TYPE D_06014040;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/BossHakugin_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/BossHakugin_Destroy.s")

@@ -70,6 +70,10 @@ static DamageTable D_80A1939C = {
 extern ColliderCylinderInit D_80A18EE0;
 extern DamageTable D_80A1939C;
 
+extern UNK_TYPE D_06000108;
+extern UNK_TYPE D_060024E0;
+extern UNK_TYPE D_060032F8;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A16D40.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A16D6C.s")

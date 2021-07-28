@@ -94,6 +94,9 @@ extern ColliderJntSphInit D_809EE1B4;
 extern ColliderJntSphElementInit D_809EE1C4[1];
 extern ColliderJntSphInit D_809EE1E8;
 
+extern UNK_TYPE D_0600004C;
+extern UNK_TYPE D_06004510;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_04/func_809EC040.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_04/Boss04_Init.s")

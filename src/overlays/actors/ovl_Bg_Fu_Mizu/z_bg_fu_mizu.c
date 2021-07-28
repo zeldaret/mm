@@ -24,6 +24,9 @@ const ActorInit Bg_Fu_Mizu_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_060037D8;
+extern UNK_TYPE D_060037F8;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Fu_Mizu/BgFuMizu_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Fu_Mizu/BgFuMizu_Destroy.s")

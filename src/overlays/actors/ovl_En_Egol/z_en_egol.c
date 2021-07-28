@@ -122,6 +122,10 @@ extern ColliderJntSphInit D_80A80D4C;
 extern ColliderQuadInit D_80A80D5C;
 extern DamageTable D_80A80DAC;
 
+extern UNK_TYPE D_06000040;
+extern UNK_TYPE D_060094E4;
+extern UNK_TYPE D_0600EE4C;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Egol/func_80A7C990.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Egol/func_80A7CA18.s")

@@ -24,6 +24,8 @@ const ActorInit Demo_Tre_Lgt_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06007D78;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Tre_Lgt/DemoTreLgt_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Tre_Lgt/DemoTreLgt_Destroy.s")

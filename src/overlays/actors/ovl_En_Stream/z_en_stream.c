@@ -31,6 +31,8 @@ static InitChainEntry D_80965B20[] = {
 
 extern InitChainEntry D_80965B20[];
 
+extern UNK_TYPE D_06000950;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stream/func_80965650.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stream/EnStream_Init.s")

@@ -35,6 +35,9 @@ static InitChainEntry D_80AC9D70[] = {
 
 extern InitChainEntry D_80AC9D70[];
 
+extern UNK_TYPE D_06001E40;
+extern UNK_TYPE D_060048D0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Ocarinalift/func_80AC94C0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Ocarinalift/ObjOcarinalift_Init.s")

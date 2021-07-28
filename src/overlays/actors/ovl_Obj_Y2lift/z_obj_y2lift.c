@@ -34,6 +34,9 @@ static InitChainEntry D_80B9A940[] = {
 
 extern InitChainEntry D_80B9A940[];
 
+extern UNK_TYPE D_06001680;
+extern UNK_TYPE D_060019B0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Y2lift/ObjY2lift_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Y2lift/ObjY2lift_Destroy.s")

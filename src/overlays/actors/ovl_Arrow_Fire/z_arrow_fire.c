@@ -33,6 +33,8 @@ const ActorInit Arrow_Fire_InitVars = {
 
 extern ColliderQuadInit D_80922230;
 
+extern UNK_TYPE D_0E0002E0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Fire/FireArrow_SetUpdateFunc.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Fire/ArrowFire_Init.s")

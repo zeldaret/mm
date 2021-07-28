@@ -23,6 +23,9 @@ const ActorInit Demo_Effect_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06000050;
+extern UNK_TYPE D_06000060;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Effect/DemoEffect_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Effect/DemoEffect_Destroy.s")

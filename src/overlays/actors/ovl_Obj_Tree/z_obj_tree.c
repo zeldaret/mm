@@ -74,6 +74,9 @@ extern ColliderCylinderInit D_80B9A570;
 extern DamageTable D_80B9A59C;
 extern CollisionCheckInfoInit2 D_80B9A5BC;
 
+extern UNK_TYPE D_06000680;
+extern UNK_TYPE D_06001B2C;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tree/ObjTree_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tree/ObjTree_Destroy.s")

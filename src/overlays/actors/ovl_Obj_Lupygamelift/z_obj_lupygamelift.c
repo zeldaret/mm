@@ -34,6 +34,9 @@ static InitChainEntry D_80AF0740[] = {
 
 extern InitChainEntry D_80AF0740[];
 
+extern UNK_TYPE D_060048D0;
+extern UNK_TYPE D_060071B8;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lupygamelift/ObjLupygamelift_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lupygamelift/ObjLupygamelift_Destroy.s")

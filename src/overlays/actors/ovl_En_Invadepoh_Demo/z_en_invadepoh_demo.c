@@ -75,6 +75,13 @@ extern InitChainEntry D_80C1AAA0[];
 extern InitChainEntry D_80C1AAB0[];
 extern InitChainEntry D_80C1AAC8[];
 
+extern UNK_TYPE D_06000560;
+extern UNK_TYPE D_06001D80;
+extern UNK_TYPE D_06004264;
+extern UNK_TYPE D_06004E98;
+extern UNK_TYPE D_06011FC8;
+extern UNK_TYPE D_06016588;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C192A0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C192B0.s")

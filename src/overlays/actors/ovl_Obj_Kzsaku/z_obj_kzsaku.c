@@ -24,6 +24,9 @@ const ActorInit Obj_Kzsaku_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06000040;
+extern UNK_TYPE D_06001118;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kzsaku/ObjKzsaku_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kzsaku/ObjKzsaku_Destroy.s")

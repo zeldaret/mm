@@ -51,6 +51,10 @@ extern ColliderTrisElementInit D_80C0A620[2];
 extern ColliderTrisInit D_80C0A698;
 extern InitChainEntry D_80C0A6A8[];
 
+extern UNK_TYPE D_06002178;
+extern UNK_TYPE D_06002380;
+extern UNK_TYPE D_06002498;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Astr_Bombwall/func_80C09ED0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Astr_Bombwall/BgAstrBombwall_Init.s")

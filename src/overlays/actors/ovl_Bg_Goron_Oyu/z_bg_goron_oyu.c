@@ -24,6 +24,9 @@ const ActorInit Bg_Goron_Oyu_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06000968;
+extern UNK_TYPE D_06000988;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Goron_Oyu/func_80B40080.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Goron_Oyu/func_80B4009C.s")

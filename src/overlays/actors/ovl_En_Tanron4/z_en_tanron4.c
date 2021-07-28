@@ -24,6 +24,8 @@ const ActorInit En_Tanron4_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06000168;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron4/EnTanron4_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron4/EnTanron4_Destroy.s")

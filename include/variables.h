@@ -16,103 +16,6 @@ extern s32 osAppNmiBuffer[0x10];
 extern u16 gFramebuffer1[SCREEN_HEIGHT][SCREEN_WIDTH]; // at 0x80000500
 extern u8 D_80025D00[];
 
-// keep objects
-extern Gfx D_040008D0[];
-extern UNK_TYPE D_040032B0;
-extern UNK_TYPE D_0400DEA8;
-extern UNK_TYPE D_0400E2A8;
-extern UNK_TYPE D_0401A4D0;
-extern UNK_TYPE D_0401A538;
-extern UNK_TYPE D_0401A620;
-extern Gfx D_0401C430[];
-extern UNK_TYPE D_0401F740;
-extern UNK_TYPE D_0401F7C0;
-extern UNK_TYPE D_0401F8C0;
-extern UNK_TYPE D_04023130;
-extern Gfx D_04023210[];
-extern Gfx D_04029CB0[];
-extern Gfx D_04029CF0[];
-extern Gfx D_0402E510[];
-extern Gfx D_04030100[]; // Floor shockwave ring
-extern UNK_TYPE D_040301B0;
-extern UNK_TYPE D_04032270;
-extern UNK_TYPE D_04035710;
-extern UNK_TYPE D_040367B0;
-extern UNK_TYPE D_040377B0;
-extern UNK_TYPE D_04037850;
-extern Gfx D_040378F0[]; // gExplosionSplashTex1
-extern Gfx D_04037DF0[]; // gExplosionSplashTex2
-extern Gfx D_040382F0[]; // gExplosionSplashTex3
-extern Gfx D_040387F0[]; // gExplosionSplashTex4
-extern Gfx D_04038CF0[]; // gExplosionSplashTex5
-extern Gfx D_040391F0[]; // gExplosionSplashTex6
-extern Gfx D_040396F0[]; // gExplosionSplashTex7
-extern Gfx D_04039BF0[]; // gExplosionSplashTex8
-extern Gfx D_0403A0F0[]; // gExplosionSplashDL
-extern UNK_TYPE D_0403C190;
-extern UNK_TYPE D_0403F230;
-extern UNK_TYPE D_04044300;
-extern Gfx D_04048DF0[];
-extern Gfx D_04054A90[];
-extern Gfx D_04057B10[];
-extern Gfx D_04058BA0[];
-extern Gfx D_04089070[];
-extern u64 D_0408DBE0[]; // gDust1Tex
-extern u64 D_0408DFE0[]; // gDust2Tex
-extern u64 D_0408E3E0[]; // gDust3Tex
-extern u64 D_0408E7E0[]; // gDust4Tex
-extern u64 D_0408EBE0[]; // gDust5Tex
-extern u64 D_0408EFE0[]; // gDust6Tex
-extern u64 D_0408F3E0[]; // gDust7Tex
-extern u64 D_0408F7E0[]; // gDust8Tex
-extern UNK_TYPE D_04050550;
-extern UNK_TYPE D_04050648;
-extern UNK_TYPE D_040510B0;
-extern UNK_TYPE D_04054940;
-extern Gfx D_0405AAB0[];
-extern UNK_TYPE D_0405B6F0;
-extern UNK_TYPE D_0405BEF0;
-extern UNK_TYPE D_0405C6F0;
-extern UNK_TYPE D_0405CEF0;
-extern UNK_TYPE D_0405E6F0;
-extern Gfx D_0405F6F0[];
-extern UNK_TYPE D_0405F7C0;
-extern UNK_TYPE D_0405FFC0;
-extern UNK_TYPE D_040607C0;
-extern UNK_TYPE D_04060FC0;
-extern UNK_TYPE D_040617C0;
-extern UNK_TYPE D_04061FC0;
-extern UNK_TYPE D_04061FE0;
-extern UNK_TYPE D_04062000;
-extern UNK_TYPE D_04062020;
-extern UNK_TYPE D_04062040;
-extern UNK_TYPE D_04062060;
-extern Gfx D_040622C0[];
-extern UNK_TYPE D_04073F00;
-extern UNK_TYPE D_04075400;
-extern Gfx D_04075A40[];
-extern Gfx D_04075B30[];
-extern Gfx D_04076BC0[];
-extern Gfx D_04077480[];
-extern UNK_TYPE D_04079B10;
-extern UNK_TYPE D_0407D590;
-extern UNK_TYPE D_0407D650;
-extern UNK_TYPE D_04091BE0;
-extern UNK_TYPE D_04091CE0;
-
-extern Gfx D_05000C40[];
-extern Gfx D_05017EA0[]; // pot displaylist
-extern Gfx D_05018090[]; // pot break shard displaylist
-extern Gfx D_0501D980[];
-extern Gfx D_050219E0[];
-
-// other segments
-extern UNK_TYPE D_0E000048;
-extern UNK_TYPE D_0E000088;
-extern UNK_TYPE D_0E000140;
-extern UNK_TYPE D_0E0001C8;
-extern UNK_TYPE D_0E0002C8;
-
 // data
 extern UNK_TYPE1 D_800969C0;
 extern u8 D_80096B20;
@@ -3950,6 +3853,7 @@ extern OSMesg D_80203290[1];
 // extern UNK_TYPE1 D_80208E99;
 // extern UNK_TYPE1 D_80208E9C;
 
+// post-code buffers
 extern u8 gGfxSPTaskYieldBuffer[OS_YIELD_DATA_SIZE];
 extern u8 gGfxSPTaskStack[0x400];
 extern GfxPool gGfxPools[2];
@@ -3959,5 +3863,158 @@ extern u8 gSystemHeap[UNK_SIZE];
 extern u8 D_80780000[0x4600];
 extern u8 D_80784600[0x56200];
 extern u16 gFramebuffer0[SCREEN_HEIGHT][SCREEN_WIDTH];
+
+// keep objects
+
+extern Gfx D_040008D0[];
+extern UNK_TYPE D_040032B0;
+extern UNK_TYPE D_0400CF88;
+extern UNK_TYPE D_0400D568;
+extern UNK_TYPE D_0400DEA8;
+extern UNK_TYPE D_0400E2A8;
+extern UNK_TYPE D_0400EB7C;
+extern UNK_TYPE D_040117A8;
+extern UNK_TYPE D_04012860;
+extern UNK_TYPE D_040128BC;
+extern UNK_TYPE D_04015FA0;
+extern UNK_TYPE D_04016360;
+extern UNK_TYPE D_0401A4D0;
+extern UNK_TYPE D_0401A538;
+extern UNK_TYPE D_0401A620;
+extern Gfx D_0401C430[];
+extern UNK_TYPE D_0401F740;
+extern UNK_TYPE D_0401F7C0;
+extern UNK_TYPE D_0401F8C0;
+extern UNK_TYPE D_0401FA40;
+extern UNK_TYPE D_04020BB8;
+extern UNK_TYPE D_040221B8;
+extern UNK_TYPE D_04023100;
+extern UNK_TYPE D_04023130;
+extern Gfx D_04023210[];
+extern UNK_TYPE D_04023288;
+extern UNK_TYPE D_04023348;
+extern UNK_TYPE D_04025850;
+extern UNK_TYPE D_04025DD0;
+extern UNK_TYPE D_040281DC;
+extern UNK_TYPE D_04028FEC;
+extern UNK_TYPE D_04029140;
+extern Gfx D_04029CB0[];
+extern Gfx D_04029CF0[];
+extern UNK_TYPE D_04029D20;
+extern UNK_TYPE D_0402B494;
+extern UNK_TYPE D_0402C908;
+extern Gfx D_0402E510[];
+extern UNK_TYPE D_0402E65C;
+extern UNK_TYPE D_0402F0EC;
+extern Gfx D_04030100[]; // Floor shockwave ring
+extern UNK_TYPE D_040301B0;
+extern UNK_TYPE D_04032270;
+extern UNK_TYPE D_04035710;
+extern UNK_TYPE D_040367B0;
+extern UNK_TYPE D_040377B0;
+extern UNK_TYPE D_04037850;
+extern Gfx D_040378F0[]; // gExplosionSplashTex1
+extern Gfx D_04037DF0[]; // gExplosionSplashTex2
+extern Gfx D_040382F0[]; // gExplosionSplashTex3
+extern Gfx D_040387F0[]; // gExplosionSplashTex4
+extern Gfx D_04038CF0[]; // gExplosionSplashTex5
+extern Gfx D_040391F0[]; // gExplosionSplashTex6
+extern Gfx D_040396F0[]; // gExplosionSplashTex7
+extern Gfx D_04039BF0[]; // gExplosionSplashTex8
+extern Gfx D_0403A0F0[]; // gExplosionSplashDL
+extern UNK_TYPE D_0403C190;
+extern UNK_TYPE D_0403F230;
+extern UNK_TYPE D_04044300;
+extern Gfx D_04048DF0[];
+extern UNK_TYPE D_04050D10;
+extern UNK_TYPE D_04051180;
+extern UNK_TYPE D_04051238;
+extern UNK_TYPE D_0405140C;
+extern UNK_TYPE D_040527F0;
+extern Gfx D_04054A90[];
+extern UNK_TYPE D_04055628;
+extern Gfx D_04057B10[];
+extern Gfx D_04058BA0[];
+extern Gfx D_04089070[];
+extern u64 D_0408DBE0[]; // gDust1Tex
+extern u64 D_0408DFE0[]; // gDust2Tex
+extern u64 D_0408E3E0[]; // gDust3Tex
+extern u64 D_0408E7E0[]; // gDust4Tex
+extern u64 D_0408EBE0[]; // gDust5Tex
+extern u64 D_0408EFE0[]; // gDust6Tex
+extern u64 D_0408F3E0[]; // gDust7Tex
+extern u64 D_0408F7E0[]; // gDust8Tex
+extern UNK_TYPE D_04050550;
+extern UNK_TYPE D_04050648;
+extern UNK_TYPE D_040510B0;
+extern UNK_TYPE D_04054940;
+extern Gfx D_0405AAB0[];
+extern UNK_TYPE D_0405B6F0;
+extern UNK_TYPE D_0405BEF0;
+extern UNK_TYPE D_0405C6F0;
+extern UNK_TYPE D_0405CEF0;
+extern UNK_TYPE D_0405E6F0;
+extern Gfx D_0405F6F0[];
+extern UNK_TYPE D_0405F7C0;
+extern UNK_TYPE D_0405FFC0;
+extern UNK_TYPE D_040607C0;
+extern UNK_TYPE D_04060FC0;
+extern UNK_TYPE D_040617C0;
+extern UNK_TYPE D_04061FC0;
+extern UNK_TYPE D_04061FE0;
+extern UNK_TYPE D_04062000;
+extern UNK_TYPE D_04062020;
+extern UNK_TYPE D_04062040;
+extern UNK_TYPE D_04062060;
+extern Gfx D_040622C0[];
+extern UNK_TYPE D_0406AB30;
+extern UNK_TYPE D_0406B730;
+extern UNK_TYPE D_0406BB0C;
+extern UNK_TYPE D_0406F380;
+extern UNK_TYPE D_04073F00;
+extern UNK_TYPE D_04075400;
+extern Gfx D_04075A40[];
+extern Gfx D_04075B30[];
+extern Gfx D_04076BC0[];
+extern Gfx D_04077480[];
+extern UNK_TYPE D_04079B10;
+extern UNK_TYPE D_0407AB10;
+extern UNK_TYPE D_0407AFB0;
+extern UNK_TYPE D_0407D590;
+extern UNK_TYPE D_0407D650;
+extern UNK_TYPE D_0407F218;
+extern UNK_TYPE D_040815D0;
+extern UNK_TYPE D_04081628;
+extern UNK_TYPE D_04083534;
+extern UNK_TYPE D_04091BE0;
+extern UNK_TYPE D_04091CE0;
+
+extern Gfx D_05000C40[];
+extern UNK_TYPE D_05001D20;
+extern UNK_TYPE D_050061E8;
+extern UNK_TYPE D_05006420;
+extern UNK_TYPE D_050066B0;
+extern UNK_TYPE D_05007498;
+extern UNK_TYPE D_050078A0;
+extern UNK_TYPE D_05007938;
+extern UNK_TYPE D_05007E00;
+extern UNK_TYPE D_05008018;
+extern UNK_TYPE D_050085F0;
+extern Gfx D_05017EA0[]; // pot displaylist
+extern Gfx D_05018090[]; // pot break shard displaylist
+extern UNK_TYPE D_050182A8;
+extern UNK_TYPE D_0501B508;
+extern UNK_TYPE D_0501C058;
+extern Gfx D_0501D980[];
+extern Gfx D_050219E0[];
+extern UNK_TYPE D_05023008;
+extern UNK_TYPE D_0502324C;
+
+// other segments
+extern UNK_TYPE D_0E000048;
+extern UNK_TYPE D_0E000088;
+extern UNK_TYPE D_0E000140;
+extern UNK_TYPE D_0E0001C8;
+extern UNK_TYPE D_0E0002C8;
 
 #endif

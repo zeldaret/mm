@@ -23,6 +23,8 @@ const ActorInit Bg_Sinkai_Kabe_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06000048;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Sinkai_Kabe/BgSinkaiKabe_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Sinkai_Kabe/BgSinkaiKabe_Destroy.s")

@@ -98,6 +98,9 @@ extern ColliderQuadInit D_80B8017C;
 extern ColliderQuadInit D_80B801FC;
 extern InitChainEntry D_80B8021C[];
 
+extern UNK_TYPE D_06001E18;
+extern UNK_TYPE D_06002358;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/func_80B7F730.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/BgIkanaMirror_Init.s")

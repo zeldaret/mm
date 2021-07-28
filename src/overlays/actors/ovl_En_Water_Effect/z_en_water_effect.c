@@ -24,6 +24,10 @@ const ActorInit En_Water_Effect_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06000DE0;
+extern UNK_TYPE D_060042B0;
+extern UNK_TYPE D_060043E8;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Water_Effect/func_80A587A0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Water_Effect/func_80A58908.s")

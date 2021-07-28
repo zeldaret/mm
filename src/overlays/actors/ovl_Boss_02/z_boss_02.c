@@ -227,6 +227,11 @@ extern ColliderJntSphElementInit D_809DF93C[2];
 extern ColliderJntSphInit D_809DF984;
 extern ColliderCylinderInit D_809DF994;
 
+extern UNK_TYPE D_060002E0;
+extern UNK_TYPE D_060003A0;
+extern UNK_TYPE D_06008650;
+extern UNK_TYPE D_06009C78;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_02/func_809DA1D0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_02/func_809DA22C.s")

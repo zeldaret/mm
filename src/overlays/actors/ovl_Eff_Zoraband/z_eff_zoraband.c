@@ -24,6 +24,8 @@ const ActorInit Eff_Zoraband_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06000F38;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Zoraband/EffZoraband_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Zoraband/EffZoraband_Destroy.s")

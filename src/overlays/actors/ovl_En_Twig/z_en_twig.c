@@ -34,6 +34,8 @@ static InitChainEntry D_80AC10C0[] = {
 
 extern InitChainEntry D_80AC10C0[];
 
+extern UNK_TYPE D_06001C38;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Twig/EnTwig_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Twig/EnTwig_Destroy.s")

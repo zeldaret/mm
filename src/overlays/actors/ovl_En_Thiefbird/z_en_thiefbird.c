@@ -99,6 +99,13 @@ extern CollisionCheckInfoInit D_80C1363C;
 extern DamageTable D_80C13644;
 extern InitChainEntry D_80C13670[];
 
+extern UNK_TYPE D_06000088;
+extern UNK_TYPE D_06000278;
+extern UNK_TYPE D_06000604;
+extern UNK_TYPE D_06003060;
+extern UNK_TYPE D_060033B0;
+extern UNK_TYPE D_060063C4;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/EnThiefbird_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/EnThiefbird_Destroy.s")

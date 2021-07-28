@@ -68,6 +68,9 @@ extern ColliderJntSphElementInit D_808AE658[2];
 extern ColliderJntSphInit D_808AE6A0;
 extern InitChainEntry D_808AE6B8[];
 
+extern UNK_TYPE D_060000F8;
+extern UNK_TYPE D_06003DC8;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Famos/EnFamos_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Famos/EnFamos_Destroy.s")

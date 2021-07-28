@@ -32,6 +32,8 @@ static InitChainEntry D_808B82E0[] = {
 
 extern InitChainEntry D_808B82E0[];
 
+extern UNK_TYPE D_06000A50;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Breakwall/func_808B7360.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Breakwall/func_808B736C.s")

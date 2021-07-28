@@ -68,6 +68,9 @@ extern ColliderTrisElementInit D_80A1F040[6];
 extern ColliderTrisInit D_80A1F1A8;
 extern InitChainEntry D_80A1F204[];
 
+extern UNK_TYPE D_06000460;
+extern UNK_TYPE D_06000E68;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spinyroll/func_80A1DA50.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spinyroll/func_80A1DAAC.s")

@@ -33,6 +33,8 @@ static ColliderCylinderInit D_80C15078 = {
 
 extern ColliderCylinderInit D_80C15078;
 
+extern UNK_TYPE D_060092FC;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jgame_Tsn/EnJgameTsn_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jgame_Tsn/func_80C13A2C.s")

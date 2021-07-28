@@ -231,6 +231,30 @@ extern ColliderJntSphInit D_809D7C64;
 extern ColliderCylinderInit D_809D7C74;
 extern ColliderCylinderInit D_809D7CA0;
 
+extern UNK_TYPE D_06000C44;
+extern UNK_TYPE D_06001884;
+extern UNK_TYPE D_0600C338;
+extern UNK_TYPE D_0600C5E0;
+extern UNK_TYPE D_0600C7A8;
+extern UNK_TYPE D_0600E3E8;
+extern UNK_TYPE D_0600FDEC;
+extern UNK_TYPE D_0600FF94;
+extern UNK_TYPE D_06010980;
+extern UNK_TYPE D_060124CC;
+extern UNK_TYPE D_06012B70;
+extern UNK_TYPE D_06012D10;
+extern UNK_TYPE D_06012EBC;
+extern UNK_TYPE D_06013480;
+extern UNK_TYPE D_0601407C;
+extern UNK_TYPE D_06014F14;
+extern UNK_TYPE D_06015A30;
+extern UNK_TYPE D_06016168;
+extern UNK_TYPE D_060164CC;
+extern UNK_TYPE D_0601F6A4;
+extern UNK_TYPE D_060204AC;
+extern UNK_TYPE D_060213A8;
+extern UNK_TYPE D_06022550;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_01/func_809D0530.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_01/func_809D0550.s")

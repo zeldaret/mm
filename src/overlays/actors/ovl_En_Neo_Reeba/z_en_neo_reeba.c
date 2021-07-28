@@ -70,6 +70,8 @@ static ColliderCylinderInit D_80B7E520 = {
 extern DamageTable D_80B7E500;
 extern ColliderCylinderInit D_80B7E520;
 
+extern UNK_TYPE D_060001E4;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Neo_Reeba/EnNeoReeba_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Neo_Reeba/EnNeoReeba_Destroy.s")

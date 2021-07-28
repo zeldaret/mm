@@ -24,6 +24,8 @@ const ActorInit En_Hata_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06002FD0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hata/EnHata_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hata/EnHata_Destroy.s")

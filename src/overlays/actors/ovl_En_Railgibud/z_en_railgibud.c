@@ -82,6 +82,9 @@ extern DamageTable D_80BA82CC;
 extern CollisionCheckInfoInit2 D_80BA82EC;
 extern InitChainEntry D_80BA82FC[];
 
+extern UNK_TYPE D_0600ABE0;
+extern UNK_TYPE D_06010B88;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Railgibud/func_80BA5400.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Railgibud/EnRailgibud_Init.s")

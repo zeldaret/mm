@@ -24,6 +24,9 @@ const ActorInit En_Wiz_Brock_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_060010E8;
+extern UNK_TYPE D_06001690;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz_Brock/EnWizBrock_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz_Brock/EnWizBrock_Destroy.s")

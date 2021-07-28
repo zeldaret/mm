@@ -24,6 +24,9 @@ const ActorInit Bg_Crace_Movebg_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_060003A0;
+extern UNK_TYPE D_06000E00;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Crace_Movebg/BgCraceMovebg_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Crace_Movebg/func_80A7090C.s")

@@ -61,6 +61,10 @@ extern ColliderCylinderInit D_80976068;
 extern ColliderJntSphElementInit D_80976094[1];
 extern ColliderJntSphInit D_809760B8;
 
+extern UNK_TYPE D_060000D8;
+extern UNK_TYPE D_06000304;
+extern UNK_TYPE D_06005850;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ssh/func_80973EF0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ssh/func_80973EFC.s")

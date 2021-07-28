@@ -84,6 +84,13 @@ extern CollisionCheckInfoInit D_80A2972C;
 extern DamageTable D_80A29734;
 extern InitChainEntry D_80A29764[];
 
+extern UNK_TYPE D_06000440;
+extern UNK_TYPE D_06000AF4;
+extern UNK_TYPE D_06001C68;
+extern UNK_TYPE D_060031DC;
+extern UNK_TYPE D_06004210;
+extern UNK_TYPE D_0600823C;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bigpamet/EnBigpamet_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bigpamet/EnBigpamet_Destroy.s")

@@ -24,6 +24,10 @@ const ActorInit En_Egblock_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06001698;
+extern UNK_TYPE D_06001820;
+extern UNK_TYPE D_06001BF8;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Egblock/EnEgblock_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Egblock/EnEgblock_Destroy.s")

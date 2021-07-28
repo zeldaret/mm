@@ -24,6 +24,11 @@ const ActorInit Demo_Syoten_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_0600023C;
+extern UNK_TYPE D_06001298;
+extern UNK_TYPE D_060018C0;
+extern UNK_TYPE D_06002880;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/DemoSyoten_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/DemoSyoten_Destroy.s")

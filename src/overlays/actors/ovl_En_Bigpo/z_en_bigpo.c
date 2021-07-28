@@ -80,6 +80,14 @@ extern CollisionCheckInfoInit D_80B6503C;
 extern DamageTable D_80B65044;
 extern InitChainEntry D_80B65064[];
 
+extern UNK_TYPE D_06000454;
+extern UNK_TYPE D_06000924;
+extern UNK_TYPE D_06001360;
+extern UNK_TYPE D_06001BB0;
+extern UNK_TYPE D_060041A0;
+extern UNK_TYPE D_060042C8;
+extern UNK_TYPE D_060058B8;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bigpo/EnBigpo_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bigpo/EnBigpo_Destroy.s")

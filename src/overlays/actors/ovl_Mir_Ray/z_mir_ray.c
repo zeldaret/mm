@@ -58,6 +58,8 @@ extern ColliderJntSphElementInit D_808E3C44[1];
 extern ColliderJntSphInit D_808E3C68;
 extern InitChainEntry D_808E3DB8[];
 
+extern UNK_TYPE D_060003F8;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray/D_808E3DD0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray/func_808E2600.s")

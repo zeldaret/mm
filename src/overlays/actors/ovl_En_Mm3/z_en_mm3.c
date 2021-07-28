@@ -37,6 +37,8 @@ static CollisionCheckInfoInit2 D_80A7041C = { 0, 0, 0, 0, MASS_IMMOVABLE };
 extern ColliderCylinderInit D_80A703F0;
 extern CollisionCheckInfoInit2 D_80A7041C;
 
+extern UNK_TYPE D_0600A4E0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mm3/EnMm3_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mm3/EnMm3_Destroy.s")

@@ -82,6 +82,17 @@ extern DamageTable D_8087638C;
 extern CollisionCheckInfoInit D_808763AC;
 extern InitChainEntry D_808763B4[];
 
+extern UNK_TYPE D_06000590;
+extern UNK_TYPE D_06000EA4;
+extern UNK_TYPE D_060019CC;
+extern UNK_TYPE D_0600299C;
+extern UNK_TYPE D_060041F4;
+extern UNK_TYPE D_06008688;
+extern UNK_TYPE D_06009244;
+extern UNK_TYPE D_06009520;
+extern UNK_TYPE D_06009DB0;
+extern UNK_TYPE D_0600A054;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/EnWallmas_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/EnWallmas_Destroy.s")

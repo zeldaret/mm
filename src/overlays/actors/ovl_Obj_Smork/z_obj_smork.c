@@ -24,6 +24,8 @@ const ActorInit Obj_Smork_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06001C00;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Smork/func_80A3D680.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Smork/func_80A3D940.s")

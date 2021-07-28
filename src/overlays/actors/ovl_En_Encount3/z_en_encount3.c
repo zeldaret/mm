@@ -24,6 +24,8 @@ const ActorInit En_Encount3_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_060009A0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Encount3/EnEncount3_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Encount3/EnEncount3_Destroy.s")

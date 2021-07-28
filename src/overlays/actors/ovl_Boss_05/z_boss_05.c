@@ -151,6 +151,16 @@ extern ColliderJntSphInit D_809F1BDC;
 extern DamageTable D_809F1C00;
 extern DamageTable D_809F1C20;
 
+extern UNK_TYPE D_060006A4;
+extern UNK_TYPE D_06000A5C;
+extern UNK_TYPE D_06000ABC;
+extern UNK_TYPE D_06002F0C;
+extern UNK_TYPE D_06003448;
+extern UNK_TYPE D_06006240;
+extern UNK_TYPE D_06006E50;
+extern UNK_TYPE D_06007488;
+extern UNK_TYPE D_06007908;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_05/func_809EE4E0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_05/func_809EE668.s")

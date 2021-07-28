@@ -24,6 +24,9 @@ const ActorInit Bg_Hakugin_Elvpole_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_0600ACB8;
+extern UNK_TYPE D_0600BF40;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Elvpole/BgHakuginElvpole_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Elvpole/BgHakuginElvpole_Destroy.s")
