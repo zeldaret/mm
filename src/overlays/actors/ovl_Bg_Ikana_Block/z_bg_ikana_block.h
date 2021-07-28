@@ -1,7 +1,7 @@
 #ifndef Z_BG_IKANA_BLOCK_H
 #define Z_BG_IKANA_BLOCK_H
 
-#include <global.h>
+#include "global.h"
 
 struct BgIkanaBlock;
 

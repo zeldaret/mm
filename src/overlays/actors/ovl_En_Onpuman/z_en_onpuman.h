@@ -1,7 +1,7 @@
 #ifndef Z_EN_ONPUMAN_H
 #define Z_EN_ONPUMAN_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnOnpuman;
 

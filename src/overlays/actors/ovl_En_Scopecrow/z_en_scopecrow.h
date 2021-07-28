@@ -1,7 +1,7 @@
 #ifndef Z_EN_SCOPECROW_H
 #define Z_EN_SCOPECROW_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnScopecrow;
 

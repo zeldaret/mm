@@ -1,6 +1,6 @@
 /*
  * File z_obj_moon_stone.c
- * Overlay: ovl_obj_moon_stone
+ * Overlay: ovl_Obj_Moon_Stone
  * Description: Moon's Tear
  */
 
@@ -74,10 +74,10 @@ void func_80C0662C(ObjMoonStone* this) {
 }
 
 void func_80C06640(ObjMoonStone* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     s16 sp1A = this->actor.yawTowardsPlayer - 0x8000;
 
-    sp1A -= player->base.shape.rot.y;
+    sp1A -= player->actor.shape.rot.y;
     if (func_800B84D0(&this->actor, globalCtx)) {
         this->actor.colChkInfo.health = 1;
         func_801518B0(globalCtx, 0x5E3U, &this->actor);
@@ -140,7 +140,7 @@ void func_80C06870(ObjMoonStone* this, GlobalContext* globalCtx) {
 
 void ObjMoonStone_Update(Actor* thisx, GlobalContext* globalCtx) {
     ObjMoonStone* this = THIS;
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
     if ((player->stateFlags1 & 0x10000282) == 0) {
         this->actionFunc(this, globalCtx);
@@ -156,7 +156,7 @@ void ObjMoonStone_Draw(Actor* thisx, GlobalContext* globalCtx) {
     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_06001C60));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_06000D78);
-    SysMatrix_NormalizeXYZ(&globalCtx->unk187FC);
+    SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, D_06000C80);
     CLOSE_DISPS(globalCtx->state.gfxCtx);

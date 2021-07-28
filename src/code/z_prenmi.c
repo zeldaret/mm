@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 void PreNMI_Stop(PreNMIContext* prenmiCtx) {
     prenmiCtx->state.running = 0;

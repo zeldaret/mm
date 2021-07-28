@@ -9,7 +9,7 @@ void EnDai_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDai_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDai_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Dai_InitVars = {
     ACTOR_EN_DAI,
     ACTORCAT_NPC,
@@ -21,7 +21,8 @@ const ActorInit En_Dai_InitVars = {
     (ActorFunc)EnDai_Update,
     (ActorFunc)EnDai_Draw,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dai/func_80B3DFF0.s")
 

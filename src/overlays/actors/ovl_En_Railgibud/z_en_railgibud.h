@@ -1,7 +1,7 @@
 #ifndef Z_EN_RAILGIBUD_H
 #define Z_EN_RAILGIBUD_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnRailgibud;
 

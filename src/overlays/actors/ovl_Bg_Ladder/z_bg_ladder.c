@@ -3,6 +3,7 @@
  * Overlay: ovl_Bg_Ladder
  * Description: Wooden Ladder
  */
+
 #include "z_bg_ladder.h"
 
 #define FLAGS 0x00000010
@@ -109,7 +110,7 @@ void BgLadder_ActionStartCutscene(BgLadder* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         this->dyna.actor.draw = BgLadder_Draw;
-        Audio_PlayActorSound2(this, 0x2997);
+        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_SECRET_LADDER_APPEAR);
         this->action = BgLadder_ActionFadeIn;
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);

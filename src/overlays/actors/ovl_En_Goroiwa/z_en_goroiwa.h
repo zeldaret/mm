@@ -1,7 +1,7 @@
 #ifndef Z_EN_GOROIWA_H
 #define Z_EN_GOROIWA_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnGoroiwa;
 

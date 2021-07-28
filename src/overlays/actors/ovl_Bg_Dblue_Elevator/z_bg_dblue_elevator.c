@@ -9,7 +9,7 @@ void BgDblueElevator_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgDblueElevator_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgDblueElevator_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Bg_Dblue_Elevator_InitVars = {
     ACTOR_BG_DBLUE_ELEVATOR,
     ACTORCAT_BG,
@@ -21,7 +21,19 @@ const ActorInit Bg_Dblue_Elevator_InitVars = {
     (ActorFunc)BgDblueElevator_Update,
     (ActorFunc)BgDblueElevator_Draw,
 };
-*/
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80B929EC[] = {
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 250, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 250, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
+};
+
+
+extern InitChainEntry D_80B929EC[];
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Dblue_Elevator/func_80B91F20.s")
 

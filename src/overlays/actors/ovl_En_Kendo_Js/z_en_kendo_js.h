@@ -1,7 +1,7 @@
 #ifndef Z_EN_KENDO_JS_H
 #define Z_EN_KENDO_JS_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnKendoJs;
 

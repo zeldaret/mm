@@ -8,7 +8,7 @@ void EnEncount4_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnEncount4_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnEncount4_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Encount4_InitVars = {
     ACTOR_EN_ENCOUNT4,
     ACTORCAT_PROP,
@@ -20,7 +20,8 @@ const ActorInit En_Encount4_InitVars = {
     (ActorFunc)EnEncount4_Update,
     (ActorFunc)NULL,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Encount4/EnEncount4_Init.s")
 

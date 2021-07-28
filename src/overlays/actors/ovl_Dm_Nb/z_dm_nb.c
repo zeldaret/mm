@@ -27,19 +27,18 @@ const ActorInit Dm_Nb_InitVars = {
     (ActorFunc)DmNb_Draw,
 };
 
-extern UNK_TYPE D_06000990;
+extern AnimationHeader D_06000990;
 
 extern FlexSkeletonHeader D_06008C40;
 
-// Probably the same struct as ActorAnimationEntryS, need more info from func_8013BC6C
-static UNK_TYPE D_80C1E200[] = { &D_06000990, 0x3F800000, 0x0000FFFF, 0x00000000 };
+static ActorAnimationEntryS D_80C1E200[] = { &D_06000990, 1.0f, 0, -1, 0, 0 };
 
 s32 func_80C1DED0(DmNb* this, s32 arg1) {
     s32 ret = 0;
 
     if (arg1 != this->unk1F0) {
         this->unk1F0 = arg1;
-        ret = func_8013BC6C(&this->skelAnime, &D_80C1E200, arg1);
+        ret = func_8013BC6C(&this->skelAnime, D_80C1E200, arg1);
     }
     return ret;
 }
@@ -57,7 +56,7 @@ void func_80C1DF18(DmNb* this, GlobalContext* globalCtx) {
         }
         if (func_800EE29C(globalCtx, 0x232)) {
             actionIndex = func_800EE200(globalCtx, 0x232);
-            actionUnk0 = globalCtx->csCtx.actorActions[actionIndex]->unk0;
+            actionUnk0 = globalCtx->csCtx.npcActions[actionIndex]->unk0;
             if (this->unk1EC != (actionUnk0 & 0xFF)) {
                 this->unk1EC = actionUnk0;
                 func_80C1DED0(this, sp2C[actionUnk0]);
@@ -90,7 +89,7 @@ void DmNb_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-    func_800B78B8(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 0x4);
 }
 
 void DmNb_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* actor) {

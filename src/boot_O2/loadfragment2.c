@@ -1,12 +1,11 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 UNK_TYPE4 D_80096C30 = 2;
 
 #ifdef NON_MATCHING
 // This needs lots of work. Mostly regalloc and getting the address of D_80096C30 placed in s5 at the beginning of the
 // function
-void Load2_Relocate(u32 allocatedVRamAddr, OverlayBlockSizes* overlayInfo, u32 vRamStart) {
+void Load2_Relocate(u32 allocatedVRamAddr, OverlayRelocationSection* overlayInfo, u32 vRamStart) {
     s32 sectionLocations[4];
     u32* regReferences[32];
     u32 regValues[32];
@@ -22,7 +21,7 @@ void Load2_Relocate(u32 allocatedVRamAddr, OverlayBlockSizes* overlayInfo, u32 v
     sectionLocations[1] = allocatedVRamAddr;
     sectionLocations[2] = overlayInfo->textSize + allocatedVRamAddr;
     sectionLocations[3] = sectionLocations[2] + overlayInfo->dataSize;
-    for (i = 0, relocationIndex = 0; i < overlayInfo->amountOfRelocations; relocationIndex++) {
+    for (i = 0, relocationIndex = 0; i < overlayInfo->nRelocations; relocationIndex++) {
         relocation = overlayInfo->relocations[relocationIndex];
         i++;
         inst = (u32*)(sectionLocations[relocation >> 0x1e] + (relocation & 0xffffff));
@@ -69,7 +68,7 @@ s32 Load2_LoadOverlay(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd, u3
     u32 pad;
     u32 size;
     void* end;
-    OverlayBlockSizes* overlayInfo;
+    OverlayRelocationSection* overlayInfo;
 
     size = vRomEnd - vRomStart;
 
@@ -80,7 +79,7 @@ s32 Load2_LoadOverlay(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd, u3
     DmaMgr_SendRequest0(allocatedVRamAddr, vRomStart, size);
 
     end = (void*)(allocatedVRamAddr + size);
-    overlayInfo = (OverlayBlockSizes*)((int)end - *(int*)((int)end + -4));
+    overlayInfo = (OverlayRelocationSection*)((int)end - *(int*)((int)end + -4));
 
     if (1) {
         ;

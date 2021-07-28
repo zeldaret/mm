@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 #define FILL_ALLOCBLOCK (1 << 0)
 #define FILL_FREEBLOCK (1 << 1)
@@ -15,6 +14,8 @@
 #define BLOCK_FREE_MAGIC_32 (0xEFEFEFEF)
 
 extern OSMesg sArenaLockMsg[1];
+
+#pragma GLOBAL_ASM("asm/non_matchings/boot/__osMalloc/D_80099110.s")
 
 void ArenaImpl_LockInit(Arena* arena) {
     osCreateMesgQueue(&arena->lock, sArenaLockMsg, ARRAY_COUNT(sArenaLockMsg));

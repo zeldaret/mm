@@ -86,12 +86,12 @@ void EnCha_Ring(EnCha* this, GlobalContext* globalCtx) {
 
 void EnCha_Idle(EnCha* this, GlobalContext* globalCtx) {
     if (gSaveContext.weekEventReg[60] & 4) {
-        Audio_PlayActorSound2(&this->actor, 0x289E);
+        Audio_PlayActorSound2(&this->actor, NA_SE_EV_DOOR_BELL);
         gSaveContext.weekEventReg[60] &= 0xFB;
         this->actor.home.rot.z = 0x7D0;
     }
     if (this->collider.base.acFlags & AC_HIT) {
-        Audio_PlayActorSound2(&this->actor, 0x289E);
+        Audio_PlayActorSound2(&this->actor, NA_SE_EV_DOOR_BELL);
         this->actor.home.rot.z = 0x7D0;
         if (!(gSaveContext.weekEventReg[51] & 4)) {
             gSaveContext.weekEventReg[51] |= 4;
@@ -107,10 +107,10 @@ void EnCha_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnCha* this = THIS;
     GlobalContext* globalCtx2 = globalCtx;
 
-    CollisionCheck_SetOC(globalCtx, &globalCtx2->colCheckCtx, &this->collider.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx2->colChkCtx, &this->collider.base);
     this->actionFunc(this, globalCtx);
     if ((this->actor.shape.rot.z >= -0x1F3F) && (this->actor.shape.rot.z < 0x1F40)) {
-        CollisionCheck_SetAC(globalCtx, &globalCtx2->colCheckCtx, &this->collider.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx2->colChkCtx, &this->collider.base);
     }
 }
 

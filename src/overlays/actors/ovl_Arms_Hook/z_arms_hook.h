@@ -1,7 +1,7 @@
 #ifndef Z_ARMS_HOOK_H
 #define Z_ARMS_HOOK_H
 
-#include <global.h>
+#include "global.h"
 
 struct ArmsHook;
 

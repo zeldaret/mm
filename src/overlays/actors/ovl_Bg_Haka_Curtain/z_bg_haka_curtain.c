@@ -106,7 +106,7 @@ void func_80B6DD9C(BgHakaCurtain* this, GlobalContext* globalCtx) {
         func_80B6DE80(this);
         return;
     }
-    func_800B9010(&this->dyna.actor, 0x218D);
+    func_800B9010(&this->dyna.actor, NA_SE_EV_CURTAIN_DOWN - SFX_FLAG);
 }
 
 void func_80B6DE80(BgHakaCurtain* this) {
@@ -122,7 +122,7 @@ void BgHakaCurtain_Update(Actor* thisx, GlobalContext* globalCtx) {
     CsCmdActorAction* actorAction;
 
     if (func_800EE29C(globalCtx, 0x1D5)) {
-        actorAction = globalCtx->csCtx.actorActions[func_800EE200(globalCtx, 0x1D5)];
+        actorAction = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x1D5)];
         if (actorAction->startFrame == globalCtx->csCtx.frames && actorAction->unk0 == 2) {
             func_80B6DD80(this);
         }

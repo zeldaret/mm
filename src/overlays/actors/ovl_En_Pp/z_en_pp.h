@@ -1,7 +1,7 @@
 #ifndef Z_EN_PP_H
 #define Z_EN_PP_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnPp;
 

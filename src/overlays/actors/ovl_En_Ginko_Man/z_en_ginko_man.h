@@ -1,7 +1,7 @@
 #ifndef Z_EN_GINKO_MAN_H
 #define Z_EN_GINKO_MAN_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnGinkoMan;
 
@@ -50,8 +50,5 @@ typedef enum {
     /* 3 */ GINKO_AMAZED,
     /* 4 */ GINKO_ADVERTISING,
 } GinkoAnimationIndex;
-
-// values to get wallet capacity
-extern u16 D_801C1E2C[]; // wallet capacities
 
 #endif // Z_EN_GINKO_MAN_H

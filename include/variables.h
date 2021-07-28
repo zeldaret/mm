@@ -1,10 +1,10 @@
 #ifndef _VARIABLES_H_
 #define _VARIABLES_H_
 
-#include <z64.h>
-#include <segment_symbols.h>
-#include <segment.h>
-#include <section.h>
+#include "z64.h"
+#include "segment_symbols.h"
+#include "segment.h"
+#include "section.h"
 
 // pre-boot variables
 extern UNK_TYPE osTvType;
@@ -373,10 +373,6 @@ extern ActorInit En_A_Obj_InitVars;
 extern ColliderCylinderInit enAObjCylinderInit;
 extern InitChainEntry enAObjInitVar;
 extern Gfx* enAObjDisplayLists[2];
-extern Color_RGBA8 D_801ADF10;
-extern Color_RGBA8 D_801ADF14;
-extern Vec3f D_801ADF18;
-extern Vec3f D_801ADF24;
 extern UNK_PTR D_801ADF30[5];
 extern UNK_PTR D_801ADF44[12];
 extern u8 sDropTable[DROP_TABLE_SIZE * DROP_TABLE_NUMBER];
@@ -1390,12 +1386,6 @@ extern UNK_PTR D_801C0B0C;
 // extern UNK_TYPE1 D_801C0EA0;
 // extern UNK_TYPE1 D_801C0EAC;
 // extern UNK_TYPE1 D_801C0EB8;
-// extern UNK_TYPE2 D_801C0EC0;
-extern s16 sQuakeRequestCount;
-extern quake_callback_func sQuakeCallbacks[7];
-extern s16 D_801C0EE4;
-extern s16 D_801C0EE8;
-extern s16 D_801C0EEC;
 extern Gfx sSetupDL[438];
 extern Gfx sFillSetupDL[12];
 extern Gfx gEmptyDL[1];
@@ -1413,7 +1403,7 @@ extern u32 gGsFlagsMask[];
 extern u32 gGsFlagsShift[];
 extern void* gItemIcons[];
 extern u8 gItemSlots[];
-extern u16 gItemPrices[];
+extern s16 gItemPrices[];
 extern u16 gScenesPerRegion[11][27];
 extern u32 D_801C2410[];
 extern s16 gLinkFormObjectIndexes[8];
@@ -1679,7 +1669,7 @@ extern u32 D_801D1514[3];
 extern s32 gScreenWidth;
 extern s32 gScreenHeight;
 // extern UNK_TYPE4 startHeapSize;
-extern PadmgrThreadStruct* padmgrContext;
+extern PadMgr* padmgrContext;
 // extern UNK_TYPE4 controllerInputsCaptured;
 // extern UNK_TYPE4 D_801D1538;
 extern UNK_PTR D_801D1540;
@@ -1888,7 +1878,7 @@ extern UNK_PTR D_801DB478[7];
 // extern UNK_TYPE1 D_801DB494;
 // extern UNK_TYPE1 D_801DB49C;
 // extern UNK_TYPE2 D_801DB4A0;
-// extern UNK_TYPE4 D_801DB4A4;
+extern UNK_TYPE D_801DB4A4;
 // extern UNK_TYPE1 D_801DB4B0;
 // extern UNK_TYPE1 D_801DB4B8;
 // extern UNK_TYPE1 D_801DB4C0;
@@ -3381,8 +3371,8 @@ extern s32* gNMIBuffer;
 // extern UNK_TYPE1 D_801F59F0;
 // extern UNK_TYPE1 D_801F59F4;
 // extern UNK_TYPE1 D_801F59F8;
-extern QuakeRequest sQuakeRequest[4];
-extern Quake2Context sQuake2Context;
+// extern QuakeRequest sQuakeRequest[4];
+// extern Quake2Context sQuake2Context;
 extern s32 sMatAnimStep;
 extern u32 sMatAnimFlags;
 extern f32 sMatAnimAlphaRatio;
@@ -3453,8 +3443,8 @@ extern u64 lastRenderFrameTimestamp;
 extern OSMesgQueue siEventCallbackQueue;
 extern OSMesg siEventCallbackBuffer[1];
 extern u32 gSegments[NUM_SEGMENTS];
-extern SchedThreadStruct schedContext;
-extern OSMesgQueueListNode mainIrqmgrCallbackNode;
+extern SchedContext schedContext;
+extern IrqMgrClient mainIrqmgrCallbackNode;
 extern OSMesgQueue mainIrqmgrCallbackQueue;
 extern OSMesg mainIrqCallbackBuffer[60];
 extern OSThread graphOSThread;
@@ -3466,8 +3456,8 @@ extern StackEntry graphStackEntry;
 extern StackEntry schedStackEntry;
 extern StackEntry audioStackEntry;
 extern StackEntry padmgrStackEntry;
-extern AudioThreadStruct audioContext;
-extern PadmgrThreadStruct D_801FB620;
+extern AudioMgr audioContext;
+extern PadMgr D_801FB620;
 // extern UNK_TYPE1 D_801FBAA0;
 // extern UNK_TYPE1 D_801FBAB0;
 // extern UNK_TYPE1 D_801FBAB4;

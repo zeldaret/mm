@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 void TitleSetup_GameStateResetContext(void) {
     XREG(2) = 0;

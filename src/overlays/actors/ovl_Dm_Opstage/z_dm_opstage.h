@@ -1,7 +1,7 @@
 #ifndef Z_DM_OPSTAGE_H
 #define Z_DM_OPSTAGE_H
 
-#include <global.h>
+#include "global.h"
 
 struct DmOpstage;
 

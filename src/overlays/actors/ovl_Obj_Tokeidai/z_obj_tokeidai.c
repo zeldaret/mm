@@ -9,7 +9,7 @@ void ObjTokeidai_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjTokeidai_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjTokeidai_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Obj_Tokeidai_InitVars = {
     ACTOR_OBJ_TOKEIDAI,
     ACTORCAT_PROP,
@@ -21,7 +21,8 @@ const ActorInit Obj_Tokeidai_InitVars = {
     (ActorFunc)ObjTokeidai_Update,
     (ActorFunc)ObjTokeidai_Draw,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB2790.s")
 

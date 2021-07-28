@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 void EffectSS_Init(GlobalContext* globalCtx, s32 numEntries) {
     u32 i;
@@ -10,7 +9,8 @@ void EffectSS_Init(GlobalContext* globalCtx, s32 numEntries) {
     EffectSS2Info.searchIndex = 0;
     EffectSS2Info.size = numEntries;
 
-    for (effectsSs = &EffectSS2Info.data_table[0]; effectsSs < &EffectSS2Info.data_table[EffectSS2Info.size]; effectsSs++) {
+    for (effectsSs = &EffectSS2Info.data_table[0]; effectsSs < &EffectSS2Info.data_table[EffectSS2Info.size];
+         effectsSs++) {
         EffectSS_ResetEntry(effectsSs);
     }
 
@@ -97,7 +97,7 @@ s32 EffectSS_FindFreeSpace(s32 priority, s32* tableEntry) {
     // Search for a unused entry
     i = EffectSS2Info.searchIndex;
     foundFree = false;
-    while(true) {
+    while (true) {
         if (EffectSS2Info.data_table[i].life == -1) {
             foundFree = true;
             break;
@@ -118,12 +118,12 @@ s32 EffectSS_FindFreeSpace(s32 priority, s32* tableEntry) {
     if (foundFree == true) {
         *tableEntry = i;
         return false;
-    } 
-    
+    }
+
     // If all slots are in use, search for a slot with a lower priority
     // Note that a lower priority is representend by a higher value
     i = EffectSS2Info.searchIndex;
-    while(true) {
+    while (true) {
         // Equal priority should only be considered "lower" if flag 0 is set
         if ((priority <= EffectSS2Info.data_table[i].priority) &&
             !((priority == EffectSS2Info.data_table[i].priority) && (EffectSS2Info.data_table[i].flags & 1))) {
@@ -181,14 +181,13 @@ void EffectSs_Spawn(GlobalContext* globalCtx, s32 type, s32 priority, void* init
                 return;
             }
 
-            Load2_LoadOverlay(entry->vromStart, entry->vromEnd, entry->vramStart, entry->vramEnd,
-                                      entry->loadedRamAddr);
+            Load2_LoadOverlay(entry->vromStart, entry->vromEnd, entry->vramStart, entry->vramEnd, entry->loadedRamAddr);
         }
 
-        overlayInfo = (void*)(u32)(entry->overlayInfo != NULL
-                                       ? (ParticleOverlayInfo*)(-((u32)entry->vramStart - (u32)entry->loadedRamAddr) +
-                                                                (u32)entry->overlayInfo)
-                                       : NULL);
+        overlayInfo = (void*)(u32)(
+            entry->overlayInfo != NULL
+                ? (ParticleOverlayInfo*)(-((u32)entry->vramStart - (u32)entry->loadedRamAddr) + (u32)entry->overlayInfo)
+                : NULL);
     }
 
     if (overlayInfo->init != NULL) {

@@ -1,7 +1,7 @@
 #ifndef Z_EN_DINOFOS_H
 #define Z_EN_DINOFOS_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnDinofos;
 

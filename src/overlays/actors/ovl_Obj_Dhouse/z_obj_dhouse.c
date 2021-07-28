@@ -9,7 +9,7 @@ void ObjDhouse_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjDhouse_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjDhouse_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Obj_Dhouse_InitVars = {
     ACTOR_OBJ_DHOUSE,
     ACTORCAT_BG,
@@ -21,7 +21,19 @@ const ActorInit Obj_Dhouse_InitVars = {
     (ActorFunc)ObjDhouse_Update,
     (ActorFunc)ObjDhouse_Draw,
 };
-*/
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80B13FB4[] = {
+    ICHAIN_F32(uncullZoneForward, 8000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 1000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
+};
+
+
+extern InitChainEntry D_80B13FB4[];
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Dhouse/ObjDhouse_Init.s")
 

@@ -1,7 +1,7 @@
 #ifndef Z_BG_FIRE_WALL_H
 #define Z_BG_FIRE_WALL_H
 
-#include <global.h>
+#include "global.h"
 
 struct BgFireWall;
 

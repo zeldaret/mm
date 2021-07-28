@@ -1,7 +1,7 @@
 #ifndef Z_BG_ICEFLOE_H
 #define Z_BG_ICEFLOE_H
 
-#include <global.h>
+#include "global.h"
 
 struct BgIcefloe;
 

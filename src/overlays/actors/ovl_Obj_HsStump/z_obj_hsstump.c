@@ -34,7 +34,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 180, ICHAIN_STOP),
 };
 
-Vec3f iceSmokeAccel = { 0.0f, 0.0f, 0.0f }; // Readd as static when possible
+static Vec3f iceSmokeAccel = { 0.0f, 0.0f, 0.0f };
 
 void ObjHsStump_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjHsStump* this = THIS;
@@ -73,24 +73,11 @@ void ObjHsStump_SetupAppear(ObjHsStump* this, GlobalContext* globalCtx) {
     this->framesAppeared = 0;
     this->rotAngle = 0;
     this->rotFactor = 3640.0f;
-    func_8019F128(0x3A86);
+    func_8019F128(NA_SE_EN_NPC_APPEAR);
     this->actionFunc = ObjHsStump_Appear;
 }
 
-#ifdef NON_MATCHING
-// Correct instructions, but they are all out of order in the (this->framesAppeared) < 11 branch
-// Loop looks fine, it's everything before
 void ObjHsStump_Appear(ObjHsStump* this, GlobalContext* globalCtx) {
-    s16 i;
-    f32 angle;
-    s16 numDirections;
-    Vec3f iceSmokePosOffset;
-    Vec3f iceSmokeVelOffset;
-    s16 offsetAngle;
-    Vec3f iceSmokeVel;
-    f32 angleBAMS;
-    Vec3f iceSmokePos;
-
     if (this->framesAppeared >= 0) {
         Math_SmoothStepToF(&this->rotFactor, 0.0f, 1.0f, this->framesAppeared + 18.0f, 0.01f);
         this->dyna.actor.shape.rot.x = (Math_SinS(this->rotAngle) * this->rotFactor) + this->dyna.actor.home.rot.x;
@@ -99,16 +86,29 @@ void ObjHsStump_Appear(ObjHsStump* this, GlobalContext* globalCtx) {
     }
     if (this->framesAppeared < 11) {
         if (this->framesAppeared == 0) {
-            iceSmokePosOffset.x = iceSmokeVelOffset.x = 1.0f;
-            iceSmokePosOffset.y = iceSmokeVelOffset.y = 0.5f;
-            iceSmokePosOffset.z = iceSmokeVelOffset.z = 0.0f;
+            s32 i;
+            f32 angle;
+            s16 numDirections = 4;
+            Vec3f iceSmokePosOffset;
+            Vec3f iceSmokeVelOffset;
+            s16 offsetAngle;
+            Vec3f iceSmokeVel;
+            f32 angleBinary;
+            Vec3f iceSmokePos;
 
-            numDirections = 4;
+            iceSmokePosOffset.x = 1.0f;
+            iceSmokePosOffset.y = 0.5f;
+            iceSmokePosOffset.z = 0.0f;
+            iceSmokeVelOffset.x = 1.0f;
+            iceSmokeVelOffset.y = 0.5f;
+            iceSmokeVelOffset.z = 0.0f;
+
             angle = 360.0f / numDirections;
-            angleBAMS = angle * (0x10000 / 360.0f);
+            i = angle * (0x10000 / 360.0f);
+            angleBinary = i;
 
             for (i = 0; i < numDirections; i++) {
-                offsetAngle = i * angleBAMS;
+                offsetAngle = i * angleBinary;
                 Lib_Vec3f_TranslateAndRotateY(&this->dyna.actor.world.pos, offsetAngle, &iceSmokePosOffset,
                                               &iceSmokePos);
                 Lib_Vec3f_TranslateAndRotateY(&D_801D15B0, offsetAngle, &iceSmokeVelOffset, &iceSmokeVel);
@@ -127,9 +127,6 @@ void ObjHsStump_Appear(ObjHsStump* this, GlobalContext* globalCtx) {
     }
     this->framesAppeared++;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_HsStump_0x80BDAA30/ObjHsStump_Appear.asm")
-#endif
 
 void ObjHsStump_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjHsStump* this = THIS;

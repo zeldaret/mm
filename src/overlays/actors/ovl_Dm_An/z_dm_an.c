@@ -8,7 +8,7 @@ void DmAn_Init(Actor* thisx, GlobalContext* globalCtx);
 void DmAn_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmAn_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Dm_An_InitVars = {
     ACTOR_DM_AN,
     ACTORCAT_NPC,
@@ -20,7 +20,8 @@ const ActorInit Dm_An_InitVars = {
     (ActorFunc)DmAn_Update,
     (ActorFunc)NULL,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_An/func_80C1C410.s")
 

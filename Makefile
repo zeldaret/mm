@@ -62,8 +62,8 @@ OBJCOPY    := $(MIPS_BINUTILS_PREFIX)objcopy
 OBJDUMP    := $(MIPS_BINUTILS_PREFIX)objdump
 
 # Check code syntax with host compiler
-CHECK_WARNINGS := -Wall -Wextra -Wno-format-security -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-int-conversion
-CC_CHECK   := gcc -fno-builtin -fsyntax-only -fsigned-char -std=gnu90 -D _LANGUAGE_C -D NON_MATCHING -Iinclude -Isrc -include stdarg.h $(CHECK_WARNINGS)
+CHECK_WARNINGS := -Wall -Wextra -Wno-format-security -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-int-conversion -Wno-unused-but-set-variable -Wno-unused-label
+CC_CHECK   := gcc -fno-builtin -fsyntax-only -fsigned-char -std=gnu90 -D _LANGUAGE_C -D NON_MATCHING -Iinclude -Isrc -Iassets -Ibuild -include stdarg.h $(CHECK_WARNINGS)
 
 CPP        := cpp
 ELF2ROM    := tools/buildtools/elf2rom
@@ -76,7 +76,7 @@ ASFLAGS := -march=vr4300 -32 -Iinclude
 MIPS_VERSION := -mips2
 
 # we support Microsoft extensions such as anonymous structs, which the compiler does support but warns for their usage. Surpress the warnings with -woff.
-CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm -Iinclude -Isrc -Wab,-r4300_mul -woff 649,838,712
+CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm -Iinclude -Isrc -Iassets -Ibuild -I. -Wab,-r4300_mul -woff 624,649,838,712
 
 ifeq ($(shell getconf LONG_BIT), 32)
   # Work around memory allocation bug in QEMU
@@ -100,6 +100,7 @@ $(shell mkdir -p asm data)
 
 SRC_DIRS := $(shell find src -type d)
 ASM_DIRS := $(shell find asm -type d -not -path "asm/non_matchings*") $(shell find data -type d)
+ASSET_BIN_DIRS := $(shell find assets/* -type d -not -path "assets/xml*")
 BASEROM_DIRS := $(shell find baserom -type d 2>/dev/null)
 ASSET_C_FILES := $(shell find assets/ -type f -name "*.c")
 ASSET_FILES_BIN := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.bin))
@@ -114,10 +115,11 @@ TEXTURE_FILES_OUT := $(foreach f,$(TEXTURE_FILES_PNG:.png=.inc.c),build/$f) \
 C_FILES       := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
 S_FILES       := $(foreach dir,$(ASM_DIRS),$(wildcard $(dir)/*.s))
 O_FILES       := $(foreach f,$(S_FILES:.s=.o),build/$f) \
-                 $(foreach f,$(wildcard baserom/*),build/$f.o)
-                 #$(foreach f,$(C_FILES:.c=.o),build/$f) \
+                 $(foreach f,$(wildcard baserom/*),build/$f.o) \
+                 $(foreach f,$(C_FILES:.c=.o),build/$f) \
+                 $(foreach f,$(ASSET_C_FILES:.c=.o),build/$f)
 # create build directories
-$(shell mkdir -p build/baserom $(foreach dir,$(SRC_DIRS) $(ASM_DIRS),build/$(dir)))
+$(shell mkdir -p build/baserom $(foreach dir,$(SRC_DIRS) $(ASM_DIRS) $(ASSET_BIN_DIRS),build/$(dir)))
 #$(shell mkdir -p build/linker_scripts build/asm build/asm/boot build/asm/code build/asm/overlays $(foreach dir, $(COMP_DIRS) $(BINARY_DIRS) $(SRC_DIRS) $(ASSET_BIN_DIRS),$(shell mkdir -p build/$(dir))))
 
 build/src/libultra/os/%: OPTFLAGS := -O1
@@ -133,6 +135,11 @@ build/src/boot_O2/%: OPTFLAGS := -O2
 build/src/boot_O2_g3/%: OPTFLAGS := -O2 -g3
 build/src/boot_O2_g3_trapuv/%: OPTFLAGS := -O2 -g3
 build/src/boot_O2_g3_trapuv/%: CFLAGS := $(CFLAGS) -trapuv
+
+build/src/libultra/%: CC := $(CC_OLD)
+build/src/libultra/io/%: CC := ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
+build/src/libultra/os/%: CC := ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
+build/src/libultra/voice/%: CC := ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
 
 CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
 
@@ -172,31 +179,27 @@ $(ELF): $(TEXTURE_FILES_OUT) $(O_FILES) build/ldscript.txt build/undefined_syms.
 
 ## Cleaning ##
 clean:
-	$(RM) -r $(ROM) $(ELF) build
-
-distclean:
-	$(RM) -r $(ROM) $(ROMC) $(ELF) build asm baserom data
-	$(MAKE) -C tools clean
+	$(RM) -rf $(ROMC) $(ROM) $(ELF) build
 
 assetclean:
 	$(RM) -rf $(ASSET_BIN_DIRS)
 	$(RM) -rf build/assets
 
-disasm:
-	$(RM) -rf asm data
-	python3 tools/disasm/disasm.py
+distclean: assetclean clean
+	$(RM) -rf asm baserom data
+	$(MAKE) -C tools clean
 
+## Extraction step
 setup:
 	$(MAKE) -C tools
 	python3 tools/fixbaserom.py
 	python3 tools/extract_baserom.py
 	python3 extract_assets.py
 
-init:
-	python3 -m pip install -r requirements.txt
-	$(MAKE) distclean
-	$(MAKE) setup
-	$(MAKE) disasm
+## Assembly generation
+disasm:
+	$(RM) -rf asm data
+	python3 tools/disasm/disasm.py
 
 diff-init: all
 	$(RM) -rf expected/
@@ -204,6 +207,13 @@ diff-init: all
 	cp -r build expected/build
 	cp $(ROM) expected/$(ROM)
 	cp $(ROMC) expected/$(ROMC)
+
+init:
+	$(MAKE) distclean
+	$(MAKE) setup
+	$(MAKE) disasm
+	$(MAKE) all
+	$(MAKE) diff-init
 
 build/assets/%.o: assets/%.c
 	$(CC) -I build/ -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
@@ -229,16 +239,6 @@ build/asm/%.o: asm/%.s
 build/data/%.o: data/%.s
 	iconv --from UTF-8 --to EUC-JP $^ | $(AS) $(ASFLAGS) -o $@
 
-# Build C files from assets
-build/%.inc.c: %.png
-	$(ZAPD) btex -eh -tt $(lastword ,$(subst ., ,$(basename $<))) -i $< -o $@
-
-build/assets/%.bin.inc.c: assets/%.bin
-	$(ZAPD) bblb -eh -i $< -o $@
-
-build/assets/%.jpg.inc.c: assets/%.jpg
-	$(ZAPD) bren -eh -i $< -o $@
-
 build/src/overlays/%.o: src/overlays/%.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $^
 #	$(CC_CHECK) $^
@@ -250,3 +250,25 @@ build/src/%.o: src/%.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $^
 #	$(CC_CHECK) $^
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
+
+build/src/libultra/libc/ll.o: src/libultra/libc/ll.c
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
+#	$(CC_CHECK) $<
+	python3 tools/set_o32abi_bit.py $@
+	@$(OBJDUMP) -d $@ > $(@:.o=.s)
+
+build/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
+#	$(CC_CHECK) $<
+	python3 tools/set_o32abi_bit.py $@
+	@$(OBJDUMP) -d $@ > $(@:.o=.s)
+
+# Build C files from assets
+build/%.inc.c: %.png
+	$(ZAPD) btex -eh -tt $(lastword ,$(subst ., ,$(basename $<))) -i $< -o $@
+
+build/assets/%.bin.inc.c: assets/%.bin
+	$(ZAPD) bblb -eh -i $< -o $@
+
+build/assets/%.jpg.inc.c: assets/%.jpg
+	$(ZAPD) bren -eh -i $< -o $@

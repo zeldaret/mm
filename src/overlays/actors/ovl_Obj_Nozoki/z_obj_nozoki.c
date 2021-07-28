@@ -8,7 +8,7 @@ void ObjNozoki_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjNozoki_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjNozoki_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Obj_Nozoki_InitVars = {
     ACTOR_OBJ_NOZOKI,
     ACTORCAT_ITEMACTION,
@@ -20,7 +20,17 @@ const ActorInit Obj_Nozoki_InitVars = {
     (ActorFunc)ObjNozoki_Update,
     (ActorFunc)NULL,
 };
-*/
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80BA34B0[] = {
+    ICHAIN_VEC3F(scale, 1, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, 0, ICHAIN_STOP),
+};
+
+
+extern InitChainEntry D_80BA34B0[];
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Nozoki/func_80BA2420.s")
 

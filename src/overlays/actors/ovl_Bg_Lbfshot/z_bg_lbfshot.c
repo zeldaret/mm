@@ -16,8 +16,8 @@ const ActorInit Bg_Lbfshot_InitVars = {
     sizeof(BgLbfshot),
     (ActorFunc)BgLbfshot_Init,
     (ActorFunc)BgLbfshot_Destroy,
-    (ActorFunc)Actor_NoOp,
-    (ActorFunc)BgLbfshot_Draw
+    (ActorFunc)Actor_Noop,
+    (ActorFunc)BgLbfshot_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

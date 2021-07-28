@@ -5,3 +5,4 @@ ansiwrap>=0.8.4
 attrs>=18.2.0
 watchdog>=0.10.2
 GitPython>=3.1.14
+numpy

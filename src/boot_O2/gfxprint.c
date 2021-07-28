@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 extern u16 sGfxPrintFontTLUT[64];
 extern u16 sGfxPrintUnkTLUT[16];

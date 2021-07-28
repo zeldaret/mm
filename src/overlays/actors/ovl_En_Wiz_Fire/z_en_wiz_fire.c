@@ -9,7 +9,7 @@ void EnWizFire_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnWizFire_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnWizFire_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Wiz_Fire_InitVars = {
     ACTOR_EN_WIZ_FIRE,
     ACTORCAT_ENEMY,
@@ -21,7 +21,18 @@ const ActorInit En_Wiz_Fire_InitVars = {
     (ActorFunc)EnWizFire_Update,
     (ActorFunc)EnWizFire_Draw,
 };
-*/
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_80A4C1E4 = {
+    { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_1, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x09, 0x10 }, { 0x01001202, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+    { 0, 0, 0, { 0, 0, 0 } },
+};
+
+
+extern ColliderCylinderInit D_80A4C1E4;
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz_Fire/EnWizFire_Init.s")
 

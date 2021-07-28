@@ -1,7 +1,7 @@
 #ifndef _SEGMENT_H_
 #define _SEGMENT_H_
 
-#include <z64.h>
+#include "z64.h"
 
 extern Gfx D_040008D0[];
 extern Gfx D_04029CB0[];

@@ -7,7 +7,7 @@
 void ObjMakeoshihiki_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjMakeoshihiki_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Obj_Makeoshihiki_InitVars = {
     ACTOR_OBJ_MAKEOSHIHIKI,
     ACTORCAT_PROP,
@@ -15,11 +15,12 @@ const ActorInit Obj_Makeoshihiki_InitVars = {
     GAMEPLAY_KEEP,
     sizeof(ObjMakeoshihiki),
     (ActorFunc)ObjMakeoshihiki_Init,
-    (ActorFunc)Actor_NoOp,
+    (ActorFunc)Actor_Noop,
     (ActorFunc)ObjMakeoshihiki_Update,
     (ActorFunc)NULL,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Makeoshihiki/func_80972350.s")
 

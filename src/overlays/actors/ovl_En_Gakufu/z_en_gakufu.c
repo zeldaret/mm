@@ -9,7 +9,7 @@ void EnGakufu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGakufu_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGakufu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Gakufu_InitVars = {
     ACTOR_EN_GAKUFU,
     ACTORCAT_ITEMACTION,
@@ -21,7 +21,8 @@ const ActorInit En_Gakufu_InitVars = {
     (ActorFunc)EnGakufu_Update,
     (ActorFunc)EnGakufu_Draw,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Gakufu/func_80AFC960.s")
 

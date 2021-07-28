@@ -9,7 +9,7 @@ void EnHorseLinkChild_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHorseLinkChild_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHorseLinkChild_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Horse_Link_Child_InitVars = {
     ACTOR_EN_HORSE_LINK_CHILD,
     ACTORCAT_BG,
@@ -21,7 +21,38 @@ const ActorInit En_Horse_Link_Child_InitVars = {
     (ActorFunc)EnHorseLinkChild_Update,
     (ActorFunc)EnHorseLinkChild_Draw,
 };
-*/
+
+
+// static ColliderJntSphElementInit sJntSphElementsInit[1] = {
+static ColliderJntSphElementInit D_808DFED4[1] = {
+    {
+        { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
+        { 13, { { 0, 0, 0 }, 10 }, 100 },
+    },
+};
+
+// static ColliderJntSphInit sJntSphInit = {
+static ColliderJntSphInit D_808DFEF8 = {
+    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1 | OC2_UNK1, COLSHAPE_JNTSPH, },
+    1, D_808DFED4, // sJntSphElementsInit,
+};
+
+
+// sColChkInfoInit
+static CollisionCheckInfoInit D_808DFF08 = { 10, 35, 100, MASS_HEAVY };
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_808DFF2C[] = {
+    ICHAIN_F32(uncullZoneScale, 1200, ICHAIN_STOP),
+};
+
+
+extern ColliderJntSphElementInit D_808DFED4[1];
+extern ColliderJntSphInit D_808DFEF8;
+extern CollisionCheckInfoInit D_808DFF08;
+extern InitChainEntry D_808DFF2C[];
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Link_Child/func_808DE5C0.s")
 

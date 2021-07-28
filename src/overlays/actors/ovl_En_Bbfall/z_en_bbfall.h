@@ -1,7 +1,7 @@
 #ifndef Z_EN_BBFALL_H
 #define Z_EN_BBFALL_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnBbfall;
 

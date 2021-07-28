@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
+
 #ifdef NON_MATCHING
 void func_800A81F0(EffectBlure* this, Vec3f* p1, Vec3f* p2) {
     EffectBlureElement* elem;

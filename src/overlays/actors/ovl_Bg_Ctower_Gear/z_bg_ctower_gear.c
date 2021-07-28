@@ -1,6 +1,6 @@
 /*
  * File: z_bg_ctower_gear.c
- * Overlay: Bg_Ctower_Gear
+ * Overlay: ovl_Bg_Ctower_Gear
  * Description: Different Cogs/Organ inside Clock Tower
  */
 
@@ -129,7 +129,7 @@ void BgCtowerGear_Splash(BgCtowerGear* this, GlobalContext* globalCtx) {
                 }
             }
         }
-        Audio_PlayActorSound2(this, 0x291B);
+        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_WATERWHEEL_LEVEL);
     }
 }
 
@@ -177,7 +177,7 @@ void BgCtowerGear_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->dyna.actor.shape.rot.x -= 0x1F4;
     } else if (type == CENTER_COG) {
         this->dyna.actor.shape.rot.y += 0x1F4;
-        func_800B9010(&this->dyna.actor, 0x2085);
+        func_800B9010(&this->dyna.actor, NA_SE_EV_WINDMILL_LEVEL - SFX_FLAG);
     } else if (type == WATER_WHEEL) {
         this->dyna.actor.shape.rot.z -= 0x1F4;
         BgCtowerGear_Splash(this, globalCtx);
@@ -188,7 +188,7 @@ void BgCtowerGear_UpdateOrgan(Actor* thisx, GlobalContext* globalCtx) {
     BgCtowerGear* this = THIS;
 
     if (func_800EE29C(globalCtx, 0x68)) {
-        switch (globalCtx->csCtx.actorActions[func_800EE200(globalCtx, 0x68)]->unk0) {
+        switch (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x68)]->unk0) {
             case 1:
                 this->dyna.actor.draw = NULL;
                 func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);

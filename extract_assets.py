@@ -35,6 +35,10 @@ def ExtractFunc(fullPath):
 
     outPath = os.path.join("assets", *pathList[2:-1], objectName)
     outSourcePath = outPath
+    if "overlays" in pathList:
+        basromPath = os.path.join("baserom", *pathList[2:-1])
+    else:
+        basromPath = os.path.join("baserom", "assets", *pathList[2:-1])
 
     ## MM doesn't have _scene prefixed files, so this check is not necessary.
     ## This _may_ change in the future, so I wont delete this for now.

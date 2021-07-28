@@ -1,7 +1,7 @@
 #ifndef Z_BG_BOTIHASIRA_H
 #define Z_BG_BOTIHASIRA_H
 
-#include <global.h>
+#include "global.h"
 
 struct BgBotihasira;
 

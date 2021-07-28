@@ -1,7 +1,7 @@
 #ifndef Z_EN_TIME_TAG_H
 #define Z_EN_TIME_TAG_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnTimeTag;
 

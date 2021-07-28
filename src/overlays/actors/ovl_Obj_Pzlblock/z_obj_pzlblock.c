@@ -8,7 +8,7 @@ void ObjPzlblock_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjPzlblock_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjPzlblock_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Obj_Pzlblock_InitVars = {
     ACTOR_OBJ_PZLBLOCK,
     ACTORCAT_PROP,
@@ -20,7 +20,19 @@ const ActorInit Obj_Pzlblock_InitVars = {
     (ActorFunc)ObjPzlblock_Update,
     (ActorFunc)NULL,
 };
-*/
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_809A4078[] = {
+    ICHAIN_VEC3S(world.rot, 0, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
+};
+
+
+extern InitChainEntry D_809A4078[];
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Pzlblock/func_809A33E0.s")
 

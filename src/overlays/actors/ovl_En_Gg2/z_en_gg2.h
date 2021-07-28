@@ -1,7 +1,7 @@
 #ifndef Z_EN_GG2_H
 #define Z_EN_GG2_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnGg2;
 

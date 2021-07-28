@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 #define SCENE_ENTRY(name, textId, config) \
     { (u32) _##name##SegmentRomStart, (u32)_##name##SegmentRomEnd, textId, 0, config }

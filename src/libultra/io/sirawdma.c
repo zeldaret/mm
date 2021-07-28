@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 s32 __osSiRawStartDma(s32 direction, void* dramAddr) {
     if ((*(u32*)0xA4800018 & 0x3) != 0) {

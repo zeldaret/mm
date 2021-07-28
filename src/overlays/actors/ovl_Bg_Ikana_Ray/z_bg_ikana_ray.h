@@ -1,12 +1,12 @@
 #ifndef Z_BG_IKANA_RAY_H
 #define Z_BG_IKANA_RAY_H
 
-#include <global.h>
+#include "global.h"
 
 struct BgIkanaRay;
 
 typedef struct BgIkanaRay {
-    /* 0x000 */ Actor base;
+    /* 0x000 */ Actor actor;
     /* 0x144 */ ColliderCylinder collision;
     /* 0x190 */ AnimatedMaterial* animatedTextures;
     /* 0x194 */ void (*update)(struct BgIkanaRay*, GlobalContext*);

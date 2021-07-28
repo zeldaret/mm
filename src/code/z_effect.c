@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 EffInfo sEffInfoTable[] = {
     {
@@ -187,7 +186,7 @@ void Effect_Add(GlobalContext* globalCtx, s32* index, s32 type, u8 param_4, u8 p
 void Effect_DrawAll(GraphicsContext* gfxCtx) {
     s32 i;
 
-    for (i = 0; i < SPARK_COUNT; i++) { 
+    for (i = 0; i < SPARK_COUNT; i++) {
         if (1) {} // necessary to match
         if (sEffTable.sparks[i].base.active) {
             sEffInfoTable[0].draw(&sEffTable.sparks[i].params, gfxCtx);
@@ -195,8 +194,10 @@ void Effect_DrawAll(GraphicsContext* gfxCtx) {
     }
 
     for (i = 0; i < BLURE_COUNT; i++) {
-        if (1) { if (gfxCtx) {} } // necessary to match
-        if (sEffTable.blures[i].base.active) { 
+        if (1) {
+            if (gfxCtx) {}
+        } // necessary to match
+        if (sEffTable.blures[i].base.active) {
             sEffInfoTable[1].draw(&sEffTable.blures[i].params, gfxCtx);
         }
     }

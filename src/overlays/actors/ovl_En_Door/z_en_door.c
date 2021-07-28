@@ -9,7 +9,7 @@ void EnDoor_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDoor_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDoor_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Door_InitVars = {
     ACTOR_EN_DOOR,
     ACTORCAT_DOOR,
@@ -21,7 +21,19 @@ const ActorInit En_Door_InitVars = {
     (ActorFunc)EnDoor_Update,
     (ActorFunc)EnDoor_Draw,
 };
-*/
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80867954[] = {
+    ICHAIN_U8(targetMode, 0, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_U16(shape.rot.x, 0, ICHAIN_CONTINUE),
+    ICHAIN_U16(shape.rot.z, 0, ICHAIN_STOP),
+};
+
+
+extern InitChainEntry D_80867954[];
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door/EnDoor_Init.s")
 

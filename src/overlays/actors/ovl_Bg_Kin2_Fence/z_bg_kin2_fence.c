@@ -92,16 +92,18 @@ static ColliderJntSphInit sJntSphInit = {
     sJntSphElementsInit,
 };
 
-Vec3f eyeSparkleSpawnPositions[][2] = { { { -215.0f, 139.0f, 50.0f }, { -193.0f, 139.0f, 50.0f } },
+static Vec3f eyeSparkleSpawnPositions[][2] = {
+    { { -215.0f, 139.0f, 50.0f }, { -193.0f, 139.0f, 50.0f } },
 
-                                        { { -125.0f, 139.0f, 50.0f }, { -103.0f, 139.0f, 50.0f } },
+    { { -125.0f, 139.0f, 50.0f }, { -103.0f, 139.0f, 50.0f } },
 
-                                        { { 103.0f, 139.0f, 50.0f }, { 125.0f, 139.0f, 50.0f } },
+    { { 103.0f, 139.0f, 50.0f }, { 125.0f, 139.0f, 50.0f } },
 
-                                        { { 193.0f, 139.0f, 50.0f }, { 215.0f, 139.0f, 50.0f } } };
+    { { 193.0f, 139.0f, 50.0f }, { 215.0f, 139.0f, 50.0f } },
+};
 
-Color_RGBA8 primColor = { 0xFF, 0xFF, 0xFF, 0x00 };
-Color_RGBA8 envColor = { 0x00, 128, 128, 0x00 };
+static Color_RGBA8 primColor = { 255, 255, 255, 0 };
+static Color_RGBA8 envColor = { 0, 128, 128, 0 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),
@@ -185,20 +187,20 @@ void BgKin2Fence_HandleMaskCode(BgKin2Fence* this, GlobalContext* globalCtx) {
     s32 hitMask;
     s32 nextMask;
 
-    if (this->collider.base.acFlags & 2) {
+    if (this->collider.base.acFlags & AC_HIT) {
         hitMask = BgKin2Fence_CheckHitMask(this);
         if (hitMask >= 0) {
             nextMask = (s8)gSaveContext.spiderHouseMaskOrder[this->masksHit];
             if (hitMask == nextMask) {
-                play_sound(0x4807);
+                play_sound(NA_SE_SY_TRE_BOX_APPEAR);
                 this->masksHit += 1;
                 BgKin2Fence_SpawnEyeSparkles(this, globalCtx, nextMask);
             } else {
-                play_sound(0x4806);
+                play_sound(NA_SE_SY_ERROR);
                 this->masksHit = 0;
             }
         }
-        this->collider.base.acFlags &= 0xFFFD;
+        this->collider.base.acFlags &= ~AC_HIT;
         this->cooldownTimer = 5;
         if (this->masksHit > 5) {
             BgKin2Fence_SetupPlayOpenCutscene(this);
@@ -209,7 +211,7 @@ void BgKin2Fence_HandleMaskCode(BgKin2Fence* this, GlobalContext* globalCtx) {
             this->cooldownTimer -= 1;
             return;
         }
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 }
 

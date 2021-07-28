@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 u32 sDmaMgrDmaBuffSize = 0x2000;
 
@@ -202,8 +201,6 @@ s32 DmaMgr_SendRequest0(void* vramStart, u32 vromStart, u32 size) {
 
     return 0;
 }
-
-const char dmamgrThreadName[] = "dmamgr";
 
 #ifdef NON_MATCHING
 // TODO missing a useless move initializing v0, and some reorderings

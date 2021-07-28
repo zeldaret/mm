@@ -7,7 +7,7 @@
 void ObjWturn_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjWturn_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Obj_Wturn_InitVars = {
     ACTOR_OBJ_WTURN,
     ACTORCAT_ITEMACTION,
@@ -15,11 +15,12 @@ const ActorInit Obj_Wturn_InitVars = {
     GAMEPLAY_KEEP,
     sizeof(ObjWturn),
     (ActorFunc)ObjWturn_Init,
-    (ActorFunc)Actor_NoOp,
+    (ActorFunc)Actor_Noop,
     (ActorFunc)ObjWturn_Update,
     (ActorFunc)NULL,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Wturn/ObjWturn_Init.s")
 

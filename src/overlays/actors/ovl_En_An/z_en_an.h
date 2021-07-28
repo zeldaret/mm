@@ -1,7 +1,7 @@
 #ifndef Z_EN_AN_H
 #define Z_EN_AN_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnAn;
 

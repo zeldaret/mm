@@ -1,7 +1,7 @@
 #ifndef Z_BG_KEIKOKU_SAKU_H
 #define Z_BG_KEIKOKU_SAKU_H
 
-#include <global.h>
+#include "global.h"
 
 struct BgKeikokuSaku;
 

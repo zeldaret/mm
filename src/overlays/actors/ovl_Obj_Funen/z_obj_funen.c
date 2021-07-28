@@ -14,8 +14,8 @@ const ActorInit Obj_Funen_InitVars = {
     OBJECT_FUNEN,
     sizeof(ObjFunen),
     (ActorFunc)ObjFunen_Init,
-    (ActorFunc)Actor_NoOp,
-    (ActorFunc)Actor_NoOp,
+    (ActorFunc)Actor_Noop,
+    (ActorFunc)Actor_Noop,
     (ActorFunc)ObjFunen_Draw
 };
 

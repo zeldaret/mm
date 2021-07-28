@@ -57,8 +57,38 @@ static ColliderJntSphInit sJntSphInit = {
 };
 
 static DamageTable sDamageTable = {
-    0xF0, 0xF0, 0x00, 0xF0, 0xE1, 0xE1, 0x00, 0xE1, 0xF0, 0xF0, 0xF0, 0xE1, 0xE1, 0xE1, 0xF0, 0xF0,
-    0xE1, 0xF0, 0xF0, 0xF0, 0x00, 0x00, 0xE1, 0xF0, 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0,
+    /* Deku Nut       */ DMG_ENTRY(0, 0xF),
+    /* Deku Stick     */ DMG_ENTRY(0, 0xF),
+    /* Horse trample  */ DMG_ENTRY(0, 0x0),
+    /* Explosives     */ DMG_ENTRY(0, 0xF),
+    /* Zora boomerang */ DMG_ENTRY(1, 0xE),
+    /* Normal arrow   */ DMG_ENTRY(1, 0xE),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
+    /* Hookshot       */ DMG_ENTRY(1, 0xE),
+    /* Goron punch    */ DMG_ENTRY(0, 0xF),
+    /* Sword          */ DMG_ENTRY(0, 0xF),
+    /* Goron pound    */ DMG_ENTRY(0, 0xF),
+    /* Fire arrow     */ DMG_ENTRY(1, 0xE),
+    /* Ice arrow      */ DMG_ENTRY(1, 0xE),
+    /* Light arrow    */ DMG_ENTRY(1, 0xE),
+    /* Goron spikes   */ DMG_ENTRY(0, 0xF),
+    /* Deku spin      */ DMG_ENTRY(0, 0xF),
+    /* Deku bubble    */ DMG_ENTRY(1, 0xE),
+    /* Deku launch    */ DMG_ENTRY(0, 0xF),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0xF),
+    /* Zora barrier   */ DMG_ENTRY(0, 0xF),
+    /* Normal shield  */ DMG_ENTRY(0, 0x0),
+    /* Light ray      */ DMG_ENTRY(0, 0x0),
+    /* Thrown object  */ DMG_ENTRY(1, 0xE),
+    /* Zora punch     */ DMG_ENTRY(0, 0xF),
+    /* Spin attack    */ DMG_ENTRY(0, 0xF),
+    /* Sword beam     */ DMG_ENTRY(0, 0x0),
+    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
+    /* Unblockable    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
+    /* Powder Keg     */ DMG_ENTRY(0, 0xF),
 };
 
 void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -66,15 +96,15 @@ void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     CollisionHeader* colHeader = NULL;
 
-    BcCheck3_BgActorInit(&this->dynaActor, 0);
+    BcCheck3_BgActorInit(&this->dyna, 0);
     BgCheck_RelocateMeshHeader(&D_06002420, &colHeader);
-    this->dynaActor.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dynaActor, colHeader);
-    ActorShape_Init(&this->dynaActor.actor.shape, 0.0f, func_800B3FC0, 25.0f);
-    this->dynaActor.actor.colChkInfo.mass = 0xFF;
-    Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->dynaActor.actor, &sJntSphInit, &this->colElement);
+    this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
+    ActorShape_Init(&this->dyna.actor.shape, 0.0f, func_800B3FC0, 25.0f);
+    this->dyna.actor.colChkInfo.mass = 0xFF;
+    Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->dyna.actor, &sJntSphInit, &this->colElement);
 
-    this->dynaActor.actor.targetMode = 6;
-    this->dynaActor.actor.colChkInfo.health = 1;
+    this->dyna.actor.targetMode = 6;
+    this->dyna.actor.colChkInfo.health = 1;
     this->scale = 0.1;
     this->switchFlag = GET_ENCOUNT2_SWITCH_FLAG(this);
 
@@ -83,7 +113,7 @@ void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if ((this->switchFlag >= 0) && (Flags_GetSwitch(globalCtx, this->switchFlag))) {
-        Actor_MarkForDeath(&this->dynaActor.actor);
+        Actor_MarkForDeath(&this->dyna.actor);
         return;
     }
 
@@ -93,13 +123,13 @@ void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->collider.elements->dim.modelSphere.center.y = -4;
     this->collider.elements->dim.modelSphere.center.z = 0;
 
-    this->dynaActor.actor.colChkInfo.damageTable = &sDamageTable;
+    this->dyna.actor.colChkInfo.damageTable = &sDamageTable;
     EnEncount2_SetIdle(this);
 }
 
 void EnEncount2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnEncount2* this = THIS;
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dynaActor.bgId);
+    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyJntSph(globalCtx, &this->collider);
 }
 
@@ -110,10 +140,10 @@ void EnEncount2_SetIdle(EnEncount2* this) {
 
 void EnEncount2_Idle(EnEncount2* this, GlobalContext* globalCtx) {
     this->oscillationAngle += 1500.0f;
-    this->dynaActor.actor.velocity.y = Math_SinS(this->oscillationAngle);
+    this->dyna.actor.velocity.y = Math_SinS(this->oscillationAngle);
     Math_ApproachF(&this->scale, 0.1f, 0.3f, 0.01f);
-    if (((this->collider.base.acFlags & AC_HIT) != 0) && (this->dynaActor.actor.colChkInfo.damageEffect == 0xE)) {
-        this->dynaActor.actor.colChkInfo.health = 0;
+    if ((this->collider.base.acFlags & AC_HIT) && (this->dyna.actor.colChkInfo.damageEffect == 0xE)) {
+        this->dyna.actor.colChkInfo.health = 0;
         this->isPopped = 1;
         this->actionFunc = EnEncount2_Popped;
     }
@@ -123,16 +153,16 @@ void EnEncount2_Popped(EnEncount2* this, GlobalContext* globalCtx) {
     s32 i;
     Vec3f curPos;
 
-    Math_Vec3f_Copy(&curPos, &this->dynaActor.actor.world.pos);
+    Math_Vec3f_Copy(&curPos, &this->dyna.actor.world.pos);
     curPos.y += 60.0f;
-    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, curPos.x, curPos.y, curPos.z, 0xFF, 0xFF, 0xC8,
-                0x0001);
+    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, curPos.x, curPos.y, curPos.z, 255, 255, 200,
+                CLEAR_TAG_LARGE_EXPLOSION);
 
     for (i = 0; i != 100; ++i) {
         EnEncount2_InitParticles(this, &curPos, 10);
     }
 
-    Audio_PlayActorSound2(this, 0x2949); // NA_SE_EV_MUJURA_BALLOON_BROKEN
+    Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_MUJURA_BALLOON_BROKEN);
     this->deathTimer = 30;
     this->actionFunc = EnEncount2_Die;
 }
@@ -142,7 +172,7 @@ void EnEncount2_Die(EnEncount2* this, GlobalContext* globalCtx) {
         if (this->switchFlag >= 0) {
             Actor_SetSwitchFlag(globalCtx, this->switchFlag);
         }
-        Actor_MarkForDeath(&this->dynaActor.actor);
+        Actor_MarkForDeath(&this->dyna.actor);
     }
 }
 
@@ -152,17 +182,17 @@ void EnEncount2_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     DECR(this->deathTimer);
 
-    this->dynaActor.actor.shape.rot.y = this->dynaActor.actor.world.rot.y;
-    Actor_SetHeight(&this->dynaActor.actor, 30.0f);
-    Actor_SetScale(&this->dynaActor.actor, this->scale);
+    this->dyna.actor.shape.rot.y = this->dyna.actor.world.rot.y;
+    Actor_SetHeight(&this->dyna.actor, 30.0f);
+    Actor_SetScale(&this->dyna.actor, this->scale);
     this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->dynaActor.actor);
+    Actor_SetVelocityAndMoveYRotationAndGravity(&this->dyna.actor);
     EnEncount2_UpdateParticles(this, globalCtx);
 
     if (!this->isPopped) {
-        Collider_UpdateSpheresElement(&this->collider, 0, &this->dynaActor.actor);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+        Collider_UpdateSpheresElement(&this->collider, 0, &this->dyna.actor);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 }
 
@@ -244,4 +274,4 @@ void EnEncount2_UpdateParticles(EnEncount2* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Encount2_0x808E1560/EnEncount2_DrawParticles.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Encount2/EnEncount2_DrawParticles.s")

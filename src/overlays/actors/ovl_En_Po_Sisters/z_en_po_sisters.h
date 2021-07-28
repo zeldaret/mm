@@ -1,7 +1,7 @@
 #ifndef Z_EN_PO_SISTERS_H
 #define Z_EN_PO_SISTERS_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnPoSisters;
 

@@ -1,7 +1,7 @@
 #ifndef Z_EN_SYATEKI_DEKUNUTS_H
 #define Z_EN_SYATEKI_DEKUNUTS_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnSyatekiDekunuts;
 

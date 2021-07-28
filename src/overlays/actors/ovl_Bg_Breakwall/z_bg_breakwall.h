@@ -1,7 +1,7 @@
 #ifndef Z_BG_BREAKWALL_H
 #define Z_BG_BREAKWALL_H
 
-#include <global.h>
+#include "global.h"
 
 struct BgBreakwall;
 

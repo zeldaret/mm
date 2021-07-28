@@ -1,7 +1,7 @@
 #ifndef Z_BG_DY_YOSEIZO_H
 #define Z_BG_DY_YOSEIZO_H
 
-#include <global.h>
+#include "global.h"
 
 struct BgDyYoseizo;
 

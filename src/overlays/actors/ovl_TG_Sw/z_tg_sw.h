@@ -1,7 +1,7 @@
 #ifndef Z_TG_SW_H
 #define Z_TG_SW_H
 
-#include <global.h>
+#include "global.h"
 
 struct TGSw;
 typedef void (*TGSwActionFunc)(struct TGSw*, GlobalContext*);
