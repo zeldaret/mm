@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 
 void osViExtendVStart(u32 a0) {

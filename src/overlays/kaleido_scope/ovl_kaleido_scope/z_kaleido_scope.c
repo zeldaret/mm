@@ -1,5 +1,4 @@
 #include "global.h"
-#include "ultra64.h"
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_808160A0.s")
 

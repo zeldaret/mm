@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_fbdemo_dlftbls/func_80163C90.s")

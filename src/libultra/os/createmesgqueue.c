@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 
 void osCreateMesgQueue(OSMesgQueue* mq, OSMesg* msq, s32 count) {

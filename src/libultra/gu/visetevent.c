@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 
 void osViSetEvent(OSMesgQueue* mq, OSMesg m, u32 retraceCount) {

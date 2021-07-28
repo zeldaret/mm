@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 
 #define RAND_MULTIPLIER 1664525

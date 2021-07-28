@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_eff_tire_mark/func_800AE930.s")

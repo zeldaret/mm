@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_game_over/func_801AA610.s")

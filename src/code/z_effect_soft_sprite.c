@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 
 void EffectSS_Init(GlobalContext* globalCtx, s32 numEntries) {

@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 
 #pragma GLOBAL_ASM("asm/non_matchings/boot/fp/func_80086C70.s")

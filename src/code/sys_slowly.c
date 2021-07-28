@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 
 #define SLOWLY_STATUS_DONE (1 << 0)

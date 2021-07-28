@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 
 void __assert(const char* file, u32 lineNum) {

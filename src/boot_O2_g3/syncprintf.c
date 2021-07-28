@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 
 // This file contains print functions that are used by fault.c, so they are placed in the fault module

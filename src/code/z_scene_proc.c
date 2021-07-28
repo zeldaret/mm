@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 
 //! @TODO: Once BSS is supported, remove these from `variables.h` (because they are static), and uncomment these here.

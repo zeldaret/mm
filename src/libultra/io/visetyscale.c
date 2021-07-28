@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 
 void osViSetYScale(f32 value) {

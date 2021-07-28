@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 
 void* Lib_MemCpy(void* dest, void* src, size_t size) {

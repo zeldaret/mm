@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 
 void BgCheck2_UpdateActorPosition(CollisionContext* colCtx, s32 index, Actor* actor) {

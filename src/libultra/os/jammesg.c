@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 
 s32 osJamMesg(OSMesgQueue* mq, OSMesg msg, s32 flag) {

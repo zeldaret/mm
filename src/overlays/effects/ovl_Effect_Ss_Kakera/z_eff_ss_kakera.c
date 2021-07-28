@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Kakera/func_8097DCA0.s")

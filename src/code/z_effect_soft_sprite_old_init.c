@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 
 void EffectSs_DrawGEffect(GlobalContext* globalCtx, EffectSs* this, void* texture) {

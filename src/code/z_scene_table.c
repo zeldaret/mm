@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 
 #define SCENE_ENTRY(name, textId, config) \

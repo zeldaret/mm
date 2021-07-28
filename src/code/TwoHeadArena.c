@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 
 void* THA_GetHead(TwoHeadArena* tha) {

@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 
 void THGA_Ct(TwoHeadGfxArena* thga, Gfx* start, u32 size) {

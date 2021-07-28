@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 
 void guOrthoF(float m[4][4], float l, float r, float b, float t, float n, float f, float scale) {

@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 
 u64 osClockRate = 0x0000000003B9ACA0;

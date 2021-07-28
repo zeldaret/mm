@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 
 void BgCheck_PolygonLinkedListNodeInit(SSNode* node, s16* polyIndex, u16 next) {

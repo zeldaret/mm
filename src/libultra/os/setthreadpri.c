@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 
 void osSetThreadPri(OSThread* t, OSPri p) {

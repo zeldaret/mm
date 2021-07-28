@@ -4,7 +4,6 @@
  * Description: Player
  */
 
-#include "ultra64.h"
 #include "global.h"
 
 #define THIS ((Player*)thisx)

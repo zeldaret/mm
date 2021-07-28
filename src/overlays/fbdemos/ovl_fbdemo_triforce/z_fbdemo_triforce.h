@@ -1,7 +1,6 @@
 #ifndef Z_FBDEMO_TRIFORCE_H
 #define Z_FBDEMO_TRIFORCE_H
 
-#include "ultra64.h"
 #include "global.h"
 
 typedef struct {

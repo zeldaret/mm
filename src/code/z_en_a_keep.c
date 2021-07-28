@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 
 void EnAObj_Init(ActorEnAObj* this, GlobalContext* globalCtx) {

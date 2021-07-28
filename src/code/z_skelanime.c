@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 
 s32 func_80136288(GlobalContext* globalCtx, SkelAnime* skelAnime);

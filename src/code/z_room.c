@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 
 void Room_nop8012D510(GlobalContext* globalCtx, Room* room, UNK_PTR param_3, UNK_TYPE1 param_4) {

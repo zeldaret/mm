@@ -1,7 +1,6 @@
 #ifndef Z_FBDEMO_WIPE4_H
 #define Z_FBDEMO_WIPE4_H
 
-#include "ultra64.h"
 #include "global.h"
 
 typedef struct {

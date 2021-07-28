@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 
 void* proutSprintf(void* dst, char* fmt, size_t size) {
