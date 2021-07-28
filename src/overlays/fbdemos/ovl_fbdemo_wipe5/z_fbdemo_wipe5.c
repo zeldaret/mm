@@ -48,4 +48,3 @@ const TransitionInit TransitionWipe5_InitVars = {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_fbdemo_wipe5/TransitionWipe5_SetColor.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_fbdemo_wipe5/TransitionWipe5_SetEnvColor.s")
-

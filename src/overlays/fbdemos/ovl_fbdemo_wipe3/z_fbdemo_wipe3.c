@@ -50,4 +50,3 @@ const TransitionInit TransitionWipe3_InitVars = {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_fbdemo_wipe3/TransitionWipe3_SetColor.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_fbdemo_wipe3/TransitionWipe3_SetEnvColor.s")
-

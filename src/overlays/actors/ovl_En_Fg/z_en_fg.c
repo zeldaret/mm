@@ -22,14 +22,6 @@ void EnFg_AddDust(EnFgEffectDust* dustEffect, Vec3f* worldPos);
 void EnFg_UpdateDust(EnFgEffectDust* dustEffect);
 void EnFg_DrawDust(GlobalContext* globalCtx, EnFgEffectDust* dustEffect);
 
-extern u64 D_0408DBE0[]; // gDust1Tex
-extern u64 D_0408DFE0[]; // gDust2Tex
-extern u64 D_0408E3E0[]; // gDust3Tex
-extern u64 D_0408E7E0[]; // gDust4Tex
-extern u64 D_0408EBE0[]; // gDust5Tex
-extern u64 D_0408EFE0[]; // gDust6Tex
-extern u64 D_0408F3E0[]; // gDust7Tex
-extern u64 D_0408F7E0[]; // gDust8Tex
 extern AnimationHeader D_06001534;
 extern AnimationHeader D_060011C0;
 extern AnimationHeader D_060007BC;

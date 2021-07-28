@@ -216,12 +216,8 @@ extern Gfx D_06014AD8[];
 extern Gfx D_06014ED8[];
 extern Gfx D_060152D8[];
 extern Gfx D_060156D8[];
-extern Gfx D_04023210[];
 extern Gfx D_060003B0[];
-extern Gfx D_04029CB0[];
-extern Gfx D_04029CF0[];
 extern Gfx D_06000720[];
-extern Gfx D_0402E510[];
 extern Gfx D_06000080[];
 
 extern s32 D_801BDA9C;

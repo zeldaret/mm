@@ -21,6 +21,9 @@ const ActorInit Bg_Fu_Kaiten_InitVars = {
     (ActorFunc)BgFuKaiten_Draw,
 };
 
+extern Gfx D_060005D0[];
+extern CollisionHeader D_06002D30;
+
 void BgFuKaiten_Init(Actor* thisx, GlobalContext* globalCtx) {
     UNK_TYPE pad0;
     UNK_TYPE pad1;

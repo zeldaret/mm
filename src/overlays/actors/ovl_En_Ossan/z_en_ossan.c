@@ -45,9 +45,6 @@ void EnOssan_ResetItemPosition(EnOssan* this);
 void EnOssan_Blink(EnOssan* this);
 void EnOssan_GetCutscenes(EnOssan* this, GlobalContext* globalCtx);
 
-extern UNK_TYPE D_0401F740;
-extern UNK_TYPE D_0401F8C0;
-extern UNK_TYPE D_0401F7C0;
 extern FlexSkeletonHeader D_060028A0;
 extern TexturePtr D_06005BC0;
 extern TexturePtr D_06006498;

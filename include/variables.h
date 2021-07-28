@@ -3,21 +3,90 @@
 
 #include "z64.h"
 #include "segment_symbols.h"
-#include "segment.h"
-#include "section.h"
 
 // pre-boot variables
-extern UNK_TYPE osTvType;
-extern UNK_TYPE osRomType;
-extern UNK_TYPE osRomBase;
-extern UNK_TYPE osResetType;
-extern UNK_TYPE osCicId;
-extern UNK_TYPE osVersion;
-extern UNK_TYPE osMemSize;
+extern u32 osTvType;
+extern u32 osRomType;
+extern u32 osRomBase;
+extern u32 osResetType;
+extern u32 osCicId;
+extern u32 osVersion;
+extern u32 osMemSize;
 extern s32 osAppNmiBuffer[0x10];
 extern u16 gFramebuffer1[SCREEN_HEIGHT][SCREEN_WIDTH]; // at 0x80000500
-extern u16 gFramebufferHighRes1[SCREEN_HEIGHT_HIGH_RES][SCREEN_WIDTH_HIGH_RES]; // at 0x80000500
 extern u8 D_80025D00[];
+
+// keep objects
+extern Gfx D_040008D0[];
+extern UNK_TYPE1 D_0400DEA8;
+extern UNK_TYPE1 D_0400E2A8;
+extern Gfx D_0401C430[];
+extern UNK_TYPE D_0401F740;
+extern UNK_TYPE D_0401F7C0;
+extern UNK_TYPE D_0401F8C0;
+extern Gfx D_04023210[];
+extern Gfx D_04029CB0[];
+extern Gfx D_04029CF0[];
+extern Gfx D_0402E510[];
+extern Gfx D_04030100[]; // Floor shockwave ring
+extern Gfx D_040378F0[]; // gExplosionSplashTex1
+extern Gfx D_04037DF0[]; // gExplosionSplashTex2
+extern Gfx D_040382F0[]; // gExplosionSplashTex3
+extern Gfx D_040387F0[]; // gExplosionSplashTex4
+extern Gfx D_04038CF0[]; // gExplosionSplashTex5
+extern Gfx D_040391F0[]; // gExplosionSplashTex6
+extern Gfx D_040396F0[]; // gExplosionSplashTex7
+extern Gfx D_04039BF0[]; // gExplosionSplashTex8
+extern Gfx D_0403A0F0[]; // gExplosionSplashDL
+extern Gfx D_04048DF0[];
+extern Gfx D_04054A90[];
+extern Gfx D_04057B10[];
+extern Gfx D_04058BA0[];
+extern Gfx D_04089070[];
+extern u64 D_0408DBE0[]; // gDust1Tex
+extern u64 D_0408DFE0[]; // gDust2Tex
+extern u64 D_0408E3E0[]; // gDust3Tex
+extern u64 D_0408E7E0[]; // gDust4Tex
+extern u64 D_0408EBE0[]; // gDust5Tex
+extern u64 D_0408EFE0[]; // gDust6Tex
+extern u64 D_0408F3E0[]; // gDust7Tex
+extern u64 D_0408F7E0[]; // gDust8Tex
+extern Gfx D_0405AAB0[];
+extern UNK_TYPE D_0405B6F0;
+extern UNK_TYPE D_0405BEF0;
+extern UNK_TYPE D_0405C6F0;
+extern UNK_TYPE D_0405CEF0;
+extern UNK_TYPE D_0405E6F0;
+extern Gfx D_0405F6F0[];
+extern UNK_TYPE D_0405F7C0;
+extern UNK_TYPE D_0405FFC0;
+extern UNK_TYPE D_040607C0;
+extern UNK_TYPE D_04060FC0;
+extern UNK_TYPE D_040617C0;
+extern UNK_TYPE D_04061FC0;
+extern UNK_TYPE D_04061FE0;
+extern UNK_TYPE D_04062000;
+extern UNK_TYPE D_04062020;
+extern UNK_TYPE D_04062040;
+extern UNK_TYPE D_04062060;
+extern Gfx D_040622C0[];
+extern Gfx D_04075A40[];
+extern Gfx D_04075B30[];
+extern Gfx D_04076BC0[];
+extern Gfx D_04077480[];
+
+extern Gfx D_05000C40[];
+extern Gfx D_05017EA0[]; // pot displaylist
+extern Gfx D_05018090[]; // pot break shard displaylist
+extern Gfx D_0501D980[];
+extern Gfx D_050219E0[];
+
+// other segments
+extern UNK_TYPE D_0E000048;
+extern UNK_TYPE D_0E000088;
+extern UNK_TYPE D_0E000140;
+extern UNK_TYPE D_0E0001C8;
+extern UNK_TYPE D_0E0002C8;
 
 // data
 extern UNK_TYPE1 D_800969C0;
@@ -3855,16 +3924,15 @@ extern OSMesg D_80203290[1];
 // extern UNK_TYPE1 D_80208E98;
 // extern UNK_TYPE1 D_80208E99;
 // extern UNK_TYPE1 D_80208E9C;
+
 extern u8 gGfxSPTaskYieldBuffer[OS_YIELD_DATA_SIZE];
 extern u8 gGfxSPTaskStack[0x400];
 extern GfxPool gGfxPools[2];
 extern u8 gAudioHeap[0x138000];
 extern u8 gSystemHeap[UNK_SIZE];
 
-extern u16 gFramebufferHighRes0[SCREEN_HEIGHT_HIGH_RES][SCREEN_WIDTH_HIGH_RES]; // at 0x80780000
 extern u8 D_80780000[0x4600];
 extern u8 D_80784600[0x56200];
-extern u16 gFramebuffer0[SCREEN_HEIGHT][SCREEN_WIDTH]; // at 0x807DA800
+extern u16 gFramebuffer0[SCREEN_HEIGHT][SCREEN_WIDTH];
 
 #endif
-

@@ -45,9 +45,6 @@ void EnFsn_SelectItem(EnFsn* this, GlobalContext* globalCtx);
 void EnFsn_LookToShopkeeperFromShelf(EnFsn* this, GlobalContext* globalCtx);
 void EnFsn_PlayerCannotBuy(EnFsn* this, GlobalContext* globalCtx);
 
-extern UNK_TYPE D_0401F740;
-extern UNK_TYPE D_0401F8C0;
-extern UNK_TYPE D_0401F7C0;
 extern AnimationHeader D_06012C34;
 extern AnimationHeader D_060131FC;
 extern AnimationHeader D_0600C58C;

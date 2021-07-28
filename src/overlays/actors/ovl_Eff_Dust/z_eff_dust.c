@@ -22,8 +22,6 @@ void func_80919230(EffDust* this, GlobalContext* globalCtx);
 void func_80919768(Actor* thisx, GlobalContext* globalCtx);
 void func_809199FC(Actor* thisx, GlobalContext* globalCtx);
 
-extern Gfx D_04054A90[];
-
 const ActorInit Eff_Dust_InitVars = {
     ACTOR_EFF_DUST,
     ACTORCAT_NPC,
