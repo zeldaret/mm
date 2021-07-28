@@ -988,7 +988,7 @@ CollisionHeader* BgCheck_GetActorMeshHeader(CollisionContext* colCtx, s32 index)
 f32 func_800C3D50(s32 arg0, CollisionContext* colCtx, s32 arg2, CollisionPoly** arg3, s32* arg4, Vec3f* pos, Actor* actor, s32 arg7, f32 arg8, s32 arg9);
 // void func_800C3F40(void);
 // void func_800C3FA0(void);
-f32 func_800C4000(GlobalContext* globalCtx, CollisionContext* colCtx, Vec3s* arg2, Vec3f* arg3);
+f32 func_800C4000(GlobalContext* globalCtx, CollisionContext* colCtx, s32* arg2, Vec3f* arg3);
 // void func_800C4058(void);
 // void func_800C40B4(void);
 f32 func_800C411C(CollisionContext* colCtx, CollisionPoly** arg1, s32* arg2, Actor* actor, Vec3f* pos);
