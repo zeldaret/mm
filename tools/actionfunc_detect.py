@@ -52,10 +52,9 @@ for root, dirs, files in os.walk("src/overlays/actors/"):
         setup_action_func = None
         action_funcs = set()
 
+        #   Entrypoint Analysis
+
         for asm_root, asm_dirs, asm_files in os.walk(actor_asm):
-
-            #   Entrypoint Analysis
-
             for asm_file in asm_files:
                 asm = ""
                 with open(os.path.join(asm_root,asm_file), "r") as _asm_file:
@@ -81,14 +80,15 @@ for root, dirs, files in os.walk("src/overlays/actors/"):
                         elif "jal " in line and reg != None:
                             break
 
-            #   Actor has no action function, no reason to do anything else here
+        #   Actor has no action function, no reason to do anything else here
 
-            if action_func_offset == -1:
-                # print("No actionfunc")
-                continue
+        if action_func_offset == -1:
+            # print("No actionfunc")
+            continue
 
-            #   Find the SetupAction function, if the actor has one
+        #   Find the SetupAction function, if the actor has one
 
+        for asm_root, asm_dirs, asm_files in os.walk(actor_asm):
             for asm_file in asm_files:
                 asm = ""
                 with open(os.path.join(asm_root,asm_file), "r") as _asm_file:
@@ -117,8 +117,9 @@ for root, dirs, files in os.walk("src/overlays/actors/"):
                         # print("Found SetupAction func")
                         # print(f"{setup_action_func} is {actor_name}_SetupAction({actor_name}* this, {actor_name}ActionFunc actionFunc);")
 
-            #   Find action functions, we know what type they should be
+        #   Find action functions, we know what type they should be
 
+        for asm_root, asm_dirs, asm_files in os.walk(actor_asm):
             for asm_file in asm_files:
                 asm = ""
                 with open(os.path.join(asm_root,asm_file), "r") as _asm_file:
@@ -155,104 +156,108 @@ for root, dirs, files in os.walk("src/overlays/actors/"):
                     elif "lui" in line and f"{reg}, " in line:
                         reg = None
 
-            #   Sort action functions by vaddr
+        #   Sort action functions by vaddr
 
-            action_funcs = list(sorted(set(action_funcs), key=lambda x: int(x[5:], 16)))
+        action_funcs = list(sorted(set(action_funcs), key=lambda x: int(x[5:], 16)))
 
-            #   Add actionfunc to header & struct
+        #   Add actionfunc to header & struct
 
-            print(actor_name)
+        print(actor_name)
 
-            h_src = ""
-            with open(actor_h_file, "r") as infile:
-                h_src = infile.read()
+        h_src = ""
+        with open(actor_h_file, "r") as infile:
+            h_src = infile.read()
 
-            def member_offset(member):
-                return int(member.strip().split("/* ")[1].split(" */")[0], 16)
+        def member_offset(member):
+            return int(member.strip().split("/* ")[1].split(" */")[0], 16)
 
-            struct_body = "    " + h_src.split(" {")[1].split("} ")[0].strip()
-            struct_size = int(h_src.split("// size = ")[1].split("\n")[0].strip(), 16)
+        struct_body = "    " + h_src.split(" {")[1].split("} ")[0].strip()
+        struct_size = int(h_src.split("// size = ")[1].split("\n")[0].strip(), 16)
 
-            struct_members = struct_body.split("\n")
-            member_sizes = []
+        struct_members = struct_body.split("\n")
+        member_sizes = []
 
-            for i,member in enumerate(struct_members,0):
-                this_offset = member_offset(member)
-                next_offset = member_offset(struct_members[i + 1]) if i < len(struct_members) - 1 else struct_size
-                
-                member_sizes.append(next_offset - this_offset)
+        for i,member in enumerate(struct_members,0):
+            this_offset = member_offset(member)
+            next_offset = member_offset(struct_members[i + 1]) if i < len(struct_members) - 1 else struct_size
+            
+            member_sizes.append(next_offset - this_offset)
 
-            member_offsets = [member_offset(member) for member in struct_members]
-            member_types = [member.split("*/ ")[1].split(" ")[0] for member in struct_members]
-            member_names = [member.split("*/ ")[1].split(" ")[1].split(";")[0] for member in struct_members]
+        member_offsets = [member_offset(member) for member in struct_members]
+        member_types = [member.split("*/ ")[1].split(" ")[0] for member in struct_members]
+        member_names = [member.split("*/ ")[1].split(" ")[1].split(";")[0] for member in struct_members]
 
-            # (offset, name, type, size)
-            struct_members = list(zip(member_offsets,member_names,member_types,member_sizes))
+        # (offset, name, type, size)
+        struct_members = list(zip(member_offsets,member_names,member_types,member_sizes))
 
-            def fix_name(name, offset, size):
-                new_name = name
-                if "[" in new_name: # correct array size
-                    new_name = new_name.split("[")[0] + f"[0x{size:X}]"
-                if "unk" in new_name: # correct unk name
-                    if "[" in new_name:
-                        new_name = f"unk_{offset:X}[" + new_name.split("[")[1]
-                    else:
-                        new_name = f"unk_{offset:X}"
-
-                return new_name
-
-            found = False
-            new_members = []
-            for member in struct_members:
-                if not found and member[0] <= action_func_offset and member[0] + member[3] > action_func_offset:
-                    assert member[2] == 'char'
-                    assert action_func_offset - member[0] + 4 <= member[3]
-
-                    # actionfunc is in this member
-
-                    member_actionfunc_offset = action_func_offset - member[0]
-                    if member_actionfunc_offset == 0:
-                        # at the start
-                        new_members.extend([
-                            (member[0], "actionFunc", f"{actor_name}ActionFunc", 4),
-                            (member[0] + 4, fix_name(member[1], member[0], member[3] - 4), member[2], member[3] - 4),
-                        ])
-                    elif member_actionfunc_offset + 4 == member[3]:
-                        # at the end
-                        new_members.extend([
-                            (member[0], fix_name(member[1], member[0], member[3] - 4), member[2], member[3] - 4),
-                            (member[0] + member_actionfunc_offset, "actionFunc", f"{actor_name}ActionFunc", 4),
-                        ])
-                    else:
-                        # in the middle
-                        new_members.extend([
-                            (member[0], fix_name(member[1], member[0], member_actionfunc_offset), member[2], member_actionfunc_offset),
-                            (member[0] + member_actionfunc_offset, "actionFunc", f"{actor_name}ActionFunc", 4),
-                            (member[0] + member_actionfunc_offset + 4, fix_name(member[1], member[0] + member_actionfunc_offset + 4, member[3] - member_actionfunc_offset - 4), member[2], member[3] - member_actionfunc_offset - 4),
-                        ])
-                    found = True
+        def fix_name(name, offset, size):
+            new_name = name
+            if "[" in new_name: # correct array size
+                new_name = new_name.split("[")[0] + f"[0x{size:X}]"
+            if "unk" in new_name: # correct unk name
+                if "[" in new_name:
+                    new_name = f"unk_{offset:X}[" + new_name.split("[")[1]
                 else:
-                    new_members.append(member)
+                    new_name = f"unk_{offset:X}"
 
-            new_struct = ""
-            for member in new_members:
-                new_struct += f"    /* 0x{member[0]:04X} */ {member[2]} {member[1]};\n"
-            new_struct = "    " + new_struct.strip()
+            return new_name
 
-            h_src = h_src.replace(f"struct {actor_name};", f"struct {actor_name};\n\ntypedef void (*{actor_name}ActionFunc)(struct {actor_name}* this, GlobalContext* globalCtx);")
-            h_src = h_src.replace(struct_body, new_struct)
+        found = False
+        new_members = []
+        for member in struct_members:
+            if not found and member[0] <= action_func_offset and member[0] + member[3] > action_func_offset:
+                assert member[2] == 'char'
+                assert action_func_offset - member[0] + 4 <= member[3]
 
-            print(h_src)
+                # actionfunc is in this member
 
-            # Add SetupAction and actionfunc prototypes to C source
+                member_actionfunc_offset = action_func_offset - member[0]
+                if member_actionfunc_offset == 0:
+                    # at the start
+                    new_members.extend([
+                        (member[0], "actionFunc", f"{actor_name}ActionFunc", 4),
+                        (member[0] + 4, fix_name(member[1], member[0], member[3] - 4), member[2], member[3] - 4),
+                    ])
+                elif member_actionfunc_offset + 4 == member[3]:
+                    # at the end
+                    new_members.extend([
+                        (member[0], fix_name(member[1], member[0], member[3] - 4), member[2], member[3] - 4),
+                        (member[0] + member_actionfunc_offset, "actionFunc", f"{actor_name}ActionFunc", 4),
+                    ])
+                else:
+                    # in the middle
+                    new_members.extend([
+                        (member[0], fix_name(member[1], member[0], member_actionfunc_offset), member[2], member_actionfunc_offset),
+                        (member[0] + member_actionfunc_offset, "actionFunc", f"{actor_name}ActionFunc", 4),
+                        (member[0] + member_actionfunc_offset + 4, fix_name(member[1], member[0] + member_actionfunc_offset + 4, member[3] - member_actionfunc_offset - 4), member[2], member[3] - member_actionfunc_offset - 4),
+                    ])
+                found = True
+            else:
+                new_members.append(member)
 
-            setup_action_prototype = ""
-            if setup_action_func is not None:
-                setup_action_prototype = f"\n\nvoid {actor_name}_SetupAction({actor_name}* this, {actor_name}ActionFunc actionFunc);"
-                c_src = c_src.replace(setup_action_func + ".s", f"{actor_name}_SetupAction.s")
+        new_struct = ""
+        for member in new_members:
+            new_struct += f"    /* 0x{member[0]:04X} */ {member[2]} {member[1]};\n"
+        new_struct = "    " + new_struct.strip()
 
-            actionfunc_prototypes = "\n".join([f"void {func}({actor_name}* this, GlobalContext* globalCtx);" for func in action_funcs])
+        h_src = h_src.replace(f"struct {actor_name};", f"struct {actor_name};\n\ntypedef void (*{actor_name}ActionFunc)(struct {actor_name}* this, GlobalContext* globalCtx);")
+        h_src = h_src.replace(struct_body, new_struct)
 
-            c_src = c_src.replace("#if 0", actionfunc_prototypes + setup_action_prototype + "\n\n#if 0")
+        print(h_src)
+        #   with open(actor_h_file, "w") as outfile:
+        #       outfile.write(h_src)
 
-            print(c_src)
+        # Add SetupAction and actionfunc prototypes to C source
+
+        setup_action_prototype = ""
+        if setup_action_func is not None:
+            setup_action_prototype = f"\n\nvoid {actor_name}_SetupAction({actor_name}* this, {actor_name}ActionFunc actionFunc);"
+            c_src = c_src.replace(setup_action_func + ".s", f"{actor_name}_SetupAction.s")
+
+        actionfunc_prototypes = "\n".join([f"void {func}({actor_name}* this, GlobalContext* globalCtx);" for func in action_funcs])
+
+        c_src = c_src.replace("#if 0", actionfunc_prototypes + setup_action_prototype + "\n\n#if 0")
+
+        print(c_src)
+        #   with open(os.path.join(root,actor_c_file), "w") as outfile:
+        #       outfile.write(c_src)
