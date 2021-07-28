@@ -1,5 +1,10 @@
-#include "global.h"
+/*
+ * File: z_select.c
+ * Overlay: ovl_select
+ * Description:
+ */
 
+#include "z_select.h"
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/D_80802390.s")
 
@@ -27,9 +32,9 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/func_80801A64.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/func_80801AFC.s")
+void Select_Main(GameState* thisx);
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/Select_Main.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/func_80801B28.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/Select_Destroy.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/func_80801B4C.s")
-
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/Select_Init.s")

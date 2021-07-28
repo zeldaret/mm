@@ -4047,8 +4047,4 @@ void func_801AA624(GlobalContext* globalCtx);
 // void func_801AA68C(UNK_TYPE4 ctxt);
 void nop_801AAAA0(GlobalContext* globalCtx);
 
-// overlays
-
-void Title_Init(TitleContext* titleCtx);
-
 #endif
