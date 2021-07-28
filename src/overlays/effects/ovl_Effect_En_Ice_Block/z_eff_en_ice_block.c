@@ -20,6 +20,8 @@ const EffectSsInit Effect_En_Ice_Block_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06000A38;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_En_Ice_Block/func_80A22D40.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_En_Ice_Block/EffectEnIceBlock_Init.s")

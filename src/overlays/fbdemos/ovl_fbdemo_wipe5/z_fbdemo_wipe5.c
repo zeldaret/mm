@@ -31,6 +31,8 @@ const TransitionInit TransitionWipe5_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_0F000000;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_fbdemo_wipe5/TransitionWipe5_Start.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_fbdemo_wipe5/TransitionWipe5_Init.s")

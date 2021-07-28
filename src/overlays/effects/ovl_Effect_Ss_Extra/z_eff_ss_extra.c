@@ -20,6 +20,8 @@ const EffectSsInit Effect_Ss_Extra_InitVars = {
 
 #endif
 
+extern UNK_TYPE D_06000DC0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Extra/EffectSsExtra_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Extra/EffectSsExtra_Draw.s")

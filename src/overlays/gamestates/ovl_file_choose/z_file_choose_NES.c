@@ -6,6 +6,14 @@
 
 #include "z_file_choose.h"
 
+extern UNK_TYPE D_01002800;
+extern UNK_TYPE D_01007980;
+extern UNK_TYPE D_0102A6B0;
+extern UNK_TYPE D_0102B170;
+extern UNK_TYPE D_010310F0;
+extern UNK_TYPE D_010311F0;
+extern UNK_TYPE D_0E0002E0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080BC20.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileChoose_nop8080bc44.s")

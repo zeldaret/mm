@@ -18,17 +18,28 @@ extern u8 D_80025D00[];
 
 // keep objects
 extern Gfx D_040008D0[];
-extern UNK_TYPE1 D_0400DEA8;
-extern UNK_TYPE1 D_0400E2A8;
+extern UNK_TYPE D_040032B0;
+extern UNK_TYPE D_0400DEA8;
+extern UNK_TYPE D_0400E2A8;
+extern UNK_TYPE D_0401A4D0;
+extern UNK_TYPE D_0401A538;
+extern UNK_TYPE D_0401A620;
 extern Gfx D_0401C430[];
 extern UNK_TYPE D_0401F740;
 extern UNK_TYPE D_0401F7C0;
 extern UNK_TYPE D_0401F8C0;
+extern UNK_TYPE D_04023130;
 extern Gfx D_04023210[];
 extern Gfx D_04029CB0[];
 extern Gfx D_04029CF0[];
 extern Gfx D_0402E510[];
 extern Gfx D_04030100[]; // Floor shockwave ring
+extern UNK_TYPE D_040301B0;
+extern UNK_TYPE D_04032270;
+extern UNK_TYPE D_04035710;
+extern UNK_TYPE D_040367B0;
+extern UNK_TYPE D_040377B0;
+extern UNK_TYPE D_04037850;
 extern Gfx D_040378F0[]; // gExplosionSplashTex1
 extern Gfx D_04037DF0[]; // gExplosionSplashTex2
 extern Gfx D_040382F0[]; // gExplosionSplashTex3
@@ -38,6 +49,9 @@ extern Gfx D_040391F0[]; // gExplosionSplashTex6
 extern Gfx D_040396F0[]; // gExplosionSplashTex7
 extern Gfx D_04039BF0[]; // gExplosionSplashTex8
 extern Gfx D_0403A0F0[]; // gExplosionSplashDL
+extern UNK_TYPE D_0403C190;
+extern UNK_TYPE D_0403F230;
+extern UNK_TYPE D_04044300;
 extern Gfx D_04048DF0[];
 extern Gfx D_04054A90[];
 extern Gfx D_04057B10[];
@@ -51,6 +65,10 @@ extern u64 D_0408EBE0[]; // gDust5Tex
 extern u64 D_0408EFE0[]; // gDust6Tex
 extern u64 D_0408F3E0[]; // gDust7Tex
 extern u64 D_0408F7E0[]; // gDust8Tex
+extern UNK_TYPE D_04050550;
+extern UNK_TYPE D_04050648;
+extern UNK_TYPE D_040510B0;
+extern UNK_TYPE D_04054940;
 extern Gfx D_0405AAB0[];
 extern UNK_TYPE D_0405B6F0;
 extern UNK_TYPE D_0405BEF0;
@@ -70,10 +88,17 @@ extern UNK_TYPE D_04062020;
 extern UNK_TYPE D_04062040;
 extern UNK_TYPE D_04062060;
 extern Gfx D_040622C0[];
+extern UNK_TYPE D_04073F00;
+extern UNK_TYPE D_04075400;
 extern Gfx D_04075A40[];
 extern Gfx D_04075B30[];
 extern Gfx D_04076BC0[];
 extern Gfx D_04077480[];
+extern UNK_TYPE D_04079B10;
+extern UNK_TYPE D_0407D590;
+extern UNK_TYPE D_0407D650;
+extern UNK_TYPE D_04091BE0;
+extern UNK_TYPE D_04091CE0;
 
 extern Gfx D_05000C40[];
 extern Gfx D_05017EA0[]; // pot displaylist

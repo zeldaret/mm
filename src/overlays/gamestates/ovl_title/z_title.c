@@ -6,6 +6,8 @@
 
 #include "z_title.h"
 
+extern UNK_TYPE D_01002720;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_title/Title_UpdateCounters.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_title/Title_RenderView.s")
