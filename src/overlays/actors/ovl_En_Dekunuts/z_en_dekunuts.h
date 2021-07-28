@@ -7,6 +7,15 @@ struct EnDekunuts;
 
 typedef void (*EnDekunutsActionFunc)(struct EnDekunuts*, GlobalContext*);
 
+#define ENDEKUNUTS_FF00(thisx) (((thisx)->params >> 8) & 0xFF);
+
+enum {
+    /* 0x0 */ ENDEKUNUTS_PARAMS_0,
+    /* 0x1 */ ENDEKUNUTS_PARAMS_1,
+    /* 0x2 */ ENDEKUNUTS_PARAMS_2,
+    /* 0xFF*/ ENDEKUNUTS_PARAMS_FF = 0xFF,
+};
+
 typedef struct EnDekunuts {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;

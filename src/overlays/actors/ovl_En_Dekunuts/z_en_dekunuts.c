@@ -135,17 +135,17 @@ void EnDekunuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_Init(globalCtx, &this->skelAnime, &D_06002468, &D_0600326C, this->jointTable, this->morphTable, 10);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    this->unk_194 = (this->actor.params >> 8) & 0xFF;
+    this->unk_194 = ENDEKUNUTS_FF00(&this->actor);
     thisx->params &= 0xFF;
-    if ((this->unk_194 == 0xFF) || (this->unk_194 == 0)) {
-        this->unk_194 = 1;
+    if ((this->unk_194 == ENDEKUNUTS_PARAMS_FF) || (this->unk_194 == ENDEKUNUTS_PARAMS_0)) {
+        this->unk_194 = ENDEKUNUTS_PARAMS_1;
     }
 
-    if (this->actor.params == 1) {
+    if (this->actor.params == ENDEKUNUTS_PARAMS_1) {
         this->actor.flags &= ~1;
         this->collider.base.colType = COLTYPE_NONE;
         this->collider.info.bumperFlags |= (0x40 | 0x20 | 0x10 | 0x8);
-    } else if (this->actor.params == 2) {
+    } else if (this->actor.params == ENDEKUNUTS_PARAMS_2) {
         this->actor.targetMode = 0;
     }
 
@@ -205,7 +205,7 @@ void func_808BD49C(EnDekunuts* this, GlobalContext* globalCtx) {
 
     this->collider.dim.height = (s32)((CLAMP(this->skelAnime.animCurrentFrame, 9.0f, 12.0f) - 9.0f) * 9.0f) + 5;
 
-    if (!phi_v1 && (this->actor.params == 0) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK) &&
+    if (!phi_v1 && (this->actor.params == ENDEKUNUTS_PARAMS_0) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK) &&
         (this->actor.xzDistToPlayer < 120.0f)) {
         func_808BDC9C(this);
     } else if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
@@ -213,9 +213,9 @@ void func_808BD49C(EnDekunuts* this, GlobalContext* globalCtx) {
             (Player_GetMask(globalCtx) == PLAYER_MASK_STONE_MASK)) {
             func_808BD78C(this);
         } else {
-            if (this->actor.params == 1) {
+            if (this->actor.params == ENDEKUNUTS_PARAMS_1) {
                 func_808BE680(this);
-            } else if ((this->actor.params == 0) && (this->actor.xzDistToPlayer < 120.0f)) {
+            } else if ((this->actor.params == ENDEKUNUTS_PARAMS_0) && (this->actor.xzDistToPlayer < 120.0f)) {
                 func_808BDC9C(this);
             } else {
                 func_808BD870(this);
@@ -223,9 +223,9 @@ void func_808BD49C(EnDekunuts* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (phi_v1 && ((this->actor.xzDistToPlayer > 160.0f) || (this->actor.params != 0)) &&
-        (((this->actor.params == 0) && (fabsf(this->actor.yDistToPlayer) < 120.0f)) ||
-         ((this->actor.params == 2) && (this->actor.yDistToPlayer > -60.0f)) || (this->actor.params == 1)) &&
+    if (phi_v1 && ((this->actor.xzDistToPlayer > 160.0f) || (this->actor.params != ENDEKUNUTS_PARAMS_0)) &&
+        (((this->actor.params == ENDEKUNUTS_PARAMS_0) && (fabsf(this->actor.yDistToPlayer) < 120.0f)) ||
+         ((this->actor.params == ENDEKUNUTS_PARAMS_2) && (this->actor.yDistToPlayer > -60.0f)) || (this->actor.params == ENDEKUNUTS_PARAMS_1)) &&
         ((this->unk_190 == 0) || (this->actor.xzDistToPlayer < 480.0f))) {
         this->skelAnime.animPlaybackSpeed = 1.0f;
     }
@@ -274,7 +274,7 @@ void func_808BD8D8(EnDekunuts* this, GlobalContext* globalCtx) {
 
     if (this->unk_190 == 0x1000) {
         if ((this->actor.xzDistToPlayer > 480.0f) ||
-            ((this->actor.params == 0) && (this->actor.xzDistToPlayer < 120.0f)) ||
+            ((this->actor.params == ENDEKUNUTS_PARAMS_0) && (this->actor.xzDistToPlayer < 120.0f)) ||
             (Player_GetMask(globalCtx) == PLAYER_MASK_STONE_MASK)) {
             func_808BDC9C(this);
         } else {
@@ -304,7 +304,7 @@ void func_808BDA4C(EnDekunuts* this, GlobalContext* globalCtx) {
     s16 params;
 
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0xE38);
-    if (this->actor.params == 2) {
+    if (this->actor.params == ENDEKUNUTS_PARAMS_2) {
         player = PLAYER;
 
         sp58.x = player->actor.world.pos.x;
@@ -327,7 +327,7 @@ void func_808BDA4C(EnDekunuts* this, GlobalContext* globalCtx) {
         pos.x = (Math_SinS(this->actor.shape.rot.y) * val) + this->actor.world.pos.x;
         pos.y = (this->actor.world.pos.y + 12.0f) - (Math_SinS(this->actor.world.rot.x) * 15.0f);
         pos.z = (Math_CosS(this->actor.shape.rot.y) * val) + this->actor.world.pos.z;
-        params = (this->actor.params == 2) ? 2 : 0;
+        params = (this->actor.params == ENDEKUNUTS_PARAMS_2) ? ENDEKUNUTS_PARAMS_2 : ENDEKUNUTS_PARAMS_0;
 
         if (Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_NUTSBALL, pos.x, pos.y, pos.z,
                         this->actor.world.rot.x, this->actor.shape.rot.y, 0, params) != NULL) {
@@ -476,7 +476,7 @@ void func_808BE22C(EnDekunuts* this, GlobalContext* globalCtx) {
 
 void func_808BE294(EnDekunuts* this, s32 arg1) {
     SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_0600259C, -3.0f);
-    if (this->actor.params == 0) {
+    if (this->actor.params == ENDEKUNUTS_PARAMS_0) {
         this->actor.speedXZ = 10.0f;
         if (arg1 != 0) {
             func_800BE504(&this->actor, &this->collider);
@@ -515,7 +515,7 @@ void func_808BE3FC(EnDekunuts* this, GlobalContext* globalCtx) {
 
     if (this->unk_190 == 0) {
         func_808BD3B4(this, globalCtx);
-        if (this->actor.params == 1) {
+        if (this->actor.params == ENDEKUNUTS_PARAMS_1) {
             func_808BDCF0(this);
         } else if (this->actor.colChkInfo.health == 0) {
             func_808BE294(this, 0);
@@ -578,12 +578,12 @@ void func_808BE73C(EnDekunuts* this, GlobalContext* globalCtx) {
         func_800BE258(&this->actor, &this->collider.info);
         if ((this->unk_18E != 10) || !(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
             func_808BD3B4(this, globalCtx);
-            if ((this->actor.colChkInfo.mass == 50) || (this->actor.params != 0)) {
-                if ((this->actor.params != 1) && !func_800BE22C(&this->actor)) {
+            if ((this->actor.colChkInfo.mass == 50) || (this->actor.params != ENDEKUNUTS_PARAMS_0)) {
+                if ((this->actor.params != ENDEKUNUTS_PARAMS_1) && !func_800BE22C(&this->actor)) {
                     func_800BBA88(globalCtx, &this->actor);
                 }
 
-                if (this->actor.params == 1) {
+                if (this->actor.params == ENDEKUNUTS_PARAMS_1) {
                     func_808BDCF0(this);
                     return;
                 }
@@ -624,15 +624,15 @@ void func_808BE73C(EnDekunuts* this, GlobalContext* globalCtx) {
                 }
 
                 func_808BE294(this, 1);
-            } else if (this->actor.params == 0) {
+            } else if (this->actor.params == ENDEKUNUTS_PARAMS_0) {
                 func_808BDE7C(this);
             }
         }
     } else if ((this->actor.colChkInfo.mass == MASS_IMMOVABLE) && (globalCtx->actorCtx.unk2 != 0) &&
                (this->actor.xyzDistToPlayerSq < SQ(200.0f))) {
-        if (this->actor.params == 1) {
+        if (this->actor.params == ENDEKUNUTS_PARAMS_1) {
             func_808BDCF0(this);
-        } else if (this->actor.params == 0) {
+        } else if (this->actor.params == ENDEKUNUTS_PARAMS_0) {
             func_808BDE7C(this);
         } else if (this->actor.colChkInfo.health != 0) {
             this->actor.colChkInfo.health = 0;
@@ -693,7 +693,7 @@ s32 func_808BEBD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
                 return 0;
             }
             Matrix_Scale(arg1, arg2, arg3, MTXMODE_APPLY);
-        } else if ((limbIndex == 2) && (this->actor.params == 2)) {
+        } else if ((limbIndex == 2) && (this->actor.params == ENDEKUNUTS_PARAMS_2)) {
             rot->z = this->actor.world.rot.x;
         }
     }
