@@ -147,16 +147,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-typedef struct {
-    AnimationHeader* unk_00;
-    f32 unk_04;
-    s16 unk_08;
-    s16 unk_0A;
-    u8 unk_0C;
-    s16 unk_0E;
-} D_8098C35C_s;
-
-static D_8098C35C_s D_8098C35C[] = {
+static ActorAnimationEntryS D_8098C35C[] = {
     { &D_060021C8, 1.0f, 0, -1, 0, 0 },   { &D_060021C8, 1.0f, 0, -1, 0, -6 },  { &D_06001BD8, 1.0f, 0, -1, 0, 0 },
     { &D_06000998, 1.0f, 0, -1, 0, -6 },  { &D_06001FB0, 1.0f, 0, -1, 2, -6 },  { &D_06001FB0, 1.0f, 0, -1, 4, -6 },
     { &D_06001048, 1.0f, 0, -1, 2, -6 },  { &D_06001348, 1.0f, 0, -1, 0, -6 },  { &D_06001048, 1.0f, 0, 27, 2, -6 },
@@ -169,18 +160,18 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_STOP),
 };
 
-void func_80989140(SkelAnime* skelAnime, D_8098C35C_s arg1[], s32 arg2) {
-    f32 phi_f0;
+void func_80989140(SkelAnime* skelAnime, ActorAnimationEntryS arg1[], s32 arg2) {
+    f32 frameCount;
 
     arg1 += arg2;
-    if (arg1->unk_0A < 0) {
-        phi_f0 = SkelAnime_GetFrameCount(&arg1->unk_00->common);
+    if (arg1->frameCount < 0) {
+        frameCount = SkelAnime_GetFrameCount(&arg1->animationSeg->common);
     } else {
-        phi_f0 = arg1->unk_0A;
+        frameCount = arg1->frameCount;
     }
 
-    SkelAnime_ChangeAnim(skelAnime, arg1->unk_00, arg1->unk_04 + (BREG(88) * 0.1f), arg1->unk_08, phi_f0, arg1->unk_0C,
-                         arg1->unk_0E);
+    SkelAnime_ChangeAnim(skelAnime, arg1->animationSeg, arg1->playbackSpeed + (BREG(88) * 0.1f), arg1->frame, frameCount, arg1->mode,
+                         arg1->transitionRate);
 }
 
 void func_80989204(EnDg* this, GlobalContext* globalCtx) {
@@ -723,7 +714,7 @@ void func_8098A938(EnDg* this, GlobalContext* globalCtx) {
                 this->actionFunc = func_8098AC34;
             } else {
                 func_80989140(&this->skelAnime, D_8098C35C, 11);
-                D_8098C35C[11].unk_04 = -1.0f;
+                D_8098C35C[11].playbackSpeed = -1.0f;
                 this->actionFunc = func_8098B198;
             }
         }
@@ -796,14 +787,14 @@ void func_8098AC34(EnDg* this, GlobalContext* globalCtx) {
 
     if (sp26 < 9) {
         if (func_801378B8(&this->skelAnime, 0.0f)) {
-            D_8098C35C[14].unk_04 = randPlusMinusPoint5Scaled(1.0f) + 3.0f;
+            D_8098C35C[14].playbackSpeed = randPlusMinusPoint5Scaled(1.0f) + 3.0f;
         }
         func_80989864(this, globalCtx);
     } else {
         this->unk_280 |= 2;
         if (func_801378B8(&this->skelAnime, 9.0f)) {
             f32 rand = randPlusMinusPoint5Scaled(1.5f);
-            D_8098C35C[14].unk_04 = 1.2f;
+            D_8098C35C[14].playbackSpeed = 1.2f;
             this->actor.velocity.y = 2.0f * rand + 3.0f;
             this->actor.speedXZ = 8.0f + rand;
         } else if (sp26 >= 0x15) {
@@ -1143,7 +1134,7 @@ void EnDg_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->unk_1DC = func_8013D648(globalCtx, (this->actor.params & 0xFC00) >> 0xA, 0x3F);
+    this->unk_1DC = func_8013D648(globalCtx, ENDG_FC00(&this->actor), 0x3F);
     Actor_SetScale(&this->actor, 0.0075f);
     this->actor.targetMode = 1;
     this->actor.gravity = -3.0f;
@@ -1151,7 +1142,7 @@ void EnDg_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_280 = 0;
     this->unk_28E = 20;
     this->unk_284 = 10;
-    this->unk_286 = (this->actor.params & 0x3E0) >> 5;
+    this->unk_286 = ENDG_3E0(&this->actor);
     this->unk_28C = 0;
     this->unk_290 = 0;
     if (globalCtx->sceneNum == SCENE_F01_B) {
