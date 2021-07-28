@@ -22,7 +22,6 @@ const ActorInit En_Crow_InitVars = {
     (ActorFunc)EnCrow_Draw,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_8099C070[1] = {
     {
@@ -37,10 +36,8 @@ static ColliderJntSphInit D_8099C094 = {
     1, D_8099C070, // sJntSphElementsInit,
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_8099C0A4 = { 1, 15, 30, 30 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_8099C0AC = {
@@ -78,7 +75,6 @@ static DamageTable D_8099C0AC = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_8099C0D0[] = {
     ICHAIN_F32(uncullZoneForward, 3000, ICHAIN_CONTINUE),
@@ -87,13 +83,13 @@ static InitChainEntry D_8099C0D0[] = {
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_8099C070[1];
 extern ColliderJntSphInit D_8099C094;
 extern CollisionCheckInfoInit D_8099C0A4;
 extern DamageTable D_8099C0AC;
 extern InitChainEntry D_8099C0D0[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Crow/EnCrow_Init.s")
 

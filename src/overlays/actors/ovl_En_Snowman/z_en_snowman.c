@@ -22,7 +22,6 @@ const ActorInit En_Snowman_InitVars = {
     (ActorFunc)EnSnowman_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B19A00 = {
     { COLTYPE_HIT4, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,14 +29,12 @@ static ColliderCylinderInit D_80B19A00 = {
     { 60, 80, 0, { 0, 0, 0 } },
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B19A2C = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_NONE | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NONE, BUMP_ON, OCELEM_ON, },
     { 60, 80, 0, { 0, 0, 0 } },
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80B19A58 = {
@@ -75,10 +72,8 @@ static DamageTable D_80B19A58 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_80B19A78 = { 2, 60, 80, 150 };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B19AAC[] = {
@@ -87,13 +82,13 @@ static InitChainEntry D_80B19AAC[] = {
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80B19A00;
 extern ColliderCylinderInit D_80B19A2C;
 extern DamageTable D_80B19A58;
 extern CollisionCheckInfoInit D_80B19A78;
 extern InitChainEntry D_80B19AAC[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowman/EnSnowman_Init.s")
 

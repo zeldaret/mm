@@ -22,7 +22,6 @@ const ActorInit En_Lift_Nuts_InitVars = {
     (ActorFunc)EnLiftNuts_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80AEBF28 = {
     { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
@@ -30,14 +29,13 @@ static ColliderCylinderInit D_80AEBF28 = {
     { 25, 75, 0, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80AEBF54 = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
+#endif
 
 extern ColliderCylinderInit D_80AEBF28;
 extern CollisionCheckInfoInit2 D_80AEBF54;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Lift_Nuts/func_80AE9A20.s")
 

@@ -21,16 +21,15 @@ const ActorInit En_Warp_tag_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_809C1008[] = {
     ICHAIN_VEC3F(scale, 1, ICHAIN_CONTINUE),
     ICHAIN_VEC3S(shape.rot, 0, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_809C1008[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Warp_tag/EnWarptag_Init.s")
 

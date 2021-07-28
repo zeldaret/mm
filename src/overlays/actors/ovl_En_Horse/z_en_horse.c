@@ -22,7 +22,6 @@ const ActorInit En_Horse_InitVars = {
     (ActorFunc)EnHorse_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80888F74 = {
     { COLTYPE_NONE, AT_NONE | AT_TYPE_PLAYER, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1 | OC2_UNK1, COLSHAPE_CYLINDER, },
@@ -30,14 +29,12 @@ static ColliderCylinderInit D_80888F74 = {
     { 20, 70, 0, { 0, 0, 0 } },
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80888FA0 = {
     { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1 | OC2_UNK1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
     { 20, 70, 0, { 0, 0, 0 } },
 };
-
 
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_80888FCC[1] = {
@@ -53,10 +50,8 @@ static ColliderJntSphInit D_80888FF0 = {
     1, D_80888FCC, // sJntSphElementsInit,
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_80889000 = { 10, 35, 100, MASS_HEAVY };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80889010[] = {
@@ -64,6 +59,7 @@ static InitChainEntry D_80889010[] = {
     ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80888F74;
 extern ColliderCylinderInit D_80888FA0;
@@ -71,7 +67,6 @@ extern ColliderJntSphElementInit D_80888FCC[1];
 extern ColliderJntSphInit D_80888FF0;
 extern CollisionCheckInfoInit D_80889000;
 extern InitChainEntry D_80889010[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse/func_8087B730.s")
 

@@ -46,7 +46,6 @@ static DamageTable D_809BDB04 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-
 // static DamageTable sDamageTable = {
 static DamageTable D_809BDB24 = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
@@ -83,7 +82,6 @@ static DamageTable D_809BDB24 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_809BDB44[1] = {
     {
@@ -97,7 +95,6 @@ static ColliderJntSphInit D_809BDB8C = {
     { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
     1, D_809BDB44, // sJntSphElementsInit,
 };
-
 
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_809BDB68[1] = {
@@ -113,7 +110,6 @@ static ColliderJntSphInit D_809BDB9C = {
     1, D_809BDB68, // sJntSphElementsInit,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_809BDBAC[1] = {
     {
@@ -127,7 +123,6 @@ static ColliderJntSphInit D_809BDBD0 = {
     { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
     1, D_809BDBAC, // sJntSphElementsInit,
 };
-
 
 // static ColliderJntSphElementInit sJntSphElementsInit[2] = {
 static ColliderJntSphElementInit D_809BDBE0[2] = {
@@ -147,7 +142,6 @@ static ColliderJntSphInit D_809BDC28 = {
     2, D_809BDBE0, // sJntSphElementsInit,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_809BDC38 = {
     { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -155,14 +149,12 @@ static ColliderCylinderInit D_809BDC38 = {
     { 15, 20, -10, { 0, 0, 0 } },
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_809BDC64 = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ALL, AC_ON | AC_TYPE_PLAYER | AC_TYPE_ENEMY | AC_TYPE_OTHER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x00 }, { 0xF7FFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
     { 20, 40, 0, { 0, 0, 0 } },
 };
-
 
 const ActorInit En_Knight_InitVars = {
     ACTOR_EN_KNIGHT,
@@ -176,6 +168,7 @@ const ActorInit En_Knight_InitVars = {
     (ActorFunc)EnKnight_Draw,
 };
 
+#endif
 
 extern DamageTable D_809BDB04;
 extern DamageTable D_809BDB24;
@@ -189,7 +182,6 @@ extern ColliderJntSphElementInit D_809BDBE0[2];
 extern ColliderJntSphInit D_809BDC28;
 extern ColliderCylinderInit D_809BDC38;
 extern ColliderCylinderInit D_809BDC64;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Knight/func_809B20F0.s")
 

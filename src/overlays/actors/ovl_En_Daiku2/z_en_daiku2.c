@@ -22,7 +22,6 @@ const ActorInit En_Daiku2_InitVars = {
     (ActorFunc)EnDaiku2_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80BE7900 = {
     { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
@@ -30,9 +29,9 @@ static ColliderCylinderInit D_80BE7900 = {
     { 20, 60, 0, { 0, 0, 0 } },
 };
 
+#endif
 
 extern ColliderCylinderInit D_80BE7900;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Daiku2/func_80BE61D0.s")
 

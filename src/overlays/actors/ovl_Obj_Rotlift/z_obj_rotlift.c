@@ -22,7 +22,6 @@ const ActorInit Obj_Rotlift_InitVars = {
     (ActorFunc)ObjRotlift_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B96178[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
@@ -31,9 +30,9 @@ static InitChainEntry D_80B96178[] = {
     ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_80B96178[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Rotlift/func_80B95E20.s")
 

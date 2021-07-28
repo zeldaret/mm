@@ -22,7 +22,6 @@ const ActorInit En_Tanron2_InitVars = {
     (ActorFunc)EnTanron2_Draw,
 };
 
-
 // static DamageTable sDamageTable = {
 static DamageTable D_80BB8170 = {
     /* Deku Nut       */ DMG_ENTRY(1, 0xF),
@@ -59,14 +58,12 @@ static DamageTable D_80BB8170 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80BB8190 = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xFFFFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
     { 30, 50, -25, { 0, 0, 0 } },
 };
-
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80BB81BC = {
@@ -75,11 +72,11 @@ static ColliderCylinderInit D_80BB81BC = {
     { 22, 42, -21, { 0, 0, 0 } },
 };
 
+#endif
 
 extern DamageTable D_80BB8170;
 extern ColliderCylinderInit D_80BB8190;
 extern ColliderCylinderInit D_80BB81BC;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron2/EnTanron2_Init.s")
 

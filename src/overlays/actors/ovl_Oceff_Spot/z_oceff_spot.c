@@ -22,16 +22,15 @@ const ActorInit Oceff_Spot_InitVars = {
     (ActorFunc)OceffSpot_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80973478[] = {
     ICHAIN_VEC3F_DIV1000(scale, 0, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 1500, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_80973478[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Spot/func_80972680.s")
 

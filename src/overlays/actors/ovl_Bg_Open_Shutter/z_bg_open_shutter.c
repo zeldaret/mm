@@ -22,7 +22,6 @@ const ActorInit Bg_Open_Shutter_InitVars = {
     (ActorFunc)BgOpenShutter_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80ACB140[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
@@ -31,9 +30,9 @@ static InitChainEntry D_80ACB140[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_80ACB140[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Open_Shutter/func_80ACAB10.s")
 

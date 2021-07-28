@@ -22,7 +22,6 @@ const ActorInit En_Estone_InitVars = {
     (ActorFunc)EnEstone_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A9AB70 = {
     { COLTYPE_HARD, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_2, COLSHAPE_CYLINDER, },
@@ -30,9 +29,9 @@ static ColliderCylinderInit D_80A9AB70 = {
     { 30, 30, -10, { 0, 0, 0 } },
 };
 
+#endif
 
 extern ColliderCylinderInit D_80A9AB70;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Estone/EnEstone_Init.s")
 

@@ -46,7 +46,6 @@ static DamageTable D_80A338A0 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-
 const ActorInit En_Pr_InitVars = {
     ACTOR_EN_PR,
     ACTORCAT_ENEMY,
@@ -59,7 +58,6 @@ const ActorInit En_Pr_InitVars = {
     (ActorFunc)EnPr_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A338F4 = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -67,10 +65,10 @@ static ColliderCylinderInit D_80A338F4 = {
     { 18, 20, 5, { 0, 0, 0 } },
 };
 
+#endif
 
 extern DamageTable D_80A338A0;
 extern ColliderCylinderInit D_80A338F4;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Pr/EnPr_Init.s")
 

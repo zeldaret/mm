@@ -22,16 +22,15 @@ const ActorInit En_Takaraya_InitVars = {
     (ActorFunc)EnTakaraya_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80ADFB20[] = {
     ICHAIN_U8(targetMode, 6, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 1000, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_80ADFB20[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/EnTakaraya_Init.s")
 

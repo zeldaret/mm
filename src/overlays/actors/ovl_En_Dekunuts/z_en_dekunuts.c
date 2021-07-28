@@ -22,7 +22,6 @@ const ActorInit En_Dekunuts_InitVars = {
     (ActorFunc)EnDekunuts_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_808BEF30 = {
     { COLTYPE_HIT6, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,10 +29,8 @@ static ColliderCylinderInit D_808BEF30 = {
     { 18, 32, 0, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_808BEF5C = { 1, 18, 32, MASS_IMMOVABLE };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_808BEF64 = {
@@ -71,7 +68,6 @@ static DamageTable D_808BEF64 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_808BEF84[] = {
     ICHAIN_S8(hintId, 77, ICHAIN_CONTINUE),
@@ -79,12 +75,12 @@ static InitChainEntry D_808BEF84[] = {
     ICHAIN_F32(targetArrowOffset, 2600, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_808BEF30;
 extern CollisionCheckInfoInit D_808BEF5C;
 extern DamageTable D_808BEF64;
 extern InitChainEntry D_808BEF84[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dekunuts/EnDekunuts_Init.s")
 

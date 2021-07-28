@@ -22,7 +22,6 @@ const ActorInit En_Boom_InitVars = {
     (ActorFunc)EnBoom_Draw,
 };
 
-
 // static ColliderQuadInit sQuadInit = {
 static ColliderQuadInit D_808A3010 = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_PLAYER, AC_NONE, OC1_NONE, OC2_TYPE_PLAYER, COLSHAPE_QUAD, },
@@ -30,17 +29,16 @@ static ColliderQuadInit D_808A3010 = {
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_808A3060[] = {
     ICHAIN_S8(targetMode, 5, ICHAIN_CONTINUE),
     ICHAIN_VEC3S(shape.rot, 0, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderQuadInit D_808A3010;
 extern InitChainEntry D_808A3060[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Boom/func_808A24D0.s")
 

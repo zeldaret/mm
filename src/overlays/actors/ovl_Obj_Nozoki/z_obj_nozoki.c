@@ -21,16 +21,15 @@ const ActorInit Obj_Nozoki_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80BA34B0[] = {
     ICHAIN_VEC3F(scale, 1, ICHAIN_CONTINUE),
     ICHAIN_U8(targetMode, 0, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_80BA34B0[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Nozoki/func_80BA2420.s")
 

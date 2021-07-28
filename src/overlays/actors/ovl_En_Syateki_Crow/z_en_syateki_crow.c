@@ -22,7 +22,6 @@ const ActorInit En_Syateki_Crow_InitVars = {
     (ActorFunc)EnSyatekiCrow_Draw,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_809CB07C[1] = {
     {
@@ -37,7 +36,6 @@ static ColliderJntSphInit D_809CB0A0 = {
     1, D_809CB07C, // sJntSphElementsInit,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_809CB0B0[] = {
     ICHAIN_F32(uncullZoneScale, 3000, ICHAIN_CONTINUE),
@@ -46,11 +44,11 @@ static InitChainEntry D_809CB0B0[] = {
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_809CB07C[1];
 extern ColliderJntSphInit D_809CB0A0;
 extern InitChainEntry D_809CB0B0[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/EnSyatekiCrow_Init.s")
 

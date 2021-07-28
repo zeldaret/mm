@@ -22,7 +22,6 @@ const ActorInit En_Bigpamet_InitVars = {
     (ActorFunc)EnBigpamet_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A29700 = {
     { COLTYPE_HARD, AT_NONE | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,10 +29,8 @@ static ColliderCylinderInit D_80A29700 = {
     { 53, 50, 0, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_80A2972C = { 1, 53, 60, 250 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80A29734 = {
@@ -71,7 +68,6 @@ static DamageTable D_80A29734 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80A29764[] = {
     ICHAIN_S8(hintId, 1, ICHAIN_CONTINUE),
@@ -81,12 +77,12 @@ static InitChainEntry D_80A29764[] = {
     ICHAIN_U8(targetMode, 5, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80A29700;
 extern CollisionCheckInfoInit D_80A2972C;
 extern DamageTable D_80A29734;
 extern InitChainEntry D_80A29764[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bigpamet/EnBigpamet_Init.s")
 

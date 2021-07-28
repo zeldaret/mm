@@ -22,7 +22,6 @@ const ActorInit En_Scopecrow_InitVars = {
     (ActorFunc)EnScopecrow_Draw,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_80BCDB70[1] = {
     {
@@ -37,10 +36,10 @@ static ColliderJntSphInit D_80BCDB94 = {
     1, D_80BCDB70, // sJntSphElementsInit,
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_80BCDB70[1];
 extern ColliderJntSphInit D_80BCDB94;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/func_80BCD000.s")
 

@@ -22,7 +22,6 @@ const ActorInit En_Racedog_InitVars = {
     (ActorFunc)EnRacedog_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B25E98 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,10 +29,8 @@ static ColliderCylinderInit D_80B25E98 = {
     { 13, 19, 0, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80B25EC4 = { 0, 0, 0, 0, 1 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80B25ED0 = {
@@ -71,18 +68,17 @@ static DamageTable D_80B25ED0 = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B25FF0[] = {
     ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80B25E98;
 extern CollisionCheckInfoInit2 D_80B25EC4;
 extern DamageTable D_80B25ED0;
 extern InitChainEntry D_80B25FF0[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B24630.s")
 

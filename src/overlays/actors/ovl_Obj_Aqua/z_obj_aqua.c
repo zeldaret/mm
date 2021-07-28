@@ -22,14 +22,12 @@ const ActorInit Obj_Aqua_InitVars = {
     (ActorFunc)ObjAqua_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80ACC2C0 = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_OTHER, AC_NONE, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NONE, BUMP_NONE, OCELEM_NONE, },
     { 6, 10, 0, { 0, 0, 0 } },
 };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80ACC2EC[] = {
@@ -42,10 +40,10 @@ static InitChainEntry D_80ACC2EC[] = {
     ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80ACC2C0;
 extern InitChainEntry D_80ACC2EC[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Aqua/func_80ACB6A0.s")
 

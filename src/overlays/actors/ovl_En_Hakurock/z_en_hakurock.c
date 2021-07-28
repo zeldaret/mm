@@ -21,7 +21,6 @@ const ActorInit En_Hakurock_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B22A80 = {
     { COLTYPE_HARD, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_NO_PUSH | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -29,14 +28,13 @@ static ColliderCylinderInit D_80B22A80 = {
     { 60, 60, -30, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_80B22AAC = { 0, 60, 60, MASS_IMMOVABLE };
 
+#endif
 
 extern ColliderCylinderInit D_80B22A80;
 extern CollisionCheckInfoInit D_80B22AAC;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/EnHakurock_Init.s")
 

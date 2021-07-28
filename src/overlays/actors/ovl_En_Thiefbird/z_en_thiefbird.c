@@ -22,7 +22,6 @@ const ActorInit En_Thiefbird_InitVars = {
     (ActorFunc)EnThiefbird_Draw,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[3] = {
 static ColliderJntSphElementInit D_80C135C0[3] = {
     {
@@ -45,10 +44,8 @@ static ColliderJntSphInit D_80C1362C = {
     3, D_80C135C0, // sJntSphElementsInit,
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_80C1363C = { 24, 15, 30, 30 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80C13644 = {
@@ -86,7 +83,6 @@ static DamageTable D_80C13644 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80C13670[] = {
     ICHAIN_F32(uncullZoneForward, 3000, ICHAIN_CONTINUE),
@@ -95,13 +91,13 @@ static InitChainEntry D_80C13670[] = {
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_80C135C0[3];
 extern ColliderJntSphInit D_80C1362C;
 extern CollisionCheckInfoInit D_80C1363C;
 extern DamageTable D_80C13644;
 extern InitChainEntry D_80C13670[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/EnThiefbird_Init.s")
 

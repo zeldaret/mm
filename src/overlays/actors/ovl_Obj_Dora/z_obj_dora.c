@@ -22,7 +22,6 @@ const ActorInit Obj_Dora_InitVars = {
     (ActorFunc)ObjDora_Draw,
 };
 
-
 // static ColliderTrisElementInit sTrisElementsInit[6] = {
 static ColliderTrisElementInit D_80B61310[6] = {
     {
@@ -56,7 +55,6 @@ static ColliderTrisInit D_80B61478 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_TRIS, },
     6, D_80B61310, // sTrisElementsInit,
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80B61488 = {
@@ -94,16 +92,15 @@ static DamageTable D_80B61488 = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80B614A8 = { 8, 0, 0, 0, MASS_HEAVY };
 
+#endif
 
 extern ColliderTrisElementInit D_80B61310[6];
 extern ColliderTrisInit D_80B61478;
 extern DamageTable D_80B61488;
 extern CollisionCheckInfoInit2 D_80B614A8;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Dora/ObjDora_Init.s")
 

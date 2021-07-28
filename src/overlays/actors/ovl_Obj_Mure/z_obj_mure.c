@@ -21,7 +21,6 @@ const ActorInit Obj_Mure_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_808D87BC[] = {
     ICHAIN_F32(uncullZoneForward, 1200, ICHAIN_CONTINUE),
@@ -29,9 +28,9 @@ static InitChainEntry D_808D87BC[] = {
     ICHAIN_F32(uncullZoneDownward, 1200, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_808D87BC[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure/func_808D78D0.s")
 

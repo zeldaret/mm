@@ -22,7 +22,6 @@ const ActorInit En_Peehat_InitVars = {
     (ActorFunc)EnPeehat_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80899430 = {
     { COLTYPE_WOOD, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,14 +29,12 @@ static ColliderCylinderInit D_80899430 = {
     { 50, 120, -20, { 0, 0, 0 } },
 };
 
-
 // static ColliderSphereInit sSphereInit = {
 static ColliderSphereInit D_8089945C = {
     { COLTYPE_HIT6, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_SPHERE, },
     { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
     { 0, { { 0, 0, 0 }, 40 }, 100 },
 };
-
 
 // static ColliderTrisElementInit sTrisElementsInit[2] = {
 static ColliderTrisElementInit D_80899488[2] = {
@@ -56,7 +53,6 @@ static ColliderTrisInit D_80899500 = {
     { COLTYPE_METAL, AT_NONE | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_1, COLSHAPE_TRIS, },
     2, D_80899488, // sTrisElementsInit,
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80899510 = {
@@ -94,14 +90,11 @@ static DamageTable D_80899510 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80899530 = { 15, 50, 120, -20, MASS_HEAVY };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_8089953C = { 1, 20, 15, -5, 30 };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80899548[] = {
@@ -111,6 +104,7 @@ static InitChainEntry D_80899548[] = {
     ICHAIN_F32(targetArrowOffset, 700, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80899430;
 extern ColliderSphereInit D_8089945C;
@@ -120,7 +114,6 @@ extern DamageTable D_80899510;
 extern CollisionCheckInfoInit2 D_80899530;
 extern CollisionCheckInfoInit2 D_8089953C;
 extern InitChainEntry D_80899548[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/EnPeehat_Init.s")
 

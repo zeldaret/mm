@@ -21,7 +21,6 @@ const ActorInit Obj_Pzlblock_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_809A4078[] = {
     ICHAIN_VEC3S(world.rot, 0, ICHAIN_CONTINUE),
@@ -30,9 +29,9 @@ static InitChainEntry D_809A4078[] = {
     ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_809A4078[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Pzlblock/func_809A33E0.s")
 

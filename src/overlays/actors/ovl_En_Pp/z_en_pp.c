@@ -46,7 +46,6 @@ static DamageTable D_80B21624 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xC),
 };
 
-
 const ActorInit En_Pp_InitVars = {
     ACTOR_EN_PP,
     ACTORCAT_ENEMY,
@@ -58,7 +57,6 @@ const ActorInit En_Pp_InitVars = {
     (ActorFunc)EnPp_Update,
     (ActorFunc)EnPp_Draw,
 };
-
 
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_80B21664[1] = {
@@ -74,7 +72,6 @@ static ColliderJntSphInit D_80B21688 = {
     1, D_80B21664, // sJntSphElementsInit,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_80B21698[1] = {
     {
@@ -89,7 +86,6 @@ static ColliderJntSphInit D_80B216BC = {
     1, D_80B21698, // sJntSphElementsInit,
 };
 
-
 // static ColliderQuadInit sQuadInit = {
 static ColliderQuadInit D_80B216CC = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_NONE, OC1_NONE, OC2_NONE, COLSHAPE_QUAD, },
@@ -97,6 +93,7 @@ static ColliderQuadInit D_80B216CC = {
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
 
+#endif
 
 extern DamageTable D_80B21624;
 extern ColliderJntSphElementInit D_80B21664[1];
@@ -104,7 +101,6 @@ extern ColliderJntSphInit D_80B21688;
 extern ColliderJntSphElementInit D_80B21698[1];
 extern ColliderJntSphInit D_80B216BC;
 extern ColliderQuadInit D_80B216CC;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Pp/EnPp_Init.s")
 

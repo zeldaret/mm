@@ -22,15 +22,14 @@ const ActorInit Bg_Kin2_Shelf_InitVars = {
     (ActorFunc)BgKin2Shelf_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B7077C[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_80B7077C[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Shelf/func_80B6FB30.s")
 

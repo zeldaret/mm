@@ -22,15 +22,14 @@ const ActorInit Arrow_Ice_InitVars = {
     (ActorFunc)ArrowIce_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_809241F0[] = {
     ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_809241F0[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/D_80924200.s")
 

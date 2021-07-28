@@ -21,7 +21,6 @@ const ActorInit Obj_Bean_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80938FA0 = {
     { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_2, COLSHAPE_CYLINDER, },
@@ -29,14 +28,12 @@ static ColliderCylinderInit D_80938FA0 = {
     { 64, 30, -31, { 0, 0, 0 } },
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80938FCC = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_OTHER, OC1_NONE, OC2_TYPE_2, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
     { 10, 10, 0, { 0, 0, 0 } },
 };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_8093902C[] = {
@@ -46,11 +43,11 @@ static InitChainEntry D_8093902C[] = {
     ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80938FA0;
 extern ColliderCylinderInit D_80938FCC;
 extern InitChainEntry D_8093902C[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Bean/func_80936CF0.s")
 

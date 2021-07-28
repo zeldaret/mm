@@ -28,7 +28,6 @@ static ColliderJntSphInit D_809974E0 = {
     2, D_80997498, // sJntSphElementsInit,
 };
 
-
 // static DamageTable sDamageTable = {
 static DamageTable D_809974F0 = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x1),
@@ -65,7 +64,6 @@ static DamageTable D_809974F0 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-
 const ActorInit En_Skb_InitVars = {
     ACTOR_EN_SKB,
     ACTORCAT_ENEMY,
@@ -78,19 +76,18 @@ const ActorInit En_Skb_InitVars = {
     (ActorFunc)EnSkb_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80997548[] = {
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_80997498[2];
 extern ColliderJntSphInit D_809974E0;
 extern DamageTable D_809974F0;
 extern InitChainEntry D_80997548[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Skb/func_809947B0.s")
 

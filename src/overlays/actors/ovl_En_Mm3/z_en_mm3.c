@@ -22,7 +22,6 @@ const ActorInit En_Mm3_InitVars = {
     (ActorFunc)EnMm3_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A703F0 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,14 +29,13 @@ static ColliderCylinderInit D_80A703F0 = {
     { 18, 63, 0, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80A7041C = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
+#endif
 
 extern ColliderCylinderInit D_80A703F0;
 extern CollisionCheckInfoInit2 D_80A7041C;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mm3/EnMm3_Init.s")
 

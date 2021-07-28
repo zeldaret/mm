@@ -22,7 +22,6 @@ const ActorInit Obj_Flowerpot_InitVars = {
     (ActorFunc)ObjFlowerpot_Draw,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[2] = {
 static ColliderJntSphElementInit D_80A1D3A0[2] = {
     {
@@ -41,7 +40,6 @@ static ColliderJntSphInit D_80A1D3E8 = {
     2, D_80A1D3A0, // sJntSphElementsInit,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80A1D414[] = {
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
@@ -52,11 +50,11 @@ static InitChainEntry D_80A1D414[] = {
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_80A1D3A0[2];
 extern ColliderJntSphInit D_80A1D3E8;
 extern InitChainEntry D_80A1D414[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Flowerpot/func_80A1B3D0.s")
 

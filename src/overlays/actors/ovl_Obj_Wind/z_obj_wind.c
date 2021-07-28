@@ -22,7 +22,6 @@ const ActorInit Obj_Wind_InitVars = {
     (ActorFunc)ObjWind_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B24480[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
@@ -30,9 +29,9 @@ static InitChainEntry D_80B24480[] = {
     ICHAIN_F32(uncullZoneDownward, 4000, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_80B24480[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Wind/ObjWind_Init.s")
 

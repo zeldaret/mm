@@ -22,7 +22,6 @@ const ActorInit Bg_Ikninside_InitVars = {
     (ActorFunc)BgIkninside_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80C076A8 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,9 +29,9 @@ static ColliderCylinderInit D_80C076A8 = {
     { 32, 32, 0, { 0, 0, 0 } },
 };
 
+#endif
 
 extern ColliderCylinderInit D_80C076A8;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikninside/BgIkninside_Init.s")
 

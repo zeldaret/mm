@@ -22,14 +22,12 @@ const ActorInit En_Bigokuta_InitVars = {
     (ActorFunc)EnBigokuta_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80AC4530 = {
     { COLTYPE_HARD, AT_NONE, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFC74F, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
     { 75, 125, 0, { 0, 0, 0 } },
 };
-
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80AC455C = {
@@ -38,10 +36,8 @@ static ColliderCylinderInit D_80AC455C = {
     { 70, 125, 0, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_80AC4588 = { 4, 130, 120, MASS_HEAVY };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80AC4590[] = {
@@ -52,12 +48,12 @@ static InitChainEntry D_80AC4590[] = {
     ICHAIN_VEC3F_DIV1000(scale, 33, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80AC4530;
 extern ColliderCylinderInit D_80AC455C;
 extern CollisionCheckInfoInit D_80AC4588;
 extern InitChainEntry D_80AC4590[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bigokuta/EnBigokuta_Init.s")
 

@@ -22,7 +22,6 @@ const ActorInit En_Twig_InitVars = {
     (ActorFunc)EnTwig_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80AC10C0[] = {
     ICHAIN_F32(uncullZoneScale, 40, ICHAIN_CONTINUE),
@@ -31,9 +30,9 @@ static InitChainEntry D_80AC10C0[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_80AC10C0[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Twig/EnTwig_Init.s")
 

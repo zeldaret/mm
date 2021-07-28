@@ -22,7 +22,6 @@ const ActorInit Obj_Oshihiki_InitVars = {
     (ActorFunc)ObjOshihiki_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80918898[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
@@ -30,9 +29,9 @@ static InitChainEntry D_80918898[] = {
     ICHAIN_F32(uncullZoneDownward, 500, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_80918898[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Oshihiki/func_80917290.s")
 

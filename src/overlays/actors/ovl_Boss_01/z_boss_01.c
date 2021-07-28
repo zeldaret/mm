@@ -46,7 +46,6 @@ static DamageTable D_809D7990 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xE),
 };
 
-
 // static DamageTable sDamageTable = {
 static DamageTable D_809D79B0 = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x1),
@@ -83,7 +82,6 @@ static DamageTable D_809D79B0 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[3] = {
 static ColliderJntSphElementInit D_809D79D0[3] = {
     {
@@ -106,7 +104,6 @@ static ColliderJntSphInit D_809D7A3C = {
     3, D_809D79D0, // sJntSphElementsInit,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_809D7A4C[1] = {
     {
@@ -120,7 +117,6 @@ static ColliderJntSphInit D_809D7A70 = {
     { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
     1, D_809D7A4C, // sJntSphElementsInit,
 };
-
 
 // static ColliderJntSphElementInit sJntSphElementsInit[11] = {
 static ColliderJntSphElementInit D_809D7A80[11] = {
@@ -176,7 +172,6 @@ static ColliderJntSphInit D_809D7C0C = {
     11, D_809D7A80, // sJntSphElementsInit,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[2] = {
 static ColliderJntSphElementInit D_809D7C1C[2] = {
     {
@@ -195,7 +190,6 @@ static ColliderJntSphInit D_809D7C64 = {
     2, D_809D7C1C, // sJntSphElementsInit,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_809D7C74 = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -203,14 +197,12 @@ static ColliderCylinderInit D_809D7C74 = {
     { 15, 15, 10, { 0, 0, 0 } },
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_809D7CA0 = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7FFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
     { 8, 15, 10, { 0, 0, 0 } },
 };
-
 
 const ActorInit Boss_01_InitVars = {
     ACTOR_BOSS_01,
@@ -224,6 +216,7 @@ const ActorInit Boss_01_InitVars = {
     (ActorFunc)Boss01_Draw,
 };
 
+#endif
 
 extern DamageTable D_809D7990;
 extern DamageTable D_809D79B0;
@@ -237,7 +230,6 @@ extern ColliderJntSphElementInit D_809D7C1C[2];
 extern ColliderJntSphInit D_809D7C64;
 extern ColliderCylinderInit D_809D7C74;
 extern ColliderCylinderInit D_809D7CA0;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_01/func_809D0530.s")
 

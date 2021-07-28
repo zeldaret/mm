@@ -22,14 +22,12 @@ const ActorInit En_Tru_Mt_InitVars = {
     (ActorFunc)EnTruMt_Draw,
 };
 
-
 // static ColliderSphereInit sSphereInit = {
 static ColliderSphereInit D_80B77510 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_SPHERE, },
     { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
     { 0, { { 0, 0, 0 }, 22 }, 100 },
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80B7753C = {
@@ -67,10 +65,10 @@ static DamageTable D_80B7753C = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
+#endif
 
 extern ColliderSphereInit D_80B77510;
 extern DamageTable D_80B7753C;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tru_Mt/func_80B76030.s")
 

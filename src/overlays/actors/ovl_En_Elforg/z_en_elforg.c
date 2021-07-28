@@ -22,7 +22,6 @@ const ActorInit En_Elforg_InitVars = {
     (ActorFunc)EnElforg_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80ACDA30 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,9 +29,9 @@ static ColliderCylinderInit D_80ACDA30 = {
     { 16, 32, 0, { 0, 0, 0 } },
 };
 
+#endif
 
 extern ColliderCylinderInit D_80ACDA30;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACC470.s")
 

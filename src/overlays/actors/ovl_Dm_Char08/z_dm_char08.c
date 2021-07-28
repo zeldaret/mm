@@ -22,7 +22,6 @@ const ActorInit Dm_Char08_InitVars = {
     (ActorFunc)DmChar08_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80AB1764[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
@@ -30,9 +29,9 @@ static InitChainEntry D_80AB1764[] = {
     ICHAIN_F32(uncullZoneDownward, 4000, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_80AB1764[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char08/func_80AAF050.s")
 

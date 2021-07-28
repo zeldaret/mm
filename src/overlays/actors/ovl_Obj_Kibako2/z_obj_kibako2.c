@@ -22,14 +22,12 @@ const ActorInit Obj_Kibako2_InitVars = {
     (ActorFunc)ObjKibako2_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_8098EE60 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_2, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x80000508, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
     { 31, 48, 0, { 0, 0, 0 } },
 };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_8098EE8C[] = {
@@ -39,10 +37,10 @@ static InitChainEntry D_8098EE8C[] = {
     ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_8098EE60;
 extern InitChainEntry D_8098EE8C[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/func_8098E5C0.s")
 

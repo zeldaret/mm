@@ -21,7 +21,6 @@ const ActorInit Door_Shutter_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_808A2248[] = {
     ICHAIN_VEC3F(scale, 1, ICHAIN_CONTINUE),
@@ -30,9 +29,9 @@ static InitChainEntry D_808A2248[] = {
     ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_808A2248[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Shutter/func_808A08F0.s")
 

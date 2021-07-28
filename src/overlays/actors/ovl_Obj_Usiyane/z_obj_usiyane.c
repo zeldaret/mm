@@ -22,7 +22,6 @@ const ActorInit Obj_Usiyane_InitVars = {
     (ActorFunc)ObjUsiyane_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80C086B0[] = {
     ICHAIN_F32(uncullZoneScale, 1200, ICHAIN_CONTINUE),
@@ -30,9 +29,9 @@ static InitChainEntry D_80C086B0[] = {
     ICHAIN_F32(uncullZoneDownward, 900, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_80C086B0[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Usiyane/func_80C07C80.s")
 

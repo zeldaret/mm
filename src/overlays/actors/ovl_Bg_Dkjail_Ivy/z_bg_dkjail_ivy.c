@@ -22,14 +22,12 @@ const ActorInit Bg_Dkjail_Ivy_InitVars = {
     (ActorFunc)BgDkjailIvy_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80ADE950 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x01000200, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
     { 20, 80, 0, { 0, 0, 0 } },
 };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80ADE98C[] = {
@@ -39,10 +37,10 @@ static InitChainEntry D_80ADE98C[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80ADE950;
 extern InitChainEntry D_80ADE98C[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Dkjail_Ivy/func_80ADE230.s")
 

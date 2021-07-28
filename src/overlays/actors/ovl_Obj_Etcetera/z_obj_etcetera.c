@@ -21,7 +21,6 @@ const ActorInit Obj_Etcetera_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A7C790 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -29,9 +28,9 @@ static ColliderCylinderInit D_80A7C790 = {
     { 20, 14, 0, { 0, 0, 0 } },
 };
 
+#endif
 
 extern ColliderCylinderInit D_80A7C790;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Etcetera/ObjEtcetera_Init.s")
 

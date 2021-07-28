@@ -22,7 +22,6 @@ const ActorInit En_Bigslime_InitVars = {
     (ActorFunc)EnBigslime_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_808F02A0 = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_NO_PUSH | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,10 +29,8 @@ static ColliderCylinderInit D_808F02A0 = {
     { 30, 60, 0, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_808F02CC = { 10, 100, 100, 50 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_808F02D4 = {
@@ -71,7 +68,6 @@ static DamageTable D_808F02D4 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_808F0338[] = {
     ICHAIN_S8(hintId, 95, ICHAIN_CONTINUE),
@@ -80,12 +76,12 @@ static InitChainEntry D_808F0338[] = {
     ICHAIN_U8(targetMode, 5, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_808F02A0;
 extern CollisionCheckInfoInit D_808F02CC;
 extern DamageTable D_808F02D4;
 extern InitChainEntry D_808F0338[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bigslime/EnBigslime_Init.s")
 

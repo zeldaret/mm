@@ -21,7 +21,6 @@ const ActorInit En_Minideath_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[3] = {
 static ColliderJntSphElementInit D_808CBF50[3] = {
     {
@@ -43,7 +42,6 @@ static ColliderJntSphInit D_808CBFBC = {
     { COLTYPE_NONE, AT_NONE | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_NONE | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
     3, D_808CBF50, // sJntSphElementsInit,
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_808CBFCC = {
@@ -81,10 +79,8 @@ static DamageTable D_808CBFCC = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_808CBFEC = { 1, 15, 30, 10 };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_808CBFF4[] = {
@@ -92,13 +88,13 @@ static InitChainEntry D_808CBFF4[] = {
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_808CBF50[3];
 extern ColliderJntSphInit D_808CBFBC;
 extern DamageTable D_808CBFCC;
 extern CollisionCheckInfoInit D_808CBFEC;
 extern InitChainEntry D_808CBFF4[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Minideath/EnMinideath_Init.s")
 

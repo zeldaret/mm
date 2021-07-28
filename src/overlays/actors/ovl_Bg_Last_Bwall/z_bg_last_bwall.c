@@ -22,7 +22,6 @@ const ActorInit Bg_Last_Bwall_InitVars = {
     (ActorFunc)BgLastBwall_Draw,
 };
 
-
 // static ColliderTrisElementInit sTrisElementsInit[2] = {
 static ColliderTrisElementInit D_80C189C0[2] = {
     {
@@ -41,17 +40,16 @@ static ColliderTrisInit D_80C18A38 = {
     2, D_80C189C0, // sTrisElementsInit,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80C18AC8[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderTrisElementInit D_80C189C0[2];
 extern ColliderTrisInit D_80C18A38;
 extern InitChainEntry D_80C18AC8[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Last_Bwall/func_80C18240.s")
 

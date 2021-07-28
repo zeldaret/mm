@@ -22,7 +22,6 @@ const ActorInit Bg_Kin2_Picture_InitVars = {
     (ActorFunc)BgKin2Picture_Draw,
 };
 
-
 // static ColliderTrisElementInit sTrisElementsInit[2] = {
 static ColliderTrisElementInit D_80B6F990[2] = {
     {
@@ -41,7 +40,6 @@ static ColliderTrisInit D_80B6FA08 = {
     2, D_80B6F990, // sTrisElementsInit,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B6FA24[] = {
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
@@ -52,11 +50,11 @@ static InitChainEntry D_80B6FA24[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderTrisElementInit D_80B6F990[2];
 extern ColliderTrisInit D_80B6FA08;
 extern InitChainEntry D_80B6FA24[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Picture/func_80B6EFA0.s")
 

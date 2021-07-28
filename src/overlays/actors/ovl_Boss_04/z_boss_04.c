@@ -46,7 +46,6 @@ static DamageTable D_809EE150 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-
 const ActorInit Boss_04_InitVars = {
     ACTOR_BOSS_04,
     ACTORCAT_BOSS,
@@ -58,7 +57,6 @@ const ActorInit Boss_04_InitVars = {
     (ActorFunc)Boss04_Update,
     (ActorFunc)Boss04_Draw,
 };
-
 
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_809EE190[1] = {
@@ -74,7 +72,6 @@ static ColliderJntSphInit D_809EE1B4 = {
     1, D_809EE190, // sJntSphElementsInit,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_809EE1C4[1] = {
     {
@@ -89,13 +86,13 @@ static ColliderJntSphInit D_809EE1E8 = {
     1, D_809EE1C4, // sJntSphElementsInit,
 };
 
+#endif
 
 extern DamageTable D_809EE150;
 extern ColliderJntSphElementInit D_809EE190[1];
 extern ColliderJntSphInit D_809EE1B4;
 extern ColliderJntSphElementInit D_809EE1C4[1];
 extern ColliderJntSphInit D_809EE1E8;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_04/func_809EC040.s")
 

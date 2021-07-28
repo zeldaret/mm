@@ -22,7 +22,6 @@ const ActorInit En_Attack_Niw_InitVars = {
     (ActorFunc)EnAttackNiw_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80959120[] = {
     ICHAIN_U8(targetMode, 1, ICHAIN_CONTINUE),
@@ -30,9 +29,9 @@ static InitChainEntry D_80959120[] = {
     ICHAIN_F32(targetArrowOffset, 0, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_80959120[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Attack_Niw/EnAttackNiw_Init.s")
 

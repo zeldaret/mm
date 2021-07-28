@@ -22,7 +22,6 @@ const ActorInit En_Door_InitVars = {
     (ActorFunc)EnDoor_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80867954[] = {
     ICHAIN_U8(targetMode, 0, ICHAIN_CONTINUE),
@@ -31,9 +30,9 @@ static InitChainEntry D_80867954[] = {
     ICHAIN_U16(shape.rot.z, 0, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_80867954[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door/EnDoor_Init.s")
 

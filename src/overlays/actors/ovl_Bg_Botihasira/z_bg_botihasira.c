@@ -22,7 +22,6 @@ const ActorInit Bg_Botihasira_InitVars = {
     (ActorFunc)BgBotihasira_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B282F0 = {
     { COLTYPE_METAL, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,9 +29,9 @@ static ColliderCylinderInit D_80B282F0 = {
     { 27, 80, 0, { 0, 0, 0 } },
 };
 
+#endif
 
 extern ColliderCylinderInit D_80B282F0;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Botihasira/BgBotihasira_Init.s")
 

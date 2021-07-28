@@ -22,7 +22,6 @@ const ActorInit En_Am_InitVars = {
     (ActorFunc)EnAm_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_808B1070 = {
     { COLTYPE_HIT5, AT_NONE | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,14 +29,12 @@ static ColliderCylinderInit D_808B1070 = {
     { 23, 98, 0, { 0, 0, 0 } },
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_808B109C = {
     { COLTYPE_METAL, AT_NONE, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x760D3877, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
     { 23, 98, 0, { 0, 0, 0 } },
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_808B10C8 = {
@@ -75,10 +72,8 @@ static DamageTable D_808B10C8 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_808B10E8 = { 1, 23, 98, MASS_HEAVY };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_808B10F0[] = {
@@ -88,13 +83,13 @@ static InitChainEntry D_808B10F0[] = {
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_808B1070;
 extern ColliderCylinderInit D_808B109C;
 extern DamageTable D_808B10C8;
 extern CollisionCheckInfoInit D_808B10E8;
 extern InitChainEntry D_808B10F0[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Am/EnAm_Init.s")
 

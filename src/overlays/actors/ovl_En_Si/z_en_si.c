@@ -22,7 +22,6 @@ const ActorInit En_Si_InitVars = {
     (ActorFunc)EnSi_Draw,
 };
 
-
 // static ColliderSphereInit sSphereInit = {
 static ColliderSphereInit D_8098CD80 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_NO_PUSH | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_SPHERE, },
@@ -30,10 +29,8 @@ static ColliderSphereInit D_8098CD80 = {
     { 0, { { 0, 0, 0 }, 10 }, 100 },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_8098CDAC = { 1, 0, 0, 0, MASS_IMMOVABLE };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_8098CDB8 = {
@@ -71,11 +68,11 @@ static DamageTable D_8098CDB8 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
+#endif
 
 extern ColliderSphereInit D_8098CD80;
 extern CollisionCheckInfoInit2 D_8098CDAC;
 extern DamageTable D_8098CDB8;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Si/func_8098CA20.s")
 

@@ -22,7 +22,6 @@ const ActorInit Boss_Hakugin_InitVars = {
     (ActorFunc)BossHakugin_Draw,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[19] = {
 static ColliderJntSphElementInit D_80B0E700[19] = {
     {
@@ -109,7 +108,6 @@ static ColliderJntSphInit D_80B0E9AC = {
     19, D_80B0E700, // sJntSphElementsInit,
 };
 
-
 // static ColliderTrisElementInit sTrisElementsInit[1] = {
 static ColliderTrisElementInit D_80B0E9BC[1] = {
     {
@@ -124,7 +122,6 @@ static ColliderTrisInit D_80B0E9F8 = {
     1, D_80B0E9BC, // sTrisElementsInit,
 };
 
-
 // static ColliderSphereInit sSphereInit = {
 static ColliderSphereInit D_80B0EA08 = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_NONE, OC1_NONE, OC2_TYPE_2, COLSHAPE_SPHERE, },
@@ -132,14 +129,12 @@ static ColliderSphereInit D_80B0EA08 = {
     { 1, { { 0, 0, 0 }, 23 }, 100 },
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B0EA34 = {
     { COLTYPE_HARD, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x02, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NONE, BUMP_ON, OCELEM_ON, },
     { 170, 40, 0, { 0, 0, 0 } },
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80B0EA60 = {
@@ -177,10 +172,8 @@ static DamageTable D_80B0EA60 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xC),
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_80B0EA80 = { 30, 80, 100, MASS_IMMOVABLE };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B0EAD8[] = {
@@ -190,6 +183,7 @@ static InitChainEntry D_80B0EAD8[] = {
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_80B0E700[19];
 extern ColliderJntSphInit D_80B0E9AC;
@@ -200,7 +194,6 @@ extern ColliderCylinderInit D_80B0EA34;
 extern DamageTable D_80B0EA60;
 extern CollisionCheckInfoInit D_80B0EA80;
 extern InitChainEntry D_80B0EAD8[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/BossHakugin_Init.s")
 

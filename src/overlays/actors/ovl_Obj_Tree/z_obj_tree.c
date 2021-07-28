@@ -22,14 +22,12 @@ const ActorInit Obj_Tree_InitVars = {
     (ActorFunc)ObjTree_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B9A570 = {
     { COLTYPE_TREE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK1, { 0x00000000, 0x00, 0x00 }, { 0x0100020A, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
     { 28, 120, 0, { 0, 0, 0 } },
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80B9A59C = {
@@ -67,15 +65,14 @@ static DamageTable D_80B9A59C = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80B9A5BC = { 8, 0, 0, 0, MASS_HEAVY };
 
+#endif
 
 extern ColliderCylinderInit D_80B9A570;
 extern DamageTable D_80B9A59C;
 extern CollisionCheckInfoInit2 D_80B9A5BC;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tree/ObjTree_Init.s")
 

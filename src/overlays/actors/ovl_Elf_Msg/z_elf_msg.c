@@ -21,16 +21,15 @@ const ActorInit Elf_Msg_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_8092E470[] = {
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_8092E470[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg/D_8092E480.s")
 

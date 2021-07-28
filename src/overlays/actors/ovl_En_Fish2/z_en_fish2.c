@@ -22,7 +22,6 @@ const ActorInit En_Fish2_InitVars = {
     (ActorFunc)EnFish2_Draw,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[2] = {
 static ColliderJntSphElementInit D_80B2B318[2] = {
     {
@@ -41,10 +40,10 @@ static ColliderJntSphInit D_80B2B360 = {
     2, D_80B2B318, // sJntSphElementsInit,
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_80B2B318[2];
 extern ColliderJntSphInit D_80B2B360;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fish2/func_80B28370.s")
 

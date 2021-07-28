@@ -22,7 +22,6 @@ const ActorInit En_Tg_InitVars = {
     (ActorFunc)EnTg_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_809901C0 = {
     { COLTYPE_HIT0, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,10 +29,8 @@ static ColliderCylinderInit D_809901C0 = {
     { 18, 64, 0, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_809901EC = { 0, 0, 0, 0, MASS_IMMOVABLE };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_809901F8 = {
@@ -71,11 +68,11 @@ static DamageTable D_809901F8 = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
+#endif
 
 extern ColliderCylinderInit D_809901C0;
 extern CollisionCheckInfoInit2 D_809901EC;
 extern DamageTable D_809901F8;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F800.s")
 

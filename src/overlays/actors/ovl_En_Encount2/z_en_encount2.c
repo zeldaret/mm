@@ -91,6 +91,10 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0xF),
 };
 
+extern Gfx D_06000A00[];
+extern Gfx D_06000D78[];
+extern CollisionHeader D_06002420;
+
 void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnEncount2* this = THIS;
     s32 pad;

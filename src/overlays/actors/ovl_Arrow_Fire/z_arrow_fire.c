@@ -17,7 +17,6 @@ static ColliderQuadInit D_80922230 = {
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
 
-
 const ActorInit Arrow_Fire_InitVars = {
     ACTOR_ARROW_FIRE,
     ACTORCAT_ITEMACTION,
@@ -30,9 +29,9 @@ const ActorInit Arrow_Fire_InitVars = {
     (ActorFunc)ArrowFire_Draw,
 };
 
+#endif
 
 extern ColliderQuadInit D_80922230;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Fire/FireArrow_SetUpdateFunc.s")
 

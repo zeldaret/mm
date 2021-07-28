@@ -21,7 +21,6 @@ const ActorInit Bg_Fire_Wall_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_809ACC60 = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_NONE, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_2, COLSHAPE_CYLINDER, },
@@ -29,14 +28,13 @@ static ColliderCylinderInit D_809ACC60 = {
     { 34, 85, 0, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_809ACC8C = { 1, 80, 100, MASS_IMMOVABLE };
 
+#endif
 
 extern ColliderCylinderInit D_809ACC60;
 extern CollisionCheckInfoInit D_809ACC8C;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Fire_Wall/BgFireWall_Init.s")
 

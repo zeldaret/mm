@@ -22,7 +22,6 @@ const ActorInit Obj_Grass_InitVars = {
     (ActorFunc)ObjGrass_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_809AAB20 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER | OC1_TYPE_2, OC2_TYPE_2, COLSHAPE_CYLINDER, },
@@ -30,9 +29,9 @@ static ColliderCylinderInit D_809AAB20 = {
     { 6, 44, 0, { 0, 0, 0 } },
 };
 
+#endif
 
 extern ColliderCylinderInit D_809AAB20;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Grass/func_809A9110.s")
 

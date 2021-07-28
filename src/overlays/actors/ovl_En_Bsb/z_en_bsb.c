@@ -48,7 +48,6 @@ static ColliderJntSphInit D_80C0F9D0 = {
     7, D_80C0F8D4, // sJntSphElementsInit,
 };
 
-
 // static DamageTable sDamageTable = {
 static DamageTable D_80C0F9E0 = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x1),
@@ -85,7 +84,6 @@ static DamageTable D_80C0F9E0 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xD),
 };
 
-
 const ActorInit En_Bsb_InitVars = {
     ACTOR_EN_BSB,
     ACTORCAT_PROP,
@@ -98,11 +96,11 @@ const ActorInit En_Bsb_InitVars = {
     (ActorFunc)EnBsb_Draw,
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_80C0F8D4[7];
 extern ColliderJntSphInit D_80C0F9D0;
 extern DamageTable D_80C0F9E0;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bsb/func_80C0B290.s")
 

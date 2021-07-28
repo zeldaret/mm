@@ -22,14 +22,12 @@ const ActorInit En_Po_Composer_InitVars = {
     (ActorFunc)EnPoComposer_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80BC6780 = {
     { COLTYPE_HIT3, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
     { 20, 40, 20, { 0, 0, 0 } },
 };
-
 
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_80BC67AC[1] = {
@@ -45,10 +43,8 @@ static ColliderJntSphInit D_80BC67D0 = {
     1, D_80BC67AC, // sJntSphElementsInit,
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_80BC67E0 = { 4, 25, 50, 40 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80BC67E8 = {
@@ -86,12 +82,12 @@ static DamageTable D_80BC67E8 = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80BC6958[] = {
     ICHAIN_F32(targetArrowOffset, 3200, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80BC6780;
 extern ColliderJntSphElementInit D_80BC67AC[1];
@@ -99,7 +95,6 @@ extern ColliderJntSphInit D_80BC67D0;
 extern CollisionCheckInfoInit D_80BC67E0;
 extern DamageTable D_80BC67E8;
 extern InitChainEntry D_80BC6958[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Po_Composer/EnPoComposer_Init.s")
 

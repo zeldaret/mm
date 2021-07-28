@@ -22,7 +22,6 @@ const ActorInit Obj_Comb_InitVars = {
     (ActorFunc)ObjComb_Draw,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_8098E440[1] = {
     {
@@ -37,7 +36,6 @@ static ColliderJntSphInit D_8098E464 = {
     1, D_8098E440, // sJntSphElementsInit,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_8098E474[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
@@ -46,11 +44,11 @@ static InitChainEntry D_8098E474[] = {
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_8098E440[1];
 extern ColliderJntSphInit D_8098E464;
 extern InitChainEntry D_8098E474[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Comb/func_8098CE40.s")
 

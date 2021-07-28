@@ -22,7 +22,6 @@ const ActorInit En_Pamera_InitVars = {
     (ActorFunc)EnPamera_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80BDA480 = {
     { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
@@ -30,14 +29,13 @@ static ColliderCylinderInit D_80BDA480 = {
     { 12, 46, 0, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80BDA4AC = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
+#endif
 
 extern ColliderCylinderInit D_80BDA480;
 extern CollisionCheckInfoInit2 D_80BDA4AC;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Pamera/EnPamera_Init.s")
 

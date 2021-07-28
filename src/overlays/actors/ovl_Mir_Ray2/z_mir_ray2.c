@@ -22,7 +22,6 @@ const ActorInit Mir_Ray2_InitVars = {
     (ActorFunc)MirRay2_Draw,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_80AF4350[1] = {
     {
@@ -37,10 +36,10 @@ static ColliderJntSphInit D_80AF4374 = {
     1, D_80AF4350, // sJntSphElementsInit,
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_80AF4350[1];
 extern ColliderJntSphInit D_80AF4374;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray2/func_80AF3F70.s")
 

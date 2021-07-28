@@ -22,7 +22,6 @@ const ActorInit En_Dragon_InitVars = {
     (ActorFunc)EnDragon_Draw,
 };
 
-
 // static DamageTable sDamageTable = {
 static DamageTable D_80B605F4 = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
@@ -58,7 +57,6 @@ static DamageTable D_80B605F4 = {
     /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
-
 
 // static ColliderJntSphElementInit sJntSphElementsInit[8] = {
 static ColliderJntSphElementInit D_80B60614[8] = {
@@ -102,11 +100,11 @@ static ColliderJntSphInit D_80B60734 = {
     8, D_80B60614, // sJntSphElementsInit,
 };
 
+#endif
 
 extern DamageTable D_80B605F4;
 extern ColliderJntSphElementInit D_80B60614[8];
 extern ColliderJntSphInit D_80B60734;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/EnDragon_Init.s")
 

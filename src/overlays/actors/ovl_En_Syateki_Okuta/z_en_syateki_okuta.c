@@ -22,7 +22,6 @@ const ActorInit En_Syateki_Okuta_InitVars = {
     (ActorFunc)EnSyatekiOkuta_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A37570 = {
     { COLTYPE_HIT3, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,17 +29,16 @@ static ColliderCylinderInit D_80A37570 = {
     { 20, 40, -30, { 0, 0, 0 } },
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80A37B88[] = {
     ICHAIN_S8(hintId, 66, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 6500, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80A37570;
 extern InitChainEntry D_80A37B88[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/EnSyatekiOkuta_Init.s")
 

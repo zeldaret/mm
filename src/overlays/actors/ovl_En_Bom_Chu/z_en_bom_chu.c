@@ -22,7 +22,6 @@ const ActorInit En_Bom_Chu_InitVars = {
     (ActorFunc)EnBomChu_Draw,
 };
 
-
 // static ColliderSphereInit sSphereInit = {
 static ColliderSphereInit D_808F88E0 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_1 | OC1_TYPE_2, OC2_TYPE_2, COLSHAPE_SPHERE, },
@@ -30,17 +29,16 @@ static ColliderSphereInit D_808F88E0 = {
     { 1, { { 0, 0, 0 }, 13 }, 100 },
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_808F890C[] = {
     ICHAIN_U8(targetMode, 2, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderSphereInit D_808F88E0;
 extern InitChainEntry D_808F890C[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Chu/EnBomChu_Init.s")
 

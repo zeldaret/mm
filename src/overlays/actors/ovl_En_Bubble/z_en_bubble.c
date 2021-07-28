@@ -22,7 +22,6 @@ const ActorInit En_Bubble_InitVars = {
     (ActorFunc)EnBubble_Draw,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[2] = {
 static ColliderJntSphElementInit D_808A0700[2] = {
     {
@@ -41,15 +40,14 @@ static ColliderJntSphInit D_808A0748 = {
     2, D_808A0700, // sJntSphElementsInit,
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_808A0758 = { 1, 2, 25, 25, MASS_IMMOVABLE };
 
+#endif
 
 extern ColliderJntSphElementInit D_808A0700[2];
 extern ColliderJntSphInit D_808A0748;
 extern CollisionCheckInfoInit2 D_808A0758;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bubble/func_8089F4E0.s")
 

@@ -22,7 +22,6 @@ const ActorInit En_Bjt_InitVars = {
     (ActorFunc)EnBjt_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80BFDF48 = {
     { COLTYPE_HIT1, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,14 +29,13 @@ static ColliderCylinderInit D_80BFDF48 = {
     { 10, 68, 0, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80BFDF74 = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
+#endif
 
 extern ColliderCylinderInit D_80BFDF48;
 extern CollisionCheckInfoInit2 D_80BFDF74;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bjt/func_80BFD2E0.s")
 

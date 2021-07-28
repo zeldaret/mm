@@ -22,7 +22,6 @@ const ActorInit Obj_Armos_InitVars = {
     (ActorFunc)ObjArmos_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_809A5BC0[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
@@ -32,9 +31,9 @@ static InitChainEntry D_809A5BC0[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_809A5BC0[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/func_809A4E00.s")
 

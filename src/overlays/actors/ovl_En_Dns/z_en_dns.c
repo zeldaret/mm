@@ -22,7 +22,6 @@ const ActorInit En_Dns_InitVars = {
     (ActorFunc)EnDns_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_8092DD28 = {
     { COLTYPE_HIT0, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,14 +29,13 @@ static ColliderCylinderInit D_8092DD28 = {
     { 18, 46, 0, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_8092DD54 = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
+#endif
 
 extern ColliderCylinderInit D_8092DD28;
 extern CollisionCheckInfoInit2 D_8092DD54;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dns/func_8092C5C0.s")
 

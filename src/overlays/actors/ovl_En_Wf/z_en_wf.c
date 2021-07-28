@@ -22,7 +22,6 @@ const ActorInit En_Wf_InitVars = {
     (ActorFunc)EnWf_Draw,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[4] = {
 static ColliderJntSphElementInit D_80994170[4] = {
     {
@@ -49,7 +48,6 @@ static ColliderJntSphInit D_80994200 = {
     4, D_80994170, // sJntSphElementsInit,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80994210 = {
     { COLTYPE_HIT5, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
@@ -57,14 +55,12 @@ static ColliderCylinderInit D_80994210 = {
     { 20, 50, 0, { 0, 0, 0 } },
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_8099423C = {
     { COLTYPE_HIT5, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK1, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
     { 15, 20, -15, { 0, 0, 0 } },
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80994268 = {
@@ -102,7 +98,6 @@ static DamageTable D_80994268 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-
 // static DamageTable sDamageTable = {
 static DamageTable D_80994288 = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x1),
@@ -139,10 +134,8 @@ static DamageTable D_80994288 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_809942A8 = { 8, 50, 100, MASS_HEAVY };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_809942D0[] = {
@@ -150,6 +143,7 @@ static InitChainEntry D_809942D0[] = {
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_80994170[4];
 extern ColliderJntSphInit D_80994200;
@@ -159,7 +153,6 @@ extern DamageTable D_80994268;
 extern DamageTable D_80994288;
 extern CollisionCheckInfoInit D_809942A8;
 extern InitChainEntry D_809942D0[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wf/EnWf_Init.s")
 

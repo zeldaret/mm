@@ -22,7 +22,6 @@ const ActorInit En_Wiz_InitVars = {
     (ActorFunc)EnWiz_Draw,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[10] = {
 static ColliderJntSphElementInit D_80A48B50[10] = {
     {
@@ -73,14 +72,12 @@ static ColliderJntSphInit D_80A48CB8 = {
     10, D_80A48B50, // sJntSphElementsInit,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A48CC8 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK1, { 0xF7CFFFFF, 0x08, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
     { 35, 130, 0, { 0, 0, 0 } },
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80A48CF4 = {
@@ -118,7 +115,6 @@ static DamageTable D_80A48CF4 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-
 // static DamageTable sDamageTable = {
 static DamageTable D_80A48D14 = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x1),
@@ -155,13 +151,13 @@ static DamageTable D_80A48D14 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_80A48B50[10];
 extern ColliderJntSphInit D_80A48CB8;
 extern ColliderCylinderInit D_80A48CC8;
 extern DamageTable D_80A48CF4;
 extern DamageTable D_80A48D14;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/EnWiz_Init.s")
 

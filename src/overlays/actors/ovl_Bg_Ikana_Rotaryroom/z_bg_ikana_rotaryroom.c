@@ -22,7 +22,6 @@ const ActorInit Bg_Ikana_Rotaryroom_InitVars = {
     (ActorFunc)BgIkanaRotaryroom_Draw,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[2] = {
 static ColliderJntSphElementInit D_80B820E0[2] = {
     {
@@ -41,7 +40,6 @@ static ColliderJntSphInit D_80B82128 = {
     2, D_80B820E0, // sJntSphElementsInit,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_80B82138[1] = {
     {
@@ -56,19 +54,18 @@ static ColliderJntSphInit D_80B8215C = {
     1, D_80B82138, // sJntSphElementsInit,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B82214[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_80B820E0[2];
 extern ColliderJntSphInit D_80B82128;
 extern ColliderJntSphElementInit D_80B82138[1];
 extern ColliderJntSphInit D_80B8215C;
 extern InitChainEntry D_80B82214[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Rotaryroom/func_80B802E0.s")
 

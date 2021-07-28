@@ -22,7 +22,6 @@ const ActorInit Bg_Hakugin_Switch_InitVars = {
     (ActorFunc)BgHakuginSwitch_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B16860 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
@@ -30,14 +29,12 @@ static ColliderCylinderInit D_80B16860 = {
     { 60, 10, 180, { 0, 0, 0 } },
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B16904[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 150, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 130, ICHAIN_STOP),
 };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B16910[] = {
@@ -47,11 +44,11 @@ static InitChainEntry D_80B16910[] = {
     ICHAIN_F32(uncullZoneDownward, 360, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80B16860;
 extern InitChainEntry D_80B16904[];
 extern InitChainEntry D_80B16910[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Switch/func_80B15790.s")
 

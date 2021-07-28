@@ -22,7 +22,6 @@ const ActorInit En_Mkk_InitVars = {
     (ActorFunc)EnMkk_Draw,
 };
 
-
 // static ColliderSphereInit sSphereInit = {
 static ColliderSphereInit D_80A4F720 = {
     { COLTYPE_HIT3, AT_NONE | AT_TYPE_ENEMY, AC_NONE | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_SPHERE, },
@@ -30,10 +29,8 @@ static ColliderSphereInit D_80A4F720 = {
     { 1, { { 0, 0, 0 }, 15 }, 100 },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_80A4F74C = { 1, 15, 30, 10 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80A4F754 = {
@@ -71,7 +68,6 @@ static DamageTable D_80A4F754 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80A4F774[] = {
     ICHAIN_F32_DIV1000(gravity, -500, ICHAIN_CONTINUE),
@@ -79,12 +75,12 @@ static InitChainEntry D_80A4F774[] = {
     ICHAIN_F32(targetArrowOffset, 3000, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderSphereInit D_80A4F720;
 extern CollisionCheckInfoInit D_80A4F74C;
 extern DamageTable D_80A4F754;
 extern InitChainEntry D_80A4F774[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mkk/EnMkk_Init.s")
 

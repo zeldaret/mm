@@ -22,7 +22,6 @@ const ActorInit Obj_Mine_InitVars = {
     (ActorFunc)ObjMine_Draw,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_80A84570[1] = {
     {
@@ -37,7 +36,6 @@ static ColliderJntSphInit D_80A84594 = {
     1, D_80A84570, // sJntSphElementsInit,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80A845E8[] = {
     ICHAIN_F32(uncullZoneForward, 1300, ICHAIN_CONTINUE),
@@ -46,11 +44,11 @@ static InitChainEntry D_80A845E8[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_80A84570[1];
 extern ColliderJntSphInit D_80A84594;
 extern InitChainEntry D_80A845E8[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mine/func_80A811D0.s")
 

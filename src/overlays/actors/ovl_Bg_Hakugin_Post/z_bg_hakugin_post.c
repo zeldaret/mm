@@ -21,7 +21,6 @@ const ActorInit Bg_Hakugin_Post_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A9D8B8 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
@@ -29,16 +28,15 @@ static ColliderCylinderInit D_80A9D8B8 = {
     { 276, 0, 20, { 0, 0, 0 } },
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80A9D8F8[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80A9D8B8;
 extern InitChainEntry D_80A9D8F8[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Post/func_80A9ACD0.s")
 

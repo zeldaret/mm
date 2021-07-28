@@ -22,7 +22,6 @@ const ActorInit En_Al_InitVars = {
     (ActorFunc)EnAl_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80BDFFB8 = {
     { COLTYPE_HIT1, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,14 +29,13 @@ static ColliderCylinderInit D_80BDFFB8 = {
     { 14, 62, 0, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80BDFFE4 = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
+#endif
 
 extern ColliderCylinderInit D_80BDFFB8;
 extern CollisionCheckInfoInit2 D_80BDFFE4;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Al/func_80BDE1A0.s")
 

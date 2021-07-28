@@ -20,7 +20,6 @@ const ActorInit Bg_Breakwall_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_808B82E0[] = {
     ICHAIN_VEC3F(scale, 1, ICHAIN_CONTINUE),
@@ -29,9 +28,9 @@ static InitChainEntry D_808B82E0[] = {
     ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_808B82E0[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Breakwall/func_808B7360.s")
 

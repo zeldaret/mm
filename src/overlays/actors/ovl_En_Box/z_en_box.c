@@ -22,15 +22,14 @@ const ActorInit En_Box_InitVars = {
     (ActorFunc)EnBox_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80869B50[] = {
     ICHAIN_U8(targetMode, 0, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_80869B50[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Box/func_80867BD0.s")
 

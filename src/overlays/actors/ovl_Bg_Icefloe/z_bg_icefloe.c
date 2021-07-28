@@ -22,15 +22,14 @@ const ActorInit Bg_Icefloe_InitVars = {
     (ActorFunc)BgIcefloe_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80AC4F3C[] = {
     ICHAIN_VEC3F_DIV1000(scale, 0, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_80AC4F3C[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/BgIcefloe_Init.s")
 

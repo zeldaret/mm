@@ -22,14 +22,12 @@ const ActorInit En_Tite_InitVars = {
     (ActorFunc)EnTite_Draw,
 };
 
-
 // static ColliderSphereInit sSphereInit = {
 static ColliderSphereInit D_80896AD0 = {
     { COLTYPE_HIT6, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_SPHERE, },
     { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x08 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_HARD, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
     { 0, { { 0, 1500, 0 }, 20 }, 100 },
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80896AFC = {
@@ -67,10 +65,8 @@ static DamageTable D_80896AFC = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_80896B1C = { 2, 40, 40, MASS_HEAVY };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80896B50[] = {
@@ -80,12 +76,12 @@ static InitChainEntry D_80896B50[] = {
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderSphereInit D_80896AD0;
 extern DamageTable D_80896AFC;
 extern CollisionCheckInfoInit D_80896B1C;
 extern InitChainEntry D_80896B50[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tite/EnTite_Init.s")
 

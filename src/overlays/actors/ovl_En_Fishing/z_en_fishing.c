@@ -28,7 +28,6 @@ const ActorInit En_Fishing_InitVars = {
     (ActorFunc)EnFishing_Draw,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[12] = {
 static ColliderJntSphElementInit D_8090CD58[12] = {
     {
@@ -87,18 +86,17 @@ static ColliderJntSphInit D_8090CF08 = {
     12, D_8090CD58, // sJntSphElementsInit,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_8090D4D0[] = {
     ICHAIN_U8(targetMode, 5, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 0, ICHAIN_STOP),
 };
 
-
-extern ColliderJntSphElementInit D_8090CD58[12]
-extern ColliderJntSphInit D_8090CF08
-extern InitChainEntry D_8090D4D0[]
 #endif
+
+extern ColliderJntSphElementInit D_8090CD58[12];
+extern ColliderJntSphInit D_8090CF08;
+extern InitChainEntry D_8090D4D0[];
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fishing/func_808FC6C0.s")
 

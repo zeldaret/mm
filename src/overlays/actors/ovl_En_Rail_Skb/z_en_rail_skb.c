@@ -22,7 +22,6 @@ const ActorInit En_Rail_Skb_InitVars = {
     (ActorFunc)EnRailSkb_Draw,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[2] = {
 static ColliderJntSphElementInit D_80B73408[2] = {
     {
@@ -41,10 +40,8 @@ static ColliderJntSphInit D_80B73450 = {
     2, D_80B73408, // sJntSphElementsInit,
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80B73460 = { 2, 0, 0, 0, MASS_IMMOVABLE };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80B7346C = {
@@ -82,20 +79,19 @@ static DamageTable D_80B7346C = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B73490[] = {
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_80B73408[2];
 extern ColliderJntSphInit D_80B73450;
 extern CollisionCheckInfoInit2 D_80B73460;
 extern DamageTable D_80B7346C;
 extern InitChainEntry D_80B73490[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rail_Skb/func_80B708C0.s")
 

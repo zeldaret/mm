@@ -22,16 +22,15 @@ const ActorInit En_Horse_Game_Check_InitVars = {
     (ActorFunc)EnHorseGameCheck_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_808F9BDC[] = {
     ICHAIN_F32(uncullZoneScale, 2400, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_808F9BDC[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Game_Check/func_808F8AA0.s")
 

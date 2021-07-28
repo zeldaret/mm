@@ -22,7 +22,6 @@ const ActorInit En_Sw_InitVars = {
     (ActorFunc)EnSw_Draw,
 };
 
-
 // static ColliderSphereInit sSphereInit = {
 static ColliderSphereInit D_808DB9E0 = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_SPHERE, },
@@ -30,10 +29,8 @@ static ColliderSphereInit D_808DB9E0 = {
     { 0, { { 0, 0, 0 }, 16 }, 100 },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_808DBA0C = { 1, 0, 0, 0, MASS_IMMOVABLE };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_808DBA18 = {
@@ -71,10 +68,8 @@ static DamageTable D_808DBA18 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_808DBA38 = { 1, 0, 0, 0, MASS_IMMOVABLE };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_808DBA44 = {
@@ -112,13 +107,13 @@ static DamageTable D_808DBA44 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
+#endif
 
 extern ColliderSphereInit D_808DB9E0;
 extern CollisionCheckInfoInit2 D_808DBA0C;
 extern DamageTable D_808DBA18;
 extern CollisionCheckInfoInit2 D_808DBA38;
 extern DamageTable D_808DBA44;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sw/func_808D8940.s")
 

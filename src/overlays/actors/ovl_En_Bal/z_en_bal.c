@@ -22,7 +22,6 @@ const ActorInit En_Bal_InitVars = {
     (ActorFunc)EnBal_Draw,
 };
 
-
 // static DamageTable sDamageTable = {
 static DamageTable D_80A63CE0 = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
@@ -59,10 +58,8 @@ static DamageTable D_80A63CE0 = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80A63D00 = { 1, 0, 0, 0, MASS_IMMOVABLE };
-
 
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_80A63D0C[1] = {
@@ -78,12 +75,12 @@ static ColliderJntSphInit D_80A63D30 = {
     1, D_80A63D0C, // sJntSphElementsInit,
 };
 
+#endif
 
 extern DamageTable D_80A63CE0;
 extern CollisionCheckInfoInit2 D_80A63D00;
 extern ColliderJntSphElementInit D_80A63D0C[1];
 extern ColliderJntSphInit D_80A63D30;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/EnBal_Init.s")
 

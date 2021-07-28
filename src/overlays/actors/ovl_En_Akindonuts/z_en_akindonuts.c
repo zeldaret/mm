@@ -22,7 +22,6 @@ const ActorInit En_Akindonuts_InitVars = {
     (ActorFunc)EnAkindonuts_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80BF02F0 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_HIT_PLAYER, COLSHAPE_JNTSPH, },
@@ -30,17 +29,16 @@ static ColliderCylinderInit D_80BF02F0 = {
     { 27, 32, 0, { 0, 0, 0 } },
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80BF04B4[] = {
     ICHAIN_U8(targetMode, 0, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80BF02F0;
 extern InitChainEntry D_80BF04B4[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Akindonuts/func_80BECBE0.s")
 

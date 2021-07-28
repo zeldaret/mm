@@ -22,14 +22,12 @@ const ActorInit Obj_Ice_Poly_InitVars = {
     (ActorFunc)ObjIcePoly_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80932320 = {
     { COLTYPE_HARD, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x02, 0x00 }, { 0xF7CFF7FF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NONE, BUMP_ON, OCELEM_ON, },
     { 50, 105, 0, { 0, 0, 0 } },
 };
-
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_8093234C = {
@@ -38,10 +36,10 @@ static ColliderCylinderInit D_8093234C = {
     { 65, 105, 0, { 0, 0, 0 } },
 };
 
+#endif
 
 extern ColliderCylinderInit D_80932320;
 extern ColliderCylinderInit D_8093234C;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Ice_Poly/ObjIcePoly_Init.s")
 

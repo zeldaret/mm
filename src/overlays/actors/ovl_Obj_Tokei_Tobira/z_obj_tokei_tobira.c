@@ -22,7 +22,6 @@ const ActorInit Obj_Tokei_Tobira_InitVars = {
     (ActorFunc)ObjTokeiTobira_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80ABD750[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
@@ -31,9 +30,9 @@ static InitChainEntry D_80ABD750[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_80ABD750[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokei_Tobira/ObjTokeiTobira_Init.s")
 

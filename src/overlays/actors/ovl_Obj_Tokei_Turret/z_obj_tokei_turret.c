@@ -22,16 +22,15 @@ const ActorInit Obj_Tokei_Turret_InitVars = {
     (ActorFunc)ObjTokeiTurret_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B91EC0[] = {
     ICHAIN_F32(uncullZoneForward, 1200, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_80B91EC0[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokei_Turret/ObjTokeiTurret_Init.s")
 

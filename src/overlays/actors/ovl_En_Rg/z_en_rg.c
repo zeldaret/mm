@@ -22,14 +22,12 @@ const ActorInit En_Rg_InitVars = {
     (ActorFunc)EnRg_Draw,
 };
 
-
 // static ColliderSphereInit sSphereInit = {
 static ColliderSphereInit D_80BF5760 = {
     { COLTYPE_METAL, AT_ON | AT_TYPE_PLAYER | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_SPHERE, },
     { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
     { 0, { { 0, 0, 0 }, 20 }, 100 },
 };
-
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80BF578C = {
@@ -38,10 +36,8 @@ static ColliderCylinderInit D_80BF578C = {
     { 20, 62, 0, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80BF57B8 = { 0, 0, 0, 0, MASS_IMMOVABLE };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80BF57C4 = {
@@ -79,12 +75,12 @@ static DamageTable D_80BF57C4 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
+#endif
 
 extern ColliderSphereInit D_80BF5760;
 extern ColliderCylinderInit D_80BF578C;
 extern CollisionCheckInfoInit2 D_80BF57B8;
 extern DamageTable D_80BF57C4;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rg/func_80BF3920.s")
 

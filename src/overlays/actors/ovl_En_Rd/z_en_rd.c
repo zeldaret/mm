@@ -22,14 +22,12 @@ const ActorInit En_Rd_InitVars = {
     (ActorFunc)EnRd_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_808D70E0 = {
     { COLTYPE_HIT0, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK1, { 0x00000000, 0x00, 0x00 }, { 0xF7EFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
     { 20, 70, 0, { 0, 0, 0 } },
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_808D710C = {
@@ -67,7 +65,6 @@ static DamageTable D_808D710C = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_808D712C[] = {
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_CONTINUE),
@@ -75,11 +72,11 @@ static InitChainEntry D_808D712C[] = {
     ICHAIN_F32_DIV1000(gravity, -3500, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_808D70E0;
 extern DamageTable D_808D710C;
 extern InitChainEntry D_808D712C[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rd/EnRd_Init.s")
 

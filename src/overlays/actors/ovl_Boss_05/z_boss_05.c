@@ -28,7 +28,6 @@ static ColliderJntSphInit D_809F1B74 = {
     2, D_809F1B2C, // sJntSphElementsInit,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_809F1B84[1] = {
     {
@@ -43,7 +42,6 @@ static ColliderJntSphInit D_809F1BA8 = {
     1, D_809F1B84, // sJntSphElementsInit,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_809F1BB8[1] = {
     {
@@ -57,7 +55,6 @@ static ColliderJntSphInit D_809F1BDC = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
     1, D_809F1BB8, // sJntSphElementsInit,
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_809F1C00 = {
@@ -95,7 +92,6 @@ static DamageTable D_809F1C00 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-
 // static DamageTable sDamageTable = {
 static DamageTable D_809F1C20 = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x1),
@@ -132,7 +128,6 @@ static DamageTable D_809F1C20 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-
 const ActorInit Boss_05_InitVars = {
     ACTOR_BOSS_05,
     ACTORCAT_ENEMY,
@@ -145,6 +140,7 @@ const ActorInit Boss_05_InitVars = {
     (ActorFunc)Boss05_Draw,
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_809F1B2C[2];
 extern ColliderJntSphInit D_809F1B74;
@@ -154,7 +150,6 @@ extern ColliderJntSphElementInit D_809F1BB8[1];
 extern ColliderJntSphInit D_809F1BDC;
 extern DamageTable D_809F1C00;
 extern DamageTable D_809F1C20;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_05/func_809EE4E0.s")
 

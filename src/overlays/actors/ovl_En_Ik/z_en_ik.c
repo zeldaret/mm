@@ -22,14 +22,12 @@ const ActorInit En_Ik_InitVars = {
     (ActorFunc)EnIk_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_8092C01C = {
     { COLTYPE_METAL, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK2, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
     { 25, 80, 0, { 0, 0, 0 } },
 };
-
 
 // static ColliderTrisElementInit sTrisElementsInit[2] = {
 static ColliderTrisElementInit D_8092C048[2] = {
@@ -49,14 +47,12 @@ static ColliderTrisInit D_8092C0C0 = {
     2, D_8092C048, // sTrisElementsInit,
 };
 
-
 // static ColliderQuadInit sQuadInit = {
 static ColliderQuadInit D_8092C0D0 = {
     { COLTYPE_NONE, AT_NONE | AT_TYPE_ENEMY, AC_NONE, OC1_NONE, OC2_TYPE_2, COLSHAPE_QUAD, },
     { ELEMTYPE_UNK0, { 0x20000000, 0x04, 0x40 }, { 0x00000000, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL | TOUCH_UNK7, BUMP_NONE, OCELEM_NONE, },
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_8092C120 = {
@@ -94,7 +90,6 @@ static DamageTable D_8092C120 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-
 // static DamageTable sDamageTable = {
 static DamageTable D_8092C140 = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
@@ -131,10 +126,8 @@ static DamageTable D_8092C140 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_8092C160 = { 18, 25, 80, MASS_HEAVY };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_8092C168[] = {
@@ -143,6 +136,7 @@ static InitChainEntry D_8092C168[] = {
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_8092C01C;
 extern ColliderTrisElementInit D_8092C048[2];
@@ -152,7 +146,6 @@ extern DamageTable D_8092C120;
 extern DamageTable D_8092C140;
 extern CollisionCheckInfoInit D_8092C160;
 extern InitChainEntry D_8092C168[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ik/EnIk_Init.s")
 

@@ -21,7 +21,6 @@ const ActorInit En_Minislime_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_809857E0 = {
     { COLTYPE_NONE, AT_NONE | AT_TYPE_ENEMY, AC_NONE | AC_TYPE_PLAYER, OC1_NONE | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -29,10 +28,8 @@ static ColliderCylinderInit D_809857E0 = {
     { 54, 60, -30, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_8098580C = { 4, 40, 40, 30 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80985814 = {
@@ -70,11 +67,11 @@ static DamageTable D_80985814 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
+#endif
 
 extern ColliderCylinderInit D_809857E0;
 extern CollisionCheckInfoInit D_8098580C;
 extern DamageTable D_80985814;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Minislime/EnMinislime_Init.s")
 

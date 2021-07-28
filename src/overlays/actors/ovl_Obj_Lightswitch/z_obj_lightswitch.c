@@ -23,6 +23,9 @@ void ObjLightswitch_Idle(ObjLightswitch* this, GlobalContext* globalCtx);
 extern Gfx D_06000260[];
 extern Gfx D_06000398[];
 extern Gfx D_06000408[];
+extern Gfx D_06000C20[]; 
+extern Gfx D_06000420[]; 
+extern Gfx D_06001420[];
 
 const ActorInit Obj_Lightswitch_InitVars = {
     ACTOR_OBJ_LIGHTSWITCH,
@@ -369,7 +372,7 @@ void ObjLightSwitch_DrawOpa(ObjLightswitch* this, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     gDPSetEnvColor(POLY_OPA_DISP++, (u8)(this->colorR >> 6), (u8)(this->colorG >> 6), ((void)0, (u8)(this->colorB >> 6)),
                    (u8)(this->colorAlpha >> 6));
-    gSPSegment(POLY_OPA_DISP++, 0x09, &D_801AEFA0);
+    gSPSegment(POLY_OPA_DISP++, 0x09, D_801AEFA0);
 
     tempPos.x = this->actor.world.pos.x;
     tempPos.y = this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y);
@@ -405,7 +408,7 @@ void ObjLightSwitch_DrawXlu(ObjLightswitch* this, GlobalContext* globalCtx) {
     func_8012C2DC(globalCtx->state.gfxCtx);
     gDPSetEnvColor(POLY_XLU_DISP++, (u8)(this->colorR >> 6), (u8)(this->colorG >> 6), ((void)0, (u8)(this->colorB >> 6)),
                    (u8)(this->colorAlpha >> 6));
-    gSPSegment(POLY_XLU_DISP++, 0x09, &D_801AEF88);
+    gSPSegment(POLY_XLU_DISP++, 0x09, D_801AEF88);
 
     tempPos.x = this->actor.world.pos.x;
     tempPos.y = this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y);

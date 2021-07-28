@@ -45,7 +45,6 @@ static DamageTable D_80B8AB3C = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xE),
 };
 
-
 const ActorInit En_Kaizoku_InitVars = {
     ACTOR_EN_KAIZOKU,
     ACTORCAT_ENEMY,
@@ -58,14 +57,12 @@ const ActorInit En_Kaizoku_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B8AB7C = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
     { 20, 50, 0, { 0, 0, 0 } },
 };
-
 
 // static ColliderQuadInit sQuadInit = {
 static ColliderQuadInit D_80B8ABA8 = {
@@ -74,11 +71,11 @@ static ColliderQuadInit D_80B8ABA8 = {
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
 
+#endif
 
 extern DamageTable D_80B8AB3C;
 extern ColliderCylinderInit D_80B8AB7C;
 extern ColliderQuadInit D_80B8ABA8;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kaizoku/EnKaizoku_Init.s")
 

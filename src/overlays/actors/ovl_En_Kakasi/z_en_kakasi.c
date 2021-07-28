@@ -17,7 +17,6 @@ static ColliderCylinderInit D_80971D80 = {
     { 20, 70, 0, { 0, 0, 0 } },
 };
 
-
 const ActorInit En_Kakasi_InitVars = {
     ACTOR_EN_KAKASI,
     ACTORCAT_NPC,
@@ -30,9 +29,9 @@ const ActorInit En_Kakasi_InitVars = {
     (ActorFunc)EnKakasi_Draw,
 };
 
+#endif
 
 extern ColliderCylinderInit D_80971D80;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/EnKakasi_Destroy.s")
 

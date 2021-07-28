@@ -22,7 +22,6 @@ const ActorInit Obj_Snowball2_InitVars = {
     (ActorFunc)ObjSnowball2_Draw,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_80B3A8E0[1] = {
     {
@@ -37,7 +36,6 @@ static ColliderJntSphInit D_80B3A904 = {
     1, D_80B3A8E0, // sJntSphElementsInit,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B3A93C[] = {
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
@@ -48,11 +46,11 @@ static InitChainEntry D_80B3A93C[] = {
     ICHAIN_VEC3F_DIV1000(scale, 25, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_80B3A8E0[1];
 extern ColliderJntSphInit D_80B3A904;
 extern InitChainEntry D_80B3A93C[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B38E20.s")
 

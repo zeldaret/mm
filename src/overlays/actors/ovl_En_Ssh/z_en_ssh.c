@@ -22,7 +22,6 @@ const ActorInit En_Ssh_InitVars = {
     (ActorFunc)EnSsh_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80976030 = {
     { COLTYPE_HIT6, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,10 +29,8 @@ static ColliderCylinderInit D_80976030 = {
     { 32, 50, -24, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_8097605C = { 1, 0, 0, 0, MASS_IMMOVABLE };
-
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80976068 = {
@@ -41,7 +38,6 @@ static ColliderCylinderInit D_80976068 = {
     { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
     { 20, 60, -30, { 0, 0, 0 } },
 };
-
 
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_80976094[1] = {
@@ -57,13 +53,13 @@ static ColliderJntSphInit D_809760B8 = {
     1, D_80976094, // sJntSphElementsInit,
 };
 
+#endif
 
 extern ColliderCylinderInit D_80976030;
 extern CollisionCheckInfoInit2 D_8097605C;
 extern ColliderCylinderInit D_80976068;
 extern ColliderJntSphElementInit D_80976094[1];
 extern ColliderJntSphInit D_809760B8;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ssh/func_80973EF0.s")
 

@@ -21,7 +21,6 @@ const ActorInit En_Baguo_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_80A3C2F0[1] = {
     {
@@ -35,7 +34,6 @@ static ColliderJntSphInit D_80A3C314 = {
     { COLTYPE_HARD, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
     1, D_80A3C2F0, // sJntSphElementsInit,
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80A3C324 = {
@@ -73,11 +71,11 @@ static DamageTable D_80A3C324 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xE),
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_80A3C2F0[1];
 extern ColliderJntSphInit D_80A3C314;
 extern DamageTable D_80A3C324;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/EnBaguo_Init.s")
 

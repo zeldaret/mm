@@ -45,7 +45,6 @@ static DamageTable D_809B0F48 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-
 const ActorInit En_Jso_InitVars = {
     ACTOR_EN_JSO,
     ACTORCAT_ENEMY,
@@ -58,14 +57,12 @@ const ActorInit En_Jso_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_809B0F88 = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x08, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
     { 22, 55, 0, { 0, 0, 0 } },
 };
-
 
 // static ColliderQuadInit sQuadInit = {
 static ColliderQuadInit D_809B0FB4 = {
@@ -74,11 +71,11 @@ static ColliderQuadInit D_809B0FB4 = {
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
 
+#endif
 
 extern DamageTable D_809B0F48;
 extern ColliderCylinderInit D_809B0F88;
 extern ColliderQuadInit D_809B0FB4;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jso/EnJso_Init.s")
 

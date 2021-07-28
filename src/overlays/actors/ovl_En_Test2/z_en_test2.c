@@ -20,7 +20,6 @@ const ActorInit En_Test2_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80A3E74C[] = {
     ICHAIN_VEC3F(scale, 1, ICHAIN_CONTINUE),
@@ -29,9 +28,9 @@ static InitChainEntry D_80A3E74C[] = {
     ICHAIN_F32(uncullZoneDownward, 2500, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_80A3E74C[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test2/EnTest2_Init.s")
 

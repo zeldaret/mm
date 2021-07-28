@@ -22,7 +22,6 @@ const ActorInit Obj_Dhouse_InitVars = {
     (ActorFunc)ObjDhouse_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B13FB4[] = {
     ICHAIN_F32(uncullZoneForward, 8000, ICHAIN_CONTINUE),
@@ -31,9 +30,9 @@ static InitChainEntry D_80B13FB4[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_80B13FB4[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Dhouse/ObjDhouse_Init.s")
 

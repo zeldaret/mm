@@ -22,7 +22,6 @@ const ActorInit En_Hidden_Nuts_InitVars = {
     (ActorFunc)EnHiddenNuts_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80BDC0D0 = {
     { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,9 +29,9 @@ static ColliderCylinderInit D_80BDC0D0 = {
     { 30, 20, 0, { 0, 0, 0 } },
 };
 
+#endif
 
 extern ColliderCylinderInit D_80BDC0D0;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hidden_Nuts/EnHiddenNuts_Init.s")
 

@@ -22,7 +22,6 @@ const ActorInit En_Po_Sisters_InitVars = {
     (ActorFunc)EnPoSisters_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B1DA70 = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,10 +29,8 @@ static ColliderCylinderInit D_80B1DA70 = {
     { 18, 60, 15, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_80B1DA9C = { 6, 25, 60, 50 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80B1DAA4 = {
@@ -71,19 +68,18 @@ static DamageTable D_80B1DAA4 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B1DAC4[] = {
     ICHAIN_VEC3F_DIV1000(scale, 7, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 6000, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80B1DA70;
 extern CollisionCheckInfoInit D_80B1DA9C;
 extern DamageTable D_80B1DAA4;
 extern InitChainEntry D_80B1DAC4[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Po_Sisters/EnPoSisters_Init.s")
 

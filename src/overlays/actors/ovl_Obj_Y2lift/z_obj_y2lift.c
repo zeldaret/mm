@@ -22,7 +22,6 @@ const ActorInit Obj_Y2lift_InitVars = {
     (ActorFunc)ObjY2lift_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B9A940[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
@@ -31,9 +30,9 @@ static InitChainEntry D_80B9A940[] = {
     ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_80B9A940[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Y2lift/ObjY2lift_Init.s")
 

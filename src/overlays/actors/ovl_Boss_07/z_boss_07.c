@@ -46,7 +46,6 @@ static DamageTable D_80A07980 = {
     /* Powder Keg     */ DMG_ENTRY(2, 0xF),
 };
 
-
 // static DamageTable sDamageTable = {
 static DamageTable D_80A079A0 = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
@@ -82,7 +81,6 @@ static DamageTable D_80A079A0 = {
     /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
     /* Powder Keg     */ DMG_ENTRY(4, 0xC),
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80A079C0 = {
@@ -120,7 +118,6 @@ static DamageTable D_80A079C0 = {
     /* Powder Keg     */ DMG_ENTRY(2, 0xC),
 };
 
-
 // static DamageTable sDamageTable = {
 static DamageTable D_80A079E0 = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
@@ -156,7 +153,6 @@ static DamageTable D_80A079E0 = {
     /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
     /* Powder Keg     */ DMG_ENTRY(2, 0xE),
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80A07A00 = {
@@ -194,7 +190,6 @@ static DamageTable D_80A07A00 = {
     /* Powder Keg     */ DMG_ENTRY(2, 0xB),
 };
 
-
 const ActorInit Boss_07_InitVars = {
     ACTOR_BOSS_07,
     ACTORCAT_BOSS,
@@ -206,7 +201,6 @@ const ActorInit Boss_07_InitVars = {
     (ActorFunc)Boss07_Update,
     (ActorFunc)Boss07_Draw,
 };
-
 
 // static ColliderJntSphElementInit sJntSphElementsInit[11] = {
 static ColliderJntSphElementInit D_80A07A40[11] = {
@@ -262,14 +256,12 @@ static ColliderJntSphInit D_80A07BCC = {
     11, D_80A07A40, // sJntSphElementsInit,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A07BDC = {
     { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK2, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CEFFFE, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
     { 80, 200, 0, { 0, 0, 0 } },
 };
-
 
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_80A07C08[1] = {
@@ -285,7 +277,6 @@ static ColliderJntSphInit D_80A07C2C = {
     1, D_80A07C08, // sJntSphElementsInit,
 };
 
-
 // static ColliderQuadInit sQuadInit = {
 static ColliderQuadInit D_80A07C3C = {
     { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_QUAD, },
@@ -293,14 +284,12 @@ static ColliderQuadInit D_80A07C3C = {
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
 
-
 // static ColliderQuadInit sQuadInit = {
 static ColliderQuadInit D_80A07C8C = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_QUAD, },
     { ELEMTYPE_UNK2, { 0xF7CFFFFF, 0x04, 0x10 }, { 0xF7CEFFFE, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
-
 
 // static ColliderJntSphElementInit sJntSphElementsInit[11] = {
 static ColliderJntSphElementInit D_80A07CDC[11] = {
@@ -356,14 +345,12 @@ static ColliderJntSphInit D_80A07E68 = {
     11, D_80A07CDC, // sJntSphElementsInit,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A07E78 = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x04, 0x10 }, { 0x00300000, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
     { 15, 30, -15, { 0, 0, 0 } },
 };
-
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A07EA4 = {
@@ -372,7 +359,6 @@ static ColliderCylinderInit D_80A07EA4 = {
     { 50, 100, -50, { 0, 0, 0 } },
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A07ED0 = {
     { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -380,6 +366,7 @@ static ColliderCylinderInit D_80A07ED0 = {
     { 40, 20, 15, { 0, 0, 0 } },
 };
 
+#endif
 
 extern DamageTable D_80A07980;
 extern DamageTable D_80A079A0;
@@ -398,7 +385,6 @@ extern ColliderJntSphInit D_80A07E68;
 extern ColliderCylinderInit D_80A07E78;
 extern ColliderCylinderInit D_80A07EA4;
 extern ColliderCylinderInit D_80A07ED0;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_809F4980.s")
 

@@ -22,7 +22,6 @@ const ActorInit Bg_Spdweb_InitVars = {
     (ActorFunc)BgSpdweb_Draw,
 };
 
-
 // static ColliderTrisElementInit sTrisElementsInit[2] = {
 static ColliderTrisElementInit D_809CF080[2] = {
     {
@@ -40,7 +39,6 @@ static ColliderTrisInit D_809CF0F8 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_2, COLSHAPE_TRIS, },
     2, D_809CF080, // sTrisElementsInit,
 };
-
 
 // static ColliderTrisElementInit sTrisElementsInit[4] = {
 static ColliderTrisElementInit D_809CF108[4] = {
@@ -68,20 +66,19 @@ static ColliderTrisInit D_809CF1F8 = {
     4, D_809CF108, // sTrisElementsInit,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_809CF210[] = {
     ICHAIN_F32(uncullZoneForward, 1500, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderTrisElementInit D_809CF080[2];
 extern ColliderTrisInit D_809CF0F8;
 extern ColliderTrisElementInit D_809CF108[4];
 extern ColliderTrisInit D_809CF1F8;
 extern InitChainEntry D_809CF210[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Spdweb/BgSpdweb_Init.s")
 

@@ -22,7 +22,6 @@ const ActorInit En_Bee_InitVars = {
     (ActorFunc)EnBee_Draw,
 };
 
-
 // static DamageTable sDamageTable = {
 static DamageTable D_80B5B214 = {
     /* Deku Nut       */ DMG_ENTRY(1, 0xF),
@@ -59,7 +58,6 @@ static DamageTable D_80B5B214 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B5B234 = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -67,10 +65,10 @@ static ColliderCylinderInit D_80B5B234 = {
     { 6, 13, -4, { 0, 0, 0 } },
 };
 
+#endif
 
 extern DamageTable D_80B5B214;
 extern ColliderCylinderInit D_80B5B234;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bee/EnBee_Init.s")
 

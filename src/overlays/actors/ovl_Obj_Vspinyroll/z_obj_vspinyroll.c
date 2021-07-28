@@ -22,7 +22,6 @@ const ActorInit Obj_Vspinyroll_InitVars = {
     (ActorFunc)ObjVspinyroll_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A3D488 = {
     { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
@@ -30,17 +29,16 @@ static ColliderCylinderInit D_80A3D488 = {
     { 30, 120, 0, { 0, 0, 0 } },
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80A3D4D4[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 500, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80A3D488;
 extern InitChainEntry D_80A3D4D4[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Vspinyroll/func_80A3C4E0.s")
 

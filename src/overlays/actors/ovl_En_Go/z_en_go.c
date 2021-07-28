@@ -21,14 +21,12 @@ const ActorInit En_Go_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static ColliderSphereInit sSphereInit = {
 static ColliderSphereInit D_80A16434 = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_SPHERE, },
     { ELEMTYPE_UNK0, { 0x20000000, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
     { 0, { { 0, 0, 0 }, 0 }, 100 },
 };
-
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A16460 = {
@@ -37,7 +35,6 @@ static ColliderCylinderInit D_80A16460 = {
     { 0, 0, 0, { 0, 0, 0 } },
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A1648C = {
     { COLTYPE_HIT1, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -45,10 +42,8 @@ static ColliderCylinderInit D_80A1648C = {
     { 0, 0, 0, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80A164B8 = { 0, 0, 0, 0, MASS_IMMOVABLE };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80A164C4 = {
@@ -86,13 +81,13 @@ static DamageTable D_80A164C4 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
+#endif
 
 extern ColliderSphereInit D_80A16434;
 extern ColliderCylinderInit D_80A16460;
 extern ColliderCylinderInit D_80A1648C;
 extern CollisionCheckInfoInit2 D_80A164B8;
 extern DamageTable D_80A164C4;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Go/func_80A10FD0.s")
 

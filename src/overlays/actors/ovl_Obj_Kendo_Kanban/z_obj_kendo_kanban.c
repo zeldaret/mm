@@ -22,7 +22,6 @@ const ActorInit Obj_Kendo_Kanban_InitVars = {
     (ActorFunc)ObjKendoKanban_Draw,
 };
 
-
 // static ColliderTrisElementInit sTrisElementsInit[2] = {
 static ColliderTrisElementInit D_80B6673C[2] = {
     {
@@ -41,14 +40,12 @@ static ColliderTrisInit D_80B667B4 = {
     2, D_80B6673C, // sTrisElementsInit,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B667C4 = {
     { COLTYPE_TREE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK1, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
     { 33, 80, 0, { 0, 0, 0 } },
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80B667F0 = {
@@ -86,17 +83,16 @@ static DamageTable D_80B667F0 = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80B66810 = { 8, 0, 0, 0, MASS_HEAVY };
 
+#endif
 
 extern ColliderTrisElementInit D_80B6673C[2];
 extern ColliderTrisInit D_80B667B4;
 extern ColliderCylinderInit D_80B667C4;
 extern DamageTable D_80B667F0;
 extern CollisionCheckInfoInit2 D_80B66810;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban/ObjKendoKanban_Init.s")
 

@@ -46,7 +46,6 @@ static DamageTable D_809A8CDC = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xE),
 };
 
-
 const ActorInit En_Grasshopper_InitVars = {
     ACTOR_EN_GRASSHOPPER,
     ACTORCAT_ENEMY,
@@ -58,7 +57,6 @@ const ActorInit En_Grasshopper_InitVars = {
     (ActorFunc)EnGrasshopper_Update,
     (ActorFunc)EnGrasshopper_Draw,
 };
-
 
 // static ColliderJntSphElementInit sJntSphElementsInit[2] = {
 static ColliderJntSphElementInit D_809A8D1C[2] = {
@@ -78,11 +76,11 @@ static ColliderJntSphInit D_809A8D64 = {
     2, D_809A8D1C, // sJntSphElementsInit,
 };
 
+#endif
 
 extern DamageTable D_809A8CDC;
 extern ColliderJntSphElementInit D_809A8D1C[2];
 extern ColliderJntSphInit D_809A8D64;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Grasshopper/EnGrasshopper_Init.s")
 

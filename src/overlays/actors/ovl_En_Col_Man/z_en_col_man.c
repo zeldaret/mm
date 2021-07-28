@@ -16,7 +16,6 @@ static ColliderCylinderInit D_80AFE730 = {
     { 10, 11, 1, { 0, 0, 0 } },
 };
 
-
 const ActorInit En_Col_Man_InitVars = {
     ACTOR_EN_COL_MAN,
     ACTORCAT_MISC,
@@ -29,9 +28,9 @@ const ActorInit En_Col_Man_InitVars = {
     (ActorFunc)NULL,
 };
 
+#endif
 
 extern ColliderCylinderInit D_80AFE730;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Col_Man/EnColMan_Init.s")
 

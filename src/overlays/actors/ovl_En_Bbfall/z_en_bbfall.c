@@ -22,7 +22,6 @@ const ActorInit En_Bbfall_InitVars = {
     (ActorFunc)EnBbfall_Draw,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[3] = {
 static ColliderJntSphElementInit D_808C0D30[3] = {
     {
@@ -44,7 +43,6 @@ static ColliderJntSphInit D_808C0D9C = {
     { COLTYPE_HIT3, AT_NONE | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
     3, D_808C0D30, // sJntSphElementsInit,
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_808C0DAC = {
@@ -82,10 +80,8 @@ static DamageTable D_808C0DAC = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_808C0DCC = { 2, 20, 40, 50 };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_808C0DD4[] = {
@@ -93,13 +89,13 @@ static InitChainEntry D_808C0DD4[] = {
     ICHAIN_F32(targetArrowOffset, 10, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_808C0D30[3];
 extern ColliderJntSphInit D_808C0D9C;
 extern DamageTable D_808C0DAC;
 extern CollisionCheckInfoInit D_808C0DCC;
 extern InitChainEntry D_808C0DD4[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/EnBbfall_Init.s")
 

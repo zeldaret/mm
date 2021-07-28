@@ -24,7 +24,6 @@ static ColliderJntSphInit D_8091FA84 = {
     1, D_8091FA60, // sJntSphElementsInit,
 };
 
-
 const ActorInit En_Fish_InitVars = {
     ACTOR_EN_FISH,
     ACTORCAT_ITEMACTION,
@@ -37,7 +36,6 @@ const ActorInit En_Fish_InitVars = {
     (ActorFunc)EnFish_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_8091FAC0[] = {
     ICHAIN_F32(uncullZoneForward, 720, ICHAIN_CONTINUE),
@@ -45,11 +43,11 @@ static InitChainEntry D_8091FAC0[] = {
     ICHAIN_F32(uncullZoneDownward, 40, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_8091FA60[1];
 extern ColliderJntSphInit D_8091FA84;
 extern InitChainEntry D_8091FAC0[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fish/func_8091D630.s")
 

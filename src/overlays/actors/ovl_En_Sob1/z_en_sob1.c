@@ -21,15 +21,14 @@ const ActorInit En_Sob1_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80A109E8[] = {
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_80A109E8[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sob1/D_80A10A50.s")
 

@@ -22,7 +22,6 @@ const ActorInit En_Mm_InitVars = {
     (ActorFunc)EnMm_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80966340 = {
     { COLTYPE_METAL, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
@@ -30,17 +29,16 @@ static ColliderCylinderInit D_80966340 = {
     { 6, 30, 0, { 0, 0, 0 } },
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_8096636C[] = {
     ICHAIN_F32_DIV1000(gravity, -1200, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 270, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80966340;
 extern InitChainEntry D_8096636C[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mm/func_80965BB0.s")
 

@@ -22,7 +22,6 @@ const ActorInit En_Ruppecrow_InitVars = {
     (ActorFunc)EnRuppecrow_Draw,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_80BE39B0[1] = {
     {
@@ -37,10 +36,8 @@ static ColliderJntSphInit D_80BE39D4 = {
     1, D_80BE39B0, // sJntSphElementsInit,
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_80BE39E4 = { 1, 15, 30, 30 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80BE39EC = {
@@ -78,20 +75,19 @@ static DamageTable D_80BE39EC = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80BE3A0C[] = {
     ICHAIN_F32_DIV1000(gravity, -500, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_80BE39B0[1];
 extern ColliderJntSphInit D_80BE39D4;
 extern CollisionCheckInfoInit D_80BE39E4;
 extern DamageTable D_80BE39EC;
 extern InitChainEntry D_80BE3A0C[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ruppecrow/func_80BE2260.s")
 

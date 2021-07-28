@@ -22,7 +22,6 @@ const ActorInit En_Holl_InitVars = {
     (ActorFunc)EnHoll_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_8089A5D0[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
@@ -30,9 +29,9 @@ static InitChainEntry D_8089A5D0[] = {
     ICHAIN_F32(uncullZoneDownward, 400, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_8089A5D0[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Holl/func_80899960.s")
 

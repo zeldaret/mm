@@ -22,7 +22,6 @@ const ActorInit Bg_Astr_Bombwall_InitVars = {
     (ActorFunc)BgAstrBombwall_Draw,
 };
 
-
 // static ColliderTrisElementInit sTrisElementsInit[2] = {
 static ColliderTrisElementInit D_80C0A620[2] = {
     {
@@ -41,17 +40,16 @@ static ColliderTrisInit D_80C0A698 = {
     2, D_80C0A620, // sTrisElementsInit,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80C0A6A8[] = {
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderTrisElementInit D_80C0A620[2];
 extern ColliderTrisInit D_80C0A698;
 extern InitChainEntry D_80C0A6A8[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Astr_Bombwall/func_80C09ED0.s")
 

@@ -22,14 +22,12 @@ const ActorInit En_Raf_InitVars = {
     (ActorFunc)EnRaf_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A18EE0 = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x04, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
     { 50, 10, -10, { 0, 0, 0 } },
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80A1939C = {
@@ -67,10 +65,10 @@ static DamageTable D_80A1939C = {
     /* Powder Keg     */ DMG_ENTRY(0, 0xF),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80A18EE0;
 extern DamageTable D_80A1939C;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A16D40.s")
 

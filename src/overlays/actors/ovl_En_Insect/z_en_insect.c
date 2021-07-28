@@ -22,7 +22,6 @@ const ActorInit En_Insect_InitVars = {
     (ActorFunc)EnInsect_Draw,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_8091BD84[1] = {
     {
@@ -37,7 +36,6 @@ static ColliderJntSphInit D_8091BDA8 = {
     1, D_8091BD84, // sJntSphElementsInit,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_8091BDBC[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_CONTINUE),
@@ -46,11 +44,11 @@ static InitChainEntry D_8091BDBC[] = {
     ICHAIN_F32(uncullZoneDownward, 30, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_8091BD84[1];
 extern ColliderJntSphInit D_8091BDA8;
 extern InitChainEntry D_8091BDBC[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Insect/func_8091A8A0.s")
 

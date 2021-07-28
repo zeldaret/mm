@@ -22,7 +22,6 @@ const ActorInit En_Mk_InitVars = {
     (ActorFunc)EnMk_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_8095A260 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_ENEMY, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,9 +29,9 @@ static ColliderCylinderInit D_8095A260 = {
     { 30, 40, 0, { 0, 0, 0 } },
 };
 
+#endif
 
 extern ColliderCylinderInit D_8095A260;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mk/func_809592E0.s")
 

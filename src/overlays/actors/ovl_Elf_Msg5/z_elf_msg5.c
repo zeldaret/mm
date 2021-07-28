@@ -21,16 +21,15 @@ const ActorInit Elf_Msg5_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80AFDBD0[] = {
     ICHAIN_VEC3F_DIV1000(scale, 200, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_80AFDBD0[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg5/D_80AFDBE0.s")
 

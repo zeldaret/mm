@@ -21,14 +21,12 @@ const ActorInit Obj_Bombiwa_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_8093A940 = {
     { COLTYPE_HARD, AT_NONE, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x81C37FBE, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
     { 55, 70, 0, { 0, 0, 0 } },
 };
-
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_8093A96C = {
@@ -37,10 +35,8 @@ static ColliderCylinderInit D_8093A96C = {
     { 75, 130, 0, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_8093A9B8 = { 0, 12, 60, MASS_IMMOVABLE };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_8093A9C0[] = {
@@ -50,12 +46,12 @@ static InitChainEntry D_8093A9C0[] = {
     ICHAIN_F32(uncullZoneDownward, 500, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_8093A940;
 extern ColliderCylinderInit D_8093A96C;
 extern CollisionCheckInfoInit D_8093A9B8;
 extern InitChainEntry D_8093A9C0[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Bombiwa/func_809393B0.s")
 

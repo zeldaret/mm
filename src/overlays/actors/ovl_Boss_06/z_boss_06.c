@@ -46,7 +46,6 @@ static DamageTable D_809F4080 = {
     /* Powder Keg     */ DMG_ENTRY(0, 0xF),
 };
 
-
 const ActorInit Boss_06_InitVars = {
     ACTOR_BOSS_06,
     ACTORCAT_BOSS,
@@ -59,7 +58,6 @@ const ActorInit Boss_06_InitVars = {
     (ActorFunc)Boss06_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_809F40C0 = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -67,10 +65,10 @@ static ColliderCylinderInit D_809F40C0 = {
     { 90, 140, 10, { 0, 0, 0 } },
 };
 
+#endif
 
 extern DamageTable D_809F4080;
 extern ColliderCylinderInit D_809F40C0;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_06/func_809F2120.s")
 

@@ -22,7 +22,6 @@ const ActorInit En_Horse_Link_Child_InitVars = {
     (ActorFunc)EnHorseLinkChild_Draw,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_808DFED4[1] = {
     {
@@ -37,22 +36,20 @@ static ColliderJntSphInit D_808DFEF8 = {
     1, D_808DFED4, // sJntSphElementsInit,
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_808DFF08 = { 10, 35, 100, MASS_HEAVY };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_808DFF2C[] = {
     ICHAIN_F32(uncullZoneScale, 1200, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_808DFED4[1];
 extern ColliderJntSphInit D_808DFEF8;
 extern CollisionCheckInfoInit D_808DFF08;
 extern InitChainEntry D_808DFF2C[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse_Link_Child/func_808DE5C0.s")
 

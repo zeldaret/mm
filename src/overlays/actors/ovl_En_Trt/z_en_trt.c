@@ -22,15 +22,14 @@ const ActorInit En_Trt_InitVars = {
     (ActorFunc)EnTrt_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80A8FEF8[] = {
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_80A8FEF8[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Trt/D_80A8FF10.s")
 

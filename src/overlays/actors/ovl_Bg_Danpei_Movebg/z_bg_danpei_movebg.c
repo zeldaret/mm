@@ -21,7 +21,6 @@ const ActorInit Bg_Danpei_Movebg_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80AF753C[] = {
     ICHAIN_F32(uncullZoneScale, 1500, ICHAIN_CONTINUE),
@@ -30,9 +29,9 @@ static InitChainEntry D_80AF753C[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_80AF753C[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Danpei_Movebg/func_80AF6DE0.s")
 

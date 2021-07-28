@@ -22,7 +22,6 @@ const ActorInit Obj_Lift_InitVars = {
     (ActorFunc)ObjLift_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_8093DD84[] = {
     ICHAIN_F32_DIV1000(gravity, -600, ICHAIN_CONTINUE),
@@ -32,9 +31,9 @@ static InitChainEntry D_8093DD84[] = {
     ICHAIN_F32(uncullZoneDownward, 350, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_8093DD84[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lift/func_8093D3C0.s")
 

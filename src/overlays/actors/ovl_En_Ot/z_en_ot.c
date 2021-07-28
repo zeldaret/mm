@@ -22,14 +22,12 @@ const ActorInit En_Ot_InitVars = {
     (ActorFunc)EnOt_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B5E3A0 = {
     { COLTYPE_HIT0, AT_NONE, AC_ON | AC_TYPE_PLAYER | AC_TYPE_ENEMY, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK1, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
     { 5, 33, -20, { 0, 0, 0 } },
 };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B5E3FC[] = {
@@ -38,10 +36,10 @@ static InitChainEntry D_80B5E3FC[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80B5E3A0;
 extern InitChainEntry D_80B5E3FC[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ot/func_80B5B2E0.s")
 

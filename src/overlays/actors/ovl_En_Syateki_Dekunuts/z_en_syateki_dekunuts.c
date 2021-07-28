@@ -22,14 +22,12 @@ const ActorInit En_Syateki_Dekunuts_InitVars = {
     (ActorFunc)EnSyatekiDekunuts_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A2CAB0 = {
     { COLTYPE_HIT6, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
     { 48, 80, 0, { 0, 0, 0 } },
 };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80A2CB90[] = {
@@ -38,10 +36,10 @@ static InitChainEntry D_80A2CB90[] = {
     ICHAIN_F32(targetArrowOffset, 2600, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80A2CAB0;
 extern InitChainEntry D_80A2CB90[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/EnSyatekiDekunuts_Init.s")
 

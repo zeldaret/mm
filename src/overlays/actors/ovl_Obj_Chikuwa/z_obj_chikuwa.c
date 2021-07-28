@@ -22,7 +22,6 @@ const ActorInit Obj_Chikuwa_InitVars = {
     (ActorFunc)ObjChikuwa_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_809B1FC0[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
@@ -31,9 +30,9 @@ static InitChainEntry D_809B1FC0[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_809B1FC0[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Chikuwa/func_809B1550.s")
 

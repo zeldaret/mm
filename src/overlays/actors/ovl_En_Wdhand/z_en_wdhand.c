@@ -22,7 +22,6 @@ const ActorInit En_Wdhand_InitVars = {
     (ActorFunc)EnWdhand_Draw,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[7] = {
 static ColliderJntSphElementInit D_80AF63E0[7] = {
     {
@@ -61,10 +60,8 @@ static ColliderJntSphInit D_80AF64DC = {
     7, D_80AF63E0, // sJntSphElementsInit,
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_80AF64EC = { 1, 25, 25, MASS_HEAVY };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80AF64F4 = {
@@ -102,12 +99,12 @@ static DamageTable D_80AF64F4 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_80AF63E0[7];
 extern ColliderJntSphInit D_80AF64DC;
 extern CollisionCheckInfoInit D_80AF64EC;
 extern DamageTable D_80AF64F4;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wdhand/EnWdhand_Init.s")
 

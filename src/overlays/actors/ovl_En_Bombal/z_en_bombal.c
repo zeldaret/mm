@@ -22,7 +22,6 @@ const ActorInit En_Bombal_InitVars = {
     (ActorFunc)EnBombal_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80C06460 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_2, COLSHAPE_CYLINDER, },
@@ -30,9 +29,9 @@ static ColliderCylinderInit D_80C06460 = {
     { 60, 90, -50, { 0, 0, 0 } },
 };
 
+#endif
 
 extern ColliderCylinderInit D_80C06460;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bombal/EnBombal_Init.s")
 

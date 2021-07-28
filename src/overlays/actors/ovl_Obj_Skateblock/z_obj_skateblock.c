@@ -22,7 +22,6 @@ const ActorInit Obj_Skateblock_InitVars = {
     (ActorFunc)ObjSkateblock_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80A22AE0[] = {
     ICHAIN_F32_DIV1000(gravity, -1700, ICHAIN_CONTINUE),
@@ -33,9 +32,9 @@ static InitChainEntry D_80A22AE0[] = {
     ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_80A22AE0[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Skateblock/func_80A21150.s")
 

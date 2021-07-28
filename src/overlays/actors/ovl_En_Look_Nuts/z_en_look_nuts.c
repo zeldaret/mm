@@ -22,14 +22,12 @@ const ActorInit En_Look_Nuts_InitVars = {
     (ActorFunc)EnLookNuts_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A68600 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
     { 20, 50, 0, { 0, 0, 0 } },
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80A68630 = {
@@ -67,10 +65,10 @@ static DamageTable D_80A68630 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80A68600;
 extern DamageTable D_80A68630;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Look_Nuts/EnLookNuts_Init.s")
 

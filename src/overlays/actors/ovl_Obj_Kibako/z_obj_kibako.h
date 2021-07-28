@@ -25,6 +25,4 @@ typedef struct ObjKibako {
 
 extern const ActorInit Obj_Kibako_InitVars;
 
-
-
 #endif // Z_OBJ_KIBAKO_H

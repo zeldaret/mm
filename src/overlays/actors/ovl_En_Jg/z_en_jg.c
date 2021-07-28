@@ -22,7 +22,6 @@ const ActorInit En_Jg_InitVars = {
     (ActorFunc)EnJg_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B75820 = {
     { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,10 +29,8 @@ static ColliderCylinderInit D_80B75820 = {
     { 60, 80, 0, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80B7584C = { 0, 50, 80, 0, MASS_IMMOVABLE };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80B75858 = {
@@ -71,11 +68,11 @@ static DamageTable D_80B75858 = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80B75820;
 extern CollisionCheckInfoInit2 D_80B7584C;
 extern DamageTable D_80B75858;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Jg/func_80B73A90.s")
 

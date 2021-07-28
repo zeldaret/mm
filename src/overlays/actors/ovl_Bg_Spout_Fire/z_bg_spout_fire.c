@@ -21,7 +21,6 @@ const ActorInit Bg_Spout_Fire_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A61160 = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_NONE, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_2, COLSHAPE_CYLINDER, },
@@ -29,14 +28,13 @@ static ColliderCylinderInit D_80A61160 = {
     { 30, 83, 0, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_80A6118C = { 1, 80, 100, MASS_IMMOVABLE };
 
+#endif
 
 extern ColliderCylinderInit D_80A61160;
 extern CollisionCheckInfoInit D_80A6118C;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Spout_Fire/BgSpoutFire_Init.s")
 

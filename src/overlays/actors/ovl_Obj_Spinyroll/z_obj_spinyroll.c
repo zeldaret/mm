@@ -22,7 +22,6 @@ const ActorInit Obj_Spinyroll_InitVars = {
     (ActorFunc)ObjSpinyroll_Draw,
 };
 
-
 // static ColliderTrisElementInit sTrisElementsInit[6] = {
 static ColliderTrisElementInit D_80A1F040[6] = {
     {
@@ -57,18 +56,17 @@ static ColliderTrisInit D_80A1F1A8 = {
     6, D_80A1F040, // sTrisElementsInit,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80A1F204[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 500, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderTrisElementInit D_80A1F040[6];
 extern ColliderTrisInit D_80A1F1A8;
 extern InitChainEntry D_80A1F204[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spinyroll/func_80A1DA50.s")
 

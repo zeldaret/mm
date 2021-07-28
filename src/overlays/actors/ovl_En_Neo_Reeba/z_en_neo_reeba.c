@@ -22,7 +22,6 @@ const ActorInit En_Neo_Reeba_InitVars = {
     (ActorFunc)EnNeoReeba_Draw,
 };
 
-
 // static DamageTable sDamageTable = {
 static DamageTable D_80B7E500 = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
@@ -59,7 +58,6 @@ static DamageTable D_80B7E500 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B7E520 = {
     { COLTYPE_HIT5, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -67,10 +65,10 @@ static ColliderCylinderInit D_80B7E520 = {
     { 18, 30, 0, { 0, 0, 0 } },
 };
 
+#endif
 
 extern DamageTable D_80B7E500;
 extern ColliderCylinderInit D_80B7E520;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Neo_Reeba/EnNeoReeba_Init.s")
 

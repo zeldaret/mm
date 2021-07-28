@@ -22,14 +22,12 @@ const ActorInit En_Bombf_InitVars = {
     (ActorFunc)EnBombf_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_808AFB20 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER | AC_TYPE_OTHER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK2, { 0x00000000, 0x00, 0x00 }, { 0x00013A28, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
     { 9, 18, 10, { 0, 0, 0 } },
 };
-
 
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_808AFB4C[1] = {
@@ -45,11 +43,11 @@ static ColliderJntSphInit D_808AFB70 = {
     1, D_808AFB4C, // sJntSphElementsInit,
 };
 
+#endif
 
 extern ColliderCylinderInit D_808AFB20;
 extern ColliderJntSphElementInit D_808AFB4C[1];
 extern ColliderJntSphInit D_808AFB70;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bombf/func_808AE8C0.s")
 

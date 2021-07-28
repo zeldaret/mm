@@ -21,7 +21,6 @@ const ActorInit Shot_Sun_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80973BA0 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -29,9 +28,9 @@ static ColliderCylinderInit D_80973BA0 = {
     { 30, 60, 0, { 0, 0, 0 } },
 };
 
+#endif
 
 extern ColliderCylinderInit D_80973BA0;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Shot_Sun/ShotSun_Init.s")
 

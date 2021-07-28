@@ -22,14 +22,12 @@ const ActorInit En_Poh_InitVars = {
     (ActorFunc)EnPoh_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B2F680 = {
     { COLTYPE_HIT3, AT_NONE, AC_NONE | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CBFFFE, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
     { 20, 40, 20, { 0, 0, 0 } },
 };
-
 
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_80B2F6AC[1] = {
@@ -44,7 +42,6 @@ static ColliderJntSphInit D_80B2F6D0 = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
     1, D_80B2F6AC, // sJntSphElementsInit,
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80B2F6E0 = {
@@ -82,10 +79,8 @@ static DamageTable D_80B2F6E0 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_80B2F700 = { 3, 25, 50, 50 };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B2F708[] = {
@@ -93,6 +88,7 @@ static InitChainEntry D_80B2F708[] = {
     ICHAIN_F32(targetArrowOffset, 3200, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80B2F680;
 extern ColliderJntSphElementInit D_80B2F6AC[1];
@@ -100,7 +96,6 @@ extern ColliderJntSphInit D_80B2F6D0;
 extern DamageTable D_80B2F6E0;
 extern CollisionCheckInfoInit D_80B2F700;
 extern InitChainEntry D_80B2F708[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Poh/EnPoh_Init.s")
 

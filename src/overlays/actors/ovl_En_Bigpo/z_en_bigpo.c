@@ -21,7 +21,6 @@ const ActorInit En_Bigpo_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B65010 = {
     { COLTYPE_HIT3, AT_NONE | AT_TYPE_ENEMY, AC_NONE | AC_TYPE_PLAYER, OC1_NONE | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -29,10 +28,8 @@ static ColliderCylinderInit D_80B65010 = {
     { 35, 100, 10, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_80B6503C = { 10, 35, 100, 50 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80B65044 = {
@@ -70,19 +67,18 @@ static DamageTable D_80B65044 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B65064[] = {
     ICHAIN_S8(hintId, 90, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 3200, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80B65010;
 extern CollisionCheckInfoInit D_80B6503C;
 extern DamageTable D_80B65044;
 extern InitChainEntry D_80B65064[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bigpo/EnBigpo_Init.s")
 

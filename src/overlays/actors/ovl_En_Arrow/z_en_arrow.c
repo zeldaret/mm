@@ -22,7 +22,6 @@ const ActorInit En_Arrow_InitVars = {
     (ActorFunc)EnArrow_Draw,
 };
 
-
 // static ColliderQuadInit sQuadInit = {
 static ColliderQuadInit D_8088C1E0 = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_PLAYER, AC_NONE, OC1_NONE, OC2_TYPE_PLAYER, COLSHAPE_QUAD, },
@@ -30,16 +29,15 @@ static ColliderQuadInit D_8088C1E0 = {
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_8088C230[] = {
     ICHAIN_F32(minVelocityY, -150, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderQuadInit D_8088C1E0;
 extern InitChainEntry D_8088C230[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Arrow/EnArrow_Init.s")
 

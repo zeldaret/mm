@@ -22,14 +22,12 @@ const ActorInit En_Maruta_InitVars = {
     (ActorFunc)EnMaruta_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B38AFC = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK1, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
     { 12, 65, 0, { 0, 0, 0 } },
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80B38B28 = {
@@ -67,15 +65,14 @@ static DamageTable D_80B38B28 = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80B38B48 = { 8, 0, 0, 0, MASS_HEAVY };
 
+#endif
 
 extern ColliderCylinderInit D_80B38AFC;
 extern DamageTable D_80B38B28;
 extern CollisionCheckInfoInit2 D_80B38B48;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/EnMaruta_Init.s")
 

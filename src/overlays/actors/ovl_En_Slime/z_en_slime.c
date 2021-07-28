@@ -22,14 +22,12 @@ const ActorInit En_Slime_InitVars = {
     (ActorFunc)EnSlime_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A31AF0 = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_HARD, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
     { 22, 35, 0, { 0, 0, 0 } },
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80A31B1C = {
@@ -67,10 +65,8 @@ static DamageTable D_80A31B1C = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_80A31B3C = { 1, 22, 35, 60 };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80A31B54[] = {
@@ -78,12 +74,12 @@ static InitChainEntry D_80A31B54[] = {
     ICHAIN_F32(targetArrowOffset, 6000, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80A31AF0;
 extern DamageTable D_80A31B1C;
 extern CollisionCheckInfoInit D_80A31B3C;
 extern InitChainEntry D_80A31B54[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Slime/EnSlime_Init.s")
 

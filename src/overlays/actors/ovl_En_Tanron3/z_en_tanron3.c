@@ -22,7 +22,6 @@ const ActorInit En_Tanron3_InitVars = {
     (ActorFunc)EnTanron3_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80BB9750 = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,9 +29,9 @@ static ColliderCylinderInit D_80BB9750 = {
     { 7, 10, -5, { 0, 0, 0 } },
 };
 
+#endif
 
 extern ColliderCylinderInit D_80BB9750;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron3/func_80BB85A0.s")
 

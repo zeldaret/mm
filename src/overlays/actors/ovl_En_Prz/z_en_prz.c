@@ -46,14 +46,12 @@ static DamageTable D_80A771C0 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A771F4 = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK4, { 0x20000000, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
     { 10, 10, 0, { 0, 0, 0 } },
 };
-
 
 const ActorInit En_Prz_InitVars = {
     ACTOR_EN_PRZ,
@@ -67,10 +65,10 @@ const ActorInit En_Prz_InitVars = {
     (ActorFunc)EnPrz_Draw,
 };
 
+#endif
 
 extern DamageTable D_80A771C0;
 extern ColliderCylinderInit D_80A771F4;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Prz/EnPrz_Init.s")
 

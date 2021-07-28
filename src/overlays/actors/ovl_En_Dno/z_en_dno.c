@@ -22,7 +22,6 @@ const ActorInit En_Dno_InitVars = {
     (ActorFunc)EnDno_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A73B00 = {
     { COLTYPE_HIT0, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,17 +29,16 @@ static ColliderCylinderInit D_80A73B00 = {
     { 17, 58, 0, { 0, 0, 0 } },
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80A73B38[] = {
     ICHAIN_F32(uncullZoneDownward, 80, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80A73B00;
 extern InitChainEntry D_80A73B38[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dno/func_80A711D0.s")
 

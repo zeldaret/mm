@@ -22,7 +22,6 @@ const ActorInit En_Honotrap_InitVars = {
     (ActorFunc)EnHonotrap_Draw,
 };
 
-
 // static ColliderTrisElementInit sTrisElementsInit[2] = {
 static ColliderTrisElementInit D_80930424[2] = {
     {
@@ -41,7 +40,6 @@ static ColliderTrisInit D_8093049C = {
     2, D_80930424, // sTrisElementsInit,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_809304AC = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
@@ -49,10 +47,8 @@ static ColliderCylinderInit D_809304AC = {
     { 10, 25, 0, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_809304D8 = { 0, 9, 23, 1 };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_809304E0[] = {
@@ -61,13 +57,13 @@ static InitChainEntry D_809304E0[] = {
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderTrisElementInit D_80930424[2];
 extern ColliderTrisInit D_8093049C;
 extern ColliderCylinderInit D_809304AC;
 extern CollisionCheckInfoInit D_809304D8;
 extern InitChainEntry D_809304E0[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Honotrap/func_8092E510.s")
 

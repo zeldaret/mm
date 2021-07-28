@@ -22,15 +22,14 @@ const ActorInit En_Stream_InitVars = {
     (ActorFunc)EnStream_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80965B20[] = {
     ICHAIN_VEC3F_DIV1000(scale, 20, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_80965B20[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stream/func_80965650.s")
 

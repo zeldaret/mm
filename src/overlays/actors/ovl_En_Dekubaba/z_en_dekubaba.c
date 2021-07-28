@@ -22,7 +22,6 @@ const ActorInit En_Dekubaba_InitVars = {
     (ActorFunc)EnDekubaba_Draw,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[7] = {
 static ColliderJntSphElementInit D_808B4D60[7] = {
     {
@@ -61,10 +60,8 @@ static ColliderJntSphInit D_808B4E5C = {
     7, D_808B4D60, // sJntSphElementsInit,
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_808B4E6C = { 2, 25, 25, MASS_IMMOVABLE };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_808B4E74 = {
@@ -102,19 +99,18 @@ static DamageTable D_808B4E74 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_808B4E94[] = {
     ICHAIN_F32(targetArrowOffset, 1500, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_808B4D60[7];
 extern ColliderJntSphInit D_808B4E5C;
 extern CollisionCheckInfoInit D_808B4E6C;
 extern DamageTable D_808B4E74;
 extern InitChainEntry D_808B4E94[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dekubaba/EnDekubaba_Init.s")
 

@@ -22,15 +22,14 @@ const ActorInit Obj_Yado_InitVars = {
     (ActorFunc)ObjYado_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80C16420[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_80C16420[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Yado/ObjYado_Init.s")
 

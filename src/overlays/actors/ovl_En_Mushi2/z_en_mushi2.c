@@ -22,7 +22,6 @@ const ActorInit En_Mushi2_InitVars = {
     (ActorFunc)EnMushi2_Draw,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_80A6B950[1] = {
     {
@@ -37,7 +36,6 @@ static ColliderJntSphInit D_80A6B974 = {
     1, D_80A6B950, // sJntSphElementsInit,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80A6BA04[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_CONTINUE),
@@ -46,11 +44,11 @@ static InitChainEntry D_80A6BA04[] = {
     ICHAIN_F32(uncullZoneDownward, 20, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_80A6B950[1];
 extern ColliderJntSphInit D_80A6B974;
 extern InitChainEntry D_80A6BA04[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mushi2/func_80A687A0.s")
 

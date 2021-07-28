@@ -22,14 +22,12 @@ const ActorInit Obj_Toge_InitVars = {
     (ActorFunc)ObjToge_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_809A4CB0 = {
     { COLTYPE_METAL, AT_NONE, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x01C37BB6, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
     { 30, 20, 0, { 0, 0, 0 } },
 };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_809A4D14[] = {
@@ -39,10 +37,10 @@ static InitChainEntry D_809A4D14[] = {
     ICHAIN_F32(uncullZoneDownward, 150, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_809A4CB0;
 extern InitChainEntry D_809A4D14[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Toge/func_809A41C0.s")
 

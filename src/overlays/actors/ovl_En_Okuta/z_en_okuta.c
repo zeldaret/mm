@@ -22,14 +22,12 @@ const ActorInit En_Okuta_InitVars = {
     (ActorFunc)EnOkuta_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_808708A0 = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK4, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_HARD, BUMP_ON, OCELEM_ON, },
     { 13, 20, 0, { 0, 0, 0 } },
 };
-
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_808708CC = {
@@ -38,10 +36,8 @@ static ColliderCylinderInit D_808708CC = {
     { 20, 40, -30, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_808708F8 = { 4, 15, 60, 100 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80870900 = {
@@ -79,20 +75,19 @@ static DamageTable D_80870900 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80870920[] = {
     ICHAIN_S8(hintId, 66, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 6500, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_808708A0;
 extern ColliderCylinderInit D_808708CC;
 extern CollisionCheckInfoInit D_808708F8;
 extern DamageTable D_80870900;
 extern InitChainEntry D_80870920[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Okuta/EnOkuta_Init.s")
 

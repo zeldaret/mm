@@ -22,7 +22,6 @@ const ActorInit En_Gamelupy_InitVars = {
     (ActorFunc)EnGamelupy_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80AF6CF0 = {
     { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_NO_PUSH | OC1_TYPE_PLAYER, OC2_TYPE_2, COLSHAPE_CYLINDER, },
@@ -30,9 +29,9 @@ static ColliderCylinderInit D_80AF6CF0 = {
     { 10, 30, 0, { 0, 0, 0 } },
 };
 
+#endif
 
 extern ColliderCylinderInit D_80AF6CF0;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Gamelupy/EnGamelupy_Init.s")
 

@@ -21,7 +21,6 @@ const ActorInit En_Trt2_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80AD58A0 = {
     { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -29,10 +28,8 @@ static ColliderCylinderInit D_80AD58A0 = {
     { 32, 56, 30, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80AD58CC = { 1, 0, 0, 0, MASS_IMMOVABLE };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80AD58D8 = {
@@ -70,19 +67,18 @@ static DamageTable D_80AD58D8 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80AD5964[] = {
     ICHAIN_U8(targetMode, 3, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80AD58A0;
 extern CollisionCheckInfoInit2 D_80AD58CC;
 extern DamageTable D_80AD58D8;
 extern InitChainEntry D_80AD5964[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Trt2/func_80AD3380.s")
 

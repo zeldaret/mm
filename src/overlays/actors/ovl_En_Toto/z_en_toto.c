@@ -62,35 +62,20 @@ const ActorInit En_Toto_InitVars = {
 };
 
 extern AnimationHeader D_06000C80;
-
 extern AnimationHeader D_06001324;
-
 extern AnimationHeader D_060016A4;
-
 extern AnimationHeader D_06001DF0;
-
 extern AnimationHeader D_060022C8;
-
 extern AnimationHeader D_060028B8;
-
 extern AnimationHeader D_06002F20;
-
 extern AnimationHeader D_06003AA8;
-
 extern UNK_TYPE D_06008AE8;
-
 extern UNK_TYPE D_0600A068;
-
 extern UNK_TYPE D_0600A468;
-
 extern FlexSkeletonHeader D_0600A978;
-
 extern AnimationHeader D_0600B3E0;
-
 extern AnimationHeader D_0600B894;
-
 extern AnimationHeader D_0600BC08;
-
 extern AnimationHeader D_0600C880;
 
 static ColliderCylinderInit sCylinderInit = {

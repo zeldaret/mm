@@ -22,7 +22,6 @@ const ActorInit En_Zo_InitVars = {
     (ActorFunc)EnZo_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_8099F4B0 = {
     { COLTYPE_HIT0, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,10 +29,8 @@ static ColliderCylinderInit D_8099F4B0 = {
     { 18, 64, 0, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_8099F4DC = { 0, 0, 0, 0, MASS_IMMOVABLE };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_8099F4E8 = {
@@ -71,11 +68,11 @@ static DamageTable D_8099F4E8 = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
+#endif
 
 extern ColliderCylinderInit D_8099F4B0;
 extern CollisionCheckInfoInit2 D_8099F4DC;
 extern DamageTable D_8099F4E8;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zo/func_8099E790.s")
 

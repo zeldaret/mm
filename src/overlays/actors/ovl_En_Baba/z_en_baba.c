@@ -22,7 +22,6 @@ const ActorInit En_Baba_InitVars = {
     (ActorFunc)EnBaba_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80BAA430 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,10 +29,8 @@ static ColliderCylinderInit D_80BAA430 = {
     { 18, 64, 0, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80BAA45C = { 0, 0, 0, 0, MASS_IMMOVABLE };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80BAA468 = {
@@ -71,11 +68,11 @@ static DamageTable D_80BAA468 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80BAA430;
 extern CollisionCheckInfoInit2 D_80BAA45C;
 extern DamageTable D_80BAA468;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baba/func_80BA8820.s")
 

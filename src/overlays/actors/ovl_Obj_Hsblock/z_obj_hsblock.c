@@ -22,7 +22,6 @@ const ActorInit Obj_Hsblock_InitVars = {
     (ActorFunc)ObjHsblock_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_8093E33C[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
@@ -31,9 +30,9 @@ static InitChainEntry D_8093E33C[] = {
     ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_8093E33C[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hsblock/func_8093DEA0.s")
 

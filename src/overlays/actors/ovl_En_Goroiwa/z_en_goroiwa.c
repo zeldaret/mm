@@ -22,7 +22,6 @@ const ActorInit En_Goroiwa_InitVars = {
     (ActorFunc)EnGoroiwa_Draw,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_80942DC0[1] = {
     {
@@ -37,10 +36,8 @@ static ColliderJntSphInit D_80942DE4 = {
     1, D_80942DC0, // sJntSphElementsInit,
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_80942DF4 = { 0, 12, 60, MASS_HEAVY };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80942E78[] = {
@@ -51,12 +48,12 @@ static InitChainEntry D_80942E78[] = {
     ICHAIN_F32(uncullZoneDownward, 350, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_80942DC0[1];
 extern ColliderJntSphInit D_80942DE4;
 extern CollisionCheckInfoInit D_80942DF4;
 extern InitChainEntry D_80942E78[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Goroiwa/func_8093E8A0.s")
 

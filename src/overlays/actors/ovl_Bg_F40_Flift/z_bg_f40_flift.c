@@ -22,7 +22,6 @@ const ActorInit Bg_F40_Flift_InitVars = {
     (ActorFunc)BgF40Flift_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_808D7830[] = {
     ICHAIN_F32(uncullZoneScale, 400, ICHAIN_CONTINUE),
@@ -30,9 +29,9 @@ static InitChainEntry D_808D7830[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_808D7830[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_F40_Flift/BgF40Flift_Init.s")
 

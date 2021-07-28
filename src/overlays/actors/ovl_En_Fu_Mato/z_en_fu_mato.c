@@ -22,7 +22,6 @@ const ActorInit En_Fu_Mato_InitVars = {
     (ActorFunc)EnFuMato_Draw,
 };
 
-
 // static ColliderSphereInit sSphereInit = {
 static ColliderSphereInit D_80ACF610 = {
     { COLTYPE_HIT3, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_SPHERE, },
@@ -30,9 +29,9 @@ static ColliderSphereInit D_80ACF610 = {
     { 0, { { 0, 0, 0 }, 200 }, 100 },
 };
 
+#endif
 
 extern ColliderSphereInit D_80ACF610;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fu_Mato/EnFuMato_Init.s")
 

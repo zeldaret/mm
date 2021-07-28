@@ -22,7 +22,6 @@ const ActorInit Bg_Hakugin_Bombwall_InitVars = {
     (ActorFunc)BgHakuginBombwall_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80ABCF80 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
@@ -30,17 +29,16 @@ static ColliderCylinderInit D_80ABCF80 = {
     { 80, 80, 0, { 0, 0, 0 } },
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80ABD040[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80ABCF80;
 extern InitChainEntry D_80ABD040[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Bombwall/func_80ABBFC0.s")
 

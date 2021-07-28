@@ -22,7 +22,6 @@ const ActorInit En_Famos_InitVars = {
     (ActorFunc)EnFamos_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_808AE600 = {
     { COLTYPE_METAL, AT_NONE | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,14 +29,12 @@ static ColliderCylinderInit D_808AE600 = {
     { 20, 80, 0, { 0, 0, 0 } },
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_808AE62C = {
     { COLTYPE_NONE, AT_NONE | AT_TYPE_ENEMY, AC_NONE, OC1_NONE, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x04, 0x08 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_NONE, },
     { 70, 10, 0, { 0, 0, 0 } },
 };
-
 
 // static ColliderJntSphElementInit sJntSphElementsInit[2] = {
 static ColliderJntSphElementInit D_808AE658[2] = {
@@ -57,20 +54,19 @@ static ColliderJntSphInit D_808AE6A0 = {
     2, D_808AE658, // sJntSphElementsInit,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_808AE6B8[] = {
     ICHAIN_S8(hintId, 15, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 3500, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_808AE600;
 extern ColliderCylinderInit D_808AE62C;
 extern ColliderJntSphElementInit D_808AE658[2];
 extern ColliderJntSphInit D_808AE6A0;
 extern InitChainEntry D_808AE6B8[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Famos/EnFamos_Init.s")
 

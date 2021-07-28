@@ -22,7 +22,6 @@ const ActorInit Obj_Chan_InitVars = {
     (ActorFunc)ObjChan_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80BBAB30 = {
     { COLTYPE_HARD, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,16 +29,15 @@ static ColliderCylinderInit D_80BBAB30 = {
     { 48, 76, -60, { 0, 0, 0 } },
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80BBAB5C[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80BBAB30;
 extern InitChainEntry D_80BBAB5C[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Chan/ObjChan_Init.s")
 

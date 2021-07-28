@@ -22,14 +22,12 @@ const ActorInit Bg_Ikana_Dharma_InitVars = {
     (ActorFunc)BgIkanaDharma_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80BECAD0 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00000100, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
     { 98, 10, 25, { 0, 0, 0 } },
 };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80BECAFC[] = {
@@ -39,10 +37,10 @@ static InitChainEntry D_80BECAFC[] = {
     ICHAIN_F32_DIV1000(gravity, -1100, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80BECAD0;
 extern InitChainEntry D_80BECAFC[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Dharma/func_80BEC240.s")
 

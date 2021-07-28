@@ -22,7 +22,6 @@ const ActorInit Boss_03_InitVars = {
     (ActorFunc)Boss03_Draw,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[2] = {
 static ColliderJntSphElementInit D_809E8ECC[2] = {
     {
@@ -40,7 +39,6 @@ static ColliderJntSphInit D_809E8F14 = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
     2, D_809E8ECC, // sJntSphElementsInit,
 };
-
 
 // static ColliderJntSphElementInit sJntSphElementsInit[5] = {
 static ColliderJntSphElementInit D_809E8F24[5] = {
@@ -72,12 +70,12 @@ static ColliderJntSphInit D_809E8FD8 = {
     5, D_809E8F24, // sJntSphElementsInit,
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_809E8ECC[2];
 extern ColliderJntSphInit D_809E8F14;
 extern ColliderJntSphElementInit D_809E8F24[5];
 extern ColliderJntSphInit D_809E8FD8;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E2760.s")
 

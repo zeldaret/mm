@@ -21,7 +21,6 @@ const ActorInit En_Kusa_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_809366E0 = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_PLAYER, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER | OC1_TYPE_2, OC2_TYPE_2, COLSHAPE_CYLINDER, },
@@ -29,10 +28,8 @@ static ColliderCylinderInit D_809366E0 = {
     { 6, 44, 0, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_8093670C = { 0, 12, 30, MASS_IMMOVABLE };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80936754[] = {
@@ -44,11 +41,11 @@ static InitChainEntry D_80936754[] = {
     ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_809366E0;
 extern CollisionCheckInfoInit D_8093670C;
 extern InitChainEntry D_80936754[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kusa/func_809349E0.s")
 

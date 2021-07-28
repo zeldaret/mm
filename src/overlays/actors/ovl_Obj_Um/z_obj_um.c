@@ -22,7 +22,6 @@ const ActorInit Obj_Um_InitVars = {
     (ActorFunc)ObjUm_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B7C138 = {
     { COLTYPE_HIT3, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,17 +29,16 @@ static ColliderCylinderInit D_80B7C138 = {
     { 40, 64, 0, { 0, 0, 0 } },
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B7C254[] = {
     ICHAIN_F32(uncullZoneScale, 1200, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80B7C138;
 extern InitChainEntry D_80B7C254[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Um/func_80B77770.s")
 

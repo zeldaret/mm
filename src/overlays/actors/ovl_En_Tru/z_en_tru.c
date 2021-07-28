@@ -22,7 +22,6 @@ const ActorInit En_Tru_InitVars = {
     (ActorFunc)EnTru_Draw,
 };
 
-
 // static ColliderSphereInit sSphereInit = {
 static ColliderSphereInit D_80A8B2A0 = {
     { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_SPHERE, },
@@ -30,14 +29,13 @@ static ColliderSphereInit D_80A8B2A0 = {
     { 0, { { 0, 0, 0 }, 32 }, 100 },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80A8B2CC = { 1, 20, 0, 0, MASS_IMMOVABLE };
 
+#endif
 
 extern ColliderSphereInit D_80A8B2A0;
 extern CollisionCheckInfoInit2 D_80A8B2CC;
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tru/func_80A85620.s")
 

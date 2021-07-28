@@ -22,7 +22,6 @@ const ActorInit Obj_Y2shutter_InitVars = {
     (ActorFunc)ObjY2shutter_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B9AEB0[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
@@ -31,9 +30,9 @@ static InitChainEntry D_80B9AEB0[] = {
     ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_80B9AEB0[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Y2shutter/ObjY2shutter_Init.s")
 

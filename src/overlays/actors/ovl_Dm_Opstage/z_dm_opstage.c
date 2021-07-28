@@ -22,15 +22,14 @@ const ActorInit Dm_Opstage_InitVars = {
     (ActorFunc)DmOpstage_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80A9FD30[] = {
     ICHAIN_F32(uncullZoneScale, 300, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_80A9FD30[];
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Opstage/func_80A9F950.s")
 
