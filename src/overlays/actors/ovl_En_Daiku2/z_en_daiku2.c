@@ -290,7 +290,7 @@ void func_80BE66E4(EnDaiku2* this, GlobalContext* globalCtx) {
     s32 pad[2];
     s16 temp_v0;
 
-    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.home.rot.y, 1, 0xBB8, 0);
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.home.rot.y, 1, 3000, 0);
     if (sp98 != 2) {
         if ((this->unk_278 >= 0) && Flags_GetSwitch(globalCtx, this->unk_278)) {
             this->unk_28A = 5;
@@ -333,7 +333,7 @@ void func_80BE66E4(EnDaiku2* this, GlobalContext* globalCtx) {
             sp7C.y = (Rand_ZeroOne() * 10.0f) + 4.0f;
             sp7C.z = (Rand_ZeroOne() - 0.5f) * 4.0f;
 
-            func_80BE7504(this, &sp70, &sp7C, &sp88, 0.01f - (Rand_ZeroFloat(1.0f) * 0.005f), 0x28);
+            func_80BE7504(this, &sp70, &sp7C, &sp88, 0.01f - (Rand_ZeroFloat(1.0f) * 0.005f), 40);
         }
     }
 
@@ -374,7 +374,7 @@ void func_80BE6B40(EnDaiku2* this, GlobalContext* globalCtx) {
 void func_80BE6BC0(EnDaiku2* this, GlobalContext* globalCtx) {
     s32 day;
 
-    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 3000, 0);
     if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         day = gSaveContext.day - 1;
         func_801477B4(globalCtx);
@@ -418,7 +418,7 @@ void func_80BE6D40(EnDaiku2* this, GlobalContext* globalCtx) {
         return;
     }
 
-    Math_SmoothStepToS(&this->actor.world.rot.y, sp3A, 1, 0x7D0, 0xA);
+    Math_SmoothStepToS(&this->actor.world.rot.y, sp3A, 1, 2000, 10);
     Math_ApproachF(&this->actor.world.pos.x, this->unk_268.x, 0.5f, fabsf(Math_SinS(this->actor.world.rot.y) * 6.0f));
     Math_ApproachF(&this->actor.world.pos.z, this->unk_268.z, 0.5f, fabsf(Math_CosS(this->actor.world.rot.y) * 6.0f));
 
@@ -452,14 +452,14 @@ void func_80BE6EF0(EnDaiku2* this, GlobalContext* globalCtx) {
         return;
     }
 
-    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.home.rot.y, 1, 0xBB8, 0);
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.home.rot.y, 1, 3000, 0);
     if (this->unk_284 <= sp5C) {
         this->unk_274 = 1;
     }
 
     if (this->unk_274 != 0) {
-        Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_268), 1, 0x7D0,
-                           0xA);
+        Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_268), 1, 2000,
+                           10);
         Math_ApproachF(&this->actor.world.pos.x, this->unk_268.x, 0.5f,
                        fabsf(Math_SinS(this->actor.world.rot.y) * 4.0f));
         Math_ApproachF(&this->actor.world.pos.z, this->unk_268.z, 0.5f,
