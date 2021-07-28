@@ -35,19 +35,19 @@ extern ColliderQuadInit D_80922230;
 
 extern UNK_TYPE D_0E0002E0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Fire/FireArrow_SetUpdateFunc.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Fire/func_80920340.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Fire/ArrowFire_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Fire/ArrowFire_Destroy.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Fire/FireArrow_Update1.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Fire/func_80920440.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Fire/FireArrow_Lerp.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Fire/FireArrow_Update3.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Fire/func_8092058C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Fire/FireArrow_Update2.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Fire/func_809207A0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Fire/ArrowFire_Update.s")
 
