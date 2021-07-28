@@ -142,9 +142,9 @@ void EnDekunuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->actor.params == 1) {
-        this->actor.flags &= -2;
+        this->actor.flags &= ~1;
         this->collider.base.colType = COLTYPE_NONE;
-        this->collider.info.bumperFlags |= 0x78;
+        this->collider.info.bumperFlags |= (0x40 | 0x20 | 0x10 | 0x8);
     } else if (this->actor.params == 2) {
         this->actor.targetMode = 0;
     }
@@ -164,8 +164,8 @@ void func_808BD348(EnDekunuts* this) {
     this->unk_218 = 0.82500005f;
     this->unk_210 = 1.0f;
     this->collider.base.colType = COLTYPE_HIT3;
-    this->unk_190 = 0x50;
-    func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 0x50);
+    this->unk_190 = 80;
+    func_800BCB70(&this->actor, 0x4000, 255, 0, 80);
 }
 
 void func_808BD3B4(EnDekunuts* this, GlobalContext* globalCtx) {
@@ -173,7 +173,7 @@ void func_808BD3B4(EnDekunuts* this, GlobalContext* globalCtx) {
         this->unk_18E = 0;
         this->collider.base.colType = COLTYPE_HIT6;
         this->unk_210 = 0.0f;
-        func_800BF7CC(globalCtx, &this->actor, &this->unk_21C[0], 8, 2, 0.2f, 0.2f);
+        func_800BF7CC(globalCtx, &this->actor, this->unk_21C, 8, 2, 0.2f, 0.2f);
     }
 }
 
@@ -299,9 +299,7 @@ void func_808BDA4C(EnDekunuts* this, GlobalContext* globalCtx) {
     Player* player;
     Vec3f sp58;
     s16 pitch;
-    f32 z;
-    f32 y;
-    f32 x;
+    Vec3f pos;
     f32 val;
     s16 params;
 
@@ -326,13 +324,13 @@ void func_808BDA4C(EnDekunuts* this, GlobalContext* globalCtx) {
         func_808BD870(this);
     } else if (func_801378B8(&this->skelAnime, 7.0f)) {
         val = Math_CosS(this->actor.world.rot.x) * 15.0f;
-        x = (Math_SinS(this->actor.shape.rot.y) * val) + this->actor.world.pos.x;
-        y = (this->actor.world.pos.y + 12.0f) - (Math_SinS(this->actor.world.rot.x) * 15.0f);
-        z = (Math_CosS(this->actor.shape.rot.y) * val) + this->actor.world.pos.z;
+        pos.x = (Math_SinS(this->actor.shape.rot.y) * val) + this->actor.world.pos.x;
+        pos.y = (this->actor.world.pos.y + 12.0f) - (Math_SinS(this->actor.world.rot.x) * 15.0f);
+        pos.z = (Math_CosS(this->actor.shape.rot.y) * val) + this->actor.world.pos.z;
         params = (this->actor.params == 2) ? 2 : 0;
 
-        if (Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_NUTSBALL, x, y, z, this->actor.world.rot.x,
-                        this->actor.shape.rot.y, 0, params) != NULL) {
+        if (Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_NUTSBALL, pos.x, pos.y, pos.z,
+                        this->actor.world.rot.x, this->actor.shape.rot.y, 0, params) != NULL) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_THROW);
         }
     } else if ((this->unk_190 >= 2) && func_801378B8(&this->skelAnime, 12.0f)) {
@@ -353,7 +351,7 @@ void func_808BDC9C(EnDekunuts* this) {
 void func_808BDCF0(EnDekunuts* this) {
     SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06002A5C, -5.0f);
     this->collider.base.acFlags &= ~1;
-    this->unk_190 = 0x50;
+    this->unk_190 = 80;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_DOWN);
     this->actionFunc = func_808BDD54;
 }
@@ -378,7 +376,7 @@ void func_808BDD54(EnDekunuts* this, GlobalContext* globalCtx) {
 
 void func_808BDE7C(EnDekunuts* this) {
     SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06002DD4, -3.0f);
-    this->collider.dim.height = 0x25;
+    this->collider.dim.height = 37;
     this->actor.colChkInfo.mass = 50;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_DAMAGE);
     this->actor.world.rot.x = 0;
@@ -490,7 +488,7 @@ void func_808BE294(EnDekunuts* this, s32 arg1) {
     this->actionFunc = func_808BE358;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_DAMAGE);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_CUTBODY);
-    func_800BCB70(&this->actor, 0x4000, 0xFF, 0, SkelAnime_GetFrameCount(&D_0600259C.common));
+    func_800BCB70(&this->actor, 0x4000, 255, 0, SkelAnime_GetFrameCount(&D_0600259C.common));
 }
 
 void func_808BE358(EnDekunuts* this, GlobalContext* globalCtx) {
@@ -546,14 +544,14 @@ void func_808BE4D4(EnDekunuts* this, GlobalContext* globalCtx) {
         sp40.x = this->actor.world.pos.x;
         sp40.y = this->actor.world.pos.y + 18.0f;
         sp40.z = this->actor.world.pos.z;
-        EffectSsDeadDb_Spawn(globalCtx, &sp40, &D_801D15B0, &D_801D15B0, &D_808BEF90, &D_808BEF94, 0xC8, 0, 0xD);
-        func_800F0568(globalCtx, &this->actor.world.pos, 0xB, NA_SE_EN_EXTINCT);
+        EffectSsDeadDb_Spawn(globalCtx, &sp40, &D_801D15B0, &D_801D15B0, &D_808BEF90, &D_808BEF94, 200, 0, 13);
+        func_800F0568(globalCtx, &this->actor.world.pos, 11, NA_SE_EN_EXTINCT);
         sp40.y = this->actor.world.pos.y + 10.0f;
-        EffectSsHahen_SpawnBurst(globalCtx, &sp40, 3.0f, 0, 0xC, 3, 0xF, -1, 0xA, NULL);
+        EffectSsHahen_SpawnBurst(globalCtx, &sp40, 3.0f, 0, 12, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
         Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0xE0);
-        Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0x183, this->actor.home.pos.x, this->actor.home.pos.y,
+        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_OBJ_ETCETERA, this->actor.home.pos.x, this->actor.home.pos.y,
                     this->actor.home.pos.z, 0, this->actor.home.rot.y, 0, 0x80);
-        EffectSsHahen_SpawnBurst(globalCtx, &this->actor.home.pos, 6.0f, 0, 6, 2, 0xF, 0x40, 0xA, D_06001F50);
+        EffectSsHahen_SpawnBurst(globalCtx, &this->actor.home.pos, 6.0f, 0, 6, 2, 15, 64, 10, D_06001F50);
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -601,8 +599,8 @@ void func_808BE73C(EnDekunuts* this, GlobalContext* globalCtx) {
                 }
 
                 if (this->actor.colChkInfo.damageEffect == 1) {
-                    this->unk_190 = 0x28;
-                    func_800BCB70(&this->actor, 0, 0xFF, 0, 0x28);
+                    this->unk_190 = 40;
+                    func_800BCB70(&this->actor, 0, 255, 0, 40);
                     Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     func_808BE3A8(this);
                     return;
@@ -618,7 +616,7 @@ void func_808BE73C(EnDekunuts* this, GlobalContext* globalCtx) {
                     this->unk_18E = 20;
                     Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG,
                                 this->collider.info.bumper.hitPos.x, this->collider.info.bumper.hitPos.y,
-                                this->collider.info.bumper.hitPos.z, 0, 0, 0, 3);
+                                this->collider.info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_SMALL_LIGHT_RAYS);
                 } else if (this->actor.colChkInfo.damageEffect == 5) {
                     this->unk_18E = 32;
                     this->unk_210 = 4.0f;
@@ -631,7 +629,7 @@ void func_808BE73C(EnDekunuts* this, GlobalContext* globalCtx) {
             }
         }
     } else if ((this->actor.colChkInfo.mass == MASS_IMMOVABLE) && (globalCtx->actorCtx.unk2 != 0) &&
-               (this->actor.xyzDistToPlayerSq < 40000.0f)) {
+               (this->actor.xyzDistToPlayerSq < SQ(200.0f))) {
         if (this->actor.params == 1) {
             func_808BDCF0(this);
         } else if (this->actor.params == 0) {
@@ -664,7 +662,7 @@ void EnDekunuts_Update(Actor* thisx, GlobalContext* globalCtx) {
             Math_StepToF(&this->unk_210, 0.0f, 0.05f);
             this->unk_214 = (this->unk_210 + 1.0f) * 0.275f;
             this->unk_214 = CLAMP_MAX(this->unk_214, 0.55f);
-        } else if ((this->unk_18E == 10) && !Math_StepToF(&this->unk_218, 0.55f, 0.020625f)) {
+        } else if ((this->unk_18E == 10) && !Math_StepToF(&this->unk_218, 0.55f, (33.0f / 1600.0f))) {
             func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
@@ -704,7 +702,7 @@ s32 func_808BEBD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 
 void func_808BED30(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static s8 D_808BEF98[] = {
-        0xFF, 0xFF, 0xFF, 0x03, 0xFF, 0x00, 0xFF, 0x01, 0xFF, 0x02, 0x00, 0x00,
+        -1, -1, -1, 3, -1, 0, -1, 1, -1, 2, 0, 0,
     };
 
     static Vec3f D_808BEFA4[] = {
@@ -749,6 +747,6 @@ void EnDekunuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
         func_800AE5A0(globalCtx);
     }
     func_800BDFC0(globalCtx, D_06001E50);
-    func_800BE680(globalCtx, &this->actor, &this->unk_21C[0], 8, this->unk_214, this->unk_218, this->unk_210,
+    func_800BE680(globalCtx, &this->actor, this->unk_21C, 8, this->unk_214, this->unk_218, this->unk_210,
                   this->unk_18E);
 }
