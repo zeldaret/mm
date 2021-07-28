@@ -1,46 +1,10 @@
-#include "global.h"
+/*
+ * File: z_kaleido_scope_NES.c
+ * Overlay: ovl_kaleido_scope
+ * Description:
+ */
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_808160A0.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80817B5C.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80818904.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80818920.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_808190C4.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80819238.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80819F04.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_8081B240.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_8081B6BC.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_8081B6EC.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_8081BCA8.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_8081C684.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_8081D240.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_8081D6DC.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_8081E118.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_8081E7D8.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_8081FB1C.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_8081FF80.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_808204AC.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80820FA4.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80821730.s")
+#include "z_kaleido_scope.h"
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80821900.s")
 
@@ -93,4 +57,3 @@
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80828788.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_8082895C.s")
-
