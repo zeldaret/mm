@@ -5,13 +5,25 @@
 
 struct EnDekunuts;
 
-typedef void (*EnDekunutsActionFunc)(struct EnDekunuts* this, GlobalContext* globalCtx);
+typedef void (*EnDekunutsActionFunc)(struct EnDekunuts*, GlobalContext*);
 
 typedef struct EnDekunuts {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x44];
-    /* 0x0188 */ EnDekunutsActionFunc actionFunc;
-    /* 0x018C */ char unk_18C[0x13C];
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ SkelAnime skelAnime;
+    /* 0x188 */ EnDekunutsActionFunc actionFunc;
+    /* 0x18C */ u8 unk_18C;
+    /* 0x18D */ u8 unk_18D;
+    /* 0x18E */ u8 unk_18E;
+    /* 0x190 */ s16 unk_190;
+    /* 0x192 */ s16 unk_192;
+    /* 0x194 */ s16 unk_194;
+    /* 0x196 */ Vec3s jointTable[10];
+    /* 0x1D2 */ Vec3s morphTable[10];
+    /* 0x210 */ f32 unk_210;
+    /* 0x214 */ f32 unk_214;
+    /* 0x218 */ f32 unk_218;
+    /* 0x21C */ Vec3f unk_21C[8];
+    /* 0x27C */ ColliderCylinder collider;
 } EnDekunuts; // size = 0x2C8
 
 extern const ActorInit En_Dekunuts_InitVars;
