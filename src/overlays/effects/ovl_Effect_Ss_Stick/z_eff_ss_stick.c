@@ -1,8 +1,27 @@
-#include "global.h"
+/*
+ * File: z_eff_ss_stick.c
+ * Overlay: ovl_Effect_Ss_Stick
+ * Description:
+ */
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Stick/func_8097B810.s")
+#include "z_eff_ss_stick.h"
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Stick/func_8097B924.s")
+#define PARAMS ((EffectSsStickInitParams*)initParamsx)
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Stick/func_8097BA58.s")
+s32 EffectSsStick_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsStick_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
+void EffectSsStick_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
 
+#if 0
+const EffectSsInit Effect_Ss_Stick_InitVars = {
+    EFFECT_SS_STICK,
+    EffectSsStick_Init,
+};
+
+#endif
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Stick/EffectSsStick_Init.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Stick/EffectSsStick_Draw.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Stick/EffectSsStick_Update.s")

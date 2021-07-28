@@ -1,10 +1,30 @@
-#include "global.h"
+/*
+ * File: z_eff_ss_kakera.c
+ * Overlay: ovl_Effect_Ss_Kakera
+ * Description:
+ */
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Kakera/func_8097DCA0.s")
+#include "z_eff_ss_kakera.h"
+
+#define PARAMS ((EffectSsKakeraInitParams*)initParamsx)
+
+s32 EffectSsKakera_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsKakera_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
+void EffectSsKakera_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+
+#if 0
+const EffectSsInit Effect_Ss_Kakera_InitVars = {
+    EFFECT_SS_KAKERA,
+    EffectSsKakera_Init,
+};
+
+#endif
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Kakera/EffectSsKakera_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Kakera/func_8097DE30.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Kakera/func_8097DE6C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Kakera/EffectSsKakera_Draw.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Kakera/func_8097E130.s")
 
@@ -34,5 +54,4 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Kakera/func_8097E7E0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Kakera/func_8097E9D8.s")
-
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Kakera/EffectSsKakera_Update.s")

@@ -1,8 +1,27 @@
-#include "global.h"
+/*
+ * File: z_eff_ss_sibuki.c
+ * Overlay: ovl_Effect_Ss_Sibuki
+ * Description:
+ */
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Sibuki/func_8097BAD0.s")
+#include "z_eff_ss_sibuki.h"
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Sibuki/func_8097BC4C.s")
+#define PARAMS ((EffectSsSibukiInitParams*)initParamsx)
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Sibuki/func_8097BDCC.s")
+s32 EffectSsSibuki_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsSibuki_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
+void EffectSsSibuki_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
 
+#if 0
+const EffectSsInit Effect_Ss_Sibuki_InitVars = {
+    EFFECT_SS_SIBUKI,
+    EffectSsSibuki_Init,
+};
+
+#endif
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Sibuki/EffectSsSibuki_Init.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Sibuki/EffectSsSibuki_Draw.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Sibuki/EffectSsSibuki_Update.s")

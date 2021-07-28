@@ -1,8 +1,27 @@
-#include "global.h"
+/*
+ * File: z_eff_ss_ice_piece.c
+ * Overlay: ovl_Effect_Ss_Ice_Piece
+ * Description:
+ */
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Ice_Piece/func_8097ECD0.s")
+#include "z_eff_ss_ice_piece.h"
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Ice_Piece/func_8097EE1C.s")
+#define PARAMS ((EffectSsIcePieceInitParams*)initParamsx)
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Ice_Piece/func_8097F020.s")
+s32 EffectSsIcePiece_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsIcePiece_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
+void EffectSsIcePiece_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
 
+#if 0
+const EffectSsInit Effect_Ss_Ice_Piece_InitVars = {
+    EFFECT_SS_ICE_PIECE,
+    EffectSsIcePiece_Init,
+};
+
+#endif
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Ice_Piece/EffectSsIcePiece_Init.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Ice_Piece/EffectSsIcePiece_Draw.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Ice_Piece/EffectSsIcePiece_Update.s")

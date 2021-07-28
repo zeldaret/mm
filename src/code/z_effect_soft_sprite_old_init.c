@@ -1,4 +1,36 @@
 #include "global.h"
+#include "overlays/effects/ovl_Effect_En_Ice_Block/z_eff_en_ice_block.h"
+#include "overlays/effects/ovl_Effect_Ss_Blast/z_eff_ss_blast.h"
+#include "overlays/effects/ovl_Effect_Ss_Bomb2/z_eff_ss_bomb2.h"
+#include "overlays/effects/ovl_Effect_Ss_Bubble/z_eff_ss_bubble.h"
+#include "overlays/effects/ovl_Effect_Ss_Dead_Db/z_eff_ss_dead_db.h"
+#include "overlays/effects/ovl_Effect_Ss_Dead_Dd/z_eff_ss_dead_dd.h"
+#include "overlays/effects/ovl_Effect_Ss_Dead_Ds/z_eff_ss_dead_ds.h"
+#include "overlays/effects/ovl_Effect_Ss_Dt_Bubble/z_eff_ss_dt_bubble.h"
+#include "overlays/effects/ovl_Effect_Ss_Dust/z_eff_ss_dust.h"
+#include "overlays/effects/ovl_Effect_Ss_D_Fire/z_eff_ss_d_fire.h"
+#include "overlays/effects/ovl_Effect_Ss_En_Fire/z_eff_ss_en_fire.h"
+#include "overlays/effects/ovl_Effect_Ss_En_Ice/z_eff_ss_en_ice.h"
+#include "overlays/effects/ovl_Effect_Ss_Extra/z_eff_ss_extra.h"
+#include "overlays/effects/ovl_Effect_Ss_Fhg_Flash/z_eff_ss_fhg_flash.h"
+#include "overlays/effects/ovl_Effect_Ss_Fire_Tail/z_eff_ss_fire_tail.h"
+#include "overlays/effects/ovl_Effect_Ss_G_Fire/z_eff_ss_g_fire.h"
+#include "overlays/effects/ovl_Effect_Ss_G_Ripple/z_eff_ss_g_ripple.h"
+#include "overlays/effects/ovl_Effect_Ss_G_Spk/z_eff_ss_g_spk.h"
+#include "overlays/effects/ovl_Effect_Ss_G_Splash/z_eff_ss_g_splash.h"
+#include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
+#include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
+#include "overlays/effects/ovl_Effect_Ss_Ice_Piece/z_eff_ss_ice_piece.h"
+#include "overlays/effects/ovl_Effect_Ss_Ice_Smoke/z_eff_ss_ice_smoke.h"
+#include "overlays/effects/ovl_Effect_Ss_Kakera/z_eff_ss_kakera.h"
+#include "overlays/effects/ovl_Effect_Ss_Kirakira/z_eff_ss_kirakira.h"
+#include "overlays/effects/ovl_Effect_Ss_K_Fire/z_eff_ss_k_fire.h"
+#include "overlays/effects/ovl_Effect_Ss_Lightning/z_eff_ss_lightning.h"
+#include "overlays/effects/ovl_Effect_Ss_Sbn/z_eff_ss_sbn.h"
+#include "overlays/effects/ovl_Effect_Ss_Sibuki/z_eff_ss_sibuki.h"
+#include "overlays/effects/ovl_Effect_Ss_Solder_Srch_Ball/z_eff_ss_solder_srch_ball.h"
+#include "overlays/effects/ovl_Effect_Ss_Stick/z_eff_ss_stick.h"
+#include "overlays/effects/ovl_Effect_Ss_Stone1/z_eff_ss_stone1.h"
 
 void EffectSs_DrawGEffect(GlobalContext* globalCtx, EffectSs* this, void* texture) {
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
@@ -1025,7 +1057,7 @@ void EffectSsIceSmoke_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocit
 // EffectSsIceBlock Spawn Functions
 
 void EffectSsIceBlock_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale) {
-    EffectSsIceBlockInitParams initParams;
+    EffectEnIceBlockInitParams initParams;
 
     Math_Vec3f_Copy(&initParams.pos, pos);
     Math_Vec3f_Copy(&initParams.velocity, velocity);

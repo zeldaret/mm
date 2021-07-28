@@ -1,8 +1,27 @@
-#include "global.h"
+/*
+ * File: z_eff_ss_hitmark.c
+ * Overlay: ovl_Effect_Ss_Hitmark
+ * Description:
+ */
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Hitmark/func_8097C490.s")
+#include "z_eff_ss_hitmark.h"
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Hitmark/func_8097C560.s")
+#define PARAMS ((EffectSsHitmarkInitParams*)initParamsx)
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Hitmark/func_8097C74C.s")
+s32 EffectSsHitmark_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsHitmark_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
+void EffectSsHitmark_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
 
+#if 0
+const EffectSsInit Effect_Ss_Hitmark_InitVars = {
+    EFFECT_SS_HITMARK,
+    EffectSsHitmark_Init,
+};
+
+#endif
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Hitmark/EffectSsHitmark_Init.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Hitmark/EffectSsHitmark_Draw.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Effect_Ss_Hitmark/EffectSsHitmark_Update.s")
