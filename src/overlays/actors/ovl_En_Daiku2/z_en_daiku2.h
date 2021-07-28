@@ -7,6 +7,24 @@ struct EnDaiku2;
 
 typedef void (*EnDaiku2ActionFunc)(struct EnDaiku2*, GlobalContext*);
 
+#define ENDAIKU2_PARAMS_7F(thisx) ((thisx)->params & 0x7F);
+#define ENDAIKU2_PARAMS_1F80(thisx) (((thisx)->params >> 7) & 0x3F);
+#define ENDAIKU2_PARAMS_8000(thisx) (((thisx)->params >> 15) & 0x1);
+
+enum {
+    /*  -1 */ ENDAIKU2_PARAMS_7F_MINUS1 = -1,
+    /*   0 */ ENDAIKU2_PARAMS_7F_0,
+    /* 127 */ ENDAIKU2_PARAMS_7F_127 = 127,
+};
+
+enum {
+    /* -1 */ ENDAIKU2_PARAMS_1F80_MINUS1 = -1,
+};
+
+enum {
+    /* 0 */ ENDAIKU2_PARAMS_8000_0 = 0,
+};
+
 typedef struct EnDaiku2Particle {
     /* 0x00 */ u8 isEnabled;
     /* 0x04 */ Vec3f unk_04;
