@@ -68,7 +68,6 @@ extern FlexSkeletonHeader D_06013320;
 extern AnimationHeader D_060138B0;
 extern AnimationHeader D_0601430C;
 
-
 const ActorInit En_Ossan_InitVars = {
     ACTOR_EN_OSSAN,
     ACTORCAT_NPC,
@@ -963,7 +962,7 @@ void EnOssan_SetupBuy(GlobalContext* globalCtx, EnOssan* this, u16 textId) {
 
 void EnOssan_HandleCanBuyItem(GlobalContext* globalCtx, EnOssan* this) {
     EnGirlA* item = this->items[this->cursorIdx];
-    
+
     switch (item->canBuyFunc(globalCtx, item)) {
         case CANBUY_RESULT_SUCCESS_1:
             if (this->cutsceneState == ENOSSAN_CUTSCENESTATE_PLAYING) {
@@ -1149,7 +1148,7 @@ void EnOssan_PositionSelectedItem(EnOssan* this) {
     u8 i2;
     ShopItem* shopItem = &sShops[this->actor.params][i];
     Vec3f worldPos;
-    
+
     item = this->items[i];
     i2 = i >> 2;
     VEC3F_LERPIMPDST(&worldPos, &shopItem->spawnPos, &sSelectedItemPosition[i2], this->shopItemSelectedTween);
@@ -1213,8 +1212,8 @@ void EnOssan_UpdateItemSelectedProperty(EnOssan* this) {
 }
 
 void EnOssan_UpdateCursorAnim(EnOssan* this) {
-    f32 t =  this->cursorAnimTween;
-    
+    f32 t = this->cursorAnimTween;
+
     if (this->cursorAnimState == 0) {
         t += 0.05f;
         if (t >= 1.0f) {
@@ -1339,7 +1338,7 @@ void EnOssan_InitPartTimeWorker(EnOssan* this, GlobalContext* globalCtx) {
 s32 EnOssan_GetWelcomeCuriosityShopMan(EnOssan* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
     u16 ret = func_800F1250(globalCtx, 0x2F);
-    
+
     if (ret != 0) {
         this->animationIdx = 4;
         this->flags |= END_INTERACTION;
@@ -1372,7 +1371,7 @@ s32 EnOssan_GetWelcomeCuriosityShopMan(EnOssan* this, GlobalContext* globalCtx) 
 s32 EnOssan_GetWelcomePartTimeWorker(EnOssan* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
     u16 ret = func_800F1250(globalCtx, 0x36);
-    
+
     if (ret != 0) {
         this->flags |= END_INTERACTION;
         return ret;
