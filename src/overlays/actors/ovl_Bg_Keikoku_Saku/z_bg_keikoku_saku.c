@@ -9,7 +9,7 @@ void BgKeikokuSaku_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgKeikokuSaku_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgKeikokuSaku_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Bg_Keikoku_Saku_InitVars = {
     ACTOR_BG_KEIKOKU_SAKU,
     ACTORCAT_ITEMACTION,
@@ -21,7 +21,8 @@ const ActorInit Bg_Keikoku_Saku_InitVars = {
     (ActorFunc)BgKeikokuSaku_Update,
     (ActorFunc)BgKeikokuSaku_Draw,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Keikoku_Saku_0x80A537D0/BgKeikokuSaku_Init.asm")
 

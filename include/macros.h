@@ -18,10 +18,11 @@
 
 // Currently most often called ctxt in MM, TODO: Refactor names when its used
 #define ACTIVE_CAM globalCtx->cameraPtrs[globalCtx->activeCamera]
+#define MAIN_CAM 0
 
 #define SET_NEXT_GAMESTATE(curState, newInit, newStruct)    \
     (curState)->nextGameStateInit = (GameStateFunc)newInit; \
-    (curState)->nextGameStateSize = sizeof(newStruct);
+    (curState)->nextGameStateSize = sizeof(newStruct)
 
 #define PLAYER ((Player*)globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first)
 
@@ -72,7 +73,7 @@ extern GraphicsContext* __gfxCtx;
 #define OPEN_DISPS(gfxCtx)                  \
     {                                       \
         GraphicsContext* __gfxCtx = gfxCtx; \
-        s32 __dispPad;
+        s32 __dispPad
 
 #define CLOSE_DISPS(gfxCtx) \
     }                       \

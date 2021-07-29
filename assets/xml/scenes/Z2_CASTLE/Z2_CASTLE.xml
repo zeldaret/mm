@@ -3,8 +3,8 @@
         <Scene Name="Z2_CASTLE" Offset="0x0"/>
     </File>
     <File Name="Z2_CASTLE_room_00" Segment="3" Game="MM">
-        <Texture Name="Z2_CASTLE_room_00Tex_00FFB8" Format="rgb5a1" Width="64" Height="64" Offset="0xFFB8"/>
-        <Texture Name="Z2_CASTLE_room_00Tex_0127B8" Format="rgb5a1" Width="32" Height="128" Offset="0x127B8"/>
+        <Texture Name="Z2_CASTLE_room_00Tex_00FFB8" Format="rgba16" Width="64" Height="64" Offset="0xFFB8"/>
+        <Texture Name="Z2_CASTLE_room_00Tex_0127B8" Format="rgba16" Width="32" Height="128" Offset="0x127B8"/>
 
         <Room Name="Z2_CASTLE_room_00" Offset="0x0"/>
     </File>
@@ -18,7 +18,7 @@
         <Room Name="Z2_CASTLE_room_03" Offset="0x0"/>
     </File>
     <File Name="Z2_CASTLE_room_04" Segment="3" Game="MM">
-        <Texture Name="Z2_CASTLE_room_04Tex_004AC0" Format="rgb5a1" Width="64" Height="64" Offset="0x4AC0"/>
+        <Texture Name="Z2_CASTLE_room_04Tex_004AC0" Format="rgba16" Width="64" Height="64" Offset="0x4AC0"/>
 
         <Room Name="Z2_CASTLE_room_04" Offset="0x0"/>
     </File>

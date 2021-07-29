@@ -9,7 +9,7 @@ void EnBomjimb_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBomjimb_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBomjimb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Bomjimb_InitVars = {
     ACTOR_EN_BOMJIMB,
     ACTORCAT_NPC,
@@ -21,7 +21,18 @@ const ActorInit En_Bomjimb_InitVars = {
     (ActorFunc)EnBomjimb_Update,
     (ActorFunc)EnBomjimb_Draw,
 };
-*/
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_80C03194 = {
+    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    { 20, 30, 0, { 0, 0, 0 } },
+};
+
+
+extern ColliderCylinderInit D_80C03194;
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bomjimb_0x80C00EA0/EnBomjimb_Init.asm")
 

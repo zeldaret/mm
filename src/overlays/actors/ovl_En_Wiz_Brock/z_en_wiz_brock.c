@@ -9,7 +9,7 @@ void EnWizBrock_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnWizBrock_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnWizBrock_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Wiz_Brock_InitVars = {
     ACTOR_EN_WIZ_BROCK,
     ACTORCAT_PROP,
@@ -21,7 +21,8 @@ const ActorInit En_Wiz_Brock_InitVars = {
     (ActorFunc)EnWizBrock_Update,
     (ActorFunc)EnWizBrock_Draw,
 };
-*/
+
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_Brock_0x80A48FE0/EnWizBrock_Init.asm")
 

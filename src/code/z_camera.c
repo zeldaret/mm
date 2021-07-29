@@ -370,7 +370,7 @@ s32 func_800CBAD4(Vec3f* dst, Camera* camera) {
         return dst;
     }
 
-    func_800B8248(&sp24, camera->player);
+    func_800B8248(&sp24, &camera->player->actor);
     *dst = sp24.pos;
     return dst;
 }
@@ -718,7 +718,7 @@ s32 Camera_GetWaterBoxDataIdx(Camera* camera, f32* waterY) {
     s32 sp30;
 
     // Actor_GetWorldPosShapeRot
-    func_800B8248(&playerPosShape, camera->player); // &camera->player->actor
+    func_800B8248(&playerPosShape, &camera->player->actor);
     *waterY = playerPosShape.pos.y;
 
     // WaterBox_GetSurface1
@@ -6929,7 +6929,7 @@ void Camera_InitPlayerSettings(Camera* camera, Player* player) {
     Vec3f* eye = &camera->eye;
     s32 pad;
 
-    func_800B8248(&playerPosShape, player);
+    func_800B8248(&playerPosShape, &player->actor);
     camera->player = player;
     playerYOffset = func_800CB700(camera);
     camera->playerPosRot = playerPosShape;
@@ -7198,9 +7198,9 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
     if (camera->globalCtx->view.unk164 == 0) {
         if (camera->player != NULL) {
             if (&camera->player->actor == camera->globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first) {
-                func_800B8248(&sp68, camera->player); // TODO: func.h
+                func_800B8248(&sp68, &camera->player->actor);
             } else {
-                func_800B8214(&sp68, camera->player); // TODO: func.h
+                func_800B8214(&sp68, &camera->player->actor);
             }
             camera->playerPosDelta.x = sp68.pos.x - camera->playerPosRot.pos.x;
             camera->playerPosDelta.y = sp68.pos.y - camera->playerPosRot.pos.y;
@@ -7825,9 +7825,9 @@ s32 Camera_Copy(Camera* dstCamera, Camera* srcCamera) {
 
     if (dstCamera->player != NULL) {
         if (&dstCamera->player->actor == dstCamera->globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first) {
-            func_800B8248(&dstCamera->playerPosRot, dstCamera->player);
+            func_800B8248(&dstCamera->playerPosRot, &dstCamera->player->actor);
         } else {
-            func_800B8214(&dstCamera->playerPosRot, dstCamera->player);
+            func_800B8214(&dstCamera->playerPosRot, &dstCamera->player->actor);
         }
         func_800CB6C8(dstCamera, &dstCamera->playerPosRot);
     }
@@ -7880,10 +7880,10 @@ s16 func_800E0238(Camera* camera) {
     }
 }
 
-void func_800E02AC(Camera* camera, Player* player) {
-    camera->player = player;
-    if (&player->actor == camera->globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first) {
-        func_800B8248(&camera->playerPosRot, player);
+void func_800E02AC(Camera* camera, Actor* actor) {
+    camera->player = (Player*)actor;
+    if (actor == camera->globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first) {
+        func_800B8248(&camera->playerPosRot, actor);
     } else {
         
         func_800B8214(&camera->playerPosRot, &camera->player->actor);

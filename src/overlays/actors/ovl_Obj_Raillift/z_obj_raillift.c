@@ -1,7 +1,7 @@
 /*
  * File: z_obj_raillift.c
- * Overlay: Obj_Raillift
- * Description: Moving Deku Flower Platform and OOT Water Temple Waterfall Platform
+ * Overlay: ovl_Obj_Raillift
+ * Description: Moving Deku Flower Platform and OoT Water Temple Waterfall Platform
  */
 
 #include "z_obj_raillift.h"
@@ -53,7 +53,6 @@ static InitChainEntry sInitChain[] = {
 
 static CollisionHeader* sColHeaders[] = { &D_06004FF8, &D_060048D0 };
 
-
 void ObjRaillift_UpdatePosition(ObjRaillift* this, s32 idx) {
     Math_Vec3s_ToVec3f(&this->dyna.actor.world.pos, &this->points[idx]);
 }
@@ -79,9 +78,9 @@ void ObjRaillift_Init(Actor* thisx, GlobalContext* globalCtx) {
         isColorful = true;
     }
     if (type == DEKU_FLOWER_PLATFORM) {
-        Actor_SpawnWithParent(&globalCtx->actorCtx, thisx, globalCtx, ACTOR_OBJ_ETCETERA, thisx->world.pos.x,
-                              thisx->world.pos.y, thisx->world.pos.z, thisx->shape.rot.x, thisx->shape.rot.y,
-                              thisx->shape.rot.z, 0);
+        Actor_SpawnAsChild(&globalCtx->actorCtx, thisx, globalCtx, ACTOR_OBJ_ETCETERA, thisx->world.pos.x,
+                           thisx->world.pos.y, thisx->world.pos.z, thisx->shape.rot.x, thisx->shape.rot.y,
+                           thisx->shape.rot.z, 0);
         if (isColorful) {
             thisx->draw = ObjRaillift_DrawDekuFlowerPlatformColorful;
         } else {
@@ -159,7 +158,8 @@ void ObjRaillift_Move(ObjRaillift* this, GlobalContext* globalCtx) {
         this->dyna.actor.speedXZ *= 0.4f;
         isTeleporting = OBJRAILLIFT_SHOULD_TELEPORT(&this->dyna.actor);
         isPosUpdated = true;
-        if (((this->curPoint >= this->endPoint) && (this->direction > 0)) || ((this->curPoint <= 0) && (this->direction < 0))) {
+        if (((this->curPoint >= this->endPoint) && (this->direction > 0)) ||
+            ((this->curPoint <= 0) && (this->direction < 0))) {
             if (!isTeleporting) {
                 this->direction = -this->direction;
                 this->waitTimer = 10;
@@ -168,7 +168,8 @@ void ObjRaillift_Move(ObjRaillift* this, GlobalContext* globalCtx) {
                 endPoint = &this->points[this->endPoint];
                 this->curPoint = this->direction > 0 ? 0 : this->endPoint;
                 initialPoint = &this->points[0];
-                if ((initialPoint->x != endPoint->x) || (initialPoint->y != endPoint->y) || (initialPoint->z != endPoint->z)) {
+                if ((initialPoint->x != endPoint->x) || (initialPoint->y != endPoint->y) ||
+                    (initialPoint->z != endPoint->z)) {
                     this->actionFunc = ObjRaillift_Teleport;
                     func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
                     isPosUpdated = false;
@@ -245,11 +246,12 @@ void ObjRaillift_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
         this->cycle += 0xCE4;
         Math_StepToF(&this->maxHeight, 0.0f, 0.12f);
-        step = this->isWeightOn ? Math_CosS(fabsf(this->cycleSpeed) * 2048.0f) + 0.02f : Math_SinS(fabsf(this->cycleSpeed) * 2048.0f) + 0.02f;
+        step = this->isWeightOn ? Math_CosS(fabsf(this->cycleSpeed) * 2048.0f) + 0.02f
+                                : Math_SinS(fabsf(this->cycleSpeed) * 2048.0f) + 0.02f;
         target = this->isWeightOn ? -8.0f : 0.0f;
         Math_StepToF(&this->cycleSpeed, target, step);
         this->dyna.actor.shape.yOffset = ((Math_SinS(this->cycle) * this->maxHeight) + this->cycleSpeed) * 10.0f;
-        dummy:;
+    dummy:;
     }
     if (OBJRAILLIFT_GET_TYPE(thisx) == DEKU_FLOWER_PLATFORM && this->dyna.actor.child != NULL) {
         if (this->dyna.actor.child->update == NULL) {
@@ -269,8 +271,8 @@ void ObjRaillift_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08,
-               Gfx_TwoTexScrollEnvColor(globalCtx->state.gfxCtx, 0, globalCtx->gameplayFrames, 0, 32, 32, 1, 0, 0,
-                                        32, 32, 0, 0, 0, 160));
+               Gfx_TwoTexScrollEnvColor(globalCtx->state.gfxCtx, 0, globalCtx->gameplayFrames, 0, 32, 32, 1, 0, 0, 32,
+                                        32, 0, 0, 0, 160));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_06004BF0);
     CLOSE_DISPS(globalCtx->state.gfxCtx);

@@ -8,7 +8,7 @@ void EnKusa_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnKusa_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKusa_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Kusa_InitVars = {
     ACTOR_EN_KUSA,
     ACTORCAT_PROP,
@@ -20,7 +20,35 @@ const ActorInit En_Kusa_InitVars = {
     (ActorFunc)EnKusa_Update,
     (ActorFunc)NULL,
 };
-*/
+
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_809366E0 = {
+    { COLTYPE_NONE, AT_ON | AT_TYPE_PLAYER, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER | OC1_TYPE_2, OC2_TYPE_2, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0x00400000, 0x00, 0x02 }, { 0x0580C71C, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NONE, BUMP_ON, OCELEM_ON, },
+    { 6, 44, 0, { 0, 0, 0 } },
+};
+
+
+// sColChkInfoInit
+static CollisionCheckInfoInit D_8093670C = { 0, 12, 30, MASS_IMMOVABLE };
+
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80936754[] = {
+    ICHAIN_VEC3F_DIV1000(scale, 400, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(gravity, -3200, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(minVelocityY, -17000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 1200, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
+};
+
+
+extern ColliderCylinderInit D_809366E0;
+extern CollisionCheckInfoInit D_8093670C;
+extern InitChainEntry D_80936754[];
+#endif
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kusa_0x809349E0/func_809349E0.asm")
 
