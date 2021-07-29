@@ -22,7 +22,6 @@ const ActorInit En_Kanban_InitVars = {
     (ActorFunc)EnKanban_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80957300 = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,18 +29,20 @@ static ColliderCylinderInit D_80957300 = {
     { 20, 50, 5, { 0, 0, 0 } },
 };
 
-
-extern ColliderCylinderInit D_80957300;
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kanban_0x80954960/func_80954960.asm")
+extern ColliderCylinderInit D_80957300;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kanban_0x80954960/EnKanban_Init.asm")
+extern UNK_TYPE D_06000C30;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kanban_0x80954960/EnKanban_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kanban/func_80954960.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kanban_0x80954960/func_80954BE8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kanban/EnKanban_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kanban_0x80954960/EnKanban_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kanban/EnKanban_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kanban_0x80954960/EnKanban_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kanban/func_80954BE8.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kanban/EnKanban_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kanban/EnKanban_Draw.s")

@@ -8,6 +8,9 @@ void EnOkarinaTag_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnOkarinaTag_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnOkarinaTag_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_8093E518(EnOkarinaTag* this, GlobalContext* globalCtx);
+void func_8093E68C(EnOkarinaTag* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Okarina_Tag_InitVars = {
     ACTOR_EN_OKARINA_TAG,
@@ -23,12 +26,12 @@ const ActorInit En_Okarina_Tag_InitVars = {
 
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Okarina_Tag_0x8093E420/EnOkarinaTag_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Okarina_Tag/EnOkarinaTag_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Okarina_Tag_0x8093E420/EnOkarinaTag_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Okarina_Tag/EnOkarinaTag_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Okarina_Tag_0x8093E420/func_8093E518.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Okarina_Tag/func_8093E518.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Okarina_Tag_0x8093E420/func_8093E68C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Okarina_Tag/func_8093E68C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Okarina_Tag_0x8093E420/EnOkarinaTag_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Okarina_Tag/EnOkarinaTag_Update.s")

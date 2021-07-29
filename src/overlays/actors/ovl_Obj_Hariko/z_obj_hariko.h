@@ -1,13 +1,16 @@
 #ifndef Z_OBJ_HARIKO_H
 #define Z_OBJ_HARIKO_H
 
-#include <global.h>
+#include "global.h"
 
 struct ObjHariko;
 
+typedef void (*ObjHarikoActionFunc)(struct ObjHariko* this, GlobalContext* globalCtx);
+
 typedef struct ObjHariko {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x14];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ ObjHarikoActionFunc actionFunc;
+    /* 0x0148 */ char unk_144[0x10];
 } ObjHariko; // size = 0x158
 
 extern const ActorInit Obj_Hariko_InitVars;

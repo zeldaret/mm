@@ -9,6 +9,9 @@ void EnSi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSi_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSi_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_8098CB70(EnSi* this, GlobalContext* globalCtx);
+void func_8098CBDC(EnSi* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Si_InitVars = {
     ACTOR_EN_SI,
@@ -22,7 +25,6 @@ const ActorInit En_Si_InitVars = {
     (ActorFunc)EnSi_Draw,
 };
 
-
 // static ColliderSphereInit sSphereInit = {
 static ColliderSphereInit D_8098CD80 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_NO_PUSH | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_SPHERE, },
@@ -30,10 +32,8 @@ static ColliderSphereInit D_8098CD80 = {
     { 0, { { 0, 0, 0 }, 10 }, 100 },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_8098CDAC = { 1, 0, 0, 0, MASS_IMMOVABLE };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_8098CDB8 = {
@@ -71,24 +71,24 @@ static DamageTable D_8098CDB8 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
+#endif
 
 extern ColliderSphereInit D_8098CD80;
 extern CollisionCheckInfoInit2 D_8098CDAC;
 extern DamageTable D_8098CDB8;
-#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Si_0x8098CA20/func_8098CA20.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Si/func_8098CA20.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Si_0x8098CA20/func_8098CAD0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Si/func_8098CAD0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Si_0x8098CA20/func_8098CB70.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Si/func_8098CB70.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Si_0x8098CA20/func_8098CBDC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Si/func_8098CBDC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Si_0x8098CA20/EnSi_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Si/EnSi_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Si_0x8098CA20/EnSi_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Si/EnSi_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Si_0x8098CA20/EnSi_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Si/EnSi_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Si_0x8098CA20/EnSi_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Si/EnSi_Draw.s")

@@ -9,6 +9,8 @@ void DmAl_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmAl_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmAl_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C1BDD8(DmAl* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Dm_Al_InitVars = {
     ACTOR_EN_AL,
@@ -24,20 +26,22 @@ const ActorInit Dm_Al_InitVars = {
 
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Al_0x80C1BD90/func_80C1BD90.asm")
+extern UNK_TYPE D_0600A0D8;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Al_0x80C1BD90/func_80C1BDD8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Al/func_80C1BD90.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Al_0x80C1BD90/DmAl_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Al/func_80C1BDD8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Al_0x80C1BD90/DmAl_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Al/DmAl_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Al_0x80C1BD90/DmAl_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Al/DmAl_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Al_0x80C1BD90/func_80C1C028.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Al/DmAl_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Al_0x80C1BD90/func_80C1C064.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Al/func_80C1C028.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Al_0x80C1BD90/func_80C1C11C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Al/func_80C1C064.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Al_0x80C1BD90/DmAl_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Al/func_80C1C11C.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Al/DmAl_Draw.s")

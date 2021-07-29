@@ -9,6 +9,8 @@ void EnEndingHero6_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnEndingHero6_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnEndingHero6_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C23E18(EnEndingHero6* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Ending_Hero6_InitVars = {
     ACTOR_EN_ENDING_HERO6,
@@ -24,18 +26,18 @@ const ActorInit En_Ending_Hero6_InitVars = {
 
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ending_Hero6_0x80C23C90/EnEndingHero6_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ending_Hero6/EnEndingHero6_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ending_Hero6_0x80C23C90/EnEndingHero6_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ending_Hero6/EnEndingHero6_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ending_Hero6_0x80C23C90/func_80C23D60.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ending_Hero6/func_80C23D60.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ending_Hero6_0x80C23C90/func_80C23DDC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ending_Hero6/func_80C23DDC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ending_Hero6_0x80C23C90/func_80C23E18.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ending_Hero6/func_80C23E18.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ending_Hero6_0x80C23C90/EnEndingHero6_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ending_Hero6/EnEndingHero6_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ending_Hero6_0x80C23C90/func_80C23F14.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ending_Hero6/func_80C23F14.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ending_Hero6_0x80C23C90/EnEndingHero6_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ending_Hero6/EnEndingHero6_Draw.s")

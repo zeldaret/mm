@@ -785,7 +785,7 @@ typedef struct {
     s32 unk_00;
     char unk_04[0x20];
     Vec3f unk_24;
-} UnkStruct_D801ED920; // size = ??
+} UnkStruct_D801ED920; // size >= 0x30
 
 typedef struct Camera {
     /* 0x000 */ char paramData[0x50];

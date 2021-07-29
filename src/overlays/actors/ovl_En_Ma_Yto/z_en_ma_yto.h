@@ -1,7 +1,7 @@
 #ifndef Z_EN_MA_YTO_H
 #define Z_EN_MA_YTO_H
 
-#include <global.h>
+#include "global.h"
 #include "overlays/actors/ovl_En_Ma_Yts/z_en_ma_yts.h"
 
 struct EnMaYto;

@@ -23,8 +23,8 @@ const ActorInit En_Fr_InitVars = {
 
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fr_0x808FC550/EnFr_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fr/EnFr_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fr_0x808FC550/EnFr_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fr/EnFr_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fr_0x808FC550/EnFr_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fr/EnFr_Update.s")

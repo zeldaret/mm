@@ -1,15 +1,18 @@
 #ifndef Z_EN_DOOR_H
 #define Z_EN_DOOR_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnDoor;
 
+typedef void (*EnDoorActionFunc)(struct EnDoor* this, GlobalContext* globalCtx);
+
 typedef struct EnDoor {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x63];
-    /* 0x1A7 */ s8 unk1A7;
-    /* 0x1A8 */ char unk1A8[0x24];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x63];
+    /* 0x01A7 */ s8 unk1A7;
+    /* 0x01A8 */ char unk_1A8[0x20];
+    /* 0x01C8 */ EnDoorActionFunc actionFunc;
 } EnDoor; // size = 0x1CC
 
 extern const ActorInit En_Door_InitVars;

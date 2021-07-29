@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 s32 D_801C5E30[] = { 0, 0x2000, 0x4000, 0x6000, 0x8000, 0xC000 };
 
@@ -18,7 +17,7 @@ s16 D_801C5EC4[] = {
     24, 7,  29, 28, 25, 26, 30, 10, 26, 27, 11, 30, 27, 28, 31, 11, 28, 29, 15, 31,
 };
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_vr_box/func_80142440.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_vr_box/func_80142440.s")
 
 void func_80143148(SkyboxContext* skyboxCtx, s32 arg1) {
     static struct_801C5F44 D_801C5F44[] = {
@@ -36,7 +35,7 @@ void func_80143148(SkyboxContext* skyboxCtx, s32 arg1) {
     }
 }
 
-#ifdef NON_MATCHING
+// #ifdef NON_MATCHING
 // Matches besides rodata, since rodata is not merged into the asm in code files yet.
 void func_801431E8(GameState* gamestate, SkyboxContext* skyboxCtx, s16 skyType) {
     GlobalContext* globalCtx = (GlobalContext*)gamestate;
@@ -53,21 +52,21 @@ void func_801431E8(GameState* gamestate, SkyboxContext* skyboxCtx, s16 skyType) 
     } else {
         // Send a DMA request for the cloudy sky texture
         skyboxCtx->skyboxStaticSegment[0] = &D_80025D00;
-        size = (u32)_vr_cloud_staticSegmentRomEnd - (u32)_vr_cloud_staticSegmentRomStart;
+        size = (u32)_d2_cloud_staticSegmentRomEnd - (u32)_d2_cloud_staticSegmentRomStart;
         offset = (void*)ALIGN8((u32)skyboxCtx->skyboxStaticSegment[0] + size);
-        DmaMgr_SendRequest0(skyboxCtx->skyboxStaticSegment[0], (u32)_vr_cloud_staticSegmentRomStart, size);
+        DmaMgr_SendRequest0(skyboxCtx->skyboxStaticSegment[0], (u32)_d2_cloud_staticSegmentRomStart, size);
 
         // Send a DMA request for the clear sky texture
         skyboxCtx->skyboxStaticSegment[1] = offset;
-        size = (u32)_vr_fine_staticSegmentRomEnd - (u32)_vr_fine_staticSegmentRomStart;
+        size = (u32)_d2_fine_staticSegmentRomEnd - (u32)_d2_fine_staticSegmentRomStart;
         offset = (void*)ALIGN8((u32)offset + size);
-        DmaMgr_SendRequest0(skyboxCtx->skyboxStaticSegment[1], (u32)_vr_fine_staticSegmentRomStart, size);
+        DmaMgr_SendRequest0(skyboxCtx->skyboxStaticSegment[1], (u32)_d2_fine_staticSegmentRomStart, size);
 
         // Send a DMA request for the skybox palette
         skyboxCtx->skyboxPaletteStaticSegment = offset;
-        size = (u32)_vr_pal_staticSegmentRomEnd - (u32)_vr_pal_staticSegmentRomStart;
+        size = (u32)_d2_fine_pal_staticSegmentRomEnd - (u32)_d2_fine_pal_staticSegmentRomStart;
         offset = (void*)ALIGN8((u32)offset + size);
-        DmaMgr_SendRequest0(skyboxCtx->skyboxPaletteStaticSegment, (u32)_vr_pal_staticSegmentRomStart, size);
+        DmaMgr_SendRequest0(skyboxCtx->skyboxPaletteStaticSegment, (u32)_d2_fine_pal_staticSegmentRomStart, size);
 
         skyboxCtx->primR = 145;
         skyboxCtx->primG = 120;
@@ -83,9 +82,9 @@ void func_801431E8(GameState* gamestate, SkyboxContext* skyboxCtx, s16 skyType) 
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_vr_box/func_801431E8.asm")
-#endif
+// #else
+// #pragma GLOBAL_ASM("asm/non_matchings/code/z_vr_box/func_801431E8.s")
+// #endif
 
 void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyType) {
     u32 size;

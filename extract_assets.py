@@ -14,13 +14,13 @@ def SignalHandler(sig, frame):
     mainAbort.set()
     # Don't exit immediately to update the extracted assets file.
 
-def ExtractFile(xmlPath, basromPath, outputPath, outputSourcePath):
+def ExtractFile(xmlPath, outputPath, outputSourcePath):
     if globalAbort.is_set():
         # Don't extract if another file wasn't extracted properly.
         return
 
-    execStr = "tools/ZAPD/ZAPD.out e -eh -i %s -b %s -o %s -osf %s -gsf 1 -rconf tools/ZAPDConfigs/MM/Config.xml" % (xmlPath, basromPath, outputPath, outputSourcePath)
-    # execStr = "tools/ZAPD/ZAPD.out e -eh -i %s -b baserom/ -o %s -osf %s -gsf 1 -rconf tools/ZAPDConfigs/MM/Config.xml" % (xmlPath, outputPath, outputSourcePath)
+    execStr = "tools/ZAPD/ZAPD.out e -eh -i %s -b baserom/ -o %s -osf %s -gsf 1 -rconf tools/ZAPDConfigs/MM/Config.xml" % (xmlPath, outputPath, outputSourcePath)
+
     if globalUnaccounted:
         execStr += " -wu"
 
@@ -42,11 +42,6 @@ def ExtractFunc(fullPath):
     else:
         outPath = os.path.join("assets", *pathList[2:], objectName)
     outSourcePath = outPath
-    # TODO: remove condition when NBS is merged
-    if "overlays" in pathList:
-        basromPath = os.path.join("baserom", *pathList[2:])
-    else:
-        basromPath = os.path.join("baserom", "assets", *pathList[2:-1])
 
     if fullPath in globalExtractedAssetsTracker:
         timestamp = globalExtractedAssetsTracker[fullPath]["timestamp"]
@@ -57,7 +52,7 @@ def ExtractFunc(fullPath):
 
     currentTimeStamp = int(time.time())
 
-    ExtractFile(fullPath, basromPath, outPath, outSourcePath)
+    ExtractFile(fullPath, outPath, outSourcePath)
 
     if not globalAbort.is_set():
         # Only update timestamp on succesful extractions

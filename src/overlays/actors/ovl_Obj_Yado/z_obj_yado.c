@@ -22,20 +22,22 @@ const ActorInit Obj_Yado_InitVars = {
     (ActorFunc)ObjYado_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80C16420[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-
-extern InitChainEntry D_80C16420[];
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Yado_0x80C161E0/ObjYado_Init.asm")
+extern InitChainEntry D_80C16420[];
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Yado_0x80C161E0/ObjYado_Destroy.asm")
+extern UNK_TYPE D_06000430;
+extern UNK_TYPE D_060012E8;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Yado_0x80C161E0/ObjYado_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Yado/ObjYado_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Yado_0x80C161E0/ObjYado_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Yado/ObjYado_Destroy.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Yado/ObjYado_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Yado/ObjYado_Draw.s")

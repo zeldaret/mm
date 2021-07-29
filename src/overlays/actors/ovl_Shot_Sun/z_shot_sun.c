@@ -8,6 +8,11 @@ void ShotSun_Init(Actor* thisx, GlobalContext* globalCtx);
 void ShotSun_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ShotSun_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80973740(ShotSun* this, GlobalContext* globalCtx);
+void func_80973804(ShotSun* this, GlobalContext* globalCtx);
+void func_809738D0(ShotSun* this, GlobalContext* globalCtx);
+void func_80973960(ShotSun* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Shot_Sun_InitVars = {
     ACTOR_SHOT_SUN,
@@ -21,7 +26,6 @@ const ActorInit Shot_Sun_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80973BA0 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -29,20 +33,20 @@ static ColliderCylinderInit D_80973BA0 = {
     { 30, 60, 0, { 0, 0, 0 } },
 };
 
-
-extern ColliderCylinderInit D_80973BA0;
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Shot_Sun_0x80973640/ShotSun_Init.asm")
+extern ColliderCylinderInit D_80973BA0;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Shot_Sun_0x80973640/ShotSun_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Shot_Sun/ShotSun_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Shot_Sun_0x80973640/func_80973740.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Shot_Sun/ShotSun_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Shot_Sun_0x80973640/func_80973804.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Shot_Sun/func_80973740.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Shot_Sun_0x80973640/func_809738D0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Shot_Sun/func_80973804.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Shot_Sun_0x80973640/func_80973960.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Shot_Sun/func_809738D0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Shot_Sun_0x80973640/ShotSun_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Shot_Sun/func_80973960.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Shot_Sun/ShotSun_Update.s")

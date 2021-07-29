@@ -5,7 +5,7 @@
  */
 
 #include "z_en_invadepoh.h"
-#include "../ovl_En_Door/z_en_door.h"
+#include "overlays/actors/ovl_En_Door/z_en_door.h"
 
 #define FLAGS 0x00000010
 
@@ -216,12 +216,8 @@ extern Gfx D_06014AD8[];
 extern Gfx D_06014ED8[];
 extern Gfx D_060152D8[];
 extern Gfx D_060156D8[];
-extern Gfx D_04023210[];
 extern Gfx D_060003B0[];
-extern Gfx D_04029CB0[];
-extern Gfx D_04029CF0[];
 extern Gfx D_06000720[];
-extern Gfx D_0402E510[];
 extern Gfx D_06000080[];
 
 extern s32 D_801BDA9C;
@@ -696,7 +692,7 @@ s32 func_80B43A24(s32 arg0) {
 }
 
 void func_80B43A74(s32 arg0) {
-    gSaveContext.roomInf[124][4] = (gSaveContext.roomInf[124][4] & ~0xFF) | arg0 & 0xFF;
+    gSaveContext.roomInf[124][4] = (gSaveContext.roomInf[124][4] & ~0xFF) | (arg0 & 0xFF);
 }
 
 s32 func_80B43A9C(void) {
@@ -3924,7 +3920,7 @@ void func_80B4C3A0(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectSegment(globalCtx, &this->actor);
         func_80B44FEC();
-        SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06015C28, &D_06016720, (0, this->limbDrawTable),
+        SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06015C28, &D_06016720, this->limbDrawTable,
                          this->transitionDrawTable, 22);
         func_80B45C04(&this->behaviorInfo, D_80B4EBDC, 1, D_80B4EC08, 0, &D_801D15BC, 100, 0.03f, 0.3f, 0.03f);
         this->actor.textId = 0x33CD;
@@ -4226,9 +4222,8 @@ void func_80B4D15C(EnInvadepoh* this) {
 }
 
 void func_80B4D290(EnInvadepoh* this, GlobalContext* globalCtx) {
-    f32 temp_f10;
-    f32 sp28;
     Actor* temp_v1;
+    f32 sp28;
 
     if (D_80B503F0 == NULL) {
         Actor_MarkForDeath(&this->actor);
@@ -4239,12 +4234,12 @@ void func_80B4D290(EnInvadepoh* this, GlobalContext* globalCtx) {
     sp28 = Math_SmoothStepToF(&this->actor.world.pos.y, this->actor.home.pos.y + 850.0f, 0.2f, this->actor.velocity.y,
                               0.01f);
     this->unk304 += 0x2BC;
-    this->actor.world.pos.x = (Math_SinS(this->unk304) * 80.0f) + this->actor.home.pos.x;
-    temp_f10 = Math_CosS(this->unk304) * 80.0f;
+    this->actor.world.pos.x = this->actor.home.pos.x + Math_SinS(this->unk304) * 80.0f;
+    this->actor.world.pos.z = this->actor.home.pos.z + Math_CosS(this->unk304) * 80.0f;
     this->behaviorInfo.unk4C += this->behaviorInfo.unk4E;
-    temp_v1 = this->actor.child;
     this->actor.shape.rot.y += this->behaviorInfo.unk4C;
-    this->actor.world.pos.z = this->actor.home.pos.z + ((0, temp_f10));
+    temp_v1 = this->actor.child;
+
     if (this->actor.child != NULL) {
         this->actor.child->world.pos.x = this->actor.world.pos.x;
         temp_v1->world.pos.y = this->actor.world.pos.y - 38.0f;

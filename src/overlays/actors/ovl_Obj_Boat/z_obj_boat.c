@@ -22,7 +22,6 @@ const ActorInit Obj_Boat_InitVars = {
     (ActorFunc)ObjBoat_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B9B680[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
@@ -31,20 +30,23 @@ static InitChainEntry D_80B9B680[] = {
     ICHAIN_F32(uncullZoneDownward, 1000, ICHAIN_STOP),
 };
 
-
-extern InitChainEntry D_80B9B680[];
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Boat_0x80B9AF50/func_80B9AF50.asm")
+extern InitChainEntry D_80B9B680[];
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Boat_0x80B9AF50/ObjBoat_Init.asm")
+extern UNK_TYPE D_06007630;
+extern UNK_TYPE D_06009A88;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Boat_0x80B9AF50/ObjBoat_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boat/func_80B9AF50.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Boat_0x80B9AF50/func_80B9B124.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boat/ObjBoat_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Boat_0x80B9AF50/ObjBoat_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boat/ObjBoat_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Boat_0x80B9AF50/func_80B9B428.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boat/func_80B9B124.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Boat_0x80B9AF50/ObjBoat_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boat/ObjBoat_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boat/func_80B9B428.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boat/ObjBoat_Draw.s")

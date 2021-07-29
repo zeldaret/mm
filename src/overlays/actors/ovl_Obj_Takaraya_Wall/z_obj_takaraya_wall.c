@@ -9,6 +9,8 @@ void ObjTakarayaWall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjTakarayaWall_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjTakarayaWall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AD9B04(ObjTakarayaWall* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Takaraya_Wall_InitVars = {
     ACTOR_OBJ_TAKARAYA_WALL,
@@ -22,7 +24,6 @@ const ActorInit Obj_Takaraya_Wall_InitVars = {
     (ActorFunc)ObjTakarayaWall_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80ADA2A0 = {
     { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
@@ -30,31 +31,32 @@ static ColliderCylinderInit D_80ADA2A0 = {
     { 40, 120, 0, { 0, 0, 0 } },
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80ADA2CC[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80ADA2A0;
 extern InitChainEntry D_80ADA2CC[];
-#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Takaraya_Wall_0x80AD9240/func_80AD9240.asm")
+extern UNK_TYPE D_06000D60;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Takaraya_Wall_0x80AD9240/func_80AD92FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Takaraya_Wall/func_80AD9240.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Takaraya_Wall_0x80AD9240/func_80AD9358.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Takaraya_Wall/func_80AD92FC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Takaraya_Wall_0x80AD9240/func_80AD9488.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Takaraya_Wall/func_80AD9358.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Takaraya_Wall_0x80AD9240/ObjTakarayaWall_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Takaraya_Wall/func_80AD9488.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Takaraya_Wall_0x80AD9240/ObjTakarayaWall_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Takaraya_Wall/ObjTakarayaWall_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Takaraya_Wall_0x80AD9240/func_80AD9B04.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Takaraya_Wall/ObjTakarayaWall_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Takaraya_Wall_0x80AD9240/ObjTakarayaWall_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Takaraya_Wall/func_80AD9B04.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Takaraya_Wall_0x80AD9240/ObjTakarayaWall_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Takaraya_Wall/ObjTakarayaWall_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Takaraya_Wall/ObjTakarayaWall_Draw.s")

@@ -9,6 +9,8 @@ void EnZl4_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnZl4_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnZl4_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809A1D0C(EnZl4* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Zl4_InitVars = {
     ACTOR_EN_ZL4,
@@ -24,24 +26,26 @@ const ActorInit En_Zl4_InitVars = {
 
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Zl4_0x809A1BB0/func_809A1BB0.asm")
+extern UNK_TYPE D_06013328;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Zl4_0x809A1BB0/EnZl4_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zl4/func_809A1BB0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Zl4_0x809A1BB0/EnZl4_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zl4/EnZl4_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Zl4_0x809A1BB0/func_809A1D0C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zl4/EnZl4_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Zl4_0x809A1BB0/EnZl4_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zl4/func_809A1D0C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Zl4_0x809A1BB0/func_809A1D60.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zl4/EnZl4_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Zl4_0x809A1BB0/func_809A1DA4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zl4/func_809A1D60.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Zl4_0x809A1BB0/func_809A1DBC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zl4/func_809A1DA4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Zl4_0x809A1BB0/func_809A1DD0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zl4/func_809A1DBC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Zl4_0x809A1BB0/func_809A1E28.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zl4/func_809A1DD0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Zl4_0x809A1BB0/EnZl4_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zl4/func_809A1E28.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zl4/EnZl4_Draw.s")

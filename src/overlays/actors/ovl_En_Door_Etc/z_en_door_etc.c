@@ -21,14 +21,12 @@ const ActorInit En_Door_Etc_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80AC25A0 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
     { 100, 40, 0, { 0, 0, 0 } },
 };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80AC2634[] = {
@@ -38,27 +36,27 @@ static InitChainEntry D_80AC2634[] = {
     ICHAIN_U16(shape.rot.z, 0, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80AC25A0;
 extern InitChainEntry D_80AC2634[];
-#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_Etc_0x80AC1ED0/EnDoorEtc_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door_Etc/EnDoorEtc_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_Etc_0x80AC1ED0/EnDoorEtc_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door_Etc/EnDoorEtc_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_Etc_0x80AC1ED0/func_80AC2044.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door_Etc/func_80AC2044.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_Etc_0x80AC1ED0/func_80AC20A8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door_Etc/func_80AC20A8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_Etc_0x80AC1ED0/func_80AC2118.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door_Etc/func_80AC2118.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_Etc_0x80AC1ED0/func_80AC2154.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door_Etc/func_80AC2154.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_Etc_0x80AC1ED0/func_80AC21A0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door_Etc/func_80AC21A0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_Etc_0x80AC1ED0/func_80AC2354.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door_Etc/func_80AC2354.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_Etc_0x80AC1ED0/EnDoorEtc_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door_Etc/EnDoorEtc_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Door_Etc_0x80AC1ED0/func_80AC24A8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door_Etc/func_80AC24A8.s")

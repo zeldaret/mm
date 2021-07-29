@@ -9,6 +9,13 @@ void EnStoneheishi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnStoneheishi_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnStoneheishi_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BC9560(EnStoneheishi* this, GlobalContext* globalCtx);
+void func_80BC9680(EnStoneheishi* this, GlobalContext* globalCtx);
+void func_80BC9908(EnStoneheishi* this, GlobalContext* globalCtx);
+void func_80BC9A2C(EnStoneheishi* this, GlobalContext* globalCtx);
+void func_80BC9D28(EnStoneheishi* this, GlobalContext* globalCtx);
+void func_80BC9E50(EnStoneheishi* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Stone_heishi_InitVars = {
     ACTOR_EN_STONE_HEISHI,
@@ -22,7 +29,6 @@ const ActorInit En_Stone_heishi_InitVars = {
     (ActorFunc)EnStoneheishi_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80BCA3A0 = {
     { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
@@ -30,44 +36,47 @@ static ColliderCylinderInit D_80BCA3A0 = {
     { 15, 70, 0, { 0, 0, 0 } },
 };
 
-
-extern ColliderCylinderInit D_80BCA3A0;
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stone_heishi_0x80BC9270/EnStoneheishi_Init.asm")
+extern ColliderCylinderInit D_80BCA3A0;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stone_heishi_0x80BC9270/EnStoneheishi_Destroy.asm")
+extern UNK_TYPE D_06000768;
+extern UNK_TYPE D_06003BFC;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stone_heishi_0x80BC9270/func_80BC935C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stone_heishi/EnStoneheishi_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stone_heishi_0x80BC9270/func_80BC941C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stone_heishi/EnStoneheishi_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stone_heishi_0x80BC9270/func_80BC94B0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stone_heishi/func_80BC935C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stone_heishi_0x80BC9270/func_80BC9560.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stone_heishi/func_80BC941C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stone_heishi_0x80BC9270/func_80BC9660.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stone_heishi/func_80BC94B0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stone_heishi_0x80BC9270/func_80BC9680.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stone_heishi/func_80BC9560.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stone_heishi_0x80BC9270/func_80BC98EC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stone_heishi/func_80BC9660.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stone_heishi_0x80BC9270/func_80BC9908.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stone_heishi/func_80BC9680.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stone_heishi_0x80BC9270/func_80BC9A10.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stone_heishi/func_80BC98EC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stone_heishi_0x80BC9270/func_80BC9A2C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stone_heishi/func_80BC9908.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stone_heishi_0x80BC9270/func_80BC9C88.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stone_heishi/func_80BC9A10.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stone_heishi_0x80BC9270/func_80BC9D28.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stone_heishi/func_80BC9A2C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stone_heishi_0x80BC9270/func_80BC9E50.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stone_heishi/func_80BC9C88.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stone_heishi_0x80BC9270/EnStoneheishi_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stone_heishi/func_80BC9D28.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stone_heishi_0x80BC9270/func_80BCA0AC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stone_heishi/func_80BC9E50.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stone_heishi_0x80BC9270/func_80BCA104.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stone_heishi/EnStoneheishi_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stone_heishi_0x80BC9270/EnStoneheishi_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stone_heishi/func_80BCA0AC.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stone_heishi/func_80BCA104.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stone_heishi/EnStoneheishi_Draw.s")

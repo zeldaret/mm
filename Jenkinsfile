@@ -20,6 +20,16 @@ pipeline {
                 sh 'python3 tools/warnings_count/compare_warnings.py tools/warnings_count/warnings_setup_current.txt tools/warnings_count/warnings_setup_new.txt'
             }
         }
+        stage('Disasm') {
+            steps {
+                sh 'bash -c "make -j disasm 2> >(tee tools/warnings_count/warnings_disasm_new.txt)"'
+            }
+        }
+        stage('Check disasm warnings') {
+            steps {
+                sh 'python3 tools/warnings_count/compare_warnings.py tools/warnings_count/warnings_disasm_current.txt tools/warnings_count/warnings_disasm_new.txt'
+            }
+        }
         stage('Build') {
             steps {
                 sh 'bash -c "make -j all 2> >(tee tools/warnings_count/warnings_build_new.txt)"'

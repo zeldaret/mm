@@ -24,10 +24,12 @@ const ActorInit Obj_Jg_Gakki_InitVars = {
 
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Jg_Gakki_0x80B961E0/ObjJgGakki_Init.asm")
+extern UNK_TYPE D_0601B1E8;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Jg_Gakki_0x80B961E0/ObjJgGakki_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jg_Gakki/ObjJgGakki_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Jg_Gakki_0x80B961E0/ObjJgGakki_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jg_Gakki/ObjJgGakki_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Jg_Gakki_0x80B961E0/ObjJgGakki_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jg_Gakki/ObjJgGakki_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jg_Gakki/ObjJgGakki_Draw.s")

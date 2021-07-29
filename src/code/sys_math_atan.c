@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 u16 sATan2Tbl[] = {
     0,    10,   20,   31,   41,   51,   61,   71,   81,   92,   102,  112,  122,  132,  143,  153,  163,  173,  183,

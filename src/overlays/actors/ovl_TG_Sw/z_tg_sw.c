@@ -10,7 +10,7 @@ void TGSw_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void TGSw_Update(Actor* thisx, GlobalContext* globalCtx);
 void TGSw_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-static void TGSw_ActionExecuteOneShot(struct TGSw* this, GlobalContext* globalCtx);
+void TGSw_ActionExecuteOneShot(struct TGSw* this, GlobalContext* globalCtx);
 
 const ActorInit TG_Sw_InitVars = {
     ACTOR_TG_SW,
@@ -24,7 +24,7 @@ const ActorInit TG_Sw_InitVars = {
     (ActorFunc)TGSw_Draw,
 };
 
-static void TGSw_ActionDecider(struct TGSw* this, GlobalContext* globalCtx) {
+void TGSw_ActionDecider(struct TGSw* this, GlobalContext* globalCtx) {
     f32 scaledAbsoluteRotZ;
     f32 scaledAbsoluteRotY;
     u8 unk1F4;
@@ -43,7 +43,7 @@ static void TGSw_ActionDecider(struct TGSw* this, GlobalContext* globalCtx) {
     }
 }
 
-static void TGSw_ActionExecuteOneShot(struct TGSw* this, GlobalContext* globalCtx) {
+void TGSw_ActionExecuteOneShot(struct TGSw* this, GlobalContext* globalCtx) {
     void* actorIterator;
     struct Actor* actorEntry;
 

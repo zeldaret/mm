@@ -22,7 +22,6 @@ const ActorInit En_Wiz_InitVars = {
     (ActorFunc)EnWiz_Draw,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[10] = {
 static ColliderJntSphElementInit D_80A48B50[10] = {
     {
@@ -73,14 +72,12 @@ static ColliderJntSphInit D_80A48CB8 = {
     10, D_80A48B50, // sJntSphElementsInit,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A48CC8 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK1, { 0xF7CFFFFF, 0x08, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
     { 35, 130, 0, { 0, 0, 0 } },
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80A48CF4 = {
@@ -118,7 +115,6 @@ static DamageTable D_80A48CF4 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-
 // static DamageTable sDamageTable = {
 static DamageTable D_80A48D14 = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x1),
@@ -155,66 +151,70 @@ static DamageTable D_80A48D14 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_80A48B50[10];
 extern ColliderJntSphInit D_80A48CB8;
 extern ColliderCylinderInit D_80A48CC8;
 extern DamageTable D_80A48CF4;
 extern DamageTable D_80A48D14;
-#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_0x80A45360/EnWiz_Init.asm")
+extern UNK_TYPE D_0600211C;
+extern UNK_TYPE D_060025F0;
+extern UNK_TYPE D_060066C0;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_0x80A45360/EnWiz_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/EnWiz_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_0x80A45360/func_80A455C4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/EnWiz_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_0x80A45360/func_80A456A0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A455C4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_0x80A45360/func_80A45CD8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A456A0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_0x80A45360/func_80A460A4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A45CD8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_0x80A45360/func_80A46280.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A460A4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_0x80A45360/func_80A462F8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A46280.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_0x80A45360/func_80A46414.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A462F8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_0x80A45360/func_80A4668C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A46414.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_0x80A45360/func_80A46764.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A4668C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_0x80A45360/func_80A468CC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A46764.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_0x80A45360/func_80A46990.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A468CC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_0x80A45360/func_80A46C88.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A46990.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_0x80A45360/func_80A46CC4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A46C88.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_0x80A45360/func_80A46DDC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A46CC4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_0x80A45360/func_80A46E24.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A46DDC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_0x80A45360/func_80A47000.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A46E24.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_0x80A45360/func_80A470D8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A47000.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_0x80A45360/func_80A47298.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A470D8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_0x80A45360/func_80A473B8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A47298.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_0x80A45360/func_80A4767C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A473B8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_0x80A45360/func_80A476C8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A4767C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_0x80A45360/func_80A477E8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A476C8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_0x80A45360/EnWiz_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A477E8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_0x80A45360/func_80A47FCC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/EnWiz_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_0x80A45360/func_80A48138.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A47FCC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wiz_0x80A45360/EnWiz_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/func_80A48138.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wiz/EnWiz_Draw.s")

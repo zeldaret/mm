@@ -101,7 +101,7 @@ def simplify_objdump(input_lines: List[str], *, stack_differences: bool) -> List
             # relocations.
             if imm != "0" and imm != "imm" and imm != "addr":
                 repl += "+" + imm if int(imm, 0) > 0 else imm
-            if any(reloc in row for reloc in ["R_MIPS_LO16", "R_MIPS_LITERAL", "R_MIPS_GPREL16"]):
+            if "R_MIPS_LO16" in row:
                 repl = f"%lo({repl})"
             elif "R_MIPS_HI16" in row:
                 # Ideally we'd pair up R_MIPS_LO16 and R_MIPS_HI16 to generate a

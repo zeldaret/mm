@@ -22,7 +22,6 @@ const ActorInit Bg_Ikana_Mirror_InitVars = {
     (ActorFunc)BgIkanaMirror_Draw,
 };
 
-
 // static ColliderTrisElementInit sTrisElementsInit[9] = {
 static ColliderTrisElementInit D_80B7FF50[9] = {
     {
@@ -69,7 +68,6 @@ static ColliderTrisInit D_80B8016C = {
     9, D_80B7FF50, // sTrisElementsInit,
 };
 
-
 // static ColliderQuadInit sQuadInit = {
 static ColliderQuadInit D_80B8017C = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_OTHER, AC_NONE, OC1_NONE, OC2_NONE, COLSHAPE_QUAD, },
@@ -77,14 +75,12 @@ static ColliderQuadInit D_80B8017C = {
     { { { 0.0f, 72.0f, 20.0f }, { 0.0f, 72.0f, 240.0f }, { 0.0f, 6.0f, 20.0f }, { 0.0f, 6.0f, 240.0f } } },
 };
 
-
 // static ColliderQuadInit sQuadInit = {
 static ColliderQuadInit D_80B801FC = {
     { 0x41, AT_NONE | AT_TYPE_OTHER, AC_NONE, OC1_NONE, OC2_FIRST_ONLY | OC2_UNK1 | OC2_HIT_PLAYER, 0x70, },
     { 0xC1, { 0x41A00000, 0x41, 0xA0 }, { 0xC1CA6666, 0x41, 0xA0 }, TOUCH_ON | TOUCH_HIT | TOUCH_SFX_NORMAL | TOUCH_DREW_HITMARK, BUMP_NONE | BUMP_NO_DAMAGE | BUMP_NO_SWORD_SFX | BUMP_NO_HITMARK, OCELEM_NONE, },
     { { { -1.8339854079840734e-09f, -1.8626939990440405e-09f, -1.9208972190654094e-09f }, { 221185.5625f, 0.0f, 0.003921568859368563f }, { 0.0f, 0.0f, 0.0f }, { 2.8698592549372254e-42f, 1.0761972206014595e-42f, 2.2420775429197073e-44f } } },
 };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B8021C[] = {
@@ -94,28 +90,31 @@ static InitChainEntry D_80B8021C[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderTrisElementInit D_80B7FF50[9];
 extern ColliderTrisInit D_80B8016C;
 extern ColliderQuadInit D_80B8017C;
 extern ColliderQuadInit D_80B801FC;
 extern InitChainEntry D_80B8021C[];
-#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror_0x80B7F730/func_80B7F730.asm")
+extern UNK_TYPE D_06001E18;
+extern UNK_TYPE D_06002358;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror_0x80B7F730/BgIkanaMirror_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/func_80B7F730.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror_0x80B7F730/BgIkanaMirror_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/BgIkanaMirror_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror_0x80B7F730/func_80B7FA84.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/BgIkanaMirror_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror_0x80B7F730/func_80B7FA9C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/func_80B7FA84.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror_0x80B7F730/func_80B7FB84.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/func_80B7FA9C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror_0x80B7F730/func_80B7FBA4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/func_80B7FB84.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror_0x80B7F730/BgIkanaMirror_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/func_80B7FBA4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror_0x80B7F730/BgIkanaMirror_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/BgIkanaMirror_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Mirror/BgIkanaMirror_Draw.s")

@@ -18,7 +18,7 @@ f32 Camera_Vec3fMagnitude(Vec3f* vec) {
  * Interpolates along a curve between 0 and 1 with a period of
  * -a <= p <= a at time `b`
  */
-#ifdef NON_MATCHING
+// #ifdef NON_MATCHING
 f32 Camera_InterpolateCurve(f32 a, f32 b) {
     f32 ret;
     f32 absB;
@@ -44,10 +44,10 @@ f32 Camera_InterpolateCurve(f32 a, f32 b) {
     }
     return ret;
 }
-#else
-f32 Camera_InterpolateCurve(f32 a, f32 b);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_InterpolateCurve.asm")
-#endif
+// #else
+// f32 Camera_InterpolateCurve(f32 a, f32 b);
+// #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_InterpolateCurve.s")
+// #endif
 
 /*
  * Performs linear interpoloation between `cur` and `target`.  If `cur` is within
@@ -103,7 +103,7 @@ void func_800CB544(Camera* camera) {
 }
 #else
 void func_800CB544(Camera* camera);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CB544.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800CB544.s")
 #endif
 
 #ifdef NON_MATCHING
@@ -120,7 +120,7 @@ void func_800CB584(Camera* camera) {
 }
 #else
 void func_800CB584(Camera* camera);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CB584.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800CB584.s")
 #endif
 
 #ifdef NON_MATCHING
@@ -134,7 +134,7 @@ void func_800CB5DC(Camera* camera) {
 }
 #else
 void func_800CB5DC(Camera* camera);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CB5DC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800CB5DC.s")
 #endif
 
 Vec3f* Camera_Vec3sToVec3f(Vec3f* dest, Vec3s* src) {
@@ -313,7 +313,7 @@ s32 func_800CB950(Camera* camera) {
 }
 #else
 s32 func_800CB950(Camera* camera);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CB950.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800CB950.s")
 #endif
 
 s32 func_800CBA08(Camera* camera) {
@@ -476,7 +476,7 @@ s32 func_800CBC84(Camera* camera, Vec3f* from, CamColChk* to, s32 arg3) {
 }
 #else
 s32 func_800CBC84(Camera* camera, Vec3f* from, CamColChk* to, s32 arg3);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CBC84.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800CBC84.s")
 #endif
 
 // OoT func_80044340
@@ -513,7 +513,7 @@ s32 func_800CC000(Camera* camera, Vec3f* from, CamColChk* to) {
 }
 #else
 s32 func_800CC000(Camera* camera, Vec3f* from, CamColChk* to);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CC000.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800CC000.s")
 #endif
 
 s32 func_800CC128(Camera* camera, Vec3f* from, Vec3f* to) {
@@ -599,7 +599,7 @@ s16 func_800CC260(Camera* camera, Vec3f* arg1, Vec3f* arg2, VecSph* arg3, Actor*
 }
 #else
 s16 func_800CC260(Camera* camera, Vec3f* arg1, Vec3f* arg2, VecSph* arg3, Actor** exclusions, s16 numExclusions);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CC260.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800CC260.s")
 #endif
 
 // OoT Camera_GetFloorYLayer (Camera_GetFloorYNorm)
@@ -623,7 +623,7 @@ f32 func_800CC488(Camera* camera, Vec3f* floorNorm, Vec3f* chkPos, s32* bgId) {
 }
 #else
 f32 func_800CC488(Camera* camera, Vec3f* floorNorm, Vec3f* chkPos, s32* bgId);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CC488.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800CC488.s")
 #endif
 
 f32 func_800CC56C(Camera* camera, Vec3f* arg1) {
@@ -667,7 +667,7 @@ f32 func_800CC5C8(Camera* camera, Vec3f* norm, Vec3f* pos, s32* bgId) {
 }
 #else
 f32 func_800CC5C8(Camera* camera, Vec3f* norm, Vec3f* pos, s32* bgId);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CC5C8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800CC5C8.s")
 #endif
 
 s16 func_800CC740(Camera* camera, u32 flags) {
@@ -754,7 +754,7 @@ s16 Camera_XZAngle(Vec3f* to, Vec3f* from) {
 }
 #else
 s16 Camera_XZAngle(Vec3f* to, Vec3f* from);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_XZAngle.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_XZAngle.s")
 #endif
 
 // Identical to OoT func_80044ADC
@@ -830,8 +830,11 @@ s16 func_800CC9C0(Camera *camera, s16 yaw, s16 arg2) {
 
 }
 #else
+f32 D_801EDBF4;
+f32 D_801EDBF8;
+CamColChk D_801EDC00;
 s16 func_800CC9C0(Camera *camera, s16 yaw, s16 arg2);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CC9C0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800CC9C0.s")
 #endif
 
 // OoT func_80044ADC
@@ -1021,7 +1024,7 @@ f32 Camera_ClampLERPScale(Camera *camera, f32 maxLERPScale) {
 }
 #else
 f32 Camera_ClampLERPScale(Camera *camera, f32 maxLERPScale);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_ClampLERPScale.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ClampLERPScale.s")
 #endif
 
 void Camera_ResetAnim(Camera* camera, s32 mode) {
@@ -1208,7 +1211,7 @@ s32 Camera_CalcAtDefault(Camera *camera, VecSph *eyeAtDir, f32 extraYOffset, s16
 }
 #else
 s32 Camera_CalcAtDefault(Camera *camera, VecSph *eyeAtDir, f32 extraYOffset, s16 calcSlope);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_CalcAtDefault.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_CalcAtDefault.s")
 #endif
 
 #ifdef NON_MATCHING
@@ -1268,7 +1271,7 @@ s32 func_800CD834(Camera *camera, VecSph *eyeAtDir, f32 arg2, f32* arg3, f32 arg
 }
 #else
 s32 func_800CD834(Camera *camera, VecSph *eyeAtDir, f32 arg2, f32* arg3, f32 arg4);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CD834.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800CD834.s")
 #endif
 
 #ifdef NON_MATCHING
@@ -1301,7 +1304,7 @@ s32 func_800CDA14(Camera *camera, VecSph *arg1, f32 arg2, f32 arg3) {
 }
 #else
 s32 func_800CDA14(Camera *camera, VecSph *arg1, f32 arg2, f32 arg3);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CDA14.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800CDA14.s")
 #endif
 
 #ifdef NON_MATCHING
@@ -1390,7 +1393,7 @@ s32 func_800CDB6C(Camera *camera, VecSph *arg1, f32 arg2, f32 arg3, f32 *arg4, s
 }
 #else
 s32 func_800CDB6C(Camera *camera, VecSph *arg1, f32 arg2, f32 arg3, f32 *arg4, s16 arg5);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CDB6C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800CDB6C.s")
 #endif
 
 // OoTs Camera_CalcAtForLockOn
@@ -1489,7 +1492,7 @@ s32 Camera_CalcAtForLockOn(Camera *camera, VecSph *eyeAtDir, Vec3f *targetPos, f
 }
 #else
 s32 Camera_CalcAtForLockOn(Camera *camera, VecSph *eyeAtDir, Vec3f *targetPos, f32 yOffset, f32 distance, f32 *yPosOffset, VecSph *outPlayerToTargetDir, s16 flags);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_CalcAtForLockOn.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_CalcAtForLockOn.s")
 #endif
 
 // Camera_CalcAtForLockOn2?
@@ -1573,7 +1576,7 @@ s32 func_800CE2B8(Camera *camera, f32* arg1, s32 arg2, f32 arg3, f32 arg4, f32 a
 }
 #else
 s32 func_800CE2B8(Camera *camera, f32* arg1, s32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 *arg6, VecSph* arg7, s16 flags);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CE2B8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800CE2B8.s")
 #endif
 
 #ifdef NON_MATCHING
@@ -1614,7 +1617,7 @@ s32 Camera_CalcAtForHorse(Camera* camera, VecSph* eyeAtDir, f32 yOffset, f32* yP
 }
 #else
 s32 Camera_CalcAtForHorse(Camera* camera, VecSph* eyeAtDir, f32 yOffset, f32* yPosOffset, s16 calcSlope);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_CalcAtForHorse.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_CalcAtForHorse.s")
 #endif
 
 #ifdef NON_MATCHING
@@ -1646,7 +1649,7 @@ f32 func_800CE79C(Camera *camera, f32 dist, f32 minDist, f32 maxDist, s16 timer)
 }
 #else
 f32 func_800CE79C(Camera *camera, f32 dist, f32 minDist, f32 maxDist, s16 timer);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CE79C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800CE79C.s")
 #endif
 
 #ifdef NON_MATCHING
@@ -1677,7 +1680,7 @@ f32 func_800CE930(Camera *camera, f32 dist, f32 minDist, f32 maxDist, s16 timer)
 }
 #else
 f32 func_800CE930(Camera *camera, f32 dist, f32 minDist, f32 maxDist, s16 timer);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CE930.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800CE930.s")
 #endif
 
 #ifdef NON_MATCHING
@@ -1704,7 +1707,7 @@ s16 Camera_CalcDefaultPitch(Camera* camera, s16 arg1, s16 arg2, s16 arg3) {
 }
 #else
 s16 Camera_CalcDefaultPitch(Camera* camera, s16 arg1, s16 arg2, s16 arg3);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_CalcDefaultPitch.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_CalcDefaultPitch.s")
 #endif
 
 #ifdef NON_MATCHING
@@ -1738,7 +1741,7 @@ s16 Camera_CalcDefaultYaw(Camera* camera, s16 cur, s16 target, f32 arg3, f32 acc
 }
 #else
 s16 Camera_CalcDefaultYaw(Camera* camera, s16 cur, s16 target, f32 arg3, f32 accel);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_CalcDefaultYaw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_CalcDefaultYaw.s")
 #endif
 
 // TODO: May be f32* return, not void
@@ -1871,7 +1874,7 @@ void func_800CED90(Camera *camera, VecSph *arg1, VecSph *arg2, f32 arg3, f32 arg
 }
 #else
 void func_800CED90(Camera *camera, VecSph *arg1, VecSph *arg2, f32 arg3, f32 arg4, SwingAnimation *arg5, s16 *arg6);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/func_800CED90.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800CED90.s")
 #endif
 
 s32 Camera_Noop(Camera* camera) {
@@ -2267,7 +2270,7 @@ s32 Camera_Normal1(Camera *camera) {
 
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Normal1.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Normal1.s")
 #endif
 
 
@@ -2454,9 +2457,8 @@ s32 Camera_Normal3(Camera *camera) {
     return 1;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Normal3.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Normal3.s")
 #endif
-
 
 s32 Camera_Normal4(Camera* camera) {
     Vec3s* sceneCamData;
@@ -2653,7 +2655,7 @@ s32 Camera_Normal0(Camera *camera) {
     return 1;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Normal0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Normal0.s")
 #endif
 
 #ifdef NON_EQUIVALENT
@@ -2994,7 +2996,7 @@ s32 Camera_Parallel1(Camera *camera) {
     
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Parallel1.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Parallel1.s")
 #endif
 
 
@@ -3202,7 +3204,7 @@ s32 Camera_Jump2(Camera *camera) {
     return true;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Jump2.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Jump2.s")
 #endif
 
 #ifdef NON_EQUIVALENT
@@ -3470,7 +3472,7 @@ s32 Camera_Jump3(Camera* camera) {
     // )
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Jump3.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Jump3.s")
 #endif
 
 s32 Camera_Jump4(Camera* camera) {
@@ -3883,7 +3885,7 @@ func_800CE2B8(camera, &sp94.r, sp40, batt1->unk_00, batt1->unk_2C, 1.0f - spEC, 
     return true;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Battle1.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Battle1.s")
 #endif
 
 s32 Camera_Battle2(Camera* camera) {
@@ -4244,7 +4246,7 @@ s32 Camera_KeepOn1(Camera *camera) {
     return true;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_KeepOn1.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_KeepOn1.s")
 #endif
 
 s32 Camera_KeepOn2(Camera* camera) {
@@ -4497,7 +4499,7 @@ s32 Camera_KeepOn3(Camera* camera) {
 
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_KeepOn3.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_KeepOn3.s")
 #endif
 
 #ifdef NON_MATCHING
@@ -4735,7 +4737,10 @@ s32 Camera_KeepOn4(Camera* camera) {
 
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_KeepOn4.asm")
+static Vec3f D_801EDDD0;
+static Vec3f D_801EDDE0;
+static Vec3f D_801EDDF0;
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_KeepOn4.s")
 #endif
 
 s32 Camera_KeepOn0(Camera* camera) {
@@ -4844,7 +4849,7 @@ s32 Camera_Fixed1(Camera *camera) {
     return true;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Fixed1.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Fixed1.s")
 #endif
 
 #ifdef NON_MATCHING
@@ -5084,7 +5089,7 @@ s32 Camera_Fixed2(Camera* camera) {
 
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Fixed2.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Fixed2.s")
 #endif
 
 s32 Camera_Fixed3(Camera* camera) {
@@ -5235,7 +5240,7 @@ s32 Camera_Subj1(Camera* camera) {
     return 1;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Subj1.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Subj1.s")
 #endif
 
 s32 Camera_Subj2(Camera* camera) {
@@ -5367,7 +5372,7 @@ s32 Camera_Unique2(Camera *camera) {
     return 1;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Unique2.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Unique2.s")
 #endif
 
 s32 Camera_Unique3(Camera* camera) {
@@ -5577,7 +5582,7 @@ s32 Camera_Unique0(Camera* camera) {
     return true;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Unique0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Unique0.s")
 #endif
 
 s32 Camera_Unique6(Camera *camera) {
@@ -5787,7 +5792,7 @@ s32 Camera_Demo1(Camera *camera) {
     return true;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Demo1.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Demo1.s")
 #endif
 
 #ifdef NON_MATCHING
@@ -5998,7 +6003,7 @@ s32 Camera_Demo2(Camera* camera) {
     return 1;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Demo2.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Demo2.s")
 #endif
 
 #ifdef NON_MATCHING
@@ -6079,7 +6084,7 @@ s32 Camera_Demo3(Camera *camera) {
     return true;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Demo3.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Demo3.s")
 #endif
 
 #ifdef NON_MATCHING
@@ -6214,7 +6219,7 @@ s32 Camera_Demo4(Camera *camera) {
     return 1;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Demo4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Demo4.s")
 #endif
 
 #ifdef NON_MATCHING
@@ -6313,7 +6318,7 @@ s32 Camera_Demo5(Camera* camera) {
     return 1;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Demo5.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Demo5.s")
 #endif
 
 
@@ -6552,7 +6557,7 @@ s32 Camera_Special5(Camera *camera) {
     return 1;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Special5.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Special5.s")
 #endif
 
 s32 Camera_Special6(Camera* camera) {
@@ -6648,7 +6653,7 @@ s32 Camera_Special8(Camera *camera) {
     return 1;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Special8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Special8.s")
 #endif
 
 #ifdef NON_MATCHING
@@ -6800,7 +6805,7 @@ s32 Camera_Special9(Camera *camera) {
     return true;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Special9.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Special9.s")
 #endif
 
 Camera* Camera_Create(View *view, CollisionContext *colCtx, GlobalContext *globalCtx) {
@@ -6883,7 +6888,7 @@ void Camera_Init(Camera* camera, View* view, CollisionContext* colCtx, GlobalCon
 }
 #else
 void Camera_Init(Camera* camera, View* view, CollisionContext* colCtx, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Init.s")
 #endif
 
 void func_800DDFE0(Camera* camera) {
@@ -6990,7 +6995,7 @@ void Camera_InitPlayerSettings(Camera* camera, Player* player) {
 }
 #else
 void Camera_InitPlayerSettings(Camera* camera, Player* player);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_InitPlayerSettings.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_InitPlayerSettings.s")
 #endif
 
 s32 Camera_ChangeStatus(Camera* camera, s16 status) {
@@ -7393,7 +7398,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
     return inputDir;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Update.s")
 #endif
 
 s32 func_800DF498(Camera* camera) {
@@ -7539,7 +7544,7 @@ s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 flags) {
 #else
 static s32 modeChangeFlags = 0;
 s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 flags);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_ChangeModeFlags.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ChangeModeFlags.s")
 #endif
 
 s32 Camera_ChangeMode(Camera* camera, s16 mode) {
@@ -7741,7 +7746,7 @@ s32 Camera_SetParam(Camera* camera, s32 param, void* value) {
 }
 #else
 s32 Camera_SetParam(Camera* camera, s32 param, void* value);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_SetParam.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_SetParam.s")
 #endif
 
 s32 func_800DFEF0(Camera* camera, s16 paramFlags) {
@@ -7835,7 +7840,7 @@ s32 Camera_Copy(Camera* dstCamera, Camera* srcCamera) {
 }
 #else
 s32 Camera_Copy(Camera* dstCamera, Camera* srcCamera);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_camera/Camera_Copy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Copy.s")
 #endif
 
 // Unused

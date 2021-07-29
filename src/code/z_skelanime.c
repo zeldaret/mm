@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 s32 func_80136288(GlobalContext* globalCtx, SkelAnime* skelAnime);
 s32 func_8013631C(GlobalContext* globalCtx, SkelAnime* skelAnime);
@@ -849,8 +848,8 @@ Gfx* SkelAnime_DrawSV2(GlobalContext* globalCtx, void** skeleton, Vec3s* limbDra
     return gfx;
 }
 
-// Function is unused.
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skelanime/func_80134FFC.asm")
+//Function is unused.
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_skelanime/func_80134FFC.s")
 
 s16 func_801353D4(AnimationHeaderCommon* animationSeg) {
     AnimationHeaderCommon* animation = Lib_SegmentedToVirtual(animationSeg);

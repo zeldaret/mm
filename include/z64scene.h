@@ -1,9 +1,9 @@
 #ifndef _Z64SCENE_H_
 #define _Z64SCENE_H_
 
-#include <ultra64.h>
-#include <z64dma.h>
-#include <unk.h>
+#include "ultra64.h"
+#include "z64dma.h"
+#include "unk.h"
 
 #define SPAWN_ROT_FLAGS(rotation, flags) (((rotation) << 7) | (flags))
 
@@ -349,7 +349,6 @@ typedef struct {
     /* 0xA */ u8 unk_A;
     /* 0xB */ u8 drawConfig;
     /* 0xC */ u8 unk_C;
-    /* 0xD */ char pad_D[3];
 } SceneTableEntry; // size = 0x10;
 
 typedef struct {

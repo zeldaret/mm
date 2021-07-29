@@ -9,6 +9,9 @@ void EnStopheishi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnStopheishi_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnStopheishi_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AE7F34(EnStopheishi* this, GlobalContext* globalCtx);
+void func_80AE85C4(EnStopheishi* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Stop_heishi_InitVars = {
     ACTOR_EN_STOP_HEISHI,
@@ -22,7 +25,6 @@ const ActorInit En_Stop_heishi_InitVars = {
     (ActorFunc)EnStopheishi_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80AE88B0 = {
     { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
@@ -30,36 +32,38 @@ static ColliderCylinderInit D_80AE88B0 = {
     { 50, 260, 0, { 0, 0, 0 } },
 };
 
-
-extern ColliderCylinderInit D_80AE88B0;
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stop_heishi_0x80AE73A0/EnStopheishi_Init.asm")
+extern ColliderCylinderInit D_80AE88B0;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stop_heishi_0x80AE73A0/EnStopheishi_Destroy.asm")
+extern UNK_TYPE D_06006C18;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stop_heishi_0x80AE73A0/func_80AE750C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stop_heishi/EnStopheishi_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stop_heishi_0x80AE73A0/func_80AE75C8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stop_heishi/EnStopheishi_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stop_heishi_0x80AE73A0/func_80AE7718.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stop_heishi/func_80AE750C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stop_heishi_0x80AE73A0/func_80AE77D4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stop_heishi/func_80AE75C8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stop_heishi_0x80AE73A0/func_80AE795C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stop_heishi/func_80AE7718.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stop_heishi_0x80AE73A0/func_80AE7E9C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stop_heishi/func_80AE77D4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stop_heishi_0x80AE73A0/func_80AE7F34.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stop_heishi/func_80AE795C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stop_heishi_0x80AE73A0/func_80AE854C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stop_heishi/func_80AE7E9C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stop_heishi_0x80AE73A0/func_80AE85C4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stop_heishi/func_80AE7F34.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stop_heishi_0x80AE73A0/EnStopheishi_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stop_heishi/func_80AE854C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stop_heishi_0x80AE73A0/func_80AE87A4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stop_heishi/func_80AE85C4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stop_heishi_0x80AE73A0/func_80AE87EC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stop_heishi/EnStopheishi_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stop_heishi_0x80AE73A0/EnStopheishi_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stop_heishi/func_80AE87A4.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stop_heishi/func_80AE87EC.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stop_heishi/EnStopheishi_Draw.s")

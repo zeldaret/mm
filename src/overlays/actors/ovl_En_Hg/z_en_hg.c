@@ -30,16 +30,16 @@ void func_80BCF95C(EnHg* this, GlobalContext* globalCtx);
 s32 EnHg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 void EnHg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
-extern FlexSkeletonHeader D_06008580;
-extern AnimationHeader D_0600260C;
-extern AnimationHeader D_06009D44;
-extern AnimationHeader D_0600A164;
 extern AnimationHeader D_06000370;
 extern AnimationHeader D_06001138;
 extern AnimationHeader D_060015D4;
 extern AnimationHeader D_06001960;
-extern AnimationHeader D_0600AE1C;
+extern AnimationHeader D_0600260C;
 extern Gfx D_06005E28[];
+extern FlexSkeletonHeader D_06008580;
+extern AnimationHeader D_06009D44;
+extern AnimationHeader D_0600A164;
+extern AnimationHeader D_0600AE1C;
 
 const ActorInit En_Hg_InitVars = {
     ACTOR_EN_HG,
