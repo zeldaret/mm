@@ -732,7 +732,7 @@ void EnSob1_EndWalk(EnSob1* this, GlobalContext* globalCtx) {
     Math_ApproachF(&this->actor.speedXZ, 0.5f, 0.2f, 1.0f);
     if (distSq < 12.0f) {
         this->actor.speedXZ = 0.0f;
-        if (sp2C == sp2E) {
+        if (animLastFrame == animCurrentFrame) {
             EnSob1_ChangeAnim(&this->skelAnime, sAnimationsBombShopkeeper, 1);
             EnSob1_SetupAction(this, EnSob1_SetupIdle);
         }
