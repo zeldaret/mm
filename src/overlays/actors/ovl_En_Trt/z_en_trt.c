@@ -852,7 +852,7 @@ void EnTrt_IdleAwake(EnTrt* this, GlobalContext* globalCtx) {
 
 void EnTrt_BeginInteraction(EnTrt* this, GlobalContext* globalCtx) {
     s16 animCurrentFrame = this->skelAnime.animCurrentFrame / this->skelAnime.animPlaybackSpeed;
-    s16 sp28 = SkelAnime_GetFrameCount(&D_060030EC.common) / (s16)this->skelAnime.animPlaybackSpeed;
+    s16 animLastFrame = SkelAnime_GetFrameCount(&D_060030EC.common) / (s16)this->skelAnime.animPlaybackSpeed;
 
     if (this->cutsceneState == ENTRT_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
