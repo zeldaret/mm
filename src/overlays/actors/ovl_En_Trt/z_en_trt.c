@@ -10,9 +10,9 @@
 
 #define THIS ((EnTrt*)thisx)
 
-#define ENTRT_FULLY_AWAKE 1
-#define ENTRT_GIVEN_MUSHROOM 2
-#define ENTRT_MET 4
+#define ENTRT_FULLY_AWAKE (1 << 0)
+#define ENTRT_GIVEN_MUSHROOM (1 << 1)
+#define ENTRT_MET (1 << 2)
 
 void EnTrt_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTrt_Destroy(Actor* thisx, GlobalContext* globalCtx);
