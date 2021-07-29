@@ -243,21 +243,26 @@ for root, dirs, files in os.walk("src/overlays/actors/"):
         h_src = h_src.replace(f"struct {actor_name};", f"struct {actor_name};\n\ntypedef void (*{actor_name}ActionFunc)(struct {actor_name}* this, GlobalContext* globalCtx);")
         h_src = h_src.replace(struct_body, new_struct)
 
-        print(h_src)
-        #   with open(actor_h_file, "w") as outfile:
-        #       outfile.write(h_src)
+        with open(actor_h_file, "w") as outfile:
+            outfile.write(h_src)
 
         # Add SetupAction and actionfunc prototypes to C source
 
         setup_action_prototype = ""
         if setup_action_func is not None:
-            setup_action_prototype = f"\n\nvoid {actor_name}_SetupAction({actor_name}* this, {actor_name}ActionFunc actionFunc);"
+            setup_action_prototype = f"void {actor_name}_SetupAction({actor_name}* this, {actor_name}ActionFunc actionFunc);\n\n"
+
+            print(f"{setup_action_func}.s", f"{actor_name}_SetupAction.s")
+
             c_src = c_src.replace(setup_action_func + ".s", f"{actor_name}_SetupAction.s")
+            rename_function(actor_asm + setup_action_func + ".s", setup_action_func, f"{actor_name}_SetupAction")
 
         actionfunc_prototypes = "\n".join([f"void {func}({actor_name}* this, GlobalContext* globalCtx);" for func in action_funcs])
 
-        c_src = c_src.replace("#if 0", actionfunc_prototypes + setup_action_prototype + "\n\n#if 0")
+        if actionfunc_prototypes != "":
+            actionfunc_prototypes += "\n\n"
 
-        print(c_src)
-        #   with open(os.path.join(root,actor_c_file), "w") as outfile:
-        #       outfile.write(c_src)
+        c_src = c_src.replace("#if 0", actionfunc_prototypes + setup_action_prototype + "#if 0")
+
+        with open(os.path.join(root,actor_c_file), "w") as outfile:
+            outfile.write(c_src)

@@ -1100,7 +1100,7 @@ for segment in files_spec:
     if segment[2] == 'makerom':
         continue
 
-    # print(f"Finding symbols in {segment[0]}")
+    print(f"Finding symbols in {segment[0]}")
 
     # vram segment start
     if segment[3][0][0] not in variables_ast:
@@ -1269,7 +1269,7 @@ glabel {variables_ast[0x8009F8B0][0]}
     for section in segment[3]:
         if (section[0] == section[1] and section[2] != 'reloc') or (section[2] != 'bss' and len(section[4]) == 0):
             continue
-        # print(f"Disassembling {segment[0]} .{section[2]}")
+        print(f"Disassembling {segment[0]} .{section[2]}")
         if section[2] == 'text':
             data_regions = []
             if section[3] is not None:
@@ -1400,7 +1400,7 @@ for root,dirs,files in os.walk(ASM_OUT):
         asm_path = os.path.join(root,f)
         rodata_path = asm_path.replace(ASM_OUT + "overlays/", DATA_OUT).replace(ASM_OUT, DATA_OUT).replace(".text.s", ".rodata.s")
 
-        # print(asm_path)
+        print(asm_path)
 
         asm = ""
         with open(asm_path,"r") as infile:
@@ -1507,7 +1507,7 @@ for root,dirs,files in os.walk(ASM_OUT):
                                          0x80AA418C, 0x80BE0160, 0x80B591D8, 0x80B59610, 
                                          0x80B59780, 0x80964E00, 0x80964F10, 0x80BB40A0, 
                                          0x80952038, 0x80AFB920, 0x80AFBBFC, 0x80AFBE28, 
-                                         0x80983320]: # hacks for especially badly behaved rodata, TODO this are ALL jumptables associated with
+                                         0x80983320]: # hacks for especially badly behaved rodata, TODO these are ALL jumptables associated with
                                                       # comparatively tiny functions, can we swat these programmatically?
                             late_rodata_alignment = f".late_rodata_alignment {'8' if vaddr % 8 == 0 else '4'}\n"
 
