@@ -750,9 +750,9 @@ void Actor_FreeOverlay(ActorOverlay* entry) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_LoadOverlay.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_SpawnWithParentAndCutscene.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_SpawnAsChildAndCutscene.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_SpawnWithParent.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_SpawnAsChild.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_SpawnTransitionActors.s")
 

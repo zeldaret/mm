@@ -63,11 +63,11 @@ void func_80B3C2B0(ObjGhaka* this) {
 
 void func_80B3C2C4(ObjGhaka* this, GlobalContext* globalCtx) {
     if (!(gSaveContext.weekEventReg[20] & 0x20)) {
-        Actor_SpawnWithParentAndCutscene(&globalCtx->actorCtx, globalCtx, ACTOR_BG_GORON_OYU, 0.0f, 25.0f, 261.0f, 0, 0,
-                                         0, 0, this->dyna.actor.cutscene, this->dyna.actor.unk20, 0);
+        Actor_SpawnAsChildAndCutscene(&globalCtx->actorCtx, globalCtx, ACTOR_BG_GORON_OYU, 0.0f, 25.0f, 261.0f, 0, 0, 0,
+                                      0, this->dyna.actor.cutscene, this->dyna.actor.unk20, 0);
     } else {
-        Actor_SpawnWithParentAndCutscene(&globalCtx->actorCtx, globalCtx, ACTOR_BG_GORON_OYU, 0.0f, 25.0f, 261.0f, 0, 0,
-                                         0, 1, -1, this->dyna.actor.unk20, 0);
+        Actor_SpawnAsChildAndCutscene(&globalCtx->actorCtx, globalCtx, ACTOR_BG_GORON_OYU, 0.0f, 25.0f, 261.0f, 0, 0, 0,
+                                      1, -1, this->dyna.actor.unk20, 0);
     }
 }
 
@@ -97,7 +97,7 @@ void func_80B3C39C(ObjGhaka* this, GlobalContext* globalCtx) {
 }
 
 void func_80B3C4E0(ObjGhaka* this, GlobalContext* globalCtx) {
-    s32 talkState = func_80152498(&globalCtx->msgCtx);
+    u8 talkState = func_80152498(&globalCtx->msgCtx);
 
     if (talkState == 5) {
         if (func_80147624(globalCtx)) {
