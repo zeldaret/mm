@@ -36,6 +36,7 @@ enum class ZResourceType
 	Cutscene,
 	DisplayList,
 	Limb,
+	LimbTable,
 	Mtx,
 	Path,
 	Room,

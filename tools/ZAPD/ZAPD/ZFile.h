@@ -33,7 +33,7 @@ public:
 	std::map<uint32_t, Declaration*> declarations;
 	std::string defines;
 	std::vector<ZResource*> resources;
-	int32_t segment;
+	uint32_t segment;
 	uint32_t baseAddress, rangeStart, rangeEnd;
 
 	ZFile(std::string nName);

@@ -799,7 +799,7 @@ std::string ZTexture::GetExternalExtension() const
 	case TextureType::RGBA32bpp:
 		return "rgba32";
 	case TextureType::RGBA16bpp:
-		return "rgb5a1";
+		return "rgba16";
 	case TextureType::Grayscale4bpp:
 		return "i4";
 	case TextureType::Grayscale8bpp:
@@ -833,8 +833,19 @@ TextureType ZTexture::GetTextureTypeFromString(std::string str)
 
 	if (str == "rgba32")
 		texType = TextureType::RGBA32bpp;
-	else if (str == "rgb5a1")
+	else if (str == "rgba16")
 		texType = TextureType::RGBA16bpp;
+	else if (str == "rgb5a1")
+	{
+		texType = TextureType::RGBA16bpp;
+#ifdef DEPRECATION_ON
+		fprintf(stderr,
+		        "ZTexture::GetTextureTypeFromString: Deprecation warning.\n"
+		        "\t The texture format 'rgb5a1' is currently deprecated, and will be removed in a future "
+		        "version.\n"
+		        "\t Use the format 'rgba16' instead.\n");
+#endif
+	}
 	else if (str == "i4")
 		texType = TextureType::Grayscale4bpp;
 	else if (str == "i8")

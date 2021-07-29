@@ -510,7 +510,7 @@ int32_t ZDisplayList::OptimizationCheck_LoadTextureBlock(int32_t startIndex, std
 			fmt = (__ & 0xE0) >> 5;
 			siz = (__ & 0x18) >> 3;
 			texAddr = Seg2Filespace(data, parent->baseAddress);
-			int32_t segmentNumber = GETSEGNUM(data);
+			uint32_t segmentNumber = GETSEGNUM(data);
 
 			lastTexSeg = segmentNumber;
 
@@ -1660,7 +1660,7 @@ static int32_t GfxdCallback_Texture(segptr_t seg, int32_t fmt, int32_t siz, int3
 {
 	ZDisplayList* self = static_cast<ZDisplayList*>(gfxd_udata_get());
 	uint32_t texOffset = Seg2Filespace(seg, self->parent->baseAddress);
-	int32_t texSegNum = GETSEGNUM(seg);
+	uint32_t texSegNum = GETSEGNUM(seg);
 
 	self->lastTexWidth = width;
 	self->lastTexHeight = height;
@@ -1696,7 +1696,7 @@ static int32_t GfxdCallback_Palette(uint32_t seg, int32_t idx, int32_t count)
 {
 	ZDisplayList* self = static_cast<ZDisplayList*>(gfxd_udata_get());
 	uint32_t palOffset = Seg2Filespace(seg, self->parent->baseAddress);
-	int32_t palSegNum = GETSEGNUM(seg);
+	uint32_t palSegNum = GETSEGNUM(seg);
 
 	self->lastTexWidth = sqrt(count);
 	self->lastTexHeight = sqrt(count);
@@ -1732,7 +1732,7 @@ static int32_t GfxdCallback_DisplayList(uint32_t seg)
 {
 	ZDisplayList* self = static_cast<ZDisplayList*>(gfxd_udata_get());
 	uint32_t dListOffset = GETSEGOFFSET(seg);
-	int32_t dListSegNum = GETSEGNUM(seg);
+	uint32_t dListSegNum = GETSEGNUM(seg);
 
 	if ((dListSegNum <= 6) && Globals::Instance->HasSegment(dListSegNum))
 	{
@@ -2147,7 +2147,7 @@ TextureType ZDisplayList::TexFormatToTexType(F3DZEXTexFormats fmt, F3DZEXTexSize
 	else if (fmt == F3DZEXTexFormats::G_IM_FMT_IA)
 	{
 		if (siz == F3DZEXTexSizes::G_IM_SIZ_4b)
-			return TextureType::Grayscale4bpp;
+			return TextureType::GrayscaleAlpha4bpp;
 		else if (siz == F3DZEXTexSizes::G_IM_SIZ_8b)
 			return TextureType::GrayscaleAlpha8bpp;
 		else if (siz == F3DZEXTexSizes::G_IM_SIZ_16b)

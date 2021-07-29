@@ -161,6 +161,15 @@ void ZFile::ParseXML(ZFileMode mode, XMLElement* reader, std::string filename, b
 			}
 			offsetSet.insert(offsetXml);
 		}
+		else if (Globals::Instance->warnNoOffset)
+		{
+			fprintf(stderr, "Warning No offset specified for: %s", nameXml);
+		}
+		else if (Globals::Instance->errorNoOffset)
+		{
+			throw std::runtime_error(
+				StringHelper::Sprintf("Error no offset specified for %s", nameXml));
+		}
 		if (outNameXml != nullptr)
 		{
 			if (outNameSet.find(outNameXml) != outNameSet.end())
@@ -544,6 +553,7 @@ uint32_t ZFile::GetDeclarationRangedAddress(uint32_t address) const
 
 bool ZFile::HasDeclaration(uint32_t address)
 {
+	assert(GETSEGNUM(address) == 0);
 	return declarations.find(address) != declarations.end();
 }
 
@@ -588,7 +598,7 @@ void ZFile::GenerateSourceFiles(fs::path outputDir)
 					    Globals::Instance->cfg.texturePool.end())
 					{
 						incStr = Globals::Instance->cfg.texturePool[tex->hash].path.string() + "." +
-								 res->GetExternalExtension() + ".inc";
+						         res->GetExternalExtension() + ".inc";
 					}
 				}
 
@@ -908,8 +918,22 @@ std::string ZFile::ProcessDeclarations()
 					nonZeroUnaccounted = true;
 				}
 
-				if ((i % 16 == 15) && (i != (diff - 1)))
-					src += "\n    ";
+				if (Globals::Instance->verboseUnaccounted)
+				{
+					if ((i % 4 == 3))
+					{
+						src += StringHelper::Sprintf(" // 0x%06X", unaccountedAddress + i - 3);
+						if (i != (diff - 1))
+						{
+							src += "\n\t";
+						}
+					}
+				}
+				else
+				{
+					if ((i % 16 == 15) && (i != (diff - 1)))
+						src += "\n    ";
+				}
 			}
 
 			if (declarations.find(unaccountedAddress) == declarations.end())
@@ -919,7 +943,13 @@ std::string ZFile::ProcessDeclarations()
 					std::string unaccountedPrefix = "unaccounted";
 
 					if (diff < 16 && !nonZeroUnaccounted)
+					{
 						unaccountedPrefix = "possiblePadding";
+
+						// Strip unnecessary padding at the end of the file.
+						if (unaccountedAddress + diff >= rawData.size())
+							break;
+					}
 
 					Declaration* decl = AddDeclarationArray(
 						unaccountedAddress, DeclarationAlignment::None, diff, "static u8",

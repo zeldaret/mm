@@ -151,7 +151,7 @@ void ZRoom::ExtractFromXML(tinyxml2::XMLElement* reader, uint32_t nRawDataIndex)
 			delete pathway;
 		}
 
-#ifndef DEPRECATION_OFF
+#ifdef DEPRECATION_ON
 		fprintf(stderr,
 		        "ZRoom::ExtractFromXML: Deprecation warning in '%s'.\n"
 		        "\t The resource '%s' is currently deprecated, and will be removed in a future "

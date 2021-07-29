@@ -8,10 +8,12 @@
 
 enum class ZLimbType
 {
+	Invalid,
 	Standard,
 	LOD,
 	Skin,
 	Curve,
+	Legacy,
 };
 
 // TODO: check if more types exists
@@ -126,6 +128,12 @@ protected:
 	Struct_800A5E28 segmentStruct;                              // Skin only
 	segptr_t dList2Ptr;                                         // LOD and Curve Only
 
+	// Legacy only
+	float legTransX, legTransY, legTransZ;  // Vec3f
+	uint16_t rotX, rotY, rotZ;              // Vec3s
+	segptr_t childPtr;                      // LegacyLimb*
+	segptr_t siblingPtr;                    // LegacyLimb*
+
 	std::string GetLimbDListSourceOutputCode(const std::string& prefix,
 	                                         const std::string& limbPrefix, segptr_t dListPtr);
 
@@ -145,6 +153,7 @@ public:
 
 	void ParseXML(tinyxml2::XMLElement* reader) override;
 	void ParseRawData() override;
+	void DeclareReferences(const std::string& prefix) override;
 
 	size_t GetRawDataSize() const override;
 	std::string GetSourceOutputCode(const std::string& prefix) override;
@@ -154,6 +163,7 @@ public:
 	ZLimbType GetLimbType();
 	void SetLimbType(ZLimbType value);
 	static const char* GetSourceTypeName(ZLimbType limbType);
+	static ZLimbType GetTypeByAttributeName(const std::string& attrName);
 
 	uint32_t GetFileAddress();
 	void SetFileAddress(uint32_t nAddress);
