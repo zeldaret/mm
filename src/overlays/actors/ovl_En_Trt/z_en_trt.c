@@ -851,8 +851,8 @@ void EnTrt_IdleAwake(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_BeginInteraction(EnTrt* this, GlobalContext* globalCtx) {
-    s16 sp26 = this->skelAnime.animCurrentFrame / this->skelAnime.animPlaybackSpeed;
-    s16 sp28 = SkelAnime_GetFrameCount(&D_060030EC.common) / (s16)this->skelAnime.animPlaybackSpeed;
+    s16 animCurrentFrame = this->skelAnime.animCurrentFrame / this->skelAnime.animPlaybackSpeed;
+    s16 animLastFrame = SkelAnime_GetFrameCount(&D_060030EC.common) / (s16)this->skelAnime.animPlaybackSpeed;
 
     if (this->cutsceneState == ENTRT_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
@@ -863,7 +863,7 @@ void EnTrt_BeginInteraction(EnTrt* this, GlobalContext* globalCtx) {
         }
     } else if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
         if (this->animationIdx != 5) {
-            if (sp26 == sp28) {
+            if (animLastFrame == animCurrentFrame) {
                 EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 3);
                 this->animationIdx = 3;
                 this->blinkFunc = EnTrt_OpenEyesThenSetToBlink;
