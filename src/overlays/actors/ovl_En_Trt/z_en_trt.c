@@ -863,7 +863,7 @@ void EnTrt_BeginInteraction(EnTrt* this, GlobalContext* globalCtx) {
         }
     } else if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
         if (this->animationIdx != 5) {
-            if (sp26 == sp28) {
+            if (animLastFrame == animCurrentFrame) {
                 EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 3);
                 this->animationIdx = 3;
                 this->blinkFunc = EnTrt_OpenEyesThenSetToBlink;
