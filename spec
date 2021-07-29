@@ -2354,8 +2354,7 @@ beginseg
     name "ovl_En_Minislime"
     compress
     include "build/src/overlays/actors/ovl_En_Minislime/z_en_minislime.o"
-    include "build/data/ovl_En_Minislime/ovl_En_Minislime.data.o"
-    include "build/data/ovl_En_Minislime/ovl_En_Minislime.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Minislime/ovl_En_Minislime_reloc.o"
 endseg
 
 beginseg
@@ -2874,8 +2873,7 @@ beginseg
     name "ovl_En_Sob1"
     compress
     include "build/src/overlays/actors/ovl_En_Sob1/z_en_sob1.o"
-    include "build/data/ovl_En_Sob1/ovl_En_Sob1.data.o"
-    include "build/data/ovl_En_Sob1/ovl_En_Sob1.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Sob1/ovl_En_Sob1_reloc.o"
 endseg
 
 beginseg
@@ -3496,8 +3494,7 @@ beginseg
     name "ovl_En_Trt"
     compress
     include "build/src/overlays/actors/ovl_En_Trt/z_en_trt.o"
-    include "build/data/ovl_En_Trt/ovl_En_Trt.data.o"
-    include "build/data/ovl_En_Trt/ovl_En_Trt.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Trt/ovl_En_Trt_reloc.o"
 endseg
 
 beginseg
@@ -5167,8 +5164,7 @@ beginseg
     name "ovl_En_Pamera"
     compress
     include "build/src/overlays/actors/ovl_En_Pamera/z_en_pamera.o"
-    include "build/data/ovl_En_Pamera/ovl_En_Pamera.data.o"
-    include "build/data/ovl_En_Pamera/ovl_En_Pamera.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Pamera/ovl_En_Pamera_reloc.o"
 endseg
 
 beginseg
