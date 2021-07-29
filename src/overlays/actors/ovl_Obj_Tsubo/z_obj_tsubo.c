@@ -8,6 +8,12 @@ void ObjTsubo_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjTsubo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjTsubo_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80928928(ObjTsubo* this, GlobalContext* globalCtx);
+void func_809289E4(ObjTsubo* this, GlobalContext* globalCtx);
+void func_80928D80(ObjTsubo* this, GlobalContext* globalCtx);
+void func_80928F18(ObjTsubo* this, GlobalContext* globalCtx);
+void func_8092926C(ObjTsubo* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Tsubo_InitVars = {
     ACTOR_OBJ_TSUBO,

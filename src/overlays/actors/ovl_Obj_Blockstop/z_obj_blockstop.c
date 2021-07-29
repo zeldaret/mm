@@ -7,6 +7,8 @@
 void ObjBlockstop_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjBlockstop_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809466F0(ObjBlockstop* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Blockstop_InitVars = {
     ACTOR_OBJ_BLOCKSTOP,

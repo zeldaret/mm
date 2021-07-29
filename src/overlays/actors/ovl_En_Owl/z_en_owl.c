@@ -9,6 +9,24 @@ void EnOwl_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnOwl_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnOwl_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_8095AB1C(EnOwl* this, GlobalContext* globalCtx);
+void func_8095ABF0(EnOwl* this, GlobalContext* globalCtx);
+void func_8095AD54(EnOwl* this, GlobalContext* globalCtx);
+void func_8095AE00(EnOwl* this, GlobalContext* globalCtx);
+void func_8095AE60(EnOwl* this, GlobalContext* globalCtx);
+void func_8095AEC0(EnOwl* this, GlobalContext* globalCtx);
+void func_8095AF2C(EnOwl* this, GlobalContext* globalCtx);
+void func_8095AFEC(EnOwl* this, GlobalContext* globalCtx);
+void func_8095B254(EnOwl* this, GlobalContext* globalCtx);
+void func_8095B2F8(EnOwl* this, GlobalContext* globalCtx);
+void func_8095B650(EnOwl* this, GlobalContext* globalCtx);
+void func_8095B6C8(EnOwl* this, GlobalContext* globalCtx);
+void func_8095B76C(EnOwl* this, GlobalContext* globalCtx);
+void func_8095B960(EnOwl* this, GlobalContext* globalCtx);
+void func_8095BA84(EnOwl* this, GlobalContext* globalCtx);
+void func_8095BE0C(EnOwl* this, GlobalContext* globalCtx);
+void func_8095BF20(EnOwl* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Owl_InitVars = {
     ACTOR_EN_OWL,

@@ -9,6 +9,24 @@ void EnGb2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGb2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGb2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B0FEBC(EnGb2* this, GlobalContext* globalCtx);
+void func_80B0FFA8(EnGb2* this, GlobalContext* globalCtx);
+void func_80B10240(EnGb2* this, GlobalContext* globalCtx);
+void func_80B10344(EnGb2* this, GlobalContext* globalCtx);
+void func_80B10584(EnGb2* this, GlobalContext* globalCtx);
+void func_80B10634(EnGb2* this, GlobalContext* globalCtx);
+void func_80B10868(EnGb2* this, GlobalContext* globalCtx);
+void func_80B10924(EnGb2* this, GlobalContext* globalCtx);
+void func_80B109DC(EnGb2* this, GlobalContext* globalCtx);
+void func_80B10A48(EnGb2* this, GlobalContext* globalCtx);
+void func_80B10B5C(EnGb2* this, GlobalContext* globalCtx);
+void func_80B10DAC(EnGb2* this, GlobalContext* globalCtx);
+void func_80B10E98(EnGb2* this, GlobalContext* globalCtx);
+void func_80B11048(EnGb2* this, GlobalContext* globalCtx);
+void func_80B111AC(EnGb2* this, GlobalContext* globalCtx);
+void func_80B11268(EnGb2* this, GlobalContext* globalCtx);
+void func_80B11344(EnGb2* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Gb2_InitVars = {
     ACTOR_EN_GB2,

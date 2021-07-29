@@ -9,6 +9,8 @@ void EnZl4_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnZl4_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnZl4_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809A1D0C(EnZl4* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Zl4_InitVars = {
     ACTOR_EN_ZL4,

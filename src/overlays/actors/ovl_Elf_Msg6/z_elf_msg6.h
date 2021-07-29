@@ -5,9 +5,11 @@
 
 struct ElfMsg6;
 
+typedef void (*ElfMsg6ActionFunc)(struct ElfMsg6* this, GlobalContext* globalCtx);
+
 typedef struct ElfMsg6 {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x4];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ ElfMsg6ActionFunc actionFunc;
 } ElfMsg6; // size = 0x148
 
 extern const ActorInit Elf_Msg6_InitVars;

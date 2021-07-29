@@ -9,6 +9,8 @@ void EnAnd_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnAnd_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnAnd_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C18C50(EnAnd* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_And_InitVars = {
     ACTOR_EN_AND,

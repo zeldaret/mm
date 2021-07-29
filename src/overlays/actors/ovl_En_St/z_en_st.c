@@ -8,6 +8,12 @@ void EnSt_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnSt_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSt_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_808A6A78(EnSt* this, GlobalContext* globalCtx);
+void func_808A6C04(EnSt* this, GlobalContext* globalCtx);
+void func_808A6D84(EnSt* this, GlobalContext* globalCtx);
+void func_808A6E24(EnSt* this, GlobalContext* globalCtx);
+void func_808A701C(EnSt* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_St_InitVars = {
     ACTOR_EN_ST,

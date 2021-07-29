@@ -5,9 +5,13 @@
 
 struct EnBox;
 
+typedef void (*EnBoxActionFunc)(struct EnBox* this, GlobalContext* globalCtx);
+
 typedef struct EnBox {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0xE0];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0xBC];
+    /* 0x0200 */ EnBoxActionFunc actionFunc;
+    /* 0x0204 */ char unk_204[0x20];
 } EnBox; // size = 0x224
 
 extern const ActorInit En_Box_InitVars;

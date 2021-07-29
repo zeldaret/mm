@@ -8,6 +8,14 @@ void ElfMsg6_Init(Actor* thisx, GlobalContext* globalCtx);
 void ElfMsg6_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ElfMsg6_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BA1CF8(ElfMsg6* this, GlobalContext* globalCtx);
+void func_80BA1E30(ElfMsg6* this, GlobalContext* globalCtx);
+void func_80BA1F80(ElfMsg6* this, GlobalContext* globalCtx);
+void func_80BA2038(ElfMsg6* this, GlobalContext* globalCtx);
+void func_80BA2048(ElfMsg6* this, GlobalContext* globalCtx);
+void func_80BA215C(ElfMsg6* this, GlobalContext* globalCtx);
+void func_80BA21C4(ElfMsg6* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Elf_Msg6_InitVars = {
     ACTOR_ELF_MSG6,

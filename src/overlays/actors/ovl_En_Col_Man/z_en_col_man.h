@@ -5,9 +5,12 @@
 
 struct EnColMan;
 
+typedef void (*EnColManActionFunc)(struct EnColMan* this, GlobalContext* globalCtx);
+
 typedef struct EnColMan {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x5C];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ EnColManActionFunc actionFunc;
+    /* 0x0148 */ char unk_144[0x58];
 } EnColMan; // size = 0x1A0
 
 extern const ActorInit En_Col_Man_InitVars;

@@ -9,6 +9,9 @@ void EnJa_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnJa_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnJa_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BC21A8(EnJa* this, GlobalContext* globalCtx);
+void func_80BC22F4(EnJa* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Ja_InitVars = {
     ACTOR_EN_JA,

@@ -8,6 +8,11 @@ void EnColMan_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnColMan_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnColMan_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AFDE00(EnColMan* this, GlobalContext* globalCtx);
+void func_80AFDF00(EnColMan* this, GlobalContext* globalCtx);
+void func_80AFDFB4(EnColMan* this, GlobalContext* globalCtx);
+void func_80AFE25C(EnColMan* this, GlobalContext* globalCtx);
+
 #if 0
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80AFE730 = {

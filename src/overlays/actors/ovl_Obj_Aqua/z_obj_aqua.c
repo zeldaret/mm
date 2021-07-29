@@ -9,6 +9,10 @@ void ObjAqua_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjAqua_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjAqua_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80ACBC8C(ObjAqua* this, GlobalContext* globalCtx);
+void func_80ACBD48(ObjAqua* this, GlobalContext* globalCtx);
+void func_80ACBDFC(ObjAqua* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Aqua_InitVars = {
     ACTOR_OBJ_AQUA,

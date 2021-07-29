@@ -9,6 +9,21 @@ void EnZog_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnZog_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnZog_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B943A0(EnZog* this, GlobalContext* globalCtx);
+void func_80B943C0(EnZog* this, GlobalContext* globalCtx);
+void func_80B94470(EnZog* this, GlobalContext* globalCtx);
+void func_80B9451C(EnZog* this, GlobalContext* globalCtx);
+void func_80B9461C(EnZog* this, GlobalContext* globalCtx);
+void func_80B946B4(EnZog* this, GlobalContext* globalCtx);
+void func_80B946FC(EnZog* this, GlobalContext* globalCtx);
+void func_80B948A8(EnZog* this, GlobalContext* globalCtx);
+void func_80B94A00(EnZog* this, GlobalContext* globalCtx);
+void func_80B94C5C(EnZog* this, GlobalContext* globalCtx);
+void func_80B94D0C(EnZog* this, GlobalContext* globalCtx);
+void func_80B94E34(EnZog* this, GlobalContext* globalCtx);
+void func_80B95128(EnZog* this, GlobalContext* globalCtx);
+void func_80B95240(EnZog* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Zog_InitVars = {
     ACTOR_EN_ZOG,

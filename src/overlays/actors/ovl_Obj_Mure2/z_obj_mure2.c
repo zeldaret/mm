@@ -7,6 +7,10 @@
 void ObjMure2_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjMure2_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809613C4(ObjMure2* this, GlobalContext* globalCtx);
+void func_809613FC(ObjMure2* this, GlobalContext* globalCtx);
+void func_80961490(ObjMure2* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Mure2_InitVars = {
     ACTOR_OBJ_MURE2,

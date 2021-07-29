@@ -9,6 +9,21 @@ void DmStk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmStk_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmStk_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AA16F4(DmStk* this, GlobalContext* globalCtx);
+void func_80AA1704(DmStk* this, GlobalContext* globalCtx);
+void func_80AA1714(DmStk* this, GlobalContext* globalCtx);
+void func_80AA17F8(DmStk* this, GlobalContext* globalCtx);
+void func_80AA18D8(DmStk* this, GlobalContext* globalCtx);
+void func_80AA192C(DmStk* this, GlobalContext* globalCtx);
+void func_80AA1998(DmStk* this, GlobalContext* globalCtx);
+void func_80AA19EC(DmStk* this, GlobalContext* globalCtx);
+void func_80AA1A50(DmStk* this, GlobalContext* globalCtx);
+void func_80AA1AC8(DmStk* this, GlobalContext* globalCtx);
+void func_80AA1B9C(DmStk* this, GlobalContext* globalCtx);
+void func_80AA1C64(DmStk* this, GlobalContext* globalCtx);
+void func_80AA2720(DmStk* this, GlobalContext* globalCtx);
+void func_80AA27EC(DmStk* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Dm_Stk_InitVars = {
     ACTOR_DM_STK,

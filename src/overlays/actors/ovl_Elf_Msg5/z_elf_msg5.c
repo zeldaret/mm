@@ -8,6 +8,8 @@ void ElfMsg5_Init(Actor* thisx, GlobalContext* globalCtx);
 void ElfMsg5_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ElfMsg5_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AFDB38(ElfMsg5* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Elf_Msg5_InitVars = {
     ACTOR_ELF_MSG5,

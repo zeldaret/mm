@@ -9,6 +9,9 @@ void EnPaper_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPaper_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPaper_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C1F480(EnPaper* this, GlobalContext* globalCtx);
+void func_80C1F4FC(EnPaper* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Paper_InitVars = {
     ACTOR_EN_PAPER,

@@ -9,6 +9,23 @@ void EnPoh_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPoh_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPoh_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B2CAA4(EnPoh* this, GlobalContext* globalCtx);
+void func_80B2CBBC(EnPoh* this, GlobalContext* globalCtx);
+void func_80B2CD64(EnPoh* this, GlobalContext* globalCtx);
+void func_80B2CF28(EnPoh* this, GlobalContext* globalCtx);
+void func_80B2D07C(EnPoh* this, GlobalContext* globalCtx);
+void func_80B2D140(EnPoh* this, GlobalContext* globalCtx);
+void func_80B2D300(EnPoh* this, GlobalContext* globalCtx);
+void func_80B2D628(EnPoh* this, GlobalContext* globalCtx);
+void func_80B2D6EC(EnPoh* this, GlobalContext* globalCtx);
+void func_80B2D7D4(EnPoh* this, GlobalContext* globalCtx);
+void func_80B2D980(EnPoh* this, GlobalContext* globalCtx);
+void func_80B2DB44(EnPoh* this, GlobalContext* globalCtx);
+void func_80B2DD2C(EnPoh* this, GlobalContext* globalCtx);
+void func_80B2E180(EnPoh* this, GlobalContext* globalCtx);
+void func_80B2E230(EnPoh* this, GlobalContext* globalCtx);
+void func_80B2E3F8(EnPoh* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Poh_InitVars = {
     ACTOR_EN_POH,

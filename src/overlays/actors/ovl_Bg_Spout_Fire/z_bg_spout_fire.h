@@ -5,9 +5,12 @@
 
 struct BgSpoutFire;
 
+typedef void (*BgSpoutFireActionFunc)(struct BgSpoutFire* this, GlobalContext* globalCtx);
+
 typedef struct BgSpoutFire {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x54];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ BgSpoutFireActionFunc actionFunc;
+    /* 0x0148 */ char unk_144[0x50];
 } BgSpoutFire; // size = 0x198
 
 extern const ActorInit Bg_Spout_Fire_InitVars;

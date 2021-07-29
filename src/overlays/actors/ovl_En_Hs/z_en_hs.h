@@ -5,9 +5,12 @@
 
 struct EnHs;
 
+typedef void (*EnHsActionFunc)(struct EnHs* this, GlobalContext* globalCtx);
+
 typedef struct EnHs {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x254];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x250];
+    /* 0x0394 */ EnHsActionFunc actionFunc;
 } EnHs; // size = 0x398
 
 extern const ActorInit En_Hs_InitVars;

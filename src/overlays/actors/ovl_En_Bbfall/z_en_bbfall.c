@@ -9,6 +9,15 @@ void EnBbfall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBbfall_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBbfall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_808BF734(EnBbfall* this, GlobalContext* globalCtx);
+void func_808BF830(EnBbfall* this, GlobalContext* globalCtx);
+void func_808BF8DC(EnBbfall* this, GlobalContext* globalCtx);
+void func_808BFA3C(EnBbfall* this, GlobalContext* globalCtx);
+void func_808BFB4C(EnBbfall* this, GlobalContext* globalCtx);
+void func_808BFE58(EnBbfall* this, GlobalContext* globalCtx);
+void func_808C00A0(EnBbfall* this, GlobalContext* globalCtx);
+void func_808C0178(EnBbfall* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Bbfall_InitVars = {
     ACTOR_EN_BBFALL,

@@ -9,6 +9,25 @@ void EnSkb_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSkb_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSkb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80994E94(EnSkb* this, GlobalContext* globalCtx);
+void func_80995068(EnSkb* this, GlobalContext* globalCtx);
+void func_80995190(EnSkb* this, GlobalContext* globalCtx);
+void func_80995244(EnSkb* this, GlobalContext* globalCtx);
+void func_8099533C(EnSkb* this, GlobalContext* globalCtx);
+void func_8099544C(EnSkb* this, GlobalContext* globalCtx);
+void func_8099556C(EnSkb* this, GlobalContext* globalCtx);
+void func_80995818(EnSkb* this, GlobalContext* globalCtx);
+void func_8099599C(EnSkb* this, GlobalContext* globalCtx);
+void func_80995A8C(EnSkb* this, GlobalContext* globalCtx);
+void func_80995C84(EnSkb* this, GlobalContext* globalCtx);
+void func_80995DC4(EnSkb* this, GlobalContext* globalCtx);
+void func_80995E64(EnSkb* this, GlobalContext* globalCtx);
+void func_809960AC(EnSkb* this, GlobalContext* globalCtx);
+void func_80996284(EnSkb* this, GlobalContext* globalCtx);
+void func_8099630C(EnSkb* this, GlobalContext* globalCtx);
+void func_809963D8(EnSkb* this, GlobalContext* globalCtx);
+void func_809964A0(EnSkb* this, GlobalContext* globalCtx);
+
 #if 0
 // static ColliderJntSphElementInit sJntSphElementsInit[2] = {
 static ColliderJntSphElementInit D_80997498[2] = {

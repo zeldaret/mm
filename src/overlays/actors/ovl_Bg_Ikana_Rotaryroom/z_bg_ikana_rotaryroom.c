@@ -9,6 +9,8 @@ void BgIkanaRotaryroom_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaRotaryroom_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaRotaryroom_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B814B8(BgIkanaRotaryroom* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_Ikana_Rotaryroom_InitVars = {
     ACTOR_BG_IKANA_ROTARYROOM,

@@ -9,6 +9,25 @@ void EnOt_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnOt_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnOt_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B5BE04(EnOt* this, GlobalContext* globalCtx);
+void func_80B5BED4(EnOt* this, GlobalContext* globalCtx);
+void func_80B5BFB8(EnOt* this, GlobalContext* globalCtx);
+void func_80B5C1CC(EnOt* this, GlobalContext* globalCtx);
+void func_80B5C25C(EnOt* this, GlobalContext* globalCtx);
+void func_80B5C3D8(EnOt* this, GlobalContext* globalCtx);
+void func_80B5C64C(EnOt* this, GlobalContext* globalCtx);
+void func_80B5C6DC(EnOt* this, GlobalContext* globalCtx);
+void func_80B5C950(EnOt* this, GlobalContext* globalCtx);
+void func_80B5C9C0(EnOt* this, GlobalContext* globalCtx);
+void func_80B5CA30(EnOt* this, GlobalContext* globalCtx);
+void func_80B5CB0C(EnOt* this, GlobalContext* globalCtx);
+void func_80B5CBEC(EnOt* this, GlobalContext* globalCtx);
+void func_80B5CCA0(EnOt* this, GlobalContext* globalCtx);
+void func_80B5CD40(EnOt* this, GlobalContext* globalCtx);
+void func_80B5CEC8(EnOt* this, GlobalContext* globalCtx);
+void func_80B5D160(EnOt* this, GlobalContext* globalCtx);
+void func_80B5D750(EnOt* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Ot_InitVars = {
     ACTOR_EN_OT,

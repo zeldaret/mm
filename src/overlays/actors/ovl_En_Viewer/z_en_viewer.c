@@ -9,6 +9,12 @@ void EnViewer_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnViewer_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnViewer_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_8089F17C(EnViewer* this, GlobalContext* globalCtx);
+void func_8089F218(EnViewer* this, GlobalContext* globalCtx);
+void func_8089F2C4(EnViewer* this, GlobalContext* globalCtx);
+
+void EnViewer_SetupAction(EnViewer* this, EnViewerActionFunc actionFunc);
+
 #if 0
 const ActorInit En_Viewer_InitVars = {
     ACTOR_EN_VIEWER,
@@ -24,7 +30,7 @@ const ActorInit En_Viewer_InitVars = {
 
 #endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Viewer/func_8089EE20.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Viewer/EnViewer_SetupAction.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Viewer/EnViewer_Init.s")
 

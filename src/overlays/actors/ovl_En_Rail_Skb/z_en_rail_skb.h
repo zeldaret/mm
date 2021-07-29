@@ -5,9 +5,13 @@
 
 struct EnRailSkb;
 
+typedef void (*EnRailSkbActionFunc)(struct EnRailSkb* this, GlobalContext* globalCtx);
+
 typedef struct EnRailSkb {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x2C0];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0xE4];
+    /* 0x0228 */ EnRailSkbActionFunc actionFunc;
+    /* 0x022C */ char unk_22C[0x1D8];
 } EnRailSkb; // size = 0x404
 
 extern const ActorInit En_Rail_Skb_InitVars;

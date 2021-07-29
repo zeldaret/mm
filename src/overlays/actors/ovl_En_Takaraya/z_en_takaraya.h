@@ -5,9 +5,13 @@
 
 struct EnTakaraya;
 
+typedef void (*EnTakarayaActionFunc)(struct EnTakaraya* this, GlobalContext* globalCtx);
+
 typedef struct EnTakaraya {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x178];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x164];
+    /* 0x02A8 */ EnTakarayaActionFunc actionFunc;
+    /* 0x02AC */ char unk_2AC[0x10];
 } EnTakaraya; // size = 0x2BC
 
 extern const ActorInit En_Takaraya_InitVars;

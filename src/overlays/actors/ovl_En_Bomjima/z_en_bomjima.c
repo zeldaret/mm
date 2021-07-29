@@ -9,6 +9,23 @@ void EnBomjima_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBomjima_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBomjima_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BFEA94(EnBomjima* this, GlobalContext* globalCtx);
+void func_80BFEB64(EnBomjima* this, GlobalContext* globalCtx);
+void func_80BFF03C(EnBomjima* this, GlobalContext* globalCtx);
+void func_80BFF174(EnBomjima* this, GlobalContext* globalCtx);
+void func_80BFF430(EnBomjima* this, GlobalContext* globalCtx);
+void func_80BFF52C(EnBomjima* this, GlobalContext* globalCtx);
+void func_80BFF6CC(EnBomjima* this, GlobalContext* globalCtx);
+void func_80BFF754(EnBomjima* this, GlobalContext* globalCtx);
+void func_80BFF9B0(EnBomjima* this, GlobalContext* globalCtx);
+void func_80BFFB40(EnBomjima* this, GlobalContext* globalCtx);
+void func_80BFFBC4(EnBomjima* this, GlobalContext* globalCtx);
+void func_80BFFD48(EnBomjima* this, GlobalContext* globalCtx);
+void func_80BFFE48(EnBomjima* this, GlobalContext* globalCtx);
+void func_80BFFF54(EnBomjima* this, GlobalContext* globalCtx);
+void func_80C00168(EnBomjima* this, GlobalContext* globalCtx);
+void func_80C00284(EnBomjima* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Bomjima_InitVars = {
     ACTOR_EN_BOMJIMA,

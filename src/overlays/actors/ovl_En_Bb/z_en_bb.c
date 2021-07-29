@@ -9,6 +9,14 @@ void EnBb_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBb_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_808C23EC(EnBb* this, GlobalContext* globalCtx);
+void func_808C25E0(EnBb* this, GlobalContext* globalCtx);
+void func_808C28CC(EnBb* this, GlobalContext* globalCtx);
+void func_808C2B1C(EnBb* this, GlobalContext* globalCtx);
+void func_808C2BD0(EnBb* this, GlobalContext* globalCtx);
+void func_808C2CB4(EnBb* this, GlobalContext* globalCtx);
+void func_808C2D78(EnBb* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Bb_InitVars = {
     ACTOR_EN_BB,

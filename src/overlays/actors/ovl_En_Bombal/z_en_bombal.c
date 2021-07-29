@@ -9,6 +9,10 @@ void EnBombal_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBombal_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBombal_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C05B3C(EnBombal* this, GlobalContext* globalCtx);
+void func_80C05C44(EnBombal* this, GlobalContext* globalCtx);
+void func_80C05DE8(EnBombal* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Bombal_InitVars = {
     ACTOR_EN_BOMBAL,

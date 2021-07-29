@@ -5,9 +5,12 @@
 
 struct EnKbt;
 
+typedef void (*EnKbtActionFunc)(struct EnKbt* this, GlobalContext* globalCtx);
+
 typedef struct EnKbt {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x148];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x144];
+    /* 0x0288 */ EnKbtActionFunc actionFunc;
 } EnKbt; // size = 0x28C
 
 extern const ActorInit En_Kbt_InitVars;

@@ -9,6 +9,36 @@ void EnKnight_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKnight_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKnight_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809B331C(EnKnight* this, GlobalContext* globalCtx);
+void func_809B33F0(EnKnight* this, GlobalContext* globalCtx);
+void func_809B3618(EnKnight* this, GlobalContext* globalCtx);
+void func_809B3834(EnKnight* this, GlobalContext* globalCtx);
+void func_809B3958(EnKnight* this, GlobalContext* globalCtx);
+void func_809B3B94(EnKnight* this, GlobalContext* globalCtx);
+void func_809B40E8(EnKnight* this, GlobalContext* globalCtx);
+void func_809B41F8(EnKnight* this, GlobalContext* globalCtx);
+void func_809B4308(EnKnight* this, GlobalContext* globalCtx);
+void func_809B4C58(EnKnight* this, GlobalContext* globalCtx);
+void func_809B4ED8(EnKnight* this, GlobalContext* globalCtx);
+void func_809B5058(EnKnight* this, GlobalContext* globalCtx);
+void func_809B52E8(EnKnight* this, GlobalContext* globalCtx);
+void func_809B5698(EnKnight* this, GlobalContext* globalCtx);
+void func_809B58D4(EnKnight* this, GlobalContext* globalCtx);
+void func_809B5B08(EnKnight* this, GlobalContext* globalCtx);
+void func_809B5D54(EnKnight* this, GlobalContext* globalCtx);
+void func_809B5ED0(EnKnight* this, GlobalContext* globalCtx);
+void func_809B601C(EnKnight* this, GlobalContext* globalCtx);
+void func_809B6764(EnKnight* this, GlobalContext* globalCtx);
+void func_809B6C54(EnKnight* this, GlobalContext* globalCtx);
+void func_809B6D94(EnKnight* this, GlobalContext* globalCtx);
+void func_809B6F40(EnKnight* this, GlobalContext* globalCtx);
+void func_809B71DC(EnKnight* this, GlobalContext* globalCtx);
+void func_809B7778(EnKnight* this, GlobalContext* globalCtx);
+void func_809B7950(EnKnight* this, GlobalContext* globalCtx);
+void func_809B8458(EnKnight* this, GlobalContext* globalCtx);
+void func_809BA0CC(EnKnight* this, GlobalContext* globalCtx);
+void func_809BA978(EnKnight* this, GlobalContext* globalCtx);
+
 #if 0
 // static DamageTable sDamageTable = {
 static DamageTable D_809BDB04 = {

@@ -9,6 +9,20 @@ void EnAob01_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnAob01_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnAob01_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809C1C9C(EnAob01* this, GlobalContext* globalCtx);
+void func_809C1D64(EnAob01* this, GlobalContext* globalCtx);
+void func_809C2060(EnAob01* this, GlobalContext* globalCtx);
+void func_809C21E0(EnAob01* this, GlobalContext* globalCtx);
+void func_809C26E4(EnAob01* this, GlobalContext* globalCtx);
+void func_809C2730(EnAob01* this, GlobalContext* globalCtx);
+void func_809C2788(EnAob01* this, GlobalContext* globalCtx);
+void func_809C2824(EnAob01* this, GlobalContext* globalCtx);
+void func_809C28B8(EnAob01* this, GlobalContext* globalCtx);
+void func_809C2A64(EnAob01* this, GlobalContext* globalCtx);
+void func_809C2BE4(EnAob01* this, GlobalContext* globalCtx);
+void func_809C2C9C(EnAob01* this, GlobalContext* globalCtx);
+void func_809C2D0C(EnAob01* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Aob_01_InitVars = {
     ACTOR_EN_AOB_01,

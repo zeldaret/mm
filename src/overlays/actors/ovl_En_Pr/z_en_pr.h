@@ -5,9 +5,13 @@
 
 struct EnPr;
 
+typedef void (*EnPrActionFunc)(struct EnPr* this, GlobalContext* globalCtx);
+
 typedef struct EnPr {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x204];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0xBC];
+    /* 0x0200 */ EnPrActionFunc actionFunc;
+    /* 0x0204 */ char unk_204[0x144];
 } EnPr; // size = 0x348
 
 extern const ActorInit En_Pr_InitVars;

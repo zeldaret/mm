@@ -9,6 +9,12 @@ void ArrowFire_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ArrowFire_Update(Actor* thisx, GlobalContext* globalCtx);
 void ArrowFire_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80920440(ArrowFire* this, GlobalContext* globalCtx);
+void func_8092058C(ArrowFire* this, GlobalContext* globalCtx);
+void func_809207A0(ArrowFire* this, GlobalContext* globalCtx);
+
+void ArrowFire_SetupAction(ArrowFire* this, ArrowFireActionFunc actionFunc);
+
 #if 0
 // static ColliderQuadInit sQuadInit = {
 static ColliderQuadInit D_80922230 = {
@@ -35,7 +41,7 @@ extern ColliderQuadInit D_80922230;
 
 extern UNK_TYPE D_0E0002E0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Fire/func_80920340.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Fire/ArrowFire_SetupAction.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Fire/ArrowFire_Init.s")
 

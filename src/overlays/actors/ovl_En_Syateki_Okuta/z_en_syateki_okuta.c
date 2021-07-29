@@ -9,6 +9,13 @@ void EnSyatekiOkuta_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiOkuta_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiOkuta_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A362A8(EnSyatekiOkuta* this, GlobalContext* globalCtx);
+void func_80A36350(EnSyatekiOkuta* this, GlobalContext* globalCtx);
+void func_80A363B4(EnSyatekiOkuta* this, GlobalContext* globalCtx);
+void func_80A36488(EnSyatekiOkuta* this, GlobalContext* globalCtx);
+void func_80A36504(EnSyatekiOkuta* this, GlobalContext* globalCtx);
+void func_80A365EC(EnSyatekiOkuta* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Syateki_Okuta_InitVars = {
     ACTOR_EN_SYATEKI_OKUTA,

@@ -5,9 +5,12 @@
 
 struct EnAz;
 
+typedef void (*EnAzActionFunc)(struct EnAz* this, GlobalContext* globalCtx);
+
 typedef struct EnAz {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x294];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ EnAzActionFunc actionFunc;
+    /* 0x0148 */ char unk_144[0x290];
 } EnAz; // size = 0x3D8
 
 extern const ActorInit En_Az_InitVars;

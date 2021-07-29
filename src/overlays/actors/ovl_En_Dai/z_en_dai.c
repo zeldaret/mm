@@ -9,6 +9,10 @@ void EnDai_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDai_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDai_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B3EE8C(EnDai* this, GlobalContext* globalCtx);
+void func_80B3EF90(EnDai* this, GlobalContext* globalCtx);
+void func_80B3F00C(EnDai* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Dai_InitVars = {
     ACTOR_EN_DAI,

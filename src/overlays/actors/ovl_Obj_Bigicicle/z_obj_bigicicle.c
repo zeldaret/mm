@@ -9,6 +9,12 @@ void ObjBigicicle_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjBigicicle_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjBigicicle_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AE8FD4(ObjBigicicle* this, GlobalContext* globalCtx);
+void func_80AE9090(ObjBigicicle* this, GlobalContext* globalCtx);
+void func_80AE9180(ObjBigicicle* this, GlobalContext* globalCtx);
+void func_80AE9258(ObjBigicicle* this, GlobalContext* globalCtx);
+void func_80AE939C(ObjBigicicle* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Bigicicle_InitVars = {
     ACTOR_OBJ_BIGICICLE,

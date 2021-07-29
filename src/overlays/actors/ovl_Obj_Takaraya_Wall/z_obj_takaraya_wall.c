@@ -9,6 +9,8 @@ void ObjTakarayaWall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjTakarayaWall_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjTakarayaWall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AD9B04(ObjTakarayaWall* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Takaraya_Wall_InitVars = {
     ACTOR_OBJ_TAKARAYA_WALL,

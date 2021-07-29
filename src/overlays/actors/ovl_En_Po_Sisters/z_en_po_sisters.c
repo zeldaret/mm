@@ -9,6 +9,23 @@ void EnPoSisters_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPoSisters_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B1AAE8(EnPoSisters* this, GlobalContext* globalCtx);
+void func_80B1ABB8(EnPoSisters* this, GlobalContext* globalCtx);
+void func_80B1ACB8(EnPoSisters* this, GlobalContext* globalCtx);
+void func_80B1AE3C(EnPoSisters* this, GlobalContext* globalCtx);
+void func_80B1B020(EnPoSisters* this, GlobalContext* globalCtx);
+void func_80B1B168(EnPoSisters* this, GlobalContext* globalCtx);
+void func_80B1B2F0(EnPoSisters* this, GlobalContext* globalCtx);
+void func_80B1B444(EnPoSisters* this, GlobalContext* globalCtx);
+void func_80B1B628(EnPoSisters* this, GlobalContext* globalCtx);
+void func_80B1B7BC(EnPoSisters* this, GlobalContext* globalCtx);
+void func_80B1B940(EnPoSisters* this, GlobalContext* globalCtx);
+void func_80B1BA90(EnPoSisters* this, GlobalContext* globalCtx);
+void func_80B1BCA0(EnPoSisters* this, GlobalContext* globalCtx);
+void func_80B1BF2C(EnPoSisters* this, GlobalContext* globalCtx);
+void func_80B1C0A4(EnPoSisters* this, GlobalContext* globalCtx);
+void func_80B1C340(EnPoSisters* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Po_Sisters_InitVars = {
     ACTOR_EN_PO_SISTERS,

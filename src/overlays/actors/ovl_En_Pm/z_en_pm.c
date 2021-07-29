@@ -9,6 +9,9 @@ void EnPm_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPm_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPm_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AFA4D0(EnPm* this, GlobalContext* globalCtx);
+void func_80AFA5FC(EnPm* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Pm_InitVars = {
     ACTOR_EN_PM,

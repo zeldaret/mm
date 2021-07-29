@@ -5,9 +5,13 @@
 
 struct BgIkanaBlock;
 
+typedef void (*BgIkanaBlockActionFunc)(struct BgIkanaBlock* this, GlobalContext* globalCtx);
+
 typedef struct BgIkanaBlock {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x3C];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x1C];
+    /* 0x0160 */ BgIkanaBlockActionFunc actionFunc;
+    /* 0x0164 */ char unk_164[0x1C];
 } BgIkanaBlock; // size = 0x180
 
 extern const ActorInit Bg_Ikana_Block_InitVars;

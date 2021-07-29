@@ -9,6 +9,10 @@ void EnBoom_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBoom_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBoom_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_808A2918(EnBoom* this, GlobalContext* globalCtx);
+
+void EnBoom_SetupAction(EnBoom* this, EnBoomActionFunc actionFunc);
+
 #if 0
 const ActorInit En_Boom_InitVars = {
     ACTOR_EN_BOOM,
@@ -40,7 +44,7 @@ static InitChainEntry D_808A3060[] = {
 extern ColliderQuadInit D_808A3010;
 extern InitChainEntry D_808A3060[];
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Boom/func_808A24D0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Boom/EnBoom_SetupAction.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Boom/func_808A24DC.s")
 

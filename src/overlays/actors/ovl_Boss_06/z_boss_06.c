@@ -9,6 +9,12 @@ void Boss06_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void Boss06_Update(Actor* thisx, GlobalContext* globalCtx);
 void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809F24C8(Boss06* this, GlobalContext* globalCtx);
+void func_809F2B64(Boss06* this, GlobalContext* globalCtx);
+void func_809F2C44(Boss06* this, GlobalContext* globalCtx);
+void func_809F2E34(Boss06* this, GlobalContext* globalCtx);
+void func_809F2EE8(Boss06* this, GlobalContext* globalCtx);
+
 #if 0
 // static DamageTable sDamageTable = {
 static DamageTable D_809F4080 = {

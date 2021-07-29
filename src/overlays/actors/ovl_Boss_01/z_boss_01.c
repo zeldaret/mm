@@ -9,6 +9,28 @@ void Boss01_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void Boss01_Update(Actor* thisx, GlobalContext* globalCtx);
 void Boss01_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809D12B4(Boss01* this, GlobalContext* globalCtx);
+void func_809D1B2C(Boss01* this, GlobalContext* globalCtx);
+void func_809D1E74(Boss01* this, GlobalContext* globalCtx);
+void func_809D20D0(Boss01* this, GlobalContext* globalCtx);
+void func_809D25E8(Boss01* this, GlobalContext* globalCtx);
+void func_809D26B8(Boss01* this, GlobalContext* globalCtx);
+void func_809D27D4(Boss01* this, GlobalContext* globalCtx);
+void func_809D2AA0(Boss01* this, GlobalContext* globalCtx);
+void func_809D2BCC(Boss01* this, GlobalContext* globalCtx);
+void func_809D2CDC(Boss01* this, GlobalContext* globalCtx);
+void func_809D2E4C(Boss01* this, GlobalContext* globalCtx);
+void func_809D30D0(Boss01* this, GlobalContext* globalCtx);
+void func_809D345C(Boss01* this, GlobalContext* globalCtx);
+void func_809D3530(Boss01* this, GlobalContext* globalCtx);
+void func_809D3ADC(Boss01* this, GlobalContext* globalCtx);
+void func_809D3CD0(Boss01* this, GlobalContext* globalCtx);
+void func_809D4464(Boss01* this, GlobalContext* globalCtx);
+void func_809D6314(Boss01* this, GlobalContext* globalCtx);
+void func_809D6488(Boss01* this, GlobalContext* globalCtx);
+void func_809D6588(Boss01* this, GlobalContext* globalCtx);
+void func_809D65E0(Boss01* this, GlobalContext* globalCtx);
+
 #if 0
 // static DamageTable sDamageTable = {
 static DamageTable D_809D7990 = {

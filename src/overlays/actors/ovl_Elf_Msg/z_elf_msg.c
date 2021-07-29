@@ -8,6 +8,8 @@ void ElfMsg_Init(Actor* thisx, GlobalContext* globalCtx);
 void ElfMsg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ElfMsg_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void ElfMsg_SetupAction(ElfMsg* this, ElfMsgActionFunc actionFunc);
+
 #if 0
 const ActorInit Elf_Msg_InitVars = {
     ACTOR_ELF_MSG,
@@ -33,7 +35,7 @@ extern InitChainEntry D_8092E470[];
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg/D_8092E480.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg/func_8092DF90.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg/ElfMsg_SetupAction.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg/func_8092DF9C.s")
 

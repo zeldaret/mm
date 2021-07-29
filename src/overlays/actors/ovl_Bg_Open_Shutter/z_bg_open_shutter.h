@@ -5,9 +5,13 @@
 
 struct BgOpenShutter;
 
+typedef void (*BgOpenShutterActionFunc)(struct BgOpenShutter* this, GlobalContext* globalCtx);
+
 typedef struct BgOpenShutter {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x24];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x1C];
+    /* 0x0160 */ BgOpenShutterActionFunc actionFunc;
+    /* 0x0164 */ char unk_164[0x4];
 } BgOpenShutter; // size = 0x168
 
 extern const ActorInit Bg_Open_Shutter_InitVars;

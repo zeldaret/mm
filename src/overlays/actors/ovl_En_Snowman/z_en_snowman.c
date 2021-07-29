@@ -9,6 +9,20 @@ void EnSnowman_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSnowman_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSnowman_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B1746C(EnSnowman* this, GlobalContext* globalCtx);
+void func_80B178B8(EnSnowman* this, GlobalContext* globalCtx);
+void func_80B17A58(EnSnowman* this, GlobalContext* globalCtx);
+void func_80B17D78(EnSnowman* this, GlobalContext* globalCtx);
+void func_80B17EFC(EnSnowman* this, GlobalContext* globalCtx);
+void func_80B17FE0(EnSnowman* this, GlobalContext* globalCtx);
+void func_80B18124(EnSnowman* this, GlobalContext* globalCtx);
+void func_80B183A4(EnSnowman* this, GlobalContext* globalCtx);
+void func_80B1848C(EnSnowman* this, GlobalContext* globalCtx);
+void func_80B1861C(EnSnowman* this, GlobalContext* globalCtx);
+void func_80B189C4(EnSnowman* this, GlobalContext* globalCtx);
+void func_80B18A04(EnSnowman* this, GlobalContext* globalCtx);
+void func_80B18C7C(EnSnowman* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Snowman_InitVars = {
     ACTOR_EN_SNOWMAN,

@@ -9,6 +9,18 @@ void EnOkuta_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnOkuta_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnOkuta_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_8086E52C(EnOkuta* this, GlobalContext* globalCtx);
+void func_8086E658(EnOkuta* this, GlobalContext* globalCtx);
+void func_8086E7E8(EnOkuta* this, GlobalContext* globalCtx);
+void func_8086E948(EnOkuta* this, GlobalContext* globalCtx);
+void func_8086EC00(EnOkuta* this, GlobalContext* globalCtx);
+void func_8086EF14(EnOkuta* this, GlobalContext* globalCtx);
+void func_8086EFE8(EnOkuta* this, GlobalContext* globalCtx);
+void func_8086F434(EnOkuta* this, GlobalContext* globalCtx);
+void func_8086F4B0(EnOkuta* this, GlobalContext* globalCtx);
+void func_8086F57C(EnOkuta* this, GlobalContext* globalCtx);
+void func_8086F694(EnOkuta* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Okuta_InitVars = {
     ACTOR_EN_OKUTA,

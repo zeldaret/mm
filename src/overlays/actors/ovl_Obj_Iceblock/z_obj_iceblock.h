@@ -5,9 +5,13 @@
 
 struct ObjIceblock;
 
+typedef void (*ObjIceblockActionFunc)(struct ObjIceblock* this, GlobalContext* globalCtx);
+
 typedef struct ObjIceblock {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x174];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x64];
+    /* 0x01A8 */ ObjIceblockActionFunc actionFunc;
+    /* 0x01AC */ char unk_1AC[0x10C];
 } ObjIceblock; // size = 0x2B8
 
 extern const ActorInit Obj_Iceblock_InitVars;

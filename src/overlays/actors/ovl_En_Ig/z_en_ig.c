@@ -9,6 +9,9 @@ void EnIg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnIg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnIg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BF2AF8(EnIg* this, GlobalContext* globalCtx);
+void func_80BF2BD4(EnIg* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Ig_InitVars = {
     ACTOR_EN_IG,

@@ -9,6 +9,23 @@ void EnKakasi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKakasi_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKakasi_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_8096FCC4(EnKakasi* this, GlobalContext* globalCtx);
+void func_8096FE00(EnKakasi* this, GlobalContext* globalCtx);
+void func_8097006C(EnKakasi* this, GlobalContext* globalCtx);
+void func_80970658(EnKakasi* this, GlobalContext* globalCtx);
+void func_80970740(EnKakasi* this, GlobalContext* globalCtx);
+void func_80970978(EnKakasi* this, GlobalContext* globalCtx);
+void func_80970A9C(EnKakasi* this, GlobalContext* globalCtx);
+void func_80970F20(EnKakasi* this, GlobalContext* globalCtx);
+void func_80971064(EnKakasi* this, GlobalContext* globalCtx);
+void func_80971430(EnKakasi* this, GlobalContext* globalCtx);
+void func_809714BC(EnKakasi* this, GlobalContext* globalCtx);
+void func_809717D0(EnKakasi* this, GlobalContext* globalCtx);
+void func_8097185C(EnKakasi* this, GlobalContext* globalCtx);
+void func_8097193C(EnKakasi* this, GlobalContext* globalCtx);
+void func_80971A64(EnKakasi* this, GlobalContext* globalCtx);
+void func_80971AD4(EnKakasi* this, GlobalContext* globalCtx);
+
 #if 0
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80971D80 = {

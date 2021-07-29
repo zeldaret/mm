@@ -9,6 +9,24 @@ void ObjUm_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjUm_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjUm_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B79A50(ObjUm* this, GlobalContext* globalCtx);
+void func_80B79F10(ObjUm* this, GlobalContext* globalCtx);
+void func_80B7A070(ObjUm* this, GlobalContext* globalCtx);
+void func_80B7A0E0(ObjUm* this, GlobalContext* globalCtx);
+void func_80B7A144(ObjUm* this, GlobalContext* globalCtx);
+void func_80B7A2AC(ObjUm* this, GlobalContext* globalCtx);
+void func_80B7A394(ObjUm* this, GlobalContext* globalCtx);
+void func_80B7A400(ObjUm* this, GlobalContext* globalCtx);
+void func_80B7A494(ObjUm* this, GlobalContext* globalCtx);
+void func_80B7A614(ObjUm* this, GlobalContext* globalCtx);
+void func_80B7A7AC(ObjUm* this, GlobalContext* globalCtx);
+void func_80B7ABE4(ObjUm* this, GlobalContext* globalCtx);
+void func_80B7AC94(ObjUm* this, GlobalContext* globalCtx);
+void func_80B7AD34(ObjUm* this, GlobalContext* globalCtx);
+void func_80B7AE58(ObjUm* this, GlobalContext* globalCtx);
+
+void ObjUm_SetupAction(ObjUm* this, ObjUmActionFunc actionFunc);
+
 #if 0
 const ActorInit Obj_Um_InitVars = {
     ACTOR_OBJ_UM,
@@ -61,7 +79,7 @@ extern UNK_TYPE D_06012CC0;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Um/func_80B78DF0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Um/func_80B78E2C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Um/ObjUm_SetupAction.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Um/func_80B78E38.s")
 

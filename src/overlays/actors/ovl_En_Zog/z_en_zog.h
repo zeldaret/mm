@@ -5,9 +5,12 @@
 
 struct EnZog;
 
+typedef void (*EnZogActionFunc)(struct EnZog* this, GlobalContext* globalCtx);
+
 typedef struct EnZog {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x1E8];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x1E4];
+    /* 0x0328 */ EnZogActionFunc actionFunc;
 } EnZog; // size = 0x32C
 
 extern const ActorInit En_Zog_InitVars;

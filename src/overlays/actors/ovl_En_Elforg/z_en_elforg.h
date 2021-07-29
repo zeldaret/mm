@@ -5,9 +5,12 @@
 
 struct EnElforg;
 
+typedef void (*EnElforgActionFunc)(struct EnElforg* this, GlobalContext* globalCtx);
+
 typedef struct EnElforg {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0xEC];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0xE8];
+    /* 0x022C */ EnElforgActionFunc actionFunc;
 } EnElforg; // size = 0x230
 
 extern const ActorInit En_Elforg_InitVars;

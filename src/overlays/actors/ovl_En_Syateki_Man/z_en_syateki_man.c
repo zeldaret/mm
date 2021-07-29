@@ -9,6 +9,25 @@ void EnSyatekiMan_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiMan_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiMan_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809C6810(EnSyatekiMan* this, GlobalContext* globalCtx);
+void func_809C6848(EnSyatekiMan* this, GlobalContext* globalCtx);
+void func_809C6E30(EnSyatekiMan* this, GlobalContext* globalCtx);
+void func_809C72D8(EnSyatekiMan* this, GlobalContext* globalCtx);
+void func_809C7990(EnSyatekiMan* this, GlobalContext* globalCtx);
+void func_809C7A90(EnSyatekiMan* this, GlobalContext* globalCtx);
+void func_809C7C14(EnSyatekiMan* this, GlobalContext* globalCtx);
+void func_809C7D14(EnSyatekiMan* this, GlobalContext* globalCtx);
+void func_809C7EB4(EnSyatekiMan* this, GlobalContext* globalCtx);
+void func_809C7FFC(EnSyatekiMan* this, GlobalContext* globalCtx);
+void func_809C80C0(EnSyatekiMan* this, GlobalContext* globalCtx);
+void func_809C81D0(EnSyatekiMan* this, GlobalContext* globalCtx);
+void func_809C8488(EnSyatekiMan* this, GlobalContext* globalCtx);
+void func_809C8610(EnSyatekiMan* this, GlobalContext* globalCtx);
+void func_809C8710(EnSyatekiMan* this, GlobalContext* globalCtx);
+void func_809C8808(EnSyatekiMan* this, GlobalContext* globalCtx);
+void func_809C898C(EnSyatekiMan* this, GlobalContext* globalCtx);
+void func_809C8BF0(EnSyatekiMan* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Syateki_Man_InitVars = {
     ACTOR_EN_SYATEKI_MAN,

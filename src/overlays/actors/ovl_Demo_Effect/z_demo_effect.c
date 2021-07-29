@@ -8,6 +8,11 @@ void DemoEffect_Init(Actor* thisx, GlobalContext* globalCtx);
 void DemoEffect_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DemoEffect_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_808CD940(DemoEffect* this, GlobalContext* globalCtx);
+void func_808CDBDC(DemoEffect* this, GlobalContext* globalCtx);
+void func_808CDCEC(DemoEffect* this, GlobalContext* globalCtx);
+void func_808CDD70(DemoEffect* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Demo_Effect_InitVars = {
     ACTOR_DEMO_EFFECT,

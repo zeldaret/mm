@@ -8,6 +8,10 @@ void BgSpoutFire_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgSpoutFire_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgSpoutFire_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A60C94(BgSpoutFire* this, GlobalContext* globalCtx);
+void func_80A60CDC(BgSpoutFire* this, GlobalContext* globalCtx);
+void func_80A60D10(BgSpoutFire* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_Spout_Fire_InitVars = {
     ACTOR_BG_SPOUT_FIRE,

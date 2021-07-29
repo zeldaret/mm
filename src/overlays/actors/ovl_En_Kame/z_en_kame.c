@@ -9,6 +9,20 @@ void EnKame_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKame_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKame_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AD70EC(EnKame* this, GlobalContext* globalCtx);
+void func_80AD7254(EnKame* this, GlobalContext* globalCtx);
+void func_80AD7424(EnKame* this, GlobalContext* globalCtx);
+void func_80AD7798(EnKame* this, GlobalContext* globalCtx);
+void func_80AD7948(EnKame* this, GlobalContext* globalCtx);
+void func_80AD7B90(EnKame* this, GlobalContext* globalCtx);
+void func_80AD7D40(EnKame* this, GlobalContext* globalCtx);
+void func_80AD7E0C(EnKame* this, GlobalContext* globalCtx);
+void func_80AD7F10(EnKame* this, GlobalContext* globalCtx);
+void func_80AD7FF8(EnKame* this, GlobalContext* globalCtx);
+void func_80AD810C(EnKame* this, GlobalContext* globalCtx);
+void func_80AD825C(EnKame* this, GlobalContext* globalCtx);
+void func_80AD8388(EnKame* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Kame_InitVars = {
     ACTOR_EN_KAME,

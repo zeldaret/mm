@@ -9,6 +9,18 @@ void EnBaba_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBaba_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBaba_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BA9480(EnBaba* this, GlobalContext* globalCtx);
+void func_80BA9758(EnBaba* this, GlobalContext* globalCtx);
+void func_80BA9848(EnBaba* this, GlobalContext* globalCtx);
+void func_80BA98EC(EnBaba* this, GlobalContext* globalCtx);
+void func_80BA9AB8(EnBaba* this, GlobalContext* globalCtx);
+void func_80BA9B24(EnBaba* this, GlobalContext* globalCtx);
+void func_80BA9B80(EnBaba* this, GlobalContext* globalCtx);
+void func_80BA9CD4(EnBaba* this, GlobalContext* globalCtx);
+void func_80BA9E00(EnBaba* this, GlobalContext* globalCtx);
+void func_80BA9E10(EnBaba* this, GlobalContext* globalCtx);
+void func_80BA9E48(EnBaba* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Baba_InitVars = {
     ACTOR_EN_BABA,

@@ -8,6 +8,14 @@ void EnMttag_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnMttag_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMttag_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809CF9A0(EnMttag* this, GlobalContext* globalCtx);
+void func_809CFA00(EnMttag* this, GlobalContext* globalCtx);
+void func_809CFA54(EnMttag* this, GlobalContext* globalCtx);
+void func_809CFC38(EnMttag* this, GlobalContext* globalCtx);
+void func_809CFD98(EnMttag* this, GlobalContext* globalCtx);
+void func_809CFE28(EnMttag* this, GlobalContext* globalCtx);
+void func_809CFF94(EnMttag* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Mt_tag_InitVars = {
     ACTOR_EN_MT_TAG,

@@ -9,6 +9,8 @@ void EffZoraband_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EffZoraband_Update(Actor* thisx, GlobalContext* globalCtx);
 void EffZoraband_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C07790(EffZoraband* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Eff_Zoraband_InitVars = {
     ACTOR_EFF_ZORABAND,

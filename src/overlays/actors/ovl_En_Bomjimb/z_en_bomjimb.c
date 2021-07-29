@@ -9,6 +9,18 @@ void EnBomjimb_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBomjimb_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBomjimb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C014E4(EnBomjimb* this, GlobalContext* globalCtx);
+void func_80C01A24(EnBomjimb* this, GlobalContext* globalCtx);
+void func_80C01B74(EnBomjimb* this, GlobalContext* globalCtx);
+void func_80C01CD0(EnBomjimb* this, GlobalContext* globalCtx);
+void func_80C0201C(EnBomjimb* this, GlobalContext* globalCtx);
+void func_80C0217C(EnBomjimb* this, GlobalContext* globalCtx);
+void func_80C02570(EnBomjimb* this, GlobalContext* globalCtx);
+void func_80C02704(EnBomjimb* this, GlobalContext* globalCtx);
+void func_80C02A14(EnBomjimb* this, GlobalContext* globalCtx);
+void func_80C02BCC(EnBomjimb* this, GlobalContext* globalCtx);
+void func_80C02DAC(EnBomjimb* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Bomjimb_InitVars = {
     ACTOR_EN_BOMJIMB,

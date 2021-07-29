@@ -9,6 +9,12 @@ void ObjWarpstone_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjWarpstone_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B92C00(ObjWarpstone* this, GlobalContext* globalCtx);
+void func_80B92CD0(ObjWarpstone* this, GlobalContext* globalCtx);
+void func_80B92DC4(ObjWarpstone* this, GlobalContext* globalCtx);
+
+void ObjWarpstone_SetupAction(ObjWarpstone* this, ObjWarpstoneActionFunc actionFunc);
+
 #if 0
 const ActorInit Obj_Warpstone_InitVars = {
     ACTOR_OBJ_WARPSTONE,
@@ -39,7 +45,7 @@ static InitChainEntry D_80B9324C[] = {
 extern ColliderCylinderInit D_80B93220;
 extern InitChainEntry D_80B9324C[];
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Warpstone/func_80B92B10.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Warpstone/ObjWarpstone_SetupAction.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Warpstone/ObjWarpstone_Init.s")
 

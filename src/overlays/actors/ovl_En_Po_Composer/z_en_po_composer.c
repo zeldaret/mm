@@ -9,6 +9,18 @@ void EnPoComposer_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPoComposer_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPoComposer_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BC5294(EnPoComposer* this, GlobalContext* globalCtx);
+void func_80BC52F0(EnPoComposer* this, GlobalContext* globalCtx);
+void func_80BC53A0(EnPoComposer* this, GlobalContext* globalCtx);
+void func_80BC5404(EnPoComposer* this, GlobalContext* globalCtx);
+void func_80BC5570(EnPoComposer* this, GlobalContext* globalCtx);
+void func_80BC55E0(EnPoComposer* this, GlobalContext* globalCtx);
+void func_80BC5670(EnPoComposer* this, GlobalContext* globalCtx);
+void func_80BC56D0(EnPoComposer* this, GlobalContext* globalCtx);
+void func_80BC5780(EnPoComposer* this, GlobalContext* globalCtx);
+void func_80BC5830(EnPoComposer* this, GlobalContext* globalCtx);
+void func_80BC58E0(EnPoComposer* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Po_Composer_InitVars = {
     ACTOR_EN_PO_COMPOSER,

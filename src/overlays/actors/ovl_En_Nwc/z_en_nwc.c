@@ -9,6 +9,14 @@ void EnNwc_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnNwc_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnNwc_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809448A4(EnNwc* this, GlobalContext* globalCtx);
+void func_809449D0(EnNwc* this, GlobalContext* globalCtx);
+void func_80944A50(EnNwc* this, GlobalContext* globalCtx);
+void func_80944E44(EnNwc* this, GlobalContext* globalCtx);
+void func_80944EFC(EnNwc* this, GlobalContext* globalCtx);
+void func_80944FA8(EnNwc* this, GlobalContext* globalCtx);
+void func_8094506C(EnNwc* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Nwc_InitVars = {
     ACTOR_EN_NWC,

@@ -9,6 +9,26 @@ void EnDinofos_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDinofos_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDinofos_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_8089B288(EnDinofos* this, GlobalContext* globalCtx);
+void func_8089B3D4(EnDinofos* this, GlobalContext* globalCtx);
+void func_8089B580(EnDinofos* this, GlobalContext* globalCtx);
+void func_8089B72C(EnDinofos* this, GlobalContext* globalCtx);
+void func_8089B834(EnDinofos* this, GlobalContext* globalCtx);
+void func_8089C0DC(EnDinofos* this, GlobalContext* globalCtx);
+void func_8089C1F8(EnDinofos* this, GlobalContext* globalCtx);
+void func_8089C2A8(EnDinofos* this, GlobalContext* globalCtx);
+void func_8089C44C(EnDinofos* this, GlobalContext* globalCtx);
+void func_8089C56C(EnDinofos* this, GlobalContext* globalCtx);
+void func_8089C724(EnDinofos* this, GlobalContext* globalCtx);
+void func_8089C7B8(EnDinofos* this, GlobalContext* globalCtx);
+void func_8089C938(EnDinofos* this, GlobalContext* globalCtx);
+void func_8089CA74(EnDinofos* this, GlobalContext* globalCtx);
+void func_8089CBEC(EnDinofos* this, GlobalContext* globalCtx);
+void func_8089CF70(EnDinofos* this, GlobalContext* globalCtx);
+void func_8089D018(EnDinofos* this, GlobalContext* globalCtx);
+void func_8089D1E0(EnDinofos* this, GlobalContext* globalCtx);
+void func_8089D318(EnDinofos* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Dinofos_InitVars = {
     ACTOR_EN_DINOFOS,

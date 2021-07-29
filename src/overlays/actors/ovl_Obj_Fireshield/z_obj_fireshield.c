@@ -9,6 +9,11 @@ void ObjFireshield_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjFireshield_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjFireshield_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A4CABC(ObjFireshield* this, GlobalContext* globalCtx);
+void func_80A4CB7C(ObjFireshield* this, GlobalContext* globalCtx);
+void func_80A4CCBC(ObjFireshield* this, GlobalContext* globalCtx);
+void func_80A4CD28(ObjFireshield* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Fireshield_InitVars = {
     ACTOR_OBJ_FIRESHIELD,

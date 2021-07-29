@@ -9,6 +9,13 @@ void EnDnp_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDnp_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDnp_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B3D11C(EnDnp* this, GlobalContext* globalCtx);
+void func_80B3D2D4(EnDnp* this, GlobalContext* globalCtx);
+void func_80B3D338(EnDnp* this, GlobalContext* globalCtx);
+void func_80B3D3F8(EnDnp* this, GlobalContext* globalCtx);
+void func_80B3D47C(EnDnp* this, GlobalContext* globalCtx);
+void func_80B3D558(EnDnp* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Dnp_InitVars = {
     ACTOR_EN_DNP,

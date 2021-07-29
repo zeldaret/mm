@@ -9,6 +9,14 @@ void EnSyatekiWf_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiWf_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiWf_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A20284(EnSyatekiWf* this, GlobalContext* globalCtx);
+void func_80A20320(EnSyatekiWf* this, GlobalContext* globalCtx);
+void func_80A203DC(EnSyatekiWf* this, GlobalContext* globalCtx);
+void func_80A206DC(EnSyatekiWf* this, GlobalContext* globalCtx);
+void func_80A2075C(EnSyatekiWf* this, GlobalContext* globalCtx);
+void func_80A20800(EnSyatekiWf* this, GlobalContext* globalCtx);
+void func_80A208F8(EnSyatekiWf* this, GlobalContext* globalCtx);
+
 #if 0
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A20E74 = {

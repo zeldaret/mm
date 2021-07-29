@@ -9,6 +9,10 @@ void EnBubble_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBubble_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBubble_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_808A029C(EnBubble* this, GlobalContext* globalCtx);
+void func_808A0350(EnBubble* this, GlobalContext* globalCtx);
+void func_808A03E8(EnBubble* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Bubble_InitVars = {
     ACTOR_EN_BUBBLE,

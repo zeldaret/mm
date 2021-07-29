@@ -8,6 +8,9 @@ void EnTest4_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTest4_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTest4_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx);
+void func_80A42F20(EnTest4* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Test4_InitVars = {
     ACTOR_EN_TEST4,

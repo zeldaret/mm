@@ -9,6 +9,8 @@ void DmAl_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmAl_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmAl_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C1BDD8(DmAl* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Dm_Al_InitVars = {
     ACTOR_EN_AL,

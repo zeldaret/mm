@@ -9,6 +9,10 @@ void BgDblueBalance_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgDblueBalance_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgDblueBalance_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B82DE0(BgDblueBalance* this, GlobalContext* globalCtx);
+void func_80B8335C(BgDblueBalance* this, GlobalContext* globalCtx);
+void func_80B833C4(BgDblueBalance* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_Dblue_Balance_InitVars = {
     ACTOR_BG_DBLUE_BALANCE,

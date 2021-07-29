@@ -8,6 +8,9 @@ void EnTalk_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTalk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTalk_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BDE058(EnTalk* this, GlobalContext* globalCtx);
+void func_80BDE090(EnTalk* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Talk_InitVars = {
     ACTOR_EN_TALK,

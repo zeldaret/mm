@@ -5,9 +5,12 @@
 
 struct BgIkninside;
 
+typedef void (*BgIkninsideActionFunc)(struct BgIkninside* this, GlobalContext* globalCtx);
+
 typedef struct BgIkninside {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x6C];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x68];
+    /* 0x01AC */ BgIkninsideActionFunc actionFunc;
 } BgIkninside; // size = 0x1B0
 
 extern const ActorInit Bg_Ikninside_InitVars;

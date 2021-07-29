@@ -7,6 +7,8 @@
 void BgBreakwall_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgBreakwall_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void BgBreakwall_SetupAction(BgBreakwall* this, BgBreakwallActionFunc actionFunc);
+
 #if 0
 const ActorInit Bg_Breakwall_InitVars = {
     ACTOR_BG_BREAKWALL,
@@ -34,7 +36,7 @@ extern InitChainEntry D_808B82E0[];
 
 extern UNK_TYPE D_06000A50;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Breakwall/func_808B7360.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Breakwall/BgBreakwall_SetupAction.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Breakwall/func_808B736C.s")
 

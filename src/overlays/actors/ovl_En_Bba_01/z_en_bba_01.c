@@ -9,6 +9,11 @@ void EnBba01_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBba01_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBba01_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809CC2F0(EnBba01* this, GlobalContext* globalCtx);
+void func_809CC370(EnBba01* this, GlobalContext* globalCtx);
+void func_809CC3A8(EnBba01* this, GlobalContext* globalCtx);
+void func_809CC3CC(EnBba01* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Bba_01_InitVars = {
     ACTOR_EN_BBA_01,

@@ -9,6 +9,12 @@ void EnDaiku2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDaiku2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDaiku2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BE66E4(EnDaiku2* this, GlobalContext* globalCtx);
+void func_80BE6BC0(EnDaiku2* this, GlobalContext* globalCtx);
+void func_80BE6D40(EnDaiku2* this, GlobalContext* globalCtx);
+void func_80BE6EF0(EnDaiku2* this, GlobalContext* globalCtx);
+void func_80BE71D8(EnDaiku2* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Daiku2_InitVars = {
     ACTOR_EN_DAIKU2,

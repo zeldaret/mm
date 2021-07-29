@@ -9,6 +9,9 @@ void EnRacedog_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRacedog_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRacedog_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B24C14(EnRacedog* this, GlobalContext* globalCtx);
+void func_80B24CB4(EnRacedog* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Racedog_InitVars = {
     ACTOR_EN_RACEDOG,

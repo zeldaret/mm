@@ -9,6 +9,11 @@ void DemoKankyo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DemoKankyo_Update(Actor* thisx, GlobalContext* globalCtx);
 void DemoKankyo_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_808CF06C(DemoKankyo* this, GlobalContext* globalCtx);
+void func_808CF0CC(DemoKankyo* this, GlobalContext* globalCtx);
+
+void DemoKankyo_SetupAction(DemoKankyo* this, DemoKankyoActionFunc actionFunc);
+
 #if 0
 const ActorInit Demo_Kankyo_InitVars = {
     ACTOR_DEMO_KANKYO,
@@ -24,7 +29,7 @@ const ActorInit Demo_Kankyo_InitVars = {
 
 #endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Kankyo/func_808CE450.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Kankyo/DemoKankyo_SetupAction.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Kankyo/func_808CE45C.s")
 

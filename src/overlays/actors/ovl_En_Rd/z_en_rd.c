@@ -9,6 +9,26 @@ void EnRd_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRd_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRd_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_808D43AC(EnRd* this, GlobalContext* globalCtx);
+void func_808D4660(EnRd* this, GlobalContext* globalCtx);
+void func_808D4868(EnRd* this, GlobalContext* globalCtx);
+void func_808D49E4(EnRd* this, GlobalContext* globalCtx);
+void func_808D4B20(EnRd* this, GlobalContext* globalCtx);
+void func_808D4CA8(EnRd* this, GlobalContext* globalCtx);
+void func_808D4E60(EnRd* this, GlobalContext* globalCtx);
+void func_808D506C(EnRd* this, GlobalContext* globalCtx);
+void func_808D5440(EnRd* this, GlobalContext* globalCtx);
+void func_808D56E4(EnRd* this, GlobalContext* globalCtx);
+void func_808D58CC(EnRd* this, GlobalContext* globalCtx);
+void func_808D5CCC(EnRd* this, GlobalContext* globalCtx);
+void func_808D5DF4(EnRd* this, GlobalContext* globalCtx);
+void func_808D5F18(EnRd* this, GlobalContext* globalCtx);
+void func_808D6054(EnRd* this, GlobalContext* globalCtx);
+void func_808D6130(EnRd* this, GlobalContext* globalCtx);
+void func_808D6200(EnRd* this, GlobalContext* globalCtx);
+void func_808D6388(EnRd* this, GlobalContext* globalCtx);
+void func_808D65BC(EnRd* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Rd_InitVars = {
     ACTOR_EN_RD,

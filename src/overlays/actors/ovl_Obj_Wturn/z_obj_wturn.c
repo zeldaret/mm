@@ -7,6 +7,11 @@
 void ObjWturn_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjWturn_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_808A7968(ObjWturn* this, GlobalContext* globalCtx);
+void func_808A7A5C(ObjWturn* this, GlobalContext* globalCtx);
+void func_808A7BA0(ObjWturn* this, GlobalContext* globalCtx);
+void func_808A7C78(ObjWturn* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Wturn_InitVars = {
     ACTOR_OBJ_WTURN,

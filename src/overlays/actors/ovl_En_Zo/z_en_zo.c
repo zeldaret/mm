@@ -9,6 +9,11 @@ void EnZo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnZo_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnZo_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_8099EBD8(EnZo* this, GlobalContext* globalCtx);
+void func_8099EC50(EnZo* this, GlobalContext* globalCtx);
+void func_8099ED4C(EnZo* this, GlobalContext* globalCtx);
+void func_8099EE24(EnZo* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Zo_InitVars = {
     ACTOR_EN_ZO,

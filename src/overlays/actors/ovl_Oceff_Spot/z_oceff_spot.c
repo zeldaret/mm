@@ -9,6 +9,11 @@ void OceffSpot_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void OceffSpot_Update(Actor* thisx, GlobalContext* globalCtx);
 void OceffSpot_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809728F8(OceffSpot* this, GlobalContext* globalCtx);
+void func_80972934(OceffSpot* this, GlobalContext* globalCtx);
+
+void OceffSpot_SetupAction(OceffSpot* this, OceffSpotActionFunc actionFunc);
+
 #if 0
 const ActorInit Oceff_Spot_InitVars = {
     ACTOR_OCEFF_SPOT,
@@ -32,7 +37,7 @@ static InitChainEntry D_80973478[] = {
 
 extern InitChainEntry D_80973478[];
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Spot/func_80972680.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Spot/OceffSpot_SetupAction.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Spot/OceffSpot_Init.s")
 

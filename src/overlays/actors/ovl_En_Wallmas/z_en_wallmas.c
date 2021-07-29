@@ -9,6 +9,21 @@ void EnWallmas_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnWallmas_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnWallmas_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80874BE4(EnWallmas* this, GlobalContext* globalCtx);
+void func_80874DE8(EnWallmas* this, GlobalContext* globalCtx);
+void func_80874FD8(EnWallmas* this, GlobalContext* globalCtx);
+void func_80875054(EnWallmas* this, GlobalContext* globalCtx);
+void func_80875108(EnWallmas* this, GlobalContext* globalCtx);
+void func_8087520C(EnWallmas* this, GlobalContext* globalCtx);
+void func_808752CC(EnWallmas* this, GlobalContext* globalCtx);
+void func_80875484(EnWallmas* this, GlobalContext* globalCtx);
+void func_8087556C(EnWallmas* this, GlobalContext* globalCtx);
+void func_80875638(EnWallmas* this, GlobalContext* globalCtx);
+void func_8087571C(EnWallmas* this, GlobalContext* globalCtx);
+void func_80875910(EnWallmas* this, GlobalContext* globalCtx);
+void func_8087596C(EnWallmas* this, GlobalContext* globalCtx);
+void func_80875A0C(EnWallmas* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Wallmas_InitVars = {
     ACTOR_EN_WALLMAS,

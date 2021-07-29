@@ -9,6 +9,27 @@ void EnWf_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnWf_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnWf_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80990F50(EnWf* this, GlobalContext* globalCtx);
+void func_80991040(EnWf* this, GlobalContext* globalCtx);
+void func_80991174(EnWf* this, GlobalContext* globalCtx);
+void func_80991280(EnWf* this, GlobalContext* globalCtx);
+void func_8099149C(EnWf* this, GlobalContext* globalCtx);
+void func_8099177C(EnWf* this, GlobalContext* globalCtx);
+void func_809919F4(EnWf* this, GlobalContext* globalCtx);
+void func_80991C80(EnWf* this, GlobalContext* globalCtx);
+void func_80992068(EnWf* this, GlobalContext* globalCtx);
+void func_809922B4(EnWf* this, GlobalContext* globalCtx);
+void func_809923E4(EnWf* this, GlobalContext* globalCtx);
+void func_809924EC(EnWf* this, GlobalContext* globalCtx);
+void func_80992784(EnWf* this, GlobalContext* globalCtx);
+void func_809928CC(EnWf* this, GlobalContext* globalCtx);
+void func_80992B8C(EnWf* this, GlobalContext* globalCtx);
+void func_80992E0C(EnWf* this, GlobalContext* globalCtx);
+void func_80993018(EnWf* this, GlobalContext* globalCtx);
+void func_80993194(EnWf* this, GlobalContext* globalCtx);
+void func_809933A0(EnWf* this, GlobalContext* globalCtx);
+void func_8099357C(EnWf* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Wf_InitVars = {
     ACTOR_EN_WF,

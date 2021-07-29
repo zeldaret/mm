@@ -5,9 +5,13 @@
 
 struct EnSyatekiCrow;
 
+typedef void (*EnSyatekiCrowActionFunc)(struct EnSyatekiCrow* this, GlobalContext* globalCtx);
+
 typedef struct EnSyatekiCrow {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x158];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x74];
+    /* 0x01B8 */ EnSyatekiCrowActionFunc actionFunc;
+    /* 0x01BC */ char unk_1BC[0xE0];
 } EnSyatekiCrow; // size = 0x29C
 
 extern const ActorInit En_Syateki_Crow_InitVars;

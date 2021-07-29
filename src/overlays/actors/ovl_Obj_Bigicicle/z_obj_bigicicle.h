@@ -5,9 +5,12 @@
 
 struct ObjBigicicle;
 
+typedef void (*ObjBigicicleActionFunc)(struct ObjBigicicle* this, GlobalContext* globalCtx);
+
 typedef struct ObjBigicicle {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0xA0];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ ObjBigicicleActionFunc actionFunc;
+    /* 0x0148 */ char unk_144[0x9C];
 } ObjBigicicle; // size = 0x1E4
 
 extern const ActorInit Obj_Bigicicle_InitVars;

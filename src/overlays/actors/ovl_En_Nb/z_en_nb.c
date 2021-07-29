@@ -9,6 +9,9 @@ void EnNb_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnNb_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnNb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BC0D84(EnNb* this, GlobalContext* globalCtx);
+void func_80BC0EAC(EnNb* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Nb_InitVars = {
     ACTOR_EN_NB,

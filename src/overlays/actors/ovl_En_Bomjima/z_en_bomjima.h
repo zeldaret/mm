@@ -5,9 +5,13 @@
 
 struct EnBomjima;
 
+typedef void (*EnBomjimaActionFunc)(struct EnBomjima* this, GlobalContext* globalCtx);
+
 typedef struct EnBomjima {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x200];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x140];
+    /* 0x0284 */ EnBomjimaActionFunc actionFunc;
+    /* 0x0288 */ char unk_288[0xBC];
 } EnBomjima; // size = 0x344
 
 extern const ActorInit En_Bomjima_InitVars;

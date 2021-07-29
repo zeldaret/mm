@@ -5,9 +5,12 @@
 
 struct EnBombal;
 
+typedef void (*EnBombalActionFunc)(struct EnBombal* this, GlobalContext* globalCtx);
+
 typedef struct EnBombal {
     /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_0144[0x2900];
+    /* 0x0144 */ EnBombalActionFunc actionFunc;
+    /* 0x0148 */ char unk_144[0x28FC];
 } EnBombal; // size = 0x2A44
 
 extern const ActorInit En_Bombal_InitVars;

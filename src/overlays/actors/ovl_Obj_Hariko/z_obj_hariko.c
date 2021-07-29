@@ -9,6 +9,9 @@ void ObjHariko_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjHariko_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjHariko_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B66A90(ObjHariko* this, GlobalContext* globalCtx);
+void func_80B66AC4(ObjHariko* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Hariko_InitVars = {
     ACTOR_OBJ_HARIKO,

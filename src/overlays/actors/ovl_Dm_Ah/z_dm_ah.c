@@ -9,6 +9,9 @@ void DmAh_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmAh_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmAh_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C1D7FC(DmAh* this, GlobalContext* globalCtx);
+void func_80C1D92C(DmAh* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Dm_Ah_InitVars = {
     ACTOR_DM_AH,

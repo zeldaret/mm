@@ -9,6 +9,13 @@ void EnKujiya_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKujiya_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKujiya_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BB09BC(EnKujiya* this, GlobalContext* globalCtx);
+void func_80BB0E58(EnKujiya* this, GlobalContext* globalCtx);
+void func_80BB0F38(EnKujiya* this, GlobalContext* globalCtx);
+void func_80BB0FA8(EnKujiya* this, GlobalContext* globalCtx);
+void func_80BB1180(EnKujiya* this, GlobalContext* globalCtx);
+void func_80BB1268(EnKujiya* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Kujiya_InitVars = {
     ACTOR_EN_KUJIYA,

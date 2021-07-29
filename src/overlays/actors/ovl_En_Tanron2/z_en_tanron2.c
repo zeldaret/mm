@@ -9,6 +9,11 @@ void EnTanron2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BB69FC(EnTanron2* this, GlobalContext* globalCtx);
+void func_80BB6BD8(EnTanron2* this, GlobalContext* globalCtx);
+void func_80BB6F78(EnTanron2* this, GlobalContext* globalCtx);
+void func_80BB7408(EnTanron2* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Tanron2_InitVars = {
     ACTOR_EN_TANRON2,

@@ -5,9 +5,13 @@
 
 struct EnEgblock;
 
+typedef void (*EnEgblockActionFunc)(struct EnEgblock* this, GlobalContext* globalCtx);
+
 typedef struct EnEgblock {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0xC70];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x5C];
+    /* 0x01A0 */ EnEgblockActionFunc actionFunc;
+    /* 0x01A4 */ char unk_1A4[0xC10];
 } EnEgblock; // size = 0xDB4
 
 extern const ActorInit En_Egblock_InitVars;

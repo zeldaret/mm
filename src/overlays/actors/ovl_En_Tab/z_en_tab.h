@@ -5,9 +5,13 @@
 
 struct EnTab;
 
+typedef void (*EnTabActionFunc)(struct EnTab* this, GlobalContext* globalCtx);
+
 typedef struct EnTab {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x1F8];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x44];
+    /* 0x0188 */ EnTabActionFunc actionFunc;
+    /* 0x018C */ char unk_18C[0x1B0];
 } EnTab; // size = 0x33C
 
 extern const ActorInit En_Tab_InitVars;

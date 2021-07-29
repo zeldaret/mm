@@ -9,6 +9,17 @@ void EnKusa2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKusa2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKusa2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A5D5F4(EnKusa2* this, GlobalContext* globalCtx);
+void func_80A5D62C(EnKusa2* this, GlobalContext* globalCtx);
+void func_80A5D6C4(EnKusa2* this, GlobalContext* globalCtx);
+void func_80A5D794(EnKusa2* this, GlobalContext* globalCtx);
+void func_80A5D7C4(EnKusa2* this, GlobalContext* globalCtx);
+void func_80A5D9C8(EnKusa2* this, GlobalContext* globalCtx);
+void func_80A5DC98(EnKusa2* this, GlobalContext* globalCtx);
+void func_80A5DEB4(EnKusa2* this, GlobalContext* globalCtx);
+void func_80A5E210(EnKusa2* this, GlobalContext* globalCtx);
+void func_80A5E4BC(EnKusa2* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Kusa2_InitVars = {
     ACTOR_EN_KUSA2,

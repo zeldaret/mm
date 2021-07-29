@@ -5,9 +5,13 @@
 
 struct EnRaf;
 
+typedef void (*EnRafActionFunc)(struct EnRaf* this, GlobalContext* globalCtx);
+
 typedef struct EnRaf {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x9A0];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0xEC];
+    /* 0x0230 */ EnRafActionFunc actionFunc;
+    /* 0x0234 */ char unk_234[0x8B0];
 } EnRaf; // size = 0xAE4
 
 extern const ActorInit En_Raf_InitVars;

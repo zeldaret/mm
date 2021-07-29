@@ -9,6 +9,9 @@ void EnTru_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTru_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTru_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A87FD0(EnTru* this, GlobalContext* globalCtx);
+void func_80A881E0(EnTru* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Tru_InitVars = {
     ACTOR_EN_TRU,

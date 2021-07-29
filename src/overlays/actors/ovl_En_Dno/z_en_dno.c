@@ -9,6 +9,20 @@ void EnDno_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDno_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDno_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A71B04(EnDno* this, GlobalContext* globalCtx);
+void func_80A71B58(EnDno* this, GlobalContext* globalCtx);
+void func_80A71B68(EnDno* this, GlobalContext* globalCtx);
+void func_80A71C3C(EnDno* this, GlobalContext* globalCtx);
+void func_80A71F18(EnDno* this, GlobalContext* globalCtx);
+void func_80A72438(EnDno* this, GlobalContext* globalCtx);
+void func_80A724B8(EnDno* this, GlobalContext* globalCtx);
+void func_80A72598(EnDno* this, GlobalContext* globalCtx);
+void func_80A725F8(EnDno* this, GlobalContext* globalCtx);
+void func_80A72B3C(EnDno* this, GlobalContext* globalCtx);
+void func_80A72BA4(EnDno* this, GlobalContext* globalCtx);
+void func_80A730A0(EnDno* this, GlobalContext* globalCtx);
+void func_80A732C8(EnDno* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Dno_InitVars = {
     ACTOR_EN_DNO,

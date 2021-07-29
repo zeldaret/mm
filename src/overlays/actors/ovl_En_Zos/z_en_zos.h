@@ -5,9 +5,12 @@
 
 struct EnZos;
 
+typedef void (*EnZosActionFunc)(struct EnZos* this, GlobalContext* globalCtx);
+
 typedef struct EnZos {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x180];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x17C];
+    /* 0x02C0 */ EnZosActionFunc actionFunc;
 } EnZos; // size = 0x2C4
 
 extern const ActorInit En_Zos_InitVars;

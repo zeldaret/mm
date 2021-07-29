@@ -9,6 +9,11 @@ void DmHina_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmHina_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmHina_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A1F470(DmHina* this, GlobalContext* globalCtx);
+void func_80A1F56C(DmHina* this, GlobalContext* globalCtx);
+void func_80A1F5AC(DmHina* this, GlobalContext* globalCtx);
+void func_80A1F63C(DmHina* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Dm_Hina_InitVars = {
     ACTOR_DM_HINA,

@@ -8,6 +8,16 @@ void EnGo_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnGo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGo_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A14798(EnGo* this, GlobalContext* globalCtx);
+void func_80A149B0(EnGo* this, GlobalContext* globalCtx);
+void func_80A14B30(EnGo* this, GlobalContext* globalCtx);
+void func_80A14E14(EnGo* this, GlobalContext* globalCtx);
+void func_80A14E74(EnGo* this, GlobalContext* globalCtx);
+void func_80A14EB0(EnGo* this, GlobalContext* globalCtx);
+void func_80A14FC8(EnGo* this, GlobalContext* globalCtx);
+void func_80A153FC(EnGo* this, GlobalContext* globalCtx);
+void func_80A157C4(EnGo* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Go_InitVars = {
     ACTOR_EN_GO,

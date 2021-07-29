@@ -5,9 +5,12 @@
 
 struct EnTrt;
 
+typedef void (*EnTrtActionFunc)(struct EnTrt* this, GlobalContext* globalCtx);
+
 typedef struct EnTrt {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x2EC];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ EnTrtActionFunc actionFunc;
+    /* 0x0148 */ char unk_144[0x2E8];
 } EnTrt; // size = 0x430
 
 extern const ActorInit En_Trt_InitVars;

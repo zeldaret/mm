@@ -9,6 +9,9 @@ void EnGm_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGm_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGm_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80950CDC(EnGm* this, GlobalContext* globalCtx);
+void func_80950DB8(EnGm* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Gm_InitVars = {
     ACTOR_EN_GM,

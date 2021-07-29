@@ -9,6 +9,12 @@ void BgF40Switch_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgF40Switch_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgF40Switch_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BC4B20(BgF40Switch* this, GlobalContext* globalCtx);
+void func_80BC4B94(BgF40Switch* this, GlobalContext* globalCtx);
+void func_80BC4BB8(BgF40Switch* this, GlobalContext* globalCtx);
+void func_80BC4C68(BgF40Switch* this, GlobalContext* globalCtx);
+void func_80BC4D30(BgF40Switch* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_F40_Switch_InitVars = {
     ACTOR_BG_F40_SWITCH,

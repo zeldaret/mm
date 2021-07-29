@@ -9,6 +9,10 @@ void EnBomChu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBomChu_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBomChu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_808F7868(EnBomChu* this, GlobalContext* globalCtx);
+void func_808F7A84(EnBomChu* this, GlobalContext* globalCtx);
+void func_808F7FA0(EnBomChu* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Bom_Chu_InitVars = {
     ACTOR_EN_BOM_CHU,

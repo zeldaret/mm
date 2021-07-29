@@ -9,6 +9,13 @@ void BgNumaHana_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgNumaHana_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgNumaHana_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A1AA28(BgNumaHana* this, GlobalContext* globalCtx);
+void func_80A1AA4C(BgNumaHana* this, GlobalContext* globalCtx);
+void func_80A1AB00(BgNumaHana* this, GlobalContext* globalCtx);
+void func_80A1ABF0(BgNumaHana* this, GlobalContext* globalCtx);
+void func_80A1ACE0(BgNumaHana* this, GlobalContext* globalCtx);
+void func_80A1AE1C(BgNumaHana* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_Numa_Hana_InitVars = {
     ACTOR_BG_NUMA_HANA,

@@ -9,6 +9,13 @@ void BgIknvDoukutu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIknvDoukutu_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIknvDoukutu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BD716C(BgIknvDoukutu* this, GlobalContext* globalCtx);
+void func_80BD71BC(BgIknvDoukutu* this, GlobalContext* globalCtx);
+void func_80BD7250(BgIknvDoukutu* this, GlobalContext* globalCtx);
+void func_80BD72BC(BgIknvDoukutu* this, GlobalContext* globalCtx);
+void func_80BD7360(BgIknvDoukutu* this, GlobalContext* globalCtx);
+void func_80BD73D0(BgIknvDoukutu* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_Iknv_Doukutu_InitVars = {
     ACTOR_BG_IKNV_DOUKUTU,

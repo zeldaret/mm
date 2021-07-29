@@ -5,9 +5,12 @@
 
 struct ObjIcePoly;
 
+typedef void (*ObjIcePolyActionFunc)(struct ObjIcePoly* this, GlobalContext* globalCtx);
+
 typedef struct ObjIcePoly {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x138];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ ObjIcePolyActionFunc actionFunc;
+    /* 0x0148 */ char unk_144[0x134];
 } ObjIcePoly; // size = 0x27C
 
 extern const ActorInit Obj_Ice_Poly_InitVars;

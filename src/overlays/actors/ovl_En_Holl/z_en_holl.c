@@ -9,6 +9,8 @@ void EnHoll_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHoll_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHoll_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_8089A330(EnHoll* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Holl_InitVars = {
     ACTOR_EN_HOLL,

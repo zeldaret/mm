@@ -9,6 +9,15 @@ void EnSsh_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSsh_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSsh_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809755C0(EnSsh* this, GlobalContext* globalCtx);
+void func_80975720(EnSsh* this, GlobalContext* globalCtx);
+void func_809758B0(EnSsh* this, GlobalContext* globalCtx);
+void func_80975998(EnSsh* this, GlobalContext* globalCtx);
+void func_80975A98(EnSsh* this, GlobalContext* globalCtx);
+void func_80975C14(EnSsh* this, GlobalContext* globalCtx);
+
+void EnSsh_SetupAction(EnSsh* this, EnSshActionFunc actionFunc);
+
 #if 0
 const ActorInit En_Ssh_InitVars = {
     ACTOR_EN_SSH,
@@ -65,7 +74,7 @@ extern UNK_TYPE D_060000D8;
 extern UNK_TYPE D_06000304;
 extern UNK_TYPE D_06005850;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ssh/func_80973EF0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ssh/EnSsh_SetupAction.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ssh/func_80973EFC.s")
 

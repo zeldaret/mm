@@ -9,6 +9,14 @@ void EnMkk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMkk_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMkk_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A4E100(EnMkk* this, GlobalContext* globalCtx);
+void func_80A4E1F0(EnMkk* this, GlobalContext* globalCtx);
+void func_80A4E2E8(EnMkk* this, GlobalContext* globalCtx);
+void func_80A4E60C(EnMkk* this, GlobalContext* globalCtx);
+void func_80A4E72C(EnMkk* this, GlobalContext* globalCtx);
+void func_80A4EE48(EnMkk* this, GlobalContext* globalCtx);
+void func_80A4EF74(EnMkk* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Mkk_InitVars = {
     ACTOR_EN_MKK,

@@ -9,6 +9,10 @@ void ObjArmos_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjArmos_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjArmos_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809A54E0(ObjArmos* this, GlobalContext* globalCtx);
+void func_809A562C(ObjArmos* this, GlobalContext* globalCtx);
+void func_809A57F4(ObjArmos* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Armos_InitVars = {
     ACTOR_OBJ_ARMOS,

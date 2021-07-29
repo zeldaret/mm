@@ -9,6 +9,10 @@ void ObjComb_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjComb_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjComb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_8098DC60(ObjComb* this, GlobalContext* globalCtx);
+void func_8098DEA0(ObjComb* this, GlobalContext* globalCtx);
+void func_8098E0B8(ObjComb* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Comb_InitVars = {
     ACTOR_OBJ_COMB,

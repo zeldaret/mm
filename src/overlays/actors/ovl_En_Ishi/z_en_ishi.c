@@ -8,6 +8,13 @@ void EnIshi_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnIshi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnIshi_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_8095E5C0(EnIshi* this, GlobalContext* globalCtx);
+void func_8095E660(EnIshi* this, GlobalContext* globalCtx);
+void func_8095E95C(EnIshi* this, GlobalContext* globalCtx);
+void func_8095EBDC(EnIshi* this, GlobalContext* globalCtx);
+void func_8095F0A4(EnIshi* this, GlobalContext* globalCtx);
+void func_8095F194(EnIshi* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Ishi_InitVars = {
     ACTOR_EN_ISHI,

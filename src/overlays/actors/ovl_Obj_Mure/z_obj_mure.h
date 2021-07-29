@@ -5,9 +5,12 @@
 
 struct ObjMure;
 
+typedef void (*ObjMureActionFunc)(struct ObjMure* this, GlobalContext* globalCtx);
+
 typedef struct ObjMure {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x60];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ ObjMureActionFunc actionFunc;
+    /* 0x0148 */ char unk_144[0x5C];
 } ObjMure; // size = 0x1A4
 
 extern const ActorInit Obj_Mure_InitVars;

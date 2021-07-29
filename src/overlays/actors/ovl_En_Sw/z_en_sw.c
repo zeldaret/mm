@@ -9,6 +9,18 @@ void EnSw_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSw_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSw_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_808DA350(EnSw* this, GlobalContext* globalCtx);
+void func_808DA3F4(EnSw* this, GlobalContext* globalCtx);
+void func_808DA578(EnSw* this, GlobalContext* globalCtx);
+void func_808DA6FC(EnSw* this, GlobalContext* globalCtx);
+void func_808DA89C(EnSw* this, GlobalContext* globalCtx);
+void func_808DAA60(EnSw* this, GlobalContext* globalCtx);
+void func_808DACF4(EnSw* this, GlobalContext* globalCtx);
+void func_808DAEB4(EnSw* this, GlobalContext* globalCtx);
+void func_808DB100(EnSw* this, GlobalContext* globalCtx);
+void func_808DB25C(EnSw* this, GlobalContext* globalCtx);
+void func_808DB2E0(EnSw* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Sw_InitVars = {
     ACTOR_EN_SW,

@@ -9,6 +9,22 @@ void EnRailSkb_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRailSkb_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRailSkb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B70FF8(EnRailSkb* this, GlobalContext* globalCtx);
+void func_80B710E4(EnRailSkb* this, GlobalContext* globalCtx);
+void func_80B7114C(EnRailSkb* this, GlobalContext* globalCtx);
+void func_80B7123C(EnRailSkb* this, GlobalContext* globalCtx);
+void func_80B71314(EnRailSkb* this, GlobalContext* globalCtx);
+void func_80B713A4(EnRailSkb* this, GlobalContext* globalCtx);
+void func_80B714D8(EnRailSkb* this, GlobalContext* globalCtx);
+void func_80B715AC(EnRailSkb* this, GlobalContext* globalCtx);
+void func_80B716A8(EnRailSkb* this, GlobalContext* globalCtx);
+void func_80B717E0(EnRailSkb* this, GlobalContext* globalCtx);
+void func_80B718C4(EnRailSkb* this, GlobalContext* globalCtx);
+void func_80B71954(EnRailSkb* this, GlobalContext* globalCtx);
+void func_80B71A58(EnRailSkb* this, GlobalContext* globalCtx);
+void func_80B71BB8(EnRailSkb* this, GlobalContext* globalCtx);
+void func_80B71EA8(EnRailSkb* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Rail_Skb_InitVars = {
     ACTOR_EN_RAIL_SKB,

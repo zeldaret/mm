@@ -5,9 +5,12 @@
 
 struct DemoGetitem;
 
+typedef void (*DemoGetitemActionFunc)(struct DemoGetitem* this, GlobalContext* globalCtx);
+
 typedef struct DemoGetitem {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0xC];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x8];
+    /* 0x014C */ DemoGetitemActionFunc actionFunc;
 } DemoGetitem; // size = 0x150
 
 extern const ActorInit Demo_Getitem_InitVars;

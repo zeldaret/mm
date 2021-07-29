@@ -8,6 +8,11 @@ void ShotSun_Init(Actor* thisx, GlobalContext* globalCtx);
 void ShotSun_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ShotSun_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80973740(ShotSun* this, GlobalContext* globalCtx);
+void func_80973804(ShotSun* this, GlobalContext* globalCtx);
+void func_809738D0(ShotSun* this, GlobalContext* globalCtx);
+void func_80973960(ShotSun* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Shot_Sun_InitVars = {
     ACTOR_SHOT_SUN,

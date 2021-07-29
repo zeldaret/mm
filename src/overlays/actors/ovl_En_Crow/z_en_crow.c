@@ -9,6 +9,13 @@ void EnCrow_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnCrow_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnCrow_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_8099AC8C(EnCrow* this, GlobalContext* globalCtx);
+void func_8099B0CC(EnCrow* this, GlobalContext* globalCtx);
+void func_8099B584(EnCrow* this, GlobalContext* globalCtx);
+void func_8099B6C4(EnCrow* this, GlobalContext* globalCtx);
+void func_8099B838(EnCrow* this, GlobalContext* globalCtx);
+void func_8099B9E8(EnCrow* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Crow_InitVars = {
     ACTOR_EN_CROW,

@@ -5,9 +5,13 @@
 
 struct EnOwl;
 
+typedef void (*EnOwlActionFunc)(struct EnOwl* this, GlobalContext* globalCtx);
+
 typedef struct EnOwl {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x2D4];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x2CC];
+    /* 0x0410 */ EnOwlActionFunc actionFunc;
+    /* 0x0414 */ char unk_414[0x4];
 } EnOwl; // size = 0x418
 
 extern const ActorInit En_Owl_InitVars;

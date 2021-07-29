@@ -9,6 +9,15 @@ void EnMaruta_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMaruta_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMaruta_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B372CC(EnMaruta* this, GlobalContext* globalCtx);
+void func_80B3738C(EnMaruta* this, GlobalContext* globalCtx);
+void func_80B37428(EnMaruta* this, GlobalContext* globalCtx);
+void func_80B374FC(EnMaruta* this, GlobalContext* globalCtx);
+void func_80B37950(EnMaruta* this, GlobalContext* globalCtx);
+void func_80B379C0(EnMaruta* this, GlobalContext* globalCtx);
+void func_80B37A64(EnMaruta* this, GlobalContext* globalCtx);
+void func_80B37AA0(EnMaruta* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Maruta_InitVars = {
     ACTOR_EN_MARUTA,

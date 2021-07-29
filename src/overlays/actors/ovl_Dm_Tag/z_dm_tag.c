@@ -8,6 +8,10 @@ void DmTag_Init(Actor* thisx, GlobalContext* globalCtx);
 void DmTag_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmTag_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C229AC(DmTag* this, GlobalContext* globalCtx);
+void func_80C229EC(DmTag* this, GlobalContext* globalCtx);
+void func_80C229FC(DmTag* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Dm_Tag_InitVars = {
     ACTOR_DM_TAG,

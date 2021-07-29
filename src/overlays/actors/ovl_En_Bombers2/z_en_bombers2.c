@@ -9,6 +9,10 @@ void EnBombers2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBombers2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBombers2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C04BA0(EnBombers2* this, GlobalContext* globalCtx);
+void func_80C04D8C(EnBombers2* this, GlobalContext* globalCtx);
+void func_80C0520C(EnBombers2* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Bombers2_InitVars = {
     ACTOR_EN_BOMBERS2,

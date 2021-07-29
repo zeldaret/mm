@@ -5,9 +5,12 @@
 
 struct ObjNozoki;
 
+typedef void (*ObjNozokiActionFunc)(struct ObjNozoki* this, GlobalContext* globalCtx);
+
 typedef struct ObjNozoki {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x20];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x1C];
+    /* 0x0160 */ ObjNozokiActionFunc actionFunc;
 } ObjNozoki; // size = 0x164
 
 extern const ActorInit Obj_Nozoki_InitVars;

@@ -5,9 +5,12 @@
 
 struct EnMinislime;
 
+typedef void (*EnMinislimeActionFunc)(struct EnMinislime* this, GlobalContext* globalCtx);
+
 typedef struct EnMinislime {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x68];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ EnMinislimeActionFunc actionFunc;
+    /* 0x0148 */ char unk_144[0x64];
 } EnMinislime; // size = 0x1AC
 
 extern const ActorInit En_Minislime_InitVars;

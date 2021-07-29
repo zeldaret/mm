@@ -9,6 +9,17 @@ void EnGe2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGe2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGe2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B8BCEC(EnGe2* this, GlobalContext* globalCtx);
+void func_80B8BD38(EnGe2* this, GlobalContext* globalCtx);
+void func_80B8BE08(EnGe2* this, GlobalContext* globalCtx);
+void func_80B8BF04(EnGe2* this, GlobalContext* globalCtx);
+void func_80B8C048(EnGe2* this, GlobalContext* globalCtx);
+void func_80B8C0B0(EnGe2* this, GlobalContext* globalCtx);
+void func_80B8C45C(EnGe2* this, GlobalContext* globalCtx);
+void func_80B8C59C(EnGe2* this, GlobalContext* globalCtx);
+void func_80B8C644(EnGe2* this, GlobalContext* globalCtx);
+void func_80B8C9B8(EnGe2* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Ge2_InitVars = {
     ACTOR_EN_GE2,

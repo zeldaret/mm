@@ -9,6 +9,16 @@ void EnThiefbird_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnThiefbird_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnThiefbird_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C11590(EnThiefbird* this, GlobalContext* globalCtx);
+void func_80C1193C(EnThiefbird* this, GlobalContext* globalCtx);
+void func_80C11D14(EnThiefbird* this, GlobalContext* globalCtx);
+void func_80C11DF0(EnThiefbird* this, GlobalContext* globalCtx);
+void func_80C1215C(EnThiefbird* this, GlobalContext* globalCtx);
+void func_80C12378(EnThiefbird* this, GlobalContext* globalCtx);
+void func_80C124B0(EnThiefbird* this, GlobalContext* globalCtx);
+void func_80C126D8(EnThiefbird* this, GlobalContext* globalCtx);
+void func_80C127F4(EnThiefbird* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Thiefbird_InitVars = {
     ACTOR_EN_THIEFBIRD,

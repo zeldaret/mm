@@ -5,9 +5,13 @@
 
 struct EnMm3;
 
+typedef void (*EnMm3ActionFunc)(struct EnMm3* this, GlobalContext* globalCtx);
+
 typedef struct EnMm3 {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x174];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x90];
+    /* 0x01D4 */ EnMm3ActionFunc actionFunc;
+    /* 0x01D8 */ char unk_1D8[0xE0];
 } EnMm3; // size = 0x2B8
 
 extern const ActorInit En_Mm3_InitVars;

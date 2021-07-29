@@ -5,9 +5,12 @@
 
 struct ArrowLight;
 
+typedef void (*ArrowLightActionFunc)(struct ArrowLight* this, GlobalContext* globalCtx);
+
 typedef struct ArrowLight {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x20];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x1C];
+    /* 0x0160 */ ArrowLightActionFunc actionFunc;
 } ArrowLight; // size = 0x164
 
 extern const ActorInit Arrow_Light_InitVars;

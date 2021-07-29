@@ -9,6 +9,13 @@ void EnTest6_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTest6_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTest6_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A9156C(EnTest6* this, GlobalContext* globalCtx);
+void func_80A91760(EnTest6* this, GlobalContext* globalCtx);
+void func_80A92188(EnTest6* this, GlobalContext* globalCtx);
+void func_80A92950(EnTest6* this, GlobalContext* globalCtx);
+
+void EnTest6_SetupAction(EnTest6* this, EnTest6ActionFunc actionFunc);
+
 #if 0
 const ActorInit En_Test6_InitVars = {
     ACTOR_EN_TEST6,
@@ -38,7 +45,7 @@ const ActorInit En_Test6_InitVars = {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test6/func_80A90FC0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test6/func_80A91324.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test6/EnTest6_SetupAction.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test6/EnTest6_Init.s")
 

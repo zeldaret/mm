@@ -9,6 +9,21 @@ void EnHonotrap_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHonotrap_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHonotrap_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_8092EBDC(EnHonotrap* this, GlobalContext* globalCtx);
+void func_8092ECF0(EnHonotrap* this, GlobalContext* globalCtx);
+void func_8092EDD8(EnHonotrap* this, GlobalContext* globalCtx);
+void func_8092EE1C(EnHonotrap* this, GlobalContext* globalCtx);
+void func_8092EE90(EnHonotrap* this, GlobalContext* globalCtx);
+void func_8092EF98(EnHonotrap* this, GlobalContext* globalCtx);
+void func_8092F074(EnHonotrap* this, GlobalContext* globalCtx);
+void func_8092F0B8(EnHonotrap* this, GlobalContext* globalCtx);
+void func_8092F10C(EnHonotrap* this, GlobalContext* globalCtx);
+void func_8092F208(EnHonotrap* this, GlobalContext* globalCtx);
+void func_8092F3D8(EnHonotrap* this, GlobalContext* globalCtx);
+void func_8092F5EC(EnHonotrap* this, GlobalContext* globalCtx);
+void func_8092F7BC(EnHonotrap* this, GlobalContext* globalCtx);
+void func_8092F878(EnHonotrap* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Honotrap_InitVars = {
     ACTOR_EN_HONOTRAP,

@@ -9,6 +9,15 @@ void EnCow_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnCow_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnCow_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_8099CAA8(EnCow* this, GlobalContext* globalCtx);
+void func_8099CB20(EnCow* this, GlobalContext* globalCtx);
+void func_8099CB68(EnCow* this, GlobalContext* globalCtx);
+void func_8099CBCC(EnCow* this, GlobalContext* globalCtx);
+void func_8099CC68(EnCow* this, GlobalContext* globalCtx);
+void func_8099CCF8(EnCow* this, GlobalContext* globalCtx);
+void func_8099CDA0(EnCow* this, GlobalContext* globalCtx);
+void func_8099CFAC(EnCow* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Cow_InitVars = {
     ACTOR_EN_COW,

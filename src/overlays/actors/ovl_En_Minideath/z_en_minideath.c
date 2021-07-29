@@ -8,6 +8,20 @@ void EnMinideath_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnMinideath_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMinideath_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_808CA860(EnMinideath* this, GlobalContext* globalCtx);
+void func_808CA8F4(EnMinideath* this, GlobalContext* globalCtx);
+void func_808CAAEC(EnMinideath* this, GlobalContext* globalCtx);
+void func_808CABB0(EnMinideath* this, GlobalContext* globalCtx);
+void func_808CACD8(EnMinideath* this, GlobalContext* globalCtx);
+void func_808CAE18(EnMinideath* this, GlobalContext* globalCtx);
+void func_808CAF68(EnMinideath* this, GlobalContext* globalCtx);
+void func_808CB094(EnMinideath* this, GlobalContext* globalCtx);
+void func_808CB22C(EnMinideath* this, GlobalContext* globalCtx);
+void func_808CB454(EnMinideath* this, GlobalContext* globalCtx);
+void func_808CB59C(EnMinideath* this, GlobalContext* globalCtx);
+void func_808CB6D4(EnMinideath* this, GlobalContext* globalCtx);
+void func_808CB7CC(EnMinideath* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Minideath_InitVars = {
     ACTOR_EN_MINIDEATH,

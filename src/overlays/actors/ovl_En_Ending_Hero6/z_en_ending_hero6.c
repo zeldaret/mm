@@ -9,6 +9,8 @@ void EnEndingHero6_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnEndingHero6_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnEndingHero6_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C23E18(EnEndingHero6* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Ending_Hero6_InitVars = {
     ACTOR_EN_ENDING_HERO6,

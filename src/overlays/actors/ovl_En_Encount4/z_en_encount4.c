@@ -8,6 +8,12 @@ void EnEncount4_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnEncount4_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnEncount4_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809C3FD8(EnEncount4* this, GlobalContext* globalCtx);
+void func_809C4078(EnEncount4* this, GlobalContext* globalCtx);
+void func_809C42A8(EnEncount4* this, GlobalContext* globalCtx);
+void func_809C4598(EnEncount4* this, GlobalContext* globalCtx);
+void func_809C464C(EnEncount4* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Encount4_InitVars = {
     ACTOR_EN_ENCOUNT4,

@@ -9,6 +9,14 @@ void EnMushi2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMushi2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMushi2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A6A36C(EnMushi2* this, GlobalContext* globalCtx);
+void func_80A6A5C0(EnMushi2* this, GlobalContext* globalCtx);
+void func_80A6A824(EnMushi2* this, GlobalContext* globalCtx);
+void func_80A6A9E4(EnMushi2* this, GlobalContext* globalCtx);
+void func_80A6AB08(EnMushi2* this, GlobalContext* globalCtx);
+void func_80A6AE7C(EnMushi2* this, GlobalContext* globalCtx);
+void func_80A6B0D8(EnMushi2* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Mushi2_InitVars = {
     ACTOR_EN_MUSHI2,

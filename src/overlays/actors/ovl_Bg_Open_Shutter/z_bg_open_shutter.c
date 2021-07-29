@@ -9,6 +9,10 @@ void BgOpenShutter_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgOpenShutter_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgOpenShutter_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80ACAD88(BgOpenShutter* this, GlobalContext* globalCtx);
+void func_80ACAE5C(BgOpenShutter* this, GlobalContext* globalCtx);
+void func_80ACAEF0(BgOpenShutter* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_Open_Shutter_InitVars = {
     ACTOR_BG_OPEN_SHUTTER,

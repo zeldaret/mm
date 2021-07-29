@@ -9,6 +9,25 @@ void EnKgy_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKgy_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKgy_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B417B8(EnKgy* this, GlobalContext* globalCtx);
+void func_80B41858(EnKgy* this, GlobalContext* globalCtx);
+void func_80B419B0(EnKgy* this, GlobalContext* globalCtx);
+void func_80B41A48(EnKgy* this, GlobalContext* globalCtx);
+void func_80B41ACC(EnKgy* this, GlobalContext* globalCtx);
+void func_80B41C30(EnKgy* this, GlobalContext* globalCtx);
+void func_80B41C54(EnKgy* this, GlobalContext* globalCtx);
+void func_80B41CBC(EnKgy* this, GlobalContext* globalCtx);
+void func_80B41D64(EnKgy* this, GlobalContext* globalCtx);
+void func_80B41E18(EnKgy* this, GlobalContext* globalCtx);
+void func_80B42508(EnKgy* this, GlobalContext* globalCtx);
+void func_80B425A0(EnKgy* this, GlobalContext* globalCtx);
+void func_80B42660(EnKgy* this, GlobalContext* globalCtx);
+void func_80B42714(EnKgy* this, GlobalContext* globalCtx);
+void func_80B427C8(EnKgy* this, GlobalContext* globalCtx);
+void func_80B4296C(EnKgy* this, GlobalContext* globalCtx);
+void func_80B42A8C(EnKgy* this, GlobalContext* globalCtx);
+void func_80B42D28(EnKgy* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Kgy_InitVars = {
     ACTOR_EN_KGY,

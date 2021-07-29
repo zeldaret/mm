@@ -9,6 +9,11 @@ void EnArrow_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnArrow_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnArrow_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_8088A594(EnArrow* this, GlobalContext* globalCtx);
+void func_8088ACE0(EnArrow* this, GlobalContext* globalCtx);
+void func_8088B630(EnArrow* this, GlobalContext* globalCtx);
+void func_8088B6B0(EnArrow* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Arrow_InitVars = {
     ACTOR_EN_ARROW,

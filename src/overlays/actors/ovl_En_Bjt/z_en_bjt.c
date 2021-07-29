@@ -9,6 +9,9 @@ void EnBjt_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBjt_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBjt_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BFDA48(EnBjt* this, GlobalContext* globalCtx);
+void func_80BFDAE8(EnBjt* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Bjt_InitVars = {
     ACTOR_EN_BJT,

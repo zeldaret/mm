@@ -9,6 +9,19 @@ void EnDekunuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDekunuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDekunuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_808BD49C(EnDekunuts* this, GlobalContext* globalCtx);
+void func_808BD7D4(EnDekunuts* this, GlobalContext* globalCtx);
+void func_808BD8D8(EnDekunuts* this, GlobalContext* globalCtx);
+void func_808BDA4C(EnDekunuts* this, GlobalContext* globalCtx);
+void func_808BDD54(EnDekunuts* this, GlobalContext* globalCtx);
+void func_808BDEF8(EnDekunuts* this, GlobalContext* globalCtx);
+void func_808BDFB8(EnDekunuts* this, GlobalContext* globalCtx);
+void func_808BE22C(EnDekunuts* this, GlobalContext* globalCtx);
+void func_808BE358(EnDekunuts* this, GlobalContext* globalCtx);
+void func_808BE3FC(EnDekunuts* this, GlobalContext* globalCtx);
+void func_808BE4D4(EnDekunuts* this, GlobalContext* globalCtx);
+void func_808BE6C4(EnDekunuts* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Dekunuts_InitVars = {
     ACTOR_EN_DEKUNUTS,

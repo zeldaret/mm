@@ -5,9 +5,13 @@
 
 struct EnSyatekiWf;
 
+typedef void (*EnSyatekiWfActionFunc)(struct EnSyatekiWf* this, GlobalContext* globalCtx);
+
 typedef struct EnSyatekiWf {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x288];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x150];
+    /* 0x0294 */ EnSyatekiWfActionFunc actionFunc;
+    /* 0x0298 */ char unk_298[0x134];
 } EnSyatekiWf; // size = 0x3CC
 
 extern const ActorInit En_Syateki_Wf_InitVars;

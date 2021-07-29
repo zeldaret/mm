@@ -5,9 +5,13 @@
 
 struct EnBigslime;
 
+typedef void (*EnBigslimeActionFunc)(struct EnBigslime* this, GlobalContext* globalCtx);
+
 typedef struct EnBigslime {
     /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_0144[0x34F0];
+    /* 0x0144 */ char unk_144[0x44];
+    /* 0x0188 */ EnBigslimeActionFunc actionFunc;
+    /* 0x018C */ char unk_18C[0x34A8];
 } EnBigslime; // size = 0x3634
 
 extern const ActorInit En_Bigslime_InitVars;

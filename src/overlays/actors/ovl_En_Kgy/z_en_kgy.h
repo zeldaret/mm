@@ -5,9 +5,12 @@
 
 struct EnKgy;
 
+typedef void (*EnKgyActionFunc)(struct EnKgy* this, GlobalContext* globalCtx);
+
 typedef struct EnKgy {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x1C4];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x1C0];
+    /* 0x0304 */ EnKgyActionFunc actionFunc;
 } EnKgy; // size = 0x308
 
 extern const ActorInit En_Kgy_InitVars;

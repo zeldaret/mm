@@ -9,6 +9,12 @@ void EnZow_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnZow_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnZow_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BDD350(EnZow* this, GlobalContext* globalCtx);
+void func_80BDD570(EnZow* this, GlobalContext* globalCtx);
+void func_80BDD634(EnZow* this, GlobalContext* globalCtx);
+void func_80BDD6BC(EnZow* this, GlobalContext* globalCtx);
+void func_80BDD79C(EnZow* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Zow_InitVars = {
     ACTOR_EN_ZOW,

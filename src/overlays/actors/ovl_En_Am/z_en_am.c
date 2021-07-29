@@ -9,6 +9,17 @@ void EnAm_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnAm_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnAm_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_808B0040(EnAm* this, GlobalContext* globalCtx);
+void func_808B0124(EnAm* this, GlobalContext* globalCtx);
+void func_808B03C0(EnAm* this, GlobalContext* globalCtx);
+void func_808B04A8(EnAm* this, GlobalContext* globalCtx);
+void func_808B0508(EnAm* this, GlobalContext* globalCtx);
+void func_808B05C8(EnAm* this, GlobalContext* globalCtx);
+void func_808B066C(EnAm* this, GlobalContext* globalCtx);
+void func_808B07A8(EnAm* this, GlobalContext* globalCtx);
+void func_808B0894(EnAm* this, GlobalContext* globalCtx);
+void func_808B0B4C(EnAm* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Am_InitVars = {
     ACTOR_EN_AM,

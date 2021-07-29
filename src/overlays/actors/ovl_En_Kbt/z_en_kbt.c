@@ -9,6 +9,9 @@ void EnKbt_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKbt_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKbt_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B34314(EnKbt* this, GlobalContext* globalCtx);
+void func_80B34598(EnKbt* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Kbt_InitVars = {
     ACTOR_EN_KBT,

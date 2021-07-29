@@ -8,6 +8,11 @@ void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjEtcetera_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjEtcetera_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A7BF08(ObjEtcetera* this, GlobalContext* globalCtx);
+void func_80A7C168(ObjEtcetera* this, GlobalContext* globalCtx);
+void func_80A7C1F0(ObjEtcetera* this, GlobalContext* globalCtx);
+void func_80A7C308(ObjEtcetera* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Etcetera_InitVars = {
     ACTOR_OBJ_ETCETERA,

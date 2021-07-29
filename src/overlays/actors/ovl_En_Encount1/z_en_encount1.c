@@ -7,6 +7,8 @@
 void EnEncount1_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnEncount1_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_808E0954(EnEncount1* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Encount1_InitVars = {
     ACTOR_EN_ENCOUNT1,

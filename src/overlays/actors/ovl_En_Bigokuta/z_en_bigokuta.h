@@ -5,9 +5,13 @@
 
 struct EnBigokuta;
 
+typedef void (*EnBigokutaActionFunc)(struct EnBigokuta* this, GlobalContext* globalCtx);
+
 typedef struct EnBigokuta {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x2B4];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x48];
+    /* 0x018C */ EnBigokutaActionFunc actionFunc;
+    /* 0x0190 */ char unk_190[0x268];
 } EnBigokuta; // size = 0x3F8
 
 extern const ActorInit En_Bigokuta_InitVars;

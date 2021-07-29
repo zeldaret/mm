@@ -9,6 +9,15 @@ void EnYb_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnYb_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnYb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BFA730(EnYb* this, GlobalContext* globalCtx);
+void func_80BFA868(EnYb* this, GlobalContext* globalCtx);
+void func_80BFA91C(EnYb* this, GlobalContext* globalCtx);
+void func_80BFA9D4(EnYb* this, GlobalContext* globalCtx);
+void func_80BFAB4C(EnYb* this, GlobalContext* globalCtx);
+void func_80BFABF0(EnYb* this, GlobalContext* globalCtx);
+void func_80BFAC88(EnYb* this, GlobalContext* globalCtx);
+void func_80BFAE80(EnYb* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Yb_InitVars = {
     ACTOR_EN_YB,

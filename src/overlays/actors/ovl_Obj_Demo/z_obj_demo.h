@@ -5,9 +5,12 @@
 
 struct ObjDemo;
 
+typedef void (*ObjDemoActionFunc)(struct ObjDemo* this, GlobalContext* globalCtx);
+
 typedef struct ObjDemo {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x10];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ ObjDemoActionFunc actionFunc;
+    /* 0x0148 */ char unk_144[0xC];
 } ObjDemo; // size = 0x154
 
 extern const ActorInit Obj_Demo_InitVars;

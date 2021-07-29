@@ -9,6 +9,12 @@ void EnMm_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMm_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMm_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80965D3C(EnMm* this, GlobalContext* globalCtx);
+void func_80965DB4(EnMm* this, GlobalContext* globalCtx);
+void func_8096611C(EnMm* this, GlobalContext* globalCtx);
+
+void EnMm_SetupAction(EnMm* this, EnMmActionFunc actionFunc);
+
 #if 0
 const ActorInit En_Mm_InitVars = {
     ACTOR_EN_MM,
@@ -40,7 +46,7 @@ static InitChainEntry D_8096636C[] = {
 extern ColliderCylinderInit D_80966340;
 extern InitChainEntry D_8096636C[];
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mm/func_80965BB0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mm/EnMm_SetupAction.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mm/func_80965BBC.s")
 

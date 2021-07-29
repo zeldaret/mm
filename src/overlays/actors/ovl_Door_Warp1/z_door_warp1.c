@@ -9,6 +9,25 @@ void DoorWarp1_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DoorWarp1_Update(Actor* thisx, GlobalContext* globalCtx);
 void DoorWarp1_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_808B921C(DoorWarp1* this, GlobalContext* globalCtx);
+void func_808B93A0(DoorWarp1* this, GlobalContext* globalCtx);
+void func_808B94A4(DoorWarp1* this, GlobalContext* globalCtx);
+void func_808B9524(DoorWarp1* this, GlobalContext* globalCtx);
+void func_808B958C(DoorWarp1* this, GlobalContext* globalCtx);
+void func_808B96B0(DoorWarp1* this, GlobalContext* globalCtx);
+void func_808B9840(DoorWarp1* this, GlobalContext* globalCtx);
+void func_808B98A8(DoorWarp1* this, GlobalContext* globalCtx);
+void func_808B9B30(DoorWarp1* this, GlobalContext* globalCtx);
+void func_808B9BE8(DoorWarp1* this, GlobalContext* globalCtx);
+void func_808B9CE8(DoorWarp1* this, GlobalContext* globalCtx);
+void func_808B9E94(DoorWarp1* this, GlobalContext* globalCtx);
+void func_808B9FD0(DoorWarp1* this, GlobalContext* globalCtx);
+void func_808BA550(DoorWarp1* this, GlobalContext* globalCtx);
+void func_808BAAF4(DoorWarp1* this, GlobalContext* globalCtx);
+void func_808BABF4(DoorWarp1* this, GlobalContext* globalCtx);
+
+void DoorWarp1_SetupAction(DoorWarp1* this, DoorWarp1ActionFunc actionFunc);
+
 #if 0
 const ActorInit Door_Warp1_InitVars = {
     ACTOR_DOOR_WARP1,
@@ -30,7 +49,7 @@ extern UNK_TYPE D_060044D8;
 extern UNK_TYPE D_060076C0;
 extern UNK_TYPE D_06008BD4;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Warp1/func_808B8490.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Warp1/DoorWarp1_SetupAction.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Door_Warp1/func_808B849C.s")
 

@@ -8,6 +8,15 @@ void EnFall_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnFall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFall_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A6C3FC(EnFall* this, GlobalContext* globalCtx);
+void func_80A6C9A8(EnFall* this, GlobalContext* globalCtx);
+void func_80A6CA9C(EnFall* this, GlobalContext* globalCtx);
+void func_80A6CB74(EnFall* this, GlobalContext* globalCtx);
+void func_80A6CD38(EnFall* this, GlobalContext* globalCtx);
+void func_80A6CD74(EnFall* this, GlobalContext* globalCtx);
+void func_80A6CF60(EnFall* this, GlobalContext* globalCtx);
+void func_80A6CF70(EnFall* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Fall_InitVars = {
     ACTOR_EN_FALL,

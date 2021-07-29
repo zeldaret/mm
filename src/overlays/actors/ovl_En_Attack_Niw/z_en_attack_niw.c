@@ -9,6 +9,10 @@ void EnAttackNiw_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnAttackNiw_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnAttackNiw_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80958634(EnAttackNiw* this, GlobalContext* globalCtx);
+void func_80958974(EnAttackNiw* this, GlobalContext* globalCtx);
+void func_80958BE4(EnAttackNiw* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Attack_Niw_InitVars = {
     ACTOR_EN_ATTACK_NIW,

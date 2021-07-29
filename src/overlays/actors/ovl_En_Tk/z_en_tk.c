@@ -9,6 +9,19 @@ void EnTk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTk_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTk_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AECA90(EnTk* this, GlobalContext* globalCtx);
+void func_80AECB6C(EnTk* this, GlobalContext* globalCtx);
+void func_80AED610(EnTk* this, GlobalContext* globalCtx);
+void func_80AED940(EnTk* this, GlobalContext* globalCtx);
+void func_80AEDC4C(EnTk* this, GlobalContext* globalCtx);
+void func_80AEDD4C(EnTk* this, GlobalContext* globalCtx);
+void func_80AEDF5C(EnTk* this, GlobalContext* globalCtx);
+void func_80AEE2C0(EnTk* this, GlobalContext* globalCtx);
+void func_80AEE414(EnTk* this, GlobalContext* globalCtx);
+void func_80AEE4D0(EnTk* this, GlobalContext* globalCtx);
+void func_80AEE6B8(EnTk* this, GlobalContext* globalCtx);
+void func_80AEE9B0(EnTk* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Tk_InitVars = {
     ACTOR_EN_TK,

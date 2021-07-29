@@ -5,9 +5,13 @@
 
 struct EnDaiku2;
 
+typedef void (*EnDaiku2ActionFunc)(struct EnDaiku2* this, GlobalContext* globalCtx);
+
 typedef struct EnDaiku2 {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0xC84];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x110];
+    /* 0x0254 */ EnDaiku2ActionFunc actionFunc;
+    /* 0x0258 */ char unk_258[0xB70];
 } EnDaiku2; // size = 0xDC8
 
 extern const ActorInit En_Daiku2_InitVars;

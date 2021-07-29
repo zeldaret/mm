@@ -5,9 +5,12 @@
 
 struct EnSnowwd;
 
+typedef void (*EnSnowwdActionFunc)(struct EnSnowwd* this, GlobalContext* globalCtx);
+
 typedef struct EnSnowwd {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x54];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x50];
+    /* 0x0194 */ EnSnowwdActionFunc actionFunc;
 } EnSnowwd; // size = 0x198
 
 extern const ActorInit En_Snowwd_InitVars;

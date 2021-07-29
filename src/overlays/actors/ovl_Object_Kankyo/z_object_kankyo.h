@@ -5,9 +5,12 @@
 
 struct ObjectKankyo;
 
+typedef void (*ObjectKankyoActionFunc)(struct ObjectKankyo* this, GlobalContext* globalCtx);
+
 typedef struct ObjectKankyo {
     /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_0144[0x1010];
+    /* 0x0144 */ char unk_144[0x100C];
+    /* 0x1150 */ ObjectKankyoActionFunc actionFunc;
 } ObjectKankyo; // size = 0x1154
 
 extern const ActorInit Object_Kankyo_InitVars;

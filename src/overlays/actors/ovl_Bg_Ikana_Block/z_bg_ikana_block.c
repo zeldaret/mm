@@ -8,6 +8,11 @@ void BgIkanaBlock_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaBlock_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaBlock_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B7F034(BgIkanaBlock* this, GlobalContext* globalCtx);
+void func_80B7F0D0(BgIkanaBlock* this, GlobalContext* globalCtx);
+void func_80B7F290(BgIkanaBlock* this, GlobalContext* globalCtx);
+void func_80B7F398(BgIkanaBlock* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_Ikana_Block_InitVars = {
     ACTOR_BG_IKANA_BLOCK,

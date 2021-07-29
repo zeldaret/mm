@@ -9,6 +9,12 @@ void EnGakufu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGakufu_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGakufu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AFCB94(EnGakufu* this, GlobalContext* globalCtx);
+void func_80AFCBD4(EnGakufu* this, GlobalContext* globalCtx);
+void func_80AFCC14(EnGakufu* this, GlobalContext* globalCtx);
+void func_80AFCD44(EnGakufu* this, GlobalContext* globalCtx);
+void func_80AFCDC8(EnGakufu* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Gakufu_InitVars = {
     ACTOR_EN_GAKUFU,

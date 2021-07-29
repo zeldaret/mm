@@ -9,6 +9,11 @@ void EnOsk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnOsk_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnOsk_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BF5F60(EnOsk* this, GlobalContext* globalCtx);
+void func_80BF61EC(EnOsk* this, GlobalContext* globalCtx);
+void func_80BF656C(EnOsk* this, GlobalContext* globalCtx);
+void func_80BF6A20(EnOsk* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Osk_InitVars = {
     ACTOR_EN_OSK,

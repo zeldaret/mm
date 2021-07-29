@@ -9,6 +9,15 @@ void EnDragon_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDragon_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDragon_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B5ED90(EnDragon* this, GlobalContext* globalCtx);
+void func_80B5EE3C(EnDragon* this, GlobalContext* globalCtx);
+void func_80B5EFD0(EnDragon* this, GlobalContext* globalCtx);
+void func_80B5F418(EnDragon* this, GlobalContext* globalCtx);
+void func_80B5F508(EnDragon* this, GlobalContext* globalCtx);
+void func_80B5F8D8(EnDragon* this, GlobalContext* globalCtx);
+void func_80B5FCC0(EnDragon* this, GlobalContext* globalCtx);
+void func_80B5FD68(EnDragon* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Dragon_InitVars = {
     ACTOR_EN_DRAGON,

@@ -9,6 +9,22 @@ void EnDekubaba_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDekubaba_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDekubaba_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_808B1B14(EnDekubaba* this, GlobalContext* globalCtx);
+void func_808B1CF0(EnDekubaba* this, GlobalContext* globalCtx);
+void func_808B2240(EnDekubaba* this, GlobalContext* globalCtx);
+void func_808B2660(EnDekubaba* this, GlobalContext* globalCtx);
+void func_808B28B4(EnDekubaba* this, GlobalContext* globalCtx);
+void func_808B29C4(EnDekubaba* this, GlobalContext* globalCtx);
+void func_808B2CB8(EnDekubaba* this, GlobalContext* globalCtx);
+void func_808B3078(EnDekubaba* this, GlobalContext* globalCtx);
+void func_808B3280(EnDekubaba* this, GlobalContext* globalCtx);
+void func_808B3404(EnDekubaba* this, GlobalContext* globalCtx);
+void func_808B37E8(EnDekubaba* this, GlobalContext* globalCtx);
+void func_808B3B48(EnDekubaba* this, GlobalContext* globalCtx);
+void func_808B3C50(EnDekubaba* this, GlobalContext* globalCtx);
+void func_808B3DA8(EnDekubaba* this, GlobalContext* globalCtx);
+void func_808B3EE8(EnDekubaba* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Dekubaba_InitVars = {
     ACTOR_EN_DEKUBABA,

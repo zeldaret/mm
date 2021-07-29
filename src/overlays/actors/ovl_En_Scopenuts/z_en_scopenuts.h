@@ -5,9 +5,13 @@
 
 struct EnScopenuts;
 
+typedef void (*EnScopenutsActionFunc)(struct EnScopenuts* this, GlobalContext* globalCtx);
+
 typedef struct EnScopenuts {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x230];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x194];
+    /* 0x02D8 */ EnScopenutsActionFunc actionFunc;
+    /* 0x02DC */ char unk_2DC[0x98];
 } EnScopenuts; // size = 0x374
 
 extern const ActorInit En_Scopenuts_InitVars;

@@ -9,6 +9,14 @@ void EnHiddenNuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHiddenNuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHiddenNuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BDB2B8(EnHiddenNuts* this, GlobalContext* globalCtx);
+void func_80BDB59C(EnHiddenNuts* this, GlobalContext* globalCtx);
+void func_80BDB7E8(EnHiddenNuts* this, GlobalContext* globalCtx);
+void func_80BDB8F4(EnHiddenNuts* this, GlobalContext* globalCtx);
+void func_80BDB978(EnHiddenNuts* this, GlobalContext* globalCtx);
+void func_80BDBB48(EnHiddenNuts* this, GlobalContext* globalCtx);
+void func_80BDBED4(EnHiddenNuts* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Hidden_Nuts_InitVars = {
     ACTOR_EN_HIDDEN_NUTS,

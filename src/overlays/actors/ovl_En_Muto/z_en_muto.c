@@ -9,6 +9,9 @@ void EnMuto_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMuto_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMuto_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BE7DEC(EnMuto* this, GlobalContext* globalCtx);
+void func_80BE7FEC(EnMuto* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Muto_InitVars = {
     ACTOR_EN_MUTO,

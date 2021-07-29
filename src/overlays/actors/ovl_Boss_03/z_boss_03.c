@@ -9,6 +9,19 @@ void Boss03_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void Boss03_Update(Actor* thisx, GlobalContext* globalCtx);
 void Boss03_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809E344C(Boss03* this, GlobalContext* globalCtx);
+void func_809E34B8(Boss03* this, GlobalContext* globalCtx);
+void func_809E3968(Boss03* this, GlobalContext* globalCtx);
+void func_809E3D98(Boss03* this, GlobalContext* globalCtx);
+void func_809E421C(Boss03* this, GlobalContext* globalCtx);
+void func_809E475C(Boss03* this, GlobalContext* globalCtx);
+void func_809E497C(Boss03* this, GlobalContext* globalCtx);
+void func_809E4C90(Boss03* this, GlobalContext* globalCtx);
+void func_809E4E80(Boss03* this, GlobalContext* globalCtx);
+void func_809E5B64(Boss03* this, GlobalContext* globalCtx);
+void func_809E6640(Boss03* this, GlobalContext* globalCtx);
+void func_809E6BC0(Boss03* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Boss_03_InitVars = {
     ACTOR_BOSS_03,

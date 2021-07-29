@@ -9,6 +9,18 @@ void EnKarebaba_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKarebaba_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKarebaba_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_808F15B0(EnKarebaba* this, GlobalContext* globalCtx);
+void func_808F169C(EnKarebaba* this, GlobalContext* globalCtx);
+void func_808F1778(EnKarebaba* this, GlobalContext* globalCtx);
+void func_808F190C(EnKarebaba* this, GlobalContext* globalCtx);
+void func_808F1A58(EnKarebaba* this, GlobalContext* globalCtx);
+void func_808F1C84(EnKarebaba* this, GlobalContext* globalCtx);
+void func_808F200C(EnKarebaba* this, GlobalContext* globalCtx);
+void func_808F21A4(EnKarebaba* this, GlobalContext* globalCtx);
+void func_808F228C(EnKarebaba* this, GlobalContext* globalCtx);
+void func_808F241C(EnKarebaba* this, GlobalContext* globalCtx);
+void func_808F254C(EnKarebaba* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Karebaba_InitVars = {
     ACTOR_EN_KAREBABA,

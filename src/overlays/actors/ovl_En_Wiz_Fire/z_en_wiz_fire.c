@@ -9,6 +9,13 @@ void EnWizFire_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnWizFire_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnWizFire_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A4984C(EnWizFire* this, GlobalContext* globalCtx);
+void func_80A49A44(EnWizFire* this, GlobalContext* globalCtx);
+void func_80A49F38(EnWizFire* this, GlobalContext* globalCtx);
+void func_80A49FD8(EnWizFire* this, GlobalContext* globalCtx);
+void func_80A4A11C(EnWizFire* this, GlobalContext* globalCtx);
+void func_80A4A608(EnWizFire* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Wiz_Fire_InitVars = {
     ACTOR_EN_WIZ_FIRE,

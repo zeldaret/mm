@@ -9,6 +9,11 @@ void EnButte_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnButte_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnButte_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_8091C794(EnButte* this, GlobalContext* globalCtx);
+void func_8091CBB4(EnButte* this, GlobalContext* globalCtx);
+void func_8091CFB4(EnButte* this, GlobalContext* globalCtx);
+void func_8091D090(EnButte* this, GlobalContext* globalCtx);
+
 #if 0
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_8091D2D0[1] = {

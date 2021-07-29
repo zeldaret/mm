@@ -8,6 +8,10 @@ void ObjMure_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjMure_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjMure_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_808D7FFC(ObjMure* this, GlobalContext* globalCtx);
+void func_808D8014(ObjMure* this, GlobalContext* globalCtx);
+void func_808D8678(ObjMure* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Mure_InitVars = {
     ACTOR_OBJ_MURE,

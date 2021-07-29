@@ -9,6 +9,43 @@ void Boss07_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void Boss07_Update(Actor* thisx, GlobalContext* globalCtx);
 void Boss07_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809F5E88(Boss07* this, GlobalContext* globalCtx);
+void func_809F65F4(Boss07* this, GlobalContext* globalCtx);
+void func_809F748C(Boss07* this, GlobalContext* globalCtx);
+void func_809F76D0(Boss07* this, GlobalContext* globalCtx);
+void func_809F77A8(Boss07* this, GlobalContext* globalCtx);
+void func_809F7968(Boss07* this, GlobalContext* globalCtx);
+void func_809F7BC4(Boss07* this, GlobalContext* globalCtx);
+void func_809F805C(Boss07* this, GlobalContext* globalCtx);
+void func_809F86B8(Boss07* this, GlobalContext* globalCtx);
+void func_809F87C8(Boss07* this, GlobalContext* globalCtx);
+void func_809F8908(Boss07* this, GlobalContext* globalCtx);
+void func_809F8B1C(Boss07* this, GlobalContext* globalCtx);
+void func_809F8D04(Boss07* this, GlobalContext* globalCtx);
+void func_809F8EC8(Boss07* this, GlobalContext* globalCtx);
+void func_809F91D4(Boss07* this, GlobalContext* globalCtx);
+void func_809FCCCC(Boss07* this, GlobalContext* globalCtx);
+void func_809FD710(Boss07* this, GlobalContext* globalCtx);
+void func_809FD89C(Boss07* this, GlobalContext* globalCtx);
+void func_809FDAB0(Boss07* this, GlobalContext* globalCtx);
+void func_809FDF54(Boss07* this, GlobalContext* globalCtx);
+void func_809FE0E4(Boss07* this, GlobalContext* globalCtx);
+void func_809FE348(Boss07* this, GlobalContext* globalCtx);
+void func_809FE524(Boss07* this, GlobalContext* globalCtx);
+void func_809FE734(Boss07* this, GlobalContext* globalCtx);
+void func_809FFA80(Boss07* this, GlobalContext* globalCtx);
+void func_809FFEAC(Boss07* this, GlobalContext* globalCtx);
+void func_80A00274(Boss07* this, GlobalContext* globalCtx);
+void func_80A00554(Boss07* this, GlobalContext* globalCtx);
+void func_80A00720(Boss07* this, GlobalContext* globalCtx);
+void func_80A01750(Boss07* this, GlobalContext* globalCtx);
+void func_80A0264C(Boss07* this, GlobalContext* globalCtx);
+void func_80A04890(Boss07* this, GlobalContext* globalCtx);
+void func_80A04E5C(Boss07* this, GlobalContext* globalCtx);
+void func_80A05608(Boss07* this, GlobalContext* globalCtx);
+void func_80A05B50(Boss07* this, GlobalContext* globalCtx);
+void func_80A05DDC(Boss07* this, GlobalContext* globalCtx);
+
 #if 0
 // static DamageTable sDamageTable = {
 static DamageTable D_80A07980 = {

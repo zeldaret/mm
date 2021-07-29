@@ -9,6 +9,36 @@ void EnBigslime_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBigslime_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBigslime_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_808E6E80(EnBigslime* this, GlobalContext* globalCtx);
+void func_808E6F50(EnBigslime* this, GlobalContext* globalCtx);
+void func_808E7048(EnBigslime* this, GlobalContext* globalCtx);
+void func_808E71FC(EnBigslime* this, GlobalContext* globalCtx);
+void func_808E7354(EnBigslime* this, GlobalContext* globalCtx);
+void func_808E7B80(EnBigslime* this, GlobalContext* globalCtx);
+void func_808E84DC(EnBigslime* this, GlobalContext* globalCtx);
+void func_808E89CC(EnBigslime* this, GlobalContext* globalCtx);
+void func_808E8CCC(EnBigslime* this, GlobalContext* globalCtx);
+void func_808E91EC(EnBigslime* this, GlobalContext* globalCtx);
+void func_808E97D0(EnBigslime* this, GlobalContext* globalCtx);
+void func_808E9AE0(EnBigslime* this, GlobalContext* globalCtx);
+void func_808E9DD0(EnBigslime* this, GlobalContext* globalCtx);
+void func_808E9FC0(EnBigslime* this, GlobalContext* globalCtx);
+void func_808EA1C8(EnBigslime* this, GlobalContext* globalCtx);
+void func_808EA2D0(EnBigslime* this, GlobalContext* globalCtx);
+void func_808EA5E8(EnBigslime* this, GlobalContext* globalCtx);
+void func_808EA7A4(EnBigslime* this, GlobalContext* globalCtx);
+void func_808EA860(EnBigslime* this, GlobalContext* globalCtx);
+void func_808EA9B8(EnBigslime* this, GlobalContext* globalCtx);
+void func_808EAA8C(EnBigslime* this, GlobalContext* globalCtx);
+void func_808EAB74(EnBigslime* this, GlobalContext* globalCtx);
+void func_808EACEC(EnBigslime* this, GlobalContext* globalCtx);
+void func_808EB0A8(EnBigslime* this, GlobalContext* globalCtx);
+void func_808EB24C(EnBigslime* this, GlobalContext* globalCtx);
+void func_808EB574(EnBigslime* this, GlobalContext* globalCtx);
+void func_808EB708(EnBigslime* this, GlobalContext* globalCtx);
+void func_808EB804(EnBigslime* this, GlobalContext* globalCtx);
+void func_808EB8B4(EnBigslime* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Bigslime_InitVars = {
     ACTOR_EN_BIGSLIME,

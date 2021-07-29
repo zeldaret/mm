@@ -9,6 +9,20 @@ void DmChar05_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmChar05_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmChar05_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AAC990(DmChar05* this, GlobalContext* globalCtx);
+void func_80AAC9DC(DmChar05* this, GlobalContext* globalCtx);
+void func_80AACA98(DmChar05* this, GlobalContext* globalCtx);
+void func_80AACAE4(DmChar05* this, GlobalContext* globalCtx);
+void func_80AACBE4(DmChar05* this, GlobalContext* globalCtx);
+void func_80AACC48(DmChar05* this, GlobalContext* globalCtx);
+void func_80AACC6C(DmChar05* this, GlobalContext* globalCtx);
+void func_80AACCD4(DmChar05* this, GlobalContext* globalCtx);
+void func_80AACD0C(DmChar05* this, GlobalContext* globalCtx);
+void func_80AACD1C(DmChar05* this, GlobalContext* globalCtx);
+void func_80AACD68(DmChar05* this, GlobalContext* globalCtx);
+void func_80AACE10(DmChar05* this, GlobalContext* globalCtx);
+void func_80AACE5C(DmChar05* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Dm_Char05_InitVars = {
     ACTOR_DM_CHAR05,

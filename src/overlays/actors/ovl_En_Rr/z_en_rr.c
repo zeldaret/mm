@@ -9,6 +9,14 @@ void EnRr_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRr_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRr_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_808FAF94(EnRr* this, GlobalContext* globalCtx);
+void func_808FB088(EnRr* this, GlobalContext* globalCtx);
+void func_808FB1C0(EnRr* this, GlobalContext* globalCtx);
+void func_808FB2C0(EnRr* this, GlobalContext* globalCtx);
+void func_808FB42C(EnRr* this, GlobalContext* globalCtx);
+void func_808FB680(EnRr* this, GlobalContext* globalCtx);
+void func_808FB710(EnRr* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Rr_InitVars = {
     ACTOR_EN_RR,

@@ -9,6 +9,8 @@ void EnStream_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnStream_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnStream_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void EnStream_SetupAction(EnStream* this, EnStreamActionFunc actionFunc);
+
 #if 0
 const ActorInit En_Stream_InitVars = {
     ACTOR_EN_STREAM,
@@ -33,7 +35,7 @@ extern InitChainEntry D_80965B20[];
 
 extern UNK_TYPE D_06000950;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stream/func_80965650.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stream/EnStream_SetupAction.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stream/EnStream_Init.s")
 

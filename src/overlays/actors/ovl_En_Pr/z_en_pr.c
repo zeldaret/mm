@@ -9,6 +9,15 @@ void EnPr_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPr_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPr_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A32740(EnPr* this, GlobalContext* globalCtx);
+void func_80A3289C(EnPr* this, GlobalContext* globalCtx);
+void func_80A32984(EnPr* this, GlobalContext* globalCtx);
+void func_80A32A40(EnPr* this, GlobalContext* globalCtx);
+void func_80A32B20(EnPr* this, GlobalContext* globalCtx);
+void func_80A32D28(EnPr* this, GlobalContext* globalCtx);
+void func_80A32EA4(EnPr* this, GlobalContext* globalCtx);
+void func_80A32F48(EnPr* this, GlobalContext* globalCtx);
+
 #if 0
 // static DamageTable sDamageTable = {
 static DamageTable D_80A338A0 = {

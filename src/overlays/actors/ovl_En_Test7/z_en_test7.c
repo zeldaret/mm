@@ -9,6 +9,10 @@ void EnTest7_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTest7_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTest7_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AF2854(EnTest7* this, GlobalContext* globalCtx);
+
+void EnTest7_SetupAction(EnTest7* this, EnTest7ActionFunc actionFunc);
+
 #if 0
 const ActorInit En_Test7_InitVars = {
     ACTOR_EN_TEST7,
@@ -24,7 +28,7 @@ const ActorInit En_Test7_InitVars = {
 
 #endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test7/func_80AF0820.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test7/EnTest7_SetupAction.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test7/func_80AF082C.s")
 

@@ -8,6 +8,11 @@ void EnHanabi_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnHanabi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHanabi_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B23894(EnHanabi* this, GlobalContext* globalCtx);
+void func_80B238D4(EnHanabi* this, GlobalContext* globalCtx);
+void func_80B23910(EnHanabi* this, GlobalContext* globalCtx);
+void func_80B23934(EnHanabi* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Hanabi_InitVars = {
     ACTOR_EN_HANABI,

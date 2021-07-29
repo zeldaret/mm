@@ -5,9 +5,12 @@
 
 struct EnEncount4;
 
+typedef void (*EnEncount4ActionFunc)(struct EnEncount4* this, GlobalContext* globalCtx);
+
 typedef struct EnEncount4 {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x14];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ EnEncount4ActionFunc actionFunc;
+    /* 0x0148 */ char unk_144[0x10];
 } EnEncount4; // size = 0x158
 
 extern const ActorInit En_Encount4_InitVars;

@@ -9,6 +9,22 @@ void BossHakugin_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BossHakugin_Update(Actor* thisx, GlobalContext* globalCtx);
 void BossHakugin_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B08018(BossHakugin* this, GlobalContext* globalCtx);
+void func_80B0813C(BossHakugin* this, GlobalContext* globalCtx);
+void func_80B082AC(BossHakugin* this, GlobalContext* globalCtx);
+void func_80B0863C(BossHakugin* this, GlobalContext* globalCtx);
+void func_80B08960(BossHakugin* this, GlobalContext* globalCtx);
+void func_80B08CB8(BossHakugin* this, GlobalContext* globalCtx);
+void func_80B091D8(BossHakugin* this, GlobalContext* globalCtx);
+void func_80B094E0(BossHakugin* this, GlobalContext* globalCtx);
+void func_80B098BC(BossHakugin* this, GlobalContext* globalCtx);
+void func_80B09C78(BossHakugin* this, GlobalContext* globalCtx);
+void func_80B09E20(BossHakugin* this, GlobalContext* globalCtx);
+void func_80B09EDC(BossHakugin* this, GlobalContext* globalCtx);
+void func_80B0A2A4(BossHakugin* this, GlobalContext* globalCtx);
+void func_80B0A638(BossHakugin* this, GlobalContext* globalCtx);
+void func_80B0A8C4(BossHakugin* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Boss_Hakugin_InitVars = {
     ACTOR_BOSS_HAKUGIN,

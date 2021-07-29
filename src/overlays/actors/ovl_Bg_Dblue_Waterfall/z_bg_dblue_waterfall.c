@@ -9,6 +9,11 @@ void BgDblueWaterfall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgDblueWaterfall_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgDblueWaterfall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B84928(BgDblueWaterfall* this, GlobalContext* globalCtx);
+void func_80B84AEC(BgDblueWaterfall* this, GlobalContext* globalCtx);
+void func_80B84BCC(BgDblueWaterfall* this, GlobalContext* globalCtx);
+void func_80B84F20(BgDblueWaterfall* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_Dblue_Waterfall_InitVars = {
     ACTOR_BG_DBLUE_WATERFALL,

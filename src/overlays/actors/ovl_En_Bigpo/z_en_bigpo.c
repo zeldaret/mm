@@ -8,6 +8,33 @@ void EnBigpo_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpo_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B61AF8(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B61B70(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B61CFC(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B61DA4(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B61F04(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B62084(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B621CC(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B623BC(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B6259C(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B627B4(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B62830(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B62920(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B62A68(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B62B10(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B62F10(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B63264(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B6330C(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B63410(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B63474(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B636E4(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B6382C(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B63854(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B63888(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B638D4(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B63980(EnBigpo* this, GlobalContext* globalCtx);
+void func_80B63AC4(EnBigpo* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Bigpo_InitVars = {
     ACTOR_EN_BIGPO,

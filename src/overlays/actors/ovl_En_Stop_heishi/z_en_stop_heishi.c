@@ -9,6 +9,9 @@ void EnStopheishi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnStopheishi_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnStopheishi_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AE7F34(EnStopheishi* this, GlobalContext* globalCtx);
+void func_80AE85C4(EnStopheishi* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Stop_heishi_InitVars = {
     ACTOR_EN_STOP_HEISHI,

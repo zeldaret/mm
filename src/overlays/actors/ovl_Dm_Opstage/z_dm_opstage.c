@@ -9,6 +9,10 @@ void DmOpstage_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmOpstage_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmOpstage_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A9FA58(DmOpstage* this, GlobalContext* globalCtx);
+
+void DmOpstage_SetupAction(DmOpstage* this, DmOpstageActionFunc actionFunc);
+
 #if 0
 const ActorInit Dm_Opstage_InitVars = {
     ACTOR_DM_OPSTAGE,
@@ -34,7 +38,7 @@ extern InitChainEntry D_80A9FD30[];
 extern UNK_TYPE D_06000978;
 extern UNK_TYPE D_06001C98;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Opstage/func_80A9F950.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Opstage/DmOpstage_SetupAction.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Opstage/DmOpstage_Init.s")
 

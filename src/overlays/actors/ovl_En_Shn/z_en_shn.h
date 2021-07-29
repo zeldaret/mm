@@ -5,9 +5,12 @@
 
 struct EnShn;
 
+typedef void (*EnShnActionFunc)(struct EnShn* this, GlobalContext* globalCtx);
+
 typedef struct EnShn {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x1AC];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ EnShnActionFunc actionFunc;
+    /* 0x0148 */ char unk_144[0x1A8];
 } EnShn; // size = 0x2F0
 
 extern const ActorInit En_Shn_InitVars;

@@ -9,6 +9,29 @@ void EnFloormas_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnFloormas_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFloormas_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_808D0B50(EnFloormas* this, GlobalContext* globalCtx);
+void func_808D0C58(EnFloormas* this, GlobalContext* globalCtx);
+void func_808D0D70(EnFloormas* this, GlobalContext* globalCtx);
+void func_808D0F14(EnFloormas* this, GlobalContext* globalCtx);
+void func_808D0F80(EnFloormas* this, GlobalContext* globalCtx);
+void func_808D11BC(EnFloormas* this, GlobalContext* globalCtx);
+void func_808D1458(EnFloormas* this, GlobalContext* globalCtx);
+void func_808D1650(EnFloormas* this, GlobalContext* globalCtx);
+void func_808D17EC(EnFloormas* this, GlobalContext* globalCtx);
+void func_808D1B44(EnFloormas* this, GlobalContext* globalCtx);
+void func_808D1C1C(EnFloormas* this, GlobalContext* globalCtx);
+void func_808D1D6C(EnFloormas* this, GlobalContext* globalCtx);
+void func_808D1F7C(EnFloormas* this, GlobalContext* globalCtx);
+void func_808D2040(EnFloormas* this, GlobalContext* globalCtx);
+void func_808D22C8(EnFloormas* this, GlobalContext* globalCtx);
+void func_808D24F0(EnFloormas* this, GlobalContext* globalCtx);
+void func_808D2764(EnFloormas* this, GlobalContext* globalCtx);
+void func_808D2AA8(EnFloormas* this, GlobalContext* globalCtx);
+void func_808D2AF4(EnFloormas* this, GlobalContext* globalCtx);
+void func_808D2C08(EnFloormas* this, GlobalContext* globalCtx);
+void func_808D2D30(EnFloormas* this, GlobalContext* globalCtx);
+void func_808D2DC0(EnFloormas* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Floormas_InitVars = {
     ACTOR_EN_FLOORMAS,

@@ -9,6 +9,11 @@ void EffLastday_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EffLastday_Update(Actor* thisx, GlobalContext* globalCtx);
 void EffLastday_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BEBD0C(EffLastday* this, GlobalContext* globalCtx);
+void func_80BEBDF8(EffLastday* this, GlobalContext* globalCtx);
+void func_80BEBEB8(EffLastday* this, GlobalContext* globalCtx);
+void func_80BEBF78(EffLastday* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Eff_Lastday_InitVars = {
     ACTOR_EFF_LASTDAY,

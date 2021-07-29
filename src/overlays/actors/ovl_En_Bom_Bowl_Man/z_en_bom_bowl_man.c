@@ -9,6 +9,17 @@ void EnBomBowlMan_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBomBowlMan_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBomBowlMan_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809C4DA4(EnBomBowlMan* this, GlobalContext* globalCtx);
+void func_809C51B4(EnBomBowlMan* this, GlobalContext* globalCtx);
+void func_809C5310(EnBomBowlMan* this, GlobalContext* globalCtx);
+void func_809C5408(EnBomBowlMan* this, GlobalContext* globalCtx);
+void func_809C5598(EnBomBowlMan* this, GlobalContext* globalCtx);
+void func_809C5738(EnBomBowlMan* this, GlobalContext* globalCtx);
+void func_809C59F0(EnBomBowlMan* this, GlobalContext* globalCtx);
+void func_809C5AA4(EnBomBowlMan* this, GlobalContext* globalCtx);
+void func_809C5B1C(EnBomBowlMan* this, GlobalContext* globalCtx);
+void func_809C5BF4(EnBomBowlMan* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Bom_Bowl_Man_InitVars = {
     ACTOR_EN_BOM_BOWL_MAN,

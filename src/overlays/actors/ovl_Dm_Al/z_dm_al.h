@@ -5,9 +5,13 @@
 
 struct DmAl;
 
+typedef void (*DmAlActionFunc)(struct DmAl* this, GlobalContext* globalCtx);
+
 typedef struct DmAl {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x31C];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x44];
+    /* 0x0188 */ DmAlActionFunc actionFunc;
+    /* 0x018C */ char unk_18C[0x2D4];
 } DmAl; // size = 0x460
 
 extern const ActorInit Dm_Al_InitVars;

@@ -9,6 +9,10 @@ void DmChar06_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmChar06_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmChar06_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AAE6F0(DmChar06* this, GlobalContext* globalCtx);
+
+void DmChar06_SetupAction(DmChar06* this, DmChar06ActionFunc actionFunc);
+
 #if 0
 const ActorInit Dm_Char06_InitVars = {
     ACTOR_DM_CHAR06,
@@ -26,7 +30,7 @@ const ActorInit Dm_Char06_InitVars = {
 
 extern UNK_TYPE D_06006868;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char06/func_80AAE680.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char06/DmChar06_SetupAction.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char06/DmChar06_Init.s")
 

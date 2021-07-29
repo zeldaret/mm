@@ -5,9 +5,13 @@
 
 struct EnOsn;
 
+typedef void (*EnOsnActionFunc)(struct EnOsn* this, GlobalContext* globalCtx);
+
 typedef struct EnOsn {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0xBC];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x90];
+    /* 0x01D4 */ EnOsnActionFunc actionFunc;
+    /* 0x01D8 */ char unk_1D8[0x28];
 } EnOsn; // size = 0x200
 
 extern const ActorInit En_Osn_InitVars;

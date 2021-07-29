@@ -9,6 +9,24 @@ void EnZob_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnZob_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnZob_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B9FD24(EnZob* this, GlobalContext* globalCtx);
+void func_80B9FDDC(EnZob* this, GlobalContext* globalCtx);
+void func_80B9FE1C(EnZob* this, GlobalContext* globalCtx);
+void func_80B9FF20(EnZob* this, GlobalContext* globalCtx);
+void func_80BA005C(EnZob* this, GlobalContext* globalCtx);
+void func_80BA00BC(EnZob* this, GlobalContext* globalCtx);
+void func_80BA0318(EnZob* this, GlobalContext* globalCtx);
+void func_80BA0374(EnZob* this, GlobalContext* globalCtx);
+void func_80BA0610(EnZob* this, GlobalContext* globalCtx);
+void func_80BA06BC(EnZob* this, GlobalContext* globalCtx);
+void func_80BA0728(EnZob* this, GlobalContext* globalCtx);
+void func_80BA09E0(EnZob* this, GlobalContext* globalCtx);
+void func_80BA0A04(EnZob* this, GlobalContext* globalCtx);
+void func_80BA0AD8(EnZob* this, GlobalContext* globalCtx);
+void func_80BA0BB4(EnZob* this, GlobalContext* globalCtx);
+void func_80BA0C14(EnZob* this, GlobalContext* globalCtx);
+void func_80BA0CF4(EnZob* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Zob_InitVars = {
     ACTOR_EN_ZOB,

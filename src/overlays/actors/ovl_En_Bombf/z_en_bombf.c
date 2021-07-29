@@ -9,6 +9,12 @@ void EnBombf_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBombf_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBombf_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_808AEE3C(EnBombf* this, GlobalContext* globalCtx);
+void func_808AEF68(EnBombf* this, GlobalContext* globalCtx);
+void func_808AEFD4(EnBombf* this, GlobalContext* globalCtx);
+
+void EnBombf_SetupAction(EnBombf* this, EnBombfActionFunc actionFunc);
+
 #if 0
 const ActorInit En_Bombf_InitVars = {
     ACTOR_EN_BOMBF,
@@ -51,7 +57,7 @@ extern ColliderJntSphInit D_808AFB70;
 
 extern UNK_TYPE D_06000340;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bombf/func_808AE8C0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bombf/EnBombf_SetupAction.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bombf/EnBombf_Init.s")
 

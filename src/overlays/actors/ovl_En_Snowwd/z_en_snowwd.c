@@ -9,6 +9,8 @@ void EnSnowwd_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSnowwd_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSnowwd_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AF76F0(EnSnowwd* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Snowwd_InitVars = {
     ACTOR_EN_SNOWWD,

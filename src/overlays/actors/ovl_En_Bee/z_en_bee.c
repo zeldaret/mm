@@ -9,6 +9,9 @@ void EnBee_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBee_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBee_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B5A9E8(EnBee* this, GlobalContext* globalCtx);
+void func_80B5AC3C(EnBee* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Bee_InitVars = {
     ACTOR_EN_BEE,

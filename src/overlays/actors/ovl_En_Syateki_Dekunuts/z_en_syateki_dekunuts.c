@@ -9,6 +9,15 @@ void EnSyatekiDekunuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiDekunuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiDekunuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A2BF18(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
+void func_80A2C0F8(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
+void func_80A2C168(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
+void func_80A2C208(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
+void func_80A2C2E0(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
+void func_80A2C3F0(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
+void func_80A2C48C(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
+void func_80A2C5DC(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Syateki_Dekunuts_InitVars = {
     ACTOR_EN_SYATEKI_DEKUNUTS,

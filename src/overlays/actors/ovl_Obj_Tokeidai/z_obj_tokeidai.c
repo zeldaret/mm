@@ -9,6 +9,28 @@ void ObjTokeidai_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjTokeidai_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjTokeidai_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80AB319C(ObjTokeidai* this, GlobalContext* globalCtx);
+void func_80AB3240(ObjTokeidai* this, GlobalContext* globalCtx);
+void func_80AB32F0(ObjTokeidai* this, GlobalContext* globalCtx);
+void func_80AB3370(ObjTokeidai* this, GlobalContext* globalCtx);
+void func_80AB34CC(ObjTokeidai* this, GlobalContext* globalCtx);
+void func_80AB3544(ObjTokeidai* this, GlobalContext* globalCtx);
+void func_80AB3598(ObjTokeidai* this, GlobalContext* globalCtx);
+void func_80AB363C(ObjTokeidai* this, GlobalContext* globalCtx);
+void func_80AB365C(ObjTokeidai* this, GlobalContext* globalCtx);
+void func_80AB3808(ObjTokeidai* this, GlobalContext* globalCtx);
+void func_80AB3880(ObjTokeidai* this, GlobalContext* globalCtx);
+void func_80AB38B0(ObjTokeidai* this, GlobalContext* globalCtx);
+void func_80AB39BC(ObjTokeidai* this, GlobalContext* globalCtx);
+void func_80AB3A7C(ObjTokeidai* this, GlobalContext* globalCtx);
+void func_80AB3B34(ObjTokeidai* this, GlobalContext* globalCtx);
+void func_80AB3BD8(ObjTokeidai* this, GlobalContext* globalCtx);
+void func_80AB3BE8(ObjTokeidai* this, GlobalContext* globalCtx);
+void func_80AB3ED0(ObjTokeidai* this, GlobalContext* globalCtx);
+void func_80AB4040(ObjTokeidai* this, GlobalContext* globalCtx);
+void func_80AB4080(ObjTokeidai* this, GlobalContext* globalCtx);
+void func_80AB4160(ObjTokeidai* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Tokeidai_InitVars = {
     ACTOR_OBJ_TOKEIDAI,

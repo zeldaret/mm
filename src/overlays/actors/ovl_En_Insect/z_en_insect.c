@@ -9,6 +9,14 @@ void EnInsect_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnInsect_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnInsect_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_8091ACC4(EnInsect* this, GlobalContext* globalCtx);
+void func_8091AE5C(EnInsect* this, GlobalContext* globalCtx);
+void func_8091B07C(EnInsect* this, GlobalContext* globalCtx);
+void func_8091B2D8(EnInsect* this, GlobalContext* globalCtx);
+void func_8091B440(EnInsect* this, GlobalContext* globalCtx);
+void func_8091B670(EnInsect* this, GlobalContext* globalCtx);
+void func_8091B984(EnInsect* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Insect_InitVars = {
     ACTOR_EN_INSECT,

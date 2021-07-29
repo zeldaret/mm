@@ -5,9 +5,12 @@
 
 struct EnZov;
 
+typedef void (*EnZovActionFunc)(struct EnZov* this, GlobalContext* globalCtx);
+
 typedef struct EnZov {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x1F0];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x1EC];
+    /* 0x0330 */ EnZovActionFunc actionFunc;
 } EnZov; // size = 0x334
 
 extern const ActorInit En_Zov_InitVars;

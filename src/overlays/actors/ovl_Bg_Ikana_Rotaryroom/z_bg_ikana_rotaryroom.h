@@ -5,9 +5,13 @@
 
 struct BgIkanaRotaryroom;
 
+typedef void (*BgIkanaRotaryroomActionFunc)(struct BgIkanaRotaryroom* this, GlobalContext* globalCtx);
+
 typedef struct BgIkanaRotaryroom {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x444];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x43C];
+    /* 0x0580 */ BgIkanaRotaryroomActionFunc actionFunc;
+    /* 0x0584 */ char unk_584[0x4];
 } BgIkanaRotaryroom; // size = 0x588
 
 extern const ActorInit Bg_Ikana_Rotaryroom_InitVars;

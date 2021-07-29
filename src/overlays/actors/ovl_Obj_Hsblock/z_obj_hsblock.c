@@ -9,6 +9,10 @@ void ObjHsblock_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjHsblock_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjHsblock_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_8093E0A0(ObjHsblock* this, GlobalContext* globalCtx);
+
+void ObjHsblock_SetupAction(ObjHsblock* this, ObjHsblockActionFunc actionFunc);
+
 #if 0
 const ActorInit Obj_Hsblock_InitVars = {
     ACTOR_OBJ_HSBLOCK,
@@ -34,7 +38,7 @@ static InitChainEntry D_8093E33C[] = {
 
 extern InitChainEntry D_8093E33C[];
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hsblock/func_8093DEA0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hsblock/ObjHsblock_SetupAction.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hsblock/func_8093DEAC.s")
 

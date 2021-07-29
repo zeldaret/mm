@@ -5,9 +5,13 @@
 
 struct EnWallmas;
 
+typedef void (*EnWallmasActionFunc)(struct EnWallmas* this, GlobalContext* globalCtx);
+
 typedef struct EnWallmas {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x260];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x44];
+    /* 0x0188 */ EnWallmasActionFunc actionFunc;
+    /* 0x018C */ char unk_18C[0x218];
 } EnWallmas; // size = 0x3A4
 
 extern const ActorInit En_Wallmas_InitVars;

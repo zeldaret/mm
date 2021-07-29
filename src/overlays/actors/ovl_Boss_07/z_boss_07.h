@@ -5,9 +5,12 @@
 
 struct Boss07;
 
+typedef void (*Boss07ActionFunc)(struct Boss07* this, GlobalContext* globalCtx);
+
 typedef struct Boss07 {
     /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_0144[0xAADC];
+    /* 0x0144 */ Boss07ActionFunc actionFunc;
+    /* 0x0148 */ char unk_144[0xAAD8];
 } Boss07; // size = 0xAC20
 
 extern const ActorInit Boss_07_InitVars;

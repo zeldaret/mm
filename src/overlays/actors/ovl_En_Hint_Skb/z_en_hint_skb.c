@@ -9,6 +9,18 @@ void EnHintSkb_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHintSkb_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHintSkb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C1FE20(EnHintSkb* this, GlobalContext* globalCtx);
+void func_80C1FE80(EnHintSkb* this, GlobalContext* globalCtx);
+void func_80C1FF88(EnHintSkb* this, GlobalContext* globalCtx);
+void func_80C200B8(EnHintSkb* this, GlobalContext* globalCtx);
+void func_80C2016C(EnHintSkb* this, GlobalContext* globalCtx);
+void func_80C20334(EnHintSkb* this, GlobalContext* globalCtx);
+void func_80C204F0(EnHintSkb* this, GlobalContext* globalCtx);
+void func_80C20590(EnHintSkb* this, GlobalContext* globalCtx);
+void func_80C2069C(EnHintSkb* this, GlobalContext* globalCtx);
+void func_80C2077C(EnHintSkb* this, GlobalContext* globalCtx);
+void func_80C208D0(EnHintSkb* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Hint_Skb_InitVars = {
     ACTOR_EN_HINT_SKB,

@@ -8,6 +8,10 @@ void EnAn_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnAn_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnAn_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B577F0(EnAn* this, GlobalContext* globalCtx);
+void func_80B578F8(EnAn* this, GlobalContext* globalCtx);
+void func_80B57A44(EnAn* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_An_InitVars = {
     ACTOR_EN_AN,

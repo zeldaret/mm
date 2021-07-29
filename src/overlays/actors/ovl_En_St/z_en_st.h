@@ -5,9 +5,13 @@
 
 struct EnSt;
 
+typedef void (*EnStActionFunc)(struct EnSt* this, GlobalContext* globalCtx);
+
 typedef struct EnSt {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x40C];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x44];
+    /* 0x0188 */ EnStActionFunc actionFunc;
+    /* 0x018C */ char unk_18C[0x3C4];
 } EnSt; // size = 0x550
 
 extern const ActorInit En_St_InitVars;

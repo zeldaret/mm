@@ -9,6 +9,11 @@ void EnDns_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDns_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDns_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_8092D1B8(EnDns* this, GlobalContext* globalCtx);
+void func_8092D320(EnDns* this, GlobalContext* globalCtx);
+void func_8092D330(EnDns* this, GlobalContext* globalCtx);
+void func_8092D4D8(EnDns* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Dns_InitVars = {
     ACTOR_EN_DNS,

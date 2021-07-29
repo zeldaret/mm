@@ -5,9 +5,13 @@
 
 struct EnBb;
 
+typedef void (*EnBbActionFunc)(struct EnBb* this, GlobalContext* globalCtx);
+
 typedef struct EnBb {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x208];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x104];
+    /* 0x0248 */ EnBbActionFunc actionFunc;
+    /* 0x024C */ char unk_24C[0x100];
 } EnBb; // size = 0x34C
 
 extern const ActorInit En_Bb_InitVars;

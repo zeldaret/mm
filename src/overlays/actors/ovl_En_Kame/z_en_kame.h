@@ -5,9 +5,13 @@
 
 struct EnKame;
 
+typedef void (*EnKameActionFunc)(struct EnKame* this, GlobalContext* globalCtx);
+
 typedef struct EnKame {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x248];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x154];
+    /* 0x0298 */ EnKameActionFunc actionFunc;
+    /* 0x029C */ char unk_29C[0xF0];
 } EnKame; // size = 0x38C
 
 extern const ActorInit En_Kame_InitVars;

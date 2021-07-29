@@ -5,9 +5,13 @@
 
 struct DoorWarp1;
 
+typedef void (*DoorWarp1ActionFunc)(struct DoorWarp1* this, GlobalContext* globalCtx);
+
 typedef struct DoorWarp1 {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0xC8];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x94];
+    /* 0x01D8 */ DoorWarp1ActionFunc actionFunc;
+    /* 0x01DC */ char unk_1DC[0x30];
 } DoorWarp1; // size = 0x20C
 
 extern const ActorInit Door_Warp1_InitVars;

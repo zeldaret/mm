@@ -8,6 +8,12 @@ void EnHakurock_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnHakurock_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHakurock_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B22040(EnHakurock* this, GlobalContext* globalCtx);
+void func_80B221E8(EnHakurock* this, GlobalContext* globalCtx);
+void func_80B2242C(EnHakurock* this, GlobalContext* globalCtx);
+void func_80B22500(EnHakurock* this, GlobalContext* globalCtx);
+void func_80B22750(EnHakurock* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Hakurock_InitVars = {
     ACTOR_EN_HAKUROCK,

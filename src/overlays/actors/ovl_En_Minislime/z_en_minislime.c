@@ -8,6 +8,22 @@ void EnMinislime_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnMinislime_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMinislime_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80983EB4(EnMinislime* this, GlobalContext* globalCtx);
+void func_80984030(EnMinislime* this, GlobalContext* globalCtx);
+void func_8098419C(EnMinislime* this, GlobalContext* globalCtx);
+void func_80984248(EnMinislime* this, GlobalContext* globalCtx);
+void func_80984450(EnMinislime* this, GlobalContext* globalCtx);
+void func_809845A4(EnMinislime* this, GlobalContext* globalCtx);
+void func_80984748(EnMinislime* this, GlobalContext* globalCtx);
+void func_809849C4(EnMinislime* this, GlobalContext* globalCtx);
+void func_80984C28(EnMinislime* this, GlobalContext* globalCtx);
+void func_80984D08(EnMinislime* this, GlobalContext* globalCtx);
+void func_80984ECC(EnMinislime* this, GlobalContext* globalCtx);
+void func_80985088(EnMinislime* this, GlobalContext* globalCtx);
+void func_80985168(EnMinislime* this, GlobalContext* globalCtx);
+void func_809851E8(EnMinislime* this, GlobalContext* globalCtx);
+void func_8098537C(EnMinislime* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Minislime_InitVars = {
     ACTOR_EN_MINISLIME,

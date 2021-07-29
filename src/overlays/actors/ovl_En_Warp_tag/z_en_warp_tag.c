@@ -8,6 +8,13 @@ void EnWarptag_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnWarptag_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnWarptag_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809C085C(EnWarptag* this, GlobalContext* globalCtx);
+void func_809C08E0(EnWarptag* this, GlobalContext* globalCtx);
+void func_809C09A0(EnWarptag* this, GlobalContext* globalCtx);
+void func_809C0A20(EnWarptag* this, GlobalContext* globalCtx);
+void func_809C0AB4(EnWarptag* this, GlobalContext* globalCtx);
+void func_809C0E30(EnWarptag* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Warp_tag_InitVars = {
     ACTOR_EN_WARP_TAG,

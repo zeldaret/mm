@@ -9,6 +9,10 @@ void ObjKendoKanban_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjKendoKanban_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjKendoKanban_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B65894(ObjKendoKanban* this, GlobalContext* globalCtx);
+void func_80B65CE0(ObjKendoKanban* this, GlobalContext* globalCtx);
+void func_80B65D68(ObjKendoKanban* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Kendo_Kanban_InitVars = {
     ACTOR_OBJ_KENDO_KANBAN,

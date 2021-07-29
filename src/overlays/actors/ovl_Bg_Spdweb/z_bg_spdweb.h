@@ -5,9 +5,13 @@
 
 struct BgSpdweb;
 
+typedef void (*BgSpdwebActionFunc)(struct BgSpdweb* this, GlobalContext* globalCtx);
+
 typedef struct BgSpdweb {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x1B8];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x18];
+    /* 0x015C */ BgSpdwebActionFunc actionFunc;
+    /* 0x0160 */ char unk_160[0x19C];
 } BgSpdweb; // size = 0x2FC
 
 extern const ActorInit Bg_Spdweb_InitVars;

@@ -5,9 +5,13 @@
 
 struct ObjHunsui;
 
+typedef void (*ObjHunsuiActionFunc)(struct ObjHunsui* this, GlobalContext* globalCtx);
+
 typedef struct ObjHunsui {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x74];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x18];
+    /* 0x015C */ ObjHunsuiActionFunc actionFunc;
+    /* 0x0160 */ char unk_160[0x58];
 } ObjHunsui; // size = 0x1B8
 
 extern const ActorInit Obj_Hunsui_InitVars;

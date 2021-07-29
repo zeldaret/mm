@@ -8,6 +8,9 @@ void ObjBombiwa_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjBombiwa_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjBombiwa_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80939EF4(ObjBombiwa* this, GlobalContext* globalCtx);
+void func_8093A1F0(ObjBombiwa* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Bombiwa_InitVars = {
     ACTOR_OBJ_BOMBIWA,

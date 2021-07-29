@@ -5,9 +5,13 @@
 
 struct EnTru;
 
+typedef void (*EnTruActionFunc)(struct EnTru* this, GlobalContext* globalCtx);
+
 typedef struct EnTru {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x7F0];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x44];
+    /* 0x0188 */ EnTruActionFunc actionFunc;
+    /* 0x018C */ char unk_18C[0x7A8];
 } EnTru; // size = 0x934
 
 extern const ActorInit En_Tru_InitVars;
