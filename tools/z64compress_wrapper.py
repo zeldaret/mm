@@ -4,7 +4,7 @@
 #   Arguments: <rom in> <rom out> <elf> <spec> [cache directory] [num threads]
 #
 
-import argparse, itertools, re, subprocess, sys
+import argparse, itertools, shlex, subprocess, sys
 
 from elftools.elf.elffile import ELFFile
 from elftools.elf.sections import SymbolTableSection
@@ -98,4 +98,8 @@ cmd = f"./tools/z64compress/z64compress --in {IN_ROM} --out {OUT_ROM}{' --matchi
 --compress {COMPRESS_INDICES}{f' --threads {N_THREADS}' if N_THREADS > 0 else ''}{f' --only-stdout' if STDOUT else ''}"
 
 print(cmd)
-subprocess.run(cmd, shell=True)
+
+try:
+    subprocess.check_call(cmd, shell=True)
+except subprocess.CalledProcessError as e:
+    sys.exit(e.returncode)
