@@ -3,8 +3,6 @@
 import ast, math, os, re, struct
 import threading
 
-import numpy as np
-
 from mips_isa import *
 
 ASM_OUT = "asm/"
