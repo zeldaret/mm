@@ -40,6 +40,8 @@
 #define  fwrite  wow_fwrite
 #define  remove  wow_remove
 
+extern FILE* printer;
+
 #define SIZE_16MB (1024 * 1024 * 16)
 #define SIZE_4MB  (1024 * 1024 * 4)
 
@@ -534,7 +536,7 @@ static void report_progress(
 	/* caching enabled */
 	if (rom->cache)
 		fprintf(
-			stderr
+			printer
 			, "\r""updating '%s/%s' %d/%d: "
 			, rom->cache
 			, codec
@@ -544,7 +546,7 @@ static void report_progress(
 	
 	else
 		fprintf(
-			stderr
+			printer
 			, "\r""compressing file %d/%d: "
 			, v
 			, total
@@ -1050,7 +1052,7 @@ void rom_compress(struct rom *rom, int mb, int numThreads, bool matching)
 	
 	/* all files now compressed */
 	report_progress(rom, codec, PROGRESS_A_B);
-	fprintf(stderr, "success!\n");
+	fprintf(printer, "success!\n");
 	
 	/* sort by original start, ascending */
 	DMASORT(rom, sortfunc_dma_start_ascend);
@@ -1079,7 +1081,7 @@ void rom_compress(struct rom *rom, int mb, int numThreads, bool matching)
 		char *fn = dma->compname;
 		unsigned int sz;
 		unsigned int sz16;
-		fprintf(stderr, "\r""injecting file %d/%d: ", PROGRESS_A_B);
+		fprintf(printer, "\r""injecting file %d/%d: ", PROGRESS_A_B);
 		
 		if (dma->deleted)
 			continue;
@@ -1150,11 +1152,11 @@ void rom_compress(struct rom *rom, int mb, int numThreads, bool matching)
 			}
 		}
 	}
-	fprintf(stderr, "\r""injecting file %d/%d: ", dma_num, dma_num);
-	fprintf(stderr, "success!\n");
+	fprintf(printer, "\r""injecting file %d/%d: ", dma_num, dma_num);
+	fprintf(printer, "success!\n");
 	
 	fprintf(
-		stderr
+		printer
 		, "compression ratio: %.02f%%\n"
 		, (total_compressed / total_decompressed) * 100.0f
 	);
@@ -1339,7 +1341,7 @@ void rom_dma_ready(struct rom *rom, bool matching)
 		if (dma->end == dma->start)
 		{
 			fprintf(
-				stderr
+				printer
 				, "warning: dma entry %d is empty file (%08X == %08X)\n"
 				, dma->index, dma->start, dma->end
 			);
@@ -1513,7 +1515,7 @@ void rom_dma_repack(
 		
 		/* fatal error */
 		if (errstr)
-			die(errstr);
+			die("%s", errstr);
 		
 		/* repacked archive won't fit in place of original archive */
 		if (Nsz > Osz)
@@ -1525,7 +1527,7 @@ void rom_dma_repack(
 		memcpy(dst, rom->mem.mb16, Nsz);
 		
 		/* file sizes changed */
-		fprintf(stderr, "%.2f kb saved!\n", ((float)(Osz-Nsz))/1000.0f);
+		fprintf(printer, "%.2f kb saved!\n", ((float)(Osz-Nsz))/1000.0f);
 		
 		dma->end = dma->start + Nsz;
 		

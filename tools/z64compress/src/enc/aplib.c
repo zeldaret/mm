@@ -35,6 +35,8 @@ aplenc(
 		, src_sz
 		, nMaxCompressedSize
 		, 0 /* flags */
+		, 0 /* nMaxWindowSize */
+		, 0 /* nDictionarySize */
 		, compression_progress
 		, &stats
 	);

@@ -30,7 +30,9 @@ $(shell mkdir -p $(foreach dir,$(SRC_DIRS),$(OBJ_DIR)/$(dir)))
 
 .PHONY: all clean
 
-all: $(O_FILES)
+all: z64compress
+
+z64compress: $(O_FILES)
 	$(CC) $(TARGET_CFLAGS) $(CFLAGS) $(O_FILES) -lm -lpthread $(TARGET_LIBS) -o z64compress
 
 $(OBJ_DIR)/%.o: %.c

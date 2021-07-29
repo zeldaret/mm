@@ -10,74 +10,77 @@ If you add an algorithm, please make sure `valgrind` reports no memory leaks or 
 This is a command line application. Learn from these common examples and adapt the arguments to your needs:
 ```
   compressing oot debug
-    --in        "path/to/in.z64"
-    --out       "path/to/out.z64"
-    --mb        32
-    --codec     yaz
-    --cache     "path/to/cache"
-    --dma       "0x12F70,1548"
-    --compress  "9-14,28-END"
-    --threads   4
+    --in           "path/to/in.z64"
+    --out          "path/to/out.z64"
+    --mb           32
+    --codec        yaz
+    --cache        "path/to/cache"
+    --dma          "0x12F70,1548"
+    --compress     "9-14,28-END"
+    --threads      4
 
   compressing oot ntsc 1.0
-    --in        "path/to/in.z64"
-    --out       "path/to/out.z64"
-    --mb        32
-    --codec     yaz
-    --cache     "path/to/cache"
-    --dma       "0x7430,1526"
-    --compress  "10-14,27-END"
-    --threads   4
+    --in           "path/to/in.z64"
+    --out          "path/to/out.z64"
+    --mb           32
+    --codec        yaz
+    --cache        "path/to/cache"
+    --dma          "0x7430,1526"
+    --compress     "10-14,27-END"
+    --threads      4
 
   compressing mm usa
-    --in        "path/to/in.z64"
-    --out       "path/to/out.z64"
-    --mb        32
-    --codec     yaz
-    --cache     "path/to/cache"
-    --dma       "0x1A500,1568"
-    --compress  "10-14,23,24,31-END"
-    --skip      "1127"
-    --repack    "15-20,22"
-    --threads   4
+    --in           "path/to/in.z64"
+    --out          "path/to/out.z64"
+    --mb           32
+    --codec        yaz
+    --cache        "path/to/cache"
+    --dma          "0x1A500,1568"
+    --compress     "10-14,23,24,31-END"
+    --skip         "1127"
+    --repack       "15-20,22"
+    --threads      4
 ```
 
 ## Arguments
 ```
-    --in        uncompressed input rom
+    --in           uncompressed input rom
 
-    --out       compressed output rom
+    --out          compressed output rom
 
-    --matching  attempt matching compression at the cost of
-                some optimizations and reduced performance
+    --matching     attempt matching compression at the cost of
+                   some optimizations and reduced performance
 
-    --mb        how many mb the compressed rom should be
+    --mb           how many mb the compressed rom should be
 
-    --codec     currently supported codecs
-                   yaz
-                   ucl
-                   lzo
-                   aplib
-              * to use non-yaz codecs, find patches
-                and code on my z64enc repo
+    --codec        currently supported codecs
+                      yaz
+                      ucl
+                      lzo
+                      aplib
+                 * to use non-yaz codecs, find patches
+                   and code on my z64enc repo
 
-    --cache     is optional and won't be created if
-                no path is specified (having a cache
-                makes subsequent compressions faster)
-              * pro-tip: linux users who don't want a
-                cache to persist across power cycles
-                can use the path "/tmp/z64compress"
+    --cache        is optional and won't be created if
+                   no path is specified (having a cache
+                   makes subsequent compressions faster)
+                 * pro-tip: linux users who don't want a
+                   cache to persist across power cycles
+                   can use the path "/tmp/z64compress"
 
-    --dma       specify dmadata address and count
+    --dma          specify dmadata address and count
 
-    --compress  enable compression on specified files
+    --compress     enable compression on specified files
 
-    --skip      disable compression on specified files
+    --skip         disable compression on specified files
 
-    --repack    handles Majora's Mask archives
+    --repack       handles Majora's Mask archives
 
-    --threads   optional multithreading;
-                exclude this argument to disable it
+    --threads      optional multithreading;
+                   exclude this argument to disable it
+
+    --only-stdout  reserve stderr for errors and print
+                   everything else to stdout
 
   arguments are executed as they
   are parsed, so order matters!

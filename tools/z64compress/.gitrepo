@@ -6,7 +6,7 @@
 [subrepo]
 	remote = https://github.com/z64me/z64compress.git
 	branch = main
-	commit = eb11085cf41e7766b7d800be10295d673e488e5c
-	parent = 33d9f7d80fb255566669cb5db52d1258f7acb950
+	commit = 163ca2af2ebddf6368455a9ecb9f1c7eb56c5c28
+	parent = 4a58404454e1b794a30e86c4f8459e720965d674
 	method = merge
 	cmdver = 0.4.3

@@ -49,8 +49,9 @@ extern "C" {
 #define VISITED_FLAG 0x8000000000000000ULL
 #define EXCL_VISITED_MASK  0x7fffffffffffffffULL
 
-#define NMATCHES_PER_ARRIVAL 24
-#define NMATCHES_PER_ARRIVAL_SMALL 9
+#define NARRIVALS_PER_POSITION_MAX 62
+#define NARRIVALS_PER_POSITION_NORMAL 46
+#define NARRIVALS_PER_POSITION_SMALL 9
 
 #define NMATCHES_PER_INDEX 64
 #define MATCHES_PER_INDEX_SHIFT 6
@@ -72,16 +73,17 @@ typedef struct _apultra_final_match {
 /** Forward arrival slot */
 typedef struct {
    int cost;
+
    unsigned int from_pos:21;
-   int from_slot:8;
+   int from_slot:7;
    unsigned int follows_literal:1;
 
-   unsigned int rep_offset;
-   unsigned int rep_pos;
-   int score;
-
-   unsigned int match_offset:21;
+   unsigned int rep_offset:21;
+   unsigned int short_offset:4;
+   unsigned int rep_pos:21;
    unsigned int match_len:11;
+
+   int score;
 } apultra_arrival;
 
 /** Compression statistics */
@@ -91,6 +93,9 @@ typedef struct _apultra_stats {
    int num_7bit_matches;
    int num_variable_matches;
    int num_rep_matches;
+   int num_eod;
+
+   int safe_dist;
 
    int min_offset;
    int max_offset;
@@ -125,8 +130,13 @@ typedef struct _apultra_compressor {
    unsigned char *match1;
    apultra_final_match *best_match;
    apultra_arrival *arrival;
+   int *first_offset_for_byte;
+   int *next_offset_for_pos;
+   int *offset_cache;
    int flags;
    int block_size;
+   int max_offset;
+   int max_arrivals;
    apultra_stats stats;
 } apultra_compressor;
 
@@ -147,13 +157,15 @@ size_t apultra_get_max_compressed_size(size_t nInputSize);
  * @param nInputSize input(source) size in bytes
  * @param nMaxOutBufferSize maximum capacity of compression buffer
  * @param nFlags compression flags (set to 0)
+ * @param nMaxWindowSize maximum window size to use (0 for default)
+ * @param nDictionarySize size of dictionary in front of input data (0 for none)
  * @param progress progress function, called after compressing each block, or NULL for none
  * @param pStats pointer to compression stats that are filled if this function is successful, or NULL
  *
  * @return actual compressed size, or -1 for error
  */
 size_t apultra_compress(const unsigned char *pInputData, unsigned char *pOutBuffer, size_t nInputSize, size_t nMaxOutBufferSize,
-   const unsigned int nFlags, void(*progress)(long long nOriginalSize, long long nCompressedSize), apultra_stats *pStats);
+   const unsigned int nFlags, size_t nMaxWindowSize, size_t nDictionarySize, void(*progress)(long long nOriginalSize, long long nCompressedSize), apultra_stats *pStats);
 
 #ifdef __cplusplus
 }
