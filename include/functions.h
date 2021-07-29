@@ -1334,7 +1334,7 @@ s16 Camera_ClearFlags(Camera* camera, s16 flags);
 // void func_800E01DC(s32 param_1, u32 param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6);
 // UNK_TYPE4 func_800E0228(void);
 // void func_800E0238(void);
-// void func_800E02AC(void);
+void func_800E02AC(Camera* camera, Actor* actor);
 // void func_800E0308(void);
 // void func_800E031C(void);
 void func_800E0348(Camera* camera);

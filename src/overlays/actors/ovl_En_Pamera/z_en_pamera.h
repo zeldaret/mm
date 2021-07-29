@@ -44,7 +44,7 @@ typedef struct EnPamera {
     /* 0x1DC */ Vec3s* pathPoints;
     /* 0x1E0 */ s32 pathIndex;
     /* 0x1E4 */ s32 pathPointsCount;
-    /* 0x1E8 */ s32 pathID; 
+    /* 0x1E8 */ s32 pathId; 
     /* 0x1EC */ s32 unk_1EC;
     /* 0x1F0 */ Vec3s limbDrawTbl[PAMERA_LIMB_MAX];
     /* 0x27A */ Vec3s transitionDrawTbl[PAMERA_LIMB_MAX];
