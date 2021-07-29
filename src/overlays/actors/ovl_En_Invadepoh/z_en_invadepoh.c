@@ -1358,13 +1358,13 @@ void func_80B452EC(EnInvadepoh* this, GlobalContext* globalCtx) {
 }
 
 void func_80B453F4(EnInvadepoh* this, GlobalContext* globalCtx, s32 arg2) {
-    Actor_SpawnWithParent(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_INVADEPOH, this->actor.home.pos.x,
-                          this->actor.home.pos.y, this->actor.home.pos.z, 0, 0, 0, (arg2 & 7) | 0x20);
+    Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_INVADEPOH, this->actor.home.pos.x,
+                       this->actor.home.pos.y, this->actor.home.pos.z, 0, 0, 0, (arg2 & 7) | 0x20);
 }
 
 void func_80B45460(EnInvadepoh* this, GlobalContext* globalCtx) {
-    Actor_SpawnWithParent(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_INVADEPOH, this->actor.home.pos.x,
-                          this->actor.home.pos.y, this->actor.home.pos.z, 0, 0, 0, 0x40);
+    Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_INVADEPOH, this->actor.home.pos.x,
+                       this->actor.home.pos.y, this->actor.home.pos.z, 0, 0, 0, 0x40);
 }
 
 void func_80B454BC(EnInvadepoh* this, GlobalContext* globalCtx) {
@@ -1745,8 +1745,8 @@ void EnInvadepoh_InitAlien(EnInvadepoh* this, GlobalContext* globalCtx) {
 void EnInvadepoh_InitParentCow(EnInvadepoh* this, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->actor, sInitChainParentCow);
     this->actor.update = func_80B47FA8;
-    Actor_SpawnWithParent(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_INVADEPOH, 0.0f, 0.0f, 0.0f, 0, 0, 0,
-                          0x30);
+    Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_INVADEPOH, 0.0f, 0.0f, 0.0f, 0, 0, 0,
+                       0x30);
     this->bankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_COW);
     if (this->bankIndex < 0) {
         Actor_MarkForDeath(&this->actor);
