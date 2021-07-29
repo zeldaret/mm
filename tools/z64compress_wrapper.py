@@ -20,11 +20,14 @@ parser.add_argument("--cache", help="cache directory")
 parser.add_argument("--threads", help="number of threads to run compression on, 0 disables multithreading")
 parser.add_argument("--mb", help="compressed rom size in MB, default 32")
 parser.add_argument("--matching", help="matching compression, forfeits some useful optimizations", action="store_true")
+parser.add_argument("--stderr", help="z64compress will write its output messages to stderr instead of stdout", action="store_true")
 
 args = parser.parse_args()
 
 IN_ROM = args.in_rom
 OUT_ROM = args.out_rom
+
+STDOUT = not args.stderr
 
 elf_path = args.elf
 
@@ -92,7 +95,7 @@ DMADATA_ADDR, DMADATA_COUNT = get_dmadata_start_len()
 
 cmd = f"./tools/z64compress/z64compress --in {IN_ROM} --out {OUT_ROM}{' --matching' if matching else ''} \
 --mb {MB} --codec yaz{f' --cache {CACHE_DIR}' if CACHE_DIR is not None else ''} --dma 0x{DMADATA_ADDR:X},{DMADATA_COUNT} \
---compress {COMPRESS_INDICES}{f' --threads {N_THREADS}' if N_THREADS > 0 else ''}"
+--compress {COMPRESS_INDICES}{f' --threads {N_THREADS}' if N_THREADS > 0 else ''}{f' --only-stdout' if STDOUT else ''}"
 
 print(cmd)
 subprocess.run(cmd, shell=True)
