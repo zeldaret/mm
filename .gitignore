@@ -35,6 +35,7 @@ graphs/
 *.png
 *.jpg
 !*_custom*
+.extracted-assets.json
 
 # Per-user configuration
 .python-version

@@ -813,8 +813,10 @@ SECTIONS
     _ovl_Player_ActorSegmentStart = SegmentStart;
     ovl_Player_Actor : AT(RomLocation)
     {
-        build/asm/overlays/ovl_Player_Actor_0x8082DA90.o(.text)
+        build/src/overlays/actors/ovl_Player_Actor/z_player.o(.text)
         build/asm/overlays/ovl_Player_Actor_data.o(.data)
+        build/src/overlays/actors/ovl_Player_Actor/z_player.o(.rodata)
+        build/asm/overlays/ovl_Player_Actor_rodata.o(.rodata)
         ovl_Player_Actor_bss_start = .;
     }
     . += 0x80;
@@ -1269,10 +1271,9 @@ SECTIONS
     ovl_En_Ossan : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Ossan/z_en_ossan.o(.text)
-        build/asm/overlays/ovl_En_Ossan_data.o(.data)
+        build/src/overlays/actors/ovl_En_Ossan/z_en_ossan.o(.data)
         build/src/overlays/actors/ovl_En_Ossan/z_en_ossan.o(.rodata)
-        build/asm/overlays/ovl_En_Ossan_rodata.o(.rodata)
-        build/asm/overlays/ovl_En_Ossan_late_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Ossan/z_en_ossan_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -4141,10 +4142,9 @@ SECTIONS
     ovl_En_Sob1 : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Sob1/z_en_sob1.o(.text)
-        build/asm/overlays/ovl_En_Sob1_data.o(.data)
+        build/src/overlays/actors/ovl_En_Sob1/z_en_sob1.o(.data)
         build/src/overlays/actors/ovl_En_Sob1/z_en_sob1.o(.rodata)
-        build/asm/overlays/ovl_En_Sob1_rodata.o(.rodata)
-        build/asm/overlays/ovl_En_Sob1_late_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Sob1/z_en_sob1_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
@@ -8046,9 +8046,9 @@ SECTIONS
     ovl_En_Hg : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Hg/z_en_hg.o(.text)
-        build/asm/overlays/ovl_En_Hg_data.o(.data)
+        build/src/overlays/actors/ovl_En_Hg/z_en_hg.o(.data)
         build/src/overlays/actors/ovl_En_Hg/z_en_hg.o(.rodata)
-        build/asm/overlays/ovl_En_Hg_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Hg/z_en_hg_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;
