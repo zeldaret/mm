@@ -98,39 +98,48 @@ const ActorInit En_Pametfrog_InitVars = {
     (ActorFunc)EnPametfrog_Draw,
 };
 
+typedef enum {
+    /* 0x0 */ GEKKO_DMGEFF_NONE,
+    /* 0x1 */ GEKKO_DMGEFF_STUN,
+    /* 0x2 */ GEKKO_DMGEFF_FIRE,
+    /* 0x3 */ GEKKO_DMGEFF_ICE,
+    /* 0x4 */ GEKKO_DMGEFF_LIGHT,
+    /* 0x5 */ GEKKO_DMGEFF_ZORA_BARRIER,
+} EnPametfrogDamageEffect;
+
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, 0x1),
-    /* Deku Stick     */ DMG_ENTRY(1, 0x0),
-    /* Horse trample  */ DMG_ENTRY(0, 0x0),
-    /* Explosives     */ DMG_ENTRY(1, 0x0),
-    /* Zora boomerang */ DMG_ENTRY(1, 0x0),
-    /* Normal arrow   */ DMG_ENTRY(1, 0x0),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
-    /* Hookshot       */ DMG_ENTRY(0, 0x1),
-    /* Goron punch    */ DMG_ENTRY(1, 0x0),
-    /* Sword          */ DMG_ENTRY(1, 0x0),
-    /* Goron pound    */ DMG_ENTRY(1, 0x0),
-    /* Fire arrow     */ DMG_ENTRY(2, 0x2),
-    /* Ice arrow      */ DMG_ENTRY(2, 0x3),
-    /* Light arrow    */ DMG_ENTRY(2, 0x4),
-    /* Goron spikes   */ DMG_ENTRY(1, 0x0),
-    /* Deku spin      */ DMG_ENTRY(0, 0x1),
-    /* Deku bubble    */ DMG_ENTRY(1, 0x0),
-    /* Deku launch    */ DMG_ENTRY(2, 0x0),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x1),
-    /* Zora barrier   */ DMG_ENTRY(0, 0x5),
-    /* Normal shield  */ DMG_ENTRY(0, 0x0),
-    /* Light ray      */ DMG_ENTRY(0, 0x0),
-    /* Thrown object  */ DMG_ENTRY(1, 0x0),
-    /* Zora punch     */ DMG_ENTRY(1, 0x0),
-    /* Spin attack    */ DMG_ENTRY(1, 0x0),
-    /* Sword beam     */ DMG_ENTRY(1, 0x0),
-    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
-    /* Unblockable    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
-    /* Powder Keg     */ DMG_ENTRY(1, 0x0),
+    /* Deku Nut       */ DMG_ENTRY(0, GEKKO_DMGEFF_STUN),
+    /* Deku Stick     */ DMG_ENTRY(1, GEKKO_DMGEFF_NONE),
+    /* Horse trample  */ DMG_ENTRY(0, GEKKO_DMGEFF_NONE),
+    /* Explosives     */ DMG_ENTRY(1, GEKKO_DMGEFF_NONE),
+    /* Zora boomerang */ DMG_ENTRY(1, GEKKO_DMGEFF_NONE),
+    /* Normal arrow   */ DMG_ENTRY(1, GEKKO_DMGEFF_NONE),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, GEKKO_DMGEFF_NONE),
+    /* Hookshot       */ DMG_ENTRY(0, GEKKO_DMGEFF_STUN),
+    /* Goron punch    */ DMG_ENTRY(1, GEKKO_DMGEFF_NONE),
+    /* Sword          */ DMG_ENTRY(1, GEKKO_DMGEFF_NONE),
+    /* Goron pound    */ DMG_ENTRY(1, GEKKO_DMGEFF_NONE),
+    /* Fire arrow     */ DMG_ENTRY(2, GEKKO_DMGEFF_FIRE),
+    /* Ice arrow      */ DMG_ENTRY(2, GEKKO_DMGEFF_ICE),
+    /* Light arrow    */ DMG_ENTRY(2, GEKKO_DMGEFF_LIGHT),
+    /* Goron spikes   */ DMG_ENTRY(1, GEKKO_DMGEFF_NONE),
+    /* Deku spin      */ DMG_ENTRY(0, GEKKO_DMGEFF_STUN),
+    /* Deku bubble    */ DMG_ENTRY(1, GEKKO_DMGEFF_NONE),
+    /* Deku launch    */ DMG_ENTRY(2, GEKKO_DMGEFF_NONE),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, GEKKO_DMGEFF_STUN),
+    /* Zora barrier   */ DMG_ENTRY(0, GEKKO_DMGEFF_ZORA_BARRIER),
+    /* Normal shield  */ DMG_ENTRY(0, GEKKO_DMGEFF_NONE),
+    /* Light ray      */ DMG_ENTRY(0, GEKKO_DMGEFF_NONE),
+    /* Thrown object  */ DMG_ENTRY(1, GEKKO_DMGEFF_NONE),
+    /* Zora punch     */ DMG_ENTRY(1, GEKKO_DMGEFF_NONE),
+    /* Spin attack    */ DMG_ENTRY(1, GEKKO_DMGEFF_NONE),
+    /* Sword beam     */ DMG_ENTRY(1, GEKKO_DMGEFF_NONE),
+    /* Normal Roll    */ DMG_ENTRY(0, GEKKO_DMGEFF_NONE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, GEKKO_DMGEFF_NONE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, GEKKO_DMGEFF_NONE),
+    /* Unblockable    */ DMG_ENTRY(0, GEKKO_DMGEFF_NONE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, GEKKO_DMGEFF_NONE),
+    /* Powder Keg     */ DMG_ENTRY(1, GEKKO_DMGEFF_NONE),
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[2] = {
@@ -397,18 +406,18 @@ void EnPametfrog_JumpOnGround(EnPametfrog* this, GlobalContext* globalCtx) {
 }
 
 void EnPametfrog_ApplyMagicArrowEffects(EnPametfrog* this, GlobalContext* globalCtx) {
-    if (this->actor.colChkInfo.damageEffect == 2) { // Fire Arrows
+    if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_FIRE) {
         this->drawEffect = GEKKO_DRAW_EFFECT_NONE;
         this->unk_2C4 = 3.0f;
         this->unk_2C8 = 0.75f;
-    } else if (this->actor.colChkInfo.damageEffect == 4) { // Light Arrows
+    } else if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_LIGHT) {
         this->drawEffect = GEKKO_DRAW_EFFECT_LIGHT_ORBS;
         this->unk_2C8 = 0.75f;
         this->unk_2C4 = 3.0f;
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG,
                     this->collider.elements[0].info.bumper.hitPos.x, this->collider.elements[0].info.bumper.hitPos.y,
                     this->collider.elements[0].info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
-    } else if (this->actor.colChkInfo.damageEffect == 3) { // Ice Arrows
+    } else if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_ICE) {
         EnPametfrog_ChangeColliderFreeze(this);
     }
 }
@@ -1282,24 +1291,24 @@ void EnPametfrog_ApplyDamageEffect(EnPametfrog* this, GlobalContext* globalCtx) 
                     func_801A2ED8();
                 }
 
-                if (this->actor.colChkInfo.damageEffect == 5) { // Zora barrier
+                if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_ZORA_BARRIER) {
                     EnPametfrog_ApplyElectricStun(this);
                     EnPametfrog_SetupStun(this);
-                } else if (this->actor.colChkInfo.damageEffect == 1) { // Nuts/Hookshot/Deku Spin/UNK_DMG_0x12
+                } else if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_STUN) {
                     EnPametfrog_ApplyStun(this);
                     EnPametfrog_SetupStun(this);
-                } else if (this->actor.colChkInfo.damageEffect == 3) { // Ice arrows
+                } else if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_ICE) {
                     EnPametfrog_ChangeColliderFreeze(this);
                     this->freezeTimer = 80;
                     func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 0x50);
                     EnPametfrog_SetupStun(this);
                 } else {
                     EnPametfrog_ChangeColliderThaw(this, globalCtx);
-                    if (this->actor.colChkInfo.damageEffect == 2) { // Fire arrows
+                    if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_FIRE) {
                         this->drawEffect = GEKKO_DRAW_EFFECT_NONE;
                         this->unk_2C8 = 0.75f;
                         this->unk_2C4 = 4.0f;
-                    } else if (this->actor.colChkInfo.damageEffect == 4) { // Light arrows
+                    } else if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_LIGHT) {
                         this->drawEffect = GEKKO_DRAW_EFFECT_LIGHT_ORBS;
                         this->unk_2C8 = 0.75f;
                         this->unk_2C4 = 4.0f;
@@ -1318,9 +1327,9 @@ void EnPametfrog_ApplyDamageEffect(EnPametfrog* this, GlobalContext* globalCtx) 
                 this->actor.flags &= ~1;
                 func_801A2ED8();
                 EnPametfrog_SetupCutscene(this);
-            } else if (this->actor.colChkInfo.damageEffect == 5) { // Zora Barrier
+            } else if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_ZORA_BARRIER) {
                 EnPametfrog_ApplyElectricStun(this);
-            } else if (this->actor.colChkInfo.damageEffect == 1) { // Nuts/Hookshot/Deku Spin/UNK_DMG_0x12
+            } else if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_STUN) {
                 EnPametfrog_ApplyStun(this);
             } else {
                 EnPametfrog_ApplyMagicArrowEffects(this, globalCtx);

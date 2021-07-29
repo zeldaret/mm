@@ -15,7 +15,7 @@ typedef void (*EnBigslimeActionFunc)(struct EnBigslime*, GlobalContext*);
 #define BIGSLIME_NUM_RING_VTX (1 + BIGSLIME_NUM_RING_FACES)  // Number of rings composed of vertices
 #define BIGSLIME_RADIUS_S 1000      // Radius of reference sphere int
 #define BIGSLIME_RADIUS_F 1000.0f   // Radius of reference sphere float
-#define BIGSLIME_NUM_ICE_SHARD (BIGSLIME_NUM_VTX + 10*MINISLIME_NUM_ACTOR)
+#define BIGSLIME_NUM_ICE_SHARD (BIGSLIME_NUM_VTX + 10*MINISLIME_NUM_SPAWN)
 
 #define GBT_ROOM_5_CENTER_X 1338.0f
 #define GBT_ROOM_5_CENTER_Y -390.0f
@@ -117,7 +117,7 @@ typedef struct EnBigslime {
     /* 0x0628 */ f32 iceShardScale;
     /* 0x062C */ ColliderCylinder gekkoCollider;
     /* 0x0678 */ ColliderCylinder bigslimeCollider[BIGSLIME_NUM_RING_FACES];
-    /* 0x0A14 */ EnMinislime* minislime[MINISLIME_NUM_ACTOR];
+    /* 0x0A14 */ EnMinislime* minislime[MINISLIME_NUM_SPAWN];
     /* 0x0A44 */ EnMinislime* minislimeToThrow;
     /* 0x0A48 */ AnimatedMaterial* bigslimeFrozenTex;
     /* 0x0A4C */ AnimatedMaterial* minislimeFrozenTex;

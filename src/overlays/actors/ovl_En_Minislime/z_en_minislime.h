@@ -7,11 +7,11 @@ struct EnMinislime;
 
 typedef void (*EnMinislimeActionFunc)(struct EnMinislime*, GlobalContext*);
 
-#define MINISLIME_NUM_ACTOR 15
+#define MINISLIME_NUM_SPAWN 15
 
 typedef enum {
     /* 0x0 */ MINISLIME_DISAPPEAR, // Either Bigslime is active or Gekko is defeated
-    /* 0x1 */ MINISLIME_INIT_FALL, // Initial fall when Gekko firsts calls
+    /* 0x1 */ MINISLIME_INIT_FALL, // Initial fall when Gekko first calls
     /* 0x2 */ MINISLIME_BREAK_BIGSLIME,
     /* 0x3 */ MINISLIME_IDLE,
     /* 0x4 */ MINISLIME_FORM_BIGSLIME,

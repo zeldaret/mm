@@ -55,7 +55,6 @@ typedef enum {
     /* 0x18 */ GEKKO_LIMB_MAX,
 } EnPametfrogLimb;
 
-
 typedef struct EnPametfrog {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;

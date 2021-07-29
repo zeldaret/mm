@@ -75,39 +75,47 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit sColChkInfoInit = { 4, 40, 40, 30 };
 
+typedef enum {
+    /* 0x0 */ MINISLIME_DMGEFF_NONE,
+    /* 0x2 */ MINISLIME_DMGEFF_FIRE = 0x2,
+    /* 0x3 */ MINISLIME_DMGEFF_ICE,
+    /* 0xE */ MINISLIME_DMGEFF_HOOKSHOT = 0xE,
+    /* 0xF */ MINISLIME_DMGEFF_BREAK_ICE,
+} MinislimeDamageEffect;
+
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, 0x0),
-    /* Deku Stick     */ DMG_ENTRY(1, 0x0),
-    /* Horse trample  */ DMG_ENTRY(1, 0x0),
-    /* Explosives     */ DMG_ENTRY(1, 0xF),
-    /* Zora boomerang */ DMG_ENTRY(1, 0x0),
-    /* Normal arrow   */ DMG_ENTRY(1, 0x0),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(1, 0x0),
-    /* Hookshot       */ DMG_ENTRY(0, 0xE),
-    /* Goron punch    */ DMG_ENTRY(1, 0xF),
-    /* Sword          */ DMG_ENTRY(1, 0x0),
-    /* Goron pound    */ DMG_ENTRY(1, 0xF),
-    /* Fire arrow     */ DMG_ENTRY(1, 0x2),
-    /* Ice arrow      */ DMG_ENTRY(1, 0x3),
-    /* Light arrow    */ DMG_ENTRY(1, 0x0),
-    /* Goron spikes   */ DMG_ENTRY(1, 0xF),
-    /* Deku spin      */ DMG_ENTRY(1, 0x0),
-    /* Deku bubble    */ DMG_ENTRY(1, 0x0),
-    /* Deku launch    */ DMG_ENTRY(1, 0x0),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x0),
-    /* Zora barrier   */ DMG_ENTRY(1, 0x0),
-    /* Normal shield  */ DMG_ENTRY(0, 0x0),
-    /* Light ray      */ DMG_ENTRY(0, 0x0),
-    /* Thrown object  */ DMG_ENTRY(1, 0x0),
-    /* Zora punch     */ DMG_ENTRY(1, 0x0),
-    /* Spin attack    */ DMG_ENTRY(1, 0x0),
-    /* Sword beam     */ DMG_ENTRY(0, 0x0),
-    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
-    /* Unblockable    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
-    /* Powder Keg     */ DMG_ENTRY(1, 0xF),
+    /* Deku Nut       */ DMG_ENTRY(0, MINISLIME_DMGEFF_NONE),
+    /* Deku Stick     */ DMG_ENTRY(1, MINISLIME_DMGEFF_NONE),
+    /* Horse trample  */ DMG_ENTRY(1, MINISLIME_DMGEFF_NONE),
+    /* Explosives     */ DMG_ENTRY(1, MINISLIME_DMGEFF_BREAK_ICE),
+    /* Zora boomerang */ DMG_ENTRY(1, MINISLIME_DMGEFF_NONE),
+    /* Normal arrow   */ DMG_ENTRY(1, MINISLIME_DMGEFF_NONE),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(1, MINISLIME_DMGEFF_NONE),
+    /* Hookshot       */ DMG_ENTRY(0, MINISLIME_DMGEFF_HOOKSHOT),
+    /* Goron punch    */ DMG_ENTRY(1, MINISLIME_DMGEFF_BREAK_ICE),
+    /* Sword          */ DMG_ENTRY(1, MINISLIME_DMGEFF_NONE),
+    /* Goron pound    */ DMG_ENTRY(1, MINISLIME_DMGEFF_BREAK_ICE),
+    /* Fire arrow     */ DMG_ENTRY(1, MINISLIME_DMGEFF_FIRE),
+    /* Ice arrow      */ DMG_ENTRY(1, MINISLIME_DMGEFF_ICE),
+    /* Light arrow    */ DMG_ENTRY(1, MINISLIME_DMGEFF_NONE),
+    /* Goron spikes   */ DMG_ENTRY(1, MINISLIME_DMGEFF_BREAK_ICE),
+    /* Deku spin      */ DMG_ENTRY(1, MINISLIME_DMGEFF_NONE),
+    /* Deku bubble    */ DMG_ENTRY(1, MINISLIME_DMGEFF_NONE),
+    /* Deku launch    */ DMG_ENTRY(1, MINISLIME_DMGEFF_NONE),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, MINISLIME_DMGEFF_NONE),
+    /* Zora barrier   */ DMG_ENTRY(1, MINISLIME_DMGEFF_NONE),
+    /* Normal shield  */ DMG_ENTRY(0, MINISLIME_DMGEFF_NONE),
+    /* Light ray      */ DMG_ENTRY(0, MINISLIME_DMGEFF_NONE),
+    /* Thrown object  */ DMG_ENTRY(1, MINISLIME_DMGEFF_NONE),
+    /* Zora punch     */ DMG_ENTRY(1, MINISLIME_DMGEFF_NONE),
+    /* Spin attack    */ DMG_ENTRY(1, MINISLIME_DMGEFF_NONE),
+    /* Sword beam     */ DMG_ENTRY(0, MINISLIME_DMGEFF_NONE),
+    /* Normal Roll    */ DMG_ENTRY(0, MINISLIME_DMGEFF_NONE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, MINISLIME_DMGEFF_NONE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, MINISLIME_DMGEFF_NONE),
+    /* Unblockable    */ DMG_ENTRY(0, MINISLIME_DMGEFF_NONE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, MINISLIME_DMGEFF_NONE),
+    /* Powder Keg     */ DMG_ENTRY(1, MINISLIME_DMGEFF_BREAK_ICE),
 };
 
 void EnMinislime_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -506,7 +514,7 @@ void EnMinislime_SetupMoveToBigslime(EnMinislime* this) {
 void EnMinislime_MoveToBigslime(EnMinislime* this, GlobalContext* globalCtx) {
     if (this->actor.params == MINISLIME_DISAPPEAR) {
         EnMinislime_SetupDisappear(this);
-    } else if ((this->actor.scale.x > 0.0f) && (this->actor.world.pos.y > -190.0f)) {
+    } else if ((this->actor.scale.x > 0.0f) && (this->actor.world.pos.y > (GBT_ROOM_5_MAX_Y - 100.0f))) {
         this->actor.params = MINISLIME_SETUP_DISAPPEAR;
         this->actor.speedXZ = 0.0f;
         Actor_SetScale(&this->actor, 0.0f);
@@ -678,17 +686,17 @@ void EnMinislime_ApplyDamage(EnMinislime* this) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
         if (this->actionFunc == EnMinislime_IceArrowDamage) {
-            if (this->actor.colChkInfo.damageEffect != 14) {     // Hookshot
-                if (this->actor.colChkInfo.damageEffect == 15) { // Explosion/Goron Attacks/Keg
+            if (this->actor.colChkInfo.damageEffect != MINISLIME_DMGEFF_HOOKSHOT) {
+                if (this->actor.colChkInfo.damageEffect == MINISLIME_DMGEFF_BREAK_ICE) {
                     EnMinislime_AddIceShardEffect(this);
                     EnMinislime_SetupIdle(this);
-                } else if (this->actor.colChkInfo.damageEffect == 2) {
+                } else if (this->actor.colChkInfo.damageEffect == MINISLIME_DMGEFF_FIRE) {
                     EnMinislime_SetupFireArrowDamage(this);
                 }
             }
         } else {
-            if (this->actor.colChkInfo.damageEffect != 14) { // Hookshot
-                if (this->actor.colChkInfo.damageEffect == 3) {
+            if (this->actor.colChkInfo.damageEffect != MINISLIME_DMGEFF_HOOKSHOT) {
+                if (this->actor.colChkInfo.damageEffect == MINISLIME_DMGEFF_ICE) {
                     EnMinislime_SetupIceArrowDamage(this);
                 } else {
                     EnMinislime_SetupKnockback(this);
