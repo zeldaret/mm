@@ -5251,10 +5251,9 @@ SECTIONS
     ovl_En_Trt : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_En_Trt/z_en_trt.o(.text)
-        build/asm/overlays/ovl_En_Trt_data.o(.data)
+        build/src/overlays/actors/ovl_En_Trt/z_en_trt.o(.data)
         build/src/overlays/actors/ovl_En_Trt/z_en_trt.o(.rodata)
-        build/asm/overlays/ovl_En_Trt_rodata.o(.rodata)
-        build/asm/overlays/ovl_En_Trt_late_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_En_Trt/z_en_trt_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;

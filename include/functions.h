@@ -2159,7 +2159,7 @@ UNK_TYPE func_80114978(UNK_TYPE arg0);
 // void func_80114B84(void);
 // void func_80114CA0(void);
 UNK_TYPE func_80114E90(void);
-// void func_80114F2C(void);
+UNK_TYPE func_80114F2C(UNK_TYPE arg0);
 // void func_80114FD0(void);
 // void func_80115130(void);
 // void func_801152B8(void);

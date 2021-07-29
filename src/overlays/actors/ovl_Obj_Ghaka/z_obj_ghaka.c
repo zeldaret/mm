@@ -97,7 +97,7 @@ void func_80B3C39C(ObjGhaka* this, GlobalContext* globalCtx) {
 }
 
 void func_80B3C4E0(ObjGhaka* this, GlobalContext* globalCtx) {
-    s32 talkState = func_80152498(&globalCtx->msgCtx);
+    u8 talkState = func_80152498(&globalCtx->msgCtx);
 
     if (talkState == 5) {
         if (func_80147624(globalCtx)) {

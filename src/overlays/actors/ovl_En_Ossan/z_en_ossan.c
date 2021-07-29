@@ -10,8 +10,8 @@
 
 #define THIS ((EnOssan*)thisx)
 
-#define LOOKED_AT_PLAYER 1
-#define END_INTERACTION 2
+#define LOOKED_AT_PLAYER (1 << 0)
+#define END_INTERACTION (1 << 1)
 
 void EnOssan_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnOssan_Destroy(Actor* thisx, GlobalContext* globalCtx);
