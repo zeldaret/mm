@@ -189,6 +189,7 @@ clean:
 assetclean:
 	$(RM) -rf $(ASSET_BIN_DIRS)
 	$(RM) -rf build/assets
+	$(RM) -rf .extracted-assets.json
 
 distclean: assetclean clean
 	$(RM) -rf asm baserom data
