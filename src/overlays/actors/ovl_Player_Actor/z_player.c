@@ -8,6 +8,10 @@
 
 #define THIS ((Player*)thisx)
 
+extern UNK_TYPE D_06008860;
+extern UNK_TYPE D_0600BDD8;
+extern UNK_TYPE D_060178D0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Player_Actor/func_8082DA90.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Player_Actor/func_8082DABC.s")
