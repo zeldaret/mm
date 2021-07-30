@@ -123,8 +123,8 @@ void FaultDrawer_SetCharPad(s8 padW, s8 padH) {
 void FaultDrawer_SetCursor(s32 x, s32 y) {
     if (sFaultDrawContext->osSyncPrintfEnabled) {
         osSyncPrintf(VT_CUP("%d", "%d"),
-                  (y - sFaultDrawContext->yStart) / (sFaultDrawContext->charH + sFaultDrawContext->charHPad),
-                  (x - sFaultDrawContext->xStart) / (sFaultDrawContext->charW + sFaultDrawContext->charWPad));
+                     (y - sFaultDrawContext->yStart) / (sFaultDrawContext->charH + sFaultDrawContext->charHPad),
+                     (x - sFaultDrawContext->xStart) / (sFaultDrawContext->charW + sFaultDrawContext->charWPad));
     }
     sFaultDrawContext->cursorX = x;
     sFaultDrawContext->cursorY = y;

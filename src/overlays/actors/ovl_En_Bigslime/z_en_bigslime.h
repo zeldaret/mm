@@ -1,7 +1,7 @@
 #ifndef Z_EN_BIGSLIME_H
 #define Z_EN_BIGSLIME_H
 
-#include <global.h>
+#include "global.h"
 #include "overlays/actors/ovl_En_Minislime/z_en_minislime.h"
 #include "overlays/actors/ovl_En_Pametfrog/z_en_pametfrog.h"
 

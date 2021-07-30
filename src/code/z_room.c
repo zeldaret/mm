@@ -75,44 +75,6 @@ void Room_Init(GlobalContext* globalCtx, RoomContext* roomCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_room/Room_AllocateAndLoad.s")
 
-// s32 Room_StartRoomTransition(GlobalContext* globalCtx, RoomContext* roomCtx, s32 index) {
-//     u32 sp3C;
-//     DmaRequest* sp38;
-//     s32 sp34;
-//     OSMesgQueue* sp30;
-//     DmaRequest* temp_t0;
-//     OSMesgQueue* temp_a0;
-//     s32 temp_t1;
-//     u32 temp_a3;
-//     u8 temp_v1;
-//     void* temp_v0;
-
-//     if (roomCtx->unk31 == 0) {
-//         roomCtx->prevRoom = roomCtx->currRoom;
-        
-//         roomCtx->currRoom.segment = NULL;
-//         roomCtx->unk31 = 1;
-//         roomCtx->currRoom.num = (s8) index;
-//         temp_t0 = &globalCtx->objectCtx.status[9].dmaReq;
-//         temp_t1 = index * 8;
-//         temp_v1 = roomCtx->activeMemPage;
-//         temp_v0 = temp_t0->unk84C + temp_t1;
-//         temp_a3 = temp_v0->unk4 - temp_v0->unk0;
-//         temp_a0 = &roomCtx->loadQueue;
-//         roomCtx->activeRoomVram = (void* ) (((roomCtx->roomMemPages[temp_v1] - ((temp_a3 + 8) * temp_v1)) + 8) & ~0xF);
-//         sp34 = temp_t1;
-//         sp38 = temp_t0;
-//         sp3C = temp_a3;
-//         sp30 = temp_a0;
-//         osCreateMesgQueue(temp_a0, roomCtx->loadMsg, 1);
-//         DmaMgr_SendRequestImpl(&roomCtx->dmaRequest, roomCtx->activeRoomVram, *(temp_t0->unk84C + temp_t1), temp_a3, 0, sp30, NULL);
-//         roomCtx->activeMemPage ^= 1;
-//         return 1;
-//     }
-//     return 0;
-// }
-
-
 #ifdef NON_MATCHING
 s32 Room_StartRoomTransition(GlobalContext* globalCtx, RoomContext* roomCtx, s32 index) {
     u32 size;
@@ -127,7 +89,7 @@ s32 Room_StartRoomTransition(GlobalContext* globalCtx, RoomContext* roomCtx, s32
         size = globalCtx->roomList[index].vromEnd - globalCtx->roomList[index].vromStart;
         roomCtx->activeRoomVram =
             (void*)(((s32)roomCtx->roomMemPages[roomCtx->activeMemPage] - (size + 8) * roomCtx->activeMemPage + 8) &
-            0xfffffff0);
+                    0xfffffff0);
 
         osCreateMesgQueue(&roomCtx->loadQueue, roomCtx->loadMsg, 1);
         DmaMgr_SendRequestImpl(&roomCtx->dmaRequest, roomCtx->activeRoomVram, globalCtx->roomList[index].vromStart,
