@@ -728,6 +728,7 @@ typedef struct {
 } DoorParams; // size = 0xC
 
 typedef struct {
+    /* 0x00 */ Vec3f unk_00;
     /* 0x0C */ s16 unk_0C;
     /* 0x0E */ s16 unk_0E;
 } Special8Anim; // size = 0x1C
