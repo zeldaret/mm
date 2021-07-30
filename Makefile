@@ -125,7 +125,6 @@ DEP_FILES := $(O_FILES:.o=.asmproc.d)
 
 # create build directories
 $(shell mkdir -p build/baserom $(foreach dir,$(SRC_DIRS) $(ASM_DIRS) $(ASSET_BIN_DIRS),build/$(dir)))
-#$(shell mkdir -p build/linker_scripts build/asm build/asm/boot build/asm/code build/asm/overlays $(foreach dir, $(COMP_DIRS) $(BINARY_DIRS) $(SRC_DIRS) $(ASSET_BIN_DIRS),$(shell mkdir -p build/$(dir))))
 
 build/src/libultra/os/%: OPTFLAGS := -O1
 build/src/libultra/voice/%: OPTFLAGS := -O2

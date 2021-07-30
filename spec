@@ -68,7 +68,7 @@ beginseg
     include "build/src/boot/boot_80086760.o"
     include "build/data/boot/boot_80086760.bss.o"
 
-    include "build/src/boot/fp.o"
+    include "build/asm/boot/fp.text.o"
 
     include "build/src/boot/system_malloc.o"
     include "build/data/boot/system_malloc.data.o"
@@ -875,9 +875,9 @@ beginseg
 
     include "build/src/code/audio_seqplayer.o"
 
-    include "build/src/code/code_8019AE40.o"
+    include "build/asm/code/code_8019AE40.text.o" // handwritten
     pad_text
-    include "build/src/code/code_8019AEC0.o"
+    include "build/asm/code/code_8019AEC0.text.o" // handwritten
 
     include "build/src/code/code_8019AF00.o"
     include "build/data/code/code_8019AF00.bss.o"

@@ -35,8 +35,6 @@ void func_80143148(SkyboxContext* skyboxCtx, s32 arg1) {
     }
 }
 
-// #ifdef NON_MATCHING
-// Matches besides rodata, since rodata is not merged into the asm in code files yet.
 void func_801431E8(GameState* gamestate, SkyboxContext* skyboxCtx, s16 skyType) {
     GlobalContext* globalCtx = (GlobalContext*)gamestate;
     u32 size;
@@ -82,9 +80,6 @@ void func_801431E8(GameState* gamestate, SkyboxContext* skyboxCtx, s16 skyType) 
         }
     }
 }
-// #else
-// #pragma GLOBAL_ASM("asm/non_matchings/code/z_vr_box/func_801431E8.s")
-// #endif
 
 void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyType) {
     u32 size;
