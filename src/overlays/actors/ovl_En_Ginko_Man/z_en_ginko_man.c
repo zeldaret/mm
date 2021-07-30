@@ -63,8 +63,8 @@ void EnGinkoMan_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->isStampChecked = false;
     this->choiceDepositWithdrawl = GINKOMAN_CHOICE_RESET;
     this->serviceFee = 0;
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, D_0600C240, D_060043F0, this->limbDrawTbl,
-                     this->transitionDrawTbl, 16);
+    SkelAnime_InitSV(globalCtx, &this->skelAnime, D_0600C240, D_060043F0, this->limbDrawTbl, this->transitionDrawTbl,
+                     16);
     EnGinkoMan_SetupIdle(this);
 }
 
@@ -403,8 +403,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
                     func_800BDC5C(&this->skelAnime, animations, GINKO_FLOORSMACKING);
                     func_801518B0(globalCtx, 0x476, &this->actor);
                     this->curTextId = 0x476; // you dont have enough deposited to withdrawl
-                } else if (CUR_CAPACITY(UPG_WALLET) <
-                           (globalCtx->msgCtx.bankRupeesSelected + gSaveContext.rupees)) {
+                } else if (CUR_CAPACITY(UPG_WALLET) < (globalCtx->msgCtx.bankRupeesSelected + gSaveContext.rupees)) {
                     // check if wallet is big enough
                     play_sound(NA_SE_SY_ERROR);
                     func_801518B0(globalCtx, 0x475, &this->actor);

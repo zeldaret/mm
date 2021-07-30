@@ -1,4 +1,0 @@
-src/rom.c: In function ‘rom_dma_repack’:
-src/rom.c:1516:4: warning: format not a string literal and no format arguments [-Wformat-security]
- 1516 |    die(errstr);
-      |    ^~~

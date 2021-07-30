@@ -8,15 +8,9 @@ void ObjFunen_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjFunen_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit Obj_Funen_InitVars = {
-    ACTOR_OBJ_FUNEN,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_FUNEN,
-    sizeof(ObjFunen),
-    (ActorFunc)ObjFunen_Init,
-    (ActorFunc)Actor_Noop,
-    (ActorFunc)Actor_Noop,
-    (ActorFunc)ObjFunen_Draw
+    ACTOR_OBJ_FUNEN,       ACTORCAT_PROP,         FLAGS,
+    OBJECT_FUNEN,          sizeof(ObjFunen),      (ActorFunc)ObjFunen_Init,
+    (ActorFunc)Actor_Noop, (ActorFunc)Actor_Noop, (ActorFunc)ObjFunen_Draw,
 };
 
 extern Gfx D_060000D0[];

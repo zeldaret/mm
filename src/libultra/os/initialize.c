@@ -5,8 +5,6 @@ s32 osViClock = 0x02E6D354;
 UNK_TYPE4 __osShutdown = 0;
 UNK_TYPE4 __OSGlobalIntMask = 0x003FFF01;
 
-
-
 #ifdef NON_MATCHING
 void __createSpeedParam(void) {
     D_8009D130.type = 7;
