@@ -2094,7 +2094,7 @@ void func_8010A33C(GlobalContext* globalCtx, s16 param_2);
 // void func_8010BEBC(void);
 // void func_8010BEF0(void);
 // void func_8010BF24(void);
-s32 func_8010BF58(Actor* actor, GlobalContext* globalCtx, s32* param_2, s32 param_3, s32 param_4);
+s32 func_8010BF58(Actor* actor, GlobalContext* globalCtx, s32* param_2, s32 param_3, s32* param_4);
 // void Nmi_Init(void);
 // void Nmi_SetPrenmiStart(void);
 // s32 Nmi_GetPrenmiHasStarted(void);
