@@ -151,8 +151,8 @@ typedef struct {
     /* 0x18 */ u16   unk_18;
     /* 0x1A */ u8    unk_1A;
     /* 0x1B */ u8    unk_1B;
-    /* 0x1C */ CutsceneCameraPoint* cameraFocus;
-    /* 0x20 */ CutsceneCameraPoint* cameraPosition;
+    /* 0x1C */ CutsceneCameraPoint* atPoints;
+    /* 0x20 */ CutsceneCameraPoint* eyePoints;
     /* 0x24 */ CsCmdActorAction* linkAction;
     /* 0x28 */ CsCmdActorAction* npcActions[10]; // "npcdemopnt"
     /* 0x50 */ CutsceneEntry* sceneCsList;

@@ -795,9 +795,9 @@ typedef struct Camera {
     /* 0x074 */ Vec3f eyeNext;
     /* 0x080 */ Vec3f skyboxOffset;
     /* 0x08C */ struct GlobalContext* globalCtx;
-    /* 0x090 */ struct Player* player;
+    /* 0x090 */ struct Player* player; // trackedActor Is likely Actor* not Player*. This is the actor the camera focuses on
     /* 0x094 */ PosRot playerPosRot;
-    /* 0x0A8 */ struct Actor* target;
+    /* 0x0A8 */ struct Actor* target; // targetedActor
     /* 0x0AC */ PosRot targetPosRot;
     /* 0x0C0 */ f32 rUpdateRateInv;
     /* 0x0C4 */ f32 pitchUpdateRateInv;
@@ -848,7 +848,6 @@ typedef struct Camera {
     /* 0x164 */ s16 thisIdx;
     /* 0x166 */ s16 prevCamDataIdx;
     /* 0x168 */ s16 unk168;
-    /* 0x16A */ s16 unk16A; // pad/unused
     /* 0x16C */ Vec3f meshActorPos;
 } Camera; // size = 0x178
 
