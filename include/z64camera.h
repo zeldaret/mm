@@ -702,42 +702,47 @@ typedef struct {
 } Demo0; // size = 0x4
 
 typedef struct {
-    /* 0x00 */ s16 unk_00;
-} Special5Anim; // size = 0x1C
+    /* 0x00 */ s16 animTimer;
+} Special5Anim; // size = 0x2
 
 typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ s16 unk_14;
-    /* 0x16 */ s16 unk_16;
+    /* 0x00 */ f32 yOffset;
+    /* 0x04 */ f32 eyeDist;
+    /* 0x08 */ f32 minDistForRot;
+    /* 0x0C */ f32 fovTarget;
+    /* 0x10 */ f32 atMaxLERPScale;
+    /* 0x14 */ s16 timerInit;
+    /* 0x16 */ s16 pitch;
     /* 0x18 */ s16 interfaceFlags;
-    /* 0x1A */ UNK_TYPE2 unk1A; // pas
+    /* 0x1A */ UNK_TYPE2 unk1A; // pad
     /* 0x1C */ Special5Anim anim;
-} Special5; // 8
+} Special5; // size = 0x20
 
 typedef struct {
     /* 0x00 */ struct Actor* doorActor;
     /* 0x04 */ s16 camDataIdx;
-    /* 0x06 */ s16 timer1;
-    /* 0x08 */ s16 timer2;
-    /* 0x0A */ s16 timer3;
+    /* 0x06 */ union {
+        Vec3s eye;
+        struct {
+            s16 timer1;
+            s16 timer2;
+            s16 timer3;
+        };
+    };
 } DoorParams; // size = 0xC
 
 typedef struct {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ s16 unk_0E;
+    /* 0x00 */ Vec3f eye;
+    /* 0x0C */ s16 doorCutsceneCounter;
+    /* 0x0E */ s16 fov;
 } Special8Anim; // size = 0x1C
 
 typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x00 */ f32 unk_08;
-    /* 0x04 */ f32 unk_0C;
-    /* 0x08 */ s16 unk_10;
+    /* 0x00 */ f32 yOffset;
+    /* 0x04 */ f32 eyeStepScale;
+    /* 0x00 */ f32 posStepScale;
+    /* 0x04 */ f32 fov;
+    /* 0x08 */ s16 maxDoorCutsceneCounter;
     /* 0x0A */ s16 interfaceFlags;
     /* 0x14 */ Special8Anim anim;
 } Special8Params;

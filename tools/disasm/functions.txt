@@ -1261,7 +1261,7 @@
     0x800DE0EC:("Camera_InitPlayerSettings",),
     0x800DE308:("Camera_ChangeStatus",),
     0x800DE324:("Camera_CheckWater",),
-    0x800DE62C:("func_800DE62C",),
+    0x800DE62C:("Camera_OutdoorEarthquakeDay3",),
     0x800DE840:("Camera_SetRoomHotFlag",),
     0x800DE890:("func_800DE890",),
     0x800DE954:("func_800DE954",),

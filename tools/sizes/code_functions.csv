@@ -775,7 +775,7 @@ asm/non_matchings/code/z_camera/Camera_Stub800DE0E0.s,Camera_Stub800DE0E0,0x800D
 asm/non_matchings/code/z_camera/Camera_InitPlayerSettings.s,Camera_InitPlayerSettings,0x800DE0EC,0x87
 asm/non_matchings/code/z_camera/Camera_ChangeStatus.s,Camera_ChangeStatus,0x800DE308,0x7
 asm/non_matchings/code/z_camera/Camera_CheckWater.s,Camera_CheckWater,0x800DE324,0xC2
-asm/non_matchings/code/z_camera/func_800DE62C.s,func_800DE62C,0x800DE62C,0x85
+asm/non_matchings/code/z_camera/Camera_OutdoorEarthquakeDay3.s,Camera_OutdoorEarthquakeDay3,0x800DE62C,0x85
 asm/non_matchings/code/z_camera/Camera_SetRoomHotFlag.s,Camera_SetRoomHotFlag,0x800DE840,0x14
 asm/non_matchings/code/z_camera/func_800DE890.s,func_800DE890,0x800DE890,0x31
 asm/non_matchings/code/z_camera/func_800DE954.s,func_800DE954,0x800DE954,0x17

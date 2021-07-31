@@ -1153,7 +1153,7 @@ void func_800DDFE0(Camera* camera);
 void Camera_InitPlayerSettings(Camera* camera, Player* player);
 s32 Camera_ChangeStatus(Camera* camera, s16 status);
 s32 Camera_CheckWater(Camera* camera);
-void func_800DE62C(Camera* camera);
+void Camera_OutdoorEarthquakeDay3(Camera* camera);
 s32 Camera_SetRoomHotFlag(Camera* camera);
 s32 func_800DE890(Camera* camera);
 s32 func_800DE954(Camera* camera);
