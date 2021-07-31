@@ -1,5 +1,47 @@
 #include "global.h"
 
+Vec3f D_801EDE00;
+Vec3f D_801EDE10;
+Vec3f D_801EDE20;
+Vec3f D_801EDE30;
+TriNorm D_801EDE40;
+TriNorm D_801EDE78;
+LineSegment D_801EDEB0;
+TriNorm D_801EDEC8;
+TriNorm D_801EDF00;
+Vec3f D_801EDF38;
+Vec3f D_801EDF48;
+TriNorm D_801EDF58;
+TriNorm D_801EDF90;
+LineSegment D_801EDFC8;
+Vec3f D_801EDFE0;
+Vec3f D_801EDFF0;
+TriNorm D_801EE000;
+TriNorm D_801EE038;
+TriNorm D_801EE070[2];
+Vec3f D_801EE0D8;
+TriNorm D_801EE0E8[2];
+TriNorm D_801EE150;
+TriNorm D_801EE188;
+Vec3f D_801EE1C0;
+Vec3f D_801EE1D0;
+Vec3f D_801EE1E0;
+Vec3f D_801EE1F0;
+EffSparkParams D_801EE200;
+TriNorm D_801EE6C8;
+TriNorm D_801EE700;
+EffSparkParams D_801EE738;
+EffSparkParams D_801EEC00;
+EffSparkParams D_801EF0C8;
+TriNorm D_801EF590;
+TriNorm D_801EF5C8;
+TriNorm D_801EF600;
+TriNorm D_801EF638;
+
+//! @TODO: These are fake bss symbols likely related to z_message_nes
+UNK_TYPE1 D_801EF66C;
+UNK_TYPE1 D_801EF66D;
+
 /**
  * Gets the damage and effect that should be applied for the collision between
  * `at` and `ac`, referring to the ac actor's damage chart if applicable.
