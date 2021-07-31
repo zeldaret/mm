@@ -87,13 +87,29 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
+static ActorAnimationEntryS sAnimations[] = {
+    { &D_060007D8, 1.0f, 0, -1, 2, -4 }, { &D_060021DC, 1.0f, 0, -1, 0, 0 },  { &D_060021DC, 1.0f, 0, -1, 0, -4 },
+    { &D_060026B8, 1.0f, 0, -1, 2, -4 }, { &D_06004D08, 1.0f, 0, -1, 2, -4 }, { &D_060071F4, 1.0f, 0, -1, 2, -4 },
+    { &D_06007960, 1.0f, 0, -1, 0, -4 }, { &D_06008588, 1.0f, 0, -1, 2, 0 },  { &D_0600A900, 1.0f, 0, -1, 0, -4 },
+    { &D_0600AEB8, 1.0f, 0, -1, 0, -4 }, { &D_0600B754, 1.0f, 0, -1, 2, -4 }, { &D_0600674C, 1.0f, 0, -1, 0, -4 },
+    { &D_0600BAD8, 1.0f, 0, -1, 2, -4 }, { &D_06006B74, 1.0f, 0, -1, 0, -4 }, { &D_06012428, 1.0f, 0, -1, 0, -4 },
+    { &D_0600B324, 1.0f, 0, -1, 0, 0 },  { &D_0600B324, 1.0f, 0, -1, 0, -4 }, { &D_060115B8, 1.0f, 0, -1, 0, -4 },
+    { &D_060115B8, 1.0f, 0, -1, 0, 0 },  { &D_0600923C, 1.0f, 0, -1, 2, -4 }, { &D_06009AA0, 1.0f, 0, -1, 0, -4 },
+    { &D_0600125C, 1.0f, 0, -1, 2, -4 }, { &D_060017F8, 1.0f, 0, -1, 2, 0 },  { &D_06001C1C, 1.0f, 0, -1, 0, -4 },
+    { &D_060057AC, 1.0f, 0, -1, 2, 0 },  { &D_0600625C, 1.0f, 0, -1, 0, -4 },
+};
+
+static s32 D_80B3DE58[] = {
+    0x00172000, 0x0D040005, 0x0E09670C, 0x100E0968, 0x0C100E09, 0x6F0C0F09, 0x700C1000,
+};
+
 s32 func_80B3CA20(EnDnp* this) {
     if ((this->unk_340 == 2) || (this->unk_340 == 9)) {
         if (func_801378B8(&this->skelAnime, 1.0f) || func_801378B8(&this->skelAnime, 5.0f) ||
             func_801378B8(&this->skelAnime, 9.0f) || func_801378B8(&this->skelAnime, 13.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_DEKUHIME_TURN);
         }
-    } else if ((this->unk_340 == 0x18) || (this->unk_340 == 7)) {
+    } else if ((this->unk_340 == 24) || (this->unk_340 == 7)) {
         if (func_801378B8(&this->skelAnime, 1.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_DEKUHIME_TURN);
         }
@@ -129,23 +145,11 @@ s32 func_80B3CA20(EnDnp* this) {
 }
 
 s32 func_80B3CC38(EnDnp* this, s32 arg1) {
-    static ActorAnimationEntryS D_80B3DCB8[] = {
-        { &D_060007D8, 1.0f, 0, -1, 2, -4 }, { &D_060021DC, 1.0f, 0, -1, 0, 0 },  { &D_060021DC, 1.0f, 0, -1, 0, -4 },
-        { &D_060026B8, 1.0f, 0, -1, 2, -4 }, { &D_06004D08, 1.0f, 0, -1, 2, -4 }, { &D_060071F4, 1.0f, 0, -1, 2, -4 },
-        { &D_06007960, 1.0f, 0, -1, 0, -4 }, { &D_06008588, 1.0f, 0, -1, 2, 0 },  { &D_0600A900, 1.0f, 0, -1, 0, -4 },
-        { &D_0600AEB8, 1.0f, 0, -1, 0, -4 }, { &D_0600B754, 1.0f, 0, -1, 2, -4 }, { &D_0600674C, 1.0f, 0, -1, 0, -4 },
-        { &D_0600BAD8, 1.0f, 0, -1, 2, -4 }, { &D_06006B74, 1.0f, 0, -1, 0, -4 }, { &D_06012428, 1.0f, 0, -1, 0, -4 },
-        { &D_0600B324, 1.0f, 0, -1, 0, 0 },  { &D_0600B324, 1.0f, 0, -1, 0, -4 }, { &D_060115B8, 1.0f, 0, -1, 0, -4 },
-        { &D_060115B8, 1.0f, 0, -1, 0, 0 },  { &D_0600923C, 1.0f, 0, -1, 2, -4 }, { &D_06009AA0, 1.0f, 0, -1, 0, -4 },
-        { &D_0600125C, 1.0f, 0, -1, 2, -4 }, { &D_060017F8, 1.0f, 0, -1, 2, 0 },  { &D_06001C1C, 1.0f, 0, -1, 0, -4 },
-        { &D_060057AC, 1.0f, 0, -1, 2, 0 },  { &D_0600625C, 1.0f, 0, -1, 0, -4 },
-    };
-
     s32 ret = false;
 
     if (arg1 != this->unk_340) {
         this->unk_340 = arg1;
-        ret = func_8013BC6C(&this->skelAnime, D_80B3DCB8, arg1);
+        ret = func_8013BC6C(&this->skelAnime, sAnimations, arg1);
     }
 
     return ret;
@@ -161,13 +165,11 @@ void func_80B3CC80(EnDnp* this, GlobalContext* globalCtx) {
 }
 
 void func_80B3CD1C(EnDnp* this) {
-    if (this->unk_322 & 0x80) {
-        if (DECR(this->unk_334) == 0) {
-            this->unk_336++;
-            if (this->unk_336 >= 4) {
-                this->unk_334 = Rand_S16Offset(30, 30);
-                this->unk_336 = 0;
-            }
+    if ((this->unk_322 & 0x80) && (DECR(this->unk_334) == 0)) {
+        this->unk_336++;
+        if (this->unk_336 >= 4) {
+            this->unk_334 = Rand_S16Offset(30, 30);
+            this->unk_336 = 0;
         }
     }
 }
@@ -252,10 +254,6 @@ s32 func_80B3D044(EnDnp* this, GlobalContext* globalCtx) {
     return ret;
 }
 
-static s32 D_80B3DE58[] = {
-    0x00172000, 0x0D040005, 0x0E09670C, 0x100E0968, 0x0C100E09, 0x6F0C0F09, 0x700C1000,
-};
-
 void func_80B3D11C(EnDnp* this, GlobalContext* globalCtx) {
     static s32 D_80B3DE74[] = {
         0, 16, 14, 10, 18, 12, 5, 7, 2, 19, 21, 22, 24, 8,
@@ -304,9 +302,9 @@ void func_80B3D11C(EnDnp* this, GlobalContext* globalCtx) {
 
 void func_80B3D2D4(EnDnp* this, GlobalContext* globalCtx) {
     if (this->unk_322 & 0x20) {
-        Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 10920);
+        Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0x2AA8);
     } else {
-        Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 10920);
+        Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x2AA8);
     }
 }
 
@@ -332,7 +330,7 @@ void func_80B3D3F8(EnDnp* this, GlobalContext* globalCtx) {
         this->unk_322 &= ~0x8;
         this->actionFunc = func_80B3D2D4;
     } else {
-        Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 10920);
+        Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0x2AA8);
     }
 }
 
@@ -449,9 +447,9 @@ s32 func_80B3D974(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4, s32 ar
             sp6C.z = arg0;
             sp6C.y = arg1;
         }
-        Math_SmoothStepToS(&arg3->x, sp6C.x, 3, 10920, 182);
-        Math_SmoothStepToS(&arg3->y, sp6C.y, 3, 10920, 182);
-        Math_SmoothStepToS(&arg3->z, sp6C.z, 3, 10920, 182);
+        Math_SmoothStepToS(&arg3->x, sp6C.x, 3, 0x2AA8, 182);
+        Math_SmoothStepToS(&arg3->y, sp6C.y, 3, 0x2AA8, 182);
+        Math_SmoothStepToS(&arg3->z, sp6C.z, 3, 0x2AA8, 182);
     } else {
         arg3->x = sp6C.x;
         arg3->y = sp6C.y;
