@@ -27,8 +27,7 @@
 
 using namespace tinyxml2;
 
-bool Parse(const fs::path& xmlFilePath, const fs::path& basePath, const fs::path& outPath,
-           ZFileMode fileMode);
+bool Parse(const fs::path& xmlFilePath, const fs::path& basePath, ZFileMode fileMode);
 
 void BuildAssetTexture(const fs::path& pngFilePath, TextureType texType, const fs::path& outPath);
 void BuildAssetBackground(const fs::path& imageFilePath, const fs::path& outPath);
@@ -242,6 +241,18 @@ int main(int argc, char* argv[])
 		{
 			Globals::Instance->warnUnaccounted = true;
 		}
+		else if (arg == "-wno" || arg == "--warn-no-offset")
+		{
+			Globals::Instance->warnNoOffset = true;
+		}
+		else if (arg == "-eno" || arg == "--error-no-offset")
+		{
+			Globals::Instance->errorNoOffset = true;
+		}
+		else if (arg == "-vu" || arg == "--verbose-unaccounted")  // Verbose unaccounted
+		{
+			Globals::Instance->verboseUnaccounted = true;
+		}
 	}
 
 	if (Globals::Instance->verbosity >= VerbosityLevel::VERBOSITY_INFO)
@@ -249,8 +260,8 @@ int main(int argc, char* argv[])
 
 	if (fileMode == ZFileMode::Extract || fileMode == ZFileMode::BuildSourceFile)
 	{
-		bool parseSuccessful = Parse(Globals::Instance->inputPath, Globals::Instance->baseRomPath,
-		                             Globals::Instance->outputPath, fileMode);
+		bool parseSuccessful =
+			Parse(Globals::Instance->inputPath, Globals::Instance->baseRomPath, fileMode);
 
 		if (!parseSuccessful)
 			return 1;
@@ -287,13 +298,11 @@ int main(int argc, char* argv[])
 			File::WriteAllText(Globals::Instance->outputPath.string(),
 			                   overlay->GetSourceOutputCode(""));
 	}
-
 	delete g;
 	return 0;
 }
 
-bool Parse(const fs::path& xmlFilePath, const fs::path& basePath, const fs::path& outPath,
-           ZFileMode fileMode)
+bool Parse(const fs::path& xmlFilePath, const fs::path& basePath, ZFileMode fileMode)
 {
 	XMLDocument doc;
 	XMLError eResult = doc.LoadFile(xmlFilePath.string().c_str());
@@ -317,7 +326,7 @@ bool Parse(const fs::path& xmlFilePath, const fs::path& basePath, const fs::path
 	{
 		if (std::string(child->Name()) == "File")
 		{
-			ZFile* file = new ZFile(fileMode, child, basePath, outPath, "", xmlFilePath, false);
+			ZFile* file = new ZFile(fileMode, child, basePath, "", xmlFilePath, false);
 			Globals::Instance->files.push_back(file);
 		}
 		else
@@ -332,9 +341,9 @@ bool Parse(const fs::path& xmlFilePath, const fs::path& basePath, const fs::path
 	for (ZFile* file : Globals::Instance->files)
 	{
 		if (fileMode == ZFileMode::BuildSourceFile)
-			file->BuildSourceFile(outPath);
+			file->BuildSourceFile();
 		else
-			file->ExtractResources(outPath);
+			file->ExtractResources();
 	}
 
 	// All done, free files
@@ -397,7 +406,7 @@ void BuildAssetModelIntermediette(const fs::path& outPath)
 void BuildAssetAnimationIntermediette(const fs::path& animPath, const fs::path& outPath)
 {
 	std::vector<std::string> split = StringHelper::Split(outPath.string(), "/");
-	ZFile* file = new ZFile("", split[split.size() - 2]);
+	ZFile* file = new ZFile(split[split.size() - 2]);
 	HLAnimationIntermediette* anim = HLAnimationIntermediette::FromXML(animPath.string());
 	ZAnimation* zAnim = anim->ToZAnimation();
 	zAnim->SetName(Path::GetFileNameWithoutExtension(split[split.size() - 1]));
