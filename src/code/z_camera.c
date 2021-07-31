@@ -2529,7 +2529,7 @@ s32 Camera_Normal0(Camera *camera) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Normal0.s")
 #endif
 
-#ifdef NON_EQUIVALENT
+#ifdef NON_MATCHING
 s32 Camera_Parallel1(Camera *camera) {
     Vec3f *sp44 = &camera->eye;
     Vec3f *sp40 = &camera->at;
@@ -2553,6 +2553,7 @@ s32 Camera_Parallel1(Camera *camera) {
     s16 new_var2; 
     s16 phi_a0;
     s32 phi_a0_2;
+    // s16 phi_a0_3;
     CameraModeValue* values;
     f32 sp50;
 
@@ -2800,17 +2801,18 @@ s32 Camera_Parallel1(Camera *camera) {
         // PERM_RANDOMIZE(
 
         if (para1->unk_26 & 1) {
-            phi_a0_2 = (s16)(anim->unk_20 - anim->unk_1C);
+            phi_a0 = (anim->unk_20 - anim->unk_1C);
             // phi_a0_2 = tangle; // resued temp needed for extra s16 cast
         } else {
-            phi_a0_2 = anim->unk_20;
+            phi_a0 = anim->unk_20;
         }
 
         if (new_var3 == (0x8 | 0x4 | 0x2)) {
             spA0 = CLAMP_MAX(camera->speedRatio, 1.0f);
-            sp90.pitch = Camera_LERPCeilS((sp90.pitch * spA0) + (phi_a0_2 * (1.0f - spA0)), sp78.pitch, 1.0f / camera->pitchUpdateRateInv, 5);
+            phi_a0 = (sp90.pitch * spA0) + (phi_a0 * (1.0f - spA0));
+            sp90.pitch = Camera_LERPCeilS(phi_a0, sp78.pitch, 1.0f / camera->pitchUpdateRateInv, 5);
         } else if (new_var3 != 0x8) {
-            sp90.pitch = Camera_LERPCeilS(phi_a0_2, sp78.pitch, 1.0f / camera->pitchUpdateRateInv, 5);
+            sp90.pitch = Camera_LERPCeilS(phi_a0, sp78.pitch, 1.0f / camera->pitchUpdateRateInv, 5);
         }
 
         // )
@@ -2888,7 +2890,7 @@ s32 Camera_Jump1(Camera* camera) {
     return Camera_Noop(camera);
 }
 
-// NON_EQUIVALENT?
+// Rodata/Bss Issues
 #ifdef NON_MATCHING
 s32 Camera_Jump2(Camera *camera) {
     Jump2* jump2 = (Jump2*)camera->paramData;
@@ -3284,20 +3286,20 @@ s32 Camera_Jump3(Camera* camera) {
         // spD0 = pad1;
         spAC.pitch = Camera_LERPCeilS((spAC.pitch * spD0) + (jump3->unk_20 * (1.0f - spD0)), sp94.pitch, 1.0f / ((camera->pitchUpdateRateInv + 1.0f) - (camera->pitchUpdateRateInv * spD0)), 5);
     } else if (D_801EDC30[camera->thisIdx].unk_64 == 1) {
-        spAC.yaw = Camera_LERPCeilS(D_801EDC30[camera->thisIdx].unk_5C.yaw, sp94.yaw, 1.0f / camera->yawUpdateRateInv, 5);
+        pad1 = 1.0f / camera->yawUpdateRateInv;
+        spAC.yaw = Camera_LERPCeilS(D_801EDC30[camera->thisIdx].unk_5C.yaw, sp94.yaw, pad1, 5);
         // temp_f0 = 1.0f / camera->yawUpdateRateInv;
-        pad3 = 1.0f / camera->yawUpdateRateInv;
-        spAC.pitch = Camera_LERPCeilS(D_801EDC30[camera->thisIdx].unk_5C.pitch, sp94.pitch, pad3, 5);
+        // Bug? Should be pitchUpdateRateInv
+        spAC.pitch = Camera_LERPCeilS(D_801EDC30[camera->thisIdx].unk_5C.pitch, sp94.pitch, 1.0f / camera->yawUpdateRateInv, 5);
     } else if (jump3->unk_22 & (0x80 | 0x8)) {
         spAC.yaw = Camera_CalcDefaultYaw(camera, sp94.yaw, sp3C->rot.y, jump3->unk_14, 0.0f);
         
         if (camera->speedRatio * 1.3f > 1.0f) {
-            spCC = 1.0f;
+            spCC = pad2 = 1.0f;
         } else {
-            spCC = (camera->speedRatio * 1.3f);
+            spCC = pad2 = camera->speedRatio * 1.3f;
         }
-        pad2 = spCC;
-        spAC.pitch = Camera_LERPCeilS((spAC.pitch * pad2) + (jump3->unk_20 * (1.0f - pad2)), sp94.pitch, 1.0f / ((camera->pitchUpdateRateInv + 1.0f) - (camera->pitchUpdateRateInv * pad2)), 5);
+        spAC.pitch = Camera_LERPCeilS((spAC.pitch * spCC) + (jump3->unk_20 * (1.0f - spCC)), sp94.pitch, 1.0f / ((camera->pitchUpdateRateInv + 1.0f) - (camera->pitchUpdateRateInv * spCC)), 5);
     } else {
         spAC.yaw = Camera_CalcDefaultYaw(camera, sp94.yaw, sp3C->rot.y, jump3->unk_14, 0.0f);
         spAC.pitch = Camera_CalcDefaultPitch(camera, sp94.pitch, jump3->unk_20, 0);
@@ -3825,6 +3827,7 @@ s32 Camera_KeepOn1(Camera *camera) {
 
 
     spA4 = &camera->player->actor.focus;
+    if (temp_v0_3) {} // TODO: Is needed?
     sp78 = 0;
     temp_f0 = func_800CB700(camera);
     // temp_a1 = camera->target;
@@ -3959,7 +3962,7 @@ s32 Camera_KeepOn1(Camera *camera) {
     OLib_Vec3fDiffToVecSphGeo(&spD8, sp44, &sp118);
     if (1) { } if (1) { } if (1) { } // TODO: Is needed?
     pad1 = spD8.r; // TODO: Fake temp?
-    spD8.r = spF8 - (((pad1 <= spF8) ? spD8.r : spF8) * 0.5f);
+    spD8.r = spF8 - (((pad1 <= spF8) ? spD8.r : spF8) * .5f);
     camera->dist = Camera_LERPCeilF(pad1, camera->dist, 0.06f, 0.1f);
     spE8.r = camera->dist;
     spFC = keep1->unk_0C + ((keep1->unk_10 - keep1->unk_0C) * (1.1f - sp74));
@@ -3972,13 +3975,12 @@ s32 Camera_KeepOn1(Camera *camera) {
             OLib_Vec3fDiffToVecSphGeo(&spD0, sp44, sp48);
             spD0.yaw = (s16)(spF2 + 0x8000);
             sp60 = (anim->unk_00 - spD0.r) * 0.16666667f;
-            new_var2 = sp60; // TODO: Fake temp?
             spF2 = (s16)(anim->unk_12 - (s16)(spF2 + 0x8000)) * 0.16666667f;
             spF0 = ((s16)(anim->unk_14 - (s64)spD0.pitch)); // TODO: s16 cast on F0
             spF0 = (s16)(spF0 * 0.16666667f);
-            spE8.r = Camera_LERPCeilF((sp72 * new_var2) + spD0.r, spC8.r, 0.5f, 0.1f);
-            spE8.yaw = Camera_LERPCeilS(spD0.yaw + (spF2 * sp72), spC8.yaw, 0.5f, 5);
-            spE8.pitch = Camera_LERPCeilS(spD0.pitch + (spF0 * sp72), spC8.pitch, 0.5f, 5);
+            spE8.r = Camera_LERPCeilF(spD0.r + (sp60 * sp72), spC8.r, .5f, 0.1f);
+            spE8.yaw = Camera_LERPCeilS(spD0.yaw + (spF2 * sp72), spC8.yaw, .5f, 5);
+            spE8.pitch = Camera_LERPCeilS(spD0.pitch + (spF0 * sp72), spC8.pitch, .5f, 5);
         }
         sp78 = 1;
         anim->unk_16--;
@@ -3993,9 +3995,9 @@ s32 Camera_KeepOn1(Camera *camera) {
             temp_f2_3 = (sp104 * (*pad2)) / ((temp_f2_3 * (*pad2)) + (2.0f - (360.0f * temp_f2_3)));
             
             if (spF2 >= 0) {
-                phi_v1_3 = (s16)((temp_f2_3 * 182.04167f) + 0.5f);
+                phi_v1_3 = (s16)((temp_f2_3 * 182.04167f) + .5f);
             } else {
-                phi_v1_3 = -(s16)((temp_f2_3 * 182.04167f) + 0.5f);
+                phi_v1_3 = -(s16)((temp_f2_3 * 182.04167f) + .5f);
             }
             spE8.yaw = (s16)(spC0.yaw + 0x8000) + (s16)(phi_v1_3 + 0x8000);
         } else {
