@@ -719,8 +719,13 @@ CameraModeValue D_801B4EF0[] = {
 };
 
 CameraModeValue D_801B4EF4[] = {
-    /* CAM_FUNC_UNIQ6 */
-	{ 0xFF00, 9 },
+    /* CAM_FUNC_UNIQ6
+       CAM_FUNC_DEMO1
+       CAM_FUNC_DEMO3
+       CAM_FUNC_DEMO4
+       CAM_FUNC_DEMO5
+       CAM_FUNC_DEMO0 */
+    { 0xFF00, 9 }, // flags
 };
 
 CameraModeValue D_801B4EF8[] = {
@@ -1495,9 +1500,9 @@ CameraModeValue D_801B574C[] = {
 
 CameraModeValue D_801B5770[] = {
     /* CAM_FUNC_DEMO2 */
-	{ 0x003C, 7 },
-	{ 0x001E, 8 },
-	{ 0xFF00, 9 },
+	{ 0x003C, 7 }, // fov
+	{ 0x001E, 8 }, // unk_04
+	{ 0xFF00, 9 }, // flags
 };
 
 CameraModeValue D_801B577C[] = {

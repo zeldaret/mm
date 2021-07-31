@@ -478,7 +478,7 @@ f32 Actor_YDistance(Actor* actor1, Actor* actor2) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B6F20.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B6FC8.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Player_GetHeight.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B7090.s")
 
@@ -573,7 +573,7 @@ s32 Actor_IsActorFacingActorAndWithinRange(Actor* actor, Actor* other, f32 range
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8118.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B81E0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_GetFocus.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8214.s")
 

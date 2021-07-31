@@ -769,7 +769,7 @@ f32 Actor_XZDistanceToPoint(Actor* actor, Vec3f* point);
 void Actor_CalcOffsetOrientedToDrawRotation(Actor* actor, Vec3f* offset, Vec3f* point);
 f32 Actor_YDistance(Actor* actor1, Actor* actor2);
 void func_800B6F20(GlobalContext* globalCtx, s32 param_2, f32 param_3, s16 param_4);
-f32 func_800B6FC8(Player* player);
+f32 Player_GetHeight(Player* player);
 f32 func_800B7090(Player* player);
 // void func_800B7118(void);
 // void func_800B7128(void);
@@ -797,7 +797,7 @@ s32 func_800B7FE0(f32* param_1, f32* param_2, f32* param_3, GraphicsContext* gfx
 // void func_800B8018(void);
 void func_800B8050(Actor* actor, GlobalContext* globalCtx, s32 iParm3);
 void func_800B8118(Actor* actor, GlobalContext* globalCtx, s32 iParm3);
-s8 func_800B81E0(Vec3f* arg0, Actor* actor);
+PosRot* Actor_GetFocus(PosRot* dest, Actor* actor);
 UNK_PTR func_800B8214(PosRot* arg0, Actor* actor);
 f32* func_800B8248(PosRot* arg0, Actor* actor);
 // void func_800B82EC(void);

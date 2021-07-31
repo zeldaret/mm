@@ -249,7 +249,7 @@ asm/non_matchings/code/z_actor/Actor_XZDistanceToPoint.s,Actor_XZDistanceToPoint
 asm/non_matchings/code/z_actor/Actor_CalcOffsetOrientedToDrawRotation.s,Actor_CalcOffsetOrientedToDrawRotation,0x800B6E6C,0x28
 asm/non_matchings/code/z_actor/Actor_YDistance.s,Actor_YDistance,0x800B6F0C,0x5
 asm/non_matchings/code/z_actor/func_800B6F20.s,func_800B6F20,0x800B6F20,0x2A
-asm/non_matchings/code/z_actor/func_800B6FC8.s,func_800B6FC8,0x800B6FC8,0x32
+asm/non_matchings/code/z_actor/Player_GetHeight.s,Player_GetHeight,0x800B6FC8,0x32
 asm/non_matchings/code/z_actor/func_800B7090.s,func_800B7090,0x800B7090,0x22
 asm/non_matchings/code/z_actor/func_800B7118.s,func_800B7118,0x800B7118,0x4
 asm/non_matchings/code/z_actor/func_800B7128.s,func_800B7128,0x800B7128,0xD
@@ -277,7 +277,7 @@ asm/non_matchings/code/z_actor/func_800B7FE0.s,func_800B7FE0,0x800B7FE0,0xE
 asm/non_matchings/code/z_actor/func_800B8018.s,func_800B8018,0x800B8018,0xE
 asm/non_matchings/code/z_actor/func_800B8050.s,func_800B8050,0x800B8050,0x32
 asm/non_matchings/code/z_actor/func_800B8118.s,func_800B8118,0x800B8118,0x32
-asm/non_matchings/code/z_actor/func_800B81E0.s,func_800B81E0,0x800B81E0,0xD
+asm/non_matchings/code/z_actor/Actor_GetFocus.s,Actor_GetFocus,0x800B81E0,0xD
 asm/non_matchings/code/z_actor/func_800B8214.s,func_800B8214,0x800B8214,0xD
 asm/non_matchings/code/z_actor/func_800B8248.s,func_800B8248,0x800B8248,0x29
 asm/non_matchings/code/z_actor/func_800B82EC.s,func_800B82EC,0x800B82EC,0x34
@@ -661,8 +661,8 @@ asm/non_matchings/code/z_camera/func_800CBC00.s,func_800CBC00,0x800CBC00,0xC
 asm/non_matchings/code/z_camera/func_800CBC30.s,func_800CBC30,0x800CBC30,0x15
 asm/non_matchings/code/z_camera/func_800CBC84.s,func_800CBC84,0x800CBC84,0xC8
 asm/non_matchings/code/z_camera/func_800CBFA4.s,func_800CBFA4,0x800CBFA4,0x17
-asm/non_matchings/code/z_camera/func_800CC000.s,func_800CC000,0x800CC000,0x4A
-asm/non_matchings/code/z_camera/func_800CC128.s,func_800CC128,0x800CC128,0x27
+asm/non_matchings/code/z_camera/Camera_BGCheckInfo.s,Camera_BGCheckInfo,0x800CC000,0x4A
+asm/non_matchings/code/z_camera/Camera_BGCheck.s,Camera_BGCheck,0x800CC128,0x27
 asm/non_matchings/code/z_camera/Camera_CheckOOB.s,Camera_CheckOOB,0x800CC1C4,0x27
 asm/non_matchings/code/z_camera/func_800CC260.s,func_800CC260,0x800CC260,0x8A
 asm/non_matchings/code/z_camera/func_800CC488.s,func_800CC488,0x800CC488,0x39

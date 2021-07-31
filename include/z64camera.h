@@ -294,7 +294,7 @@ typedef struct {
 } Normal3Anim;
 
 typedef struct {
-    /* 0x00 */ f32 unk_00;
+    /* 0x00 */ f32 yOffset;
     /* 0x04 */ f32 unk_04;
     /* 0x08 */ f32 unk_08;
     /* 0x0C */ f32 unk_0C;
@@ -631,17 +631,16 @@ typedef struct {
 } Demo1; // size = 0x4
 
 typedef struct {
-    /* 0x00 */ Vec3f unk_00;
+    /* 0x00 */ Vec3f initialAt;
     /* 0x0C */ f32 unk_0C;
-    /* 0x14 */ s16 unk_10;
-    /* 0x12 */ s16 unk_12;
+    /* 0x14 */ s16 animFrame;
+    /* 0x12 */ s16 yawDir;
 } Demo2Anim; // size = 0xC
 
 typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A; // pad
+    /* 0x00 */ f32 fov;
+    /* 0x04 */ f32 unk_04; // unused
+    /* 0x08 */ s16 interfaceFlags;
     /* 0x0C */ Demo2Anim anim;
 } Demo2; // size = 0xC
 
@@ -714,8 +713,8 @@ typedef struct {
     /* 0x10 */ f32 unk_10;
     /* 0x14 */ s16 unk_14;
     /* 0x16 */ s16 unk_16;
-    /* 0x18 */ s16 unk_18;
-    /* 0x1A */ s16 pad;
+    /* 0x18 */ s16 interfaceFlags;
+    /* 0x1A */ UNK_TYPE2 unk1A; // pas
     /* 0x1C */ Special5Anim anim;
 } Special5; // 8
 
@@ -739,7 +738,7 @@ typedef struct {
     /* 0x00 */ f32 unk_08;
     /* 0x04 */ f32 unk_0C;
     /* 0x08 */ s16 unk_10;
-    /* 0x0A */ s16 unk_12;
+    /* 0x0A */ s16 interfaceFlags;
     /* 0x14 */ Special8Anim anim;
 } Special8Params;
 
