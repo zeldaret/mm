@@ -1,8 +1,8 @@
 #include "global.h"
 
-s32 sMatAnimStep;
-u32 sMatAnimFlags;
-f32 sMatAnimAlphaRatio;
+static s32 sMatAnimStep;
+static u32 sMatAnimFlags;
+static f32 sMatAnimAlphaRatio;
 
 // Default displaylist that sets a valid displaylist into all of the segments.
 static Gfx sSceneDrawDefaultDL[] = {
