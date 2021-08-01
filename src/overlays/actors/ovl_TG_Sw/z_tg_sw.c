@@ -102,7 +102,6 @@ void TGSw_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 absRot;
 
     if (sREG(0) != 0) {
-
         absRot = ABS_ALT(thisx->world.rot.z);
         scale = absRot * 0.2f;
         absRot = ABS_ALT(thisx->world.rot.y);
