@@ -225,14 +225,7 @@ beginseg
     include "build/src/boot/invalicache.o"
     include "build/src/boot/invaldcache.o"
 
-    include "build/src/boot/timerintr.o"
-    include "build/data/boot/timerintr.data.o"
-    include "build/data/boot/timerintr.bss.o"
-    /*
     include "build/src/libultra/os/timerintr.o"
-    //include "build/data/boot/timerintr.data.o"
-    //include "build/data/boot/timerintr.bss.o"
-    */
 
     include "build/src/boot/voicecontread36.o"
     include "build/src/boot/sp.o"

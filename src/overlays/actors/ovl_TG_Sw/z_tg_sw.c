@@ -24,61 +24,61 @@ const ActorInit TG_Sw_InitVars = {
     (ActorFunc)TGSw_Draw,
 };
 
-void TGSw_ActionDecider(struct TGSw* this, GlobalContext* globalCtx) {
+void TGSw_ActionDecider(TGSw* this, GlobalContext* globalCtx) {
     f32 scaledAbsoluteRotZ;
     f32 scaledAbsoluteRotY;
     u8 unk1F4;
 
     // Maybe actorCtx Debug Flag?
-    if (!!globalCtx->actorCtx.unk1F5) {
+    if (globalCtx->actorCtx.unk1F5 != 0) {
         scaledAbsoluteRotY = ABS_ALT(this->actor.world.rot.y) * 4.0f;
         scaledAbsoluteRotZ = ABS_ALT(this->actor.world.rot.z) * 4.0f;
 
-        if (!(scaledAbsoluteRotZ < this->actor.xzDistToPlayer) && !(scaledAbsoluteRotY < this->actor.yDistToPlayer)) {
-            unk1F4 = globalCtx->actorCtx.unk1F4;
-            if (unk1F4 == 2 || !unk1F4) {
-                this->actionFunc = &TGSw_ActionExecuteOneShot;
-            }
+        if ((scaledAbsoluteRotZ < this->actor.xzDistToPlayer) || (scaledAbsoluteRotY < this->actor.yDistToPlayer)) {
+            return;
+        }
+        unk1F4 = globalCtx->actorCtx.unk1F4;
+        if (unk1F4 == 2 || unk1F4 == 0) {
+            this->actionFunc = &TGSw_ActionExecuteOneShot;
         }
     }
 }
 
-void TGSw_ActionExecuteOneShot(struct TGSw* this, GlobalContext* globalCtx) {
-    void* actorIterator;
-    struct Actor* actorEntry;
+void TGSw_ActionExecuteOneShot(TGSw* this, GlobalContext* globalCtx) {
+    Actor* actor = NULL;
 
-    actorIterator = NULL;
+    if (1) {}
+
     do {
-        actorEntry =
-            func_ActorCategoryIterateById(globalCtx, (struct Actor*)actorIterator, ACTORCAT_ENEMY, ACTOR_EN_SW);
-        if (actorIterator = (void*)!actorEntry) {
+        actor = func_ActorCategoryIterateById(globalCtx, actor, 5, 0x50);
+        if (actor == NULL) {
             break;
         }
-
-        if ((((this->actor.params & 0xFC) >> 2) & 0xFF) == (((actorEntry->params & 0xFC) >> 2) & 0xFF)) {
-            // Prevents register swap
-            if (1) {}
-            actorEntry->parent = (struct Actor*)this;
-            actorEntry->speedXZ = ABS_ALT(this->actor.world.rot.x);
+        if ((((this->actor.params & 0xFC) >> 2) & 0xFF) == (((actor->params & 0xFC) >> 2) & 0xFF)) {
+            actor->parent = &this->actor;
+            actor->speedXZ = ABS_ALT(this->actor.world.rot.x);
             break;
         }
-    } while (actorIterator = actorEntry->next);
+        actor = actor->next;
+    } while (actor != NULL);
 
-    actorIterator = NULL;
+    actor = NULL;
+
     do {
-        actorEntry = func_ActorCategoryIterateById(globalCtx, actorIterator, ACTORCAT_NPC, ACTOR_EN_SW);
-        if (actorIterator = (void*)!actorEntry) {
+        actor = func_ActorCategoryIterateById(globalCtx, actor, 4, 0x50);
+
+        if (actor == NULL) {
             break;
         }
-
-        if ((((this->actor.params & 0xFC) >> 2) & 0xFF) == (((actorEntry->params & 0xFC) >> 2) & 0xFF)) {
-            actorEntry->parent = (struct Actor*)this;
-            actorEntry->speedXZ = ABS_ALT(this->actor.world.rot.x);
+        if ((((this->actor.params & 0xFC) >> 2) & 0xFF) == (((actor->params & 0xFC) >> 2) & 0xFF)) {
+            actor->parent = &this->actor;
+            actor->speedXZ = ABS_ALT(this->actor.world.rot.x);
             break;
         }
-    } while (actorIterator = actorEntry->next);
+        actor = actor->next;
+    } while (actor != NULL);
 
-    Actor_MarkForDeath((Actor*)this);
+    Actor_MarkForDeath(&this->actor);
 }
 
 void TGSw_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -97,26 +97,22 @@ void TGSw_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void TGSw_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    s32 pad0;
-    s32 absoluteRotZ;
-    s32 absoluteRotY;
-    f32 factoredRotZ;
-    TGSw* this = THIS;
+    s32 pad;
+    f32 scale;
+    s32 absRot;
 
-    if (!!sREG(0)) {
-        absoluteRotZ = ABS_ALT(this->actor.world.rot.z);
-        factoredRotZ = absoluteRotZ * 0.2f;
-        // if needs to use the factored Rot as a var, "true" doesnt work
-        if (factoredRotZ) {
-            ;
-        }
-        absoluteRotY = ABS_ALT(this->actor.world.rot.y);
+    if (sREG(0) != 0) {
 
-        DebugDisplay_AddObject(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0,
-                               this->actor.shape.rot.y, 0, 0.1f, 0.1f, factoredRotZ, 0xA0, 0xA0, 0xA0, 0xFF, 6,
-                               globalCtx->state.gfxCtx);
-        DebugDisplay_AddObject(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0.1f,
-                               absoluteRotY * 0.2f, 0.1f, 0xA0, 0xA0, 0xA0, 0xFF, 6, globalCtx->state.gfxCtx);
-        this->actor.shape.rot.y = (s16)(this->actor.shape.rot.y + 0x1000);
+        absRot = ABS_ALT(thisx->world.rot.z);
+        scale = absRot * 0.2f;
+        absRot = ABS_ALT(thisx->world.rot.y);
+
+        DebugDisplay_AddObject(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, 0, thisx->shape.rot.y, 0,
+                               0.1f, 0.1f, scale, 0xA0, 0xA0, 0xA0, 0xFF, 6, globalCtx->state.gfxCtx);
+
+        scale = absRot * 0.2f;
+        DebugDisplay_AddObject(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, 0, 0, 0, 0.1f, scale, 0.1f,
+                               0xA0, 0xA0, 0xA0, 0xFF, 6, globalCtx->state.gfxCtx);
+        thisx->shape.rot.y += 0x1000;
     }
 }
