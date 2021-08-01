@@ -1,7 +1,5 @@
 #include "global.h"
 
-// This file is not included in the spec.
-
 OSTimer D_8009E590;
 OSTime __osCurrentTime;
 u32 __osBaseCounter;
@@ -9,12 +7,6 @@ u32 __osViIntrCount;
 u32 __osTimerCounter;
 s32 D_8009E5C8[2]; // dummy bss padding required
 OSPifRam __osPfsPifRam;
-// extern OSTimer D_8009E590;
-// extern OSTime __osCurrentTime;
-// extern u32 __osBaseCounter;
-// extern u32 __osViIntrCount;
-// extern u32 __osTimerCounter;
-// extern OSPifRam __osPfsPifRam;
 
 OSTimer* __osTimerList = &D_8009E590;
 
