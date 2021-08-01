@@ -78,6 +78,35 @@ void ObjWarpstone_Destroy(Actor* thisx, GlobalContext *globalCtx) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Warpstone_0x80B92B10/func_80B92DC4.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Warpstone_0x80B92B10/ObjWarpstone_Update.asm")
+/*#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Warpstone_0x80B92B10/ObjWarpstone_Update.asm")*/
+
+void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx) {
+    ObjWarpstone* this = THIS;
+    s32 pad;
+
+    if (this->unk1A8 != 0) {
+        if (func_800B867C(&this->actor, globalCtx) != 0) {
+            this->unk1A8 = 0;
+        } else if ((func_80152498(&globalCtx->msgCtx) == 4) && (func_80147624(globalCtx))) {
+            if (globalCtx->msgCtx.choiceIndex != 0) {
+                func_8019F208();
+                globalCtx->msgCtx.unk11F22 = 0x4D;
+                globalCtx->msgCtx.unk120D6 = 0;
+                globalCtx->msgCtx.unk120D4 = 0;
+                gSaveContext.owlSaveLocation = GET_OWL_ID(this);
+            } else {
+                func_801477B4(globalCtx);
+            }
+        }
+    } else if (func_800B84D0(&this->actor, globalCtx)) {
+        this->unk1A8 = 1;
+    } else if (!this->actionFunc(this, globalCtx)) {
+        func_800B863C(&this->actor, globalCtx);
+    }
+    Collider_ResetCylinderAC(globalCtx, &this->collider.base);
+    Collider_UpdateCylinder(&this->actor, &this->collider.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Warpstone_0x80B92B10/ObjWarpstone_Draw.asm")
