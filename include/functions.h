@@ -2087,7 +2087,7 @@ void func_8010A33C(GlobalContext* globalCtx, s16 param_2);
 // void func_8010BEBC(void);
 // void func_8010BEF0(void);
 // void func_8010BF24(void);
-s32 func_8010BF58(Actor* actor, GlobalContext* globalCtx, s32* param_2, s32 param_3, s32* param_4);
+s32 func_8010BF58(Actor* actor, GlobalContext* globalCtx, s32* param_3, void* param_4, s16* param_5);
 // void Nmi_Init(void);
 // void Nmi_SetPrenmiStart(void);
 // s32 Nmi_GetPrenmiHasStarted(void);
@@ -2700,7 +2700,7 @@ UNK_TYPE func_8013BC6C(SkelAnime* skelAnime, ActorAnimationEntryS* arg1, s32 arg
 // void func_8013C068(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_8013C624(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 // void func_8013C8B8(void);
-void func_8013C964(Actor* actor, GlobalContext* globalCtx, f32 arg2, f32 arg3, s32 arg4, s32 arg5);
+void func_8013C964(Actor* actor, GlobalContext* globalCtx, f32 param_3, f32 param_4, s32 param_5, s16 param_6);
 // void func_8013CC2C(void);
 // void func_8013CD64(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
 // void func_8013CF04(void);
