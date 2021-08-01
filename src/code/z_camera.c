@@ -71,7 +71,7 @@ f32 Camera_Vec3fMagnitude(Vec3f* vec) {
 
 /**
  * Interpolates along the curve shown below
- * returns a value y ranging from 0.0f to 1.0f for -xMax <= x <= xMax
+ * returns value y ranging from 0.0f to 1.0f for -xMax <= x <= xMax
  * returns 1.0f otherwise
  *
  * y = 1.0f    ________                   _________
@@ -80,12 +80,12 @@ f32 Camera_Vec3fMagnitude(Vec3f* vec) {
  * y axis                 _           _
  *                         ___     ___
  *                            _____
- * y = 0.0f		      |		    |         |
- *			       -xMax        0       xMax
+ * y = 0.0f           |         |         |
+ *                 -xMax        0       xMax
  *
  * 						     x axis
  */
-f32 Camera_QuadraticInterpolateCurve(f32 xMax, f32 x) {
+f32 Camera_QuadraticAttenuation(f32 xMax, f32 x) {
     f32 y;
     f32 absX;
     f32 percent40 = 0.4f;
@@ -456,7 +456,7 @@ s32 func_800CBB88(Camera* camera) {
             return 1;
         }
     }
-    
+
     return 0;
 }
 
@@ -1681,7 +1681,7 @@ f32 Camera_ClampDist2(Camera *camera, f32 dist, f32 minDist, f32 maxDist, s16 ti
 }
 
 s16 Camera_CalcDefaultPitch(Camera* camera, s16 arg1, s16 arg2, s16 arg3) {
-    f32 pad;
+    f32 attenuationFactor;
     f32 phi_a2;
     f32 t;
     s16 phi_v0;
@@ -1695,12 +1695,13 @@ s16 Camera_CalcDefaultPitch(Camera* camera, s16 arg1, s16 arg2, s16 arg3) {
         phi_a2 = (1.0f / camera->pitchUpdateRateInv) * 3.0f;
     } else {
         t = phi_v1 * (1.0f / 14500.0f);
-        pad = Camera_QuadraticInterpolateCurve(0.8f, 1.0f - t);
-        phi_a2 = (1.0f / camera->pitchUpdateRateInv) * pad;
+        attenuationFactor = Camera_QuadraticAttenuation(0.8f, 1.0f - t);
+        phi_a2 = (1.0f / camera->pitchUpdateRateInv) * attenuationFactor;
     }
     return Camera_LERPCeilS(sp1C, arg1, phi_a2, 5);
 }
 
+// TODO: Variable names were interpreted wrong (accel? speeds? attenuation?)
 s16 Camera_CalcDefaultYaw(Camera* camera, s16 cur, s16 target, f32 arg3, f32 accel) {
     f32 velocity;
     s16 angDelta;
@@ -1711,28 +1712,28 @@ s16 Camera_CalcDefaultYaw(Camera* camera, s16 cur, s16 target, f32 arg3, f32 acc
 
     if (camera->xzSpeed > 0.001f) {
         angDelta = BINANG_SUB(target, BINANG_ROT180(cur));
-        speedT = BINANG_ROT180(angDelta) / 32768.0f;
+        speedT = BINANG_ROT180(angDelta) / (f32)0x8000;
     } else {
         angDelta = target - BINANG_ROT180(cur);
         speedT = 0.3f;
     }
 
-    updSpeed = Camera_QuadraticInterpolateCurve(arg3, speedT);
+    updSpeed = Camera_QuadraticAttenuation(arg3, speedT);
 
     velocity = ((1.0f - updSpeed) * accel) + updSpeed;
     velocity = CLAMP_MIN(velocity, 0.0f);
 
-    velFactor = Camera_QuadraticInterpolateCurve(0.5f, camera->speedRatio);
+    velFactor = Camera_QuadraticAttenuation(0.5f, camera->speedRatio);
     yawUpdRate = 1.0f / camera->yawUpdateRateInv;
     return cur + (s16)(angDelta * velocity * velFactor * yawUpdRate);
 }
 
 // TODO: May be f32* return, not void
-void func_800CED90(Camera* camera, VecSph* arg1, VecSph* arg2, f32 arg3, f32 arg4, SwingAnimation* arg5, s16* arg6) {
-    SwingAnimation *new_var;
-    Vec3f *sp38 = &camera->eye;
-    Vec3f *sp34 = &camera->at;
-    Vec3f sp90;
+void func_800CED90(Camera* camera, VecSph* arg1, VecSph* arg2, f32 arg3, f32 arg4, SwingAnimation* swing2, s16* flags) {
+    SwingAnimation* swing = swing2;
+    Vec3f* eye = &camera->eye;
+    Vec3f* at = &camera->at;
+    Vec3f peekAroundPoint;
     s32 sp8C;
     f32 sp88;
     s32 checkEyeBit1;
@@ -1743,95 +1744,94 @@ void func_800CED90(Camera* camera, VecSph* arg1, VecSph* arg2, f32 arg3, f32 arg
 
     sp8C = 0;
 
-    new_var = arg5;
-    if (arg5->unk_64 == 1) {
-        if (arg3 < (sp88 = OLib_Vec3fDist(sp34, &new_var->unk_00))) {
+    if (swing->unk_64 == 1) {
+        if (arg3 < (sp88 = OLib_Vec3fDist(at, &swing->collisionClosePoint))) {
             dummy:;
-            new_var->unk_64 = 0;
-        } else if ((sp88 = Math3D_SignedDistanceFromPlane(new_var->unk_34.norm.x, new_var->unk_34.norm.y, new_var->unk_34.norm.z, new_var->unk_34.poly->dist, sp34)) > 0.0f) {
-            new_var->unk_64 = 0;
-        } else if ((sp88 = OLib_Vec3fDist(sp38, &new_var->unk_34.pos)) < 10.0f) {
-            new_var->unk_64 = 0;
-        } else if ((sp88 = Math3D_SignedDistanceFromPlane(new_var->unk_0C.norm.x, new_var->unk_0C.norm.y, new_var->unk_0C.norm.z, new_var->unk_0C.poly->dist, sp38)) > 0.0f) {
-            new_var->unk_64 = 0;
-        } else if (new_var->unk_0C.norm.y > 0.50f) {
-            new_var->unk_64 = 0;
+            swing->unk_64 = 0;
+        } else if ((sp88 = Math3D_SignedDistanceFromPlane(swing->eyeAtColChk.norm.x, swing->eyeAtColChk.norm.y, swing->eyeAtColChk.norm.z, swing->eyeAtColChk.poly->dist, at)) > 0.0f) {
+            swing->unk_64 = 0;
+        } else if ((sp88 = OLib_Vec3fDist(eye, &swing->eyeAtColChk.pos)) < 10.0f) {
+            swing->unk_64 = 0;
+        } else if ((sp88 = Math3D_SignedDistanceFromPlane(swing->atEyeColChk.norm.x, swing->atEyeColChk.norm.y, swing->atEyeColChk.norm.z, swing->atEyeColChk.poly->dist, eye)) > 0.0f) {
+            swing->unk_64 = 0;
+        } else if (swing->atEyeColChk.norm.y > 0.50f) {
+            swing->unk_64 = 0;
         } else {
-            Math3D_AngleBetweenVectors(&camera->playerPosDelta, &new_var->unk_34.norm, &sp88);
+            Math3D_AngleBetweenVectors(&camera->playerPosDelta, &swing->eyeAtColChk.norm, &sp88);
             if (sp88 > 0.0f) {
-                new_var->unk_64 = 0;
+                swing->unk_64 = 0;
             }
 
         }
 
-        if (new_var->unk_64 == 1) {
+        if (swing->unk_64 == 1) {
             sp8C = 2;
         }
     } else {
-        if (new_var->unk_64 == 2) {
-            new_var->unk_64 = 0;
+        if (swing->unk_64 == 2) {
+            swing->unk_64 = 0;
         }
     }
 
     if (sp8C == 0) {
-        if ((*arg6 & 2) != 0) {
+        if (*flags & 2) {
             checkEyeBit1 = 1 << 1;
         } else {
             checkEyeBit1 = 0;
         }
-        if (new_var->unk_64 != 1) {
+        if (swing->unk_64 != 1) {
             checkEyeBit2 = 1 << 0;
         } else {
             checkEyeBit2 = 0;
         }
 
-        sp8C = func_800CD44C(camera, arg1, &new_var->unk_0C, &new_var->unk_34, ((s16)checkEyeBit2 | checkEyeBit1));
+        sp8C = func_800CD44C(camera, arg1, &swing->atEyeColChk, &swing->eyeAtColChk, ((s16)checkEyeBit2 | checkEyeBit1));
     }
 
 
     switch (sp8C) {
         default:
-            sp30 = &new_var->unk_0C.pos;
-            *arg6 &= 0xEFFF;
-            new_var->unk_5C.r = arg4;
-            *sp38 = *sp30;
+            sp30 = &swing->atEyeColChk.pos;
+            *flags &= ~0x1000;
+            swing->swingUpdateRate = arg4;
+            *eye = *sp30;
             break;
         case 1:
-            Camera_BGCheckCorner(&new_var->unk_00, &camera->at, &camera->eyeNext, &new_var->unk_0C, &new_var->unk_34);
+            Camera_BGCheckCorner(&swing->collisionClosePoint, &camera->at, &camera->eyeNext, &swing->atEyeColChk, &swing->eyeAtColChk);
         case 2:
-            sp90.x = new_var->unk_00.x + (new_var->unk_0C.norm.x + new_var->unk_34.norm.x);
-            sp90.y = new_var->unk_00.y + (new_var->unk_0C.norm.y + new_var->unk_34.norm.y);
-            sp90.z = new_var->unk_00.z + (new_var->unk_0C.norm.z + new_var->unk_34.norm.z);
+            peekAroundPoint.x = swing->collisionClosePoint.x + (swing->atEyeColChk.norm.x + swing->eyeAtColChk.norm.x);
+            peekAroundPoint.y = swing->collisionClosePoint.y + (swing->atEyeColChk.norm.y + swing->eyeAtColChk.norm.y);
+            peekAroundPoint.z = swing->collisionClosePoint.z + (swing->atEyeColChk.norm.z + swing->eyeAtColChk.norm.z);
 
             sp30 = &camera->eyeNext;
-            OLib_Vec3fDiffToVecSphGeo(&sp50, sp34, &sp90);
+            OLib_Vec3fDiffToVecSphGeo(&sp50, at, &peekAroundPoint);
             sp50.r = arg1->r;
-            new_var->unk_64 = 1;
-            new_var->unk_5C.r = 1.5f;
-            OLib_VecSphAddToVec3f(&sp58.pos, sp34, &sp50);
-            if (func_800CBC84(camera, &new_var->unk_34.pos, &sp58, 0) == 0) {
+            swing->unk_64 = 1;
+            swing->swingUpdateRate = 1.5f;
+            OLib_VecSphAddToVec3f(&sp58.pos, at, &sp50);
+            if (func_800CBC84(camera, &swing->eyeAtColChk.pos, &sp58, 0) == 0) {
                 sp50.yaw = Camera_AngleDiffAndScale(arg1->yaw, arg2->yaw, (camera->speedRatio * 0.5f) + 0.5f) + arg2->yaw;
                 sp50.pitch = Camera_AngleDiffAndScale(arg1->pitch, arg2->pitch, (camera->speedRatio * 0.5f) + 0.5f) + arg2->pitch;
-                if (new_var->unk_0C.sphNorm.pitch < 0x2AA8) {
-                    new_var->unk_5C.yaw = sp50.yaw;
-                    new_var->unk_5C.pitch = sp50.pitch;
+                if (swing->atEyeColChk.sphNorm.pitch < 0x2AA8) {
+                    swing->yaw = sp50.yaw;
+                    swing->pitch = sp50.pitch;
                 } else {
-                    new_var->unk_5C.yaw = arg1->yaw;
-                    new_var->unk_5C.pitch = arg1->pitch;
+                    swing->yaw = arg1->yaw;
+                    swing->pitch = arg1->pitch;
                 }
             }
-            *sp38 = *sp30 = sp58.pos;
+            *eye = *sp30 = sp58.pos;
             break;
         case 3:
         case 6:
-            sp30 = &new_var->unk_0C.pos;
-            sp88 = OLib_Vec3fDist(sp34, sp30);
+            sp30 = &swing->atEyeColChk.pos;
+            sp88 = OLib_Vec3fDist(at, sp30);
             if (sp88 < 60.0f) {
                 sp50.yaw = Camera_AngleDiffAndScale(arg1->yaw, arg2->yaw, camera->speedRatio) + arg2->yaw;
-                if ((*arg6 & 0x1000) != 0) {
+                if (*flags & 0x1000) {
                     sp50.pitch = arg2->pitch;
                 } else {
-                    sp50.pitch = Math_CosS(new_var->unk_0C.sphNorm.pitch) * 16380.0f;
+                    sp50.pitch = Math_CosS(swing->atEyeColChk.sphNorm.pitch) * 0x3FFC;
                 }
                 sp50.r = 60.0f - sp88;
                 OLib_VecSphAddToVec3f(&sp58.pos, sp30, &sp50);
@@ -1839,10 +1839,10 @@ void func_800CED90(Camera* camera, VecSph* arg1, VecSph* arg2, f32 arg3, f32 arg
                 sp50.yaw = Camera_AngleDiffAndScale(arg1->yaw, arg2->yaw, camera->speedRatio) + arg2->yaw;
                 sp50.pitch = Camera_AngleDiffAndScale(arg1->pitch, arg2->pitch, camera->speedRatio) + arg2->pitch;
                 sp50.r = arg1->r;
-                OLib_VecSphAddToVec3f(&sp58.pos, sp34, &sp50);
+                OLib_VecSphAddToVec3f(&sp58.pos, at, &sp50);
             }
-            func_800CBC84(camera, sp34, &sp58, 0);
-            *sp38 = sp58.pos;
+            func_800CBC84(camera, at, &sp58, 0);
+            *eye = sp58.pos;
             break;
     }
 }
@@ -1940,9 +1940,9 @@ s32 Camera_Normal1(Camera *camera) {
                 anim->unk_0C = 0;
             }
             anim->unk_08 = 0;
-            D_801EDC30[camera->thisIdx].unk_5C.yaw = D_801EDC30[camera->thisIdx].unk_5C.pitch = D_801EDC30[camera->thisIdx].unk_64 = 0;
+            D_801EDC30[camera->thisIdx].yaw = D_801EDC30[camera->thisIdx].pitch = D_801EDC30[camera->thisIdx].unk_64 = 0;
             anim->unk_0A = 0x514;
-            D_801EDC30[camera->thisIdx].unk_5C.r = norm1->unk_0C;
+            D_801EDC30[camera->thisIdx].swingUpdateRate = norm1->unk_0C;
             anim->unk_00 = camera->playerPosRot.pos.y;
             anim->unk_04 = camera->xzSpeed;
             D_801EDC30[camera->thisIdx].unk_66 = 0;
@@ -2006,7 +2006,7 @@ s32 Camera_Normal1(Camera *camera) {
     anim->unk_04 = camera->xzSpeed;
 
     if (D_801EDC30[camera->thisIdx].unk_66 != 0) {
-        camera->yawUpdateRateInv = Camera_LERPCeilF((D_801EDC30[camera->thisIdx].unk_66 * 2) + D_801EDC30[camera->thisIdx].unk_5C.r, camera->yawUpdateRateInv, phi_f2, 0.1f);
+        camera->yawUpdateRateInv = Camera_LERPCeilF((D_801EDC30[camera->thisIdx].unk_66 * 2) + D_801EDC30[camera->thisIdx].swingUpdateRate, camera->yawUpdateRateInv, phi_f2, 0.1f);
         if (norm1->unk_22 & 8) {
             camera->pitchUpdateRateInv = Camera_LERPCeilF(100.0f, camera->pitchUpdateRateInv, 0.5f, 0.1f);
         } else {
@@ -2014,7 +2014,7 @@ s32 Camera_Normal1(Camera *camera) {
         }
         D_801EDC30[camera->thisIdx].unk_66--;
     } else {
-        camera->yawUpdateRateInv = Camera_LERPCeilF(D_801EDC30[camera->thisIdx].unk_5C.r - (D_801EDC30[camera->thisIdx].unk_5C.r * 0.7f * spC0), camera->yawUpdateRateInv, phi_f2, 0.1f);
+        camera->yawUpdateRateInv = Camera_LERPCeilF(D_801EDC30[camera->thisIdx].swingUpdateRate - (D_801EDC30[camera->thisIdx].swingUpdateRate * 0.7f * spC0), camera->yawUpdateRateInv, phi_f2, 0.1f);
         if ((norm1->unk_22 & 8) && (camera->speedRatio > 0.01f)) {
             camera->pitchUpdateRateInv = Camera_LERPCeilF(100.0f, camera->pitchUpdateRateInv, 0.5f, 0.1f);
         } else if (D_801ED920 != NULL) {
@@ -2036,7 +2036,7 @@ s32 Camera_Normal1(Camera *camera) {
     }
 
     if ((D_801EDC30[camera->thisIdx].unk_64 == 1) && (norm1->unk_00 > -40.0f)) {
-        phi_f0_4 = Math_SinS(D_801EDC30[camera->thisIdx].unk_5C.pitch);
+        phi_f0_4 = Math_SinS(D_801EDC30[camera->thisIdx].pitch);
         phi_f2 = norm1->unk_00;
         phi_f2 = phi_f2 * (1.0f - phi_f0_4); // TODO: phi_f2 should not be on the LHS and RHS
         // phi_f2 = norm1->unk_00 * (1.0f - phi_f0_4);
@@ -2118,8 +2118,8 @@ s32 Camera_Normal1(Camera *camera) {
 
     if (D_801EDC30[camera->thisIdx].unk_64 != 0) {
         if (phi_v1_2) {} 
-        spB4.pitch = Camera_LERPCeilS(D_801EDC30[camera->thisIdx].unk_5C.pitch, sp9C.pitch, 1.0f / camera->yawUpdateRateInv, 5);
-        spB4.yaw = Camera_LERPCeilS(D_801EDC30[camera->thisIdx].unk_5C.yaw, sp9C.yaw, 1.0f / camera->yawUpdateRateInv, 5);
+        spB4.pitch = Camera_LERPCeilS(D_801EDC30[camera->thisIdx].pitch, sp9C.pitch, 1.0f / camera->yawUpdateRateInv, 5);
+        spB4.yaw = Camera_LERPCeilS(D_801EDC30[camera->thisIdx].yaw, sp9C.yaw, 1.0f / camera->yawUpdateRateInv, 5);
     } else {
         if (norm1->unk_22 & 0x20) {
             spB4.yaw = sp9C.yaw;
@@ -2213,7 +2213,7 @@ s32 Camera_Normal1(Camera *camera) {
             camera->inputDir.y += phi_v1_2;
         }
     } else {
-        D_801EDC30[camera->thisIdx].unk_5C.r = norm1->unk_0C;
+        D_801EDC30[camera->thisIdx].swingUpdateRate = norm1->unk_0C;
         D_801EDC30[camera->thisIdx].unk_64 = 0;
         sUpdateCameraDirection = false;
         *sp4C = camera->eyeNext;
@@ -2252,7 +2252,9 @@ s32 Camera_Normal2(Camera* camera) {
     return Camera_Noop(camera);
 }
 
-// TODO: Get D_801EDC30 Size (Check this still matches with bss declared outside)
+/**
+ * Riding Epona
+ */
 s32 Camera_Normal3(Camera *camera) {
     Normal3* norm3 = (Normal3*)camera->paramData;
     Normal3Anim* anim = &norm3->anim;
@@ -2267,7 +2269,7 @@ s32 Camera_Normal3(Camera *camera) {
     f32 phi_f2;
     s16 sp62;
     s16 phi_v1_2;
-    struct Player* sp5C = camera->player;
+    Player* player = camera->player;
     Vec3f* eye = &camera->eye;
     Vec3f* at = &camera->at;
     Vec3f* eyeNext = &camera->eyeNext;
@@ -2275,9 +2277,9 @@ s32 Camera_Normal3(Camera *camera) {
 
     temp_f2 = Camera_GetActorHeight(camera);
 
-    if ((camera->setting == CAM_SET_HORSE0) && (sp5C->rideActor == NULL)) {
+    if ((camera->setting == CAM_SET_HORSE0) && (player->rideActor == NULL)) {
         Camera_ChangeSettingFlags(camera, camera->prevSetting, 2);
-        return 1;
+        return true;
     }
 
     if (RELOAD_PARAMS) {
@@ -2285,59 +2287,59 @@ s32 Camera_Normal3(Camera *camera) {
         temp_f2 = PCT(temp_f2);
 
         norm3->yOffset = NEXTSETTING * temp_f2;
-        norm3->unk_04 = NEXTSETTING * temp_f2;
-        norm3->unk_08 = NEXTSETTING * temp_f2;
-        norm3->unk_1C = DEGF_TO_BINANG(NEXTSETTING);
-        norm3->unk_0C = NEXTSETTING;
-        norm3->unk_10 = NEXTSETTING;
-        norm3->unk_14 = NEXTSETTING;
-        norm3->unk_18 = NEXTPCT;
-        norm3->unk_1E = NEXTSETTING;
+        norm3->distMin = NEXTSETTING * temp_f2;
+        norm3->distMax = NEXTSETTING * temp_f2;
+        norm3->pitchTarget = DEGF_TO_BINANG(NEXTSETTING);
+        norm3->yawUpdateRateInv = NEXTSETTING;
+        norm3->pitchUpdateRateInv = NEXTSETTING;
+        norm3->fovTarget = NEXTSETTING;
+        norm3->maxAtLERPScale = NEXTPCT;
+        norm3->interfaceFlags = NEXTSETTING;
     }
 
     OLib_Vec3fDiffToVecSphGeo(&sp70, at, eye);
     OLib_Vec3fDiffToVecSphGeo(&sp68, at, eyeNext);
     sUpdateCameraDirection = true;
-    sCameraInterfaceFlags = norm3->unk_1E;
+    sCameraInterfaceFlags = norm3->interfaceFlags;
 
     phi_v1_2 = camera->animState;
     if (!(((phi_v1_2 == 0) || (phi_v1_2 == 10)) || (phi_v1_2 == 20))) {
     } else {
-        anim->unk_00 = 0;
-        anim->unk_08 = 0;
-        anim->unk_04 = camera->playerGroundY;
+        anim->isZero = 0;
+        anim->curPitch = 0;
+        anim->yPosOffset = camera->playerGroundY;
 
-        D_801EDC30[camera->thisIdx].unk_5C.yaw = D_801EDC30[camera->thisIdx].unk_5C.pitch = D_801EDC30[camera->thisIdx].unk_64 = 0;
-        D_801EDC30[camera->thisIdx].unk_5C.r = norm3->unk_0C;
-        anim->unk_0A = BINANG_SUB(BINANG_ROT180(camera->playerPosRot.rot.y), sp70.yaw) * 0.16666667f;
-        anim->unk_0E = 0;
-        anim->unk_12 = 0x4B0;
+        D_801EDC30[camera->thisIdx].yaw = D_801EDC30[camera->thisIdx].pitch = D_801EDC30[camera->thisIdx].unk_64 = 0;
+        D_801EDC30[camera->thisIdx].swingUpdateRate = norm3->yawUpdateRateInv;
+        anim->yawUpdateRate = BINANG_SUB(BINANG_ROT180(camera->playerPosRot.rot.y), sp70.yaw) * (1.0f / 6.0f);
+        anim->distTimer = 0;
+        anim->is1200 = 1200;
 
-        if (norm3->unk_1E & 2) {
-            anim->unk_0C = 6;
+        if (norm3->interfaceFlags & 2) {
+            anim->yawTimer = 6;
             Camera_SetFlags(camera, 0x20);
         } else {
-            anim->unk_0C = 0;
+            anim->yawTimer = 0;
         }
 
         camera->animState = 1;
         D_801EDC30[camera->thisIdx].unk_66 = 0;
-        anim->unk_10 = 1;
+        anim->flag = 1;
     }
 
-    if (anim->unk_0E != 0) {
-        anim->unk_0E--;
+    if (anim->distTimer != 0) {
+        anim->distTimer--;
     }
 
     sp90 = ((camera->speedRatio * 3.0f) + 1.0f) * 0.25f * 0.5f;
     sp8C = (temp_f2 = camera->speedRatio * 0.2f);
 
     if (D_801EDC30[camera->thisIdx].unk_66 != 0) {
-        camera->yawUpdateRateInv = Camera_LERPCeilF((D_801EDC30[camera->thisIdx].unk_66 * 2) + norm3->unk_0C, camera->yawUpdateRateInv, sp90, 0.1f);
+        camera->yawUpdateRateInv = Camera_LERPCeilF((D_801EDC30[camera->thisIdx].unk_66 * 2) + norm3->yawUpdateRateInv, camera->yawUpdateRateInv, sp90, 0.1f);
         camera->pitchUpdateRateInv = Camera_LERPCeilF((D_801EDC30[camera->thisIdx].unk_66 * 2) + 16.0f, camera->pitchUpdateRateInv, sp8C, 0.1f);
         D_801EDC30[camera->thisIdx].unk_66--;
     } else {
-        camera->yawUpdateRateInv = Camera_LERPCeilF(norm3->unk_0C, camera->yawUpdateRateInv, sp90, 0.1f);
+        camera->yawUpdateRateInv = Camera_LERPCeilF(norm3->yawUpdateRateInv, camera->yawUpdateRateInv, sp90, 0.1f);
         camera->pitchUpdateRateInv = Camera_LERPCeilF(16.0f, camera->pitchUpdateRateInv, sp8C, 0.1f);
     }
 
@@ -2345,29 +2347,29 @@ s32 Camera_Normal3(Camera *camera) {
     camera->xzOffsetUpdateRate = Camera_LERPCeilF(0.05f, camera->xzOffsetUpdateRate, sp8C, 0.0001f);
     camera->fovUpdateRate = Camera_LERPCeilF(0.05f, camera->fovUpdateRate, sp8C, 0.0001f);
 
-    phi_v1_2 = func_800CC9C0(camera, BINANG_ROT180(sp70.yaw), anim->unk_10 & 1);
-    temp_f2 = ((1.0f / norm3->unk_10) * 0.5f) * (1.0f - camera->speedRatio);
-    anim->unk_08 = Camera_LERPCeilS(phi_v1_2, anim->unk_08, 
-        ((1.0f / norm3->unk_10) * 0.5f) + temp_f2, 5);
+    phi_v1_2 = func_800CC9C0(camera, BINANG_ROT180(sp70.yaw), anim->flag & 1);
+    temp_f2 = ((1.0f / norm3->pitchUpdateRateInv) * 0.5f) * (1.0f - camera->speedRatio);
+    anim->curPitch = Camera_LERPCeilS(phi_v1_2, anim->curPitch, 
+        ((1.0f / norm3->pitchUpdateRateInv) * 0.5f) + temp_f2, 5);
 
-    if ((norm3->unk_1E & 0x40) || (sp5C->rideActor == NULL)) {
+    if ((norm3->interfaceFlags & 0x40) || (player->rideActor == NULL)) {
         Camera_CalcAtDefault(camera, &sp68, norm3->yOffset, 1);
     } else {
-        Camera_CalcAtForHorse(camera, &sp68, norm3->yOffset, &anim->unk_04, 1);
+        Camera_CalcAtForHorse(camera, &sp68, norm3->yOffset, &anim->yPosOffset, 1);
     }
 
-    sp88 = (norm3->unk_08 + norm3->unk_04) * 0.5f;
+    sp88 = (norm3->distMax + norm3->distMin) * 0.5f;
     OLib_Vec3fDiffToVecSphGeo(&sp80, at, eyeNext);
-    temp_f2 = Camera_ClampDist1(camera, sp80.r, norm3->unk_04, norm3->unk_08, anim->unk_0E);
+    temp_f2 = Camera_ClampDist1(camera, sp80.r, norm3->distMin, norm3->distMax, anim->distTimer);
 
     phi_f2 = ((sp88 - temp_f2));
-    phi_f2 = phi_f2 *  0.002f;
+    phi_f2 *= 0.002f;
     camera->dist = sp80.r = temp_f2 + phi_f2;
 
-    if (norm3->unk_1E & 0x80) {
-        sp80.pitch = Camera_LERPCeilS(camera->player->actor.focus.rot.x - anim->unk_08, sp68.pitch, 0.25f, 5);
+    if (norm3->interfaceFlags & 0x80) {
+        sp80.pitch = Camera_LERPCeilS(camera->player->actor.focus.rot.x - anim->curPitch, sp68.pitch, 0.25f, 5);
     } else {
-        sp62 = norm3->unk_1C - anim->unk_08;
+        sp62 = norm3->pitchTarget - anim->curPitch;
         sp80.pitch = Camera_LERPCeilS(sp62, sp68.pitch, 1.0f / camera->pitchUpdateRateInv, 5);
     }
 
@@ -2379,7 +2381,7 @@ s32 Camera_Normal3(Camera *camera) {
         sp80.pitch = -0x1554;
     }
 
-    if (norm3->unk_1E & 0x80) {
+    if (norm3->interfaceFlags & 0x80) {
         sp62 = BINANG_SUB(camera->player->actor.focus.rot.y, BINANG_ROT180(sp68.yaw));
         temp_f2 = 1.0f;
     } else {
@@ -2393,19 +2395,19 @@ s32 Camera_Normal3(Camera *camera) {
         if (phi_v1_2 < 0x555A) {
             temp_f2 = 1.0f;
         } else {
-            temp_f2 = (32768.0f - phi_v1_2) / 10918.0f;
+            temp_f2 = ((f32)0x8000 - phi_v1_2) / (f32)0x2AA6;
         }
     }
 
-    sp90 = (sp62 * ((camera->speedRatio * camera->speedRatio * 0.8f) + 0.2f) * temp_f2) / camera->yawUpdateRateInv;
+    sp90 = (sp62 * ((SQ(camera->speedRatio) * 0.8f) + 0.2f) * temp_f2) / camera->yawUpdateRateInv;
     if ((Camera_fabsf(sp90) > 150.0f) && (camera->speedRatio > 0.05f)) {
         sp80.yaw = sp68.yaw + sp90;
     }
 
-    if (anim->unk_0C > 0) {
-        sp80.yaw += anim->unk_0A;
-        anim->unk_0C--;
-        if (anim->unk_0C == 0) {
+    if (anim->yawTimer > 0) {
+        sp80.yaw += anim->yawUpdateRate;
+        anim->yawTimer--;
+        if (anim->yawTimer == 0) {
             Camera_UnsetFlags(camera, 0x20);
         }
     }
@@ -2418,16 +2420,16 @@ s32 Camera_Normal3(Camera *camera) {
         *eye = *eyeNext;
     }
 
-    camera->fov = Camera_LERPCeilF(norm3->unk_14, camera->fov, camera->fovUpdateRate, 0.1f);
-    if (norm3->unk_1E & 0x20) {
+    camera->fov = Camera_LERPCeilF(norm3->fovTarget, camera->fov, camera->fovUpdateRate, 0.1f);
+    if (norm3->interfaceFlags & 0x20) {
         camera->roll = Camera_LERPCeilS(0, camera->roll, 0.05f, 5);
     } else {
         camera->roll = Camera_LERPCeilS(0, camera->roll, 0.1f, 5);
     }
 
-    camera->atLERPStepScale = Camera_ClampLERPScale(camera, norm3->unk_18);
-    anim->unk_10 &= ~1;
-    return 1;
+    camera->atLERPStepScale = Camera_ClampLERPScale(camera, norm3->maxAtLERPScale);
+    anim->flag &= ~1;
+    return true;
 }
 
 s32 Camera_Normal4(Camera* camera) {
@@ -3284,9 +3286,9 @@ s32 Camera_Jump3(Camera* camera) {
         case 10:
         case 20:
             anim->unk_00 = camera->playerGroundY;
-            D_801EDC30[camera->thisIdx].unk_5C.yaw = D_801EDC30[camera->thisIdx].unk_5C.pitch = D_801EDC30[camera->thisIdx].unk_64 = 0;
+            D_801EDC30[camera->thisIdx].yaw = D_801EDC30[camera->thisIdx].pitch = D_801EDC30[camera->thisIdx].unk_64 = 0;
             anim->unk_08 = 0xA;
-            D_801EDC30[camera->thisIdx].unk_5C.r = jump3->unk_0C;
+            D_801EDC30[camera->thisIdx].swingUpdateRate = jump3->unk_0C;
             camera->animState++;
             D_801EDC30[camera->thisIdx].unk_66 = 0;
             break;
@@ -3318,13 +3320,13 @@ s32 Camera_Jump3(Camera* camera) {
     if (D_801EDC30[camera->thisIdx].unk_66 != 0) {
         // spD0 = temp_f2;
         // spCC = camera->speedRatio * 0.2f;
-        camera->yawUpdateRateInv = Camera_LERPCeilF((D_801EDC30[camera->thisIdx].unk_5C.r + D_801EDC30[camera->thisIdx].unk_66 * 2), camera->yawUpdateRateInv, spD0, 0.1f);
+        camera->yawUpdateRateInv = Camera_LERPCeilF((D_801EDC30[camera->thisIdx].swingUpdateRate + D_801EDC30[camera->thisIdx].unk_66 * 2), camera->yawUpdateRateInv, spD0, 0.1f);
         camera->pitchUpdateRateInv = Camera_LERPCeilF((40.0f + D_801EDC30[camera->thisIdx].unk_66 * 2), camera->pitchUpdateRateInv, spCC, 0.1f);
         D_801EDC30[camera->thisIdx].unk_66--;
     } else {
         // spCC = camera->speedRatio * 0.2f;
         // phi_f14 = camera->yawUpdateRateInv;
-        camera->yawUpdateRateInv = Camera_LERPCeilF(D_801EDC30[camera->thisIdx].unk_5C.r, camera->yawUpdateRateInv, temp_f0, 0.1f);
+        camera->yawUpdateRateInv = Camera_LERPCeilF(D_801EDC30[camera->thisIdx].swingUpdateRate, camera->yawUpdateRateInv, temp_f0, 0.1f);
         camera->pitchUpdateRateInv = Camera_LERPCeilF(40.0f, camera->pitchUpdateRateInv, spCC, 0.1f);
     }
 
@@ -3387,10 +3389,10 @@ s32 Camera_Jump3(Camera* camera) {
         spAC.pitch = Camera_LERPCeilS((spAC.pitch * spD0) + (jump3->unk_20 * (1.0f - spD0)), sp94.pitch, 1.0f / ((camera->pitchUpdateRateInv + 1.0f) - (camera->pitchUpdateRateInv * spD0)), 5);
     } else if (D_801EDC30[camera->thisIdx].unk_64 == 1) {
         pad1 = 1.0f / camera->yawUpdateRateInv;
-        spAC.yaw = Camera_LERPCeilS(D_801EDC30[camera->thisIdx].unk_5C.yaw, sp94.yaw, pad1, 5);
+        spAC.yaw = Camera_LERPCeilS(D_801EDC30[camera->thisIdx].yaw, sp94.yaw, pad1, 5);
         // temp_f0 = 1.0f / camera->yawUpdateRateInv;
         // Bug? Should be pitchUpdateRateInv
-        spAC.pitch = Camera_LERPCeilS(D_801EDC30[camera->thisIdx].unk_5C.pitch, sp94.pitch, 1.0f / camera->yawUpdateRateInv, 5);
+        spAC.pitch = Camera_LERPCeilS(D_801EDC30[camera->thisIdx].pitch, sp94.pitch, 1.0f / camera->yawUpdateRateInv, 5);
     } else if (jump3->unk_22 & (0x80 | 0x8)) {
         spAC.yaw = Camera_CalcDefaultYaw(camera, sp94.yaw, sp3C->rot.y, jump3->unk_14, 0.0f);
         
@@ -3430,7 +3432,7 @@ s32 Camera_Jump3(Camera* camera) {
             camera->inputDir.z = 0;
         }
     } else {
-        D_801EDC30[camera->thisIdx].unk_5C.r = jump3->unk_0C;
+        D_801EDC30[camera->thisIdx].swingUpdateRate = jump3->unk_0C;
         D_801EDC30[camera->thisIdx].unk_64 = 0;
         sUpdateCameraDirection = false;
         *sp48 = *sp40;
@@ -3651,19 +3653,19 @@ s32 Camera_Battle1(Camera *camera) {
 
     // Above is down to SP and Floats
     
-if ((sp104 < spA4.r) || func_800CBA34(camera)) {
-    spEC = 1.0f;
-    spF8 = 10.0f;
-    // dummy:; // Helps?
-    // sp80 = batt1->unk_14; // Fake & Non-equivalent but helps?
-} else {
-    spEC = spA4.r / sp104;
-    spF8 = 2.0f;
-}
-// spF8 should be set with swc1 twice, not once
+    if ((sp104 < spA4.r) || func_800CBA34(camera)) {
+        spEC = 1.0f;
+        spF8 = 10.0f;
+        // dummy:; // Helps?
+        // sp80 = batt1->unk_14; // Fake & Non-equivalent but helps?
+    } else {
+        spEC = spA4.r / sp104;
+        spF8 = 2.0f;
+    }
+    // spF8 should be set with swc1 twice, not once
 
-// sp94 is loading in too early
-func_800CE2B8(camera, &sp94.r, sp40, batt1->unk_00, batt1->unk_2C, 1.0f - spEC, &anim->unk_04, &spA4, (sp84 ? 0x81 : 1) | batt1->unk_30);
+    // sp94 is loading in too early
+    func_800CE2B8(camera, &sp94.r, sp40, batt1->unk_00, batt1->unk_2C, 1.0f - spEC, &anim->unk_04, &spA4, (sp84 ? 0x81 : 1) | batt1->unk_30);
     
     
     sp88 = spA4.yaw;

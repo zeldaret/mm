@@ -628,7 +628,7 @@ asm/non_matchings/code/z_bg_item/func_800CAFDC.s,func_800CAFDC,0x800CAFDC,0x9
 asm/non_matchings/code/code_800CB000/func_800CB000.s,func_800CB000,0x800CB000,0x84
 asm/non_matchings/code/z_camera/Camera_fabsf.s,Camera_fabsf,0x800CB210,0xC
 asm/non_matchings/code/z_camera/Camera_Vec3fMagnitude.s,Camera_Vec3fMagnitude,0x800CB240,0xC
-asm/non_matchings/code/z_camera/Camera_QuadraticInterpolateCurve.s,Camera_QuadraticInterpolateCurve,0x800CB270,0x30
+asm/non_matchings/code/z_camera/Camera_QuadraticAttenuation.s,Camera_QuadraticAttenuation,0x800CB270,0x30
 asm/non_matchings/code/z_camera/Camera_LERPCeilF.s,Camera_LERPCeilF,0x800CB330,0x1A
 asm/non_matchings/code/z_camera/Camera_LERPCeilS.s,Camera_LERPCeilS,0x800CB398,0x25
 asm/non_matchings/code/z_camera/Camera_LERPFloorS.s,Camera_LERPFloorS,0x800CB42C,0x25

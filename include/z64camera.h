@@ -283,26 +283,26 @@ typedef struct {
 } Normal1; // 10
 
 typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A;
-    /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ s16 unk_0E;
-    /* 0x10 */ s16 unk_10;
-    /* 0x12 */ s16 unk_12;
+    /* 0x00 */ f32 isZero; // set but unused
+    /* 0x04 */ f32 yPosOffset;
+    /* 0x08 */ s16 curPitch;
+    /* 0x0A */ s16 yawUpdateRate;
+    /* 0x0C */ s16 yawTimer;
+    /* 0x0E */ s16 distTimer;
+    /* 0x10 */ s16 flag;
+    /* 0x12 */ s16 is1200; // set but unused
 } Normal3Anim;
 
 typedef struct {
     /* 0x00 */ f32 yOffset;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14;
-    /* 0x18 */ f32 unk_18;
-    /* 0x1C */ s16 unk_1C;
-    /* 0x1E */ s16 unk_1E;
+    /* 0x04 */ f32 distMin;
+    /* 0x08 */ f32 distMax;
+    /* 0x0C */ f32 yawUpdateRateInv;
+    /* 0x10 */ f32 pitchUpdateRateInv;
+    /* 0x14 */ f32 fovTarget;
+    /* 0x18 */ f32 maxAtLERPScale;
+    /* 0x1C */ s16 pitchTarget;
+    /* 0x1E */ s16 interfaceFlags;
     /* 0x20 */ Normal3Anim anim;
 } Normal3; // 9
 
@@ -778,10 +778,12 @@ typedef struct {
 } CamColChk; // size = 0x28
 
 typedef struct {
-    Vec3f unk_00; // collisionClosePoint
-    CamColChk unk_0C;
-    CamColChk unk_34;
-    VecSph unk_5C; // (Not VecSph) swingUpdateRate - yaw - pitch
+    Vec3f collisionClosePoint;
+    CamColChk atEyeColChk;
+    CamColChk eyeAtColChk;
+    f32 swingUpdateRate;
+    s16 pitch;
+    s16 yaw;
     s16 unk_64;
     s16 unk_66; // startSwingTimer
 } SwingAnimation; // size = 0x68

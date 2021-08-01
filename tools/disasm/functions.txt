@@ -1114,7 +1114,7 @@
     0x800CB000:("func_800CB000",),
     0x800CB210:("Camera_fabsf",),
     0x800CB240:("Camera_Vec3fMagnitude",),
-    0x800CB270:("Camera_QuadraticInterpolateCurve",),
+    0x800CB270:("Camera_QuadraticAttenuation",),
     0x800CB330:("Camera_LERPCeilF",),
     0x800CB398:("Camera_LERPCeilS",),
     0x800CB42C:("Camera_LERPFloorS",),
