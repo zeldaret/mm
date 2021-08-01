@@ -12,7 +12,10 @@ void func_80B92B10(Actor* thisx, GlobalContext* globalCtx);
 void func_80B92C00(Actor* thisx, s32 arg1);
 void func_80B92DC4(Actor* thisx, s32 arg1);
 
-#if 0
+extern Gfx D_04023210[];
+extern Gfx D_060001D0[];
+extern Gfx D_06003770[];
+
 const ActorInit Obj_Warpstone_InitVars = {
     ACTOR_OBJ_WARPSTONE,
     ACTORCAT_ITEMACTION,
@@ -39,10 +42,7 @@ static InitChainEntry D_80B9324C[] = {
     ICHAIN_U8(targetMode, 1, ICHAIN_STOP),
 };
 
-
-#endif
-extern ColliderCylinderInit D_80B93220;
-extern InitChainEntry D_80B9324C[];
+static Gfx* D_80B93250[] = {D_060001D0, D_06003770};
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Warpstone_0x80B92B10/func_80B92B10.asm")
 
@@ -109,4 +109,31 @@ void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Warpstone_0x80B92B10/ObjWarpstone_Draw.asm")
+/*#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Warpstone_0x80B92B10/ObjWarpstone_Draw.asm")*/
+
+void ObjWarpstone_Draw(Actor* thisx, GlobalContext* globalCtx2) {
+    ObjWarpstone* this = THIS;
+    GlobalContext* globalCtx = globalCtx2;
+
+    func_800BDFC0(globalCtx, D_80B93250[this->unk1AA]);
+    if (this->actor.home.rot.x != 0) {
+	OPEN_DISPS(globalCtx->state.gfxCtx);
+        func_8012C2DC(globalCtx->state.gfxCtx);
+        SysMatrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y + 34.0f, this->actor.world.pos.z, 0);
+        SysMatrix_InsertMatrix(&globalCtx->mf_187FC, 1);
+        SysMatrix_InsertTranslation(0.0f, 0.0f, 30.0f, 1);
+        Matrix_Scale(this->actor.velocity.x, this->actor.velocity.x, this->actor.velocity.x, 1);
+        SysMatrix_StatePush();
+	gDPPipeSync(POLY_XLU_DISP++);
+	gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 0xFF, 0xFF, 0xC8, this->actor.home.rot.x);
+	gDPSetEnvColor(POLY_XLU_DISP++, 0x64, 0xC8, 0x00, 0xFF);
+        SysMatrix_InsertZRotation_f((((globalCtx->gameplayFrames * 1500) & 0xFFFF) * M_PI) / 32768.0f, 1);
+	gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+	gSPDisplayList(POLY_XLU_DISP++, D_04023210);
+        SysMatrix_StatePop();
+        SysMatrix_InsertZRotation_f((~((globalCtx->gameplayFrames * 1200) & 0xFFFF) * M_PI) / 32768.0f, 1);
+	gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+	gSPDisplayList(POLY_XLU_DISP++, D_04023210);
+	CLOSE_DISPS(globalCtx->state.gfxCtx);
+    }
+}
