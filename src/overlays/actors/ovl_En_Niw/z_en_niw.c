@@ -817,7 +817,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         camera.x = globalCtx->view.at.x - globalCtx->view.eye.x;
         camera.y = globalCtx->view.at.y - globalCtx->view.eye.y;
         camera.z = globalCtx->view.at.z - globalCtx->view.eye.z;
-        camResult = camera.y / sqrtf(SQXYZ(camera));
+        camResult = camera.y / sqrtf(SQXYZ(&camera));
 
         this->actor.world.pos.x = this->actor.home.pos.x;
         this->actor.world.pos.z = this->actor.home.pos.z;

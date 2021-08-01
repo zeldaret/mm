@@ -848,7 +848,7 @@ extern BgSpecialSceneMaxObjects bgSpecialSceneMaxObjects[1];
 // extern UNK_TYPE2 D_801B9E34;
 // extern UNK_TYPE4 sUpdateCameraDirection;
 // extern UNK_TYPE4 sIsFalse;
-// extern UNK_TYPE4 D_801B9E58;
+// extern UNK_TYPE4 sCameraInitCounter;
 // extern UNK_TYPE4 D_801B9E5C;
 // extern UNK_TYPE4 D_801B9E60;
 // extern UNK_TYPE1 D_801B9E64;

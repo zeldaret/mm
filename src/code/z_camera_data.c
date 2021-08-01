@@ -5739,7 +5739,7 @@ static s16 D_801B9E34[] = {
 
 static s32 sUpdateCameraDirection = 0;
 static s32 sIsFalse = false;
-static s32 D_801B9E58 = 0;
+static s32 sCameraInitCounter = 0;
 
 // BSS
 // UnkStruct_D801ED920* D_801ED920;

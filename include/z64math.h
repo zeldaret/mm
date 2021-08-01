@@ -111,9 +111,9 @@ typedef struct {
 #define BINANG_TO_RAD(binang) (((f32)binang / 32768.0f) * M_PI)
 
 // Vector macros
-#define SQXZ(vec) ((vec.x) * (vec.x) + (vec.z) * (vec.z))
+#define SQXZ(vec) (((vec)->x) * ((vec)->x) + ((vec)->z) * ((vec)->z))
 #define DOTXZ(vec1, vec2) ((vec1.x) * (vec2.x) + (vec1.z) * (vec2.z))
-#define SQXYZ(vec) ((vec.x) * (vec.x) + (vec.y) * (vec.y) + (vec.z) * (vec.z))
+#define SQXYZ(vec) (((vec)->x) * ((vec)->x) + ((vec)->y) * ((vec)->y) + ((vec)->z) * ((vec)->z))
 #define DOTXYZ(vec1, vec2) ((vec1.x) * (vec2.x) + (vec1.y) * (vec2.y) + (vec1.z) * (vec2.z))
 
 #endif

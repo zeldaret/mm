@@ -852,7 +852,7 @@
     0x801B9E34:("D_801B9E34","UNK_TYPE2","",0x2),
     0x801B9E50:("sUpdateCameraDirection","UNK_TYPE4","",0x4),
     0x801B9E54:("sIsFalse","UNK_TYPE4","",0x4),
-    0x801B9E58:("D_801B9E58","UNK_TYPE4","",0x4),
+    0x801B9E58:("sCameraInitCounter","UNK_TYPE4","",0x4),
     0x801B9E5C:("D_801B9E5C","UNK_TYPE4","",0x4),
     0x801B9E60:("D_801B9E60","f32","",0x4),
     0x801B9E64:("D_801B9E64","UNK_TYPE1","",0x1),

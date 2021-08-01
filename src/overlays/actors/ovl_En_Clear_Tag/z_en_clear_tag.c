@@ -260,7 +260,7 @@ void EnClearTag_CreateLightRayEffect(EnClearTag* this, Vec3f* position, Vec3f* v
             effect->actionTimer = Rand_ZeroFloat(10.0f);
 
             effect->rotationY = Math_Acot2F(effect->velocity.z, effect->velocity.x);
-            effect->rotationX = -Math_Acot2F(sqrtf(SQXZ(effect->velocity)), effect->velocity.y);
+            effect->rotationX = -Math_Acot2F(sqrtf(SQXZ(&effect->velocity)), effect->velocity.y);
 
             effect->envColor.r = 255.0f;
             effect->envColor.g = 255.0f;
@@ -303,7 +303,7 @@ void EnClearTag_CreateIsolatedLightRayEffect(EnClearTag* this, Vec3f* position, 
             effect->actionTimer = Rand_ZeroFloat(10.0f);
 
             effect->rotationY = Math_Acot2F(effect->velocity.z, effect->velocity.x);
-            effect->rotationX = -Math_Acot2F(sqrtf(SQXZ(effect->velocity)), effect->velocity.y);
+            effect->rotationX = -Math_Acot2F(sqrtf(SQXZ(&effect->velocity)), effect->velocity.y);
 
             effect->envColor.r = sLightRayEnvColor[colorIndex].x;
             effect->envColor.g = sLightRayEnvColor[colorIndex].y;

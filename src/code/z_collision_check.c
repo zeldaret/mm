@@ -3947,31 +3947,31 @@ s32 CollisionCheck_CylSideVsLineSeg(f32 radius, f32 height, f32 offset, Vec3f* a
     itemStep.y = actorToItemProj.y - actorToItem.y;
     itemStep.z = actorToItemProj.z - actorToItem.z;
 
-    if ((actorToItem.y > 0.0f) && (actorToItem.y < height) && (sqrtf(SQXZ(actorToItem)) < radius)) {
+    if ((actorToItem.y > 0.0f) && (actorToItem.y < height) && (sqrtf(SQXZ(&actorToItem)) < radius)) {
         return 3;
     }
 
-    if ((actorToItemProj.y > 0.0f) && (actorToItemProj.y < height) && (sqrtf(SQXZ(actorToItemProj)) < radius)) {
+    if ((actorToItemProj.y > 0.0f) && (actorToItemProj.y < height) && (sqrtf(SQXZ(&actorToItemProj)) < radius)) {
         return 3;
     }
-    radSqDiff = SQXZ(actorToItem) - SQ(radius);
-    if (!IS_ZERO(SQXZ(itemStep))) {
+    radSqDiff = SQXZ(&actorToItem) - SQ(radius);
+    if (!IS_ZERO(SQXZ(&itemStep))) {
         actorDotItemXZ = DOTXZ(2.0f * itemStep, actorToItem);
-        if (SQ(actorDotItemXZ) < (4.0f * SQXZ(itemStep) * radSqDiff)) {
+        if (SQ(actorDotItemXZ) < (4.0f * SQXZ(&itemStep) * radSqDiff)) {
             return 0;
         }
-        if (SQ(actorDotItemXZ) - (4.0f * SQXZ(itemStep) * radSqDiff) > zero) {
+        if (SQ(actorDotItemXZ) - (4.0f * SQXZ(&itemStep) * radSqDiff) > zero) {
             intersect1 = intersect2 = 1;
         } else {
             intersect1 = 1;
             intersect2 = 0;
         }
-        closeDist = sqrtf(SQ(actorDotItemXZ) - (4.0f * SQXZ(itemStep) * radSqDiff));
+        closeDist = sqrtf(SQ(actorDotItemXZ) - (4.0f * SQXZ(&itemStep) * radSqDiff));
         if (intersect1 != 0) {
-            frac1 = (closeDist - actorDotItemXZ) / (2.0f * SQXZ(itemStep));
+            frac1 = (closeDist - actorDotItemXZ) / (2.0f * SQXZ(&itemStep));
         }
         if (intersect2 != 0) {
-            frac2 = (-actorDotItemXZ - closeDist) / (2.0f * SQXZ(itemStep));
+            frac2 = (-actorDotItemXZ - closeDist) / (2.0f * SQXZ(&itemStep));
         }
     } else if (!IS_ZERO(DOTXZ(2.0f * itemStep, actorToItem))) {
         intersect1 = 1;
