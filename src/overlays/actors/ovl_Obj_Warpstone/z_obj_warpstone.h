@@ -5,7 +5,9 @@
 
 struct ObjWarpstone;
 
-typedef s32 (*ObjWarpstoneActionFunc)(struct ObjWarpstone* this, GlobalContext* globalCtx);
+typedef void (*ObjWarpstoneActionFunc)(struct ObjWarpstone* this, GlobalContext* globalCtx);
+
+typedef s32 (*ObjWarpstoneUnkFunc)(struct ObjWarpstone* this, GlobalContext* globalCtx);
 
 typedef struct ObjWarpstone {
     /* 0x000 */ Actor actor;
@@ -14,7 +16,7 @@ typedef struct ObjWarpstone {
     /* 0x1A8 */ u8 unk1A8;
     /* 0x1A8 */ u8 unk1A9;
     /* 0x1AA */ u8 unk1AA;
-    /* 0x1AC */ ObjWarpstoneActionFunc actionFunc;
+    /* 0x1AC */ ObjWarpstoneUnkFunc unkFunc;
 } ObjWarpstone; // size = 0x1B0
 
 extern const ActorInit Obj_Warpstone_InitVars;

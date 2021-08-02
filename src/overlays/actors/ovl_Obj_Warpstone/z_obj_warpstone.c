@@ -8,9 +8,9 @@ void ObjWarpstone_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjWarpstone_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjWarpstone_Draw(Actor* thisx, GlobalContext* globalCtx);
-void func_80B92B10(Actor* thisx, GlobalContext* globalCtx);
-void func_80B92C00(Actor* thisx, s32 arg1);
-void func_80B92DC4(Actor* thisx, s32 arg1);
+void func_80B92B10(ObjWarpstone* this, ObjWarpstoneUnkFunc unkFunc);
+void func_80B92C00(ObjWarpstone* this, GlobalContext* globalCtx);
+void func_80B92DC4(ObjWarpstone* this, GlobalContext* globalCtx);
 
 extern Gfx D_04023210[];
 extern Gfx D_060001D0[];
@@ -44,9 +44,10 @@ static InitChainEntry D_80B9324C[] = {
 
 static Gfx* D_80B93250[] = {D_060001D0, D_06003770};
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Warpstone_0x80B92B10/func_80B92B10.asm")
 
-/*#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Warpstone_0x80B92B10/ObjWarpstone_Init.asm")*/
+void func_80B92B10(ObjWarpstone *this, ObjWarpstoneUnkFunc unkFunc) {
+    this->unkFunc = unkFunc;
+}
 
 void ObjWarpstone_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjWarpstone* this = THIS;
@@ -55,14 +56,12 @@ void ObjWarpstone_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80B93220);
     Actor_SetHeight(&this->actor, 40.0f);
     if (!IS_OWL_HIT(GET_OWL_ID(this))) {
-        func_80B92B10(&this->actor, func_80B92C00);
+        func_80B92B10(this, func_80B92C00);
     } else {
-        func_80B92B10(&this->actor, func_80B92DC4);
+        func_80B92B10(this, func_80B92DC4);
         this->unk1AA = 1;
     }
 }
-
-/*#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Warpstone_0x80B92B10/ObjWarpstone_Destroy.asm")*/
 
 void ObjWarpstone_Destroy(Actor* thisx, GlobalContext *globalCtx) {
     ObjWarpstone* this = THIS;
@@ -77,8 +76,6 @@ void ObjWarpstone_Destroy(Actor* thisx, GlobalContext *globalCtx) {
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Warpstone_0x80B92B10/func_80B92CD0.asm")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Warpstone_0x80B92B10/func_80B92DC4.asm")
-
-/*#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Warpstone_0x80B92B10/ObjWarpstone_Update.asm")*/
 
 void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx) {
     ObjWarpstone* this = THIS;
@@ -100,16 +97,14 @@ void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
     } else if (func_800B84D0(&this->actor, globalCtx)) {
         this->unk1A8 = 1;
-    } else if (!this->actionFunc(this, globalCtx)) {
+    } else if (!this->unkFunc(this,globalCtx)) {
         func_800B863C(&this->actor, globalCtx);
     }
     Collider_ResetCylinderAC(globalCtx, &this->collider.base);
-    Collider_UpdateCylinder(&this->actor, &this->collider.base);
+    Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
-
-/*#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Warpstone_0x80B92B10/ObjWarpstone_Draw.asm")*/
 
 void ObjWarpstone_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     ObjWarpstone* this = THIS;
