@@ -9,8 +9,9 @@ void ObjWarpstone_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjWarpstone_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_80B92B10(ObjWarpstone* this, ObjWarpstoneUnkFunc unkFunc);
-void func_80B92C00(ObjWarpstone* this, GlobalContext* globalCtx);
-void func_80B92DC4(ObjWarpstone* this, GlobalContext* globalCtx);
+s32 func_80B92C00(ObjWarpstone* this, GlobalContext* globalCtx);
+s32 func_80B92C48(ObjWarpstone* this, GlobalContext* globalCtx);
+s32 func_80B92DC4(ObjWarpstone* this, GlobalContext* globalCtx);
 
 extern Gfx D_04023210[];
 extern Gfx D_060001D0[];
@@ -69,7 +70,17 @@ void ObjWarpstone_Destroy(Actor* thisx, GlobalContext *globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Warpstone_0x80B92B10/func_80B92C00.asm")
+//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Warpstone_0x80B92B10/func_80B92C00.asm")
+
+s32 func_80B92C00(ObjWarpstone *this, GlobalContext *globalCtx) {
+    if (this->collider.base.acFlags & AC_HIT) {
+        func_80B92B10(this, func_80B92C48);
+	return 1;
+    } else {
+        this->actor.textId = 0xC00;
+	return 0;
+    }
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Warpstone_0x80B92B10/func_80B92C48.asm")
 
