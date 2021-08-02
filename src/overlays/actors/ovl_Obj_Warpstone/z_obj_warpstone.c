@@ -11,6 +11,7 @@ void ObjWarpstone_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_80B92B10(ObjWarpstone* this, ObjWarpstoneUnkFunc unkFunc);
 s32 func_80B92C00(ObjWarpstone* this, GlobalContext* globalCtx);
 s32 func_80B92C48(ObjWarpstone* this, GlobalContext* globalCtx);
+s32 func_80B92CD0(ObjWarpstone* this, GlobalContext* globalCtx);
 s32 func_80B92DC4(ObjWarpstone* this, GlobalContext* globalCtx);
 
 extern Gfx D_04023210[];
@@ -70,8 +71,6 @@ void ObjWarpstone_Destroy(Actor* thisx, GlobalContext *globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Warpstone_0x80B92B10/func_80B92C00.asm")
-
 s32 func_80B92C00(ObjWarpstone *this, GlobalContext *globalCtx) {
     if (this->collider.base.acFlags & AC_HIT) {
         func_80B92B10(this, func_80B92C48);
@@ -82,7 +81,16 @@ s32 func_80B92C00(ObjWarpstone *this, GlobalContext *globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Warpstone_0x80B92B10/func_80B92C48.asm")
+s32 func_80B92C48(ObjWarpstone *this, GlobalContext *globalCtx) {
+    if (this->actor.cutscene < 0 || ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
+        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+        func_80B92B10(this, func_80B92CD0);
+        Audio_PlayActorSound2(&this->actor, NA_SE_EV_OWL_WARP_SWITCH_ON);
+    } else {
+        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+    }
+    return 1;
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Warpstone_0x80B92B10/func_80B92CD0.asm")
 
