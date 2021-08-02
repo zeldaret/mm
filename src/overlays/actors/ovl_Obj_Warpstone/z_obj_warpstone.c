@@ -92,7 +92,23 @@ s32 func_80B92C48(ObjWarpstone *this, GlobalContext *globalCtx) {
     return 1;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Warpstone_0x80B92B10/func_80B92CD0.asm")
+s32 func_80B92CD0(ObjWarpstone *this, GlobalContext *globalCtx) {
+    if (this->unk1A9++ >= 0x42) {
+        ActorCutscene_Stop(this->actor.cutscene);
+        func_80143A10(GET_OWL_ID(this));
+        func_80B92B10(this, func_80B92DC4);
+    } else if (this->unk1A9 < 0x19) {
+        Math_StepToF(&this->actor.velocity, 0.01f, 0.001f);
+        Math_StepToS(&this->actor.home.rot, 0xFF, 0x12);
+    } else {
+        Math_StepToF(&this->actor.velocity, 20.0f, 0.01f);
+        if (this->actor.velocity.x > 0.2f) {
+            this->unk1AA = 1;
+            Math_StepToS(&this->actor.home.rot, 0, 0x14);
+        }
+    }
+    return 1;
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Warpstone_0x80B92B10/func_80B92DC4.asm")
 

@@ -2824,7 +2824,7 @@ void func_801434E4(GameState* gamestate, SkyboxContext* skyboxCtx, s16 skyType);
 // void func_80143624(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE1 param_7);
 // void func_80143668(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
 // void func_80143A04(void);
-// void func_80143A10(void);
+void func_80143A10(u8 owlId);
 // void func_80143A54(void);
 // void func_80143AC4(void);
 void func_80143B0C(GlobalContext* globalCtx);
