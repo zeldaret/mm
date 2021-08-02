@@ -110,7 +110,10 @@ s32 func_80B92CD0(ObjWarpstone *this, GlobalContext *globalCtx) {
     return 1;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Warpstone_0x80B92B10/func_80B92DC4.asm")
+s32 func_80B92DC4(ObjWarpstone *this, GlobalContext *globalCtx) {
+    this->actor.textId = 0xC01;
+    return 0;
+}
 
 void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx) {
     ObjWarpstone* this = THIS;
