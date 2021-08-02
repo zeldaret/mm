@@ -1414,7 +1414,7 @@ extern MtxF sMtxFClear;
 // extern UNK_TYPE1 D_801C5D20;
 // extern UNK_TYPE1 D_801C5D60;
 // extern UNK_TYPE1 D_801C5D80;
-// extern UNK_TYPE1 D_801C5DB0;
+extern Vec3f D_801C5DB0;
 // extern UNK_TYPE1 D_801C5DD0;
 // extern UNK_TYPE1 D_801C5DE0;
 // extern UNK_TYPE1 D_801C5DF0;
