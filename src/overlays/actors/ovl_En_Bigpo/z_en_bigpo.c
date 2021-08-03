@@ -1296,7 +1296,6 @@ void func_80B64470(Actor *thisx, GlobalContext *globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-// draw func: the scoopable soul
 void EnBigPo_DrawScoopSoul(Actor *thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*) thisx;
     s32 pad;
@@ -1332,6 +1331,7 @@ void EnBigPo_DrawScoopSoul(Actor *thisx, GlobalContext *globalCtx) {
 // draw func
 // set as poe is dying 
 // this matches without OPENDISPS but with it has stack issues, might be able to find an alternative match with the macros
+// oh I think this is drawing just the lantern, as the lantern is being drawn during death, and as normal
 void func_80B64880(Actor *thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*) thisx;
     f32 magnitude;
