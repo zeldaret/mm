@@ -168,7 +168,8 @@ void ObjWarpstone_Draw(Actor* thisx, GlobalContext* globalCtx2) {
                                     this->dyna.actor.world.pos.z, MTXMODE_NEW);
         SysMatrix_InsertMatrix(&globalCtx->mf_187FC, MTXMODE_APPLY);
         SysMatrix_InsertTranslation(0.0f, 0.0f, 30.0f, MTXMODE_APPLY);
-        Matrix_Scale(this->dyna.actor.velocity.x, this->dyna.actor.velocity.x, this->dyna.actor.velocity.x, MTXMODE_APPLY);
+        Matrix_Scale(this->dyna.actor.velocity.x, this->dyna.actor.velocity.x, this->dyna.actor.velocity.x,
+                     MTXMODE_APPLY);
         SysMatrix_StatePush();
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetPrimColor(POLY_XLU_DISP++, 128, 128, 255, 255, 200, this->dyna.actor.home.rot.x);
