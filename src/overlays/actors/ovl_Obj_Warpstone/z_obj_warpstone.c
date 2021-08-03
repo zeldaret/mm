@@ -84,11 +84,11 @@ void ObjWarpstone_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 s32 ObjWarpstone_ClosedIdle(ObjWarpstone* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & AC_HIT) {
         ObjWarpstone_SetupAction(this, ObjWarpstone_BeginOpeningCutscene);
-        return 1;
+        return true;
     } else {
         /*Ye who hold the sacred sword, leave proof of our encounter.*/
         this->dyna.actor.textId = 0xC00;
-        return 0;
+        return false;
     }
 }
 
@@ -100,7 +100,7 @@ s32 ObjWarpstone_BeginOpeningCutscene(ObjWarpstone* this, GlobalContext* globalC
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
     }
-    return 1;
+    return true;
 }
 
 s32 ObjWarpstone_PlayOpeningCutscene(ObjWarpstone* this, GlobalContext* globalCtx) {
@@ -118,13 +118,13 @@ s32 ObjWarpstone_PlayOpeningCutscene(ObjWarpstone* this, GlobalContext* globalCt
             Math_StepToS(&this->dyna.actor.home.rot.x, 0, 0x14);
         }
     }
-    return 1;
+    return true;
 }
 
 s32 ObjWarpstone_OpenedIdle(ObjWarpstone* this, GlobalContext* globalCtx) {
     /*You can save your progress and quit here.*/
     this->dyna.actor.textId = 0xC01;
-    return 0;
+    return false;
 }
 
 void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx) {
