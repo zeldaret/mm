@@ -7397,9 +7397,9 @@ SECTIONS
     ovl_Obj_Warpstone : AT(RomLocation)
     {
         build/src/overlays/actors/ovl_Obj_Warpstone/z_obj_warpstone.o(.text)
-        build/asm/overlays/ovl_Obj_Warpstone_data.o(.data)
+        build/src/overlays/actors/ovl_Obj_Warpstone/z_obj_warpstone.o(.data)
         build/src/overlays/actors/ovl_Obj_Warpstone/z_obj_warpstone.o(.rodata)
-        build/asm/overlays/ovl_Obj_Warpstone_rodata.o(.rodata)
+        build/src/overlays/actors/ovl_Obj_Warpstone/z_obj_warpstone_overlay.o(.ovl)
     }
     SegmentEnd = .;
     SegmentSize = SegmentEnd - SegmentStart;

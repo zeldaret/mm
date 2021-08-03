@@ -30,22 +30,17 @@ const ActorInit Obj_Warpstone_InitVars = {
     (ActorFunc)ObjWarpstone_Draw,
 };
 
-
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80B93220 = {
+static ColliderCylinderInit sCylinderInit = {
     { COLTYPE_METAL, AT_NONE, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK2, { 0x00100000, 0x00, 0x00 }, { 0x01000202, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
     { 20, 60, 0, { 0, 0, 0 } },
 };
 
-
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80B9324C[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 1, ICHAIN_STOP),
 };
 
 static Gfx* D_80B93250[] = {D_060001D0, D_06003770};
-
 
 void func_80B92B10(ObjWarpstone *this, ObjWarpstoneUnkFunc unkFunc) {
     this->unkFunc = unkFunc;
@@ -54,8 +49,8 @@ void func_80B92B10(ObjWarpstone *this, ObjWarpstoneUnkFunc unkFunc) {
 void ObjWarpstone_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjWarpstone* this = THIS;
 
-    Actor_ProcessInitChain(&this->actor, D_80B9324C);
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80B93220);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
+    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     Actor_SetHeight(&this->actor, 40.0f);
     if (!IS_OWL_HIT(GET_OWL_ID(this))) {
         func_80B92B10(this, func_80B92C00);
