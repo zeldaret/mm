@@ -46,15 +46,14 @@ void EnHoll_Init(Actor* thisx, GlobalContext* globalCtx) {
     func_808999B0(globalCtx, this, &pad[1]);
 }
 
-//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Holl_0x80899960/EnHoll_Destroy.asm")
-
 void EnHoll_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnHoll* this = THIS;
 
     if (this->type != 4) {
-	u32 transitionActorIndex = ((u16)this->actor.params) >> 0xA;
+        u32 transitionActorIndex = ((u16)this->actor.params) >> 0xA;
 
-        globalCtx->doorCtx.transitionActorList[transitionActorIndex].id = -globalCtx->doorCtx.transitionActorList[transitionActorIndex].id;
+        globalCtx->doorCtx.transitionActorList[transitionActorIndex].id =
+            -globalCtx->doorCtx.transitionActorList[transitionActorIndex].id;
         if (this == D_8089A5B8) {
             D_8089A5B8 = NULL;
         }
@@ -73,6 +72,15 @@ void EnHoll_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Holl_0x80899960/func_8089A330.asm")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Holl_0x80899960/EnHoll_Update.asm")
+//#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Holl_0x80899960/EnHoll_Update.asm")
+
+void EnHoll_Update(Actor* thisx, GlobalContext* globalCtx) {
+    EnHoll* this = THIS;
+    Player* player = PLAYER;
+
+    if ((globalCtx->sceneLoadFlag == 0) && (globalCtx->unk_18B4A == 0) && !(player->stateFlags1 & 0x200)) {
+        this->actionFunc(this, globalCtx);
+    }
+}
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Holl_0x80899960/EnHoll_Draw.asm")
