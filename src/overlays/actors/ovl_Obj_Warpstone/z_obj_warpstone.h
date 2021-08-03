@@ -5,23 +5,30 @@
 
 struct ObjWarpstone;
 
-typedef void (*ObjWarpstoneActionFunc)(struct ObjWarpstone* this, GlobalContext* globalCtx);
+typedef s32 (*ObjWarpstoneActionFunc)(struct ObjWarpstone* this, GlobalContext* globalCtx);
 
-typedef s32 (*ObjWarpstoneUnkFunc)(struct ObjWarpstone* this, GlobalContext* globalCtx);
+typedef enum {
+    /* 0 */ SEK_MODEL_CLOSED,
+    /* 1 */ SEK_MODEL_OPENED
+} ObjectSekModels;
+
+typedef enum {
+    /* 25 */ OBJ_WARPSTONE_TIMER_OPENED = 25,
+    /* 66 */ OBJ_WARPSTONE_TIMER_DONE = 66
+} ObjWarpstoneTimerCutoffs;
 
 typedef struct ObjWarpstone {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk144[0x18];
+    /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ ColliderCylinder collider; 
-    /* 0x1A8 */ u8 unk1A8;
-    /* 0x1A8 */ u8 unk1A9;
-    /* 0x1AA */ u8 unk1AA;
-    /* 0x1AC */ ObjWarpstoneUnkFunc unkFunc;
+    /* 0x1A8 */ u8 isTalking;
+    /* 0x1A9 */ u8 timer /*for statue opening cutscene*/;
+    /* 0x1AA */ u8 modelIndex;
+    /* 0x1AC */ ObjWarpstoneActionFunc actionFunc;
 } ObjWarpstone; // size = 0x1B0
 
 extern const ActorInit Obj_Warpstone_InitVars;
 
-#define GET_OWL_ID(this) ((u16)(this->actor.params & 0xF))
+#define GET_OWL_ID(this) ((u16)(this->dyna.actor.params & 0xF))
 #define IS_OWL_HIT(owlId) (((void)0,gSaveContext.owlsHit) & (u16)gBitFlags[owlId])
 
 #endif // Z_OBJ_WARPSTONE_H

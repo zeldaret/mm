@@ -8,15 +8,15 @@ void ObjWarpstone_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjWarpstone_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjWarpstone_Draw(Actor* thisx, GlobalContext* globalCtx);
-void func_80B92B10(ObjWarpstone* this, ObjWarpstoneUnkFunc unkFunc);
-s32 func_80B92C00(ObjWarpstone* this, GlobalContext* globalCtx);
-s32 func_80B92C48(ObjWarpstone* this, GlobalContext* globalCtx);
-s32 func_80B92CD0(ObjWarpstone* this, GlobalContext* globalCtx);
-s32 func_80B92DC4(ObjWarpstone* this, GlobalContext* globalCtx);
+void ObjWarpstone_SetupAction(ObjWarpstone* this, ObjWarpstoneActionFunc actionFunc);
+s32 ObjWarpstone_ClosedIdle(ObjWarpstone* this, GlobalContext* globalCtx);
+s32 ObjWarpstone_BeginOpeningCutscene(ObjWarpstone* this, GlobalContext* globalCtx);
+s32 ObjWarpstone_PlayOpeningCutscene(ObjWarpstone* this, GlobalContext* globalCtx);
+s32 ObjWarpstone_OpenedIdle(ObjWarpstone* this, GlobalContext* globalCtx);
 
-extern Gfx D_04023210[];
-extern Gfx D_060001D0[];
-extern Gfx D_06003770[];
+extern Gfx D_04023210[] /*gOwlStatueWhiteFlashDL*/;
+extern Gfx D_060001D0[] /*gOwlStatueClosedDL*/;
+extern Gfx D_06003770[] /*gOwlStatueOpenedDL*/;
 
 const ActorInit Obj_Warpstone_InitVars = {
     ACTOR_OBJ_WARPSTONE,
@@ -31,8 +31,22 @@ const ActorInit Obj_Warpstone_InitVars = {
 };
 
 static ColliderCylinderInit sCylinderInit = {
-    { COLTYPE_METAL, AT_NONE, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK2, { 0x00100000, 0x00, 0x00 }, { 0x01000202, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
+    {
+        COLTYPE_METAL,
+        AT_NONE,
+        AC_ON | AC_HARD | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_2,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK2,
+        { 0x00100000, 0x00, 0x00 },
+        { 0x01000202, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON | BUMP_HOOKABLE,
+        OCELEM_ON,
+    },
     { 20, 60, 0, { 0, 0, 0 } },
 };
 
@@ -40,73 +54,76 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 1, ICHAIN_STOP),
 };
 
-static Gfx* D_80B93250[] = {D_060001D0, D_06003770};
+static Gfx* sOwlStatueDLs[] = { D_060001D0, D_06003770 };
 
-void func_80B92B10(ObjWarpstone *this, ObjWarpstoneUnkFunc unkFunc) {
-    this->unkFunc = unkFunc;
+void ObjWarpstone_SetupAction(ObjWarpstone* this, ObjWarpstoneActionFunc actionFunc) {
+    this->actionFunc = actionFunc;
 }
 
 void ObjWarpstone_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjWarpstone* this = THIS;
 
-    Actor_ProcessInitChain(&this->actor, sInitChain);
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    Actor_SetHeight(&this->actor, 40.0f);
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
+    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
+    Actor_SetHeight(&this->dyna.actor, 40.0f);
+
     if (!IS_OWL_HIT(GET_OWL_ID(this))) {
-        func_80B92B10(this, func_80B92C00);
+        ObjWarpstone_SetupAction(this, ObjWarpstone_ClosedIdle);
     } else {
-        func_80B92B10(this, func_80B92DC4);
-        this->unk1AA = 1;
+        ObjWarpstone_SetupAction(this, ObjWarpstone_OpenedIdle);
+        this->modelIndex = SEK_MODEL_OPENED;
     }
 }
 
-void ObjWarpstone_Destroy(Actor* thisx, GlobalContext *globalCtx) {
+void ObjWarpstone_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjWarpstone* this = THIS;
 
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-s32 func_80B92C00(ObjWarpstone *this, GlobalContext *globalCtx) {
+s32 ObjWarpstone_ClosedIdle(ObjWarpstone* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & AC_HIT) {
-        func_80B92B10(this, func_80B92C48);
-	return 1;
+        ObjWarpstone_SetupAction(this, ObjWarpstone_BeginOpeningCutscene);
+        return 1;
     } else {
-        this->actor.textId = 0xC00;
-	return 0;
+        /*Ye who hold the sacred sword, leave proof of our encounter.*/
+        this->dyna.actor.textId = 0xC00;
+        return 0;
     }
 }
 
-s32 func_80B92C48(ObjWarpstone *this, GlobalContext *globalCtx) {
-    if (this->actor.cutscene < 0 || ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
-        func_80B92B10(this, func_80B92CD0);
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_OWL_WARP_SWITCH_ON);
+s32 ObjWarpstone_BeginOpeningCutscene(ObjWarpstone* this, GlobalContext* globalCtx) {
+    if (this->dyna.actor.cutscene < 0 || ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
+        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+        ObjWarpstone_SetupAction(this, ObjWarpstone_PlayOpeningCutscene);
+        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_OWL_WARP_SWITCH_ON);
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
     }
     return 1;
 }
 
-s32 func_80B92CD0(ObjWarpstone *this, GlobalContext *globalCtx) {
-    if (this->unk1A9++ >= 0x42) {
-        ActorCutscene_Stop(this->actor.cutscene);
+s32 ObjWarpstone_PlayOpeningCutscene(ObjWarpstone* this, GlobalContext* globalCtx) {
+    if (this->timer++ >= OBJ_WARPSTONE_TIMER_DONE) {
+        ActorCutscene_Stop(this->dyna.actor.cutscene);
         func_80143A10(GET_OWL_ID(this));
-        func_80B92B10(this, func_80B92DC4);
-    } else if (this->unk1A9 < 0x19) {
-        Math_StepToF(&this->actor.velocity, 0.01f, 0.001f);
-        Math_StepToS(&this->actor.home.rot, 0xFF, 0x12);
+        ObjWarpstone_SetupAction(this, ObjWarpstone_OpenedIdle);
+    } else if (this->timer < OBJ_WARPSTONE_TIMER_OPENED) {
+        Math_StepToF(&this->dyna.actor.velocity.x, 0.01f, 0.001f);
+        Math_StepToS(&this->dyna.actor.home.rot.x, 0xFF, 0x12);
     } else {
-        Math_StepToF(&this->actor.velocity, 20.0f, 0.01f);
-        if (this->actor.velocity.x > 0.2f) {
-            this->unk1AA = 1;
-            Math_StepToS(&this->actor.home.rot, 0, 0x14);
+        Math_StepToF(&this->dyna.actor.velocity.x, 20.0f, 0.01f);
+        if (this->dyna.actor.velocity.x > 0.2f) {
+            this->modelIndex = SEK_MODEL_OPENED;
+            Math_StepToS(&this->dyna.actor.home.rot.x, 0, 0x14);
         }
     }
     return 1;
 }
 
-s32 func_80B92DC4(ObjWarpstone *this, GlobalContext *globalCtx) {
-    this->actor.textId = 0xC01;
+s32 ObjWarpstone_OpenedIdle(ObjWarpstone* this, GlobalContext* globalCtx) {
+    /*You can save your progress and quit here.*/
+    this->dyna.actor.textId = 0xC01;
     return 0;
 }
 
@@ -114,9 +131,9 @@ void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx) {
     ObjWarpstone* this = THIS;
     s32 pad;
 
-    if (this->unk1A8 != 0) {
-        if (func_800B867C(&this->actor, globalCtx) != 0) {
-            this->unk1A8 = 0;
+    if (this->isTalking) {
+        if (func_800B867C(&this->dyna.actor, globalCtx) != 0) {
+            this->isTalking = false;
         } else if ((func_80152498(&globalCtx->msgCtx) == 4) && (func_80147624(globalCtx))) {
             if (globalCtx->msgCtx.choiceIndex != 0) {
                 func_8019F208();
@@ -128,13 +145,13 @@ void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx) {
                 func_801477B4(globalCtx);
             }
         }
-    } else if (func_800B84D0(&this->actor, globalCtx)) {
-        this->unk1A8 = 1;
-    } else if (!this->unkFunc(this,globalCtx)) {
-        func_800B863C(&this->actor, globalCtx);
+    } else if (func_800B84D0(&this->dyna.actor, globalCtx)) {
+        this->isTalking = true;
+    } else if (!this->actionFunc(this, globalCtx)) {
+        func_800B863C(&this->dyna.actor, globalCtx);
     }
     Collider_ResetCylinderAC(globalCtx, &this->collider.base);
-    Collider_UpdateCylinder(&this->actor, &this->collider);
+    Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
@@ -143,25 +160,26 @@ void ObjWarpstone_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     ObjWarpstone* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
 
-    func_800BDFC0(globalCtx, D_80B93250[this->unk1AA]);
-    if (this->actor.home.rot.x != 0) {
-	OPEN_DISPS(globalCtx->state.gfxCtx);
+    func_800BDFC0(globalCtx, sOwlStatueDLs[this->modelIndex]);
+    if (this->dyna.actor.home.rot.x != 0) {
+        OPEN_DISPS(globalCtx->state.gfxCtx);
         func_8012C2DC(globalCtx->state.gfxCtx);
-        SysMatrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y + 34.0f, this->actor.world.pos.z, 0);
+        SysMatrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + 34.0f,
+                                    this->dyna.actor.world.pos.z, 0);
         SysMatrix_InsertMatrix(&globalCtx->mf_187FC, 1);
         SysMatrix_InsertTranslation(0.0f, 0.0f, 30.0f, 1);
-        Matrix_Scale(this->actor.velocity.x, this->actor.velocity.x, this->actor.velocity.x, 1);
+        Matrix_Scale(this->dyna.actor.velocity.x, this->dyna.actor.velocity.x, this->dyna.actor.velocity.x, 1);
         SysMatrix_StatePush();
-	gDPPipeSync(POLY_XLU_DISP++);
-	gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 0xFF, 0xFF, 0xC8, this->actor.home.rot.x);
-	gDPSetEnvColor(POLY_XLU_DISP++, 0x64, 0xC8, 0x00, 0xFF);
+        gDPPipeSync(POLY_XLU_DISP++);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 0xFF, 0xFF, 0xC8, this->dyna.actor.home.rot.x);
+        gDPSetEnvColor(POLY_XLU_DISP++, 0x64, 0xC8, 0x00, 0xFF);
         SysMatrix_InsertZRotation_f((((globalCtx->gameplayFrames * 1500) & 0xFFFF) * M_PI) / 32768.0f, 1);
-	gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-	gSPDisplayList(POLY_XLU_DISP++, D_04023210);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_XLU_DISP++, D_04023210);
         SysMatrix_StatePop();
         SysMatrix_InsertZRotation_f((~((globalCtx->gameplayFrames * 1200) & 0xFFFF) * M_PI) / 32768.0f, 1);
-	gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-	gSPDisplayList(POLY_XLU_DISP++, D_04023210);
-	CLOSE_DISPS(globalCtx->state.gfxCtx);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_XLU_DISP++, D_04023210);
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }
