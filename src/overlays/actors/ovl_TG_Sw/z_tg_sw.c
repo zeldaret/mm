@@ -107,11 +107,11 @@ void TGSw_Draw(Actor* thisx, GlobalContext* globalCtx) {
         absRot = ABS_ALT(thisx->world.rot.y);
 
         DebugDisplay_AddObject(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, 0, thisx->shape.rot.y, 0,
-                               0.1f, 0.1f, scale, 0xA0, 0xA0, 0xA0, 0xFF, 6, globalCtx->state.gfxCtx);
+                               0.1f, 0.1f, scale, 160, 160, 160, 255, 6, globalCtx->state.gfxCtx);
 
         scale = absRot * 0.2f;
         DebugDisplay_AddObject(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, 0, 0, 0, 0.1f, scale, 0.1f,
-                               0xA0, 0xA0, 0xA0, 0xFF, 6, globalCtx->state.gfxCtx);
+                               160, 160, 160, 255, 6, globalCtx->state.gfxCtx);
         thisx->shape.rot.y += 0x1000;
     }
 }
