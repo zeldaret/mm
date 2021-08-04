@@ -39,7 +39,7 @@ static InitChainEntry D_8098EE8C[] = {
     ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
 };
 
-extern UNK_TYPE D_06000960;
+extern Gfx D_06000960;
 extern CollisionHeader D_06000B70;
 extern UNK_TYPE D_06001040;
 
@@ -138,4 +138,6 @@ void ObjKibako2_Update(Actor *thisx, GlobalContext *globalCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/ObjKibako2_Update.s")
 #endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/ObjKibako2_Draw.s")
+void ObjKibako2_Draw(Actor *thisx, GlobalContext *globalCtx) {
+    func_800BDFC0(globalCtx, &D_06000960);
+}
