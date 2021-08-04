@@ -61,16 +61,15 @@ extern AnimationHeader D_06009100;
 extern AnimationHeader D_060051E4;
 extern AnimationHeader D_06005E20;
 extern AnimationHeader D_06006F84;
-extern Gfx D_0407D590[];
 
 static struct_80B8E1A8 D_80A739A0[] = {
-    { &D_06000470, 1.0f, 0x02, 0.0f }, { &D_060008F0, 1.0f, 0x02, 0.0f }, { &D_06000F6C, 1.0f, 0x00, 0.0f },
-    { &D_06001A50, 1.0f, 0x02, 0.0f }, { &D_06002530, 1.0f, 0x02, 0.0f }, { &D_06003320, 1.0f, 0x02, 0.0f },
-    { &D_060036D0, 1.0f, 0x00, 0.0f }, { &D_060041CC, 1.0f, 0x02, 0.0f }, { &D_06004DD8, 1.0f, 0x02, 0.0f },
-    { &D_06005F98, 1.0f, 0x00, 0.0f }, { &D_06006488, 1.0f, 0x02, 0.0f }, { &D_060073E4, 1.0f, 0x00, 0.0f },
-    { &D_060077A8, 1.0f, 0x00, 0.0f }, { &D_06007CA4, 1.0f, 0x00, 0.0f }, { &D_06008324, 1.0f, 0x00, 0.0f },
-    { &D_06008AE4, 1.0f, 0x02, 0.0f }, { &D_06009100, 1.0f, 0x02, 0.0f }, { &D_060051E4, 1.0f, 0x02, 0.0f },
-    { &D_06005E20, 1.0f, 0x00, 0.0f }, { &D_06006F84, 1.0f, 0x00, 0.0f },
+    { &D_06000470, 1.0f, 2, 0.0f }, { &D_060008F0, 1.0f, 2, 0.0f }, { &D_06000F6C, 1.0f, 0, 0.0f },
+    { &D_06001A50, 1.0f, 2, 0.0f }, { &D_06002530, 1.0f, 2, 0.0f }, { &D_06003320, 1.0f, 2, 0.0f },
+    { &D_060036D0, 1.0f, 0, 0.0f }, { &D_060041CC, 1.0f, 2, 0.0f }, { &D_06004DD8, 1.0f, 2, 0.0f },
+    { &D_06005F98, 1.0f, 0, 0.0f }, { &D_06006488, 1.0f, 2, 0.0f }, { &D_060073E4, 1.0f, 0, 0.0f },
+    { &D_060077A8, 1.0f, 0, 0.0f }, { &D_06007CA4, 1.0f, 0, 0.0f }, { &D_06008324, 1.0f, 0, 0.0f },
+    { &D_06008AE4, 1.0f, 2, 0.0f }, { &D_06009100, 1.0f, 2, 0.0f }, { &D_060051E4, 1.0f, 2, 0.0f },
+    { &D_06005E20, 1.0f, 0, 0.0f }, { &D_06006F84, 1.0f, 0, 0.0f },
 };
 
 const ActorInit En_Dno_InitVars = {
@@ -113,10 +112,10 @@ static InitChainEntry sInitChain[] = {
 };
 
 void func_80A711D0(EnDno* this, GlobalContext* globalCtx, Vec3f* vec) {
-    f32 temp_f2 = Rand_ZeroOne() * 0.5f;
+    f32 rand = Rand_ZeroOne() * 0.5f;
 
-    Lights_PointGlowSetInfo(&this->lightInfo, vec->x, vec->y, vec->z, (127.5f * temp_f2) + 127.5f,
-                            (100.0f * temp_f2) + 100.0f, (40.0f * temp_f2) + 40.0f, 320);
+    Lights_PointGlowSetInfo(&this->lightInfo, vec->x, vec->y, vec->z, (127.5f * rand) + 127.5f,
+                            (100.0f * rand) + 100.0f, (40.0f * rand) + 40.0f, 320);
 }
 
 s32 func_80A71424(s16* arg0, s16 arg1, s16 yawToPlayer, s16 rotY, s16 arg4, s16 arg5) {
@@ -148,19 +147,11 @@ void func_80A714B4(EnDno* this, GlobalContext* globalCtx) {
 
 // Unused?
 void func_80A7153C(EnDno* this, Vec3f* arg1, Vec3f* arg2) {
-    f32 sp1C;
-    f32 sp18;
-    f32 temp_f12;
-    f32 temp_f2;
-    f32 temp_f8;
-
-    sp1C = Math_CosS(this->actor.home.rot.y);
-    sp18 = Math_SinS(this->actor.home.rot.y);
-
-    temp_f2 = arg2->x - this->actor.home.pos.x;
-    temp_f12 = arg2->z - this->actor.home.pos.z;
-
-    temp_f8 = temp_f2 * sp18;
+    f32 sp1C = Math_CosS(this->actor.home.rot.y);
+    f32 sp18 = Math_SinS(this->actor.home.rot.y);
+    f32 temp_f2 = arg2->x - this->actor.home.pos.x;
+    f32 temp_f12 = arg2->z - this->actor.home.pos.z;
+    f32 temp_f8 = temp_f2 * sp18;
 
     arg1->x = (temp_f2 * sp1C) - (temp_f12 * sp18);
     arg1->z = (temp_f12 * sp1C) + temp_f8;
@@ -175,7 +166,8 @@ void func_80A715DC(EnDno* this, GlobalContext* globalCtx) {
     Vec3f sp70;
 
     do {
-        crace = (BgCraceMovebg*)func_ActorCategoryIterateById(globalCtx, &crace->actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
+        crace =
+            (BgCraceMovebg*)func_ActorCategoryIterateById(globalCtx, &crace->actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
         if (crace != NULL) {
             if (ENDNO_PARAMS_F(&crace->actor) == ENDNO_PARAMS_F_0 && !(crace->unk_170 & 1)) {
                 if (func_8013E5CC(&crace->actor.home.pos, &crace->actor.home.rot, &D_80A73B2C, &this->actor.prevPos,
@@ -334,19 +326,19 @@ void func_80A71C3C(EnDno* this, GlobalContext* globalCtx) {
             }
 
         case 6:
-            Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_YawBetweenActors(&this->actor, this->unk_460), 2, 3640,
-                               546);
+            Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_YawBetweenActors(&this->actor, this->unk_460), 2, 0xE38,
+                               0x222);
             break;
     }
 
     if ((this->unk_32C == 13) && (this->actor.xzDistToPlayer <= 120.0f)) {
-        func_80A71424(&this->unk_466, 0, this->actor.yawTowardsPlayer, this->actor.shape.rot.y, 8192, 364);
+        func_80A71424(&this->unk_466, 0, this->actor.yawTowardsPlayer, this->actor.shape.rot.y, 0x2000, 0x16C);
     } else {
-        Math_ScaledStepToS(&this->unk_466, 0, 364);
+        Math_ScaledStepToS(&this->unk_466, 0, 0x16C);
     }
 
     if ((this->unk_32C != 3) && (this->unk_32C != 15) && (this->unk_32C != 6)) {
-        Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 546);
+        Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 0x222);
     }
 
     if (func_800B84D0(&this->actor, globalCtx)) {
@@ -383,11 +375,11 @@ void func_80A71E54(EnDno* this, GlobalContext* globalCtx) {
 }
 
 void func_80A71F18(EnDno* this, GlobalContext* globalCtx) {
-    Math_ScaledStepToS(&this->unk_466, 0, 364);
+    Math_ScaledStepToS(&this->unk_466, 0, 0x16C);
     switch (func_80152498(&globalCtx->msgCtx)) {
         case 0:
             if (!(this->unk_3B0 & 0x10) ||
-                Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3640)) {
+                Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xE38)) {
                 switch (this->unk_464) {
                     case 0x80B:
                         func_8013E1C8(&this->skelAnime, D_80A739A0, 16, &this->unk_32C);
@@ -429,7 +421,6 @@ void func_80A71F18(EnDno* this, GlobalContext* globalCtx) {
                         }
                         break;
                 }
-                break;
             }
             break;
 
@@ -437,7 +428,7 @@ void func_80A71F18(EnDno* this, GlobalContext* globalCtx) {
         case 5:
         case 6:
             switch (globalCtx->msgCtx.unk11F04) {
-                case 2059:
+                case 0x80B:
                     switch (this->unk_32C) {
                         case 16:
                             if (this->skelAnime.animCurrentFrame == this->skelAnime.animFrameCount) {
@@ -462,19 +453,19 @@ void func_80A71F18(EnDno* this, GlobalContext* globalCtx) {
                     }
                     break;
 
-                case 2060:
+                case 0x80C:
                     if (func_80147624(globalCtx)) {
                         func_80151938(globalCtx, 0x80D);
                     }
                     break;
 
-                case 2061:
+                case 0x80D:
                     if (func_80147624(globalCtx)) {
                         func_80151938(globalCtx, 0x80E);
                     }
                     break;
 
-                case 2062:
+                case 0x80E:
                     if (this->unk_32C == 11) {
                         func_8013E1C8(&this->skelAnime, D_80A739A0, 3, &this->unk_32C);
                     } else if (this->unk_32C == 3) {
@@ -487,18 +478,18 @@ void func_80A71F18(EnDno* this, GlobalContext* globalCtx) {
                     }
                     break;
 
-                case 2063:
+                case 0x80F:
                     if (func_80147624(globalCtx)) {
                         func_80151938(globalCtx, 0x810);
                     }
                     break;
 
-                case 2064:
+                case 0x810:
                     if (func_80147624(globalCtx)) {
                         this->unk_3B0 |= 0x20;
                         func_801477B4(globalCtx);
                         func_80A71B68(this, globalCtx);
-                        return;
+                        break;
                     }
 
                     switch (this->unk_32C) {
@@ -514,7 +505,7 @@ void func_80A71F18(EnDno* this, GlobalContext* globalCtx) {
                     }
                     break;
 
-                case 2065:
+                case 0x811:
                     if (func_80147624(globalCtx)) {
                         func_801477B4(globalCtx);
                         func_80A71B68(this, globalCtx);
@@ -537,8 +528,9 @@ void func_80A72438(EnDno* this, GlobalContext* globalCtx) {
 
 void func_80A724B8(EnDno* this, GlobalContext* globalCtx) {
     if (this->actor.xzDistToPlayer < 120.0f) {
-        func_80A71424(&this->unk_466, 0, this->actor.yawTowardsPlayer, this->actor.home.rot.y, 8192, 728);
+        func_80A71424(&this->unk_466, 0, this->actor.yawTowardsPlayer, this->actor.home.rot.y, 0x2000, 0x2D8);
     }
+
     if (func_800B84D0(&this->actor, globalCtx)) {
         func_80A725E0(this, globalCtx);
     } else if (this->actor.xzDistToPlayer < 60.0f) {
@@ -565,13 +557,13 @@ void func_80A725E0(EnDno* this, GlobalContext* globalCtx) {
 void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
     s32 pad[2];
 
-    func_80A71424(&this->unk_466, 0, 0, 0, 8192, 364);
+    func_80A71424(&this->unk_466, 0, 0, 0, 0x2000, 0x16C);
     switch (func_80152498(&globalCtx->msgCtx)) {
         case 0:
             switch (this->unk_328) {
                 case 0:
                     if (this->unk_32C == 14) {
-                        if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 728)) {
+                        if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x2D8)) {
                             func_8013E1C8(&this->skelAnime, D_80A739A0, 5, &this->unk_32C);
                         }
                     } else if ((this->unk_32C == 5) &&
@@ -584,12 +576,11 @@ void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
                             func_801518B0(globalCtx, 0x800, &this->actor);
                         }
                         func_8013E1C8(&this->skelAnime, D_80A739A0, 14, &this->unk_32C);
-                        break;
                     }
                     break;
 
                 case 2:
-                    if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 728)) {
+                    if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x2D8)) {
                         gSaveContext.weekEventReg[93] |= 2;
                         func_801518B0(globalCtx, 0x802, &this->actor);
                     }
@@ -617,6 +608,7 @@ void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
                 } else if (this->skelAnime.animCurrentFrame >= 25.0f) {
                     this->unk_452 = 2;
                 }
+
                 if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
                     func_8013E1C8(&this->skelAnime, D_80A739A0, 12, &this->unk_32C);
                     func_801518B0(globalCtx, 0x803, &this->actor);
@@ -628,8 +620,8 @@ void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
         case 5:
         case 6:
             switch (globalCtx->msgCtx.unk11F04) {
-                case 2048:
-                case 2049:
+                case 0x800:
+                case 0x801:
                     if (func_80147624(globalCtx)) {
                         globalCtx->msgCtx.unk11F22 = 0x44;
                         this->unk_452 = 1;
@@ -638,7 +630,7 @@ void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
                     }
                     break;
 
-                case 2050:
+                case 0x802:
                     if (func_80147624(globalCtx)) {
                         if (gSaveContext.inventory.items[D_801C20C0] == ITEM_MASK_SCENTS) {
                             this->unk_458 = 4;
@@ -651,13 +643,13 @@ void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
                     }
                     break;
 
-                case 2051:
+                case 0x803:
                     if (func_80147624(globalCtx)) {
                         func_80A72AE4(this, globalCtx);
                     }
                     break;
 
-                case 2052:
+                case 0x804:
                     if (this->unk_32C == 14) {
                         if (func_80147624(globalCtx)) {
                             func_8013E1C8(&this->skelAnime, D_80A739A0, 5, &this->unk_32C);
@@ -673,7 +665,7 @@ void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
                     }
                     break;
 
-                case 2054:
+                case 0x806:
                     if (func_80147624(globalCtx)) {
                         func_80151938(globalCtx, 0x800);
                     }
@@ -716,8 +708,8 @@ void func_80A72BA4(EnDno* this, GlobalContext* globalCtx) {
 
 void func_80A72C04(EnDno* this, GlobalContext* globalCtx) {
     func_8013E1C8(&this->skelAnime, D_80A739A0, 0, &this->unk_32C);
-    this->actor.flags |= 0x08000000;
-    this->actor.flags &= ~9;
+    this->actor.flags |= 0x8000000;
+    this->actor.flags &= ~(8 | 1);
     Math_Vec3f_Copy(&this->unk_334, &this->actor.world.pos);
     func_8013DCE0(globalCtx, &this->unk_334, &this->actor, &this->unk_340, globalCtx->setupPathList,
                   ENDNO_PARAMS_7F(&this->actor), 1, 0, 1, 0);
@@ -737,7 +729,7 @@ void func_80A72CF8(EnDno* this, GlobalContext* globalCtx) {
 s32 func_80A72D8C(GlobalContext* globalCtx, ActorUnkStruct* arg1) {
     Actor* actor = arg1->unk_48;
     s32 pad;
-    s32 sp3C = 0;
+    s32 ret = false;
     f32 sp38;
     s16 temp_v0;
     s32 temp_v0_2;
@@ -758,30 +750,27 @@ s32 func_80A72D8C(GlobalContext* globalCtx, ActorUnkStruct* arg1) {
     }
 
     if (arg1->unk_50 < SQ(actor->speedXZ)) {
-        sp3C = 1;
+        ret = true;
     } else {
         sp38 = actor->speedXZ / sqrtf(arg1->unk_4C);
         sp2C = ABS(arg1->unk_54 - actor->world.rot.x);
         temp_v0_2 = sp2C;
         temp_v0_2 *= sp38;
-        temp_v0_2 += 1820;
+        temp_v0_2 += 0x71C;
         sp2C = ABS(arg1->unk_56 - actor->world.rot.y);
 
         Math_ScaledStepToS(&actor->world.rot.x, arg1->unk_54, temp_v0_2);
-        Math_ScaledStepToS(&actor->world.rot.y, arg1->unk_56, (s32)(sp2C * sp38) + 1820);
+        Math_ScaledStepToS(&actor->world.rot.y, arg1->unk_56, (s32)(sp2C * sp38) + 0x71C);
     }
 
-    return sp3C;
+    return ret;
 }
 
 s32 func_80A72FAC(GlobalContext* globalCtx, ActorUnkStruct* arg1) {
     Actor* actor = arg1->unk_48;
     EnDno* dno = (EnDno*)actor;
-    f32 sp24;
-    f32 sp20;
-
-    sp24 = Math_CosS(-actor->world.rot.x) * actor->speedXZ;
-    sp20 = gFramerateDivisorHalf;
+    f32 sp24 = Math_CosS(-actor->world.rot.x) * actor->speedXZ;
+    f32 sp20 = gFramerateDivisorHalf;
 
     actor->velocity.x = Math_SinS(actor->world.rot.y) * sp24;
     actor->velocity.y = Math_SinS(-actor->world.rot.x) * actor->speedXZ;
@@ -843,8 +832,8 @@ void func_80A730A0(EnDno* this, GlobalContext* globalCtx) {
 }
 
 void func_80A73244(EnDno* this, GlobalContext* globalCtx) {
-    this->actor.flags &= ~0x08000000;
-    this->actor.flags |= 9;
+    this->actor.flags &= ~0x8000000;
+    this->actor.flags |= (8 | 1);
     this->unk_328 = 2;
     this->actor.speedXZ = 0.0f;
     Actor_UnsetSwitchFlag(globalCtx, ENDNO_PARAMS_3F80(&this->actor));
@@ -857,7 +846,7 @@ void func_80A732C8(EnDno* this, GlobalContext* globalCtx) {
     s32 pad;
 
     if (this->unk_44E == 0) {
-        if (Math_ScaledStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1820)) {
+        if (Math_ScaledStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0x71C)) {
             this->unk_3B0 |= 4;
             this->unk_44E = 3;
             func_8013E1C8(&this->skelAnime, D_80A739A0, 7, &this->unk_32C);
@@ -870,6 +859,7 @@ void func_80A732C8(EnDno* this, GlobalContext* globalCtx) {
             if (this->skelAnime.animCurrentFrame >= 20.0f) {
                 Math_SmoothStepToF(&this->unk_454, 0.0f, 1.0f, 0.125f, 0.01f);
             }
+
             if (func_801378B8(&this->skelAnime, 4.0f)) {
                 Audio_PlayActorSound2(&this->actor, NA_SE_EV_CLOSE_AMBRELLA);
                 this->unk_452 = 4;
@@ -912,7 +902,7 @@ void func_80A73408(EnDno* this, GlobalContext* globalCtx) {
     }
 
     if ((func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) && (this->unk_32C == 17)) {
-    label:
+        if (0) {};
         func_8013E1C8(&this->skelAnime, D_80A739A0, 18, &this->unk_32C);
     }
 }
