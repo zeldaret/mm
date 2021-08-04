@@ -9,8 +9,8 @@ void ObjKibako2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjKibako2_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjKibako2_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_8098EC68(ObjKibako2* this, GlobalContext* globalCtx);
-void func_8098ED20(ObjKibako2 *this, GlobalContext* globalCtx);
-s32 func_8098EB78(ObjKibako2 *);
+void func_8098ED20(ObjKibako2* this, GlobalContext* globalCtx);
+s32 func_8098EB78(ObjKibako2* this);
 
 const ActorInit Obj_Kibako2_InitVars = {
     ACTOR_OBJ_KIBAKO2,
@@ -102,7 +102,7 @@ void func_8098E9C4(ObjKibako2* this, GlobalContext* globalCtx) {
     }
 }
 
-void ObjKibako2_Init(Actor *thisx, GlobalContext *globalCtx) {
+void ObjKibako2_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjKibako2* this = THIS;
     s16 tempParams;
     s32 sp24;
@@ -132,16 +132,41 @@ void ObjKibako2_Init(Actor *thisx, GlobalContext *globalCtx) {
     this->actionFunc = func_8098EC68;
 }
 
-void ObjKibako2_Destroy(Actor *thisx, GlobalContext *globalCtx) {
+void ObjKibako2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjKibako2* this = THIS;
 
     Collider_DestroyCylinder(globalCtx, &this->collider);
     BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/func_8098EB78.s")
+s32 func_8098EB78(ObjKibako2* this) {
+    u8 acFlags = this->collider.base.acFlags;
+    s32 ret = 0;
 
-void func_8098EC68(ObjKibako2 *this, GlobalContext *globalCtx) {
+    if ((acFlags & 2) != 0) {
+        Actor* ac = this->collider.base.ac;
+        this->collider.base.acFlags = acFlags & 0xFFFD;
+        if (ac != 0) {
+            if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x80000000) {
+                if (Math3D_DistanceSquared(&this->dyna.actor.world.pos, &ac->world.pos) < 25600.0f) {
+                    ret = 1;
+                }
+            } else if ((this->collider.info.acHitInfo->toucher.dmgFlags & 8) != 0) {
+                if (Math3D_DistanceSquared(&this->dyna.actor.world.pos, &ac->world.pos) < 10000.0f) {
+                    ret = 1;
+                }
+            } else if ((this->collider.info.acHitInfo->toucher.dmgFlags & 0x500) != 0) {
+                ret = 1;
+            }
+        }
+    } else if (this->dyna.actor.home.rot.z != 0) {
+        ret = 1;
+    }
+    return ret;
+}
+
+
+void func_8098EC68(ObjKibako2* this, GlobalContext* globalCtx) {
     if (func_8098EB78(this) != 0) {
         func_8098E62C(this, globalCtx);
         func_800F0568(globalCtx, &this->dyna.actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
@@ -156,14 +181,14 @@ void func_8098EC68(ObjKibako2 *this, GlobalContext *globalCtx) {
     }
 }
 
-void func_8098ED20(ObjKibako2 *this, GlobalContext* globalCtx) {
+void func_8098ED20(ObjKibako2* this, GlobalContext* globalCtx) {
     func_8098E9C4(this, globalCtx);
     Actor_MarkForDeath(&this->dyna.actor);
 }
 
 // Still needs a lot of love
 #ifdef NON_MATCHING
-void ObjKibako2_Update(Actor *thisx, GlobalContext *globalCtx) {
+void ObjKibako2_Update(Actor* thisx, GlobalContext* globalCtx) {
     ObjKibako2* this = THIS;
 
     if (this->unk_1AC != 0) {
@@ -187,6 +212,6 @@ void ObjKibako2_Update(Actor *thisx, GlobalContext *globalCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/ObjKibako2_Update.s")
 #endif
 
-void ObjKibako2_Draw(Actor *thisx, GlobalContext *globalCtx) {
+void ObjKibako2_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_800BDFC0(globalCtx, &D_06000960);
 }
