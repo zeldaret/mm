@@ -209,8 +209,8 @@ typedef struct Player {
     /* 0xA74 */ u32 stateFlags3;
     /* 0xA78 */ Actor* unk_A78;
     /* 0xA7C */ Actor* boomerangActor;
-    /* 0xA80 */ Actor* naviActor;
-    /* 0xA84 */ s16 naviTextId;
+    /* 0xA80 */ Actor* tatlActor;
+    /* 0xA84 */ s16 tatlTextId;
     /* 0xA86 */ s8 unk_A86;
     /* 0xA87 */ s8 unk_A87;
     /* 0xA88 */ Actor* targetActor;

@@ -1,7 +1,7 @@
 #ifndef Z_EN_FIRE_ROCK_H
 #define Z_EN_FIRE_ROCK_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnFireRock;
 

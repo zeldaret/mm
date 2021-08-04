@@ -47,7 +47,7 @@ const ActorInit En_Guruguru_InitVars = {
 };
 
 static u16 textIDs[] = { 0x292A, 0x292B, 0x292C, 0x292D, 0x292E, 0x292F, 0x2930, 0x2931,
-                  0x2932, 0x2933, 0x2934, 0x2935, 0x2936, 0x294D, 0x294E };
+                         0x2932, 0x2933, 0x2934, 0x2935, 0x2936, 0x294D, 0x294E };
 
 static ColliderCylinderInit sCylinderInit = {
     {
@@ -80,8 +80,7 @@ void EnGuruguru_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 19.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06006C90, &D_06000B04, this->jointTable, this->morphTable,
-                     16);
+    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06006C90, &D_06000B04, this->jointTable, this->morphTable, 16);
     this->actor.targetMode = 0;
     if (this->actor.params != 2) {
         Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -375,9 +374,10 @@ void EnGuruguru_Update(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
-s32 EnGuruguru_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnGuruguru_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                Actor* thisx) {
     EnGuruguru* this = THIS;
-    
+
     if (limbIndex == 14) {
         rot->x += this->headXRot;
         rot->z += this->headZRot;

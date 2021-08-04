@@ -1,13 +1,12 @@
 #ifndef Z_EN_MA_YTS_H
 #define Z_EN_MA_YTS_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnMaYts;
 
 typedef void (*EnMaYtsActionFunc)(struct EnMaYts*, GlobalContext*);
 
-// Limbs of OBJECT_MA1
 typedef enum {
     /* 00 */ MA1_LIMB_NONE,
     /* 01 */ MA1_LIMB_ROOT,

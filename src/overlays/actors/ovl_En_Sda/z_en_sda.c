@@ -9,7 +9,7 @@ void EnSda_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSda_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSda_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Sda_InitVars = {
     ACTOR_EN_SDA,
     ACTORCAT_BOSS,
@@ -21,18 +21,19 @@ const ActorInit En_Sda_InitVars = {
     (ActorFunc)EnSda_Update,
     (ActorFunc)EnSda_Draw,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sda_0x809468D0/EnSda_Init.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sda_0x809468D0/EnSda_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sda/EnSda_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sda_0x809468D0/EnSda_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sda/EnSda_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sda_0x809468D0/EnSda_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sda/EnSda_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sda_0x809468D0/func_809469C0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sda/EnSda_Draw.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sda_0x809468D0/func_8094702C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sda/func_809469C0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Sda_0x809468D0/func_80947668.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sda/func_8094702C.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sda/func_80947668.s")

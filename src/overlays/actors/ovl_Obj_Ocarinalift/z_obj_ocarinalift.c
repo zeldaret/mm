@@ -9,7 +9,7 @@ void ObjOcarinalift_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjOcarinalift_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjOcarinalift_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Obj_Ocarinalift_InitVars = {
     ACTOR_OBJ_OCARINALIFT,
     ACTORCAT_BG,
@@ -21,42 +21,57 @@ const ActorInit Obj_Ocarinalift_InitVars = {
     (ActorFunc)ObjOcarinalift_Update,
     (ActorFunc)ObjOcarinalift_Draw,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ocarinalift_0x80AC94C0/func_80AC94C0.asm")
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80AC9D70[] = {
+    ICHAIN_U8(targetMode, 2, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
+};
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ocarinalift_0x80AC94C0/ObjOcarinalift_Init.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ocarinalift_0x80AC94C0/ObjOcarinalift_Destroy.asm")
+extern InitChainEntry D_80AC9D70[];
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ocarinalift_0x80AC94C0/func_80AC9680.asm")
+extern UNK_TYPE D_06001E40;
+extern UNK_TYPE D_060048D0;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ocarinalift_0x80AC94C0/func_80AC96A4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Ocarinalift/func_80AC94C0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ocarinalift_0x80AC94C0/func_80AC96B4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Ocarinalift/ObjOcarinalift_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ocarinalift_0x80AC94C0/func_80AC96D0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Ocarinalift/ObjOcarinalift_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ocarinalift_0x80AC94C0/func_80AC99C0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Ocarinalift/func_80AC9680.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ocarinalift_0x80AC94C0/func_80AC99D4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Ocarinalift/func_80AC96A4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ocarinalift_0x80AC94C0/func_80AC9A68.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Ocarinalift/func_80AC96B4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ocarinalift_0x80AC94C0/func_80AC9A7C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Ocarinalift/func_80AC96D0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ocarinalift_0x80AC94C0/func_80AC9AB8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Ocarinalift/func_80AC99C0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ocarinalift_0x80AC94C0/func_80AC9AE0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Ocarinalift/func_80AC99D4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ocarinalift_0x80AC94C0/func_80AC9B48.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Ocarinalift/func_80AC9A68.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ocarinalift_0x80AC94C0/func_80AC9B5C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Ocarinalift/func_80AC9A7C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ocarinalift_0x80AC94C0/func_80AC9C20.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Ocarinalift/func_80AC9AB8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ocarinalift_0x80AC94C0/func_80AC9C48.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Ocarinalift/func_80AC9AE0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ocarinalift_0x80AC94C0/ObjOcarinalift_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Ocarinalift/func_80AC9B48.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Ocarinalift_0x80AC94C0/ObjOcarinalift_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Ocarinalift/func_80AC9B5C.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Ocarinalift/func_80AC9C20.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Ocarinalift/func_80AC9C48.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Ocarinalift/ObjOcarinalift_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Ocarinalift/ObjOcarinalift_Draw.s")

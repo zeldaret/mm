@@ -86,11 +86,11 @@ extern AnimationHeader D_06000454;
 extern Gfx D_060041A0;
 extern Gfx D_06001BB0;
 extern Gfx D_060058B8;
-extern Gfx D_801AEFA0;
-extern Gfx D_801AEF88;
+//extern Gfx D_801AEFA0;
+//extern Gfx D_801AEF88;
 extern Gfx D_060042C8;
 extern Gfx D_060043F8;
-extern Gfx D_0407D590; // called in En_Light too, so probably the fire flame
+//extern Gfx D_0407D590; // called in En_Light too, so probably the fire flame
 
 extern const ActorInit En_Bigpo_InitVars;
 
@@ -106,6 +106,8 @@ const ActorInit En_Bigpo_InitVars = {
     (ActorFunc)NULL,
 };
 
+
+
 // cannot be renamed until Init matches
 static ColliderCylinderInit D_80B65010 = { //glabel D_80B65010 // sCylinderInit 
     { COLTYPE_HIT3, AT_NONE | AT_TYPE_ENEMY, AC_NONE | AC_TYPE_PLAYER, OC1_NONE | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -113,12 +115,44 @@ static ColliderCylinderInit D_80B65010 = { //glabel D_80B65010 // sCylinderInit
     { 35, 100, 10, { 0, 0, 0 } },
 };
 
+// sColChkInfoInit
 static CollisionCheckInfoInit D_80B6503C = { 10, 35, 100, 50};
 
+// static DamageTable sDamageTable = {
 static DamageTable D_80B65044 = {
-    0x00, 0x01, 0x00, 0x01, 0x01, 0x01, 0x00, 0xF0, 0x01, 0x01, 0x00, 0x01, 0x01, 0x42, 0x01, 0x01, 
-    0x01, 0x02, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 
-}; 
+    /* Deku Nut       */ DMG_ENTRY(0, 0x0),
+    /* Deku Stick     */ DMG_ENTRY(1, 0x0),
+    /* Horse trample  */ DMG_ENTRY(0, 0x0),
+    /* Explosives     */ DMG_ENTRY(1, 0x0),
+    /* Zora boomerang */ DMG_ENTRY(1, 0x0),
+    /* Normal arrow   */ DMG_ENTRY(1, 0x0),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
+    /* Hookshot       */ DMG_ENTRY(0, 0xF),
+    /* Goron punch    */ DMG_ENTRY(1, 0x0),
+    /* Sword          */ DMG_ENTRY(1, 0x0),
+    /* Goron pound    */ DMG_ENTRY(0, 0x0),
+    /* Fire arrow     */ DMG_ENTRY(1, 0x0),
+    /* Ice arrow      */ DMG_ENTRY(1, 0x0),
+    /* Light arrow    */ DMG_ENTRY(2, 0x4),
+    /* Goron spikes   */ DMG_ENTRY(1, 0x0),
+    /* Deku spin      */ DMG_ENTRY(1, 0x0),
+    /* Deku bubble    */ DMG_ENTRY(1, 0x0),
+    /* Deku launch    */ DMG_ENTRY(2, 0x0),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x0),
+    /* Zora barrier   */ DMG_ENTRY(0, 0x0),
+    /* Normal shield  */ DMG_ENTRY(0, 0x0),
+    /* Light ray      */ DMG_ENTRY(0, 0x0),
+    /* Thrown object  */ DMG_ENTRY(1, 0x0),
+    /* Zora punch     */ DMG_ENTRY(1, 0x0),
+    /* Spin attack    */ DMG_ENTRY(1, 0x0),
+    /* Sword beam     */ DMG_ENTRY(1, 0x0),
+    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
+    /* Unblockable    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
+    /* Powder Keg     */ DMG_ENTRY(1, 0x0),
+};
 
 static InitChainEntry sInitChain[] = { 
     ICHAIN_S8(hintId, 90, ICHAIN_CONTINUE),
@@ -414,7 +448,7 @@ void func_80B62084(EnBigpo *this, GlobalContext *globalCtx) {
     this->idleTimer -= 1;
     if (this->idleTimer == 0) {
         cam = Play_GetCamera(globalCtx, this->unk20E);
-        func_8016970C(globalCtx, 0, &cam->focalPoint, &cam->eye);
+        func_8016970C(globalCtx, 0, &cam->at, &cam->eye);
         this->unk20E = 0;
         if (this->actor.params == ENBIGPO_SUMMONED) {
             // if dampe exists, switch to viewing his running away cutscene
@@ -609,7 +643,7 @@ void EnBigPo_HitStun(EnBigpo *this) {
     SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06000454, -6.0f);
     func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 0x10);
     this->collider.base.acFlags &= ~AC_ON;
-    func_800BE504(&this->actor, &this->collider.base);
+    func_800BE504(&this->actor, &this->collider);
     this->actionFunc = EnBigPo_CheckHealth;
     this->actor.speedXZ = 5.0f;
 }
@@ -1342,7 +1376,7 @@ void func_80B64880(Actor *thisx, GlobalContext *globalCtx) {
     Camera* cam = globalCtx->cameraPtrs[globalCtx->activeCamera];
 
     if (cam != NULL) {
-        Math_Vec3f_Diff(&cam->eye, &cam->focalPoint, &vec1);
+        Math_Vec3f_Diff(&cam->eye, &cam->at, &vec1);
         magnitude = Math3D_Vec3fMagnitude(&vec1);
         magnitude2 = (magnitude > 1.0f) ? (20.0f / magnitude) : (20.0f);
         Math_Vec3f_Scale(&vec1, magnitude2);

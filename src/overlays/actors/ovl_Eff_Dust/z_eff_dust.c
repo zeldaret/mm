@@ -1,4 +1,4 @@
-/**
+/*
  * File z_eff_dust.c
  * Overlay: ovl_Eff_Dust
  * Description: Dust effects
@@ -21,8 +21,6 @@ void func_80919230(EffDust* this, GlobalContext* globalCtx);
 
 void func_80919768(Actor* thisx, GlobalContext* globalCtx);
 void func_809199FC(Actor* thisx, GlobalContext* globalCtx);
-
-extern Gfx D_04054A90[];
 
 const ActorInit Eff_Dust_InitVars = {
     ACTOR_EFF_DUST,

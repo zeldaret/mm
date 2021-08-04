@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
+#include "overlays/gamestates/ovl_title/z_title.h"
 
 void TitleSetup_GameStateResetContext(void) {
     XREG(2) = 0;

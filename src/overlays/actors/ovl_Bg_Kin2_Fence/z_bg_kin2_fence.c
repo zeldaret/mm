@@ -92,16 +92,18 @@ static ColliderJntSphInit sJntSphInit = {
     sJntSphElementsInit,
 };
 
-Vec3f eyeSparkleSpawnPositions[][2] = { { { -215.0f, 139.0f, 50.0f }, { -193.0f, 139.0f, 50.0f } },
+static Vec3f eyeSparkleSpawnPositions[][2] = {
+    { { -215.0f, 139.0f, 50.0f }, { -193.0f, 139.0f, 50.0f } },
 
-                                        { { -125.0f, 139.0f, 50.0f }, { -103.0f, 139.0f, 50.0f } },
+    { { -125.0f, 139.0f, 50.0f }, { -103.0f, 139.0f, 50.0f } },
 
-                                        { { 103.0f, 139.0f, 50.0f }, { 125.0f, 139.0f, 50.0f } },
+    { { 103.0f, 139.0f, 50.0f }, { 125.0f, 139.0f, 50.0f } },
 
-                                        { { 193.0f, 139.0f, 50.0f }, { 215.0f, 139.0f, 50.0f } } };
+    { { 193.0f, 139.0f, 50.0f }, { 215.0f, 139.0f, 50.0f } },
+};
 
-Color_RGBA8 primColor = { 0xFF, 0xFF, 0xFF, 0x00 };
-Color_RGBA8 envColor = { 0x00, 128, 128, 0x00 };
+static Color_RGBA8 primColor = { 255, 255, 255, 0 };
+static Color_RGBA8 envColor = { 0, 128, 128, 0 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),

@@ -1,11 +1,11 @@
 #ifndef _Z64ACTOR_H_
 #define _Z64ACTOR_H_
 
-#include <PR/ultratypes.h>
-#include <z64math.h>
-#include <z64animation.h>
-#include <z64collision_check.h>
-#include <unk.h>
+#include "PR/ultratypes.h"
+#include "z64math.h"
+#include "z64animation.h"
+#include "z64collision_check.h"
+#include "unk.h"
 
 #define MASS_IMMOVABLE 0xFF // Cannot be pushed by OC collisions
 #define MASS_HEAVY 0xFE     // Can only be pushed by OC collisions with IMMOVABLE and HEAVY objects.
@@ -427,7 +427,7 @@ typedef enum {
     /* 0x076 */ ACTOR_UNSET_76,
     /* 0x077 */ ACTOR_UNSET_77,
     /* 0x078 */ ACTOR_UNSET_78,
-    /* 0x079 */ ACTOR_UNSET_79,
+    /* 0x079 */ ACTOR_EN_FISHING,
     /* 0x07A */ ACTOR_OBJ_OSHIHIKI,
     /* 0x07B */ ACTOR_EFF_DUST,
     /* 0x07C */ ACTOR_BG_UMAJUMP,
@@ -998,5 +998,15 @@ typedef enum {
     /* 0x2B1 */ ACTOR_EN_RSN,
     /* 0x2B2 */ ACTOR_ID_MAX // originally "ACTOR_DLF_MAX"
 } ActorID;
+
+typedef enum {
+    /* 0x00 */ CLEAR_TAG_SMALL_EXPLOSION,
+    /* 0x01 */ CLEAR_TAG_LARGE_EXPLOSION,
+    /* 0x02 */ CLEAR_TAG_POP,
+    /* 0x03 */ CLEAR_TAG_SMALL_LIGHT_RAYS,
+    /* 0x04 */ CLEAR_TAG_LARGE_LIGHT_RAYS,
+    /* 0x23 */ CLEAR_TAG_SPLASH = 35,
+    /* 0xC8 */ CLEAR_TAG_SMOKE = 200,
+} ClearTagType;
 
 #endif

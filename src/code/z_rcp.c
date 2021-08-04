@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 Gfx sSetupDL[438] = {
     /* 0x00 */
@@ -1235,7 +1234,7 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 iParm2, s32 iParm3, u8 r, u8 g, 
 
     gfx = graphDlEntry + 0x16;
     gSPDisplayList(gfx + 0, &D_0E000140);
-    gSPDisplayList(gfx + 1, D_801C1CA0);
+    gSPDisplayList(gfx + 1, &sFillSetupDL);
     gDPSetColorImage(gfx + 2, G_IM_FMT_RGBA, G_IM_SIZ_16b, D_801FBBCC, 0x0F000000);
     if (gfxCtx->zbuffer != NULL) {
         gDPSetDepthImage(gfx + 3, gfxCtx->zbuffer);
@@ -1302,7 +1301,7 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 iParm2, s32 iParm3, u8 r, u8 g, 
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_rcp/func_8012CF0C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_rcp/func_8012CF0C.s")
 #endif
 
 void func_8012D374(GraphicsContext* gfxCtx, u8 r, u8 g, u8 b) {

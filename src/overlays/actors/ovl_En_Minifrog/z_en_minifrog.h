@@ -1,7 +1,7 @@
 #ifndef Z_EN_MINIFROG_H
 #define Z_EN_MINIFROG_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnMinifrog;
 

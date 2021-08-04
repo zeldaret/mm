@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 void osCreateMesgQueue(OSMesgQueue* mq, OSMesg* msq, s32 count) {
     mq->mtqueue = (OSThread*)&__osThreadTail;

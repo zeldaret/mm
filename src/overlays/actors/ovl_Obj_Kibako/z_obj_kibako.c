@@ -60,6 +60,9 @@ static ColliderCylinderInit sCylinderInit = {
     { 15, 30, 0, { 0, 0, 0 } },
 };
 
+extern Gfx D_06001A70[];
+extern Gfx D_06001180[];
+
 static s16 sObjectIdList[] = { GAMEPLAY_DANGEON_KEEP, OBJECT_KIBAKO };
 
 static Gfx* sKakeraDisplayLists[] = { D_05007980, D_06001A70 };

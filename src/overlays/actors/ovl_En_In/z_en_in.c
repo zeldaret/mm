@@ -1,6 +1,6 @@
 /*
  * File z_en_in.c
- * Overlay: ovl_en_in
+ * Overlay: ovl_En_In
  * Description: Gorman Bros
  */
 
@@ -141,13 +141,41 @@ static ColliderJntSphInit sJntSphInit = {
     sJntSphElementsInit,
 };
 
-CollisionCheckInfoInit2 sColChkInfoInit2 = {
-    0, 0, 0, 0, MASS_HEAVY,
-};
+static CollisionCheckInfoInit2 sColChkInfoInit2 = { 0, 0, 0, 0, MASS_HEAVY };
 
 static DamageTable sDamageTable = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    /* Deku Nut       */ DMG_ENTRY(0, 0x0),
+    /* Deku Stick     */ DMG_ENTRY(0, 0x0),
+    /* Horse trample  */ DMG_ENTRY(0, 0x0),
+    /* Explosives     */ DMG_ENTRY(0, 0x0),
+    /* Zora boomerang */ DMG_ENTRY(0, 0x0),
+    /* Normal arrow   */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
+    /* Hookshot       */ DMG_ENTRY(0, 0x0),
+    /* Goron punch    */ DMG_ENTRY(0, 0x0),
+    /* Sword          */ DMG_ENTRY(0, 0x0),
+    /* Goron pound    */ DMG_ENTRY(0, 0x0),
+    /* Fire arrow     */ DMG_ENTRY(0, 0x0),
+    /* Ice arrow      */ DMG_ENTRY(0, 0x0),
+    /* Light arrow    */ DMG_ENTRY(0, 0x0),
+    /* Goron spikes   */ DMG_ENTRY(0, 0x0),
+    /* Deku spin      */ DMG_ENTRY(0, 0x0),
+    /* Deku bubble    */ DMG_ENTRY(0, 0x0),
+    /* Deku launch    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x0),
+    /* Zora barrier   */ DMG_ENTRY(0, 0x0),
+    /* Normal shield  */ DMG_ENTRY(0, 0x0),
+    /* Light ray      */ DMG_ENTRY(0, 0x0),
+    /* Thrown object  */ DMG_ENTRY(0, 0x0),
+    /* Zora punch     */ DMG_ENTRY(0, 0x0),
+    /* Spin attack    */ DMG_ENTRY(0, 0x0),
+    /* Sword beam     */ DMG_ENTRY(0, 0x0),
+    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
+    /* Unblockable    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
+    /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
 static ActorAnimationEntryS sAnimations[] = {
@@ -290,10 +318,10 @@ void EnIn_DoNothing(EnIn* this, GlobalContext* globalCtx) {
 }
 
 void func_808F3618(EnIn* this, GlobalContext* globalCtx) {
-    if (ENIN_GET_WALKING_FLAG(&this->actor) != 0x3F) {
+    if (ENIN_GET_PATH(&this->actor) != 0x3F) {
         func_808F30B0(&this->skelAnime, 9);
     }
-    if (ENIN_GET_WALKING_FLAG(&this->actor) != 0x3F) {
+    if (ENIN_GET_PATH(&this->actor) != 0x3F) {
         this->actionFunc = func_808F3690;
     } else {
         this->actionFunc = EnIn_DoNothing;
@@ -306,9 +334,9 @@ void func_808F3690(EnIn* this, GlobalContext* globalCtx) {
 
     Math_SmoothStepToF(&this->actor.speedXZ, 1.0f, 0.4f, 1000.0f, 0.0f);
     sp36 = this->actor.speedXZ * 400.0f;
-    if (func_8013D68C(this->unk240, this->unk244, &sp28) && func_8013D768(&this->actor, &sp28, sp36)) {
+    if (func_8013D68C(this->path, this->unk244, &sp28) && func_8013D768(&this->actor, &sp28, sp36)) {
         this->unk244++;
-        if (this->unk244 >= *this->unk240) {
+        if (this->unk244 >= this->path->count) {
             this->unk244 = 0;
         }
     }
@@ -1396,7 +1424,7 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
         Collider_SetJntSph(globalCtx, &this->colliderJntSph, &this->actor, &sJntSphInit, &this->colliderJntSphElement);
         Actor_SetScale(&this->actor, 0.01f);
         this->actor.gravity = -4.0f;
-        this->unk240 = func_8013D648(globalCtx, ENIN_GET_WALKING_FLAG(&this->actor), 0x3F);
+        this->path = func_8013D648(globalCtx, ENIN_GET_PATH(&this->actor), 0x3F);
         this->unk23D = 0;
         if (type == ENIN_YELLOW_SHIRT || type == ENIN_BLUE_SHIRT) {
             if ((gSaveContext.weekEventReg[92] & (1 | 2 | 4)) == 2 ||

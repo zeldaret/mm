@@ -9,7 +9,7 @@ void BgIcefloe_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIcefloe_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIcefloe_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Bg_Icefloe_InitVars = {
     ACTOR_BG_ICEFLOE,
     ACTORCAT_BG,
@@ -21,24 +21,35 @@ const ActorInit Bg_Icefloe_InitVars = {
     (ActorFunc)BgIcefloe_Update,
     (ActorFunc)BgIcefloe_Draw,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icefloe_0x80AC48F0/BgIcefloe_Init.asm")
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80AC4F3C[] = {
+    ICHAIN_VEC3F_DIV1000(scale, 0, ICHAIN_STOP),
+};
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icefloe_0x80AC48F0/BgIcefloe_Destroy.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icefloe_0x80AC48F0/func_80AC4A80.asm")
+extern InitChainEntry D_80AC4F3C[];
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icefloe_0x80AC48F0/func_80AC4AE8.asm")
+extern UNK_TYPE D_060001E0;
+extern UNK_TYPE D_06000C90;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icefloe_0x80AC48F0/func_80AC4C18.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/BgIcefloe_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icefloe_0x80AC48F0/func_80AC4C34.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/BgIcefloe_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icefloe_0x80AC48F0/func_80AC4CF0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/func_80AC4A80.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icefloe_0x80AC48F0/func_80AC4D2C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/func_80AC4AE8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icefloe_0x80AC48F0/BgIcefloe_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/func_80AC4C18.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Icefloe_0x80AC48F0/BgIcefloe_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/func_80AC4C34.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/func_80AC4CF0.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/func_80AC4D2C.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/BgIcefloe_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Icefloe/BgIcefloe_Draw.s")

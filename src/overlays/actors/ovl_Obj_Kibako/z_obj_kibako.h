@@ -1,13 +1,9 @@
 #ifndef Z_OBJ_KIBAKO_H
 #define Z_OBJ_KIBAKO_H
 
-#include <global.h>
+#include "global.h"
 
 #define GET_KIBAKO_COLLECTIBLE_ID(x) (((x->actor.params >> 0x8) & 0x7F) << 8)
-#define D_05007890 0x05007890
-#define D_05007980 0x05007980
-#define D_06001180 0x06001180
-#define D_06001A70 0x06001A70
 
 struct ObjKibako;
 
@@ -24,7 +20,5 @@ typedef struct ObjKibako {
 } ObjKibako; // size = 0x19C
 
 extern const ActorInit Obj_Kibako_InitVars;
-
-
 
 #endif // Z_OBJ_KIBAKO_H

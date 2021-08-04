@@ -1,7 +1,7 @@
 /*
  * File: z_bg_ctower_rot.c
  * Overlay: ovl_Bg_CtowerRot
- * Description: Twisting path along with the Doors to Clocktower
+ * Description: Twisting path along with the Doors to Clock Tower
  */
 
 #include "z_bg_ctower_rot.h"
@@ -33,17 +33,11 @@ const ActorInit Bg_Ctower_Rot_InitVars = {
 };
 
 extern Gfx D_060129D0[];
-
 extern Gfx D_06012DA0[];
-
 extern CollisionHeader D_060142E8;
-
 extern Gfx D_06017220[];
-
 extern CollisionHeader D_06017410;
-
 extern Gfx D_060174E0[];
-
 extern CollisionHeader D_06017650;
 
 static InitChainEntry sInitChain[] = {

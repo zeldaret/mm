@@ -64,8 +64,38 @@ static ColliderSphereInit sSphereInit = {
 };
 
 static DamageTable sDamageTable = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0xF1, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF1, 0xF1, 0xF1, 0xF1, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    /* Deku Nut       */ DMG_ENTRY(0, 0x0),
+    /* Deku Stick     */ DMG_ENTRY(0, 0x0),
+    /* Horse trample  */ DMG_ENTRY(0, 0x0),
+    /* Explosives     */ DMG_ENTRY(0, 0x0),
+    /* Zora boomerang */ DMG_ENTRY(0, 0x0),
+    /* Normal arrow   */ DMG_ENTRY(1, 0xF),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
+    /* Hookshot       */ DMG_ENTRY(0, 0x0),
+    /* Goron punch    */ DMG_ENTRY(0, 0x0),
+    /* Sword          */ DMG_ENTRY(0, 0x0),
+    /* Goron pound    */ DMG_ENTRY(0, 0x0),
+    /* Fire arrow     */ DMG_ENTRY(1, 0xF),
+    /* Ice arrow      */ DMG_ENTRY(1, 0xF),
+    /* Light arrow    */ DMG_ENTRY(1, 0xF),
+    /* Goron spikes   */ DMG_ENTRY(1, 0xF),
+    /* Deku spin      */ DMG_ENTRY(0, 0x0),
+    /* Deku bubble    */ DMG_ENTRY(0, 0x0),
+    /* Deku launch    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x0),
+    /* Zora barrier   */ DMG_ENTRY(0, 0x0),
+    /* Normal shield  */ DMG_ENTRY(0, 0x0),
+    /* Light ray      */ DMG_ENTRY(0, 0x0),
+    /* Thrown object  */ DMG_ENTRY(0, 0x0),
+    /* Zora punch     */ DMG_ENTRY(0, 0x0),
+    /* Spin attack    */ DMG_ENTRY(0, 0x0),
+    /* Sword beam     */ DMG_ENTRY(0, 0x0),
+    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
+    /* Unblockable    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
+    /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
 void EnPoFusen_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -212,7 +242,7 @@ void EnPoFusen_IncrementRomaniPop(EnPoFusen* this) {
 
 void EnPoFusen_Pop(EnPoFusen* this, GlobalContext* globalCtx) {
     Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
-                this->actor.world.pos.y + 20.0f, this->actor.world.pos.z, 255, 255, 200, 2);
+                this->actor.world.pos.y + 20.0f, this->actor.world.pos.z, 255, 255, 200, CLEAR_TAG_POP);
     Audio_PlayActorSound2(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
     Actor_MarkForDeath(&this->actor);
 }

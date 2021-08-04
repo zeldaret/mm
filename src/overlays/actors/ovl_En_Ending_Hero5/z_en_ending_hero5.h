@@ -1,7 +1,7 @@
 #ifndef Z_EN_ENDING_HERO5_H
 #define Z_EN_ENDING_HERO5_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnEndingHero5;
 
