@@ -30,14 +30,18 @@ void Load2_Relocate(u32 allocatedVRamAddr, OverlayRelocationSection* overlayInfo
             case 0x2000000:
                 if ((*inst & 0xf000000) == 0) {
                     *inst = (*inst - vRamStart) + allocatedVRamAddr;
-                } else {
-                    if (D_80096C30 > 2)
+                } 
+                /*
+                else {
+                    if (D_80096C30 > 2) {
                         ;
+                    }
                 }
+                */
                 break;
             case 0x4000000:
                 *inst = (*inst & 0xfc000000) |
-                        (((((*inst & 0x3ffffff) << 2 | 0x80000000) - vRamStart) + allocatedVRamAddr & 0xfffffff) >> 2);
+                        ((((((*inst & 0x3ffffff) << 2 | 0x80000000) - vRamStart) + allocatedVRamAddr) & 0xfffffff) >> 2);
                 break;
             case 0x5000000:
                 regReferences[*inst >> 0x10 & 0x1f] = inst;
@@ -46,12 +50,12 @@ void Load2_Relocate(u32 allocatedVRamAddr, OverlayRelocationSection* overlayInfo
             case 0x6000000:
                 lastInst = regReferences[*inst >> 0x15 & 0x1f];
                 signedOffset = (s16)*inst;
-                if ((signedOffset + *lastInst * 0x10000 & 0xf000000) == 0) {
+                if (((signedOffset + *lastInst * 0x10000) & 0xf000000) == 0) {
                     relocatedAddress =
                         ((signedOffset + regValues[*inst >> 0x15 & 0x1f] * 0x10000) - vRamStart) + allocatedVRamAddr;
                     *lastInst = (((relocatedAddress >> 0x10) & 0xFFFF) + ((relocatedAddress & 0x8000) ? 1 : 0)) |
                                 (*lastInst & 0xffff0000);
-                    *inst = *inst & 0xffff0000 | relocatedAddress & 0xffff;
+                    *inst = (*inst & 0xffff0000) | (relocatedAddress & 0xffff);
                 }
                 break;
         }
