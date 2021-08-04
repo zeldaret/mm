@@ -118,7 +118,7 @@ void EnKgy_Init(Actor* thisx, GlobalContext* globalCtx) {
                               this->actor.world.pos.z, 0xFF, 0x40, 0x40, -1);
     this->lightNode = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->lightInfo);
     this->unk_300 = -1;
-    this->actor.flags &= ~0x1;
+    this->actor.flags &= ~1;
 }
 
 void EnKgy_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -310,7 +310,7 @@ void func_80B40EE8(EnKgy* this, GlobalContext* globalCtx) {
             } else {
                 func_80B40EBC(this, globalCtx, this->actor.textId);
             }
-            this->unk_29C &= ~0x4;
+            this->unk_29C &= ~4;
         }
     }
 }
@@ -374,13 +374,13 @@ void func_80B413C8(EnKgy* this) {
     ActorCutscene_Stop(this->unk_2D4[this->unk_2E0]);
     this->unk_2E0 = -1;
     this->unk_2E6 = 0;
-    this->unk_29C &= ~0x2;
+    this->unk_29C &= ~2;
 }
 
 s32 func_80B41460(void) {
-    if ((gSaveContext.playerForm != PLAYER_FORM_HUMAN) || (CUR_BTN_ITEM(BTN_ITEM_B) != ITEM_SWORD_KOKIRI) &&
-                                                              (CUR_BTN_ITEM(BTN_ITEM_B) != ITEM_SWORD_RAZOR) &&
-                                                              (CUR_BTN_ITEM(BTN_ITEM_B) != ITEM_SWORD_GILDED)) {
+    if ((gSaveContext.playerForm != PLAYER_FORM_HUMAN) ||
+        ((CUR_BTN_ITEM(BTN_ITEM_B) != ITEM_SWORD_KOKIRI) && (CUR_BTN_ITEM(BTN_ITEM_B) != ITEM_SWORD_RAZOR) &&
+         (CUR_BTN_ITEM(BTN_ITEM_B) != ITEM_SWORD_GILDED))) {
         return 0xC38;
     }
 
