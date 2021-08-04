@@ -33,7 +33,7 @@ void EnBigPo_ScoopSoulStartLeaving(EnBigpo* this);
 void func_80B63450(EnBigpo* this);
 void EnBigPo_ChangeToFireCounting(EnBigpo* this);
 void EnBigPo_InitHiddenFire(EnBigpo* this);
-void func_80B638AC(EnBigpo* this);
+void EnBigpo_SetupFireRevealed(EnBigpo* this);
 
 void func_80B619FC(EnBigpo *this, GlobalContext *globalCtx);
 void EnBigPo_WellWaitForProximity(EnBigpo* this, GlobalContext* globalCtx);
@@ -63,12 +63,12 @@ void func_80B63AC4(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B63C28(EnBigpo* this);
 void func_80B63D0C(EnBigpo* this);
 s32 func_80B63D88(EnBigpo* this, GlobalContext* globalCtx);
-void func_80B63964(EnBigpo* this);
-void func_80B63980(EnBigpo* this, GlobalContext* globalCtx);
+void EnBigpo_SetupRevealedFireIdle(EnBigpo* this);
+void EnBigpo_RevealedFireIdle(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_DoNothing(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigPo_WaitingForDampe(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_Die(EnBigpo* this, GlobalContext* globalCtx);
-void func_80B638D4(EnBigpo* this, GlobalContext* globalCtx);
+void EnBigpo_RevealedFireGrowing(EnBigpo* this, GlobalContext* globalCtx);
 
 // draw funcs
 void func_80B64470(Actor* thisx, GlobalContext* globalCtx);
@@ -808,8 +808,8 @@ void EnBigPo_ScoopSoulAppearing(EnBigpo *this, GlobalContext *globalCtx) {
 void EnBigPo_SetupScoopSoulIdle(EnBigpo *this) {
     this->unk218 = this->actor.world.pos.y;
     Actor_SetHeight(&this->actor, -10.0f);
-    this->idleTimer = 400;
-    this->actor.flags |= 1;
+    this->idleTimer = 400; // 20 seconds
+    this->actor.flags |= 1; 
     this->actionFunc = EnBigPo_ScoopSoulIdle;
 }
 
@@ -842,10 +842,11 @@ void EnBigPo_ScoopSoulFadingAway(EnBigpo *this, GlobalContext *globalCtx) {
 
 // type ENBIGPO_SUMMONED
 void func_80B63450(EnBigpo *this) {
-    this->actor.flags &= ~1; // targetable OFF
+    this->actor.flags &= ~0x1; // targetable OFF
     this->actionFunc = EnBigPo_SelectRandomFireLocations;
 }
 
+// dampe fires are in 3/4 random locations, here we pick them
 void EnBigPo_SelectRandomFireLocations(EnBigpo *this, GlobalContext *globalCtx) {
     Actor *enemyPtr;
     EnBigpo* randomFirePo;
@@ -853,7 +854,7 @@ void EnBigPo_SelectRandomFireLocations(EnBigpo *this, GlobalContext *globalCtx) 
     s32 randomIndex;
     s32 fireCount = 0;
 
-    // count the number of possible fires we can use
+    // count the number of possible fires we can find (4 in vanilla)
     for (enemyPtr = FIRSTENEMY; enemyPtr != NULL; enemyPtr = enemyPtr->next) {
       if ((enemyPtr->id == ACTOR_EN_BIGPO) && (enemyPtr->params == ENBIGPO_POSSIBLEFIRE)) {
         fireCount++;
@@ -927,7 +928,7 @@ void EnBigPo_FireCounting(EnBigpo *this, GlobalContext *globalCtx) {
     s32 activatedFireCount = 0;
 
     for (childPoh = (EnBigpo*) this->actor.child; childPoh; childPoh = (EnBigpo*)childPoh->actor.child) {
-        if ((childPoh->actor.params == ENBIGPO_REVEALEDFIRE) && (childPoh->actionFunc == func_80B63980)) {
+        if ((childPoh->actor.params == ENBIGPO_REVEALEDFIRE) && (childPoh->actionFunc == EnBigpo_RevealedFireIdle)) {
             activatedFireCount++;
         }
     }
@@ -970,7 +971,7 @@ void EnBigPo_InitHiddenFire(EnBigpo *this) {
 // idle until dampe turns ENBIGPO_POSSIBLEFIRE into ENBIGPO_REVEALEDFIRE
 void EnBigPo_WaitingForDampe(EnBigpo *this, GlobalContext *globalCtx) {
     if (this->actor.params == ENBIGPO_REVEALEDFIRE) {
-        func_80B638AC(this);
+        EnBigpo_SetupFireRevealed(this);
     }
 }
 
@@ -979,36 +980,32 @@ void EnBigpo_Die(EnBigpo *this, GlobalContext *globalCtx) {
 }
 
 // setup fire revealed
-void func_80B638AC(EnBigpo *this) {
+void EnBigpo_SetupFireRevealed(EnBigpo *this) {
     this->actor.draw = func_80B64DFC;
-    this->idleTimer = 0xF;
-    this->actionFunc = func_80B638D4;
+    this->idleTimer = 15;
+    this->actionFunc = EnBigpo_RevealedFireGrowing;
 }
 
-// fire is growing to become visible after being revealed
-void func_80B638D4(EnBigpo *this, GlobalContext *globalCtx) {
+void EnBigpo_RevealedFireGrowing(EnBigpo *this, GlobalContext *globalCtx) {
     if (Math_StepToF(&this->actor.scale.x, 0.01f, 0.0005f) != 0) {
         this->idleTimer--;
         if (this->idleTimer == 0) {
-            func_80B63964(this);
+            EnBigpo_SetupRevealedFireIdle(this);
         }
     }
     this->actor.scale.z = this->actor.scale.x;
     this->actor.scale.y = ((0.01f - this->actor.scale.x) * 0.5f) + 0.01f;
 }
 
-// setup finish fire appearing
-void func_80B63964(EnBigpo *this) {
-    this->idleTimer = 0x2710;
-    this->actionFunc = func_80B63980;
+void EnBigpo_SetupRevealedFireIdle(EnBigpo *this) {
+    this->idleTimer = 10000; // 8 minutes until the fire leaves
+    this->actionFunc = EnBigpo_RevealedFireIdle;
 }
 
-// do these fires have timers? I never noticed
-// fire is burning
-void func_80B63980(EnBigpo *this, GlobalContext *globalCtx) {
+void EnBigpo_RevealedFireIdle(EnBigpo *this, GlobalContext *globalCtx) {
     if (this->idleTimer > 0) {
         if (this->idleTimer == 0) {
-            // ! @ BUG: unreachable code?
+            // ! @ BUG: unreachable code
             this->actor.params = ENBIGPO_UNK5;
             return;
         }
@@ -1024,13 +1021,13 @@ void func_80B63980(EnBigpo *this, GlobalContext *globalCtx) {
 
 // setup: start flame swirl cutscene for dampe poe
 void func_80B63A18(EnBigpo *this) {
-    s16 h;
+    s16 flameHeight;
 
     this->idleTimer = 40;
-    h = this->actor.parent->yawTowardsPlayer + this->unk20C * 0x5555;
-    this->actor.home.pos.x = Math_SinS(h) * 30.0f + this->actor.parent->world.pos.x;
+    flameHeight = this->actor.parent->yawTowardsPlayer + this->unk20C * 0x5555;
+    this->actor.home.pos.x = Math_SinS(flameHeight) * 30.0f + this->actor.parent->world.pos.x;
     this->actor.home.pos.y = this->actor.parent->world.pos.y;
-    this->actor.home.pos.z = Math_CosS(h) * 30.0f + this->actor.parent->world.pos.z;
+    this->actor.home.pos.z = Math_CosS(flameHeight) * 30.0f + this->actor.parent->world.pos.z;
     this->actionFunc = func_80B63AC4;
 }
 
@@ -1151,7 +1148,7 @@ s32 func_80B63D88(EnBigpo *this, GlobalContext *globalCtx) {
 void EnBigpo_Update(Actor *thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*) thisx;
     s32 pad;
-    ColliderCylinder* thisCollider; // todo: this might not be a base collider
+    ColliderCylinder* thisCollider;
 
     if ((this->actor.flags & 0x2000) == 0x2000) {
         this->unk212 = 0;
@@ -1423,7 +1420,9 @@ void func_80B64880(Actor *thisx, GlobalContext *globalCtx) {
     }
 }
 
-
+// draw function for...?
+// set when the big poe first apears, main?
+// but also called by another draw function
 void func_80B64B08(Actor *thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*) thisx;
     s32 pad[3];
@@ -1482,7 +1481,6 @@ void func_80B64DFC(Actor *thisx, GlobalContext *globalCtx) {
     gSPSegment(POLY_XLU_DISP++, 0x08, Gfx_TwoTexScroll(globalCtx->state.gfxCtx,
        0, 0, 0, 0x20, 0x40, 1, 0, ((s32) globalCtx->gameplayFrames * -0x14) & 0x1FF, 0x20, 0x80));
 
-    // flame color is static
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 0xAA, 0xFF, 0xFF, 0xFF);
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0xFF, 0xFF);
 
@@ -1493,7 +1491,7 @@ void func_80B64DFC(Actor *thisx, GlobalContext *globalCtx) {
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
        G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gSPDisplayList(POLY_XLU_DISP++, &D_0407D590); // flame display list?
+    gSPDisplayList(POLY_XLU_DISP++, &D_0407D590); // flame displaylist
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

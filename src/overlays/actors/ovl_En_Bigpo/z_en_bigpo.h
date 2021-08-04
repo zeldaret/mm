@@ -25,10 +25,11 @@ typedef struct EnBigpo {
     // * when spinning back into reality, counts frames from start
     // * in death one, counts frames from death start
     // * after scoop spawned, idle timer used to count down to actor disapear
-    /* 0x206 */ s16 idleTimer; // idle frames beteween attacks
-    /* 0x208 */ s16 unk208;
+    /* 0x206 */ s16 idleTimer; // frame counter
+    /* 0x208 */ s16 unk208; // facing rotY?
     /* 0x20A */ s16 rotVelocity;
-    /* 0x20C */ s16 unk20C; // incremented 
+    // is this counting the number of frames the player is ztargeting them?
+    /* 0x20C */ s16 unk20C; // ++ if enemy is attacking po?
     /* 0x20E */ s16 unk20E;
     /* 0x210 */ s16 switchFlags;
     /* 0x212 */ s16 unk212; // seems to affect pos.y of idle flying poh
