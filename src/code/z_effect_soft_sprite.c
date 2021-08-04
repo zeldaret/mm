@@ -1,10 +1,9 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 void EffectSS_Init(GlobalContext* globalCtx, s32 numEntries) {
     u32 i;
     EffectSs* effectsSs;
-    ParticleOverlay* overlay;
+    EffectSsOverlay* overlay;
 
     EffectSS2Info.data_table = (EffectSs*)THA_AllocEndAlign16(&globalCtx->state.heap, numEntries * sizeof(EffectSs));
     EffectSS2Info.searchIndex = 0;
@@ -16,7 +15,7 @@ void EffectSS_Init(GlobalContext* globalCtx, s32 numEntries) {
     }
 
     overlay = &particleOverlayTable[0];
-    for (i = 0; i < EFFECT_SS2_TYPE_LAST_LABEL; i++) {
+    for (i = 0; i < EFFECT_SS_MAX; i++) {
         overlay->loadedRamAddr = NULL;
         overlay++;
     }
@@ -25,7 +24,7 @@ void EffectSS_Init(GlobalContext* globalCtx, s32 numEntries) {
 void EffectSS_Clear(GlobalContext* globalCtx) {
     u32 i;
     EffectSs* effectsSs;
-    ParticleOverlay* overlay;
+    EffectSsOverlay* overlay;
     void* addr;
 
     EffectSS2Info.data_table = NULL;
@@ -39,7 +38,7 @@ void EffectSS_Clear(GlobalContext* globalCtx) {
 
     // Free memory from loaded particle overlays
     overlay = &particleOverlayTable[0];
-    for (i = 0; i < EFFECT_SS2_TYPE_LAST_LABEL; i++) {
+    for (i = 0; i < EFFECT_SS_MAX; i++) {
         addr = overlay->loadedRamAddr;
         if (addr != NULL) {
             zelda_free(addr);
@@ -69,7 +68,7 @@ void EffectSS_Delete(EffectSs* effectSs) {
 void EffectSS_ResetEntry(EffectSs* particle) {
     u32 i;
 
-    particle->type = EFFECT_SS2_TYPE_LAST_LABEL;
+    particle->type = EFFECT_SS_MAX;
     particle->accel.x = particle->accel.y = particle->accel.z = 0;
     particle->velocity.x = particle->velocity.y = particle->velocity.z = 0;
     particle->vec.x = particle->vec.y = particle->vec.z = 0;
@@ -161,8 +160,8 @@ void EffectSS_Copy(GlobalContext* globalCtx, EffectSs* effectsSs) {
 void EffectSs_Spawn(GlobalContext* globalCtx, s32 type, s32 priority, void* initData) {
     s32 index;
     u32 overlaySize;
-    ParticleOverlay* entry = &particleOverlayTable[type];
-    ParticleOverlayInfo* overlayInfo;
+    EffectSsOverlay* entry = &particleOverlayTable[type];
+    EffectSsInit* initInfo;
 
     if (EffectSS_FindFreeSpace(priority, &index) != 0) {
         // Abort because we couldn't find a suitable slot to add this effect in
@@ -173,7 +172,7 @@ void EffectSs_Spawn(GlobalContext* globalCtx, s32 type, s32 priority, void* init
     overlaySize = (u32)entry->vramEnd - (u32)entry->vramStart;
 
     if (entry->vramStart == NULL) {
-        overlayInfo = entry->overlayInfo;
+        initInfo = entry->initInfo;
     } else {
         if (entry->loadedRamAddr == NULL) {
             entry->loadedRamAddr = zelda_mallocR(overlaySize);
@@ -185,20 +184,20 @@ void EffectSs_Spawn(GlobalContext* globalCtx, s32 type, s32 priority, void* init
             Load2_LoadOverlay(entry->vromStart, entry->vromEnd, entry->vramStart, entry->vramEnd, entry->loadedRamAddr);
         }
 
-        overlayInfo = (void*)(u32)(
-            entry->overlayInfo != NULL
-                ? (ParticleOverlayInfo*)(-((u32)entry->vramStart - (u32)entry->loadedRamAddr) + (u32)entry->overlayInfo)
+        initInfo = (void*)(u32)(
+            entry->initInfo != NULL
+                ? (EffectSsInit*)(-((u32)entry->vramStart - (u32)entry->loadedRamAddr) + (u32)entry->initInfo)
                 : NULL);
     }
 
-    if (overlayInfo->init != NULL) {
+    if (initInfo->init != NULL) {
         // Delete the previous effect in the slot, in case the slot wasn't free
         EffectSS_Delete(&EffectSS2Info.data_table[index]);
 
         EffectSS2Info.data_table[index].type = type;
         EffectSS2Info.data_table[index].priority = priority;
 
-        if (overlayInfo->init(globalCtx, index, &EffectSS2Info.data_table[index], initData) == 0) {
+        if (initInfo->init(globalCtx, index, &EffectSS2Info.data_table[index], initData) == 0) {
             EffectSS_ResetEntry(&EffectSS2Info.data_table[index]);
         }
     }

@@ -1,7 +1,7 @@
 #ifndef Z_OBJ_TOKEI_TURRET_H
 #define Z_OBJ_TOKEI_TURRET_H
 
-#include <global.h>
+#include "global.h"
 
 struct ObjTokeiTurret;
 

@@ -9,6 +9,11 @@ void EnCne01_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnCne01_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnCne01_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809CB520(EnCne01* this, GlobalContext* globalCtx);
+void func_809CB5A0(EnCne01* this, GlobalContext* globalCtx);
+void func_809CB5D8(EnCne01* this, GlobalContext* globalCtx);
+void func_809CB5FC(EnCne01* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Cne_01_InitVars = {
     ACTOR_EN_CNE_01,
@@ -22,7 +27,6 @@ const ActorInit En_Cne_01_InitVars = {
     (ActorFunc)EnCne01_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_809CBF00 = {
     { COLTYPE_HIT0, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,10 +34,8 @@ static ColliderCylinderInit D_809CBF00 = {
     { 18, 64, 0, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_809CBF2C = { 0, 0, 0, 0, MASS_IMMOVABLE };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_809CBF38 = {
@@ -71,36 +73,39 @@ static DamageTable D_809CBF38 = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
+#endif
 
 extern ColliderCylinderInit D_809CBF00;
 extern CollisionCheckInfoInit2 D_809CBF2C;
 extern DamageTable D_809CBF38;
-#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Cne_01_0x809CB290/func_809CB290.asm")
+extern UNK_TYPE D_060000F0;
+extern UNK_TYPE D_06001300;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Cne_01_0x809CB290/func_809CB404.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Cne_01/func_809CB290.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Cne_01_0x809CB290/func_809CB4A0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Cne_01/func_809CB404.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Cne_01_0x809CB290/func_809CB520.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Cne_01/func_809CB4A0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Cne_01_0x809CB290/func_809CB5A0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Cne_01/func_809CB520.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Cne_01_0x809CB290/func_809CB5D8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Cne_01/func_809CB5A0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Cne_01_0x809CB290/func_809CB5FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Cne_01/func_809CB5D8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Cne_01_0x809CB290/EnCne01_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Cne_01/func_809CB5FC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Cne_01_0x809CB290/EnCne01_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Cne_01/EnCne01_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Cne_01_0x809CB290/EnCne01_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Cne_01/EnCne01_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Cne_01_0x809CB290/func_809CB920.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Cne_01/EnCne01_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Cne_01_0x809CB290/func_809CBBC8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Cne_01/func_809CB920.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Cne_01_0x809CB290/func_809CBCA0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Cne_01/func_809CBBC8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Cne_01_0x809CB290/EnCne01_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Cne_01/func_809CBCA0.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Cne_01/EnCne01_Draw.s")

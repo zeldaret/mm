@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 
-import os
-import sys
-import subprocess
-import argparse
+import argparse, os, subprocess, sys
 from pathlib import Path
 
 script_dir = os.path.dirname(os.path.realpath(__file__))

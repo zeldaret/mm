@@ -22,7 +22,6 @@ const ActorInit En_Peehat_InitVars = {
     (ActorFunc)EnPeehat_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80899430 = {
     { COLTYPE_WOOD, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,14 +29,12 @@ static ColliderCylinderInit D_80899430 = {
     { 50, 120, -20, { 0, 0, 0 } },
 };
 
-
 // static ColliderSphereInit sSphereInit = {
 static ColliderSphereInit D_8089945C = {
     { COLTYPE_HIT6, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_SPHERE, },
     { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
     { 0, { { 0, 0, 0 }, 40 }, 100 },
 };
-
 
 // static ColliderTrisElementInit sTrisElementsInit[2] = {
 static ColliderTrisElementInit D_80899488[2] = {
@@ -56,7 +53,6 @@ static ColliderTrisInit D_80899500 = {
     { COLTYPE_METAL, AT_NONE | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_1, COLSHAPE_TRIS, },
     2, D_80899488, // sTrisElementsInit,
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80899510 = {
@@ -94,14 +90,11 @@ static DamageTable D_80899510 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80899530 = { 15, 50, 120, -20, MASS_HEAVY };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_8089953C = { 1, 20, 15, -5, 30 };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80899548[] = {
@@ -111,6 +104,7 @@ static InitChainEntry D_80899548[] = {
     ICHAIN_F32(targetArrowOffset, 700, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80899430;
 extern ColliderSphereInit D_8089945C;
@@ -120,70 +114,74 @@ extern DamageTable D_80899510;
 extern CollisionCheckInfoInit2 D_80899530;
 extern CollisionCheckInfoInit2 D_8089953C;
 extern InitChainEntry D_80899548[];
-#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/EnPeehat_Init.asm")
+extern UNK_TYPE D_06000350;
+extern UNK_TYPE D_060005C4;
+extern UNK_TYPE D_06000844;
+extern UNK_TYPE D_060009C4;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/EnPeehat_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/EnPeehat_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/func_80897170.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/EnPeehat_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/func_808971DC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/func_80897170.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/func_80897258.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/func_808971DC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/func_80897390.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/func_80897258.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/func_80897498.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/func_80897390.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/func_80897520.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/func_80897498.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/func_80897648.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/func_80897520.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/func_808976DC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/func_80897648.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/func_80897864.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/func_808976DC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/func_80897910.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/func_80897864.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/func_80897A34.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/func_80897910.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/func_80897A94.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/func_80897A34.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/func_80897D00.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/func_80897A94.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/func_80897D48.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/func_80897D00.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/func_80897EAC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/func_80897D48.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/func_80897F44.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/func_80897EAC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/func_80898124.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/func_80897F44.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/func_80898144.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/func_80898124.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/func_808982E0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/func_80898144.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/func_80898338.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/func_808982E0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/func_80898414.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/func_80898338.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/func_80898454.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/func_80898414.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/func_808984E0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/func_80898454.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/func_80898594.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/func_808984E0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/func_80898654.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/func_80898594.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/func_808986A4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/func_80898654.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/func_8089874C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/func_808986A4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/EnPeehat_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/func_8089874C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/func_80898E74.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/EnPeehat_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/func_80899024.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/func_80898E74.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Peehat_0x80896F30/EnPeehat_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/func_80899024.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Peehat/EnPeehat_Draw.s")

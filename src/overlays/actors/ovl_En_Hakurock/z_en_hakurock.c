@@ -8,6 +8,12 @@ void EnHakurock_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnHakurock_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHakurock_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B22040(EnHakurock* this, GlobalContext* globalCtx);
+void func_80B221E8(EnHakurock* this, GlobalContext* globalCtx);
+void func_80B2242C(EnHakurock* this, GlobalContext* globalCtx);
+void func_80B22500(EnHakurock* this, GlobalContext* globalCtx);
+void func_80B22750(EnHakurock* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Hakurock_InitVars = {
     ACTOR_EN_HAKUROCK,
@@ -21,7 +27,6 @@ const ActorInit En_Hakurock_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B22A80 = {
     { COLTYPE_HARD, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_NO_PUSH | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -29,45 +34,46 @@ static ColliderCylinderInit D_80B22A80 = {
     { 60, 60, -30, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_80B22AAC = { 0, 60, 60, MASS_IMMOVABLE };
 
+#endif
 
 extern ColliderCylinderInit D_80B22A80;
 extern CollisionCheckInfoInit D_80B22AAC;
-#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hakurock_0x80B21B00/EnHakurock_Init.asm")
+extern UNK_TYPE D_06011100;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hakurock_0x80B21B00/EnHakurock_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/EnHakurock_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hakurock_0x80B21B00/func_80B21BE0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/EnHakurock_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hakurock_0x80B21B00/func_80B21EA4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B21BE0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hakurock_0x80B21B00/func_80B21FFC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B21EA4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hakurock_0x80B21B00/func_80B22040.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B21FFC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hakurock_0x80B21B00/func_80B220A8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B22040.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hakurock_0x80B21B00/func_80B221E8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B220A8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hakurock_0x80B21B00/func_80B222AC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B221E8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hakurock_0x80B21B00/func_80B2242C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B222AC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hakurock_0x80B21B00/func_80B224C0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B2242C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hakurock_0x80B21B00/func_80B22500.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B224C0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hakurock_0x80B21B00/func_80B226AC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B22500.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hakurock_0x80B21B00/func_80B22750.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B226AC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hakurock_0x80B21B00/EnHakurock_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B22750.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hakurock_0x80B21B00/func_80B228F4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/EnHakurock_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hakurock_0x80B21B00/func_80B229A4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B228F4.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B229A4.s")

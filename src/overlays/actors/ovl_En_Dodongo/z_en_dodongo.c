@@ -22,7 +22,6 @@ const ActorInit En_Dodongo_InitVars = {
     (ActorFunc)EnDodongo_Draw,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[10] = {
 static ColliderJntSphElementInit D_808790D0[10] = {
     {
@@ -73,29 +72,11 @@ static ColliderJntSphInit D_80879238 = {
     10, D_808790D0, // sJntSphElementsInit,
 };
 
-
-// static ColliderJntSphElementInit sJntSphElementsInit[3] = {
-static ColliderJntSphElementInit D_808790D0[3] = {
-    {
-        { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x800CB019, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
-        { 7, { { 500, 0, 0 }, 27 }, 100 },
-    },
-    {
-        { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x800CB019, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
-        { 21, { { -200, 0, 0 }, 20 }, 100 },
-    },
-    {
-        { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x800CB019, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
-        { 28, { { -200, 0, 0 }, 20 }, 100 },
-    },
-};
-
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_80879248 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_1, COLSHAPE_JNTSPH, },
     3, D_808790D0, // sJntSphElementsInit,
 };
-
 
 // static ColliderJntSphElementInit sJntSphElementsInit[3] = {
 static ColliderJntSphElementInit D_80879258[3] = {
@@ -118,7 +99,6 @@ static ColliderJntSphInit D_808792C4 = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_NONE, OC1_NONE, OC2_NONE, COLSHAPE_JNTSPH, },
     3, D_80879258, // sJntSphElementsInit,
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_808792D4 = {
@@ -156,10 +136,8 @@ static DamageTable D_808792D4 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_808792F4 = { 3, 100, 100, 80 };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_808792FC[] = {
@@ -168,80 +146,87 @@ static InitChainEntry D_808792FC[] = {
     ICHAIN_F32(targetArrowOffset, 1400, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_808790D0[10];
 extern ColliderJntSphInit D_80879238;
-extern ColliderJntSphElementInit D_808790D0[3];
 extern ColliderJntSphInit D_80879248;
 extern ColliderJntSphElementInit D_80879258[3];
 extern ColliderJntSphInit D_808792C4;
 extern DamageTable D_808792D4;
 extern CollisionCheckInfoInit D_808792F4;
 extern InitChainEntry D_808792FC[];
-#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/EnDodongo_Init.asm")
+extern UNK_TYPE D_060013C4;
+extern UNK_TYPE D_06001A44;
+extern UNK_TYPE D_060028F0;
+extern UNK_TYPE D_06003088;
+extern UNK_TYPE D_060042C4;
+extern UNK_TYPE D_06004C20;
+extern UNK_TYPE D_06008B1C;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/EnDodongo_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/EnDodongo_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/func_80876930.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/EnDodongo_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/func_80876B08.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/func_80876930.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/func_80876BD0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/func_80876B08.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/func_80876CAC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/func_80876BD0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/func_80876D28.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/func_80876CAC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/func_80876DC4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/func_80876D28.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/func_8087721C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/func_80876DC4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/func_80877278.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/func_8087721C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/func_808773C4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/func_80877278.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/func_80877424.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/func_808773C4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/func_80877494.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/func_80877424.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/func_80877500.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/func_80877494.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/func_808777A8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/func_80877500.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/func_8087784C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/func_808777A8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/func_80877D50.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/func_8087784C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/func_80877D90.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/func_80877D50.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/func_80877DE0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/func_80877D90.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/func_80877E60.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/func_80877DE0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/func_80878354.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/func_80877E60.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/func_80878424.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/func_80878354.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/func_80878594.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/func_80878424.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/func_808785B0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/func_80878594.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/func_8087864C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/func_808785B0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/func_808786C8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/func_8087864C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/func_80878724.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/func_808786C8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/func_808787B0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/func_80878724.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/func_80878910.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/func_808787B0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/EnDodongo_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/func_80878910.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/func_80878E44.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/EnDodongo_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/func_80878EB4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/func_80878E44.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dodongo_0x80876670/EnDodongo_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/func_80878EB4.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dodongo/EnDodongo_Draw.s")

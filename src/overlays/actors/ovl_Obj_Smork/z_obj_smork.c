@@ -24,16 +24,18 @@ const ActorInit Obj_Smork_InitVars = {
 
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Smork_0x80A3D680/func_80A3D680.asm")
+extern UNK_TYPE D_06001C00;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Smork_0x80A3D680/func_80A3D940.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Smork/func_80A3D680.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Smork_0x80A3D680/func_80A3D9C4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Smork/func_80A3D940.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Smork_0x80A3D680/ObjSmork_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Smork/func_80A3D9C4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Smork_0x80A3D680/ObjSmork_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Smork/ObjSmork_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Smork_0x80A3D680/ObjSmork_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Smork/ObjSmork_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Smork_0x80A3D680/ObjSmork_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Smork/ObjSmork_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Smork/ObjSmork_Draw.s")

@@ -3,8 +3,8 @@
 
 // TODO should be in libultra/io
 
-#include <PR/ultratypes.h>
-#include <os.h>
+#include "PR/ultratypes.h"
+#include "os.h"
 
 typedef struct {
     /* 0x0 */ f32 factor;

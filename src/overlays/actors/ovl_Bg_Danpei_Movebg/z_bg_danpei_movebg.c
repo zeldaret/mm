@@ -21,7 +21,6 @@ const ActorInit Bg_Danpei_Movebg_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80AF753C[] = {
     ICHAIN_F32(uncullZoneScale, 1500, ICHAIN_CONTINUE),
@@ -30,30 +29,30 @@ static InitChainEntry D_80AF753C[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-
-extern InitChainEntry D_80AF753C[];
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Danpei_Movebg_0x80AF6DE0/func_80AF6DE0.asm")
+extern InitChainEntry D_80AF753C[];
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Danpei_Movebg_0x80AF6DE0/BgDanpeiMovebg_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Danpei_Movebg/func_80AF6DE0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Danpei_Movebg_0x80AF6DE0/func_80AF6EA8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Danpei_Movebg/BgDanpeiMovebg_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Danpei_Movebg_0x80AF6DE0/BgDanpeiMovebg_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Danpei_Movebg/func_80AF6EA8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Danpei_Movebg_0x80AF6DE0/BgDanpeiMovebg_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Danpei_Movebg/BgDanpeiMovebg_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Danpei_Movebg_0x80AF6DE0/func_80AF705C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Danpei_Movebg/BgDanpeiMovebg_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Danpei_Movebg_0x80AF6DE0/func_80AF70FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Danpei_Movebg/func_80AF705C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Danpei_Movebg_0x80AF6DE0/func_80AF71FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Danpei_Movebg/func_80AF70FC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Danpei_Movebg_0x80AF6DE0/func_80AF72F8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Danpei_Movebg/func_80AF71FC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Danpei_Movebg_0x80AF6DE0/func_80AF7354.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Danpei_Movebg/func_80AF72F8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Danpei_Movebg_0x80AF6DE0/func_80AF746C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Danpei_Movebg/func_80AF7354.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Danpei_Movebg_0x80AF6DE0/func_80AF74CC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Danpei_Movebg/func_80AF746C.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Danpei_Movebg/func_80AF74CC.s")

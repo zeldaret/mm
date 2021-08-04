@@ -22,10 +22,10 @@ const ActorInit Obj_Makeoshihiki_InitVars = {
 
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Makeoshihiki_0x80972350/func_80972350.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Makeoshihiki/func_80972350.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Makeoshihiki_0x80972350/func_809723C4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Makeoshihiki/func_809723C4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Makeoshihiki_0x80972350/ObjMakeoshihiki_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Makeoshihiki/ObjMakeoshihiki_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Makeoshihiki_0x80972350/ObjMakeoshihiki_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Makeoshihiki/ObjMakeoshihiki_Update.s")

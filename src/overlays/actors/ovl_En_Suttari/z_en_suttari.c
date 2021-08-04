@@ -38,12 +38,12 @@ void func_80BADF3C(EnSuttari* this, GlobalContext* globalCtx);
 
 extern FlexSkeletonHeader D_0600C240;
 extern AnimationHeader D_0600071C;
-extern AnimationHeader D_060128F4;
-extern AnimationHeader D_06011F84;
-extern AnimationHeader D_06012E84;
-extern AnimationHeader D_0601139C;
-extern AnimationHeader D_06011C38;
 extern AnimationHeader D_06010BDC;
+extern AnimationHeader D_0601139C;
+extern AnimationHeader D_06011F84;
+extern AnimationHeader D_06011C38;
+extern AnimationHeader D_060128F4;
+extern AnimationHeader D_06012E84;
 extern Gfx D_0600AF90[];
 extern Gfx D_06013380[];
 

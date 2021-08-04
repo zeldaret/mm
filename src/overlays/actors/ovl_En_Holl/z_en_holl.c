@@ -9,6 +9,8 @@ void EnHoll_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHoll_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHoll_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_8089A330(EnHoll* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Holl_InitVars = {
     ACTOR_EN_HOLL,
@@ -22,7 +24,6 @@ const ActorInit En_Holl_InitVars = {
     (ActorFunc)EnHoll_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_8089A5D0[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
@@ -30,30 +31,30 @@ static InitChainEntry D_8089A5D0[] = {
     ICHAIN_F32(uncullZoneDownward, 400, ICHAIN_STOP),
 };
 
-
-extern InitChainEntry D_8089A5D0[];
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Holl_0x80899960/func_80899960.asm")
+extern InitChainEntry D_8089A5D0[];
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Holl_0x80899960/func_808999B0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Holl/func_80899960.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Holl_0x80899960/EnHoll_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Holl/func_808999B0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Holl_0x80899960/EnHoll_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Holl/EnHoll_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Holl_0x80899960/func_80899ACC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Holl/EnHoll_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Holl_0x80899960/func_80899B88.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Holl/func_80899ACC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Holl_0x80899960/func_80899F30.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Holl/func_80899B88.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Holl_0x80899960/func_8089A0C0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Holl/func_80899F30.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Holl_0x80899960/func_8089A238.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Holl/func_8089A0C0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Holl_0x80899960/func_8089A330.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Holl/func_8089A238.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Holl_0x80899960/EnHoll_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Holl/func_8089A330.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Holl_0x80899960/EnHoll_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Holl/EnHoll_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Holl/EnHoll_Draw.s")

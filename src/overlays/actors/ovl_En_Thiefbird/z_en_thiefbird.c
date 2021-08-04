@@ -9,6 +9,16 @@ void EnThiefbird_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnThiefbird_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnThiefbird_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C11590(EnThiefbird* this, GlobalContext* globalCtx);
+void func_80C1193C(EnThiefbird* this, GlobalContext* globalCtx);
+void func_80C11D14(EnThiefbird* this, GlobalContext* globalCtx);
+void func_80C11DF0(EnThiefbird* this, GlobalContext* globalCtx);
+void func_80C1215C(EnThiefbird* this, GlobalContext* globalCtx);
+void func_80C12378(EnThiefbird* this, GlobalContext* globalCtx);
+void func_80C124B0(EnThiefbird* this, GlobalContext* globalCtx);
+void func_80C126D8(EnThiefbird* this, GlobalContext* globalCtx);
+void func_80C127F4(EnThiefbird* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Thiefbird_InitVars = {
     ACTOR_EN_THIEFBIRD,
@@ -21,7 +31,6 @@ const ActorInit En_Thiefbird_InitVars = {
     (ActorFunc)EnThiefbird_Update,
     (ActorFunc)EnThiefbird_Draw,
 };
-
 
 // static ColliderJntSphElementInit sJntSphElementsInit[3] = {
 static ColliderJntSphElementInit D_80C135C0[3] = {
@@ -45,10 +54,8 @@ static ColliderJntSphInit D_80C1362C = {
     3, D_80C135C0, // sJntSphElementsInit,
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_80C1363C = { 24, 15, 30, 30 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80C13644 = {
@@ -86,7 +93,6 @@ static DamageTable D_80C13644 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80C13670[] = {
     ICHAIN_F32(uncullZoneForward, 3000, ICHAIN_CONTINUE),
@@ -95,78 +101,85 @@ static InitChainEntry D_80C13670[] = {
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_80C135C0[3];
 extern ColliderJntSphInit D_80C1362C;
 extern CollisionCheckInfoInit D_80C1363C;
 extern DamageTable D_80C13644;
 extern InitChainEntry D_80C13670[];
-#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/EnThiefbird_Init.asm")
+extern UNK_TYPE D_06000088;
+extern UNK_TYPE D_06000278;
+extern UNK_TYPE D_06000604;
+extern UNK_TYPE D_06003060;
+extern UNK_TYPE D_060033B0;
+extern UNK_TYPE D_060063C4;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/EnThiefbird_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/EnThiefbird_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/func_80C10984.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/EnThiefbird_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/func_80C10B0C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C10984.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/func_80C10DE8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C10B0C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/func_80C10E98.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C10DE8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/func_80C11338.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C10E98.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/func_80C11454.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C11338.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/func_80C114C0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C11454.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/func_80C11538.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C114C0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/func_80C11590.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C11538.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/func_80C118E4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C11590.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/func_80C1193C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C118E4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/func_80C11C60.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C1193C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/func_80C11D14.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C11C60.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/func_80C11DC0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C11D14.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/func_80C11DF0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C11DC0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/func_80C11F6C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C11DF0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/func_80C1215C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C11F6C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/func_80C12308.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C1215C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/func_80C12378.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C12308.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/func_80C1242C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C12378.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/func_80C124B0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C1242C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/func_80C126A8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C124B0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/func_80C126D8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C126A8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/func_80C12744.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C126D8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/func_80C127F4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C12744.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/func_80C12B1C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C127F4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/func_80C12D00.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C12B1C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/EnThiefbird_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C12D00.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/func_80C130EC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/EnThiefbird_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/func_80C1315C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C130EC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/func_80C13354.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C1315C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Thiefbird_0x80C10770/EnThiefbird_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C13354.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/EnThiefbird_Draw.s")

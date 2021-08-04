@@ -22,7 +22,6 @@ const ActorInit Bg_Hakugin_Bombwall_InitVars = {
     (ActorFunc)BgHakuginBombwall_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80ABCF80 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
@@ -30,40 +29,41 @@ static ColliderCylinderInit D_80ABCF80 = {
     { 80, 80, 0, { 0, 0, 0 } },
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80ABD040[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80ABCF80;
 extern InitChainEntry D_80ABD040[];
-#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Hakugin_Bombwall_0x80ABBFC0/func_80ABBFC0.asm")
+extern UNK_TYPE D_06009830;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Hakugin_Bombwall_0x80ABBFC0/func_80ABC2E0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Bombwall/func_80ABBFC0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Hakugin_Bombwall_0x80ABBFC0/func_80ABC58C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Bombwall/func_80ABC2E0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Hakugin_Bombwall_0x80ABBFC0/func_80ABC7FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Bombwall/func_80ABC58C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Hakugin_Bombwall_0x80ABBFC0/BgHakuginBombwall_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Bombwall/func_80ABC7FC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Hakugin_Bombwall_0x80ABBFC0/BgHakuginBombwall_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Bombwall/BgHakuginBombwall_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Hakugin_Bombwall_0x80ABBFC0/func_80ABCB5C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Bombwall/BgHakuginBombwall_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Hakugin_Bombwall_0x80ABBFC0/func_80ABCC00.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Bombwall/func_80ABCB5C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Hakugin_Bombwall_0x80ABBFC0/func_80ABCCE4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Bombwall/func_80ABCC00.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Hakugin_Bombwall_0x80ABBFC0/func_80ABCD98.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Bombwall/func_80ABCCE4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Hakugin_Bombwall_0x80ABBFC0/func_80ABCE60.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Bombwall/func_80ABCD98.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Hakugin_Bombwall_0x80ABBFC0/BgHakuginBombwall_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Bombwall/func_80ABCE60.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Hakugin_Bombwall_0x80ABBFC0/BgHakuginBombwall_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Bombwall/BgHakuginBombwall_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Hakugin_Bombwall/BgHakuginBombwall_Draw.s")

@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 #define FLAGS 0x00000000
 
@@ -624,7 +623,7 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc = func_800A6A40;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_en_item00/EnItem00_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_en_item00/EnItem00_Update.s")
 #endif
 
 void EnItem00_DrawRupee(EnItem00* this, GlobalContext* globalCtx);
@@ -914,7 +913,7 @@ EnItem00* Item_DropCollectible(GlobalContext* globalCtx, Vec3f* spawnPos, u32 pa
     return spawnedActor;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_en_item00/Item_DropCollectible.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_en_item00/Item_DropCollectible.s")
 #endif
 
 #ifdef NON_MATCHING
@@ -971,7 +970,7 @@ Actor* Item_DropCollectible2(GlobalContext* globalCtx, Vec3f* spawnPos, u32 para
     return spawnedActor;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_en_item00/Item_DropCollectible2.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_en_item00/Item_DropCollectible2.s")
 #endif
 
 u8 sDropTable[DROP_TABLE_SIZE * DROP_TABLE_NUMBER] = {
@@ -1171,7 +1170,7 @@ void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_en_item00/Item_DropCollectibleRandom.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_en_item00/Item_DropCollectibleRandom.s")
 #endif
 
 s32 D_801AE194[32] = { ITEM00_NO_DROP,     ITEM00_RUPEE_GREEN,     ITEM00_RUPEE_BLUE,  ITEM00_NO_DROP,

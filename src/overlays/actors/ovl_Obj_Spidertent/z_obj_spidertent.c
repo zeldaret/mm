@@ -22,7 +22,6 @@ const ActorInit Obj_Spidertent_InitVars = {
     (ActorFunc)ObjSpidertent_Draw,
 };
 
-
 // static ColliderTrisElementInit sTrisElementsInit[6] = {
 static ColliderTrisElementInit D_80B31060[6] = {
     {
@@ -56,7 +55,6 @@ static ColliderTrisInit D_80B311C8 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_TRIS, },
     6, D_80B31060, // sTrisElementsInit,
 };
-
 
 // static ColliderTrisElementInit sTrisElementsInit[6] = {
 static ColliderTrisElementInit D_80B311D8[6] = {
@@ -92,7 +90,6 @@ static ColliderTrisInit D_80B31340 = {
     6, D_80B311D8, // sTrisElementsInit,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B31418[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
@@ -101,42 +98,42 @@ static InitChainEntry D_80B31418[] = {
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderTrisElementInit D_80B31060[6];
 extern ColliderTrisInit D_80B311C8;
 extern ColliderTrisElementInit D_80B311D8[6];
 extern ColliderTrisInit D_80B31340;
 extern InitChainEntry D_80B31418[];
-#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Spidertent_0x80B2FB10/func_80B2FB10.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/func_80B2FB10.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Spidertent_0x80B2FB10/func_80B2FB94.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/func_80B2FB94.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Spidertent_0x80B2FB10/func_80B2FC98.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/func_80B2FC98.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Spidertent_0x80B2FB10/func_80B300F4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/func_80B300F4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Spidertent_0x80B2FB10/func_80B30410.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/func_80B30410.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Spidertent_0x80B2FB10/func_80B30480.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/func_80B30480.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Spidertent_0x80B2FB10/ObjSpidertent_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/ObjSpidertent_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Spidertent_0x80B2FB10/ObjSpidertent_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/ObjSpidertent_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Spidertent_0x80B2FB10/func_80B307E0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/func_80B307E0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Spidertent_0x80B2FB10/func_80B30808.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/func_80B30808.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Spidertent_0x80B2FB10/func_80B30A2C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/func_80B30A2C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Spidertent_0x80B2FB10/func_80B30A4C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/func_80B30A4C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Spidertent_0x80B2FB10/func_80B30AD4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/func_80B30AD4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Spidertent_0x80B2FB10/func_80B30AF8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/func_80B30AF8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Spidertent_0x80B2FB10/ObjSpidertent_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/ObjSpidertent_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Spidertent_0x80B2FB10/ObjSpidertent_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/ObjSpidertent_Draw.s")

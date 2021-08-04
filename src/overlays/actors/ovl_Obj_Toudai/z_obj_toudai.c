@@ -24,16 +24,19 @@ const ActorInit Obj_Toudai_InitVars = {
 
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Toudai_0x80A33B00/func_80A33B00.asm")
+extern UNK_TYPE D_060023B0;
+extern UNK_TYPE D_060024E8;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Toudai_0x80A33B00/func_80A33BB4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Toudai/func_80A33B00.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Toudai_0x80A33B00/func_80A342F4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Toudai/func_80A33BB4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Toudai_0x80A33B00/ObjToudai_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Toudai/func_80A342F4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Toudai_0x80A33B00/ObjToudai_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Toudai/ObjToudai_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Toudai_0x80A33B00/ObjToudai_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Toudai/ObjToudai_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Toudai_0x80A33B00/ObjToudai_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Toudai/ObjToudai_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Toudai/ObjToudai_Draw.s")

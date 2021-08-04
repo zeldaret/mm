@@ -24,12 +24,14 @@ const ActorInit Eff_Stk_InitVars = {
 
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Stk_0x80BF0D90/EffStk_Init.asm")
+extern UNK_TYPE D_06009F60;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Stk_0x80BF0D90/EffStk_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Stk/EffStk_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Stk_0x80BF0D90/func_80BF0DE0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Stk/EffStk_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Stk_0x80BF0D90/EffStk_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Stk/func_80BF0DE0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Stk_0x80BF0D90/EffStk_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Stk/EffStk_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Stk/EffStk_Draw.s")

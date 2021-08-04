@@ -23,20 +23,24 @@ const ActorInit Eff_Kamejima_Wave_InitVars = {
 
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Kamejima_Wave_0x80BCEB20/EffKamejimaWave_Init.asm")
+extern UNK_TYPE D_06000000;
+extern UNK_TYPE D_06000140;
+extern UNK_TYPE D_06001AF0;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Kamejima_Wave_0x80BCEB20/EffKamejimaWave_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Kamejima_Wave/EffKamejimaWave_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Kamejima_Wave_0x80BCEB20/func_80BCEBC0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Kamejima_Wave/EffKamejimaWave_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Kamejima_Wave_0x80BCEB20/func_80BCEC6C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Kamejima_Wave/func_80BCEBC0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Kamejima_Wave_0x80BCEB20/func_80BCED34.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Kamejima_Wave/func_80BCEC6C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Kamejima_Wave_0x80BCEB20/func_80BCEDE0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Kamejima_Wave/func_80BCED34.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Kamejima_Wave_0x80BCEB20/EffKamejimaWave_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Kamejima_Wave/func_80BCEDE0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Kamejima_Wave_0x80BCEB20/func_80BCEEBC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Kamejima_Wave/EffKamejimaWave_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Kamejima_Wave_0x80BCEB20/func_80BCEF0C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Kamejima_Wave/func_80BCEEBC.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Kamejima_Wave/func_80BCEF0C.s")
