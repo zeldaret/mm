@@ -13,15 +13,15 @@ typedef enum {
 } ObjectSekModels;
 
 typedef enum {
-    /* 25 */ OBJ_WARPSTONE_TIMER_OPENED = 25,
-    /* 66 */ OBJ_WARPSTONE_TIMER_DONE = 66
+    /* 25 */ OBJ_WARPSTONE_TIMER_OPEN_THRESHOLD = 25,
+    /* 66 */ OBJ_WARPSTONE_TIMER_ACTIVATE_THRESHOLD = 66
 } ObjWarpstoneTimerCutoffs;
 
 typedef struct ObjWarpstone {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ ColliderCylinder collider; 
     /* 0x1A8 */ u8 isTalking;
-    /* 0x1A9 */ u8 timer /*for statue opening cutscene*/;
+    /* 0x1A9 */ u8 openingCSTimer;
     /* 0x1AA */ u8 modelIndex;
     /* 0x1AC */ ObjWarpstoneActionFunc actionFunc;
 } ObjWarpstone; // size = 0x1B0
