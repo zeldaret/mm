@@ -20,16 +20,14 @@ void func_8092D320(EnDns* this, GlobalContext* globalCtx);
 void func_8092D4D8(EnDns* this, GlobalContext* globalCtx);
 
 extern SkeletonHeader D_06002DD8;
-extern AnimationHeader D_06003310[];
-extern AnimationHeader D_06003310[];
-extern AnimationHeader D_060034EC[];
-extern AnimationHeader D_060034EC[];
-extern AnimationHeader D_060008F4[];
-extern AnimationHeader D_06000BD8[];
-extern AnimationHeader D_06000D58[];
-extern AnimationHeader D_06000FEC[];
-extern AnimationHeader D_060002A8[];
-extern AnimationHeader D_06000734[];
+extern AnimationHeader D_06003310;
+extern AnimationHeader D_060034EC;
+extern AnimationHeader D_060008F4;
+extern AnimationHeader D_06000BD8;
+extern AnimationHeader D_06000D58;
+extern AnimationHeader D_06000FEC;
+extern AnimationHeader D_060002A8;
+extern AnimationHeader D_06000734;
 extern Gfx D_060028E8[];
 extern Gfx D_06002968[];
 extern Gfx D_060029E8[];
@@ -77,10 +75,10 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
 static ActorAnimationEntryS sAnimations[] = {
-    { D_06003310, 1.0f, 0, -1, 0, 0 },  { D_06003310, 1.0f, 0, -1, 0, -4 }, { D_060034EC, 1.0f, 0, -1, 0, 0 },
-    { D_060034EC, 1.0f, 0, -1, 0, -4 }, { D_060008F4, 1.0f, 0, -1, 2, 0 },  { D_06000BD8, 1.0f, 0, -1, 0, 0 },
-    { D_06000D58, 1.0f, 0, -1, 2, 0 },  { D_06000FEC, 1.0f, 0, -1, 0, 0 },  { D_060002A8, 1.0f, 0, -1, 2, 0 },
-    { D_06000734, 1.0f, 0, -1, 2, 0 },
+    { &D_06003310, 1.0f, 0, -1, 0, 0 },  { &D_06003310, 1.0f, 0, -1, 0, -4 }, { &D_060034EC, 1.0f, 0, -1, 0, 0 },
+    { &D_060034EC, 1.0f, 0, -1, 0, -4 }, { &D_060008F4, 1.0f, 0, -1, 2, 0 },  { &D_06000BD8, 1.0f, 0, -1, 0, 0 },
+    { &D_06000D58, 1.0f, 0, -1, 2, 0 },  { &D_06000FEC, 1.0f, 0, -1, 0, 0 },  { &D_060002A8, 1.0f, 0, -1, 2, 0 },
+    { &D_06000734, 1.0f, 0, -1, 2, 0 },
 };
 
 void func_8092C5C0(EnDns* this) {
@@ -282,12 +280,10 @@ s32 func_8092CC68(GlobalContext* globalCtx) {
 s32 func_8092CCEC(EnDns* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
     s32 pad;
-    Vec3f sp3C;
-    Vec3f sp30;
+    Vec3f sp3C = player->actor.world.pos;
+    Vec3f sp30 = this->actor.world.pos;
     s16 sp2E;
 
-    sp3C = player->actor.world.pos;
-    sp30 = this->actor.world.pos;
     Math_Vec3f_Copy(&sp30, &this->actor.world.pos);
     Math_Vec3f_Copy(&sp3C, &player->actor.world.pos);
     this->unk_2D6 = Math_Vec3f_Yaw(&D_801D15B0, &sp3C);
@@ -329,7 +325,7 @@ s32 func_8092CE38(EnDns* this) {
     } else {
         if (this->unk_2D2 == 0) {
             if (func_801378B8(&this->skelAnime, 13.0f)) {
-                this->actor.world.rot.y += 0x8000;
+                this->actor.world.rot.y = BINANG_ROT180(this->actor.world.rot.y);
                 this->unk_2E4 = 0.0f;
                 this->actor.shape.rot.y = this->actor.world.rot.y;
                 Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_JUMP);
@@ -531,8 +527,8 @@ void EnDns_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_2FC = 0;
     }
     this->actionFunc = func_8092D1B8;
-    gSaveContext.eventInf[1] &= 0xDF;
-    gSaveContext.eventInf[1] &= 0xBF;
+    gSaveContext.eventInf[1] &= (u8)~0x20;
+    gSaveContext.eventInf[1] &= (u8)~0x40;
 }
 
 void EnDns_Destroy(Actor* thisx, GlobalContext* globalCtx) {
