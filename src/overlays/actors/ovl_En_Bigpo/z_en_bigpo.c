@@ -194,7 +194,7 @@ void EnBigpo_Init(Actor* thisx, GlobalContext *globalCtx2) {
         return;
     }
     
-    SkelAnime_Init(globalCtx, &this->skelAnime, &D_06005C18, &D_06000924, &this->limbDrawTbl, &this->transitionDrawTbl, 0xA);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &D_06005C18, &D_06000924, this->limbDrawTbl, this->transitionDrawTbl, 0xA);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80B65010);
     CollisionCheck_SetInfo(&thisx->colChkInfo, &D_80B65044, &D_80B6503C);
 
@@ -1151,7 +1151,7 @@ s32 func_80B63D88(EnBigpo *this, GlobalContext *globalCtx) {
 void EnBigpo_Update(Actor *thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*) thisx;
     s32 pad;
-    Collider* thisCollider; // todo: this might not be a base collider
+    ColliderCylinder* thisCollider; // todo: this might not be a base collider
 
     if ((this->actor.flags & 0x2000) == 0x2000) {
         this->unk212 = 0;
@@ -1189,16 +1189,16 @@ void EnBigpo_Update(Actor *thisx, GlobalContext *globalCtx) {
     func_80B63D0C(this); // randomizes a second color
 
     this->actor.shape.shadowAlpha = this->mainColor.a;
-    thisCollider = &this->collider.base;
+    thisCollider = &this->collider;
     Collider_UpdateCylinder(&this->actor, thisCollider);
     if ((this->collider.base.ocFlags1 & OC1_ON)) {
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, thisCollider);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &thisCollider->base);
     }
     if ((this->collider.base.atFlags & AT_ON)) {
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, thisCollider);
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &thisCollider->base);
     }
     if ((this->collider.base.acFlags & AC_ON)) {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, thisCollider);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &thisCollider->base);
     }
 
     if (this->unk21C > 0.0f) {
@@ -1262,22 +1262,22 @@ void EnBigPo_PostLimbDraw2(struct GlobalContext *globalCtx, s32 limbIndex, Gfx *
     limbByte = D_80B65078[limbIndex];
     if (limbByte != -1) {
         if (limbByte < 3) {
-            SysMatrix_GetStateTranslation(&this->unk224[limbByte]);
+            SysMatrix_GetStateTranslation(&this->limbPos[limbByte]);
             return;
         }
         if (limbByte == 3) {
-            SysMatrix_GetStateTranslationAndScaledX(3000.0f, &this->unk224[limbByte]);
+            SysMatrix_GetStateTranslationAndScaledX(3000.0f, &this->limbPos[limbByte]);
             return;
         }
         if (limbByte == 4) {
-            SysMatrix_GetStateTranslationAndScaledY(-2000.0f, &this->unk224[limbByte]);
+            SysMatrix_GetStateTranslationAndScaledY(-2000.0f, &this->limbPos[limbByte]);
             return;
 
         }
 
-        v2ptr = &this->unk224[limbByte+1];
-        v1ptr = &D_80B65084;
-        SysMatrix_GetStateTranslationAndScaledX(-4000.0f, &this->unk224[limbByte]);
+        v2ptr = &this->limbPos[limbByte+1];
+        v1ptr = D_80B65084;
+        SysMatrix_GetStateTranslationAndScaledX(-4000.0f, &this->limbPos[limbByte]);
         
         for (i = limbByte + 1; i < 9; i++) {
             SysMatrix_MultiplyVector3fByState(v1ptr, v2ptr);
@@ -1318,7 +1318,7 @@ void func_80B64470(Actor *thisx, GlobalContext *globalCtx) {
                                     EnBigPo_OverrideLimbDraw2, EnBigPo_PostLimbDraw2, &this->actor, dispHead + 3);
     }
 
-    func_800BE680(globalCtx, &this->actor, &this->unk224, 9,
+    func_800BE680(globalCtx, &this->actor, this->limbPos, 9,
          this->actor.scale.x * 71.428566f * this->unk220, 0, this->unk21C, 0x14);
 
     SysMatrix_SetCurrentState(&this->drawMtxF);

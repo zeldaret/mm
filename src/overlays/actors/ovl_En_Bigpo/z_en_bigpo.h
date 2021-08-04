@@ -36,7 +36,7 @@ typedef struct EnBigpo {
     /* 0x218 */ f32 unk218; // re-appear height
     /* 0x21C */ f32 unk21C; // reduced alpha?
     /* 0x220 */ f32 unk220; // created from unk21C
-    /* 0x224 */ Vec3f unk224[0x9];
+    /* 0x224 */ Vec3f limbPos[0x9];
     /* 0x290 */ Color_RGBA8 mainColor;
     /* 0x294 */ Color_RGBA8 unk294; // only used by one draw function
     /* 0x298 */ u8 pad298[0x14];
