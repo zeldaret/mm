@@ -107,8 +107,17 @@ void func_8098EC68(ObjKibako2 *this, GlobalContext *globalCtx) {
     }
 }
 
+// Extra sw, why???
+#ifdef NON_MATCHING
+void func_8098ED20(ObjKibako2 *this, GlobalContext *globalCtx) {
+    func_8098E9C4(this);
+    Actor_MarkForDeath(&this->dyna.actor);
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/func_8098ED20.s")
+#endif
 
+// Still needs a lot of love
 #ifdef NON_MATCHING
 void ObjKibako2_Update(Actor *thisx, GlobalContext *globalCtx) {
     ObjKibako2* this = THIS;
