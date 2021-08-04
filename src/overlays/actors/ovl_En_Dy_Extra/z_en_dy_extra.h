@@ -1,7 +1,7 @@
 #ifndef Z_EN_DY_EXTRA_H
 #define Z_EN_DY_EXTRA_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnDyExtra;
 

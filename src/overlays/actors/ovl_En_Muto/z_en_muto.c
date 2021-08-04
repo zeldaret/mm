@@ -9,6 +9,9 @@ void EnMuto_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMuto_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMuto_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BE7DEC(EnMuto* this, GlobalContext* globalCtx);
+void func_80BE7FEC(EnMuto* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Muto_InitVars = {
     ACTOR_EN_MUTO,
@@ -22,7 +25,6 @@ const ActorInit En_Muto_InitVars = {
     (ActorFunc)EnMuto_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80BE841C = {
     { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
@@ -30,28 +32,30 @@ static ColliderCylinderInit D_80BE841C = {
     { 20, 60, 0, { 0, 0, 0 } },
 };
 
-
-extern ColliderCylinderInit D_80BE841C;
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Muto_0x80BE7B00/EnMuto_Init.asm")
+extern ColliderCylinderInit D_80BE841C;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Muto_0x80BE7B00/EnMuto_Destroy.asm")
+extern UNK_TYPE D_06000E50;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Muto_0x80BE7B00/func_80BE7C94.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Muto/EnMuto_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Muto_0x80BE7B00/func_80BE7D20.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Muto/EnMuto_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Muto_0x80BE7B00/func_80BE7DB4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Muto/func_80BE7C94.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Muto_0x80BE7B00/func_80BE7DEC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Muto/func_80BE7D20.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Muto_0x80BE7B00/func_80BE7F88.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Muto/func_80BE7DB4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Muto_0x80BE7B00/func_80BE7FEC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Muto/func_80BE7DEC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Muto_0x80BE7B00/EnMuto_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Muto/func_80BE7F88.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Muto_0x80BE7B00/func_80BE8328.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Muto/func_80BE7FEC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Muto_0x80BE7B00/EnMuto_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Muto/EnMuto_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Muto/func_80BE8328.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Muto/EnMuto_Draw.s")

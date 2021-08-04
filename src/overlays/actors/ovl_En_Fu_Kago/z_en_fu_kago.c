@@ -22,7 +22,6 @@ const ActorInit En_Fu_Kago_InitVars = {
     (ActorFunc)EnFuKago_Draw,
 };
 
-
 // static ColliderSphereInit sSphereInit = {
 static ColliderSphereInit D_80AD05F0 = {
     { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_NO_PUSH | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_SPHERE, },
@@ -30,36 +29,39 @@ static ColliderSphereInit D_80AD05F0 = {
     { 0, { { 0, 0, 0 }, 200 }, 100 },
 };
 
-
-extern ColliderSphereInit D_80AD05F0;
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fu_Kago_0x80ACF780/EnFuKago_Init.asm")
+extern ColliderSphereInit D_80AD05F0;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fu_Kago_0x80ACF780/EnFuKago_Destroy.asm")
+extern UNK_TYPE D_060006A0;
+extern UNK_TYPE D_060015C0;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fu_Kago_0x80ACF780/func_80ACF8B8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fu_Kago/EnFuKago_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fu_Kago_0x80ACF780/func_80ACF994.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fu_Kago/EnFuKago_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fu_Kago_0x80ACF780/func_80ACF9A8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fu_Kago/func_80ACF8B8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fu_Kago_0x80ACF780/func_80ACF9DC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fu_Kago/func_80ACF994.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fu_Kago_0x80ACF780/func_80ACF9FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fu_Kago/func_80ACF9A8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fu_Kago_0x80ACF780/func_80ACFA78.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fu_Kago/func_80ACF9DC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fu_Kago_0x80ACF780/func_80ACFDAC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fu_Kago/func_80ACF9FC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fu_Kago_0x80ACF780/func_80AD0028.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fu_Kago/func_80ACFA78.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fu_Kago_0x80ACF780/func_80AD0274.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fu_Kago/func_80ACFDAC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fu_Kago_0x80ACF780/func_80AD0288.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fu_Kago/func_80AD0028.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fu_Kago_0x80ACF780/EnFuKago_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fu_Kago/func_80AD0274.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fu_Kago_0x80ACF780/func_80AD0340.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fu_Kago/func_80AD0288.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Fu_Kago_0x80ACF780/EnFuKago_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fu_Kago/EnFuKago_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fu_Kago/func_80AD0340.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fu_Kago/EnFuKago_Draw.s")

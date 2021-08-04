@@ -22,14 +22,12 @@ const ActorInit En_Talk_Gibud_InitVars = {
     (ActorFunc)EnTalkGibud_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B01350 = {
     { COLTYPE_HIT0, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK1, { 0x00000000, 0x00, 0x00 }, { 0xF7EFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
     { 20, 70, 0, { 0, 0, 0 } },
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80B0137C = {
@@ -67,10 +65,8 @@ static DamageTable D_80B0137C = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80B0139C = { 8, 0, 0, 0, MASS_HEAVY };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B01448[] = {
@@ -79,109 +75,113 @@ static InitChainEntry D_80B01448[] = {
     ICHAIN_F32_DIV1000(gravity, -3500, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80B01350;
 extern DamageTable D_80B0137C;
 extern CollisionCheckInfoInit2 D_80B0139C;
 extern InitChainEntry D_80B01448[];
-#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/EnTalkGibud_Init.asm")
+extern UNK_TYPE D_06009298;
+extern UNK_TYPE D_0600ABE0;
+extern UNK_TYPE D_06010B88;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/EnTalkGibud_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/EnTalkGibud_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80AFEB38.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/EnTalkGibud_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80AFEB7C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFEB38.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80AFEC08.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFEB7C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80AFEC4C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFEC08.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80AFED08.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFEC4C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80AFED7C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFED08.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80AFEFD4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFED7C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80AFF030.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFEFD4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80AFF22C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFF030.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80AFF288.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFF22C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80AFF330.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFF288.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80AFF378.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFF330.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80AFF45C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFF378.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80AFF4AC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFF45C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80AFF618.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFF4AC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80AFF6A0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFF618.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80AFF700.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFF6A0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80AFF76C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFF700.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80AFF880.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFF76C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80AFF8E4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFF880.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80AFF9CC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFF8E4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80AFFA68.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFF9CC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80AFFAB0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFFA68.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80AFFC10.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFFAB0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80AFFC9C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFFC10.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80AFFD3C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFFC9C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80AFFE3C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFFD3C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80AFFE94.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFFE3C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80AFFFA4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFFE94.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80AFFFBC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFFFA4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80B000FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80AFFFBC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80B00158.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80B000FC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80B00384.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80B00158.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80B0040C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80B00384.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80B00484.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80B0040C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80B004D0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80B00484.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80B005EC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80B004D0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80B00760.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80B005EC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80B008BC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80B00760.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80B008FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80B008BC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80B0094C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80B008FC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80B00B8C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80B0094C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80B00C94.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80B00B8C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80B00D9C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80B00C94.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/EnTalkGibud_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80B00D9C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80B00F08.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/EnTalkGibud_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/func_80B00F64.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80B00F08.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_Gibud_0x80AFE8A0/EnTalkGibud_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/func_80B00F64.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk_Gibud/EnTalkGibud_Draw.s")

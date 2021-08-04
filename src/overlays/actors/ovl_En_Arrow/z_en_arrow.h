@@ -1,13 +1,16 @@
 #ifndef Z_EN_ARROW_H
 #define Z_EN_ARROW_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnArrow;
 
+typedef void (*EnArrowActionFunc)(struct EnArrow* this, GlobalContext* globalCtx);
+
 typedef struct EnArrow {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x134];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x130];
+    /* 0x0274 */ EnArrowActionFunc actionFunc;
 } EnArrow; // size = 0x278
 
 extern const ActorInit En_Arrow_InitVars;

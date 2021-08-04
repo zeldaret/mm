@@ -24,10 +24,10 @@ const ActorInit Oceff_Wipe5_InitVars = {
 
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Wipe5_0x80BC7AD0/OceffWipe5_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe5/OceffWipe5_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Wipe5_0x80BC7AD0/OceffWipe5_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe5/OceffWipe5_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Wipe5_0x80BC7AD0/OceffWipe5_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe5/OceffWipe5_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Wipe5_0x80BC7AD0/OceffWipe5_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe5/OceffWipe5_Draw.s")

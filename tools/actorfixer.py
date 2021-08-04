@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-import os
-import argparse
+import argparse, os
 
 # "old": "new"
 animdict ={

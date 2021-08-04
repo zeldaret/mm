@@ -22,7 +22,6 @@ const ActorInit En_Wood02_InitVars = {
     (ActorFunc)EnWood02_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_808C4D00 = {
     { COLTYPE_TREE, AT_NONE, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,20 +29,22 @@ static ColliderCylinderInit D_808C4D00 = {
     { 18, 60, 0, { 0, 0, 0 } },
 };
 
-
-extern ColliderCylinderInit D_808C4D00;
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wood02_0x808C3C00/func_808C3C00.asm")
+extern ColliderCylinderInit D_808C4D00;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wood02_0x808C3C00/func_808C3D28.asm")
+extern UNK_TYPE D_06000700;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wood02_0x808C3C00/EnWood02_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wood02/func_808C3C00.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wood02_0x808C3C00/EnWood02_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wood02/func_808C3D28.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wood02_0x808C3C00/func_808C4458.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wood02/EnWood02_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wood02_0x808C3C00/EnWood02_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wood02/EnWood02_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wood02_0x808C3C00/EnWood02_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wood02/func_808C4458.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wood02/EnWood02_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wood02/EnWood02_Draw.s")

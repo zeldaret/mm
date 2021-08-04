@@ -1,7 +1,7 @@
 #ifndef Z_EN_WARP_UZU_H
 #define Z_EN_WARP_UZU_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnWarpUzu;
 

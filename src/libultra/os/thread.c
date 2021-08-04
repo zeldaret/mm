@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 OSThread* __osThreadTail = NULL;
 UNK_TYPE D_80097E14 = -1;

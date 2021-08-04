@@ -8,6 +8,9 @@ void EnDnk_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnDnk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDnk_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A51648(EnDnk* this, GlobalContext* globalCtx);
+void func_80A51890(EnDnk* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Dnk_InitVars = {
     ACTOR_EN_DNK,
@@ -21,7 +24,6 @@ const ActorInit En_Dnk_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A521C4 = {
     { COLTYPE_HIT0, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -29,10 +31,8 @@ static ColliderCylinderInit D_80A521C4 = {
     { 18, 46, 0, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80A521F0 = { 1, 0, 0, 0, MASS_IMMOVABLE };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80A521FC = {
@@ -70,42 +70,44 @@ static DamageTable D_80A521FC = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80A521C4;
 extern CollisionCheckInfoInit2 D_80A521F0;
 extern DamageTable D_80A521FC;
-#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnk_0x80A514F0/func_80A514F0.asm")
+extern UNK_TYPE D_06002848;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnk_0x80A514F0/func_80A515C4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnk/func_80A514F0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnk_0x80A514F0/func_80A51648.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnk/func_80A515C4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnk_0x80A514F0/func_80A51890.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnk/func_80A51648.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnk_0x80A514F0/func_80A518DC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnk/func_80A51890.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnk_0x80A514F0/EnDnk_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnk/func_80A518DC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnk_0x80A514F0/EnDnk_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnk/EnDnk_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnk_0x80A514F0/EnDnk_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnk/EnDnk_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnk_0x80A514F0/func_80A51A78.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnk/EnDnk_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnk_0x80A514F0/func_80A51AA4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnk/func_80A51A78.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnk_0x80A514F0/func_80A51CB8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnk/func_80A51AA4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnk_0x80A514F0/func_80A51D78.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnk/func_80A51CB8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnk_0x80A514F0/func_80A51DA4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnk/func_80A51D78.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnk_0x80A514F0/func_80A51FC0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnk/func_80A51DA4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnk_0x80A514F0/func_80A52018.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnk/func_80A51FC0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnk_0x80A514F0/func_80A52074.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnk/func_80A52018.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dnk_0x80A514F0/func_80A52134.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnk/func_80A52074.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnk/func_80A52134.s")

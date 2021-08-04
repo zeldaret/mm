@@ -22,7 +22,6 @@ const ActorInit Bg_Botihasira_InitVars = {
     (ActorFunc)BgBotihasira_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B282F0 = {
     { COLTYPE_METAL, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,16 +29,19 @@ static ColliderCylinderInit D_80B282F0 = {
     { 27, 80, 0, { 0, 0, 0 } },
 };
 
-
-extern ColliderCylinderInit D_80B282F0;
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Botihasira_0x80B28080/BgBotihasira_Init.asm")
+extern ColliderCylinderInit D_80B282F0;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Botihasira_0x80B28080/BgBotihasira_Destroy.asm")
+extern UNK_TYPE D_06000638;
+extern UNK_TYPE D_06001BD8;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Botihasira_0x80B28080/func_80B2815C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Botihasira/BgBotihasira_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Botihasira_0x80B28080/BgBotihasira_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Botihasira/BgBotihasira_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Botihasira_0x80B28080/BgBotihasira_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Botihasira/func_80B2815C.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Botihasira/BgBotihasira_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Botihasira/BgBotihasira_Draw.s")

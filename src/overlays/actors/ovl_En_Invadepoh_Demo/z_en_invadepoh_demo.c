@@ -9,6 +9,13 @@ void EnInvadepohDemo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnInvadepohDemo_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnInvadepohDemo_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C19AB4(EnInvadepohDemo* this, GlobalContext* globalCtx);
+void func_80C19D00(EnInvadepohDemo* this, GlobalContext* globalCtx);
+void func_80C19D48(EnInvadepohDemo* this, GlobalContext* globalCtx);
+void func_80C19E04(EnInvadepohDemo* this, GlobalContext* globalCtx);
+void func_80C19EC0(EnInvadepohDemo* this, GlobalContext* globalCtx);
+void func_80C19F7C(EnInvadepohDemo* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Invadepoh_Demo_InitVars = {
     ACTOR_EN_INVADEPOH_DEMO,
@@ -22,7 +29,6 @@ const ActorInit En_Invadepoh_Demo_InitVars = {
     (ActorFunc)EnInvadepohDemo_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80C1AA74[] = {
     ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE),
@@ -31,7 +37,6 @@ static InitChainEntry D_80C1AA74[] = {
     ICHAIN_F32(targetArrowOffset, 6000, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80C1AA88[] = {
@@ -43,7 +48,6 @@ static InitChainEntry D_80C1AA88[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80C1AAA0[] = {
     ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE),
@@ -51,7 +55,6 @@ static InitChainEntry D_80C1AAA0[] = {
     ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80C1AAB0[] = {
@@ -63,7 +66,6 @@ static InitChainEntry D_80C1AAB0[] = {
     ICHAIN_VEC3F_DIV1000(scale, 800, ICHAIN_STOP),
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80C1AAC8[] = {
     ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE),
@@ -72,82 +74,89 @@ static InitChainEntry D_80C1AAC8[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
+#endif
 
 extern InitChainEntry D_80C1AA74[];
 extern InitChainEntry D_80C1AA88[];
 extern InitChainEntry D_80C1AAA0[];
 extern InitChainEntry D_80C1AAB0[];
 extern InitChainEntry D_80C1AAC8[];
-#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C192A0.asm")
+extern UNK_TYPE D_06000560;
+extern UNK_TYPE D_06001D80;
+extern UNK_TYPE D_06004264;
+extern UNK_TYPE D_06004E98;
+extern UNK_TYPE D_06011FC8;
+extern UNK_TYPE D_06016588;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C192B0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C192A0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C19334.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C192B0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C193A8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C19334.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C19454.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C193A8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C19498.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C19454.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C1950C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C19498.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C19548.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C1950C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C19564.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C19548.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C19590.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C19564.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C1965C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C19590.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C19688.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C1965C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C19754.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C19688.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C1985C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C19754.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C1987C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C1985C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C199BC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C1987C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C199EC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C199BC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C19AB4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C199EC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C19D00.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C19AB4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C19D48.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C19D00.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C19E04.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C19D48.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C19EC0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C19E04.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C19F7C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C19EC0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C1A038.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C19F7C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C1A070.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C1A038.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C1A168.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C1A070.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C1A244.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C1A168.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C1A590.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C1A244.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C1A650.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C1A590.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C1A670.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C1A650.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C1A6C8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C1A670.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/func_80C1A854.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C1A6C8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/EnInvadepohDemo_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/func_80C1A854.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/EnInvadepohDemo_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/EnInvadepohDemo_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/EnInvadepohDemo_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/EnInvadepohDemo_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Invadepoh_Demo_0x80C192A0/EnInvadepohDemo_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/EnInvadepohDemo_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Invadepoh_Demo/EnInvadepohDemo_Draw.s")

@@ -1,13 +1,15 @@
 #ifndef Z_EN_TALK_H
 #define Z_EN_TALK_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnTalk;
 
+typedef void (*EnTalkActionFunc)(struct EnTalk* this, GlobalContext* globalCtx);
+
 typedef struct EnTalk {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x4];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ EnTalkActionFunc actionFunc;
 } EnTalk; // size = 0x148
 
 extern const ActorInit En_Talk_InitVars;

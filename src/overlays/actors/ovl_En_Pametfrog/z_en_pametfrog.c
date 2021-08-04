@@ -6,6 +6,7 @@
 
 #include "z_en_pametfrog.h"
 #include "overlays/actors/ovl_En_Bigpamet/z_en_bigpamet.h"
+#include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
 #define FLAGS 0x00000035
 

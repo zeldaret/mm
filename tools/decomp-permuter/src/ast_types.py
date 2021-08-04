@@ -7,9 +7,10 @@ They make a number of simplifying assumptions:
 
 For the purposes of the randomizer these restrictions are acceptable."""
 
-from dataclasses import dataclass, field
 from typing import Union, Dict, Set, List
+import sys
 
+import attr
 from pycparser import c_ast
 from pycparser.c_ast import ArrayDecl, TypeDecl, PtrDecl, FuncDecl, IdentifierType
 
@@ -19,12 +20,12 @@ SimpleType = Union[PtrDecl, TypeDecl]
 StructUnion = Union[c_ast.Struct, c_ast.Union]
 
 
-@dataclass
+@attr.s
 class TypeMap:
-    typedefs: Dict[str, Type] = field(default_factory=dict)
-    fn_ret_types: Dict[str, Type] = field(default_factory=dict)
-    var_types: Dict[str, Type] = field(default_factory=dict)
-    struct_defs: Dict[str, StructUnion] = field(default_factory=dict)
+    typedefs: Dict[str, Type] = attr.ib(factory=dict)
+    fn_ret_types: Dict[str, Type] = attr.ib(factory=dict)
+    var_types: Dict[str, Type] = attr.ib(factory=dict)
+    struct_defs: Dict[str, StructUnion] = attr.ib(factory=dict)
 
 
 def basic_type(name: Union[str, List[str]]) -> TypeDecl:
@@ -62,14 +63,6 @@ def pointer_decay(type: Type, typemap: TypeMap) -> SimpleType:
     return type
 
 
-def get_decl_type(decl: c_ast.Decl) -> Type:
-    """For a Decl that declares a variable (and not just a struct/union/enum),
-    return its type."""
-    assert decl.name is not None
-    assert isinstance(decl.type, (PtrDecl, ArrayDecl, FuncDecl, TypeDecl))
-    return decl.type
-
-
 def deref_type(type: Type, typemap: TypeMap) -> Type:
     type = resolve_typedefs(type, typemap)
     assert isinstance(type, (ArrayDecl, PtrDecl)), "dereferencing non-pointer"
@@ -86,7 +79,7 @@ def struct_member_type(struct: StructUnion, field_name: str, typemap: TypeMap) -
     for decl in struct.decls:
         if isinstance(decl, c_ast.Decl):
             if decl.name == field_name:
-                return get_decl_type(decl)
+                return decl.type
             if decl.name == None and isinstance(decl.type, (c_ast.Struct, c_ast.Union)):
                 try:
                     return struct_member_type(decl.type, field_name, typemap)
@@ -130,12 +123,6 @@ def expr_type(node: c_ast.Node, typemap: TypeMap) -> Type:
         if node.op == "*":
             subtype = rec(node.expr)
             return deref_type(subtype, typemap)
-        if node.op in ["-", "+"]:
-            subtype = pointer_decay(rec(node.expr), typemap)
-            if allowed_basic_type(subtype, typemap, ["double"]):
-                return basic_type("double")
-            if allowed_basic_type(subtype, typemap, ["float"]):
-                return basic_type("float")
         if node.op in ["sizeof", "-", "+", "~", "!"]:
             return basic_type("int")
         assert False, f"unknown unary op {node.op}"
@@ -275,7 +262,7 @@ def build_typemap(ast: c_ast.FileAST) -> TypeMap:
 
         def visit_Decl(self, decl: c_ast.Decl) -> None:
             if decl.name is not None:
-                ret.var_types[decl.name] = get_decl_type(decl)
+                ret.var_types[decl.name] = decl.type
             if not isinstance(decl.type, FuncDecl) or decl in defined_function_decls:
                 # Do not visit declarations in parameter lists of functions
                 # other than our own.
@@ -286,7 +273,7 @@ def build_typemap(ast: c_ast.FileAST) -> TypeMap:
 
         def visit_FuncDef(self, fn: c_ast.FuncDef) -> None:
             if fn.decl.name is not None:
-                ret.var_types[fn.decl.name] = get_decl_type(fn.decl)
+                ret.var_types[fn.decl.name] = fn.decl.type
             defined_function_decls.add(fn.decl)
             self.generic_visit(fn)
 
@@ -296,8 +283,7 @@ def build_typemap(ast: c_ast.FileAST) -> TypeMap:
 
 def set_decl_name(decl: c_ast.Decl) -> None:
     name = decl.name
-    assert name is not None
-    type = get_decl_type(decl)
+    type = decl.type
     while not isinstance(type, TypeDecl):
         type = type.type
     type.declname = name

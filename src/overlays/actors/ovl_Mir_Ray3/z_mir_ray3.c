@@ -22,14 +22,12 @@ const ActorInit Mir_Ray3_InitVars = {
     (ActorFunc)MirRay3_Draw,
 };
 
-
 // static ColliderQuadInit sQuadInit = {
 static ColliderQuadInit D_80B9F420 = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_PLAYER, AC_NONE, OC1_NONE, OC2_NONE, COLSHAPE_QUAD, },
     { ELEMTYPE_UNK0, { 0x00200000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_NONE, },
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
-
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B9F470 = {
@@ -38,23 +36,25 @@ static ColliderCylinderInit D_80B9F470 = {
     { 10, 10, 0, { 0, 0, 0 } },
 };
 
+#endif
 
 extern ColliderQuadInit D_80B9F420;
 extern ColliderCylinderInit D_80B9F470;
-#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Mir_Ray3_0x80B9E2C0/MirRay3_Init.asm")
+extern UNK_TYPE D_060003F8;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Mir_Ray3_0x80B9E2C0/MirRay3_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray3/MirRay3_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Mir_Ray3_0x80B9E2C0/MirRay3_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray3/MirRay3_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Mir_Ray3_0x80B9E2C0/func_80B9E544.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray3/MirRay3_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Mir_Ray3_0x80B9E2C0/func_80B9E5F4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray3/func_80B9E544.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Mir_Ray3_0x80B9E2C0/func_80B9E7D0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray3/func_80B9E5F4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Mir_Ray3_0x80B9E2C0/func_80B9E8D4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray3/func_80B9E7D0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Mir_Ray3_0x80B9E2C0/MirRay3_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray3/func_80B9E8D4.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray3/MirRay3_Draw.s")

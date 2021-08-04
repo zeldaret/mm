@@ -21,14 +21,12 @@ const ActorInit Obj_Grass_Carry_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_809ABBD0 = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_PLAYER, AC_NONE, OC1_ON | OC1_TYPE_PLAYER | OC1_TYPE_2, OC2_TYPE_2, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0x00400000, 0x00, 0x02 }, { 0x00000000, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NONE, BUMP_NONE, OCELEM_ON, },
     { 10, 44, 0, { 0, 0, 0 } },
 };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_809ABC4C[] = {
@@ -37,47 +35,47 @@ static InitChainEntry D_809ABC4C[] = {
     ICHAIN_VEC3F_DIV1000(scale, 400, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_809ABBD0;
 extern InitChainEntry D_809ABC4C[];
-#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Carry_0x809AAE60/func_809AAE60.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Grass_Carry/func_809AAE60.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Carry_0x809AAE60/func_809AAE94.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Grass_Carry/func_809AAE94.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Carry_0x809AAE60/func_809AAF18.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Grass_Carry/func_809AAF18.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Carry_0x809AAE60/func_809AAF58.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Grass_Carry/func_809AAF58.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Carry_0x809AAE60/func_809AAF9C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Grass_Carry/func_809AAF9C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Carry_0x809AAE60/func_809AAFE8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Grass_Carry/func_809AAFE8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Carry_0x809AAE60/ObjGrassCarry_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Grass_Carry/ObjGrassCarry_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Carry_0x809AAE60/ObjGrassCarry_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Grass_Carry/ObjGrassCarry_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Carry_0x809AAE60/func_809AB3C4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Grass_Carry/func_809AB3C4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Carry_0x809AAE60/func_809AB3D8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Grass_Carry/func_809AB3D8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Carry_0x809AAE60/func_809AB428.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Grass_Carry/func_809AB428.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Carry_0x809AAE60/func_809AB43C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Grass_Carry/func_809AB43C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Carry_0x809AAE60/func_809AB474.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Grass_Carry/func_809AB474.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Carry_0x809AAE60/func_809AB4A8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Grass_Carry/func_809AB4A8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Carry_0x809AAE60/func_809AB5FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Grass_Carry/func_809AB5FC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Carry_0x809AAE60/func_809AB610.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Grass_Carry/func_809AB610.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Carry_0x809AAE60/func_809AB6FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Grass_Carry/func_809AB6FC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Carry_0x809AAE60/func_809AB77C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Grass_Carry/func_809AB77C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Carry_0x809AAE60/ObjGrassCarry_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Grass_Carry/ObjGrassCarry_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Carry_0x809AAE60/func_809ABB7C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Grass_Carry/func_809ABB7C.s")

@@ -45,13 +45,15 @@ void EnOssan_ResetItemPosition(EnOssan* this);
 void EnOssan_Blink(EnOssan* this);
 void EnOssan_GetCutscenes(EnOssan* this, GlobalContext* globalCtx);
 
-extern UNK_TYPE D_0401F740;
-extern UNK_TYPE D_0401F8C0;
-extern UNK_TYPE D_0401F7C0;
-extern FlexSkeletonHeader D_06013320;
-extern AnimationHeader D_06012C34;
 extern FlexSkeletonHeader D_060028A0;
+extern TexturePtr D_06005BC0;
+extern TexturePtr D_06006498;
+extern TexturePtr D_06006B18;
+extern TexturePtr D_06006D40;
+extern TexturePtr D_06006F18;
+extern TexturePtr D_06007140;
 extern AnimationHeader D_06009D34;
+extern AnimationHeader D_0600A460;
 extern AnimationHeader D_0600CB3C;
 extern AnimationHeader D_0600DE34;
 extern AnimationHeader D_0600E3EC;
@@ -60,16 +62,11 @@ extern AnimationHeader D_0600F00C;
 extern AnimationHeader D_0600B9D8;
 extern AnimationHeader D_0600C26C;
 extern AnimationHeader D_0600D354;
+extern AnimationHeader D_06012C34;
 extern AnimationHeader D_060131FC;
-extern AnimationHeader D_0601430C;
+extern FlexSkeletonHeader D_06013320;
 extern AnimationHeader D_060138B0;
-extern AnimationHeader D_0600A460;
-extern TexturePtr D_06006498;
-extern TexturePtr D_06007140;
-extern TexturePtr D_06006D40;
-extern TexturePtr D_06005BC0;
-extern TexturePtr D_06006F18;
-extern TexturePtr D_06006B18;
+extern AnimationHeader D_0601430C;
 
 const ActorInit En_Ossan_InitVars = {
     ACTOR_EN_OSSAN,

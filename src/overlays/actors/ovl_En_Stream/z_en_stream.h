@@ -1,13 +1,16 @@
 #ifndef Z_EN_STREAM_H
 #define Z_EN_STREAM_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnStream;
 
+typedef void (*EnStreamActionFunc)(struct EnStream* this, GlobalContext* globalCtx);
+
 typedef struct EnStream {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0xC];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ EnStreamActionFunc actionFunc;
+    /* 0x0148 */ char unk_144[0x8];
 } EnStream; // size = 0x150
 
 extern const ActorInit En_Stream_InitVars;

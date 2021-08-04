@@ -9,6 +9,12 @@ void EnViewer_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnViewer_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnViewer_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_8089F17C(EnViewer* this, GlobalContext* globalCtx);
+void func_8089F218(EnViewer* this, GlobalContext* globalCtx);
+void func_8089F2C4(EnViewer* this, GlobalContext* globalCtx);
+
+void EnViewer_SetupAction(EnViewer* this, EnViewerActionFunc actionFunc);
+
 #if 0
 const ActorInit En_Viewer_InitVars = {
     ACTOR_EN_VIEWER,
@@ -24,22 +30,22 @@ const ActorInit En_Viewer_InitVars = {
 
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Viewer_0x8089EE20/func_8089EE20.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Viewer/EnViewer_SetupAction.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Viewer_0x8089EE20/EnViewer_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Viewer/EnViewer_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Viewer_0x8089EE20/EnViewer_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Viewer/EnViewer_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Viewer_0x8089EE20/func_8089F014.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Viewer/func_8089F014.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Viewer_0x8089EE20/func_8089F0A0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Viewer/func_8089F0A0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Viewer_0x8089EE20/func_8089F17C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Viewer/func_8089F17C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Viewer_0x8089EE20/func_8089F218.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Viewer/func_8089F218.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Viewer_0x8089EE20/func_8089F2C4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Viewer/func_8089F2C4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Viewer_0x8089EE20/EnViewer_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Viewer/EnViewer_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Viewer_0x8089EE20/EnViewer_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Viewer/EnViewer_Draw.s")

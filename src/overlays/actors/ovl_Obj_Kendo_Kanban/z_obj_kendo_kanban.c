@@ -9,6 +9,10 @@ void ObjKendoKanban_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjKendoKanban_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjKendoKanban_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B65894(ObjKendoKanban* this, GlobalContext* globalCtx);
+void func_80B65CE0(ObjKendoKanban* this, GlobalContext* globalCtx);
+void func_80B65D68(ObjKendoKanban* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Kendo_Kanban_InitVars = {
     ACTOR_OBJ_KENDO_KANBAN,
@@ -21,7 +25,6 @@ const ActorInit Obj_Kendo_Kanban_InitVars = {
     (ActorFunc)ObjKendoKanban_Update,
     (ActorFunc)ObjKendoKanban_Draw,
 };
-
 
 // static ColliderTrisElementInit sTrisElementsInit[2] = {
 static ColliderTrisElementInit D_80B6673C[2] = {
@@ -41,14 +44,12 @@ static ColliderTrisInit D_80B667B4 = {
     2, D_80B6673C, // sTrisElementsInit,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B667C4 = {
     { COLTYPE_TREE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK1, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
     { 33, 80, 0, { 0, 0, 0 } },
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80B667F0 = {
@@ -86,40 +87,41 @@ static DamageTable D_80B667F0 = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80B66810 = { 8, 0, 0, 0, MASS_HEAVY };
 
+#endif
 
 extern ColliderTrisElementInit D_80B6673C[2];
 extern ColliderTrisInit D_80B667B4;
 extern ColliderCylinderInit D_80B667C4;
 extern DamageTable D_80B667F0;
 extern CollisionCheckInfoInit2 D_80B66810;
-#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban_0x80B654C0/ObjKendoKanban_Init.asm")
+extern UNK_TYPE D_06000180;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban_0x80B654C0/ObjKendoKanban_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban/ObjKendoKanban_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban_0x80B654C0/func_80B65880.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban/ObjKendoKanban_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban_0x80B654C0/func_80B65894.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban/func_80B65880.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban_0x80B654C0/func_80B658A4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban/func_80B65894.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban_0x80B654C0/func_80B65CE0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban/func_80B658A4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban_0x80B654C0/func_80B65D54.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban/func_80B65CE0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban_0x80B654C0/func_80B65D68.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban/func_80B65D54.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban_0x80B654C0/func_80B65DA8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban/func_80B65D68.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban_0x80B654C0/func_80B6618C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban/func_80B65DA8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban_0x80B654C0/func_80B66304.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban/func_80B6618C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban_0x80B654C0/ObjKendoKanban_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban/func_80B66304.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban_0x80B654C0/ObjKendoKanban_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban/ObjKendoKanban_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban/ObjKendoKanban_Draw.s")

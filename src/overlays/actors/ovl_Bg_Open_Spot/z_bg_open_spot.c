@@ -21,7 +21,6 @@ const ActorInit Bg_Open_Spot_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80ACB3B0[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
@@ -30,14 +29,17 @@ static InitChainEntry D_80ACB3B0[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-
-extern InitChainEntry D_80ACB3B0[];
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Open_Spot_0x80ACB1E0/BgOpenSpot_Init.asm")
+extern InitChainEntry D_80ACB3B0[];
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Open_Spot_0x80ACB1E0/BgOpenSpot_Destroy.asm")
+extern UNK_TYPE D_06001A60;
+extern UNK_TYPE D_06002CE0;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Open_Spot_0x80ACB1E0/BgOpenSpot_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Open_Spot/BgOpenSpot_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Open_Spot_0x80ACB1E0/func_80ACB2B0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Open_Spot/BgOpenSpot_Destroy.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Open_Spot/BgOpenSpot_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Open_Spot/func_80ACB2B0.s")

@@ -9,6 +9,21 @@ void EnWallmas_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnWallmas_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnWallmas_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80874BE4(EnWallmas* this, GlobalContext* globalCtx);
+void func_80874DE8(EnWallmas* this, GlobalContext* globalCtx);
+void func_80874FD8(EnWallmas* this, GlobalContext* globalCtx);
+void func_80875054(EnWallmas* this, GlobalContext* globalCtx);
+void func_80875108(EnWallmas* this, GlobalContext* globalCtx);
+void func_8087520C(EnWallmas* this, GlobalContext* globalCtx);
+void func_808752CC(EnWallmas* this, GlobalContext* globalCtx);
+void func_80875484(EnWallmas* this, GlobalContext* globalCtx);
+void func_8087556C(EnWallmas* this, GlobalContext* globalCtx);
+void func_80875638(EnWallmas* this, GlobalContext* globalCtx);
+void func_8087571C(EnWallmas* this, GlobalContext* globalCtx);
+void func_80875910(EnWallmas* this, GlobalContext* globalCtx);
+void func_8087596C(EnWallmas* this, GlobalContext* globalCtx);
+void func_80875A0C(EnWallmas* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Wallmas_InitVars = {
     ACTOR_EN_WALLMAS,
@@ -22,14 +37,12 @@ const ActorInit En_Wallmas_InitVars = {
     (ActorFunc)EnWallmas_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80876360 = {
     { COLTYPE_HIT0, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
     { 30, 40, 0, { 0, 0, 0 } },
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_8087638C = {
@@ -67,10 +80,8 @@ static DamageTable D_8087638C = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_808763AC = { 3, 30, 40, 150 };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_808763B4[] = {
@@ -79,83 +90,94 @@ static InitChainEntry D_808763B4[] = {
     ICHAIN_F32_DIV1000(gravity, -1500, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80876360;
 extern DamageTable D_8087638C;
 extern CollisionCheckInfoInit D_808763AC;
 extern InitChainEntry D_808763B4[];
-#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/EnWallmas_Init.asm")
+extern UNK_TYPE D_06000590;
+extern UNK_TYPE D_06000EA4;
+extern UNK_TYPE D_060019CC;
+extern UNK_TYPE D_0600299C;
+extern UNK_TYPE D_060041F4;
+extern UNK_TYPE D_06008688;
+extern UNK_TYPE D_06009244;
+extern UNK_TYPE D_06009520;
+extern UNK_TYPE D_06009DB0;
+extern UNK_TYPE D_0600A054;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/EnWallmas_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/EnWallmas_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_80874A88.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/EnWallmas_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_80874B04.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80874A88.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_80874B88.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80874B04.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_80874BE4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80874B88.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_80874D1C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80874BE4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_80874DE8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80874D1C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_80874F14.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80874DE8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_80874FD8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80874F14.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_80875014.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80874FD8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_80875054.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875014.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_808750B8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875054.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_80875108.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_808750B8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_808751C4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875108.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_8087520C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_808751C4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_80875248.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_8087520C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_808752CC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875248.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_808753F0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_808752CC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_80875484.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_808753F0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_80875518.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875484.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_8087556C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875518.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_808755A8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_8087556C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_80875638.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_808755A8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_808756AC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875638.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_8087571C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_808756AC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_808758C8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_8087571C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_80875910.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_808758C8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_8087596C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875910.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_808759B8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_8087596C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_80875A0C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_808759B8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_80875A74.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875A0C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/EnWallmas_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875A74.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_80875F04.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/EnWallmas_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_808760A4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875F04.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/func_80876118.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_808760A4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Wallmas_0x80874810/EnWallmas_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80876118.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/EnWallmas_Draw.s")

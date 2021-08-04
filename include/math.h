@@ -1,7 +1,7 @@
 #ifndef _MATH_H_
 #define _MATH_H_
 
-#include <PR/ultratypes.h>
+#include "PR/ultratypes.h"
 
 #define M_PI 3.14159265358979323846f
 #define M_SQRT2 1.41421356237309504880f

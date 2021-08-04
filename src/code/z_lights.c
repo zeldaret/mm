@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 void Lights_PointSetInfo(LightInfo* info, s16 x, s16 y, s16 z, u8 r, u8 g, u8 b, s16 radius, s32 type) {
     info->type = type;
@@ -407,7 +406,6 @@ void Lights_GlowCheck(GlobalContext* globalCtx) {
     }
 }
 
-#if 1
 void Lights_DrawGlow(GlobalContext* globalCtx) {
     Gfx* dl;
     LightPoint* params;
@@ -452,6 +450,3 @@ void Lights_DrawGlow(GlobalContext* globalCtx) {
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_lights/Lights_DrawGlow.asm")
-#endif

@@ -9,6 +9,11 @@ void EnDns_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDns_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDns_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_8092D1B8(EnDns* this, GlobalContext* globalCtx);
+void func_8092D320(EnDns* this, GlobalContext* globalCtx);
+void func_8092D330(EnDns* this, GlobalContext* globalCtx);
+void func_8092D4D8(EnDns* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Dns_InitVars = {
     ACTOR_EN_DNS,
@@ -22,7 +27,6 @@ const ActorInit En_Dns_InitVars = {
     (ActorFunc)EnDns_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_8092DD28 = {
     { COLTYPE_HIT0, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,65 +34,67 @@ static ColliderCylinderInit D_8092DD28 = {
     { 18, 46, 0, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_8092DD54 = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
+#endif
 
 extern ColliderCylinderInit D_8092DD28;
 extern CollisionCheckInfoInit2 D_8092DD54;
-#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dns_0x8092C5C0/func_8092C5C0.asm")
+extern UNK_TYPE D_06002C48;
+extern UNK_TYPE D_06002DD8;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dns_0x8092C5C0/func_8092C63C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dns/func_8092C5C0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dns_0x8092C5C0/func_8092C6FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dns/func_8092C63C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dns_0x8092C5C0/func_8092C740.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dns/func_8092C6FC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dns_0x8092C5C0/func_8092C86C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dns/func_8092C740.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dns_0x8092C5C0/func_8092C934.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dns/func_8092C86C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dns_0x8092C5C0/func_8092C9BC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dns/func_8092C934.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dns_0x8092C5C0/func_8092CA74.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dns/func_8092C9BC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dns_0x8092C5C0/func_8092CAD0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dns/func_8092CA74.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dns_0x8092C5C0/func_8092CB98.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dns/func_8092CAD0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dns_0x8092C5C0/func_8092CC68.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dns/func_8092CB98.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dns_0x8092C5C0/func_8092CCEC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dns/func_8092CC68.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dns_0x8092C5C0/func_8092CE38.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dns/func_8092CCEC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dns_0x8092C5C0/func_8092D068.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dns/func_8092CE38.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dns_0x8092C5C0/func_8092D108.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dns/func_8092D068.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dns_0x8092C5C0/func_8092D1B8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dns/func_8092D108.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dns_0x8092C5C0/func_8092D320.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dns/func_8092D1B8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dns_0x8092C5C0/func_8092D330.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dns/func_8092D320.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dns_0x8092C5C0/func_8092D4D8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dns/func_8092D330.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dns_0x8092C5C0/func_8092D5E8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dns/func_8092D4D8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dns_0x8092C5C0/EnDns_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dns/func_8092D5E8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dns_0x8092C5C0/EnDns_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dns/EnDns_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dns_0x8092C5C0/EnDns_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dns/EnDns_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dns_0x8092C5C0/func_8092D954.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dns/EnDns_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dns_0x8092C5C0/func_8092DA68.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dns/func_8092D954.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dns_0x8092C5C0/func_8092DA94.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dns/func_8092DA68.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Dns_0x8092C5C0/EnDns_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dns/func_8092DA94.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dns/EnDns_Draw.s")
