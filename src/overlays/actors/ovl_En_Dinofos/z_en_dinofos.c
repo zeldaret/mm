@@ -486,7 +486,7 @@ void func_8089B100(EnDinofos* this, GlobalContext* globalCtx) {
 
     SkelAnime_ChangeAnim(&this->skelAnime, &D_06001CCC, 1.0f, SkelAnime_GetFrameCount(&D_06001CCC.common),
                          SkelAnime_GetFrameCount(&D_06001CCC.common), 2, 0.0f);
-    func_800BE33C(&camera->eye, &camera->at, this->unk_29A, 1);
+    func_800BE33C(&camera->eye, &camera->at, &this->unk_29A, 1);
     Math_Vec3f_Diff(&this->actor.world.pos, &player->actor.world.pos, &sp3C);
     this->unk_2BC.x = player->actor.world.pos.x + (0.4f * sp3C.x);
     this->unk_2BC.y = player->actor.world.pos.y + 5.0f;

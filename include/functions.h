@@ -522,7 +522,7 @@ s32 func_800A8150(s32 index);
 s32 func_800A817C(s32 index);
 s32 func_800A81A4(GlobalContext* globalCtx, s32 a1, s32 a2);
 void func_800A81F0(EffectBlure* this, Vec3f* p1, Vec3f* p2);
-// void func_800A8514(void);
+void func_800A8514(void* effectParams);
 void EffectBlure_Initcommon(EffectBlure* params);
 void EffectBlure_Init1(EffectBlure* params, EffBlureInit1* init);
 void EffectBlure_Init2(EffectBlure* params, EffBlureInit2* init);
@@ -635,7 +635,8 @@ void EffectSsKiraKira_SpawnDispersed (GlobalContext * globalCtx, Vec3f * pos, Ve
 // void EffectSsGSpk_SpawnFuse(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void EffectSsGSpk_SpawnRandColor(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7);
 // void EffectSsGSpk_SpawnSmall(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-// void EffectSsDFire_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE4 param_10);
+void EffectSsDFire_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep,
+                         s16 alpha, s16 fadeDelay, s16 arg8, s32 life);
 void EffectSsBubble_Spawn(GlobalContext* globalCtx, Vec3f* pos, f32 yPosOffset, f32 yPosRandScale, f32 xzPosRandScale,
                           f32 scale);
 void EffectSsGRipple_Spawn(GlobalContext* globalCtx, Vec3f* pos, s16 radius, s16 radiusMax, s16 life);
@@ -920,7 +921,7 @@ void func_800BE03C(GlobalContext* globalCtx, Gfx* dl);
 u8 func_800BE22C(Actor* actor);
 void func_800BE258(Actor* actor, UNK_PTR arg1);
 void func_800BE2B8(Actor* actor, ColliderJntSph* jntSphere);
-// void func_800BE33C(void);
+void func_800BE33C(Vec3f* arg0, Vec3f* arg1, Vec3s* arg2, s32 arg3);
 // void func_800BE3D0(void);
 void func_800BE504(Actor* actor, ColliderCylinder* collider);
 // void func_800BE568(void);

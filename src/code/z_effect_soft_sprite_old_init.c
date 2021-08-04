@@ -402,9 +402,8 @@ void EffectSsGSpk_SpawnSmall(GlobalContext* globalCtx, Actor* actor, Vec3f* pos,
 }
 
 // EffectSsDFire Spawn Functions
-#ifdef NON_MATCHING
 void EffectSsDFire_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep,
-                         s16 alpha, s16 fadeDelay, s16 life) {
+                         s16 alpha, s16 fadeDelay, s16 life, s32 arg9) {
     EffectSsDFireInitParams initParams;
 
     Math_Vec3f_Copy(&initParams.pos, pos);
@@ -415,12 +414,10 @@ void EffectSsDFire_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, 
     initParams.alpha = alpha;
     initParams.fadeDelay = fadeDelay;
     initParams.life = life;
+    initParams.unk_2C = arg9;
 
     EffectSs_Spawn(globalCtx, EFFECT_SS_D_FIRE, 128, &initParams);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_effect_soft_sprite_old_init/EffectSsDFire_Spawn.s")
-#endif
 
 // EffectSsBubble Spawn Functions
 
