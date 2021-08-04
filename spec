@@ -4540,8 +4540,8 @@ beginseg
     name "ovl_Obj_Tree"
     compress
     include "build/src/overlays/actors/ovl_Obj_Tree/z_obj_tree.o"
-    include "build/data/ovl_Obj_Tree/ovl_Obj_Tree.data.o"
-    include "build/data/ovl_Obj_Tree/ovl_Obj_Tree.reloc.o"
+//    include "build/data/ovl_Obj_Tree/ovl_Obj_Tree.data.o"
+    include "build/src/overlays/actors/ovl_Obj_Tree/ovl_Obj_Tree_reloc.o"
 endseg
 
 beginseg

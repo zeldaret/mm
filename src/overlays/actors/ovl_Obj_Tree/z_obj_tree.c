@@ -9,7 +9,10 @@ void ObjTree_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjTree_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjTree_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
+void func_80B9A220(ObjTree* this, GlobalContext* globalCtx);
+void func_80B9A20C(ObjTree* this);
+void func_80B9A27C(ObjTree* this, GlobalContext* globalCtx);
+
 const ActorInit Obj_Tree_InitVars = {
     ACTOR_OBJ_TREE,
     ACTORCAT_PROP,
@@ -68,29 +71,113 @@ static DamageTable D_80B9A59C = {
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80B9A5BC = { 8, 0, 0, 0, MASS_HEAVY };
 
-#endif
+extern Gfx D_06000680[];
+extern Gfx D_060007C8[];
+extern CollisionHeader D_06001B2C;
 
-extern ColliderCylinderInit D_80B9A570;
-extern DamageTable D_80B9A59C;
-extern CollisionCheckInfoInit2 D_80B9A5BC;
+void ObjTree_Init(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    ObjTree* this = THIS;
+    CollisionHeader* colHeader = NULL;
 
-extern UNK_TYPE D_06000680;
-extern UNK_TYPE D_06001B2C;
+    if (this->dyna.actor.params & 0x8000) {
+        Actor_SetScale(&this->dyna.actor, 0.15f);
+        this->dyna.actor.uncullZoneForward = 4000.0f;
+    } else {
+        Actor_SetScale(&this->dyna.actor, 0.1f);
+        BcCheck3_BgActorInit(&this->dyna, 1);
+        BgCheck_RelocateMeshHeader(&D_06001B2C, &colHeader);
+        this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
+    }
+    
+    Collider_InitCylinder(globalCtx, &this->collider);
+    Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &D_80B9A570);
+    CollisionCheck_SetInfo2(&this->dyna.actor.colChkInfo, &D_80B9A59C, &D_80B9A5BC);
+    
+    if (this->dyna.actor.params & 0x8000) {
+        this->collider.dim.height = 220;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tree/ObjTree_Init.s")
+    this->unk_1AC = 0.0f;
+    this->unk_1B0 = 0;
+    this->unk_1B2 = 0;
+    func_80B9A20C(this);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tree/ObjTree_Destroy.s")
+void ObjTree_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    ObjTree* this = THIS;
+    s32 index;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tree/func_80B9A20C.s")
+    if (!(this->dyna.actor.params & 0x8000)) {
+        index = this->dyna.bgId;
+        BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, index);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tree/func_80B9A220.s")
+    Collider_DestroyCylinder(globalCtx, &this->collider);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tree/func_80B9A230.s")
+void func_80B9A20C(ObjTree* this) {
+    this->actionFunc = func_80B9A220;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tree/func_80B9A27C.s")
+void func_80B9A220(ObjTree* this, GlobalContext* globalCtx) {
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tree/func_80B9A348.s")
+void func_80B9A230(ObjTree* this) {
+    this->unk_1B4 = 0;
+    this->unk_1AC = 546.0f;
+    this->unk_1B2 = 0x18E3;
+    Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_TREE_SWING);
+    this->actionFunc = func_80B9A27C;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tree/ObjTree_Update.s")
+void func_80B9A27C(ObjTree* this, GlobalContext* globalCtx) {
+    if (this->unk_1B4 > 0x50) {
+        func_80B9A20C(this);
+        return;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tree/ObjTree_Draw.s")
+    Math_SmoothStepToF(&this->unk_1AC, 0.0f, 0.1f, 91.0f, 18.0f);
+    this->unk_1B2 += 0xB6;
+    this->unk_1B0 += this->unk_1B2;
+    this->dyna.actor.shape.rot.x = Math_SinS(this->unk_1B0) * this->unk_1AC;
+    this->dyna.actor.shape.rot.z = Math_CosS(this->unk_1B0) * this->unk_1AC;
+    this->unk_1B4 += 1;
+}
+
+void func_80B9A348(ObjTree* this, GlobalContext* globalCtx) {
+    Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+
+    if (this->dyna.actor.xzDistToPlayer < 600.0f) {
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        if (this->dyna.actor.home.rot.y == 1) {
+            this->dyna.actor.home.rot.y = 0;
+            func_80B9A230(this);
+        }
+    }
+}
+
+void ObjTree_Update(Actor* thisx, GlobalContext* globalCtx) {
+    ObjTree* this = THIS;
+
+    this->actionFunc(this, globalCtx);
+    func_80B9A348(this, globalCtx);
+}
+
+void ObjTree_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    s16 sp36 = (f32) thisx->shape.rot.x;
+    s16 sp34 = (f32) thisx->shape.rot.z;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+    
+    func_8012C28C(globalCtx->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, D_06000680);
+
+    SysMatrix_InsertRotation(sp36, 0, sp34, MTXMODE_APPLY);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, D_060007C8);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
