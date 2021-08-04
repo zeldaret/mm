@@ -21,9 +21,9 @@ typedef struct EnDinofos {
     /* 0x28E */ s16 unk_28E;
     /* 0x290 */ s16 unk_290;
     /* 0x290 */ s16 unk_292;
-    /* 0x294 */ UNK_TYPE1 unk_294[0x4];
-    /* 0x298 */ s16 unk_298;
-    /* 0x29A */ UNK_TYPE1 unk_29A[0x6];
+    /* 0x294 */ UNK_TYPE1 unk_294[4];
+    /* 0x298 */ s16 camId;
+    /* 0x29A */ UNK_TYPE1 unk_29A[6];
     /* 0x2A0 */ s32 unk_2A0;
     /* 0x2A4 */ f32 unk_2A4;
     /* 0x2A8 */ f32 unk_2A8;
