@@ -109,7 +109,7 @@ void func_8098EC68(ObjKibako2 *this, GlobalContext *globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/func_8098ED20.s")
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/ObjKibako2_Update.s")
+#ifdef NON_MATCHING
 void ObjKibako2_Update(Actor *thisx, GlobalContext *globalCtx) {
     ObjKibako2* this = THIS;
 
@@ -130,5 +130,8 @@ void ObjKibako2_Update(Actor *thisx, GlobalContext *globalCtx) {
     }
     this->actionFunc(this, globalCtx);
 }
+#else
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/ObjKibako2_Update.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/ObjKibako2_Draw.s")
