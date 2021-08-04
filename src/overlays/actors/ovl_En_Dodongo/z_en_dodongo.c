@@ -392,9 +392,9 @@ void func_80876930(EnDodongo* this, GlobalContext* globalCtx, Vec3f* arg2) {
 
 void func_80876B08(EnDodongo* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
-    s16 temp_v0 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+    s16 yDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
-    if (ABS_ALT(temp_v0) < 0x4000) {
+    if (ABS_ALT(yDiff) < 0x4000) {
         if (!(player->stateFlags1 & 0x00800000) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK)) {
             func_808777A8(this);
         } else {
@@ -597,7 +597,7 @@ void func_80877500(EnDodongo* this, GlobalContext* globalCtx) {
         Math_ScaledStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0x1F4);
         if (this->actor.xzDistToPlayer < (100.0f * this->unk_334)) {
             if ((ABS_ALT(temp_v1) < 0x1388) && (this->actor.yDistToPlayer < 60.0f) &&
-                !(player->stateFlags1 & 0x00800000)) {
+                !(player->stateFlags1 & 0x800000)) {
                 func_808777A8(this);
             }
         }
@@ -606,6 +606,7 @@ void func_80877500(EnDodongo* this, GlobalContext* globalCtx) {
             (Player_GetMask(globalCtx) == PLAYER_MASK_STONE_MASK)) {
             Math_ScaledStepToS(&this->actor.world.rot.y, Actor_YawToPoint(&this->actor, &this->actor.home.pos), 0x1F4);
         }
+
         this->unk_302--;
         if (this->unk_302 == 0) {
             if (Rand_ZeroOne() > 0.7f) {
@@ -628,6 +629,7 @@ void func_808777A8(EnDodongo* this) {
 
     for (i = 0; i < ARRAY_COUNT(this->collider3Elements); i++) {
         sph = &this->collider3.elements[i].dim.worldSphere;
+
         sph->center.x = this->unk_348[0].x;
         sph->center.y = this->unk_348[0].y;
         sph->center.z = this->unk_348[0].z;
@@ -808,11 +810,11 @@ void func_80877E60(EnDodongo* this, GlobalContext* globalCtx) {
 void func_80878354(EnDodongo* this) {
     s32 pad;
     AnimationHeader* sp18;
-    s16 temp_v0 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+    s16 yDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
-    this->unk_306 = (0xFFFF - ABS_ALT(temp_v0)) / 15;
+    this->unk_306 = (0xFFFF - ABS_ALT(yDiff)) / 15;
 
-    if (temp_v0 >= 0) {
+    if (yDiff >= 0) {
         sp18 = &D_060042C4;
         this->unk_306 = -this->unk_306;
     } else {
@@ -822,7 +824,7 @@ void func_80878354(EnDodongo* this) {
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_DODO_J_TAIL);
     SkelAnime_ChangeAnimPlaybackStop(&this->skelAnime, sp18, 2.0f);
     this->unk_302 = 0;
-    this->collider1.base.atFlags |= 1;
+    this->collider1.base.atFlags |= AT_ON;
     this->unk_304 = -1;
     this->actionFunc = func_80878424;
 }
@@ -833,8 +835,8 @@ void func_80878424(EnDodongo* this, GlobalContext* globalCtx) {
 
     this->unk_302++;
     if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
-        if (!(player->stateFlags1 & 0x00800000) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK)) {
-            this->collider1.base.atFlags &= ~0x1;
+        if (!(player->stateFlags1 & 0x800000) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK)) {
+            this->collider1.base.atFlags &= ~AT_ON;
             func_808777A8(this);
         } else {
             func_80877494(this);
@@ -903,7 +905,7 @@ void func_80878724(EnDodongo* this) {
     this->unk_302 = 0;
     this->unk_304 = 0;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_DODO_J_DEAD);
-    this->actor.flags &= ~0x1;
+    this->actor.flags &= ~1;
     this->actor.speedXZ = 0.0f;
     func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 8);
     this->actionFunc = func_808787B0;
@@ -950,12 +952,12 @@ void func_80878910(EnDodongo* this, GlobalContext* globalCtx) {
     Vec3f sp3C;
     s32 i;
 
-    if (this->collider2.base.acFlags & 2) {
-        this->collider2.base.acFlags &= ~0x2;
-        this->collider1.base.acFlags &= ~0x2;
+    if (this->collider2.base.acFlags & AC_HIT) {
+        this->collider2.base.acFlags &= ~AC_HIT;
+        this->collider1.base.acFlags &= ~AC_HIT;
 
         for (i = 0; i < ARRAY_COUNT(this->collider2Elements); i++) {
-            if (this->collider2.elements[i].info.bumperFlags & 2) {
+            if (this->collider2.elements[i].info.bumperFlags & BUMP_HIT) {
                 break;
             }
         }
@@ -964,7 +966,7 @@ void func_80878910(EnDodongo* this, GlobalContext* globalCtx) {
             ((this->unk_300 != 10) || !(this->collider2.elements[i].info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
             func_80876D28(this, globalCtx);
             Math_Vec3s_ToVec3f(&sp3C, &this->collider2.elements[i].info.bumper.hitPos);
-            if (this->actor.colChkInfo.damageEffect == 15) {
+            if (this->actor.colChkInfo.damageEffect == 0xF) {
                 CollisionCheck_BlueBlood(globalCtx, NULL, &sp3C);
                 EffectSsHitMark_SpawnFixedScale(globalCtx, 0, &sp3C);
             } else if (this->actor.colChkInfo.damageEffect != 14) {
@@ -972,13 +974,13 @@ void func_80878910(EnDodongo* this, GlobalContext* globalCtx) {
                 CollisionCheck_SpawnShieldParticlesMetalSound(globalCtx, &sp3C, &this->actor.projectedPos);
             }
         }
-    } else if (this->collider1.base.acFlags & 2) {
-        this->collider2.base.acFlags &= ~0x2;
-        this->collider1.base.acFlags &= ~0x2;
+    } else if (this->collider1.base.acFlags & AC_HIT) {
+        this->collider2.base.acFlags &= ~AC_HIT;
+        this->collider1.base.acFlags &= ~AC_HIT;
         func_800BE2B8(&this->actor, &this->collider1.base);
 
         for (i = 0; i < ARRAY_COUNT(this->collider1Elements); i++) {
-            if (this->collider1.elements[i].info.bumperFlags & 2) {
+            if (this->collider1.elements[i].info.bumperFlags & BUMP_HIT) {
                 break;
             }
         }
@@ -992,8 +994,8 @@ void func_80878910(EnDodongo* this, GlobalContext* globalCtx) {
                     if (this->actor.colChkInfo.damageEffect == 3) {
                         func_80876CAC(this);
                         this->unk_302 = 3;
-                        this->collider1.base.acFlags &= ~0x1;
-                        this->collider2.base.acFlags &= ~0x1;
+                        this->collider1.base.acFlags &= ~AC_ON;
+                        this->collider2.base.acFlags &= ~AC_ON;
                         func_80878594(this);
                     } else {
                         func_80876BD0(this, globalCtx, i);
