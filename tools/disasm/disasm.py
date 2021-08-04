@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
 import ast, math, os, re, struct
-import threading
-
 from mips_isa import *
 
 ASM_OUT = "asm/"

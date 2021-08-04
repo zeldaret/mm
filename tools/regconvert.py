@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-import argparse
-import re
+import argparse, re
 
 GROUP_SIZE = 0x60
 DATA_OFFSET = 0x14

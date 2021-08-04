@@ -1,11 +1,7 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
-import argparse
+import argparse, os, sys
 from collections import OrderedDict
-import os
-import re
-import pickle
-import sys
 
 script_dir = os.path.dirname(os.path.realpath(__file__))
 root_dir = script_dir + "/../"

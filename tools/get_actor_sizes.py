@@ -1,10 +1,6 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
-import os
-#import pprint
-import re
-import argparse
-import math
+import argparse, math, os, re
 
 script_dir = os.path.dirname(os.path.realpath(__file__))
 root_dir = script_dir + "/../"

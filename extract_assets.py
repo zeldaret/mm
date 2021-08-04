@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 
-import argparse
-from multiprocessing import Pool, cpu_count, Event, Manager
-import os
-import json
-import time
-import signal
-import sys
+import argparse, json, os, signal, time
+from multiprocessing import Pool, Event, Manager
 
 EXTRACTED_ASSETS_NAMEFILE = ".extracted-assets.json"
 
