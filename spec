@@ -1107,8 +1107,7 @@ beginseg
     name "ovl_En_Dekunuts"
     compress
     include "build/src/overlays/actors/ovl_En_Dekunuts/z_en_dekunuts.o"
-    include "build/data/ovl_En_Dekunuts/ovl_En_Dekunuts.data.o"
-    include "build/data/ovl_En_Dekunuts/ovl_En_Dekunuts.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Dekunuts/ovl_En_Dekunuts_reloc.o"
 endseg
 
 beginseg

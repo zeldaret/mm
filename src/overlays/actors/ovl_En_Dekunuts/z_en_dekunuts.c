@@ -5,6 +5,7 @@
  */
 
 #include "z_en_dekunuts.h"
+#include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
 #define FLAGS 0x00000005
 
@@ -182,7 +183,7 @@ void func_808BD428(EnDekunuts* this) {
     this->unk_190 = Rand_S16Offset(100, 50);
     this->collider.dim.height = 5;
     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
-    this->collider.base.acFlags &= ~1;
+    this->collider.base.acFlags &= ~AC_ON;
     this->actionFunc = func_808BD49C;
 }
 
@@ -198,15 +199,15 @@ void func_808BD49C(EnDekunuts* this, GlobalContext* globalCtx) {
     }
 
     if (func_801378B8(&this->skelAnime, 9.0f)) {
-        this->collider.base.acFlags |= 1;
+        this->collider.base.acFlags |= AC_ON;
     } else if (func_801378B8(&this->skelAnime, 8.0f)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_UP);
     }
 
     this->collider.dim.height = (s32)((CLAMP(this->skelAnime.animCurrentFrame, 9.0f, 12.0f) - 9.0f) * 9.0f) + 5;
 
-    if (!phi_v1 && (this->actor.params == ENDEKUNUTS_PARAMS_0) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK) &&
-        (this->actor.xzDistToPlayer < 120.0f)) {
+    if (!phi_v1 && (this->actor.params == ENDEKUNUTS_PARAMS_0) &&
+        (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK) && (this->actor.xzDistToPlayer < 120.0f)) {
         func_808BDC9C(this);
     } else if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
         if (((this->unk_190 == 0) && (this->actor.xzDistToPlayer > 320.0f)) ||
@@ -225,7 +226,8 @@ void func_808BD49C(EnDekunuts* this, GlobalContext* globalCtx) {
 
     if (phi_v1 && ((this->actor.xzDistToPlayer > 160.0f) || (this->actor.params != ENDEKUNUTS_PARAMS_0)) &&
         (((this->actor.params == ENDEKUNUTS_PARAMS_0) && (fabsf(this->actor.yDistToPlayer) < 120.0f)) ||
-         ((this->actor.params == ENDEKUNUTS_PARAMS_2) && (this->actor.yDistToPlayer > -60.0f)) || (this->actor.params == ENDEKUNUTS_PARAMS_1)) &&
+         ((this->actor.params == ENDEKUNUTS_PARAMS_2) && (this->actor.yDistToPlayer > -60.0f)) ||
+         (this->actor.params == ENDEKUNUTS_PARAMS_1)) &&
         ((this->unk_190 == 0) || (this->actor.xzDistToPlayer < 480.0f))) {
         this->skelAnime.animPlaybackSpeed = 1.0f;
     }
@@ -253,7 +255,7 @@ void func_808BD7D4(EnDekunuts* this, GlobalContext* globalCtx) {
 void func_808BD870(EnDekunuts* this) {
     SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_0600326C, -3.0f);
     if (this->actionFunc == func_808BDA4C) {
-        this->unk_190 = 0x1002;
+        this->unk_190 = 4098;
     } else {
         this->unk_190 = 1;
     }
@@ -350,7 +352,7 @@ void func_808BDC9C(EnDekunuts* this) {
 
 void func_808BDCF0(EnDekunuts* this) {
     SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06002A5C, -5.0f);
-    this->collider.base.acFlags &= ~1;
+    this->collider.base.acFlags &= ~AC_ON;
     this->unk_190 = 80;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_DOWN);
     this->actionFunc = func_808BDD54;
@@ -361,14 +363,16 @@ void func_808BDD54(EnDekunuts* this, GlobalContext* globalCtx) {
         if (this->unk_190 != 0) {
             this->unk_190--;
         }
+
         if (this->unk_190 == 0) {
             func_808BD428(this);
         }
     } else {
         this->collider.dim.height = (s32)((3.0f - CLAMP(this->skelAnime.animCurrentFrame, 1.0f, 3.0f)) * 12.0f) + 5;
     }
+
     if (func_801378B8(&this->skelAnime, 4.0f)) {
-        this->collider.base.acFlags &= ~1;
+        this->collider.base.acFlags &= ~AC_ON;
     }
     Math_ApproachF(&this->actor.world.pos.x, this->actor.home.pos.x, 0.5f, 3.0f);
     Math_ApproachF(&this->actor.world.pos.z, this->actor.home.pos.z, 0.5f, 3.0f);
@@ -381,7 +385,7 @@ void func_808BDE7C(EnDekunuts* this) {
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_DAMAGE);
     this->actor.world.rot.x = 0;
     this->actor.flags |= 0x20;
-    this->collider.base.acFlags &= ~1;
+    this->collider.base.acFlags &= ~AC_ON;
     this->actionFunc = func_808BDEF8;
 }
 
@@ -398,7 +402,7 @@ void func_808BDF60(EnDekunuts* this) {
     SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06003780);
     this->unk_190 = 2;
     this->unk_18C = 0;
-    this->collider.base.acFlags |= 1;
+    this->collider.base.acFlags |= AC_ON;
     this->actionFunc = func_808BDFB8;
 }
 
@@ -484,7 +488,7 @@ void func_808BE294(EnDekunuts* this, s32 arg1) {
     }
 
     this->actor.world.rot.x = 0;
-    this->collider.base.acFlags &= ~1;
+    this->collider.base.acFlags &= ~AC_ON;
     this->actionFunc = func_808BE358;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_DAMAGE);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_CUTBODY);
@@ -573,8 +577,8 @@ void func_808BE6C4(EnDekunuts* this, GlobalContext* globalCtx) {
 }
 
 void func_808BE73C(EnDekunuts* this, GlobalContext* globalCtx) {
-    if (this->collider.base.acFlags & 2) {
-        this->collider.base.acFlags &= ~2;
+    if (this->collider.base.acFlags & AC_HIT) {
+        this->collider.base.acFlags &= ~AC_HIT;
         func_800BE258(&this->actor, &this->collider.info);
         if ((this->unk_18E != 10) || !(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
             func_808BD3B4(this, globalCtx);
@@ -592,7 +596,7 @@ void func_808BE73C(EnDekunuts* this, GlobalContext* globalCtx) {
                     func_808BD348(this);
                     if (this->actor.colChkInfo.health == 0) {
                         this->unk_190 = 3;
-                        this->collider.base.acFlags &= ~1;
+                        this->collider.base.acFlags &= ~AC_ON;
                     }
                     func_808BE3A8(this);
                     return;
@@ -652,7 +656,7 @@ void EnDekunuts_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, this->collider.dim.radius, this->collider.dim.height, 0x1D);
     Collider_UpdateCylinder(&this->actor, &this->collider);
 
-    if (this->collider.base.acFlags & 1) {
+    if (this->collider.base.acFlags & AC_ON) {
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 
