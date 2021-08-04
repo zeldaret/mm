@@ -1,11 +1,7 @@
 #!/usr/bin/env python3
 
-import argparse
-from multiprocessing import Pool, cpu_count, Event, Manager
-import os
-import json
-import time
-import signal
+import argparse, json, os, signal, time
+from multiprocessing import Pool, Event, Manager
 
 EXTRACTED_ASSETS_NAMEFILE = ".extracted-assets.json"
 
@@ -73,6 +69,7 @@ def initializeWorker(abort, unaccounted: bool, extractedAssetsTracker: dict, man
 def main():
     parser = argparse.ArgumentParser(description="baserom asset extractor")
     parser.add_argument("-s", "--single", help="asset path relative to assets/, e.g. objects/gameplay_keep")
+    parser.add_argument("-t", "--threads", help="Number of cpu cores to extract with.")
     parser.add_argument("-f", "--force", help="Force the extraction of every xml instead of checking the touched ones.", action="store_true")
     parser.add_argument("-u", "--unaccounted", help="Enables ZAPD unaccounted detector warning system.", action="store_true")
     args = parser.parse_args()
@@ -107,7 +104,9 @@ def main():
                 if file.endswith(".xml"):
                     xmlFiles.append(fullPath)
 
-        numCores = cpu_count()
+        numCores = int(args.threads or 0)
+        if numCores <= 0:
+            numCores = 1
         print("Extracting assets with " + str(numCores) + " CPU cores.")
         with Pool(numCores,  initializer=initializeWorker, initargs=(mainAbort, args.unaccounted, extractedAssetsTracker, manager)) as p:
             p.map(ExtractFunc, xmlFiles)

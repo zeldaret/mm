@@ -4,8 +4,7 @@
 #   Arguments: <rom in> <rom out> <elf> <spec> [cache directory] [num threads]
 #
 
-import argparse, itertools, shlex, subprocess, sys
-
+import argparse, itertools, subprocess, sys
 from elftools.elf.elffile import ELFFile
 from elftools.elf.sections import SymbolTableSection
 

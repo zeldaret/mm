@@ -1,10 +1,7 @@
 #!/usr/bin/env python3
 
+import hashlib, io, struct, sys
 from os import path
-import io
-import sys
-import struct
-import hashlib
 
 from libyaz0 import decompress
 
