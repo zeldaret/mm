@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#define GET_KIBAKO2_COLLECTIBLE_ID(x) (((x->dyna.actor.params >> 0x8) & 0x7F) << 8)
+
 struct ObjKibako2;
 
 typedef void (*ObjKibako2ActionFunc)(struct ObjKibako2* this, GlobalContext* globalCtx);

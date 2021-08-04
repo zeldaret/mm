@@ -47,7 +47,14 @@ extern UNK_TYPE D_06001040;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/func_8098E62C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/func_8098E8A8.s")
+void func_8098E8A8(ObjKibako2* this, GlobalContext* globalCtx) {
+    s32 collectible;
+
+    collectible = func_800A8150(this->dyna.actor.params & 0x3F);
+    if (collectible >= 0) {
+        Item_DropCollectible(globalCtx, &this->dyna.actor.world.pos, collectible | GET_KIBAKO2_COLLECTIBLE_ID(this));
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/func_8098E900.s")
 
