@@ -24,18 +24,20 @@ const ActorInit En_Tanron4_InitVars = {
 
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron4_0x80BE3B80/EnTanron4_Init.asm")
+extern UNK_TYPE D_06000168;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron4_0x80BE3B80/EnTanron4_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron4/EnTanron4_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron4_0x80BE3B80/func_80BE3DC0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron4/EnTanron4_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron4_0x80BE3B80/func_80BE3DFC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron4/func_80BE3DC0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron4_0x80BE3B80/func_80BE4268.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron4/func_80BE3DFC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron4_0x80BE3B80/func_80BE42A4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron4/func_80BE4268.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron4_0x80BE3B80/EnTanron4_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron4/func_80BE42A4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron4_0x80BE3B80/EnTanron4_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron4/EnTanron4_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron4/EnTanron4_Draw.s")

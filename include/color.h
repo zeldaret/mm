@@ -1,7 +1,7 @@
 #ifndef _COLOR_H_
 #define _COLOR_H_
 
-#include <PR/ultratypes.h>
+#include "PR/ultratypes.h"
 
 typedef struct {
     /* 0x0 */ u8 r;

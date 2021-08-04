@@ -1,9 +1,9 @@
 #ifndef _Z64LIGHT_H_
 #define _Z64LIGHT_H_
 
-#include <ultra64.h>
-#include <PR/gbi.h>
-#include <color.h>
+#include "ultra64.h"
+#include "PR/gbi.h"
+#include "color.h"
 
 typedef struct {
     /* 0x00 */ u8 ambientColor[3];

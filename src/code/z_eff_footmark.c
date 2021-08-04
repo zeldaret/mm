@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 void EffFootmark_Init(GlobalContext* globalCtx) {
     EffFootmark* footmark;

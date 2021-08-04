@@ -9,6 +9,10 @@ void DmOpstage_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmOpstage_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmOpstage_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A9FA58(DmOpstage* this, GlobalContext* globalCtx);
+
+void DmOpstage_SetupAction(DmOpstage* this, DmOpstageActionFunc actionFunc);
+
 #if 0
 const ActorInit Dm_Opstage_InitVars = {
     ACTOR_DM_OPSTAGE,
@@ -22,24 +26,26 @@ const ActorInit Dm_Opstage_InitVars = {
     (ActorFunc)DmOpstage_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80A9FD30[] = {
     ICHAIN_F32(uncullZoneScale, 300, ICHAIN_STOP),
 };
 
-
-extern InitChainEntry D_80A9FD30[];
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Opstage_0x80A9F950/func_80A9F950.asm")
+extern InitChainEntry D_80A9FD30[];
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Opstage_0x80A9F950/DmOpstage_Init.asm")
+extern UNK_TYPE D_06000978;
+extern UNK_TYPE D_06001C98;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Opstage_0x80A9F950/DmOpstage_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Opstage/DmOpstage_SetupAction.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Opstage_0x80A9F950/func_80A9FA58.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Opstage/DmOpstage_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Opstage_0x80A9F950/DmOpstage_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Opstage/DmOpstage_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Opstage_0x80A9F950/DmOpstage_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Opstage/func_80A9FA58.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Opstage/DmOpstage_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Opstage/DmOpstage_Draw.s")

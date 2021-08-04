@@ -1,6 +1,6 @@
-#include <stdarg.h>
-#include <osint.h>
-#include <assert.h>
+#include "stdarg.h"
+#include "osint.h"
+#include "assert.h"
 
 s32 __osSpRawStartDma(s32 direction, u32 devAddr, void* dramAddr, u32 size) {
     if (__osSpDeviceBusy() != 0) {

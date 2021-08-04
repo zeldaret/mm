@@ -22,7 +22,6 @@ const ActorInit Bg_Spdweb_InitVars = {
     (ActorFunc)BgSpdweb_Draw,
 };
 
-
 // static ColliderTrisElementInit sTrisElementsInit[2] = {
 static ColliderTrisElementInit D_809CF080[2] = {
     {
@@ -40,7 +39,6 @@ static ColliderTrisInit D_809CF0F8 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_2, COLSHAPE_TRIS, },
     2, D_809CF080, // sTrisElementsInit,
 };
-
 
 // static ColliderTrisElementInit sTrisElementsInit[4] = {
 static ColliderTrisElementInit D_809CF108[4] = {
@@ -68,43 +66,45 @@ static ColliderTrisInit D_809CF1F8 = {
     4, D_809CF108, // sTrisElementsInit,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_809CF210[] = {
     ICHAIN_F32(uncullZoneForward, 1500, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderTrisElementInit D_809CF080[2];
 extern ColliderTrisInit D_809CF0F8;
 extern ColliderTrisElementInit D_809CF108[4];
 extern ColliderTrisInit D_809CF1F8;
 extern InitChainEntry D_809CF210[];
-#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Spdweb_0x809CDEC0/BgSpdweb_Init.asm")
+extern UNK_TYPE D_06000060;
+extern UNK_TYPE D_06002678;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Spdweb_0x809CDEC0/BgSpdweb_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Spdweb/BgSpdweb_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Spdweb_0x809CDEC0/func_809CE068.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Spdweb/BgSpdweb_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Spdweb_0x809CDEC0/func_809CE15C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Spdweb/func_809CE068.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Spdweb_0x809CDEC0/func_809CE1D0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Spdweb/func_809CE15C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Spdweb_0x809CDEC0/func_809CE234.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Spdweb/func_809CE1D0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Spdweb_0x809CDEC0/func_809CE4C8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Spdweb/func_809CE234.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Spdweb_0x809CDEC0/func_809CE830.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Spdweb/func_809CE4C8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Spdweb_0x809CDEC0/func_809CEBC0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Spdweb/func_809CE830.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Spdweb_0x809CDEC0/func_809CEE74.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Spdweb/func_809CEBC0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Spdweb_0x809CDEC0/func_809CEEAC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Spdweb/func_809CEE74.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Spdweb_0x809CDEC0/BgSpdweb_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Spdweb/func_809CEEAC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Spdweb_0x809CDEC0/BgSpdweb_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Spdweb/BgSpdweb_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Spdweb/BgSpdweb_Draw.s")

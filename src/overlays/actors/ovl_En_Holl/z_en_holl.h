@@ -1,8 +1,7 @@
 #ifndef Z_EN_HOLL_H
 #define Z_EN_HOLL_H
 
-
-#include <global.h>
+#include "global.h"
 
 struct EnHoll;
 

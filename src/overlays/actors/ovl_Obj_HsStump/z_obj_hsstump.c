@@ -26,15 +26,14 @@ const ActorInit Obj_HsStump_InitVars = {
     (ActorFunc)ObjHsStump_Draw,
 };
 
-extern Gfx D_060003B8[];
-
-extern CollisionHeader D_060011B0;
-
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 180, ICHAIN_STOP),
 };
 
 static Vec3f iceSmokeAccel = { 0.0f, 0.0f, 0.0f };
+
+extern Gfx D_060003B8[];
+extern CollisionHeader D_060011B0;
 
 void ObjHsStump_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjHsStump* this = THIS;

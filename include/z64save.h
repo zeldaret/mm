@@ -3,7 +3,7 @@
 
 #include "ultra64.h"
 #include "z64math.h"
-#include <os.h>
+#include "os.h"
 
 typedef struct {
     /* 0x00 */ u8 buttonItems[4][4];
@@ -188,7 +188,7 @@ typedef enum {
     /* 0x05 */ RESPAWN_MODE_DEKU,
     /* 0x06 */ RESPAWN_MODE_CHILD_LINK,
     /* 0x07 */ RESPAWN_MODE_UNK_7,
-    /* 0x07 */ RESPAWN_MODE_UNK_8,
+    /* 0x07 */ RESPAWN_MODE_UNK_8
 } RespawnMode;
 
 typedef enum {

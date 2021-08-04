@@ -8,6 +8,13 @@ void EnWarptag_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnWarptag_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnWarptag_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809C085C(EnWarptag* this, GlobalContext* globalCtx);
+void func_809C08E0(EnWarptag* this, GlobalContext* globalCtx);
+void func_809C09A0(EnWarptag* this, GlobalContext* globalCtx);
+void func_809C0A20(EnWarptag* this, GlobalContext* globalCtx);
+void func_809C0AB4(EnWarptag* this, GlobalContext* globalCtx);
+void func_809C0E30(EnWarptag* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Warp_tag_InitVars = {
     ACTOR_EN_WARP_TAG,
@@ -21,33 +28,32 @@ const ActorInit En_Warp_tag_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_809C1008[] = {
     ICHAIN_VEC3F(scale, 1, ICHAIN_CONTINUE),
     ICHAIN_VEC3S(shape.rot, 0, ICHAIN_STOP),
 };
 
-
-extern InitChainEntry D_809C1008[];
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Warp_tag_0x809C0760/EnWarptag_Init.asm")
+extern InitChainEntry D_809C1008[];
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Warp_tag_0x809C0760/EnWarptag_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Warp_tag/EnWarptag_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Warp_tag_0x809C0760/func_809C085C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Warp_tag/EnWarptag_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Warp_tag_0x809C0760/func_809C08E0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Warp_tag/func_809C085C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Warp_tag_0x809C0760/func_809C09A0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Warp_tag/func_809C08E0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Warp_tag_0x809C0760/func_809C0A20.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Warp_tag/func_809C09A0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Warp_tag_0x809C0760/func_809C0AB4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Warp_tag/func_809C0A20.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Warp_tag_0x809C0760/func_809C0E30.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Warp_tag/func_809C0AB4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Warp_tag_0x809C0760/EnWarptag_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Warp_tag/func_809C0E30.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Warp_tag_0x809C0760/func_809C0F3C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Warp_tag/EnWarptag_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Warp_tag/func_809C0F3C.s")

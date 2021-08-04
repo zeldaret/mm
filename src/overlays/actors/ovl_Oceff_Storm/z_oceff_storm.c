@@ -9,6 +9,11 @@ void OceffStorm_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void OceffStorm_Update(Actor* thisx, GlobalContext* globalCtx);
 void OceffStorm_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80981928(OceffStorm* this, GlobalContext* globalCtx);
+void func_80981B48(OceffStorm* this, GlobalContext* globalCtx);
+
+void OceffStorm_SetupAction(OceffStorm* this, OceffStormActionFunc actionFunc);
+
 #if 0
 const ActorInit Oceff_Storm_InitVars = {
     ACTOR_OCEFF_STORM,
@@ -24,20 +29,20 @@ const ActorInit Oceff_Storm_InitVars = {
 
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Storm_0x80981760/func_80981760.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Storm/OceffStorm_SetupAction.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Storm_0x80981760/func_8098176C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Storm/func_8098176C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Storm_0x80981760/OceffStorm_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Storm/OceffStorm_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Storm_0x80981760/OceffStorm_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Storm/OceffStorm_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Storm_0x80981760/func_80981928.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Storm/func_80981928.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Storm_0x80981760/func_80981B48.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Storm/func_80981B48.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Storm_0x80981760/OceffStorm_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Storm/OceffStorm_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Storm_0x80981760/func_80981BB8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Storm/func_80981BB8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Storm_0x80981760/OceffStorm_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Storm/OceffStorm_Draw.s")

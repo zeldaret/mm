@@ -8,6 +8,10 @@ void BgSpoutFire_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgSpoutFire_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgSpoutFire_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A60C94(BgSpoutFire* this, GlobalContext* globalCtx);
+void func_80A60CDC(BgSpoutFire* this, GlobalContext* globalCtx);
+void func_80A60D10(BgSpoutFire* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Bg_Spout_Fire_InitVars = {
     ACTOR_BG_SPOUT_FIRE,
@@ -21,7 +25,6 @@ const ActorInit Bg_Spout_Fire_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A61160 = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_NONE, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_2, COLSHAPE_CYLINDER, },
@@ -29,31 +32,32 @@ static ColliderCylinderInit D_80A61160 = {
     { 30, 83, 0, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit D_80A6118C = { 1, 80, 100, MASS_IMMOVABLE };
 
+#endif
 
 extern ColliderCylinderInit D_80A61160;
 extern CollisionCheckInfoInit D_80A6118C;
-#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Spout_Fire_0x80A60B20/BgSpoutFire_Init.asm")
+extern UNK_TYPE D_06000040;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Spout_Fire_0x80A60B20/BgSpoutFire_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Spout_Fire/BgSpoutFire_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Spout_Fire_0x80A60B20/func_80A60C24.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Spout_Fire/BgSpoutFire_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Spout_Fire_0x80A60B20/func_80A60C94.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Spout_Fire/func_80A60C24.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Spout_Fire_0x80A60B20/func_80A60CDC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Spout_Fire/func_80A60C94.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Spout_Fire_0x80A60B20/func_80A60D10.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Spout_Fire/func_80A60CDC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Spout_Fire_0x80A60B20/func_80A60DA0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Spout_Fire/func_80A60D10.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Spout_Fire_0x80A60B20/func_80A60E08.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Spout_Fire/func_80A60DA0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Spout_Fire_0x80A60B20/BgSpoutFire_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Spout_Fire/func_80A60E08.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Spout_Fire_0x80A60B20/func_80A61040.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Spout_Fire/BgSpoutFire_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Spout_Fire/func_80A61040.s")

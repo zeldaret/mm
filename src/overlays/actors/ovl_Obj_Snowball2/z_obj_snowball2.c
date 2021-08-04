@@ -22,7 +22,6 @@ const ActorInit Obj_Snowball2_InitVars = {
     (ActorFunc)ObjSnowball2_Draw,
 };
 
-
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_80B3A8E0[1] = {
     {
@@ -37,7 +36,6 @@ static ColliderJntSphInit D_80B3A904 = {
     1, D_80B3A8E0, // sJntSphElementsInit,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B3A93C[] = {
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
@@ -48,56 +46,58 @@ static InitChainEntry D_80B3A93C[] = {
     ICHAIN_VEC3F_DIV1000(scale, 25, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_80B3A8E0[1];
 extern ColliderJntSphInit D_80B3A904;
 extern InitChainEntry D_80B3A93C[];
-#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Snowball2_0x80B38E20/func_80B38E20.asm")
+extern UNK_TYPE D_06008B90;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Snowball2_0x80B38E20/func_80B38E88.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B38E20.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Snowball2_0x80B38E20/func_80B38EFC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B38E88.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Snowball2_0x80B38E20/func_80B39108.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B38EFC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Snowball2_0x80B38E20/func_80B39470.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B39108.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Snowball2_0x80B38E20/func_80B395C4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B39470.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Snowball2_0x80B38E20/func_80B395EC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B395C4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Snowball2_0x80B38E20/func_80B39638.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B395EC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Snowball2_0x80B38E20/func_80B39834.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B39638.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Snowball2_0x80B38E20/func_80B39908.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B39834.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Snowball2_0x80B38E20/func_80B39B28.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B39908.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Snowball2_0x80B38E20/func_80B39B5C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B39B28.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Snowball2_0x80B38E20/ObjSnowball2_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B39B5C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Snowball2_0x80B38E20/ObjSnowball2_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/ObjSnowball2_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Snowball2_0x80B38E20/func_80B39C78.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/ObjSnowball2_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Snowball2_0x80B38E20/func_80B39C9C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B39C78.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Snowball2_0x80B38E20/func_80B39F60.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B39C9C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Snowball2_0x80B38E20/func_80B39FA8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B39F60.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Snowball2_0x80B38E20/func_80B3A0D8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B39FA8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Snowball2_0x80B38E20/func_80B3A13C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B3A0D8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Snowball2_0x80B38E20/func_80B3A498.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B3A13C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Snowball2_0x80B38E20/func_80B3A500.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B3A498.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Snowball2_0x80B38E20/ObjSnowball2_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B3A500.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Snowball2_0x80B38E20/ObjSnowball2_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/ObjSnowball2_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/ObjSnowball2_Draw.s")

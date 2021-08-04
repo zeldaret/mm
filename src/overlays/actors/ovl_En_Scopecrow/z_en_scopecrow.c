@@ -9,6 +9,9 @@ void EnScopecrow_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnScopecrow_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnScopecrow_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BCD590(EnScopecrow* this, GlobalContext* globalCtx);
+void func_80BCD640(EnScopecrow* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Scopecrow_InitVars = {
     ACTOR_EN_SCOPECROW,
@@ -21,7 +24,6 @@ const ActorInit En_Scopecrow_InitVars = {
     (ActorFunc)EnScopecrow_Update,
     (ActorFunc)EnScopecrow_Draw,
 };
-
 
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_80BCDB70[1] = {
@@ -37,31 +39,33 @@ static ColliderJntSphInit D_80BCDB94 = {
     1, D_80BCDB70, // sJntSphElementsInit,
 };
 
+#endif
 
 extern ColliderJntSphElementInit D_80BCDB70[1];
 extern ColliderJntSphInit D_80BCDB94;
-#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Scopecrow_0x80BCD000/func_80BCD000.asm")
+extern UNK_TYPE D_060010C0;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Scopecrow_0x80BCD000/func_80BCD09C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/func_80BCD000.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Scopecrow_0x80BCD000/func_80BCD1AC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/func_80BCD09C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Scopecrow_0x80BCD000/func_80BCD2BC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/func_80BCD1AC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Scopecrow_0x80BCD000/func_80BCD334.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/func_80BCD2BC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Scopecrow_0x80BCD000/func_80BCD4D0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/func_80BCD334.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Scopecrow_0x80BCD000/func_80BCD590.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/func_80BCD4D0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Scopecrow_0x80BCD000/func_80BCD640.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/func_80BCD590.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Scopecrow_0x80BCD000/EnScopecrow_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/func_80BCD640.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Scopecrow_0x80BCD000/EnScopecrow_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/EnScopecrow_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Scopecrow_0x80BCD000/EnScopecrow_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/EnScopecrow_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Scopecrow_0x80BCD000/EnScopecrow_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/EnScopecrow_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Scopecrow/EnScopecrow_Draw.s")

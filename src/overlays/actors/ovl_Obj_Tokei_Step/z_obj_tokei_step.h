@@ -1,7 +1,7 @@
 #ifndef Z_OBJ_TOKEI_STEP_H
 #define Z_OBJ_TOKEI_STEP_H
 
-#include <global.h>
+#include "global.h"
 
 struct ObjTokeiStep;
 

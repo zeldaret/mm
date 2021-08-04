@@ -29,8 +29,6 @@ extern AnimationHeader D_06001534;
 extern FlexSkeletonHeader D_0600B538;
 extern UNK_TYPE4 D_060059A0;
 extern UNK_TYPE4 D_06005BA0;
-extern UNK_TYPE1 D_0400DEA8;
-extern UNK_TYPE1 D_0400E2A8;
 
 const ActorInit En_Minifrog_InitVars = {
     ACTOR_EN_MINIFROG,

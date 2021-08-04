@@ -135,7 +135,7 @@ QuakeRequest* Quake_AddImpl(Camera* camera, u32 callbackIdx) {
     s16 idx = Quake_GetFreeIndex();
     QuakeRequest* req = &sQuakeRequest[idx];
 
-    func_80096880(req, 0, sizeof(QuakeRequest)); // memset
+    __osMemset(req, 0, sizeof(QuakeRequest));
     req->camera = camera;
     req->cameraPtrsIdx = camera->thisIdx;
     req->callbackIdx = callbackIdx;

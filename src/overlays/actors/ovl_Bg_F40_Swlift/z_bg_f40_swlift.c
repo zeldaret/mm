@@ -22,7 +22,6 @@ const ActorInit Bg_F40_Swlift_InitVars = {
     (ActorFunc)BgF40Swlift_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_8096F540[] = {
     ICHAIN_F32(uncullZoneScale, 550, ICHAIN_CONTINUE),
@@ -30,14 +29,17 @@ static InitChainEntry D_8096F540[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-
-extern InitChainEntry D_8096F540[];
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_F40_Swlift_0x8096F160/BgF40Swlift_Init.asm")
+extern InitChainEntry D_8096F540[];
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_F40_Swlift_0x8096F160/BgF40Swlift_Destroy.asm")
+extern UNK_TYPE D_06003B08;
+extern UNK_TYPE D_06003E80;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_F40_Swlift_0x8096F160/BgF40Swlift_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_F40_Swlift/BgF40Swlift_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_F40_Swlift_0x8096F160/BgF40Swlift_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_F40_Swlift/BgF40Swlift_Destroy.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_F40_Swlift/BgF40Swlift_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_F40_Swlift/BgF40Swlift_Draw.s")

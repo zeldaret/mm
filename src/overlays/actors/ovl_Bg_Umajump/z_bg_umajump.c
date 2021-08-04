@@ -21,7 +21,6 @@ const ActorInit Bg_Umajump_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_8091A810[] = {
     ICHAIN_F32(uncullZoneScale, 1200, ICHAIN_CONTINUE),
@@ -29,24 +28,27 @@ static InitChainEntry D_8091A810[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-
-extern InitChainEntry D_8091A810[];
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Umajump_0x80919F30/func_80919F30.asm")
+extern InitChainEntry D_8091A810[];
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Umajump_0x80919F30/func_80919FC8.asm")
+extern UNK_TYPE D_06001220;
+extern UNK_TYPE D_06001558;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Umajump_0x80919F30/func_8091A044.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Umajump/func_80919F30.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Umajump_0x80919F30/func_8091A0B8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Umajump/func_80919FC8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Umajump_0x80919F30/BgUmajump_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Umajump/func_8091A044.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Umajump_0x80919F30/BgUmajump_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Umajump/func_8091A0B8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Umajump_0x80919F30/BgUmajump_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Umajump/BgUmajump_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Umajump_0x80919F30/func_8091A5A0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Umajump/BgUmajump_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Umajump_0x80919F30/func_8091A7B0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Umajump/BgUmajump_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Umajump/func_8091A5A0.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Umajump/func_8091A7B0.s")
