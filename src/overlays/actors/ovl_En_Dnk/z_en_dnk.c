@@ -58,6 +58,9 @@ extern AnimationHeader D_060033E4;
 extern AnimationHeader D_06003780;
 extern AnimationHeader D_06003780;
 extern AnimationHeader D_06002950;
+extern Gfx D_06001680[];
+extern Gfx D_06001700[];
+extern Gfx D_06001780[];
 
 static s16 D_80A521A0 = 0;
 
@@ -211,7 +214,7 @@ void func_80A51648(EnDnk* this, GlobalContext* globalCtx) {
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
         if (ENDNK_PARAMS_3C(&this->actor) == ENDNK_PARAMS_3C_4) {
             this->actor.flags &= ~1;
-            this->actor.flags |= 0x30;
+            this->actor.flags |= (0x10 | 0x20);
             this->actionFunc = func_80A51890;
             Actor_SetScale(&this->actor, 0.1f);
         } else {
@@ -306,9 +309,9 @@ void func_80A51AA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
                 sp3C.y = this->unk_298;
                 sp3C.y += this->actor.shape.rot.y;
                 sp3C.z = 0;
-                Math_SmoothStepToS(&this->unk_290, sp3C.x, 4, 8190, 1);
-                Math_SmoothStepToS(&this->unk_292, sp3C.y, 4, 8190, 1);
-                Math_SmoothStepToS(&this->unk_294, sp3C.z, 4, 8190, 1);
+                Math_SmoothStepToS(&this->unk_290, sp3C.x, 4, 0x1FFE, 1);
+                Math_SmoothStepToS(&this->unk_292, sp3C.y, 4, 0x1FFE, 1);
+                Math_SmoothStepToS(&this->unk_294, sp3C.z, 4, 0x1FFE, 1);
             } else {
                 this->unk_290 = sp3C.x;
                 this->unk_292 = sp3C.y;
@@ -320,6 +323,7 @@ void func_80A51AA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
             this->unk_292 = sp3C.y;
             this->unk_294 = sp3C.z;
         }
+
         Matrix_RotateY(this->unk_292, MTXMODE_APPLY);
         SysMatrix_InsertXRotation_s(this->unk_290, MTXMODE_APPLY);
         SysMatrix_InsertZRotation_s(this->unk_294, MTXMODE_APPLY);
@@ -335,9 +339,9 @@ void func_80A51AA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 
 void func_80A51CB8(EnDnk* this, GlobalContext* globalCtx) {
     static Gfx* D_80A5245C[] = {
-        0x06001680,
-        0x06001700,
-        0x06001780,
+        D_06001680,
+        D_06001700,
+        D_06001780,
     };
 
     s32 pad;
@@ -376,6 +380,7 @@ void func_80A51DA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         func_8018219C(&sp5C, &sp3C, 0);
         SysMatrix_InsertTranslation(sp44.x, sp44.y, sp44.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
+        
         if (this->unk_28C & 0x10) {
             if (this->unk_28C & 0x20) {
                 sp3C.z = this->unk_296 + 0x4000;
@@ -396,6 +401,7 @@ void func_80A51DA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
             this->unk_292 = sp3C.y;
             this->unk_294 = sp3C.z;
         }
+
         Matrix_RotateY(this->unk_292, MTXMODE_APPLY);
         SysMatrix_InsertXRotation_s(this->unk_290, MTXMODE_APPLY);
         SysMatrix_InsertZRotation_s(this->unk_294, MTXMODE_APPLY);
