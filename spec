@@ -15,151 +15,96 @@ beginseg
     address 0x80080060
     include "build/src/boot_O2_g3/boot_main.o"
     include "build/data/boot/boot_main.bss.o"
-
     include "build/data/boot/rsp_boot.data.o"
-
     include "build/src/boot_O2_g3/idle.o"
     include "build/data/boot/idle.bss.o"
-
     include "build/src/boot_O2_g3/viconfig.o"
     include "build/data/boot/viconfig.data.o"
-
     include "build/src/boot_O2_g3/z_std_dma.o"
     include "build/data/boot/z_std_dma.bss.o"
-
     include "build/src/boot_O2_g3/yaz0.o"
-
     include "build/src/boot_O2_g3/irqmgr.o"
-
     include "build/src/boot_O2_g3/CIC6105.o"
     include "build/data/boot/CIC6105.bss.o"
-
     include "build/src/boot_O2_g3/syncprintf.o"
-
     include "build/src/boot_O2_g3/fault.o"
     include "build/data/boot/fault.data.o"
     include "build/data/boot/fault.bss.o"
-
     include "build/src/boot_O2_g3/fault_drawer.o"
     include "build/data/boot/fault_drawer.bss.o"
-
     include "build/src/boot_O2/boot_80084940.o"
-
     include "build/src/boot/loadfragment.o"
     include "build/data/boot/loadfragment.data.o"
-
     include "build/src/boot_O2/loadfragment2.o"
-
     include "build/src/boot_O2/padutils.o"
-
     include "build/src/boot_O2/stackcheck.o"
-
     include "build/src/boot_O2/gfxprint.o"
     include "build/data/boot/gfxprint.data.o"
-
     include "build/src/boot_O2/mtxuty-cvt.o"
-
     include "build/src/boot_O2/assert.o"
-
     include "build/src/boot_O2/boot_800862E0.o"
-
     include "build/src/boot_O2/padsetup.o"
-
     include "build/src/boot/boot_80086760.o"
     include "build/data/boot/boot_80086760.bss.o"
-
     include "build/asm/boot/fp.text.o"
-
     include "build/src/boot/system_malloc.o"
     include "build/data/boot/system_malloc.data.o"
     include "build/data/boot/system_malloc.bss.o"
-
     include "build/src/boot_O2/rand.o"
     include "build/data/boot/rand.data.o"
     include "build/data/boot/rand.bss.o"
-
     include "build/src/boot_O2/__osMalloc.o"
     include "build/data/boot/__osMalloc.bss.o"
-
     include "build/src/libultra/rmon/sprintf.o"
     include "build/src/boot/printutils.o"
-
     include "build/asm/boot/setcause.text.o"
-
     include "build/src/libultra/os/sendmesg.o"
     include "build/src/boot/pfsfreeblocks.o"
     include "build/src/libultra/os/viextend.o"
     include "build/src/libultra/os/stopthread.o"
-
     include "build/src/libultra/os/recvmesg.o"
-
     include "build/asm/boot/setintmask.text.o"
     include "build/data/boot/setintmask.rodata.o"
-
     include "build/asm/boot/getintmask.text.o"
-
     include "build/src/libultra/voice/voicesetword.o"
-
     include "build/data/boot/vimodeHpf.data.o"
-
     include "build/asm/boot/guScale.text.o"
-
     include "build/src/libultra/gu/sinf.o"
-
     include "build/src/libultra/gu/sins.o"
-
     include "build/src/libultra/io/sptask.o"
     include "build/data/boot/sptask.bss.o"
-
     include "build/src/libultra/libc/ll.o"
-
     include "build/asm/boot/exceptasm.text.o"
     include "build/data/boot/exceptasm.data.o"
     include "build/data/boot/exceptasm.rodata.o"
-
     include "build/src/libultra/os/thread.o"
-
     include "build/src/libultra/os/destroythread.o"
     include "build/src/libultra/voice/voicecheckresult.o"
     include "build/asm/boot/bzero.text.o"
-
     include "build/src/boot/rumblepak.o"
     include "build/data/boot/rumblepak.bss.o"
-
     include "build/src/libultra/io/siacs.o"
     include "build/data/boot/siacs.bss.o"
-
     include "build/src/libultra/io/controller.o"
     include "build/data/boot/controller.bss.o"
-
     include "build/src/libultra/os/createthread.o"
-
     include "build/src/libultra/io/contreaddata.o"
-
     include "build/src/boot/voicegetreaddata.o"
     include "build/src/libultra/os/virtualtophysical.o"
-
     include "build/asm/boot/getsr.text.o"
     include "build/asm/boot/setsr.text.o"
-
     include "build/src/boot/writebackdcache.o"
-
     include "build/data/boot/threadsave.bss.o"
-
     include "build/src/libultra/os/initialize.o"
     include "build/data/boot/initialize.bss.o"
-
     pad_text
     pad_text
     pad_text
     pad_text
     pad_text
     pad_text
-
     include "build/src/libultra/io/vigetnextframebuf.o"
-
     include "build/src/libultra/gu/perspective.o"
-
     include "build/src/libultra/io/sprawdma.o"
     include "build/src/libultra/io/sirawdma.o"
     include "build/src/boot/epilinkhandle.o"
@@ -172,49 +117,33 @@ beginseg
     pad_text
     include "build/asm/boot/guMtxIdentF.text.o"
     include "build/src/libultra/io/visetmode.o"
-
     include "build/asm/boot/getconfig.text.o"
     include "build/asm/boot/setconfig.text.o"
-
     include "build/src/libultra/gu/lookat.o"
     include "build/src/boot/pfsallocatefile.o"
     include "build/src/libultra/os/stoptimer.o"
-
     include "build/asm/boot/probetlb.text.o"
-
     include "build/src/libultra/io/pimgr.o"
     include "build/data/boot/pimgr.data.o"
     include "build/data/boot/pimgr.bss.o"
-
     include "build/src/libultra/io/piacs.o"
-
     pad_text
     include "build/src/boot/devmgr.o"
-
     include "build/src/libultra/io/pirawdma.o"
-
     include "build/src/boot/contpfs.o"
     include "build/data/boot/contpfs.data.o"
-
     include "build/asm/boot/getcount.text.o"
-
     pad_text
-
     include "build/asm/boot/guMtxL2F.text.o"
     include "build/src/libultra/os/getmemsize.o"
     include "build/src/boot/pfssearchfile.o"
-
     include "build/src/libultra/os/seteventmesg.o"
     include "build/data/boot/seteventmesg.bss.o"
-
     include "build/src/boot/sqrtf.o"
     include "build/src/boot/afterprenmi.o"
     include "build/src/libultra/io/contquery.o"
-
     include "build/src/libultra/gu/lookathil.o"
-
     include "build/src/libultra/rmon/xprintf.o"
-
     include "build/src/boot/voicecleardictionary.o"
     include "build/asm/boot/unmaptlball.text.o"
     include "build/src/libultra/io/epidma.o"
@@ -224,9 +153,7 @@ beginseg
     include "build/src/libultra/os/createmesgqueue.o"
     include "build/src/boot/invalicache.o"
     include "build/src/boot/invaldcache.o"
-
     include "build/src/libultra/os/timerintr.o"
-
     include "build/src/boot/voicecontread36.o"
     include "build/src/boot/sp.o"
     include "build/src/libultra/io/si.o"
@@ -236,74 +163,52 @@ beginseg
     include "build/src/libultra/os/getthreadpri.o"
     include "build/src/boot/epirawread.o"
     include "build/src/libultra/io/viswapbuf.o"
-
     include "build/src/boot/position.o"
     include "build/data/boot/position.data.o"
-
     include "build/src/boot/epirawdma.o"
     include "build/src/libultra/io/sptaskyielded.o"
     include "build/src/boot/memcmp.o"
     include "build/src/libultra/os/gettime.o"
-
     include "build/src/libultra/gu/rotate.o"
-
     include "build/src/boot/setglobalintmask.o"
-
     include "build/src/boot/voiceinit.o"
     include "build/data/boot/voiceinit.data.o"
-
     include "build/src/boot/contchannelreset.o"
     include "build/src/boot/voicesetadconverter.o"
     include "build/src/boot/aisetfreq.o"
-
     include "build/src/boot/contramread.o"
     include "build/data/boot/contramread.data.o"
-
     include "build/src/boot/voicecontwrite20.o"
     include "build/src/boot/crc.o"
     include "build/src/libultra/os/getactivequeue.o"
     include "build/src/boot/normalize.o"
-
     include "build/asm/boot/setcompare.text.o"
-
     include "build/asm/boot/getcompare.text.o"
-
     include "build/src/libultra/io/dpgetstat.o"
     include "build/src/libultra/io/dpsetstat.o"
     include "build/src/boot/bcopy.o"
     include "build/src/boot/resetglobalintmask.o"
     include "build/src/boot/pfsdeletefile.o"
     include "build/src/libultra/gu/ortho.o"
-
     include "build/asm/boot/interrupt.text.o"
-
     include "build/src/libultra/io/vi.o"
     include "build/data/boot/vi.data.o"
-
     include "build/src/boot/viswapcontext.o"
     include "build/src/libultra/io/pigetcmdq.o"
-
     include "build/src/boot/cosf.o"
-
     include "build/src/boot/epiread.o"
     include "build/src/libultra/io/visetspecial.o"
-
     include "build/src/libultra/gu/coss.o"
-
     include "build/src/libultra/os/settime.o"
     include "build/src/boot/voicestopread.o"
     include "build/src/libultra/gu/visetevent.o"
     include "build/src/boot/pfsisplug.o"
-
     include "build/src/libultra/voice/voicegetstatus.o"
-
     include "build/src/boot/cartrominit.o"
     include "build/data/boot/cartrominit.data.o"
     include "build/data/boot/cartrominit.bss.o"
-
     include "build/src/boot/guS2DInitBg.o"
     include "build/data/boot/guS2DInitBg.data.o"
-
     include "build/src/boot/pfsselectbank.o"
     include "build/src/libultra/io/contsetch.o"
     include "build/src/boot/setfpccsr.o"
@@ -313,36 +218,26 @@ beginseg
     include "build/src/boot/pfschecker.o"
     include "build/src/libultra/io/aigetlen.o"
     include "build/src/boot/epiwrite.o"
-
     include "build/asm/boot/maptlbrdb.text.o"
-
     include "build/src/libultra/os/yieldthread.o"
     pad_text
     include "build/asm/boot/guTranslate.text.o"
-
     include "build/asm/boot/getcause.text.o"
-
     include "build/src/boot/contramwrite.o"
     include "build/src/libultra/io/epirawwrite.o"
     include "build/src/libultra/os/settimer.o"
-
     include "build/data/boot/__libm_qnan_f.rodata.o"
-
     include "build/src/boot/xldtob.o"
     include "build/data/boot/xldtob.data.o"
-
     include "build/src/libultra/libc/ldiv.o"
-
     include "build/src/boot/xlitob.o"
     include "build/src/libultra/io/sirawwrite.o"
     include "build/src/libultra/io/spgetstat.o"
     include "build/src/libultra/io/spsetstat.o"
-
     pad_text
     include "build/src/libultra/io/vimgr.o"
     include "build/data/boot/vimgr.data.o"
     include "build/data/boot/vimgr.bss.o"
-
     include "build/src/libultra/io/vigetcurrcontext.o"
     include "build/src/boot/writebackdcacheall.o"
     include "build/src/libultra/os/getcurrfaultthread.o"
@@ -351,11 +246,8 @@ beginseg
     include "build/asm/boot/guMtxF2L.text.o"
     include "build/src/libultra/os/startthread.o"
     include "build/src/libultra/io/visetyscale.o"
-
     include "build/src/libultra/io/visetxscale.o"
-
     include "build/src/libultra/libc/llcvt.o"
-
     include "build/src/boot/voicecheckword.o"
     include "build/src/boot/voicecontrolgain.o"
     include "build/src/boot/voicestartreaddata.o"
@@ -364,16 +256,13 @@ beginseg
     include "build/src/boot/voicecontwrite4.o"
     include "build/src/libultra/os/gethwinterrupt.o"
     include "build/src/boot/sethwinterrupt.o"
-
     include "build/asm/boot/getwatchlo.text.o"
     include "build/asm/boot/setwatchlo.text.o"
-
     include "build/src/boot/fmodf.o"
     include "build/src/boot/__osMemset.o"
     include "build/src/boot_O2_g3/__osMemcmp.o"
     include "build/src/boot/__osStrcpy.o"
     include "build/src/boot/__osMemcpy.o"
-
     include "build/data/boot/build.rodata.o"
 endseg
 
@@ -663,239 +552,149 @@ beginseg
     include "build/src/code/z_room.o"
     include "build/data/code/z_room.data.o"
     include "build/src/code/code_8012EC80.o"
-
     pad_text
-
     include "build/data/code/code_801C2410.data.o"
-
     include "build/src/code/z_scene.o"
-
     include "build/data/code/code_801C2730.data.o"
-
     include "build/src/code/z_scene_proc.o"
-
     include "build/src/code/z_scene_table.o"
-
     include "build/src/code/code_801323D0.o"
-
     include "build/data/code/code_801C5C50.data.o"
-
     include "build/src/code/z_skelanime.o"
-
     include "build/src/code/z_skin.o"
     include "build/data/code/z_skin.bss.o"
-
     include "build/src/code/z_skin_awb.o"
-
     include "build/src/code/z_skin_matrix.o"
-
     include "build/src/code/z_snap.o"
-
     include "build/src/code/z_sub_s.o"
     include "build/data/code/z_sub_s.data.o"
-
     include "build/data/code/code_801DE890.rodata.o"
-
     include "build/src/code/code_8013EC10.o"
     include "build/data/code/code_8013EC10.bss.o"
-
     include "build/src/code/z_view.o"
-
     include "build/src/code/z_vimode.o"
     include "build/data/code/z_vimode.data.o"
-
     include "build/src/code/code_80140E80.o"
-
     include "build/src/code/z_vismono.o"
     include "build/src/code/code_801420C0.o"
-
     include "build/src/code/z_vr_box.o"
-
     include "build/src/code/z_vr_box_draw.o"
     include "build/data/code/z_vr_box_draw.data.o"
     include "build/data/code/z_vr_box_draw.bss.o"
-
     include "build/src/code/z_sram_NES.o"
     include "build/data/code/z_sram_NES.data.o"
     include "build/data/code/z_sram_NES.bss.o"
-
     include "build/src/code/z_message.o"
     include "build/data/code/z_message.bss.o"
-
     include "build/src/code/z_message_nes.o"
     include "build/data/code/z_message_nes.data.o"
-
     include "build/src/code/z_message_staff.o"
-
     include "build/src/code/z_player_call.o"
     include "build/data/code/z_player_call.bss.o"
-
     include "build/src/code/z_shrink_window.o"
     include "build/data/code/z_shrink_window.bss.o"
-
     include "build/src/code/db_camera.o"
     include "build/data/code/db_camera.bss.o"
-
     include "build/data/code/code_801D0B50.data.o"
-
     include "build/src/code/z_kaleido_manager.o"
     include "build/data/code/z_kaleido_manager.data.o"
     include "build/data/code/z_kaleido_manager.bss.o"
-
     include "build/src/code/z_kaleido_scope_call.o"
     include "build/data/code/z_kaleido_scope_call.bss.o"
-
     include "build/src/code/z_fbdemo_dlftbls.o"
-
     include "build/data/code/code_801D0BB0.data.o"
-
     include "build/src/code/z_fbdemo.o"
     include "build/data/code/z_fbdemo.data.o"
-
     include "build/src/code/z_fbdemo_fade.o"
-
     include "build/src/code/z_fbdemo_circle.o"
     include "build/data/code/z_fbdemo_circle.data.o"
-
     include "build/src/code/z_overlay.o"
-
     include "build/src/code/z_play.o"
     include "build/data/code/z_play.data.o"
     include "build/data/code/z_play.bss.o"
-
     include "build/src/code/z_play_hireso.o"
     include "build/data/code/z_play_hireso.data.o"
-
     include "build/src/code/PreRender.o"
     include "build/data/code/PreRender.bss.o"
-
     include "build/src/code/TwoHeadGfxArena.o"
     include "build/src/code/TwoHeadArena.o"
-
     include "build/src/code/code_80172BC0.o"
-
     include "build/src/code/audioMgr.o"
-
     include "build/src/code/title_setup.o"
     include "build/src/code/game.o"
     include "build/data/code/game.bss.o"
-
     include "build/src/code/gamealloc.o"
-
     include "build/src/code/graph.o"
     include "build/data/code/graph.data.o"
     include "build/data/code/graph.bss.o"
-
     include "build/src/code/code_80174A40.o"
-
     include "build/src/code/listalloc.o"
-
     include "build/src/code/main.o"
     include "build/data/code/main.bss.o"
-
     include "build/src/code/padmgr.o"
     include "build/data/code/padmgr.data.o"
-
     include "build/src/code/sched.o"
     include "build/data/code/sched.bss.o"
-
     include "build/src/code/speed_meter.o"
     include "build/data/code/speed_meter.data.o"
     include "build/data/code/speed_meter.bss.o"
-
     include "build/data/code/sys_cfb.bss.o"
-
     include "build/src/code/sys_cmpdma.o"
     include "build/data/code/sys_cmpdma.bss.o"
-
     include "build/src/code/sys_initial_check.o"
-
     include "build/src/code/sys_math.o"
-
     include "build/src/code/sys_math3d.o"
     include "build/data/code/sys_math3d.bss.o"
-
     include "build/data/code/code_801D1570.data.o"
     include "build/data/code/code_801D15B0.data.o"
-
     include "build/src/code/sys_math_atan.o"
-
     include "build/src/code/sys_matrix.o"
     include "build/data/code/sys_matrix.data.o"
     include "build/data/code/sys_matrix.bss.o"
-
     include "build/src/code/sys_ucode.o"
     include "build/data/code/code_801D1E70.data.o"
-
     include "build/src/code/code_80183070.o"
-
     include "build/src/code/c_keyframe.o"
-
     include "build/src/code/sys_slowly.o"
-
     include "build/src/code/sys_flashrom.o"
     include "build/data/code/sys_flashrom.bss.o"
-
     include "build/asm/code/code_80185F90.text.o" // handwritten
-
     include "build/src/code/osFlash.o"
     include "build/data/code/osFlash.bss.o"
-
     pad_text
     pad_text
     pad_text
-
     include "build/src/code/audio_synthesis.o"
-
     include "build/src/code/audio_heap.o"
     include "build/data/code/code_801D2E80.data.o"
     include "build/data/code/audio_heap.bss.o"
-
     include "build/data/code/code_801D3D90.data.o"
-
     include "build/src/code/audio_load.o"
     include "build/data/code/audio_load.bss.o"
-
     include "build/src/code/code_80192BE0.o"
-
     include "build/src/code/code_80194710.o"
-
     include "build/src/code/audio_playback.o"
-
     include "build/src/code/audio_effects.o"
-
     include "build/src/code/audio_seqplayer.o"
-
     include "build/asm/code/code_8019AE40.text.o" // handwritten
     pad_text
     include "build/asm/code/code_8019AEC0.text.o" // handwritten
-
     include "build/src/code/code_8019AF00.o"
     include "build/data/code/code_8019AF00.bss.o"
-
     include "build/data/code/code_801D55B0.data.o"
-
     include "build/src/code/code_801A51F0.o"
     include "build/data/code/code_801A51F0.data.o"
     include "build/data/code/code_801A51F0.bss.o"
-
     pad_text
-
     include "build/src/code/code_801A5BD0.o"
     include "build/data/code/code_801A5BD0.bss.o"
-
     include "build/src/code/code_801A7B10.o"
     include "build/data/code/code_801A7B10.bss.o"
-
     include "build/src/code/code_801AA020.o"
     include "build/data/code/code_801AA020.bss.o"
-
     include "build/src/code/z_game_over.o"
-
     include "build/src/code/z_construct.o"
-
     include "build/data/code/code_801D9090.data.o"
-
     include "build/data/code/code_801E1180.rodata.o"
 endseg
 

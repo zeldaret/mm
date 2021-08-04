@@ -1224,8 +1224,8 @@ for segment in files_spec:
 .macro DMA_TABLE_ENTRY segment
     .4byte _\segment\()SegmentRomStart
     .4byte _\segment\()SegmentRomEnd
-    .4byte _\segment\()SegmentPRomStart
-    .4byte _\segment\()SegmentPRomEnd
+    .4byte _\segment\()SegmentRomStart
+    .4byte 0x00000000
 .endm
 
 .macro DMA_TABLE_ENTRY_UNSET segment

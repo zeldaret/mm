@@ -34,6 +34,13 @@ else
   endif
 endif
 
+# Threads to compress and extract assets with, TODO improve later
+ifeq ($(DETECTED_OS),linux)
+  N_THREADS ?= $(shell nproc)
+else
+  N_THREADS ?= 1
+endif
+
 #### Tools ####
 ifeq ($(shell type mips-linux-gnu-ld >/dev/null 2>/dev/null; echo $$?), 0)
   MIPS_BINUTILS_PREFIX := mips-linux-gnu-
@@ -141,11 +148,11 @@ build/src/boot_O2_g3/fault.o: CFLAGS += -trapuv
 build/src/boot_O2_g3/fault_drawer.o: CFLAGS += -trapuv
 
 build/src/libultra/%: CC := $(CC_OLD)
-build/src/libultra/io/%: CC := ./tools/asm-processor/build.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
-build/src/libultra/os/%: CC := ./tools/asm-processor/build.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
-build/src/libultra/voice/%: CC := ./tools/asm-processor/build.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
+build/src/libultra/io/%: CC := python3 tools/asm-processor/build.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
+build/src/libultra/os/%: CC := python3 tools/asm-processor/build.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
+build/src/libultra/voice/%: CC := python3 tools/asm-processor/build.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
 
-CC := ./tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
+CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
 
 #### Main Targets ###
 
@@ -162,18 +169,14 @@ ifeq ($(COMPARE),1)
 endif
 
 .PHONY: all uncompressed compressed clean assetclean distclean disasm init setup
-
-# make will delete any generated assembly files that are not a prerequisite for anything, so keep it from doing so
-.PRECIOUS: asm/%.asm
 .DEFAULT_GOAL := uncompressed
-
 all: uncompressed compressed
 
 $(ROM): $(ELF)
 	$(ELF2ROM) -cic 6105 $< $@
 
 $(ROMC): $(ROM)
-	python3 tools/z64compress_wrapper.py --mb 32 --matching --threads $(shell nproc) $< $@ $(ELF) build/$(SPEC)
+	python3 tools/z64compress_wrapper.py --mb 32 --matching --threads $(N_THREADS) $< $@ $(ELF) build/$(SPEC)
 
 $(ELF): $(TEXTURE_FILES_OUT) $(OVERLAY_RELOC_FILES) $(O_FILES) build/ldscript.txt build/undefined_syms.txt
 	$(LD) -T build/undefined_syms.txt -T build/ldscript.txt --no-check-sections --accept-unknown-input-arch --emit-relocs -Map build/mm.map -o $@
@@ -199,7 +202,7 @@ setup:
 	$(MAKE) -C tools
 	python3 tools/fixbaserom.py
 	python3 tools/extract_baserom.py
-	python3 extract_assets.py
+	python3 extract_assets.py -t $(N_THREADS)
 
 ## Assembly generation
 disasm:
@@ -220,9 +223,6 @@ init:
 
 build/assets/%.o: assets/%.c
 	$(CC) -I build/ -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-
-build/binary/assets/scenes/%: build/code.elf
-	@$(OBJCOPY) --dump-section $*=$@ $< /dev/null
 
 #### Various Recipes ####
 
