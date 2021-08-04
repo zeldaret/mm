@@ -43,7 +43,26 @@ extern Gfx D_06000960;
 extern CollisionHeader D_06000B70;
 extern UNK_TYPE D_06001040;
 
+#ifdef NON_MATCHING
+s32 func_8098E5C0(ObjKibako2* this, GlobalContext* globalCtx) {
+    s32 temp_v0;
+    s32 flag;
+    s32 phi_v0;
+
+    temp_v0 = ((this->dyna.actor.params & 0x1F) * 4) | 0xFF01;
+    flag = -1;
+    if ((temp_v0 & 3)) {
+        flag = ((temp_v0 & 0x3FC) >> 2) & 0xFF;
+    }
+    phi_v0 = (flag < 0) == 1;
+    if (phi_v0 == 0) {
+        phi_v0 = Actor_GetChestFlag(globalCtx, flag) == 0;
+    }
+    return phi_v0;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/func_8098E5C0.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/func_8098E62C.s")
 
