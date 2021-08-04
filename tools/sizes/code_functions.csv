@@ -2706,7 +2706,7 @@ asm/non_matchings/code/padmgr/Padmgr_GetInput.s,Padmgr_GetInput,0x80175F98,0xF
 asm/non_matchings/code/padmgr/Padmgr_GetInput2.s,Padmgr_GetInput2,0x80175FD4,0xF
 asm/non_matchings/code/padmgr/Padmgr_ThreadEntry.s,Padmgr_ThreadEntry,0x80176010,0x61
 asm/non_matchings/code/padmgr/Padmgr_Start.s,Padmgr_Start,0x80176194,0x3B
-asm/non_matchings/code/sched/Sched_SwapFrameBuffer.s,Sched_SwapFrameBuffer,0x80176280,0x25
+asm/non_matchings/code/sched/Sched_SwapFramebuffer.s,Sched_SwapFramebuffer,0x80176280,0x25
 asm/non_matchings/code/sched/Sched_RetraceUpdateFramebuffer.s,Sched_RetraceUpdateFramebuffer,0x80176314,0x14
 asm/non_matchings/code/sched/Sched_HandleReset.s,Sched_HandleReset,0x80176364,0x3
 asm/non_matchings/code/sched/Sched_HandleStop.s,Sched_HandleStop,0x80176370,0x9

@@ -3192,7 +3192,7 @@
     0x80175FD4:("Padmgr_GetInput2",),
     0x80176010:("Padmgr_ThreadEntry",),
     0x80176194:("Padmgr_Start",),
-    0x80176280:("Sched_SwapFrameBuffer",),
+    0x80176280:("Sched_SwapFramebuffer",),
     0x80176314:("Sched_RetraceUpdateFramebuffer",),
     0x80176364:("Sched_HandleReset",),
     0x80176370:("Sched_HandleStop",),

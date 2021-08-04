@@ -16,7 +16,7 @@ OSTime sRDPStartTime;
 u64* gAudioSPDataPtr;
 u32 gAudioSPDataSize;
 
-void Sched_SwapFrameBuffer(CfbInfo* cfbInfo) {
+void Sched_SwapFramebuffer(CfbInfo* cfbInfo) {
     s32 one = 1;
 
     if (cfbInfo->swapBuffer != NULL) {
@@ -43,7 +43,7 @@ void Sched_RetraceUpdateFramebuffer(SchedContext* sched, CfbInfo* cfbInfo) {
             ViConfig_UpdateVi(0);
         }
     }
-    Sched_SwapFrameBuffer(cfbInfo);
+    Sched_SwapFramebuffer(cfbInfo);
 }
 
 void Sched_HandleReset(SchedContext* sched) {
@@ -58,7 +58,7 @@ void Sched_HandleStop(SchedContext* sched) {
  * SP status register and waiting. Regardless of the result, the scheduler will send an
  * RSP_DONE_MSG back to itself.
  * If there was no currently running audio task, it will dequeue the currently waiting
- * audio task and notify the sender if the task is ssociated with a message queue.
+ * audio task and notify the sender if the task is associated with a message queue.
  */
 void Sched_HandleAudioCancel(SchedContext* sched) {
     s32 i;
@@ -118,7 +118,7 @@ void Sched_HandleAudioCancel(SchedContext* sched) {
  * SP status register and waiting. Regardless of the result, the scheduler will send an
  * RSP_DONE_MSG back to itself and attempt to stop the RDP.
  * If there was no currently running gfx task, it will dequeue the currently waiting gfx
- * task and notify the sender if the task is ssociated with a message queue.
+ * task and notify the sender if the task is associated with a message queue.
  * If there is an RDP task, the output buffer will be cleared and the scheduler will send
  * an RDP_DONE_MSG back to itself.
  */

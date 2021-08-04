@@ -3219,7 +3219,7 @@ void Padmgr_GetInput(Input* input, s32 param_2);
 void Padmgr_GetInput2(Input* input, s32 param_2);
 void Padmgr_ThreadEntry(PadMgr* padmgr);
 void Padmgr_Start(OSMesgQueue* siEventCallbackQueue, IrqMgr* irqmgr, OSId threadId, OSPri threadPri, void* stack);
-void Sched_SwapFrameBuffer(CfbInfo* cfbInfo);
+void Sched_SwapFramebuffer(CfbInfo* cfbInfo);
 void Sched_RetraceUpdateFramebuffer(SchedContext* sched, CfbInfo* cfbInfo);
 void Sched_HandleReset(SchedContext* sched);
 void Sched_HandleStop(SchedContext* sched);
