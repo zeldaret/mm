@@ -71,13 +71,13 @@ typedef struct {
 
 
 typedef struct {
-    /* 0x00 */ s32 active;
+    /* 0x00 */ s32 active; // u32 maybe? need to check
     /* 0x04 */ OSThread* thread;
     /* 0x08 */ OSMesgQueue* cmdQueue;
     /* 0x0C */ OSMesgQueue* evtQueue;
     /* 0x10 */ OSMesgQueue* acsQueue;
-    /* 0x14 */ s32 (*dma)(void);
-    /* 0x18 */ s32 (*unk18)(void);
+    /* 0x14 */ s32 (*piDmaCallback)(s32, u32, void*, u32);
+    /* 0x18 */ s32 (*epiDmaCallback)(OSPiHandle*, s32, u32, void*, u32);
 } OSDevMgr;
 
 

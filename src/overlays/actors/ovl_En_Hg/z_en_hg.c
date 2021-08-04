@@ -184,7 +184,7 @@ void func_80BCF4AC(EnHg* this, GlobalContext* globalCtx) {
     this->actor.speedXZ = 1.6f;
     if (!(player->stateFlags2 & 0x08000000) && !func_80152498(&globalCtx->msgCtx)) {
         if (((this->skelAnime.animCurrentFrame > 9.0f) && (this->skelAnime.animCurrentFrame < 16.0f)) ||
-            (this->skelAnime.animCurrentFrame > 44.0f) && (this->skelAnime.animCurrentFrame < 51.0f)) {
+            ((this->skelAnime.animCurrentFrame > 44.0f) && (this->skelAnime.animCurrentFrame < 51.0f))) {
             Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
             Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x3E8, 0x14);
             this->actor.world.rot.y = this->actor.shape.rot.y;
