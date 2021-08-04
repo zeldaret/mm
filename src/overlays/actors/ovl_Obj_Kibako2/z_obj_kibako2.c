@@ -9,8 +9,8 @@ void ObjKibako2_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjKibako2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjKibako2_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjKibako2_Draw(Actor* thisx, GlobalContext* globalCtx);
-void func_8098EC68(ObjKibako2* this, GlobalContext* globalCtx);
-void func_8098ED20(ObjKibako2* this, GlobalContext* globalCtx);
+void ObjKibako2_Idle(ObjKibako2* this, GlobalContext* globalCtx);
+void ObjKibako2_Kill(ObjKibako2* this, GlobalContext* globalCtx);
 
 const ActorInit Obj_Kibako2_InitVars = {
     ACTOR_OBJ_KIBAKO2,
@@ -43,6 +43,7 @@ extern Gfx D_06000960[];
 extern CollisionHeader D_06000B70;
 extern Gfx D_06001040[];
 
+// From context, this function is likely checking if the box contains a Skulltula
 #ifdef NON_MATCHING
 s32 func_8098E5C0(ObjKibako2* this, GlobalContext* globalCtx) {
     s32 temp_v0;
@@ -104,7 +105,7 @@ void ObjKibako2_Break(ObjKibako2* this, GlobalContext* globalCtx) {
 }
 
 
-void func_8098E8A8(ObjKibako2* this, GlobalContext* globalCtx) {
+void ObjKibako2_SpawnCollectible(ObjKibako2* this, GlobalContext* globalCtx) {
     s32 collectible;
 
     collectible = func_800A8150(this->dyna.actor.params & 0x3F);
@@ -113,7 +114,7 @@ void func_8098E8A8(ObjKibako2* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_8098E900(ObjKibako2* this, GlobalContext* globalCtx) {
+void ObjKibako2_SpawnSkulltula(ObjKibako2* this, GlobalContext* globalCtx) {
     s16 yRotation;
     s32 param;
     Actor* skulltula;
@@ -132,11 +133,11 @@ void func_8098E900(ObjKibako2* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_8098E9C4(ObjKibako2* this, GlobalContext* globalCtx) {
+void ObjKibako2_SpawnContents(ObjKibako2* this, GlobalContext* globalCtx) {
     if (((this->dyna.actor.params >> 0xF) & 1) == 0) {
-        func_8098E8A8(this, globalCtx);
+        ObjKibako2_SpawnCollectible(this, globalCtx);
     } else {
-        func_8098E900(this, globalCtx);
+        ObjKibako2_SpawnSkulltula(this, globalCtx);
     }
 }
 
@@ -167,7 +168,7 @@ void ObjKibako2_Init(Actor* thisx, GlobalContext* globalCtx) {
     if ((sp24 != 1) || (func_8098E5C0(this, globalCtx) == 0)) {
         this->skulltulaNoiseTimer = -1;
     }
-    this->actionFunc = func_8098EC68;
+    this->actionFunc = ObjKibako2_Idle;
 }
 
 void ObjKibako2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -204,14 +205,14 @@ s32 func_8098EB78(ObjKibako2* this) {
 }
 
 
-void func_8098EC68(ObjKibako2* this, GlobalContext* globalCtx) {
+void ObjKibako2_Idle(ObjKibako2* this, GlobalContext* globalCtx) {
     if (func_8098EB78(this) != 0) {
         ObjKibako2_Break(this, globalCtx);
         func_800F0568(globalCtx, &this->dyna.actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
         this->dyna.actor.flags |= 0x10;
         func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
         this->dyna.actor.draw = NULL;
-        this->actionFunc = func_8098ED20;
+        this->actionFunc = ObjKibako2_Kill;
         return;
     }
     if (this->dyna.actor.xzDistToPlayer < 600.0f) {
@@ -219,8 +220,8 @@ void func_8098EC68(ObjKibako2* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_8098ED20(ObjKibako2* this, GlobalContext* globalCtx) {
-    func_8098E9C4(this, globalCtx);
+void ObjKibako2_Kill(ObjKibako2* this, GlobalContext* globalCtx) {
+    ObjKibako2_SpawnContents(this, globalCtx);
     Actor_MarkForDeath(&this->dyna.actor);
 }
 
