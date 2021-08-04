@@ -1,7 +1,7 @@
 #include "global.h"
 
 #define SCENE_ENTRY(name, textId, config) \
-    { { (u32) _##name##SegmentRomStart, (u32)_##name##SegmentRomEnd }, textId, 0, config, 0 }
+    { { (u32)_##name##SegmentRomStart, (u32)_##name##SegmentRomEnd }, textId, 0, config, 0 }
 
 #define SCENE_ENTRY_NONE() \
     { { 0, 0 }, 0, 0, 0, 0 }
