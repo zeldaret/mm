@@ -8,8 +8,8 @@ void EnHoll_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnHoll_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHoll_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHoll_Draw(Actor* thisx, GlobalContext* globalCtx);
-void func_80899960(EnHoll* this);
-void func_808999B0(GlobalContext* globalCtx, EnHoll* this, Vec3f* vec3fP);
+void EnHoll_SetTypeAndOpacity(EnHoll* this);
+void EnHoll_SetPlayerSide(GlobalContext* globalCtx, EnHoll* this, Vec3f* vec3fP);
 void func_80899B88(EnHoll* this, GlobalContext* globalCtx);
 void func_8089A238(EnHoll* this, GlobalContext* globalCtx);
 void func_80899F30(EnHoll* this, GlobalContext* globalCtx);
@@ -28,25 +28,40 @@ const ActorInit En_Holl_InitVars = {
     (ActorFunc)EnHoll_Draw,
 };
 
-static InitChainEntry sInitChain[] = {
+static s32 D_8089A550[] = {
+    0x465055F0, 0x00000000, 0x08000800, 0xFFFFFFFF,
+    0xB9B055F0, 0x00000000, 0x00000800, 0xFFFFFFFF,
+    0xB9B0AA10, 0x00000000, 0x00000000, 0xFFFFFFFF,
+    0x4650AA10, 0x00000000, 0x08000000, 0xFFFFFFFF
+};
+
+static s32 D_8089A590[] = {
+    0xD7000000, 0xFFFFFFFF, 0xFCFFFFFF, 0xFFFDF638,
+    0x01004008, &D_8089A550, 0x06000204, 0x00000406,
+    0xDF000000, 0x00000000
+};
+
+static UNK_PTR D_8089A5B8 = 0;
+
+static EnHollActionFunc D_8089A5BC[] /* sEnHollActionFuncs */ = {
+    func_80899B88, func_8089A238, func_80899F30, func_8089A0C0,
+    func_80899B88
+};
+
+static InitChainEntry D_8089A5D0[] /* sInitChain[] */ = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 400, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 400, ICHAIN_STOP),
 };
 
-static s32 D_8089A590[] = {
-    0xD7000000, 0xFFFFFFFF, 0xFCFFFFFF, 0xFFFDF638, 0x01004008, &sInitChain, 0x06000204, 0x00000406, 0xDF000000, 0x00000000};
+static f32 D_8089A5DC = 200.0f;
+static f32 D_8089A5E0 = 150.0f;
+static f32 D_8089A5E4 = 100.0f;
+static f32 D_8089A5E8 = 50.0f;
 
-static UNK_PTR D_8089A5B8 = 0;
-
-static UNK_PTR enHollActionFuncs[] = {
-    func_80899B88, func_8089A238, func_80899F30, func_8089A0C0, func_80899B88
-};
-
-//EnHoll_SetTypeAndOpacity(EnHoll* this) {
-void func_80899960(EnHoll* this) {
+void EnHoll_SetTypeAndOpacity(EnHoll* this) {
     this->type = GET_HOLL_TYPE(this);
-    this->actionFunc = enHollActionFuncs[this->type];
+    this->actionFunc = D_8089A5BC[this->type];
     if (IS_HOLL_TYPE_VISIBLE(this)) {
         this->opacity = EN_HOLL_OPAQUE;
     } else {
@@ -54,8 +69,7 @@ void func_80899960(EnHoll* this) {
     }
 }
 
-// EnHoll_SetPlayerSide(GlobalContext* globalCtx, EnHoll* this, Vec3f* rotatedPlayerPos) {
-void func_808999B0(GlobalContext* globalCtx, EnHoll* this, Vec3f* rotatedPlayerPos) {
+void EnHoll_SetPlayerSide(GlobalContext* globalCtx, EnHoll* this, Vec3f* rotatedPlayerPos) {
     Player* player = PLAYER;
 
     /* rotatedPlayerPos = function output
@@ -73,11 +87,11 @@ void EnHoll_Init(Actor* thisx, GlobalContext* globalCtx) {
     UNK_TYPE4 pad;
     Vec3f rotatedPlayerPos;
 
-    Actor_ProcessInitChain(&this->actor, sInitChain);
-    func_80899960(this) /* Sets visible Holls to OPAQUE, invisible Holls to not draw */;
+    Actor_ProcessInitChain(&this->actor, D_8089A5D0);
+    EnHoll_SetTypeAndOpacity(this) /* Sets visible Holls to OPAQUE, invisible Holls to not draw */;
     this->alwaysZero = 0;
     this->opacity = EN_HOLL_OPAQUE /* Sets *all* Holls to OPAQUE */;
-    func_808999B0(globalCtx, this, &rotatedPlayerPos);
+    EnHoll_SetPlayerSide(globalCtx, this, &rotatedPlayerPos);
 }
 
 void EnHoll_Destroy(Actor* thisx, GlobalContext* globalCtx) {
