@@ -443,7 +443,7 @@ void Quake2_Update(void) {
     Player* player;
     GlobalContext* globalCtx = sQuake2Context.globalCtx;
     PosRot playerPosRot;
-    Camera* camera = globalCtx->cameraPtrs[globalCtx->activeCamera];
+    Camera* camera = ACTIVE_CAM;
     f32 speedRatio = CLAMP_MAX(camera->speedRatio, 1.0f);
 
     if (sQuake2Context.type != 0) {
@@ -607,7 +607,7 @@ void Quake2_Update(void) {
             player = PLAYER;
 
             if (&player->actor != NULL) {
-                func_800B8248(&playerPosRot, player);
+                func_800B8248(&playerPosRot, &player->actor);
             }
 
             angle1Speed = 359.2f;
