@@ -75,13 +75,30 @@ void func_8098E8A8(ObjKibako2* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/func_8098E900.s")
+void func_8098E900(ObjKibako2* this, GlobalContext* globalCtx) {
+    s16 yRotation;
+    s32 param;
+    Actor* skulltula;
+
+    if (func_8098E5C0(this, globalCtx) != 0) {
+        param = ((this->dyna.actor.params & 0x1F) * 4) | 0xFF01;
+        yRotation = ((u32) Rand_Next() >> 0x11) + this->dyna.actor.yawTowardsPlayer + 0xC000;
+        skulltula = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_SW, this->dyna.actor.world.pos.x,
+                                this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, 0, yRotation, 0,
+                                param);
+        if (skulltula != 0) {
+            skulltula->parent = &this->dyna.actor;
+            skulltula->velocity.y = 13.0f;
+            skulltula->speedXZ = 0.0f;
+        }
+    }
+}
 
 void func_8098E9C4(ObjKibako2* this, GlobalContext* globalCtx) {
     if (((this->dyna.actor.params >> 0xF) & 1) == 0) {
         func_8098E8A8(this, globalCtx);
     } else {
-        func_8098E900();
+        func_8098E900(this, globalCtx);
     }
 }
 
