@@ -43,27 +43,18 @@ extern Gfx D_06000960[];
 extern CollisionHeader D_06000B70;
 extern Gfx D_06001040[];
 
-// From context, this function is likely checking if the box contains a Skulltula
-#ifdef NON_MATCHING
+// This function is likely checking if the box contains a Skulltula
 s32 func_8098E5C0(ObjKibako2* this, GlobalContext* globalCtx) {
-    s32 temp_v0;
+    s32 actorSpawnParam;
     s32 flag;
-    s32 phi_v0;
 
-    temp_v0 = ((this->dyna.actor.params & 0x1F) * 4) | 0xFF01;
+    actorSpawnParam = ((this->dyna.actor.params & 0x1F) << 2) | 0xFF01;
     flag = -1;
-    if ((temp_v0 & 3)) {
-        flag = ((temp_v0 & 0x3FC) >> 2) & 0xFF;
+    if ((u16) actorSpawnParam & 3) {
+        flag = ((actorSpawnParam & 0x3FC) >> 2) & 0xFF;
     }
-    phi_v0 = (flag < 0) == 1;
-    if (phi_v0 == 0) {
-        phi_v0 = Actor_GetChestFlag(globalCtx, flag) == 0;
-    }
-    return phi_v0;
+    return !((flag >= 0) && Actor_GetChestFlag(globalCtx, flag));
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/func_8098E5C0.s")
-#endif
 
 void ObjKibako2_Break(ObjKibako2* this, GlobalContext* globalCtx) {
     s32 pad[2];
@@ -120,7 +111,7 @@ void ObjKibako2_SpawnSkulltula(ObjKibako2* this, GlobalContext* globalCtx) {
     Actor* skulltula;
 
     if (func_8098E5C0(this, globalCtx) != 0) {
-        param = ((this->dyna.actor.params & 0x1F) * 4) | 0xFF01;
+        param = ((this->dyna.actor.params & 0x1F) << 2) | 0xFF01;
         yRotation = ((u32) Rand_Next() >> 0x11) + this->dyna.actor.yawTowardsPlayer + 0xC000;
         skulltula = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_SW, this->dyna.actor.world.pos.x,
                                 this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, 0, yRotation, 0,
