@@ -9,7 +9,11 @@ void EnHoll_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHoll_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHoll_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_80899960(EnHoll* this);
-void func_808999B0(GlobalContext* globalCtx, EnHoll* this, UNK_PTR unkPtr);
+void func_808999B0(GlobalContext* globalCtx, EnHoll* this, Vec3f* vec3fP);
+void func_80899B88(EnHoll* this, GlobalContext* globalCtx);
+void func_8089A238(EnHoll* this, GlobalContext* globalCtx);
+void func_80899F30(EnHoll* this, GlobalContext* globalCtx);
+void func_8089A0C0(EnHoll* this, GlobalContext* globalCtx);
 
 const ActorInit En_Holl_InitVars = {
     ACTOR_EN_HOLL,
@@ -34,27 +38,52 @@ static s32 D_8089A590[] = {
 
 static UNK_PTR D_8089A5B8 = 0;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Holl_0x80899960/func_80899960.asm")
+static UNK_PTR enHollActionFuncs[] = {
+    func_80899B88, func_8089A238, func_80899F30, func_8089A0C0, func_80899B88
+};
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Holl_0x80899960/func_808999B0.asm")
+//EnHoll_SetTypeAndOpacity(EnHoll* this) {
+void func_80899960(EnHoll* this) {
+    this->type = GET_HOLL_TYPE(this);
+    this->actionFunc = enHollActionFuncs[this->type];
+    if (IS_HOLL_TYPE_VISIBLE(this)) {
+        this->opacity = EN_HOLL_OPAQUE;
+    } else {
+        this->actor.draw = NULL;
+    }
+}
+
+// EnHoll_SetPlayerSide(GlobalContext* globalCtx, EnHoll* this, Vec3f* rotatedPlayerPos) {
+void func_808999B0(GlobalContext* globalCtx, EnHoll* this, Vec3f* rotatedPlayerPos) {
+    Player* player = PLAYER;
+
+    /* rotatedPlayerPos = function output
+     * = hypothetical rotation of Player around Holl's origin to intersect Holl's z axis */
+    Actor_CalcOffsetOrientedToDrawRotation(&this->actor, rotatedPlayerPos, &player->actor.world.pos);
+    if (rotatedPlayerPos->z < 0.0f) {
+        this->playerSide = EN_HOLL_PLAYER_BEHIND;
+    } else {
+        this->playerSide = EN_HOLL_PLAYER_NOT_BEHIND;
+    }
+}
 
 void EnHoll_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnHoll* this = THIS;
-    UNK_TYPE4 pad[5];
+    UNK_TYPE4 pad;
+    Vec3f rotatedPlayerPos;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    func_80899960(this);
+    func_80899960(this) /* Sets visible Holls to OPAQUE, invisible Holls to not draw */;
     this->alwaysZero = 0;
-    this->opacity = 0xFF;
-    func_808999B0(globalCtx, this, &pad[1]);
+    this->opacity = EN_HOLL_OPAQUE /* Sets *all* Holls to OPAQUE */;
+    func_808999B0(globalCtx, this, &rotatedPlayerPos);
 }
 
 void EnHoll_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnHoll* this = THIS;
 
-    if (this->type != 4) {
+    if (!IS_HOLL_TYPE_SCENE_CHANGER(this)) {
         u32 transitionActorIndex = ((u16)this->actor.params) >> 0xA;
-
         globalCtx->doorCtx.transitionActorList[transitionActorIndex].id =
             -globalCtx->doorCtx.transitionActorList[transitionActorIndex].id;
         if (this == D_8089A5B8) {
@@ -99,7 +128,7 @@ void EnHoll_Draw(Actor *thisx, GlobalContext *globalCtx) {
             dlIndex = 0;
         }
         gfxP = Gfx_CallSetupDL(gfxP, dlIndex);
-        if (this->alwaysOne == 0) {
+        if (this->playerSide == EN_HOLL_PLAYER_BEHIND) {
             SysMatrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
         }
 	gSPMatrix(gfxP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
