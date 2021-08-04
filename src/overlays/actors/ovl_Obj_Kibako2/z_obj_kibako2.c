@@ -10,7 +10,6 @@ void ObjKibako2_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjKibako2_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_8098EC68(ObjKibako2* this, GlobalContext* globalCtx);
 void func_8098ED20(ObjKibako2* this, GlobalContext* globalCtx);
-s32 func_8098EB78(ObjKibako2* this);
 
 const ActorInit Obj_Kibako2_InitVars = {
     ACTOR_OBJ_KIBAKO2,
