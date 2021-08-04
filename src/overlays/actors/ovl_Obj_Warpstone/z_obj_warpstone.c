@@ -14,9 +14,9 @@ s32 ObjWarpstone_BeginOpeningCutscene(ObjWarpstone* this, GlobalContext* globalC
 s32 ObjWarpstone_PlayOpeningCutscene(ObjWarpstone* this, GlobalContext* globalCtx);
 s32 ObjWarpstone_OpenedIdle(ObjWarpstone* this, GlobalContext* globalCtx);
 
-extern Gfx D_04023210[] /*gOwlStatueWhiteFlashDL*/;
-extern Gfx D_060001D0[] /*gOwlStatueClosedDL*/;
-extern Gfx D_06003770[] /*gOwlStatueOpenedDL*/;
+extern Gfx D_04023210[]; // gOwlStatueWhiteFlashDL
+extern Gfx D_060001D0[]; // gOwlStatueClosedDL
+extern Gfx D_06003770[]; // gOwlStatueOpenedDL
 
 const ActorInit Obj_Warpstone_InitVars = {
     ACTOR_OBJ_WARPSTONE,
