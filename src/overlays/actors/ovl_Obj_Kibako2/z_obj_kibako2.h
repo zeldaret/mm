@@ -12,7 +12,7 @@ typedef struct ObjKibako2 {
     /* 0x015C */ ColliderCylinder collider;
     /* 0x01A8 */ ObjKibako2ActionFunc actionFunc;
     /* 0x01AC */ s8 unk_1AC;
-    /* 0x01AD */ s8 unk_1AD;
+    /* 0x01AD */ s8 skulltulaNoiseTimer;
     /* 0x01AE */ char unk_1AE[0x2];
 } ObjKibako2; // size = 0x1B0
 

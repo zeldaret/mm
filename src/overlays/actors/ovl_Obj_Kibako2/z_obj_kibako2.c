@@ -78,7 +78,7 @@ void ObjKibako2_Init(Actor *thisx, GlobalContext *globalCtx) {
         }
     }
     if ((sp24 != 1) || (func_8098E5C0(this, globalCtx) == 0)) {
-        this->unk_1AD = -1;
+        this->skulltulaNoiseTimer = -1;
     }
     this->actionFunc = func_8098EC68;
 }
@@ -117,15 +117,16 @@ void ObjKibako2_Update(Actor *thisx, GlobalContext *globalCtx) {
         globalCtx->actorCtx.unk5 |= 8;
     }
 
-    if (this->unk_1AD == 0) {
+    if (this->skulltulaNoiseTimer > 0) {
+        this->skulltulaNoiseTimer--;
+    }
+    else if (this->skulltulaNoiseTimer == 0) {
         Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
         if (Rand_ZeroOne() < 0.1f) {
-            this->unk_1AD = Rand_S16Offset(40, 80);
+            this->skulltulaNoiseTimer = Rand_S16Offset(40, 80);
         } else {
-            this->unk_1AD = 8;
+            this->skulltulaNoiseTimer = 8;
         }
-    } else {
-        this->unk_1AD--;
     }
     this->actionFunc(this, globalCtx);
 }
