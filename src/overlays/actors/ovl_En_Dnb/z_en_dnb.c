@@ -22,14 +22,14 @@ s32 func_80A50950(EnDnbStruct* arg0, GlobalContext* globalCtx);
 extern CollisionHeader D_06004D8C;
 extern Vec3s D_06004710[];
 extern Gfx D_06004638[];
-extern Gfx D_0408F7E0[];
-extern Gfx D_0408F3E0[];
-extern Gfx D_0408EFE0[];
-extern Gfx D_0408EBE0[];
-extern Gfx D_0408E7E0[];
-extern Gfx D_0408E3E0[];
-extern Gfx D_0408DFE0[];
-extern Gfx D_0408DBE0[];
+extern u64 D_0408F7E0[];
+extern u64 D_0408F3E0[];
+extern u64 D_0408EFE0[];
+extern u64 D_0408EBE0[];
+extern u64 D_0408E7E0[];
+extern u64 D_0408E3E0[];
+extern u64 D_0408DFE0[];
+extern u64 D_0408DBE0[];
 extern Gfx D_06000000[];
 extern Gfx D_06000020[];
 
@@ -267,7 +267,7 @@ s32 func_80A5086C(EnDnbStruct* arg0) {
 }
 
 s32 func_80A50950(EnDnbStruct* arg0, GlobalContext* globalCtx2) {
-    static Gfx* D_80A50CBC[] = {
+    static u64* D_80A50CBC[] = {
         D_0408F7E0, D_0408F3E0, D_0408EFE0, D_0408EBE0, D_0408E7E0, D_0408E3E0, D_0408DFE0, D_0408DBE0,
     };
 
@@ -285,7 +285,7 @@ s32 func_80A50950(EnDnbStruct* arg0, GlobalContext* globalCtx2) {
         if (arg0->isEnabled == 1) {
             if (!isGfxSetup) {
                 POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
-                gSPDisplayList(POLY_XLU_DISP++, &D_06000000);
+                gSPDisplayList(POLY_XLU_DISP++, D_06000000);
                 gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 0);
                 isGfxSetup = true;
             }
@@ -304,7 +304,7 @@ s32 func_80A50950(EnDnbStruct* arg0, GlobalContext* globalCtx2) {
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             idx = (arg0->unk_01 / (f32)arg0->unk_02) * 8.0f;
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A50CBC[idx]));
-            gSPDisplayList(POLY_XLU_DISP++, &D_06000020);
+            gSPDisplayList(POLY_XLU_DISP++, D_06000020);
 
             SysMatrix_StatePop();
             sp5C += 1;
