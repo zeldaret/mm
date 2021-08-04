@@ -468,8 +468,8 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    Collision_CylinderMoveToActor(&this->actor, &this->collider);
-    Collision_AddAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    Collider_UpdateCylinder(&this->actor, &this->collider);
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 
     if ((this->actor.params == ITEM00_SHIELD_HERO) || (this->actor.params == ITEM00_MAP) ||
         (this->actor.params == ITEM00_COMPASS)) {
@@ -897,7 +897,7 @@ EnItem00* Item_DropCollectible(GlobalContext* globalCtx, Vec3f* spawnPos, u32 pa
                 spawnedActor->actor.speedXZ = 2.0f;
                 spawnedActor->actor.gravity = -0.9f;
                 spawnedActor->actor.world.rot.y = randPlusMinusPoint5Scaled(65536.0f);
-                Actor_SetScale(spawnedActor, 0.0f);
+                Actor_SetScale(&spawnedActor->actor, 0.0f);
                 spawnedActor->actionFunc = func_800A6780;
                 spawnedActor->unk152 = 0xDC;
                 if ((spawnedActor->actor.params != ITEM00_SMALL_KEY) &&

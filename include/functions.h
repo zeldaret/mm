@@ -618,6 +618,8 @@ void func_800B13D8(Vec3f* srcPos, f32 randScale, Vec3f* newPos, Vec3f* velocity,
 void func_800B14D4(GlobalContext* globalCtx, f32 randScale, Vec3f* srcPos);
 void func_800B1598(GlobalContext* globalCtx, f32 randScale, Vec3f* srcPos);
 void EffectSsKiraKira_SpawnSmallYellow (GlobalContext * globalCtx, Vec3f * pos, Vec3f * velocity, Vec3f * accel);
+void EffectSsKiraKira_SpawnSmall(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel,
+                                 Color_RGBA8* primColor, Color_RGBA8* envColor);
 void EffectSsGSpk_SpawnSmall(GlobalContext* globalCtx, Actor* actor, Vec3f* pos, Vec3f* velocity, Vec3f* accel,
                              Color_RGBA8* primColor, Color_RGBA8* envColor);
 void EffectSsKiraKira_SpawnDispersed (GlobalContext * globalCtx, Vec3f * pos, Vec3f * velocity, Vec3f * accel, Color_RGBA8 * primColor, Color_RGBA8 * envColor, s16 scale, s32 life);
@@ -3359,7 +3361,7 @@ s32 Math3D_ColSphereLineSeg(Sphere16* sphere, LineSegment* line);
 void func_8017DD34(Sphere16* sphere, TriNorm* tri, Vec3f* pfParm3);
 s32 Math3D_ColSphereTri(Sphere16* sphere, TriNorm* tri, Vec3f* uParm3);
 // void func_8017E294(void);
-// void func_8017E350(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+UNK_TYPE func_8017E350(UNK_PTR, Vec3f*, Vec3f*, Vec3f*, Vec3f*);
 s32 Math3D_ColCylinderTri(Cylinder16* cylinder, TriNorm* tri, Vec3f* pzParm3);
 // void func_8017F1A0(void);
 s32 Math3D_ColSphereSphere(Sphere16* sphere1, Sphere16* sphere2);
@@ -3879,7 +3881,7 @@ void func_8019FDC8(UNK_PTR arg0, u16 sfxId, UNK_TYPE arg2);
 // void func_801A0124(void);
 // void func_801A0184(void);
 // void func_801A01C4(void);
-// void func_801A0204(void);
+void func_801A0204(UNK_TYPE);
 // void func_801A0238(void);
 // void func_801A026C(void);
 // void func_801A0318(void);

@@ -18,7 +18,7 @@ void Font_LoadMessageBoxEndIcon(Font* font, u16 icon) {
                         FONT_CHAR_TEX_SIZE);
 }
 
-static char sFontOrdering[] = "\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19"
+static u8 sFontOrdering[] = "\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19"
                               "!\"#$%&\'()*+,-./0123456789:ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                               "\x00\x0D\x0E\x1A"
                               "afjmosvwxyz{|}~"
