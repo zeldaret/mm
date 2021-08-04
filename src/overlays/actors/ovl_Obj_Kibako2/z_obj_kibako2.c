@@ -81,7 +81,13 @@ void ObjKibako2_Init(Actor *thisx, GlobalContext *globalCtx) {
     this->actionFunc = func_8098EC68;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/ObjKibako2_Destroy.s")
+void ObjKibako2_Destroy(Actor *thisx, GlobalContext *globalCtx) {
+    ObjKibako2* this = THIS;
+
+    Collider_DestroyCylinder(globalCtx, &this->collider);
+    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+}
+
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/func_8098EB78.s")
 
