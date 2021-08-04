@@ -1600,8 +1600,7 @@ beginseg
     name "ovl_En_Daiku"
     compress
     include "build/src/overlays/actors/ovl_En_Daiku/z_en_daiku.o"
-    include "build/data/ovl_En_Daiku/ovl_En_Daiku.data.o"
-    include "build/data/ovl_En_Daiku/ovl_En_Daiku.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Daiku/ovl_En_Daiku_reloc.o"
 endseg
 
 beginseg

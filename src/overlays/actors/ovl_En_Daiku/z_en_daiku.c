@@ -94,7 +94,7 @@ void EnDaiku_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->collider.dim.radius = 30;
         this->collider.dim.height = 60;
         this->collider.dim.yShift = 0;
-        this->actor.flags |= 0x08000000;
+        this->actor.flags |= 0x8000000;
         if ((gSaveContext.weekEventReg[63] & 0x80) || ((gSaveContext.day == 3) && gSaveContext.isNight)) {
             Actor_MarkForDeath(&this->actor);
         }
@@ -218,7 +218,7 @@ void func_809438F8(EnDaiku* this, GlobalContext* globalCtx) {
                        fabsf(2.0f * Math_SinS(this->actor.world.rot.y)));
         Math_ApproachF(&this->actor.world.pos.z, this->unk_26C.z, 0.5f,
                        fabsf(2.0f * Math_CosS(this->actor.world.rot.y)));
-        Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_282, 1, 2000, 10);
+        Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_282, 1, 0x7D0, 0xA);
 
         sq = sqrtf(SQ(this->actor.world.pos.x - this->unk_26C.x) + SQ(this->actor.world.pos.z - this->unk_26C.z));
         abs = fabsf(this->actor.world.rot.y - this->unk_282);
@@ -290,8 +290,8 @@ void EnDaiku_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     Actor_SetHeight(&this->actor, 65.0f);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    Math_SmoothStepToS(&this->unk_260, this->unk_266, 1, 3000, 0);
-    Math_SmoothStepToS(&this->unk_25E, this->unk_264, 1, 3000, 0);
+    Math_SmoothStepToS(&this->unk_260, this->unk_266, 1, 0xBB8, 0);
+    Math_SmoothStepToS(&this->unk_25E, this->unk_264, 1, 0xBB8, 0);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
     this->actor.uncullZoneForward = 650.0f;
     Collider_UpdateCylinder(&this->actor, &this->collider);
