@@ -86,7 +86,7 @@ void func_8098E900(ObjKibako2* this, GlobalContext* globalCtx) {
         skulltula = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_SW, this->dyna.actor.world.pos.x,
                                 this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, 0, yRotation, 0,
                                 param);
-        if (skulltula != 0) {
+        if (skulltula != NULL) {
             skulltula->parent = &this->dyna.actor;
             skulltula->velocity.y = 13.0f;
             skulltula->speedXZ = 0.0f;
@@ -143,10 +143,10 @@ s32 func_8098EB78(ObjKibako2* this) {
     u8 acFlags = this->collider.base.acFlags;
     s32 ret = 0;
 
-    if ((acFlags & 2) != 0) {
+    if ((acFlags & 2)) {
         Actor* ac = this->collider.base.ac;
         this->collider.base.acFlags = acFlags & 0xFFFD;
-        if (ac != 0) {
+        if (ac != NULL) {
             if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x80000000) {
                 if (Math3D_DistanceSquared(&this->dyna.actor.world.pos, &ac->world.pos) < 25600.0f) {
                     ret = 1;
