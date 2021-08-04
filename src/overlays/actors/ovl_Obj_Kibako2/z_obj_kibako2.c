@@ -51,7 +51,13 @@ extern UNK_TYPE D_06001040;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/func_8098E900.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/func_8098E9C4.s")
+void func_8098E9C4(ObjKibako2* this) {
+    if (((this->dyna.actor.params >> 0xF) & 1) == 0) {
+        func_8098E8A8();
+    } else {
+        func_8098E900();
+    }
+}
 
 void ObjKibako2_Init(Actor *thisx, GlobalContext *globalCtx) {
     ObjKibako2* this = THIS;
