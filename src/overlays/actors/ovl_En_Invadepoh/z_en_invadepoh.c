@@ -2686,7 +2686,7 @@ void func_80B48AD4(EnInvadepoh* this, GlobalContext* globalCtx) {
             temp_v1 = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f;
             temp_v1 -= this->actor.shape.rot.x;
             substruct->unk26.x = CLAMP(temp_v1, -2500, 2500);
-            new_var3 = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
+            new_var3 = SUB16(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
             temp_v1 = new_var3 * 0.7f;
             substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
         }
@@ -2755,7 +2755,7 @@ void func_80B48E4C(EnInvadepoh* this, GlobalContext* globalCtx) {
     temp_v1 *= 0.85f;
     temp_v1 -= this->actor.shape.rot.x;
     substruct->unk26.x = CLAMP(temp_v1, -0xBB8, 0xBB8);
-    diff = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
+    diff = SUB16(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
     temp_v1 = diff * 0.7f;
     substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
     if (func_800B867C(&this->actor, globalCtx)) {
@@ -3102,7 +3102,7 @@ void func_80B49DFC(EnInvadepoh* this, GlobalContext* globalCtx) {
     temp_v1 = (Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f);
     temp_v1 -= this->actor.shape.rot.x;
     substruct->unk26.x = CLAMP(temp_v1, -0xBB8, 0xBB8);
-    diff = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
+    diff = SUB16(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
     temp_v1 = diff;
     temp_v1 *= 0.7f;
     substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
@@ -3229,7 +3229,7 @@ void func_80B4A350(EnInvadepoh* this, GlobalContext* globalCtx) {
         temp_v1_2 *= 0.85f;
         temp_v1_2 -= this->actor.shape.rot.x;
         substruct->unk26.x = CLAMP(temp_v1_2, -0x9C4, 0x9C4);
-        diff = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
+        diff = SUB16(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
         temp_v1_2 = diff;
         temp_v1_2 *= 0.7f;
         substruct->unk26.y = CLAMP(temp_v1_2, -0x1F40, 0x1F40);
@@ -3328,7 +3328,7 @@ void func_80B4A81C(EnInvadepoh* this, GlobalContext* globalCtx) {
     temp_v1 = (Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f);
     temp_v1 -= this->actor.shape.rot.x;
     substruct->unk26.x = CLAMP(temp_v1, -0xBB8, 0xBB8);
-    diff = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
+    diff = SUB16(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
     temp_v1 = diff;
     temp_v1 *= 0.7f;
     substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
@@ -3561,7 +3561,7 @@ void func_80B4B218(Actor* thisx, GlobalContext* globalCtx) {
         temp_v1 = (Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.9f);
         temp_v1 -= this->actor.shape.rot.x;
         substruct->unk26.x = CLAMP(temp_v1, -0xBB8, 0xBB8);
-        diff = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
+        diff = SUB16(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
         temp_v1 = diff;
         temp_v1 *= 0.7f;
         substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
@@ -3827,7 +3827,7 @@ void func_80B4BC4C(EnInvadepoh* this, GlobalContext* globalCtx) {
             temp_v1_2 *= 0.85f;
             temp_v1_2 -= this->actor.shape.rot.x;
             substruct->unk26.x = CLAMP(temp_v1_2, -3000, 3000);
-            diff = BINANG_SUB(sp40, this->actor.shape.rot.y);
+            diff = SUB16(sp40, this->actor.shape.rot.y);
             temp_v1_2 = diff;
             temp_v1_2 *= 0.7f;
             substruct->unk26.y = CLAMP(temp_v1_2, -8000, 8000);
@@ -3866,7 +3866,7 @@ void func_80B4C058(EnInvadepoh* this, GlobalContext* globalCtx) {
     temp_v1 -= this->actor.shape.rot.x;
     substruct->unk26.x = CLAMP(temp_v1, -0xBB8, 0xBB8);
 
-    diff = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
+    diff = SUB16(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
     temp_v1 = diff;
     temp_v1 *= 0.7f;
 
@@ -3898,7 +3898,7 @@ void func_80B4C218(EnInvadepoh* this, GlobalContext* globalCtx) {
     temp_v1 *= 0.85f;
     temp_v1 -= this->actor.shape.rot.x;
     substruct->unk26.x = CLAMP(temp_v1, -0xBB8, 0xBB8);
-    diff = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
+    diff = SUB16(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
     temp_v1 = diff;
     temp_v1 *= 0.7f;
     substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
@@ -4049,7 +4049,7 @@ void func_80B4C730(EnInvadepoh* this, GlobalContext* globalCtx) {
         temp_v1_4 *= 0.85f;
         temp_v1_4 -= this->actor.shape.rot.x;
         substruct->unk26.x = CLAMP(temp_v1_4, -3000, 3000);
-        diff = BINANG_SUB(sp3A, this->actor.shape.rot.y);
+        diff = SUB16(sp3A, this->actor.shape.rot.y);
         temp_v1_4 = diff;
         temp_v1_4 *= 0.7f;
         substruct->unk26.y = CLAMP(temp_v1_4, -8000, 8000);
@@ -4090,7 +4090,7 @@ void func_80B4CB0C(EnInvadepoh* this, GlobalContext* globalCtx) {
     temp_v1 *= 0.85f;
     temp_v1 -= this->actor.shape.rot.x;
     substruct->unk26.x = CLAMP(temp_v1, -0xBB8, 0xBB8);
-    diff = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
+    diff = SUB16(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
     temp_v1 = diff;
     temp_v1 *= 0.7f;
     substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
@@ -4119,7 +4119,7 @@ void func_80B4CCCC(EnInvadepoh* this, GlobalContext* globalCtx) {
     temp_v1 *= 0.85f;
     temp_v1 -= this->actor.shape.rot.x;
     substruct->unk26.x = CLAMP(temp_v1, -0xBB8, 0xBB8);
-    diff = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
+    diff = SUB16(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
     temp_v1 = diff;
     temp_v1 *= 0.7f;
     substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);

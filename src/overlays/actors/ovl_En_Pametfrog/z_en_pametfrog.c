@@ -324,7 +324,7 @@ s32 func_8086A2CC(EnPametfrog* this, CollisionPoly* floorPoly) {
     floorNorm.x = COLPOLY_GET_NORMAL(floorPoly->normal.x);
     floorNorm.y = COLPOLY_GET_NORMAL(floorPoly->normal.y);
     floorNorm.z = COLPOLY_GET_NORMAL(floorPoly->normal.z);
-    arg0 = DOTXYZ(floorNorm, this->unk_2DC);
+    arg0 = DOTXYZ(&floorNorm, &this->unk_2DC);
     if (fabsf(arg0) >= 1.0f) {
         return false;
     }

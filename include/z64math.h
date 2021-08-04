@@ -88,8 +88,8 @@ typedef struct {
 #define F32_LERP(v0,v1,t) ((1.0f - (t)) * (v0) + (t) * (v1))
 #define F32_LERPIMP(v0, v1, t) (v0 + ((v1 - v0) * t))
 #define F32_LERPIMPINV(v0, v1, t) ((v0) + (((v1) - (v0)) / (t)))
-#define BINANG_LERPIMP(v0, v1, t) ((v0) + (s16)(BINANG_SUB((v1), (v0)) * (t)))
-#define BINANG_LERPIMPINV(v0, v1, t) ((v0) + BINANG_SUB((v1), (v0)) / (t))
+#define BINANG_LERPIMP(v0, v1, t) ((v0) + (s16)(SUB16((v1), (v0)) * (t)))
+#define BINANG_LERPIMPINV(v0, v1, t) ((v0) + SUB16((v1), (v0)) / (t))
 
 #define VEC3F_LERPIMPDST(dst, v0, v1, t){ \
     (dst)->x = (v0)->x + (((v1)->x - (v0)->x) * t); \
@@ -105,7 +105,8 @@ typedef struct {
 #define RADF_TO_DEGF(radf) (radf * (180.0f / M_PI))
 #define DEGF_TO_RADF(degf) (degf * (M_PI / 180.0f))
 #define BINANG_ROT180(angle) ((s16)(angle + 0x8000))
-#define BINANG_SUB(a, b) ((s16)(a - b))
+#define ADD16(a, b) ((s16)(a - b))
+#define SUB16(a, b) ((s16)(a - b))
 #define DEG_TO_RAD(degrees) ((degrees) * (M_PI / 180.0f))
 #define BINANG_TO_DEGF(binang) ((f32)binang * (360.0001525f / 65535.0f))
 #define BINANG_TO_RAD(binang) (((f32)binang / 32768.0f) * M_PI)
@@ -114,6 +115,6 @@ typedef struct {
 #define SQXZ(vec) (((vec)->x) * ((vec)->x) + ((vec)->z) * ((vec)->z))
 #define DOTXZ(vec1, vec2) ((vec1.x) * (vec2.x) + (vec1.z) * (vec2.z))
 #define SQXYZ(vec) (((vec)->x) * ((vec)->x) + ((vec)->y) * ((vec)->y) + ((vec)->z) * ((vec)->z))
-#define DOTXYZ(vec1, vec2) ((vec1.x) * (vec2.x) + (vec1.y) * (vec2.y) + (vec1.z) * (vec2.z))
+#define DOTXYZ(vec1, vec2) (((vec1)->x) * ((vec2)->x) + ((vec1)->y) * ((vec2)->y) + ((vec1)->z) * ((vec2)->z))
 
 #endif
