@@ -8,8 +8,8 @@ void ObjKibako2_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjKibako2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjKibako2_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjKibako2_Draw(Actor* thisx, GlobalContext* globalCtx);
+void func_8098EC68(ObjKibako2* this, GlobalContext* globalCtx);
 
-#if 0
 const ActorInit Obj_Kibako2_InitVars = {
     ACTOR_OBJ_KIBAKO2,
     ACTORCAT_BG,
@@ -37,13 +37,8 @@ static InitChainEntry D_8098EE8C[] = {
     ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
 };
 
-#endif
-
-extern ColliderCylinderInit D_8098EE60;
-extern InitChainEntry D_8098EE8C[];
-
 extern UNK_TYPE D_06000960;
-extern UNK_TYPE D_06000B70;
+extern CollisionHeader D_06000B70;
 extern UNK_TYPE D_06001040;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/func_8098E5C0.s")
@@ -56,7 +51,35 @@ extern UNK_TYPE D_06001040;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/func_8098E9C4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/ObjKibako2_Init.s")
+void ObjKibako2_Init(Actor *thisx, GlobalContext *globalCtx) {
+    ObjKibako2* this = THIS;
+    s16 tempParams;
+    s32 sp24;
+
+    sp24 = (this->dyna.actor.params >> 0xF) & 1;
+    BcCheck3_BgActorInit(&this->dyna, 0);
+    Collider_InitCylinder(globalCtx, &this->collider);
+    Actor_ProcessInitChain(thisx, D_8098EE8C);
+    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000B70);
+    Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &D_8098EE60);
+    Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
+    thisx->home.rot.z = 0;
+    thisx->world.rot.z = 0;
+    thisx->shape.rot.z = 0;
+    thisx->world.rot.x = 0;
+    thisx->shape.rot.x = 0;
+    if (sp24 == 0) {
+        tempParams = thisx->params;
+        if (func_800A81A4(globalCtx, tempParams & 0x3F, (tempParams >> 8) & 0x7F) != 0) {
+            this->unk_1AC = 1;
+            thisx->flags |= 0x10;
+        }
+    }
+    if ((sp24 != 1) || (func_8098E5C0(this, globalCtx) == 0)) {
+        this->unk_1AD = -1;
+    }
+    this->actionFunc = func_8098EC68;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/ObjKibako2_Destroy.s")
 
