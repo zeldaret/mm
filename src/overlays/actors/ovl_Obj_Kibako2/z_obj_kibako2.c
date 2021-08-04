@@ -109,6 +109,25 @@ void func_8098EC68(ObjKibako2 *this, GlobalContext *globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/func_8098ED20.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/ObjKibako2_Update.s")
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/ObjKibako2_Update.s")
+void ObjKibako2_Update(Actor *thisx, GlobalContext *globalCtx) {
+    ObjKibako2* this = THIS;
+
+    if (this->unk_1AC != 0) {
+        globalCtx->actorCtx.unk5 |= 8;
+    }
+
+    if (this->unk_1AD == 0) {
+        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
+        if (Rand_ZeroOne() < 0.1f) {
+            this->unk_1AD = Rand_S16Offset(40, 80);
+        } else {
+            this->unk_1AD = 8;
+        }
+    } else {
+        this->unk_1AD--;
+    }
+    this->actionFunc(this, globalCtx);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/ObjKibako2_Draw.s")
