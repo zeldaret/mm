@@ -15,11 +15,28 @@ void EnDai_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDai_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDai_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80B3EE8C(EnDai* this, GlobalContext* globalCtx);
-void func_80B3EF90(EnDai* this, GlobalContext* globalCtx);
 void func_80B3F00C(EnDai* this, GlobalContext* globalCtx);
+void func_80B3EEDC(EnDai* this, GlobalContext* globalCtx);
+void func_80B3EF90(EnDai* this, GlobalContext* globalCtx);
 
-#if 0
+extern AnimationHeader D_060107B0;
+extern AnimationHeader D_06010FB0;
+extern AnimationHeader D_060117B0;
+extern AnimationHeader D_06010FB0;
+extern AnimationHeader D_06011FB0;
+extern AnimationHeader D_060127B0;
+extern AnimationHeader D_060079E4;
+extern AnimationHeader D_06007354;
+extern AnimationHeader D_06000CEC;
+extern AnimationHeader D_060069DC;
+extern AnimationHeader D_0600563C;
+extern AnimationHeader D_06002E58;
+extern AnimationHeader D_06006590;
+extern FlexSkeletonHeader D_060130D0;
+extern Gfx D_06000230[];
+extern Gfx D_060002E8[];
+extern Gfx D_0600C538[];
+
 const ActorInit En_Dai_InitVars = {
     ACTOR_EN_DAI,
     ACTORCAT_NPC,
@@ -177,7 +194,7 @@ s32 func_80B3E69C(EnDai* this, GlobalContext* globalCtx) {
         (globalCtx->csCtx.unk_12 == 0) && !(gSaveContext.weekEventReg[30] & 1)) {
         if (!(this->unk_1CE & 0x10)) {
             Actor_SetSwitchFlag(globalCtx, 20);
-            this->unk_1CE |= 0x90;
+            this->unk_1CE |= (0x80 | 0x10);
             this->unk_1CE &= ~(0x100 | 0x20);
             this->unk_1CC = 0xFF;
             this->unk_1DC = 0;
@@ -428,12 +445,12 @@ void func_80B3EF90(EnDai* this, GlobalContext* globalCtx) {
         this->unk_1D0 = 0;
         this->actionFunc = func_80B3F00C;
     } else {
-        Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 10920);
+        Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0x2AA8);
     }
 }
 
 void func_80B3F00C(EnDai* this, GlobalContext* globalCtx) {
-    Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 10920);
+    Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x2AA8);
 }
 
 void func_80B3F044(EnDai* this, GlobalContext* globalCtx) {
@@ -556,7 +573,7 @@ void EnDai_Update(Actor* thisx, GlobalContext* globalCtx) {
         func_80B3E460(this);
     } else {
         this->actionFunc(this, globalCtx);
-        if (!(player->stateFlags2 & 0x08000000)) {
+        if (!(player->stateFlags2 & 0x8000000)) {
             SkelAnime_FrameUpdateMatrix(&this->skelAnime);
             func_80B3E834(this);
             if (!(this->unk_1CE & 0x200)) {
@@ -664,38 +681,69 @@ void func_80B3F78C(EnDai* this, GlobalContext* globalCtx) {
         gSPDisplayList(POLY_XLU_DISP++, D_0600C538);
     }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dai/func_80B3E96C.s")
+    func_80B3E5B4(this, globalCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dai/func_80B3EC10.s")
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dai/func_80B3EC84.s")
+void func_80B3F920(EnDai* this, GlobalContext* globalCtx) {
+    static AnimationHeader* D_80B3FE70[] = {
+        &D_060107B0, &D_06010FB0, &D_060117B0, &D_06010FB0, &D_06011FB0, &D_060127B0,
+    };
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dai/func_80B3ED88.s")
+    s32 pad;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dai/func_80B3EE8C.s")
+    this->unk_1CE |= 0x40;
+    if (this->unk_1CD == 0xFF) {
+        func_8012C28C(globalCtx->state.gfxCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dai/func_80B3EEDC.s")
+        OPEN_DISPS(globalCtx->state.gfxCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dai/func_80B3EF90.s")
+        Scene_SetRenderModeXlu(globalCtx, 0, 1);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dai/func_80B3F00C.s")
+        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B3FE70[this->unk_1D6]));
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dai/func_80B3F044.s")
+        POLY_OPA_DISP =
+            func_8013AB00(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
+                          func_80B3F598, func_80B3F614, func_80B3F6EC, &this->actor, POLY_OPA_DISP);
+        SysMatrix_SetCurrentState(&this->unk_18C);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dai/EnDai_Init.s")
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_OPA_DISP++, D_0600C538);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dai/EnDai_Destroy.s")
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
+    } else {
+        func_8012C2DC(globalCtx->state.gfxCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dai/EnDai_Update.s")
+        OPEN_DISPS(globalCtx->state.gfxCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dai/func_80B3F598.s")
+        Scene_SetRenderModeXlu(globalCtx, 2, 2);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dai/func_80B3F614.s")
+        gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->unk_1CD);
+        gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B3FE70[this->unk_1D6]));
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dai/func_80B3F6EC.s")
+        POLY_XLU_DISP =
+            func_8013AB00(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
+                          func_80B3F598, func_80B3F614, func_80B3F6EC, &this->actor, POLY_XLU_DISP);
+        SysMatrix_SetCurrentState(&this->unk_18C);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dai/func_80B3F78C.s")
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_XLU_DISP++, D_0600C538);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dai/func_80B3F920.s")
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dai/EnDai_Draw.s")
+    func_80B3E5B4(this, globalCtx);
+}
+
+void EnDai_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    EnDai* this = THIS;
+
+    if (!(this->unk_1CE & 0x200)) {
+        if (this->unk_1CE & 0x20) {
+            func_80B3F78C(this, globalCtx);
+        } else {
+            func_80B3F920(this, globalCtx);
+        }
+    }
+}
