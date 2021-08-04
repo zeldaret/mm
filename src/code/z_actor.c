@@ -845,9 +845,6 @@ void Actor_FreeOverlay(ActorOverlay* entry) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE03C.s")
 
-<<<<<<< HEAD
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE0B8.s")
-=======
 Actor *func_800BE0B8(GlobalContext *globalCtx, Actor *inActor, s16 arg2, u8 arg3, f32 arg4) {
     Actor *actor = globalCtx->actorCtx.actorList[arg3].first;
 
@@ -866,7 +863,6 @@ Actor *func_800BE0B8(GlobalContext *globalCtx, Actor *inActor, s16 arg2, u8 arg3
 
     return NULL;
 }
->>>>>>> Daiku2
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE184.s")
 

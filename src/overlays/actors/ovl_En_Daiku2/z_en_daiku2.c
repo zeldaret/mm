@@ -31,7 +31,6 @@ void func_80BE7504(EnDaiku2* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 ar
 
 extern AnimationHeader D_06002134;
 extern AnimationHeader D_06002FA0;
-extern AnimationHeader D_06002FA0;
 extern AnimationHeader D_0600ACD0;
 extern AnimationHeader D_0600C92C;
 extern AnimationHeader D_06000C44;
@@ -40,23 +39,12 @@ extern AnimationHeader D_06000600;
 extern AnimationHeader D_06001114;
 extern AnimationHeader D_0600B690;
 extern AnimationHeader D_06001A24;
-extern AnimationHeader D_06002134;
 extern AnimationHeader D_0600D328;
 extern FlexSkeletonHeader D_0600A850;
 extern Gfx D_06009638[];
 extern Gfx D_0600A390[];
 extern Gfx D_060009E0[];
 
-<<<<<<< HEAD
-void func_80BE66E4(EnDaiku2* this, GlobalContext* globalCtx);
-void func_80BE6BC0(EnDaiku2* this, GlobalContext* globalCtx);
-void func_80BE6D40(EnDaiku2* this, GlobalContext* globalCtx);
-void func_80BE6EF0(EnDaiku2* this, GlobalContext* globalCtx);
-void func_80BE71D8(EnDaiku2* this, GlobalContext* globalCtx);
-
-#if 0
-=======
->>>>>>> Daiku2
 const ActorInit En_Daiku2_InitVars = {
     ACTOR_EN_DAIKU2,
     ACTORCAT_NPC,
@@ -69,65 +57,6 @@ const ActorInit En_Daiku2_InitVars = {
     (ActorFunc)EnDaiku2_Draw,
 };
 
-<<<<<<< HEAD
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80BE7900 = {
-    { COLTYPE_NONE, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
-    { 20, 60, 0, { 0, 0, 0 } },
-};
-
-#endif
-
-extern ColliderCylinderInit D_80BE7900;
-
-extern UNK_TYPE D_060009E0;
-extern UNK_TYPE D_06002134;
-extern UNK_TYPE D_06002FA0;
-extern UNK_TYPE D_06009638;
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Daiku2/func_80BE61D0.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Daiku2/EnDaiku2_Init.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Daiku2/EnDaiku2_Destroy.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Daiku2/func_80BE6408.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Daiku2/func_80BE64C0.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Daiku2/func_80BE65B4.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Daiku2/func_80BE66E4.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Daiku2/func_80BE6B40.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Daiku2/func_80BE6BC0.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Daiku2/func_80BE6CFC.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Daiku2/func_80BE6D40.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Daiku2/func_80BE6EB0.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Daiku2/func_80BE6EF0.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Daiku2/func_80BE71A0.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Daiku2/func_80BE71D8.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Daiku2/EnDaiku2_Update.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Daiku2/func_80BE738C.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Daiku2/EnDaiku2_Draw.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Daiku2/func_80BE7504.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Daiku2/func_80BE7600.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Daiku2/func_80BE7718.s")
-=======
 static u16 sTextIds[] = {
     0x32CB, 0x32CC, 0x32CD, 0x32CE, 0x32CF, 0x32D0, 0x32D1, 0x32D2,
 };
@@ -174,7 +103,7 @@ void EnDaiku2_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_258 = func_8013D648(globalCtx, this->unk_27A, 0x3F);
     this->unk_280 = ENDAIKU2_PARAMS_8000(&this->actor);
     Actor_SetScale(&this->actor, 0.01f);
-    if (this->unk_280 == ENDAIKU2_PARAMS_8000_0) {
+    if (!this->unk_280) {
         if (day == 3) {
             Actor_MarkForDeath(&this->actor);
             return;
@@ -238,8 +167,10 @@ s32 func_80BE64C0(EnDaiku2* this, GlobalContext* globalCtx) {
         } else {
             this->actor.textId = 0x32D4;
         }
+
         return true;
     }
+
     return false;
 }
 
@@ -290,7 +221,7 @@ void func_80BE66E4(EnDaiku2* this, GlobalContext* globalCtx) {
     s32 pad[2];
     s16 temp_v0;
 
-    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.home.rot.y, 1, 3000, 0);
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.home.rot.y, 1, 0xBB8, 0x0);
     if (sp98 != 2) {
         if ((this->unk_278 >= ENDAIKU2_PARAMS_7F_0) && Flags_GetSwitch(globalCtx, this->unk_278)) {
             this->unk_28A = 5;
@@ -374,7 +305,7 @@ void func_80BE6B40(EnDaiku2* this, GlobalContext* globalCtx) {
 void func_80BE6BC0(EnDaiku2* this, GlobalContext* globalCtx) {
     s32 day;
 
-    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 3000, 0);
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0x0);
     if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         day = gSaveContext.day - 1;
         func_801477B4(globalCtx);
@@ -418,7 +349,7 @@ void func_80BE6D40(EnDaiku2* this, GlobalContext* globalCtx) {
         return;
     }
 
-    Math_SmoothStepToS(&this->actor.world.rot.y, sp3A, 1, 2000, 10);
+    Math_SmoothStepToS(&this->actor.world.rot.y, sp3A, 1, 0x7D0, 0xA);
     Math_ApproachF(&this->actor.world.pos.x, this->unk_268.x, 0.5f, fabsf(Math_SinS(this->actor.world.rot.y) * 6.0f));
     Math_ApproachF(&this->actor.world.pos.z, this->unk_268.z, 0.5f, fabsf(Math_CosS(this->actor.world.rot.y) * 6.0f));
 
@@ -452,14 +383,14 @@ void func_80BE6EF0(EnDaiku2* this, GlobalContext* globalCtx) {
         return;
     }
 
-    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.home.rot.y, 1, 3000, 0);
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.home.rot.y, 1, 0xBB8, 0x0);
     if (this->unk_284 <= sp5C) {
         this->unk_274 = 1;
     }
 
     if (this->unk_274 != 0) {
-        Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_268), 1, 2000,
-                           10);
+        Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_268), 1, 0x7D0,
+                           0xA);
         Math_ApproachF(&this->actor.world.pos.x, this->unk_268.x, 0.5f,
                        fabsf(Math_SinS(this->actor.world.rot.y) * 4.0f));
         Math_ApproachF(&this->actor.world.pos.z, this->unk_268.z, 0.5f,
@@ -649,4 +580,3 @@ void func_80BE7718(EnDaiku2* this, GlobalContext* globalCtx) {
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
->>>>>>> Daiku2

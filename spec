@@ -5055,8 +5055,7 @@ beginseg
     name "ovl_En_Daiku2"
     compress
     include "build/src/overlays/actors/ovl_En_Daiku2/z_en_daiku2.o"
-    include "build/data/ovl_En_Daiku2/ovl_En_Daiku2.data.o"
-    include "build/data/ovl_En_Daiku2/ovl_En_Daiku2.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Daiku2/ovl_En_Daiku2_reloc.o"
 endseg
 
 beginseg

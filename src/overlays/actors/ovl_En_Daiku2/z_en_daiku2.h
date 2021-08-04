@@ -21,10 +21,6 @@ enum {
     /* -1 */ ENDAIKU2_PARAMS_1F80_MINUS1 = -1,
 };
 
-enum {
-    /* 0 */ ENDAIKU2_PARAMS_8000_0 = 0,
-};
-
 typedef struct EnDaiku2Particle {
     /* 0x00 */ u8 isEnabled;
     /* 0x04 */ Vec3f unk_04;
