@@ -9,7 +9,7 @@ void ObjKibako2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjKibako2_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjKibako2_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_8098EC68(ObjKibako2* this, GlobalContext* globalCtx);
-void func_8098ED20(ObjKibako2 *this, GlobalContext *globalCtx);
+void func_8098ED20(ObjKibako2 *this);
 s32 func_8098EB78(ObjKibako2 *);
 
 const ActorInit Obj_Kibako2_InitVars = {
@@ -107,15 +107,10 @@ void func_8098EC68(ObjKibako2 *this, GlobalContext *globalCtx) {
     }
 }
 
-// Extra sw, why???
-#ifdef NON_MATCHING
-void func_8098ED20(ObjKibako2 *this, GlobalContext *globalCtx) {
+void func_8098ED20(ObjKibako2 *this) {
     func_8098E9C4(this);
     Actor_MarkForDeath(&this->dyna.actor);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/func_8098ED20.s")
-#endif
 
 // Still needs a lot of love
 #ifdef NON_MATCHING
