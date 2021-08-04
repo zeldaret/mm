@@ -176,7 +176,7 @@ void BgCheck_CreateTriNormFromPolygon(CollisionPoly* poly, Vec3s* vtxList, Vec3f
 
 //#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C02C0.s")
 //CollisionPoly_GetVerticesByBgId
-void func_800C02C0(CollisionPoly* poly, s32 bgId, CollisionContext* bgCtxt, Vec3f* dest) {
+void func_800C02C0(CollisionPoly* poly, s32 bgId, CollisionContext* colCtx, Vec3f* dest) {
     Vec3s* vtxList;
 
     if (poly == NULL || bgId > BG_ACTOR_MAX || dest == NULL) {
@@ -192,10 +192,10 @@ void func_800C02C0(CollisionPoly* poly, s32 bgId, CollisionContext* bgCtxt, Vec3
     }
     else {
         if (bgId == BGCHECK_SCENE) {
-            vtxList = bgCtxt->colHeader->vtxList;
+            vtxList = colCtx->colHeader->vtxList;
         }
         else {
-            vtxList = bgCtxt->dyna.vtxList;
+            vtxList = colCtx->dyna.vtxList;
         }
         BgCheck_CreateTriNormFromPolygon(poly, vtxList, dest);
     }
@@ -282,7 +282,7 @@ s32 func_8017C540(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 y, f32 z, f32 unk, f32 ch
 s32 func_8017BAD0(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 y, f32 z, f32 unk, f32 chkDist, f32 ny); //Math3D_TriChkPointParaYDist
 s32 func_8017CB7C(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 y, f32 z, f32 unk, f32 chkDist, f32 nz); //Math3D_TriChkLineSegParaZDist
 
-Vec3f D_801EDB70[3];
+//Vec3f D_801EDB70[3];
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C07F0.s")
 //extern Vec3f D_01EDB70[3];//polyVerts[3];

@@ -90,49 +90,6 @@ typedef struct {
 } PolygonType2; // size = 0xC
 
 typedef struct {
-    /* 0x0 */ u16 floorHead;
-    /* 0x2 */ u16 wallHead;
-    /* 0x4 */ u16 ceilingHead;
-} BgMeshSubdivision; // size = 0x6
-
-typedef struct {
-    /* 0x0 */ u32 attributes[2];
-} BgPolygonAttributes; // size = 0x8
-
-typedef struct {
-    /* 0x0 */ s16 polyIndex;
-    /* 0x2 */ u16 next;
-} BgPolygonLinkedListNode; // size = 0x4
-
-typedef struct {
-    /* 0x0 */ u16 maxNodes;
-    /* 0x2 */ u16 reservedNodes;
-    /* 0x4 */ BgPolygonLinkedListNode* nodes;
-    /* 0x8 */ u8* unk8;
-} BgScenePolygonLists; // size = 0xC
-
-typedef struct {
-    /* 0x0 */ s16 sceneNumber;
-    /* 0x2 */ UNK_TYPE1 pad2[0x2];
-    /* 0x4 */ u32 maxMemory;
-} BgSpecialSceneMaxMemory; // size = 0x8
-
-typedef struct {
-    /* 0x0 */ s16 sceneId;
-    /* 0x2 */ s16 maxNodes;
-    /* 0x4 */ s16 maxPolygons;
-    /* 0x6 */ s16 maxVertices;
-} BgSpecialSceneMaxObjects; // size = 0x8
-
-typedef struct {
-    /* 0x0 */ s16 sceneNumber;
-    /* 0x2 */ s16 xSubdivisions;
-    /* 0x4 */ s16 ySubdivisions;
-    /* 0x6 */ s16 zSubdivisions;
-    /* 0x8 */ s32 unk8;
-} BgSpecialSceneMeshSubdivision; // size = 0xC
-
-typedef struct {
     /* 0x0 */ s16 func;
     /* 0x2 */ UNK_TYPE1 pad2[0x6];
 } CameraModeParams; // size = 0x8

@@ -1,5 +1,5 @@
-#ifndef _Z_BGCHECK_
-#define _Z_BGCHECK_
+#ifndef _Z64_BGCHECK_H_
+#define _Z64_BGCHECK_H_
 
 struct GlobalContext;
 struct Actor;
@@ -40,33 +40,33 @@ typedef struct {
     /* 0x4 */ SSList wall;
     /* 0x6 */ SSList floor;
 } DynaLookup; // size = 0x8
-#define ActorMeshPolyLists DynaLookup
+//#define ActorMeshPolyLists DynaLookup
 
 typedef struct {
     /* 0x0 */ SSList floor;
     /* 0x2 */ SSList wall;
     /* 0x4 */ SSList ceiling;
 } StaticLookup; // size = 0x6
-#define BgMeshSubdivision StaticLookup
+//#define BgMeshSubdivision StaticLookup
 
 typedef struct {
     /* 0x0 */ u32 data[2]; //attributes[2];
 } SurfaceType; // size = 0x8
-#define BgPolygonAttributes SurfaceType
+//#define BgPolygonAttributes SurfaceType
 
 typedef struct {
     /* 0x0 */ s16 polyId; //polyIndex;
     /* 0x2 */ u16 next;
 } SSNode; // size = 0x4
-#define BgPolygonLinkedListNode SSNode
+//#define BgPolygonLinkedListNode SSNode
 
 typedef struct {
     /* 0x0 */ u16 maxNodes;
     /* 0x2 */ u16 reservedNodes;
-    /* 0x4 */ BgPolygonLinkedListNode* nodes;
+    /* 0x4 */ SSNode* nodes;
     /* 0x8 */ u8* polyCheckTbl;
 } SSNodeList; // size = 0xC
-#define BgScenePolygonLists SSNodeList
+//#define BgScenePolygonLists SSNodeList
 
 typedef struct {
     /* 0x0 */ s16 sceneId;
@@ -92,12 +92,12 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ Vec3f scale;
-    /* 0x0C */ Vec3s rotation;
+    /* 0x0C */ Vec3s rot;
     /* 0x14 */ Vec3f pos;
 } ScaleRotPos; // size = 0x20
-#define ActorMeshParams ScaleRotPos
+//#define ActorMeshParams ScaleRotPos
 
-typedef struct {
+typedef struct CollisionPoly {
     /* 0x00 */ u16 type;
     union {
         u16 vtxData[3];
@@ -115,11 +115,11 @@ typedef struct {
 } CollisionPoly; // size = 0x10
 
 typedef struct {
-    /* 0x0 */ BgPolygonLinkedListNode* nodes;
+    /* 0x0 */ SSNode* nodes;
     /* 0x4 */ u32 count;
     /* 0x8 */ s32 maxNodes;
 } DynaSSNodeList; // size = 0xC
-#define BgPolygonLinkedList DynaSSNodeList
+//#define BgPolygonLinkedList DynaSSNodeList
 
 typedef struct {
     /* 0x0 */ Vec3s pos;
@@ -133,18 +133,13 @@ typedef struct {
     /* 0x9 */ UNK_TYPE1 pad9[0x3];
     /* 0xC */ u32 properties;
 } WaterBox; // size = 0x10
-#define BgWaterBox WaterBox
+//#define BgWaterBox WaterBox
 
 typedef struct {
     /* 0x0 */ UNK_TYPE1 pad0[0x4];
-    /* 0x4 */ BgWaterBox* boxes;
-} BgWaterboxList; // size = 0x8
-
-typedef struct {
-    SSNode* tbl;
-    s32 count;
-    s32 max;
-} DynaSSNodeList;
+    /* 0x4 */ WaterBox* boxes;
+} DynaSSWaterboxList; // size = 0x8
+//#define DynaSSWaterboxList BgWaterboxList
 
 typedef struct {
     /* 0x00 */ Vec3s min;
@@ -153,44 +148,37 @@ typedef struct {
     /* 0x10 */ Vec3s* vtxList; //BgVertex* vertices;
     /* 0x14 */ u16 nbPolygons; //numPolygons;
     /* 0x18 */ CollisionPoly* polyList; //polygons;
-    /* 0x1C */ BgPolygonAttributes* surfaceTypeList; //attributes;
+    /* 0x1C */ SurfaceType* surfaceTypeList; //attributes;
     /* 0x20 */ UNK_PTR cameraDataList; //cameraData;
     /* 0x24 */ u16 nbWaterBoxes; //numWaterBoxes;
-    /* 0x28 */ BgWaterBox* waterboxes;
+    /* 0x28 */ WaterBox* waterBoxes;
 } CollisionHeader; // size = 0x2C
-#define BgMeshHeader CollisionHeader
-
-typedef struct {
-    u16 polyStartIndex;
-    SSList ceiling;
-    SSList wall;
-    SSList floor;
-} DynaLookup;
+//#define BgMeshHeader CollisionHeader
 
 typedef struct {
     /* 0x00 */ DynaPolyActor* actor;
-    /* 0x04 */ BgMeshHeader* colHeader; //header;
-    /* 0x08 */ ActorMeshPolyLists dynaLookup; //polyLists;
+    /* 0x04 */ CollisionHeader* colHeader; //header;
+    /* 0x08 */ DynaLookup dynaLookup; //polyLists;
     /* 0x10 */ u16 vtxStartIndex; //s16 verticesStartIndex;
     /* 0x12 */ s16 waterboxesStartIndex;
-    /* 0x14 */ ActorMeshParams prevTransform; //prevParams;
-    /* 0x34 */ ActorMeshParams curTransform; //currParams;
+    /* 0x14 */ ScaleRotPos prevTransform; //prevParams;
+    /* 0x34 */ ScaleRotPos curTransform; //currParams;
     /* 0x54 */ Sphere16 boundingSphere; //Vec3s averagePos;
     /* 0x5A */ //s16 radiusFromAveragePos;
     /* 0x5C */ f32 minY;
     /* 0x60 */ f32 maxY;
 } BgActor; // size = 0x64
-#define ActorMesh BgActor
+//#define ActorMesh BgActor
 
 typedef struct {
     /* 0x0000 */ u8 unk0;
     /* 0x0001 */ //UNK_TYPE1 pad1[0x3];
-    /* 0x0004 */ ActorMesh bgActors[BG_ACTOR_MAX]; //actorMeshArr[50];
+    /* 0x0004 */ BgActor bgActors[BG_ACTOR_MAX]; //actorMeshArr[50];
     /* 0x138C */ u16 bgActorFlags[BG_ACTOR_MAX]; //flags[50]; // bit 0 - Is mesh active
     /* 0x13F0 */ CollisionPoly* polyList; //polygons;
     /* 0x13F4 */ Vec3s* vtxList; //BgVertex* vertices;
-    /* 0x13F8 */ BgWaterboxList waterboxes;
-    /* 0x1400 */ BgPolygonLinkedList polyNodes; //polygonList;
+    /* 0x13F8 */ DynaSSWaterboxList waterboxes;
+    /* 0x1400 */ DynaSSNodeList polyNodes; //polygonList;
     /* 0x140C */ s32 polyNodesMax; //u32 maxNodes;
     /* 0x1410 */ s32 polyListMax; //u32 maxPolygons;
     /* 0x1414 */ s32 vtxListMax; //u32 maxVertices;
@@ -198,8 +186,8 @@ typedef struct {
     /* 0x141C */ u32 unk141C;
 } DynaCollisionContext; // size = 0x1420
 
-struct CollisionContext {
-    /* 0x00 */ BgMeshHeader* colHeader;//sceneMesh;
+typedef struct {
+    /* 0x00 */ CollisionHeader* colHeader;//sceneMesh;
     /* 0x04 */ Vec3f minBounds; //sceneMin;
     /* 0x10 */ Vec3f maxBounds; //sceneMax;
     /* 0x1C */ Vec3i subdivAmount; //s32 xSubdivisions;
@@ -207,8 +195,15 @@ struct CollisionContext {
     /* 0x24 */ //s32 zSubdivisions;
     /* 0x28 */ Vec3f subdivLength; //subdivisionSize;
     /* 0x34 */ Vec3f subdivLengthInv; //inverseSubdivisionSize;
-    /* 0x40 */ BgMeshSubdivision* lookupTbl; //subdivisions;
-    /* 0x44 */ BgScenePolygonLists polyNodes; //scenePolyLists;
+    /* 0x40 */ StaticLookup* lookupTbl; //subdivisions;
+    /* 0x44 */ SSNodeList polyNodes; //scenePolyLists;
     /* 0x0050 */ DynaCollisionContext dyna;
-}; // size = 0x1470
+} CollisionContext; // size = 0x1470
+
+typedef struct {
+    /* 0x00 */ u16 cameraSType;
+    /* 0x02 */ s16 numCameras;
+    /* 0x04 */ Vec3s* camPosData;
+} CamData;
+
 #endif
