@@ -9,7 +9,7 @@ void ObjKibako2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjKibako2_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjKibako2_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_8098EC68(ObjKibako2* this, GlobalContext* globalCtx);
-void func_8098ED20(ObjKibako2 *this);
+void func_8098ED20(ObjKibako2 *this, GlobalContext* globalCtx);
 s32 func_8098EB78(ObjKibako2 *);
 
 const ActorInit Obj_Kibako2_InitVars = {
@@ -51,9 +51,9 @@ extern UNK_TYPE D_06001040;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/func_8098E900.s")
 
-void func_8098E9C4(ObjKibako2* this) {
+void func_8098E9C4(ObjKibako2* this, GlobalContext* globalCtx) {
     if (((this->dyna.actor.params >> 0xF) & 1) == 0) {
-        func_8098E8A8();
+        func_8098E8A8(this, globalCtx);
     } else {
         func_8098E900();
     }
@@ -113,8 +113,8 @@ void func_8098EC68(ObjKibako2 *this, GlobalContext *globalCtx) {
     }
 }
 
-void func_8098ED20(ObjKibako2 *this) {
-    func_8098E9C4(this);
+void func_8098ED20(ObjKibako2 *this, GlobalContext* globalCtx) {
+    func_8098E9C4(this, globalCtx);
     Actor_MarkForDeath(&this->dyna.actor);
 }
 
