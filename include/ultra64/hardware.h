@@ -1,6 +1,8 @@
 #ifndef _ULTRA64_HARDWARE_H_
 #define _ULTRA64_HARDWARE_H_
 
+#define HW_REG(reg, type) *(volatile type*)((reg) | 0xa0000000)
+
 #define AI_DRAM_ADDR_REG 0x04500000
 #define AI_LEN_REG 0x04500004
 #define AI_CONTROL_REG 0x04500008
@@ -35,13 +37,18 @@
 #define VI_Y_SCALE_REG 0x04400034 //VI y-scale
 
 #define SP_IMEM_START 0x04001000
+#define SP_IMEM_SIZE  0x1000
+
 #define SP_DMEM_START 0x04000000
+#define SP_DMEM_SIZE  0x1000
 
 #define SP_MEM_ADDR_REG 0x04040000
 #define SP_DRAM_ADDR_REG 0x04040004
 #define SP_RD_LEN_REG 0x04040008
 #define SP_WR_LEN_REG 0x0404000C
 #define SP_STATUS_REG 0x04040010
+#define SP_DMA_FULL_REG 0x04040014
+#define SP_DMA_BUSY_REG 0x04040018
 #define SP_PC_REG 0x04080000
 
 #define PI_DRAM_ADDR_REG 0x04600000    //PI DRAM address
@@ -84,5 +91,15 @@
 #define MI_VERSION_REG 0x04300004
 #define MI_INTR_REG 0x04300008
 #define MI_INTR_MASK_REG 0x0430000C
+
+/* Interrupt pending bits */
+#define	CAUSE_IP8	0x00008000	/* External level 8 pending - COMPARE */
+#define	CAUSE_IP7	0x00004000	/* External level 7 pending - INT4 */
+#define	CAUSE_IP6	0x00002000	/* External level 6 pending - INT3 */
+#define	CAUSE_IP5	0x00001000	/* External level 5 pending - INT2 */
+#define	CAUSE_IP4	0x00000800	/* External level 4 pending - INT1 */
+#define	CAUSE_IP3	0x00000400	/* External level 3 pending - INT0 */
+#define	CAUSE_SW2	0x00000200	/* Software level 2 pending */
+#define	CAUSE_SW1	0x00000100	/* Software level 1 pending */
 
 #endif
