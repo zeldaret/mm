@@ -4,10 +4,10 @@
 #include "global.h"
 
 typedef enum {
-    EFFECT_HITMARK_WHITE,
-    EFFECT_HITMARK_DUST,
-    EFFECT_HITMARK_RED,
-    EFFECT_HITMARK_METAL
+    /* 0 */ EFFECT_HITMARK_WHITE,
+    /* 1 */ EFFECT_HITMARK_DUST,
+    /* 2 */ EFFECT_HITMARK_RED,
+    /* 3 */ EFFECT_HITMARK_METAL
 } EffectSsHitmarkType;
 
 typedef struct {
