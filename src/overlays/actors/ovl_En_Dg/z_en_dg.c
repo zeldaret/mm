@@ -170,8 +170,8 @@ void func_80989140(SkelAnime* skelAnime, ActorAnimationEntryS arg1[], s32 arg2) 
         frameCount = arg1->frameCount;
     }
 
-    SkelAnime_ChangeAnim(skelAnime, arg1->animationSeg, arg1->playbackSpeed + (BREG(88) * 0.1f), arg1->frame, frameCount, arg1->mode,
-                         arg1->transitionRate);
+    SkelAnime_ChangeAnim(skelAnime, arg1->animationSeg, arg1->playbackSpeed + (BREG(88) * 0.1f), arg1->frame,
+                         frameCount, arg1->mode, arg1->transitionRate);
 }
 
 void func_80989204(EnDg* this, GlobalContext* globalCtx) {
@@ -205,6 +205,7 @@ void func_8098933C(EnDg* this, Vec3f* globalCtx) {
         sp24 = this->actor.floorPoly->normal.x * 0.00003051851f;
         sp20 = this->actor.floorPoly->normal.y * 0.00003051851f;
         sp1C = this->actor.floorPoly->normal.z * 0.00003051851f;
+
         __sinf(0.0f);
         __cosf(0.0f);
         globalCtx->x = -Math_Acot2F(1.0f, -sp1C * sp20);
@@ -213,21 +214,16 @@ void func_8098933C(EnDg* this, Vec3f* globalCtx) {
 }
 
 s32 func_80989418(EnDg* this, Path* arg1, s32 arg2) {
-    Vec3s* sp5C;
-    s32 count;
-    s32 idx;
-    s32 sp50;
+    Vec3s* sp5C = (Vec3s*)Lib_SegmentedToVirtual(arg1->points);
+    s32 count = arg1->count;
+    s32 idx = arg2;
+    s32 sp50 = false;
     f32 phi_f12;
     f32 phi_f14;
     f32 sp44;
     f32 sp40;
     f32 sp3C;
     Vec3f sp30;
-
-    sp5C = (Vec3s*)Lib_SegmentedToVirtual(arg1->points);
-    count = arg1->count;
-    idx = arg2;
-    sp50 = false;
 
     Math_Vec3s_ToVec3f(&sp30, &sp5C[idx]);
     if (idx == 0) {
@@ -279,7 +275,7 @@ void func_80989674(EnDg* this, GlobalContext* globalCtx) {
             phi_a1 = this->actor.wallYaw;
         }
 
-        Math_SmoothStepToS(&this->actor.world.rot.y, phi_a1, 4, 1000, 1);
+        Math_SmoothStepToS(&this->actor.world.rot.y, phi_a1, 4, 0x3E8, 1);
         this->actor.shape.rot.y = this->actor.world.rot.y;
         if (func_80989418(this, this->unk_1DC, this->unk_1E0)) {
             if (this->unk_1E0 >= (this->unk_1DC->count - 1)) {
@@ -408,11 +404,9 @@ void func_80989E18(EnDg* this, GlobalContext* globalCtx) {
     if ((D_8098C2A0 != 0) && !(this->unk_280 & 1)) {
         this->actor.flags |= 0x8000000;
         this->unk_280 |= 1;
-    } else if (D_8098C2A0 == 0) {
-        if (this->unk_280 & 1) {
-            this->actor.flags &= ~0x08000000;
-            this->unk_280 &= ~1;
-        }
+    } else if ((D_8098C2A0 == 0) && (this->unk_280 & 1)) {
+        this->actor.flags &= ~0x8000000;
+        this->unk_280 &= ~1;
     }
 
     if (Actor_HasParent(&this->actor, globalCtx)) {
@@ -424,6 +418,7 @@ void func_80989E18(EnDg* this, GlobalContext* globalCtx) {
             D_8098C2A0 = 1;
             this->unk_280 |= 1;
         }
+
         func_80989140(&this->skelAnime, D_8098C35C, 5);
         this->actor.flags &= ~1;
         this->actor.speedXZ = 0.0f;
@@ -632,7 +627,7 @@ void func_8098A618(EnDg* this, GlobalContext* globalCtx) {
         func_80989140(&this->skelAnime, D_8098C35C, 2);
         this->actionFunc = func_8098A70C;
     } else {
-        Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 1000, 1);
+        Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0x3E8, 1);
         if (this->actor.bgCheckFlags & 8) {
             this->actor.shape.rot.y = this->actor.wallYaw;
         }
@@ -640,6 +635,7 @@ void func_8098A618(EnDg* this, GlobalContext* globalCtx) {
         Math_ApproachF(&this->actor.speedXZ, -1.5f, 0.2f, 1.0f);
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     }
+
     func_80989974(this);
     func_80989A9C(this, 0);
 }
@@ -650,12 +646,14 @@ void func_8098A70C(EnDg* this, GlobalContext* globalCtx) {
 
     if (this->actor.xzDistToPlayer < 250.0f) {
         Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer * -1, 4, 0xC00);
+
         if (this->actor.bgCheckFlags & 8) {
             phi_a1 = this->actor.wallYaw;
         } else {
             phi_a1 = 0;
         }
-        Math_SmoothStepToS(&this->actor.world.rot.y, phi_a1, 4, 1000, 1);
+
+        Math_SmoothStepToS(&this->actor.world.rot.y, phi_a1, 4, 0x3E8, 1);
         this->actor.world.rot.y = this->actor.shape.rot.y;
         if (player->actor.speedXZ != 0.0f) {
             Math_ApproachF(&this->actor.speedXZ, player->actor.speedXZ, 0.2f, 1.0f);
@@ -681,7 +679,7 @@ void func_8098A70C(EnDg* this, GlobalContext* globalCtx) {
 }
 
 void func_8098A89C(EnDg* this, GlobalContext* globalCtx) {
-    Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 3072);
+    Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xC00);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (this->actor.xzDistToPlayer < 250.0f) {
         func_80989140(&this->skelAnime, D_8098C35C, 11);
@@ -719,7 +717,7 @@ void func_8098A938(EnDg* this, GlobalContext* globalCtx) {
             }
         }
     } else {
-        Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 3072);
+        Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xC00);
         Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.2f, 1.0f);
     }
 
@@ -747,8 +745,9 @@ void func_8098AB48(EnDg* this, GlobalContext* globalCtx) {
     if (!(this->actor.bgCheckFlags & 1)) {
         this->actionFunc = func_8098AF98;
     }
+
     if (this->actor.xzDistToPlayer < 50.0f) {
-        Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 3072);
+        Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xC00);
         this->actor.world.rot.y = this->actor.shape.rot.y;
     } else {
         if (player->stateFlags3 & 0x20000000) {
@@ -758,6 +757,7 @@ void func_8098AB48(EnDg* this, GlobalContext* globalCtx) {
         }
         this->actionFunc = func_8098B004;
     }
+
     func_8098A064(this, globalCtx);
     if (!(this->unk_280 & 0x20)) {
         func_80989A48(this);
@@ -767,11 +767,11 @@ void func_8098AB48(EnDg* this, GlobalContext* globalCtx) {
 void func_8098AC34(EnDg* this, GlobalContext* globalCtx) {
     s16 sp26 = this->skelAnime.animCurrentFrame;
 
-    if ((this->actor.xyzDistToPlayerSq < 800.0f) && (this->collider.base.atFlags & 4)) {
+    if ((this->actor.xyzDistToPlayerSq < 800.0f) && (this->collider.base.atFlags & AT_BOUNCED)) {
         this->unk_28E = 60;
         this->unk_280 &= ~2;
         this->unk_280 |= 8;
-        this->collider.base.atFlags &= ~4;
+        this->collider.base.atFlags &= ~AT_BOUNCED;
         this->actor.speedXZ *= -1.0f;
         func_80989140(&this->skelAnime, D_8098C35C, 2);
         this->actionFunc = func_8098AAAC;
@@ -818,7 +818,7 @@ void func_8098AE58(EnDg* this, GlobalContext* globalCtx) {
         func_80989140(&this->skelAnime, D_8098C35C, 3);
         this->actionFunc = func_8098B390;
     } else {
-        Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 3072);
+        Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xC00);
         this->actor.world.rot.y = this->actor.shape.rot.y;
         Math_ApproachF(&this->actor.speedXZ, 2.0f, 0.2f, 1.0f);
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
@@ -854,7 +854,7 @@ void func_8098B004(EnDg* this, GlobalContext* globalCtx) {
     if ((this->actor.xzDistToPlayer < 60.0f) && (this->collider.base.ocFlags1 & 2)) {
         this->actor.shape.rot.y += 0x71C;
     } else {
-        Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 3072);
+        Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xC00);
     }
 
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -885,7 +885,7 @@ void func_8098B198(EnDg* this, GlobalContext* globalCtx) {
         this->actionFunc = func_8098AC34;
     }
 
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 1000, 1);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0x3E8, 1);
     if (this->actor.bgCheckFlags & 8) {
         this->actor.shape.rot.y = this->actor.wallYaw;
         func_80989140(&this->skelAnime, D_8098C35C, 14);
@@ -907,10 +907,11 @@ void func_8098B28C(EnDg* this, GlobalContext* globalCtx) {
         func_80989140(&this->skelAnime, D_8098C35C, 3);
         this->actionFunc = func_8098B390;
     } else {
-        Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 1000, 1);
+        Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0x3E8, 1);
         if (this->actor.bgCheckFlags & 8) {
             this->actor.shape.rot.y = this->actor.wallYaw;
         }
+
         this->actor.world.rot.y = this->actor.shape.rot.y;
         Math_ApproachF(&this->actor.speedXZ, -2.0f, 0.2f, 1.0f);
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
@@ -959,13 +960,12 @@ void func_8098B464(EnDg* this, GlobalContext* globalCtx) {
 void func_8098B560(EnDg* this, GlobalContext* globalCtx) {
     Vec3f sp54;
     Vec3f sp48;
-    s16 sp46;
+    s16 sp46 = 0;
     WaterBox* sp40;
     f32 sp3C;
     s32 sp38;
     f32 sp34;
 
-    sp46 = 0;
     sp54.x = this->actor.world.pos.x;
     sp54.y = this->actor.world.pos.y + this->actor.yDistToWater;
     sp54.z = this->actor.world.pos.z + 20.0f;
@@ -1018,7 +1018,7 @@ void func_8098B560(EnDg* this, GlobalContext* globalCtx) {
         this->actionFunc = func_8098A468;
     }
 
-    Math_SmoothStepToS(&this->actor.world.rot.y, sp46, 4, 1000, 1);
+    Math_SmoothStepToS(&this->actor.world.rot.y, sp46, 4, 0x3E8, 1);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     Math_ApproachF(&this->actor.speedXZ, 0.5f, 0.2f, 1.0f);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
@@ -1069,7 +1069,7 @@ void func_8098BA64(EnDg* this, GlobalContext* globalCtx) {
         this->unk_290 = 2;
         this->actor.flags |= 1;
         if (D_8098C2A0 != 0) {
-            this->actor.flags &= ~0x08000000;
+            this->actor.flags &= ~0x8000000;
             D_8098C2A0 = 0;
             this->unk_280 &= ~1;
         }
@@ -1109,7 +1109,7 @@ void func_8098BB10(EnDg* this, GlobalContext* globalCtx) {
 
 void func_8098BBEC(EnDg* this, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx)) {
-        this->actor.flags &= ~0x00010000;
+        this->actor.flags &= ~0x10000;
         func_80989D38(this, globalCtx);
         this->actionFunc = func_8098BC54;
     } else {
