@@ -1,4 +1,5 @@
 #include "z_obj_kibako2.h"
+#include "overlays/effects/ovl_Effect_Ss_Kakera/z_eff_ss_kakera.h"
 
 #define FLAGS 0x00000000
 
@@ -38,9 +39,9 @@ static InitChainEntry D_8098EE8C[] = {
     ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
 };
 
-extern Gfx D_06000960;
+extern Gfx D_06000960[];
 extern CollisionHeader D_06000B70;
-extern UNK_TYPE D_06001040;
+extern Gfx D_06001040[];
 
 #ifdef NON_MATCHING
 s32 func_8098E5C0(ObjKibako2* this, GlobalContext* globalCtx) {
@@ -63,7 +64,45 @@ s32 func_8098E5C0(ObjKibako2* this, GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/func_8098E5C0.s")
 #endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/func_8098E62C.s")
+void ObjKibako2_Break(ObjKibako2* this, GlobalContext* globalCtx) {
+    s32 pad[2];
+    Vec3f* thisPos;
+    Vec3f pos;
+    Vec3f velocity;
+    s16 angle;
+    s32 i;
+
+    thisPos = &this->dyna.actor.world.pos;
+    for (i = 0, angle = 0; i < 0x10; i++, angle += 0x4E20) {
+        f32 sn = Math_SinS(angle);
+        f32 cs = Math_CosS(angle);
+        f32 temp_rand;
+        s32 phi_s0;
+
+        temp_rand = Rand_ZeroOne() * 30.0f;
+        pos.x = sn * temp_rand;
+        pos.y = (Rand_ZeroOne() * 10.0f) + 2.0f;
+        pos.z = cs * temp_rand;
+        velocity.x = pos.x * 0.2f;
+        velocity.y = (Rand_ZeroOne() * 10.0f) + 2.0f;
+        velocity.z = pos.z * 0.2f;
+        pos.x += thisPos->x;
+        pos.y += thisPos->y;
+        pos.z += thisPos->z;
+        temp_rand = Rand_ZeroOne();
+        if (temp_rand < 0.05f) {
+            phi_s0 = 0x60;
+        } else if (temp_rand < 0.7f) {
+            phi_s0 = 0x40;
+        } else {
+            phi_s0 = 0x20;
+        }
+        EffectSsKakera_Spawn(globalCtx, &pos, &velocity, &pos, -200, phi_s0, 28, 2, 0, (Rand_ZeroOne() * 30.0f) + 5.0f,
+                            0, 0, 70, KAKERA_COLOR_NONE, OBJECT_KIBAKO2, D_06001040);
+    }
+    func_800BBFB0(globalCtx, thisPos, 90.0f, 6, 100, 160, 1);
+}
+
 
 void func_8098E8A8(ObjKibako2* this, GlobalContext* globalCtx) {
     s32 collectible;
@@ -167,7 +206,7 @@ s32 func_8098EB78(ObjKibako2* this) {
 
 void func_8098EC68(ObjKibako2* this, GlobalContext* globalCtx) {
     if (func_8098EB78(this) != 0) {
-        func_8098E62C(this, globalCtx);
+        ObjKibako2_Break(this, globalCtx);
         func_800F0568(globalCtx, &this->dyna.actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
         this->dyna.actor.flags |= 0x10;
         func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
@@ -212,5 +251,5 @@ void ObjKibako2_Update(Actor* thisx, GlobalContext* globalCtx) {
 #endif
 
 void ObjKibako2_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, &D_06000960);
+    func_800BDFC0(globalCtx, D_06000960);
 }

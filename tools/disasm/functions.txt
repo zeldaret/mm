@@ -8386,7 +8386,7 @@
     0x8098E15C:("ObjComb_Update",),
     0x8098E2F8:("ObjComb_Draw",),
     0x8098E5C0:("func_8098E5C0",),
-    0x8098E62C:("func_8098E62C",),
+    0x8098E62C:("ObjKibako2_Break",),
     0x8098E8A8:("func_8098E8A8",),
     0x8098E900:("func_8098E900",),
     0x8098E9C4:("func_8098E9C4",),
