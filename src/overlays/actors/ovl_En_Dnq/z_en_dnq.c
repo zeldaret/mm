@@ -40,11 +40,8 @@ extern AnimationHeader D_06005A14;
 extern AnimationHeader D_06003DBC;
 
 static s32 D_80A53400[] = {
-    0x00120100, 0x150E0899, 0x0C120F08, 0x9A0C0F08, 0x9B0C0F08,
-
-    0x9C0C1112, 0x01100E08, 0x980C1000, 0x00120200, 0x0C0E089D, 0x0C0F089E, 0x0C111202, 0x100E089F, 0x0C100000,
-
-    0x0E08A10C, 0x0F08A20C, 0x10000000,
+    0x00120100, 0x150E0899, 0x0C120F08, 0x9A0C0F08, 0x9B0C0F08, 0x9C0C1112, 0x01100E08, 0x980C1000, 0x00120200,
+    0x0C0E089D, 0x0C0F089E, 0x0C111202, 0x100E089F, 0x0C100000, 0x0E08A10C, 0x0F08A20C, 0x10000000,
 };
 
 const ActorInit En_Dnq_InitVars = {
@@ -269,26 +266,26 @@ s32 func_80A52B68(EnDnq* this, GlobalContext* globalCtx) {
 
     if ((player->stateFlags1 & 0x40) && (player->targetActor == &this->actor)) {
         switch (temp) {
-            case 2203:
+            case 0x89B:
                 func_80A5257C(this, 18);
                 break;
 
-            case 2206:
+            case 0x89E:
                 func_80A5257C(this, 19);
                 break;
 
-            case 2200:
-            case 2207:
+            case 0x898:
+            case 0x89F:
                 func_80A5257C(this, 16);
                 break;
 
-            case 2201:
-            case 2205:
+            case 0x899:
+            case 0x89D:
                 func_80A5257C(this, 14);
                 break;
 
-            case 2202:
-            case 2204:
+            case 0x89A:
+            case 0x89C:
                 func_80A5257C(this, 15);
                 break;
         }
@@ -329,16 +326,16 @@ s32* func_80A52CF8(EnDnq* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80A52D44(EnDnq* this, GlobalContext* globalCtx) {
-    s32 phi_v1 = false;
+    s32 ret = false;
 
     if ((this->unk_37C & 7) && func_800B84D0(&this->actor, globalCtx)) {
         func_8013AED4(&this->unk_37C, 0, 7);
         this->unk_380 = func_80A52CF8(this, globalCtx);
         this->actionFunc = func_80A52FB8;
-        phi_v1 = true;
+        ret = true;
     }
 
-    return phi_v1;
+    return ret;
 }
 
 void func_80A52DC8(EnDnq* this, GlobalContext* globalCtx) {
