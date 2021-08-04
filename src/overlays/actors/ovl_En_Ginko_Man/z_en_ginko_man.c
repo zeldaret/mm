@@ -24,12 +24,12 @@ void EnGinkoMan_Dialogue(EnGinkoMan* this, GlobalContext* globalCtx);
 void EnGinkoMan_SwitchAnimation(EnGinkoMan* this, GlobalContext* globalCtx);
 
 extern FlexSkeletonHeader D_0600C240; // object_ginko_skeleton
-extern Gfx D_0600B1D8[]; // object_ginko_limb15_dlist
-extern AnimationHeader D_060008C0; // object_ginko_floorsmacking_anim
-extern AnimationHeader D_060043F0; // object_ginko_sitting_anim
-extern AnimationHeader D_06004A7C; // object_ginko_amazed_anim
-extern AnimationHeader D_06004F40; // object_ginko_stamp_reach_anim
-extern AnimationHeader D_06000AC4; // object_ginko_advertising_anim
+extern Gfx D_0600B1D8[];              // object_ginko_limb15_dlist
+extern AnimationHeader D_060008C0;    // object_ginko_floorsmacking_anim
+extern AnimationHeader D_060043F0;    // object_ginko_sitting_anim
+extern AnimationHeader D_06004A7C;    // object_ginko_amazed_anim
+extern AnimationHeader D_06004F40;    // object_ginko_stamp_reach_anim
+extern AnimationHeader D_06000AC4;    // object_ginko_advertising_anim
 
 const ActorInit En_Ginko_Man_InitVars = {
     ACTOR_EN_GINKO_MAN,

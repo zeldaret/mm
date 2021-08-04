@@ -9,7 +9,7 @@ void TitleSetup_GameStateResetContext(void) {
     XREG(13) = 0;
     XREG(31) = 0;
     XREG(41) = 0x50;
-    XREG(43) = 0xFFFFFC54;
+    XREG(43) = 0xFC54;
 
     XREG(44) = 0xD7;
     XREG(45) = 0xDA;

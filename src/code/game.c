@@ -176,7 +176,7 @@ void Game_ResizeHeap(GameState* gamestate, u32 size) {
         size = systemMaxFree - (sizeof(ArenaNode));
     }
 
-    if (buf = Gamealloc_Alloc(alloc, size)) {
+    if ((buf = Gamealloc_Alloc(alloc, size)) != NULL) {
         THA_Ct(&gamestate->heap, buf, size);
     } else {
         THA_Ct(&gamestate->heap, 0, 0);
