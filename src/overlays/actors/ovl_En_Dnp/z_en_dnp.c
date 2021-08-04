@@ -428,6 +428,7 @@ void EnDnp_Update(Actor* thisx, GlobalContext* globalCtx) {
         Actor_SetHeight(&this->actor, 30.0f);
         func_80B3CC80(this, globalCtx);
     }
+    
     if (this->unk_322 & 0x100) {
         func_80B3CA20(this);
     }
