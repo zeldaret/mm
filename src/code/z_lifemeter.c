@@ -201,10 +201,10 @@ UNK_PTR HeartDDTextures[] = {
     0x02000800, 0x02000800, 0x02000800, 0x02000800, 0x02000800  // Three Quarter
 };
 
-extern u64 EmptyHeartTexture[];
-extern u64 FullHeartTexture[];
-extern u64 EmptyHeartDDTexture[];
-extern u64 FullHeartDDTexture[];
+extern u64 D_02000000[]; // Empty heart texture
+extern u64 D_02000400[]; // Full heart texture
+extern u64 D_02000500[]; // Empty Double Defense Heart texture
+extern u64 D_02000900[]; // Full Double Defense Heart texture
 
 void LifeMeter_Draw(GlobalContext* globalCtx) {
     s32 pad[5];
@@ -279,11 +279,11 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
             }
 
             if (i < fullHeartCount) {
-                heartTex = FullHeartTexture;
+                heartTex = D_02000400;
             } else if (fullHeartCount == i) {
                 heartTex = HeartTextures[fractionHeartCount];
             } else {
-                heartTex = EmptyHeartTexture;
+                heartTex = D_02000000;
             }
         } else {
             if (i < fullHeartCount) {
@@ -319,11 +319,11 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
                 gDPSetEnvColor(OVERLAY_DISP++, sHeartsDDEnv[1][0], sHeartsDDEnv[1][1], sHeartsDDEnv[1][2], 0xFF);
             }
             if (i < fullHeartCount) {
-                heartTex = FullHeartDDTexture;
+                heartTex = D_02000900;
             } else if (fullHeartCount == i) {
                 heartTex = HeartDDTextures[fractionHeartCount];
             } else {
-                heartTex = EmptyHeartDDTexture;
+                heartTex = D_02000500;
             }
         }
 
