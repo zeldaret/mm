@@ -9,6 +9,8 @@ void ObjKibako2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjKibako2_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjKibako2_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_8098EC68(ObjKibako2* this, GlobalContext* globalCtx);
+void func_8098ED20(ObjKibako2 *this, GlobalContext *globalCtx);
+s32 func_8098EB78(ObjKibako2 *);
 
 const ActorInit Obj_Kibako2_InitVars = {
     ACTOR_OBJ_KIBAKO2,
@@ -88,10 +90,22 @@ void ObjKibako2_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
-
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/func_8098EB78.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/func_8098EC68.s")
+void func_8098EC68(ObjKibako2 *this, GlobalContext *globalCtx) {
+    if (func_8098EB78(this) != 0) {
+        func_8098E62C(this, globalCtx);
+        func_800F0568(globalCtx, &this->dyna.actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
+        this->dyna.actor.flags |= 0x10;
+        func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        this->dyna.actor.draw = NULL;
+        this->actionFunc = func_8098ED20;
+        return;
+    }
+    if (this->dyna.actor.xzDistToPlayer < 600.0f) {
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/func_8098ED20.s")
 
