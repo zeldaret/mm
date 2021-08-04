@@ -2005,7 +2005,7 @@ void LifeMeter_UpdateColors(GlobalContext* globalCtx);
 // UNK_TYPE4 func_80100AF0(GlobalContext* globalCtx);
 void LifeMeter_Draw(GlobalContext* globalCtx);
 void LifeMeter_UpdateSizeAndBeep(GlobalContext* globalCtx);
-// s32 LifeMeter_IsCritical(void);
+bool LifeMeter_IsCritical(void);
 void Lights_PointSetInfo(LightInfo* info, s16 x, s16 y, s16 z, u8 r, u8 g, u8 b, s16 radius, s32 type);
 void Lights_PointNoGlowSetInfo(LightInfo* info, s16 x, s16 y, s16 z, u8 r, u8 g, u8 b, s16 radius);
 void Lights_PointGlowSetInfo(LightInfo* info, s16 x, s16 y, s16 z, u8 r, u8 g, u8 b, s16 radius);
@@ -3389,15 +3389,16 @@ void Sched_Init(SchedContext* sched, void* stack, OSPri pri, UNK_TYPE arg3, UNK_
 void func_801773A0(void* arg0);
 void func_801773C4(void* arg0);
 void SpeedMeter_DrawTimeEntries(void* displayList, GraphicsContext* gCtx);
-// void func_80177A84(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9); void func_80177AC8(void);
-void SpeedMeter_DrawAllocEntries(void* displayList, GraphicsContext* gCtx, GameState* ctx);
-// void func_801780F0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7); void func_801781EC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3,
-// UNK_TYPE1 param_4, UNK_TYPE4 param_5); void func_8017842C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3,
-// UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9,
-// UNK_TYPE4 param_10, UNK_TYPE4 param_11); void func_80178750(void); void func_80178818(void); void
-// func_80178978(void); void func_801789D4(void);
+// void func_80177A84(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9);
+// void func_80177AC8(void);
+void SpeedMeter_DrawAllocEntries(void* displayList, GraphicsContext *gCtx, GameState *ctx);
+void func_801780F0(Mtx* param_1, f32 param_2, f32 param_3, f32 param_4, f32 param_5, f32 param_6, f32 param_7);
+// void func_801781EC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_8017842C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
+// void func_80178750(void);
+// void func_80178818(void);
+// void func_80178978(void);
+// void func_801789D4(void);
 u32* get_framebuffer(s32 index);
 // u16* get_zbuffer(void);
 // UNK_TYPE4 func_80178A24(void);
