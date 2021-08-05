@@ -122,7 +122,7 @@ void ObjKibako2_SpawnSkulltula(ObjKibako2* this, GlobalContext* globalCtx) {
 }
 
 void ObjKibako2_SpawnContents(ObjKibako2* this, GlobalContext* globalCtx) {
-    if (((this->dyna.actor.params >> 0xF) & 1) == 0) {
+    if (KIBAKO2_CONTENTS(this) == CONTENTS_COLLECTIBLE) {
         ObjKibako2_SpawnCollectible(this, globalCtx);
     } else {
         ObjKibako2_SpawnSkulltula(this, globalCtx);
@@ -132,9 +132,9 @@ void ObjKibako2_SpawnContents(ObjKibako2* this, GlobalContext* globalCtx) {
 void ObjKibako2_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjKibako2* this = THIS;
     s16 tempParams;
-    s32 sp24;
+    ObjKibako2Contents contents;
 
-    sp24 = (this->dyna.actor.params >> 0xF) & 1;
+    contents = KIBAKO2_CONTENTS(this);
     BcCheck3_BgActorInit(&this->dyna, 0);
     Collider_InitCylinder(globalCtx, &this->collider);
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -146,14 +146,14 @@ void ObjKibako2_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->dyna.actor.shape.rot.z = 0;
     this->dyna.actor.world.rot.x = 0;
     this->dyna.actor.shape.rot.x = 0;
-    if (sp24 == 0) {
+    if (contents == CONTENTS_COLLECTIBLE) {
         tempParams = this->dyna.actor.params;
         if (func_800A81A4(globalCtx, tempParams & 0x3F, (tempParams >> 8) & 0x7F)) {
             this->unk_1AC = 1;
             this->dyna.actor.flags |= 0x10;
         }
     }
-    if ((sp24 != 1) || (!ObjKibako2_ContainsSkulltula(this, globalCtx))) {
+    if ((contents != CONTENTS_SKULLTULA) || (!ObjKibako2_ContainsSkulltula(this, globalCtx))) {
         this->skulltulaNoiseTimer = -1;
     }
     this->actionFunc = ObjKibako2_Idle;
