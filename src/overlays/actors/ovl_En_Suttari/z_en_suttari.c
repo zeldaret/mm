@@ -154,7 +154,7 @@ void EnSuttari_UpdateCollider(EnSuttari* this, GlobalContext* globalCtx) {
             if (this->actor.colChkInfo.damageEffect == 0xF) {
                 this->flags1 |= 0x100;
                 this->flags1 &= ~0x40;
-                func_800BBA88(globalCtx, &this->actor);
+                Enemy_StartFinishingBlow(globalCtx, &this->actor);
             } else if (this->actor.colChkInfo.damageEffect == 0xE) {
                 this->flags1 |= 0x200;
                 this->flags1 &= ~0x40;
@@ -1195,7 +1195,7 @@ void func_80BAD380(EnSuttari* this, GlobalContext* globalCtx) {
             this->actor.speedXZ = 0.0f;
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
                         this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_SMALL_EXPLOSION);
-            func_800F0568(globalCtx, &this->actor.world.pos, 30, NA_SE_IT_BOMB_EXPLOSION);
+            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 30, NA_SE_IT_BOMB_EXPLOSION);
             Actor_MarkForDeath(&this->actor);
             return;
         }

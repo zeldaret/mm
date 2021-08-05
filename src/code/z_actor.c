@@ -766,7 +766,7 @@ void Actor_FreeOverlay(ActorOverlay* entry) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BB8EC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BBA88.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Enemy_StartFinishingBlow.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BBAC0.s")
 

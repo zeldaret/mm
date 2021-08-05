@@ -875,7 +875,7 @@ Actor* func_800BB498(ActorContext* actorCtx, Actor* actor, GlobalContext* global
 // void func_800BB59C(void);
 // void func_800BB604(void);
 // void func_800BB8EC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
-void func_800BBA88(GlobalContext* globalCtx, Actor* actor);
+void Enemy_StartFinishingBlow(GlobalContext* globalCtx, Actor* actor);
 // void func_800BBAC0(void);
 void func_800BBB74(s16* arg1, UNK_TYPE1 arg2, UNK_TYPE1 arg3, UNK_TYPE4 arg4);
 // void func_800BBC20(void);
@@ -1644,7 +1644,7 @@ void EffFootmark_Draw(GlobalContext* globalCtx);
 void func_800F0390(GlobalContext* globalCtx);
 void func_800F03C0(GlobalContext* globalCtx);
 void func_800F048C(GlobalContext* globalCtx, Vec3f* param_2, u8 param_3, u16 param_4, u8 param_5);
-void func_800F0568(GlobalContext* globalCtx, Vec3f* position, s32 param_3, u16 sfxId);
+void Audio_PlaySoundAtPosition(GlobalContext* globalCtx, Vec3f* position, s32 param_3, u16 sfxId);
 // void func_800F0590(void);
 // void func_800F05C0(void);
 // void func_800F07C0(void);

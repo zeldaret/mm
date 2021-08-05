@@ -1103,7 +1103,7 @@ s32 EnBigpo_CheckHit(EnBigpo *this, GlobalContext *globalCtx) {
         if (Actor_ApplyDamage(&this->actor) == 0) {
             this->actor.flags &= ~0x1; // targetable OFF
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_DEAD);
-            func_800BBA88(globalCtx, &this->actor);
+            Enemy_StartFinishingBlow(globalCtx, &this->actor);
             if (this->actor.params == ENBIGPO_SUMMONED) { // dampe type
                 func_801A2ED8();
             }

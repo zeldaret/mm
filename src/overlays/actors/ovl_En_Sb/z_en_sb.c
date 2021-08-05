@@ -343,8 +343,8 @@ void EnSb_UpdateDamage(EnSb* this, GlobalContext* globalCtx) {
                 this->isDrawn = true;
             }
             this->isDead = true;
-            func_800BBA88(globalCtx, &this->actor);
-            func_800F0568(globalCtx, &this->actor.world.pos, 0x28, NA_SE_EN_BEE_FLY);
+            Enemy_StartFinishingBlow(globalCtx, &this->actor);
+            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 0x28, NA_SE_EN_BEE_FLY);
             return;
         }
         hitPoint.x = this->collider.info.bumper.hitPos.x;
