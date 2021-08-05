@@ -7,12 +7,12 @@ struct EnDnp;
 
 typedef void (*EnDnpActionFunc)(struct EnDnp*, GlobalContext*);
 
-#define ENDNP_PARAMS_7(thisx) ((thisx)->params & 7)
+#define ENDNP_GET_7(thisx) ((thisx)->params & 7)
 
 enum {
-    /* 0x0 */ ENDNP_PARAMS_7_0,
-    /* 0x1 */ ENDNP_PARAMS_7_1,
-    /* 0x2 */ ENDNP_PARAMS_7_2,
+    /* 0x0 */ ENDNP_GET_7_0,
+    /* 0x1 */ ENDNP_GET_7_1,
+    /* 0x2 */ ENDNP_GET_7_2,
 };
 
 typedef struct EnDnp {

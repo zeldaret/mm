@@ -23,31 +23,28 @@ void func_80B3D338(EnDnp* this, GlobalContext* globalCtx);
 
 extern FlexSkeletonHeader D_06010D60;
 extern AnimationHeader D_060007D8;
-extern AnimationHeader D_060021DC;
+extern AnimationHeader D_0600125C;
+extern AnimationHeader D_060017F8;
+extern AnimationHeader D_06001C1C;
 extern AnimationHeader D_060021DC;
 extern AnimationHeader D_060026B8;
 extern AnimationHeader D_06004D08;
+extern AnimationHeader D_060057AC;
+extern AnimationHeader D_0600625C;
+extern AnimationHeader D_0600674C;
 extern AnimationHeader D_060071F4;
 extern AnimationHeader D_06007960;
 extern AnimationHeader D_06008588;
 extern AnimationHeader D_0600A900;
 extern AnimationHeader D_0600AEB8;
 extern AnimationHeader D_0600B754;
-extern AnimationHeader D_0600674C;
+extern AnimationHeader D_0600B324;
 extern AnimationHeader D_0600BAD8;
 extern AnimationHeader D_06006B74;
-extern AnimationHeader D_06012428;
-extern AnimationHeader D_0600B324;
-extern AnimationHeader D_0600B324;
-extern AnimationHeader D_060115B8;
-extern AnimationHeader D_060115B8;
 extern AnimationHeader D_0600923C;
 extern AnimationHeader D_06009AA0;
-extern AnimationHeader D_0600125C;
-extern AnimationHeader D_060017F8;
-extern AnimationHeader D_06001C1C;
-extern AnimationHeader D_060057AC;
-extern AnimationHeader D_0600625C;
+extern AnimationHeader D_06012428;
+extern AnimationHeader D_060115B8;
 extern Gfx D_060103D0[];
 extern Gfx D_060105D0[];
 extern Gfx D_060107D0[];
@@ -371,7 +368,7 @@ void EnDnp_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetMode = 0;
     this->unk_322 |= (0x100 | 0x80 | 0x10);
     this->actor.gravity = -1.0f;
-    if (ENDNP_PARAMS_7(&this->actor) == ENDNP_PARAMS_7_1) {
+    if (ENDNP_GET_7(&this->actor) == ENDNP_GET_7_1) {
         this->actor.flags &= -2;
         Actor_SetScale(&this->actor, 0.00085000007f);
         func_8013AED4(&this->unk_322, 0, 7);
@@ -379,9 +376,9 @@ void EnDnp_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.world.rot.x = this->actor.shape.rot.x;
         this->actor.cutscene = 0x10;
         this->actionFunc = func_80B3D47C;
-    } else if (((ENDNP_PARAMS_7(&this->actor) == ENDNP_PARAMS_7_0) && !func_80114F2C(0x17) &&
+    } else if (((ENDNP_GET_7(&this->actor) == ENDNP_GET_7_0) && !func_80114F2C(0x17) &&
                 !(gSaveContext.weekEventReg[23] & 0x20)) ||
-               ((ENDNP_PARAMS_7(&this->actor) == ENDNP_PARAMS_7_2) && (gSaveContext.weekEventReg[23] & 0x20))) {
+               ((ENDNP_GET_7(&this->actor) == ENDNP_GET_7_2) && (gSaveContext.weekEventReg[23] & 0x20))) {
         Actor_SetScale(&this->actor, 0.0085f);
         func_8013AED4(&this->unk_322, 3, 7);
         this->unk_322 |= 0x400;
