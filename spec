@@ -4279,7 +4279,7 @@ beginseg
     name "ovl_En_Bigpo"
     compress
     include "build/src/overlays/actors/ovl_En_Bigpo/z_en_bigpo.o"
-    include "build/data/ovl_En_Bigpo/ovl_En_Bigpo.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Bigpo/ovl_En_Bigpo_reloc.o"
 endseg
 
 beginseg

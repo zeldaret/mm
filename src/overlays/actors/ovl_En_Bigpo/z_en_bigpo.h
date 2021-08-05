@@ -65,6 +65,6 @@ enum EnBigpoType {
   /* 5 */ ENBIGPO_UNK5,
 };
 
-#define FIRSTENEMY ((Actor*)globalCtx->actorCtx.actorList[ACTORCAT_ENEMY].first)
+#define GET_BIGPO_SWITCHFLAGS(thisx) ((u8)(thisx->params >> 0x8)) 
 
 #endif // Z_EN_BIGPO_H

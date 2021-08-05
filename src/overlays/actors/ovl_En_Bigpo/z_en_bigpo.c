@@ -11,69 +11,70 @@ void EnBigpo_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpo_UpdateFire(Actor* thisx, GlobalContext* globalCtx);
 
 void EnBigpo_InitWellBigpo(EnBigpo* this);
-void EnBigpo_SpawnPoCutscene(EnBigpo* this);
-void func_80B61D74(EnBigpo* this);
-void func_80B61E9C(EnBigpo* this);
-void func_80B62034(EnBigpo* this);
-void EnBigpo_SetupWarpOut(EnBigpo* this);
-void EnBigpo_SetupWarpIn(EnBigpo* this, GlobalContext* globalCtx);
-void EnBigpo_SetupIdleFlying(EnBigpo* this);
-void EnBigpo_SetupSpinUp(EnBigpo* this);
-
-void EnBigpo_SetupSpinAttack(EnBigpo* this);
-void EnBigpo_SetupSpinDown(EnBigpo* this);
 void EnBigpo_HitStun(EnBigpo* this);
-void EnBigpo_SetupDeath(EnBigpo* this);
-void EnBigpo_SetupLanternDrop(EnBigpo* this, GlobalContext* globalCtx);
-void EnBigpo_SpawnScoopSoul(EnBigpo* this);
-void EnBigpo_SetupScoopSoulIdle(EnBigpo* this);
-void EnBigpo_ScoopSoulStartLeaving(EnBigpo* this);
 void EnBigpo_InitDampeMainPo(EnBigpo* this);
 void EnBigpo_ChangeToFireCounting(EnBigpo* this);
 void EnBigpo_InitHiddenFire(EnBigpo* this);
 void EnBigpo_SetupFireRevealed(EnBigpo* this);
 
+void EnBigpo_SetupSpawn(EnBigpo* this);
+void EnBigpo_SpawnPoCutscene1(EnBigpo *this, GlobalContext *globalCtx);
+void EnBigpo_SpawnPoCutscene2(EnBigpo *this, GlobalContext *globalCtx);
+void EnBigpo_SpawnPoCutscene3(EnBigpo* this);
+void EnBigpo_SpawnPoCutscene4(EnBigpo* this, GlobalContext* globalCtx);
+void EnBigpo_SpawnPoCutscene5(EnBigpo* this);
+void EnBigpo_SpawnPoCutscene6(EnBigpo* this, GlobalContext* globalCtx);
+void EnBigpo_SpawnPoCutscene7(EnBigpo* this);
+void EnBigpo_SpawnPoCutscene8(EnBigpo* this, GlobalContext* globalCtx);
+
+// unk camera func
 void func_80B619FC(EnBigpo *this, GlobalContext *globalCtx);
 void EnBigpo_WellWaitForProximity(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_WaitCutsceneQueue(EnBigpo* this, GlobalContext* globalCtx);
-void func_80B61DA4(EnBigpo* this, GlobalContext* globalCtx);
-void func_80B61F04(EnBigpo* this, GlobalContext* globalCtx);
-void func_80B62084(EnBigpo* this, GlobalContext* globalCtx);
+void EnBigpo_SetupWarpOut(EnBigpo* this);
 void EnBigpo_WarpingOut(EnBigpo* this, GlobalContext* globalCtx);
+void EnBigpo_SetupWarpIn(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_WarpingIn(EnBigpo* this, GlobalContext* globalCtx);
+void EnBigpo_SetupIdleFlying(EnBigpo* this);
 void EnBigpo_IdleFlying(EnBigpo* this, GlobalContext* globalCtx);
+void EnBigpo_SetupSpinUp(EnBigpo* this);
 void EnBigpo_SpinningUp(EnBigpo* this, GlobalContext* globalCtx);
-void EnBigpo_SpawnWellPo(EnBigpo *this, GlobalContext *globalCtx);
-void func_80B61CFC(EnBigpo *this, GlobalContext *globalCtx);
+void EnBigpo_SetupSpinAttack(EnBigpo* this);
 void EnBigpo_SpinAttack(EnBigpo* this, GlobalContext* globalCtx);
+void EnBigpo_SetupSpinDown(EnBigpo* this);
 void EnBigpo_SpinningDown(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_CheckHealth(EnBigpo* this, GlobalContext* globalCtx);
+s32 EnBigpo_ApplyDamage(EnBigpo* this, GlobalContext* globalCtx);
+void EnBigpo_SetupDeath(EnBigpo* this);
 void EnBigpo_BurnAwayDeath(EnBigpo* this, GlobalContext* globalCtx);
+void EnBigpo_SetupLanternDrop(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_LanternFalling(EnBigpo* this, GlobalContext* globalCtx);
+void EnBigpo_SpawnScoopSoul(EnBigpo* this);
 void EnBigpo_ScoopSoulAppearing(EnBigpo* this, GlobalContext* globalCtx);
+void EnBigpo_SetupScoopSoulIdle(EnBigpo* this);
 void EnBigpo_ScoopSoulIdle(EnBigpo* this, GlobalContext* globalCtx);
+void EnBigpo_SetupScoopSoulLeaving(EnBigpo* this);
 void EnBigpo_ScoopSoulFadingAway(EnBigpo* this, GlobalContext* globalCtx);
+void EnBigpo_Die(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_SelectRandomFireLocations(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_FireCounting(EnBigpo* this, GlobalContext* globalCtx);
-void func_80B63758(EnBigpo *this, GlobalContext *globalCtx);
-void func_80B63A18(EnBigpo* this);
-void func_80B63AC4(EnBigpo* this, GlobalContext* globalCtx);
+void EnBigpo_SetupFlameCirclePositions(EnBigpo *this, GlobalContext *globalCtx);
+void EnBigpo_SetupFlameCircleCutscene(EnBigpo* this);
+void EnBigpo_FlameCircleCutscene(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_UpdateColor(EnBigpo* this);
 void EnBigpo_FlickerLanternLight(EnBigpo* this);
-s32 EnBigpo_CheckHit(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_SetupRevealedFireIdle(EnBigpo* this);
 void EnBigpo_RevealedFireIdle(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_DoNothing(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_WaitingForDampe(EnBigpo* this, GlobalContext* globalCtx);
-void EnBigpo_Die(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_RevealedFireGrowing(EnBigpo* this, GlobalContext* globalCtx);
 
 // draw funcs
 void EnBigpo_PostLimbDraw2(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, struct Actor *actor, Gfx **gfx);
-void func_80B64470(Actor* thisx, GlobalContext* globalCtx);
+void EnBigpo_Draw1(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpo_DrawScoopSoul(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpo_DrawLantern(Actor* thisx, GlobalContext* globalCtx);
-void func_80B64B08(Actor* thisx, GlobalContext* globalCtx);
+void EnBigpo_Draw4(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpo_DrawFire(Actor* thisx, GlobalContext* globalCtx);
 
 extern AnimationHeader D_06001360;
@@ -128,7 +129,7 @@ static DamageTable sDamageTable = {
     /* Goron spikes   */ DMG_ENTRY(1, 0x0),
     /* Deku spin      */ DMG_ENTRY(1, 0x0),
     /* Deku bubble    */ DMG_ENTRY(1, 0x0),
-    /* Deku launch    */ DMG_ENTRY(2, 0x0), // wut
+    /* Deku launch    */ DMG_ENTRY(2, 0x0),
     /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x0),
     /* Zora barrier   */ DMG_ENTRY(0, 0x0),
     /* Normal shield  */ DMG_ENTRY(0, 0x0),
@@ -176,7 +177,7 @@ void EnBigpo_Init(Actor* thisx, GlobalContext *globalCtx2) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
     // thisx req to match
-    this->switchFlags = (u8)(thisx->params >> 8);
+    this->switchFlags = GET_BIGPO_SWITCHFLAGS(thisx);
     thisx->params &= 0xFF;
     if (thisx->params == ENBIGPO_POSSIBLEFIRE) {
         if (Flags_GetSwitch(globalCtx, this->switchFlags)) {
@@ -232,7 +233,7 @@ void EnBigpo_Destroy(Actor *thisx, GlobalContext *globalCtx) {
        (this->actor.params != ENBIGPO_CHOSENFIRE) &&
        (this->actor.params != ENBIGPO_REVEALEDFIRE) && (this->actor.params != ENBIGPO_UNK5)) {
         // if NOT a fire type, ENBIGPO_REGULAR and ENBIGPO_SUMMONED combat types only
-        if (1) {} // req for matching
+        if (1) {}
         gCtx2 = globalCtx;
         for(fireCount = 0; fireCount < 3; ++fireCount){
           LightContext_RemoveLight(gCtx2, &gCtx2->lightCtx, this->fires[fireCount].light);
@@ -261,7 +262,7 @@ void EnBigpo_UpdateSpin(EnBigpo *this) {
     }
 }
 
-// used every frame of opening fire spawn cutscene
+// force camera to.. what?
 void func_80B619FC(EnBigpo *this, GlobalContext *globalContext) {
     Camera *cam;
     if (this->cutsceneCam != NULL) {
@@ -277,18 +278,18 @@ void func_80B619FC(EnBigpo *this, GlobalContext *globalContext) {
 
 void EnBigpo_InitWellBigpo(EnBigpo *this) {
     // ! @ BUG: redundant: targetable flag was already set by init, nothing else calls this
-    this->actor.flags &= ~1; // targetable OFF
+    this->actor.flags &= ~0x1; // targetable OFF
     this->actionFunc = EnBigpo_WellWaitForProximity;
     this->fireRadius = 200.0f;
 }
 
 void EnBigpo_WellWaitForProximity(EnBigpo *this, GlobalContext *globalCtx) {
     if (this->actor.xzDistToPlayer < 200.0f) {
-        EnBigpo_SpawnPoCutscene(this);
+        EnBigpo_SetupSpawn(this);
     }
 }
 
-void EnBigpo_SpawnPoCutscene(EnBigpo *this) {
+void EnBigpo_SetupSpawn(EnBigpo *this) {
     ActorCutscene_SetIntentToPlay(this->actor.cutscene);
     this->actionFunc = EnBigpo_WaitCutsceneQueue;
 }
@@ -299,19 +300,19 @@ void EnBigpo_WaitCutsceneQueue(EnBigpo *this, GlobalContext *globalCtx) {
         func_800B724C(globalCtx, &this->actor, 7);
         this->cutsceneCam = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
         if (this->actor.params == ENBIGPO_REGULAR) { // and SUMMONED, got switched earlier
-            EnBigpo_SpawnWellPo(this, globalCtx);
+            EnBigpo_SpawnPoCutscene1(this, globalCtx);
         } else { // ENBIGPO_REVEALEDFIRE
-            func_80B63758(this, globalCtx);
+            EnBigpo_SetupFlameCirclePositions(this, globalCtx);
         }
     }else {
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
     }
 }
 
-void EnBigpo_SpawnWellPo(EnBigpo *this, GlobalContext *globalCtx) {
+void EnBigpo_SpawnPoCutscene1(EnBigpo *this, GlobalContext *globalCtx) {
     s32 i;
 
-    this->actor.draw = func_80B64B08;
+    this->actor.draw = EnBigpo_Draw4;
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer + 0x8000;
     func_80B61914(this);
 
@@ -330,29 +331,29 @@ void EnBigpo_SpawnWellPo(EnBigpo *this, GlobalContext *globalCtx) {
         newPos.z = ((this->actor.world.pos.z - this->fires[0].pos.z) * 1.8f) + this->actor.world.pos.z;
         func_8016970C(globalCtx, this->cutsceneCam, &this->actor.focus.pos, &newPos);
     }
-    this->actionFunc = func_80B61CFC;
+    this->actionFunc = EnBigpo_SpawnPoCutscene2;
 }
 
-// well spawn2: fires are growing
-void func_80B61CFC(EnBigpo *this, GlobalContext *globalCtx) {
+// fires are growing
+void EnBigpo_SpawnPoCutscene2(EnBigpo *this, GlobalContext *globalCtx) {
     if (Math_StepToF(&this->actor.scale.x, 0.01f, 0.001f) != 0) {
-        func_80B61D74(this);
+        EnBigpo_SpawnPoCutscene3(this);
     }
     this->actor.scale.z = this->actor.scale.x;
     this->actor.scale.y = ((0.01f - this->actor.scale.x) * 0.5f) + 0.01f;
 }
 
 
-// well spawn3: switch to fires rotation 
-void func_80B61D74(EnBigpo *this) {
+// switch to fires rotation 
+void EnBigpo_SpawnPoCutscene3(EnBigpo *this) {
     this->rotVelocity = 0x1000;
-    this->actionFunc = func_80B61DA4;
+    this->actionFunc = EnBigpo_SpawnPoCutscene4;
     this->fireRadius = 200.0f;
     this->actor.velocity.y = 0.0f;
 }
 
-// well spawn4: fires are circling inward toward each other
-void func_80B61DA4(EnBigpo *this, GlobalContext *globalCtx) {
+// fires are circling inward toward each other
+void EnBigpo_SpawnPoCutscene4(EnBigpo *this, GlobalContext *globalCtx) {
     s32 i;
 
     if (Math_StepToF(&this->fireRadius, 30.0f, 5.0f) != 0) {
@@ -370,21 +371,21 @@ void func_80B61DA4(EnBigpo *this, GlobalContext *globalCtx) {
     this->actor.world.pos.y += this->actor.velocity.y;
     func_80B619FC(this, globalCtx);
     if (this->actor.velocity.y >= 4.0f) {
-        func_80B61E9C(this);
+        EnBigpo_SpawnPoCutscene5(this);
     }
 }
 
-// well spawn5: fires have touched, they start to rise, big poe starts to visibly apear
-void func_80B61E9C(EnBigpo *this) {
+// fires have touched, they start to rise, big poe starts to visibly apear
+void EnBigpo_SpawnPoCutscene5(EnBigpo *this) {
     SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06001360);
-    this->actor.draw = func_80B64470;
+    this->actor.draw = EnBigpo_Draw1;
     Actor_SetScale(&this->actor, 0.014f);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
-    this->actionFunc = func_80B61F04;
+    this->actionFunc = EnBigpo_SpawnPoCutscene6;
 }
 
-// well spawn6: big poe becoming visible in the flames
-void func_80B61F04(EnBigpo *this, GlobalContext *globalCtx) {
+// big poe becoming visible in the flames
+void EnBigpo_SpawnPoCutscene6(EnBigpo *this, GlobalContext *globalCtx) {
     s32 i;
     s32 alphaPlus; // color alpha + 10
 
@@ -407,28 +408,27 @@ void func_80B61F04(EnBigpo *this, GlobalContext *globalCtx) {
 
     func_80B619FC(this, globalCtx);
     if (alphaPlus >= 0xFF) {
-        this->mainColor.a = 0xFF; // max opacity
-        func_80B62034(this);
+        this->mainColor.a = 0xFF; // fully visible 
+        EnBigpo_SpawnPoCutscene7(this);
     } else {
         this->mainColor.a = alphaPlus;
     }
 }
 
 
-// big poe is now fully visible 
-void func_80B62034(EnBigpo *this) {
+// big poe is now fully visible
+void EnBigpo_SpawnPoCutscene7(EnBigpo *this) {
     this->idleTimer = 15;
     if (this->unkBool204 == false) {
         func_801A2E54(0x38);
         this->unkBool204 = true;
     }
-    this->actionFunc = func_80B62084;
+    this->actionFunc = EnBigpo_SpawnPoCutscene8;
 }
 
 // count 15 frames, animating, then start dampe cutscene if hes here
 // if no dampe, camera pans back to player
-// yes this is the well poe, not dampe poe, but its still here 
-void func_80B62084(EnBigpo *this, GlobalContext *globalCtx) {
+void EnBigpo_SpawnPoCutscene8(EnBigpo *this, GlobalContext *globalCtx) {
     Actor *dampe;
     Camera *cam;
 
@@ -455,7 +455,7 @@ void func_80B62084(EnBigpo *this, GlobalContext *globalCtx) {
 }
 
 
-// setup spinning fade out
+// spinning fade out
 void EnBigpo_SetupWarpOut(EnBigpo *this) {
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.ocFlags1 &= ~OC1_ON;
@@ -481,7 +481,7 @@ void EnBigpo_WarpingOut(EnBigpo *this, GlobalContext *globalCtx) {
     }
 }
 
-// setup warp behind player
+// warp behind player
 void EnBigpo_SetupWarpIn(EnBigpo *this, GlobalContext *globalCtx) {
     Player *player = PLAYER;
     f32 distance;
@@ -497,7 +497,7 @@ void EnBigpo_SetupWarpIn(EnBigpo *this, GlobalContext *globalCtx) {
     this->actionFunc = EnBigpo_WarpingIn;
 }
 
-// action: spinning back into reality behind player
+// spinning back into reality behind player
 void EnBigpo_WarpingIn(EnBigpo *this, GlobalContext *globalCtx) {
     this->idleTimer += 1;
     this->actor.shape.rot.y -= this->rotVelocity;
@@ -517,7 +517,6 @@ void EnBigpo_WarpingIn(EnBigpo *this, GlobalContext *globalCtx) {
     }
 }
 
-// setup fully appeared, idle
 void EnBigpo_SetupIdleFlying(EnBigpo *this) {
     SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06000924, -5.0f);
     // if poe missed attack, idle 4 seconds, otherwise its reappearing: attack immediately
@@ -532,7 +531,6 @@ void EnBigpo_SetupIdleFlying(EnBigpo *this) {
     this->actionFunc = EnBigpo_IdleFlying;
 }
 
-// idle flying around
 void EnBigpo_IdleFlying(EnBigpo *this, GlobalContext *globalCtx) {
     Player *player = PLAYER;
 
@@ -603,13 +601,12 @@ void EnBigpo_SpinAttack(EnBigpo *this, GlobalContext *globalCtx) {
     }
 }
 
-// start spinning down attack is finishing
+// after missing, spin down before idle flying
 void EnBigpo_SetupSpinDown(EnBigpo *this) {
     this->collider.base.atFlags &= ~AT_ON;
     this->actionFunc = EnBigpo_SpinningDown;
 }
 
-// spin down to no spin
 void EnBigpo_SpinningDown(EnBigpo *this, GlobalContext *globalCtx) {
     Player *player = PLAYER;
 
@@ -648,17 +645,16 @@ void EnBigpo_CheckHealth(EnBigpo *this, GlobalContext *globalCtx) {
     }
 }
 
-// setup death
 void EnBigpo_SetupDeath(EnBigpo *this) {
     this->idleTimer = 0;
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.hintId = 0xFF; // clear?
-    this->collider.base.ocFlags1 &= 0xFFFE; //~0x1 what flag is this? OC_ON?
+    this->collider.base.ocFlags1 &= ~OC1_ON;
     this->actionFunc = EnBigpo_BurnAwayDeath;
 }
 
-// from red damaged poe to flamed up, shinking into the lantern
+// from [red damaged poe] to [burning up poe] to [shinking into the lantern]
 void EnBigpo_BurnAwayDeath(EnBigpo *this, GlobalContext *globalCtx) {
     Vec3f tempVec; 
     f32 unkTemp2; // dont really know what these unktemps are doing
@@ -806,14 +802,14 @@ void EnBigpo_ScoopSoulIdle(EnBigpo *this, GlobalContext *globalCtx) {
     } else if (this->idleTimer == 0) {
         // took too long, soul is leaving
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_LAUGH);
-        EnBigpo_ScoopSoulStartLeaving(this);
+        EnBigpo_SetupScoopSoulLeaving(this);
     } else {
         func_800B8A1C(&this->actor, globalCtx, 0xBA, 35.0f, 60.0f);
         this->actor.world.pos.y = (sin_rad((f32) this->idleTimer * 0.15707964f) * 5.0f) + this->savedHeight;
     }
 }
 
-void EnBigpo_ScoopSoulStartLeaving(EnBigpo *this) {
+void EnBigpo_SetupScoopSoulLeaving(EnBigpo *this) {
     this->actor.flags &= ~0x10001; // targetable OFF and unknown OFF
     this->actionFunc = EnBigpo_ScoopSoulFadingAway;
 }
@@ -839,7 +835,7 @@ void EnBigpo_SelectRandomFireLocations(EnBigpo *this, GlobalContext *globalCtx) 
     s32 fireCount = 0;
 
     // count the number of possible fires we can find (4 in vanilla)
-    for (enemyPtr = FIRSTENEMY; enemyPtr != NULL; enemyPtr = enemyPtr->next) {
+    for (enemyPtr = FIRST_ENEMY; enemyPtr != NULL; enemyPtr = enemyPtr->next) {
       if ((enemyPtr->id == ACTOR_EN_BIGPO) && (enemyPtr->params == ENBIGPO_POSSIBLEFIRE)) {
         fireCount++;
       }
@@ -847,7 +843,7 @@ void EnBigpo_SelectRandomFireLocations(EnBigpo *this, GlobalContext *globalCtx) 
 
     // if not enough fires exist, just starting fighting already
     if (fireCount < 3) {
-        this->actor.draw = func_80B64470;
+        this->actor.draw = EnBigpo_Draw1;
         Actor_SetScale(&this->actor, 0.014f);
         EnBigpo_SetupWarpIn(this, globalCtx);
         Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
@@ -857,7 +853,7 @@ void EnBigpo_SelectRandomFireLocations(EnBigpo *this, GlobalContext *globalCtx) 
 
     // for available possiblefires, pick three to be random fires
     for (fireIndex = 0; fireIndex < 3 ; ++fireIndex, --fireCount) {
-        enemyPtr = FIRSTENEMY;
+        enemyPtr = FIRST_ENEMY;
         randomIndex = ((s32) Rand_ZeroFloat(fireCount)) % fireCount;
 
         while(enemyPtr != NULL) {
@@ -890,7 +886,7 @@ void EnBigpo_SelectRandomFireLocations(EnBigpo *this, GlobalContext *globalCtx) 
     }
 
     // remove unused fires
-    for (enemyPtr = FIRSTENEMY; enemyPtr != NULL; enemyPtr = enemyPtr->next) {
+    for (enemyPtr = FIRST_ENEMY; enemyPtr != NULL; enemyPtr = enemyPtr->next) {
         if ((enemyPtr->id == ACTOR_EN_BIGPO) && (enemyPtr->params == ENBIGPO_POSSIBLEFIRE)) {
             randomFirePo = (EnBigpo* ) enemyPtr;
             randomFirePo->actionFunc = EnBigpo_Die;
@@ -917,18 +913,17 @@ void EnBigpo_FireCounting(EnBigpo *this, GlobalContext *globalCtx) {
     }
 
     if (activatedFireCount == 3) { // all fires found
-        EnBigpo_SpawnPoCutscene(this);
+        EnBigpo_SetupSpawn(this);
     }
 }
 
-// setup: place swirling flame start positions?
-void func_80B63758(EnBigpo *this, GlobalContext *globalCtx) {
+void EnBigpo_SetupFlameCirclePositions(EnBigpo *this, GlobalContext *globalCtx) {
     EnBigpo *firePo;
     Vec3f newPos;
 
     this->idleTimer = 39;
     for (firePo = (EnBigpo *) this->actor.child; firePo; firePo = (EnBigpo*)firePo->actor.child) {
-        func_80B63A18(firePo);
+        EnBigpo_SetupFlameCircleCutscene(firePo);
     }
 
     // set new starting position for flames?
@@ -963,7 +958,6 @@ void EnBigpo_Die(EnBigpo *this, GlobalContext *globalCtx) {
     Actor_MarkForDeath(&this->actor);
 }
 
-// setup fire revealed
 void EnBigpo_SetupFireRevealed(EnBigpo *this) {
     this->actor.draw = EnBigpo_DrawFire;
     this->idleTimer = 15;
@@ -1003,9 +997,8 @@ void EnBigpo_RevealedFireIdle(EnBigpo *this, GlobalContext *globalCtx) {
     }
 }
 
-// setup: start flame swirl cutscene for dampe poe
-// this is for the flames
-void func_80B63A18(EnBigpo *this) {
+// this is for the flames, which are also bigpo actors
+void EnBigpo_SetupFlameCircleCutscene(EnBigpo *this) {
     s16 flameHeight;
 
     this->idleTimer = 40;
@@ -1013,11 +1006,11 @@ void func_80B63A18(EnBigpo *this) {
     this->actor.home.pos.x = Math_SinS(flameHeight) * 30.0f + this->actor.parent->world.pos.x;
     this->actor.home.pos.y = this->actor.parent->world.pos.y;
     this->actor.home.pos.z = Math_CosS(flameHeight) * 30.0f + this->actor.parent->world.pos.z;
-    this->actionFunc = func_80B63AC4;
+    this->actionFunc = EnBigpo_FlameCircleCutscene;
 }
 
 // every frame, swirl the flames toward big poe as summoned
-void func_80B63AC4(EnBigpo *this, GlobalContext *globalCtx) {
+void EnBigpo_FlameCircleCutscene(EnBigpo *this, GlobalContext *globalCtx) {
     Vec3f posDiff;
     f32 magnitude;
 
@@ -1028,9 +1021,9 @@ void func_80B63AC4(EnBigpo *this, GlobalContext *globalCtx) {
         Math_Vec3f_Copy(&parentPoh->fires[this->unk20C].pos, &this->actor.world.pos);
         Actor_MarkForDeath(&this->actor);
         if (this->unk20C == 0) {
-            parentPoh->actor.draw = func_80B64B08;
+            parentPoh->actor.draw = EnBigpo_Draw4;
             Actor_SetScale(&parentPoh->actor, 0.01f);
-            func_80B61D74(parentPoh);
+            EnBigpo_SpawnPoCutscene3(parentPoh);
             parentPoh->fireRadius = 30.0f;
         }
     } else {
@@ -1046,7 +1039,6 @@ void func_80B63AC4(EnBigpo *this, GlobalContext *globalCtx) {
     }
 }
 
-// modify color
 void EnBigpo_UpdateColor(EnBigpo *this) {
     s32 bplus5;
     s32 bminus5;
@@ -1092,7 +1084,7 @@ void EnBigpo_FlickerLanternLight(EnBigpo *this) {
     this->lanternColor.a = ((s32)(rand *  30.0f)) + 0xDC;
 }
 
-s32 EnBigpo_CheckHit(EnBigpo *this, GlobalContext *globalCtx) {
+s32 EnBigpo_ApplyDamage(EnBigpo *this, GlobalContext *globalCtx) {
     if (((this->collider.base.acFlags & AC_HIT) != 0) && ((this->collider.base.acFlags & AC_HARD) == 0)) {
         this->collider.base.acFlags &= ~AC_HIT;
         
@@ -1137,7 +1129,7 @@ void EnBigpo_Update(Actor *thisx, GlobalContext *globalCtx) {
         this->savedHeight = this->actor.world.pos.y;
     }
 
-    if (EnBigpo_CheckHit(this, globalCtx) == 0) {
+    if (EnBigpo_ApplyDamage(this, globalCtx) == 0) {
         if ((this->actor.isTargeted) && (this->actionFunc != EnBigpo_WarpingOut) 
           && ((this->collider.base.acFlags & AC_HARD) == 0) && (this->actor.category == ACTORCAT_ENEMY)) {
             this->unk20C += 1;
@@ -1151,7 +1143,7 @@ void EnBigpo_Update(Actor *thisx, GlobalContext *globalCtx) {
     }
 
     this->actionFunc(this, globalCtx);
-    if ((this->actionFunc != func_80B61F04) && (this->actionFunc != func_80B61DA4)) {
+    if ((this->actionFunc != EnBigpo_SpawnPoCutscene6) && (this->actionFunc != EnBigpo_SpawnPoCutscene4)) {
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     }
     if (this->actionFunc == EnBigpo_LanternFalling) {
@@ -1164,7 +1156,7 @@ void EnBigpo_Update(Actor *thisx, GlobalContext *globalCtx) {
         Actor_SetHeight(&this->actor, 42.0f);
     }
 
-    EnBigpo_UpdateColor(this); // modifies a color
+    EnBigpo_UpdateColor(this);
     EnBigpo_FlickerLanternLight(this);
 
     this->actor.shape.shadowAlpha = this->mainColor.a;
@@ -1195,6 +1187,7 @@ void EnBigpo_Update(Actor *thisx, GlobalContext *globalCtx) {
 // alt update func: the revealed fires under dampe's house
 void EnBigpo_UpdateFire(Actor *thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*) thisx;
+    // bilboarding the fire toward player camera?
     this->actor.shape.rot.y = func_800DFCDC(globalCtx->cameraPtrs[globalCtx->activeCamera]) + 0x8000;
     this->actionFunc(this, globalCtx);
 }
@@ -1251,7 +1244,6 @@ void EnBigpo_PostLimbDraw2(struct GlobalContext *globalCtx, s32 limbIndex, Gfx *
         if (limbByte == 4) {
             SysMatrix_GetStateTranslationAndScaledY(-2000.0f, &this->limbPos[limbByte]);
             return;
-
         }
 
         v2ptr = &this->limbPos[limbByte+1];
@@ -1268,8 +1260,8 @@ void EnBigpo_PostLimbDraw2(struct GlobalContext *globalCtx, s32 limbIndex, Gfx *
 
 }
 
-// used if enough fires, for main po?
-void func_80B64470(Actor *thisx, GlobalContext *globalCtx) {
+// one of the two main draws
+void EnBigpo_Draw1(Actor *thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*) thisx;
     Gfx* dispHead;
 
@@ -1302,9 +1294,9 @@ void func_80B64470(Actor *thisx, GlobalContext *globalCtx) {
 
     SysMatrix_SetCurrentState(&this->drawMtxF);
     EnBigpo_DrawLantern(&this->actor, globalCtx);
-    if (this->actionFunc == func_80B61F04 ) {
+    if (this->actionFunc == EnBigpo_SpawnPoCutscene6 ) {
         // call the other unk draw func
-        func_80B64B08(&this->actor, globalCtx);
+        EnBigpo_Draw4(&this->actor, globalCtx);
     }
   
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -1400,9 +1392,9 @@ void EnBigpo_DrawLantern(Actor *thisx, GlobalContext *globalCtx) {
     }
 }
 
-// set when the big poe first apears, main?
+// one of the main draws
 // but also called by another draw function
-void func_80B64B08(Actor *thisx, GlobalContext *globalCtx) {
+void EnBigpo_Draw4(Actor *thisx, GlobalContext *globalCtx) {
     EnBigpo* this = (EnBigpo*) thisx;
     s32 pad[3];
     s16 fireRadius;
@@ -1414,7 +1406,7 @@ void func_80B64B08(Actor *thisx, GlobalContext *globalCtx) {
 
     func_8012C2DC(globalCtx->state.gfxCtx);
     Matrix_RotateY((func_800DFCDC(globalCtx->cameraPtrs[globalCtx->activeCamera]) + 0x8000), 0);
-    if (this->actionFunc == func_80B61F04 ) {
+    if (this->actionFunc == EnBigpo_SpawnPoCutscene6 ) {
         Matrix_Scale(0.01f, 0.01f, 0.01f, 1);
         fireRadius = 0x1F4;
     } else {
