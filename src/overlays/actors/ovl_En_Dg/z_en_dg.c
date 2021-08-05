@@ -88,7 +88,7 @@ static D_8098C2A8_s D_8098C2A8[] = {
     { 0x0001, 0x000C, 0x3545 }, { 0x0004, 0x000D, 0x3546 },
 };
 
-static D_8098C2A8_s D_8098C2FC = { 0x0000, -1, 0x353E };
+static D_8098C2A8_s D_8098C2FC = { 0, -1, 0x353E };
 
 static ColliderCylinderInit sCylinderInit = {
     {
@@ -196,7 +196,7 @@ void func_80989204(EnDg* this, GlobalContext* globalCtx) {
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 26.0f, 10.0f, 0.0f, 5);
 }
 
-void func_8098933C(EnDg* this, Vec3f* globalCtx) {
+void func_8098933C(EnDg* this, Vec3f* arg1) {
     f32 sp24;
     f32 sp20;
     f32 sp1C;
@@ -208,8 +208,8 @@ void func_8098933C(EnDg* this, Vec3f* globalCtx) {
 
         __sinf(0.0f);
         __cosf(0.0f);
-        globalCtx->x = -Math_Acot2F(1.0f, -sp1C * sp20);
-        globalCtx->z = Math_Acot2F(1.0f, -sp24 * sp20);
+        arg1->x = -Math_Acot2F(1.0f, -sp1C * sp20);
+        arg1->z = Math_Acot2F(1.0f, -sp24 * sp20);
     }
 }
 
@@ -384,7 +384,7 @@ void func_80989BF8(EnDg* this) {
 
 void func_80989D38(EnDg* this, GlobalContext* globalCtx) {
     if (this->unk_286 == 21) {
-        if ((gSaveContext.day % 5) == 1) {
+        if (CURRENT_DAY == 1) {
             func_801518B0(globalCtx, 0x91C, NULL);
         } else {
             func_801518B0(globalCtx, 0x91E, NULL);
@@ -436,7 +436,7 @@ void func_80989E18(EnDg* this, GlobalContext* globalCtx) {
 
 s32 func_80989FC8(GlobalContext* globalCtx) {
     EnDg* enemy = (EnDg*)globalCtx->actorCtx.actorList[ACTORCAT_ENEMY].first;
-    f32 maxDist = 9999.0f;
+    f32 minDist = 9999.0f;
     f32 dist;
 
     while (enemy != NULL) {
@@ -447,9 +447,9 @@ s32 func_80989FC8(GlobalContext* globalCtx) {
             }
 
             dist = enemy->actor.xzDistToPlayer;
-            if (dist < maxDist) {
+            if (dist < minDist) {
                 D_8098C2A4.unk_00 = enemy->unk_286;
-                maxDist = dist;
+                minDist = dist;
             }
         }
         enemy = (EnDg*)enemy->actor.next;
@@ -525,12 +525,10 @@ void func_8098A234(EnDg* this, GlobalContext* globalCtx) {
 
             case PLAYER_FORM_ZORA:
                 this->unk_280 &= ~2;
-                if (this->unk_28C != 4) {
-                    if (player->actor.speedXZ > 1.0f) {
-                        this->unk_28C = 4;
-                        func_80989140(&this->skelAnime, D_8098C35C, 2);
-                        this->actionFunc = func_8098B004;
-                    }
+                if ((this->unk_28C != 4) && (player->actor.speedXZ > 1.0f)) {
+                    this->unk_28C = 4;
+                    func_80989140(&this->skelAnime, D_8098C35C, 2);
+                    this->actionFunc = func_8098B004;
                 }
 
                 if ((this->unk_28C != 5) && (this->unk_28C != 4)) {
@@ -541,13 +539,11 @@ void func_8098A234(EnDg* this, GlobalContext* globalCtx) {
 
             case PLAYER_FORM_GORON:
                 this->unk_280 &= ~2;
-                if (this->unk_28C != 2) {
-                    if (player->actor.speedXZ > 1.0f) {
-                        this->unk_28C = 2;
-                        func_80989140(&this->skelAnime, D_8098C35C, 11);
-                        this->unk_282 = 50;
-                        this->actionFunc = func_8098A618;
-                    }
+                if ((this->unk_28C != 2) && (player->actor.speedXZ > 1.0f)) {
+                    this->unk_28C = 2;
+                    func_80989140(&this->skelAnime, D_8098C35C, 11);
+                    this->unk_282 = 50;
+                    this->actionFunc = func_8098A618;
                 }
 
                 if ((this->unk_28C != 3) && (this->unk_28C != 2)) {
@@ -558,12 +554,10 @@ void func_8098A234(EnDg* this, GlobalContext* globalCtx) {
 
             case PLAYER_FORM_DEKU:
                 this->unk_280 &= ~2;
-                if (this->unk_28C != 6) {
-                    if (player->actor.speedXZ > 1.0f) {
-                        this->unk_28C = 6;
-                        func_80989140(&this->skelAnime, D_8098C35C, 2);
-                        this->actionFunc = func_8098A938;
-                    }
+                if ((this->unk_28C != 6) && (player->actor.speedXZ > 1.0f)) {
+                    this->unk_28C = 6;
+                    func_80989140(&this->skelAnime, D_8098C35C, 2);
+                    this->actionFunc = func_8098A938;
                 }
 
                 if ((this->unk_28C != 7) && (this->unk_28C != 6)) {
@@ -1134,7 +1128,7 @@ void EnDg_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->unk_1DC = func_8013D648(globalCtx, ENDG_FC00(&this->actor), 0x3F);
+    this->unk_1DC = func_8013D648(globalCtx, ENDG_GET_FC00(&this->actor), 0x3F);
     Actor_SetScale(&this->actor, 0.0075f);
     this->actor.targetMode = 1;
     this->actor.gravity = -3.0f;
@@ -1142,7 +1136,7 @@ void EnDg_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_280 = 0;
     this->unk_28E = 20;
     this->unk_284 = 10;
-    this->unk_286 = ENDG_3E0(&this->actor);
+    this->unk_286 = ENDG_GET_3E0(&this->actor);
     this->unk_28C = 0;
     this->unk_290 = 0;
     if (globalCtx->sceneNum == SCENE_F01_B) {

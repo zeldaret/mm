@@ -7,8 +7,8 @@ struct EnDg;
 
 typedef void (*EnDgActionFunc)(struct EnDg*, GlobalContext*);
 
-#define ENDG_FC00(thisx) (((thisx)->params & 0xFC00) >> 0xA)
-#define ENDG_3E0(thisx) (((thisx)->params & 0x3E0) >> 5)
+#define ENDG_GET_FC00(thisx) (((thisx)->params & 0xFC00) >> 0xA)
+#define ENDG_GET_3E0(thisx) (((thisx)->params & 0x3E0) >> 5)
 
 typedef struct EnDg {
     /* 0x000 */ Actor actor;
