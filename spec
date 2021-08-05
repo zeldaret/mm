@@ -2200,7 +2200,7 @@ beginseg
     name "ovl_Obj_Kibako2"
     compress
     include "build/src/overlays/actors/ovl_Obj_Kibako2/z_obj_kibako2.o"
-    include "build/data/ovl_Obj_Kibako2/ovl_Obj_Kibako2.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Kibako2/ovl_Obj_Kibako2_reloc.o"
 endseg
 
 beginseg
