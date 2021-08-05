@@ -27,16 +27,16 @@ typedef struct {
     /* 0x0C */ Vec3f unk_0C;
     /* 0x18 */ Vec3f unk_18;
     /* 0x24 */ f32 unk_24;
-} EnDnbStruct; // size = 0x28
+} EnDnbUnkStruct; // size = 0x28
 
 typedef struct EnDnb {
     /* 0x0000 */ DynaPolyActor dyna;
-    /* 0x015C */ char unk_015C[0x4];
+    /* 0x015C */ UNK_TYPE1 unk_015C[0x4];
     /* 0x0160 */ EnDnbParticle particles[54];
     /* 0x0D30 */ s16 unk_0D30;
     /* 0x0D32 */ s16 unk_0D32;
     /* 0x0D34 */ s16 unk_0D34;
-    /* 0x0D38 */ EnDnbStruct unk_0D38[256];
+    /* 0x0D38 */ EnDnbUnkStruct unk_0D38[256];
 } EnDnb; // size = 0x3538
 
 extern const ActorInit En_Dnb_InitVars;

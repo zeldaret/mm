@@ -1,7 +1,7 @@
 /*
  * File: z_en_dnb.c
  * Overlay: ovl_En_Dnb
- * Description: Dnb
+ * Description: 
  */
 
 #include "z_en_dnb.h"
@@ -15,23 +15,15 @@ void EnDnb_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDnb_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDnb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-s32 func_80A5086C(EnDnbStruct* arg0);
-s32 func_80A507C0(EnDnbStruct* arg0, Vec3f arg1, Vec3f arg2, u8 arg3, f32 arg4, f32 arg5);
-s32 func_80A50950(EnDnbStruct* arg0, GlobalContext* globalCtx);
+s32 func_80A507C0(EnDnbUnkStruct* arg0, Vec3f arg1, Vec3f arg2, u8 arg3, f32 arg4, f32 arg5);
+s32 func_80A5086C(EnDnbUnkStruct* arg0);
+s32 func_80A50950(EnDnbUnkStruct* arg0, GlobalContext* globalCtx);
 
-extern CollisionHeader D_06004D8C;
-extern Vec3s D_06004710[];
-extern Gfx D_06004638[];
-extern u64 D_0408F7E0[];
-extern u64 D_0408F3E0[];
-extern u64 D_0408EFE0[];
-extern u64 D_0408EBE0[];
-extern u64 D_0408E7E0[];
-extern u64 D_0408E3E0[];
-extern u64 D_0408DFE0[];
-extern u64 D_0408DBE0[];
 extern Gfx D_06000000[];
 extern Gfx D_06000020[];
+extern Gfx D_06004638[];
+extern Vec3s D_06004710[];
+extern CollisionHeader D_06004D8C;
 
 const ActorInit En_Dnb_InitVars = {
     ACTOR_EN_DNB,
@@ -93,7 +85,6 @@ void func_80A4FFE8(EnDnbParticle* particle, s16 arg1) {
 
 s32 func_80A500F8(EnDnb* this) {
     static Vec3f D_80A50CB0 = { 0.0f, 0.0f, 1000.0f };
-
     Actor* actor = &this->dyna.actor;
     Vec3f spA8 = D_801D15B0;
     Vec3f sp9C;
@@ -224,7 +215,7 @@ void EnDnb_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_80A50950(this->unk_0D38, globalCtx);
 }
 
-s32 func_80A507C0(EnDnbStruct* arg0, Vec3f arg1, Vec3f arg2, u8 arg3, f32 arg4, f32 arg5) {
+s32 func_80A507C0(EnDnbUnkStruct* arg0, Vec3f arg1, Vec3f arg2, u8 arg3, f32 arg4, f32 arg5) {
     s32 i;
     s32 ret = 0;
 
@@ -245,7 +236,7 @@ s32 func_80A507C0(EnDnbStruct* arg0, Vec3f arg1, Vec3f arg2, u8 arg3, f32 arg4, 
     return ret;
 }
 
-s32 func_80A5086C(EnDnbStruct* arg0) {
+s32 func_80A5086C(EnDnbUnkStruct* arg0) {
     s32 count = 0;
     s32 i;
 
@@ -266,11 +257,10 @@ s32 func_80A5086C(EnDnbStruct* arg0) {
     return count;
 }
 
-s32 func_80A50950(EnDnbStruct* arg0, GlobalContext* globalCtx2) {
-    static u64* D_80A50CBC[] = {
+s32 func_80A50950(EnDnbUnkStruct* arg0, GlobalContext* globalCtx2) {
+    static TexturePtr D_80A50CBC[] = {
         D_0408F7E0, D_0408F3E0, D_0408EFE0, D_0408EBE0, D_0408E7E0, D_0408E3E0, D_0408DFE0, D_0408DBE0,
     };
-
     GlobalContext* globalCtx = globalCtx2;
     s32 isGfxSetup = false;
     s32 sp5C = 0;
