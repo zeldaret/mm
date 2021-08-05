@@ -1,7 +1,7 @@
 /*
  * File: z_en_dnk.c
  * Overlay: ovl_En_Dnk
- * Description: Hallucinatory Mad Scrubs
+ * Description: Hallucinatory Mad Scrubs (Deku curse and healing cutscenes)
  */
 
 #include "z_en_dnk.h"
@@ -16,46 +16,36 @@ void EnDnk_Update(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80A52018(Actor* thisx, GlobalContext* globalCtx);
 void func_80A51890(EnDnk* this, GlobalContext* globalCtx);
-void func_80A518DC(EnDnk* this, GlobalContext* globalCtx);
+void EnDnk_DoNothing(EnDnk* this, GlobalContext* globalCtx);
 void func_80A52134(EnDnk* this, GlobalContext* globalCtx);
 
 extern SkeletonHeader D_06002848;
 extern SkeletonHeader D_060023B8;
 extern SkeletonHeader D_06002468;
 extern AnimationHeader D_06000B70;
-extern AnimationHeader D_06000B70;
 extern AnimationHeader D_06002A08;
 extern AnimationHeader D_0600031C;
 extern AnimationHeader D_06000430;
-extern AnimationHeader D_06000430;
 extern AnimationHeader D_06000894;
 extern AnimationHeader D_06002B6C;
-extern AnimationHeader D_06002B6C;
 extern AnimationHeader D_060006CC;
-extern AnimationHeader D_06000168;
-extern AnimationHeader D_060024CC;
 extern AnimationHeader D_060024CC;
 extern AnimationHeader D_060026C4;
 extern AnimationHeader D_06002894;
 extern AnimationHeader D_06002B90;
 extern AnimationHeader D_06002F7C;
-extern AnimationHeader D_06002F7C;
-extern AnimationHeader D_06003128;
 extern AnimationHeader D_06003128;
 extern AnimationHeader D_060029BC;
 extern AnimationHeader D_06002E84;
 extern AnimationHeader D_06000168;
 extern AnimationHeader D_0600259C;
 extern AnimationHeader D_06002A5C;
-extern AnimationHeader D_06002A5C;
 extern AnimationHeader D_06002BD4;
 extern AnimationHeader D_06002DD4;
 extern AnimationHeader D_06002FA4;
 extern AnimationHeader D_06003180;
 extern AnimationHeader D_0600326C;
-extern AnimationHeader D_0600326C;
 extern AnimationHeader D_060033E4;
-extern AnimationHeader D_06003780;
 extern AnimationHeader D_06003780;
 extern AnimationHeader D_06002950;
 extern Gfx D_06001680[];
@@ -148,24 +138,24 @@ static ActorAnimationEntryS D_80A5221C[] = {
     { &D_06003780, 1.0f, 0, -1, 0, 0 },  { &D_06003780, 1.0f, 0, -1, 0, -4 }, { &D_06002950, 1.0f, 0, -1, 0, 0 },
 };
 
-s32 func_80A514F0(SkelAnime* skelAnime, s16 arg1) {
+s32 func_80A514F0(SkelAnime* skelAnime, s16 animIndex) {
     s16 frame;
     s16 frameCount;
-    s32 sp30 = 0;
+    s32 sp30 = false;
 
-    if (arg1 >= 0) {
-        if (arg1 < 36) {
-            sp30 = 1;
-            frameCount = D_80A5221C[arg1].frameCount;
+    if (animIndex >= 0) {
+        if (animIndex < 36) {
+            sp30 = true;
+            frameCount = D_80A5221C[animIndex].frameCount;
             if (frameCount < 0) {
-                frameCount = SkelAnime_GetFrameCount(&(D_80A5221C[arg1].animationSeg)->common);
+                frameCount = SkelAnime_GetFrameCount(&(D_80A5221C[animIndex].animationSeg)->common);
             }
-            frame = D_80A5221C[arg1].frame;
+            frame = D_80A5221C[animIndex].frame;
             if (frame < 0) {
                 frame = frameCount;
             }
-            SkelAnime_ChangeAnim(skelAnime, D_80A5221C[arg1].animationSeg, D_80A5221C[arg1].playbackSpeed, frame,
-                                 frameCount, D_80A5221C[arg1].mode, D_80A5221C[arg1].transitionRate);
+            SkelAnime_ChangeAnim(skelAnime, D_80A5221C[animIndex].animationSeg, D_80A5221C[animIndex].playbackSpeed, frame,
+                                 frameCount, D_80A5221C[animIndex].mode, D_80A5221C[animIndex].transitionRate);
         }
     }
     return sp30;
@@ -192,18 +182,18 @@ void func_80A51648(EnDnk* this, GlobalContext* globalCtx) {
         this->actor.objBankIndex = this->unk_28E;
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 18.0f);
 
-        switch (ENDNK_PARAMS_3(&this->actor)) {
-            case ENDNK_PARAMS_3_0:
+        switch (ENDNK_GET_3(&this->actor)) {
+            case ENDNK_GET_3_0:
                 SkelAnime_Init(globalCtx, &this->skelAnime, &D_06002848, NULL, this->jointTable, this->morphTable, 11);
                 func_80A514F0(&this->skelAnime, 7);
                 break;
 
-            case ENDNK_PARAMS_3_1:
+            case ENDNK_GET_3_1:
                 SkelAnime_Init(globalCtx, &this->skelAnime, &D_060023B8, NULL, this->jointTable, this->morphTable, 10);
                 func_80A514F0(&this->skelAnime, 18);
                 break;
 
-            case ENDNK_PARAMS_3_2:
+            case ENDNK_GET_3_2:
                 SkelAnime_Init(globalCtx, &this->skelAnime, &D_06002468, NULL, this->jointTable, this->morphTable, 10);
                 func_80A514F0(&this->skelAnime, 35);
                 break;
@@ -212,14 +202,14 @@ void func_80A51648(EnDnk* this, GlobalContext* globalCtx) {
         Collider_InitCylinder(globalCtx, &this->collider);
         Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-        if (ENDNK_PARAMS_3C(&this->actor) == ENDNK_PARAMS_3C_4) {
+        if (ENDNK_GET_3C(&this->actor) == 4) {
             this->actor.flags &= ~1;
             this->actor.flags |= (0x10 | 0x20);
             this->actionFunc = func_80A51890;
             Actor_SetScale(&this->actor, 0.1f);
         } else {
             this->actor.flags &= ~1;
-            this->actionFunc = func_80A518DC;
+            this->actionFunc = EnDnk_DoNothing;
             Actor_SetScale(&this->actor, 0.01f);
         }
     }
@@ -231,23 +221,23 @@ void func_80A51890(EnDnk* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A518DC(EnDnk* this, GlobalContext* globalCtx) {
+void EnDnk_DoNothing(EnDnk* this, GlobalContext* globalCtx) {
 }
 
 void EnDnk_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnDnk* this = THIS;
 
     this->unk_28E = -1;
-    switch (ENDNK_PARAMS_3(&this->actor)) {
-        case ENDNK_PARAMS_3_1:
+    switch (ENDNK_GET_3(&this->actor)) {
+        case ENDNK_GET_3_1:
             this->unk_28E = func_8013D924(0x12B, globalCtx);
             break;
 
-        case ENDNK_PARAMS_3_0:
+        case ENDNK_GET_3_0:
             this->unk_28E = func_8013D924(0x135, globalCtx);
             break;
 
-        case ENDNK_PARAMS_3_2:
+        case ENDNK_GET_3_2:
             this->unk_28E = func_8013D924(0x40, globalCtx);
             break;
     }
@@ -287,7 +277,7 @@ s32 func_80A51A78(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 
     this->unk_260[limbIndex] = *dList;
     *dList = NULL;
-    return 0;
+    return false;
 }
 
 void func_80A51AA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
@@ -343,7 +333,6 @@ void func_80A51CB8(EnDnk* this, GlobalContext* globalCtx) {
         D_06001700,
         D_06001780,
     };
-
     s32 pad;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -364,7 +353,7 @@ s32 func_80A51D78(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 
     this->unk_260[limbIndex] = *dList;
     *dList = NULL;
-    return 0;
+    return false;
 }
 
 void func_80A51DA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
@@ -424,13 +413,13 @@ void func_80A51FC0(EnDnk* this, GlobalContext* globalCtx) {
 void func_80A52018(Actor* thisx, GlobalContext* globalCtx) {
     EnDnk* this = THIS;
 
-    switch (ENDNK_PARAMS_3(thisx)) {
-        case ENDNK_PARAMS_3_0:
+    switch (ENDNK_GET_3(thisx)) {
+        case ENDNK_GET_3_0:
             func_80A51CB8(this, globalCtx);
             break;
 
-        case ENDNK_PARAMS_3_1:
-        case ENDNK_PARAMS_3_2:
+        case ENDNK_GET_3_1:
+        case ENDNK_GET_3_2:
             func_80A51FC0(this, globalCtx);
             break;
     }
@@ -461,7 +450,7 @@ void func_80A52074(EnDnk* this, GlobalContext* globalCtx) {
 }
 
 void func_80A52134(EnDnk* this, GlobalContext* globalCtx) {
-    if ((globalCtx->csCtx.state != 0) && (ENDNK_PARAMS_3C(&this->actor) == ENDNK_PARAMS_3C_4) &&
+    if ((globalCtx->csCtx.state != 0) && (ENDNK_GET_3C(&this->actor) == 4) &&
         (globalCtx->sceneNum == SCENE_SPOT00) && (gSaveContext.sceneSetupIndex == 2)) {
         func_80A52074(this, globalCtx);
     }
