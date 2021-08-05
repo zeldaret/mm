@@ -24,15 +24,13 @@ const ActorInit Obj_Kibako2_InitVars = {
     (ActorFunc)ObjKibako2_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_8098EE60 = {
+static ColliderCylinderInit sCylinderInit = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_2, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x80000508, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
     { 31, 48, 0, { 0, 0, 0 } },
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_8098EE8C[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
@@ -139,9 +137,9 @@ void ObjKibako2_Init(Actor* thisx, GlobalContext* globalCtx) {
     sp24 = (this->dyna.actor.params >> 0xF) & 1;
     BcCheck3_BgActorInit(&this->dyna, 0);
     Collider_InitCylinder(globalCtx, &this->collider);
-    Actor_ProcessInitChain(&this->dyna.actor, D_8098EE8C);
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000B70);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &D_8098EE60);
+    Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
     this->dyna.actor.home.rot.z = 0;
     this->dyna.actor.world.rot.z = 0;
