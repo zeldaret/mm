@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_kibako2.c
+ * Overlay: ovl_Obj_Kibako2
+ * Description: Large wooden crate
+ */
+
 #include "z_obj_kibako2.h"
 #include "overlays/effects/ovl_Effect_Ss_Kakera/z_eff_ss_kakera.h"
 
