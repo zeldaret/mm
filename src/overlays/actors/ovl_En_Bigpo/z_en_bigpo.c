@@ -390,7 +390,7 @@ void EnBigpo_SpawnPoCutscene6(EnBigpo* this, GlobalContext* globalCtx) {
     alphaPlus = this->mainColor.a + 0xA; // decrease transparency
     func_80B61914(this);
     if (alphaPlus >= 0x5A) {
-        this->rotVelocity += -0x80;
+        this->rotVelocity -= 0x80;
         this->actor.velocity.y -= 0.25f;
         if (alphaPlus >= 0xB4) {
             Math_ScaledStepToS(&this->actor.world.rot.y, 0, 0x180);
@@ -455,7 +455,7 @@ void EnBigpo_SetupWarpOut(EnBigpo* this) {
     this->collider.base.ocFlags1 &= ~OC1_ON;
     this->rotVelocity = 0x2000;
     this->idleTimer = 32;
-    this->actor.flags &= ~1; // targetable
+    this->actor.flags &= ~1; // targetable OFF
     this->actor.speedXZ = 0.0f;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_DISAPPEAR);
     this->actionFunc = EnBigpo_WarpingOut;
@@ -521,7 +521,7 @@ void EnBigpo_SetupIdleFlying(EnBigpo* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->collider.base.acFlags |= AC_ON;
     this->collider.base.ocFlags1 |= OC1_ON;
-    this->actor.flags |= 0x1; // targetable
+    this->actor.flags |= 0x1; // targetable ON
     this->actionFunc = EnBigpo_IdleFlying;
 }
 
@@ -589,7 +589,7 @@ void EnBigpo_SpinAttack(EnBigpo* this, GlobalContext* globalCtx) {
     yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
     // because acFlags AC_HARD and COLTYPE_METAL, if we hit it means we contacted as attack
     if (((this->collider.base.atFlags & AT_HIT)) ||
-        (((yawDiff < 0) ? -yawDiff : yawDiff) >= 0x4001) && (this->actor.xzDistToPlayer > 50.0f)) {
+        ((((yawDiff < 0) ? -yawDiff : yawDiff) >= 0x4001) && (this->actor.xzDistToPlayer > 50.0f))) {
         // hit the player OR the poe has missed and flew past player
         EnBigpo_SetupSpinDown(this);
     }
