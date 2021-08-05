@@ -17,33 +17,32 @@ void EnDodongo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDodongo_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDodongo_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80877424(EnDodongo* this, GlobalContext* globalCtx);
-void func_80877500(EnDodongo* this, GlobalContext* globalCtx);
-void func_8087784C(EnDodongo* this, GlobalContext* globalCtx);
-void func_80877D90(EnDodongo* this, GlobalContext* globalCtx);
-void func_808786C8(EnDodongo* this, GlobalContext* globalCtx);
-void func_80877E60(EnDodongo* this, GlobalContext* globalCtx);
-void func_808787B0(EnDodongo* this, GlobalContext* globalCtx);
-void func_808785B0(EnDodongo* this, GlobalContext* globalCtx);
-void func_80878424(EnDodongo* this, GlobalContext* globalCtx);
-
 void func_808773C4(EnDodongo* this);
+void func_80877424(EnDodongo* this, GlobalContext* globalCtx);
 void func_80877494(EnDodongo* this);
+void func_80877500(EnDodongo* this, GlobalContext* globalCtx);
 void func_808777A8(EnDodongo* this);
+void func_8087784C(EnDodongo* this, GlobalContext* globalCtx);
 void func_80877D50(EnDodongo* this);
+void func_80877D90(EnDodongo* this, GlobalContext* globalCtx);
+void func_80877E60(EnDodongo* this, GlobalContext* globalCtx);
 void func_80878354(EnDodongo* this);
-void func_80878724(EnDodongo* this);
+void func_80878424(EnDodongo* this, GlobalContext* globalCtx);
+void func_808785B0(EnDodongo* this, GlobalContext* globalCtx);
 void func_8087864C(EnDodongo* this);
+void func_808786C8(EnDodongo* this, GlobalContext* globalCtx);
+void func_80878724(EnDodongo* this);
+void func_808787B0(EnDodongo* this, GlobalContext* globalCtx);
 
-extern SkeletonHeader D_06008318;
-extern AnimationHeader D_06004C20;
-extern AnimationHeader D_06008B1C;
+extern AnimationHeader D_060013C4;
+extern AnimationHeader D_06001A44;
 extern AnimationHeader D_060028F0;
 extern AnimationHeader D_06003088;
-extern AnimationHeader D_06001A44;
-extern AnimationHeader D_060013C4;
-extern AnimationHeader D_060042C4;
 extern AnimationHeader D_06003B14;
+extern AnimationHeader D_060042C4;
+extern AnimationHeader D_06004C20;
+extern SkeletonHeader D_06008318;
+extern AnimationHeader D_06008B1C;
 
 const ActorInit En_Dodongo_InitVars = {
     ACTOR_EN_DODONGO,
@@ -292,7 +291,6 @@ void EnDodongo_Init(Actor* thisx, GlobalContext* globalCtx) {
     static s32 D_80879308[] = {
         0x00000002, 0x00080000, 0xFFFFFFFF, 0xFFFFFF40, 0xFFFFFF00, 0xFFFFFF00, 0x08000000, 0x00000000, 0x00000000,
     };
-
     EnDodongo* this = THIS;
     s32 i;
 
@@ -317,7 +315,7 @@ void EnDodongo_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     Effect_Add(globalCtx, &this->unk_338, 2, 0, 0, &D_80879308);
-    if (!this->actor.params) {
+    if (this->actor.params == 0) {
         Actor_SetScale(&this->actor, 0.01875f);
         this->unk_334 = 1.0f;
     } else {
@@ -352,12 +350,11 @@ void EnDodongo_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80876930(EnDodongo* this, GlobalContext* globalCtx, Vec3f* arg2) {
-    static Color_RGBA8 D_8087932C = { 0xFA, 0xFA, 0xFA, 0xFF };
-    static Color_RGBA8 D_80879330 = { 0xB4, 0xB4, 0xB4, 0xFF };
-    static Color_RGBA8 D_80879334 = { 0xAA, 0x82, 0x5A, 0xFF };
-    static Color_RGBA8 D_80879338 = { 0x64, 0x3C, 0x14, 0xFF };
+    static Color_RGBA8 D_8087932C = { 250, 250, 250, 255 };
+    static Color_RGBA8 D_80879330 = { 180, 180, 180, 255 };
+    static Color_RGBA8 D_80879334 = { 170, 130, 90, 255 };
+    static Color_RGBA8 D_80879338 = { 100, 60, 20, 255 };
     static Vec3f D_8087933C = { 0.0f, 0.3f, 0.0f };
-
     s32 i;
     Vec3f sp88;
     s32 pad2;
@@ -527,6 +524,7 @@ s32 func_80877278(EnDodongo* this, GlobalContext* globalCtx) {
     Actor* explosive = globalCtx->actorCtx.actorList[ACTORCAT_EXPLOSIVES].first;
     Vec3f sp44;
 
+    // Bugfix from OoT
     while (explosive != NULL) {
         if (!explosive->params && (explosive->parent == NULL) && (explosive->update != NULL) &&
             (explosive != player->unk_388) &&
@@ -642,7 +640,6 @@ void func_808777A8(EnDodongo* this) {
 void func_8087784C(EnDodongo* this, GlobalContext* globalCtx) {
     static Vec3f D_80879348 = { 0.0f, 0.9f, 0.0f };
     static Vec3f D_80879354 = { 0.0f, 0.0f, 0.0f };
-
     s16 frame;
     ColliderJntSphElement* element;
     s32 i;
@@ -712,7 +709,6 @@ void func_80877DE0(EnDodongo* this) {
 void func_80877E60(EnDodongo* this, GlobalContext* globalCtx) {
     static Vec3f D_80879360 = { 0.0f, 0.6f, 0.0f };
     static Color_RGBA8 D_8087936C = { 255, 255, 255, 255 };
-
     Vec3f sp84;
     Vec3f sp78;
     s16 i;
@@ -793,8 +789,8 @@ void func_80877E60(EnDodongo* this, GlobalContext* globalCtx) {
         }
     }
 
-    this->unk_314.z = Math_SinS((this->actor.colorFilterTimer << 0xC) >> 1) + 1.0f;
-    this->unk_314.x = Math_SinS(this->actor.colorFilterTimer << 0xC) + 1.0f;
+    this->unk_314.z = Math_SinS((this->actor.colorFilterTimer * 0x1000) >> 1) + 1.0f;
+    this->unk_314.x = Math_SinS(this->actor.colorFilterTimer * 0x1000) + 1.0f;
     this->unk_314.y = this->unk_314.z;
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     if (this->unk_302 == 0) {
@@ -872,7 +868,7 @@ void func_808785B0(EnDodongo* this, GlobalContext* globalCtx) {
         func_80876D28(this, globalCtx);
         if (this->actor.colChkInfo.health == 0) {
             func_80878724(this);
-        } else if (this->actor.xzDistToPlayer > SQ(10.0f) * this->unk_334) {
+        } else if (this->actor.xzDistToPlayer > 100.0f * this->unk_334) {
             func_80877494(this);
         } else {
             func_80876B08(this, globalCtx);
@@ -938,7 +934,7 @@ void func_808787B0(EnDodongo* this, GlobalContext* globalCtx) {
     if (this->unk_302 != 0) {
         this->unk_302--;
         if (this->unk_302 == 0) {
-            if (!this->actor.params) {
+            if (this->actor.params == 0) {
                 Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0x90);
             } else {
                 Item_DropCollectible(globalCtx, &this->actor.world.pos, ITEM00_RUPEE_PURPLE);
@@ -948,7 +944,7 @@ void func_808787B0(EnDodongo* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80878910(EnDodongo* this, GlobalContext* globalCtx) {
+void EnDodongo_UpdateDamage(EnDodongo* this, GlobalContext* globalCtx) {
     Vec3f sp3C;
     s32 i;
 
@@ -1030,7 +1026,7 @@ void EnDodongo_Update(Actor* thisx, GlobalContext* globalCtx2) {
     EnDodongo* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
 
-    func_80878910(this, globalCtx);
+    EnDodongo_UpdateDamage(this, globalCtx);
     this->actionFunc(this, globalCtx);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 75.0f, 60.0f, 70.0f, 0x1D);
@@ -1064,7 +1060,8 @@ void EnDodongo_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 }
 
-s32 func_80878E44(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnDodongo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                               Actor* thisx) {
     EnDodongo* this = THIS;
 
     if (limbIndex == 1) {
@@ -1073,17 +1070,16 @@ s32 func_80878E44(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
         Matrix_Scale(this->unk_314.x, this->unk_314.y, this->unk_314.z, MTXMODE_APPLY);
     }
 
-    return 0;
+    return false;
 }
 
-void func_80878EB4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnDodongo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80879370 = { 1800.0f, 1200.0f, 0.0f };
     static Vec3f D_8087937C = { 1500.0f, 300.0f, 0.0f };
     static s8 D_80879388[] = {
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2, 3,  4,
         -1, -1, -1, -1, -1, 5,  6,  -1, -1, -1, -1, -1, 7,  8, -1, 0,
     };
-
     EnDodongo* this = THIS;
 
     Collider_UpdateSpheres(limbIndex, &this->collider1);
@@ -1111,8 +1107,8 @@ void EnDodongo_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnDodongo* this = THIS;
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, func_80878E44, func_80878EB4,
-                   &this->actor);
+    SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, EnDodongo_OverrideLimbDraw,
+                   EnDodongo_PostLimbDraw, &this->actor);
     func_800BE680(globalCtx, &this->actor, this->unk_348, 9, this->unk_340 * this->unk_334,
                   this->unk_344 * this->unk_334, this->unk_33C, this->unk_300);
 }
