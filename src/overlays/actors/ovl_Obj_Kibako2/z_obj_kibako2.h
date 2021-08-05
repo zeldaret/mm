@@ -3,10 +3,10 @@
 
 #include "global.h"
 
-#define KIBAKO2_COLLECTIBLE_ID(this) (this->dyna.actor.params & 0x3F)
-#define KIBAKO2_COLLECTIBLE_FLAG(this) ((this->dyna.actor.params >> 0x8) & 0x7F)
-#define KIBAKO2_SKULLTULA_SPAWN_PARAM(this) (((this->dyna.actor.params & 0x1F) << 2) | 0xFF01)
-#define KIBAKO2_CONTENTS(this) ((this->dyna.actor.params >> 0xF) & 1)
+#define KIBAKO2_COLLECTIBLE_ID(thisx) ((thisx)->params & 0x3F)
+#define KIBAKO2_COLLECTIBLE_FLAG(thisx) (((thisx)->params >> 0x8) & 0x7F)
+#define KIBAKO2_SKULLTULA_SPAWN_PARAM(thisx) ((((thisx)->params & 0x1F) << 2) | 0xFF01)
+#define KIBAKO2_CONTENTS(thisx) (((thisx)->params >> 0xF) & 1)
 
 typedef enum {
     /*  0   */ CONTENTS_COLLECTIBLE,

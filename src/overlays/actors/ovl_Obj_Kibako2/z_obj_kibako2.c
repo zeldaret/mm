@@ -45,7 +45,7 @@ s32 ObjKibako2_ContainsSkulltula(ObjKibako2* this, GlobalContext* globalCtx) {
     s32 actorSpawnParam;
     s32 flag;
 
-    actorSpawnParam = KIBAKO2_SKULLTULA_SPAWN_PARAM(this);
+    actorSpawnParam = KIBAKO2_SKULLTULA_SPAWN_PARAM(&this->dyna.actor);
     flag = -1;
     if ((u16) actorSpawnParam & 3) {
         flag = ((actorSpawnParam & 0x3FC) >> 2) & 0xFF;
@@ -96,9 +96,9 @@ void ObjKibako2_Break(ObjKibako2* this, GlobalContext* globalCtx) {
 void ObjKibako2_SpawnCollectible(ObjKibako2* this, GlobalContext* globalCtx) {
     s32 collectible;
 
-    collectible = func_800A8150(KIBAKO2_COLLECTIBLE_ID(this));
+    collectible = func_800A8150(KIBAKO2_COLLECTIBLE_ID(&this->dyna.actor));
     if (collectible >= 0) {
-        Item_DropCollectible(globalCtx, &this->dyna.actor.world.pos, collectible | KIBAKO2_COLLECTIBLE_FLAG(this) << 8);
+        Item_DropCollectible(globalCtx, &this->dyna.actor.world.pos, collectible | KIBAKO2_COLLECTIBLE_FLAG(&this->dyna.actor) << 8);
     }
 }
 
@@ -108,7 +108,7 @@ void ObjKibako2_SpawnSkulltula(ObjKibako2* this, GlobalContext* globalCtx) {
     Actor* skulltula;
 
     if (ObjKibako2_ContainsSkulltula(this, globalCtx)) {
-        actorSpawnParam = KIBAKO2_SKULLTULA_SPAWN_PARAM(this);
+        actorSpawnParam = KIBAKO2_SKULLTULA_SPAWN_PARAM(&this->dyna.actor);
         yRotation = ((u32) Rand_Next() >> 0x11) + this->dyna.actor.yawTowardsPlayer + 0xC000;
         skulltula = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_SW, this->dyna.actor.world.pos.x,
                                 this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, 0, yRotation, 0,
@@ -122,7 +122,7 @@ void ObjKibako2_SpawnSkulltula(ObjKibako2* this, GlobalContext* globalCtx) {
 }
 
 void ObjKibako2_SpawnContents(ObjKibako2* this, GlobalContext* globalCtx) {
-    if (KIBAKO2_CONTENTS(this) == CONTENTS_COLLECTIBLE) {
+    if (KIBAKO2_CONTENTS(&this->dyna.actor) == CONTENTS_COLLECTIBLE) {
         ObjKibako2_SpawnCollectible(this, globalCtx);
     } else {
         ObjKibako2_SpawnSkulltula(this, globalCtx);
@@ -134,7 +134,7 @@ void ObjKibako2_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     ObjKibako2Contents contents;
 
-    contents = KIBAKO2_CONTENTS(this);
+    contents = KIBAKO2_CONTENTS(&this->dyna.actor);
     BcCheck3_BgActorInit(&this->dyna, 0);
     Collider_InitCylinder(globalCtx, &this->collider);
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -147,7 +147,7 @@ void ObjKibako2_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->dyna.actor.world.rot.x = 0;
     this->dyna.actor.shape.rot.x = 0;
     if (contents == CONTENTS_COLLECTIBLE) {
-        if (func_800A81A4(globalCtx, KIBAKO2_COLLECTIBLE_ID(this), KIBAKO2_COLLECTIBLE_FLAG(this))) {
+        if (func_800A81A4(globalCtx, KIBAKO2_COLLECTIBLE_ID(&this->dyna.actor), KIBAKO2_COLLECTIBLE_FLAG(&this->dyna.actor))) {
             this->unk_1AC = 1;
             this->dyna.actor.flags |= 0x10;
         }
