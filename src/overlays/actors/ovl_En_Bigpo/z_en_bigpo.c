@@ -1,3 +1,9 @@
+/*
+ * File z_en_bigpo.c
+ * Overlay: ovl_En_Bigpi
+ * Description: Leader of the Poes, Found under Dampe's house and the well
+ */
+
 #include "z_en_bigpo.h"
 
 #define FLAGS 0x00001215
