@@ -109,7 +109,7 @@ void ObjKibako2_SpawnSkulltula(ObjKibako2* this, GlobalContext* globalCtx) {
     s32 actorSpawnParam;
     Actor* skulltula;
 
-    if (ObjKibako2_ContainsSkulltula(this, globalCtx) != 0) {
+    if (ObjKibako2_ContainsSkulltula(this, globalCtx)) {
         actorSpawnParam = KIBAKO2_SKULLTULA_SPAWN_PARAM(this);
         yRotation = ((u32) Rand_Next() >> 0x11) + this->dyna.actor.yawTowardsPlayer + 0xC000;
         skulltula = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_SW, this->dyna.actor.world.pos.x,
@@ -139,20 +139,20 @@ void ObjKibako2_Init(Actor* thisx, GlobalContext* globalCtx) {
     sp24 = (this->dyna.actor.params >> 0xF) & 1;
     BcCheck3_BgActorInit(&this->dyna, 0);
     Collider_InitCylinder(globalCtx, &this->collider);
-    Actor_ProcessInitChain(thisx, D_8098EE8C);
+    Actor_ProcessInitChain(&this->dyna.actor, D_8098EE8C);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000B70);
     Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &D_8098EE60);
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
-    thisx->home.rot.z = 0;
-    thisx->world.rot.z = 0;
-    thisx->shape.rot.z = 0;
-    thisx->world.rot.x = 0;
-    thisx->shape.rot.x = 0;
+    this->dyna.actor.home.rot.z = 0;
+    this->dyna.actor.world.rot.z = 0;
+    this->dyna.actor.shape.rot.z = 0;
+    this->dyna.actor.world.rot.x = 0;
+    this->dyna.actor.shape.rot.x = 0;
     if (sp24 == 0) {
-        tempParams = thisx->params;
-        if (func_800A81A4(globalCtx, tempParams & 0x3F, (tempParams >> 8) & 0x7F) != 0) {
+        tempParams = this->dyna.actor.params;
+        if (func_800A81A4(globalCtx, tempParams & 0x3F, (tempParams >> 8) & 0x7F)) {
             this->unk_1AC = 1;
-            thisx->flags |= 0x10;
+            this->dyna.actor.flags |= 0x10;
         }
     }
     if ((sp24 != 1) || (!ObjKibako2_ContainsSkulltula(this, globalCtx))) {
