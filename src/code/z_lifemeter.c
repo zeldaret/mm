@@ -1,19 +1,19 @@
 #include "global.h"
 
-static s16 sHeartsPrimColors[3][3] = { { 0xFF, 0x46, 0x32 }, { 0xFF, 0xBE, 0x00 }, { 0x64, 0x64, 0xFF } };
-static s16 sHeartsEnvColors[3][3] = { { 0x32, 0x28, 0x3C }, { 0xFF, 0x00, 0x00 }, { 0x00, 0x00, 0xFF } };
-static s16 sHeartsPrimFactors[3][3] = { { 0x00, 0x00, 0x00 }, { 0x00, 0x78, 0xFFCE }, { 0xFF65, 0x1E, 0xCD } };
-static s16 sHeartsEnvFactors[3][3] = { { 0x00, 0x00, 0x00 }, { 0xCD, 0xFFD8, 0xFFC4 }, { 0xFFCE, 0xFFD8, 0xC3 } };
-static s16 sHeartsDDPrimColors[3][3] = { { 0xFF, 0xFF, 0xFF }, { 0xFF, 0xBE, 0x00 }, { 0x64, 0x64, 0xFF } };
+static s16 sHeartsPrimColors[3][3] = { { 0x00FF, 0x0046, 0x0032 }, { 0x00FF, 0x00BE, 0x0000 }, { 0x0064, 0x0064, 0x00FF } };
+static s16 sHeartsEnvColors[3][3] = { { 0x0032, 0x0028, 0x003C }, { 0x00FF, 0x0000, 0x0000 }, { 0x0000, 0x0000, 0x00FF } };
+static s16 sHeartsPrimFactors[3][3] = { { 0x0000, 0x0000, 0x0000 }, { 0x0000, 0x0078, 0xFFCE }, { 0xFF65, 0x001E, 0x00CD } };
+static s16 sHeartsEnvFactors[3][3] = { { 0x0000, 0x0000, 0x0000 }, { 0x00CD, 0xFFD8, 0xFFC4 }, { 0xFFCE, 0xFFD8, 0x00C3 } };
+static s16 sHeartsDDPrimColors[3][3] = { { 0x00FF, 0x00FF, 0x00FF }, { 0x00FF, 0x00BE, 0x0000 }, { 0x0064, 0x0064, 0x00FF } };
 
-static s16 sHeartsDDEnvColors[3][3] = { { 0xC8, 0x00, 0x00 }, { 0xFF, 0x00, 0x00 }, { 0x00, 0x00, 0xFF } };
+static s16 sHeartsDDEnvColors[3][3] = { { 0x00C8, 0x0000, 0x0000 }, { 0x00FF, 0x0000, 0x0000 }, { 0x0000, 0x0000, 0x00FF } };
 
 static s16 sHeartsDDPrimFactors[3][3] = {
-    { 0x00, 0x00, 0x00 },
-    { 0x00, 0xFFBF, 0xFF01 },
-    { 0xFF65, 0xFF65, 0x00 },
+    { 0x0000, 0x0000, 0x0000 },
+    { 0x0000, 0xFFBF, 0xFF01 },
+    { 0xFF65, 0xFF65, 0x0000 },
 };
-static s16 sHeartsDDEnvFactors[3][3] = { { 0x00, 0x00, 0x00 }, { 0x37, 0x00, 0x00 }, { 0xFF38, 0x00, 0xFF } };
+static s16 sHeartsDDEnvFactors[3][3] = { { 0x0000, 0x0000, 0x0000 }, { 0x0037, 0x0000, 0x0000 }, { 0xFF38, 0x0000, 0x00FF } };
 
 s16 sBeatingHeartsDDPrim[3];
 s16 sBeatingHeartsDDEnv[3];
@@ -187,24 +187,32 @@ s32 func_80100AF0(GlobalContext* globalCtx) {
     return 0;
 }
 
-UNK_PTR HeartTextures[] = {
-    0x02000400,                                                 // Full
-    0x02000100, 0x02000100, 0x02000100, 0x02000100, 0x02000100, // Quarter
-    0x02000200, 0x02000200, 0x02000200, 0x02000200, 0x02000200, // Half
-    0x02000300, 0x02000300, 0x02000300, 0x02000300, 0x02000300  // Three Quarter
+extern TexturePtr D_02000000; // Empty heart texture
+extern TexturePtr D_02000100; // Quarter Heart texture
+extern TexturePtr D_02000200; // Half Heart texture
+extern TexturePtr D_02000300; // Three Quarter Heart texture
+extern TexturePtr D_02000400; // Full heart texture
+extern TexturePtr D_02000500; // Empty Double Defense Heart texture
+extern TexturePtr D_02000600; // Quarter Double Defense Heart texture
+extern TexturePtr D_02000700; // Half Double Defense Heart texture
+extern TexturePtr D_02000800; // Three Quarter Double Defense Heart texture
+extern TexturePtr D_02000900; // Full Double Defense Heart texture
+
+TexturePtr HeartTextures[] = {
+    &D_02000400,                                                 // Full
+    &D_02000100, &D_02000100, &D_02000100, &D_02000100, &D_02000100, // Quarter
+    &D_02000200, &D_02000200, &D_02000200, &D_02000200, &D_02000200, // Half
+    &D_02000300, &D_02000300, &D_02000300, &D_02000300, &D_02000300  // Three Quarter
 };
 
-UNK_PTR HeartDDTextures[] = {
-    0x02000900,                                                 // Full
-    0x02000600, 0x02000600, 0x02000600, 0x02000600, 0x02000600, // Quarter
-    0x02000700, 0x02000700, 0x02000700, 0x02000700, 0x02000700, // Half
-    0x02000800, 0x02000800, 0x02000800, 0x02000800, 0x02000800  // Three Quarter
+TexturePtr HeartDDTextures[] = {
+    &D_02000900,                                                 // Full
+    &D_02000600, &D_02000600, &D_02000600, &D_02000600, &D_02000600, // Quarter
+    &D_02000700, &D_02000700, &D_02000700, &D_02000700, &D_02000700, // Half
+    &D_02000800, &D_02000800, &D_02000800, &D_02000800, &D_02000800  // Three Quarter
 };
 
-extern u64 D_02000000[]; // Empty heart texture
-extern u64 D_02000400[]; // Full heart texture
-extern u64 D_02000500[]; // Empty Double Defense Heart texture
-extern u64 D_02000900[]; // Full Double Defense Heart texture
+
 
 void LifeMeter_Draw(GlobalContext* globalCtx) {
     s32 pad[5];
