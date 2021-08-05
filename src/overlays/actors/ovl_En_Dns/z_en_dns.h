@@ -8,15 +8,15 @@ struct EnDns;
 typedef void (*EnDnsActionFunc)(struct EnDns*, GlobalContext*);
 typedef s32 (*EnDnsFunc)(struct EnDns*, GlobalContext*);
 
-#define ENDNS_PARAMS_7(thisx) ((thisx)->params & 7)
-#define ENDNS_PARAMS_4000(thisx) ((thisx)->params & 0x4000)
-#define ENDNS_PARAMS_8000(thisx) ((thisx)->params & 0x8000)
+#define ENDNS_GET_7(thisx) ((thisx)->params & 7)
+#define ENDNS_GET_4000(thisx) ((thisx)->params & 0x4000)
+#define ENDNS_GET_8000(thisx) ((thisx)->params & 0x8000)
 
 enum {
-    /* 0x0 */ ENDNS_PARAMS_7_0,
-    /* 0x1 */ ENDNS_PARAMS_7_1,
-    /* 0x2 */ ENDNS_PARAMS_7_2,
-    /* 0x3 */ ENDNS_PARAMS_7_3,
+    /* 0x0 */ ENDNS_GET_7_0,
+    /* 0x1 */ ENDNS_GET_7_1,
+    /* 0x2 */ ENDNS_GET_7_2,
+    /* 0x3 */ ENDNS_GET_7_3,
 };
 
 typedef struct EnDns {
