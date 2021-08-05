@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_warpstone.c
+ * Overlay: ovl_Obj_Warpstone
+ * Description: Owl Statue
+ */
+
 #include "z_obj_warpstone.h"
 
 #define FLAGS 0x00000009
