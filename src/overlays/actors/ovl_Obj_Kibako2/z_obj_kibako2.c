@@ -169,7 +169,7 @@ void ObjKibako2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
-s32 func_8098EB78(ObjKibako2* this) {
+s32 ObjKibako2_ShouldBreak(ObjKibako2* this) {
     u8 acFlags = this->collider.base.acFlags;
     s32 ret = 0;
 
@@ -177,15 +177,18 @@ s32 func_8098EB78(ObjKibako2* this) {
         Actor* ac = this->collider.base.ac;
         this->collider.base.acFlags = acFlags & 0xFFFD;
         if (ac != NULL) {
-            if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x80000000) {
-                if (Math3D_DistanceSquared(&this->dyna.actor.world.pos, &ac->world.pos) < 25600.0f) {
+            if (this->collider.info.acHitInfo->toucher.dmgFlags & 1 << 31) {
+                // Powder Keg
+                if (Math3D_DistanceSquared(&this->dyna.actor.world.pos, &ac->world.pos) < SQ(160.0f)) {
                     ret = 1;
                 }
-            } else if ((this->collider.info.acHitInfo->toucher.dmgFlags & 8) != 0) {
-                if (Math3D_DistanceSquared(&this->dyna.actor.world.pos, &ac->world.pos) < 10000.0f) {
+            } else if ((this->collider.info.acHitInfo->toucher.dmgFlags & 1 << 3)) {
+                // Explosives
+                if (Math3D_DistanceSquared(&this->dyna.actor.world.pos, &ac->world.pos) < SQ(100.0f)) {
                     ret = 1;
                 }
-            } else if ((this->collider.info.acHitInfo->toucher.dmgFlags & 0x500) != 0) {
+            } else if ((this->collider.info.acHitInfo->toucher.dmgFlags & (1 << 8 | 1 << 10))) {
+                // Goron Punch/Pound
                 ret = 1;
             }
         }
@@ -197,7 +200,7 @@ s32 func_8098EB78(ObjKibako2* this) {
 
 
 void ObjKibako2_Idle(ObjKibako2* this, GlobalContext* globalCtx) {
-    if (func_8098EB78(this) != 0) {
+    if (ObjKibako2_ShouldBreak(this)) {
         ObjKibako2_Break(this, globalCtx);
         func_800F0568(globalCtx, &this->dyna.actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
         this->dyna.actor.flags |= 0x10;

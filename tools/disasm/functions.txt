@@ -8392,7 +8392,7 @@
     0x8098E9C4:("ObjKibako2_SpawnContents",),
     0x8098EA08:("ObjKibako2_Init",),
     0x8098EB30:("ObjKibako2_Destroy",),
-    0x8098EB78:("func_8098EB78",),
+    0x8098EB78:("ObjKibako2_ShouldBreak",),
     0x8098EC68:("ObjKibako2_Idle",),
     0x8098ED20:("ObjKibako2_Kill",),
     0x8098ED4C:("ObjKibako2_Update",),
