@@ -171,7 +171,7 @@ s32 ObjKibako2_ShouldBreak(ObjKibako2* this) {
 
     if ((this->collider.base.acFlags & AC_HIT)) {
         Actor* ac = this->collider.base.ac;
-        this->collider.base.acFlags = acFlags & 0xFFFD;
+        this->collider.base.acFlags = acFlags & ~AC_HIT;
         if (ac != NULL) {
             if (this->collider.info.acHitInfo->toucher.dmgFlags & 1 << 31) {
                 // Powder Keg
