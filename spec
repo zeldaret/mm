@@ -1187,8 +1187,7 @@ beginseg
     name "ovl_Demo_Kankyo"
     compress
     include "build/src/overlays/actors/ovl_Demo_Kankyo/z_demo_kankyo.o"
-    include "build/data/ovl_Demo_Kankyo/ovl_Demo_Kankyo.data.o"
-    include "build/data/ovl_Demo_Kankyo/ovl_Demo_Kankyo.reloc.o"
+    include "build/src/overlays/actors/ovl_Demo_Kankyo/ovl_Demo_Kankyo_reloc.o"
 endseg
 
 beginseg

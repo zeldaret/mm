@@ -4067,7 +4067,7 @@ extern Gfx D_04075B30[];
 extern Gfx D_04076BC0[];
 extern Gfx D_04077480[];
 extern UNK_TYPE D_04079B10;
-extern UNK_TYPE D_0407AB10;
+extern Gfx D_0407AB10[];
 extern UNK_TYPE D_0407AFB0;
 extern UNK_TYPE D_0407D590;
 extern UNK_TYPE D_0407D650;
