@@ -63,15 +63,15 @@ void ObjKibako2_Break(ObjKibako2* this, GlobalContext* globalCtx) {
 
     thisPos = &this->dyna.actor.world.pos;
     for (i = 0, angle = 0; i < 0x10; i++, angle += 0x4E20) {
-        f32 sn = Math_SinS(angle);
-        f32 cs = Math_CosS(angle);
+        f32 sin = Math_SinS(angle);
+        f32 cos = Math_CosS(angle);
         f32 tempRand;
         s32 phi_s0;
 
         tempRand = Rand_ZeroOne() * 30.0f;
-        pos.x = sn * tempRand;
+        pos.x = sin * tempRand;
         pos.y = (Rand_ZeroOne() * 10.0f) + 2.0f;
-        pos.z = cs * tempRand;
+        pos.z = cos * tempRand;
         velocity.x = pos.x * 0.2f;
         velocity.y = (Rand_ZeroOne() * 10.0f) + 2.0f;
         velocity.z = pos.z * 0.2f;
