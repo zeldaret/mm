@@ -67,23 +67,23 @@ void ObjKibako2_Break(ObjKibako2* this, GlobalContext* globalCtx) {
     for (i = 0, angle = 0; i < 0x10; i++, angle += 0x4E20) {
         f32 sn = Math_SinS(angle);
         f32 cs = Math_CosS(angle);
-        f32 temp_rand;
+        f32 tempRand;
         s32 phi_s0;
 
-        temp_rand = Rand_ZeroOne() * 30.0f;
-        pos.x = sn * temp_rand;
+        tempRand = Rand_ZeroOne() * 30.0f;
+        pos.x = sn * tempRand;
         pos.y = (Rand_ZeroOne() * 10.0f) + 2.0f;
-        pos.z = cs * temp_rand;
+        pos.z = cs * tempRand;
         velocity.x = pos.x * 0.2f;
         velocity.y = (Rand_ZeroOne() * 10.0f) + 2.0f;
         velocity.z = pos.z * 0.2f;
         pos.x += thisPos->x;
         pos.y += thisPos->y;
         pos.z += thisPos->z;
-        temp_rand = Rand_ZeroOne();
-        if (temp_rand < 0.05f) {
+        tempRand = Rand_ZeroOne();
+        if (tempRand < 0.05f) {
             phi_s0 = 0x60;
-        } else if (temp_rand < 0.7f) {
+        } else if (tempRand < 0.7f) {
             phi_s0 = 0x40;
         } else {
             phi_s0 = 0x20;
