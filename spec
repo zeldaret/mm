@@ -4490,7 +4490,6 @@ beginseg
     name "ovl_Obj_Warpstone"
     compress
     include "build/src/overlays/actors/ovl_Obj_Warpstone/z_obj_warpstone.o"
-    include "build/data/ovl_Obj_Warpstone/ovl_Obj_Warpstone.data.o"
     include "build/data/ovl_Obj_Warpstone/ovl_Obj_Warpstone.reloc.o"
 endseg
 
