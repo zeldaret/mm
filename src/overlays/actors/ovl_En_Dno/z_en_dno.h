@@ -7,20 +7,20 @@ struct EnDno;
 
 typedef void (*EnDnoActionFunc)(struct EnDno*, GlobalContext*);
 
-#define ENDNO_PARAMS_F(thisx) (u32)((thisx)->params & 0xF)
-#define ENDNO_PARAMS_7F(thisx) ((thisx)->params & 0x7F)
-#define ENDNO_PARAMS_7F0(thisx) (((thisx)->params >> 4) & 0x7F)
-#define ENDNO_PARAMS_3F80(thisx) (((thisx)->params >> 7) & 0x7F)
-#define ENDNO_PARAMS_C000(thisx) (((thisx)->params >> 0xE) & 0x3)
+#define ENDNO_GET_F(thisx) (u32)((thisx)->params & 0xF)
+#define ENDNO_GET_7F(thisx) ((thisx)->params & 0x7F)
+#define ENDNO_GET_7F0(thisx) (((thisx)->params >> 4) & 0x7F)
+#define ENDNO_GET_3F80(thisx) (((thisx)->params >> 7) & 0x7F)
+#define ENDNO_GET_C000(thisx) (((thisx)->params >> 0xE) & 0x3)
 
 enum {
-    /* 0x0 */ ENDNO_PARAMS_F_0,
-    /* 0x1 */ ENDNO_PARAMS_F_1,
+    /* 0x0 */ ENDNO_GET_F_0,
+    /* 0x1 */ ENDNO_GET_F_1,
 };
 
 enum {
-    /* 0x0 */ ENDNO_PARAMS_C000_0,
-    /* 0x1 */ ENDNO_PARAMS_C000_1,
+    /* 0x0 */ ENDNO_GET_C000_0,
+    /* 0x1 */ ENDNO_GET_C000_1,
 };
 
 typedef struct EnDno {
@@ -34,7 +34,7 @@ typedef struct EnDno {
     /* 0x32C */ s32 unk_32C;
     /* 0x330 */ UNK_TYPE1 unk_330[0x4];
     /* 0x334 */ Vec3f unk_334;
-    /* 0x340 */ ActorUnkStruct unk_340;
+    /* 0x340 */ EnDno_ActorUnkStruct unk_340;
     /* 0x3AC */ s16 unk_3AC;
     /* 0x3AE */ s16 unk_3AE;
     /* 0x3B0 */ u16 unk_3B0;

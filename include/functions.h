@@ -2724,12 +2724,12 @@ Actor* func_ActorCategoryIterateById(GlobalContext* globalCtx, struct Actor* act
 void func_8013D9C8(GlobalContext* globalCtx, s16* arg1, s16* arg2, UNK_TYPE arg3);
 u8 func_8013DB90(GlobalContext* globalCtx, UNK_PTR arg1, f32 arg2);
 // void func_8013DC40(void);
-void func_8013DCE0(GlobalContext* globalCtx, Vec3f* param_2, Actor* actor, ActorUnkStruct* param_4, Path* param_5, s32 param_6, s32 param_7, s32 param_8, s32 param_9, s32 param_10);
-void func_8013DE04(GlobalContext* globalCtx, ActorUnkStruct* arg1, ActorUnkStructFunc arg2, ActorUnkStructFunc arg3, ActorUnkStructFunc arg4, ActorUnkStructFunc arg5);
-s32 func_8013DF3C(GlobalContext* globalCtx, ActorUnkStruct* arg1);
+void func_8013DCE0(GlobalContext* globalCtx, Vec3f* param_2, Actor* actor, EnDno_ActorUnkStruct* param_4, Path* param_5, s32 param_6, s32 param_7, s32 param_8, s32 param_9, s32 param_10);
+void func_8013DE04(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1, EnDno_ActorUnkFunc arg2, EnDno_ActorUnkFunc arg3, EnDno_ActorUnkFunc arg4, EnDno_ActorUnkFunc arg5);
+s32 func_8013DF3C(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1);
 // void func_8013E054(void);
 // void func_8013E07C(void);
-s32 func_8013E0A4(GlobalContext* globalCtx, ActorUnkStruct* arg1);
+s32 func_8013E0A4(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1);
 void func_8013E1C8(SkelAnime* skelAnime, struct_80B8E1A8 animations[], s32 animationIndex, s32* actorAnimationIndex);
 s32 func_8013E2D4(Actor* actor, s16 arg1, s32 arg2, s32 arg3);
 s32 func_8013E3B8(Actor* actor, s16 cutscenes[], s32 cutsceneArrayLen);

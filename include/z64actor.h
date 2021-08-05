@@ -76,10 +76,10 @@ typedef struct {
     /* 0x3A */ s16 unk3A;
 } ActorEnTest20C; // size = 0x3C
 
-struct ActorUnkStruct;
-typedef s32 (*ActorUnkStructFunc)(struct GlobalContext*, struct ActorUnkStruct*);
+struct EnDno_ActorUnkStruct;
+typedef s32 (*EnDno_ActorUnkFunc)(struct GlobalContext*, struct EnDno_ActorUnkStruct*);
 
-typedef struct ActorUnkStruct {
+typedef struct EnDno_ActorUnkStruct {
     /* 0x00 */ Vec3f unk_00;
     /* 0x0C */ UNK_TYPE1 unk_0C[0x4];
     /* 0x10 */ s16 unk_10;
@@ -95,11 +95,11 @@ typedef struct ActorUnkStruct {
     /* 0x54 */ s16 unk_54;
     /* 0x56 */ s16 unk_56;
     /* 0x58 */ s32 unk_58;
-    /* 0x5C */ ActorUnkStructFunc unk_5C;
-    /* 0x60 */ ActorUnkStructFunc unk_60;
-    /* 0x64 */ ActorUnkStructFunc unk_64;
-    /* 0x68 */ ActorUnkStructFunc unk_68;
-} ActorUnkStruct; // size = ??? at least 0x6C
+    /* 0x5C */ EnDno_ActorUnkFunc unk_5C;
+    /* 0x60 */ EnDno_ActorUnkFunc unk_60;
+    /* 0x64 */ EnDno_ActorUnkFunc unk_64;
+    /* 0x68 */ EnDno_ActorUnkFunc unk_68;
+} EnDno_ActorUnkStruct; // size >= 0x6C
 
 typedef struct {
     /* 0x00 */ s16 id;
