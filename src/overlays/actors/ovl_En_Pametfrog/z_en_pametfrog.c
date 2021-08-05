@@ -1288,7 +1288,7 @@ void EnPametfrog_ApplyDamageEffect(EnPametfrog* this, GlobalContext* globalCtx) 
         if ((this->drawEffect != GEKKO_DRAW_EFFECT_FROZEN) ||
             !(this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
             if (this->actor.params == GEKKO_PRE_SNAPPER) {
-                if (func_800BE22C(&this->actor) == 0) {
+                if (Actor_ApplyDamage(&this->actor) == 0) {
                     func_801A2ED8();
                 }
 
@@ -1321,7 +1321,7 @@ void EnPametfrog_ApplyDamageEffect(EnPametfrog* this, GlobalContext* globalCtx) 
                     }
                     EnPametfrog_SetupDamage(this);
                 }
-            } else if (func_800BE22C(&this->actor) == 0) {
+            } else if (Actor_ApplyDamage(&this->actor) == 0) {
                 this->collider.base.acFlags &= ~AC_ON;
                 EnPametfrog_ApplyMagicArrowEffects(this, globalCtx);
                 func_800BBA88(globalCtx, &this->actor);

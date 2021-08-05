@@ -11,7 +11,7 @@ void EnBigpo_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpo_UpdateFire(Actor* thisx, GlobalContext* globalCtx);
 
 void EnBigpo_InitWellBigpo(EnBigpo* this);
-void EnBigpo_SetupCutsceneWait(EnBigpo* this);
+void EnBigpo_SpawnPoCutscene(EnBigpo* this);
 void func_80B61D74(EnBigpo* this);
 void func_80B61E9C(EnBigpo* this);
 void func_80B62034(EnBigpo* this);
@@ -58,7 +58,7 @@ void EnBigpo_FireCounting(EnBigpo* this, GlobalContext* globalCtx);
 void func_80B63758(EnBigpo *this, GlobalContext *globalCtx);
 void func_80B63A18(EnBigpo* this);
 void func_80B63AC4(EnBigpo* this, GlobalContext* globalCtx);
-void func_80B63C28(EnBigpo* this);
+void EnBigpo_UpdateColor(EnBigpo* this);
 void EnBigpo_FlickerLanternLight(EnBigpo* this);
 s32 EnBigpo_CheckHit(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_SetupRevealedFireIdle(EnBigpo* this);
@@ -284,11 +284,11 @@ void EnBigpo_InitWellBigpo(EnBigpo *this) {
 
 void EnBigpo_WellWaitForProximity(EnBigpo *this, GlobalContext *globalCtx) {
     if (this->actor.xzDistToPlayer < 200.0f) {
-        EnBigpo_SetupCutsceneWait(this);
+        EnBigpo_SpawnPoCutscene(this);
     }
 }
 
-void EnBigpo_SetupCutsceneWait(EnBigpo *this) {
+void EnBigpo_SpawnPoCutscene(EnBigpo *this) {
     ActorCutscene_SetIntentToPlay(this->actor.cutscene);
     this->actionFunc = EnBigpo_WaitCutsceneQueue;
 }
@@ -917,7 +917,7 @@ void EnBigpo_FireCounting(EnBigpo *this, GlobalContext *globalCtx) {
     }
 
     if (activatedFireCount == 3) { // all fires found
-        EnBigpo_SetupCutsceneWait(this);
+        EnBigpo_SpawnPoCutscene(this);
     }
 }
 
@@ -1047,7 +1047,7 @@ void func_80B63AC4(EnBigpo *this, GlobalContext *globalCtx) {
 }
 
 // modify color
-void func_80B63C28(EnBigpo *this) {
+void EnBigpo_UpdateColor(EnBigpo *this) {
     s32 bplus5;
     s32 bminus5;
 
@@ -1100,7 +1100,7 @@ s32 EnBigpo_CheckHit(EnBigpo *this, GlobalContext *globalCtx) {
           return true;
         }
         
-        if (func_800BE22C(&this->actor) == 0) { // TODO change this to Actor_GetHealth
+        if (Actor_ApplyDamage(&this->actor) == 0) {
             this->actor.flags &= ~0x1; // targetable OFF
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_DEAD);
             func_800BBA88(globalCtx, &this->actor);
@@ -1164,8 +1164,8 @@ void EnBigpo_Update(Actor *thisx, GlobalContext *globalCtx) {
         Actor_SetHeight(&this->actor, 42.0f);
     }
 
-    func_80B63C28(this); // modifies a color
-    EnBigpo_FlickerLanternLight(this); // randomizes a second color
+    EnBigpo_UpdateColor(this); // modifies a color
+    EnBigpo_FlickerLanternLight(this);
 
     this->actor.shape.shadowAlpha = this->mainColor.a;
     thisCollider = &this->collider;
