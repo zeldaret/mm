@@ -216,8 +216,6 @@ void ObjKibako2_Kill(ObjKibako2* this, GlobalContext* globalCtx) {
     Actor_MarkForDeath(&this->dyna.actor);
 }
 
-// Still needs a lot of love
-#ifdef NON_MATCHING
 void ObjKibako2_Update(Actor* thisx, GlobalContext* globalCtx) {
     ObjKibako2* this = THIS;
 
@@ -225,22 +223,20 @@ void ObjKibako2_Update(Actor* thisx, GlobalContext* globalCtx) {
         globalCtx->actorCtx.unk5 |= 8;
     }
 
-    if (this->skulltulaNoiseTimer > 0) {
-        this->skulltulaNoiseTimer--;
-    }
-    else if (this->skulltulaNoiseTimer == 0) {
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
-        if (Rand_ZeroOne() < 0.1f) {
-            this->skulltulaNoiseTimer = Rand_S16Offset(40, 80);
+    if (this->skulltulaNoiseTimer >= 0) {
+        if (this->skulltulaNoiseTimer == 0) {
+            Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
+            if (Rand_ZeroOne() < 0.1f) {
+                this->skulltulaNoiseTimer = Rand_S16Offset(40, 80);
+            } else {
+                this->skulltulaNoiseTimer = 8;
+            }
         } else {
-            this->skulltulaNoiseTimer = 8;
+            this->skulltulaNoiseTimer--;
         }
     }
     this->actionFunc(this, globalCtx);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kibako2/ObjKibako2_Update.s")
-#endif
 
 void ObjKibako2_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_800BDFC0(globalCtx, D_06000960);
