@@ -82,7 +82,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void func_80BE61D0(EnDaiku2* this) {
-    if ((this->unk_27A != ENDAIKU2_PARAMS_1F80_MINUS1) && (this->unk_258 != 0)) {
+    if ((this->unk_27A != -1) && (this->unk_258 != 0)) {
         if (func_8013D68C(this->unk_258, this->unk_25C, &this->unk_268) == 0) {
             Actor_MarkForDeath(&this->actor);
         }
@@ -98,10 +98,10 @@ void EnDaiku2_Init(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600A850, &D_06002FA0, this->jointTable, this->morphTable, 17);
     this->actor.targetMode = 0;
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    this->unk_278 = ENDAIKU2_PARAMS_7F(&this->actor);
-    this->unk_27A = ENDAIKU2_PARAMS_1F80(&this->actor);
+    this->unk_278 = ENDAIKU2_GET_7F(&this->actor);
+    this->unk_27A = ENDAIKU2_GET_1F80(&this->actor);
     this->unk_258 = func_8013D648(globalCtx, this->unk_27A, 0x3F);
-    this->unk_280 = ENDAIKU2_PARAMS_8000(&this->actor);
+    this->unk_280 = ENDAIKU2_GET_8000(&this->actor);
     Actor_SetScale(&this->actor, 0.01f);
     if (!this->unk_280) {
         if (day == 3) {
@@ -109,8 +109,8 @@ void EnDaiku2_Init(Actor* thisx, GlobalContext* globalCtx) {
             return;
         }
 
-        if (this->unk_278 == ENDAIKU2_PARAMS_7F_127) {
-            this->unk_278 = ENDAIKU2_PARAMS_7F_MINUS1;
+        if (this->unk_278 == ENDAIKU2_GET_7F_127) {
+            this->unk_278 = ENDAIKU2_GET_7F_MINUS1;
         } else if (Flags_GetSwitch(globalCtx, this->unk_278)) {
             this->unk_25C = this->unk_258->count - 1;
             func_80BE61D0(this);
@@ -160,7 +160,7 @@ s32 func_80BE64C0(EnDaiku2* this, GlobalContext* globalCtx) {
     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
     bomb = (EnBom*)func_800BE0B8(globalCtx, &this->actor, -1, ACTORCAT_EXPLOSIVES, BREG(7) + 240.0f);
     Math_Vec3f_Copy(&this->actor.world.pos, &sp30);
-    if ((this->unk_278 >= ENDAIKU2_PARAMS_7F_0) && !Flags_GetSwitch(globalCtx, this->unk_278) && (bomb != NULL) &&
+    if ((this->unk_278 >= ENDAIKU2_GET_7F_0) && !Flags_GetSwitch(globalCtx, this->unk_278) && (bomb != NULL) &&
         (bomb->actor.id == ACTOR_EN_BOM)) {
         if (bomb->unk_1F9 == 0) {
             this->actor.textId = 0x32D3;
@@ -200,7 +200,7 @@ void func_80BE65B4(EnDaiku2* this, GlobalContext* globalCtx) {
     }
 
     this->unk_264 = 1.0f;
-    if ((this->unk_278 >= ENDAIKU2_PARAMS_7F_0) && Flags_GetSwitch(globalCtx, this->unk_278)) {
+    if ((this->unk_278 >= ENDAIKU2_GET_7F_0) && Flags_GetSwitch(globalCtx, this->unk_278)) {
         this->unk_28A = 5;
         if (this->unk_276 != 10) {
             func_80BE6408(this, 10);
@@ -223,7 +223,7 @@ void func_80BE66E4(EnDaiku2* this, GlobalContext* globalCtx) {
 
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.home.rot.y, 1, 0xBB8, 0x0);
     if (sp98 != 2) {
-        if ((this->unk_278 >= ENDAIKU2_PARAMS_7F_0) && Flags_GetSwitch(globalCtx, this->unk_278)) {
+        if ((this->unk_278 >= ENDAIKU2_GET_7F_0) && Flags_GetSwitch(globalCtx, this->unk_278)) {
             this->unk_28A = 5;
             if (this->unk_276 != 10) {
                 func_80BE6408(this, 10);
@@ -251,7 +251,7 @@ void func_80BE66E4(EnDaiku2* this, GlobalContext* globalCtx) {
             Math_Vec3f_Copy(&sp70, &this->actor.world.pos);
 
             sp70.x += Math_SinS(this->actor.world.rot.y) * 70.0f;
-            sp70.y = sp70.y + 40.0f;
+            sp70.y += 40.0f;
             sp70.z += Math_CosS(this->actor.world.rot.y) * 70.0f;
 
             sp70.x += randPlusMinusPoint5Scaled(5.0f);
@@ -303,11 +303,10 @@ void func_80BE6B40(EnDaiku2* this, GlobalContext* globalCtx) {
 }
 
 void func_80BE6BC0(EnDaiku2* this, GlobalContext* globalCtx) {
-    s32 day;
-
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0x0);
     if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
-        day = gSaveContext.day - 1;
+        s32 day = gSaveContext.day - 1;
+        
         func_801477B4(globalCtx);
 
         if (this->unk_288 == 2) {
@@ -341,9 +340,8 @@ void func_80BE6CFC(EnDaiku2* this) {
 
 void func_80BE6D40(EnDaiku2* this, GlobalContext* globalCtx) {
     s32 pad[3];
-    s16 sp3A;
+    s16 sp3A = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_268);
 
-    sp3A = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_268);
     if (func_800B84D0(&this->actor, globalCtx)) {
         this->actionFunc = func_80BE6BC0;
         return;
@@ -403,7 +401,7 @@ void func_80BE6EF0(EnDaiku2* this, GlobalContext* globalCtx) {
                     func_80BE6408(this, 3);
                 }
 
-                if ((this->unk_278 >= ENDAIKU2_PARAMS_7F_0) && Flags_GetSwitch(globalCtx, this->unk_278)) {
+                if ((this->unk_278 >= ENDAIKU2_GET_7F_0) && Flags_GetSwitch(globalCtx, this->unk_278)) {
                     this->unk_28A = 5;
                     if (this->unk_276 != 10) {
                         func_80BE6408(this, 10);
