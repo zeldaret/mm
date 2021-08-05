@@ -43,12 +43,11 @@ extern Gfx D_06000960[];
 extern CollisionHeader D_06000B70;
 extern Gfx D_06001040[];
 
-// This function is likely checking if the box contains a Skulltula
-s32 func_8098E5C0(ObjKibako2* this, GlobalContext* globalCtx) {
+s32 ObjKibako2_ContainsSkulltula(ObjKibako2* this, GlobalContext* globalCtx) {
     s32 actorSpawnParam;
     s32 flag;
 
-    actorSpawnParam = ((this->dyna.actor.params & 0x1F) << 2) | 0xFF01;
+    actorSpawnParam = KIBAKO2_SKULLTULA_SPAWN_PARAM(this);
     flag = -1;
     if ((u16) actorSpawnParam & 3) {
         flag = ((actorSpawnParam & 0x3FC) >> 2) & 0xFF;
@@ -107,15 +106,15 @@ void ObjKibako2_SpawnCollectible(ObjKibako2* this, GlobalContext* globalCtx) {
 
 void ObjKibako2_SpawnSkulltula(ObjKibako2* this, GlobalContext* globalCtx) {
     s16 yRotation;
-    s32 param;
+    s32 actorSpawnParam;
     Actor* skulltula;
 
-    if (func_8098E5C0(this, globalCtx) != 0) {
-        param = ((this->dyna.actor.params & 0x1F) << 2) | 0xFF01;
+    if (ObjKibako2_ContainsSkulltula(this, globalCtx) != 0) {
+        actorSpawnParam = KIBAKO2_SKULLTULA_SPAWN_PARAM(this);
         yRotation = ((u32) Rand_Next() >> 0x11) + this->dyna.actor.yawTowardsPlayer + 0xC000;
         skulltula = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_SW, this->dyna.actor.world.pos.x,
                                 this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, 0, yRotation, 0,
-                                param);
+                                actorSpawnParam);
         if (skulltula != NULL) {
             skulltula->parent = &this->dyna.actor;
             skulltula->velocity.y = 13.0f;
@@ -156,7 +155,7 @@ void ObjKibako2_Init(Actor* thisx, GlobalContext* globalCtx) {
             thisx->flags |= 0x10;
         }
     }
-    if ((sp24 != 1) || (func_8098E5C0(this, globalCtx) == 0)) {
+    if ((sp24 != 1) || (!ObjKibako2_ContainsSkulltula(this, globalCtx))) {
         this->skulltulaNoiseTimer = -1;
     }
     this->actionFunc = ObjKibako2_Idle;

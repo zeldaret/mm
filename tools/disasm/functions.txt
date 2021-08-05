@@ -8385,7 +8385,7 @@
     0x8098E0B8:("func_8098E0B8",),
     0x8098E15C:("ObjComb_Update",),
     0x8098E2F8:("ObjComb_Draw",),
-    0x8098E5C0:("func_8098E5C0",),
+    0x8098E5C0:("ObjKibako2_ContainsSkulltula",),
     0x8098E62C:("ObjKibako2_Break",),
     0x8098E8A8:("ObjKibako2_SpawnCollectible",),
     0x8098E900:("ObjKibako2_SpawnSkulltula",),

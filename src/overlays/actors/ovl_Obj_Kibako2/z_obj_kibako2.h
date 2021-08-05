@@ -4,6 +4,7 @@
 #include "global.h"
 
 #define GET_KIBAKO2_COLLECTIBLE_ID(x) (((x->dyna.actor.params >> 0x8) & 0x7F) << 8)
+#define KIBAKO2_SKULLTULA_SPAWN_PARAM(x) (((x->dyna.actor.params & 0x1F) << 2) | 0xFF01)
 
 struct ObjKibako2;
 
