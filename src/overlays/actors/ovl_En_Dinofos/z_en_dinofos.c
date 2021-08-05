@@ -409,7 +409,7 @@ void func_8089ACEC(EnDinofos* this, GlobalContext* globalCtx) {
         this->unk_28A = 0;
         this->colliderJntSph.base.colType = COLTYPE_HIT0;
         this->unk_2B0 = 0.0f;
-        func_800BF7CC(globalCtx, &this->actor, this->unk_2D4, 0xC, 2, 0.3f, 0.2f);
+        func_800BF7CC(globalCtx, &this->actor, this->unk_2D4, 12, 2, 0.3f, 0.2f);
         this->actor.flags |= 0x400;
     }
 }
@@ -515,9 +515,9 @@ void func_8089B288(EnDinofos* this, GlobalContext* globalCtx) {
 void func_8089B320(EnDinofos* this) {
     this->actor.gravity = -2.0f;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_RIZA_CRY);
-    this->unk_2BC.x = (Math_SinS(this->actor.shape.rot.y - 0xE00) * 86.0f) + this->actor.world.pos.x;
+    this->unk_2BC.x = (Math_SinS(this->actor.shape.rot.y - 0x0E00) * 86.0f) + this->actor.world.pos.x;
     this->unk_2BC.y = this->actor.floorHeight + 6.0f;
-    this->unk_2BC.z = (Math_CosS(this->actor.shape.rot.y - 0xE00) * 86.0f) + this->actor.world.pos.z;
+    this->unk_2BC.z = (Math_CosS(this->actor.shape.rot.y - 0x0E00) * 86.0f) + this->actor.world.pos.z;
     this->unk_290 = 0;
     this->actionFunc = func_8089B3D4;
 }
@@ -1306,7 +1306,7 @@ s32 func_8089D60C(EnDinofos* this, GlobalContext* globalCtx) {
 
         this->colliderQuad.base.atFlags &= ~(AT_ON | AT_BOUNCED);
         this->colliderJntSph.base.atFlags &= ~AT_ON;
-        if (this->actor.colChkInfo.damageEffect == 0x3) {
+        if (this->actor.colChkInfo.damageEffect == 3) {
             func_8089AC70(this);
             if (this->actor.colChkInfo.health == 0) {
                 this->unk_290 = 3;
@@ -1316,7 +1316,7 @@ s32 func_8089D60C(EnDinofos* this, GlobalContext* globalCtx) {
             return true;
         }
 
-        if (this->actor.colChkInfo.damageEffect == 0x1) {
+        if (this->actor.colChkInfo.damageEffect == 1) {
             this->unk_290 = 40;
             func_800BCB70(&this->actor, 0, 255, 0, 40);
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
@@ -1324,7 +1324,7 @@ s32 func_8089D60C(EnDinofos* this, GlobalContext* globalCtx) {
             return true;
         }
 
-        if (this->actor.colChkInfo.damageEffect == 0x5) {
+        if (this->actor.colChkInfo.damageEffect == 5) {
             this->unk_290 = 40;
             func_800BCB70(&this->actor, 0, 255, 0, 40);
             this->unk_2B4 = 0.55f;
@@ -1335,11 +1335,11 @@ s32 func_8089D60C(EnDinofos* this, GlobalContext* globalCtx) {
             return true;
         }
 
-        if (this->actor.colChkInfo.damageEffect == 0x2) {
+        if (this->actor.colChkInfo.damageEffect == 2) {
             this->unk_2B0 = 4.0f;
             this->unk_2B4 = 0.55f;
             this->unk_28A = 0;
-        } else if (this->actor.colChkInfo.damageEffect == 0x4) {
+        } else if (this->actor.colChkInfo.damageEffect == 4) {
             this->unk_2B0 = 4.0f;
             this->unk_2B4 = 0.55f;
             this->unk_28A = 20;
