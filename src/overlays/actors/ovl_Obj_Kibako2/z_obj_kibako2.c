@@ -168,7 +168,7 @@ void ObjKibako2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 s32 ObjKibako2_ShouldBreak(ObjKibako2* this) {
     u8 acFlags = this->collider.base.acFlags;
-    s32 ret = 0;
+    s32 shouldBreak = false;
 
     if ((acFlags & 2)) {
         Actor* ac = this->collider.base.ac;
@@ -177,22 +177,22 @@ s32 ObjKibako2_ShouldBreak(ObjKibako2* this) {
             if (this->collider.info.acHitInfo->toucher.dmgFlags & 1 << 31) {
                 // Powder Keg
                 if (Math3D_DistanceSquared(&this->dyna.actor.world.pos, &ac->world.pos) < SQ(160.0f)) {
-                    ret = 1;
+                    shouldBreak = true;
                 }
             } else if ((this->collider.info.acHitInfo->toucher.dmgFlags & 1 << 3)) {
                 // Explosives
                 if (Math3D_DistanceSquared(&this->dyna.actor.world.pos, &ac->world.pos) < SQ(100.0f)) {
-                    ret = 1;
+                    shouldBreak = true;
                 }
             } else if ((this->collider.info.acHitInfo->toucher.dmgFlags & (1 << 8 | 1 << 10))) {
                 // Goron Punch/Pound
-                ret = 1;
+                shouldBreak = true;
             }
         }
     } else if (this->dyna.actor.home.rot.z != 0) {
-        ret = 1;
+        shouldBreak = true;
     }
-    return ret;
+    return shouldBreak;
 }
 
 
