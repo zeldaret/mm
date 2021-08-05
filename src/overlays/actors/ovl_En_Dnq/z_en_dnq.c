@@ -17,27 +17,23 @@ void EnDnq_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80A52FB8(EnDnq* this, GlobalContext* globalCtx);
 
-extern FlexSkeletonHeader D_0600EB48;
-extern AnimationHeader D_06008328;
-extern AnimationHeader D_06008328;
-extern AnimationHeader D_06007528;
 extern AnimationHeader D_060006F0;
 extern AnimationHeader D_06000BF8;
-extern AnimationHeader D_06002690;
+extern AnimationHeader D_06001100;
+extern AnimationHeader D_06001AEC;
 extern AnimationHeader D_06002690;
 extern AnimationHeader D_06003408;
-extern AnimationHeader D_06006984;
-extern AnimationHeader D_06005E18;
-extern AnimationHeader D_06005A14;
-extern AnimationHeader D_06005284;
-extern AnimationHeader D_06001AEC;
-extern AnimationHeader D_06001100;
-extern AnimationHeader D_06004EA0;
-extern AnimationHeader D_0600F504;
+extern AnimationHeader D_06003DBC;
 extern AnimationHeader D_060047B8;
-extern AnimationHeader D_06003DBC;
+extern AnimationHeader D_06004EA0;
+extern AnimationHeader D_06005284;
 extern AnimationHeader D_06005A14;
-extern AnimationHeader D_06003DBC;
+extern AnimationHeader D_06005E18;
+extern AnimationHeader D_06006984;
+extern AnimationHeader D_06007528;
+extern AnimationHeader D_06008328;
+extern FlexSkeletonHeader D_0600EB48;
+extern AnimationHeader D_0600F504;
 
 static s32 D_80A53400[] = {
     0x00120100, 0x150E0899, 0x0C120F08, 0x9A0C0F08, 0x9B0C0F08, 0x9C0C1112, 0x01100E08, 0x980C1000, 0x00120200,
