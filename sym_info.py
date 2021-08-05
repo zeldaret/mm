@@ -46,10 +46,6 @@ def search_address(target_addr):
                 if not is_ram and (".bss" in line or ".bss" in prev_line):
                     ram_offset = None
                     continue
-                elif line.startswith("buffers"):
-                    # this section is reported as huge and tramples most overlays, ignore it
-                    ram_offset = None
-                    continue
                 ram = int(line[16 : 16 + 18], 0)
                 rom = int(line[59 : 59 + 18], 0)
                 ram_offset = ram - rom
