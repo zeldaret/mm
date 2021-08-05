@@ -7,14 +7,14 @@ struct EnDaiku;
 
 typedef void (*EnDaikuActionFunc)(struct EnDaiku*, GlobalContext*);
 
-#define ENDAIKU_FF(thisx) ((thisx)->params & 0xFF);
-#define ENDAIKU_FF00(thisx) (((thisx)->params >> 8) & 0xFF);
+#define ENDAIKU_GET_FF(thisx) ((thisx)->params & 0xFF);
+#define ENDAIKU_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF);
 
 enum {
-    /* 0x0 */ ENDAIKU_PARAMS_0,
-    /* 0x1 */ ENDAIKU_PARAMS_1,
-    /* 0x2 */ ENDAIKU_PARAMS_2,
-    /* 0x3 */ ENDAIKU_PARAMS_3,
+    /* 0x0 */ ENDAIKU_PARAMS_FF_0,
+    /* 0x1 */ ENDAIKU_PARAMS_FF_1,
+    /* 0x2 */ ENDAIKU_PARAMS_FF_2,
+    /* 0x3 */ ENDAIKU_PARAMS_FF_3,
 };
 
 typedef struct EnDaiku {
