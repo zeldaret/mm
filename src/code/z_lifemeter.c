@@ -188,35 +188,35 @@ s32 func_80100AF0(GlobalContext* globalCtx) {
 }
 
 extern TexturePtr D_02000000; // Empty heart texture
-extern TexturePtr D_02000100; // Quarter Heart texture
-extern TexturePtr D_02000200; // Half Heart texture
-extern TexturePtr D_02000300; // Three Quarter Heart texture
 extern TexturePtr D_02000400; // Full heart texture
 extern TexturePtr D_02000500; // Empty Double Defense Heart texture
-extern TexturePtr D_02000600; // Quarter Double Defense Heart texture
-extern TexturePtr D_02000700; // Half Double Defense Heart texture
-extern TexturePtr D_02000800; // Three Quarter Double Defense Heart texture
 extern TexturePtr D_02000900; // Full Double Defense Heart texture
+extern TexturePtr heartQuarterTexture; 
+extern TexturePtr heartHalfTexture; 
+extern TexturePtr heartThreeQuarterTexture; 
+extern TexturePtr ddHeartQuarterTexture; 
+extern TexturePtr ddHeartHalfTexture; 
+extern TexturePtr ddHeartThreeQuarterTexture; 
 
 TexturePtr HeartTextures[] = {
-    &D_02000400,                                                 // Full
-    &D_02000100, &D_02000100, &D_02000100, &D_02000100, &D_02000100, // Quarter
-    &D_02000200, &D_02000200, &D_02000200, &D_02000200, &D_02000200, // Half
-    &D_02000300, &D_02000300, &D_02000300, &D_02000300, &D_02000300  // Three Quarter
+    &D_02000400, // Full
+    &heartQuarterTexture, &heartQuarterTexture, &heartQuarterTexture, &heartQuarterTexture, &heartQuarterTexture,
+    &heartHalfTexture, &heartHalfTexture, &heartHalfTexture, &heartHalfTexture, &heartHalfTexture,
+    &heartThreeQuarterTexture, &heartThreeQuarterTexture, &heartThreeQuarterTexture, &heartThreeQuarterTexture, &heartThreeQuarterTexture
 };
 
 TexturePtr HeartDDTextures[] = {
-    &D_02000900,                                                 // Full
-    &D_02000600, &D_02000600, &D_02000600, &D_02000600, &D_02000600, // Quarter
-    &D_02000700, &D_02000700, &D_02000700, &D_02000700, &D_02000700, // Half
-    &D_02000800, &D_02000800, &D_02000800, &D_02000800, &D_02000800  // Three Quarter
+    &D_02000900, // Full
+    &ddHeartQuarterTexture, &ddHeartQuarterTexture, &ddHeartQuarterTexture, &ddHeartQuarterTexture, &ddHeartQuarterTexture, 
+    &ddHeartHalfTexture, &ddHeartHalfTexture, &ddHeartHalfTexture, &ddHeartHalfTexture, &ddHeartHalfTexture,
+    &ddHeartThreeQuarterTexture, &ddHeartThreeQuarterTexture, &ddHeartThreeQuarterTexture, &ddHeartThreeQuarterTexture, &ddHeartThreeQuarterTexture
 };
 
 
 
 void LifeMeter_Draw(GlobalContext* globalCtx) {
     s32 pad[5];
-    UNK_PTR heartTex;
+    TexturePtr heartTex;
     s32 curColorSet;
     f32 offsetX;
     f32 offsetY;
@@ -234,7 +234,7 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
     s32 pad2;
     f32 lifesize = interfaceCtx->lifeSizeChange * 0.1f;
     u32 curCombineModeSet = 0;
-    UNK_PTR temp = NULL;
+    TexturePtr temp = NULL;
     s32 ddCount = gSaveContext.inventory.dungeonKeys[9] - 1;
 
     OPEN_DISPS(gfxCtx);
@@ -287,11 +287,11 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
             }
 
             if (i < fullHeartCount) {
-                heartTex = D_02000400;
+                heartTex = &D_02000400;
             } else if (fullHeartCount == i) {
                 heartTex = HeartTextures[fractionHeartCount];
             } else {
-                heartTex = D_02000000;
+                heartTex = &D_02000000;
             }
         } else {
             if (i < fullHeartCount) {
@@ -327,11 +327,11 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
                 gDPSetEnvColor(OVERLAY_DISP++, sHeartsDDEnv[1][0], sHeartsDDEnv[1][1], sHeartsDDEnv[1][2], 0xFF);
             }
             if (i < fullHeartCount) {
-                heartTex = D_02000900;
+                heartTex = &D_02000900;
             } else if (fullHeartCount == i) {
                 heartTex = HeartDDTextures[fractionHeartCount];
             } else {
-                heartTex = D_02000500;
+                heartTex = &D_02000500;
             }
         }
 
