@@ -73,7 +73,7 @@ typedef struct {
     /* 0x0042 */ u8 doubleDefense;   // "life_ability"
     /* 0x0043 */ u8 unk_43;          // "ocarina_round"
     /* 0x0044 */ u8 unk_44;          // "first_memory"
-    /* 0x0046 */ u16 owlsHit;         // "memory_warp_point"
+    /* 0x0046 */ u16 owlActivationFlags;         // "memory_warp_point"
     /* 0x0048 */ u8 unk_48;          // "last_warp_pt"
     /* 0x004A */ s16 savedSceneNum;  // "scene_data_ID"
     /* 0x004C */ ItemEquips equips;

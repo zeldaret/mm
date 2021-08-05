@@ -28,7 +28,7 @@ typedef struct ObjWarpstone {
 
 extern const ActorInit Obj_Warpstone_InitVars;
 
-#define GET_OWL_ID(this) ((u16)(this->dyna.actor.params & 0xF))
-#define IS_OWL_HIT(owlId) (((void)0,gSaveContext.owlsHit) & (u16)gBitFlags[owlId])
+#define OBJ_WARPSTONE_GET_ID(this) ((u16)(this->dyna.actor.params & 0xF))
+#define OBJ_WARPSTONE_IS_HIT(owlId) (((void)0,gSaveContext.owlActivationFlags) & (u16)gBitFlags[owlId])
 
 #endif // Z_OBJ_WARPSTONE_H
