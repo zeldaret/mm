@@ -3,23 +3,23 @@
 
 #include "ultra64/thread.h"
 
-#define OS_NUM_EVENTS           15
+#define OS_NUM_EVENTS               15
 
-#define OS_EVENT_SW1            0     /* CPU SW1 interrupt */
-#define OS_EVENT_SW2            1     /* CPU SW2 interrupt */
-#define OS_EVENT_CART           2     /* Cartridge interrupt: used by rmon */
-#define OS_EVENT_COUNTER        3     /* Counter int: used by VI/Timer Mgr */
-#define OS_EVENT_SP             4     /* SP task done interrupt */
-#define OS_EVENT_SI             5     /* SI (controller) interrupt */
-#define OS_EVENT_AI             6     /* AI interrupt */
-#define OS_EVENT_VI             7     /* VI interrupt: used by VI/Timer Mgr */
-#define OS_EVENT_PI             8     /* PI interrupt: used by PI Manager */
-#define OS_EVENT_DP             9     /* DP full sync interrupt */
-#define OS_EVENT_CPU_BREAK      10    /* CPU breakpoint: used by rmon */
-#define OS_EVENT_SP_BREAK       11    /* SP breakpoint:  used by rmon */
-#define OS_EVENT_FAULT          12    /* CPU fault event: used by rmon */
-#define OS_EVENT_THREADSTATUS   13    /* CPU thread status: used by rmon */
-#define OS_EVENT_PRENMI         14    /* Pre NMI interrupt */
+#define OS_EVENT_SW1                0     /* CPU SW1 interrupt */
+#define OS_EVENT_SW2                1     /* CPU SW2 interrupt */
+#define OS_EVENT_CART               2     /* Cartridge interrupt: used by rmon */
+#define OS_EVENT_COUNTER            3     /* Counter int: used by VI/Timer Mgr */
+#define OS_EVENT_SP                 4     /* SP task done interrupt */
+#define OS_EVENT_SI                 5     /* SI (controller) interrupt */
+#define OS_EVENT_AI                 6     /* AI interrupt */
+#define OS_EVENT_VI                 7     /* VI interrupt: used by VI/Timer Mgr */
+#define OS_EVENT_PI                 8     /* PI interrupt: used by PI Manager */
+#define OS_EVENT_DP                 9     /* DP full sync interrupt */
+#define OS_EVENT_CPU_BREAK          10    /* CPU breakpoint: used by rmon */
+#define OS_EVENT_SP_BREAK           11    /* SP breakpoint:  used by rmon */
+#define OS_EVENT_FAULT              12    /* CPU fault event: used by rmon */
+#define OS_EVENT_THREADSTATUS       13    /* CPU thread status: used by rmon */
+#define OS_EVENT_PRENMI             14    /* Pre NMI interrupt */
 
 #define OS_EVENT_RDB_READ_DONE      15    /* RDB read ok event: used by rmon */
 #define OS_EVENT_RDB_LOG_DONE       16    /* read of log data complete */
@@ -33,8 +33,8 @@
 typedef void* OSMesg;
 typedef u32 OSEvent;
 
-#define OS_MESG_NOBLOCK         0
-#define OS_MESG_BLOCK           1
+#define OS_MESG_NOBLOCK  0
+#define OS_MESG_BLOCK    1
 
 typedef struct OSMesgQueue {
     /* 0x00 */ OSThread* mtQueue;
@@ -45,9 +45,9 @@ typedef struct OSMesgQueue {
     /* 0x14 */ OSMesg* msg;
 } OSMesgQueue; // size = 0x18
 
-#define MQ_COUNT(mq)        ((mq)->validCount)
+#define MQ_COUNT(mq)    ((mq)->validCount)
 
-#define MQ_IS_EMPTY(mq)		(MQ_COUNT(mq) == 0)
-#define MQ_IS_FULL(mq)		(MQ_COUNT(mq) >= (mq)->msgCount)
+#define MQ_IS_EMPTY(mq) (MQ_COUNT(mq) == 0)
+#define MQ_IS_FULL(mq)  (MQ_COUNT(mq) >= (mq)->msgCount)
 
 #endif
