@@ -180,7 +180,7 @@ s32 func_8012EC80(GlobalContext* globalCtx) {
         return ITEM_NONE;
     } else if (gSaveContext.unk_1015 == ITEM_NONE) {
         return ITEM_NONE;
-    } else if (CUR_BTN_ITEM(BTN_ITEM_B) == ITEM_NONE) {
+    } else if (CUR_FORM_EQUIP(EQUIP_SLOT_B) == ITEM_NONE) {
         if (globalCtx->interfaceCtx.unk_21C != 0) {
             if (globalCtx->interfaceCtx.unk_21E != 0) {
                 return globalCtx->interfaceCtx.unk_21E;
@@ -188,7 +188,7 @@ s32 func_8012EC80(GlobalContext* globalCtx) {
         }
         return ITEM_NONE;
     } else {
-        return CUR_BTN_ITEM(BTN_ITEM_B);
+        return CUR_FORM_EQUIP(EQUIP_SLOT_B);
     }
 }
 

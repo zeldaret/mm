@@ -56,10 +56,10 @@
 #define Z_PRIORITY_DMAMGR 17
 #define Z_PRIORITY_IRQMGR 18
 
-#define BTN_ITEM_B 0
-#define BTN_ITEM_C_LEFT 1
-#define BTN_ITEM_C_DOWN 2
-#define BTN_ITEM_C_RIGHT 3
+#define EQUIP_SLOT_B 0
+#define EQUIP_SLOT_C_LEFT 1
+#define EQUIP_SLOT_C_DOWN 2
+#define EQUIP_SLOT_C_RIGHT 3
 
 typedef struct {
     /* 0x0 */ s16 priority; // Lower means higher priority. -1 means it ignores priority

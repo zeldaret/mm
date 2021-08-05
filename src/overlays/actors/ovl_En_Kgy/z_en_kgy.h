@@ -7,8 +7,8 @@ struct EnKgy;
 
 typedef void (*EnKgyActionFunc)(struct EnKgy*, GlobalContext*);
 
-#define ENKGY_PARAMS_1F(thisx) ((thisx)->params & 0x1F)
-#define ENKGY_PARAMS_FE00(thisx) (((thisx)->params & 0xFE00) >> 9)
+#define ENKGY_GET_1F(thisx) ((thisx)->params & 0x1F)
+#define ENKGY_GET_FE00(thisx) (((thisx)->params & 0xFE00) >> 9)
 
 typedef struct EnKgy {
     /* 0x000 */ Actor actor;
@@ -16,8 +16,8 @@ typedef struct EnKgy {
     /* 0x188 */ Vec3s jointTable[23];
     /* 0x212 */ Vec3s morphTable[23];
     /* 0x29C */ u16 unk_29C;
-    /* 0x2A0 */ EnKbt* unk_2A0;
-    /* 0x2A4 */ ObjIcePoly* unk_2A4;
+    /* 0x2A0 */ EnKbt* zubora;
+    /* 0x2A4 */ ObjIcePoly* iceBlock;
     /* 0x2A8 */ Vec3f unk_2A8;
     /* 0x2B4 */ Vec3f unk_2B4;
     /* 0x2C0 */ Vec3f unk_2C0;

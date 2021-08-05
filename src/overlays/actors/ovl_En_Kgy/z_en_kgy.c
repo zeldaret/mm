@@ -17,39 +17,37 @@ void EnKgy_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKgy_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKgy_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B40D30(GlobalContext* globalCtx);
+s32 func_80B40D64(GlobalContext* globalCtx);
+s32 func_80B40DB4(GlobalContext* globalCtx);
 void func_80B419B0(EnKgy* this, GlobalContext* globalCtx);
 void func_80B41A48(EnKgy* this, GlobalContext* globalCtx);
 void func_80B41E18(EnKgy* this, GlobalContext* globalCtx);
+void func_80B42508(EnKgy* this, GlobalContext* globalCtx);
 void func_80B425A0(EnKgy* this, GlobalContext* globalCtx);
 void func_80B42714(EnKgy* this, GlobalContext* globalCtx);
 void func_80B42D28(EnKgy* this, GlobalContext* globalCtx);
-void func_80B42508(EnKgy* this, GlobalContext* globalCtx);
+void EnKgy_ChangeAnim(EnKgy* this, s16 arg1, u8 arg2, f32 arg3);
+EnKbt* EnKgy_FindZubora(GlobalContext* globalCtx);
+ObjIcePoly* EnKgy_FindIceBlock(GlobalContext* globalCtx);
 
-void func_80B40B38(EnKgy* this, s16 arg1, u8 arg2, f32 arg3);
-EnKbt* func_80B40BFC(GlobalContext* globalCtx);
-ObjIcePoly* func_80B40C38(GlobalContext* globalCtx);
-s32 func_80B40D64(GlobalContext* globalCtx);
-s32 func_80B40DB4(GlobalContext* globalCtx);
-void func_80B40D30(GlobalContext* globalCtx);
-
-extern FlexSkeletonHeader D_0600F910;
-extern AnimationHeader D_06004B98;
-extern AnimationHeader D_06004B98;
-extern AnimationHeader D_060008FC;
-extern AnimationHeader D_0600292C;
-extern AnimationHeader D_060042E4;
-extern AnimationHeader D_060101F0;
-extern AnimationHeader D_06001764;
-extern AnimationHeader D_06003334;
-extern AnimationHeader D_06010B84;
-extern AnimationHeader D_06001EA4;
-extern AnimationHeader D_06003D88;
-extern Gfx D_0600F6A0[];
-extern Gfx D_0600EE58[];
 extern Gfx D_04001D00[];
-extern Gfx D_0600F180[];
 extern Gfx D_040021A8[];
+extern AnimationHeader D_060008FC;
+extern AnimationHeader D_06001764;
+extern AnimationHeader D_06001EA4;
+extern AnimationHeader D_0600292C;
+extern AnimationHeader D_06003334;
+extern AnimationHeader D_06003D88;
+extern AnimationHeader D_060042E4;
+extern AnimationHeader D_06004B98;
 extern Gfx D_0600E8F0[];
+extern Gfx D_0600EE58[];
+extern Gfx D_0600F180[];
+extern Gfx D_0600F6A0[];
+extern FlexSkeletonHeader D_0600F910;
+extern AnimationHeader D_06010B84;
+extern AnimationHeader D_060101F0;
 
 const ActorInit En_Kgy_InitVars = {
     ACTOR_EN_KGY,
@@ -74,33 +72,33 @@ void EnKgy_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_29C = 0;
     this->unk_2E4 = 0;
     this->unk_2E2 = -1;
-    this->unk_2A0 = func_80B40BFC(globalCtx);
-    this->unk_2A4 = func_80B40C38(globalCtx);
-    Actor_UnsetSwitchFlag(globalCtx, ENKGY_PARAMS_FE00(&this->actor) + 1);
-    if (Flags_GetSwitch(globalCtx, ENKGY_PARAMS_FE00(&this->actor)) || (gSaveContext.weekEventReg[33] & 0x80)) {
-        Actor_SetSwitchFlag(globalCtx, ENKGY_PARAMS_FE00(&this->actor) + 1);
+    this->zubora = EnKgy_FindZubora(globalCtx);
+    this->iceBlock = EnKgy_FindIceBlock(globalCtx);
+    Actor_UnsetSwitchFlag(globalCtx, ENKGY_GET_FE00(&this->actor) + 1);
+    if (Flags_GetSwitch(globalCtx, ENKGY_GET_FE00(&this->actor)) || (gSaveContext.weekEventReg[33] & 0x80)) {
+        Actor_SetSwitchFlag(globalCtx, ENKGY_GET_FE00(&this->actor) + 1);
         globalCtx->envCtx.unk_C3 = 1;
         gSaveContext.weekEventReg[21] |= 1;
         if (!func_80B40D64(globalCtx)) {
-            func_80B40B38(this, 4, 0, 0);
+            EnKgy_ChangeAnim(this, 4, 0, 0);
             this->actionFunc = func_80B425A0;
             this->actor.textId = 0xC35;
         } else if (!func_80B40DB4(globalCtx)) {
-            func_80B40B38(this, 6, 2, 0);
+            EnKgy_ChangeAnim(this, 6, 2, 0);
             this->actionFunc = func_80B419B0;
             this->actor.textId = 0xC4E;
             this->unk_29C |= 1;
             this->unk_2EA = 3;
         } else {
-            func_80B40B38(this, 4, 0, 0);
+            EnKgy_ChangeAnim(this, 4, 0, 0);
             this->actionFunc = func_80B42714;
             this->actor.textId = 0xC50;
         }
     } else {
         if (gSaveContext.weekEventReg[20] & 0x80) {
-            func_80B40B38(this, 4, 0, 0);
+            EnKgy_ChangeAnim(this, 4, 0, 0);
         } else {
-            func_80B40B38(this, 0, 0, 0);
+            EnKgy_ChangeAnim(this, 0, 0, 0);
         }
         this->actionFunc = func_80B42D28;
     }
@@ -127,24 +125,24 @@ void EnKgy_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     LightContext_RemoveLight(globalCtx, &globalCtx->lightCtx, this->lightNode);
 }
 
-void func_80B40B38(EnKgy* this, s16 arg1, u8 arg2, f32 arg3) {
-    static AnimationHeader* D_80B43270[] = {
+void EnKgy_ChangeAnim(EnKgy* this, s16 animIndex, u8 mode, f32 transitionRate) {
+    static AnimationHeader* sAnimations[] = {
         &D_06004B98, &D_060008FC, &D_0600292C, &D_060042E4, &D_060101F0,
         &D_06001764, &D_06003334, &D_06010B84, &D_06001EA4, &D_06003D88,
     };
 
-    SkelAnime_ChangeAnim(&this->skelAnime, D_80B43270[arg1], 1.0f, 0.0f,
-                         SkelAnime_GetFrameCount(&D_80B43270[arg1]->common), arg2, arg3);
-    this->unk_2D2 = arg1;
+    SkelAnime_ChangeAnim(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f,
+                         SkelAnime_GetFrameCount(&sAnimations[animIndex]->common), mode, transitionRate);
+    this->unk_2D2 = animIndex;
 }
 
 void func_80B40BC0(EnKgy* this, s16 arg1) {
     if (arg1 != this->unk_2D2) {
-        func_80B40B38(this, arg1, 0, -5.0f);
+        EnKgy_ChangeAnim(this, arg1, 0, -5.0f);
     }
 }
 
-EnKbt* func_80B40BFC(GlobalContext* globalCtx) {
+EnKbt* EnKgy_FindZubora(GlobalContext* globalCtx) {
     Actor* actor = globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
 
     while (actor != NULL) {
@@ -156,7 +154,7 @@ EnKbt* func_80B40BFC(GlobalContext* globalCtx) {
     return NULL;
 }
 
-ObjIcePoly* func_80B40C38(GlobalContext* globalCtx) {
+ObjIcePoly* EnKgy_FindIceBlock(GlobalContext* globalCtx) {
     Actor* actor = globalCtx->actorCtx.actorList[ACTORCAT_ITEMACTION].first;
 
     while (actor != NULL) {
@@ -201,33 +199,33 @@ s32 func_80B40DB4(GlobalContext* globalCtx) {
     return false;
 }
 
-void func_80B40E18(EnKgy* this, u16 arg1) {
-    if (this->unk_2A0 != NULL) {
-        this->unk_2A0->actor.textId = arg1;
+void func_80B40E18(EnKgy* this, u16 textId) {
+    if (this->zubora != NULL) {
+        this->zubora->actor.textId = textId;
     }
 }
 
 void func_80B40E38(EnKgy* this) {
-    if (this->unk_2A0 != NULL) {
-        this->unk_2A0->actor.home.rot.z = 1;
+    if (this->zubora != NULL) {
+        this->zubora->actor.home.rot.z = 1;
     }
 }
 
 s32 func_80B40E54(EnKgy* this) {
-    if (this->unk_2A0 != NULL) {
-        return this->unk_2A0->actor.home.rot.z;
+    if (this->zubora != NULL) {
+        return this->zubora->actor.home.rot.z;
     }
     return 0;
 }
 
-void func_80B40E74(EnKgy* this, GlobalContext* globalCtx, u16 arg2) {
-    func_80151938(globalCtx, arg2);
-    this->actor.textId = arg2;
+void func_80B40E74(EnKgy* this, GlobalContext* globalCtx, u16 textId) {
+    func_80151938(globalCtx, textId);
+    this->actor.textId = textId;
     func_80B40E18(this, this->actor.textId);
 }
 
 void func_80B40EBC(EnKgy* this, GlobalContext* globalCtx, u16 arg2) {
-    func_80B40E74(this, globalCtx, arg2 += 1);
+    func_80B40E74(this, globalCtx, ++arg2);
 }
 
 void func_80B40EE8(EnKgy* this, GlobalContext* globalCtx) {
@@ -237,7 +235,7 @@ void func_80B40EE8(EnKgy* this, GlobalContext* globalCtx) {
         this->unk_2E4--;
         if ((this->unk_2E4 == 0) && (this->unk_2E2 >= 0)) {
             if (this->unk_2E2 == 3) {
-                func_80B40B38(this, 3, 2, -5.0f);
+                EnKgy_ChangeAnim(this, 3, 2, -5.0f);
             } else {
                 func_80B40BC0(this, this->unk_2E2);
             }
@@ -326,33 +324,33 @@ void func_80B411DC(EnKgy* this, GlobalContext* globalCtx, s32 arg2) {
             break;
 
         case 1:
-            if (this->unk_2A0 != NULL) {
-                this->unk_2B4 = this->unk_2A0->actor.focus.pos;
-                this->actor.focus.pos = this->unk_2A0->actor.focus.pos;
+            if (this->zubora != NULL) {
+                this->unk_2B4 = this->zubora->actor.focus.pos;
+                this->actor.focus.pos = this->zubora->actor.focus.pos;
             }
             this->unk_2E0 = 1;
             break;
 
         case 2:
-            if (this->unk_2A4 != NULL) {
-                this->unk_2B4 = this->unk_2A4->actor.world.pos;
-                this->actor.focus.pos = this->unk_2A4->actor.focus.pos;
+            if (this->iceBlock != NULL) {
+                this->unk_2B4 = this->iceBlock->actor.world.pos;
+                this->actor.focus.pos = this->iceBlock->actor.focus.pos;
             }
             this->unk_2E0 = 2;
             break;
 
         case 3:
             this->unk_2B4 = player->actor.world.pos;
-            if (this->unk_2A0 != NULL) {
-                this->actor.focus.pos = this->unk_2A0->actor.focus.pos;
+            if (this->zubora != NULL) {
+                this->actor.focus.pos = this->zubora->actor.focus.pos;
             }
             this->unk_2E0 = 3;
             break;
 
         case 4:
-            if (this->unk_2A0 != NULL) {
-                this->unk_2B4 = this->unk_2A0->actor.focus.pos;
-                this->actor.focus.pos = this->unk_2A0->actor.focus.pos;
+            if (this->zubora != NULL) {
+                this->unk_2B4 = this->zubora->actor.focus.pos;
+                this->actor.focus.pos = this->zubora->actor.focus.pos;
             }
             this->unk_2E0 = 4;
             break;
@@ -379,8 +377,8 @@ void func_80B413C8(EnKgy* this) {
 
 s32 func_80B41460(void) {
     if ((gSaveContext.playerForm != PLAYER_FORM_HUMAN) ||
-        ((CUR_BTN_ITEM(BTN_ITEM_B) != ITEM_SWORD_KOKIRI) && (CUR_BTN_ITEM(BTN_ITEM_B) != ITEM_SWORD_RAZOR) &&
-         (CUR_BTN_ITEM(BTN_ITEM_B) != ITEM_SWORD_GILDED))) {
+        ((CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_KOKIRI) && (CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_RAZOR) &&
+         (CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_GILDED))) {
         return 0xC38;
     }
 
@@ -392,11 +390,11 @@ s32 func_80B41460(void) {
 }
 
 s32 func_80B41528(GlobalContext* globalCtx) {
-    if (CUR_BTN_ITEM(BTN_ITEM_B) == ITEM_SWORD_GILDED) {
+    if (CUR_FORM_EQUIP(EQUIP_SLOT_B) == ITEM_SWORD_GILDED) {
         return 0xC4C;
     }
 
-    if (CUR_BTN_ITEM(BTN_ITEM_B) == ITEM_SWORD_RAZOR) {
+    if (CUR_FORM_EQUIP(EQUIP_SLOT_B) == ITEM_SWORD_RAZOR) {
         return 0xC45;
     }
 
@@ -439,14 +437,14 @@ void func_80B4163C(EnKgy* this, GlobalContext* globalCtx) {
     if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
         if (this->unk_2D2 == 6) {
             if (this->unk_2EA > 0) {
-                func_80B40B38(this, 6, 2, 0.0f);
+                EnKgy_ChangeAnim(this, 6, 2, 0.0f);
                 this->unk_2EA--;
             } else {
-                func_80B40B38(this, 9, 2, -5.0f);
+                EnKgy_ChangeAnim(this, 9, 2, -5.0f);
                 this->unk_2EA = (s32)Rand_ZeroFloat(3.0f) + 2;
             }
         } else {
-            func_80B40B38(this, 6, 2, -5.0f);
+            EnKgy_ChangeAnim(this, 6, 2, -5.0f);
         }
         SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     }
@@ -531,7 +529,7 @@ void func_80B41A48(EnKgy* this, GlobalContext* globalCtx) {
     if (this->unk_2E4 > 0) {
         this->unk_2E4--;
     } else {
-        globalCtx->nextEntranceIndex = globalCtx->setupExitList[ENKGY_PARAMS_1F(&this->actor)];
+        globalCtx->nextEntranceIndex = globalCtx->setupExitList[ENKGY_GET_1F(&this->actor)];
         globalCtx->sceneLoadFlag = 20;
     }
 }
@@ -600,7 +598,7 @@ void func_80B41C54(EnKgy* this, GlobalContext* globalCtx) {
 void func_80B41CBC(EnKgy* this, GlobalContext* globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     if (func_800B84D0(&this->actor, globalCtx)) {
-        this->actor.flags &= ~0x00010000;
+        this->actor.flags &= ~0x10000;
         func_80B40E18(this, this->actor.textId);
         this->actionFunc = func_80B41E18;
         func_80B411DC(this, globalCtx, 4);
@@ -734,8 +732,8 @@ void func_80B41E18(EnKgy* this, GlobalContext* globalCtx) {
                             globalCtx->msgCtx.unk11F10 = 0;
                             func_80B41368(this, globalCtx, 0);
                             this->actor.textId = 0xC43;
-                            CUR_BTN_ITEM(BTN_ITEM_B) = ITEM_NONE;
-                            TAKE_EQUIP(EQUIP_SWORD);
+                            CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_NONE;
+                            TAKE_EQUIPPED_ITEM(EQUIP_SWORD);
                             func_80112B40(globalCtx, 0);
                             func_80B40C74(globalCtx);
                             break;
@@ -960,11 +958,11 @@ void func_80B4296C(EnKgy* this, GlobalContext* globalCtx) {
         if (this->unk_2D2 == 4) {
             func_80B40BC0(this, 7);
         } else {
-            func_80B40B38(this, 5, 2, -5.0f);
+            EnKgy_ChangeAnim(this, 5, 2, -5.0f);
         }
         func_80B411DC(this, globalCtx, 0);
         func_80B40E18(this, this->actor.textId);
-        this->actor.flags &= ~0x00010000;
+        this->actor.flags &= ~0x10000;
     } else {
         this->actor.flags |= 0x10000;
         func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, 0);
@@ -1072,13 +1070,13 @@ void func_80B42D28(EnKgy* this, GlobalContext* globalCtx) {
         if (this->actor.textId == 0xC2D) {
             func_80B40BC0(this, 1);
         } else {
-            func_80B40B38(this, 5, 2, -5.0f);
+            EnKgy_ChangeAnim(this, 5, 2, -5.0f);
             gSaveContext.weekEventReg[20] |= 0x80;
         }
         func_80B411DC(this, globalCtx, 0);
         func_80B40E18(this, this->actor.textId);
     } else {
-        if (Flags_GetSwitch(globalCtx, ENKGY_PARAMS_FE00(&this->actor))) {
+        if (Flags_GetSwitch(globalCtx, ENKGY_GET_FE00(&this->actor))) {
             this->actor.textId = 0xC30;
             this->actionFunc = func_80B4296C;
             gSaveContext.weekEventReg[21] |= 1;
@@ -1092,7 +1090,7 @@ void func_80B42D28(EnKgy* this, GlobalContext* globalCtx) {
         }
 
         if ((this->unk_2D2 == 0) && (this->actor.xzDistToPlayer < 200.0f)) {
-            func_80B40B38(this, 8, 2, 5.0f);
+            EnKgy_ChangeAnim(this, 8, 2, 5.0f);
         }
     }
 }
@@ -1114,7 +1112,7 @@ void EnKgy_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_80B42FA0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnKgy_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnKgy* this = THIS;
 
     if (!(this->unk_29C & 1)) {
@@ -1129,10 +1127,10 @@ s32 func_80B42FA0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
         rot->x += this->unk_2CC.y;
     }
 
-    return 0;
+    return false;
 }
 
-void func_80B43008(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnKgy_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80B432D8 = { 1000.0f, 2000.0f, 0.0f };
     static Vec3f D_80B432E4 = { 3000.0f, 4000.0f, 300.0f };
 
@@ -1169,11 +1167,11 @@ void func_80B43074(EnKgy* this, GlobalContext* globalCtx) {
     gSPMatrix(gfx, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     if (func_80B40D8C(globalCtx)) {
-        gSPDisplayList(gfx + 1, D_04001D00);
-        gSPDisplayList(gfx + 2, D_0600F180);
+        gSPDisplayList(&gfx[1], D_04001D00);
+        gSPDisplayList(&gfx[2], D_0600F180);
     } else {
-        gSPDisplayList(gfx + 1, D_040021A8);
-        gSPDisplayList(gfx + 2, D_0600E8F0);
+        gSPDisplayList(&gfx[1], D_040021A8);
+        gSPDisplayList(&gfx[2], D_0600E8F0);
     }
     POLY_OPA_DISP = gfx + 3;
 
@@ -1190,5 +1188,5 @@ void EnKgy_Draw(Actor* thisx, GlobalContext* globalCtx) {
         func_80B43074(this, globalCtx);
     }
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                     func_80B42FA0, func_80B43008, &this->actor);
+                     EnKgy_OverrideLimbDraw, EnKgy_PostLimbDraw, &this->actor);
 }
