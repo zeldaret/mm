@@ -33,7 +33,7 @@ typedef struct EnBigpo {
     /* 0x20A */ s16 rotVelocity;
     // is this counting the number of frames the player is ztargeting them?
     /* 0x20C */ s16 unk20C; // ++ if enemy is attacking po?
-    /* 0x20E */ s16 cutsceneCam;
+    /* 0x20E */ s16 cutsceneSubCamId;
     /* 0x210 */ s16 switchFlags;
     /* 0x212 */ s16 hoverHeightCycleTimer; // sin wave up and down bobbing
     /* 0x214 */ f32 fireRadius; // distance from center during conjunction cutscene

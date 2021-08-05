@@ -34,7 +34,7 @@ void EnBigpo_SpawnPoCutscene7(EnBigpo* this);
 void EnBigpo_SpawnPoCutscene8(EnBigpo* this, GlobalContext* globalCtx);
 
 // unk camera func
-void func_80B619FC(EnBigpo* this, GlobalContext* globalCtx);
+void EnBigpo_LowerCutsceneSubCamera(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_WellWaitForProximity(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_WaitCutsceneQueue(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_SetupWarpOut(EnBigpo* this);
@@ -269,13 +269,13 @@ void EnBigpo_UpdateSpin(EnBigpo* this) {
 void EnBigpo_LowerCutsceneSubCamera(EnBigpo* this, GlobalContext* globalContext) {
     Camera* subCamId;
     if (this->cutsceneSubCamId != MAIN_CAM) {
-        subCamId = Play_GetCamera(globalContext, this->subCamId);
+        subCamId = Play_GetCamera(globalContext, this->cutsceneSubCamId);
         subCamId->eye.y -= this->actor.velocity.y;
         if (this->actor.velocity.y > 0.0f) {
             subCamId->eye.x -= 1.5f * Math_SinS(this->actor.yawTowardsPlayer);
             subCamId->eye.z -= 1.5f * Math_CosS(this->actor.yawTowardsPlayer);
         }
-        func_8016970C(globalContext, this->subCamId, &this->actor.focus.pos, &subCamId->eye);
+        func_8016970C(globalContext, this->cutsceneSubCamId, &this->actor.focus.pos, &subCamId->eye);
     }
 }
 
@@ -301,7 +301,7 @@ void EnBigpo_WaitCutsceneQueue(EnBigpo* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_Start(this->actor.cutscene, &this->actor);
         func_800B724C(globalCtx, &this->actor, 7);
-        this->camId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
+        this->cutsceneSubCamId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
         if (this->actor.params == ENBIGPO_REGULAR) { // and SUMMONED, got switched earlier
             EnBigpo_SpawnPoCutscene1(this, globalCtx);
         } else { // ENBIGPO_REVEALEDFIRE
@@ -329,10 +329,11 @@ void EnBigpo_SpawnPoCutscene1(EnBigpo* this, GlobalContext* globalCtx) {
 
     if (this->cutsceneSubCamId != MAIN_CAM) {
         Vec3f subCamEye;
-        subCamEye.x = F32_LERPIMP(this->actor.world.pos.x, this->fires[0].pos.x, 1.8f);
+        // not F32_LERPIMP macro, introduces float reg regalloc
+        subCamEye.x = ((this->actor.world.pos.x - this->fires[0].pos.x) * 1.8f) + this->actor.world.pos.x;
         subCamEye.y = this->actor.world.pos.y + 150.0f;
-        subCamEye.z = F32_LERPIMP(this->actor.world.pos.z, this->fires[0].pos.z, 1.8f);
-        func_8016970C(globalCtx, this->cutsceneCam, &this->actor.focus.pos, &subCamEye);
+        subCamEye.z = ((this->actor.world.pos.z - this->fires[0].pos.z) * 1.8f) + this->actor.world.pos.z;
+        func_8016970C(globalCtx, this->cutsceneSubCamId, &this->actor.focus.pos, &subCamEye);
     }
     this->actionFunc = EnBigpo_SpawnPoCutscene2;
 }
@@ -371,7 +372,7 @@ void EnBigpo_SpawnPoCutscene4(EnBigpo* this, GlobalContext* globalCtx) {
     }
 
     this->actor.world.pos.y += this->actor.velocity.y;
-    func_80B619FC(this, globalCtx);
+    EnBigpo_LowerCutsceneSubCamera(this, globalCtx);
     if (this->actor.velocity.y >= 4.0f) {
         EnBigpo_SpawnPoCutscene5(this);
     }
@@ -408,7 +409,7 @@ void EnBigpo_SpawnPoCutscene6(EnBigpo* this, GlobalContext* globalCtx) {
         this->fires[i].pos.y += this->actor.velocity.y;
     }
 
-    func_80B619FC(this, globalCtx);
+    EnBigpo_LowerCutsceneSubCamera(this, globalCtx);
     if (alphaPlus >= 0xFF) {
         this->mainColor.a = 0xFF; // fully visible
         EnBigpo_SpawnPoCutscene7(this);
@@ -436,9 +437,9 @@ void EnBigpo_SpawnPoCutscene8(EnBigpo* this, GlobalContext* globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     this->idleTimer -= 1;
     if (this->idleTimer == 0) {
-        subCamId= Play_GetCamera(globalCtx, this->camId);
+        subCamId = Play_GetCamera(globalCtx, this->cutsceneSubCamId);
         func_8016970C(globalCtx, MAIN_CAM, &subCamId->at, &subCamId->eye);
-        this->camId = MAIN_CAM;
+        this->cutsceneSubCamId = MAIN_CAM;
         if (this->actor.params == ENBIGPO_SUMMONED) {
             dampe = func_ActorCategoryIterateById(globalCtx, NULL, ACTORCAT_NPC, ACTOR_EN_TK);
             if (dampe != NULL) {
