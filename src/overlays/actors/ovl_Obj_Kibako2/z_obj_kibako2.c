@@ -131,7 +131,7 @@ void ObjKibako2_SpawnContents(ObjKibako2* this, GlobalContext* globalCtx) {
 
 void ObjKibako2_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjKibako2* this = THIS;
-    s16 tempParams;
+    s32 pad;
     ObjKibako2Contents contents;
 
     contents = KIBAKO2_CONTENTS(this);
@@ -147,8 +147,7 @@ void ObjKibako2_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->dyna.actor.world.rot.x = 0;
     this->dyna.actor.shape.rot.x = 0;
     if (contents == CONTENTS_COLLECTIBLE) {
-        tempParams = this->dyna.actor.params;
-        if (func_800A81A4(globalCtx, tempParams & 0x3F, (tempParams >> 8) & 0x7F)) {
+        if (func_800A81A4(globalCtx, this->dyna.actor.params & 0x3F, (this->dyna.actor.params >> 8) & 0x7F)) {
             this->unk_1AC = 1;
             this->dyna.actor.flags |= 0x10;
         }
