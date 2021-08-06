@@ -5,7 +5,7 @@
 
 struct ObjOshihiki;
 
-typedef void (*ObjOshihikiActionFunc)(struct ObjOshihiki* this, GlobalContext* globalCtx);
+typedef void (*ObjOshihikiActionFunc)(struct ObjOshihiki*, GlobalContext*);
 
 typedef struct ObjOshihiki {
     /* 0x0000 */ Actor actor;

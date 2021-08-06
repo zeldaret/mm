@@ -5,7 +5,7 @@
 
 struct BgOpenShutter;
 
-typedef void (*BgOpenShutterActionFunc)(struct BgOpenShutter* this, GlobalContext* globalCtx);
+typedef void (*BgOpenShutterActionFunc)(struct BgOpenShutter*, GlobalContext*);
 
 typedef struct BgOpenShutter {
     /* 0x0000 */ Actor actor;

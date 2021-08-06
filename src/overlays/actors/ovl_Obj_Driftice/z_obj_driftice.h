@@ -5,7 +5,7 @@
 
 struct ObjDriftice;
 
-typedef void (*ObjDrifticeActionFunc)(struct ObjDriftice* this, GlobalContext* globalCtx);
+typedef void (*ObjDrifticeActionFunc)(struct ObjDriftice*, GlobalContext*);
 
 typedef struct ObjDriftice {
     /* 0x0000 */ Actor actor;

@@ -5,7 +5,7 @@
 
 struct EnSnowman;
 
-typedef void (*EnSnowmanActionFunc)(struct EnSnowman* this, GlobalContext* globalCtx);
+typedef void (*EnSnowmanActionFunc)(struct EnSnowman*, GlobalContext*);
 
 typedef struct EnSnowman {
     /* 0x0000 */ Actor actor;

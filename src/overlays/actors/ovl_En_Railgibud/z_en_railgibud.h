@@ -5,7 +5,7 @@
 
 struct EnRailgibud;
 
-typedef void (*EnRailgibudActionFunc)(struct EnRailgibud* this, GlobalContext* globalCtx);
+typedef void (*EnRailgibudActionFunc)(struct EnRailgibud*, GlobalContext*);
 
 typedef struct EnRailgibud {
     /* 0x0000 */ Actor actor;

@@ -5,7 +5,7 @@
 
 struct EnThiefbird;
 
-typedef void (*EnThiefbirdActionFunc)(struct EnThiefbird* this, GlobalContext* globalCtx);
+typedef void (*EnThiefbirdActionFunc)(struct EnThiefbird*, GlobalContext*);
 
 typedef struct EnThiefbird {
     /* 0x0000 */ Actor actor;
