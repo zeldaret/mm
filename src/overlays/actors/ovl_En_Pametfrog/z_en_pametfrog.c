@@ -346,7 +346,7 @@ s32 func_8086A2CC(EnPametfrog* this, CollisionPoly* floorPoly) {
 }
 
 void EnPametfrog_ShakeCamera(EnPametfrog* this, GlobalContext* globalCtx, f32 magShakeXZ, f32 magShakeY) {
-    Camera* subCamera = Play_GetCamera(globalCtx, this->subCamId);
+    Camera* subCamera = Gameplay_GetCamera(globalCtx, this->subCamId);
     s16 subCamYaw = BINANG_ROT180(Camera_GetCamDirYaw(subCamera));
     Vec3f subCamEye;
 
@@ -360,7 +360,7 @@ void EnPametfrog_StopCutscene(EnPametfrog* this, GlobalContext* globalCtx) {
     Camera* subCamera;
 
     if (this->subCamId != SUBCAM_FREE) {
-        subCamera = Play_GetCamera(globalCtx, this->subCamId);
+        subCamera = Gameplay_GetCamera(globalCtx, this->subCamId);
         Gameplay_CameraSetAtEye(globalCtx, MAIN_CAM, &subCamera->at, &subCamera->eye);
         this->subCamId = SUBCAM_FREE;
         ActorCutscene_Stop(this->cutscene);
@@ -743,7 +743,7 @@ void EnPametfrog_ClimbDownWall(EnPametfrog* this, GlobalContext* globalCtx) {
 
     if (this->actor.bgCheckFlags & 1) {
         EnPametfrog_SetupRunToSnapper(this);
-    } else if (this->actor.floorHeight == -32000.0f) {
+    } else if (this->actor.floorHeight == BGCHECK_Y_MIN) {
         yaw = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
         this->actor.world.pos.x += 5.0f * Math_SinS(yaw);
         this->actor.world.pos.z += 5.0f * Math_CosS(yaw);
@@ -878,7 +878,7 @@ void EnPametfrog_FallInAir(EnPametfrog* this, GlobalContext* globalCtx) {
     } else {
         this->spinYaw += 0xF00;
         if (this->subCamId != SUBCAM_FREE) {
-            Gameplay_CameraSetAtEye(globalCtx, this->subCamId, &this->actor.world.pos, &Play_GetCamera(globalCtx, this->subCamId)->eye);
+            Gameplay_CameraSetAtEye(globalCtx, this->subCamId, &this->actor.world.pos, &Gameplay_GetCamera(globalCtx, this->subCamId)->eye);
         }
 
         if (this->actor.bgCheckFlags & 1) {

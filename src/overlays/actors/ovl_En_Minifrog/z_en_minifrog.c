@@ -228,22 +228,22 @@ void EnMinifrog_TurnToMissingFrog(EnMinifrog* this) {
 static Color_RGBA8 sPrimColor = { 255, 255, 255, 255 };
 static Color_RGBA8 sEnvColor = { 80, 80, 80, 255 };
 
-void EnMinifrog_SetCamera(EnMinifrog* this, GlobalContext* globalCtx) {
+void EnMinifrog_SpawnDust(EnMinifrog* this, GlobalContext* globalCtx) {
     Vec3f pos;
     Vec3f vec5;
     Vec3f vel;
     Vec3f accel;
     s16 yaw;
     s16 pitch;
-    Vec3f eye;
+    Vec3f eye = ACTIVE_CAM->eye;
     s32 i;
 
-    eye = ACTIVE_CAM->eye;
     yaw = Math_Vec3f_Yaw(&eye, &this->actor.world.pos);
     pitch = -Math_Vec3f_Pitch(&eye, &this->actor.world.pos);
     vec5.x = this->actor.world.pos.x - (5.0f * Math_SinS(yaw) * Math_CosS(pitch));
     vec5.y = this->actor.world.pos.y - (5.0f * Math_SinS(pitch));
     vec5.z = this->actor.world.pos.z - (5.0f * Math_CosS(yaw) * Math_CosS(pitch));
+
     for (i = 0; i < 5; i++) {
         vel.x = randPlusMinusPoint5Scaled(4.0f);
         vel.y = randPlusMinusPoint5Scaled(4.0f);
@@ -288,7 +288,7 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, GlobalContext* globalCtx) {
             case 0xD85: // "I understand. I shall head for the mountains immediately."
             default:
                 func_801477B4(globalCtx);
-                EnMinifrog_SetCamera(this, globalCtx);
+                EnMinifrog_SpawnDust(this, globalCtx);
                 func_800F0568(globalCtx, &this->actor.world.pos, 30, NA_SE_EN_NPC_FADEAWAY);
                 if (this->actor.cutscene != -1) {
                     if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {

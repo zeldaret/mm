@@ -6678,7 +6678,7 @@ void Camera_Destroy(Camera* camera) {
 }
 
 void Camera_Init(Camera* camera, View* view, CollisionContext* colCtx, GlobalContext* globalCtx) {
-    Camera* camP;
+    Camera* cameraPtr;
     s32 i;
     s16 curUID;
     s16 j;
@@ -6694,8 +6694,8 @@ void Camera_Init(Camera* camera, View* view, CollisionContext* colCtx, GlobalCon
         }
 
         for (j = 0; j < NUM_CAMS; j++) {
-            camP = camera->globalCtx->cameraPtrs[j];
-            if (camP != NULL && (curUID == camP->uid)) {
+            cameraPtr = camera->globalCtx->cameraPtrs[j];
+            if ((cameraPtr != NULL) && (curUID == cameraPtr->uid)) {
                 break;
             }
         }
@@ -7737,12 +7737,11 @@ s16 func_800E0238(Camera* camera) {
     }
 }
 
-void func_800E02AC(Camera* camera, Actor* actor) {
+void Camera_SetCameraToTrack(Camera* camera, Actor* actor) {
     camera->trackedActor = (Player*)actor;
     if (actor == camera->globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first) {
         Actor_GetWorldPosShapeRot(&camera->trackedActorPosRot, actor);
     } else {
-        
         Actor_GetWorld(&camera->trackedActorPosRot, &camera->trackedActor->actor);
     }
 

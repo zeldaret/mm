@@ -509,7 +509,7 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
-    Camera* camera;
+    Camera* mainCam;
     s32 pad;
 
     switch (this->cameraState) {
@@ -537,13 +537,13 @@ void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
             Gameplay_ChangeCameraStatus(globalCtx, MAIN_CAM, CAM_STAT_WAIT);
             Gameplay_ChangeCameraStatus(globalCtx, this->subCamId, CAM_STAT_ACTIVE);
             func_800B7298(globalCtx, &this->actor, 4);
-            camera = Play_GetCamera(globalCtx, MAIN_CAM);
-            this->subCamEye.x = camera->eye.x;
-            this->subCamEye.y = camera->eye.y;
-            this->subCamEye.z = camera->eye.z;
-            this->subCamAt.x = camera->at.x;
-            this->subCamAt.y = camera->at.y;
-            this->subCamAt.z = camera->at.z;
+            mainCam = Gameplay_GetCamera(globalCtx, MAIN_CAM);
+            this->subCamEye.x = mainCam->eye.x;
+            this->subCamEye.y = mainCam->eye.y;
+            this->subCamEye.z = mainCam->eye.z;
+            this->subCamAt.x = mainCam->at.x;
+            this->subCamAt.y = mainCam->at.y;
+            this->subCamAt.z = mainCam->at.z;
             // "You got 5 Bombs! Set them to [C Left], [C Down] or [C Right] on the Select Item Screen.
             // Light and place one with [C], or press [C] while running to throw it."
             func_801518B0(globalCtx, 0xF, NULL);
@@ -558,10 +558,10 @@ void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
 
             player->actor.speedXZ = 0.0f;
             if (func_80152498(&globalCtx->msgCtx) == 0) {
-                camera = Play_GetCamera(globalCtx, MAIN_CAM);
-                camera->eye = this->subCamEye;
-                camera->eyeNext = this->subCamEye;
-                camera->at = this->subCamAt;
+                mainCam = Gameplay_GetCamera(globalCtx, MAIN_CAM);
+                mainCam->eye = this->subCamEye;
+                mainCam->eyeNext = this->subCamEye;
+                mainCam->at = this->subCamAt;
                 func_80169AFC(globalCtx, this->subCamId, 0); // OoT: func_800C08AC
                 func_800EA0EC(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 6);
