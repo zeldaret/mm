@@ -246,7 +246,7 @@ void EnEncount2_UpdateParticles(EnEncount2* this, GlobalContext* globalCtx) {
             sPtr->vel.x += sPtr->accel.x;
             sPtr->vel.y += sPtr->accel.y;
             sPtr->vel.z += sPtr->accel.z;
-            
+
             if (sPtr->alphaFadeDelay != 0) {
                 sPtr->alphaFadeDelay--;
             } else {
@@ -262,7 +262,7 @@ void EnEncount2_UpdateParticles(EnEncount2* this, GlobalContext* globalCtx) {
 void EnEncount2_DrawParticles(EnEncount2* this, GlobalContext* globalCtx) {
     s16 i;
     EnEncount2Particle* sPtr;
-    GraphicsContext *gfxCtx = globalCtx->state.gfxCtx;
+    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
     sPtr = this->particles;
