@@ -1600,10 +1600,8 @@ typedef struct struct_800F0944_arg0 {
     /* 0x190 */ s8 unk191;
     /* 0x190 */ s8 unk192;
     /* 0x193 */ s8 unk193;
-    /* 0x194 */ char unk_194[0xC];
-    /* 0x1A0 */ s8 unk1A0;
-    /* 0x1A1 */ s8 unk1A1;
-    /* 0x1A2 */ char unk_1A2[0x42];
+    /* 0x194 */ ColliderCylinder collider;
+    /* 0x1E0 */ char unk_1E0[0x4];
     /* 0x1E4 */ Path* path;
     /* 0x1E8 */ s16 unk1E8;
     /* 0x1EA */ char unk_1EA[0x1C];

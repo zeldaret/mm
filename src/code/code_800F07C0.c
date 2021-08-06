@@ -136,6 +136,13 @@ s32 func_800F0FF0(struct_800F0944_arg0* arg0, f32 arg1) {
     return ret;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_800F07C0/func_800F10AC.s")
+void func_800F10AC(struct_800F0944_arg0* arg0, GlobalContext* globalCtx) {
+    arg0->collider.dim.pos.x = arg0->actor.world.pos.x;
+    arg0->collider.dim.pos.y = arg0->actor.world.pos.y;
+    arg0->collider.dim.pos.z = arg0->actor.world.pos.z;
+
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &arg0->collider.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &arg0->collider.base);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_800F07C0/func_800F112C.s")

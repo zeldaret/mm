@@ -1776,7 +1776,7 @@ s32 func_800F0E94(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, f32 grav
 s32 func_800F0EEC(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, s16 animIndex);
 s32 func_800F0F28(struct_800F0944_arg0* arg0, f32 arg1);
 s32 func_800F0FF0(struct_800F0944_arg0* arg0, f32 arg1);
-void func_800F10AC(Actor* actor, GlobalContext* globalCtx);
+void func_800F10AC(struct_800F0944_arg0* arg0, GlobalContext* globalCtx);
 // void func_800F112C(void);
 u16 func_800F1250(GlobalContext* globalCtx, UNK_TYPE arg1);
 void func_800F12D0(GlobalContext* globalCtx);
