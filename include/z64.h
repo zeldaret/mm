@@ -1603,7 +1603,8 @@ typedef struct struct_800F0944_arg0 {
     /* 0x194 */ char unk_194[0xC];
     /* 0x1A0 */ s8 unk1A0;
     /* 0x1A1 */ s8 unk1A1;
-    /* 0x1A2 */ char unk_1A2[0x46];
+    /* 0x1A2 */ char unk_1A2[0x42];
+    /* 0x1E4 */ Path* path;
     /* 0x1E8 */ s16 unk1E8;
     /* 0x1EA */ char unk_1EA[0x1C];
     /* 0x206 */ Vec3s jointTable[16];
