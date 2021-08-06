@@ -2754,10 +2754,10 @@ asm/non_matchings/code/sys_cmpdma/func_80178D7C.s,func_80178D7C,0x80178D7C,0xC
 asm/non_matchings/code/sys_cmpdma/func_80178DAC.s,func_80178DAC,0x80178DAC,0x24
 asm/non_matchings/code/sys_cmpdma/func_80178E3C.s,func_80178E3C,0x80178E3C,0x10
 asm/non_matchings/code/sys_cmpdma/func_80178E7C.s,func_80178E7C,0x80178E7C,0x2D
-asm/non_matchings/code/sys_initial_check/Check_WriteRGB5A1Pixel.s,Check_WriteRGB5A1Pixel,0x80178F30,0xC
+asm/non_matchings/code/sys_initial_check/Check_WriteRGBA16Pixel.s,Check_WriteRGBA16Pixel,0x80178F30,0xC
 asm/non_matchings/code/sys_initial_check/Check_WriteI4Pixel.s,Check_WriteI4Pixel,0x80178F60,0x10
 asm/non_matchings/code/sys_initial_check/Check_DrawI4Texture.s,Check_DrawI4Texture,0x80178FA0,0x3C
-asm/non_matchings/code/sys_initial_check/Check_ClearRGB5A1.s,Check_ClearRGB5A1,0x80179090,0x1F
+asm/non_matchings/code/sys_initial_check/Check_ClearRGBA16.s,Check_ClearRGBA16,0x80179090,0x1F
 asm/non_matchings/code/sys_initial_check/Check_DrawExpansionPakErrorMessage.s,Check_DrawExpansionPakErrorMessage,0x8017910C,0x30
 asm/non_matchings/code/sys_initial_check/Check_DrawRegionLockErrorMessage.s,Check_DrawRegionLockErrorMessage,0x801791CC,0x25
 asm/non_matchings/code/sys_initial_check/Check_ExpansionPak.s,Check_ExpansionPak,0x80179260,0x11
