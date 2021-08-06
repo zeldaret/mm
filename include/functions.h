@@ -1144,7 +1144,7 @@ s32 func_800CAF70(DynaPolyActor* actor);
 s32 func_800CAF94(DynaPolyActor* actor);
 s32 func_800CAFB8(DynaPolyActor* actor);
 s32 func_800CAFDC(DynaPolyActor* actor);
-// void func_800CB000(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5);
+s32 func_800CB000(GlobalContext* globalCtx, Actor* actor, s16 arg2, s16 arg3, s16 arg4);
 f32 Camera_fabsf(f32 f);
 f32 Camera_LengthVec3f(Vec3f* v);
 // void func_800CB270(void);
@@ -1649,7 +1649,7 @@ void func_800F048C(GlobalContext* globalCtx, Vec3f* param_2, u8 param_3, u16 par
 void func_800F0568(GlobalContext* globalCtx, Vec3f* position, s32 param_3, u16 sfxId);
 // void func_800F0590(void);
 // void func_800F05C0(void);
-// void func_800F07C0(void);
+s32 func_800F07C0(SkelAnime* skelAnime, s16 animIndex);
 // void func_800F0888(void);
 // void func_800F0944(void);
 // void func_800F09B4(void);

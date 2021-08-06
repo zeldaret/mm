@@ -1,6 +1,21 @@
 #include "global.h"
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_800F07C0/func_800F07C0.s")
+s32 func_800F07C0(SkelAnime* skelAnime, s16 animIndex) {
+    s16 frameCount;
+    s32 ret = false;
+
+    if (animIndex >= 0 && animIndex <= 20) {
+        ret = true;
+        frameCount = D_801BC2A0[animIndex].frameCount;
+        if (frameCount < 0) {
+            frameCount = SkelAnime_GetFrameCount(&D_801BC2A0[animIndex].animationSeg->common);
+        }
+        SkelAnime_ChangeAnim(skelAnime, D_801BC2A0[animIndex].animationSeg, D_801BC2A0[animIndex].playbackSpeed,
+                             D_801BC2A0[animIndex].frame, frameCount, D_801BC2A0[animIndex].mode,
+                             D_801BC2A0[animIndex].transitionRate);
+    }
+    return ret;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_800F07C0/func_800F0888.s")
 
