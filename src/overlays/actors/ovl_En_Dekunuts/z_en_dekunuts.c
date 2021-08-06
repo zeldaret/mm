@@ -145,7 +145,7 @@ void EnDekunuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (this->actor.params == ENDEKUNUTS_GET_FF00_1) {
         this->actor.flags &= ~1;
         this->collider.base.colType = COLTYPE_NONE;
-        this->collider.info.bumperFlags |= (0x40 | 0x20 | 0x10 | 0x8);
+        this->collider.info.bumperFlags |= (BUMP_NO_HITMARK | BUMP_NO_SWORD_SFX | BUMP_NO_DAMAGE | BUMP_NO_AT_INFO);
     } else if (this->actor.params == ENDEKUNUTS_GET_FF00_2) {
         this->actor.targetMode = 0;
     }
@@ -246,7 +246,7 @@ void func_808BD7D4(EnDekunuts* this, GlobalContext* globalCtx) {
             this->unk_190--;
         }
     }
-    
+
     if ((this->unk_190 == 0) ||
         ((this->actor.xzDistToPlayer < 120.0f) && Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK)) {
         func_808BDC9C(this);
