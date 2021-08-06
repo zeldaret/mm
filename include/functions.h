@@ -1655,10 +1655,10 @@ void func_800F0944(struct_800F0944_arg0 *arg0, GlobalContext* globalCtx, s16 arg
 s32 func_800F09B4(struct_800F0944_arg0 *arg0, GlobalContext* globalCtx);
 // void func_800F0A20(void);
 s32 func_800F0A94(struct_800F0944_arg0 *arg0, GlobalContext *globalCtx, FlexSkeletonHeader *arg2, s16 arg3);
-// void func_800F0BB4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5);
+void func_800F0BB4(struct_800F0944_arg0 *arg0, GlobalContext *globalCtx, Actor *arg2, s16 arg3, s16 arg4);
 // void func_800F0CE4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6);
 // void func_800F0DD4(void);
-// void func_800F0E94(void);
+s32 func_800F0E94(struct_800F0944_arg0 *arg0, GlobalContext *globalCtx, f32 gravity, s16 arg3);
 // void func_800F0EEC(void);
 // void func_800F0F28(void);
 // void func_800F0FF0(void);
