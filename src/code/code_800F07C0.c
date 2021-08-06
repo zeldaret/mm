@@ -48,7 +48,10 @@ Actor* func_800F0888(Actor* actor, GlobalContext* globalCtx) {
     return nearestDoor;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_800F07C0/func_800F0944.s")
+void func_800F0944(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, s16 arg2) {
+    gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[arg0->unk193].segment);
+    func_800F07C0(&arg0->skelAnime, arg2);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_800F07C0/func_800F09B4.s")
 

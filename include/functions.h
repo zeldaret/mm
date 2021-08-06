@@ -1651,7 +1651,7 @@ void func_800F0568(GlobalContext* globalCtx, Vec3f* position, s32 param_3, u16 s
 // void func_800F05C0(void);
 s32 func_800F07C0(SkelAnime* skelAnime, s16 animIndex);
 Actor* func_800F0888(Actor* actor, GlobalContext* globalCtx);
-// void func_800F0944(void);
+void func_800F0944(struct_800F0944_arg0 *arg0, GlobalContext* globalCtx, s16 arg2);
 // void func_800F09B4(void);
 // void func_800F0A20(void);
 // void func_800F0A94(void);
@@ -1662,7 +1662,7 @@ Actor* func_800F0888(Actor* actor, GlobalContext* globalCtx);
 // void func_800F0EEC(void);
 // void func_800F0F28(void);
 // void func_800F0FF0(void);
-// void func_800F10AC(void);
+void func_800F10AC(Actor* actor, GlobalContext* globalCtx);
 // void func_800F112C(void);
 u16 func_800F1250(GlobalContext* globalCtx, UNK_TYPE arg1);
 void func_800F12D0(GlobalContext* globalCtx);

@@ -1592,6 +1592,14 @@ typedef struct {
     /* 0x24 */ s16 unk_24;
 } struct_800BD888_arg1; // size = 0x28
 
+typedef struct struct_800F0944_arg0 {
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ char unk_144[0x8];
+    /* 0x14C */ SkelAnime skelAnime;
+    /* 0x190 */ char unk_190[0x3];
+    /* 0x193 */ s8 unk193;
+} struct_800F0944_arg0;
+
 typedef struct {
     /* 0x0 */ u8 unk0;
     /* 0x4 */ s32 unk4;
