@@ -13,7 +13,7 @@ typedef void (*EnDgActionFunc)(struct EnDg*, GlobalContext*);
 typedef struct EnDg {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnDgActionFunc actionFunc;
-    /* 0x148 */ char unk_148[0x4];
+    /* 0x148 */ UNK_TYPE1 unk_148[0x4];
     /* 0x14C */ SkelAnime skelAnime;
     /* 0x190 */ ColliderCylinder collider;
     /* 0x1DC */ Path* unk_1DC;
