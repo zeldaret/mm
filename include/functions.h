@@ -1650,7 +1650,7 @@ void func_800F0568(GlobalContext* globalCtx, Vec3f* position, s32 param_3, u16 s
 // void func_800F0590(void);
 // void func_800F05C0(void);
 s32 func_800F07C0(SkelAnime* skelAnime, s16 animIndex);
-// void func_800F0888(void);
+Actor* func_800F0888(Actor* actor, GlobalContext* globalCtx);
 // void func_800F0944(void);
 // void func_800F09B4(void);
 // void func_800F0A20(void);

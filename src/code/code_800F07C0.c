@@ -17,7 +17,36 @@ s32 func_800F07C0(SkelAnime* skelAnime, s16 animIndex) {
     return ret;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_800F07C0/func_800F0888.s")
+// FindNearestDoor
+Actor* func_800F0888(Actor* actor, GlobalContext* globalCtx) {
+    Actor* doorIter;
+    Actor* door;
+    f32 dist;
+    s32 haveFound;
+    f32 minDist;
+    Actor* nearestDoor;
+
+    nearestDoor = NULL;
+    doorIter = NULL;
+    haveFound = false;
+    minDist = 0.0f;
+
+    do {
+        do {
+            doorIter = func_ActorCategoryIterateById(globalCtx, doorIter, ACTORCAT_DOOR, ACTOR_EN_DOOR);
+            door = doorIter;
+            dist = Actor_DistanceBetweenActors(actor, door);
+            if (!haveFound || (dist < minDist)) {
+                nearestDoor = door;
+                minDist = dist;
+                haveFound = true;
+            }
+            doorIter = door->next;
+        } while (doorIter != NULL);
+    } while (0);
+
+    return nearestDoor;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_800F07C0/func_800F0944.s")
 
