@@ -53,7 +53,16 @@ void func_800F0944(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, s16 arg
     func_800F07C0(&arg0->skelAnime, arg2);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_800F07C0/func_800F09B4.s")
+s32 func_800F09B4(struct_800F0944_arg0* arg0, GlobalContext* globalCtx) {
+    s32 ret = false;
+
+    if (arg0->actor.draw != NULL) {
+        gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[arg0->unk193].segment);
+        SkelAnime_FrameUpdateMatrix(&arg0->skelAnime);
+        ret = true;
+    }
+    return ret;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_800F07C0/func_800F0A20.s")
 
