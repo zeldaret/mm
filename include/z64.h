@@ -1611,6 +1611,9 @@ typedef struct struct_800F0944_arg0 {
     /* 0x205 */ u8 unk205;
     /* 0x206 */ Vec3s jointTable[16];
     /* 0x266 */ Vec3s morphTable[16];
+    /* 0x2C6 */ char unk_2C6[0x120];
+    /* 0x3E6 */ s16 unk3E6;
+    /* 0x3E8 */ s16 unk3E8;
 } struct_800F0944_arg0;
 
 typedef struct {

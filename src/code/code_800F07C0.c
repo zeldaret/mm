@@ -64,7 +64,15 @@ s32 func_800F09B4(struct_800F0944_arg0* arg0, GlobalContext* globalCtx) {
     return ret;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_800F07C0/func_800F0A20.s")
+void func_800F0A20(struct_800F0944_arg0 *arg0, s32 arg1) {
+    if (DECR(arg0->unk3E8) == 0) {
+        arg0->unk3E6 += 1;
+        if (arg0->unk3E6 >= arg1) {
+            arg0->unk3E6 = 0;
+            arg0->unk3E8 = Rand_S16Offset(30, 30);
+        }
+    }
+}
 
 s32 func_800F0A94(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, FlexSkeletonHeader* skeletonHeaderSeg,
                   s16 animIndex) {

@@ -1766,7 +1766,7 @@ s32 func_800F07C0(SkelAnime* skelAnime, s16 animIndex);
 Actor* func_800F0888(Actor* actor, GlobalContext* globalCtx);
 void func_800F0944(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, s16 animIndex);
 s32 func_800F09B4(struct_800F0944_arg0* arg0, GlobalContext* globalCtx);
-// void func_800F0A20(void);
+void func_800F0A20(struct_800F0944_arg0* arg0, s32 arg1);
 s32 func_800F0A94(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, FlexSkeletonHeader* skeletonHeaderSeg,
                   s16 animIndex);
 void func_800F0BB4(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, Actor* arg2, s16 arg3, s16 arg4);
