@@ -1777,7 +1777,7 @@ s32 func_800F0EEC(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, s16 anim
 s32 func_800F0F28(struct_800F0944_arg0* arg0, f32 arg1);
 s32 func_800F0FF0(struct_800F0944_arg0* arg0, f32 arg1);
 void func_800F10AC(struct_800F0944_arg0* arg0, GlobalContext* globalCtx);
-// void func_800F112C(void);
+s32 func_800F112C(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, f32 arg2);
 u16 func_800F1250(GlobalContext* globalCtx, UNK_TYPE arg1);
 void func_800F12D0(GlobalContext* globalCtx);
 void func_800F1304(GlobalContext* globalCtx, s16 param_2);
@@ -2884,7 +2884,7 @@ s32 func_8013D8DC(s8 arg0, GlobalContext* globalCtx);
 Actor* func_ActorCategoryIterateById(GlobalContext* globalCtx, struct Actor* actorListStart, s32 actorCategory,
                                      s32 actorId);
 void func_8013D9C8(GlobalContext* globalCtx, s16* arg1, s16* arg2, UNK_TYPE arg3);
-u8 func_8013DB90(GlobalContext* globalCtx, UNK_PTR arg1, f32 arg2);
+u8 func_8013DB90(GlobalContext* globalCtx, Vec3f* arg1, f32 arg2);
 // void func_8013DC40(void);
 // void func_8013DCE0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
 // UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE1 param_10); void

@@ -1604,7 +1604,11 @@ typedef struct struct_800F0944_arg0 {
     /* 0x1E0 */ char unk_1E0[0x4];
     /* 0x1E4 */ Path* path;
     /* 0x1E8 */ s16 unk1E8;
-    /* 0x1EA */ char unk_1EA[0x1C];
+    /* 0x1EA */ char unk_1EA[0x2];
+    /* 0x1EC */ Vec3f unk1EC;
+    /* 0x1F8 */ Vec3f unk1F8;
+    /* 0x204 */ u8 unk204;
+    /* 0x205 */ u8 unk205;
     /* 0x206 */ Vec3s jointTable[16];
     /* 0x266 */ Vec3s morphTable[16];
 } struct_800F0944_arg0;

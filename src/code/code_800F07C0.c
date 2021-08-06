@@ -145,4 +145,27 @@ void func_800F10AC(struct_800F0944_arg0* arg0, GlobalContext* globalCtx) {
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &arg0->collider.base);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_800F07C0/func_800F112C.s")
+s32 func_800F112C(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, f32 arg2) {
+    u8 prevUnk204 = arg0->unk204;
+    u8 prevUnk205 = arg0->unk205;
+    s32 pad;
+    u16 sound;
+    u8 tmp;
+
+    if (arg0->actor.bgCheckFlags & 0x20) {
+        sound = ((arg0->actor.yDistToWater < 20.0f) ? (NA_SE_PL_WALK_WATER0 - SFX_FLAG)
+                                                    : (NA_SE_PL_WALK_WATER1 - SFX_FLAG)) +
+                SFX_FLAG;
+    } else {
+        sound = func_800C9BDC(&globalCtx->colCtx, arg0->actor.floorPoly, arg0->actor.floorBgId) + SFX_FLAG;
+    }
+    arg0->unk204 = tmp = func_8013DB90(globalCtx, &arg0->unk1EC, arg2);
+    if (arg0->unk204 != 0 && prevUnk204 == 0 && tmp != 0) {
+        Audio_PlayActorSound2(&arg0->actor, sound);
+    }
+    arg0->unk205 = tmp = func_8013DB90(globalCtx, &arg0->unk1F8, arg2);
+    if (arg0->unk205 != 0 && prevUnk205 == 0 && tmp != 0) {
+        Audio_PlayActorSound2(&arg0->actor, sound);
+    }
+    return 0;
+}
