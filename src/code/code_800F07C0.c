@@ -48,9 +48,9 @@ Actor* func_800F0888(Actor* actor, GlobalContext* globalCtx) {
     return nearestDoor;
 }
 
-void func_800F0944(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, s16 arg2) {
+void func_800F0944(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, s16 animIndex) {
     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[arg0->unk193].segment);
-    func_800F07C0(&arg0->skelAnime, arg2);
+    func_800F07C0(&arg0->skelAnime, animIndex);
 }
 
 s32 func_800F09B4(struct_800F0944_arg0* arg0, GlobalContext* globalCtx) {
@@ -66,7 +66,21 @@ s32 func_800F09B4(struct_800F0944_arg0* arg0, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_800F07C0/func_800F0A20.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_800F07C0/func_800F0A94.s")
+s32 func_800F0A94(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, FlexSkeletonHeader* skeletonHeaderSeg,
+                  s16 animIndex) {
+    s32 ret = 0;
+
+    if ((func_8013D8DC(arg0->unk193, globalCtx) == 1) && (func_8013D8DC(arg0->unk190, globalCtx) == 1) &&
+        (func_8013D8DC(arg0->unk191, globalCtx) == 1) && (func_8013D8DC(arg0->unk192, globalCtx) == 1)) {
+        arg0->actor.objBankIndex = arg0->unk192;
+        ret = 1;
+        ActorShape_Init(&arg0->actor.shape, 0.0f, NULL, 0.0f);
+        gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[arg0->actor.objBankIndex].segment);
+        SkelAnime_InitSV(globalCtx, &arg0->skelAnime, skeletonHeaderSeg, NULL, arg0->jointTable, arg0->morphTable, 16);
+        func_800F0944(arg0, globalCtx, animIndex);
+    }
+    return ret;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_800F07C0/func_800F0BB4.s")
 

@@ -1596,8 +1596,13 @@ typedef struct struct_800F0944_arg0 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ char unk_144[0x8];
     /* 0x14C */ SkelAnime skelAnime;
-    /* 0x190 */ char unk_190[0x3];
+    /* 0x190 */ s8 unk190;
+    /* 0x190 */ s8 unk191;
+    /* 0x190 */ s8 unk192;
     /* 0x193 */ s8 unk193;
+    /* 0x194 */ char unk_194[0x72];
+    /* 0x206 */ Vec3s jointTable[16];
+    /* 0x266 */ Vec3s morphTable[16];
 } struct_800F0944_arg0;
 
 typedef struct {
