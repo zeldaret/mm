@@ -414,7 +414,7 @@ void EffectSsDFire_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, 
     initParams.alpha = alpha;
     initParams.fadeDelay = fadeDelay;
     initParams.life = life;
-    initParams.unk_2C = arg9;
+    initParams.unk_30 = arg9;
 
     EffectSs_Spawn(globalCtx, EFFECT_SS_D_FIRE, 128, &initParams);
 }
