@@ -7,7 +7,7 @@
 #define CAM_STAT_WAIT       1
 #define CAM_STAT_UNK3       3
 #define CAM_STAT_ACTIVE     7
-#define CAM_STAT_UNK100     0x100
+#define CAM_STAT_DISABLED   0x100
 
 #define NUM_CAMS 4
 #define MAIN_CAM 0
@@ -824,7 +824,7 @@ typedef struct Camera {
     /* 0x104 */ f32 playerGroundY;
     /* 0x108 */ Vec3f floorNorm;
     /* 0x114 */ f32 waterYPos;
-    /* 0x118 */ s32 waterPrevCamIdx;
+    /* 0x118 */ s32 waterPrevCamIdx; // TODO: waterPrevCamDataIdx
     /* 0x11C */ s32 waterPrevCamSetting;
     /* 0x120 */ s16 waterQuakeId;
     /* 0x122 */ s16 unk122;
@@ -854,7 +854,7 @@ typedef struct Camera {
     /* 0x15E */ s16 animState;
     /* 0x160 */ s16 unk160;
     /* 0x162 */ s16 timer;
-    /* 0x164 */ s16 thisIdx;
+    /* 0x164 */ s16 camId;
     /* 0x166 */ s16 prevCamDataIdx;
     /* 0x168 */ s16 unk168;
     /* 0x16C */ Vec3f meshActorPos;

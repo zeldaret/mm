@@ -533,17 +533,19 @@ void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
             break;
         case 1:
             func_800EA0D4(globalCtx, &globalCtx->csCtx);
-            this->camId = func_801694DC(globalCtx);
-            func_80169590(globalCtx, 0, 1);
-            func_80169590(globalCtx, this->camId, 7);
+            this->subCamId = Gameplay_CreateSubCamera(globalCtx);
+            Gameplay_ChangeCameraStatus(globalCtx, MAIN_CAM, CAM_STAT_WAIT);
+            Gameplay_ChangeCameraStatus(globalCtx, this->subCamId, CAM_STAT_ACTIVE);
             func_800B7298(globalCtx, &this->actor, 4);
-            camera = Play_GetCamera(globalCtx, 0);
-            this->eye.x = camera->eye.x;
-            this->eye.y = camera->eye.y;
-            this->eye.z = camera->eye.z;
-            this->at.x = camera->at.x;
-            this->at.y = camera->at.y;
-            this->at.z = camera->at.z;
+            camera = Play_GetCamera(globalCtx, MAIN_CAM);
+            this->subCamEye.x = camera->eye.x;
+            this->subCamEye.y = camera->eye.y;
+            this->subCamEye.z = camera->eye.z;
+            this->subCamAt.x = camera->at.x;
+            this->subCamAt.y = camera->at.y;
+            this->subCamAt.z = camera->at.z;
+            // "You got 5 Bombs! Set them to [C Left], [C Down] or [C Right] on the Select Item Screen.
+            // Light and place one with [C], or press [C] while running to throw it."
             func_801518B0(globalCtx, 0xF, NULL);
             this->cameraState = 2;
             func_8019FDC8(&D_801DB4A4, NA_SE_VO_NA_LISTEN, 0x20);
@@ -556,22 +558,22 @@ void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
 
             player->actor.speedXZ = 0.0f;
             if (func_80152498(&globalCtx->msgCtx) == 0) {
-                camera = Play_GetCamera(globalCtx, 0);
-                camera->eye = this->eye;
-                camera->eyeNext = this->eye;
-                camera->at = this->at;
-                func_80169AFC(globalCtx, this->camId, 0);
+                camera = Play_GetCamera(globalCtx, MAIN_CAM);
+                camera->eye = this->subCamEye;
+                camera->eyeNext = this->subCamEye;
+                camera->at = this->subCamAt;
+                func_80169AFC(globalCtx, this->subCamId, 0); // OoT: func_800C08AC
                 func_800EA0EC(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 6);
                 this->cameraState = 0;
-                this->camId = 0;
+                this->subCamId = SUBCAM_FREE;
                 this->activeTimer = 20;
             }
             break;
     }
 
-    if (this->camId != 0) {
-        func_8016970C(globalCtx, this->camId, &this->at, &this->eye);
+    if (this->subCamId != SUBCAM_FREE) {
+        Gameplay_CameraSetAtEye(globalCtx, this->subCamId, &this->subCamAt, &this->subCamEye);
     }
 }
 

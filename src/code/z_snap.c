@@ -114,12 +114,10 @@ s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, 
     s16 y;
     f32 distance;
     CollisionPoly* unk1;
-    Camera* camera;
+    Camera* camera = ACTIVE_CAM;
     Actor* actors[2];
     s32 ret = 0;
     u32 unk2;
-
-    camera = ACTIVE_CAM;
 
     distance = OLib_Vec3fDist(pos, &camera->eye);
     if ((distance < distanceMin) || (distanceMax < distance)) {

@@ -74,19 +74,19 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169474.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_801694DC.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Gameplay_CreateSubCamera.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_GetActiveCameraIndex.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169590.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Gameplay_ChangeCameraStatus.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169600.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Gameplay_ClearCamera.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169668.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_GetCamera.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_8016970C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Gameplay_CameraSetAtEye.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_8016981C.s")
 

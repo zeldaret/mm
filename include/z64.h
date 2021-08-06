@@ -1112,7 +1112,7 @@ typedef struct {
     /* 0x1A */ s16 speed;
     /* 0x1C */ s16 isShakePerpendicular;
     /* 0x1E */ s16 countdown;
-    /* 0x20 */ s16 cameraPtrsIdx;
+    /* 0x20 */ s16 camId;
 } QuakeRequest; // size = 0x24
 
 typedef struct {

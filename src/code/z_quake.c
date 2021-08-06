@@ -137,7 +137,7 @@ QuakeRequest* Quake_AddImpl(Camera* camera, u32 callbackIdx) {
 
     __osMemset(req, 0, sizeof(QuakeRequest));
     req->camera = camera;
-    req->cameraPtrsIdx = camera->thisIdx;
+    req->camId = camera->camId;
     req->callbackIdx = callbackIdx;
     req->isShakePerpendicular = true;
     req->randIdx = ((s16)(Rand_ZeroOne() * (f32)0x10000) & ~3) + idx;
@@ -326,10 +326,10 @@ s16 Quake_Calc(Camera* camera, QuakeCamCalc* camData) {
     for (idx = 0; idx < ARRAY_COUNT(sQuakeRequest); idx++) {
         req = &sQuakeRequest[idx];
         if (req->callbackIdx != 0) {
-            if (globalCtx->cameraPtrs[req->cameraPtrsIdx] == NULL) {
+            if (globalCtx->cameraPtrs[req->camId] == NULL) {
                 Quake_Remove(req);
             } else {
-                eq = (camera->thisIdx != req->camera->thisIdx);
+                eq = (camera->camId != req->camera->camId);
                 absSpeedDiv = ABS(req->speed) / (f32)0x8000;
                 if (sQuakeCallbacks[req->callbackIdx](req, &shake) == 0) {
                     Quake_Remove(req);
@@ -607,7 +607,7 @@ void Quake2_Update(void) {
             player = PLAYER;
 
             if (&player->actor != NULL) {
-                func_800B8248(&playerPosRot, &player->actor);
+                Actor_GetWorldPosShapeRot(&playerPosRot, &player->actor);
             }
 
             angle1Speed = 359.2f;
