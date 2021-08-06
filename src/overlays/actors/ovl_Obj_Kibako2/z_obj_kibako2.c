@@ -31,8 +31,22 @@ const ActorInit Obj_Kibako2_InitVars = {
 };
 
 static ColliderCylinderInit sCylinderInit = {
-    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_2, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x80000508, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_NONE,
+        OC2_TYPE_2,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0x80000508, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_NONE,
+    },
     { 31, 48, 0, { 0, 0, 0 } },
 };
 
@@ -53,7 +67,7 @@ s32 ObjKibako2_ContainsSkulltula(ObjKibako2* this, GlobalContext* globalCtx) {
 
     actorSpawnParam = KIBAKO2_SKULLTULA_SPAWN_PARAM(&this->dyna.actor);
     flag = -1;
-    if ((u16) actorSpawnParam & 3) {
+    if ((u16)actorSpawnParam & 3) {
         flag = ((actorSpawnParam & 0x3FC) >> 2) & 0xFF;
     }
     return !((flag >= 0) && Actor_GetChestFlag(globalCtx, flag));
@@ -93,18 +107,18 @@ void ObjKibako2_Break(ObjKibako2* this, GlobalContext* globalCtx) {
             phi_s0 = 0x20;
         }
         EffectSsKakera_Spawn(globalCtx, &pos, &velocity, &pos, -200, phi_s0, 28, 2, 0, (Rand_ZeroOne() * 30.0f) + 5.0f,
-                            0, 0, 70, KAKERA_COLOR_NONE, OBJECT_KIBAKO2, D_06001040);
+                             0, 0, 70, KAKERA_COLOR_NONE, OBJECT_KIBAKO2, D_06001040);
     }
     func_800BBFB0(globalCtx, thisPos, 90.0f, 6, 100, 160, 1);
 }
-
 
 void ObjKibako2_SpawnCollectible(ObjKibako2* this, GlobalContext* globalCtx) {
     s32 collectible;
 
     collectible = func_800A8150(KIBAKO2_COLLECTIBLE_ID(&this->dyna.actor));
     if (collectible >= 0) {
-        Item_DropCollectible(globalCtx, &this->dyna.actor.world.pos, collectible | KIBAKO2_COLLECTIBLE_FLAG(&this->dyna.actor) << 8);
+        Item_DropCollectible(globalCtx, &this->dyna.actor.world.pos,
+                             collectible | KIBAKO2_COLLECTIBLE_FLAG(&this->dyna.actor) << 8);
     }
 }
 
@@ -115,10 +129,10 @@ void ObjKibako2_SpawnSkulltula(ObjKibako2* this, GlobalContext* globalCtx) {
 
     if (ObjKibako2_ContainsSkulltula(this, globalCtx)) {
         actorSpawnParam = KIBAKO2_SKULLTULA_SPAWN_PARAM(&this->dyna.actor);
-        yRotation = ((u32) Rand_Next() >> 0x11) + this->dyna.actor.yawTowardsPlayer + 0xC000;
-        skulltula = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_SW, this->dyna.actor.world.pos.x,
-                                this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, 0, yRotation, 0,
-                                actorSpawnParam);
+        yRotation = ((u32)Rand_Next() >> 0x11) + this->dyna.actor.yawTowardsPlayer + 0xC000;
+        skulltula =
+            Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_SW, this->dyna.actor.world.pos.x,
+                        this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, 0, yRotation, 0, actorSpawnParam);
         if (skulltula != NULL) {
             skulltula->parent = &this->dyna.actor;
             skulltula->velocity.y = 13.0f;
@@ -153,7 +167,8 @@ void ObjKibako2_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->dyna.actor.world.rot.x = 0;
     this->dyna.actor.shape.rot.x = 0;
     if (contents == CONTENTS_COLLECTIBLE) {
-        if (func_800A81A4(globalCtx, KIBAKO2_COLLECTIBLE_ID(&this->dyna.actor), KIBAKO2_COLLECTIBLE_FLAG(&this->dyna.actor))) {
+        if (func_800A81A4(globalCtx, KIBAKO2_COLLECTIBLE_ID(&this->dyna.actor),
+                          KIBAKO2_COLLECTIBLE_FLAG(&this->dyna.actor))) {
             this->unk_1AC = 1;
             this->dyna.actor.flags |= 0x10;
         }
@@ -199,7 +214,6 @@ s32 ObjKibako2_ShouldBreak(ObjKibako2* this) {
     }
     return shouldBreak;
 }
-
 
 void ObjKibako2_Idle(ObjKibako2* this, GlobalContext* globalCtx) {
     if (ObjKibako2_ShouldBreak(this)) {
