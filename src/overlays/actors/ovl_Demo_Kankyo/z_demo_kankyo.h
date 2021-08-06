@@ -8,21 +8,21 @@ struct DemoKankyo;
 typedef void (*DemoKankyoActionFunc)(struct DemoKankyo*, GlobalContext*);
 
 typedef struct {
-  /* 0x000 */ u8 unk_00;
+  /* 0x000 */ u8 state;
   /* 0x004 */ Vec3f unk_04;
   /* 0x010 */ Vec3f unk_10;
   /* 0x01C */ Vec3f unk_1C;
   /* 0x028 */ Vec3f unk_28;
-  /* 0x034 */ f32 unk_34;
+  /* 0x034 */ f32 unk_34; // modifier, speed?
   /* 0x038 */ f32 unk_38;
   /* 0x03C */ u16 unk_3C;
   /* 0x03E */ u16 unk_3E;
-  /* 0x040 */ u8 unk_40;
+  /* 0x040 */ u8 alpha;
   /* 0x044 */ f32 unk_44;
   /* 0x048 */ u16 unk_48;
   /* 0x04A */ u16 unk_4A;
   /* 0x04C */ f32 unk_4C;
-  /* 0x050 */ u16 unk_50;
+  /* 0x050 */ u16 pad50; // seems unused
   /* 0x052 */ UNK_TYPE1 unk52[0x2];
 } DemoKankyoParticle; // size = 0x54
 
@@ -30,11 +30,18 @@ typedef struct {
 
 typedef struct DemoKankyo {
     /* 0x0000 */ Actor actor;
-    /* 0x0144 */ DemoKankyoParticle particles[64];
+    /* 0x0144 */ DemoKankyoParticle particles[DEMOKANKYO_PARTICLE_COUNT];
     /* 0x1644 */ DemoKankyoActionFunc actionFunc;
-    /* 0x1648 */ s32 unk_1648;
-    /* 0x164C */ u8 unk_164C;
+    /* 0x1648 */ s32 objectId;
+    /* 0x164C */ u8 isSafeToDrawGiants;
 } DemoKankyo; // size = 0x1650
+
+typedef enum {
+    /* 0 */ DEMO_KANKYO_TYPE_LOSTWOODS,
+    /* 1 */ DEMO_KANKYO_TYPE_GIANTS,
+    /* 2 */ DEMO_KANKYO_TYPE_MOON,
+    /* 3 */ DEMO_KANKYO_TYPE_UNK3,
+} DemoKankyoType;
 
 extern const ActorInit Demo_Kankyo_InitVars;
 
