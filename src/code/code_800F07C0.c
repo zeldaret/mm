@@ -96,7 +96,11 @@ s32 func_800F0E94(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, f32 grav
     return 0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_800F07C0/func_800F0EEC.s")
+s32 func_800F0EEC(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, s16 animIndex) {
+    func_800F0944(arg0, globalCtx, animIndex);
+    arg0->unk1E8--;
+    return 0;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_800F07C0/func_800F0F28.s")
 
