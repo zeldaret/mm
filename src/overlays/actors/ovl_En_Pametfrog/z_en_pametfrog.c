@@ -569,7 +569,7 @@ void EnPametfrog_JumpToWall(EnPametfrog* this, GlobalContext* globalCtx) {
         (COLPOLY_GET_NORMAL(this->actor.wallPoly->normal.y) < 0.5f)) {
         EnPametfrog_SetupWallCrawl(this);
     } else if (!(this->actor.bgCheckFlags & 1) ||
-               (this->skelAnime.animCurrentFrame > 1.0f) && (this->skelAnime.animCurrentFrame < 12.0f)) {
+               ((this->skelAnime.animCurrentFrame > 1.0f) && (this->skelAnime.animCurrentFrame < 12.0f))) {
         this->actor.speedXZ = 12.0f;
     } else {
         this->actor.speedXZ = 0.0f;
