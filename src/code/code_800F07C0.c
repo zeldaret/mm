@@ -119,7 +119,22 @@ s32 func_800F0F28(struct_800F0944_arg0* arg0, f32 arg1) {
     return ret;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_800F07C0/func_800F0FF0.s")
+s32 func_800F0FF0(struct_800F0944_arg0* arg0, f32 arg1) {
+    s16 sp3E;
+    s32 ret;
+    Vec3f sp2C;
+
+    ret = 0;
+    Math_SmoothStepToF(&arg0->actor.speedXZ, arg1, 0.4f, 1000.0f, 0.0f);
+    sp3E = arg0->actor.speedXZ * 400.0f;
+    if (func_8013D68C(arg0->path, arg0->unk1E8, &sp2C) && func_8013D768(&arg0->actor, &sp2C, sp3E)) {
+        arg0->unk1E8--;
+        if (arg0->unk1E8 < 0) {
+            ret = 1;
+        }
+    }
+    return ret;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_800F07C0/func_800F10AC.s")
 
