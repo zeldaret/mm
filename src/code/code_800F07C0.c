@@ -86,7 +86,26 @@ s32 func_800F0A94(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, FlexSkel
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_800F07C0/func_800F0CE4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_800F07C0/func_800F0DD4.s")
+s32 func_800F0DD4(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, s16 arg2, s16 arg3) {
+    s32 ret = 0;
+    s32 pad;
+    Actor* door;
+
+    arg0->unk1E8 = 0;
+    if (func_8013D68C(arg0->path, arg0->unk1E8, &arg0->actor.world.pos)) {
+        door = func_800F0888(&arg0->actor, globalCtx);
+        if (door != NULL) {
+            ret = 1;
+            func_800F0BB4(arg0, globalCtx, door, arg2, arg3);
+            arg0->actor.shape.rot.y = Math_Vec3f_Yaw(&arg0->actor.world.pos, &door->world.pos);
+            arg0->actor.world.rot.y = arg0->actor.shape.rot.y;
+            arg0->actor.gravity = 0.0f;
+            arg0->actor.flags &= ~1;
+        }
+    }
+    return ret;
+}
+//#pragma GLOBAL_ASM("asm/non_matchings/code/code_800F07C0/func_800F0DD4.s")
 
 s32 func_800F0E94(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, f32 gravity, s16 animIndex) {
     arg0->actor.gravity = gravity;

@@ -330,7 +330,7 @@ void func_808F3618(EnIn* this, GlobalContext* globalCtx) {
 
 void func_808F3690(EnIn* this, GlobalContext* globalCtx) {
     s16 sp36;
-    Vec3f sp28; // unsure if Vec3f, but it is probably size 0xC
+    Vec3f sp28;
 
     Math_SmoothStepToF(&this->actor.speedXZ, 1.0f, 0.4f, 1000.0f, 0.0f);
     sp36 = this->actor.speedXZ * 400.0f;

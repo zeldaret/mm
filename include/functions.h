@@ -1771,7 +1771,8 @@ s32 func_800F0A94(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, FlexSkel
                   s16 animIndex);
 void func_800F0BB4(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, Actor* arg2, s16 arg3, s16 arg4);
 // void func_800F0CE4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5,
-// UNK_TYPE4 param_6); void func_800F0DD4(void);
+// UNK_TYPE4 param_6); 
+s32 func_800F0DD4(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, s16 arg2, s16 arg3);
 s32 func_800F0E94(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, f32 gravity, s16 animIndex);
 s32 func_800F0EEC(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, s16 animIndex);
 s32 func_800F0F28(struct_800F0944_arg0* arg0, f32 arg1);
@@ -2875,7 +2876,7 @@ void func_8013C964(Actor* actor, GlobalContext* globalCtx, f32 arg2, f32 arg3, s
 void func_8013D2E0(Vec3f* arg0, PosRot* arg1, ActorShape* arg2, s16* arg3, s16* arg4, s16* arg5, s16* arg6);
 UNK_TYPE func_8013D5E8(s16 arg0, UNK_TYPE arg1, s16 arg2);
 Path* func_8013D648(GlobalContext* globalCtx, s16 arg1, s32 arg2);
-UNK_TYPE func_8013D68C(Path* path, s16 arg1, UNK_PTR arg2);
+UNK_TYPE func_8013D68C(Path* path, s16 arg1, Vec3f* arg2);
 // void func_8013D720(void);
 UNK_TYPE func_8013D768(Actor* actor, UNK_PTR arg1, s16 arg2);
 // void func_8013D83C(void);
