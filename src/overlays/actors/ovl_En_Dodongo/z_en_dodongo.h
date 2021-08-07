@@ -14,7 +14,7 @@ typedef struct EnDodongo {
     /* 0x242 */ Vec3s morphTable[31];
     /* 0x2FC */ EnDodongoActionFunc actionFunc;
     /* 0x300 */ u8 unk_300;
-    /* 0x302 */ s16 unk_302;
+    /* 0x302 */ s16 timer;
     /* 0x304 */ s16 unk_304;
     /* 0x306 */ s16 unk_306;
     /* 0x308 */ Vec3f unk_308;

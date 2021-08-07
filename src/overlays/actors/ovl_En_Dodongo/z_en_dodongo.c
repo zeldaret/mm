@@ -288,8 +288,17 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnDodongo_Init(Actor* thisx, GlobalContext* globalCtx) {
-    static s32 D_80879308[] = {
-        0x00000002, 0x00080000, 0xFFFFFFFF, 0xFFFFFF40, 0xFFFFFF00, 0xFFFFFF00, 0x08000000, 0x00000000, 0x00000000,
+    static EffBlureInit2 D_80879308 = {
+        2, 
+        8, 
+        0, 
+        { 255, 255, 255, 255 }, 
+        { 255, 255, 255, 64 }, 
+        { 255, 255, 255, 0 }, 
+        { 255, 255, 255, 0 }, 
+        8, 0, 0, 0, 
+        { 0, 0, 0, 0 }, 
+        { 0, 0, 0, 0 }, 
     };
     EnDodongo* this = THIS;
     s32 i;
@@ -426,14 +435,14 @@ void func_80876CAC(EnDodongo* this) {
     this->unk_340 = 0.75f;
     this->unk_344 = 1.125f;
     this->unk_33C = 1.0f;
-    this->unk_302 = 80;
+    this->timer = 80;
     this->actor.flags &= ~0x400;
     func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 80);
 }
 
 void func_80876D28(EnDodongo* this, GlobalContext* globalCtx) {
     if (this->unk_300 == 10) {
-        this->unk_302 = 0;
+        this->timer = 0;
         this->actor.colorFilterTimer = 0;
         this->unk_300 = 0;
         this->collider1.base.colType = 0;
@@ -545,17 +554,17 @@ s32 func_80877278(EnDodongo* this, GlobalContext* globalCtx) {
 void func_808773C4(EnDodongo* this) {
     SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06004C20, -4.0f);
     this->actor.speedXZ = 0.0f;
-    this->unk_302 = Rand_S16Offset(30, 50);
+    this->timer = Rand_S16Offset(30, 50);
     this->actionFunc = func_80877424;
 }
 
 void func_80877424(EnDodongo* this, GlobalContext* globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-    if (this->unk_302 != 0) {
-        this->unk_302--;
+    if (this->timer != 0) {
+        this->timer--;
     }
 
-    if (this->unk_302 == 0) {
+    if (this->timer == 0) {
         if (func_801378B8(&this->skelAnime, 0.0f)) {
             func_80877494(this);
         }
@@ -565,7 +574,7 @@ void func_80877424(EnDodongo* this, GlobalContext* globalCtx) {
 void func_80877494(EnDodongo* this) {
     SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06008B1C, -4.0f);
     this->actor.speedXZ = this->unk_334 * 1.5f;
-    this->unk_302 = Rand_S16Offset(50, 70);
+    this->timer = Rand_S16Offset(50, 70);
     this->actionFunc = func_80877500;
 }
 
@@ -605,10 +614,10 @@ void func_80877500(EnDodongo* this, GlobalContext* globalCtx) {
             Math_ScaledStepToS(&this->actor.world.rot.y, Actor_YawToPoint(&this->actor, &this->actor.home.pos), 0x1F4);
         }
 
-        this->unk_302--;
-        if (this->unk_302 == 0) {
+        this->timer--;
+        if (this->timer == 0) {
             if (Rand_ZeroOne() > 0.7f) {
-                this->unk_302 = Rand_S16Offset(50, 70);
+                this->timer = Rand_S16Offset(50, 70);
             } else {
                 func_808773C4(this);
             }
@@ -694,14 +703,14 @@ void func_80877D50(EnDodongo* this) {
 void func_80877D90(EnDodongo* this, GlobalContext* globalCtx) {
     if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
         func_808773C4(this);
-        this->unk_302 = Rand_S16Offset(10, 20);
+        this->timer = Rand_S16Offset(10, 20);
     }
 }
 
 void func_80877DE0(EnDodongo* this) {
     SkelAnime_ChangeAnim(&this->skelAnime, &D_060028F0, -1.0f, 35.0f, 0.0f, 2, -4.0f);
     this->actor.flags |= 0x10;
-    this->unk_302 = 25;
+    this->timer = 25;
     this->actionFunc = func_80877E60;
     this->actor.speedXZ = 0.0f;
 }
@@ -742,8 +751,8 @@ void func_80877E60(EnDodongo* this, GlobalContext* globalCtx) {
         }
         this->actor.flags &= ~0x10;
     } else if (this->skelAnime.animPlaybackSpeed > -0.5f) {
-        this->unk_302--;
-        if (this->unk_302 == 10) {
+        this->timer--;
+        if (this->timer == 10) {
             for (i = 10; i >= 0; i--) {
                 sp84.x = randPlusMinusPoint5Scaled(10.0f);
                 sp84.y = randPlusMinusPoint5Scaled(10.0f);
@@ -768,12 +777,12 @@ void func_80877E60(EnDodongo* this, GlobalContext* globalCtx) {
             func_800BCB70(&this->actor, 0x4000, 0x78, 0, 8);
         }
     } else if (func_801378B8(&this->skelAnime, 24.0f)) {
-        this->unk_302--;
+        this->timer--;
         this->skelAnime.animPlaybackSpeed = 0.0f;
     }
 
     if (this->skelAnime.animCurrentFrame <= 27.0f) {
-        if ((this->skelAnime.animCurrentFrame <= 25.0f) && (this->unk_302 < 11)) {
+        if ((this->skelAnime.animCurrentFrame <= 25.0f) && (this->timer < 11)) {
             func_80876DC4(this, globalCtx);
         } else {
             sp5E = this->unk_334 * 50.0f;
@@ -793,7 +802,7 @@ void func_80877E60(EnDodongo* this, GlobalContext* globalCtx) {
     this->unk_314.x = Math_SinS(this->actor.colorFilterTimer * 0x1000) + 1.0f;
     this->unk_314.y = this->unk_314.z;
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-    if (this->unk_302 == 0) {
+    if (this->timer == 0) {
         if (this->actor.colChkInfo.health == 0) {
             func_80878724(this);
         } else {
@@ -819,7 +828,7 @@ void func_80878354(EnDodongo* this) {
 
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_DODO_J_TAIL);
     SkelAnime_ChangeAnimPlaybackStop(&this->skelAnime, sp18, 2.0f);
-    this->unk_302 = 0;
+    this->timer = 0;
     this->collider1.base.atFlags |= AT_ON;
     this->unk_304 = -1;
     this->actionFunc = func_80878424;
@@ -829,7 +838,7 @@ void func_80878424(EnDodongo* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
     Vec3f sp20;
 
-    this->unk_302++;
+    this->timer++;
     if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
         if (!(player->stateFlags1 & 0x800000) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK)) {
             this->collider1.base.atFlags &= ~AT_ON;
@@ -860,11 +869,11 @@ void func_80878594(EnDodongo* this) {
 }
 
 void func_808785B0(EnDodongo* this, GlobalContext* globalCtx) {
-    if (this->unk_302 != 0) {
-        this->unk_302--;
+    if (this->timer != 0) {
+        this->timer--;
     }
 
-    if (this->unk_302 == 0) {
+    if (this->timer == 0) {
         func_80876D28(this, globalCtx);
         if (this->actor.colChkInfo.health == 0) {
             func_80878724(this);
@@ -879,7 +888,7 @@ void func_808785B0(EnDodongo* this, GlobalContext* globalCtx) {
 void func_8087864C(EnDodongo* this) {
     SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06001A44, -4.0f);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_DODO_J_DAMAGE);
-    this->unk_302 = 0;
+    this->timer = 0;
     this->unk_304 = 0;
     this->actor.speedXZ = 0.0f;
     func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 8);
@@ -898,7 +907,7 @@ void func_808786C8(EnDodongo* this, GlobalContext* globalCtx) {
 
 void func_80878724(EnDodongo* this) {
     SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_060013C4, -8.0f);
-    this->unk_302 = 0;
+    this->timer = 0;
     this->unk_304 = 0;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_DODO_J_DEAD);
     this->actor.flags &= ~1;
@@ -919,21 +928,21 @@ void func_808787B0(EnDodongo* this, GlobalContext* globalCtx) {
     }
 
     if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
-        if (this->unk_302 == 0) {
+        if (this->timer == 0) {
             EnBom* bomb = (EnBom*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOM, this->actor.world.pos.x,
                                               this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0);
             if (bomb != NULL) {
                 bomb->timer = 0;
             }
-            this->unk_302 = 8;
+            this->timer = 8;
         }
     } else if (func_801378B8(&this->skelAnime, 52.0f)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
     }
 
-    if (this->unk_302 != 0) {
-        this->unk_302--;
-        if (this->unk_302 == 0) {
+    if (this->timer != 0) {
+        this->timer--;
+        if (this->timer == 0) {
             if (this->actor.params == 0) {
                 Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0x90);
             } else {
@@ -989,7 +998,7 @@ void EnDodongo_UpdateDamage(EnDodongo* this, GlobalContext* globalCtx) {
                     func_800BBA88(globalCtx, &this->actor);
                     if (this->actor.colChkInfo.damageEffect == 3) {
                         func_80876CAC(this);
-                        this->unk_302 = 3;
+                        this->timer = 3;
                         this->collider1.base.acFlags &= ~AC_ON;
                         this->collider2.base.acFlags &= ~AC_ON;
                         func_80878594(this);
@@ -998,12 +1007,12 @@ void EnDodongo_UpdateDamage(EnDodongo* this, GlobalContext* globalCtx) {
                         func_80878724(this);
                     }
                 } else if (this->actor.colChkInfo.damageEffect == 1) {
-                    this->unk_302 = 40;
+                    this->timer = 40;
                     func_800BCB70(&this->actor, 0, 0xFF, 0, 40);
                     Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     func_80878594(this);
                 } else if (this->actor.colChkInfo.damageEffect == 5) {
-                    this->unk_302 = 40;
+                    this->timer = 40;
                     func_800BCB70(&this->actor, 0, 0xFF, 0, 40);
                     Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     this->unk_300 = 30;
@@ -1097,9 +1106,9 @@ void EnDodongo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
         SysMatrix_GetStateTranslationAndScaledX(1600.0f, &this->unk_320);
     }
 
-    if ((limbIndex == 30) && (this->actionFunc == func_80878424) && (this->unk_302 != this->unk_304)) {
+    if ((limbIndex == 30) && (this->actionFunc == func_80878424) && (this->timer != this->unk_304)) {
         func_800A81F0(Effect_GetParams(this->unk_338), &this->unk_320, &this->unk_348[4]);
-        this->unk_304 = this->unk_302;
+        this->unk_304 = this->timer;
     }
 }
 
