@@ -245,8 +245,8 @@ s32 func_80A52A78(EnDnq* this, GlobalContext* globalCtx) {
     if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
         if (this->unk_38C == 0) {
             this->unk_38C = Rand_S16Offset(20, 20);
-            this->unk_388 = this->unk_388 + 3;
-            this->unk_388 = this->unk_388 % 5;
+            this->unk_388 += 3;
+            this->unk_388 %= 5;
         }
         func_80A5257C(this, D_80A535DC[this->unk_388]);
         this->skelAnime.animCurrentFrame = 0.0f;
@@ -392,7 +392,6 @@ void func_80A53038(EnDnq* this, GlobalContext* globalCtx) {
     static s32 D_80A535FC[] = {
         0, 1, 2, 3, 5, 6,
     };
-
     u32 temp_v0;
     u32 temp_v1;
 
@@ -452,20 +451,19 @@ void EnDnq_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (!func_80A52D44(this, globalCtx) && func_80A52648(this, globalCtx)) {
         func_80A53038(this, globalCtx);
         SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-        return;
+    } else {
+        this->actionFunc(this, globalCtx);
+        func_80A52B68(this, globalCtx);
+        SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+        this->unk_394 = this->actor.xzDistToPlayer;
+        func_80A52C6C(this, globalCtx);
+        func_8013C964(&this->actor, globalCtx, this->unk_390, fabsf(this->actor.yDistToPlayer) + 1.0f, 0,
+                      this->unk_37C & 7);
+        this->actor.xzDistToPlayer = this->unk_394;
+        Actor_SetHeight(&this->actor, 46.0f);
+        func_80A52604(this, globalCtx);
     }
-
-    this->actionFunc(this, globalCtx);
-    func_80A52B68(this, globalCtx);
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
-    this->unk_394 = this->actor.xzDistToPlayer;
-    func_80A52C6C(this, globalCtx);
-    func_8013C964(&this->actor, globalCtx, this->unk_390, fabsf(this->actor.yDistToPlayer) + 1.0f, 0,
-                  this->unk_37C & 7);
-    this->actor.xzDistToPlayer = this->unk_394;
-    Actor_SetHeight(&this->actor, 46.0f);
-    func_80A52604(this, globalCtx);
 }
 
 void EnDnq_Draw(Actor* thisx, GlobalContext* globalCtx) {
