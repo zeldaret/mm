@@ -660,8 +660,9 @@ void EnBigpo_BurnAwayDeath(EnBigpo* this, GlobalContext* globalCtx) {
     this->idleTimer++;
     if (this->idleTimer < 8) {
         cam = func_800DFCDC(ACTIVE_CAM) + 0x4800;
-        if ((s32)this->idleTimer < 5) {
+        if (this->idleTimer < 5) {
             unkTemp = (this->idleTimer << 0xC) - 0x4000;
+            // 1.4.0...1 is NOT 1.4, the rodata demands it
             tempVec.y = (((Math_SinS(unkTemp) * 23.0f) + 40.0f) * 1.4000001f) + this->actor.world.pos.y;
             unkTemp2 = Math_CosS(unkTemp) * 32.2f;
             tempVec.x = (Math_SinS(cam) * unkTemp2) + this->actor.world.pos.x;
@@ -674,7 +675,7 @@ void EnBigpo_BurnAwayDeath(EnBigpo* this, GlobalContext* globalCtx) {
         }
 
         // not sure what we're turning this into, but its based on the timer
-        modifiedTimer = (s32)((f32)((this->idleTimer * 10) + 80) * 1.4000001f);
+        modifiedTimer = ((f32)((this->idleTimer * 10) + 80) * 1.4000001f);
         func_800B3030(globalCtx, &tempVec, &D_80B6506C, &D_801D15B0, modifiedTimer, 0, 2);
         tempVec.x = (2.0f * this->actor.world.pos.x) - tempVec.x;
         tempVec.z = (2.0f * this->actor.world.pos.z) - tempVec.z;
@@ -799,7 +800,7 @@ void EnBigpo_ScoopSoulIdle(EnBigpo* this, GlobalContext* globalCtx) {
         EnBigpo_SetupScoopSoulLeaving(this);
     } else {
         func_800B8A1C(&this->actor, globalCtx, 0xBA, 35.0f, 60.0f);
-        this->actor.world.pos.y = (sin_rad((f32)this->idleTimer * 0.15707964f) * 5.0f) + this->savedHeight;
+        this->actor.world.pos.y = (sin_rad(this->idleTimer * (M_PI / 20)) * 5.0f) + this->savedHeight;
     }
 }
 
@@ -846,7 +847,7 @@ void EnBigpo_SelectRandomFireLocations(EnBigpo* this, GlobalContext* globalCtx) 
     }
 
     // for available possiblefires, pick three to be random fires
-    for (fireIndex = 0; fireIndex < 3; ++fireIndex, --fireCount) {
+    for (fireIndex = 0; fireIndex < ARRAY_COUNT(this->fires); fireIndex++, fireCount--) {
         enemyPtr = FIRST_ENEMY;
         randomIndex = ((s32)Rand_ZeroFloat(fireCount)) % fireCount;
 
@@ -1048,8 +1049,8 @@ void EnBigpo_UpdateColor(EnBigpo* this) {
             this->mainColor.b = 0xE1;
         }
     } else {
-        this->mainColor.r = (this->mainColor.r + 5 >= 0x100) ? (0xFF) : (this->mainColor.r + 5);
-        this->mainColor.g = (this->mainColor.g + 5 >= 0x100) ? (0xFF) : (this->mainColor.g + 5);
+        this->mainColor.r = CLAMP_MAX(this->mainColor.r + 5, 0xFF);
+        this->mainColor.g = CLAMP_MAX(this->mainColor.g + 5, 0xFF);
 
         // this might be a triple ternary but it matches and is easier to read spread out
         bplus5 = this->mainColor.b + 5;
@@ -1167,12 +1168,12 @@ void EnBigpo_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (this->unk21C > 0.0f) {
         Math_StepToF(&this->unk21C, 0.0f, 0.05f);
         if (this->mainColor.a != 0xFF) { // NOT fully visible
-            if (this->mainColor.a * 0.003921569f < this->mainColor.a) {
-                this->unk21C = this->mainColor.a * 0.003921569f;
+            if (this->mainColor.a * (1.0f / 255.0f) < this->mainColor.a) {
+                this->unk21C = this->mainColor.a * (1.0f / 255.0f);
             }
         }
         this->unk220 = ((this->unk21C + 1.0f) * 0.5f);
-        this->unk220 = (this->unk220 > 1.0f) ? 1.0f : this->unk220;
+        this->unk220 = CLAMP_MAX(this->unk220, 1.0f);
     }
 }
 
@@ -1195,7 +1196,7 @@ s32 EnBigpo_OverrideLimbDraw2(struct GlobalContext* globalCtx, s32 limbIndex, Gf
     return 0;
 }
 
-void EnBigpo_PostLimbDraw2(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, struct Actor* actor,
+void EnBigpo_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor,
                            Gfx** gfx) {
     EnBigpo* this = (EnBigpo*)actor;
     s8 limbByte;
