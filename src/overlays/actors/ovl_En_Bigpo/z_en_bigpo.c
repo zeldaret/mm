@@ -1190,7 +1190,7 @@ s32 EnBigpo_OverrideLimbDraw2(struct GlobalContext* globalCtx, s32 limbIndex, Gf
     EnBigpo* this = (EnBigpo*)actor;
     // not fully invisible
     if ((!((this->mainColor.a != 0x00) && (limbIndex != 7))) ||
-        ((this->actionFunc == EnBigpo_BurnAwayDeath) && ((s32)this->idleTimer >= 2))) {
+        ((this->actionFunc == EnBigpo_BurnAwayDeath) && (this->idleTimer >= 2))) {
         *dList = NULL;
     }
     return 0;
