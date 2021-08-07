@@ -279,10 +279,17 @@ static InitChainEntry sInitChain[] = {
 void EnDinofos_Init(Actor* thisx, GlobalContext* globalCtx) {
     static s32 D_8089E364 = 0;
     static EffBlureInit2 D_8089E368 = {
-        { 0, 0, 0, 0, 0, 8, 0, 0 }, { 255, 255, 255, 255 }, { 255, 255, 255, 64 },
-        { 255, 255, 255, 0 },       { 255, 255, 255, 0 },   { 8, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        0,
+        8,
+        0,
+        { 255, 255, 255, 255 }, 
+        { 255, 255, 255, 64 },
+        { 255, 255, 255, 0 },
+        { 255, 255, 255, 0 },
+        8, 0, 2, 0,
+        { 0, 0, 0, 0 },
+        { 0, 0, 0, 0 },
     };
-
     EnDinofos* this = THIS;
     s32 i;
     ColliderJntSphElementDim* dim;
@@ -1433,7 +1440,6 @@ void func_8089DC84(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     static s8 D_8089E3B0[] = {
         -1, -1, 0, -1, 1, 2, -1, 3, 4, -1, 5, 6, -1, 7, 8, -1, 9, 10, -1, 11, -1,
     };
-
     EnDinofos* this = THIS;
     Vec3f sp80;
     Vec3f sp74;

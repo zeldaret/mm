@@ -289,16 +289,8 @@ static InitChainEntry sInitChain[] = {
 
 void EnDodongo_Init(Actor* thisx, GlobalContext* globalCtx) {
     static EffBlureInit2 D_80879308 = {
-        2, 
-        8, 
-        0, 
-        { 255, 255, 255, 255 }, 
-        { 255, 255, 255, 64 }, 
-        { 255, 255, 255, 0 }, 
-        { 255, 255, 255, 0 }, 
-        8, 0, 0, 0, 
-        { 0, 0, 0, 0 }, 
-        { 0, 0, 0, 0 }, 
+        2, 8, 0, { 255, 255, 255, 255 }, { 255, 255, 255, 64 }, { 255, 255, 255, 0 }, { 255, 255, 255, 0 }, 8,
+        0, 0, 0, { 0, 0, 0, 0 },         { 0, 0, 0, 0 },
     };
     EnDodongo* this = THIS;
     s32 i;
@@ -325,10 +317,10 @@ void EnDodongo_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Effect_Add(globalCtx, &this->unk_338, 2, 0, 0, &D_80879308);
     if (this->actor.params == 0) {
-        Actor_SetScale(&this->actor, 0.01875f);
+        Actor_SetScale(&this->actor, 3.0f / 160.0f);
         this->unk_334 = 1.0f;
     } else {
-        Actor_SetScale(&this->actor, 0.0375f);
+        Actor_SetScale(&this->actor, 3.0f / 80.0f);
         this->actor.colChkInfo.health = 12;
         this->unk_334 = 2.0f;
 
@@ -982,7 +974,7 @@ void EnDodongo_UpdateDamage(EnDodongo* this, GlobalContext* globalCtx) {
     } else if (this->collider1.base.acFlags & AC_HIT) {
         this->collider2.base.acFlags &= ~AC_HIT;
         this->collider1.base.acFlags &= ~AC_HIT;
-        func_800BE2B8(&this->actor, &this->collider1.base);
+        func_800BE2B8(&this->actor, &this->collider1);
 
         for (i = 0; i < ARRAY_COUNT(this->collider1Elements); i++) {
             if (this->collider1.elements[i].info.bumperFlags & BUMP_HIT) {
@@ -1118,6 +1110,6 @@ void EnDodongo_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, EnDodongo_OverrideLimbDraw,
                    EnDodongo_PostLimbDraw, &this->actor);
-    func_800BE680(globalCtx, &this->actor, this->unk_348, 9, this->unk_340 * this->unk_334,
+    func_800BE680(globalCtx, &this->actor, this->unk_348, ARRAY_COUNT(this->unk_348), this->unk_340 * this->unk_334,
                   this->unk_344 * this->unk_334, this->unk_33C, this->unk_300);
 }
