@@ -34,9 +34,9 @@ void Idle_InitFramebuffer(u32* ptr, u32 numBytes, u32 value) {
 }
 
 void Idle_InitScreen(void) {
-    Idle_InitFramebuffer((u32*)&gFramebuffer1, 0x25800, 0x00010001);
+    Idle_InitFramebuffer((u32*)gFramebuffer1, 0x25800, 0x00010001);
     ViConfig_UpdateVi(0);
-    osViSwapBuffer(&gFramebuffer1);
+    osViSwapBuffer(gFramebuffer1);
     osViBlack(0);
 }
 
@@ -44,9 +44,9 @@ void Idle_InitMemory(void) {
     u32 pad;
     void* memEnd = 0x80000000 + osMemSize;
 
-    Idle_ClearMemory(0x80000400, &gFramebuffer1);
-    Idle_ClearMemory(&D_80025D00, bootproc);
-    Idle_ClearMemory(&gGfxSPTaskYieldBuffer, memEnd);
+    Idle_ClearMemory(0x80000400, gFramebuffer1);
+    Idle_ClearMemory(D_80025D00, bootproc);
+    Idle_ClearMemory(gGfxSPTaskYieldBuffer, memEnd);
 }
 
 void Idle_InitCodeAndMemory(void) {

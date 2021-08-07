@@ -280,8 +280,9 @@ extern char D_800994B0[];
 extern f64 D_800994B8;
 extern f64 D_800994C0;
 extern f64 D_800994C8;
-extern char D_800994D0[];
-extern char D_800994DC[];
+extern char gBuildTeam[];
+extern char gBuildDate[];
+extern char gBuildMakeOption[];
 
 
 extern StackEntry sDmaMgrStackInfo;
@@ -297,9 +298,9 @@ extern u32 sYaz0CurRomStart;
 extern u32 sYaz0CurSize;
 extern u8* sYaz0MaxPtr;
 extern u8* D_8009BE20;
-extern UNK_TYPE4 D_8009BE30;
-extern UNK_TYPE4 D_8009BE34;
-extern FaultClient romInfoFaultClient;
+// extern UNK_TYPE4 D_8009BE30;
+// extern UNK_TYPE4 D_8009BE34;
+// extern FaultClient romInfoFaultClient;
 extern FaultThreadStruct* sFaultContext;
 extern f32 D_8009BE54;
 extern u32 faultCustomOptions;

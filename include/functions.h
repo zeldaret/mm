@@ -11,13 +11,6 @@ double sqrt(double d);
 #pragma intrinsic(sqrt)
 
 void bootproc(void);
-void Idle_ClearMemory(void* begin, void* end);
-void Idle_InitFramebuffer(u32* ptr, u32 numBytes, u32 value);
-void Idle_InitScreen(void);
-void Idle_InitMemory(void);
-void Idle_InitCodeAndMemory(void);
-void Main_ThreadEntry(void* arg);
-void Idle_InitVideo(void);
 void Idle_ThreadEntry(void* arg);
 void ViConfig_UpdateVi(u32 arg0);
 void ViConfig_UpdateBlack(void);
