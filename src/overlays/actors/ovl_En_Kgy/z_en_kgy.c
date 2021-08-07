@@ -17,6 +17,9 @@ void EnKgy_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKgy_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnKgy_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void EnKgy_ChangeAnim(EnKgy* this, s16 arg1, u8 arg2, f32 arg3);
+EnKbt* EnKgy_FindZubora(GlobalContext* globalCtx);
+ObjIcePoly* EnKgy_FindIceBlock(GlobalContext* globalCtx);
 void func_80B40D30(GlobalContext* globalCtx);
 s32 func_80B40D64(GlobalContext* globalCtx);
 s32 func_80B40DB4(GlobalContext* globalCtx);
@@ -27,15 +30,12 @@ void func_80B42508(EnKgy* this, GlobalContext* globalCtx);
 void func_80B425A0(EnKgy* this, GlobalContext* globalCtx);
 void func_80B42714(EnKgy* this, GlobalContext* globalCtx);
 void func_80B42D28(EnKgy* this, GlobalContext* globalCtx);
-void EnKgy_ChangeAnim(EnKgy* this, s16 arg1, u8 arg2, f32 arg3);
-EnKbt* EnKgy_FindZubora(GlobalContext* globalCtx);
-ObjIcePoly* EnKgy_FindIceBlock(GlobalContext* globalCtx);
 
-extern Gfx D_04001D00[];
-extern Gfx D_040021A8[];
 extern AnimationHeader D_060008FC;
 extern AnimationHeader D_06001764;
+extern Gfx D_04001D00[];
 extern AnimationHeader D_06001EA4;
+extern Gfx D_040021A8[];
 extern AnimationHeader D_0600292C;
 extern AnimationHeader D_06003334;
 extern AnimationHeader D_06003D88;
@@ -168,7 +168,7 @@ ObjIcePoly* EnKgy_FindIceBlock(GlobalContext* globalCtx) {
 
 void func_80B40C74(GlobalContext* globalCtx) {
     gSaveContext.roomInf[globalCtx->sceneNum][5] |= 1;
-    if ((gSaveContext.day % 5) == 1) {
+    if (CURRENT_DAY == 1) {
         gSaveContext.roomInf[globalCtx->sceneNum][5] |= 2;
     } else {
         gSaveContext.roomInf[globalCtx->sceneNum][5] &= ~2;
@@ -192,8 +192,7 @@ s32 func_80B40D8C(GlobalContext* globalCtx) {
 }
 
 s32 func_80B40DB4(GlobalContext* globalCtx) {
-    if (((gSaveContext.day % 5) == 3) ||
-        (((gSaveContext.day % 5) == 2) && (gSaveContext.roomInf[globalCtx->sceneNum][5] & 2))) {
+    if ((CURRENT_DAY == 3) || ((CURRENT_DAY == 2) && (gSaveContext.roomInf[globalCtx->sceneNum][5] & 2))) {
         return true;
     }
     return false;
@@ -382,7 +381,7 @@ s32 func_80B41460(void) {
         return 0xC38;
     }
 
-    if ((gSaveContext.day % 5) == 3) {
+    if (CURRENT_DAY == 3) {
         return 0xC39;
     }
 
@@ -418,7 +417,6 @@ void func_80B415A8(GlobalContext* globalCtx, Vec3f* arg1) {
         { 0, 0, 0, { 0, 128, 255 }, 0, 300 },
         0,
     };
-
     s32 effectIndex;
 
     D_80B43298.position.x = arg1->x;
@@ -1133,7 +1131,6 @@ s32 EnKgy_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
 void EnKgy_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80B432D8 = { 1000.0f, 2000.0f, 0.0f };
     static Vec3f D_80B432E4 = { 3000.0f, 4000.0f, 300.0f };
-
     EnKgy* this = THIS;
 
     if (limbIndex == 11) {
