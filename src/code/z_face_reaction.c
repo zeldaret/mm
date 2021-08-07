@@ -1,7 +1,7 @@
 #include "global.h"
 
 /**
- * Indexes of this array:
+ * Indices of this array:
  * - index 0x00: PLAYER_MASK_MASK_OF_TRUTH
  * - index 0x01: PLAYER_MASK_KAFEIS_MASK
  * - index 0x02: PLAYER_MASK_ALL_NIGHT_MASK
