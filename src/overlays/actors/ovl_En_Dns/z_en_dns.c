@@ -16,7 +16,7 @@ void EnDns_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDns_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_8092D330(EnDns* this, GlobalContext* globalCtx);
-void EnDns_Noop(EnDns* this, GlobalContext* globalCtx);
+void EnDns_DoNothing(EnDns* this, GlobalContext* globalCtx);
 void func_8092D4D8(EnDns* this, GlobalContext* globalCtx);
 
 extern AnimationHeader D_060002A8;
@@ -25,9 +25,9 @@ extern AnimationHeader D_060008F4;
 extern AnimationHeader D_06000BD8;
 extern AnimationHeader D_06000D58;
 extern AnimationHeader D_06000FEC;
-extern Gfx D_060028E8[];
-extern Gfx D_06002968[];
-extern Gfx D_060029E8[];
+extern TexturePtr D_060028E8;
+extern TexturePtr D_06002968;
+extern TexturePtr D_060029E8;
 extern Gfx D_06002C48[];
 extern SkeletonHeader D_06002DD8;
 extern AnimationHeader D_06003310;
@@ -129,11 +129,10 @@ void func_8092C6FC(EnDns* this, GlobalContext* globalCtx) {
 
 void func_8092C740(EnDns* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
-    s16 temp;
+    s16 temp = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
     Vec3f sp34;
     Vec3f sp28;
 
-    temp = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
     Math_ApproachS(&this->unk_2CE, temp, 4, 0x2AA8);
     this->unk_2CE = CLAMP(this->unk_2CE, -0x3FFC, 0x3FFC);
 
@@ -299,7 +298,6 @@ s32 func_8092CCEC(EnDns* this, GlobalContext* globalCtx) {
 
 s32 func_8092CE38(EnDns* this) {
     static s32 D_8092DE00[] = { 8, 8, 9 };
-
     s16 frame;
     s32 pad;
     Vec3f sp2C;
@@ -400,7 +398,7 @@ void func_8092D1B8(EnDns* this, GlobalContext* globalCtx) {
             gSaveContext.eventInf[1] |= 0x20;
             this->unk_2F4 = func_8092CCEC;
             func_8092C63C(this, 2);
-            this->actionFunc = EnDns_Noop;
+            this->actionFunc = EnDns_DoNothing;
         } else if (gSaveContext.eventInf[1] & 0x40) {
             func_8092CCEC(this, globalCtx);
             func_8092C63C(this, 2);
@@ -410,7 +408,7 @@ void func_8092D1B8(EnDns* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnDns_Noop(EnDns* this, GlobalContext* globalCtx) {
+void EnDns_DoNothing(EnDns* this, GlobalContext* globalCtx) {
 }
 
 void func_8092D330(EnDns* this, GlobalContext* globalCtx) {
@@ -468,7 +466,6 @@ void func_8092D4D8(EnDns* this, GlobalContext* globalCtx) {
 
 void func_8092D5E8(EnDns* this, GlobalContext* globalCtx) {
     static s32 D_8092DE0C[] = { 0, 0, 4, 6 };
-
     u32 temp_v0;
     u32 temp_v1;
 
@@ -620,7 +617,7 @@ void EnDns_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 }
 
 void EnDns_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static Gfx* D_8092DE1C[] = { D_060028E8, D_06002968, D_060029E8, D_06002968 };
+    static TexturePtr D_8092DE1C[] = { &D_060028E8, &D_06002968, &D_060029E8, &D_06002968 };
     EnDns* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
