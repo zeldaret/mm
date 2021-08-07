@@ -280,7 +280,6 @@ void EnBigpo_LowerCutsceneSubCamera(EnBigpo* this, GlobalContext* globalContext)
 }
 
 void EnBigpo_InitWellBigpo(EnBigpo* this) {
-    // ! @ BUG: redundant: targetable flag was already set by init, nothing else calls this
     this->actor.flags &= ~0x1; // targetable OFF
     this->actionFunc = EnBigpo_WellWaitForProximity;
     this->fireRadius = 200.0f;
@@ -316,7 +315,7 @@ void EnBigpo_SpawnPoCutscene1(EnBigpo* this, GlobalContext* globalCtx) {
     s32 i;
 
     this->actor.draw = EnBigpo_Draw4;
-    this->actor.shape.rot.y = this->actor.yawTowardsPlayer + 0x8000;
+    this->actor.shape.rot.y = BINANG_ROT180(this->actor.yawTowardsPlayer);
     func_80B61914(this);
 
     for (i = 0; i < 3; i++) {
