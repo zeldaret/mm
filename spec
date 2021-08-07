@@ -23,7 +23,6 @@ beginseg
     include "build/src/boot_O2_g3/yaz0.o"
     include "build/src/boot_O2_g3/irqmgr.o"
     include "build/src/boot_O2_g3/CIC6105.o"
-    include "build/data/boot/CIC6105.bss.o"
     include "build/src/boot_O2_g3/syncprintf.o"
     include "build/src/boot_O2_g3/fault.o"
     include "build/data/boot/fault.data.o"
@@ -49,8 +48,8 @@ beginseg
     include "build/data/boot/system_malloc.data.o"
     include "build/data/boot/system_malloc.bss.o"
     include "build/src/boot_O2/rand.o"
-    include "build/data/boot/rand.data.o"
-    include "build/data/boot/rand.bss.o"
+//    include "build/data/boot/rand.data.o"
+//    include "build/data/boot/rand.bss.o"
     include "build/src/boot_O2/__osMalloc.o"
     include "build/data/boot/__osMalloc.bss.o"
     include "build/src/libultra/rmon/sprintf.o"
@@ -70,7 +69,7 @@ beginseg
     include "build/src/libultra/gu/sinf.o"
     include "build/src/libultra/gu/sins.o"
     include "build/src/libultra/io/sptask.o"
-    include "build/data/boot/sptask.bss.o"
+//    include "build/data/boot/sptask.bss.o"
     include "build/src/libultra/libc/ll.o"
     include "build/asm/boot/exceptasm.text.o"
     include "build/data/boot/exceptasm.data.o"
@@ -261,7 +260,7 @@ beginseg
     include "build/src/boot_O2_g3/__osMemcmp.o"
     include "build/src/boot/__osStrcpy.o"
     include "build/src/boot/__osMemcpy.o"
-    include "build/data/boot/build.rodata.o"
+    include "build/src/boot/build.o"
 endseg
 
 beginseg

@@ -313,7 +313,7 @@ extern FaultDrawer sFaultDrawerStruct;
 extern Arena startHeap;
 // extern u32 sRandFloat;
 // extern UNK_TYPE4 sArenaLockMsg;
-extern OSTask tmp_task;
+// extern OSTask tmp_task;
 // extern UNK_TYPE1 D_8009CDB0;
 extern OSMesg siAccessBuf[1];
 extern OSMesgQueue __osSiAccessQueue;
