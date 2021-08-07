@@ -1267,17 +1267,17 @@ void EnBigpo_Draw1(Actor* thisx, GlobalContext* globalCtx) {
                    Gfx_EnvColor(globalCtx->state.gfxCtx, this->mainColor.r, this->mainColor.g, this->mainColor.b,
                                 this->mainColor.a));
         POLY_OPA_DISP = SkelAnime_Draw2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
-                                        EnBigpo_OverrideLimbDraw2, EnBigpo_PostLimbDraw2, &this->actor, dispHead + 3);
+                                        EnBigpo_OverrideLimbDraw2, EnBigpo_PostLimbDraw2, &this->actor, &dispHead[3]);
 
     } else {
         dispHead = POLY_XLU_DISP;
         gSPDisplayList(dispHead, &sSetupDL[6 * 0x19]);
-        gSPSegment(dispHead + 1, 0x0C, &D_801AEF88);
-        gSPSegment(dispHead + 2, 0x08,
+        gSPSegment(&dispHead[1], 0x0C, &D_801AEF88);
+        gSPSegment(&dispHead[2], 0x08,
                    Gfx_EnvColor(globalCtx->state.gfxCtx, this->mainColor.r, this->mainColor.g, this->mainColor.b,
                                 this->mainColor.a));
         POLY_XLU_DISP = SkelAnime_Draw2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
-                                        EnBigpo_OverrideLimbDraw2, EnBigpo_PostLimbDraw2, &this->actor, dispHead + 3);
+                                        EnBigpo_OverrideLimbDraw2, EnBigpo_PostLimbDraw2, &this->actor, &dispHead[3]);
     }
 
     func_800BE680(globalCtx, &this->actor, this->limbPos, 9, this->actor.scale.x * 71.428566f * this->unk220, 0,
