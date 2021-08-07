@@ -14,10 +14,8 @@ beginseg
     name "boot"
     address 0x80080060
     include "build/src/boot_O2_g3/boot_main.o"
-    include "build/data/boot/boot_main.bss.o"
     include "build/data/boot/rsp_boot.data.o"
     include "build/src/boot_O2_g3/idle.o"
-    include "build/data/boot/idle.bss.o"
     include "build/src/boot_O2_g3/viconfig.o"
     include "build/data/boot/viconfig.data.o"
     include "build/src/boot_O2_g3/z_std_dma.o"
