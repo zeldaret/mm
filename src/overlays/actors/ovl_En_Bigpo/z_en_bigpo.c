@@ -161,7 +161,7 @@ static Vec3f D_80B6506C = { 0.0f, 3.0f, 0.0f };
 
 // bytes per limb, used in draw func? bit over my head
 static u8 D_80B65078[] = {
-    0xFF, 0x04, 0xFF, 0x00, 0xFF, 0x01, 0xFF, 0x02, 0x05, 0x03, 0x00, 0x00,
+    -1, 4, -1, 0, -1, 1, -1, 2, 5, 3,
 };
 
 // used in limbdraw?
