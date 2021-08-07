@@ -14,43 +14,43 @@ void EnDnk_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnDnk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDnk_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80A52018(Actor* thisx, GlobalContext* globalCtx);
 void func_80A51890(EnDnk* this, GlobalContext* globalCtx);
 void EnDnk_DoNothing(EnDnk* this, GlobalContext* globalCtx);
+void func_80A52018(Actor* thisx, GlobalContext* globalCtx);
 void func_80A52134(EnDnk* this, GlobalContext* globalCtx);
 
-extern SkeletonHeader D_06002848;
-extern SkeletonHeader D_060023B8;
-extern SkeletonHeader D_06002468;
-extern AnimationHeader D_06000B70;
-extern AnimationHeader D_06002A08;
+extern AnimationHeader D_06000168;
 extern AnimationHeader D_0600031C;
 extern AnimationHeader D_06000430;
-extern AnimationHeader D_06000894;
-extern AnimationHeader D_06002B6C;
 extern AnimationHeader D_060006CC;
+extern AnimationHeader D_06000894;
+extern AnimationHeader D_06000B70;
+extern UNK_PTR D_06001680[];
+extern UNK_PTR D_06001700[];
+extern UNK_PTR D_06001780[];
+extern SkeletonHeader D_060023B8;
+extern SkeletonHeader D_06002468;
 extern AnimationHeader D_060024CC;
-extern AnimationHeader D_060026C4;
-extern AnimationHeader D_06002894;
-extern AnimationHeader D_06002B90;
-extern AnimationHeader D_06002F7C;
-extern AnimationHeader D_06003128;
-extern AnimationHeader D_060029BC;
-extern AnimationHeader D_06002E84;
-extern AnimationHeader D_06000168;
 extern AnimationHeader D_0600259C;
+extern AnimationHeader D_060026C4;
+extern SkeletonHeader D_06002848;
+extern AnimationHeader D_06002894;
+extern AnimationHeader D_06002950;
+extern AnimationHeader D_060029BC;
+extern AnimationHeader D_06002A08;
 extern AnimationHeader D_06002A5C;
+extern AnimationHeader D_06002B6C;
+extern AnimationHeader D_06002B90;
 extern AnimationHeader D_06002BD4;
 extern AnimationHeader D_06002DD4;
+extern AnimationHeader D_06002E84;
+extern AnimationHeader D_06002F7C;
 extern AnimationHeader D_06002FA4;
+extern AnimationHeader D_06003128;
 extern AnimationHeader D_06003180;
 extern AnimationHeader D_0600326C;
 extern AnimationHeader D_060033E4;
 extern AnimationHeader D_06003780;
-extern AnimationHeader D_06002950;
-extern Gfx D_06001680[];
-extern Gfx D_06001700[];
-extern Gfx D_06001780[];
 
 static s16 D_80A521A0 = 0;
 
@@ -123,7 +123,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static ActorAnimationEntryS D_80A5221C[] = {
+static ActorAnimationEntryS sAnimations[] = {
     { &D_06000B70, 1.0f, 0, -1, 2, 0 },  { &D_06000B70, 1.0f, 0, -1, 2, -4 }, { &D_06002A08, 1.0f, 0, -1, 0, -4 },
     { &D_0600031C, 1.0f, 0, -1, 0, -4 }, { &D_06000430, 1.0f, -1, -1, 2, 0 }, { &D_06000430, 1.0f, 0, -1, 2, -4 },
     { &D_06000894, 1.0f, 0, -1, 2, -4 }, { &D_06002B6C, 1.0f, 0, -1, 0, 0 },  { &D_06002B6C, 1.0f, 0, -1, 0, -4 },
@@ -146,16 +146,16 @@ s32 func_80A514F0(SkelAnime* skelAnime, s16 animIndex) {
     if (animIndex >= 0) {
         if (animIndex < 36) {
             sp30 = true;
-            frameCount = D_80A5221C[animIndex].frameCount;
+            frameCount = sAnimations[animIndex].frameCount;
             if (frameCount < 0) {
-                frameCount = SkelAnime_GetFrameCount(&(D_80A5221C[animIndex].animationSeg)->common);
+                frameCount = SkelAnime_GetFrameCount(&(sAnimations[animIndex].animationSeg)->common);
             }
-            frame = D_80A5221C[animIndex].frame;
+            frame = sAnimations[animIndex].frame;
             if (frame < 0) {
                 frame = frameCount;
             }
-            SkelAnime_ChangeAnim(skelAnime, D_80A5221C[animIndex].animationSeg, D_80A5221C[animIndex].playbackSpeed, frame,
-                                 frameCount, D_80A5221C[animIndex].mode, D_80A5221C[animIndex].transitionRate);
+            SkelAnime_ChangeAnim(skelAnime, sAnimations[animIndex].animationSeg, sAnimations[animIndex].playbackSpeed,
+                                 frame, frameCount, sAnimations[animIndex].mode, sAnimations[animIndex].transitionRate);
         }
     }
     return sp30;
@@ -328,7 +328,7 @@ void func_80A51AA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 }
 
 void func_80A51CB8(EnDnk* this, GlobalContext* globalCtx) {
-    static Gfx* D_80A5245C[] = {
+    static UNK_PTR D_80A5245C[] = {
         D_06001680,
         D_06001700,
         D_06001780,
@@ -369,7 +369,7 @@ void func_80A51DA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         func_8018219C(&sp5C, &sp3C, 0);
         SysMatrix_InsertTranslation(sp44.x, sp44.y, sp44.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        
+
         if (this->unk_28C & 0x10) {
             if (this->unk_28C & 0x20) {
                 sp3C.z = this->unk_296 + 0x4000;
@@ -450,8 +450,8 @@ void func_80A52074(EnDnk* this, GlobalContext* globalCtx) {
 }
 
 void func_80A52134(EnDnk* this, GlobalContext* globalCtx) {
-    if ((globalCtx->csCtx.state != 0) && (ENDNK_GET_3C(&this->actor) == 4) &&
-        (globalCtx->sceneNum == SCENE_SPOT00) && (gSaveContext.sceneSetupIndex == 2)) {
+    if ((globalCtx->csCtx.state != 0) && (ENDNK_GET_3C(&this->actor) == 4) && (globalCtx->sceneNum == SCENE_SPOT00) &&
+        (gSaveContext.sceneSetupIndex == 2)) {
         func_80A52074(this, globalCtx);
     }
 }
