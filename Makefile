@@ -141,6 +141,7 @@ build/src/libultra/libc/ll%: OPTFLAGS := -O1
 build/src/libultra/libc/ll%: MIPS_VERSION := -mips3 -32
 build/src/libultra/gu/%: OPTFLAGS := -O2
 build/src/libultra/rmon/%: OPTFLAGS := -O2
+
 build/src/boot_O2/%: OPTFLAGS := -O2
 build/src/boot_O2_g3/%: OPTFLAGS := -O2 -g3
 

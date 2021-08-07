@@ -1,6 +1,12 @@
 #include "global.h"
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/system_malloc/StartHeap_Alloc.s")
+void* StartHeap_Alloc(u32 arg0) {
+    void* ptr = __osMalloc(&startHeap, arg0);
+
+    if (1) {}
+
+    return ptr;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/boot/system_malloc/StartHeap_AllocR.s")
 
