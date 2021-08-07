@@ -22,7 +22,7 @@
  * - index 0x11: PLAYER_MASK_BLAST_MASK
  * - index 0x12: PLAYER_MASK_MASK_OF_SCENTS
  */
-u16 sReactionTextIds[][PLAYER_MASK_GIANTS_MASK - 1] = {
+static u16 sReactionTextIds[][PLAYER_MASK_GIANTS_MASK - 1] = {
     { 0 },
     { 0 },
     { 0 },
