@@ -482,7 +482,7 @@ void EnBigpo_WarpingOut(EnBigpo* this, GlobalContext* globalCtx) {
 // warp behind player
 void EnBigpo_SetupWarpIn(EnBigpo* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
-    f32 distance = (this->actor.xzDistToPlayer < 200.0f) ? 200.0f : this->actor.xzDistToPlayer;
+    f32 distance = CLAMP_MIN(this->actor.xzDistToPlayer, 200.0f);
     s16 randomYaw = (Rand_Next() >> 0x14) + this->actor.yawTowardsPlayer;
 
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
@@ -590,7 +590,7 @@ void EnBigpo_SpinAttack(EnBigpo* this, GlobalContext* globalCtx) {
     yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
     // because acFlags AC_HARD and COLTYPE_METAL, if we hit it means we contacted as attack
     if ((this->collider.base.atFlags & AT_HIT) ||
-        ((((yawDiff < 0) ? -yawDiff : yawDiff) > 0x4000) && (this->actor.xzDistToPlayer > 50.0f))) {
+        ((ABS_ALT(yawDiff) > 0x4000) && (this->actor.xzDistToPlayer > 50.0f))) {
         // hit the player OR the poe has missed and flew past player
         EnBigpo_SetupSpinDown(this);
     }
@@ -1059,13 +1059,13 @@ void EnBigpo_UpdateColor(EnBigpo* this) {
             if (bminus5 < 0xD2) {
                 this->mainColor.b = 0xD2;
             } else {
-                this->mainColor.b = (u8)bminus5;
+                this->mainColor.b = bminus5;
             }
         } else {
             if (bplus5 >= 0xD3) {
                 this->mainColor.b = 0xD2;
             } else {
-                this->mainColor.b = (u8)bplus5;
+                this->mainColor.b = bplus5;
             }
         }
     }
@@ -1262,7 +1262,7 @@ void EnBigpo_Draw1(Actor* thisx, GlobalContext* globalCtx) {
         // fully visible OR fully transparent
         dispHead = POLY_OPA_DISP;
         gSPDisplayList(dispHead, &sSetupDL[6 * 0x19]);
-        gSPSegment(dispHead + 1, 0x0C, &D_801AEFA0);
+        gSPSegment(&dispHead[1], 0x0C, &D_801AEFA0);
         gSPSegment(dispHead + 2, 0x08,
                    Gfx_EnvColor(globalCtx->state.gfxCtx, this->mainColor.r, this->mainColor.g, this->mainColor.b,
                                 this->mainColor.a));
@@ -1303,7 +1303,7 @@ void EnBigpo_DrawScoopSoul(Actor* thisx, GlobalContext* globalCtx) {
 
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0,
-                                (globalCtx->gameplayFrames * -0xF) & 0x1FF, 0x20, 0x80));
+                                (globalCtx->gameplayFrames * -15) % 512, 0x20, 0x80));
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 0xFF, 0xFF, 0xAA, this->mainColor.a);
 
@@ -1403,12 +1403,12 @@ void EnBigpo_Draw4(Actor* thisx, GlobalContext* globalCtx) {
     }
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0,
-                                ((s32)globalCtx->gameplayFrames * -0x14) & 0x1FF, 0x20, 0x80));
+                                (globalCtx->gameplayFrames * -20) % 512, 0x20, 0x80));
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 0xAA, 0xFF, 0xFF, 0xFF - this->mainColor.a);
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0xFF, 0xFF);
 
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->fires); i++) {
         EnBigpoFireParticle* firePtr = &this->fires[i];
         Lights_PointNoGlowSetInfo(&this->fires[i].info, this->fires[i].pos.x, this->fires[i].pos.y,
                                   this->fires[i].pos.z, 0xAA, 0xFF, 0xFF, fireRadius);
@@ -1436,7 +1436,7 @@ void EnBigpo_DrawFire(Actor* thisx, GlobalContext* globalCtx) {
 
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0,
-                                ((s32)globalCtx->gameplayFrames * -0x14) & 0x1FF, 0x20, 0x80));
+                                (globalCtx->gameplayFrames * -20) % 512, 0x20, 0x80));
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 0xAA, 0xFF, 0xFF, 0xFF);
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0xFF, 0xFF);
