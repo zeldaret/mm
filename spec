@@ -631,7 +631,6 @@ beginseg
     include "build/src/code/padmgr.o"
     include "build/data/code/padmgr.data.o"
     include "build/src/code/sched.o"
-    include "build/data/code/sched.bss.o"
     include "build/src/code/speed_meter.o"
     include "build/data/code/speed_meter.data.o"
     include "build/data/code/speed_meter.bss.o"
