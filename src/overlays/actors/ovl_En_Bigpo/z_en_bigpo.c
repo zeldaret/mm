@@ -33,7 +33,6 @@ void EnBigpo_SpawnPoCutscene6(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_SpawnPoCutscene7(EnBigpo* this);
 void EnBigpo_SpawnPoCutscene8(EnBigpo* this, GlobalContext* globalCtx);
 
-// unk camera func
 void EnBigpo_LowerCutsceneSubCamera(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_WellWaitForProximity(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_WaitCutsceneQueue(EnBigpo* this, GlobalContext* globalCtx);
@@ -267,15 +266,16 @@ void EnBigpo_UpdateSpin(EnBigpo* this) {
 
 // Lowers the position/eye of the camera during the Big Poe spawn cutscene
 void EnBigpo_LowerCutsceneSubCamera(EnBigpo* this, GlobalContext* globalContext) {
-    Camera* subCamId;
-    if (this->cutsceneSubCamId != MAIN_CAM) {
-        subCamId = Play_GetCamera(globalContext, this->cutsceneSubCamId);
-        subCamId->eye.y -= this->actor.velocity.y;
+    Camera* subCam;
+    
+    if (this->cutsceneSubCamId != SUBCAM_FREE) {
+        subCam = Play_GetCamera(globalContext, this->cutsceneSubCamId);
+        subCam->eye.y -= this->actor.velocity.y;
         if (this->actor.velocity.y > 0.0f) {
-            subCamId->eye.x -= 1.5f * Math_SinS(this->actor.yawTowardsPlayer);
-            subCamId->eye.z -= 1.5f * Math_CosS(this->actor.yawTowardsPlayer);
+            subCam->eye.x -= 1.5f * Math_SinS(this->actor.yawTowardsPlayer);
+            subCam->eye.z -= 1.5f * Math_CosS(this->actor.yawTowardsPlayer);
         }
-        func_8016970C(globalContext, this->cutsceneSubCamId, &this->actor.focus.pos, &subCamId->eye);
+        Gameplay_CameraSetAtEye(globalContext, this->cutsceneSubCamId, &this->actor.focus.pos, &subCamId->eye);
     }
 }
 
@@ -327,13 +327,13 @@ void EnBigpo_SpawnPoCutscene1(EnBigpo* this, GlobalContext* globalCtx) {
     this->actor.scale.y = 0.015f;
     this->actor.scale.z = 0.0f;
 
-    if (this->cutsceneSubCamId != MAIN_CAM) {
+    if (this->cutsceneSubCamId != SUBCAM_FREE) {
         Vec3f subCamEye;
-        // not F32_LERPIMP macro, introduces float reg regalloc
+
         subCamEye.x = ((this->actor.world.pos.x - this->fires[0].pos.x) * 1.8f) + this->actor.world.pos.x;
         subCamEye.y = this->actor.world.pos.y + 150.0f;
         subCamEye.z = ((this->actor.world.pos.z - this->fires[0].pos.z) * 1.8f) + this->actor.world.pos.z;
-        func_8016970C(globalCtx, this->cutsceneSubCamId, &this->actor.focus.pos, &subCamEye);
+        Gameplay_CameraSetAtEye(globalCtx, this->cutsceneSubCamId, &this->actor.focus.pos, &subCamEye);
     }
     this->actionFunc = EnBigpo_SpawnPoCutscene2;
 }
@@ -927,11 +927,11 @@ void EnBigpo_SetupFlameCirclePositions(EnBigpo* this, GlobalContext* globalCtx) 
     }
 
     // Setup sub camera: set 'eye' and 'at' and switch to subcamera
-    if (this->cutsceneSubCamId != MAIN_CAM) {
+    if (this->cutsceneSubCamId != SUBCAM_FREE) {
         subCamEye.x = (Math_SinS(this->actor.yawTowardsPlayer) * 360.0f) + this->actor.world.pos.x;
         subCamEye.y = this->actor.world.pos.y + 150.0f;
         subCamEye.z = (Math_CosS(this->actor.yawTowardsPlayer) * 360.0f) + this->actor.world.pos.z;
-        func_8016970C(globalCtx, this->cutsceneSubCamId, &this->actor.focus.pos, &subCamEye);
+        Gameplay_CameraSetAtEye(globalCtx, this->cutsceneSubCamId, &this->actor.focus.pos, &subCamEye);
     }
 
     this->actionFunc = EnBigpo_DoNothing;
