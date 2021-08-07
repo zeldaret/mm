@@ -34,7 +34,7 @@
 char spaces[] = "                                ";
 char zeroes[] = "00000000000000000000000000000000";
 
-int _Printf(printf_func pfn, void* arg, const char* fmt, va_list ap) {
+int _Printf(PrintCallback pfn, void* arg, const char* fmt, va_list ap) {
     _Pft x;
     x.nchar = 0;
     while (1) {

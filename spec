@@ -926,8 +926,7 @@ beginseg
     name "ovl_En_Dinofos"
     compress
     include "build/src/overlays/actors/ovl_En_Dinofos/z_en_dinofos.o"
-    include "build/data/ovl_En_Dinofos/ovl_En_Dinofos.data.o"
-    include "build/data/ovl_En_Dinofos/ovl_En_Dinofos.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Dinofos/ovl_En_Dinofos_reloc.o"
 endseg
 
 beginseg
@@ -4199,8 +4198,7 @@ beginseg
     name "ovl_En_Dai"
     compress
     include "build/src/overlays/actors/ovl_En_Dai/z_en_dai.o"
-    include "build/data/ovl_En_Dai/ovl_En_Dai.data.o"
-    include "build/data/ovl_En_Dai/ovl_En_Dai.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Dai/ovl_En_Dai_reloc.o"
 endseg
 
 beginseg
@@ -4490,7 +4488,6 @@ beginseg
     name "ovl_Obj_Warpstone"
     compress
     include "build/src/overlays/actors/ovl_Obj_Warpstone/z_obj_warpstone.o"
-    include "build/data/ovl_Obj_Warpstone/ovl_Obj_Warpstone.data.o"
     include "build/data/ovl_Obj_Warpstone/ovl_Obj_Warpstone.reloc.o"
 endseg
 

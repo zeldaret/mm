@@ -506,8 +506,8 @@ void EnFirefly_FlyAway(EnFirefly* this, GlobalContext* globalCtx) {
         this->timer--;
     }
 
-    if ((fabsf(this->actor.world.pos.y - this->maxAltitude) < 10.0f) &&
-            (Math_Vec3f_DistXZ(&this->actor.world.pos, &this->actor.home.pos) < 20.0f) ||
+    if (((fabsf(this->actor.world.pos.y - this->maxAltitude) < 10.0f) &&
+         (Math_Vec3f_DistXZ(&this->actor.world.pos, &this->actor.home.pos) < 20.0f)) ||
         (this->timer == 0)) {
         EnFirefly_SetupFlyIdle(this);
         return;
