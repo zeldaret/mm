@@ -25,6 +25,7 @@ typedef enum {
     /* 0x07 */ ITEM_BOMBCHU,
     /* 0x08 */ ITEM_STICK,
     /* 0x09 */ ITEM_NUT,
+    /* 0xA */ ITEM_MAGIC_BEAN = 0xA,
     /* 0x10 */ ITEM_SWORD_GREAT_FAIRY = 0x10,
     /* 0x12 */ ITEM_BOTTLE = 0x12,
     /* 0x13 */ ITEM_POTION_RED,
