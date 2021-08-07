@@ -16,42 +16,41 @@ void EnDekunuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDekunuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDekunuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_808BDD54(EnDekunuts* this, GlobalContext* globalCtx);
-void func_808BE3FC(EnDekunuts* this, GlobalContext* globalCtx);
-void func_808BDEF8(EnDekunuts* this, GlobalContext* globalCtx);
-void func_808BE358(EnDekunuts* this, GlobalContext* globalCtx);
-void func_808BDFB8(EnDekunuts* this, GlobalContext* globalCtx);
-void func_808BD49C(EnDekunuts* this, GlobalContext* globalCtx);
-void func_808BE4D4(EnDekunuts* this, GlobalContext* globalCtx);
-void func_808BE22C(EnDekunuts* this, GlobalContext* globalCtx);
-void func_808BE6C4(EnDekunuts* this, GlobalContext* globalCtx);
-void func_808BD8D8(EnDekunuts* this, GlobalContext* globalCtx);
-void func_808BDA4C(EnDekunuts* this, GlobalContext* globalCtx);
-void func_808BD7D4(EnDekunuts* this, GlobalContext* globalCtx);
-
 void func_808BD428(EnDekunuts* this);
-void func_808BDF60(EnDekunuts* this);
-void func_808BE484(EnDekunuts* this);
-void func_808BE1CC(EnDekunuts* this);
-void func_808BE680(EnDekunuts* this);
-void func_808BD870(EnDekunuts* this);
-void func_808BDC9C(EnDekunuts* this);
-void func_808BDA08(EnDekunuts* this);
+void func_808BD49C(EnDekunuts* this, GlobalContext* globalCtx);
 void func_808BD78C(EnDekunuts* this);
+void func_808BD7D4(EnDekunuts* this, GlobalContext* globalCtx);
+void func_808BD870(EnDekunuts* this);
+void func_808BD8D8(EnDekunuts* this, GlobalContext* globalCtx);
+void func_808BDA08(EnDekunuts* this);
+void func_808BDA4C(EnDekunuts* this, GlobalContext* globalCtx);
+void func_808BDC9C(EnDekunuts* this);
+void func_808BDD54(EnDekunuts* this, GlobalContext* globalCtx);
+void func_808BDEF8(EnDekunuts* this, GlobalContext* globalCtx);
+void func_808BDF60(EnDekunuts* this);
+void func_808BDFB8(EnDekunuts* this, GlobalContext* globalCtx);
+void func_808BE1CC(EnDekunuts* this);
+void func_808BE22C(EnDekunuts* this, GlobalContext* globalCtx);
+void func_808BE358(EnDekunuts* this, GlobalContext* globalCtx);
+void func_808BE3FC(EnDekunuts* this, GlobalContext* globalCtx);
+void func_808BE484(EnDekunuts* this);
+void func_808BE4D4(EnDekunuts* this, GlobalContext* globalCtx);
+void func_808BE680(EnDekunuts* this);
+void func_808BE6C4(EnDekunuts* this, GlobalContext* globalCtx);
 
-extern SkeletonHeader D_06002468;
-extern AnimationHeader D_0600326C;
-extern AnimationHeader D_06002A5C;
-extern AnimationHeader D_06002DD4;
-extern AnimationHeader D_0600259C;
-extern AnimationHeader D_06003780;
-extern AnimationHeader D_06003180;
-extern AnimationHeader D_06002BD4;
-extern AnimationHeader D_060033E4;
 extern AnimationHeader D_06000168;
-extern AnimationHeader D_06002FA4;
-extern Gfx D_06001F50[];
 extern Gfx D_06001E50[];
+extern Gfx D_06001F50[];
+extern SkeletonHeader D_06002468;
+extern AnimationHeader D_0600259C;
+extern AnimationHeader D_06002A5C;
+extern AnimationHeader D_06002BD4;
+extern AnimationHeader D_06002DD4;
+extern AnimationHeader D_06002FA4;
+extern AnimationHeader D_06003180;
+extern AnimationHeader D_0600326C;
+extern AnimationHeader D_060033E4;
+extern AnimationHeader D_06003780;
 
 const ActorInit En_Dekunuts_InitVars = {
     ACTOR_EN_DEKUNUTS,
@@ -541,7 +540,6 @@ void func_808BE484(EnDekunuts* this) {
 void func_808BE4D4(EnDekunuts* this, GlobalContext* globalCtx) {
     static Color_RGBA8 D_808BEF90 = { 255, 255, 255, 255 };
     static Color_RGBA8 D_808BEF94 = { 150, 150, 150, 0 };
-
     s32 pad;
     Vec3f sp40;
 
@@ -709,12 +707,10 @@ void func_808BED30(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     static s8 D_808BEF98[] = {
         -1, -1, -1, 3, -1, 0, -1, 1, -1, 2, 0, 0,
     };
-
     static Vec3f D_808BEFA4[] = {
         { -1500.0f, 0.0f, -1700.0f }, { -1500.0f, 0.0f, 1700.0f }, { -2500.0f, -2000.0f, 0.0f },
         { -1000.0f, 1000.0f, 0.0f },  { 0.0f, 0.0f, 0.0f },
     };
-
     EnDekunuts* this = THIS;
     s32 i;
     Vec3f* ptr1;
