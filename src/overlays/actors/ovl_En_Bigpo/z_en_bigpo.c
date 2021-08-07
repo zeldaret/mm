@@ -275,7 +275,7 @@ void EnBigpo_LowerCutsceneSubCamera(EnBigpo* this, GlobalContext* globalContext)
             subCam->eye.x -= 1.5f * Math_SinS(this->actor.yawTowardsPlayer);
             subCam->eye.z -= 1.5f * Math_CosS(this->actor.yawTowardsPlayer);
         }
-        Gameplay_CameraSetAtEye(globalContext, this->cutsceneSubCamId, &this->actor.focus.pos, &subCamId->eye);
+        Gameplay_CameraSetAtEye(globalContext, this->cutsceneSubCamId, &this->actor.focus.pos, &subCam->eye);
     }
 }
 
@@ -438,8 +438,8 @@ void EnBigpo_SpawnPoCutscene8(EnBigpo* this, GlobalContext* globalCtx) {
     this->idleTimer -= 1;
     if (this->idleTimer == 0) {
         subCamId = Play_GetCamera(globalCtx, this->cutsceneSubCamId);
-        func_8016970C(globalCtx, MAIN_CAM, &subCamId->at, &subCamId->eye);
-        this->cutsceneSubCamId = MAIN_CAM;
+        Gameplay_CameraSetAtEye(globalCtx, MAIN_CAM, &subCamId->at, &subCamId->eye);
+        this->cutsceneSubCamId = SUBCAM_FREE;
         if (this->actor.params == ENBIGPO_SUMMONED) {
             dampe = func_ActorCategoryIterateById(globalCtx, NULL, ACTORCAT_NPC, ACTOR_EN_TK);
             if (dampe != NULL) {

@@ -19,6 +19,7 @@
 // Currently most often called ctxt in MM, TODO: Refactor names when its used
 #define ACTIVE_CAM globalCtx->cameraPtrs[globalCtx->activeCamera]
 #define MAIN_CAM 0
+#define SUBCAM_FREE 0
 
 #define SET_NEXT_GAMESTATE(curState, newInit, newStruct)    \
     (curState)->nextGameStateInit = (GameStateFunc)newInit; \

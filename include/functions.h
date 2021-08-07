@@ -3039,7 +3039,7 @@ void func_80169590(GlobalContext* globalCtx, s16 param_2, s16 param_3);
 void func_80169600(GlobalContext* globalCtx, s16 param_2);
 // void func_80169668(void);
 Camera* Play_GetCamera(GlobalContext* globalCtx, s16 index);
-s32 func_8016970C(GlobalContext* globalCtx, s16 camId, Vec3f* at, Vec3f* eye);
+s32 Gameplay_CameraSetAtEye(GlobalContext* globalCtx, s16 camId, Vec3f* at, Vec3f* eye);
 // void func_8016981C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_80169940(void);
 // void func_80169988(void);
