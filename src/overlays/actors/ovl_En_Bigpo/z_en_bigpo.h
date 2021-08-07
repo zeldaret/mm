@@ -21,8 +21,7 @@ typedef struct EnBigpo {
     /* 0x188 */ Vec3s limbDrawTbl[ENBIGPO_LIMBCOUNT];
     /* 0x1C4 */ Vec3s transitionDrawTbl[ENBIGPO_LIMBCOUNT];
     /* 0x200 */ EnBigPoActionFunc actionFunc;
-    // need to know what func_801A2E54 does to know what this is
-    /* 0x204 */ u8 unkBool204;
+    /* 0x204 */ u8 unkBool204; // need to know what func_801A2E54 does to know what this is
     // idleTimer gets reused:
     // * when idle flying around, frames until next attack
     // * when spinning back into reality, counts frames from start
@@ -41,7 +40,7 @@ typedef struct EnBigpo {
     // both unk21C and unk220 are passed to func_800BE680, probably need that to know what they are
     /* 0x21C */ f32 unk21C; // tied to color alpha, decremented to zero
     /* 0x220 */ f32 unk220; // created from unk21C
-    /* 0x224 */ Vec3f limbPos[0x9];
+    /* 0x224 */ Vec3f limbPos[9];
     /* 0x290 */ Color_RGBA8 mainColor;
     /* 0x294 */ Color_RGBA8 lanternColor;
     /* 0x298 */ u8 pad298[0x14];
