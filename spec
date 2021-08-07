@@ -499,7 +499,6 @@ beginseg
     include "build/src/code/code_800F07C0.o"
     include "build/data/code/code_801BC2A0.data.o"
     include "build/src/code/z_face_reaction.o"
-    include "build/data/code/z_face_reaction.data.o"
     include "build/src/code/code_800F12D0.o"
     include "build/src/code/z_eventmgr.o"
     include "build/data/code/z_eventmgr.bss.o"
