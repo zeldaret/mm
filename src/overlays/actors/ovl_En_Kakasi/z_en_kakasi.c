@@ -40,12 +40,11 @@ void func_80970FF8(EnKakasi *this);
 void func_80971CE0(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, struct Actor* actor);
 
 
-ColliderCylinderInit D_80971D80[] = { // col init
-    0x0A000939, 0x20010000, 0.0f, 0xF7CFFFFF,
-    0.0f, 0xF7CFFFFF, 0.0f, 0x00050100,
-    0x00140046, 0.0f, 0.0f,
+static ColliderCylinderInit D_80971D80 = {
+    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
+    { 20, 70, 0, { 0, 0, 0 } },
 };
- //cant use this until we match init
 
 const ActorInit En_Kakasi_InitVars = {
     ACTOR_EN_KAKASI,
@@ -1046,7 +1045,7 @@ void func_80971064(EnKakasi* this, GlobalContext* globalCtx) {
             Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x3E8, 0);
             if (this->unk204 == 0) {
                 player = PLAYER;
-                func_80169DCC(globalCtx, 0, Entrance_CreateIndexFromSpawn(0) & 0xFFFF, 
+                func_80169DCC(globalCtx, 0, Entrance_CreateIndexFromSpawn(0), 
                     player->unk_3CE, 0xBFF, &player->unk_3C0, player->unk_3CC);
                 func_80169EFC(globalCtx);
 
