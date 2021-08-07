@@ -255,7 +255,7 @@
             0x80096C30 : "loadfragment2",
             0x80096C40 : "stackcheck",
             0x80096C50 : "gfxprint",
-            0x80097500 : "system_malloc",
+            0x80097500 : "",
             0x80097530 : "rand",
             0x80097540 : "vimodeHpf",
             0x800975E0 : "sins",
