@@ -139,7 +139,7 @@ beginseg
     include "build/src/boot/pfssearchfile.o"
     include "build/src/libultra/os/seteventmesg.o"
     include "build/data/boot/seteventmesg.bss.o"
-    include "build/src/boot_O2/sqrtf.o"
+    include "build/src/libultra/gu/sqrtf.o"
     include "build/src/boot/afterprenmi.o"
     include "build/src/libultra/io/contquery.o"
     include "build/src/libultra/gu/lookathil.o"
