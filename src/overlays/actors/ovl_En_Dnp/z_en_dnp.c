@@ -15,13 +15,12 @@ void EnDnp_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDnp_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDnp_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80B3D558(EnDnp* this, GlobalContext* globalCtx);
-void func_80B3D2D4(EnDnp* this, GlobalContext* globalCtx);
 void func_80B3D11C(EnDnp* this, GlobalContext* globalCtx);
-void func_80B3D3F8(EnDnp* this, GlobalContext* globalCtx);
+void func_80B3D2D4(EnDnp* this, GlobalContext* globalCtx);
 void func_80B3D338(EnDnp* this, GlobalContext* globalCtx);
+void func_80B3D3F8(EnDnp* this, GlobalContext* globalCtx);
+void func_80B3D558(EnDnp* this, GlobalContext* globalCtx);
 
-extern FlexSkeletonHeader D_06010D60;
 extern AnimationHeader D_060007D8;
 extern AnimationHeader D_0600125C;
 extern AnimationHeader D_060017F8;
@@ -32,23 +31,24 @@ extern AnimationHeader D_06004D08;
 extern AnimationHeader D_060057AC;
 extern AnimationHeader D_0600625C;
 extern AnimationHeader D_0600674C;
+extern AnimationHeader D_06006B74;
 extern AnimationHeader D_060071F4;
 extern AnimationHeader D_06007960;
 extern AnimationHeader D_06008588;
-extern AnimationHeader D_0600A900;
-extern AnimationHeader D_0600AEB8;
-extern AnimationHeader D_0600B754;
-extern AnimationHeader D_0600B324;
-extern AnimationHeader D_0600BAD8;
-extern AnimationHeader D_06006B74;
 extern AnimationHeader D_0600923C;
 extern AnimationHeader D_06009AA0;
-extern AnimationHeader D_06012428;
-extern AnimationHeader D_060115B8;
+extern AnimationHeader D_0600A900;
+extern AnimationHeader D_0600AEB8;
+extern AnimationHeader D_0600B324;
+extern AnimationHeader D_0600B754;
+extern AnimationHeader D_0600BAD8;
 extern Gfx D_060103D0[];
 extern Gfx D_060105D0[];
 extern Gfx D_060107D0[];
 extern Gfx D_060109D0[];
+extern FlexSkeletonHeader D_06010D60;
+extern AnimationHeader D_060115B8;
+extern AnimationHeader D_06012428;
 
 const ActorInit En_Dnp_InitVars = {
     ACTOR_EN_DNP,
@@ -180,14 +180,14 @@ s32 func_80B3CDA4(EnDnp* this, GlobalContext* globalCtx) {
 
     temp_s0 = CLAMP(temp_s0, -0x3FFC, 0x3FFC);
 
-    Math_SmoothStepToS(&this->unk_332, temp_s0, 3, 0x2AA8, 1);
+    Math_SmoothStepToS(&this->unk_332, temp_s0, 3, 0x2AA8, 0x1);
     sp30 = player->actor.world.pos;
     sp30.y = player->bodyPartsPos[7].y + 3.0f;
     sp3C = this->actor.world.pos;
     sp3C.y += 10.0f;
     pitch = Math_Vec3f_Pitch(&sp3C, &sp30);
     if (1) {};
-    Math_SmoothStepToS(&this->unk_330, pitch, 3, 0x2AA8, 1);
+    Math_SmoothStepToS(&this->unk_330, pitch, 3, 0x2AA8, 0x1);
 
     return 1;
 }
@@ -217,16 +217,15 @@ s32 func_80B3CF60(EnDnp* this, GlobalContext* globalCtx) {
         this->unk_322 |= 8;
         this->actionFunc = func_80B3D3F8;
         ret = true;
-    } else if (!(gSaveContext.weekEventReg[23] & 0x20)) {
-        if (Actor_HasParent(&this->actor, globalCtx)) {
-            func_8013AED4(&this->unk_322, 0, 7);
-            this->unk_322 &= ~0x500;
-            this->actor.parent = NULL;
-            this->unk_32E = 0;
-            this->actionFunc = func_80B3D338;
-            ret = true;
-        }
+    } else if (!(gSaveContext.weekEventReg[23] & 0x20) && Actor_HasParent(&this->actor, globalCtx)) {
+        func_8013AED4(&this->unk_322, 0, 7);
+        this->unk_322 &= ~0x500;
+        this->actor.parent = NULL;
+        this->unk_32E = 0;
+        this->actionFunc = func_80B3D338;
+        ret = true;
     }
+
     return ret;
 }
 
@@ -236,7 +235,7 @@ s32 func_80B3D044(EnDnp* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state != 0) {
         if (!(this->unk_322 & 0x200)) {
             this->unk_322 |= (0x200 | 0x10);
-            this->actor.flags &= -2;
+            this->actor.flags &= ~1;
             this->unk_324 = 0xFF;
         }
         func_8013AED4(&this->unk_322, 0, 7);
@@ -248,6 +247,7 @@ s32 func_80B3D044(EnDnp* this, GlobalContext* globalCtx) {
         this->unk_322 &= ~(0x200 | 0x10);
         this->actionFunc = func_80B3D2D4;
     }
+
     return ret;
 }
 
@@ -255,7 +255,6 @@ void func_80B3D11C(EnDnp* this, GlobalContext* globalCtx) {
     static s32 D_80B3DE74[] = {
         0, 16, 14, 10, 18, 12, 5, 7, 2, 19, 21, 22, 24, 8,
     };
-
     u32 temp_v0;
     s32 val;
 
@@ -273,7 +272,7 @@ void func_80B3D11C(EnDnp* this, GlobalContext* globalCtx) {
             if (this->unk_340 == 16) {
                 this->unk_322 |= 8;
             } else {
-                this->unk_322 &= ~0x8;
+                this->unk_322 &= ~8;
             }
 
             if (this->unk_340 == 19) {
@@ -299,9 +298,9 @@ void func_80B3D11C(EnDnp* this, GlobalContext* globalCtx) {
 
 void func_80B3D2D4(EnDnp* this, GlobalContext* globalCtx) {
     if (this->unk_322 & 0x20) {
-        Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0x2AA8);
+        Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x3, 0x2AA8);
     } else {
-        Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x2AA8);
+        Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 0x3, 0x2AA8);
     }
 }
 
@@ -324,10 +323,10 @@ void func_80B3D338(EnDnp* this, GlobalContext* globalCtx) {
 void func_80B3D3F8(EnDnp* this, GlobalContext* globalCtx) {
     if (func_8010BF58(&this->actor, globalCtx, D_80B3DE58, 0, &this->unk_328)) {
         func_8013AED4(&this->unk_322, 3, 7);
-        this->unk_322 &= ~0x8;
+        this->unk_322 &= ~8;
         this->actionFunc = func_80B3D2D4;
     } else {
-        Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0x2AA8);
+        Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x3, 0x2AA8);
     }
 }
 
@@ -369,7 +368,7 @@ void EnDnp_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_322 |= (0x100 | 0x80 | 0x10);
     this->actor.gravity = -1.0f;
     if (ENDNP_GET_7(&this->actor) == ENDNP_GET_7_1) {
-        this->actor.flags &= -2;
+        this->actor.flags &= ~1;
         Actor_SetScale(&this->actor, 0.00085000007f);
         func_8013AED4(&this->unk_322, 0, 7);
         this->actor.shape.rot.x = 0;
@@ -425,7 +424,7 @@ void EnDnp_Update(Actor* thisx, GlobalContext* globalCtx) {
         Actor_SetHeight(&this->actor, 30.0f);
         func_80B3CC80(this, globalCtx);
     }
-    
+
     if (this->unk_322 & 0x100) {
         func_80B3CA20(this);
     }
@@ -445,9 +444,9 @@ s32 func_80B3D974(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4, s32 ar
             sp6C.z = arg0;
             sp6C.y = arg1;
         }
-        Math_SmoothStepToS(&arg3->x, sp6C.x, 3, 0x2AA8, 182);
-        Math_SmoothStepToS(&arg3->y, sp6C.y, 3, 0x2AA8, 182);
-        Math_SmoothStepToS(&arg3->z, sp6C.z, 3, 0x2AA8, 182);
+        Math_SmoothStepToS(&arg3->x, sp6C.x, 3, 0x2AA8, 0xB6);
+        Math_SmoothStepToS(&arg3->y, sp6C.y, 3, 0x2AA8, 0xB6);
+        Math_SmoothStepToS(&arg3->z, sp6C.z, 3, 0x2AA8, 0xB6);
     } else {
         arg3->x = sp6C.x;
         arg3->y = sp6C.y;
@@ -496,7 +495,6 @@ void EnDnp_Draw(Actor* thisx, GlobalContext* globalCtx) {
         D_060107D0,
         D_060109D0,
     };
-
     EnDnp* this = THIS;
 
     if (this->unk_322 & 0x100) {
