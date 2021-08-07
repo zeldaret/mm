@@ -1665,7 +1665,7 @@ void func_800F0568(GlobalContext* globalCtx, Vec3f* position, s32 param_3, u16 s
 // void func_800F0FF0(void);
 // void func_800F10AC(void);
 // void func_800F112C(void);
-u16 func_800F1250(GlobalContext* globalCtx, u32 arg1);
+u16 Text_GetFaceReaction(GlobalContext* globalCtx, u32 reactionSet);
 void func_800F12D0(GlobalContext* globalCtx);
 void func_800F1304(GlobalContext* globalCtx, s16 param_2);
 void func_800F1374(s32 param_1, s16 param_2);

@@ -1342,7 +1342,7 @@ void EnOssan_InitPartTimeWorker(EnOssan* this, GlobalContext* globalCtx) {
 
 s32 EnOssan_GetWelcomeCuriosityShopMan(EnOssan* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
-    u16 ret = func_800F1250(globalCtx, 0x2F);
+    u16 ret = Text_GetFaceReaction(globalCtx, 0x2F);
 
     if (ret != 0) {
         this->animationIdx = 4;
@@ -1375,7 +1375,7 @@ s32 EnOssan_GetWelcomeCuriosityShopMan(EnOssan* this, GlobalContext* globalCtx) 
 
 s32 EnOssan_GetWelcomePartTimeWorker(EnOssan* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
-    u16 ret = func_800F1250(globalCtx, 0x36);
+    u16 ret = Text_GetFaceReaction(globalCtx, 0x36);
 
     if (ret != 0) {
         this->flags |= END_INTERACTION;

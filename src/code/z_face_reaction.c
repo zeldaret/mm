@@ -1,6 +1,28 @@
 #include "global.h"
 
-u16 D_801BC420[][0x13] = {
+/**
+ * Indexes of this array:
+ * - index 0x00: PLAYER_MASK_MASK_OF_TRUTH
+ * - index 0x01: PLAYER_MASK_KAFEIS_MASK
+ * - index 0x02: PLAYER_MASK_ALL_NIGHT_MASK
+ * - index 0x03: PLAYER_MASK_BUNNY_HOOD
+ * - index 0x04: PLAYER_MASK_KEATON_MASK
+ * - index 0x05: PLAYER_MASK_GAROS_MASK
+ * - index 0x06: PLAYER_MASK_ROMANIS_MASK
+ * - index 0x07: PLAYER_MASK_CIRCUS_LEADERS_MASK
+ * - index 0x08: PLAYER_MASK_POSTMANS_HAT
+ * - index 0x09: PLAYER_MASK_COUPLES_MASK
+ * - index 0x0A: PLAYER_MASK_GREAT_FAIRYS_MASK
+ * - index 0x0B: PLAYER_MASK_GIBDO_MASK
+ * - index 0x0C: PLAYER_MASK_DON_GEROS_MASK
+ * - index 0x0D: PLAYER_MASK_KAMAROS_MASK
+ * - index 0x0E: PLAYER_MASK_CAPTAINS_HAT
+ * - index 0x0F: PLAYER_MASK_STONE_MASK
+ * - index 0x10: PLAYER_MASK_BREMEN_MASK
+ * - index 0x11: PLAYER_MASK_BLAST_MASK
+ * - index 0x12: PLAYER_MASK_MASK_OF_SCENTS
+ */
+u16 sReactionTextIds[][PLAYER_MASK_GIANTS_MASK-1] = {
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -158,9 +180,9 @@ u16 D_801BC420[][0x13] = {
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 };
 
-u16 func_800F1250(GlobalContext* globalCtx, u32 arg1) {
-    if ((Player_GetMask(globalCtx) > 0) && (Player_GetMask(globalCtx) < 0x14)) {
-        return D_801BC420[arg1][Player_GetMask(globalCtx) - 1];
+u16 Text_GetFaceReaction(GlobalContext* globalCtx, u32 reactionSet) {
+    if ((Player_GetMask(globalCtx) > PLAYER_MASK_NONE) && (Player_GetMask(globalCtx) < PLAYER_MASK_GIANTS_MASK)) {
+        return sReactionTextIds[reactionSet][Player_GetMask(globalCtx) - 1];
     }
     return 0;
 }
