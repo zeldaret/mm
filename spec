@@ -49,7 +49,6 @@ beginseg
     include "build/asm/boot/fp.text.o"
     include "build/src/boot_O2/system_malloc.o"
     include "build/data/boot/system_malloc.data.o"
-    include "build/data/boot/system_malloc.bss.o"
     include "build/src/boot_O2/rand.o"
     include "build/data/boot/rand.data.o"
     include "build/data/boot/rand.bss.o"

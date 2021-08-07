@@ -1,23 +1,50 @@
 #include "global.h"
 
-void* SystemArena_Alloc(u32 arg0) {
-    return __osMalloc(&gSystemArena, arg0);
+Arena gSystemArena;
+
+void* SystemArena_Alloc(u32 size) {
+    return __osMalloc(&gSystemArena, size);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/system_malloc/SystemArena_AllocR.s")
+void* SystemArena_AllocR(u32 size) {
+    return __osMallocR(&gSystemArena, size);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/system_malloc/SystemArena_Realloc.s")
+void* SystemArena_Realloc(void* oldPtr, u32 newSize) {
+    return __osRealloc(&gSystemArena, oldPtr, newSize);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/system_malloc/SystemArena_Free.s")
+void SystemArena_Free(void* ptr) {
+    __osFree(&gSystemArena, ptr);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/system_malloc/SystemArena_Calloc.s")
+void* SystemArena_Calloc(u32 elements, u32 size) {
+    void* ptr;
+    u32 totalSize = elements * size;
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/system_malloc/SystemArena_AnalyzeArena.s")
+    ptr = __osMalloc(&gSystemArena, totalSize);
+    if (ptr != NULL) {
+        bzero(ptr, totalSize);
+    }
+    return ptr;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/system_malloc/SystemArena_CheckArena.s")
+void SystemArena_AnalyzeArena(u32* maxFreeBlock, u32* bytesFree, u32* bytesAllocated) {
+    __osAnalyzeArena(&gSystemArena, maxFreeBlock, bytesFree, bytesAllocated);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/system_malloc/SystemArena_InitArena.s")
+void SystemArena_CheckArena(void) {
+    __osCheckArena(&gSystemArena);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/system_malloc/SystemArena_Cleanup.s")
+void SystemArena_InitArena(void* start, u32 size) {
+    __osMallocInit(&gSystemArena, start, size);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/system_malloc/SystemArena_IsInitialized.s")
+void SystemArena_Cleanup(void) {
+    __osMallocCleanup(&gSystemArena);
+}
+
+void SystemArena_IsInitialized(void) {
+    __osMallocIsInitalized(&gSystemArena);
+}
