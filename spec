@@ -1831,7 +1831,6 @@ beginseg
     name "ovl_En_Kakasi"
     compress
     include "build/src/overlays/actors/ovl_En_Kakasi/z_en_kakasi.o"
-    include "build/data/ovl_En_Kakasi/ovl_En_Kakasi.data.o"
     include "build/data/ovl_En_Kakasi/ovl_En_Kakasi.reloc.o"
 endseg
 

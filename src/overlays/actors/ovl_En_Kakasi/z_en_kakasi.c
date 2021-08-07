@@ -19,7 +19,6 @@ void func_80970658(EnKakasi* this, GlobalContext* globalCtx);
 void func_80970740(EnKakasi* this, GlobalContext* globalCtx);
 void func_80970978(EnKakasi* this, GlobalContext* globalCtx);
 void func_80970A9C(EnKakasi* this, GlobalContext* globalCtx);
-<<<<<<< HEAD
 void func_809714BC(EnKakasi* this, GlobalContext* globalCtx);
 void func_80971AD4(EnKakasi* this, GlobalContext* globalCtx);
 void func_809717D0(EnKakasi* this, GlobalContext* globalCtx);
@@ -40,14 +39,26 @@ void func_80970FF8(EnKakasi *this);
 
 void func_80971CE0(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, struct Actor* actor);
 
-//ColliderCylinderInit D_80971D80[] = { // col init
-    //0x0A000939, 0x20010000, 0.0f, 0xF7CFFFFF,
-    //0.0f, 0xF7CFFFFF, 0.0f, 0x00050100,
-    //0x00140046, 0.0f, 0.0f,
-//};
-// cant use this until we match init
 
-static ColliderCylinderInit D_80971D80 = { // sCylinderInit 
+ColliderCylinderInit D_80971D80[] = { // col init
+    0x0A000939, 0x20010000, 0.0f, 0xF7CFFFFF,
+    0.0f, 0xF7CFFFFF, 0.0f, 0x00050100,
+    0x00140046, 0.0f, 0.0f,
+};
+ //cant use this until we match init
+
+const ActorInit En_Kakasi_InitVars = {
+    ACTOR_EN_KAKASI,
+    ACTORCAT_NPC,
+    FLAGS,
+    OBJECT_KA,
+    sizeof(EnKakasi),
+    (ActorFunc)EnKakasi_Init,
+    (ActorFunc)EnKakasi_Destroy,
+    (ActorFunc)EnKakasi_Update,
+    (ActorFunc)EnKakasi_Draw,
+};
+
 Vec3f D_80971DCC[] = {
     {0.0f, 60.0f, 60.0f},
     {40.0f, 40.0f, 50.0f},
@@ -215,10 +226,12 @@ void EnKakasi_Init(Actor *thisx, GlobalContext *globalCtx) {
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kakasi_0x8096F5E0/EnKakasi_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/EnKakasi_Init.s")
 #endif
 
-void EnKakasi_SetAnimation(EnKakasi *this, s32 index) { // func_8096F800
+// I messed up, now that I changed this the nonmatching cannot use it
+// EnKakasi_SetAnimation
+void func_8096F800(EnKakasi *this, s32 index) { // func_8096F800
     this->animeIndex = index;
     this->animeFrameCount = SkelAnime_GetFrameCount(D_80972048[this->animeIndex]);
     // 1: regular playback speed, 0: starting frame
@@ -264,19 +277,19 @@ void func_8096F8D8(EnKakasi *this) {
 
 // moves the player's position relative to scarecrow during song teach, also each frame of dance the night away
 void func_8096FA18(EnKakasi *this, GlobalContext *globalCtx) {
-    Actor* player = &PLAYER->base;
+    Player* player = PLAYER;
     s16 sceneNum;
 
     sceneNum = globalCtx->sceneNum;
     if (sceneNum == SCENE_8ITEMSHOP) {
-        player->world.pos.x = -50.0f;
-        player->world.pos.z = 155.0f;
+        player->actor.world.pos.x = -50.0f;
+        player->actor.world.pos.z = 155.0f;
     } else if (sceneNum == SCENE_TENMON_DAI) {
-        player->world.pos.x = 60.0f;
-        player->world.pos.z = -190.0f;
+        player->actor.world.pos.x = 60.0f;
+        player->actor.world.pos.z = -190.0f;
     }
 
-    Math_SmoothStepToS(&player->shape.rot.y, (this->actor.yawTowardsPlayer + 0x8000), 5, 0x3E8, 0);
+    Math_SmoothStepToS(&player->actor.shape.rot.y, (this->actor.yawTowardsPlayer + 0x8000), 5, 0x3E8, 0);
 }
 
 // this goes off every frame of dancing the night away, and song teaching
@@ -304,7 +317,7 @@ void func_8096FBB8(EnKakasi* this, GlobalContext* globalCtx) {
         this->unk190++;
     }
     if ((this->unk190 != 0) && (this->animeIndex != 1)) {
-        EnKakasi_SetAnimation(this, 1);
+        func_8096F800(this, 1);
     }
     if (this->unk190 >= 9) {
         this->unk190 = 8;
@@ -317,14 +330,14 @@ void func_8096FBB8(EnKakasi* this, GlobalContext* globalCtx) {
 
 // init extension
 void func_8096FC8C(EnKakasi *this) {
-    EnKakasi_SetAnimation(this, 7);
+    func_8096F800(this, 7);
     this->actionFunc = func_8096FCC4;
 }
 
 // action func
 // goes off every frame after scene reload after dancing all night action (fade from black, pause for dawn of day text, continue until he starts talking)
 void func_8096FCC4(EnKakasi* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
     if ((gSaveContext.respawnFlag != -4) && (gSaveContext.respawnFlag != -8)) {
         if ((gSaveContext.time != 0x4000) && (gSaveContext.time != 0xC000) 
@@ -381,21 +394,21 @@ void func_8096FE00(EnKakasi* this, GlobalContext *globalCtx) {
         if ((this->actor.projectedPos.z > -20.0f) 
           && ((s32) passedValue1 > 0) && ((s32) passedValue1 < 0x140) 
           && ((s32) passedValue2 > 0) && ((s32) passedValue2 < 0xF0) && (this->animeIndex != 1)) {
-            EnKakasi_SetAnimation(this, 1);
+            func_8096F800(this, 1);
             this->skelanime.animPlaybackSpeed = 2.0f;
         }
-    } else if (func_8012403C(globalCtx) == 0xE) { // wearing kamaro mask
+    } else if (Player_GetMask(globalCtx) == 0xE) { // wearing kamaro mask
         if (this->animeIndex != 1) {
-            EnKakasi_SetAnimation(this, 1);
+            func_8096F800(this, 1);
             this->skelanime.animPlaybackSpeed = 2.0f;
         }
     } else if ((saveContextDay == 3) && (gSaveContext.isNight)) {
         this->skelanime.animPlaybackSpeed = 1.0f;
         if (this->animeIndex != 1) {
-            EnKakasi_SetAnimation(this, 1);
+            func_8096F800(this, 1);
         }
     } else if (this->animeIndex != 8) {
-        EnKakasi_SetAnimation(this, 8);
+        func_8096F800(this, 8);
     }
     if (this->actor.xzDistToPlayer < 120.0f) {
         func_800B8614(&this->actor, globalCtx, 100.0f);
@@ -406,12 +419,12 @@ void func_8096FE00(EnKakasi* this, GlobalContext *globalCtx) {
 // goes off once when you start talking to him from idle, but NOT from day/night transition
 void func_80970008(EnKakasi *this) {
     if (this->animeIndex != 1) {
-        EnKakasi_SetAnimation(this, 1);
+        func_8096F800(this, 1);
     }
 
     this->unk1AC = 5;
     this->unk196 = 1;
-    EnKakasi_SetAnimation(this, 3);
+    func_8096F800(this, 3);
     this->actionFunc = func_8097006C;
 }
 
@@ -432,7 +445,7 @@ void func_8097006C(EnKakasi* this, GlobalContext* globalCtx) {
     // Time will pass in the blink of an eye if you dance with me."
     if ((this->actor.textId != 0x1644) && (this->animeFrameCount <= currentAnimeFrame) 
       && (this->animeIndex == 7)) {
-        EnKakasi_SetAnimation(this, 3);
+        func_8096F800(this, 3);
         this->unkCounter1A4 = 0;
     }
 
@@ -442,7 +455,7 @@ void func_8097006C(EnKakasi* this, GlobalContext* globalCtx) {
         if ((this->animeFrameCount <= currentAnimeFrame) && (this->animeIndex != 3)) {
             if (++this->unkCounter1A4 >= 2) {
                 this->unkCounter1A4 = 0;
-                EnKakasi_SetAnimation(this, 3);
+                func_8096F800(this, 3);
             }
         }
     }
@@ -469,7 +482,7 @@ void func_8097006C(EnKakasi* this, GlobalContext* globalCtx) {
                 // also delay slot shenanigans
                 //fake_label: ;
                 if (this->animeIndex != 1) {
-                    EnKakasi_SetAnimation(this, 1);
+                    func_8096F800(this, 1);
                 }
         
                 //if ((gSaveContext.day == 3) && (gSaveContext.isNight != 0)) {
@@ -517,7 +530,7 @@ void func_8097006C(EnKakasi* this, GlobalContext* globalCtx) {
             } else if ((this->actor.textId == 0x1645) || (this->actor.textId == 0x164E)) {
                 this->actor.textId = 0x1650;
                 if (this->animeIndex != 1) {
-                    EnKakasi_SetAnimation(this, 1);
+                    func_8096F800(this, 1);
                 }
                 this->unk1AC = 4;
 
@@ -525,7 +538,7 @@ void func_8097006C(EnKakasi* this, GlobalContext* globalCtx) {
             // Time will pass in the blink of an eye if you dance with me."
             } else if (this->actor.textId == 0x1644) {
                 if (this->animeIndex != 1) {
-                    EnKakasi_SetAnimation(this, 1);
+                    func_8096F800(this, 1);
                 }
                 if (gSaveContext.isNight != 0) {
                     // "If you like, baby, we can forget the time and dance 'til dawn!"
@@ -538,14 +551,14 @@ void func_8097006C(EnKakasi* this, GlobalContext* globalCtx) {
                     // "But outside it seems to have gotten kind of...dangerous.
             } else if (this->actor.textId == 0x164F) {
                 if (this->animeIndex != 1) {
-                    EnKakasi_SetAnimation(this, 1);
+                    func_8096F800(this, 1);
                 }
                 // Take care...
                 this->actor.textId = 0x165A;
             // "Oh, sorry. That's too bad. In that case, come back anytime if you do ...
             } else if (this->actor.textId == 0x1651) {
                 if (this->animeIndex != 1) {
-                    EnKakasi_SetAnimation(this, 1);
+                    func_8096F800(this, 1);
                 }
                 this->actor.textId = 0x1654;
             } else if (this->actor.textId == 0x1654) {
@@ -605,7 +618,7 @@ void func_8097006C(EnKakasi* this, GlobalContext* globalCtx) {
                     // "Oh, yeah!  In that case, forget the time.  Let's dance!"
                     this->actor.textId = 0x1652;
                 }
-                EnKakasi_SetAnimation(this, 2);
+                func_8096F800(this, 2);
             } else {
                 func_8019F230(); // play 0x480A sfx (cancel) and calls func_801A75E8
                 // "Do you want to learn it?  No Yes"
@@ -621,7 +634,7 @@ void func_8097006C(EnKakasi* this, GlobalContext* globalCtx) {
                 }
                 this->unkCounter1A4 = 0;
                 if (this->animeIndex != 0) {
-                    EnKakasi_SetAnimation(this, 0);
+                    func_8096F800(this, 0);
                 }
             }
         }
@@ -629,7 +642,7 @@ void func_8097006C(EnKakasi* this, GlobalContext* globalCtx) {
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Kakasi_0x8096F5E0/func_8097006C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_8097006C.s")
 #endif
 
 // setup for.. ?
@@ -640,7 +653,7 @@ void func_809705E4(EnKakasi* this, GlobalContext* globalCtx) {
     this->cutsceneCamera = 0;
     this->unk20C = 0.0f;
     this->unk210 = 60.0f;
-    EnKakasi_SetAnimation(this, 4);
+    func_8096F800(this, 4);
     this->unk196 = 2;
     this->actionFunc = func_80970658;
 }
@@ -700,7 +713,7 @@ void func_80970740(EnKakasi* this, GlobalContext* globalCtx) {
         this->unk238.z = D_80971DCC[(s16)this->unk190].z;
 
         Math_Vec3f_Copy(&tempVec,  &this->unk238);
-        func_8010CAA0(&this->actor.home.pos, &tempVec, &this->unk238, 1);
+        OLib_DbCameraVec3fSum(&this->actor.home.pos, &tempVec, &this->unk238, 1);
         Math_Vec3f_Copy(&this->unk244, &this->unk22C);
         Math_Vec3f_Copy(&this->unk214, &this->unk238);
         Math_Vec3f_Copy(&this->unk220, &this->unk244);
@@ -719,13 +732,13 @@ void func_80970740(EnKakasi* this, GlobalContext* globalCtx) {
             this->actor.textId = 0x1647;
             this->unk1A8 = 2;
             this->unk1AC = 5;
-            EnKakasi_SetAnimation(this, 0);
+            func_8096F800(this, 0);
             this->actionFunc = func_8097006C;
 
         } else if (globalCtx->msgCtx.unk1202A == 3) {
             this->unk192 = 0x1E;
             this->skelanime.animPlaybackSpeed = 2.0f;
-            EnKakasi_SetAnimation(this, 2);
+            func_8096F800(this, 2);
             this->actionFunc = func_80970978;//post-song-teach twirl
         }
     }
@@ -742,7 +755,7 @@ void func_80970978(EnKakasi* this, GlobalContext *globalCtx) {
     temp192 = this->unk192;
     tempAnimeFrame = this->skelanime.animCurrentFrame;
     if (temp192 == 0 && this->animeIndex != 4) {
-        EnKakasi_SetAnimation(this, 4);
+        func_8096F800(this, 4);
         this->skelanime.animPlaybackSpeed = 2.0f;
         temp192 = this->unk192;
     }
@@ -757,7 +770,7 @@ void func_80970A10(EnKakasi *this, GlobalContext *globalCtx) {
     globalCtx->msgCtx.unk1202A = 4;
     this->unk190 = 0;
     this->unkCounter1A4 = 0;
-    EnKakasi_SetAnimation(this, 2);
+    func_8096F800(this, 2);
     this->cutsceneCamera = 0;
     this->unk1AC = 5;
     this->unk1A8 = 1;
@@ -769,13 +782,13 @@ void func_80970A10(EnKakasi *this, GlobalContext *globalCtx) {
 // action func
 //  think this is the post-song teaching action func
 void func_80970A9C(EnKakasi* this, GlobalContext *globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     f32 tempAnimFrame; // needed to get the frame to load earlier?
     Vec3f vec3fCopy;
 
     tempAnimFrame = this->skelanime.animCurrentFrame;
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 1, 0xBB8, 0);
-    Math_SmoothStepToS(&player->base.shape.rot.y, (this->actor.yawTowardsPlayer + 0x8000), 5, 0x3E8, 0);
+    Math_SmoothStepToS(&player->actor.shape.rot.y, (this->actor.yawTowardsPlayer + 0x8000), 5, 0x3E8, 0);
 
     // this is setup, only goes off first frame
     if ((s16) this->unk190 == 0) {
@@ -792,13 +805,13 @@ void func_80970A9C(EnKakasi* this, GlobalContext *globalCtx) {
     if ((this->actor.textId == 0x1648) && (this->animeIndex == 2) && (this->animeFrameCount <= tempAnimFrame)) {
         this->unkCounter1A4++;
         if (this->unkCounter1A4>= 2) {
-            EnKakasi_SetAnimation(this, 0); // reach this point when he finishes dancing idle
+            func_8096F800(this, 0); // reach this point when he finishes dancing idle
         }
     }
     if ((this->actor.textId == 0x164B) && (this->animeIndex == 0) && (this->animeFrameCount <= tempAnimFrame)) {
         this->unkCounter1A4++;
         if (this->unkCounter1A4 >= 2) {
-            EnKakasi_SetAnimation(this, 3);
+            func_8096F800(this, 3);
         }
     }
 
@@ -826,7 +839,7 @@ void func_80970A9C(EnKakasi* this, GlobalContext *globalCtx) {
         this->unk238.y = D_80971FA0[this->unk190].y;
         this->unk238.z = D_80971FA0[this->unk190].z;
         Math_Vec3f_Copy(&vec3fCopy, &this->unk238);
-        func_8010CAA0(&this->actor.home.pos, &vec3fCopy, &this->unk238, 1);
+        OLib_DbCameraVec3fSum(&this->actor.home.pos, &vec3fCopy, &this->unk238, 1);
         this->unk244.x = D_80971FE8[(s16) this->unk190].x + this->unk22C.x;
         this->unk244.y = D_80971FE8[(s16) this->unk190].y + this->unk22C.y;
         this->unk244.z = D_80971FE8[(s16) this->unk190].z + this->unk22C.z;
@@ -852,7 +865,7 @@ void func_80970A9C(EnKakasi* this, GlobalContext *globalCtx) {
                 // "I know of a mysterious song that allows you to manipulate the flow of time..."
                 this->actor.textId = 0x1649;
                 if (this->animeIndex != 0) {
-                    EnKakasi_SetAnimation(this, 0);
+                    func_8096F800(this, 0);
                 }
 
             // "I know of a mysterious song that allows you to manipulate the flow of time..."
@@ -870,7 +883,7 @@ void func_80970A9C(EnKakasi* this, GlobalContext *globalCtx) {
             } else if (this->actor.textId == 0x164B) {
                 // "If you want to see me again, play that song you wrote for me here ...
                 this->actor.textId = 0x164C;
-                EnKakasi_SetAnimation(this, 4);
+                func_8096F800(this, 4);
 
             } else {
                 // "If you want to see me again, play that song you wrote for me here ...
@@ -928,7 +941,7 @@ void func_80970FF8(EnKakasi *this) {
     this->unkCounter1A4 = 0;
     this->unk20C = 0.0f;
     this->unk210 = 60.0f;
-    EnKakasi_SetAnimation(this, 4);
+    func_8096F800(this, 4);
     Math_Vec3f_Copy(&this->unk22C, &this->actor.home.pos);
     func_8016566C(0xB4);
     this->actionFunc = func_80971064;
@@ -941,7 +954,7 @@ void func_80971064(EnKakasi* this, GlobalContext* globalCtx) {
     //EnKakasi* this= (EnKakasi*)thisx; // matches without, leaving as EnKakasi* this for now
     f32 currentFrame;
     Vec3f localVec3f;
-    ActorPlayer* player;
+    Player* player;
 
     currentFrame = this->skelanime.animCurrentFrame;
     func_8096FA18(this, globalCtx); // move player in front of scarecrow
@@ -952,7 +965,7 @@ void func_80971064(EnKakasi* this, GlobalContext* globalCtx) {
     this->unk238.y = D_80971E38[this->unk190].y;
     this->unk238.z = D_80971E38[this->unk190].z;
     Math_Vec3f_Copy(&localVec3f, &this->unk238);
-    func_8010CAA0(&this->actor.home.pos, &localVec3f, &this->unk238, 1);
+    OLib_DbCameraVec3fSum(&this->actor.home.pos, &localVec3f, &this->unk238, 1);
 
     // we assign unk244 here but then under the next condition we set unk220->unk244?
     // bug? think this condition was supposed to important, was optimized out without knowing
@@ -979,7 +992,7 @@ void func_80971064(EnKakasi* this, GlobalContext* globalCtx) {
             if ((this->unk204 == 0) && (this->animeFrameCount <= currentFrame)) {
                 this->unk204 = 0x14;
                 this->unk190++;
-                EnKakasi_SetAnimation(this, 1);
+                func_8096F800(this, 1);
             }
             return;
         case 2:
@@ -1034,7 +1047,7 @@ void func_80971064(EnKakasi* this, GlobalContext* globalCtx) {
             if (this->unk204 == 0) {
                 player = PLAYER;
                 func_80169DCC(globalCtx, 0, Entrance_CreateIndexFromSpawn(0) & 0xFFFF, 
-                    player->unk3CE, 0xBFF, &player->unk3C0, player->unk3CC);
+                    player->unk_3CE, 0xBFF, &player->unk_3C0, player->unk_3CC);
                 func_80169EFC(globalCtx);
 
                 if(0){}
@@ -1060,7 +1073,7 @@ void EnKakasi_DoNothing(EnKakasi* this, GlobalContext* globalCtx) { }
 // setup for digging animation
 void func_80971440(EnKakasi *this){
     if (this->animeIndex != 1) {
-        EnKakasi_SetAnimation(this, 1);
+        func_8096F800(this, 1);
     }
     this->unk190 = 0;
     this->unkCounter1A4 = 0;
@@ -1084,7 +1097,7 @@ void func_809714BC(EnKakasi* this, GlobalContext *globalCtx) {
         this->unk238.z = D_80972030.z;
 
         Math_Vec3f_Copy( &tempunk238, &this->unk238);
-        func_8010CAA0(&this->actor.home.pos, &tempunk238, &this->unk238, 1);
+        OLib_DbCameraVec3fSum(&this->actor.home.pos, &tempunk238, &this->unk238, 1);
         this->unk244.x = ((float)D_8097203C.x) + this->unk22C.x; //float cast is req to stop regalloc
         this->unk244.y = ((float)D_8097203C.y) + this->unk22C.y;
         this->unk244.z = ((float)D_8097203C.z) + this->unk22C.z;
@@ -1181,7 +1194,7 @@ void func_8097193C(EnKakasi* this, GlobalContext *globalCtx) {
     this->actor.shape.rot.y += 0x3000;
 
     if (this->animeIndex != 1) {
-        EnKakasi_SetAnimation(this, 1);
+        func_8096F800(this, 1);
     }
     if (this->actor.shape.yOffset < -10.0f) {
         if ((globalCtx->gameplayFrames & 7) == 0) {
@@ -1252,11 +1265,11 @@ void EnKakasi_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    func_800B78B8(globalCtx, &this->actor, 50.0f, 50.0f, 100.0f, 0x1C);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 50.0f, 50.0f, 100.0f, 0x1C);
     if (this->actor.draw != 0) {
         Collider_UpdateCylinder( &this->actor, &this->collider);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 }
 
@@ -1276,82 +1289,3 @@ void EnKakasi_Draw(Actor* thisx, GlobalContext *globalCtx) {
        this->skelanime.limbDrawTbl, (s32) this->skelanime.dListCount, NULL, func_80971CE0, &this->actor);
 
 }
-=======
-#endif
-
-extern ColliderCylinderInit D_80971D80;
-
-extern UNK_TYPE D_06000214;
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/EnKakasi_Destroy.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/EnKakasi_Init.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_8096F800.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_8096F88C.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_8096F8D8.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_8096FA18.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_8096FAAC.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_8096FBB8.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_8096FC8C.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_8096FCC4.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_8096FDE8.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_8096FE00.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_80970008.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_8097006C.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_809705E4.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_80970658.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_80970740.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_80970978.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_80970A10.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_80970A9C.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_80970F20.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_80970FF8.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_80971064.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_80971430.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_80971440.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_809714BC.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_80971794.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_809717D0.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_8097185C.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_8097193C.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_80971A38.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_80971A64.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_80971AD4.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/EnKakasi_Update.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/func_80971CE0.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/EnKakasi_Draw.s")
->>>>>>> master
