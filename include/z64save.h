@@ -3,7 +3,7 @@
 
 #include "ultra64.h"
 #include "z64math.h"
-#include <os.h>
+#include "os.h"
 
 typedef struct {
     /* 0x00 */ u8 buttonItems[4][4];
@@ -51,8 +51,7 @@ typedef struct {
     /* 0x000C */ u16 time;     // "zelda_time"
     /* 0x000E */ u16 owlSaveLocation;
     /* 0x0010 */ s32 isNight;        // "asahiru_fg"
-    /* 0x0014 */ u16 unk_14;         // "change_zelda_time"
-    /* 0x0016 */ u16 unk_16;
+    /* 0x0014 */ u32 unk_14;         // "change_zelda_time"
     /* 0x0018 */ s32 day;            // "totalday"
     /* 0x001C */ u32 daysElapsed;    // "eventday"
     /* 0x0020 */ u8 playerForm;      // "player_character"
@@ -74,7 +73,7 @@ typedef struct {
     /* 0x0042 */ u8 doubleDefense;   // "life_ability"
     /* 0x0043 */ u8 unk_43;          // "ocarina_round"
     /* 0x0044 */ u8 unk_44;          // "first_memory"
-    /* 0x0046 */ u16 unk_46;         // "memory_warp_point"
+    /* 0x0046 */ u16 owlsHit;         // "memory_warp_point"
     /* 0x0048 */ u8 unk_48;          // "last_warp_pt"
     /* 0x004A */ s16 savedSceneNum;  // "scene_data_ID"
     /* 0x004C */ ItemEquips equips;
@@ -189,7 +188,7 @@ typedef enum {
     /* 0x05 */ RESPAWN_MODE_DEKU,
     /* 0x06 */ RESPAWN_MODE_CHILD_LINK,
     /* 0x07 */ RESPAWN_MODE_UNK_7,
-    /* 0x07 */ RESPAWN_MODE_UNK_8,
+    /* 0x07 */ RESPAWN_MODE_UNK_8
 } RespawnMode;
 
 typedef enum {

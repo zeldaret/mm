@@ -1,6 +1,6 @@
 /*
  * File: z_bg_ctower_gear.c
- * Overlay: Bg_Ctower_Gear
+ * Overlay: ovl_Bg_Ctower_Gear
  * Description: Different Cogs/Organ inside Clock Tower
  */
 
@@ -40,17 +40,11 @@ const ActorInit Bg_Ctower_Gear_InitVars = {
 };
 
 extern Gfx D_06010828[];
-
 extern Gfx D_06015F30[];
-
 extern Gfx D_060160A0[];
-
 extern CollisionHeader D_06016E70;
-
 extern Gfx D_06017018[];
-
 extern Gfx D_06018118[];
-
 extern CollisionHeader D_06018588;
 
 static Vec3f D_80AD3270[] = {
@@ -188,7 +182,7 @@ void BgCtowerGear_UpdateOrgan(Actor* thisx, GlobalContext* globalCtx) {
     BgCtowerGear* this = THIS;
 
     if (func_800EE29C(globalCtx, 0x68)) {
-        switch (globalCtx->csCtx.actorActions[func_800EE200(globalCtx, 0x68)]->unk0) {
+        switch (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x68)]->unk0) {
             case 1:
                 this->dyna.actor.draw = NULL;
                 func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);

@@ -37,10 +37,6 @@ const ActorInit Obj_Tokei_Step_InitVars = {
     (ActorFunc)ObjTokeiStep_Draw,
 };
 
-extern Gfx D_06000088[];
-
-extern CollisionHeader D_06000968;
-
 static f32 panelXOffsets[] = { -105.0f, -90.0f, -75.0f, -60.0f, -45.0f, -30.0f, -15.0f };
 
 static f32 dustSpawnXOffsets[] = { -60.0f, -40.0f, -20.0f, 0.0f, 20.0f, 40.0f, 60.0f };
@@ -53,6 +49,9 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
+
+extern Gfx D_06000088[];
+extern CollisionHeader D_06000968;
 
 void ObjTokeiStep_SetSysMatrix(ObjTokeiStepPanel* panel) {
     MtxF* sysMatrix;
@@ -197,7 +196,7 @@ void ObjTokeiStep_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     BcCheck3_BgActorInit(&this->dyna, 0);
-    if ((globalCtx->sceneNum == 0x6F) && (gSaveContext.sceneSetupIndex == 2) && (globalCtx->csCtx.unk12 == 0)) {
+    if ((globalCtx->sceneNum == 0x6F) && (gSaveContext.sceneSetupIndex == 2) && (globalCtx->csCtx.unk_12 == 0)) {
         BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000968);
         ObjTokeiStep_InitSteps(this);
         ObjTokeiStep_SetupBeginOpen(this);
@@ -226,7 +225,7 @@ void ObjTokeiStep_BeginOpen(ObjTokeiStep* this, GlobalContext* globalCtx) {
     CsCmdActorAction* action;
 
     if (func_800EE29C(globalCtx, 0x86)) {
-        action = globalCtx->csCtx.actorActions[func_800EE200(globalCtx, 0x86)];
+        action = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x86)];
         if ((globalCtx->csCtx.frames == (*action).startFrame) && action->unk0) {
             this->dyna.actor.draw = ObjTokeiStep_DrawOpen;
             ObjTokeiStep_SetupOpen(this);

@@ -18,12 +18,13 @@
 
 // Currently most often called ctxt in MM, TODO: Refactor names when its used
 #define ACTIVE_CAM globalCtx->cameraPtrs[globalCtx->activeCamera]
+#define MAIN_CAM 0
 
 #define SET_NEXT_GAMESTATE(curState, newInit, newStruct)    \
     (curState)->nextGameStateInit = (GameStateFunc)newInit; \
-    (curState)->nextGameStateSize = sizeof(newStruct);
+    (curState)->nextGameStateSize = sizeof(newStruct)
 
-#define PLAYER ((ActorPlayer*)globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first)
+#define PLAYER ((Player*)globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first)
 
 // linkAge still exists in MM, but is always set to 0 (always adult)
 // There are remnants of these macros from OOT, but they are essentially useless
@@ -31,6 +32,8 @@
 #define LINK_IS_ADULT (gSaveContext.linkAge == 0)
 
 #define CURRENT_DAY (gSaveContext.day % 5)
+
+#define CLOCK_TIME(hr, min) ((s32)(((hr) * 60 + (min)) * 0x10000 / (24 * 60)))
 
 #define SLOT(item) gItemSlots[item]
 #define AMMO(item) gSaveContext.inventory.ammo[SLOT(item)]
@@ -50,6 +53,11 @@
 #define CAPACITY(upg, value) gUpgradeCapacities[upg][value]
 #define CUR_CAPACITY(upg) CAPACITY(upg, CUR_UPG_VALUE(upg) - 4)
 
+#define CONTROLLER1(globalCtx) (&(globalCtx)->state.input[0])
+#define CONTROLLER2(globalCtx) (&(globalCtx)->state.input[1])
+#define CONTROLLER3(globalCtx) (&(globalCtx)->state.input[2])
+#define CONTROLLER4(globalCtx) (&(globalCtx)->state.input[3])
+
 #define CHECK_BTN_ALL(state, combo) (~((state) | ~(combo)) == 0)
 #define CHECK_BTN_ANY(state, combo) (((state) & (combo)) != 0)
 
@@ -65,7 +73,7 @@ extern GraphicsContext* __gfxCtx;
 #define OPEN_DISPS(gfxCtx)                  \
     {                                       \
         GraphicsContext* __gfxCtx = gfxCtx; \
-        s32 __dispPad;
+        s32 __dispPad
 
 #define CLOSE_DISPS(gfxCtx) \
     }                       \

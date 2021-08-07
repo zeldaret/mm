@@ -1,8 +1,8 @@
 #ifndef _SCHED_H_
 #define _SCHED_H_
 
-#include <os.h>
-#include <sptask.h>
+#include "os.h"
+#include "sptask.h"
 
 typedef struct {
     /* 0x0 */ short type;

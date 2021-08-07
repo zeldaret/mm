@@ -1,18 +1,18 @@
-from dataclasses import dataclass, field
-import difflib
-import hashlib
-import re
 from typing import Tuple, List, Optional
-from collections import Counter
+import re
+import subprocess
+import hashlib
+import difflib
 
+import attr
 
 from .objdump import objdump, sp_offset
 
 
-@dataclass(init=False, unsafe_hash=True)
+@attr.s(init=False, hash=True)
 class DiffAsmLine:
-    line: str = field(compare=False)
-    mnemonic: str
+    line: str = attr.ib(cmp=False)
+    mnemonic: str = attr.ib()
 
     def __init__(self, line: str) -> None:
         self.line = line
@@ -24,11 +24,12 @@ class Scorer:
 
     PENALTY_STACKDIFF = 1
     PENALTY_REGALLOC = 5
+    PENALTY_SPLIT_DIFF = 20
     PENALTY_REORDERING = 60
     PENALTY_INSERTION = 100
     PENALTY_DELETION = 100
 
-    def __init__(self, target_o: str, *, stack_differences: bool):
+    def __init__(self, target_o: str, *, stack_differences: bool = False):
         self.target_o = target_o
         self.stack_differences = stack_differences
         _, self.target_seq = self._objdump(target_o)
@@ -84,23 +85,19 @@ class Scorer:
             if lo_hi_match(old, new):
                 return
 
-            ignore_last_field = False
             if self.stack_differences:
                 oldsp = re.search(sp_offset, old)
                 newsp = re.search(sp_offset, new)
                 if oldsp and newsp:
-                    oldrel = int(oldsp.group(1) or "0", 0)
-                    newrel = int(newsp.group(1) or "0", 0)
+                    oldrel = int(oldsp.group(1), 0)
+                    newrel = int(newsp.group(1), 0)
                     score += abs(oldrel - newrel) * self.PENALTY_STACKDIFF
-                    ignore_last_field = True
+                    return
 
             # Probably regalloc difference, or signed vs unsigned
 
             # Compare each field in order
             newfields, oldfields = new.split(","), old.split(",")
-            if ignore_last_field:
-                newfields = newfields[:-1]
-                oldfields = oldfields[:-1]
             for nf, of in zip(newfields, oldfields):
                 if nf != of:
                     score += self.PENALTY_REGALLOC
@@ -115,6 +112,7 @@ class Scorer:
         def diff_delete(line: str) -> None:
             deletions.append(line)
 
+        first_ins = None
         self.differ.set_seq1(cand_seq)
         for (tag, i1, i2, j1, j2) in self.differ.get_opcodes():
             if tag == "equal":
@@ -129,16 +127,12 @@ class Scorer:
                 for k in range(j1, j2):
                     diff_delete(self.target_seq[k].line)
 
-        insertions_co = Counter(insertions)
-        deletions_co = Counter(deletions)
-        for item in insertions_co + deletions_co:
-            ins = insertions_co[item]
-            dels = deletions_co[item]
-            common = min(ins, dels)
-            score += (
-                (ins - common) * self.PENALTY_INSERTION
-                + (dels - common) * self.PENALTY_DELETION
-                + self.PENALTY_REORDERING * common
-            )
-
+        common = set(deletions) & set(insertions)
+        score += len(common) * self.PENALTY_REORDERING
+        for change in deletions:
+            if change not in common:
+                score += self.PENALTY_DELETION
+        for change in insertions:
+            if change not in common:
+                score += self.PENALTY_INSERTION
         return (score, hashlib.sha256(objdump_output.encode()).hexdigest())

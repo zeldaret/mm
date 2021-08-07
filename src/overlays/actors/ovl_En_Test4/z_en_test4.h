@@ -1,13 +1,16 @@
 #ifndef Z_EN_TEST4_H
 #define Z_EN_TEST4_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnTest4;
 
+typedef void (*EnTest4ActionFunc)(struct EnTest4* this, GlobalContext* globalCtx);
+
 typedef struct EnTest4 {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x10];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0xC];
+    /* 0x0150 */ EnTest4ActionFunc actionFunc;
 } EnTest4; // size = 0x154
 
 extern const ActorInit En_Test4_InitVars;

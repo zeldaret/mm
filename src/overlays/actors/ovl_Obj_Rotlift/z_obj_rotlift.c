@@ -9,7 +9,7 @@ void ObjRotlift_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjRotlift_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjRotlift_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Obj_Rotlift_InitVars = {
     ACTOR_OBJ_ROTLIFT,
     ACTORCAT_BG,
@@ -21,14 +21,25 @@ const ActorInit Obj_Rotlift_InitVars = {
     (ActorFunc)ObjRotlift_Update,
     (ActorFunc)ObjRotlift_Draw,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Rotlift_0x80B95E20/func_80B95E20.asm")
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80B96178[] = {
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 800, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_STOP),
+};
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Rotlift_0x80B95E20/ObjRotlift_Init.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Rotlift_0x80B95E20/ObjRotlift_Destroy.asm")
+extern InitChainEntry D_80B96178[];
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Rotlift_0x80B95E20/ObjRotlift_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Rotlift/func_80B95E20.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Rotlift_0x80B95E20/ObjRotlift_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Rotlift/ObjRotlift_Init.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Rotlift/ObjRotlift_Destroy.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Rotlift/ObjRotlift_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Rotlift/ObjRotlift_Draw.s")

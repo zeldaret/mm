@@ -3,6 +3,7 @@
  * Overlay: ovl_Bg_Ladder
  * Description: Wooden Ladder
  */
+
 #include "z_bg_ladder.h"
 
 #define FLAGS 0x00000010

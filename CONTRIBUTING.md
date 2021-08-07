@@ -98,7 +98,7 @@ void CollisionCheck_SpawnWaterDroplets(GlobalContext* globalCtx, Vec3f* v) {
     // ... 
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_collision_check/CollisionCheck_SpawnWaterDroplets.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_collision_check/CollisionCheck_SpawnWaterDroplets.s")
 #endif
 ```
 

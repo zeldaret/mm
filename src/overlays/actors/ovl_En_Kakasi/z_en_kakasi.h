@@ -1,7 +1,7 @@
 #ifndef Z_EN_KAKASI_H
 #define Z_EN_KAKASI_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnKakasi;
 

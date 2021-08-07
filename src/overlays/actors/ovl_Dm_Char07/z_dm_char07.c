@@ -1,6 +1,6 @@
 /*
  * File: z_dm_char07.c
- * Overlay: Dm_Char07
+ * Overlay: ovl_Dm_Char07
  * Description: Different Milk Bar Objects (Stage, Credits Stage, Spotlights, Dishes)
  */
 

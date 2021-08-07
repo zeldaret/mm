@@ -1,13 +1,16 @@
 #ifndef Z_OBJ_TSUBO_H
 #define Z_OBJ_TSUBO_H
 
-#include <global.h>
+#include "global.h"
 
 struct ObjTsubo;
 
+typedef void (*ObjTsuboActionFunc)(struct ObjTsubo* this, GlobalContext* globalCtx);
+
 typedef struct ObjTsubo {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x58];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ ObjTsuboActionFunc actionFunc;
+    /* 0x0148 */ char unk_144[0x54];
 } ObjTsubo; // size = 0x19C
 
 extern const ActorInit Obj_Tsubo_InitVars;

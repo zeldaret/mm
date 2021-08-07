@@ -36,11 +36,11 @@ const ActorInit Bg_Iknin_Susceil_InitVars = {
     (ActorFunc)BgIkninSusceil_Draw,
 };
 
-s32 unused = 0;
-f32 D_80C0B0E4 = 960.0f;
-Vec2f D_80C0B0E8 = { -320.0f, 0.0f };
-s8 D_80C0B0F0[] = { 0x00, 0x00, 0x07, 0x0A, 0x0A, 0x0B, 0x0B, 0x00 };
-s8 D_80C0B0F8[] = { 0x01, 0x02, 0x00, 0x01, 0x02, 0x01, 0x02, 0x00 };
+static s32 unused = 0;
+static f32 D_80C0B0E4 = 960.0f;
+static Vec2f D_80C0B0E8 = { -320.0f, 0.0f };
+static s8 D_80C0B0F0[] = { 0x00, 0x00, 0x07, 0x0A, 0x0A, 0x0B, 0x0B, 0x00 };
+static s8 D_80C0B0F8[] = { 0x01, 0x02, 0x00, 0x01, 0x02, 0x01, 0x02, 0x00 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
@@ -49,9 +49,9 @@ static InitChainEntry sInitChain[] = {
 s32 func_80C0A740(BgIkninSusceil* this, GlobalContext* globalCtx) {
     s32 pad2[2];
     Vec3f offset;
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
-    Actor_CalcOffsetOrientedToDrawRotation(&this->dyna.actor, &offset, &player->base.world.pos);
+    Actor_CalcOffsetOrientedToDrawRotation(&this->dyna.actor, &offset, &player->actor.world.pos);
 
     return (D_80C0B0E8.x < offset.z) && (offset.z < D_80C0B0E8.y) && (offset.x > -240.0f) && (offset.x < D_80C0B0E4);
 }
@@ -64,12 +64,12 @@ void func_80C0A838(BgIkninSusceil* this, GlobalContext* globalCtx) {
     func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
-void func_80C0A86C(BgIkninSusceil* this, GlobalContext* globalCtx, s16 y, s16 countdown, s32 arg4) {
+void func_80C0A86C(BgIkninSusceil* this, GlobalContext* globalCtx, s16 verticalMag, s16 countdown, s32 arg4) {
     s32 pad;
     s16 quake = Quake_Add(ACTIVE_CAM, 3);
 
     Quake_SetSpeed(quake, 0x7B30);
-    Quake_SetQuakeValues(quake, y, 0, 0, 0);
+    Quake_SetQuakeValues(quake, verticalMag, 0, 0, 0);
     Quake_SetCountdown(quake, countdown);
     if (arg4 == 1) {
         func_8013ECE0(10000.0f, 255, 20, 150);
@@ -84,11 +84,11 @@ s32 func_80C0A95C(BgIkninSusceil* this, GlobalContext* globalCtx) {
     s32 phi_t0 = true;
     s32 i;
     f32 new_var;
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     Vec3f offset;
     f32 temp1, temp2, temp3, temp4;
 
-    Actor_CalcOffsetOrientedToDrawRotation(&this->dyna.actor, &offset, &player->base.world.pos);
+    Actor_CalcOffsetOrientedToDrawRotation(&this->dyna.actor, &offset, &player->actor.world.pos);
     for (i = 0; i < 7; i++) {
         temp3 = (D_80C0B0F0[i] * 80.0f) + 0.5f;
         temp4 = (D_80C0B0F0[i] * 80.0f) + 79.5f;
@@ -191,7 +191,7 @@ void func_80C0AD64(BgIkninSusceil* this, GlobalContext* globalCtx) {
     this->dyna.actor.velocity.y *= 0.98f;
     if (Math_SmoothStepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y + 365.0f, 0.5f,
                            this->dyna.actor.velocity.y, 1.0f) < 0.1f) {
-        func_80C0A86C(this, globalCtx, 1, 0xE, 3);
+        func_80C0A86C(this, globalCtx, 1, 14, 3);
         ActorCutscene_Stop(this->dyna.actor.cutscene);
         func_80C0AB14(this);
     } else {
@@ -218,12 +218,12 @@ void func_80C0AE5C(BgIkninSusceil* this, GlobalContext* globalCtx) {
 void BgIkninSusceil_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     BgIkninSusceil* this = THIS;
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
-    if ((this->unk168 == 0) && (this->unk166 > 0) && ((player->unkA74 & 0x100) != 0) && (player->unkB48 > 1000.0f)) {
+    if ((this->unk168 == 0) && (this->unk166 > 0) && (player->stateFlags3 & 0x100) && (player->unk_B48 > 1000.0f)) {
         this->unk168 = 2;
         if ((func_80C0A95C(this, globalCtx) != 0) && (this->actionFunc != func_80C0AE5C)) {
-            func_800B8E58(player, 0x83E);
+            func_800B8E58(&player->actor, NA_SE_PL_BODY_HIT);
             func_80C0AE3C(this);
         }
     }
@@ -236,7 +236,7 @@ void BgIkninSusceil_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if ((this->dyna.actor.home.pos.y + 70.0f) < this->dyna.actor.world.pos.y) {
         this->unk166 = 0;
-    } else if ((player->unkA74 & 0x100) != 0) {
+    } else if (player->stateFlags3 & 0x100) {
         this->unk166 = 3;
     } else {
         if (this->unk166 > 0) {

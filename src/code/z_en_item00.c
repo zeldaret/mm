@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 #define FLAGS 0x00000000
 
@@ -320,10 +319,10 @@ void func_800A640C(EnItem00* this, GlobalContext* globalCtx) {
     }
 }
 
-Color_RGBA8 D_801ADF10 = { 0xFF, 0xFF, 0x7F, 0x00 };
-Color_RGBA8 D_801ADF14 = { 0xFF, 0xFF, 0xFF, 0x00 };
-Vec3f D_801ADF18 = { 0.0f, 0.1f, 0.0f };
-Vec3f D_801ADF24 = { 0.0f, 0.01f, 0.0f };
+static Color_RGBA8 D_801ADF10 = { 255, 255, 127, 0 };
+static Color_RGBA8 D_801ADF14 = { 255, 255, 255, 0 };
+static Vec3f D_801ADF18 = { 0.0f, 0.1f, 0.0f };
+static Vec3f D_801ADF24 = { 0.0f, 0.01f, 0.0f };
 
 void func_800A6650(EnItem00* this, GlobalContext* globalCtx) {
     u32 pad;
@@ -404,7 +403,7 @@ void func_800A6780(EnItem00* this, GlobalContext* globalCtx) {
 }
 
 void func_800A6A40(EnItem00* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
     if (this->unk14A != 0) {
         if (Actor_HasParent(&this->actor, globalCtx) == 0) {
@@ -420,7 +419,7 @@ void func_800A6A40(EnItem00* this, GlobalContext* globalCtx) {
         return;
     }
 
-    this->actor.world.pos = player->base.world.pos;
+    this->actor.world.pos = player->actor.world.pos;
 
     if (this->actor.params <= ITEM00_RUPEE_RED) {
         this->actor.shape.rot.y = this->actor.shape.rot.y + 960;
@@ -440,8 +439,8 @@ void func_800A6A40(EnItem00* this, GlobalContext* globalCtx) {
 void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnItem00* this = THIS;
     s32 pad;
-    ActorPlayer* player = PLAYER;
-    s32 sp38 = player->unkA74 & 0x1000;
+    Player* player = PLAYER;
+    s32 sp38 = player->stateFlags3 & 0x1000;
     s32 getItemId = GI_NONE;
     s32 pad2;
 
@@ -461,7 +460,7 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->actor.gravity != 0.0f) {
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-        func_800B78B8(globalCtx, &this->actor, 20.0f, 15.0f, 15.0f, 0x1D);
+        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 15.0f, 15.0f, 0x1D);
 
         if (this->actor.floorHeight <= -32000.0f) {
             Actor_MarkForDeath(&this->actor);
@@ -469,8 +468,8 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    Collision_CylinderMoveToActor(&this->actor, &this->collider);
-    Collision_AddAC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+    Collider_UpdateCylinder(&this->actor, &this->collider);
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 
     if ((this->actor.params == ITEM00_SHIELD_HERO) || (this->actor.params == ITEM00_MAP) ||
         (this->actor.params == ITEM00_COMPASS)) {
@@ -490,7 +489,7 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    if (globalCtx->unk17000 != 0) {
+    if (globalCtx->gameOverCtx.state != 0) {
         return;
     }
 
@@ -624,7 +623,7 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc = func_800A6A40;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_en_item00/EnItem00_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_en_item00/EnItem00_Update.s")
 #endif
 
 void EnItem00_DrawRupee(EnItem00* this, GlobalContext* globalCtx);
@@ -867,15 +866,18 @@ EnItem00* Item_DropCollectible(GlobalContext* globalCtx, Vec3f* spawnPos, u32 pa
         }
     } else if (((paramFF == ITEM00_FLEXIBLE) || ((params & 0xFF) == ITEM00_BIG_FAIRY)) && (param10000 == 0)) {
         if ((params & 0xFF) == ITEM00_FLEXIBLE) {
-            spawnedActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f,
+            // TODO: fix cast, this actor is not an EnItem00
+            spawnedActor =
+                (EnItem00*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f,
                                        spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) << 9) & 0xFE00) | 0x102);
             if (!Actor_GetCollectibleFlag(globalCtx, (param7F00 >> 8) & 0x7F)) {
                 func_800F0568(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
             }
         } else {
-            spawnedActor =
-                Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELFORG, spawnPos->x, spawnPos->y + 40.0f,
-                            spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) & 0x7F) << 9) | 7);
+            // TODO: fix cast, this actor is not an EnItem00
+            spawnedActor = (EnItem00*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELFORG, spawnPos->x,
+                                                  spawnPos->y + 40.0f, spawnPos->z, 0, 0, 0,
+                                                  ((((param7F00 >> 8) & 0x7F) & 0x7F) << 9) | 7);
             if (param20000 == 0) {
                 if (!Actor_GetCollectibleFlag(globalCtx, (param7F00 >> 8) & 0x7F)) {
                     func_800F0568(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
@@ -886,9 +888,9 @@ EnItem00* Item_DropCollectible(GlobalContext* globalCtx, Vec3f* spawnPos, u32 pa
         if (param8000 == 0) {
             params = func_800A7650(params & 0xFF);
         }
-        if (params != ITEM00_NO_DROP) {
-            spawnedActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ITEM00, spawnPos->x, spawnPos->y,
-                                       spawnPos->z, 0, 0, 0, params | param8000 | param7F00);
+        if (params != (u32)ITEM00_NO_DROP) {
+            spawnedActor = (EnItem00*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ITEM00, spawnPos->x,
+                                                  spawnPos->y, spawnPos->z, 0, 0, 0, params | param8000 | param7F00);
             if ((spawnedActor != NULL) && (param8000 == 0)) {
                 if (param10000 == 0) {
                     spawnedActor->actor.velocity.y = 8.0f;
@@ -898,7 +900,7 @@ EnItem00* Item_DropCollectible(GlobalContext* globalCtx, Vec3f* spawnPos, u32 pa
                 spawnedActor->actor.speedXZ = 2.0f;
                 spawnedActor->actor.gravity = -0.9f;
                 spawnedActor->actor.world.rot.y = randPlusMinusPoint5Scaled(65536.0f);
-                Actor_SetScale(spawnedActor, 0.0f);
+                Actor_SetScale(&spawnedActor->actor, 0.0f);
                 spawnedActor->actionFunc = func_800A6780;
                 spawnedActor->unk152 = 0xDC;
                 if ((spawnedActor->actor.params != ITEM00_SMALL_KEY) &&
@@ -914,7 +916,7 @@ EnItem00* Item_DropCollectible(GlobalContext* globalCtx, Vec3f* spawnPos, u32 pa
     return spawnedActor;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_en_item00/Item_DropCollectible.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_en_item00/Item_DropCollectible.s")
 #endif
 
 #ifdef NON_MATCHING
@@ -949,7 +951,7 @@ Actor* Item_DropCollectible2(GlobalContext* globalCtx, Vec3f* spawnPos, u32 para
         }
     } else {
         params = func_800A7650(params);
-        if (params != ITEM00_NO_DROP) {
+        if (params != (u32)ITEM00_NO_DROP) {
             spawnedActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ITEM00, spawnPos->x, spawnPos->y,
                                        spawnPos->z, 0, 0, 0, params | param8000 | param7F00);
             if (spawnedActor != NULL) {
@@ -971,7 +973,7 @@ Actor* Item_DropCollectible2(GlobalContext* globalCtx, Vec3f* spawnPos, u32 para
     return spawnedActor;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_en_item00/Item_DropCollectible2.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_en_item00/Item_DropCollectible2.s")
 #endif
 
 u8 sDropTable[DROP_TABLE_SIZE * DROP_TABLE_NUMBER] = {
@@ -1138,19 +1140,19 @@ void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3
             }
         }
 
-        if (dropId != ITEM00_NO_DROP) {
+        if (dropId != (u8)ITEM00_NO_DROP) {
             while (dropQuantity > 0) {
                 if (param8000 == 0) {
                     dropId = func_800A7650(dropId);
-                    if (dropId != ITEM00_NO_DROP) {
-                        spawnedActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ITEM00, spawnPos->x,
-                                                   spawnPos->y, spawnPos->z, 0, 0, 0, dropId);
-                        if ((spawnedActor != 0) && (dropId != ITEM00_NO_DROP)) {
+                    if (dropId != (u8)ITEM00_NO_DROP) {
+                        spawnedActor = (EnItem00*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ITEM00,
+                                                              spawnPos->x, spawnPos->y, spawnPos->z, 0, 0, 0, dropId);
+                        if ((spawnedActor != 0) && (dropId != (u8)ITEM00_NO_DROP)) {
                             spawnedActor->actor.velocity.y = 8.0f;
                             spawnedActor->actor.speedXZ = 2.0f;
                             spawnedActor->actor.gravity = -0.9f;
                             spawnedActor->actor.world.rot.y = Rand_ZeroOne() * 40000.0f;
-                            Actor_SetScale(spawnedActor, 0.0f);
+                            Actor_SetScale(&spawnedActor->actor, 0.0f);
                             spawnedActor->actionFunc = func_800A6780;
                             spawnedActor->actor.flags = spawnedActor->actor.flags | 0x10;
                             if ((spawnedActor->actor.params != ITEM00_SMALL_KEY) &&
@@ -1171,7 +1173,7 @@ void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_en_item00/Item_DropCollectibleRandom.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_en_item00/Item_DropCollectibleRandom.s")
 #endif
 
 s32 D_801AE194[32] = { ITEM00_NO_DROP,     ITEM00_RUPEE_GREEN,     ITEM00_RUPEE_BLUE,  ITEM00_NO_DROP,

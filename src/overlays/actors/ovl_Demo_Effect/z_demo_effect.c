@@ -8,7 +8,12 @@ void DemoEffect_Init(Actor* thisx, GlobalContext* globalCtx);
 void DemoEffect_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DemoEffect_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+void func_808CD940(DemoEffect* this, GlobalContext* globalCtx);
+void func_808CDBDC(DemoEffect* this, GlobalContext* globalCtx);
+void func_808CDCEC(DemoEffect* this, GlobalContext* globalCtx);
+void func_808CDD70(DemoEffect* this, GlobalContext* globalCtx);
+
+#if 0
 const ActorInit Demo_Effect_InitVars = {
     ACTOR_DEMO_EFFECT,
     ACTORCAT_BG,
@@ -20,30 +25,34 @@ const ActorInit Demo_Effect_InitVars = {
     (ActorFunc)DemoEffect_Update,
     (ActorFunc)NULL,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Effect_0x808CD740/DemoEffect_Init.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Effect_0x808CD740/DemoEffect_Destroy.asm")
+extern UNK_TYPE D_06000050;
+extern UNK_TYPE D_06000060;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Effect_0x808CD740/func_808CD940.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Effect/DemoEffect_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Effect_0x808CD740/func_808CD998.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Effect/DemoEffect_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Effect_0x808CD740/func_808CDAD0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Effect/func_808CD940.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Effect_0x808CD740/func_808CDBDC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Effect/func_808CD998.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Effect_0x808CD740/func_808CDCEC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Effect/func_808CDAD0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Effect_0x808CD740/func_808CDD70.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Effect/func_808CDBDC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Effect_0x808CD740/func_808CDDE0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Effect/func_808CDCEC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Effect_0x808CD740/DemoEffect_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Effect/func_808CDD70.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Effect_0x808CD740/func_808CDE78.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Effect/func_808CDDE0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Effect_0x808CD740/func_808CDFF8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Effect/DemoEffect_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Effect_0x808CD740/func_808CE078.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Effect/func_808CDE78.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Effect/func_808CDFF8.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Effect/func_808CE078.s")

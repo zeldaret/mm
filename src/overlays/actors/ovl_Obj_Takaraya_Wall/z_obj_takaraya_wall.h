@@ -1,13 +1,16 @@
 #ifndef Z_OBJ_TAKARAYA_WALL_H
 #define Z_OBJ_TAKARAYA_WALL_H
 
-#include <global.h>
+#include "global.h"
 
 struct ObjTakarayaWall;
 
+typedef void (*ObjTakarayaWallActionFunc)(struct ObjTakarayaWall* this, GlobalContext* globalCtx);
+
 typedef struct ObjTakarayaWall {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x9C];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ ObjTakarayaWallActionFunc actionFunc;
+    /* 0x0148 */ char unk_144[0x98];
 } ObjTakarayaWall; // size = 0x1E0
 
 extern const ActorInit Obj_Takaraya_Wall_InitVars;

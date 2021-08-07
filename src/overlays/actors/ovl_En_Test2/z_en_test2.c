@@ -7,7 +7,7 @@
 void EnTest2_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTest2_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Test2_InitVars = {
     ACTOR_EN_TEST2,
     ACTORCAT_BG,
@@ -15,16 +15,27 @@ const ActorInit En_Test2_InitVars = {
     GAMEPLAY_KEEP,
     sizeof(EnTest2),
     (ActorFunc)EnTest2_Init,
-    (ActorFunc)func_800BDFB0,
+    (ActorFunc)Actor_Noop,
     (ActorFunc)EnTest2_Update,
     (ActorFunc)NULL,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test2_0x80A3E390/EnTest2_Init.asm")
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80A3E74C[] = {
+    ICHAIN_VEC3F(scale, 1, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 8000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 800, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 2500, ICHAIN_STOP),
+};
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test2_0x80A3E390/EnTest2_Update.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test2_0x80A3E390/func_80A3E4EC.asm")
+extern InitChainEntry D_80A3E74C[];
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test2_0x80A3E390/func_80A3E524.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test2/EnTest2_Init.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test2/EnTest2_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test2/func_80A3E4EC.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test2/func_80A3E524.s")

@@ -9,7 +9,7 @@ void ObjDanpeilift_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjDanpeilift_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjDanpeilift_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Obj_Danpeilift_InitVars = {
     ACTOR_OBJ_DANPEILIFT,
     ACTORCAT_BG,
@@ -21,22 +21,36 @@ const ActorInit Obj_Danpeilift_InitVars = {
     (ActorFunc)ObjDanpeilift_Update,
     (ActorFunc)ObjDanpeilift_Draw,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Danpeilift_0x80C1ADC0/func_80C1ADC0.asm")
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80C1B540[] = {
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 400, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
+};
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Danpeilift_0x80C1ADC0/ObjDanpeilift_Init.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Danpeilift_0x80C1ADC0/ObjDanpeilift_Destroy.asm")
+extern InitChainEntry D_80C1B540[];
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Danpeilift_0x80C1ADC0/func_80C1AF84.asm")
+extern UNK_TYPE D_06000180;
+extern UNK_TYPE D_06000BA0;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Danpeilift_0x80C1ADC0/func_80C1AF94.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Danpeilift/func_80C1ADC0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Danpeilift_0x80C1ADC0/func_80C1B210.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Danpeilift/ObjDanpeilift_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Danpeilift_0x80C1ADC0/func_80C1B26C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Danpeilift/ObjDanpeilift_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Danpeilift_0x80C1ADC0/ObjDanpeilift_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Danpeilift/func_80C1AF84.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Danpeilift_0x80C1ADC0/ObjDanpeilift_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Danpeilift/func_80C1AF94.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Danpeilift/func_80C1B210.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Danpeilift/func_80C1B26C.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Danpeilift/ObjDanpeilift_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Danpeilift/ObjDanpeilift_Draw.s")

@@ -8,7 +8,7 @@ void BgSinkaiKabe_Init(Actor* thisx, GlobalContext* globalCtx);
 void BgSinkaiKabe_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgSinkaiKabe_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Bg_Sinkai_Kabe_InitVars = {
     ACTOR_BG_SINKAI_KABE,
     ACTORCAT_ITEMACTION,
@@ -20,12 +20,15 @@ const ActorInit Bg_Sinkai_Kabe_InitVars = {
     (ActorFunc)BgSinkaiKabe_Update,
     (ActorFunc)NULL,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Sinkai_Kabe_0x80B6D660/BgSinkaiKabe_Init.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Sinkai_Kabe_0x80B6D660/BgSinkaiKabe_Destroy.asm")
+extern UNK_TYPE D_06000048;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Sinkai_Kabe_0x80B6D660/func_80B6DA20.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Sinkai_Kabe/BgSinkaiKabe_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Sinkai_Kabe_0x80B6D660/BgSinkaiKabe_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Sinkai_Kabe/BgSinkaiKabe_Destroy.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Sinkai_Kabe/func_80B6DA20.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Sinkai_Kabe/BgSinkaiKabe_Update.s")

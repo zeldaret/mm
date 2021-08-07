@@ -1,13 +1,17 @@
 #ifndef Z_EN_BIGPO_H
 #define Z_EN_BIGPO_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnBigpo;
 
+typedef void (*EnBigpoActionFunc)(struct EnBigpo* this, GlobalContext* globalCtx);
+
 typedef struct EnBigpo {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x254];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0xBC];
+    /* 0x0200 */ EnBigpoActionFunc actionFunc;
+    /* 0x0204 */ char unk_204[0x194];
 } EnBigpo; // size = 0x398
 
 extern const ActorInit En_Bigpo_InitVars;

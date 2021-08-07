@@ -17,11 +17,6 @@ void EnTorch2_Draw(Actor* thisx, GlobalContext* globalCtx);
 void EnTorch2_UpdateIdle(Actor* thisx, GlobalContext* globalCtx);
 void EnTorch2_UpdateDeath(Actor* thisx, GlobalContext* globalCtx);
 
-extern Gfx D_0401C430[];
-extern Gfx D_04048DF0[];
-extern Gfx D_04057B10[];
-extern Gfx D_04089070[];
-
 const ActorInit En_Torch2_InitVars = {
     ACTOR_EN_TORCH2,
     ACTORCAT_ITEMACTION,
@@ -77,7 +72,7 @@ void EnTorch2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnTorch2* this = THIS;
 
     Collider_DestroyCylinder(globalCtx, &this->collider);
-    func_80169DCC(globalCtx, this->actor.params + 3, 0xFF, 0, 0xBFF, &this->actor.world, this->actor.shape.rot.y);
+    func_80169DCC(globalCtx, this->actor.params + 3, 0xFF, 0, 0xBFF, &this->actor.world.pos, this->actor.shape.rot.y);
     globalCtx->actorCtx.unk254[this->actor.params] = 0;
 }
 
@@ -94,7 +89,7 @@ void EnTorch2_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actor.gravity = -1.0f;
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    func_800B78B8(globalCtx, &this->actor, 30.0f, 20.0f, 70.0f, 0x05);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 20.0f, 70.0f, 0x05);
 
     if (this->framesUntilNextState == 0) {
         remainingFrames = 0;
@@ -120,7 +115,7 @@ void EnTorch2_Update(Actor* thisx, GlobalContext* globalCtx) {
         } else {
             // Once the player has moved away, update collision and become opaque
             Collider_UpdateCylinder(&this->actor, &this->collider);
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->collider.base);
+            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
             targetAlpha = 255;
         }
         Math_StepToS(&this->alpha, targetAlpha, 8);

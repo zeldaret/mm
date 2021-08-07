@@ -6,13 +6,11 @@ from .helpers import try_remove
 
 
 class Compiler:
-    def __init__(self, compile_cmd: str, *, show_errors: bool) -> None:
+    def __init__(self, compile_cmd: str, show_errors: bool = False) -> None:
         self.compile_cmd = compile_cmd
         self.show_errors = show_errors
 
-    def compile(self, source: str, *, show_errors: bool = False) -> Optional[str]:
-        """Try to compile a piece of C code. Returns the filename of the resulting .o
-        temp file if it succeeds."""
+    def compile(self, source: str, show_errors: bool = False) -> Optional[str]:
         show_errors = show_errors or self.show_errors
         with tempfile.NamedTemporaryFile(
             prefix="permuter", suffix=".c", mode="w", delete=False
@@ -26,10 +24,10 @@ class Compiler:
             o_name = f2.name
 
         try:
-            stderr = 2 if show_errors else subprocess.DEVNULL
+            stderr = None if show_errors else subprocess.DEVNULL
             subprocess.check_call(
-                [self.compile_cmd, c_name, "-o", o_name],
-                stdout=stderr,
+                self.compile_cmd + " " + c_name + " -o " + o_name,
+                shell=True,
                 stderr=stderr,
             )
         except subprocess.CalledProcessError:

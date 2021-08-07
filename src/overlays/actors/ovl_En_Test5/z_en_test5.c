@@ -8,7 +8,11 @@ void EnTest5_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTest5_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTest5_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+void func_80A90478(EnTest5* this, GlobalContext* globalCtx);
+
+void EnTest5_SetupAction(EnTest5* this, EnTest5ActionFunc actionFunc);
+
+#if 0
 const ActorInit En_Test5_InitVars = {
     ACTOR_EN_TEST5,
     ACTORCAT_ITEMACTION,
@@ -20,14 +24,15 @@ const ActorInit En_Test5_InitVars = {
     (ActorFunc)EnTest5_Update,
     (ActorFunc)NULL,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test5_0x80A903B0/func_80A903B0.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test5_0x80A903B0/EnTest5_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test5/EnTest5_SetupAction.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test5_0x80A903B0/EnTest5_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test5/EnTest5_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test5_0x80A903B0/func_80A90478.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test5/EnTest5_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Test5_0x80A903B0/EnTest5_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test5/func_80A90478.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test5/EnTest5_Update.s")

@@ -1,7 +1,7 @@
 #ifndef _OS_H_
 #define _OS_H_
 
-#include <PR/ultratypes.h>
+#include "PR/ultratypes.h"
 
 typedef s32 OSPri;
 
@@ -100,31 +100,31 @@ typedef u32 OSPageMask;
 typedef void* OSMesg;
 
 typedef struct {
-    /* 0x0 */ OSThread* mtqueue;
-    /* 0x4 */ OSThread* fullqueue;
-    /* 0x8 */ s32 validCount;
-    /* 0xC */ s32 first;
+    /* 0x00 */ OSThread* mtqueue;
+    /* 0x04 */ OSThread* fullqueue;
+    /* 0x08 */ s32 validCount;
+    /* 0x0C */ s32 first;
     /* 0x10 */ s32 msgCount;
     /* 0x14 */ OSMesg* msg;
-} OSMesgQueue;
+} OSMesgQueue; // size = 0x20
 
 
 typedef struct {
-    /* 0x0 */ u32 errStatus;
-    /* 0x4 */ void* dramAddr;
-    /* 0x8 */ void* C2Addr;
-    /* 0xC */ u32 sectorSize;
+    /* 0x00 */ u32 errStatus;
+    /* 0x04 */ void* dramAddr;
+    /* 0x08 */ void* C2Addr;
+    /* 0x0C */ u32 sectorSize;
     /* 0x10 */ u32 C1ErrNum;
     /* 0x14 */ u32 C1ErrSector[4];
 } __OSBlockInfo;
 
 
 typedef struct {
-    /* 0x0 */ u32 cmdType;
-    /* 0x4 */ u16 transferMode;
-    /* 0x6 */ u16 blockNum;
-    /* 0x8 */ s32 sectorNum;
-    /* 0xC */ u32 devAddr;
+    /* 0x00 */ u32 cmdType;
+    /* 0x04 */ u16 transferMode;
+    /* 0x06 */ u16 blockNum;
+    /* 0x08 */ s32 sectorNum;
+    /* 0x0C */ u32 devAddr;
     /* 0x10 */ u32 bmCtlShadow;
     /* 0x14 */ u32 seqCtlShadow;
     /* 0x18 */ __OSBlockInfo block[2];
@@ -132,14 +132,14 @@ typedef struct {
 
 
 typedef struct OSPiHandle_s {
-    /* 0x0 */ struct OSPiHandle_s* next;
-    /* 0x4 */ u8 type;
-    /* 0x5 */ u8 latency;
-    /* 0x6 */ u8 pageSize;
-    /* 0x7 */ u8 relDuration;
-    /* 0x8 */ u8 pulse;
-    /* 0x9 */ u8 domain;
-    /* 0xC */ u32 baseAddress;
+    /* 0x00 */ struct OSPiHandle_s* next;
+    /* 0x04 */ u8 type;
+    /* 0x05 */ u8 latency;
+    /* 0x06 */ u8 pageSize;
+    /* 0x07 */ u8 relDuration;
+    /* 0x08 */ u8 pulse;
+    /* 0x09 */ u8 domain;
+    /* 0x0C */ u32 baseAddress;
     /* 0x10 */ u32 speed;
     /* 0x14 */ __OSTranxInfo transferInfo;
 } OSPiHandle;
@@ -160,30 +160,30 @@ typedef struct {
 
 
 typedef struct {
-    /* 0x0 */ OSIoMesgHdr hdr;
-    /* 0x8 */ void* dramAddr;
-    /* 0xC */ u32 devAddr;
+    /* 0x00 */ OSIoMesgHdr hdr;
+    /* 0x08 */ void* dramAddr;
+    /* 0x0C */ u32 devAddr;
     /* 0x10 */ u32 size;
     /* 0x14 */ OSPiHandle* piHandle;
 } OSIoMesg;
 
 
 typedef struct {
-    /* 0x0 */ s32 active;
-    /* 0x4 */ OSThread* thread;
-    /* 0x8 */ OSMesgQueue* cmdQueue;
-    /* 0xC */ OSMesgQueue* evtQueue;
+    /* 0x00 */ s32 active; // u32 maybe? need to check
+    /* 0x04 */ OSThread* thread;
+    /* 0x08 */ OSMesgQueue* cmdQueue;
+    /* 0x0C */ OSMesgQueue* evtQueue;
     /* 0x10 */ OSMesgQueue* acsQueue;
-    /* 0x14 */ s32 (*dma)(void);
-    /* 0x14 */ s32 (*unk18)(void);
+    /* 0x14 */ s32 (*piDmaCallback)(s32, u32, void*, u32);
+    /* 0x18 */ s32 (*epiDmaCallback)(OSPiHandle*, s32, u32, void*, u32);
 } OSDevMgr;
 
 
 typedef struct {
-    /* 0x0 */ u32 ctrl;
-    /* 0x4 */ u32 width;
-    /* 0x8 */ u32 burst;
-    /* 0xC */ u32 vSync;
+    /* 0x00 */ u32 ctrl;
+    /* 0x04 */ u32 width;
+    /* 0x08 */ u32 burst;
+    /* 0x0C */ u32 vSync;
     /* 0x10 */ u32 hSync;
     /* 0x14 */ u32 leap;
     /* 0x18 */ u32 hStart;
@@ -193,17 +193,17 @@ typedef struct {
 
 
 typedef struct {
-    /* 0x0 */ u32 origin;
-    /* 0x4 */ u32 yScale;
-    /* 0x8 */ u32 vStart;
-    /* 0xC */ u32 vBurst;
+    /* 0x00 */ u32 origin;
+    /* 0x04 */ u32 yScale;
+    /* 0x08 */ u32 vStart;
+    /* 0x0C */ u32 vBurst;
     /* 0x10 */ u32 vIntr;
 } OSViFieldRegs;
 
 
 typedef struct {
-    /* 0x0 */ u8 type;
-    /* 0x4 */ OSViCommonRegs comRegs;
+    /* 0x00 */ u8 type;
+    /* 0x04 */ OSViCommonRegs comRegs;
     /* 0x28 */ OSViFieldRegs fldRegs[2];
 } OSViMode;
 
@@ -211,9 +211,9 @@ typedef u64 OSTime;
 
 
 typedef struct OSTimer_s {
-    /* 0x0 */ struct OSTimer_s* next;
-    /* 0x4 */ struct OSTimer_s* prev;
-    /* 0x8 */ OSTime interval;
+    /* 0x00 */ struct OSTimer_s* next;
+    /* 0x04 */ struct OSTimer_s* prev;
+    /* 0x08 */ OSTime interval;
     /* 0x10 */ OSTime value;
     /* 0x18 */ OSMesgQueue* mq;
     /* 0x1C */ OSMesg msg;
@@ -236,8 +236,8 @@ typedef struct {
 
 
 typedef struct {
-    /* 0x0 */ void* address;
-    /* 0x4 */ u8 databuffer[32];
+    /* 0x00 */ void* address;
+    /* 0x04 */ u8 databuffer[32];
     /* 0x24 */ u8 addressCrc;
     /* 0x25 */ u8 dataCrc;
     /* 0x26 */ u8 errno;

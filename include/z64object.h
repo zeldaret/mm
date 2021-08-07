@@ -651,7 +651,8 @@ typedef enum {
     /* 0x27F */ OBJECT_LBFSHOT,
     /* 0x280 */ OBJECT_FUSEN,
     /* 0x281 */ OBJECT_ENDING_OBJ,
-    /* 0x282 */ OBJECT_GI_MASK13
+    /* 0x282 */ OBJECT_GI_MASK13,
+    /* 0x283 */ OBJECT_ID_MAX
 } ObjectID;
 
 #endif
