@@ -33,8 +33,8 @@ void SystemArena_AnalyzeArena(u32* maxFreeBlock, u32* bytesFree, u32* bytesAlloc
     __osAnalyzeArena(&gSystemArena, maxFreeBlock, bytesFree, bytesAllocated);
 }
 
-void SystemArena_CheckArena(void) {
-    __osCheckArena(&gSystemArena);
+u32 SystemArena_CheckArena(void) {
+    return __osCheckArena(&gSystemArena);
 }
 
 void SystemArena_InitArena(void* start, u32 size) {
@@ -45,6 +45,6 @@ void SystemArena_Cleanup(void) {
     __osMallocCleanup(&gSystemArena);
 }
 
-void SystemArena_IsInitialized(void) {
-    __osMallocIsInitalized(&gSystemArena);
+u8 SystemArena_IsInitialized(void) {
+    return __osMallocIsInitalized(&gSystemArena);
 }
