@@ -1342,12 +1342,12 @@ void EnOssan_InitPartTimeWorker(EnOssan* this, GlobalContext* globalCtx) {
 
 s32 EnOssan_GetWelcomeCuriosityShopMan(EnOssan* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
-    u16 faceReaction = Text_GetFaceReaction(globalCtx, 0x2F);
+    u16 textId = Text_GetFaceReaction(globalCtx, 0x2F);
 
-    if (faceReaction != 0) {
+    if (textId != 0) {
         this->animationIdx = 4;
         this->flags |= END_INTERACTION;
-        return faceReaction;
+        return textId;
     }
     switch (player->transformation) {
         case PLAYER_FORM_DEKU:
@@ -1375,11 +1375,11 @@ s32 EnOssan_GetWelcomeCuriosityShopMan(EnOssan* this, GlobalContext* globalCtx) 
 
 s32 EnOssan_GetWelcomePartTimeWorker(EnOssan* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
-    u16 faceReaction = Text_GetFaceReaction(globalCtx, 0x36);
+    u16 textId = Text_GetFaceReaction(globalCtx, 0x36);
 
-    if (faceReaction != 0) {
+    if (textId != 0) {
         this->flags |= END_INTERACTION;
-        return faceReaction;
+        return textId;
     }
     switch (player->transformation) {
         case PLAYER_FORM_DEKU:
