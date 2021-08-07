@@ -1,5 +1,13 @@
 #include "global.h"
 
+// The latest generated random number, used to generate the next number in the sequence.
+static u32 sRandInt = 1;
+
+// Space to store a value to be re-interpreted as a float.
+// This can't be static because it is used in z_kankyo 
+u32 sRandFloat;
+
+
 #define RAND_MULTIPLIER 1664525
 #define RAND_INCREMENT 1013904223
 
