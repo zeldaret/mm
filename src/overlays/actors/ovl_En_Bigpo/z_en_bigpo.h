@@ -2,6 +2,7 @@
 #define Z_EN_BIGPO_H
 
 #include "global.h"
+#include "../ovl_En_Clear_Tag/z_en_clear_tag.h"
 
 struct EnBigpo;
 
@@ -18,8 +19,8 @@ typedef struct EnBigpoFireParticle {
 typedef struct EnBigpo {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s limbDrawTbl[ENBIGPO_LIMBCOUNT];
-    /* 0x1C4 */ Vec3s transitionDrawTbl[ENBIGPO_LIMBCOUNT];
+    /* 0x188 */ Vec3s jointTable[ENBIGPO_LIMBCOUNT];
+    /* 0x1C4 */ Vec3s morphTable[ENBIGPO_LIMBCOUNT];
     /* 0x200 */ EnBigPoActionFunc actionFunc;
     /* 0x204 */ u8 unkBool204; // need to know what func_801A2E54 does to know what this is
     // idleTimer gets reused:

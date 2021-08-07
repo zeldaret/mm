@@ -722,7 +722,7 @@ void EnBigpo_SetupLanternDrop(EnBigpo* this, GlobalContext* globalCtx) {
 }
 
 void EnBigpo_LanternFalling(EnBigpo* this, GlobalContext* globalCtx) {
-    if ((this->actor.bgCheckFlags & 1) || (this->actor.floorHeight == BGCHECK_Y_MIN) {
+    if (this->actor.bgCheckFlags & 1 || this->actor.floorHeight == BGCHECK_Y_MIN) {
         if (this->switchFlags != 0xFF) {
             Actor_SetSwitchFlag(globalCtx, this->switchFlags);
         }
@@ -1104,7 +1104,8 @@ s32 EnBigpo_ApplyDamage(EnBigpo* this, GlobalContext* globalCtx) {
             this->unk21C = 4.0f;
             this->unk220 = 1.0f;
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
-                        this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAY);
+                        this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0, 
+                        CLEAR_TAG_EFFECT_FLASH);
         }
         EnBigpo_HitStun(this);
         return true;
