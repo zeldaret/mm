@@ -1,4 +1,5 @@
 #include "global.h"
+#include "overlays/actors/ovl_En_Door/z_en_door.h"
 
 s32 func_800F07C0(SkelAnime* skelAnime, s16 animIndex) {
     s16 frameCount;
@@ -64,7 +65,7 @@ s32 func_800F09B4(struct_800F0944_arg0* arg0, GlobalContext* globalCtx) {
     return ret;
 }
 
-void func_800F0A20(struct_800F0944_arg0 *arg0, s32 arg1) {
+void func_800F0A20(struct_800F0944_arg0* arg0, s32 arg1) {
     if (DECR(arg0->unk3E8) == 0) {
         arg0->unk3E6 += 1;
         if (arg0->unk3E6 >= arg1) {
@@ -90,7 +91,23 @@ s32 func_800F0A94(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, FlexSkel
     return ret;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_800F07C0/func_800F0BB4.s")
+void func_800F0BB4(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, Actor* arg2, s16 arg3, s16 arg4) {
+    s32 pad;
+    s8 sp3B;
+    Vec3f sp2C;
+    f32 phi_f0;
+
+    Actor_CalcOffsetOrientedToDrawRotation(arg2, &sp2C, &arg0->actor.world.pos);
+    phi_f0 = (sp2C.z >= 0.0f) ? 1.0f : -1.0f;
+    sp3B = ((s8)phi_f0 < 0) ? 0 : 2;
+    func_800F0944(arg0, globalCtx, (sp3B == 0) ? arg3 : arg4);
+    arg0->skelAnime.unk3E = *arg0->skelAnime.limbDrawTbl;
+    arg0->skelAnime.prevFramePos = *arg0->skelAnime.limbDrawTbl;
+    arg0->skelAnime.flags |= 3;
+    SkelAnime_LoadAnimationType5(globalCtx, &arg0->actor, &arg0->skelAnime, 1.0f);
+    ((EnDoor*)arg2)->unk1A1 = 1;
+    ((EnDoor*)arg2)->unk1A0 = sp3B;
+}
 
 s32 func_800F0CE4(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, ActorFunc draw, s16 arg3, s16 arg4, f32 arg5) {
     s32 ret;

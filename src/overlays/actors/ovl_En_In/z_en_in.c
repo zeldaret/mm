@@ -214,12 +214,12 @@ s32 func_808F3178(EnIn* this, GlobalContext* globalCtx) {
     u8 tmp;
 
     this->unk260 = tmp = func_8013DB90(globalCtx, &this->unk248, -6.0f);
-    if (this->unk260 != 0 && prevUnk260 == 0 && tmp & 0xFF) {
-        Audio_PlayActorSound2(&this->actor, 0x802);
+    if (this->unk260 != 0 && prevUnk260 == 0 && (tmp & 0xFF)) {
+        Audio_PlayActorSound2(&this->actor, NA_SE_PL_WALK_CONCRETE);
     }
     this->unk261 = tmp = func_8013DB90(globalCtx, &this->unk254, -6.0f);
-    if (this->unk261 != 0 && prevUnk261 == 0 && tmp & 0xFF) {
-        Audio_PlayActorSound2(&this->actor, 0x802);
+    if (this->unk261 != 0 && prevUnk261 == 0 && (tmp & 0xFF)) {
+        Audio_PlayActorSound2(&this->actor, NA_SE_PL_WALK_CONCRETE);
     }
     return 0;
 }
