@@ -15,29 +15,26 @@ void EnDaiku_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDaiku_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDaiku_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_809438F8(EnDaiku* this, GlobalContext* globalCtx);
-void func_80943BDC(EnDaiku* this, GlobalContext* globalCtx);
 void func_80943820(EnDaiku* this);
 void func_80943BC0(EnDaiku* this);
+void func_80943BDC(EnDaiku* this, GlobalContext* globalCtx);
+void func_809438F8(EnDaiku* this, GlobalContext* globalCtx);
 
-extern FlexSkeletonHeader D_0600A850;
-extern AnimationHeader D_06002FA0;
-extern AnimationHeader D_0600B690;
-extern AnimationHeader D_06001114;
-extern AnimationHeader D_06002FA0;
-extern AnimationHeader D_0600ACD0;
-extern AnimationHeader D_0600C92C;
-extern AnimationHeader D_06000C44;
-extern AnimationHeader D_0600C234;
 extern AnimationHeader D_06000600;
+extern AnimationHeader D_06000C44;
 extern AnimationHeader D_06001114;
+extern AnimationHeader D_06002FA0;
+extern FlexSkeletonHeader D_0600A850;
+extern AnimationHeader D_0600ACD0;
 extern AnimationHeader D_0600B690;
 extern AnimationHeader D_0600BEAC;
-extern Gfx D_06008EC8[];
-extern Gfx D_060070C0[];
-extern Gfx D_06006FB0[];
-extern Gfx D_06006E80[];
+extern AnimationHeader D_0600C234;
+extern AnimationHeader D_0600C92C;
 extern Gfx D_06006D70[];
+extern Gfx D_06006E80[];
+extern Gfx D_06006FB0[];
+extern Gfx D_060070C0[];
+extern Gfx D_06008EC8[];
 
 const ActorInit En_Daiku_InitVars = {
     ACTOR_EN_DAIKU,
@@ -140,7 +137,6 @@ void func_8094373C(EnDaiku* this, s32 arg1) {
         &D_06002FA0, &D_0600ACD0, &D_0600C92C, &D_06000C44, &D_0600C234,
         &D_06000600, &D_06001114, &D_0600B690, &D_0600BEAC,
     };
-
     static u8 D_809440C8[] = {
         0, 0, 0, 0, 2, 0, 0, 2, 2,
     };
@@ -315,7 +311,6 @@ void func_80943E60(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     static Gfx* D_809440D4[] = {
         D_060070C0, D_06006FB0, D_06006E80, D_06006D70,
     };
-
     EnDaiku* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
