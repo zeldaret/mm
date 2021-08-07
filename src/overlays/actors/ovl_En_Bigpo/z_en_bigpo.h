@@ -16,6 +16,15 @@ typedef struct EnBigpoFireParticle {
 
 #define ENBIGPO_LIMBCOUNT 10
 
+
+// idleTimer gets reused:
+// * after dampe reveals a fire, 8 minutes of frames before it goes away again
+// * used by flames and regular bigpo to count frames during the appearance cutscene
+// * when idle flying around, frames until next attack
+// * when spinning in/out of reality, counts frames from start
+// * in burning death, counts frames from death start
+// * after scoop spawned, idle timer used to count down to actor disapear
+
 typedef struct EnBigpo {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -23,16 +32,10 @@ typedef struct EnBigpo {
     /* 0x1C4 */ Vec3s morphTable[ENBIGPO_LIMBCOUNT];
     /* 0x200 */ EnBigPoActionFunc actionFunc;
     /* 0x204 */ u8 unkBool204; // need to know what func_801A2E54 does to know what this is
-    // idleTimer gets reused:
-    // * when idle flying around, frames until next attack
-    // * when spinning back into reality, counts frames from start
-    // * in death one, counts frames from death start
-    // * after scoop spawned, idle timer used to count down to actor disapear
     /* 0x206 */ s16 idleTimer; // frame counter
     /* 0x208 */ s16 unk208; // facing rotY?
     /* 0x20A */ s16 rotVelocity;
-    // is this counting the number of frames the player is ztargeting them?
-    /* 0x20C */ s16 unk20C; // ++ if enemy is attacking po?
+    /* 0x20C */ s16 unk20C; // is this counting the number of frames the player is ztargeting them?
     /* 0x20E */ s16 cutsceneSubCamId;
     /* 0x210 */ s16 switchFlags;
     /* 0x212 */ s16 hoverHeightCycleTimer; // sin wave up and down bobbing
@@ -51,8 +54,6 @@ typedef struct EnBigpo {
     //   also the fires dampe digs up under his house
     /* 0x338 */ EnBigpoFireParticle fires[3];
 } EnBigpo; // size = 0x398
-
-// todo make params macro for switch flags
 
 // well ver is regular, dampe basement ver is summoned
 // on spawn, 3/possible fires are turned into chosenfire

@@ -455,7 +455,6 @@ void EnBigpo_SpawnPoCutscene8(EnBigpo* this, GlobalContext* globalCtx) {
     }
 }
 
-// spinning fade out
 void EnBigpo_SetupWarpOut(EnBigpo* this) {
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.ocFlags1 &= ~OC1_ON;
@@ -467,7 +466,6 @@ void EnBigpo_SetupWarpOut(EnBigpo* this) {
     this->actionFunc = EnBigpo_WarpingOut;
 }
 
-// spinning fade out of reality
 void EnBigpo_WarpingOut(EnBigpo* this, GlobalContext* globalCtx) {
     DECR(this->idleTimer);
     this->actor.shape.rot.y += this->rotVelocity;
