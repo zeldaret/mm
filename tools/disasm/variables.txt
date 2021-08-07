@@ -929,7 +929,7 @@
     0x801BC3F0:("D_801BC3F0","UNK_TYPE1","",0x1),
     0x801BC400:("D_801BC400","UNK_TYPE1","",0x1),
     0x801BC410:("D_801BC410","UNK_TYPE1","",0x1),
-    0x801BC41E:("D_801BC41E","UNK_TYPE1","",0x1),
+    0x801BC420:("D_801BC420","u16","[]",0x140A),
     0x801BD830:("actorCutscenesGlobalCutscenes","ActorCutscene","[8]",0x80),
     0x801BD8B0:("actorCutsceneCurrent","s16","",0x2),
     0x801BD8B2:("actorCutsceneCurrentLength","s16","",0x2),

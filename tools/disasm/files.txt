@@ -511,6 +511,7 @@
             0x801BB170 : "z_draw",
             0x801BC240 : "z_eff_footmark",
             0x801BC2A0 : "",
+            0x801BC420 : "z_face_reaction",
             0x801BD830 : "",
             0x801BD8d0 : "z_fireobj",
             0x801BD910 : "",
