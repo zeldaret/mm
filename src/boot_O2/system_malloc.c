@@ -2,11 +2,11 @@
 
 Arena gSystemArena;
 
-void* SystemArena_Alloc(u32 size) {
+void* SystemArena_Malloc(u32 size) {
     return __osMalloc(&gSystemArena, size);
 }
 
-void* SystemArena_AllocR(u32 size) {
+void* SystemArena_MallocR(u32 size) {
     return __osMallocR(&gSystemArena, size);
 }
 

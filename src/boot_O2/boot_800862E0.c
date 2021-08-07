@@ -1,6 +1,6 @@
 #include "global.h"
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/boot_800862E0/SystemArena_AllocMin1.s")
+#pragma GLOBAL_ASM("asm/non_matchings/boot/boot_800862E0/SystemArena_MallocMin1.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/boot/boot_800862E0/SystemArena_FreeNull.s")
 

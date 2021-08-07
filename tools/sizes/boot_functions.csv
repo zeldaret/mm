@@ -154,7 +154,7 @@ asm/non_matchings/boot/mtxuty-cvt/MtxConv_F2L.s,MtxConv_F2L,0x80086110,0x52
 asm/non_matchings/boot/mtxuty-cvt/MtxConv_L2F.s,MtxConv_L2F,0x80086258,0xA
 asm/non_matchings/boot/assert/__assert.s,__assert,0x80086280,0xD
 asm/non_matchings/boot/assert/func_800862B4.s,func_800862B4,0x800862B4,0xB
-asm/non_matchings/boot/boot_800862E0/SystemArena_AllocMin1.s,SystemArena_AllocMin1,0x800862E0,0xC
+asm/non_matchings/boot/boot_800862E0/SystemArena_MallocMin1.s,SystemArena_MallocMin1,0x800862E0,0xC
 asm/non_matchings/boot/boot_800862E0/SystemArena_FreeNull.s,SystemArena_FreeNull,0x80086310,0xB
 asm/non_matchings/boot/boot_800862E0/func_8008633C.s,func_8008633C,0x8008633C,0x1C
 asm/non_matchings/boot/boot_800862E0/func_800863AC.s,func_800863AC,0x800863AC,0x1C
@@ -196,8 +196,8 @@ asm/non_matchings/boot/fp/func_80086D50.s,func_80086D50,0x80086D50,0x7
 asm/non_matchings/boot/fp/func_80086D6C.s,func_80086D6C,0x80086D6C,0x8
 asm/non_matchings/boot/fp/func_80086D8C.s,func_80086D8C,0x80086D8C,0x8
 asm/non_matchings/boot/fp/func_80086DAC.s,func_80086DAC,0x80086DAC,0x9
-asm/non_matchings/boot/system_malloc/SystemArena_Alloc.s,SystemArena_Alloc,0x80086DD0,0xA
-asm/non_matchings/boot/system_malloc/SystemArena_AllocR.s,SystemArena_AllocR,0x80086DF8,0xA
+asm/non_matchings/boot/system_malloc/SystemArena_Malloc.s,SystemArena_Malloc,0x80086DD0,0xA
+asm/non_matchings/boot/system_malloc/SystemArena_MallocR.s,SystemArena_MallocR,0x80086DF8,0xA
 asm/non_matchings/boot/system_malloc/SystemArena_Realloc.s,SystemArena_Realloc,0x80086E20,0xC
 asm/non_matchings/boot/system_malloc/SystemArena_Free.s,SystemArena_Free,0x80086E50,0xA
 asm/non_matchings/boot/system_malloc/SystemArena_Calloc.s,SystemArena_Calloc,0x80086E78,0x15
