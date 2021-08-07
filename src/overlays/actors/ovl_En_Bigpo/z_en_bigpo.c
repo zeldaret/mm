@@ -1263,7 +1263,7 @@ void EnBigpo_Draw1(Actor* thisx, GlobalContext* globalCtx) {
         dispHead = POLY_OPA_DISP;
         gSPDisplayList(dispHead, &sSetupDL[6 * 0x19]);
         gSPSegment(&dispHead[1], 0x0C, &D_801AEFA0);
-        gSPSegment(dispHead + 2, 0x08,
+        gSPSegment(&dispHead[2], 0x08,
                    Gfx_EnvColor(globalCtx->state.gfxCtx, this->mainColor.r, this->mainColor.g, this->mainColor.b,
                                 this->mainColor.a));
         POLY_OPA_DISP = SkelAnime_Draw2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
