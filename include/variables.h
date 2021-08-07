@@ -282,21 +282,8 @@ extern f64 D_800994C0;
 extern f64 D_800994C8;
 extern char D_800994D0[];
 extern char D_800994DC[];
-extern StackEntry sBootThreadInfo;
-extern OSThread sIdleThread;
-extern u8 sIdleThreadStack[1024];
-extern StackEntry sIdleThreadInfo;
-extern u8 sBootThreadStack[1024];
-extern IrqMgr gIrqMgr;
-extern u8 sIrqMgrStack[1280];
-extern StackEntry sIrqMgrStackInfo;
-extern OSThread gMainThread;
-extern u8 sMainStack[2304];
-extern StackEntry sMainStackInfo;
-extern OSMesg sPiMgrCmdBuff[50];
-extern OSMesgQueue gPiMgrCmdQ;
-extern OSViMode gViConfigMode;
-extern u8 D_8009B290;
+
+
 extern StackEntry sDmaMgrStackInfo;
 extern u16 numDmaEntries;
 extern OSMesgQueue sDmaMgrMsgQueue;

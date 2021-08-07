@@ -16,7 +16,7 @@ typedef union {
         /* 0x4 */ f32 f_even;
     } f;
     /* 0x0 */ f64 d;
-} __OSfp;
+} __OSfp; // size = 0x8
 
 
 typedef struct {
@@ -73,7 +73,7 @@ typedef struct {
     /* 0x178 */ __OSfp fp26;
     /* 0x180 */ __OSfp fp28;
     /* 0x188 */ __OSfp fp30;
-} __OSThreadContext;
+} __OSThreadContext; // size = 0x190
 
 
 typedef struct OSThread_s {
@@ -86,7 +86,7 @@ typedef struct OSThread_s {
     /* 0x14 */ OSId id;
     /* 0x18 */ int fp;
     /* 0x20 */ __OSThreadContext context;
-} OSThread;
+} OSThread; // size = 0x1B0
 
 typedef u32 OSEvent;
 
@@ -116,7 +116,7 @@ typedef struct {
     /* 0x0C */ u32 sectorSize;
     /* 0x10 */ u32 C1ErrNum;
     /* 0x14 */ u32 C1ErrSector[4];
-} __OSBlockInfo;
+} __OSBlockInfo; // size = 0x24
 
 
 typedef struct {
@@ -128,7 +128,7 @@ typedef struct {
     /* 0x10 */ u32 bmCtlShadow;
     /* 0x14 */ u32 seqCtlShadow;
     /* 0x18 */ __OSBlockInfo block[2];
-} __OSTranxInfo;
+} __OSTranxInfo; // size = 0x60
 
 
 typedef struct OSPiHandle_s {
@@ -142,13 +142,13 @@ typedef struct OSPiHandle_s {
     /* 0x0C */ u32 baseAddress;
     /* 0x10 */ u32 speed;
     /* 0x14 */ __OSTranxInfo transferInfo;
-} OSPiHandle;
+} OSPiHandle; // size = 0x74
 
 
 typedef struct {
     /* 0x0 */ u8 type;
     /* 0x4 */ u32 address;
-} OSPiInfo;
+} OSPiInfo; // size = 0x8
 
 
 typedef struct {
@@ -156,7 +156,7 @@ typedef struct {
     /* 0x2 */ u8 pri;
     /* 0x3 */ u8 status;
     /* 0x4 */ OSMesgQueue* retQueue;
-} OSIoMesgHdr;
+} OSIoMesgHdr; // size = 0x8
 
 
 typedef struct {
@@ -165,7 +165,7 @@ typedef struct {
     /* 0x0C */ u32 devAddr;
     /* 0x10 */ u32 size;
     /* 0x14 */ OSPiHandle* piHandle;
-} OSIoMesg;
+} OSIoMesg; // size = 0x88
 
 
 typedef struct {
@@ -176,7 +176,7 @@ typedef struct {
     /* 0x10 */ OSMesgQueue* acsQueue;
     /* 0x14 */ s32 (*piDmaCallback)(s32, u32, void*, u32);
     /* 0x18 */ s32 (*epiDmaCallback)(OSPiHandle*, s32, u32, void*, u32);
-} OSDevMgr;
+} OSDevMgr; // size = 0x1C
 
 
 typedef struct {
@@ -189,7 +189,7 @@ typedef struct {
     /* 0x18 */ u32 hStart;
     /* 0x1C */ u32 xScale;
     /* 0x20 */ u32 vCurrent;
-} OSViCommonRegs;
+} OSViCommonRegs; // size = 0x24
 
 
 typedef struct {
@@ -198,14 +198,14 @@ typedef struct {
     /* 0x08 */ u32 vStart;
     /* 0x0C */ u32 vBurst;
     /* 0x10 */ u32 vIntr;
-} OSViFieldRegs;
+} OSViFieldRegs; // size = 0x14
 
 
 typedef struct {
     /* 0x00 */ u8 type;
     /* 0x04 */ OSViCommonRegs comRegs;
     /* 0x28 */ OSViFieldRegs fldRegs[2];
-} OSViMode;
+} OSViMode; // size = 0x50
 
 typedef u64 OSTime;
 
@@ -217,14 +217,14 @@ typedef struct OSTimer_s {
     /* 0x10 */ OSTime value;
     /* 0x18 */ OSMesgQueue* mq;
     /* 0x1C */ OSMesg msg;
-} OSTimer;
+} OSTimer; // size = 0x20
 
 
 typedef struct {
     /* 0x0 */ u16 type;
     /* 0x2 */ u8 status;
     /* 0x3 */ u8 errno;
-} OSContStatus;
+} OSContStatus; // size = 0x4
 
 
 typedef struct {
@@ -232,7 +232,7 @@ typedef struct {
     /* 0x2 */ s8 stick_x;
     /* 0x3 */ s8 stick_y;
     /* 0x4 */ u8 errno;
-} OSContPad;
+} OSContPad; // size = 0x6
 
 
 typedef struct {
@@ -241,14 +241,14 @@ typedef struct {
     /* 0x24 */ u8 addressCrc;
     /* 0x25 */ u8 dataCrc;
     /* 0x26 */ u8 errno;
-} OSContRamIo;
+} OSContRamIo; // size = 0x28
 
 typedef struct {
     /* 0x0 */ u16* histo_base;
     /* 0x4 */ u32 histo_size;
     /* 0x8 */ u32* text_start;
     /* 0xC */ u32* text_end;
-} OSProf;
+} OSProf; // size = 0x10
 
 typedef struct {
     /* 0x0 */ OSMesgQueue* mq;

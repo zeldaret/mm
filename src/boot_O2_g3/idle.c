@@ -1,5 +1,16 @@
 #include "global.h"
 
+IrqMgr gIrqMgr;
+u8 sIrqMgrStack[1280];
+StackEntry sIrqMgrStackInfo;
+OSThread gMainThread;
+u8 sMainStack[2304];
+StackEntry sMainStackInfo;
+OSMesg sPiMgrCmdBuff[50];
+OSMesgQueue gPiMgrCmdQ;
+OSViMode gViConfigMode;
+u8 D_8009B290;
+
 u8 D_80096B20 = 1;
 vu8 gViConfigUseDefault = 1;
 u8 gViConfigAdditionalScanLines = 0;
@@ -38,7 +49,7 @@ void Idle_InitMemory(void) {
     Idle_ClearMemory(&gGfxSPTaskYieldBuffer, memEnd);
 }
 
-#ifdef NON_MATCHING
+// #ifdef NON_MATCHING
 // regalloc around DmaMgr_SendRequestImpl
 void Idle_InitCodeAndMemory(void) {
     DmaRequest dmaReq;
@@ -52,7 +63,7 @@ void Idle_InitCodeAndMemory(void) {
     sDmaMgrDmaBuffSize = 0;
 
     DmaMgr_SendRequestImpl(&dmaReq, (u32)_codeSegmentStart, (u32)_codeSegmentRomStart,
-                           (u32)_codeSegmentRomEnd - (u32)_codeSegmentRomStart, 0, &queue, 0);
+                           _codeSegmentRomEnd - _codeSegmentRomStart, 0, &queue, 0);
     Idle_InitScreen();
     Idle_InitMemory();
     osRecvMesg(&queue, NULL, 1);
@@ -61,9 +72,9 @@ void Idle_InitCodeAndMemory(void) {
 
     Idle_ClearMemory(_codeSegmentBssStart, _codeSegmentBssEnd);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/boot/idle/Idle_InitCodeAndMemory.s")
-#endif
+// #else
+// #pragma GLOBAL_ASM("asm/non_matchings/boot/idle/Idle_InitCodeAndMemory.s")
+// #endif
 
 void Main_ThreadEntry(void* arg) {
     StackCheck_Init(&sIrqMgrStackInfo, sIrqMgrStack, sIrqMgrStack + sizeof(sIrqMgrStack), 0, 256, "irqmgr");
