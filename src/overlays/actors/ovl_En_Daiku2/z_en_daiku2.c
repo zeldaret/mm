@@ -15,19 +15,20 @@ void EnDaiku2_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnDaiku2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDaiku2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDaiku2_Draw(Actor* thisx, GlobalContext* globalCtx);
+
 void func_80BE65B4(EnDaiku2* this, GlobalContext* globalCtx);
 void func_80BE66E4(EnDaiku2* this, GlobalContext* globalCtx);
 void func_80BE6B40(EnDaiku2* this, GlobalContext* globalCtx);
 void func_80BE6BC0(EnDaiku2* this, GlobalContext* globalCtx);
+void func_80BE6CFC(EnDaiku2* this);
 void func_80BE6D40(EnDaiku2* this, GlobalContext* globalCtx);
+void func_80BE6EB0(EnDaiku2* this);
 void func_80BE6EF0(EnDaiku2* this, GlobalContext* globalCtx);
 void func_80BE7600(EnDaiku2* this, GlobalContext* globalCtx);
-void func_80BE7718(EnDaiku2* this, GlobalContext* globalCtx);
-void func_80BE71D8(EnDaiku2* this, GlobalContext* globalCtx);
-void func_80BE6CFC(EnDaiku2* this);
-void func_80BE6EB0(EnDaiku2* this);
 void func_80BE71A0(EnDaiku2* this);
+void func_80BE71D8(EnDaiku2* this, GlobalContext* globalCtx);
 void func_80BE7504(EnDaiku2* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, s16 arg5);
+void func_80BE7718(EnDaiku2* this, GlobalContext* globalCtx);
 
 extern AnimationHeader D_06002134;
 extern AnimationHeader D_06002FA0;
@@ -140,7 +141,6 @@ void func_80BE6408(EnDaiku2* this, s32 arg1) {
     static u8 D_80BE7958[] = {
         0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0,
     };
-
     f32 sp34 = 1.0f;
 
     this->unk_276 = arg1;
@@ -306,7 +306,7 @@ void func_80BE6BC0(EnDaiku2* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0x0);
     if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         s32 day = gSaveContext.day - 1;
-        
+
         func_801477B4(globalCtx);
 
         if (this->unk_288 == 2) {
@@ -548,16 +548,16 @@ void func_80BE7718(EnDaiku2* this, GlobalContext* globalCtx) {
     s32 i;
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
     EnDaiku2Particle* particle = &this->particles[0];
-    s32 object;
+    s32 objectIdx;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C28C(globalCtx->state.gfxCtx);
 
-    object = Object_GetIndex(&globalCtx->objectCtx, OBJECT_BOMBIWA);
-    if ((object >= 0) && Object_IsLoaded(&globalCtx->objectCtx, object)) {
+    objectIdx = Object_GetIndex(&globalCtx->objectCtx, OBJECT_BOMBIWA);
+    if ((objectIdx >= 0) && Object_IsLoaded(&globalCtx->objectCtx, objectIdx)) {
         gDPPipeSync(POLY_OPA_DISP++);
-        gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[object].segment);
+        gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[objectIdx].segment);
 
         for (i = 0; i < ARRAY_COUNT(this->particles); i++, particle++) {
             if (particle->isEnabled) {
