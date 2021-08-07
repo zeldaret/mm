@@ -731,10 +731,10 @@ def resolve_symbol(address):
     for entry in actor_tbl:
         if address >= 0x80000000:
             if entry[3] <= address < entry[4]:
-                return repo + "baserom/overlays" + os.sep + entry[0], address - entry[3]
+                return repo + "baserom" + os.sep + entry[0], address - entry[3]
         else:
             if entry[1] <= address < entry[2]:
-                return repo + "baserom/overlays" + os.sep + entry[0], address - entry[1]
+                return repo + "baserom" + os.sep + entry[0], address - entry[1]
     else:
         raise RuntimeError('Symbol not found in actor overlay table file ranges. Are you sure the file is an actor overlay?')
 
