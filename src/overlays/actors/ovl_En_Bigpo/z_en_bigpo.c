@@ -432,13 +432,13 @@ void EnBigpo_SpawnPoCutscene7(EnBigpo* this) {
 // also sets the main camera to align with the subCamera and switches back from the subCamera back to the main camera
 void EnBigpo_SpawnPoCutscene8(EnBigpo* this, GlobalContext* globalCtx) {
     Actor* dampe;
-    Camera* subCamId;
+    Camera* subCam;
 
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     this->idleTimer -= 1;
     if (this->idleTimer == 0) {
-        subCamId = Play_GetCamera(globalCtx, this->cutsceneSubCamId);
-        Gameplay_CameraSetAtEye(globalCtx, MAIN_CAM, &subCamId->at, &subCamId->eye);
+        subCam = Play_GetCamera(globalCtx, this->cutsceneSubCamId);
+        Gameplay_CameraSetAtEye(globalCtx, MAIN_CAM, &subCam->at, &subCam->eye);
         this->cutsceneSubCamId = SUBCAM_FREE;
         if (this->actor.params == ENBIGPO_SUMMONED) {
             dampe = func_ActorCategoryIterateById(globalCtx, NULL, ACTORCAT_NPC, ACTOR_EN_TK);
