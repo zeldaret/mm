@@ -30,6 +30,7 @@ const ActorInit Demo_Kankyo_InitVars = {
     (ActorFunc)DemoKankyo_Draw,
 };
 
+// object E is bubble, which exists in giants chamber
 static s32 D_808D03E8 = 0x1000E;
 
 void DemoKankyo_SetupAction(DemoKankyo* this, DemoKankyoActionFunc actionFunc) {
@@ -42,7 +43,7 @@ void func_808CE45C(DemoKankyo* this, GlobalContext* globalCtx) {
     s32 i;
     f32 static130;
     f32 diffX;
-    f32 spCC; // vec3f
+    f32 spCC; // vec3f?
     f32 spC8;
     f32 spC4;
     f32 distance;
@@ -76,16 +77,21 @@ void func_808CE45C(DemoKankyo* this, GlobalContext* globalCtx) {
 
         switch (this->particles[i].state) {
             case 0: // init
+                // guess: new starting location?
                 this->particles[i].unk_1C.x = globalCtx->view.eye.x + (spCC * 80.0f);
                 this->particles[i].unk_1C.y = globalCtx->view.eye.y + (spC8 * 80.0f);
                 this->particles[i].unk_1C.z = globalCtx->view.eye.z + (spC4 * 80.0f);
+    
                 this->particles[i].unk_04.x = (Rand_ZeroOne() - 0.5f) * 160.0f;
-                this->particles[i].unk_04.y = 30.0f;
+                this->particles[i].unk_04.y = 30.0f; // starts random direction pointed upwards, velocity?
                 this->particles[i].unk_04.z = (Rand_ZeroOne() - 0.5f) * 160.0f;
                 this->particles[i].unk_38 = (Rand_ZeroOne() * 1.6f) + 0.5f;
                 this->particles[i].alpha = 0;
+                // random max value of u16?
                 this->particles[i].unk_3C = Rand_ZeroOne() * 65535;
                 this->particles[i].unk_44 = 0.1f;
+
+                // random angle?
                 this->particles[i].unk_28.x = Rand_ZeroOne() * 360.0f;
                 this->particles[i].unk_28.y = Rand_ZeroOne() * 360.0f;
                 this->particles[i].unk_28.z = Rand_ZeroOne() * 360.0f;
@@ -313,6 +319,8 @@ void func_808CF0CC(DemoKankyo* this, GlobalContext* globalCtx) {
                 temp_f26 = globalCtx->view.eye.z + (spD4 * static120);
                 Math_SmoothStepToF(&this->particles[i].unk_44, 0.2f, 0.1f, 0.001f, 0.00001f);
                 Math_SmoothStepToF(&this->particles[i].unk_34, this->particles[i].unk_38, 0.5f, 0.2f, 0.02f);
+
+                // pos update based on vel?
                 this->particles[i].unk_04.x += __sinf(this->particles[i].unk_28.x) * this->particles[i].unk_34;
                 this->particles[i].unk_04.y += __sinf(this->particles[i].unk_28.y) * this->particles[i].unk_34;
                 this->particles[i].unk_04.z += __sinf(this->particles[i].unk_28.z) * this->particles[i].unk_34;
