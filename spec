@@ -634,7 +634,6 @@ beginseg
     include "build/src/code/padmgr.o"
     include "build/data/code/padmgr.data.o"
     include "build/src/code/sched.o"
-    include "build/data/code/sched.bss.o"
     include "build/src/code/speed_meter.o"
     include "build/data/code/speed_meter.data.o"
     include "build/data/code/speed_meter.bss.o"
@@ -1106,8 +1105,7 @@ beginseg
     name "ovl_En_Dekunuts"
     compress
     include "build/src/overlays/actors/ovl_En_Dekunuts/z_en_dekunuts.o"
-    include "build/data/ovl_En_Dekunuts/ovl_En_Dekunuts.data.o"
-    include "build/data/ovl_En_Dekunuts/ovl_En_Dekunuts.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Dekunuts/ovl_En_Dekunuts_reloc.o"
 endseg
 
 beginseg
@@ -1599,8 +1597,7 @@ beginseg
     name "ovl_En_Daiku"
     compress
     include "build/src/overlays/actors/ovl_En_Daiku/z_en_daiku.o"
-    include "build/data/ovl_En_Daiku/ovl_En_Daiku.data.o"
-    include "build/data/ovl_En_Daiku/ovl_En_Daiku.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Daiku/ovl_En_Daiku_reloc.o"
 endseg
 
 beginseg
@@ -3043,8 +3040,7 @@ beginseg
     name "ovl_En_Dnb"
     compress
     include "build/src/overlays/actors/ovl_En_Dnb/z_en_dnb.o"
-    include "build/data/ovl_En_Dnb/ovl_En_Dnb.data.o"
-    include "build/data/ovl_En_Dnb/ovl_En_Dnb.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Dnb/ovl_En_Dnb_reloc.o"
 endseg
 
 beginseg
@@ -3210,8 +3206,7 @@ beginseg
     name "ovl_En_Dno"
     compress
     include "build/src/overlays/actors/ovl_En_Dno/z_en_dno.o"
-    include "build/data/ovl_En_Dno/ovl_En_Dno.data.o"
-    include "build/data/ovl_En_Dno/ovl_En_Dno.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Dno/ovl_En_Dno_reloc.o"
 endseg
 
 beginseg
@@ -4488,7 +4483,7 @@ beginseg
     name "ovl_Obj_Warpstone"
     compress
     include "build/src/overlays/actors/ovl_Obj_Warpstone/z_obj_warpstone.o"
-    include "build/data/ovl_Obj_Warpstone/ovl_Obj_Warpstone.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Warpstone/ovl_Obj_Warpstone_reloc.o"
 endseg
 
 beginseg
@@ -5051,8 +5046,7 @@ beginseg
     name "ovl_En_Daiku2"
     compress
     include "build/src/overlays/actors/ovl_En_Daiku2/z_en_daiku2.o"
-    include "build/data/ovl_En_Daiku2/ovl_En_Daiku2.data.o"
-    include "build/data/ovl_En_Daiku2/ovl_En_Daiku2.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Daiku2/ovl_En_Daiku2_reloc.o"
 endseg
 
 beginseg
