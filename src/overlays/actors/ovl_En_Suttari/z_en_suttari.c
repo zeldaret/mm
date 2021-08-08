@@ -202,7 +202,8 @@ void EnSuttari_UpdateTime(void) {
 
 s32 func_80BAA904(EnSuttari* this, GlobalContext* globalCtx) {
     Vec3f sp2C;
-    Vec3s sp24;
+    s32 pad;
+    s32 sp24;
 
     sp2C.x = (Math_SinS(this->actor.world.rot.y) * 50.0f) + this->actor.world.pos.x;
     sp2C.y = this->actor.world.pos.y + 100.0f;
