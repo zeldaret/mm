@@ -1083,7 +1083,7 @@ void EnPametfrog_JumpToLink(EnPametfrog* this, GlobalContext* globalCtx) {
     }
 
     if ((this->collider.base.ocFlags1 & OC1_HIT) && (this->collider.base.ocFlags2 & OC2_HIT_PLAYER) &&
-        Actor_IsActorFacingLink(&this->actor, 0x3000) &&
+        Actor_IsActorFacingPlayer(&this->actor, 0x3000) &&
         (this->skelAnime.animCurrentFrame <= 2.0f || this->skelAnime.animCurrentFrame >= 11.0f)) {
         EnPametfrog_SetupMeleeAttack(this);
     }

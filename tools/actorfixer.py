@@ -16,6 +16,9 @@ animdict ={
     "func_8012404c": "Player_RemoveMask",
     "Actor_SpawnWithParentAndCutscene": "Actor_SpawnAsChildAndCutscene",
     "Actor_SpawnWithParent": "Actor_SpawnAsChild",
+    "Actor_IsLinkFacingActor": "Actor_IsPlayerFacingActor",
+    "Actor_IsActorFacingLink": "Actor_IsActorFacingPlayer",
+    "Actor_IsActorFacingLinkAndWithinRange": "Actor_IsActorFacingPlayerAndWithinRange",
 }
 
 def replace_anim(file):

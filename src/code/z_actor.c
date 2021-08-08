@@ -92,6 +92,10 @@ void func_800B4024(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
     ActorShadow_Draw(actor, lights, globalCtx, D_04075A40, NULL);
 }
 
+#if 0
+static Color_RGBA8 D_801AEC80 = {255, 255, 255, 255};
+#endif
+
 /* ActorShadow_DrawWhiteCircle */
 void func_800B4088(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
     ActorShadow_Draw(actor, lights, globalCtx, D_04076BC0, &D_801AEC80);
@@ -142,6 +146,23 @@ void func_800B40E0(GlobalContext* globalCtx, Light* light, MtxF* arg2, s32 arg3,
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B4F40.s")
 
+#if 0
+s801AEC84 D_801AEC84[13] = {
+    {0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0},
+    {0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0},
+    {0xFF, 0xFF, 0xE6, 0xFF, 0xDC, 0xA0, 0x50, 0},
+    {0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0},
+    {0x96, 0x96, 0xFF, 0xFF, 0x96, 0x96, 0xFF, 0},
+    {0xFF, 0xFF, 0, 0xFF, 0xC8, 0x9B, 0, 0},
+    {0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0},
+    {0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0},
+    {0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0},
+    {0xFF, 0xFF, 0, 0xFF, 0xC8, 0x9B, 0, 0},
+    {0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0},
+    {0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0},
+    {0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0},
+};
+#endif
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B4F78.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B5040.s")
@@ -362,6 +383,10 @@ void Actor_FiniActor(Actor* actor, GlobalContext* globalCtx) {
     }
 }
 
+#if 0
+static f32 actorMovementScale = 1.0f;
+#endif
+
 void Actor_SetMovementScale(s32 scale) {
     actorMovementScale = scale * 0.5f;
 }
@@ -507,7 +532,7 @@ void func_800B72F8(DynaPolyActor* dpactor, f32 a1, s16 a2) {
     dpactor->unk148 += a1;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_IsLinkFacingActor.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_IsPlayerFacingActor.s")
 
 s32 Actor_IsActorFacedByActor(Actor* actor, Actor* other, s16 tolerance) {
     s16 angle;
@@ -521,7 +546,7 @@ s32 Actor_IsActorFacedByActor(Actor* actor, Actor* other, s16 tolerance) {
     return 0;
 }
 
-s32 Actor_IsActorFacingLink(Actor* actor, s16 angle) {
+s32 Actor_IsActorFacingPlayer(Actor* actor, s16 angle) {
     s16 dist;
 
     dist = actor->yawTowardsPlayer - actor->shape.rot.y;
@@ -541,7 +566,7 @@ s32 Actor_IsActorFacingActor(Actor* actor, Actor* other, s16 tolerance) {
     return 0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_IsActorFacingLinkAndWithinRange.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_IsActorFacingPlayerAndWithinRange.s")
 
 s32 Actor_IsActorFacingActorAndWithinRange(Actor* actor, Actor* other, f32 range, s16 tolerance) {
     s16 dist;
@@ -580,6 +605,33 @@ s32 Actor_IsActorFacingActorAndWithinRange(Actor* actor, Actor* other, f32 range
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8248.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B82EC.s")
+
+#if 0
+f32 D_801AECF0[22] = {
+    4900.0f,
+    0.5f,
+    28900.0f,
+    0.6666667f,
+    78400.0f,
+    0.05f,
+    122500.0f,
+    0.6666667f,
+    490000.0f,
+    0.6666667f,
+    1000000.0f,
+    0.6666667f,
+    10000.0f,
+    0.94905096f,
+    19600.0f,
+    0.85714287f,
+    57600.0f,
+    0.41666666f,
+    78400.0f,
+    0.001f,
+    6250000.0f,
+    0.6666667f,
+};
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B83BC.s")
 
