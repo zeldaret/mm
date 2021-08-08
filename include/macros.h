@@ -26,6 +26,8 @@
 
 #define PLAYER ((Player*)globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first)
 
+#define CUR_TRANSFORMATION ((gSaveContext.transformation == 4) ? 0 : gSaveContext.transformation)
+
 // linkAge still exists in MM, but is always set to 0 (always adult)
 // There are remnants of these macros from OOT, but they are essentially useless
 //#define LINK_IS_CHILD (gSaveContext.linkAge != 0)

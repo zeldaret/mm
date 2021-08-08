@@ -1515,6 +1515,19 @@ typedef struct {
     /* 0x04 */ s32 timer;
 } FrameAdvanceContext; // size = 0x8
 
+typedef enum {
+    /* 00 */ GAMEOVER_INACTIVE,
+    /* 01 */ GAMEOVER_DEATH_START,
+    /* 02 */ GAMEOVER_DEATH_WAIT_GROUND,    // wait for link to fall and hit the ground
+    /* 03 */ GAMEOVER_DEATH_FADE_OUT,       // wait before fading out
+
+    /* 20 */ GAMEOVER_REVIVE_START = 20,
+    /* 21 */ GAMEOVER_REVIVE_RUMBLE,
+    /* 22 */ GAMEOVER_REVIVE_WAIT_GROUND,   // wait for link to fall and hit the ground
+    /* 23 */ GAMEOVER_REVIVE_WAIT_FAIRY,    // wait for the fairy to rise all the way up out of links body
+    /* 24 */ GAMEOVER_REVIVE_FADE_OUT       // fade out the game over lights as link is revived and gets back up
+} GameOverState;
+
 typedef struct {
     /* 0x00 */ u16 state;
 } GameOverContext; // size = 0x02

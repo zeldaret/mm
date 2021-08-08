@@ -1127,7 +1127,7 @@ void EnMaYto_PostMilkRunEnd(EnMaYto* this, GlobalContext* globalCtx) {
 
 void EnMaYto_DefaultStartDialogue(EnMaYto* this, GlobalContext* globalCtx) {
     if (CURRENT_DAY == 1) {
-        if (Player_GetMask(globalCtx) != PLAYER_MASK_NONE && gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
+        if (Player_GetMask(globalCtx) != PLAYER_MASK_NONE && gSaveContext.transformation == PLAYER_FORM_HUMAN) {
             switch (Player_GetMask(globalCtx)) {
                 case PLAYER_MASK_ROMANIS_MASK:
                     func_801518B0(globalCtx, 0x235D, &this->actor);
@@ -1186,7 +1186,7 @@ void EnMaYto_DefaultStartDialogue(EnMaYto* this, GlobalContext* globalCtx) {
 void EnMaYto_DinnerStartDialogue(EnMaYto* this, GlobalContext* globalCtx) {
     switch (CURRENT_DAY) {
         case 1:
-            if (Player_GetMask(globalCtx) != PLAYER_MASK_NONE && gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
+            if (Player_GetMask(globalCtx) != PLAYER_MASK_NONE && gSaveContext.transformation == PLAYER_FORM_HUMAN) {
                 switch (Player_GetMask(globalCtx)) {
                     case PLAYER_MASK_ROMANIS_MASK:
                         func_801518B0(globalCtx, 0x235D, &this->actor);

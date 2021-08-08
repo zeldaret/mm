@@ -913,7 +913,7 @@ void EnFsn_DeterminePrice(EnFsn* this, GlobalContext* globalCtx) {
             if (player->heldItemButton == 0) {
                 buttonItem =
                     gSaveContext.equips
-                        .buttonItems[(gSaveContext.playerForm == PLAYER_FORM_HUMAN) ? 0 : gSaveContext.playerForm]
+                        .buttonItems[(gSaveContext.transformation == PLAYER_FORM_HUMAN) ? 0 : gSaveContext.transformation]
                                     [player->heldItemButton];
             } else {
                 buttonItem = gSaveContext.equips.buttonItems[0][player->heldItemButton];

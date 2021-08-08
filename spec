@@ -691,7 +691,7 @@ beginseg
     include "build/data/code/code_801A7B10.bss.o"
     include "build/src/code/code_801AA020.o"
     include "build/data/code/code_801AA020.bss.o"
-    include "build/src/code/z_game_over.o"
+    include_readonly "build/src/code/z_game_over.o"
     include "build/src/code/z_construct.o"
     include "build/data/code/code_801D9090.data.o"
     include "build/data/code/code_801E1180.rodata.o"

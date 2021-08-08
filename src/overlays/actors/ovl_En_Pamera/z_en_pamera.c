@@ -614,7 +614,7 @@ void func_80BD994C(EnPamera* this, GlobalContext* globalCtx) {
             func_801518B0(globalCtx, 0x15A8, &this->actor);
 
             this->unk_324 = 0x15A8;
-        } else if ((gSaveContext.playerForm != PLAYER_FORM_HUMAN) ||
+        } else if ((gSaveContext.transformation != PLAYER_FORM_HUMAN) ||
                    ((gSaveContext.weekEventReg[52] & 0x20) && (!(gSaveContext.weekEventReg[75] & 0x20)))) {
             func_80BD93CC(this, 1, 0);
             func_801518B0(globalCtx, 0x158E, &this->actor);

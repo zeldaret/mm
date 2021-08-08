@@ -1257,9 +1257,9 @@ asm/non_matchings/code/z_kankyo/func_800FB388.s,func_800FB388,0x800FB388,0xF4
 asm/non_matchings/code/z_kankyo/func_800FB758.s,func_800FB758,0x800FB758,0x97
 asm/non_matchings/code/z_kankyo/func_800FB9B4.s,func_800FB9B4,0x800FB9B4,0xC2
 asm/non_matchings/code/z_kankyo/func_800FBCBC.s,func_800FBCBC,0x800FBCBC,0x4C
-asm/non_matchings/code/z_kankyo/func_800FBDEC.s,func_800FBDEC,0x800FBDEC,0x54
-asm/non_matchings/code/z_kankyo/func_800FBF3C.s,func_800FBF3C,0x800FBF3C,0x87
-asm/non_matchings/code/z_kankyo/func_800FC158.s,func_800FC158,0x800FC158,0xA1
+asm/non_matchings/code/z_kankyo/Kankyo_InitGameOverLights.s,Kankyo_InitGameOverLights,0x800FBDEC,0x54
+asm/non_matchings/code/z_kankyo/Kankyo_FadeInGameOverLights.s,Kankyo_FadeInGameOverLights,0x800FBF3C,0x87
+asm/non_matchings/code/z_kankyo/Kankyo_FadeOutGameOverLights.s,Kankyo_FadeOutGameOverLights,0x800FC158,0xA1
 asm/non_matchings/code/z_kankyo/func_800FC3DC.s,func_800FC3DC,0x800FC3DC,0x1A
 asm/non_matchings/code/z_kankyo/func_800FC444.s,func_800FC444,0x800FC444,0x82
 asm/non_matchings/code/z_kankyo/func_800FC64C.s,func_800FC64C,0x800FC64C,0x31A
@@ -3597,7 +3597,7 @@ asm/non_matchings/code/code_801AA020/func_801AA020.s,func_801AA020,0x801AA020,0x
 asm/non_matchings/code/code_801AA020/func_801AA248.s,func_801AA248,0x801AA248,0x67
 asm/non_matchings/code/code_801AA020/func_801AA3E4.s,func_801AA3E4,0x801AA3E4,0x4F
 asm/non_matchings/code/code_801AA020/func_801AA520.s,func_801AA520,0x801AA520,0x3C
-asm/non_matchings/code/z_game_over/func_801AA610.s,func_801AA610,0x801AA610,0x5
-asm/non_matchings/code/z_game_over/func_801AA624.s,func_801AA624,0x801AA624,0x1A
-asm/non_matchings/code/z_game_over/func_801AA68C.s,func_801AA68C,0x801AA68C,0x105
+asm/non_matchings/code/z_game_over/GameOver_Init.s,GameOver_Init,0x801AA610,0x5
+asm/non_matchings/code/z_game_over/GameOver_FadeLights.s,GameOver_FadeLights,0x801AA624,0x1A
+asm/non_matchings/code/z_game_over/GameOver_Update.s,GameOver_Update,0x801AA68C,0x105
 asm/non_matchings/code/z_construct/nop_801AAAA0.s,nop_801AAAA0,0x801AAAA0,0x4

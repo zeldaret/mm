@@ -125,7 +125,7 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
     switch (this->actor.params) {
         case ENBJI01_PARAMS_DEFAULT:
         case ENBJI01_PARAMS_FINISHED_CONVERSATION:
-            switch (gSaveContext.playerForm) {
+            switch (gSaveContext.transformation) {
                 case PLAYER_FORM_DEKU:
                     if (gSaveContext.weekEventReg[17] & 0x10) {
                         if (gSaveContext.weekEventReg[74] & 0x80) {
@@ -160,7 +160,7 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
             }
             break;
         case ENBJI01_PARAMS_LOOKED_THROUGH_TELESCOPE:
-            switch (gSaveContext.playerForm) {
+            switch (gSaveContext.transformation) {
                 case PLAYER_FORM_DEKU:
                     if (gSaveContext.weekEventReg[74] & 0x80) {
                         this->textId = 0x5F2;
@@ -220,7 +220,7 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
                         break;
                     case 1:
                         func_8019F230();
-                        switch (gSaveContext.playerForm) {
+                        switch (gSaveContext.transformation) {
                             case PLAYER_FORM_DEKU:
                                 func_80151938(globalCtx, 0x5F0);
                                 break;

@@ -511,9 +511,9 @@ u16 func_808F3DD4(GlobalContext* globalCtx, EnIn* this, u32 arg2) {
     } else {
         switch (arg2) {
             case 0:
-                if ((gSaveContext.playerForm == 2) || (gSaveContext.playerForm == 1)) {
+                if ((gSaveContext.transformation == 2) || (gSaveContext.transformation == 1)) {
                     textId = 0x345C;
-                } else if (gSaveContext.playerForm == 3) {
+                } else if (gSaveContext.transformation == 3) {
                     textId = 0x3460;
                 } else if (!(gSaveContext.weekEventReg[15] & 8)) {
                     textId = 0x3458;
@@ -529,9 +529,9 @@ u16 func_808F3DD4(GlobalContext* globalCtx, EnIn* this, u32 arg2) {
                 }
                 break;
             case 3:
-                if (gSaveContext.playerForm == 3) {
+                if (gSaveContext.transformation == 3) {
                     textId = 0x3485;
-                } else if (gSaveContext.playerForm == 2 || gSaveContext.playerForm == 1) {
+                } else if (gSaveContext.transformation == 2 || gSaveContext.transformation == 1) {
                     textId = 0x3484;
                 } else if (!(gSaveContext.weekEventReg[56] & 4)) {
                     textId = 0x346D;
@@ -540,9 +540,9 @@ u16 func_808F3DD4(GlobalContext* globalCtx, EnIn* this, u32 arg2) {
                 }
                 break;
             case 4:
-                if (gSaveContext.playerForm == 2 || gSaveContext.playerForm == 1) {
+                if (gSaveContext.transformation == 2 || gSaveContext.transformation == 1) {
                     textId = 0x348A;
-                } else if (gSaveContext.playerForm == 3) {
+                } else if (gSaveContext.transformation == 3) {
                     textId = 0x348B;
                 } else if (!(gSaveContext.weekEventReg[16] & 1)) {
                     textId = 0x3486;
@@ -560,9 +560,9 @@ u16 func_808F3DD4(GlobalContext* globalCtx, EnIn* this, u32 arg2) {
                 }
                 break;
             case 7:
-                if (gSaveContext.playerForm == 3) {
+                if (gSaveContext.transformation == 3) {
                     textId = 0x34A8;
-                } else if (gSaveContext.playerForm == 2 || gSaveContext.playerForm == 1) {
+                } else if (gSaveContext.transformation == 2 || gSaveContext.transformation == 1) {
                     textId = 0x34A7;
                 } else if (!(gSaveContext.weekEventReg[16] & 4)) {
                     textId = 0x3495;

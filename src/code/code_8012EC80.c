@@ -180,8 +180,7 @@ s32 func_8012EC80(GlobalContext* globalCtx) {
         return 0xFF;
     } else if (gSaveContext.unk_1015 == 0xFF) {
         return 0xFF;
-    } else if (gSaveContext.equips.buttonItems[((gSaveContext.playerForm == 4) ? 0 : gSaveContext.playerForm)][0] ==
-               0xFF) {
+    } else if (gSaveContext.equips.buttonItems[CUR_TRANSFORMATION][0] == 0xFF) {
         if (globalCtx->interfaceCtx.unk_21C != 0) {
             if (globalCtx->interfaceCtx.unk_21E != 0) {
                 return globalCtx->interfaceCtx.unk_21E;
@@ -189,7 +188,7 @@ s32 func_8012EC80(GlobalContext* globalCtx) {
         }
         return 0xFF;
     } else {
-        return gSaveContext.equips.buttonItems[((gSaveContext.playerForm == 4) ? 0 : gSaveContext.playerForm)][0];
+        return gSaveContext.equips.buttonItems[CUR_TRANSFORMATION][0];
     }
 }
 
