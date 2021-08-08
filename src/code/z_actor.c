@@ -814,6 +814,7 @@ void Actor_FreeOverlay(ActorOverlay* entry) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BCC68.s")
 
+
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BCCDC.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BD2B4.s")
@@ -827,21 +828,139 @@ void Actor_FreeOverlay(ActorOverlay* entry) {
 // This function is very similar to OoT's func_80034A14
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BD888.s")
 
+#ifdef NON_EQUIVALENT
+void* func_800BD9A0(GraphicsContext* gfxCtx) {
+    //Gfx* temp_v0;
+    //Gfx* temp_v1;
+    //OPEN_DISPS(gfxCtx);
+
+    /*
+    temp_v1 = gfxCtx->polyOpa.d - 0x10;
+    gfxCtx->polyOpa.d = temp_v1;
+    temp_v1->words.w1 = 0xC81049F8;
+    temp_v0 = temp_v1 + 8;
+    temp_v1->words.w0 = 0xE200001C;
+    */
+    gDPSetRenderMode(gfxCtx->polyOpa.p++, AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL | G_RM_FOG_SHADE_A, AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL | GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA));
+    /*
+    temp_v0->words.w0 = 0xDF000000;
+    temp_v0->words.w1 = 0;
+    */
+    gSPEndDisplayList(gfxCtx->polyOpa.p);
+
+    //CLOSE_DISPS(gfxCtx);
+    return gfxCtx;
+}
+#else
+void* func_800BD9A0(GraphicsContext* gfxCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BD9A0.s")
+#endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BD9E0.s")
+// unused
+void func_800BD9E0(GlobalContext* globalCtx, SkelAnime* skelAnime, OverrideLimbDraw2 overrideLimbDraw, PostLimbDraw2 postLimbDraw, Actor* actor, s16 alpha) {
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+    func_8012C28C(globalCtx->state.gfxCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BDAA0.s")
+    gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, alpha);
+    gSPSegment(POLY_OPA_DISP++, 0x0C, gEmptyDL);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BDB6C.s")
+    POLY_OPA_DISP = SkelAnime_DrawSV2(globalCtx, skelAnime->skeleton, skelAnime->limbDrawTbl, skelAnime->dListCount, overrideLimbDraw, postLimbDraw, actor, POLY_OPA_DISP);
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
 
+void func_800BDAA0(GlobalContext* globalCtx, SkelAnime* skelAnime, OverrideLimbDraw2 overrideLimbDraw, PostLimbDraw2 postLimbDraw, Actor* actor, s16 alpha) {
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+    func_8012C2DC(globalCtx->state.gfxCtx);
+
+    gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, alpha);
+    gSPSegment(POLY_XLU_DISP++, 0x0C, func_800BD9A0(globalCtx->state.gfxCtx));
+
+    POLY_XLU_DISP = SkelAnime_DrawSV2(globalCtx, skelAnime->skeleton, skelAnime->limbDrawTbl, skelAnime->dListCount, overrideLimbDraw, postLimbDraw, actor, POLY_XLU_DISP);
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+
+// Unused
+s16 func_800BDB6C(Actor* actor, GlobalContext* globalCtx, s16 arg2, f32 arg3) {
+    Player* player = PLAYER;
+    f32 phi_f2;
+
+    if ((globalCtx->csCtx.state != 0) || (D_801D0D50 != 0)) {
+        phi_f2 = Math_Vec3f_DistXYZ(&actor->world.pos, &globalCtx->view.eye) * 0.25f;
+    } else {
+        phi_f2 = Math_Vec3f_DistXYZ(&actor->world.pos, &player->actor.world.pos);
+    }
+
+    if (arg3 < phi_f2) {
+        actor->flags &= -2;
+        Math_SmoothStepToS(&arg2, 0, 6, 0x14, 1);
+    } else {
+        actor->flags |= 1;
+        Math_SmoothStepToS(&arg2, 0xFF, 6, 0x14, 1);
+    }
+
+    return arg2;
+}
+
+
+#ifdef NON_EQUIVALENT
+void func_800BDC5C(SkelAnime* skelAnime, ActorAnimationEntry* animation, s32 index) {
+    //ActorAnimationEntry* temp_s0;
+    f32 phi_f2;
+
+    //temp_s0 = &animation[index];
+    if (animation[index].frameCount > 0.0f) {
+        phi_f2 = animation[index].frameCount;
+    } else {
+        phi_f2 = (f32) SkelAnime_GetFrameCount(&animation[index].animation->common);
+    }
+
+    SkelAnime_ChangeAnim(skelAnime, animation[index].animation, animation[index].playSpeed, animation[index].startFrame, phi_f2, animation[index].mode, animation[index].morphFrames);
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BDC5C.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BDCF4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_Noop.s")
+void Actor_Noop(Actor* actor, GlobalContext* globalCtx) {
+}
 
+#ifdef NON_EQUIVALENT
+void func_800BDFC0(GlobalContext* globalCtx2, Gfx* dl) {
+    GlobalContext* globalCtx = globalCtx2;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    /*
+    temp_a2 = globalCtx->state.gfxCtx;
+    temp_v1 = temp_a2->polyOpa.p;
+    temp_v1->words.w1 = (u32) (sSetupDL + 0x4B0);
+    temp_v1->words.w0 = 0xDE000000;
+    */
+    gSPDisplayList(&POLY_OPA_DISP[0], &sSetupDL[6 * 0x19]);
+
+    /*
+    temp_v1->unk_8 = 0xDA380003;
+    sp18 = temp_a2;
+    sp1C = temp_v1;
+    temp_v1->unk_C = Matrix_NewMtx(globalCtx->state.gfxCtx);
+    */
+    gSPMatrix(&POLY_OPA_DISP[1], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+    /*
+    temp_v1->unk_10 = 0xDE000000;
+    temp_v1->unk_14 = dl;
+    temp_a2->polyOpa.p = temp_v1 + 0x18;
+    */
+    gSPDisplayList(&POLY_OPA_DISP[2], dl);
+
+    POLY_OPA_DISP += 3;
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BDFC0.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE03C.s")
 
