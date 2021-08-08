@@ -2,6 +2,15 @@
 
 UNK_TYPE4 D_80097E40 = 0;
 
+OSPifRam __osContPifRam;
+u8 __osContLastCmd;
+u8 __osMaxControllers;
+
+OSTimer __osEepromTimer;
+OSMesgQueue D_8009CF38;
+OSMesg D_8009CF50;
+
+
 s32 osContInit(OSMesgQueue* mq, u8* bitpattern, OSContStatus* data) {
     OSMesg dummy;
     s32 ret = 0;
@@ -35,7 +44,7 @@ s32 osContInit(OSMesgQueue* mq, u8* bitpattern, OSContStatus* data) {
     __osContGetInitData(bitpattern, data);
     __osContLastCmd = 0;
     __osSiCreateAccessQueue();
-    osCreateMesgQueue(&D_8009CF38, D_8009CF50, 1);
+    osCreateMesgQueue(&D_8009CF38, &D_8009CF50, 1);
 
     return ret;
 }
