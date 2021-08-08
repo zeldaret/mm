@@ -9,10 +9,10 @@ f32 gViConfigXScale = 1.0f;
 f32 gViConfigYScale = 1.0f;
 
 IrqMgr gIrqMgr;
-u8 sIrqMgrStack[1280];
+u8 sIrqMgrStack[0x500];
 StackEntry sIrqMgrStackInfo;
 OSThread gMainThread;
-u8 sMainStack[2304];
+u8 sMainStack[0x900];
 StackEntry sMainStackInfo;
 OSMesg sPiMgrCmdBuff[50];
 OSMesgQueue gPiMgrCmdQ;
