@@ -123,13 +123,15 @@ beginseg
     include "build/asm/boot/probetlb.text.o"
     include "build/src/libultra/io/pimgr.o"
     include "build/data/boot/pimgr.data.o"
-    include "build/data/boot/pimgr.bss.o"
+//    include "build/data/boot/pimgr.bss.o"
     include "build/src/libultra/io/piacs.o"
+//    include "build/data/boot/piacs.bss.o"
     pad_text
     include "build/src/boot/devmgr.o"
     include "build/src/libultra/io/pirawdma.o"
     include "build/src/boot/contpfs.o"
     include "build/data/boot/contpfs.data.o"
+    include "build/data/boot/contpfs.bss.o"
     include "build/asm/boot/getcount.text.o"
     pad_text
     include "build/asm/boot/guMtxL2F.text.o"
