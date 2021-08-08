@@ -634,7 +634,6 @@ beginseg
     include "build/src/code/padmgr.o"
     include "build/data/code/padmgr.data.o"
     include "build/src/code/sched.o"
-    include "build/data/code/sched.bss.o"
     include "build/src/code/speed_meter.o"
     include "build/data/code/speed_meter.data.o"
     include "build/data/code/speed_meter.bss.o"
@@ -926,8 +925,7 @@ beginseg
     name "ovl_En_Dinofos"
     compress
     include "build/src/overlays/actors/ovl_En_Dinofos/z_en_dinofos.o"
-    include "build/data/ovl_En_Dinofos/ovl_En_Dinofos.data.o"
-    include "build/data/ovl_En_Dinofos/ovl_En_Dinofos.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Dinofos/ovl_En_Dinofos_reloc.o"
 endseg
 
 beginseg
@@ -1600,8 +1598,7 @@ beginseg
     name "ovl_En_Daiku"
     compress
     include "build/src/overlays/actors/ovl_En_Daiku/z_en_daiku.o"
-    include "build/data/ovl_En_Daiku/ovl_En_Daiku.data.o"
-    include "build/data/ovl_En_Daiku/ovl_En_Daiku.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Daiku/ovl_En_Daiku_reloc.o"
 endseg
 
 beginseg
@@ -3044,8 +3041,7 @@ beginseg
     name "ovl_En_Dnb"
     compress
     include "build/src/overlays/actors/ovl_En_Dnb/z_en_dnb.o"
-    include "build/data/ovl_En_Dnb/ovl_En_Dnb.data.o"
-    include "build/data/ovl_En_Dnb/ovl_En_Dnb.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Dnb/ovl_En_Dnb_reloc.o"
 endseg
 
 beginseg
@@ -4490,7 +4486,7 @@ beginseg
     name "ovl_Obj_Warpstone"
     compress
     include "build/src/overlays/actors/ovl_Obj_Warpstone/z_obj_warpstone.o"
-    include "build/data/ovl_Obj_Warpstone/ovl_Obj_Warpstone.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Warpstone/ovl_Obj_Warpstone_reloc.o"
 endseg
 
 beginseg
