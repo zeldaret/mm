@@ -556,7 +556,7 @@ s32 func_80BA4530(EnToto* this, GlobalContext* globalCtx) {
 
 s32 func_80BA46D8(EnToto* this, GlobalContext* globalCtx) {
     func_800B7298(globalCtx, NULL, 0x44);
-    func_80152434(globalCtx, D_80BA5120[gSaveContext.transformation == 4 ? 0 : gSaveContext.transformation]);
+    func_80152434(globalCtx, D_80BA5120[CUR_TRANSFORMATION]);
     return 0;
 }
 
