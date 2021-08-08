@@ -169,6 +169,7 @@ void LifeMeter_UpdateColors(GlobalContext* globalCtx) {
 
 s32 func_80100A80(GlobalContext* globalCtx) {
     gSaveContext.health = (s16)globalCtx->interfaceCtx.unk_24E;
+    
     return 1;
 }
 
@@ -187,6 +188,7 @@ s32 func_80100AA0(GlobalContext* globalCtx) {
 s32 func_80100AF0(GlobalContext* globalCtx) {
     InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
     s32 health;
+
     if (interfaceCtx->unk_250 != 0) {
         interfaceCtx->unk_250--;
     } else {
@@ -226,8 +228,9 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
 
     OPEN_DISPS(gfxCtx);
 
-    if (!(gSaveContext.health % 0x10))
+    if (!(gSaveContext.health % 0x10)){
         fullHeartCount--;
+    }
     offsetY = 0.0f;
     offsetX = 0.0f;
     curColorSet = -1;
@@ -337,26 +340,22 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
                     gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE,
                                       0, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
                 }
-            } else {
-                if (curCombineModeSet != 3) {
-                    curCombineModeSet = 3;
-                    func_8012C654(gfxCtx);
-                    gDPSetCombineLERP(OVERLAY_DISP++, ENVIRONMENT, PRIMITIVE, TEXEL0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
-                                      0, ENVIRONMENT, PRIMITIVE, TEXEL0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0);
-                }
+            } else if (curCombineModeSet != 3) {
+                curCombineModeSet = 3;
+                func_8012C654(gfxCtx);
+                gDPSetCombineLERP(OVERLAY_DISP++, ENVIRONMENT, PRIMITIVE, TEXEL0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
+                                    0, ENVIRONMENT, PRIMITIVE, TEXEL0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0);
             }
-            {
-                posY = 26.0f + offsetY;
-                posX = 30.0f + offsetX;
-                temp_f4 = 1.0f;
-                temp_f4 /= 0.68f;
-                temp_f4 *= 1 << 10;
-                halfTexSize = 8.0f;
-                halfTexSize *= 0.68f;
-                gSPTextureRectangle(OVERLAY_DISP++, (s32)((posX - halfTexSize) * 4), (s32)((posY - halfTexSize) * 4),
-                                    (s32)((posX + halfTexSize) * 4), (s32)((posY + halfTexSize) * 4), G_TX_RENDERTILE,
-                                    0, 0, (s32)temp_f4, (s32)temp_f4);
-            }
+            posY = 26.0f + offsetY;
+            posX = 30.0f + offsetX;
+            temp_f4 = 1.0f;
+            temp_f4 /= 0.68f;
+            temp_f4 *= 1 << 10;
+            halfTexSize = 8.0f;
+            halfTexSize *= 0.68f;
+            gSPTextureRectangle(OVERLAY_DISP++, (s32)((posX - halfTexSize) * 4), (s32)((posY - halfTexSize) * 4),
+                                (s32)((posX + halfTexSize) * 4), (s32)((posY + halfTexSize) * 4), G_TX_RENDERTILE,
+                                0, 0, (s32)temp_f4, (s32)temp_f4);
         } else {
             Mtx* mtx;
             if ((ddCount < 0) || (ddCount < i)) {
@@ -394,6 +393,7 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
 
 void LifeMeter_UpdateSizeAndBeep(GlobalContext* globalCtx) {
     InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
+
     if (interfaceCtx->lifeSizeChangeDirection != 0) {
         interfaceCtx->lifeSizeChange--;
         if (interfaceCtx->lifeSizeChange <= 0) {
