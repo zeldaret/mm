@@ -3206,8 +3206,7 @@ beginseg
     name "ovl_En_Dno"
     compress
     include "build/src/overlays/actors/ovl_En_Dno/z_en_dno.o"
-    include "build/data/ovl_En_Dno/ovl_En_Dno.data.o"
-    include "build/data/ovl_En_Dno/ovl_En_Dno.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Dno/ovl_En_Dno_reloc.o"
 endseg
 
 beginseg
