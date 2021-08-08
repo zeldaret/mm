@@ -15,29 +15,30 @@ s16 sHeartsDDPrim[2][3];
 s16 sHeartsDDEnv[2][3];
 
 extern TexturePtr D_02000000; // Empty heart texture
+extern TexturePtr D_02000100; // Quarter Heart Texture
+extern TexturePtr D_02000200; // Half Heart Texture
+extern TexturePtr D_02000300; // Three Quarter Heart Texture
 extern TexturePtr D_02000400; // Full heart texture
 extern TexturePtr D_02000500; // Empty Double Defense Heart texture
+extern TexturePtr D_02000600; // Quarter Double Defense Heart Texture
+extern TexturePtr D_02000700; // Half Double Defense Heart Texture
+extern TexturePtr D_02000800; // Three Quarter Double Defense Heart Texture
 extern TexturePtr D_02000900; // Full Double Defense Heart texture
-extern TexturePtr heartQuarterTexture; 
-extern TexturePtr heartHalfTexture; 
-extern TexturePtr heartThreeQuarterTexture; 
-extern TexturePtr ddHeartQuarterTexture; 
-extern TexturePtr ddHeartHalfTexture; 
-extern TexturePtr ddHeartThreeQuarterTexture; 
 
 TexturePtr HeartTextures[] = {
-    &D_02000400, // Full
-    &heartQuarterTexture, &heartQuarterTexture, &heartQuarterTexture, &heartQuarterTexture, &heartQuarterTexture,
-    &heartHalfTexture, &heartHalfTexture, &heartHalfTexture, &heartHalfTexture, &heartHalfTexture,
-    &heartThreeQuarterTexture, &heartThreeQuarterTexture, &heartThreeQuarterTexture, &heartThreeQuarterTexture, &heartThreeQuarterTexture
+    &D_02000400, 
+    &D_02000100, &D_02000100, &D_02000100, &D_02000100, &D_02000100,
+    &D_02000200, &D_02000200, &D_02000200, &D_02000200, &D_02000200,
+    &D_02000300, &D_02000300, &D_02000300, &D_02000300, &D_02000300
 };
 
 TexturePtr HeartDDTextures[] = {
-    &D_02000900, // Full
-    &ddHeartQuarterTexture, &ddHeartQuarterTexture, &ddHeartQuarterTexture, &ddHeartQuarterTexture, &ddHeartQuarterTexture, 
-    &ddHeartHalfTexture, &ddHeartHalfTexture, &ddHeartHalfTexture, &ddHeartHalfTexture, &ddHeartHalfTexture,
-    &ddHeartThreeQuarterTexture, &ddHeartThreeQuarterTexture, &ddHeartThreeQuarterTexture, &ddHeartThreeQuarterTexture, &ddHeartThreeQuarterTexture
+    &D_02000900, 
+    &D_02000600, &D_02000600, &D_02000600, &D_02000600, &D_02000600, 
+    &D_02000700, &D_02000700, &D_02000700, &D_02000700, &D_02000700,
+    &D_02000800, &D_02000800, &D_02000800, &D_02000800, &D_02000800
 };
+
 void LifeMeter_Init(GlobalContext* globalCtx) {
     InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
 
@@ -179,6 +180,7 @@ s32 func_80100A80(GlobalContext* globalCtx) {
 
 s32 func_80100AA0(GlobalContext* globalCtx) {
     InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
+
     interfaceCtx->unk_250 = 0x140;
     interfaceCtx->unk_24E += 0x10;
     if (globalCtx->interfaceCtx.unk_24E >= gSaveContext.health) {
@@ -204,7 +206,6 @@ s32 func_80100AF0(GlobalContext* globalCtx) {
     }
     return 0;
 }
-
 
 void LifeMeter_Draw(GlobalContext* globalCtx) {
     s32 pad[5];
@@ -418,13 +419,16 @@ void LifeMeter_UpdateSizeAndBeep(GlobalContext* globalCtx) {
     }
 }
 
-bool LifeMeter_IsCritical(void) {
+u32 LifeMeter_IsCritical(void) {
     s16 criticalThreshold;
-    if (gSaveContext.healthCapacity <= 0x50) {
+    
+    if (gSaveContext.healthCapacity <= 80) { // healthCapacity <= 5 hearts?
         criticalThreshold = 0x10;
-    } else if (gSaveContext.healthCapacity <= 0xA0) {
+    
+    } else if (gSaveContext.healthCapacity <= 160) { // healthCapacity <= 10 hearts?
         criticalThreshold = 0x18;
-    } else if (gSaveContext.healthCapacity <= 0xF0) {
+    
+    } else if (gSaveContext.healthCapacity <= 240) { // healthCapacity <= 15 hearts?
         criticalThreshold = 0x20;
     } else {
         criticalThreshold = 0x2C;
