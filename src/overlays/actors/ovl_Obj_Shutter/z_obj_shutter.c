@@ -9,7 +9,7 @@ void ObjShutter_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjShutter_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjShutter_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Obj_Shutter_InitVars = {
     ACTOR_OBJ_SHUTTER,
     ACTORCAT_PROP,
@@ -21,12 +21,15 @@ const ActorInit Obj_Shutter_InitVars = {
     (ActorFunc)ObjShutter_Update,
     (ActorFunc)ObjShutter_Draw,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Shutter_0x80A37ED0/ObjShutter_Init.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Shutter_0x80A37ED0/ObjShutter_Destroy.asm")
+extern UNK_TYPE D_060011E0;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Shutter_0x80A37ED0/ObjShutter_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Shutter/ObjShutter_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Shutter_0x80A37ED0/ObjShutter_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Shutter/ObjShutter_Destroy.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Shutter/ObjShutter_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Shutter/ObjShutter_Draw.s")

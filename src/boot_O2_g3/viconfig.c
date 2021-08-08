@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 void ViConfig_UpdateVi(u32 mode) {
     if (mode != 0) {
@@ -27,7 +26,7 @@ void ViConfig_UpdateVi(u32 mode) {
         osViSetMode(&gViConfigMode);
 
         if (gViConfigAdditionalScanLines != 0) {
-            func_80087E00(gViConfigAdditionalScanLines);
+            osViExtendVStart(gViConfigAdditionalScanLines);
         }
 
         if (gViConfigFeatures != 0) {

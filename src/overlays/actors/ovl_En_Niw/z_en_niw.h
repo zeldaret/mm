@@ -1,7 +1,7 @@
 #ifndef Z_EN_NIW_H
 #define Z_EN_NIW_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnNiw;
 
@@ -86,12 +86,5 @@ typedef struct EnNiw {
 #define ENNIW_TYPE_UNK2 2
 // the attacking cuccos are not here, they are a different actor:
 //  ovl_En_Attack_Niw
-
-extern FlexSkeletonHeader D_06002530;
-extern AnimationHeader D_060000E8;
-
-// feather display list?
-extern Gfx D_060023B0[];
-extern Gfx D_06002428[];
 
 #endif // Z_EN_NIW_H

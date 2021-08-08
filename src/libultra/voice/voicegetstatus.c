@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 #include "io/controller.h"
 
 s32 __osVoiceGetStatus(OSMesgQueue* mq, s32 port, u8* status) {

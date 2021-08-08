@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 void __osViInit(void) {
     bzero(D_80098060, sizeof(D_80098060));

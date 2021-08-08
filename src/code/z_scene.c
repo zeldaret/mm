@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 s32 Object_Spawn(ObjectContext* objectCtx, s16 id) {
     u32 size;
@@ -316,7 +315,7 @@ void Scene_HeaderCmdLightList(GlobalContext* globalCtx, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x0D: Path List
 void Scene_HeaderCmdPathList(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->setupPathList = (void*)Lib_SegmentedToVirtual(cmd->pathList.segment);
+    globalCtx->setupPathList = (Path*)Lib_SegmentedToVirtual(cmd->pathList.segment);
 }
 
 // SceneTableEntry Header Command 0x0E: Transition Actor List

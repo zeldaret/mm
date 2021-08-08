@@ -88,7 +88,7 @@ void EnHakurock_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hakurock_0x80B21B00/func_80B21BE0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B21BE0.s")
 
 #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hakurock_0x80B21B00/func_80B21EA4.asm")
 // void func_80B21EA4(EnHakurock* this, s32 arg1) {

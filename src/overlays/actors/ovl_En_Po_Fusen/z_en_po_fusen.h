@@ -1,7 +1,7 @@
 #ifndef Z_EN_PO_FUSEN_H
 #define Z_EN_PO_FUSEN_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnPoFusen;
 

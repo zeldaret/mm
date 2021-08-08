@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 void osViBlack(u8 active) {
     register u32 saveMask;

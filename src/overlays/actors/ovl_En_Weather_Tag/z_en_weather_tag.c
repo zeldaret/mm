@@ -355,8 +355,6 @@ void func_80966FEC(EnWeatherTag* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
-// non-matching: two instructions are swapped
 // type 4_2 pirates fortres only?
 void func_80967060(EnWeatherTag* this, GlobalContext* globalCtx) {
     Vec3f vec1;
@@ -368,16 +366,12 @@ void func_80967060(EnWeatherTag* this, GlobalContext* globalCtx) {
 
     func_80169474(globalCtx, &vec1, &vec2);
 
-    // 0x428C0000 = 70.0f
-    // ca4:  lwc1    $f0,0x18(sp)    | ca4:  lui     at,0x428c
-    // ca8:  lui     at,0x428c       | ca8:  lwc1    $f0,0x18(sp)
-    if (globalCtx->view.fovy < 25.0f && (vec2.x >= 70.0f && vec2.x < 250.0f) && (vec2.y >= 30.0f && vec2.y < 210.0f)) {
-        EnWeatherTag_SetupAction(this, func_80967148);
+    if (globalCtx->view.fovy < 25.0f) {
+        if ((vec2.x >= 70.0f) && (vec2.x < 250.0f) && (vec2.y >= 30.0f) && (vec2.y < 210.0f)) {
+            EnWeatherTag_SetupAction(this, func_80967148);
+        }
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Weather_Tag_0x80966410/func_80967060.asm")
-#endif
 
 // type 4_3, start cutscene then die?
 void func_80967148(EnWeatherTag* this, GlobalContext* globalCtx) {
@@ -415,8 +409,6 @@ void EnWeatherTag_Unused_80967250(EnWeatherTag* this, GlobalContext* globalCtx) 
     }
 }
 
-#ifdef NON_MATCHING
-// non_matching: the parameters for func_800BCCDC are correct, but out of order
 // WEATHERTAG_TYPE_WATERMURK: (pinnacle rock, zora cape, zora coast)
 void func_809672DC(EnWeatherTag* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
@@ -425,13 +417,7 @@ void func_809672DC(EnWeatherTag* this, GlobalContext* globalCtx) {
     f32 range;
     f32 strength = 0.0f;
 
-    // the parameters here are correct but loaded in the wrong order
-    // eec:  addiu   a3,s0,0x24    | eec:  lw      a0,0x150(s0)   4
-    // ef0:  sw      v0,0x3c(sp)   | ef0:  lbu     a1,0x14c(s0)   3
-    // ef4:  lbu     a1,0x14c(s0)  | ef4:  sw      zero,0x10(sp)  5
-    // ef8:  lw      a0,0x150(s0)  | ef8:  addiu   a3,s0,0x24     1
-    // efc:  sw      zero,0x10(sp) | efc:  sw      v0,0x3c(sp)    2
-    func_800BCCDC(this->pathPoints, this->pathCount, &player->actor.world.pos, &this->actor.world.pos, 0);
+    func_800BCCDC(this->pathPoints, this->pathCount, &PLAYER->actor.world.pos, &this->actor.world.pos, 0);
 
     distance = Actor_XZDistanceBetweenActors(&player->actor, &this->actor);
     range = WEATHER_TAG_RANGE100(this);
@@ -452,9 +438,6 @@ void func_809672DC(EnWeatherTag* this, GlobalContext* globalCtx) {
 
     Math_SmoothStepToS(&globalCtx->envCtx.unk_8C.fogNear, (s16)(-40.0f * strength), 1, 1, 1);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Weather_Tag_0x80966410/func_809672DC.asm")
-#endif
 
 // WEATHERTAG_TYPE_LOCALDAY2RAIN: rain proximity as approaching rainy scene
 // (milk road day 2 approaching ranch it rains, walking away towards termfield no rain)
@@ -502,7 +485,7 @@ void EnWeatherTag_Update(Actor* thisx, GlobalContext* globalCtx) {
         gSaveContext.time = (u16)REG(0xF) + oldTime; // cast req
         if (REG(0xF) != 0) {
             oldTime = gSaveContext.time;
-            gSaveContext.time = (gSaveContext.unk_16) + oldTime;
+            gSaveContext.time = (u16)gSaveContext.unk_14 + oldTime;
         }
     }
 }

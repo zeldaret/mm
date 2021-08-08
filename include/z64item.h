@@ -7,7 +7,8 @@
 // TODO fill out these enums
 
 typedef enum {
-    /* 0x1 */ EQUIP_SHIELD = 0x1
+    /* 0x0 */ EQUIP_SWORD,
+    /* 0x1 */ EQUIP_SHIELD
 } EquipmentType;
 
 typedef enum {
@@ -30,8 +31,12 @@ typedef enum {
     /* 0x14 */ ITEM_POTION_GREEN,
     /* 0x15 */ ITEM_POTION_BLUE,
     /* 0x16 */ ITEM_FAIRY,
+    /* 0x1E */ ITEM_MUSHROOM = 0x1E,
     /* 0x38 */ ITEM_MASK_ALL_NIGHT = 0x38,
-    /* 0x3B */ ITEM_MASK_GARO = 0x3B,
+    /* 0x3A */ ITEM_MASK_KEATON = 0x3A,
+    /* 0x3B */ ITEM_MASK_GARO,
+    /* 0x3C */ ITEM_MASK_ROMANIS,
+    /* 0x46 */ ITEM_MASK_BREMEN = 0x46,
     /* 0x4D */ ITEM_SWORD_KOKIRI = 0x4D,
     /* 0x4E */ ITEM_SWORD_RAZOR,
     /* 0x4F */ ITEM_SWORD_GILDED,
@@ -67,6 +72,13 @@ typedef enum {
 
 typedef enum {
     /* 0x00 */ GI_NONE,
+    /* 0x01 */ GI_RUPEE_GREEN,
+    /* 0x02 */ GI_RUPEE_BLUE,
+    /* 0x03 */ GI_RUPEE_10,
+    /* 0x04 */ GI_RUPEE_RED,
+    /* 0x05 */ GI_RUPEE_PURPLE,
+    /* 0x06 */ GI_RUPEE_SILVER,
+    /* 0x07 */ GI_RUPEE_GOLD,
     /* 0x0C */ GI_HEART_PIECE = 0x0C,
     /* 0x0D */ GI_HEART_CONTAINER,
     /* 0x16 */ GI_BOMBS_10 = 0x16,
@@ -85,16 +97,22 @@ typedef enum {
     /* 0x3C */ GI_KEY_SMALL = 0x3C,
     /* 0x3E */ GI_MAP = 0x3E,
     /* 0x3F */ GI_COMPASS,
+    /* 0x59 */ GI_BOTTLE_POTION_RED = 0x59,
     /* 0x5B */ GI_POTION_RED = 0x5B,
     /* 0x5C */ GI_POTION_GREEN,
     /* 0x5D */ GI_POTION_BLUE,
     /* 0x5E */ GI_FAIRY,
+    /* 0x60 */ GI_MILK_BOTTLE = 0x60,
     /* 0x7E */ GI_MASK_ALL_NIGHT = 0x7E,
+    /* 0x80 */ GI_MASK_KEATON = 0x80,
+    /* 0x82 */ GI_MASK_ROMANIS = 0x82,
+    /* 0x8C */ GI_MASK_BREMEN = 0x8C,
     /* 0x9B */ GI_SWORD_GREAT_FAIRY = 0x9B,
     /* 0x9C */ GI_SWORD_KOKIRI,
     /* 0x9D */ GI_SWORD_RAZOR,
     /* 0x9E */ GI_SWORD_GILDED,
     /* 0x9F */ GI_SHIELD_HERO_2, // Code that treats this as hero's shield is unused, so take with a grain of salt
+    /* 0xA1 */ GI_LETTER_TO_MAMA = 0xA1,
     /* 0xA9 */ GI_BOTTLE = 0xA9
 } GetItemID;
 

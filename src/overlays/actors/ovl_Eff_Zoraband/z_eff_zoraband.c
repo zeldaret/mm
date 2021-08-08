@@ -9,7 +9,9 @@ void EffZoraband_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EffZoraband_Update(Actor* thisx, GlobalContext* globalCtx);
 void EffZoraband_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+void func_80C07790(EffZoraband* this, GlobalContext* globalCtx);
+
+#if 0
 const ActorInit Eff_Zoraband_InitVars = {
     ACTOR_EFF_ZORABAND,
     ACTORCAT_ITEMACTION,
@@ -21,14 +23,17 @@ const ActorInit Eff_Zoraband_InitVars = {
     (ActorFunc)EffZoraband_Update,
     (ActorFunc)EffZoraband_Draw,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Zoraband_0x80C07740/EffZoraband_Init.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Zoraband_0x80C07740/EffZoraband_Destroy.asm")
+extern UNK_TYPE D_06000F38;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Zoraband_0x80C07740/func_80C07790.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Zoraband/EffZoraband_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Zoraband_0x80C07740/EffZoraband_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Zoraband/EffZoraband_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Zoraband_0x80C07740/EffZoraband_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Zoraband/func_80C07790.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Zoraband/EffZoraband_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Zoraband/EffZoraband_Draw.s")

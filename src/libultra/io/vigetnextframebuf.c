@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 void* osViGetNextFramebuffer(void) {
     register u32 saveMask;

@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 typedef struct {
     Actor actor;
@@ -122,7 +121,7 @@ s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, 
 
     camera = ACTIVE_CAM;
 
-    distance = CamMath_Distance(pos, &camera->eye);
+    distance = OLib_Vec3fDist(pos, &camera->eye);
     if ((distance < distanceMin) || (distanceMax < distance)) {
         func_8013A41C(0x3f);
         ret = 0x3f;

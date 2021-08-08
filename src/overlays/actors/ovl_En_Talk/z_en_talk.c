@@ -8,7 +8,10 @@ void EnTalk_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTalk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTalk_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+void func_80BDE058(EnTalk* this, GlobalContext* globalCtx);
+void func_80BDE090(EnTalk* this, GlobalContext* globalCtx);
+
+#if 0
 const ActorInit En_Talk_InitVars = {
     ACTOR_EN_TALK,
     ACTORCAT_ITEMACTION,
@@ -20,14 +23,15 @@ const ActorInit En_Talk_InitVars = {
     (ActorFunc)EnTalk_Update,
     (ActorFunc)NULL,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_0x80BDDFE0/EnTalk_Init.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_0x80BDDFE0/EnTalk_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk/EnTalk_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_0x80BDDFE0/func_80BDE058.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk/EnTalk_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_0x80BDDFE0/func_80BDE090.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk/func_80BDE058.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Talk_0x80BDDFE0/EnTalk_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk/func_80BDE090.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Talk/EnTalk_Update.s")

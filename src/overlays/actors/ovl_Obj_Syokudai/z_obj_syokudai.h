@@ -1,13 +1,14 @@
 #ifndef Z_OBJ_SYOKUDAI_H
 #define Z_OBJ_SYOKUDAI_H
 
-#include <global.h>
+#include "global.h"
 
 struct ObjSyokudai;
 
 typedef struct ObjSyokudai {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x98];
+    /* 0x144 */ ColliderCylinder colliderCylinder1;
+    /* 0x190 */ ColliderCylinder colliderCylinder2;
     /* 0x1DC */ s16 unk_1DC;
     /* 0x1DE */ char unk_1DE[0x16];
 } ObjSyokudai; // size = 0x1F4

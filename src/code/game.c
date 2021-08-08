@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 s32 gFramerateDivisor = 1;
 f32 gFramerateDivisorF = 1.0f;
@@ -156,7 +155,7 @@ void Game_InitHeap(GameState* gamestate, u32 size) {
     }
 
     THA_Ct(&gamestate->heap, NULL, 0);
-    assert_fail("../game.c", 0x40B);
+    __assert("../game.c", 0x40B);
 }
 
 void Game_ResizeHeap(GameState* gamestate, u32 size) {
@@ -177,11 +176,11 @@ void Game_ResizeHeap(GameState* gamestate, u32 size) {
         size = systemMaxFree - (sizeof(ArenaNode));
     }
 
-    if (buf = Gamealloc_Alloc(alloc, size)) {
+    if ((buf = Gamealloc_Alloc(alloc, size)) != NULL) {
         THA_Ct(&gamestate->heap, buf, size);
     } else {
         THA_Ct(&gamestate->heap, 0, 0);
-        assert_fail("../game.c", 0x432);
+        __assert("../game.c", 0x432);
     }
 }
 

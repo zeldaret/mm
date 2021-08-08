@@ -1,22 +1,19 @@
 #ifndef _VARIABLES_H_
 #define _VARIABLES_H_
 
-#include <z64.h>
-#include <segment_symbols.h>
-#include <segment.h>
-#include <section.h>
+#include "z64.h"
+#include "segment_symbols.h"
 
 // pre-boot variables
-extern UNK_TYPE osTvType;
-extern UNK_TYPE osRomType;
-extern UNK_TYPE osRomBase;
-extern UNK_TYPE osResetType;
-extern UNK_TYPE osCicId;
-extern UNK_TYPE osVersion;
-extern UNK_TYPE osMemSize;
+extern u32 osTvType;
+extern u32 osRomType;
+extern u32 osRomBase;
+extern u32 osResetType;
+extern u32 osCicId;
+extern u32 osVersion;
+extern u32 osMemSize;
 extern s32 osAppNmiBuffer[0x10];
 extern u16 gFramebuffer1[SCREEN_HEIGHT][SCREEN_WIDTH]; // at 0x80000500
-extern u16 gFramebufferHighRes1[SCREEN_HEIGHT_HIGH_RES][SCREEN_WIDTH_HIGH_RES]; // at 0x80000500
 extern u8 D_80025D00[];
 
 // data
@@ -373,10 +370,6 @@ extern ActorInit En_A_Obj_InitVars;
 extern ColliderCylinderInit enAObjCylinderInit;
 extern InitChainEntry enAObjInitVar;
 extern Gfx* enAObjDisplayLists[2];
-extern Color_RGBA8 D_801ADF10;
-extern Color_RGBA8 D_801ADF14;
-extern Vec3f D_801ADF18;
-extern Vec3f D_801ADF24;
 extern UNK_PTR D_801ADF30[5];
 extern UNK_PTR D_801ADF44[12];
 extern u8 sDropTable[DROP_TABLE_SIZE * DROP_TABLE_NUMBER];
@@ -396,7 +389,7 @@ extern UNK_PTR D_801AE260[3];
 // extern UNK_TYPE4 D_801AE2DC;
 extern F3DVertex sEffectShieldParticleVertices[4];
 extern EffInfo sEffInfoTable[5];
-extern EffectTableInfo EffectSS2Info;
+extern EffectSsInfo EffectSS2Info;
 // extern UNK_TYPE1 D_801AE3B0;
 // extern UNK_TYPE1 D_801AE3B4;
 // extern UNK_TYPE4 D_801AE3B8;
@@ -424,7 +417,7 @@ extern EffectTableInfo EffectSS2Info;
 // extern UNK_TYPE1 D_801AE48A;
 // extern UNK_TYPE1 D_801AE48C;
 // extern UNK_TYPE1 D_801AE490;
-extern ParticleOverlay particleOverlayTable[39];
+extern EffectSsOverlay particleOverlayTable[39];
 extern UNK_PTR D_801AE8F0;
 // extern UNK_TYPE4 D_801AEC70;
 // extern UNK_TYPE4 D_801AEC74;
@@ -446,8 +439,8 @@ extern Color_RGBA8 actorDefaultHitColor;
 // extern UNK_TYPE4 D_801AEE30;
 // extern UNK_TYPE4 D_801AEE38;
 // extern UNK_TYPE2 D_801AEE4C;
-// extern UNK_TYPE1 D_801AEF88;
-// extern UNK_TYPE1 D_801AEFA0;
+extern Gfx D_801AEF88[];
+extern Gfx D_801AEFA0[];
 // extern UNK_TYPE1 D_801AEFA8;
 // extern UNK_TYPE1 D_801AEFB8;
 // extern UNK_TYPE1 D_801AEFBC;
@@ -944,7 +937,7 @@ extern s16 actorCutsceneReturnCamera;
 extern s16 D_801BD8C6;
 extern ColliderCylinderInit fireObjCollisionInit;
 extern FireObjLightParams D_801BD8FC[2];
-extern GameStateOverlay initialGameStateInfo;
+extern GameStateOverlay gGameStateOverlayTable;
 extern GameStateOverlay D_801BD940;
 extern GameStateOverlay titleGameStateInfo;
 extern GameStateOverlay mainGameStateInfo;
@@ -1390,12 +1383,6 @@ extern UNK_PTR D_801C0B0C;
 // extern UNK_TYPE1 D_801C0EA0;
 // extern UNK_TYPE1 D_801C0EAC;
 // extern UNK_TYPE1 D_801C0EB8;
-// extern UNK_TYPE2 D_801C0EC0;
-extern s16 sQuakeRequestCount;
-extern quake_callback_func sQuakeCallbacks[7];
-extern s16 D_801C0EE4;
-extern s16 D_801C0EE8;
-extern s16 D_801C0EEC;
 extern Gfx sSetupDL[438];
 extern Gfx sFillSetupDL[12];
 extern Gfx gEmptyDL[1];
@@ -1413,7 +1400,7 @@ extern u32 gGsFlagsMask[];
 extern u32 gGsFlagsShift[];
 extern void* gItemIcons[];
 extern u8 gItemSlots[];
-extern u16 gItemPrices[];
+extern s16 gItemPrices[];
 extern u16 gScenesPerRegion[11][27];
 extern u32 D_801C2410[];
 extern s16 gLinkFormObjectIndexes[8];
@@ -1612,9 +1599,9 @@ extern ActorInit Player_InitVars;
 // extern UNK_TYPE4 D_801D0BB0;
 // extern UNK_TYPE1 D_801D0C80;
 // extern UNK_TYPE1 D_801D0CB0;
-extern UNK_PTR D_801D0CD8;
+extern const TransitionInit TransitionFade_InitVars;
 // extern UNK_TYPE1 D_801D0D00;
-extern UNK_PTR D_801D0D28;
+extern const TransitionInit TransitionCircle_InitVars;
 extern UNK_TYPE4 D_801D0D50;
 // extern UNK_TYPE1 D_801D0D54;
 // extern UNK_TYPE2 D_801D0D58;
@@ -1679,7 +1666,7 @@ extern u32 D_801D1514[3];
 extern s32 gScreenWidth;
 extern s32 gScreenHeight;
 // extern UNK_TYPE4 startHeapSize;
-extern PadmgrThreadStruct* padmgrContext;
+extern PadMgr* padmgrContext;
 // extern UNK_TYPE4 controllerInputsCaptured;
 // extern UNK_TYPE4 D_801D1538;
 extern UNK_PTR D_801D1540;
@@ -1888,7 +1875,7 @@ extern UNK_PTR D_801DB478[7];
 // extern UNK_TYPE1 D_801DB494;
 // extern UNK_TYPE1 D_801DB49C;
 // extern UNK_TYPE2 D_801DB4A0;
-// extern UNK_TYPE4 D_801DB4A4;
+extern UNK_TYPE D_801DB4A4;
 // extern UNK_TYPE1 D_801DB4B0;
 // extern UNK_TYPE1 D_801DB4B8;
 // extern UNK_TYPE1 D_801DB4C0;
@@ -3381,11 +3368,11 @@ extern s32* gNMIBuffer;
 // extern UNK_TYPE1 D_801F59F0;
 // extern UNK_TYPE1 D_801F59F4;
 // extern UNK_TYPE1 D_801F59F8;
-extern QuakeRequest sQuakeRequest[4];
-extern Quake2Context sQuake2Context;
-extern s32 sMatAnimStep;
-extern u32 sMatAnimFlags;
-extern f32 sMatAnimAlphaRatio;
+// extern QuakeRequest sQuakeRequest[4];
+// extern Quake2Context sQuake2Context;
+// extern s32 sMatAnimStep;
+// extern u32 sMatAnimFlags;
+// extern f32 sMatAnimAlphaRatio;
 extern s32 D_801F5AB0;
 extern s32 D_801F5AB4;
 // extern UNK_TYPE1 D_801F5AC0;
@@ -3453,8 +3440,8 @@ extern u64 lastRenderFrameTimestamp;
 extern OSMesgQueue siEventCallbackQueue;
 extern OSMesg siEventCallbackBuffer[1];
 extern u32 gSegments[NUM_SEGMENTS];
-extern SchedThreadStruct schedContext;
-extern OSMesgQueueListNode mainIrqmgrCallbackNode;
+extern SchedContext schedContext;
+extern IrqMgrClient mainIrqmgrCallbackNode;
 extern OSMesgQueue mainIrqmgrCallbackQueue;
 extern OSMesg mainIrqCallbackBuffer[60];
 extern OSThread graphOSThread;
@@ -3466,30 +3453,24 @@ extern StackEntry graphStackEntry;
 extern StackEntry schedStackEntry;
 extern StackEntry audioStackEntry;
 extern StackEntry padmgrStackEntry;
-extern AudioThreadStruct audioContext;
-extern PadmgrThreadStruct D_801FB620;
-// extern UNK_TYPE1 D_801FBAA0;
-// extern UNK_TYPE1 D_801FBAB0;
-// extern UNK_TYPE1 D_801FBAB4;
-// extern UNK_TYPE1 D_801FBAB8;
-// extern UNK_TYPE1 D_801FBABC;
-// extern UNK_TYPE1 D_801FBAC0;
-// extern UNK_TYPE1 D_801FBAC4;
-// extern UNK_TYPE1 D_801FBAC8;
-// extern UNK_TYPE1 D_801FBACC;
-// extern UNK_TYPE1 D_801FBAD0;
-// extern UNK_TYPE1 D_801FBAD4;
+extern AudioMgr audioContext;
+extern PadMgr D_801FB620;
+extern FaultClient sSchedFaultClient;
+extern OSTime sRSPGFXStartTime;
+extern OSTime sRSPAudioStartTime;
+extern OSTime sRSPOtherStartTime;
+extern OSTime sRDPStartTime;
+extern u64* gAudioSPDataPtr;
+extern u32 gAudioSPDataSize;
 // extern UNK_TYPE1 D_801FBAE0;
 // extern UNK_TYPE1 D_801FBAE8;
 extern volatile OSTime D_801FBAF0;
 extern volatile OSTime lastRenderFrameDuration;
-// extern UNK_TYPE1 D_801FBB00;
-// extern UNK_TYPE1 D_801FBB04;
-// extern UNK_TYPE1 D_801FBB08;
-// extern UNK_TYPE1 D_801FBB0C;
-// extern UNK_TYPE1 D_801FBB10;
-// extern UNK_TYPE1 D_801FBB14;
-// extern UNK_TYPE1 D_801FBB20;
+extern volatile OSTime gRSPAudioTotalTime;
+extern volatile OSTime sRSPGFXTotalTime;
+extern volatile OSTime sRSPOtherTotalTime;
+// extern UNK_TYPE1 D_801FBB18;
+extern volatile OSTime gRDPTotalTime;
 // extern UNK_TYPE1 D_801FBB28;
 extern OSViMode D_801FBB30;
 extern u32* gFramebuffers[2];
@@ -3865,15 +3846,260 @@ extern OSMesg D_80203290[1];
 // extern UNK_TYPE1 D_80208E98;
 // extern UNK_TYPE1 D_80208E99;
 // extern UNK_TYPE1 D_80208E9C;
+
+// post-code buffers
 extern u8 gGfxSPTaskYieldBuffer[OS_YIELD_DATA_SIZE];
 extern u8 gGfxSPTaskStack[0x400];
 extern GfxPool gGfxPools[2];
 extern u8 gAudioHeap[0x138000];
-extern u32 gSystemHeap[UNK_SIZE];
-extern u16 gFramebufferHighRes0[SCREEN_HEIGHT_HIGH_RES][SCREEN_WIDTH_HIGH_RES]; // at 0x80780000
+extern u8 gSystemHeap[UNK_SIZE];
+
 extern u8 D_80780000[0x4600];
 extern u8 D_80784600[0x56200];
-extern u16 gFramebuffer0[SCREEN_HEIGHT][SCREEN_WIDTH]; // at 0x807DA800
+extern u16 gFramebuffer0[SCREEN_HEIGHT][SCREEN_WIDTH];
+
+// keep objects
+
+extern Gfx D_040008D0[];
+extern UNK_TYPE D_040032B0;
+extern UNK_TYPE D_0400CF58;
+extern UNK_TYPE D_0400CF88;
+extern UNK_TYPE D_0400CF98;
+extern UNK_TYPE D_0400D0A8;
+extern UNK_TYPE D_0400D0B0;
+extern UNK_TYPE D_0400D0C8;
+extern UNK_TYPE D_0400D100;
+extern UNK_TYPE D_0400D218;
+extern UNK_TYPE D_0400D220;
+extern UNK_TYPE D_0400D228;
+extern UNK_TYPE D_0400D2D0;
+extern UNK_TYPE D_0400D3E8;
+extern UNK_TYPE D_0400D3F8;
+extern UNK_TYPE D_0400D488;
+extern UNK_TYPE D_0400D490;
+extern UNK_TYPE D_0400D500;
+extern UNK_TYPE D_0400D520;
+extern UNK_TYPE D_0400D568;
+extern UNK_TYPE D_0400D638;
+extern UNK_TYPE D_0400D660;
+extern UNK_TYPE D_0400D698;
+extern UNK_TYPE D_0400D728;
+extern UNK_TYPE D_0400D9C8;
+extern UNK_TYPE D_0400D9D0;
+extern UNK_TYPE D_0400DA70;
+extern UNK_TYPE D_0400DA88;
+extern UNK_TYPE D_0400DAA8;
+extern UNK_TYPE D_0400DAC0;
+extern UNK_TYPE D_0400DAC8;
+extern UNK_TYPE D_0400DAD8;
+extern UNK_TYPE D_0400DAE0;
+extern UNK_TYPE D_0400DAF0;
+extern UNK_TYPE D_0400DB10;
+extern UNK_TYPE D_0400DB18;
+extern UNK_TYPE D_0400DB30;
+extern UNK_TYPE D_0400DBB0;
+extern UNK_TYPE D_0400DBE8;
+extern UNK_TYPE D_0400DC48;
+extern UNK_TYPE D_0400DC50;
+extern UNK_TYPE D_0400DCA8;
+extern UNK_TYPE D_0400DCD0;
+extern UNK_TYPE D_0400DCD8;
+extern UNK_TYPE D_0400DCF8;
+extern UNK_TYPE D_0400DD30;
+extern UNK_TYPE D_0400DD38;
+extern UNK_TYPE D_0400DD40;
+extern UNK_TYPE D_0400DD50;
+extern UNK_TYPE D_0400DD58;
+extern UNK_TYPE D_0400DD80;
+extern UNK_TYPE D_0400DDB0;
+extern UNK_TYPE D_0400DDF8;
+extern UNK_TYPE D_0400DE00;
+extern UNK_TYPE D_0400DE08;
+extern UNK_TYPE D_0400DE10;
+extern UNK_TYPE D_0400DE28;
+extern UNK_TYPE D_0400DE30;
+extern UNK_TYPE D_0400DE58;
+extern UNK_TYPE D_0400DE60;
+extern UNK_TYPE D_0400DEA0;
+extern UNK_TYPE D_0400DEA8;
+extern UNK_TYPE D_0400DF78;
+extern UNK_TYPE D_0400DF90;
+extern UNK_TYPE D_0400DFA0;
+extern UNK_TYPE D_0400DFD0;
+extern UNK_TYPE D_0400DFE0;
+extern UNK_TYPE D_0400DFE8;
+extern UNK_TYPE D_0400DFF8;
+extern UNK_TYPE D_0400E000;
+extern UNK_TYPE D_0400E070;
+extern UNK_TYPE D_0400E088;
+extern UNK_TYPE D_0400E120;
+extern UNK_TYPE D_0400E150;
+extern UNK_TYPE D_0400E1F0;
+extern UNK_TYPE D_0400E200;
+extern UNK_TYPE D_0400E208;
+extern UNK_TYPE D_0400E270;
+extern UNK_TYPE D_0400E290;
+extern UNK_TYPE D_0400E2A8;
+extern UNK_TYPE D_0400E2B8;
+extern UNK_TYPE D_0400E2C0;
+extern UNK_TYPE D_0400E2D0;
+extern UNK_TYPE D_0400E2D8;
+extern UNK_TYPE D_0400E2E8;
+extern UNK_TYPE D_0400E318;
+extern UNK_TYPE D_0400E398;
+extern UNK_TYPE D_0400E3A0;
+extern UNK_TYPE D_0400E3A8;
+extern UNK_TYPE D_0400E3C0;
+extern UNK_TYPE D_0400E3D8;
+extern UNK_TYPE D_0400E408;
+extern UNK_TYPE D_0400E410;
+extern UNK_TYPE D_0400E418;
+extern UNK_TYPE D_0400EB7C;
+extern UNK_TYPE D_040117A8;
+extern UNK_TYPE D_04012860;
+extern UNK_TYPE D_040128BC;
+extern UNK_TYPE D_04015FA0;
+extern UNK_TYPE D_04016360;
+extern UNK_TYPE D_0401A4D0;
+extern UNK_TYPE D_0401A538;
+extern UNK_TYPE D_0401A620;
+extern Gfx D_0401C430[];
+extern UNK_TYPE D_0401F740;
+extern UNK_TYPE D_0401F7C0;
+extern UNK_TYPE D_0401F8C0;
+extern UNK_TYPE D_0401FA40;
+extern UNK_TYPE D_04020BB8;
+extern UNK_TYPE D_040221B8;
+extern UNK_TYPE D_04023100;
+extern UNK_TYPE D_04023130;
+extern Gfx D_04023210[];
+extern UNK_TYPE D_04023288;
+extern UNK_TYPE D_04023348;
+extern UNK_TYPE D_04025850;
+extern UNK_TYPE D_04025DD0;
+extern UNK_TYPE D_040281DC;
+extern UNK_TYPE D_04028FEC;
+extern UNK_TYPE D_04029140;
+extern Gfx D_04029CB0[];
+extern Gfx D_04029CF0[];
+extern UNK_TYPE D_04029D20;
+extern UNK_TYPE D_0402B494;
+extern UNK_TYPE D_0402C908;
+extern Gfx D_0402E510[];
+extern UNK_TYPE D_0402E65C;
+extern UNK_TYPE D_0402F0EC;
+extern Gfx D_04030100[]; // Floor shockwave ring
+extern UNK_TYPE D_040301B0;
+extern UNK_TYPE D_04032270;
+extern UNK_TYPE D_04035710;
+extern UNK_TYPE D_040367B0;
+extern UNK_TYPE D_040377B0;
+extern UNK_TYPE D_04037850;
+extern Gfx D_040378F0[]; // gExplosionSplashTex1
+extern Gfx D_04037DF0[]; // gExplosionSplashTex2
+extern Gfx D_040382F0[]; // gExplosionSplashTex3
+extern Gfx D_040387F0[]; // gExplosionSplashTex4
+extern Gfx D_04038CF0[]; // gExplosionSplashTex5
+extern Gfx D_040391F0[]; // gExplosionSplashTex6
+extern Gfx D_040396F0[]; // gExplosionSplashTex7
+extern Gfx D_04039BF0[]; // gExplosionSplashTex8
+extern Gfx D_0403A0F0[]; // gExplosionSplashDL
+extern UNK_TYPE D_0403C190;
+extern UNK_TYPE D_0403F230;
+extern UNK_TYPE D_04044300;
+extern Gfx D_04048DF0[];
+extern UNK_TYPE D_04050D10;
+extern UNK_TYPE D_04051180;
+extern UNK_TYPE D_04051238;
+extern UNK_TYPE D_0405140C;
+extern UNK_TYPE D_040527F0;
+extern UNK_TYPE D_040528B0;
+extern Gfx D_04054A90[];
+extern UNK_TYPE D_04055628;
+extern Gfx D_04057B10[];
+extern Gfx D_04058BA0[];
+extern Gfx D_04089070[];
+extern u64 D_0408DBE0[]; // gDust1Tex
+extern u64 D_0408DFE0[]; // gDust2Tex
+extern u64 D_0408E3E0[]; // gDust3Tex
+extern u64 D_0408E7E0[]; // gDust4Tex
+extern u64 D_0408EBE0[]; // gDust5Tex
+extern u64 D_0408EFE0[]; // gDust6Tex
+extern u64 D_0408F3E0[]; // gDust7Tex
+extern u64 D_0408F7E0[]; // gDust8Tex
+extern UNK_TYPE D_04050550;
+extern UNK_TYPE D_04050648;
+extern UNK_TYPE D_040510B0;
+extern UNK_TYPE D_04054940;
+extern Gfx D_0405AAB0[];
+extern UNK_TYPE D_0405B6F0;
+extern UNK_TYPE D_0405BEF0;
+extern UNK_TYPE D_0405C6F0;
+extern UNK_TYPE D_0405CEF0;
+extern UNK_TYPE D_0405E6F0;
+extern Gfx D_0405F6F0[];
+extern UNK_TYPE D_0405F7C0;
+extern UNK_TYPE D_0405FFC0;
+extern UNK_TYPE D_040607C0;
+extern UNK_TYPE D_04060FC0;
+extern UNK_TYPE D_040617C0;
+extern UNK_TYPE D_04061FC0;
+extern UNK_TYPE D_04061FE0;
+extern UNK_TYPE D_04062000;
+extern UNK_TYPE D_04062020;
+extern UNK_TYPE D_04062040;
+extern UNK_TYPE D_04062060;
+extern Gfx D_040622C0[];
+extern UNK_TYPE D_0406AB30;
+extern UNK_TYPE D_0406B730;
+extern UNK_TYPE D_0406BB0C;
+extern UNK_TYPE D_0406F380;
+extern UNK_TYPE D_04073F00;
+extern UNK_TYPE D_04075400;
+extern Gfx D_04075A40[];
+extern Gfx D_04075B30[];
+extern Gfx D_04076BC0[];
+extern Gfx D_04077480[];
+extern UNK_TYPE D_04079B10;
+extern UNK_TYPE D_0407AB10;
+extern UNK_TYPE D_0407AFB0;
+extern UNK_TYPE D_0407D590;
+extern UNK_TYPE D_0407D650;
+extern UNK_TYPE D_0407F218;
+extern UNK_TYPE D_040815D0;
+extern UNK_TYPE D_04081628;
+extern UNK_TYPE D_04083534;
+extern UNK_TYPE D_04091BE0;
+extern UNK_TYPE D_04091CE0;
+
+extern Gfx D_05000C40[];
+extern UNK_TYPE D_05001D20;
+extern UNK_TYPE D_050061E8;
+extern UNK_TYPE D_05006420;
+extern UNK_TYPE D_050066B0;
+extern UNK_TYPE D_05007498;
+extern Gfx D_05007890[];
+extern UNK_TYPE D_050078A0;
+extern UNK_TYPE D_05007938;
+extern Gfx D_05007980[];
+extern UNK_TYPE D_05007E00;
+extern UNK_TYPE D_05008018;
+extern UNK_TYPE D_050085F0;
+extern Gfx D_05017EA0[]; // pot displaylist
+extern Gfx D_05018090[]; // pot break shard displaylist
+extern UNK_TYPE D_050182A8;
+extern UNK_TYPE D_0501B508;
+extern UNK_TYPE D_0501C058;
+extern Gfx D_0501D980[];
+extern Gfx D_050219E0[];
+extern UNK_TYPE D_05023008;
+extern UNK_TYPE D_0502324C;
+
+// other segments
+extern UNK_TYPE D_0E000048;
+extern UNK_TYPE D_0E000088;
+extern UNK_TYPE D_0E000140;
+extern UNK_TYPE D_0E0001C8;
+extern UNK_TYPE D_0E0002C8;
 
 #endif
-

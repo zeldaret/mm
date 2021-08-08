@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-import os.path
 import argparse
+import os.path
 
 parser = argparse.ArgumentParser(
     description="Display various information about a symbol or address."

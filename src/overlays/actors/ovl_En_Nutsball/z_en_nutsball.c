@@ -1,4 +1,5 @@
 #include "z_en_nutsball.h"
+#include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
 #define FLAGS 0x00000010
 
@@ -106,7 +107,7 @@ void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx) {
                 (this->collider.base.atFlags & AT_TYPE_ENEMY) && (this->collider.base.atFlags & AT_BOUNCED)) {
                 EnNutsball_InitColliderParams(this);
                 func_8018219C(&player->shieldMf, &worldRot, 0);
-                this->actor.world.rot.y = worldRot.y + 0x8000;
+                this->actor.world.rot.y = BINANG_ROT180(worldRot.y);
                 this->timer = 20;
             } else {
                 spawnBurstPos.x = this->actor.world.pos.x;
@@ -162,7 +163,7 @@ void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx) {
 void EnNutsball_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnNutsball* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx)
+    OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     SysMatrix_InsertMatrix(&globalCtx->mf_187FC, 1);
     SysMatrix_InsertZRotation_s(this->actor.home.rot.z, 1);

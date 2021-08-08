@@ -1,7 +1,7 @@
 #ifndef Z_EN_FIREFLY_H
 #define Z_EN_FIREFLY_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnFirefly;
 
@@ -31,7 +31,7 @@ typedef struct EnFirefly {
     /* 0x23C */ Vec3s morphTable[28];
     /* 0x2E4 */ f32 maxAltitude;
     /* 0x2E8 */ Vec3f unk_2E8;
-    /* 0x2F4 */ s32 unk_2F4;
+    /* 0x2F4 */ u32 unk_2F4;
     /* 0x2F8 */ Vec3f unk_2F8;
     /* 0x304 */ Vec3f unk_304;
     /* 0x304 */ Vec3f unk_310;

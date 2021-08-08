@@ -1,12 +1,11 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 UNK_TYPE4 D_80096C30 = 2;
 
 #ifdef NON_MATCHING
 // This needs lots of work. Mostly regalloc and getting the address of D_80096C30 placed in s5 at the beginning of the
 // function
-void Load2_Relocate(u32 allocatedVRamAddr, OverlayBlockSizes* overlayInfo, u32 vRamStart) {
+void Load2_Relocate(u32 allocatedVRamAddr, OverlayRelocationSection* overlayInfo, u32 vRamStart) {
     s32 sectionLocations[4];
     u32* regReferences[32];
     u32 regValues[32];
@@ -22,7 +21,7 @@ void Load2_Relocate(u32 allocatedVRamAddr, OverlayBlockSizes* overlayInfo, u32 v
     sectionLocations[1] = allocatedVRamAddr;
     sectionLocations[2] = overlayInfo->textSize + allocatedVRamAddr;
     sectionLocations[3] = sectionLocations[2] + overlayInfo->dataSize;
-    for (i = 0, relocationIndex = 0; i < overlayInfo->amountOfRelocations; relocationIndex++) {
+    for (i = 0, relocationIndex = 0; i < overlayInfo->nRelocations; relocationIndex++) {
         relocation = overlayInfo->relocations[relocationIndex];
         i++;
         inst = (u32*)(sectionLocations[relocation >> 0x1e] + (relocation & 0xffffff));
@@ -31,14 +30,19 @@ void Load2_Relocate(u32 allocatedVRamAddr, OverlayBlockSizes* overlayInfo, u32 v
             case 0x2000000:
                 if ((*inst & 0xf000000) == 0) {
                     *inst = (*inst - vRamStart) + allocatedVRamAddr;
-                } else {
-                    if (D_80096C30 > 2)
-                        ;
                 }
+                /*
+                else {
+                    if (D_80096C30 > 2) {
+                        ;
+                    }
+                }
+                */
                 break;
             case 0x4000000:
-                *inst = (*inst & 0xfc000000) |
-                        (((((*inst & 0x3ffffff) << 2 | 0x80000000) - vRamStart) + allocatedVRamAddr & 0xfffffff) >> 2);
+                *inst =
+                    (*inst & 0xfc000000) |
+                    ((((((*inst & 0x3ffffff) << 2 | 0x80000000) - vRamStart) + allocatedVRamAddr) & 0xfffffff) >> 2);
                 break;
             case 0x5000000:
                 regReferences[*inst >> 0x10 & 0x1f] = inst;
@@ -47,19 +51,19 @@ void Load2_Relocate(u32 allocatedVRamAddr, OverlayBlockSizes* overlayInfo, u32 v
             case 0x6000000:
                 lastInst = regReferences[*inst >> 0x15 & 0x1f];
                 signedOffset = (s16)*inst;
-                if ((signedOffset + *lastInst * 0x10000 & 0xf000000) == 0) {
+                if (((signedOffset + *lastInst * 0x10000) & 0xf000000) == 0) {
                     relocatedAddress =
                         ((signedOffset + regValues[*inst >> 0x15 & 0x1f] * 0x10000) - vRamStart) + allocatedVRamAddr;
                     *lastInst = (((relocatedAddress >> 0x10) & 0xFFFF) + ((relocatedAddress & 0x8000) ? 1 : 0)) |
                                 (*lastInst & 0xffff0000);
-                    *inst = *inst & 0xffff0000 | relocatedAddress & 0xffff;
+                    *inst = (*inst & 0xffff0000) | (relocatedAddress & 0xffff);
                 }
                 break;
         }
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/loadfragment2/Load2_Relocate.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/boot/loadfragment2/Load2_Relocate.s")
 #endif
 
 #ifdef NON_MATCHING
@@ -69,7 +73,7 @@ s32 Load2_LoadOverlay(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd, u3
     u32 pad;
     u32 size;
     void* end;
-    OverlayBlockSizes* overlayInfo;
+    OverlayRelocationSection* overlayInfo;
 
     size = vRomEnd - vRomStart;
 
@@ -80,7 +84,7 @@ s32 Load2_LoadOverlay(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd, u3
     DmaMgr_SendRequest0(allocatedVRamAddr, vRomStart, size);
 
     end = (void*)(allocatedVRamAddr + size);
-    overlayInfo = (OverlayBlockSizes*)((int)end - *(int*)((int)end + -4));
+    overlayInfo = (OverlayRelocationSection*)((int)end - *(int*)((int)end + -4));
 
     if (1) {
         ;
@@ -99,7 +103,7 @@ s32 Load2_LoadOverlay(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd, u3
     return nbytes;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/loadfragment2/Load2_LoadOverlay.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/boot/loadfragment2/Load2_LoadOverlay.s")
 #endif
 
 void* Load2_AllocateAndLoad(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd) {

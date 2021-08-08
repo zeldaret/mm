@@ -9,7 +9,7 @@ void BgGoronOyu_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgGoronOyu_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgGoronOyu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Bg_Goron_Oyu_InitVars = {
     ACTOR_BG_GORON_OYU,
     ACTORCAT_BG,
@@ -21,28 +21,32 @@ const ActorInit Bg_Goron_Oyu_InitVars = {
     (ActorFunc)BgGoronOyu_Update,
     (ActorFunc)BgGoronOyu_Draw,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Goron_Oyu_0x80B40080/func_80B40080.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Goron_Oyu_0x80B40080/func_80B4009C.asm")
+extern UNK_TYPE D_06000968;
+extern UNK_TYPE D_06000988;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Goron_Oyu_0x80B40080/func_80B400C8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Goron_Oyu/func_80B40080.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Goron_Oyu_0x80B40080/func_80B40100.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Goron_Oyu/func_80B4009C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Goron_Oyu_0x80B40080/func_80B40160.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Goron_Oyu/func_80B400C8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Goron_Oyu_0x80B40080/func_80B401F8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Goron_Oyu/func_80B40100.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Goron_Oyu_0x80B40080/func_80B40308.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Goron_Oyu/func_80B40160.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Goron_Oyu_0x80B40080/func_80B40394.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Goron_Oyu/func_80B401F8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Goron_Oyu_0x80B40080/BgGoronOyu_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Goron_Oyu/func_80B40308.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Goron_Oyu_0x80B40080/BgGoronOyu_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Goron_Oyu/func_80B40394.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Goron_Oyu_0x80B40080/BgGoronOyu_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Goron_Oyu/BgGoronOyu_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Goron_Oyu_0x80B40080/BgGoronOyu_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Goron_Oyu/BgGoronOyu_Destroy.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Goron_Oyu/BgGoronOyu_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Goron_Oyu/BgGoronOyu_Draw.s")

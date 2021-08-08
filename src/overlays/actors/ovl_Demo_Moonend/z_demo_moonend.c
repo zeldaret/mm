@@ -9,7 +9,7 @@ void DemoMoonend_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DemoMoonend_Update(Actor* thisx, GlobalContext* globalCtx);
 void DemoMoonend_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Demo_Moonend_InitVars = {
     ACTOR_DEMO_MOONEND,
     ACTORCAT_ITEMACTION,
@@ -21,24 +21,29 @@ const ActorInit Demo_Moonend_InitVars = {
     (ActorFunc)DemoMoonend_Update,
     (ActorFunc)DemoMoonend_Draw,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Moonend_0x80C17A10/DemoMoonend_Init.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Moonend_0x80C17A10/DemoMoonend_Destroy.asm")
+extern UNK_TYPE D_06001214;
+extern UNK_TYPE D_0600B540;
+extern UNK_TYPE D_060129F0;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Moonend_0x80C17A10/func_80C17B50.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Moonend/DemoMoonend_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Moonend_0x80C17A10/func_80C17B60.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Moonend/DemoMoonend_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Moonend_0x80C17A10/func_80C17C48.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Moonend/func_80C17B50.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Moonend_0x80C17A10/DemoMoonend_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Moonend/func_80C17B60.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Moonend_0x80C17A10/func_80C17E70.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Moonend/func_80C17C48.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Moonend_0x80C17A10/func_80C17EE0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Moonend/DemoMoonend_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Moonend_0x80C17A10/DemoMoonend_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Moonend/func_80C17E70.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Demo_Moonend_0x80C17A10/func_80C17FCC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Moonend/func_80C17EE0.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Moonend/DemoMoonend_Draw.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Moonend/func_80C17FCC.s")

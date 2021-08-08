@@ -9,7 +9,7 @@ void EnHata_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHata_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHata_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Hata_InitVars = {
     ACTOR_EN_HATA,
     ACTORCAT_PROP,
@@ -21,14 +21,17 @@ const ActorInit En_Hata_InitVars = {
     (ActorFunc)EnHata_Update,
     (ActorFunc)EnHata_Draw,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hata_0x8089E8E0/EnHata_Init.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hata_0x8089E8E0/EnHata_Destroy.asm")
+extern UNK_TYPE D_06002FD0;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hata_0x8089E8E0/EnHata_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hata/EnHata_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hata_0x8089E8E0/func_8089EC68.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hata/EnHata_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hata_0x8089E8E0/EnHata_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hata/EnHata_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hata/func_8089EC68.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hata/EnHata_Draw.s")

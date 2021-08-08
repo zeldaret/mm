@@ -27,19 +27,17 @@ const ActorInit Dm_Nb_InitVars = {
     (ActorFunc)DmNb_Draw,
 };
 
-extern UNK_TYPE D_06000990;
-
+extern AnimationHeader D_06000990;
 extern FlexSkeletonHeader D_06008C40;
 
-// Probably the same struct as ActorAnimationEntryS, need more info from func_8013BC6C
-static UNK_TYPE D_80C1E200[] = { &D_06000990, 0x3F800000, 0x0000FFFF, 0x00000000 };
+static ActorAnimationEntryS D_80C1E200[] = { &D_06000990, 1.0f, 0, -1, 0, 0 };
 
 s32 func_80C1DED0(DmNb* this, s32 arg1) {
     s32 ret = 0;
 
     if (arg1 != this->unk1F0) {
         this->unk1F0 = arg1;
-        ret = func_8013BC6C(&this->skelAnime, &D_80C1E200, arg1);
+        ret = func_8013BC6C(&this->skelAnime, D_80C1E200, arg1);
     }
     return ret;
 }

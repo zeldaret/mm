@@ -9,7 +9,13 @@ void ArrowLight_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ArrowLight_Update(Actor* thisx, GlobalContext* globalCtx);
 void ArrowLight_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+void func_809243AC(ArrowLight* this, GlobalContext* globalCtx);
+void func_809244F8(ArrowLight* this, GlobalContext* globalCtx);
+void func_809246C4(ArrowLight* this, GlobalContext* globalCtx);
+
+void ArrowLight_SetupAction(ArrowLight* this, ArrowLightActionFunc actionFunc);
+
+#if 0
 const ActorInit Arrow_Light_InitVars = {
     ACTOR_ARROW_LIGHT,
     ACTORCAT_ITEMACTION,
@@ -21,22 +27,34 @@ const ActorInit Arrow_Light_InitVars = {
     (ActorFunc)ArrowLight_Update,
     (ActorFunc)ArrowLight_Draw,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Light_0x80924300/func_80924300.asm")
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_809260A0[] = {
+    ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_STOP),
+};
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Light_0x80924300/ArrowLight_Init.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Light_0x80924300/ArrowLight_Destroy.asm")
+extern InitChainEntry D_809260A0[];
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Light_0x80924300/func_809243AC.asm")
+extern UNK_TYPE D_0E0002E0;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Light_0x80924300/func_809244A0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Light/D_809260B0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Light_0x80924300/func_809244F8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Light/ArrowLight_SetupAction.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Light_0x80924300/func_809246C4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Light/ArrowLight_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Light_0x80924300/ArrowLight_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Light/ArrowLight_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Arrow_Light_0x80924300/ArrowLight_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Light/func_809243AC.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Light/func_809244A0.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Light/func_809244F8.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Light/func_809246C4.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Light/ArrowLight_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Light/ArrowLight_Draw.s")

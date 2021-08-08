@@ -9,7 +9,11 @@ void EnBombal_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBombal_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBombal_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+void func_80C05B3C(EnBombal* this, GlobalContext* globalCtx);
+void func_80C05C44(EnBombal* this, GlobalContext* globalCtx);
+void func_80C05DE8(EnBombal* this, GlobalContext* globalCtx);
+
+#if 0
 const ActorInit En_Bombal_InitVars = {
     ACTOR_EN_BOMBAL,
     ACTORCAT_PROP,
@@ -21,26 +25,38 @@ const ActorInit En_Bombal_InitVars = {
     (ActorFunc)EnBombal_Update,
     (ActorFunc)EnBombal_Draw,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bombal_0x80C05A70/EnBombal_Init.asm")
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_80C06460 = {
+    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_2, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x004138B0, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+    { 60, 90, -50, { 0, 0, 0 } },
+};
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bombal_0x80C05A70/EnBombal_Destroy.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bombal_0x80C05A70/func_80C05B24.asm")
+extern ColliderCylinderInit D_80C06460;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bombal_0x80C05A70/func_80C05B3C.asm")
+extern UNK_TYPE D_06000A00;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bombal_0x80C05A70/func_80C05C44.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bombal/EnBombal_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bombal_0x80C05A70/func_80C05DE8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bombal/EnBombal_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bombal_0x80C05A70/EnBombal_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bombal/func_80C05B24.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bombal_0x80C05A70/EnBombal_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bombal/func_80C05B3C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bombal_0x80C05A70/func_80C05F90.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bombal/func_80C05C44.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bombal_0x80C05A70/func_80C060B8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bombal/func_80C05DE8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bombal_0x80C05A70/func_80C06208.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bombal/EnBombal_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bombal/EnBombal_Draw.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bombal/func_80C05F90.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bombal/func_80C060B8.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bombal/func_80C06208.s")

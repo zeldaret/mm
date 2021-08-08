@@ -62,35 +62,20 @@ const ActorInit En_Toto_InitVars = {
 };
 
 extern AnimationHeader D_06000C80;
-
 extern AnimationHeader D_06001324;
-
 extern AnimationHeader D_060016A4;
-
 extern AnimationHeader D_06001DF0;
-
 extern AnimationHeader D_060022C8;
-
 extern AnimationHeader D_060028B8;
-
 extern AnimationHeader D_06002F20;
-
 extern AnimationHeader D_06003AA8;
-
 extern UNK_TYPE D_06008AE8;
-
 extern UNK_TYPE D_0600A068;
-
 extern UNK_TYPE D_0600A468;
-
 extern FlexSkeletonHeader D_0600A978;
-
 extern AnimationHeader D_0600B3E0;
-
 extern AnimationHeader D_0600B894;
-
 extern AnimationHeader D_0600BC08;
-
 extern AnimationHeader D_0600C880;
 
 static ColliderCylinderInit sCylinderInit = {
@@ -383,7 +368,7 @@ s32 func_80BA3ED4(EnToto* this, GlobalContext* globalCtx) {
 
 s32 func_80BA3EE8(EnToto* this, GlobalContext* globalCtx) {
     if (this->text->unk1 == 2) {
-        func_800B7298(globalCtx, 0, 7);
+        func_800B7298(globalCtx, NULL, 7);
     }
     return 0;
 }
@@ -465,7 +450,7 @@ s32 func_80BA4204(EnToto* this, GlobalContext* globalCtx) {
     if (DECR(this->unk2B1) == 0) {
         if (!ENTOTO_WEEK_EVENT_FLAGS) {
             temp_v1_2 = &D_80BA50DC[gSaveContext.playerForm - 1];
-            func_801518B0(globalCtx, (this->text->unk0 == 6 ? temp_v1_2->unk0 : temp_v1_2->unk4) & 0xFFFF, NULL);
+            func_801518B0(globalCtx, (this->text->unk0 == 6) ? temp_v1_2->unk0 : temp_v1_2->unk4, NULL);
         }
         return 1;
     }
@@ -478,7 +463,7 @@ s32 func_80BA42BC(EnToto* this, GlobalContext* globalCtx) {
     Vec3s* end = &D_80BA510C[3];
 
     func_80BA3FB0(this, globalCtx);
-    func_800B7298(globalCtx, 0, 6);
+    func_800B7298(globalCtx, NULL, 6);
     if (player->actor.world.pos.z > -310.0f) {
         if ((player->actor.world.pos.x > -150.0f) || (player->actor.world.pos.z > -172.0f)) {
             phi_s0 = 3;
@@ -498,7 +483,7 @@ s32 func_80BA42BC(EnToto* this, GlobalContext* globalCtx) {
 s32 func_80BA43F4(EnToto* this, GlobalContext* globalCtx) {
     func_80BA3C88(this);
     if (func_80122760(globalCtx, this->unk2BC, 60.0f)) {
-        func_800B7298(globalCtx, 0, 0x13);
+        func_800B7298(globalCtx, NULL, 0x13);
         return func_80BA4204(this, globalCtx);
     }
     return 0;
@@ -506,7 +491,7 @@ s32 func_80BA43F4(EnToto* this, GlobalContext* globalCtx) {
 
 s32 func_80BA445C(EnToto* this, GlobalContext* globalCtx) {
     if (func_80BA4128(this, globalCtx)) {
-        func_800B7298(globalCtx, 0, 6);
+        func_800B7298(globalCtx, NULL, 6);
         return 1;
     }
     return 0;
@@ -570,7 +555,7 @@ s32 func_80BA4530(EnToto* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80BA46D8(EnToto* this, GlobalContext* globalCtx) {
-    func_800B7298(globalCtx, 0, 0x44);
+    func_800B7298(globalCtx, NULL, 0x44);
     func_80152434(globalCtx, D_80BA5120[gSaveContext.playerForm == 4 ? 0 : gSaveContext.playerForm]);
     return 0;
 }
@@ -626,7 +611,7 @@ s32 func_80BA47E0(EnToto* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80BA49A4(EnToto* this, GlobalContext* globalCtx) {
-    func_800B7298(globalCtx, 0, 0x44);
+    func_800B7298(globalCtx, NULL, 0x44);
     func_801A31EC(0x54, 4, this->unk2B3 ^ 0xF);
     this->unk2B1 = 4;
     return 0;
@@ -646,7 +631,7 @@ s32 func_80BA4A00(EnToto* this, GlobalContext* globalCtx) {
             if (this->spotlights != NULL) {
                 Actor_MarkForDeath(this->spotlights);
             }
-            func_800B7298(globalCtx, 0, 0x45);
+            func_800B7298(globalCtx, NULL, 0x45);
             if (this->unk2B3 == 0xF) {
                 if (CURRENT_DAY == 1) {
                     gSaveContext.weekEventReg[50] |= 1;

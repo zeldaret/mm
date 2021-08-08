@@ -9,7 +9,11 @@ void DmChar06_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DmChar06_Update(Actor* thisx, GlobalContext* globalCtx);
 void DmChar06_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+void func_80AAE6F0(DmChar06* this, GlobalContext* globalCtx);
+
+void DmChar06_SetupAction(DmChar06* this, DmChar06ActionFunc actionFunc);
+
+#if 0
 const ActorInit Dm_Char06_InitVars = {
     ACTOR_DM_CHAR06,
     ACTORCAT_ITEMACTION,
@@ -21,16 +25,19 @@ const ActorInit Dm_Char06_InitVars = {
     (ActorFunc)DmChar06_Update,
     (ActorFunc)DmChar06_Draw,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Char06_0x80AAE680/func_80AAE680.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Char06_0x80AAE680/DmChar06_Init.asm")
+extern UNK_TYPE D_06006868;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Char06_0x80AAE680/DmChar06_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char06/DmChar06_SetupAction.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Char06_0x80AAE680/func_80AAE6F0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char06/DmChar06_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Char06_0x80AAE680/DmChar06_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char06/DmChar06_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Dm_Char06_0x80AAE680/DmChar06_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char06/func_80AAE6F0.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char06/DmChar06_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char06/DmChar06_Draw.s")

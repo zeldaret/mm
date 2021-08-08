@@ -1,11 +1,11 @@
 #ifndef _Z64ACTOR_H_
 #define _Z64ACTOR_H_
 
-#include <PR/ultratypes.h>
-#include <z64math.h>
-#include <z64animation.h>
-#include <z64collision_check.h>
-#include <unk.h>
+#include "PR/ultratypes.h"
+#include "z64math.h"
+#include "z64animation.h"
+#include "z64collision_check.h"
+#include "unk.h"
 
 #define MASS_IMMOVABLE 0xFF // Cannot be pushed by OC collisions
 #define MASS_HEAVY 0xFE     // Can only be pushed by OC collisions with IMMOVABLE and HEAVY objects.
@@ -39,7 +39,7 @@ typedef struct {
     /* 0x04 */ s16 cylHeight;
     /* 0x06 */ s16 cylYShift;
     /* 0x08 */ u8 mass;
-} CollisionCheckInfoInit2;
+} CollisionCheckInfoInit2; // size = 0xC
 
 typedef struct {
     /* 0x00 */ DamageTable* damageTable;
@@ -104,7 +104,6 @@ typedef struct {
     /* 0x18 */ char* name;
     /* 0x1C */ u16 allocType; // bit 0: don't allocate memory, use actorContext->0x250? bit 1: Always keep loaded?
     /* 0x1E */ s8 numLoaded; // original name: "clients"
-    /* 0x1F */ UNK_TYPE1 pad1F[0x1];
 } ActorOverlay; // size = 0x20
 
 typedef void(*ActorShadowFunc)(struct Actor* actor, struct Lights* mapper, struct GlobalContext* globalCtx);
@@ -428,7 +427,7 @@ typedef enum {
     /* 0x076 */ ACTOR_UNSET_76,
     /* 0x077 */ ACTOR_UNSET_77,
     /* 0x078 */ ACTOR_UNSET_78,
-    /* 0x079 */ ACTOR_UNSET_79,
+    /* 0x079 */ ACTOR_EN_FISHING,
     /* 0x07A */ ACTOR_OBJ_OSHIHIKI,
     /* 0x07B */ ACTOR_EFF_DUST,
     /* 0x07C */ ACTOR_BG_UMAJUMP,
@@ -999,5 +998,15 @@ typedef enum {
     /* 0x2B1 */ ACTOR_EN_RSN,
     /* 0x2B2 */ ACTOR_ID_MAX // originally "ACTOR_DLF_MAX"
 } ActorID;
+
+typedef enum {
+    /* 0x00 */ CLEAR_TAG_SMALL_EXPLOSION,
+    /* 0x01 */ CLEAR_TAG_LARGE_EXPLOSION,
+    /* 0x02 */ CLEAR_TAG_POP,
+    /* 0x03 */ CLEAR_TAG_SMALL_LIGHT_RAYS,
+    /* 0x04 */ CLEAR_TAG_LARGE_LIGHT_RAYS,
+    /* 0x23 */ CLEAR_TAG_SPLASH = 35,
+    /* 0xC8 */ CLEAR_TAG_SMOKE = 200,
+} ClearTagType;
 
 #endif
