@@ -202,29 +202,91 @@ s32 DmaMgr_SendRequest0(void* vramStart, u32 vromStart, u32 size) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-// TODO missing a useless move initializing v0, and some reorderings
-void DmaMgr_Start() {
+void DmaMgr_Start(void) {
     DmaEntry* iter;
     u32 idx;
 
-    DmaMgr_DMARomToRam((u32)_dmadataSegmentRomStart, dmadata, (u32)(_dmadataSegmentRomEnd - _dmadataSegmentRomStart));
+    DmaMgr_DMARomToRam((u32)_dmadataSegmentRomStart, (u32)dmadata,
+                       (u32)_dmadataSegmentRomEnd - (u32)_dmadataSegmentRomStart);
 
+    dummy_label_580802:;
     for (iter = dmadata, idx = 0; iter->vromEnd != 0; iter++, idx++) {
         ;
     }
+    // iter = dmadata;
+    // idx = 0;
+    // while (iter->vromEnd != 0) {
+    //     iter++;
+    //     idx++;
+    // }
 
     numDmaEntries = idx;
 
+    dummy_label_179878:;
+
     osCreateMesgQueue(&sDmaMgrMsgQueue, sDmaMgrMsgs, ARRAY_COUNT(sDmaMgrMsgs));
-    StackCheck_Init(&sDmaMgrStackInfo, sDmaMgrStack, sDmaMgrStack + sizeof(sDmaMgrStack), 0, 256, dmamgrThreadName);
-    osCreateThread(&sDmaMgrThread, Z_THREAD_ID_DMAMGR, DmaMgr_ThreadEntry, NULL, sDmaMgrStack + sizeof(sDmaMgrStack),
-                   Z_PRIORITY_DMAMGR);
+    StackCheck_Init(&sDmaMgrStackInfo, sDmaMgrStack, sDmaMgrStack + (sizeof(sDmaMgrStack)), 0, 0x100, "dmamgr");
+    osCreateThread(&sDmaMgrThread, Z_THREAD_ID_DMAMGR, DmaMgr_ThreadEntry, NULL, sDmaMgrStack + (sizeof(sDmaMgrStack)), Z_PRIORITY_DMAMGR);
+
     osStartThread(&sDmaMgrThread);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/boot/z_std_dma/DmaMgr_Start.s")
-#endif
+
+// void DmaMgr_Start(void) {
+//     DmaEntry *phi_v0;
+//     u16 phi_v1;
+
+//     DmaMgr_DMARomToRam((u32) _dmadataSegmentRomStart, (u32) dmadata, (u32)(_AudiobankSegmentRomStart -
+//     _dmadataSegmentRomStart)); phi_v0 = dmadata; phi_v1 = 0;
+
+//     while (phi_v0->vromEnd != 0) {
+//         // do {
+//             phi_v0++;
+//             phi_v1++;
+//         // } while (phi_v0->vromEnd != 0);
+//     }
+//     numDmaEntries = phi_v1;
+//     osCreateMesgQueue(&sDmaMgrMsgQueue, sDmaMgrMsgs, 0x20);
+//     StackCheck_Init(&sDmaMgrStackInfo, sDmaMgrStack, sDmaMgrStack + sizeof(sDmaMgrStack), 0U, 0x100, "dmamgr");
+//     osCreateThread(&sDmaMgrThread, 0x12, DmaMgr_ThreadEntry, NULL, sDmaMgrStack + sizeof(sDmaMgrStack), 0x11);
+//     osStartThread(&sDmaMgrThread);
+// }
+// void DmaMgr_Start() {
+//     const char** name;
+//     u32 idx;
+//     DmaEntry* iter;
+
+//     DmaMgr_DMARomToRam((u32)_dmadataSegmentRomStart, (u32)dmadata, (u32)(_dmadataSegmentRomEnd -
+//     _dmadataSegmentRomStart));
+
+//     // for (iter = dmadata, idx = 0; iter->vromEnd != 0; iter++, idx++) {
+//     //     ;
+//     // }
+
+//     iter = dmadata;
+//     idx = 0;
+
+//         do {} while (0);
+//     while (iter->vromEnd != 0) {
+//         do {} while (0);
+//         do {} while (0);
+
+//         idx++;
+//         iter++;
+
+//     }
+
+//     numDmaEntries = idx;
+
+//     osCreateMesgQueue(&sDmaMgrMsgQueue, sDmaMgrMsgs, ARRAY_COUNT(sDmaMgrMsgs));
+//     StackCheck_Init(&sDmaMgrStackInfo, sDmaMgrStack, sDmaMgrStack + sizeof(sDmaMgrStack), 0, 256, dmamgrThreadName);
+//     osCreateThread(&sDmaMgrThread, Z_THREAD_ID_DMAMGR, DmaMgr_ThreadEntry, NULL, sDmaMgrStack + sizeof(sDmaMgrStack),
+//                    Z_PRIORITY_DMAMGR);
+//     osStartThread(&sDmaMgrThread);
+// }
+
+// #else
+// #pragma GLOBAL_ASM("asm/non_matchings/boot/z_std_dma/DmaMgr_Start.s")
+// #endif
 
 void DmaMgr_Stop() {
     osSendMesg(&sDmaMgrMsgQueue, NULL, OS_MESG_BLOCK);
