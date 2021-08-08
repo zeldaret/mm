@@ -92,9 +92,10 @@ beginseg
     include "build/asm/boot/getsr.text.o"
     include "build/asm/boot/setsr.text.o"
     include "build/src/boot/writebackdcache.o"
-    include "build/data/boot/threadsave.bss.o"
     include "build/src/libultra/os/initialize.o"
-    include "build/data/boot/initialize.bss.o"
+//    include "build/data/boot/initialize.bss.o"
+    include "build/src/boot/threadsave.o"
+//    include "build/data/boot/threadsave.bss.o"
     pad_text
     pad_text
     pad_text

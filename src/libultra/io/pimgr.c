@@ -1,5 +1,7 @@
 #include "global.h"
 
+OSPiHandle D_8009D130;
+OSPiHandle D_8009D1A8;
 OSThread D_8009D220;
 u8 piManagerStack[0x1000];
 OSMesgQueue D_8009E3D0;
