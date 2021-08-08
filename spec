@@ -20,7 +20,6 @@ beginseg
     include "build/src/boot_O2_g3/viconfig.o"
     include "build/data/boot/viconfig.data.o"
     include "build/src/boot_O2_g3/z_std_dma.o"
-//    include "build/data/boot/z_std_dma.bss.o"
     include "build/src/boot_O2_g3/yaz0.o"
     include "build/src/boot_O2_g3/irqmgr.o"
     include "build/src/boot_O2_g3/CIC6105.o"
@@ -49,8 +48,6 @@ beginseg
     include "build/data/boot/system_malloc.data.o"
     include "build/data/boot/system_malloc.bss.o"
     include "build/src/boot_O2/rand.o"
-//    include "build/data/boot/rand.data.o"
-//    include "build/data/boot/rand.bss.o"
     include "build/src/boot_O2/__osMalloc.o"
     include "build/data/boot/__osMalloc.bss.o"
     include "build/src/libultra/rmon/sprintf.o"
@@ -70,7 +67,6 @@ beginseg
     include "build/src/libultra/gu/sinf.o"
     include "build/src/libultra/gu/sins.o"
     include "build/src/libultra/io/sptask.o"
-//    include "build/data/boot/sptask.bss.o"
     include "build/src/libultra/libc/ll.o"
     include "build/asm/boot/exceptasm.text.o"
     include "build/data/boot/exceptasm.data.o"
@@ -82,9 +78,7 @@ beginseg
     include "build/src/boot/rumblepak.o"
     include "build/data/boot/rumblepak.bss.o"
     include "build/src/libultra/io/siacs.o"
-//    include "build/data/boot/siacs.bss.o"
     include "build/src/libultra/io/controller.o"
-//    include "build/data/boot/controller.bss.o"
     include "build/src/libultra/os/createthread.o"
     include "build/src/libultra/io/contreaddata.o"
     include "build/src/boot/voicegetreaddata.o"
@@ -94,9 +88,7 @@ beginseg
     include "build/asm/boot/setsr.text.o"
     include "build/src/boot/writebackdcache.o"
     include "build/src/libultra/os/initialize.o"
-//    include "build/data/boot/initialize.bss.o"
     include "build/src/boot/threadsave.o"
-//    include "build/data/boot/threadsave.bss.o"
     pad_text
     pad_text
     pad_text
@@ -125,9 +117,7 @@ beginseg
     include "build/asm/boot/probetlb.text.o"
     include "build/src/libultra/io/pimgr.o"
     include "build/data/boot/pimgr.data.o"
-//    include "build/data/boot/pimgr.bss.o"
     include "build/src/libultra/io/piacs.o"
-//    include "build/data/boot/piacs.bss.o"
     pad_text
     include "build/src/boot/devmgr.o"
     include "build/src/libultra/io/pirawdma.o"
@@ -140,7 +130,6 @@ beginseg
     include "build/src/libultra/os/getmemsize.o"
     include "build/src/boot/pfssearchfile.o"
     include "build/src/libultra/os/seteventmesg.o"
-//    include "build/data/boot/seteventmesg.bss.o"
     include "build/src/boot/sqrtf.o"
     include "build/src/boot/afterprenmi.o"
     include "build/src/libultra/io/contquery.o"
@@ -1773,11 +1762,7 @@ beginseg
     name "ovl_En_Weather_Tag"
     compress
     include "build/src/overlays/actors/ovl_En_Weather_Tag/z_en_weather_tag.o"
-#ifdef NON_MATCHING
-    // TODO
-#else
     include "build/src/overlays/actors/ovl_En_Weather_Tag/ovl_En_Weather_Tag_reloc.o"
-#endif
 endseg
 
 beginseg
