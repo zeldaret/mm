@@ -38,6 +38,7 @@ typedef enum {
     /* 0x3B */ ITEM_MASK_GARO,
     /* 0x3C */ ITEM_MASK_ROMANIS,
     /* 0x46 */ ITEM_MASK_BREMEN = 0x46,
+    /* 0x48 */ ITEM_MASK_SCENTS = 0x48,
     /* 0x4D */ ITEM_SWORD_KOKIRI = 0x4D,
     /* 0x4E */ ITEM_SWORD_RAZOR,
     /* 0x4F */ ITEM_SWORD_GILDED,

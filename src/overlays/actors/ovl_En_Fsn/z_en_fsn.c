@@ -1000,7 +1000,7 @@ void EnFsn_GiveItem(EnFsn* this, GlobalContext* globalCtx) {
 }
 
 void EnFsn_SetupResumeInteraction(EnFsn* this, GlobalContext* globalCtx) {
-    if (((void)0, gSaveContext.inventory.questItems) & gBitFlags[18]) {
+    if (CHECK_QUEST_ITEM(18)) {
         if (globalCtx->msgCtx.unk120B1 == 0) {
             EnFsn_HandleSetupResumeInteraction(this, globalCtx);
         }
@@ -1180,7 +1180,7 @@ void EnFsn_SetupEndInteraction(EnFsn* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
 
     if ((talkState == 5 || talkState == 6) && func_80147624(globalCtx)) {
-        if (((void)0, gSaveContext.inventory.questItems) & gBitFlags[18]) {
+        if (CHECK_QUEST_ITEM(18)) {
             if (globalCtx->msgCtx.unk120B1 == 0) {
                 EnFsn_EndInteraction(this, globalCtx);
             } else {
@@ -1252,7 +1252,7 @@ void EnFsn_AskCanBuyMore(EnFsn* this, GlobalContext* globalCtx) {
             }
         }
     } else if ((talkState == 5 || talkState == 6) && func_80147624(globalCtx)) {
-        if (((void)0, gSaveContext.inventory.questItems) & gBitFlags[18]) {
+        if (CHECK_QUEST_ITEM(18)) {
             if (globalCtx->msgCtx.unk120B1 == 0) {
                 EnFsn_EndInteraction(this, globalCtx);
             } else {
@@ -1299,7 +1299,7 @@ void EnFsn_AskCanBuyAterRunningOutOfItems(EnFsn* this, GlobalContext* globalCtx)
             }
         }
     } else if ((talkState == 5 || talkState == 6) && func_80147624(globalCtx)) {
-        if (((void)0, gSaveContext.inventory.questItems) & gBitFlags[18]) {
+        if (CHECK_QUEST_ITEM(18)) {
             if (globalCtx->msgCtx.unk120B1 == 0) {
                 EnFsn_EndInteraction(this, globalCtx);
             } else {
