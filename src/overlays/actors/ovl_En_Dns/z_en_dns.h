@@ -26,7 +26,7 @@ typedef struct EnDns {
     /* 0x18C */ ColliderCylinder collider;
     /* 0x1D8 */ u8 unk_1D8;
     /* 0x1D9 */ UNK_TYPE1 unk_1D9[0x3];
-    /* 0x1DC */ s16 unk_1DC;
+    /* 0x1DC */ s32 unk_1DC;
     /* 0x1E0 */ s32* unk_1E0;
     /* 0x1E4 */ Gfx* unk_1E4[13];
     /* 0x218 */ Vec3f unk_218;
