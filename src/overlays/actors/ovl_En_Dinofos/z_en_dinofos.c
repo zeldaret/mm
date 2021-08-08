@@ -468,7 +468,7 @@ s32 func_8089AE00(EnDinofos* this, GlobalContext* globalCtx) {
         return true;
     }
 
-    if ((gSaveContext.transformation == PLAYER_FORM_GORON) && (player->actor.velocity.y < -5.0f) &&
+    if ((gSaveContext.playerForm == PLAYER_FORM_GORON) && (player->actor.velocity.y < -5.0f) &&
         (player->unk_AE7 == 1) && (this->unk_28B == 0)) {
         this->unk_28B = 1;
         for (i = 0; i < ARRAY_COUNT(this->colliderJntSphElement) - 3; i++) {

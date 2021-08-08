@@ -54,7 +54,7 @@ typedef struct {
     /* 0x0014 */ u32 unk_14;         // "change_zelda_time"
     /* 0x0018 */ s32 day;            // "totalday"
     /* 0x001C */ u32 daysElapsed;    // "eventday"
-    /* 0x0020 */ u8 transformation;  // "player_character"
+    /* 0x0020 */ u8 playerForm;  // "player_character"
     /* 0x0021 */ u8 snowheadCleared; // "spring_flag"
     /* 0x0022 */ u8 hasTatl;         // "bell_flag"
     /* 0x0023 */ u8 isOwlSave;

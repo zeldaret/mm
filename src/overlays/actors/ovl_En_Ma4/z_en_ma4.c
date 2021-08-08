@@ -623,7 +623,7 @@ void EnMa4_ChooseNextDialogue(EnMa4* this, GlobalContext* globalCtx) {
                 break;
 
             case 0x3358:
-                if ((gSaveContext.transformation != PLAYER_FORM_HUMAN) ||
+                if ((gSaveContext.playerForm != PLAYER_FORM_HUMAN) ||
                     !((aux = gSaveContext.inventory.questItems) & gBitFlags[0xE])) {
                     func_801518B0(globalCtx, 0x335C, &this->actor);
                     this->textId = 0x335C;
@@ -897,7 +897,7 @@ void EnMa4_StartDialogue(EnMa4* this, GlobalContext* globalCtx) {
 
     switch (this->type) {
         case MA4_TYPE_DAY1:
-            if (gSaveContext.transformation != PLAYER_FORM_HUMAN) {
+            if (gSaveContext.playerForm != PLAYER_FORM_HUMAN) {
                 if ((gSaveContext.weekEventReg[0x15] & 0x80)) {
                     EnMa4_SetFaceExpression(this, 3, 3);
                     func_801518B0(globalCtx, 0x3337, &this->actor);
@@ -953,7 +953,7 @@ void EnMa4_StartDialogue(EnMa4* this, GlobalContext* globalCtx) {
             break;
 
         case MA4_TYPE_ALIENS_DEFEATED:
-            if (gSaveContext.transformation != PLAYER_FORM_HUMAN) {
+            if (gSaveContext.playerForm != PLAYER_FORM_HUMAN) {
                 if ((gSaveContext.weekEventReg[0x15] & 0x80)) {
                     EnMa4_SetFaceExpression(this, 3, 3);
                     func_801518B0(globalCtx, 0x3337, &this->actor);

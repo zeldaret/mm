@@ -363,7 +363,7 @@ void func_80BCFC0C(EnHg* this, GlobalContext* globalCtx) {
             D_80BD00C8 = false;
         }
         if (globalCtx->msgCtx.unk1202A == 3) {
-            if (globalCtx->msgCtx.unk1202E == 7 && gSaveContext.transformation == PLAYER_FORM_HUMAN) {
+            if (globalCtx->msgCtx.unk1202E == 7 && gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
                 if (INV_CONTENT(0x41) == 0x41) {
                     this->unk218 = 3;
                 } else {

@@ -1071,9 +1071,9 @@ void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3
 
         if (dropId == ITEM00_MASK) {
             dropQuantity = 1;
-            if (gSaveContext.transformation != 1) {
-                if (gSaveContext.transformation != 2) {
-                    if (gSaveContext.transformation != 4) {
+            if (gSaveContext.playerForm != 1) {
+                if (gSaveContext.playerForm != 2) {
+                    if (gSaveContext.playerForm != 4) {
                         dropId = ITEM00_RUPEE_GREEN;
                     } else {
                         dropId = ITEM00_ARROWS_10;

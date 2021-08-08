@@ -318,7 +318,7 @@ void EnMaYts_StartDialogue(EnMaYts* this, GlobalContext* globalCtx) {
     s16 sp26 = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
 
     if (func_800B84D0(&this->actor, globalCtx)) { // if (Actor_IsTalking)
-        if (!(gSaveContext.transformation == PLAYER_FORM_HUMAN)) {
+        if (!(gSaveContext.playerForm == PLAYER_FORM_HUMAN)) {
             if (!(gSaveContext.weekEventReg[0x41] & 0x80)) {
                 // Saying to non-human Link: "Cremia went to town."
                 gSaveContext.weekEventReg[0x41] |= 0x80;
