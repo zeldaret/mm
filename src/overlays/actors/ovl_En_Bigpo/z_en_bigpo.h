@@ -2,7 +2,6 @@
 #define Z_EN_BIGPO_H
 
 #include "global.h"
-#include "../ovl_En_Clear_Tag/z_en_clear_tag.h"
 
 struct EnBigpo;
 

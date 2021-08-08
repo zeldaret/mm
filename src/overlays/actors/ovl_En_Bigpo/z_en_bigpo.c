@@ -201,17 +201,17 @@ void EnBigpo_Init(Actor* thisx, GlobalContext* globalCtx2) {
         firesPtr = &this->fires[i];
         firesPtr->light = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &firesPtr->info);
 
-        Lights_PointNoGlowSetInfo(&firesPtr->info, thisx->home.pos.x, thisx->home.pos.y, thisx->home.pos.z, 0xFF, 0xFF,
-                                  0xFF, 0);
+        Lights_PointNoGlowSetInfo(&firesPtr->info, thisx->home.pos.x, thisx->home.pos.y, thisx->home.pos.z, 255, 255,
+                                  255, 0);
     }
 
     ActorShape_Init(&thisx->shape, 0.0f, func_800B3FC0, 45.0f);
     thisx->bgCheckFlags |= 0x400;
     this->savedHeight = thisx->home.pos.y + 100.0f;
-    this->mainColor.r = 0xFF;
-    this->mainColor.g = 0xFF;
-    this->mainColor.b = 0xD2;
-    this->mainColor.a = 0x00; // fully invisible
+    this->mainColor.r = 255;
+    this->mainColor.g = 255;
+    this->mainColor.b = 210;
+    this->mainColor.a = 0; // fully invisible
 
     if ((this->switchFlags != 0xFF) && (Flags_GetSwitch(globalCtx, this->switchFlags))) {
         Actor_MarkForDeath(&this->actor);
@@ -393,12 +393,12 @@ void EnBigpo_SpawnPoCutscene6(EnBigpo* this, GlobalContext* globalCtx) {
 
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     this->actor.shape.rot.y += this->rotVelocity;
-    alphaPlus = this->mainColor.a + 0xA; // decrease transparency
+    alphaPlus = this->mainColor.a + 10; // decrease transparency
     func_80B61914(this);
-    if (alphaPlus >= 0x5A) {
+    if (alphaPlus >= 90) {
         this->rotVelocity -= 0x80;
         this->actor.velocity.y -= 0.25f;
-        if (alphaPlus >= 0xB4) {
+        if (alphaPlus >= 180) {
             Math_ScaledStepToS(&this->actor.world.rot.y, 0, 0x180);
         }
     }
@@ -409,8 +409,8 @@ void EnBigpo_SpawnPoCutscene6(EnBigpo* this, GlobalContext* globalCtx) {
     }
 
     EnBigpo_LowerCutsceneSubCamera(this, globalCtx);
-    if (alphaPlus >= 0xFF) {
-        this->mainColor.a = 0xFF; // fully visible
+    if (alphaPlus >= 255) {
+        this->mainColor.a = 255; // fully visible
         EnBigpo_SpawnPoCutscene7(this);
     } else {
         this->mainColor.a = alphaPlus;
@@ -504,7 +504,7 @@ void EnBigpo_WarpingIn(EnBigpo* this, GlobalContext* globalCtx) {
 
     this->mainColor.a = this->idleTimer * (255.0f / 32.0f);
     if (this->idleTimer == 32) {
-        this->mainColor.a = 0xFF; // fully visible
+        this->mainColor.a = 255; // fully visible
         if (this->unkBool204 == false) {
             func_801A2E54(0x38);
             this->unkBool204 = true;
@@ -732,13 +732,11 @@ void EnBigpo_LanternFalling(EnBigpo* this, GlobalContext* globalCtx) {
 }
 
 void EnBigpo_AdjustPoAlpha(EnBigpo* this, s32 alphaDiff) {
-    s32 newAlpha;
+    s32 newAlpha = this->mainColor.a + alphaDiff;
     f32 lowerAlpha;
     f32 newXYScale;
 
-    newAlpha = this->mainColor.a + alphaDiff;
-
-    this->mainColor.a = (newAlpha < 0) ? (0) : ((newAlpha >= 0x100) ? 0xFF : newAlpha);
+    this->mainColor.a = (newAlpha < 0) ? 0 : ((newAlpha > 255) ? 255: newAlpha);
 
     lowerAlpha = this->mainColor.a * (1.0f / 255.0f);
     if (alphaDiff < 0) {
@@ -776,8 +774,8 @@ void EnBigpo_SpawnScoopSoul(EnBigpo* this) {
 
 void EnBigpo_ScoopSoulAppearing(EnBigpo* this, GlobalContext* globalCtx) {
     this->savedHeight += 2.0f;
-    EnBigpo_AdjustPoAlpha(this, 0x14); // increase visibility
-    if (this->mainColor.a == 0xFF) {   // fully visible
+    EnBigpo_AdjustPoAlpha(this, 20); // increase visibility
+    if (this->mainColor.a == 255) {   // fully visible
         EnBigpo_SetupScoopSoulIdle(this);
     }
 }
@@ -810,7 +808,7 @@ void EnBigpo_SetupScoopSoulLeaving(EnBigpo* this) {
 }
 
 void EnBigpo_ScoopSoulFadingAway(EnBigpo* this, GlobalContext* globalCtx) {
-    EnBigpo_AdjustPoAlpha(this, -0xD);
+    EnBigpo_AdjustPoAlpha(this, -13);
     if (this->mainColor.a == 0) { // fully invisible
         Actor_MarkForDeath(&this->actor);
     }
@@ -1044,9 +1042,9 @@ void EnBigpo_UpdateColor(EnBigpo* this) {
             this->mainColor.g = 0;
             this->mainColor.b = 0;
         } else {
-            this->mainColor.r = 0x50; // teal? what about the red health?
-            this->mainColor.g = 0xFF;
-            this->mainColor.b = 0xE1;
+            this->mainColor.r = 80; // teal? what about the red health?
+            this->mainColor.g = 255;
+            this->mainColor.b = 225;
         }
     } else {
         this->mainColor.r = CLAMP_MAX(this->mainColor.r + 5, 0xFF);
@@ -1073,10 +1071,11 @@ void EnBigpo_UpdateColor(EnBigpo* this) {
 
 void EnBigpo_FlickerLanternLight(EnBigpo* this) {
     f32 rand = Rand_ZeroOne();
-    this->lanternColor.r = ((s32)(rand * 30.0f)) + 0xE1;
-    this->lanternColor.g = ((s32)(rand * 100.0f)) + 0x9B;
-    this->lanternColor.b = ((s32)(rand * 160.0f)) + 0x5F;
-    this->lanternColor.a = ((s32)(rand * 30.0f)) + 0xDC;
+    
+    this->lanternColor.r = ((s32)(rand * 30.0f)) + 225;
+    this->lanternColor.g = ((s32)(rand * 100.0f)) + 155;
+    this->lanternColor.b = ((s32)(rand * 160.0f)) + 95;
+    this->lanternColor.a = ((s32)(rand * 30.0f)) + 220;
 }
 
 s32 EnBigpo_ApplyDamage(EnBigpo* this, GlobalContext* globalCtx) {
@@ -1104,7 +1103,7 @@ s32 EnBigpo_ApplyDamage(EnBigpo* this, GlobalContext* globalCtx) {
             this->unk220 = 1.0f;
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
                         this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0, 
-                        CLEAR_TAG_EFFECT_FLASH);
+                        CLEAR_TAG_LARGE_LIGHT_RAYS);
         }
         EnBigpo_HitStun(this);
         return true;
@@ -1189,7 +1188,7 @@ s32 EnBigpo_OverrideLimbDraw2(struct GlobalContext* globalCtx, s32 limbIndex, Gf
                               struct Actor* actor, Gfx** gfx) {
     EnBigpo* this = (EnBigpo*)actor;
     // not fully invisible
-    if ((!((this->mainColor.a != 0x00) && (limbIndex != 7))) ||
+    if ((!((this->mainColor.a != 0) && (limbIndex != 7))) ||
         ((this->actionFunc == EnBigpo_BurnAwayDeath) && (this->idleTimer >= 2))) {
         *dList = NULL;
     }
@@ -1258,7 +1257,7 @@ void EnBigpo_Draw1(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    if ((this->mainColor.a == 0xFF) || (this->mainColor.a == 0)) {
+    if ((this->mainColor.a == 255) || (this->mainColor.a == 0)) {
         // fully visible OR fully transparent
         dispHead = POLY_OPA_DISP;
         gSPDisplayList(dispHead, &sSetupDL[6 * 0x19]);
@@ -1305,9 +1304,9 @@ void EnBigpo_DrawScoopSoul(Actor* thisx, GlobalContext* globalCtx) {
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0,
                                 (globalCtx->gameplayFrames * -15) % 512, 0x20, 0x80));
 
-    gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 0xFF, 0xFF, 0xAA, this->mainColor.a);
+    gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 170, this->mainColor.a);
 
-    gDPSetEnvColor(POLY_XLU_DISP++, this->mainColor.r, this->mainColor.g, this->mainColor.b, 0xFF);
+    gDPSetEnvColor(POLY_XLU_DISP++, this->mainColor.r, this->mainColor.g, this->mainColor.b, 255);
 
     Lights_PointNoGlowSetInfo(&this->fires[0].info, this->actor.world.pos.x, this->actor.world.pos.y,
                               this->actor.world.pos.z, this->mainColor.r, this->mainColor.g, this->mainColor.b,
@@ -1442,7 +1441,7 @@ void EnBigpo_DrawFire(Actor* thisx, GlobalContext* globalCtx) {
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0xFF, 0xFF);
 
     Lights_PointNoGlowSetInfo(&parent->fires[this->unk20C].info, thisx->world.pos.x, thisx->world.pos.y,
-                              thisx->world.pos.z, 0xAA, 0xFF, 0xFF, (s32)(thisx->scale.x * 500.0f * 100.0f));
+                              thisx->world.pos.z, 170, 255, 255, (s32)(thisx->scale.x * 500.0f * 100.0f));
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
