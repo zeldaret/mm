@@ -1,12 +1,12 @@
 #include "global.h"
 
 static s16 sHeartsPrimColors[3][3] = { { 255, 70, 50 }, { 255, 190, 0 }, { 100, 100, 255 } };
-static s16 sHeartsEnvColors[3][3] = { { 50, 40, 60 }, { 255, 0, 0}, { 0, 0, 255 } };
-static s16 sHeartsPrimFactors[3][3] = { { 0, 0, 0 }, { 0, 120, -50}, { -155, 30, 205 } };
+static s16 sHeartsEnvColors[3][3] = { { 50, 40, 60 }, { 255, 0, 0 }, { 0, 0, 255 } };
+static s16 sHeartsPrimFactors[3][3] = { { 0, 0, 0 }, { 0, 120, -50 }, { -155, 30, 205 } };
 static s16 sHeartsEnvFactors[3][3] = { { 0, 0, 0 }, { 205, -40, -60 }, { -50, -40, 195 } };
 static s16 sHeartsDDPrimColors[3][3] = { { 255, 255, 255 }, { 255, 190, 0 }, { 100, 100, 255 } };
-static s16 sHeartsDDEnvColors[3][3] = { { 200, 0,  0}, { 255, 0, 0 }, { 0, 0, 255 } };
-static s16 sHeartsDDPrimFactors[3][3] = { { 0, 0, 0 }, { 0, -65, -255 },{ -155, -155, 0 } };
+static s16 sHeartsDDEnvColors[3][3] = { { 200, 0, 0 }, { 255, 0, 0 }, { 0, 0, 255 } };
+static s16 sHeartsDDPrimFactors[3][3] = { { 0, 0, 0 }, { 0, -65, -255 }, { -155, -155, 0 } };
 static s16 sHeartsDDEnvFactors[3][3] = { { 0, 0, 0 }, { 55, 0, 0 }, { -200, 0, 255 } };
 
 s16 sBeatingHeartsDDPrim[3];
@@ -25,19 +25,13 @@ extern TexturePtr D_02000700; // Half Double Defense Heart Texture
 extern TexturePtr D_02000800; // Three Quarter Double Defense Heart Texture
 extern TexturePtr D_02000900; // Full Double Defense Heart texture
 
-TexturePtr HeartTextures[] = {
-    &D_02000400, 
-    &D_02000100, &D_02000100, &D_02000100, &D_02000100, &D_02000100,
-    &D_02000200, &D_02000200, &D_02000200, &D_02000200, &D_02000200,
-    &D_02000300, &D_02000300, &D_02000300, &D_02000300, &D_02000300
-};
+TexturePtr HeartTextures[] = { &D_02000400, &D_02000100, &D_02000100, &D_02000100, &D_02000100, &D_02000100,
+                               &D_02000200, &D_02000200, &D_02000200, &D_02000200, &D_02000200, &D_02000300,
+                               &D_02000300, &D_02000300, &D_02000300, &D_02000300 };
 
-TexturePtr HeartDDTextures[] = {
-    &D_02000900, 
-    &D_02000600, &D_02000600, &D_02000600, &D_02000600, &D_02000600, 
-    &D_02000700, &D_02000700, &D_02000700, &D_02000700, &D_02000700,
-    &D_02000800, &D_02000800, &D_02000800, &D_02000800, &D_02000800
-};
+TexturePtr HeartDDTextures[] = { &D_02000900, &D_02000600, &D_02000600, &D_02000600, &D_02000600, &D_02000600,
+                                 &D_02000700, &D_02000700, &D_02000700, &D_02000700, &D_02000700, &D_02000800,
+                                 &D_02000800, &D_02000800, &D_02000800, &D_02000800 };
 
 void LifeMeter_Init(GlobalContext* globalCtx) {
     InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
@@ -387,7 +381,7 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
                           -130.0f + offsetX, 94.5f - offsetY, 0.0f);
             gSPMatrix(OVERLAY_DISP++, mtx, G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPVertex(OVERLAY_DISP++, beatingHeartVtx, 4, 0);
-            gSP1Quadrangle(OVERLAY_DISP++, 0, 2, 3, 1, 0);            
+            gSP1Quadrangle(OVERLAY_DISP++, 0, 2, 3, 1, 0);
         }
         offsetX += 10.0f;
         if (i == 9) {
@@ -421,13 +415,13 @@ void LifeMeter_UpdateSizeAndBeep(GlobalContext* globalCtx) {
 
 u32 LifeMeter_IsCritical(void) {
     s16 criticalThreshold;
-    
+
     if (gSaveContext.healthCapacity <= 80) { // healthCapacity <= 5 hearts?
         criticalThreshold = 0x10;
-    
+
     } else if (gSaveContext.healthCapacity <= 160) { // healthCapacity <= 10 hearts?
         criticalThreshold = 0x18;
-    
+
     } else if (gSaveContext.healthCapacity <= 240) { // healthCapacity <= 15 hearts?
         criticalThreshold = 0x20;
     } else {
