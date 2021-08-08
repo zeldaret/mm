@@ -493,7 +493,7 @@ float __ull_to_f(unsigned long long l);
 // void osVoiceCheckWord(void);
 // void osVoiceControlGain(void);
 // void osVoiceStartReadData(void);
-// void osViGetCurrentFramebuffer(void);
+void* osViGetCurrentFramebuffer(void);
 s32 __osSpSetPc(u32 data);
 // void __osVoiceContWrite4(void);
 void __osGetHWIntrRoutine(s32 idx, OSMesgQueue** outQueue, OSMesg* outMsg);
@@ -533,7 +533,7 @@ s32 func_800A8150(s32 index);
 s32 func_800A817C(s32 index);
 s32 func_800A81A4(GlobalContext* globalCtx, s32 a1, s32 a2);
 void func_800A81F0(EffectBlure* this, Vec3f* p1, Vec3f* p2);
-// void func_800A8514(void);
+void func_800A8514(void* effectParams);
 void EffectBlure_Initcommon(EffectBlure* params);
 void EffectBlure_Init1(EffectBlure* params, EffBlureInit1* init);
 void EffectBlure_Init2(EffectBlure* params, EffBlureInit2* init);
@@ -649,16 +649,13 @@ void EffectSsKiraKira_SpawnDispersed(GlobalContext* globalCtx, Vec3f* pos, Vec3f
 // UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7); void EffectSsBlast_SpawnShockwave(UNK_TYPE1 param_1,
 // UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7);
 // void EffectSsBlast_SpawnWhiteShockwave(void);
-// void EffectSsGSpk_SpawnAccel(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, Vec3f* pzParm3, Vec3f* pzParm4, Vec3f* param_5,
-// Color_RGBA8* param_6, Color_RGBA8* param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9); void
-// EffectSsGSpk_SpawnNoAccel(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4
-// param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9); void
-// EffectSsGSpk_SpawnFuse(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4
-// param_5); void EffectSsGSpk_SpawnRandColor(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1
-// param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7); void EffectSsGSpk_SpawnSmall(UNK_TYPE1 param_1,
-// UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-// void EffectSsDFire_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5,
-// UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE4 param_10);
+// void EffectSsGSpk_SpawnAccel(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, Vec3f* pzParm3, Vec3f* pzParm4, Vec3f* param_5, Color_RGBA8* param_6, Color_RGBA8* param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9);
+// void EffectSsGSpk_SpawnNoAccel(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9);
+// void EffectSsGSpk_SpawnFuse(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void EffectSsGSpk_SpawnRandColor(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7);
+// void EffectSsGSpk_SpawnSmall(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+void EffectSsDFire_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep,
+                         s16 alpha, s16 fadeDelay, s16 arg8, s32 life);
 void EffectSsBubble_Spawn(GlobalContext* globalCtx, Vec3f* pos, f32 yPosOffset, f32 yPosRandScale, f32 xzPosRandScale,
                           f32 scale);
 void EffectSsGRipple_Spawn(GlobalContext* globalCtx, Vec3f* pos, s16 radius, s16 radiusMax, s16 life);
@@ -931,10 +928,10 @@ void func_800BC154(GlobalContext* globalCtx, ActorContext* actorCtx, Actor* acto
 // void func_800BC188(void);
 // void func_800BC1B4(void);
 Actor* func_800BC270(GlobalContext* globalCtx, Actor* actor, f32 arg2, UNK_TYPE4 arg3);
-// void func_800BC444(void);
+Actor* func_800BC444(GlobalContext* globalCtx, Actor* actor, f32 arg2);
 // void func_800BC4EC(void);
 // void func_800BC5B8(void);
-// void func_800BC5EC(void);
+s32 func_800BC5EC(GlobalContext* globalCtx, Actor* actor);
 void func_800BC620(Vec3f* arg0, Vec3f* arg1, UNK_TYPE arg2, GlobalContext* globalCtx);
 // void func_800BC770(void);
 // void func_800BC7D8(void);
@@ -964,12 +961,12 @@ Actor* func_800BE0B8(GlobalContext* globalCtx, Actor* inActor, s16 arg2, u8 arg3
 // UNK_TYPE2 param_6);
 u8 func_800BE22C(Actor* actor);
 void func_800BE258(Actor* actor, UNK_PTR arg1);
-// void func_800BE2B8(void);
-// void func_800BE33C(void);
+void func_800BE2B8(Actor* actor, ColliderJntSph* jntSphere);
+void func_800BE33C(Vec3f* arg0, Vec3f* arg1, Vec3s* arg2, s32 arg3);
 // void func_800BE3D0(void);
 void func_800BE504(Actor* actor, ColliderCylinder* collider);
 // void func_800BE568(void);
-void func_800BE5CC(Actor* actor, ColliderJntSph* collider, UNK_TYPE1 arg2);
+void func_800BE5CC(Actor* actor, ColliderJntSph* collider, s32 arg2);
 // void func_800BE63C(void);
 void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s32 arg3, f32 arg4, f32 arg5, f32 arg6,
                    u8 mode);
@@ -2197,7 +2194,7 @@ void func_8010A33C(GlobalContext* globalCtx, s16 param_2);
 // void func_8010BEBC(void);
 // void func_8010BEF0(void);
 // void func_8010BF24(void);
-// void func_8010BF58(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+s32 func_8010BF58(Actor* actor, GlobalContext* globalCtx, s32* param_2, s32 param_3, s32 param_4);
 // void Nmi_Init(void);
 // void Nmi_SetPrenmiStart(void);
 // s32 Nmi_GetPrenmiHasStarted(void);
@@ -2837,10 +2834,8 @@ s16 func_8013A504(s16 val);
 s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin,
                   f32 distanceMax, s16 angleError);
 // void func_8013A7C0(void);
-// void func_8013A860(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10); void
-// func_8013AB00(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9);
+// void func_8013A860(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
+Gfx* func_8013AB00(GlobalContext* globalCtx, void** skeleton, Vec3s* limbDrawTable, s32 dListCount, void* func1, void* func2, void* func3, Actor* actor, Gfx* gfx);
 s32 func_8013AD6C(GlobalContext* globalCtx);
 // void func_8013AD9C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
 // UNK_TYPE4 param_6);
@@ -2859,12 +2854,13 @@ UNK_TYPE func_8013BC6C(SkelAnime* skelAnime, ActorAnimationEntryS* arg1, s32 arg
 // void func_8013BD40(void);
 // void func_8013BEDC(void);
 // void func_8013C068(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
-// void func_8013C624(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6); void func_8013C8B8(void); void func_8013C964(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1
-// param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); void func_8013CC2C(void); void
-// func_8013CD64(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7); void func_8013CF04(void); void func_8013D0E0(UNK_TYPE1 param_1, UNK_TYPE1
-// param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_8013C624(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_8013C8B8(void);
+void func_8013C964(Actor* actor, GlobalContext* globalCtx, f32 arg2, f32 arg3, s32 arg4, s32 arg5);
+// void func_8013CC2C(void);
+// void func_8013CD64(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_8013CF04(void);
+// void func_8013D0E0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 void func_8013D2E0(Vec3f* arg0, PosRot* arg1, ActorShape* arg2, s16* arg3, s16* arg4, s16* arg5, s16* arg6);
 UNK_TYPE func_8013D5E8(s16 arg0, UNK_TYPE arg1, s16 arg2);
 Path* func_8013D648(GlobalContext* globalCtx, s16 arg1, s32 arg2);
@@ -2879,23 +2875,22 @@ Actor* func_ActorCategoryIterateById(GlobalContext* globalCtx, struct Actor* act
 void func_8013D9C8(GlobalContext* globalCtx, s16* arg1, s16* arg2, UNK_TYPE arg3);
 u8 func_8013DB90(GlobalContext* globalCtx, UNK_PTR arg1, f32 arg2);
 // void func_8013DC40(void);
-// void func_8013DCE0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE1 param_10); void
-// func_8013DE04(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6); void func_8013DF3C(void); void func_8013E054(void); void func_8013E07C(void); void
-// func_8013E0A4(void);
+void func_8013DCE0(GlobalContext* globalCtx, Vec3f* param_2, Actor* actor, EnDno_ActorUnkStruct* param_4, Path* param_5, s32 param_6, s32 param_7, s32 param_8, s32 param_9, s32 param_10);
+void func_8013DE04(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1, EnDno_ActorUnkFunc arg2, EnDno_ActorUnkFunc arg3, EnDno_ActorUnkFunc arg4, EnDno_ActorUnkFunc arg5);
+s32 func_8013DF3C(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1);
+// void func_8013E054(void);
+// void func_8013E07C(void);
+s32 func_8013E0A4(GlobalContext* globalCtx, EnDno_ActorUnkStruct* arg1);
 void func_8013E1C8(SkelAnime* skelAnime, struct_80B8E1A8 animations[], s32 animationIndex, s32* actorAnimationIndex);
 s32 func_8013E2D4(Actor* actor, s16 arg1, s32 arg2, s32 arg3);
 s32 func_8013E3B8(Actor* actor, s16 cutscenes[], s32 cutsceneArrayLen);
 // void func_8013E4B0(void);
-// void func_8013E5CC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6); void func_8013E640(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE2 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); void func_8013E748(UNK_TYPE1 param_1, UNK_TYPE1 param_2,
-// UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); void
-// func_8013E7C0(void); void func_8013E8F8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE4 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7);
-s32 func_8013E950(Vec3f* param_1, Vec3f* param_2, s16 param_3, Vec3f* param_4, Vec3f* param_5, s16* param_6,
-                  s16* param_7, s16* param_8, s16* param_9, u16 param_10, u16 param_11, u16 param_12, u16 param_13);
+s32 func_8013E5CC(Vec3f* param_1, Vec3s* param_2, Vec3f* param_3, Vec3f* param_4, Vec3f* param_5, Vec3f* param_6);
+// void func_8013E640(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_8013E748(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_8013E7C0(void);
+// void func_8013E8F8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7);
+s32 func_8013E950(Vec3f* param_1, Vec3f* param_2, s16 param_3, Vec3f* param_4, Vec3f* param_5, s16* param_6, s16* param_7, s16* param_8, s16* param_9, u16 param_10, u16 param_11, u16 param_12, u16 param_13);
 // void func_8013EC10(void);
 // void func_8013EC44(void);
 void func_8013ECE0(f32 xyzDistToPlayerSq, u8 arg1, u8 arg2, u8 arg3);
@@ -2973,10 +2968,12 @@ void func_801431E8(GameState* gamestate, SkyboxContext* skyboxCtx, s16 skyType);
 void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyType); // func_80143324
 void func_801434E4(GameState* gamestate, SkyboxContext* skyboxCtx, s16 skyType);     // func_801434E4
 // void func_801435A0(void);
-// void func_80143624(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5,
-// UNK_TYPE1 param_6, UNK_TYPE1 param_7); void func_80143668(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3,
-// UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); void func_80143A04(void); void
-// func_80143A10(void); void func_80143A54(void); void func_80143AC4(void);
+// void func_80143624(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE1 param_7);
+// void func_80143668(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_80143A04(void);
+void func_80143A10(u8 owlId);
+// void func_80143A54(void);
+// void func_80143AC4(void);
 void func_80143B0C(GlobalContext* globalCtx);
 // void Sram_IncrementDay(void);
 u32 Sram_CalcChecksum(u8* data, u32 length);
@@ -3361,32 +3358,29 @@ void Padmgr_GetInput(Input* input, s32 param_2);
 void Padmgr_GetInput2(Input* input, s32 param_2);
 void Padmgr_ThreadEntry(PadMgr* padmgr);
 void Padmgr_Start(OSMesgQueue* siEventCallbackQueue, IrqMgr* irqmgr, OSId threadId, OSPri threadPri, void* stack);
-// void func_80176280(void);
-// void func_80176314(void);
-void Sched_Nop80176364(SchedContext* sched);
-void func_80176370(SchedContext* sched);
-void func_80176394(SchedContext* sched);
-void func_801764F0(SchedContext* sched);
-void func_8017668C(SchedContext* sched, UNK_PTR puParm2);
-// void func_801766F0(void);
-// void func_80176748(void);
-// void func_801767B8(void);
-// void func_801768E0(void);
-// void func_8017691C(void);
-// void func_80176988(void);
-void func_80176B34(SchedContext* sched);
-void func_80176C24(SchedContext* sched);
-void func_80176CF4(SchedContext* sched);
-void func_80176F2C(SchedContext* sched);
+void Sched_SwapFramebuffer(CfbInfo* cfbInfo);
+void Sched_RetraceUpdateFramebuffer(SchedContext* sched, CfbInfo* cfbInfo);
+void Sched_HandleReset(SchedContext* sched);
+void Sched_HandleStop(SchedContext* sched);
+void Sched_HandleAudioCancel(SchedContext* sched);
+void Sched_HandleGfxCancel(SchedContext* sched);
+void Sched_QueueTask(SchedContext* sched, OSScTask* task);
+void Sched_Yield(SchedContext* sched);
+s32 Sched_Schedule(SchedContext* sched, OSScTask** spTask, OSScTask** dpTask, s32 state);
+void Sched_TaskUpdateFramebuffer(SchedContext* sched, OSScTask* task);
+void Sched_NotifyDone(SchedContext* sched, OSScTask* task);
+void Sched_RunTask(SchedContext* sched, OSScTask* spTask, OSScTask* dpTask);
+void Sched_HandleEntry(SchedContext* sched);
+void Sched_HandleRetrace(SchedContext* sched);
+void Sched_HandleRSPDone(SchedContext* sched);
+void Sched_HandleRDPDone(SchedContext* sched);
 void Sched_SendEntryMsg(SchedContext* sched);
-void func_8017703C(SchedContext* sched);
-void func_80177060(SchedContext* sched);
-void func_80177084(SchedContext* sched);
-void Sched_ThreadEntry(SchedContext* sched);
-// void func_80177280(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5,
-// UNK_TYPE1 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11,
-// UNK_TYPE4 param_12); void Sched_Start(SchedContext* sched, void* stack, OSPri pri, UNK_TYPE4 param_4, UNK_TYPE4
-// param_5, IrqMgr* irqmgrStruct); void func_80177390(void);
+void Sched_SendAudioCancelMsg(SchedContext* sched);
+void Sched_SendGfxCancelMsg(SchedContext* sched);
+void Sched_FaultClient(void* param1, void* param2);
+void Sched_ThreadEntry(void* arg);
+void Sched_Init(SchedContext* sched, void* stack, OSPri pri, UNK_TYPE arg3, UNK_TYPE arg4, IrqMgr* irqMgr);
+// void func_80177390(void);
 void func_801773A0(void* arg0);
 void func_801773C4(void* arg0);
 void SpeedMeter_DrawTimeEntries(void* displayList, GraphicsContext* gCtx);
