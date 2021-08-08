@@ -228,18 +228,18 @@ void EnBigpo_Init(Actor* thisx, GlobalContext* globalCtx2) {
 
 void EnBigpo_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnBigpo* this = (EnBigpo*)thisx;
-    GlobalContext* gCtx2;
+    GlobalContext* globalCtx2;
     s32 fireCount;
 
     if ((this->actor.params != ENBIGPO_POSSIBLEFIRE) && (this->actor.params != ENBIGPO_CHOSENFIRE) &&
         (this->actor.params != ENBIGPO_REVEALEDFIRE) && (this->actor.params != ENBIGPO_UNK5)) {
         // if NOT a fire type, ENBIGPO_REGULAR and ENBIGPO_SUMMONED combat types only
         if (1) {}
-        gCtx2 = globalCtx;
+        globalCtx2 = globalCtx;
         for (fireCount = 0; fireCount < ARRAY_COUNT(this->fires); fireCount++) {
-            LightContext_RemoveLight(gCtx2, &gCtx2->lightCtx, this->fires[fireCount].light);
+            LightContext_RemoveLight(globalCtx2, &globalCtx2->lightCtx, this->fires[fireCount].light);
         }
-        Collider_DestroyCylinder(gCtx2, &this->collider);
+        Collider_DestroyCylinder(globalCtx2, &this->collider);
     }
 }
 
