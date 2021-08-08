@@ -817,7 +817,24 @@ void Actor_FreeOverlay(ActorOverlay* entry) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BCCDC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BD2B4.s")
+// unused
+s32 func_800BD2B4(GlobalContext* globalCtx, Actor* actor, s16* arg2, f32 arg3, u16 (*arg4)(GlobalContext*, Actor*), s16 (*arg5)(GlobalContext*, Actor*)) {
+    if (func_800B84D0(actor, globalCtx) != 0) {
+        *arg2 = 1;
+        return 1;
+    } else if (*arg2 != 0) {
+        *arg2 = arg5(globalCtx, actor);
+        return 0;
+    } else if (func_800B8934(globalCtx, actor) == 0) {
+        return 0;
+    } else if (func_800B8614(actor, globalCtx, arg3) == 0) {
+        return 0;
+    } else {
+        actor->textId = arg4(globalCtx, actor);
+        return 0;
+    }
+}
+
 
 typedef struct {
     /* 0x00 */ s16 unk_00;
