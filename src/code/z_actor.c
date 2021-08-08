@@ -819,20 +819,126 @@ void Actor_FreeOverlay(ActorOverlay* entry) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BD2B4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BD384.s")
+typedef struct {
+    /* 0x00 */ s16 unk_00;
+    /* 0x02 */ s16 unk_02;
+    /* 0x04 */ s16 unk_04;
+    /* 0x06 */ s16 unk_06;
+    /* 0x08 */ s16 unk_08;
+    /* 0x0A */ s16 unk_0A;
+    /* 0x0C */ u8 unk_0C;
+} struct_801AEE38_0; // size = 0x10
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BD6B8.s")
+typedef struct {
+    /* 0x00 */ struct_801AEE38_0 sub_00;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ s16 unk_14;
+} struct_801AEE38; // size = 0x18
 
+extern struct_801AEE38 D_801AEE38[];
+#if 0
+struct_801AEE38 D_801AEE38[14] = {
+    {{0x1C20, 0xE390, 0x1C70, 0x1554, 0, 0, 0}, 170.0f, 0x3FFC},
+    {{0x2AA8, 0xEAAC, 0x1554, 0x1554, 0xF8E4, 0xE38, 1}, 170.0f, 0x3FFC},
+    {{0x31C4, 0xE390, 0xE38, 0xE38, 0xF1C8, 0x71C, 1}, 170.0f, 0x3FFC},
+    {{0x1554, 0xF1C8, 0, 0x71C, 0xF8E4, 0, 1}, 170.0f, 0x3FFC},
+    {{0x2AA8, 0xF8E4, 0x71C, 0xE38, 0xD558, 0x2AA8, 1}, 170.0f, 0x3FFC},
+    {{0, 0xE390, 0x2AA8, 0x3FFC, 0xF1C8, 0xE38, 1}, 170.0f, 0x3FFC},
+    {{0x2AA8, 0xF1C8, 0xE38, 0xE38, 0, 0, 1}, 0.0f, 0},
+    {{0x2AA8, 0xF1C8, 0, 0xE38, 0, 0x1C70, 1}, 0.0f, 0},
+    {{0x2AA8, 0xF1C8, 0xF1C8, 0, 0, 0, 1}, 0.0f, 0},
+    {{0x71C, 0xF1C8, 0xE38, 0x1C70, 0, 0, 1}, 0.0f, 0},
+    {{0xE38, 0xF1C8, 0, 0x1C70, 0, 0xE38, 1}, 0.0f, 0},
+    {{0x2AA8, 0xE390, 0x1C70, 0xE38, 0xF1C8, 0xE38, 1}, 0.0f, 0},
+    {{0x18E2, 0xF1C8, 0xE38, 0xE38, 0, 0, 1}, 0.0f, 0},
+    {{0x2A6C, 0xE390, 0x1C70, 0x1554, 0, 0, 0}, 170.0f, 0x3FFC},
+};
+#endif
+
+void func_800BD384(Actor* actor, struct_800BD888_arg1* arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7,
+                   u8 arg8) {
+    s16 sp46;
+    s16 sp44;
+    s16 temp2;
+    s16 sp40;
+    s16 temp1;
+    Vec3f sp30;
+
+    sp30.x = actor->world.pos.x;
+    sp30.y = actor->world.pos.y + arg1->unk_14;
+    sp30.z = actor->world.pos.z;
+
+    sp46 = Math_Vec3f_Pitch(&sp30, &arg1->unk_18);
+    sp44 = Math_Vec3f_Yaw(&sp30, &arg1->unk_18);
+    sp40 = Math_Vec3f_Yaw(&actor->world.pos, &arg1->unk_18) - actor->shape.rot.y;
+
+    temp1 = CLAMP(sp40, -arg2, arg2);
+    Math_SmoothStepToS(&arg1->unk_08.y, temp1, 6, 2000, 1);
+
+    temp1 = (ABS_ALT(sp40) >= 0x8000) ? 0 : ABS_ALT(sp40);
+    arg1->unk_08.y = CLAMP(arg1->unk_08.y, -temp1, temp1);
+
+    sp40 -= arg1->unk_08.y;
+
+    temp1 = CLAMP(sp40, -arg5, arg5);
+    Math_SmoothStepToS(&arg1->unk_0E.y, temp1, 6, 2000, 1);
+
+    temp1 = (ABS_ALT(sp40) >= 0x8000) ? 0 : ABS_ALT(sp40);
+    arg1->unk_0E.y = CLAMP(arg1->unk_0E.y, -temp1, temp1);
+
+    if (arg8) {
+        Math_SmoothStepToS(&actor->shape.rot.y, sp44, 6, 2000, 1);
+    }
+
+    temp1 = CLAMP(sp46, arg4, (s16)(u16)arg3);
+    Math_SmoothStepToS(&arg1->unk_08.x, temp1, 6, 2000, 1);
+
+    temp2 = sp46 - arg1->unk_08.x;
+
+    temp1 = CLAMP(temp2, arg7, arg6);
+    Math_SmoothStepToS(&arg1->unk_0E.x, temp1, 6, 2000, 1);
+}
+
+// unused
+s16 func_800BD6B8(s16 arg0) {
+    return D_801AEE38[arg0].unk_14;
+}
+
+s16 func_800BD6E4(Actor* actor, struct_800BD888_arg1* arg1, f32 arg2, s16 arg3, s16 arg4);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BD6E4.s")
 
 // This function is very similar to OoT's func_80034A14
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BD888.s")
+void func_800BD888(Actor* actor, struct_800BD888_arg1* arg1, s16 arg2, s16 arg3) {
+    struct_801AEE38_0 sp38;
 
-#ifdef NON_EQUIVALENT
+    arg1->unk_02 = func_800BD6E4(actor, arg1, D_801AEE38[arg2].unk_10, D_801AEE38[arg2].unk_14, arg3);
+
+    sp38 = D_801AEE38[arg2].sub_00;
+
+    switch (arg1->unk_02) {
+        case 1:
+            sp38.unk_00 = 0;
+            sp38.unk_04 = 0;
+            sp38.unk_02 = 0;
+        case 3:
+            sp38.unk_06 = 0;
+            sp38.unk_0A = 0;
+            sp38.unk_08 = 0;
+        case 2:
+            sp38.unk_0C = 0;
+    }
+
+    func_800BD384(actor, arg1, sp38.unk_00, sp38.unk_04, sp38.unk_02, sp38.unk_06, sp38.unk_0A, sp38.unk_08,
+                  sp38.unk_0C);
+}
+
+#ifdef NON_MATCHING
 void* func_800BD9A0(GraphicsContext* gfxCtx) {
-    //Gfx* temp_v0;
-    //Gfx* temp_v1;
-    //OPEN_DISPS(gfxCtx);
+    Gfx* displayListHead;
+    Gfx* displayList;
+
+    displayListHead = &gfxCtx->polyOpa.d[-2];
+    displayList = &gfxCtx->polyOpa.d[-2];
 
     /*
     temp_v1 = gfxCtx->polyOpa.d - 0x10;
@@ -841,15 +947,15 @@ void* func_800BD9A0(GraphicsContext* gfxCtx) {
     temp_v0 = temp_v1 + 8;
     temp_v1->words.w0 = 0xE200001C;
     */
-    gDPSetRenderMode(gfxCtx->polyOpa.p++, AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL | G_RM_FOG_SHADE_A, AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL | GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA));
+    gDPSetRenderMode(displayListHead++, AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL | G_RM_FOG_SHADE_A, AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL | GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA));
     /*
     temp_v0->words.w0 = 0xDF000000;
     temp_v0->words.w1 = 0;
     */
-    gSPEndDisplayList(gfxCtx->polyOpa.p);
+    gSPEndDisplayList(displayListHead++);
 
     //CLOSE_DISPS(gfxCtx);
-    return gfxCtx;
+    return displayList;
 }
 #else
 void* func_800BD9A0(GraphicsContext* gfxCtx);
@@ -901,24 +1007,18 @@ s16 func_800BDB6C(Actor* actor, GlobalContext* globalCtx, s16 arg2, f32 arg3) {
     return arg2;
 }
 
-
-#ifdef NON_EQUIVALENT
 void func_800BDC5C(SkelAnime* skelAnime, ActorAnimationEntry* animation, s32 index) {
-    //ActorAnimationEntry* temp_s0;
-    f32 phi_f2;
+    f32 frameCount;
 
-    //temp_s0 = &animation[index];
-    if (animation[index].frameCount > 0.0f) {
-        phi_f2 = animation[index].frameCount;
+    animation += index;
+    if (animation->frameCount > 0.0f) {
+        frameCount = animation->frameCount;
     } else {
-        phi_f2 = (f32) SkelAnime_GetFrameCount(&animation[index].animation->common);
+        frameCount = SkelAnime_GetFrameCount(&animation->animation->common);
     }
 
-    SkelAnime_ChangeAnim(skelAnime, animation[index].animation, animation[index].playSpeed, animation[index].startFrame, phi_f2, animation[index].mode, animation[index].morphFrames);
+    SkelAnime_ChangeAnim(skelAnime, animation->animation, animation->playSpeed, animation->startFrame, frameCount, animation->mode, animation->morphFrames);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BDC5C.s")
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BDCF4.s")
 
@@ -941,6 +1041,7 @@ void Gfx_DrawDListOpa(GlobalContext* globalCtx, Gfx* dlist) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
+// Gfx_DrawDListXlu
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE03C.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE0B8.s")
