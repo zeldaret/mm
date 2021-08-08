@@ -1047,21 +1047,21 @@ void EnBigpo_UpdateColor(EnBigpo* this) {
             this->mainColor.b = 225;
         }
     } else {
-        this->mainColor.r = CLAMP_MAX(this->mainColor.r + 5, 0xFF);
-        this->mainColor.g = CLAMP_MAX(this->mainColor.g + 5, 0xFF);
+        this->mainColor.r = CLAMP_MAX(this->mainColor.r + 5, 255);
+        this->mainColor.g = CLAMP_MAX(this->mainColor.g + 5, 255);
 
         // this might be a triple ternary but it matches and is easier to read spread out
         bplus5 = this->mainColor.b + 5;
-        if (this->mainColor.b >= 0xD3) {
+        if (this->mainColor.b >= 211) {
             bminus5 = this->mainColor.b - 5;
-            if (bminus5 < 0xD2) {
-                this->mainColor.b = 0xD2;
+            if (bminus5 < 210) {
+                this->mainColor.b = 210;
             } else {
                 this->mainColor.b = bminus5;
             }
         } else {
-            if (bplus5 >= 0xD3) {
-                this->mainColor.b = 0xD2;
+            if (bplus5 >= 211) {
+                this->mainColor.b = 210;
             } else {
                 this->mainColor.b = bplus5;
             }
@@ -1166,7 +1166,7 @@ void EnBigpo_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->unk21C > 0.0f) {
         Math_StepToF(&this->unk21C, 0.0f, 0.05f);
-        if (this->mainColor.a != 0xFF) { // NOT fully visible
+        if (this->mainColor.a != 255) { // NOT fully visible
             if (this->mainColor.a * (1.0f / 255.0f) < this->mainColor.a) {
                 this->unk21C = this->mainColor.a * (1.0f / 255.0f);
             }
@@ -1437,8 +1437,8 @@ void EnBigpo_DrawFire(Actor* thisx, GlobalContext* globalCtx) {
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0,
                                 (globalCtx->gameplayFrames * -20) % 512, 0x20, 0x80));
 
-    gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 0xAA, 0xFF, 0xFF, 0xFF);
-    gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0xFF, 0xFF);
+    gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 170, 255, 255, 255);
+    gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, 255);
 
     Lights_PointNoGlowSetInfo(&parent->fires[this->unk20C].info, thisx->world.pos.x, thisx->world.pos.y,
                               thisx->world.pos.z, 170, 255, 255, (s32)(thisx->scale.x * 500.0f * 100.0f));
