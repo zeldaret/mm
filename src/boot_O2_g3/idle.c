@@ -1,6 +1,5 @@
 #include "global.h"
 
-
 u8 D_80096B20 = 1;
 vu8 gViConfigUseDefault = 1;
 u8 gViConfigAdditionalScanLines = 0;
@@ -59,8 +58,8 @@ void Idle_InitCodeAndMemory(void) {
     oldSize = sDmaMgrDmaBuffSize;
     sDmaMgrDmaBuffSize = 0;
 
-    DmaMgr_SendRequestImpl(&dmaReq, _codeSegmentStart, _codeSegmentRomStart,
-                           _codeSegmentRomEnd - _codeSegmentRomStart, 0, &queue, 0);
+    DmaMgr_SendRequestImpl(&dmaReq, _codeSegmentStart, _codeSegmentRomStart, _codeSegmentRomEnd - _codeSegmentRomStart,
+                           0, &queue, 0);
     Idle_InitScreen();
     Idle_InitMemory();
     osRecvMesg(&queue, NULL, 1);
@@ -114,5 +113,4 @@ void Idle_ThreadEntry(void* arg) {
     osStartThread(&gMainThread);
     osSetThreadPri(NULL, 0);
 
-    do {} while (true);
-}
+    do { } while (true); }

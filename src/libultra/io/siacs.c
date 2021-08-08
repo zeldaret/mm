@@ -5,7 +5,6 @@ u32 __osSiAccessQueueEnabled = 0;
 OSMesg siAccessBuf[1];
 OSMesgQueue __osSiAccessQueue;
 
-
 void __osSiCreateAccessQueue() {
     __osSiAccessQueueEnabled = 1;
     osCreateMesgQueue(&__osSiAccessQueue, siAccessBuf, 1);
