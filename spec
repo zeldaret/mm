@@ -2215,8 +2215,7 @@ beginseg
     name "ovl_En_Skb"
     compress
     include "build/src/overlays/actors/ovl_En_Skb/z_en_skb.o"
-    include "build/data/ovl_En_Skb/ovl_En_Skb.data.o"
-    include "build/data/ovl_En_Skb/ovl_En_Skb.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Skb/ovl_En_Skb_reloc.o"
 endseg
 
 beginseg
