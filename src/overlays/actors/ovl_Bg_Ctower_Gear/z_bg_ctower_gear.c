@@ -200,7 +200,7 @@ void BgCtowerGear_UpdateOrgan(Actor* thisx, GlobalContext* globalCtx) {
 
 // Using BgCtowerGear *this = THIS causes regalloc issues
 void BgCtowerGear_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_80AD32E8[BGCTOWERGEAR_GET_TYPE(thisx)]);
+    Gfx_DrawDListOpa(globalCtx, D_80AD32E8[BGCTOWERGEAR_GET_TYPE(thisx)]);
 }
 
 void BgCtowerGear_DrawOrgan(Actor* thisx, GlobalContext* globalCtx) {

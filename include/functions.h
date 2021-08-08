@@ -914,8 +914,8 @@ void func_800BDAA0(GlobalContext* globalCtx, SkelAnime* skelAnime, OverrideLimbD
 void func_800BDC5C(SkelAnime* skelAnime, ActorAnimationEntry animation[], s32 index);
 // void func_800BDCF4(void);
 void Actor_Noop(Actor* actor, GlobalContext* globalCtx);
-void func_800BDFC0(GlobalContext* globalCtx, Gfx* dl);
-void func_800BE03C(GlobalContext* globalCtx, Gfx* dl);
+void Gfx_DrawDListOpa(GlobalContext* globalCtx, Gfx* dlist);
+void func_800BE03C(GlobalContext* globalCtx, Gfx* dlist);
 // void func_800BE0B8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_800BE184(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6);
 u8 func_800BE22C(Actor* actor);

@@ -154,7 +154,7 @@ void EnTorch2_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (this->alpha == 0xFF) {
         Scene_SetRenderModeXlu(globalCtx, 0, 0x01);
         gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
-        func_800BDFC0(globalCtx, gfx);
+        Gfx_DrawDListOpa(globalCtx, gfx);
     } else {
         Scene_SetRenderModeXlu(globalCtx, 1, 0x02);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, this->alpha);

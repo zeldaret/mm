@@ -159,7 +159,7 @@ void BgCtowerRot_Update(Actor* thisx, GlobalContext* globalCtx) {
 void BgCtowerRot_Draw(Actor* thisx, GlobalContext* globalCtx) {
     BgCtowerRot* this = THIS;
 
-    func_800BDFC0(globalCtx, bgCtowerRotDlists[this->dyna.actor.params]);
+    Gfx_DrawDListOpa(globalCtx, bgCtowerRotDlists[this->dyna.actor.params]);
     if (this->dyna.actor.params == CORRIDOR) {
         func_800BE03C(globalCtx, D_060129D0);
     }

@@ -207,5 +207,5 @@ void BgIkanaShutter_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgIkanaShutter_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_06000CE8);
+    Gfx_DrawDListOpa(globalCtx, D_06000CE8);
 }

@@ -308,5 +308,5 @@ void EnTuboTrap_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnTuboTrap_Draw(Actor* thisx, GlobalContext* globalCtx) {
     //  Gfx_DrawDListOpa with a display list
-    func_800BDFC0(globalCtx, D_05017EA0);
+    Gfx_DrawDListOpa(globalCtx, D_05017EA0);
 }

@@ -266,5 +266,5 @@ void BgKin2Fence_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgKin2Fence_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_06000828);
+    Gfx_DrawDListOpa(globalCtx, D_06000828);
 }

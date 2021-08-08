@@ -117,8 +117,8 @@ void EnCha_Update(Actor* thisx, GlobalContext* globalCtx) {
 void EnCha_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnCha* this = THIS;
 
-    func_800BDFC0(globalCtx, D_06000710);
+    Gfx_DrawDListOpa(globalCtx, D_06000710);
     SysMatrix_InsertTranslation(-1094.0f, 4950.0f, 9.0f, 1);
     SysMatrix_InsertXRotation_s(this->actor.home.rot.x, 1);
-    func_800BDFC0(globalCtx, D_06000958);
+    Gfx_DrawDListOpa(globalCtx, D_06000958);
 }

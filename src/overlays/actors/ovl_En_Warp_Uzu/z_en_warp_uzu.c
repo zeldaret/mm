@@ -133,5 +133,5 @@ void EnWarpUzu_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnWarpUzu_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_06000EC0);
+    Gfx_DrawDListOpa(globalCtx, D_06000EC0);
 }

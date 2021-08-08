@@ -44,5 +44,5 @@ void EnAObj_Update(ActorEnAObj* this, GlobalContext* globalCtx) {
 }
 
 void EnAObj_Draw(ActorEnAObj* this, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, enAObjDisplayLists[this->base.params]);
+    Gfx_DrawDListOpa(globalCtx, enAObjDisplayLists[this->base.params]);
 }

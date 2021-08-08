@@ -35,6 +35,6 @@ void BgMarketStep_Init(Actor* thisx, GlobalContext* globalCtx) {
 void BgMarketStep_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 index = thisx->params & 1;
 
-    func_800BDFC0(globalCtx, D_80AF0120[index]);
-    func_800BDFC0(globalCtx, D_80AF0128[index]);
+    Gfx_DrawDListOpa(globalCtx, D_80AF0120[index]);
+    Gfx_DrawDListOpa(globalCtx, D_80AF0128[index]);
 }

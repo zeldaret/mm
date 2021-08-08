@@ -269,7 +269,7 @@ void ObjTokeiStep_Update(Actor* thisx, GlobalContext* globalCtx) {
 void ObjTokeiStep_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjTokeiStep* this = THIS;
 
-    func_800BDFC0(globalCtx, D_06000088);
+    Gfx_DrawDListOpa(globalCtx, D_06000088);
 }
 
 void ObjTokeiStep_DrawOpen(Actor* thisx, GlobalContext* globalCtx) {

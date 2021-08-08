@@ -131,5 +131,5 @@ void BgHakaCurtain_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgHakaCurtain_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_06001410);
+    Gfx_DrawDListOpa(globalCtx, D_06001410);
 }

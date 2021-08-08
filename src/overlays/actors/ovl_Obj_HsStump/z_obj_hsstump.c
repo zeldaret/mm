@@ -140,5 +140,5 @@ void ObjHsStump_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjHsStump_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_060003B8);
+    Gfx_DrawDListOpa(globalCtx, D_060003B8);
 }

@@ -411,5 +411,5 @@ void ObjKibako_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjKibako_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, sDisplayLists[((thisx->params >> 0xF) & 1)]);
+    Gfx_DrawDListOpa(globalCtx, sDisplayLists[((thisx->params >> 0xF) & 1)]);
 }

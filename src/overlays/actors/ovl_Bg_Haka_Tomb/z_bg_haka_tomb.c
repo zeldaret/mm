@@ -123,5 +123,5 @@ void BgHakaTomb_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgHakaTomb_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_060007B0);
+    Gfx_DrawDListOpa(globalCtx, D_060007B0);
 }

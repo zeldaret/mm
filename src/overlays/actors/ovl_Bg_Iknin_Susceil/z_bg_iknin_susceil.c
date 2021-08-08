@@ -254,5 +254,5 @@ void BgIkninSusceil_Draw(Actor* thisx, GlobalContext* globalCtx) {
     BgIkninSusceil* this = THIS;
 
     AnimatedMat_Draw(globalCtx, this->animatedTexture);
-    func_800BDFC0(globalCtx, D_0600C308);
+    Gfx_DrawDListOpa(globalCtx, D_0600C308);
 }

@@ -925,42 +925,21 @@ void func_800BDC5C(SkelAnime* skelAnime, ActorAnimationEntry* animation, s32 ind
 void Actor_Noop(Actor* actor, GlobalContext* globalCtx) {
 }
 
-#ifdef NON_EQUIVALENT
-void func_800BDFC0(GlobalContext* globalCtx2, Gfx* dl) {
-    GlobalContext* globalCtx = globalCtx2;
+void Gfx_DrawDListOpa(GlobalContext* globalCtx, Gfx* dlist) {
+    Gfx* dl;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    /*
-    temp_a2 = globalCtx->state.gfxCtx;
-    temp_v1 = temp_a2->polyOpa.p;
-    temp_v1->words.w1 = (u32) (sSetupDL + 0x4B0);
-    temp_v1->words.w0 = 0xDE000000;
-    */
-    gSPDisplayList(&POLY_OPA_DISP[0], &sSetupDL[6 * 0x19]);
+    dl = POLY_OPA_DISP;
 
-    /*
-    temp_v1->unk_8 = 0xDA380003;
-    sp18 = temp_a2;
-    sp1C = temp_v1;
-    temp_v1->unk_C = Matrix_NewMtx(globalCtx->state.gfxCtx);
-    */
-    gSPMatrix(&POLY_OPA_DISP[1], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(&dl[0], &sSetupDL[6 * 0x19]);
+    gSPMatrix(&dl[1], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(&dl[2], dlist);
 
-    /*
-    temp_v1->unk_10 = 0xDE000000;
-    temp_v1->unk_14 = dl;
-    temp_a2->polyOpa.p = temp_v1 + 0x18;
-    */
-    gSPDisplayList(&POLY_OPA_DISP[2], dl);
-
-    POLY_OPA_DISP += 3;
+    POLY_OPA_DISP = &dl[3];
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BDFC0.s")
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE03C.s")
 

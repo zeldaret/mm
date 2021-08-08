@@ -65,7 +65,7 @@ void ObjEnding_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
     dl1 = this->modelInfo->dLists[0];
     if (dl1 != NULL) {
-        func_800BDFC0(globalCtx, dl1);
+        Gfx_DrawDListOpa(globalCtx, dl1);
     }
     dl2 = this->modelInfo->dLists[1];
     if (dl2 != NULL) {

@@ -245,5 +245,5 @@ void BgIcicle_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgIcicle_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_060000D0);
+    Gfx_DrawDListOpa(globalCtx, D_060000D0);
 }

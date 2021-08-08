@@ -160,7 +160,7 @@ void ObjWarpstone_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     ObjWarpstone* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
 
-    func_800BDFC0(globalCtx, sOwlStatueDLs[this->modelIndex]);
+    Gfx_DrawDListOpa(globalCtx, sOwlStatueDLs[this->modelIndex]);
     if (this->dyna.actor.home.rot.x != 0) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
         func_8012C2DC(globalCtx->state.gfxCtx);
