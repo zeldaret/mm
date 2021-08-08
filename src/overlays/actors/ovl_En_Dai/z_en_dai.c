@@ -217,7 +217,7 @@ s32 func_80B3E7C8(EnDai* this, GlobalContext* globalCtx) {
     s32 ret = false;
 
     if (this->unk_1CE & 7) {
-        if (func_800B84D0(&this->actor, globalCtx)) {
+        if (Actor_IsTalking(&this->actor, globalCtx)) {
             func_8013AED4(&this->unk_1CE, 0, 7);
             this->actionFunc = func_80B3EF90;
             ret = true;

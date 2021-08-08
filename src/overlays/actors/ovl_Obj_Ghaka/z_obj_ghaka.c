@@ -75,7 +75,7 @@ void func_80B3C39C(ObjGhaka* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
     s16 distDiff = this->dyna.actor.yawTowardsPlayer - this->dyna.actor.shape.rot.y;
 
-    if (func_800B84D0(&this->dyna.actor, globalCtx)) {
+    if (Actor_IsTalking(&this->dyna.actor, globalCtx)) {
         func_80B3C29C(this);
     } else if (this->dyna.actor.xzDistToPlayer < 100.0f || this->dyna.actor.isTargeted) {
         if (distDiff <= -0x5556 || distDiff >= 0x5556) {

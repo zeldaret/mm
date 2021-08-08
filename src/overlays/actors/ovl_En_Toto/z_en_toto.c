@@ -253,7 +253,7 @@ void func_80BA39C8(EnToto* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
     func_80BA383C(this, globalCtx);
-    if (func_800B84D0(&this->actor, globalCtx) != 0) {
+    if (Actor_IsTalking(&this->actor, globalCtx) != 0) {
         func_80BA36C0(this, globalCtx, 1);
         if (globalCtx->sceneNum != 0x12) {
             Actor_SetSwitchFlag(globalCtx, this->actor.params & 0x7F);

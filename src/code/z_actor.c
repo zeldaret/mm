@@ -637,7 +637,7 @@ f32 D_801AECF0[22] = {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B83F8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B84D0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_IsTalking.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8500.s")
 
@@ -871,7 +871,7 @@ void Actor_FreeOverlay(ActorOverlay* entry) {
 
 // unused
 s32 func_800BD2B4(GlobalContext* globalCtx, Actor* actor, s16* arg2, f32 arg3, u16 (*arg4)(GlobalContext*, Actor*), s16 (*arg5)(GlobalContext*, Actor*)) {
-    if (func_800B84D0(actor, globalCtx) != 0) {
+    if (Actor_IsTalking(actor, globalCtx) != 0) {
         *arg2 = 1;
         return 1;
     } else if (*arg2 != 0) {
@@ -1136,5 +1136,11 @@ void Gfx_DrawDListOpa(GlobalContext* globalCtx, Gfx* dlist) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE63C.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE680.s")
+
+#if 0
+static Color_RGBA8 D_801AEFB8 = {0xAA, 0xFF, 0xFF, 0xFF};
+static Color_RGBA8 D_801AEFBC = {0xC8, 0xC8, 0xFF, 0xFF};
+static Vec3f D_801AEFC0 = {0.0f, -1.0f, 0.0f};
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BF7CC.s")

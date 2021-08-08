@@ -170,7 +170,7 @@ void func_80BC6F14(EnGuruguru* this, GlobalContext* globalCtx) {
     yawTemp = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
     yaw = ABS_ALT(yawTemp);
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, globalCtx)) {
         func_80BC701C(this, globalCtx);
     } else if (yaw <= 0x2890) {
         func_800B8614(&this->actor, globalCtx, 60.0f);
@@ -312,7 +312,7 @@ void func_80BC7440(EnGuruguru* this, GlobalContext* globalCtx) {
 
 void func_80BC7520(EnGuruguru* this, GlobalContext* globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, globalCtx)) {
         this->actionFunc = func_80BC7068;
     } else {
         func_800B8500(&this->actor, globalCtx, 400.0f, 400.0f, -1);

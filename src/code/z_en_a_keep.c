@@ -20,7 +20,7 @@ void EnAObj_Destroy(ActorEnAObj* this, GlobalContext* globalCtx) {
 void EnAObj_Update1(ActorEnAObj* this, GlobalContext* globalCtx) {
     s16 v0;
     s32 v1;
-    if (func_800B84D0((Actor*)this, globalCtx) != 0) {
+    if (Actor_IsTalking((Actor*)this, globalCtx) != 0) {
         this->update = (ActorFunc)EnAObj_Update2;
     } else {
         v0 = this->base.yawTowardsPlayer - this->base.shape.rot.y;

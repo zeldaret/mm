@@ -213,7 +213,7 @@ void EnTrt_EndInteraction(GlobalContext* globalCtx, EnTrt* this) {
         ActorCutscene_Stop(this->cutscene);
         this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
     }
-    func_800B84D0(&this->actor, globalCtx);
+    Actor_IsTalking(&this->actor, globalCtx);
     globalCtx->msgCtx.unk11F22 = 0x43;
     globalCtx->msgCtx.unk12023 = 4;
     Interface_ChangeAlpha(50);
@@ -774,7 +774,7 @@ void EnTrt_IdleSleeping(EnTrt* this, GlobalContext* globalCtx) {
     if (Player_GetMask(globalCtx) == PLAYER_MASK_MASK_OF_SCENTS) {
         this->textId = 0x890;
     }
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, globalCtx)) {
         if (player->transformation == PLAYER_FORM_HUMAN) {
             this->flags |= ENTRT_MET;
         }
@@ -818,7 +818,7 @@ void EnTrt_IdleAwake(EnTrt* this, GlobalContext* globalCtx) {
     } else {
         this->textId = 0x850;
     }
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, globalCtx)) {
         if (this->cutsceneState == ENTRT_CUTSCENESTATE_STOPPED) {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
@@ -999,7 +999,7 @@ void EnTrt_ItemGiven(EnTrt* this, GlobalContext* globalCtx) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     }
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, globalCtx)) {
         switch (this->textId) {
             case 0x889:
                 this->textId = 0x88A;
@@ -1034,7 +1034,7 @@ void EnTrt_ShopkeeperGone(EnTrt* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
     Player* player = PLAYER;
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, globalCtx)) {
         func_801518B0(globalCtx, this->textId, &this->actor);
     } else {
         if ((player->actor.world.pos.x >= -50.0f && player->actor.world.pos.x <= 50.0f) &&

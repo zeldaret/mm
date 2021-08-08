@@ -19,10 +19,11 @@ animdict ={
     "Actor_IsLinkFacingActor": "Actor_IsPlayerFacingActor",
     "Actor_IsActorFacingLink": "Actor_IsActorFacingPlayer",
     "Actor_IsActorFacingLinkAndWithinRange": "Actor_IsActorFacingPlayerAndWithinRange",
+    "func_800B84D0": "Actor_IsTalking",
 }
 
 def replace_anim(file):
-    with open(file,'r',encoding = 'utf-8') as infile:
+    with open(file, 'r', encoding='utf-8') as infile:
         srcdata = infile.read()
 
     funcs = list(animdict.keys())

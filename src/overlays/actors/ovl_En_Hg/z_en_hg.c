@@ -222,7 +222,7 @@ void func_80BCF6D0(EnHg* this, GlobalContext* globalCtx) {
 
 void func_80BCF710(EnHg* this, GlobalContext* globalCtx) {
     if (!func_80152498(&globalCtx->msgCtx)) {
-        if (func_800B84D0(&this->actor, globalCtx)) {
+        if (Actor_IsTalking(&this->actor, globalCtx)) {
             func_801518B0(globalCtx, 0x24F, &this->actor);
         } else {
             func_800B8614(&this->actor, globalCtx, 80.0f);

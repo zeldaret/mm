@@ -806,7 +806,7 @@ f32* func_800B8248(PosRot* param_1, Player* param_2);
 // void func_800B82EC(void);
 // void func_800B83BC(void);
 // void func_800B83F8(void);
-s32 func_800B84D0(Actor* actor, GlobalContext* globalCtx); // Actor_IsTalking
+s32 Actor_IsTalking(Actor* actor, GlobalContext* globalCtx);
 s32 func_800B8500(Actor* actor, GlobalContext* globalCtx, f32 fParm3, f32 fParm4, s32 param_5);
 s32 func_800B85E0(Actor* actor, GlobalContext* globalCtx, f32 uParm3, s32 uParm4);
 s32 func_800B8614(Actor* actor, GlobalContext* globalCtx, f32 uParm3);
@@ -928,10 +928,10 @@ void func_800BE5CC(Actor* actor, ColliderJntSph* collider, s32 arg2);
 // void func_800BE63C(void);
 void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s32 arg3, f32 arg4, f32 arg5, f32 arg6, u8 mode);
 void func_800BF7CC(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s32 arg3, s32 arg4, f32 arg5, f32 arg6);
-void ActorOverlayTable_FaultPrint(void* arg0, void* arg1); // ActorOverlayTable_FaultPrint
-void* ActorOverlayTable_FaultAddrConv(void* arg0, void* arg1); // ActorOverlayTable_FaultAddrConv
-void ActorOverlayTable_Init(void); // ActorOverlayTable_Init
-void ActorOverlayTable_Cleanup(void); // ActorOverlayTable_Cleanup
+void ActorOverlayTable_FaultPrint(void* arg0, void* arg1);
+void* ActorOverlayTable_FaultAddrConv(void* arg0, void* arg1);
+void ActorOverlayTable_Init(void);
+void ActorOverlayTable_Cleanup(void);
 void BgCheck_PolygonLinkedListNodeInit(SSNode* node, s16* polyIndex, u16 next);
 void BgCheck_PolygonLinkedListResetHead(u16* head);
 void BgCheck_ScenePolygonListsNodeInsert(SSNodeList* list, u16* head, s16* polyIndex);

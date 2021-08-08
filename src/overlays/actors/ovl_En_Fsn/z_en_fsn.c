@@ -197,7 +197,7 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, GlobalContext* globalCtx) {
 
 void EnFsn_HandleSetupResumeInteraction(EnFsn* this, GlobalContext* globalCtx) {
     if (func_80152498(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx) && this->cutsceneState == 0) {
-        func_800B84D0(&this->actor, globalCtx);
+        Actor_IsTalking(&this->actor, globalCtx);
         func_800B85E0(&this->actor, globalCtx, 400.0f, -1);
         if (ENFSN_IS_SHOP(&this->actor)) {
             this->actor.textId = 0;
@@ -376,7 +376,7 @@ void EnFsn_EndInteraction(EnFsn* this, GlobalContext* globalCtx) {
         ActorCutscene_Stop(this->cutscene);
         this->cutsceneState = 0;
     }
-    func_800B84D0(&this->actor, globalCtx);
+    Actor_IsTalking(&this->actor, globalCtx);
     globalCtx->msgCtx.unk11F22 = 0x43;
     globalCtx->msgCtx.unk12023 = 4;
     Interface_ChangeAlpha(50);
@@ -722,7 +722,7 @@ void EnFsn_Idle(EnFsn* this, GlobalContext* globalCtx) {
         this->actionFunc = EnFsn_Haggle;
     } else {
     dummy2:;
-        if (func_800B84D0(&this->actor, globalCtx)) {
+        if (Actor_IsTalking(&this->actor, globalCtx)) {
             if (this->cutsceneState == 0) {
                 if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                     ActorCutscene_Stop(0x7C);
@@ -895,7 +895,7 @@ void EnFsn_AskBuyOrSell(EnFsn* this, GlobalContext* globalCtx) {
 }
 
 void EnFsn_SetupDeterminePrice(EnFsn* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, globalCtx)) {
         this->actor.textId = 0xFF;
         func_801518B0(globalCtx, this->actor.textId, &this->actor);
         this->actionFunc = EnFsn_DeterminePrice;
@@ -1013,7 +1013,7 @@ void EnFsn_SetupResumeInteraction(EnFsn* this, GlobalContext* globalCtx) {
 }
 
 void EnFsn_ResumeInteraction(EnFsn* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, globalCtx)) {
         if (ENFSN_IS_SHOP(&this->actor)) {
             if (!this->isSelling) {
                 this->cutscene = this->lookToShopkeeperBuyingCutscene;
@@ -1347,7 +1347,7 @@ void EnFsn_SetupEndInteractionImmediately(EnFsn* this, GlobalContext* globalCtx)
 }
 
 void EnFsn_IdleBackroom(EnFsn* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, globalCtx)) {
         this->textId = 0;
         EnFsn_HandleConversationBackroom(this, globalCtx);
         this->actionFunc = EnFsn_ConverseBackroom;
