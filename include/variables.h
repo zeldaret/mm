@@ -1672,7 +1672,7 @@ extern PadMgr* padmgrContext;
 extern UNK_PTR D_801D1540;
 extern f32 D_801D1570[13];
 extern Vec3f D_801D15B0;
-// extern UNK_TYPE4 D_801D15BC;
+extern Vec3s D_801D15BC;
 extern RSPMatrix D_801D1DE0;
 extern MtxF D_801D1E20;
 extern UNK_PTR D_801D1E60;
@@ -4019,14 +4019,14 @@ extern UNK_TYPE D_04055628;
 extern Gfx D_04057B10[];
 extern Gfx D_04058BA0[];
 extern Gfx D_04089070[];
-extern u64 D_0408DBE0[]; // gDust1Tex
-extern u64 D_0408DFE0[]; // gDust2Tex
-extern u64 D_0408E3E0[]; // gDust3Tex
-extern u64 D_0408E7E0[]; // gDust4Tex
-extern u64 D_0408EBE0[]; // gDust5Tex
-extern u64 D_0408EFE0[]; // gDust6Tex
-extern u64 D_0408F3E0[]; // gDust7Tex
-extern u64 D_0408F7E0[]; // gDust8Tex
+extern TexturePtr D_0408DBE0[]; // gDust1Tex
+extern TexturePtr D_0408DFE0[]; // gDust2Tex
+extern TexturePtr D_0408E3E0[]; // gDust3Tex
+extern TexturePtr D_0408E7E0[]; // gDust4Tex
+extern TexturePtr D_0408EBE0[]; // gDust5Tex
+extern TexturePtr D_0408EFE0[]; // gDust6Tex
+extern TexturePtr D_0408F3E0[]; // gDust7Tex
+extern TexturePtr D_0408F7E0[]; // gDust8Tex
 extern UNK_TYPE D_04050550;
 extern UNK_TYPE D_04050648;
 extern UNK_TYPE D_040510B0;
@@ -4063,7 +4063,7 @@ extern Gfx D_04077480[];
 extern UNK_TYPE D_04079B10;
 extern UNK_TYPE D_0407AB10;
 extern UNK_TYPE D_0407AFB0;
-extern UNK_TYPE D_0407D590;
+extern Gfx D_0407D590[];
 extern UNK_TYPE D_0407D650;
 extern UNK_TYPE D_0407F218;
 extern UNK_TYPE D_040815D0;
