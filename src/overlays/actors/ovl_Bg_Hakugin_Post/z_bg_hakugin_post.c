@@ -401,14 +401,14 @@ void func_80A9B554(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
             unkStruct2->unk_2D = 0;
         }
     }
-    unkStruct->unk_1924 = 1;
+    unkStruct->unk_1924 = true;
 }
 
 void func_80A9BC0C(BgHakuginPostUnkStruct* unkStruct) {
     s32 i;
 
-    if (unkStruct->unk_1924 != 0) {
-        unkStruct->unk_1924 = 0;
+    if (unkStruct->unk_1924) {
+        unkStruct->unk_1924 = false;
 
         for (i = 0; i < ARRAY_COUNT(unkStruct->unk_02A4); i++) {
             BgHakuginPostUnkStruct2* unkStruct2 = &unkStruct->unk_02A4[i];
@@ -423,7 +423,7 @@ void func_80A9BC0C(BgHakuginPostUnkStruct* unkStruct) {
                 unkStruct2->unk_20.y += unkStruct2->unk_28;
                 unkStruct2->unk_20.z += unkStruct2->unk_2A;
                 unkStruct2->unk_2C--;
-                unkStruct->unk_1924 = 1;
+                unkStruct->unk_1924 = true;
             }
         }
     }
@@ -1028,7 +1028,7 @@ void func_80A9D61C(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    if (D_80A9E028.unk_1924 != 0) {
+    if (D_80A9E028.unk_1924) {
         for (i = 0; i < ARRAY_COUNT(D_80A9E028.unk_02A4); i++) {
             unkStruct2 = &D_80A9E028.unk_02A4[i];
             if (unkStruct2->unk_2C > 0) {
