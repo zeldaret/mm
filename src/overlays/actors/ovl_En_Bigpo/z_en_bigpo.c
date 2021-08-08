@@ -1404,13 +1404,13 @@ void EnBigpo_Draw4(Actor* thisx, GlobalContext* globalCtx) {
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0,
                                 (globalCtx->gameplayFrames * -20) % 512, 0x20, 0x80));
 
-    gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 0xAA, 0xFF, 0xFF, 0xFF - this->mainColor.a);
-    gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0xFF, 0xFF);
+    gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 170, 255, 255, 255 - this->mainColor.a);
+    gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, 255);
 
     for (i = 0; i < ARRAY_COUNT(this->fires); i++) {
         EnBigpoFireParticle* firePtr = &this->fires[i];
         Lights_PointNoGlowSetInfo(&this->fires[i].info, this->fires[i].pos.x, this->fires[i].pos.y,
-                                  this->fires[i].pos.z, 0xAA, 0xFF, 0xFF, fireRadius);
+                                  this->fires[i].pos.z, 170, 255, 255, fireRadius);
         mtfxPtr->wx = firePtr->pos.x;
         mtfxPtr->wy = firePtr->pos.y;
         mtfxPtr->wz = firePtr->pos.z;
