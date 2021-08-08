@@ -3324,7 +3324,7 @@
     0x8017D404:("func_8017D404",),
     0x8017D568:("Math3D_TriSetCoords",),
     0x8017D618:("Math3D_IsPointInSphere",),
-    0x8017D668:("func_8017D668",),
+    0x8017D668:("Math3D_PointDistToLine2D",),
     0x8017D7C0:("func_8017D7C0",),
     0x8017D814:("func_8017D814",),
     0x8017D91C:("func_8017D91C",),

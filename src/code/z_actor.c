@@ -866,8 +866,107 @@ void Actor_FreeOverlay(ActorOverlay* entry) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BCC68.s")
 
+#ifdef NON_MATCHING
+// small regalloc and needs to import data
+void func_800BCCDC(Vec3s* points, s32 pathcount, Vec3f* pos1, Vec3f* pos2, s32 parm5) {
+    s32 spB4;
+    s32 spB0;
+    s32 spA8[2] = {0, 0};
+    s32 spA0[2] = {0, 0};
+    Vec3f sp94;
+    Vec3f sp7C[2];
+    Vec3f sp70;
+    Vec3f sp64;
+    f32 sp60;
+    f32 sp5C;
+    f32 sp54[2];
 
+    spB0 = 0;
+    sp5C = 1.6e9f;
+
+    for (spB4 = 0; spB4 < pathcount; spB4++) {
+        sp60 = Math3D_XZDistanceSquared(pos1->x, pos1->z, points[spB4].x, points[spB4].z);
+        if (sp60 < sp5C) {
+            sp5C = sp60;
+            spB0 = spB4;
+        }
+    }
+
+    sp94.x = points[spB0].x;
+    sp94.z = points[spB0].z;
+    pos2->y = points[spB0].y;
+    if (spB0 != 0) {
+        sp64.x = (f32) points[spB0-1].x;
+        sp64.z = (f32) points[spB0-1].z;
+    } else if (parm5) {
+        sp64.x = (f32) points[pathcount-1].x;
+        sp64.z = (f32) points[pathcount-1].z;
+    }
+
+    if ((spB0 != 0) || (parm5)) {
+        spA8[0] = Math3D_PointDistToLine2D(pos1->x, pos1->z, sp64.x, sp64.z, sp94.x, sp94.z, &sp7C[0].x, &sp7C[0].z, &sp60);
+    }
+
+    if (spB0+1 != pathcount) {
+        sp70.x = (f32) points[spB0+1].x;
+        sp70.z = (f32) points[spB0+1].z;
+    } else if (parm5) {
+        sp70.x = (f32) points->x;
+        sp70.z = (f32) points->z;
+    }
+
+    if ((spB0+1 != pathcount) || (parm5)) {
+        spA8[1] = Math3D_PointDistToLine2D(pos1->x, pos1->z, sp94.x, sp94.z, sp70.x, sp70.z, &sp7C[1].x, &sp7C[1].z, &sp60);
+    }
+
+    if (parm5) {
+        s32 phi_s0_2;
+
+        spA0[0] = ((sp64.x - pos1->x) * (sp94.z - pos1->z)) < ((sp64.z - pos1->z) * (sp94.x - pos1->x));
+        spA0[1] = ((sp70.z - pos1->z) * (sp94.x - pos1->x)) < ((sp94.z - pos1->z) * (sp70.x - pos1->x));
+
+        for (phi_s0_2 = 0; phi_s0_2 < ARRAY_COUNT(sp54); phi_s0_2++) {
+            if ((spA8)[phi_s0_2] != 0) {
+                sp54[phi_s0_2] = Math3D_XZDistanceSquared(pos1->x, pos1->z, sp7C[phi_s0_2].x, sp7C[phi_s0_2].z);
+            } else {
+                sp54[phi_s0_2] = 1.6e9f;
+            }
+        }
+    }
+
+    if ((parm5) && (((spA0[0] != 0) && (spA0[1] != 0)) || ((spA0[0] != 0) && (spA8[0] != 0) && (sp54[0] < sp54[1])) || ((spA0[1] != 0) && (spA8[1] != 0) && (sp54[1] < sp54[0])))) {
+        pos2->x = pos1->x;
+        pos2->z = pos1->z;
+    } else if ((spA8[0] != 0) && (spA8[1] != 0)) {
+        if ((spA0[0] == 0) && (spA0[1] == 0)) {
+            if (Math3D_PointDistToLine2D(pos1->x, pos1->z, sp7C[0].x, sp7C[0].z, sp7C[1].x, sp7C[1].z, &pos2->x, &pos2->z, &sp60) == 0) {
+                pos2->x = (sp7C[1].x + sp7C[0].x) * 0.5f;
+                pos2->z = (sp7C[1].z + sp7C[0].z) * 0.5f;
+            }
+        } else if (sp54[1] < sp54[0]) {
+            pos2->x = sp7C[1].x;
+            pos2->z = sp7C[1].z;
+        } else {
+            pos2->x = sp7C[0].x;
+            pos2->z = sp7C[0].z;
+        }
+    } else if (spA8[0] != 0) {
+        pos2->x = sp7C[0].x;
+        pos2->z = sp7C[0].z;
+    } else if (spA8[1] != 0) {
+        pos2->x = sp7C[1].x;
+        pos2->z = sp7C[1].z;
+    } else if ((parm5) && ((((sp64.x - pos1->x) * (sp70.z - pos1->z)) < ((sp64.z - pos1->z) * (sp70.x - pos1->x))))) {
+        pos2->x = pos1->x;
+        pos2->z = pos1->z;
+    } else {
+        pos2->x = sp94.x;
+        pos2->z = sp94.z;
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BCCDC.s")
+#endif
 
 // unused
 s32 func_800BD2B4(GlobalContext* globalCtx, Actor* actor, s16* arg2, f32 arg3, u16 (*arg4)(GlobalContext*, Actor*), s16 (*arg5)(GlobalContext*, Actor*)) {

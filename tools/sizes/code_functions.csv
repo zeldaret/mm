@@ -2838,7 +2838,7 @@ asm/non_matchings/code/sys_math3d/func_8017D2FC.s,func_8017D2FC,0x8017D2FC,0x42
 asm/non_matchings/code/sys_math3d/func_8017D404.s,func_8017D404,0x8017D404,0x59
 asm/non_matchings/code/sys_math3d/Math3D_TriSetCoords.s,Math3D_TriSetCoords,0x8017D568,0x2C
 asm/non_matchings/code/sys_math3d/Math3D_IsPointInSphere.s,Math3D_IsPointInSphere,0x8017D618,0x14
-asm/non_matchings/code/sys_math3d/func_8017D668.s,func_8017D668,0x8017D668,0x56
+asm/non_matchings/code/sys_math3d/Math3D_PointDistToLine2D.s,Math3D_PointDistToLine2D,0x8017D668,0x56
 asm/non_matchings/code/sys_math3d/func_8017D7C0.s,func_8017D7C0,0x8017D7C0,0x15
 asm/non_matchings/code/sys_math3d/func_8017D814.s,func_8017D814,0x8017D814,0x42
 asm/non_matchings/code/sys_math3d/func_8017D91C.s,func_8017D91C,0x8017D91C,0x42

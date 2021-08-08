@@ -20,6 +20,7 @@ animdict ={
     "Actor_IsActorFacingLink": "Actor_IsActorFacingPlayer",
     "Actor_IsActorFacingLinkAndWithinRange": "Actor_IsActorFacingPlayerAndWithinRange",
     "func_800B84D0": "Actor_IsTalking",
+    "func_8017D668": "Math3D_PointDistToLine2D",
 }
 
 def replace_anim(file):
