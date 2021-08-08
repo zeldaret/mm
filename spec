@@ -3699,8 +3699,7 @@ beginseg
     name "ovl_En_Sellnuts"
     compress
     include "build/src/overlays/actors/ovl_En_Sellnuts/z_en_sellnuts.o"
-    include "build/data/ovl_En_Sellnuts/ovl_En_Sellnuts.data.o"
-    include "build/data/ovl_En_Sellnuts/ovl_En_Sellnuts.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Sellnuts/ovl_En_Sellnuts_reloc.o"
 endseg
 
 beginseg
