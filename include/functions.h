@@ -904,9 +904,9 @@ void func_800BCBF4(Vec3f* uParm1, GlobalContext* globalCtx);
 void func_800BCC68(Vec3f* param_1, GlobalContext* globalCtx);
 void func_800BCCDC(Vec3s* points, s32 pathcount, Vec3f* pos1, Vec3f* pos2, UNK_TYPE parm5);
 s32 func_800BD2B4(GlobalContext* globalCtx, Actor* actor, s16* arg2, f32 arg3, u16 (*arg4)(GlobalContext*, Actor*), s16 (*arg5)(GlobalContext*, Actor*));
-// void func_800BD6E4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5);
+s16 func_800BD6E4(Actor* actor, struct_800BD888_arg1* arg1, f32 arg2, s16 arg3, s16 flag);
 void func_800BD888(Actor*, struct_800BD888_arg1*, s16, s16); // This function is very similar to OoT's func_80034A14
-// void func_800BD9A0(void);
+void* func_800BD9A0(GraphicsContext* gfxCtx);
 void func_800BD9E0(GlobalContext* globalCtx, SkelAnime* skelAnime, OverrideLimbDraw2 overrideLimbDraw, PostLimbDraw2 postLimbDraw, Actor* actor, s16 alpha);
 void func_800BDAA0(GlobalContext* globalCtx, SkelAnime* skelAnime, OverrideLimbDraw2 overrideLimbDraw, PostLimbDraw2 postLimbDraw, Actor* actor, s16 alpha);
 // void func_800BDB6C(void);

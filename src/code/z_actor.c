@@ -1072,15 +1072,52 @@ s16 func_800BD6B8(s16 arg0) {
     return D_801AEE38[arg0].unk_14;
 }
 
-s16 func_800BD6E4(Actor* actor, struct_800BD888_arg1* arg1, f32 arg2, s16 arg3, s16 arg4);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BD6E4.s")
+s16 func_800BD6E4(Actor* actor, struct_800BD888_arg1* arg1, f32 arg2, s16 arg3, s16 flag) {
+    s32 pad;
+
+    if (flag) {
+        return flag;
+    } else if (arg1->unk_00 != 0) {
+        return 4;
+    } else if (arg2 < Math_Vec3f_DistXYZ(&actor->world.pos, &arg1->unk_18)) {
+        arg1->unk_04 = 0;
+        arg1->unk_06 = 0;
+        return 1;
+    } else {
+        s16 yaw = Math_Vec3f_Yaw(&actor->world.pos, &arg1->unk_18);
+        s16 phi_a0 = ABS_ALT(BINANG_SUB(yaw, actor->shape.rot.y));
+
+        if (arg3 >= phi_a0) {
+            arg1->unk_04 = 0;
+            arg1->unk_06 = 0;
+            return 2;
+        } else if (DECR(arg1->unk_04) != 0) {
+            return arg1->unk_02;
+        } else {
+            switch (arg1->unk_06) {
+                case 0:
+                case 2:
+                    arg1->unk_04 = Rand_S16Offset(30, 30);
+                    arg1->unk_06++;
+                    return 1;
+
+                case 1:
+                    arg1->unk_04 = Rand_S16Offset(10, 10);
+                    arg1->unk_06++;
+                    return 3;
+
+                default: 
+                    return 4;
+            }
+        }
+    }
+}
 
 // This function is very similar to OoT's func_80034A14
 void func_800BD888(Actor* actor, struct_800BD888_arg1* arg1, s16 arg2, s16 arg3) {
     struct_801AEE38_0 sp38;
 
     arg1->unk_02 = func_800BD6E4(actor, arg1, D_801AEE38[arg2].unk_10, D_801AEE38[arg2].unk_14, arg3);
-
     sp38 = D_801AEE38[arg2].sub_00;
 
     switch (arg1->unk_02) {
@@ -1100,35 +1137,17 @@ void func_800BD888(Actor* actor, struct_800BD888_arg1* arg1, s16 arg2, s16 arg3)
                   sp38.unk_0C);
 }
 
-#ifdef NON_MATCHING
 void* func_800BD9A0(GraphicsContext* gfxCtx) {
     Gfx* displayListHead;
     Gfx* displayList;
 
-    displayListHead = &gfxCtx->polyOpa.d[-2];
-    displayList = &gfxCtx->polyOpa.d[-2];
+    displayListHead = displayList = GRAPH_ALLOC(gfxCtx, 0x10);
 
-    /*
-    temp_v1 = gfxCtx->polyOpa.d - 0x10;
-    gfxCtx->polyOpa.d = temp_v1;
-    temp_v1->words.w1 = 0xC81049F8;
-    temp_v0 = temp_v1 + 8;
-    temp_v1->words.w0 = 0xE200001C;
-    */
     gDPSetRenderMode(displayListHead++, AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL | G_RM_FOG_SHADE_A, AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL | GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA));
-    /*
-    temp_v0->words.w0 = 0xDF000000;
-    temp_v0->words.w1 = 0;
-    */
     gSPEndDisplayList(displayListHead++);
 
-    //CLOSE_DISPS(gfxCtx);
     return displayList;
 }
-#else
-void* func_800BD9A0(GraphicsContext* gfxCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BD9A0.s")
-#endif
 
 // unused
 void func_800BD9E0(GlobalContext* globalCtx, SkelAnime* skelAnime, OverrideLimbDraw2 overrideLimbDraw, PostLimbDraw2 postLimbDraw, Actor* actor, s16 alpha) {
