@@ -11,13 +11,13 @@ void CIC6105_Nop80081828(void) {
 }
 
 void CIC6105_PrintRomInfo(void) {
-    FaultDrawer_DrawText(80, 200, "SP_STATUS %08x", (void*)(*(u32*)0xA4040010));
+    FaultDrawer_DrawText(80, 200, "SP_STATUS %08x", HW_REG(SP_STATUS_REG, u32));
     FaultDrawer_DrawText(40, 184, "ROM_F [Creator:%s]", gBuildTeam);
     FaultDrawer_DrawText(56, 192, "[Date:%s]", gBuildDate);
 }
 
 void CIC6105_AddRomInfoFaultPage(void) {
-    Fault_AddClient(&romInfoFaultClient, CIC6105_PrintRomInfo, 0, 0);
+    Fault_AddClient(&romInfoFaultClient, (fault_client_func)CIC6105_PrintRomInfo, 0, 0);
 }
 
 void CIC6105_RemoveRomInfoFaultPage(void) {

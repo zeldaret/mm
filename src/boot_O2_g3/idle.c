@@ -42,7 +42,7 @@ void Idle_InitScreen(void) {
 
 void Idle_InitMemory(void) {
     u32 pad;
-    void* memEnd = 0x80000000 + osMemSize;
+    void* memEnd = OS_PHYSICAL_TO_K0(osMemSize);
 
     Idle_ClearMemory(0x80000400, gFramebuffer1);
     Idle_ClearMemory(D_80025D00, bootproc);
