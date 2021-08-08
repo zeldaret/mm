@@ -302,7 +302,6 @@
     0x8009B2D8:("sDmaMgrMsgs","OSMesg","[32]",0x80),
     0x8009B358:("sDmaMgrThread","OSThread","",0x1b0),
     0x8009B508:("sDmaMgrStack","u8","[1280]",0x500),
-    0x8009BA08:("D_8009BA08","UNK_TYPE1","",0x1),
     0x8009BA10:("sYaz0DataBuffer","u8","[1024]",0x400),
     0x8009BE10:("sYaz0CurDataEnd","u8*","",0x4),
     0x8009BE14:("sYaz0CurRomStart","u32","",0x4),

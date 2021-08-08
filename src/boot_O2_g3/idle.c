@@ -1,5 +1,13 @@
 #include "global.h"
 
+
+u8 D_80096B20 = 1;
+vu8 gViConfigUseDefault = 1;
+u8 gViConfigAdditionalScanLines = 0;
+u32 gViConfigFeatures = 0x42;
+f32 gViConfigXScale = 1.0f;
+f32 gViConfigYScale = 1.0f;
+
 IrqMgr gIrqMgr;
 u8 sIrqMgrStack[1280];
 StackEntry sIrqMgrStackInfo;
@@ -8,15 +16,6 @@ u8 sMainStack[2304];
 StackEntry sMainStackInfo;
 OSMesg sPiMgrCmdBuff[50];
 OSMesgQueue gPiMgrCmdQ;
-OSViMode gViConfigMode;
-u8 D_8009B290;
-
-u8 D_80096B20 = 1;
-vu8 gViConfigUseDefault = 1;
-u8 gViConfigAdditionalScanLines = 0;
-u32 gViConfigFeatures = 0x42;
-f32 gViConfigXScale = 1.0f;
-f32 gViConfigYScale = 1.0f;
 
 void Idle_ClearMemory(void* begin, void* end) {
     if (begin < end) {
