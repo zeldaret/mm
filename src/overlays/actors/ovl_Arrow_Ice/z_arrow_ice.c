@@ -91,7 +91,39 @@ void func_809224DC(ArrowIce* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/func_80922628.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/func_809227F4.s")
+void func_809227F4(ArrowIce* this, GlobalContext* globalCtx) {
+    EnArrow* arrow;
+    f32 distanceScaled;
+    s32 pad;
+
+    arrow = (EnArrow*)this->actor.parent;
+    if ((arrow == NULL) || (arrow->actor.update == NULL)) {
+        Actor_MarkForDeath(&this->actor);
+        return;
+    }
+    // copy position and rotation from arrow
+    this->actor.world.pos = arrow->actor.world.pos;
+    this->actor.shape.rot = arrow->actor.shape.rot;
+    distanceScaled = Math_Vec3f_DistXYZ(&this->unk_14C, &this->actor.world.pos) * (1.0f / 24.0f);
+    this->unk_158 = distanceScaled;
+    if (distanceScaled < 1.0f) {
+        this->unk_158 = 1.0f;
+    }
+    func_809225D0(&this->unk_14C, &this->actor.world.pos, 0x3D4CCCCD);
+
+    if (arrow->unk_261 & 1) {
+        Audio_PlayActorSound2(&this->actor, NA_SE_IT_EXPLOSION_ICE);
+        ArrowIce_SetupAction(this, func_80922628);
+        this->unk_146 = 32;
+        this->unk_148 = 255;
+    } else if (arrow->unk_260 < 34) {
+        if (this->unk_148 < 35) {
+            Actor_MarkForDeath(&this->actor);
+        } else {
+            this->unk_148 -= 25;
+        }
+    }
+}
 
 void ArrowIce_Update(Actor* thisx, GlobalContext* globalCtx) {
     ArrowIce* this = THIS;
