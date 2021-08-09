@@ -60,9 +60,9 @@ static f32 D_8089A5E4 = 100.0f;
 static f32 D_8089A5E8 = 50.0f;
 
 void EnHoll_SetTypeAndOpacity(EnHoll* this) {
-    this->type = GET_HOLL_TYPE(this);
+    this->type = EN_HOLL_GET_TYPE(this);
     this->actionFunc = D_8089A5BC[this->type];
-    if (IS_HOLL_TYPE_VISIBLE(this)) {
+    if (EN_HOLL_IS_VISIBLE(this)) {
         this->opacity = EN_HOLL_OPAQUE;
     } else {
         this->actor.draw = NULL;
@@ -73,7 +73,7 @@ void EnHoll_SetPlayerSide(GlobalContext* globalCtx, EnHoll* this, Vec3f* rotated
     Player* player = PLAYER;
 
     /* rotatedPlayerPos = function output
-     * = hypothetical rotation of Player around Holl's origin to intersect Holl's z axis */
+     * = hypothetical rotation of Player around Holl's origin to intersect its y-z plane */
     Actor_CalcOffsetOrientedToDrawRotation(&this->actor, rotatedPlayerPos, &player->actor.world.pos);
     if (rotatedPlayerPos->z < 0.0f) {
         this->playerSide = EN_HOLL_PLAYER_BEHIND;
@@ -97,7 +97,7 @@ void EnHoll_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnHoll_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnHoll* this = THIS;
 
-    if (!IS_HOLL_TYPE_SCENE_CHANGER(this)) {
+    if (!EN_HOLL_IS_SCENE_CHANGER(this)) {
         u32 transitionActorIndex = ((u16)this->actor.params) >> 0xA;
         globalCtx->doorCtx.transitionActorList[transitionActorIndex].id =
             -globalCtx->doorCtx.transitionActorList[transitionActorIndex].id;
@@ -133,12 +133,12 @@ void EnHoll_Draw(Actor *thisx, GlobalContext *globalCtx) {
     Gfx* gfxP;
     u32 dlIndex;
 
-    if (this->opacity != EN_HOLL_INVISIBLE) {
+    if (this->opacity != EN_HOLL_TRANSPARENT) {
 	OPEN_DISPS(globalCtx->state.gfxCtx);
         if (this->opacity == EN_HOLL_OPAQUE) {
             gfxP = POLY_OPA_DISP;
             dlIndex = 37;
-        } else {
+        } else { // EN_HOLL_TRANSLUCENT
             gfxP = POLY_XLU_DISP;
             dlIndex = 0;
         }
@@ -151,7 +151,7 @@ void EnHoll_Draw(Actor *thisx, GlobalContext *globalCtx) {
 	gSPDisplayList(gfxP++, D_8089A590);
         if (this->opacity == EN_HOLL_OPAQUE) {
             POLY_OPA_DISP = gfxP;
-	} else {
+	} else { // EN_HOLL_TRANSLUCENT
             POLY_XLU_DISP = gfxP;
 	}
 	CLOSE_DISPS(globalCtx->state.gfxCtx);

@@ -5,18 +5,19 @@
 
 struct EnHoll;
 
-typedef void (*EnHollActionFunc)(struct EnHoll* this, GlobalContext* globalCtx);
+typedef void (*EnHollActionFunc)(struct EnHoll*, GlobalContext*);
 
 typedef enum {
-    /* 0 */ EN_HOLL_HORIZONTAL_VISIBLE,
-    /* 1 */ EN_HOLL_VERTICAL_A,
-    /* 2 */ EN_HOLL_HORIZONTAL,
-    /* 3 */ EN_HOLL_VERTICAL_B,
-    /* 4 */ EN_HOLL_HORIZONTAL_VISIBLE_SCENE_CHANGER
+    /* 0 */ EN_HOLL_TYPE_DEFAULT,
+    /* 1 */ EN_HOLL_TYPE_TRANSPARENT_VERTICAL_A,
+    /* 2 */ EN_HOLL_TYPE_TRANSPARENT,
+    /* 3 */ EN_HOLL_TYPE_TRANSPARENT_VERTICAL_B,
+    /* 4 */ EN_HOLL_TYPE_SCENE_CHANGER
 } EnHollTypes;
 
 typedef enum {
-    /* 0x00 */ EN_HOLL_INVISIBLE,
+    /* 0x00 */ EN_HOLL_TRANSPARENT,
+    /* 0x01-FE EN_HOLL_TRANSLUCENT, */
     /* 0xFF */ EN_HOLL_OPAQUE = 0xFF
 } EnHollOpacities;
 
@@ -34,9 +35,9 @@ typedef struct EnHoll {
     /* 0x148 */ EnHollActionFunc actionFunc;
 } EnHoll; // size = 0x14C
 
-#define GET_HOLL_TYPE(this) ((this->actor.params >> 7) & 7)
-#define IS_HOLL_TYPE_VISIBLE(this) ((this->type == EN_HOLL_HORIZONTAL_VISIBLE) || (this->type == EN_HOLL_HORIZONTAL_VISIBLE_SCENE_CHANGER))
-#define IS_HOLL_TYPE_SCENE_CHANGER(this) (this->type == 4)
+#define EN_HOLL_GET_TYPE(this) ((this->actor.params >> 7) & 7)
+#define EN_HOLL_IS_VISIBLE(this) ((this->type == EN_HOLL_TYPE_DEFAULT) || (this->type == EN_HOLL_TYPE_SCENE_CHANGER))
+#define EN_HOLL_IS_SCENE_CHANGER(this) (this->type == EN_HOLL_TYPE_SCENE_CHANGER)
 
 extern const ActorInit En_Holl_InitVars;
 
