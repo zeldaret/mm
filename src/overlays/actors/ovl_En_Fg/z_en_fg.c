@@ -450,7 +450,7 @@ void EnFg_UpdateDust(EnFgEffectDust* dustEffect) {
     }
 }
 
-u64* sDustTex[] = {
+TexturePtr sDustTex[] = {
     D_0408F7E0, D_0408F3E0, D_0408EFE0, D_0408EBE0, D_0408E7E0, D_0408E3E0, D_0408DFE0, D_0408DBE0,
 };
 

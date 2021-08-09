@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_warpstone.c
+ * Overlay: ovl_Obj_Warpstone
+ * Description: Owl Statue
+ */
+
 #include "z_obj_warpstone.h"
 
 #define FLAGS 0x00000009
@@ -67,7 +73,7 @@ void ObjWarpstone_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
     Actor_SetHeight(&this->dyna.actor, 40.0f);
 
-    if (!IS_OWL_HIT(GET_OWL_ID(this))) {
+    if (!OBJ_WARPSTONE_IS_ACTIVATED(OBJ_WARPSTONE_GET_ID(this))) {
         ObjWarpstone_SetupAction(this, ObjWarpstone_ClosedIdle);
     } else {
         ObjWarpstone_SetupAction(this, ObjWarpstone_OpenedIdle);
@@ -106,7 +112,7 @@ s32 ObjWarpstone_BeginOpeningCutscene(ObjWarpstone* this, GlobalContext* globalC
 s32 ObjWarpstone_PlayOpeningCutscene(ObjWarpstone* this, GlobalContext* globalCtx) {
     if (this->openingCSTimer++ >= OBJ_WARPSTONE_TIMER_ACTIVATE_THRESHOLD) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
-        func_80143A10(GET_OWL_ID(this));
+        func_80143A10(OBJ_WARPSTONE_GET_ID(this));
         ObjWarpstone_SetupAction(this, ObjWarpstone_OpenedIdle);
     } else if (this->openingCSTimer < OBJ_WARPSTONE_TIMER_OPEN_THRESHOLD) {
         Math_StepToF(&this->dyna.actor.velocity.x, 0.01f, 0.001f);
@@ -140,7 +146,7 @@ void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx) {
                 globalCtx->msgCtx.unk11F22 = 0x4D;
                 globalCtx->msgCtx.unk120D6 = 0;
                 globalCtx->msgCtx.unk120D4 = 0;
-                gSaveContext.owlSaveLocation = GET_OWL_ID(this);
+                gSaveContext.owlSaveLocation = OBJ_WARPSTONE_GET_ID(this);
             } else {
                 func_801477B4(globalCtx);
             }

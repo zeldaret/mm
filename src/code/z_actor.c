@@ -1250,7 +1250,24 @@ void Gfx_DrawDListOpa(GlobalContext* globalCtx, Gfx* dlist) {
 // Gfx_DrawDListXlu
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE03C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE0B8.s")
+Actor* func_800BE0B8(GlobalContext* globalCtx, Actor* inActor, s16 arg2, u8 arg3, f32 arg4) {
+    Actor* actor = globalCtx->actorCtx.actorList[arg3].first;
+
+    while (actor != NULL) {
+        if (actor == inActor || ((arg2 != -1) && (arg2 != actor->id))) {
+            actor = actor->next;
+            continue;
+        }
+
+        if (Actor_DistanceBetweenActors(inActor, actor) <= arg4) {
+            return actor;
+        }
+
+        actor = actor->next;
+    }
+
+    return NULL;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE184.s")
 
