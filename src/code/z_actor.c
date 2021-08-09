@@ -1220,7 +1220,16 @@ void func_800BDC5C(SkelAnime* skelAnime, ActorAnimationEntry* animation, s32 ind
                          animation->mode, animation->morphFrames);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BDCF4.s")
+// Unused
+void func_800BDCF4(GlobalContext* globalCtx, s16* arg1, s16* arg2, s32 size) {
+    s32 frames = globalCtx->gameplayFrames;
+    s32 i;
+
+    for (i = 0; i < size; i++) {
+        arg1[i] = (0x814 + 50 * i) * frames;
+        arg2[i] = (0x940 + 50 * i) * frames;
+    }
+}
 
 void Actor_Noop(Actor* actor, GlobalContext* globalCtx) {
 }

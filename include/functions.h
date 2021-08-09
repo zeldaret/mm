@@ -911,7 +911,7 @@ void func_800BD9E0(GlobalContext* globalCtx, SkelAnime* skelAnime, OverrideLimbD
 void func_800BDAA0(GlobalContext* globalCtx, SkelAnime* skelAnime, OverrideLimbDraw2 overrideLimbDraw, PostLimbDraw2 postLimbDraw, Actor* actor, s16 alpha);
 // void func_800BDB6C(void);
 void func_800BDC5C(SkelAnime* skelAnime, ActorAnimationEntry animation[], s32 index);
-// void func_800BDCF4(void);
+void func_800BDCF4(GlobalContext* globalCtx, s16* arg1, s16* arg2, s32 size);
 void Actor_Noop(Actor* actor, GlobalContext* globalCtx);
 void Gfx_DrawDListOpa(GlobalContext* globalCtx, Gfx* dlist);
 void func_800BE03C(GlobalContext* globalCtx, Gfx* dlist);
