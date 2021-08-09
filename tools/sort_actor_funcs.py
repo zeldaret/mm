@@ -3,7 +3,7 @@
 from pathlib import Path
 import argparse
 
-parser = argparse.ArgumentParser()
+parser = argparse.ArgumentParser(description="Script to sort forward-declared functions and extern'd symbols in actors")
 parser.add_argument("file", type=str, help="Path to c file to sort")
 args = parser.parse_args()
 
@@ -40,28 +40,15 @@ externs = []
 extern_set = set()
 
 i = 0
-last_extern = 0
 while (not (lines[i].startswith("const") or lines[i].startswith("static") or lines[i].startswith("typedef"))):
     line = lines[i]
-    
-    if start_func_line == 0 and "(" in line and ");" in line and line.count(" ") == 4:
-        if "_Init(" not in line and "_Destroy(" not in line and "_Update(" not in line and "_Draw(" not in line:
-            start_func_line = i
-    elif line.startswith("extern"):
+    if line.startswith("extern"):
         extern_type = line.rsplit(" ",1)[0]
         extern_name = line.split(" ",2)[2][:-1]
         if extern_name not in extern_set:
             externs.append({"type":extern_type, "name":extern_name})
             extern_set.add(extern_name)
-        if end_func_line == 0:
-            end_func_line = i
-            start_extern_line = i
-        last_extern = i
     i += 1
-end_extern_line = last_extern + 1
-
-assert start_func_line > 0 and end_func_line > 0
-assert start_extern_line > 0 and end_extern_line > 0
 
 declares_needed = set()
 funcs_seen = set()
