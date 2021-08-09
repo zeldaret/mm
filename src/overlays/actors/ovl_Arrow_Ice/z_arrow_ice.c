@@ -1,5 +1,7 @@
 #include "z_arrow_ice.h"
 
+#include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
+
 #define FLAGS 0x02000010
 
 #define THIS ((ArrowIce*)thisx)
@@ -58,7 +60,32 @@ void ArrowIce_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     func_80115D5C(globalCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/func_809224DC.s")
+void func_809224DC(ArrowIce* this, GlobalContext* globalCtx) {
+    EnArrow* arrow;
+
+    arrow = (EnArrow*)this->actor.parent;
+    if ((arrow == NULL) || (arrow->actor.update == NULL)) {
+        Actor_MarkForDeath(&this->actor);
+        return;
+    }
+
+    if (this->unk_144 < 10) {
+        this->unk_144 += 1;
+    }
+    // copy position and rotation from arrow
+    this->actor.world.pos = arrow->actor.world.pos;
+    this->actor.shape.rot = arrow->actor.shape.rot;
+
+    func_800B9010(&this->actor, NA_SE_PL_ARROW_CHARGE_ICE - SFX_FLAG);
+
+    // if arrow has no parent, player has fired the arrow
+    if (arrow->actor.parent == NULL) {
+        this->unk_14C = this->actor.world.pos;
+        this->unk_144 = 10;
+        ArrowIce_SetupAction(this, func_809227F4);
+        this->unk_148 = 255;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/func_809225D0.s")
 

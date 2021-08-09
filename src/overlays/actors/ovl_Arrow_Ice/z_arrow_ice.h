@@ -12,7 +12,7 @@ typedef struct ArrowIce {
     /* 0x0144 */ s16 unk_144; // radius
     /* 0x0146 */ u16 unk_146; // timer
     /* 0x0148 */ u8 unk_148;  // alpha
-    /* 0x0149 */ UNK_TYPE1 unk_149[0xF];
+    /* 0x014C */ Vec3f unk_14C; // unkPos
     /* 0x0158 */ f32 unk_158;
     /* 0x015C */ f32 unk_15C;
     /* 0x0160 */ ArrowIceActionFunc actionFunc;
