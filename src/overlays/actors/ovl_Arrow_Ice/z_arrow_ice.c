@@ -87,7 +87,11 @@ void func_809224DC(ArrowIce* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/func_809225D0.s")
+void func_809225D0(Vec3f* unkPos, Vec3f* icePos, f32 scale) {
+    unkPos->x += ((icePos->x - unkPos->x) * scale);
+    unkPos->y += ((icePos->y - unkPos->y) * scale);
+    unkPos->z += ((icePos->z - unkPos->z) * scale);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/func_80922628.s")
 
@@ -109,7 +113,7 @@ void func_809227F4(ArrowIce* this, GlobalContext* globalCtx) {
     if (distanceScaled < 1.0f) {
         this->unk_158 = 1.0f;
     }
-    func_809225D0(&this->unk_14C, &this->actor.world.pos, 0x3D4CCCCD);
+    func_809225D0(&this->unk_14C, &this->actor.world.pos, 0.05f);
 
     if (arrow->unk_261 & 1) {
         Audio_PlayActorSound2(&this->actor, NA_SE_IT_EXPLOSION_ICE);
