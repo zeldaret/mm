@@ -52,7 +52,9 @@ void ArrowIce_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_15C = 0.0f;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/ArrowIce_Destroy.s")
+void ArrowIce_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    func_80115D5C(globalCtx);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/func_809224DC.s")
 
