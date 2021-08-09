@@ -243,12 +243,10 @@ void func_80BA57A8(EnRailgibud* this) {
     this->actionFunc = func_80BA57F8;
 }
 
-#ifdef NON_MATCHING
 void func_80BA57F8(EnRailgibud* this, GlobalContext* globalCtx) {
     Vec3f sp3C;
     s32 pad;
     s16 sp36;
-    EnRailgibud* parent;
 
     sp3C.x = this->unk_294[this->unk_298].x;
     sp3C.y = this->unk_294[this->unk_298].y;
@@ -262,25 +260,31 @@ void func_80BA57F8(EnRailgibud* this, GlobalContext* globalCtx) {
 
     Math_SmoothStepToS(&this->unk_3E2, 0, 1, 0x64, 0);
     Math_SmoothStepToS(&this->unk_3E8, 0, 1, 0x64, 0);
-    parent = (EnRailgibud*)this->actor.parent;
-    if ((parent == NULL) || (this->unk_3EC != 0)) {
+
+    if (this->actor.parent == NULL) {
+        if (this->unk_3EC != 0) {
+        } else {
+            return;
+        }
+    } else {
+        EnRailgibud* parent = (EnRailgibud*)this->actor.parent;
+
         if (parent->unk_3EC == 0) {
-            sp36 = Math_Vec3f_Yaw(&this->actor.world.pos, &sp3C);
-            if (Math_Vec3f_DistXZ(&this->actor.world.pos, &sp3C) > 60.0f) {
-                Math_SmoothStepToS(&this->actor.world.rot.y, sp36, 1, 0x190, 0xA);
-                this->actor.shape.rot.y = this->actor.world.rot.y;
-            } else if (this->unk_298 < (this->unk_29C - 1)) {
-                this->unk_298++;
-            } else {
-                this->unk_298 = 0;
-            }
-            Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+            return;
         }
     }
+
+    sp36 = Math_Vec3f_Yaw(&this->actor.world.pos, &sp3C);
+    if (Math_Vec3f_DistXZ(&this->actor.world.pos, &sp3C) > 60.0f) {
+        Math_SmoothStepToS(&this->actor.world.rot.y, sp36, 1, 0x190, 0xA);
+        this->actor.shape.rot.y = this->actor.world.rot.y;
+    } else if (this->unk_298 < (this->unk_29C - 1)) {
+        this->unk_298++;
+    } else {
+        this->unk_298 = 0;
+    }
+    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Railgibud/func_80BA57F8.s")
-#endif
 
 void func_80BA59F0(EnRailgibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, 9);
