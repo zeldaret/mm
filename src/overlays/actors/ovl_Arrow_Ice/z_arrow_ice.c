@@ -93,6 +93,14 @@ void func_809224DC(ArrowIce* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/func_809227F4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/ArrowIce_Update.s")
+void ArrowIce_Update(Actor* thisx, GlobalContext* globalCtx) {
+    ArrowIce* this = THIS;
+
+    if ((globalCtx->msgCtx.unk11F22 == 0xE) || (globalCtx->msgCtx.unk11F22 == 0x12)) {
+        Actor_MarkForDeath(&this->actor);
+    } else {
+        this->actionFunc(this, globalCtx);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/ArrowIce_Draw.s")
