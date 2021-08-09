@@ -195,7 +195,7 @@ void func_809438F8(EnDaiku* this, GlobalContext* globalCtx) {
         this->actor.textId = sTextIds[this->unk_28C];
     }
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, globalCtx)) {
         func_80943BC0(this);
         return;
     }

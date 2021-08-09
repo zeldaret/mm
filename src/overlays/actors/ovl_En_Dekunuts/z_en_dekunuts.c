@@ -747,7 +747,7 @@ void EnDekunuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (this->actor.colorFilterTimer != 0) {
         func_800AE5A0(globalCtx);
     }
-    func_800BDFC0(globalCtx, D_06001E50);
+    Gfx_DrawDListOpa(globalCtx, D_06001E50);
     func_800BE680(globalCtx, &this->actor, this->unk_21C, 8, this->unk_214, this->unk_218, this->unk_210,
                   this->unk_18E);
 }

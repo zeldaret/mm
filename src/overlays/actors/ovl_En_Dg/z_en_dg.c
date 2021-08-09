@@ -1095,7 +1095,7 @@ void func_8098BB10(EnDg* this, GlobalContext* globalCtx) {
 }
 
 void func_8098BBEC(EnDg* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, globalCtx)) {
         this->actor.flags &= ~0x10000;
         func_80989D38(this, globalCtx);
         this->actionFunc = func_8098BC54;
