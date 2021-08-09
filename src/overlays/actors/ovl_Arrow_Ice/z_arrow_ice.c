@@ -37,7 +37,9 @@ extern UNK_TYPE D_0E0002E0;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/D_80924200.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/ArrowIce_SetupAction.s")
+void ArrowIce_SetupAction(ArrowIce* this, ArrowIceActionFunc actionFunc) {
+    this->actionFunc = actionFunc;
+}
 
 void ArrowIce_Init(Actor* thisx, GlobalContext* globalCtx) {
     ArrowIce* this = THIS;
@@ -45,7 +47,7 @@ void ArrowIce_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->unk_144 = 0;
     this->unk_158 = 1.0f;
-    ArrowIce_SetupAction(this, &func_809224DC);
+    ArrowIce_SetupAction(this, func_809224DC);
     Actor_SetScale(&this->actor, 0.01f);
     this->unk_148 = 0x64;
     this->unk_146 = 0;
