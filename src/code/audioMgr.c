@@ -51,7 +51,7 @@ void AudioMgr_HandleRetrace(AudioMgr* audioMgr) {
                 osSyncPrintf("AUDIO SP TIMEOUT %08x %08x\n", audioMgr->rspTask, audioMgr->rspTask->task);
                 if (retryCount >= 0) {
                     retryCount--;
-                    func_8017703C(audioMgr->sched);
+                    Sched_SendAudioCancelMsg(audioMgr->sched);
                 } else {
                     osSyncPrintf("audioMgr.c:もうダメ！死ぬ！\n");
                     osDestroyThread(NULL);

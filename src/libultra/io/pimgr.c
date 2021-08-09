@@ -24,8 +24,8 @@ void osCreatePiManager(OSPri pri, OSMesgQueue* cmdQ, OSMesg* cmdBuf, s32 cmdMsgC
         __osPiDevMgr.cmdQueue = cmdQ;
         __osPiDevMgr.evtQueue = &D_8009E3D0;
         __osPiDevMgr.acsQueue = &__osPiAccessQueue;
-        __osPiDevMgr.dma = (s32(*)(void))osPiRawStartDma;
-        __osPiDevMgr.unk18 = (s32(*)(void))osEPiRawStartDma;
+        __osPiDevMgr.piDmaCallback = osPiRawStartDma;
+        __osPiDevMgr.epiDmaCallback = osEPiRawStartDma;
         osCreateThread(&D_8009D220, 0, __osDevMgrMain, (void*)&__osPiDevMgr, &piManagerStack[4096], pri);
         osStartThread(&D_8009D220);
         __osRestoreInt(savedMask);

@@ -712,7 +712,10 @@ void Fault_ProcessClients(void) {
         if (iter->callback) {
             Fault_FillScreenBlack();
             FaultDrawer_SetCharPad(-2, 0);
-            FaultDrawer_Printf("8CallBack (%d) %08x %08x %08x\n7", idx++, iter, iter->param0, iter->param1);
+            FaultDrawer_Printf("\x1A\x38"
+                               "CallBack (%d) %08x %08x %08x\n"
+                               "\x1A\x37",
+                               idx++, iter, iter->param0, iter->param1);
             FaultDrawer_SetCharPad(0, 0);
             iter->callback(iter->param0, iter->param1);
             Fault_WaitForInput();

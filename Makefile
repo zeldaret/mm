@@ -170,13 +170,13 @@ endif
 
 .PHONY: all uncompressed compressed clean assetclean distclean disasm init setup
 .DEFAULT_GOAL := uncompressed
-all: uncompressed compressed
+all: compressed
 
 $(ROM): $(ELF)
 	$(ELF2ROM) -cic 6105 $< $@
 
-$(ROMC): $(ROM)
-	python3 tools/z64compress_wrapper.py --mb 32 --matching --threads $(N_THREADS) $< $@ $(ELF) build/$(SPEC)
+$(ROMC): uncompressed
+	python3 tools/z64compress_wrapper.py --mb 32 --matching --threads $(N_THREADS) $(ROM) $@ $(ELF) build/$(SPEC)
 
 $(ELF): $(TEXTURE_FILES_OUT) $(OVERLAY_RELOC_FILES) $(O_FILES) build/ldscript.txt build/undefined_syms.txt
 	$(LD) -T build/undefined_syms.txt -T build/ldscript.txt --no-check-sections --accept-unknown-input-arch --emit-relocs -Map build/mm.map -o $@
@@ -244,7 +244,7 @@ build/data/%.o: data/%.s
 
 build/src/overlays/%.o: src/overlays/%.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-#	$(CC_CHECK) $<
+	$(CC_CHECK) $<
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 # TODO: `() || true` is currently necessary to suppress `Error 1 (ignored)` make warnings caused by `test`, but this will go away if 
 # 	the following is moved to a separate rule that is only run once when all the required objects have been compiled. 
@@ -253,18 +253,18 @@ build/src/overlays/%.o: src/overlays/%.c
 
 build/src/%.o: src/%.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-#	$(CC_CHECK) $<
+	$(CC_CHECK) $<
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 
 build/src/libultra/libc/ll.o: src/libultra/libc/ll.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-#	$(CC_CHECK) $<
+	$(CC_CHECK) $<
 	python3 tools/set_o32abi_bit.py $@
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 
 build/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-#	$(CC_CHECK) $<
+	$(CC_CHECK) $<
 	python3 tools/set_o32abi_bit.py $@
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 
