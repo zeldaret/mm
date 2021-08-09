@@ -15,7 +15,8 @@ void func_809227F4(ArrowIce* this, GlobalContext* globalCtx);
 
 void ArrowIce_SetupAction(ArrowIce* this, ArrowIceActionFunc actionFunc);
 
-#if 0
+#include "z_arrow_ice_gfx.c"
+
 const ActorInit Arrow_Ice_InitVars = {
     ACTOR_ARROW_ICE,
     ACTORCAT_ITEMACTION,
@@ -28,14 +29,9 @@ const ActorInit Arrow_Ice_InitVars = {
     (ActorFunc)ArrowIce_Draw,
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_809241F0[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_STOP),
 };
-
-#endif
-
-extern InitChainEntry D_809241F0[];
 
 extern UNK_TYPE D_0E0002E0;
 
@@ -43,7 +39,18 @@ extern UNK_TYPE D_0E0002E0;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/ArrowIce_SetupAction.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/ArrowIce_Init.s")
+void ArrowIce_Init(Actor* thisx, GlobalContext* globalCtx) {
+    ArrowIce* this = THIS;
+
+    Actor_ProcessInitChain(&this->actor, sInitChain);
+    this->unk_144 = 0;
+    this->unk_158 = 1.0f;
+    ArrowIce_SetupAction(this, &func_809224DC);
+    Actor_SetScale(&this->actor, 0.01f);
+    this->unk_148 = 0x64;
+    this->unk_146 = 0;
+    this->unk_15C = 0.0f;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/ArrowIce_Destroy.s")
 
