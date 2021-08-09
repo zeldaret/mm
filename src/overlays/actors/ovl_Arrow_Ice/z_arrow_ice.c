@@ -93,7 +93,57 @@ void func_809225D0(Vec3f* unkPos, Vec3f* icePos, f32 scale) {
     unkPos->z += ((icePos->z - unkPos->z) * scale);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/func_80922628.s")
+void func_80922628(ArrowIce* this, GlobalContext* globalCtx) {
+    f32 scale;
+    f32 offset;
+    u16 timer;
+
+    if (this->actor.projectedW < 50.0f) {
+        scale = 10.0f;
+    } else {
+        if (950.0f < this->actor.projectedW) {
+            scale = 310.0f;
+        } else {
+            scale = this->actor.projectedW;
+            scale = ((scale - 50.0f) * (1.0f / 3.0f)) + 10.0f;
+        }
+    }
+
+    timer = this->unk_146;
+    if (timer != 0) {
+        this->unk_146 -= 1;
+
+        if (this->unk_146 >= 8) {
+            offset = ((this->unk_146 - 8) * (1.0f / 24.0f));
+            offset = SQ(offset);
+            this->unk_144 = (((1.0f - offset) * scale) + 10.0f);
+            this->unk_158 += ((2.0f - this->unk_158) * 0.1f);
+            if (this->unk_146 < 16) {
+                if (1) {}
+                this->unk_148 = ((this->unk_146 * 0x23) - 0x118);
+            }
+        }
+    }
+
+    if (this->unk_146 >= 9) {
+        if (this->unk_15C < 1.0f) {
+            this->unk_15C += 0.25f;
+        }
+    } else {
+        if (this->unk_15C > 0.0f) {
+            this->unk_15C -= 0.125f;
+        }
+    }
+
+    if (this->unk_146 < 8) {
+        this->unk_148 = 0;
+    }
+
+    if (this->unk_146 == 0) {
+        this->unk_146 = 255;
+        Actor_MarkForDeath(&this->actor);
+    }
+}
 
 void func_809227F4(ArrowIce* this, GlobalContext* globalCtx) {
     EnArrow* arrow;
