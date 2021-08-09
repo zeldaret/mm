@@ -3329,7 +3329,7 @@ void func_80174AA0(ListAlloc* alloc);
 // void func_80174AB4(void);
 // void func_80174B20(void);
 void func_80174BA0(ListAlloc* alloc);
-void main(void* arg);
+void Main(void* arg);
 // u32 Padmgr_GetControllerBitmask(void);
 // void func_80174F24(void);
 // void func_80174F44(void);
