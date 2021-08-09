@@ -1272,7 +1272,7 @@ beginseg
     name "ovl_En_Encount2"
     compress
     include "build/src/overlays/actors/ovl_En_Encount2/z_en_encount2.o"
-    include "build/data/ovl_En_Encount2/ovl_En_Encount2.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Encount2/ovl_En_Encount2_reloc.o"
 endseg
 
 beginseg
