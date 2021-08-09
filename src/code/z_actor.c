@@ -26,7 +26,6 @@ void ActorShape_Init(ActorShape* actorShape, f32 yOffset, ActorShadowFunc shadow
     actorShape->shadowAlpha = 255;
 }
 
-#ifdef NON_MATCHING
 void ActorShadow_Draw(Actor* actor, Lights* lights, GlobalContext* globalCtx, Gfx* dlist, Color_RGBA8* color) {
     if (actor->floorPoly != NULL) {
         f32 dy = actor->world.pos.y - actor->floorHeight;
@@ -44,6 +43,9 @@ void ActorShadow_Draw(Actor* actor, Lights* lights, GlobalContext* globalCtx, Gf
 
             dy = CLAMP(dy, 0.0f, 150.0f);
             shadowScale = 1.0f - (dy * 0.0028571428f);
+            if ((dy * 0.0028571428f) > 1.0f) {
+                shadowScale = 0.0f;
+            }
 
             if (color != NULL) {
                 gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, color->r, color->g, color->b,
@@ -55,13 +57,12 @@ void ActorShadow_Draw(Actor* actor, Lights* lights, GlobalContext* globalCtx, Gf
             func_800C0094(actor->floorPoly, actor->world.pos.x, actor->floorHeight, actor->world.pos.z, &mtx);
             SysMatrix_SetCurrentState(&mtx);
 
-            if (dlist != D_04076BC0) {
-                Matrix_RotateY((f32)actor->shape.rot.y * (M_PI / 32768), MTXMODE_APPLY);
+            if ((dlist != D_04076BC0) || (actor->scale.x != actor->scale.z)) {
+                Matrix_RotateY(actor->shape.rot.y, MTXMODE_APPLY);
             }
 
-            shadowScale = 1.0f - (dy * 0.0028571428f);
             shadowScale *= actor->shape.shadowScale;
-            Matrix_Scale(shadowScale * actor->scale.x, 1.0f, shadowScale * actor->scale.z, MTXMODE_APPLY);
+            Matrix_Scale(actor->scale.x * shadowScale, 1.0f, actor->scale.z * shadowScale, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
             gSPDisplayList(POLY_OPA_DISP++, dlist);
@@ -70,9 +71,6 @@ void ActorShadow_Draw(Actor* actor, Lights* lights, GlobalContext* globalCtx, Gf
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/ActorShadow_Draw.s")
-#endif
 
 /* ActorShadow_DrawCircle */
 void func_800B3FC0(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
@@ -107,20 +105,22 @@ void func_800B40B8(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
 }
 
 /* ActorShadow_DrawFoot */
-#ifdef NON_MATCHING
 void func_800B40E0(GlobalContext* globalCtx, Light* light, MtxF* arg2, s32 arg3, f32 arg4, f32 arg5, f32 arg6) {
-    s32 pad1;
+    s32 pad;
     s16 sp58;
-    s32 pad2[2];
+    f32 dir2;
+    f32 dir0;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0,
-                    (u32)(((arg3 * 1.3e-05f) > 1.0f ? 1.0f : (arg3 * 1.3e-05f)) * arg4) & 0xFF);
+                    (u8)(CLAMP_MAX(arg3 * 1.3e-05f, 1.0f) * arg4));
 
-    sp58 = Math_FAtan2F(light->l.dir[0], light->l.dir[2]);
-    arg6 *= (4.5f - (light->l.dir[1] * 0.035f));
-    arg6 = (arg6 < 1.0f) ? 1.0f : arg6;
+    dir0 = light->l.dir[0];
+    dir2 = light->l.dir[2];
+    sp58 = Math_FAtan2F(dir2, dir0);
+    arg6 *= 4.5f - light->l.dir[1] * 0.035f;
+    arg6 = CLAMP_MIN(arg6, 1.0f);
     SysMatrix_SetCurrentState(arg2);
     Matrix_RotateY(sp58, MTXMODE_APPLY);
     Matrix_Scale(arg5, 1.0f, arg5 * arg6, MTXMODE_APPLY);
@@ -130,9 +130,6 @@ void func_800B40E0(GlobalContext* globalCtx, Light* light, MtxF* arg2, s32 arg3,
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B40E0.s")
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B42F8.s")
 
