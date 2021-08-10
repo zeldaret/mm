@@ -792,8 +792,6 @@ void Fault_SetOptionsFromController3(void) {
     }
 }
 #else
-//const char D_80098A44[] = "GRAPH PC=%08x RA=%08x STACK=%08x\n";
-//const char D_80098A68[] = "GRAPH PC %08x RA %08x SP %08x";
 #pragma GLOBAL_ASM("asm/non_matchings/boot/fault/Fault_SetOptionsFromController3.s")
 #endif
 
