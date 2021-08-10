@@ -2490,8 +2490,7 @@ beginseg
     name "ovl_En_Syateki_Man"
     compress
     include "build/src/overlays/actors/ovl_En_Syateki_Man/z_en_syateki_man.o"
-    include "build/data/ovl_En_Syateki_Man/ovl_En_Syateki_Man.data.o"
-    include "build/data/ovl_En_Syateki_Man/ovl_En_Syateki_Man.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Syateki_Man/ovl_En_Syateki_Man_reloc.o"
 endseg
 
 beginseg
