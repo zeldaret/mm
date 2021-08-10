@@ -8,8 +8,10 @@ void EnHoll_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnHoll_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHoll_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHoll_Draw(Actor* thisx, GlobalContext* globalCtx);
+
 void EnHoll_SetTypeAndOpacity(EnHoll* this);
-void EnHoll_SetPlayerSide(GlobalContext* globalCtx, EnHoll* this, Vec3f* vec3fP);
+void EnHoll_SetPlayerSide(GlobalContext* globalCtx, EnHoll* this, Vec3f* rotatedPlayerPos);
+void func_80899ACC(GlobalContext* globalCtx);
 void func_80899B88(EnHoll* this, GlobalContext* globalCtx);
 void func_8089A238(EnHoll* this, GlobalContext* globalCtx);
 void func_80899F30(EnHoll* this, GlobalContext* globalCtx);
@@ -109,7 +111,83 @@ void EnHoll_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Holl/func_80899ACC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Holl/func_80899B88.s")
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Holl/func_80899B88.s")
+
+void func_80899B88(EnHoll *this, GlobalContext *globalCtx) {
+    s32 enHollId;
+    Vec3f rotatedPlayerPos;
+    f32 rotatedPlayerZ;
+    s32 tempCalc;
+    s32 tempCalc2;
+    f32 sp30;
+    f32 sp2C;
+    s32 pad[2];
+
+    if (this->type == EN_HOLL_TYPE_DEFAULT) {
+	    tempCalc = ((globalCtx->actorCtx.unkC & 0x2AA) >> 1) | (globalCtx->actorCtx.unkC & 0x155);
+	    tempCalc2 = D_801AED48[this->actor.params & 7];
+        if ((tempCalc & tempCalc2) == 0) {
+            Actor_MarkForDeath(&this->actor);
+            return;
+        }
+        if (this == D_8089A5B8) {
+            func_800B9010(&this->actor, 0x211DU);
+        }
+        goto block_5;
+    }
+block_5:
+    if ((globalCtx->sceneLoadFlag != 0) || (globalCtx->unk_18B4A != 0)) {
+        this->opacity = EN_HOLL_OPAQUE;
+        return;
+    }
+    sp30 = -50.0f;
+    sp2C = 150.0f;
+
+    EnHoll_SetPlayerSide(globalCtx, this, &rotatedPlayerPos);
+    rotatedPlayerZ = fabsf(rotatedPlayerPos.z);
+    if (globalCtx->sceneNum == 0x13) {
+        sp30 = -90.0f;
+        sp2C = 280.0f;
+    }
+    if ((sp30 < rotatedPlayerPos.y) && (rotatedPlayerPos.y < 200.0f) && (fabsf(rotatedPlayerPos.x) < sp2C) && (rotatedPlayerZ < D_8089A5DC)) {
+	enHollId = EN_HOLL_GET_ID(this);
+        if (D_8089A5E0 < rotatedPlayerZ) {
+            if ((globalCtx->roomCtx.prevRoom.num >= 0) && (globalCtx->roomCtx.unk31 == 0)) {
+                this->actor.room = globalCtx->doorCtx.transitionActorList[enHollId].sides[this->playerSide].room;
+                if (globalCtx->roomCtx.prevRoom.num == this->actor.room) {
+                    func_80899ACC(globalCtx);
+                }
+                func_8012EBF8(globalCtx, &globalCtx->roomCtx);
+                return;
+            }
+            // Duplicate return node #36. Try simplifying control flow for better match
+            return;
+        }
+        if (EN_HOLL_IS_SCENE_CHANGER(this)) {
+            globalCtx->nextEntranceIndex = globalCtx->setupExitList[this->actor.params & 0x7F];
+            gSaveContext.unk_3DBB = 1U;
+            Scene_SetExitFade(globalCtx);
+            globalCtx->sceneLoadFlag = 0x14;
+            globalCtx->unk_1878C(globalCtx);
+            return;
+        }
+        this->actor.room = globalCtx->doorCtx.transitionActorList[enHollId].sides[this->playerSide ^ 1].room;
+        if (globalCtx->roomCtx.prevRoom.num < 0) {
+            Room_StartRoomTransition(globalCtx, &globalCtx->roomCtx, this->actor.room);
+            if (this == D_8089A5B8) {
+                D_8089A5B8 = NULL;
+            }
+            // Duplicate return node #36. Try simplifying control flow for better match
+            return;
+        }
+            this->opacity = CLAMP((s32) ((rotatedPlayerZ - D_8089A5E8) * (255.0f / (D_8089A5E4 - D_8089A5E8))), EN_HOLL_TRANSPARENT, EN_HOLL_OPAQUE);
+        if (globalCtx->roomCtx.currRoom.num != this->actor.room) {
+            func_80899ACC(globalCtx);
+        }
+    } else if ((this->type == EN_HOLL_TYPE_DEFAULT) && (globalCtx->sceneNum == 0x64) && (D_8089A5B8 == 0)) {
+        D_8089A5B8 = (void *) this;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Holl/func_80899F30.s")
 

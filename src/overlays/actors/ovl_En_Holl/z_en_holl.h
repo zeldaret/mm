@@ -38,6 +38,7 @@ typedef struct EnHoll {
 #define EN_HOLL_GET_TYPE(this) ((this->actor.params >> 7) & 7)
 #define EN_HOLL_IS_VISIBLE(this) ((this->type == EN_HOLL_TYPE_DEFAULT) || (this->type == EN_HOLL_TYPE_SCENE_CHANGER))
 #define EN_HOLL_IS_SCENE_CHANGER(this) (this->type == EN_HOLL_TYPE_SCENE_CHANGER)
+#define EN_HOLL_GET_ID(this) ((this->actor.params & 0xFFFF) >> 10)
 
 extern const ActorInit En_Holl_InitVars;
 
