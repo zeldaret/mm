@@ -11,8 +11,8 @@ void EnHoll_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void EnHoll_SetTypeAndOpacity(EnHoll* this);
 void EnHoll_SetPlayerSide(GlobalContext* globalCtx, EnHoll* this, Vec3f* rotatedPlayerPos);
-void func_80899ACC(GlobalContext* globalCtx);
-void func_80899B88(EnHoll* this, GlobalContext* globalCtx);
+void EnHoll_ChangeRooms(GlobalContext* globalCtx);
+void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx);
 void func_8089A238(EnHoll* this, GlobalContext* globalCtx);
 void func_80899F30(EnHoll* this, GlobalContext* globalCtx);
 void func_8089A0C0(EnHoll* this, GlobalContext* globalCtx);
@@ -39,8 +39,8 @@ static s32 D_8089A590[] = { 0xD7000000,  0xFFFFFFFF, 0xFCFFFFFF, 0xFFFDF638, 0x0
 
 static UNK_PTR D_8089A5B8 = 0;
 
-static EnHollActionFunc D_8089A5BC[] /* sEnHollActionFuncs */ = { func_80899B88, func_8089A238, func_80899F30,
-                                                                  func_8089A0C0, func_80899B88 };
+static EnHollActionFunc D_8089A5BC[] /* sEnHollActionFuncs */ = { EnHoll_VisibleIdle, func_8089A238, func_80899F30,
+                                                                  func_8089A0C0, EnHoll_VisibleIdle };
 
 static InitChainEntry D_8089A5D0[] /* sInitChain[] */ = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
@@ -101,9 +101,14 @@ void EnHoll_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Holl/func_80899ACC.s")
+void EnHoll_ChangeRooms(GlobalContext *globalCtx) {
+    Room oldCurrRoom = globalCtx->roomCtx.currRoom;
+    globalCtx->roomCtx.currRoom = globalCtx->roomCtx.prevRoom;
+    globalCtx->roomCtx.prevRoom = oldCurrRoom;
+    globalCtx->roomCtx.activeMemPage ^= 1;
+}
 
-void func_80899B88(EnHoll* this, GlobalContext* globalCtx) {
+void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx) {
     s32 pad;
     Vec3f rotatedPlayerPos;
     f32 rotatedPlayerZ;
@@ -138,7 +143,7 @@ void func_80899B88(EnHoll* this, GlobalContext* globalCtx) {
                 if ((globalCtx->roomCtx.prevRoom.num >= 0) && (globalCtx->roomCtx.unk31 == 0)) {
                     this->actor.room = globalCtx->doorCtx.transitionActorList[enHollId].sides[this->playerSide].room;
                     if (globalCtx->roomCtx.prevRoom.num == this->actor.room) {
-                        func_80899ACC(globalCtx);
+                        EnHoll_ChangeRooms(globalCtx);
                     }
                     func_8012EBF8(globalCtx, &globalCtx->roomCtx);
                 }
@@ -159,7 +164,7 @@ void func_80899B88(EnHoll* this, GlobalContext* globalCtx) {
                     s32 valueToClamp = (rotatedPlayerZ - D_8089A5E8) * (EN_HOLL_OPAQUE / (D_8089A5E4 - D_8089A5E8));
                     this->opacity = CLAMP(valueToClamp, EN_HOLL_TRANSPARENT, EN_HOLL_OPAQUE);
                     if (globalCtx->roomCtx.currRoom.num != this->actor.room) {
-                        func_80899ACC(globalCtx);
+                        EnHoll_ChangeRooms(globalCtx);
                     }
                 }
             }
