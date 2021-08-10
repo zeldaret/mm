@@ -6,4 +6,10 @@
 
 #include "unk.h"
 
+#include "ultra64/hardware.h"
+#include "ultra64/message.h"
+#include "ultra64/sptask.h"
+#include "ultra64/thread.h"
+#include "ultra64/rsp.h"
+
 #endif
