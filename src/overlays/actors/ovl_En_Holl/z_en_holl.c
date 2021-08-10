@@ -103,39 +103,37 @@ void EnHoll_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Holl/func_80899ACC.s")
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Holl/func_80899B88.s")
-
 void func_80899B88(EnHoll* this, GlobalContext* globalCtx) {
     s32 pad;
     Vec3f rotatedPlayerPos;
     f32 rotatedPlayerZ;
 
     if (this->type == EN_HOLL_TYPE_DEFAULT) {
-        s32 tempCalc = ((globalCtx->actorCtx.unkC & 0x2AA) >> 1) | (globalCtx->actorCtx.unkC & 0x155);
-        s32 tempCalc2 = D_801AED48[this->actor.params & 7];
-        if ((tempCalc & tempCalc2) == 0) {
+        u32 actorCtxBitmask = (ACTOR_CONTEXT_UNKC_ODD_10BITS(globalCtx) >> 1) | ACTOR_CONTEXT_UNKC_EVEN_10BITS(globalCtx);
+        u32 zActorBitmask = D_801AED48[EN_HOLL_GET_Z_ACTOR_BITMASK_INDEX(this)];
+        if ((actorCtxBitmask & zActorBitmask) == 0) {
             Actor_MarkForDeath(&this->actor);
             return;
         }
         if (this == D_8089A5B8) {
-            func_800B9010(&this->actor, 0x211DU);
+            func_800B9010(&this->actor, NA_SE_EV_INVISIBLE_MONKEY - SFX_FLAG);
         }
     }
     if ((globalCtx->sceneLoadFlag != 0) || (globalCtx->unk_18B4A != 0)) {
         this->opacity = EN_HOLL_OPAQUE;
     } else {
-        f32 sp30 = -50.0f;
-        f32 sp2C = 150.0f;
+        f32 enHollBottom = EN_HOLL_BOTTOM_DEFAULT;
+        f32 enHollWidth = EN_HOLL_WIDTH_DEFAULT;
 
         EnHoll_SetPlayerSide(globalCtx, this, &rotatedPlayerPos);
         rotatedPlayerZ = fabsf(rotatedPlayerPos.z);
-        if (globalCtx->sceneNum == 0x13) {
-            sp30 = -90.0f;
-            sp2C = 280.0f;
+        if (globalCtx->sceneNum == SCENE_IKANA) {
+            enHollBottom = EN_HOLL_BOTTOM_IKANA;
+            enHollWidth = EN_HOLL_WIDTH_IKANA;
         }
-        if ((sp30 < rotatedPlayerPos.y) && (rotatedPlayerPos.y < 200.0f) && (fabsf(rotatedPlayerPos.x) < sp2C) &&
+        if ((enHollBottom < rotatedPlayerPos.y) && (rotatedPlayerPos.y < EN_HOLL_HEIGHT) && (fabsf(rotatedPlayerPos.x) < enHollWidth) &&
             (rotatedPlayerZ < D_8089A5DC)) {
-            s32 enHollId = EN_HOLL_GET_ID(this);
+            u32 enHollId = EN_HOLL_GET_ID(this);
             if (D_8089A5E0 < rotatedPlayerZ) {
                 if ((globalCtx->roomCtx.prevRoom.num >= 0) && (globalCtx->roomCtx.unk31 == 0)) {
                     this->actor.room = globalCtx->doorCtx.transitionActorList[enHollId].sides[this->playerSide].room;
@@ -143,34 +141,30 @@ void func_80899B88(EnHoll* this, GlobalContext* globalCtx) {
                         func_80899ACC(globalCtx);
                     }
                     func_8012EBF8(globalCtx, &globalCtx->roomCtx);
-                    return;
                 }
-                // Duplicate return node #36. Try simplifying control flow for better match
-                return;
-            }
-            if (EN_HOLL_IS_SCENE_CHANGER(this)) {
-                globalCtx->nextEntranceIndex = globalCtx->setupExitList[this->actor.params & 0x7F];
-                gSaveContext.unk_3DBB = 1U;
+	    } else if (EN_HOLL_IS_SCENE_CHANGER(this)) {
+                globalCtx->nextEntranceIndex = globalCtx->setupExitList[EN_HOLL_GET_EXIT_LIST_INDEX(this)];
+                gSaveContext.unk_3DBB = 1;
                 Scene_SetExitFade(globalCtx);
                 globalCtx->sceneLoadFlag = 0x14;
                 globalCtx->unk_1878C(globalCtx);
-                return;
-            }
-            this->actor.room = globalCtx->doorCtx.transitionActorList[enHollId].sides[this->playerSide ^ 1].room;
-            if (globalCtx->roomCtx.prevRoom.num < 0) {
-                Room_StartRoomTransition(globalCtx, &globalCtx->roomCtx, this->actor.room);
-                if (this == D_8089A5B8) {
-                    D_8089A5B8 = NULL;
-                }
             } else {
-                s32 valueToClamp = (rotatedPlayerZ - D_8089A5E8) * (255.0f / (D_8089A5E4 - D_8089A5E8));
-                this->opacity = CLAMP(valueToClamp, EN_HOLL_TRANSPARENT, EN_HOLL_OPAQUE);
-                if (globalCtx->roomCtx.currRoom.num != this->actor.room) {
-                    func_80899ACC(globalCtx);
+                this->actor.room = globalCtx->doorCtx.transitionActorList[enHollId].sides[this->playerSide ^ 1].room;
+                if (globalCtx->roomCtx.prevRoom.num < 0) {
+                    Room_StartRoomTransition(globalCtx, &globalCtx->roomCtx, this->actor.room);
+                    if (this == D_8089A5B8) {
+                        D_8089A5B8 = NULL;
+                    }
+                } else {
+                    s32 valueToClamp = (rotatedPlayerZ - D_8089A5E8) * (EN_HOLL_OPAQUE / (D_8089A5E4 - D_8089A5E8));
+                    this->opacity = CLAMP(valueToClamp, EN_HOLL_TRANSPARENT, EN_HOLL_OPAQUE);
+                    if (globalCtx->roomCtx.currRoom.num != this->actor.room) {
+                        func_80899ACC(globalCtx);
+                    }
                 }
             }
-        } else if ((this->type == EN_HOLL_TYPE_DEFAULT) && (globalCtx->sceneNum == 0x64) && (D_8089A5B8 == 0)) {
-            D_8089A5B8 = (void*)this;
+        } else if ((this->type == EN_HOLL_TYPE_DEFAULT) && (globalCtx->sceneNum == SCENE_26SARUNOMORI) && (D_8089A5B8 == 0)) {
+            D_8089A5B8 = this;
         }
     }
 }
