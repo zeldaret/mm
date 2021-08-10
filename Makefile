@@ -170,13 +170,13 @@ endif
 
 .PHONY: all uncompressed compressed clean assetclean distclean disasm init setup
 .DEFAULT_GOAL := uncompressed
-all: uncompressed compressed
+all: compressed
 
 $(ROM): $(ELF)
 	$(ELF2ROM) -cic 6105 $< $@
 
-$(ROMC): $(ROM)
-	python3 tools/z64compress_wrapper.py --mb 32 --matching --threads $(N_THREADS) $< $@ $(ELF) build/$(SPEC)
+$(ROMC): uncompressed
+	python3 tools/z64compress_wrapper.py --mb 32 --matching --threads $(N_THREADS) $(ROM) $@ $(ELF) build/$(SPEC)
 
 $(ELF): $(TEXTURE_FILES_OUT) $(OVERLAY_RELOC_FILES) $(O_FILES) build/ldscript.txt build/undefined_syms.txt
 	$(LD) -T build/undefined_syms.txt -T build/ldscript.txt --no-check-sections --accept-unknown-input-arch --emit-relocs -Map build/mm.map -o $@

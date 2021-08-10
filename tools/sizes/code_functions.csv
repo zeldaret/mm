@@ -1145,7 +1145,7 @@ asm/non_matchings/code/code_800F07C0/func_800F0F28.s,func_800F0F28,0x800F0F28,0x
 asm/non_matchings/code/code_800F07C0/func_800F0FF0.s,func_800F0FF0,0x800F0FF0,0x2F
 asm/non_matchings/code/code_800F07C0/func_800F10AC.s,func_800F10AC,0x800F10AC,0x20
 asm/non_matchings/code/code_800F07C0/func_800F112C.s,func_800F112C,0x800F112C,0x49
-asm/non_matchings/code/z_face_reaction/func_800F1250.s,func_800F1250,0x800F1250,0x20
+asm/non_matchings/code/z_face_reaction/Text_GetFaceReaction.s,Text_GetFaceReaction,0x800F1250,0x20
 asm/non_matchings/code/code_800F12D0/func_800F12D0.s,func_800F12D0,0x800F12D0,0xD
 asm/non_matchings/code/code_800F12D0/func_800F1304.s,func_800F1304,0x800F1304,0x1C
 asm/non_matchings/code/code_800F12D0/func_800F1374.s,func_800F1374,0x800F1374,0x1D
