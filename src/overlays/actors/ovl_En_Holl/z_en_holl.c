@@ -16,7 +16,7 @@ void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx);
 void func_8089A238(EnHoll* this, GlobalContext* globalCtx);
 void func_80899F30(EnHoll* this, GlobalContext* globalCtx);
 void func_8089A0C0(EnHoll* this, GlobalContext* globalCtx);
-void func_8089A330(EnHoll* this, GlobalContext* globalCtx);
+void EnHoll_SetAlwaysZero(EnHoll* this, GlobalContext* globalCtx);
 
 const ActorInit En_Holl_InitVars = {
     ACTOR_EN_HOLL,
@@ -101,7 +101,7 @@ void EnHoll_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnHoll_ChangeRooms(GlobalContext *globalCtx) {
+void EnHoll_ChangeRooms(GlobalContext* globalCtx) {
     Room oldCurrRoom = globalCtx->roomCtx.currRoom;
     globalCtx->roomCtx.currRoom = globalCtx->roomCtx.prevRoom;
     globalCtx->roomCtx.prevRoom = oldCurrRoom;
@@ -114,7 +114,8 @@ void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx) {
     f32 rotatedPlayerZ;
 
     if (this->type == EN_HOLL_TYPE_DEFAULT) {
-        u32 actorCtxBitmask = (ACTOR_CONTEXT_UNKC_ODD_10BITS(globalCtx) >> 1) | ACTOR_CONTEXT_UNKC_EVEN_10BITS(globalCtx);
+        u32 actorCtxBitmask =
+            (ACTOR_CONTEXT_UNKC_ODD_10BITS(globalCtx) >> 1) | ACTOR_CONTEXT_UNKC_EVEN_10BITS(globalCtx);
         u32 zActorBitmask = D_801AED48[EN_HOLL_GET_Z_ACTOR_BITMASK_INDEX(this)];
         if ((actorCtxBitmask & zActorBitmask) == 0) {
             Actor_MarkForDeath(&this->actor);
@@ -136,8 +137,8 @@ void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx) {
             enHollBottom = EN_HOLL_BOTTOM_IKANA;
             enHollWidth = EN_HOLL_WIDTH_IKANA;
         }
-        if ((enHollBottom < rotatedPlayerPos.y) && (rotatedPlayerPos.y < EN_HOLL_HEIGHT) && (fabsf(rotatedPlayerPos.x) < enHollWidth) &&
-            (rotatedPlayerZ < D_8089A5DC)) {
+        if ((enHollBottom < rotatedPlayerPos.y) && (rotatedPlayerPos.y < EN_HOLL_HEIGHT) &&
+            (fabsf(rotatedPlayerPos.x) < enHollWidth) && (rotatedPlayerZ < D_8089A5DC)) {
             u32 enHollId = EN_HOLL_GET_ID(this);
             if (D_8089A5E0 < rotatedPlayerZ) {
                 if ((globalCtx->roomCtx.prevRoom.num >= 0) && (globalCtx->roomCtx.unk31 == 0)) {
@@ -147,7 +148,7 @@ void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx) {
                     }
                     func_8012EBF8(globalCtx, &globalCtx->roomCtx);
                 }
-	    } else if (EN_HOLL_IS_SCENE_CHANGER(this)) {
+            } else if (EN_HOLL_IS_SCENE_CHANGER(this)) {
                 globalCtx->nextEntranceIndex = globalCtx->setupExitList[EN_HOLL_GET_EXIT_LIST_INDEX(this)];
                 gSaveContext.unk_3DBB = 1;
                 Scene_SetExitFade(globalCtx);
@@ -168,7 +169,8 @@ void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx) {
                     }
                 }
             }
-        } else if ((this->type == EN_HOLL_TYPE_DEFAULT) && (globalCtx->sceneNum == SCENE_26SARUNOMORI) && (D_8089A5B8 == 0)) {
+        } else if ((this->type == EN_HOLL_TYPE_DEFAULT) && (globalCtx->sceneNum == SCENE_26SARUNOMORI) &&
+                   (D_8089A5B8 == 0)) {
             D_8089A5B8 = this;
         }
     }
@@ -180,7 +182,15 @@ void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Holl/func_8089A238.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Holl/func_8089A330.s")
+void EnHoll_SetAlwaysZero(EnHoll* this, GlobalContext* globalCtx) {
+    if (globalCtx->roomCtx.unk31 == 0) {
+        func_8012EBF8(globalCtx, &globalCtx->roomCtx);
+        if (globalCtx->unk_18878 == 0) {
+            this->alwaysZero = 0;
+        }
+        EnHoll_SetTypeAndOpacity(this);
+    }
+}
 
 void EnHoll_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnHoll* this = THIS;
