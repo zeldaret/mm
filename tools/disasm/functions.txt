@@ -4086,7 +4086,7 @@
     0x801AA610:("func_801AA610",),
     0x801AA624:("func_801AA624",),
     0x801AA68C:("func_801AA68C",),
-    0x801AAAA0:("nop_801AAAA0",),
+    0x801AAAA0:("func_801AAAA0",),
     0x80800000:("Title_UpdateCounters",),
     0x8080009C:("Title_RenderView",),
     0x80800134:("Title_Draw",),

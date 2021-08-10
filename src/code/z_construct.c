@@ -1,4 +1,4 @@
 #include "global.h"
 
-void nop_801AAAA0(GlobalContext* globalCtx) {
+void func_801AAAA0(GlobalContext* globalCtx) {
 }

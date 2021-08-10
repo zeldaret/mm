@@ -4079,6 +4079,6 @@ s32 func_801A8A50(s32 param1);
 void func_801AA610(GlobalContext* globalCtx);
 void func_801AA624(GlobalContext* globalCtx);
 // void func_801AA68C(UNK_TYPE4 ctxt);
-void nop_801AAAA0(GlobalContext* globalCtx);
+void func_801AAAA0(GlobalContext* globalCtx);
 
 #endif
