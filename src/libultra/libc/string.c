@@ -1,4 +1,4 @@
-#include "string.h"
+#include "global.h"
 
 const char* strchr(const char* s, int c) {
     const unsigned char ch = c;

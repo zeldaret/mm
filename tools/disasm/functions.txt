@@ -374,7 +374,7 @@
     0x8008FAB0:("osJamMesg",),
     0x8008FC00:("osSetThreadPri",),
     0x8008FCE0:("osGetThreadPri",),
-    0x8008FD00:("osEPiRawReadIo",),
+    0x8008FD00:("__osEPiRawReadIo",),
     0x8008FE60:("osViSwapBuffer",),
     0x8008FEB0:("guPositionF",),
     0x80090058:("guPosition",),

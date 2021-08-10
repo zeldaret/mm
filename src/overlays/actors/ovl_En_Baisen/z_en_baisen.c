@@ -268,7 +268,7 @@ void EnBaisen_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnBaisen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                              Actor* thisx) {
+                              void* thisx) {
     EnBaisen* this = THIS;
 
     if (limbIndex == 9) {

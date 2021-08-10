@@ -4386,12 +4386,12 @@ void func_80B4D9B4(Actor* thisx, GlobalContext* globalCtx) {
     func_80B4D7B8(globalCtx);
 }
 
-s32 func_80B4D9D8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
+s32 func_80B4D9D8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx,
                   Gfx** gfx) {
     return 0;
 }
 
-void func_80B4D9F4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+void func_80B4D9F4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx, Gfx** gfx) {
     EnInvadepoh* this = THIS;
 
     if ((limbIndex == 12) && (this->alienBeamAlpha != 0)) {
@@ -4506,7 +4506,7 @@ void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(spCC);
 }
 
-s32 func_80B4E120(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 func_80B4E120(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
     if (limbIndex == 5) {
         EnInvadepoh* this = THIS;
         rot->x -= this->actor.shape.rot.x;
@@ -4530,7 +4530,7 @@ void func_80B4E1B0(Actor* thisx, GlobalContext* globalCtx) {
                      NULL, &this->actor);
 }
 
-s32 func_80B4E200(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 func_80B4E200(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
     if (limbIndex == 14) {
         EnInvadepoh* this = THIS; // both of these needed to match
         rot->x += this->behaviorInfo.unk20.y;
@@ -4544,7 +4544,7 @@ s32 func_80B4E200(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return 0;
 }
 
-void func_80B4E2AC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void func_80B4E2AC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
     EnInvadepoh* this = THIS;
 
     if (limbIndex == 19) {
@@ -4596,7 +4596,7 @@ void func_80B4E3F0(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-s32 func_80B4E5B0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 func_80B4E5B0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
     if ((limbIndex == 5) || (limbIndex == 6) || (limbIndex == 7)) {
         EnInvadepoh* this = THIS;
         rot->x += this->behaviorInfo.unk20.x;
@@ -4607,9 +4607,11 @@ s32 func_80B4E5B0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return 0;
 }
 
-void func_80B4E61C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void func_80B4E61C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+    EnInvadepoh* this = THIS;
+
     if (limbIndex == 5) {
-        Matrix_GetStateTranslationAndScaledY(20.0f, &thisx->focus.pos);
+        Matrix_GetStateTranslationAndScaledY(20.0f, &this->actor.focus.pos);
     }
 }
 
@@ -4624,7 +4626,7 @@ void func_80B4E660(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-s32 func_80B4E6E4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 func_80B4E6E4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
     if (limbIndex == 9) {
         EnInvadepoh* this = THIS; // both of these needed to match
         rot->x += this->behaviorInfo.unk20.y;
@@ -4637,9 +4639,11 @@ s32 func_80B4E6E4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return 0;
 }
 
-void func_80B4E784(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void func_80B4E784(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+    EnInvadepoh* this = THIS;
+
     if (limbIndex == 9) {
-        Matrix_GetStateTranslation(&thisx->focus.pos);
+        Matrix_GetStateTranslation(&this->actor.focus.pos);
     }
 }
 

@@ -1050,7 +1050,7 @@ void EnMa4_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80ABDD9C(this, globalCtx);
 }
 
-s32 EnMa4_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnMa4_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
     EnMa4* this = THIS;
     Vec3s sp4;
 
@@ -1068,7 +1068,7 @@ s32 EnMa4_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     return false;
 }
 
-void EnMa4_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnMa4_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
     EnMa4* this = THIS;
     Vec3f sp28 = { 800.0f, 0.0f, 0.0f };
 

@@ -1454,7 +1454,7 @@ void EnMaYto_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnMaYto_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                             Actor* thisx) {
+                             void* thisx) {
     EnMaYto* this = THIS;
     Vec3s sp4;
 
@@ -1477,7 +1477,7 @@ s32 EnMaYto_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     return 0;
 }
 
-void EnMaYto_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnMaYto_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
     EnMaYto* this = THIS;
 
     if (limbIndex == MA2_LIMB_HEAD) {

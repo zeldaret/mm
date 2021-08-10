@@ -1415,7 +1415,7 @@ void EnDinofos_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 }
 
-s32 func_8089DC4C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
+s32 func_8089DC4C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx,
                   Gfx** gfx) {
     EnDinofos* this = THIS;
 
@@ -1426,7 +1426,7 @@ s32 func_8089DC4C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return 0;
 }
 
-void func_8089DC84(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+void func_8089DC84(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx, Gfx** gfx) {
     static Vec3f D_8089E38C = { 400.0f, -3600.0f, 0.0f };
     static Vec3f D_8089E398 = { 300.0f, 500.0f, 0.0f };
     static Vec3f D_8089E3A4 = { 700.0f, 400.0f, 0.0f };

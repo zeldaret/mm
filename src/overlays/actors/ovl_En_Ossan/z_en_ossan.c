@@ -1638,7 +1638,7 @@ void EnOssan_DrawStickDirectionPrompts(GlobalContext* globalCtx, EnOssan* this) 
 }
 
 s32 EnOssan_OverrideLimbDrawCuriosityShopMan(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos,
-                                             Vec3s* rot, Actor* thisx) {
+                                             Vec3s* rot, void* thisx) {
     EnOssan* this = THIS;
 
     if (limbIndex == 16) {
@@ -1648,7 +1648,7 @@ s32 EnOssan_OverrideLimbDrawCuriosityShopMan(GlobalContext* globalCtx, s32 limbI
 }
 
 s32 EnOssan_OverrideLimbDrawPartTimeWorker(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                           Actor* thisx) {
+                                           void* thisx) {
     EnOssan* this = THIS;
 
     if (limbIndex == 15) {
@@ -1659,7 +1659,7 @@ s32 EnOssan_OverrideLimbDrawPartTimeWorker(GlobalContext* globalCtx, s32 limbInd
 }
 
 void EnOssan_PostLimbDrawCuriosityShopMan(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot,
-                                          Actor* thisx) {
+                                          void* thisx) {
     EnOssan* this = THIS;
 
     if (limbIndex == 1 || limbIndex == 9 || limbIndex == 12) {
@@ -1669,7 +1669,7 @@ void EnOssan_PostLimbDrawCuriosityShopMan(GlobalContext* globalCtx, s32 limbInde
 }
 
 void EnOssan_PostLimbDrawPartTimeWorker(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot,
-                                        Actor* thisx) {
+                                        void* thisx) {
     static Vec3f sPartTimeWorkerFocusOffset = { 800.0f, 500.0f, 0.0f };
     EnOssan* this = THIS;
 

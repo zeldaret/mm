@@ -371,7 +371,7 @@ asm/non_matchings/boot/guMtxIdent/guMtxIdent.s,guMtxIdent,0x8008FA60,0x14
 asm/non_matchings/boot/jammesg/osJamMesg.s,osJamMesg,0x8008FAB0,0x54
 asm/non_matchings/boot/setthreadpri/osSetThreadPri.s,osSetThreadPri,0x8008FC00,0x38
 asm/non_matchings/boot/getthreadpri/osGetThreadPri.s,osGetThreadPri,0x8008FCE0,0x8
-asm/non_matchings/boot/epirawread/osEPiRawReadIo.s,osEPiRawReadIo,0x8008FD00,0x58
+asm/non_matchings/boot/epirawread/__osEPiRawReadIo.s,__osEPiRawReadIo,0x8008FD00,0x58
 asm/non_matchings/boot/viswapbuf/osViSwapBuffer.s,osViSwapBuffer,0x8008FE60,0x14
 asm/non_matchings/boot/position/guPositionF.s,guPositionF,0x8008FEB0,0x6A
 asm/non_matchings/boot/position/guPosition.s,guPosition,0x80090058,0x1A

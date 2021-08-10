@@ -1,4 +1,4 @@
-/*
+    /*
  * File: z_en_dnp.c
  * Overlay: ovl_En_Dnp
  * Description: Deku Princess
@@ -456,10 +456,10 @@ s32 func_80B3D974(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4, s32 ar
     return 1;
 }
 
-void func_80B3DA88(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void func_80B3DA88(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
 }
 
-void func_80B3DAA0(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void func_80B3DAA0(GlobalContext* globalCtx, s32 limbIndex, void* thisx) {
     EnDnp* this = THIS;
     s32 phi_v1 = 1;
     s32 phi_v0;

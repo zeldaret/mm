@@ -407,7 +407,7 @@ typedef void(*func_ptr)(void);
 
 typedef void(*osCreateThread_func)(void*);
 
-typedef void* (*PrintCallback)(void*, const char*, u32);
+typedef void* (*PrintCallback)(void*, const char*, size_t);
 
 typedef enum {
     SLOWLY_CALLBACK_NO_ARGS,
