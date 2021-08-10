@@ -9,7 +9,9 @@ void EnAnd_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnAnd_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnAnd_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+void func_80C18C50(EnAnd* this, GlobalContext* globalCtx);
+
+#if 0
 const ActorInit En_And_InitVars = {
     ACTOR_EN_AND,
     ACTORCAT_NPC,
@@ -21,20 +23,23 @@ const ActorInit En_And_InitVars = {
     (ActorFunc)EnAnd_Update,
     (ActorFunc)EnAnd_Draw,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_And_0x80C18B90/func_80C18B90.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_And_0x80C18B90/func_80C18BD8.asm")
+extern UNK_TYPE D_0600B380;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_And_0x80C18B90/func_80C18C50.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_And/func_80C18B90.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_And_0x80C18B90/EnAnd_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_And/func_80C18BD8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_And_0x80C18B90/EnAnd_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_And/func_80C18C50.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_And_0x80C18B90/EnAnd_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_And/EnAnd_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_And_0x80C18B90/func_80C18ED0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_And/EnAnd_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_And_0x80C18B90/EnAnd_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_And/EnAnd_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_And/func_80C18ED0.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_And/EnAnd_Draw.s")

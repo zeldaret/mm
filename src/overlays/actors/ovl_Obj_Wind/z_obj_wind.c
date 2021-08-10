@@ -9,7 +9,7 @@ void ObjWind_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjWind_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjWind_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Obj_Wind_InitVars = {
     ACTOR_OBJ_WIND,
     ACTORCAT_ITEMACTION,
@@ -21,12 +21,22 @@ const ActorInit Obj_Wind_InitVars = {
     (ActorFunc)ObjWind_Update,
     (ActorFunc)ObjWind_Draw,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Wind_0x80B23ED0/ObjWind_Init.asm")
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80B24480[] = {
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 4000, ICHAIN_STOP),
+};
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Wind_0x80B23ED0/ObjWind_Destroy.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Wind_0x80B23ED0/ObjWind_Update.asm")
+extern InitChainEntry D_80B24480[];
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Wind_0x80B23ED0/ObjWind_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Wind/ObjWind_Init.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Wind/ObjWind_Destroy.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Wind/ObjWind_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Wind/ObjWind_Draw.s")

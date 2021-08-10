@@ -1,7 +1,7 @@
 #ifndef Z_EN_IN_H
 #define Z_EN_IN_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnIn;
 
@@ -16,7 +16,7 @@ typedef enum {
 } EnInType;
 
 #define ENIN_GET_TYPE(thisx) ((thisx)->params & 0x1FF)
-#define ENIN_GET_WALKING_FLAG(thisx) (((thisx)->params & 0x7E00) >> 9) // Only used with ENIN_UNK_TYPE
+#define ENIN_GET_PATH(thisx) (((thisx)->params & 0x7E00) >> 9) // Only used with ENIN_UNK_TYPE
 
 typedef struct EnIn {
     /* 0x000 */ Actor actor;
@@ -28,7 +28,7 @@ typedef struct EnIn {
     /* 0x238 */ char unk238[0x4];
     /* 0x23C */ u8 unk23C;
     /* 0x23D */ u8 unk23D;
-    /* 0x240 */ u8 *unk240;
+    /* 0x240 */ Path* path;
     /* 0x244 */ s16 unk244;
     /* 0x248 */ Vec3f unk248;
     /* 0x254 */ Vec3f unk254;

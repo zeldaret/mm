@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 void Room_nop8012D510(GlobalContext* globalCtx, Room* room, UNK_PTR param_3, UNK_TYPE1 param_4) {
 }
@@ -44,13 +43,13 @@ void Room_DrawType0Mesh(GlobalContext* globalCtx, Room* room, u32 flags) {
     }
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_room/Room_DrawType2Mesh.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_room/Room_DrawType2Mesh.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_room/func_8012DEE8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_room/func_8012DEE8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_room/func_8012E254.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_room/func_8012E254.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_room/func_8012E32C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_room/func_8012E32C.s")
 
 void Room_DrawType1Mesh(GlobalContext* globalCtx, Room* room, u32 flags) {
     RoomMeshType1* mesh = &room->mesh->type1;
@@ -59,7 +58,7 @@ void Room_DrawType1Mesh(GlobalContext* globalCtx, Room* room, u32 flags) {
     } else if (mesh->format == 2) {
         func_8012E32C(globalCtx, room, flags);
     } else {
-        assert_fail(D_801DDFAC, 0x3c5);
+        __assert("../z_room.c", 0x3c5);
     }
 }
 
@@ -74,7 +73,7 @@ void Room_Init(GlobalContext* globalCtx, RoomContext* roomCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_room/Room_AllocateAndLoad.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_room/Room_AllocateAndLoad.s")
 
 #ifdef NON_MATCHING
 s32 Room_StartRoomTransition(GlobalContext* globalCtx, RoomContext* roomCtx, s32 index) {
@@ -87,13 +86,13 @@ s32 Room_StartRoomTransition(GlobalContext* globalCtx, RoomContext* roomCtx, s32
         roomCtx->currRoom.segment = NULL;
         roomCtx->unk31 = 1;
 
-        size = globalCtx->roomAddrs[index].vromEnd - globalCtx->roomAddrs[index].vromStart;
+        size = globalCtx->roomList[index].vromEnd - globalCtx->roomList[index].vromStart;
         roomCtx->activeRoomVram =
-            (void*)((s32)roomCtx->roomMemPages[roomCtx->activeMemPage] - (size + 8) * roomCtx->activeMemPage + 8) &
-            0xfffffff0;
+            (void*)(((s32)roomCtx->roomMemPages[roomCtx->activeMemPage] - (size + 8) * roomCtx->activeMemPage + 8) &
+                    0xfffffff0);
 
         osCreateMesgQueue(&roomCtx->loadQueue, roomCtx->loadMsg, 1);
-        DmaMgr_SendRequestImpl(&roomCtx->dmaRequest, roomCtx->activeRoomVram, globalCtx->roomAddrs[index].vromStart,
+        DmaMgr_SendRequestImpl(&roomCtx->dmaRequest, roomCtx->activeRoomVram, globalCtx->roomList[index].vromStart,
                                size, 0, &roomCtx->loadQueue, NULL);
         roomCtx->activeMemPage ^= 1;
 
@@ -103,7 +102,7 @@ s32 Room_StartRoomTransition(GlobalContext* globalCtx, RoomContext* roomCtx, s32
     return 0;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_room/Room_StartRoomTransition.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_room/Room_StartRoomTransition.s")
 #endif
 
 s32 Room_HandleLoadCallbacks(GlobalContext* globalCtx, RoomContext* roomCtx) {
@@ -120,8 +119,8 @@ s32 Room_HandleLoadCallbacks(GlobalContext* globalCtx, RoomContext* roomCtx) {
 
             if (((globalCtx->sceneNum != SCENE_IKANA) || (roomCtx->currRoom.num != 1)) &&
                 (globalCtx->sceneNum != SCENE_IKNINSIDE)) {
-                globalCtx->kankyoContext.unkC3 = 0xff;
-                globalCtx->kankyoContext.unkE0 = 0;
+                globalCtx->envCtx.unk_C3 = 0xff;
+                globalCtx->envCtx.unk_E0 = 0;
             }
             func_800FEAB0();
             if (!func_800FE4B8(globalCtx)) {
@@ -153,5 +152,5 @@ void func_8012EBF8(GlobalContext* globalCtx, RoomContext* roomCtx) {
         func_8010A33C(globalCtx, roomCtx->currRoom.num);
         func_8010A2DC(globalCtx);
     }
-    func_801A3CD8(globalCtx->roomContext.currRoom.echo);
+    func_801A3CD8(globalCtx->roomCtx.currRoom.echo);
 }

@@ -7,7 +7,10 @@
 void ObjDemo_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjDemo_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+void func_80983678(ObjDemo* this, GlobalContext* globalCtx);
+void func_80983704(ObjDemo* this, GlobalContext* globalCtx);
+
+#if 0
 const ActorInit Obj_Demo_InitVars = {
     ACTOR_OBJ_DEMO,
     ACTORCAT_PROP,
@@ -15,18 +18,19 @@ const ActorInit Obj_Demo_InitVars = {
     GAMEPLAY_KEEP,
     sizeof(ObjDemo),
     (ActorFunc)ObjDemo_Init,
-    (ActorFunc)func_800BDFB0,
+    (ActorFunc)Actor_Noop,
     (ActorFunc)ObjDemo_Update,
     (ActorFunc)NULL,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Demo_0x80983520/ObjDemo_Init.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Demo_0x80983520/func_80983634.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Demo/ObjDemo_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Demo_0x80983520/func_80983678.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Demo/func_80983634.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Demo_0x80983520/func_80983704.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Demo/func_80983678.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Demo_0x80983520/ObjDemo_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Demo/func_80983704.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Demo/ObjDemo_Update.s")

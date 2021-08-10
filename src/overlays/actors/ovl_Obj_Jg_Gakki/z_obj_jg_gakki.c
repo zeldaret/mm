@@ -9,7 +9,7 @@ void ObjJgGakki_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjJgGakki_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjJgGakki_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Obj_Jg_Gakki_InitVars = {
     ACTOR_OBJ_JG_GAKKI,
     ACTORCAT_PROP,
@@ -21,12 +21,15 @@ const ActorInit Obj_Jg_Gakki_InitVars = {
     (ActorFunc)ObjJgGakki_Update,
     (ActorFunc)ObjJgGakki_Draw,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Jg_Gakki_0x80B961E0/ObjJgGakki_Init.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Jg_Gakki_0x80B961E0/ObjJgGakki_Destroy.asm")
+extern UNK_TYPE D_0601B1E8;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Jg_Gakki_0x80B961E0/ObjJgGakki_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jg_Gakki/ObjJgGakki_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Jg_Gakki_0x80B961E0/ObjJgGakki_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jg_Gakki/ObjJgGakki_Destroy.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jg_Gakki/ObjJgGakki_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Jg_Gakki/ObjJgGakki_Draw.s")

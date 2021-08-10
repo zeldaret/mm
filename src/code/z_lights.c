@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 void Lights_PointSetInfo(LightInfo* info, s16 x, s16 y, s16 z, u8 r, u8 g, u8 b, s16 radius, s32 type) {
     info->type = type;
@@ -132,7 +131,7 @@ void Lights_BindPoint(Lights* lights, LightParams* params, GlobalContext* global
         posF.x = params->point.x;
         posF.y = params->point.y;
         posF.z = params->point.z;
-        SkinMatrix_Vec3fMtxFMultXYZ(&globalCtx->unk187B0, &posF, &adjustedPos);
+        SkinMatrix_Vec3fMtxFMultXYZ(&globalCtx->projectionMatrix, &posF, &adjustedPos);
         if ((adjustedPos.z > -radiusF) && (600 + radiusF > adjustedPos.z) && (400 > fabsf(adjustedPos.x) - radiusF) &&
             (400 > fabsf(adjustedPos.y) - radiusF)) {
             light = Lights_FindSlot(lights);

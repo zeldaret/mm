@@ -1,7 +1,7 @@
 #ifndef Z_OBJ_GRASS_UNIT_H
 #define Z_OBJ_GRASS_UNIT_H
 
-#include <global.h>
+#include "global.h"
 
 struct ObjGrassUnit;
 

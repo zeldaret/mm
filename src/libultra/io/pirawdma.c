@@ -1,7 +1,6 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
-s32 osPiRawStartDma(s32 direction, u32 devAddr, void* dramAddr, u32 size) {
+s32 __osPiRawStartDma(s32 direction, u32 devAddr, void* dramAddr, u32 size) {
     register int stat;
 
     stat = *(vu32*)0xA4600010;

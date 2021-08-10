@@ -1,6 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
-#include "PR/hardware.h"
+#include "global.h"
+
 
 #ifdef NON_MATCHING
 // rodata issues
@@ -72,20 +71,20 @@ label:
             switch (ioMesg->hdr.type) {
                 case 11:
                     osRecvMesg(devMgr->acsQueue, &sp6C, OS_MESG_BLOCK);
-                    ret = devMgr->dma(OS_READ, ioMesg->devAddr, ioMesg->dramAddr, ioMesg->size);
+                    ret = devMgr->piDmaCallback(OS_READ, ioMesg->devAddr, ioMesg->dramAddr, ioMesg->size);
                     break;
                 case 12:
                     osRecvMesg(devMgr->acsQueue, &sp6C, OS_MESG_BLOCK);
-                    ret = devMgr->dma(OS_WRITE, ioMesg->devAddr, ioMesg->dramAddr, ioMesg->size);
+                    ret = devMgr->piDmaCallback(OS_WRITE, ioMesg->devAddr, ioMesg->dramAddr, ioMesg->size);
                     break;
                 case 15:
                     osRecvMesg(devMgr->acsQueue, &sp6C, OS_MESG_BLOCK);
-                    ret = devMgr->edma(ioMesg->piHandle, OS_READ, ioMesg->devAddr, ioMesg->dramAddr,
+                    ret = devMgr->epiDmaCallback(ioMesg->piHandle, OS_READ, ioMesg->devAddr, ioMesg->dramAddr,
                                                   ioMesg->size);
                     break;
                 case 16:
                     osRecvMesg(devMgr->acsQueue, &sp6C, OS_MESG_BLOCK);
-                    ret = devMgr->edma(ioMesg->piHandle, OS_WRITE, ioMesg->devAddr, ioMesg->dramAddr,
+                    ret = devMgr->epiDmaCallback(ioMesg->piHandle, OS_WRITE, ioMesg->devAddr, ioMesg->dramAddr,
                                                   ioMesg->size);
                     break;
                 case 10:
@@ -106,5 +105,5 @@ label:
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/devmgr/__osDevMgrMain.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/boot/devmgr/__osDevMgrMain.s")
 #endif

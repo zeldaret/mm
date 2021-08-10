@@ -6,7 +6,7 @@
 
 void ObjGrassUnit_Init(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Obj_Grass_Unit_InitVars = {
     ACTOR_OBJ_GRASS_UNIT,
     ACTORCAT_BG,
@@ -14,18 +14,19 @@ const ActorInit Obj_Grass_Unit_InitVars = {
     GAMEPLAY_FIELD_KEEP,
     sizeof(ObjGrassUnit),
     (ActorFunc)ObjGrassUnit_Init,
-    (ActorFunc)func_800BDFB0,
-    (ActorFunc)func_800BDFB0,
+    (ActorFunc)Actor_Noop,
+    (ActorFunc)Actor_Noop,
     (ActorFunc)NULL,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Unit_0x809ABDE0/func_809ABDE0.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Unit_0x809ABDE0/func_809ABE54.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Grass_Unit/func_809ABDE0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Unit_0x809ABDE0/func_809ABEC4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Grass_Unit/func_809ABE54.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Unit_0x809ABDE0/func_809ABF38.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Grass_Unit/func_809ABEC4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Grass_Unit_0x809ABDE0/ObjGrassUnit_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Grass_Unit/func_809ABF38.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Grass_Unit/ObjGrassUnit_Init.s")

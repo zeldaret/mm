@@ -53,18 +53,21 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
+extern Gfx D_06001100[];
+extern AnimatedMaterial D_06001228[];
+
 void BgIkanaRay_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgIkanaRay* this = THIS;
     ColliderCylinder* collision = &this->collision;
 
-    Actor_ProcessInitChain(&this->base, sInitChain);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitCylinder(globalCtx, collision);
-    Collider_SetCylinder(globalCtx, collision, &this->base, &sCylinderInit);
-    Collider_UpdateCylinder(&this->base, &this->collision);
+    Collider_SetCylinder(globalCtx, collision, &this->actor, &sCylinderInit);
+    Collider_UpdateCylinder(&this->actor, &this->collision);
 
-    this->animatedTextures = (AnimatedMaterial*)Lib_SegmentedToVirtual(object_ikana_obj_001228);
+    this->animatedTextures = (AnimatedMaterial*)Lib_SegmentedToVirtual(D_06001228);
 
-    if (Flags_GetSwitch(globalCtx, this->base.params & 0x7F) != 0) {
+    if (Flags_GetSwitch(globalCtx, this->actor.params & 0x7F)) {
         BgIkanaRay_SetActivated(this);
     } else {
         BgIkanaRay_SetDeactivated(this);
@@ -79,25 +82,25 @@ void BgIkanaRay_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgIkanaRay_SetDeactivated(BgIkanaRay* this) {
-    this->base.draw = NULL;
-    this->base.flags |= 0x10;
+    this->actor.draw = NULL;
+    this->actor.flags |= 0x10;
     this->update = BgIkanaRay_UpdateCheckForActivation;
 }
 
 void BgIkanaRay_UpdateCheckForActivation(BgIkanaRay* this, GlobalContext* globalCtx) {
-    if (Flags_GetSwitch(globalCtx, this->base.params & 0x7F) != 0) {
+    if (Flags_GetSwitch(globalCtx, this->actor.params & 0x7F)) {
         BgIkanaRay_SetActivated(this);
     }
 }
 
 void BgIkanaRay_SetActivated(BgIkanaRay* this) {
-    this->base.draw = BgIkanaRay_Draw;
-    this->base.flags &= ~0x10;
+    this->actor.draw = BgIkanaRay_Draw;
+    this->actor.flags &= ~0x10;
     this->update = BgIkanaRay_UpdateActivated;
 }
 
 void BgIkanaRay_UpdateActivated(BgIkanaRay* this, GlobalContext* globalCtx) {
-    CollisionCheck_SetAT(globalCtx, &globalCtx->colCheckCtx, &this->collision.base);
+    CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collision.base);
 }
 
 void BgIkanaRay_Update(Actor* thisx, GlobalContext* globalCtx) {
@@ -110,5 +113,5 @@ void BgIkanaRay_Draw(Actor* thisx, GlobalContext* globalCtx) {
     BgIkanaRay* this = THIS;
 
     AnimatedMat_Draw(globalCtx, this->animatedTextures);
-    func_800BE03C(globalCtx, object_ikana_obj_001100);
+    func_800BE03C(globalCtx, D_06001100);
 }

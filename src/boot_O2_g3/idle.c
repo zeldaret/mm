@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 u8 D_80096B20 = 1;
 vu8 gViConfigUseDefault = 1;
@@ -35,8 +34,8 @@ void Idle_InitMemory(void) {
     void* memEnd = (void*)(0x80000000 + osMemSize);
 
     Idle_ClearMemory((void*)0x80000400, &gFramebuffer1);
-    Idle_ClearMemory(&D_80025D00, (int*)&boot_text_start);
-    Idle_ClearMemory(&code_bss_end, memEnd);
+    Idle_ClearMemory(&D_80025D00, (int*)&bootproc);
+    Idle_ClearMemory(&gGfxSPTaskYieldBuffer, memEnd);
 }
 
 #ifdef NON_MATCHING
@@ -52,7 +51,7 @@ void Idle_InitCodeAndMemory(void) {
     oldSize = sDmaMgrDmaBuffSize;
     sDmaMgrDmaBuffSize = 0;
 
-    DmaMgr_SendRequestImpl(&dmaReq, (u32)&code_text_start, (u32)_codeSegmentRomStart,
+    DmaMgr_SendRequestImpl(&dmaReq, (u32)_codeSegmentStart, (u32)_codeSegmentRomStart,
                            (u32)_codeSegmentRomEnd - (u32)_codeSegmentRomStart, 0, &queue, 0);
     Idle_InitScreen();
     Idle_InitMemory();
@@ -60,10 +59,10 @@ void Idle_InitCodeAndMemory(void) {
 
     sDmaMgrDmaBuffSize = oldSize;
 
-    Idle_ClearMemory(&code_bss_start, &code_bss_end);
+    Idle_ClearMemory(_codeSegmentBssStart, _codeSegmentBssEnd);
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/idle/Idle_InitCodeAndMemory.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/boot/idle/Idle_InitCodeAndMemory.s")
 #endif
 
 void Main_ThreadEntry(void* arg) {
@@ -71,7 +70,7 @@ void Main_ThreadEntry(void* arg) {
     IrqMgr_Init(&gIrqMgr, &sIrqMgrStackInfo, Z_PRIORITY_IRQMGR, 1);
     DmaMgr_Start();
     Idle_InitCodeAndMemory();
-    main(arg);
+    Main(arg);
     DmaMgr_Stop();
 }
 

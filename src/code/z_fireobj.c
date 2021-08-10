@@ -1,28 +1,27 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_fireobj/FireObj_InitWithParams.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_fireobj/FireObj_InitWithParams.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_fireobj/FireObj_SetState.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_fireobj/FireObj_SetState.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_fireobj/FireObj_SetPosition.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_fireobj/FireObj_SetPosition.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_fireobj/FireObj_StepSize.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_fireobj/FireObj_StepSize.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_fireobj/FireObj_UpdateStateTransitions.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_fireobj/FireObj_UpdateStateTransitions.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_fireobj/FireObj_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_fireobj/FireObj_Draw.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_fireobj/FireObj_InitLight.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_fireobj/FireObj_InitLight.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_fireobj/FireObj_FiniLight.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_fireobj/FireObj_FiniLight.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_fireobj/FireObj_UpdateLight.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_fireobj/FireObj_UpdateLight.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_fireobj/FireObj_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_fireobj/FireObj_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_fireobj/FireObj_Fini.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_fireobj/FireObj_Fini.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_fireobj/FireObj_SetState2.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_fireobj/FireObj_SetState2.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_fireobj/FireObj_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_fireobj/FireObj_Update.s")

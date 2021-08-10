@@ -1,13 +1,16 @@
 #ifndef Z_EN_BAT_H
 #define Z_EN_BAT_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnBat;
 
+typedef void (*EnBatActionFunc)(struct EnBat* this, GlobalContext* globalCtx);
+
 typedef struct EnBat {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x98];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ EnBatActionFunc actionFunc;
+    /* 0x0148 */ char unk_144[0x94];
 } EnBat; // size = 0x1DC
 
 extern const ActorInit En_Bat_InitVars;

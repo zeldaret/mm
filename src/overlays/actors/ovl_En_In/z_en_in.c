@@ -1,6 +1,6 @@
 /*
  * File z_en_in.c
- * Overlay: ovl_en_in
+ * Overlay: ovl_En_In
  * Description: Gorman Bros
  */
 
@@ -141,13 +141,41 @@ static ColliderJntSphInit sJntSphInit = {
     sJntSphElementsInit,
 };
 
-CollisionCheckInfoInit2 sColChkInfoInit2 = {
-    0, 0, 0, 0, MASS_HEAVY,
-};
+static CollisionCheckInfoInit2 sColChkInfoInit2 = { 0, 0, 0, 0, MASS_HEAVY };
 
 static DamageTable sDamageTable = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    /* Deku Nut       */ DMG_ENTRY(0, 0x0),
+    /* Deku Stick     */ DMG_ENTRY(0, 0x0),
+    /* Horse trample  */ DMG_ENTRY(0, 0x0),
+    /* Explosives     */ DMG_ENTRY(0, 0x0),
+    /* Zora boomerang */ DMG_ENTRY(0, 0x0),
+    /* Normal arrow   */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
+    /* Hookshot       */ DMG_ENTRY(0, 0x0),
+    /* Goron punch    */ DMG_ENTRY(0, 0x0),
+    /* Sword          */ DMG_ENTRY(0, 0x0),
+    /* Goron pound    */ DMG_ENTRY(0, 0x0),
+    /* Fire arrow     */ DMG_ENTRY(0, 0x0),
+    /* Ice arrow      */ DMG_ENTRY(0, 0x0),
+    /* Light arrow    */ DMG_ENTRY(0, 0x0),
+    /* Goron spikes   */ DMG_ENTRY(0, 0x0),
+    /* Deku spin      */ DMG_ENTRY(0, 0x0),
+    /* Deku bubble    */ DMG_ENTRY(0, 0x0),
+    /* Deku launch    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x0),
+    /* Zora barrier   */ DMG_ENTRY(0, 0x0),
+    /* Normal shield  */ DMG_ENTRY(0, 0x0),
+    /* Light ray      */ DMG_ENTRY(0, 0x0),
+    /* Thrown object  */ DMG_ENTRY(0, 0x0),
+    /* Zora punch     */ DMG_ENTRY(0, 0x0),
+    /* Spin attack    */ DMG_ENTRY(0, 0x0),
+    /* Sword beam     */ DMG_ENTRY(0, 0x0),
+    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
+    /* Unblockable    */ DMG_ENTRY(0, 0x0),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
+    /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
 static ActorAnimationEntryS sAnimations[] = {
@@ -211,26 +239,26 @@ void func_808F32A0(EnIn* this, GlobalContext* globalCtx) {
     this->colliderCylinder.dim.pos.y = this->actor.world.pos.y;
     this->colliderCylinder.dim.pos.z = this->actor.world.pos.z;
     if (this->unk23D == 0) {
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colCheckCtx, &this->colliderCylinder.base);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->colliderCylinder.base);
     }
 }
 
 s32 func_808F3310(EnIn* this, GlobalContext* globalCtx) {
-    if (this->colliderCylinder.base.acFlags & 2) {
-        this->colliderCylinder.base.acFlags &= ~2;
+    if (this->colliderCylinder.base.acFlags & AC_HIT) {
+        this->colliderCylinder.base.acFlags &= ~AC_HIT;
     }
     return 0;
 }
 
 s32 func_808F3334(EnIn* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
 
-    if (this->colliderJntSph.base.atFlags & 2) {
-        this->colliderJntSph.base.atFlags &= ~2;
-        if (this->colliderJntSph.base.atFlags & 4) {
+    if (this->colliderJntSph.base.atFlags & AT_HIT) {
+        this->colliderJntSph.base.atFlags &= ~AT_HIT;
+        if (this->colliderJntSph.base.atFlags & AT_BOUNCED) {
             return 0;
         }
-        Audio_PlayActorSound2(&player->base, 0x83E);
+        Audio_PlayActorSound2(&player->actor, 0x83E);
         func_800B8D98(globalCtx, &this->actor, 3.0f, this->actor.yawTowardsPlayer, 6.0f);
     }
     return 1;
@@ -247,16 +275,16 @@ s32 func_808F33B8(void) {
 }
 
 void func_808F3414(EnIn* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     Vec3f sp30;
 
     if (this->unk23D == 0) {
         this->unk494 = SkelAnime_Update(&this->skelAnime);
     }
     if (func_8013D5E8(this->actor.shape.rot.y, 0x2710, this->actor.yawTowardsPlayer)) {
-        sp30.x = player->base.world.pos.x;
+        sp30.x = player->actor.world.pos.x;
         sp30.y = player->bodyPartsPos[7].y + 3.0f;
-        sp30.z = player->base.world.pos.z;
+        sp30.z = player->actor.world.pos.z;
         func_8013D2E0(&sp30, &this->actor.focus, &this->actor.shape, &this->unk352, &this->unk358, &this->unk35E,
                       D_808F6C0C);
     } else {
@@ -290,10 +318,10 @@ void EnIn_DoNothing(EnIn* this, GlobalContext* globalCtx) {
 }
 
 void func_808F3618(EnIn* this, GlobalContext* globalCtx) {
-    if (ENIN_GET_WALKING_FLAG(&this->actor) != 0x3F) {
+    if (ENIN_GET_PATH(&this->actor) != 0x3F) {
         func_808F30B0(&this->skelAnime, 9);
     }
-    if (ENIN_GET_WALKING_FLAG(&this->actor) != 0x3F) {
+    if (ENIN_GET_PATH(&this->actor) != 0x3F) {
         this->actionFunc = func_808F3690;
     } else {
         this->actionFunc = EnIn_DoNothing;
@@ -306,9 +334,9 @@ void func_808F3690(EnIn* this, GlobalContext* globalCtx) {
 
     Math_SmoothStepToF(&this->actor.speedXZ, 1.0f, 0.4f, 1000.0f, 0.0f);
     sp36 = this->actor.speedXZ * 400.0f;
-    if (func_8013D68C(this->unk240, this->unk244, &sp28) && func_8013D768(&this->actor, &sp28, sp36)) {
+    if (func_8013D68C(this->path, this->unk244, &sp28) && func_8013D768(&this->actor, &sp28, sp36)) {
         this->unk244++;
-        if (this->unk244 >= *this->unk240) {
+        if (this->unk244 >= this->path->count) {
             this->unk244 = 0;
         }
     }
@@ -471,7 +499,7 @@ void func_808F3D40(EnIn* this, GlobalContext* globalCtx) {
 u16 func_808F3DD4(GlobalContext* globalCtx, EnIn* this, u32 arg2) {
     u16 textId = 0;
 
-    if (func_8012403C(globalCtx) == 8) {
+    if (Player_GetMask(globalCtx) == PLAYER_MASK_CIRCUS_LEADERS_MASK) {
         if (!(gSaveContext.weekEventReg[63] & 0x40)) {
             return 0x34A9;
         } else if (this->unk4AC & 8) {
@@ -831,8 +859,8 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     SET_FLAGS_START_RACE;
                     func_800FD750(0x40);
                     globalCtx->nextEntranceIndex = 0xCE50;
-                    globalCtx->unk1887F = 5;
-                    globalCtx->unk18875 = 0x14;
+                    globalCtx->unk_1887F = 5;
+                    globalCtx->sceneLoadFlag = 0x14;
                     gSaveContext.weekEventReg[57] |= 1;
                     break;
                 case 0x3478:
@@ -1078,8 +1106,8 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     SET_FLAGS_START_RACE;
                     func_800FD750(0x40);
                     globalCtx->nextEntranceIndex = 0xCE50;
-                    globalCtx->unk1887F = 5;
-                    globalCtx->unk18875 = 0x14;
+                    globalCtx->unk_1887F = 5;
+                    globalCtx->sceneLoadFlag = 0x14;
                     gSaveContext.weekEventReg[57] |= 1;
                     break;
                 case 0x349D:
@@ -1211,7 +1239,7 @@ s32 func_808F5728(GlobalContext* globalCtx, EnIn* this, s32 arg2, s32* arg3) {
     s16 rotDiff;
     s16 yawDiff;
     s16 yawDiffA;
-    ActorPlayer* player;
+    Player* player;
 
     if (*arg3 == 4) {
         return 0;
@@ -1232,7 +1260,7 @@ s32 func_808F5728(GlobalContext* globalCtx, EnIn* this, s32 arg2, s32* arg3) {
     }
     if (*arg3 == 1) {
         player = PLAYER;
-        func_808F5994(this, globalCtx, &player->base.world.pos, 0xC80);
+        func_808F5994(this, globalCtx, &player->actor.world.pos, 0xC80);
     dummy_label_895711:; // POSSIBLE FAKE MATCH
     } else {
         rotDiff = this->actor.home.rot.y - this->actor.world.rot.y;
@@ -1315,7 +1343,7 @@ void func_808F5A94(EnIn* this, GlobalContext* globalCtx) {
 
 void func_808F5B58(EnIn* this, GlobalContext* globalCtx) {
     if (func_800F41E4(globalCtx, &globalCtx->actorCtx)) {
-        if ((func_8012403C(globalCtx) == 8 && gSaveContext.weekEventReg[63] & 0x40) ||
+        if ((Player_GetMask(globalCtx) == PLAYER_MASK_CIRCUS_LEADERS_MASK && gSaveContext.weekEventReg[63] & 0x40) ||
             gSaveContext.weekEventReg[56] & 8) {
             if (gSaveContext.day == 3) {
                 func_808F5728(globalCtx, this, 6, &this->unk48C);
@@ -1323,8 +1351,8 @@ void func_808F5B58(EnIn* this, GlobalContext* globalCtx) {
                 func_808F5728(globalCtx, this, 2, &this->unk48C);
             }
         }
-    } else if (func_8012403C(globalCtx) != 8 ||
-               (func_8012403C(globalCtx) == 8 && gSaveContext.weekEventReg[63] & 0x40)) {
+    } else if (Player_GetMask(globalCtx) != PLAYER_MASK_CIRCUS_LEADERS_MASK ||
+               (Player_GetMask(globalCtx) == PLAYER_MASK_CIRCUS_LEADERS_MASK && gSaveContext.weekEventReg[63] & 0x40)) {
         if (gSaveContext.day == 3) {
             func_808F5728(globalCtx, this, 4, &this->unk48C);
         } else {
@@ -1337,7 +1365,8 @@ void func_808F5C98(EnIn* this, GlobalContext* globalCtx) {
     if (this->unk4B0 == 0) {
         this->actionFunc = func_808F5B58;
     }
-    if ((func_8012403C(globalCtx) == 8 && gSaveContext.weekEventReg[63] & 0x40) || gSaveContext.weekEventReg[56] & 8) {
+    if ((Player_GetMask(globalCtx) == PLAYER_MASK_CIRCUS_LEADERS_MASK && gSaveContext.weekEventReg[63] & 0x40) ||
+        gSaveContext.weekEventReg[56] & 8) {
         if (gSaveContext.day != 3) {
             func_808F5728(globalCtx, this, 2, &this->unk48C);
         } else {
@@ -1395,7 +1424,7 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
         Collider_SetJntSph(globalCtx, &this->colliderJntSph, &this->actor, &sJntSphInit, &this->colliderJntSphElement);
         Actor_SetScale(&this->actor, 0.01f);
         this->actor.gravity = -4.0f;
-        this->unk240 = func_8013D648(globalCtx, ENIN_GET_WALKING_FLAG(&this->actor), 0x3F);
+        this->path = func_8013D648(globalCtx, ENIN_GET_PATH(&this->actor), 0x3F);
         this->unk23D = 0;
         if (type == ENIN_YELLOW_SHIRT || type == ENIN_BLUE_SHIRT) {
             if ((gSaveContext.weekEventReg[92] & (1 | 2 | 4)) == 2 ||
@@ -1473,19 +1502,19 @@ void EnIn_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->unk4AC &= ~2;
         func_808F38F8(this, globalCtx);
     }
-    if (func_8012403C(globalCtx) == 8) {
+    if (Player_GetMask(globalCtx) == PLAYER_MASK_CIRCUS_LEADERS_MASK) {
         this->unk4AC |= 0x40;
     } else {
         this->unk4AC &= ~0x40;
     }
     this->actionFunc(this, globalCtx);
-    func_800B78B8(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 0x4);
     func_808F3414(this, globalCtx);
     func_808F32A0(this, globalCtx);
 }
 
 void func_808F6334(EnIn* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = PLAYER;
     s32 newUnk4C8;
 
     newUnk4C8 = func_80152498(&globalCtx->msgCtx);
@@ -1493,8 +1522,9 @@ void func_808F6334(EnIn* this, GlobalContext* globalCtx) {
     this->unk4C4 = CLAMP(this->unk4C4, 0.0f, 80.0f);
 
     Matrix_InsertTranslation(this->unk4C4, 0.0f, 0.0f, MTXMODE_APPLY);
-    if (this == (EnIn*)player->unkA88 && !(globalCtx->msgCtx.unk11F04 >= 0xFF && globalCtx->msgCtx.unk11F04 <= 0x200) &&
-        newUnk4C8 == 3 && this->unk4C8 == 3) {
+    if (this == (EnIn*)player->targetActor &&
+        !(globalCtx->msgCtx.unk11F04 >= 0xFF && globalCtx->msgCtx.unk11F04 <= 0x200) && newUnk4C8 == 3 &&
+        this->unk4C8 == 3) {
         if (!(globalCtx->state.frames & 1)) {
             this->unk4C0 = this->unk4C0 != 0.0f ? 0.0f : 1.0f;
         }

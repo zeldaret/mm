@@ -1,10 +1,10 @@
 #ifndef _Z64_ANIMATION_H
 #define _Z64_ANIMATION_H
 
-#include <PR/ultratypes.h>
-#include <PR/gbi.h>
-#include <z64dma.h>
-#include <z64math.h>
+#include "PR/ultratypes.h"
+#include "PR/gbi.h"
+#include "z64dma.h"
+#include "z64math.h"
 
 struct GlobalContext;
 struct Actor;

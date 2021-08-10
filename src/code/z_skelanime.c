@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 #define ANIM_INTERP 1
 
@@ -924,7 +923,7 @@ ret:
     return limbCount;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_skelanime/SkelAnime_GetFrameData2.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_skelanime/SkelAnime_GetFrameData2.s")
 #endif
 
 /**

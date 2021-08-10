@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 s32 gFramerateDivisor = 1;
 f32 gFramerateDivisorF = 1.0f;
@@ -164,7 +163,7 @@ void GameState_InitArena(GameState* gameState, size_t size) {
     }
 
     THA_Ct(&gameState->heap, NULL, 0);
-    assert_fail("../game.c", 1035);
+    __assert("../game.c", 1035);
 }
 
 void GameState_Realloc(GameState* gameState, size_t size) {
@@ -185,11 +184,11 @@ void GameState_Realloc(GameState* gameState, size_t size) {
         size = systemMaxFree - (sizeof(ArenaNode));
     }
 
-    if (gameArena = GameAlloc_Malloc(alloc, size), gameArena != NULL) {
+    if ((gameArena = GameAlloc_Malloc(alloc, size)) != NULL) {
         THA_Ct(&gameState->heap, gameArena, size);
     } else {
-        THA_Ct(&gameState->heap, NULL, 0);
-        assert_fail("../game.c", 1074);
+        THA_Ct(&gameState->heap, 0, 0);
+        __assert("../game.c", 1074);
     }
 }
 

@@ -107,10 +107,10 @@ void EnCha_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnCha* this = THIS;
     GlobalContext* globalCtx2 = globalCtx;
 
-    CollisionCheck_SetOC(globalCtx, &globalCtx2->colCheckCtx, &this->collider.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx2->colChkCtx, &this->collider.base);
     this->actionFunc(this, globalCtx);
     if ((this->actor.shape.rot.z >= -0x1F3F) && (this->actor.shape.rot.z < 0x1F40)) {
-        CollisionCheck_SetAC(globalCtx, &globalCtx2->colCheckCtx, &this->collider.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx2->colChkCtx, &this->collider.base);
     }
 }
 

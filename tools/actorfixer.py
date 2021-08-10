@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 
-import os
-import argparse
+import argparse, os
 
 # "old": "new"
 animdict ={
     "Actor_GetSwitchFlag": "Flags_GetSwitch",
     "atan_flip": "Math_Acot2F",
     "atans": "Math_Atan2S",
-    "Matrix_Pop": "SysMatrix_StatePop",
-    "Matrix_Push": "SysMatrix_StatePush",
-    "Matrix_Init": "SysMatrix_StateAlloc",
-    "Matrix_Put": "SysMatrix_SetCurrentState",
+    "Matrix_Pop": "Matrix_StatePop",
+    "Matrix_Push": "Matrix_StatePush",
+    "Matrix_Init": "Matrix_StateAlloc",
+    "Matrix_Put": "Matrix_SetCurrentState",
+    "func_800B78B8": "Actor_UpdateBgCheckInfo",
+    "func_8012403C": "Player_GetMask",
+    "func_8012404c": "Player_RemoveMask",
+    "Actor_SpawnWithParentAndCutscene": "Actor_SpawnAsChildAndCutscene",
+    "Actor_SpawnWithParent": "Actor_SpawnAsChild",
 }
 
 def replace_anim(file):

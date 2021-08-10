@@ -1,7 +1,7 @@
 #ifndef _ULTRALOG_H_
 #define _ULTRALOG_H_
 
-#include <PR/ultratypes.h>
+#include "PR/ultratypes.h"
 
 typedef struct {
     /* 0x0 */ u32 magic;

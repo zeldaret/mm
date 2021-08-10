@@ -6,7 +6,7 @@
 
 s32 __osPfsSelectBank(OSPfs* pfs, u8 bank);
 
-s32 __osMotorAccess(OSPfs* pfs, u32 vibrate) {
+s32 osSetRumble(OSPfs* pfs, u32 vibrate) {
     s32 i;
     s32 ret;
     u8* buf = (u8*)&osPifBuffers[pfs->channel];
@@ -45,7 +45,7 @@ s32 __osMotorAccess(OSPfs* pfs, u32 vibrate) {
 
     return ret;
 }
-void __osSetupMotorWrite(s32 channel, OSPifRam* buf) {
+void osSetUpMempakWrite(s32 channel, OSPifRam* buf) {
     u8* bufptr = (u8*)buf;
     __OSContRamReadFormat mempakwr;
     s32 i;
@@ -68,7 +68,7 @@ void __osSetupMotorWrite(s32 channel, OSPifRam* buf) {
     *bufptr = 0xFE;
 }
 
-s32 osMotorInit(OSMesgQueue* ctrlrqueue, OSPfs* pfs, u32 channel) {
+s32 osProbeRumblePak(OSMesgQueue* ctrlrqueue, OSPfs* pfs, u32 channel) {
     s32 ret;
     u8 sp24[BLOCKSIZE];
 
@@ -112,7 +112,7 @@ s32 osMotorInit(OSMesgQueue* ctrlrqueue, OSPfs* pfs, u32 channel) {
         return 0xB;
     }
     if ((pfs->status & PFS_MOTOR_INITIALIZED) == 0) {
-        __osSetupMotorWrite(channel, &osPifBuffers[channel]);
+        osSetUpMempakWrite(channel, &osPifBuffers[channel]);
     }
     pfs->status = PFS_MOTOR_INITIALIZED;
 

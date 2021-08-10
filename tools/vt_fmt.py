@@ -1,10 +1,6 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
-import os
-import sys
-import struct
-import argparse
-import re
+import argparse, re
 
 COLORS = [
     'BLACK',

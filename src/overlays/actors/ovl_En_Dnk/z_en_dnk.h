@@ -1,13 +1,17 @@
 #ifndef Z_EN_DNK_H
 #define Z_EN_DNK_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnDnk;
 
+typedef void (*EnDnkActionFunc)(struct EnDnk* this, GlobalContext* globalCtx);
+
 typedef struct EnDnk {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x160];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x44];
+    /* 0x0188 */ EnDnkActionFunc actionFunc;
+    /* 0x018C */ char unk_18C[0x118];
 } EnDnk; // size = 0x2A4
 
 extern const ActorInit En_Dnk_InitVars;

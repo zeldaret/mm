@@ -20,6 +20,7 @@ build/
 baserom/
 decomp/
 asm/
+data/
 expected/
 nonmatchings/
 
@@ -35,6 +36,7 @@ graphs/
 *.png
 *.jpg
 !*_custom*
+.extracted-assets.json
 
 # Per-user configuration
 .python-version

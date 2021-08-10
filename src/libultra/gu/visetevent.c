@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 void osViSetEvent(OSMesgQueue* mq, OSMesg m, u32 retraceCount) {
     register u32 saveMask = __osDisableInt();

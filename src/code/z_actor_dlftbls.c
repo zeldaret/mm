@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 #include "initvars.h"
 
 #define ACTOR_OVERLAY(name, allocType)                                                                  \
@@ -726,7 +725,7 @@ void ActorOverlayTable_FaultPrint(void* arg0, void* arg1) {
         overlaySize = (u32)overlayEntry->vramEnd - (u32)overlayEntry->vramStart;
         if (overlayEntry->loadedRamAddr != NULL) {
             FaultDrawer_Printf("%3d %08x-%08x %3d %s\n", i, overlayEntry->loadedRamAddr,
-                               (u32)overlayEntry->loadedRamAddr + overlaySize, overlayEntry->nbLoaded, "");
+                               (u32)overlayEntry->loadedRamAddr + overlaySize, overlayEntry->numLoaded, "");
         }
     }
 }
