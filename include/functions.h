@@ -905,10 +905,10 @@ Actor* Actor_Spawn(ActorContext* actorCtx, GlobalContext* globalCtx, s16 index, 
                    s16 rotZ, s16 sParm10);
 ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index);
 Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* globalCtx, s16 index, f32 x, f32 y, f32 z,
-                                     s16 rotX, s16 rotY, s16 rotZ, s16 variable, u32 cutscene, s32 param_12,
+                                     s16 rotX, s16 rotY, s16 rotZ, s32 variable, u32 cutscene, s32 param_12,
                                      Actor* parent);
 Actor* Actor_SpawnAsChild(ActorContext* actorCtx, Actor* parent, GlobalContext* globalCtx, s16 index, f32 x, f32 y,
-                          f32 z, s16 rotX, s16 rotY, s16 rotZ, s16 variable);
+                          f32 z, s16 rotX, s16 rotY, s16 rotZ, s32 variable);
 void Actor_SpawnTransitionActors(GlobalContext* globalCtx, ActorContext* actorCtx);
 void func_800BB2D0(ActorContext* actorCtx, u16* param_2, GlobalContext* globalCtx);
 Actor* func_800BB498(ActorContext* actorCtx, Actor* actor, GlobalContext* globalCtx);

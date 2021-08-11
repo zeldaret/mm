@@ -1837,8 +1837,7 @@ beginseg
     name "ovl_Obj_Makeoshihiki"
     compress
     include "build/src/overlays/actors/ovl_Obj_Makeoshihiki/z_obj_makeoshihiki.o"
-    include "build/data/ovl_Obj_Makeoshihiki/ovl_Obj_Makeoshihiki.data.o"
-    include "build/data/ovl_Obj_Makeoshihiki/ovl_Obj_Makeoshihiki.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Makeoshihiki/ovl_Obj_Makeoshihiki_reloc.o"
 endseg
 
 beginseg
