@@ -28,7 +28,6 @@ beginseg
     include "build/data/boot/CIC6105.bss.o"
     include "build/src/boot_O2_g3/syncprintf.o"
     include "build/src/boot_O2_g3/fault.o"
-//    include "build/data/boot/fault.data.o"
     include "build/data/boot/fault.bss.o"
     include "build/src/boot_O2_g3/fault_drawer.o"
     include "build/data/boot/fault_drawer.bss.o"
