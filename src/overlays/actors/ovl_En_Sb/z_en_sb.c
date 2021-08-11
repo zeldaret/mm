@@ -388,7 +388,7 @@ void EnSb_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnSb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnSb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
     s8 phi_a2;
     EnSb* this = THIS;
 

@@ -1,7 +1,7 @@
 #include "global.h"
 
-void EnAObj_Init(EnAObj* this, GlobalContext* globalCtx) {
-    EnAObj* s0 = (EnAObj*)this;
+void EnAObj_Init(EnAObj* thisx, GlobalContext* globalCtx) {
+    EnAObj* s0 = (EnAObj*)thisx;
     s0->base.textId = ((s0->base.params >> 8) & 0xFF) | 0x300;
     s0->base.params = (s0->base.params & 0xFF) - 9;
     Actor_ProcessInitChain((Actor*)s0, &enAObjInitVar);
@@ -9,7 +9,7 @@ void EnAObj_Init(EnAObj* this, GlobalContext* globalCtx) {
     Collider_InitAndSetCylinder(globalCtx, &s0->collision, (Actor*)s0, &enAObjCylinderInit);
     Collider_UpdateCylinder((Actor*)s0, &s0->collision);
     s0->base.colChkInfo.mass = 255;
-    s0->actionFunc = (ActorFunc)EnAObj_Update1;
+    s0->actionFunc = (EnAObjActionFunc)EnAObj_Update1;
 }
 
 void EnAObj_Destroy(EnAObj* this, GlobalContext* globalCtx) {
@@ -21,7 +21,7 @@ void EnAObj_Update1(EnAObj* this, GlobalContext* globalCtx) {
     s16 v0;
     s32 v1;
     if (func_800B84D0((Actor*)this, globalCtx) != 0) {
-        this->actionFunc = (ActorFunc)EnAObj_Update2;
+        this->actionFunc = (EnAObjActionFunc)EnAObj_Update2;
     } else {
         v0 = this->base.yawTowardsPlayer - this->base.shape.rot.y;
         v1 = (v0 < 0) ? -v0 : v0;
@@ -33,12 +33,12 @@ void EnAObj_Update1(EnAObj* this, GlobalContext* globalCtx) {
 
 void EnAObj_Update2(EnAObj* this, GlobalContext* globalCtx) {
     if (func_800B867C((Actor*)this, globalCtx) != 0) {
-        this->actionFunc = (ActorFunc)EnAObj_Update1;
+        this->actionFunc = (EnAObjActionFunc)EnAObj_Update1;
     }
 }
 
 void EnAObj_Update(EnAObj* this, GlobalContext* globalCtx) {
-    (this->actionFunc)((Actor*)this, (GlobalContext*)globalCtx);
+    (this->actionFunc)((struct EnAObj*)this, (GlobalContext*)globalCtx);
     Actor_SetHeight((Actor*)this, 45.0f);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, (Collider*)&this->collision);
 }

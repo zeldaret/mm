@@ -469,7 +469,7 @@ void EnDaiku2_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80BE7600(this, globalCtx);
 }
 
-void EnDaiku2_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnDaiku2_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
     EnDaiku2* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
