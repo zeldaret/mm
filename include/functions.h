@@ -2196,7 +2196,7 @@ void func_8011C808(GlobalContext* globalCtx);
 // void func_80121F94(void);
 void func_80121FC4(GlobalContext* globalCtx);
 s32 func_801224E0(s32 param_1, s16 param_2, s16 param_3);
-// void func_80122524(void);
+f32 func_80122524(Actor* actor, Path* path, s16 arg2, s16* arg3);
 // void func_801225CC(void);
 // void func_80122660(void);
 // UNK_TYPE4 func_80122670(s32* param_1, Input* input);
