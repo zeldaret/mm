@@ -429,7 +429,7 @@
     0x801AEC80:("D_801AEC80","Color_RGBA8","",0x4),
     0x801AEC84:("D_801AEC84","s801AEC84","[13]",0x68),
     0x801AECEC:("actorMovementScale","f32","",0x4),
-    0x801AECF0:("D_801AECF0","f32","",0x58),
+    0x801AECF0:("D_801AECF0","f32","[]",0x58),
     0x801AED48:("D_801AED48","UNK_TYPE1","",0x1),
     0x801AED58:("D_801AED58","UNK_TYPE4","",0x4),
     0x801AED88:("actorDefaultHitColor","Color_RGBA8","",0x4),
