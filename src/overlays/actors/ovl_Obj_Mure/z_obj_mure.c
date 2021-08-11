@@ -8,15 +8,16 @@ void ObjMure_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjMure_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjMure_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void func_808D7FFC(ObjMure* this, GlobalContext* globalCtx);
-void func_808D8014(ObjMure* this, GlobalContext* globalCtx);
+#define ObjMure_InitialAction func_808D7FFC
+void ObjMure_InitialAction(ObjMure* this, GlobalContext* globalCtx);
 #define ObjMure_CulledState func_808D8014
-void func_808D8678(ObjMure* this, GlobalContext* globalCtx);
+void ObjMure_CulledState(ObjMure* this, GlobalContext* globalCtx);
 #define ObjMure_ActiveState func_808D8678
-void func_808D7F0C(ObjMure* this, GlobalContext* globalCtx);
+void ObjMure_ActiveState(ObjMure* this, GlobalContext* globalCtx);
 #define ObjMure_KillActors func_808D7F0C
-void func_808D7F2C(ObjMure* this, GlobalContext* globalCtx);
+void ObjMure_KillActors(ObjMure* this, GlobalContext* globalCtx);
 #define ObjMure_CheckChildren func_808D7F2C
+void ObjMure_CheckChildren(ObjMure* this, GlobalContext* globalCtx);
 
 const ActorInit Obj_Mure_InitVars = {
     ACTOR_OBJ_MURE,
@@ -63,28 +64,15 @@ typedef enum {
     /* 2 */ OBJMURE_CHILD_STATE_2
 } ObjMureChildState;
 
-s32 func_808D78D0(ObjMure* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure/func_808D78D0.s")
-//s32 func_808D78D0(Actor* thisx, GlobalContext* arg1) {
-//    s32 result;
-//    ObjMure* this = THIS;
-//
-//    //switch(this->unk_14E)  {
-//    //    case 2:
-//    //    case 3:
-//    //    case 4:
-//
-//    if (this->type == 2 || this->type == 3 || this->type == 4) {
-//        Actor_ProcessInitChain(this, D_808D87BC);
-//        result = true;
-//    }
-//    else {
-//            result = false;
-//    }
-//    return result;
-//}
-
-void func_808D7FFC(ObjMure* this, GlobalContext* globalCtx);
+s32 func_808D78D0(ObjMure* this, GlobalContext* arg1) {
+    if (this->type == 2 || this->type == 3 || this->type == 4) {
+        Actor_ProcessInitChain(this, D_808D87BC);
+    }
+    else {
+        return false;
+    }
+    return true;
+}
 
 s32 func_808D7928(ObjMure* this, GlobalContext* globalCtx) {
     if (!func_808D78D0(this, globalCtx)) {
@@ -112,7 +100,7 @@ void ObjMure_Init(Actor* thisx, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
-    this->actionFunc = func_808D7FFC;
+    this->actionFunc = ObjMure_InitialAction;
 }
 
 void ObjMure_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -127,79 +115,89 @@ s32 ObjMure_GetMaxChildSpawns(ObjMure* this) {
 }
 
 #define ObjMure_GetSpawnPos func_808D7A40
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure/func_808D7A40.s")
 void ObjMure_GetSpawnPos(Vec3f* outPos, Vec3f* inPos, s32 ptn, s32 idx) {
     *outPos = *inPos;
 }
 
 #define ObjMure_SpawnActors0 func_808D7A68
+#ifdef NON_MATCHING
+void ObjMure_SpawnActors0(ObjMure* this, GlobalContext* globalCtx) {
+    GlobalContext* globalCtx2 = globalCtx;
+    s32 i;
+    Vec3f pos;
+    s32 pad;
+    s32 maxChildren = ObjMure_GetMaxChildSpawns(this);
+
+    for (i = 0; i < maxChildren; i++) {
+        switch (this->childrenStates[i]) {
+        case OBJMURE_CHILD_STATE_1:
+            break;
+        case OBJMURE_CHILD_STATE_2:
+            ObjMure_GetSpawnPos(&pos, &this->actor.world.pos, this->ptn, i);
+            this->children[i] =
+                Actor_SpawnAsChildAndCutscene(
+                    &globalCtx2->actorCtx, globalCtx,
+                    sSpawnActorIds[this->type],
+                    pos.x, pos.y, pos.z,
+                    this->actor.world.rot.x, this->actor.world.rot.y, this->actor.world.rot.z,
+                    sSpawnParams[this->type],
+                    this->actor.cutscene, this->actor.unk20, NULL);
+            if (this->children[i] != NULL) {
+                if (this->type == 0x90) {
+                    ((ObjMureChild*)this->children[i])->unk_197 = 1;
+                }
+                this->children[i]->room = this->actor.room;
+            }
+            break;
+        default:
+            ObjMure_GetSpawnPos(&pos, &this->actor.world.pos, this->ptn, i);
+            this->children[i] = Actor_SpawnAsChildAndCutscene(
+                &globalCtx2->actorCtx, globalCtx,
+                sSpawnActorIds[this->type],
+                pos.x, pos.y, pos.z,
+                this->actor.world.rot.x, this->actor.world.rot.y, this->actor.world.rot.z,
+                sSpawnParams[this->type],
+                this->actor.cutscene, this->actor.unk20, NULL);
+            if (this->children[i] != NULL) {
+                this->children[i]->room = this->actor.room;
+            }
+            break;
+        }
+    }
+}
+#else
 void ObjMure_SpawnActors0(ObjMure* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure/func_808D7A68.s")
-//void ObjMure_SpawnActors0(ObjMure* this, GlobalContext* globalCtx) {
-//    ActorContext* ac;
-//    s32 i;
-//    Vec3f pos;
-//    s32 pad;
-//    //PosRot* world;
-//    s32 maxChildren = ObjMure_GetMaxChildSpawns(this);
-//
-//    for (i = 0; i < maxChildren; i++) {
-//        switch (this->childrenStates[i]) {
-//            case OBJMURE_CHILD_STATE_1:
-//                break;
-//            case OBJMURE_CHILD_STATE_2:
-//                ac = &globalCtx->actorCtx;
-//                ObjMure_GetSpawnPos(&pos, &this->actor.world.pos, this->ptn, i);
-//                this->children[i] =
-//                    Actor_SpawnAsChildAndCutscene(
-//                        ac,
-//                        globalCtx,
-//                        sSpawnActorIds[this->type],
-//                        pos.x, pos.y, pos.z,
-//                        this->actor.world.rot.x,
-//                        this->actor.world.rot.y,
-//                        this->actor.world.rot.z,
-//                        sSpawnParams[this->type],
-//                        this->actor.cutscene,
-//                        this->actor.unk20, NULL);
-//                if (this->children[i] != NULL) {
-//                    //this->children[i]->flags |= 0x800;
-//                    if (this->type == 0x90) {
-//                        ((ObjMureChild*)this->children[i])->unk_197 = 1;
-//                    }
-//                    this->children[i]->room = this->actor.room;
-//                }
-//                break;
-//            default:
-//                ac = &globalCtx->actorCtx;
-//                ObjMure_GetSpawnPos(&pos, &this->actor.world.pos, this->ptn, i);
-//                this->children[i] = Actor_SpawnAsChildAndCutscene(
-//                    ac,
-//                    globalCtx, 
-//                    sSpawnActorIds[this->type],
-//                    pos.x, pos.y, pos.z,
-//                    this->actor.world.rot.x, 
-//                    this->actor.world.rot.y, 
-//                    this->actor.world.rot.z,
-//                    sSpawnParams[this->type],
-//                    this->actor.cutscene,
-//                    this->actor.unk20,
-//                    NULL);
-//                if (this->children[i] != NULL) {
-//                    this->children[i]->room = this->actor.room;
-//                }
-//                break;
-//        }
-//    }
-//}
+#endif
 
 #define ObjMure_SpawnActors1 func_808D7C64
-void ObjMure_SpawnActors1(ObjMure* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure/func_808D7C64.s")
+void ObjMure_SpawnActors1(ObjMure* this, GlobalContext* globalCtx) {
+    GlobalContext* globalCtx2 = globalCtx;
 
+    Actor* actor = &this->actor;
+    Vec3f spawnPos;
+    s32 maxChildren = ObjMure_GetMaxChildSpawns(this);
+    s32 i;
+
+    for (i = 0; i < maxChildren; i++) {
+        ObjMure_GetSpawnPos(&spawnPos, &actor->world.pos, this->ptn, i);
+        this->children[i] = Actor_SpawnAsChildAndCutscene(&globalCtx->actorCtx, globalCtx, sSpawnActorIds[this->type], spawnPos.x, spawnPos.y, spawnPos.z,
+            actor->world.rot.x, actor->world.rot.y, actor->world.rot.z,
+            (this->type == 4 && i == 0) ? 1 : sSpawnParams[this->type],
+            this->actor.cutscene,
+            this->actor.unk20, NULL
+        );
+        if (this->children[i] != NULL) {
+            this->childrenStates[i] = OBJMURE_CHILD_STATE_0;
+            this->children[i]->room = actor->room;
+        }
+        else {
+            this->childrenStates[i] = OBJMURE_CHILD_STATE_1;
+        }
+    }
+}
 
 #define ObjMure_SpawnActors func_808D7DC4
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure/func_808D7DC4.s")
 void ObjMure_SpawnActors(ObjMure* this, GlobalContext* globalCtx) {
     switch (this->svNum) {
     case 0:
@@ -271,7 +269,6 @@ void ObjMure_CheckChildren(ObjMure* this, GlobalContext* globalCtx) {
     }
 }
 
-#define ObjMure_InitialAction func_808D7FFC
 void ObjMure_InitialAction(ObjMure* this, GlobalContext* globalCtx) {
     this->actionFunc = ObjMure_CulledState;
 }
@@ -332,100 +329,91 @@ void ObjMure_SetChildToFollowPlayer(ObjMure* this, s32 idx1) {
     }
 }
 
-void func_808D82CC(ObjMure* this, GlobalContext* globalCtx);
-void func_808D84F4(ObjMure* this, GlobalContext* globalCtx);
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure/func_808D82CC.s")
 // Fish, Bugs
-void func_808D82CC(ObjMure* this, GlobalContext* globalCtx);
 #define ObjMure_GroupBehavior0 func_808D82CC
+void ObjMure_GroupBehavior0(ObjMure* this, GlobalContext* globalCtx) {
+    if (this->unk_1A4 <= 0) {
+        if (this->unk_1A6) {
+            this->unk_1A6 = false;
+            ObjMure_SetFollowTargets(this, (Rand_ZeroOne() * 0.5f) + 0.1f);
+            if (this->actor.xzDistToPlayer < 60.0f) {
+                this->unk_1A4 = (s32)(Rand_ZeroOne() * 5.5f) + 4;
+            }
+            else {
+                this->unk_1A4 = (s32)(Rand_ZeroOne() * 40.5f) + 4;
+            }
+        }
+        else {
+            this->unk_1A6 = true;
+            if (this->actor.xzDistToPlayer < 60.0f) {
+                this->unk_1A4 = (s32)(Rand_ZeroOne() * 10.5f) + 4;
+                ObjMure_SetFollowTargets(this, (Rand_ZeroOne() * 0.2f) + 0.8f);
+            }
+            else {
+                this->unk_1A4 = (s32)(Rand_ZeroOne() * 10.5f) + 4;
+                ObjMure_SetFollowTargets(this, (Rand_ZeroOne() * 0.2f) + 0.6f);
+            }
+        }
+    }
+    if (this->actor.xzDistToPlayer < 120.0f) {
+        this->unk_1A8++;
+    }
+    else {
+        this->unk_1A8 = 0;
+    }
+    if (this->unk_1A8 >= 80) {
+        ObjMure_SetChildToFollowPlayer(this, 1);
+    }
+    else {
+        ObjMure_SetChildToFollowPlayer(this, 0);
+    }
+}
 
-//void ObjMure_GroupBehavior0(ObjMure* this, GlobalContext* globalCtx) {
-//    if (this->unk_1A4 <= 0) {
-//        if (this->unk_1A6) {
-//            this->unk_1A6 = false;
-//            ObjMure_SetFollowTargets(this, (Rand_ZeroOne() * 0.5f) + 0.1f);
-//            if (this->actor.xzDistToPlayer < 60.0f) {
-//                this->unk_1A4 = (s16)(Rand_ZeroOne() * 5.5f) + 4;
-//            }
-//            else {
-//                this->unk_1A4 = (s16)(Rand_ZeroOne() * 40.5f) + 4;
-//            }
-//        }
-//        else {
-//            this->unk_1A6 = true;
-//            if (this->actor.xzDistToPlayer < 60.0f) {
-//                this->unk_1A4 = (s16)(Rand_ZeroOne() * 10.5f) + 4;
-//                ObjMure_SetFollowTargets(this, (Rand_ZeroOne() * 0.2f) + 0.8f);
-//            }
-//            else {
-//                this->unk_1A4 = (s16)(Rand_ZeroOne() * 10.5f) + 4;
-//                ObjMure_SetFollowTargets(this, (Rand_ZeroOne() * 0.2f) + 0.6f);
-//            }
-//        }
-//    }
-//    if (this->actor.xzDistToPlayer < 120.0f) {
-//        this->unk_1A8++;
-//    }
-//    else {
-//        this->unk_1A8 = 0;
-//    }
-//    if (this->unk_1A8 >= 80) {
-//        ObjMure_SetChildToFollowPlayer(this, 1);
-//    }
-//    else {
-//        ObjMure_SetChildToFollowPlayer(this, 0);
-//    }
-//}
-
-void func_808D84F4(ObjMure* this, GlobalContext* globalCtx);
-#define ObjMure_GroupBehavior1 func_808D84F4
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure/func_808D84F4.s")
 // Butterflies
-//void func_808D84F4(ObjMure* this, GlobalContext* globalCtx) {
-//#define ObjMure_GroupBehavior1 func_808D84F4
-//    s32 maxChildren;
-//    s32 i;
-//
-//    if (this->unk_1A4 <= 0) {
-//        if (this->unk_1A6) {
-//            this->unk_1A6 = false;
-//            ObjMure_SetFollowTargets(this, Rand_ZeroOne() * 0.2f);
-//            if (this->actor.xzDistToPlayer < 60.0f) {
-//                this->unk_1A4 = (s16)(Rand_ZeroOne() * 5.5f) + 4;
-//            }
-//            else {
-//                this->unk_1A4 = (s16)(Rand_ZeroOne() * 40.5f) + 4;
-//            }
-//        }
-//        else {
-//            this->unk_1A6 = true;
-//            ObjMure_SetFollowTargets(this, Rand_ZeroOne() * 0.7f);
-//            this->unk_1A4 = (s16)(Rand_ZeroOne() * 10.5f) + 4;
-//        }
-//    }
-//
-//    maxChildren = ObjMure_GetMaxChildSpawns(this);
-//    for (i = 0; i < maxChildren; i++) {
-//        if (this->children[i] != NULL) {
-//            if (this->children[i]->child != NULL && this->children[i]->child->update == NULL) {
-//                this->children[i]->child = NULL;
-//            }
-//        }
-//    }
-//}
+#define ObjMure_GroupBehavior1 func_808D84F4
+void ObjMure_GroupBehavior1(ObjMure* this, GlobalContext* globalCtx) {
+    s32 maxChildren;
+    s32 i;
 
-static ObjMureActionFunc D_808D87C8[] = {
-    NULL, NULL, func_808D82CC, func_808D82CC, func_808D84F4,
-};
+    if (this->unk_1A4 <= 0) {
+        if (this->unk_1A6) {
+            this->unk_1A6 = false;
+            ObjMure_SetFollowTargets(this, Rand_ZeroOne() * 0.2f);
+            if (this->actor.xzDistToPlayer < 60.0f) {
+                this->unk_1A4 = (s32)(Rand_ZeroOne() * 5.5f) + 4;
+            }
+            else {
+                this->unk_1A4 = (s32)(Rand_ZeroOne() * 40.5f) + 4;
+            }
+        }
+        else {
+            this->unk_1A6 = true;
+            ObjMure_SetFollowTargets(this, Rand_ZeroOne() * 0.7f);
+            this->unk_1A4 = (s32)(Rand_ZeroOne() * 10.5f) + 4;
+        }
+    }
+
+    maxChildren = ObjMure_GetMaxChildSpawns(this);
+    for (i = 0; i < maxChildren; i++) {
+        if (this->children[i] != NULL) {
+            if (this->children[i]->child != NULL && this->children[i]->child->update == NULL) {
+                this->children[i]->child = NULL;
+            }
+        }
+    }
+}
+
 #define sTypeGroupBehaviorFunc D_808D87C8
+static ObjMureActionFunc sTypeGroupBehaviorFunc[] = {
+    NULL, NULL, ObjMure_GroupBehavior0, ObjMure_GroupBehavior0, ObjMure_GroupBehavior1,
+};
 
-void func_808D8678(ObjMure* this, GlobalContext* globalCtx) {
-    func_808D7F2C(this, globalCtx);
+void ObjMure_ActiveState(ObjMure* this, GlobalContext* globalCtx) {
+    ObjMure_CheckChildren(this, globalCtx);
     if (sZClip[this->type] + 40.0f <= fabsf(this->actor.projectedPos.z)) {
-        this->actionFunc = func_808D8014;
+        this->actionFunc = ObjMure_CulledState;
         this->actor.flags &= ~0x10;
-        func_808D7F0C(this, globalCtx);
+        ObjMure_KillActors(this, globalCtx);
     }
     else if (sTypeGroupBehaviorFunc[this->type] != NULL) {
         sTypeGroupBehaviorFunc[this->type](this, globalCtx);
