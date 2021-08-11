@@ -39,8 +39,9 @@ static s32 D_8089A590[] = { 0xD7000000,  0xFFFFFFFF, 0xFCFFFFFF, 0xFFFDF638, 0x0
 
 static UNK_PTR D_8089A5B8 = 0;
 
-static EnHollActionFunc D_8089A5BC[] /* sEnHollActionFuncs */ = { EnHoll_VisibleIdle, func_8089A238, EnHoll_TransparentIdle,
-                                                                  func_8089A0C0, EnHoll_VisibleIdle };
+static EnHollActionFunc D_8089A5BC[] /* sEnHollActionFuncs */ = { EnHoll_VisibleIdle, func_8089A238,
+                                                                  EnHoll_TransparentIdle, func_8089A0C0,
+                                                                  EnHoll_VisibleIdle };
 
 static InitChainEntry D_8089A5D0[] /* sInitChain[] */ = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
@@ -83,7 +84,7 @@ void EnHoll_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, D_8089A5D0);
     EnHoll_SetTypeAndOpacity(this) /* Sets visible Holls to OPAQUE, invisible Holls to not draw */;
-    this->alwaysZero = 0;
+    this->playerInsideVerticalHollAfterRoomChange = false;
     this->opacity = EN_HOLL_OPAQUE /* Sets *all* Holls to OPAQUE */;
     EnHoll_SetPlayerSide(globalCtx, this, &rotatedPlayerPos);
 }
@@ -129,15 +130,15 @@ void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx) {
         this->opacity = EN_HOLL_OPAQUE;
     } else {
         f32 enHollBottom = EN_HOLL_BOTTOM_DEFAULT;
-        f32 enHollWidth = EN_HOLL_WIDTH_DEFAULT;
+        f32 enHollWidth = EN_HOLL_HALFWIDTH_DEFAULT;
 
         EnHoll_SetPlayerSide(globalCtx, this, &rotatedPlayerPos);
         rotatedPlayerZ = fabsf(rotatedPlayerPos.z);
         if (globalCtx->sceneNum == SCENE_IKANA) {
             enHollBottom = EN_HOLL_BOTTOM_IKANA;
-            enHollWidth = EN_HOLL_WIDTH_IKANA;
+            enHollWidth = EN_HOLL_HALFWIDTH_IKANA;
         }
-        if ((enHollBottom < rotatedPlayerPos.y) && (rotatedPlayerPos.y < EN_HOLL_HEIGHT) &&
+        if ((enHollBottom < rotatedPlayerPos.y) && (rotatedPlayerPos.y < EN_HOLL_HALFHEIGHT) &&
             (fabsf(rotatedPlayerPos.x) < enHollWidth) && (rotatedPlayerZ < D_8089A5DC)) {
             u32 enHollId = EN_HOLL_GET_ID_AND(this);
             if (D_8089A5E0 < rotatedPlayerZ) {
@@ -187,7 +188,7 @@ void EnHoll_TransparentIdle(EnHoll* this, GlobalContext* globalCtx) {
                                            useViewEye ? &globalCtx->view.eye : &player->actor.world.pos);
     enHollTop = (globalCtx->sceneNum == SCENE_PIRATE) ? EN_HOLL_TOP_PIRATE : EN_HOLL_TOP_DEFAULT;
     if ((rotatedPlayerPos.y > EN_HOLL_BOTTOM_DEFAULT) && (rotatedPlayerPos.y < enHollTop) &&
-        (fabsf(rotatedPlayerPos.x) < EN_HOLL_WIDTH)) {
+        (fabsf(rotatedPlayerPos.x) < EN_HOLL_HALFWIDTH)) {
         if (absRotPlayerZ = fabsf(rotatedPlayerPos.z), absRotPlayerZ < 100.0f && absRotPlayerZ > 50.0f) {
             s32 enHollId = EN_HOLL_GET_ID_CAST(this);
             s32 playerSide = (rotatedPlayerPos.z < 0.0f) ? EN_HOLL_PLAYER_BEHIND : EN_HOLL_PLAYER_NOT_BEHIND;
@@ -203,7 +204,34 @@ void EnHoll_TransparentIdle(EnHoll* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Holl/func_8089A0C0.s")
+void func_8089A0C0(EnHoll* this, GlobalContext* globalCtx) {
+    f32 absY;
+
+    if ((this->actor.xzDistToPlayer < EN_HOLL_RADIUS) &&
+        (absY = fabsf(this->actor.yDistToPlayer), absY < EN_HOLL_HALFHEIGHT)) {
+        if (absY < EN_HOLL_HALFHEIGHT_MAXDARKNESS) {
+            globalCtx->unk_18878 =
+                0xFF; // Sets room textures to be maximally dark (pure black) [add enum for this later]
+        } else {
+            globalCtx->unk_18878 =
+                (EN_HOLL_HALFHEIGHT - absY) * (0xFF / (EN_HOLL_HALFHEIGHT - EN_HOLL_HALFHEIGHT_MAXDARKNESS));
+        }
+        if (absY > EN_HOLL_HALFHEIGHT_MAXDARKNESS) {
+            s32 enHollId = EN_HOLL_GET_ID_CAST(this);
+            s32 playerSide = (this->actor.yDistToPlayer > 0.0f) ? EN_HOLL_PLAYER_BEHIND : EN_HOLL_PLAYER_NOT_BEHIND;
+
+            this->actor.room = globalCtx->doorCtx.transitionActorList[enHollId].sides[playerSide].room;
+            if ((this->actor.room != globalCtx->roomCtx.currRoom.num) &&
+                Room_StartRoomTransition(globalCtx, &globalCtx->roomCtx, this->actor.room)) {
+                this->actionFunc = EnHoll_SetAlwaysZero;
+                this->playerInsideVerticalHollAfterRoomChange = true;
+            }
+        }
+    } else if (this->playerInsideVerticalHollAfterRoomChange) {
+        this->playerInsideVerticalHollAfterRoomChange = false;
+        globalCtx->unk_18878 = 0; // Sets room textures to default (no darkness added) [add enum for this later]
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Holl/func_8089A238.s")
 
@@ -211,7 +239,7 @@ void EnHoll_SetAlwaysZero(EnHoll* this, GlobalContext* globalCtx) {
     if (globalCtx->roomCtx.unk31 == 0) {
         func_8012EBF8(globalCtx, &globalCtx->roomCtx);
         if (globalCtx->unk_18878 == 0) {
-            this->alwaysZero = 0;
+            this->playerInsideVerticalHollAfterRoomChange = false;
         }
         EnHoll_SetTypeAndOpacity(this);
     }

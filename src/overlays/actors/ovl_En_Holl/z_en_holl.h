@@ -31,7 +31,7 @@ typedef struct EnHoll {
     /* 0x144 */ s8 type;
     /* 0x145 */ u8 opacity;
     /* 0x146 */ u8 playerSide;
-    /* 0x147 */ UNK_TYPE1 alwaysZero;
+    /* 0x147 */ u8 playerInsideVerticalHollAfterRoomChange;
     /* 0x148 */ EnHollActionFunc actionFunc;
 } EnHoll; // size = 0x14C
 
@@ -41,11 +41,14 @@ typedef struct EnHoll {
 #define EN_HOLL_TOP_DEFAULT 200.0f
 #define EN_HOLL_TOP_PIRATE 280.0f
 
-#define EN_HOLL_WIDTH_DEFAULT 150.0f 
-#define EN_HOLL_WIDTH_IKANA 280.0f 
+#define EN_HOLL_HALFWIDTH_DEFAULT 150.0f 
+#define EN_HOLL_HALFWIDTH_IKANA 280.0f 
 
-#define EN_HOLL_HEIGHT 200.0f
-#define EN_HOLL_WIDTH 200.0f
+#define EN_HOLL_HALFHEIGHT 200.0f
+#define EN_HOLL_HALFHEIGHT_MAXDARKNESS 50.0f
+
+#define EN_HOLL_HALFWIDTH 200.0f
+#define EN_HOLL_RADIUS 120.0f
 
 #define EN_HOLL_GET_ID_AND(this) ((this->actor.params & 0xFFFF) >> 10)
 #define EN_HOLL_GET_ID_CAST(this) ((u16) this->actor.params >> 10)
