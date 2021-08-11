@@ -14,7 +14,7 @@ void EnHoll_SetPlayerSide(GlobalContext* globalCtx, EnHoll* this, Vec3f* rotated
 void EnHoll_ChangeRooms(GlobalContext* globalCtx);
 void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx);
 void func_8089A238(EnHoll* this, GlobalContext* globalCtx);
-void func_80899F30(EnHoll* this, GlobalContext* globalCtx);
+void EnHoll_TransparentIdle(EnHoll* this, GlobalContext* globalCtx);
 void func_8089A0C0(EnHoll* this, GlobalContext* globalCtx);
 void EnHoll_SetAlwaysZero(EnHoll* this, GlobalContext* globalCtx);
 
@@ -39,7 +39,7 @@ static s32 D_8089A590[] = { 0xD7000000,  0xFFFFFFFF, 0xFCFFFFFF, 0xFFFDF638, 0x0
 
 static UNK_PTR D_8089A5B8 = 0;
 
-static EnHollActionFunc D_8089A5BC[] /* sEnHollActionFuncs */ = { EnHoll_VisibleIdle, func_8089A238, func_80899F30,
+static EnHollActionFunc D_8089A5BC[] /* sEnHollActionFuncs */ = { EnHoll_VisibleIdle, func_8089A238, EnHoll_TransparentIdle,
                                                                   func_8089A0C0, EnHoll_VisibleIdle };
 
 static InitChainEntry D_8089A5D0[] /* sInitChain[] */ = {
@@ -139,7 +139,7 @@ void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx) {
         }
         if ((enHollBottom < rotatedPlayerPos.y) && (rotatedPlayerPos.y < EN_HOLL_HEIGHT) &&
             (fabsf(rotatedPlayerPos.x) < enHollWidth) && (rotatedPlayerZ < D_8089A5DC)) {
-            u32 enHollId = EN_HOLL_GET_ID(this);
+            u32 enHollId = EN_HOLL_GET_ID_AND(this);
             if (D_8089A5E0 < rotatedPlayerZ) {
                 if ((globalCtx->roomCtx.prevRoom.num >= 0) && (globalCtx->roomCtx.unk31 == 0)) {
                     this->actor.room = globalCtx->doorCtx.transitionActorList[enHollId].sides[this->playerSide].room;
@@ -176,7 +176,32 @@ void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Holl/func_80899F30.s")
+void EnHoll_TransparentIdle(EnHoll* this, GlobalContext* globalCtx) {
+    Player* player = PLAYER;
+    s32 useViewEye = D_801D0D50 || globalCtx->csCtx.state != 0;
+    Vec3f rotatedPlayerPos;
+    f32 enHollTop;
+    f32 absRotPlayerZ;
+
+    Actor_CalcOffsetOrientedToDrawRotation(&this->actor, &rotatedPlayerPos,
+                                           useViewEye ? &globalCtx->view.eye : &player->actor.world.pos);
+    enHollTop = (globalCtx->sceneNum == SCENE_PIRATE) ? EN_HOLL_TOP_PIRATE : EN_HOLL_TOP_DEFAULT;
+    if ((rotatedPlayerPos.y > EN_HOLL_BOTTOM_DEFAULT) && (rotatedPlayerPos.y < enHollTop) &&
+        (fabsf(rotatedPlayerPos.x) < EN_HOLL_WIDTH)) {
+        if (absRotPlayerZ = fabsf(rotatedPlayerPos.z), absRotPlayerZ < 100.0f && absRotPlayerZ > 50.0f) {
+            s32 enHollId = EN_HOLL_GET_ID_CAST(this);
+            s32 playerSide = (rotatedPlayerPos.z < 0.0f) ? EN_HOLL_PLAYER_BEHIND : EN_HOLL_PLAYER_NOT_BEHIND;
+            TransitionActorEntry* transitionActorEntry = &globalCtx->doorCtx.transitionActorList[enHollId];
+            s8 room = transitionActorEntry->sides[playerSide].room;
+
+            this->actor.room = room;
+            if ((this->actor.room != globalCtx->roomCtx.currRoom.num) &&
+                (Room_StartRoomTransition(globalCtx, &globalCtx->roomCtx, this->actor.room))) {
+                this->actionFunc = EnHoll_SetAlwaysZero;
+            }
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Holl/func_8089A0C0.s")
 

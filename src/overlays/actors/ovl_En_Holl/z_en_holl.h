@@ -38,12 +38,17 @@ typedef struct EnHoll {
 #define EN_HOLL_BOTTOM_DEFAULT -50.0f
 #define EN_HOLL_BOTTOM_IKANA -90.0f
 
+#define EN_HOLL_TOP_DEFAULT 200.0f
+#define EN_HOLL_TOP_PIRATE 280.0f
+
 #define EN_HOLL_WIDTH_DEFAULT 150.0f 
 #define EN_HOLL_WIDTH_IKANA 280.0f 
 
 #define EN_HOLL_HEIGHT 200.0f
+#define EN_HOLL_WIDTH 200.0f
 
-#define EN_HOLL_GET_ID(this) ((this->actor.params & 0xFFFF) >> 10)
+#define EN_HOLL_GET_ID_AND(this) ((this->actor.params & 0xFFFF) >> 10)
+#define EN_HOLL_GET_ID_CAST(this) ((u16) this->actor.params >> 10)
 #define EN_HOLL_GET_TYPE(this) ((this->actor.params >> 7) & 0x7)
 #define EN_HOLL_GET_EXIT_LIST_INDEX(this) (this->actor.params & 0x7F)
 #define EN_HOLL_GET_Z_ACTOR_BITMASK_INDEX(this) (this->actor.params & 0x7)
