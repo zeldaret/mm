@@ -9,9 +9,9 @@ typedef void (*EnHollActionFunc)(struct EnHoll*, GlobalContext*);
 
 typedef enum {
     /* 0 */ EN_HOLL_TYPE_DEFAULT,
-    /* 1 */ EN_HOLL_TYPE_TRANSPARENT_VERTICAL_A,
+    /* 1 */ EN_HOLL_TYPE_VERTICAL_TRANSPARENT,
     /* 2 */ EN_HOLL_TYPE_TRANSPARENT,
-    /* 3 */ EN_HOLL_TYPE_TRANSPARENT_VERTICAL_B,
+    /* 3 */ EN_HOLL_TYPE_VERTICAL,
     /* 4 */ EN_HOLL_TYPE_SCENE_CHANGER
 } EnHollTypes;
 
@@ -31,7 +31,7 @@ typedef struct EnHoll {
     /* 0x144 */ s8 type;
     /* 0x145 */ u8 opacity;
     /* 0x146 */ u8 playerSide;
-    /* 0x147 */ u8 playerInsideVerticalHollAfterRoomChange;
+    /* 0x147 */ u8 verticalOpacityActive;
     /* 0x148 */ EnHollActionFunc actionFunc;
 } EnHoll; // size = 0x14C
 
@@ -49,6 +49,9 @@ typedef struct EnHoll {
 
 #define EN_HOLL_HALFWIDTH 200.0f
 #define EN_HOLL_RADIUS 120.0f
+
+#define EN_HOLL_ACTIVATION_PLANE_DISTANCE 100.0f
+#define EN_HOLL_LOADING_PLANE_DISTANCE 50.0f
 
 #define EN_HOLL_GET_ID_AND(this) ((this->actor.params & 0xFFFF) >> 10)
 #define EN_HOLL_GET_ID_CAST(this) ((u16) this->actor.params >> 10)
