@@ -309,7 +309,10 @@ s32 func_80943E18(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 
 void func_80943E60(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Gfx* D_809440D4[] = {
-        D_060070C0, D_06006FB0, D_06006E80, D_06006D70,
+        D_060070C0,
+        D_06006FB0,
+        D_06006E80,
+        D_06006D70,
     };
     EnDaiku* this = THIS;
 

@@ -1637,7 +1637,7 @@ typedef struct struct_800F0944_arg0 {
     /* 0x194 */ ColliderCylinder collider;
     /* 0x1E0 */ char unk_1E0[0x4];
     /* 0x1E4 */ Path* path;
-    /* 0x1E8 */ s16 unk1E8;
+    /* 0x1E8 */ s16 unk1E8; //curPoint
     /* 0x1EA */ char unk_1EA[0x2];
     /* 0x1EC */ Vec3f unk1EC;
     /* 0x1F8 */ Vec3f unk1F8;

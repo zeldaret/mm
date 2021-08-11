@@ -1,6 +1,40 @@
 #include "global.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 
+extern AnimationHeader D_0600007C;
+extern AnimationHeader D_0600066C;
+extern AnimationHeader D_0600071C;
+extern AnimationHeader D_060008C0;
+extern AnimationHeader D_06000AB0;
+extern AnimationHeader D_06000FDC;
+extern AnimationHeader D_06001494;
+extern AnimationHeader D_06001908;
+extern AnimationHeader D_06001EE0;
+extern AnimationHeader D_06005DC4;
+extern AnimationHeader D_06005D9C;
+extern AnimationHeader D_0600DED8;
+extern AnimationHeader D_0600F920;
+extern AnimationHeader D_0600FC1C;
+extern AnimationHeader D_0600FEE4;
+extern AnimationHeader D_06010330;
+
+ActorAnimationEntryS D_801BC2A0[] = {
+    { &D_0600007C, 1.0f, 0, -1, 0, 0 },  { &D_06001494, 1.0f, 0, -1, 0, 0 },  { &D_06001494, 1.0f, 0, -1, 0, -8 },
+    { &D_06001908, 1.0f, 0, -1, 0, 0 },  { &D_06001908, 1.0f, 0, -1, 0, -8 }, { &D_060008C0, 1.0f, 0, -1, 0, 0 },
+    { &D_06005DC4, 1.0f, 0, -1, 0, 0 },  { &D_06000FDC, 1.0f, 0, -1, 0, 0 },  { &D_06000AB0, 1.0f, 0, -1, 0, -8 },
+    { &D_0600066C, 1.0f, 0, -1, 0, 0 },  { &D_0600071C, 1.0f, 0, -1, 0, 0 },  { &D_06001EE0, 1.0f, 0, -1, 0, 0 },
+    { &D_0600DED8, 1.5f, 0, -1, 2, 0 },  { &D_0600F920, 1.5f, 0, -1, 2, 0 },  { &D_0600FC1C, 1.0f, 0, -1, 0, 0 },
+    { &D_0600FEE4, 1.0f, 0, -1, 0, 0 },  { &D_06010330, 1.0f, 0, -1, 0, 0 },  { &D_0600FC1C, 1.0f, 0, -1, 0, -8 },
+    { &D_0600FEE4, 1.0f, 0, -1, 0, -8 }, { &D_06010330, 1.0f, 0, -1, 0, -8 }, { &D_06005D9C, 1.0f, 0, -1, 0, -8 },
+};
+
+s8 D_801BC3F0[] = { -1, 1, 12, 13, 14, 9, 10, 11, 0, 6, 7, 8, 3, 4, 5, 2 };
+
+UNK_TYPE D_801BC400[] = { 0x00000000, 0x03040006, 0x0700090A, 0x000C0D00 };
+
+UNK_TYPE D_801BC410[] = { 0x00000000, 0x00000000, 0x00000000, 0x00000000 };
+
+// ChangeAnim
 s32 func_800F07C0(SkelAnime* skelAnime, s16 animIndex) {
     s16 frameCount;
     s32 ret = false;
@@ -49,11 +83,13 @@ Actor* func_800F0888(Actor* actor, GlobalContext* globalCtx) {
     return nearestDoor;
 }
 
+// ChangeOjbectAndAnime
 void func_800F0944(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, s16 animIndex) {
     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[arg0->unk193].segment);
     func_800F07C0(&arg0->skelAnime, animIndex);
 }
 
+// UpdateFrame
 s32 func_800F09B4(struct_800F0944_arg0* arg0, GlobalContext* globalCtx) {
     s32 ret = false;
 
@@ -65,6 +101,7 @@ s32 func_800F09B4(struct_800F0944_arg0* arg0, GlobalContext* globalCtx) {
     return ret;
 }
 
+// Blink?
 void func_800F0A20(struct_800F0944_arg0* arg0, s32 arg1) {
     if (DECR(arg0->unk3E8) == 0) {
         arg0->unk3E6 += 1;
@@ -75,14 +112,15 @@ void func_800F0A20(struct_800F0944_arg0* arg0, s32 arg1) {
     }
 }
 
+// Init
 s32 func_800F0A94(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, FlexSkeletonHeader* skeletonHeaderSeg,
                   s16 animIndex) {
-    s32 ret = 0;
+    s32 ret = false;
 
     if ((func_8013D8DC(arg0->unk193, globalCtx) == 1) && (func_8013D8DC(arg0->unk190, globalCtx) == 1) &&
         (func_8013D8DC(arg0->unk191, globalCtx) == 1) && (func_8013D8DC(arg0->unk192, globalCtx) == 1)) {
         arg0->actor.objBankIndex = arg0->unk192;
-        ret = 1;
+        ret = true;
         ActorShape_Init(&arg0->actor.shape, 0.0f, NULL, 0.0f);
         gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[arg0->actor.objBankIndex].segment);
         SkelAnime_InitSV(globalCtx, &arg0->skelAnime, skeletonHeaderSeg, NULL, arg0->jointTable, arg0->morphTable, 16);
@@ -115,11 +153,11 @@ s32 func_800F0CE4(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, ActorFun
     Actor* door;
     s32 pad;
 
-    ret = 0;
+    ret = false;
     if (func_8013D68C(arg0->path, arg0->unk1E8, &arg0->actor.world.pos)) {
         door = func_800F0888(&arg0->actor, globalCtx);
         if (door != NULL) {
-            ret = 1;
+            ret = true;
             func_800F0BB4(arg0, globalCtx, door, arg3, arg4);
             yaw = Math_Vec3f_Yaw(&arg0->actor.world.pos, &door->world.pos);
             arg0->actor.world.pos.x += arg5 * Math_SinS(yaw);
@@ -166,6 +204,7 @@ s32 func_800F0EEC(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, s16 anim
     return 0;
 }
 
+// MoveForwards
 s32 func_800F0F28(struct_800F0944_arg0* arg0, f32 arg1) {
     s16 sp3E;
     s32 ret;
@@ -183,6 +222,7 @@ s32 func_800F0F28(struct_800F0944_arg0* arg0, f32 arg1) {
     return ret;
 }
 
+// MoveBackwards
 s32 func_800F0FF0(struct_800F0944_arg0* arg0, f32 arg1) {
     s16 sp3E;
     s32 ret;
@@ -200,6 +240,7 @@ s32 func_800F0FF0(struct_800F0944_arg0* arg0, f32 arg1) {
     return ret;
 }
 
+// UpdateCollider
 void func_800F10AC(struct_800F0944_arg0* arg0, GlobalContext* globalCtx) {
     arg0->collider.dim.pos.x = arg0->actor.world.pos.x;
     arg0->collider.dim.pos.y = arg0->actor.world.pos.y;
@@ -209,6 +250,7 @@ void func_800F10AC(struct_800F0944_arg0* arg0, GlobalContext* globalCtx) {
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &arg0->collider.base);
 }
 
+// PlaySound
 s32 func_800F112C(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, f32 arg2) {
     u8 prevUnk204 = arg0->unk204;
     u8 prevUnk205 = arg0->unk205;
