@@ -233,8 +233,6 @@ void func_8089A0C0(EnHoll* this, GlobalContext* globalCtx) {
     }
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Holl/func_8089A238.s")
-
 void func_8089A238(EnHoll* this, GlobalContext* globalCtx) {
     f32 absY;
 
