@@ -1,5 +1,4 @@
-#include "osint.h"
-#include "assert.h"
+#include "global.h"
 
 s32 __osSiRawWriteIo(u32 devAddr, u32 data) {
     if (__osSiDeviceBusy() != 0) {

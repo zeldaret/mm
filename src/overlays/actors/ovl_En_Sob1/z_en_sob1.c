@@ -159,7 +159,7 @@ static EnSob1ActionFunc sInitFuncs[] = {
     EnSob1_InitGoronShopkeeper,
 };
 
-extern Vec3f sPosOffset[] = {
+static Vec3f sPosOffset[] = {
     { 0.0f, 0.0f, 0.0f },
     { 0.0f, -4.0f, 0.0f },
     { 0.0f, 0.0f, 0.0f },

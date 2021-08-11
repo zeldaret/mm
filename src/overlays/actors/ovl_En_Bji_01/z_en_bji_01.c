@@ -1,3 +1,9 @@
+/*
+ * File: z_en_bji_01.c
+ * Overlay: ovl_En_Bji_01
+ * Description: Professor Shikashi (Astral Observatory Proprietor)
+ */
+
 #include "z_en_bji_01.h"
 
 #define FLAGS 0x00000019
