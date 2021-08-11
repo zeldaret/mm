@@ -21,7 +21,7 @@ void PreNMI_Update(PreNMIContext* prenmiCtx) {
 void PreNMI_Draw(PreNMIContext* prenmiCtx) {
     GraphicsContext* gfxCtx = prenmiCtx->state.gfxCtx;
 
-    func_8012CF0C(gfxCtx, 1, 1, 0, 0, 0);
+    func_8012CF0C(gfxCtx, true, true, 0, 0, 0);
     func_8012C470(gfxCtx);
 
     gDPSetFillColor(gfxCtx->polyOpa.p++,
@@ -36,7 +36,7 @@ void PreNMI_Main(PreNMIContext* prenmiCtx) {
     PreNMI_Update(prenmiCtx);
     PreNMI_Draw(prenmiCtx);
 
-    prenmiCtx->state.unkA3 = 1;
+    prenmiCtx->state.unk_A3 = 1;
 }
 
 void PreNMI_Destroy(PreNMIContext* prenmiCtx) {

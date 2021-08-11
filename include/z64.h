@@ -242,6 +242,30 @@ typedef struct {
     /* 0x0014 */ s16 data[2784]; // Accessed through REG macros
 } GameInfo; // size = 0x15D4
 
+typedef struct IrqMgrClient_t {
+    /* 0x0 */ struct IrqMgrClient_t* next;
+    /* 0x4 */ OSMesgQueue* queue;
+} IrqMgrClient; // size = 0x8
+
+typedef struct {
+    /* 0x0 */ s16 type;
+    /* 0x2 */ u8 misc[30];
+} OSScMsg;
+
+typedef struct {
+    /* 0x000 */ OSScMsg verticalRetraceMesg;
+    /* 0x020 */ OSScMsg prenmiMsg;
+    /* 0x040 */ OSScMsg nmiMsg;
+    /* 0x060 */ OSMesgQueue irqQueue;
+    /* 0x078 */ OSMesg irqBuffer[8];
+    /* 0x098 */ OSThread thread;
+    /* 0x248 */ IrqMgrClient* callbacks;
+    /* 0x24C */ u8 prenmiStage;
+    /* 0x250 */ OSTime lastPrenmiTime;
+    /* 0x258 */ OSTimer prenmiTimer;
+    /* 0x278 */ OSTime lastFrameTime;
+} IrqMgr; // size = 0x280
+
 typedef struct {
     /* 0x0000 */ u32    size;
     /* 0x0004 */ void*  bufp;
@@ -257,12 +281,30 @@ typedef struct {
 } TwoHeadGfxArena; // size = 0x10
 
 typedef struct {
+    /* 0x0000 0x00 */ Gfx unk_0[9];     // task start
+    /* 0x0048 0x09 */ Gfx unk_48[8];    // original name: clear_zb_dl
+    /* 0x0088 0x11 */ Gfx unk_88[5];    // original name: clear_fb_dl
+    /* 0x00B0 0x16 */ Gfx unk_B0[6];    // setup fb and zb dl
+    /* 0x00E0 0x1C */ Gfx unk_E0[12];   // unused
+    /* 0x0140 0x28 */ Gfx unk_140[17];  // sync segments
+    /* 0x01C8 0x39 */ Gfx unk_1C8[2];   // set scissor dl
+    /* 0x01D8 0x41 */ Gfx unk_1D8[25];  // unused
+    /* 0x02A0 0x54 */ Gfx unk_2A0[5];   // disp buffers master list
+    /* 0x02C8 0x59 */ Gfx unk_2C8[3];   // fillrect
+    /* 0x02E0 0x5C */ Gfx unk_2E0[3];   // another fillrect
+    /* 0x02F8 0x5F */ Gfx unk_2F8[1];   // debug disp
+} GfxMasterList; // size = 0x300
+
+#define GFXPOOL_HEAD_MAGIC 0x1234
+#define GFXPOOL_TAIL_MAGIC 0x5678
+
+typedef struct {
     /* 0x00000 */ u16 headMagic; // 1234
-    /* 0x00008 */ Gfx unk8[96];
+    /* 0x00008 */ GfxMasterList master;
     /* 0x00308 */ Gfx polyXluBuffer[2048];
     /* 0x04308 */ Gfx overlayBuffer[1024];
-    /* 0x06308 */ Gfx unk6308[64];
-    /* 0x06508 */ Gfx unk6508[64];
+    /* 0x06308 */ Gfx workBuffer[64];
+    /* 0x06508 */ Gfx debugBuffer[64];
     /* 0x06708 */ Gfx polyOpaBuffer[13184];
     /* 0x20308 */ u16 tailMagic; // 5678
 } GfxPool; // size = 0x20310
@@ -280,38 +322,90 @@ typedef struct {
     /* 0x18 */ f32      yScale;
 } CfbInfo; // size = 0x1C
 
+#define OS_SC_NEEDS_RDP         0x0001
+#define OS_SC_NEEDS_RSP         0x0002
+#define OS_SC_DRAM_DLIST        0x0004
+#define OS_SC_PARALLEL_TASK     0x0010
+#define OS_SC_LAST_TASK         0x0020
+#define OS_SC_SWAPBUFFER        0x0040
+
+#define OS_SC_RCP_MASK          0x0003
+#define OS_SC_TYPE_MASK         0x0007
+
+#define OS_SC_DP                0x0001
+#define OS_SC_SP                0x0002
+#define OS_SC_YIELD             0x0010
+#define OS_SC_YIELDED           0x0020
+
+typedef struct OSScTask {
+    /* 0x00 */ struct OSScTask* next;
+    /* 0x04 */ u32      state;
+    /* 0x08 */ u32      flags;
+    /* 0x0C */ CfbInfo* framebuffer;
+    /* 0x10 */ OSTask   list;
+    /* 0x50 */ OSMesgQueue* msgQ;
+    /* 0x54 */ OSMesg   msg;
+} OSScTask; // size = 0x58
+
 typedef struct GraphicsContext {
-    /* 0x000 */ Gfx* polyOpaBuffer;
-    /* 0x004 */ Gfx* polyXluBuffer;
-    /* 0x008 */ UNK_TYPE1 pad8[0x8];
-    /* 0x010 */ Gfx* overlayBuffer;
-    /* 0x014 */ UNK_TYPE1 pad14[0x24];
-    /* 0x038 */ UNK_TYPE4 unk38[8];
-    /* 0x058 */ OSMesgQueue* unk58;
-    /* 0x05C */ OSMesgQueue unk5C;
-    /* 0x074 */ UNK_TYPE1 pad74[0x12C];
-    /* 0x1A0 */ Gfx* unk1A0;
-    /* 0x1A4 */ TwoHeadGfxArena unk1A4;
-    /* 0x1B4 */ Gfx* unk1B4;
-    /* 0x1B8 */ TwoHeadGfxArena unk1B8;
-    /* 0x1C8 */ UNK_TYPE1 pad1C8[0xAC];
-    /* 0x274 */ OSViMode* unk274;
-    /* 0x278 */ void* zbuffer;
-    /* 0x27C */ UNK_TYPE1 pad27C[0x1C];
-    /* 0x298 */ TwoHeadGfxArena overlay;
-    /* 0x2A8 */ TwoHeadGfxArena polyOpa;
-    /* 0x2B8 */ TwoHeadGfxArena polyXlu;
-    /* 0x2C8 */ s32 displaylistCounter;
-    /* 0x2CC */ void* framebuffer;
-    /* 0x2D0 */ int pad2D0;
-    /* 0x2D4 */ u32 viConfigFeatures;
-    /* 0x2D8 */ UNK_TYPE1 gap2D8[0x3];
-    /* 0x2DB */ u8 framebufferCounter;
-    /* 0x2DC */ UNK_TYPE1 pad2DC[0x8];
-    /* 0x2E4 */ f32 viConfigXScale;
-    /* 0x2E8 */ f32 viConfigYScale;
-    /* 0x2EC */ UNK_TYPE1 pad2EC[0x4];
-} GraphicsContext; // size = 0x2F0
+    /* 0x000 */ Gfx*        polyOpaBuffer;     // Pointer to "Zelda 0"
+    /* 0x004 */ Gfx*        polyXluBuffer;     // Pointer to "Zelda 1"
+    /* 0x008 */ char        unk_8[0x8];        // Unused, could this be pointers to "Zelda 2" / "Zelda 3"
+    /* 0x010 */ Gfx*        overlayBuffer;     // Pointer to "Zelda 4"
+    /* 0x014 */ u32         unk_14;
+    /* 0x018 */ char        unk_18[0x20];
+    /* 0x038 */ OSMesg      msgBuff[8];
+    /* 0x058 */ OSMesgQueue* schedMsgQ;
+    /* 0x05C */ OSMesgQueue queue;
+    /* 0x074 */ char        unk_74[0x04];
+    /* 0x078 */ OSScTask    task;
+    /* 0x0E0 */ char        unk_E0[0xD0];
+    /* 0x1B0 */ Gfx*        workBuffer;
+    /* 0x1B4 */ TwoHeadGfxArena work;
+    /* 0x1C4 */ Gfx*        debugBuffer;
+    /* 0x1C8 */ TwoHeadGfxArena debug;
+    /* 0x1D8 */ char        unk_1D8[0xAC];
+    /* 0x284 */ OSViMode*   viMode;
+    /* 0x288 */ void*       zbuffer;
+    /* 0x28C */ char        unk_28C[0x1C];
+    /* 0x2A8 */ TwoHeadGfxArena overlay;        // "Zelda 4"
+    /* 0x2B8 */ TwoHeadGfxArena polyOpa;        // "Zelda 0"
+    /* 0x2C8 */ TwoHeadGfxArena polyXlu;        // "Zelda 1"
+    /* 0x2D8 */ s32         gfxPoolIdx;
+    /* 0x2DC */ u16*        curFrameBuffer;
+    /* 0x2E0 */ char        unk_2E0[0x4];
+    /* 0x2E4 */ u32         viConfigFeatures;
+    /* 0x2E8 */ char        unk_2E8[0x2];
+    /* 0x2EA */ u8          unk_2EA;
+    /* 0x2EB */ u8          framebufferIdx;
+    /* 0x2EC */ void (*callback)(struct GraphicsContext*, u32);
+    /* 0x2F0 */ u32         callbackParam;
+    /* 0x2F4 */ f32         xScale;
+    /* 0x2F8 */ f32         yScale;
+    /* 0x2FC */ GfxMasterList* unk_2FC;         // current master list
+} GraphicsContext; // size = 0x300
+
+typedef struct {
+    /* 0x0000 */ OSMesgQueue interruptQ;
+    /* 0x0018 */ OSMesg      intBuf[64];
+    /* 0x0118 */ OSMesgQueue cmdQ;
+    /* 0x0130 */ OSMesg      cmdMsgBuf[8];
+    /* 0x0150 */ OSThread    thread;
+    /* 0x0300 */ OSScTask*   audioListHead;
+    /* 0x0304 */ OSScTask*   gfxListHead;
+    /* 0x0308 */ OSScTask*   audioListTail;
+    /* 0x030C */ OSScTask*   gfxListTail;
+    /* 0x0310 */ OSScTask*   curRSPTask;
+    /* 0x0314 */ OSScTask*   curRDPTask;
+    /* 0x0318 */ s32         retraceCount;
+    /* 0x0318 */ s32         doAudio;
+    /* 0x0320 */ CfbInfo*    curBuf;
+    /* 0x0324 */ CfbInfo*    pendingSwapBuf1;
+    /* 0x0328 */ CfbInfo*    pendingSwapBuf2;
+    /* 0x032C */ char unk_32C[0x3];
+    /* 0x032F */ u8 shouldUpdateVi;
+    /* 0x0330 */ IrqMgrClient irqClient;
+} SchedContext; // size = 0x338
 
 typedef enum IRQ_MSG_TYPE {
     IRQ_VERTICAL_RETRACE_MSG = 0x1,
@@ -553,21 +647,6 @@ typedef enum {
     GFXPRINT_FLAG64 = 0x40,
     GFXPRINT_OPEN = 0x80
 } GfxPrintFlag;
-
-typedef struct {
-    /* 0x00 */ void* loadedRamAddr;
-    /* 0x04 */ u32 vromStart;
-    /* 0x08 */ u32 vromEnd;
-    /* 0x0C */ void* vramStart;
-    /* 0x10 */ void* vramEnd;
-    /* 0x14 */ UNK_TYPE4 unk14;
-    /* 0x18 */ func_ptr init;
-    /* 0x1C */ func_ptr destroy;
-    /* 0x20 */ UNK_TYPE4 unk20;
-    /* 0x24 */ UNK_TYPE4 unk24;
-    /* 0x28 */ UNK_TYPE4 unk28;
-    /* 0x2C */ u32 instanceSize;
-} GameStateOverlay; // size = 0x30
 
 typedef struct {
     /* 0x00 */ u16 countdown;
@@ -1049,11 +1128,28 @@ typedef struct FireObjLight FireObjLight;
 
 typedef struct GameAlloc GameAlloc;
 
-typedef struct GameState GameState;
-
 typedef struct PreNMIContext PreNMIContext;
 
 typedef struct GameAllocNode GameAllocNode;
+
+struct GameState;
+
+typedef void (*GameStateFunc)(struct GameState* gameState);
+
+typedef struct {
+    /* 0x00 */ void* loadedRamAddr;
+    /* 0x04 */ u32 vromStart;
+    /* 0x08 */ u32 vromEnd;
+    /* 0x0C */ void* vramStart;
+    /* 0x10 */ void* vramEnd;
+    /* 0x14 */ UNK_TYPE4 unk14;
+    /* 0x18 */ GameStateFunc init;
+    /* 0x1C */ GameStateFunc destroy;
+    /* 0x20 */ UNK_TYPE4 unk20;
+    /* 0x24 */ UNK_TYPE4 unk24;
+    /* 0x28 */ UNK_TYPE4 unk28;
+    /* 0x2C */ u32 instanceSize;
+} GameStateOverlay; // size = 0x30
 
 struct GameAllocNode {
     /* 0x0 */ GameAllocNode* next;
@@ -1067,9 +1163,7 @@ struct GameAlloc {
     /* 0x10 */ GameAllocNode* head;
 }; // size = 0x14
 
-typedef void (*GameStateFunc)(struct GameState* gameState);
-
-struct GameState {
+typedef struct {
     /* 0x00 */ GraphicsContext* gfxCtx;
     /* 0x04 */ GameStateFunc main;
     /* 0x08 */ GameStateFunc destroy;
@@ -1083,8 +1177,8 @@ struct GameState {
     /* 0x9C */ u32 frames;
     /* 0xA0 */ UNK_TYPE1 padA0[0x2];
     /* 0xA2 */ u8 framerateDivisor; // game speed?
-    /* 0xA3 */ UNK_TYPE1 unkA3;
-}; // size = 0xA4
+    /* 0xA3 */ u8 unk_A3;
+} GameState; // size = 0xA4
 
 struct PreNMIContext {
     /* 0x00 */ GameState state;
@@ -1242,30 +1336,6 @@ typedef enum {
     QUAKE2_SETUP,
 } Quake2State;
 
-typedef struct IrqMgrClient_t {
-    /* 0x0 */ struct IrqMgrClient_t* next;
-    /* 0x4 */ OSMesgQueue* queue;
-} IrqMgrClient; // size = 0x8
-
-typedef struct {
-    /* 0x0 */ s16 type;
-    /* 0x2 */ u8 misc[30];
-} OSScMsg;
-
-typedef struct {
-    /* 0x000 */ OSScMsg verticalRetraceMesg;
-    /* 0x020 */ OSScMsg prenmiMsg;
-    /* 0x040 */ OSScMsg nmiMsg;
-    /* 0x060 */ OSMesgQueue irqQueue;
-    /* 0x078 */ OSMesg irqBuffer[8];
-    /* 0x098 */ OSThread thread;
-    /* 0x248 */ IrqMgrClient* callbacks;
-    /* 0x24C */ u8 prenmiStage;
-    /* 0x250 */ OSTime lastPrenmiTime;
-    /* 0x258 */ OSTimer prenmiTimer;
-    /* 0x278 */ OSTime lastFrameTime;
-} IrqMgr; // size = 0x280
-
 typedef struct {
     /* 0x000 */ u8 controllers; // bit 0 is set if controller 1 is plugged in, etc.
     /* 0x001 */ UNK_TYPE1 pad1[0x13];
@@ -1288,53 +1358,6 @@ typedef struct {
     /* 0x47E */ u8 hasStopped;
     /* 0x47F */ UNK_TYPE1 pad47F[0x1];
 } PadMgr; // size = 0x480
-
-#define OS_SC_NEEDS_RDP         0x0001
-#define OS_SC_NEEDS_RSP         0x0002
-#define OS_SC_DRAM_DLIST        0x0004
-#define OS_SC_PARALLEL_TASK     0x0010
-#define OS_SC_LAST_TASK         0x0020
-#define OS_SC_SWAPBUFFER        0x0040
-
-#define OS_SC_RCP_MASK          0x0003
-#define OS_SC_TYPE_MASK         0x0007
-
-#define OS_SC_DP                0x0001
-#define OS_SC_SP                0x0002
-#define OS_SC_YIELD             0x0010
-#define OS_SC_YIELDED           0x0020
-
-typedef struct OSScTask {
-    /* 0x00 */ struct OSScTask* next;
-    /* 0x04 */ u32      state;
-    /* 0x08 */ u32      flags;
-    /* 0x0C */ CfbInfo* framebuffer;
-    /* 0x10 */ OSTask   list;
-    /* 0x50 */ OSMesgQueue* msgQ;
-    /* 0x54 */ OSMesg   msg;
-} OSScTask; // size = 0x58
-
-typedef struct {
-    /* 0x0000 */ OSMesgQueue interruptQ;
-    /* 0x0018 */ OSMesg      intBuf[64];
-    /* 0x0118 */ OSMesgQueue cmdQ;
-    /* 0x0130 */ OSMesg      cmdMsgBuf[8];
-    /* 0x0150 */ OSThread    thread;
-    /* 0x0300 */ OSScTask*   audioListHead;
-    /* 0x0304 */ OSScTask*   gfxListHead;
-    /* 0x0308 */ OSScTask*   audioListTail;
-    /* 0x030C */ OSScTask*   gfxListTail;
-    /* 0x0310 */ OSScTask*   curRSPTask;
-    /* 0x0314 */ OSScTask*   curRDPTask;
-    /* 0x0318 */ s32         retraceCount;
-    /* 0x0318 */ s32         doAudio;
-    /* 0x0320 */ CfbInfo*    curBuf;
-    /* 0x0324 */ CfbInfo*    pendingSwapBuf1;
-    /* 0x0328 */ CfbInfo*    pendingSwapBuf2;
-    /* 0x032C */ char unk_32C[0x3];
-    /* 0x032F */ u8 shouldUpdateVi;
-    /* 0x0330 */ IrqMgrClient irqClient;
-} SchedContext; // size = 0x338
 
 typedef struct StackEntry_t {
     /* 0x00 */ struct StackEntry_t* next;

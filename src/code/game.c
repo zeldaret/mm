@@ -5,9 +5,6 @@ f32 gFramerateDivisorF = 1.0f;
 f32 gFramerateDivisorHalf = 1.0f / 2.0f;
 f32 gFramerateDivisorThird = 1.0f / 3.0f;
 
-u32 D_801D1510 = 0x0000000A;
-u32 D_801D1514[3] = { 0 };
-
 void Game_UpdateFramerateVariables(s32 divisor) {
     gFramerateDivisor = divisor;
     gFramerateDivisorF = (f32)divisor;
@@ -100,11 +97,11 @@ lblUnk:; // Label prevents reordering, if(1) around the above block don't seem t
 
 void Game_ResetSegments(GraphicsContext* gfxCtx) {
     gSPSegment(gfxCtx->polyOpa.p++, 0, 0);
-    gSPSegment(gfxCtx->polyOpa.p++, 0xF, gfxCtx->framebuffer);
+    gSPSegment(gfxCtx->polyOpa.p++, 0xF, gfxCtx->curFrameBuffer);
     gSPSegment(gfxCtx->polyXlu.p++, 0, 0);
-    gSPSegment(gfxCtx->polyXlu.p++, 0xF, gfxCtx->framebuffer);
+    gSPSegment(gfxCtx->polyXlu.p++, 0xF, gfxCtx->curFrameBuffer);
     gSPSegment(gfxCtx->overlay.p++, 0, 0);
-    gSPSegment(gfxCtx->overlay.p++, 0xF, gfxCtx->framebuffer);
+    gSPSegment(gfxCtx->overlay.p++, 0xF, gfxCtx->curFrameBuffer);
 }
 
 void func_801736DC(GraphicsContext* gfxCtx) {
@@ -190,10 +187,10 @@ void Game_StateInit(GameState* gamestate, GameStateFunc gameStateInit, GraphicsC
     gamestate->main = NULL;
     gamestate->destroy = NULL;
     gamestate->running = 1;
-    gfxCtx->unk274 = D_801FBB88;
+    gfxCtx->viMode = D_801FBB88;
     gfxCtx->viConfigFeatures = gViConfigFeatures;
-    gfxCtx->viConfigXScale = gViConfigXScale;
-    gfxCtx->viConfigYScale = gViConfigYScale;
+    gfxCtx->xScale = gViConfigXScale;
+    gfxCtx->yScale = gViConfigYScale;
     gamestate->nextGameStateInit = NULL;
     gamestate->nextGameStateSize = 0U;
 
@@ -211,13 +208,13 @@ lblUnk:;
     func_801773A0(&D_801F7FF0);
     func_8013ED9C();
 
-    osSendMesg(&gamestate->gfxCtx->unk5C, NULL, 1);
+    osSendMesg(&gamestate->gfxCtx->queue, NULL, 1);
 }
 
 void Game_StateFini(GameState* gamestate) {
     func_80172BC0();
     func_8019E014();
-    osRecvMesg(&gamestate->gfxCtx->unk5C, 0, 1);
+    osRecvMesg(&gamestate->gfxCtx->queue, 0, 1);
 
     if (gamestate->destroy != 0) {
         gamestate->destroy(gamestate);
