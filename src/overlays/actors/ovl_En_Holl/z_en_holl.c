@@ -233,7 +233,24 @@ void func_8089A0C0(EnHoll* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Holl/func_8089A238.s")
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Holl/func_8089A238.s")
+
+void func_8089A238(EnHoll* this, GlobalContext* globalCtx) {
+    f32 absY;
+
+    if ((this->actor.xzDistToPlayer < EN_HOLL_RADIUS) &&
+        (absY = fabsf(this->actor.yDistToPlayer), absY < EN_HOLL_HALFHEIGHT) &&
+        (absY > EN_HOLL_HALFHEIGHT_MAXDARKNESS)) {
+        s32 enHollId = EN_HOLL_GET_ID_CAST(this);
+        s32 playerSide = (this->actor.yDistToPlayer > 0.0f) ? EN_HOLL_PLAYER_BEHIND : EN_HOLL_PLAYER_NOT_BEHIND;
+
+        this->actor.room = globalCtx->doorCtx.transitionActorList[enHollId].sides[playerSide].room;
+        if ((this->actor.room != globalCtx->roomCtx.currRoom.num) &&
+            Room_StartRoomTransition(globalCtx, &globalCtx->roomCtx, this->actor.room)) {
+            this->actionFunc = EnHoll_SetAlwaysZero;
+        }
+    }
+}
 
 void EnHoll_SetAlwaysZero(EnHoll* this, GlobalContext* globalCtx) {
     if (globalCtx->roomCtx.unk31 == 0) {
