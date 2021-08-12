@@ -984,7 +984,7 @@ void EnDno_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 
         func_8012C28C(globalCtx->state.gfxCtx);
         if (limbIndex == 13) {
-            Matrix_Scale(this->unk_454, this->unk_454, this->unk_454, 1);
+            Matrix_Scale(this->unk_454, this->unk_454, this->unk_454, MTXMODE_APPLY); 
             Matrix_InsertXRotation_s(this->unk_45C, 1);
         }
 
@@ -1006,8 +1006,8 @@ void EnDno_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
         Matrix_MultiplyVector3fByState(&D_80A73B40, &sp84);
         func_80A711D0(this, globalCtx, &sp84);
         Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
-        Matrix_Scale(0.15f, 0.15f, 1.0f, 1);
-        Matrix_InsertTranslation(0.0f, -3200.0f, 0.0f, 1);
+        Matrix_Scale(0.15f, 0.15f, 1.0f, MTXMODE_APPLY); 
+        Matrix_InsertTranslation(0.0f, -3200.0f, 0.0f, MTXMODE_APPLY); 
         gfxXlu = func_8012C2B4(POLY_XLU_DISP);
 
         gSPMatrix(gfxXlu, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

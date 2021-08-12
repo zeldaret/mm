@@ -118,7 +118,7 @@ void EnCha_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnCha* this = THIS;
 
     func_800BDFC0(globalCtx, D_06000710);
-    Matrix_InsertTranslation(-1094.0f, 4950.0f, 9.0f, 1);
+    Matrix_InsertTranslation(-1094.0f, 4950.0f, 9.0f, MTXMODE_APPLY); 
     Matrix_InsertXRotation_s(this->actor.home.rot.x, 1);
     func_800BDFC0(globalCtx, D_06000958);
 }

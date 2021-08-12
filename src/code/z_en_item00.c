@@ -660,7 +660,7 @@ void EnItem00_Draw(Actor* thisx, GlobalContext* globalCtx) {
                             this->unk152 = -2;
                         }
                     } else {
-                        Matrix_Scale(16.0f, 16.0f, 16.0f, 1);
+                        Matrix_Scale(16.0f, 16.0f, 16.0f, MTXMODE_APPLY); 
                         GetItem_Draw(globalCtx, 8);
                     }
                     break;
@@ -785,7 +785,7 @@ void EnItem00_DrawHeartContainer(EnItem00* actor, GlobalContext* globalCtx) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         func_8012C2DC(globalCtx->state.gfxCtx);
-        Matrix_Scale(20.0f, 20.0f, 20.0f, 1);
+        Matrix_Scale(20.0f, 20.0f, 20.0f, MTXMODE_APPLY); 
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
 

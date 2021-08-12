@@ -12,7 +12,7 @@ void* ZeldaArena_MallocR(size_t size) {
     return ptr;
 }
 
-void* ZeldaArena_Realloc(void* ptr, u32 newSize) {
+void* ZeldaArena_Realloc(void* ptr, size_t newSize) {
     ptr = __osRealloc(&sZeldaArena, ptr, newSize);
     return ptr;
 }

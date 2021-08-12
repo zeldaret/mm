@@ -286,7 +286,7 @@ void func_80919768(Actor* thisx, GlobalContext* globalCtx2) {
             Matrix_InsertTranslation(initialPositions->x * ((this->dx * aux) + (1.0f - this->dx)),
                                      initialPositions->y * ((this->dy * aux) + (1.0f - this->dy)),
                                      initialPositions->z * ((this->dz * aux) + (1.0f - this->dz)), MTXMODE_APPLY);
-            Matrix_Scale(this->scalingFactor, this->scalingFactor, this->scalingFactor, 1);
+            Matrix_Scale(this->scalingFactor, this->scalingFactor, this->scalingFactor, MTXMODE_APPLY); 
 
             Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
 
