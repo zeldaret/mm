@@ -240,7 +240,7 @@ s32 __osCheckId(OSPfs* pfs) {
         }
     }
 
-    if (memcmp(pfs->id, temp, BLOCKSIZE) != 0) {
+    if (bcmp(pfs->id, temp, BLOCKSIZE) != 0) {
         return PFS_ERR_NEW_PACK;
     }
 
