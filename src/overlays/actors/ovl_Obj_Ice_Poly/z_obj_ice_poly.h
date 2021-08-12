@@ -5,7 +5,7 @@
 
 struct ObjIcePoly;
 
-typedef void (*ObjIcePolyActionFunc)(struct ObjIcePoly* this, GlobalContext* globalCtx);
+typedef void (*ObjIcePolyActionFunc)(struct ObjIcePoly*, GlobalContext*);
 
 typedef struct ObjIcePoly {
     /* 0x0000 */ Actor actor;

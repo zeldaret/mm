@@ -5,7 +5,7 @@
 
 struct ObjTree;
 
-typedef void (*ObjTreeActionFunc)(struct ObjTree* this, GlobalContext* globalCtx);
+typedef void (*ObjTreeActionFunc)(struct ObjTree*, GlobalContext*);
 
 typedef struct ObjTree {
     /* 0x0000 */ Actor actor;

@@ -5,7 +5,7 @@
 
 struct EnDnk;
 
-typedef void (*EnDnkActionFunc)(struct EnDnk* this, GlobalContext* globalCtx);
+typedef void (*EnDnkActionFunc)(struct EnDnk*, GlobalContext*);
 
 typedef struct EnDnk {
     /* 0x0000 */ Actor actor;

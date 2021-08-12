@@ -5,7 +5,7 @@
 
 struct ShotSun;
 
-typedef void (*ShotSunActionFunc)(struct ShotSun* this, GlobalContext* globalCtx);
+typedef void (*ShotSunActionFunc)(struct ShotSun*, GlobalContext*);
 
 typedef struct ShotSun {
     /* 0x0000 */ Actor actor;
