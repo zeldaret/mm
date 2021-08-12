@@ -193,17 +193,17 @@ s32 ObjKibako2_ShouldBreak(ObjKibako2* this) {
         Actor* ac = this->collider.base.ac;
         this->collider.base.acFlags = acFlags & ~AC_HIT;
         if (ac != NULL) {
-            if (this->collider.info.acHitInfo->toucher.dmgFlags & 1 << 31) {
+            if (this->collider.info.acHitInfo->toucher.dmgFlags & (1 << 31)) {
                 // Powder Keg
                 if (Math3D_DistanceSquared(&this->dyna.actor.world.pos, &ac->world.pos) < SQ(160.0f)) {
                     shouldBreak = true;
                 }
-            } else if ((this->collider.info.acHitInfo->toucher.dmgFlags & 1 << 3)) {
+            } else if (this->collider.info.acHitInfo->toucher.dmgFlags & (1 << 3)) {
                 // Explosives
                 if (Math3D_DistanceSquared(&this->dyna.actor.world.pos, &ac->world.pos) < SQ(100.0f)) {
                     shouldBreak = true;
                 }
-            } else if ((this->collider.info.acHitInfo->toucher.dmgFlags & (1 << 8 | 1 << 10))) {
+            } else if (this->collider.info.acHitInfo->toucher.dmgFlags & (1 << 8 | 1 << 10)) {
                 // Goron Punch/Pound
                 shouldBreak = true;
             }
