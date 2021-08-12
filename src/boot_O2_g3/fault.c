@@ -472,7 +472,7 @@ void Fault_WaitForButtonCombo(void) {
     } while (!CHECK_BTN_ALL(input->cur.button, BTN_DLEFT | BTN_L | BTN_R | BTN_CRIGHT));
 }
 
-void Fault_DrawMemDumpPage(char* title, u32* addr, u32 param_3) {
+void Fault_DrawMemDumpPage(const char* title, u32* addr, u32 param_3) {
     u32* alignedAddr;
     u32* writeAddr;
     s32 y;
