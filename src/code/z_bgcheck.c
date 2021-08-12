@@ -16,7 +16,7 @@ void BgCheck_ScenePolygonListsNodeInsert(SSNodeList* list, SSList* ssList, s16* 
     u16 index;
 
     index = BgCheck_ScenePolygonListsReserveNode(list);
-    BgCheck_PolygonLinkedListNodeInit(&list->nodes[index], polyIndex, ssList->head);
+    BgCheck_PolygonLinkedListNodeInit(&list->tbl[index], polyIndex, ssList->head);
     ssList->head = index;
 }
 
@@ -229,6 +229,8 @@ s32 func_800C0340(CollisionPoly* poly, Vec3s* vtxList, f32 x, f32 z, f32* yInter
         x, yIntersect, chkDist);
 }
 
+#define CollisionPoly_CheckYIntersect func_800C0474
+s32 CollisionPoly_CheckYIntersect(CollisionPoly* poly, Vec3s* vtxList, f32 x, f32 z, f32* yIntersect, f32 chkDist);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C0474.s")
 
 //#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C0668.s")
@@ -282,73 +284,82 @@ s32 func_8017C540(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 y, f32 z, f32 unk, f32 ch
 s32 func_8017BAD0(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 y, f32 z, f32 unk, f32 chkDist, f32 ny); //Math3D_TriChkPointParaYDist
 s32 func_8017CB7C(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 y, f32 z, f32 unk, f32 chkDist, f32 nz); //Math3D_TriChkLineSegParaZDist
 
-//Vec3f D_801EDB70[3];
-
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C07F0.s")
-//extern Vec3f D_01EDB70[3];//polyVerts[3];
-//extern Plane D_801EDB98;//plane;
 //CollisionPoly_LineVsPoly
-/*
+#ifdef NON_MATCHING
+//#define polyVerts D_801EDB70
+//#define plane D_801EDB98
 s32 func_800C07F0(func_800C07F0_args* a0) {
+    static Vec3f polyVerts[3];
+    static Plane plane;
     f32 planeDistA;
     f32 planeDistB;
     f32 planeDistDelta;
 
-    D_801EDB98.originDist = a0->poly->dist;
+    plane.originDist = a0->poly->dist;
     planeDistA =
-        (a0->poly->normal.x * a0->posA->x + a0->poly->normal.y * a0->posA->y + a0->poly->normal.z * a0->posA->z) * COLPOLY_NORMAL_FRAC +
-        D_801EDB98.originDist;
+        COLPOLY_GET_NORMAL(a0->poly->normal.x * a0->posA->x + a0->poly->normal.y * a0->posA->y + a0->poly->normal.z * a0->posA->z) +
+        plane.originDist;
     planeDistB =
-        (a0->poly->normal.x * a0->posB->x + a0->poly->normal.y * a0->posB->y + a0->poly->normal.z * a0->posB->z) * COLPOLY_NORMAL_FRAC +
-        D_801EDB98.originDist;
+        COLPOLY_GET_NORMAL(a0->poly->normal.x * a0->posB->x + a0->poly->normal.y * a0->posB->y + a0->poly->normal.z * a0->posB->z) +
+        plane.originDist;
 
     planeDistDelta = planeDistA - planeDistB;
-    if ((planeDistA >= 0.0f && planeDistB >= 0.0f) || (planeDistA < 0.0f && planeDistB < 0.0f) ||
-        (a0->chkOneFace && planeDistA < 0.0f && planeDistB > 0.0f) || IS_ZERO(planeDistDelta)) {
+    if ((planeDistA >= 0.0f && planeDistB >= 0.0f)
+        || (planeDistA < 0.0f && planeDistB < 0.0f)
+        || ((a0->chkOneFace != 0) && (planeDistA < 0.0f && planeDistB > 0.0f))
+        || IS_ZERO(planeDistDelta)) {
         return false;
     }
 
-    BgCheck_PolygonGetNormal(a0->poly, &D_801EDB98.normal.x, &D_801EDB98.normal.y, &D_801EDB98.normal.z);
-    BgCheck_CreateTriNormFromPolygon(a0->poly, a0->vtxList, D_01EDB70);
+    BgCheck_PolygonGetNormal(a0->poly, &plane.normal.x, &plane.normal.y, &plane.normal.z);
+    BgCheck_CreateTriNormFromPolygon(a0->poly, a0->vtxList, polyVerts);
     Math3D_Lerp(a0->posA, a0->posB, planeDistA / planeDistDelta, a0->planeIntersect);
-    if ((fabsf(D_801EDB98.normal.x) > 0.5f &&
+
+    if ((fabsf(plane.normal.x) > 0.5f &&
         func_8017C540(
-            &D_01EDB70[0], 
-            &D_01EDB70[1],
-            &D_01EDB70[2], 
+            &polyVerts[0],
+            &polyVerts[1],
+            &polyVerts[2],
             a0->planeIntersect->y,
             a0->planeIntersect->z,
             0.0f,
-            a0->chkDist, 
-            D_801EDB98.normal.x)) ||
-        (fabsf(D_801EDB98.normal.y) > 0.5f &&
+            a0->chkDist,
+            plane.normal.x))
+        || (fabsf(plane.normal.y) > 0.5f &&
             func_8017BAD0(
-                &D_01EDB70[0],
-                &D_01EDB70[1],
-                &D_01EDB70[2],
+                &polyVerts[0],
+                &polyVerts[1],
+                &polyVerts[2],
                 a0->planeIntersect->z,
                 a0->planeIntersect->x,
                 0.0f,
-                a0->chkDist, D_801EDB98.normal.y)) ||
-        (fabsf(D_801EDB98.normal.z) > 0.5f &&
+                a0->chkDist,
+                plane.normal.y))
+        || (fabsf(plane.normal.z) > 0.5f &&
             func_8017CB7C(
-                &D_01EDB70[0],
-                &D_01EDB70[1],
-                &D_01EDB70[2],
+                &polyVerts[0],
+                &polyVerts[1],
+                &polyVerts[2],
                 a0->planeIntersect->x,
                 a0->planeIntersect->y,
                 0.0f,
                 a0->chkDist,
-                D_801EDB98.normal.z))) {
+                plane.normal.z))) {
         return true;
     }
     return false;
 }
-*/
+#undef polyVerts
+#undef plane 
+#else
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C07F0.s")
+#endif
+
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_PolygonCollidesWithSphere.s")
 
 //CollisionPoly_SphVsPoly
-//s32 BgCheck_PolygonCollidesWithSphere(CollisionPoly* poly, BgVertex* vtxList, Vec3f* center, f32 radius) {
+//OK
+//s32 BgCheck_PolygonCollidesWithSphere(CollisionPoly* poly, Vec3s* vtxList, Vec3f* center, f32 radius) {
 //    static Sphere16 sphere; //D_801EDBA8
 //    static TriNorm tri; //D_801EDBB0
 //    Vec3f intersect;
@@ -363,7 +374,7 @@ s32 func_800C07F0(func_800C07F0_args* a0) {
 //    return Math3D_ColSphereTri(&sphere, &tri, &intersect);
 //}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_ScenePolygonListsInsertSorted.s")
+
 // NON_MATCHING
 /**
  * Add poly to StaticLookup table
@@ -373,61 +384,146 @@ s32 func_800C07F0(func_800C07F0_args* a0) {
  * `vtxList` is the vertex lookup list
  * `polyId` is the index of the poly in polyList to insert into the lookup table
  */
-//StaticLookup_AddPolyToSSList
-//void BgCheck_ScenePolygonListsInsertSorted(CollisionContext* colCtx, SSList* ssList, CollisionPoly* polyList, Vec3s* vtxList,
-//    s16 polyId) {
-//    SSNode* curNode;
-//    SSNode* nextNode;
-//    s32 polyYMin;
-//    u16 newNodeId;
-//    s16 curPolyId;
-//
-//    // if list is null
-//    if (ssList->head == SS_NULL) {
-//        BgCheck_ScenePolygonListsNodeInsert(&colCtx->polyNodes, ssList, &polyId);
-//        return;
-//    }
-//
-//    polyYMin = BgCheck_PolygonGetMinY(&polyList[polyId], vtxList);
-//
-//    curNode = &colCtx->polyNodes.nodes[ssList->head];
-//    curPolyId = curNode->polyId;
-//
-//    // if the poly being inserted has a lower y than the first poly
-//    if (polyYMin < vtxList[COLPOLY_VTX_INDEX(polyList[curPolyId].flags_vIA)].y &&
-//        polyYMin < vtxList[COLPOLY_VTX_INDEX(polyList[curPolyId].flags_vIB)].y &&
-//        polyYMin < vtxList[polyList[curPolyId].vIC].y) {
-//        BgCheck_ScenePolygonListsNodeInsert(&colCtx->polyNodes, ssList, &polyId);
-//        return;
-//    }
-//    while (true) {
-//        // if at the end of the list
-//        if (curNode->next == SS_NULL) {
-//            newNodeId = BgCheck_ScenePolygonListsReserveNode(&colCtx->polyNodes);
-//            BgCheck_PolygonLinkedListNodeInit(&colCtx->polyNodes.nodes[newNodeId], &polyId, SS_NULL);
-//            curNode->next = newNodeId;
-//            return;
-//        }
-//
-//        nextNode = &colCtx->polyNodes.nodes[curNode->next];
-//        curPolyId = nextNode->polyId;
-//
-//        // if the poly being inserted is lower than the next poly
-//        if (polyYMin < vtxList[COLPOLY_VTX_INDEX(polyList[curPolyId].flags_vIA)].y &&
-//            polyYMin < vtxList[COLPOLY_VTX_INDEX(polyList[curPolyId].flags_vIB)].y &&
-//            polyYMin < vtxList[polyList[curPolyId].vIC].y) {
-//            newNodeId = BgCheck_ScenePolygonListsReserveNode(&colCtx->polyNodes);
-//            BgCheck_PolygonLinkedListNodeInit(&colCtx->polyNodes.nodes[newNodeId], &polyId, curNode->next);
-//            curNode->next = newNodeId;
-//            return;
-//        }
-//        curNode = nextNode;
-//    }
-//}
+#define StaticLookup_AddPolyToSSList BgCheck_ScenePolygonListsInsertSorted
+#ifdef NON_MATCHING
+void BgCheck_ScenePolygonListsInsertSorted(CollisionContext* colCtx, SSList* ssList, CollisionPoly* polyList, Vec3s* vtxList,
+    s16 polyId) {
+    SSNode* curNode;
+    SSNode* nextNode;
+    s32 polyYMin;
+    u16 newNodeId;
+    s16 curPolyId;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_ScenePolygonListsInsert.s")
+    // if list is null
+    if (ssList->head == SS_NULL) {
+        BgCheck_ScenePolygonListsNodeInsert(&colCtx->polyNodes, ssList, &polyId);
+        return;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C0E74.s")
+    polyYMin = BgCheck_PolygonGetMinY(&polyList[polyId], vtxList);
+
+    curNode = &colCtx->polyNodes.tbl[ssList->head];
+    curPolyId = curNode->polyId;
+
+    // if the poly being inserted has a lower y than the first poly
+    if (polyYMin < vtxList[COLPOLY_VTX_INDEX(polyList[curPolyId].flags_vIA)].y &&
+        polyYMin < vtxList[COLPOLY_VTX_INDEX(polyList[curPolyId].flags_vIB)].y &&
+        polyYMin < vtxList[polyList[curPolyId].vIC].y) {
+        BgCheck_ScenePolygonListsNodeInsert(&colCtx->polyNodes, ssList, &polyId);
+        return;
+    }
+    while (true) {
+        // if at the end of the list
+        if (curNode->next == SS_NULL) {
+            newNodeId = BgCheck_ScenePolygonListsReserveNode(&colCtx->polyNodes);
+            BgCheck_PolygonLinkedListNodeInit(&colCtx->polyNodes.tbl[newNodeId], &polyId, SS_NULL);
+            curNode->next = newNodeId;
+            return;
+        }
+
+        nextNode = &colCtx->polyNodes.tbl[curNode->next];
+        curPolyId = nextNode->polyId;
+
+        // if the poly being inserted is lower than the next poly
+        if (polyYMin < vtxList[COLPOLY_VTX_INDEX(polyList[curPolyId].flags_vIA)].y &&
+            polyYMin < vtxList[COLPOLY_VTX_INDEX(polyList[curPolyId].flags_vIB)].y &&
+            polyYMin < vtxList[polyList[curPolyId].vIC].y) {
+            newNodeId = BgCheck_ScenePolygonListsReserveNode(&colCtx->polyNodes);
+            BgCheck_PolygonLinkedListNodeInit(&colCtx->polyNodes.tbl[newNodeId], &polyId, curNode->next);
+            curNode->next = newNodeId;
+            return;
+        }
+        curNode = nextNode;
+    }
+}
+#else
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_ScenePolygonListsInsertSorted.s")
+#endif 
+
+/**
+ * Add CollisionPoly to StaticLookup list
+ */
+//StaticLookup_AddPoly
+void BgCheck_ScenePolygonListsInsert(StaticLookup* lookup, CollisionContext* colCtx, CollisionPoly* polyList, Vec3s* vtxList,
+    s16 index) {
+    if (polyList[index].normal.y > COLPOLY_SNORMAL(0.5f)) {
+        StaticLookup_AddPolyToSSList(colCtx, &lookup->floor, polyList, vtxList, index);
+    }
+    else if (polyList[index].normal.y < COLPOLY_SNORMAL(-0.8f)) {
+        StaticLookup_AddPolyToSSList(colCtx, &lookup->ceiling, polyList, vtxList, index);
+    }
+    else {
+        StaticLookup_AddPolyToSSList(colCtx, &lookup->wall, polyList, vtxList, index);
+    }
+}
+
+typedef struct {
+    u16 unk0;
+    u8 unk2;
+} struct_func_800C0E74;
+
+#define BgCheck_RaycastFloorStaticList func_800C0E74
+/**
+ * Locates the closest static poly directly underneath `pos`, starting at list `ssList`
+ * returns yIntersect of the closest poly, or `yIntersectMin`
+ * stores the pointer of the closest poly to `outPoly`
+ * if (flags & 1), ignore polys with a normal.y < 0 (from vertical walls to ceilings)
+ */
+f32 BgCheck_RaycastFloorStaticList(CollisionContext* colCtx, u16 xpFlags, SSList* ssList, CollisionPoly** outPoly,
+    Vec3f* pos, f32 yIntersectMin, f32 chkDist, s32 flags, struct_func_800C0E74* arg8, s32 arg9) {
+    SSNode* curNode;
+    s32 polyId;
+    f32 result;
+    f32 yIntersect;
+    CollisionPoly* colPoly;
+    s32 pad;
+
+    result = yIntersectMin;
+    if (ssList->head == SS_NULL) {
+        return result;
+    }
+
+    curNode = &colCtx->polyNodes.tbl[ssList->head];
+
+    while (true) {
+        polyId = curNode->polyId;
+        colPoly = &colCtx->colHeader->polyList[polyId];
+
+        if ( (flags & 1) && (colPoly->normal.y < 0)
+            || ( (arg9 & 0x20) && ((colCtx->colHeader->surfaceTypeList[colPoly->type].data[0] >> 0x1E) & 1))
+            || COLPOLY_VIA_FLAG_TEST(colPoly->flags_vIA, xpFlags)
+            || ( COLPOLY_VIA_FLAG_TEST(colPoly->flags_vIB, 4)
+                && ( (arg8 != NULL && arg8->unk2 != 2) || (arg8 == NULL && xpFlags != 1))))
+        {
+            if (curNode->next == SS_NULL) {
+                break;
+            }
+            curNode = &colCtx->polyNodes.tbl[curNode->next];
+            continue;
+        }
+
+        if (pos->y < colCtx->colHeader->vtxList[COLPOLY_VTX_INDEX(colPoly->flags_vIA)].y &&
+            pos->y < colCtx->colHeader->vtxList[COLPOLY_VTX_INDEX(colPoly->flags_vIB)].y &&
+            pos->y < colCtx->colHeader->vtxList[colPoly->vIC].y) {
+            break;
+        }
+
+        if (CollisionPoly_CheckYIntersect(colPoly, colCtx->colHeader->vtxList, pos->x,
+            pos->z, &yIntersect, chkDist)) {
+            // if poly is closer to pos without going over
+            if (yIntersect < pos->y && result < yIntersect) {
+                result = yIntersect;
+                *outPoly = colPoly;
+            }
+        }
+
+        if (curNode->next == SS_NULL) {
+            break;
+        }
+        curNode = &colCtx->polyNodes.tbl[curNode->next];
+    }
+    return result;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C10FC.s")
 

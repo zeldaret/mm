@@ -63,7 +63,7 @@ typedef struct {
 typedef struct {
     /* 0x0 */ u16 maxNodes;
     /* 0x2 */ u16 reservedNodes;
-    /* 0x4 */ SSNode* nodes;
+    /* 0x4 */ SSNode* tbl;//nodes;
     /* 0x8 */ u8* polyCheckTbl;
 } SSNodeList; // size = 0xC
 //#define BgScenePolygonLists SSNodeList

@@ -999,7 +999,7 @@ void func_800C02C0(CollisionPoly* poly, s32 index, CollisionContext* colCtx, Vec
 // void func_800C06A8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_800C074C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_800C07F0(void);
-s32 BgCheck_PolygonCollidesWithSphere(CollisionPoly* polygon, Vec3s* vtxList, Vec3f* pos, f32 radius);
+s32 BgCheck_PolygonCollidesWithSphere(CollisionPoly* poly, Vec3s* vtxList, Vec3f* center, f32 radius);
 void BgCheck_ScenePolygonListsInsertSorted(CollisionContext* colCtx, SSList* head, CollisionPoly* polyList, Vec3s* vtxList, s16 polyId);
 void BgCheck_ScenePolygonListsInsert(StaticLookup* subdivision, CollisionContext* colCtx, CollisionPoly* polygons, Vec3s* vertices, s16 index);
 // void func_800C0E74(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
