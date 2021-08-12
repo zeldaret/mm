@@ -25,8 +25,7 @@ void EnPoFusen_InitFuse(EnPoFusen* this);
 void EnPoFusen_Pop(EnPoFusen* this, GlobalContext* globalCtx);
 void EnPoFusen_Idle(EnPoFusen* this, GlobalContext* globalCtx);
 void EnPoFusen_IdleFuse(EnPoFusen* this, GlobalContext* globalCtx);
-s32 EnPoFusen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                               void* arg);
+s32 EnPoFusen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* arg);
 
 extern AnimationHeader D_06000040;
 extern FlexSkeletonHeader D_060024F0;
@@ -289,10 +288,10 @@ s32 EnPoFusen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
         yScale = yScale * yScale;
         xRot = ((Math_SinS(this->randXZRotChange) * 2730.0f));
         zRot = ((Math_CosS(this->randXZRotChange) * 2730.0f));
-        Matrix_InsertRotation(xRot, 0, zRot , MTXMODE_APPLY);
+        Matrix_InsertRotation(xRot, 0, zRot, MTXMODE_APPLY);
         Matrix_Scale(xScale, yScale, zScale, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s( -zRot, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s( -xRot, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(-zRot, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(-xRot, MTXMODE_APPLY);
     } else if (limbIndex == 3) {
         rot->y += this->limb3Rot;
     } else if (limbIndex == 6) {
@@ -319,7 +318,6 @@ void EnPoFusen_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, void* arg) 
 void EnPoFusen_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnPoFusen* this = THIS;
     func_8012C28C(globalCtx->state.gfxCtx);
-    func_801343C0(globalCtx, this->anime.skeleton,
-       this->anime.jointTable, this->anime.dListCount,
-       EnPoFusen_OverrideLimbDraw, EnPoFusen_PostLimbDraw, EnPoFusen_UnkActorDraw, &this->actor);
+    func_801343C0(globalCtx, this->anime.skeleton, this->anime.jointTable, this->anime.dListCount,
+                  EnPoFusen_OverrideLimbDraw, EnPoFusen_PostLimbDraw, EnPoFusen_UnkActorDraw, &this->actor);
 }

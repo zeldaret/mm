@@ -207,8 +207,7 @@ void EnPametfrog_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 55.0f);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInit);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600DF98, &D_0600F990, this->jointTable,
-                     this->morphTable, 24);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600DF98, &D_0600F990, this->jointTable, this->morphTable, 24);
     Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colElement);
     this->params = CLAMP(this->actor.params, 1, 4);
     if (Actor_GetRoomCleared(globalCtx, globalCtx->roomCtx.currRoom.num)) {
@@ -720,8 +719,7 @@ void EnPametfrog_WallPause(EnPametfrog* this, GlobalContext* globalCtx) {
 void EnPametfrog_SetupClimbDownWall(EnPametfrog* this) {
     s16 yaw;
 
-    Animation_Change(&this->skelAnime, &D_060039C4, 0.0f, 0.0f, Animation_GetLastFrame(&D_060039C4.common), 2,
-                         0.0f);
+    Animation_Change(&this->skelAnime, &D_060039C4, 0.0f, 0.0f, Animation_GetLastFrame(&D_060039C4.common), 2, 0.0f);
     this->actor.shape.rot.y = Actor_YawBetweenActors(&this->actor, this->actor.child);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.shape.rot.x = 0;
@@ -765,8 +763,7 @@ void EnPametfrog_RunToSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
     EnPametfrog_JumpOnGround(this, globalCtx);
     this->actor.shape.rot.y = Actor_YawBetweenActors(&this->actor, this->actor.child);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if (!(this->actor.bgCheckFlags & 1) ||
-        ((this->skelAnime.curFrame > 1.0f) && (this->skelAnime.curFrame < 12.0f))) {
+    if (!(this->actor.bgCheckFlags & 1) || ((this->skelAnime.curFrame > 1.0f) && (this->skelAnime.curFrame < 12.0f))) {
         this->actor.speedXZ = 12.0f;
     } else {
         this->actor.speedXZ = 0.0f;
@@ -1075,8 +1072,7 @@ void EnPametfrog_JumpToLink(EnPametfrog* this, GlobalContext* globalCtx) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     SkelAnime_Update(&this->skelAnime);
     EnPametfrog_JumpOnGround(this, globalCtx);
-    if (!(this->actor.bgCheckFlags & 1) ||
-        (this->skelAnime.curFrame > 1.0f && this->skelAnime.curFrame < 12.0f)) {
+    if (!(this->actor.bgCheckFlags & 1) || (this->skelAnime.curFrame > 1.0f && this->skelAnime.curFrame < 12.0f)) {
         this->actor.speedXZ = 8.0f;
     } else {
         this->actor.speedXZ = 0.0f;
@@ -1408,7 +1404,7 @@ static s8 limbPosIndex[] = {
 };
 
 void EnPametfrog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* arg) {
-    EnPametfrog* this = (EnPametfrog *)arg;
+    EnPametfrog* this = (EnPametfrog*)arg;
     Vec3f vec;
     Vec3s* center;
     s8 index;
@@ -1438,8 +1434,8 @@ void EnPametfrog_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     Matrix_RotateY(this->spinYaw, MTXMODE_APPLY);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
-                     EnPametfrog_PostLimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          NULL, EnPametfrog_PostLimbDraw, &this->actor);
     func_800BE680(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->unk_2C8, this->unk_2CC,
                   this->unk_2C4, this->drawEffect);
 }

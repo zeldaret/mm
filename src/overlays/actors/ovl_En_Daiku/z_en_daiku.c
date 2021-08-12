@@ -108,18 +108,18 @@ void EnDaiku_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->unk_27E = this->unk_278 * 4 + 4;
 
         case ENDAIKU_PARAMS_FF_1:
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600A850, &D_06002FA0, this->jointTable, this->morphTable,
-                             17);
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600A850, &D_06002FA0, this->jointTable,
+                               this->morphTable, 17);
             break;
 
         case ENDAIKU_PARAMS_FF_2:
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600A850, &D_0600B690, this->jointTable, this->morphTable,
-                             17);
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600A850, &D_0600B690, this->jointTable,
+                               this->morphTable, 17);
             break;
 
         case ENDAIKU_PARAMS_FF_3:
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600A850, &D_06001114, this->jointTable, this->morphTable,
-                             17);
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600A850, &D_06001114, this->jointTable,
+                               this->morphTable, 17);
             break;
     }
 
@@ -309,7 +309,10 @@ s32 func_80943E18(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 
 void func_80943E60(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
     static Gfx* D_809440D4[] = {
-        D_060070C0, D_06006FB0, D_06006E80, D_06006D70,
+        D_060070C0,
+        D_06006FB0,
+        D_06006E80,
+        D_06006D70,
     };
     EnDaiku* this = THIS;
 
@@ -356,7 +359,7 @@ void EnDaiku_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                     func_80943E18, func_80943E60, &this->actor);
+                          func_80943E18, func_80943E60, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

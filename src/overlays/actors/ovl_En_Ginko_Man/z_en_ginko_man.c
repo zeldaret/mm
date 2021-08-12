@@ -63,8 +63,7 @@ void EnGinkoMan_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->isStampChecked = false;
     this->choiceDepositWithdrawl = GINKOMAN_CHOICE_RESET;
     this->serviceFee = 0;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600C240, &D_060043F0, this->jointTable, this->morphTable,
-                     16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600C240, &D_060043F0, this->jointTable, this->morphTable, 16);
     EnGinkoMan_SetupIdle(this);
 }
 
@@ -496,8 +495,7 @@ void EnGinkoMan_Dialogue(EnGinkoMan* this, GlobalContext* globalCtx) {
             break;
     }
 
-    if ((this->skelAnime.animation == &D_060008C0) &&
-        Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+    if ((this->skelAnime.animation == &D_060008C0) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_BANK_MAN_HAND_HIT);
     }
 }
@@ -630,7 +628,7 @@ void EnGinkoMan_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 s32 EnGinkoMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                 void* arg) {
-    EnGinkoMan* this = (EnGinkoMan *)arg;
+    EnGinkoMan* this = (EnGinkoMan*)arg;
 
     if (limbIndex == 15) {
         *dList = D_0600B1D8;
@@ -664,7 +662,7 @@ void EnGinkoMan_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gDPPipeSync(POLY_OPA_DISP++);
 
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                     EnGinkoMan_OverrideLimbDraw, EnGinkoMan_PostLimbDraw, &this->actor);
+                          EnGinkoMan_OverrideLimbDraw, EnGinkoMan_PostLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

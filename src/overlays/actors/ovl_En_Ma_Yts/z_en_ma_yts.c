@@ -136,11 +136,10 @@ static void* sEyeTextures[] = {
     D_0600FFC8, D_060107C8, D_06010FC8, D_060117C8, D_06011FC8,
 };
 
-
 void EnMaYts_ChangeAnim(EnMaYts* this, s32 index) {
     Animation_Change(&this->skelAnime, sAnimationInfo[index].animationSeg, 1.0f, 0.0f,
-                         Animation_GetLastFrame(&sAnimationInfo[index].animationSeg->common), sAnimationInfo[index].mode,
-                         sAnimationInfo[index].transitionRate);
+                     Animation_GetLastFrame(&sAnimationInfo[index].animationSeg->common), sAnimationInfo[index].mode,
+                     sAnimationInfo[index].transitionRate);
 }
 
 void func_80B8D12C(EnMaYts* this, GlobalContext* globalCtx) {
@@ -248,7 +247,7 @@ void EnMaYts_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 18.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013928, NULL, this->jointTable, this->morphTable,
-                     MA1_LIMB_MAX);
+                       MA1_LIMB_MAX);
     EnMaYts_InitAnimation(this, globalCtx);
 
     Collider_InitCylinder(globalCtx, &this->collider);
@@ -523,9 +522,8 @@ void EnMaYts_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80B8D12C(this, globalCtx);
 }
 
-s32 EnMaYts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                             void* arg) {
-    EnMaYts* this = (EnMaYts *)arg;
+s32 EnMaYts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* arg) {
+    EnMaYts* this = (EnMaYts*)arg;
     Vec3s sp4;
 
     if (limbIndex == MA1_LIMB_HEAD) {
@@ -544,7 +542,7 @@ s32 EnMaYts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
 }
 
 void EnMaYts_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* arg) {
-    EnMaYts* this = (EnMaYts *)arg;
+    EnMaYts* this = (EnMaYts*)arg;
 
     if (limbIndex == MA1_LIMB_HEAD) {
         Matrix_GetStateTranslation(&this->actor.focus.pos);
@@ -567,7 +565,7 @@ void EnMaYts_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEyeTextures[this->eyeTexIndex]));
 
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                     EnMaYts_OverrideLimbDraw, EnMaYts_PostLimbDraw, &this->actor);
+                          EnMaYts_OverrideLimbDraw, EnMaYts_PostLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

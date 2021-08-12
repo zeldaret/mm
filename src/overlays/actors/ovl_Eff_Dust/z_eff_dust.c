@@ -284,8 +284,8 @@ void func_80919768(Actor* thisx, GlobalContext* globalCtx2) {
             Matrix_InsertTranslation(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, MTXMODE_NEW);
             Matrix_RotateY(sp92, MTXMODE_APPLY);
             Matrix_InsertTranslation(initialPositions->x * ((this->dx * aux) + (1.0f - this->dx)),
-                                        initialPositions->y * ((this->dy * aux) + (1.0f - this->dy)),
-                                        initialPositions->z * ((this->dz * aux) + (1.0f - this->dz)), MTXMODE_APPLY);
+                                     initialPositions->y * ((this->dy * aux) + (1.0f - this->dy)),
+                                     initialPositions->z * ((this->dz * aux) + (1.0f - this->dz)), MTXMODE_APPLY);
             Matrix_Scale(this->scalingFactor, this->scalingFactor, this->scalingFactor, 1);
 
             Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
@@ -339,8 +339,8 @@ void func_809199FC(Actor* thisx, GlobalContext* globalCtx2) {
             aux = 1.0f - SQ(*distanceTraveled);
             Matrix_InsertMatrix(&player->mf_CC4, MTXMODE_NEW);
             Matrix_InsertTranslation(initialPositions->x * ((this->dx * aux) + (1.0f - this->dx)),
-                                        (initialPositions->y * (1.0f - *distanceTraveled)) + 320.0f,
-                                        (initialPositions->z * (1.0f - *distanceTraveled)) + -20.0f, MTXMODE_APPLY);
+                                     (initialPositions->y * (1.0f - *distanceTraveled)) + 320.0f,
+                                     (initialPositions->z * (1.0f - *distanceTraveled)) + -20.0f, MTXMODE_APPLY);
 
             Matrix_Scale(*distanceTraveled * this->scalingFactor, *distanceTraveled * this->scalingFactor,
                          *distanceTraveled * this->scalingFactor, MTXMODE_APPLY);

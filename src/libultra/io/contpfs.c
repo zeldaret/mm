@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "ultra64.h"
+#include "global.h"
 
 u16 __osSumcalc(u8* ptr, s32 length) {
     s32 i;

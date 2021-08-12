@@ -825,7 +825,7 @@ void EnFirefly_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     gfx = SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnFirefly_OverrideLimbDraw,
-                          EnFirefly_PostLimbDraw, &this->actor, &gfx[2]);
+                         EnFirefly_PostLimbDraw, &this->actor, &gfx[2]);
     if (this->isInvisible) {
         POLY_XLU_DISP = gfx;
     } else {

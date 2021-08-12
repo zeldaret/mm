@@ -162,8 +162,8 @@ void func_80989140(SkelAnime* skelAnime, ActorAnimationEntryS arg1[], s32 arg2) 
         frameCount = arg1->frameCount;
     }
 
-    Animation_Change(skelAnime, arg1->animationSeg, arg1->playbackSpeed + (BREG(88) * 0.1f), arg1->frame,
-                         frameCount, arg1->mode, arg1->transitionRate);
+    Animation_Change(skelAnime, arg1->animationSeg, arg1->playbackSpeed + (BREG(88) * 0.1f), arg1->frame, frameCount,
+                     arg1->mode, arg1->transitionRate);
 }
 
 void func_80989204(EnDg* this, GlobalContext* globalCtx) {
@@ -1231,7 +1231,7 @@ void EnDg_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                     func_8098BFB8, func_8098BFD4, &this->actor);
+                          func_8098BFB8, func_8098BFD4, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

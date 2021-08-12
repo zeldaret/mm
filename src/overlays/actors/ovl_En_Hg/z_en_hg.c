@@ -128,7 +128,7 @@ void EnHg_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 36.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06008580, &D_0600260C, this->jointTable, this->morphTable,
-                     HG_LIMB_MAX);
+                       HG_LIMB_MAX);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
@@ -419,7 +419,7 @@ void EnHg_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                     EnHg_OverrideLimbDraw, EnHg_PostLimbDraw, &this->actor);
+                          EnHg_OverrideLimbDraw, EnHg_PostLimbDraw, &this->actor);
     Matrix_SetCurrentState(&this->unk1D8);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_06005E28);

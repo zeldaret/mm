@@ -980,7 +980,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
                     if ((effect->position.y - ySurface) < 200.0f) {
                         // Draw the splash effect.
                         Matrix_InsertTranslation(effect->position.x + vec.x, ySurface, effect->position.z + vec.z,
-                                                    MTXMODE_NEW);
+                                                 MTXMODE_NEW);
                         Matrix_InsertYRotation_f(2.0f * (j * M_PI) * (1.0f / 16.0f), MTXMODE_APPLY);
                         Matrix_RotateStateAroundXAxis(effect->rotationX);
                         Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);

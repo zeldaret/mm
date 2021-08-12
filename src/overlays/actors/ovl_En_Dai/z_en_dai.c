@@ -281,8 +281,7 @@ s16 func_80B3E8BC(EnDai* this, s32 arg1) {
     }
 
     while (i < end) {
-        if ((D_80B3FCB4[i] <= this->skelAnime.curFrame) &&
-            (D_80B3FCE4[i] >= this->skelAnime.curFrame)) {
+        if ((D_80B3FCB4[i] <= this->skelAnime.curFrame) && (D_80B3FCE4[i] >= this->skelAnime.curFrame)) {
             return D_80B3FD14[i];
         }
         i++;
@@ -376,8 +375,8 @@ s32 func_80B3EC84(EnDai* this) {
     for (i = 0; i < ARRAY_COUNT(D_80B3FD6C); i++) {
         if ((this->unk_1DC == D_80B3FD6C[i]) && (D_80B3FD2C[i] < this->skelAnime.curFrame) &&
             (D_80B3FD4C[i] >= this->skelAnime.curFrame)) {
-            func_80B3EC10(D_80B3FD2C[i], D_80B3FD7C[i], D_80B3FD4C[i], D_80B3FD7C[i + 1],
-                          this->skelAnime.curFrame, &this->unk_1F0);
+            func_80B3EC10(D_80B3FD2C[i], D_80B3FD7C[i], D_80B3FD4C[i], D_80B3FD7C[i + 1], this->skelAnime.curFrame,
+                          &this->unk_1F0);
             ret = true;
             break;
         }
@@ -403,8 +402,8 @@ s32 func_80B3ED88(EnDai* this) {
     for (i = 0; i < ARRAY_COUNT(D_80B3FE00); i++) {
         if ((this->unk_1DC == D_80B3FE00[i]) && (D_80B3FDE8[i] < this->skelAnime.curFrame) &&
             (D_80B3FDF4[i] >= this->skelAnime.curFrame)) {
-            func_80B3EC10(D_80B3FDE8[i], D_80B3FE08[i], D_80B3FDF4[i], D_80B3FE08[i + 1],
-                          this->skelAnime.curFrame, &this->unk_1FC);
+            func_80B3EC10(D_80B3FDE8[i], D_80B3FE08[i], D_80B3FDF4[i], D_80B3FE08[i + 1], this->skelAnime.curFrame,
+                          &this->unk_1FC);
             ret = true;
             break;
         }

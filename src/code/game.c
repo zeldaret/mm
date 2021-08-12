@@ -66,17 +66,17 @@ void Game_Nop80173534(GameState* gameState) {
     ;
 }
 
-void GameState_Draw(GameState* gameState, GraphicsContext *gfxCtx) {
+void GameState_Draw(GameState* gameState, GraphicsContext* gfxCtx) {
     Gfx* nextDisplayList;
     Gfx* polyOpa;
-    
+
     OPEN_DISPS(gfxCtx);
 
     nextDisplayList = Graph_GfxPlusOne(polyOpa = POLY_OPA_DISP);
     gSPDisplayList(OVERLAY_DISP++, nextDisplayList);
 
     if (R_FB_FILTER_TYPE && R_FB_FILTER_ENV_COLOR(3) == 0) {
-        GameState_SetFBFilter(&nextDisplayList, (u32) gfxCtx->zbuffer);
+        GameState_SetFBFilter(&nextDisplayList, (u32)gfxCtx->zbuffer);
     }
 
     if (R_ENABLE_ARENA_DBG < 0) {
@@ -98,7 +98,7 @@ lblUnk:; // Label prevents reordering, if(1) around the above block don't seem t
     CLOSE_DISPS(gfxCtx);
 }
 
-void GameState_SetFrameBuffer(GraphicsContext *gfxCtx) {
+void GameState_SetFrameBuffer(GraphicsContext* gfxCtx) {
     OPEN_DISPS(gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0, NULL);
@@ -259,6 +259,6 @@ s32 GameState_GetArenaSize(GameState* gameState) {
 
 s32 func_80173B48(GameState* gameState) {
     s32 result = OS_CYCLES_TO_NSEC(gameState->framerateDivisor * sIrqMgrRetraceTime) - OS_CYCLES_TO_NSEC(D_801FBAF0);
-    
+
     return result;
 }

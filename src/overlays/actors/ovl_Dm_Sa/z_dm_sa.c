@@ -38,7 +38,7 @@ void func_80A2E960(SkelAnime* arg0, ActorAnimationEntry* animations, u16 index) 
         frameCount = animations->frameCount;
     }
     Animation_Change(arg0, animations->animation, animations->playSpeed, animations->startFrame, frameCount,
-                         animations->mode, animations->morphFrames);
+                     animations->mode, animations->morphFrames);
 }
 
 void DmSa_Init(Actor* thisx, GlobalContext* globalCtx) {

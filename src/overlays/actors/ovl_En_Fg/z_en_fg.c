@@ -120,8 +120,8 @@ s32 EnFg_UpdateAnimation(SkelAnime* skelAnime, s16 animIndex) {
             frameCount = Animation_GetLastFrame(&sAnimations[animIndex].animationSeg->common);
         }
         Animation_Change(skelAnime, sAnimations[animIndex].animationSeg, sAnimations[animIndex].playbackSpeed,
-                             sAnimations[animIndex].frame, frameCount, sAnimations[animIndex].mode,
-                             sAnimations[animIndex].transitionRate);
+                         sAnimations[animIndex].frame, frameCount, sAnimations[animIndex].mode,
+                         sAnimations[animIndex].transitionRate);
     }
     return ret;
 }
@@ -361,7 +361,7 @@ void EnFg_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnFg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* arg) {
-    EnFg* this = (EnFg *)arg;
+    EnFg* this = (EnFg*)arg;
 
     if ((limbIndex == 7) || (limbIndex == 8)) {
         *dList = NULL;
@@ -376,7 +376,7 @@ s32 EnFg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 }
 
 void EnFg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* arg) {
-    EnFg* this = (EnFg *)arg;
+    EnFg* this = (EnFg*)arg;
     s16 pad;
     Vec3f vec1 = { 0.0f, 0.0f, 0.0f };
 
@@ -415,7 +415,7 @@ void EnFg_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&D_060059A0));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(&D_060059A0));
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                     EnFg_OverrideLimbDraw, EnFg_PostLimbDraw, &this->actor);
+                          EnFg_OverrideLimbDraw, EnFg_PostLimbDraw, &this->actor);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 

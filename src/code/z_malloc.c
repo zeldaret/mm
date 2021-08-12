@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 void* ZeldaArena_Malloc(size_t size) {
     void* ptr = __osMalloc(&sZeldaArena, size);

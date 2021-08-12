@@ -943,8 +943,8 @@ void EffectSsExtra_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, 
 
 // EffectSsDeadDb Spawn Functions
 
-void EffectSsDeadDb_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* prim, Color_RGBA8* env,
-                          s16 scale, s16 scaleStep, s32 unk) {
+void EffectSsDeadDb_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* prim,
+                          Color_RGBA8* env, s16 scale, s16 scaleStep, s32 unk) {
     EffectSsDeadDbInitParams initParams;
 
     Math_Vec3f_Copy(&initParams.pos, pos);
@@ -974,7 +974,8 @@ void func_800B3030(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f*
 
 // EffectSsDeadDd Spawn Functions
 
-void EffectSsDeadDd_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* prim, Color_RGBA8* env, s16 scale, s16 scaleStep, s16 alphalphaStep, s32 life)  {
+void EffectSsDeadDd_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* prim,
+                          Color_RGBA8* env, s16 scale, s16 scaleStep, s16 alphaStep, s32 life) {
     EffectSsDeadDdInitParams initParams;
 
     Math_Vec3f_Copy(&initParams.pos, pos);
@@ -990,7 +991,7 @@ void EffectSsDeadDd_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity,
     initParams.envColor.g = env->g;
     initParams.envColor.b = env->b;
     initParams.type = 0;
-    initParams.alphaStep = alphalphaStep;
+    initParams.alphaStep = alphaStep;
     initParams.life = life;
 
     EffectSs_Spawn(globalCtx, EFFECT_SS_DEAD_DD, 120, &initParams);

@@ -1,6 +1,5 @@
 #include "global.h"
 
-
 #ifdef NON_MATCHING
 // rodata issues
 void __osDevMgrMain(void* arg) {
@@ -11,14 +10,15 @@ void __osDevMgrMain(void* arg) {
     OSDevMgr* devMgr;
     s32 msgVar = 0;
 
-    devMgr = (OSDevMgr *)arg;
+    devMgr = (OSDevMgr*)arg;
     ioMesg = NULL;
     ret = 0;
 
     while (true) {
         osRecvMesg(devMgr->cmdQueue, (OSMesg)&ioMesg, OS_MESG_BLOCK);
         if ((ioMesg->piHandle != NULL) && (ioMesg->piHandle->type == 2) &&
-            ((ioMesg->piHandle->transferInfo.cmdType == OS_READ) || (ioMesg->piHandle->transferInfo.cmdType == OS_WRITE))) {
+            ((ioMesg->piHandle->transferInfo.cmdType == OS_READ) ||
+             (ioMesg->piHandle->transferInfo.cmdType == OS_WRITE))) {
             __OSBlockInfo* block;
             __OSTranxInfo* transfer;
 
@@ -29,7 +29,7 @@ void __osDevMgrMain(void* arg) {
                 block->dramAddr = (void*)((u32)block->dramAddr - block->sectorSize);
             }
 
-            if((transfer->transferMode == 2) && (ioMesg->piHandle->transferInfo.cmdType == OS_READ)) {
+            if ((transfer->transferMode == 2) && (ioMesg->piHandle->transferInfo.cmdType == OS_READ)) {
                 msgVar = 1;
             } else {
                 msgVar = 0;
@@ -39,28 +39,28 @@ void __osDevMgrMain(void* arg) {
             __osResetGlobalIntMask(0x00100401);
             __osEPiRawWriteIo(ioMesg->piHandle, 0x05000510, transfer->bmCtlShadow | 0x80000000);
 
-label:
-                osRecvMesg(devMgr->evtQueue, &sp70, OS_MESG_BLOCK);
-                transfer = &ioMesg->piHandle->transferInfo;
-                block = &transfer->block[transfer->blockNum];
-                if (block->errStatus == 0x1D) {
-                    u32 status;
+        label:
+            osRecvMesg(devMgr->evtQueue, &sp70, OS_MESG_BLOCK);
+            transfer = &ioMesg->piHandle->transferInfo;
+            block = &transfer->block[transfer->blockNum];
+            if (block->errStatus == 0x1D) {
+                u32 status;
 
-                    __osEPiRawWriteIo(ioMesg->piHandle, 0x05000510, transfer->bmCtlShadow | 0x10000000);
-                    __osEPiRawWriteIo(ioMesg->piHandle, 0x05000510, transfer->bmCtlShadow);
-                    __osEPiRawReadIo(ioMesg->piHandle, 0x05000508, &status);
-                    if (status & 0x02000000) {
-                        __osEPiRawWriteIo(ioMesg->piHandle, 0x05000510, transfer->bmCtlShadow | 0x1000000);
-                    }
-                    block->errStatus = 4;
-                    HW_REG(PI_STATUS_REG, u32) = PI_STATUS_CLEAR_INTR;
-                    __osSetGlobalIntMask(0x00100C01);
+                __osEPiRawWriteIo(ioMesg->piHandle, 0x05000510, transfer->bmCtlShadow | 0x10000000);
+                __osEPiRawWriteIo(ioMesg->piHandle, 0x05000510, transfer->bmCtlShadow);
+                __osEPiRawReadIo(ioMesg->piHandle, 0x05000508, &status);
+                if (status & 0x02000000) {
+                    __osEPiRawWriteIo(ioMesg->piHandle, 0x05000510, transfer->bmCtlShadow | 0x1000000);
                 }
-                osSendMesg(ioMesg->hdr.retQueue, (OSMesg)ioMesg, OS_MESG_NOBLOCK);
+                block->errStatus = 4;
+                HW_REG(PI_STATUS_REG, u32) = PI_STATUS_CLEAR_INTR;
+                __osSetGlobalIntMask(0x00100C01);
+            }
+            osSendMesg(ioMesg->hdr.retQueue, (OSMesg)ioMesg, OS_MESG_NOBLOCK);
 
-                if ((msgVar == 1) && (ioMesg->piHandle->transferInfo.block[0].errStatus == 0)) {
-                    msgVar = 0;
-                    goto label;
+            if ((msgVar == 1) && (ioMesg->piHandle->transferInfo.block[0].errStatus == 0)) {
+                msgVar = 0;
+                goto label;
             }
 
             osSendMesg(devMgr->acsQueue, NULL, OS_MESG_NOBLOCK);
@@ -80,12 +80,12 @@ label:
                 case 15:
                     osRecvMesg(devMgr->acsQueue, &sp6C, OS_MESG_BLOCK);
                     ret = devMgr->epiDmaCallback(ioMesg->piHandle, OS_READ, ioMesg->devAddr, ioMesg->dramAddr,
-                                                  ioMesg->size);
+                                                 ioMesg->size);
                     break;
                 case 16:
                     osRecvMesg(devMgr->acsQueue, &sp6C, OS_MESG_BLOCK);
                     ret = devMgr->epiDmaCallback(ioMesg->piHandle, OS_WRITE, ioMesg->devAddr, ioMesg->dramAddr,
-                                                  ioMesg->size);
+                                                 ioMesg->size);
                     break;
                 case 10:
                     osSendMesg(ioMesg->hdr.retQueue, ioMesg, OS_MESG_NOBLOCK);

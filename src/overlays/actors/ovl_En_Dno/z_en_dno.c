@@ -213,14 +213,14 @@ void EnDno_Init(Actor* thisx, GlobalContext* globalCtx) {
         if (actor == NULL) {
             Actor_ProcessInitChain(thisx, sInitChain);
             ActorShape_Init(&thisx->shape, 0.0f, func_800B3FC0, 21.0f);
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600E1F8, &D_06007CA4, this->jointTable, this->morphTable,
-                             28);
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600E1F8, &D_06007CA4, this->jointTable,
+                               this->morphTable, 28);
             Collider_InitCylinder(globalCtx, &this->collider);
             Collider_SetCylinder(globalCtx, &this->collider, thisx, &sCylinderInit);
             Actor_UpdateBgCheckInfo(globalCtx, thisx, 0.0f, 0.0f, 0.0f, 4);
             Animation_Change(&this->skelAnime, sAnimations[14].animationSeg, 1.0f, 0.0f,
-                                 Animation_GetLastFrame(&(sAnimations[14].animationSeg)->common), sAnimations[14].mode,
-                                 sAnimations[14].transitionRate);
+                             Animation_GetLastFrame(&(sAnimations[14].animationSeg)->common), sAnimations[14].mode,
+                             sAnimations[14].transitionRate);
             this->unk_3BE = 0x3E93;
             this->unk_3C0 = 60.0f;
             this->unk_3B0 = 0;
@@ -390,8 +390,7 @@ void func_80A71F18(EnDno* this, GlobalContext* globalCtx) {
                     case 0x80F:
                         if (this->unk_32C == 13) {
                             func_8013E1C8(&this->skelAnime, sAnimations, 4, &this->unk_32C);
-                        } else if ((this->unk_32C == 4) &&
-                                   (this->skelAnime.curFrame == this->skelAnime.endFrame)) {
+                        } else if ((this->unk_32C == 4) && (this->skelAnime.curFrame == this->skelAnime.endFrame)) {
                             func_8013E1C8(&this->skelAnime, sAnimations, 11, &this->unk_32C);
                             func_801518B0(globalCtx, this->unk_464, &this->actor);
                         }
@@ -564,8 +563,7 @@ void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
                         if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x2D8)) {
                             func_8013E1C8(&this->skelAnime, sAnimations, 5, &this->unk_32C);
                         }
-                    } else if ((this->unk_32C == 5) &&
-                               Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+                    } else if ((this->unk_32C == 5) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         if (Flags_GetSwitch(globalCtx, ENDNO_GET_3F80(&this->actor))) {
                             func_801518B0(globalCtx, 0x801, &this->actor);
                         } else if (Player_GetMask(globalCtx) == PLAYER_MASK_MASK_OF_SCENTS) {
@@ -656,8 +654,7 @@ void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
                                 this->unk_3B0 |= 0x40;
                             }
                         }
-                    } else if ((this->unk_32C == 5) &&
-                               (this->skelAnime.curFrame == this->skelAnime.endFrame)) {
+                    } else if ((this->unk_32C == 5) && (this->skelAnime.curFrame == this->skelAnime.endFrame)) {
                         func_801477B4(globalCtx);
                         func_80A72438(this, globalCtx);
                     }
@@ -924,7 +921,7 @@ void EnDno_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnDno* this = THIS;
 
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                     EnDno_OverrideLimbDraw, EnDno_PostLimbDraw, &this->actor);
+                          EnDno_OverrideLimbDraw, EnDno_PostLimbDraw, &this->actor);
 }
 
 s32 EnDno_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {

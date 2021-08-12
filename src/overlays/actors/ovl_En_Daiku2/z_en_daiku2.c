@@ -148,8 +148,8 @@ void func_80BE6408(EnDaiku2* this, s32 arg1) {
     if (this->unk_276 == 3) {
         sp34 = 2.0f;
     }
-    Animation_Change(&this->skelAnime, sAnimations[this->unk_276], sp34, 0.0f, this->unk_284,
-                         D_80BE7958[this->unk_276], -4.0f);
+    Animation_Change(&this->skelAnime, sAnimations[this->unk_276], sp34, 0.0f, this->unk_284, D_80BE7958[this->unk_276],
+                     -4.0f);
 }
 
 s32 func_80BE64C0(EnDaiku2* this, GlobalContext* globalCtx) {
@@ -496,8 +496,8 @@ void EnDaiku2_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     gDPSetEnvColor(POLY_OPA_DISP++, 245, 155, 0, 255);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
-                     EnDaiku2_PostLimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          NULL, EnDaiku2_PostLimbDraw, &this->actor);
     func_80BE7718(this, globalCtx);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);

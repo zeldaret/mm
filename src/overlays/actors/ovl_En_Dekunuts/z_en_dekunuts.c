@@ -740,9 +740,9 @@ void EnDekunuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnDekunuts* this = THIS;
 
     SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, func_808BEBD0, func_808BED30,
-                   &this->actor);
+                      &this->actor);
     Matrix_SetStateRotationAndTranslation(this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z,
-                                             &this->actor.home.rot);
+                                          &this->actor.home.rot);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     if (this->actor.colorFilterTimer != 0) {
         func_800AE5A0(globalCtx);

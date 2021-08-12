@@ -205,8 +205,8 @@ void EnToto_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 30.0f);
     this->actor.bgCheckFlags |= 0x400;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600A978, globalCtx->sceneNum == 0x12 ? &D_06003AA8 : &D_0600C880,
-                     this->jointTable, this->morphTable, 18);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600A978,
+                       globalCtx->sceneNum == 0x12 ? &D_06003AA8 : &D_0600C880, this->jointTable, this->morphTable, 18);
     func_80BA36C0(this, globalCtx, 0);
     this->actor.shape.rot.x = 0;
 }
@@ -218,8 +218,7 @@ void EnToto_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80BA383C(EnToto* this, GlobalContext* globalCtx) {
-    if (SkelAnime_Update(&this->skelAnime) && this->actionFuncIndex == 1 &&
-        this->skelAnime.animation != &D_06000C80) {
+    if (SkelAnime_Update(&this->skelAnime) && this->actionFuncIndex == 1 && this->skelAnime.animation != &D_06000C80) {
         if (globalCtx->msgCtx.unk11F04 != 0x2A98 && globalCtx->msgCtx.unk11F04 != 0x2A99) {
             if (this->unk2B4 & 1 || Rand_ZeroOne() > 0.5f) {
                 this->unk2B4 = (this->unk2B4 + 1) & 3;
@@ -743,8 +742,8 @@ void EnToto_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sp4C[this->unk260]));
     Scene_SetRenderModeXlu(globalCtx, 0, 1);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
-                     NULL, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          NULL, NULL, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

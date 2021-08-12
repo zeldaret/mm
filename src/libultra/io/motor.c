@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "ultra64.h"
+#include "global.h"
 
 #define BANK_ADDR 0x400
 #define MOTOR_ID 0x80

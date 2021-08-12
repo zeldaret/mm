@@ -114,7 +114,7 @@ void EnGuruguru_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void EnGuruguru_ChangeAnimation(EnGuruguru* this, s32 arg1) {
     this->frameCount = Animation_GetLastFrame(&D_80BC79CC[arg1]->common);
     Animation_Change(&this->skelAnime, D_80BC79CC[arg1], D_80BC79D8[arg1], 0.0f, this->frameCount, D_80BC79D4[arg1],
-                         -4.0f);
+                     -4.0f);
 }
 
 void EnGuruguru_DoNothing(EnGuruguru* this, GlobalContext* globalCtx) {
@@ -395,6 +395,6 @@ void EnGuruguru_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEyeTextures[this->texIndex]));
     gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(sMouthTextures[this->texIndex]));
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                     EnGuruguru_OverrideLimbDraw, NULL, &this->actor);
+                          EnGuruguru_OverrideLimbDraw, NULL, &this->actor);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

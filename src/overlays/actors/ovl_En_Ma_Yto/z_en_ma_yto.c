@@ -190,7 +190,7 @@ void EnMaYto_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 18.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06015C28, NULL, this->jointTable, this->morphTable,
-                     MA2_LIMB_MAX);
+                       MA2_LIMB_MAX);
     EnMaYto_InitAnimation(this, globalCtx);
 
     Collider_InitCylinder(globalCtx, &this->collider);
@@ -1294,8 +1294,8 @@ void EnMaYto_BarnStartDialogue(EnMaYto* this, GlobalContext* globalCtx) {
 
 void EnMaYto_ChangeAnim(EnMaYto* this, s32 index) {
     Animation_Change(&this->skelAnime, sAnimationInfo[index].animationSeg, 1.0f, 0.0f,
-                         Animation_GetLastFrame(&sAnimationInfo[index].animationSeg->common),
-                         sAnimationInfo[index].mode, sAnimationInfo[index].transitionRate);
+                     Animation_GetLastFrame(&sAnimationInfo[index].animationSeg->common), sAnimationInfo[index].mode,
+                     sAnimationInfo[index].transitionRate);
 }
 
 void func_80B90C78(EnMaYto* this, GlobalContext* globalCtx) {
@@ -1500,7 +1500,7 @@ void EnMaYto_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyesTextures[this->eyeTexIndex]));
 
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                     EnMaYto_OverrideLimbDraw, EnMaYto_PostLimbDraw, &this->actor);
+                          EnMaYto_OverrideLimbDraw, EnMaYto_PostLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

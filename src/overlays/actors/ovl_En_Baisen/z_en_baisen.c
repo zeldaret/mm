@@ -105,7 +105,7 @@ void EnBaisen_ChangeAnimation(EnBaisen* this, s32 animIndex) {
     this->animIndex = animIndex;
     this->frameCount = Animation_GetLastFrame(&D_80BE8E4C[animIndex]->common);
     Animation_Change(&this->skelAnime, D_80BE8E4C[this->animIndex], 1.0f, 0.0f, this->frameCount,
-                         animModes[this->animIndex], -10.0f);
+                     animModes[this->animIndex], -10.0f);
 }
 
 void func_80BE871C(EnBaisen* this) {
@@ -285,5 +285,5 @@ void EnBaisen_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                     EnBaisen_OverrideLimbDraw, NULL, &this->actor);
+                          EnBaisen_OverrideLimbDraw, NULL, &this->actor);
 }

@@ -117,8 +117,7 @@ void EnSb_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.colChkInfo.damageTable = &sDamageTable;
     this->actor.colChkInfo.mass = 0xA;
     this->actor.colChkInfo.health = 2;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06002BF0, &D_06000194, this->jointTable,
-                     this->morphTable, 9);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06002BF0, &D_06000194, this->jointTable, this->morphTable, 9);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinderType1(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->isDead = false;
@@ -411,8 +410,8 @@ void EnSb_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s16 fireDecr;
 
     func_800B8050(&this->actor, globalCtx, 1);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
-                     EnSb_PostLimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          NULL, EnSb_PostLimbDraw, &this->actor);
     if (this->fireCount != 0) {
         this->actor.colorFilterTimer++;
         fireDecr = this->fireCount - 1;

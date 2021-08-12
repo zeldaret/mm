@@ -25,7 +25,6 @@ void* GameAlloc_Malloc(GameAlloc* this, size_t size) {
     }
 }
 
-
 void GameAlloc_Free(GameAlloc* this, void* data) {
     GameAllocEntry* ptr;
 

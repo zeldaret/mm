@@ -101,7 +101,7 @@ void ObjTokeiStep_InitSteps(ObjTokeiStep* this) {
     s32 pad;
 
     Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                             this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
     panelOffset.x = 0.0f;
     panelOffset.y = 0.0f;
@@ -120,7 +120,7 @@ void ObjTokeiStep_InitStepsOpen(ObjTokeiStep* this) {
     Vec3f panelOffset;
 
     Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                             this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
     panelOffset.x = 0.0f;
     for (i = 0; i < 7; i++) {

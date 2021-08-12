@@ -485,7 +485,7 @@ void func_8089B100(EnDinofos* this, GlobalContext* globalCtx) {
     Vec3f sp3C;
 
     Animation_Change(&this->skelAnime, &D_06001CCC, 1.0f, Animation_GetLastFrame(&D_06001CCC.common),
-                         Animation_GetLastFrame(&D_06001CCC.common), 2, 0.0f);
+                     Animation_GetLastFrame(&D_06001CCC.common), 2, 0.0f);
     func_800BE33C(&camera->eye, &camera->at, &this->unk_29A, 1);
     Math_Vec3f_Diff(&this->actor.world.pos, &player->actor.world.pos, &sp3C);
     this->unk_2BC.x = player->actor.world.pos.x + (0.4f * sp3C.x);
@@ -733,7 +733,7 @@ void func_8089BBB4(EnDinofos* this, GlobalContext* globalCtx) {
             this->skelAnime.playSpeed = this->actor.speedXZ * 0.166666671634f;
         } else {
             Animation_Change(&this->skelAnime, &D_0600D62C, this->actor.speedXZ * 0.166666671634f, 0.0f, 0.0f, 0,
-                                 -4.0f);
+                             -4.0f);
         }
 
         this->actor.world.rot.y = BINANG_ADD(this->actor.shape.rot.y, 0x4000);
@@ -1498,7 +1498,7 @@ void EnDinofos_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Scene_SetRenderModeXlu(globalCtx, 0, 1);
         POLY_OPA_DISP =
             SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                              this->skelAnime.dListCount, func_8089DC4C, func_8089DC84, &this->actor, POLY_OPA_DISP);
+                               this->skelAnime.dListCount, func_8089DC4C, func_8089DC84, &this->actor, POLY_OPA_DISP);
     } else {
         func_8012C2DC(globalCtx->state.gfxCtx);
         func_800B8118(&this->actor, globalCtx, 0);
@@ -1509,7 +1509,7 @@ void EnDinofos_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Scene_SetRenderModeXlu(globalCtx, 1, 2);
         POLY_XLU_DISP =
             SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                              this->skelAnime.dListCount, func_8089DC4C, func_8089DC84, &this->actor, POLY_XLU_DISP);
+                               this->skelAnime.dListCount, func_8089DC4C, func_8089DC84, &this->actor, POLY_XLU_DISP);
     }
 
     func_800BE680(globalCtx, &this->actor, this->unk_2D4, 12, this->unk_2B4, this->unk_2B8, this->unk_2B0,

@@ -202,8 +202,8 @@ s32 func_808F30B0(SkelAnime* skelAnime, s16 animIndex) {
             frameCount = Animation_GetLastFrame(&sAnimations[animIndex].animationSeg->common);
         }
         Animation_Change(skelAnime, sAnimations[animIndex].animationSeg, sAnimations[animIndex].playbackSpeed,
-                             sAnimations[animIndex].frame, frameCount, sAnimations[animIndex].mode,
-                             sAnimations[animIndex].transitionRate);
+                         sAnimations[animIndex].frame, frameCount, sAnimations[animIndex].mode,
+                         sAnimations[animIndex].transitionRate);
     }
     return ret;
 }
@@ -361,7 +361,7 @@ void func_808F374C(EnIn* this, GlobalContext* globalCtx) {
     if (SkelAnime_Update(&this->skelAnime)) {
         this->unk486 = this->unk488 %= 8;
         Animation_Change(&this->skelAnime, animations[this->unk488], 1.0f, 0.0f,
-                             Animation_GetLastFrame(&animations[this->unk488]->common), 2, -10.0f);
+                         Animation_GetLastFrame(&animations[this->unk488]->common), 2, -10.0f);
     }
 }
 
@@ -1414,7 +1414,7 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
         this->unk488 = 1;
         Animation_Change(&this->skelAnime, &D_06016A60, 1.0f, 0.0f, Animation_GetLastFrame(&D_06016A60.common), 2,
-                             0.0f);
+                         0.0f);
         Actor_SetScale(&this->actor, 0.01f);
         this->unk23C = 0;
         this->unk23D = 1;
@@ -1441,8 +1441,7 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
                     func_808F30B0(&this->skelAnime, 4);
                 }
                 if ((gSaveContext.weekEventReg[92] & (1 | 2 | 4)) == 2) {
-                    this->skelAnime.curFrame =
-                        ((Rand_ZeroOne() * 0.6f) + 0.2f) * this->skelAnime.endFrame;
+                    this->skelAnime.curFrame = ((Rand_ZeroOne() * 0.6f) + 0.2f) * this->skelAnime.endFrame;
                 }
                 if (this->unk4AC & 8) {
                     this->actionFunc = func_808F39DC;
@@ -1535,7 +1534,7 @@ void func_808F6334(EnIn* this, GlobalContext* globalCtx) {
 }
 
 s32 EnIn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* arg) {
-    EnIn* this = (EnIn *)arg;
+    EnIn* this = (EnIn*)arg;
     s32 pad;
     Gfx* sp50[] = {
         NULL,       NULL,       D_060149A8, D_06014AE0, D_06014C30, D_060145D8, D_06014710,
@@ -1596,7 +1595,7 @@ s32 EnIn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 }
 
 void EnIn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* arg) {
-    EnIn* this = (EnIn *)arg;
+    EnIn* this = (EnIn*)arg;
     Vec3f sp50 = { 1600.0f, 0.0f, 0.0f };
     Vec3f sp44 = { 0.0f, 0.0f, 0.0f };
 
@@ -1641,6 +1640,6 @@ void EnIn_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     gDPPipeSync(POLY_OPA_DISP++);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                     EnIn_OverrideLimbDraw, EnIn_PostLimbDraw, &this->actor);
+                          EnIn_OverrideLimbDraw, EnIn_PostLimbDraw, &this->actor);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

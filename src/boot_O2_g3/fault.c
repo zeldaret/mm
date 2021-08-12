@@ -1,6 +1,6 @@
-#include <ultra64.h>
-#include <global.h>
-#include <vt.h>
+#include "ultra64.h"
+#include "global.h"
+#include "vt.h"
 
 // TODO move out
 #define OS_CLOCK_RATE 62500000LL
@@ -28,12 +28,7 @@ const char* sCpuExceptions[] = {
 };
 
 const char* sFpuExceptions[] = {
-    "Unimplemented operation",
-    "Invalid operation",
-    "Division by zero",
-    "Overflow",
-    "Underflow",
-    "Inexact operation",
+    "Unimplemented operation", "Invalid operation", "Division by zero", "Overflow", "Underflow", "Inexact operation",
 };
 
 void Fault_SleepImpl(u32 duration) {
@@ -176,7 +171,8 @@ void Fault_RemoveAddrConvClient(FaultAddrConvClient* client) {
     osSetIntMask(mask);
 
     if (listIsEmpty) {
-        osSyncPrintf(VT_COL(RED, WHITE) "fault_AddressConverterRemoveClient: %08x は既にリスト中にある\n" VT_RST, client);
+        osSyncPrintf(VT_COL(RED, WHITE) "fault_AddressConverterRemoveClient: %08x は既にリスト中にある\n" VT_RST,
+                     client);
     }
 }
 
@@ -747,7 +743,8 @@ void Fault_ProcessClients(void) {
             FaultDrawer_Printf("\x1a"
                                "8CallBack (%d) %08x %08x %08x\n"
                                "\x1a"
-                               "7", idx++, iter, iter->param0, iter->param1);
+                               "7",
+                               idx++, iter, iter->param0, iter->param1);
             FaultDrawer_SetCharPad(0, 0);
             iter->callback(iter->param0, iter->param1);
             Fault_WaitForInput();
@@ -781,13 +778,13 @@ void Fault_SetOptionsFromController3(void) {
             FaultDrawer_SetOsSyncPrintfEnabled(faultCopyToLog);
         }
         if (CHECK_BTN_ALL(input3->press.button, BTN_A)) {
-              osSyncPrintf("GRAPH PC=%08x RA=%08x STACK=%08x\n", graphPC, graphRA, graphSP);
+            osSyncPrintf("GRAPH PC=%08x RA=%08x STACK=%08x\n", graphPC, graphRA, graphSP);
         }
         if (CHECK_BTN_ALL(input3->press.button, BTN_B)) {
-              FaultDrawer_SetDrawerFB(osViGetNextFramebuffer(), 0x140, 0xF0);
-              Fault_DrawRec(0, 0xD7, 0x140, 9, 1);
-              FaultDrawer_SetCharPad(-2, 0);
-              FaultDrawer_DrawText(0x20, 0xD8, "GRAPH PC %08x RA %08x SP %08x", graphPC, graphRA, graphSP);
+            FaultDrawer_SetDrawerFB(osViGetNextFramebuffer(), 0x140, 0xF0);
+            Fault_DrawRec(0, 0xD7, 0x140, 9, 1);
+            FaultDrawer_SetCharPad(-2, 0);
+            FaultDrawer_DrawText(0x20, 0xD8, "GRAPH PC %08x RA %08x SP %08x", graphPC, graphRA, graphSP);
         }
     }
 }

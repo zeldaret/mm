@@ -47,7 +47,7 @@ FaultDrawer sFaultDrawerDefault = {
     GPACK_RGBA5551(0, 0, 0, 0),         // backColor
     22,                                 // cursorX
     16,                                 // cursorY
-    (u32 *)sFaultDrawerFont,            // font
+    (u32*)sFaultDrawerFont,             // font
     8,                                  // charW
     8,                                  // charH
     0,                                  // charWPad

@@ -63,7 +63,7 @@ void EnRsn_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnRsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* arg) {
-    EnRsn* this = (EnRsn *)arg;
+    EnRsn* this = (EnRsn*)arg;
 
     if (limbIndex == 14) {
         Matrix_InsertXRotation_s(this->unk1D8.y, 1);
@@ -74,7 +74,7 @@ s32 EnRsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
 static Vec3f D_80C26028 = { 0.0f, 0.0f, 0.0f };
 
 void EnRsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* arg) {
-    EnRsn* this = (EnRsn *)arg;
+    EnRsn* this = (EnRsn*)arg;
     Vec3f sp18 = D_80C26028;
 
     if (limbIndex == 14) {
@@ -89,6 +89,6 @@ void EnRsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C5B0(globalCtx->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_06005458));
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                     EnRsn_OverrideLimbDraw, EnRsn_PostLimbDraw, &this->actor);
+                          EnRsn_OverrideLimbDraw, EnRsn_PostLimbDraw, &this->actor);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

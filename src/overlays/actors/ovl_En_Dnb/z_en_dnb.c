@@ -1,7 +1,7 @@
 /*
  * File: z_en_dnb.c
  * Overlay: ovl_En_Dnb
- * Description: 
+ * Description:
  */
 
 #include "z_en_dnb.h"
@@ -164,8 +164,8 @@ void func_80A50510(EnDnb* this, GlobalContext* globalCtx) {
 
     for (i = 0; i < ARRAY_COUNT(this->particles); i++) {
         Matrix_StatePush();
-        Matrix_InsertTranslation(this->particles[i].unk_0C.x, this->particles[i].unk_0C.y,
-                                    this->particles[i].unk_0C.z, MTXMODE_NEW);
+        Matrix_InsertTranslation(this->particles[i].unk_0C.x, this->particles[i].unk_0C.y, this->particles[i].unk_0C.z,
+                                 MTXMODE_NEW);
         Matrix_InsertXRotation_s(this->particles[i].unk_18.x, MTXMODE_APPLY);
         Matrix_RotateY(this->particles[i].unk_18.y, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(this->particles[i].unk_18.z, MTXMODE_APPLY);
@@ -189,8 +189,8 @@ void func_80A5063C(EnDnb* this, GlobalContext* globalCtx) {
 
     for (i = 0; i < ARRAY_COUNT(this->particles); i++) {
         Matrix_StatePush();
-        Matrix_InsertTranslation(this->particles[i].unk_0C.x, this->particles[i].unk_0C.y,
-                                    this->particles[i].unk_0C.z, MTXMODE_NEW);
+        Matrix_InsertTranslation(this->particles[i].unk_0C.x, this->particles[i].unk_0C.y, this->particles[i].unk_0C.z,
+                                 MTXMODE_NEW);
         Matrix_InsertXRotation_s(this->particles[i].unk_18.x, MTXMODE_APPLY);
         Matrix_RotateY(this->particles[i].unk_18.y, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(this->particles[i].unk_18.z, MTXMODE_APPLY);

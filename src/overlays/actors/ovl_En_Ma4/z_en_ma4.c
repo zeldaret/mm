@@ -155,8 +155,8 @@ static struct_80B8E1A8 sAnimationInfo[] = {
 
 void EnMa4_ChangeAnim(EnMa4* this, s32 index) {
     Animation_Change(&this->skelAnime, sAnimationInfo[index].animationSeg, 1.0f, 0.0f,
-                         Animation_GetLastFrame(&sAnimationInfo[index].animationSeg->common),
-                         sAnimationInfo[index].mode, sAnimationInfo[index].transitionRate);
+                     Animation_GetLastFrame(&sAnimationInfo[index].animationSeg->common), sAnimationInfo[index].mode,
+                     sAnimationInfo[index].transitionRate);
 }
 
 void func_80ABDD9C(EnMa4* this, GlobalContext* globalCtx) {
@@ -202,7 +202,7 @@ void EnMa4_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 18.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013928, NULL, this->jointTable, this->morphTable,
-                     MA1_LIMB_MAX);
+                       MA1_LIMB_MAX);
 
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -623,8 +623,7 @@ void EnMa4_ChooseNextDialogue(EnMa4* this, GlobalContext* globalCtx) {
                 break;
 
             case 0x3358:
-                if ((gSaveContext.playerForm != PLAYER_FORM_HUMAN) ||
-                    !(CHECK_QUEST_ITEM(14))) {
+                if ((gSaveContext.playerForm != PLAYER_FORM_HUMAN) || !(CHECK_QUEST_ITEM(14))) {
                     func_801518B0(globalCtx, 0x335C, &this->actor);
                     this->textId = 0x335C;
                     func_80151BB4(globalCtx, 5);
@@ -663,8 +662,7 @@ void EnMa4_DialogueHandler(EnMa4* this, GlobalContext* globalCtx) {
 
         case 6: // End conversation
             if (func_80147624(globalCtx) != 0) {
-                if ((globalCtx->msgCtx.unk120B1 == 0) ||
-                    !CHECK_QUEST_ITEM(18)) {
+                if ((globalCtx->msgCtx.unk120B1 == 0) || !CHECK_QUEST_ITEM(18)) {
                     EnMa4_SetupWait(this);
                 }
             }
@@ -845,8 +843,7 @@ void EnMa4_EponasSongCs(EnMa4* this, GlobalContext* globalCtx) {
         }
 
         func_800EDF24(&this->actor, globalCtx, actionIndex);
-        if (D_80AC0260 == 2 && this->animTimer == 0 &&
-            Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        if (D_80AC0260 == 2 && this->animTimer == 0 && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             EnMa4_ChangeAnim(this, 7);
         }
     } else {
@@ -1098,7 +1095,7 @@ void EnMa4_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(sMouthTextures[this->mouthTexIndex]));
 
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                     EnMa4_OverrideLimbDraw, EnMa4_PostLimbDraw, &this->actor);
+                          EnMa4_OverrideLimbDraw, EnMa4_PostLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
