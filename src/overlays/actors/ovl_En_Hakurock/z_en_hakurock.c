@@ -23,7 +23,6 @@ void func_80B22750(EnHakurock* this, GlobalContext* globalCtx);
 void func_80B228F4(Actor* thisx, GlobalContext* globalCtx);
 void func_80B229A4(Actor* thisx, GlobalContext* globalCtx);
 
-/*
 const ActorInit En_Hakurock_InitVars = {
     ACTOR_EN_HAKUROCK,
     ACTORCAT_ITEMACTION,
@@ -35,9 +34,8 @@ const ActorInit En_Hakurock_InitVars = {
     (ActorFunc)EnHakurock_Update,
     (ActorFunc)NULL,
 };
-*/
 
-// D_80B22A80
+// static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_HARD,
@@ -58,13 +56,13 @@ static ColliderCylinderInit sCylinderInit = {
     { 60, 60, -30, { 0, 0, 0 } },
 };
 
-static CollisionCheckInfoInit D_80B22AAC = { 0x0000003C, 0x003CFF00, 0x00000000 };
+// sColChkInfoInit
+static CollisionCheckInfoInit D_80B22AAC = { 0, 60, 60, MASS_IMMOVABLE };
 
-extern Gfx D_0406AB30[];
 extern Gfx D_06011100[];
 extern Gfx D_06011178[];
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hakurock_0x80B21B00/EnHakurock_Init.asm")
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/EnHakurock_Init.s")
 void EnHakurock_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnHakurock* this = THIS;
 
@@ -81,7 +79,7 @@ void EnHakurock_Init(Actor* thisx, GlobalContext* globalCtx) {
     func_80B21FFC(this);
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hakurock_0x80B21B00/EnHakurock_Destroy.asm")
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/EnHakurock_Destroy.s")
 void EnHakurock_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnHakurock* this = THIS;
 
@@ -90,61 +88,58 @@ void EnHakurock_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B21BE0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hakurock_0x80B21B00/func_80B21EA4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B21EA4.s")
 // void func_80B21EA4(EnHakurock* this, s32 arg1) {
 //     Vec3f sp4C;
 //     s32 i;
 //     f32 temp_f20;
-//     f32 sp50;
 //     s32 k;
-//     s32 phi_s0_3;
 
 //     if (arg1 == 0) {
 //         for (i = 0; i < 20; i++) {
 //             func_80B21BE0(this->actor.parent, &this->actor.world.pos, arg1);
 //         }
-//         return;
-//     }
-//     if (arg1 == 2) {
+//     } else if (arg1 == 2) {
 //         for (i = 0; i < 10; i++) {
 //             func_80B21BE0(this->actor.parent, &this->actor.world.pos, arg1);
 //         }
-//         return;
-//     }
-//     Math_Vec3f_Copy(&sp4C, &this->actor.world.pos);
-//     temp_f20 = this->actor.scale.x * 600.0f;
-//     k = 1;
-//     if (arg1 == 1) {
-//         sp50 -= temp_f20;
-//         k = 0;
-//     }
+//     } else {
 
-//     for (k = (k * 5) + 5; k < 0x14; k += 5) {
-
-//         for (i = 0; i < k - 1; i++) {
-//             func_80B21BE0(this->actor.parent, &sp4C, arg1);
+//         Math_Vec3f_Copy(&sp4C, &this->actor.world.pos);
+//         temp_f20 = this->actor.scale.x * 600.0f;
+//         k = 1;
+//         if (arg1 == 1) {
+//             temp_f20 -= temp_f20;
+//             k = 0;
 //         }
-//         sp50 += temp_f20;
 
+//         for (k = (k * 5) + 5; k < 0x14; k += 5) {
+
+//             for (i = 0; i < k - 1; i++) {
+//                 func_80B21BE0(this->actor.parent, &sp4C, arg1);
+//             }
+//             temp_f20 += temp_f20;
+//         }
+//         // if (phi_s0_3 < 3) {
+//         //     phi_s5 = (phi_s0_3 * 5) + 5;
+//         //     do {
+//         //         phi_s0_4 = 0;
+//         //         if (phi_s5 > 0) {
+//         //             do {
+//         //                 func_80B21BE0(this->actor.parent, &sp4C, arg1);
+//         //                 temp_s0_3 = phi_s0_4 + 1;
+//         //                 phi_s0_4 = temp_s0_3;
+//         //             } while (temp_s0_3 < phi_s5);
+//         //         }
+//         //         temp_s5 = phi_s5 + 5;
+//         //         sp50 += temp_f20;
+//         //         phi_s5 = temp_s5;
+//         //     } while (temp_s5 < 0x14);
+//         // }
 //     }
-//     // if (phi_s0_3 < 3) {
-//     //     phi_s5 = (phi_s0_3 * 5) + 5;
-//     //     do {
-//     //         phi_s0_4 = 0;
-//     //         if (phi_s5 > 0) {
-//     //             do {
-//     //                 func_80B21BE0(this->actor.parent, &sp4C, arg1);
-//     //                 temp_s0_3 = phi_s0_4 + 1;
-//     //                 phi_s0_4 = temp_s0_3;
-//     //             } while (temp_s0_3 < phi_s5);
-//     //         }
-//     //         temp_s5 = phi_s5 + 5;
-//     //         sp50 += temp_f20;
-//     //         phi_s5 = temp_s5;
-//     //     } while (temp_s5 < 0x14);
-//     // }
 // }
 
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B21FFC.s")
 void func_80B21FFC(EnHakurock* this) {
     this->actor.bgCheckFlags &= 0xFFFE;
     this->collider.base.atFlags &= -3;
@@ -154,6 +149,7 @@ void func_80B21FFC(EnHakurock* this) {
     this->actionFunc = func_80B22040;
 }
 
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B22040.s")
 void func_80B22040(EnHakurock* this, GlobalContext* globalCtx) {
     if (this->actor.params == 1) {
         func_80B220A8(this);
@@ -164,6 +160,7 @@ void func_80B22040(EnHakurock* this, GlobalContext* globalCtx) {
     }
 }
 
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B220A8.s")
 void func_80B220A8(EnHakurock* this) {
     this->actor.params = 1;
     this->actor.draw = func_80B228F4;
@@ -182,6 +179,7 @@ void func_80B220A8(EnHakurock* this) {
     this->actionFunc = func_80B221E8;
 }
 
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B221E8.s")
 void func_80B221E8(EnHakurock* this, GlobalContext* globalCtx) {
 
     if (this->unk_148 > 0) {
@@ -199,6 +197,7 @@ void func_80B221E8(EnHakurock* this, GlobalContext* globalCtx) {
     }
 }
 
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B222AC.s")
 void func_80B222AC(EnHakurock* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
     s16 angle;
@@ -222,6 +221,7 @@ void func_80B222AC(EnHakurock* this, GlobalContext* globalCtx) {
     this->actionFunc = func_80B2242C;
 }
 
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B2242C.s")
 void func_80B2242C(EnHakurock* this, GlobalContext* globalCtx) {
     if ((this->collider.base.ocFlags1 & 2) && (this->collider.base.oc == this->actor.parent)) {
         func_80B21EA4(this, 1);
@@ -233,6 +233,7 @@ void func_80B2242C(EnHakurock* this, GlobalContext* globalCtx) {
     }
 }
 
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B224C0.s")
 void func_80B224C0(EnHakurock* this) {
     this->actor.params = 3;
     this->unk_148 = 0xA;
@@ -241,6 +242,7 @@ void func_80B224C0(EnHakurock* this) {
     this->actionFunc = func_80B22500;
 }
 
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B22500.s")
 void func_80B22500(EnHakurock* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
@@ -273,6 +275,7 @@ void func_80B22500(EnHakurock* this, GlobalContext* globalCtx) {
     }
 }
 
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B226AC.s")
 void func_80B226AC(EnHakurock* this) {
     f32 shiftFactor;
 
@@ -288,6 +291,7 @@ void func_80B226AC(EnHakurock* this) {
     this->actionFunc = func_80B22750;
 }
 
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B22750.s")
 void func_80B22750(EnHakurock* this, GlobalContext* globalCtx) {
     if (this->actor.params == 0) {
         func_80B21EA4(this, 3);
@@ -295,7 +299,7 @@ void func_80B22750(EnHakurock* this, GlobalContext* globalCtx) {
     }
 }
 
-// #pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hakurock_0x80B21B00/EnHakurock_Update.asm")
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/EnHakurock_Update.s")
 void EnHakurock_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnHakurock* this = THIS;
     s16 rockParams;
@@ -320,21 +324,24 @@ void EnHakurock_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B228F4(Actor* thisx, GlobalContext* globalCtx) {
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-    func_8012C28C(globalCtx->state.gfxCtx);
-    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 185, 24, 255);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_0406AB30);
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
-}
+// TODO: Fix the draw functions here...
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B228F4.s")
+// void func_80B228F4(Actor* thisx, GlobalContext* globalCtx) {
+//     OPEN_DISPS(globalCtx->state.gfxCtx);
+//     func_8012C28C(globalCtx->state.gfxCtx);
+//     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 185, 24, 255);
+//     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+//     gSPDisplayList(POLY_OPA_DISP++, D_0406AB30);
+//     CLOSE_DISPS(globalCtx->state.gfxCtx);
+// }
 
-void func_80B229A4(Actor* thisx, GlobalContext* globalCtx) {
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-    func_8012C28C(globalCtx->state.gfxCtx);
-    SysMatrix_InsertTranslation(-100.0f, 0.0f, 0.0f, 1);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_06011100);
-    gSPDisplayList(POLY_OPA_DISP++, D_06011178);
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
-}
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B229A4.s")
+// void func_80B229A4(Actor* thisx, GlobalContext* globalCtx) {
+//     OPEN_DISPS(globalCtx->state.gfxCtx);
+//     func_8012C28C(globalCtx->state.gfxCtx);
+//     SysMatrix_InsertTranslation(-100.0f, 0.0f, 0.0f, 1);
+//     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+//     gSPDisplayList(POLY_OPA_DISP++, D_06011100);
+//     gSPDisplayList(POLY_OPA_DISP++, D_06011178);
+//     CLOSE_DISPS(globalCtx->state.gfxCtx);
+// }
