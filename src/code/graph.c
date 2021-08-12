@@ -6,42 +6,29 @@
 #include "overlays/gamestates/ovl_select/z_select.h"
 #include "overlays/gamestates/ovl_title/z_title.h"
 
-extern u64* D_801FBB94; // gGfxSPTaskOutputBufferPtr
-extern u32 D_801FBB98; // gGfxSPTaskOutputBufferSize
-
-FaultAddrConvClient graphFaultAddrConvClient;
-FaultClient graphFaultClient;
+FaultAddrConvClient sGraphFaultAddrConvClient;
+FaultClient sGraphFaultClient;
 GfxMasterList* gGfxMasterDL;
-CfbInfo D_801F80F8[3];
-OSTime lastRenderFrameTimestamp;
-
-// TODO rename get_framebuffer -> SysCfb_GetFbPtr
-// TODO rename get_zbuffer -> SysCfb_GetZBuffer
-// TODO rename schedContext -> gSchedContext
-// TODO rename func_80182C90 -> SysUcode_GetUCodeBoot
-// TODO rename func_80182CA0 -> SysUcode_GetUCodeBootSize
-// TODO rename func_80182CBC -> SysUcode_GetUCode
-// TODO rename func_80182CCC -> SysUcode_GetUCodeData
+CfbInfo sGraphCfbInfos[3];
+OSTime sGraphTaskStartTime;
 
 void* Graph_FaultClient(void) {
     FaultDrawer_DrawText(30, 100, "ShowFrameBuffer PAGE 0/1");
-    osViSwapBuffer(get_framebuffer(0));
+    osViSwapBuffer(SysCfb_GetFbPtr(0));
     osViSetMode(D_801FBB88);
-    osViSetSpecialFeatures(0x42); // gamma_disable | dither_fliter_enable_aa_mode3_disable
+    osViSetSpecialFeatures(OS_VI_DITHER_FILTER_ON | OS_VI_GAMMA_OFF);
     Fault_WaitForInput();
-    osViSwapBuffer(get_framebuffer(1));
+    osViSwapBuffer(SysCfb_GetFbPtr(1));
     osViSetMode(D_801FBB88);
-    osViSetSpecialFeatures(0x42); // gamma_disable | dither_fliter_enable_aa_mode3_disable
+    osViSetSpecialFeatures(OS_VI_DITHER_FILTER_ON | OS_VI_GAMMA_OFF);
 }
 
-// Graph_InitTHGA
-void Graph_DlAlloc(TwoHeadGfxArena* arena, Gfx* buffer, s32 size) {
+void Graph_InitTHGA(TwoHeadGfxArena* arena, Gfx* buffer, s32 size) {
     THGA_Ct(arena, buffer, size);
 }
 
-// TODO rename
-void Graph_InitTHGA(GraphicsContext* gfxCtx) {
-    GfxPool* pool = &gGfxPools[gfxCtx->gfxPoolIdx & 1];
+void Graph_SetNextGfxPool(GraphicsContext* gfxCtx) {
+    GfxPool* pool = &gGfxPools[gfxCtx->gfxPoolIdx % 2];
 
     gGfxMasterDL = &pool->master;
     gSegments[0x0E] = gGfxMasterDL;
@@ -49,11 +36,11 @@ void Graph_InitTHGA(GraphicsContext* gfxCtx) {
     pool->headMagic = GFXPOOL_HEAD_MAGIC;
     pool->tailMagic = GFXPOOL_TAIL_MAGIC;
 
-    Graph_DlAlloc(&gfxCtx->polyOpa, pool->polyOpaBuffer, sizeof(pool->polyOpaBuffer));
-    Graph_DlAlloc(&gfxCtx->polyXlu, pool->polyXluBuffer, sizeof(pool->polyXluBuffer));
-    Graph_DlAlloc(&gfxCtx->overlay, pool->overlayBuffer, sizeof(pool->overlayBuffer));
-    Graph_DlAlloc(&gfxCtx->work, pool->workBuffer, sizeof(pool->workBuffer));
-    Graph_DlAlloc(&gfxCtx->debug, pool->debugBuffer, sizeof(pool->debugBuffer));
+    Graph_InitTHGA(&gfxCtx->polyOpa, pool->polyOpaBuffer, sizeof(pool->polyOpaBuffer));
+    Graph_InitTHGA(&gfxCtx->polyXlu, pool->polyXluBuffer, sizeof(pool->polyXluBuffer));
+    Graph_InitTHGA(&gfxCtx->overlay, pool->overlayBuffer, sizeof(pool->overlayBuffer));
+    Graph_InitTHGA(&gfxCtx->work, pool->workBuffer, sizeof(pool->workBuffer));
+    Graph_InitTHGA(&gfxCtx->debug, pool->debugBuffer, sizeof(pool->debugBuffer));
 
     gfxCtx->polyOpaBuffer = pool->polyOpaBuffer;
     gfxCtx->polyXluBuffer = pool->polyXluBuffer;
@@ -61,17 +48,17 @@ void Graph_InitTHGA(GraphicsContext* gfxCtx) {
     gfxCtx->workBuffer = pool->workBuffer;
     gfxCtx->debugBuffer = pool->debugBuffer;
 
-    gfxCtx->curFrameBuffer = get_framebuffer(gfxCtx->framebufferIdx % 2);
+    gfxCtx->curFrameBuffer = SysCfb_GetFbPtr(gfxCtx->framebufferIdx % 2);
     gSegments[0x0F] = gfxCtx->curFrameBuffer;
 
-    gfxCtx->zbuffer = get_zbuffer();
+    gfxCtx->zbuffer = SysCfb_GetZBuffer();
 
-    gSPBranchList(&gGfxMasterDL->unk_2A0[0], pool->polyOpaBuffer);
-    gSPBranchList(&gGfxMasterDL->unk_2A0[1], pool->polyXluBuffer);
-    gSPBranchList(&gGfxMasterDL->unk_2A0[2], pool->overlayBuffer);
-    gSPBranchList(&gGfxMasterDL->unk_2A0[3], pool->workBuffer);
-    gSPEndDisplayList(&gGfxMasterDL->unk_2A0[4]);
-    gSPBranchList(&gGfxMasterDL->unk_2F8[0], pool->debugBuffer);
+    gSPBranchList(&gGfxMasterDL->disps[0], pool->polyOpaBuffer);
+    gSPBranchList(&gGfxMasterDL->disps[1], pool->polyXluBuffer);
+    gSPBranchList(&gGfxMasterDL->disps[2], pool->overlayBuffer);
+    gSPBranchList(&gGfxMasterDL->disps[3], pool->workBuffer);
+    gSPEndDisplayList(&gGfxMasterDL->disps[4]);
+    gSPBranchList(&gGfxMasterDL->debugDisp[0], pool->debugBuffer);
 }
 
 GameStateOverlay* Graph_GetNextGameState(GameState* gameState) {
@@ -105,7 +92,7 @@ GameStateOverlay* Graph_GetNextGameState(GameState* gameState) {
 // Regalloc differences
 void* Graph_FaultAddrConvFunc(void* address, void* param) {
     u32 addr = address;
-    GameStateOverlay *gamestateOvl;
+    GameStateOverlay* gamestateOvl;
     u32 ramConv;
     u32 ramStart;
     u32 diff;
@@ -138,19 +125,23 @@ void Graph_Init(GraphicsContext* gfxCtx) {
     gfxCtx->xScale = gViConfigXScale;
     gfxCtx->yScale = gViConfigYScale;
     osCreateMesgQueue(&gfxCtx->queue, gfxCtx->msgBuff, ARRAY_COUNT(gfxCtx->msgBuff));
-    Fault_AddClient(&graphFaultClient, (fault_client_func)Graph_FaultClient, NULL, NULL);
-    Fault_AddAddrConvClient(&graphFaultAddrConvClient, (fault_address_converter_func )Graph_FaultAddrConvFunc, NULL);
+    Fault_AddClient(&sGraphFaultClient, (fault_client_func)Graph_FaultClient, NULL, NULL);
+    Fault_AddAddrConvClient(&sGraphFaultAddrConvClient, (fault_address_converter_func)Graph_FaultAddrConvFunc, NULL);
 }
 
 void Graph_Destroy(GraphicsContext* gfxCtx) {
-    Fault_RemoveClient(&graphFaultClient);
-    Fault_RemoveAddrConvClient(&graphFaultAddrConvClient);
+    Fault_RemoveClient(&sGraphFaultClient);
+    Fault_RemoveAddrConvClient(&sGraphFaultAddrConvClient);
 }
 
-// Graph_TaskSet00
-void Graph_Render(GraphicsContext* gfxCtx, GameState* gameState) {
-    static s32 D_801D1510 = 10; // retry count?
-    static s32 D_801D1514 = 0;
+/**
+ * Constructs the graphics OSTask and forwards it to the scheduler.
+ * Waits for up to 3 additional seconds for any current graphics task to complete.
+ * If it does not signal completion in that time, retry or trigger a crash.
+ */
+void Graph_TaskSet00(GraphicsContext* gfxCtx, GameState* gameState) {
+    static s32 retryCount = 10; // retry count?
+    static s32 cfbIdx = 0;
 
     OSTask_t* task = &gfxCtx->task.list.t;
     OSScTask* scTask = &gfxCtx->task;
@@ -159,15 +150,15 @@ void Graph_Render(GraphicsContext* gfxCtx, GameState* gameState) {
     CfbInfo* cfb;
 
 retry:
-    osSetTimer(&timer, 140625000, 0, &gfxCtx->queue, (OSMesg)666);
+    osSetTimer(&timer, OS_USEC_TO_CYCLES(3 * 1000 * 1000), 0, &gfxCtx->queue, (OSMesg)666);
     osRecvMesg(&gfxCtx->queue, &msg, OS_MESG_BLOCK);
     osStopTimer(&timer);
 
     if (msg == (OSMesg)666) {
         osSyncPrintf("GRAPH SP TIMEOUT\n");
-        if (D_801D1510 >= 0) {
-            D_801D1510--;
-            Sched_SendGfxCancelMsg(&schedContext);
+        if (retryCount >= 0) {
+            retryCount--;
+            Sched_SendGfxCancelMsg(&gSchedContext);
             goto retry;
         } else {
             // graph.c: No more! die!
@@ -175,27 +166,28 @@ retry:
             Fault_AddHungupAndCrashImpl("RCP is HUNG UP!!", "Oh! MY GOD!!");
         }
     }
-    gfxCtx->unk_2FC = gGfxMasterDL;
+
+    gfxCtx->masterList = gGfxMasterDL;
     if (gfxCtx->callback != NULL) {
         gfxCtx->callback(gfxCtx, gfxCtx->callbackParam);
     }
 
-    task->type = 1;
-    task->flags = 4;
-    task->ucode_boot = func_80182C90();
-    task->ucode_boot_size = func_80182CA0();
-    task->ucode = func_80182CBC();
-    task->ucode_data = func_80182CCC();
+    task->type = M_GFXTASK;
+    task->flags = OS_SC_DRAM_DLIST;
+    task->ucode_boot = SysUcode_GetUCodeBoot();
+    task->ucode_boot_size = SysUcode_GetUCodeBootSize();
+    task->ucode = SysUcode_GetUCode();
+    task->ucode_data = SysUcode_GetUCodeData();
     task->ucode_size = 0x1000;
     task->ucode_data_size = 0x800;
     task->dram_stack = (u64*)gGfxSPTaskStack;
     task->dram_stack_size = sizeof(gGfxSPTaskStack);
-    task->output_buff = D_801FBB94; // gGfxSPTaskOutputBufferPtr;
-    task->output_buff_size = D_801FBB98; // gGfxSPTaskOutputBufferSize;
+    task->output_buff = gGfxSPTaskOutputBufferPtr;
+    task->output_buff_size = gGfxSPTaskOutputBufferSize;
     task->data_ptr = (u64*)gGfxMasterDL;
     task->data_size = 0;
     task->yield_data_ptr = (u64*)gGfxSPTaskYieldBuffer;
-    task->yield_data_size = 0xC00;
+    task->yield_data_size = sizeof(gGfxSPTaskYieldBuffer);
 
     scTask->next = NULL;
     scTask->flags = OS_SC_RCP_MASK | OS_SC_SWAPBUFFER | OS_SC_LAST_TASK;
@@ -211,14 +203,14 @@ retry:
 
     { s32 pad; }
 
-    cfb = &D_801F80F8[D_801D1514];
-    D_801D1514 = (D_801D1514 + 1) % 3;
+    cfb = &sGraphCfbInfos[cfbIdx];
+    cfbIdx = (cfbIdx + 1) % ARRAY_COUNT(sGraphCfbInfos);
 
     cfb->fb1 = gfxCtx->curFrameBuffer;
     cfb->swapBuffer = gfxCtx->curFrameBuffer;
 
-    if (gfxCtx->unk_2EA != 0) {
-        gfxCtx->unk_2EA = 0;
+    if (gfxCtx->updateViMode) {
+        gfxCtx->updateViMode = false;
         cfb->viMode = gfxCtx->viMode;
         cfb->features = gfxCtx->viConfigFeatures;
         cfb->xScale = gfxCtx->xScale;
@@ -235,12 +227,12 @@ retry:
         osRecvMesg(&gfxCtx->queue, NULL, OS_MESG_NOBLOCK);
     }
 
-    gfxCtx->schedMsgQ = &schedContext.cmdQ;
-    osSendMesg(&schedContext.cmdQ, scTask, OS_MESG_BLOCK);
-    Sched_SendEntryMsg(&schedContext);
+    gfxCtx->schedMsgQ = &gSchedContext.cmdQ;
+    osSendMesg(&gSchedContext.cmdQ, scTask, OS_MESG_BLOCK);
+    Sched_SendEntryMsg(&gSchedContext);
 }
 
-void Graph_FrameSetup(GameState* state) {
+void Graph_UpdateGame(GameState* state) {
     Game_UpdateInput(state);
     Game_IncrementFrameCount(state);
     if (SREG(20) < 3) {
@@ -248,12 +240,15 @@ void Graph_FrameSetup(GameState* state) {
     }
 }
 
-// Graph_Update
-void Graph_RenderFrame(GraphicsContext* gfxCtx, GameState* gameState) {
+/**
+ *  Run the gamestate logic, then finalize the gfx buffer
+ *  and run the graphics task for this frame.
+ */
+void Graph_ExecuteAndDraw(GraphicsContext* gfxCtx, GameState* gameState) {
     u32 problem;
 
     gameState->unk_A3 = 0;
-    Graph_InitTHGA(gfxCtx);
+    Graph_SetNextGfxPool(gfxCtx);
 
     Game_Update(gameState);
 
@@ -268,14 +263,14 @@ void Graph_RenderFrame(GraphicsContext* gfxCtx, GameState* gameState) {
     CLOSE_DISPS(gfxCtx);
 
     {
-        Gfx* gfx = &gGfxMasterDL->unk_0[0];
+        Gfx* gfx = gGfxMasterDL->taskStart;
 
         gSPSegment(gfx++, 0x0E, gGfxMasterDL);
-        gSPDisplayList(gfx++, &D_0E000000.unk_2A0[3]);
-        gSPDisplayList(gfx++, &D_0E000000.unk_2A0[0]);
-        gSPDisplayList(gfx++, &D_0E000000.unk_2A0[1]);
-        gSPDisplayList(gfx++, &D_0E000000.unk_2A0[2]);
-        gSPDisplayList(gfx++, &D_0E000000.unk_2F8[0]);
+        gSPDisplayList(gfx++, &D_0E000000.disps[3]);
+        gSPDisplayList(gfx++, &D_0E000000.disps[0]);
+        gSPDisplayList(gfx++, &D_0E000000.disps[1]);
+        gSPDisplayList(gfx++, &D_0E000000.disps[2]);
+        gSPDisplayList(gfx++, &D_0E000000.debugDisp[0]);
 
         gDPPipeSync(gfx++);
         gDPFullSync(gfx++);
@@ -285,7 +280,7 @@ void Graph_RenderFrame(GraphicsContext* gfxCtx, GameState* gameState) {
     problem = false;
 
     {
-        GfxPool* pool = &gGfxPools[gfxCtx->gfxPoolIdx & 1];
+        GfxPool* pool = &gGfxPools[gfxCtx->gfxPoolIdx % 2];
 
         if (pool->headMagic != GFXPOOL_HEAD_MAGIC) {
             Fault_AddHungupAndCrash("../graph.c", 1054);
@@ -312,7 +307,7 @@ void Graph_RenderFrame(GraphicsContext* gfxCtx, GameState* gameState) {
     }
 
     if (!problem) {
-        Graph_Render(gfxCtx, gameState);
+        Graph_TaskSet00(gfxCtx, gameState);
         gfxCtx->gfxPoolIdx++;
         gfxCtx->framebufferIdx++;
     }
@@ -327,18 +322,18 @@ void Graph_RenderFrame(GraphicsContext* gfxCtx, GameState* gameState) {
         gRSPAudioTotalTime = 0;
         gRDPTotalTime = 0;
 
-        if (lastRenderFrameTimestamp != 0) {
-            lastRenderFrameDuration = time - lastRenderFrameTimestamp;
+        if (sGraphTaskStartTime != 0) {
+            lastRenderFrameDuration = time - sGraphTaskStartTime;
         }
-        lastRenderFrameTimestamp = time;
+        sGraphTaskStartTime = time;
     }
 }
 
-void Graph_DoFrame(GraphicsContext* gfxCtx, GameState* gameState) {
+void Graph_Update(GraphicsContext* gfxCtx, GameState* gameState) {
     gameState->unk_A3 = 0;
 
-    Graph_FrameSetup(gameState);
-    Graph_RenderFrame(gfxCtx, gameState);
+    Graph_UpdateGame(gameState);
+    Graph_ExecuteAndDraw(gfxCtx, gameState);
 }
 
 void Graph_ThreadEntry(void* arg) {
@@ -349,16 +344,15 @@ void Graph_ThreadEntry(void* arg) {
     u32 size;
     s32 pad[2];
 
-    sys_cfb_zbufl = StartHeap_Alloc(sizeof(*sys_cfb_zbufl) + sizeof(*sys_cfb_wbufl) + 64 - 1);
-    sys_cfb_zbufl = (void*)ALIGN64((u32)sys_cfb_zbufl);
+    gZBuffer = StartHeap_Alloc(sizeof(*gZBuffer) + sizeof(*gWorkBuffer) + 64 - 1);
+    gZBuffer = (void*)ALIGN64((u32)gZBuffer);
 
-    sys_cfb_wbufl = (void*)((u8*)sys_cfb_zbufl + sizeof(*sys_cfb_zbufl));
+    gWorkBuffer = (void*)((u8*)gZBuffer + sizeof(*gZBuffer));
 
-    sys_cfb_fifol = StartHeap_Alloc(sizeof(*sys_cfb_fifol));
-    D_801FBBC4 = sys_cfb_fifol;
+    gGfxSPTaskOutputBuffer2 = gGfxSPTaskOutputBuffer = StartHeap_Alloc(sizeof(*gGfxSPTaskOutputBuffer));
 
-    D_801FBBB0 = (u8*)sys_cfb_fifol + sizeof(*sys_cfb_fifol);
-    D_801FBBC8 = (u8*)D_801FBBC4 + sizeof(*sys_cfb_fifol);
+    gGfxSPTaskOutputBufferEnd = (u8*)gGfxSPTaskOutputBuffer + sizeof(*gGfxSPTaskOutputBuffer);
+    gGfxSPTaskOutputBufferEnd2 = (u8*)gGfxSPTaskOutputBuffer2 + sizeof(*gGfxSPTaskOutputBuffer2);
 
     func_80178978();
     Fault_SetFB(D_801FBB90, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -379,7 +373,7 @@ void Graph_ThreadEntry(void* arg) {
         Game_StateInit(gameState, ovl->init, &gfxCtx);
 
         while (Game_GetShouldContinue(gameState)) {
-            Graph_DoFrame(&gfxCtx, gameState);
+            Graph_Update(&gfxCtx, gameState);
         }
 
         nextOvl = Graph_GetNextGameState(gameState);

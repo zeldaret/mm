@@ -5,16 +5,13 @@
 #include "stdbool.h"
 #include "stdint.h"
 
-#include "PR/ultratypes.h"
-#include "PR/gbi.h"
+#include "ultra64.h"
 #include "io/controller.h"
 #include "osint.h"
-#include "viint.h"
 #include "math.h"
 #include "os.h"
 #include "stdlib.h"
 #include "xstdio.h"
-#include "unk.h"
 
 #include "sfx.h"
 #include "color.h"
@@ -281,18 +278,18 @@ typedef struct {
 } TwoHeadGfxArena; // size = 0x10
 
 typedef struct {
-    /* 0x0000 0x00 */ Gfx unk_0[9];     // task start
-    /* 0x0048 0x09 */ Gfx unk_48[8];    // original name: clear_zb_dl
-    /* 0x0088 0x11 */ Gfx unk_88[5];    // original name: clear_fb_dl
-    /* 0x00B0 0x16 */ Gfx unk_B0[6];    // setup fb and zb dl
-    /* 0x00E0 0x1C */ Gfx unk_E0[12];   // unused
-    /* 0x0140 0x28 */ Gfx unk_140[17];  // sync segments
-    /* 0x01C8 0x39 */ Gfx unk_1C8[2];   // set scissor dl
-    /* 0x01D8 0x41 */ Gfx unk_1D8[25];  // unused
-    /* 0x02A0 0x54 */ Gfx unk_2A0[5];   // disp buffers master list
-    /* 0x02C8 0x59 */ Gfx unk_2C8[3];   // fillrect
-    /* 0x02E0 0x5C */ Gfx unk_2E0[3];   // another fillrect
-    /* 0x02F8 0x5F */ Gfx unk_2F8[1];   // debug disp
+    /* 0x0000 0x00 */ Gfx taskStart[9];
+    /* 0x0048 0x09 */ Gfx clearZBuffer[8];      // original name: clear_zb_dl
+    /* 0x0088 0x11 */ Gfx clearFrameBuffer[5];  // original name: clear_fb_dl
+    /* 0x00B0 0x16 */ Gfx setupBuffers[6];      // setup framebuffer and zbuffer
+    /* 0x00E0 0x1C */ Gfx unk_E0[12];           // unused
+    /* 0x0140 0x28 */ Gfx syncSegments[17];
+    /* 0x01C8 0x39 */ Gfx setScissor[2];
+    /* 0x01D8 0x41 */ Gfx unk_1D8[25];          // unused
+    /* 0x02A0 0x54 */ Gfx disps[5];
+    /* 0x02C8 0x59 */ Gfx clearFillRect[3];     // fillrect for clearing buffers
+    /* 0x02E0 0x5C */ Gfx fillRect[3];          // fillrect for general purpose
+    /* 0x02F8 0x5F */ Gfx debugDisp[1];
 } GfxMasterList; // size = 0x300
 
 #define GFXPOOL_HEAD_MAGIC 0x1234
@@ -348,10 +345,10 @@ typedef struct OSScTask {
 } OSScTask; // size = 0x58
 
 typedef struct GraphicsContext {
-    /* 0x000 */ Gfx*        polyOpaBuffer;     // Pointer to "Zelda 0"
-    /* 0x004 */ Gfx*        polyXluBuffer;     // Pointer to "Zelda 1"
-    /* 0x008 */ char        unk_8[0x8];        // Unused, could this be pointers to "Zelda 2" / "Zelda 3"
-    /* 0x010 */ Gfx*        overlayBuffer;     // Pointer to "Zelda 4"
+    /* 0x000 */ Gfx*        polyOpaBuffer;  // Pointer to "Zelda 0"
+    /* 0x004 */ Gfx*        polyXluBuffer;  // Pointer to "Zelda 1"
+    /* 0x008 */ char        unk_8[0x8];     // Unused, could this be pointers to "Zelda 2" / "Zelda 3"
+    /* 0x010 */ Gfx*        overlayBuffer;  // Pointer to "Zelda 4"
     /* 0x014 */ u32         unk_14;
     /* 0x018 */ char        unk_18[0x20];
     /* 0x038 */ OSMesg      msgBuff[8];
@@ -368,21 +365,21 @@ typedef struct GraphicsContext {
     /* 0x284 */ OSViMode*   viMode;
     /* 0x288 */ void*       zbuffer;
     /* 0x28C */ char        unk_28C[0x1C];
-    /* 0x2A8 */ TwoHeadGfxArena overlay;        // "Zelda 4"
-    /* 0x2B8 */ TwoHeadGfxArena polyOpa;        // "Zelda 0"
-    /* 0x2C8 */ TwoHeadGfxArena polyXlu;        // "Zelda 1"
-    /* 0x2D8 */ s32         gfxPoolIdx;
+    /* 0x2A8 */ TwoHeadGfxArena overlay;    // "Zelda 4"
+    /* 0x2B8 */ TwoHeadGfxArena polyOpa;    // "Zelda 0"
+    /* 0x2C8 */ TwoHeadGfxArena polyXlu;    // "Zelda 1"
+    /* 0x2D8 */ u32         gfxPoolIdx;
     /* 0x2DC */ u16*        curFrameBuffer;
     /* 0x2E0 */ char        unk_2E0[0x4];
     /* 0x2E4 */ u32         viConfigFeatures;
     /* 0x2E8 */ char        unk_2E8[0x2];
-    /* 0x2EA */ u8          unk_2EA;
+    /* 0x2EA */ u8          updateViMode;
     /* 0x2EB */ u8          framebufferIdx;
-    /* 0x2EC */ void (*callback)(struct GraphicsContext*, u32);
+    /* 0x2EC */ void        (*callback)(struct GraphicsContext*, u32);
     /* 0x2F0 */ u32         callbackParam;
     /* 0x2F4 */ f32         xScale;
     /* 0x2F8 */ f32         yScale;
-    /* 0x2FC */ GfxMasterList* unk_2FC;         // current master list
+    /* 0x2FC */ GfxMasterList* masterList;
 } GraphicsContext; // size = 0x300
 
 typedef struct {
@@ -1163,7 +1160,7 @@ struct GameAlloc {
     /* 0x10 */ GameAllocNode* head;
 }; // size = 0x14
 
-typedef struct {
+typedef struct GameState {
     /* 0x00 */ GraphicsContext* gfxCtx;
     /* 0x04 */ GameStateFunc main;
     /* 0x08 */ GameStateFunc destroy;

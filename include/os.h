@@ -80,35 +80,6 @@ typedef struct {
     /* 0x18 */ s32 (*epiDmaCallback)(OSPiHandle*, s32, u32, void*, u32);
 } OSDevMgr;
 
-
-typedef struct {
-    /* 0x00 */ u32 ctrl;
-    /* 0x04 */ u32 width;
-    /* 0x08 */ u32 burst;
-    /* 0x0C */ u32 vSync;
-    /* 0x10 */ u32 hSync;
-    /* 0x14 */ u32 leap;
-    /* 0x18 */ u32 hStart;
-    /* 0x1C */ u32 xScale;
-    /* 0x20 */ u32 vCurrent;
-} OSViCommonRegs;
-
-
-typedef struct {
-    /* 0x00 */ u32 origin;
-    /* 0x04 */ u32 yScale;
-    /* 0x08 */ u32 vStart;
-    /* 0x0C */ u32 vBurst;
-    /* 0x10 */ u32 vIntr;
-} OSViFieldRegs;
-
-
-typedef struct {
-    /* 0x00 */ u8 type;
-    /* 0x04 */ OSViCommonRegs comRegs;
-    /* 0x28 */ OSViFieldRegs fldRegs[2];
-} OSViMode;
-
 typedef u64 OSTime;
 
 

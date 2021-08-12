@@ -762,7 +762,7 @@ Gfx sFillSetupDL[] = {
                          G_TD_CLAMP | G_TP_PERSP | G_CYC_FILL | G_PM_NPRIMITIVE,
                      G_AC_NONE | G_ZS_PIXEL | G_RM_NOOP | G_RM_NOOP2),
     gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH),
-    gsSPDisplayList(&D_0E0001C8),
+    gsSPDisplayList(D_0E000000.setScissor),
     gsDPSetBlendColor(0x00, 0x00, 0x00, 0x08),
     gsSPClipRatio(FRUSTRATIO_2),
     gsSPEndDisplayList(),
@@ -1223,7 +1223,7 @@ Gfx* Gfx_PrimColor(GraphicsContext* gfxCtx, s32 lodfrac, s32 r, s32 g, s32 b, s3
 }
 
 #ifdef NON_MATCHING
-// Regalloc differences
+// Regalloc differences, minor reorderings
 void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g, u8 b) {
     Gfx* masterGfx;
     void* zbuffer;
@@ -1237,10 +1237,10 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
 
     // Set up Framebuffer and Z-Buffer
 
-    masterGfx = gGfxMasterDL->unk_B0;
+    masterGfx = gGfxMasterDL->setupBuffers;
 
-    gSPDisplayList(&masterGfx[0], D_0E000000.unk_140);
-    gSPDisplayList(&masterGfx[1], &sFillSetupDL);
+    gSPDisplayList(&masterGfx[0], D_0E000000.syncSegments);
+    gSPDisplayList(&masterGfx[1], sFillSetupDL);
     gDPSetColorImage(&masterGfx[2], G_IM_FMT_RGBA, G_IM_SIZ_16b, D_801FBBCC, &D_0F000000);
     if (zbuffer != NULL) {
         gDPSetDepthImage(&masterGfx[3], zbuffer);
@@ -1251,14 +1251,14 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
 
     // Set Scissor
 
-    masterGfx = gGfxMasterDL->unk_1C8;
+    masterGfx = gGfxMasterDL->setScissor;
 
     gDPSetScissor(&masterGfx[0], G_SC_NON_INTERLACE, 0, 0, D_801FBBCC, D_801FBBCE);
     gSPEndDisplayList(&masterGfx[1]);
 
     // Clear Z-Buffer
 
-    masterGfx = gGfxMasterDL->unk_48;
+    masterGfx = gGfxMasterDL->clearZBuffer;
 
     if (zbuffer == NULL) {
         gSPEndDisplayList(&masterGfx[0]);
@@ -1268,40 +1268,40 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
         gDPSetCycleType(&masterGfx[2], G_CYC_FILL);
         gDPSetRenderMode(&masterGfx[3], G_RM_NOOP, G_RM_NOOP2);
         gDPSetFillColor(&masterGfx[4], (GPACK_RGBA5551(255, 255, 240, 0) << 16) | GPACK_RGBA5551(255, 255, 240, 0));
-        gSPDisplayList(&masterGfx[5], D_0E000000.unk_2C8);
+        gSPDisplayList(&masterGfx[5], D_0E000000.clearFillRect);
         gDPSetColorImage(&masterGfx[6], G_IM_FMT_RGBA, G_IM_SIZ_16b, D_801FBBCC, zbuffer);
         gSPEndDisplayList(&masterGfx[7]);
     }
 
     // Clear Framebuffer
 
-    masterGfx = gGfxMasterDL->unk_88;
+    masterGfx = gGfxMasterDL->clearFrameBuffer;
 
     gDPSetColorImage(&masterGfx[0], G_IM_FMT_RGBA, G_IM_SIZ_16b, D_801FBBCC, &D_0F000000);
     gDPSetCycleType(&masterGfx[1], G_CYC_FILL);
     gDPSetRenderMode(&masterGfx[2], G_RM_NOOP, G_RM_NOOP2);
     gDPSetFillColor(&masterGfx[3], (GPACK_RGBA5551(r, g, b, 1) << 16) | GPACK_RGBA5551(r, g, b, 1));
-    gSPBranchList(&masterGfx[4], D_0E000000.unk_2C8);
+    gSPBranchList(&masterGfx[4], D_0E000000.clearFillRect);
 
-    // Fillrect used by above
+    // Fillrect used by the above buffer clearing routines
 
-    masterGfx = gGfxMasterDL->unk_2C8;
+    masterGfx = gGfxMasterDL->clearFillRect;
 
     gDPFillRectangle(&masterGfx[0], 0, 0, D_801FBBCC - 1, D_801FBBCE - 1);
     gDPPipeSync(&masterGfx[1]);
     gSPEndDisplayList(&masterGfx[2]);
 
-    // Fillrect used by other things?
+    // General Fillrect?
 
-    masterGfx = gGfxMasterDL->unk_2E0;
+    masterGfx = gGfxMasterDL->fillRect;
 
     gDPFillRectangle(&masterGfx[0], 0, 0, D_801FBBCC, D_801FBBCE);
     gDPPipeSync(&masterGfx[1]);
     gSPEndDisplayList(&masterGfx[2]);
 
-    // Sync SP Segments with CPU?
+    // Sync SP Segments with current CPU Segments
 
-    masterGfx = gGfxMasterDL->unk_140;
+    masterGfx = gGfxMasterDL->syncSegments;
 
     for (i = 0; i < ARRAY_COUNT(gSegments); i++) {
         if (i == 0xE) {
@@ -1312,17 +1312,21 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
     }
     gSPEndDisplayList(&masterGfx[i]);
 
-    gSPDisplayList(gfxCtx->polyOpa.p++, gGfxMasterDL->unk_B0);
-    gSPDisplayList(gfxCtx->polyXlu.p++, gGfxMasterDL->unk_B0);
-    gSPDisplayList(gfxCtx->overlay.p++, gGfxMasterDL->unk_B0);
-    gSPDisplayList(gfxCtx->debug.p++, gGfxMasterDL->unk_B0);
+    OPEN_DISPS(gfxCtx);
+
+    gSPDisplayList(POLY_OPA_DISP++, gGfxMasterDL->setupBuffers);
+    gSPDisplayList(POLY_XLU_DISP++, gGfxMasterDL->setupBuffers);
+    gSPDisplayList(OVERLAY_DISP++, gGfxMasterDL->setupBuffers);
+    gSPDisplayList(DEBUG_DISP++, gGfxMasterDL->setupBuffers);
 
     if (clearZb) {
-        gSPDisplayList(gfxCtx->polyOpa.p++, D_0E000000.unk_48);
+        gSPDisplayList(gfxCtx->polyOpa.p++, D_0E000000.clearZBuffer);
     }
     if (clearFb) {
-        gSPDisplayList(gfxCtx->polyOpa.p++, D_0E000000.unk_88);
+        gSPDisplayList(gfxCtx->polyOpa.p++, D_0E000000.clearFrameBuffer);
     }
+
+    CLOSE_DISPS(gfxCtx);
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_rcp/func_8012CF0C.s")
