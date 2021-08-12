@@ -5,7 +5,7 @@
 
 struct EnFish2;
 
-typedef void (*EnFish2ActionFunc)(struct EnFish2* this, GlobalContext* globalCtx);
+typedef void (*EnFish2ActionFunc)(struct EnFish2*, GlobalContext*);
 
 typedef struct EnFish2 {
     /* 0x0000 */ Actor actor;

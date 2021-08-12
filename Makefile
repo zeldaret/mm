@@ -133,27 +133,39 @@ DEP_FILES := $(O_FILES:.o=.asmproc.d)
 # create build directories
 $(shell mkdir -p build/baserom $(foreach dir,$(SRC_DIRS) $(ASM_DIRS) $(ASSET_BIN_DIRS),build/$(dir)))
 
-build/src/libultra/os/%: OPTFLAGS := -O1
-build/src/libultra/voice/%: OPTFLAGS := -O2
-build/src/libultra/io/%: OPTFLAGS := -O2
-build/src/libultra/libc/%: OPTFLAGS := -O2
-build/src/libultra/libc/ll%: OPTFLAGS := -O1
-build/src/libultra/libc/ll%: MIPS_VERSION := -mips3 -32
-build/src/libultra/gu/%: OPTFLAGS := -O2
-build/src/libultra/rmon/%: OPTFLAGS := -O2
-build/src/boot_O2/%: OPTFLAGS := -O2
-build/src/boot_O2_g3/%: OPTFLAGS := -O2 -g3
+# directory flags
+build/src/boot_O2/%.o: OPTFLAGS := -O2
+build/src/boot_O2_g3/%.o: OPTFLAGS := -O2 -g3
 
+build/src/libultra/os/%.o: OPTFLAGS := -O1
+build/src/libultra/voice/%.o: OPTFLAGS := -O2
+build/src/libultra/io/%.o: OPTFLAGS := -O2
+build/src/libultra/libc/%.o: OPTFLAGS := -O2
+build/src/libultra/gu/%.o: OPTFLAGS := -O2
+build/src/libultra/rmon/%.o: OPTFLAGS := -O2
+
+# file flags
 build/src/boot_O2_g3/fault.o: CFLAGS += -trapuv
 build/src/boot_O2_g3/fault_drawer.o: CFLAGS += -trapuv
 
-build/src/libultra/%: CC := $(CC_OLD)
-build/src/libultra/libc/%: CC := python3 tools/asm-processor/build.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
-build/src/libultra/io/%: CC := python3 tools/asm-processor/build.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
-build/src/libultra/os/%: CC := python3 tools/asm-processor/build.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
-build/src/libultra/voice/%: CC := python3 tools/asm-processor/build.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
+build/src/libultra/libc/ll.o: OPTFLAGS := -O1
+build/src/libultra/libc/ll.o: MIPS_VERSION := -mips3 -32
+build/src/libultra/libc/llcvt.o: OPTFLAGS := -O1
+build/src/libultra/libc/llcvt.o: MIPS_VERSION := -mips3 -32
 
-CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
+# cc & asm-processor
+build/src/boot_O2/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
+build/src/boot_O2_g3/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
+
+build/src/libultra/%.o: CC := python3 tools/asm-processor/build.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
+
+build/src/code/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
+
+build/src/overlays/actors/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
+build/src/overlays/effects/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
+build/src/overlays/fbdemos/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
+build/src/overlays/gamestates/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
+build/src/overlays/kaleido_scope/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
 
 #### Main Targets ###
 

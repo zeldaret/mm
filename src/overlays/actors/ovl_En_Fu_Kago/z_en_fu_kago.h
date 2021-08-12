@@ -5,7 +5,7 @@
 
 struct EnFuKago;
 
-typedef void (*EnFuKagoActionFunc)(struct EnFuKago* this, GlobalContext* globalCtx);
+typedef void (*EnFuKagoActionFunc)(struct EnFuKago*, GlobalContext*);
 
 typedef struct EnFuKago {
     /* 0x0000 */ Actor actor;

@@ -56,9 +56,9 @@ void CIC6105_PrintRomInfo(void);
 void CIC6105_AddRomInfoFaultPage(void);
 void CIC6105_RemoveRomInfoFaultPage(void);
 void func_800818F4(void);
-void __osSyncVPrintf(UNK_TYPE4 param_1, ...);
-void osSyncPrintf(char* str, ...);
-void rmonPrintf(UNK_TYPE4 param_1, ...);
+void __osSyncVPrintf(const char* fmt, ...);
+void osSyncPrintf(const char* fmt, ...);
+void rmonPrintf(const char* fmt, ...);
 void Fault_SleepImpl(u32 duration);
 void Fault_AddClient(FaultClient* client, fault_client_func callback, void* param0, void* param1);
 void Fault_RemoveClient(FaultClient* client);
@@ -400,7 +400,7 @@ void guPositionF(float mf[4][4], f32 r, f32 p, f32 h, f32 s, f32 x, f32 y, f32 z
 void guPosition(Mtx* m, f32 r, f32 p, f32 h, f32 s, f32 x, f32 y, f32 z);
 s32 __osEPiRawStartDma(OSPiHandle* handle, s32 direction, u32 cartAddr, void* dramAddr, u32 size);
 OSYieldResult osSpTaskYielded(OSTask* task);
-s32 memcmp(void* __s1, void* __s2, size_t __n);
+s32 bcmp(void* __s1, void* __s2, size_t __n);
 OSTime osGetTime(void);
 void guRotateF(float mf[4][4], f32 a, f32 x, f32 y, f32 z);
 void guRotate(Mtx* m, f32 a, f32 x, f32 y, f32 z);
@@ -498,13 +498,13 @@ s32 __osSpSetPc(u32 data);
 // void __osVoiceContWrite4(void);
 void __osGetHWIntrRoutine(s32 idx, OSMesgQueue** outQueue, OSMesg* outMsg);
 // void __osSetHWIntrRoutine(void);
-// u32 __osGetWatchLo(void);
+u32 __osGetWatchLo(void);
 void __osSetWatchLo(u32 value);
-f32 fmodf(f32 param_1, f32 param_2);
-void* __osMemset(void* param_1, u8 param_2, s32 param_3);
-s32 __osMemcmp(const char* str1, const char* str2);
-char* __osStrCpy(char* param_1, char* param_2);
-// void __osMemcpy(void);
+f32 fmodf(f32 dividend, f32 divisor);
+void* __osMemset(void* ptr, s32 val, u32 size);
+s32 __osStrcmp(const char* str1, const char* str2);
+char* __osStrcpy(char* dst, const char* src);
+void* __osMemcpy(void* dst, void* src, size_t size);
 void EnAObj_Init(EnAObj* this, GlobalContext* globalCtx);
 void EnAObj_Destroy(EnAObj* this, GlobalContext* globalCtx);
 void EnAObj_Update1(EnAObj* this, GlobalContext* globalCtx);
@@ -3372,10 +3372,10 @@ void Sched_Init(SchedContext* sched, void* stack, OSPri pri, UNK_TYPE arg3, UNK_
 // void func_80177390(void);
 void func_801773A0(void* arg0);
 void func_801773C4(void* arg0);
-void SpeedMeter_DrawTimeEntries(void* displayList, GraphicsContext* gCtx);
+void SpeedMeter_DrawTimeEntries(void* displayList, GraphicsContext* gfxCtx);
 // void func_80177A84(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5,
 // UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9); void func_80177AC8(void);
-void SpeedMeter_DrawAllocEntries(void* displayList, GraphicsContext* gCtx, GameState* ctx);
+void SpeedMeter_DrawAllocEntries(void* displayList, GraphicsContext* gfxCtx, GameState* ctx);
 // void func_801780F0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
 // UNK_TYPE4 param_6, UNK_TYPE4 param_7); void func_801781EC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3,
 // UNK_TYPE1 param_4, UNK_TYPE4 param_5); void func_8017842C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3,

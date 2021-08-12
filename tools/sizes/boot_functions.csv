@@ -377,7 +377,7 @@ asm/non_matchings/boot/position/guPositionF.s,guPositionF,0x8008FEB0,0x6A
 asm/non_matchings/boot/position/guPosition.s,guPosition,0x80090058,0x1A
 asm/non_matchings/boot/epirawdma/__osEPiRawStartDma.s,__osEPiRawStartDma,0x800900C0,0x78
 asm/non_matchings/boot/sptaskyielded/osSpTaskYielded.s,osSpTaskYielded,0x800902A0,0x18
-asm/non_matchings/boot/memcmp/memcmp.s,memcmp,0x80090300,0x48
+asm/non_matchings/boot/bcmp/bcmp.s,bcmp,0x80090300,0x48
 asm/non_matchings/boot/gettime/osGetTime.s,osGetTime,0x80090420,0x24
 asm/non_matchings/boot/rotate/guRotateF.s,guRotateF,0x800904B0,0x61
 asm/non_matchings/boot/rotate/guRotate.s,guRotate,0x80090634,0x13
@@ -478,6 +478,6 @@ asm/non_matchings/boot/getwatchlo/__osGetWatchLo.s,__osGetWatchLo,0x80096810,0x4
 asm/non_matchings/boot/setwatchlo/__osSetWatchLo.s,__osSetWatchLo,0x80096820,0x4
 asm/non_matchings/boot/fmodf/fmodf.s,fmodf,0x80096830,0x14
 asm/non_matchings/boot/__osMemset/__osMemset.s,__osMemset,0x80096880,0xC
-asm/non_matchings/boot/__osMemcmp/__osMemcmp.s,__osMemcmp,0x800968B0,0x10
+asm/non_matchings/boot/__osStrcmp/__osStrcmp.s,__osStrcmp,0x800968B0,0x10
 asm/non_matchings/boot/__osStrcpy/__osStrcpy.s,__osStrcpy,0x800968F0,0x10
 asm/non_matchings/boot/__osMemcpy/__osMemcpy.s,__osMemcpy,0x80096930,0x24
