@@ -70,7 +70,7 @@ void Main_ThreadEntry(void* arg) {
     IrqMgr_Init(&gIrqMgr, &sIrqMgrStackInfo, Z_PRIORITY_IRQMGR, 1);
     DmaMgr_Start();
     Idle_InitCodeAndMemory();
-    main(arg);
+    Main(arg);
     DmaMgr_Stop();
 }
 
