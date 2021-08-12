@@ -48,10 +48,10 @@ void SkelAnime_DrawLimbLod(GlobalContext* globalCtx, s32 limbIndex, void** skele
         if (dList != NULL) {
             Gfx* polyTemp = POLY_OPA_DISP;
 
-            gSPMatrix(polyTemp, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_LOAD);
+            gSPMatrix(&polyTemp[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_LOAD);
 
-            gSPDisplayList(polyTemp + 1, dList);
-            POLY_OPA_DISP = polyTemp + 2;
+            gSPDisplayList(&polyTemp[1], dList);
+            POLY_OPA_DISP = &polyTemp[2];
         }
     }
 
@@ -105,11 +105,11 @@ void SkelAnime_DrawLod(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTa
         if (dList != NULL) {
             Gfx* polyTemp = POLY_OPA_DISP;
 
-            gSPMatrix(polyTemp, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_LOAD);
+            gSPMatrix(&polyTemp[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_LOAD);
 
-            gSPDisplayList(polyTemp + 1, dList);
+            gSPDisplayList(&polyTemp[1], dList);
 
-            POLY_OPA_DISP = polyTemp + 2;
+            POLY_OPA_DISP = &polyTemp[2];
         }
     }
 
@@ -225,9 +225,9 @@ void SkelAnime_DrawFlexLod(GlobalContext* globalCtx, void** skeleton, Vec3s* joi
         if (newDList != NULL) {
             Gfx* polyTemp = POLY_OPA_DISP;
 
-            gSPMatrix(polyTemp, Matrix_ToMtx(mtx), G_MTX_LOAD);
-            gSPDisplayList(polyTemp + 1, newDList);
-            POLY_OPA_DISP = polyTemp + 2;
+            gSPMatrix(&polyTemp[0], Matrix_ToMtx(mtx), G_MTX_LOAD);
+            gSPDisplayList(&polyTemp[1], newDList);
+            POLY_OPA_DISP = &polyTemp[2];
             mtx++;
         } else if (limbDList != NULL) {
             Matrix_ToMtx(mtx);
@@ -276,9 +276,9 @@ void SkelAnime_DrawLimbOpa(GlobalContext* globalCtx, s32 limbIndex, void** skele
         if (dList != NULL) {
             Gfx* polyTemp = POLY_OPA_DISP;
 
-            gSPMatrix(polyTemp, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_LOAD);
-            gSPDisplayList(polyTemp + 1, dList);
-            POLY_OPA_DISP = polyTemp + 2;
+            gSPMatrix(&polyTemp[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_LOAD);
+            gSPDisplayList(&polyTemp[1], dList);
+            POLY_OPA_DISP = &polyTemp[2];
         }
     }
 
@@ -331,9 +331,9 @@ void SkelAnime_DrawOpa(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTa
         if (dList != NULL) {
             Gfx* polyTemp = POLY_OPA_DISP;
 
-            gSPMatrix(polyTemp, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_LOAD);
-            gSPDisplayList(polyTemp + 1, dList);
-            POLY_OPA_DISP = polyTemp + 2;
+            gSPMatrix(&polyTemp[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_LOAD);
+            gSPDisplayList(&polyTemp[1], dList);
+            POLY_OPA_DISP = &polyTemp[2];
         }
     }
 
@@ -444,9 +444,9 @@ void SkelAnime_DrawFlexOpa(GlobalContext* globalCtx, void** skeleton, Vec3s* joi
         if (newDList != NULL) {
             Gfx* polyTemp = POLY_OPA_DISP;
 
-            gSPMatrix(polyTemp, Matrix_ToMtx(mtx), G_MTX_LOAD);
-            gSPDisplayList(polyTemp + 1, newDList);
-            POLY_OPA_DISP = polyTemp + 2;
+            gSPMatrix(&polyTemp[0], Matrix_ToMtx(mtx), G_MTX_LOAD);
+            gSPDisplayList(&polyTemp[1], newDList);
+            POLY_OPA_DISP = &polyTemp[2];
             mtx++;
         } else {
             if (limbDList != NULL) {
@@ -500,9 +500,9 @@ void func_80134148(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec
         if (newDList != NULL) {
             Gfx* polyTemp = POLY_OPA_DISP;
 
-            gSPMatrix(polyTemp, Matrix_ToMtx(*mtx), G_MTX_LOAD);
-            gSPDisplayList(polyTemp + 1, newDList);
-            POLY_OPA_DISP = polyTemp + 2;
+            gSPMatrix(&polyTemp[0], Matrix_ToMtx(*mtx), G_MTX_LOAD);
+            gSPDisplayList(&polyTemp[1], newDList);
+            POLY_OPA_DISP = &polyTemp[2];
             (*mtx)++;
         } else {
             if (limbDList != NULL) {
@@ -570,9 +570,9 @@ void func_801343C0(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable,
         if (newDList != NULL) {
             Gfx* polyTemp = POLY_OPA_DISP;
 
-            gSPMatrix(polyTemp, Matrix_ToMtx(mtx), G_MTX_LOAD);
-            gSPDisplayList(polyTemp + 1, newDList);
-            POLY_OPA_DISP = polyTemp + 2;
+            gSPMatrix(&polyTemp[0], Matrix_ToMtx(mtx), G_MTX_LOAD);
+            gSPDisplayList(&polyTemp[1], newDList);
+            POLY_OPA_DISP = &polyTemp[2];
             mtx++;
         } else {
             if (limbDList != NULL) {
@@ -659,9 +659,9 @@ Gfx* SkelAnime_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, void** skeleton
     if ((overrideLimbDraw == NULL) || !overrideLimbDraw(globalCtx, limbIndex, &dList, &pos, &rot, arg, &gfx)) {
         Matrix_JointPosition(&pos, &rot);
         if (dList != NULL) {
-            gSPMatrix(gfx, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_LOAD);
-            gSPDisplayList(gfx + 1, dList);
-            gfx = gfx + 2;
+            gSPMatrix(&gfx[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_LOAD);
+            gSPDisplayList(&gfx[1], dList);
+            gfx = &gfx[2];
         }
     }
 
@@ -715,9 +715,9 @@ Gfx* SkelAnime_Draw(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable
     if ((overrideLimbDraw == NULL) || !overrideLimbDraw(globalCtx, 1, &dList, &pos, &rot, arg, &gfx)) {
         Matrix_JointPosition(&pos, &rot);
         if (dList != NULL) {
-            gSPMatrix(gfx, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_LOAD);
-            gSPDisplayList(gfx + 1, dList);
-            gfx = gfx + 2;
+            gSPMatrix(&gfx[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_LOAD);
+            gSPDisplayList(&gfx[1], dList);
+            gfx = &gfx[2];
         }
     }
 
@@ -762,9 +762,9 @@ Gfx* SkelAnime_DrawFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** skel
     if ((overrideLimbDraw == NULL) || !overrideLimbDraw(globalCtx, limbIndex, &newDList, &pos, &rot, arg, &gfx)) {
         Matrix_JointPosition(&pos, &rot);
         if (newDList != NULL) {
-            gSPMatrix(gfx, Matrix_ToMtx(*mtx), G_MTX_LOAD);
-            gSPDisplayList(gfx + 1, newDList);
-            gfx = gfx + 2;
+            gSPMatrix(&gfx[0], Matrix_ToMtx(*mtx), G_MTX_LOAD);
+            gSPDisplayList(&gfx[1], newDList);
+            gfx = &gfx[2];
             (*mtx)++;
         } else {
             if (limbDList != NULL) {
@@ -831,9 +831,9 @@ Gfx* SkelAnime_DrawFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jointT
     if ((overrideLimbDraw == NULL) || !overrideLimbDraw(globalCtx, 1, &newDList, &pos, &rot, arg, &gfx)) {
         Matrix_JointPosition(&pos, &rot);
         if (newDList != NULL) {
-            gSPMatrix(gfx, Matrix_ToMtx(mtx), G_MTX_LOAD);
-            gSPDisplayList(gfx + 1, newDList);
-            gfx = gfx + 2;
+            gSPMatrix(&gfx[0], Matrix_ToMtx(mtx), G_MTX_LOAD);
+            gSPDisplayList(&gfx[1], newDList);
+            gfx = &gfx[2];
             mtx++;
         } else {
             if (limbDList != NULL) {
@@ -1661,7 +1661,7 @@ s32 SkelAnime_Morph(SkelAnime* skelAnime) {
  * animation frame
  */
 s32 SkelAnime_MorphTaper(SkelAnime* skelAnime) {
-    s16 prevPhase = (s16)(skelAnime->morphWeight * 16384.0f);
+    s16 prevPhase = skelAnime->morphWeight * 0x4000;
     s16 curPhase;
     f32 prevWeight;
     f32 curWeight;
@@ -1672,7 +1672,7 @@ s32 SkelAnime_MorphTaper(SkelAnime* skelAnime) {
         SkelAnime_SetUpdate(skelAnime);
         skelAnime->morphWeight = 0.0f;
     }
-    curPhase = (s16)(skelAnime->morphWeight * 16384.0f);
+    curPhase = skelAnime->morphWeight * 0x4000;
     if (skelAnime->taper < 0) {
         prevWeight = 1.0f - Math_CosS(prevPhase);
         curWeight = 1.0f - Math_CosS(curPhase);
@@ -1761,7 +1761,7 @@ s32 SkelAnime_Once(SkelAnime* skelAnime) {
     f32 updateRate = gFramerateDivisorThird;
 
     if (skelAnime->curFrame == skelAnime->endFrame) {
-        SkelAnime_GetFrameData(skelAnime->animation, (s32)skelAnime->curFrame, skelAnime->limbCount,
+        SkelAnime_GetFrameData(skelAnime->animation, skelAnime->curFrame, skelAnime->limbCount,
                                skelAnime->jointTable);
         SkelAnime_AnimateFrame(skelAnime);
         return 1;
