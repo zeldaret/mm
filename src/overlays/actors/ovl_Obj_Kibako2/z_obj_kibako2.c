@@ -75,13 +75,12 @@ s32 ObjKibako2_ContainsSkulltula(ObjKibako2* this, GlobalContext* globalCtx) {
 
 void ObjKibako2_Break(ObjKibako2* this, GlobalContext* globalCtx) {
     s32 pad[2];
-    Vec3f* thisPos;
+    Vec3f* thisPos = &this->dyna.actor.world.pos;
     Vec3f pos;
     Vec3f velocity;
     s16 angle;
     s32 i;
 
-    thisPos = &this->dyna.actor.world.pos;
     for (i = 0, angle = 0; i < 0x10; i++, angle += 0x4E20) {
         f32 sin = Math_SinS(angle);
         f32 cos = Math_CosS(angle);
