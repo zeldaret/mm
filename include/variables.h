@@ -230,7 +230,6 @@ extern char D_80098C2C[];
 extern char D_80098C34[];
 extern char D_80098C38[];
 extern char D_80098C40[];
-extern const u32 sFaultDrawerFont[];
 extern char D_80099050[];
 extern char D_80099054[];
 extern char D_8009905C[];

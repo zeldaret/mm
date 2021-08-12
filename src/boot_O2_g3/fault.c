@@ -107,7 +107,7 @@ void Fault_RemoveClient(FaultClient* client) {
     }
 }
 
-void Fault_AddAddrConvClient(FaultAddrConvClient* client, fault_address_converter_func callback, void* param) {
+void Fault_AddAddrConvClient(FaultAddrConvClient* client, FaultAddrConvFunc callback, void* param) {
     OSIntMask mask;
     u32 alreadyExists = 0;
 

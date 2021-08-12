@@ -62,7 +62,7 @@ void rmonPrintf(const char* fmt, ...);
 void Fault_SleepImpl(u32 duration);
 void Fault_AddClient(FaultClient* client, fault_client_func callback, void* param0, void* param1);
 void Fault_RemoveClient(FaultClient* client);
-void Fault_AddAddrConvClient(FaultAddrConvClient* client, fault_address_converter_func callback, void* param);
+void Fault_AddAddrConvClient(FaultAddrConvClient* client, FaultAddrConvFunc callback, void* param);
 void Fault_RemoveAddrConvClient(FaultAddrConvClient* client);
 void* Fault_ConvertAddress(void* addr);
 void Fault_Sleep(u32 duration);

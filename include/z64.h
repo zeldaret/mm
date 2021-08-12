@@ -397,7 +397,7 @@ typedef struct {
     /* 0xC */ unsigned int inst4;
 } __osExceptionVector; // size = 0x10
 
-typedef void*(*fault_address_converter_func)(void* addr, void* arg);
+typedef void*(*FaultAddrConvFunc)(void* addr, void* arg);
 
 typedef void(*fault_client_func)(void* arg1, void* arg2);
 
@@ -1012,7 +1012,7 @@ typedef struct FaultAddrConvClient FaultAddrConvClient;
 
 struct FaultAddrConvClient {
     /* 0x0 */ FaultAddrConvClient* next;
-    /* 0x4 */ fault_address_converter_func callback;
+    /* 0x4 */ FaultAddrConvFunc callback;
     /* 0x8 */ void* param;
 }; // size = 0xC
 
