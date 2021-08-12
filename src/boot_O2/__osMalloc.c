@@ -45,7 +45,7 @@ ArenaNode* ArenaImpl_GetLastBlock(Arena* arena) {
     return last;
 }
 
-void __osMallocInit(Arena* arena, void* start, u32 size) {
+void __osMallocInit(Arena* arena, void* start, size_t size) {
     bzero(arena, sizeof(*arena));
     ArenaImpl_LockInit(arena);
     __osMallocAddBlock(arena, start, size);
@@ -91,7 +91,7 @@ u8 __osMallocIsInitalized(Arena* arena) {
     return arena->isInit;
 }
 
-void* __osMalloc(Arena* arena, u32 size) {
+void* __osMalloc(Arena* arena, size_t size) {
     ArenaNode* iter;
     ArenaNode* newNode;
     void* alloc;
@@ -134,7 +134,7 @@ void* __osMalloc(Arena* arena, u32 size) {
     return alloc;
 }
 
-void* __osMallocR(Arena* arena, u32 size) {
+void* __osMallocR(Arena* arena, size_t size) {
     ArenaNode* iter;
     ArenaNode* newNode;
     u32 blockSize;

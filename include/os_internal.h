@@ -12,8 +12,8 @@ typedef struct {
     /* 0x08 */ OSMesgQueue* cmdQueue;
     /* 0x0C */ OSMesgQueue* eventQueue;
     /* 0x10 */ OSMesgQueue* acccessQueue;
-    /* 0x14 */ s32 (*piDmaCallback)(s32, u32, void*, u32);
-    /* 0x18 */ s32 (*epiDmaCallback)(OSPiHandle*, s32, u32, void*, u32);
+    /* 0x14 */ s32 (*piDmaCallback)(s32, u32, void*, size_t);
+    /* 0x18 */ s32 (*epiDmaCallback)(OSPiHandle*, s32, u32, void*, size_t);
 } OSMgrArgs; // size = 0x1C
 
 #endif

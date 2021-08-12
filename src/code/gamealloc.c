@@ -9,7 +9,7 @@ void GameAlloc_Log(GameAlloc* this) {
     }
 }
 
-void* GameAlloc_Malloc(GameAlloc* this, u32 size) {
+void* GameAlloc_Malloc(GameAlloc* this, size_t size) {
     GameAllocEntry* ptr = SystemArena_Malloc(size + sizeof(GameAllocEntry));
 
     if (ptr != NULL) {

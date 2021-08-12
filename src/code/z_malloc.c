@@ -1,13 +1,13 @@
 #include <ultra64.h>
 #include <global.h>
 
-void* ZeldaArena_Malloc(u32 size) {
+void* ZeldaArena_Malloc(size_t size) {
     void* ptr = __osMalloc(&sZeldaArena, size);
 
     return ptr;
 }
 
-void* ZeldaArena_MallocR(u32 size) {
+void* ZeldaArena_MallocR(size_t size) {
     void* ptr = __osMallocR(&sZeldaArena, size);
 
     return ptr;
@@ -22,7 +22,7 @@ void ZeldaArena_Free(void* ptr) {
     __osFree(&sZeldaArena, ptr);
 }
 
-void* ZeldaArena_Calloc(u32 num, u32 size) {
+void* ZeldaArena_Calloc(u32 num, size_t size) {
     void* ret;
     u32 n = num * size;
 
@@ -42,7 +42,7 @@ void ZeldaArena_Check() {
     __osCheckArena(&sZeldaArena);
 }
 
-void ZeldaArena_Init(void* start, u32 size) {
+void ZeldaArena_Init(void* start, size_t size) {
     __osMallocInit(&sZeldaArena, start, size);
 }
 

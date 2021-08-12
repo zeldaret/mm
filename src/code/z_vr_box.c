@@ -37,7 +37,7 @@ void func_80143148(SkyboxContext* skyboxCtx, s32 arg1) {
 
 void func_801431E8(GameState* gamestate, SkyboxContext* skyboxCtx, s16 skyType) {
     GlobalContext* globalCtx = (GlobalContext*)gamestate;
-    u32 size;
+    size_t size;
     void* offset;
     s32 pad;
 
@@ -82,7 +82,7 @@ void func_801431E8(GameState* gamestate, SkyboxContext* skyboxCtx, s16 skyType) 
 }
 
 void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyType) {
-    u32 size;
+    size_t size;
 
     if (1) {}
 

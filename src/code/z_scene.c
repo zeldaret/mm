@@ -1,7 +1,7 @@
 #include "global.h"
 
 s32 Object_Spawn(ObjectContext* objectCtx, s16 id) {
-    u32 size;
+    size_t size;
 
     objectCtx->status[objectCtx->num].id = id;
     size = objectFileTable[id].vromEnd - objectFileTable[id].vromStart;
@@ -60,7 +60,7 @@ void Object_UpdateBank(ObjectContext* objectCtx) {
     s32 i;
     ObjectStatus* status = &objectCtx->status[0];
     RomFile* objectFile;
-    u32 size;
+    size_t size;
 
     for (i = 0; i < objectCtx->num; i++) {
         if (status->id < 0) {
@@ -354,7 +354,7 @@ s32 Scene_LoadAreaTextures(GlobalContext* globalCtx, s32 fileIndex) {
         { (u32)_scene_texture_08SegmentRomStart, (u32)_scene_texture_08SegmentRomEnd },
     };
     u32 vromStart = sceneTextureFiles[fileIndex].vromStart;
-    u32 size = sceneTextureFiles[fileIndex].vromEnd - vromStart;
+    size_t size = sceneTextureFiles[fileIndex].vromEnd - vromStart;
 
     if (size != 0) {
         globalCtx->roomCtx.unk74 = THA_AllocEndAlign16(&globalCtx->state.heap, size);

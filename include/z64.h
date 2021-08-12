@@ -986,7 +986,7 @@ typedef struct ActorListEntry ActorListEntry;
 typedef struct ArenaNode_t {
     /* 0x0 */ s16 magic; // Should always be 0x7373
     /* 0x2 */ s16 isFree;
-    /* 0x4 */ u32 size;
+    /* 0x4 */ size_t size;
     /* 0x8 */ struct ArenaNode_t* next;
     /* 0xC */ struct ArenaNode_t* prev;
 } ArenaNode; // size = 0x10
@@ -1056,7 +1056,7 @@ typedef struct GameAllocNode GameAllocNode;
 typedef struct GameAllocNode {
     /* 0x0 */ struct GameAllocNode* next;
     /* 0x4 */ struct GameAllocNode* prev;
-    /* 0x8 */ u32 size;
+    /* 0x8 */ size_t size;
     /* 0xC */ u32 unk_0C;
 } GameAllocEntry; // size = 0x10
 
