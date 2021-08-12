@@ -5,7 +5,7 @@
 
 struct ObjAqua;
 
-typedef void (*ObjAquaActionFunc)(struct ObjAqua* this, GlobalContext* globalCtx);
+typedef void (*ObjAquaActionFunc)(struct ObjAqua*, GlobalContext*);
 
 typedef struct ObjAqua {
     /* 0x0000 */ Actor actor;

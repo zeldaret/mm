@@ -5,7 +5,7 @@
 
 struct ObjLightblock;
 
-typedef void (*ObjLightblockActionFunc)(struct ObjLightblock* this, GlobalContext* globalCtx);
+typedef void (*ObjLightblockActionFunc)(struct ObjLightblock*, GlobalContext*);
 
 typedef struct ObjLightblock {
     /* 0x0000 */ Actor actor;

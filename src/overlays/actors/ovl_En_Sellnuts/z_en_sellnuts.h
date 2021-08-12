@@ -5,7 +5,7 @@
 
 struct EnSellnuts;
 
-typedef void (*EnSellnutsActionFunc)(struct EnSellnuts* this, GlobalContext* globalCtx);
+typedef void (*EnSellnutsActionFunc)(struct EnSellnuts*, GlobalContext*);
 
 typedef struct EnSellnuts {
     /* 0x0000 */ Actor actor;

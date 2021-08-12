@@ -5,7 +5,7 @@
 
 struct ObjHakaisi;
 
-typedef void (*ObjHakaisiActionFunc)(struct ObjHakaisi* this, GlobalContext* globalCtx);
+typedef void (*ObjHakaisiActionFunc)(struct ObjHakaisi*, GlobalContext*);
 
 typedef struct ObjHakaisi {
     /* 0x0000 */ Actor actor;

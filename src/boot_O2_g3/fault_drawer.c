@@ -145,7 +145,7 @@ void FaultDrawer_FillScreen() {
 #pragma GLOBAL_ASM("asm/non_matchings/boot/fault_drawer/D_80099080.s")
 
 void FaultDrawer_VPrintf(const char* str, char* args) { // va_list
-    _Printf((printf_func)FaultDrawer_FormatStringFunc, sFaultDrawContext, str, args);
+    _Printf((PrintCallback)FaultDrawer_FormatStringFunc, sFaultDrawContext, str, args);
 }
 
 void FaultDrawer_Printf(const char* fmt, ...) {

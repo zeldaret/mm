@@ -5,7 +5,7 @@
 
 struct ObjToge;
 
-typedef void (*ObjTogeActionFunc)(struct ObjToge* this, GlobalContext* globalCtx);
+typedef void (*ObjTogeActionFunc)(struct ObjToge*, GlobalContext*);
 
 typedef struct ObjToge {
     /* 0x0000 */ Actor actor;

@@ -1672,7 +1672,7 @@ extern PadMgr* padmgrContext;
 extern UNK_PTR D_801D1540;
 extern f32 D_801D1570[13];
 extern Vec3f D_801D15B0;
-// extern UNK_TYPE4 D_801D15BC;
+extern Vec3s D_801D15BC;
 extern RSPMatrix D_801D1DE0;
 extern MtxF D_801D1E20;
 extern UNK_PTR D_801D1E60;
@@ -3455,28 +3455,22 @@ extern StackEntry audioStackEntry;
 extern StackEntry padmgrStackEntry;
 extern AudioMgr audioContext;
 extern PadMgr D_801FB620;
-// extern UNK_TYPE1 D_801FBAA0;
-// extern UNK_TYPE1 D_801FBAB0;
-// extern UNK_TYPE1 D_801FBAB4;
-// extern UNK_TYPE1 D_801FBAB8;
-// extern UNK_TYPE1 D_801FBABC;
-// extern UNK_TYPE1 D_801FBAC0;
-// extern UNK_TYPE1 D_801FBAC4;
-// extern UNK_TYPE1 D_801FBAC8;
-// extern UNK_TYPE1 D_801FBACC;
-// extern UNK_TYPE1 D_801FBAD0;
-// extern UNK_TYPE1 D_801FBAD4;
+extern FaultClient sSchedFaultClient;
+extern OSTime sRSPGFXStartTime;
+extern OSTime sRSPAudioStartTime;
+extern OSTime sRSPOtherStartTime;
+extern OSTime sRDPStartTime;
+extern u64* gAudioSPDataPtr;
+extern u32 gAudioSPDataSize;
 // extern UNK_TYPE1 D_801FBAE0;
 // extern UNK_TYPE1 D_801FBAE8;
 extern volatile OSTime D_801FBAF0;
 extern volatile OSTime lastRenderFrameDuration;
-// extern UNK_TYPE1 D_801FBB00;
-// extern UNK_TYPE1 D_801FBB04;
-// extern UNK_TYPE1 D_801FBB08;
-// extern UNK_TYPE1 D_801FBB0C;
-// extern UNK_TYPE1 D_801FBB10;
-// extern UNK_TYPE1 D_801FBB14;
-// extern UNK_TYPE1 D_801FBB20;
+extern volatile OSTime gRSPAudioTotalTime;
+extern volatile OSTime sRSPGFXTotalTime;
+extern volatile OSTime sRSPOtherTotalTime;
+// extern UNK_TYPE1 D_801FBB18;
+extern volatile OSTime gRDPTotalTime;
 // extern UNK_TYPE1 D_801FBB28;
 extern OSViMode D_801FBB30;
 extern u32* gFramebuffers[2];
@@ -4025,14 +4019,14 @@ extern UNK_TYPE D_04055628;
 extern Gfx D_04057B10[];
 extern Gfx D_04058BA0[];
 extern Gfx D_04089070[];
-extern u64 D_0408DBE0[]; // gDust1Tex
-extern u64 D_0408DFE0[]; // gDust2Tex
-extern u64 D_0408E3E0[]; // gDust3Tex
-extern u64 D_0408E7E0[]; // gDust4Tex
-extern u64 D_0408EBE0[]; // gDust5Tex
-extern u64 D_0408EFE0[]; // gDust6Tex
-extern u64 D_0408F3E0[]; // gDust7Tex
-extern u64 D_0408F7E0[]; // gDust8Tex
+extern TexturePtr D_0408DBE0[]; // gDust1Tex
+extern TexturePtr D_0408DFE0[]; // gDust2Tex
+extern TexturePtr D_0408E3E0[]; // gDust3Tex
+extern TexturePtr D_0408E7E0[]; // gDust4Tex
+extern TexturePtr D_0408EBE0[]; // gDust5Tex
+extern TexturePtr D_0408EFE0[]; // gDust6Tex
+extern TexturePtr D_0408F3E0[]; // gDust7Tex
+extern TexturePtr D_0408F7E0[]; // gDust8Tex
 extern UNK_TYPE D_04050550;
 extern UNK_TYPE D_04050648;
 extern UNK_TYPE D_040510B0;
@@ -4067,9 +4061,10 @@ extern Gfx D_04075B30[];
 extern Gfx D_04076BC0[];
 extern Gfx D_04077480[];
 extern UNK_TYPE D_04079B10;
-extern UNK_TYPE D_0407AB10;
+extern Gfx D_0407AB10[];
+extern Gfx D_0407AB58[];
 extern UNK_TYPE D_0407AFB0;
-extern UNK_TYPE D_0407D590;
+extern Gfx D_0407D590[];
 extern UNK_TYPE D_0407D650;
 extern UNK_TYPE D_0407F218;
 extern UNK_TYPE D_040815D0;

@@ -22,10 +22,12 @@ void EnOssan_DrawPartTimeWorker(Actor* thisx, GlobalContext* globalCtx);
 
 void EnOssan_InitCuriosityShopMan(EnOssan* this, GlobalContext* globalCtx);
 void EnOssan_InitPartTimeWorker(EnOssan* this, GlobalContext* globalCtx);
+u16 EnOssan_GetWelcomeCuriosityShopMan(EnOssan* this, GlobalContext* globalCtx);
 void EnOssan_InitShop(EnOssan* this, GlobalContext* globalCtx);
 void EnOssan_Idle(EnOssan* this, GlobalContext* globalCtx);
 void EnOssan_BeginInteraction(EnOssan* this, GlobalContext* globalCtx);
 void EnOssan_Hello(EnOssan* this, GlobalContext* globalCtx);
+u16 EnOssan_GetWelcomePartTimeWorker(EnOssan* this, GlobalContext* globalCtx);
 void EnOssan_SetHaveMet(EnOssan* this);
 void EnOssan_StartShopping(GlobalContext* globalCtx, EnOssan* this);
 void EnOssan_FaceShopkeeper(EnOssan* this, GlobalContext* globalCtx);
@@ -44,6 +46,9 @@ void EnOssan_ItemPurchased(EnOssan* this, GlobalContext* globalCtx);
 void EnOssan_ResetItemPosition(EnOssan* this);
 void EnOssan_Blink(EnOssan* this);
 void EnOssan_GetCutscenes(EnOssan* this, GlobalContext* globalCtx);
+
+s32 EnOssan_ReturnItemToShelf(EnOssan* this);
+s32 EnOssan_TakeItemOffShelf(EnOssan* this);
 
 extern FlexSkeletonHeader D_060028A0;
 extern TexturePtr D_06005BC0;
@@ -1335,14 +1340,14 @@ void EnOssan_InitPartTimeWorker(EnOssan* this, GlobalContext* globalCtx) {
     this->actor.draw = EnOssan_DrawPartTimeWorker;
 }
 
-s32 EnOssan_GetWelcomeCuriosityShopMan(EnOssan* this, GlobalContext* globalCtx) {
+u16 EnOssan_GetWelcomeCuriosityShopMan(EnOssan* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
-    u16 ret = func_800F1250(globalCtx, 0x2F);
+    u16 textId = Text_GetFaceReaction(globalCtx, 0x2F);
 
-    if (ret != 0) {
+    if (textId != 0) {
         this->animationIdx = 4;
         this->flags |= END_INTERACTION;
-        return ret;
+        return textId;
     }
     switch (player->transformation) {
         case PLAYER_FORM_DEKU:
@@ -1368,13 +1373,13 @@ s32 EnOssan_GetWelcomeCuriosityShopMan(EnOssan* this, GlobalContext* globalCtx) 
     return sWelcomeHumanTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
 }
 
-s32 EnOssan_GetWelcomePartTimeWorker(EnOssan* this, GlobalContext* globalCtx) {
+u16 EnOssan_GetWelcomePartTimeWorker(EnOssan* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
-    u16 ret = func_800F1250(globalCtx, 0x36);
+    u16 textId = Text_GetFaceReaction(globalCtx, 0x36);
 
-    if (ret != 0) {
+    if (textId != 0) {
         this->flags |= END_INTERACTION;
-        return ret;
+        return textId;
     }
     switch (player->transformation) {
         case PLAYER_FORM_DEKU:
