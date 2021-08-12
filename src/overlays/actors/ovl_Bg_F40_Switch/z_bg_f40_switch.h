@@ -5,7 +5,7 @@
 
 struct BgF40Switch;
 
-typedef void (*BgF40SwitchActionFunc)(struct BgF40Switch* this, GlobalContext* globalCtx);
+typedef void (*BgF40SwitchActionFunc)(struct BgF40Switch*, GlobalContext*);
 
 typedef struct BgF40Switch {
     /* 0x0000 */ Actor actor;
