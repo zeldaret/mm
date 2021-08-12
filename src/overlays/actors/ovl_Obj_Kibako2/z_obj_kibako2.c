@@ -222,9 +222,7 @@ void ObjKibako2_Idle(ObjKibako2* this, GlobalContext* globalCtx) {
         func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
         this->dyna.actor.draw = NULL;
         this->actionFunc = ObjKibako2_Kill;
-        return;
-    }
-    if (this->dyna.actor.xzDistToPlayer < 600.0f) {
+    } else if (this->dyna.actor.xzDistToPlayer < 600.0f) {
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 }
