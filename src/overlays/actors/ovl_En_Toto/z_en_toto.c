@@ -206,7 +206,7 @@ void EnToto_Init(Actor* thisx, GlobalContext* globalCtx) {
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 30.0f);
     this->actor.bgCheckFlags |= 0x400;
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600A978,
-                       globalCtx->sceneNum == 0x12 ? &D_06003AA8 : &D_0600C880, this->jointTable, this->morphTable, 18);
+                       ((globalCtx->sceneNum == 0x12) ? &D_06003AA8 : &D_0600C880), this->jointTable, this->morphTable, 18);
     func_80BA36C0(this, globalCtx, 0);
     this->actor.shape.rot.x = 0;
 }
