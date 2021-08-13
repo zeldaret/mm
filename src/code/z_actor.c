@@ -131,9 +131,17 @@ void func_800B40E0(GlobalContext* globalCtx, Light* light, MtxF* arg2, s32 arg3,
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
+// ActorShadow_DrawFeet
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B42F8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B4A98.s")
+// Actor_SetFeetPos
+void func_800B4A98(Actor* actor, s32 limbIndex, s32 leftFootIndex, Vec3f* leftFootPos, s32 rightFootIndex, Vec3f* rightFootPos) {
+    if (limbIndex == leftFootIndex) {
+        SysMatrix_MultiplyVector3fByState(leftFootPos, &actor->shape.feetPos[FOOT_LEFT]);
+    } else if (limbIndex == rightFootIndex) {
+        SysMatrix_MultiplyVector3fByState(rightFootPos, &actor->shape.feetPos[FOOT_RIGHT]);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B4AEC.s")
 
@@ -259,6 +267,7 @@ void Actor_TitleCardContextInit(GlobalContext* globalCtx, TitleCardContext* titl
     titleCardCtx->alpha = 0;
 }
 
+// TitleCard_InitBossName
 void Actor_TitleCardCreate(GlobalContext* globalCtx, TitleCardContext* titleCardCtx, u32 texture, s16 param_4,
                            s16 param_5, u8 param_6, u8 param_7) {
     titleCardCtx->texture = texture;
@@ -270,8 +279,10 @@ void Actor_TitleCardCreate(GlobalContext* globalCtx, TitleCardContext* titleCard
     titleCardCtx->fadeInDelay = 0;
 }
 
+// TitleCard_InitPlaceName?
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_Nop800B5E50.s")
 
+// TitleCard_Update
 void Actor_TitleCardUpdate(GlobalContext* globalCtx, TitleCardContext* titleCardCtx) {
     if (DECR(titleCardCtx->fadeInDelay) == 0) {
         if (DECR(titleCardCtx->fadeOutDelay) == 0) {
@@ -284,13 +295,20 @@ void Actor_TitleCardUpdate(GlobalContext* globalCtx, TitleCardContext* titleCard
     }
 }
 
+// TitleCard_Draw
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_TitleCardDraw.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B6434.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B6468.s")
+void func_800B6468(GlobalContext* globalCtx) {
+    globalCtx->actorCtx.unk1F5 = 0;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B6474.s")
+void func_800B6474(GlobalContext* globalCtx) {
+    if (globalCtx->actorCtx.unk1F5 != 0) {
+        globalCtx->actorCtx.unk1F5--;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B648C.s")
 
@@ -308,23 +326,28 @@ void Actor_MarkForDeath(Actor* actor) {
     actor->flags &= ~0x1;
 }
 
+// Actor_SetWorldToHome
 void Actor_InitCurrPosition(Actor* actor) {
     actor->world = actor->home;
 }
 
+// Actor_SetFocus
 void Actor_SetHeight(Actor* actor, f32 height) {
     actor->focus.pos.x = actor->world.pos.x;
     actor->focus.pos.y = actor->world.pos.y + height;
     actor->focus.pos.z = actor->world.pos.z;
+
     actor->focus.rot.x = actor->world.rot.x;
     actor->focus.rot.y = actor->world.rot.y;
     actor->focus.rot.z = actor->world.rot.z;
 }
 
+// Actor_SetWorldRotToShape
 void Actor_SetRotationFromDrawRotation(Actor* actor) {
     actor->world.rot = actor->shape.rot;
 }
 
+// Actor_SetShapeRotToWorld
 void Actor_InitDrawRotation(Actor* actor) {
     actor->shape.rot = actor->world.rot;
 }
@@ -335,11 +358,13 @@ void Actor_SetScale(Actor* actor, f32 scale) {
     actor->scale.x = scale;
 }
 
+// Actor_SetObjectDependency
 void Actor_SetObjectSegment(GlobalContext* globalCtx, Actor* actor) {
     // TODO: Segment number enum
     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[actor->objBankIndex].segment);
 }
 
+// Actor_Init
 #if 0
 void Actor_InitToDefaultValues(Actor* actor, GlobalContext* globalCtx) {
     Actor_InitCurrPosition(actor);
@@ -371,6 +396,7 @@ void Actor_InitToDefaultValues(Actor* actor, GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_InitToDefaultValues.s")
 #endif
 
+// Actor_Destroy
 void Actor_FiniActor(Actor* actor, GlobalContext* globalCtx) {
     if (actor->init == NULL) {
         if (actor->destroy != NULL) {
@@ -399,13 +425,14 @@ void Actor_ApplyMovement(Actor* actor) {
 void Actor_SetVelocityYRotationAndGravity(Actor* actor) {
     actor->velocity.x = actor->speedXZ * Math_SinS(actor->world.rot.y);
     actor->velocity.z = actor->speedXZ * Math_CosS(actor->world.rot.y);
-    actor->velocity.y += actor->gravity;
 
+    actor->velocity.y += actor->gravity;
     if (actor->velocity.y < actor->minVelocityY) {
         actor->velocity.y = actor->minVelocityY;
     }
 }
 
+// Actor_MoveForward
 void Actor_SetVelocityAndMoveYRotationAndGravity(Actor* actor) {
     Actor_SetVelocityYRotationAndGravity(actor);
     Actor_ApplyMovement(actor);
@@ -413,6 +440,7 @@ void Actor_SetVelocityAndMoveYRotationAndGravity(Actor* actor) {
 
 void Actor_SetVelocityXYRotation(Actor* actor) {
     f32 velX = Math_CosS(actor->world.rot.x) * actor->speedXZ;
+
     actor->velocity.x = Math_SinS(actor->world.rot.y) * velX;
     actor->velocity.y = Math_SinS(actor->world.rot.x) * actor->speedXZ;
     actor->velocity.z = Math_CosS(actor->world.rot.y) * velX;
@@ -435,9 +463,19 @@ void Actor_SetVelocityAndMoveXYRotationReverse(Actor* actor) {
     Actor_ApplyMovement(actor);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B6C04.s")
+void func_800B6C04(Actor* actor, f32 speed) {
+    actor->speedXZ = Math_CosS(actor->world.rot.x) * speed;
+    actor->velocity.y = -Math_SinS(actor->world.rot.x) * speed;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B6C58.s")
+void func_800B6C58(Actor* actor, SkelAnime* skelAnime) {
+    Vec3f pos;
+
+    func_80137748(skelAnime, &pos, actor->shape.rot.y);
+    actor->world.pos.x += pos.x * actor->scale.x;
+    actor->world.pos.y += pos.y * actor->scale.y;
+    actor->world.pos.z += pos.z * actor->scale.z;
+}
 
 s16 Actor_YawBetweenActors(Actor* from, Actor* to) {
     return Math_Vec3f_Yaw(&from->world.pos, &to->world.pos);
@@ -494,6 +532,7 @@ void Actor_CalcOffsetOrientedToDrawRotation(Actor* actor, Vec3f* offset, Vec3f* 
     offset->y = point->y - actor->world.pos.y;
 }
 
+// Actor_HeightDiff
 f32 Actor_YDistance(Actor* actor1, Actor* actor2) {
     return actor2->world.pos.y - actor1->world.pos.y;
 }
@@ -634,7 +673,14 @@ f32 D_801AECF0[22] = {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B83F8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_IsTalking.s")
+s32 Actor_IsTalking(Actor* actor, GlobalContext* globalCtx) {
+    if (actor->flags & 0x100) {
+        actor->flags = actor->flags & ~0x100;
+        return 1;
+    }
+
+    return 0;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8500.s")
 
