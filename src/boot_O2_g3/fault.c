@@ -2,9 +2,6 @@
 #include "global.h"
 #include "vt.h"
 
-// TODO move out
-#define OS_CLOCK_RATE 62500000LL
-
 // data
 const char* sCpuExceptions[] = {
     "Interrupt",

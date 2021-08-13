@@ -294,8 +294,8 @@ struct EnAObj;
 
 typedef void (*EnAObjActionFunc)(struct EnAObj*, struct GlobalContext*);
 
-typedef struct {
-    /* 0x000 */ Actor base;
+typedef struct EnAObj {
+    /* 0x000 */ Actor actor;
     /* 0x144 */ EnAObjActionFunc actionFunc;
     /* 0x148 */ ColliderCylinder collision;
     /* 0x194 */ UNK_TYPE1 pad194[0x14];

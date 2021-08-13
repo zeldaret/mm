@@ -477,7 +477,6 @@ beginseg
     include "build/src/code/z_collision_btltbls.o"
     pad_text
     include "build/src/code/z_collision_check.o"
-  //  include "build/data/code/z_collision_check.bss.o"
     include "build/src/code/code_800E8EA0.o"
     include "build/src/code/z_common_data.o"
     include "build/data/code/z_common_data.bss.o"

@@ -506,12 +506,7 @@ void* __osMemset(void* ptr, s32 val, size_t size);
 s32 __osStrcmp(const char* str1, const char* str2);
 char* __osStrcpy(char* dst, const char* src);
 void* __osMemcpy(void* dst, void* src, size_t size);
-void EnAObj_Init(EnAObj* this, GlobalContext* globalCtx);
-void EnAObj_Destroy(EnAObj* this, GlobalContext* globalCtx);
-void EnAObj_Update1(EnAObj* this, GlobalContext* globalCtx);
-void EnAObj_Update2(EnAObj* this, GlobalContext* globalCtx);
-void EnAObj_Update(EnAObj* this, GlobalContext* globalCtx);
-void EnAObj_Draw(EnAObj* this, GlobalContext* globalCtx);
+
 // void EnItem00_SetObject(EnItem00* this, GlobalContext* globalCtx, f32* shadowOffset, f32* shadowScale);
 // void EnItem00_Init(Actor* thisx, GlobalContext* globalCtx);
 // void EnItem00_Destroy(Actor* thisx, GlobalContext* globalCtx);
