@@ -227,7 +227,6 @@ void func_8014CC14(GlobalContext* globalCtx, u16 codePointIndex, s32* offset, f3
 
 void Message_StartTextbox(GlobalContext* globalCtx, u16 textId, Actor* Actor) {
     MessageContext* msgCtx;
-
     msgCtx = &globalCtx->msgCtx;
     msgCtx->ocarinaAction = 0xFFFF;
     func_80150D08(globalCtx, textId);
@@ -246,7 +245,7 @@ void func_80151938(GlobalContext* globalCtx, u16 textId) {
     msgCtx->unk11F10 = 0;
     func_80150D08(globalCtx, (u32)textId);
     func_80150A84(globalCtx);
-    msgCtx->unk11F22 = 5;
+    msgCtx->msgMode = 5;
     msgCtx->unk12023 = 8;
     msgCtx->unk12024 = 0;
     
