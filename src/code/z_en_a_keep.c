@@ -20,9 +20,8 @@ void EnAObj_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnAObj_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnAObj* this = THIS;
-    ColliderCylinder* collider = &this->collision;
 
-    Collider_DestroyCylinder(globalCtx, collider);
+    Collider_DestroyCylinder(globalCtx, &this->collision);
 }
 
 void EnAObj_Update1(EnAObj* this, GlobalContext* globalCtx) {
