@@ -5,7 +5,7 @@
 
 struct EnWf;
 
-typedef void (*EnWfActionFunc)(struct EnWf* this, GlobalContext* globalCtx);
+typedef void (*EnWfActionFunc)(struct EnWf*, GlobalContext*);
 
 typedef struct EnWf {
     /* 0x0000 */ Actor actor;
