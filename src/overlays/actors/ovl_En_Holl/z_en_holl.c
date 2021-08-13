@@ -57,7 +57,7 @@ void EnHoll_SetTypeAndOpacity(EnHoll* this) {
     this->type = EN_HOLL_GET_TYPE(this);
     this->actionFunc = sEnHollTypeActionFuncs[this->type];
     if (EN_HOLL_IS_VISIBLE(this)) {
-        this->opacity = EN_HOLL_OPAQUE;
+        this->alpha = 255;
     } else {
         this->actor.draw = NULL;
     }
@@ -69,11 +69,7 @@ void EnHoll_SetPlayerSide(GlobalContext* globalCtx, EnHoll* this, Vec3f* rotated
     /* rotatedPlayerPos = function output
      * = hypothetical rotation of Player around Holl's y-axis to intersect its y-z plane */
     Actor_CalcOffsetOrientedToDrawRotation(&this->actor, rotatedPlayerPos, &player->actor.world.pos);
-    if (rotatedPlayerPos->z < 0.0f) {
-        this->playerSide = EN_HOLL_PLAYER_BEHIND;
-    } else {
-        this->playerSide = EN_HOLL_PLAYER_NOT_BEHIND;
-    }
+    this->playerSide = (rotatedPlayerPos->z < 0.0f) ? EN_HOLL_BEHIND : EN_HOLL_BEFORE;
 }
 
 void EnHoll_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -83,8 +79,8 @@ void EnHoll_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     EnHoll_SetTypeAndOpacity(this);
-    this->verticalOpacityActive = false;
-    this->opacity = EN_HOLL_OPAQUE;
+    this->bgCoverAlphaActive = false;
+    this->alpha = 255;
     EnHoll_SetPlayerSide(globalCtx, this, &rotatedPlayerPos);
 }
 
@@ -114,7 +110,7 @@ void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx) {
 
     if (this->type == EN_HOLL_TYPE_DEFAULT) {
         u32 actorCtxBitmask =
-            (ACTOR_CONTEXT_UNKC_ODD_10BITS(globalCtx) >> 1) | ACTOR_CONTEXT_UNKC_EVEN_10BITS(globalCtx);
+            (globalCtx->actorCtx.unkC & 0x2AA) >> 1 | (globalCtx->actorCtx.unkC & 0x155);
         u32 zActorBitmask = D_801AED48[EN_HOLL_GET_Z_ACTOR_BITMASK_INDEX(this)];
         if ((actorCtxBitmask & zActorBitmask) == 0) {
             Actor_MarkForDeath(&this->actor);
@@ -125,19 +121,19 @@ void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx) {
         }
     }
     if ((globalCtx->sceneLoadFlag != 0) || (globalCtx->unk_18B4A != 0)) {
-        this->opacity = EN_HOLL_OPAQUE;
+        this->alpha = 255;
     } else {
         f32 enHollBottom = EN_HOLL_BOTTOM_DEFAULT;
-        f32 enHollWidth = EN_HOLL_HALFWIDTH_DEFAULT;
+        f32 enHollHalfwidth = EN_HOLL_HALFWIDTH_DEFAULT;
 
         EnHoll_SetPlayerSide(globalCtx, this, &rotatedPlayerPos);
         absRotatedPlayerZ = fabsf(rotatedPlayerPos.z);
         if (globalCtx->sceneNum == SCENE_IKANA) {
             enHollBottom = EN_HOLL_BOTTOM_IKANA;
-            enHollWidth = EN_HOLL_HALFWIDTH_IKANA;
+            enHollHalfwidth = EN_HOLL_HALFWIDTH_IKANA;
         }
-        if ((enHollBottom < rotatedPlayerPos.y) && (rotatedPlayerPos.y < EN_HOLL_HALFHEIGHT) &&
-            (fabsf(rotatedPlayerPos.x) < enHollWidth) && (absRotatedPlayerZ < sActivationPlaneDistance)) {
+        if ((enHollBottom < rotatedPlayerPos.y) && (rotatedPlayerPos.y < EN_HOLL_TOP_DEFAULT) &&
+            (fabsf(rotatedPlayerPos.x) < enHollHalfwidth) && (absRotatedPlayerZ < sActivationPlaneDistance)) {
             u32 enHollId = EN_HOLL_GET_ID_AND(this);
             if (sLoadingPlaneDistance < absRotatedPlayerZ) {
                 if ((globalCtx->roomCtx.prevRoom.num >= 0) && (globalCtx->roomCtx.unk31 == 0)) {
@@ -147,7 +143,7 @@ void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx) {
                     }
                     func_8012EBF8(globalCtx, &globalCtx->roomCtx);
                 }
-            } else if (EN_HOLL_IS_SCENE_CHANGER(this)) {
+            } else if (this->type == EN_HOLL_TYPE_SCENE_CHANGER) {
                 globalCtx->nextEntranceIndex = globalCtx->setupExitList[EN_HOLL_GET_EXIT_LIST_INDEX(this)];
                 gSaveContext.unk_3DBB = 1;
                 Scene_SetExitFade(globalCtx);
@@ -161,16 +157,15 @@ void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx) {
                         sThis = NULL;
                     }
                 } else {
-                    s32 valueToClamp = (absRotatedPlayerZ - sTransparencyPlaneDistance) *
-                                       (EN_HOLL_OPAQUE / (sTranslucencyPlaneDistance - sTransparencyPlaneDistance));
-                    this->opacity = CLAMP(valueToClamp, EN_HOLL_TRANSPARENT, EN_HOLL_OPAQUE);
+                    s32 unclampedAlpha = EN_HOLL_SCALE_ALPHA(absRotatedPlayerZ); 
+                    this->alpha = CLAMP(unclampedAlpha, 0, 255);
                     if (globalCtx->roomCtx.currRoom.num != this->actor.room) {
                         EnHoll_ChangeRooms(globalCtx);
                     }
                 }
             }
         } else if ((this->type == EN_HOLL_TYPE_DEFAULT) && (globalCtx->sceneNum == SCENE_26SARUNOMORI) &&
-                   (sThis == 0)) {
+                   (sThis == NULL)) {
             sThis = this;
         }
     }
@@ -187,11 +182,11 @@ void EnHoll_TransparentIdle(EnHoll* this, GlobalContext* globalCtx) {
                                            useViewEye ? &globalCtx->view.eye : &player->actor.world.pos);
     enHollTop = (globalCtx->sceneNum == SCENE_PIRATE) ? EN_HOLL_TOP_PIRATE : EN_HOLL_TOP_DEFAULT;
     if ((rotatedPlayerPos.y > EN_HOLL_BOTTOM_DEFAULT) && (rotatedPlayerPos.y < enHollTop) &&
-        (fabsf(rotatedPlayerPos.x) < EN_HOLL_HALFWIDTH)) {
+        (fabsf(rotatedPlayerPos.x) < EN_HOLL_HALFWIDTH_TRANSPARENT)) {
         if (absRotatedPlayerZ = fabsf(rotatedPlayerPos.z), absRotatedPlayerZ < EN_HOLL_ACTIVATION_PLANE_DISTANCE &&
                                                                absRotatedPlayerZ > EN_HOLL_LOADING_PLANE_DISTANCE) {
             s32 enHollId = EN_HOLL_GET_ID_CAST(this);
-            s32 playerSide = (rotatedPlayerPos.z < 0.0f) ? EN_HOLL_PLAYER_BEHIND : EN_HOLL_PLAYER_NOT_BEHIND;
+            s32 playerSide = (rotatedPlayerPos.z < 0.0f) ? EN_HOLL_BEHIND : EN_HOLL_BEFORE;
             TransitionActorEntry* transitionActorEntry = &globalCtx->doorCtx.transitionActorList[enHollId];
             s8 room = transitionActorEntry->sides[playerSide].room;
 
@@ -205,41 +200,40 @@ void EnHoll_TransparentIdle(EnHoll* this, GlobalContext* globalCtx) {
 }
 
 void EnHoll_VerticalIdle(EnHoll* this, GlobalContext* globalCtx) {
-    f32 absY;
+    f32 absYDistToPlayer;
 
     if ((this->actor.xzDistToPlayer < EN_HOLL_RADIUS) &&
-        (absY = fabsf(this->actor.yDistToPlayer), absY < EN_HOLL_HALFHEIGHT)) {
-        if (absY < EN_HOLL_HALFHEIGHT_MAXDARKNESS) {
-            globalCtx->unk_18878 = EN_HOLL_OPAQUE;
+        (absYDistToPlayer = fabsf(this->actor.yDistToPlayer), absYDistToPlayer < EN_HOLL_ACTIVATION_PLANE_DISTANCE_VERTICAL)) {
+        if (absYDistToPlayer < EN_HOLL_LOADING_PLANE_DISTANCE_VERTICAL) {
+            globalCtx->unk_18878 = 255;
         } else {
-            globalCtx->unk_18878 =
-                (EN_HOLL_HALFHEIGHT - absY) * (EN_HOLL_OPAQUE / (EN_HOLL_HALFHEIGHT - EN_HOLL_HALFHEIGHT_MAXDARKNESS));
+            globalCtx->unk_18878 = EN_HOLL_SCALE_BG_COVER_ALPHA(absYDistToPlayer);
         }
-        if (absY > EN_HOLL_HALFHEIGHT_MAXDARKNESS) {
+        if (absYDistToPlayer > EN_HOLL_LOADING_PLANE_DISTANCE_VERTICAL) {
             s32 enHollId = EN_HOLL_GET_ID_CAST(this);
-            s32 playerSide = (this->actor.yDistToPlayer > 0.0f) ? EN_HOLL_PLAYER_BEHIND : EN_HOLL_PLAYER_NOT_BEHIND;
+            s32 playerSide = (this->actor.yDistToPlayer > 0.0f) ? EN_HOLL_ABOVE : EN_HOLL_BELOW;
 
             this->actor.room = globalCtx->doorCtx.transitionActorList[enHollId].sides[playerSide].room;
             if ((this->actor.room != globalCtx->roomCtx.currRoom.num) &&
                 Room_StartRoomTransition(globalCtx, &globalCtx->roomCtx, this->actor.room)) {
                 this->actionFunc = EnHoll_RoomTransitionIdle;
-                this->verticalOpacityActive = true;
+                this->bgCoverAlphaActive = true;
             }
         }
-    } else if (this->verticalOpacityActive) {
-        this->verticalOpacityActive = false;
-        globalCtx->unk_18878 = EN_HOLL_TRANSPARENT;
+    } else if (this->bgCoverAlphaActive) {
+        this->bgCoverAlphaActive = false;
+        globalCtx->unk_18878 = 0;
     }
 }
 
 void EnHoll_VerticalTransparentIdle(EnHoll* this, GlobalContext* globalCtx) {
-    f32 absY;
+    f32 absYDistToPlayer;
 
     if ((this->actor.xzDistToPlayer < EN_HOLL_RADIUS) &&
-        (absY = fabsf(this->actor.yDistToPlayer), absY < EN_HOLL_HALFHEIGHT) &&
-        (absY > EN_HOLL_HALFHEIGHT_MAXDARKNESS)) {
+        (absYDistToPlayer = fabsf(this->actor.yDistToPlayer), absYDistToPlayer < EN_HOLL_ACTIVATION_PLANE_DISTANCE_VERTICAL) &&
+        (absYDistToPlayer > EN_HOLL_LOADING_PLANE_DISTANCE_VERTICAL)) {
         s32 enHollId = EN_HOLL_GET_ID_CAST(this);
-        s32 playerSide = (this->actor.yDistToPlayer > 0.0f) ? EN_HOLL_PLAYER_BEHIND : EN_HOLL_PLAYER_NOT_BEHIND;
+        s32 playerSide = (this->actor.yDistToPlayer > 0.0f) ? EN_HOLL_ABOVE : EN_HOLL_BELOW;
 
         this->actor.room = globalCtx->doorCtx.transitionActorList[enHollId].sides[playerSide].room;
         if ((this->actor.room != globalCtx->roomCtx.currRoom.num) &&
@@ -252,8 +246,8 @@ void EnHoll_VerticalTransparentIdle(EnHoll* this, GlobalContext* globalCtx) {
 void EnHoll_RoomTransitionIdle(EnHoll* this, GlobalContext* globalCtx) {
     if (globalCtx->roomCtx.unk31 == 0) {
         func_8012EBF8(globalCtx, &globalCtx->roomCtx);
-        if (globalCtx->unk_18878 == EN_HOLL_TRANSPARENT) {
-            this->verticalOpacityActive = false;
+        if (globalCtx->unk_18878 == 0) {
+            this->bgCoverAlphaActive = false;
         }
         EnHoll_SetTypeAndOpacity(this);
     }
@@ -273,25 +267,25 @@ void EnHoll_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Gfx* gfxP;
     u32 dlIndex;
 
-    if (this->opacity != EN_HOLL_TRANSPARENT) {
+    if (this->alpha != 0) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
-        if (this->opacity == EN_HOLL_OPAQUE) {
+        if (this->alpha == 255) {
             gfxP = POLY_OPA_DISP;
             dlIndex = 37;
-        } else { // EN_HOLL_TRANSLUCENT
+        } else {
             gfxP = POLY_XLU_DISP;
             dlIndex = 0;
         }
         gfxP = Gfx_CallSetupDL(gfxP, dlIndex);
-        if (this->playerSide == EN_HOLL_PLAYER_BEHIND) {
+        if (this->playerSide == EN_HOLL_BEHIND) {
             SysMatrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
         }
         gSPMatrix(gfxP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gDPSetPrimColor(gfxP++, 0, 0, 0, 0, 0, this->opacity);
+        gDPSetPrimColor(gfxP++, 0, 0, 0, 0, 0, this->alpha);
         gSPDisplayList(gfxP++, D_8089A590);
-        if (this->opacity == EN_HOLL_OPAQUE) {
+        if (this->alpha == 255) {
             POLY_OPA_DISP = gfxP;
-        } else { // EN_HOLL_TRANSLUCENT
+        } else {
             POLY_XLU_DISP = gfxP;
         }
         CLOSE_DISPS(globalCtx->state.gfxCtx);

@@ -1605,9 +1605,6 @@ struct GlobalContext {
     /* 0x18E58 */ char unk_18E58[0x400];
 }; // size = 0x19258
 
-#define ACTOR_CONTEXT_UNKC_ODD_10BITS(globalCtx) (globalCtx->actorCtx.unkC & 0x2AA)
-#define ACTOR_CONTEXT_UNKC_EVEN_10BITS(globalCtx) (globalCtx->actorCtx.unkC & 0x155)
-
 typedef struct {
     /* 0x00 */ s32 unk0;
     /* 0x04 */ s32 unk4;
