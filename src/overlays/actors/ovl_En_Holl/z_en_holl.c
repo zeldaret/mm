@@ -205,9 +205,9 @@ void EnHoll_VerticalBgCoverIdle(EnHoll* this, GlobalContext* globalCtx) {
     if ((this->actor.xzDistToPlayer < EN_HOLL_RADIUS) &&
         (absYDistToPlayer = fabsf(this->actor.yDistToPlayer), absYDistToPlayer < EN_HOLL_ACTIVATION_PLANE_DISTANCE_VERTICAL)) {
         if (absYDistToPlayer < EN_HOLL_LOADING_PLANE_DISTANCE_VERTICAL) {
-            globalCtx->unk_18878 = 255;
+            globalCtx->bgCoverAlpha = 255;
         } else {
-            globalCtx->unk_18878 = EN_HOLL_SCALE_BG_COVER_ALPHA(absYDistToPlayer);
+            globalCtx->bgCoverAlpha = EN_HOLL_SCALE_BG_COVER_ALPHA(absYDistToPlayer);
         }
         if (absYDistToPlayer > EN_HOLL_LOADING_PLANE_DISTANCE_VERTICAL) {
             s32 enHollId = EN_HOLL_GET_ID_CAST(this);
@@ -222,7 +222,7 @@ void EnHoll_VerticalBgCoverIdle(EnHoll* this, GlobalContext* globalCtx) {
         }
     } else if (this->bgCoverAlphaActive) {
         this->bgCoverAlphaActive = false;
-        globalCtx->unk_18878 = 0;
+        globalCtx->bgCoverAlpha = 0;
     }
 }
 
@@ -246,7 +246,7 @@ void EnHoll_VerticalIdle(EnHoll* this, GlobalContext* globalCtx) {
 void EnHoll_RoomTransitionIdle(EnHoll* this, GlobalContext* globalCtx) {
     if (globalCtx->roomCtx.unk31 == 0) {
         func_8012EBF8(globalCtx, &globalCtx->roomCtx);
-        if (globalCtx->unk_18878 == 0) {
+        if (globalCtx->bgCoverAlpha == 0) {
             this->bgCoverAlphaActive = false;
         }
         EnHoll_SetupAction(this);

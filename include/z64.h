@@ -1587,7 +1587,7 @@ struct GlobalContext {
     /* 0x18874 */ u8 skyboxId;
     /* 0x18875 */ s8 sceneLoadFlag; // "fade_direction"
     /* 0x18876 */ s16 unk_18876;
-    /* 0x18878 */ s16 unk_18878;
+    /* 0x18878 */ s16 bgCoverAlpha;
     /* 0x1887A */ u16 nextEntranceIndex;
     /* 0x1887C */ s8 unk_1887C;
     /* 0x1887D */ s8 unk_1887D;
