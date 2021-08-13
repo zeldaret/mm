@@ -3848,6 +3848,8 @@ void func_8019E014(void);
 // void func_8019F05C(void);
 void func_8019F170(Vec3f* pos, u16 sfxId);
 void func_8019F1C0(Vec3f* pos, u16 sfxId);
+void play_sound(u16 sfxId);
+void func_8019F128(u16 sfxId);
 void func_8019F208(void); // decide
 void func_8019F230(void); // cancel
 // void func_8019F258(void);
