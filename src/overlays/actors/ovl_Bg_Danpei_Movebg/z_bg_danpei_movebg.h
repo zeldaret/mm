@@ -5,7 +5,7 @@
 
 struct BgDanpeiMovebg;
 
-typedef void (*BgDanpeiMovebgActionFunc)(struct BgDanpeiMovebg* this, GlobalContext* globalCtx);
+typedef void (*BgDanpeiMovebgActionFunc)(struct BgDanpeiMovebg*, GlobalContext*);
 
 typedef struct BgDanpeiMovebg {
     /* 0x0000 */ Actor actor;

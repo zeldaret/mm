@@ -5,7 +5,7 @@
 
 struct EnAttackNiw;
 
-typedef void (*EnAttackNiwActionFunc)(struct EnAttackNiw* this, GlobalContext* globalCtx);
+typedef void (*EnAttackNiwActionFunc)(struct EnAttackNiw*, GlobalContext*);
 
 typedef struct EnAttackNiw {
     /* 0x0000 */ Actor actor;

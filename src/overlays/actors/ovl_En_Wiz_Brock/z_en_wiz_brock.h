@@ -5,7 +5,7 @@
 
 struct EnWizBrock;
 
-typedef void (*EnWizBrockActionFunc)(struct EnWizBrock* this, GlobalContext* globalCtx);
+typedef void (*EnWizBrockActionFunc)(struct EnWizBrock*, GlobalContext*);
 
 typedef struct EnWizBrock {
     /* 0x0000 */ Actor actor;

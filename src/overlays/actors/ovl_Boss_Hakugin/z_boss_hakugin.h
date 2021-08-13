@@ -5,7 +5,7 @@
 
 struct BossHakugin;
 
-typedef void (*BossHakuginActionFunc)(struct BossHakugin* this, GlobalContext* globalCtx);
+typedef void (*BossHakuginActionFunc)(struct BossHakugin*, GlobalContext*);
 
 typedef struct BossHakugin {
     /* 0x0000 */ Actor actor;

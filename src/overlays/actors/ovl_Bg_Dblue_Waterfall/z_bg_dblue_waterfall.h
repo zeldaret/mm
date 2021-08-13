@@ -5,7 +5,7 @@
 
 struct BgDblueWaterfall;
 
-typedef void (*BgDblueWaterfallActionFunc)(struct BgDblueWaterfall* this, GlobalContext* globalCtx);
+typedef void (*BgDblueWaterfallActionFunc)(struct BgDblueWaterfall*, GlobalContext*);
 
 typedef struct BgDblueWaterfall {
     /* 0x0000 */ Actor actor;
