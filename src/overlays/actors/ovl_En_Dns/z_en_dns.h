@@ -5,7 +5,7 @@
 
 struct EnDns;
 
-typedef void (*EnDnsActionFunc)(struct EnDns* this, GlobalContext* globalCtx);
+typedef void (*EnDnsActionFunc)(struct EnDns*, GlobalContext*);
 
 typedef struct EnDns {
     /* 0x0000 */ Actor actor;

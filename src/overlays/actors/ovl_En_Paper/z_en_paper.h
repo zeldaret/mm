@@ -5,7 +5,7 @@
 
 struct EnPaper;
 
-typedef void (*EnPaperActionFunc)(struct EnPaper* this, GlobalContext* globalCtx);
+typedef void (*EnPaperActionFunc)(struct EnPaper*, GlobalContext*);
 
 typedef struct EnPaper {
     /* 0x0000 */ Actor actor;

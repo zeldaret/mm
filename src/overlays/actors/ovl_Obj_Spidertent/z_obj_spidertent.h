@@ -5,7 +5,7 @@
 
 struct ObjSpidertent;
 
-typedef void (*ObjSpidertentActionFunc)(struct ObjSpidertent* this, GlobalContext* globalCtx);
+typedef void (*ObjSpidertentActionFunc)(struct ObjSpidertent*, GlobalContext*);
 
 typedef struct ObjSpidertent {
     /* 0x0000 */ Actor actor;

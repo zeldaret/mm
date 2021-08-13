@@ -5,7 +5,7 @@
 
 struct EnHakurock;
 
-typedef void (*EnHakurockActionFunc)(struct EnHakurock* this, GlobalContext* globalCtx);
+typedef void (*EnHakurockActionFunc)(struct EnHakurock*, GlobalContext*);
 
 typedef struct EnHakurock {
     /* 0x0000 */ Actor actor;

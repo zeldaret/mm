@@ -5,7 +5,7 @@
 
 struct EnJso2;
 
-typedef void (*EnJso2ActionFunc)(struct EnJso2* this, GlobalContext* globalCtx);
+typedef void (*EnJso2ActionFunc)(struct EnJso2*, GlobalContext*);
 
 typedef struct EnJso2 {
     /* 0x0000 */ Actor actor;
