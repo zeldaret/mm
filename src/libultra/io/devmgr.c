@@ -1,7 +1,5 @@
 #include "global.h"
 
-#ifdef NON_MATCHING
-// rodata issues
 void __osDevMgrMain(void* arg) {
     OSIoMesg* ioMesg;
     OSMesg sp70;
@@ -104,6 +102,3 @@ void __osDevMgrMain(void* arg) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/boot/devmgr/__osDevMgrMain.s")
-#endif
