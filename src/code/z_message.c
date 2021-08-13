@@ -80,7 +80,19 @@ void func_801477B4(GlobalContext *globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014C70C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014CC14.s")
+void func_8014CC14(GlobalContext* globalCtx, u16 codePointIndex, s32* offset, f32* arg3, s16 arg4) {
+    MessageContext* msgCtx = &globalCtx->msgCtx;
+    s32 temp1 = *offset;
+    f32 temp2 = *arg3;
+
+    
+    Font_LoadChar(globalCtx, codePointIndex, temp1);
+    msgCtx->unk11F24[arg4] = codePointIndex; 
+    temp1 += 128;
+    temp2 += (16.0f * msgCtx->unk12098);
+    *offset = temp1;
+    *arg3 = temp2;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014CCB4.s")
 

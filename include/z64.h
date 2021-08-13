@@ -845,7 +845,8 @@ typedef struct {
     /* 0x11F10 */ s32 unk11F10;
     /* 0x11F14 */ UNK_TYPE1 pad11F14[0xE];
     /* 0x11F22 */ u8 msgMode;
-    /* 0x11F23 */ UNK_TYPE1 pad11F23[0xFD];
+    /* 0x11F23 */ UNK_TYPE1 pad11F23;
+    /* 0x11F24 */ u16 unk11F24[0x7E];
     /* 0x12020 */ u8 unk12020;
     /* 0x12021 */ u8 choiceIndex;
     /* 0x12022 */ u8 unk12022;
@@ -873,7 +874,9 @@ typedef struct {
     /* 0x12074 */ UNK_TYPE1 pad12074[0x4];
     /* 0x12078 */ s32 bankRupeesSelected;
     /* 0x1207C */ s32 bankRupees; 
-    /* 0x12080 */ UNK_TYPE1 pad12080[0x31];
+    /* 0x12080 */ UNK_TYPE1 pad12080[0x18];
+    /* 0x12098 */ f32 unk12098;
+    /* 0x1209C */ UNK_TYPE1 unk1209C[0x15];
     /* 0x120B1 */ u8 unk120B1;
     /* 0x120B2 */ UNK_TYPE1 pad120B2[0x22];
     /* 0x120D4 */ UNK_TYPE2 unk120D4;
