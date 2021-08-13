@@ -571,7 +571,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
     }
 
     if (this->camId != 0) {
-        Gameplay_CameraSetAtEye(globalCtx, this->camId, &this->at, &this->eye);
+        Play_CameraSetAtEye(globalCtx, this->camId, &this->at, &this->eye);
     }
 }
 

@@ -384,7 +384,7 @@ void func_8089ABF4(EnDinofos* this, GlobalContext* globalCtx) {
     if (this->camId != 0) {
         Camera* camera = Play_GetCamera(globalCtx, this->camId);
 
-        Gameplay_CameraSetAtEye(globalCtx, 0, &camera->at, &camera->eye);
+        Play_CameraSetAtEye(globalCtx, 0, &camera->at, &camera->eye);
         this->camId = 0;
         ActorCutscene_Stop(this->actor.cutscene);
         if (this->actor.colChkInfo.health == 0) {
@@ -506,7 +506,7 @@ void func_8089B288(EnDinofos* this, GlobalContext* globalCtx) {
     this->unk_290--;
     Math_Vec3f_StepTo(&camera->eye, &this->unk_2BC, this->unk_2AC);
     Math_Vec3f_StepTo(&camera->at, &this->unk_2C8, this->unk_2A8);
-    Gameplay_CameraSetAtEye(globalCtx, this->camId, &camera->at, &camera->eye);
+    Play_CameraSetAtEye(globalCtx, this->camId, &camera->at, &camera->eye);
     if (this->unk_290 == 0) {
         func_8089B320(this);
     }
@@ -540,7 +540,7 @@ void func_8089B3D4(EnDinofos* this, GlobalContext* globalCtx) {
         sp28.y = camera->at.y;
     }
 
-    Gameplay_CameraSetAtEye(globalCtx, this->camId, &sp28, &camera->eye);
+    Play_CameraSetAtEye(globalCtx, this->camId, &sp28, &camera->eye);
     if (this->actor.bgCheckFlags & 1) {
         func_8089B4A4(this);
     }
@@ -565,7 +565,7 @@ void func_8089B580(EnDinofos* this, GlobalContext* globalCtx) {
 
     this->unk_290++;
     if (this->unk_290 < 8) {
-        Gameplay_CameraSetAtEye(globalCtx, this->camId, &this->actor.focus.pos, &camera->eye);
+        Play_CameraSetAtEye(globalCtx, this->camId, &this->actor.focus.pos, &camera->eye);
     }
 
     if (this->skelAnime.animCurrentFrame > 35.0f) {
@@ -574,7 +574,7 @@ void func_8089B580(EnDinofos* this, GlobalContext* globalCtx) {
         }
 
         Math_Vec3f_StepTo(&camera->eye, &this->unk_2BC, 10.0f);
-        Gameplay_CameraSetAtEye(globalCtx, this->camId, &this->actor.focus.pos, &camera->eye);
+        Play_CameraSetAtEye(globalCtx, this->camId, &this->actor.focus.pos, &camera->eye);
         if (this->skelAnime.animCurrentFrame <= 55.0f) {
             func_800B9010(&this->actor, NA_SE_EN_DODO_J_FIRE - SFX_FLAG);
         }
@@ -1231,7 +1231,7 @@ void func_8089D318(EnDinofos* this, GlobalContext* globalCtx) {
             sp24.x = (Math_SinS(this->actor.shape.rot.y) * 150.0f) + this->actor.focus.pos.x;
             sp24.y = this->actor.focus.pos.y;
             sp24.z = (Math_CosS(this->actor.shape.rot.y) * 150.0f) + this->actor.focus.pos.z;
-            Gameplay_CameraSetAtEye(globalCtx, this->camId, &this->actor.focus.pos, &sp24);
+            Play_CameraSetAtEye(globalCtx, this->camId, &this->actor.focus.pos, &sp24);
             func_8089CFAC(this);
         } else {
             func_8089B100(this, globalCtx);
