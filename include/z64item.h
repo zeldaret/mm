@@ -107,14 +107,18 @@ typedef enum {
     /* 0x7E */ GI_MASK_ALL_NIGHT = 0x7E,
     /* 0x80 */ GI_MASK_KEATON = 0x80,
     /* 0x82 */ GI_MASK_ROMANIS = 0x82,
+    /* 0x83 */ GI_MASK_CIRCUS_LEADER,
     /* 0x8C */ GI_MASK_BREMEN = 0x8C,
+    /* 0x97 */ GI_LAND_TITLE_DEED = 0x97,
     /* 0x9B */ GI_SWORD_GREAT_FAIRY = 0x9B,
     /* 0x9C */ GI_SWORD_KOKIRI,
     /* 0x9D */ GI_SWORD_RAZOR,
     /* 0x9E */ GI_SWORD_GILDED,
     /* 0x9F */ GI_SHIELD_HERO_2, // Code that treats this as hero's shield is unused, so take with a grain of salt
     /* 0xA1 */ GI_LETTER_TO_MAMA = 0xA1,
-    /* 0xA9 */ GI_BOTTLE = 0xA9
+    /* 0xA9 */ GI_BOTTLE = 0xA9,
+    /* 0xAB */ GI_PENDANT_OF_MEMORIES = 0xAB,
+    /* 0xBA */ GI_MAX = 0xBA
 } GetItemID;
 
 typedef enum {

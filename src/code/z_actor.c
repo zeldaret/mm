@@ -672,13 +672,70 @@ u32 Actor_HasParent(Actor* actor, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8A1C.s")
+s32 func_800B8A1C(Actor* actor, GlobalContext* globalCtx, s32 getItemId, f32 xzRange, f32 yRange) {
+    Player* player = PLAYER;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8B84.s")
+#if 0
+OoT version:
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8BB0.s")
+    if (!(player->stateFlags1 & 0x3C7080) && Player_GetExplosiveHeld(player) < 0) {
+        if ((((player->heldActor != NULL) || (actor == player->targetActor)) && (getItemId > GI_NONE) &&
+             (getItemId < GI_MAX)) ||
+            (!(player->stateFlags1 & 0x20000800))) {
+            if ((actor->xzDistToPlayer < xzRange) && (fabsf(actor->yDistToPlayer) < yRange)) {
+                s16 yawDiff = actor->yawTowardsPlayer - player->actor.shape.rot.y;
+                s32 absYawDiff = ABS(yawDiff);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8BD0.s")
+                if ((getItemId != GI_NONE) || (player->getItemDirection < absYawDiff)) {
+                    player->getItemId = getItemId;
+                    player->interactRangeActor = actor;
+                    player->getItemDirection = absYawDiff;
+                    return true;
+                }
+            }
+        }
+    }
+
+I am keeping this to rename the corresponding variables in the future
+#endif
+
+    if (!(player->stateFlags1 & 0x3C7080) && func_80124258(player) < 0) {
+        if ((actor->xzDistToPlayer <= xzRange) && (fabsf(actor->yDistToPlayer) <= fabsf(yRange))) {
+            if ( ( getItemId == GI_MASK_CIRCUS_LEADER || getItemId == GI_PENDANT_OF_MEMORIES || getItemId == GI_LAND_TITLE_DEED || 
+               (( (player->leftHandActor != NULL) || (actor == player->targetActor)) && (getItemId > GI_NONE && getItemId < GI_MAX) )) 
+                || (!(player->stateFlags1 & 0x20000800))) {
+                s16 yawDiff = actor->yawTowardsPlayer - player->actor.shape.rot.y;
+                s32 absYawDiff = ABS_ALT(yawDiff);
+
+                if ((getItemId != GI_NONE) || (player->unk_386 < absYawDiff)) {
+                    player->unk_384 = getItemId;
+                    player->unk_388 = actor;
+                    player->unk_386 = absYawDiff;
+
+                    if (getItemId > GI_NONE && getItemId < GI_MAX) {
+                        ActorCutscene_SetIntentToPlay(globalCtx->unk_1879C[1]);
+                    }
+
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+s32 func_800B8B84(Actor* actor, GlobalContext* globalCtx, s32 getItemId) {
+    return func_800B8A1C(actor, globalCtx, getItemId, 50.0f, 10.0f);
+}
+
+s32 func_800B8BB0(Actor* actor, GlobalContext* globalCtx) {
+    return func_800B8B84(actor, globalCtx, GI_NONE);
+}
+
+s32 func_800B8BD0(Actor* actor, GlobalContext* globalCtx, s32 getItemId) {
+    return func_800B8A1C(actor, globalCtx, getItemId, 9999.9f, 9999.9f);
+}
 
 s32 Actor_HasNoParent(Actor* actor, GlobalContext* globalCtx) {
     if (!actor->parent) {
