@@ -18,7 +18,7 @@ animdict ={
     "Actor_SpawnWithParent": "Actor_SpawnAsChild",
     "func_800BE22C": "Actor_ApplyDamage",
     "func_800F0568": "Audio_PlaySoundAtPosition",
-    "func_8016970C": "Gameplay_CameraSetAtEye",
+    "func_8016970C": "Play_CameraSetAtEye",
     "func_800BBA88": "Enemy_StartFinishingBlow",
 }
 
