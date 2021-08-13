@@ -5,7 +5,7 @@
 
 struct EnMm;
 
-typedef void (*EnMmActionFunc)(struct EnMm* this, GlobalContext* globalCtx);
+typedef void (*EnMmActionFunc)(struct EnMm*, GlobalContext*);
 
 typedef struct EnMm {
     /* 0x0000 */ Actor actor;

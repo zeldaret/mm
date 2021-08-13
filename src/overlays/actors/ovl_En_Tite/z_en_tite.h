@@ -5,7 +5,7 @@
 
 struct EnTite;
 
-typedef void (*EnTiteActionFunc)(struct EnTite* this, GlobalContext* globalCtx);
+typedef void (*EnTiteActionFunc)(struct EnTite*, GlobalContext*);
 
 typedef struct EnTite {
     /* 0x0000 */ Actor actor;

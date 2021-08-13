@@ -5,7 +5,7 @@
 
 struct EnFloormas;
 
-typedef void (*EnFloormasActionFunc)(struct EnFloormas* this, GlobalContext* globalCtx);
+typedef void (*EnFloormasActionFunc)(struct EnFloormas*, GlobalContext*);
 
 typedef struct EnFloormas {
     /* 0x0000 */ Actor actor;

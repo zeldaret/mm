@@ -5,7 +5,7 @@
 
 struct EnKaizoku;
 
-typedef void (*EnKaizokuActionFunc)(struct EnKaizoku* this, GlobalContext* globalCtx);
+typedef void (*EnKaizokuActionFunc)(struct EnKaizoku*, GlobalContext*);
 
 typedef struct EnKaizoku {
     /* 0x0000 */ Actor actor;
