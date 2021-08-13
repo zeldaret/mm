@@ -275,7 +275,7 @@ void EnBigpo_LowerCutsceneSubCamera(EnBigpo* this, GlobalContext* globalContext)
             subCam->eye.x -= 1.5f * Math_SinS(this->actor.yawTowardsPlayer);
             subCam->eye.z -= 1.5f * Math_CosS(this->actor.yawTowardsPlayer);
         }
-        Gameplay_CameraSetAtEye(globalContext, this->cutsceneSubCamId, &this->actor.focus.pos, &subCam->eye);
+        Play_CameraSetAtEye(globalContext, this->cutsceneSubCamId, &this->actor.focus.pos, &subCam->eye);
     }
 }
 
@@ -332,7 +332,7 @@ void EnBigpo_SpawnPoCutscene1(EnBigpo* this, GlobalContext* globalCtx) {
         subCamEye.x = ((this->actor.world.pos.x - this->fires[0].pos.x) * 1.8f) + this->actor.world.pos.x;
         subCamEye.y = this->actor.world.pos.y + 150.0f;
         subCamEye.z = ((this->actor.world.pos.z - this->fires[0].pos.z) * 1.8f) + this->actor.world.pos.z;
-        Gameplay_CameraSetAtEye(globalCtx, this->cutsceneSubCamId, &this->actor.focus.pos, &subCamEye);
+        Play_CameraSetAtEye(globalCtx, this->cutsceneSubCamId, &this->actor.focus.pos, &subCamEye);
     }
     this->actionFunc = EnBigpo_SpawnPoCutscene2;
 }
@@ -437,7 +437,7 @@ void EnBigpo_SpawnPoCutscene8(EnBigpo* this, GlobalContext* globalCtx) {
     this->idleTimer--;
     if (this->idleTimer == 0) {
         subCam = Play_GetCamera(globalCtx, this->cutsceneSubCamId);
-        Gameplay_CameraSetAtEye(globalCtx, MAIN_CAM, &subCam->at, &subCam->eye);
+        Play_CameraSetAtEye(globalCtx, MAIN_CAM, &subCam->at, &subCam->eye);
         this->cutsceneSubCamId = SUBCAM_FREE;
         if (this->actor.params == ENBIGPO_SUMMONED) {
             dampe = func_ActorCategoryIterateById(globalCtx, NULL, ACTORCAT_NPC, ACTOR_EN_TK);
@@ -924,7 +924,7 @@ void EnBigpo_SetupFlameCirclePositions(EnBigpo* this, GlobalContext* globalCtx) 
         subCamEye.x = (Math_SinS(this->actor.yawTowardsPlayer) * 360.0f) + this->actor.world.pos.x;
         subCamEye.y = this->actor.world.pos.y + 150.0f;
         subCamEye.z = (Math_CosS(this->actor.yawTowardsPlayer) * 360.0f) + this->actor.world.pos.z;
-        Gameplay_CameraSetAtEye(globalCtx, this->cutsceneSubCamId, &this->actor.focus.pos, &subCamEye);
+        Play_CameraSetAtEye(globalCtx, this->cutsceneSubCamId, &this->actor.focus.pos, &subCamEye);
     }
 
     this->actionFunc = EnBigpo_DoNothing;
