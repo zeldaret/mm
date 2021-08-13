@@ -39,7 +39,7 @@ static UNK_TYPE D_8089A590[] = { 0xD7000000,  0xFFFFFFFF, 0xFCFFFFFF, 0xFFFDF638
 
 static EnHoll* sThis = NULL;
 
-static EnHollActionFunc sEnHollTypeActionFuncs[] = { EnHoll_VisibleIdle, EnHoll_VerticalIdle,
+static EnHollActionFunc sActionFuncs[] = { EnHoll_VisibleIdle, EnHoll_VerticalIdle,
                                                      EnHoll_TransparentIdle, EnHoll_VerticalBgCoverIdle, EnHoll_VisibleIdle };
 
 static InitChainEntry sInitChain[] = {
@@ -55,7 +55,7 @@ static f32 sTransparencyPlaneDistance = 50.0f;
 
 void EnHoll_SetupAction(EnHoll* this) {
     this->type = EN_HOLL_GET_TYPE(this);
-    this->actionFunc = sEnHollTypeActionFuncs[this->type];
+    this->actionFunc = sActionFuncs[this->type];
     if (EN_HOLL_IS_VISIBLE(this)) {
         this->alpha = 255;
     } else {

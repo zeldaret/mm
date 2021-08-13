@@ -6441,7 +6441,7 @@
     0x8089A550:("D_8089A550","UNK_TYPE1","",0x1),
     0x8089A590:("D_8089A590","UNK_TYPE1","",0x1),
     0x8089A5B8:("sThis","UNK_TYPE4","",0x4),
-    0x8089A5BC:("sEnHollTypeActionFuncs","UNK_PTR","",0x4),
+    0x8089A5BC:("sActionFuncs","UNK_PTR","",0x4),
     0x8089A5D0:("sInitChain","UNK_TYPE1","",0x1),
     0x8089A5DC:("sActivationPlaneDistance","f32","",0x4),
     0x8089A5E0:("sLoadingPlaneDistance","f32","",0x4),
