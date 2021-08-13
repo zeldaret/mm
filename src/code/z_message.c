@@ -39,7 +39,7 @@ void func_801477B4(GlobalContext *globalCtx) {
     msgCtx = &globalCtx->msgCtx;
     if (globalCtx->msgCtx.unk11F10 != 0) {
         msgCtx->unk12023 = 2;
-        msgCtx->unk11F22 = 0x43;
+        msgCtx->msgMode = 0x43;
         msgCtx->unk12020 = 0;
         play_sound(0U);
     }
@@ -100,7 +100,18 @@ void func_801477B4(GlobalContext *globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_801514B0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/Message_StartTextbox.s")
+void Message_StartTextbox(GlobalContext* globalCtx, u16 textId, Actor* Actor) {
+    MessageContext* msgCtx;
+
+    msgCtx = &globalCtx->msgCtx;
+    msgCtx->ocarinaAction = 0xFFFF;
+    func_80150D08(globalCtx, textId);
+    msgCtx->unkActor = Actor;
+    msgCtx->msgMode = 1;
+    msgCtx->unk12023 = 0;
+    msgCtx->unk12024 = 0;
+    globalCtx->msgCtx.ocarinaMode = 0;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80151938.s")
 
@@ -328,7 +339,7 @@ void func_8015680C(GlobalContext *globalCtx) {
         globalCtx->msgCtx.unk120AA = 0;
     }
     if (msgCtx->unk11F10 != 0) {
-        switch (msgCtx->unk11F22) {
+        switch (msgCtx->msgMode) {
         case 1:
             temp_t8 = D_801C6A70 + 1;
             temp_a0 = temp_t8 & 0xFF;
@@ -421,7 +432,7 @@ void func_8015680C(GlobalContext *globalCtx) {
                 }
                 temp_v0_12 = msgCtx->unk11F0A;
                 if ((temp_v0_12 == 4) || (phi_t0 == temp_v0_12)) {
-                    globalCtx->msgCtx.unk11F22 = 3;
+                    globalCtx->msgCtx.msgMode = 3;
                     globalCtx->msgCtx.unk12068 = msgCtx->unk12004;
                     globalCtx->msgCtx.unk1206A = msgCtx->unk12006;
                     globalCtx->msgCtx.unk12008 = 0x100;
@@ -434,7 +445,7 @@ void func_8015680C(GlobalContext *globalCtx) {
                 func_80149C18(globalCtx, phi_a1, &gSaveContext);
                 func_801A3FB4(0);
                 globalCtx->msgCtx.unk12023 = 0;
-                globalCtx->msgCtx.unk11F22 = 2;
+                globalCtx->msgCtx.msgMode = 2;
                 if (globalCtx->pauseCtx.unk_2B9 == 0) {
                     func_80150A84();
                     return;
@@ -445,7 +456,7 @@ void func_8015680C(GlobalContext *globalCtx) {
             func_80149C18(globalCtx, 0, (SaveContext *) 0x10000);
             return;
         case 3:
-            globalCtx->msgCtx.unk11F22 = 4;
+            globalCtx->msgCtx.msgMode = 4;
             if (globalCtx->pauseCtx.unk_2B9 == 0) {
                 temp_v0_13 = msgCtx->unk11F04;
                 if (temp_v0_13 == 0xFF) {
@@ -514,19 +525,19 @@ void func_8015680C(GlobalContext *globalCtx) {
             return;
         case 7:
             if (func_80147624(globalCtx) != 0) {
-                globalCtx->msgCtx.unk11F22 = 6;
+                globalCtx->msgCtx.msgMode = 6;
                 globalCtx->msgCtx.unk11FEE++;
             }
             return;
         case 8:
             globalCtx->msgCtx.unk12023--;
             if (msgCtx->unk12023 == 0) {
-                globalCtx->msgCtx.unk11F22 = 4;
+                globalCtx->msgCtx.msgMode = 4;
             }
             return;
         case 65:
             if (func_80147624(globalCtx) != 0) {
-                globalCtx->msgCtx.unk11F22 = 4;
+                globalCtx->msgCtx.msgMode = 4;
                 globalCtx->msgCtx.unk11FEC++;
             }
             return;
@@ -637,9 +648,9 @@ block_157:
                     sp20 = phi_ra_2;
                     if (func_80147624(globalCtx) != 0) {
                         if (phi_ra_2->unk2021 == 0) {
-                            globalCtx->msgCtx.unk1202A = 2;
+                            globalCtx->msgCtx.ocarinaMode = 2;
                         } else {
-                            globalCtx->msgCtx.unk1202A = 4;
+                            globalCtx->msgCtx.ocarinaMode = 4;
                         }
                         func_801477B4(globalCtx);
                         return;
@@ -655,14 +666,14 @@ block_157:
                             sp20 = phi_ra_2;
                             sp30 = phi_t5;
                             func_8019F208();
-                            phi_t5->unk11F22 = 0x4A;
+                            phi_t5->msgMode = 0x4A;
                             phi_t5->unk11FF0 = (s16) (phi_ra_2->unk1FF0 - 3);
                             phi_t5->unk120D6 = 0;
                             phi_t5->unk120D4 = 0;
                             return;
                         }
                         func_8019F230();
-                        globalCtx->msgCtx.unk1202A = 4;
+                        globalCtx->msgCtx.ocarinaMode = 4;
                         func_801477B4(globalCtx);
                         return;
                     }
@@ -675,17 +686,17 @@ block_157:
                         if (phi_ra_2->unk2021 == 0) {
                             func_8019F208();
                             if (gSaveContext.unk_14 == 0) {
-                                globalCtx->msgCtx.unk1202A = 0x19;
+                                globalCtx->msgCtx.ocarinaMode = 0x19;
                                 gSaveContext.unk_14 = -2;
                             } else {
-                                globalCtx->msgCtx.unk1202A = 0x18;
+                                globalCtx->msgCtx.ocarinaMode = 0x18;
                                 gSaveContext.unk_14 = 0;
                             }
                             func_801477B4(globalCtx);
                             return;
                         }
                         func_8019F230();
-                        globalCtx->msgCtx.unk1202A = 4;
+                        globalCtx->msgCtx.ocarinaMode = 4;
                         func_801477B4(globalCtx);
                         return;
                     }
@@ -702,11 +713,11 @@ block_157:
                             } else {
                                 gSaveContext.time = 0xC000;
                             }
-                            globalCtx->msgCtx.unk1202A = 0x1A;
+                            globalCtx->msgCtx.ocarinaMode = 0x1A;
                             gSaveContext.unk3DD3 = 0;
                         } else {
                             func_8019F230();
-                            globalCtx->msgCtx.unk1202A = 4;
+                            globalCtx->msgCtx.ocarinaMode = 4;
                         }
                         func_801477B4(globalCtx);
                         return;
@@ -720,10 +731,10 @@ block_157:
                         if (func_80147624(globalCtx) != 0) {
                             if (phi_ra_2->unk2021 == 0) {
                                 func_8019F208();
-                                globalCtx->msgCtx.unk1202A = 0x26;
+                                globalCtx->msgCtx.ocarinaMode = 0x26;
                             } else {
                                 func_8019F230();
-                                globalCtx->msgCtx.unk1202A = 4;
+                                globalCtx->msgCtx.ocarinaMode = 4;
                             }
                             func_801477B4(globalCtx);
                             return;
@@ -752,7 +763,7 @@ block_157:
                         if (func_80147734(globalCtx) != 0) {
                             play_sound(0x4808U);
                             func_801477B4(globalCtx);
-                            globalCtx->msgCtx.unk1202A = 4;
+                            globalCtx->msgCtx.ocarinaMode = 4;
                             return;
                         }
                         // Duplicate return node #352. Try simplifying control flow for better match
@@ -792,8 +803,8 @@ block_157:
                         sp20 = phi_ra;
                         sp30 = &globalCtx->msgCtx;
                         if ((func_8010A0A4(globalCtx, 0x1B95U, 0x10000, &D_801C6A7C) != 0) || (globalCtx->sceneNum == 0x4F)) {
-                            func_801518B0(globalCtx, 0x1B93U, NULL);
-                            globalCtx->msgCtx.unk1202A = 0x1B;
+                            Message_StartTextbox(globalCtx, 0x1B93U, NULL);
+                            globalCtx->msgCtx.ocarinaMode = 0x1B;
                             D_801C6A7C = 0xFF;
                             return;
                         }
@@ -810,7 +821,7 @@ block_157:
                                 temp_v0_16->pageIndex = 1;
                                 D_801C6A7C = 0xFF;
                                 func_801477B4(globalCtx);
-                                globalCtx->msgCtx.unk1202A = 4;
+                                globalCtx->msgCtx.ocarinaMode = 4;
                                 gSaveContext.unk_3F26 = 0x15;
                                 func_80115844(globalCtx, 0x12);
                                 Game_SetFramerateDivisor((GameState *) globalCtx, 2);
@@ -821,23 +832,23 @@ block_157:
                                 return;
                             }
                             D_801C6A7C = 0xFF;
-                            func_801518B0(globalCtx, 0xFBU, NULL);
-                            globalCtx->msgCtx.unk1202A = 0x27;
+                            Message_StartTextbox(globalCtx, 0xFBU, NULL);
+                            globalCtx->msgCtx.ocarinaMode = 0x27;
                             return;
                         }
                         globalCtx->msgCtx.unk12023 = 1;
                         return;
                     }
                     D_801C6A7C = 0xFF;
-                    func_801518B0(globalCtx, 0x1B95U, NULL);
-                    globalCtx->msgCtx.unk1202A = 0x27;
+                    Message_StartTextbox(globalCtx, 0x1B95U, NULL);
+                    globalCtx->msgCtx.ocarinaMode = 0x27;
                     return;
                 }
                 temp_v0_17 = phi_ra->unk1F04;
                 if ((temp_v0_17 == 0xC) || (temp_v0_17 == 0xD) || (temp_v0_17 == 0xC5) || (temp_v0_17 == 0xC6) || (temp_v0_17 == 0xC7) || (temp_v0_17 == 0x2165) || (temp_v0_17 == 0x2166) || (temp_v0_17 == 0x2167) || (temp_v0_17 == 0x2168)) {
                     gSaveContext.healthAccumulator = 0x140;
                 }
-                if ((globalCtx->csCtx.state == 0) && (gSaveContext.cutscene < 0xFFF0) && ((temp_v0_18 = &globalCtx->objectCtx.status[9].dmaReq, (globalCtx->activeCamera == 0)) || ((temp_v0_18->unk875 == 0) && (temp_v0_18->unkB4A == 0))) && (globalCtx->msgCtx.unk1202A == 4)) {
+                if ((globalCtx->csCtx.state == 0) && (gSaveContext.cutscene < 0xFFF0) && ((temp_v0_18 = &globalCtx->objectCtx.status[9].dmaReq, (globalCtx->activeCamera == 0)) || ((temp_v0_18->unk875 == 0) && (temp_v0_18->unkB4A == 0))) && (globalCtx->msgCtx.ocarinaMode == 4)) {
                     temp_v0_19 = gSaveContext.unk_3F26;
                     if ((temp_v0_19 == 0) || (temp_v0_19 == 1) || (temp_v0_19 == 2)) {
                         gSaveContext.unk_3F26 = 0x32;
@@ -846,7 +857,7 @@ block_157:
                 }
                 temp_v0_20 = phi_ra->unk1F04;
                 if (((s32) temp_v0_20 >= 0x1BB2) && ((s32) temp_v0_20 < 0x1BB7) && ((globalCtx->actorCtx.unk5 & 2) != 0)) {
-                    func_801518B0(globalCtx, 0x5E6U, NULL);
+                    Message_StartTextbox(globalCtx, 0x5E6U, NULL);
                     return;
                 }
                 if (phi_ra->unk20B1 != 0) {
@@ -860,7 +871,7 @@ block_157:
                     return;
                 }
                 globalCtx->msgCtx.unk11F10 = 0;
-                globalCtx->msgCtx.unk11F22 = 0;
+                globalCtx->msgCtx.msgMode = 0;
                 globalCtx->msgCtx.unk11F04 = 0;
                 globalCtx->msgCtx.unk12023 = 0;
                 temp_v0_21 = &globalCtx->pauseCtx;
@@ -876,7 +887,7 @@ block_157:
                 phi_a3_2 = &D_801C6A7C;
                 if (phi_ra->unk2020 == 0x30) {
                     globalCtx->msgCtx.unk12020 = 0;
-                    globalCtx->msgCtx.unk1202A = 2;
+                    globalCtx->msgCtx.ocarinaMode = 2;
                 } else {
                     globalCtx->msgCtx.unk12020 = 0;
                 }
@@ -891,34 +902,34 @@ block_157:
                     temp_v0_23 = D_801C6A7C;
                     if (temp_v0_23 == 6) {
                         if (globalCtx->interfaceCtx.restrictions.unk_312 == 0) {
-                            func_801518B0(globalCtx, 0x1B8AU, NULL);
-                            globalCtx->msgCtx.unk1202A = 0x12;
+                            Message_StartTextbox(globalCtx, 0x1B8AU, NULL);
+                            globalCtx->msgCtx.ocarinaMode = 0x12;
                             phi_a3_2 = &D_801C6A7C;
                         } else {
                             D_801C6A7C = 0xFF;
-                            func_801518B0(globalCtx, 0x1B95U, NULL);
-                            globalCtx->msgCtx.unk1202A = 0x27;
+                            Message_StartTextbox(globalCtx, 0x1B95U, NULL);
+                            globalCtx->msgCtx.ocarinaMode = 0x27;
                             phi_a3_2 = &D_801C6A7C;
                         }
                     } else if (temp_v0_23 == 0xC) {
                         if (globalCtx->interfaceCtx.restrictions.unk_314 == 0) {
                             if (gGameInfo->data[15] != 0) {
                                 if (gSaveContext.unk_14 == 0) {
-                                    func_801518B0(globalCtx, 0x1B8CU, NULL);
+                                    Message_StartTextbox(globalCtx, 0x1B8CU, NULL);
                                 } else {
-                                    func_801518B0(globalCtx, 0x1B8DU, NULL);
+                                    Message_StartTextbox(globalCtx, 0x1B8DU, NULL);
                                 }
-                                globalCtx->msgCtx.unk1202A = 0x13;
+                                globalCtx->msgCtx.ocarinaMode = 0x13;
                                 phi_a3_2 = &D_801C6A7C;
                             } else {
-                                func_801518B0(globalCtx, 0x1B8BU, NULL);
-                                globalCtx->msgCtx.unk1202A = 4;
+                                Message_StartTextbox(globalCtx, 0x1B8BU, NULL);
+                                globalCtx->msgCtx.ocarinaMode = 4;
                                 phi_a3_2 = &D_801C6A7C;
                             }
                         } else {
                             D_801C6A7C = 0xFF;
-                            func_801518B0(globalCtx, 0x1B95U, NULL);
-                            globalCtx->msgCtx.unk1202A = 0x27;
+                            Message_StartTextbox(globalCtx, 0x1B95U, NULL);
+                            globalCtx->msgCtx.ocarinaMode = 0x27;
                             phi_a3_2 = &D_801C6A7C;
                         }
                     } else if (temp_v0_23 == 0xD) {
@@ -926,27 +937,27 @@ block_157:
                             temp_v1_7 = gSaveContext.day;
                             if (((temp_v1_7 % 5) != 3) || (gSaveContext.isNight == 0)) {
                                 if (gSaveContext.isNight != 0) {
-                                    func_801518B0(globalCtx, *(&D_801D0462 + ((temp_v1_7 % 5) * 2)), NULL);
+                                    Message_StartTextbox(globalCtx, *(&D_801D0462 + ((temp_v1_7 % 5) * 2)), NULL);
                                 } else {
-                                    func_801518B0(globalCtx, *(&D_801D045A + ((temp_v1_7 % 5) * 2)), NULL);
+                                    Message_StartTextbox(globalCtx, *(&D_801D045A + ((temp_v1_7 % 5) * 2)), NULL);
                                 }
-                                globalCtx->msgCtx.unk1202A = 0x15;
+                                globalCtx->msgCtx.ocarinaMode = 0x15;
                                 phi_a3_2 = &D_801C6A7C;
                             } else {
-                                func_801518B0(globalCtx, 0x1B94U, NULL);
-                                globalCtx->msgCtx.unk1202A = 4;
+                                Message_StartTextbox(globalCtx, 0x1B94U, NULL);
+                                globalCtx->msgCtx.ocarinaMode = 4;
                                 phi_a3_2 = &D_801C6A7C;
                             }
                         } else {
                             D_801C6A7C = 0xFF;
-                            func_801518B0(globalCtx, 0x1B95U, NULL);
-                            globalCtx->msgCtx.unk1202A = 0x27;
+                            Message_StartTextbox(globalCtx, 0x1B95U, NULL);
+                            globalCtx->msgCtx.ocarinaMode = 0x27;
                             phi_a3_2 = &D_801C6A7C;
                         }
                     } else if ((temp_v1_6 == 0x32) && ((temp_v0_24 = (globalCtx + 0x10000)->unk6932, (temp_v0_24 == 1)) || (temp_v0_24 == 3) || (temp_v0_24 == 0xD) || (temp_v0_24 == 0x2A))) {
-                        globalCtx->msgCtx.unk1202A = 4;
+                        globalCtx->msgCtx.ocarinaMode = 4;
                         if (phi_ra->unk202E == 9) {
-                            globalCtx->msgCtx.unk1202A = 1;
+                            globalCtx->msgCtx.ocarinaMode = 1;
                         }
                     }
                     *phi_a3_2 = 0xFF;
@@ -960,7 +971,7 @@ block_157:
         case 13:
             if (~(globalCtx->state.input[0].press.button | ~0x4000) == 0) {
                 func_8019C300(0, 0, 0x10000);
-                globalCtx->msgCtx.unk1202A = 4;
+                globalCtx->msgCtx.ocarinaMode = 4;
                 func_801477B4(globalCtx);
                 return;
             }
@@ -980,7 +991,7 @@ block_157:
                 func_8019CD08(0, 0, 0x10000);
                 play_sound(0x4827U);
                 func_801477B4(globalCtx);
-                globalCtx->msgCtx.unk11F22 = 0x2C;
+                globalCtx->msgCtx.msgMode = 0x2C;
                 return;
             }
             globalCtx->msgCtx.unk12048 = 0xFF;
@@ -989,7 +1000,7 @@ block_157:
             globalCtx->msgCtx.unk1203C = (s16) (phi_ra->unk203C + gGameInfo->data[1417]);
             if ((s32) phi_ra->unk203C >= 0xFF) {
                 globalCtx->msgCtx.unk1203C = 0xFF;
-                globalCtx->msgCtx.unk11F22 = 0x46;
+                globalCtx->msgCtx.msgMode = 0x46;
                 return;
             }
             // Duplicate return node #352. Try simplifying control flow for better match
@@ -998,7 +1009,7 @@ block_157:
             globalCtx->msgCtx.unk1201E = (s16) (phi_ra->unk201E + gGameInfo->data[1417]);
             if ((s32) phi_ra->unk201E >= 0xFF) {
                 globalCtx->msgCtx.unk1201E = 0xFF;
-                globalCtx->msgCtx.unk11F22 = 0x47;
+                globalCtx->msgCtx.msgMode = 0x47;
                 return;
             }
             // Duplicate return node #352. Try simplifying control flow for better match
@@ -1006,7 +1017,7 @@ block_157:
         case 71:
             globalCtx->msgCtx.unk12023 = phi_ra->unk2023 - 1;
             if (phi_ra->unk2023 == 0) {
-                globalCtx->msgCtx.unk11F22 = 0x48;
+                globalCtx->msgCtx.msgMode = 0x48;
                 return;
             }
             // Duplicate return node #352. Try simplifying control flow for better match
@@ -1015,7 +1026,7 @@ block_157:
             globalCtx->msgCtx.unk1201E = (s16) (phi_ra->unk201E - gGameInfo->data[1414]);
             if ((s32) phi_ra->unk201E <= 0) {
                 globalCtx->msgCtx.unk1201E = 0;
-                globalCtx->msgCtx.unk11F22 = 0x49;
+                globalCtx->msgCtx.msgMode = 0x49;
                 return;
             }
             // Duplicate return node #352. Try simplifying control flow for better match
@@ -1025,7 +1036,7 @@ block_157:
             if ((s32) phi_ra->unk203C <= 0) {
                 temp_v0_25 = phi_ra->unk1F04;
                 if (((s32) temp_v0_25 >= 0x1BB2) && ((s32) temp_v0_25 < 0x1BB7) && ((globalCtx->actorCtx.unk5 & 2) != 0)) {
-                    func_801518B0(globalCtx, 0x5E6U, NULL);
+                    Message_StartTextbox(globalCtx, 0x5E6U, NULL);
                     Interface_ChangeAlpha(2U);
                     return;
                 }
@@ -1034,7 +1045,7 @@ block_157:
                 }
                 globalCtx->msgCtx.unk1203C = 0;
                 globalCtx->msgCtx.unk11F10 = 0;
-                globalCtx->msgCtx.unk11F22 = 0;
+                globalCtx->msgCtx.msgMode = 0;
                 globalCtx->msgCtx.unk11F04 = 0;
                 globalCtx->msgCtx.unk12023 = 0;
                 return;
@@ -1062,21 +1073,21 @@ block_157:
                 func_80147008(sp2C, *(&D_801C67C8 + temp_v1_9), *(&D_801C6818 + temp_v1_9));
                 func_80147020((SramContext *) sp2C);
             }
-            globalCtx->msgCtx.unk11F22 = 0x4B;
+            globalCtx->msgCtx.msgMode = 0x4B;
             return;
         case 75:
             if (gSaveContext.fileNum != 0xFF) {
                 globalCtx->state.unkA3 = 1;
                 if (globalCtx->sramCtx.status == 0) {
-                    globalCtx->msgCtx.unk1202A = 0x16;
-                    globalCtx->msgCtx.unk11F22 = 0x4C;
+                    globalCtx->msgCtx.ocarinaMode = 0x16;
+                    globalCtx->msgCtx.msgMode = 0x4C;
                     return;
                 }
                 // Duplicate return node #352. Try simplifying control flow for better match
                 return;
             }
-            globalCtx->msgCtx.unk1202A = 0x16;
-            globalCtx->msgCtx.unk11F22 = 0x4C;
+            globalCtx->msgCtx.ocarinaMode = 0x16;
+            globalCtx->msgCtx.msgMode = 0x4C;
             return;
         case 77:
             globalCtx->state.unkA3 = 1;
@@ -1093,18 +1104,18 @@ block_157:
                 func_80147138(sp2C, *(&D_801C6840 + temp_v1_10), *(&D_801C6850 + temp_v1_10));
                 func_80147150((SramContext *) sp2C);
             }
-            globalCtx->msgCtx.unk11F22 = 0x4E;
+            globalCtx->msgCtx.msgMode = 0x4E;
             return;
         case 78:
             if (gSaveContext.fileNum != 0xFF) {
                 globalCtx->state.unkA3 = 1;
                 if (globalCtx->sramCtx.status == 0) {
-                    globalCtx->msgCtx.unk1202A = 0x16;
-                    globalCtx->msgCtx.unk11F22 = 0x4F;
+                    globalCtx->msgCtx.ocarinaMode = 0x16;
+                    globalCtx->msgCtx.msgMode = 0x4F;
                 }
             } else {
-                globalCtx->msgCtx.unk1202A = 0x16;
-                globalCtx->msgCtx.unk11F22 = 0x4F;
+                globalCtx->msgCtx.ocarinaMode = 0x16;
+                globalCtx->msgCtx.msgMode = 0x4F;
             }
             if (phi_ra->unk1F22 == 0x4F) {
                 gSaveContext.gameMode = 4;
@@ -1143,8 +1154,8 @@ void Message_Init(GlobalContext *globalCtx) {
     MessageContext *messageCtx = &globalCtx->msgCtx;
 
     func_801586A4(globalCtx);
-    globalCtx->msgCtx.unk1202A = 0;
-    messageCtx->unk11F22 = 0;
+    globalCtx->msgCtx.ocarinaMode = 0;
+    messageCtx->msgMode = 0;
     messageCtx->unk11F10 = 0;
     messageCtx->unk11F04 = 0;
     messageCtx->unk12020 = 0;
