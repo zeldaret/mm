@@ -496,6 +496,8 @@ void func_80134148(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec
     if ((overrideLimbDraw == NULL) || !overrideLimbDraw(globalCtx, limbIndex, &newDList, &pos, &rot, arg)) {
         Matrix_JointPosition(&pos, &rot);
         Matrix_StatePush();
+
+        //! @bug Does not check unkDraw is not NULL before calling it.
         unkDraw(globalCtx, limbIndex, arg);
         if (newDList != NULL) {
             Gfx* polyTemp = POLY_OPA_DISP;
@@ -566,7 +568,10 @@ void func_801343C0(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable,
     if ((overrideLimbDraw == NULL) || !overrideLimbDraw(globalCtx, 1, &newDList, &pos, &rot, arg)) {
         Matrix_JointPosition(&pos, &rot);
         Matrix_StatePush();
+
+        //! @bug Does not check unkDraw is not NULL before calling it.
         unkDraw(globalCtx, 1, arg);
+        
         if (newDList != NULL) {
             Gfx* polyTemp = POLY_OPA_DISP;
 
