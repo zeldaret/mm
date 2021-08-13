@@ -39,8 +39,8 @@ static UNK_TYPE D_8089A590[] = { 0xD7000000,  0xFFFFFFFF, 0xFCFFFFFF, 0xFFFDF638
 
 static EnHoll* sThis = NULL;
 
-static EnHollActionFunc sActionFuncs[] = { EnHoll_VisibleIdle, EnHoll_VerticalIdle,
-                                                     EnHoll_TransparentIdle, EnHoll_VerticalBgCoverIdle, EnHoll_VisibleIdle };
+static EnHollActionFunc sActionFuncs[] = { EnHoll_VisibleIdle, EnHoll_VerticalIdle, EnHoll_TransparentIdle,
+                                           EnHoll_VerticalBgCoverIdle, EnHoll_VisibleIdle };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
@@ -109,8 +109,7 @@ void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx) {
     f32 absRotatedPlayerZ;
 
     if (this->type == EN_HOLL_TYPE_DEFAULT) {
-        u32 actorCtxBitmask =
-            (globalCtx->actorCtx.unkC & 0x2AA) >> 1 | (globalCtx->actorCtx.unkC & 0x155);
+        u32 actorCtxBitmask = (globalCtx->actorCtx.unkC & 0x2AA) >> 1 | (globalCtx->actorCtx.unkC & 0x155);
         u32 zActorBitmask = D_801AED48[EN_HOLL_GET_Z_ACTOR_BITMASK_INDEX(this)];
         if ((actorCtxBitmask & zActorBitmask) == 0) {
             Actor_MarkForDeath(&this->actor);
@@ -157,7 +156,7 @@ void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx) {
                         sThis = NULL;
                     }
                 } else {
-                    s32 unclampedAlpha = EN_HOLL_SCALE_ALPHA(absRotatedPlayerZ); 
+                    s32 unclampedAlpha = EN_HOLL_SCALE_ALPHA(absRotatedPlayerZ);
                     this->alpha = CLAMP(unclampedAlpha, 0, 255);
                     if (globalCtx->roomCtx.currRoom.num != this->actor.room) {
                         EnHoll_ChangeRooms(globalCtx);
@@ -203,7 +202,8 @@ void EnHoll_VerticalBgCoverIdle(EnHoll* this, GlobalContext* globalCtx) {
     f32 absYDistToPlayer;
 
     if ((this->actor.xzDistToPlayer < EN_HOLL_RADIUS) &&
-        (absYDistToPlayer = fabsf(this->actor.yDistToPlayer), absYDistToPlayer < EN_HOLL_ACTIVATION_PLANE_DISTANCE_VERTICAL)) {
+        (absYDistToPlayer = fabsf(this->actor.yDistToPlayer),
+         absYDistToPlayer < EN_HOLL_ACTIVATION_PLANE_DISTANCE_VERTICAL)) {
         if (absYDistToPlayer < EN_HOLL_LOADING_PLANE_DISTANCE_VERTICAL) {
             globalCtx->bgCoverAlpha = 255;
         } else {
@@ -230,7 +230,8 @@ void EnHoll_VerticalIdle(EnHoll* this, GlobalContext* globalCtx) {
     f32 absYDistToPlayer;
 
     if ((this->actor.xzDistToPlayer < EN_HOLL_RADIUS) &&
-        (absYDistToPlayer = fabsf(this->actor.yDistToPlayer), absYDistToPlayer < EN_HOLL_ACTIVATION_PLANE_DISTANCE_VERTICAL) &&
+        (absYDistToPlayer = fabsf(this->actor.yDistToPlayer),
+         absYDistToPlayer < EN_HOLL_ACTIVATION_PLANE_DISTANCE_VERTICAL) &&
         (absYDistToPlayer > EN_HOLL_LOADING_PLANE_DISTANCE_VERTICAL)) {
         s32 enHollId = EN_HOLL_GET_ID_CAST(this);
         s32 playerSide = (this->actor.yDistToPlayer > 0.0f) ? EN_HOLL_ABOVE : EN_HOLL_BELOW;
