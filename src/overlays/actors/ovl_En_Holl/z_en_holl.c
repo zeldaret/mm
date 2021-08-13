@@ -9,13 +9,13 @@ void EnHoll_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHoll_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHoll_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void EnHoll_SetTypeAndOpacity(EnHoll* this);
+void EnHoll_SetupAction(EnHoll* this);
 void EnHoll_SetPlayerSide(GlobalContext* globalCtx, EnHoll* this, Vec3f* rotatedPlayerPos);
 void EnHoll_ChangeRooms(GlobalContext* globalCtx);
 void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx);
-void EnHoll_VerticalTransparentIdle(EnHoll* this, GlobalContext* globalCtx);
-void EnHoll_TransparentIdle(EnHoll* this, GlobalContext* globalCtx);
 void EnHoll_VerticalIdle(EnHoll* this, GlobalContext* globalCtx);
+void EnHoll_TransparentIdle(EnHoll* this, GlobalContext* globalCtx);
+void EnHoll_VerticalBgCoverIdle(EnHoll* this, GlobalContext* globalCtx);
 void EnHoll_RoomTransitionIdle(EnHoll* this, GlobalContext* globalCtx);
 
 const ActorInit En_Holl_InitVars = {
@@ -39,8 +39,8 @@ static UNK_TYPE D_8089A590[] = { 0xD7000000,  0xFFFFFFFF, 0xFCFFFFFF, 0xFFFDF638
 
 static EnHoll* sThis = NULL;
 
-static EnHollActionFunc sEnHollTypeActionFuncs[] = { EnHoll_VisibleIdle, EnHoll_VerticalTransparentIdle,
-                                                     EnHoll_TransparentIdle, EnHoll_VerticalIdle, EnHoll_VisibleIdle };
+static EnHollActionFunc sEnHollTypeActionFuncs[] = { EnHoll_VisibleIdle, EnHoll_VerticalIdle,
+                                                     EnHoll_TransparentIdle, EnHoll_VerticalBgCoverIdle, EnHoll_VisibleIdle };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
@@ -53,7 +53,7 @@ static f32 sLoadingPlaneDistance = 150.0f;
 static f32 sTranslucencyPlaneDistance = 100.0f;
 static f32 sTransparencyPlaneDistance = 50.0f;
 
-void EnHoll_SetTypeAndOpacity(EnHoll* this) {
+void EnHoll_SetupAction(EnHoll* this) {
     this->type = EN_HOLL_GET_TYPE(this);
     this->actionFunc = sEnHollTypeActionFuncs[this->type];
     if (EN_HOLL_IS_VISIBLE(this)) {
@@ -78,7 +78,7 @@ void EnHoll_Init(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f rotatedPlayerPos;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    EnHoll_SetTypeAndOpacity(this);
+    EnHoll_SetupAction(this);
     this->bgCoverAlphaActive = false;
     this->alpha = 255;
     EnHoll_SetPlayerSide(globalCtx, this, &rotatedPlayerPos);
@@ -199,7 +199,7 @@ void EnHoll_TransparentIdle(EnHoll* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnHoll_VerticalIdle(EnHoll* this, GlobalContext* globalCtx) {
+void EnHoll_VerticalBgCoverIdle(EnHoll* this, GlobalContext* globalCtx) {
     f32 absYDistToPlayer;
 
     if ((this->actor.xzDistToPlayer < EN_HOLL_RADIUS) &&
@@ -226,7 +226,7 @@ void EnHoll_VerticalIdle(EnHoll* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnHoll_VerticalTransparentIdle(EnHoll* this, GlobalContext* globalCtx) {
+void EnHoll_VerticalIdle(EnHoll* this, GlobalContext* globalCtx) {
     f32 absYDistToPlayer;
 
     if ((this->actor.xzDistToPlayer < EN_HOLL_RADIUS) &&
@@ -249,7 +249,7 @@ void EnHoll_RoomTransitionIdle(EnHoll* this, GlobalContext* globalCtx) {
         if (globalCtx->unk_18878 == 0) {
             this->bgCoverAlphaActive = false;
         }
-        EnHoll_SetTypeAndOpacity(this);
+        EnHoll_SetupAction(this);
     }
 }
 
