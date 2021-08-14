@@ -7,7 +7,7 @@
 #define CAM_STAT_WAIT       1
 #define CAM_STAT_UNK3       3
 #define CAM_STAT_ACTIVE     7
-#define CAM_STAT_DISABLED   0x100
+#define CAM_STAT_INACTIVE   0x100
 
 #define NUM_CAMS 4
 #define MAIN_CAM 0

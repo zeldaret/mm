@@ -6489,7 +6489,7 @@ s32 Camera_Special8(Camera *camera) {
         camera->atLERPStepScale = Camera_ClampLERPScale(camera, 1.0f);
         Camera_UpdateAtActorOffset(camera, &playerPosRot->pos);
     } else {
-        Camera_SetFlags(camera, 0x410);
+        Camera_SetFlags(camera, 0x400 | 0x10);
         sCameraInterfaceFlags = 0;
         if ((camera->xzSpeed > 0.001f) || 
             CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_A) ||
@@ -6874,10 +6874,10 @@ s32 Camera_CheckWater(Camera* camera) {
             } else {
                 Camera_ChangeSettingFlags(camera, CAM_SET_ZORA0, 6);
             }
-            Camera_SetFlags(camera, -0x8000);
+            Camera_SetFlags(camera, -0x8000); // TODO, not negative sign
         } else if (camera->flags2 & (s16)0x8000) {
             Camera_ChangeSettingFlags(camera, *waterPrevCamSetting, 6); // unk11E
-            Camera_UnsetFlags(camera, -0x8000);
+            Camera_UnsetFlags(camera, -0x8000); // TODO, not negative sign
         }
     }
 
@@ -7737,7 +7737,7 @@ s16 func_800E0238(Camera* camera) {
     }
 }
 
-void Camera_SetCameraToTrack(Camera* camera, Actor* actor) {
+void Camera_SetToTrackActor(Camera* camera, Actor* actor) {
     camera->trackedActor = (Player*)actor;
     if (actor == camera->globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first) {
         Actor_GetWorldPosShapeRot(&camera->trackedActorPosRot, actor);
