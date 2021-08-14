@@ -17,14 +17,15 @@ u32 gUpgradeNegMasks[] = {
     0xFFFFFFF8, 0xFFFFFFC7, 0xFFFFFE3F, 0xFFFFF1FF, 0xFFFFCFFF, 0xFFFE3FFF, 0xFFF1FFFF, 0xFF8FFFFF,
 };
 u8 gEquipShifts[] = { 0, 4, 8, 12 };
-u8 gUpgradeShifts[] = { 0, 3, 6, 9, 12, 14, 17, 20, 0, 0, 0, 30, 0, 40, 0, 50 };
+u8 gUpgradeShifts[] = { 0, 3, 6, 9, 12, 14, 17, 20 };
 
 u16 gUpgradeCapacities[][4] = {
+    { 0, 30, 40, 50 },     // Quivers
     { 0, 20, 30, 40 },     // Bomb Bags
     { 0, 0, 0, 0 },        // Unused (Scale)
     { 0, 0, 0, 0 },        // Unused (Strength)
     { 99, 200, 500, 500 }, // Wallets
-    { 0, 30, 40, 50 },     // Quivers
+    { 0, 30, 40, 50 },     // Unused (Deku Seed Bullet Bags)
     { 0, 10, 20, 30 },     // Unused (Deku Stick)
     { 0, 20, 30, 40 },     // Unused (Deku Nut)
 };

@@ -52,7 +52,7 @@
 #define CHECK_QUEST_ITEM(item) (((void)0, gSaveContext.inventory.questItems) & gBitFlags[item])
 
 #define CAPACITY(upg, value) gUpgradeCapacities[upg][value]
-#define CUR_CAPACITY(upg) CAPACITY(upg, CUR_UPG_VALUE(upg) - 4)
+#define CUR_CAPACITY(upg) CAPACITY(upg, CUR_UPG_VALUE(upg))
 
 #define CONTROLLER1(globalCtx) (&(globalCtx)->state.input[0])
 #define CONTROLLER2(globalCtx) (&(globalCtx)->state.input[1])

@@ -12,11 +12,14 @@ typedef enum {
 } EquipmentType;
 
 typedef enum {
-    /* 0x0 */ UPG_QUIVER,
-    /* 0x1 */ UPG_BOMB_BAG,
-    /* 0x4 */ UPG_WALLET = 0x4,
-    /* 0x6 */ UPG_STICK = 0x6,
-    /* 0x7 */ UPG_NUTS
+    /* 0x00 */ UPG_QUIVER,
+    /* 0x01 */ UPG_BOMB_BAG,
+    /* 0x02 */ UPG_STRENGTH,
+    /* 0x03 */ UPG_SCALE,
+    /* 0x04 */ UPG_WALLET,
+    /* 0x05 */ UPG_BULLET_BAG,
+    /* 0x06 */ UPG_STICKS,
+    /* 0x07 */ UPG_NUTS
 } UpgradeType;
 
 typedef enum {
