@@ -33,20 +33,19 @@ typedef struct EnKakasi {
     /* 0x208 */ s16 cutsceneCamId;
     /* 0x20A */ UNK_TYPE1 pad20A[2];//padd
     /* 0x20C */ f32 unk20C; // set to 0 or 60 in some setups
-    /* 0x210 */ f32 unk210; // gets set to 60 multiple places
+    /* 0x210 */ f32 unk210; // used as a target for 20C to approach
     /* 0x214 */ Vec3f unk214; // copied from unk238 regularly
     /* 0x220 */ Vec3f unk220; //EnKakasi_TeachingSong
     /* 0x22C */ Vec3f unk22C; //actor home copied to here
     /* 0x238 */ Vec3f unk238; //copied from D_80971E38[unk190]
     /* 0x244 */ Vec3f unk244;
-    /* 0x250 */ f32 unk250; // set by params, later set to 40f or 80f
+    /* 0x250 */ f32 songSummonDist;
     /* 0x254 */ ColliderCylinder collider;
 
 } EnKakasi; // size = 0x2A0
 
 extern const ActorInit En_Kakasi_InitVars;
 
-extern Gfx D_06000214[];
-extern Gfx D_060065B0[];
+// todo: make params macro for summon distance
 
 #endif // Z_EN_KAKASI_H

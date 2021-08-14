@@ -21,7 +21,7 @@ void EnKakasi_PostSongLearnTwirl(EnKakasi* this, GlobalContext* globalCtx);
 void func_80970A9C(EnKakasi* this, GlobalContext* globalCtx);
 void EnKakasi_DiggingAway(EnKakasi* this, GlobalContext* globalCtx);
 void func_80971AD4(EnKakasi* this, GlobalContext* globalCtx);
-void func_809717D0(EnKakasi* this, GlobalContext* globalCtx);
+void EnKakasi_IdleUnderground(EnKakasi* this, GlobalContext* globalCtx);
 void func_80971A64(EnKakasi* this, GlobalContext* globalCtx);
 void func_8097185C(EnKakasi* this, GlobalContext* globalCtx);
 void func_8097193C(EnKakasi* this, GlobalContext* globalCtx);
@@ -31,7 +31,7 @@ void func_80970F20(EnKakasi* this, GlobalContext* globalCtx);
 void func_8097006C(EnKakasi* this, GlobalContext* globalCtx);
 void EnKakasi_SetupSongTeach(EnKakasi* this, GlobalContext* globalCtx);
 
-void func_80971794(EnKakasi *this); // dig and leave setup
+void EnKakasi_SetupIdleUnderground(EnKakasi *this); // dig and leave setup
 void func_80970008(EnKakasi* this);
 void EnKakasi_SetupDigAway(EnKakasi* this); // setup for digging anime
 void func_80971A38(EnKakasi *this);
@@ -159,71 +159,49 @@ void EnKakasi_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-#ifdef NON_MATCHING
-// the cutscene loop is wrong, however with the ugly loop:
-//   its only regalloc and two instructions swapped
+extern FlexSkeletonHeader D_060065B0;
+extern AnimationHeader D_06000214;
+
 void EnKakasi_Init(Actor *thisx, GlobalContext *globalCtx) {
     EnKakasi* this = (EnKakasi*)thisx;
-    s16 zRot;
-
-    int tempCutscene; // permuter swears this is an int, but why
-    s32 i;// = 0;
-    s16* cutscenePointer;// = this->actorCutscenes;
-    //EnKakasi* cutscenePointer;// = this->actorCutscenes;
+    int tempCutscene;
+    s32 i;
 
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80971D80);
-    SkelAnime_InitSV(globalCtx, &this->skelanime, D_060065B0, D_06000214, 0, 0, 0);
+    SkelAnime_InitSV(globalCtx, &this->skelanime, &D_060065B0, &D_06000214, 0, 0, 0);
 
-    this->unk250 = ((this->actor.params >> 8) & 0xFF) * 20.0f;
-    if (this->unk250 < 40.0f) {
-        this->unk250 = 40.0f;
+    this->songSummonDist = ((this->actor.params >> 8) & 0xFF) * 20.0f;
+    if (this->songSummonDist < 40.0f) {
+        this->songSummonDist = 40.0f;
     }
 
-    zRot = this->actor.world.rot.z; // cannot optimize out, we load it before we set to zero
+    this->unkHeight = (( this->actor.world.rot.z * 20.0f) + 60.0f);
     this->actor.world.rot.z = 0;
     this->actor.targetMode = 0;
-    this->unkHeight = (( zRot * 20.0f) + 60.0f);
     if ((this->actor.world.rot.x > 0) && (this->actor.world.rot.x < 8)) {
         this->actor.targetMode = this->actor.world.rot.x - 1;
     }
+    this->actor.shape.rot.y = this->actor.world.rot.y;
 
     this->unk194 = (this->actor.params & 1);
     this->actor.world.rot.x = 0;
     this->actor.flags |= 0x400;
-    this->actor.colChkInfo.mass = 0xFF;
-    this->actor.shape.rot.y = this->actor.world.rot.y;
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->actor, 0.01f);
 
-    //for(tempCutscene = this->actor.cutscene; tempCutscene != -1; ++i ){
-        //this->actorCutscenes[i] = tempCutscene;
-        //tempCutscene = ActorCutscene_GetAdditionalCutscene(tempCutscene);
-    //}
-
-    // I'm not entirely convinced it's a for
-    //cutscenePointer = this->actorCutscenes;
-    //tempCutscene = this->actor.cutscene; // actor->cuscene : 0x38
-    //while (tempCutscene != -1 ){
-        ////*cutscenePointer = tempCutscene;
-        ////tempCutscene = ActorCutscene_GetAdditionalCutscene(tempCutscene);
-        //*cutscenePointer = ActorCutscene_GetAdditionalCutscene(cutscenePointer-1);
-        //cutscenePointer++;
-    //}
-
-    // looks like we point at actor, and offset by the array last second???
-    // BEST LOOP CANDIDATE
-    cutscenePointer = this;
-    tempCutscene = this->actor.cutscene; // actor->cuscene : 0x38
+    i = 0;
+    tempCutscene = this->actor.cutscene;
     while (tempCutscene != -1 ){
-        ((EnKakasi*) cutscenePointer)->actorCutscenes[0] = tempCutscene;
-        tempCutscene = ActorCutscene_GetAdditionalCutscene(tempCutscene);
-        cutscenePointer++;
+        // petrie911 has suggested this might be a fake match, no others found yet
+        tempCutscene = ActorCutscene_GetAdditionalCutscene(this->actorCutscenes[i] = tempCutscene);
+        i++;
     }
 
     if (this->unk194 != 0) {
-        if ((gSaveContext.weekEventReg[79] & 0x8)) {
+        if (gSaveContext.weekEventReg[79] & 0x8) {
           this->unk194 = 2;
-          this->unk250 = 80.0f;
-          func_80971794(this); //idle after dig
+          this->songSummonDist = 80.0f;
+          EnKakasi_SetupIdleUnderground(this); //idle after dig
         } else {
             Actor_SetHeight(thisx, 60.0f);
             this->unkFunc = func_8096F88C;
@@ -234,12 +212,9 @@ void EnKakasi_Init(Actor *thisx, GlobalContext *globalCtx) {
             }
         }
     } else {
-       func_80971794(this); //idle after dig
+       EnKakasi_SetupIdleUnderground(this); //idle after dig
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/EnKakasi_Init.s")
-#endif
 
 void EnKakasi_SetAnimation(EnKakasi *this, s32 index) {
     this->animeIndex = index;
@@ -301,7 +276,7 @@ void EnKakasi_CheckPlayerPosition(EnKakasi *this, GlobalContext *globalCtx) {
 
 // this goes off every frame of dancing the night away, and song teaching
 void func_8096FAAC(EnKakasi *this, GlobalContext* globalCtx) {
-    if (this->cutsceneCamId != 0) {
+    if (this->cutsceneCamId != 0) { // SUBCAM_FREE
         Math_ApproachF(&this->unk214.x, this->unk238.x, 0.40000000596f, 4.0f);
         Math_ApproachF(&this->unk214.y, this->unk238.y, 0.40000000596f, 4.0f);
         Math_ApproachF(&this->unk214.z, this->unk238.z, 0.40000000596f, 4.0f);
@@ -350,7 +325,7 @@ void func_8096FCC4(EnKakasi* this, GlobalContext* globalCtx) {
         if ((gSaveContext.time != 0x4000) && (gSaveContext.time != 0xC000) 
           && ((gSaveContext.eventInf[1] & 0x80) == 0)) {
             if (this->actor.textId == 0) {
-            // "Oh, yeah!  How was it? It went by in an instant, right?  I'm still full of energy!"
+                // "Oh, yeah!  How was it? It went by in an instant, right?  I'm still full of energy!"
                 this->actor.textId = 0x1653;
                 gSaveContext.weekEventReg[0x53] &= 0xFE;
                 this->unkMsgState1AC = 5;
@@ -1145,29 +1120,22 @@ void EnKakasi_DiggingAway(EnKakasi* this, GlobalContext *globalCtx) {
         func_800B7298(globalCtx, &this->actor, 6);
         ActorCutscene_Stop(this->actorCutscenes[0]);
         this->unk194 = 2;
-        this->unk250 = 80.0f;
-        func_80971794(this); // idle after dig
+        this->songSummonDist = 80.0f;
+        EnKakasi_SetupIdleUnderground(this); // idle after dig
     }
 }
 
-// setup hiding in the ground
-// cannot rename until init matches
-//void func_809717D0(EnKakasi *this) {
-void func_80971794(EnKakasi *this) {
+void EnKakasi_SetupIdleUnderground(EnKakasi *this) {
     this->actor.shape.yOffset = -7000.0;
     this->actor.draw = NULL;
     this->actor.flags |= 0x8000000;
     this->unk196 = 5;
-    this->actionFunc = func_809717D0;
+    this->actionFunc = EnKakasi_IdleUnderground;
 }
 
-// resting in the ground after you he leaves having learned a song
-// cannot change this ones name until init is matched
-//void EnKakasi_IdleUnderground (EnKakasi* this, GlobalContext* globalCtx) {
-void func_809717D0(EnKakasi* this, GlobalContext* globalCtx) {
-    //if (((*(&gSaveContext + 0xF47) & 8) != 0) && (this->actor.xzDistToPlayer < this->unk250)) {
+void EnKakasi_IdleUnderground(EnKakasi* this, GlobalContext* globalCtx) {
     if (((gSaveContext.weekEventReg[79] & 0x8)) 
-        && (this->actor.xzDistToPlayer < this->unk250)
+        && (this->actor.xzDistToPlayer < this->songSummonDist)
         && ((gGameInfo->data[2401] != 0) || (globalCtx->msgCtx.unk1202A == 0xD)) ) {
             this->actor.flags &= ~0x8000000;
             globalCtx->msgCtx.unk1202A = 4;
