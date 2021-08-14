@@ -14,6 +14,17 @@ typedef enum {
 } PlayerShield;
 
 typedef enum {
+    /* 0x00 */ PLAYER_BOOTS_FIERCE_DEITY,
+    /* 0x01 */ PLAYER_BOOTS_HYLIAN,
+    /* 0x02 */ PLAYER_BOOTS_GIANT,
+    /* 0x03 */ PLAYER_BOOTS_DEKU,
+    /* 0x04 */ PLAYER_BOOTS_ZORA_LAND,
+    /* 0x05 */ PLAYER_BOOTS_ZORA_UNDERWATER,
+    /* 0x06 */ PLAYER_BOOTS_GORON,
+    /* 0x07 */ PLAYER_BOOTS_MAX
+} PlayerBoots;
+
+typedef enum {
     /* 0x00 */ PLAYER_FORM_FIERCE_DEITY,
     /* 0x01 */ PLAYER_FORM_GORON,
     /* 0x02 */ PLAYER_FORM_ZORA,
@@ -53,12 +64,15 @@ typedef enum {
 
 typedef enum {
     /* 0x00 */ PLAYER_AP_NONE,
-    /* 0x03 */ PLAYER_AP_SWORD_KOKIRI = 0x03,
+    /* 0x01 */ PLAYER_AP_UNK_1,
+    /* 0x02 */ PLAYER_AP_UNK_2,
+    /* 0x03 */ PLAYER_AP_SWORD_KOKIRI,
     /* 0x04 */ PLAYER_AP_SWORD_RAZOR,
     /* 0x05 */ PLAYER_AP_SWORD_GILDED,
     /* 0x06 */ PLAYER_AP_SWORD_GREAT_FAIRY,
     /* 0x07 */ PLAYER_AP_STICK,
-    /* 0x09 */ PLAYER_AP_BOW = 0x09,
+    /* 0x08 */ PLAYER_AP_UNK_8,
+    /* 0x09 */ PLAYER_AP_BOW,
     /* 0x0A */ PLAYER_AP_BOW_FIRE,
     /* 0x0B */ PLAYER_AP_BOW_ICE,
     /* 0x0C */ PLAYER_AP_BOW_LIGHT,
@@ -78,7 +92,7 @@ typedef enum {
     /* 0x1B */ PLAYER_AP_BOTTLE_GOLD_DUST,
     /* 0x1D */ PLAYER_AP_BOTTLE_SEA_HORSE = 0x1D,
     /* 0x1E */ PLAYER_AP_BOTTLE_MUSHROOM,
-    /* 0x1F */ PLAYER_AP_BOTTLE_LOACH,
+    /* 0x1F */ PLAYER_AP_BOTTLE_HYLIAN_LOACH,
     /* 0x20 */ PLAYER_AP_BOTTLE_BUG,
     /* 0x21 */ PLAYER_AP_BOTTLE_POE,
     /* 0x22 */ PLAYER_AP_BOTTLE_BIG_POE,
