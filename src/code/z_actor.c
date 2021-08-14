@@ -675,7 +675,7 @@ f32 D_801AECF0[22] = {
 
 s32 Actor_IsTalking(Actor* actor, GlobalContext* globalCtx) {
     if (actor->flags & 0x100) {
-        actor->flags = actor->flags & ~0x100;
+        actor->flags &= ~0x100;
         return 1;
     }
 
@@ -806,14 +806,42 @@ s32 Actor_HasNoParent(Actor* actor, GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8D50.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8D98.s")
+/*
+void func_800B8D98(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 arg3, f32 arg4) {
+    func_800B8D50(globalCtx, actor, arg2, arg3, arg4, 0U);
+}
+*/
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8DD4.s")
+/*
+void func_800B8DD4(void* arg2, s16 arg3, f32 arg4, u32 arg5) {
+    func_800B8D10(arg2, arg2, (f32) arg3, (s16) arg4, 2, arg5);
+}
+*/
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8E1C.s")
+/*
+void func_800B8E1C(void* arg2, s16 arg3, u32 arg4) {
+    func_800B8DD4(arg2, (s16) arg2, (f32) arg3, arg4, 0);
+}
+*/
 
+#if 0
+// The OoT version of this function (func_8002F7DC) takes Actor*, but there's a high chance it takes Player* here
+void func_800B8E58(Actor* actor, u16 sfxId) {
+    if (actor->unk_153 == 0x14) {
+        func_8019F170(&actor->projectedPos, sfxId);
+        return;
+    }
+    func_801A5CFC(sfxId, &actor->projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8E58.s")
+#endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Audio_PlayActorSound2.s")
+void Audio_PlayActorSound2(Actor* actor, u16 sfxId) {
+    func_8019F1C0(&actor->projectedPos, sfxId);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8EF4.s")
 
@@ -835,8 +863,16 @@ s32 Actor_HasNoParent(Actor* actor, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B90F4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B9120.s")
+void func_800B9120(ActorContext* actorCtx) {
+    s32 phi_v0 = CURRENT_DAY * 2;
 
+    if (gSaveContext.time < CLOCK_TIME(6, 0) || gSaveContext.time > CLOCK_TIME(18, 0)) {
+        phi_v0++;
+    }
+    actorCtx->unkC = (0x200 >> phi_v0);
+}
+
+// Actor_InitContext // OoT's func_800304DC
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_Init.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B9334.s")
@@ -874,7 +910,29 @@ void Actor_DrawAllSetup(GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BA9B4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_InsertIntoTypeList.s")
+void Actor_InsertIntoTypeList(ActorContext* actorCtx, Actor* actor, u8 actorCategory) {
+    Actor* phi_v0;
+    Actor* phi_v1;
+
+    actor->category = actorCategory;
+
+    actorCtx->totalLoadedActors++;
+    actorCtx->actorList[actorCategory].length++;
+    phi_v1 = actorCtx->actorList[actorCategory].first;
+    if (phi_v1 == NULL) {
+        actorCtx->actorList[actorCategory].first = actor;
+        return;
+    }
+
+    phi_v0 = phi_v1->next;
+    while (phi_v0 != NULL) {
+        phi_v1 = phi_v0;
+        phi_v0 = phi_v0->next;
+    }
+
+    phi_v1->next = actor;
+    actor->prev = phi_v1;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_RemoveFromTypeList.s")
 
@@ -899,10 +957,109 @@ void Actor_FreeOverlay(ActorOverlay* entry) {
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_Spawn.s")
+/*
+Actor* Actor_Spawn(ActorContext* actorCtx, GlobalContext* globalCtx, s16 actorId, f32 posX, f32 posY, f32 posZ, s16 rotX, s16 rotY, s16 rotZ, s16 params) {
+    return Actor_SpawnAsChildAndCutscene(actorCtx, globalCtx, actorId, posX, posY, posZ, rotX,  rotY, rotZ, params, -1, 0x3FF, NULL);
+}
+*/
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_LoadOverlay.s")
 
+#ifdef NON_EQUIVALENT
+Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* globalCtx, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s32 params, u32 cutscene, s32 param_12, Actor* parent) {
+    s32 pad;
+    Actor* actor;
+    ActorInit* sp2C; // actorInit
+    s32 sp28; // objBankIndex
+    //s32 pad2;
+    u32 sp20; // segmentAux
+    ActorOverlay* sp1C; // overlayEntry
+
+    if (actorCtx->totalLoadedActors >= 0xFF) {
+        return NULL;
+    }
+
+    sp2C = Actor_LoadOverlay(actorCtx, index);
+    if (sp2C == NULL) {
+        return NULL;
+    }
+
+    sp28 = Object_GetIndex(&globalCtx->objectCtx, sp2C->objectId);
+    if ((sp28 < 0) || ((sp2C->type == 5) && ((Actor_GetRoomCleared(globalCtx, (u32) globalCtx->roomCtx.currRoom.num) != 0)) && (sp2C->id != 0x12D))) {
+        Actor_FreeOverlay(&gActorOverlayTable[index]);
+        return NULL;
+    }
+
+    actor = zelda_malloc(sp2C->instanceSize);
+    if (actor == NULL) {
+        Actor_FreeOverlay(&gActorOverlayTable[index]);
+        return NULL;
+    }
+
+    if (1) {}
+
+    sp1C = &gActorOverlayTable[index];
+    if (sp1C->vramStart != 0) {
+        sp1C->numLoaded++;
+    }
+
+    if (1) {}
+
+    bzero(actor, sp2C->instanceSize);
+    actor->overlayEntry = sp1C;
+    actor->id = sp2C->id;
+    actor->flags = sp2C->flags;
+
+    if (sp2C->id == ACTOR_EN_PART) {
+        actor->objBankIndex = (s8) rotZ;
+        rotZ = 0;
+    } else {
+        actor->objBankIndex = (s8) sp28;
+    }
+
+    actor->init = sp2C->init;
+    actor->destroy = sp2C->destroy;
+    actor->update = sp2C->update;
+    actor->draw = sp2C->draw;
+
+    if (parent != NULL) {
+        actor->parent = parent;
+        actor->room = parent->room;
+        parent->child = actor;
+    } else {
+        actor->room = globalCtx->roomCtx.currRoom.num;
+    }
+
+
+    actor->home.pos.x = x;
+    actor->home.pos.y = y;
+    actor->home.pos.z = z;
+    actor->home.rot.x = rotX;
+    actor->home.rot.y = rotY;
+    actor->home.rot.z = rotZ;
+    actor->params = params;
+    actor->cutscene = (cutscene & 0x7F);
+
+    if (actor->cutscene == 0x7F) {
+        actor->cutscene = -1;
+    }
+    if (param_12 != 0) {
+        actor->unk20 = param_12;
+    } else {
+        actor->unk20 = 0x3FF;
+    }
+
+    Actor_InsertIntoTypeList(actorCtx, actor, sp2C->type);
+
+    sp20 = gSegments[6];
+    Actor_InitToDefaultValues(actor, globalCtx);
+    gSegments[6] = sp20;
+
+    return actor;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_SpawnAsChildAndCutscene.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_SpawnAsChild.s")
 

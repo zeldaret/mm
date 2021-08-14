@@ -869,7 +869,7 @@ void func_800B8D98(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 arg3, f
 // void func_800B8DD4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
 // UNK_TYPE4 param_6); void func_800B8E1C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
 // UNK_TYPE4 param_5);
-void func_800B8E58(Actor* actor, u16 sfxId);
+//void func_800B8E58(UNK_PTR, u16 sfxId);
 void Audio_PlayActorSound2(Actor* actor, u16 sfxId);
 // void func_800B8FC0(void);
 void func_800B8F98(Actor* actor, u16 sfxId);
@@ -877,7 +877,7 @@ void func_800B9010(Actor* actor, u16 sfxId);
 // void func_800B9038(void);
 // void func_800B9084(void);
 void func_800B9098(Actor* actor);
-s32 func_800B90AC(GlobalContext* globalCtx, Actor* actor, UNK_TYPE arg2, UNK_TYPE arg3, UNK_TYPE arg4);
+s32 func_800B90AC(GlobalContext* globalCtx, Actor* actor, CollisionPoly* polygon, s32 index, UNK_TYPE arg4);
 // void func_800B90F4(void);
 void func_800B9120(ActorContext* actorCtx);
 // void Actor_Init(GlobalContext* globalCtx, ActorContext* actorCtx, UNK_TYPE4 uParm3);
@@ -897,17 +897,17 @@ void func_800BA6FC(GlobalContext* globalCtx, ActorContext* actorCtx);
 void func_800BA798(GlobalContext* globalCtx, ActorContext* actorCtx);
 void func_800BA8B8(GlobalContext* globalCtx, ActorContext* actorCtx);
 // void func_800BA9B4(void);
-void Actor_InsertIntoTypeList(ActorContext* actorCtx, Actor* actor, u8 type);
+void Actor_InsertIntoTypeList(ActorContext* actorCtx, Actor* actor, u8 actorCategory);
 Actor* Actor_RemoveFromTypeList(GlobalContext* globalCtx, ActorContext* actorCtx, Actor* actor);
 void Actor_FreeOverlay(ActorOverlay* entry);
-Actor* Actor_Spawn(ActorContext* actorCtx, GlobalContext* globalCtx, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY,
-                   s16 rotZ, s16 sParm10);
+Actor* Actor_Spawn(ActorContext* actorCtx, GlobalContext* globalCtx, s16 actorId, f32 posX, f32 posY, f32 posZ,
+                   s16 rotX, s16 rotY, s16 rotZ, s16 params);
 ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index);
 Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* globalCtx, s16 index, f32 x, f32 y, f32 z,
-                                     s16 rotX, s16 rotY, s16 rotZ, s16 variable, u32 cutscene, s32 param_12,
+                                     s16 rotX, s16 rotY, s16 rotZ, s32 params, u32 cutscene, s32 param_12,
                                      Actor* parent);
 Actor* Actor_SpawnAsChild(ActorContext* actorCtx, Actor* parent, GlobalContext* globalCtx, s16 index, f32 x, f32 y,
-                          f32 z, s16 rotX, s16 rotY, s16 rotZ, s16 variable);
+                          f32 z, s16 rotX, s16 rotY, s16 rotZ, s16 params);
 void Actor_SpawnTransitionActors(GlobalContext* globalCtx, ActorContext* actorCtx);
 void func_800BB2D0(ActorContext* actorCtx, u16* param_2, GlobalContext* globalCtx);
 Actor* func_800BB498(ActorContext* actorCtx, Actor* actor, GlobalContext* globalCtx);
@@ -3891,7 +3891,7 @@ void func_8019E014(void);
 // void func_8019F05C(void);
 void play_sound(u16 sfxId);
 void func_8019F128(u16 sfxId);
-// void func_8019F170(void);
+void func_8019F170(Vec3f *pos, u16 sfxId);
 void func_8019F1C0(Vec3f* pos, u16 sfxId);
 void func_8019F208(void);
 void func_8019F230(void); // Plays "No" sound
