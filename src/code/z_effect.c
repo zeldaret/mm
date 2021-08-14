@@ -127,7 +127,7 @@ void Effect_Add(GlobalContext* globalCtx, s32* index, s32 type, u8 param_4, u8 p
     if (FrameAdvance_IsEnabled(globalCtx) != true) {
         slotFound = 0;
         switch (type) {
-            case 0:
+            case EFFECT_SPARK:
                 for (i = 0; i < SPARK_COUNT; i++) {
                     if (sEffTable.sparks[i].base.active == 0) {
                         slotFound = 1;
@@ -138,8 +138,8 @@ void Effect_Add(GlobalContext* globalCtx, s32* index, s32 type, u8 param_4, u8 p
                     }
                 }
                 break;
-            case 1:
-            case 2:
+            case EFFECT_BLURE1:
+            case EFFECT_BLURE2:
                 for (i = 0; i < BLURE_COUNT; i++) {
                     if (sEffTable.blures[i].base.active == 0) {
                         slotFound = 1;
@@ -150,7 +150,7 @@ void Effect_Add(GlobalContext* globalCtx, s32* index, s32 type, u8 param_4, u8 p
                     }
                 }
                 break;
-            case 3:
+            case EFFECT_SHIELD_PARTICLE:
                 for (i = 0; i < SHIELD_PARTICLE_COUNT; i++) {
                     if (sEffTable.shieldParticles[i].base.active == 0) {
                         slotFound = 1;
@@ -161,7 +161,7 @@ void Effect_Add(GlobalContext* globalCtx, s32* index, s32 type, u8 param_4, u8 p
                     }
                 }
                 break;
-            case 4:
+            case EFFECT_TIRE_MARK:
                 for (i = 0; i < TIRE_MARK_COUNT; i++) {
                     if (sEffTable.tireMarks[i].base.active == 0) {
                         slotFound = 1;
@@ -189,7 +189,7 @@ void Effect_DrawAll(GraphicsContext* gfxCtx) {
     for (i = 0; i < SPARK_COUNT; i++) {
         if (1) {} // necessary to match
         if (sEffTable.sparks[i].base.active) {
-            sEffInfoTable[0].draw(&sEffTable.sparks[i].params, gfxCtx);
+            sEffInfoTable[EFFECT_SPARK].draw(&sEffTable.sparks[i].params, gfxCtx);
         }
     }
 
@@ -198,21 +198,21 @@ void Effect_DrawAll(GraphicsContext* gfxCtx) {
             if (gfxCtx) {}
         } // necessary to match
         if (sEffTable.blures[i].base.active) {
-            sEffInfoTable[1].draw(&sEffTable.blures[i].params, gfxCtx);
+            sEffInfoTable[EFFECT_BLURE1].draw(&sEffTable.blures[i].params, gfxCtx);
         }
     }
 
     for (i = 0; i < SHIELD_PARTICLE_COUNT; i++) {
         if (1) {} // necessary to match
         if (sEffTable.shieldParticles[i].base.active) {
-            sEffInfoTable[3].draw(&sEffTable.shieldParticles[i].params, gfxCtx);
+            sEffInfoTable[EFFECT_SHIELD_PARTICLE].draw(&sEffTable.shieldParticles[i].params, gfxCtx);
         }
     }
 
     if (1) {} // necessary to match
     for (i = 0; i < TIRE_MARK_COUNT; i++) {
         if (sEffTable.tireMarks[i].base.active) {
-            sEffInfoTable[4].draw(&sEffTable.tireMarks[i].params, gfxCtx);
+            sEffInfoTable[EFFECT_TIRE_MARK].draw(&sEffTable.tireMarks[i].params, gfxCtx);
         }
     }
 }
@@ -223,7 +223,7 @@ void Effect_UpdateAll(GlobalContext* globalCtx) {
     for (i = 0; i < SPARK_COUNT; i++) {
         if (1) {} // necessary to match
         if (sEffTable.sparks[i].base.active) {
-            if (sEffInfoTable[0].update(&sEffTable.sparks[i].params) == 1) {
+            if (sEffInfoTable[EFFECT_SPARK].update(&sEffTable.sparks[i].params) == 1) {
                 Effect_Destroy(globalCtx, i);
             }
         }
@@ -232,7 +232,7 @@ void Effect_UpdateAll(GlobalContext* globalCtx) {
     for (i = 0; i < BLURE_COUNT; i++) {
         if (1) {} // necessary to match
         if (sEffTable.blures[i].base.active) {
-            if (sEffInfoTable[1].update(&sEffTable.blures[i].params) == 1) {
+            if (sEffInfoTable[EFFECT_BLURE1].update(&sEffTable.blures[i].params) == 1) {
                 Effect_Destroy(globalCtx, i + 3);
             }
         }
@@ -241,7 +241,7 @@ void Effect_UpdateAll(GlobalContext* globalCtx) {
     for (i = 0; i < SHIELD_PARTICLE_COUNT; i++) {
         if (1) {} // necessary to match
         if (sEffTable.shieldParticles[i].base.active) {
-            if (sEffInfoTable[3].update(&sEffTable.shieldParticles[i].params) == 1) {
+            if (sEffInfoTable[EFFECT_SHIELD_PARTICLE].update(&sEffTable.shieldParticles[i].params) == 1) {
                 Effect_Destroy(globalCtx, i + 28);
             }
         }
@@ -250,7 +250,7 @@ void Effect_UpdateAll(GlobalContext* globalCtx) {
     for (i = 0; i < TIRE_MARK_COUNT; i++) {
         if (1) {} // necessary to match
         if (sEffTable.tireMarks[i].base.active) {
-            if (sEffInfoTable[4].update(&sEffTable.tireMarks[i].params) == 1) {
+            if (sEffInfoTable[EFFECT_TIRE_MARK].update(&sEffTable.tireMarks[i].params) == 1) {
                 Effect_Destroy(globalCtx, i + 31);
             }
         }
@@ -264,28 +264,28 @@ void Effect_Destroy(GlobalContext* globalCtx, s32 index) {
 
     if (index < SPARK_COUNT) {
         sEffTable.sparks[index].base.active = 0;
-        sEffInfoTable[0].destroy(&sEffTable.sparks[index].params);
+        sEffInfoTable[EFFECT_SPARK].destroy(&sEffTable.sparks[index].params);
         return;
     }
 
     index -= SPARK_COUNT;
     if (index < BLURE_COUNT) {
         sEffTable.blures[index].base.active = 0;
-        sEffInfoTable[1].destroy(&sEffTable.blures[index].params);
+        sEffInfoTable[EFFECT_BLURE1].destroy(&sEffTable.blures[index].params);
         return;
     }
 
     index -= BLURE_COUNT;
     if (index < SHIELD_PARTICLE_COUNT) {
         sEffTable.shieldParticles[index].base.active = 0;
-        sEffInfoTable[3].destroy(&sEffTable.shieldParticles[index].params);
+        sEffInfoTable[EFFECT_SHIELD_PARTICLE].destroy(&sEffTable.shieldParticles[index].params);
         return;
     }
 
     index -= SHIELD_PARTICLE_COUNT;
     if (index < TIRE_MARK_COUNT) {
         sEffTable.tireMarks[index].base.active = 0;
-        sEffInfoTable[4].destroy(&sEffTable.tireMarks[index].params);
+        sEffInfoTable[EFFECT_TIRE_MARK].destroy(&sEffTable.tireMarks[index].params);
         return;
     }
 }
@@ -295,21 +295,21 @@ void Effect_DestroyAll(GlobalContext* globalCtx) {
 
     for (i = 0; i < SPARK_COUNT; i++) {
         sEffTable.sparks[i].base.active = 0;
-        sEffInfoTable[0].destroy(&sEffTable.sparks[i].params);
+        sEffInfoTable[EFFECT_SPARK].destroy(&sEffTable.sparks[i].params);
     }
 
     for (i = 0; i < BLURE_COUNT; i++) {
         sEffTable.blures[i].base.active = 0;
-        sEffInfoTable[1].destroy(&sEffTable.blures[i].params);
+        sEffInfoTable[EFFECT_BLURE1].destroy(&sEffTable.blures[i].params);
     }
 
     for (i = 0; i < SHIELD_PARTICLE_COUNT; i++) {
         sEffTable.shieldParticles[i].base.active = 0;
-        sEffInfoTable[3].destroy(&sEffTable.shieldParticles[i].params);
+        sEffInfoTable[EFFECT_SHIELD_PARTICLE].destroy(&sEffTable.shieldParticles[i].params);
     }
 
     for (i = 0; i < TIRE_MARK_COUNT; i++) {
         sEffTable.tireMarks[i].base.active = 0;
-        sEffInfoTable[4].destroy(&sEffTable.tireMarks[i].params);
+        sEffInfoTable[EFFECT_TIRE_MARK].destroy(&sEffTable.tireMarks[i].params);
     }
 }

@@ -214,6 +214,14 @@ typedef struct {
     /* 0x10 */ eff_draw_func draw;
 } EffInfo; // size = 0x14
 
+typedef enum {
+    /* 0x00 */ EFFECT_SPARK,
+    /* 0x01 */ EFFECT_BLURE1,
+    /* 0x02 */ EFFECT_BLURE2,
+    /* 0x03 */ EFFECT_SHIELD_PARTICLE,
+    /* 0x04 */ EFFECT_TIRE_MARK
+} EffectType;
+
 typedef struct {
     /* 0x0000 */ struct GlobalContext* globalCtx;
     /* 0x0004 */ EffSpark sparks[SPARK_COUNT];
