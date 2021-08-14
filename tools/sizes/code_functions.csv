@@ -224,8 +224,8 @@ asm/non_matchings/code/z_actor/Actor_SetRotationFromDrawRotation.s,Actor_SetRota
 asm/non_matchings/code/z_actor/Actor_InitDrawRotation.s,Actor_InitDrawRotation,0x800B67C0,0x8
 asm/non_matchings/code/z_actor/Actor_SetScale.s,Actor_SetScale,0x800B67E0,0x7
 asm/non_matchings/code/z_actor/Actor_SetObjectSegment.s,Actor_SetObjectSegment,0x800B67FC,0xE
-asm/non_matchings/code/z_actor/Actor_InitToDefaultValues.s,Actor_InitToDefaultValues,0x800B6834,0x45
-asm/non_matchings/code/z_actor/Actor_FiniActor.s,Actor_FiniActor,0x800B6948,0x10
+asm/non_matchings/code/z_actor/Actor_Init.s,Actor_Init,0x800B6834,0x45
+asm/non_matchings/code/z_actor/Actor_Destroy.s,Actor_Destroy,0x800B6948,0x10
 asm/non_matchings/code/z_actor/Actor_SetMovementScale.s,Actor_SetMovementScale,0x800B6988,0x9
 asm/non_matchings/code/z_actor/Actor_ApplyMovement.s,Actor_ApplyMovement,0x800B69AC,0x19
 asm/non_matchings/code/z_actor/Actor_SetVelocityYRotationAndGravity.s,Actor_SetVelocityYRotationAndGravity,0x800B6A10,0x1E
@@ -327,7 +327,7 @@ asm/non_matchings/code/z_actor/func_800B9098.s,func_800B9098,0x800B9098,0x5
 asm/non_matchings/code/z_actor/func_800B90AC.s,func_800B90AC,0x800B90AC,0x12
 asm/non_matchings/code/z_actor/func_800B90F4.s,func_800B90F4,0x800B90F4,0xB
 asm/non_matchings/code/z_actor/func_800B9120.s,func_800B9120,0x800B9120,0x14
-asm/non_matchings/code/z_actor/Actor_Init.s,Actor_Init,0x800B9170,0x71
+asm/non_matchings/code/z_actor/func_800b9170.s,func_800b9170,0x800B9170,0x71
 asm/non_matchings/code/z_actor/func_800B9334.s,func_800B9334,0x800B9334,0x56
 asm/non_matchings/code/z_actor/Actor_UpdateActor.s,Actor_UpdateActor,0x800B948C,0xBD
 asm/non_matchings/code/z_actor/Actor_UpdateAll.s,Actor_UpdateAll,0x800B9780,0xA1

@@ -198,7 +198,7 @@ typedef struct Actor {
     /* 0x124 */ struct Actor* child; // Usage is actor specific. Set if actor is spawned via `Actor_SpawnAsChild`
     /* 0x128 */ struct Actor* prev; // Previous actor of this category
     /* 0x12C */ struct Actor* next; // Next actor of this category
-    /* 0x130 */ ActorFunc init; // Initialization Routine. Called by `Actor_Init` or `Actor_UpdateAll`
+    /* 0x130 */ ActorFunc init; // Initialization Routine. Called by `func_800b9170` or `Actor_UpdateAll`
     /* 0x134 */ ActorFunc destroy; // Destruction Routine. Called by `Actor_Destroy`
     /* 0x138 */ ActorFunc update; // Update Routine. Called by `Actor_UpdateAll`
     /* 0x13C */ ActorFunc draw; // Draw Routine. Called by `Actor_Draw`

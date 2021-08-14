@@ -364,40 +364,34 @@ void Actor_SetObjectSegment(GlobalContext* globalCtx, Actor* actor) {
     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[actor->objBankIndex].segment);
 }
 
-// Actor_Init
-#if 0
-void Actor_InitToDefaultValues(Actor* actor, GlobalContext* globalCtx) {
+void Actor_Init(Actor* actor, GlobalContext* globalCtx) {
     Actor_InitCurrPosition(actor);
     Actor_InitDrawRotation(actor);
-    Actor_SetHeight(actor, 0);
+    Actor_SetHeight(actor, 0.0f);
     Math_Vec3f_Copy(&actor->prevPos, &actor->world.pos);
-    Actor_SetScale(actor, 0.01);
+    Actor_SetScale(actor, 0.01f);
     actor->targetMode = 3;
-    actor->minYVelocity = -20.0f;
+    actor->minVelocityY = -20.0f;
 
-    actor->meshAttachedTo = 0x32;
-
-    actor->sqrdDistToLink = D_801DCA54;
-    CollisionCheck_InitInfo(&actor->colChkInfo);
+    actor->xyzDistToPlayerSq = FLT_MAX;
     actor->uncullZoneForward = 1000.0f;
     actor->uncullZoneScale = 350.0f;
     actor->uncullZoneDownward = 700.0f;
 
-    actor->naviMsgId = 255;
+    actor->hintId = 255;
 
-    Actor_Setshape(&actor->shape, 0, 0, 0);
-    if (Object_IsLoaded(&globalCtx->objectCtx, actor->objBankIndex) != 0) {
+    CollisionCheck_InitInfo(&actor->colChkInfo);
+    actor->floorBgId = BGCHECK_SCENE;
+
+    ActorShape_Init(&actor->shape, 0.0f, NULL, 0.0f);
+    if (Object_IsLoaded(&globalCtx->objectCtx, actor->objBankIndex)) {
         Actor_SetObjectSegment(globalCtx, actor);
         actor->init(actor, globalCtx);
         actor->init = NULL;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_InitToDefaultValues.s")
-#endif
 
-// Actor_Destroy
-void Actor_FiniActor(Actor* actor, GlobalContext* globalCtx) {
+void Actor_Destroy(Actor* actor, GlobalContext* globalCtx) {
     if (actor->init == NULL) {
         if (actor->destroy != NULL) {
             actor->destroy(actor, globalCtx);
@@ -873,7 +867,7 @@ void func_800B9120(ActorContext* actorCtx) {
 }
 
 // Actor_InitContext // OoT's func_800304DC
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_Init.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800b9170.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B9334.s")
 
@@ -966,6 +960,7 @@ Actor* Actor_Spawn(ActorContext* actorCtx, GlobalContext* globalCtx, s16 actorId
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_LoadOverlay.s")
 
 #ifdef NON_EQUIVALENT
+// This probably *is* equivalent, but I haven't checked 
 Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* globalCtx, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s32 params, u32 cutscene, s32 param_12, Actor* parent) {
     s32 pad;
     Actor* actor;
@@ -985,7 +980,8 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* glob
     }
 
     sp28 = Object_GetIndex(&globalCtx->objectCtx, sp2C->objectId);
-    if ((sp28 < 0) || ((sp2C->type == 5) && ((Actor_GetRoomCleared(globalCtx, (u32) globalCtx->roomCtx.currRoom.num) != 0)) && (sp2C->id != 0x12D))) {
+    if ((sp28 < 0) || 
+        ((sp2C->type == ACTORCAT_ENEMY) && ((Actor_GetRoomCleared(globalCtx, globalCtx->roomCtx.currRoom.num) != 0)) && (sp2C->id != ACTOR_BOSS_05))) {
         Actor_FreeOverlay(&gActorOverlayTable[index]);
         return NULL;
     }
@@ -1023,13 +1019,12 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* glob
     actor->draw = sp2C->draw;
 
     if (parent != NULL) {
-        actor->parent = parent;
         actor->room = parent->room;
+        actor->parent = parent;
         parent->child = actor;
     } else {
         actor->room = globalCtx->roomCtx.currRoom.num;
     }
-
 
     actor->home.pos.x = x;
     actor->home.pos.y = y;
@@ -1043,6 +1038,7 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* glob
     if (actor->cutscene == 0x7F) {
         actor->cutscene = -1;
     }
+
     if (param_12 != 0) {
         actor->unk20 = param_12;
     } else {
@@ -1051,9 +1047,13 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* glob
 
     Actor_InsertIntoTypeList(actorCtx, actor, sp2C->type);
 
+    goto dummy_label_; dummy_label_: ;
+
     sp20 = gSegments[6];
-    Actor_InitToDefaultValues(actor, globalCtx);
+    Actor_Init(actor, globalCtx);
     gSegments[6] = sp20;
+
+    goto dummy_label_47816; dummy_label_47816: ;
 
     return actor;
 }
