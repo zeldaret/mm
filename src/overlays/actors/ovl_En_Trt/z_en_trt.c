@@ -771,7 +771,7 @@ void EnTrt_IdleSleeping(EnTrt* this, GlobalContext* globalCtx) {
         player->transformation == PLAYER_FORM_DEKU) {
         this->textId = 0x850;
     }
-    if (Player_GetMask(globalCtx) == PLAYER_MASK_MASK_OF_SCENTS) {
+    if (Player_GetMask(globalCtx) == PLAYER_MASK_SCENT) {
         this->textId = 0x890;
     }
     if (func_800B84D0(&this->actor, globalCtx)) {
@@ -810,7 +810,7 @@ void EnTrt_IdleAwake(EnTrt* this, GlobalContext* globalCtx) {
 
     this->flags &= ~ENTRT_FULLY_AWAKE;
     if (player->transformation == PLAYER_FORM_HUMAN || player->transformation == PLAYER_FORM_FIERCE_DEITY) {
-        if (Player_GetMask(globalCtx) == PLAYER_MASK_MASK_OF_SCENTS) {
+        if (Player_GetMask(globalCtx) == PLAYER_MASK_SCENT) {
             this->textId = 0x890;
         } else {
             this->textId = this->tmpTextId;
@@ -1370,7 +1370,7 @@ void EnTrt_OpenEyesThenSetToBlink(EnTrt* this) {
 void EnTrt_TalkToShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
     u8 talkState = talkState = func_80152498(&globalCtx->msgCtx);
     Player* player = PLAYER;
-    s32 itemGiven;
+    s32 itemActionParam;
 
     if (talkState == 5) {
         if (func_80147624(globalCtx)) {
@@ -1381,16 +1381,16 @@ void EnTrt_TalkToShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
             }
         }
     } else if (talkState == 16) {
-        itemGiven = func_80123810(globalCtx);
-        if (itemGiven > 0) {
-            if (itemGiven == ITEM_MUSHROOM) {
+        itemActionParam = func_80123810(globalCtx);
+        if (itemActionParam > PLAYER_AP_NONE) {
+            if (itemActionParam == PLAYER_AP_BOTTLE_MUSHROOM) {
                 if (gSaveContext.weekEventReg[0x35] & 8) {
                     player->actor.textId = 0x888;
                 } else {
                     player->actor.textId = 0x883;
                 }
                 this->textId = player->actor.textId;
-                player->unk_A87 = itemGiven;
+                player->unk_A87 = itemActionParam;
                 this->actionFunc = EnTrt_GetMushroom;
             } else {
                 if (this->flags & ENTRT_GIVEN_MUSHROOM) {
@@ -1402,7 +1402,7 @@ void EnTrt_TalkToShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
                 this->actionFunc = EnTrt_Goodbye;
             }
             func_801477B4(globalCtx);
-        } else if (itemGiven < 0) {
+        } else if (itemActionParam < PLAYER_AP_NONE) {
             if (this->flags & ENTRT_GIVEN_MUSHROOM) {
                 this->textId = 0x88B;
             } else {

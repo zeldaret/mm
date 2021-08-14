@@ -53,16 +53,136 @@ void* gItemIcons[] = {
 
 // Used to map item IDs to inventory slots
 u8 gItemSlots[] = {
-    0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
-    0x10, 0x12, 0x12, 0x12, 0x12, 0x12, 0x12, 0x12, 0x12, 0x12, 0x12, 0x12, 0x12, 0x12, 0x12, 0x12,
-    0x12, 0x12, 0x12, 0x12, 0x12, 0x12, 0x12, 0x12, 0x05, 0x05, 0x05, 0x05, 0x05, 0x0B, 0x0B, 0x11,
-    0x11, 0x11, 0x1D, 0x23, 0x29, 0x2F, 0x28, 0x26, 0x19, 0x20, 0x1E, 0x2C, 0x24, 0x25, 0x18, 0x27,
-    0x1C, 0x2B, 0x21, 0x2A, 0x2D, 0x1B, 0x1F, 0x1A, 0x22, 0x2E, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00,
+    SLOT_OCARINA,            // ITEM_OCARINA
+    SLOT_BOW,                // ITEM_BOW
+    SLOT_ARROW_FIRE,         // ITEM_ARROW_FIRE
+    SLOT_ARROW_ICE,          // ITEM_ARROW_ICE
+    SLOT_ARROW_LIGHT,        // ITEM_ARROW_LIGHT
+    SLOT_TRADE_DEED,         // ITEM_OCARINA_FAIRY
+    SLOT_BOMB,               // ITEM_BOMB
+    SLOT_BOMBCHU,            // ITEM_BOMBCHU
+    SLOT_STICK,              // ITEM_STICK
+    SLOT_NUT,                // ITEM_NUT
+    SLOT_BEAN,               // ITEM_BEAN
+    SLOT_TRADE_KEY_MAMA,     // ITEM_SLINGSHOT
+    SLOT_POWDER_KEG,         // ITEM_POWDER_KEG
+    SLOT_PICTO_BOX,          // ITEM_PICTO_BOX
+    SLOT_LENS,               // ITEM_LENS
+    SLOT_HOOKSHOT,           // ITEM_HOOKSHOT
+    SLOT_SWORD_GREAT_FAIRY,  // ITEM_SWORD_GREAT_FAIRY
+    SLOT_BOTTLE_1,           //
+    SLOT_BOTTLE_1,           // ITEM_BOTTLE
+    SLOT_BOTTLE_1,           // ITEM_POTION_RED
+    SLOT_BOTTLE_1,           // ITEM_POTION_GREEN
+    SLOT_BOTTLE_1,           // ITEM_POTION_BLUE
+    SLOT_BOTTLE_1,           // ITEM_FAIRY
+    SLOT_BOTTLE_1,           // ITEM_DEKU_PRINCESS
+    SLOT_BOTTLE_1,           // ITEM_MILK_BOTTLE
+    SLOT_BOTTLE_1,           // ITEM_MILK_HALF
+    SLOT_BOTTLE_1,           // ITEM_FISH
+    SLOT_BOTTLE_1,           // ITEM_BUG
+    SLOT_BOTTLE_1,           // ITEM_BLUE_FIRE
+    SLOT_BOTTLE_1,           // ITEM_POE
+    SLOT_BOTTLE_1,           // ITEM_BIG_POE
+    SLOT_BOTTLE_1,           // ITEM_SPRING_WATER
+    SLOT_BOTTLE_1,           // ITEM_HOT_SPRING_WATER
+    SLOT_BOTTLE_1,           // ITEM_ZORA_EGG
+    SLOT_BOTTLE_1,           // ITEM_GOLD_DUST
+    SLOT_BOTTLE_1,           // ITEM_MUSHROOM
+    SLOT_BOTTLE_1,           // ITEM_SEA_HORSE
+    SLOT_BOTTLE_1,           // ITEM_CHATEAU
+    SLOT_BOTTLE_1,           // ITEM_HYLIAN_LOACH
+    SLOT_BOTTLE_1,           // ITEM_OBABA_DRINK
+    SLOT_TRADE_DEED,         // ITEM_MOON_TEAR
+    SLOT_TRADE_DEED,         // ITEM_DEED_LAND
+    SLOT_TRADE_DEED,         // ITEM_DEED_SWAMP
+    SLOT_TRADE_DEED,         // ITEM_DEED_MOUNTAIN
+    SLOT_TRADE_DEED,         // ITEM_DEED_OCEAN
+    SLOT_TRADE_KEY_MAMA,     // ITEM_ROOM_KEY
+    SLOT_TRADE_KEY_MAMA,     // ITEM_LETTER_MAMA
+    SLOT_TRADE_COUPLE,       // ITEM_LETTER_KAFEI
+    SLOT_TRADE_COUPLE,       // ITEM_PENDANT_MEMORIES
+    SLOT_TRADE_COUPLE,       // ITEM_TINGLE_MAP
+    SLOT_MASK_DEKU,          // ITEM_MASK_DEKU
+    SLOT_MASK_GORON,         // ITEM_MASK_GORON
+    SLOT_MASK_ZORA,          // ITEM_MASK_ZORA
+    SLOT_MASK_FIERCE_DEITY,  // ITEM_MASK_FIERCE_DEITY
+    SLOT_MASK_TRUTH,         // ITEM_MASK_TRUTH
+    SLOT_MASK_KAFEI,         // ITEM_MASK_KAFEI
+    SLOT_MASK_ALL_NIGHT,     // ITEM_MASK_ALL_NIGHT
+    SLOT_MASK_BUNNY,         // ITEM_MASK_BUNNY
+    SLOT_MASK_KEATON,        // ITEM_MASK_KEATON
+    SLOT_MASK_GARO,          // ITEM_MASK_GARO
+    SLOT_MASK_ROMANI,        // ITEM_MASK_ROMANI
+    SLOT_MASK_CIRCUS_LEADER, // ITEM_MASK_CIRCUS_LEADER
+    SLOT_MASK_POSTMAN,       // ITEM_MASK_POSTMAN
+    SLOT_MASK_COUPLE,        // ITEM_MASK_COUPLE
+    SLOT_MASK_GREAT_FAIRY,   // ITEM_MASK_GREAT_FAIRY
+    SLOT_MASK_GIBDO,         // ITEM_MASK_GIBDO
+    SLOT_MASK_DON_GERO,      // ITEM_MASK_DON_GERO
+    SLOT_MASK_KAMARO,        // ITEM_MASK_KAMARO
+    SLOT_MASK_CAPTAIN,       // ITEM_MASK_CAPTAIN
+    SLOT_MASK_STONE,         // ITEM_MASK_STONE
+    SLOT_MASK_BREMEN,        // ITEM_MASK_BREMEN
+    SLOT_MASK_BLAST,         // ITEM_MASK_BLAST
+    SLOT_MASK_SCENT,         // ITEM_MASK_SCENT
+    SLOT_MASK_GIANT,         // ITEM_MASK_GIANT
+    SLOT_BOW,                // ITEM_BOW_ARROW_FIRE
+    SLOT_BOW,                // ITEM_BOW_ARROW_ICE
+    SLOT_BOW,                // ITEM_BOW_ARROW_LIGHT
 };
 
 s16 gItemPrices[] = {
-    0, 0,  0,  0,  0,  0,   0,  0,  0,  0,   0, 0, 0,   0,  0, 0, 0, 0, 0, 20, 20, 20, 20, 0, 20,
-    5, 20, 20, 50, 50, 200, 20, 20, 20, 200, 5, 0, 200, 20, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0, 0,
+    0,   // ITEM_OCARINA
+    0,   // ITEM_BOW
+    0,   // ITEM_ARROW_FIRE
+    0,   // ITEM_ARROW_ICE
+    0,   // ITEM_ARROW_LIGHT
+    0,   // ITEM_OCARINA_FAIRY
+    0,   // ITEM_BOMB
+    0,   // ITEM_BOMBCHU
+    0,   // ITEM_STICK
+    0,   // ITEM_NUT
+    0,   // ITEM_BEAN
+    0,   // ITEM_SLINGSHOT
+    0,   // ITEM_POWDER_KEG
+    0,   // ITEM_PICTO_BOX
+    0,   // ITEM_LENS
+    0,   // ITEM_HOOKSHOT
+    0,   // ITEM_SWORD_GREAT_FAIRY
+    0,   //
+    0,   // ITEM_BOTTLE
+    20,  // ITEM_POTION_RED
+    20,  // ITEM_POTION_GREEN
+    20,  // ITEM_POTION_BLUE
+    20,  // ITEM_FAIRY
+    0,   // ITEM_DEKU_PRINCESS
+    20,  // ITEM_MILK_BOTTLE
+    5,   // ITEM_MILK_HALF
+    20,  // ITEM_FISH
+    20,  // ITEM_BUG
+    50,  // ITEM_BLUE_FIRE
+    50,  // ITEM_POE
+    200, // ITEM_BIG_POE
+    20,  // ITEM_SPRING_WATER
+    20,  // ITEM_HOT_SPRING_WATER
+    20,  // ITEM_ZORA_EGG
+    200, // ITEM_GOLD_DUST
+    5,   // ITEM_MUSHROOM
+    0,   // ITEM_SEA_HORSE
+    200, // ITEM_CHATEAU
+    20,  // ITEM_HYLIAN_LOACH
+    0,   // ITEM_OBABA_DRINK
+    0,   // ITEM_MOON_TEAR
+    0,   // ITEM_DEED_LAND
+    0,   // ITEM_DEED_SWAMP
+    0,   // ITEM_DEED_MOUNTAIN
+    0,   // ITEM_DEED_OCEAN
+    0,   // ITEM_ROOM_KEY
+    0,   // ITEM_LETTER_MAMA
+    0,   // ITEM_LETTER_KAFEI
+    0,   // ITEM_PENDANT_MEMORIES
+    0,   // ITEM_TINGLE_MAP
 };
 
 // Used to map scene indexes to their region in Termina

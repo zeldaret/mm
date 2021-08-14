@@ -206,11 +206,11 @@ void func_808BD49C(EnDekunuts* this, GlobalContext* globalCtx) {
     this->collider.dim.height = (s32)((CLAMP(this->skelAnime.animCurrentFrame, 9.0f, 12.0f) - 9.0f) * 9.0f) + 5;
 
     if (!phi_v1 && (this->actor.params == ENDEKUNUTS_GET_FF00_0) &&
-        (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK) && (this->actor.xzDistToPlayer < 120.0f)) {
+        (Player_GetMask(globalCtx) != PLAYER_MASK_STONE) && (this->actor.xzDistToPlayer < 120.0f)) {
         func_808BDC9C(this);
     } else if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
         if (((this->unk_190 == 0) && (this->actor.xzDistToPlayer > 320.0f)) ||
-            (Player_GetMask(globalCtx) == PLAYER_MASK_STONE_MASK)) {
+            (Player_GetMask(globalCtx) == PLAYER_MASK_STONE)) {
             func_808BD78C(this);
         } else {
             if (this->actor.params == ENDEKUNUTS_GET_FF00_1) {
@@ -247,7 +247,7 @@ void func_808BD7D4(EnDekunuts* this, GlobalContext* globalCtx) {
     }
 
     if ((this->unk_190 == 0) ||
-        ((this->actor.xzDistToPlayer < 120.0f) && Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK)) {
+        ((this->actor.xzDistToPlayer < 120.0f) && Player_GetMask(globalCtx) != PLAYER_MASK_STONE)) {
         func_808BDC9C(this);
     }
 }
@@ -277,13 +277,13 @@ void func_808BD8D8(EnDekunuts* this, GlobalContext* globalCtx) {
     if (this->unk_190 == 0x1000) {
         if ((this->actor.xzDistToPlayer > 480.0f) ||
             ((this->actor.params == ENDEKUNUTS_GET_FF00_0) && (this->actor.xzDistToPlayer < 120.0f)) ||
-            (Player_GetMask(globalCtx) == PLAYER_MASK_STONE_MASK)) {
+            (Player_GetMask(globalCtx) == PLAYER_MASK_STONE)) {
             func_808BDC9C(this);
         } else {
             func_808BDA08(this);
         }
     } else if (this->unk_190 == 0) {
-        if (Player_GetMask(globalCtx) == PLAYER_MASK_STONE_MASK) {
+        if (Player_GetMask(globalCtx) == PLAYER_MASK_STONE) {
             func_808BDC9C(this);
         } else {
             func_808BDA08(this);
@@ -566,7 +566,7 @@ void func_808BE680(EnDekunuts* this) {
 
 void func_808BE6C4(EnDekunuts* this, GlobalContext* globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-    if (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK) {
+    if (Player_GetMask(globalCtx) != PLAYER_MASK_STONE) {
         Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0xE38);
     }
 

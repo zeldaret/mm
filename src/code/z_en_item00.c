@@ -206,7 +206,7 @@ void EnItem00_Init(Actor* thisx, GlobalContext* globalCtx) {
             Item_Give(globalCtx, ITEM_RUPEE_PURPLE);
             break;
         case ITEM00_RUPEE_ORANGE:
-            Item_Give(globalCtx, ITEM_RUPEE_ORANGE);
+            Item_Give(globalCtx, ITEM_RUPEE_GOLD);
             break;
         case ITEM00_HEART:
             Item_Give(globalCtx, ITEM_HEART);
@@ -512,7 +512,7 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
             break;
         case ITEM00_RUPEE_ORANGE:
             this->unk1A4 = 1;
-            Item_Give(globalCtx, ITEM_RUPEE_ORANGE);
+            Item_Give(globalCtx, ITEM_RUPEE_GOLD);
             break;
         case ITEM00_STICK:
             getItemId = GI_STICKS_1;

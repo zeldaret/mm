@@ -125,12 +125,12 @@ u16 EnFsn_GetWelcome(GlobalContext* globalCtx) {
     switch (Player_GetMask(globalCtx)) {
         case PLAYER_MASK_NONE:
             return 0x29CC;
-        case PLAYER_MASK_DEKU_MASK:
+        case PLAYER_MASK_DEKU:
             return 0x29FC;
-        case PLAYER_MASK_GORON_MASK:
-        case PLAYER_MASK_ZORA_MASK:
+        case PLAYER_MASK_GORON:
+        case PLAYER_MASK_ZORA:
             return 0x29FD;
-        case PLAYER_MASK_KAFEIS_MASK:
+        case PLAYER_MASK_KAFEI:
             return 0x2364;
         default:
             return 0x29FE;
@@ -827,7 +827,7 @@ void EnFsn_StartBuying(EnFsn* this, GlobalContext* globalCtx) {
                 this->actionFunc = EnFsn_DeterminePrice;
                 break;
             case 0x29CF:
-                player->unk_A87 = 0;
+                player->unk_A87 = PLAYER_AP_NONE;
                 this->actionFunc = EnFsn_SetupDeterminePrice;
                 break;
         }
@@ -904,12 +904,12 @@ void EnFsn_SetupDeterminePrice(EnFsn* this, GlobalContext* globalCtx) {
 
 void EnFsn_DeterminePrice(EnFsn* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
-    s32 itemGiven;
+    s32 itemActionParam;
     u8 buttonItem;
 
     if (func_80152498(&globalCtx->msgCtx) == 16) {
-        itemGiven = func_80123810(globalCtx);
-        if (itemGiven > 0) {
+        itemActionParam = func_80123810(globalCtx);
+        if (itemActionParam > PLAYER_AP_NONE) {
             if (player->heldItemButton == 0) {
                 buttonItem =
                     gSaveContext.equips
@@ -918,7 +918,7 @@ void EnFsn_DeterminePrice(EnFsn* this, GlobalContext* globalCtx) {
             } else {
                 buttonItem = gSaveContext.equips.buttonItems[0][player->heldItemButton];
             }
-            this->price = (buttonItem < 40) ? gItemPrices[buttonItem] : 0;
+            this->price = (buttonItem < ITEM_MOON_TEAR) ? gItemPrices[buttonItem] : 0;
             if (this->price > 0) {
                 player->actor.textId = 0x29EF;
                 player->unk_A87 = buttonItem;
@@ -929,7 +929,7 @@ void EnFsn_DeterminePrice(EnFsn* this, GlobalContext* globalCtx) {
             }
             this->actor.textId = player->actor.textId;
             func_801477B4(globalCtx);
-        } else if (itemGiven < 0) {
+        } else if (itemActionParam < PLAYER_AP_NONE) {
             if (CURRENT_DAY == 3) {
                 this->actor.textId = 0x29DF;
             } else {
@@ -977,7 +977,7 @@ void EnFsn_MakeOffer(EnFsn* this, GlobalContext* globalCtx) {
                 break;
             case 1:
                 func_8019F230();
-                player->unk_A87 = 0;
+                player->unk_A87 = PLAYER_AP_NONE;
                 this->actionFunc = EnFsn_SetupDeterminePrice;
                 break;
         }
@@ -1003,7 +1003,7 @@ void EnFsn_GiveItem(EnFsn* this, GlobalContext* globalCtx) {
 }
 
 void EnFsn_SetupResumeInteraction(EnFsn* this, GlobalContext* globalCtx) {
-    if (CHECK_QUEST_ITEM(18)) {
+    if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
         if (globalCtx->msgCtx.unk120B1 == 0) {
             EnFsn_HandleSetupResumeInteraction(this, globalCtx);
         }
@@ -1183,7 +1183,7 @@ void EnFsn_SetupEndInteraction(EnFsn* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
 
     if ((talkState == 5 || talkState == 6) && func_80147624(globalCtx)) {
-        if (CHECK_QUEST_ITEM(18)) {
+        if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
             if (globalCtx->msgCtx.unk120B1 == 0) {
                 EnFsn_EndInteraction(this, globalCtx);
             } else {
@@ -1255,7 +1255,7 @@ void EnFsn_AskCanBuyMore(EnFsn* this, GlobalContext* globalCtx) {
             }
         }
     } else if ((talkState == 5 || talkState == 6) && func_80147624(globalCtx)) {
-        if (CHECK_QUEST_ITEM(18)) {
+        if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
             if (globalCtx->msgCtx.unk120B1 == 0) {
                 EnFsn_EndInteraction(this, globalCtx);
             } else {
@@ -1302,7 +1302,7 @@ void EnFsn_AskCanBuyAterRunningOutOfItems(EnFsn* this, GlobalContext* globalCtx)
             }
         }
     } else if ((talkState == 5 || talkState == 6) && func_80147624(globalCtx)) {
-        if (CHECK_QUEST_ITEM(18)) {
+        if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
             if (globalCtx->msgCtx.unk120B1 == 0) {
                 EnFsn_EndInteraction(this, globalCtx);
             } else {

@@ -2,28 +2,28 @@
 
 /**
  * Indices of the columns of this array:
- * - index 0x00: PLAYER_MASK_MASK_OF_TRUTH
- * - index 0x01: PLAYER_MASK_KAFEIS_MASK
- * - index 0x02: PLAYER_MASK_ALL_NIGHT_MASK
- * - index 0x03: PLAYER_MASK_BUNNY_HOOD
- * - index 0x04: PLAYER_MASK_KEATON_MASK
- * - index 0x05: PLAYER_MASK_GAROS_MASK
- * - index 0x06: PLAYER_MASK_ROMANIS_MASK
- * - index 0x07: PLAYER_MASK_CIRCUS_LEADERS_MASK
- * - index 0x08: PLAYER_MASK_POSTMANS_HAT
- * - index 0x09: PLAYER_MASK_COUPLES_MASK
- * - index 0x0A: PLAYER_MASK_GREAT_FAIRYS_MASK
- * - index 0x0B: PLAYER_MASK_GIBDO_MASK
- * - index 0x0C: PLAYER_MASK_DON_GEROS_MASK
- * - index 0x0D: PLAYER_MASK_KAMAROS_MASK
- * - index 0x0E: PLAYER_MASK_CAPTAINS_HAT
- * - index 0x0F: PLAYER_MASK_STONE_MASK
- * - index 0x10: PLAYER_MASK_BREMEN_MASK
- * - index 0x11: PLAYER_MASK_BLAST_MASK
- * - index 0x12: PLAYER_MASK_MASK_OF_SCENTS
+ * - index 0x00: PLAYER_MASK_TRUTH
+ * - index 0x01: PLAYER_MASK_KAFEI
+ * - index 0x02: PLAYER_MASK_ALL_NIGHT
+ * - index 0x03: PLAYER_MASK_BUNNY
+ * - index 0x04: PLAYER_MASK_KEATON
+ * - index 0x05: PLAYER_MASK_GARO
+ * - index 0x06: PLAYER_MASK_ROMANI
+ * - index 0x07: PLAYER_MASK_CIRCUS_LEADER
+ * - index 0x08: PLAYER_MASK_POSTMAN
+ * - index 0x09: PLAYER_MASK_COUPLE
+ * - index 0x0A: PLAYER_MASK_GREAT_FAIRY
+ * - index 0x0B: PLAYER_MASK_GIBDO
+ * - index 0x0C: PLAYER_MASK_DON_GERO
+ * - index 0x0D: PLAYER_MASK_KAMARO
+ * - index 0x0E: PLAYER_MASK_CAPTAIN
+ * - index 0x0F: PLAYER_MASK_STONE
+ * - index 0x10: PLAYER_MASK_BREMEN
+ * - index 0x11: PLAYER_MASK_BLAST
+ * - index 0x12: PLAYER_MASK_SCENT
  */
 // clang-format off
-static u16 sReactionTextIds[][PLAYER_MASK_GIANTS_MASK - 1] = {
+static u16 sReactionTextIds[][PLAYER_MASK_GIANT - 1] = {
     /* 0x00 */ { 0 },
     /* 0x01 */ { 0 },
     /* 0x02 */ { 0 },
@@ -179,7 +179,7 @@ static u16 sReactionTextIds[][PLAYER_MASK_GIANTS_MASK - 1] = {
 // clang-format on
 
 u16 Text_GetFaceReaction(GlobalContext* globalCtx, u32 reactionSet) {
-    if ((Player_GetMask(globalCtx) > PLAYER_MASK_NONE) && (Player_GetMask(globalCtx) < PLAYER_MASK_GIANTS_MASK)) {
+    if ((Player_GetMask(globalCtx) > PLAYER_MASK_NONE) && (Player_GetMask(globalCtx) < PLAYER_MASK_GIANT)) {
         return sReactionTextIds[reactionSet][Player_GetMask(globalCtx) - 1];
     }
     return 0;

@@ -301,7 +301,7 @@ void EnMaYto_ChooseAction(EnMaYto* this, GlobalContext* globalCtx) {
 
         case MA_YTO_TYPE_AFTERMILKRUN:
             this->unk310 = 0;
-            if (INV_CONTENT(ITEM_MASK_ROMANIS) == ITEM_MASK_ROMANIS && (gSaveContext.weekEventReg[0x34] & 1) &&
+            if (INV_CONTENT(ITEM_MASK_ROMANI) == ITEM_MASK_ROMANI && (gSaveContext.weekEventReg[0x34] & 1) &&
                 (Rand_Next() & 0x80)) {
                 EnMaYto_SetupBeginWarmFuzzyFeelingCs(this);
             } else {
@@ -985,7 +985,7 @@ void EnMaYto_SetupPostMilkRunGiveReward(EnMaYto* this) {
 void EnMaYto_PostMilkRunGiveReward(EnMaYto* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         EnMaYto_SetupPostMilkRunExplainReward(this);
-    } else if (INV_CONTENT(ITEM_MASK_ROMANIS) == ITEM_MASK_ROMANIS) {
+    } else if (INV_CONTENT(ITEM_MASK_ROMANI) == ITEM_MASK_ROMANI) {
         func_800B8A1C(&this->actor, globalCtx, GI_RUPEE_GOLD, 500.0f, 100.0f);
         this->unk310 = 2;
     } else {
@@ -1129,24 +1129,24 @@ void EnMaYto_DefaultStartDialogue(EnMaYto* this, GlobalContext* globalCtx) {
     if (CURRENT_DAY == 1) {
         if (Player_GetMask(globalCtx) != PLAYER_MASK_NONE && gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
             switch (Player_GetMask(globalCtx)) {
-                case PLAYER_MASK_ROMANIS_MASK:
+                case PLAYER_MASK_ROMANI:
                     func_801518B0(globalCtx, 0x235D, &this->actor);
                     this->textId = 0x235D;
                     break;
 
-                case PLAYER_MASK_CIRCUS_LEADERS_MASK:
+                case PLAYER_MASK_CIRCUS_LEADER:
                     EnMaYto_SetFaceExpression(this, 1, 3);
                     func_801518B0(globalCtx, 0x235E, &this->actor);
                     this->textId = 0x235E;
                     break;
 
-                case PLAYER_MASK_KAFEIS_MASK:
+                case PLAYER_MASK_KAFEI:
                     EnMaYto_SetFaceExpression(this, 1, 2);
                     func_801518B0(globalCtx, 0x235F, &this->actor);
                     this->textId = 0x235F;
                     break;
 
-                case PLAYER_MASK_COUPLES_MASK:
+                case PLAYER_MASK_COUPLE:
                     func_801518B0(globalCtx, 0x2360, &this->actor);
                     this->textId = 0x2360;
                     break;
@@ -1188,22 +1188,22 @@ void EnMaYto_DinnerStartDialogue(EnMaYto* this, GlobalContext* globalCtx) {
         case 1:
             if (Player_GetMask(globalCtx) != PLAYER_MASK_NONE && gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
                 switch (Player_GetMask(globalCtx)) {
-                    case PLAYER_MASK_ROMANIS_MASK:
+                    case PLAYER_MASK_ROMANI:
                         func_801518B0(globalCtx, 0x235D, &this->actor);
                         this->textId = 0x235D;
                         break;
 
-                    case PLAYER_MASK_CIRCUS_LEADERS_MASK:
+                    case PLAYER_MASK_CIRCUS_LEADER:
                         func_801518B0(globalCtx, 0x235E, &this->actor);
                         this->textId = 0x235E;
                         break;
 
-                    case PLAYER_MASK_KAFEIS_MASK:
+                    case PLAYER_MASK_KAFEI:
                         func_801518B0(globalCtx, 0x235F, &this->actor);
                         this->textId = 0x235F;
                         break;
 
-                    case PLAYER_MASK_COUPLES_MASK:
+                    case PLAYER_MASK_COUPLE:
                         func_801518B0(globalCtx, 0x2360, &this->actor);
                         this->textId = 0x2360;
                         break;
