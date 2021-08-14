@@ -5,7 +5,7 @@
 
 struct BgDblueBalance;
 
-typedef void (*BgDblueBalanceActionFunc)(struct BgDblueBalance* this, GlobalContext* globalCtx);
+typedef void (*BgDblueBalanceActionFunc)(struct BgDblueBalance*, GlobalContext*);
 
 typedef struct BgDblueBalance {
     /* 0x0000 */ Actor actor;

@@ -5,7 +5,7 @@
 
 struct EnDnq;
 
-typedef void (*EnDnqActionFunc)(struct EnDnq* this, GlobalContext* globalCtx);
+typedef void (*EnDnqActionFunc)(struct EnDnq*, GlobalContext*);
 
 typedef struct EnDnq {
     /* 0x0000 */ Actor actor;

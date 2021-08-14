@@ -7,7 +7,6 @@
 
 #include "PR/ultratypes.h"
 #include "PR/gbi.h"
-#include "PR/sched.h"
 #include "io/controller.h"
 #include "osint.h"
 #include "viint.h"
@@ -46,6 +45,7 @@
 #define Z_THREAD_ID_IDLE     1
 #define Z_THREAD_ID_SLOWLY   2
 #define Z_THREAD_ID_MAIN     3
+#define Z_THREAD_ID_SCHED    5
 #define Z_THREAD_ID_DMAMGR  18
 #define Z_THREAD_ID_IRQMGR  19
 
@@ -266,6 +266,19 @@ typedef struct {
     /* 0x06708 */ Gfx polyOpaBuffer[13184];
     /* 0x20308 */ u16 tailMagic; // 5678
 } GfxPool; // size = 0x20310
+
+typedef struct {
+    /* 0x00 */ u16*     fb1;
+    /* 0x04 */ u16*     swapBuffer;
+    /* 0x08 */ OSViMode* viMode;
+    /* 0x0C */ u32      features;
+    /* 0x10 */ u8       unk_10;
+    /* 0x11 */ s8       updateRate;
+    /* 0x12 */ s8       updateRate2;
+    /* 0x13 */ u8       unk_13;
+    /* 0x14 */ f32      xScale;
+    /* 0x18 */ f32      yScale;
+} CfbInfo; // size = 0x1C
 
 typedef struct GraphicsContext {
     /* 0x000 */ Gfx* polyOpaBuffer;
@@ -1238,6 +1251,11 @@ typedef struct IrqMgrClient_t {
 } IrqMgrClient; // size = 0x8
 
 typedef struct {
+    /* 0x0 */ s16 type;
+    /* 0x2 */ u8 misc[30];
+} OSScMsg;
+
+typedef struct {
     /* 0x000 */ OSScMsg verticalRetraceMesg;
     /* 0x020 */ OSScMsg prenmiMsg;
     /* 0x040 */ OSScMsg nmiMsg;
@@ -1284,25 +1302,41 @@ typedef struct {
 #define OS_SC_RCP_MASK          0x0003
 #define OS_SC_TYPE_MASK         0x0007
 
+#define OS_SC_DP                0x0001
+#define OS_SC_SP                0x0002
+#define OS_SC_YIELD             0x0010
+#define OS_SC_YIELDED           0x0020
+
+typedef struct OSScTask {
+    /* 0x00 */ struct OSScTask* next;
+    /* 0x04 */ u32      state;
+    /* 0x08 */ u32      flags;
+    /* 0x0C */ CfbInfo* framebuffer;
+    /* 0x10 */ OSTask   list;
+    /* 0x50 */ OSMesgQueue* msgQ;
+    /* 0x54 */ OSMesg   msg;
+} OSScTask; // size = 0x58
+
 typedef struct {
-    /* 0x000 */ OSMesgQueue interruptQ;
-    /* 0x018 */ OSMesg intMsgBuf[64];
-    /* 0x118 */ OSMesgQueue cmdQ;
-    /* 0x130 */ OSMesg cmdMsgBuf[8];
-    /* 0x150 */ OSThread thread;
-    /* 0x300 */ UNK_TYPE4 unk300;
-    /* 0x304 */ UNK_TYPE4 unk304;
-    /* 0x308 */ UNK_TYPE4 unk308;
-    /* 0x30C */ UNK_TYPE4 unk30C;
-    /* 0x310 */ UNK_TYPE4 unk310;
-    /* 0x314 */ UNK_TYPE4 unk314;
-    /* 0x318 */ s32 unk318;
-    /* 0x31C */ UNK_TYPE1 pad31C[0x4];
-    /* 0x320 */ UNK_TYPE4 unk320;
-    /* 0x324 */ UNK_TYPE4 unk324;
-    /* 0x328 */ UNK_TYPE1 pad328[0x7];
-    /* 0x32F */ s8 unk32F;
-    /* 0x330 */ IrqMgrClient irqClient;
+    /* 0x0000 */ OSMesgQueue interruptQ;
+    /* 0x0018 */ OSMesg      intBuf[64];
+    /* 0x0118 */ OSMesgQueue cmdQ;
+    /* 0x0130 */ OSMesg      cmdMsgBuf[8];
+    /* 0x0150 */ OSThread    thread;
+    /* 0x0300 */ OSScTask*   audioListHead;
+    /* 0x0304 */ OSScTask*   gfxListHead;
+    /* 0x0308 */ OSScTask*   audioListTail;
+    /* 0x030C */ OSScTask*   gfxListTail;
+    /* 0x0310 */ OSScTask*   curRSPTask;
+    /* 0x0314 */ OSScTask*   curRDPTask;
+    /* 0x0318 */ s32         retraceCount;
+    /* 0x0318 */ s32         doAudio;
+    /* 0x0320 */ CfbInfo*    curBuf;
+    /* 0x0324 */ CfbInfo*    pendingSwapBuf1;
+    /* 0x0328 */ CfbInfo*    pendingSwapBuf2;
+    /* 0x032C */ char unk_32C[0x3];
+    /* 0x032F */ u8 shouldUpdateVi;
+    /* 0x0330 */ IrqMgrClient irqClient;
 } SchedContext; // size = 0x338
 
 typedef struct StackEntry_t {
