@@ -238,19 +238,20 @@ void EnHoll_VerticalBgCoverIdle(EnHoll* this, GlobalContext* globalCtx) {
 }
 
 void EnHoll_VerticalIdle(EnHoll* this, GlobalContext* globalCtx) {
-    f32 absYDistToPlayer;
 
-    if ((this->actor.xzDistToPlayer < EN_HOLL_RADIUS) &&
-        (absYDistToPlayer = fabsf(this->actor.yDistToPlayer),
-         absYDistToPlayer < EN_HOLL_ACTIVATION_PLANE_DISTANCE_VERTICAL) &&
-        (absYDistToPlayer > EN_HOLL_LOADING_PLANE_DISTANCE_VERTICAL)) {
-        s32 enHollId = EN_HOLL_GET_ID_CAST(this);
-        s32 playerSide = (this->actor.yDistToPlayer > 0.0f) ? EN_HOLL_ABOVE : EN_HOLL_BELOW;
+    if (this->actor.xzDistToPlayer < EN_HOLL_RADIUS) {
+        f32 absYDistToPlayer = fabsf(this->actor.yDistToPlayer);
 
-        this->actor.room = globalCtx->doorCtx.transitionActorList[enHollId].sides[playerSide].room;
-        if ((this->actor.room != globalCtx->roomCtx.currRoom.num) &&
-            Room_StartRoomTransition(globalCtx, &globalCtx->roomCtx, this->actor.room)) {
-            this->actionFunc = EnHoll_RoomTransitionIdle;
+        if (absYDistToPlayer < EN_HOLL_ACTIVATION_PLANE_DISTANCE_VERTICAL &&
+            absYDistToPlayer > EN_HOLL_LOADING_PLANE_DISTANCE_VERTICAL) {
+            s32 enHollId = EN_HOLL_GET_ID_CAST(this);
+            s32 playerSide = (this->actor.yDistToPlayer > 0.0f) ? EN_HOLL_ABOVE : EN_HOLL_BELOW;
+
+            this->actor.room = globalCtx->doorCtx.transitionActorList[enHollId].sides[playerSide].room;
+            if ((this->actor.room != globalCtx->roomCtx.currRoom.num) &&
+                Room_StartRoomTransition(globalCtx, &globalCtx->roomCtx, this->actor.room)) {
+                this->actionFunc = EnHoll_RoomTransitionIdle;
+            }
         }
     }
 }
