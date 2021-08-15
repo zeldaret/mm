@@ -837,7 +837,9 @@ typedef struct {
 typedef struct {
     /* 0x00000 */ View view;
     /* 0x00168 */ Font font;
-    /* 0x11EF4 */ char unk_11EF4[0x10];
+    /* 0x11EF4 */ char unk_11EF4[0x4];
+    /* 0x11EF8 */ UNK_PTR unk11EF8;
+    /* 0x11EFC */ UNK_TYPE1 unk11EFC[0x8];
     /* 0x11F04 */ u16 unk11F04;
     /* 0x11F06 */ UNK_TYPE1 pad11F06[0x4];
     /* 0x11F0A */ u8 unk11F0A;
@@ -846,7 +848,13 @@ typedef struct {
     /* 0x11F14 */ UNK_TYPE1 pad11F14[0xE];
     /* 0x11F22 */ u8 msgMode;
     /* 0x11F23 */ UNK_TYPE1 pad11F23;
-    /* 0x11F24 */ u16 unk11F24[0x7E];
+    /* 0x11F24 */ u16 unk11F24[0x67];
+    /* 0x11FF2 */ u16 unk11FF2;
+    /* 0x11FF4 */ s16 unk11FF4;
+    /* 0x11FF6 */ s16 unk11FF6;
+    /* 0x11FF8 */ UNK_TYPE1 unk11FF8[0x6];
+    /* 0x11FFE */ s16 unk11FFE[0x10];
+    /* 0x1201E */ u16 unk1201E;
     /* 0x12020 */ u8 unk12020;
     /* 0x12021 */ u8 choiceIndex;
     /* 0x12022 */ u8 unk12022;
@@ -861,26 +869,48 @@ typedef struct {
     /* 0x12034 */ UNK_TYPE1 pad12034[0xE];
     /* 0x12040 */ Actor* unkActor;
     /* 0x12044 */ s16 unk12044;
-    /* 0x12046 */ UNK_TYPE1 pad12046[0x2];
+    /* 0x12046 */ s16 unk12046;
     /* 0x12048 */ u8 unk12048; // EnKakasi
     /* 0x12049 */ UNK_TYPE1 pad12049[0xB];
     /* 0x12054 */ s16 unk12054; // First digit in lottery code guess
     /* 0x12056 */ s16 unk12056; // Second digit lottery code guess
     /* 0x12058 */ s16 unk12058; // Third digit lottery code guess
-    /* 0x1205A */ UNK_TYPE1 pad1205A[0x10];
+    /* 0x1205A */ UNK_TYPE1 pad1205A[0xE];
+    /* 0x12068 */ s16 unk12068;
     /* 0x1206A */ s16 unk1206A;
     /* 0x1206C */ s32 unk1206C;
     /* 0x12070 */ s32 unk12070;
     /* 0x12074 */ UNK_TYPE1 pad12074[0x4];
     /* 0x12078 */ s32 bankRupeesSelected;
     /* 0x1207C */ s32 bankRupees; 
-    /* 0x12080 */ UNK_TYPE1 pad12080[0x18];
+    /* 0x12080 */ UNK_TYPE1 pad12080[0x4];
+    /* 0x12084 */ UNK_PTR unk12084;
+    /* 0x12088 */ UNK_TYPE4 unk12088;
+    /* 0x1208C */ UNK_PTR unk1208C;
+    /* 0x12090 */ s16 unk12090;
+    /* 0x12092 */ s16 unk12092;
+    /* 0x12094 */ s8 unk12094;
+    /* 0x12095 */ UNK_TYPE1 unk12096[0x2];
     /* 0x12098 */ f32 unk12098;
-    /* 0x1209C */ UNK_TYPE1 unk1209C[0x15];
+    /* 0x1209C */ s16 unk1209C;
+    /* 0x1209E */ UNK_TYPE1 unk1209E[0x2];
+    /* 0x120A0 */ s32 unk120A0;
+    /* 0x120A4 */ UNK_TYPE1 unk120A4[0xC];
+    /* 0x120B0 */ u8 unk120B0;
     /* 0x120B1 */ u8 unk120B1;
-    /* 0x120B2 */ UNK_TYPE1 pad120B2[0x22];
-    /* 0x120D4 */ UNK_TYPE2 unk120D4;
-    /* 0x120D6 */ UNK_TYPE2 unk120D6;
+    /* 0x120B2 */ UNK_TYPE1 pad120B2[0xC];
+    /* 0x120BE */ s16 unk120BE;
+    /* 0x120C0 */ s16 unk120C0;
+    /* 0x120C2 */ s16 unk120C2;
+    /* 0x120C4 */ s32 unk120C4;
+    /* 0x120C8 */ s16 unk120C8;
+    /* 0x120CA */ s16 unk120CA;
+    /* 0x120CC */ s16 unk120CC;
+    /* 0x120CE */ s16 unk120CE;
+    /* 0x120D0 */ s16 unk120D0;
+    /* 0x120D2 */ s16 unk120D2;
+    /* 0x120D4 */ s16 unk120D4;
+    /* 0x120D6 */ s16 unk120D6;
     /* 0x120D8 */ UNK_TYPE1 pad120D8[0x8];
 } MessageContext; // size = 0x120E0
 

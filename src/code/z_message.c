@@ -12,24 +12,25 @@ void func_80147520(void) {
 #ifdef NON_MATCHING
 
 u32 func_80147734(GlobalContext *globalCtx) {
-    u32 ret_value;
- 
+    s32 ret_value;
+    Input* controller;
     MessageContext* msgCtx = &globalCtx->msgCtx;
+
     if(msgCtx->unk12020 == 0x10 ||msgCtx->unk12020 == 0x11){
-        return ~(CONTROLLER1(globalCtx)->press.button | 0xFFFF7FFF) == 0;
+        return CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_A);
     }
-    //buttons = 
-    ret_value = (~(CONTROLLER1(globalCtx)->press.button | 0xFFFF7FFF) == 0);
+    controller = CONTROLLER1(globalCtx);
+    ret_value = CHECK_BTN_ALL(controller->press.button, BTN_A);
     if(ret_value == 0){
-        ret_value = (~(CONTROLLER1(globalCtx)->press.button | ~0x4000) == 0);
+        ret_value = CHECK_BTN_ALL(controller->press.button, BTN_B);
         if(ret_value == 0){
-            ret_value = (~(CONTROLLER1(globalCtx)->press.button | ~8) == 0);
+            ret_value = CHECK_BTN_ALL(controller->press.button, BTN_CUP);
         }
     }
     return ret_value;
 }
-#else
 
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80147734.s")
 #endif
 
@@ -45,7 +46,6 @@ void func_801477B4(GlobalContext *globalCtx) {
     }
 }
 
-
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80147818.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80147F18.s")
@@ -54,7 +54,18 @@ void func_801477B4(GlobalContext *globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80148B98.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80148CBC.s")
+void func_80148CBC(GlobalContext *globalCtx, UNK_PTR puParm2, u8 arg2) {
+    MessageContext* msgCtx;
+
+    msgCtx = &globalCtx->msgCtx;
+    msgCtx->unk11FF4 = 0x30;
+    if (arg2  == 1) {
+        msgCtx->unk11FF6 = msgCtx->unk11FFE[1+msgCtx->choiceIndex];
+    } else {
+        msgCtx->unk11FF6 = msgCtx->unk11FFE[msgCtx->choiceIndex];
+    }
+    func_80147818(globalCtx, puParm2, msgCtx->unk11FF4, msgCtx->unk11FF6);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80148D64.s")
 
@@ -124,6 +135,7 @@ void Message_StartTextbox(GlobalContext* globalCtx, u16 textId, Actor* Actor) {
     msgCtx->unk12024 = 0;
     globalCtx->msgCtx.ocarinaMode = 0;
 }
+
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80151938.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80151A68.s")
@@ -134,14 +146,12 @@ void Message_StartTextbox(GlobalContext* globalCtx, u16 textId, Actor* Actor) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80151DA4.s")
 
-
 void func_80152434(GlobalContext *globalCtx, u16 arg2) {
     globalCtx->msgCtx.unk12046 = 0;
     func_80151DA4(globalCtx, arg2);
 } 
 
-
-void func_80152464(GlobalContext *globalCtx, s32 arg1) {
+void func_80152464(GlobalContext *globalCtx, u16 arg1) {
     globalCtx->msgCtx.unk12046 = 1;
     func_80151DA4(globalCtx, arg1);
 }
@@ -193,6 +203,7 @@ void func_801586A4(GlobalContext *globalCtx) {
     globalCtx->msgCtx.unk12084 = &D_801C6B98;
     globalCtx->msgCtx.unk1208C = &D_801CFB08;
 }
+
 void Message_Init(GlobalContext *globalCtx) {
     Font *font;
     MessageContext *messageCtx = &globalCtx->msgCtx;
@@ -204,7 +215,7 @@ void Message_Init(GlobalContext *globalCtx) {
     messageCtx->unk11F04 = 0;
     messageCtx->unk12020 = 0;
     messageCtx->choiceIndex = 0;
-    messageCtx->pad1202C = messageCtx->unk11FF2 = 0;
+    messageCtx->unk1202C = messageCtx->unk11FF2 = 0;
     messageCtx->unk1201E = 0xFF;
     View_Init( &messageCtx->view, globalCtx->state.gfxCtx);
     messageCtx->unk11EF8 = THA_AllocEndAlign16(&globalCtx->state.heap, 0x13C00);
@@ -231,4 +242,5 @@ void Message_Init(GlobalContext *globalCtx) {
     messageCtx->unk120D4 = 0;
     messageCtx->unk120D6 = 0;
 }
+
 
