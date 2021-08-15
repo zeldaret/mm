@@ -8054,7 +8054,7 @@
     0x80971B48:("EnKakasi_Update",),
     0x80971CE0:("func_80971CE0",),
     0x80971D20:("EnKakasi_Draw",),
-    0x80972350:("ObjMakeoshihiki_GetPathIndex",),
+    0x80972350:("ObjMakeoshihiki_GetChildSpawnPointIndex",),
     0x809723C4:("ObjMakeoshihiki_SetSwitchFlags",),
     0x80972454:("ObjMakeoshihiki_Init",),
     0x80972548:("ObjMakeoshihiki_Update",),
