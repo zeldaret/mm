@@ -2671,7 +2671,7 @@ u8 Message_GetState(MessageContext* msgCtx);
 // void func_80153750(void);
 // void func_80153E7C(void);
 // void func_80153EF0(void);
-// void func_801541D4(void);
+void func_801541D4(GlobalContext* globalCtx, Gfx** gfxp);
 // void func_80156758(void);
 void func_8015680C(GlobalContext* globalCtx);
 void func_801586A4(GlobalContext* globalCtx);

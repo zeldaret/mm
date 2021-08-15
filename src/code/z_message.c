@@ -195,7 +195,23 @@ void func_80153E7C(GlobalContext *globalCtx, void *arg1) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_801541D4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80156758.s")
+void func_80156758(GlobalContext *globalCtx) {
+    Gfx* nextDisplayList;
+    Gfx* _polyOpa;
+    GraphicsContext* gfxCtx;
+
+    gfxCtx = globalCtx->state.gfxCtx;
+    OPEN_DISPS(gfxCtx);
+    nextDisplayList = Graph_GfxPlusOne(_polyOpa = POLY_OPA_DISP);
+    gSPDisplayList(OVERLAY_DISP++, nextDisplayList);
+    if ((globalCtx->msgCtx.unk11F04 != 0x5E6) || (func_801690CC(globalCtx) == 0)) {
+        func_801541D4(globalCtx, &nextDisplayList);
+    }
+    gSPEndDisplayList(nextDisplayList++);
+    Graph_BranchDlist(_polyOpa, nextDisplayList);
+    gfxCtx->polyOpa.p = nextDisplayList;
+    CLOSE_DISPS(gfxCtx);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8015680C.s")
 
