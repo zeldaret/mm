@@ -738,7 +738,7 @@ typedef struct {
     /* 0x246 */ s16 heartsEnvG[2];
     /* 0x24A */ s16 heartsEnvB[2];
     /* 0x24E */ s16 health;
-    /* 0x250 */ s16 unk_timer;
+    /* 0x250 */ s16 unkTimer;
     /* 0x252 */ s16 lifeSizeChange;
     /* 0x254 */ s16 lifeSizeChangeDirection; // 1 means shrinking, 0 growing
     /* 0x256 */ s16 unk_256;

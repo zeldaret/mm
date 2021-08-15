@@ -36,7 +36,7 @@ TexturePtr HeartDDTextures[] = { &D_02000900, &D_02000600, &D_02000600, &D_02000
 void LifeMeter_Init(GlobalContext* globalCtx) {
     InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
 
-    interfaceCtx->unk_timer = 0x140;
+    interfaceCtx->unkTimer = 320;
 
     interfaceCtx->health = gSaveContext.health;
 
@@ -176,7 +176,7 @@ s32 LifeMeter_SaveInterfaceHealth(GlobalContext* globalCtx) {
 s32 LifeMeter_IncreaseInterfaceHealth(GlobalContext* globalCtx) {
     InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
 
-    interfaceCtx->unk_timer = 0x140;
+    interfaceCtx->unkTimer = 320;
     interfaceCtx->health += 0x10;
     if (globalCtx->interfaceCtx.health >= gSaveContext.health) {
         globalCtx->interfaceCtx.health = gSaveContext.health;
@@ -188,10 +188,10 @@ s32 LifeMeter_IncreaseInterfaceHealth(GlobalContext* globalCtx) {
 s32 LifeMeter_DecreaseInterfaceHealth(GlobalContext* globalCtx) {
     InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
 
-    if (interfaceCtx->unk_timer != 0) {
-        interfaceCtx->unk_timer--;
+    if (interfaceCtx->unkTimer != 0) {
+        interfaceCtx->unkTimer--;
     } else {
-        interfaceCtx->unk_timer = 0x140;
+        interfaceCtx->unkTimer = 320;
         interfaceCtx->health -= 0x10;
         if (interfaceCtx->health <= 0) {
             interfaceCtx->health = 0;
@@ -245,7 +245,7 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
                     gDPSetEnvColor(OVERLAY_DISP++, interfaceCtx->heartsEnvR[0], interfaceCtx->heartsEnvG[0],
                                    interfaceCtx->heartsEnvB[0], 255);
                 }
-            } else if (fullHeartCount == i) {
+            } else if (i == fullHeartCount) {
                 if (curColorSet != 1) {
                     curColorSet = 1;
                     gDPPipeSync(OVERLAY_DISP++);
@@ -277,7 +277,7 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
 
             if (i < fullHeartCount) {
                 heartTex = &D_02000400;
-            } else if (fullHeartCount == i) {
+            } else if (i == fullHeartCount) {
                 heartTex = HeartTextures[fractionHeartCount];
             } else {
                 heartTex = &D_02000000;
@@ -291,7 +291,7 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
                                     interfaceCtx->healthAlpha);
                     gDPSetEnvColor(OVERLAY_DISP++, sHeartsDDEnv[0][0], sHeartsDDEnv[0][1], sHeartsDDEnv[0][2], 255);
                 }
-            } else if (fullHeartCount == i) {
+            } else if (i == fullHeartCount) {
                 if (curColorSet != 5) {
                     curColorSet = 5;
                     gDPPipeSync(OVERLAY_DISP++);
@@ -317,7 +317,7 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
             }
             if (i < fullHeartCount) {
                 heartTex = &D_02000900;
-            } else if (fullHeartCount == i) {
+            } else if (i == fullHeartCount) {
                 heartTex = HeartDDTextures[fractionHeartCount];
             } else {
                 heartTex = &D_02000500;
@@ -331,7 +331,7 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
                                 G_TX_NOLOD, G_TX_NOLOD);
         }
 
-        if (fullHeartCount != i) {
+        if (i != fullHeartCount) {
             if ((ddCount < 0) || (i > ddCount)) {
                 if (curCombineModeSet != 1) {
                     curCombineModeSet = 1;
@@ -354,7 +354,7 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
             halfTexSize *= 0.68f;
             gSPTextureRectangle(OVERLAY_DISP++, (s32)((posX - halfTexSize) * 4), (s32)((posY - halfTexSize) * 4),
                                 (s32)((posX + halfTexSize) * 4), (s32)((posY + halfTexSize) * 4), G_TX_RENDERTILE,
-                                0, 0, (s32)temp_f4, (s32)temp_f4);
+                                0, 0, (s32) temp_f4, (s32) temp_f4);
         } else {
             Mtx* mtx;
             
@@ -401,6 +401,7 @@ void LifeMeter_UpdateSizeAndBeep(GlobalContext* globalCtx) {
             interfaceCtx->lifeSizeChangeDirection = 0;
             if (func_801233E4(globalCtx) == 0 && (globalCtx->pauseCtx.state == 0) &&
                 (globalCtx->pauseCtx.debugState == 0) && LifeMeter_IsCritical() && func_801690CC(globalCtx) == 0) {
+                //func_801233E4 and func_801690CC : Check if in Cutscene
                 play_sound(NA_SE_SY_HITPOINT_ALARM);
             }
         }
