@@ -22,15 +22,15 @@ void EnBigpo_ChangeToFireCounting(EnBigpo* this);
 void EnBigpo_InitHiddenFire(EnBigpo* this);
 void EnBigpo_SetupFireRevealed(EnBigpo* this);
 
-void EnBigpo_SetupSpawn(EnBigpo* this);
-void EnBigpo_SpawnPoCutscene1(EnBigpo* this, GlobalContext* globalCtx);
-void EnBigpo_SpawnPoCutscene2(EnBigpo* this, GlobalContext* globalCtx);
-void EnBigpo_SpawnPoCutscene3(EnBigpo* this);
-void EnBigpo_SpawnPoCutscene4(EnBigpo* this, GlobalContext* globalCtx);
-void EnBigpo_SpawnPoCutscene5(EnBigpo* this);
-void EnBigpo_SpawnPoCutscene6(EnBigpo* this, GlobalContext* globalCtx);
-void EnBigpo_SpawnPoCutscene7(EnBigpo* this);
-void EnBigpo_SpawnPoCutscene8(EnBigpo* this, GlobalContext* globalCtx);
+void EnBigpo_SetupSpawnCutscene(EnBigpo* this);
+void EnBigpo_SpawnCutsceneStage1(EnBigpo* this, GlobalContext* globalCtx);
+void EnBigpo_SpawnCutsceneStage2(EnBigpo* this, GlobalContext* globalCtx);
+void EnBigpo_SpawnCutsceneStage3(EnBigpo* this);
+void EnBigpo_SpawnCutsceneStage4(EnBigpo* this, GlobalContext* globalCtx);
+void EnBigpo_SpawnCutsceneStage5(EnBigpo* this);
+void EnBigpo_SpawnCutsceneStage6(EnBigpo* this, GlobalContext* globalCtx);
+void EnBigpo_SpawnCutsceneStage7(EnBigpo* this);
+void EnBigpo_SpawnCutsceneStage8(EnBigpo* this, GlobalContext* globalCtx);
 
 void EnBigpo_LowerCutsceneSubCamera(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_WellWaitForProximity(EnBigpo* this, GlobalContext* globalCtx);
@@ -287,11 +287,11 @@ void EnBigpo_InitWellBigpo(EnBigpo* this) {
 
 void EnBigpo_WellWaitForProximity(EnBigpo* this, GlobalContext* globalCtx) {
     if (this->actor.xzDistToPlayer < 200.0f) {
-        EnBigpo_SetupSpawn(this);
+        EnBigpo_SetupSpawnCutscene(this);
     }
 }
 
-void EnBigpo_SetupSpawn(EnBigpo* this) {
+void EnBigpo_SetupSpawnCutscene(EnBigpo* this) {
     ActorCutscene_SetIntentToPlay(this->actor.cutscene);
     this->actionFunc = EnBigpo_WaitCutsceneQueue;
 }
@@ -302,7 +302,7 @@ void EnBigpo_WaitCutsceneQueue(EnBigpo* this, GlobalContext* globalCtx) {
         func_800B724C(globalCtx, &this->actor, 7);
         this->cutsceneSubCamId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
         if (this->actor.params == ENBIGPO_REGULAR) { // and SUMMONED, got switched earlier
-            EnBigpo_SpawnPoCutscene1(this, globalCtx);
+            EnBigpo_SpawnCutsceneStage1(this, globalCtx);
         } else { // ENBIGPO_REVEALEDFIRE
             EnBigpo_SetupFlameCirclePositions(this, globalCtx);
         }
@@ -311,7 +311,7 @@ void EnBigpo_WaitCutsceneQueue(EnBigpo* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnBigpo_SpawnPoCutscene1(EnBigpo* this, GlobalContext* globalCtx) {
+void EnBigpo_SpawnCutsceneStage1(EnBigpo* this, GlobalContext* globalCtx) {
     s32 i;
 
     this->actor.draw = EnBigpo_Draw4;
@@ -334,28 +334,28 @@ void EnBigpo_SpawnPoCutscene1(EnBigpo* this, GlobalContext* globalCtx) {
         subCamEye.z = ((this->actor.world.pos.z - this->fires[0].pos.z) * 1.8f) + this->actor.world.pos.z;
         Play_CameraSetAtEye(globalCtx, this->cutsceneSubCamId, &this->actor.focus.pos, &subCamEye);
     }
-    this->actionFunc = EnBigpo_SpawnPoCutscene2;
+    this->actionFunc = EnBigpo_SpawnCutsceneStage2;
 }
 
 // fires are growing
-void EnBigpo_SpawnPoCutscene2(EnBigpo* this, GlobalContext* globalCtx) {
+void EnBigpo_SpawnCutsceneStage2(EnBigpo* this, GlobalContext* globalCtx) {
     if (Math_StepToF(&this->actor.scale.x, 0.01f, 0.001f)) {
-        EnBigpo_SpawnPoCutscene3(this);
+        EnBigpo_SpawnCutsceneStage3(this);
     }
     this->actor.scale.z = this->actor.scale.x;
     this->actor.scale.y = ((0.01f - this->actor.scale.x) * 0.5f) + 0.01f;
 }
 
 // switch to fires rotation
-void EnBigpo_SpawnPoCutscene3(EnBigpo* this) {
+void EnBigpo_SpawnCutsceneStage3(EnBigpo* this) {
     this->rotVelocity = 0x1000;
-    this->actionFunc = EnBigpo_SpawnPoCutscene4;
+    this->actionFunc = EnBigpo_SpawnCutsceneStage4;
     this->fireRadius = 200.0f;
     this->actor.velocity.y = 0.0f;
 }
 
 // fires are circling inward toward each other
-void EnBigpo_SpawnPoCutscene4(EnBigpo* this, GlobalContext* globalCtx) {
+void EnBigpo_SpawnCutsceneStage4(EnBigpo* this, GlobalContext* globalCtx) {
     s32 i;
 
     if (Math_StepToF(&this->fireRadius, 30.0f, 5.0f)) {
@@ -373,21 +373,21 @@ void EnBigpo_SpawnPoCutscene4(EnBigpo* this, GlobalContext* globalCtx) {
     this->actor.world.pos.y += this->actor.velocity.y;
     EnBigpo_LowerCutsceneSubCamera(this, globalCtx);
     if (this->actor.velocity.y >= 4.0f) {
-        EnBigpo_SpawnPoCutscene5(this);
+        EnBigpo_SpawnCutsceneStage5(this);
     }
 }
 
 // fires have touched, they start to rise, big poe starts to visibly apear
-void EnBigpo_SpawnPoCutscene5(EnBigpo* this) {
+void EnBigpo_SpawnCutsceneStage5(EnBigpo* this) {
     SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06001360);
     this->actor.draw = EnBigpo_Draw1;
     Actor_SetScale(&this->actor, 0.014f);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
-    this->actionFunc = EnBigpo_SpawnPoCutscene6;
+    this->actionFunc = EnBigpo_SpawnCutsceneStage6;
 }
 
 // big poe becoming visible in the flames
-void EnBigpo_SpawnPoCutscene6(EnBigpo* this, GlobalContext* globalCtx) {
+void EnBigpo_SpawnCutsceneStage6(EnBigpo* this, GlobalContext* globalCtx) {
     s32 i;
     s32 alphaPlus; // color alpha + 10
 
@@ -411,25 +411,25 @@ void EnBigpo_SpawnPoCutscene6(EnBigpo* this, GlobalContext* globalCtx) {
     EnBigpo_LowerCutsceneSubCamera(this, globalCtx);
     if (alphaPlus >= 255) {
         this->mainColor.a = 255; // fully visible
-        EnBigpo_SpawnPoCutscene7(this);
+        EnBigpo_SpawnCutsceneStage7(this);
     } else {
         this->mainColor.a = alphaPlus;
     }
 }
 
 // big poe is now fully visible
-void EnBigpo_SpawnPoCutscene7(EnBigpo* this) {
+void EnBigpo_SpawnCutsceneStage7(EnBigpo* this) {
     this->idleTimer = 15;
     if (this->unkBool204 == false) {
         func_801A2E54(0x38);
         this->unkBool204 = true;
     }
-    this->actionFunc = EnBigpo_SpawnPoCutscene8;
+    this->actionFunc = EnBigpo_SpawnCutsceneStage8;
 }
 
 // count 15 frames, animating, then start dampe cutscene if hes here
 // also sets the main camera to align with the subCamera and switches back from the subCamera back to the main camera
-void EnBigpo_SpawnPoCutscene8(EnBigpo* this, GlobalContext* globalCtx) {
+void EnBigpo_SpawnCutsceneStage8(EnBigpo* this, GlobalContext* globalCtx) {
     Actor* dampe;
     Camera* subCam;
 
@@ -906,7 +906,7 @@ void EnBigpo_FireCounting(EnBigpo* this, GlobalContext* globalCtx) {
     }
 
     if (activatedFireCount == ARRAY_COUNT(this->fires)) { // all fires found
-        EnBigpo_SetupSpawn(this);
+        EnBigpo_SetupSpawnCutscene(this);
     }
 }
 
@@ -1016,7 +1016,7 @@ void EnBigpo_FlameCircleCutscene(EnBigpo* this, GlobalContext* globalCtx) {
         if (this->unk20C == 0) {
             parentPoh->actor.draw = EnBigpo_Draw4;
             Actor_SetScale(&parentPoh->actor, 0.01f);
-            EnBigpo_SpawnPoCutscene3(parentPoh);
+            EnBigpo_SpawnCutsceneStage3(parentPoh);
             parentPoh->fireRadius = 30.0f;
         }
     } else {
@@ -1135,7 +1135,7 @@ void EnBigpo_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->actionFunc(this, globalCtx);
-    if ((this->actionFunc != EnBigpo_SpawnPoCutscene6) && (this->actionFunc != EnBigpo_SpawnPoCutscene4)) {
+    if ((this->actionFunc != EnBigpo_SpawnCutsceneStage6) && (this->actionFunc != EnBigpo_SpawnCutsceneStage4)) {
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     }
     if (this->actionFunc == EnBigpo_LanternFalling) {
@@ -1284,7 +1284,7 @@ void EnBigpo_Draw1(Actor* thisx, GlobalContext* globalCtx) {
 
     SysMatrix_SetCurrentState(&this->drawMtxF);
     EnBigpo_DrawLantern(&this->actor, globalCtx);
-    if (this->actionFunc == EnBigpo_SpawnPoCutscene6) {
+    if (this->actionFunc == EnBigpo_SpawnCutsceneStage6) {
         // call the other unk draw func
         EnBigpo_Draw4(&this->actor, globalCtx);
     }
@@ -1393,7 +1393,7 @@ void EnBigpo_Draw4(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C2DC(globalCtx->state.gfxCtx);
     Matrix_RotateY(BINANG_ROT180(func_800DFCDC(ACTIVE_CAM)), MTXMODE_NEW);
-    if (this->actionFunc == EnBigpo_SpawnPoCutscene6) {
+    if (this->actionFunc == EnBigpo_SpawnCutsceneStage6) {
         Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
         fireRadius = 500;
     } else {
