@@ -46,7 +46,7 @@ typedef struct EnBigpo {
     /* 0x224 */ Vec3f limbPos[9];
     /* 0x290 */ Color_RGBA8 mainColor;
     /* 0x294 */ Color_RGBA8 lanternColor;
-    /* 0x298 */ u8 pad298[0x14];
+    /* 0x298 */ UNK_TYPE1 pad298[0x14];
     /* 0x2AC */ ColliderCylinder collider;
     /* 0x2F8 */ MtxF drawMtxF;
     // the three fires that merge to become big po
