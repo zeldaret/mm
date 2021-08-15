@@ -369,11 +369,9 @@ void func_80BA5DBC(EnRailgibud* this) {
     this->actionFunc = func_80BA5E18;
 }
 
-#ifdef NON_MATCHING
-// Player not saved in an s reg, and some strangeness with case 1
 void func_80BA5E18(EnRailgibud* this, GlobalContext* globalCtx) {
-    s32 pad;
-    Player* player = PLAYER;
+    Player* player2 = PLAYER;
+    Player* player = player2;
     s32 sp34;
     u16 sp32;
 
@@ -398,13 +396,11 @@ void func_80BA5E18(EnRailgibud* this, GlobalContext* globalCtx) {
                 func_800B8E58(&player->actor, sp32);
                 func_8013ECE0(this->actor.xzDistToPlayer, 240, 1, 12);
                 this->unk_3F2 = 0;
-                // if (player){};
+                label:;
             } else {
-                // if (player){};
                 this->unk_3F2++;
             }
 
-            // if (player){};
             if (func_801378B8(&this->skelAnime, 0.0f)) {
                 Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_ATTACK);
             }
@@ -432,9 +428,6 @@ void func_80BA5E18(EnRailgibud* this, GlobalContext* globalCtx) {
             break;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Railgibud/func_80BA5E18.s")
-#endif
 
 void func_80BA6054(EnRailgibud* this) {
     func_800BDC5C(&this->skelAnime, sAnimations, 7);
