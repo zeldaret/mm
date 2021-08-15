@@ -80,7 +80,7 @@ void EnHoll_SetPlayerSide(GlobalContext* globalCtx, EnHoll* this, Vec3f* rotated
 
 void EnHoll_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnHoll* this = THIS;
-    UNK_TYPE pad;
+    s32 pad;
     Vec3f rotatedPlayerPos;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
