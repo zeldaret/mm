@@ -7,11 +7,11 @@ struct EnBigpo;
 
 typedef void (*EnBigPoActionFunc)(struct EnBigpo*, GlobalContext*);
 
-typedef struct EnBigpoFireParticle {
+typedef struct EnBigpoFireEffect {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ LightNode* light;
     /* 0x10 */ LightInfo info; // size 0xE
-} EnBigpoFireParticle; // size = 0x20
+} EnBigpoFireEffect; // size = 0x20
 
 #define ENBIGPO_LIMBCOUNT 10
 
@@ -51,7 +51,7 @@ typedef struct EnBigpo {
     /* 0x2F8 */ MtxF drawMtxF;
     // the three fires that merge to become big po
     //   also the fires dampe digs up under his house
-    /* 0x338 */ EnBigpoFireParticle fires[3];
+    /* 0x338 */ EnBigpoFireEffect fires[3];
 } EnBigpo; // size = 0x398
 
 // well ver is regular, dampe basement ver is summoned

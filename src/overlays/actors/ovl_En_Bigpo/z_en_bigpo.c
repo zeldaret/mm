@@ -174,7 +174,7 @@ static Vec3f D_80B65084[] = {
 void EnBigpo_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     EnBigpo* this = (EnBigpo*)thisx;
-    EnBigpoFireParticle* firesPtr;
+    EnBigpoFireEffect* firesPtr;
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -244,7 +244,7 @@ void EnBigpo_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80B61914(EnBigpo* this) {
-    EnBigpoFireParticle* firePtr;
+    EnBigpoFireEffect* firePtr;
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(this->fires); i++) {
@@ -1408,7 +1408,7 @@ void EnBigpo_Draw4(Actor* thisx, GlobalContext* globalCtx) {
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, 255);
 
     for (i = 0; i < ARRAY_COUNT(this->fires); i++) {
-        EnBigpoFireParticle* firePtr = &this->fires[i];
+        EnBigpoFireEffect* firePtr = &this->fires[i];
         Lights_PointNoGlowSetInfo(&this->fires[i].info, this->fires[i].pos.x, this->fires[i].pos.y,
                                   this->fires[i].pos.z, 170, 255, 255, fireRadius);
         mtfxPtr->wx = firePtr->pos.x;
