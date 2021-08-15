@@ -46,7 +46,7 @@ static UNK_TYPE D_8089A590[] = { 0xD7000000,  0xFFFFFFFF, 0xFCFFFFFF, 0xFFFDF638
 static EnHoll* sThis = NULL;
 
 static EnHollActionFunc sActionFuncs[] = { EnHoll_VisibleIdle, EnHoll_VerticalIdle, EnHoll_TransparentIdle,
-                                           EnHoll_VerticalBgCoverIdle, EnHoll_VisibleIdle };
+                                           EnHoll_VerticalBgCoverIdle, EnHoll_VisibleIdle, };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
