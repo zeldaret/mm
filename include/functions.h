@@ -243,7 +243,7 @@ u32 __osCheckArena(Arena* heap);
 void* proutSprintf(void* s, const char* buf, size_t n);
 s32 vsprintf(char* dst, char* fmt, va_list args);
 s32 sprintf(char* s, char* fmt, ...);
- void PrintUtils_VPrintf(void* callback, const char* fmt, va_list args);
+void PrintUtils_VPrintf(void* callback, const char* fmt, va_list args);
 // void PrintUtils_Printf(void);
 void Sleep_Cycles(OSTime time);
 // void Sleep_Nsec(void);
@@ -384,7 +384,7 @@ s32 __osSiDeviceBusy(void);
 s32 osJamMesg(OSMesgQueue* mq, OSMesg msg, s32 flag);
 void osSetThreadPri(OSThread* t, OSPri pri);
 OSPri osGetThreadPri(OSThread* t);
-s32 osEPiRawReadIo (OSPiHandle* handle, u32 devAddr, u32* data);
+s32 osEPiRawReadIo(OSPiHandle* handle, u32 devAddr, u32* data);
 void osViSwapBuffer(void* frameBufPtr);
 void guPositionF(float mf[4][4], f32 r, f32 p, f32 h, f32 s, f32 x, f32 y, f32 z);
 void guPosition(Mtx* m, f32 r, f32 p, f32 h, f32 s, f32 x, f32 y, f32 z);
@@ -617,12 +617,12 @@ void func_800B139C(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f*
 void func_800B13D8(Vec3f* srcPos, f32 randScale, Vec3f* newPos, Vec3f* velocity, Vec3f* accel);
 void func_800B14D4(GlobalContext* globalCtx, f32 randScale, Vec3f* srcPos);
 void func_800B1598(GlobalContext* globalCtx, f32 randScale, Vec3f* srcPos);
-void EffectSsKiraKira_SpawnSmallYellow (GlobalContext * globalCtx, Vec3f * pos, Vec3f * velocity, Vec3f * accel);
+void EffectSsKiraKira_SpawnSmallYellow(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel);
 void EffectSsKiraKira_SpawnSmall(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel,
                                  Color_RGBA8* primColor, Color_RGBA8* envColor);
 void EffectSsGSpk_SpawnSmall(GlobalContext* globalCtx, Actor* actor, Vec3f* pos, Vec3f* velocity, Vec3f* accel,
                              Color_RGBA8* primColor, Color_RGBA8* envColor);
-void EffectSsKiraKira_SpawnDispersed (GlobalContext * globalCtx, Vec3f * pos, Vec3f * velocity, Vec3f * accel, Color_RGBA8 * primColor, Color_RGBA8 * envColor, s16 scale, s32 life);
+void EffectSsKiraKira_SpawnDispersed(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor, Color_RGBA8* envColor, s16 scale, s32 life);
 // void EffectSsKiraKira_SpawnFocused(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE4 param_8);
 // void EffectSsBomb2_SpawnFade(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4);
 // void EffectSsBomb2_SpawnLayered(UNK_TYPE4 param_1, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6);
@@ -1332,8 +1332,8 @@ void func_800E02AC(Camera* camera, Actor* actor);
 // void func_800E0308(void);
 // void func_800E031C(void);
 void func_800E0348(Camera* camera);
-DamageTable* DamageTable_Get(s32 index); // func_800E03A0
-void DamageTable_Clear(DamageTable* damageTable); // func_800E03CC
+DamageTable* DamageTable_Get(s32 index);
+void DamageTable_Clear(DamageTable* damageTable);
 f32 CollisionCheck_GetDamageAndEffectOnBumper(Collider* at, ColliderInfo* atInfo, Collider* ac, ColliderInfo* acInfo, u32* effect);
 f32 CollisionCheck_ApplyBumperDefense(f32 damage, ColliderInfo* ac);
 s32 CollisionCheck_GetToucherDamage(Collider* at, ColliderInfo* atInfo, Collider* ac, ColliderInfo* acInfo);
@@ -2689,7 +2689,7 @@ s16 func_8013A504(s16 val);
 s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin, f32 distanceMax, s16 angleError);
 // void func_8013A7C0(void);
 // void func_8013A860(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
-Gfx* func_8013AB00(GlobalContext *globalCtx, void** skeleton, Vec3s* limbDrawTable, s32 dListCount, void* func1, void* func2, void* func3, Actor* actor, Gfx* gfx);
+Gfx* func_8013AB00(GlobalContext* globalCtx, void** skeleton, Vec3s* limbDrawTable, s32 dListCount, void* func1, void* func2, void* func3, Actor* actor, Gfx* gfx);
 s32 func_8013AD6C(GlobalContext* globalCtx);
 // void func_8013AD9C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 void func_8013AED4(u16* param_1, u16 param_2, u16 param_3);
@@ -2714,7 +2714,7 @@ void func_8013C964(Actor* actor, GlobalContext* globalCtx, f32 arg2, f32 arg3, s
 // void func_8013D0E0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 void func_8013D2E0(Vec3f* arg0, PosRot* arg1, ActorShape* arg2, s16* arg3, s16* arg4, s16* arg5, s16* arg6);
 UNK_TYPE func_8013D5E8(s16 arg0, UNK_TYPE arg1, s16 arg2);
-Path* func_8013D648(GlobalContext *globalCtx, s16 arg1, s32 arg2);
+Path* func_8013D648(GlobalContext* globalCtx, s16 arg1, s32 arg2);
 UNK_TYPE func_8013D68C(Path* path, s16 arg1, UNK_PTR arg2);
 // void func_8013D720(void);
 UNK_TYPE func_8013D768(Actor* actor, UNK_PTR arg1, s16 arg2);
@@ -2804,16 +2804,16 @@ void func_801418B0(void* arg0);
 void func_80141900(void* arg0);
 // void func_80141924(void);
 // void func_80141C34(void);
-void VisMono_Draw(void* arg0, Gfx** gfx, u32 arg2); // VisMono_Draw
+void VisMono_Draw(void* arg0, Gfx** gfx, u32 arg2);
 // void func_8014204C(void);
 void func_801420C0(void* arg0);
 void func_801420F4(void* arg0);
 void func_80142100(void* arg0, Gfx** gfx, u32 arg2);
-s32 func_80142440(SkyboxContext* skyboxCtx, Vtx* vtx, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8); // func_80142440
-void func_80143148(SkyboxContext* skyboxCtx, s32 arg1); // func_80143148
-void func_801431E8(GameState* gamestate, SkyboxContext* skyboxCtx, s16 skyType); // func_801431E8
-void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyType); // func_80143324
-void func_801434E4(GameState* gamestate, SkyboxContext* skyboxCtx, s16 skyType); // func_801434E4
+s32 func_80142440(SkyboxContext* skyboxCtx, Vtx* vtx, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
+void func_80143148(SkyboxContext* skyboxCtx, s32 arg1);
+void func_801431E8(GameState* gamestate, SkyboxContext* skyboxCtx, s16 skyType);
+void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyType);
+void func_801434E4(GameState* gamestate, SkyboxContext* skyboxCtx, s16 skyType);
 // void func_801435A0(void);
 // void func_80143624(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE1 param_7);
 // void func_80143668(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
@@ -3054,7 +3054,7 @@ void func_80169AFC(GlobalContext* globalCtx, s16 camId, s16 arg2);
 // void func_80169C84(void);
 // void convert_scene_number_among_shared_scenes(void);
 void func_80169D40(GlobalContext* globalCtx);
-void func_80169DCC(GlobalContext* globalCtx, s32 arg1, u16 arg2, s32 arg3, s32 arg4, Vec3f *arg5, s16 arg6);
+void func_80169DCC(GlobalContext* globalCtx, s32 arg1, u16 arg2, s32 arg3, s32 arg4, Vec3f* arg5, s16 arg6);
 void func_80169E6C(GlobalContext* globalCtx, s32 param_1, s32 param_2);
 // void func_80169ECC(void);
 void func_80169EFC(GlobalContext* globalCtx);
