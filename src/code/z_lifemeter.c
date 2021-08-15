@@ -36,9 +36,9 @@ TexturePtr HeartDDTextures[] = { &D_02000900, &D_02000600, &D_02000600, &D_02000
 void LifeMeter_Init(GlobalContext* globalCtx) {
     InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
 
-    interfaceCtx->unk_250 = 0x140;
+    interfaceCtx->unk_timer = 0x140;
 
-    interfaceCtx->unk_24E = gSaveContext.health;
+    interfaceCtx->health = gSaveContext.health;
 
     interfaceCtx->lifeColorChange = 0;
     interfaceCtx->lifeColorChangeDirection = 0;
@@ -167,36 +167,35 @@ void LifeMeter_UpdateColors(GlobalContext* globalCtx) {
     sBeatingHeartsDDEnv[2] = (u8)(bFactor + 0) & 0xFF;
 }
 
-s32 func_80100A80(GlobalContext* globalCtx) {
-    gSaveContext.health = (s16)globalCtx->interfaceCtx.unk_24E;
+s32 LifeMeter_SaveInterfaceHealth(GlobalContext* globalCtx) {
+    gSaveContext.health = globalCtx->interfaceCtx.health;
     
     return 1;
 }
 
-s32 func_80100AA0(GlobalContext* globalCtx) {
+s32 LifeMeter_IncreaseInterfaceHealth(GlobalContext* globalCtx) {
     InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
 
-    interfaceCtx->unk_250 = 0x140;
-    interfaceCtx->unk_24E += 0x10;
-    if (globalCtx->interfaceCtx.unk_24E >= gSaveContext.health) {
-        globalCtx->interfaceCtx.unk_24E = gSaveContext.health;
+    interfaceCtx->unk_timer = 0x140;
+    interfaceCtx->health += 0x10;
+    if (globalCtx->interfaceCtx.health >= gSaveContext.health) {
+        globalCtx->interfaceCtx.health = gSaveContext.health;
         return 1;
     }
     return 0;
 }
 
-s32 func_80100AF0(GlobalContext* globalCtx) {
+s32 LifeMeter_DecreaseInterfaceHealth(GlobalContext* globalCtx) {
     InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
-    s32 health;
 
-    if (interfaceCtx->unk_250 != 0) {
-        interfaceCtx->unk_250--;
+    if (interfaceCtx->unk_timer != 0) {
+        interfaceCtx->unk_timer--;
     } else {
-        interfaceCtx->unk_250 = 0x140;
-        interfaceCtx->unk_24E -= 0x10;
-        if (interfaceCtx->unk_24E <= 0) {
-            interfaceCtx->unk_24E = 0;
-            globalCtx->damagePlayer(globalCtx, -((health = gSaveContext.health) + 1));
+        interfaceCtx->unk_timer = 0x140;
+        interfaceCtx->health -= 0x10;
+        if (interfaceCtx->health <= 0) {
+            interfaceCtx->health = 0;
+            globalCtx->damagePlayer(globalCtx, -(((void)0, gSaveContext.health) + 1));
             return 1;
         }
     }
@@ -417,15 +416,15 @@ u32 LifeMeter_IsCritical(void) {
     s16 criticalThreshold;
 
     if (gSaveContext.healthCapacity <= 80) { // healthCapacity <= 5 hearts?
-        criticalThreshold = 0x10;
+        criticalThreshold = 16;
 
     } else if (gSaveContext.healthCapacity <= 160) { // healthCapacity <= 10 hearts?
-        criticalThreshold = 0x18;
+        criticalThreshold = 24;
 
     } else if (gSaveContext.healthCapacity <= 240) { // healthCapacity <= 15 hearts?
-        criticalThreshold = 0x20;
+        criticalThreshold = 32;
     } else {
-        criticalThreshold = 0x2C;
+        criticalThreshold = 44;
     }
 
     if ((criticalThreshold >= gSaveContext.health) && (gSaveContext.health > 0)) {
