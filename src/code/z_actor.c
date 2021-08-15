@@ -526,8 +526,7 @@ void Actor_CalcOffsetOrientedToDrawRotation(Actor* actor, Vec3f* offset, Vec3f* 
     offset->y = point->y - actor->world.pos.y;
 }
 
-// Actor_HeightDiff
-f32 Actor_YDistance(Actor* actor1, Actor* actor2) {
+f32 Actor_HeightDiff(Actor* actor1, Actor* actor2) {
     return actor2->world.pos.y - actor1->world.pos.y;
 }
 
@@ -565,10 +564,9 @@ void func_800B72F8(DynaPolyActor* dyna, f32 a1, s16 a2) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_IsPlayerFacingActor.s")
 
 s32 Actor_IsActorFacedByActor(Actor* actor, Actor* other, s16 tolerance) {
-    s16 angle;
+    s16 angle = BINANG_ROT180(Actor_YawBetweenActors(actor, other));
     s16 dist;
 
-    angle = BINANG_ROT180(Actor_YawBetweenActors(actor, other));
     dist = angle - other->shape.rot.y;
     if (ABS_ALT(dist) < tolerance) {
         return 1;
@@ -577,9 +575,8 @@ s32 Actor_IsActorFacedByActor(Actor* actor, Actor* other, s16 tolerance) {
 }
 
 s32 Actor_IsActorFacingPlayer(Actor* actor, s16 angle) {
-    s16 dist;
+    s16 dist = actor->yawTowardsPlayer - actor->shape.rot.y;
 
-    dist = actor->yawTowardsPlayer - actor->shape.rot.y;
     if (ABS_ALT(dist) < angle) {
         return 1;
     }
@@ -587,9 +584,8 @@ s32 Actor_IsActorFacingPlayer(Actor* actor, s16 angle) {
 }
 
 s32 Actor_IsActorFacingActor(Actor* actor, Actor* other, s16 tolerance) {
-    s16 dist;
+    s16 dist = Actor_YawBetweenActors(actor, other) - actor->shape.rot.y;
 
-    dist = Actor_YawBetweenActors(actor, other) - actor->shape.rot.y;
     if (ABS_ALT(dist) < tolerance) {
         return 1;
     }
@@ -1061,7 +1057,10 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* glob
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_SpawnAsChildAndCutscene.s")
 #endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_SpawnAsChild.s")
+Actor* Actor_SpawnAsChild(ActorContext* actorCtx, Actor* parent, GlobalContext* globalCtx, s16 actorId, f32 posX, f32 posY,
+                          f32 posZ, s16 rotX, s16 rotY, s16 rotZ, s32 params) {
+    return Actor_SpawnAsChildAndCutscene(actorCtx, globalCtx, actorId, posX, posY, posZ, rotX, rotY, rotZ, params, -1, parent->unk20, parent);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_SpawnTransitionActors.s")
 

@@ -798,7 +798,7 @@ f32 Actor_DistanceToPoint(Actor* actor, Vec3f* point);
 f32 Actor_XZDistanceBetweenActors(Actor* actor1, Actor* actor2);
 f32 Actor_XZDistanceToPoint(Actor* actor, Vec3f* point);
 void Actor_CalcOffsetOrientedToDrawRotation(Actor* actor, Vec3f* offset, Vec3f* point);
-f32 Actor_YDistance(Actor* actor1, Actor* actor2);
+f32 Actor_HeightDiff(Actor* actor1, Actor* actor2);
 void func_800B6F20(GlobalContext* globalCtx, s32 param_2, f32 param_3, s16 param_4);
 float func_800B6FC8(Player* player);
 // void func_800B7090(void);
@@ -906,8 +906,8 @@ ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index);
 Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* globalCtx, s16 index, f32 x, f32 y, f32 z,
                                      s16 rotX, s16 rotY, s16 rotZ, s32 params, u32 cutscene, s32 param_12,
                                      Actor* parent);
-Actor* Actor_SpawnAsChild(ActorContext* actorCtx, Actor* parent, GlobalContext* globalCtx, s16 index, f32 x, f32 y,
-                          f32 z, s16 rotX, s16 rotY, s16 rotZ, s16 params);
+Actor* Actor_SpawnAsChild(ActorContext* actorCtx, Actor* parent, GlobalContext* globalCtx, s16 actorId, f32 posX, f32 posY,
+                          f32 posZ, s16 rotX, s16 rotY, s16 rotZ, s32 params);
 void Actor_SpawnTransitionActors(GlobalContext* globalCtx, ActorContext* actorCtx);
 void func_800BB2D0(ActorContext* actorCtx, u16* param_2, GlobalContext* globalCtx);
 Actor* func_800BB498(ActorContext* actorCtx, Actor* actor, GlobalContext* globalCtx);

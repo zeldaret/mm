@@ -733,7 +733,7 @@
     0x800B6E1C:("Actor_XZDistanceBetweenActors",),
     0x800B6E48:("Actor_XZDistanceToPoint",),
     0x800B6E6C:("Actor_CalcOffsetOrientedToDrawRotation",),
-    0x800B6F0C:("Actor_YDistance",),
+    0x800B6F0C:("Actor_HeightDiff",),
     0x800B6F20:("func_800B6F20",),
     0x800B6FC8:("func_800B6FC8",),
     0x800B7090:("func_800B7090",),
