@@ -216,10 +216,8 @@ void DmaMgr_Start(void) {
     DmaMgr_DMARomToRam((u32)_dmadataSegmentRomStart, (u32)dmadata,
                        (u32)_dmadataSegmentRomEnd - (u32)_dmadataSegmentRomStart);
 
-dummy_label_580802:;
-    // for (iter = dmadata, idx = 0; iter->vromEnd != 0; iter++, idx++) {
-    //     ;
-    // }
+dummy_label:;
+
     iter = dmadata;
     idx = 0;
     while (iter->vromEnd != 0) {
@@ -229,7 +227,7 @@ dummy_label_580802:;
 
     numDmaEntries = idx;
 
-dummy_label_179878:;
+dummy_label_2:;
 
     osCreateMesgQueue(&sDmaMgrMsgQueue, sDmaMgrMsgs, ARRAY_COUNT(sDmaMgrMsgs));
     StackCheck_Init(&sDmaMgrStackInfo, sDmaMgrStack, sDmaMgrStack + sizeof(sDmaMgrStack), 0, 0x100, "dmamgr");
