@@ -357,6 +357,7 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
                                 0, 0, (s32)temp_f4, (s32)temp_f4);
         } else {
             Mtx* mtx;
+            
             if ((ddCount < 0) || (ddCount < i)) {
                 if (curCombineModeSet != 2) {
                     curCombineModeSet = 2;
