@@ -96,6 +96,7 @@ void EnHoll_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
     if (!EN_HOLL_IS_SCENE_CHANGER(this)) {
         u32 enHollId = EN_HOLL_GET_ID_CAST(this);
+
         globalCtx->doorCtx.transitionActorList[enHollId].id = -globalCtx->doorCtx.transitionActorList[enHollId].id;
         if (this == sThis) {
             sThis = NULL;
@@ -111,13 +112,14 @@ void EnHoll_ChangeRooms(GlobalContext* globalCtx) {
 }
 
 void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx) {
-    UNK_TYPE pad;
+    s32 pad;
     Vec3f rotatedPlayerPos;
     f32 absRotatedPlayerZ;
 
     if (this->type == EN_HOLL_TYPE_DEFAULT) {
         u32 actorCtxBitmask = (globalCtx->actorCtx.unkC & 0x2AA) >> 1 | (globalCtx->actorCtx.unkC & 0x155);
         u32 zActorBitmask = D_801AED48[EN_HOLL_GET_Z_ACTOR_BITMASK_INDEX(this)];
+
         if ((actorCtxBitmask & zActorBitmask) == 0) {
             Actor_MarkForDeath(&this->actor);
             return;
@@ -141,6 +143,7 @@ void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx) {
         if ((enHollBottom < rotatedPlayerPos.y) && (rotatedPlayerPos.y < EN_HOLL_TOP_DEFAULT) &&
             (fabsf(rotatedPlayerPos.x) < enHollHalfwidth) && (absRotatedPlayerZ < sActivationPlaneDistance)) {
             u32 enHollId = EN_HOLL_GET_ID_AND(this);
+
             if (sLoadingPlaneDistance < absRotatedPlayerZ) {
                 if ((globalCtx->roomCtx.prevRoom.num >= 0) && (globalCtx->roomCtx.unk31 == 0)) {
                     this->actor.room = globalCtx->doorCtx.transitionActorList[enHollId].sides[this->playerSide].room;
@@ -164,6 +167,7 @@ void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx) {
                     }
                 } else {
                     s32 unclampedAlpha = EN_HOLL_SCALE_ALPHA(absRotatedPlayerZ);
+
                     this->alpha = CLAMP(unclampedAlpha, 0, 255);
                     if (globalCtx->roomCtx.currRoom.num != this->actor.room) {
                         EnHoll_ChangeRooms(globalCtx);
