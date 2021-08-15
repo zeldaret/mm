@@ -5,7 +5,7 @@
 
 struct EnEgblock;
 
-typedef void (*EnEgblockActionFunc)(struct EnEgblock* this, GlobalContext* globalCtx);
+typedef void (*EnEgblockActionFunc)(struct EnEgblock*, GlobalContext*);
 
 typedef struct EnEgblock {
     /* 0x0000 */ Actor actor;

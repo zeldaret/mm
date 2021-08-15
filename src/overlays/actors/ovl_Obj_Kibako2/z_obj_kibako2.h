@@ -5,7 +5,7 @@
 
 struct ObjKibako2;
 
-typedef void (*ObjKibako2ActionFunc)(struct ObjKibako2* this, GlobalContext* globalCtx);
+typedef void (*ObjKibako2ActionFunc)(struct ObjKibako2*, GlobalContext*);
 
 typedef struct ObjKibako2 {
     /* 0x0000 */ Actor actor;

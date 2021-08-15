@@ -5,7 +5,7 @@
 
 struct ObjBombiwa;
 
-typedef void (*ObjBombiwaActionFunc)(struct ObjBombiwa* this, GlobalContext* globalCtx);
+typedef void (*ObjBombiwaActionFunc)(struct ObjBombiwa*, GlobalContext*);
 
 typedef struct ObjBombiwa {
     /* 0x0000 */ Actor actor;

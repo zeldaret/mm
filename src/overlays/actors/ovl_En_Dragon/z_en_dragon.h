@@ -5,7 +5,7 @@
 
 struct EnDragon;
 
-typedef void (*EnDragonActionFunc)(struct EnDragon* this, GlobalContext* globalCtx);
+typedef void (*EnDragonActionFunc)(struct EnDragon*, GlobalContext*);
 
 typedef struct EnDragon {
     /* 0x0000 */ Actor actor;

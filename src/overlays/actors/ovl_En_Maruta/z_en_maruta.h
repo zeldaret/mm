@@ -5,7 +5,7 @@
 
 struct EnMaruta;
 
-typedef void (*EnMarutaActionFunc)(struct EnMaruta* this, GlobalContext* globalCtx);
+typedef void (*EnMarutaActionFunc)(struct EnMaruta*, GlobalContext*);
 
 typedef struct EnMaruta {
     /* 0x0000 */ Actor actor;
