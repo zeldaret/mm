@@ -520,8 +520,6 @@ beginseg
     include "build/data/code/z_kankyo.bss.o"
     include "build/src/code/z_lib.o"
     include "build/src/code/z_lifemeter.o"
-    include "build/data/code/z_lifemeter.data.o"
-    include "build/data/code/z_lifemeter.bss.o"
     include "build/src/code/z_lights.o"
     include "build/data/code/z_lights.bss.o"
     include "build/src/code/z_malloc.o"
