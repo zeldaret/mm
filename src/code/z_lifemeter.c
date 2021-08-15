@@ -227,7 +227,7 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
 
     OPEN_DISPS(gfxCtx);
 
-    if (!(gSaveContext.health % 0x10)){
+    if ((gSaveContext.health % 0x10) == 0){
         fullHeartCount--;
     }
     offsetY = 0.0f;
