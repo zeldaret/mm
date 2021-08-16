@@ -70,7 +70,7 @@ s32 ObjKibako2_ContainsSkulltula(ObjKibako2* this, GlobalContext* globalCtx) {
     if ((u16)actorSpawnParam & 3) {
         flag = ((actorSpawnParam & 0x3FC) >> 2) & 0xFF;
     }
-    return !((flag >= 0) && Actor_GetChestFlag(globalCtx, flag));
+    return !(flag >= 0 && Actor_GetChestFlag(globalCtx, flag));
 }
 
 void ObjKibako2_Break(ObjKibako2* this, GlobalContext* globalCtx) {
