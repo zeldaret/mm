@@ -367,7 +367,7 @@ void func_80152EC0(GlobalContext *globalCtx) {
     Actor* actor = (Actor*)PLAYER;
     
     if(1){}
-    if ((msgCtx->songPlayed < 0x17) && (msgCtx->songPlayed != 0xE) && ((msgCtx->unk1202C < 0x43) || (msgCtx->unk1202C >= 0x47))) {
+    if ((msgCtx->songPlayed < 0x17) && (msgCtx->songPlayed != 0xE) && ((msgCtx->ocarinaAction < 0x43) || (msgCtx->ocarinaAction >= 0x47))) {
         msgCtx->unk120B0 = 1;
         if (msgCtx->songPlayed != 0x16) {
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, D_801D02D8[msgCtx->songPlayed], actor->world.pos.x, actor->world.pos.y, actor->world.pos.z, 0,  0,  0, D_801D02F8[msgCtx->songPlayed]);
