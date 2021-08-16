@@ -110,7 +110,7 @@ void ObjKibako2_Break(ObjKibako2* this, GlobalContext* globalCtx) {
 
 void ObjKibako2_SpawnCollectible(ObjKibako2* this, GlobalContext* globalCtx) {
     s32 collectible = func_800A8150(KIBAKO2_COLLECTIBLE_ID(&this->dyna.actor));
-    
+
     if (collectible >= 0) {
         Item_DropCollectible(globalCtx, &this->dyna.actor.world.pos,
                              collectible | KIBAKO2_COLLECTIBLE_FLAG(&this->dyna.actor) << 8);
@@ -168,7 +168,7 @@ void ObjKibako2_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->dyna.actor.flags |= 0x10;
         }
     }
-    if ((contents != CONTENTS_SKULLTULA) || (!ObjKibako2_ContainsSkulltula(this, globalCtx))) {
+    if ((contents != CONTENTS_SKULLTULA) || !ObjKibako2_ContainsSkulltula(this, globalCtx)) {
         this->skulltulaNoiseTimer = -1;
     }
     this->actionFunc = ObjKibako2_Idle;
