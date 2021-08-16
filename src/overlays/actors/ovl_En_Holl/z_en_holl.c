@@ -43,7 +43,7 @@ static UNK_TYPE D_8089A550[] = { 0x465055F0, 0x00000000, 0x08000800, 0xFFFFFFFF,
 static UNK_TYPE D_8089A590[] = { 0xD7000000,  0xFFFFFFFF, 0xFCFFFFFF, 0xFFFDF638, 0x01004008,
                                  &D_8089A550, 0x06000204, 0x00000406, 0xDF000000, 0x00000000 };
 
-static EnHoll* sThis = NULL;
+static EnHoll* sInstancePlayingSound = NULL;
 
 static EnHollActionFunc sActionFuncs[] = {
     EnHoll_VisibleIdle, EnHoll_VerticalIdle, EnHoll_TransparentIdle, EnHoll_VerticalBgCoverIdle, EnHoll_VisibleIdle,
@@ -98,8 +98,8 @@ void EnHoll_Destroy(Actor* thisx, GlobalContext* globalCtx) {
         u32 enHollId = EN_HOLL_GET_ID_CAST(this);
 
         globalCtx->doorCtx.transitionActorList[enHollId].id = -globalCtx->doorCtx.transitionActorList[enHollId].id;
-        if (this == sThis) {
-            sThis = NULL;
+        if (this == sInstancePlayingSound) {
+            sInstancePlayingSound = NULL;
         }
     }
 }
@@ -124,7 +124,7 @@ void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx) {
             Actor_MarkForDeath(&this->actor);
             return;
         }
-        if (this == sThis) {
+        if (this == sInstancePlayingSound) {
             func_800B9010(&this->actor, NA_SE_EV_INVISIBLE_MONKEY - SFX_FLAG);
         }
     }
@@ -162,8 +162,8 @@ void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx) {
                 this->actor.room = globalCtx->doorCtx.transitionActorList[enHollId].sides[this->playerSide ^ 1].room;
                 if (globalCtx->roomCtx.prevRoom.num < 0) {
                     Room_StartRoomTransition(globalCtx, &globalCtx->roomCtx, this->actor.room);
-                    if (this == sThis) {
-                        sThis = NULL;
+                    if (this == sInstancePlayingSound) {
+                        sInstancePlayingSound = NULL;
                     }
                 } else {
                     s32 unclampedAlpha = EN_HOLL_SCALE_ALPHA(absRotatedPlayerZ);
@@ -175,8 +175,8 @@ void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx) {
                 }
             }
         } else if ((this->type == EN_HOLL_TYPE_DEFAULT) && (globalCtx->sceneNum == SCENE_26SARUNOMORI) &&
-                   (sThis == NULL)) {
-            sThis = this;
+                   (sInstancePlayingSound == NULL)) {
+            sInstancePlayingSound = this;
         }
     }
 }
