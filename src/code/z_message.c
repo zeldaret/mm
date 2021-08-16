@@ -5,7 +5,42 @@ void func_80147520(void) {
     D_801CFCA4[0] = D_801CFCA4[1] = D_801CFCA4[2] = D_801CFCA4[3]= D_801CFCA4[4] = D_801CFCA4[5] = D_801CFCA4[6] = D_801CFCA4[7]  = D_801CFCA4[8] = 0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80147564.s")
+extern s16 D_801F6B0C;
+extern s16 D_801F6B0E;
+extern s16 D_801F6B10;
+extern s16 D_801F6B12;
+extern s16 D_801F6B14;
+extern s16 D_801F6B16;
+extern s16 D_801F6B18;
+extern s16 D_801F6B1A;
+extern s16 D_801F6B1C;
+extern s16 D_801F6B1E;
+extern s16 D_801F6B20;
+extern s16 D_801F6B22;
+
+
+void func_80147564(GlobalContext *globalCtx) {
+    MessageContext* msgCtx = &globalCtx->msgCtx;
+    
+    msgCtx->unk1204A[0] = 0xBD;
+    msgCtx->unk1204A[1] = 0xB8;
+    msgCtx->unk1204A[2] = 0xB3;
+    msgCtx->unk1204A[3] = 0xAE;
+    msgCtx->unk1204A[4] = 0xA9;
+    func_80147520();
+    D_801F6B0C = 0x50;
+    D_801F6B10 = 0x96;
+    D_801F6B0E = 0xFF;
+    D_801F6B12 = 0xA;
+    D_801F6B16 = 0xA;
+    D_801F6B14 = 0xA;
+    D_801F6B18 = 0xFF;
+    D_801F6B1C = 0xFF;
+    D_801F6B1A = 0x32;
+    D_801F6B1E = 0xA;
+    D_801F6B22 = 0xA;
+    D_801F6B20 = 0xA;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80147624.s")
 
@@ -81,7 +116,52 @@ void func_80148CBC(GlobalContext *globalCtx, UNK_PTR puParm2, u8 arg2) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80149C18.s")
 
+#ifdef NON_EQUIVALENT
+
+void func_80149EBC(GlobalContext *globalCtx, u16 arg2) {
+    Font *font;
+    s32 temp_a1;
+    s32 temp_a1_2;
+    s32 temp_a2;
+    UnkMsgStruct** temp_v1;
+    u16 temp_v0_3;
+    u16 phi_v0;
+    s8 *phi_v1;
+
+    temp_v1 = globalCtx->msgCtx.unk12080;
+    phi_v0 = temp_v1[0]->unk0000;
+    temp_a2 = temp_v1[0]->unk0004;
+    while(phi_v0 != 0xFFFF){
+         if ((arg2 & 0xFFFF) == phi_v0) {
+            temp_a1 = temp_v1[0]->unk0004;
+            font = &globalCtx->msgCtx.font;
+            font->messageStart = temp_a1 - temp_a2;
+            font->messageEnd = temp_v1[1]->unk0004 - temp_a1;
+            return;
+        }
+        phi_v0 = temp_v1[1]->unk0000;
+        temp_v1 += 1;
+        if (phi_v0 == 0xFFFF) {
+            // Duplicate return node #4. Try simplifying control flow for better match
+            temp_v1 = globalCtx->msgCtx.unk12080;
+            temp_a1 = temp_v1[0]->unk0004;
+            font = &globalCtx->msgCtx.font;
+            font->messageStart = temp_a1 - temp_a2;
+            font->messageEnd = temp_v1[1]->unk0004 - temp_a1;
+            return;
+        }
+    }
+    
+    temp_v1 =  globalCtx->msgCtx.unk12080;
+    temp_a1 = temp_v1[0]->unk0004;
+    font = &globalCtx->msgCtx.font;
+    font->messageStart = temp_a1 - temp_a2;
+    font->messageEnd = temp_v1[1]->unk0004 - temp_a1;
+}
+
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80149EBC.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80149F74.s")
 
@@ -231,7 +311,7 @@ void Message_Init(GlobalContext *globalCtx) {
     messageCtx->unk11F04 = 0;
     messageCtx->unk12020 = 0;
     messageCtx->choiceIndex = 0;
-    messageCtx->unk1202C = messageCtx->unk11FF2 = 0;
+    messageCtx->ocarinaAction = messageCtx->unk11FF2 = 0;
     messageCtx->unk1201E = 0xFF;
     View_Init( &messageCtx->view, globalCtx->state.gfxCtx);
     messageCtx->unk11EF8 = THA_AllocEndAlign16(&globalCtx->state.heap, 0x13C00);

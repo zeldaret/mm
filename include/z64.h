@@ -834,6 +834,12 @@ typedef struct {
     /* 0x24 */ u32 flags;
 } PreRenderParams; // size = 0x28
 
+typedef struct UnkMsgStruct{
+    /* 0x0000 */ u16 unk0000;
+    /* 0x0002 */ u16 unk0002;
+    /* 0x0004 */ s32 unk0004;
+} UnkMsgStruct; // size = 0x8;
+
 typedef struct {
     /* 0x00000 */ View view;
     /* 0x00168 */ Font font;
@@ -871,7 +877,8 @@ typedef struct {
     /* 0x12044 */ s16 unk12044;
     /* 0x12046 */ s16 unk12046;
     /* 0x12048 */ u8 unk12048; // EnKakasi
-    /* 0x12049 */ UNK_TYPE1 pad12049[0xB];
+    /* 0x12049 */ UNK_TYPE1 pad12049[0x1];
+    /* 0x1204A */ s16 unk1204A[0x5];
     /* 0x12054 */ s16 unk12054; // First digit in lottery code guess
     /* 0x12056 */ s16 unk12056; // Second digit lottery code guess
     /* 0x12058 */ s16 unk12058; // Third digit lottery code guess
@@ -883,7 +890,7 @@ typedef struct {
     /* 0x12074 */ UNK_TYPE1 pad12074[0x4];
     /* 0x12078 */ s32 bankRupeesSelected;
     /* 0x1207C */ s32 bankRupees; 
-    /* 0x12080 */ UNK_TYPE1 pad12080[0x4];
+    /* 0x12080 */ UnkMsgStruct** unk12080;
     /* 0x12084 */ UNK_PTR unk12084;
     /* 0x12088 */ UNK_TYPE4 unk12088;
     /* 0x1208C */ UNK_PTR unk1208C;
