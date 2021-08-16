@@ -3091,7 +3091,7 @@ void ShrinkWindow_SetPillarboxTarget(s8 target);
 void ShrinkWindow_SetPillarboxMagnitude(u8 magnitude);
 // s32 ShrinkWindow_GetPillarboxMagnitude(void);
 // void ShrinkWindow_Init(void);
-// void ShrinkWindow_Fini(void);
+void ShrinkWindow_Fini(void);
 void ShrinkWindow_Step(s32 framerateDivisor);
 void ShrinkWindow_Draw(GlobalContext* globalCtx);
 // void func_80161180(void);
