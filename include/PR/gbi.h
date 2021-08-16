@@ -4506,6 +4506,33 @@ _DW({									\
 #define gDPNoOpCloseDisp(pkt, file, line) 	gDma1p(pkt, G_NOOP, file, line, 8)
 #define gDPNoOpTag3(pkt, type, data, n)		gDma1p(pkt, G_NOOP, data, n, type)
 
+// Hopefully I won't forget to ask somebody about this before PRing
+
+#define	gDPHalf1(pkt, arg) \
+_DW({									\
+	Gfx *_g = (Gfx *)(pkt);						\
+									\
+	_g->words.w0 = 0xE1000000;	\
+	_g->words.w1 = (unsigned int)(arg);				\
+})
+
+#define	gDPHalf2(pkt, arg) \
+_DW({									\
+	Gfx *_g = (Gfx *)(pkt);						\
+									\
+	_g->words.w0 = 0xF1000000;	\
+	_g->words.w1 = (unsigned int)(arg);				\
+})
+
+#define	gTexRect(pkt, a, b, c, d, e) \
+_DW({									\
+	Gfx *_g = (Gfx *)(pkt);						\
+									\
+	_g->words.w0 = _SHIFTL(0xE4, 24, 8) | _SHIFTL(c, 12, 12) | _SHIFTL(d, 0, 12);	\
+	_g->words.w1 = _SHIFTL(e, 24, 3) | _SHIFTL(a, 12, 12) | _SHIFTL(b, 0, 12);				\
+})
+
+
 #endif
 
 #endif
