@@ -62,11 +62,9 @@ extern CollisionHeader D_06000B70;
 extern Gfx D_06001040[];
 
 s32 ObjKibako2_ContainsSkulltula(ObjKibako2* this, GlobalContext* globalCtx) {
-    s32 actorSpawnParam;
-    s32 flag;
+    s32 actorSpawnParam = KIBAKO2_SKULLTULA_SPAWN_PARAM(&this->dyna.actor);
+    s32 flag = -1;
 
-    actorSpawnParam = KIBAKO2_SKULLTULA_SPAWN_PARAM(&this->dyna.actor);
-    flag = -1;
     if ((u16)actorSpawnParam & 3) {
         flag = ((actorSpawnParam & 0x3FC) >> 2) & 0xFF;
     }
