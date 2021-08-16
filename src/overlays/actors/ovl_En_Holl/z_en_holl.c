@@ -277,29 +277,29 @@ void EnHoll_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnHoll_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnHoll* this = THIS;
-    Gfx* gfxP;
+    Gfx* dl;
     u32 dlIndex;
 
     if (this->alpha != 0) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
         if (this->alpha == 255) {
-            gfxP = POLY_OPA_DISP;
+            dl = POLY_OPA_DISP;
             dlIndex = 37;
         } else {
-            gfxP = POLY_XLU_DISP;
+            dl = POLY_XLU_DISP;
             dlIndex = 0;
         }
-        gfxP = Gfx_CallSetupDL(gfxP, dlIndex);
+        dl = Gfx_CallSetupDL(dl, dlIndex);
         if (this->playerSide == EN_HOLL_BEHIND) {
             SysMatrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
         }
-        gSPMatrix(gfxP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gDPSetPrimColor(gfxP++, 0, 0, 0, 0, 0, this->alpha);
-        gSPDisplayList(gfxP++, D_8089A590);
+        gSPMatrix(dl++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gDPSetPrimColor(dl++, 0, 0, 0, 0, 0, this->alpha);
+        gSPDisplayList(dl++, D_8089A590);
         if (this->alpha == 255) {
-            POLY_OPA_DISP = gfxP;
+            POLY_OPA_DISP = dl;
         } else {
-            POLY_XLU_DISP = gfxP;
+            POLY_XLU_DISP = dl;
         }
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
