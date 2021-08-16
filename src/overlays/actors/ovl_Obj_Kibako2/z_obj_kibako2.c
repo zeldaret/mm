@@ -147,9 +147,8 @@ void ObjKibako2_SpawnContents(ObjKibako2* this, GlobalContext* globalCtx) {
 void ObjKibako2_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjKibako2* this = THIS;
     s32 pad;
-    ObjKibako2Contents contents;
+    ObjKibako2Contents contents = KIBAKO2_CONTENTS(&this->dyna.actor);
 
-    contents = KIBAKO2_CONTENTS(&this->dyna.actor);
     BcCheck3_BgActorInit(&this->dyna, 0);
     Collider_InitCylinder(globalCtx, &this->collider);
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
