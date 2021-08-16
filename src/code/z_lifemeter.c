@@ -169,7 +169,7 @@ void LifeMeter_UpdateColors(GlobalContext* globalCtx) {
 
 s32 LifeMeter_SaveInterfaceHealth(GlobalContext* globalCtx) {
     gSaveContext.health = globalCtx->interfaceCtx.health;
-    
+
     return 1;
 }
 
@@ -227,7 +227,7 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
 
     OPEN_DISPS(gfxCtx);
 
-    if ((gSaveContext.health % 0x10) == 0){
+    if ((gSaveContext.health % 0x10) == 0) {
         fullHeartCount--;
     }
     offsetY = 0.0f;
@@ -342,8 +342,8 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
             } else if (curCombineModeSet != 3) {
                 curCombineModeSet = 3;
                 func_8012C654(gfxCtx);
-                gDPSetCombineLERP(OVERLAY_DISP++, ENVIRONMENT, PRIMITIVE, TEXEL0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
-                                    0, ENVIRONMENT, PRIMITIVE, TEXEL0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0);
+                gDPSetCombineLERP(OVERLAY_DISP++, ENVIRONMENT, PRIMITIVE, TEXEL0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0,
+                                  ENVIRONMENT, PRIMITIVE, TEXEL0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0);
             }
             posY = 26.0f + offsetY;
             posX = 30.0f + offsetX;
@@ -353,11 +353,11 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
             halfTexSize = 8.0f;
             halfTexSize *= 0.68f;
             gSPTextureRectangle(OVERLAY_DISP++, (s32)((posX - halfTexSize) * 4), (s32)((posY - halfTexSize) * 4),
-                                (s32)((posX + halfTexSize) * 4), (s32)((posY + halfTexSize) * 4), G_TX_RENDERTILE,
-                                0, 0, (s32) temp_f4, (s32) temp_f4);
+                                (s32)((posX + halfTexSize) * 4), (s32)((posY + halfTexSize) * 4), G_TX_RENDERTILE, 0, 0,
+                                (s32)temp_f4, (s32)temp_f4);
         } else {
             Mtx* mtx;
-            
+
             if ((ddCount < 0) || (ddCount < i)) {
                 if (curCombineModeSet != 2) {
                     curCombineModeSet = 2;
@@ -401,7 +401,7 @@ void LifeMeter_UpdateSizeAndBeep(GlobalContext* globalCtx) {
             interfaceCtx->lifeSizeChangeDirection = 0;
             if (func_801233E4(globalCtx) == 0 && (globalCtx->pauseCtx.state == 0) &&
                 (globalCtx->pauseCtx.debugState == 0) && LifeMeter_IsCritical() && func_801690CC(globalCtx) == 0) {
-                //func_801233E4 and func_801690CC : Check if in Cutscene
+                // func_801233E4 and func_801690CC : Check if in Cutscene
                 play_sound(NA_SE_SY_HITPOINT_ALARM);
             }
         }

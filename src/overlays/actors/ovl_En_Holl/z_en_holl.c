@@ -139,7 +139,8 @@ void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx) {
             enHollHalfwidth = EN_HOLL_HALFWIDTH_IKANA;
         }
         if ((enHollBottom < transformedPlayerPos.y) && (transformedPlayerPos.y < EN_HOLL_TOP_DEFAULT) &&
-            (fabsf(transformedPlayerPos.x) < enHollHalfwidth) && (playerDistFromCentralPlane < sActivationPlaneDistance)) {
+            (fabsf(transformedPlayerPos.x) < enHollHalfwidth) &&
+            (playerDistFromCentralPlane < sActivationPlaneDistance)) {
             u32 enHollId = EN_HOLL_GET_ID_AND(this);
 
             if (sLoadingPlaneDistance < playerDistFromCentralPlane) {
@@ -191,8 +192,9 @@ void EnHoll_TransparentIdle(EnHoll* this, GlobalContext* globalCtx) {
     enHollTop = (globalCtx->sceneNum == SCENE_PIRATE) ? EN_HOLL_TOP_PIRATE : EN_HOLL_TOP_DEFAULT;
     if ((transformedPlayerPos.y > EN_HOLL_BOTTOM_DEFAULT) && (transformedPlayerPos.y < enHollTop) &&
         (fabsf(transformedPlayerPos.x) < EN_HOLL_HALFWIDTH_TRANSPARENT)) {
-        if (playerDistFromCentralPlane = fabsf(transformedPlayerPos.z), playerDistFromCentralPlane < EN_HOLL_ACTIVATION_PLANE_DISTANCE &&
-                                                               playerDistFromCentralPlane > EN_HOLL_LOADING_PLANE_DISTANCE) {
+        if (playerDistFromCentralPlane = fabsf(transformedPlayerPos.z),
+            playerDistFromCentralPlane < EN_HOLL_ACTIVATION_PLANE_DISTANCE &&
+                playerDistFromCentralPlane > EN_HOLL_LOADING_PLANE_DISTANCE) {
             s32 enHollId = EN_HOLL_GET_ID_CAST(this);
             s32 playerSide = (transformedPlayerPos.z < 0.0f) ? EN_HOLL_BEHIND : EN_HOLL_BEFORE;
             TransitionActorEntry* transitionActorEntry = &globalCtx->doorCtx.transitionActorList[enHollId];
