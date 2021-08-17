@@ -743,7 +743,6 @@ beginseg
     name "ovl_daytelop"
     compress
     include "build/src/overlays/gamestates/ovl_daytelop/z_daytelop.o"
-    include "build/data/ovl_daytelop/ovl_daytelop.data.o"
     include "build/data/ovl_daytelop/ovl_daytelop.reloc.o"
 endseg
 
