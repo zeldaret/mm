@@ -467,28 +467,29 @@ UNK_TYPE D_808158E0[] = {
 u8 D_80815FF0 = 0;
 
 TexturePtr D_80815FF4[] = {
-    0x09000000,
-    0x09002000,
-    0x09004000,
+    gDaytelopFirstDayLeftNESTex,
+    gDaytelopSecondDayLeftNESTex,
+    gDaytelopFinalDayLeftNESTex,
 };
 
-s32 D_80816000 = {
-    0x09006000
+TexturePtr D_80816000 = {
+    gDaytelopNewDayLeftNESTex
 };
+
 TexturePtr D_80816004[] = {
-    0x09001000,
-    0x09003000,
-    0x09005000,
+    gDaytelopFirstDayRightNESTex,
+    gDaytelopSecondDayRightNESTex,
+    gDaytelopFinalDayRightNESTex,
 };
 
-s32 D_80816010 = {
-    0x09007000
+TexturePtr D_80816010 = {
+    gDaytelopNewDayRightNESTex
 };
 
 TexturePtr D_80816014[] = {
-    0x09008000,
-    0x09008900,
-    0x09009200,
+    gDaytelop72HoursNESTex,
+    gDaytelop48HoursNESTex,
+    gDaytelop24HoursNESTex,
 };
 
 #ifdef NON_EQUIVALENT
