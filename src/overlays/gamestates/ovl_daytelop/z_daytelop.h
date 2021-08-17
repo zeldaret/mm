@@ -14,9 +14,8 @@ typedef struct {
     /* 0x0B0 */ View view;
     /* 0x218 */ UNK_TYPE1 pad218[0x28];
     /* 0x240 */ s16 transitionCountdown;
-    /* 0x242 */ s16 unk_242;
-    /* 0x244 */ s16 unk_244;
-    /* 0x246 */ UNK_TYPE1 pad246[0x2];
+    /* 0x242 */ s16 unk_242; // state?
+    /* 0x244 */ s16 alpha;
 } DaytelopContext; // size = 0x248
 
 #endif

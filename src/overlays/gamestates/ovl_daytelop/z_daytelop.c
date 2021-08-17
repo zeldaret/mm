@@ -9,6 +9,7 @@
 #include "static/icon_item_gameover_static/icon_item_gameover_static.h"
 
 
+// unused
 UNK_TYPE D_808158E0[] = {
     0x00000C00,
     0x00000000,
@@ -517,7 +518,7 @@ void Daytelop_Update(DaytelopContext* this, GameState* gameState) {
         D_801BDBC8 = 0xFE;
     } else if (this->transitionCountdown == 0x5A) {
         this->unk_242 = 1;
-        this->unk_244 = 0;
+        this->alpha = 0;
         if (1) {}
         D_80815FF0 = 0x1E;
     }
@@ -525,29 +526,29 @@ void Daytelop_Update(DaytelopContext* this, GameState* gameState) {
     if (this->unk_242 == 1) {
     aux_var = D_80815FF0;
         /*
-        temp_a1 = this->unk_244 - 0xFF;
+        temp_a1 = this->alpha - 0xFF;
         phi_a2 = temp_a1;
         if (temp_a1 < 0) {
-            phi_a2 = 0xFF - this->unk_244;
+            phi_a2 = 0xFF - this->alpha;
         }
-        this->unk_244 = this->unk_244 + (s16) (phi_a2 / D_80815FF0);
+        this->alpha = this->alpha + (s16) (phi_a2 / D_80815FF0);
         */
 
         
-        phi_a2 = ABS_ALT((this->unk_244 - 0xFF));
+        phi_a2 = ABS_ALT((this->alpha - 0xFF));
         //phi_a2 /= D_80815FF0;
-        //this->unk_244 += phi_a2;
-        //this->unk_244 += (phi_a2 / D_80815FF0--);
+        //this->alpha += phi_a2;
+        //this->alpha += (phi_a2 / D_80815FF0--);
         //aux_var = D_80815FF0;
-        //aux_var = this->unk_244 + (phi_a2 / (aux_var));
+        //aux_var = this->alpha + (phi_a2 / (aux_var));
         aux_var = phi_a2 / aux_var;
-        aux_var = this->unk_244 + aux_var;
-        this->unk_244 = (s16)aux_var;
+        aux_var = this->alpha + aux_var;
+        this->alpha = (s16)aux_var;
         
 
         /*
-        phi_a2 =  (ABS_ALT(this->unk_244 - 0xFF) / D_80815FF0);
-        this->unk_244 += phi_a2;
+        phi_a2 =  (ABS_ALT(this->alpha - 0xFF) / D_80815FF0);
+        this->alpha += phi_a2;
         */
         
         /*
@@ -555,13 +556,13 @@ void Daytelop_Update(DaytelopContext* this, GameState* gameState) {
         D_80815FF0 = temp_v0_3;
         if (temp_v0_3 == 0) {
             this->unk_242 = 2;
-            this->unk_244 = 0xFF;
+            this->alpha = 0xFF;
         }
         */
         D_80815FF0--;
         if (D_80815FF0 == 0) {
             this->unk_242 = 2;
-            this->unk_244 = 0xFF;
+            this->alpha = 0xFF;
         }
 
     }
@@ -571,7 +572,7 @@ void Daytelop_Update(DaytelopContext* this, GameState* gameState);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_daytelop/Daytelop_Update.s")
 #endif
 
-#ifdef NON_EQUIVALENT
+//#ifdef NON_EQUIVALENT
 void Daytelop_Draw(DaytelopContext* this) {
     //DaytelopContext* this = (DaytelopContext*)thisx;
     /*
@@ -633,7 +634,8 @@ void Daytelop_Draw(DaytelopContext* this) {
     GraphicsContext* temp_a0;
     */
 
-    OPEN_DISPS(this->common.gfxCtx);
+    GraphicsContext* sp1C = this->common.gfxCtx;
+    OPEN_DISPS(sp1C);
     //temp_a0 = this->common.gfxCtx;
 
     //sp1C = this->common.gfxCtx;
@@ -915,10 +917,9 @@ void Daytelop_Draw(DaytelopContext* this) {
         temp_v0_31->words.w0 = 0xF2000000;
         */
         gDPSetTileSize(POLY_OPA_DISP++, G_TX_RENDERTILE, 0, 0, 0x01FC, 0x00FC);
-        #endif 
-        TexturePtr aux = D_80816004[CURRENT_DAY-1];
+        #endif
 
-        gDPLoadTextureBlock_4b(POLY_OPA_DISP++, aux, G_IM_FMT_I, 128, 64, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock_4b(POLY_OPA_DISP++, D_80816004[CURRENT_DAY-1], G_IM_FMT_I, 128, 64, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     } else {
         #if 0
         /*
@@ -1033,9 +1034,9 @@ void Daytelop_Draw(DaytelopContext* this) {
         temp_v0_44 = temp_a0->polyOpa.p;
         temp_a0->polyOpa.p = temp_v0_44 + 8;
         temp_v0_44->words.w0 = 0xFA000000;
-        temp_v0_44->words.w1 = (this->unk_244 & 0xFF) | ~0xFF;
+        temp_v0_44->words.w1 = (this->alpha & 0xFF) | ~0xFF;
         */
-        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->unk_244);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->alpha);
 
         #if 0
         /*
@@ -1098,13 +1099,7 @@ void Daytelop_Draw(DaytelopContext* this) {
         gDPSetTileSize(POLY_OPA_DISP++, G_TX_RENDERTILE, 0, 0, 0x023C, 0x007C);
         #endif 
 
-        {
-
-        TexturePtr aux;
-        aux = D_80816014[CURRENT_DAY-1];
-
-        gDPLoadTextureBlock_4b(POLY_OPA_DISP++, aux, G_IM_FMT_I, 144, 32, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-        }
+        gDPLoadTextureBlock_4b(POLY_OPA_DISP++, D_80816014[CURRENT_DAY-1], G_IM_FMT_I, 144, 32, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
 
         #if 0
@@ -1137,13 +1132,12 @@ void Daytelop_Draw(DaytelopContext* this) {
 
     }
 
-
     CLOSE_DISPS(this->common.gfxCtx);
 }
-#else
-void Daytelop_Draw(DaytelopContext* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_daytelop/Daytelop_Draw.s")
-#endif
+//#else
+//void Daytelop_Draw(DaytelopContext* this);
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_daytelop/Daytelop_Draw.s")
+//#endif
 
 
 void Daytelop_Main(GameState* thisx) {
