@@ -1168,14 +1168,14 @@ void Daytelop_nop80815770(DaytelopContext* this) {
 }
 
 void Daytelop_LoadGraphics(DaytelopContext* this) {
-    uintptr_t segmentSize = (uintptr_t)_daytelop_staticSegmentRomEnd - (uintptr_t)_daytelop_staticSegmentRomStart;
+    size_t segmentSize = SEGMENT_ROM_SIZE(daytelop_static);
 
     this->unk_A4 = THA_AllocEndAlign16(&this->common.heap, segmentSize);
-    DmaMgr_SendRequest0(this->unk_A4, _daytelop_staticSegmentRomStart, segmentSize);
+    DmaMgr_SendRequest0(this->unk_A4, SEGMENT_ROM_START(daytelop_static), segmentSize);
 
-    segmentSize = (uintptr_t)_icon_item_gameover_staticSegmentRomEnd - (uintptr_t)_icon_item_gameover_staticSegmentRomStart;
+    segmentSize = SEGMENT_ROM_SIZE(icon_item_gameover_static);
     this->unk_A8 = THA_AllocEndAlign16(&this->common.heap, segmentSize);
-    DmaMgr_SendRequest0(this->unk_A8, _icon_item_gameover_staticSegmentRomStart, segmentSize);
+    DmaMgr_SendRequest0(this->unk_A8, SEGMENT_ROM_START(icon_item_gameover_static), segmentSize);
 }
 
 void Daytelop_Init(GameState* thisx) {
