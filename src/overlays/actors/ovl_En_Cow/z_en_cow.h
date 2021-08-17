@@ -5,7 +5,7 @@
 
 struct EnCow;
 
-typedef void (*EnCowActionFunc)(struct EnCow* this, GlobalContext* globalCtx);
+typedef void (*EnCowActionFunc)(struct EnCow*, GlobalContext*);
 
 typedef struct EnCow {
     /* 0x0000 */ Actor actor;

@@ -5,7 +5,7 @@
 
 struct EnHs;
 
-typedef void (*EnHsActionFunc)(struct EnHs* this, GlobalContext* globalCtx);
+typedef void (*EnHsActionFunc)(struct EnHs*, GlobalContext*);
 
 typedef struct EnHs {
     /* 0x0000 */ Actor actor;

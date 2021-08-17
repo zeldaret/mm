@@ -5,7 +5,7 @@
 
 struct ObjRoomtimer;
 
-typedef void (*ObjRoomtimerActionFunc)(struct ObjRoomtimer* this, GlobalContext* globalCtx);
+typedef void (*ObjRoomtimerActionFunc)(struct ObjRoomtimer*, GlobalContext*);
 
 typedef struct ObjRoomtimer {
     /* 0x0000 */ Actor actor;

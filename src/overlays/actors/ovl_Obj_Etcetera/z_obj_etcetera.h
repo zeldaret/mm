@@ -5,7 +5,7 @@
 
 struct ObjEtcetera;
 
-typedef void (*ObjEtceteraActionFunc)(struct ObjEtcetera* this, GlobalContext* globalCtx);
+typedef void (*ObjEtceteraActionFunc)(struct ObjEtcetera*, GlobalContext*);
 
 typedef struct ObjEtcetera {
     /* 0x0000 */ Actor actor;

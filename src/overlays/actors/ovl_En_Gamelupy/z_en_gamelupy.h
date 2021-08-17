@@ -5,7 +5,7 @@
 
 struct EnGamelupy;
 
-typedef void (*EnGamelupyActionFunc)(struct EnGamelupy* this, GlobalContext* globalCtx);
+typedef void (*EnGamelupyActionFunc)(struct EnGamelupy*, GlobalContext*);
 
 typedef struct EnGamelupy {
     /* 0x0000 */ Actor actor;

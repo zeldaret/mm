@@ -5,7 +5,7 @@
 
 struct EnInvisibleRuppe;
 
-typedef void (*EnInvisibleRuppeActionFunc)(struct EnInvisibleRuppe* this, GlobalContext* globalCtx);
+typedef void (*EnInvisibleRuppeActionFunc)(struct EnInvisibleRuppe*, GlobalContext*);
 
 typedef struct EnInvisibleRuppe {
     /* 0x0000 */ Actor actor;
