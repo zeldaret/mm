@@ -463,7 +463,7 @@ UNK_TYPE D_808158E0[] = {
     0x00000000,
 };
 
-TexturePtr D_80815FF0[] = {
+s32 D_80815FF0[] = {
     0x00000000,
     0x09000000,
     0x09002000,
@@ -497,15 +497,16 @@ void Daytelop_Update(DaytelopContext* this, GameState* gameState) {
             gSaveContext.unk_3F4A = 0xFFF6;
             gSaveContext.day = 1;
         }
-        this->common.running = 0;
-        this->common.nextGameStateSize = 0x19258;
+        this->common.running = false;
         this->common.nextGameStateInit = Play_Init;
+        this->common.nextGameStateSize = sizeof(GlobalContext); // 0x19258;
         gSaveContext.time = CLOCK_TIME(6, 0);
         D_801BDBC8 = 0xFE;
     } else if (this->transitionCountdown == 0x5A) {
         this->unk_242 = 1;
+        if (1) {}
         this->unk_244 = 0;
-        D_80815FF0 = 0x1E;
+        ((u8*)D_80815FF0)[0] = 0x1E;
     }
 
     if (this->unk_242 == 1) {
@@ -519,10 +520,10 @@ void Daytelop_Update(DaytelopContext* this, GameState* gameState) {
         //this->unk_244 += (((this->unk_244 - 0xFF) < 0 ? 0xFF - this->unk_244 : this->unk_244 - 0xFF) / D_80815FF0);
         //this->unk_244 += ((ABS_ALT(this->unk_244 - 0xFF)) / D_80815FF0);
         phi_a2 = ABS_ALT(this->unk_244 - 0xFF);
-        this->unk_244 += (phi_a2 / D_80815FF0);
+        this->unk_244 += (phi_a2 / ((u8*)D_80815FF0)[0]);
 
-        D_80815FF0 = (D_80815FF0 - 1) & 0xFF;
-        if (D_80815FF0 == 0) {
+        ((u8*)D_80815FF0)[0] = (((u8*)D_80815FF0)[0] - 1) /*& 0xFF*/;
+        if (((u8*)D_80815FF0)[0] == 0) {
             this->unk_242 = 2;
             this->unk_244 = 0xFF;
         }
@@ -1098,29 +1099,16 @@ void Daytelop_nop80815770(DaytelopContext* this) {
 
 }
 
-#ifdef NON_EQUIVALENT
 void Daytelop_LoadGraphics(DaytelopContext* this) {
-    u8* sp20;
-    u32 sp1C;
-    TwoHeadArena* sp18;
-    s32 temp_a0_2;
+    uintptr_t segmentSize = (uintptr_t)_daytelop_staticSegmentRomEnd - (uintptr_t)_daytelop_staticSegmentRomStart;
 
-    sp1C = _daytelop_staticSegmentRomEnd - _daytelop_staticSegmentRomStart;
-    sp18 = &this->common.heap;
-    sp20 = _daytelop_staticSegmentRomStart;
+    this->unk_A4 = THA_AllocEndAlign16(&this->common.heap, segmentSize);
+    DmaMgr_SendRequest0(this->unk_A4, _daytelop_staticSegmentRomStart, segmentSize);
 
-    this->unk_A4 = THA_AllocEndAlign16(sp18, sp1C);
-    DmaMgr_SendRequest0(this->unk_A4, (u32) sp20, sp1C);
-    sp1C = _icon_item_gameover_staticSegmentRomEnd - _icon_item_gameover_staticSegmentRomStart;
-
-    sp20 = _icon_item_gameover_staticSegmentRomStart;
-    this->unk_A8 = THA_AllocEndAlign16(sp18, sp1C);
-    DmaMgr_SendRequest0(this->unk_A8, sp20, sp1C);
+    segmentSize = (uintptr_t)_icon_item_gameover_staticSegmentRomEnd - (uintptr_t)_icon_item_gameover_staticSegmentRomStart;
+    this->unk_A8 = THA_AllocEndAlign16(&this->common.heap, segmentSize);
+    DmaMgr_SendRequest0(this->unk_A8, _icon_item_gameover_staticSegmentRomStart, segmentSize);
 }
-#else
-void Daytelop_LoadGraphics(DaytelopContext* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_daytelop/Daytelop_LoadGraphics.s")
-#endif
 
 void Daytelop_Init(GameState* thisx) {
     DaytelopContext* this = (DaytelopContext*)thisx;
@@ -1142,5 +1130,5 @@ void Daytelop_Init(GameState* thisx) {
     }
     Daytelop_nop80815770(this);
     Daytelop_LoadGraphics(this);
-    play_sound(0x5808U);
+    play_sound(0x5808);
 }

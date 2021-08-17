@@ -8,8 +8,8 @@ void Daytelop_Destroy(GameState* thisx);
 
 typedef struct {
     /* 0x000 */ GameState common;
-    /* 0x0A4 */ s32 unk_A4;
-    /* 0x0A8 */ s32 unk_A8;
+    /* 0x0A4 */ void* unk_A4;
+    /* 0x0A8 */ void* unk_A8;
     /* 0x0AC */ UNK_TYPE1 padAC[0x4];
     /* 0x0B0 */ View view;
     /* 0x218 */ UNK_TYPE1 pad218[0x28];
