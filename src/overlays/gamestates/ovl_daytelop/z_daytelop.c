@@ -5,7 +5,8 @@
  */
 
 #include "z_daytelop.h"
-
+#include "static/daytelop_static/daytelop_static.h"
+#include "static/icon_item_gameover_static/icon_item_gameover_static.h"
 
 
 UNK_TYPE D_808158E0[] = {
@@ -463,9 +464,7 @@ UNK_TYPE D_808158E0[] = {
     0x00000000,
 };
 
-s32 D_80815FF0[] = {
-    0x00000000,
-};
+u8 D_80815FF0 = 0;
 
 TexturePtr D_80815FF4[] = {
     0x09000000,
@@ -494,10 +493,14 @@ TexturePtr D_80816014[] = {
 
 #ifdef NON_EQUIVALENT
 void Daytelop_Update(DaytelopContext* this, GameState* gameState) {
-    //u8 temp_v0_3;
+    s16 temp_v0;
+    s32 temp_a1;
+    u8 temp_v0_3;
     s32 phi_a2;
+    s32 aux_var;
 
     this->transitionCountdown--;
+
     if (this->transitionCountdown == 0) {
         if (gSaveContext.day < 9) {
             gSaveContext.gameMode = 0;
@@ -506,35 +509,60 @@ void Daytelop_Update(DaytelopContext* this, GameState* gameState) {
             gSaveContext.day = 1;
         }
         this->common.running = false;
+        if (1) {}
         this->common.nextGameStateInit = Play_Init;
         this->common.nextGameStateSize = sizeof(GlobalContext); // 0x19258;
         gSaveContext.time = CLOCK_TIME(6, 0);
         D_801BDBC8 = 0xFE;
     } else if (this->transitionCountdown == 0x5A) {
         this->unk_242 = 1;
-        if (1) {}
         this->unk_244 = 0;
-        ((u8*)D_80815FF0)[0] = 0x1E;
+        if (1) {}
+        D_80815FF0 = 0x1E;
     }
 
     if (this->unk_242 == 1) {
+    aux_var = D_80815FF0;
         /*
-        phi_a2 = this->unk_244 - 0xFF;
-        if (phi_a2 < 0) {
+        temp_a1 = this->unk_244 - 0xFF;
+        phi_a2 = temp_a1;
+        if (temp_a1 < 0) {
             phi_a2 = 0xFF - this->unk_244;
         }
-        this->unk_244 += (phi_a2 / D_80815FF0);
+        this->unk_244 = this->unk_244 + (s16) (phi_a2 / D_80815FF0);
         */
-        //this->unk_244 += (((this->unk_244 - 0xFF) < 0 ? 0xFF - this->unk_244 : this->unk_244 - 0xFF) / D_80815FF0);
-        //this->unk_244 += ((ABS_ALT(this->unk_244 - 0xFF)) / D_80815FF0);
-        phi_a2 = ABS_ALT(this->unk_244 - 0xFF);
-        this->unk_244 += (phi_a2 / ((u8*)D_80815FF0)[0]);
 
-        ((u8*)D_80815FF0)[0] = (((u8*)D_80815FF0)[0] - 1) /*& 0xFF*/;
-        if (((u8*)D_80815FF0)[0] == 0) {
+        
+        phi_a2 = ABS_ALT((this->unk_244 - 0xFF));
+        //phi_a2 /= D_80815FF0;
+        //this->unk_244 += phi_a2;
+        //this->unk_244 += (phi_a2 / D_80815FF0--);
+        //aux_var = D_80815FF0;
+        //aux_var = this->unk_244 + (phi_a2 / (aux_var));
+        aux_var = phi_a2 / aux_var;
+        aux_var = this->unk_244 + aux_var;
+        this->unk_244 = (s16)aux_var;
+        
+
+        /*
+        phi_a2 =  (ABS_ALT(this->unk_244 - 0xFF) / D_80815FF0);
+        this->unk_244 += phi_a2;
+        */
+        
+        /*
+        temp_v0_3 = (D_80815FF0 - 1) & 0xFF;
+        D_80815FF0 = temp_v0_3;
+        if (temp_v0_3 == 0) {
             this->unk_242 = 2;
             this->unk_244 = 0xFF;
         }
+        */
+        D_80815FF0--;
+        if (D_80815FF0 == 0) {
+            this->unk_242 = 2;
+            this->unk_244 = 0xFF;
+        }
+
     }
 }
 #else
@@ -543,7 +571,6 @@ void Daytelop_Update(DaytelopContext* this, GameState* gameState);
 #endif
 
 #ifdef NON_EQUIVALENT
-
 void Daytelop_Draw(DaytelopContext* this) {
     //DaytelopContext* this = (DaytelopContext*)thisx;
     /*

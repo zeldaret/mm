@@ -329,7 +329,8 @@ beginseg
     name "icon_item_gameover_static"
     compress
     romalign 0x1000
-    include "build/baserom/icon_item_gameover_static.o"
+    include "build/assets/static/icon_item_gameover_static/icon_item_gameover_static.o"
+    number 12
 endseg
 
 beginseg
@@ -8956,28 +8957,32 @@ beginseg
     name "daytelop_static"
     compress
     romalign 0x1000
-    include "build/baserom/daytelop_static.o"
+    include "build/assets/static/daytelop_static/daytelop_static.o"
+    number 9
 endseg
 
 beginseg
     name "ger_daytelop_static"
     compress
     romalign 0x1000
-    include "build/baserom/ger_daytelop_static.o"
+    include "build/assets/static/ger_daytelop_static/ger_daytelop_static.o"
+    number 9
 endseg
 
 beginseg
     name "fra_daytelop_static"
     compress
     romalign 0x1000
-    include "build/baserom/fra_daytelop_static.o"
+    include "build/assets/static/fra_daytelop_static/fra_daytelop_static.o"
+    number 9
 endseg
 
 beginseg
     name "esp_daytelop_static"
     compress
     romalign 0x1000
-    include "build/baserom/esp_daytelop_static.o"
+    include "build/assets/static/esp_daytelop_static/esp_daytelop_static.o"
+    number 9
 endseg
 
 beginseg
