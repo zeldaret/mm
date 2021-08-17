@@ -465,20 +465,28 @@ UNK_TYPE D_808158E0[] = {
 
 s32 D_80815FF0[] = {
     0x00000000,
+};
+
+TexturePtr D_80815FF4[] = {
     0x09000000,
     0x09002000,
     0x09004000,
 };
 
-TexturePtr D_80816000[] = {
-    0x09006000,
+s32 D_80816000 = {
+    0x09006000
+};
+TexturePtr D_80816004[] = {
     0x09001000,
     0x09003000,
     0x09005000,
 };
 
-TexturePtr D_80816010[] = {
-    0x09007000,
+s32 D_80816010 = {
+    0x09007000
+};
+
+TexturePtr D_80816014[] = {
     0x09008000,
     0x09008900,
     0x09009200,
@@ -534,11 +542,7 @@ void Daytelop_Update(DaytelopContext* this, GameState* gameState);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_daytelop/Daytelop_Update.s")
 #endif
 
-//extern TexturePtr D_80816000[];
-//extern TexturePtr D_80816010[];
-
 #ifdef NON_EQUIVALENT
-extern UNK_TYPE D_04000400;
 
 void Daytelop_Draw(DaytelopContext* this) {
     //DaytelopContext* this = (DaytelopContext*)thisx;
@@ -637,7 +641,7 @@ void Daytelop_Draw(DaytelopContext* this) {
         temp_v0_4->words.w1 = 0;
         temp_v0_4->words.w0 = 0xF65003C0;
         */
-        gDPFillRectangle(POLY_OPA_DISP++, 0, 0, 320, 240);
+        gDPFillRectangle(POLY_OPA_DISP++, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
     //sp1C = temp_a0;
     func_8012C628(this->common.gfxCtx);
@@ -670,13 +674,14 @@ void Daytelop_Draw(DaytelopContext* this) {
     }
 
     if (gSaveContext.day < 9) {
+        #if 0
         /*
         temp_v0_8 = temp_a0->polyOpa.p;
         temp_a0->polyOpa.p = temp_v0_8 + 8;
         temp_v0_8->words.w0 = 0xFD900000;
         temp_v0_8->words.w1 = *(&D_80815FF0 + (((s32) gSaveContext.day % 5) * 4));
         */
-        gDPSetTextureImage(POLY_OPA_DISP++, G_IM_FMT_I, G_IM_SIZ_16b, 1, ((s32*)&D_80815FF0)[CURRENT_DAY]);
+        gDPSetTextureImage(POLY_OPA_DISP++, G_IM_FMT_I, G_IM_SIZ_16b, 1, D_80815FF0[CURRENT_DAY]);
 
         /*
         temp_v0_9 = temp_a0->polyOpa.p;
@@ -727,7 +732,11 @@ void Daytelop_Draw(DaytelopContext* this) {
         temp_v0_14->words.w0 = 0xF2000000;
         */
         gDPSetTileSize(POLY_OPA_DISP++, G_TX_RENDERTILE, 0, 0, 0x01FC, 0x00FC);
+        #endif
+        gDPLoadTextureBlock_4b(POLY_OPA_DISP++, D_80815FF4[CURRENT_DAY-1], G_IM_FMT_I, 128, 64, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+
     } else {
+        #if 0
         /*
         temp_v0_15 = temp_a0->polyOpa.p;
         temp_a0->polyOpa.p = temp_v0_15 + 8;
@@ -755,7 +764,7 @@ void Daytelop_Draw(DaytelopContext* this) {
         /*
         temp_v0_18 = temp_a0->polyOpa.p;
         temp_a0->polyOpa.p = temp_v0_18 + 8;
-        temp_v0_18->words.w1 = 0x77FF100;
+        temp_v0_18->words.w1 = 0x077FF100;
         temp_v0_18->words.w0 = 0xF3000000;
         */
         gDPLoadBlock(POLY_OPA_DISP++, G_TX_LOADTILE, 0, 0, 2047, 256);
@@ -783,8 +792,13 @@ void Daytelop_Draw(DaytelopContext* this) {
         temp_v0_21->words.w0 = 0xF2000000;
         */
         gDPSetTileSize(POLY_OPA_DISP++, G_TX_RENDERTILE, 0, 0, 0x01FC, 0x00FC);
+        #endif
+
+        gDPLoadTextureBlock_4b(POLY_OPA_DISP++, D_80816000, G_IM_FMT_I, 128, 64, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+
     }
 
+    #if 0
     /*
     temp_v0_22 = temp_a0->polyOpa.p;
     temp_a0->polyOpa.p = temp_v0_22 + 8;
@@ -812,9 +826,12 @@ void Daytelop_Draw(DaytelopContext* this) {
     */
     gDPHalf2(POLY_OPA_DISP++, 0x04000400);
     //gDPHalf2(POLY_OPA_DISP++, &D_04000400);
+    #endif
+    gSPTextureRectangle(POLY_OPA_DISP++, 0x0080, 0x0134, 0x0280, 0x0234, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
 
 
     if (gSaveContext.day < 9) {
+        #if 0
         /*
         temp_v0_25 = temp_a0->polyOpa.p;
         temp_a0->polyOpa.p = temp_v0_25 + 8;
@@ -826,7 +843,7 @@ void Daytelop_Draw(DaytelopContext* this) {
         /*
         temp_v0_26 = temp_a0->polyOpa.p;
         temp_a0->polyOpa.p = temp_v0_26 + 8;
-        temp_v0_26->words.w1 = 0x7000000;
+        temp_v0_26->words.w1 = 0x07000000;
         temp_v0_26->words.w0 = 0xF5900000;
         */
         gDPSetTile(POLY_OPA_DISP++, G_IM_FMT_I, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
@@ -842,7 +859,7 @@ void Daytelop_Draw(DaytelopContext* this) {
         /*
         temp_v0_28 = temp_a0->polyOpa.p;
         temp_a0->polyOpa.p = temp_v0_28 + 8;
-        temp_v0_28->words.w1 = 0x77FF100;
+        temp_v0_28->words.w1 = 0x077FF100;
         temp_v0_28->words.w0 = 0xF3000000;
         */
         gDPLoadBlock(POLY_OPA_DISP++, G_TX_LOADTILE, 0, 0, 2047, 256);
@@ -866,11 +883,16 @@ void Daytelop_Draw(DaytelopContext* this) {
         /*
         temp_v0_31 = temp_a0->polyOpa.p;
         temp_a0->polyOpa.p = temp_v0_31 + 8;
-        temp_v0_31->words.w1 = 0x1FC0FC;
+        temp_v0_31->words.w1 = 0x001FC0FC;
         temp_v0_31->words.w0 = 0xF2000000;
         */
         gDPSetTileSize(POLY_OPA_DISP++, G_TX_RENDERTILE, 0, 0, 0x01FC, 0x00FC);
+        #endif 
+        TexturePtr aux = D_80816004[CURRENT_DAY-1];
+
+        gDPLoadTextureBlock_4b(POLY_OPA_DISP++, aux, G_IM_FMT_I, 128, 64, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     } else {
+        #if 0
         /*
         temp_v0_32 = temp_a0->polyOpa.p;
         temp_a0->polyOpa.p = temp_v0_32 + 8;
@@ -883,7 +905,7 @@ void Daytelop_Draw(DaytelopContext* this) {
         /*
         temp_v0_33 = temp_a0->polyOpa.p;
         temp_a0->polyOpa.p = temp_v0_33 + 8;
-        temp_v0_33->words.w1 = 0x7000000;
+        temp_v0_33->words.w1 = 0x07000000;
         temp_v0_33->words.w0 = 0xF5900000;
         */
         gDPSetTile(POLY_OPA_DISP++, G_IM_FMT_I, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
@@ -899,7 +921,7 @@ void Daytelop_Draw(DaytelopContext* this) {
         /*
         temp_v0_35 = temp_a0->polyOpa.p;
         temp_a0->polyOpa.p = temp_v0_35 + 8;
-        temp_v0_35->words.w1 = 0x77FF100;
+        temp_v0_35->words.w1 = 0x077FF100;
         temp_v0_35->words.w0 = 0xF3000000;
         */
         gDPLoadBlock(POLY_OPA_DISP++, G_TX_LOADTILE, 0, 0, 2047, 256);
@@ -923,12 +945,17 @@ void Daytelop_Draw(DaytelopContext* this) {
         /*
         temp_v0_38 = temp_a0->polyOpa.p;
         temp_a0->polyOpa.p = temp_v0_38 + 8;
-        temp_v0_38->words.w1 = 0x1FC0FC;
+        temp_v0_38->words.w1 = 0x001FC0FC;
         temp_v0_38->words.w0 = 0xF2000000;
         */
         gDPSetTileSize(POLY_OPA_DISP++, G_TX_RENDERTILE, 0, 0, 0x01FC, 0x00FC);
+
+        #endif
+        gDPLoadTextureBlock_4b(POLY_OPA_DISP++, D_80816010, G_IM_FMT_I, 128, 64, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+
     }
 
+    #if 0
     /*
     temp_v0_39 = temp_a0->polyOpa.p;
     temp_a0->polyOpa.p = temp_v0_39 + 8;
@@ -953,8 +980,11 @@ void Daytelop_Draw(DaytelopContext* this) {
     temp_v0_41->words.w0 = 0xF1000000;
     */
     gDPHalf2(POLY_OPA_DISP++, 0x04000400);
+    #endif
+    gSPTextureRectangle(POLY_OPA_DISP++, 0x0280, 0x0134, 0x0480, 0x0234, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
 
     if (gSaveContext.day < 9) {
+
         /*
         temp_v0_42 = temp_a0->polyOpa.p;
         temp_a0->polyOpa.p = temp_v0_42 + 8;
@@ -979,6 +1009,7 @@ void Daytelop_Draw(DaytelopContext* this) {
         */
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->unk_244);
 
+        #if 0
         /*
         temp_v0_45 = temp_a0->polyOpa.p;
         temp_a0->polyOpa.p = temp_v0_45 + 8;
@@ -1037,6 +1068,16 @@ void Daytelop_Draw(DaytelopContext* this) {
         temp_v0_51->words.w0 = 0xF2000000;
         */
         gDPSetTileSize(POLY_OPA_DISP++, G_TX_RENDERTILE, 0, 0, 0x023C, 0x007C);
+        #endif 
+
+        {
+
+        TexturePtr aux;
+        aux = D_80816014[CURRENT_DAY-1];
+
+        gDPLoadTextureBlock_4b(POLY_OPA_DISP++, aux, G_IM_FMT_I, 144, 32, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        }
+
 
         #if 0
         /*
