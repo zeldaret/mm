@@ -74,8 +74,8 @@ void EnBigpo_WaitingForDampe(EnBigpo* this, GlobalContext* globalCtx);
 void EnBigpo_RevealedFireGrowing(EnBigpo* this, GlobalContext* globalCtx);
 
 // draw funcs
-void EnBigpo_PostLimbDraw2(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, struct Actor* actor,
-                           Gfx** gfx);
+void EnBigpo_PostLimbDraw(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, struct Actor* actor,
+                          Gfx** gfx);
 void EnBigpo_DrawMainBigpo(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpo_DrawScoopSoul(Actor* thisx, GlobalContext* globalCtx);
 void EnBigpo_DrawLantern(Actor* thisx, GlobalContext* globalCtx);
@@ -108,8 +108,22 @@ const ActorInit En_Bigpo_InitVars = {
 };
 
 static ColliderCylinderInit sCylinderInit = {
-    { COLTYPE_HIT3, AT_NONE | AT_TYPE_ENEMY, AC_NONE | AC_TYPE_PLAYER, OC1_NONE | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
+    {
+        COLTYPE_HIT3,
+        AT_NONE | AT_TYPE_ENEMY,
+        AC_NONE | AC_TYPE_PLAYER,
+        OC1_NONE | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0xF7CFFFFF, 0x00, 0x10 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NORMAL,
+        BUMP_ON | BUMP_HOOKABLE,
+        OCELEM_ON,
+    },
     { 35, 100, 10, { 0, 0, 0 } },
 };
 
@@ -256,7 +270,7 @@ void func_80B61914(EnBigpo* this) {
 
 void EnBigpo_UpdateSpin(EnBigpo* this) {
     s16 oldYaw = this->actor.shape.rot.y;
-    
+
     this->actor.shape.rot.y += this->rotVelocity;
     if ((oldYaw < 0) && (this->actor.shape.rot.y > 0)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_ROLL); // spinning sfx during spin attack
@@ -266,7 +280,7 @@ void EnBigpo_UpdateSpin(EnBigpo* this) {
 // Lowers the position/eye of the camera during the Big Poe spawn cutscene
 void EnBigpo_LowerCutsceneSubCamera(EnBigpo* this, GlobalContext* globalContext) {
     Camera* subCam;
-    
+
     if (this->cutsceneSubCamId != SUBCAM_FREE) {
         subCam = Play_GetCamera(globalContext, this->cutsceneSubCamId);
         subCam->eye.y -= this->actor.velocity.y;
@@ -386,7 +400,7 @@ void EnBigpo_SpawnCutsceneStage4(EnBigpo* this, GlobalContext* globalCtx) {
 }
 
 /*
- * stage 5: fires have touched, they start to rise, 
+ * stage 5: fires have touched, they start to rise,
  *          big poe starts to visibly appear
  */
 void EnBigpo_SpawnCutsceneStage5(EnBigpo* this) {
@@ -762,7 +776,7 @@ void EnBigpo_AdjustPoAlpha(EnBigpo* this, s32 alphaDiff) {
     f32 lowerAlpha;
     f32 newXYScale;
 
-    this->mainColor.a = (newAlpha < 0) ? 0 : ((newAlpha > 255) ? 255: newAlpha);
+    this->mainColor.a = (newAlpha < 0) ? 0 : ((newAlpha > 255) ? 255 : newAlpha);
 
     lowerAlpha = this->mainColor.a * (1.0f / 255.0f);
     if (alphaDiff < 0) {
@@ -861,7 +875,7 @@ void EnBigpo_SelectRandomFireLocations(EnBigpo* this, GlobalContext* globalCtx) 
         }
     }
 
-    // if not enough fires exist, just starting fighting immediately 
+    // if not enough fires exist, just starting fighting immediately
     if (fireCount < ARRAY_COUNT(this->fires)) {
         this->actor.draw = EnBigpo_DrawMainBigpo;
         Actor_SetScale(&this->actor, 0.014f);
@@ -922,7 +936,7 @@ void EnBigpo_ChangeToFireCounting(EnBigpo* this) {
 }
 
 /*
- * count fires already found by dampe,
+ * count fires already found by Dampe,
  * once enough: spawn big poe for fight
  */
 void EnBigpo_FireCounting(EnBigpo* this, GlobalContext* globalCtx) {
@@ -1103,7 +1117,7 @@ void EnBigpo_UpdateColor(EnBigpo* this) {
 
 void EnBigpo_FlickerLanternLight(EnBigpo* this) {
     f32 rand = Rand_ZeroOne();
-    
+
     this->lanternColor.r = ((s32)(rand * 30.0f)) + 225;
     this->lanternColor.g = ((s32)(rand * 100.0f)) + 155;
     this->lanternColor.b = ((s32)(rand * 160.0f)) + 95;
@@ -1134,7 +1148,7 @@ s32 EnBigpo_ApplyDamage(EnBigpo* this, GlobalContext* globalCtx) {
             this->unk21C = 4.0f;
             this->unk220 = 1.0f;
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
-                        this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0, 
+                        this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
                         CLEAR_TAG_LARGE_LIGHT_RAYS);
         }
         EnBigpo_HitStun(this);
@@ -1207,6 +1221,7 @@ void EnBigpo_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->unk220 = CLAMP_MAX(this->unk220, 1.0f);
     }
 }
+
 /*
  * alt update func: the revealed fires under dampe's house
  */
@@ -1216,8 +1231,8 @@ void EnBigpo_UpdateFire(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 }
 
-s32 EnBigpo_OverrideLimbDraw2(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                              struct Actor* actor, Gfx** gfx) {
+s32 EnBigpo_OverrideLimbDraw(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                             struct Actor* actor, Gfx** gfx) {
     EnBigpo* this = (EnBigpo*)actor;
     // not fully invisible
     if (!(this->mainColor.a != 0 && limbIndex != 7) ||
@@ -1227,8 +1242,7 @@ s32 EnBigpo_OverrideLimbDraw2(struct GlobalContext* globalCtx, s32 limbIndex, Gf
     return 0;
 }
 
-void EnBigpo_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor,
-                           Gfx** gfx) {
+void EnBigpo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor, Gfx** gfx) {
     EnBigpo* this = (EnBigpo*)actor;
     s8 limbByte;
     Vec3f* v1ptr; // todo: figure out better names
@@ -1297,7 +1311,7 @@ void EnBigpo_DrawMainBigpo(Actor* thisx, GlobalContext* globalCtx) {
                    Gfx_EnvColor(globalCtx->state.gfxCtx, this->mainColor.r, this->mainColor.g, this->mainColor.b,
                                 this->mainColor.a));
         POLY_OPA_DISP = SkelAnime_Draw2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
-                                        EnBigpo_OverrideLimbDraw2, EnBigpo_PostLimbDraw2, &this->actor, &dispHead[3]);
+                                        EnBigpo_OverrideLimbDraw, EnBigpo_PostLimbDraw, &this->actor, &dispHead[3]);
 
     } else {
         dispHead = POLY_XLU_DISP;
@@ -1307,7 +1321,7 @@ void EnBigpo_DrawMainBigpo(Actor* thisx, GlobalContext* globalCtx) {
                    Gfx_EnvColor(globalCtx->state.gfxCtx, this->mainColor.r, this->mainColor.g, this->mainColor.b,
                                 this->mainColor.a));
         POLY_XLU_DISP = SkelAnime_Draw2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
-                                        EnBigpo_OverrideLimbDraw2, EnBigpo_PostLimbDraw2, &this->actor, &dispHead[3]);
+                                        EnBigpo_OverrideLimbDraw, EnBigpo_PostLimbDraw, &this->actor, &dispHead[3]);
     }
 
     // 71.428566f might be 500/7 context unknown
@@ -1353,7 +1367,7 @@ void EnBigpo_DrawScoopSoul(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 /*
- * this matches without OPENDISPS but with it has stack issues, 
+ * this matches without OPENDISPS but with it has stack issues,
  *  might be able to find an alternative match with the macros, so far no success
  */
 void EnBigpo_DrawLantern(Actor* thisx, GlobalContext* globalCtx) {
