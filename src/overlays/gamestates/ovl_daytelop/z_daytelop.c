@@ -491,16 +491,13 @@ TexturePtr D_80816014[] = {
     gDaytelop24HoursNESTex,
 };
 
-#ifdef NON_EQUIVALENT
+#ifdef NON_MATCHING
+// minor regalloc and swapped instruction
 void Daytelop_Update(DaytelopContext* this, GameState* gameState) {
-    s16 temp_v0;
-    s32 temp_a1;
-    u8 temp_v0_3;
-    s32 phi_a2;
-    s32 aux_var;
+    s16 new_var;
+    u8 temp_v0_2;
 
     this->transitionCountdown--;
-
     if (this->transitionCountdown == 0) {
         if (gSaveContext.day < 9) {
             gSaveContext.gameMode = 0;
@@ -508,61 +505,31 @@ void Daytelop_Update(DaytelopContext* this, GameState* gameState) {
             gSaveContext.unk_3F4A = 0xFFF6;
             gSaveContext.day = 1;
         }
-        this->common.running = false;
-        if (1) {}
-        this->common.nextGameStateInit = Play_Init;
-        this->common.nextGameStateSize = sizeof(GlobalContext); // 0x19258;
+        this->common.running = false; this->common.nextGameStateInit = Play_Init; this->common.nextGameStateSize = sizeof(GlobalContext);  // 0x19258;
         gSaveContext.time = CLOCK_TIME(6, 0);
         D_801BDBC8 = 0xFE;
-    } else if (this->transitionCountdown == 0x5A) {
-        this->unk_242 = 1;
-        this->alpha = 0;
-        if (1) {}
-        D_80815FF0 = 0x1E;
+    } else  {
+        if (this->transitionCountdown == 90) {
+            this->unk_242 = 1;
+            this->alpha = 0;
+            D_80815FF0 = 30;
+        }
+        if (1) { }
     }
 
-    if (this->unk_242 == 1) {
-    aux_var = D_80815FF0;
-        /*
-        temp_a1 = this->alpha - 0xFF;
-        phi_a2 = temp_a1;
-        if (temp_a1 < 0) {
-            phi_a2 = 0xFF - this->alpha;
-        }
-        this->alpha = this->alpha + (s16) (phi_a2 / D_80815FF0);
-        */
+    temp_v0_2 = D_80815FF0;
+    new_var = this->unk_242;
+    if (new_var == 1) {
+        s16 abs_temp = (s16) (ABS_ALT(this->alpha - 0xFF)  / temp_v0_2);
 
-        
-        phi_a2 = ABS_ALT((this->alpha - 0xFF));
-        //phi_a2 /= D_80815FF0;
-        //this->alpha += phi_a2;
-        //this->alpha += (phi_a2 / D_80815FF0--);
-        //aux_var = D_80815FF0;
-        //aux_var = this->alpha + (phi_a2 / (aux_var));
-        aux_var = phi_a2 / aux_var;
-        aux_var = this->alpha + aux_var;
-        this->alpha = (s16)aux_var;
-        
+        this->alpha += abs_temp;
+        temp_v0_2--;
+        D_80815FF0 = temp_v0_2;
 
-        /*
-        phi_a2 =  (ABS_ALT(this->alpha - 0xFF) / D_80815FF0);
-        this->alpha += phi_a2;
-        */
-        
-        /*
-        temp_v0_3 = (D_80815FF0 - 1) & 0xFF;
-        D_80815FF0 = temp_v0_3;
-        if (temp_v0_3 == 0) {
+        if (temp_v0_2 == 0) {
             this->unk_242 = 2;
-            this->alpha = 0xFF;
+            this->alpha = 255;
         }
-        */
-        D_80815FF0--;
-        if (D_80815FF0 == 0) {
-            this->unk_242 = 2;
-            this->alpha = 0xFF;
-        }
-
     }
 }
 #else
@@ -662,7 +629,7 @@ void Daytelop_Init(GameState* thisx) {
     View_Init(&this->view, thisx->gfxCtx);
     thisx->main = Daytelop_Main;
     thisx->destroy = Daytelop_Destroy;
-    this->transitionCountdown = 0x8C;
+    this->transitionCountdown = 140;
     this->unk_242 = 0;
 
     if (gSaveContext.day < 9) {

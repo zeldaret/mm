@@ -3214,7 +3214,7 @@ s32 FrameAdvance_IsEnabled(GlobalContext* globalCtx);
 // void func_8016A178(void);
 // void func_8016A268(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5,
 // UNK_TYPE1 param_6);
-void Play_Init(GlobalContext* globalCtx);
+void Play_Init(GameState* gameState);
 // void func_8016AC10(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
 // UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10); void
 // func_8016AE1C(void); void func_8016B278(void); void func_8016B4B0(void); void func_8016C344(void); void
