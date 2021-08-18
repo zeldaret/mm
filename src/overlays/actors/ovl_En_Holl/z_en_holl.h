@@ -42,13 +42,23 @@ typedef struct EnHoll {
 #define EN_HOLL_HALFWIDTH_TRANSPARENT 200.0f
 #define EN_HOLL_TOP_DEFAULT 200.0f
 #define EN_HOLL_TOP_PIRATE 280.0f 
+
+//! Transparent Halls: Being inside this plane enables the execution of more code within the actionFunc.
 #define EN_HOLL_ACTIVATION_PLANE_DISTANCE 100.0f
+
+//! Transparent Halls: Crossing this plane will change rooms/scenes.
 #define EN_HOLL_LOADING_PLANE_DISTANCE 50.0f
+
 
 // Vertical
 #define EN_HOLL_RADIUS 120.0f
+
+//! Holes: Being inside this plane enables the execution of more code within the actionFunc.
 #define EN_HOLL_ACTIVATION_PLANE_DISTANCE_VERTICAL 200.0f
+
+//! Holes: Crossing this plane will change rooms/scenes.
 #define EN_HOLL_LOADING_PLANE_DISTANCE_VERTICAL 50.0f
+
 
 #define EN_HOLL_GET_ID_AND(this) ((this->actor.params & 0xFFFF) >> 10)
 #define EN_HOLL_GET_ID_CAST(this) ((u16) this->actor.params >> 10)

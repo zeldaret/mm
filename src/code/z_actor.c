@@ -457,10 +457,11 @@ f32 Actor_XZDistanceToPoint(Actor* actor, Vec3f* point) {
     return Math_Vec3f_DistXZ(&actor->world.pos, point);
 }
 
-/* `offset` = function output
- * = horizontal rotation of `point` around `actor` by `actor->shape.rot.y` (facing angle)
- *   vertical translation of `point` by `actor->world.pos.y` (altitude)
- * = affine (linear) transformation from world coordinates to actor coordinates
+/** Performs the affine (linear) transformation from world coordinates to actor coordinates
+ *
+ * @param[in]  actor  The actor whose coordinate system to transform to.
+ * @param[out] offset The transformed coordinates.
+ * @param[in]  point  The point to transform to actor coordinates.
  */
 void Actor_CalcOffsetOrientedToDrawRotation(Actor* actor, Vec3f* offset, Vec3f* point) {
     f32 cos_rot_y;

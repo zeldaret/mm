@@ -1,7 +1,41 @@
-/*
+/** @file
  * File: z_en_holl.c
  * Overlay: ovl_En_Holl
- * Description: Room/Scene Loading Hallways
+ * Description: Loading Halls/Holes
+ *
+ * This actor has several different types, which can be thought of as a bitfield of size 3:
+ * bit 0 = Orientation: Horizontal (Hall) or Vertical (Hole)
+ * bit 1 = Alpha: Transparent (alpha=0) or Visible (alpha=[0,255])
+ * bit 2 = Space to Load: Room or Scene
+ * Note: The meaning of bit 1 is slightly different for Halls than Holes.
+ *       For Halls, bit 1 being set indicates the actor shall not draw.
+ *       For Holes, bit 1 being set indicates the bgCover shall be applied.
+ *
+ * This would suggest there are 8 types of En_Holl, but in fact, there are only 5. This is because the only "Scene
+ * changer" is horizontal and visible, but it would be fairly simple to mod in the other 3 types.
+ *
+ * Halls take the shape of a rectangular box, and Holes take the shape of a circular cylinder.
+ *
+ * Each En_Holl has a number of distinct planes inside, which, when intersected with the En_Holl itself, take the shape
+ * of either a rectangle or a circle, respectively. Being within this rectangle or circle is necessary to achieve the
+ * effect of the plane.
+ *
+ * Every En_Holl has pairs of at least the first two planes below. Only Visible Room-Changing Halls get pairs of the
+ * last two planes. All planes are ordered from greatest to smallest distance from the central plane, which determines
+ * the side the player is on.
+ *
+ * @sa sActivationPlaneDistance, EN_HOLL_ACTIVATION_PLANE_DISTANCE, and EN_HOLL_ACTIVATION_PLANE_DISTANCE_VERTICAL
+ * @sa sLoadingPlaneDistance, EN_HOLL_LOADING_PLANE_DISTANCE, and EN_HOLL_LOADING_PLANE_DISTANCE_VERTICAL
+ * @sa sTranslucencyPlaneDistance
+ * @sa sTransparencyPlaneDistance
+ *
+ * Since, all these planes except the central plane are duplicated on either side of the actor, this means that there
+ * are a total of 5 (or 9 for Type 0) planes that crossing will produce an effect. The most noticeable effect is the
+ * room/scene loading, which has historically led to this actor being erroneously referred to as a "loading plane".
+ * However, the loading plane(s) are only one of many planes in the actor, which is why "loading hall/hole" is a more
+ * accurate name for En_Holl. A given instance can be called either a "loading hall" if it is horizontal, or a "loading
+ * hole" if it is vertical. It is worth noting that "Holl" is a portmanteau of "hall" and "hole", though whether that
+ * was the origin of the actor name or not is unknown.
  */
 
 #include "z_en_holl.h"
@@ -55,9 +89,16 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 400, ICHAIN_STOP),
 };
 
+//! Visible Halls: Being inside this plane enables the execution of more code within the actionFunc.
 static f32 sActivationPlaneDistance = 200.0f;
+
+//! Visible Halls: Crossing this plane will change rooms/scenes.
 static f32 sLoadingPlaneDistance = 150.0f;
+
+//! Visible Room Halls: Being inside this plane indicates the draw function will render using POLY_XLU.
 static f32 sTranslucencyPlaneDistance = 100.0f;
+
+//! Visible Room Halls: Being inside this plane indicates the draw function won't render.
 static f32 sTransparencyPlaneDistance = 50.0f;
 
 void EnHoll_SetupAction(EnHoll* this) {
