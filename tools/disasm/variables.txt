@@ -321,7 +321,7 @@
     0x8009C480:("gFaultStruct","FaultThreadStruct","",0x848),
     0x8009CCD0:("sFaultDrawerStruct","FaultDrawer","",0x3c),
     0x8009CD10:("D_8009CD10","UNK_TYPE4","",0x4),
-    0x8009CD20:("startHeap","Arena","",0x24),
+    0x8009CD20:("gSystemArena","Arena","",0x24),
     0x8009CD50:("sRandFloat","f32","",0x4),
     0x8009CD60:("sArenaLockMsg","OSMesg","[1]",0x4),
     0x8009CD70:("tmp_task","OSTask","",0x40),
