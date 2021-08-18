@@ -154,7 +154,7 @@ void EnHoll_VisibleIdle(EnHoll* this, GlobalContext* globalCtx) {
         u32 actorCtxBitmask = (globalCtx->actorCtx.unkC & 0x2AA) >> 1 | (globalCtx->actorCtx.unkC & 0x155);
         u32 zActorBitmask = D_801AED48[EN_HOLL_GET_Z_ACTOR_BITMASK_INDEX(this)];
 
-        if ((actorCtxBitmask & zActorBitmask) == 0) {
+        if (!(actorCtxBitmask & zActorBitmask)) {
             Actor_MarkForDeath(&this->actor);
             return;
         }
