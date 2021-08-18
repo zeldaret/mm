@@ -70,12 +70,7 @@ const ActorInit En_Holl_InitVars = {
     (ActorFunc)EnHoll_Draw,
 };
 
-static UNK_TYPE D_8089A550[] = { 0x465055F0, 0x00000000, 0x08000800, 0xFFFFFFFF, 0xB9B055F0, 0x00000000,
-                                 0x00000800, 0xFFFFFFFF, 0xB9B0AA10, 0x00000000, 0x00000000, 0xFFFFFFFF,
-                                 0x4650AA10, 0x00000000, 0x08000000, 0xFFFFFFFF };
-
-static UNK_TYPE D_8089A590[] = { 0xD7000000,  0xFFFFFFFF, 0xFCFFFFFF, 0xFFFDF638, 0x01004008,
-                                 &D_8089A550, 0x06000204, 0x00000406, 0xDF000000, 0x00000000 };
+#include "overlays/ovl_En_Holl/ovl_En_Holl.c"
 
 static EnHoll* sInstancePlayingSound = NULL;
 
