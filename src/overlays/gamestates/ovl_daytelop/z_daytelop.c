@@ -250,5 +250,5 @@ void Daytelop_Init(GameState* thisx) {
 
     Daytelop_nop80815770(this);
     Daytelop_LoadGraphics(this);
-    play_sound(0x5808);
+    play_sound(NA_SE_OC_TELOP_IMPACT);
 }
