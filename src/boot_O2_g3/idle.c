@@ -51,7 +51,7 @@ void Idle_InitCodeAndMemory(void) {
     oldSize = sDmaMgrDmaBuffSize;
     sDmaMgrDmaBuffSize = 0;
 
-    DmaMgr_SendRequestImpl(&dmaReq, (u32)_codeSegmentStart, SEGMENT_ROM_START(code),
+    DmaMgr_SendRequestImpl(&dmaReq, SEGMENT_START(code), SEGMENT_ROM_START(code),
                            SEGMENT_ROM_SIZE(code), 0, &queue, 0);
     Idle_InitScreen();
     Idle_InitMemory();
@@ -59,7 +59,7 @@ void Idle_InitCodeAndMemory(void) {
 
     sDmaMgrDmaBuffSize = oldSize;
 
-    Idle_ClearMemory(_codeSegmentBssStart, _codeSegmentBssEnd);
+    Idle_ClearMemory(SEGMENT_BSS_START(code), SEGMENT_BSS_END(code));
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/boot/idle/Idle_InitCodeAndMemory.s")
