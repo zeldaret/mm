@@ -14,7 +14,8 @@ void Font_LoadCharNES(GlobalContext* globalCtx, u8 codePointIndex, s32 offset) {
 }
 
 void Font_LoadMessageBoxEndIcon(Font* font, u16 icon) {
-    DmaMgr_SendRequest0(&font->iconBuf, &((u8*)SEGMENT_ROM_START(message_static))[5 * 0x1000 + icon * FONT_CHAR_TEX_SIZE],
+    DmaMgr_SendRequest0(&font->iconBuf,
+                        &((u8*)SEGMENT_ROM_START(message_static))[5 * 0x1000 + icon * FONT_CHAR_TEX_SIZE],
                         FONT_CHAR_TEX_SIZE);
 }
 
