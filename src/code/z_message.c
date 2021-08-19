@@ -227,7 +227,7 @@ void func_80151BB4(GlobalContext* globalCtx, u8 uParm2) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
     u8 temp = uParm2;
 
-    if (CHECK_QUEST_ITEM(18)) { 
+    if (CHECK_QUEST_ITEM(18)) { // CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)
         if (((gSaveContext.weekEventReg[D_801C6B28[uParm2] >> 8]) & (u8)D_801C6B28[uParm2]) == 0) {
             msgCtx->pad120B2[msgCtx->unk120B1] = temp;
             msgCtx->unk120B1++;
@@ -274,7 +274,34 @@ void func_80152C64(View *view) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80152CAC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80152EC0.s")
+s16 D_801D02D8[15] = {
+    ACTOR_OCEFF_WIPE5, ACTOR_OCEFF_WIPE5, // Sonata of Awakening Effect, Sonata of Awakening Effect
+    ACTOR_OCEFF_WIPE5, ACTOR_OCEFF_WIPE5, // Sonata of Awakening Effect, Sonata of Awakening Effect
+    ACTOR_OCEFF_WIPE5, ACTOR_OCEFF_WIPE5, // Sonata of Awakening Effect, Sonata of Awakening Effect
+    ACTOR_OCEFF_WIPE,  ACTOR_OCEFF_WIPE7, // Song of Time Effect, Song of Healing Effect
+    ACTOR_OCEFF_WIPE2, ACTOR_OCEFF_WIPE6, // Epona's Song Effect, Song of Soaring Effect
+    ACTOR_OCEFF_STORM, ACTOR_OCEFF_SPOT,  // Song of Storms Effect II [?], Sun's Song Effect
+    ACTOR_OCEFF_WIPE, ACTOR_OCEFF_WIPE,   // Song of Time Effect, Song of Time Effect
+    ACTOR_OCEFF_WIPE4                     // Scarecrow's Song Effect 
+};
+extern s32 D_801D02F8[15] = { 0,1,2,3,4,0,1,0,0,0,0,0,1,1,0 };
+
+//Spawn song effect?
+void func_80152EC0(GlobalContext *globalCtx) {
+    MessageContext* msgCtx = &globalCtx->msgCtx;
+    Actor* actor = PLAYER;
+    
+    if(1){}
+    if ((msgCtx->songPlayed < 0x17) && (msgCtx->songPlayed != 0xE) && ((msgCtx->unk1202C < 0x43) || (msgCtx->unk1202C >= 0x47))) {
+        msgCtx->unk120B0 = 1;
+        if (msgCtx->songPlayed != 0x16) {
+            Actor_Spawn(&globalCtx->actorCtx, globalCtx, D_801D02D8[msgCtx->songPlayed], actor->world.pos.x, actor->world.pos.y, actor->world.pos.z, 0,  0,  0, D_801D02F8[msgCtx->songPlayed]);
+            return;
+        }
+        Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0xF6, actor->world.pos.x, actor->world.pos.y, actor->world.pos.z, 0, 0,  0,  0);
+    }
+}
+
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80152FB8.s")
 

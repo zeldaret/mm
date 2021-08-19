@@ -866,7 +866,8 @@ typedef struct {
     /* 0x12022 */ u8 unk12022;
     /* 0x12023 */ u8 unk12023;
     /* 0x12024 */ s16 unk12024;
-    /* 0x12026 */ UNK_TYPE1 unk12026[0x4];
+    /* 0x12026 */ u16 unk12026;
+    /* 0x12028 */ u16 songPlayed;
     /* 0x1202A */ u16 ocarinaMode;
     /* 0x1202C */ u16 ocarinaAction;
     /* 0x1202E */ u16 unk1202E;
