@@ -7,9 +7,18 @@ u32 gViConfigFeatures = 0x42;
 f32 gViConfigXScale = 1.0f;
 f32 gViConfigYScale = 1.0f;
 
+IrqMgr gIrqMgr;
+u8 sIrqMgrStack[0x500];
+StackEntry sIrqMgrStackInfo;
+OSThread gMainThread;
+u8 sMainStack[0x900];
+StackEntry sMainStackInfo;
+OSMesg sPiMgrCmdBuff[50];
+OSMesgQueue gPiMgrCmdQ;
+
 void Idle_ClearMemory(void* begin, void* end) {
     if (begin < end) {
-        bzero(begin, (s32)(int)end - (int)begin);
+        bzero(begin, (u32)end - (u32)begin);
     }
 }
 
@@ -23,23 +32,21 @@ void Idle_InitFramebuffer(u32* ptr, u32 numBytes, u32 value) {
 }
 
 void Idle_InitScreen(void) {
-    Idle_InitFramebuffer((u32*)&gFramebuffer1, 0x25800, 0x00010001);
+    Idle_InitFramebuffer((u32*)gFramebuffer1, 0x25800, 0x00010001);
     ViConfig_UpdateVi(0);
-    osViSwapBuffer(&gFramebuffer1);
+    osViSwapBuffer(gFramebuffer1);
     osViBlack(0);
 }
 
 void Idle_InitMemory(void) {
     u32 pad;
-    void* memEnd = (void*)(0x80000000 + osMemSize);
+    void* memEnd = OS_PHYSICAL_TO_K0(osMemSize);
 
-    Idle_ClearMemory((void*)0x80000400, &gFramebuffer1);
-    Idle_ClearMemory(&D_80025D00, (int*)&bootproc);
-    Idle_ClearMemory(&gGfxSPTaskYieldBuffer, memEnd);
+    Idle_ClearMemory(0x80000400, gFramebuffer1);
+    Idle_ClearMemory(D_80025D00, bootproc);
+    Idle_ClearMemory(gGfxSPTaskYieldBuffer, memEnd);
 }
 
-#ifdef NON_MATCHING
-// regalloc around DmaMgr_SendRequestImpl
 void Idle_InitCodeAndMemory(void) {
     DmaRequest dmaReq;
     OSMesgQueue queue;
@@ -60,9 +67,6 @@ void Idle_InitCodeAndMemory(void) {
 
     Idle_ClearMemory(SEGMENT_BSS_START(code), SEGMENT_BSS_END(code));
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/boot/idle/Idle_InitCodeAndMemory.s")
-#endif
 
 void Main_ThreadEntry(void* arg) {
     StackCheck_Init(&sIrqMgrStackInfo, sIrqMgrStack, sIrqMgrStack + sizeof(sIrqMgrStack), 0, 256, "irqmgr");
@@ -108,7 +112,4 @@ void Idle_ThreadEntry(void* arg) {
     osStartThread(&gMainThread);
     osSetThreadPri(NULL, 0);
 
-    for (;;) {
-        ;
-    }
-}
+    do { } while (true); }
