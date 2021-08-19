@@ -331,7 +331,7 @@ void EnHoll_Draw(Actor* thisx, GlobalContext* globalCtx) {
         }
         gSPMatrix(dl++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(dl++, 0, 0, 0, 0, 0, this->alpha);
-        gSPDisplayList(dl++, D_8089A590);
+        gSPDisplayList(dl++, gEnHollCentralRectangleDL);
         if (this->alpha == 255) {
             POLY_OPA_DISP = dl;
         } else {
