@@ -220,7 +220,28 @@ void Message_StartTextbox(GlobalContext* globalCtx, u16 textId, Actor* Actor) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80151A68.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80151BB4.s")
+
+extern u16 D_801C6B28[];
+
+void func_80151BB4(GlobalContext* globalCtx, u8 uParm2) {
+    MessageContext* msgCtx = &globalCtx->msgCtx;
+    u8 temp = uParm2;
+
+    if (CHECK_QUEST_ITEM(18)) { 
+        if (((gSaveContext.weekEventReg[D_801C6B28[uParm2] >> 8]) & (u8)D_801C6B28[uParm2]) == 0) {
+            msgCtx->pad120B2[msgCtx->unk120B1] = temp;
+            msgCtx->unk120B1++;
+        }
+    }
+    else if (uParm2 >= 20) {
+        //temp = uParm2;
+        if (((gSaveContext.weekEventReg[D_801C6B28[uParm2] >> 8]) & (u8)D_801C6B28[uParm2]) == 0) {
+            msgCtx->pad120B2[msgCtx->unk120B1] = temp;
+            msgCtx->unk120B1++;
+        }
+    }
+}
+
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80151C9C.s")
 

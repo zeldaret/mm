@@ -905,7 +905,7 @@ typedef struct {
     /* 0x120A4 */ UNK_TYPE1 unk120A4[0xC];
     /* 0x120B0 */ u8 unk120B0;
     /* 0x120B1 */ u8 unk120B1;
-    /* 0x120B2 */ UNK_TYPE1 pad120B2[0xC];
+    /* 0x120B2 */ u8 pad120B2[0xC];
     /* 0x120BE */ s16 unk120BE;
     /* 0x120C0 */ s16 unk120C0;
     /* 0x120C2 */ s16 unk120C2;

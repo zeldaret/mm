@@ -2657,7 +2657,7 @@ void func_80150D08(GlobalContext* globalCtx, u32 uParm2);
 void Message_StartTextbox(GlobalContext* globalCtx, u16 textId, Actor* Actor);
 void func_80151938(GlobalContext* globalCtx, u16 textId);
 void func_80151A68(GlobalContext* globalCtx, u16 textId);
-void func_80151BB4(GlobalContext* globalCtx, u32 uParm2);
+void func_80151BB4(GlobalContext* globalCtx, u8 uParm2);
 // void func_80151C9C(void);
 void func_80151DA4(GlobalContext* globalCtx, u16 arg2);
 void func_80152434(GlobalContext* globalCtx, u16 arg2);
