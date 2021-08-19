@@ -467,7 +467,7 @@ UNK_TYPE D_808158E0[] = {
 
 u8 D_80815FF0 = 0;
 
-TexturePtr D_80815FF4[] = {
+TexturePtr sDayLeftTextures[] = {
     gDaytelopFirstDayLeftNESTex,
     gDaytelopSecondDayLeftNESTex,
     gDaytelopFinalDayLeftNESTex,
@@ -476,7 +476,7 @@ TexturePtr D_80815FF4[] = {
     gDaytelopNewDayLeftNESTex,
 };
 
-TexturePtr D_80816004[] = {
+TexturePtr sDayRightTextures[] = {
     gDaytelopFirstDayRightNESTex,
     gDaytelopSecondDayRightNESTex,
     gDaytelopFinalDayRightNESTex,
@@ -485,7 +485,7 @@ TexturePtr D_80816004[] = {
     gDaytelopNewDayRightNESTex,
 };
 
-TexturePtr D_80816014[] = {
+TexturePtr sHoursLeftTextures[] = {
     gDaytelop72HoursNESTex,
     gDaytelop48HoursNESTex,
     gDaytelop24HoursNESTex,
@@ -505,7 +505,10 @@ void Daytelop_Update(DaytelopContext* this, GameState* gameState) {
             gSaveContext.unk_3F4A = 0xFFF6;
             gSaveContext.day = 1;
         }
-        this->common.running = false; this->common.nextGameStateInit = Play_Init; this->common.nextGameStateSize = sizeof(GlobalContext);  // 0x19258;
+
+        // clang-format off
+        this->common.running = false; this->common.nextGameStateInit = Play_Init; this->common.nextGameStateSize = sizeof(GlobalContext);
+        // clang-format on
         gSaveContext.time = CLOCK_TIME(6, 0);
         D_801BDBC8 = 0xFE;
     } else  {
@@ -560,17 +563,17 @@ void Daytelop_Draw(DaytelopContext* this) {
     }
 
     if (gSaveContext.day < 9) {
-        gDPLoadTextureBlock_4b(POLY_OPA_DISP++, D_80815FF4[CURRENT_DAY-1], G_IM_FMT_I, 128, 64, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock_4b(POLY_OPA_DISP++, sDayLeftTextures[CURRENT_DAY-1], G_IM_FMT_I, 128, 64, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     } else {
-        gDPLoadTextureBlock_4b(POLY_OPA_DISP++, D_80815FF4[ARRAY_COUNT(D_80815FF4) - 1], G_IM_FMT_I, 128, 64, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock_4b(POLY_OPA_DISP++, sDayLeftTextures[ARRAY_COUNT(sDayLeftTextures) - 1], G_IM_FMT_I, 128, 64, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     }
 
     gSPTextureRectangle(POLY_OPA_DISP++, 0x0080, 0x0134, 0x0280, 0x0234, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
 
     if (gSaveContext.day < 9) {
-        gDPLoadTextureBlock_4b(POLY_OPA_DISP++, D_80816004[CURRENT_DAY-1], G_IM_FMT_I, 128, 64, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock_4b(POLY_OPA_DISP++, sDayRightTextures[CURRENT_DAY-1], G_IM_FMT_I, 128, 64, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     } else {
-        gDPLoadTextureBlock_4b(POLY_OPA_DISP++, D_80816004[ARRAY_COUNT(D_80816004) - 1], G_IM_FMT_I, 128, 64, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock_4b(POLY_OPA_DISP++, sDayRightTextures[ARRAY_COUNT(sDayRightTextures) - 1], G_IM_FMT_I, 128, 64, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     }
 
     gSPTextureRectangle(POLY_OPA_DISP++, 0x0280, 0x0134, 0x0480, 0x0234, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
@@ -579,7 +582,7 @@ void Daytelop_Draw(DaytelopContext* this) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetRenderMode(POLY_OPA_DISP++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->alpha);
-        gDPLoadTextureBlock_4b(POLY_OPA_DISP++, D_80816014[CURRENT_DAY-1], G_IM_FMT_I, 144, 32, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock_4b(POLY_OPA_DISP++, sHoursLeftTextures[CURRENT_DAY-1], G_IM_FMT_I, 144, 32, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
         gSPTextureRectangle(POLY_OPA_DISP++, 0x0160, 0x0240, 0x03A0, 0x02C0, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
     }
 
@@ -593,8 +596,8 @@ void Daytelop_Main(GameState* thisx) {
     func_8012CF0C(this->common.gfxCtx, 1, 1, 0, 0, 0);
 
     OPEN_DISPS(this->common.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x09, this->unk_A4);
-    gSPSegment(POLY_OPA_DISP++, 0x0C, this->unk_A8);
+    gSPSegment(POLY_OPA_DISP++, 0x09, this->daytelopStaticFile);
+    gSPSegment(POLY_OPA_DISP++, 0x0C, this->gameoverStaticFile);
     CLOSE_DISPS(this->common.gfxCtx);
 
     Daytelop_Draw(this);
@@ -612,12 +615,12 @@ void Daytelop_nop80815770(DaytelopContext* this) {
 void Daytelop_LoadGraphics(DaytelopContext* this) {
     size_t segmentSize = SEGMENT_ROM_SIZE(daytelop_static);
 
-    this->unk_A4 = THA_AllocEndAlign16(&this->common.heap, segmentSize);
-    DmaMgr_SendRequest0(this->unk_A4, SEGMENT_ROM_START(daytelop_static), segmentSize);
+    this->daytelopStaticFile = THA_AllocEndAlign16(&this->common.heap, segmentSize);
+    DmaMgr_SendRequest0(this->daytelopStaticFile, SEGMENT_ROM_START(daytelop_static), segmentSize);
 
     segmentSize = SEGMENT_ROM_SIZE(icon_item_gameover_static);
-    this->unk_A8 = THA_AllocEndAlign16(&this->common.heap, segmentSize);
-    DmaMgr_SendRequest0(this->unk_A8, SEGMENT_ROM_START(icon_item_gameover_static), segmentSize);
+    this->gameoverStaticFile = THA_AllocEndAlign16(&this->common.heap, segmentSize);
+    DmaMgr_SendRequest0(this->gameoverStaticFile, SEGMENT_ROM_START(icon_item_gameover_static), segmentSize);
 }
 
 void Daytelop_Init(GameState* thisx) {
@@ -638,6 +641,7 @@ void Daytelop_Init(GameState* thisx) {
         }
         Sram_IncrementDay();
     }
+
     Daytelop_nop80815770(this);
     Daytelop_LoadGraphics(this);
     play_sound(0x5808);

@@ -744,7 +744,11 @@ beginseg
     name "ovl_daytelop"
     compress
     include "build/src/overlays/gamestates/ovl_daytelop/z_daytelop.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_daytelop/ovl_daytelop_reloc.o"
+#else
     include "build/data/ovl_daytelop/ovl_daytelop.reloc.o"
+#endif
 endseg
 
 beginseg
@@ -1768,11 +1772,7 @@ beginseg
     name "ovl_En_Weather_Tag"
     compress
     include "build/src/overlays/actors/ovl_En_Weather_Tag/z_en_weather_tag.o"
-#ifdef NON_MATCHING
-    // TODO
-#else
     include "build/src/overlays/actors/ovl_En_Weather_Tag/ovl_En_Weather_Tag_reloc.o"
-#endif
 endseg
 
 beginseg
