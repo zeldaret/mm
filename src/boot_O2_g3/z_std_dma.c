@@ -208,7 +208,7 @@ void DmaMgr_Start() {
     DmaEntry* iter;
     u32 idx;
 
-    DmaMgr_DMARomToRam((u32)_dmadataSegmentRomStart, dmadata, (u32)(_dmadataSegmentRomEnd - _dmadataSegmentRomStart));
+    DmaMgr_DMARomToRam(SEGMENT_ROM_START(dmadata), dmadata, SEGMENT_ROM_SIZE(dmadata));
 
     for (iter = dmadata, idx = 0; iter->vromEnd != 0; iter++, idx++) {
         ;

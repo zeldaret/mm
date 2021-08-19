@@ -3,7 +3,7 @@
 
 #define ACTOR_OVERLAY(name, allocType)                                                                  \
     {                                                                                                   \
-        (u32) _ovl_##name##SegmentRomStart, (u32)_ovl_##name##SegmentRomEnd, _ovl_##name##SegmentStart, \
+        SEGMENT_ROM_START(ovl_##name), SEGMENT_ROM_END(ovl_##name), _ovl_##name##SegmentStart, \
             _ovl_##name##SegmentEnd, NULL, &name##_InitVars, NULL, allocType, 0                         \
     }
 

@@ -16,10 +16,6 @@
 #define VIRTUAL_TO_PHYSICAL(addr) (uintptr_t)((u8*)(addr)-0x80000000)
 #define SEGMENTED_TO_VIRTUAL(addr) (void*)(PHYSICAL_TO_VIRTUAL(gSegments[SEGMENT_NUMBER(addr)]) + SEGMENT_OFFSET(addr))
 
-#define SEGMENT_ROM_START(segment) ((void*) _ ## segment ## SegmentRomStart)
-#define SEGMENT_ROM_END(segment) ((void*) _ ## segment ## SegmentRomEnd)
-#define SEGMENT_ROM_SIZE(segment) ((uintptr_t) SEGMENT_ROM_END(segment) - (uintptr_t)SEGMENT_ROM_START(segment))
-
 // Currently most often called ctxt in MM, TODO: Refactor names when its used
 #define ACTIVE_CAM globalCtx->cameraPtrs[globalCtx->activeCamera]
 #define MAIN_CAM 0

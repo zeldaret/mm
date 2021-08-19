@@ -51,8 +51,8 @@ void Idle_InitCodeAndMemory(void) {
     oldSize = sDmaMgrDmaBuffSize;
     sDmaMgrDmaBuffSize = 0;
 
-    DmaMgr_SendRequestImpl(&dmaReq, (u32)_codeSegmentStart, (u32)_codeSegmentRomStart,
-                           (u32)_codeSegmentRomEnd - (u32)_codeSegmentRomStart, 0, &queue, 0);
+    DmaMgr_SendRequestImpl(&dmaReq, (u32)_codeSegmentStart, SEGMENT_ROM_START(code),
+                           SEGMENT_ROM_SIZE(code), 0, &queue, 0);
     Idle_InitScreen();
     Idle_InitMemory();
     osRecvMesg(&queue, NULL, 1);

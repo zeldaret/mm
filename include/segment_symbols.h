@@ -19,6 +19,10 @@
     DECLARE_SEGMENT(ovl_##name)       \
     DECLARE_ROM_SEGMENT(ovl_##name)
 
+#define SEGMENT_ROM_START(segment) ((uintptr_t) _ ## segment ## SegmentRomStart)
+#define SEGMENT_ROM_END(segment) ((uintptr_t) _ ## segment ## SegmentRomEnd)
+#define SEGMENT_ROM_SIZE(segment) (uintptr_t)(SEGMENT_ROM_END(segment) - SEGMENT_ROM_START(segment))
+
 DECLARE_SEGMENT(boot)
 DECLARE_ROM_SEGMENT(boot)
 

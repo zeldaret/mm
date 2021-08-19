@@ -9,12 +9,12 @@ void Font_LoadCharNES(GlobalContext* globalCtx, u8 codePointIndex, s32 offset) {
     Font* font = &msgCtx->font;
 
     DmaMgr_SendRequest0(&font->charBuf[font->unk_11D88][offset],
-                        &_nes_font_staticSegmentRomStart[(codePointIndex - ' ') * FONT_CHAR_TEX_SIZE],
+                        &((u8*)SEGMENT_ROM_START(nes_font_static))[(codePointIndex - ' ') * FONT_CHAR_TEX_SIZE],
                         FONT_CHAR_TEX_SIZE);
 }
 
 void Font_LoadMessageBoxEndIcon(Font* font, u16 icon) {
-    DmaMgr_SendRequest0(&font->iconBuf, &_message_staticSegmentRomStart[5 * 0x1000 + icon * FONT_CHAR_TEX_SIZE],
+    DmaMgr_SendRequest0(&font->iconBuf, &((u8*)SEGMENT_ROM_START(message_static))[5 * 0x1000 + icon * FONT_CHAR_TEX_SIZE],
                         FONT_CHAR_TEX_SIZE);
 }
 
@@ -36,7 +36,7 @@ void Font_LoadOrderedFont(Font* font) {
             loadOffset = 0;
         }
         // UB to convert pointer to u32
-        DmaMgr_SendRequest0(writeLocation, (u32)_nes_font_staticSegmentRomStart + loadOffset, FONT_CHAR_TEX_SIZE);
+        DmaMgr_SendRequest0(writeLocation, SEGMENT_ROM_START(nes_font_static) + loadOffset, FONT_CHAR_TEX_SIZE);
         if (sFontOrdering[codePointIndex] == 0x8C) {
             break;
         }
