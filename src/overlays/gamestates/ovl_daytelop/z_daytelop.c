@@ -1,7 +1,7 @@
 /*
  * File: z_daytelop.c
  * Overlay: ovl_daytelop
- * Description:
+ * Description: "Dawn of ... day" screen
  */
 
 #include "z_daytelop.h"
