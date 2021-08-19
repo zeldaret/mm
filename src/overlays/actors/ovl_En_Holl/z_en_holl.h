@@ -69,8 +69,8 @@ typedef struct EnHoll {
 #define EN_HOLL_IS_VISIBLE(this) ((this->type == EN_HOLL_TYPE_DEFAULT) || (this->type == EN_HOLL_TYPE_SCENE_CHANGER))
 #define EN_HOLL_IS_SCENE_CHANGER(this) (this->type == EN_HOLL_TYPE_SCENE_CHANGER)
 
-#define EN_HOLL_SCALE_ALPHA(absRotatedPlayerZ) ((absRotatedPlayerZ - sTransparencyPlaneDistance) * (255 / (sTranslucencyPlaneDistance - sTransparencyPlaneDistance)))
-#define EN_HOLL_SCALE_BG_COVER_ALPHA(absYDistToPlayer) ((EN_HOLL_ACTIVATION_PLANE_DISTANCE_VERTICAL - absYDistToPlayer) * (255 / (EN_HOLL_ACTIVATION_PLANE_DISTANCE_VERTICAL - EN_HOLL_LOADING_PLANE_DISTANCE_VERTICAL)))
+#define EN_HOLL_SCALE_ALPHA(playerDistFromCentralPlane) ((playerDistFromCentralPlane - sTransparencyPlaneDistance) * (255 / (sTranslucencyPlaneDistance - sTransparencyPlaneDistance)))
+#define EN_HOLL_SCALE_BG_COVER_ALPHA(playerDistFromCentralPlane) ((EN_HOLL_ACTIVATION_PLANE_DISTANCE_VERTICAL - playerDistFromCentralPlane) * (255 / (EN_HOLL_ACTIVATION_PLANE_DISTANCE_VERTICAL - EN_HOLL_LOADING_PLANE_DISTANCE_VERTICAL)))
 
 extern const ActorInit En_Holl_InitVars;
 
