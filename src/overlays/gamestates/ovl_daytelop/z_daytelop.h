@@ -14,8 +14,14 @@ typedef struct {
     /* 0x0B0 */ View view;
     /* 0x218 */ UNK_TYPE1 pad218[0x28];
     /* 0x240 */ s16 transitionCountdown;
-    /* 0x242 */ s16 unk_242; // state?
+    /* 0x242 */ s16 fadeInState;
     /* 0x244 */ s16 alpha;
 } DaytelopContext; // size = 0x248
+
+typedef enum {
+    /* 0 */ DAYTELOP_HOURSTEXT_OFF,
+    /* 1 */ DAYTELOP_HOURSTEXT_FADEIN,
+    /* 2 */ DAYTELOP_HOURSTEXT_ON
+} Daytelop_FadeState;
 
 #endif

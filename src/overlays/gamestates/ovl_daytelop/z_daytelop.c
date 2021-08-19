@@ -111,7 +111,7 @@ void Daytelop_Update(DaytelopContext* this, GameState* gameState) {
         D_801BDBC8 = 0xFE;
     } else {
         if (this->transitionCountdown == 90) {
-            this->unk_242 = 1;
+            this->fadeInState = DAYTELOP_HOURSTEXT_FADEIN;
             this->alpha = 0;
             D_80815FF0 = 30;
         }
@@ -119,8 +119,8 @@ void Daytelop_Update(DaytelopContext* this, GameState* gameState) {
     }
 
     temp_v0_2 = D_80815FF0;
-    new_var = this->unk_242;
-    if (new_var == 1) {
+    new_var = this->fadeInState;
+    if (new_var == DAYTELOP_HOURSTEXT_FADEIN) {
         s16 abs_temp = (s16)(ABS_ALT(this->alpha - 0xFF) / temp_v0_2);
 
         this->alpha += abs_temp;
@@ -128,7 +128,7 @@ void Daytelop_Update(DaytelopContext* this, GameState* gameState) {
         D_80815FF0 = temp_v0_2;
 
         if (temp_v0_2 == 0) {
-            this->unk_242 = 2;
+            this->fadeInState = DAYTELOP_HOURSTEXT_ON;
             this->alpha = 255;
         }
     }
@@ -239,7 +239,7 @@ void Daytelop_Init(GameState* thisx) {
     thisx->main = Daytelop_Main;
     thisx->destroy = Daytelop_Destroy;
     this->transitionCountdown = 140;
-    this->unk_242 = 0;
+    this->fadeInState = DAYTELOP_HOURSTEXT_OFF;
 
     if (gSaveContext.day < 9) {
         if (gSaveContext.day == 0) {
