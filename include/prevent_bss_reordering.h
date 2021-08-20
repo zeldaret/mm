@@ -80,4 +80,4 @@ struct Dummy61 { int x; };
 struct Dummy62 { int x; };
 typedef int Dummy63;
 
-#endif // PREVENT_BSS_REORDERING_H
+#endif
