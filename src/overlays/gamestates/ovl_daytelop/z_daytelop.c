@@ -126,7 +126,6 @@ TexturePtr sHoursLeftTextures[] = {
     gDaytelop24HoursNESTex,
 };
 
-
 void Daytelop_Draw(DaytelopContext* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
 
@@ -160,7 +159,8 @@ void Daytelop_Draw(DaytelopContext* this) {
                                64, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                G_TX_NOLOD, G_TX_NOLOD);
     }
-    gSPTextureRectangle(POLY_OPA_DISP++, 32 << 2, 77 << 2, (32 + 128) << 2, (77 + 64) << 2, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
+    gSPTextureRectangle(POLY_OPA_DISP++, 32 << 2, 77 << 2, (32 + 128) << 2, (77 + 64) << 2, G_TX_RENDERTILE, 0, 0,
+                        0x0400, 0x0400);
 
     // Draw the right side of the "Dawn of" texture
     if (gSaveContext.day < 9) {
@@ -172,7 +172,8 @@ void Daytelop_Draw(DaytelopContext* this) {
                                64, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                G_TX_NOLOD, G_TX_NOLOD);
     }
-    gSPTextureRectangle(POLY_OPA_DISP++, 160 << 2, 77 << 2, (160 + 128) << 2, (77 + 64) << 2, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
+    gSPTextureRectangle(POLY_OPA_DISP++, 160 << 2, 77 << 2, (160 + 128) << 2, (77 + 64) << 2, G_TX_RENDERTILE, 0, 0,
+                        0x0400, 0x0400);
 
     // Draw the "Hours left" texture
     if (gSaveContext.day < 9) {
@@ -182,7 +183,8 @@ void Daytelop_Draw(DaytelopContext* this) {
         gDPLoadTextureBlock_4b(POLY_OPA_DISP++, sHoursLeftTextures[CURRENT_DAY - 1], G_IM_FMT_I, 144, 32, 0,
                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                G_TX_NOLOD, G_TX_NOLOD);
-        gSPTextureRectangle(POLY_OPA_DISP++, 88 << 2, 144 << 2, (88 + 144) << 2, (144 + 32) << 2, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
+        gSPTextureRectangle(POLY_OPA_DISP++, 88 << 2, 144 << 2, (88 + 144) << 2, (144 + 32) << 2, G_TX_RENDERTILE, 0, 0,
+                            0x0400, 0x0400);
     }
 
     CLOSE_DISPS(this->state.gfxCtx);
