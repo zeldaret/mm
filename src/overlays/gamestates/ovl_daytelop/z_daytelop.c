@@ -100,12 +100,13 @@ void Daytelop_Update(DaytelopContext* this, GameState* gameState) {
         if (gSaveContext.day < 9) {
             gSaveContext.gameMode = 0;
         } else {
-            gSaveContext.unk_3F4A = 0xFFF6;
+            gSaveContext.nextCutsceneIndex = 0xFFF6;
             gSaveContext.day = 1;
         }
 
         // clang-format off
-        this->common.running = false; this->common.nextGameStateInit = Play_Init; this->common.nextGameStateSize = sizeof(GlobalContext);
+        this->state.running = false; 
+        SET_NEXT_GAMESTATE(&this->state, Play_Init, GlobalContext);
         // clang-format on
         gSaveContext.time = CLOCK_TIME(6, 0);
         D_801BDBC8 = 0xFE;
@@ -139,10 +140,10 @@ void Daytelop_Update(DaytelopContext* this, GameState* gameState);
 #endif
 
 void Daytelop_Draw(DaytelopContext* this) {
-    GraphicsContext* gfxCtx = this->common.gfxCtx;
+    GraphicsContext* gfxCtx = this->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
-    func_8012C628(this->common.gfxCtx);
+    func_8012C628(this->state.gfxCtx);
 
     if (gSaveContext.day >= 9) {
         // Draw a white screen
@@ -152,7 +153,7 @@ void Daytelop_Draw(DaytelopContext* this) {
         gDPFillRectangle(POLY_OPA_DISP++, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
 
-    func_8012C628(this->common.gfxCtx);
+    func_8012C628(this->state.gfxCtx);
 
     gDPSetRenderMode(POLY_OPA_DISP++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
@@ -196,21 +197,21 @@ void Daytelop_Draw(DaytelopContext* this) {
         gSPTextureRectangle(POLY_OPA_DISP++, 88 << 2, 144 << 2, (88 + 144) << 2, (144 + 32) << 2, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
     }
 
-    CLOSE_DISPS(this->common.gfxCtx);
+    CLOSE_DISPS(this->state.gfxCtx);
 }
 
 void Daytelop_Main(GameState* thisx) {
     DaytelopContext* this = (DaytelopContext*)thisx;
 
-    func_8012CF0C(this->common.gfxCtx, 1, 1, 0, 0, 0);
+    func_8012CF0C(this->state.gfxCtx, 1, 1, 0, 0, 0);
 
-    OPEN_DISPS(this->common.gfxCtx);
+    OPEN_DISPS(this->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x09, this->daytelopStaticFile);
     gSPSegment(POLY_OPA_DISP++, 0x0C, this->gameoverStaticFile);
-    CLOSE_DISPS(this->common.gfxCtx);
+    CLOSE_DISPS(this->state.gfxCtx);
 
     Daytelop_Draw(this);
-    Daytelop_Update(this, &this->common);
+    Daytelop_Update(this, &this->state);
 }
 
 void Daytelop_Destroy(GameState* thisx) {
@@ -223,11 +224,11 @@ void Daytelop_nop80815770(DaytelopContext* this) {
 void Daytelop_LoadGraphics(DaytelopContext* this) {
     size_t segmentSize = SEGMENT_ROM_SIZE(daytelop_static);
 
-    this->daytelopStaticFile = THA_AllocEndAlign16(&this->common.heap, segmentSize);
+    this->daytelopStaticFile = THA_AllocEndAlign16(&this->state.heap, segmentSize);
     DmaMgr_SendRequest0(this->daytelopStaticFile, SEGMENT_ROM_START(daytelop_static), segmentSize);
 
     segmentSize = SEGMENT_ROM_SIZE(icon_item_gameover_static);
-    this->gameoverStaticFile = THA_AllocEndAlign16(&this->common.heap, segmentSize);
+    this->gameoverStaticFile = THA_AllocEndAlign16(&this->state.heap, segmentSize);
     DmaMgr_SendRequest0(this->gameoverStaticFile, SEGMENT_ROM_START(icon_item_gameover_static), segmentSize);
 }
 
