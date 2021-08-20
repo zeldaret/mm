@@ -280,7 +280,7 @@ void Actor_SetCollectibleFlag(GlobalContext* globalCtx, s32 index) {
     }
 }
 
-void Actor_TitleCardContextInit(GlobalContext* globalCtx, TitleCardContext* titleCardCtx) {
+void TitleCard_ContextInit(GlobalContext* globalCtx, TitleCardContext* titleCardCtx) {
     titleCardCtx->fadeOutDelay = 0;
     titleCardCtx->fadeInDelay = 0;
     titleCardCtx->color = 0;
@@ -288,7 +288,7 @@ void Actor_TitleCardContextInit(GlobalContext* globalCtx, TitleCardContext* titl
 }
 
 // TitleCard_InitBossName
-void Actor_TitleCardCreate(GlobalContext* globalCtx, TitleCardContext* titleCardCtx, u32 texture, s16 param_4,
+void TitleCard_InitBossName(GlobalContext* globalCtx, TitleCardContext* titleCardCtx, u32 texture, s16 param_4,
                            s16 param_5, u8 param_6, u8 param_7) {
     titleCardCtx->texture = texture;
     titleCardCtx->unk4 = param_4;
@@ -299,11 +299,11 @@ void Actor_TitleCardCreate(GlobalContext* globalCtx, TitleCardContext* titleCard
     titleCardCtx->fadeInDelay = 0;
 }
 
-// TitleCard_InitPlaceName?
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_Nop800B5E50.s")
+void TitleCard_InitPlaceName(GlobalContext* globalCtx, TitleCardContext* titleCtx, void* texture, s32 x, s32 y,
+                             s32 width, s32 height, s32 delay)  {
+}
 
-// TitleCard_Update
-void Actor_TitleCardUpdate(GlobalContext* globalCtx, TitleCardContext* titleCardCtx) {
+void TitleCard_Update(GlobalContext* globalCtx, TitleCardContext* titleCardCtx) {
     if (DECR(titleCardCtx->fadeInDelay) == 0) {
         if (DECR(titleCardCtx->fadeOutDelay) == 0) {
             Math_StepToS(&titleCardCtx->alpha, 0, 30);
@@ -315,8 +315,7 @@ void Actor_TitleCardUpdate(GlobalContext* globalCtx, TitleCardContext* titleCard
     }
 }
 
-// TitleCard_Draw
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_TitleCardDraw.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/TitleCard_Draw.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B6434.s")
 

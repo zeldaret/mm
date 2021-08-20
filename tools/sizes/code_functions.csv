@@ -204,11 +204,11 @@ asm/non_matchings/code/z_actor/Actor_SetRoomClearedTemp.s,Actor_SetRoomClearedTe
 asm/non_matchings/code/z_actor/Actor_UnsetRoomClearedTemp.s,Actor_UnsetRoomClearedTemp,0x800B5D4C,0x8
 asm/non_matchings/code/z_actor/Actor_GetCollectibleFlag.s,Actor_GetCollectibleFlag,0x800B5D6C,0x11
 asm/non_matchings/code/z_actor/Actor_SetCollectibleFlag.s,Actor_SetCollectibleFlag,0x800B5DB0,0x10
-asm/non_matchings/code/z_actor/Actor_TitleCardContextInit.s,Actor_TitleCardContextInit,0x800B5DF0,0x7
-asm/non_matchings/code/z_actor/Actor_TitleCardCreate.s,Actor_TitleCardCreate,0x800B5E0C,0x11
-asm/non_matchings/code/z_actor/Actor_Nop800B5E50.s,Actor_Nop800B5E50,0x800B5E50,0x6
-asm/non_matchings/code/z_actor/Actor_TitleCardUpdate.s,Actor_TitleCardUpdate,0x800B5E68,0x2F
-asm/non_matchings/code/z_actor/Actor_TitleCardDraw.s,Actor_TitleCardDraw,0x800B5F24,0x144
+asm/non_matchings/code/z_actor/TitleCard_ContextInit.s,TitleCard_ContextInit,0x800B5DF0,0x7
+asm/non_matchings/code/z_actor/TitleCard_InitBossName.s,TitleCard_InitBossName,0x800B5E0C,0x11
+asm/non_matchings/code/z_actor/TitleCard_InitPlaceName.s,TitleCard_InitPlaceName,0x800B5E50,0x6
+asm/non_matchings/code/z_actor/TitleCard_Update.s,TitleCard_Update,0x800B5E68,0x2F
+asm/non_matchings/code/z_actor/TitleCard_Draw.s,TitleCard_Draw,0x800B5F24,0x144
 asm/non_matchings/code/z_actor/func_800B6434.s,func_800B6434,0x800B6434,0xD
 asm/non_matchings/code/z_actor/func_800B6468.s,func_800B6468,0x800B6468,0x3
 asm/non_matchings/code/z_actor/func_800B6474.s,func_800B6474,0x800B6474,0x6

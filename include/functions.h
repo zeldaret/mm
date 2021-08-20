@@ -746,12 +746,13 @@ void Actor_SetRoomClearedTemp(GlobalContext* globalCtx, u32 roomNumber);
 void Actor_UnsetRoomClearedTemp(GlobalContext* globalCtx, u32 roomNumber);
 u32 Actor_GetCollectibleFlag(GlobalContext* globalCtx, s32 index);
 void Actor_SetCollectibleFlag(GlobalContext* globalCtx, s32 index);
-void Actor_TitleCardContextInit(GlobalContext* globalCtx, TitleCardContext* titleCardCtx);
-void Actor_TitleCardCreate(GlobalContext* globalCtx, TitleCardContext* titleCardCtx, u32 texture, s16 param_4,
+void TitleCard_ContextInit(GlobalContext* globalCtx, TitleCardContext* titleCardCtx);
+void TitleCard_InitBossName(GlobalContext* globalCtx, TitleCardContext* titleCardCtx, u32 texture, s16 param_4,
                            s16 param_5, u8 param_6, u8 param_7);
-// void Actor_Nop800B5E50(UNK_TYPE4 param_1, UNK_TYPE4 param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4);
-void Actor_TitleCardUpdate(GlobalContext* globalCtx, TitleCardContext* titleCardCtx);
-void Actor_TitleCardDraw(GlobalContext* globalCtx, TitleCardContext* titleCardCtx);
+void TitleCard_InitPlaceName(GlobalContext* globalCtx, TitleCardContext* titleCtx, void* texture, s32 x, s32 y,
+                             s32 width, s32 height, s32 delay);
+void TitleCard_Update(GlobalContext* globalCtx, TitleCardContext* titleCardCtx);
+void TitleCard_Draw(GlobalContext* globalCtx, TitleCardContext* titleCardCtx);
 // UNK_TYPE4 func_800B6434(GlobalContext* globalCtx, TitleCardContext* titleCardCtx);
 // UNK_TYPE4 func_800B645C(void);
 void func_800B6468(GlobalContext* globalCtx);
