@@ -5,7 +5,7 @@
 
 struct EnPoComposer;
 
-typedef void (*EnPoComposerActionFunc)(struct EnPoComposer* this, GlobalContext* globalCtx);
+typedef void (*EnPoComposerActionFunc)(struct EnPoComposer*, GlobalContext*);
 
 typedef struct EnPoComposer {
     /* 0x0000 */ Actor actor;

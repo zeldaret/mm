@@ -5,7 +5,7 @@
 
 struct EnBigpo;
 
-typedef void (*EnBigpoActionFunc)(struct EnBigpo* this, GlobalContext* globalCtx);
+typedef void (*EnBigpoActionFunc)(struct EnBigpo*, GlobalContext*);
 
 typedef struct EnBigpo {
     /* 0x0000 */ Actor actor;

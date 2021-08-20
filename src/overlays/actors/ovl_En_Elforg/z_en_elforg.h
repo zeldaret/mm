@@ -5,7 +5,7 @@
 
 struct EnElforg;
 
-typedef void (*EnElforgActionFunc)(struct EnElforg* this, GlobalContext* globalCtx);
+typedef void (*EnElforgActionFunc)(struct EnElforg*, GlobalContext*);
 
 typedef struct EnElforg {
     /* 0x0000 */ Actor actor;

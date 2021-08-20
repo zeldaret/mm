@@ -5,7 +5,7 @@
 
 struct EnWarptag;
 
-typedef void (*EnWarptagActionFunc)(struct EnWarptag* this, GlobalContext* globalCtx);
+typedef void (*EnWarptagActionFunc)(struct EnWarptag*, GlobalContext*);
 
 typedef struct EnWarptag {
     /* 0x0000 */ Actor actor;
