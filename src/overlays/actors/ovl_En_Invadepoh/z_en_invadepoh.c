@@ -2324,7 +2324,7 @@ void func_80B47BAC(Actor* thisx, GlobalContext* globalCtx) {
 
     if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         this->actor.objBankIndex = this->bankIndex;
-        Actor_SetObjectSegment(globalCtx, &this->actor);
+        Actor_SetObjectDependency(globalCtx, &this->actor);
         func_80B45080();
         this->actor.update = func_80B47D30;
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06004E50, &D_06001D80, this->limbDrawTable,
@@ -2407,7 +2407,7 @@ void func_80B47FA8(Actor* thisx, GlobalContext* globalCtx) {
 
     if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         this->actor.objBankIndex = this->bankIndex;
-        Actor_SetObjectSegment(globalCtx, thisx);
+        Actor_SetObjectDependency(globalCtx, thisx);
         this->actor.update = func_80B48060;
         this->actor.draw = func_80B4E158;
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06004010, NULL, this->limbDrawTable, this->transitionDrawTable,
@@ -2451,7 +2451,7 @@ void func_80B481C4(Actor* thisx, GlobalContext* globalCtx) {
 
     if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         this->actor.objBankIndex = this->bankIndex;
-        Actor_SetObjectSegment(globalCtx, &this->actor);
+        Actor_SetObjectDependency(globalCtx, &this->actor);
         this->actor.update = func_80B4827C;
         this->actor.draw = func_80B4E1B0;
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06004C30, NULL, this->limbDrawTable, this->transitionDrawTable,
@@ -2565,7 +2565,7 @@ void func_80B48620(Actor* thisx, GlobalContext* globalCtx) {
 
     if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         this->actor.objBankIndex = this->bankIndex;
-        Actor_SetObjectSegment(globalCtx, &this->actor);
+        Actor_SetObjectDependency(globalCtx, &this->actor);
         func_80B44F58();
         this->actor.update = func_80B4873C;
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, &D_06009E58, this->limbDrawTable,
@@ -2768,7 +2768,7 @@ void func_80B48FB0(Actor* thisx, GlobalContext* globalCtx) {
 
     if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         this->actor.objBankIndex = this->bankIndex;
-        Actor_SetObjectSegment(globalCtx, &this->actor);
+        Actor_SetObjectDependency(globalCtx, &this->actor);
         func_80B44F58();
         this->actor.update = func_80B490F0;
         this->actor.draw = func_80B4E324;
@@ -3123,7 +3123,7 @@ void func_80B49F88(Actor* thisx, GlobalContext* globalCtx) {
     if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         sp38 = gSaveContext.time;
         this->actor.objBankIndex = this->bankIndex;
-        Actor_SetObjectSegment(globalCtx, &this->actor);
+        Actor_SetObjectDependency(globalCtx, &this->actor);
         func_80B44F58();
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, &D_06014088, this->limbDrawTable,
                          this->transitionDrawTable, 23);
@@ -3354,7 +3354,7 @@ void func_80B4A9C8(Actor* thisx, GlobalContext* globalCtx) {
     if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         sp38 = gSaveContext.time;
         this->actor.objBankIndex = this->bankIndex;
-        Actor_SetObjectSegment(globalCtx, &this->actor);
+        Actor_SetObjectDependency(globalCtx, &this->actor);
         func_80B44F58();
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, &D_06014088, this->limbDrawTable,
                          this->transitionDrawTable, 23);
@@ -3528,7 +3528,7 @@ void func_80B4B0C4(Actor* thisx, GlobalContext* globalCtx) {
 
     if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         this->actor.objBankIndex = this->bankIndex;
-        Actor_SetObjectSegment(globalCtx, &this->actor);
+        Actor_SetObjectDependency(globalCtx, &this->actor);
         func_80B44F58();
         this->actor.update = func_80B4B218;
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, &D_06014088, this->limbDrawTable,
@@ -3685,7 +3685,7 @@ void func_80B4B8BC(Actor* thisx, GlobalContext* globalCtx) {
 
     if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         this->actor.objBankIndex = this->bankIndex;
-        Actor_SetObjectSegment(globalCtx, &this->actor);
+        Actor_SetObjectDependency(globalCtx, &this->actor);
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_060080F0, &D_060021C8, this->limbDrawTable,
                          this->transitionDrawTable, 13);
         func_80B45C04(&this->behaviorInfo, 0, 0, 0, 0, &D_801D15BC, 3000, 0.1f, 0.0f, 0.0f);
@@ -3918,7 +3918,7 @@ void func_80B4C3A0(Actor* thisx, GlobalContext* globalCtx) {
         s32 currentTime = gSaveContext.time;
 
         this->actor.objBankIndex = this->bankIndex;
-        Actor_SetObjectSegment(globalCtx, &this->actor);
+        Actor_SetObjectDependency(globalCtx, &this->actor);
         func_80B44FEC();
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06015C28, &D_06016720, this->limbDrawTable,
                          this->transitionDrawTable, 22);
@@ -4139,7 +4139,7 @@ void func_80B4CE54(Actor* thisx, GlobalContext* globalCtx) {
         sp38 = gSaveContext.time;
 
         this->actor.objBankIndex = this->bankIndex;
-        Actor_SetObjectSegment(globalCtx, &this->actor);
+        Actor_SetObjectDependency(globalCtx, &this->actor);
         func_80B44F58();
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, &D_06014088, this->limbDrawTable,
                          this->transitionDrawTable, 23);
@@ -4327,7 +4327,7 @@ void func_80B4D670(Actor* thisx, GlobalContext* globalCtx) {
     if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         invadepohType = this->actor.params & 7;
         this->actor.objBankIndex = this->bankIndex;
-        Actor_SetObjectSegment(globalCtx, &this->actor);
+        Actor_SetObjectDependency(globalCtx, &this->actor);
         func_80B45080();
         this->actor.update = func_80B4D760;
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06004E50, &D_06001674, this->limbDrawTable,

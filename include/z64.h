@@ -364,11 +364,9 @@ typedef struct {
 } SramContext; // size = 0x28
 
 typedef struct {
-    /* 0x00 */ UNK_TYPE4 unk0;
-    /* 0x04 */ UNK_TYPE4 unk4;
-    /* 0x08 */ UNK_TYPE4 unk8;
+    /* 0x00 */ Vec3f pos;
     /* 0x0C */ f32 unkC;
-    /* 0x10 */ Color_RGBA8 unk10;
+    /* 0x10 */ Color_RGBA8 color;
 } TargetContextEntry; // size = 0x14
 
 typedef struct {

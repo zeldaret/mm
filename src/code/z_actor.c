@@ -143,13 +143,33 @@ void func_800B4A98(Actor* actor, s32 limbIndex, s32 leftFootIndex, Vec3f* leftFo
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B4AEC.s")
+void func_800B4AEC(GlobalContext* globalCtx, Actor* actor, f32 param_3) {
+    s32 floorBgId;
+    f32 yPos = actor->world.pos.y;
+
+    actor->world.pos.y += param_3;
+    actor->floorHeight = func_800C4188(param_3, &globalCtx->colCtx, &actor->floorPoly, &floorBgId, actor, &actor->world.pos);
+    actor->floorBgId = floorBgId;
+    actor->world.pos.y = yPos;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B4B50.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B4EDC.s")
+void func_800B4EDC(GlobalContext* globalCtx, Vec3f* pzParm2, Vec3f* pzParm3, f32* pfParm4) {
+    SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->projectionMatrix, pzParm2, pzParm3, pfParm4);
+    if (*pfParm4 < 1.0f) {
+        *pfParm4 = 1.0f;
+    } else {
+        *pfParm4 = 1.0f / *pfParm4;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B4F40.s")
+void func_800B4F40(TargetContext* targetCtx, s32 index, f32 x, f32 y, f32 z) {
+    targetCtx->unk50[index].pos.x = x;
+    targetCtx->unk50[index].pos.y = y;
+    targetCtx->unk50[index].pos.z = z;
+    targetCtx->unk50[index].unkC = targetCtx->unk44;
+}
 
 #if 0
 s801AEC84 D_801AEC84[13] = {
@@ -358,9 +378,7 @@ void Actor_SetScale(Actor* actor, f32 scale) {
     actor->scale.x = scale;
 }
 
-// Actor_SetObjectDependency
-void Actor_SetObjectSegment(GlobalContext* globalCtx, Actor* actor) {
-    // TODO: Segment number enum
+void Actor_SetObjectDependency(GlobalContext* globalCtx, Actor* actor) {
     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[actor->objBankIndex].segment);
 }
 
@@ -385,7 +403,7 @@ void Actor_Init(Actor* actor, GlobalContext* globalCtx) {
 
     ActorShape_Init(&actor->shape, 0.0f, NULL, 0.0f);
     if (Object_IsLoaded(&globalCtx->objectCtx, actor->objBankIndex)) {
-        Actor_SetObjectSegment(globalCtx, actor);
+        Actor_SetObjectDependency(globalCtx, actor);
         actor->init(actor, globalCtx);
         actor->init = NULL;
     }

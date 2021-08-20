@@ -709,7 +709,7 @@
     0x800B67A0:("Actor_SetRotationFromDrawRotation",),
     0x800B67C0:("Actor_InitDrawRotation",),
     0x800B67E0:("Actor_SetScale",),
-    0x800B67FC:("Actor_SetObjectSegment",),
+    0x800B67FC:("Actor_SetObjectDependency",),
     0x800B6834:("Actor_Init",),
     0x800B6948:("Actor_Destroy",),
     0x800B6988:("Actor_SetMovementScale",),

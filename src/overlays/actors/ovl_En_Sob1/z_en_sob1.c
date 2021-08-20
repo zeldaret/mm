@@ -1373,7 +1373,7 @@ void EnSob1_InitShop(EnSob1* this, GlobalContext* globalCtx) {
     if (EnSob1_AreObjectsLoaded(this, globalCtx)) {
         this->actor.flags &= ~0x10;
         this->actor.objBankIndex = this->objIndices[0];
-        Actor_SetObjectSegment(globalCtx, &this->actor);
+        Actor_SetObjectDependency(globalCtx, &this->actor);
         posOffset = &sPosOffset[this->shopType];
         this->actor.world.pos.x += posOffset->x;
         this->actor.world.pos.y += posOffset->y;

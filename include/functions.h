@@ -725,7 +725,7 @@ void func_800B4A98(Actor* actor, s32 limbIndex, s32 leftFootIndex, Vec3f* leftFo
 void func_800B4AEC(GlobalContext* globalCtx, Actor* actor, f32 param_3);
 void func_800B4B50(Actor* actor, s32 iParm2, GlobalContext* globalCtx);
 void func_800B4EDC(GlobalContext* globalCtx, Vec3f* pzParm2, Vec3f* pzParm3, f32* pfParm4);
-// void func_800B4F40(TargetContext* targetCtx, s32 param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4, UNK_TYPE4 param_5);
+void func_800B4F40(TargetContext* targetCtx, s32 index, f32 x, f32 y, f32 z);
 void func_800B4F78(TargetContext* targetCtx, u8 type, GlobalContext* globalCtx);
 void func_800B5040(TargetContext* targetCtx, Actor* actor, u8 type, GlobalContext* globalCtx);
 void Actor_TargetContextInit(TargetContext* targetCtx, Actor* actor, GlobalContext* globalCtx);
@@ -767,7 +767,7 @@ void Actor_SetHeight(Actor* actor, f32 height);
 void Actor_SetRotationFromDrawRotation(Actor* actor);
 void Actor_InitDrawRotation(Actor* actor);
 void Actor_SetScale(Actor* actor, f32 scale);
-void Actor_SetObjectSegment(GlobalContext* globalCtx, Actor* actor);
+void Actor_SetObjectDependency(GlobalContext* globalCtx, Actor* actor);
 void Actor_Init(Actor* actor, GlobalContext* globalCtx);
 void Actor_Destroy(Actor* actor, GlobalContext* globalCtx);
 void Actor_SetMovementScale(s32 scale);
@@ -1034,8 +1034,8 @@ f32 func_800C4000(GlobalContext* globalCtx, CollisionContext* colCtx, s32* arg2,
 // void func_800C4058(void);
 // void func_800C40B4(void);
 f32 func_800C411C(CollisionContext* colCtx, CollisionPoly** arg1, s32* arg2, Actor* actor, Vec3f* pos);
-// void func_800C4188(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6); void func_800C41E4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
+f32 func_800C4188(f32, CollisionContext* colCtx, CollisionPoly**, UNK_PTR param_4, Actor* actor, Vec3f* pos); 
+// void func_800C41E4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
 // UNK_TYPE4 param_5, UNK_TYPE4 param_6); void func_800C4240(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3,
 // UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); void func_800C42A8(UNK_TYPE1 param_1, UNK_TYPE1 param_2,
 // UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); void func_800C4314(void); void func_800C43CC(void); void

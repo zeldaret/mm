@@ -43,7 +43,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnItem00_SetObject(EnItem00* this, GlobalContext* globalCtx, f32* shadowOffset, f32* shadowScale) {
-    Actor_SetObjectSegment(globalCtx, &this->actor);
+    Actor_SetObjectDependency(globalCtx, &this->actor);
     Actor_SetScale(&this->actor, 0.5f);
     this->unk154 = 0.5f;
     *shadowOffset = 0.0f;
@@ -656,7 +656,7 @@ void EnItem00_Draw(Actor* thisx, GlobalContext* globalCtx) {
                         s8 bankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_GI_HEART);
                         if (Object_IsLoaded(&globalCtx->objectCtx, bankIndex)) {
                             this->actor.objBankIndex = bankIndex;
-                            Actor_SetObjectSegment(globalCtx, &this->actor);
+                            Actor_SetObjectDependency(globalCtx, &this->actor);
                             this->unk152 = -2;
                         }
                     } else {

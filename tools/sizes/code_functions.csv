@@ -223,7 +223,7 @@ asm/non_matchings/code/z_actor/Actor_SetHeight.s,Actor_SetHeight,0x800B675C,0x11
 asm/non_matchings/code/z_actor/Actor_SetRotationFromDrawRotation.s,Actor_SetRotationFromDrawRotation,0x800B67A0,0x8
 asm/non_matchings/code/z_actor/Actor_InitDrawRotation.s,Actor_InitDrawRotation,0x800B67C0,0x8
 asm/non_matchings/code/z_actor/Actor_SetScale.s,Actor_SetScale,0x800B67E0,0x7
-asm/non_matchings/code/z_actor/Actor_SetObjectSegment.s,Actor_SetObjectSegment,0x800B67FC,0xE
+asm/non_matchings/code/z_actor/Actor_SetObjectDependency.s,Actor_SetObjectDependency,0x800B67FC,0xE
 asm/non_matchings/code/z_actor/Actor_Init.s,Actor_Init,0x800B6834,0x45
 asm/non_matchings/code/z_actor/Actor_Destroy.s,Actor_Destroy,0x800B6948,0x10
 asm/non_matchings/code/z_actor/Actor_SetMovementScale.s,Actor_SetMovementScale,0x800B6988,0x9

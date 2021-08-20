@@ -1431,7 +1431,7 @@ void EnOssan_InitShop(EnOssan* this, GlobalContext* globalCtx) {
     if (Object_IsLoaded(&globalCtx->objectCtx, this->objIndex)) {
         this->actor.flags &= ~0x10;
         this->actor.objBankIndex = this->objIndex;
-        Actor_SetObjectSegment(globalCtx, &this->actor);
+        Actor_SetObjectDependency(globalCtx, &this->actor);
         shopItems = sShops[this->actor.params];
         ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
         sInitFuncs[this->actor.params](this, globalCtx);
