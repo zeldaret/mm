@@ -734,11 +734,7 @@ beginseg
     name "ovl_daytelop"
     compress
     include "build/src/overlays/gamestates/ovl_daytelop/z_daytelop.o"
-#ifdef NON_MATCHING
-    include "build/src/overlays/actors/ovl_daytelop/ovl_daytelop_reloc.o"
-#else
-    include "build/data/ovl_daytelop/ovl_daytelop.reloc.o"
-#endif
+    include "build/src/overlays/gamestates/ovl_daytelop/ovl_daytelop_reloc.o"
 endseg
 
 beginseg

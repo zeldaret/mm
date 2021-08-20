@@ -63,7 +63,44 @@ UNK_TYPE D_808158E0[] = {
     0x00000001, 0x00000000,
 };
 
-u8 D_80815FF0 = 0;
+void Daytelop_Update(DaytelopContext* this, GameState* gameState) {
+    static u8 D_80815FF0 = 0;
+    s16 new_var;
+    u8 temp_v0_2;
+
+    this->transitionCountdown--;
+    if (this->transitionCountdown == 0) {
+        if (gSaveContext.day < 9) {
+            gSaveContext.gameMode = 0;
+        } else {
+            gSaveContext.nextCutsceneIndex = 0xFFF6;
+            gSaveContext.day = 1;
+        }
+
+        {
+            GameState* state = &this->state;
+            state->running = 0;
+        }
+
+        SET_NEXT_GAMESTATE(&this->state, Play_Init, GlobalContext);
+        gSaveContext.time = CLOCK_TIME(6, 0);
+        D_801BDBC8 = 0xFE;
+    } else if (this->transitionCountdown == 90) {
+        this->fadeInState = DAYTELOP_HOURSTEXT_FADEIN;
+        this->alpha = 0;
+        D_80815FF0 = 30;
+    }
+
+    if (this->fadeInState == DAYTELOP_HOURSTEXT_FADEIN) {
+        this->alpha += (s16)(ABS_ALT(this->alpha - 0xFF) / D_80815FF0);
+
+        D_80815FF0--;
+        if (D_80815FF0 == 0) {
+            this->fadeInState = DAYTELOP_HOURSTEXT_ON;
+            this->alpha = 255;
+        }
+    }
+}
 
 TexturePtr sDayLeftTextures[] = {
     gDaytelopFirstDayLeftNESTex,
@@ -89,55 +126,6 @@ TexturePtr sHoursLeftTextures[] = {
     gDaytelop24HoursNESTex,
 };
 
-#ifdef NON_MATCHING
-// minor regalloc and swapped instruction
-void Daytelop_Update(DaytelopContext* this, GameState* gameState) {
-    s16 new_var;
-    u8 temp_v0_2;
-
-    this->transitionCountdown--;
-    if (this->transitionCountdown == 0) {
-        if (gSaveContext.day < 9) {
-            gSaveContext.gameMode = 0;
-        } else {
-            gSaveContext.nextCutsceneIndex = 0xFFF6;
-            gSaveContext.day = 1;
-        }
-
-        // clang-format off
-        this->state.running = false; 
-        SET_NEXT_GAMESTATE(&this->state, Play_Init, GlobalContext);
-        // clang-format on
-        gSaveContext.time = CLOCK_TIME(6, 0);
-        D_801BDBC8 = 0xFE;
-    } else {
-        if (this->transitionCountdown == 90) {
-            this->fadeInState = DAYTELOP_HOURSTEXT_FADEIN;
-            this->alpha = 0;
-            D_80815FF0 = 30;
-        }
-        if (1) {}
-    }
-
-    temp_v0_2 = D_80815FF0;
-    new_var = this->fadeInState;
-    if (new_var == DAYTELOP_HOURSTEXT_FADEIN) {
-        s16 abs_temp = (s16)(ABS_ALT(this->alpha - 0xFF) / temp_v0_2);
-
-        this->alpha += abs_temp;
-        temp_v0_2--;
-        D_80815FF0 = temp_v0_2;
-
-        if (temp_v0_2 == 0) {
-            this->fadeInState = DAYTELOP_HOURSTEXT_ON;
-            this->alpha = 255;
-        }
-    }
-}
-#else
-void Daytelop_Update(DaytelopContext* this, GameState* gameState);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_daytelop/Daytelop_Update.s")
-#endif
 
 void Daytelop_Draw(DaytelopContext* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
