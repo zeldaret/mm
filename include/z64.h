@@ -370,15 +370,15 @@ typedef struct {
 } TargetContextEntry; // size = 0x14
 
 typedef struct {
-    /* 0x0 */ u32 texture;
-    /* 0x4 */ s16 unk4;
-    /* 0x6 */ s16 unk6;
-    /* 0x8 */ u8 unk8;
-    /* 0x9 */ u8 unk9;
-    /* 0xA */ u8 fadeOutDelay;
-    /* 0xB */ u8 fadeInDelay;
+    /* 0x0 */ TexturePtr texture;
+    /* 0x4 */ s16 x;
+    /* 0x6 */ s16 y;
+    /* 0x8 */ u8 width;
+    /* 0x9 */ u8 height;
+    /* 0xA */ u8 durationTimer; // how long the title card appears for before fading
+    /* 0xB */ u8 delayTimer; // how long the title card waits to appear
     /* 0xC */ s16 alpha;
-    /* 0xE */ s16 color;
+    /* 0xE */ s16 intensity;
 } TitleCardContext; // size = 0x10
 
 typedef struct {

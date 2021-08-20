@@ -280,42 +280,93 @@ void Actor_SetCollectibleFlag(GlobalContext* globalCtx, s32 index) {
     }
 }
 
-void TitleCard_ContextInit(GlobalContext* globalCtx, TitleCardContext* titleCardCtx) {
-    titleCardCtx->fadeOutDelay = 0;
-    titleCardCtx->fadeInDelay = 0;
-    titleCardCtx->color = 0;
-    titleCardCtx->alpha = 0;
+void TitleCard_ContextInit(GlobalContext* globalCtx, TitleCardContext* titleCtx) {
+    titleCtx->durationTimer = 0;
+    titleCtx->delayTimer = 0;
+    titleCtx->intensity = 0;
+    titleCtx->alpha = 0;
 }
 
 // TitleCard_InitBossName
-void TitleCard_InitBossName(GlobalContext* globalCtx, TitleCardContext* titleCardCtx, u32 texture, s16 param_4,
+void TitleCard_InitBossName(GlobalContext* globalCtx, TitleCardContext* titleCtx, u32 texture, s16 param_4,
                            s16 param_5, u8 param_6, u8 param_7) {
-    titleCardCtx->texture = texture;
-    titleCardCtx->unk4 = param_4;
-    titleCardCtx->unk6 = param_5;
-    titleCardCtx->unk8 = param_6;
-    titleCardCtx->unk9 = param_7;
-    titleCardCtx->fadeOutDelay = 80;
-    titleCardCtx->fadeInDelay = 0;
+    titleCtx->texture = texture;
+    titleCtx->x = param_4;
+    titleCtx->y = param_5;
+    titleCtx->width = param_6;
+    titleCtx->height = param_7;
+    titleCtx->durationTimer = 80;
+    titleCtx->delayTimer = 0;
 }
 
 void TitleCard_InitPlaceName(GlobalContext* globalCtx, TitleCardContext* titleCtx, void* texture, s32 x, s32 y,
                              s32 width, s32 height, s32 delay)  {
 }
 
-void TitleCard_Update(GlobalContext* globalCtx, TitleCardContext* titleCardCtx) {
-    if (DECR(titleCardCtx->fadeInDelay) == 0) {
-        if (DECR(titleCardCtx->fadeOutDelay) == 0) {
-            Math_StepToS(&titleCardCtx->alpha, 0, 30);
-            Math_StepToS(&titleCardCtx->color, 0, 70);
+void TitleCard_Update(GlobalContext* globalCtx, TitleCardContext* titleCtx) {
+    if (DECR(titleCtx->delayTimer) == 0) {
+        if (DECR(titleCtx->durationTimer) == 0) {
+            Math_StepToS(&titleCtx->alpha, 0, 30);
+            Math_StepToS(&titleCtx->intensity, 0, 70);
         } else {
-            Math_StepToS(&titleCardCtx->alpha, 255, 10);
-            Math_StepToS(&titleCardCtx->color, 255, 20);
+            Math_StepToS(&titleCtx->alpha, 255, 10);
+            Math_StepToS(&titleCtx->intensity, 255, 20);
         }
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/TitleCard_Draw.s")
+void TitleCard_Draw(GlobalContext* globalCtx, TitleCardContext* titleCtx) {
+    s32 spCC;
+    s32 spC8;
+    s32 unk1;
+    s32 spC0;
+    s32 sp38;
+    s32 spB8;
+    s32 spB4;
+    int new_var;
+
+    if (titleCtx->alpha != 0) {
+        spCC = titleCtx->width;
+        spC8 = titleCtx->height;
+        new_var = spCC * 2;
+        spC0 = (titleCtx->x * 4) - new_var;
+        spB8 = (titleCtx->y * 4) - (spC8 * 2);
+        sp38 = spCC * 2;
+
+        OPEN_DISPS(globalCtx->state.gfxCtx);
+
+        spC8 = (spCC * spC8 > 0x1000) ? 0x1000 / spCC : spC8;
+        spB4 = spB8 + (spC8 * 4);
+
+        if (1) {} // Necessary to match
+
+        OVERLAY_DISP = func_8012C014(OVERLAY_DISP);
+
+        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, (u8)titleCtx->intensity, (u8)titleCtx->intensity, (u8)titleCtx->intensity,
+                        (u8)titleCtx->alpha);
+
+        gDPLoadTextureBlock(OVERLAY_DISP++, (s32*)titleCtx->texture, G_IM_FMT_IA, G_IM_SIZ_8b, spCC, spC8, 0,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                            G_TX_NOLOD);
+
+        gSPTextureRectangle(OVERLAY_DISP++, spC0, spB8, ((sp38 * 2) + spC0) - 4, spB8 + (spC8 * 4) - 1, G_TX_RENDERTILE,
+                            0, 0, 1 << 10, 1 << 10);
+
+
+        spC8 = titleCtx->height - spC8;
+
+        if (spC8 > 0) {
+            gDPLoadTextureBlock(OVERLAY_DISP++, (s32)titleCtx->texture + 0x1000, G_IM_FMT_IA, G_IM_SIZ_8b, spCC,
+                                spC8, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                G_TX_NOLOD, G_TX_NOLOD);
+
+            gSPTextureRectangle(OVERLAY_DISP++, spC0, spB4, ((sp38 * 2) + spC0) - 4, spB4 + (spC8 * 4) - 1,
+                                G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+        }
+
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B6434.s")
 
