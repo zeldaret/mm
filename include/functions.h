@@ -753,11 +753,11 @@ void TitleCard_InitPlaceName(GlobalContext* globalCtx, TitleCardContext* titleCt
                              s32 width, s32 height, s32 delay);
 void TitleCard_Update(GlobalContext* globalCtx, TitleCardContext* titleCtx);
 void TitleCard_Draw(GlobalContext* globalCtx, TitleCardContext* titleCtx);
-// UNK_TYPE4 func_800B6434(GlobalContext* globalCtx, TitleCardContext* titleCtx);
+s32 func_800B6434(GlobalContext* globalCtx, TitleCardContext* titleCtx);
 // UNK_TYPE4 func_800B645C(void);
 void func_800B6468(GlobalContext* globalCtx);
 void func_800B6474(GlobalContext* globalCtx);
-// UNK_TYPE4 func_800B648C(GlobalContext* globalCtx, UNK_TYPE1 param_2, UNK_TYPE1 param_3, f32 param_4, Vec3f* param_5);
+s32 func_800B648C(GlobalContext* globalCtx, s32 arg1, s32 arg2, f32 arg3, Vec3f* arg4);
 f32 func_800B64FC(GlobalContext* globalCtx, f32 fParm2, Vec3f* pzParm3, u32* puParm4);
 void* func_800B6584(GlobalContext* globalCtx, s16 sParm2, void* pvParm3, u32 uParm4);
 // UNK_TYPE4 func_800B6608(s32 iParm1, s16 sParm2);

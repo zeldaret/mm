@@ -368,7 +368,14 @@ void TitleCard_Draw(GlobalContext* globalCtx, TitleCardContext* titleCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B6434.s")
+s32 func_800B6434(GlobalContext* globalCtx, TitleCardContext* titleCtx) {
+    if ((globalCtx->actorCtx.titleCtxt.delayTimer != 0) || (globalCtx->actorCtx.titleCtxt.alpha != 0)) {
+        titleCtx->durationTimer = 0;
+        titleCtx->delayTimer = 0;
+        return false;
+    }
+    return true;
+}
 
 void func_800B6468(GlobalContext* globalCtx) {
     globalCtx->actorCtx.unk1F5 = 0;
@@ -380,9 +387,29 @@ void func_800B6474(GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B648C.s")
+s32 func_800B648C(GlobalContext* globalCtx, s32 arg1, s32 arg2, f32 arg3, Vec3f* arg4) {
+    if ((globalCtx->actorCtx.unk1F5 != 0) && (arg3 < globalCtx->actorCtx.unk1F8)) {
+        return 0;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B64FC.s")
+    globalCtx->actorCtx.unk1F4 = arg1;
+    globalCtx->actorCtx.unk1F5 = arg2;
+    globalCtx->actorCtx.unk1F8 = arg3;
+    Math_Vec3f_Copy(&globalCtx->actorCtx.unk1FC, arg4);
+    return 1;
+}
+
+f32 func_800B64FC(GlobalContext* globalCtx, f32 fParm2, Vec3f* pzParm3, u32* puParm4) {
+    f32 temp_f8;
+
+    if ((globalCtx->actorCtx.unk1F5 == 0) || (fParm2 == 0.0f)) {
+        return -1.0f;
+    }
+    fParm2 = fParm2;
+    temp_f8 = Math_Vec3f_DistXYZ(&globalCtx->actorCtx.unk1FC, pzParm3) / fParm2;
+    *puParm4 = globalCtx->actorCtx.unk1F4;
+    return globalCtx->actorCtx.unk1F8 - temp_f8;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B6584.s")
 
