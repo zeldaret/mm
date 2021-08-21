@@ -270,12 +270,21 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "-U",
-        "--compress",
+        "--compress-matching",
         metavar="N",
         dest="compress_matching",
         type=int,
         help="""Compress streaks of matching lines, leaving N lines of context
         around non-matching parts.""",
+    )
+    parser.add_argument(
+        "-V",
+        "--compress-sameinstr",
+        metavar="N",
+        dest="compress_sameinstr",
+        type=int,
+        help="""Compress streaks of lines with same instructions (but possibly
+        different regalloc), leaving N lines of context around other parts.""",
     )
 
     # Project-specific flags, e.g. different versions/make arguments.
@@ -335,6 +344,12 @@ class ProjectSettings:
 
 
 @dataclass
+class Compress:
+    context: int
+    same_instr: bool
+
+
+@dataclass
 class Config:
     arch: "ArchSettings"
 
@@ -352,7 +367,7 @@ class Config:
     threeway: Optional[str]
     base_shift: int
     skip_lines: int
-    compress_matching: Optional[int]
+    compress: Optional[Compress]
     show_branches: bool
     stop_jrra: bool
     ignore_large_imms: bool
@@ -390,6 +405,16 @@ def create_config(args: argparse.Namespace, project: ProjectSettings) -> Config:
     else:
         raise ValueError(f"Unsupported --format: {args.format}")
 
+    compress = None
+    if args.compress_matching is not None:
+        compress = Compress(args.compress_matching, False)
+    if args.compress_sameinstr is not None:
+        if compress is not None:
+            raise ValueError(
+                "Cannot pass both --compress-matching and --compress-sameinstr"
+            )
+        compress = Compress(args.compress_sameinstr, True)
+
     return Config(
         arch=get_arch(project.arch_str),
         # Build/objdump options
@@ -407,7 +432,7 @@ def create_config(args: argparse.Namespace, project: ProjectSettings) -> Config:
             args.base_shift, "Failed to parse --base-shift (-S) argument as an integer."
         ),
         skip_lines=args.skip_lines,
-        compress_matching=args.compress_matching,
+        compress=compress,
         show_branches=args.show_branches,
         stop_jrra=args.stop_jrra,
         ignore_large_imms=args.ignore_large_imms,
@@ -491,14 +516,8 @@ FormatFunction = Callable[[str], Format]
 class Text:
     segments: List[Tuple[str, Format]]
 
-    def __init__(
-        self, line: Optional[str] = None, f: Format = BasicFormat.NONE
-    ) -> None:
-        self.segments = []
-        if line is not None:
-            self.segments.append((line, f))
-        elif f is not BasicFormat.NONE:
-            raise ValueError("Text constructor provided `f`, but no line to format")
+    def __init__(self, line: str = "", f: Format = BasicFormat.NONE) -> None:
+        self.segments = [(line, f)] if line else []
 
     def reformat(self, f: Format) -> "Text":
         return Text(self.plain(), f)
@@ -556,7 +575,7 @@ class Text:
 
     def ljust(self, column_width: int) -> "Text":
         length = sum(len(x) for x, _ in self.segments)
-        return self + Text(" " * max(column_width - length, 0))
+        return self + " " * max(column_width - length, 0)
 
 
 class Formatter(abc.ABC):
@@ -1532,7 +1551,7 @@ class OutputLine:
     base: Optional[Text] = field(compare=False)
     fmt2: Text = field(compare=False)
     key2: Optional[str]
-    matching: bool = field(compare=False)
+    boring: bool = field(compare=False)
 
 
 def do_diff(basedump: str, mydump: str, config: Config) -> List[OutputLine]:
@@ -1707,19 +1726,22 @@ def do_diff(basedump: str, mydump: str, config: Config) -> List[OutputLine]:
                         None,
                         "  " + Text(source_line, line_format),
                         source_line,
-                        False,
+                        True,
                     )
                 )
 
         key2 = line2.original if line2 else None
-        matching = line_prefix == " "
-        if matching:
+        boring = False
+        if line_prefix == " ":
             # Canonicalize matching lines to have an empty string as key, to
             # ensure they are treated as the same when three-way diffing. This
             # matters for branches that match only relatively.
             key2 = ""
+            boring = True
+        elif config.compress and config.compress.same_instr and line_prefix in "irs":
+            boring = True
         fmt2 = Text(line_prefix, sym_color) + " " + (part2 or Text())
-        output.append(OutputLine(part1, fmt2, key2, matching))
+        output.append(OutputLine(part1, fmt2, key2, boring))
 
     return output
 
@@ -1819,19 +1841,19 @@ def format_diff(
                     new.fmt2,
                     old.fmt2 or Text("-") if old != new else Text(),
                 ),
-                new.matching,
+                new.boring,
             )
             for (base, old, new) in output
         ]
     else:
         header_line = None
         diff_lines = [
-            ((base, new.fmt2), new.matching)
+            ((base, new.fmt2), new.boring)
             for (base, old, new) in output
             if base or new.key2 is not None
         ]
-    if config.compress_matching is not None:
-        ret_lines = compress_matching(diff_lines, config.compress_matching)
+    if config.compress:
+        ret_lines = compress_matching(diff_lines, config.compress.context)
     else:
         ret_lines = [line for line, _ in diff_lines]
     return header_line, ret_lines
