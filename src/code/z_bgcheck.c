@@ -81,7 +81,7 @@ f32 func_800BFD84(CollisionPoly *polygon, f32 param_2, f32 param_3) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800BFDEC.s")
 
 //#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_PolygonGetMinY.s")
-//CollisionPoly_GetMinY
+#define CollisionPoly_GetMinY BgCheck_PolygonGetMinY
 s16 BgCheck_PolygonGetMinY(CollisionPoly* poly, BgVertex* vertices) {
     s16 phi_a3;
 
@@ -234,9 +234,9 @@ s32 CollisionPoly_CheckYIntersect(CollisionPoly* poly, Vec3s* vtxList, f32 x, f3
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C0474.s")
 
 //#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C0668.s")
-//CollisionPoly_CheckYIntersectApprox2
-void func_800C0668(CollisionPoly* poly, Vec3s* vtxList, f32 x, f32 z, f32* yIntersect) {
-    func_800C0340(poly, vtxList, x, z, yIntersect, 1.0f);
+#define CollisionPoly_CheckYIntersectApprox2 func_800C0668
+s32 CollisionPoly_CheckYIntersectApprox2(CollisionPoly* poly, Vec3s* vtxList, f32 x, f32 z, f32* yIntersect) {
+    return func_800C0340(poly, vtxList, x, z, yIntersect, 1.0f);
 }
 
 s32 func_8017C850(Vec3f* a, Vec3f* b, Vec3f* c, f32 nx, f32 ny, f32 nz, f32 dist, f32 y, f32 z, f32* xIntersect);
@@ -270,25 +270,17 @@ s32 func_800C074C(CollisionPoly* poly, Vec3s* vtxList, f32 x, f32 y, f32* zInter
         zIntersect);
 }
 
-typedef struct {
-    CollisionPoly* poly;
-    Vec3s* vtxList;
-    Vec3f* posA;
-    Vec3f* posB;
-    Vec3f* planeIntersect;
-    s32 chkOneFace;
-    f32 chkDist;
-} func_800C07F0_args;
-
 s32 func_8017C540(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 y, f32 z, f32 unk, f32 chkDist, f32 nx); //Math3D_TriChkPointParaXDist
 s32 func_8017BAD0(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 y, f32 z, f32 unk, f32 chkDist, f32 ny); //Math3D_TriChkPointParaYDist
 s32 func_8017CB7C(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 y, f32 z, f32 unk, f32 chkDist, f32 nz); //Math3D_TriChkLineSegParaZDist
+#define Math3D_Vec3fDistSq Math3D_DistanceSquared
 
-//CollisionPoly_LineVsPoly
+#define CollisionPoly_LineVsPoly func_800C07F0
+s32 CollisionPoly_LineVsPoly(func_800C07F0_args* a0);
 #ifdef NON_MATCHING
 //#define polyVerts D_801EDB70
 //#define plane D_801EDB98
-s32 func_800C07F0(func_800C07F0_args* a0) {
+s32 CollisionPoly_LineVsPoly(func_800C07F0_args* a0) {
     static Vec3f polyVerts[3];
     static Plane plane;
     f32 planeDistA;
@@ -456,11 +448,6 @@ void BgCheck_ScenePolygonListsInsert(StaticLookup* lookup, CollisionContext* col
         StaticLookup_AddPolyToSSList(colCtx, &lookup->wall, polyList, vtxList, index);
     }
 }
-
-typedef struct {
-    u16 unk0;
-    u8 unk2;
-} struct_func_800C0E74;
 
 #define BgCheck_RaycastFloorStaticList func_800C0E74
 /**
@@ -830,9 +817,157 @@ s32 BgCheck_SphVsStaticWall(StaticLookup* lookup, CollisionContext* colCtx, u16 
     return result;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C1B68.s")
+#define BgCheck_CheckStaticCeiling func_800C1B68
+/**
+ * Tests for collision with a static poly ceiling
+ * returns true if a collision occurs, else false
+ * `outPoly` returns the poly collided with
+ * `outY` returns the y coordinate needed to not collide with `outPoly`
+ */
 
+s32 BgCheck_CheckStaticCeiling(StaticLookup* lookup, u16 xpFlags, CollisionContext* colCtx, f32* outY, Vec3f* pos,
+    f32 checkHeight, CollisionPoly** outPoly, struct_func_800C0E74* arg7);
+#ifdef NON_MATCHING
+s32 BgCheck_CheckStaticCeiling(StaticLookup* lookup, u16 xpFlags, CollisionContext* colCtx, f32* outY, Vec3f* pos,
+    f32 checkHeight, CollisionPoly** outPoly, struct_func_800C0E74* arg7) {
+    s32 result = false;
+    //u16 nextId;
+    CollisionPoly* curPoly;
+    CollisionPoly* polyList;
+    f32 ceilingY;
+    Vec3s* vtxList;
+    SSNode* curNode;
+    s32 curPolyId;
+
+    if (lookup->ceiling.head == SS_NULL) {
+        return result;
+    }
+    curNode = &colCtx->polyNodes.tbl[lookup->ceiling.head];
+    polyList = colCtx->colHeader->polyList;
+    vtxList = colCtx->colHeader->vtxList;
+
+    *outY = pos->y;
+
+    while (true) {
+        curPolyId = curNode->polyId;
+        curPoly = &polyList[curPolyId];
+        if (COLPOLY_VIA_FLAG_TEST(colCtx->colHeader->polyList[curPolyId].flags_vIA, xpFlags)
+            || ( 
+                COLPOLY_VIA_FLAG_TEST(colCtx->colHeader->polyList[curPolyId].flags_vIB, 4) 
+                && ((arg7 != NULL && arg7->unk2 != 2) || (arg7 == NULL && xpFlags != 1 )))) {
+            if (curNode->next == SS_NULL) {
+                break;
+            }
+            else {
+                curNode = &colCtx->polyNodes.tbl[curNode->next];
+                continue;
+            }
+        }
+
+        if (CollisionPoly_CheckYIntersectApprox2(curPoly, vtxList, pos->x, pos->z, &ceilingY)) {
+            f32 intersectDist = ceilingY - *outY;
+            f32 ny = COLPOLY_GET_NORMAL(curPoly->normal.y);
+
+            if (intersectDist > 0 && intersectDist < checkHeight && intersectDist * ny <= 0) {
+                *outY = ceilingY - checkHeight;
+                *outPoly = curPoly;
+                result = true;
+            }
+        }
+        if (curNode->next == SS_NULL) {
+            break;
+        }
+        else {
+            curNode = &colCtx->polyNodes.tbl[curNode->next];
+            continue;
+        }
+    }
+    return result;
+}
+#else
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C1B68.s")
+#endif 
+
+#define BgCheck_CheckLineAgainstSSList func_800C1D7C
+s32 BgCheck_CheckLineAgainstSSList(struct_func_800C1D7C* arg0);
+
+#ifdef NON_MATCHING
+/**
+ * Tests if line `posA` to `posB` intersects with a static poly in list `ssList`. Uses polyCheckTbl
+ * returns true if such a poly exists, else false
+ * `outPoly` returns the pointer of the poly intersected
+ * `posB` and `outPos` returns the point of intersection with `outPoly`
+ * `outDistSq` returns the squared distance from `posA` to the point of intersect
+ */
+s32 BgCheck_CheckLineAgainstSSList(struct_func_800C1D7C* arg0) {
+    
+    CollisionContext* colCtx;
+    s32 result;
+    Vec3f polyIntersect; //sp7C
+
+    SSNode* curNode;
+    u8* checkedPoly;
+    //CollisionPoly* polyList;
+    f32 minY;
+    f32 distSq;
+    func_800C07F0_args test; //sp50
+    s16 polyId;
+
+    result = false;
+    if (arg0->ssList->head == SS_NULL) {
+        return result;
+    }
+    colCtx = arg0->colCtx;
+    curNode = &colCtx->polyNodes.tbl[arg0->ssList->head];
+    test.vtxList = colCtx->colHeader->vtxList;
+    test.posA = arg0->posA;
+    test.posB = arg0->posB;
+    test.planeIntersect = &polyIntersect; //reorder maybe
+    test.chkOneFace = arg0->bccFlags & BGCHECK_CHECK_ONE_FACE;
+    test.chkDist = arg0->chkDist;
+
+    while (true) {
+        polyId = curNode->polyId;
+        test.poly = &colCtx->colHeader->polyList[polyId];
+        checkedPoly = &colCtx->polyNodes.polyCheckTbl[polyId];
+
+        if (*checkedPoly == true || COLPOLY_VIA_FLAG_TEST(test.poly->flags_vIA, arg0->xpFlags1)
+            || !(arg0->xpFlags2 == 0 || COLPOLY_VIA_FLAG_TEST(test.poly->flags_vIA, arg0->xpFlags2))
+            || (COLPOLY_VIA_FLAG_TEST(test.poly->flags_vIB, 4) && ((arg0->unk2C != NULL && arg0->unk2C->unk2 != 2) || (arg0->unk2C == NULL && arg0->xpFlags1 != 1))))
+        {
+            if (curNode->next == SS_NULL) {
+                break;
+            }
+            else {
+                curNode = &arg0->colCtx->polyNodes.tbl[curNode->next];
+                continue;
+            }
+        }
+        *checkedPoly = true;
+        minY = CollisionPoly_GetMinY(test.poly, (BgVertex*)test.vtxList);
+        if (test.posA->y < minY && test.posB->y < minY) {
+            break;
+        }
+        if (CollisionPoly_LineVsPoly(&test)) {
+            distSq = Math3D_Vec3fDistSq(test.posA, test.planeIntersect);
+            if (distSq < arg0->outDistSq) {
+                arg0->outDistSq = distSq;
+                *arg0->outPos = *test.planeIntersect;
+                *arg0->posB = *test.planeIntersect;
+                arg0->outPoly = test.poly;
+                result = true;
+            }
+        }
+        if (curNode->next == SS_NULL) {
+            break;
+        }
+        curNode = &arg0->colCtx->polyNodes.tbl[curNode->next];
+    }
+    return result;
+}
+#else 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C1D7C.s")
+#endif 
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C2008.s")
 

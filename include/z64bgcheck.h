@@ -30,6 +30,27 @@ struct DynaPolyActor;
 
 #define WATERBOX_ROOM(p) ((p >> 13) & 0x3F)
 
+// bccFlags
+#define BGCHECK_CHECK_WALL (1 << 0)
+#define BGCHECK_CHECK_FLOOR (1 << 1)
+#define BGCHECK_CHECK_CEILING (1 << 2)
+#define BGCHECK_CHECK_ONE_FACE (1 << 3)
+#define BGCHECK_CHECK_DYNA (1 << 4)
+#define BGCHECK_CHECK_ALL \
+    (BGCHECK_CHECK_WALL | BGCHECK_CHECK_FLOOR | BGCHECK_CHECK_CEILING | BGCHECK_CHECK_ONE_FACE | BGCHECK_CHECK_DYNA)
+
+// bciFlags
+#define BGCHECK_IGNORE_NONE 0
+#define BGCHECK_IGNORE_CEILING (1 << 0)
+#define BGCHECK_IGNORE_WALL (1 << 1)
+#define BGCHECK_IGNORE_FLOOR (1 << 2)
+
+// poly exclusion flags (xpFlags)
+#define COLPOLY_IGNORE_NONE 0
+#define COLPOLY_IGNORE_CAMERA (1 << 0)
+#define COLPOLY_IGNORE_ENTITY (1 << 1)
+#define COLPOLY_IGNORE_PROJECTILES (1 << 2)
+
 typedef struct {
     u16 head;
 } SSList;
@@ -207,3 +228,35 @@ typedef struct {
 } CamData;
 
 #endif
+
+typedef struct {
+    /* 0x00 */ CollisionPoly* poly;
+    /* 0x04 */ Vec3s* vtxList;
+    /* 0x08 */ Vec3f* posA;
+    /* 0x0C */ Vec3f* posB;
+    /* 0x10 */ Vec3f* planeIntersect;
+    /* 0x14 */ s32 chkOneFace;
+    /* 0x18 */ f32 chkDist;
+} func_800C07F0_args;
+
+typedef struct {
+    u16 unk0;
+    u8 unk2;
+} struct_func_800C0E74;
+
+typedef struct
+{
+    /* 0x00 */ UNK_PTR unk_00; //ssList related ?
+    /* 0x04 */ SSList* ssList; 
+    /* 0x08 */ CollisionContext* colCtx;
+    /* 0x0C */ u16 xpFlags1;
+    /* 0x0E */ u16 xpFlags2;
+    /* 0x10 */ Vec3f* posA;
+    /* 0x14 */ Vec3f* posB;
+    /* 0x18 */ Vec3f* outPos;
+    /* 0x1C */ CollisionPoly* outPoly;
+    /* 0x20 */ f32 outDistSq;
+    /* 0x24 */ f32 chkDist; //probably?
+    /* 0x28 */ s32 bccFlags;
+    /* 0x2C */ struct_func_800C0E74* unk2C;
+} struct_func_800C1D7C;
