@@ -15,10 +15,9 @@ typedef struct EnKakasi {
     /* 0x14C */ SkelAnime skelanime;
     /* 0x190 */ s16 unk190; // max:8, incremented in multiple places, used as index
     /* 0x192 */ s16 postTeachTimer;
-    /* 0x194 */ s16 unk194; // set by params, after params set to 2?
+    /* 0x194 */ s16 aboveGroundStatus; // from params, changed to 2 in init
     /* 0x196 */ s16 unk196; // some sort of state? 0 if just standing around
-    /* 0x198 */ s16 unk198;
-    /* 0x19A */ UNK_TYPE1 pad19A[0x6];
+    /* 0x19A */ UNK_TYPE1 pad198[0x8];
     /* 0x1A0 */ s32 animeIndex;
     /* 0x1A4 */ s32 unkCounter1A4; // counter, counts up to F while he digs away, reused elsewhere
     /* 0x1A8 */ s32 unk1A8; // state? set to 0,1,2
@@ -45,6 +44,11 @@ typedef struct EnKakasi {
 } EnKakasi; // size = 0x2A0
 
 extern const ActorInit En_Kakasi_InitVars;
+
+#define ENKAKASI_ABOVE_GROUND_TYPE 2
+
+#define GET_KAKASI_SUMMON_DISTANCE(this) ((this->actor.params >> 0x8) & 0xFF) 
+#define GET_KAKASI_ABOVE_GROUND(this) (this->actor.params & 0x1) 
 
 // todo: make params macro for summon distance
 
