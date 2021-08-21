@@ -627,29 +627,99 @@ f32 Actor_HeightDiff(Actor* actor1, Actor* actor2) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B6F20.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B6FC8.s")
+#ifdef NON_MATCHING
+f32 Player_GetHeight(Player* player) {
+    f32 offset;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B7090.s")
+    if (player->stateFlags1 & 0x800000) {
+        offset = 32.0f;
+    } else {
+        offset = 0.0f;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B7118.s")
+    switch (player->transformation) {
+        default:
+        case PLAYER_FORM_FIERCE_DEITY:
+            return offset + 124.0f;
+        case PLAYER_FORM_GORON:
+            if ((player->stateFlags3 & 0x1000) != 0) {
+                return 34.0f + offset;
+            } else {
+                return offset + 80.0f;
+            }
+        case PLAYER_FORM_ZORA:
+            return offset + 68.0f;
+        case PLAYER_FORM_DEKU:
+            return offset + 36.0f;
+        case PLAYER_FORM_HUMAN:
+            return offset + 44.0f;
+    }
+}
+#else
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Player_GetHeight.s")
+#endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B7128.s")
+// Player_GetRunSpeedLimit?
+f32 func_800B7090(Player* player) {
+    if (player->stateFlags1 & 0x800000) {
+        return 15.0f;
+    } else if (player->stateFlags1 & 0x8000000) {
+        return (R_RUN_SPEED_LIMIT / 100.0f) * 0.6f;
+    } else {
+        return R_RUN_SPEED_LIMIT / 100.0f;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B715C.s")
+s32 func_800B7118(Player* player) {
+    return player->stateFlags1 & 8;
+}
 
+s32 func_800B7128(Player* player) {
+    return func_800B7118(player) && player->unk_ACC;
+}
+
+s32 func_800B715C(GlobalContext* globalCtx) {
+    Player* player = PLAYER;
+
+    return player->stateFlags2 & 8;
+}
+
+/*
+void func_800B7170(GlobalContext* globalCtx, Player* player) {
+    Actor* temp_v0;
+
+    if ((globalCtx->roomCtx.currRoom.unk3 != 4) && (player->actor.id == ACTOR_PLAYER)) {
+        temp_v0 = player->unk_390;
+        if ((temp_v0 != NULL) && ((temp_v0->unk_1EC & 0x10) == 0)) {
+            func_800DFAC8(Play_GetCamera(globalCtx, 0), 4);
+        }
+    }
+}
+*/
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B7170.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B71DC.s")
+void Actor_MountHorse(GlobalContext* globalCtx, Player* player, Actor* horse) {
+    player->unk_390 = horse;
+    player->stateFlags1 |= 0x800000;
+    horse->child = &player->actor;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B7200.s")
+s32 func_800B7200(Player* player) {
+    return (player->stateFlags1 & 0x20000080) || (player->csMode != 0);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B722C.s")
+void func_800B722C(GlobalContext* globalCtx, Player* player) {
+    func_800F40A0(globalCtx, player);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B724C.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B7298.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B72E0.s")
+void func_800B72E0(DynaPolyActor* dyna) {
+    dyna->unk14C = 0.0f;
+    dyna->unk148 = 0.0f;
+}
 
 void func_800B72F8(DynaPolyActor* dyna, f32 a1, s16 a2) {
     dyna->unk150 = a2;
