@@ -13,7 +13,7 @@ typedef struct EnKakasi {
     /* 0x144 */ EnKakasiUnkFunc unkFunc; // used for one z_snap calling function?
     /* 0x148 */ EnKakasiActionFunc actionFunc;
     /* 0x14C */ SkelAnime skelanime;
-    /* 0x190 */ s16 unk190; // max:8, incremented in multiple places, used as index
+    /* 0x190 */ s16 unk190; // camera index for song teaching angles?
     /* 0x192 */ s16 postTeachTimer;
     /* 0x194 */ s16 aboveGroundStatus; // from params, changed to 2 in init
     /* 0x196 */ s16 unkState196;
@@ -45,7 +45,6 @@ typedef struct EnKakasi {
 
 extern const ActorInit En_Kakasi_InitVars;
 
-// there may have been more than one type planned
 #define ENKAKASI_ABOVE_GROUND_TYPE 2
 
 #define GET_KAKASI_SUMMON_DISTANCE(this) ((this->actor.params >> 0x8) & 0xFF) 
