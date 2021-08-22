@@ -9,7 +9,7 @@ void EnHakurock_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHakurock_Update(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80B21BE0(Actor* arg0, Vec3f* arg1, s32 arg2);
-
+void func_80B21EA4(EnHakurock* this, s32 arg1);
 void func_80B21FFC(EnHakurock* this);
 void func_80B22040(EnHakurock* this, GlobalContext* globalCtx);
 void func_80B220A8(EnHakurock* this);
@@ -92,8 +92,9 @@ void EnHakurock_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 // void func_80B21EA4(EnHakurock* this, s32 arg1) {
 //     Vec3f sp4C;
 //     s32 i;
-//     f32 temp_f20;
-//     s32 k;
+//     f32 scaleFactor;
+//     s32 phi_s0_3;
+//     s32 phi_s5;
 
 //     if (arg1 == 0) {
 //         for (i = 0; i < 20; i++) {
@@ -105,37 +106,31 @@ void EnHakurock_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 //         }
 //     } else {
 
-//         Math_Vec3f_Copy(&sp4C, &this->actor.world.pos);
-//         temp_f20 = this->actor.scale.x * 600.0f;
-//         k = 1;
+//         Math_Vec3f_Copy(&sp4C, &this->actor.world);
+//         scaleFactor = this->actor.scale.x * 600.0f;
+//         phi_s0_3 = 1;
 //         if (arg1 == 1) {
-//             temp_f20 -= temp_f20;
-//             k = 0;
+//             sp4C.y -= scaleFactor;
+//             phi_s0_3 = 0;
 //         }
+//         if (phi_s0_3 < 3) {
+//             phi_s5 = (phi_s0_3 * 5);
+//             // while (phi_s5 < 20) {
+//             //     for (i = 0; i < phi_s5; i++) {
+//             //         func_80B21BE0(this->actor.parent, &sp4C, arg1);
+//             //     }
+//             //     sp4C.y += scaleFactor;
+//             //     phi_s5 += 5;
+//             // }
+//             for (phi_s5 = (phi_s0_3 * 5); phi_s5 < 20; phi_s5 += 5) {
 
-//         for (k = (k * 5) + 5; k < 0x14; k += 5) {
+//                 for (i = 0; i < (phi_s5 - 1); i++) {
+//                     func_80B21BE0(this->actor.parent, &sp4C, arg1);
+//                 }
 
-//             for (i = 0; i < k - 1; i++) {
-//                 func_80B21BE0(this->actor.parent, &sp4C, arg1);
+//                 sp4C.y += scaleFactor;
 //             }
-//             temp_f20 += temp_f20;
 //         }
-//         // if (phi_s0_3 < 3) {
-//         //     phi_s5 = (phi_s0_3 * 5) + 5;
-//         //     do {
-//         //         phi_s0_4 = 0;
-//         //         if (phi_s5 > 0) {
-//         //             do {
-//         //                 func_80B21BE0(this->actor.parent, &sp4C, arg1);
-//         //                 temp_s0_3 = phi_s0_4 + 1;
-//         //                 phi_s0_4 = temp_s0_3;
-//         //             } while (temp_s0_3 < phi_s5);
-//         //         }
-//         //         temp_s5 = phi_s5 + 5;
-//         //         sp50 += temp_f20;
-//         //         phi_s5 = temp_s5;
-//         //     } while (temp_s5 < 0x14);
-//         // }
 //     }
 // }
 
@@ -324,24 +319,23 @@ void EnHakurock_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-// TODO: Fix the draw functions here...
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B228F4.s")
-// void func_80B228F4(Actor* thisx, GlobalContext* globalCtx) {
-//     OPEN_DISPS(globalCtx->state.gfxCtx);
-//     func_8012C28C(globalCtx->state.gfxCtx);
-//     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 185, 24, 255);
-//     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-//     gSPDisplayList(POLY_OPA_DISP++, D_0406AB30);
-//     CLOSE_DISPS(globalCtx->state.gfxCtx);
-// }
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B228F4.s")
+void func_80B228F4(Actor* thisx, GlobalContext* globalCtx) {
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+    func_8012C28C(globalCtx->state.gfxCtx);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 185, 24, 255);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, &D_0406AB30);
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B229A4.s")
-// void func_80B229A4(Actor* thisx, GlobalContext* globalCtx) {
-//     OPEN_DISPS(globalCtx->state.gfxCtx);
-//     func_8012C28C(globalCtx->state.gfxCtx);
-//     SysMatrix_InsertTranslation(-100.0f, 0.0f, 0.0f, 1);
-//     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-//     gSPDisplayList(POLY_OPA_DISP++, D_06011100);
-//     gSPDisplayList(POLY_OPA_DISP++, D_06011178);
-//     CLOSE_DISPS(globalCtx->state.gfxCtx);
-// }
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B229A4.s")
+void func_80B229A4(Actor* thisx, GlobalContext* globalCtx) {
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+    func_8012C28C(globalCtx->state.gfxCtx);
+    SysMatrix_InsertTranslation(-100.0f, 0.0f, 0.0f, 1);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, D_06011100);
+    gSPDisplayList(POLY_OPA_DISP++, D_06011178);
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
