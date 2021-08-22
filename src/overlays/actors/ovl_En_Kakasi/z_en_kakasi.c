@@ -130,9 +130,8 @@ Vec3f D_80971FE8[] = {
     {10.0f, 5.0f, 2.0f,},
 };
 
+// both use in digging away function
 Vec3f D_80972030 = { -3.0f, 50.0f, 90.0f, };
-
-// offest possition used for digging action func
 Vec3f D_8097203C = { 10.0f, -15.0f, 2.0f, };
 
 typedef enum {
@@ -232,7 +231,7 @@ void EnKakasi_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnKakasi_SetAnimation(EnKakasi* this, s32 index) {
     this->animeIndex = index;
-    this->animeFrameCount = SkelAnime_GetFrameCount(kakasiAnimations[this->animeIndex]);
+    this->animeFrameCount = SkelAnime_GetFrameCount((AnimationHeaderCommon*) kakasiAnimations[this->animeIndex]);
     // 1: regular playback speed, 0: starting frame
     SkelAnime_ChangeAnim(&this->skelanime, kakasiAnimations[this->animeIndex], 1.0f, 0.0f, this->animeFrameCount,
                          D_8097206C[this->animeIndex], -4.0f);
@@ -308,7 +307,9 @@ void func_8096FAAC(EnKakasi* this, GlobalContext* globalCtx) {
     }
 }
 
-// goes off every frame of song teach
+/*
+ * goes off every frame of song teach, but... doing what?
+ */
 void func_8096FBB8(EnKakasi* this, GlobalContext* globalCtx) {
     if (globalCtx->msgCtx.unk12048 == 0 || globalCtx->msgCtx.unk12048 == 1 || globalCtx->msgCtx.unk12048 == 2 ||
         globalCtx->msgCtx.unk12048 == 3 || globalCtx->msgCtx.unk12048 == 4) {
