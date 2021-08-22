@@ -229,22 +229,48 @@ void func_80151BB4(GlobalContext* globalCtx, u8 uParm2) {
 
     if (CHECK_QUEST_ITEM(18)) { // CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)
         if (((gSaveContext.weekEventReg[D_801C6B28[uParm2] >> 8]) & (u8)D_801C6B28[uParm2]) == 0) {
-            msgCtx->pad120B2[msgCtx->unk120B1] = temp;
+            msgCtx->unk120B2[msgCtx->unk120B1] = temp;
             msgCtx->unk120B1++;
         }
     }
     else if (uParm2 >= 20) {
         //temp = uParm2;
         if (((gSaveContext.weekEventReg[D_801C6B28[uParm2] >> 8]) & (u8)D_801C6B28[uParm2]) == 0) {
-            msgCtx->pad120B2[msgCtx->unk120B1] = temp;
+            msgCtx->unk120B2[msgCtx->unk120B1] = temp;
             msgCtx->unk120B1++;
         }
     }
 }
 
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80151C9C.s")
+extern u16 D_801C6AB8[];
+//extern ? D_801C6B28;
 
+u32 func_80151C9C(GlobalContext *globalCtx) {
+    MessageContext* msgCtx;
+    u8 flag;
+
+    msgCtx = &globalCtx->msgCtx;
+    while(1){
+        if(msgCtx->unk120B1 == 0){
+            return 0;
+        }
+        msgCtx->unk120B1--;
+
+
+        if (((gSaveContext.weekEventReg[ D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]]>>8]) & (u8)D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]]) == 0) {
+            flag = gSaveContext.weekEventReg[D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]]>>8];
+            gSaveContext.weekEventReg[D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]]>>8] = flag | (u8)D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]];
+            if((D_801C6AB8[msgCtx->unk120B2[msgCtx->unk120B1]] != 0) && (CHECK_QUEST_ITEM(0x12))){ // CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)
+                func_80151938(globalCtx, D_801C6AB8[msgCtx->unk120B2[msgCtx->unk120B1]]);
+                play_sound(NA_SE_SY_SCHEDULE_WRITE);
+                return 1;
+            }
+        }
+    }
+}
+
+//#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80151C9C.s")
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80151DA4.s")
 
 void func_80152434(GlobalContext *globalCtx, u16 arg2) {
@@ -274,6 +300,7 @@ void func_80152C64(View *view) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80152CAC.s")
 
+
 s16 D_801D02D8[15] = {
     ACTOR_OCEFF_WIPE5, ACTOR_OCEFF_WIPE5, // Sonata of Awakening Effect, Sonata of Awakening Effect
     ACTOR_OCEFF_WIPE5, ACTOR_OCEFF_WIPE5, // Sonata of Awakening Effect, Sonata of Awakening Effect
@@ -284,12 +311,13 @@ s16 D_801D02D8[15] = {
     ACTOR_OCEFF_WIPE, ACTOR_OCEFF_WIPE,   // Song of Time Effect, Song of Time Effect
     ACTOR_OCEFF_WIPE4                     // Scarecrow's Song Effect 
 };
-extern s32 D_801D02F8[15] = { 0,1,2,3,4,0,1,0,0,0,0,0,1,1,0 };
+s32 D_801D02F8[15] = { 0,1,2,3,4,0,1,0,0,0,0,0,1,1,0 };
+
 
 //Spawn song effect?
 void func_80152EC0(GlobalContext *globalCtx) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
-    Actor* actor = PLAYER;
+    Actor* actor = (Actor*)PLAYER;
     
     if(1){}
     if ((msgCtx->songPlayed < 0x17) && (msgCtx->songPlayed != 0xE) && ((msgCtx->unk1202C < 0x43) || (msgCtx->unk1202C >= 0x47))) {
