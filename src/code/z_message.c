@@ -318,6 +318,7 @@ u32 func_80151C9C(GlobalContext *globalCtx) {
     }
 }
 
+//#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80151C9C.s")
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80151DA4.s")
 
 void func_80152434(GlobalContext *globalCtx, u16 arg2) {
@@ -346,6 +347,7 @@ void func_80152C64(View *view) {
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80152CAC.s")
+
 
 s16 D_801D02D8[15] = {
     ACTOR_OCEFF_WIPE5, ACTOR_OCEFF_WIPE5, // Sonata of Awakening Effect, Sonata of Awakening Effect
