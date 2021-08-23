@@ -457,7 +457,7 @@
     0x801B46D0:("bgSpecialSceneParamsDefault","s16","[1]",0x2),
     0x801B46D2:("D_801B46D2","UNK_TYPE1","",0x1),
     0x801B46D4:("bgSpecialSceneMaxMemory","BgSpecialSceneMaxMemory","[1]",0x8),
-    0x801B46DC:("bgSpecialSceneMeshSubdivisions","BgSpecialSceneMeshSubdivision","[3]",0x24),
+    0x801B46DC:("bgSpecialSceneMeshSubdivisions","BgCheckSceneSubdivisionEntry","[3]",0x24),
     0x801B4700:("bgSpecialSceneMaxObjects","BgSpecialSceneMaxObjects","[1]",0x8),
     0x801B4708:("D_801B4708","UNK_TYPE1","",0x1),
     0x801B4710:("D_801B4710","UNK_TYPE1","",0x1),

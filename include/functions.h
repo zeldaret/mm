@@ -3456,7 +3456,7 @@ void Math3D_NormalVector(Vec3f* a, Vec3f* b, Vec3f* c, Vec3f* res);
 u32 func_8017A954(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3);
 u32 func_8017AA0C(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3);
 u32 func_8017ABBC(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3);
-// void func_8017AD38(void);
+s32 func_8017AD38(Vec3f* min, Vec3f* max, Vec3f* a, Vec3f* b);
 // void func_8017B68C(void);
 void func_8017B7F8(Vec3f* arg0, s16 arg1, f32* arg2, f32* arg3, f32* arg4);
 void Math3D_UnitNormalVector(Vec3f* a, Vec3f* b, Vec3f* c, f32* normX, f32* normY, f32* normZ, f32* param_7);

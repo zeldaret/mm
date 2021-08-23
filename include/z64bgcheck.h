@@ -83,7 +83,7 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ u16 maxNodes;
-    /* 0x2 */ u16 reservedNodes;
+    /* 0x2 */ u16 count; //reservedNodes
     /* 0x4 */ SSNode* tbl;//nodes;
     /* 0x8 */ u8* polyCheckTbl;
 } SSNodeList; // size = 0xC
@@ -109,7 +109,13 @@ typedef struct {
     /* 0x4 */ s16 ySubdivisions;
     /* 0x6 */ s16 zSubdivisions;
     /* 0x8 */ s32 unk8;
-} BgSpecialSceneMeshSubdivision; // size = 0xC
+} BgSpecialSceneMeshSubdivision; // size = 0xC //BgCheckSceneSubdivisionEntry
+
+typedef struct {
+    s16 sceneId;
+    Vec3s subdivAmount;
+    s32 nodeListMax; // if -1, dynamically compute max nodes
+} BgCheckSceneSubdivisionEntry;
 
 typedef struct {
     /* 0x00 */ Vec3f scale;
@@ -163,11 +169,11 @@ typedef struct {
 //#define DynaSSWaterboxList BgWaterboxList
 
 typedef struct {
-    /* 0x00 */ Vec3s min;
-    /* 0x06 */ Vec3s max;
-    /* 0x0C */ u16 nbVertices; //numVertices;
+    /* 0x00 */ Vec3s minBounds; //min
+    /* 0x06 */ Vec3s maxBounds; //max
+    /* 0x0C */ u16 numVertices; //numVertices;
     /* 0x10 */ Vec3s* vtxList; //BgVertex* vertices;
-    /* 0x14 */ u16 nbPolygons; //numPolygons;
+    /* 0x14 */ u16 numPolygons; //numPolygons;
     /* 0x18 */ CollisionPoly* polyList; //polygons;
     /* 0x1C */ SurfaceType* surfaceTypeList; //attributes;
     /* 0x20 */ UNK_PTR cameraDataList; //cameraData;
@@ -203,8 +209,6 @@ typedef struct {
     /* 0x140C */ s32 polyNodesMax; //u32 maxNodes;
     /* 0x1410 */ s32 polyListMax; //u32 maxPolygons;
     /* 0x1414 */ s32 vtxListMax; //u32 maxVertices;
-    /* 0x1418 */ u32 maxMemory;
-    /* 0x141C */ u32 unk141C;
 } DynaCollisionContext; // size = 0x1420
 
 typedef struct {
@@ -219,6 +223,8 @@ typedef struct {
     /* 0x40 */ StaticLookup* lookupTbl; //subdivisions;
     /* 0x44 */ SSNodeList polyNodes; //scenePolyLists;
     /* 0x0050 */ DynaCollisionContext dyna;
+    /* 0x1418 */ u32 memSize; //maxMemory
+    /* 0x141C */ u32 unk141C;
 } CollisionContext; // size = 0x1470
 
 typedef struct {
@@ -246,7 +252,7 @@ typedef struct {
 
 typedef struct
 {
-    /* 0x00 */ UNK_PTR unk_00; //ssList related ?
+    /* 0x00 */ StaticLookup* lookup;
     /* 0x04 */ SSList* ssList; 
     /* 0x08 */ CollisionContext* colCtx;
     /* 0x0C */ u16 xpFlags1;

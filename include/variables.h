@@ -453,7 +453,7 @@ extern u8 D_801B46C0[16];
 extern s16 bgSpecialSceneParamsDefault[1];
 // extern UNK_TYPE1 D_801B46D2;
 extern BgSpecialSceneMaxMemory bgSpecialSceneMaxMemory[1];
-extern BgSpecialSceneMeshSubdivision bgSpecialSceneMeshSubdivisions[3];
+extern BgCheckSceneSubdivisionEntry bgSpecialSceneMeshSubdivisions[3];
 extern BgSpecialSceneMaxObjects bgSpecialSceneMaxObjects[1];
 // extern UNK_TYPE1 D_801B4708;
 // extern UNK_TYPE1 D_801B4710;
