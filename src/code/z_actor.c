@@ -287,7 +287,6 @@ void TitleCard_ContextInit(GlobalContext* globalCtx, TitleCardContext* titleCtx)
     titleCtx->alpha = 0;
 }
 
-// TitleCard_InitBossName
 void TitleCard_InitBossName(GlobalContext* globalCtx, TitleCardContext* titleCtx, u32 texture, s16 param_4,
                            s16 param_5, u8 param_6, u8 param_7) {
     titleCtx->texture = texture;
@@ -885,9 +884,24 @@ s32 Actor_IsTalking(Actor* actor, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B886C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8898.s")
+void func_800B8898(GlobalContext* globalCtx, Actor* actor, s16* arg2, s16* arg3) {
+    Vec3f sp1C;
+    f32 sp18;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8934.s")
+    func_800B4EDC(globalCtx, &actor->focus.pos, &sp1C, &sp18);
+    *arg2 = (sp1C.x * sp18 * 160.0f) + 160.0f;
+    *arg3 = (sp1C.y * sp18 * -120.0f) + 120.0f;
+}
+
+s32 func_800B8934(GlobalContext* globalCtx, Actor* actor) {
+    Vec3f sp2C;
+    f32 sp28;
+    s32 pad[2];
+
+    func_800B4EDC(globalCtx, &actor->focus.pos, &sp2C, &sp28);
+
+    return (sp2C.x * sp28 >= -1.0f) && (sp2C.x * sp28 <= 1.0f) && (sp2C.y * sp28 >= -1.0f) && (sp2C.y * sp28 <= 1.0f);
+}
 
 u32 Actor_HasParent(Actor* actor, GlobalContext* globalCtx) {
     if (actor->parent != NULL) {
@@ -897,6 +911,7 @@ u32 Actor_HasParent(Actor* actor, GlobalContext* globalCtx) {
     }
 }
 
+// Actor_PickUp
 s32 func_800B8A1C(Actor* actor, GlobalContext* globalCtx, s32 getItemId, f32 xzRange, f32 yRange) {
     Player* player = PLAYER;
 
@@ -950,14 +965,17 @@ I am keeping this to rename the corresponding variables in the future
     return false;
 }
 
+// Actor_PickUpNearby
 s32 func_800B8B84(Actor* actor, GlobalContext* globalCtx, s32 getItemId) {
     return func_800B8A1C(actor, globalCtx, getItemId, 50.0f, 10.0f);
 }
 
+// Actor_HoldActor?
 s32 func_800B8BB0(Actor* actor, GlobalContext* globalCtx) {
     return func_800B8B84(actor, globalCtx, GI_NONE);
 }
 
+// Actor_PickUpFar?
 s32 func_800B8BD0(Actor* actor, GlobalContext* globalCtx, s32 getItemId) {
     return func_800B8A1C(actor, globalCtx, getItemId, 9999.9f, 9999.9f);
 }
@@ -970,40 +988,87 @@ s32 Actor_HasNoParent(Actor* actor, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8C20.s")
+void func_800B8C20(Actor* actorA, Actor* actorB, GlobalContext* globalCtx) {
+    Actor* parent = actorA->parent;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8C50.s")
+    if (parent->id == ACTOR_PLAYER) {
+        Player* player = (Player*)parent;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8C78.s")
+        player->leftHandActor = actorB;
+        player->unk_388 = actorB;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8C9C.s")
+    parent->child = actorB;
+    actorB->parent = parent;
+    actorA->parent = NULL;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8CEC.s")
+void func_800B8C50(Actor* actor, GlobalContext* globalCtx) {
+    Player* player = PLAYER;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8D10.s")
+    if (actor->xyzDistToPlayerSq < player->unk_AA0) {
+        player->unk_AA0 = actor->xyzDistToPlayerSq;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8D50.s")
+// Actor_IsMounted
+s32 func_800B8C78(GlobalContext* globalCtx, Actor* horse) {
+    if (horse->child != NULL) {
+        return true;
+    }
+    return false;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8D98.s")
-/*
+// Actor_SetRideActor
+s32 func_800B8C9C(GlobalContext* globalCtx, Actor* horse, s32 mountSide) {
+    Player* player = PLAYER;
+
+    if (!(player->stateFlags1 & 0x003C7880)) {
+        //player->rideActor = horse;
+        //player->mountSide = mountSide;
+        player->unk_390 = horse;
+        player->unk_38C = mountSide;
+        ActorCutscene_SetIntentToPlay(0x7C);
+        return true;
+    }
+
+    return false;
+}
+
+// Actor_NotMounted
+s32 func_800B8CEC(GlobalContext* globalCtx, Actor* horse) {
+    if (horse->child == NULL) {
+        return true;
+    }
+
+    return false;
+}
+
+void func_800B8D10(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 arg3, f32 arg4, u32 arg5, u32 arg6) {
+    Player* player = PLAYER;
+
+    player->unk_B74 = arg6;
+    player->unk_B75 = arg5;
+    player->unk_B78 = arg2;
+    player->unk_B76 = arg3;
+    player->unk_B7C = arg4;
+}
+
+void func_800B8D50(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 yaw, f32 arg4, u32 arg5) {
+    func_800B8D10(globalCtx, actor, arg2, yaw, arg4, 3, arg5);
+}
+
 void func_800B8D98(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 arg3, f32 arg4) {
-    func_800B8D50(globalCtx, actor, arg2, arg3, arg4, 0U);
+    func_800B8D50(globalCtx, actor, arg2, arg3, arg4, 0);
 }
-*/
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8DD4.s")
-/*
-void func_800B8DD4(void* arg2, s16 arg3, f32 arg4, u32 arg5) {
-    func_800B8D10(arg2, arg2, (f32) arg3, (s16) arg4, 2, arg5);
+void func_800B8DD4(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 arg3, f32 arg4, u32 arg5) {
+    func_800B8D10(globalCtx, actor, arg2, arg3, arg4, 2, arg5);
 }
-*/
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8E1C.s")
-/*
-void func_800B8E1C(void* arg2, s16 arg3, u32 arg4) {
-    func_800B8DD4(arg2, (s16) arg2, (f32) arg3, arg4, 0);
+void func_800B8E1C(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 arg3, f32 arg4) {
+    func_800B8DD4(globalCtx, actor, arg2, arg3, arg4, 0);
 }
-*/
 
 #if 0
 // The OoT version of this function (func_8002F7DC) takes Actor*, but there's a high chance it takes Player* here
@@ -1326,7 +1391,14 @@ Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, GlobalContext* globalC
     return newHead;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BB59C.s")
+s32 func_800BB59C(GlobalContext* globalCtx, Actor* actor) {
+    s16 sp1E;
+    s16 sp1C;
+
+    func_800B8898(globalCtx, actor, &sp1E, &sp1C);
+
+    return (sp1E > -20) && (sp1E < gScreenWidth + 20) && (sp1C > -160) && (sp1C < gScreenHeight + 160);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BB604.s")
 

@@ -175,7 +175,7 @@ typedef struct Player {
     /* 0x384 */ s16 unk_384;
     /* 0x386 */ u16 unk_386;
     /* 0x388 */ Actor* unk_388;
-    /* 0x38C */ s16 unk_38C;
+    /* 0x38C */ s8 unk_38C;
     /* 0x390 */ Actor* unk_390;
     /* 0x394 */ u8 csMode;
     /* 0x395 */ u8 unk_395;
