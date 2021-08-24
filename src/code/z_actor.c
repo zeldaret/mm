@@ -627,7 +627,6 @@ f32 Actor_HeightDiff(Actor* actor1, Actor* actor2) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B6F20.s")
 
-#ifdef NON_MATCHING
 f32 Player_GetHeight(Player* player) {
     f32 offset;
 
@@ -642,11 +641,7 @@ f32 Player_GetHeight(Player* player) {
         case PLAYER_FORM_FIERCE_DEITY:
             return offset + 124.0f;
         case PLAYER_FORM_GORON:
-            if ((player->stateFlags3 & 0x1000) != 0) {
-                return 34.0f + offset;
-            } else {
-                return offset + 80.0f;
-            }
+            return offset + ((player->stateFlags3 & 0x1000) ? 34.0f : 80.0f);
         case PLAYER_FORM_ZORA:
             return offset + 68.0f;
         case PLAYER_FORM_DEKU:
@@ -655,9 +650,6 @@ f32 Player_GetHeight(Player* player) {
             return offset + 44.0f;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Player_GetHeight.s")
-#endif
 
 // Player_GetRunSpeedLimit?
 f32 func_800B7090(Player* player) {
@@ -1036,6 +1028,7 @@ void func_800B9120(ActorContext* actorCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_UpdateAll.s")
 
+// Actor_Draw
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_DrawActor.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B9D1C.s")
