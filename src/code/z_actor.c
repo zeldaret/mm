@@ -1,4 +1,5 @@
 #include "global.h"
+#include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 
 void Actor_PrintLists(ActorContext* actorCtx) {
     ActorListEntry* actorList = &actorCtx->actorList[0];
@@ -665,19 +666,15 @@ s32 func_800B715C(GlobalContext* globalCtx) {
     return player->stateFlags2 & 8;
 }
 
-/*
 void func_800B7170(GlobalContext* globalCtx, Player* player) {
-    Actor* temp_v0;
-
     if ((globalCtx->roomCtx.currRoom.unk3 != 4) && (player->actor.id == ACTOR_PLAYER)) {
-        temp_v0 = player->rideActor;
-        if ((temp_v0 != NULL) && ((temp_v0->unk_1EC & 0x10) == 0)) {
+        EnHorse* rideActor = player->rideActor;
+
+        if ((rideActor != NULL) && !(rideActor->unk_1EC & 0x10)) {
             func_800DFAC8(Play_GetCamera(globalCtx, 0), 4);
         }
     }
 }
-*/
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B7170.s")
 
 void Actor_MountHorse(GlobalContext* globalCtx, Player* player, Actor* horse) {
     player->rideActor = horse;
