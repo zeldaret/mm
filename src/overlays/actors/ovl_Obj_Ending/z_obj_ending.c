@@ -69,6 +69,6 @@ void ObjEnding_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
     dl2 = this->modelInfo->dLists[1];
     if (dl2 != NULL) {
-        func_800BE03C(globalCtx, dl2);
+        Gfx_DrawDListXlu(globalCtx, dl2);
     }
 }

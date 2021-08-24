@@ -914,7 +914,7 @@ void func_800BDC5C(SkelAnime* skelAnime, ActorAnimationEntry animation[], s32 in
 void func_800BDCF4(GlobalContext* globalCtx, s16* arg1, s16* arg2, s32 size);
 void Actor_Noop(Actor* actor, GlobalContext* globalCtx);
 void Gfx_DrawDListOpa(GlobalContext* globalCtx, Gfx* dlist);
-void func_800BE03C(GlobalContext* globalCtx, Gfx* dlist);
+void Gfx_DrawDListXlu(GlobalContext* globalCtx, Gfx* dlist);
 Actor* func_800BE0B8(GlobalContext* globalCtx, Actor* inActor, s16 arg2, u8 arg3, f32 arg4);
 // void func_800BE184(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6);
 u8 func_800BE22C(Actor* actor);

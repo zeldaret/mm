@@ -881,7 +881,7 @@
     0x800BDCF4:("func_800BDCF4",),
     0x800BDFB0:("Actor_Noop",),
     0x800BDFC0:("Gfx_DrawDListOpa",),
-    0x800BE03C:("func_800BE03C",),
+    0x800BE03C:("Gfx_DrawDListXlu",),
     0x800BE0B8:("func_800BE0B8",),
     0x800BE184:("func_800BE184",),
     0x800BE22C:("func_800BE22C",),

@@ -113,5 +113,5 @@ void BgIkanaRay_Draw(Actor* thisx, GlobalContext* globalCtx) {
     BgIkanaRay* this = THIS;
 
     AnimatedMat_Draw(globalCtx, this->animatedTextures);
-    func_800BE03C(globalCtx, D_06001100);
+    Gfx_DrawDListXlu(globalCtx, D_06001100);
 }

@@ -38,5 +38,5 @@ void DmStatue_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void DmStatue_Draw(Actor* thisx, GlobalContext* globalCtx) {
     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_06001788));
-    func_800BE03C(globalCtx, D_06000520);
+    Gfx_DrawDListXlu(globalCtx, D_06000520);
 }

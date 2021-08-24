@@ -22,6 +22,7 @@ animdict ={
     "func_800B84D0": "Actor_IsTalking",
     "func_8017D668": "Math3D_PointDistToLine2D",
     "func_800BDFC0": "Gfx_DrawDListOpa",
+    "func_800BE03C": "Gfx_DrawDListXlu",
     "func_800B6FC8": "Player_GetHeight",
 }
 
