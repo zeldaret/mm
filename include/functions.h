@@ -11,13 +11,6 @@ double sqrt(double d);
 #pragma intrinsic(sqrt)
 
 void bootproc(void);
-void Idle_ClearMemory(void* begin, void* end);
-void Idle_InitFramebuffer(u32* ptr, u32 numBytes, u32 value);
-void Idle_InitScreen(void);
-void Idle_InitMemory(void);
-void Idle_InitCodeAndMemory(void);
-void Main_ThreadEntry(void* arg);
-void Idle_InitVideo(void);
 void Idle_ThreadEntry(void* arg);
 void ViConfig_UpdateVi(u32 arg0);
 void ViConfig_UpdateBlack(void);
@@ -29,8 +22,7 @@ s32 DmaMgr_FindDmaIndex(u32 vromAddr);
 const char* func_800809F4(u32 param_1);
 void DmaMgr_ProcessMsg(DmaRequest* request);
 void DmaMgr_ThreadEntry(void* arg);
-s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, u32 vromStart, u32 size, UNK_TYPE4 unused,
-                           OSMesgQueue* callback, void* callbackMesg);
+s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, u32 vromStart, u32 size, UNK_TYPE4 unused, OSMesgQueue* callback, void* callbackMesg);
 s32 DmaMgr_SendRequest0(void* vramStart, u32 vromStart, u32 size);
 void DmaMgr_Start(void);
 void DmaMgr_Stop(void);
@@ -142,15 +134,15 @@ s8 PadUtils_GetRelYImpl(Input* input);
 s8 PadUtils_GetRelX(Input* input);
 s8 PadUtils_GetRelY(Input* input);
 void PadUtils_UpdateRelXY(Input* input);
-void StackCheck_Init(StackEntry* entry, void* stackTop, void* stackBottom, u32 initValue, s32 minSpace,
-                     const char* name);
+void StackCheck_Init(StackEntry* entry, void* stackTop, void* stackBottom, u32 initValue, s32 minSpace, const char* name);
 void StackCheck_Cleanup(StackEntry* entry);
 StackStatus StackCheck_GetState(StackEntry* entry);
 u32 StackCheck_CheckAll(void);
 u32 StackCheck_Check(StackEntry* entry);
 // void GfxPrint_InitDlist(void);
-// void GfxPrint_SetColor(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4
-// param_5); void GfxPrint_SetPosPx(void); void GfxPrint_SetPos(void);
+// void GfxPrint_SetColor(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void GfxPrint_SetPosPx(void);
+// void GfxPrint_SetPos(void);
 void GfxPrint_SetBasePosPx(GfxPrint* this, s32 param_2, s32 param_3);
 void GfxPrint_PrintCharImpl(GfxPrint* this, u8 c);
 void GfxPrint_PrintChar(GfxPrint* this, u8 c);
@@ -167,14 +159,14 @@ void GfxPrint_PrintChar(GfxPrint* this, u8 c);
 // void MtxConv_L2F(void);
 void __assert(const char* file, u32 lineNum);
 // void func_800862B4(void);
-void* StartHeap_AllocMin1(u32 size);
-void StartHeap_FreeNull(void* pvParm1);
+void* SystemArena_MallocMin1(u32 size);
+void SystemArena_FreeNull(void* pvParm1);
 void func_8008633C(u32 param_1, s32 param_2, s32 param_3, UNK_PTR param_4);
 void func_800863AC(u32 param_1, s32 param_2, s32 param_3, UNK_PTR param_4);
 // void func_8008641C(void);
 // void func_800864EC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_80086588(void);
-void StartHeap_Init(u32 base, u32 size);
+void SystemArena_Init(u32 base, u32 size);
 s32 func_80086620(OSMesgQueue* param_1, PadMgr* param_2, OSContStatus* param_3);
 // void func_80086760(void);
 // void func_80086794(void);
@@ -209,16 +201,16 @@ s32 func_80086D40(f64 param_1);
 f64 func_80086D6C(f64 param_1);
 s32 func_80086D8C(f32 param_1);
 s32 func_80086DAC(f64 param_1);
-void* StartHeap_Alloc(u32 size);
-void* StartHeap_AllocR(u32 size);
-void* StartHeap_Realloc(void* oldPtr, u32 newSize);
-void StartHeap_Free(void* ptr);
-void* StartHeap_Calloc(s32 param_1, s32 param_2);
-void StartHeap_AnalyzeArena(u32* maxFreeBlock, u32* bytesFree, u32* bytesAllocated);
-// s32 StartHeap_CheckArena(void);
-void StartHeap_InitArena(u32 base, u32 size);
-// void StartHeap_Cleanup(void);
-// u32 StartHeap_IsInitialized(void);
+void* SystemArena_Malloc(u32 size);
+void* SystemArena_MallocR(u32 size);
+void* SystemArena_Realloc(void* oldPtr, u32 newSize);
+void SystemArena_Free(void* ptr);
+void* SystemArena_Calloc(u32 elements, u32 size);
+void SystemArena_AnalyzeArena(u32* maxFreeBlock, u32* bytesFree, u32* bytesAllocated);
+u32 SystemArena_CheckArena(void);
+void SystemArena_InitArena(void* start, u32 size);
+void SystemArena_Cleanup(void);
+u8 SystemArena_IsInitialized(void);
 s32 Rand_Next(void);
 void Rand_Seed(u32 seed);
 f32 Rand_ZeroOne(void);
@@ -273,8 +265,7 @@ long long __ll_lshift(long long left, long long right);
 long long __ll_rem(long long left, unsigned long long right);
 long long __ll_div(long long left, long long right);
 long long __ll_mul(long long left, long long right);
-void __ull_divremi(unsigned long long* quotient, unsigned long long* remainder, unsigned long long dividend,
-                   unsigned short divisor);
+void __ull_divremi(unsigned long long* quotient, unsigned long long* remainder, unsigned long long dividend, unsigned short divisor);
 long long __ll_mod(long long left, long long right);
 long long __ll_rshift(long long left, long long right);
 void __osExceptionPreamble(void);
@@ -315,7 +306,7 @@ void __osInitialize_autodetect(void);
 void* osViGetNextFramebuffer(void);
 void guPerspectiveF(float mf[4][4], u16* perspNorm, f32 fovy, f32 aspect, f32 near, f32 far, f32 scale);
 void guPerspective(Mtx* m, u16* perspNorm, f32 fovy, f32 aspect, f32 near, f32 far, f32 scale);
-s32 __osSpRawStartDma(s32 direction, u32 devAddr, void* dramAddr, u32 size);
+s32 __osSpRawStartDma(s32 direction, void* devAddr, void* dramAddr, u32 size);
 s32 __osSiRawStartDma(s32 direction, void* dramAddr);
 // void osEPiLinkHandle(void);
 void osViBlack(u8 active);
@@ -333,9 +324,8 @@ void osViSetMode(OSViMode* modep);
 // void __osSetConfig(void);
 void guLookAtF(float mf[4][4], f32 xEye, f32 yEye, f32 zEye, f32 xAt, f32 yAt, f32 zAt, f32 xUp, f32 yUp, f32 zUp);
 void guLookAt(Mtx* m, f32 xEye, f32 yEye, f32 zEye, f32 xAt, f32 yAt, f32 zAt, f32 xUp, f32 yUp, f32 zUp);
-// void osPfsAllocateFile(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7); void __osPfsDeclearPage(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1
-// param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void osPfsAllocateFile(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void __osPfsDeclearPage(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
 s32 osStopTimer(OSTimer* t);
 u32 __osProbeTLB(void* param_1);
 void osCreatePiManager(OSPri pri, OSMesgQueue* cmdQ, OSMesg* cmdBuf, s32 cmdMsgCnt);
@@ -343,10 +333,7 @@ void __osPiCreateAccessQueue(void);
 void __osPiGetAccess(void);
 void __osPiRelAccess(void);
 void __osDevMgrMain(void* arg);
-// void func_8008C640(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5,
-// UNK_TYPE1 param_6, UNK_TYPE1 param_7, UNK_TYPE1 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11,
-// UNK_TYPE4 param_12, UNK_TYPE4 param_13, UNK_TYPE4 param_14, UNK_TYPE4 param_15, UNK_TYPE4 param_16, UNK_TYPE4
-// param_17, UNK_TYPE4 param_18);
+// void func_8008C640(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE1 param_7, UNK_TYPE1 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11, UNK_TYPE4 param_12, UNK_TYPE4 param_13, UNK_TYPE4 param_14, UNK_TYPE4 param_15, UNK_TYPE4 param_16, UNK_TYPE4 param_17, UNK_TYPE4 param_18);
 s32 osPiRawStartDma(s32 direction, u32 devAddr, void* dramAddr, u32 size);
 // void __osSumcalc(void);
 // void __osIdCheckSum(void);
@@ -358,18 +345,14 @@ s32 osPiRawStartDma(s32 direction, u32 devAddr, void* dramAddr, u32 size);
 u32 osGetCount(void);
 void guMtxL2F(MtxF* m1, Mtx* m2);
 u32 osGetMemSize(void);
-// void osPfsFindFile(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6);
+// void osPfsFindFile(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 void osSetEventMesg(OSEvent e, OSMesgQueue* mq, OSMesg m);
 f32 sqrtf(f32 __x);
 s32 osAfterPreNMI(void);
 s32 osContStartQuery(OSMesgQueue* mq);
 void osContGetQuery(OSContStatus* data);
-void guLookAtHiliteF(float mf[4][4], LookAt* l, Hilite* h, f32 xEye, f32 yEye, f32 zEye, f32 xAt, f32 yAt, f32 zAt,
-                     f32 xUp, f32 yUp, f32 zUp, f32 xl1, f32 yl1, f32 zl1, f32 xl2, f32 yl2, f32 zl2, s32 twidth,
-                     s32 theight);
-void guLookAtHilite(Mtx* m, LookAt* l, Hilite* h, f32 xEye, f32 yEye, f32 zEye, f32 xAt, f32 yAt, f32 zAt, f32 xUp,
-                    f32 yUp, f32 zUp, f32 xl1, f32 yl1, f32 zl1, f32 xl2, f32 yl2, f32 zl2, s32 twidth, s32 theight);
+void guLookAtHiliteF(float mf[4][4], LookAt* l, Hilite* h, f32 xEye, f32 yEye, f32 zEye, f32 xAt, f32 yAt, f32 zAt, f32 xUp, f32 yUp, f32 zUp, f32 xl1, f32 yl1, f32 zl1, f32 xl2, f32 yl2, f32 zl2, s32 twidth, s32 theight);
+void guLookAtHilite(Mtx* m, LookAt* l, Hilite* h, f32 xEye, f32 yEye, f32 zEye, f32 xAt, f32 yAt, f32 zAt, f32 xUp, f32 yUp, f32 zUp, f32 xl1, f32 yl1, f32 zl1, f32 xl2, f32 yl2, f32 zl2, s32 twidth, s32 theight);
 s32 _Printf(PrintCallback pfn, void* arg, const char* fmt, va_list ap);
 void _Putfld(_Pft* px, va_list* pap, u8 code, u8* ac);
 // void osVoiceClearDictionary(void);
@@ -422,8 +405,7 @@ void osDpSetStatus(u32 data);
 void bcopy(void* __src, void* __dest, size_t __n);
 void __osResetGlobalIntMask(u32 mask);
 // void osPfsDeleteFile(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
-// void __osPfsReleasePages(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4
-// param_5);
+// void __osPfsReleasePages(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 void guOrthoF(float mf[4][4], f32 l, f32 r, f32 b, f32 t, f32 n, f32 f, f32 scale);
 void guOrtho(Mtx* m, f32 l, f32 r, f32 b, f32 t, f32 n, f32 f, f32 scale);
 OSIntMask __osDisableInt(void);
@@ -494,7 +476,7 @@ float __ull_to_f(unsigned long long l);
 // void osVoiceControlGain(void);
 // void osVoiceStartReadData(void);
 void* osViGetCurrentFramebuffer(void);
-s32 __osSpSetPc(u32 data);
+s32 __osSpSetPc(void* data);
 // void __osVoiceContWrite4(void);
 void __osGetHWIntrRoutine(s32 idx, OSMesgQueue** outQueue, OSMesg* outMsg);
 // void __osSetHWIntrRoutine(void);
@@ -553,8 +535,7 @@ void EffectBlure_Draw(EffectBlure* params, GraphicsContext* gfxCtx);
 void EffectShieldParticle_Init(EffShieldParticleParams* params, EffShieldParticleInit* init);
 void EffectShieldParticle_Destroy(EffShieldParticleParams* params);
 s32 EffectShieldParticle_Update(EffShieldParticleParams* params);
-void EffectShieldParticle_CalculateColors(EffShieldParticleParams* params, Color_RGBA8* primColor,
-                                          Color_RGBA8* envColor);
+void EffectShieldParticle_CalculateColors(EffShieldParticleParams* params, Color_RGBA8* primColor, Color_RGBA8* envColor);
 void EffectShieldParticle_Draw(EffShieldParticleParams* params, GraphicsContext* gfxCtx);
 void EffectSpark_Init(EffSparkParams* params, EffSparkParams* init);
 void EffectSpark_Destroy(EffSparkParams* params);
@@ -566,8 +547,7 @@ void func_800AE5A0(GlobalContext* globalCtx);
 // void func_800AE5E4(void);
 void func_800AE778(GlobalContext* globalCtx, Color_RGBA8* color, s16 param_3, s16 param_4);
 void func_800AE8EC(GlobalContext* globalCtx);
-void func_800AE930(CollisionContext* colCtx, s32 param_2, float* param_3, f32 param_4, s16 param_5,
-                   CollisionPoly* param_6, s32 param_7);
+void func_800AE930(CollisionContext* colCtx, s32 param_2, float* param_3, f32 param_4, s16 param_5, CollisionPoly* param_6, s32 param_7);
 // void func_800AEF44(void);
 void EffectTireMark_InitParticle(EffTireMarkParticle* particle);
 void EffectTireMark_Init(EffTireMarkParams* params, EffTireMarkInit* init);
@@ -600,9 +580,7 @@ s16 func_800B096C(s16 param_1, s16 param_2, s32 param_3);
 s16 func_800B09D0(s16 a0, s16 a1, f32 a2);
 u8 func_800B0A24(u8 a0, u8 a1, f32 a2);
 void EffectSs_DrawGEffect(GlobalContext* globalCtx, EffectSs* this, void* texture);
-void EffectSsDust_Spawn(GlobalContext* globalCtx, u16 drawFlags, Vec3f* pos, Vec3f* velocity, Vec3f* accel,
-                        Color_RGBA8* primColor, Color_RGBA8* envColor, s16 scale, s16 scaleStep, s16 life,
-                        u8 updateMode);
+void EffectSsDust_Spawn(GlobalContext* globalCtx, u16 drawFlags, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor, Color_RGBA8* envColor, s16 scale, s16 scaleStep, s16 life, u8 updateMode);
 void func_800B0DE0(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor,
                    Color_RGBA8* envColor, s16 scale, s16 scaleStep);
 void func_800B0E48(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor,
@@ -637,17 +615,13 @@ void EffectSsKiraKira_SpawnSmall(GlobalContext* globalCtx, Vec3f* pos, Vec3f* ve
                                  Color_RGBA8* primColor, Color_RGBA8* envColor);
 void EffectSsGSpk_SpawnSmall(GlobalContext* globalCtx, Actor* actor, Vec3f* pos, Vec3f* velocity, Vec3f* accel,
                              Color_RGBA8* primColor, Color_RGBA8* envColor);
-void EffectSsKiraKira_SpawnDispersed(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel,
-                                     Color_RGBA8* primColor, Color_RGBA8* envColor, s16 scale, s32 life);
-// void EffectSsKiraKira_SpawnFocused(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE4 param_8); void EffectSsBomb2_SpawnFade(UNK_TYPE4
-// uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4); void EffectSsBomb2_SpawnLayered(UNK_TYPE4 param_1, Vec3f*
-// param_2, Vec3f* param_3, Vec3f* param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6); void EffectSsBlast_Spawn(UNK_TYPE4
-// uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, Color_RGBA8* param_5, Color_RGBA8* param_6, UNK_TYPE2
-// param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10); void
-// EffectSsBlast_SpawnWhiteCustomScale(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7); void EffectSsBlast_SpawnShockwave(UNK_TYPE1 param_1,
-// UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7);
+void EffectSsKiraKira_SpawnDispersed(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor, Color_RGBA8* envColor, s16 scale, s32 life);
+// void EffectSsKiraKira_SpawnFocused(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE4 param_8);
+// void EffectSsBomb2_SpawnFade(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4);
+// void EffectSsBomb2_SpawnLayered(UNK_TYPE4 param_1, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6);
+// void EffectSsBlast_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, Color_RGBA8* param_5, Color_RGBA8* param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10);
+// void EffectSsBlast_SpawnWhiteCustomScale(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7);
+// void EffectSsBlast_SpawnShockwave(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7);
 // void EffectSsBlast_SpawnWhiteShockwave(void);
 // void EffectSsGSpk_SpawnAccel(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, Vec3f* pzParm3, Vec3f* pzParm4, Vec3f* param_5, Color_RGBA8* param_6, Color_RGBA8* param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9);
 // void EffectSsGSpk_SpawnNoAccel(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9);
@@ -662,10 +636,8 @@ void EffectSsGRipple_Spawn(GlobalContext* globalCtx, Vec3f* pos, s16 radius, s16
 void EffectSsGSplash_Spawn(GlobalContext* globalCtx, Vec3f* pos, Color_RGBA8* primColor, Color_RGBA8* envColor,
                            s16 type, s16 scale);
 // void EffectSsGFire_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2);
-// void EffectSsLightning_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Color_RGBA8* pzParm3, Color_RGBA8* pzParm4, UNK_TYPE2
-// param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8); void EffectSsDtBubble_SpawnColorProfile(UNK_TYPE4
-// param_1, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7,
-// UNK_TYPE2 param_8);
+// void EffectSsLightning_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Color_RGBA8* pzParm3, Color_RGBA8* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8);
+// void EffectSsDtBubble_SpawnColorProfile(UNK_TYPE4 param_1, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8);
 void EffectSsDtBubble_SpawnCustomColor(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel,
                                        Color_RGBA8* primColor, Color_RGBA8* envColor, s16 scale, s16 life, s16 randXZ);
 void EffectSsHahen_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 unused, s16 scale,
@@ -674,45 +646,39 @@ void EffectSsHahen_SpawnBurst(GlobalContext* globalCtx, Vec3f* pos, f32 burstSca
                               s16 randScaleRange, s16 count, s16 objId, s16 life, Gfx* dList);
 // void func_800B2364(void);
 // void EffectSsStick_Spawn(UNK_TYPE4 uParm1, UNK_PTR puParm2, UNK_TYPE2 uParm3);
-// void EffectSsSibuki_Spawn(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2
-// param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7);
+// void EffectSsSibuki_Spawn(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7);
 void EffectSsSibuki_SpawnBurst(GlobalContext* globalCtx, Vec3f* pos);
 // void EffectSsStone1_Spawn(UNK_TYPE4 uParm1, UNK_PTR puParm2, UNK_TYPE4 uParm3);
 // void EffectSsHitMark_Spawn(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, UNK_TYPE2 uParm3, Vec3f* pzParm4);
 void EffectSsHitMark_SpawnFixedScale(GlobalContext* globalCtx, s32 type, Vec3f* pos);
 // void EffectSsHitMark_SpawnCustomScale(void);
-// void EffectSsFhgFlash_SpawnShock(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, Vec3f* pzParm3, UNK_TYPE2 uParm4, UNK_TYPE1
-// param_5); void EffectSsKFire_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2
-// param_5, UNK_TYPE1 param_6);
+// void EffectSsFhgFlash_SpawnShock(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, Vec3f* pzParm3, UNK_TYPE2 uParm4, UNK_TYPE1 param_5);
+// void EffectSsKFire_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE1 param_6);
 void EffectSsSolderSrchBall_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 unused,
                                   s16* linkDetected, s16 drawFlag);
 void EffectSsKakera_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* arg3, s16 gravity, s16 arg5,
                           s16 arg6, s16 arg7, s16 arg8, s16 scale, s16 arg10, s16 arg11, s32 life, s16 colorIdx,
                           s16 objId, Gfx* dList);
-// void EffectSsIcePiece_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, UNK_TYPE4 uParm3, Vec3f* pzParm4, Vec3f* param_5,
-// UNK_TYPE4 param_6); void EffectSsIcePiece_SpawnBurst(void); void EffectSsEnIce_SpawnFlyingVec3f(UNK_TYPE4 uParm1,
-// Actor* pzParm2, Vec3f* pzParm3, Color_RGBA8* pzParm4, Color_RGBA8* param_5, UNK_TYPE4 param_6); void
-// func_800B2B44(void); void func_800B2B7C(void);
+// void EffectSsIcePiece_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, UNK_TYPE4 uParm3, Vec3f* pzParm4, Vec3f* param_5, UNK_TYPE4 param_6);
+// void EffectSsIcePiece_SpawnBurst(void);
+// void EffectSsEnIce_SpawnFlyingVec3f(UNK_TYPE4 uParm1, Actor* pzParm2, Vec3f* pzParm3, Color_RGBA8* pzParm4, Color_RGBA8* param_5, UNK_TYPE4 param_6);
+// void func_800B2B44(void);
+// void func_800B2B7C(void);
 void EffectSsEnIce_Spawn(GlobalContext* globalCtx, Vec3f* pos, f32 scale, Vec3f* velocity, Vec3f* accel,
                          Color_RGBA8* primColor, Color_RGBA8* envColor, s32 life);
-// void EffectSsFireTail_Spawn(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, Vec3f* pzParm3, UNK_TYPE4 uParm4, Vec3f* param_5,
-// UNK_TYPE2 param_6, Color_RGBA8* param_7, Color_RGBA8* param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10, UNK_TYPE4
-// param_11); void EffectSsFireTail_SpawnFlame(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1
-// param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6); void EffectSsFireTail_SpawnFlameOnPlayer(void);
-void EffectSsEnFire_SpawnVec3f(GlobalContext* globalCtx, Actor* actor, Vec3f* pos, s16 scale, s16 arg4, s16 flags,
-                               s16 bodyPart);
-// void EffectSsEnFire_SpawnVec3s(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2
-// param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7); void EffectSsExtra_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f*
-// pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6);
-void EffectSsDeadDb_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* prim,
-                          Color_RGBA8* env, s16 scale, s16 scaleStep, s32 unk);
+// void EffectSsFireTail_Spawn(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, Vec3f* pzParm3, UNK_TYPE4 uParm4, Vec3f* param_5, UNK_TYPE2 param_6, Color_RGBA8* param_7, Color_RGBA8* param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10, UNK_TYPE4 param_11);
+// void EffectSsFireTail_SpawnFlame(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6);
+// void EffectSsFireTail_SpawnFlameOnPlayer(void);
+void EffectSsEnFire_SpawnVec3f(GlobalContext* globalCtx, Actor* actor, Vec3f* pos, s16 scale, s16 arg4, s16 flags, s16 bodyPart);
+// void EffectSsEnFire_SpawnVec3s(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7);
+// void EffectSsExtra_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6);
+void EffectSsDeadDb_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* prim, Color_RGBA8* env,
+                          s16 scale, s16 scaleStep, s32 unk);
 void func_800B3030(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep,
                    s32 colorIndex);
-// void EffectSsDeadDd_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE1* param_5,
-// UNK_TYPE1* param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE4 param_10); void
-// EffectSsDeadDs_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2
-// param_6, UNK_TYPE2 param_7, UNK_TYPE4 param_8); void func_800B31BC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1
-// param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6);
+// void EffectSsDeadDd_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE1* param_5, UNK_TYPE1* param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE4 param_10);
+// void EffectSsDeadDs_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE4 param_8);
+// void func_800B31BC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6);
 void EffectSsIceSmoke_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale);
 // void EffectSsIceBlock_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5);
 void func_800B32D0(GameState* gamestate);
@@ -728,8 +694,7 @@ void func_800B4088(Actor* actor, Lights* mapper, GlobalContext* globalCtx);
 void func_800B40B8(Actor* actor, Lights* mapper, GlobalContext* globalCtx);
 void func_800B40E0(GlobalContext* globalCtx, Light* light, MtxF* arg2, s32 arg3, f32 arg4, f32 arg5, f32 arg6);
 void func_800B42F8(Actor* actor, Lights* mapper, GlobalContext* globalCtx);
-// void func_800B4A98(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6);
+// void func_800B4A98(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 void func_800B4AEC(GlobalContext* globalCtx, Actor* actor, f32 param_3);
 void func_800B4B50(Actor* actor, s32 iParm2, GlobalContext* globalCtx);
 void func_800B4EDC(GlobalContext* globalCtx, Vec3f* pzParm2, Vec3f* pzParm3, f32* pfParm4);
@@ -755,8 +720,7 @@ void Actor_UnsetRoomClearedTemp(GlobalContext* globalCtx, u32 roomNumber);
 u32 Actor_GetCollectibleFlag(GlobalContext* globalCtx, s32 index);
 void Actor_SetCollectibleFlag(GlobalContext* globalCtx, s32 index);
 void Actor_TitleCardContextInit(GlobalContext* globalCtx, TitleCardContext* titleCardCtx);
-void Actor_TitleCardCreate(GlobalContext* globalCtx, TitleCardContext* titleCardCtx, u32 texture, s16 param_4,
-                           s16 param_5, u8 param_6, u8 param_7);
+void Actor_TitleCardCreate(GlobalContext* globalCtx, TitleCardContext* titleCardCtx, u32 texture, s16 param_4, s16 param_5, u8 param_6, u8 param_7);
 // void Actor_Nop800B5E50(UNK_TYPE4 param_1, UNK_TYPE4 param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4);
 void Actor_TitleCardUpdate(GlobalContext* globalCtx, TitleCardContext* titleCardCtx);
 void Actor_TitleCardDraw(GlobalContext* globalCtx, TitleCardContext* titleCardCtx);
@@ -823,10 +787,8 @@ s32 Actor_IsActorFacingActorAndWithinRange(Actor* actor, Actor* other, f32 range
 void func_800B75A0(CollisionPoly* param_1, Vec3f* param_2, s16* param_3);
 // UNK_TYPE4 func_800B761C(Actor* param_1, UNK_TYPE4 param_2, u32 param_3);
 // UNK_TYPE4 func_800B7678(GlobalContext* globalCtx, Actor* param_2, s32 param_3, u32 param_4);
-void Actor_UpdateBgCheckInfo(GlobalContext* globalCtx, Actor* actor, f32 wallCheckHeight, f32 wallCheckRadius,
-                             f32 ceilingCheckHeight, u32 flags);
-// void func_800B7E04(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6);
+void Actor_UpdateBgCheckInfo(GlobalContext* globalCtx, Actor* actor, f32 wallCheckHeight, f32 wallCheckRadius, f32 ceilingCheckHeight, u32 flags);
+// void func_800B7E04(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 s32 func_800B7FE0(f32* param_1, f32* param_2, f32* param_3, GraphicsContext* gfxCtx);
 // void func_800B8018(void);
 void func_800B8050(Actor* actor, GlobalContext* globalCtx, s32 iParm3);
@@ -863,13 +825,11 @@ void func_800B8C50(Actor* actor, GlobalContext* globalCtx);
 // void func_800B8C78(void);
 // void func_800B8C9C(void);
 // void func_800B8CEC(void);
-// void func_800B8D10(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_800B8D10(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
 void func_800B8D50(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 yaw, f32 arg4, u32 arg5);
 void func_800B8D98(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 arg3, f32 arg4);
-// void func_800B8DD4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6); void func_800B8E1C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE4 param_5);
+// void func_800B8DD4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_800B8E1C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 void func_800B8E58(Actor* actor, u16 sfxId);
 void Audio_PlayActorSound2(Actor* actor, u16 sfxId);
 // void func_800B8FC0(void);
@@ -901,14 +861,10 @@ void func_800BA8B8(GlobalContext* globalCtx, ActorContext* actorCtx);
 void Actor_InsertIntoTypeList(ActorContext* actorCtx, Actor* actor, u8 type);
 Actor* Actor_RemoveFromTypeList(GlobalContext* globalCtx, ActorContext* actorCtx, Actor* actor);
 void Actor_FreeOverlay(ActorOverlay* entry);
-Actor* Actor_Spawn(ActorContext* actorCtx, GlobalContext* globalCtx, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY,
-                   s16 rotZ, s16 sParm10);
+Actor* Actor_Spawn(ActorContext* actorCtx, GlobalContext* globalCtx, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s16 sParm10);
 ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index);
-Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* globalCtx, s16 index, f32 x, f32 y, f32 z,
-                                     s16 rotX, s16 rotY, s16 rotZ, s16 variable, u32 cutscene, s32 param_12,
-                                     Actor* parent);
-Actor* Actor_SpawnAsChild(ActorContext* actorCtx, Actor* parent, GlobalContext* globalCtx, s16 index, f32 x, f32 y,
-                          f32 z, s16 rotX, s16 rotY, s16 rotZ, s16 variable);
+Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* globalCtx, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s16 variable, u32 cutscene, s32 param_12, Actor* parent);
+Actor* Actor_SpawnAsChild(ActorContext* actorCtx, Actor* parent, GlobalContext* globalCtx, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s16 variable);
 void Actor_SpawnTransitionActors(GlobalContext* globalCtx, ActorContext* actorCtx);
 void func_800BB2D0(ActorContext* actorCtx, u16* param_2, GlobalContext* globalCtx);
 Actor* func_800BB498(ActorContext* actorCtx, Actor* actor, GlobalContext* globalCtx);
@@ -920,10 +876,8 @@ void func_800BBA88(GlobalContext* globalCtx, Actor* actor);
 void func_800BBB74(s16* arg1, UNK_TYPE1 arg2, UNK_TYPE1 arg3, UNK_TYPE4 arg4);
 // void func_800BBC20(void);
 void func_800BBCEC(Actor* actor, GlobalContext* globalCtx, s16 arg2, Gfx** dList);
-void func_800BBDAC(GlobalContext* globalCtx, Actor* actor, Vec3f* arg2, f32 arg3, UNK_TYPE4 arg4, f32 arg5, s16 arg6,
-                   s16 arg7, u8 arg8);
-void func_800BBFB0(GlobalContext* globalCtx, Vec3f* position, f32 param3, s32 param_4, s16 param_5, s16 param_6,
-                   u8 param_7);
+void func_800BBDAC(GlobalContext* globalCtx, Actor* actor, Vec3f* arg2, f32 arg3, UNK_TYPE4 arg4, f32 arg5, s16 arg6, s16 arg7, u8 arg8);
+void func_800BBFB0(GlobalContext* globalCtx, Vec3f* position, f32 param3, s32 param_4, s16 param_5, s16 param_6, u8 param_7);
 void func_800BC154(GlobalContext* globalCtx, ActorContext* actorCtx, Actor* actor, u8 actorCategory);
 // void func_800BC188(void);
 // void func_800BC1B4(void);
@@ -942,23 +896,21 @@ void func_800BCB70(Actor* actor, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
 void func_800BCBF4(Vec3f* uParm1, GlobalContext* globalCtx);
 void func_800BCC68(Vec3f* param_1, GlobalContext* globalCtx);
 UNK_RET func_800BCCDC(Vec3s* points, u8 pathcount, Vec3f* pos1, Vec3f* pos2, UNK_TYPE parm5);
-// void func_800BD2B4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6); void func_800BD384(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE1 param_9); void
-// func_800BD6E4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5);
+// void func_800BD2B4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_800BD384(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE1 param_9);
+// void func_800BD6E4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5);
 void func_800BD888(Actor*, struct_800BD888_arg1*, s16, s16); // This function is very similar to OoT's func_80034A14
 // void func_800BD9A0(void);
-// void func_800BD9E0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE2 param_6); void func_800BDAA0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE4 param_5, UNK_TYPE2 param_6); void func_800BDB6C(void);
+// void func_800BD9E0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6);
+// void func_800BDAA0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6);
+// void func_800BDB6C(void);
 void func_800BDC5C(SkelAnime* skelAnime, ActorAnimationEntry animation[], s32 index);
 // void func_800BDCF4(void);
 void Actor_Noop(Actor* actor, GlobalContext* globalCtx);
 void func_800BDFC0(GlobalContext* globalCtx, Gfx* dl);
 void func_800BE03C(GlobalContext* globalCtx, Gfx* dl);
 Actor* func_800BE0B8(GlobalContext* globalCtx, Actor* inActor, s16 arg2, u8 arg3, f32 arg4);
-// void func_800BE184(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5,
-// UNK_TYPE2 param_6);
+// void func_800BE184(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6);
 u8 func_800BE22C(Actor* actor);
 void func_800BE258(Actor* actor, UNK_PTR arg1);
 void func_800BE2B8(Actor* actor, ColliderJntSph* jntSphere);
@@ -968,13 +920,12 @@ void func_800BE504(Actor* actor, ColliderCylinder* collider);
 // void func_800BE568(void);
 void func_800BE5CC(Actor* actor, ColliderJntSph* collider, s32 arg2);
 // void func_800BE63C(void);
-void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s32 arg3, f32 arg4, f32 arg5, f32 arg6,
-                   u8 mode);
+void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s32 arg3, f32 arg4, f32 arg5, f32 arg6, u8 mode);
 void func_800BF7CC(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s32 arg3, s32 arg4, f32 arg5, f32 arg6);
-void ActorOverlayTable_FaultPrint(void* arg0, void* arg1);     // ActorOverlayTable_FaultPrint
+void ActorOverlayTable_FaultPrint(void* arg0, void* arg1); // ActorOverlayTable_FaultPrint
 void* ActorOverlayTable_FaultAddrConv(void* arg0, void* arg1); // ActorOverlayTable_FaultAddrConv
-void ActorOverlayTable_Init(void);                             // ActorOverlayTable_Init
-void ActorOverlayTable_Cleanup(void);                          // ActorOverlayTable_Cleanup
+void ActorOverlayTable_Init(void); // ActorOverlayTable_Init
+void ActorOverlayTable_Cleanup(void); // ActorOverlayTable_Cleanup
 void BgCheck_PolygonLinkedListNodeInit(SSNode* node, s16* polyIndex, u16 next);
 void BgCheck_PolygonLinkedListResetHead(u16* head);
 void BgCheck_ScenePolygonListsNodeInsert(SSNodeList* list, u16* head, s16* polyIndex);
@@ -993,99 +944,77 @@ void func_800C0094(struct CollisionPoly* param_1, f32 xOffset, f32 yOffset, f32 
 f32 func_800C01B8(CollisionPoly* param_1, Vec3f* param_2);
 void BgCheck_CreateColTriParamsFromPolygon(CollisionPoly* polygon, Vec3s* vertices, TriNorm* tri);
 void func_800C02C0(CollisionPoly* poly, s32 index, CollisionContext* colCtx, TriNorm* tri);
-// void func_800C0340(CollisionPoly* param_1, Vec3s* param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6); UNK_TYPE4 func_800C0474(CollisionPoly* param_1, Vec3s* param_2, UNK_TYPE4 param_3, UNK_TYPE4
-// param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); void func_800C0668(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1
-// param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); void func_800C06A8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1
-// param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); void func_800C074C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1
-// param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); void func_800C07F0(void);
+// void func_800C0340(CollisionPoly* param_1, Vec3s* param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// UNK_TYPE4 func_800C0474(CollisionPoly* param_1, Vec3s* param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_800C0668(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_800C06A8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_800C074C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_800C07F0(void);
 void BgCheck_PolygonCollidesWithSphere(CollisionPoly* polygon, Vec3s* verticies, Vec3f* pos, f32 readius);
-void BgCheck_ScenePolygonListsInsertSorted(CollisionContext* colCtx, u16* head, CollisionPoly* polygons,
-                                           Vec3s* vertices, s16 index);
-void BgCheck_ScenePolygonListsInsert(StaticLookup* subdivision, CollisionContext* colCtx, CollisionPoly* polygons,
-                                     Vec3s* vertices, s16 index);
-// void func_800C0E74(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10); void
-// func_800C10FC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9); void func_800C1238(UNK_TYPE1 param_1,
-// UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE1 param_6, UNK_TYPE4 param_7,
-// UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11); void func_800C12A4(UNK_TYPE1 param_1,
-// UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7,
-// UNK_TYPE4 param_8, UNK_TYPE4 param_9); void func_800C1B68(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3,
-// UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); void
-// func_800C1D7C(void); void func_800C2008(void); void func_800C20F4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1
-// param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); void func_800C2310(UNK_TYPE1
-// param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2
-// param_7, UNK_TYPE4 param_8); void func_800C2460(void); void func_800C2514(void); void func_800C25E0(void);
-void BgCheck_GetPolyMinSubdivisions(CollisionContext* colCtx, Vec3f* min, s32* xSubdivision, s32* ySubdivision,
-                                    s32* zSubdivision);
-void BgCheck_GetPolyMaxSubdivisions(CollisionContext* colCtx, Vec3f* max, s32* xSubdivision, s32* ySubdivision,
-                                    s32* zSubdivision);
-void BgCheck_GetPolyMinMaxSubdivisions(CollisionContext* colCtx, Vec3s* vertices, CollisionPoly* polygons, s32* minX,
-                                       s32* minY, s32* minZ, s32* maxX, s32* maxY, s32* maxZ, s16 index);
+void BgCheck_ScenePolygonListsInsertSorted(CollisionContext* colCtx, u16* head, CollisionPoly* polygons, Vec3s* vertices, s16 index);
+void BgCheck_ScenePolygonListsInsert(StaticLookup* subdivision, CollisionContext* colCtx, CollisionPoly* polygons, Vec3s* vertices, s16 index);
+// void func_800C0E74(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
+// void func_800C10FC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9);
+// void func_800C1238(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE1 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
+// void func_800C12A4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9);
+// void func_800C1B68(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8);
+// void func_800C1D7C(void);
+// void func_800C2008(void);
+// void func_800C20F4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_800C2310(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE4 param_8);
+// void func_800C2460(void);
+// void func_800C2514(void);
+// void func_800C25E0(void);
+void BgCheck_GetPolyMinSubdivisions(CollisionContext* colCtx, Vec3f* min, s32* xSubdivision, s32* ySubdivision, s32* zSubdivision);
+void BgCheck_GetPolyMaxSubdivisions(CollisionContext* colCtx, Vec3f* max, s32* xSubdivision, s32* ySubdivision, s32* zSubdivision);
+void BgCheck_GetPolyMinMaxSubdivisions(CollisionContext* colCtx, Vec3s* vertices, CollisionPoly* polygons, s32* minX, s32* minY, s32* minZ, s32* maxX, s32* maxY, s32* maxZ, s16 index);
 // UNK_TYPE4 func_800C2BE0(Vec3f* param_1, Vec3f* param_2, CollisionPoly* polygons, Vec3s* vertices, s16 index);
-u32 BgCheck_SplitScenePolygonsIntoSubdivisions(CollisionContext* colCtx, GlobalContext* globalCtx,
-                                               StaticLookup* subdivisions);
+u32 BgCheck_SplitScenePolygonsIntoSubdivisions(CollisionContext* colCtx, GlobalContext* globalCtx, StaticLookup* subdivisions);
 s32 BgCheck_GetIsDefaultSpecialScene(GlobalContext* globalCtx);
 s32 BgCheck_GetSpecialSceneMaxMemory(s32 sceneId, u32* maxMemory);
-void BgCheck_CalcSubdivisionSize(f32 min, s32 subdivisions, f32* max, f32* subdivisionSize,
-                                 f32* inverseSubdivisionSize);
+void BgCheck_CalcSubdivisionSize(f32 min, s32 subdivisions, f32* max, f32* subdivisionSize, f32* inverseSubdivisionSize);
 s32 BgCheck_GetSpecialSceneMaxObjects(GlobalContext* globalCtx, u32* maxNodes, u32* maxPolygons, u32* maxVertices);
 void BgCheck_Init(CollisionContext* colCtx, GlobalContext* globalCtx, CollisionHeader* mesh);
 void func_800C3C00(CollisionContext* colCtx, u32 param_2);
 void func_800C3C14(CollisionContext* colCtx, u32 param_2);
 CollisionHeader* BgCheck_GetActorMeshHeader(CollisionContext* colCtx, s32 index);
 // void func_800C3C94(void);
-f32 func_800C3D50(s32 arg0, CollisionContext* colCtx, s32 arg2, CollisionPoly** arg3, s32* arg4, Vec3f* pos,
-                  Actor* actor, s32 arg7, f32 arg8, s32 arg9);
+f32 func_800C3D50(s32 arg0, CollisionContext* colCtx, s32 arg2, CollisionPoly** arg3, s32* arg4, Vec3f* pos, Actor* actor, s32 arg7, f32 arg8, s32 arg9);
 // void func_800C3F40(void);
 // void func_800C3FA0(void);
 f32 func_800C4000(GlobalContext* globalCtx, CollisionContext* colCtx, s32* arg2, Vec3f* arg3);
 // void func_800C4058(void);
 // void func_800C40B4(void);
 f32 func_800C411C(CollisionContext* colCtx, CollisionPoly** arg1, s32* arg2, Actor* actor, Vec3f* pos);
-// void func_800C4188(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6); void func_800C41E4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE4 param_5, UNK_TYPE4 param_6); void func_800C4240(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3,
-// UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); void func_800C42A8(UNK_TYPE1 param_1, UNK_TYPE1 param_2,
-// UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); void func_800C4314(void); void func_800C43CC(void); void
-// func_800C4488(void); void func_800C44F0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE4 param_5); void func_800C455C(void);
-s32 func_800C45C4(CollisionContext* colCtx, u32 arg1, Vec3f* arg2, Vec3f* arg3, Vec3f* arg4, f32 arg5, s32* arg6,
-                  s32* arg7, DynaPolyActor* arg8, f32 arg9, u8 arg10);
-// void func_800C4C74(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7); void func_800C4CD8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3,
-// UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); void
-// func_800C4D3C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9); void func_800C4DA4(UNK_TYPE1 param_1,
-// UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7,
-// UNK_TYPE4 param_8, UNK_TYPE4 param_9); void func_800C4E10(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3,
-// UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); void
-// func_800C4F38(void); void func_800C4F84(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); void func_800C4FD4(UNK_TYPE1 param_1, UNK_TYPE1 param_2,
-// UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8,
-// UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11); void func_800C5464(UNK_TYPE1 param_1, UNK_TYPE1 param_2,
-// UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); void func_800C54AC(UNK_TYPE1 param_1, UNK_TYPE1 param_2,
-// UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8,
-// UNK_TYPE4 param_9, UNK_TYPE4 param_10); void func_800C5538(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3,
-// UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9,
-// UNK_TYPE4 param_10);
-s32 func_800C55C4(CollisionContext* colCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, CollisionPoly** arg4, u32 arg5,
-                  u32 arg6, u32 arg7, u32 arg8, u32* arg9);
-// void func_800C5650(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
-// void func_800C56E0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11,
-// UNK_TYPE4 param_12);
-s32 func_800C576C(CollisionContext* colCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, CollisionPoly** arg4, u32 arg5,
-                  u32 arg6, u32 arg7, u32 arg8, u32* arg9);
-// void func_800C57F8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6); void func_800C583C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9); void
-// func_800C58C8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10); void
-// func_800C5954(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE2 param_8);
+// void func_800C4188(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_800C41E4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_800C4240(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_800C42A8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_800C4314(void);
+// void func_800C43CC(void);
+// void func_800C4488(void);
+// void func_800C44F0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_800C455C(void);
+s32 func_800C45C4(CollisionContext* colCtx, u32 arg1, Vec3f* arg2, Vec3f* arg3, Vec3f* arg4, f32 arg5, s32* arg6, s32* arg7, DynaPolyActor* arg8, f32 arg9, u8 arg10);
+// void func_800C4C74(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_800C4CD8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8);
+// void func_800C4D3C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9);
+// void func_800C4DA4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9);
+// void func_800C4E10(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8);
+// void func_800C4F38(void);
+// void func_800C4F84(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_800C4FD4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
+// void func_800C5464(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_800C54AC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
+// void func_800C5538(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
+s32 func_800C55C4(CollisionContext* colCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, CollisionPoly** arg4, u32 arg5, u32 arg6, u32 arg7, u32 arg8, u32* arg9);
+// void func_800C5650(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
+// void func_800C56E0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11, UNK_TYPE4 param_12);
+s32 func_800C576C(CollisionContext* colCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, CollisionPoly** arg4, u32 arg5, u32 arg6, u32 arg7, u32 arg8, u32* arg9);
+// void func_800C57F8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_800C583C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9);
+// void func_800C58C8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
+// void func_800C5954(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE2 param_8);
 s32 func_800C5A20(CollisionContext* colCtx, Vec3f* arg1, f32 arg2);
 // void func_800C5A64(void);
 void BgCheck_ScenePolygonListsInit(SSNodeList* arg0);
@@ -1112,8 +1041,7 @@ void BgCheck_ActorMeshUpdateParams(GlobalContext* globalCtx, BgActor* mesh);
 s32 BgCheck_IsActorMeshIndexValid(s32 index);
 void BgCheck_DynaInit(GlobalContext* globalCtx, DynaCollisionContext* param_2);
 void BgCheck_DynaAlloc(GlobalContext* globalCtx, DynaCollisionContext* dyna);
-s32 BgCheck_AddActorMesh(GlobalContext* globalCtx, DynaCollisionContext* dyna, DynaPolyActor* actor,
-                         CollisionHeader* header);
+s32 BgCheck_AddActorMesh(GlobalContext* globalCtx, DynaCollisionContext* dyna, DynaPolyActor* actor, CollisionHeader* header);
 DynaPolyActor* BgCheck_GetActorOfMesh(CollisionContext* colCtx, s32 index);
 void func_800C62BC(GlobalContext* globalCtx, DynaCollisionContext* dyna, s32 index);
 void func_800C6314(GlobalContext* globalCtx, DynaCollisionContext* dyna, s32 index);
@@ -1123,32 +1051,24 @@ void func_800C641C(GlobalContext* globalCtx, DynaCollisionContext* dyna, s32 ind
 void func_800C6474(GlobalContext* globalCtx, DynaCollisionContext* dyna, s32 index);
 void BgCheck_RemoveActorMesh(GlobalContext* globalCtx, DynaCollisionContext* dyna, s32 index);
 // void func_800C6554(void);
-void BgCheck_CalcWaterboxDimensions(Vec3f* minPos, Vec3f* maxXPos, Vec3f* maxZPos, Vec3s* minPosOut, s16* xLength,
-                                    s16* zLength);
-void BgCheck_AddActorMeshToLists(GlobalContext* globalCtx, DynaCollisionContext* dyna, s32 index, s32* currVertices,
-                                 s32* currPolygons, s32* currWaterboxes);
+void BgCheck_CalcWaterboxDimensions(Vec3f* minPos, Vec3f* maxXPos, Vec3f* maxZPos, Vec3s* minPosOut, s16* xLength, s16* zLength);
+void BgCheck_AddActorMeshToLists(GlobalContext* globalCtx, DynaCollisionContext* dyna, s32 index, s32* currVertices, s32* currPolygons, s32* currWaterboxes);
 void BgCheck_ResetFlagsIfLoadedActor(GlobalContext* globalCtx, DynaCollisionContext* dyna, Actor* actor);
 void BgCheck_Update(GlobalContext* globalCtx, DynaCollisionContext* dyna);
 void func_800C756C(s32 param_1, s32* param_2, s32* param_3, s32* param_4);
 void BgCheck_UpdateAllActorMeshes(GlobalContext* globalCtx, DynaCollisionContext* dyna);
 // void func_800C76EC(void);
 // void func_800C7974(void);
-// void func_800C7E40(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11,
-// UNK_TYPE4 param_12); void func_800C8580(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9); void
-// func_800C87D0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9); void func_800C8A60(UNK_TYPE1 param_1,
-// UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7,
-// UNK_TYPE4 param_8); void func_800C8BD0(void); void func_800C8DC0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1
-// param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4
-// param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11); void func_800C8EEC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1
-// param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4
-// param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11); void func_800C90AC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1
-// param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); void func_800C921C(UNK_TYPE1
-// param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2
-// param_7, UNK_TYPE4 param_8); void func_800C9380(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1
-// param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE2 param_8);
+// void func_800C7E40(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11, UNK_TYPE4 param_12);
+// void func_800C8580(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9);
+// void func_800C87D0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9);
+// void func_800C8A60(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8);
+// void func_800C8BD0(void);
+// void func_800C8DC0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
+// void func_800C8EEC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
+// void func_800C90AC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_800C921C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7, UNK_TYPE4 param_8);
+// void func_800C9380(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE2 param_8);
 void BgCheck_RelocateMeshHeaderPointers(CollisionHeader* header);
 void BgCheck_RelocateMeshHeader(CollisionHeader* meshSegPtr, CollisionHeader** param_2);
 void BgCheck_RelocateAllMeshHeaders(CollisionContext* colCtx, GlobalContext* globalCtx);
@@ -1187,17 +1107,18 @@ u32 func_800C9D8C(CollisionContext* param_1, CollisionPoly* param_2, s32 param_3
 u32 func_800C9E18(CollisionContext* colCtx, CollisionPoly* polygon, s32 index);
 u32 func_800C9E40(CollisionContext* colCtx, CollisionPoly* polygon, s32 index);
 u32 func_800C9E88(CollisionContext* colCtx, CollisionPoly* polygon, s32 index);
-// void func_800C9EBC(GlobalContext* globalCtx, CollisionContext* colCtx, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-s32 func_800CA1AC(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface,
-                  WaterBox** outWaterBox);
+// void func_800C9EBC(GlobalContext* globalCtx, CollisionContext* colCtx, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+s32 func_800CA1AC(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface, WaterBox** outWaterBox);
 void func_800CA1E8(GlobalContext* globalCtx, CollisionContext* colCtx, f32 arg2, f32 arg3, f32* arg4, UNK_PTR arg5);
-// void func_800CA22C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6); void func_800CA568(void); void func_800CA634(void); void func_800CA648(void); void
-// func_800CA6B8(void); void func_800CA6D8(void); void func_800CA6F0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1
-// param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); void func_800CA9D0(UNK_TYPE1
-// param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); void
-// func_800CAA14(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_800CA22C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_800CA568(void);
+// void func_800CA634(void);
+// void func_800CA648(void);
+// void func_800CA6B8(void);
+// void func_800CA6D8(void);
+// void func_800CA6F0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_800CA9D0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_800CAA14(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 void BgCheck2_UpdateActorPosition(CollisionContext* colCtx, s32 index, Actor* actor);
 void BgCheck2_UpdateActorYRotation(CollisionContext* colCtx, s32 index, Actor* actor);
 void BgCheck2_AttachToMesh(CollisionContext* colCtx, Actor* actor, s32 index);
@@ -1256,25 +1177,38 @@ f32 func_800CB700(Camera* camera);
 // void func_800CC000(void);
 // void func_800CC128(void);
 // void func_800CC1C4(void);
-// void func_800CC260(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE2 param_6); void func_800CC488(void); void func_800CC56C(void); void func_800CC5C8(void); void
-// func_800CC740(void); void func_800CC7A8(void); void func_800CC804(void); void func_800CC874(void); void
-// func_800CC938(void); void func_800CC958(void); void func_800CC9C0(void); void func_800CCCEC(void); void
-// func_800CD04C(void); void func_800CD288(void); void func_800CD2E0(void); void func_800CD2F0(void); void
-// func_800CD3E4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); void
-// func_800CD44C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5); void
-// func_800CD634(void); void func_800CD6CC(void); void func_800CD6F8(void); void func_800CD834(UNK_TYPE1 param_1,
-// UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); void func_800CDA14(void); void
-// func_800CDB6C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE2 param_6); void func_800CDE6C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE2 param_8); void func_800CE2B8(UNK_TYPE1 param_1,
-// UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7,
-// UNK_TYPE4 param_8, UNK_TYPE2 param_9); void func_800CE5E0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3,
-// UNK_TYPE1 param_4, UNK_TYPE2 param_5); void func_800CE79C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3,
-// UNK_TYPE1 param_4, UNK_TYPE2 param_5); void func_800CE930(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3,
-// UNK_TYPE1 param_4, UNK_TYPE2 param_5); void func_800CEAD8(void); void func_800CEC38(UNK_TYPE1 param_1, UNK_TYPE1
-// param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); void func_800CED90(UNK_TYPE1 param_1, UNK_TYPE1
-// param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_800CC260(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6);
+// void func_800CC488(void);
+// void func_800CC56C(void);
+// void func_800CC5C8(void);
+// void func_800CC740(void);
+// void func_800CC7A8(void);
+// void func_800CC804(void);
+// void func_800CC874(void);
+// void func_800CC938(void);
+// void func_800CC958(void);
+// void func_800CC9C0(void);
+// void func_800CCCEC(void);
+// void func_800CD04C(void);
+// void func_800CD288(void);
+// void func_800CD2E0(void);
+// void func_800CD2F0(void);
+// void func_800CD3E4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_800CD44C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5);
+// void func_800CD634(void);
+// void func_800CD6CC(void);
+// void func_800CD6F8(void);
+// void func_800CD834(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_800CDA14(void);
+// void func_800CDB6C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE2 param_6);
+// void func_800CDE6C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE2 param_8);
+// void func_800CE2B8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE2 param_9);
+// void func_800CE5E0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5);
+// void func_800CE79C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5);
+// void func_800CE930(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5);
+// void func_800CEAD8(void);
+// void func_800CEC38(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_800CED90(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
 s32 Camera_ModeNop(Camera* camera);
 s32 Camera_ModeNORM1(Camera* camera);
 s32 Camera_ModeNORM2(Camera* camera);
@@ -1300,9 +1234,7 @@ s32 Camera_ModeKEEP1(Camera* camera);
 s32 Camera_ModeKEEP2(Camera* camera);
 s32 Camera_ModeKEEP3(Camera* camera);
 s32 Camera_ModeKEEP4(Camera* camera);
-// void func_800D7C44(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5,
-// UNK_TYPE1 param_6, UNK_TYPE1 param_7, UNK_TYPE1 param_8, UNK_TYPE1 param_9, UNK_TYPE1 param_10, UNK_TYPE2 param_11,
-// UNK_TYPE2 param_12);
+// void func_800D7C44(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE1 param_7, UNK_TYPE1 param_8, UNK_TYPE1 param_9, UNK_TYPE1 param_10, UNK_TYPE2 param_11, UNK_TYPE2 param_12);
 s32 Camera_ModeKEEP0(Camera* camera);
 s32 Camera_ModeFIXD1(Camera* camera);
 s32 Camera_ModeFIXD2(Camera* camera);
@@ -1382,18 +1314,20 @@ s16 func_800DFCDC(Camera* camera);
 // UNK_TYPE4 func_800DFF44(void);
 s16 Camera_SetFlags(Camera* iParm1, s16 flags);
 s16 Camera_ClearFlags(Camera* camera, s16 flags);
-// void func_800DFFAC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5,
-// UNK_TYPE2 param_6, UNK_TYPE2 param_7); UNK_TYPE4 func_800E007C(Camera* param_1, Camera* param_2); UNK_TYPE4
-// func_800E01AC(void); void func_800E01B8(void); void func_800E01DC(s32 param_1, u32 param_2, UNK_TYPE4 param_3,
-// UNK_TYPE4 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6); UNK_TYPE4 func_800E0228(void); void func_800E0238(void);
+// void func_800DFFAC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7);
+// UNK_TYPE4 func_800E007C(Camera* param_1, Camera* param_2);
+// UNK_TYPE4 func_800E01AC(void);
+// void func_800E01B8(void);
+// void func_800E01DC(s32 param_1, u32 param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6);
+// UNK_TYPE4 func_800E0228(void);
+// void func_800E0238(void);
 void func_800E02AC(Camera* camera, Actor* actor);
 // void func_800E0308(void);
 // void func_800E031C(void);
 void func_800E0348(Camera* camera);
-DamageTable* DamageTable_Get(s32 index);          // func_800E03A0
-void DamageTable_Clear(DamageTable* damageTable); // func_800E03CC
-f32 CollisionCheck_GetDamageAndEffectOnBumper(Collider* at, ColliderInfo* atInfo, Collider* ac, ColliderInfo* acInfo,
-                                              u32* effect);
+DamageTable* DamageTable_Get(s32 index);
+void DamageTable_Clear(DamageTable* damageTable);
+f32 CollisionCheck_GetDamageAndEffectOnBumper(Collider* at, ColliderInfo* atInfo, Collider* ac, ColliderInfo* acInfo, u32* effect);
 f32 CollisionCheck_ApplyBumperDefense(f32 damage, ColliderInfo* ac);
 s32 CollisionCheck_GetToucherDamage(Collider* at, ColliderInfo* atInfo, Collider* ac, ColliderInfo* acInfo);
 s32 Collider_InitBase(GlobalContext* globalCtx, Collider* collider);
@@ -1419,8 +1353,7 @@ void Collider_ResetACInfo(GlobalContext* globalCtx, ColliderInfo* info);
 void Collider_ResetOCInfo(GlobalContext* globalCtx, ColliderInfo* info);
 s32 Collider_InitJntSphElementDim(GlobalContext* globalCtx, ColliderJntSphElementDim* dim);
 s32 Collider_DestroyJntSphElementDim(GlobalContext* globalCtx, ColliderJntSphElementDim* dim);
-s32 Collider_SetJntSphElementDim(GlobalContext* globalCtx, ColliderJntSphElementDim* dest,
-                                 ColliderJntSphElementDimInit* src);
+s32 Collider_SetJntSphElementDim(GlobalContext* globalCtx, ColliderJntSphElementDim* dest, ColliderJntSphElementDimInit* src);
 s32 Collider_InitJntSphElement(GlobalContext* globalCtx, ColliderJntSphElement* element);
 s32 Collider_DestroyJntSphElement(GlobalContext* globalCtx, ColliderJntSphElement* element);
 s32 Collider_SetJntSphElement(GlobalContext* globalCtx, ColliderJntSphElement* dest, ColliderJntSphElementInit* src);
@@ -1431,12 +1364,9 @@ s32 Collider_InitJntSph(GlobalContext* globalCtx, ColliderJntSph* collider);
 s32 Collider_FreeJntSph(GlobalContext* globalCtx, ColliderJntSph* collider);
 s32 Collider_DestroyJntSph(GlobalContext* globalCtx, ColliderJntSph* collider);
 s32 Collider_SetJntSphToActor(GlobalContext* globalCtx, ColliderJntSph* collider, ColliderJntSphInitToActor* src);
-s32 Collider_SetJntSphAllocType1(GlobalContext* globalCtx, ColliderJntSph* sphereGroup, Actor* actor,
-                                 ColliderJntSphInitType1* src);
-s32 Collider_SetJntSph(GlobalContext* globalCtx, ColliderJntSph* sphereGroup, Actor* actor, ColliderJntSphInit* src,
-                       ColliderJntSphElement* elements);
-s32 Collider_InitAndSetJntSph(GlobalContext* globalCtx, ColliderJntSph* sphereGroup, Actor* actor,
-                              ColliderJntSphInit* src, ColliderJntSphElement* elements);
+s32 Collider_SetJntSphAllocType1(GlobalContext* globalCtx, ColliderJntSph* sphereGroup, Actor* actor, ColliderJntSphInitType1* src);
+s32 Collider_SetJntSph(GlobalContext* globalCtx, ColliderJntSph* sphereGroup, Actor* actor, ColliderJntSphInit* src, ColliderJntSphElement* elements);
+s32 Collider_InitAndSetJntSph(GlobalContext* globalCtx, ColliderJntSph* sphereGroup, Actor* actor, ColliderJntSphInit* src, ColliderJntSphElement* elements);
 s32 Collider_ResetJntSphAT(GlobalContext* globalCtx, Collider* collider);
 s32 Collider_ResetJntSphAC(GlobalContext* globalCtx, Collider* collider);
 s32 Collider_ResetJntSphOC(GlobalContext* globalCtx, Collider* collider);
@@ -1446,11 +1376,9 @@ s32 Collider_SetCylinderDim(GlobalContext* globalCtx, Cylinder16* dim, Cylinder1
 s32 Collider_InitCylinder(GlobalContext* globalCtx, ColliderCylinder* collider);
 s32 Collider_DestroyCylinder(GlobalContext* globalCtx, ColliderCylinder* collider);
 s32 Collider_SetCylinderToActor(GlobalContext* globalCtx, ColliderCylinder* collider, ColliderCylinderInitToActor* src);
-s32 Collider_SetCylinderType1(GlobalContext* globalCtx, ColliderCylinder* collider, Actor* actor,
-                              ColliderCylinderInitType1* src);
+s32 Collider_SetCylinderType1(GlobalContext* globalCtx, ColliderCylinder* collider, Actor* actor, ColliderCylinderInitType1* src);
 s32 Collider_SetCylinder(GlobalContext* globalCtx, ColliderCylinder* collider, Actor* actor, ColliderCylinderInit* src);
-s32 Collider_InitAndSetCylinder(GlobalContext* globalCtx, ColliderCylinder* collider, Actor* actor,
-                                ColliderCylinderInit* src);
+s32 Collider_InitAndSetCylinder(GlobalContext* globalCtx, ColliderCylinder* collider, Actor* actor, ColliderCylinderInit* src);
 s32 Collider_ResetCylinderAT(GlobalContext* globalCtx, Collider* collider);
 s32 Collider_ResetCylinderAC(GlobalContext* globalCtx, Collider* collider);
 s32 Collider_ResetCylinderOC(GlobalContext* globalCtx, Collider* collider);
@@ -1467,10 +1395,8 @@ s32 Collider_InitTris(GlobalContext* globalCtx, ColliderTris* tris);
 s32 Collider_FreeTris(GlobalContext* globalCtx, ColliderTris* tris);
 s32 Collider_DestroyTris(GlobalContext* globalCtx, ColliderTris* tris);
 s32 Collider_SetTrisAllocType1(GlobalContext* globalCtx, ColliderTris* tris, Actor* actor, ColliderTrisInitType1* src);
-s32 Collider_SetTris(GlobalContext* globalCtx, ColliderTris* triGroup, Actor* actor, ColliderTrisInit* src,
-                     ColliderTrisElement* tris);
-s32 Collider_InitAndSetTris(GlobalContext* globalCtx, ColliderTris* tris, Actor* actor, ColliderTrisInit* src,
-                            ColliderTrisElement* elements);
+s32 Collider_SetTris(GlobalContext* globalCtx, ColliderTris* triGroup, Actor* actor, ColliderTrisInit* src, ColliderTrisElement* tris);
+s32 Collider_InitAndSetTris(GlobalContext* globalCtx, ColliderTris* tris, Actor* actor, ColliderTrisInit* src, ColliderTrisElement* elements);
 s32 Collider_ResetTrisAT(GlobalContext* globalCtx, Collider* collider);
 s32 Collider_ResetTrisAC(GlobalContext* globalCtx, Collider* collider);
 s32 Collider_ResetTrisOC(GlobalContext* globalCtx, Collider* collider);
@@ -1491,8 +1417,7 @@ s32 Collider_QuadSetNearestAC(GlobalContext* globalCtx, ColliderQuad* quad, Vec3
 s32 Collider_InitSphere(GlobalContext* globalCtx, ColliderSphere* collider);
 s32 Collider_DestroySphere(GlobalContext* globalCtx, ColliderSphere* collider);
 s32 Collider_SetSphere(GlobalContext* globalCtx, ColliderSphere* collider, Actor* actor, ColliderSphereInit* src);
-s32 Collider_InitAndSetSphere(GlobalContext* globalCtx, ColliderSphere* collider, Actor* actor,
-                              ColliderSphereInit* src);
+s32 Collider_InitAndSetSphere(GlobalContext* globalCtx, ColliderSphere* collider, Actor* actor, ColliderSphereInit* src);
 s32 Collider_ResetSphereAT(GlobalContext* globalCtx, Collider* collider);
 s32 Collider_ResetSphereAC(GlobalContext* globalCtx, Collider* collider);
 s32 Collider_ResetSphereOC(GlobalContext* globalCtx, Collider* collider);
@@ -1524,63 +1449,36 @@ void CollisionCheck_RedBlood(GlobalContext* globalCtx, Collider* collider, Vec3f
 void CollisionCheck_RedBloodUnused(GlobalContext* globalCtx, Collider* collider, Vec3f* v);
 void CollisionCheck_HitSolid(GlobalContext* globalCtx, ColliderInfo* info, Collider* collider, Vec3f* hitPos);
 s32 CollisionCheck_SwordHitAudio(Collider* at, ColliderInfo* acInfo);
-void CollisionCheck_HitEffects(GlobalContext* globalCtx, Collider* at, ColliderInfo* atInfo, Collider* ac,
-                               ColliderInfo* acInfo, Vec3f* hitPos);
+void CollisionCheck_HitEffects(GlobalContext* globalCtx, Collider* at, ColliderInfo* atInfo, Collider* ac, ColliderInfo* acInfo, Vec3f* hitPos);
 void CollisionCheck_SetBounce(Collider* at, Collider* ac);
-s32 CollisionCheck_SetATvsAC(GlobalContext* globalCtx, Collider* at, ColliderInfo* atInfo, Vec3f* atPos, Collider* ac,
-                             ColliderInfo* acInfo, Vec3f* acPos, Vec3f* hitPos);
+s32 CollisionCheck_SetATvsAC(GlobalContext* globalCtx, Collider* at, ColliderInfo* atInfo, Vec3f* atPos, Collider* ac, ColliderInfo* acInfo, Vec3f* acPos, Vec3f* hitPos);
 void CollisionCheck_TrisAvgPoint(ColliderTrisElement* tri, Vec3f* avg);
 void CollisionCheck_QuadAvgPoint(ColliderQuad* quad, Vec3f* avg);
-void CollisionCheck_AC_JntSphVsJntSph(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT,
-                                      Collider* colAC);
-void CollisionCheck_AC_JntSphVsCyl(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT,
-                                   Collider* colAC);
-void CollisionCheck_AC_JntSphVsTris(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT,
-                                    Collider* colAC);
-void CollisionCheck_AC_JntSphVsQuad(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT,
-                                    Collider* colAC);
-void CollisionCheck_AC_JntSphVsSphere(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT,
-                                      Collider* colAC);
-void CollisionCheck_AC_CylVsJntSph(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT,
-                                   Collider* colAC);
-void CollisionCheck_AC_CylVsCyl(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT,
-                                Collider* colAC);
-void CollisionCheck_AC_CylVsTris(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT,
-                                 Collider* colAC);
-void CollisionCheck_AC_CylVsQuad(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT,
-                                 Collider* colAC);
-void CollisionCheck_AC_CylVsSphere(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT,
-                                   Collider* colAC);
-void CollisionCheck_AC_TrisVsJntSph(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT,
-                                    Collider* colAC);
-void CollisionCheck_AC_TrisVsCyl(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT,
-                                 Collider* colAC);
-void CollisionCheck_AC_TrisVsTris(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT,
-                                  Collider* colAC);
-void CollisionCheck_AC_TrisVsQuad(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT,
-                                  Collider* colAC);
-void CollisionCheck_AC_TrisVsSphere(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT,
-                                    Collider* colAC);
-void CollisionCheck_AC_QuadVsJntSph(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT,
-                                    Collider* colAC);
-void CollisionCheck_AC_QuadVsCyl(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT,
-                                 Collider* colAC);
-void CollisionCheck_AC_QuadVsTris(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT,
-                                  Collider* colAC);
-void CollisionCheck_AC_QuadVsQuad(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT,
-                                  Collider* colAC);
-void CollisionCheck_AC_QuadVsSphere(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT,
-                                    Collider* colAC);
-void CollisionCheck_AC_SphereVsJntSph(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT,
-                                      Collider* colAC);
-void CollisionCheck_AC_SphereVsCylinder(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT,
-                                        Collider* colAC);
-void CollisionCheck_AC_SphereVsTris(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT,
-                                    Collider* colAC);
-void CollisionCheck_AC_SphereVsQuad(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT,
-                                    Collider* colAC);
-void CollisionCheck_AC_SphereVsSphere(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT,
-                                      Collider* colAC);
+void CollisionCheck_AC_JntSphVsJntSph(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
+void CollisionCheck_AC_JntSphVsCyl(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
+void CollisionCheck_AC_JntSphVsTris(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
+void CollisionCheck_AC_JntSphVsQuad(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
+void CollisionCheck_AC_JntSphVsSphere(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
+void CollisionCheck_AC_CylVsJntSph(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
+void CollisionCheck_AC_CylVsCyl(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
+void CollisionCheck_AC_CylVsTris(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
+void CollisionCheck_AC_CylVsQuad(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
+void CollisionCheck_AC_CylVsSphere(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
+void CollisionCheck_AC_TrisVsJntSph(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
+void CollisionCheck_AC_TrisVsCyl(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
+void CollisionCheck_AC_TrisVsTris(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
+void CollisionCheck_AC_TrisVsQuad(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
+void CollisionCheck_AC_TrisVsSphere(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
+void CollisionCheck_AC_QuadVsJntSph(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
+void CollisionCheck_AC_QuadVsCyl(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
+void CollisionCheck_AC_QuadVsTris(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
+void CollisionCheck_AC_QuadVsQuad(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
+void CollisionCheck_AC_QuadVsSphere(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
+void CollisionCheck_AC_SphereVsJntSph(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
+void CollisionCheck_AC_SphereVsCylinder(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
+void CollisionCheck_AC_SphereVsTris(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
+void CollisionCheck_AC_SphereVsQuad(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
+void CollisionCheck_AC_SphereVsSphere(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT, Collider* colAC);
 void CollisionCheck_SetJntSphHitFX(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* collider);
 void CollisionCheck_SetCylHitFX(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* collider);
 void CollisionCheck_SetTrisHitFX(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* collider);
@@ -1590,21 +1488,16 @@ void CollisionCheck_SetHitEffects(GlobalContext* globalCtx, CollisionCheckContex
 void CollisionCheck_AC(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* colAT);
 void CollisionCheck_AT(GlobalContext* globalCtx, CollisionCheckContext* colCtxt);
 s32 CollisionCheck_GetMassType(u8 mass);
-void CollisionCheck_SetOCvsOC(GlobalContext* globalCtx, Collider* left, ColliderInfo* leftInfo, Vec3f* leftPos,
-                              Collider* right, ColliderInfo* rightInfo, Vec3f* rightPos, f32 overlap);
-void CollisionCheck_OC_JntSphVsJntSph(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* l,
-                                      Collider* r);
+void CollisionCheck_SetOCvsOC(GlobalContext* globalCtx, Collider* left, ColliderInfo* leftInfo, Vec3f* leftPos, Collider* right, ColliderInfo* rightInfo, Vec3f* rightPos, f32 overlap);
+void CollisionCheck_OC_JntSphVsJntSph(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* l, Collider* r);
 void CollisionCheck_OC_JntSphVsCyl(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* l, Collider* r);
-void CollisionCheck_OC_JntSphVsSphere(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* l,
-                                      Collider* r);
+void CollisionCheck_OC_JntSphVsSphere(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* l, Collider* r);
 void CollisionCheck_OC_CylVsJntSph(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* l, Collider* r);
 void CollisionCheck_OC_CylVsCyl(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* l, Collider* r);
 void CollisionCheck_OC_CylVsSphere(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* l, Collider* r);
-void CollisionCheck_OC_SphereVsJntSph(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* l,
-                                      Collider* r);
+void CollisionCheck_OC_SphereVsJntSph(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* l, Collider* r);
 void CollisionCheck_OC_SphereVsCyl(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* l, Collider* r);
-void CollisionCheck_OC_SphereVsSphere(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* l,
-                                      Collider* r);
+void CollisionCheck_OC_SphereVsSphere(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* l, Collider* r);
 s32 CollisionCheck_SkipOC(Collider* collider);
 s32 CollisionCheck_Incompatible(Collider* left, Collider* right);
 void CollisionCheck_OC(GlobalContext* globalCtx, CollisionCheckContext* colCtxt);
@@ -1614,25 +1507,19 @@ void CollisionCheck_SetInfoNoDamageTable(CollisionCheckInfo* info, CollisionChec
 void CollisionCheck_SetInfo(CollisionCheckInfo* info, DamageTable* damageTable, CollisionCheckInfoInit* init);
 void CollisionCheck_SetInfo2(CollisionCheckInfo* info, DamageTable* damageTable, CollisionCheckInfoInit2* init);
 void CollisionCheck_SetInfoGetDamageTable(CollisionCheckInfo* info, s32 index, CollisionCheckInfoInit2* init);
-void CollisionCheck_ApplyDamage(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* collider,
-                                ColliderInfo* info);
+void CollisionCheck_ApplyDamage(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* collider, ColliderInfo* info);
 void CollisionCheck_ApplyDamageJntSph(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* collider);
 void CollisionCheck_ApplyDamageCyl(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* collider);
 void CollisionCheck_ApplyDamageTris(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* collider);
 void CollisionCheck_ApplyDamageQuad(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* collider);
 void CollisionCheck_ApplyDamageSphere(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* collider);
 void CollisionCheck_Damage(GlobalContext* globalCtx, CollisionCheckContext* colCtxt);
-s32 CollisionCheck_LineOC_JntSph(GlobalContext* globalCtx, CollisionCheckContext* colChkCtx, Collider* collider,
-                                 Vec3f* a, Vec3f* b);
-s32 CollisionCheck_LineOC_Cyl(GlobalContext* globalCtx, CollisionCheckContext* colChkCtx, Collider* collider, Vec3f* a,
-                              Vec3f* b);
-s32 CollisionCheck_LineOC_Sphere(GlobalContext* globalCtx, CollisionCheckContext* colChkCtx, Collider* collider,
-                                 Vec3f* a, Vec3f* b);
-s32 CollisionCheck_LineOC(GlobalContext* globalCtx, CollisionCheckContext* colChkCtx, Vec3f* a, Vec3f* b,
-                          Actor** exclusions, s32 numExclusions);
+s32 CollisionCheck_LineOC_JntSph(GlobalContext* globalCtx, CollisionCheckContext* colChkCtx, Collider* collider, Vec3f* a, Vec3f* b);
+s32 CollisionCheck_LineOC_Cyl(GlobalContext* globalCtx, CollisionCheckContext* colChkCtx, Collider* collider, Vec3f* a, Vec3f* b);
+s32 CollisionCheck_LineOC_Sphere(GlobalContext* globalCtx, CollisionCheckContext* colChkCtx, Collider* collider, Vec3f* a, Vec3f* b);
+s32 CollisionCheck_LineOC(GlobalContext* globalCtx, CollisionCheckContext* colChkCtx, Vec3f* a, Vec3f* b, Actor** exclusions, s32 numExclusions);
 s32 CollisionCheck_LineOCCheckAll(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Vec3f* a, Vec3f* b);
-s32 CollisionCheck_LineOCCheck(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Vec3f* a, Vec3f* b,
-                               Actor** exclusions, s32 numExclusions);
+s32 CollisionCheck_LineOCCheck(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Vec3f* a, Vec3f* b, Actor** exclusions, s32 numExclusions);
 void Collider_UpdateCylinder(Actor* actor, ColliderCylinder* collider);
 void Collider_SetCylinderPosition(ColliderCylinder* collider, Vec3s* pos);
 void Collider_SetQuadVertices(ColliderQuad* collider, Vec3f* a, Vec3f* b, Vec3f* c, Vec3f* d);
@@ -1648,8 +1535,7 @@ void CollisionCheck_SpawnShieldParticlesMetal(GlobalContext* globalCtx, Vec3f* v
 void CollisionCheck_SpawnShieldParticlesMetalSound(GlobalContext* globalCtx, Vec3f* v, Vec3f* pos);
 void CollisionCheck_SpawnShieldParticlesMetal2(GlobalContext* globalCtx, Vec3f* v);
 void CollisionCheck_SpawnShieldParticlesWood(GlobalContext* globalCtx, Vec3f* v, Vec3f* pos);
-s32 CollisionCheck_CylSideVsLineSeg(f32 radius, f32 height, f32 offset, Vec3f* actorPos, Vec3f* itemPos,
-                                    Vec3f* itemProjPos, Vec3f* out1, Vec3f* out2);
+s32 CollisionCheck_CylSideVsLineSeg(f32 radius, f32 height, f32 offset, Vec3f* actorPos, Vec3f* itemPos, Vec3f* itemProjPos, Vec3f* out1, Vec3f* out2);
 void func_800E8EA0(GlobalContext* globalCtx, Actor* actor, u16 textId);
 s32 nop_800E8ED0(UNK_TYPE4 param_1);
 void nop_800E8EE0(UNK_TYPE4 param_1);
@@ -1662,8 +1548,7 @@ s32 func_800E9250(GlobalContext* globalCtx, Actor* actor, Vec3s* param_3, Vec3s*
 u8 func_800E9360(void);
 // void static_context_init(void);
 // void func_800E9470(void);
-void DebugDisplay_AddObject(f32 posX, f32 posY, f32 posZ, s16 rotX, s16 rotY, s16 rotZ, f32 scaleX, f32 scaleY,
-                            f32 scaleZ, u8 red, u8 green, u8 blue, u8 alpha, s16 type, GraphicsContext* gfxCtx);
+void DebugDisplay_AddObject(f32 posX, f32 posY, f32 posZ, s16 rotX, s16 rotY, s16 rotZ, f32 scaleX, f32 scaleY, f32 scaleZ, u8 red, u8 green, u8 blue, u8 alpha, s16 type, GraphicsContext* gfxCtx);
 void DebugDisplay_DrawObjects(GlobalContext* globalCtx);
 // void func_800E95F4(void);
 // void func_800E97D8(void);
@@ -1749,8 +1634,7 @@ void func_800EFAB8(GlobalContext* globalCtx, s16 index);
 void func_800EFBFC(GlobalContext* globalCtx, s16 index);
 void func_800EFD44(GlobalContext* globalCtx, s16 index);
 void EffFootmark_Init(GlobalContext* globalCtx);
-void EffFootmark_Add(GlobalContext* globalCtx, MtxF* displayMatrix, Actor* actor, u8 id, Vec3f* location, u16 size,
-                     u8 red, u8 green, u8 blue, u16 alpha, u16 alphaChange, u16 fadeoutDelay);
+void EffFootmark_Add(GlobalContext* globalCtx, MtxF* displayMatrix, Actor* actor, u8 id, Vec3f* location, u16 size, u8 red, u8 green, u8 blue, u16 alpha, u16 alphaChange, u16 fadeoutDelay);
 void EffFootmark_Update(GlobalContext* globalCtx);
 void EffFootmark_Draw(GlobalContext* globalCtx);
 void func_800F0390(GlobalContext* globalCtx);
@@ -1804,13 +1688,15 @@ s16 ActorCutscene_GetCurrentCamera(s16 index);
 // void func_800F21CC(void);
 // UNK_TYPE4 func_800F22C4(s16 param_1, Actor* actor);
 void ActorCutscene_SetReturnCamera(s16 index);
-// void func_800F23E0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6); void func_800F2478(void); void func_800F2620(void); void func_800F2650(void); void
-// func_800F26C0(void); void func_800F26F0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE4 param_5, UNK_TYPE4 param_6); void func_800F2728(void); void func_800F29A0(UNK_TYPE1 param_1, UNK_TYPE1
-// param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); void
-// func_800F2CD8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_800F23E0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_800F2478(void);
+// void func_800F2620(void);
+// void func_800F2650(void);
+// void func_800F26C0(void);
+// void func_800F26F0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_800F2728(void);
+// void func_800F29A0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_800F2CD8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
 void FireObj_InitWithParams(GlobalContext* globalCtx, FireObj* fire, FireObjInitParams* init);
 void FireObj_SetState(FireObj* fire, f32 dynamicSizeStep, u8 newState);
 void FireObj_SetPosition(FireObj* fire, Vec3f* pos);
@@ -1868,11 +1754,10 @@ void func_800F6FF8(GlobalContext* globalCtx, EnvironmentContext* envCtx, LightCo
 // void func_800F88C4(void);
 // void func_800F8970(void);
 // void func_800F8A9C(void);
-// void func_800F8CD4(GlobalContext* globalCtx, EnvironmentContext* envCtx, LightContext* lightCtx, s32 param_4,
-// UNK_TYPE4 param_5, UNK_TYPE4 param_6); void func_800F8D84(void); void func_800F9728(UNK_TYPE1 param_1, UNK_TYPE1
-// param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-void func_800F9824(GlobalContext* globalCtx, EnvironmentContext* envCtx, View* view, GraphicsContext* gfxCtx, Vec3f vec,
-                   f32 arg5, f32 arg6, s8 arg7, s8 arg8);
+// void func_800F8CD4(GlobalContext* globalCtx, EnvironmentContext* envCtx, LightContext* lightCtx, s32 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_800F8D84(void);
+// void func_800F9728(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+void func_800F9824(GlobalContext* globalCtx, EnvironmentContext* envCtx, View* view, GraphicsContext* gfxCtx, Vec3f vec, f32 arg5, f32 arg6, s8 arg7, s8 arg8);
 // void func_800FA39C(void);
 // void func_800FA3C4(void);
 // void func_800FA9FC(void);
@@ -1889,9 +1774,9 @@ void func_800FB320(GlobalContext* globalCtx, u8 param_2);
 void func_800FBF3C(GlobalContext* globalCtx);
 // void func_800FC158(void);
 // void func_800FC3DC(void);
-// void func_800FC444(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5,
-// UNK_TYPE1 param_6); void func_800FC64C(void); void func_800FD2B4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1
-// param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_800FC444(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6);
+// void func_800FC64C(void);
+// void func_800FD2B4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 void func_800FD538(Color_RGB8* param_1, Color_RGB8* param_2, f32 param_3, Vec3s* param_4);
 void func_800FD59C(GlobalContext* globalCtx, Color_RGB8* pzParm2, f32 fParm3);
 void func_800FD5E0(GlobalContext* globalCtx, Color_RGB8* pzParm2, f32 fParm3);
@@ -2000,12 +1885,12 @@ void* Lib_PhysicalToVirtual(void* ptr);
 void* Lib_PhysicalToVirtualNull(void* ptr);
 void LifeMeter_Init(GlobalContext* globalCtx);
 void LifeMeter_UpdateColors(GlobalContext* globalCtx);
-// UNK_TYPE4 func_80100A80(GlobalContext* globalCtx);
-// UNK_TYPE4 func_80100AA0(GlobalContext* globalCtx);
-// UNK_TYPE4 func_80100AF0(GlobalContext* globalCtx);
+s32 LifeMeter_SaveInterfaceHealth(GlobalContext* globalCtx);
+s32 LifeMeter_IncreaseInterfaceHealth(GlobalContext* globalCtx);
+s32 LifeMeter_DecreaseInterfaceHealth(GlobalContext* globalCtx);
 void LifeMeter_Draw(GlobalContext* globalCtx);
 void LifeMeter_UpdateSizeAndBeep(GlobalContext* globalCtx);
-// s32 LifeMeter_IsCritical(void);
+bool LifeMeter_IsCritical(void);
 void Lights_PointSetInfo(LightInfo* info, s16 x, s16 y, s16 z, u8 r, u8 g, u8 b, s16 radius, s32 type);
 void Lights_PointNoGlowSetInfo(LightInfo* info, s16 x, s16 y, s16 z, u8 r, u8 g, u8 b, s16 radius);
 void Lights_PointGlowSetInfo(LightInfo* info, s16 x, s16 y, s16 z, u8 r, u8 g, u8 b, s16 radius);
@@ -2029,8 +1914,7 @@ void LightContext_InitList(GlobalContext* globalCtx, LightContext* lightCtx);
 void LightContext_DestroyList(GlobalContext* globalCtx, LightContext* lightCtx);
 LightNode* LightContext_InsertLight(GlobalContext* globalCtx, LightContext* lightCtx, LightInfo* info);
 void LightContext_RemoveLight(GlobalContext* globalCtx, LightContext* lightCtx, LightNode* light);
-Lights* Lights_NewAndDraw(GraphicsContext* gfxCtx, u8 ambientR, u8 ambientG, u8 ambientB, u8 numLights, u8 r, u8 g,
-                          u8 b, s8 x, s8 y, s8 z);
+Lights* Lights_NewAndDraw(GraphicsContext* gfxCtx, u8 ambientR, u8 ambientG, u8 ambientB, u8 numLights, u8 r, u8 g, u8 b, s8 x, s8 y, s8 z);
 Lights* Lights_New(GraphicsContext* gfxCtx, u8 ambientR, u8 ambientG, u8 ambientB);
 void Lights_GlowCheck(GlobalContext* globalCtx);
 void Lights_DrawGlow(GlobalContext* globalCtx);
@@ -2054,9 +1938,14 @@ void func_80102ED0(u32 param_1);
 // void func_80103090(void);
 // void func_801030B4(void);
 // void func_801030F4(void);
-// void func_801031D0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6); void func_801039EC(void); void func_80103A10(void); void func_80103A58(void); void
-// func_8010439C(void); void func_801045AC(void); void func_80104AE8(void); void func_80104C80(void);
+// void func_801031D0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_801039EC(void);
+// void func_80103A10(void);
+// void func_80103A58(void);
+// void func_8010439C(void);
+// void func_801045AC(void);
+// void func_80104AE8(void);
+// void func_80104C80(void);
 void func_80104CF4(GlobalContext* globalCtx);
 // void func_80104F34(void);
 // void func_80105294(void);
@@ -2082,11 +1971,10 @@ void func_80105818(GlobalContext* globalCtx, u32 uParm2, TransitionActorEntry* p
 // void func_801068FC(void);
 // void func_80106BEC(void);
 // void func_80106D08(void);
-// void func_80106D5C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7); void func_80107B78(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3,
-// UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); void func_80108124(UNK_TYPE1 param_1, UNK_TYPE1 param_2,
-// UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); void func_80108558(UNK_TYPE1 param_1,
-// UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_80106D5C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_80107B78(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_80108124(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_80108558(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
 // void func_80108A10(void);
 // void func_80108A64(void);
 // void func_80108AF8(void);
@@ -2222,25 +2110,17 @@ Vec3f* OLib_Vec3fDiffDegF(Vec3f* dest, Vec3f* a, Vec3f* b);
 Vec3s* OLib_Vec3fDiffBinAng(Vec3s* dest, Vec3f* a, Vec3f* b);
 void OLib_DbCameraVec3fDiff(PosRot* a, Vec3f* b, Vec3f* dest, s16 mode);
 void OLib_DbCameraVec3fSum(PosRot* a, Vec3f* b, Vec3f* dest, s16 mode);
-// void func_8010CB80(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5,
-// UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10); void
-// func_8010CD98(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5,
-// UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10); void
-// func_8010CFBC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5,
-// UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10, UNK_TYPE2 param_11,
-// UNK_TYPE2 param_12, UNK_TYPE2 param_13, UNK_TYPE2 param_14); void func_8010D2D4(UNK_TYPE1 param_1, UNK_TYPE1 param_2,
-// UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8,
-// UNK_TYPE2 param_9, UNK_TYPE2 param_10, UNK_TYPE2 param_11); void func_8010D480(UNK_TYPE1 param_1, UNK_TYPE1 param_2,
-// UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8,
-// UNK_TYPE2 param_9, UNK_TYPE2 param_10, UNK_TYPE2 param_11, UNK_TYPE2 param_12, UNK_TYPE2 param_13, UNK_TYPE2
-// param_14, UNK_TYPE4 param_15, UNK_TYPE4 param_16); void func_8010D7D0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1
-// param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2
-// param_9, UNK_TYPE2 param_10); void func_8010D9F4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1
-// param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE4
-// param_10, UNK_TYPE4 param_11, UNK_TYPE4 param_12, UNK_TYPE2 param_13, UNK_TYPE2 param_14); void
-// func_8010DC58(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5); void
-// func_8010DE38(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5,
-// UNK_TYPE2 param_6); void func_8010E028(void); void func_8010E968(void);
+// void func_8010CB80(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10);
+// void func_8010CD98(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10);
+// void func_8010CFBC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10, UNK_TYPE2 param_11, UNK_TYPE2 param_12, UNK_TYPE2 param_13, UNK_TYPE2 param_14);
+// void func_8010D2D4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10, UNK_TYPE2 param_11);
+// void func_8010D480(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10, UNK_TYPE2 param_11, UNK_TYPE2 param_12, UNK_TYPE2 param_13, UNK_TYPE2 param_14, UNK_TYPE4 param_15, UNK_TYPE4 param_16);
+// void func_8010D7D0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10);
+// void func_8010D9F4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11, UNK_TYPE4 param_12, UNK_TYPE2 param_13, UNK_TYPE2 param_14);
+// void func_8010DC58(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5);
+// void func_8010DE38(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6);
+// void func_8010E028(void);
+// void func_8010E968(void);
 void func_8010E9F0(s16 arg0, s16 arg1);
 // void func_8010EA9C(void);
 // void func_8010EB50(void);
@@ -2309,10 +2189,10 @@ void func_8011C808(GlobalContext* globalCtx);
 // void func_8011E730(void);
 // void func_8011F0E0(UNK_TYPE4 ctxt);
 // void func_80120F90(void);
-// void func_80121000(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE1 param_8, UNK_TYPE1 param_9, UNK_TYPE1 param_10, UNK_TYPE4 param_11,
-// UNK_TYPE4 param_12, UNK_TYPE4 param_13, UNK_TYPE4 param_14); void func_80121064(void); void func_801210E0(void); void
-// func_80121F94(void);
+// void func_80121000(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE1 param_8, UNK_TYPE1 param_9, UNK_TYPE1 param_10, UNK_TYPE4 param_11, UNK_TYPE4 param_12, UNK_TYPE4 param_13, UNK_TYPE4 param_14);
+// void func_80121064(void);
+// void func_801210E0(void);
+// void func_80121F94(void);
 void func_80121FC4(GlobalContext* globalCtx);
 s32 func_801224E0(s32 param_1, s16 param_2, s16 param_3);
 // void func_80122524(void);
@@ -2380,20 +2260,22 @@ s32 func_801240C8(Player* player);
 // void func_801242DC(void);
 // void func_80124420(void);
 // void func_80124618(void);
-// void func_801246F4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE1 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
-// void func_80124870(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); void func_80124CC4(void); void func_80124F18(UNK_TYPE1
-// param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); void func_80124FF0(UNK_TYPE1
-// param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4
-// param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE2 param_10); void func_801251C4(void); void
-// func_80125318(void); void func_80125340(void); void func_8012536C(void); void func_801253A4(void); void
-// func_80125500(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); void
-// func_80125580(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6); void func_80125CE0(void); void func_80125D4C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1
-// param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); void func_801262C8(UNK_TYPE1 param_1, UNK_TYPE1
-// param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); void func_801263FC(UNK_TYPE1
-// param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_801246F4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE1 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
+// void func_80124870(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8);
+// void func_80124CC4(void);
+// void func_80124F18(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_80124FF0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE2 param_10);
+// void func_801251C4(void);
+// void func_80125318(void);
+// void func_80125340(void);
+// void func_8012536C(void);
+// void func_801253A4(void);
+// void func_80125500(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_80125580(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_80125CE0(void);
+// void func_80125D4C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_801262C8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_801263FC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 void func_80126440(GlobalContext* globalCtx, Collider* param_2, s32* param_3, Vec3f* param_4, Vec3f* param_5);
 // void func_801265C8(void);
 // void func_8012669C(void);
@@ -2411,11 +2293,12 @@ void func_8012697C(GlobalContext* globalCtx, Player* player);
 // void func_80127A60(void);
 // void func_80127B64(void);
 // void func_80127BE8(void);
-// void func_80127DA4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7); void func_80128388(void); void func_801284A0(void); void func_80128640(void);
+// void func_80127DA4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_80128388(void);
+// void func_801284A0(void);
+// void func_80128640(void);
 // void func_80128B74(void);
-// void func_80128BD0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5,
-// UNK_TYPE4 param_6);
+// void func_80128BD0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6);
 void PreNMI_Stop(PreNMIContext* prenmiCtx);
 void PreNMI_Update(PreNMIContext* prenmiCtx);
 void PreNMI_Draw(PreNMIContext* prenmiCtx);
@@ -2526,10 +2409,8 @@ Gfx* Gfx_BranchTexScroll(Gfx** gfxp, u32 x, u32 y, s32 width, s32 height);
 void func_8012CB04(Gfx** gfxp, u32 x, u32 y);
 Gfx* func_8012CB28(GraphicsContext* gfxCtx, u32 x, u32 y);
 Gfx* Gfx_TexScroll(GraphicsContext* gfxCtx, u32 x, u32 y, s32 width, s32 height);
-Gfx* Gfx_TwoTexScroll(GraphicsContext* gfxCtx, s32 tile1, u32 x1, u32 y1, s32 width1, s32 height1, s32 tile2, u32 x2,
-                      u32 y2, s32 width2, s32 height2);
-Gfx* Gfx_TwoTexScrollEnvColor(GraphicsContext* gfxCtx, s32 tile1, u32 x1, u32 y1, s32 width1, s32 height1, s32 tile2,
-                              u32 x2, u32 y2, s32 width2, s32 height2, s32 r, s32 g, s32 b, s32 a);
+Gfx* Gfx_TwoTexScroll(GraphicsContext* gfxCtx, s32 tile1, u32 x1, u32 y1, s32 width1, s32 height1, s32 tile2, u32 x2, u32 y2, s32 width2, s32 height2);
+Gfx* Gfx_TwoTexScrollEnvColor(GraphicsContext* gfxCtx, s32 tile1, u32 x1, u32 y1, s32 width1, s32 height1, s32 tile2, u32 x2, u32 y2, s32 width2, s32 height2, s32 r, s32 g, s32 b, s32 a);
 Gfx* Gfx_EnvColor(GraphicsContext* gfxCtx, s32 r, s32 g, s32 b, s32 a);
 Gfx* Gfx_PrimColor(GraphicsContext* gfxCtx, s32 lodfrac, s32 r, s32 g, s32 b, s32 a);
 void func_8012CF0C(GraphicsContext* gfxCtx, s32 iParm2, s32 iParm3, u8 r, u8 g, u8 b);
@@ -2663,42 +2544,23 @@ s32 Entrance_GetTransitionFlags(u16 entranceIndex);
 // void func_80132FDC(void);
 // void func_80133000(void);
 s32 func_80133038(GlobalContext* globalCtx, UNK_PTR arg1, struct_80133038_arg2* arg2);
-void SkelAnime_LodDrawLimb(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* limbDrawTable,
-                           OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, s32 dListIndex);
-void SkelAnime_LodDraw(GlobalContext* globalCtx, void** skeleton, Vec3s* limbDrawTable,
-                       OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, s32 dListIndex);
-void SkelAnime_LodDrawLimbSV(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* limbDrawTable,
-                             OverrideLimbDrawSV overrideLimbDraw, PostLimbDrawSV postLimbDraw, Actor* actor,
-                             s32 dListIndex, RSPMatrix** mtx);
-void SkelAnime_LodDrawSV(GlobalContext* globalCtx, void** skeleton, Vec3s* limbDrawTable, s32 dListCount,
-                         OverrideLimbDrawSV overrideLimbDraw, PostLimbDrawSV postLimbDraw, Actor* actor,
-                         s32 dListIndex);
-void SkelAnime_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* limbDrawTable,
-                        OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor);
-void SkelAnime_Draw(GlobalContext* globalCtx, void** skeleton, Vec3s* limbDrawTable, OverrideLimbDraw overrideLimbDraw,
-                    PostLimbDraw postLimbDraw, Actor* actor);
-void SkelAnime_DrawLimbSV(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* limbDrawTable,
-                          OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor,
-                          RSPMatrix** limbMatricies);
-void SkelAnime_DrawSV(GlobalContext* globalCtx, void** skeleton, Vec3s* limbDrawTable, s32 dListCount,
-                      OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor);
-void func_80134148(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* limbDrawTable,
-                   OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, UnkActorDraw unkDraw, Actor* actor,
-                   RSPMatrix** mtx);
-void func_801343C0(GlobalContext* globalCtx, void** skeleton, Vec3s* limbDrawTable, s32 dListCount,
-                   OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, UnkActorDraw unkDraw, Actor* actor);
+void SkelAnime_LodDrawLimb(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* limbDrawTable, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, s32 dListIndex);
+void SkelAnime_LodDraw(GlobalContext* globalCtx, void** skeleton, Vec3s* limbDrawTable, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, s32 dListIndex);
+void SkelAnime_LodDrawLimbSV(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* limbDrawTable, OverrideLimbDrawSV overrideLimbDraw, PostLimbDrawSV postLimbDraw, Actor* actor, s32 dListIndex, RSPMatrix** mtx);
+void SkelAnime_LodDrawSV(GlobalContext* globalCtx, void** skeleton, Vec3s* limbDrawTable, s32 dListCount, OverrideLimbDrawSV overrideLimbDraw, PostLimbDrawSV postLimbDraw, Actor* actor, s32 dListIndex);
+void SkelAnime_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* limbDrawTable, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor);
+void SkelAnime_Draw(GlobalContext* globalCtx, void** skeleton, Vec3s* limbDrawTable, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor);
+void SkelAnime_DrawLimbSV(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* limbDrawTable, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, RSPMatrix** limbMatricies);
+void SkelAnime_DrawSV(GlobalContext* globalCtx, void** skeleton, Vec3s* limbDrawTable, s32 dListCount, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor);
+void func_80134148(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* limbDrawTable, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, UnkActorDraw unkDraw, Actor* actor, RSPMatrix** mtx);
+void func_801343C0(GlobalContext* globalCtx, void** skeleton, Vec3s* limbDrawTable, s32 dListCount, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, UnkActorDraw unkDraw, Actor* actor);
 void SkelAnime_AnimateFrame(AnimationHeader* animationSeg, s32 currentFrame, s32 limbCount, Vec3s* dst);
 s16 SkelAnime_GetTotalFrames(AnimationHeaderCommon* animationSeg);
 s16 SkelAnime_GetFrameCount(AnimationHeaderCommon* animationSeg);
-Gfx* SkelAnime_Draw2Limb(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* limbDrawTable,
-                         OverrideLimbDraw2 overrideLimbDraw, PostLimbDraw2 postLimbDraw, Actor* actor, Gfx* gfx);
-Gfx* SkelAnime_Draw2(GlobalContext* globalCtx, void** skeleton, Vec3s* limbDrawTable,
-                     OverrideLimbDraw2 overrideLimbDraw, PostLimbDraw2 postLimbDraw, Actor* actor, Gfx* gfx);
-Gfx* SkelAnime_DrawLimbSV2(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* limbDrawTable,
-                           OverrideLimbDraw2 overrideLimbDraw, PostLimbDraw2 postLimbDraw, Actor* actor,
-                           RSPMatrix** mtx, Gfx* gfx);
-Gfx* SkelAnime_DrawSV2(GlobalContext* globalCtx, void** skeleton, Vec3s* limbDrawTable, s32 dListCount,
-                       OverrideLimbDraw2 overrideLimbDraw, PostLimbDraw2 postLimbDraw, Actor* actor, Gfx* gfx);
+Gfx* SkelAnime_Draw2Limb(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* limbDrawTable, OverrideLimbDraw2 overrideLimbDraw, PostLimbDraw2 postLimbDraw, Actor* actor, Gfx* gfx);
+Gfx* SkelAnime_Draw2(GlobalContext* globalCtx, void** skeleton, Vec3s* limbDrawTable, OverrideLimbDraw2 overrideLimbDraw, PostLimbDraw2 postLimbDraw, Actor* actor, Gfx* gfx);
+Gfx* SkelAnime_DrawLimbSV2(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* limbDrawTable, OverrideLimbDraw2 overrideLimbDraw, PostLimbDraw2 postLimbDraw, Actor* actor, RSPMatrix** mtx, Gfx* gfx);
+Gfx* SkelAnime_DrawSV2(GlobalContext* globalCtx, void** skeleton, Vec3s* limbDrawTable, s32 dListCount, OverrideLimbDraw2 overrideLimbDraw, PostLimbDraw2 postLimbDraw, Actor* actor, Gfx* gfx);
 s32 func_80134FFC(s32 arg0, s32 arg1, Vec3s* dst);
 s16 func_801353D4(AnimationHeaderCommon* animationSeg);
 s16 SkelAnime_GetTotalFrames2(AnimationHeaderCommon* animationSeg);
@@ -2708,8 +2570,7 @@ void SkelAnime_AnimationCtxReset(AnimationContext* animationCtx);
 void func_801358D4(GlobalContext* globalCtx);
 void func_801358F4(GlobalContext* globalCtx);
 AnimationEntry* SkelAnime_NextEntry(AnimationContext* animationCtx, AnimationType type);
-void SkelAnime_LoadLinkAnimetion(GlobalContext* globalCtx, LinkAnimationHeader* linkAnimetionSeg, s32 frame,
-                                 s32 limbCount, void* ram);
+void SkelAnime_LoadLinkAnimetion(GlobalContext* globalCtx, LinkAnimationHeader* linkAnimetionSeg, s32 frame, s32 limbCount, void* ram);
 void SkelAnime_LoadAnimationType1(GlobalContext* globalCtx, s32 vecCount, Vec3s* dst, Vec3s* src);
 void SkelAnime_LoadAnimationType2(GlobalContext* globalCtx, s32 limbCount, Vec3s* arg2, Vec3s* arg3, f32 arg4);
 void SkelAnime_LoadAnimationType3(GlobalContext* globalCtx, s32 vecCount, Vec3s* dst, Vec3s* src, u8* index);
@@ -2722,9 +2583,7 @@ void SkelAnime_AnimationType3Loaded(GlobalContext* globalCtx, AnimationEntryType
 void SkelAnime_AnimationType4Loaded(GlobalContext* globalCtx, AnimationEntryType4* entry);
 void SkelAnime_AnimationType5Loaded(GlobalContext* globalCtx, AnimationEntryType5* entry);
 void func_80135EE8(GlobalContext* globalCtx, AnimationContext* animationCtx);
-void SkelAnime_InitLinkAnimetion(GlobalContext* globalCtx, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg,
-                                 LinkAnimationHeader* linkAnimationHeaderSeg, s32 flags, Vec3s* limbDrawTbl,
-                                 Vec3s* transitionDrawTbl, s32 limbBufCount);
+void SkelAnime_InitLinkAnimetion(GlobalContext* globalCtx, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg, LinkAnimationHeader* linkAnimationHeaderSeg, s32 flags, Vec3s* limbDrawTbl, Vec3s* transitionDrawTbl, s32 limbBufCount);
 void func_801360A8(SkelAnime* skelAnime);
 s32 func_801360E0(GlobalContext* globalCtx, SkelAnime* skelAnime);
 s32 func_80136104(GlobalContext* globalCtx, SkelAnime* skelAnime);
@@ -2732,39 +2591,24 @@ void func_801361BC(GlobalContext* globalCtx, SkelAnime* skelAnime);
 s32 func_80136288(GlobalContext* globalCtx, SkelAnime* skelAnime);
 s32 func_8013631C(GlobalContext* globalCtx, SkelAnime* skelAnime);
 void SkelAnime_SetTransition(GlobalContext* globalCtx, SkelAnime* skelAnime, f32 transitionRate);
-void SkelAnime_ChangeLinkAnim(GlobalContext* globalCtx, SkelAnime* skelAnime,
-                              LinkAnimationHeader* linkAnimationHeaderSeg, f32 playbackSpeed, f32 frame, f32 frameCount,
-                              u8 animationMode, f32 transitionRate);
-void SkelAnime_ChangeLinkAnimDefaultStop(GlobalContext* globalCtx, SkelAnime* skelAnime,
-                                         LinkAnimationHeader* linkAnimationHeaderSeg);
-void SkelAnime_ChangeLinkAnimPlaybackStop(GlobalContext* globalCtx, SkelAnime* skelAnime,
-                                          LinkAnimationHeader* linkAnimationHeaderSeg, f32 playbackSpeed);
-void SkelAnime_ChangeLinkAnimDefaultRepeat(GlobalContext* globalCtx, SkelAnime* skelAnime,
-                                           LinkAnimationHeader* linkAnimationHeaderSeg);
-void SkelAnime_ChangeLinkAnimPlaybackRepeat(GlobalContext* globalCtx, SkelAnime* skelAnime,
-                                            LinkAnimationHeader* linkAnimationHeaderSeg, f32 playbackSpeed);
+void SkelAnime_ChangeLinkAnim(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimationHeader* linkAnimationHeaderSeg, f32 playbackSpeed, f32 frame, f32 frameCount, u8 animationMode, f32 transitionRate);
+void SkelAnime_ChangeLinkAnimDefaultStop(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimationHeader* linkAnimationHeaderSeg);
+void SkelAnime_ChangeLinkAnimPlaybackStop(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimationHeader* linkAnimationHeaderSeg, f32 playbackSpeed);
+void SkelAnime_ChangeLinkAnimDefaultRepeat(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimationHeader* linkAnimationHeaderSeg);
+void SkelAnime_ChangeLinkAnimPlaybackRepeat(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimationHeader* linkAnimationHeaderSeg, f32 playbackSpeed);
 void func_8013670C(GlobalContext* globalCtx, SkelAnime* skelAnime);
 void func_8013673C(GlobalContext* globalCtx, SkelAnime* skelAnime);
-void func_8013676C(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimationHeader* linkAnimationHeaderSeg,
-                   f32 frame);
-void func_801367B0(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimationHeader* linkAnimationHeaderSeg,
-                   f32 frame);
+void func_8013676C(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimationHeader* linkAnimationHeaderSeg, f32 frame);
+void func_801367B0(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimationHeader* linkAnimationHeaderSeg, f32 frame);
 void func_801367F4(GlobalContext* globalCtx, SkelAnime* skelAnime, f32 frame);
-void func_8013682C(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimationHeader* linkAnimationHeaderSeg,
-                   f32 transitionFrame, LinkAnimationHeader* LinkAnimationHeaderSeg2, f32 frame, f32 transitionRate,
-                   Vec3s* limbDrawTbl);
-void func_801368CC(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimationHeader* linkAnimationHeaderSeg,
-                   f32 transitionFrame, LinkAnimationHeader* LinkAnimationHeaderSeg2, f32 frame, f32 transitionRate,
-                   Vec3s* limbDrawTbl);
+void func_8013682C(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimationHeader* linkAnimationHeaderSeg, f32 transitionFrame, LinkAnimationHeader* LinkAnimationHeaderSeg2, f32 frame, f32 transitionRate, Vec3s* limbDrawTbl);
+void func_801368CC(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimationHeader* linkAnimationHeaderSeg, f32 transitionFrame, LinkAnimationHeader* LinkAnimationHeaderSeg2, f32 frame, f32 transitionRate, Vec3s* limbDrawTbl);
 void SkelAnime_SetModeStop(SkelAnime* skelAnime);
 s32 func_80136990(SkelAnime* skelAnime, f32 arg1, f32 updateRate);
 s32 func_80136A48(SkelAnime* skelAnime, f32 arg1);
-void SkelAnime_Init(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg,
-                    AnimationHeader* animationSeg, Vec3s* limbDrawTbl, Vec3s* transitionDrawTable, s32 limbCount);
-void SkelAnime_InitSV(GlobalContext* globalCtx, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg,
-                      AnimationHeader* animationSeg, Vec3s* limbDrawTbl, Vec3s* transitionDrawTable, s32 limbCount);
-void SkelAnime_InitSkin(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg,
-                        AnimationHeader* animationSeg);
+void SkelAnime_Init(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg, AnimationHeader* animationSeg, Vec3s* limbDrawTbl, Vec3s* transitionDrawTable, s32 limbCount);
+void SkelAnime_InitSV(GlobalContext* globalCtx, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg, AnimationHeader* animationSeg, Vec3s* limbDrawTbl, Vec3s* transitionDrawTable, s32 limbCount);
+void SkelAnime_InitSkin(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg, AnimationHeader* animationSeg);
 void func_80136C84(SkelAnime* skelAnime);
 s32 SkelAnime_FrameUpdateMatrix(SkelAnime* skelAnime);
 s32 func_80136CF4(SkelAnime* skelAnime);
@@ -2773,10 +2617,8 @@ void func_80136F04(SkelAnime* skelAnime);
 s32 func_8013702C(SkelAnime* skelAnime);
 s32 func_801370B0(SkelAnime* skelAnime);
 s32 func_8013713C(SkelAnime* skelAnime);
-void SkelAnime_ChangeAnimImpl(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 playbackSpeed, f32 frame,
-                              f32 frameCount, u8 animationType, f32 transitionRate, s8 unk2);
-void SkelAnime_ChangeAnim(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 playbackSpeed, f32 frame,
-                          f32 frameCount, u8 mode, f32 transitionRate);
+void SkelAnime_ChangeAnimImpl(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 playbackSpeed, f32 frame, f32 frameCount, u8 animationType, f32 transitionRate, s8 unk2);
+void SkelAnime_ChangeAnim(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 playbackSpeed, f32 frame, f32 frameCount, u8 mode, f32 transitionRate);
 void SkelAnime_ChangeAnimDefaultStop(SkelAnime* skelAnime, AnimationHeader* animationSeg);
 void SkelAnime_ChangeAnimTransitionStop(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 transitionRate);
 void SkelAnime_ChangeAnimPlaybackStop(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 playbackSpeed);
@@ -2795,16 +2637,19 @@ void SkelAnime_CopyVec3s(SkelAnime* skelAnime, Vec3s* dst, Vec3s* src);
 // void func_80137B34(void);
 // void func_80137EBC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_80137F58(void);
-// void func_80138050(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); void func_80138228(UNK_TYPE1 param_1, UNK_TYPE1 param_2,
-// UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); void func_80138258(UNK_TYPE1 param_1, UNK_TYPE1 param_2,
-// UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); void func_8013828C(UNK_TYPE1 param_1,
-// UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-// void func_801382C4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); void func_80138300(void); void func_8013835C(void); void
-// func_80138410(void); void func_80138424(void); void func_8013859C(void); void func_80138700(void); void
-// func_801387D4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5); void
-// func_801388E4(void);
+// void func_80138050(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8);
+// void func_80138228(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_80138258(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_8013828C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_801382C4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8);
+// void func_80138300(void);
+// void func_8013835C(void);
+// void func_80138410(void);
+// void func_80138424(void);
+// void func_8013859C(void);
+// void func_80138700(void);
+// void func_801387D4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5);
+// void func_801388E4(void);
 void SkinMatrix_Vec3fMtxFMultXYZW(MtxF* mf, Vec3f* src, Vec3f* xyzDest, f32* wDest);
 void SkinMatrix_Vec3fMtxFMultXYZ(MtxF* mf, Vec3f* src, Vec3f* dest);
 void SkinMatrix_MtxFMtxFMult(MtxF* mfB, MtxF* mfA, MtxF* dest);
@@ -2816,10 +2661,8 @@ void SkinMatrix_SetScale(MtxF* mf, f32 x, f32 y, f32 z);
 void SkinMatrix_SetRotateRPY(MtxF* mf, s16 roll, s16 pitch, s16 yaw);
 void SkinMatrix_SetRotateYRP(MtxF* mf, s16 yaw, s16 roll, s16 pitch);
 void SkinMatrix_SetTranslate(MtxF* mf, f32 x, f32 y, f32 z);
-void SkinMatrix_SetScaleRotateRPYTranslate(MtxF* mf, f32 scaleX, f32 scaleY, f32 scaleZ, s16 roll, s16 pitch, s16 yaw,
-                                           f32 dx, f32 dy, f32 dz);
-void SkinMatrix_SetScaleRotateYRPTranslate(MtxF* mf, f32 scaleX, f32 scaleY, f32 scaleZ, s16 yaw, s16 roll, s16 pitch,
-                                           f32 dx, f32 dy, f32 dz);
+void SkinMatrix_SetScaleRotateRPYTranslate(MtxF* mf, f32 scaleX, f32 scaleY, f32 scaleZ, s16 roll, s16 pitch, s16 yaw, f32 dx, f32 dy, f32 dz);
+void SkinMatrix_SetScaleRotateYRPTranslate(MtxF* mf, f32 scaleX, f32 scaleY, f32 scaleZ, s16 yaw, s16 roll, s16 pitch, f32 dx, f32 dy, f32 dz);
 void SkinMatrix_SetRotateRPYTranslate(MtxF* mf, s16 roll, s16 pitch, s16 yaw, f32 dx, f32 dy, f32 dz);
 void SkinMatrix_Vec3fToVec3s(Vec3f* src, Vec3s* dest);
 void SkinMatrix_Vec3sToVec3f(Vec3s* src, Vec3f* dest);
@@ -2836,22 +2679,18 @@ void func_8013A41C(s32 flag);
 void func_8013A46C(s32 flag);
 u32 func_8013A4C4(s32 flag);
 s16 func_8013A504(s16 val);
-s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin,
-                  f32 distanceMax, s16 angleError);
+s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin, f32 distanceMax, s16 angleError);
 // void func_8013A7C0(void);
 // void func_8013A860(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
 Gfx* func_8013AB00(GlobalContext* globalCtx, void** skeleton, Vec3s* limbDrawTable, s32 dListCount, void* func1, void* func2, void* func3, Actor* actor, Gfx* gfx);
 s32 func_8013AD6C(GlobalContext* globalCtx);
-// void func_8013AD9C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6);
+// void func_8013AD9C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 void func_8013AED4(u16* param_1, u16 param_2, u16 param_3);
 void func_8013AF00(UNK_PTR arg0, UNK_TYPE arg1, UNK_TYPE arg2);
-// void func_8013B010(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7); void func_8013B0C8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3,
-// UNK_TYPE1 param_4, UNK_TYPE4 param_5); void func_8013B350(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3,
-// UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-s32 func_8013B6B0(Path* path, UNK_PTR arg1, s32* arg2, s32 arg3, s32 arg4, s32* arg5, UNK_PTR arg6, Vec3f* arg7,
-                  s16 arg8);
+// void func_8013B010(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_8013B0C8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_8013B350(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+s32 func_8013B6B0(Path* path, UNK_PTR arg1, s32* arg2, s32 arg3, s32 arg4, s32* arg5, UNK_PTR arg6, Vec3f* arg7, s16 arg8);
 void func_8013B878(GlobalContext* globalCtx, Path* path, s32 arg2, Vec3f* arg3);
 Path* func_8013BB34(GlobalContext* globalCtx, u8 arg1, s32 arg2);
 Actor* func_8013BB7C(Actor* actor, GlobalContext* globalCtx, s32 actorCategory, s32 actorId);
@@ -2875,8 +2714,7 @@ UNK_TYPE func_8013D768(Actor* actor, UNK_PTR arg1, s16 arg2);
 // void func_8013D83C(void);
 // void func_8013D8DC(void);
 // void func_8013D924(void);
-Actor* func_ActorCategoryIterateById(GlobalContext* globalCtx, struct Actor* actorListStart, s32 actorCategory,
-                                     s32 actorId);
+Actor* func_ActorCategoryIterateById(GlobalContext* globalCtx, struct Actor* actorListStart, s32 actorCategory, s32 actorId);
 void func_8013D9C8(GlobalContext* globalCtx, s16* arg1, s16* arg2, UNK_TYPE arg3);
 u8 func_8013DB90(GlobalContext* globalCtx, UNK_PTR arg1, f32 arg2);
 // void func_8013DC40(void);
@@ -2935,9 +2773,9 @@ s32 func_8013FD74(View* view);
 s32 func_80140024(View* view);
 s32 func_801400CC(View* view, Gfx** gfxp);
 void func_80140260(OSViMode* vimode);
-// void func_8014026C(OSViMode* param_1, UNK_TYPE1 param_2, s32 param_3, s32 param_4, s32 param_5, s32 param_6, s32
-// param_7, s32 param_8, UNK_TYPE4 param_9, s32 param_10, s16 param_11, u32 param_12, UNK_TYPE4 param_13); void
-// func_80140730(void); void func_80140810(void);
+// void func_8014026C(OSViMode* param_1, UNK_TYPE1 param_2, s32 param_3, s32 param_4, s32 param_5, s32 param_6, s32 param_7, s32 param_8, UNK_TYPE4 param_9, s32 param_10, s16 param_11, u32 param_12, UNK_TYPE4 param_13);
+// void func_80140730(void);
+// void func_80140810(void);
 void func_80140898(void* arg0);
 void func_80140900(void* arg0);
 // void func_8014090C(void);
@@ -2947,31 +2785,28 @@ void func_80140D04(void* arg0);
 void func_80140D10(void* arg0, Gfx** gfx, u32 arg2);
 void func_80140E80(void* param_1);
 // void func_80140EA0(void);
-// void func_80140EAC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6); void func_80141008(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
-// void func_8014116C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6); void func_801411B4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
-// void func_80141200(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6); void func_8014151C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE4 param_5, UNK_TYPE4 param_6); void func_80141678(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3,
-// UNK_TYPE1 param_4, UNK_TYPE4 param_5); void func_80141778(void);
+// void func_80140EAC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_80141008(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
+// void func_8014116C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_801411B4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
+// void func_80141200(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_8014151C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_80141678(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_80141778(void);
 void func_801418B0(void* arg0);
 void func_80141900(void* arg0);
 // void func_80141924(void);
 // void func_80141C34(void);
-void VisMono_Draw(void* arg0, Gfx** gfx, u32 arg2); // VisMono_Draw
+void VisMono_Draw(void* arg0, Gfx** gfx, u32 arg2);
 // void func_8014204C(void);
 void func_801420C0(void* arg0);
 void func_801420F4(void* arg0);
 void func_80142100(void* arg0, Gfx** gfx, u32 arg2);
-s32 func_80142440(SkyboxContext* skyboxCtx, Vtx* vtx, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7,
-                  s32 arg8);                                                         // func_80142440
-void func_80143148(SkyboxContext* skyboxCtx, s32 arg1);                              // func_80143148
-void func_801431E8(GameState* gamestate, SkyboxContext* skyboxCtx, s16 skyType);     // func_801431E8
-void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyType); // func_80143324
-void func_801434E4(GameState* gamestate, SkyboxContext* skyboxCtx, s16 skyType);     // func_801434E4
+s32 func_80142440(SkyboxContext* skyboxCtx, Vtx* vtx, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
+void func_80143148(SkyboxContext* skyboxCtx, s32 arg1);
+void func_801431E8(GameState* gamestate, SkyboxContext* skyboxCtx, s16 skyType);
+void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyType);
+void func_801434E4(GameState* gamestate, SkyboxContext* skyboxCtx, s16 skyType);
 // void func_801435A0(void);
 // void func_80143624(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE1 param_7);
 // void func_80143668(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
@@ -3102,17 +2937,21 @@ void ShrinkWindow_Draw(GlobalContext* globalCtx);
 // s32 func_80161BAC(void);
 // void func_80161BE0(void);
 // void func_80161C0C(void);
-// void func_80161C20(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6); void func_80161E4C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE4 param_5, UNK_TYPE4 param_6); void func_801620CC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3,
-// UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); void func_8016237C(UNK_TYPE1 param_1, UNK_TYPE1 param_2,
-// UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6); void func_801623E4(UNK_TYPE1 param_1,
-// UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); void
-// func_801624EC(void); void func_8016253C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE4 param_5, UNK_TYPE4 param_6); void func_801629BC(void); void func_80162A50(UNK_TYPE1 param_1, UNK_TYPE1
-// param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); void func_80162FF8(void); void
-// func_801631DC(void); void func_80163334(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE4 param_5, UNK_TYPE4 param_6); void func_80163660(void); void func_80163700(void); void func_80163758(void);
+// void func_80161C20(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_80161E4C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_801620CC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_8016237C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6);
+// void func_801623E4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_801624EC(void);
+// void func_8016253C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_801629BC(void);
+// void func_80162A50(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_80162FF8(void);
+// void func_801631DC(void);
+// void func_80163334(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_80163660(void);
+// void func_80163700(void);
+// void func_80163758(void);
 // void func_801637B4(void);
 void func_80163804(GlobalContext* globalCtx);
 // void func_8016388C(void);
@@ -3147,9 +2986,13 @@ void* TransitionFade_Init(void* param_1);
 // void TransitionCircle_Update(void);
 // void TransitionCircle_SetColor(void);
 // void TransitionCircle_SetType(void);
-// void func_80164C14(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7); void TransitionCircle_Draw(void); void TransitionCircle_IsDone(void); void
-// func_801651B0(void); void func_80165224(void); void func_80165288(void); void func_8016537C(void);
+// void func_80164C14(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void TransitionCircle_Draw(void);
+// void TransitionCircle_IsDone(void);
+// void func_801651B0(void);
+// void func_80165224(void);
+// void func_80165288(void);
+// void func_8016537C(void);
 void func_80165438(UNK_PTR param_1);
 // void func_80165444(s32 param_1, UNK_TYPE4 param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4, UNK_TYPE4 param_5);
 // void func_80165460(void);
@@ -3216,14 +3059,18 @@ s32 FrameAdvance_IsEnabled(GlobalContext* globalCtx);
 // void func_8016A0AC(void);
 // void func_8016A168(void);
 // void func_8016A178(void);
-// void func_8016A268(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5,
-// UNK_TYPE1 param_6);
+// void func_8016A268(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6);
 void Play_Init(GlobalContext* globalCtx);
-// void func_8016AC10(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10); void
-// func_8016AE1C(void); void func_8016B278(void); void func_8016B4B0(void); void func_8016C344(void); void
-// func_8016CD4C(void); void func_8016E40C(void); void func_8016EA90(void); void func_8016F1A8(void); void
-// func_8016F4EC(void);
+// void func_8016AC10(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
+// void func_8016AE1C(void);
+// void func_8016B278(void);
+// void func_8016B4B0(void);
+// void func_8016C344(void);
+// void func_8016CD4C(void);
+// void func_8016E40C(void);
+// void func_8016EA90(void);
+// void func_8016F1A8(void);
+// void func_8016F4EC(void);
 void func_8016F5A8(GlobalContext* globalCtx, s8* pcParm2, Input* iParm3);
 // void func_8016FC78(void);
 // void func_8016FC98(void);
@@ -3253,8 +3100,7 @@ void PreRender_ApplyFiltersSlowlyInit(PreRender* this);
 void PreRender_ApplyFiltersSlowlyDestroy(PreRender* this);
 void func_801720C4(PreRender* this);
 void func_801720FC(PreRenderParams* params, Gfx** gfxp);
-void func_80172758(Gfx** gfxp, void* timg, void* tlut, u16 width, u16 height, u8 fmt, u8 siz, u16 tt, u16 arg8, f32 x,
-                   f32 y, f32 xScale, f32 yScale, u32 flags);
+void func_80172758(Gfx** gfxp, void* timg, void* tlut, u16 width, u16 height, u8 fmt, u8 siz, u16 tt, u16 arg8, f32 x, f32 y, f32 xScale, f32 yScale, u32 flags);
 void THGA_Ct(TwoHeadGfxArena* thga, Gfx* start, u32 size);
 void THGA_Dt(TwoHeadGfxArena* thga);
 u32 THGA_IsCrash(TwoHeadGfxArena* thga);
@@ -3393,15 +3239,16 @@ void Sched_Init(SchedContext* sched, void* stack, OSPri pri, UNK_TYPE arg3, UNK_
 void func_801773A0(void* arg0);
 void func_801773C4(void* arg0);
 void SpeedMeter_DrawTimeEntries(void* displayList, GraphicsContext* gCtx);
-// void func_80177A84(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9); void func_80177AC8(void);
-void SpeedMeter_DrawAllocEntries(void* displayList, GraphicsContext* gCtx, GameState* ctx);
-// void func_801780F0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7); void func_801781EC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3,
-// UNK_TYPE1 param_4, UNK_TYPE4 param_5); void func_8017842C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3,
-// UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9,
-// UNK_TYPE4 param_10, UNK_TYPE4 param_11); void func_80178750(void); void func_80178818(void); void
-// func_80178978(void); void func_801789D4(void);
+// void func_80177A84(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9);
+// void func_80177AC8(void);
+void SpeedMeter_DrawAllocEntries(void* displayList, GraphicsContext* gfxCtx, GameState* gameState);
+void func_801780F0(Mtx* param_1, f32 param_2, f32 param_3, f32 param_4, f32 param_5, f32 param_6, f32 param_7);
+// void func_801781EC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_8017842C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
+// void func_80178750(void);
+// void func_80178818(void);
+// void func_80178978(void);
+// void func_801789D4(void);
 u32* get_framebuffer(s32 index);
 // u16* get_zbuffer(void);
 // UNK_TYPE4 func_80178A24(void);
@@ -3413,10 +3260,10 @@ s32 func_80178A94(s32 param_1, s32 param_2);
 // void func_80178DAC(void);
 // void func_80178E3C(void);
 // void func_80178E7C(void);
-void Check_WriteRGB5A1Pixel(u16* buffer, u32 x, u32 y, u16 value);
+void Check_WriteRGBA16Pixel(u16* buffer, u32 x, u32 y, u16 value);
 void Check_WriteI4Pixel(u16* buffer, u32 x, u32 y, u32 value);
 void Check_DrawI4Texture(u16* buffer, u32 x, u32 y, u32 width, u32 height, u8* texture);
-void Check_ClearRGB5A1(s16* buffer);
+void Check_ClearRGBA16(s16* buffer);
 // void Check_DrawExpansionPakErrorMessage(void);
 // void Check_DrawRegionLockErrorMessage(void);
 // void Check_ExpansionPak(void);
@@ -3429,26 +3276,22 @@ f32 cos_rad(f32 rad);
 f32 Rand_ZeroFloat(f32 scale);
 f32 randPlusMinusPoint5Scaled(f32 scale);
 f32 Math3D_Normalize(Vec3f* vec);
-// UNK_TYPE4 func_80179678(f32 fParm1, f32 fParm2, f32 fParm5, f32 param_4, f32 param_5, f32 param_6, f32 param_7,
-// UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11); UNK_TYPE4 func_80179798(Vec3f*
-// param_1, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4, Vec3f* param_5, Vec3f* param_6); void func_80179A44(void);
-void func_80179B34(float fParm1, f32 fParm2, f32 fParm5, f32 fParm6, f32 param_5, f32 param_6, f32 param_7,
-                   float* param_8, float* param_9);
-// UNK_TYPE4 func_80179B94(f32 fParm1, f32 fParm2, f32 fParm5, f32 param_4, f32 param_5, f32 param_6, f32 param_7, f32
-// param_8, Vec3f* param_9); void func_80179D74(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1
-// param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4
-// param_10);
+// UNK_TYPE4 func_80179678(f32 fParm1, f32 fParm2, f32 fParm5, f32 param_4, f32 param_5, f32 param_6, f32 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
+// UNK_TYPE4 func_80179798(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4, Vec3f* param_5, Vec3f* param_6);
+// void func_80179A44(void);
+void func_80179B34(float fParm1, f32 fParm2, f32 fParm5, f32 fParm6, f32 param_5, f32 param_6, f32 param_7, float* param_8, float* param_9);
+// UNK_TYPE4 func_80179B94(f32 fParm1, f32 fParm2, f32 fParm5, f32 param_4, f32 param_5, f32 param_6, f32 param_7, f32 param_8, Vec3f* param_9);
+// void func_80179D74(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
 void Math3D_ScaleAndAdd(Vec3f* a, Vec3f* b, f32 scale, Vec3f* dst);
 void Math3D_Lerp(Vec3f* a, Vec3f* b, f32 t, Vec3f* dst);
 s32 Math3D_Parallel(Vec3f* a, Vec3f* b);
 s32 Math3D_AngleBetweenVectors(Vec3f* a, Vec3f* b, f32* angle);
 void func_80179F64(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3);
 s32 Math3D_XZBoundCheck(f32 xMin, f32 xMax, f32 zMin, f32 zMax, f32 x, f32 z);
-// void func_8017A09C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6); void func_8017A1D0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE4 param_5, UNK_TYPE4 param_6); void func_8017A304(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3,
-// UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); UNK_TYPE4 func_8017A438(Vec3f* pfParm1, Vec3f* pfParm2,
-// Vec3f* pfParm3, Vec3f* pfParm4, f32 param_5);
+// void func_8017A09C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_8017A1D0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_8017A304(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// UNK_TYPE4 func_8017A438(Vec3f* pfParm1, Vec3f* pfParm2, Vec3f* pfParm3, Vec3f* pfParm4, f32 param_5);
 f32 Math3D_XZLengthSquared(f32 x, f32 z);
 f32 Math3D_XZLength(f32 x, f32 z);
 f32 Math3D_XZDistanceSquared(f32 x1, f32 x2, f32 z1, f32 z2);
@@ -3474,51 +3317,35 @@ f32 Math3D_SignedDistanceFromPlane(f32 normX, f32 normY, f32 normZ, f32 d, Vec3f
 // void func_8017B9D8(void);
 f32 Math3D_NormalizedDistanceFromPlane(f32 normX, f32 normY, f32 normZ, f32 d, Vec3f* position);
 f32 Math3D_NormalizedSignedDistanceFromPlane(f32 normX, f32 normY, f32 normZ, f32 d, Vec3f* position);
-// void func_8017BAD0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); void func_8017BD98(UNK_TYPE1 param_1, UNK_TYPE1 param_2,
-// UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); void
-// func_8017BDE0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); void
-// func_8017BE30(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
-// void func_8017BEE0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
-// void func_8017BF8C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6); void func_8017C008(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10,
-// UNK_TYPE4 param_11, UNK_TYPE4 param_12); void func_8017C17C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3,
-// UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); void func_8017C1F0(UNK_TYPE1 param_1,
-// UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7,
-// UNK_TYPE4 param_8); void func_8017C494(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10,
-// UNK_TYPE4 param_11); void func_8017C540(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); void func_8017C808(UNK_TYPE1 param_1,
-// UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-// void func_8017C850(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10); void
-// func_8017C904(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6); void func_8017C980(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10,
-// UNK_TYPE4 param_11, UNK_TYPE4 param_12); void func_8017CB08(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3,
-// UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); void func_8017CB7C(UNK_TYPE1 param_1,
-// UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7,
-// UNK_TYPE4 param_8); void func_8017CEA8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); void func_8017CEF0(UNK_TYPE1 param_1, UNK_TYPE1 param_2,
-// UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8,
-// UNK_TYPE4 param_9, UNK_TYPE4 param_10); void func_8017CFA4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3,
-// UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); void func_8017D020(UNK_TYPE1 param_1, UNK_TYPE1 param_2,
-// UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8,
-// UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11, UNK_TYPE4 param_12); void func_8017D1AC(UNK_TYPE1 param_1,
-// UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_8017BAD0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8);
+// void func_8017BD98(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_8017BDE0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_8017BE30(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
+// void func_8017BEE0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
+// void func_8017BF8C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_8017C008(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11, UNK_TYPE4 param_12);
+// void func_8017C17C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_8017C1F0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8);
+// void func_8017C494(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
+// void func_8017C540(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8);
+// void func_8017C808(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_8017C850(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
+// void func_8017C904(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_8017C980(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11, UNK_TYPE4 param_12);
+// void func_8017CB08(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_8017CB7C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8);
+// void func_8017CEA8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_8017CEF0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
+// void func_8017CFA4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_8017D020(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11, UNK_TYPE4 param_12);
+// void func_8017D1AC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
 // void func_8017D220(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
-// void func_8017D2FC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); void func_8017D404(UNK_TYPE1 param_1, UNK_TYPE1 param_2,
-// UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8,
-// UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
+// void func_8017D2FC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8);
+// void func_8017D404(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
 void Math3D_TriSetCoords(TriNorm* tri, Vec3f* pointA, Vec3f* pointB, Vec3f* pointC);
 u32 Math3D_IsPointInSphere(Sphere16* sphere, Vec3f* point);
-// void func_8017D668(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9); void func_8017D7C0(UNK_TYPE1 param_1,
-// UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_8017D668(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9);
+// void func_8017D7C0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
 // void func_8017D814(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_8017D91C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_8017DA24(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
@@ -3535,14 +3362,12 @@ s32 Math3D_ColSphereSphereIntersectAndDistance(Sphere16* sphere1, Sphere16* sphe
 s32 Math3D_ColSphereCylinderDistance(Sphere16* sphere, Cylinder16* cylinder, f32* dist);
 s32 Math3D_ColSphereCylinderDistanceAndAmount(Sphere16* sphere, Cylinder16* cylinder, f32* dist, f32* intersectAmount);
 s32 Math3D_ColCylinderCylinderAmount(Cylinder16* cylinder1, Cylinder16* cylinder2, f32* intersectAmount);
-s32 Math3D_ColCylinderCylinderAmountAndDistance(Cylinder16* cylinder1, Cylinder16* cylinder2, f32* intersectAmount,
-                                                f32* dist);
+s32 Math3D_ColCylinderCylinderAmountAndDistance(Cylinder16* cylinder1, Cylinder16* cylinder2, f32* intersectAmount, f32* dist);
 s32 Math3d_ColTriTri(TriNorm* tri1, TriNorm* tri2, Vec3f* uParm3);
 // void func_8017F9C0(void);
 // void func_8017FA34(void);
 // void func_8017FAA8(void);
-// void func_8017FB1C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
+// void func_8017FB1C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
 // void func_8017FD44(void);
 u16 Math_GetAtan2Tbl(f32 opposite, f32 adjacent);
 s16 Math_Atan2S(f32 opposite, f32 adjacent);
@@ -3599,30 +3424,47 @@ void SysMatrix_InsertRotationAroundUnitVector_s(s16 rotation, Vec3f* vector, s32
 void func_80183070(void);
 // void func_801830A0(void);
 // void func_801830C8(void);
-// void func_801830E8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7); void func_80183148(void); void func_80183224(void); void func_801832B0(void);
+// void func_801830E8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_80183148(void);
+// void func_80183224(void);
+// void func_801832B0(void);
 // void func_8018332C(void);
 // void func_8018340C(void);
-// void func_80183430(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6); void func_8018349C(void); void func_801834A8(void); void func_80183510(void); void
-// func_80183580(void); void func_801835EC(void); void func_80183658(void); void func_801836CC(void); void
-// func_8018373C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9); void func_801837CC(void); void
-// func_80183808(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6); void func_80183880(void); void func_80183A3C(void); void func_80183B08(void); void
-// func_80183B68(void); void func_80183DE0(void); void func_8018410C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1
-// param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); void func_8018450C(UNK_TYPE1
-// param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); void
-// func_801845A4(void); void func_801845C8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE4 param_5); void func_80184638(void); void func_801846AC(void); void func_80184728(void); void
-// func_801847A0(void); void func_80184818(void); void func_80184898(void); void func_80184914(UNK_TYPE1 param_1,
-// UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7,
-// UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10); void func_801849A0(void); void func_801849DC(void); void
-// func_80184C48(void); void func_801850A0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); void func_801853C8(UNK_TYPE1 param_1, UNK_TYPE1 param_2,
-// UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); void func_80185460(void);
-// void Slowly_Main(SlowlyTask* slowly);
-// void Slowly_ThreadEntry(SlowlyTask* slowly);
+// void func_80183430(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_8018349C(void);
+// void func_801834A8(void);
+// void func_80183510(void);
+// void func_80183580(void);
+// void func_801835EC(void);
+// void func_80183658(void);
+// void func_801836CC(void);
+// void func_8018373C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9);
+// void func_801837CC(void);
+// void func_80183808(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_80183880(void);
+// void func_80183A3C(void);
+// void func_80183B08(void);
+// void func_80183B68(void);
+// void func_80183DE0(void);
+// void func_8018410C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_8018450C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_801845A4(void);
+// void func_801845C8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_80184638(void);
+// void func_801846AC(void);
+// void func_80184728(void);
+// void func_801847A0(void);
+// void func_80184818(void);
+// void func_80184898(void);
+// void func_80184914(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
+// void func_801849A0(void);
+// void func_801849DC(void);
+// void func_80184C48(void);
+// void func_801850A0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_801853C8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_80185460(void);
+//void Slowly_Main(SlowlyTask* slowly);
+//void Slowly_ThreadEntry(SlowlyTask* slowly);
 void Slowly_Start(SlowlyTask* slowly, void* stack, void (*callback)(), void* callbackArg0, void* callbackArg1);
 void Slowly_Stop(SlowlyTask* slowly);
 // void func_801857C0(void);
@@ -3653,55 +3495,141 @@ s32 func_80185F90(u32 param_1);
 // void func_80187284(void);
 // void func_801872FC(void);
 // void func_801873BC(void);
-// void func_8018752C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6); void func_801877D0(void); void func_80187B64(void); void func_80187BEC(void); void
-// func_80187DE8(void); void func_80187E58(void); void func_80187F00(void); void func_80187FB0(void); void
-// func_80187FE8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); void
-// func_80188034(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); void
-// func_80188078(void); void func_801880C4(void); void func_801880E8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1
-// param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); void func_80188124(void); void func_8018814C(void); void
-// func_80188174(void); void func_801881A8(void); void func_801881C4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1
-// param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); void func_801881F8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1
-// param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); void func_80188264(void); void func_80188288(void); void
-// func_801882A0(void); void func_80188304(void); void func_801884A0(void); void func_80188698(void); void
-// func_8018883C(void); void func_801888E4(void); void func_801889A4(void); void func_80188A50(void); void
-// func_80188AFC(void); void func_80188C48(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE4 param_5); void func_80188CB4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE4 param_5); void func_80188D28(void); void func_80188D68(void); void func_80188DDC(void); void
-// func_80188FBC(void); void func_80189064(void); void func_80189620(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1
-// param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); void func_8018A4B4(UNK_TYPE1
-// param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); void
-// func_8018A768(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5,
-// UNK_TYPE4 param_6); void func_8018A808(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE2 param_5, UNK_TYPE4 param_6); void func_8018ACC4(void); void func_8018AE34(UNK_TYPE1 param_1, UNK_TYPE1
-// param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6); void func_8018B0F0(void); void
-// func_8018B10C(void); void func_8018B250(void); void func_8018B318(void); void func_8018B474(void); void
-// func_8018B4F8(void); void func_8018B520(void); void func_8018B578(void); void func_8018B5D0(void); void
-// func_8018B608(void); void func_8018B640(void); void func_8018B69C(void); void func_8018B6E8(void); void
-// func_8018B740(void); void func_8018B768(void); void func_8018B77C(void); void func_8018B7BC(void); void
-// func_8018B8FC(void); void func_8018B95C(void); void func_8018B9E0(void); void func_8018BA64(void); void
-// func_8018BB28(void); void func_8018BBEC(void); void func_8018C380(void); void func_8018C3D8(void); void
-// func_8018C8E8(void); void func_8018C93C(void); void func_8018C994(void); void func_8018CB70(void); void
-// func_8018CB78(void); void func_8018CC3C(void); void func_8018CCA8(void); void func_8018CFAC(void); void
-// func_8018D57C(void); void func_8018D5D4(void); void func_8018D658(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1
-// param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); void func_8018D6C8(void); void func_8018D760(void); void
-// func_8018DA50(void); void func_8018DBC4(void); void func_8018DCB4(void); void func_8018DCF8(void); void
-// func_8018DD98(void); void func_8018DDD4(void); void func_8018DF24(void); void func_8018DFE0(void); void
-// func_8018E00C(void); void func_8018E03C(void); void func_8018E2A8(void); void func_8018E344(void); void
-// func_8018E8C8(void); void func_8018EB60(void); void func_8018EC4C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1
-// param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); void func_8018EF88(void); void func_8018F220(void); void
-// func_8018F298(void); void func_8018F310(void); void func_8018F388(void); void func_8018F3B8(void); void
-// func_8018F3E8(void); void func_8018F448(void); void func_8018F478(void); void func_8018F4D8(void); void
-// func_8018F588(void); void func_8018F604(void); void func_8018F6F0(void); void func_8018F7C0(UNK_TYPE1 param_1,
-// UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); void func_8018F7F8(void); void
-// func_8018F83C(void); void func_8018F880(void); void func_8018F8C4(void); void func_8018F908(void); void
-// func_8018F9B8(void); void func_8018FA60(void); void func_8018FAD0(void); void func_8018FB20(void); void
-// func_8018FB78(void); void func_8018FCCC(void); void func_8018FD20(void); void func_8018FD40(void); void
-// func_8018FE5C(void); void func_8018FF60(void); void func_80190204(void); void func_80190240(void); void
-// func_80190294(void); void func_801902D8(void); void func_80190544(void); void func_80190668(void); void
-// func_8019067C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); void func_8019075C(void); void func_8019077C(UNK_TYPE1
-// param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); void func_80190B08(void);
+// void func_8018752C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_801877D0(void);
+// void func_80187B64(void);
+// void func_80187BEC(void);
+// void func_80187DE8(void);
+// void func_80187E58(void);
+// void func_80187F00(void);
+// void func_80187FB0(void);
+// void func_80187FE8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_80188034(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_80188078(void);
+// void func_801880C4(void);
+// void func_801880E8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_80188124(void);
+// void func_8018814C(void);
+// void func_80188174(void);
+// void func_801881A8(void);
+// void func_801881C4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_801881F8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_80188264(void);
+// void func_80188288(void);
+// void func_801882A0(void);
+// void func_80188304(void);
+// void func_801884A0(void);
+// void func_80188698(void);
+// void func_8018883C(void);
+// void func_801888E4(void);
+// void func_801889A4(void);
+// void func_80188A50(void);
+// void func_80188AFC(void);
+// void func_80188C48(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_80188CB4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_80188D28(void);
+// void func_80188D68(void);
+// void func_80188DDC(void);
+// void func_80188FBC(void);
+// void func_80189064(void);
+// void func_80189620(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_8018A4B4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_8018A768(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6);
+// void func_8018A808(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6);
+// void func_8018ACC4(void);
+// void func_8018AE34(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_8018B0F0(void);
+// void func_8018B10C(void);
+// void func_8018B250(void);
+// void func_8018B318(void);
+// void func_8018B474(void);
+// void func_8018B4F8(void);
+// void func_8018B520(void);
+// void func_8018B578(void);
+// void func_8018B5D0(void);
+// void func_8018B608(void);
+// void func_8018B640(void);
+// void func_8018B69C(void);
+// void func_8018B6E8(void);
+// void func_8018B740(void);
+// void func_8018B768(void);
+// void func_8018B77C(void);
+// void func_8018B7BC(void);
+// void func_8018B8FC(void);
+// void func_8018B95C(void);
+// void func_8018B9E0(void);
+// void func_8018BA64(void);
+// void func_8018BB28(void);
+// void func_8018BBEC(void);
+// void func_8018C380(void);
+// void func_8018C3D8(void);
+// void func_8018C8E8(void);
+// void func_8018C93C(void);
+// void func_8018C994(void);
+// void func_8018CB70(void);
+// void func_8018CB78(void);
+// void func_8018CC3C(void);
+// void func_8018CCA8(void);
+// void func_8018CFAC(void);
+// void func_8018D57C(void);
+// void func_8018D5D4(void);
+// void func_8018D658(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_8018D6C8(void);
+// void func_8018D760(void);
+// void func_8018DA50(void);
+// void func_8018DBC4(void);
+// void func_8018DCB4(void);
+// void func_8018DCF8(void);
+// void func_8018DD98(void);
+// void func_8018DDD4(void);
+// void func_8018DF24(void);
+// void func_8018DFE0(void);
+// void func_8018E00C(void);
+// void func_8018E03C(void);
+// void func_8018E2A8(void);
+// void func_8018E344(void);
+// void func_8018E8C8(void);
+// void func_8018EB60(void);
+// void func_8018EC4C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_8018EF88(void);
+// void func_8018F220(void);
+// void func_8018F298(void);
+// void func_8018F310(void);
+// void func_8018F388(void);
+// void func_8018F3B8(void);
+// void func_8018F3E8(void);
+// void func_8018F448(void);
+// void func_8018F478(void);
+// void func_8018F4D8(void);
+// void func_8018F588(void);
+// void func_8018F604(void);
+// void func_8018F6F0(void);
+// void func_8018F7C0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_8018F7F8(void);
+// void func_8018F83C(void);
+// void func_8018F880(void);
+// void func_8018F8C4(void);
+// void func_8018F908(void);
+// void func_8018F9B8(void);
+// void func_8018FA60(void);
+// void func_8018FAD0(void);
+// void func_8018FB20(void);
+// void func_8018FB78(void);
+// void func_8018FCCC(void);
+// void func_8018FD20(void);
+// void func_8018FD40(void);
+// void func_8018FE5C(void);
+// void func_8018FF60(void);
+// void func_80190204(void);
+// void func_80190240(void);
+// void func_80190294(void);
+// void func_801902D8(void);
+// void func_80190544(void);
+// void func_80190668(void);
+// void func_8019067C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8);
+// void func_8019075C(void);
+// void func_8019077C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_80190B08(void);
 void func_80190B38(void* callback);
 // void func_80190B50(void);
 // void func_80190BB0(void);
@@ -3714,14 +3642,26 @@ void func_80190B38(void* callback);
 // void func_8019144C(void);
 // void func_80191460(void);
 // void func_80191568(void);
-// void func_80191598(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); void func_8019161C(UNK_TYPE1 param_1, UNK_TYPE1 param_2,
-// UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); void
-// func_80191740(void); void func_80191864(void); void func_80191870(void); void func_801919AC(void); void
-// func_80191B40(void); void func_80191BD0(void); void func_80191C40(void); void func_80191C54(void); void
-// func_80191D94(void); void func_8019218C(void); void func_80192340(void); void func_80192388(void); void
-// func_801924BC(void); void func_80192514(void); void func_80192990(void); void func_80192AE8(void); void
-// func_80192B54(void); void func_80192BAC(void);
+// void func_80191598(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8);
+// void func_8019161C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_80191740(void);
+// void func_80191864(void);
+// void func_80191870(void);
+// void func_801919AC(void);
+// void func_80191B40(void);
+// void func_80191BD0(void);
+// void func_80191C40(void);
+// void func_80191C54(void);
+// void func_80191D94(void);
+// void func_8019218C(void);
+// void func_80192340(void);
+// void func_80192388(void);
+// void func_801924BC(void);
+// void func_80192514(void);
+// void func_80192990(void);
+// void func_80192AE8(void);
+// void func_80192B54(void);
+// void func_80192BAC(void);
 AudioTask* func_80192BE0(void);
 // void func_80192C00(void);
 // void func_8019319C(void);
@@ -3945,12 +3885,15 @@ void func_801A0204(UNK_TYPE);
 // void func_801A0868(void);
 // void func_801A09D4(void);
 // void func_801A0CB0(void);
-// void func_801A0E44(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6, UNK_TYPE4 param_7); void func_801A1290(void); void func_801A1348(UNK_TYPE1 param_1, UNK_TYPE1
-// param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7); void
-// func_801A13BC(void); void func_801A153C(void); void func_801A17F4(void); void func_801A1904(void); void
-// func_801A1A10(void); void func_801A1A8C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
-// UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_801A0E44(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_801A1290(void);
+// void func_801A1348(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+// void func_801A13BC(void);
+// void func_801A153C(void);
+// void func_801A17F4(void);
+// void func_801A1904(void);
+// void func_801A1A10(void);
+// void func_801A1A8C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 void func_801A1D44(Vec3f* vec, UNK_TYPE arg1, f32 arg2);
 void func_801A1DB8(Vec3f* vec, UNK_TYPE arg1, f32 arg2);
 // void func_801A1E0C(void);
@@ -3997,8 +3940,9 @@ void func_801A3CD8(s8 param_1);
 // void func_801A3E38(void);
 // void func_801A3EC0(void);
 // void func_801A3F54(void);
-// void func_801A3F6C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6); void func_801A3FB4(void); void func_801A3FFC(UNK_TYPE1 param_1);
+// void func_801A3F6C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_801A3FB4(void);
+// void func_801A3FFC(UNK_TYPE1 param_1);
 void audio_setBGM(u32 bgmID);
 // void func_801A4058(void);
 // void func_801A41C8(void);
@@ -4047,10 +3991,15 @@ UNK_TYPE func_801A51F0(UNK_TYPE arg0);
 void func_801A5BD0(s32 param_1);
 // void func_801A5C28(void);
 // void func_801A5C8C(void);
-// void func_801A5CFC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
-// UNK_TYPE4 param_6); void func_801A5DDC(void); void func_801A5F7C(void); void func_801A6430(void); void
-// func_801A65C8(void); void func_801A6D0C(void); void func_801A7084(void); void func_801A7168(void); void
-// func_801A7284(void);
+// void func_801A5CFC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+// void func_801A5DDC(void);
+// void func_801A5F7C(void);
+// void func_801A6430(void);
+// void func_801A65C8(void);
+// void func_801A6D0C(void);
+// void func_801A7084(void);
+// void func_801A7168(void);
+// void func_801A7284(void);
 void func_801A72CC(Vec3f* uParm1);
 // void func_801A7328(void);
 // void func_801A7484(void);
@@ -4081,13 +4030,15 @@ s32 func_801A8A50(s32 param1);
 // void func_801A9C68(void);
 // void func_801A9D10(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5);
 // void func_801A9DCC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5);
-// void func_801A9EA4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5,
-// UNK_TYPE1 param_6); void func_801A9F4C(void); void func_801AA020(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1
-// param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); void func_801AA248(void); void func_801AA3E4(void); void
-// func_801AA520(void);
+// void func_801A9EA4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE1 param_6);
+// void func_801A9F4C(void);
+// void func_801AA020(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+// void func_801AA248(void);
+// void func_801AA3E4(void);
+// void func_801AA520(void);
 void func_801AA610(GlobalContext* globalCtx);
 void func_801AA624(GlobalContext* globalCtx);
 // void func_801AA68C(UNK_TYPE4 ctxt);
-void nop_801AAAA0(GlobalContext* globalCtx);
+void func_801AAAA0(GlobalContext* globalCtx);
 
 #endif

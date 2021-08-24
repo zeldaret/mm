@@ -92,7 +92,7 @@ void EffDust_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->scalingFactor = 20.0f;
             break;
         default:
-            StartHeap_Free(this);
+            SystemArena_Free(this);
             break;
     }
     this->life = 10;
