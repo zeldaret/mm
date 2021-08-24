@@ -113,8 +113,7 @@ void func_800B40E0(GlobalContext* globalCtx, Light* light, MtxF* arg2, s32 arg3,
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0,
-                    (u8)(CLAMP_MAX(arg3 * 1.3e-05f, 1.0f) * arg4));
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, (u8)(CLAMP_MAX(arg3 * 1.3e-05f, 1.0f) * arg4));
 
     dir0 = light->l.dir[0];
     dir2 = light->l.dir[2];
@@ -135,7 +134,8 @@ void func_800B40E0(GlobalContext* globalCtx, Light* light, MtxF* arg2, s32 arg3,
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B42F8.s")
 
 // Actor_SetFeetPos
-void func_800B4A98(Actor* actor, s32 limbIndex, s32 leftFootIndex, Vec3f* leftFootPos, s32 rightFootIndex, Vec3f* rightFootPos) {
+void func_800B4A98(Actor* actor, s32 limbIndex, s32 leftFootIndex, Vec3f* leftFootPos, s32 rightFootIndex,
+                   Vec3f* rightFootPos) {
     if (limbIndex == leftFootIndex) {
         SysMatrix_MultiplyVector3fByState(leftFootPos, &actor->shape.feetPos[FOOT_LEFT]);
     } else if (limbIndex == rightFootIndex) {
@@ -148,7 +148,8 @@ void func_800B4AEC(GlobalContext* globalCtx, Actor* actor, f32 param_3) {
     f32 yPos = actor->world.pos.y;
 
     actor->world.pos.y += param_3;
-    actor->floorHeight = func_800C4188(param_3, &globalCtx->colCtx, &actor->floorPoly, &floorBgId, actor, &actor->world.pos);
+    actor->floorHeight =
+        func_800C4188(param_3, &globalCtx->colCtx, &actor->floorPoly, &floorBgId, actor, &actor->world.pos);
     actor->floorBgId = floorBgId;
     actor->world.pos.y = yPos;
 }
@@ -287,8 +288,8 @@ void TitleCard_ContextInit(GlobalContext* globalCtx, TitleCardContext* titleCtx)
     titleCtx->alpha = 0;
 }
 
-void TitleCard_InitBossName(GlobalContext* globalCtx, TitleCardContext* titleCtx, u32 texture, s16 param_4,
-                           s16 param_5, u8 param_6, u8 param_7) {
+void TitleCard_InitBossName(GlobalContext* globalCtx, TitleCardContext* titleCtx, u32 texture, s16 param_4, s16 param_5,
+                            u8 param_6, u8 param_7) {
     titleCtx->texture = texture;
     titleCtx->x = param_4;
     titleCtx->y = param_5;
@@ -299,7 +300,7 @@ void TitleCard_InitBossName(GlobalContext* globalCtx, TitleCardContext* titleCtx
 }
 
 void TitleCard_InitPlaceName(GlobalContext* globalCtx, TitleCardContext* titleCtx, void* texture, s32 x, s32 y,
-                             s32 width, s32 height, s32 delay)  {
+                             s32 width, s32 height, s32 delay) {
 }
 
 void TitleCard_Update(GlobalContext* globalCtx, TitleCardContext* titleCtx) {
@@ -351,12 +352,11 @@ void TitleCard_Draw(GlobalContext* globalCtx, TitleCardContext* titleCtx) {
         gSPTextureRectangle(OVERLAY_DISP++, spC0, spB8, ((sp38 * 2) + spC0) - 4, spB8 + (spC8 * 4) - 1, G_TX_RENDERTILE,
                             0, 0, 1 << 10, 1 << 10);
 
-
         spC8 = titleCtx->height - spC8;
 
         if (spC8 > 0) {
-            gDPLoadTextureBlock(OVERLAY_DISP++, (s32)titleCtx->texture + 0x1000, G_IM_FMT_IA, G_IM_SIZ_8b, spCC,
-                                spC8, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+            gDPLoadTextureBlock(OVERLAY_DISP++, (s32)titleCtx->texture + 0x1000, G_IM_FMT_IA, G_IM_SIZ_8b, spCC, spC8,
+                                0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
 
             gSPTextureRectangle(OVERLAY_DISP++, spC0, spB4, ((sp38 * 2) + spC0) - 4, spB4 + (spC8 * 4) - 1,
@@ -936,9 +936,11 @@ I am keeping this to rename the corresponding variables in the future
 
     if (!(player->stateFlags1 & 0x3C7080) && func_80124258(player) < 0) {
         if ((actor->xzDistToPlayer <= xzRange) && (fabsf(actor->yDistToPlayer) <= fabsf(yRange))) {
-            if ( ( getItemId == GI_MASK_CIRCUS_LEADER || getItemId == GI_PENDANT_OF_MEMORIES || getItemId == GI_LAND_TITLE_DEED || 
-               (( (player->leftHandActor != NULL) || (actor == player->targetActor)) && (getItemId > GI_NONE && getItemId < GI_MAX) )) 
-                || (!(player->stateFlags1 & 0x20000800))) {
+            if ((getItemId == GI_MASK_CIRCUS_LEADER || getItemId == GI_PENDANT_OF_MEMORIES ||
+                 getItemId == GI_LAND_TITLE_DEED ||
+                 (((player->leftHandActor != NULL) || (actor == player->targetActor)) &&
+                  (getItemId > GI_NONE && getItemId < GI_MAX))) ||
+                (!(player->stateFlags1 & 0x20000800))) {
                 s16 yawDiff = actor->yawTowardsPlayer - player->actor.shape.rot.y;
                 s32 absYawDiff = ABS_ALT(yawDiff);
 
@@ -1017,8 +1019,8 @@ s32 Actor_SetRideActor(GlobalContext* globalCtx, Actor* horse, s32 mountSide) {
     Player* player = PLAYER;
 
     if (!(player->stateFlags1 & 0x003C7880)) {
-        //player->rideActor = horse;
-        //player->mountSide = mountSide;
+        // player->rideActor = horse;
+        // player->mountSide = mountSide;
         player->unk_390 = horse;
         player->unk_38C = mountSide;
         ActorCutscene_SetIntentToPlay(0x7C);
@@ -1193,21 +1195,25 @@ void Actor_FreeOverlay(ActorOverlay* entry) {
     }
 }
 
-Actor* Actor_Spawn(ActorContext* actorCtx, GlobalContext* globalCtx, s16 actorId, f32 posX, f32 posY, f32 posZ, s16 rotX, s16 rotY, s16 rotZ, s32 params) {
-    return Actor_SpawnAsChildAndCutscene(actorCtx, globalCtx, actorId, posX, posY, posZ, rotX,  rotY, rotZ, params, -1, 0x3FF, NULL);
+Actor* Actor_Spawn(ActorContext* actorCtx, GlobalContext* globalCtx, s16 actorId, f32 posX, f32 posY, f32 posZ,
+                   s16 rotX, s16 rotY, s16 rotZ, s32 params) {
+    return Actor_SpawnAsChildAndCutscene(actorCtx, globalCtx, actorId, posX, posY, posZ, rotX, rotY, rotZ, params, -1,
+                                         0x3FF, NULL);
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_LoadOverlay.s")
 
 #ifdef NON_EQUIVALENT
-// This probably *is* equivalent, but I haven't checked 
-Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* globalCtx, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s32 params, u32 cutscene, s32 param_12, Actor* parent) {
+// This probably *is* equivalent, but I haven't checked
+Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* globalCtx, s16 index, f32 x, f32 y, f32 z,
+                                     s16 rotX, s16 rotY, s16 rotZ, s32 params, u32 cutscene, s32 param_12,
+                                     Actor* parent) {
     s32 pad;
     Actor* actor;
     ActorInit* sp2C; // actorInit
-    s32 sp28; // objBankIndex
-    //s32 pad2;
-    u32 sp20; // segmentAux
+    s32 sp28;        // objBankIndex
+    // s32 pad2;
+    u32 sp20;           // segmentAux
     ActorOverlay* sp1C; // overlayEntry
 
     if (actorCtx->totalLoadedActors >= 0xFF) {
@@ -1220,8 +1226,9 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* glob
     }
 
     sp28 = Object_GetIndex(&globalCtx->objectCtx, sp2C->objectId);
-    if ((sp28 < 0) || 
-        ((sp2C->type == ACTORCAT_ENEMY) && ((Actor_GetRoomCleared(globalCtx, globalCtx->roomCtx.currRoom.num) != 0)) && (sp2C->id != ACTOR_BOSS_05))) {
+    if ((sp28 < 0) ||
+        ((sp2C->type == ACTORCAT_ENEMY) && ((Actor_GetRoomCleared(globalCtx, globalCtx->roomCtx.currRoom.num) != 0)) &&
+         (sp2C->id != ACTOR_BOSS_05))) {
         Actor_FreeOverlay(&gActorOverlayTable[index]);
         return NULL;
     }
@@ -1247,10 +1254,10 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* glob
     actor->flags = sp2C->flags;
 
     if (sp2C->id == ACTOR_EN_PART) {
-        actor->objBankIndex = (s8) rotZ;
+        actor->objBankIndex = (s8)rotZ;
         rotZ = 0;
     } else {
-        actor->objBankIndex = (s8) sp28;
+        actor->objBankIndex = (s8)sp28;
     }
 
     actor->init = sp2C->init;
@@ -1287,13 +1294,15 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* glob
 
     Actor_InsertIntoTypeList(actorCtx, actor, sp2C->type);
 
-    goto dummy_label_; dummy_label_: ;
+    goto dummy_label_;
+dummy_label_:;
 
     sp20 = gSegments[6];
     Actor_Init(actor, globalCtx);
     gSegments[6] = sp20;
 
-    goto dummy_label_47816; dummy_label_47816: ;
+    goto dummy_label_47816;
+dummy_label_47816:;
 
     return actor;
 }
@@ -1301,9 +1310,10 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* glob
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_SpawnAsChildAndCutscene.s")
 #endif
 
-Actor* Actor_SpawnAsChild(ActorContext* actorCtx, Actor* parent, GlobalContext* globalCtx, s16 actorId, f32 posX, f32 posY,
-                          f32 posZ, s16 rotX, s16 rotY, s16 rotZ, s32 params) {
-    return Actor_SpawnAsChildAndCutscene(actorCtx, globalCtx, actorId, posX, posY, posZ, rotX, rotY, rotZ, params, -1, parent->unk20, parent);
+Actor* Actor_SpawnAsChild(ActorContext* actorCtx, Actor* parent, GlobalContext* globalCtx, s16 actorId, f32 posX,
+                          f32 posY, f32 posZ, s16 rotX, s16 rotY, s16 rotZ, s32 params) {
+    return Actor_SpawnAsChildAndCutscene(actorCtx, globalCtx, actorId, posX, posY, posZ, rotX, rotY, rotZ, params, -1,
+                                         parent->unk20, parent);
 }
 
 #ifdef NON_MATCHING
@@ -1316,22 +1326,16 @@ void Actor_SpawnTransitionActors(GlobalContext* globalCtx, ActorContext* actorCt
     phi_v1 = globalCtx->doorCtx.numTransitionActors;
 
     for (phi_s2 = 0; phi_s2 < phi_v1; phi_s2++) {
-        if ((phi_s0->id >= 0) && 
-             (
-                (    (phi_s0->sides[0].room >= 0) 
-                      && 
-                     ((globalCtx->roomCtx.currRoom.num == phi_s0->sides[0].room) || (globalCtx->roomCtx.prevRoom.num == phi_s0->sides[0].room))
-                ) 
-                  || 
-                (
-                     (phi_s0->sides[1].room >= 0) 
-                      && 
-                     ((globalCtx->roomCtx.currRoom.num == phi_s0->sides[1].room) || (globalCtx->roomCtx.prevRoom.num == phi_s0->sides[1].room))))
-            ) {
+        if ((phi_s0->id >= 0) &&
+            (((phi_s0->sides[0].room >= 0) && ((globalCtx->roomCtx.currRoom.num == phi_s0->sides[0].room) ||
+                                               (globalCtx->roomCtx.prevRoom.num == phi_s0->sides[0].room))) ||
+             ((phi_s0->sides[1].room >= 0) && ((globalCtx->roomCtx.currRoom.num == phi_s0->sides[1].room) ||
+                                               (globalCtx->roomCtx.prevRoom.num == phi_s0->sides[1].room))))) {
             s16 rotY = (((phi_s0->rotY) >> 7) & 0x1FF) * 182.04445f;
 
-            if (Actor_SpawnAsChildAndCutscene(actorCtx, globalCtx, phi_s0->id & 0x1FFF, phi_s0->pos.x, phi_s0->pos.y, phi_s0->pos.z, 0, rotY, 0, (phi_s2 << 0xA) + ((phi_s0->params) & 0x3FF), phi_s0->pos.x & 0x7F, 0x3FF, 0) != 0)
-            {
+            if (Actor_SpawnAsChildAndCutscene(actorCtx, globalCtx, phi_s0->id & 0x1FFF, phi_s0->pos.x, phi_s0->pos.y,
+                                              phi_s0->pos.z, 0, rotY, 0, (phi_s2 << 0xA) + ((phi_s0->params) & 0x3FF),
+                                              phi_s0->pos.x & 0x7F, 0x3FF, 0) != 0) {
                 phi_s0->id = -phi_s0->id;
             }
             phi_v1 = globalCtx->doorCtx.numTransitionActors;
