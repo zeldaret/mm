@@ -2263,7 +2263,7 @@ s32 func_801240C8(Player* player);
 // void func_801241E0(void);
 // void func_8012420C(void);
 // void func_8012422C(void);
-s32 func_80124258(Player* player); // Player_GetExplosiveHeld
+s32 Player_GetExplosiveHeld(Player* player); // Player_GetExplosiveHeld
 // void func_80124278(void);
 // void func_801242B4(void);
 // void func_801242DC(void);

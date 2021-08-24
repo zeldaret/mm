@@ -163,7 +163,7 @@ typedef struct Player {
     /* 0x32A */ Vec3s morphTable[5];
     /* 0x348 */ s16 eyeTexId;
     /* 0x34A */ s16 eyeAnimTimer;
-    /* 0x34C */ Actor* leftHandActor;
+    /* 0x34C */ Actor* heldActor;
     /* 0x350 */ PosRot leftHandWorld;
     /* 0x364 */ Actor* rightHandActor;
     /* 0x368 */ PosRot rightHandWorld;
@@ -172,11 +172,11 @@ typedef struct Player {
     /* 0x37E */ s8 doorTimer;
     /* 0x37F */ s8 doorNext; // used with spiral staircase
     /* 0x380 */ Actor* doorActor;
-    /* 0x384 */ s16 unk_384;
-    /* 0x386 */ u16 unk_386;
-    /* 0x388 */ Actor* unk_388;
-    /* 0x38C */ s8 unk_38C;
-    /* 0x390 */ Actor* unk_390;
+    /* 0x384 */ s16 getItemId;
+    /* 0x386 */ u16 getItemDirection;
+    /* 0x388 */ Actor* interactRangeActor;
+    /* 0x38C */ s8 mountSide;
+    /* 0x390 */ Actor* rideActor;
     /* 0x394 */ u8 csMode;
     /* 0x395 */ u8 unk_395;
     /* 0x396 */ u8 unk_396;

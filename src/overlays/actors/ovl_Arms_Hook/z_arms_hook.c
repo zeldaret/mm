@@ -84,7 +84,7 @@ void func_808C1154(ArmsHook* this) {
 
 s32 ArmsHook_AttachToPlayer(ArmsHook* this, Player* player) {
     player->actor.child = &this->actor;
-    player->leftHandActor = &this->actor;
+    player->heldActor = &this->actor;
     if (this->actor.child != NULL) {
         player->actor.parent = this->actor.child = NULL;
         return 1;

@@ -675,7 +675,7 @@ void func_800B7170(GlobalContext* globalCtx, Player* player) {
     Actor* temp_v0;
 
     if ((globalCtx->roomCtx.currRoom.unk3 != 4) && (player->actor.id == ACTOR_PLAYER)) {
-        temp_v0 = player->unk_390;
+        temp_v0 = player->rideActor;
         if ((temp_v0 != NULL) && ((temp_v0->unk_1EC & 0x10) == 0)) {
             func_800DFAC8(Play_GetCamera(globalCtx, 0), 4);
         }
@@ -685,7 +685,7 @@ void func_800B7170(GlobalContext* globalCtx, Player* player) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B7170.s")
 
 void Actor_MountHorse(GlobalContext* globalCtx, Player* player, Actor* horse) {
-    player->unk_390 = horse;
+    player->rideActor = horse;
     player->stateFlags1 |= 0x800000;
     horse->child = &player->actor;
 }
@@ -910,44 +910,20 @@ u32 Actor_HasParent(Actor* actor, GlobalContext* globalCtx) {
 s32 func_800B8A1C(Actor* actor, GlobalContext* globalCtx, s32 getItemId, f32 xzRange, f32 yRange) {
     Player* player = PLAYER;
 
-#if 0
-OoT version:
-
     if (!(player->stateFlags1 & 0x3C7080) && Player_GetExplosiveHeld(player) < 0) {
-        if ((((player->heldActor != NULL) || (actor == player->targetActor)) && (getItemId > GI_NONE) &&
-             (getItemId < GI_MAX)) ||
-            (!(player->stateFlags1 & 0x20000800))) {
-            if ((actor->xzDistToPlayer < xzRange) && (fabsf(actor->yDistToPlayer) < yRange)) {
-                s16 yawDiff = actor->yawTowardsPlayer - player->actor.shape.rot.y;
-                s32 absYawDiff = ABS(yawDiff);
-
-                if ((getItemId != GI_NONE) || (player->getItemDirection < absYawDiff)) {
-                    player->getItemId = getItemId;
-                    player->interactRangeActor = actor;
-                    player->getItemDirection = absYawDiff;
-                    return true;
-                }
-            }
-        }
-    }
-
-I am keeping this to rename the corresponding variables in the future
-#endif
-
-    if (!(player->stateFlags1 & 0x3C7080) && func_80124258(player) < 0) {
         if ((actor->xzDistToPlayer <= xzRange) && (fabsf(actor->yDistToPlayer) <= fabsf(yRange))) {
             if ((getItemId == GI_MASK_CIRCUS_LEADER || getItemId == GI_PENDANT_OF_MEMORIES ||
                  getItemId == GI_LAND_TITLE_DEED ||
-                 (((player->leftHandActor != NULL) || (actor == player->targetActor)) &&
+                 (((player->heldActor != NULL) || (actor == player->targetActor)) &&
                   (getItemId > GI_NONE && getItemId < GI_MAX))) ||
                 (!(player->stateFlags1 & 0x20000800))) {
                 s16 yawDiff = actor->yawTowardsPlayer - player->actor.shape.rot.y;
                 s32 absYawDiff = ABS_ALT(yawDiff);
 
-                if ((getItemId != GI_NONE) || (player->unk_386 < absYawDiff)) {
-                    player->unk_384 = getItemId;
-                    player->unk_388 = actor;
-                    player->unk_386 = absYawDiff;
+                if ((getItemId != GI_NONE) || (player->getItemDirection < absYawDiff)) {
+                    player->getItemId = getItemId;
+                    player->interactRangeActor = actor;
+                    player->getItemDirection = absYawDiff;
 
                     if (getItemId > GI_NONE && getItemId < GI_MAX) {
                         ActorCutscene_SetIntentToPlay(globalCtx->unk_1879C[1]);
@@ -991,8 +967,8 @@ void func_800B8C20(Actor* actorA, Actor* actorB, GlobalContext* globalCtx) {
     if (parent->id == ACTOR_PLAYER) {
         Player* player = (Player*)parent;
 
-        player->leftHandActor = actorB;
-        player->unk_388 = actorB;
+        player->heldActor = actorB;
+        player->interactRangeActor = actorB;
     }
 
     parent->child = actorB;
@@ -1019,10 +995,8 @@ s32 Actor_SetRideActor(GlobalContext* globalCtx, Actor* horse, s32 mountSide) {
     Player* player = PLAYER;
 
     if (!(player->stateFlags1 & 0x003C7880)) {
-        // player->rideActor = horse;
-        // player->mountSide = mountSide;
-        player->unk_390 = horse;
-        player->unk_38C = mountSide;
+        player->rideActor = horse;
+        player->mountSide = mountSide;
         ActorCutscene_SetIntentToPlay(0x7C);
         return true;
     }
