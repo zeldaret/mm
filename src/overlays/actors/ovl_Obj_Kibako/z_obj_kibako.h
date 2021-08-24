@@ -3,7 +3,8 @@
 
 #include "global.h"
 
-#define GET_KIBAKO_COLLECTIBLE_ID(x) (((x->actor.params >> 0x8) & 0x7F) << 8)
+#define KIBAKO_COLLECTIBLE_ID(thisx) ((thisx)->params & 0x3F)
+#define KIBAKO_COLLECTIBLE_FLAG(thisx) (((thisx)->params >> 0x8) & 0x7F)
 
 struct ObjKibako;
 

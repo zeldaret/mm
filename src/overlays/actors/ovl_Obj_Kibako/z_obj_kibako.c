@@ -80,9 +80,10 @@ void ObjKibako_SpawnCollectible(ObjKibako* this, GlobalContext* globalCtx) {
     s32 collectible;
 
     if (this->isDropCollected == 0) {
-        collectible = func_800A8150(this->actor.params & 0x3F);
+        collectible = func_800A8150(KIBAKO_COLLECTIBLE_ID(&this->actor));
         if (collectible >= 0) {
-            Item_DropCollectible(globalCtx, &this->actor.world.pos, collectible | GET_KIBAKO_COLLECTIBLE_ID(this));
+            Item_DropCollectible(globalCtx, &this->actor.world.pos,
+                                 collectible | KIBAKO_COLLECTIBLE_FLAG(&this->actor) << 8);
             this->isDropCollected = 1;
         }
     }
@@ -266,7 +267,7 @@ void ObjKibako_Idle(ObjKibako* this, GlobalContext* globalCtx) {
         ObjKibako_SetupHeld(this);
         this->actor.room = -1;
         this->actor.colChkInfo.mass = 0x78;
-        if (func_800A817C(this->actor.params & 0x3F)) {
+        if (func_800A817C(KIBAKO_COLLECTIBLE_ID(&this->actor))) {
             ObjKibako_SpawnCollectible(this, globalCtx);
         }
         func_800B8E58(&this->actor, NA_SE_PL_PULL_UP_WOODBOX);
