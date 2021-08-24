@@ -1055,25 +1055,81 @@ void Audio_PlayActorSound2(Actor* actor, u16 sfxId) {
     func_8019F1C0(&actor->projectedPos, sfxId);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8EF4.s")
+void func_800B8EF4(GlobalContext* globalCtx, Actor* actor) {
+    u32 sp1C;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8F98.s")
+    if (actor->bgCheckFlags & 0x20) {
+        if (actor->yDistToWater < 20.0f) {
+            sp1C = NA_SE_PL_WALK_WATER0 - SFX_FLAG;
+        } else {
+            sp1C = NA_SE_PL_WALK_WATER1 - SFX_FLAG;
+        }
+    } else {
+        sp1C = func_800C9BDC(&globalCtx->colCtx, actor->floorPoly, actor->floorBgId);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8FC0.s")
+    func_8019F1C0(&actor->projectedPos, 0x282F);
+    func_8019F1C0(&actor->projectedPos, sp1C + SFX_FLAG);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8FE8.s")
+void func_800B8F98(Actor* actor, u16 sfxId) {
+    actor->sfx = sfxId;
+    actor->unk39 &= ~(0x10 | 0x08 | 0x04 | 0x02 | 0x01);
+    actor->unk39 |= 0x02;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B9010.s")
+void func_800B8FC0(Actor* actor, u16 sfxId) {
+    actor->sfx = sfxId;
+    actor->unk39 &= ~(0x10 | 0x08 | 0x04 | 0x02 | 0x01);
+    actor->unk39 |= 4;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B9038.s")
+void func_800B8FE8(Actor* actor, u16 sfxId) {
+    actor->sfx = sfxId;
+    actor->unk39 &= ~(0x10 | 0x08 | 0x04 | 0x02 | 0x01);
+    actor->unk39 |= 0x08;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B9084.s")
+void func_800B9010(Actor* actor, u16 sfxId) {
+    actor->sfx = sfxId;
+    actor->unk39 &= ~(0x10 | 0x08 | 0x04 | 0x02 | 0x01);
+    actor->unk39 |= 0x01;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B9098.s")
+void func_800B9038(Actor* actor, s32 arg1) {
+    actor->unk39 &= ~(0x10 | 0x08 | 0x04 | 0x02 | 0x01);
+    actor->unk39 |= 0x10;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B90AC.s")
+    if (arg1 < 40) {
+        actor->sfx = 3;
+    } else if (arg1 < 100) {
+        actor->sfx = 2;
+    } else {
+        actor->sfx = 1;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B90F4.s")
+void func_800B9084(Actor* actor) {
+    actor->unk39 |= 0x20;
+}
+
+void func_800B9098(Actor* actor) {
+    actor->unk39 |= 0x40;
+}
+
+s32 func_800B90AC(GlobalContext* globalCtx, Actor* actor, CollisionPoly* polygon, s32 index, s32 arg4) {
+    if (func_800C99D4(&globalCtx->colCtx, polygon, index) == 8) {
+        return 1;
+    }
+    return 0;
+}
+
+void func_800B90F4(GlobalContext* globalCtx) {
+    if (globalCtx->actorCtx.unk3 != 0) {
+        globalCtx->actorCtx.unk3 = 0;
+        func_80115D5C(globalCtx);
+    }
+}
 
 void func_800B9120(ActorContext* actorCtx) {
     s32 phi_v0 = CURRENT_DAY * 2;
