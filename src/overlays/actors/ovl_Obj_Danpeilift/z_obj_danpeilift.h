@@ -5,7 +5,7 @@
 
 struct ObjDanpeilift;
 
-typedef void (*ObjDanpeiliftActionFunc)(struct ObjDanpeilift* this, GlobalContext* globalCtx);
+typedef void (*ObjDanpeiliftActionFunc)(struct ObjDanpeilift*, GlobalContext*);
 
 typedef struct ObjDanpeilift {
     /* 0x0000 */ Actor actor;

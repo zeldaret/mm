@@ -5,7 +5,7 @@
 
 struct ObjArmos;
 
-typedef void (*ObjArmosActionFunc)(struct ObjArmos* this, GlobalContext* globalCtx);
+typedef void (*ObjArmosActionFunc)(struct ObjArmos*, GlobalContext*);
 
 typedef struct ObjArmos {
     /* 0x0000 */ Actor actor;

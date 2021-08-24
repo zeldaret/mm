@@ -5,7 +5,7 @@
 
 struct EnOsk;
 
-typedef void (*EnOskActionFunc)(struct EnOsk* this, GlobalContext* globalCtx);
+typedef void (*EnOskActionFunc)(struct EnOsk*, GlobalContext*);
 
 typedef struct EnOsk {
     /* 0x0000 */ Actor actor;

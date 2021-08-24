@@ -5,7 +5,7 @@
 
 struct DoorWarp1;
 
-typedef void (*DoorWarp1ActionFunc)(struct DoorWarp1* this, GlobalContext* globalCtx);
+typedef void (*DoorWarp1ActionFunc)(struct DoorWarp1*, GlobalContext*);
 
 typedef struct DoorWarp1 {
     /* 0x0000 */ Actor actor;

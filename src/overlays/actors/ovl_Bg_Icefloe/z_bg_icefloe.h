@@ -5,7 +5,7 @@
 
 struct BgIcefloe;
 
-typedef void (*BgIcefloeActionFunc)(struct BgIcefloe* this, GlobalContext* globalCtx);
+typedef void (*BgIcefloeActionFunc)(struct BgIcefloe*, GlobalContext*);
 
 typedef struct BgIcefloe {
     /* 0x0000 */ Actor actor;
