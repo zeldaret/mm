@@ -1136,12 +1136,9 @@ void Actor_FreeOverlay(ActorOverlay* entry) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_Spawn.s")
-/*
-Actor* Actor_Spawn(ActorContext* actorCtx, GlobalContext* globalCtx, s16 actorId, f32 posX, f32 posY, f32 posZ, s16 rotX, s16 rotY, s16 rotZ, s16 params) {
+Actor* Actor_Spawn(ActorContext* actorCtx, GlobalContext* globalCtx, s16 actorId, f32 posX, f32 posY, f32 posZ, s16 rotX, s16 rotY, s16 rotZ, s32 params) {
     return Actor_SpawnAsChildAndCutscene(actorCtx, globalCtx, actorId, posX, posY, posZ, rotX,  rotY, rotZ, params, -1, 0x3FF, NULL);
 }
-*/
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_LoadOverlay.s")
 

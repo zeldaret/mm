@@ -864,7 +864,7 @@ void Actor_InsertIntoTypeList(ActorContext* actorCtx, Actor* actor, u8 actorCate
 Actor* Actor_RemoveFromTypeList(GlobalContext* globalCtx, ActorContext* actorCtx, Actor* actor);
 void Actor_FreeOverlay(ActorOverlay* entry);
 Actor* Actor_Spawn(ActorContext* actorCtx, GlobalContext* globalCtx, s16 actorId, f32 posX, f32 posY, f32 posZ,
-                   s16 rotX, s16 rotY, s16 rotZ, s16 params);
+                   s16 rotX, s16 rotY, s16 rotZ, s32 params);
 ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index);
 Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* globalCtx, s16 index, f32 x, f32 y, f32 z,
                                      s16 rotX, s16 rotY, s16 rotZ, s32 params, u32 cutscene, s32 param_12,
