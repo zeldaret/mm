@@ -5,7 +5,7 @@
 
 struct BgSpdweb;
 
-typedef void (*BgSpdwebActionFunc)(struct BgSpdweb* this, GlobalContext* globalCtx);
+typedef void (*BgSpdwebActionFunc)(struct BgSpdweb*, GlobalContext*);
 
 typedef struct BgSpdweb {
     /* 0x0000 */ Actor actor;

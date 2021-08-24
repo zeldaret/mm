@@ -5,7 +5,7 @@
 
 struct EnGoroiwa;
 
-typedef void (*EnGoroiwaActionFunc)(struct EnGoroiwa* this, GlobalContext* globalCtx);
+typedef void (*EnGoroiwaActionFunc)(struct EnGoroiwa*, GlobalContext*);
 
 typedef struct EnGoroiwa {
     /* 0x0000 */ Actor actor;

@@ -5,7 +5,7 @@
 
 struct EnKitan;
 
-typedef void (*EnKitanActionFunc)(struct EnKitan* this, GlobalContext* globalCtx);
+typedef void (*EnKitanActionFunc)(struct EnKitan*, GlobalContext*);
 
 typedef struct EnKitan {
     /* 0x0000 */ Actor actor;

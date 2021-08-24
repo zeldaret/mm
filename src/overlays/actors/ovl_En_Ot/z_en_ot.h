@@ -5,7 +5,7 @@
 
 struct EnOt;
 
-typedef void (*EnOtActionFunc)(struct EnOt* this, GlobalContext* globalCtx);
+typedef void (*EnOtActionFunc)(struct EnOt*, GlobalContext*);
 
 typedef struct EnOt {
     /* 0x0000 */ Actor actor;

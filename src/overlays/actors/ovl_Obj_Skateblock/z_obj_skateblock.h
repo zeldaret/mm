@@ -5,7 +5,7 @@
 
 struct ObjSkateblock;
 
-typedef void (*ObjSkateblockActionFunc)(struct ObjSkateblock* this, GlobalContext* globalCtx);
+typedef void (*ObjSkateblockActionFunc)(struct ObjSkateblock*, GlobalContext*);
 
 typedef struct ObjSkateblock {
     /* 0x0000 */ Actor actor;

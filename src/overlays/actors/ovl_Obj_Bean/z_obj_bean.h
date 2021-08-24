@@ -5,7 +5,7 @@
 
 struct ObjBean;
 
-typedef void (*ObjBeanActionFunc)(struct ObjBean* this, GlobalContext* globalCtx);
+typedef void (*ObjBeanActionFunc)(struct ObjBean*, GlobalContext*);
 
 typedef struct ObjBean {
     /* 0x0000 */ Actor actor;

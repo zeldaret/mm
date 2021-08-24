@@ -1,10 +1,11 @@
 #include "global.h"
 
-// This file contains print functions that are used by fault.c, so they are placed in the fault module
+// This isn't a vprintf since it doesn't take a va_list
+void __osSyncVPrintf(const char* fmt, ...) {
+}
 
-void __osSyncVPrintf(UNK_TYPE4 param_1, ...) {
+void osSyncPrintf(const char* fmt, ...) {
 }
-void osSyncPrintf(char* str, ...) {
-}
-void rmonPrintf(UNK_TYPE4 param_1, ...) {
+
+void rmonPrintf(const char* fmt, ...) {
 }

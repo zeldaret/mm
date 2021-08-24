@@ -5,7 +5,7 @@
 
 struct EnButte;
 
-typedef void (*EnButteActionFunc)(struct EnButte* this, GlobalContext* globalCtx);
+typedef void (*EnButteActionFunc)(struct EnButte*, GlobalContext*);
 
 typedef struct EnButte {
     /* 0x0000 */ Actor actor;

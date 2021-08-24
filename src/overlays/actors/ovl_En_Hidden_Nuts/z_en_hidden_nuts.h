@@ -5,7 +5,7 @@
 
 struct EnHiddenNuts;
 
-typedef void (*EnHiddenNutsActionFunc)(struct EnHiddenNuts* this, GlobalContext* globalCtx);
+typedef void (*EnHiddenNutsActionFunc)(struct EnHiddenNuts*, GlobalContext*);
 
 typedef struct EnHiddenNuts {
     /* 0x0000 */ Actor actor;
