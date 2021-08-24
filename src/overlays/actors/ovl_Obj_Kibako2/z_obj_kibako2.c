@@ -250,5 +250,5 @@ void ObjKibako2_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjKibako2_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_06000960);
+    Gfx_DrawDListOpa(globalCtx, D_06000960);
 }
