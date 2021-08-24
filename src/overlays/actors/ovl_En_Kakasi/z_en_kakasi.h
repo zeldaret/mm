@@ -40,7 +40,6 @@ typedef struct EnKakasi {
     /* 0x244 */ Vec3f unk244;
     /* 0x250 */ f32 songSummonDist;
     /* 0x254 */ ColliderCylinder collider;
-
 } EnKakasi; // size = 0x2A0
 
 extern const ActorInit En_Kakasi_InitVars;

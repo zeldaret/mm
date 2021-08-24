@@ -183,7 +183,7 @@ extern FlexSkeletonHeader D_060065B0;
 
 void EnKakasi_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnKakasi* this = (EnKakasi*)thisx;
-    int tempCutscene;
+    s32 tempCutscene;
     s32 i;
 
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80971D80);
@@ -237,7 +237,7 @@ void EnKakasi_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnKakasi_SetAnimation(EnKakasi* this, s32 index) {
     this->animeIndex = index;
-    this->animeFrameCount = SkelAnime_GetFrameCount((AnimationHeaderCommon*) kakasiAnimations[this->animeIndex]);
+    this->animeFrameCount = SkelAnime_GetFrameCount(&kakasiAnimations[this->animeIndex]->common);
     // 1: regular playback speed, 0: starting frame
     SkelAnime_ChangeAnim(&this->skelanime, kakasiAnimations[this->animeIndex], 1.0f, 0.0f, this->animeFrameCount,
                          D_8097206C[this->animeIndex], -4.0f);
@@ -370,11 +370,10 @@ void EnKakasi_SetupIdleStanding(EnKakasi* this) {
 }
 
 void EnKakasi_IdleStanding(EnKakasi* this, GlobalContext* globalCtx) {
-    u32 saveContextDay;
+    u32 saveContextDay = gSaveContext.day;
     s16 passedValue1;
     s16 passedValue2;
 
-    saveContextDay = gSaveContext.day;
     // "Yo! Hey, baby!  I'm a stylin' scarecrow wandering in search of pleasant music.
     // Time will pass in the blink of an eye if you dance with me."
     this->actor.textId = 0x1644;
@@ -718,6 +717,7 @@ void EnKakasi_TeachingSong(EnKakasi* this, GlobalContext* globalCtx) {
 
 void EnKakasi_PostSongLearnTwirl(EnKakasi* this, GlobalContext* globalCtx) {
     f32 animeFrame = this->skelanime.animCurrentFrame;
+
     if (this->postTeachTimer == 0 && this->animeIndex != ENKAKASI_ANIME_TWIRL) {
         EnKakasi_SetAnimation(this, ENKAKASI_ANIME_TWIRL);
         this->skelanime.animPlaybackSpeed = 2.0f;
@@ -1025,21 +1025,19 @@ void EnKakasi_DancingNightAway(EnKakasi* this, GlobalContext* globalCtx) {
                 func_80169EFC(globalCtx);
 
                 if (0) {}
-                if (gSaveContext.time >= 0xC001 || gSaveContext.time < 0x4000) {
-                    gSaveContext.time = 0x4000;
+                if (gSaveContext.time > CLOCK_TIME(18, 0) || gSaveContext.time < CLOCK_TIME(6, 0)) {
+                    gSaveContext.time = CLOCK_TIME(6, 0);
                     gSaveContext.respawnFlag = -4;
                     gSaveContext.eventInf[2] |= 0x80;
                 } else {
-                    gSaveContext.time = 0xC000;
+                    gSaveContext.time = CLOCK_TIME(18, 0);
                     gSaveContext.respawnFlag = -8;
                 }
                 gSaveContext.weekEventReg[0x53] |= 1;
                 this->unk190 = 0;
                 this->actionFunc = EnKakasi_DoNothing;
             }
-            return;
     }
-    return;
 }
 
 void EnKakasi_DoNothing(EnKakasi* this, GlobalContext* globalCtx) {
@@ -1123,7 +1121,7 @@ void EnKakasi_SetupIdleUnderground(EnKakasi* this) {
 
 void EnKakasi_IdleUnderground(EnKakasi* this, GlobalContext* globalCtx) {
     if ((gSaveContext.weekEventReg[79] & 0x8) && this->actor.xzDistToPlayer < this->songSummonDist &&
-        (gGameInfo->data[2401] != 0 || globalCtx->msgCtx.unk1202A == 0xD)) {
+        (BREG(1) != 0 || globalCtx->msgCtx.unk1202A == 0xD)) {
         this->actor.flags &= ~0x8000000;
         globalCtx->msgCtx.unk1202A = 4;
         this->actionFunc = EnKakasi_SetupRiseOutOfGround;
@@ -1161,7 +1159,7 @@ void EnKakasi_RisingOutOfGround(EnKakasi* this, GlobalContext* globalCtx) {
         EnKakasi_SetAnimation(this, ENKAKASI_ANIME_SIDEWAYS_SHAKING);
     }
     if (this->actor.shape.yOffset < -10.0f) {
-        if ((globalCtx->gameplayFrames & 7) == 0) {
+        if ((globalCtx->gameplayFrames % 8) == 0) {
             func_800BBDAC(globalCtx, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f, 10,
                           8.0f, 500, 10, 1);
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);

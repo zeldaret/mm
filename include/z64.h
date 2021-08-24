@@ -963,7 +963,6 @@ typedef struct {
     /* 0x12044 */ s16 unk12044;
     /* 0x12046 */ UNK_TYPE1 pad12046[0x2];
     /* 0x12048 */ u8 unk12048; // EnKakasi
-
     /* 0x12049 */ UNK_TYPE1 pad12049[0x21];
     /* 0x1206A */ s16 unk1206A;
     /* 0x1206C */ s32 unk1206C;
