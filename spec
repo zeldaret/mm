@@ -1829,11 +1829,7 @@ beginseg
     name "ovl_En_Kakasi"
     compress
     include "build/src/overlays/actors/ovl_En_Kakasi/z_en_kakasi.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_En_Kakasi/ovl_En_Kakasi_reloc.o"
-#else
-    include "build/data/ovl_En_Kakasi/ovl_En_Kakasi.reloc.o"
-#endif
 endseg
 
 beginseg

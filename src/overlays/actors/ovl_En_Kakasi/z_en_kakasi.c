@@ -427,21 +427,16 @@ void EnKakasi_SetupDialogue(EnKakasi* this) {
     this->actionFunc = EnKakasi_RegularDialogue;
 }
 
-#ifdef NON_MATCHING
-// there is some out of order instructions around saveContextDay2
-// also the control flow gets confused near 70% down, but it's only one instruction off
 void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
-    // prob save context var
-    // SaveContext* sCtx;// = &gSaveContext;
     u32 saveContextDay = gSaveContext.day;
     f32 currentAnimeFrame = this->skelanime.animCurrentFrame;
-    u32 saveContextDay2;
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 2000, 0);
     // "Yo! Hey, baby!  I'm a stylin' scarecrow wandering in search of pleasant music.
     // Time will pass in the blink of an eye if you dance with me."
     if (this->actor.textId != 0x1644 && this->animeFrameCount <= currentAnimeFrame &&
         this->animeIndex == ENKAKASI_ANIME_SLOWROLL) {
+
         EnKakasi_SetAnimation(this, ENKAKASI_ANIME_SPIN_REACH_OFFER);
         this->unkCounter1A4 = 0;
     }
@@ -472,17 +467,12 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
 
             // "Oh, yeah!  How was it? It went by in an instant, right?  I'm still full of energy!"
             if (this->actor.textId == 0x1653) {
-                // this is the only way i've found to get savecontext to load twice and use the right v
-                saveContextDay2 = gSaveContext.day; // I hope this is a fake match
+                u32 saveContextDay2 = gSaveContext.day;
 
-                // 1A0 loads AFTER globalcontext from above in vanilla
-                // also delay slot shenanigans
-                // fake_label: ;
                 if (this->animeIndex != ENKAKASI_ANIME_SIDEWAYS_SHAKING) {
                     EnKakasi_SetAnimation(this, ENKAKASI_ANIME_SIDEWAYS_SHAKING);
                 }
 
-                // if (gSaveContext.day == 3 && gSaveContext.isNight != 0) {
                 if (saveContextDay2 == 3 && gSaveContext.isNight != 0) {
                     // "But outside it seems to have gotten kind of...dangerous.
                     this->actor.textId = 0x164F;
@@ -497,46 +487,41 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
                 func_80151938(globalCtx, this->actor.textId);
                 return;
 
+            } else if (this->actor.textId == 0x165D || this->actor.textId == 0x165F || this->actor.textId == 0x1660 ||
+                       this->actor.textId == 0x1652) {
                 // "Oh, sorry! That's too bad.  In that case, see you later!"
                 // "Want to learn it?  No Yes"
                 // "How's that? Pretty interesting, isn't it?  If you learn a new song ...
                 // "Oh, yeah!  In that case, forget the time.  Let's dance!"
-            } else if (this->actor.textId == 0x165D || this->actor.textId == 0x165F || this->actor.textId == 0x1660 ||
-                       this->actor.textId == 0x1652) {
-                goto dummy_label_845001;
-            dummy_label_845001:;
                 func_800B7298(globalCtx, &this->actor, 4);
                 if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                     ActorCutscene_Stop(0x7C);
                     ActorCutscene_SetIntentToPlay(this->actorCutscenes[0]);
                     this->actionFunc = EnKakasi_DancingRemark;
-                    return;
                 } else {
                     if (ActorCutscene_GetCanPlayNext(this->actorCutscenes[0]) == 0) {
                         ActorCutscene_SetIntentToPlay(this->actorCutscenes[0]);
                         this->actionFunc = EnKakasi_DancingRemark;
-                        return;
                     } else {
                         ActorCutscene_StartAndSetUnkLinkFields(this->actorCutscenes[0], &this->actor);
                         this->cutsceneCamId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
                         this->actionFunc = EnKakasi_DancingRemark;
-                        // return;
                     }
                 }
+                return;
 
+            } else if (this->actor.textId == 0x1645 || this->actor.textId == 0x164E) {
                 // "If you like, baby, we can forget the time and dance 'til dawn!"
                 // both seem to be the same text
-            } else if (this->actor.textId == 0x1645 || this->actor.textId == 0x164E) {
-                // "Shall we dance?  No Yes"
-                this->actor.textId = 0x1650;
+                this->actor.textId = 0x1650; // "Shall we dance?  No Yes"
                 if (this->animeIndex != ENKAKASI_ANIME_SIDEWAYS_SHAKING) {
                     EnKakasi_SetAnimation(this, ENKAKASI_ANIME_SIDEWAYS_SHAKING);
                 }
                 this->unkMsgState1AC = 4;
 
+            } else if (this->actor.textId == 0x1644) {
                 // "Yo! Hey, baby!  I'm a scarecrow wandering in search of music.
                 // Time will pass in the blink of an eye if you dance with me."
-            } else if (this->actor.textId == 0x1644) {
                 if (this->animeIndex != ENKAKASI_ANIME_SIDEWAYS_SHAKING) {
                     EnKakasi_SetAnimation(this, ENKAKASI_ANIME_SIDEWAYS_SHAKING);
                 }
@@ -548,8 +533,8 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
                     this->actor.textId = 0x1645;
                 }
   
-                    // "But outside it seems to have gotten kind of...dangerous.
             } else if (this->actor.textId == 0x164F) {
+                // "But outside it seems to have gotten kind of...dangerous.
                 if (this->animeIndex != ENKAKASI_ANIME_SIDEWAYS_SHAKING) {
                     EnKakasi_SetAnimation(this, ENKAKASI_ANIME_SIDEWAYS_SHAKING);
                 }
@@ -569,38 +554,25 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
                 // "Do you want to learn it?  No Yes"
                 this->actor.textId = 0x1656;
                 this->unkMsgState1AC = 4;
-            // "Oh, yeah!  Now listen up!  If you play that strange song...
             } else if (this->actor.textId == 0x1658) {
-                // "How's that? Pretty interesting, isn't it?  But I'm sure I'd like any song 
+                //^ "Oh, yeah!  Now listen up!  If you play that strange song...
+                //v "How's that? Pretty interesting, isn't it?  But I'm sure I'd like any song 
                 this->actor.textId = 0x1659;
-            // Take care...
             } else if (this->actor.textId == 0x165A) {
-                // "I know of a mysterious song that allows you to manipulate the flow ..
+                // Take care...
                 this->actor.textId = 0x165B;
-                // "I know of a mysterious song that allows you to manipulate the flow ..
             } else if (this->actor.textId == 0x165B) {
-                // "Would you like to learn it?  No Yes"
-                this->actor.textId = 0x165C;
+                // "I know of a mysterious song that allows you to manipulate the flow ..
+                this->actor.textId = 0x165C; // "Would you like to learn it?  No Yes"
                 this->unkMsgState1AC = 4;
 
-                // around here the control flow gets confused
             } else if (this->actor.textId == 0x165E) {
                 // "How's that? Pretty interesting, isn't it?  If you learn a new song ...
                 this->actor.textId = 0x165F;
-                // return;
             } else {
                 EnKakasi_SetupIdleStanding(this);
-                // return;
+                return;
             }
-            // if (this->actor.textId == 0x165E) {
-            // this->actor.textId = 0x165F;
-            // return;
-            //}else{
-            // EnKakasi_SetupIdleStanding(this);
-            // return;
-            //}
-            // return;
-            return;
         } else {
             this->unkMsgState1AC = 5;
 
@@ -623,16 +595,14 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
                 EnKakasi_SetAnimation(this, ENKAKASI_ANIME_HOPPING_REGULAR);
             } else {
                 func_8019F230(); // play 0x480A sfx (cancel) and calls func_801A75E8
-                // "Do you want to learn it?  No Yes"
-                if (this->actor.textId == 0x1656) {
+                if (this->actor.textId == 0x1656) { // "Do you want to learn it?  No Yes"
                     // "Oh, sorry. That's too bad.  In that case, let me hear a song written by you, baby!"
                     this->actor.textId = 0x1657;
-                // "Would you like to learn it?  No Yes"
-                } else if (this->actor.textId == 0x165C) {
-                    // "Oh, sorry! That's too bad.  In that case, see you later!"
+                } else if (this->actor.textId == 0x165C) { // "Would you like to learn it?  No Yes"
+                    // v "Oh, sorry! That's too bad.  In that case, see you later!"
                     this->actor.textId = 0x165D;
                 } else {
-                  // "Oh, sorry. That's too bad. In that case, come back anytime if you do ...
+                    // "Oh, sorry. That's too bad. In that case, come back anytime if you do ...
                     this->actor.textId = 0x1651;
                 }
                 this->unkCounter1A4 = 0;
@@ -644,9 +614,6 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
         func_80151938(globalCtx, this->actor.textId);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Kakasi/EnKakasi_RegularDialogue.s")
-#endif
 
 void EnKakasi_SetupSongTeach(EnKakasi* this, GlobalContext* globalCtx) {
     // "Oh, baby!  That's a nice thing you got there!  Let me hear a song you wrote on that!"
