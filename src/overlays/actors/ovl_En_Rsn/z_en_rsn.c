@@ -57,7 +57,7 @@ void EnRsn_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnRsn* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveForward(&this->actor);
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     func_800E9250(globalCtx, &this->actor, &this->unk1D8, &this->unk1DE, this->actor.focus.pos);
 }

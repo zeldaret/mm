@@ -153,7 +153,7 @@ void ObjLightswitch_Init(Actor* thisx, GlobalContext* globalCtx) {
     isSwitchActivated = Flags_GetSwitch(globalCtx, GET_LIGHTSWITCH_SWITCHFLAG(this));
     isTriggered = false;
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    Actor_SetHeight(&this->actor, 0.0f);
+    Actor_SetFocus(&this->actor, 0.0f);
 
     if (isSwitchActivated) {
         if (GET_LIGHTSWITCH_TYPE(this) == LIGHTSWITCH_TYPE_FAKE) {

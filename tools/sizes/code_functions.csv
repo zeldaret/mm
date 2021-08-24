@@ -218,10 +218,10 @@ asm/non_matchings/code/z_actor/func_800B6584.s,func_800B6584,0x800B6584,0x21
 asm/non_matchings/code/z_actor/func_800B6608.s,func_800B6608,0x800B6608,0x1E
 asm/non_matchings/code/z_actor/func_800B6680.s,func_800B6680,0x800B6680,0x23
 asm/non_matchings/code/z_actor/Actor_MarkForDeath.s,Actor_MarkForDeath,0x800B670C,0x8
-asm/non_matchings/code/z_actor/Actor_InitCurrPosition.s,Actor_InitCurrPosition,0x800B672C,0xC
-asm/non_matchings/code/z_actor/Actor_SetHeight.s,Actor_SetHeight,0x800B675C,0x11
-asm/non_matchings/code/z_actor/Actor_SetRotationFromDrawRotation.s,Actor_SetRotationFromDrawRotation,0x800B67A0,0x8
-asm/non_matchings/code/z_actor/Actor_InitDrawRotation.s,Actor_InitDrawRotation,0x800B67C0,0x8
+asm/non_matchings/code/z_actor/Actor_SetWorldToHome.s,Actor_SetWorldToHome,0x800B672C,0xC
+asm/non_matchings/code/z_actor/Actor_SetFocus.s,Actor_SetFocus,0x800B675C,0x11
+asm/non_matchings/code/z_actor/Actor_SetWorldRotToShape.s,Actor_SetWorldRotToShape,0x800B67A0,0x8
+asm/non_matchings/code/z_actor/Actor_SetShapeRotToWorld.s,Actor_SetShapeRotToWorld,0x800B67C0,0x8
 asm/non_matchings/code/z_actor/Actor_SetScale.s,Actor_SetScale,0x800B67E0,0x7
 asm/non_matchings/code/z_actor/Actor_SetObjectDependency.s,Actor_SetObjectDependency,0x800B67FC,0xE
 asm/non_matchings/code/z_actor/Actor_Init.s,Actor_Init,0x800B6834,0x45
@@ -229,7 +229,7 @@ asm/non_matchings/code/z_actor/Actor_Destroy.s,Actor_Destroy,0x800B6948,0x10
 asm/non_matchings/code/z_actor/Actor_SetMovementScale.s,Actor_SetMovementScale,0x800B6988,0x9
 asm/non_matchings/code/z_actor/Actor_ApplyMovement.s,Actor_ApplyMovement,0x800B69AC,0x19
 asm/non_matchings/code/z_actor/Actor_SetVelocityYRotationAndGravity.s,Actor_SetVelocityYRotationAndGravity,0x800B6A10,0x1E
-asm/non_matchings/code/z_actor/Actor_SetVelocityAndMoveYRotationAndGravity.s,Actor_SetVelocityAndMoveYRotationAndGravity,0x800B6A88,0xB
+asm/non_matchings/code/z_actor/Actor_MoveForward.s,Actor_MoveForward,0x800B6A88,0xB
 asm/non_matchings/code/z_actor/Actor_SetVelocityXYRotation.s,Actor_SetVelocityXYRotation,0x800B6AB4,0x1C
 asm/non_matchings/code/z_actor/Actor_SetVelocityAndMoveXYRotation.s,Actor_SetVelocityAndMoveXYRotation,0x800B6B24,0xB
 asm/non_matchings/code/z_actor/Actor_SetVelocityXYRotationReverse.s,Actor_SetVelocityXYRotationReverse,0x800B6B50,0x22
@@ -306,9 +306,9 @@ asm/non_matchings/code/z_actor/func_800B8BD0.s,func_800B8BD0,0x800B8BD0,0xB
 asm/non_matchings/code/z_actor/Actor_HasNoParent.s,Actor_HasNoParent,0x800B8BFC,0x9
 asm/non_matchings/code/z_actor/func_800B8C20.s,func_800B8C20,0x800B8C20,0xC
 asm/non_matchings/code/z_actor/func_800B8C50.s,func_800B8C50,0x800B8C50,0xA
-asm/non_matchings/code/z_actor/func_800B8C78.s,func_800B8C78,0x800B8C78,0x9
-asm/non_matchings/code/z_actor/func_800B8C9C.s,func_800B8C9C,0x800B8C9C,0x14
-asm/non_matchings/code/z_actor/func_800B8CEC.s,func_800B8CEC,0x800B8CEC,0x9
+asm/non_matchings/code/z_actor/Actor_IsMounted.s,Actor_IsMounted,0x800B8C78,0x9
+asm/non_matchings/code/z_actor/Actor_SetRideActor.s,Actor_SetRideActor,0x800B8C9C,0x14
+asm/non_matchings/code/z_actor/Actor_NotMounted.s,Actor_NotMounted,0x800B8CEC,0x9
 asm/non_matchings/code/z_actor/func_800B8D10.s,func_800B8D10,0x800B8D10,0x10
 asm/non_matchings/code/z_actor/func_800B8D50.s,func_800B8D50,0x800B8D50,0x12
 asm/non_matchings/code/z_actor/func_800B8D98.s,func_800B8D98,0x800B8D98,0xF
@@ -331,7 +331,7 @@ asm/non_matchings/code/z_actor/func_800b9170.s,func_800b9170,0x800B9170,0x71
 asm/non_matchings/code/z_actor/func_800B9334.s,func_800B9334,0x800B9334,0x56
 asm/non_matchings/code/z_actor/Actor_UpdateActor.s,Actor_UpdateActor,0x800B948C,0xBD
 asm/non_matchings/code/z_actor/Actor_UpdateAll.s,Actor_UpdateAll,0x800B9780,0xA1
-asm/non_matchings/code/z_actor/Actor_DrawActor.s,Actor_DrawActor,0x800B9A04,0xC6
+asm/non_matchings/code/z_actor/Actor_Draw.s,Actor_Draw,0x800B9A04,0xC6
 asm/non_matchings/code/z_actor/func_800B9D1C.s,func_800B9D1C,0x800B9D1C,0x48
 asm/non_matchings/code/z_actor/Actor_DrawAllSetup.s,Actor_DrawAllSetup,0x800B9E3C,0x4
 asm/non_matchings/code/z_actor/Actor_RecordUndrawnActor.s,Actor_RecordUndrawnActor,0x800B9E4C,0xE

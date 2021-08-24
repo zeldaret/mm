@@ -38,7 +38,7 @@ void EnBu_DoNothing(EnBu* this, GlobalContext* globalCtx) {
 void EnBu_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnBu* this = THIS;
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveForward(&this->actor);
     this->actionFunc(this, globalCtx);
 }
 

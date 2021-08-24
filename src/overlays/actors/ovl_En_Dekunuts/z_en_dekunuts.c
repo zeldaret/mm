@@ -651,7 +651,7 @@ void EnDekunuts_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     func_808BE73C(this, globalCtx);
     this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveForward(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, this->collider.dim.radius, this->collider.dim.height, 0x1D);
     Collider_UpdateCylinder(&this->actor, &this->collider);
 

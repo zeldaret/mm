@@ -730,7 +730,7 @@ void EnToto_Update(Actor* thisx, GlobalContext* globalCtx) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    Actor_SetHeight(&this->actor, 40.0f);
+    Actor_SetFocus(&this->actor, 40.0f);
 }
 
 void EnToto_Draw(Actor* thisx, GlobalContext* globalCtx) {

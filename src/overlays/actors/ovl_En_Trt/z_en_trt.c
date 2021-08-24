@@ -1690,7 +1690,7 @@ void EnTrt_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnTrt_UpdateCursorAnim(this);
     EnTrt_UpdateHeadYawAndPitch(this, globalCtx);
     this->actionFunc(this, globalCtx);
-    Actor_SetHeight(&this->actor, 90.0f);
+    Actor_SetFocus(&this->actor, 90.0f);
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     EnTrt_UpdateCollider(this, globalCtx);
 }

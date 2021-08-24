@@ -459,7 +459,7 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.scale.y = this->actor.scale.x;
 
     if (this->actor.gravity != 0.0f) {
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveForward(&this->actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 15.0f, 15.0f, 0x1D);
 
         if (this->actor.floorHeight <= -32000.0f) {

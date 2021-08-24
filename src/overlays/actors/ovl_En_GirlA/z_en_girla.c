@@ -579,7 +579,7 @@ void EnGirlA_Update2(EnGirlA* this, GlobalContext* globalCtx) {
     this->actor.shape.shadowScale = 4.0f;
     EnGirlA_TrySetMaskItemDescription(this, globalCtx);
     this->actionFunc(this, globalCtx);
-    Actor_SetHeight(&this->actor, 5.0f);
+    Actor_SetFocus(&this->actor, 5.0f);
     this->actor.shape.rot.x = 0;
     if (this->isSelected) {
         this->rotY += 0x1F4;

@@ -71,7 +71,7 @@ void ObjWarpstone_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
-    Actor_SetHeight(&this->dyna.actor, 40.0f);
+    Actor_SetFocus(&this->dyna.actor, 40.0f);
 
     if (!OBJ_WARPSTONE_IS_ACTIVATED(OBJ_WARPSTONE_GET_ID(this))) {
         ObjWarpstone_SetupAction(this, ObjWarpstone_ClosedIdle);

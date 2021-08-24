@@ -422,13 +422,11 @@ void Actor_MarkForDeath(Actor* actor) {
     actor->flags &= ~0x1;
 }
 
-// Actor_SetWorldToHome
-void Actor_InitCurrPosition(Actor* actor) {
+void Actor_SetWorldToHome(Actor* actor) {
     actor->world = actor->home;
 }
 
-// Actor_SetFocus
-void Actor_SetHeight(Actor* actor, f32 height) {
+void Actor_SetFocus(Actor* actor, f32 height) {
     actor->focus.pos.x = actor->world.pos.x;
     actor->focus.pos.y = actor->world.pos.y + height;
     actor->focus.pos.z = actor->world.pos.z;
@@ -438,13 +436,11 @@ void Actor_SetHeight(Actor* actor, f32 height) {
     actor->focus.rot.z = actor->world.rot.z;
 }
 
-// Actor_SetWorldRotToShape
-void Actor_SetRotationFromDrawRotation(Actor* actor) {
+void Actor_SetWorldRotToShape(Actor* actor) {
     actor->world.rot = actor->shape.rot;
 }
 
-// Actor_SetShapeRotToWorld
-void Actor_InitDrawRotation(Actor* actor) {
+void Actor_SetShapeRotToWorld(Actor* actor) {
     actor->shape.rot = actor->world.rot;
 }
 
@@ -459,9 +455,9 @@ void Actor_SetObjectDependency(GlobalContext* globalCtx, Actor* actor) {
 }
 
 void Actor_Init(Actor* actor, GlobalContext* globalCtx) {
-    Actor_InitCurrPosition(actor);
-    Actor_InitDrawRotation(actor);
-    Actor_SetHeight(actor, 0.0f);
+    Actor_SetWorldToHome(actor);
+    Actor_SetShapeRotToWorld(actor);
+    Actor_SetFocus(actor, 0.0f);
     Math_Vec3f_Copy(&actor->prevPos, &actor->world.pos);
     Actor_SetScale(actor, 0.01f);
     actor->targetMode = 3;
@@ -520,8 +516,7 @@ void Actor_SetVelocityYRotationAndGravity(Actor* actor) {
     }
 }
 
-// Actor_MoveForward
-void Actor_SetVelocityAndMoveYRotationAndGravity(Actor* actor) {
+void Actor_MoveForward(Actor* actor) {
     Actor_SetVelocityYRotationAndGravity(actor);
     Actor_ApplyMovement(actor);
 }
@@ -1011,16 +1006,14 @@ void func_800B8C50(Actor* actor, GlobalContext* globalCtx) {
     }
 }
 
-// Actor_IsMounted
-s32 func_800B8C78(GlobalContext* globalCtx, Actor* horse) {
+s32 Actor_IsMounted(GlobalContext* globalCtx, Actor* horse) {
     if (horse->child != NULL) {
         return true;
     }
     return false;
 }
 
-// Actor_SetRideActor
-s32 func_800B8C9C(GlobalContext* globalCtx, Actor* horse, s32 mountSide) {
+s32 Actor_SetRideActor(GlobalContext* globalCtx, Actor* horse, s32 mountSide) {
     Player* player = PLAYER;
 
     if (!(player->stateFlags1 & 0x003C7880)) {
@@ -1035,8 +1028,7 @@ s32 func_800B8C9C(GlobalContext* globalCtx, Actor* horse, s32 mountSide) {
     return false;
 }
 
-// Actor_NotMounted
-s32 func_800B8CEC(GlobalContext* globalCtx, Actor* horse) {
+s32 Actor_NotMounted(GlobalContext* globalCtx, Actor* horse) {
     if (horse->child == NULL) {
         return true;
     }
@@ -1125,8 +1117,7 @@ void func_800B9120(ActorContext* actorCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_UpdateAll.s")
 
-// Actor_Draw
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_DrawActor.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_Draw.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B9D1C.s")
 

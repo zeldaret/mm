@@ -199,7 +199,7 @@ void DoorSpiral_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     DoorSpiral_SetupAction(this, DoorSpiral_WaitForObject);
-    Actor_SetHeight(&this->actor, 60.0f);
+    Actor_SetFocus(&this->actor, 60.0f);
 }
 
 void DoorSpiral_Destroy(Actor* thisx, GlobalContext* globalCtx) {

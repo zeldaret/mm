@@ -866,7 +866,7 @@ void func_80A732C8(EnDno* this, GlobalContext* globalCtx) {
             }
         }
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveForward(&this->actor);
 }
 
 void func_80A73408(EnDno* this, GlobalContext* globalCtx) {
@@ -917,7 +917,7 @@ void EnDno_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    Actor_SetHeight(&this->actor, 51.0f);
+    Actor_SetFocus(&this->actor, 51.0f);
 }
 
 void EnDno_Draw(Actor* thisx, GlobalContext* globalCtx) {

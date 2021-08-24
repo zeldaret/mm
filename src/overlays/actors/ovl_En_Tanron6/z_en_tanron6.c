@@ -84,7 +84,7 @@ void EnTanron6_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnTanron6* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveForward(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, 40.0f, 40.0f, 0x1D);
 }
 

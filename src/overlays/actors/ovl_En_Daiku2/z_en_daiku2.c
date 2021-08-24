@@ -460,8 +460,8 @@ void EnDaiku2_Update(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     this->actionFunc(this, globalCtx);
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    Actor_SetHeight(&this->actor, 65.0f);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_SetFocus(&this->actor, 65.0f);
+    Actor_MoveForward(&this->actor);
     Math_ApproachF(&this->unk_260, this->unk_264, 0.3f, 2.0f);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
     Collider_UpdateCylinder(&this->actor, &this->collider);

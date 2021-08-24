@@ -1520,7 +1520,7 @@ void EnOssan_Update(Actor* thisx, GlobalContext* globalCtx) {
         EnOssan_UpdateCursorAnim(this);
         func_800E9250(globalCtx, &this->actor, &this->headRot, &this->unk2CC, this->actor.focus.pos);
         this->actionFunc(this, globalCtx);
-        Actor_SetHeight(&this->actor, 90.0f);
+        Actor_SetFocus(&this->actor, 90.0f);
         SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     } else {
         this->actionFunc(this, globalCtx);

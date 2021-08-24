@@ -1002,7 +1002,7 @@ void func_80BACA14(EnSuttari* this, GlobalContext* globalCtx) {
         }
     }
     Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.2f, 0.1f);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveForward(&this->actor);
 }
 
 void func_80BACBB0(EnSuttari* this, GlobalContext* globalCtx) {
@@ -1028,7 +1028,7 @@ void func_80BACBB0(EnSuttari* this, GlobalContext* globalCtx) {
         this->actionFunc = func_80BACD2C;
         this->actor.speedXZ = 0.0f;
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveForward(&this->actor);
     if (!(this->actor.bgCheckFlags & 1)) {
         this->actor.world.pos = this->actor.prevPos;
         this->actor.world.rot.y = -this->actor.world.rot.y;
@@ -1050,7 +1050,7 @@ void func_80BACD2C(EnSuttari* this, GlobalContext* globalCtx) {
         Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 4, 0x3E8, 1);
         this->actor.shape.rot.y = this->actor.world.rot.y;
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveForward(&this->actor);
     if (!(this->actor.bgCheckFlags & 1)) {
         this->actor.world.pos = this->actor.prevPos;
         this->actor.world.rot.y = -this->actor.world.rot.y;
@@ -1062,7 +1062,7 @@ void func_80BACE4C(EnSuttari* this, GlobalContext* globalCtx) {
     if (this->actor.xzDistToPlayer > 100.0f) {
         this->actionFunc = func_80BACBB0;
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveForward(&this->actor);
     if (this->actor.world.pos.y != this->actor.floorHeight) {
         this->actor.world.pos = this->actor.prevPos;
         this->actor.world.rot.y = -this->actor.world.rot.y;
@@ -1092,7 +1092,7 @@ void func_80BACEE0(EnSuttari* this, GlobalContext* globalCtx) {
     } else if (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK) {
         func_80BAB1A0(this, globalCtx);
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveForward(&this->actor);
 }
 
 void func_80BAD004(EnSuttari* this, GlobalContext* globalCtx) {
@@ -1115,7 +1115,7 @@ void func_80BAD004(EnSuttari* this, GlobalContext* globalCtx) {
     } else if ((this->actor.xzDistToPlayer < 200.0f) || this->actor.isTargeted) {
         func_800B863C(&this->actor, globalCtx);
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveForward(&this->actor);
 }
 
 void func_80BAD130(EnSuttari* this, GlobalContext* globalCtx) {
@@ -1211,7 +1211,7 @@ void func_80BAD380(EnSuttari* this, GlobalContext* globalCtx) {
         } else {
             this->unk3F2 = this->unk2DE;
             Math_ApproachF(&this->actor.speedXZ, 4.0f, 0.2f, 0.5f);
-            Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+            Actor_MoveForward(&this->actor);
             func_80BAB374(this, globalCtx);
         }
     }
@@ -1250,7 +1250,7 @@ void func_80BAD5F8(EnSuttari* this, GlobalContext* globalCtx) {
             func_800B863C(&this->actor, globalCtx);
         }
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveForward(&this->actor);
 }
 
 void func_80BAD7F8(EnSuttari* this, GlobalContext* globalCtx) {
@@ -1288,7 +1288,7 @@ void func_80BAD7F8(EnSuttari* this, GlobalContext* globalCtx) {
                 func_800B863C(&this->actor, globalCtx);
             }
         }
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveForward(&this->actor);
     }
 }
 
@@ -1377,7 +1377,7 @@ void func_80BADDB4(EnSuttari* this, GlobalContext* globalCtx) {
     if (gSaveContext.weekEventReg[0x33] & 0x10) {
         this->actionFunc = func_80BADE14;
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveForward(&this->actor);
 }
 
 void func_80BADE14(EnSuttari* this, GlobalContext* globalCtx) {
@@ -1388,7 +1388,7 @@ void func_80BADE14(EnSuttari* this, GlobalContext* globalCtx) {
         this->unk3F2 = this->unk2DE;
         Math_ApproachF(&this->actor.speedXZ, 6.0f, 0.2f, 0.5f);
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveForward(&this->actor);
 }
 
 void func_80BADE8C(EnSuttari* this, GlobalContext* globalCtx) {
@@ -1413,7 +1413,7 @@ void func_80BADF3C(EnSuttari* this, GlobalContext* globalCtx) {
     if (DECR(this->unk3F6) == 0) {
         Math_ApproachF(&this->actor.speedXZ, 6.0f, 0.2f, 0.5f);
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveForward(&this->actor);
 }
 
 void EnSuttari_Init(Actor* thisx, GlobalContext* globalCtx) {

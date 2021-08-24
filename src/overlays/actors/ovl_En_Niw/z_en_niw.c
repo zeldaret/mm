@@ -806,8 +806,8 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.shape.rot = this->actor.world.rot;
     this->actor.shape.shadowScale = 15.0f;
     this->actionFunc(this, globalCtx);
-    Actor_SetHeight(&this->actor, this->unk308);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_SetFocus(&this->actor, this->unk308);
+    Actor_MoveForward(&this->actor);
 
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 60.0f, 0x1F);
 

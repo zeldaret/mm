@@ -231,7 +231,7 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
         Vec3f prevFrameDiff;
         Vec3f sp60;
 
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveForward(&this->actor);
         Math_Vec3f_Diff(&this->actor.world.pos, &this->actor.prevPos, &prevFrameDiff);
         Math_Vec3f_Sum(&this->unk1E0, &prevFrameDiff, &this->unk1E0);
         this->actor.shape.rot.x = Math_FAtan2F(this->actor.speedXZ, -this->actor.velocity.y);

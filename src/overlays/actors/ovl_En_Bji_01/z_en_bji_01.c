@@ -397,7 +397,7 @@ void EnBji01_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    Actor_SetHeight(&this->actor, 40.0f);
+    Actor_SetFocus(&this->actor, 40.0f);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }

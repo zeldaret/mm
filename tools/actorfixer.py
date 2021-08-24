@@ -24,6 +24,11 @@ animdict ={
     "func_800BDFC0": "Gfx_DrawDListOpa",
     "func_800BE03C": "Gfx_DrawDListXlu",
     "func_800B6FC8": "Player_GetHeight",
+    "Actor_InitCurrPosition": "Actor_SetWorldToHome",
+    "Actor_SetHeight": "Actor_SetFocus",
+    "Actor_SetRotationFromDrawRotation": "Actor_SetWorldRotToShape",
+    "Actor_InitDrawRotation": "Actor_SetShapeRotToWorld",
+    "Actor_SetVelocityAndMoveYRotationAndGravity": "Actor_MoveForward",
 }
 
 def replace_anim(file):

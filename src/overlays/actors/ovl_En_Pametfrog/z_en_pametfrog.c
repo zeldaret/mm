@@ -1356,7 +1356,7 @@ void EnPametfrog_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     if ((this->actionFunc != EnPametfrog_JumpOnSnapper) && (this->actionFunc != EnPametfrog_RearOnSnapperRise)) {
         if (this->actor.gravity < -0.1f) {
-            Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+            Actor_MoveForward(&this->actor);
             arg3 = this->actionFunc == EnPametfrog_FallInAir ? 3.0f : 15.0f;
             Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 25.0f, arg3, 3.0f, 0x1F);
         } else if (this->freezeTimer == 0) {

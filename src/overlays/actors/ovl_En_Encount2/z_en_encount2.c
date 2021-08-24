@@ -187,10 +187,10 @@ void EnEncount2_Update(Actor* thisx, GlobalContext* globalCtx) {
     DECR(this->deathTimer);
 
     this->dyna.actor.shape.rot.y = this->dyna.actor.world.rot.y;
-    Actor_SetHeight(&this->dyna.actor, 30.0f);
+    Actor_SetFocus(&this->dyna.actor, 30.0f);
     Actor_SetScale(&this->dyna.actor, this->scale);
     this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->dyna.actor);
+    Actor_MoveForward(&this->dyna.actor);
     EnEncount2_UpdateParticles(this, globalCtx);
 
     if (!this->isPopped) {

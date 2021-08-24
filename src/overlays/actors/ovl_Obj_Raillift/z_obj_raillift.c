@@ -226,7 +226,7 @@ void ObjRaillift_Update(Actor* thisx, GlobalContext* globalCtx) {
     f32 step;
 
     this->actionFunc(this, globalCtx);
-    Actor_SetHeight(&this->dyna.actor, 10.0f);
+    Actor_SetFocus(&this->dyna.actor, 10.0f);
     if (this->cutsceneTimer > 0) {
         this->cutsceneTimer--;
         if (this->cutsceneTimer == 0) {

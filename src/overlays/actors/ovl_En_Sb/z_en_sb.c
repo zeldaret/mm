@@ -372,8 +372,8 @@ void EnSb_Update(Actor* thisx, GlobalContext* globalCtx) {
         Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0x80);
         Actor_MarkForDeath(&this->actor);
     } else {
-        Actor_SetHeight(&this->actor, 20.0f);
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_SetFocus(&this->actor, 20.0f);
+        Actor_MoveForward(&this->actor);
         this->actionFunc(this, globalCtx);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 25.0f, 20.0f, 5);
         EnSb_UpdateDamage(this, globalCtx);

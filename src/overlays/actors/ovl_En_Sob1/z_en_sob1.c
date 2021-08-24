@@ -737,7 +737,7 @@ void EnSob1_EndWalk(EnSob1* this, GlobalContext* globalCtx) {
             EnSob1_SetupAction(this, EnSob1_SetupIdle);
         }
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveForward(&this->actor);
 }
 
 void EnSob1_SetupIdle(EnSob1* this, GlobalContext* globalCtx) {
@@ -777,7 +777,7 @@ void EnSob1_Walk(EnSob1* this, GlobalContext* globalCtx) {
             }
         }
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveForward(&this->actor);
     EnSob1_Walking(this, globalCtx);
 }
 
@@ -1478,7 +1478,7 @@ void EnSob1_Update(Actor* thisx, GlobalContext* globalCtx) {
         EnSob1_UpdateCursorAnim(this);
         Math_StepToS(&this->headRot, this->headRotTarget, 0x190);
         this->actionFunc(this, globalCtx);
-        Actor_SetHeight(&this->actor, 90.0f);
+        Actor_SetFocus(&this->actor, 90.0f);
         changeObjectFunc = this->changeObjectFunc;
         if (changeObjectFunc != NULL) {
             changeObjectFunc(this, globalCtx);

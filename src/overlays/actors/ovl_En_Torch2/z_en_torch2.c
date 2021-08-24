@@ -88,7 +88,7 @@ void EnTorch2_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->actor.gravity = -1.0f;
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveForward(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 20.0f, 70.0f, 0x05);
 
     if (this->framesUntilNextState == 0) {
@@ -140,7 +140,7 @@ void EnTorch2_UpdateDeath(Actor* thisx, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->actor);
     } else {
         this->actor.gravity = -1.0f;
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveForward(&this->actor);
     }
 }
 
