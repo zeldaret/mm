@@ -132,7 +132,7 @@ void ObjKibako_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     s32 whichBankIndex;
 
-    whichBankIndex = (this->actor.params >> 0xF) & 1;
+    whichBankIndex = KIBAKO_BANK_INDEX(thisx);
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Actor_SetScale(&this->actor, 0.15f);
     if (whichBankIndex == 0) {
@@ -193,7 +193,7 @@ void ObjKibako_AirBreak(ObjKibako* this, GlobalContext* globalCtx) {
 
         EffectSsKakera_Spawn(
             globalCtx, &pos, &velocity, worldPos, -200, phi_s0, 20, 0, 0, (Rand_ZeroOne() * 38.0f) + 10.0f, 0, 0, 60,
-            -1, sObjectIdList[(this->actor.params >> 0xF) & 1], sKakeraDisplayLists[(this->actor.params >> 0xF) & 1]);
+            -1, sObjectIdList[KIBAKO_BANK_INDEX(&this->actor)], sKakeraDisplayLists[KIBAKO_BANK_INDEX(&this->actor)]);
     }
 
     func_800BBFB0(globalCtx, worldPos, 40.0f, 3, 0x32, 0x8C, 1);
@@ -237,7 +237,7 @@ void ObjKibako_WaterBreak(ObjKibako* this, GlobalContext* globalCtx) {
 
         EffectSsKakera_Spawn(
             globalCtx, &pos, &velocity, worldPos, -180, phi_s0, 50, 5, 0, (Rand_ZeroOne() * 35.0f) + 10.0f, 0, 0, 70,
-            -1, sObjectIdList[(this->actor.params >> 0xF) & 1], sKakeraDisplayLists[(this->actor.params >> 0xF) & 1]);
+            -1, sObjectIdList[KIBAKO_BANK_INDEX(&this->actor)], sKakeraDisplayLists[KIBAKO_BANK_INDEX(&this->actor)]);
     }
 }
 
@@ -412,5 +412,5 @@ void ObjKibako_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjKibako_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, sDisplayLists[((thisx->params >> 0xF) & 1)]);
+    func_800BDFC0(globalCtx, sDisplayLists[KIBAKO_BANK_INDEX(thisx)]);
 }

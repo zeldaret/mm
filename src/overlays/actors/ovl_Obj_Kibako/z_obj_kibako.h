@@ -5,6 +5,7 @@
 
 #define KIBAKO_COLLECTIBLE_ID(thisx) ((thisx)->params & 0x3F)
 #define KIBAKO_COLLECTIBLE_FLAG(thisx) (((thisx)->params >> 0x8) & 0x7F)
+#define KIBAKO_BANK_INDEX(thisx) (((thisx)->params >> 0xF) & 1)
 
 struct ObjKibako;
 
