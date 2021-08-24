@@ -1026,15 +1026,14 @@ void BgCheck_CalcSubdivisionSize(f32 min, s32 subdivisions, f32* max, f32* subdi
                                  f32* inverseSubdivisionSize);
 s32 BgCheck_GetSpecialSceneMaxObjects(GlobalContext* globalCtx, u32* maxNodes, u32* maxPolygons, u32* maxVertices);
 void BgCheck_Init(CollisionContext* colCtx, GlobalContext* globalCtx, CollisionHeader* mesh);
-void func_800C3C00(CollisionContext* colCtx, u32 param_2);
-void func_800C3C14(CollisionContext* colCtx, u32 param_2);
+void func_800C3C00(CollisionContext* colCtx, u32 arg1);
+void func_800C3C14(CollisionContext* colCtx, u32 arg1);
 CollisionHeader* BgCheck_GetActorMeshHeader(CollisionContext* colCtx, s32 index);
 // void func_800C3C94(void);
-f32 func_800C3D50(s32 arg0, CollisionContext* colCtx, s32 arg2, CollisionPoly** arg3, s32* arg4, Vec3f* pos,
-                  Actor* actor, s32 arg7, f32 arg8, s32 arg9);
+f32 func_800C3D50(GlobalContext* globalCtx, CollisionContext* colCtx, u16 xpFlags, CollisionPoly** outPoly, s32* outBgId, Vec3f* pos, Actor* actor, u32 arg7, f32 chkDist, s32 arg9);
 // void func_800C3F40(void);
 // void func_800C3FA0(void);
-f32 func_800C4000(GlobalContext* globalCtx, CollisionContext* colCtx, s32* arg2, Vec3f* arg3);
+f32 func_800C4000(GlobalContext* globalCtx, CollisionContext* colCtx, CollisionPoly** outPoly, Vec3f* pos);
 // void func_800C4058(void);
 // void func_800C40B4(void);
 f32 func_800C411C(CollisionContext* colCtx, CollisionPoly** arg1, s32* arg2, Actor* actor, Vec3f* pos);
@@ -1045,8 +1044,7 @@ f32 func_800C411C(CollisionContext* colCtx, CollisionPoly** arg1, s32* arg2, Act
 // UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5); void func_800C4314(void); void func_800C43CC(void); void
 // func_800C4488(void); void func_800C44F0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
 // UNK_TYPE4 param_5); void func_800C455C(void);
-s32 func_800C45C4(CollisionContext* colCtx, u32 arg1, Vec3f* arg2, Vec3f* arg3, Vec3f* arg4, f32 arg5, s32* arg6,
-                  s32* arg7, DynaPolyActor* arg8, f32 arg9, u8 arg10);
+s32 func_800C45C4(CollisionContext* colCtx, u16 xpFlags, Vec3f* posResult, Vec3f* posNext, Vec3f* posPrev, f32 radius, CollisionPoly** outPoly, s32* outBgId, Actor* actor, f32 checkHeight, u8 argA);
 // void func_800C4C74(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
 // UNK_TYPE4 param_6, UNK_TYPE4 param_7); void func_800C4CD8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3,
 // UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8); void
@@ -1064,15 +1062,13 @@ s32 func_800C45C4(CollisionContext* colCtx, u32 arg1, Vec3f* arg2, Vec3f* arg3, 
 // UNK_TYPE4 param_9, UNK_TYPE4 param_10); void func_800C5538(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3,
 // UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9,
 // UNK_TYPE4 param_10);
-s32 func_800C55C4(CollisionContext* colCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, CollisionPoly** arg4, u32 arg5,
-                  u32 arg6, u32 arg7, u32 arg8, u32* arg9);
+s32 func_800C55C4(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** outPoly, s32 chkWall, s32 chkFloor, s32 chkCeil, s32 chkOneFace, s32* bgId);
 // void func_800C5650(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
 // UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
 // void func_800C56E0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
 // UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11,
 // UNK_TYPE4 param_12);
-s32 func_800C576C(CollisionContext* colCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, CollisionPoly** arg4, u32 arg5,
-                  u32 arg6, u32 arg7, u32 arg8, u32* arg9);
+s32 func_800C576C(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** outPoly, s32 chkWall, s32 chkFloor, s32 chkCeil, s32 chkOneFace, s32* bgId);
 // void func_800C57F8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5,
 // UNK_TYPE4 param_6); void func_800C583C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4,
 // UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9); void
@@ -1083,26 +1079,26 @@ s32 func_800C576C(CollisionContext* colCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* arg
 s32 func_800C5A20(CollisionContext* colCtx, Vec3f* arg1, f32 arg2);
 // void func_800C5A64(void);
 void BgCheck_ScenePolygonListsInit(SSNodeList* arg0);
-void BgCheck_ScenePolygonListsAlloc(GlobalContext* globalCtx, SSNodeList* lists, s32 numNodes, u32 numPolygons);
-s32 func_800C5B80(u16* arg0);
+void BgCheck_ScenePolygonListsAlloc(GlobalContext* globalCtx, SSNodeList* lists, s32 numNodes, s32 numPolygons);
+SSNode* func_800C5B80(SSNodeList* this);
 u16 BgCheck_ScenePolygonListsReserveNode(SSNodeList* lists);
 void BgCheck_ActorMeshParamsInit(ScaleRotPos* params);
 void BgCheck_SetActorMeshParams(ScaleRotPos* params, Vec3f* scale, Vec3s* rotation, Vec3f* position);
 s32 BgCheck_AreActorMeshParamsEqual(ScaleRotPos* arg0, ScaleRotPos* arg1);
 void BgCheck_ActorMeshPolyListsHeadsInit(DynaLookup* lists);
 void BgCheck_ActorMeshPolyListsInit(DynaLookup* lists);
-void BgCheck_ActorMeshVerticesIndexInit(s16* index);
-void BgCheck_ActorMeshWaterboxesIndexInit(s16* index);
+void BgCheck_ActorMeshVerticesIndexInit(u16* index);
+void BgCheck_ActorMeshWaterboxesIndexInit(u16* index);
 void BgCheck_ActorMeshInit(GlobalContext* globalCtx, BgActor* mesh);
-void BgCheck_ActorMeshInitFromActor(BgActor* actorMesh, DynaPolyActor* actor, CollisionHeader* header);
+void BgCheck_ActorMeshInitFromActor(BgActor* bgActor, Actor* actor, CollisionHeader* colHeader);
 s32 BgCheck_HasActorMeshChanged(BgActor* mesh);
 void BgCheck_PolygonsInit(CollisionPoly** polygons);
-void BgCheck_PolygonsAlloc(GlobalContext* globalCtx, CollisionPoly* polygons, u32 numPolygons);
+void BgCheck_PolygonsAlloc(GlobalContext* globalCtx, CollisionPoly** polyList, s32 numPolys);
 void BgCheck_VerticesInit(Vec3s** vertices);
-void BgCheck_VerticesListAlloc(GlobalContext* globalCtx, Vec3s** vertices, u32 numVertices);
+void BgCheck_VerticesListAlloc(GlobalContext* globalCtx, Vec3s** vtxList, s32 numVtx);
 void BgCheck_WaterboxListInit(DynaSSWaterboxList* waterboxList);
-void BgCheck_WaterboxListAlloc(GlobalContext* globalCtx, DynaSSWaterboxList* waterboxList, u32 numWaterboxes);
-void BgCheck_ActorMeshUpdateParams(GlobalContext* globalCtx, BgActor* mesh);
+void BgCheck_WaterboxListAlloc(GlobalContext* globalCtx, DynaSSWaterboxList* waterBoxList, s32 numWaterBoxes);
+void BgCheck_ActorMeshUpdateParams(GlobalContext* globalCtx, BgActor* bgActor);
 s32 BgCheck_IsActorMeshIndexValid(s32 index);
 void BgCheck_DynaInit(GlobalContext* globalCtx, DynaCollisionContext* param_2);
 void BgCheck_DynaAlloc(GlobalContext* globalCtx, DynaCollisionContext* dyna);

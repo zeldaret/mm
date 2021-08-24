@@ -82,7 +82,7 @@ typedef struct {
 //#define BgPolygonLinkedListNode SSNode
 
 typedef struct {
-    /* 0x0 */ u16 maxNodes;
+    /* 0x0 */ u16 max; //maxNodes;
     /* 0x2 */ u16 count; //reservedNodes
     /* 0x4 */ SSNode* tbl;//nodes;
     /* 0x8 */ u8* polyCheckTbl;
@@ -163,7 +163,7 @@ typedef struct {
 //#define BgWaterBox WaterBox
 
 typedef struct {
-    /* 0x0 */ UNK_TYPE1 pad0[0x4];
+    /* 0x0 */ s32 unk0;
     /* 0x4 */ WaterBox* boxes;
 } DynaSSWaterboxList; // size = 0x8
 //#define DynaSSWaterboxList BgWaterboxList
@@ -198,13 +198,12 @@ typedef struct {
 //#define ActorMesh BgActor
 
 typedef struct {
-    /* 0x0000 */ u8 unk0;
-    /* 0x0001 */ //UNK_TYPE1 pad1[0x3];
+    /* 0x0000 */ u8 bitFlag;
     /* 0x0004 */ BgActor bgActors[BG_ACTOR_MAX]; //actorMeshArr[50];
     /* 0x138C */ u16 bgActorFlags[BG_ACTOR_MAX]; //flags[50]; // bit 0 - Is mesh active
     /* 0x13F0 */ CollisionPoly* polyList; //polygons;
     /* 0x13F4 */ Vec3s* vtxList; //BgVertex* vertices;
-    /* 0x13F8 */ DynaSSWaterboxList waterboxes;
+    /* 0x13F8 */ DynaSSWaterboxList waterboxes; //-> waterBoxList
     /* 0x1400 */ DynaSSNodeList polyNodes; //polygonList;
     /* 0x140C */ s32 polyNodesMax; //u32 maxNodes;
     /* 0x1410 */ s32 polyListMax; //u32 maxPolygons;
@@ -228,6 +227,22 @@ typedef struct {
 } CollisionContext; // size = 0x1470
 
 typedef struct {
+    /* 0x00 */ struct GlobalContext* globalCtx;
+    /* 0x04 */ struct CollisionContext* colCtx;
+    /* 0x08 */ u16 xpFlags;
+    /* 0x0C */ CollisionPoly** resultPoly;
+    /* 0x10 */ f32 yIntersect;
+    /* 0x14 */ Vec3f* pos;
+    /* 0x18 */ s32* bgId;
+    /* 0x   */ s32 unk1C; 
+    /* 0x1C */ struct Actor* actor;
+    /* 0x20 */ u32 unk_20;
+    /* 0x24 */ f32 chkDist;
+    /* 0x28 */ DynaCollisionContext* dyna;
+    /* 0x2C */ SSList* ssList;
+} DynaRaycast;
+
+typedef struct {
     /* 0x00 */ u16 cameraSType;
     /* 0x02 */ s16 numCameras;
     /* 0x04 */ Vec3s* camPosData;
@@ -245,11 +260,6 @@ typedef struct {
     /* 0x18 */ f32 chkDist;
 } func_800C07F0_args;
 
-typedef struct {
-    u16 unk0;
-    u8 unk2;
-} struct_func_800C0E74;
-
 typedef struct
 {
     /* 0x00 */ StaticLookup* lookup;
@@ -262,7 +272,7 @@ typedef struct
     /* 0x18 */ Vec3f* outPos;
     /* 0x1C */ CollisionPoly* outPoly;
     /* 0x20 */ f32 outDistSq;
-    /* 0x24 */ f32 chkDist; //probably?
+    /* 0x24 */ f32 chkDist;
     /* 0x28 */ s32 bccFlags;
-    /* 0x2C */ struct_func_800C0E74* unk2C;
+    /* 0x2C */ Actor* actor;
 } struct_func_800C1D7C;
