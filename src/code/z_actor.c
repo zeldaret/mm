@@ -90,7 +90,7 @@ void func_800B4024(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
     ActorShadow_Draw(actor, lights, globalCtx, D_04075A40, NULL);
 }
 
-static Color_RGBA8 D_801AEC80 = {255, 255, 255, 255};
+static Color_RGBA8 D_801AEC80 = { 255, 255, 255, 255 };
 
 /* ActorShadow_DrawWhiteCircle */
 void func_800B4088(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
@@ -171,19 +171,19 @@ void func_800B4F40(TargetContext* targetCtx, s32 index, f32 x, f32 y, f32 z) {
 }
 
 s801AEC84 D_801AEC84[13] = {
-    {0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0},
-    {0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0},
-    {0xFF, 0xFF, 0xE6, 0xFF, 0xDC, 0xA0, 0x50, 0},
-    {0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0},
-    {0x96, 0x96, 0xFF, 0xFF, 0x96, 0x96, 0xFF, 0},
-    {0xFF, 0xFF, 0, 0xFF, 0xC8, 0x9B, 0, 0},
-    {0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0},
-    {0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0},
-    {0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0},
-    {0xFF, 0xFF, 0, 0xFF, 0xC8, 0x9B, 0, 0},
-    {0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0},
-    {0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0},
-    {0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0},
+    { 0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0 },
+    { 0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0 },
+    { 0xFF, 0xFF, 0xE6, 0xFF, 0xDC, 0xA0, 0x50, 0 },
+    { 0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0 },
+    { 0x96, 0x96, 0xFF, 0xFF, 0x96, 0x96, 0xFF, 0 },
+    { 0xFF, 0xFF, 0, 0xFF, 0xC8, 0x9B, 0, 0 },
+    { 0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0 },
+    { 0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0 },
+    { 0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0 },
+    { 0xFF, 0xFF, 0, 0xFF, 0xC8, 0x9B, 0, 0 },
+    { 0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0 },
+    { 0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0 },
+    { 0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0 },
 };
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B4F78.s")
@@ -811,28 +811,9 @@ void func_800B75A0(CollisionPoly* param_1, Vec3f* param_2, s16* param_3) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B82EC.s")
 
 f32 D_801AECF0[22] = {
-    4900.0f,
-    0.5f,
-    28900.0f,
-    0.6666667f,
-    78400.0f,
-    0.05f,
-    122500.0f,
-    0.6666667f,
-    490000.0f,
-    0.6666667f,
-    1000000.0f,
-    0.6666667f,
-    10000.0f,
-    0.94905096f,
-    19600.0f,
-    0.85714287f,
-    57600.0f,
-    0.41666666f,
-    78400.0f,
-    0.001f,
-    6250000.0f,
-    0.6666667f,
+    4900.0f,   0.5f,        28900.0f,   0.6666667f, 78400.0f,   0.05f,       122500.0f, 0.6666667f,
+    490000.0f, 0.6666667f,  1000000.0f, 0.6666667f, 10000.0f,   0.94905096f, 19600.0f,  0.85714287f,
+    57600.0f,  0.41666666f, 78400.0f,   0.001f,     6250000.0f, 0.6666667f,
 };
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B83BC.s")
@@ -840,10 +821,7 @@ f32 D_801AECF0[22] = {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B83F8.s")
 
 s16 D_801AED48[] = {
-    0x0101, 0x0141,
-    0x0111, 0x0151,
-    0x0105, 0x0145,
-    0x0115, 0x0155,
+    0x0101, 0x0141, 0x0111, 0x0151, 0x0105, 0x0145, 0x0115, 0x0155,
 };
 
 s32 Actor_IsTalking(Actor* actor, GlobalContext* globalCtx) {
@@ -1148,25 +1126,13 @@ void func_800B9120(ActorContext* actorCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_UpdateActor.s")
 
 s32 D_801AED58[] = {
-    0x100002C2,
-    0x100002C2,
-    0x00000200,
-    0x100006C2,
-    0x00000282,
-    0x300002C2,
-    0x10000282,
-    0x00000002,
-    0x300002C2,
-    0x100006C2,
-    0x00000002,
-    0x100002C2,
+    0x100002C2, 0x100002C2, 0x00000200, 0x100006C2, 0x00000282, 0x300002C2,
+    0x10000282, 0x00000002, 0x300002C2, 0x100006C2, 0x00000002, 0x100002C2,
 };
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_UpdateAll.s")
 
-Color_RGBA8 actorDefaultHitColor = {
-    0x00, 0x00, 0x00, 0xFF
-};
+Color_RGBA8 actorDefaultHitColor = { 0x00, 0x00, 0x00, 0xFF };
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_Draw.s")
 
@@ -1447,9 +1413,7 @@ s32 func_800BB59C(GlobalContext* globalCtx, Actor* actor) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BB604.s")
 
 UNK_TYPE1 D_801AED8C[] = {
-    0x09, 0x05, 0x01, 0x03,
-    0x04, 0x07, 0x0B, 0x00,
-    0x06, 0x08, 0x0A, 0x00,
+    0x09, 0x05, 0x01, 0x03, 0x04, 0x07, 0x0B, 0x00, 0x06, 0x08, 0x0A, 0x00,
 };
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BB8EC.s")
@@ -1465,13 +1429,17 @@ UNK_TYPE1 D_801AED8C[] = {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BBCEC.s")
 
 Vec3f D_801AED98 = {
-    0.0f, 0.300000011921f, 0.0f,
+    0.0f,
+    0.300000011921f,
+    0.0f,
 };
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BBDAC.s")
 
 Vec3f D_801AEDA4 = {
-    0.0f, 0.300000011921f, 0.0f,
+    0.0f,
+    0.300000011921f,
+    0.0f,
 };
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BBFB0.s")
@@ -1479,15 +1447,7 @@ Vec3f D_801AEDA4 = {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BC154.s")
 
 s32 D_801AEDB0[] = {
-    0x00000800, 
-    0x00000020, 
-    0x00000020, 
-    0x00000800, 
-    0x00001000, 
-    0x00002000, 
-    0x00000001, 
-    0x00010000, 
-    0x00000001, 
+    0x00000800, 0x00000020, 0x00000020, 0x00000800, 0x00001000, 0x00002000, 0x00000001, 0x00010000, 0x00000001,
 };
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BC188.s")
@@ -1522,37 +1482,12 @@ typedef struct {
     /* 0x18 */ Gfx* unk_18;
 } struct_801AEDD4; // size = 0x1C
 
-struct_801AEDD4 D_801AEDD4[] = 
-{
-    {
-    0.540000021458f,
-    6000.0f,
-    5000.0,
-    1.0f,
-    0.0f,
-    0x05000230,
-    0x05000140
-    },
+struct_801AEDD4 D_801AEDD4[] = {
+    { 0.540000021458f, 6000.0f, 5000.0, 1.0f, 0.0f, 0x05000230, 0x05000140 },
 
-    {
-    0.643999993801f,
-    12000.0f,
-    8000.0f,
-    1.0f,
-    0.0f,
-    0x06000530,
-    0x06000400
-    },
+    { 0.643999993801f, 12000.0f, 8000.0f, 1.0f, 0.0f, 0x06000530, 0x06000400 },
 
-    {
-    0.6400000453f,
-    8500.0f,
-    8000.0f,
-    1.75f,
-    0.10000000149f,
-    0x05000230,
-    0x05000140
-    }
+    { 0.6400000453f, 8500.0f, 8000.0f, 1.75f, 0.10000000149f, 0x05000230, 0x05000140 },
 };
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BC8B8.s")
@@ -1668,13 +1603,9 @@ void func_800BCCDC(Vec3s* points, s32 pathcount, Vec3f* pos1, Vec3f* pos2, s32 p
     }
 }
 #else
-s32 D_801AEE28[] = {
-    0, 0
-};
+s32 D_801AEE28[] = { 0, 0 };
 
-s32 D_801AEE30[] = {
-    0, 0
-};
+s32 D_801AEE30[] = { 0, 0 };
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BCCDC.s")
 #endif
 
@@ -1714,20 +1645,20 @@ typedef struct {
 } struct_801AEE38; // size = 0x18
 
 struct_801AEE38 D_801AEE38[] = {
-    {{0x1C20, 0xE390, 0x1C70, 0x1554, 0, 0, 0}, 170.0f, 0x3FFC},
-    {{0x2AA8, 0xEAAC, 0x1554, 0x1554, 0xF8E4, 0xE38, 1}, 170.0f, 0x3FFC},
-    {{0x31C4, 0xE390, 0xE38, 0xE38, 0xF1C8, 0x71C, 1}, 170.0f, 0x3FFC},
-    {{0x1554, 0xF1C8, 0, 0x71C, 0xF8E4, 0, 1}, 170.0f, 0x3FFC},
-    {{0x2AA8, 0xF8E4, 0x71C, 0xE38, 0xD558, 0x2AA8, 1}, 170.0f, 0x3FFC},
-    {{0, 0xE390, 0x2AA8, 0x3FFC, 0xF1C8, 0xE38, 1}, 170.0f, 0x3FFC},
-    {{0x2AA8, 0xF1C8, 0xE38, 0xE38, 0, 0, 1}, 0.0f, 0},
-    {{0x2AA8, 0xF1C8, 0, 0xE38, 0, 0x1C70, 1}, 0.0f, 0},
-    {{0x2AA8, 0xF1C8, 0xF1C8, 0, 0, 0, 1}, 0.0f, 0},
-    {{0x71C, 0xF1C8, 0xE38, 0x1C70, 0, 0, 1}, 0.0f, 0},
-    {{0xE38, 0xF1C8, 0, 0x1C70, 0, 0xE38, 1}, 0.0f, 0},
-    {{0x2AA8, 0xE390, 0x1C70, 0xE38, 0xF1C8, 0xE38, 1}, 0.0f, 0},
-    {{0x18E2, 0xF1C8, 0xE38, 0xE38, 0, 0, 1}, 0.0f, 0},
-    {{0x2A6C, 0xE390, 0x1C70, 0x1554, 0, 0, 0}, 170.0f, 0x3FFC},
+    { { 0x1C20, 0xE390, 0x1C70, 0x1554, 0, 0, 0 }, 170.0f, 0x3FFC },
+    { { 0x2AA8, 0xEAAC, 0x1554, 0x1554, 0xF8E4, 0xE38, 1 }, 170.0f, 0x3FFC },
+    { { 0x31C4, 0xE390, 0xE38, 0xE38, 0xF1C8, 0x71C, 1 }, 170.0f, 0x3FFC },
+    { { 0x1554, 0xF1C8, 0, 0x71C, 0xF8E4, 0, 1 }, 170.0f, 0x3FFC },
+    { { 0x2AA8, 0xF8E4, 0x71C, 0xE38, 0xD558, 0x2AA8, 1 }, 170.0f, 0x3FFC },
+    { { 0, 0xE390, 0x2AA8, 0x3FFC, 0xF1C8, 0xE38, 1 }, 170.0f, 0x3FFC },
+    { { 0x2AA8, 0xF1C8, 0xE38, 0xE38, 0, 0, 1 }, 0.0f, 0 },
+    { { 0x2AA8, 0xF1C8, 0, 0xE38, 0, 0x1C70, 1 }, 0.0f, 0 },
+    { { 0x2AA8, 0xF1C8, 0xF1C8, 0, 0, 0, 1 }, 0.0f, 0 },
+    { { 0x71C, 0xF1C8, 0xE38, 0x1C70, 0, 0, 1 }, 0.0f, 0 },
+    { { 0xE38, 0xF1C8, 0, 0x1C70, 0, 0xE38, 1 }, 0.0f, 0 },
+    { { 0x2AA8, 0xE390, 0x1C70, 0xE38, 0xF1C8, 0xE38, 1 }, 0.0f, 0 },
+    { { 0x18E2, 0xF1C8, 0xE38, 0xE38, 0, 0, 1 }, 0.0f, 0 },
+    { { 0x2A6C, 0xE390, 0x1C70, 0x1554, 0, 0, 0 }, 170.0f, 0x3FFC },
 };
 
 void func_800BD384(Actor* actor, struct_800BD888_arg1* arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7,
@@ -1845,7 +1776,10 @@ void func_800BD888(Actor* actor, struct_800BD888_arg1* arg1, s16 arg2, s16 arg3)
 }
 
 Gfx D_801AEF88[] = {
-    gsDPSetRenderMode(AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL | G_RM_FOG_SHADE_A, AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL | GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA)),
+    gsDPSetRenderMode(AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
+                          G_RM_FOG_SHADE_A,
+                      AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
+                          GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA)),
     gsDPSetAlphaCompare(G_AC_THRESHOLD),
     gsSPEndDisplayList(),
 };
@@ -2013,8 +1947,8 @@ UNK_TYPE4 D_801AEFA8[] = {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE680.s")
 
-static Color_RGBA8 D_801AEFB8 = {0xAA, 0xFF, 0xFF, 0xFF};
-static Color_RGBA8 D_801AEFBC = {0xC8, 0xC8, 0xFF, 0xFF};
-static Vec3f D_801AEFC0 = {0.0f, -1.0f, 0.0f};
+static Color_RGBA8 D_801AEFB8 = { 170, 255, 255, 255 };
+static Color_RGBA8 D_801AEFBC = { 200, 200, 255, 255 };
+static Vec3f D_801AEFC0 = { 0.0f, -1.0f, 0.0f };
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BF7CC.s")
