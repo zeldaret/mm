@@ -668,7 +668,7 @@ s32 func_800B715C(GlobalContext* globalCtx) {
 
 void func_800B7170(GlobalContext* globalCtx, Player* player) {
     if ((globalCtx->roomCtx.currRoom.unk3 != 4) && (player->actor.id == ACTOR_PLAYER)) {
-        EnHorse* rideActor = player->rideActor;
+        EnHorse* rideActor = (EnHorse*)player->rideActor;
 
         if ((rideActor != NULL) && !(rideActor->unk_1EC & 0x10)) {
             func_800DFAC8(Play_GetCamera(globalCtx, 0), 4);
