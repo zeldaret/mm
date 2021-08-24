@@ -704,9 +704,28 @@ void func_800B722C(GlobalContext* globalCtx, Player* player) {
     func_800F40A0(globalCtx, player);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B724C.s")
+s32 func_800B724C(GlobalContext* globalCtx, Actor* actor, u8 csMode) {
+    Player* player = PLAYER;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B7298.s")
+    if ((player->csMode == 5) || ((csMode == 6) && (player->csMode == 0))) {
+        return false;
+    }
+
+    player->csMode = csMode;
+    player->unk_398 = actor;
+    player->unk_3BA = 0;
+    return true;
+}
+
+u32 func_800B7298(GlobalContext* globalCtx, Actor* actor, u8 arg2) {
+    Player* player = PLAYER;
+
+    if (func_800B724C(globalCtx, actor, arg2)) {
+        player->unk_3BA = 1;
+        return true;
+    }
+    return false;
+}
 
 void func_800B72E0(DynaPolyActor* dyna) {
     dyna->unk14C = 0.0f;
@@ -718,7 +737,15 @@ void func_800B72F8(DynaPolyActor* dyna, f32 a1, s16 a2) {
     dyna->unk148 += a1;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_IsPlayerFacingActor.s")
+s32 Actor_IsPlayerFacingActor(Actor* actor, s16 tolerance, GlobalContext* globalCtx) {
+    Player* player = PLAYER;
+    s16 yawDiff = BINANG_ADD(actor->yawTowardsPlayer, 0x8000) - player->actor.shape.rot.y;
+
+    if (ABS_ALT(yawDiff) < tolerance) {
+        return true;
+    }
+    return false;
+}
 
 s32 Actor_IsActorFacedByActor(Actor* actor, Actor* other, s16 tolerance) {
     s16 angle = BINANG_ROT180(Actor_YawBetweenActors(actor, other));
@@ -726,18 +753,18 @@ s32 Actor_IsActorFacedByActor(Actor* actor, Actor* other, s16 tolerance) {
 
     dist = angle - other->shape.rot.y;
     if (ABS_ALT(dist) < tolerance) {
-        return 1;
+        return true;
     }
-    return 0;
+    return false;
 }
 
 s32 Actor_IsActorFacingPlayer(Actor* actor, s16 angle) {
     s16 dist = actor->yawTowardsPlayer - actor->shape.rot.y;
 
     if (ABS_ALT(dist) < angle) {
-        return 1;
+        return true;
     }
-    return 0;
+    return false;
 }
 
 s32 Actor_IsActorFacingActor(Actor* actor, Actor* other, s16 tolerance) {
@@ -763,7 +790,12 @@ s32 Actor_IsActorFacingActorAndWithinRange(Actor* actor, Actor* other, f32 range
     return 0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B75A0.s")
+void func_800B75A0(CollisionPoly* param_1, Vec3f* param_2, s16* param_3) {
+    param_2->x = param_1->normal.x * (1.0f / 0x7FFF);
+    param_2->y = param_1->normal.y * (1.0f / 0x7FFF);
+    param_2->z = param_1->normal.z * (1.0f / 0x7FFF);
+    *param_3 = Math_FAtan2F(param_2->z, param_2->x);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B761C.s")
 
