@@ -304,7 +304,7 @@ void ObjKibako_Idle(ObjKibako* this, GlobalContext* globalCtx) {
 
         this->collider.base.acFlags &= ~AC_HIT;
 
-        if ((this->actor.params >> 7) & 1) {
+        if (KIBAKO_BOMBER_CAN_HIDE_IN_BOX(&this->actor)) {
             Collider_UpdateCylinder(&this->actor, &this->collider);
             CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 
