@@ -390,13 +390,6 @@ typedef struct {
     /* 0xC */ s32 rightX;
 } Viewport; // size = 0x10
 
-typedef struct {
-    /* 0x0 */ unsigned int inst1;
-    /* 0x4 */ unsigned int inst2;
-    /* 0x8 */ unsigned int inst3;
-    /* 0xC */ unsigned int inst4;
-} __osExceptionVector; // size = 0x10
-
 typedef void*(*fault_address_converter_func)(void* addr, void* arg);
 
 typedef void(*fault_client_func)(void* arg1, void* arg2);
@@ -737,8 +730,8 @@ typedef struct {
     /* 0x242 */ s16 heartsEnvR[2];
     /* 0x246 */ s16 heartsEnvG[2];
     /* 0x24A */ s16 heartsEnvB[2];
-    /* 0x24E */ s16 unk_24E;
-    /* 0x250 */ s16 unk_250;
+    /* 0x24E */ s16 health;
+    /* 0x250 */ s16 unkTimer;
     /* 0x252 */ s16 lifeSizeChange;
     /* 0x254 */ s16 lifeSizeChangeDirection; // 1 means shrinking, 0 growing
     /* 0x256 */ s16 unk_256;
