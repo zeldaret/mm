@@ -8,6 +8,8 @@ COMPARE ?= 1
 NON_MATCHING ?= 0
 # If ORIG_COMPILER is 1, compile with QEMU_IRIX and the original compiler
 ORIG_COMPILER ?= 0
+# if WERROR is 1, pass -Werror to CC_CHECK, so warnings would be treated as errors
+WERROR ?= 0
 
 ifeq ($(NON_MATCHING),1)
   CFLAGS := -DNON_MATCHING
@@ -91,6 +93,10 @@ ifeq ($(shell getconf LONG_BIT), 32)
 else
   # Ensure that gcc treats the code as 32-bit
   CC_CHECK += -m32
+endif
+
+ifneq ($(WERROR), 0)
+  CC_CHECK += -Werror
 endif
 
 #### Files ####
