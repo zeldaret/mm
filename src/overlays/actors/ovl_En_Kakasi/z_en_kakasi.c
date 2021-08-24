@@ -926,11 +926,10 @@ void EnKakasi_DancingNightAway(EnKakasi* this, GlobalContext* globalCtx) {
     Math_Vec3f_Copy(&localVec3f, &this->unk238);
     OLib_DbCameraVec3fSum(&this->actor.home, &localVec3f, &this->unk238, 1);
 
-    if (1) {
-        this->unk244.x = D_80971EEC[this->unk190].x + this->unk22C.x;
-        this->unk244.y = D_80971EEC[this->unk190].y + this->unk22C.y;
-        this->unk244.z = D_80971EEC[this->unk190].z + this->unk22C.z;
-    }
+    if (1) { }
+    this->unk244.x = D_80971EEC[this->unk190].x + this->unk22C.x;
+    this->unk244.y = D_80971EEC[this->unk190].y + this->unk22C.y;
+    this->unk244.z = D_80971EEC[this->unk190].z + this->unk22C.z;
     if (this->unk190 != 6 && this->unk190 != 7) {
         Math_Vec3f_Copy(&this->unk214, &this->unk238);
         Math_Vec3f_Copy(&this->unk220, &this->unk244);
