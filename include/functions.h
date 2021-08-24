@@ -873,7 +873,7 @@ Actor* Actor_SpawnAsChild(ActorContext* actorCtx, Actor* parent, GlobalContext* 
                           f32 posZ, s16 rotX, s16 rotY, s16 rotZ, s32 params);
 void Actor_SpawnTransitionActors(GlobalContext* globalCtx, ActorContext* actorCtx);
 void func_800BB2D0(ActorContext* actorCtx, u16* param_2, GlobalContext* globalCtx);
-Actor* func_800BB498(ActorContext* actorCtx, Actor* actor, GlobalContext* globalCtx);
+Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, GlobalContext* globalCtx);
 // void func_800BB59C(void);
 // void func_800BB604(void);
 // void func_800BB8EC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
@@ -1304,7 +1304,7 @@ void func_800DE0EC(Camera* camera, Actor* actor);
 Vec3s* Camera_Update(Vec3s* param_1, Camera* camera);
 // void func_800DF498(void);
 u32 Camera_SetMode(Camera* camera, s16 mode, s8 param_3);
-// void func_800DF840(void);
+s32 Camera_ChangeMode(Camera* camera, s16 mode);
 // void func_800DF86C(void);
 // void func_800DF8EC(void);
 s32 func_800DFAC8(Camera* camera, s16 param_2);

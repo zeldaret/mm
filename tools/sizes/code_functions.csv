@@ -353,7 +353,7 @@ asm/non_matchings/code/z_actor/Actor_SpawnWithParentAndCutscene.s,Actor_SpawnWit
 asm/non_matchings/code/z_actor/Actor_SpawnWithParent.s,Actor_SpawnWithParent,0x800BB0C0,0x20
 asm/non_matchings/code/z_actor/Actor_SpawnTransitionActors.s,Actor_SpawnTransitionActors,0x800BB140,0x64
 asm/non_matchings/code/z_actor/func_800BB2D0.s,func_800BB2D0,0x800BB2D0,0x72
-asm/non_matchings/code/z_actor/func_800BB498.s,func_800BB498,0x800BB498,0x41
+asm/non_matchings/code/z_actor/Actor_Delete.s,Actor_Delete,0x800BB498,0x41
 asm/non_matchings/code/z_actor/func_800BB59C.s,func_800BB59C,0x800BB59C,0x1A
 asm/non_matchings/code/z_actor/func_800BB604.s,func_800BB604,0x800BB604,0xBA
 asm/non_matchings/code/z_actor/func_800BB8EC.s,func_800BB8EC,0x800BB8EC,0x67
@@ -782,7 +782,7 @@ asm/non_matchings/code/z_camera/func_800DE954.s,func_800DE954,0x800DE954,0x17
 asm/non_matchings/code/z_camera/Camera_Update.s,Camera_Update,0x800DE9B0,0x2BA
 asm/non_matchings/code/z_camera/func_800DF498.s,func_800DF498,0x800DF498,0xE
 asm/non_matchings/code/z_camera/Camera_SetMode.s,Camera_SetMode,0x800DF4D0,0xDC
-asm/non_matchings/code/z_camera/func_800DF840.s,func_800DF840,0x800DF840,0xB
+asm/non_matchings/code/z_camera/Camera_ChangeMode.s,Camera_ChangeMode,0x800DF840,0xB
 asm/non_matchings/code/z_camera/func_800DF86C.s,func_800DF86C,0x800DF86C,0x20
 asm/non_matchings/code/z_camera/func_800DF8EC.s,func_800DF8EC,0x800DF8EC,0x77
 asm/non_matchings/code/z_camera/func_800DFAC8.s,func_800DFAC8,0x800DFAC8,0x13

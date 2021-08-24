@@ -312,7 +312,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_SetMode.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800DF840.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ChangeMode.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800DF86C.s")
 

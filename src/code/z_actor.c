@@ -1114,6 +1114,7 @@ void Actor_InsertIntoTypeList(ActorContext* actorCtx, Actor* actor, u8 actorCate
     actor->prev = phi_v1;
 }
 
+// Actor_RemoveFromCategory
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_RemoveFromTypeList.s")
 
 void Actor_FreeOverlay(ActorOverlay* entry) {
@@ -1249,11 +1250,81 @@ Actor* Actor_SpawnAsChild(ActorContext* actorCtx, Actor* parent, GlobalContext* 
     return Actor_SpawnAsChildAndCutscene(actorCtx, globalCtx, actorId, posX, posY, posZ, rotX, rotY, rotZ, params, -1, parent->unk20, parent);
 }
 
+#ifdef NON_MATCHING
+void Actor_SpawnTransitionActors(GlobalContext* globalCtx, ActorContext* actorCtx) {
+    TransitionActorEntry* phi_s0;
+    s32 phi_s2;
+    s16 phi_v1;
+
+    phi_s0 = globalCtx->doorCtx.transitionActorList;
+    phi_v1 = globalCtx->doorCtx.numTransitionActors;
+
+    for (phi_s2 = 0; phi_s2 < phi_v1; phi_s2++) {
+        if ((phi_s0->id >= 0) && 
+             (
+                (    (phi_s0->sides[0].room >= 0) 
+                      && 
+                     ((globalCtx->roomCtx.currRoom.num == phi_s0->sides[0].room) || (globalCtx->roomCtx.prevRoom.num == phi_s0->sides[0].room))
+                ) 
+                  || 
+                (
+                     (phi_s0->sides[1].room >= 0) 
+                      && 
+                     ((globalCtx->roomCtx.currRoom.num == phi_s0->sides[1].room) || (globalCtx->roomCtx.prevRoom.num == phi_s0->sides[1].room))))
+            ) {
+            s16 rotY = (((phi_s0->rotY) >> 7) & 0x1FF) * 182.04445f;
+
+            if (Actor_SpawnAsChildAndCutscene(actorCtx, globalCtx, phi_s0->id & 0x1FFF, phi_s0->pos.x, phi_s0->pos.y, phi_s0->pos.z, 0, rotY, 0, (phi_s2 << 0xA) + ((phi_s0->params) & 0x3FF), phi_s0->pos.x & 0x7F, 0x3FF, 0) != 0)
+            {
+                phi_s0->id = -phi_s0->id;
+            }
+            phi_v1 = globalCtx->doorCtx.numTransitionActors;
+        }
+        phi_s0 += 1;
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_SpawnTransitionActors.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BB2D0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BB498.s")
+Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, GlobalContext* globalCtx) {
+    s32 pad;
+    Player* player = PLAYER;
+    Actor* newHead;
+    ActorOverlay* overlayEntry = actor->overlayEntry;
+
+    if ((player != NULL) && (actor == player->unk_730)) {
+        func_80123DA4(player);
+        Camera_ChangeMode(Play_GetCamera(globalCtx, Play_GetActiveCameraIndex(globalCtx)), 0);
+    }
+
+    if (actor == actorCtx->targetContext.unk38) {
+        actorCtx->targetContext.unk38 = NULL;
+    }
+
+    if (actor == actorCtx->targetContext.unk8C) {
+        actorCtx->targetContext.unk8C = NULL;
+    }
+
+    if (actor == actorCtx->targetContext.unk90) {
+        actorCtx->targetContext.unk90 = NULL;
+    }
+
+    func_801A72CC(&actor->projectedPos);
+    Actor_Destroy(actor, globalCtx);
+
+    newHead = Actor_RemoveFromTypeList(globalCtx, actorCtx, actor);
+    zelda_free(actor);
+
+    if (overlayEntry->vramStart != 0) {
+        overlayEntry->numLoaded--;
+        Actor_FreeOverlay(overlayEntry);
+    }
+
+    return newHead;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BB59C.s")
 
