@@ -1338,19 +1338,20 @@ void Actor_SpawnTransitionActors(GlobalContext* globalCtx, ActorContext* actorCt
     phi_v1 = globalCtx->doorCtx.numTransitionActors;
 
     for (phi_s2 = 0; phi_s2 < phi_v1; phi_s2++) {
-        if ((phi_s0->id >= 0) &&
-            (((phi_s0->sides[0].room >= 0) && ((globalCtx->roomCtx.currRoom.num == phi_s0->sides[0].room) ||
-                                               (globalCtx->roomCtx.prevRoom.num == phi_s0->sides[0].room))) ||
-             ((phi_s0->sides[1].room >= 0) && ((globalCtx->roomCtx.currRoom.num == phi_s0->sides[1].room) ||
-                                               (globalCtx->roomCtx.prevRoom.num == phi_s0->sides[1].room))))) {
-            s16 rotY = (((phi_s0->rotY) >> 7) & 0x1FF) * 182.04445f;
+        if (phi_s0->id >= 0) {
+            if ((phi_s0->sides[0].room >= 0 && (globalCtx->roomCtx.currRoom.num == phi_s0->sides[0].room ||
+                                                globalCtx->roomCtx.prevRoom.num == phi_s0->sides[0].room)) ||
+                (phi_s0->sides[1].room >= 0 && (globalCtx->roomCtx.currRoom.num == phi_s0->sides[1].room ||
+                                                globalCtx->roomCtx.prevRoom.num == phi_s0->sides[1].room))) {
+                s16 rotY = ((phi_s0->rotY >> 7) & 0x1FF) * 182.04445f;
 
-            if (Actor_SpawnAsChildAndCutscene(actorCtx, globalCtx, phi_s0->id & 0x1FFF, phi_s0->pos.x, phi_s0->pos.y,
-                                              phi_s0->pos.z, 0, rotY, 0, (phi_s2 << 0xA) + ((phi_s0->params) & 0x3FF),
-                                              phi_s0->pos.x & 0x7F, 0x3FF, 0) != 0) {
-                phi_s0->id = -phi_s0->id;
+                if (Actor_SpawnAsChildAndCutscene(
+                        actorCtx, globalCtx, phi_s0->id & 0x1FFF, phi_s0->pos.x, phi_s0->pos.y, phi_s0->pos.z, 0, rotY,
+                        0, (phi_s2 << 0xA) + (phi_s0->params & 0x3FF), phi_s0->pos.x & 0x7F, 0x3FF, 0) != NULL) {
+                    phi_s0->id = -phi_s0->id;
+                }
+                phi_v1 = globalCtx->doorCtx.numTransitionActors;
             }
-            phi_v1 = globalCtx->doorCtx.numTransitionActors;
         }
         phi_s0 += 1;
     }
@@ -1425,19 +1426,11 @@ UNK_TYPE1 D_801AED8C[] = {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BBCEC.s")
 
-Vec3f D_801AED98 = {
-    0.0f,
-    0.300000011921f,
-    0.0f,
-};
+Vec3f D_801AED98 = { 0.0f, 0.300000011921f, 0.0f };
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BBDAC.s")
 
-Vec3f D_801AEDA4 = {
-    0.0f,
-    0.300000011921f,
-    0.0f,
-};
+Vec3f D_801AEDA4 = { 0.0f, 0.300000011921f, 0.0f };
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BBFB0.s")
 
@@ -1601,7 +1594,6 @@ void func_800BCCDC(Vec3s* points, s32 pathcount, Vec3f* pos1, Vec3f* pos2, s32 p
 }
 #else
 s32 D_801AEE28[] = { 0, 0 };
-
 s32 D_801AEE30[] = { 0, 0 };
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BCCDC.s")
 #endif
@@ -1609,7 +1601,7 @@ s32 D_801AEE30[] = { 0, 0 };
 // unused
 s32 func_800BD2B4(GlobalContext* globalCtx, Actor* actor, s16* arg2, f32 arg3, u16 (*arg4)(GlobalContext*, Actor*),
                   s16 (*arg5)(GlobalContext*, Actor*)) {
-    if (Actor_IsTalking(actor, globalCtx) != 0) {
+    if (Actor_IsTalking(actor, globalCtx)) {
         *arg2 = 1;
         return 1;
     } else if (*arg2 != 0) {
