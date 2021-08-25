@@ -3037,8 +3037,7 @@ beginseg
     name "ovl_En_Dnk"
     compress
     include "build/src/overlays/actors/ovl_En_Dnk/z_en_dnk.o"
-    include "build/data/ovl_En_Dnk/ovl_En_Dnk.data.o"
-    include "build/data/ovl_En_Dnk/ovl_En_Dnk.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Dnk/ovl_En_Dnk_reloc.o"
 endseg
 
 beginseg
