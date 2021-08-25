@@ -787,7 +787,7 @@ s32 Actor_IsActorFacingActor(Actor* actor, Actor* other, s16 tolerance);
 s32 Actor_IsActorFacingPlayerAndWithinRange(Actor* actor, f32 range, s16 tolerance);
 s32 Actor_IsActorFacingActorAndWithinRange(Actor* actor, Actor* other, f32 range, s16 tolerance);
 void func_800B75A0(CollisionPoly* param_1, Vec3f* param_2, s16* param_3);
-// UNK_TYPE4 func_800B761C(Actor* param_1, UNK_TYPE4 param_2, u32 param_3);
+s32 func_800B761C(Actor *actor, f32, s32);
 s32 func_800B7678(GlobalContext *globalCtx, Actor *actor, Vec3f *arg2, s32 arg3);
 void Actor_UpdateBgCheckInfo(GlobalContext* globalCtx, Actor* actor, f32 wallCheckHeight, f32 wallCheckRadius, f32 ceilingCheckHeight, u32 flags);
 // void func_800B7E04(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
@@ -994,7 +994,8 @@ f32 func_800C4000(GlobalContext* globalCtx, CollisionContext* colCtx, s32* arg2,
 // void func_800C4058(void);
 // void func_800C40B4(void);
 f32 func_800C411C(CollisionContext* colCtx, CollisionPoly** arg1, s32* arg2, Actor* actor, Vec3f* pos);
-f32 func_800C4188(f32, CollisionContext* colCtx, CollisionPoly**, UNK_PTR param_4, Actor* actor, Vec3f* pos); 
+f32 func_800C4188(GlobalContext* globalCtx, CollisionContext* colCtx, CollisionPoly** outPoly, s32* bgId,
+                  Actor* actor, Vec3f* pos); 
 // void func_800C41E4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 // void func_800C4240(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 // void func_800C42A8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);

@@ -148,7 +148,7 @@ void func_800B4AEC(GlobalContext* globalCtx, Actor* actor, f32 param_3) {
 
     actor->world.pos.y += param_3;
     actor->floorHeight =
-        func_800C4188(param_3, &globalCtx->colCtx, &actor->floorPoly, &floorBgId, actor, &actor->world.pos);
+        func_800C4188(globalCtx, &globalCtx->colCtx, &actor->floorPoly, &floorBgId, actor, &actor->world.pos);
     actor->floorBgId = floorBgId;
     actor->world.pos.y = yPos;
 }
@@ -793,9 +793,64 @@ void func_800B75A0(CollisionPoly* param_1, Vec3f* param_2, s16* param_3) {
     *param_3 = Math_FAtan2F(param_2->z, param_2->x);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B761C.s")
+s32 func_800B761C(Actor* actor, f32 arg1, s32 arg2) {
+    if (actor->bgCheckFlags & 0x01) {
+        actor->bgCheckFlags &= ~0x01;
+        actor->bgCheckFlags |= 0x04;
+        if ((actor->velocity.y < 0.0f) && (arg2 & 0x10)) {
+            actor->velocity.y = 0.0f;
+        }
+        return false;
+    }
+    return true;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B7678.s")
+s32 func_800B7678(GlobalContext* globalCtx, Actor* actor, Vec3f* arg2, s32 arg3) {
+    f32 temp_f0;
+    s32 sp38;
+
+    arg2->y += (arg3 & 0x800) ? 10.0f : 50.0f;
+
+    actor->floorHeight = func_800C4188(globalCtx, &globalCtx->colCtx, &actor->floorPoly, &sp38, actor, arg2);
+    actor->bgCheckFlags &= ~(0x80 | 0x04 | 0x02);
+    if (actor->floorHeight <= BGCHECK_Y_MIN) {
+        return func_800B761C(actor, BGCHECK_Y_MIN, arg3);
+    }
+
+    temp_f0 = actor->floorHeight - actor->world.pos.y;
+    actor->floorBgId = sp38;
+    if ((temp_f0 >= 0.0f) || (((actor->bgCheckFlags & 1)) && !(actor->bgCheckFlags & 0x800) && (temp_f0 >= -11.0f) && (actor->velocity.y < 0.0f))) {
+        actor->bgCheckFlags |= 0x80;
+
+        if (actor->bgCheckFlags & 0x10) {
+            if (sp38 != D_801ED8B4) {
+                if (temp_f0 > 15.0f) {
+                    actor->bgCheckFlags |= 0x100;
+                }
+            } else {
+                actor->world.pos.x = actor->prevPos.x;
+                actor->world.pos.z = actor->prevPos.z;
+            }
+        }
+        actor->world.pos.y = actor->floorHeight;
+        if (actor->velocity.y <= 0.0f) {
+            if (!(actor->bgCheckFlags & 1)) {
+                actor->bgCheckFlags |= 0x02;
+            } else if ((arg3 & 8) && (actor->gravity < 0.0f)) {
+                actor->velocity.y = -4.0f;
+            } else if (!(arg3 & 0x100)) {
+                actor->velocity.y = 0.0f;
+            }
+
+            actor->bgCheckFlags |= 0x01;
+            BgCheck2_AttachToMesh(&globalCtx->colCtx, actor, (s32) actor->floorBgId);
+        }
+    } else {
+        return func_800B761C(actor, temp_f0, arg3);
+    }
+
+    return 1;
+}
 
 void Actor_UpdateBgCheckInfo(GlobalContext* globalCtx, Actor* actor, f32 wallCheckHeight, f32 wallCheckRadius, f32 ceilingCheckHeight, u32 flags) {
     f32 sp94;
