@@ -5,7 +5,7 @@
 
 struct EnColMan;
 
-typedef void (*EnColManActionFunc)(struct EnColMan* this, GlobalContext* globalCtx);
+typedef void (*EnColManActionFunc)(struct EnColMan*, GlobalContext*);
 
 typedef struct EnColMan {
     /* 0x0000 */ Actor actor;

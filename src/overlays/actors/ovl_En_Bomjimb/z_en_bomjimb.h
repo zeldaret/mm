@@ -5,7 +5,7 @@
 
 struct EnBomjimb;
 
-typedef void (*EnBomjimbActionFunc)(struct EnBomjimb* this, GlobalContext* globalCtx);
+typedef void (*EnBomjimbActionFunc)(struct EnBomjimb*, GlobalContext*);
 
 typedef struct EnBomjimb {
     /* 0x0000 */ Actor actor;

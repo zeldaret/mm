@@ -5,7 +5,7 @@
 
 struct ObjectKankyo;
 
-typedef void (*ObjectKankyoActionFunc)(struct ObjectKankyo* this, GlobalContext* globalCtx);
+typedef void (*ObjectKankyoActionFunc)(struct ObjectKankyo*, GlobalContext*);
 
 typedef struct ObjectKankyo {
     /* 0x0000 */ Actor actor;

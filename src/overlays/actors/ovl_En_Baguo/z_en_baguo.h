@@ -5,7 +5,7 @@
 
 struct EnBaguo;
 
-typedef void (*EnBaguoActionFunc)(struct EnBaguo* this, GlobalContext* globalCtx);
+typedef void (*EnBaguoActionFunc)(struct EnBaguo*, GlobalContext*);
 
 typedef struct EnBaguo {
     /* 0x0000 */ Actor actor;

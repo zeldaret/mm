@@ -10,6 +10,8 @@
 #include "ultra64/message.h"
 #include "ultra64/sptask.h"
 #include "ultra64/thread.h"
+#include "ultra64/rcp.h"
 #include "ultra64/rsp.h"
+#include "ultra64/vi.h"
 
 #endif
