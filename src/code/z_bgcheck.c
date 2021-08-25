@@ -189,14 +189,17 @@ f32 func_800C411C(CollisionContext* colCtx, CollisionPoly** arg1, s32* arg2, Act
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C4CD8.s")
 
+// BgCheck_EntitySphVsWall3
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C4D3C.s")
 
+// BgCheck_EntitySphVsWall4
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C4DA4.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C4E10.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C4F38.s")
 
+// BgCheck_EntityCheckCeiling
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C4F84.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C4FD4.s")

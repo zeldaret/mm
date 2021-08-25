@@ -797,7 +797,149 @@ void func_800B75A0(CollisionPoly* param_1, Vec3f* param_2, s16* param_3) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B7678.s")
 
+#ifdef MIPS2C_OUTPUT
+void Actor_UpdateBgCheckInfo(GlobalContext* globalCtx, Actor* actor, f32 wallCheckHeight, f32 wallCheckRadius, f32 ceilingCheckHeight, u32 flags) {
+    f32 sp94;
+    f32 sp8C;
+    f32 sp88;
+    f32 sp84;
+    s32 sp80;
+    CollisionPoly* sp7C;
+    f32 sp78;
+    WaterBox* sp74;
+    f32 sp70;
+    f32 sp6C;
+    f32 sp68;
+    f32 sp64;
+    WaterBox* sp60;
+    f32 sp5C;
+    f32 sp58;
+    f32 sp54;
+    f32 sp50;
+    s32 sp4C;
+    PosRot* sp48;
+    CollisionPoly* temp_v1_2;
+    PosRot* temp_a2;
+    PosRot* temp_a2_2;
+    f32 temp_f12;
+    f32 temp_f14;
+    f32 temp_f2;
+    f32* temp_a1;
+    f32* temp_a1_2;
+    f32* temp_t2;
+    f32* temp_t9;
+    s32 temp_v0;
+    s32 temp_v1;
+    u16 temp_t7;
+    u16 temp_v0_2;
+    u16 temp_v0_3;
+    u8 temp_a3;
+
+    sp94 = actor->world.pos.y - actor->prevPos.y;
+    temp_a3 = actor->floorBgId;
+    if ((temp_a3 != 0x32) && ((actor->bgCheckFlags & 1) != 0)) {
+        BgCheck2_UpdateActorAttachedToMesh(&globalCtx->colCtx, (s32) temp_a3, actor);
+    }
+    if ((flags & 1) != 0) {
+        temp_a2 = &actor->world;
+        actor->bgCheckFlags &= 0xEFFF;
+        temp_v1 = flags & 0x80;
+        if (((temp_v1 == 0) && (sp4C = temp_v1, sp48 = temp_a2, (func_800C4D3C(&globalCtx->colCtx, (Vec3f* ) &sp84, (Vec3f* ) temp_a2, &actor->prevPos, wallCheckRadius, &actor->wallPoly, &sp80, actor, wallCheckHeight) != 0))) || (((flags & 0x80) != 0) && (temp_a2_2 = &actor->world, sp48 = temp_a2_2, (func_800C4DA4(&globalCtx->colCtx, (Vec3f* ) &sp84, (Vec3f* ) temp_a2_2, &actor->prevPos, wallCheckRadius, &actor->wallPoly, &sp80, actor, wallCheckHeight) != 0)))) {
+            temp_v1_2 = actor->wallPoly;
+            temp_t7 = actor->bgCheckFlags | 8;
+            actor->bgCheckFlags = temp_t7;
+            temp_v0 = temp_t7 & 0xFFFF;
+            if (((flags & 0x200) != 0) && ((temp_v0 & 0x1000) != 0) && ((s32) temp_v1_2->normal.y > 0) && (temp_f2 = actor->colChkInfo.displacement.x, temp_f12 = actor->colChkInfo.displacement.y, temp_f14 = actor->colChkInfo.displacement.z, (sqrtf((temp_f2 * temp_f2) + (temp_f12 * temp_f12) + (temp_f14 * temp_f14)) < 10.0f))) {
+                actor->bgCheckFlags = temp_v0 & 0xFFF7;
+            } else if ((actor->bgCheckFlags & 8) != 0) {
+                sp7C = temp_v1_2;
+                Math_Vec3f_Copy((Vec3f* ) &actor->world, (Vec3f* ) &sp84);
+            }
+            actor->wallYaw = Math_FAtan2F((f32) actor->wallPoly->normal.z, (f32) actor->wallPoly->normal.x);
+            actor->wallBgId = (u8) sp80;
+        } else {
+            actor->bgCheckFlags &= 0xFFF7;
+        }
+    }
+    sp84 = actor->world.pos.x;
+    sp8C = actor->world.pos.z;
+    if ((flags & 2) != 0) {
+        sp88 = actor->prevPos.y + 4.0f;
+        if (func_800C4F84(&globalCtx->colCtx, &sp78, (Vec3f* ) &sp84, (ceilingCheckHeight + sp94) - 4.0f, &D_801ED8B0, &D_801ED8B4, actor) != 0) {
+            actor->bgCheckFlags |= 0x10;
+            actor->world.pos.y = (sp78 + sp94) - 4.0f;
+        } else {
+            actor->bgCheckFlags &= 0xFFEF;
+        }
+    }
+    if ((flags & 4) != 0) {
+        sp4C = (s32) &globalCtx->colCtx;
+        sp88 = actor->prevPos.y;
+        func_800B7678(globalCtx, actor, &sp84, flags);
+        temp_t2 = &sp70;
+        sp70 = actor->world.pos.y;
+        if (func_800CA1AC(globalCtx, (CollisionContext* ) sp4C, actor->world.pos.x, actor->world.pos.z, temp_t2, &sp74) != 0) {
+            actor->yDistToWater = sp70 - actor->world.pos.y;
+            if (actor->yDistToWater <= 0.0f) {
+                actor->bgCheckFlags &= 0xFF9F;
+            } else {
+                temp_v0_2 = actor->bgCheckFlags;
+                if ((temp_v0_2 & 0x20) == 0) {
+                    actor->bgCheckFlags = temp_v0_2 | 0x60;
+                    temp_a1 = &sp64;
+                    if ((flags & 0x40) == 0) {
+                        sp64 = actor->world.pos.x;
+                        sp68 = sp70;
+                        sp6C = actor->world.pos.z;
+                        EffectSsGRipple_Spawn(globalCtx, (Vec3f* ) temp_a1, 0x64, 0x1F4, (s16) 0);
+                        EffectSsGRipple_Spawn(globalCtx, (Vec3f* ) &sp64, 0x64, 0x1F4, (s16) 4);
+                        EffectSsGRipple_Spawn(globalCtx, (Vec3f* ) &sp64, 0x64, 0x1F4, (s16) 8);
+                    }
+                } else {
+                    actor->bgCheckFlags = temp_v0_2 & 0xFFBF;
+                }
+            }
+        } else {
+            actor->bgCheckFlags &= 0xFF9F;
+            actor->yDistToWater = -32000.0f;
+        }
+    }
+    temp_t9 = &sp5C;
+    if ((flags & 0x400) != 0) {
+        sp5C = actor->world.pos.y;
+        if (func_800CA1AC(globalCtx, &globalCtx->colCtx, actor->world.pos.x, actor->world.pos.z, temp_t9, &sp60) != 0) {
+            actor->yDistToWater = sp5C - actor->world.pos.y;
+            if (actor->yDistToWater < 0.0f) {
+                actor->bgCheckFlags &= 0xFF9F;
+                return;
+            }
+            temp_v0_3 = actor->bgCheckFlags;
+            if ((temp_v0_3 & 0x20) == 0) {
+                actor->bgCheckFlags = temp_v0_3 | 0x60;
+                temp_a1_2 = &sp50;
+                if ((flags & 0x40) == 0) {
+                    sp50 = actor->world.pos.x;
+                    sp54 = sp5C;
+                    sp58 = actor->world.pos.z;
+                    EffectSsGRipple_Spawn(globalCtx, (Vec3f* ) temp_a1_2, 0x64, 0x1F4, (s16) 0);
+                    EffectSsGRipple_Spawn(globalCtx, (Vec3f* ) &sp50, 0x64, 0x1F4, (s16) 4);
+                    EffectSsGRipple_Spawn(globalCtx, (Vec3f* ) &sp50, 0x64, 0x1F4, (s16) 8);
+                    return;
+                }
+                // Duplicate return node #39. Try simplifying control flow for better match
+                return;
+            }
+            actor->bgCheckFlags = temp_v0_3 & 0xFFBF;
+            return;
+        }
+        actor->bgCheckFlags &= 0xFF9F;
+        actor->yDistToWater = -32000.0f;
+        // Duplicate return node #39. Try simplifying control flow for better match
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_UpdateBgCheckInfo.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B7E04.s")
 

@@ -788,7 +788,7 @@ s32 Actor_IsActorFacingPlayerAndWithinRange(Actor* actor, f32 range, s16 toleran
 s32 Actor_IsActorFacingActorAndWithinRange(Actor* actor, Actor* other, f32 range, s16 tolerance);
 void func_800B75A0(CollisionPoly* param_1, Vec3f* param_2, s16* param_3);
 // UNK_TYPE4 func_800B761C(Actor* param_1, UNK_TYPE4 param_2, u32 param_3);
-// UNK_TYPE4 func_800B7678(GlobalContext* globalCtx, Actor* param_2, s32 param_3, u32 param_4);
+s32 func_800B7678(GlobalContext *globalCtx, Actor *actor, Vec3f *arg2, s32 arg3);
 void Actor_UpdateBgCheckInfo(GlobalContext* globalCtx, Actor* actor, f32 wallCheckHeight, f32 wallCheckRadius, f32 ceilingCheckHeight, u32 flags);
 // void func_800B7E04(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 s32 func_800B7FE0(f32* param_1, f32* param_2, f32* param_3, GraphicsContext* gfxCtx);
@@ -1007,11 +1007,14 @@ s32 func_800C45C4(CollisionContext* colCtx, u32 arg1, Vec3f* arg2, Vec3f* arg3, 
                   s32* arg7, DynaPolyActor* arg8, f32 arg9, u8 arg10);
 // void func_800C4C74(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
 // void func_800C4CD8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8);
-// void func_800C4D3C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9);
-// void func_800C4DA4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9);
+s32 func_800C4D3C(CollisionContext* colCtx, Vec3f* posResult, Vec3f* posNext, Vec3f* posPrev, f32 radius,
+                  CollisionPoly** outPoly, s32* outBgId, Actor* actor, f32 checkHeight);
+s32 func_800C4DA4(CollisionContext* colCtx, Vec3f* posResult, Vec3f* posNext, Vec3f* posPrev, f32 radius,
+                  CollisionPoly** outPoly, s32* outBgId, Actor* actor, f32 checkHeight);
 // void func_800C4E10(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8);
 // void func_800C4F38(void);
-// void func_800C4F84(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+s32 func_800C4F84(CollisionContext* colCtx, f32* outY, Vec3f* pos, f32 checkHeight,
+                  CollisionPoly** outPoly, s32* outBgId, Actor* actor);
 // void func_800C4FD4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
 // void func_800C5464(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_800C54AC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
