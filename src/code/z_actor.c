@@ -171,7 +171,7 @@ void func_800B4F40(TargetContext* targetCtx, s32 index, f32 x, f32 y, f32 z) {
     targetCtx->unk50[index].unkC = targetCtx->unk44;
 }
 
-s801AEC84 D_801AEC84[13] = {
+s801AEC84 D_801AEC84[] = {
     { 0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0 },
     { 0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0 },
     { 0xFF, 0xFF, 0xE6, 0xFF, 0xDC, 0xA0, 0x50, 0 },
@@ -762,7 +762,17 @@ s32 Actor_IsActorFacingActor(Actor* actor, Actor* other, s16 tolerance) {
     return 0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_IsActorFacingPlayerAndWithinRange.s")
+s32 Actor_IsActorFacingPlayerAndWithinRange(Actor* actor, f32 range, s16 tolerance) {
+    s16 yaw = actor->yawTowardsPlayer - actor->shape.rot.y;
+
+    if (ABS_ALT(yaw) < tolerance) {
+label:;
+        if (sqrtf(SQ(actor->xzDistToPlayer) + SQ(actor->yDistToPlayer)) < range) {
+            return 1;
+        }
+    }
+    return 0;
+}
 
 s32 Actor_IsActorFacingActorAndWithinRange(Actor* actor, Actor* other, f32 range, s16 tolerance) {
     s16 dist;
