@@ -1405,8 +1405,7 @@ Actor* Actor_Spawn(ActorContext* actorCtx, GlobalContext* globalCtx, s16 actorId
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_LoadOverlay.s")
 
-#ifdef NON_EQUIVALENT
-// This probably *is* equivalent, but I haven't checked
+#ifdef NON_MATCHING
 Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* globalCtx, s16 index, f32 x, f32 y, f32 z,
                                      s16 rotX, s16 rotY, s16 rotZ, s32 params, u32 cutscene, s32 param_12,
                                      Actor* parent) {
@@ -1441,14 +1440,10 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* glob
         return NULL;
     }
 
-    if (1) {}
-
     sp1C = &gActorOverlayTable[index];
     if (sp1C->vramStart != 0) {
         sp1C->numLoaded++;
     }
-
-    if (1) {}
 
     bzero(actor, sp2C->instanceSize);
     actor->overlayEntry = sp1C;
@@ -1456,10 +1451,10 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* glob
     actor->flags = sp2C->flags;
 
     if (sp2C->id == ACTOR_EN_PART) {
-        actor->objBankIndex = (s8)rotZ;
+        actor->objBankIndex = rotZ;
         rotZ = 0;
     } else {
-        actor->objBankIndex = (s8)sp28;
+        actor->objBankIndex = sp28;
     }
 
     actor->init = sp2C->init;
@@ -1481,7 +1476,7 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* glob
     actor->home.rot.x = rotX;
     actor->home.rot.y = rotY;
     actor->home.rot.z = rotZ;
-    actor->params = params;
+    actor->params = params & 0xFFFF;
     actor->cutscene = (cutscene & 0x7F);
 
     if (actor->cutscene == 0x7F) {
@@ -1503,8 +1498,8 @@ dummy_label_:;
     Actor_Init(actor, globalCtx);
     gSegments[6] = sp20;
 
-    goto dummy_label_47816;
-dummy_label_47816:;
+//    goto dummy_label_47816;
+//dummy_label_47816:;
 
     return actor;
 }
