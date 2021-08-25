@@ -265,7 +265,7 @@ void EnDnk_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     func_80A515C4(this);
-    Actor_SetHeight(&this->actor, 34.0f);
+    Actor_SetFocus(&this->actor, 34.0f);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);

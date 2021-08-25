@@ -336,7 +336,7 @@ void TitleCard_Draw(GlobalContext* globalCtx, TitleCardContext* titleCtx) {
         spC8 = (spCC * spC8 > 0x1000) ? 0x1000 / spCC : spC8;
         spB4 = spB8 + (spC8 * 4);
 
-        if (1) {} // Necessary to match
+        if (1) {}
 
         OVERLAY_DISP = func_8012C014(OVERLAY_DISP);
 
@@ -824,10 +824,10 @@ s16 D_801AED48[] = {
 s32 Actor_IsTalking(Actor* actor, GlobalContext* globalCtx) {
     if (actor->flags & 0x100) {
         actor->flags &= ~0x100;
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8500.s")
