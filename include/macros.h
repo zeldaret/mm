@@ -118,4 +118,7 @@ extern GraphicsContext* __gfxCtx;
         (b) = _temp;      \
     }
 
+#define TARGET_RANGE(range, leash) \
+    { SQ(range), (f32)range / leash }
+
 #endif // _MACROS_H_

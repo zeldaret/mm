@@ -1758,4 +1758,9 @@ typedef struct {
     /* 0x20 */ u16 fracPart[4][4];
 } MatrixInternal; // size = 0x40
 
+typedef struct {
+    /* 0x0 */ f32 rangeSq;
+    /* 0x4 */ f32 leashScale;
+} TargetRangeParams; // size = 0x8
+
 #endif

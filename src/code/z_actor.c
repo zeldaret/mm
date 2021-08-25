@@ -807,15 +807,36 @@ void func_800B75A0(CollisionPoly* param_1, Vec3f* param_2, s16* param_3) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B82EC.s")
 
-f32 D_801AECF0[22] = {
-    4900.0f,   0.5f,        28900.0f,   0.6666667f, 78400.0f,   0.05f,       122500.0f, 0.6666667f,
-    490000.0f, 0.6666667f,  1000000.0f, 0.6666667f, 10000.0f,   0.94905096f, 19600.0f,  0.85714287f,
-    57600.0f,  0.41666666f, 78400.0f,   0.001f,     6250000.0f, 0.6666667f,
+TargetRangeParams D_801AECF0[] = {
+    TARGET_RANGE(70, 140),   TARGET_RANGE(170, 255),    TARGET_RANGE(280, 5600),    TARGET_RANGE(350, 525),
+    TARGET_RANGE(700, 1050), TARGET_RANGE(1000, 1500),  TARGET_RANGE(100, 105.36842), TARGET_RANGE(140, 163.33333),
+    TARGET_RANGE(240, 576),  TARGET_RANGE(280, 280000), TARGET_RANGE(2500, 3750),
 };
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B83BC.s")
+s32 func_800B83BC(Actor* actor, f32 arg1) {
+    return arg1 < D_801AECF0[actor->targetMode].rangeSq;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B83F8.s")
+s32 func_800B83F8(Actor* actor, Player* player, s32 flag) {
+    if ((actor->update == NULL) || !(actor->flags & 1) || (actor->flags & 0x8000000)) {
+        return 1;
+    }
+
+    if (!flag) {
+        s16 yaw = BINANG_SUB(actor->yawTowardsPlayer, 0x8000) - player->actor.shape.rot.y;
+        s16 phi_v1 = ABS_ALT(yaw);
+        f32 dist;
+
+        if ((player->unk_730 == NULL) && (phi_v1 >= 0x2AAB)) {
+            dist = FLT_MAX;
+        } else {
+            dist = actor->xyzDistToPlayerSq;
+        }
+
+        return !func_800B83BC(actor, D_801AECF0[actor->targetMode].leashScale * dist);
+    }
+    return 0;
+}
 
 s16 D_801AED48[] = {
     0x0101, 0x0141, 0x0111, 0x0151, 0x0105, 0x0145, 0x0115, 0x0155,
@@ -1474,9 +1495,7 @@ typedef struct {
 
 struct_801AEDD4 D_801AEDD4[] = {
     { 0.540000021458f, 6000.0f, 5000.0, 1.0f, 0.0f, 0x05000230, 0x05000140 },
-
     { 0.643999993801f, 12000.0f, 8000.0f, 1.0f, 0.0f, 0x06000530, 0x06000400 },
-
     { 0.6400000453f, 8500.0f, 8000.0f, 1.75f, 0.10000000149f, 0x05000230, 0x05000140 },
 };
 
