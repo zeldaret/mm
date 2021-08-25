@@ -1319,9 +1319,68 @@ s32 D_801AED58[] = {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_UpdateAll.s")
 
-Color_RGBA8 actorDefaultHitColor = { 0x00, 0x00, 0x00, 0xFF };
+void Actor_Draw(GlobalContext* globalCtx, Actor* actor) {
+    Lights* sp44;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_Draw.s")
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    sp44 = LightContext_NewLights(&globalCtx->lightCtx, globalCtx->state.gfxCtx);
+    if ((actor->flags & 0x10000000) && (globalCtx->roomCtx.currRoom.enablePosLights || (MREG(93) != 0))) {
+        sp44->enablePosLights = true;
+    }
+
+    Lights_BindAll(sp44, globalCtx->lightCtx.listHead, (actor->flags & 0x10400000) ? NULL : &actor->world.pos, globalCtx);
+    Lights_Draw(sp44, globalCtx->state.gfxCtx);
+
+    if (actor->flags & 0x1000) {
+        SysMatrix_SetStateRotationAndTranslation(actor->world.pos.x + globalCtx->mainCamera.skyboxOffset.x, actor->world.pos.y + ((actor->shape.yOffset * actor->scale.y) + globalCtx->mainCamera.skyboxOffset.y), actor->world.pos.z + globalCtx->mainCamera.skyboxOffset.z, &actor->shape.rot);
+    } else {
+        SysMatrix_SetStateRotationAndTranslation(actor->world.pos.x, actor->world.pos.y + (actor->shape.yOffset * actor->scale.y), actor->world.pos.z, &actor->shape.rot);
+    }
+
+    Matrix_Scale(actor->scale.x, actor->scale.y, actor->scale.z, MTXMODE_APPLY);
+    Actor_SetObjectDependency(globalCtx, actor);
+
+    gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[actor->objBankIndex].segment);
+    gSPSegment(POLY_XLU_DISP++, 0x06, globalCtx->objectCtx.status[actor->objBankIndex].segment);
+
+    if (actor->colorFilterTimer != 0) {
+        s32 temp_v0_2 = actor->colorFilterParams & 0xC000;
+        Color_RGBA8 actorDefaultHitColor = { 0, 0, 0, 255 };
+
+        if (temp_v0_2 == 0x8000) {
+            actorDefaultHitColor.r = actorDefaultHitColor.g = actorDefaultHitColor.b = ((actor->colorFilterParams & 0x1F00) >> 5) | 7;
+        } else if (temp_v0_2 == 0x4000) {
+            actorDefaultHitColor.r = ((actor->colorFilterParams & 0x1F00) >> 5) | 7;
+        } else if (temp_v0_2 == 0xC000) {
+            actorDefaultHitColor.b = actorDefaultHitColor.g = actorDefaultHitColor.r = 0;
+        } else {
+            actorDefaultHitColor.b = ((actor->colorFilterParams & 0x1F00) >> 5) | 7;
+        }
+
+        if (actor->colorFilterParams & 0x2000) {
+            func_800AE778(globalCtx, &actorDefaultHitColor, actor->colorFilterTimer, actor->colorFilterParams & 0xFF);
+        } else {
+            func_800AE434(globalCtx, &actorDefaultHitColor, actor->colorFilterTimer, actor->colorFilterParams & 0xFF);
+        }
+    }
+
+    actor->draw(actor, globalCtx);
+    if (actor->colorFilterTimer != 0) {
+        if (actor->colorFilterParams & 0x2000) {
+            func_800AE8EC(globalCtx);
+        } else {
+            func_800AE5A0(globalCtx);
+        }
+    }
+
+    if (actor->shape.shadowDraw != NULL) {
+        actor->shape.shadowDraw(actor, sp44, globalCtx);
+    }
+    actor->isDrawn = true;
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B9D1C.s")
 
