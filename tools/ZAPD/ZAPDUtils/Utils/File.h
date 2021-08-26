@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 #include "Directory.h"
-#include "StringHelper.h"
+#include "Utils/StringHelper.h"
 
 class File
 {
@@ -56,6 +56,18 @@ public:
 	{
 		std::ofstream file(filePath, std::ios::binary);
 		file.write((char*)data.data(), data.size());
+	};
+
+	static void WriteAllBytes(const std::string& filePath, const std::vector<char>& data)
+	{
+		std::ofstream file(filePath, std::ios::binary);
+		file.write((char*)data.data(), data.size());
+	};
+
+	static void WriteAllBytes(const std::string& filePath, const char* data, int dataSize)
+	{
+		std::ofstream file(filePath, std::ios::binary);
+		file.write((char*)data, dataSize);
 	};
 
 	static void WriteAllText(const fs::path& filePath, const std::string& text)

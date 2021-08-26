@@ -8,6 +8,8 @@
 class SetPathways : public ZRoomCommand
 {
 public:
+	ZPath pathwayList;
+
 	SetPathways(ZFile* nParent);
 
 	void DeclareReferences(const std::string& prefix) override;
@@ -22,7 +24,4 @@ public:
 	RoomCommand GetRoomCommand() const override;
 	size_t GetRawDataSize() const override;
 	std::string GetCommandCName() const override;
-
-private:
-	ZPath pathwayList;
 };

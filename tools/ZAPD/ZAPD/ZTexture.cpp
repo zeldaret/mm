@@ -1,12 +1,12 @@
 #include "ZTexture.h"
 
 #include <cassert>
-#include "BitConverter.h"
+#include "Utils/BitConverter.h"
 #include "CRC32.h"
-#include "Directory.h"
-#include "File.h"
+#include "Utils/Directory.h"
+#include "Utils/File.h"
 #include "Globals.h"
-#include "Path.h"
+#include "Utils/Path.h"
 
 REGISTER_ZFILENODE(Texture, ZTexture);
 
@@ -52,15 +52,8 @@ void ZTexture::FromBinary(uint32_t nRawDataIndex, int32_t nWidth, int32_t nHeigh
 void ZTexture::FromPNG(const fs::path& pngFilePath, TextureType texType)
 {
 	format = texType;
-	name = StringHelper::Split(Path::GetFileNameWithoutExtension(pngFilePath), ".")[0];
+	name = StringHelper::Split(Path::GetFileNameWithoutExtension(pngFilePath.string()), ".")[0];
 	PrepareRawDataFromFile(pngFilePath);
-}
-
-void ZTexture::FromHLTexture(HLTexture* hlTex)
-{
-	width = hlTex->width;
-	height = hlTex->height;
-	format = static_cast<TextureType>(hlTex->type);
 }
 
 void ZTexture::ParseXML(tinyxml2::XMLElement* reader)
@@ -722,14 +715,14 @@ void ZTexture::Save(const fs::path& outFolder)
 	// process for generating the Texture Pool XML.
 	if (Globals::Instance->outputCrc)
 	{
-		File::WriteAllText(Globals::Instance->outputPath / (outName + ".txt"),
+		File::WriteAllText((Globals::Instance->outputPath / (outName + ".txt")).string(),
 		                   StringHelper::Sprintf("%08lX", hash));
 	}
 
 	auto outPath = GetPoolOutPath(outFolder);
 
-	if (!Directory::Exists(outPath))
-		Directory::CreateDirectory(outPath);
+	if (!Directory::Exists(outPath.string()))
+		Directory::CreateDirectory(outPath.string());
 
 	auto outFileName = outPath / (outName + "." + GetExternalExtension() + ".png");
 
@@ -839,11 +832,11 @@ TextureType ZTexture::GetTextureTypeFromString(std::string str)
 	{
 		texType = TextureType::RGBA16bpp;
 #ifdef DEPRECATION_ON
-		fprintf(stderr,
-		        "ZTexture::GetTextureTypeFromString: Deprecation warning.\n"
-		        "\t The texture format 'rgb5a1' is currently deprecated, and will be removed in a future "
-		        "version.\n"
-		        "\t Use the format 'rgba16' instead.\n");
+		fprintf(stderr, "ZTexture::GetTextureTypeFromString: Deprecation warning.\n"
+		                "\t The texture format 'rgb5a1' is currently deprecated, and will be "
+		                "removed in a future "
+		                "version.\n"
+		                "\t Use the format 'rgba16' instead.\n");
 #endif
 	}
 	else if (str == "i4")

@@ -1,8 +1,8 @@
 #include "ZScalar.h"
-#include "BitConverter.h"
-#include "File.h"
+#include "Utils/BitConverter.h"
+#include "Utils/File.h"
 #include "Globals.h"
-#include "StringHelper.h"
+#include "Utils/StringHelper.h"
 #include "ZFile.h"
 
 REGISTER_ZFILENODE(Scalar, ZScalar);

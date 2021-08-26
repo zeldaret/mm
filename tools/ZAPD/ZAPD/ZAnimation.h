@@ -33,7 +33,6 @@ public:
 
 protected:
 	void ParseRawData() override;
-	void Save(const fs::path& outFolder) override;
 };
 
 class ZNormalAnimation : public ZAnimation

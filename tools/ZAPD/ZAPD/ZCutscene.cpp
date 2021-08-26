@@ -1,6 +1,6 @@
 #include "ZCutscene.h"
-#include "BitConverter.h"
-#include "StringHelper.h"
+#include "Utils/BitConverter.h"
+#include "Utils/StringHelper.h"
 #include "ZResource.h"
 
 REGISTER_ZFILENODE(Cutscene, ZCutscene);

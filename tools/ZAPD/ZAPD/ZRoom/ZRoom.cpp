@@ -1,10 +1,10 @@
 #include "ZRoom.h"
-#include <Path.h>
+#include <Utils/Path.h>
 #include <algorithm>
 #include <chrono>
-#include "../File.h"
+#include <Utils/File.h>
+#include <Utils/StringHelper.h>
 #include "../Globals.h"
-#include "../StringHelper.h"
 #include "../ZBlob.h"
 #include "Commands/EndMarker.h"
 #include "Commands/SetActorCutsceneList.h"

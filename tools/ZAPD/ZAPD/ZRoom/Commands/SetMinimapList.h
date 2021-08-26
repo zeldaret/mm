@@ -20,6 +20,8 @@ protected:
 class SetMinimapList : public ZRoomCommand
 {
 public:
+	std::vector<MinimapEntry> minimaps;
+
 	SetMinimapList(ZFile* nParent);
 
 	void ParseRawData() override;
@@ -32,8 +34,6 @@ public:
 	std::string GetCommandCName() const override;
 
 private:
-	std::vector<MinimapEntry> minimaps;
-
 	segptr_t listSegmentAddr;
 	uint32_t listSegmentOffset;
 	uint32_t unk4;

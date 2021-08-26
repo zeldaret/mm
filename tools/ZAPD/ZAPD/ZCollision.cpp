@@ -1,9 +1,9 @@
 #include "ZCollision.h"
 #include <stdint.h>
 #include <string>
-#include "BitConverter.h"
+#include "Utils/BitConverter.h"
 #include "Globals.h"
-#include "StringHelper.h"
+#include "Utils/StringHelper.h"
 
 REGISTER_ZFILENODE(Collision, ZCollisionHeader);
 
@@ -257,7 +257,7 @@ CameraDataList::CameraDataList(ZFile* parent, const std::string& prefix,
 		entry->cameraPosDataSeg =
 			BitConverter::ToInt32BE(rawData, rawDataIndex + (entries.size() * 8) + 4);
 
-		if (entry->cameraPosDataSeg != 0 && GETSEGNUM(entry->cameraPosDataSeg) != 2)
+		if (entry->cameraPosDataSeg != 0 && GETSEGNUM(entry->cameraPosDataSeg) != SEGMENT_SCENE)
 		{
 			cameraPosDataSeg = rawDataIndex + (entries.size() * 8);
 			break;

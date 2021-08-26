@@ -1,6 +1,6 @@
 #include "ZCutsceneMM.h"
-#include "BitConverter.h"
-#include "StringHelper.h"
+#include "Utils/BitConverter.h"
+#include "Utils/StringHelper.h"
 
 ZCutsceneMM::ZCutsceneMM(ZFile* nParent) : ZCutsceneBase(nParent)
 {

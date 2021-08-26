@@ -1,10 +1,9 @@
 #include "ZAnimation.h"
 #include <utility>
-#include "BitConverter.h"
-#include "File.h"
+#include "Utils/BitConverter.h"
+#include "Utils/File.h"
 #include "Globals.h"
-#include "HighLevel/HLAnimationIntermediette.h"
-#include "StringHelper.h"
+#include "Utils/StringHelper.h"
 #include "ZFile.h"
 
 REGISTER_ZFILENODE(Animation, ZNormalAnimation);
@@ -22,18 +21,6 @@ void ZAnimation::ParseRawData()
 	ZResource::ParseRawData();
 
 	frameCount = BitConverter::ToInt16BE(parent->GetRawData(), rawDataIndex + 0);
-}
-
-void ZAnimation::Save(const fs::path& outFolder)
-{
-	if (Globals::Instance->testMode)
-	{
-		HLAnimationIntermediette* anim = HLAnimationIntermediette::FromZAnimation(this);
-		std::string xml = anim->OutputXML();
-		File::WriteAllText(outFolder / (name + ".anmi"), xml);
-
-		delete anim;
-	}
 }
 
 std::string ZAnimation::GetSourceOutputCode(const std::string& prefix)

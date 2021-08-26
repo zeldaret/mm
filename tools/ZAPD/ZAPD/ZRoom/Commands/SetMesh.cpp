@@ -1,8 +1,8 @@
 #include "SetMesh.h"
 #include <Globals.h>
-#include <Path.h>
-#include "BitConverter.h"
-#include "StringHelper.h"
+#include <Utils/Path.h>
+#include "Utils/BitConverter.h"
+#include "Utils/StringHelper.h"
 #include "ZBackground.h"
 #include "ZFile.h"
 #include "ZRoom/ZRoom.h"
@@ -306,9 +306,7 @@ void BgImage::ParseRawData()
 ZBackground* BgImage::MakeBackground(segptr_t ptr, const std::string& prefix)
 {
 	if (ptr == 0)
-	{
 		return nullptr;
-	}
 
 	uint32_t backAddress = Seg2Filespace(ptr, parent->baseAddress);
 

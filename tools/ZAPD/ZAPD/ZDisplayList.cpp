@@ -1,16 +1,15 @@
 #include "ZDisplayList.h"
 
-#include <File.h>
-#include <Path.h>
+#include <Utils/File.h>
+#include <Utils/Path.h>
 #include <algorithm>
 #include <cassert>
 #include <chrono>
 #include <math.h>
-#include "BitConverter.h"
+#include "Utils/BitConverter.h"
 #include "Globals.h"
-#include "HighLevel/HLModelIntermediette.h"
 #include "OutputFormatter.h"
-#include "StringHelper.h"
+#include "Utils/StringHelper.h"
 #include "gfxd.h"
 
 using namespace tinyxml2;
@@ -2092,6 +2091,7 @@ bool ZDisplayList::TextureGenCheck(ZRoom* scene, ZFile* parent, std::string pref
 			if (scene->parent->GetDeclaration(texAddr) == nullptr)
 			{
 				ZTexture* tex = scene->parent->GetTextureResource(texAddr);
+
 				if (tex != nullptr)
 					tex->isPalette = texIsPalette;
 				else
@@ -2164,13 +2164,6 @@ TextureType ZDisplayList::TexFormatToTexType(F3DZEXTexFormats fmt, F3DZEXTexSize
 	}
 
 	return TextureType::RGBA16bpp;
-}
-
-void ZDisplayList::GenerateHLIntermediette(HLFileIntermediette& hlFile)
-{
-	HLModelIntermediette* mdl = (HLModelIntermediette*)&hlFile;
-	HLModelIntermediette::FromZDisplayList(mdl, this);
-	mdl->blocks.push_back(new HLTerminator());
 }
 
 bool ZDisplayList::IsExternalResource() const

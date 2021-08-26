@@ -1,7 +1,7 @@
 #include "SetEntranceList.h"
-#include "BitConverter.h"
+#include "Utils/BitConverter.h"
 #include "SetStartPositionList.h"
-#include "StringHelper.h"
+#include "Utils/StringHelper.h"
 #include "ZFile.h"
 #include "ZRoom/ZRoom.h"
 

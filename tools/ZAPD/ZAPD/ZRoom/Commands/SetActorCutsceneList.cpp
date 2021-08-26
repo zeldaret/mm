@@ -1,8 +1,8 @@
 #include "SetActorCutsceneList.h"
 
-#include "BitConverter.h"
+#include "Utils/BitConverter.h"
 #include "Globals.h"
-#include "StringHelper.h"
+#include "Utils/StringHelper.h"
 #include "ZFile.h"
 #include "ZRoom/ZRoom.h"
 

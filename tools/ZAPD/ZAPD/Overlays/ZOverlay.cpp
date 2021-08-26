@@ -1,8 +1,8 @@
 #include "ZOverlay.h"
-#include "../Directory.h"
-#include "../File.h"
-#include "../Path.h"
-#include "../StringHelper.h"
+#include <Utils/Directory.h>
+#include <Utils/File.h>
+#include <Utils/Path.h>
+#include <Utils/StringHelper.h>
 
 using namespace ELFIO;
 
