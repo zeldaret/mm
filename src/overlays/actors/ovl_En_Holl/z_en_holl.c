@@ -5,7 +5,7 @@
  *
  * This actor has several different types, which can be thought of as a bitfield of size 3:
  * bit 0 = Orientation: Horizontal (Hall) or Vertical (Hole)
- * bit 1 = Alpha: Transparent (alpha=0) or Visible (alpha=[0,255])
+ * bit 1 = Alpha: TRANSPARENT (alpha=0) or VISIBLE (alpha=[0,255])
  * bit 2 = Space to Load: Room or Scene
  * Note: The meaning of bit 1 is slightly different for Halls than Holes.
  *       For Halls, bit 1 being set indicates the actor shall not draw.
