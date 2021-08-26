@@ -11,8 +11,7 @@
  *       For Halls, bit 1 being set indicates the actor shall not draw.
  *       For Holes, bit 1 being set indicates the bgCover shall be applied.
  *
- * This would suggest there are 8 types of En_Holl, but in fact, there are only 5. This is because the only "Scene
- * changer" is horizontal and visible, but it would be fairly simple to mod in the other 3 types.
+ * There are only 5 types instead of the expected 8, because the only "Scene changer" is horizontal and visible.
  *
  * Halls take the shape of a rectangular box, and Holes take the shape of a circular cylinder.
  *
