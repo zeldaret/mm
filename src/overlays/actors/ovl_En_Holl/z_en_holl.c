@@ -138,9 +138,9 @@ void EnHoll_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnHoll_ChangeRooms(GlobalContext* globalCtx) {
-    Room oldCurrRoom = globalCtx->roomCtx.currRoom;
+    Room tempRoom = globalCtx->roomCtx.currRoom;
     globalCtx->roomCtx.currRoom = globalCtx->roomCtx.prevRoom;
-    globalCtx->roomCtx.prevRoom = oldCurrRoom;
+    globalCtx->roomCtx.prevRoom = tempRoom;
     globalCtx->roomCtx.activeMemPage ^= 1;
 }
 
