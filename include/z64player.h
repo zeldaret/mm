@@ -200,7 +200,8 @@ typedef struct Player {
     /* 0x664 */ ColliderQuad shieldQuad;
     /* 0x6E4 */ ColliderCylinder shieldCylinder;
     /* 0x730 */ Actor* unk_730;
-    /* 0x734 */ char unk_734[8];
+    /* 0x734 */ char unk_734[4];
+    /* 0x738 */ s32 unk_738;
     /* 0x73C */ s32 blureEffectIndex[3];
     /* 0x748 */ char unk_748[0x320];
     /* 0xA68 */ PlayerAgeProperties* ageProperties; // repurposed as "transformation properties"?

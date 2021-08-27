@@ -1358,7 +1358,7 @@ struct FireObjLight {
 struct ActorListEntry {
     /* 0x0 */ s32 length; // number of actors loaded of this type
     /* 0x4 */ Actor* first; // pointer to first actor of this type
-    /* 0x8 */ UNK_TYPE1 pad8[0x4];
+    /* 0x8 */ s32 unk_08;
 }; // size = 0xC
 
 #define OS_SC_RETRACE_MSG       1
@@ -1452,7 +1452,7 @@ struct TargetContext {
 struct s800B948C {
     /* 0x00 */ GlobalContext* globalCtx;
     /* 0x04 */ Actor* actor;
-    /* 0x08 */ u32 updateActorIfSet;
+    /* 0x08 */ s32 updateActorIfSet;
     /* 0x0C */ u32 unkC;
     /* 0x10 */ Actor* unk10;
     /* 0x14 */ Player* player;

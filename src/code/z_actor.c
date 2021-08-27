@@ -1310,14 +1310,198 @@ void func_800B9120(ActorContext* actorCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B9334.s")
 
+#ifdef NON_EQUIVALENT
+Actor* Actor_UpdateActor(s800B948C* params) {
+    GlobalContext* sp24;
+    Actor* temp_s0;
+    u32 temp_v1;
+    Actor* phi_v1;
+
+    temp_s0 = params->actor;
+    sp24 = params->globalCtx;
+    if (temp_s0->world.pos.y < -25000.0f) {
+        temp_s0->world.pos.y = -25000.0f;
+    }
+    temp_s0->sfx = 0;
+    temp_s0->unk39 &= 0xFF80;
+    if (temp_s0->init != 0) {
+        if (Object_IsLoaded(&sp24->objectCtx, (s32) temp_s0->objBankIndex) != 0) {
+            Actor_SetObjectDependency(sp24, temp_s0);
+            temp_s0->init(temp_s0, sp24);
+            temp_s0->init = NULL;
+        }
+        //goto block_38;
+        return temp_s0->next;
+    } else if (temp_s0->update == 0) {
+        if (temp_s0->isDrawn == 0) {
+            phi_v1 = Actor_Delete(&sp24->actorCtx, temp_s0, sp24);
+        } else {
+            Actor_Destroy(temp_s0, sp24);
+            //goto block_38;
+            return temp_s0->next;
+        }
+    } else {
+        if (Object_IsLoaded(&sp24->objectCtx, (s32) temp_s0->objBankIndex) == 0) {
+            Actor_MarkForDeath(temp_s0);
+            return temp_s0->next;
+        } else {
+            if (((params->updateActorIfSet != 0) && ((temp_s0->flags & params->updateActorIfSet) == 0)) 
+                || ((params->updateActorIfSet != 0) && (!(temp_s0->flags & 0x100000) || ((temp_s0->category == 3) && ((params->player->stateFlags1 & 0x200) != 0))) 
+                && (params->unkC != 0) && (temp_s0 != params->unk10) 
+                && ((temp_s0 != params->player->heldActor)) && (&params->player->actor != temp_s0->parent))) {
+                CollisionCheck_ResetDamage(&temp_s0->colChkInfo);
+            } else {
+                s32 phi_v0;
+
+                Math_Vec3f_Copy(&temp_s0->prevPos, (Vec3f* ) &temp_s0->world);
+                temp_s0->xzDistToPlayer = Actor_XZDistanceBetweenActors(temp_s0, (Actor* ) params->player);
+                temp_s0->yDistToPlayer = Actor_HeightDiff(temp_s0, (Actor* ) params->player);
+                temp_s0->xyzDistToPlayerSq = SQ(temp_s0->xzDistToPlayer) + SQ(temp_s0->yDistToPlayer);
+
+                temp_s0->yawTowardsPlayer = Actor_YawBetweenActors(temp_s0, (Actor* ) params->player);
+                temp_s0->flags &= 0xFEFFFFFF;
+
+                if (temp_s0->freezeTimer == 0) {
+                    phi_v0 = 0;
+                } else {
+                    temp_s0->freezeTimer--;
+                    phi_v0 = temp_s0->freezeTimer & 0xFFFF;
+                }
+
+                if ((phi_v0 == 0) && ((temp_s0->flags & params->runMainIfSet) != 0)) {
+                    if (temp_s0 == params->player->unk_730) {
+                        temp_s0->isTargeted = 1;
+                    } else {
+                        temp_s0->isTargeted = 0;
+                    }
+                    if ((temp_s0->targetPriority != 0) && (params->player->unk_730 == 0)) {
+                        temp_s0->targetPriority = 0;
+                    }
+                    Actor_SetObjectDependency(sp24, temp_s0);
+
+                    if (temp_s0->colorFilterTimer != 0) {
+                        temp_s0->colorFilterTimer--;
+                    }
+                    temp_s0->update(temp_s0, sp24);
+                    BgCheck_ResetFlagsIfLoadedActor(sp24, &sp24->colCtx.dyna, temp_s0);
+                }
+                CollisionCheck_ResetDamage(&temp_s0->colChkInfo);
+            }
+        }
+//block_38:
+        phi_v1 = temp_s0->next;
+    }
+    return phi_v1;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_UpdateActor.s")
+#endif
 
 s32 D_801AED58[] = {
     0x100002C2, 0x100002C2, 0x00000200, 0x100006C2, 0x00000282, 0x300002C2,
     0x10000282, 0x00000002, 0x300002C2, 0x100006C2, 0x00000002, 0x100002C2,
 };
 
+#ifdef NON_EQUIVALENT
+void Actor_UpdateAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
+    s800B948C sp40;
+    ActorListEntry* sp3C;
+    DynaCollisionContext* sp38;
+    s32 phi_s3;
+    u8 phi_s3_2;
+    Actor* phi_s0_3;
+
+    sp40.player = PLAYER;
+    sp40.globalCtx = globalCtx;
+
+    if (globalCtx->unk_18844 != 0) {
+        sp40.runMainIfSet = 0x200000;
+    } else {
+        sp40.runMainIfSet = 0x200050;
+    }
+
+    func_800B9334(globalCtx, actorCtx);
+
+    if (actorCtx->unk2 != 0) {
+        actorCtx->unk2--;
+    }
+
+    if (sp40.player->stateFlags2 & 0x8000000) {
+        sp40.updateActorIfSet = 0x2000000;
+    } else {
+        sp40.updateActorIfSet = 0;
+    }
+    if (((sp40.player->stateFlags1 & 0x40) != 0) && ((sp40.player->actor.textId & 0xFF00) != 0x1900)) {
+        sp40.unk10 = sp40.player->targetActor;
+    } else {
+        sp40.unk10 = 0;
+    }
+
+    sp38 = &globalCtx->colCtx.dyna;
+    for (phi_s3 = 0; phi_s3 < ARRAY_COUNT(actorCtx->actorList); phi_s3++) {
+        sp40.unkC = D_801AED58[phi_s3] & sp40.player->stateFlags1;
+        sp40.actor = actorCtx->actorList[phi_s3].first;
+        while (sp40.actor != 0) {
+            sp40.actor = Actor_UpdateActor(&sp40);
+        }
+        if (phi_s3 == 1) {
+            BgCheck_Update(globalCtx, sp38);
+        }
+    }
+
+    for (phi_s3_2 = 0; phi_s3_2 != 0xC; phi_s3_2++) {
+        if (sp3C->unk_08 != 0) {
+            Actor* phi_s0;
+
+            phi_s0 = sp3C->first;
+            if (phi_s0 != 0) {
+                Actor* phi_s0_2;
+
+                do {
+                    u8 temp_v0_3;
+
+                    temp_v0_3 = phi_s0->category;
+                    if (phi_s3_2 == temp_v0_3) {
+                        phi_s0_2 = phi_s0->next;
+                    } else {
+                        phi_s0_2 = phi_s0->next;
+                        phi_s0->category = phi_s3_2;
+                        Actor_RemoveFromTypeList(globalCtx, actorCtx, phi_s0);
+                        Actor_InsertIntoTypeList(actorCtx, phi_s0, temp_v0_3);
+                    }
+                    phi_s0 = phi_s0_2;
+                } while (phi_s0_2 != 0);
+            }
+            sp3C->unk_08 = 0;
+        }
+        sp3C++;
+    }
+
+    phi_s0_3 = sp40.player->unk_730;
+    if ((phi_s0_3 != 0) && (phi_s0_3->update == 0)) {
+        func_80123DA4(sp40.player);
+        phi_s0_3 = NULL;
+    }
+
+    if ((phi_s0_3 == 0) || (sp40.player->unk_738 < 5)) {
+        phi_s0_3 = NULL;
+        if (actorCtx->targetContext.unk4B != 0) {
+            actorCtx->targetContext.unk4B = 0;
+            play_sound(NA_SE_SY_LOCK_OFF);
+        }
+    }
+
+    if ((sp40.player->stateFlags1 & 2) == 0) {
+        func_800B5814(&actorCtx->targetContext, sp40.player, phi_s0_3, globalCtx);
+    }
+
+    TitleCard_Update(globalCtx, &actorCtx->titleCtxt);
+    func_800B6474(globalCtx);
+    BgCheck_UpdateAllActorMeshes(globalCtx, sp38);
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_UpdateAll.s")
+#endif
 
 void Actor_Draw(GlobalContext* globalCtx, Actor* actor) {
     Lights* sp44;
