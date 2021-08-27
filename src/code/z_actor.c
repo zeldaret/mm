@@ -1957,7 +1957,55 @@ struct_801AEDD4 D_801AEDD4[] = {
     { 0.6400000453f, 8500.0f, 8000.0f, 1.75f, 0.10000000149f, 0x05000230, 0x05000140 },
 };
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BC8B8.s")
+// Actor_DrawDoorLock
+void func_800BC8B8(GlobalContext* globalCtx, s32 frame, s32 type) {
+    s32 pad[2];
+    MtxF spA8;
+    s32 phi_s1;
+    f32 temp_f22;
+    f32 temp_f24;
+    struct_801AEDD4* temp_s2;
+    f32 phi_f20;
+    f32 phi_f2;
+
+    temp_s2 = &D_801AEDD4[type];
+    phi_f20 = temp_s2->unk_10;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    SysMatrix_InsertTranslation(0.0f, temp_s2->unk_08, 500.0f, MTXMODE_APPLY);
+    SysMatrix_CopyCurrentState(&spA8);
+
+    temp_f22 = __sinf(temp_s2->unk_00 - phi_f20) * -(10 - frame) * 0.1f * temp_s2->unk_04;
+    temp_f24 = __cosf(temp_s2->unk_00 - phi_f20) * (10 - frame) * 0.1f * temp_s2->unk_04;
+
+    for (phi_s1 = 0; phi_s1 < 4; phi_s1++) {
+        SysMatrix_SetCurrentState(&spA8);
+        SysMatrix_InsertZRotation_f(phi_f20, 1);
+        SysMatrix_InsertTranslation(temp_f22, temp_f24, 0.0f, 1);
+        if (temp_s2->unk_0C != 1.0f) {
+            Matrix_Scale(temp_s2->unk_0C, temp_s2->unk_0C, temp_s2->unk_0C, 1);
+        }
+
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_OPA_DISP++, temp_s2->unk_14);
+
+        if ((phi_s1 % 2) != 0) {
+            phi_f2 = 2.0f * temp_s2->unk_00;
+        } else {
+            phi_f2 = M_PI - (2.0f * temp_s2->unk_00);
+        }
+        phi_f20 += phi_f2;
+    }
+
+    SysMatrix_SetCurrentState(&spA8);
+    Matrix_Scale(frame * 0.1f, frame * 0.1f, frame * 0.1f, MTXMODE_APPLY);
+
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, temp_s2->unk_18);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BCB50.s")
 
@@ -1968,7 +2016,7 @@ struct_801AEDD4 D_801AEDD4[] = {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BCC68.s")
 
 #ifdef NON_MATCHING
-// small regalloc and needs to import data
+// small regalloc
 void func_800BCCDC(Vec3s* points, s32 pathcount, Vec3f* pos1, Vec3f* pos2, s32 parm5) {
     s32 spB4;
     s32 spB0;
@@ -1997,11 +2045,11 @@ void func_800BCCDC(Vec3s* points, s32 pathcount, Vec3f* pos1, Vec3f* pos2, s32 p
     sp94.z = points[spB0].z;
     pos2->y = points[spB0].y;
     if (spB0 != 0) {
-        sp64.x = (f32)points[spB0 - 1].x;
-        sp64.z = (f32)points[spB0 - 1].z;
+        sp64.x = points[spB0 - 1].x;
+        sp64.z = points[spB0 - 1].z;
     } else if (parm5) {
-        sp64.x = (f32)points[pathcount - 1].x;
-        sp64.z = (f32)points[pathcount - 1].z;
+        sp64.x = points[pathcount - 1].x;
+        sp64.z = points[pathcount - 1].z;
     }
 
     if ((spB0 != 0) || (parm5)) {
@@ -2010,11 +2058,11 @@ void func_800BCCDC(Vec3s* points, s32 pathcount, Vec3f* pos1, Vec3f* pos2, s32 p
     }
 
     if (spB0 + 1 != pathcount) {
-        sp70.x = (f32)points[spB0 + 1].x;
-        sp70.z = (f32)points[spB0 + 1].z;
+        sp70.x = points[spB0 + 1].x;
+        sp70.z = points[spB0 + 1].z;
     } else if (parm5) {
-        sp70.x = (f32)points->x;
-        sp70.z = (f32)points->z;
+        sp70.x = points->x;
+        sp70.z = points->z;
     }
 
     if ((spB0 + 1 != pathcount) || (parm5)) {

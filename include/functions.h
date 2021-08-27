@@ -798,7 +798,7 @@ void func_800B8118(Actor* actor, GlobalContext* globalCtx, s32 iParm3);
 // void func_800B81E0(void);
 UNK_PTR func_800B8214(PosRot* param_1, Actor* param_2);
 f32* func_800B8248(PosRot* param_1, Player* param_2);
-// void func_800B82EC(void);
+f32 func_800B82EC(Actor* actor, Player* player, s16);
 s32 func_800B83BC(Actor* actor, f32 arg1);
 s32 func_800B83F8(Actor* actor, Player* player, s32 flag);
 s32 Actor_IsTalking(Actor* actor, GlobalContext* globalCtx);
@@ -877,8 +877,8 @@ void Actor_SpawnTransitionActors(GlobalContext* globalCtx, ActorContext* actorCt
 void func_800BB2D0(ActorContext* actorCtx, u16* param_2, GlobalContext* globalCtx);
 Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, GlobalContext* globalCtx);
 // void func_800BB59C(void);
-// void func_800BB604(void);
-// void func_800BB8EC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+void func_800BB604(GlobalContext* globalCtx, ActorContext* actorCtx, Player* player, UNK_TYPE);
+void func_800BB8EC(GlobalContext* globalCtx, ActorContext* actorCtx, s32*, s32*, Player* player);
 void func_800BBA88(GlobalContext* globalCtx, Actor* actor);
 // void func_800BBAC0(void);
 void func_800BBB74(s16* arg1, UNK_TYPE1 arg2, UNK_TYPE1 arg3, UNK_TYPE4 arg4);
@@ -898,7 +898,7 @@ void func_800BC620(Vec3f* arg0, Vec3f* arg1, UNK_TYPE arg2, GlobalContext* globa
 // void func_800BC770(void);
 // void func_800BC7D8(void);
 // void func_800BC848(void);
-// void func_800BC8B8(void);
+void func_800BC8B8(GlobalContext* globalCtx, s32 frame, s32 type);
 // void func_800BCB50(void);
 void func_800BCB70(Actor* actor, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
 void func_800BCBF4(Vec3f* uParm1, GlobalContext* globalCtx);
