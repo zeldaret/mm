@@ -887,7 +887,7 @@ void func_800BBCEC(Actor* actor, GlobalContext* globalCtx, s16 arg2, Gfx** dList
 void func_800BBDAC(GlobalContext* globalCtx, Actor* actor, Vec3f* arg2, f32 arg3, UNK_TYPE4 arg4, f32 arg5, s16 arg6, s16 arg7, u8 arg8);
 void func_800BBFB0(GlobalContext* globalCtx, Vec3f* position, f32 param3, s32 param_4, s16 param_5, s16 param_6, u8 param_7);
 void func_800BC154(GlobalContext* globalCtx, ActorContext* actorCtx, Actor* actor, u8 actorCategory);
-// void func_800BC188(void);
+s32 func_800BC188(s32 index);
 // void func_800BC1B4(void);
 Actor* func_800BC270(GlobalContext* globalCtx, Actor* actor, f32 arg2, UNK_TYPE4 arg3);
 Actor* func_800BC444(GlobalContext* globalCtx, Actor* actor, f32 arg2);

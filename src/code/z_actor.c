@@ -1854,21 +1854,72 @@ UNK_TYPE1 D_801AED8C[] = {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BBCEC.s")
 
-Vec3f D_801AED98 = { 0.0f, 0.300000011921f, 0.0f };
+void func_800BBDAC(GlobalContext* globalCtx, Actor* actor, Vec3f* arg2, f32 arg3, s32 arg4, f32 arg5, s16 arg6, s16 arg7, u8 arg8) {
+    Vec3f sp94;
+    Vec3f D_801AED98 =  { 0.0f, 0.3f, 0.0f };
+    s32 pad[2];
+    f32 phi_f20;
+    s32 phi_s3;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BBDAC.s")
+    phi_f20 = (Rand_ZeroOne() - 0.5f) * 6.28f;
+    sp94.y = actor->floorHeight;
+    D_801AED98.y += (Rand_ZeroOne() - 0.5f) * 0.2f;
 
-Vec3f D_801AEDA4 = { 0.0f, 0.300000011921f, 0.0f };
+    for (phi_s3 = arg4; phi_s3 >= 0; phi_s3--) {
+        sp94.x = (sin_rad(phi_f20) * arg3) + arg2->x;
+        sp94.z = (cos_rad(phi_f20) * arg3) + arg2->z;
+        D_801AED98.x = (Rand_ZeroOne() - 0.5f) * arg5;
+        D_801AED98.z = (Rand_ZeroOne() - 0.5f) * arg5;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BBFB0.s")
+        if (arg6 == 0) {
+            func_800B10C0(globalCtx, &sp94, &D_801D15B0, &D_801AED98);
+        } else if (arg8 != 0) {
+            func_800B1210(globalCtx, &sp94, &D_801D15B0, &D_801AED98, arg6, arg7);
+        } else {
+            func_800B11A0(globalCtx, &sp94, &D_801D15B0, &D_801AED98, arg6, arg7);
+        }
+        phi_f20 += 6.28f / (arg4 + 1.0f);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BC154.s")
+void func_800BBFB0(GlobalContext* globalCtx, Vec3f* position, f32 param3, s32 param_4, s16 param_5, s16 param_6, u8 param_7) {
+    Vec3f sp84;
+    Vec3f D_801AEDA4 = { 0.0f, 0.3f, 0.0f };
+    s32 phi_s0;
+
+    for (phi_s0 = param_4; phi_s0 >= 0; phi_s0--) {
+        s16 temp_v0;
+
+        sp84.x = ((Rand_ZeroOne() - 0.5f) * param3) + position->x;
+        sp84.y = ((Rand_ZeroOne() - 0.5f) * param3) + position->y;
+        sp84.z = ((Rand_ZeroOne() - 0.5f) * param3) + position->z;
+
+        temp_v0 = (s32) (Rand_ZeroOne() * param_5 * 0.2f);
+        temp_v0 += param_5;
+
+        if (param_7) {
+            func_800B1210(globalCtx, &sp84, &D_801D15B0, &D_801AEDA4, temp_v0, param_6);
+        } else {
+            func_800B11A0(globalCtx, &sp84, &D_801D15B0, &D_801AEDA4, temp_v0, param_6);
+        }
+    }
+}
+
+void func_800BC154(GlobalContext* globalCtx, ActorContext* actorCtx, Actor* actor, u8 actorCategory) {
+    actorCtx->actorList[actor->category].unk_08 = 1;
+    actor->category = actorCategory;
+}
 
 s32 D_801AEDB0[] = {
     0x00000800, 0x00000020, 0x00000020, 0x00000800, 0x00001000, 0x00002000, 0x00000001, 0x00010000, 0x00000001,
 };
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BC188.s")
+s32 func_800BC188(s32 index) {
+    if ((index < 0) || (index >= ARRAY_COUNT(D_801AEDB0))) {
+        return 0;
+    }
+    return D_801AEDB0[index];
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BC1B4.s")
 
