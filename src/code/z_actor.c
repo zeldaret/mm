@@ -187,7 +187,24 @@ s801AEC84 D_801AEC84[] = {
     { 0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0 },
 };
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B4F78.s")
+void func_800B4F78(TargetContext* targetCtx, s32 type, GlobalContext* globalCtx) {
+    s801AEC84* temp_s2;
+    s32 phi_s1;
+    TargetContextEntry* phi_s0;
+
+    Math_Vec3f_Copy(&targetCtx->unkC, &globalCtx->view.eye);
+    targetCtx->unk48 = 0x100;
+    temp_s2 = &D_801AEC84[type];
+    targetCtx->unk44 = 500.0f;
+
+    phi_s0 = targetCtx->unk50;
+    for (phi_s1 = 0; phi_s1 < ARRAY_COUNT(targetCtx->unk50); phi_s1++, phi_s0++) {
+        func_800B4F40(targetCtx, phi_s1, 0.0f, 0.0f, 0.0f);
+        phi_s0->color.r = temp_s2->unk0;
+        phi_s0->color.g = temp_s2->unk1;
+        phi_s0->color.b = temp_s2->unk2;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B5040.s")
 
@@ -615,7 +632,15 @@ f32 Actor_HeightDiff(Actor* actor1, Actor* actor2) {
     return actor2->world.pos.y - actor1->world.pos.y;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B6F20.s")
+void func_800B6F20(GlobalContext* globalCtx, Input* input, f32 arg2, s16 arg3) {
+    s16 sp26;
+
+    sp26 = arg3 - func_800DFC68(ACTIVE_CAM);
+    input->cur.stick_x = -Math_SinS(sp26) * arg2;
+    input->rel.stick_x = input->cur.stick_x;
+    input->cur.stick_y = Math_CosS(sp26) * arg2;
+    input->rel.stick_y = input->cur.stick_y;
+}
 
 f32 Player_GetHeight(Player* player) {
     f32 offset;
@@ -960,19 +985,63 @@ void Actor_UpdateBgCheckInfo(GlobalContext* globalCtx, Actor* actor, f32 wallChe
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B7E04.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B7FE0.s")
+Hilite* func_800B7FE0(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContext* gfxCtx) {
+    Hilite* sp2C;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8018.s")
+    OPEN_DISPS(gfxCtx);
+
+    POLY_OPA_DISP = func_800B7E04(object, eye, lightDir, gfxCtx, POLY_OPA_DISP, &sp2C);
+
+    CLOSE_DISPS(gfxCtx);
+
+    return sp2C;
+}
+
+Hilite* func_800B8018(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContext* gfxCtx) {
+    Hilite* sp2C;
+
+    OPEN_DISPS(gfxCtx);
+
+    POLY_XLU_DISP = func_800B7E04(object, eye, lightDir, gfxCtx, POLY_XLU_DISP, &sp2C);
+
+    CLOSE_DISPS(gfxCtx);
+
+    return sp2C;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8050.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8118.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B81E0.s")
+// Actor_GetFocus
+PosRot* func_800B81E0(PosRot* dest, Actor* actor) {
+    *dest = actor->focus;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8214.s")
+    return dest;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8248.s")
+// Actor_GetWorld
+PosRot* func_800B8214(PosRot* dest, Actor* actor) {
+    *dest = actor->world;
+
+    return dest;
+}
+
+// Actor_GetWorldPosShapeRot
+PosRot* func_800B8248(PosRot* dest, Actor* actor) {
+    PosRot sp1C;
+
+    Math_Vec3f_Copy(&sp1C.pos, &actor->world.pos);
+    if (actor->id == ACTOR_PLAYER) {
+        Player* player = (Player*)actor;
+
+        sp1C.pos.y += player->unk_AC0 * actor->scale.y;
+    }
+    sp1C.rot = actor->shape.rot;
+    *dest = sp1C;
+
+    return dest;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B82EC.s")
 
