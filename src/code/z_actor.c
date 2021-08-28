@@ -1013,22 +1013,19 @@ Hilite* func_800B8018(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContex
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8118.s")
 
-// Actor_GetFocus
-PosRot* func_800B81E0(PosRot* dest, Actor* actor) {
+PosRot* Actor_GetFocus(PosRot* dest, Actor* actor) {
     *dest = actor->focus;
 
     return dest;
 }
 
-// Actor_GetWorld
-PosRot* func_800B8214(PosRot* dest, Actor* actor) {
+PosRot* Actor_GetWorld(PosRot* dest, Actor* actor) {
     *dest = actor->world;
 
     return dest;
 }
 
-// Actor_GetWorldPosShapeRot
-PosRot* func_800B8248(PosRot* dest, Actor* actor) {
+PosRot* Actor_GetWorldPosShapeRot(PosRot* dest, Actor* actor) {
     PosRot sp1C;
 
     Math_Vec3f_Copy(&sp1C.pos, &actor->world.pos);

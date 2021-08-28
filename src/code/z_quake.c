@@ -607,7 +607,7 @@ void Quake2_Update(void) {
             player = PLAYER;
 
             if (&player->actor != NULL) {
-                func_800B8248(&playerPosRot, player);
+                Actor_GetWorldPosShapeRot(&playerPosRot, &player->actor);
             }
 
             angle1Speed = 359.2f;

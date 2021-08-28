@@ -795,9 +795,9 @@ Hilite* func_800B7FE0(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContex
 Hilite* func_800B8018(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContext* gfxCtx);
 void func_800B8050(Actor* actor, GlobalContext* globalCtx, s32 iParm3);
 void func_800B8118(Actor* actor, GlobalContext* globalCtx, s32 iParm3);
-// void func_800B81E0(void);
-//UNK_PTR func_800B8214(PosRot* param_1, Actor* param_2);
-PosRot* func_800B8248(PosRot* dest, Actor* actor);
+PosRot* Actor_GetFocus(PosRot* dest, Actor* actor);
+PosRot* Actor_GetWorld(PosRot* dest, Actor* actor);
+PosRot* Actor_GetWorldPosShapeRot(PosRot* dest, Actor* actor);
 f32 func_800B82EC(Actor* actor, Player* player, s16);
 s32 func_800B83BC(Actor* actor, f32 arg1);
 s32 func_800B83F8(Actor* actor, Player* player, s32 flag);

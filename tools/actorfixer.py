@@ -29,6 +29,9 @@ animdict ={
     "Actor_SetRotationFromDrawRotation": "Actor_SetWorldRotToShape",
     "Actor_InitDrawRotation": "Actor_SetShapeRotToWorld",
     "Actor_SetVelocityAndMoveYRotationAndGravity": "Actor_MoveForward",
+    "func_800B81E0": "Actor_GetFocus",
+    "func_800B8214": "Actor_GetWorld",
+    "func_800B8248": "Actor_GetWorldPosShapeRot",
 }
 
 def replace_anim(file):
