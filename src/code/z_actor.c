@@ -1309,7 +1309,7 @@ void func_800B8EF4(GlobalContext* globalCtx, Actor* actor) {
         sp1C = func_800C9BDC(&globalCtx->colCtx, actor->floorPoly, actor->floorBgId);
     }
 
-    func_8019F1C0(&actor->projectedPos, 0x282F);
+    func_8019F1C0(&actor->projectedPos, NA_SE_EV_BOMB_BOUND);
     func_8019F1C0(&actor->projectedPos, sp1C + SFX_FLAG);
 }
 
