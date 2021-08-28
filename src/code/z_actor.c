@@ -338,13 +338,13 @@ void TitleCard_Draw(GlobalContext* globalCtx, TitleCardContext* titleCtx) {
     s32 sp38;
     s32 spB8;
     s32 spB4;
-    int new_var;
+    s32 temp;
 
     if (titleCtx->alpha != 0) {
         spCC = titleCtx->width;
         spC8 = titleCtx->height;
-        new_var = spCC * 2;
-        spC0 = (titleCtx->x * 4) - new_var;
+        temp = spCC * 2;
+        spC0 = (titleCtx->x * 4) - temp;
         spB8 = (titleCtx->y * 4) - (spC8 * 2);
         sp38 = spCC * 2;
 
@@ -413,15 +413,15 @@ s32 func_800B648C(GlobalContext* globalCtx, s32 arg1, s32 arg2, f32 arg3, Vec3f*
     return 1;
 }
 
-f32 func_800B64FC(GlobalContext* globalCtx, f32 fParm2, Vec3f* pzParm3, u32* puParm4) {
+f32 func_800B64FC(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2, u32* arg3) {
     f32 temp_f8;
 
-    if ((globalCtx->actorCtx.unk1F5 == 0) || (fParm2 == 0.0f)) {
+    if ((globalCtx->actorCtx.unk1F5 == 0) || (arg1 == 0.0f)) {
         return -1.0f;
     }
-    fParm2 = fParm2;
-    temp_f8 = Math_Vec3f_DistXYZ(&globalCtx->actorCtx.unk1FC, pzParm3) / fParm2;
-    *puParm4 = globalCtx->actorCtx.unk1F4;
+
+    temp_f8 = Math_Vec3f_DistXYZ(&globalCtx->actorCtx.unk1FC, arg2) / arg1;
+    *arg3 = globalCtx->actorCtx.unk1F4;
     return globalCtx->actorCtx.unk1F8 - temp_f8;
 }
 

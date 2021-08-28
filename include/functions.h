@@ -731,7 +731,7 @@ s32 func_800B6434(GlobalContext* globalCtx, TitleCardContext* titleCtx);
 void func_800B6468(GlobalContext* globalCtx);
 void func_800B6474(GlobalContext* globalCtx);
 s32 func_800B648C(GlobalContext* globalCtx, s32 arg1, s32 arg2, f32 arg3, Vec3f* arg4);
-f32 func_800B64FC(GlobalContext* globalCtx, f32 fParm2, Vec3f* pzParm3, u32* puParm4);
+f32 func_800B64FC(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2, u32* arg3);
 void* func_800B6584(GlobalContext* globalCtx, s16 sParm2, void* pvParm3, u32 uParm4);
 // UNK_TYPE4 func_800B6608(s32 iParm1, s16 sParm2);
 // void func_800B6680(void);
