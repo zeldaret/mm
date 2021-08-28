@@ -1041,7 +1041,7 @@ void BgCheck_ActorMeshUpdateParams(GlobalContext* globalCtx, BgActor* bgActor);
 s32 BgCheck_IsActorMeshIndexValid(s32 index);
 void BgCheck_DynaInit(GlobalContext* globalCtx, DynaCollisionContext* param_2);
 void BgCheck_DynaAlloc(GlobalContext* globalCtx, DynaCollisionContext* dyna);
-s32 BgCheck_AddActorMesh(GlobalContext* globalCtx, DynaCollisionContext* dyna, DynaPolyActor* actor, CollisionHeader* header);
+s32 BgCheck_AddActorMesh(GlobalContext* globalCtx, DynaCollisionContext* dyna, Actor* actor, CollisionHeader* colHeader);
 DynaPolyActor* BgCheck_GetActorOfMesh(CollisionContext* colCtx, s32 index);
 void func_800C62BC(GlobalContext* globalCtx, DynaCollisionContext* dyna, s32 index);
 void func_800C6314(GlobalContext* globalCtx, DynaCollisionContext* dyna, s32 index);

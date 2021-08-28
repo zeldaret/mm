@@ -17,6 +17,7 @@ struct DynaPolyActor;
 
 #define BGACTOR_NEG_ONE -1
 #define BG_ACTOR_MAX 50
+#define DYNA_WATERBOX_MAX 30
 #define BGCHECK_SCENE BG_ACTOR_MAX
 #define BGCHECK_Y_MIN -32000.0f
 #define BGCHECK_XYZ_ABSMAX 32760.0f
@@ -142,7 +143,7 @@ typedef struct CollisionPoly {
 } CollisionPoly; // size = 0x10
 
 typedef struct {
-    /* 0x0 */ SSNode* nodes;
+    /* 0x0 */ SSNode* tbl; //nodes
     /* 0x4 */ u32 count;
     /* 0x8 */ s32 maxNodes;
 } DynaSSNodeList; // size = 0xC
@@ -154,10 +155,8 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ Vec3s minPos;
-    /* 0x6 */ UNK_TYPE1 xLength; // Created by retype action
-    /* 0x7 */ UNK_TYPE1 pad7[0x1];
-    /* 0x8 */ UNK_TYPE1 zLength; // Created by retype action
-    /* 0x9 */ UNK_TYPE1 pad9[0x3];
+    /* 0x6 */ s16 xLength;
+    /* 0x8 */ s16 zLength;
     /* 0xC */ u32 properties;
 } WaterBox; // size = 0x10
 //#define BgWaterBox WaterBox
@@ -183,11 +182,11 @@ typedef struct {
 //#define BgMeshHeader CollisionHeader
 
 typedef struct {
-    /* 0x00 */ DynaPolyActor* actor;
+    /* 0x00 */ Actor* actor;
     /* 0x04 */ CollisionHeader* colHeader; //header;
     /* 0x08 */ DynaLookup dynaLookup; //polyLists;
     /* 0x10 */ u16 vtxStartIndex; //s16 verticesStartIndex;
-    /* 0x12 */ s16 waterboxesStartIndex;
+    /* 0x12 */ u16 waterboxesStartIndex;
     /* 0x14 */ ScaleRotPos prevTransform; //prevParams;
     /* 0x34 */ ScaleRotPos curTransform; //currParams;
     /* 0x54 */ Sphere16 boundingSphere; //Vec3s averagePos;
@@ -228,19 +227,34 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ struct GlobalContext* globalCtx;
-    /* 0x04 */ struct CollisionContext* colCtx;
+    /* 0x04 */ CollisionContext* colCtx;
     /* 0x08 */ u16 xpFlags;
     /* 0x0C */ CollisionPoly** resultPoly;
     /* 0x10 */ f32 yIntersect;
     /* 0x14 */ Vec3f* pos;
     /* 0x18 */ s32* bgId;
-    /* 0x   */ s32 unk1C; 
-    /* 0x1C */ struct Actor* actor;
-    /* 0x20 */ u32 unk_20;
-    /* 0x24 */ f32 chkDist;
-    /* 0x28 */ DynaCollisionContext* dyna;
-    /* 0x2C */ SSList* ssList;
+    /* 0x1C */ s32 unk1C; 
+    /* 0x20 */ struct Actor* actor;
+    /* 0x24 */ u32 unk_24; //oot unk20
+    /* 0x28 */ f32 chkDist;
+    /* 0x2C */ DynaCollisionContext* dyna;
+    /* 0x30 */ SSList* ssList;
 } DynaRaycast;
+
+typedef struct {
+    /* 0x00 */ struct CollisionContext* colCtx;
+    /* 0x04 */ u16 xpFlags;
+    /* 0x08 */ DynaCollisionContext* dyna;
+    /* 0x0C */ SSList* ssList;
+    /* 0x10 */ Vec3f* posA;
+    /* 0x14 */ Vec3f* posB;
+    /* 0x18 */ Vec3f* posResult;
+    /* 0x1C */ CollisionPoly** resultPoly;
+    /* 0x20 */ s32 chkOneFace; // bccFlags & 0x8
+    /* 0x24 */ f32* distSq;    // distance from posA to poly squared
+    /* 0x28 */ f32 chkDist;    // distance from poly
+    /* 0x2C */ Actor* actor;
+} DynaLineTest;
 
 typedef struct {
     /* 0x00 */ u16 cameraSType;
