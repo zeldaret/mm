@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_lightblock.c
+ * Overlay: ovl_Obj_Lightblock
+ * Description: Sun Block
+ */
+
 #include "z_obj_lightblock.h"
 
 #define FLAGS 0x00000000
@@ -66,9 +72,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 500, ICHAIN_STOP),
 };
 
-extern ColliderCylinderInit sCylinderInit;
-extern InitChainEntry sInitChain[];
-
 extern CollisionHeader D_06000B80;
 extern Gfx D_801AEF88[];
 extern Gfx D_06000178[];
@@ -77,14 +80,14 @@ extern Gfx D_801AEFA0[];
 void func_80AF3910(ObjLightblock* this, GlobalContext* globalCtx) {
     LightblockTypeVars* typeVars = &sLightblockTypeVars[LIGHTBLOCK_TYPE(&this->dyna.actor)];
 
-    Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0x48, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                this->dyna.actor.world.pos.z, 0, 0, 0, typeVars->params);
+    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_DEMO_EFFECT, this->dyna.actor.world.pos.x,
+                this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, 0, 0, 0, typeVars->params);
 }
 
 void ObjLightblock_Init(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
     ObjLightblock* this = THIS;
     LightblockTypeVars* typeVars = &sLightblockTypeVars[LIGHTBLOCK_TYPE(&this->dyna.actor)];
-    s32 pad;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     Actor_SetScale(&this->dyna.actor, typeVars->scale);
@@ -119,12 +122,12 @@ void func_80AF3ADC(ObjLightblock* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
         // light arrows
-        if (this->collider.info.acHitInfo->toucher.dmgFlags & 1 << 13) {
+        if (this->collider.info.acHitInfo->toucher.dmgFlags & (1 << 13)) {
             this->collisionCounter = 8;
         }
         // light ray
         else {
-            this->collisionCounter += 1;
+            this->collisionCounter++;
         }
     } else {
         this->collisionCounter = 0;
