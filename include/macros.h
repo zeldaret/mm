@@ -118,4 +118,10 @@ extern GraphicsContext* __gfxCtx;
         (b) = _temp;      \
     }
 
+#ifdef __GNUC__
+#define ALIGNED8 __attribute__ ((aligned (8)))
+#else
+#define ALIGNED8
+#endif
+
 #endif // _MACROS_H_
