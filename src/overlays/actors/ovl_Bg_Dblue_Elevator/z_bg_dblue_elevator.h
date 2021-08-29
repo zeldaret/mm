@@ -5,7 +5,7 @@
 
 struct BgDblueElevator;
 
-typedef void (*BgDblueElevatorActionFunc)(struct BgDblueElevator* this, GlobalContext* globalCtx);
+typedef void (*BgDblueElevatorActionFunc)(struct BgDblueElevator*, GlobalContext*);
 
 typedef struct BgDblueElevator {
     /* 0x0000 */ Actor actor;

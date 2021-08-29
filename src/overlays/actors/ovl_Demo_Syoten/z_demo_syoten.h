@@ -5,7 +5,7 @@
 
 struct DemoSyoten;
 
-typedef void (*DemoSyotenActionFunc)(struct DemoSyoten* this, GlobalContext* globalCtx);
+typedef void (*DemoSyotenActionFunc)(struct DemoSyoten*, GlobalContext*);
 
 typedef struct DemoSyoten {
     /* 0x0000 */ Actor actor;

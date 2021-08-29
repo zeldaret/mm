@@ -5,7 +5,7 @@
 
 struct ObjNozoki;
 
-typedef void (*ObjNozokiActionFunc)(struct ObjNozoki* this, GlobalContext* globalCtx);
+typedef void (*ObjNozokiActionFunc)(struct ObjNozoki*, GlobalContext*);
 
 typedef struct ObjNozoki {
     /* 0x0000 */ Actor actor;

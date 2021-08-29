@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 
 Vec3f D_801EDE00;
@@ -37,10 +38,6 @@ TriNorm D_801EF590;
 TriNorm D_801EF5C8;
 TriNorm D_801EF600;
 TriNorm D_801EF638;
-
-//! @TODO: These are fake bss symbols likely related to z_message_nes
-UNK_TYPE1 D_801EF66C;
-UNK_TYPE1 D_801EF66D;
 
 /**
  * Gets the damage and effect that should be applied for the collision between

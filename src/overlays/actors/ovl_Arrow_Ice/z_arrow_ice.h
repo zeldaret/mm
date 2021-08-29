@@ -5,7 +5,7 @@
 
 struct ArrowIce;
 
-typedef void (*ArrowIceActionFunc)(struct ArrowIce* this, GlobalContext* globalCtx);
+typedef void (*ArrowIceActionFunc)(struct ArrowIce*, GlobalContext*);
 
 typedef struct ArrowIce {
     /* 0x0000 */ Actor actor;

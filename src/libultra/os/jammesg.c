@@ -8,7 +8,7 @@ s32 osJamMesg(OSMesgQueue* mq, OSMesg msg, s32 flag) {
     while (mq->validCount >= mq->msgCount) {
         if (flag == 1) {
             __osRunningThread->state = 8;
-            __osEnqueueAndYield(&mq->fullqueue);
+            __osEnqueueAndYield(&mq->fullQueue);
         } else {
             __osRestoreInt(saveMask);
             return -1;
@@ -20,8 +20,8 @@ s32 osJamMesg(OSMesgQueue* mq, OSMesg msg, s32 flag) {
     mq->msg[mq->first] = msg;
     mq->validCount++;
 
-    if (mq->mtqueue->next != NULL) {
-        osStartThread(__osPopThread(&mq->mtqueue));
+    if (mq->mtQueue->next != NULL) {
+        osStartThread(__osPopThread(&mq->mtQueue));
     }
 
     __osRestoreInt(saveMask);

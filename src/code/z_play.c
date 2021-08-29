@@ -74,35 +74,35 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169474.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Gameplay_CreateSubCamera.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CreateSubCamera.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Gameplay_GetActiveCamId.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_GetActiveCamId.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Gameplay_ChangeCameraStatus.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_ChangeCameraStatus.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Gameplay_ClearCamera.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_ClearCamera.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Gameplay_ClearAllSubCameras.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_ClearAllSubCameras.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Gameplay_GetCamera.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_GetCamera.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Gameplay_CameraSetAtEye.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraSetAtEye.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Gameplay_CameraSetAtEyeUp.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraSetAtEyeUp.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Gameplay_CameraSetFov.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraSetFov.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Gameplay_SetCameraRoll.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_SetCameraRoll.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Gameplay_CopyCamera.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CopyCamera.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169A50.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Gameplay_CameraChangeSetting.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraChangeSetting.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169AFC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Gameplay_CameraGetUID.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraGetUID.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169BF8.s")
 
