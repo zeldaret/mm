@@ -3,15 +3,23 @@
 
 #include "global.h"
 
+struct SelectContext;
+
 void Select_Init(GameState* thisx);
 void Select_Destroy(GameState* thisx);
 
 typedef struct {
+    /* 0x00 */ char* name;
+    /* 0x04 */ void (*loadFunc)(struct SelectContext*, s32);
+    /* 0x08 */ s32 entranceIndex;
+} SceneSelectEntry; // size = 0xC
+
+typedef struct SelectContext {
     /* 0x000 */ GameState state;
     /* 0x0A4 */ char unk_0A4[0x4];
     /* 0x0A8 */ View view;
     /* 0x210 */ UNK_TYPE4 unk_210;
-    /* 0x214 */ UNK_TYPE4 unk_214;
+    /* 0x214 */ SceneSelectEntry* scenes;
     /* 0x218 */ UNK_TYPE4 unk_218;
     /* 0x21C */ UNK_TYPE4 unk_21C;
     /* 0x220 */ UNK_TYPE4 unk_220;
