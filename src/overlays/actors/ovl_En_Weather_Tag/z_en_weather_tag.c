@@ -417,7 +417,8 @@ void func_809672DC(EnWeatherTag* this, GlobalContext* globalCtx) {
     f32 range;
     f32 strength = 0.0f;
 
-    func_800BCCDC(this->pathPoints, this->pathCount, &GET_PLAYER(globalCtx)->actor.world.pos, &this->actor.world.pos, 0);
+    func_800BCCDC(this->pathPoints, this->pathCount, &GET_PLAYER(globalCtx)->actor.world.pos, &this->actor.world.pos,
+                  0);
 
     distance = Actor_XZDistanceBetweenActors(&player->actor, &this->actor);
     range = WEATHER_TAG_RANGE100(this);
@@ -466,7 +467,8 @@ void func_809674C8(EnWeatherTag* this, GlobalContext* globalCtx) {
 
 // WEATHERTAG_TYPE_LOCALDAY2RAIN 2
 void func_80967608(EnWeatherTag* this, GlobalContext* globalCtx) {
-    if ((WEATHER_TAG_RANGE100(this) + 10.0f) < Actor_XZDistanceBetweenActors(&GET_PLAYER(globalCtx)->actor, &this->actor)) {
+    if ((WEATHER_TAG_RANGE100(this) + 10.0f) <
+        Actor_XZDistanceBetweenActors(&GET_PLAYER(globalCtx)->actor, &this->actor)) {
         D_801BDBB0 = 0;
         EnWeatherTag_SetupAction(this, func_809674C8);
     }
