@@ -426,7 +426,7 @@ void func_8089AD70(EnDinofos* this) {
 }
 
 s32 func_8089AE00(EnDinofos* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 temp_v1;
     s16 temp_v1_2;
     Actor* temp_v0;
@@ -481,7 +481,7 @@ s32 func_8089AE00(EnDinofos* this, GlobalContext* globalCtx) {
 
 void func_8089B100(EnDinofos* this, GlobalContext* globalCtx) {
     Camera* camera = Play_GetCamera(globalCtx, this->camId);
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Vec3f sp3C;
 
     SkelAnime_ChangeAnim(&this->skelAnime, &D_06001CCC, 1.0f, SkelAnime_GetFrameCount(&D_06001CCC.common),
@@ -713,7 +713,7 @@ void func_8089BB60(EnDinofos* this, GlobalContext* globalCtx) {
 }
 
 void func_8089BBB4(EnDinofos* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->actionFunc != func_8089BD28) {
         s16 rotY = player->actor.shape.rot.y - this->actor.shape.rot.y;
@@ -745,7 +745,7 @@ void func_8089BBB4(EnDinofos* this, GlobalContext* globalCtx) {
 }
 
 void func_8089BD28(EnDinofos* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 phi_v0;
     f32 sp2C = 0.0f;
 

@@ -16,6 +16,8 @@ animdict ={
     "func_8012404c": "Player_RemoveMask",
     "Actor_SpawnWithParentAndCutscene": "Actor_SpawnAsChildAndCutscene",
     "Actor_SpawnWithParent": "Actor_SpawnAsChild",
+    "PLAYER": "GET_PLAYER(globalCtx)",
+    "ACTIVE_CAM": "GET_ACTIVE_CAM(globalCtx)",
 }
 
 def replace_anim(file):

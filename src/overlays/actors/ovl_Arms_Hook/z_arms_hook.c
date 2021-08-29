@@ -72,7 +72,7 @@ void ArmsHook_Wait(ArmsHook* this, GlobalContext* globalCtx) {
     if (this->actor.parent == NULL) {
         ArmsHook_SetupAction(this, ArmsHook_Shoot);
         func_800B6C04(&this->actor, 20.0f);
-        this->actor.parent = &PLAYER->actor;
+        this->actor.parent = &GET_PLAYER(globalCtx)->actor;
         this->timer = 26;
     }
 }
@@ -120,7 +120,7 @@ void ArmsHook_AttachHookToActor(ArmsHook* this, Actor* actor) {
 }
 
 void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((this->actor.parent == NULL) || (!func_801240C8(player))) {
         ArmsHook_DetachHookFromActor(this);
@@ -288,7 +288,7 @@ static Vec3f D_808C1C4C = { 0.0f, -500.0f, 0.0f };
 void ArmsHook_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ArmsHook* this = THIS;
     s32 pad;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Vec3f sp68;
     Vec3f sp5C;
     Vec3f sp50;

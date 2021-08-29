@@ -163,8 +163,8 @@ void EnTuboTrap_SpawnEffectsInWater(EnTuboTrap* this, GlobalContext* globalCtx) 
 }
 
 void EnTuboTrap_HandleImpact(EnTuboTrap* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
-    Player* player2 = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
+    Player* player2 = GET_PLAYER(globalCtx);
 
     // in oot func_800F0568 is Audio_PlaySoundAtPosition
 
@@ -221,7 +221,7 @@ void EnTuboTrap_Idle(EnTuboTrap* this, GlobalContext* globalCtx) {
     static s8 sTransformationHeight[] = {
         40, 40, 40, 25, 28,
     };
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     f32 currentHeight;
     f32 transformationHeight;
     s16 startingRotation;

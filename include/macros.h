@@ -16,15 +16,14 @@
 #define VIRTUAL_TO_PHYSICAL(addr) (uintptr_t)((u8*)(addr)-0x80000000)
 #define SEGMENTED_TO_VIRTUAL(addr) (void*)(PHYSICAL_TO_VIRTUAL(gSegments[SEGMENT_NUMBER(addr)]) + SEGMENT_OFFSET(addr))
 
-// Currently most often called ctxt in MM, TODO: Refactor names when its used
-#define ACTIVE_CAM globalCtx->cameraPtrs[globalCtx->activeCamera]
+#define GET_ACTIVE_CAM(globalCtx) globalCtx->cameraPtrs[globalCtx->activeCamera]
 #define MAIN_CAM 0
 
 #define SET_NEXT_GAMESTATE(curState, newInit, newStruct)    \
     (curState)->nextGameStateInit = (GameStateFunc)newInit; \
     (curState)->nextGameStateSize = sizeof(newStruct)
 
-#define PLAYER ((Player*)globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first)
+#define GET_PLAYER(globalCtx) ((Player*)globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first)
 
 // linkAge still exists in MM, but is always set to 0 (always adult)
 // There are remnants of these macros from OOT, but they are essentially useless

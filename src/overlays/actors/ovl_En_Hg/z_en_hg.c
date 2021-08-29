@@ -178,7 +178,7 @@ void func_80BCF468(EnHg* this) {
 }
 
 void func_80BCF4AC(EnHg* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 pad;
 
     this->actor.speedXZ = 1.6f;
@@ -202,7 +202,7 @@ void func_80BCF5F0(EnHg* this) {
 }
 
 void func_80BCF634(EnHg* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (Math_Vec3f_DistXZ(&player->actor.world.pos, &this->actor.home.pos) < 200.0f) {
         func_80BCF468(this);
@@ -351,7 +351,7 @@ void func_80BCF95C(EnHg* this, GlobalContext* globalCtx) {
 }
 
 void func_80BCFC0C(EnHg* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->actor.colChkInfo.health == 1 && !(fabsf(this->actor.yDistToPlayer) >= 80.0f)) {
         if (player->stateFlags2 & 0x08000000) {

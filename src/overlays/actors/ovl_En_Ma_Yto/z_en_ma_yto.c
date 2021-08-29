@@ -1299,7 +1299,7 @@ void EnMaYto_ChangeAnim(EnMaYto* this, s32 index) {
 }
 
 void func_80B90C78(EnMaYto* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 flag;
 
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);

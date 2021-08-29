@@ -238,7 +238,7 @@ void EnMinifrog_SetCamera(EnMinifrog* this, GlobalContext* globalCtx) {
     Vec3f eye;
     s32 i;
 
-    eye = ACTIVE_CAM->eye;
+    eye = GET_ACTIVE_CAM(globalCtx)->eye;
     yaw = Math_Vec3f_Yaw(&eye, &this->actor.world.pos);
     pitch = -Math_Vec3f_Pitch(&eye, &this->actor.world.pos);
     vec5.x = this->actor.world.pos.x - (5.0f * Math_SinS(yaw) * Math_CosS(pitch));

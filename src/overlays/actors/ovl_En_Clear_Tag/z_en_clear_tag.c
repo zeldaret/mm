@@ -508,7 +508,7 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Camera* camera;
     s32 pad;
 

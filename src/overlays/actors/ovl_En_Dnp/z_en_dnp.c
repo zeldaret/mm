@@ -172,7 +172,7 @@ void func_80B3CD1C(EnDnp* this) {
 }
 
 s32 func_80B3CDA4(EnDnp* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 temp_s0 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
     Vec3f sp3C;
     Vec3f sp30;
@@ -305,7 +305,7 @@ void func_80B3D2D4(EnDnp* this, GlobalContext* globalCtx) {
 }
 
 void func_80B3D338(EnDnp* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((this->unk_32E != 0) && (func_80152498(&globalCtx->msgCtx) == 2)) {
         Actor_MarkForDeath(&this->actor);
