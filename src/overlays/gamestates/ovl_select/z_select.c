@@ -9,10 +9,10 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/D_80802390.s")
 
-void func_80800910(SelectContext*, s32);
+void func_80800910(SelectContext* this, s32);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/func_80800910.s")
 
-void func_80800930(SelectContext*, s32);
+void func_80800930(SelectContext* this, s32);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/func_80800930.s")
 
 void func_80800A44(SelectContext* this);
@@ -24,7 +24,7 @@ void func_808013B8(SelectContext* this, GfxPrint* arg1) {
     s32 temp_s0;
     s32 temp_v0;
     s32 phi_s0;
-    u8* phi_a2;
+    char* phi_a2;
 
     GfxPrint_SetColor(arg1, 0xFFU, 0x9BU, 0x96U, 0xFFU);
     GfxPrint_SetPos(arg1, 0xC, 2);
@@ -53,46 +53,88 @@ void func_808013B8(SelectContext* this, GfxPrint* arg1) {
     GfxPrint_Printf(arg1, "OPT=%d", this->unk_248);
 }
 #else
-void func_808013B8(SelectContext* this, GfxPrint*);
+// Select_PrintMenu
+void func_808013B8(SelectContext* this, GfxPrint* printer);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/func_808013B8.s")
 #endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/D_8080343C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/func_80801594.s")
+extern char* D_80802334[12];
+
+void func_80801594(SelectContext* this, GfxPrint* printer) {
+    GfxPrint_SetPos(printer, 10, 15);
+    GfxPrint_SetColor(printer, 255, 255, 255, 255);
+    GfxPrint_Printf(printer, "%s", D_80802334[(s32) (Rand_ZeroOne() * ARRAY_COUNT(D_80802334))]);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/D_80803588.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/func_80801620.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/func_808016E8.s")
+// sFormLabels
+extern char* D_80802364[][2];
 
 #ifdef NON_MATCHING
+void func_80801620(SelectContext* this, GfxPrint* printer, s32 arg2) {
+    s32 sp20;
+    char* (*temp_a0)[2];
+    s32 temp_v0;
+    char* (*phi_v1)[2];
+    s32 phi_v0;
+
+    if ((arg2 >= 0) && (arg2 < 5)) {
+        temp_a0 = &D_80802364[arg2];
+        phi_v1 = temp_a0 + 8;
+        phi_v0 = 8;
+loop_3:
+        temp_v0 = phi_v0 - 8;
+        phi_v0 = temp_v0;
+        if (phi_v1 == 0) {
+            phi_v1 += -8;
+            if (temp_v0 >= 0) {
+                goto loop_3;
+            }
+        }
+        sp20 = *temp_a0;
+    } else {
+        sp20 = 0;
+    }
+    GfxPrint_SetPos(printer, 4, 0x1A);
+    GfxPrint_SetColor(printer, 0xFFU, 0xFFU, 0x37U, 0xFFU);
+    if (sp20 != 0) {
+        GfxPrint_Printf(printer, "Age:" "%s", sp20);
+        return;
+    }
+    GfxPrint_Printf(printer, "Age:" "???" "(%d)", arg2);
+}
+#else
+void func_80801620(SelectContext* this, GfxPrint* printer, s32 arg2);
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/func_80801620.s")
+#endif
+
+void func_808016E8(SelectContext* this, GfxPrint* printer, u16 arg2);
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/func_808016E8.s")
+
 void func_8080194C(SelectContext* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
-    GfxPrint* sp10;
+    GfxPrint* printer;
 
     OPEN_DISPS(gfxCtx);
 
     func_8012C4C0(gfxCtx);
 
-    sp10 = alloca(sizeof(GfxPrint));
-    GfxPrint_Init(sp10);
-    GfxPrint_Open(sp10, POLY_OPA_DISP);
+    printer = alloca(sizeof(GfxPrint));
+    GfxPrint_Init(printer);
+    GfxPrint_Open(printer, POLY_OPA_DISP);
 
-    func_808013B8(this, sp10);
-    func_80801620(this, sp10, ((void)0, gSaveContext.playerForm));
-    func_808016E8(this, sp10, ((void)0, gSaveContext.cutscene & 0xFFFF));
+    func_808013B8(this, printer);
+    func_80801620(this, printer, ((void)0, gSaveContext.playerForm));
+    func_808016E8(this, printer, ((void)0, gSaveContext.cutscene));
 
-    POLY_OPA_DISP = GfxPrint_Close(sp10);
-    GfxPrint_Destroy(sp10);
+    POLY_OPA_DISP = GfxPrint_Close(printer);
+    GfxPrint_Destroy(printer);
 
     CLOSE_DISPS(gfxCtx);
 }
-#else
-void func_8080194C(SelectContext* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/func_8080194C.s")
-#endif
 
 void func_808019FC(SelectContext* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/func_808019FC.s")
@@ -170,7 +212,7 @@ void Select_Init(GameState* thisx) {
         this->unk_21C = dREG(82);
     }
 
-    Game_SetFramerateDivisor(this, 1);
+    Game_SetFramerateDivisor(&this->state, 1);
     gSaveContext.cutscene = 0;
     gSaveContext.playerForm = PLAYER_FORM_HUMAN;
     gSaveContext.linkAge = 0;
