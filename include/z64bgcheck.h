@@ -35,7 +35,7 @@ typedef struct {
     Vec3f pos;
 } ScaleRotPos;
 
-typedef struct CollisionPoly {
+typedef struct {
     /* 0x00 */ u16 type;
     union {
         u16 vtxData[3];
@@ -53,9 +53,17 @@ typedef struct CollisionPoly {
 } CollisionPoly; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ u16 cameraSType;
-    /* 0x02 */ s16 numCameras;
-    /* 0x04 */ Vec3s* camPosData;
+    /* 0x00 */ Vec3s pos;
+    /* 0x06 */ Vec3s rot;
+    /* 0x0C */ s16 fov;
+    /* 0x0E */ s16 unk_0E;
+    /* 0x10 */ s16 unk_10;
+} SubBgCamData;
+
+typedef struct {
+    /* 0x00 */ u16 setting;
+    /* 0x02 */ s16 numData;
+    /* 0x04 */ Vec3s* data;
 } CamData;
 
 typedef struct {

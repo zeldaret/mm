@@ -359,10 +359,10 @@ void EnPametfrog_ShakeCamera(EnPametfrog* this, GlobalContext* globalCtx, f32 ma
 void EnPametfrog_StopCutscene(EnPametfrog* this, GlobalContext* globalCtx) {
     Camera* subCamera;
 
-    if (this->subCamId != SUBCAM_FREE) {
+    if (this->subCamId != CAM_ID_MAIN) {
         subCamera = Play_GetCamera(globalCtx, this->subCamId);
-        Play_CameraSetAtEye(globalCtx, MAIN_CAM, &subCamera->at, &subCamera->eye);
-        this->subCamId = SUBCAM_FREE;
+        Play_CameraSetAtEye(globalCtx, CAM_ID_MAIN, &subCamera->at, &subCamera->eye);
+        this->subCamId = CAM_ID_MAIN;
         ActorCutscene_Stop(this->cutscene);
         func_800B724C(globalCtx, &this->actor, 6);
     }
@@ -847,7 +847,7 @@ void EnPametfrog_SetupFallInAir(EnPametfrog* this, GlobalContext* globalCtx) {
     yaw = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
     this->actor.world.pos.x += 30.0f * Math_SinS(yaw);
     this->actor.world.pos.z += 30.0f * Math_CosS(yaw);
-    if (this->subCamId != SUBCAM_FREE) {
+    if (this->subCamId != CAM_ID_MAIN) {
         xzDist = sqrtf(SQXZ(&this->unk_2DC));
         if (xzDist > 0.001f) {
             xzDist = 200.0f / xzDist;
@@ -877,7 +877,7 @@ void EnPametfrog_FallInAir(EnPametfrog* this, GlobalContext* globalCtx) {
         }
     } else {
         this->spinYaw += 0xF00;
-        if (this->subCamId != SUBCAM_FREE) {
+        if (this->subCamId != CAM_ID_MAIN) {
             Play_CameraSetAtEye(globalCtx, this->subCamId, &this->actor.world.pos, &Play_GetCamera(globalCtx, this->subCamId)->eye);
         }
 

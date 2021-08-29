@@ -428,7 +428,7 @@ asm/non_matchings/code/z_bgcheck/func_800BFDEC.s,func_800BFDEC,0x800BFDEC,0x76
 asm/non_matchings/code/z_bgcheck/BgCheck_PolygonGetMinY.s,BgCheck_PolygonGetMinY,0x800BFFC4,0x1E
 asm/non_matchings/code/z_bgcheck/BgCheck_PolygonGetNormal.s,BgCheck_PolygonGetNormal,0x800C003C,0x16
 asm/non_matchings/code/z_bgcheck/func_800C0094.s,func_800C0094,0x800C0094,0x49
-asm/non_matchings/code/z_bgcheck/CollisionPoly_GetPointDistanceFromPlane.s,CollisionPoly_GetPointDistanceFromPlane,0x800C01B8,0x1A
+asm/non_matchings/code/z_bgcheck/func_800C01B8.s,func_800C01B8,0x800C01B8,0x1A
 asm/non_matchings/code/z_bgcheck/BgCheck_CreateTriNormFromPolygon.s,BgCheck_CreateTriNormFromPolygon,0x800C0220,0x28
 asm/non_matchings/code/z_bgcheck/func_800C02C0.s,func_800C02C0,0x800C02C0,0x20
 asm/non_matchings/code/z_bgcheck/func_800C0340.s,func_800C0340,0x800C0340,0x4D
@@ -492,7 +492,7 @@ asm/non_matchings/code/z_bgcheck/func_800C4F38.s,func_800C4F38,0x800C4F38,0x13
 asm/non_matchings/code/z_bgcheck/func_800C4F84.s,func_800C4F84,0x800C4F84,0x14
 asm/non_matchings/code/z_bgcheck/func_800C4FD4.s,func_800C4FD4,0x800C4FD4,0x124
 asm/non_matchings/code/z_bgcheck/func_800C5464.s,func_800C5464,0x800C5464,0x12
-asm/non_matchings/code/z_bgcheck/BgCheck_CameraLineTest1.s,BgCheck_CameraLineTest1,0x800C54AC,0x23
+asm/non_matchings/code/z_bgcheck/func_800C54AC.s,func_800C54AC,0x800C54AC,0x23
 asm/non_matchings/code/z_bgcheck/func_800C5538.s,func_800C5538,0x800C5538,0x23
 asm/non_matchings/code/z_bgcheck/func_800C55C4.s,func_800C55C4,0x800C55C4,0x23
 asm/non_matchings/code/z_bgcheck/func_800C5650.s,func_800C5650,0x800C5650,0x24
@@ -561,7 +561,7 @@ asm/non_matchings/code/z_bgcheck/BgCheck_RelocateMeshHeader.s,BgCheck_RelocateMe
 asm/non_matchings/code/z_bgcheck/BgCheck_RelocateAllMeshHeaders.s,BgCheck_RelocateAllMeshHeaders,0x800C9598,0x2A
 asm/non_matchings/code/z_bgcheck/func_800C9640.s,func_800C9640,0x800C9640,0x15
 asm/non_matchings/code/z_bgcheck/BgCheck_GetPolygonAttributes.s,BgCheck_GetPolygonAttributes,0x800C9694,0x1C
-asm/non_matchings/code/z_bgcheck/SurfaceType_GetCamDataIndex.s,SurfaceType_GetCamDataIndex,0x800C9704,0x9
+asm/non_matchings/code/z_bgcheck/func_800C9704.s,func_800C9704,0x800C9704,0x9
 asm/non_matchings/code/z_bgcheck/func_800C9728.s,func_800C9728,0x800C9728,0x12
 asm/non_matchings/code/z_bgcheck/func_800C9770.s,func_800C9770,0x800C9770,0x22
 asm/non_matchings/code/z_bgcheck/func_800C97F8.s,func_800C97F8,0x800C97F8,0x13
@@ -600,7 +600,7 @@ asm/non_matchings/code/z_bgcheck/func_800CA1E8.s,func_800CA1E8,0x800CA1E8,0x11
 asm/non_matchings/code/z_bgcheck/func_800CA22C.s,func_800CA22C,0x800CA22C,0xCF
 asm/non_matchings/code/z_bgcheck/func_800CA568.s,func_800CA568,0x800CA568,0x33
 asm/non_matchings/code/z_bgcheck/func_800CA634.s,func_800CA634,0x800CA634,0x5
-asm/non_matchings/code/z_bgcheck/WaterBox_GetCamDataIndex.s,WaterBox_GetCamDataIndex,0x800CA648,0x1C
+asm/non_matchings/code/z_bgcheck/func_800CA648.s,func_800CA648,0x800CA648,0x1C
 asm/non_matchings/code/z_bgcheck/func_800CA6B8.s,func_800CA6B8,0x800CA6B8,0x8
 asm/non_matchings/code/z_bgcheck/func_800CA6D8.s,func_800CA6D8,0x800CA6D8,0x6
 asm/non_matchings/code/z_bgcheck/func_800CA6F0.s,func_800CA6F0,0x800CA6F0,0xB8
@@ -669,7 +669,7 @@ asm/non_matchings/code/z_camera/Camera_GetFloorYNorm.s,Camera_GetFloorYNorm,0x80
 asm/non_matchings/code/z_camera/Camera_GetFloorY.s,Camera_GetFloorY,0x800CC56C,0x17
 asm/non_matchings/code/z_camera/Camera_GetFloorYLayer.s,Camera_GetFloorYLayer,0x800CC5C8,0x5E
 asm/non_matchings/code/z_camera/Camera_GetCamDataSetting.s,Camera_GetCamDataSetting,0x800CC740,0x1A
-asm/non_matchings/code/z_camera/Camera_GetCamBGData.s,Camera_GetCamBGData,0x800CC7A8,0x17
+asm/non_matchings/code/z_camera/Camera_GetSurfaceBgCamData.s,Camera_GetSurfaceBgCamData,0x800CC7A8,0x17
 asm/non_matchings/code/z_camera/Camera_GetDataIdxForPoly.s,Camera_GetDataIdxForPoly,0x800CC804,0x1C
 asm/non_matchings/code/z_camera/Camera_GetWaterBoxDataIdx.s,Camera_GetWaterBoxDataIdx,0x800CC874,0x31
 asm/non_matchings/code/z_camera/func_800CC938.s,func_800CC938,0x800CC938,0x8

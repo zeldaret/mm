@@ -941,7 +941,7 @@ s32 func_800BFDEC(CollisionPoly* param_1, CollisionPoly* param_2, u32* param_3, 
 s32 BgCheck_PolygonGetMinY(CollisionPoly* polygons, Vec3s* vertices);
 void BgCheck_PolygonGetNormal(CollisionPoly* polygon, f32* normalX, f32* normalY, f32* normalZ);
 void func_800C0094(struct CollisionPoly* param_1, f32 xOffset, f32 yOffset, f32 zOffset, MtxF* matrix);
-f32 CollisionPoly_GetPointDistanceFromPlane(CollisionPoly* poly, Vec3f* point);
+f32 func_800C01B8(CollisionPoly* poly, Vec3f* point);
 void BgCheck_CreateColTriParamsFromPolygon(CollisionPoly* polygon, Vec3s* vertices, TriNorm* tri);
 void func_800C02C0(CollisionPoly* poly, s32 index, CollisionContext* colCtx, TriNorm* tri);
 // void func_800C0340(CollisionPoly* param_1, Vec3s* param_2, UNK_TYPE4 param_3, UNK_TYPE4 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
@@ -1006,7 +1006,7 @@ s32 func_800C45C4(CollisionContext* colCtx, u32 arg1, Vec3f* arg2, Vec3f* arg3, 
 // void func_800C4F84(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
 // void func_800C4FD4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
 // void func_800C5464(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
-s32 BgCheck_CameraLineTest1(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult,
+s32 func_800C54AC(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult,
                             CollisionPoly** outPoly, s32 chkWall, s32 chkFloor, s32 chkCeil, s32 chkOneFace, s32* bgId);
 // void func_800C5538(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
 s32 func_800C55C4(CollisionContext* colCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, CollisionPoly** arg4, u32 arg5, u32 arg6, u32 arg7, u32 arg8, u32* arg9);
@@ -1076,7 +1076,7 @@ void BgCheck_RelocateMeshHeader(CollisionHeader* meshSegPtr, CollisionHeader** p
 void BgCheck_RelocateAllMeshHeaders(CollisionContext* colCtx, GlobalContext* globalCtx);
 // void func_800C9640(void);
 u32 BgCheck_GetPolygonAttributes(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId, s32 attributeIndex);
-u32 SurfaceType_GetCamDataIndex(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
+u32 func_800C9704(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 u16 func_800C9728(CollisionContext* colCtx, s32 camId, s32 bgId);
 // UNK_TYPE4 func_800C9770(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 // void func_800C97F8(void);
@@ -1116,7 +1116,7 @@ void func_800CA1E8(GlobalContext* globalCtx, CollisionContext* colCtx, f32 arg2,
 // void func_800CA22C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 // void func_800CA568(void);
 // void func_800CA634(void);
-u8 WaterBox_GetCamDataIndex(CollisionContext* colCtx, WaterBox* waterBox, UNK_TYPE4 arg2);
+u8 func_800CA648(CollisionContext* colCtx, WaterBox* waterBox, UNK_TYPE4 arg2);
 // void func_800CA6B8(void);
 // void func_800CA6D8(void);
 // void func_800CA6F0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);

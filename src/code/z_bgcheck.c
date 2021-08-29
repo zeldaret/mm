@@ -73,7 +73,7 @@ void BgCheck_CreateVertexFromVec3f(Vec3s* vertex, Vec3f* vector) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C0094.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/CollisionPoly_GetPointDistanceFromPlane.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C01B8.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_CreateTriNormFromPolygon.s")
 
@@ -203,7 +203,7 @@ f32 func_800C411C(CollisionContext* colCtx, CollisionPoly** arg1, s32* arg2, Act
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C5464.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_CameraLineTest1.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C54AC.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C5538.s")
 
@@ -341,7 +341,7 @@ f32 func_800C411C(CollisionContext* colCtx, CollisionPoly** arg1, s32* arg2, Act
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_GetPolygonAttributes.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/SurfaceType_GetCamDataIndex.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9704.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9728.s")
 
@@ -419,7 +419,7 @@ f32 func_800C411C(CollisionContext* colCtx, CollisionPoly** arg1, s32* arg2, Act
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800CA634.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/WaterBox_GetCamDataIndex.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800CA648.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800CA6B8.s")
 
