@@ -1,4 +1,3 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
 
 void func_800E8EA0(GlobalContext* globalCtx, Actor* actor, u16 textId) {
