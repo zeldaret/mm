@@ -1,8 +1,20 @@
 #include "ultra64.h"
 #include "global.h"
 
+/*=====================================================================
+ *                   Default Data: NORMAL0 Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting      Mode      Function
+ * ---------    ------    --------
+ * NORMAL0      NORMAL    NORM1
+ * CLIMEMAZE    NORMAL    NORM1
+ * FORCEKEEP    NORMAL    NORM1
+ * NORMAL4      NORMAL    NORM1
+ */
 CameraModeValue D_801B4710[] = {
-	/* CAM_FUNC_NORM1 */
 	{ -20, 0 },
 	{ 0x0118, 1 },
 	{ 0x0140, 2 },
@@ -15,8 +27,24 @@ CameraModeValue D_801B4710[] = {
 	{ 0x0083, 9 },
 };
 
+/**
+ * Setting      Mode        Function
+ * ---------    --------    --------
+ * NORMAL0      TARGET      PARA1
+ * NORMAL0      ZORAFINZ    PARA1
+ * NORMAL1      TARGET      PARA1
+ * NANAME       TARGET      PARA1
+ * DUNGEON0     ZORAFINZ    PARA1
+ * TOWER0       TARGET      PARA1
+ * CLIMEMAZE    TARGET      PARA1
+ * KEEPBACK     TARGET      PARA1
+ * BOSS_HAK     TARGET      PARA1
+ * BOSS_KON     TARGET      PARA1
+ * FORCEKEEP    TARGET      PARA1
+ * PARALLEL1    TARGET      PARA1
+ * NORMAL4      TARGET      PARA1
+ */
 CameraModeValue D_801B4738[] = {
-	/* CAM_FUNC_PARA1 */
 	{ 0, 0 },
 	{ 350, 1 },
 	{ 50, 2 },
@@ -31,8 +59,29 @@ CameraModeValue D_801B4738[] = {
 	{ 0, 12 },
 };
 
+/**
+ * Setting      Mode            Function
+ * ---------    ------------    --------
+ * NORMAL0      FOLLOWTARGET    KEEP1
+ * NORMAL3      FOLLOWTARGET    KEEP1
+ * FUKAN0       FOLLOWTARGET    KEEP1
+ * NORMAL1      FOLLOWTARGET    KEEP1
+ * NANAME       FOLLOWTARGET    KEEP1
+ * TOWER0       FOLLOWTARGET    KEEP1
+ * CLIMEMAZE    FOLLOWTARGET    KEEP1
+ * KEEPBACK     FOLLOWTARGET    KEEP1
+ * FUKAN1       FOLLOWTARGET    KEEP1
+ * BOSS_HAK     FOLLOWTARGET    KEEP1
+ * MORAY        FOLLOWTARGET    KEEP1
+ * NORMAL2      FOLLOWTARGET    KEEP1
+ * WHIRLPOOL    FOLLOWTARGET    KEEP1
+ * KOKKOGAME    FOLLOWTARGET    KEEP1
+ * GIANT        FOLLOWTARGET    KEEP1
+ * WATER2       FOLLOWTARGET    KEEP1
+ * PARALLEL1    FOLLOWTARGET    KEEP1
+ * NORMAL4      FOLLOWTARGET    KEEP1
+ */
 CameraModeValue D_801B4768[] = {
-	/* CAM_FUNC_KEEP1 */
 	{ -30, 0 },
 	{ 180, 1 },
 	{ 200, 2 },
@@ -47,8 +96,28 @@ CameraModeValue D_801B4768[] = {
 	{ 30, 11 },
 };
 
+/**
+ * Setting      Mode      Function
+ * ---------    ------    --------
+ * NORMAL0      BATTLE    BATT1
+ * NORMAL3      BATTLE    BATT1
+ * FUKAN0       BATTLE    BATT1
+ * NORMAL1      BATTLE    BATT1
+ * NANAME       BATTLE    BATT1
+ * TOWER0       BATTLE    BATT1
+ * CLIMEMAZE    BATTLE    BATT1
+ * KEEPBACK     BATTLE    BATT1
+ * FUKAN1       BATTLE    BATT1
+ * MORAY        BATTLE    BATT1
+ * NORMAL2      BATTLE    BATT1
+ * WHIRLPOOL    BATTLE    BATT1
+ * KOKKOGAME    BATTLE    BATT1
+ * GIANT        BATTLE    BATT1
+ * WATER2       BATTLE    BATT1
+ * PARALLEL1    BATTLE    BATT1
+ * NORMAL4      BATTLE    BATT1
+ */
 CameraModeValue D_801B4798[] = {
-    /* CAM_FUNC_BATT1 */
 	{ -30, 0 },
 	{ 0x0096, 1 },
 	{ 250, 2 },
@@ -64,8 +133,51 @@ CameraModeValue D_801B4798[] = {
 	{ 0x0028, 18 },
 };
 
+/**
+ * Setting      Mode           Function
+ * ---------    -----------    --------
+ * NORMAL0      FIRSTPERSON    SUBJ1
+ * NORMAL3      FIRSTPERSON    SUBJ1
+ * FUKAN0       FIRSTPERSON    SUBJ1
+ * NORMAL1      FIRSTPERSON    SUBJ1
+ * NANAME       FIRSTPERSON    SUBJ1
+ * CIRCLE0      FIRSTPERSON    SUBJ1
+ * FIXED0       FIRSTPERSON    SUBJ1
+ * DUNGEON0     FIRSTPERSON    SUBJ1
+ * DUNGEON1     FIRSTPERSON    SUBJ1
+ * CIRCLE3      FIRSTPERSON    SUBJ1
+ * FIXED3       FIRSTPERSON    SUBJ1
+ * TOWER0       FIRSTPERSON    SUBJ1
+ * JCRUISING    FIRSTPERSON    SUBJ1
+ * CLIMEMAZE    FIRSTPERSON    SUBJ1
+ * DUNGEON2     FIRSTPERSON    SUBJ1
+ * BOSS_SHIGE   FIRSTPERSON    SUBJ1
+ * KEEPBACK     FIRSTPERSON    SUBJ1
+ * CHUBOSS      FIRSTPERSON    SUBJ1
+ * FUKAN1       FIRSTPERSON    SUBJ1
+ * DUNGEON3     FIRSTPERSON    SUBJ1
+ * ROOM0        FIRSTPERSON    SUBJ1
+ * CIRCLE9      FIRSTPERSON    SUBJ1
+ * ONTHEPOLE    FIRSTPERSON    SUBJ1
+ * BOSS_LAST    FIRSTPERSON    SUBJ1
+ * BOSS_INI     FIRSTPERSON    SUBJ1
+ * BOSS_HAK     FIRSTPERSON    SUBJ1
+ * BOSS_KON     FIRSTPERSON    SUBJ1
+ * MORAY        FIRSTPERSON    SUBJ1
+ * NORMAL2      FIRSTPERSON    SUBJ1
+ * BOMBBOWL     FIRSTPERSON    SUBJ1
+ * WHIRLPOOL    FIRSTPERSON    SUBJ1
+ * KOKKOGAME    FIRSTPERSON    SUBJ1
+ * GIANT        FIRSTPERSON    SUBJ1
+ * ROOM1        FIRSTPERSON    SUBJ1
+ * WATER2       FIRSTPERSON    SUBJ1
+ * FORCEKEEP    FIRSTPERSON    SUBJ1
+ * PARALLEL1    FIRSTPERSON    SUBJ1
+ * ROOM2        FIRSTPERSON    SUBJ1
+ * NORMAL4      FIRSTPERSON    SUBJ1
+ * DUNGEON4     FIRSTPERSON    SUBJ1
+ */
 CameraModeValue D_801B47CC[] = {
-    /* CAM_FUNC_SUBJ1 */
 	{ 0, 0 },
 	{ 0x0005, 1 },
 	{ 50, 2 },
@@ -77,8 +189,38 @@ CameraModeValue D_801B47CC[] = {
 	{ 0, 9 },
 };
 
+/**
+ * Setting      Mode    Function
+ * ---------    ----    --------
+ * NORMAL0      TALK    KEEP3
+ * NORMAL3      TALK    KEEP3
+ * FUKAN0       TALK    KEEP3
+ * NORMAL1      TALK    KEEP3
+ * NANAME       TALK    KEEP3
+ * DUNGEON0     TALK    KEEP3
+ * DUNGEON1     TALK    KEEP3
+ * TOWER0       TALK    KEEP3
+ * CLIMEMAZE    TALK    KEEP3
+ * DUNGEON2     TALK    KEEP3
+ * KEEPBACK     TALK    KEEP3
+ * CHUBOSS      TALK    KEEP3
+ * FUKAN1       TALK    KEEP3
+ * DUNGEON3     TALK    KEEP3
+ * ONTHEPOLE    TALK    KEEP3
+ * BOSS_LAST    TALK    KEEP3
+ * BOSS_INI     TALK    KEEP3
+ * BOSS_HAK     TALK    KEEP3
+ * BOSS_KON     TALK    KEEP3
+ * MORAY        TALK    KEEP3
+ * NORMAL2      TALK    KEEP3
+ * WHIRLPOOL    TALK    KEEP3
+ * KOKKOGAME    TALK    KEEP3
+ * GIANT        TALK    KEEP3
+ * FORCEKEEP    TALK    KEEP3
+ * PARALLEL1    TALK    KEEP3
+ * DUNGEON4     TALK    KEEP3
+ */
 CameraModeValue D_801B47F0[] = {
-    /* CAM_FUNC_KEEP3 */
 	{ -20, 0 },
 	{ 80, 1 },
 	{ 0x0096, 2 },
@@ -94,8 +236,31 @@ CameraModeValue D_801B47F0[] = {
 	{ 60, 18 },
 };
 
+/**
+ * Setting      Mode     Function
+ * ---------    -----    --------
+ * NORMAL0      CLIMB    JUMP2
+ * NORMAL3      CLIMB    JUMP2
+ * FUKAN0       CLIMB    JUMP2
+ * NORMAL1      CLIMB    JUMP2
+ * NANAME       CLIMB    JUMP2
+ * TOWER0       CLIMB    JUMP2
+ * KEEPBACK     CLIMB    JUMP2
+ * FUKAN1       CLIMB    JUMP2
+ * INBUSH       CLIMB    JUMP2
+ * BOSS_INI     CLIMB    JUMP2
+ * BOSS_KON     CLIMB    JUMP2
+ * MORAY        CLIMB    JUMP2
+ * NORMAL2      CLIMB    JUMP2
+ * WHIRLPOOL    CLIMB    JUMP2
+ * KOKKOGAME    CLIMB    JUMP2
+ * GIANT        CLIMB    JUMP2
+ * WATER2       CLIMB    JUMP2
+ * FORCEKEEP    CLIMB    JUMP2
+ * PARALLEL1    CLIMB    JUMP2
+ * NORMAL4      CLIMB    JUMP2
+ */
 CameraModeValue D_801B4824[] = {
-    /* CAM_FUNC_JUMP2 */
 	{ -20, 0 },
 	{ 0x0118, 1 },
 	{ 0x0140, 2 },
@@ -107,8 +272,48 @@ CameraModeValue D_801B4824[] = {
 	{ 0, 9 },
 };
 
+/**
+ * Setting      Mode        Function
+ * ---------    --------    --------
+ * NORMAL0      BOWARROW    SUBJ1
+ * NORMAL3      BOWARROW    SUBJ1
+ * FUKAN0       BOWARROW    SUBJ1
+ * NORMAL1      BOWARROW    SUBJ1
+ * NANAME       BOWARROW    SUBJ1
+ * DUNGEON0     BOWARROW    SUBJ1
+ * DUNGEON1     BOWARROW    SUBJ1
+ * TOWER0       BOWARROW    SUBJ1
+ * JCRUISING    BOWARROW    SUBJ1
+ * CLIMEMAZE    BOWARROW    SUBJ1
+ * DUNGEON2     BOWARROW    SUBJ1
+ * BOSS_SHIGE   BOWARROW    SUBJ1
+ * KEEPBACK     BOWARROW    SUBJ1
+ * CHUBOSS      BOWARROW    SUBJ1
+ * FUKAN1       BOWARROW    SUBJ1
+ * DUNGEON3     BOWARROW    SUBJ1
+ * ROOM0        BOWARROW    SUBJ1
+ * ONTHEPOLE    BOWARROW    SUBJ1
+ * INBUSH       BOWARROW    SUBJ1
+ * BOSS_LAST    BOWARROW    SUBJ1
+ * BOSS_INI     BOWARROW    SUBJ1
+ * BOSS_HAK     BOWARROW    SUBJ1
+ * BOSS_KON     BOWARROW    SUBJ1
+ * MORAY        BOWARROW    SUBJ1
+ * NORMAL2      BOWARROW    SUBJ1
+ * BOMBBOWL     BOWARROW    SUBJ1
+ * WHIRLPOOL    BOWARROW    SUBJ1
+ * KOKKOGAME    BOWARROW    SUBJ1
+ * GIANT        BOWARROW    SUBJ1
+ * ROOM1        BOWARROW    SUBJ1
+ * WATER2       BOWARROW    SUBJ1
+ * SOKONASI     BOWARROW    SUBJ1
+ * FORCEKEEP    BOWARROW    SUBJ1
+ * PARALLEL1    BOWARROW    SUBJ1
+ * ROOM2        BOWARROW    SUBJ1
+ * NORMAL4      BOWARROW    SUBJ1
+ * DUNGEON4     BOWARROW    SUBJ1
+ */
 CameraModeValue D_801B4848[] = {
-    /* CAM_FUNC_SUBJ1 */
 	{ 0xFFF9, 0 },
 	{ 0x000E, 1 },
 	{ 50, 2 },
@@ -120,8 +325,54 @@ CameraModeValue D_801B4848[] = {
 	{ 0x2000, 9 },
 };
 
+/**
+ * Setting      Mode         Function
+ * ---------    ---------    --------
+ * NORMAL0      BOWARROWZ    SUBJ1
+ * NORMAL3      BOWARROWZ    SUBJ1
+ * HORSE0       BOWARROWZ    SUBJ1
+ * FUKAN0       BOWARROWZ    SUBJ1
+ * NORMAL1      BOWARROWZ    SUBJ1
+ * NANAME       BOWARROWZ    SUBJ1
+ * CIRCLE0      BOWARROWZ    SUBJ1
+ * FIXED0       BOWARROWZ    SUBJ1
+ * DUNGEON0     BOWARROWZ    SUBJ1
+ * DUNGEON1     BOWARROWZ    SUBJ1
+ * CIRCLE3      BOWARROWZ    SUBJ1
+ * FIXED3       BOWARROWZ    SUBJ1
+ * TOWER0       BOWARROWZ    SUBJ1
+ * JCRUISING    BOWARROWZ    SUBJ1
+ * CLIMEMAZE    BOWARROWZ    SUBJ1
+ * DUNGEON2     BOWARROWZ    SUBJ1
+ * BOSS_SHIGE   BOWARROWZ    SUBJ1
+ * KEEPBACK     BOWARROWZ    SUBJ1
+ * CHUBOSS      BOWARROWZ    SUBJ1
+ * FUKAN1       BOWARROWZ    SUBJ1
+ * DUNGEON3     BOWARROWZ    SUBJ1
+ * ROOM0        BOWARROWZ    SUBJ1
+ * CIRCLE9      BOWARROWZ    SUBJ1
+ * ONTHEPOLE    BOWARROWZ    SUBJ1
+ * INBUSH       BOWARROWZ    SUBJ1
+ * BOSS_LAST    BOWARROWZ    SUBJ1
+ * BOSS_INI     BOWARROWZ    SUBJ1
+ * BOSS_HAK     BOWARROWZ    SUBJ1
+ * BOSS_KON     BOWARROWZ    SUBJ1
+ * MORAY        BOWARROWZ    SUBJ1
+ * NORMAL2      BOWARROWZ    SUBJ1
+ * BOMBBOWL     BOWARROWZ    SUBJ1
+ * WHIRLPOOL    BOWARROWZ    SUBJ1
+ * KOKKOGAME    BOWARROWZ    SUBJ1
+ * GIANT        BOWARROWZ    SUBJ1
+ * ROOM1        BOWARROWZ    SUBJ1
+ * WATER2       BOWARROWZ    SUBJ1
+ * SOKONASI     BOWARROWZ    SUBJ1
+ * FORCEKEEP    BOWARROWZ    SUBJ1
+ * PARALLEL1    BOWARROWZ    SUBJ1
+ * ROOM2        BOWARROWZ    SUBJ1
+ * NORMAL4      BOWARROWZ    SUBJ1
+ * DUNGEON4     BOWARROWZ    SUBJ1
+ */
 CameraModeValue D_801B486C[] = {
-    /* CAM_FUNC_SUBJ1 */
 	{ 20, 0 },
 	{ 0x0046, 1 },
 	{ 0x0046, 2 },
@@ -133,8 +384,47 @@ CameraModeValue D_801B486C[] = {
 	{ 0x2000, 9 },
 };
 
+/**
+ * Setting      Mode         Function
+ * ---------    ---------    --------
+ * NORMAL0      HOOKSHOT    SPEC5
+ * NORMAL3      HOOKSHOT    SPEC5
+ * FUKAN0       HOOKSHOT    SPEC5
+ * NORMAL1      HOOKSHOT    SPEC5
+ * NANAME       HOOKSHOT    SPEC5
+ * DUNGEON0     HOOKSHOT    SPEC5
+ * DUNGEON1     HOOKSHOT    SPEC5
+ * TOWER0       HOOKSHOT    SPEC5
+ * CLIMEMAZE    HOOKSHOT    SPEC5
+ * DUNGEON2     HOOKSHOT    SPEC5
+ * BOSS_SHIGE   HOOKSHOT    SPEC5
+ * KEEPBACK     HOOKSHOT    SPEC5
+ * CHUBOSS      HOOKSHOT    SPEC5
+ * FUKAN1       HOOKSHOT    SPEC5
+ * DUNGEON3     HOOKSHOT    SPEC5
+ * ROOM0        HOOKSHOT    SPEC5
+ * ONTHEPOLE    HOOKSHOT    SPEC5
+ * INBUSH       HOOKSHOT    SPEC5
+ * BOSS_LAST    HOOKSHOT    SPEC5
+ * BOSS_INI     HOOKSHOT    SPEC5
+ * BOSS_HAK     HOOKSHOT    SPEC5
+ * BOSS_KON     HOOKSHOT    SPEC5
+ * MORAY        HOOKSHOT    SPEC5
+ * NORMAL2      HOOKSHOT    SPEC5
+ * BOMBBOWL     HOOKSHOT    SPEC5
+ * WHIRLPOOL    HOOKSHOT    SPEC5
+ * KOKKOGAME    HOOKSHOT    SPEC5
+ * GIANT        HOOKSHOT    SPEC5
+ * ROOM1        HOOKSHOT    SPEC5
+ * WATER2       HOOKSHOT    SPEC5
+ * SOKONASI     HOOKSHOT    SPEC5
+ * FORCEKEEP    HOOKSHOT    SPEC5
+ * PARALLEL1    HOOKSHOT    SPEC5
+ * ROOM2        HOOKSHOT    SPEC5
+ * NORMAL4      HOOKSHOT    SPEC5
+ * DUNGEON4     HOOKSHOT    SPEC5
+ */
 CameraModeValue D_801B4890[] = {
-    /* CAM_FUNC_SPEC5 */
     { -20, 0 },    // yOffset
     { 80, 1 },     // eyeDist
     { 250, 2 },    // minDistForRot
@@ -145,6 +435,11 @@ CameraModeValue D_801B4890[] = {
     { 0x2000, 9 }, // flags
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B48B0[] = {
     /* CAM_FUNC_SUBJ1 */
 	{ 0x0005, 0 },
@@ -158,6 +453,11 @@ CameraModeValue D_801B48B0[] = {
 	{ 0x2000, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B48D4[] = {
     /* CAM_FUNC_SUBJ1 */
 	{ 0xFFF9, 0 },
@@ -171,6 +471,11 @@ CameraModeValue D_801B48D4[] = {
 	{ 0x2000, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B48F8[] = {
     /* CAM_FUNC_JUMP2 */
 	{ -20, 0 },
@@ -184,6 +489,11 @@ CameraModeValue D_801B48F8[] = {
 	{ 0x2006, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B491C[] = {
     /* CAM_FUNC_NORM1 */
 	{ -20, 0 },
@@ -198,6 +508,11 @@ CameraModeValue D_801B491C[] = {
 	{ 0x008B, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B4944[] = {
     /* CAM_FUNC_PARA1 */
 	{ -40, 0 },
@@ -214,6 +529,11 @@ CameraModeValue D_801B4944[] = {
 	{ 0x000C, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B4974[] = {
     /* CAM_FUNC_PARA1 */
 	{ 0xFFB0, 0 },
@@ -230,6 +550,11 @@ CameraModeValue D_801B4974[] = {
 	{ 0x0002, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B49A4[] = {
     /* CAM_FUNC_PARA1 */
 	{ -10, 0 },
@@ -246,6 +571,11 @@ CameraModeValue D_801B49A4[] = {
 	{ 0x000C, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B49D4[] = {
     /* CAM_FUNC_PARA1 */
 	{ 0xFFB0, 0 },
@@ -262,6 +592,11 @@ CameraModeValue D_801B49D4[] = {
 	{ 10, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B4A04[] = {
     /* CAM_FUNC_PARA1 */
 	{ 0xFFB0, 0 },
@@ -278,6 +613,11 @@ CameraModeValue D_801B4A04[] = {
 	{ 0, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B4A34[] = {
     /* CAM_FUNC_NORM1 */
 	{ -20, 0 },
@@ -292,6 +632,11 @@ CameraModeValue D_801B4A34[] = {
 	{ 0xF023, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B4A5C[] = {
     /* CAM_FUNC_PARA1 */
 	{ 0, 0 },
@@ -308,6 +653,11 @@ CameraModeValue D_801B4A5C[] = {
 	{ 0, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B4A8C[] = {
     /* CAM_FUNC_KEEP1 */
 	{ -5, 0 },
@@ -324,6 +674,11 @@ CameraModeValue D_801B4A8C[] = {
 	{ 30, 11 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B4ABC[] = {
     /* CAM_FUNC_SUBJ1 */
 	{ 0, 0 },
@@ -337,6 +692,11 @@ CameraModeValue D_801B4ABC[] = {
 	{ 0, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B4AE0[] = {
     /* CAM_FUNC_NORM1 */
 	{ 50, 0 },
@@ -351,6 +711,11 @@ CameraModeValue D_801B4AE0[] = {
 	{ 0x0087, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B4B08[] = {
     /* CAM_FUNC_PARA1 */
 	{ 100, 0 },
@@ -367,6 +732,11 @@ CameraModeValue D_801B4B08[] = {
 	{ 20, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B4B38[] = {
     /* CAM_FUNC_NORM1 */
 	{ 0xFFB0, 0 },
@@ -381,6 +751,11 @@ CameraModeValue D_801B4B38[] = {
 	{ 0x0083, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B4B60[] = {
     /* CAM_FUNC_PARA1 */
 	{ 0xFFBA, 0 },
@@ -397,6 +772,11 @@ CameraModeValue D_801B4B60[] = {
 	{ 0, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B4B90[] = {
     /* CAM_FUNC_NORM1 */
 	{ -10, 0 },
@@ -411,6 +791,11 @@ CameraModeValue D_801B4B90[] = {
 	{ 0x008F, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B4BB8[] = {
     /* CAM_FUNC_SUBJ1 */
 	{ 0x0005, 0 },
@@ -424,8 +809,17 @@ CameraModeValue D_801B4BB8[] = {
 	{ 0x2000, 9 },
 };
 
+/*=====================================================================
+ *                   Custom Data: NORMAL3 Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL3    NORMAL    JUMP3
+ */
 CameraModeValue D_801B4BDC[] = {
-    /* CAM_FUNC_JUMP3 */
 	{ -40, 0 },
 	{ 0x0118, 1 },
 	{ 300, 2 },
@@ -438,8 +832,12 @@ CameraModeValue D_801B4BDC[] = {
 	{ 0x0084, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL3    TARGET    PARA1
+ */
 CameraModeValue D_801B4C04[] = {
-    /* CAM_FUNC_PARA1 */
 	{ -50, 0 },
 	{ 0x0118, 1 },
 	{ 0x0028, 2 },
@@ -454,8 +852,15 @@ CameraModeValue D_801B4C04[] = {
 	{ 0, 12 },
 };
 
+/**
+ * Setting     Mode        Function
+ * --------    --------    --------
+ * NORMAL3     FREEFALL    JUMP3
+ * BOSS_KON    FREEFALL    JUMP3
+ * MORAY       FREEFALL    JUMP3
+ * WATER2      FREEFALL    JUMP3
+ */
 CameraModeValue D_801B4C34[] = {
-    /* CAM_FUNC_JUMP3 */
 	{ 0, 0 },
 	{ 80, 1 },
 	{ 100, 2 },
@@ -468,8 +873,13 @@ CameraModeValue D_801B4C34[] = {
 	{ 0x0004, 9 },
 };
 
+/**
+ * Setting    Mode         Function
+ * -------    ---------    --------
+ * NORMAL3    GORONJUMP    JUMP3
+ * WATER2     GORONJUMP    JUMP3
+ */
 CameraModeValue D_801B4C5C[] = {
-    /* CAM_FUNC_JUMP3 */
 	{ -40, 0 },
 	{ 0x0096, 1 },
 	{ 0x00F0, 2 },
@@ -482,8 +892,13 @@ CameraModeValue D_801B4C5C[] = {
 	{ 0x000C, 9 },
 };
 
+/**
+ * Setting    Mode       Function
+ * -------    -------    --------
+ * NORMAL3    NUTSFLY    JUMP3
+ * WATER2     NUTSFLY    JUMP3
+ */
 CameraModeValue D_801B4C84[] = {
-    /* CAM_FUNC_JUMP3 */
 	{ -40, 0 },
 	{ 0x0096, 1 },
 	{ 250, 2 },
@@ -496,8 +911,13 @@ CameraModeValue D_801B4C84[] = {
 	{ 0x0005, 9 },
 };
 
+/**
+ * Setting    Mode        Function
+ * -------    --------    --------
+ * NORMAL3    NUTSHIDE    JUMP3
+ * WATER2     NUTSHIDE    JUMP3
+ */
 CameraModeValue D_801B4CAC[] = {
-    /* CAM_FUNC_JUMP3 */
 	{ 0xFFC4, 0 },
 	{ 0x0096, 1 },
 	{ 250, 2 },
@@ -510,8 +930,13 @@ CameraModeValue D_801B4CAC[] = {
 	{ 0x0085, 9 },
 };
 
+/**
+ * Setting    Mode     Function
+ * -------    -----    --------
+ * NORMAL3    STILL    NORM1
+ * WATER2     STILL    NORM1
+ */
 CameraModeValue D_801B4CD4[] = {
-    /* CAM_FUNC_NORM1 */
 	{ -40, 0 },
 	{ 80, 1 },
 	{ 300, 2 },
@@ -524,8 +949,13 @@ CameraModeValue D_801B4CD4[] = {
 	{ 0xF023, 9 },
 };
 
+/**
+ * Setting     Mode         Function
+ * --------    ---------    --------
+ * NORMAL3     GORONDASH    JUMP3
+ * BOSS_KON    GORONDASH    JUMP3
+ */
 CameraModeValue D_801B4CFC[] = {
-    /* CAM_FUNC_JUMP3 */
 	{ -40, 0 },
 	{ 180, 1 },
 	{ 200, 2 },
@@ -538,24 +968,46 @@ CameraModeValue D_801B4CFC[] = {
 	{ 0x000C, 9 },
 };
 
+/*=====================================================================
+ *                   Custom Data: CIRCLE5 Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * CIRCLE5    NORMAL    UNIQ2
+ */
 CameraModeValue D_801B4D24[] = {
-    /* CAM_FUNC_UNIQ2 */
 	{ -40, 0 },
 	{ 60, 1 },
 	{ 60, 7 },
 	{ 0x0002, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * CIRCLE5    TARGET    UNIQ2
+ */
 CameraModeValue D_801B4D34[] = {
-    /* CAM_FUNC_UNIQ2 */
 	{ -30, 0 },
 	{ 0x002D, 1 },
 	{ 100, 7 },
 	{ 0x2001, 9 },
 };
 
+/*=====================================================================
+ *                   Custom Data: HORSE0 Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * HORSE0     NORMAL    NORM3
+ */
 CameraModeValue D_801B4D44[] = {
-    /* CAM_FUNC_NORM3 */
     { -50, 0 },    // yOffset
     { 220, 1 },    // distMin
     { 250, 2 },    // distMax
@@ -567,8 +1019,12 @@ CameraModeValue D_801B4D44[] = {
     { 0x0620, 9 }, // flags
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * HORSE0     TARGET    NORM3
+ */
 CameraModeValue D_801B4D68[] = {
-    /* CAM_FUNC_NORM3 */
     { -40, 0 },    // yOffset
     { 180, 1 },    // distMin
     { 200, 2 },    // distMax
@@ -580,11 +1036,15 @@ CameraModeValue D_801B4D68[] = {
     { 0x2602, 9 }, // flags
 };
 
+/**
+ * Setting    Mode    Function
+ * -------    ----    --------
+ * HORSE0     JUMP    NORM3
+ */
 CameraModeValue D_801B4D8C[] = {
-    /* CAM_FUNC_NORM3 */
     { -50, 0 },    // yOffset
     { 220, 1 },    // distMin
-    { 260, 2 }, // distMax
+    { 260, 2 },    // distMax
     { 10, 3 },     // yawUpdateRateInv
     { 10, 4 },     // pitchUpdateRateInv
     { 20, 5 },     // fovTarget
@@ -593,8 +1053,12 @@ CameraModeValue D_801B4D8C[] = {
     { 0x0600, 9 }, // flags
 };
 
+/**
+ * Setting    Mode        Function
+ * -------    --------    --------
+ * HORSE0     BOWARROW    SUBJ1
+ */
 CameraModeValue D_801B4DB0[] = {
-    /* CAM_FUNC_SUBJ1 */
 	{ 0xFFF9, 0 },
 	{ 0x000E, 1 },
 	{ 100, 2 },
@@ -606,8 +1070,12 @@ CameraModeValue D_801B4DB0[] = {
 	{ 0x2600, 9 },
 };
 
+/**
+ * Setting    Mode         Function
+ * -------    ---------    --------
+ * HORSE0     SLINGSHOT    SUBJ1
+ */
 CameraModeValue D_801B4DD4[] = {
-    /* CAM_FUNC_SUBJ1 */
 	{ 0xFFF9, 0 },
 	{ 0x000E, 1 },
 	{ 100, 2 },
@@ -619,8 +1087,12 @@ CameraModeValue D_801B4DD4[] = {
 	{ 0x2000, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * HORSE0     BATTLE    BATT1
+ */
 CameraModeValue D_801B4DF8[] = {
-    /* CAM_FUNC_BATT1 */
 	{ 0xFFC4, 0 },
 	{ 180, 1 },
 	{ 0x0118, 2 },
@@ -636,8 +1108,12 @@ CameraModeValue D_801B4DF8[] = {
 	{ 0x0028, 18 },
 };
 
+/**
+ * Setting    Mode            Function
+ * -------    ------------    --------
+ * HORSE0     FOLLOWTARGET    KEEP1
+ */
 CameraModeValue D_801B4E2C[] = {
-    /* CAM_FUNC_KEEP1 */
 	{ 0xFFC4, 0 },
 	{ 180, 1 },
 	{ 220, 2 },
@@ -652,8 +1128,12 @@ CameraModeValue D_801B4E2C[] = {
 	{ 20, 11 },
 };
 
+/**
+ * Setting    Mode    Function
+ * -------    ----    --------
+ * HORSE0     TALK    KEEP3
+ */
 CameraModeValue D_801B4E5C[] = {
-    /* CAM_FUNC_KEEP3 */
 	{ -50, 0 },
 	{ 0x008C, 1 },
 	{ 200, 2 },
@@ -669,8 +1149,12 @@ CameraModeValue D_801B4E5C[] = {
 	{ 60, 18 },
 };
 
+/**
+ * Setting    Mode     Function
+ * -------    -----    --------
+ * HORSE0     STILL    NORM3
+ */
 CameraModeValue D_801B4E90[] = {
-    /* CAM_FUNC_NORM3 */
     { -40, 0 },    // yOffset
     { 180, 1 },    // distMin
     { 200, 2 },    // distMax
@@ -682,8 +1166,17 @@ CameraModeValue D_801B4E90[] = {
     { 0xFF80, 9 }, // flags
 };
 
+/*=====================================================================
+ *                   Custom Data: ZORA0 Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * ZORA0      NORMAL    NORM3
+ */
 CameraModeValue D_801B4EB4[] = {
-    /* CAM_FUNC_NORM3 */
     { -20, 0 },    // yOffset
     { 250, 1 },    // distMin
     { 250, 2 },    // distMax
@@ -695,41 +1188,100 @@ CameraModeValue D_801B4EB4[] = {
     { 0x0680, 9 }, // flags
 };
 
+/*=====================================================================
+ *                   Custom Data: PREREND0 Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting     Mode      Function
+ * --------    ------    --------
+ * PREREND0    NORMAL    FIXD3
+ */
 CameraModeValue D_801B4ED8[] = {
-    /* CAM_FUNC_FIXD3 */
 	{ 0x0000, 9 }, // flags
 };
 
+/*=====================================================================
+ *                   Custom Data: PREREND1 Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting     Mode      Function
+ * --------    ------    --------
+ * PREREND1    NORMAL    UNIQ7
+ */
 CameraModeValue D_801B4EDC[] = {
-    /* CAM_FUNC_UNIQ7 */
 	{ 60, 7 },
 	{ 0x0000, 9 },  // flags
 };
 
+/*=====================================================================
+ *                   Custom Data: DOORC Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * DOORC      NORMAL    SPEC9
+ */
 CameraModeValue D_801B4EE4[] = {
-    /* CAM_FUNC_SPEC9 */
 	{ -5, 0 },
 	{ 60, 7 },
 	{ 0x4202, 9 },  // flags
 };
 
+/*=====================================================================
+ *                   Custom Data: DEMO0 Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * DEMO0      NORMAL    DEMO1
+ */
 CameraModeValue D_801B4EF0[] = {
-    /* CAM_FUNC_DEMO1 */
 	{ 0x3200, 9 }, // flags
 };
 
+/*=====================================================================
+ *                   Custom Data:
+ *=====================================================================
+ */
+
+/**
+ * Setting      Mode      Function
+ * -------      ------    --------
+ * FREE0        NORMAL    UNIQ6
+ * NAVI         NORMAL    UNIQ6
+ * TRANSFORM    NORMAL    DEMO4
+ * TRANSFORM    JUMP      DEMO5
+ * ATTENTION    NORMAL    DEMO1
+ * WARP1        NORMAL    DEMO3
+ * STOP0        NORMAL    UNIQ6
+ * CONNECT0     NORMAL    DEMO0
+ */
 CameraModeValue D_801B4EF4[] = {
-    /* CAM_FUNC_UNIQ6
-       CAM_FUNC_DEMO1
-       CAM_FUNC_DEMO3
-       CAM_FUNC_DEMO4
-       CAM_FUNC_DEMO5
-       CAM_FUNC_DEMO0 */
     { 0xFF00, 9 }, // flags
 };
 
+/*=====================================================================
+ *                   Custom Data: FUKAN0 Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode        Function
+ * -------    --------    --------
+ * FUKAN0     NORMAL      NORM1
+ * FUKAN0     PUSHPULL    NORM1
+ * FUKAN1     PUSHPULL    NORM1
+ * INBUSH     PUSHPULL    NORM1
+ */
 CameraModeValue D_801B4EF8[] = {
-    /* CAM_FUNC_NORM1 */
 	{ -40, 0 },
 	{ 0x0258, 1 },
 	{ 0x0258, 2 },
@@ -742,8 +1294,13 @@ CameraModeValue D_801B4EF8[] = {
 	{ 0x0042, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * FUKAN0     TARGET    PARA1
+ * FUKAN1     TARGET    PARA1
+ */
 CameraModeValue D_801B4F20[] = {
-    /* CAM_FUNC_PARA1 */
 	{ -40, 0 },
 	{ 0x0190, 1 },
 	{ 0x0019, 2 },
@@ -758,8 +1315,13 @@ CameraModeValue D_801B4F20[] = {
 	{ 0, 12 },
 };
 
+/**
+ * Setting    Mode    Function
+ * -------    ----    --------
+ * FUKAN0     JUMP    NORM1
+ * FUKAN1     JUMP    NORM1
+ */
 CameraModeValue D_801B4F50[] = {
-    /* CAM_FUNC_NORM1 */
 	{ -40, 0 },
 	{ 0x0258, 1 },
 	{ 0x0258, 2 },
@@ -772,8 +1334,12 @@ CameraModeValue D_801B4F50[] = {
 	{ 0x008B, 9 },
 };
 
+/**
+ * Setting    Mode     Function
+ * -------    -----    --------
+ * FUKAN0     STILL    NORM1
+ */
 CameraModeValue D_801B4F78[] = {
-    /* CAM_FUNC_NORM1 */
 	{ -40, 0 },
 	{ 0x0258, 1 },
 	{ 0x0258, 2 },
@@ -786,8 +1352,17 @@ CameraModeValue D_801B4F78[] = {
 	{ 0xF023, 9 },
 };
 
+/*=====================================================================
+ *                   Custom Data: NORMAL1 Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL1    NORMAL    NORM1
+ */
 CameraModeValue D_801B4FA0[] = {
-    /* CAM_FUNC_NORM1 */
 	{ -20, 0 },
 	{ 0x0118, 1 },
 	{ 0x0140, 2 },
@@ -800,8 +1375,12 @@ CameraModeValue D_801B4FA0[] = {
 	{ 0x0002, 9 },
 };
 
+/**
+ * Setting    Mode     Function
+ * -------    -----    --------
+ * NORMAL1    STILL    NORM1
+ */
 CameraModeValue D_801B4FC8[] = {
-    /* CAM_FUNC_NORM1 */
 	{ -20, 0 },
 	{ 0x0118, 1 },
 	{ 0x0140, 2 },
@@ -814,8 +1393,17 @@ CameraModeValue D_801B4FC8[] = {
 	{ 0xF023, 9 },
 };
 
+/*=====================================================================
+ *                   Custom Data: NANAME Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NANAME     NORMAL    NORM4
+ */
 CameraModeValue D_801B4FF0[] = {
-    /* CAM_FUNC_NORM4 */
 	{ -20, 0 },
 	{ 0x0118, 1 },
 	{ 0x0140, 2 },
@@ -828,8 +1416,17 @@ CameraModeValue D_801B4FF0[] = {
 	{ 0x0003, 9 },
 };
 
+/*=====================================================================
+ *                   Custom Data: CIRCLE0 Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * CIRCLE0    NORMAL    FIXD2
+ */
 CameraModeValue D_801B5018[] = {
-    /* CAM_FUNC_FIXD2 */
 	{ -40, 0 },
 	{ 0x0028, 1 },
 	{ 0x3200, 2 },
@@ -839,8 +1436,14 @@ CameraModeValue D_801B5018[] = {
 	{ 0x0001, 9 },
 };
 
+/**
+ * Setting    Mode            Function
+ * -------    ------------    --------
+ * CIRCLE0    FOLLOWTARGET    FIXD2
+ * CIRCLE3    FOLLOWTARGET    FIXD2
+ * CIRCLE9    FOLLOWTARGET    FIXD2
+ */
 CameraModeValue D_801B5034[] = {
-    /* CAM_FUNC_FIXD2 */
 	{ -40, 0 },
 	{ 0x0028, 1 },
 	{ 0x3200, 2 },
@@ -850,8 +1453,14 @@ CameraModeValue D_801B5034[] = {
 	{ 0x2040, 9 },
 };
 
+/**
+ * Setting    Mode    Function
+ * -------    ----    --------
+ * CIRCLE0    TALK    FIXD2
+ * CIRCLE3    TALK    FIXD2
+ * CIRCLE9    TALK    FIXD2
+ */
 CameraModeValue D_801B5050[] = {
-    /* CAM_FUNC_FIXD2 */
 	{ -40, 0 },
 	{ 0x0028, 1 },
 	{ 200, 2 },
@@ -861,16 +1470,34 @@ CameraModeValue D_801B5050[] = {
 	{ 0x2080, 9 },
 };
 
+/*=====================================================================
+ *                   Custom Data: FIXED0 Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * FIXED0     NORMAL    FIXD1
+ */
 CameraModeValue D_801B506C[] = {
-	/* CAM_FUNC_FIXD1 */
 	{ -40, 0 },
 	{ 10, 4 },
 	{ 60, 7 },
 	{ 0, 9 },
 };
 
+/*=====================================================================
+ *                   Custom Data: SPIRAL Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * SPIRAL     NORMAL    SPEC8
+ */
 CameraModeValue D_801B507C[] = {
-    /* CAM_FUNC_SPEC8 */
     { -40, 0 },    // yOffset
     { 50, 4 },     // eyeStepScale
     { 80, 5 },     // posStepScale
@@ -879,8 +1506,17 @@ CameraModeValue D_801B507C[] = {
     { 0x0001, 9 }, // flags
 };
 
+/*=====================================================================
+ *                   Custom Data: DUNGEON0 Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting     Mode      Function
+ * --------    ------    --------
+ * DUNGEON0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5094[] = {
-    /* CAM_FUNC_NORM1 */
 	{ -20, 0 },
 	{ 0x0096, 1 },
 	{ 250, 2 },
@@ -893,8 +1529,19 @@ CameraModeValue D_801B5094[] = {
 	{ 0x0083, 9 },
 };
 
+/**
+ * Setting       Mode      Function
+ * ----------    ------    --------
+ * DUNGEON0      TARGET    PARA1
+ * DUNGEON1      TARGET    PARA1
+ * DUNGEON2      TARGET    PARA1
+ * BOSS_SHIGE    TARGET    PARA1
+ * CHUBOSS       TARGET    PARA1
+ * BOSS_LAST     TARGET    PARA1
+ * ROOM1         TARGET    PARA1
+ * ROOM2         TARGET    PARA1
+ */
 CameraModeValue D_801B50BC[] = {
-    /* CAM_FUNC_PARA1 */
 	{ 0, 0 },
 	{ 200, 1 },
 	{ 0x0019, 2 },
@@ -909,8 +1556,17 @@ CameraModeValue D_801B50BC[] = {
 	{ 0, 12 },
 };
 
+/**
+ * Setting      Mode            Function
+ * ---------    ------------    --------
+ * DUNGEON0     FOLLOWTARGET    KEEP1
+ * DUNGEON1     FOLLOWTARGET    KEEP1
+ * DUNGEON2     FOLLOWTARGET    KEEP1
+ * DUNGEON3     FOLLOWTARGET    KEEP1
+ * ONTHEPOLE    FOLLOWTARGET    KEEP1
+ * DUNGEON4     FOLLOWTARGET    KEEP1
+ */
 CameraModeValue D_801B50EC[] = {
-    /* CAM_FUNC_KEEP1 */
 	{ -20, 0 },
 	{ 0x0078, 1 },
 	{ 0x008C, 2 },
@@ -925,8 +1581,16 @@ CameraModeValue D_801B50EC[] = {
 	{ 20, 11 },
 };
 
+/**
+ * Setting      Mode      Function
+ * ---------    ------    --------
+ * DUNGEON0     BATTLE    BATT1
+ * DUNGEON1     BATTLE    BATT1
+ * DUNGEON3     BATTLE    BATT1
+ * ONTHEPOLE    BATTLE    BATT1
+ * DUNGEON4     BATTLE    BATT1
+ */
 CameraModeValue D_801B511C[] = {
-    /* CAM_FUNC_BATT1 */
 	{ -30, 0 },
 	{ 0x0096, 1 },
 	{ 0x00F0, 2 },
@@ -942,8 +1606,21 @@ CameraModeValue D_801B511C[] = {
 	{ 50, 18 },
 };
 
+/**
+ * Setting       Mode          Function
+ * ----------    ----------    --------
+ * DUNGEON0      BOOMFOLLOW    KEEP1
+ * DUNGEON1      BOOMFOLLOW    KEEP1
+ * DUNGEON2      BOOMFOLLOW    KEEP1
+ * BOSS_SHIGE    BOOMFOLLOW    KEEP1
+ * CHUBOSS       BOOMFOLLOW    KEEP1
+ * DUNGEON3      BOOMFOLLOW    KEEP1
+ * ONTHEPOLE     BOOMFOLLOW    KEEP1
+ * BOSS_LAST     BOOMFOLLOW    KEEP1
+ * BOSS_HAK      BOOMFOLLOW    KEEP1
+ * DUNGEON4      BOOMFOLLOW    KEEP1
+ */
 CameraModeValue D_801B5150[] = {
-    /* CAM_FUNC_KEEP1 */
 	{ -5, 0 },
 	{ 0x0096, 1 },
 	{ 0x00F0, 2 },
@@ -958,8 +1635,12 @@ CameraModeValue D_801B5150[] = {
 	{ 30, 11 },
 };
 
+/**
+ * Setting     Mode    Function
+ * --------    ----    --------
+ * DUNGEON0    JUMP    NORM1
+ */
 CameraModeValue D_801B5180[] = {
-    /* CAM_FUNC_NORM1 */
 	{ -20, 0 },
 	{ 0x0096, 1 },
 	{ 250, 2 },
@@ -972,8 +1653,23 @@ CameraModeValue D_801B5180[] = {
 	{ 0x008B, 9 },
 };
 
+/**
+ * Setting       Mode        Function
+ * ----------    --------    --------
+ * DUNGEON0      FREEFALL    PARA1
+ * DUNGEON1      FREEFALL    PARA1
+ * DUNGEON2      FREEFALL    PARA1
+ * BOSS_SHIGE    FREEFALL    PARA1
+ * CHUBOSS       FREEFALL    PARA1
+ * DUNGEON3      FREEFALL    PARA1
+ * ONTHEPOLE     FREEFALL    PARA1
+ * BOSS_LAST     FREEFALL    PARA1
+ * BOSS_HAK      FREEFALL    PARA1
+ * ROOM1         FREEFALL    PARA1
+ * ROOM2         FREEFALL    PARA1
+ * DUNGEON4      FREEFALL    PARA1
+ */
 CameraModeValue D_801B51A8[] = {
-    /* CAM_FUNC_PARA1 */
 	{ -10, 0 },
 	{ 250, 1 },
 	{ 100, 2 },
@@ -988,8 +1684,23 @@ CameraModeValue D_801B51A8[] = {
 	{ 0x000C, 12 },
 };
 
+/**
+ * Setting       Mode     Function
+ * ----------    -----    --------
+ * DUNGEON0      CLIMB    JUMP2
+ * DUNGEON1      CLIMB    JUMP2
+ * DUNGEON2      CLIMB    JUMP2
+ * BOSS_SHIGE    CLIMB    JUMP2
+ * CHUBOSS       CLIMB    JUMP2
+ * DUNGEON3      CLIMB    JUMP2
+ * BOSS_LAST     CLIMB    JUMP2
+ * BOSS_HAK      CLIMB    JUMP2
+ * ROOM1         CLIMB    JUMP2
+ * SOKONASI      CLIMB    JUMP2
+ * ROOM2         CLIMB    JUMP2
+ * DUNGEON4      CLIMB    JUMP2
+ */
 CameraModeValue D_801B51D8[] = {
-    /* CAM_FUNC_JUMP2 */
 	{ -40, 0 },
 	{ 0x0096, 1 },
 	{ 250, 2 },
@@ -1001,8 +1712,23 @@ CameraModeValue D_801B51D8[] = {
 	{ 0, 9 },
 };
 
+/**
+ * Setting       Mode      Function
+ * ----------    ------    --------
+ * DUNGEON0      CLIMBZ    JUMP2
+ * DUNGEON1      CLIMBZ    JUMP2
+ * DUNGEON2      CLIMBZ    JUMP2
+ * BOSS_SHIGE    CLIMBZ    JUMP2
+ * CHUBOSS       CLIMBZ    JUMP2
+ * DUNGEON3      CLIMBZ    JUMP2
+ * BOSS_LAST     CLIMBZ    JUMP2
+ * BOSS_HAK      CLIMBZ    JUMP2
+ * ROOM1         CLIMBZ    JUMP2
+ * SOKONASI      CLIMBZ    JUMP2
+ * ROOM2         CLIMBZ    JUMP2
+ * DUNGEON4      CLIMBZ    JUMP2
+ */
 CameraModeValue D_801B51FC[] = {
-    /* CAM_FUNC_JUMP2 */
 	{ -40, 0 },
 	{ 250, 1 },
 	{ 250, 2 },
@@ -1014,8 +1740,23 @@ CameraModeValue D_801B51FC[] = {
 	{ 0x2006, 9 },
 };
 
+/**
+ * Setting       Mode      Function
+ * ----------    ------    --------
+ * DUNGEON0      CHARGE    PARA1
+ * DUNGEON1      CHARGE    PARA1
+ * DUNGEON2      CHARGE    PARA1
+ * BOSS_SHIGE    CHARGE    PARA1
+ * CHUBOSS       CHARGE    PARA1
+ * DUNGEON3      CHARGE    PARA1
+ * ONTHEPOLE     CHARGE    PARA1
+ * BOSS_LAST     CHARGE    PARA1
+ * BOSS_HAK      CHARGE    PARA1
+ * ROOM1         CHARGE    PARA1
+ * ROOM2         CHARGE    PARA1
+ * DUNGEON4      CHARGE    PARA1
+ */
 CameraModeValue D_801B5220[] = {
-    /* CAM_FUNC_PARA1 */
 	{ 0, 0 },
 	{ 250, 1 },
 	{ -20, 2 },
@@ -1030,8 +1771,12 @@ CameraModeValue D_801B5220[] = {
 	{ 10, 12 },
 };
 
+/**
+ * Setting     Mode       Function
+ * --------    -------    --------
+ * DUNGEON0    CHARGEZ    PARA1
+ */
 CameraModeValue D_801B5250[] = {
-    /* CAM_FUNC_PARA1 */
 	{ 50, 0 },
 	{ 250, 1 },
 	{ -20, 2 },
@@ -1046,8 +1791,22 @@ CameraModeValue D_801B5250[] = {
 	{ 0, 12 },
 };
 
+/**
+ * Setting       Mode    Function
+ * ----------    ----    --------
+ * DUNGEON0      HANG    PARA1
+ * DUNGEON1      HANG    PARA1
+ * DUNGEON2      HANG    PARA1
+ * BOSS_SHIGE    HANG    PARA1
+ * CHUBOSS       HANG    PARA1
+ * DUNGEON3      HANG    PARA1
+ * BOSS_LAST     HANG    PARA1
+ * BOSS_HAK      HANG    PARA1
+ * ROOM1         HANG    PARA1
+ * ROOM2         HANG    PARA1
+ * DUNGEON4      HANG    PARA1
+ */
 CameraModeValue D_801B5280[] = {
-    /* CAM_FUNC_PARA1 */
 	{ -40, 0 },
 	{ 220, 1 },
 	{ 50, 2 },
@@ -1062,8 +1821,22 @@ CameraModeValue D_801B5280[] = {
 	{ 0x000C, 12 },
 };
 
+/**
+ * Setting       Mode     Function
+ * ----------    -----    --------
+ * DUNGEON0      HANGZ    PARA1
+ * DUNGEON1      HANGZ    PARA1
+ * DUNGEON2      HANGZ    PARA1
+ * BOSS_SHIGE    HANGZ    PARA1
+ * CHUBOSS       HANGZ    PARA1
+ * DUNGEON3      HANGZ    PARA1
+ * BOSS_LAST     HANGZ    PARA1
+ * BOSS_HAK      HANGZ    PARA1
+ * ROOM1         HANGZ    PARA1
+ * ROOM2         HANGZ    PARA1
+ * DUNGEON4      HANGZ    PARA1
+ */
 CameraModeValue D_801B52B0[] = {
-    /* CAM_FUNC_PARA1 */
 	{ 0xFFB0, 0 },
 	{ 250, 1 },
 	{ 50, 2 },
@@ -1078,8 +1851,12 @@ CameraModeValue D_801B52B0[] = {
 	{ 0x0002, 12 },
 };
 
+/**
+ * Setting     Mode     Function
+ * --------    -----    --------
+ * DUNGEON0    STILL    NORM1
+ */
 CameraModeValue D_801B52E0[] = {
-    /* CAM_FUNC_NORM1 */
 	{ -10, 0 },
 	{ 180, 1 },
 	{ 220, 2 },
@@ -1092,8 +1869,17 @@ CameraModeValue D_801B52E0[] = {
 	{ 0xF003, 9 },
 };
 
+/**
+ * Setting       Mode        Function
+ * ----------    --------    --------
+ * DUNGEON0      PUSHPULL    PARA1
+ * BOSS_SHIGE    PUSHPULL    PARA1
+ * CHUBOSS       PUSHPULL    PARA1
+ * BOSS_LAST     PUSHPULL    PARA1
+ * BOSS_HAK      PUSHPULL    PARA1
+ * DUNGEON4      PUSHPULL    PARA1
+ */
 CameraModeValue D_801B5308[] = {
-    /* CAM_FUNC_PARA1 */
 	{ 0, 0 },
 	{ 250, 1 },
 	{ 0x0005, 2 },
@@ -1108,8 +1894,17 @@ CameraModeValue D_801B5308[] = {
 	{ 0, 12 },
 };
 
+/*=====================================================================
+ *                   Custom Data: ITEM0 Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * ITEM0      NORMAL    KEEP4
+ */
 CameraModeValue D_801B5338[] = {
-    /* CAM_FUNC_KEEP4 */
 	{ 0x0005, 0 },
 	{ 0x0046, 1 },
 	{ 0x0019, 3 },
@@ -1121,8 +1916,12 @@ CameraModeValue D_801B5338[] = {
 	{ 0x0006, 12 },
 };
 
+/**
+ * Setting    Mode    Function
+ * -------    ----    --------
+ * ITEM0      JUMP    KEEP4
+ */
 CameraModeValue D_801B535C[] = {
-    /* CAM_FUNC_KEEP4 */
 	{ -30, 0 },
 	{ 0x0023, 1 },
 	{ 0x0028, 3 },
@@ -1134,8 +1933,12 @@ CameraModeValue D_801B535C[] = {
 	{ 0x0006, 12 },
 };
 
+/**
+ * Setting    Mode        Function
+ * -------    --------    --------
+ * ITEM0      NUTSSHOT    KEEP4
+ */
 CameraModeValue D_801B5380[] = {
-    /* CAM_FUNC_KEEP4 */
 	{ -15, 0 },
 	{ 90, 1 },
 	{ -8, 3 },
@@ -1147,8 +1950,12 @@ CameraModeValue D_801B5380[] = {
 	{ 0x0006, 12 },
 };
 
+/**
+ * Setting    Mode         Function
+ * -------    ---------    --------
+ * ITEM0      GORONDASH    KEEP4
+ */
 CameraModeValue D_801B53A4[] = {
-    /* CAM_FUNC_KEEP4 */
 	{ 20, 0 },
 	{ 0x002D, 1 },
 	{ 0x0037, 3 },
@@ -1160,8 +1967,12 @@ CameraModeValue D_801B53A4[] = {
 	{ 0x0006, 12 },
 };
 
+/**
+ * Setting    Mode       Function
+ * -------    -------    --------
+ * ITEM0      NUTSFLY    KEEP4
+ */
 CameraModeValue D_801B53C8[] = {
-    /* CAM_FUNC_KEEP4 */
 	{ 10, 0 },
 	{ 0x0046, 1 },
 	{ 30, 3 },
@@ -1173,8 +1984,17 @@ CameraModeValue D_801B53C8[] = {
 	{ 0x0006, 12 },
 };
 
+/*=====================================================================
+ *                   Custom Data: ITEM1 Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * ITEM1      NORMAL    KEEP4
+ */
 CameraModeValue D_801B53EC[] = {
-    /* CAM_FUNC_KEEP4 */
 	{ -45, 0 },
 	{ 0x004B, 1 },
 	{ 0xFFF4, 3 },
@@ -1186,8 +2006,12 @@ CameraModeValue D_801B53EC[] = {
 	{ 0x0006, 12 },
 };
 
+/**
+ * Setting    Mode    Function
+ * -------    ----    --------
+ * ITEM1      JUMP    KEEP4
+ */
 CameraModeValue D_801B5410[] = {
-    /* CAM_FUNC_KEEP4 */
 	{ -40, 0 },
 	{ 0x0046, 1 },
 	{ 20, 3 },
@@ -1199,8 +2023,12 @@ CameraModeValue D_801B5410[] = {
 	{ 0x0006, 12 },
 };
 
+/**
+ * Setting    Mode        Function
+ * -------    --------    --------
+ * ITEM1      NUTSSHOT    KEEP4
+ */
 CameraModeValue D_801B5434[] = {
-    /* CAM_FUNC_KEEP4 */
 	{ -20, 0 },
 	{ 0x0055, 1 },
 	{ -5, 3 },
@@ -1212,8 +2040,12 @@ CameraModeValue D_801B5434[] = {
 	{ 0x0006, 12 },
 };
 
+/**
+ * Setting    Mode         Function
+ * -------    ---------    --------
+ * ITEM1      GORONDASH    KEEP4
+ */
 CameraModeValue D_801B5458[] = {
-    /* CAM_FUNC_KEEP4 */
 	{ -50, 0 },
 	{ 0x005F, 1 },
 	{ -15, 3 },
@@ -1225,8 +2057,12 @@ CameraModeValue D_801B5458[] = {
 	{ 0x0006, 12 },
 };
 
+/**
+ * Setting    Mode       Function
+ * -------    -------    --------
+ * ITEM1      NUTSFLY    KEEP4
+ */
 CameraModeValue D_801B547C[] = {
-    /* CAM_FUNC_KEEP4 */
 	{ 0xFFC4, 0 },
 	{ 0x0046, 1 },
 	{ -15, 3 },
@@ -1238,8 +2074,17 @@ CameraModeValue D_801B547C[] = {
 	{ 0x0006, 12 },
 };
 
+/*=====================================================================
+ *                   Custom Data: ITEM2 Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * ITEM2      NORMAL    KEEP4
+ */
 CameraModeValue D_801B54A0[] = {
-    /* CAM_FUNC_KEEP4 */
 	{ -40, 0 },
 	{ 0x006E, 1 },
 	{ 0x0005, 3 },
@@ -1251,8 +2096,12 @@ CameraModeValue D_801B54A0[] = {
 	{ 0x0006, 12 },
 };
 
+/**
+ * Setting    Mode    Function
+ * -------    ----    --------
+ * ITEM2      JUMP    KEEP4
+ */
 CameraModeValue D_801B54C4[] = {
-    /* CAM_FUNC_KEEP4 */
 	{ 0xFFC4, 0 },
 	{ 0x0082, 1 },
 	{ -10, 3 },
@@ -1264,8 +2113,12 @@ CameraModeValue D_801B54C4[] = {
 	{ 0x0006, 12 },
 };
 
+/**
+ * Setting    Mode        Function
+ * -------    --------    --------
+ * ITEM2      NUTSSHOT    KEEP4
+ */
 CameraModeValue D_801B54E8[] = {
-    /* CAM_FUNC_KEEP4 */
 	{ -40, 0 },
 	{ 0x006E, 1 },
 	{ 0, 3 },
@@ -1277,8 +2130,12 @@ CameraModeValue D_801B54E8[] = {
 	{ 0x0006, 12 },
 };
 
+/**
+ * Setting    Mode         Function
+ * -------    ---------    --------
+ * ITEM2      GORONDASH    KEEP4
+ */
 CameraModeValue D_801B550C[] = {
-    /* CAM_FUNC_KEEP4 */
 	{ -50, 0 },
 	{ 0x008C, 1 },
 	{ -10, 3 },
@@ -1290,8 +2147,12 @@ CameraModeValue D_801B550C[] = {
 	{ 0x0006, 12 },
 };
 
+/**
+ * Setting    Mode       Function
+ * -------    -------    --------
+ * ITEM2      NUTSFLY    KEEP4
+ */
 CameraModeValue D_801B5530[] = {
-    /* CAM_FUNC_KEEP4 */
 	{ 0xFFC4, 0 },
 	{ 0x0078, 1 },
 	{ -8, 3 },
@@ -1303,8 +2164,17 @@ CameraModeValue D_801B5530[] = {
 	{ 0x0006, 12 },
 };
 
+/*=====================================================================
+ *                   Custom Data: ITEM3 Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * ITEM3      NORMAL    KEEP4
+ */
 CameraModeValue D_801B5554[] = {
-    /* CAM_FUNC_KEEP4 */
 	{ -15, 0 },
 	{ 0x0041, 1 },
 	{ 50, 3 },
@@ -1316,8 +2186,12 @@ CameraModeValue D_801B5554[] = {
 	{ 0x0006, 12 },
 };
 
+/**
+ * Setting    Mode    Function
+ * -------    ----    --------
+ * ITEM3      JUMP    KEEP4
+ */
 CameraModeValue D_801B5578[] = {
-    /* CAM_FUNC_KEEP4 */
 	{ -20, 0 },
 	{ 60, 1 },
 	{ 50, 3 },
@@ -1329,8 +2203,12 @@ CameraModeValue D_801B5578[] = {
 	{ 0x0006, 12 },
 };
 
+/**
+ * Setting    Mode        Function
+ * -------    --------    --------
+ * ITEM3      NUTSSHOT    KEEP4
+ */
 CameraModeValue D_801B559C[] = {
-    /* CAM_FUNC_KEEP4 */
 	{ -15, 0 },
 	{ 60, 1 },
 	{ 0x0028, 3 },
@@ -1342,8 +2220,12 @@ CameraModeValue D_801B559C[] = {
 	{ 0x0006, 12 },
 };
 
+/**
+ * Setting    Mode         Function
+ * -------    ---------    --------
+ * ITEM3      GORONDASH    KEEP4
+ */
 CameraModeValue D_801B55C0[] = {
-    /* CAM_FUNC_KEEP4 */
 	{ -25, 0 },
 	{ 0x005F, 1 },
 	{ 50, 3 },
@@ -1355,8 +2237,12 @@ CameraModeValue D_801B55C0[] = {
 	{ 0x0006, 12 },
 };
 
+/**
+ * Setting    Mode       Function
+ * -------    -------    --------
+ * ITEM3      NUTSFLY    KEEP4
+ */
 CameraModeValue D_801B55E4[] = {
-    /* CAM_FUNC_KEEP4 */
 	{ -20, 0 },
 	{ 0x004B, 1 },
 	{ 0x002D, 3 },
@@ -1368,8 +2254,17 @@ CameraModeValue D_801B55E4[] = {
 	{ 0x0006, 12 },
 };
 
+/*=====================================================================
+ *                   Custom Data: WARP0 Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * WARP0      NORMAL    KEEP4
+ */
 CameraModeValue D_801B5608[] = {
-    /* CAM_FUNC_KEEP4 */
 	{ -45, 0 },
 	{ 0x00A5, 1 },
 	{ 0, 3 },
@@ -1381,8 +2276,12 @@ CameraModeValue D_801B5608[] = {
 	{ 10, 12 },
 };
 
+/**
+ * Setting    Mode    Function
+ * -------    ----    --------
+ * WARP0      JUMP    KEEP4
+ */
 CameraModeValue D_801B562C[] = {
-    /* CAM_FUNC_KEEP4 */
 	{ 0xFFC9, 0 },
 	{ 180, 1 },
 	{ 0, 3 },
@@ -1394,8 +2293,12 @@ CameraModeValue D_801B562C[] = {
 	{ 10, 12 },
 };
 
+/**
+ * Setting    Mode        Function
+ * -------    --------    --------
+ * WARP0      NUTSSHOT    KEEP4
+ */
 CameraModeValue D_801B5650[] = {
-    /* CAM_FUNC_KEEP4 */
 	{ -20, 0 },
 	{ 0x00AF, 1 },
 	{ 0, 3 },
@@ -1407,8 +2310,13 @@ CameraModeValue D_801B5650[] = {
 	{ 10, 12 },
 };
 
+/**
+ * Setting    Mode         Function
+ * -------    ---------    --------
+ * WARP0      GORONDASH    KEEP4
+ */
 CameraModeValue D_801B5674[] = {
-    /* CAM_FUNC_KEEP4 */
+
 	{ -50, 0 },
 	{ 220, 1 },
 	{ 0, 3 },
@@ -1420,8 +2328,12 @@ CameraModeValue D_801B5674[] = {
 	{ 10, 12 },
 };
 
+/**
+ * Setting    Mode       Function
+ * -------    -------    --------
+ * WARP0      NUTSFLY    KEEP4
+ */
 CameraModeValue D_801B5698[] = {
-    /* CAM_FUNC_KEEP4 */
 	{ 0xFFC4, 0 },
 	{ 200, 1 },
 	{ 0, 3 },
@@ -1433,8 +2345,17 @@ CameraModeValue D_801B5698[] = {
 	{ 10, 12 },
 };
 
+/*=====================================================================
+ *                   Custom Data: DEATH Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * DEATH      NORMAL    KEEP4
+ */
 CameraModeValue D_801B56BC[] = {
-    /* CAM_FUNC_KEEP4 */
 	{ 0xFFBA, 0 },
 	{ 0x00A0, 1 },
 	{ 0, 3 },
@@ -1446,8 +2367,14 @@ CameraModeValue D_801B56BC[] = {
 	{ 100, 12 },
 };
 
+/**
+ * Setting    Mode         Function
+ * -------    ---------    --------
+ * DEATH      JUMP         KEEP4
+ * DEATH      GORONDASH    KEEP4
+ * DEATH      NUTSFLY      KEEP4
+ */
 CameraModeValue D_801B56E0[] = {
-    /* CAM_FUNC_KEEP4 */
 	{ 0xFFBA, 0 },
 	{ 0x00A0, 1 },
 	{ 0, 3 },
@@ -1459,8 +2386,12 @@ CameraModeValue D_801B56E0[] = {
 	{ 100, 12 },
 };
 
+/**
+ * Setting    Mode        Function
+ * -------    --------    --------
+ * DEATH      NUTSSHOT    KEEP4
+ */
 CameraModeValue D_801B5704[] = {
-    /* CAM_FUNC_KEEP4 */
 	{ 0xFFBA, 0 },
 	{ 0x0096, 1 },
 	{ 0, 3 },
@@ -1472,8 +2403,20 @@ CameraModeValue D_801B5704[] = {
 	{ 100, 12 },
 };
 
+/*=====================================================================
+ *                   Custom Data: REBIRTH Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode         Function
+ * -------    ---------    --------
+ * REBIRTH    NORMAL       KEEP4
+ * REBIRTH    JUMP         KEEP4
+ * REBIRTH    GORONDASH    KEEP4
+ * REBIRTH    NUTSFLY      KEEP4
+ */
 CameraModeValue D_801B5728[] = {
-    /* CAM_FUNC_KEEP4 */
 	{ 0xFFC4, 0 },
 	{ 0x00A0, 1 },
 	{ 30, 3 },
@@ -1485,8 +2428,12 @@ CameraModeValue D_801B5728[] = {
 	{ 100, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * REBIRTH    NUTSSHOT    KEEP4
+ */
 CameraModeValue D_801B574C[] = {
-    /* CAM_FUNC_KEEP4 */
 	{ -20, 0 },
 	{ 0x008C, 1 },
 	{ 30, 3 },
@@ -1498,15 +2445,33 @@ CameraModeValue D_801B574C[] = {
 	{ 100, 12 },
 };
 
+/*=====================================================================
+ *                   Custom Data: TREASURE Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting     Mode      Function
+ * --------    ------    --------
+ * TREASURE    NORMAL    DEMO2
+ */
 CameraModeValue D_801B5770[] = {
-    /* CAM_FUNC_DEMO2 */
     { 60, 7 },     // fov
     { 30, 8 },     // unk_04
     { 0xFF00, 9 }, // flags
 };
 
+/*=====================================================================
+ *                   Custom Data: DUNGEON1 Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting     Mode      Function
+ * --------    ------    --------
+ * DUNGEON1    NORMAL    NORM1
+ */
 CameraModeValue D_801B577C[] = {
-	/* CAM_FUNC_NORM1 */
 	{ -20, 0 },
 	{ 350, 1 },
 	{ 0x0190, 2 },
@@ -1519,8 +2484,12 @@ CameraModeValue D_801B577C[] = {
 	{ 0x0083, 9 },
 };
 
+/**
+ * Setting     Mode    Function
+ * --------    ----    --------
+ * DUNGEON1    JUMP    NORM1
+ */
 CameraModeValue D_801B57A4[] = {
-    /* CAM_FUNC_NORM1 */
 	{ -20, 0 },
 	{ 350, 1 },
 	{ 0x0190, 2 },
@@ -1533,8 +2502,12 @@ CameraModeValue D_801B57A4[] = {
 	{ 0x008B, 9 },
 };
 
+/**
+ * Setting     Mode     Function
+ * --------    -----    --------
+ * DUNGEON1    STILL    NORM1
+ */
 CameraModeValue D_801B57CC[] = {
-    /* CAM_FUNC_NORM1 */
 	{ -20, 0 },
 	{ 350, 1 },
 	{ 0x0190, 2 },
@@ -1547,8 +2520,13 @@ CameraModeValue D_801B57CC[] = {
 	{ 0xF023, 9 },
 };
 
+/**
+ * Setting      Mode        Function
+ * ---------    --------    --------
+ * DUNGEON1     PUSHPULL    PARA1
+ * ONTHEPOLL    PUSHPULL    PARA1
+ */
 CameraModeValue D_801B57F4[] = {
-    /* CAM_FUNC_PARA1 */
 	{ 0, 0 },
 	{ 250, 1 },
 	{ 0x0005, 2 },
@@ -1563,24 +2541,51 @@ CameraModeValue D_801B57F4[] = {
 	{ 0, 12 },
 };
 
+/*=====================================================================
+ *                   Custom Data: FIXED1 Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * FIXED1     NORMAL    FIXD1
+ */
 CameraModeValue D_801B5824[] = {
-	/* CAM_FUNC_FIXD1 */
 	{ -40, 0 },
 	{ 100, 4 },
 	{ 60, 7 },
 	{ 0xFF00, 9 },
 };
 
+/*=====================================================================
+ *                   Custom Data: FIXED2 Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * FIXED2     NORMAL    FIXD1
+ */
 CameraModeValue D_801B5834[] = {
-	/* CAM_FUNC_FIXD1 */
 	{ -40, 0 },
 	{ 10, 4 },
 	{ 60, 7 },
 	{ 0xFF00, 9 },
 };
 
+/*=====================================================================
+ *                   Custom Data: MAZE Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * MAZE       NORMAL    PARA2
+ */
 CameraModeValue D_801B5844[] = {
-    /* CAM_FUNC_PARA2 */
 	{ 0xFFDD, 0 },
 	{ 0x00A0, 2 },
 	{ 0x0041, 1 },
@@ -1591,8 +2596,17 @@ CameraModeValue D_801B5844[] = {
 	{ 0x0002, 9 },
 };
 
+/*=====================================================================
+ *                   Custom Data: REMOTEBOMB Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting       Mode      Function
+ * ----------    ------    --------
+ * REMOTEBOMB    NORMAL    NORM2
+ */
 CameraModeValue D_801B5864[] = {
-    /* CAM_FUNC_NORM2 */
 	{ 20, 0 },
 	{ 200, 1 },
 	{ 0x0320, 2 },
@@ -1603,8 +2617,17 @@ CameraModeValue D_801B5864[] = {
 	{ 0x0002, 9 },
 };
 
+/*=====================================================================
+ *                   Custom Data: CIRCLE1 Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * CIRCLE1    NORMAL    FIXD2
+ */
 CameraModeValue D_801B5884[] = {
-    /* CAM_FUNC_FIXD2 */
 	{ -40, 0 },
 	{ 0x0028, 1 },
 	{ 0x3200, 2 },
@@ -1614,8 +2637,17 @@ CameraModeValue D_801B5884[] = {
 	{ 0xFF01, 9 },
 };
 
+/*=====================================================================
+ *                   Custom Data: CIRCLE2 Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * CIRCLE2    NORMAL    FIXD2
+ */
 CameraModeValue D_801B58A0[] = {
-    /* CAM_FUNC_FIXD2 */
 	{ -40, 0 },
 	{ 0x0028, 1 },
 	{ 0x3200, 2 },
@@ -1625,8 +2657,17 @@ CameraModeValue D_801B58A0[] = {
 	{ 0xFF00, 9 },
 };
 
+/*=====================================================================
+ *                   Custom Data: CIRCLE3 Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * CIRCLE3    NORMAL    FIXD2
+ */
 CameraModeValue D_801B58BC[] = {
-    /* CAM_FUNC_FIXD2 */
 	{ -40, 0 },
 	{ 0x0028, 1 },
 	{ 0x3200, 2 },
@@ -1636,8 +2677,17 @@ CameraModeValue D_801B58BC[] = {
 	{ 0, 9 },
 };
 
+/*=====================================================================
+ *                   Custom Data: CIRCLE4 Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * CIRCLE4    NORMAL    FIXD2
+ */
 CameraModeValue D_801B58D8[] = {
-    /* CAM_FUNC_FIXD2 */
 	{ -40, 0 },
 	{ 0x0028, 1 },
 	{ 0x3200, 2 },
@@ -1647,16 +2697,34 @@ CameraModeValue D_801B58D8[] = {
 	{ 0xFF09, 9 },
 };
 
+/*=====================================================================
+ *                   Custom Data: FIXED3 Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * FIXED3     NORMAL    FIXD1
+ */
 CameraModeValue D_801B58F4[] = {
-	/* CAM_FUNC_FIXD1 */
 	{ -40, 0 },
 	{ 100, 4 },
 	{ 60, 7 },
 	{ 0, 9 },
 };
 
+/*=====================================================================
+ *                   Custom Data: TOWER0 Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * TOWER0    NORMAL    NORM0
+ */
 CameraModeValue D_801B5904[] = {
-	/* CAM_FUNC_NORM0 */
 	{ 0, 0 },
 	{ 350, 1 },
 	{ 0x0190, 2 },
@@ -1668,8 +2736,12 @@ CameraModeValue D_801B5904[] = {
 	{ 0x0001, 9 },
 };
 
+/**
+ * Setting    Mode    Function
+ * -------    ----    --------
+ * TOWER0    JUMP    NORM1
+ */
 CameraModeValue D_801B5928[] = {
-    /* CAM_FUNC_NORM1 */
 	{ -20, 0 },
 	{ 0x0154, 1 },
 	{ 0x0190, 2 },
@@ -1682,8 +2754,12 @@ CameraModeValue D_801B5928[] = {
 	{ 0x008B, 9 },
 };
 
+/**
+ * Setting    Mode     Function
+ * -------    -----    --------
+ * TOWER0     STILL    NORM1
+ */
 CameraModeValue D_801B5950[] = {
-    /* CAM_FUNC_NORM1 */
 	{ 0, 0 },
 	{ 350, 1 },
 	{ 0x0190, 2 },
@@ -1696,8 +2772,17 @@ CameraModeValue D_801B5950[] = {
 	{ 0xF023, 9 },
 };
 
+/*=====================================================================
+ *                   Custom Data: PARALLEL0 Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting      Mode      Function
+ * ---------    ------    --------
+ * PARALLEL0    NORMAL    PARA1
+ */
 CameraModeValue D_801B5978[] = {
-    /* CAM_FUNC_PARA1 */
 	{ 0, 0 },
 	{ 0x0190, 1 },
 	{ 20, 2 },
@@ -1712,8 +2797,17 @@ CameraModeValue D_801B5978[] = {
 	{ 0, 12 },
 };
 
+/*=====================================================================
+ *                   Custom Data: NORMALD Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMALD    NORMAL    NORM1
+ */
 CameraModeValue D_801B59A8[] = {
-    /* CAM_FUNC_NORM1 */
 	{ 0, 0 },
 	{ 0x0190, 1 },
 	{ 0x01F4, 2 },
@@ -1726,8 +2820,17 @@ CameraModeValue D_801B59A8[] = {
 	{ 0xFF03, 9 },
 };
 
+/*=====================================================================
+ *                   Custom Data: SUBJECTD Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting     Mode      Function
+ * --------    ------    --------
+ * SUBJECTD    NORMAL    SUBJ1
+ */
 CameraModeValue D_801B59D0[] = {
-    /* CAM_FUNC_SUBJ1 */
 	{ 0, 0 },
 	{ 0x0005, 1 },
 	{ 50, 2 },
@@ -1739,22 +2842,49 @@ CameraModeValue D_801B59D0[] = {
 	{ 0xFF00, 9 },
 };
 
+/*=====================================================================
+ *                   Custom Data: START0 Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * START0     NORMAL    UNIQ0
+ */
 CameraModeValue D_801B59F4[] = {
-    /* CAM_FUNC_UNIQ0 */
 	{ 0, 0 },
 	{ 100, 4 },
 	{ 0x0001, 9 },
 };
 
+/*=====================================================================
+ *                   Custom Data: START2 Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * START2     NORMAL    UNIQ0
+ */
 CameraModeValue D_801B5A00[] = {
-    /* CAM_FUNC_UNIQ0 */
 	{ 0, 0 },
 	{ 30, 4 },
 	{ 0x0011, 9 },
 };
 
+/*=====================================================================
+ *                   Custom Data: JCRUISING Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting      Mode      Function
+ * ---------    ------    --------
+ * JCRUISING    NORMAL    SUBJ1
+ */
 CameraModeValue D_801B5A0C[] = {
-    /* CAM_FUNC_SUBJ1 */
 	{ 20, 0 },
 	{ 90, 1 },
 	{ 80, 2 },
@@ -1766,6 +2896,16 @@ CameraModeValue D_801B5A0C[] = {
 	{ 0, 9 },
 };
 
+/*=====================================================================
+ *                   Custom Data: CLIMEMAZE Setting
+ *=====================================================================
+ */
+
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5A30[] = {
     /* CAM_FUNC_PARA1 */
 	{ 0, 0 },
@@ -1783,6 +2923,11 @@ CameraModeValue D_801B5A30[] = {
 	{ 50, 18 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5A64[] = {
     /* CAM_FUNC_PARA1 */
 	{ 0, 0 },
@@ -1799,6 +2944,11 @@ CameraModeValue D_801B5A64[] = {
 	{ 0, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5A94[] = {
     /* CAM_FUNC_NORM1 */
 	{ -10, 0 },
@@ -1813,6 +2963,11 @@ CameraModeValue D_801B5A94[] = {
 	{ 0x0083, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5ABC[] = {
     /* CAM_FUNC_BATT1 */
 	{ -40, 0 },
@@ -1830,6 +2985,11 @@ CameraModeValue D_801B5ABC[] = {
 	{ 0x0028, 18 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5AF0[] = {
     /* CAM_FUNC_NORM1 */
 	{ -20, 0 },
@@ -1844,6 +3004,11 @@ CameraModeValue D_801B5AF0[] = {
 	{ 0x008B, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5B18[] = {
     /* CAM_FUNC_NORM1 */
 	{ -10, 0 },
@@ -1858,6 +3023,11 @@ CameraModeValue D_801B5B18[] = {
 	{ 0xF023, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5B40[] = {
     /* CAM_FUNC_PARA1 */
 	{ 0, 0 },
@@ -1874,6 +3044,11 @@ CameraModeValue D_801B5B40[] = {
 	{ 0, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5B70[] = {
     /* CAM_FUNC_NORM1 */
 	{ -20, 0 },
@@ -1888,6 +3063,11 @@ CameraModeValue D_801B5B70[] = {
 	{ 0x0083, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5B98[] = {
     /* CAM_FUNC_KEEP1 */
 	{ -50, 0 },
@@ -1904,6 +3084,11 @@ CameraModeValue D_801B5B98[] = {
 	{ 20, 11 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5BC8[] = {
     /* CAM_FUNC_KEEP3 */
 	{ -20, 0 },
@@ -1921,6 +3106,11 @@ CameraModeValue D_801B5BC8[] = {
 	{ 0x0028, 18 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5BFC[] = {
     /* CAM_FUNC_BATT1 */
 	{ 0xFFC4, 0 },
@@ -1938,6 +3128,11 @@ CameraModeValue D_801B5BFC[] = {
 	{ 0x0028, 18 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5C30[] = {
     /* CAM_FUNC_NORM1 */
 	{ -20, 0 },
@@ -1952,6 +3147,11 @@ CameraModeValue D_801B5C30[] = {
 	{ 0x008B, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5C58[] = {
     /* CAM_FUNC_NORM1 */
 	{ -20, 0 },
@@ -1966,6 +3166,11 @@ CameraModeValue D_801B5C58[] = {
 	{ 0xF023, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5C80[] = {
     /* CAM_FUNC_PARA1 */
 	{ 100, 0 },
@@ -1982,6 +3187,11 @@ CameraModeValue D_801B5C80[] = {
 	{ 20, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5CB0[] = {
     /* CAM_FUNC_FIXD2 */
 	{ -40, 0 },
@@ -1993,6 +3203,11 @@ CameraModeValue D_801B5CB0[] = {
 	{ 0xFF03, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5CCC[] = {
     /* CAM_FUNC_FIXD2 */
 	{ -40, 0 },
@@ -2004,6 +3219,11 @@ CameraModeValue D_801B5CCC[] = {
 	{ 0xFF20, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5CE8[] = {
     /* CAM_FUNC_NORM1 */
 	{ -15, 0 },
@@ -2018,6 +3238,11 @@ CameraModeValue D_801B5CE8[] = {
 	{ 0x0083, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5D10[] = {
     /* CAM_FUNC_KEEP1 */
 	{ 0, 0 },
@@ -2034,6 +3259,11 @@ CameraModeValue D_801B5D10[] = {
 	{ 20, 11 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5D40[] = {
     /* CAM_FUNC_BATT1 */
 	{ -25, 0 },
@@ -2051,6 +3281,11 @@ CameraModeValue D_801B5D40[] = {
 	{ 50, 18 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5D74[] = {
     /* CAM_FUNC_NORM1 */
 	{ -15, 0 },
@@ -2065,6 +3300,11 @@ CameraModeValue D_801B5D74[] = {
 	{ 0x008B, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5D9C[] = {
     /* CAM_FUNC_NORM1 */
 	{ -15, 0 },
@@ -2079,6 +3319,11 @@ CameraModeValue D_801B5D9C[] = {
 	{ 0xF023, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5DC4[] = {
 	/* CAM_FUNC_FIXD1 */
 	{ -40, 0 },
@@ -2087,6 +3332,11 @@ CameraModeValue D_801B5DC4[] = {
 	{ 0xFF10, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5DD4[] = {
     /* CAM_FUNC_NORM1 */
 	{ -20, 0 },
@@ -2101,6 +3351,11 @@ CameraModeValue D_801B5DD4[] = {
 	{ 0x0082, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5DFC[] = {
     /* CAM_FUNC_PARA1 */
 	{ 0xFFC4, 0 },
@@ -2117,6 +3372,11 @@ CameraModeValue D_801B5DFC[] = {
 	{ 0, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5E2C[] = {
     /* CAM_FUNC_FIXD2 */
 	{ 0x0046, 0 },
@@ -2128,6 +3388,11 @@ CameraModeValue D_801B5E2C[] = {
 	{ 0x0001, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5E48[] = {
     /* CAM_FUNC_FIXD2 */
 	{ -40, 0 },
@@ -2139,6 +3404,11 @@ CameraModeValue D_801B5E48[] = {
 	{ 0xFF08, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5E64[] = {
     /* CAM_FUNC_NORM1 */
 	{ -20, 0 },
@@ -2153,6 +3423,11 @@ CameraModeValue D_801B5E64[] = {
 	{ 0x0042, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5E8C[] = {
     /* CAM_FUNC_NORM1 */
 	{ -20, 0 },
@@ -2167,6 +3442,11 @@ CameraModeValue D_801B5E8C[] = {
 	{ 0xF023, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5EB4[] = {
     /* CAM_FUNC_NORM1 */
 	{ -30, 0 },
@@ -2181,6 +3461,11 @@ CameraModeValue D_801B5EB4[] = {
 	{ 0x0082, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5EDC[] = {
     /* CAM_FUNC_PARA1 */
 	{ -30, 0 },
@@ -2197,6 +3482,11 @@ CameraModeValue D_801B5EDC[] = {
 	{ 0, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5F0C[] = {
     /* CAM_FUNC_NORM1 */
 	{ -30, 0 },
@@ -2211,6 +3501,11 @@ CameraModeValue D_801B5F0C[] = {
 	{ 0x008B, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5F34[] = {
     /* CAM_FUNC_NORM1 */
 	{ -40, 0 },
@@ -2225,6 +3520,11 @@ CameraModeValue D_801B5F34[] = {
 	{ 0xF023, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5F5C[] = {
     /* CAM_FUNC_PARA1 */
 	{ 0, 0 },
@@ -2241,6 +3541,11 @@ CameraModeValue D_801B5F5C[] = {
 	{ 0, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5F8C[] = {
     /* CAM_FUNC_SUBJ1 */
 	{ 0, 0 },
@@ -2254,6 +3559,11 @@ CameraModeValue D_801B5F8C[] = {
 	{ 0x0200, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5FB0[] = {
     /* CAM_FUNC_SUBJ1 */
 	{ 0, 0 },
@@ -2267,6 +3577,11 @@ CameraModeValue D_801B5FB0[] = {
 	{ 0x0200, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5FD4[] = {
     /* CAM_FUNC_SUBJ1 */
 	{ 0, 0 },
@@ -2280,6 +3595,11 @@ CameraModeValue D_801B5FD4[] = {
 	{ 0x0210, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B5FF8[] = {
     /* CAM_FUNC_SUBJ1 */
 	{ 0, 0 },
@@ -2293,6 +3613,11 @@ CameraModeValue D_801B5FF8[] = {
 	{ 0x0210, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B601C[] = {
     /* CAM_FUNC_NORM1 */
 	{ 0xFFDD, 0 },
@@ -2307,6 +3632,11 @@ CameraModeValue D_801B601C[] = {
 	{ 0x0083, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6044[] = {
     /* CAM_FUNC_PARA1 */
 	{ -10, 0 },
@@ -2323,6 +3653,11 @@ CameraModeValue D_801B6044[] = {
 	{ 0, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6074[] = {
     /* CAM_FUNC_KEEP1 */
 	{ -30, 0 },
@@ -2339,6 +3674,11 @@ CameraModeValue D_801B6074[] = {
 	{ 30, 11 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B60A4[] = {
     /* CAM_FUNC_KEEP3 */
 	{ -20, 0 },
@@ -2356,6 +3696,11 @@ CameraModeValue D_801B60A4[] = {
 	{ 60, 18 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B60D8[] = {
     /* CAM_FUNC_BATT1 */
 	{ -25, 0 },
@@ -2373,6 +3718,11 @@ CameraModeValue D_801B60D8[] = {
 	{ 50, 18 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B610C[] = {
     /* CAM_FUNC_JUMP2 */
 	{ -20, 0 },
@@ -2386,6 +3736,11 @@ CameraModeValue D_801B610C[] = {
 	{ 0, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6130[] = {
     /* CAM_FUNC_JUMP2 */
 	{ -20, 0 },
@@ -2399,6 +3754,11 @@ CameraModeValue D_801B6130[] = {
 	{ 0x2006, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6154[] = {
     /* CAM_FUNC_NORM1 */
 	{ -30, 0 },
@@ -2413,6 +3773,11 @@ CameraModeValue D_801B6154[] = {
 	{ 0x008B, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B617C[] = {
     /* CAM_FUNC_PARA1 */
 	{ -40, 0 },
@@ -2429,6 +3794,11 @@ CameraModeValue D_801B617C[] = {
 	{ 0x000C, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B61AC[] = {
     /* CAM_FUNC_PARA1 */
 	{ 0xFFB0, 0 },
@@ -2445,6 +3815,11 @@ CameraModeValue D_801B61AC[] = {
 	{ 0x0002, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B61DC[] = {
     /* CAM_FUNC_PARA1 */
 	{ -10, 0 },
@@ -2461,6 +3836,11 @@ CameraModeValue D_801B61DC[] = {
 	{ 0x000C, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B620C[] = {
     /* CAM_FUNC_PARA1 */
 	{ 0xFFB0, 0 },
@@ -2477,6 +3857,11 @@ CameraModeValue D_801B620C[] = {
 	{ 10, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B623C[] = {
     /* CAM_FUNC_PARA1 */
 	{ 0xFFB0, 0 },
@@ -2493,6 +3878,11 @@ CameraModeValue D_801B623C[] = {
 	{ 0, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B626C[] = {
     /* CAM_FUNC_NORM1 */
 	{ -20, 0 },
@@ -2507,6 +3897,11 @@ CameraModeValue D_801B626C[] = {
 	{ 0xF023, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6294[] = {
     /* CAM_FUNC_PARA1 */
 	{ 0, 0 },
@@ -2523,6 +3918,11 @@ CameraModeValue D_801B6294[] = {
 	{ 0, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B62C4[] = {
     /* CAM_FUNC_KEEP1 */
 	{ -5, 0 },
@@ -2539,6 +3939,11 @@ CameraModeValue D_801B62C4[] = {
 	{ 30, 11 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B62F4[] = {
     /* CAM_FUNC_NORM1 */
 	{ 50, 0 },
@@ -2553,6 +3958,11 @@ CameraModeValue D_801B62F4[] = {
 	{ 0x0087, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B631C[] = {
     /* CAM_FUNC_PARA1 */
 	{ 100, 0 },
@@ -2569,6 +3979,11 @@ CameraModeValue D_801B631C[] = {
 	{ 20, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B634C[] = {
     /* CAM_FUNC_NORM1 */
 	{ 0xFFC4, 0 },
@@ -2583,6 +3998,11 @@ CameraModeValue D_801B634C[] = {
 	{ 0x0083, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6374[] = {
     /* CAM_FUNC_PARA1 */
 	{ 0xFFC4, 0 },
@@ -2599,6 +4019,11 @@ CameraModeValue D_801B6374[] = {
 	{ 0, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B63A4[] = {
     /* CAM_FUNC_NORM1 */
 	{ -10, 0 },
@@ -2613,6 +4038,11 @@ CameraModeValue D_801B63A4[] = {
 	{ 0x008F, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B63CC[] = {
     /* CAM_FUNC_PARA1 */
 	{ 0, 0 },
@@ -2629,6 +4059,11 @@ CameraModeValue D_801B63CC[] = {
 	{ 0, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B63FC[] = {
     /* CAM_FUNC_FIXD2 */
 	{ -10, 0 },
@@ -2640,6 +4075,11 @@ CameraModeValue D_801B63FC[] = {
 	{ 0xFF18, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6418[] = {
     /* CAM_FUNC_FIXD2 */
 	{ -40, 0 },
@@ -2651,6 +4091,11 @@ CameraModeValue D_801B6418[] = {
 	{ 0x0005, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6434[] = {
     /* CAM_FUNC_NORM1 */
 	{ -15, 0 },
@@ -2665,6 +4110,11 @@ CameraModeValue D_801B6434[] = {
 	{ 0x0002, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B645C[] = {
     /* CAM_FUNC_PARA1 */
 	{ 0, 0 },
@@ -2681,6 +4131,11 @@ CameraModeValue D_801B645C[] = {
 	{ 0, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B648C[] = {
     /* CAM_FUNC_NORM1 */
 	{ -10, 0 },
@@ -2695,6 +4150,11 @@ CameraModeValue D_801B648C[] = {
 	{ 0x008B, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B64B4[] = {
     /* CAM_FUNC_JUMP2 */
 	{ -20, 0 },
@@ -2708,6 +4168,11 @@ CameraModeValue D_801B64B4[] = {
 	{ 0, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B64D8[] = {
     /* CAM_FUNC_JUMP2 */
 	{ -20, 0 },
@@ -2721,6 +4186,11 @@ CameraModeValue D_801B64D8[] = {
 	{ 0x2006, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B64FC[] = {
     /* CAM_FUNC_PARA1 */
 	{ -40, 0 },
@@ -2737,6 +4207,11 @@ CameraModeValue D_801B64FC[] = {
 	{ 0x000C, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B652C[] = {
     /* CAM_FUNC_PARA1 */
 	{ 0xFFB0, 0 },
@@ -2753,6 +4228,11 @@ CameraModeValue D_801B652C[] = {
 	{ 0x0002, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B655C[] = {
     /* CAM_FUNC_NORM1 */
 	{ -15, 0 },
@@ -2767,6 +4247,11 @@ CameraModeValue D_801B655C[] = {
 	{ 0xF023, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6584[] = {
     /* CAM_FUNC_NORM1 */
 	{ 0, 0 },
@@ -2781,6 +4266,11 @@ CameraModeValue D_801B6584[] = {
 	{ 0x0082, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B65AC[] = {
     /* CAM_FUNC_PARA1 */
 	{ 10, 0 },
@@ -2797,6 +4287,11 @@ CameraModeValue D_801B65AC[] = {
 	{ 0, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B65DC[] = {
     /* CAM_FUNC_KEEP1 */
 	{ 10, 0 },
@@ -2813,6 +4308,11 @@ CameraModeValue D_801B65DC[] = {
 	{ 30, 11 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B660C[] = {
     /* CAM_FUNC_KEEP3 */
 	{ 10, 0 },
@@ -2830,6 +4330,11 @@ CameraModeValue D_801B660C[] = {
 	{ 60, 18 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6640[] = {
     /* CAM_FUNC_BATT1 */
 	{ 10, 0 },
@@ -2847,6 +4352,11 @@ CameraModeValue D_801B6640[] = {
 	{ 60, 18 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6674[] = {
     /* CAM_FUNC_SUBJ1 */
 	{ 0, 0 },
@@ -2860,6 +4370,11 @@ CameraModeValue D_801B6674[] = {
 	{ 0, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6698[] = {
     /* CAM_FUNC_NORM1 */
 	{ 0, 0 },
@@ -2874,6 +4389,11 @@ CameraModeValue D_801B6698[] = {
 	{ 0x008A, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B66C0[] = {
     /* CAM_FUNC_NORM1 */
 	{ 0, 0 },
@@ -2888,6 +4408,11 @@ CameraModeValue D_801B66C0[] = {
 	{ 0xF023, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B66E8[] = {
     /* CAM_FUNC_NORM1 */
 	{ 0, 0 },
@@ -2902,6 +4427,11 @@ CameraModeValue D_801B66E8[] = {
 	{ 0x0083, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6710[] = {
     /* CAM_FUNC_KEEP1 */
 	{ -30, 0 },
@@ -2918,6 +4448,11 @@ CameraModeValue D_801B6710[] = {
 	{ 30, 11 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6740[] = {
     /* CAM_FUNC_BATT1 */
 	{ 0xFFC4, 0 },
@@ -2935,6 +4470,11 @@ CameraModeValue D_801B6740[] = {
 	{ 0x0028, 18 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6774[] = {
     /* CAM_FUNC_NORM1 */
 	{ -20, 0 },
@@ -2949,6 +4489,11 @@ CameraModeValue D_801B6774[] = {
 	{ 0x008B, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B679C[] = {
     /* CAM_FUNC_NORM1 */
 	{ 0, 0 },
@@ -2963,6 +4508,11 @@ CameraModeValue D_801B679C[] = {
 	{ 0xF023, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B67C4[] = {
     /* CAM_FUNC_NORM1 */
 	{ 20, 0 },
@@ -2977,6 +4527,11 @@ CameraModeValue D_801B67C4[] = {
 	{ 0x0083, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B67EC[] = {
     /* CAM_FUNC_PARA1 */
 	{ 0, 0 },
@@ -2993,6 +4548,11 @@ CameraModeValue D_801B67EC[] = {
 	{ 0, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B681C[] = {
     /* CAM_FUNC_KEEP1 */
 	{ -30, 0 },
@@ -3009,6 +4569,11 @@ CameraModeValue D_801B681C[] = {
 	{ 30, 11 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B684C[] = {
     /* CAM_FUNC_BATT1 */
 	{ 0, 0 },
@@ -3026,6 +4591,11 @@ CameraModeValue D_801B684C[] = {
 	{ 0x0028, 18 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6880[] = {
     /* CAM_FUNC_NORM1 */
 	{ -20, 0 },
@@ -3040,6 +4610,11 @@ CameraModeValue D_801B6880[] = {
 	{ 0x008B, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B68A8[] = {
     /* CAM_FUNC_NORM1 */
 	{ -20, 0 },
@@ -3054,6 +4629,11 @@ CameraModeValue D_801B68A8[] = {
 	{ 0xF033, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B68D0[] = {
     /* CAM_FUNC_NORM1 */
 	{ -20, 0 },
@@ -3068,6 +4648,11 @@ CameraModeValue D_801B68D0[] = {
 	{ 0x0083, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B68F8[] = {
     /* CAM_FUNC_BATT1 */
 	{ -25, 0 },
@@ -3085,6 +4670,11 @@ CameraModeValue D_801B68F8[] = {
 	{ 50, 18 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B692C[] = {
     /* CAM_FUNC_NORM1 */
 	{ -20, 0 },
@@ -3099,6 +4689,11 @@ CameraModeValue D_801B692C[] = {
 	{ 0x008B, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6954[] = {
     /* CAM_FUNC_NORM1 */
 	{ -20, 0 },
@@ -3113,6 +4708,11 @@ CameraModeValue D_801B6954[] = {
 	{ 0xF023, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B697C[] = {
     /* CAM_FUNC_NORM1 */
 	{ 60, 0 },
@@ -3127,6 +4727,11 @@ CameraModeValue D_801B697C[] = {
 	{ 0x0087, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B69A4[] = {
     /* CAM_FUNC_JUMP3 */
 	{ -20, 0 },
@@ -3141,6 +4746,11 @@ CameraModeValue D_801B69A4[] = {
 	{ 0x0084, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B69CC[] = {
     /* CAM_FUNC_KEEP1 */
 	{ -30, 0 },
@@ -3157,6 +4767,11 @@ CameraModeValue D_801B69CC[] = {
 	{ 30, 11 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B69FC[] = {
     /* CAM_FUNC_BATT1 */
 	{ -30, 0 },
@@ -3174,6 +4789,11 @@ CameraModeValue D_801B69FC[] = {
 	{ 50, 18 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6A30[] = {
     /* CAM_FUNC_JUMP3 */
 	{ -40, 0 },
@@ -3188,6 +4808,11 @@ CameraModeValue D_801B6A30[] = {
 	{ 0x000C, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6A58[] = {
     /* CAM_FUNC_JUMP3 */
 	{ -30, 0 },
@@ -3202,6 +4827,11 @@ CameraModeValue D_801B6A58[] = {
 	{ 0x0005, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6A80[] = {
     /* CAM_FUNC_JUMP3 */
 	{ 0xFFC4, 0 },
@@ -3216,6 +4846,11 @@ CameraModeValue D_801B6A80[] = {
 	{ 0x0085, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6AA8[] = {
     /* CAM_FUNC_NORM1 */
 	{ -40, 0 },
@@ -3230,6 +4865,11 @@ CameraModeValue D_801B6AA8[] = {
 	{ 0xF023, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6AD0[] = {
     /* CAM_FUNC_JUMP3 */
 	{ -40, 0 },
@@ -3244,6 +4884,11 @@ CameraModeValue D_801B6AD0[] = {
 	{ 0x0084, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6AF8[] = {
     /* CAM_FUNC_PARA1 */
 	{ -50, 0 },
@@ -3260,6 +4905,11 @@ CameraModeValue D_801B6AF8[] = {
 	{ 0, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6B28[] = {
     /* CAM_FUNC_JUMP3 */
 	{ -40, 0 },
@@ -3274,6 +4924,11 @@ CameraModeValue D_801B6B28[] = {
 	{ 0x000C, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6B50[] = {
     /* CAM_FUNC_JUMP3 */
 	{ -40, 0 },
@@ -3288,6 +4943,11 @@ CameraModeValue D_801B6B50[] = {
 	{ 0x0005, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6B78[] = {
     /* CAM_FUNC_JUMP3 */
 	{ 0xFFC4, 0 },
@@ -3302,6 +4962,11 @@ CameraModeValue D_801B6B78[] = {
 	{ 0x0085, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6BA0[] = {
     /* CAM_FUNC_NORM1 */
 	{ -40, 0 },
@@ -3316,6 +4981,11 @@ CameraModeValue D_801B6BA0[] = {
 	{ 0xF023, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6BC8[] = {
     /* CAM_FUNC_JUMP3 */
 	{ -40, 0 },
@@ -3330,6 +5000,11 @@ CameraModeValue D_801B6BC8[] = {
 	{ 0x000C, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6BF0[] = {
     /* CAM_FUNC_NORM1 */
 	{ -10, 0 },
@@ -3344,6 +5019,11 @@ CameraModeValue D_801B6BF0[] = {
 	{ 0x0083, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6C18[] = {
     /* CAM_FUNC_PARA1 */
 	{ 0, 0 },
@@ -3360,6 +5040,11 @@ CameraModeValue D_801B6C18[] = {
 	{ 0, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6C48[] = {
     /* CAM_FUNC_NORM1 */
 	{ -10, 0 },
@@ -3374,6 +5059,11 @@ CameraModeValue D_801B6C48[] = {
 	{ 0x008B, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6C70[] = {
     /* CAM_FUNC_NORM1 */
 	{ -10, 0 },
@@ -3388,6 +5078,11 @@ CameraModeValue D_801B6C70[] = {
 	{ 0xF023, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6C98[] = {
     /* CAM_FUNC_NORM1 */
 	{ -30, 0 },
@@ -3402,6 +5097,11 @@ CameraModeValue D_801B6C98[] = {
 	{ 0x0083, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6CC0[] = {
     /* CAM_FUNC_KEEP1 */
 	{ -30, 0 },
@@ -3418,6 +5118,11 @@ CameraModeValue D_801B6CC0[] = {
 	{ 30, 11 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6CF0[] = {
     /* CAM_FUNC_KEEP3 */
 	{ -30, 0 },
@@ -3435,6 +5140,11 @@ CameraModeValue D_801B6CF0[] = {
 	{ 50, 18 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6D24[] = {
     /* CAM_FUNC_NORM1 */
 	{ -20, 0 },
@@ -3449,6 +5159,11 @@ CameraModeValue D_801B6D24[] = {
 	{ 0x008B, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6D4C[] = {
     /* CAM_FUNC_NORM1 */
 	{ -30, 0 },
@@ -3463,6 +5178,11 @@ CameraModeValue D_801B6D4C[] = {
 	{ 0xF023, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6D74[] = {
     /* CAM_FUNC_FIXD2 */
 	{ -40, 0 },
@@ -3474,6 +5194,11 @@ CameraModeValue D_801B6D74[] = {
 	{ 0xFF0B, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6D90[] = {
     /* CAM_FUNC_JUMP3 */
 	{ -10, 0 },
@@ -3488,6 +5213,11 @@ CameraModeValue D_801B6D90[] = {
 	{ 0x00A4, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6DB8[] = {
     /* CAM_FUNC_JUMP3 */
 	{ 0, 0 },
@@ -3502,6 +5232,11 @@ CameraModeValue D_801B6DB8[] = {
 	{ 20, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6DE0[] = {
     /* CAM_FUNC_JUMP3 */
 	{ -40, 0 },
@@ -3516,6 +5251,11 @@ CameraModeValue D_801B6DE0[] = {
 	{ 0x001C, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6E08[] = {
     /* CAM_FUNC_JUMP3 */
 	{ -40, 0 },
@@ -3530,6 +5270,11 @@ CameraModeValue D_801B6E08[] = {
 	{ 0x0025, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6E30[] = {
     /* CAM_FUNC_JUMP3 */
 	{ 0xFFC4, 0 },
@@ -3544,6 +5289,11 @@ CameraModeValue D_801B6E30[] = {
 	{ 0x0094, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6E58[] = {
     /* CAM_FUNC_JUMP3 */
 	{ -40, 0 },
@@ -3558,6 +5308,11 @@ CameraModeValue D_801B6E58[] = {
 	{ 0x001C, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6E80[] = {
     /* CAM_FUNC_NORM1 */
 	{ 0xFFBA, 0 },
@@ -3572,6 +5327,11 @@ CameraModeValue D_801B6E80[] = {
 	{ 0x0083, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6EA8[] = {
     /* CAM_FUNC_NORM1 */
 	{ -40, 0 },
@@ -3586,6 +5346,11 @@ CameraModeValue D_801B6EA8[] = {
 	{ 0xF023, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6ED0[] = {
     /* CAM_FUNC_NORM1 */
 	{ -40, 0 },
@@ -3600,6 +5365,11 @@ CameraModeValue D_801B6ED0[] = {
 	{ 0x0083, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6EF8[] = {
     /* CAM_FUNC_NORM1 */
 	{ -40, 0 },
@@ -3614,6 +5384,11 @@ CameraModeValue D_801B6EF8[] = {
 	{ 0x0083, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6F20[] = {
     /* CAM_FUNC_PARA1 */
 	{ -40, 0 },
@@ -3630,6 +5405,11 @@ CameraModeValue D_801B6F20[] = {
 	{ 0, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6F50[] = {
     /* CAM_FUNC_NORM1 */
 	{ -10, 0 },
@@ -3644,6 +5424,11 @@ CameraModeValue D_801B6F50[] = {
 	{ 0x008B, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6F78[] = {
     /* CAM_FUNC_NORM1 */
 	{ -40, 0 },
@@ -3658,6 +5443,11 @@ CameraModeValue D_801B6F78[] = {
 	{ 0x0023, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6FA0[] = {
     /* CAM_FUNC_UNIQ2 */
 	{ -40, 0 },
@@ -3666,6 +5456,11 @@ CameraModeValue D_801B6FA0[] = {
 	{ 50, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6FB0[] = {
     /* CAM_FUNC_NORM1 */
 	{ -15, 0 },
@@ -3680,6 +5475,11 @@ CameraModeValue D_801B6FB0[] = {
 	{ 0x0083, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B6FD8[] = {
     /* CAM_FUNC_KEEP1 */
 	{ -20, 0 },
@@ -3696,6 +5496,11 @@ CameraModeValue D_801B6FD8[] = {
 	{ 20, 11 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B7008[] = {
     /* CAM_FUNC_BATT1 */
 	{ -25, 0 },
@@ -3713,6 +5518,11 @@ CameraModeValue D_801B7008[] = {
 	{ 50, 18 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B703C[] = {
     /* CAM_FUNC_NORM1 */
 	{ -15, 0 },
@@ -3727,6 +5537,11 @@ CameraModeValue D_801B703C[] = {
 	{ 0x008B, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B7064[] = {
     /* CAM_FUNC_NORM1 */
 	{ -15, 0 },
@@ -3741,6 +5556,11 @@ CameraModeValue D_801B7064[] = {
 	{ 0xF023, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B708C[] = {
     /* CAM_FUNC_PARA1 */
 	{ 0, 0 },
@@ -3757,6 +5577,11 @@ CameraModeValue D_801B708C[] = {
 	{ 0, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B70BC[] = {
     /* CAM_FUNC_JUMP3 */
 	{ -10, 0 },
@@ -3771,6 +5596,11 @@ CameraModeValue D_801B70BC[] = {
 	{ 0x0084, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B70E4[] = {
     /* CAM_FUNC_PARA1 */
 	{ -30, 0 },
@@ -3787,6 +5617,11 @@ CameraModeValue D_801B70E4[] = {
 	{ 0, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B7114[] = {
     /* CAM_FUNC_KEEP3 */
 	{ -20, 0 },
@@ -3804,6 +5639,11 @@ CameraModeValue D_801B7114[] = {
 	{ 60, 18 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B7148[] = {
     /* CAM_FUNC_JUMP3 */
 	{ -40, 0 },
@@ -3818,6 +5658,11 @@ CameraModeValue D_801B7148[] = {
 	{ 0x000C, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B7170[] = {
     /* CAM_FUNC_KEEP1 */
 	{ -30, 0 },
@@ -3834,6 +5679,11 @@ CameraModeValue D_801B7170[] = {
 	{ 30, 11 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B71A0[] = {
     /* CAM_FUNC_BATT1 */
 	{ -30, 0 },
@@ -3851,6 +5701,11 @@ CameraModeValue D_801B71A0[] = {
 	{ 0x0028, 18 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B71D4[] = {
     /* CAM_FUNC_PARA1 */
 	{ 0, 0 },
@@ -3867,6 +5722,11 @@ CameraModeValue D_801B71D4[] = {
 	{ 0, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B7204[] = {
     /* CAM_FUNC_UNIQ0 */
 	{ 0, 0 },
@@ -3874,6 +5734,11 @@ CameraModeValue D_801B7204[] = {
 	{ 0x0002, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B7210[] = {
     /* CAM_FUNC_KEEP3 */
 	{ -10, 0 },
@@ -3891,6 +5756,11 @@ CameraModeValue D_801B7210[] = {
 	{ 60, 18 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B7244[] = {
     /* CAM_FUNC_KEEP3 */
 	{ -20, 0 },
@@ -3908,6 +5778,11 @@ CameraModeValue D_801B7244[] = {
 	{ 50, 18 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B7278[] = {
     /* CAM_FUNC_KEEP4 */
 	{ -45, 0 },
@@ -3921,6 +5796,11 @@ CameraModeValue D_801B7278[] = {
 	{ 30, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B729C[] = {
     /* CAM_FUNC_KEEP4 */
 	{ -40, 0 },
@@ -3934,6 +5814,11 @@ CameraModeValue D_801B729C[] = {
 	{ 30, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B72C0[] = {
     /* CAM_FUNC_KEEP4 */
 	{ -20, 0 },
@@ -3947,6 +5832,11 @@ CameraModeValue D_801B72C0[] = {
 	{ 30, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B72E4[] = {
     /* CAM_FUNC_KEEP4 */
 	{ -50, 0 },
@@ -3960,6 +5850,11 @@ CameraModeValue D_801B72E4[] = {
 	{ 30, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B7308[] = {
     /* CAM_FUNC_KEEP4 */
 	{ 0xFFC4, 0 },
@@ -3973,6 +5868,11 @@ CameraModeValue D_801B7308[] = {
 	{ 30, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B732C[] = {
     /* CAM_FUNC_NORM1 */
 	{ 0, 0 },
@@ -3987,6 +5887,11 @@ CameraModeValue D_801B732C[] = {
 	{ 0x0083, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B7354[] = {
     /* CAM_FUNC_PARA1 */
 	{ 0, 0 },
@@ -4003,6 +5908,11 @@ CameraModeValue D_801B7354[] = {
 	{ 0, 12 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B7384[] = {
     /* CAM_FUNC_NORM1 */
 	{ 0, 0 },
@@ -4017,6 +5927,11 @@ CameraModeValue D_801B7384[] = {
 	{ 0x008B, 9 },
 };
 
+/**
+ * Setting    Mode      Function
+ * -------    ------    --------
+ * NORMAL0    NORMAL    NORM1
+ */
 CameraModeValue D_801B73AC[] = {
     /* CAM_FUNC_NORM1 */
 	{ 0, 0 },
@@ -4052,7 +5967,7 @@ CameraMode sCamSetNorm0Modes[] = {
     { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
     { CAM_FUNC_JUMP2, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
@@ -4085,7 +6000,7 @@ CameraMode sCamSetNorm3Modes[] = {
     { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
     { CAM_FUNC_JUMP2, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_JUMP3, 10, D_801B4C34 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
@@ -4173,7 +6088,7 @@ CameraMode sCamSetFukan0Modes[] = {
     { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
     { CAM_FUNC_JUMP2, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
@@ -4202,7 +6117,7 @@ CameraMode sCamSetNorm1Modes[] = {
     { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
     { CAM_FUNC_JUMP2, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
@@ -4231,7 +6146,7 @@ CameraMode sCamSetNanameModes[] = {
     { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
     { CAM_FUNC_JUMP2, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
@@ -4296,7 +6211,7 @@ CameraMode sCamSetDungeon0Modes[] = {
     { CAM_FUNC_PARA1, 12, D_801B5220 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B51D8 },  // CAM_MODE_CLIMB
     { CAM_FUNC_JUMP2, 9, D_801B51FC },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_PARA1, 12, D_801B51A8 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B5280 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B52B0 }, // CAM_MODE_HANGZ
@@ -4413,7 +6328,7 @@ CameraMode sCamSetDungeon1Modes[] = {
     { CAM_FUNC_PARA1, 12, D_801B5220 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B51D8 },  // CAM_MODE_CLIMB
     { CAM_FUNC_JUMP2, 9, D_801B51FC },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_PARA1, 12, D_801B51A8 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B5280 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B52B0 }, // CAM_MODE_HANGZ
@@ -4502,7 +6417,7 @@ CameraMode sCamSetTower0Modes[] = {
     { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
     { CAM_FUNC_JUMP2, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
@@ -4572,7 +6487,7 @@ CameraMode sCamSetClimeMazeModes[] = {
     { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
     { CAM_FUNC_PARA1, 13, D_801B5A30 }, // CAM_MODE_CLIMB
     { CAM_FUNC_PARA1, 13, D_801B5A30 }, // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
@@ -4605,7 +6520,7 @@ CameraMode sCamSetDungeon2Modes[] = {
     { CAM_FUNC_PARA1, 12, D_801B5220 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B51D8 },  // CAM_MODE_CLIMB
     { CAM_FUNC_JUMP2, 9, D_801B51FC },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_PARA1, 12, D_801B51A8 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B5280 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B52B0 }, // CAM_MODE_HANGZ
@@ -4634,7 +6549,7 @@ CameraMode sCamSetBossShigeModes[] = {
     { CAM_FUNC_PARA1, 12, D_801B5220 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B51D8 },  // CAM_MODE_CLIMB
     { CAM_FUNC_PARA1, 9, D_801B51FC },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_PARA1, 12, D_801B51A8 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B5280 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B52B0 }, // CAM_MODE_HANGZ
@@ -4663,7 +6578,7 @@ CameraMode sCamSetKeepBackModes[] = {
     { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
     { CAM_FUNC_PARA1, 13, D_801B5A30 }, // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
@@ -4700,7 +6615,7 @@ CameraMode sCamSetChuBossModes[] = {
     { CAM_FUNC_PARA1, 12, D_801B5220 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B51D8 },  // CAM_MODE_CLIMB
     { CAM_FUNC_JUMP2, 9, D_801B51FC },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_PARA1, 12, D_801B51A8 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B5280 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B52B0 }, // CAM_MODE_HANGZ
@@ -4755,7 +6670,7 @@ CameraMode sCamSetFukan1Modes[] = {
     { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
     { CAM_FUNC_JUMP2, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
@@ -4784,7 +6699,7 @@ CameraMode sCamSetDungeon3Modes[] = {
     { CAM_FUNC_PARA1, 12, D_801B5220 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B51D8 },  // CAM_MODE_CLIMB
     { CAM_FUNC_JUMP2, 9, D_801B51FC },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_PARA1, 12, D_801B51A8 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B5280 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B52B0 }, // CAM_MODE_HANGZ
@@ -4832,7 +6747,7 @@ CameraMode sCamSetRoom0Modes[] = {
     { CAM_FUNC_PARA1, 12, D_801B620C }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B610C },  // CAM_MODE_CLIMB
     { CAM_FUNC_JUMP2, 9, D_801B6130 },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_PARA1, 12, D_801B61DC }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B617C }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B61AC }, // CAM_MODE_HANGZ
@@ -4885,7 +6800,7 @@ CameraMode sCamSetOnThePoleModes[] = {
     { CAM_FUNC_PARA1, 12, D_801B5220 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B64B4 },  // CAM_MODE_CLIMB
     { CAM_FUNC_JUMP2, 9, D_801B64D8 },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_PARA1, 12, D_801B51A8 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B64FC }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B652C }, // CAM_MODE_HANGZ
@@ -4914,7 +6829,7 @@ CameraMode sCamSetInBushModes[] = {
     { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
     { CAM_FUNC_JUMP2, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
@@ -4943,7 +6858,7 @@ CameraMode sCamSetBossLastModes[] = {
     { CAM_FUNC_PARA1, 12, D_801B5220 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B51D8 },  // CAM_MODE_CLIMB
     { CAM_FUNC_PARA1, 9, D_801B51FC },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_PARA1, 12, D_801B51A8 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B5280 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B52B0 }, // CAM_MODE_HANGZ
@@ -4972,7 +6887,7 @@ CameraMode sCamSetBossIniModes[] = {
     { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
     { CAM_FUNC_PARA1, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
@@ -5001,7 +6916,7 @@ CameraMode sCamSetBossHakModes[] = {
     { CAM_FUNC_PARA1, 12, D_801B5220 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B51D8 },  // CAM_MODE_CLIMB
     { CAM_FUNC_PARA1, 9, D_801B51FC },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_PARA1, 12, D_801B51A8 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B5280 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B52B0 }, // CAM_MODE_HANGZ
@@ -5030,7 +6945,7 @@ CameraMode sCamSetBossKonModes[] = {
     { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
     { CAM_FUNC_JUMP2, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_JUMP3, 10, D_801B4C34 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
@@ -5064,7 +6979,7 @@ CameraMode sCamSetMorayModes[] = {
     { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
     { CAM_FUNC_JUMP2, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_JUMP3, 10, D_801B4C34 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
@@ -5094,7 +7009,7 @@ CameraMode sCamSetNorm2Modes[] = {
     { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
     { CAM_FUNC_JUMP2, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
@@ -5123,7 +7038,7 @@ CameraMode sCamSetBombBowlModes[] = {
     { CAM_FUNC_PARA1, 12, D_801B620C }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B610C },  // CAM_MODE_CLIMB
     { CAM_FUNC_JUMP2, 9, D_801B6130 },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_PARA1, 12, D_801B61DC }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B617C }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B61AC }, // CAM_MODE_HANGZ
@@ -5156,7 +7071,7 @@ CameraMode sCamSetWhirlpoolModes[] = {
     { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
     { CAM_FUNC_JUMP2, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_JUMP3, 10, D_801B6DB8 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
@@ -5186,7 +7101,7 @@ CameraMode sCamSetKokkogameModes[] = {
     { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
     { CAM_FUNC_JUMP2, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
@@ -5214,7 +7129,7 @@ CameraMode sCamSetGiantModes[] = {
     { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
     { CAM_FUNC_JUMP2, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
@@ -5247,7 +7162,7 @@ CameraMode sCamSetRoom1Modes[] = {
     { CAM_FUNC_PARA1, 12, D_801B5220 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B51D8 },  // CAM_MODE_CLIMB
     { CAM_FUNC_JUMP2, 9, D_801B51FC },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_PARA1, 12, D_801B51A8 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B5280 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B52B0 }, // CAM_MODE_HANGZ
@@ -5276,7 +7191,7 @@ CameraMode sCamSetWater2Modes[] = {
     { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
     { CAM_FUNC_JUMP2, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_JUMP3, 10, D_801B4C34 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
@@ -5306,7 +7221,7 @@ CameraMode sCamSetSokonasiModes[] = {
     { CAM_FUNC_UNIQ4, 12, D_801B49D4 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B51D8 },  // CAM_MODE_CLIMB
     { CAM_FUNC_JUMP2, 9, D_801B51FC },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_UNIQ4, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_UNIQ4, 12, D_801B4944 }, // CAM_MODE_HANG
     { CAM_FUNC_UNIQ4, 12, D_801B4974 }, // CAM_MODE_HANGZ
@@ -5335,7 +7250,7 @@ CameraMode sCamSetForceKeepModes[] = {
     { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
     { CAM_FUNC_JUMP2, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
@@ -5364,7 +7279,7 @@ CameraMode sCamSetParallel1Modes[] = {
     { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
     { CAM_FUNC_JUMP2, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
@@ -5397,7 +7312,7 @@ CameraMode sCamSetRoom2Modes[] = {
     { CAM_FUNC_PARA1, 12, D_801B5220 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B51D8 },  // CAM_MODE_CLIMB
     { CAM_FUNC_JUMP2, 9, D_801B51FC },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_PARA1, 12, D_801B51A8 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B5280 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B52B0 }, // CAM_MODE_HANGZ
@@ -5426,7 +7341,7 @@ CameraMode sCamSetNorm4Modes[] = {
     { CAM_FUNC_PARA1, 12, D_801B49D4 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B4824 },  // CAM_MODE_CLIMB
     { CAM_FUNC_JUMP2, 9, D_801B48F8 },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_PARA1, 12, D_801B49A4 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B4944 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B4974 }, // CAM_MODE_HANGZ
@@ -5464,7 +7379,7 @@ CameraMode sCamSetDungeon4Modes[] = {
     { CAM_FUNC_PARA1, 12, D_801B5220 }, // CAM_MODE_CHARGE
     { CAM_FUNC_JUMP2, 9, D_801B51D8 },  // CAM_MODE_CLIMB
     { CAM_FUNC_JUMP2, 9, D_801B51FC },  // CAM_MODE_CLIMBZ
-    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_FOOKSHOT
+    { CAM_FUNC_SPEC5, 8, D_801B4890 },  // CAM_MODE_HOOKSHOT
     { CAM_FUNC_PARA1, 12, D_801B51A8 }, // CAM_MODE_FREEFALL
     { CAM_FUNC_PARA1, 12, D_801B5280 }, // CAM_MODE_HANG
     { CAM_FUNC_PARA1, 12, D_801B52B0 }, // CAM_MODE_HANGZ
