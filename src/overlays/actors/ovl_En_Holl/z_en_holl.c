@@ -139,6 +139,7 @@ void EnHoll_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnHoll_ChangeRooms(GlobalContext* globalCtx) {
     Room tempRoom = globalCtx->roomCtx.currRoom;
+    
     globalCtx->roomCtx.currRoom = globalCtx->roomCtx.prevRoom;
     globalCtx->roomCtx.prevRoom = tempRoom;
     globalCtx->roomCtx.activeMemPage ^= 1;
@@ -239,7 +240,7 @@ void EnHoll_TransparentIdle(EnHoll* this, GlobalContext* globalCtx) {
             this->actor.room = room;
             
             if ((this->actor.room != globalCtx->roomCtx.currRoom.num) &&
-                (Room_StartRoomTransition(globalCtx, &globalCtx->roomCtx, this->actor.room))) {
+                Room_StartRoomTransition(globalCtx, &globalCtx->roomCtx, this->actor.room)) {
                 this->actionFunc = EnHoll_RoomTransitionIdle;
             }
         }
