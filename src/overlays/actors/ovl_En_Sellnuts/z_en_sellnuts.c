@@ -66,23 +66,11 @@ static u16 D_80ADD918[] = { 0x0616, 0x0610, 0x0629 };
 
 static u16 D_80ADD920[] = { 0x0618, 0x0611, 0x062A };
 
-static u16 D_80ADD928[] = {
-    0x0617,
-    0x0612,
-    0x0612,
-};
+static u16 D_80ADD928[] = { 0x0617, 0x0612, 0x0612 };
 
-static u16 D_80ADD930[] = {
-    0x0619,
-    0x0613,
-    0x0613,
-};
+static u16 D_80ADD930[] = { 0x0619, 0x0613, 0x0613 };
 
-static u16 D_80ADD938[] = {
-    0x0615,
-    0x060F,
-    0x060F,
-};
+static u16 D_80ADD938[] = { 0x0615, 0x060F, 0x060F };
 
 static u8 D_80ADD940 = 0;
 
@@ -314,8 +302,8 @@ void func_80ADB254(EnSellnuts* this, GlobalContext* globalCtx) {
     s16 frameCount = SkelAnime_GetFrameCount(&D_80ADD990[this->unk_34C].animationSeg->common);
 
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0xE38);
-    if ((((this->actor.yDistToPlayer < 50.0f) && (this->actor.yDistToPlayer > -50.0f)) ? 1 : 0) &&
-        ((this->actor.xzDistToPlayer < 200.0f) ? 1 : 0)) {
+    if (((this->actor.yDistToPlayer < 50.0f) && (this->actor.yDistToPlayer > -50.0f) ? true : false) &&
+        ((this->actor.xzDistToPlayer < 200.0f) ? true : false)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         this->actionFunc = func_80ADB4F4;
         this->unk_34C = 3;
@@ -401,39 +389,35 @@ void func_80ADB544(EnSellnuts* this, GlobalContext* globalCtx) {
                     break;
             }
         }
-    } else {
-        goto label;
-    label: // fake
-        if (((this->actor.xzDistToPlayer < 80.0f) &&
-             (((this->actor.yDistToPlayer < 50.0f) && (this->actor.yDistToPlayer > -50.0f)) ? 1 : 0)) ||
-            (this->actor.isTargeted)) {
-            func_800B85E0(&this->actor, globalCtx, 80.0f, 0x2A);
-            if (player->transformation == PLAYER_FORM_DEKU) {
-                if (gSaveContext.day == 3) {
-                    this->unk_33A = 2;
-                    if (gSaveContext.weekEventReg[77] & 0x40) {
-                        this->unk_340 = D_80ADD918[this->unk_33A];
-                    } else {
-                        this->unk_340 = D_80ADD910[this->unk_33A];
-                    }
+    } else if (((this->actor.xzDistToPlayer < 80.0f) &&
+                (((this->actor.yDistToPlayer < 50.0f) && (this->actor.yDistToPlayer > -50.0f)) ? true : false)) ||
+               this->actor.isTargeted) {
+        func_800B85E0(&this->actor, globalCtx, 80.0f, 0x2A);
+        if (player->transformation == PLAYER_FORM_DEKU) {
+            if (gSaveContext.day == 3) {
+                this->unk_33A = 2;
+                if (gSaveContext.weekEventReg[77] & 0x40) {
+                    this->unk_340 = D_80ADD918[this->unk_33A];
                 } else {
-                    this->unk_33A = 1;
-                    if (gSaveContext.weekEventReg[17] & 0x20) {
-                        this->unk_340 = D_80ADD918[this->unk_33A];
-                    } else {
-                        this->unk_340 = D_80ADD910[this->unk_33A];
-                    }
+                    this->unk_340 = D_80ADD910[this->unk_33A];
                 }
-            } else if (gSaveContext.weekEventReg[17] & 0x40) {
-                this->unk_340 = D_80ADD918[this->unk_33A];
             } else {
-                this->unk_340 = D_80ADD910[this->unk_33A];
+                this->unk_33A = 1;
+                if (gSaveContext.weekEventReg[17] & 0x20) {
+                    this->unk_340 = D_80ADD918[this->unk_33A];
+                } else {
+                    this->unk_340 = D_80ADD910[this->unk_33A];
+                }
             }
+        } else if (gSaveContext.weekEventReg[17] & 0x40) {
+            this->unk_340 = D_80ADD918[this->unk_33A];
+        } else {
+            this->unk_340 = D_80ADD910[this->unk_33A];
         }
     }
 
-    if (!(((this->actor.yDistToPlayer < 50.0f) && (this->actor.yDistToPlayer > -50.0f)) ? 1 : 0) ||
-        !((this->actor.xzDistToPlayer < 200.0f) ? 1 : 0)) {
+    if (!(((this->actor.yDistToPlayer < 50.0f) && (this->actor.yDistToPlayer > -50.0f)) ? true : false) ||
+        !((this->actor.xzDistToPlayer < 200.0f) ? true : false)) {
         this->unk_34C = 4;
         func_8013BC6C(&this->skelAnime, D_80ADD990, 4);
         this->actionFunc = func_80ADB254;
@@ -712,7 +696,7 @@ void func_80ADC37C(EnSellnuts* this, GlobalContext* globalCtx) {
         this->unk_366 = 2;
     }
 
-    this->unk_368 += 1;
+    this->unk_368++;
 }
 
 void func_80ADC580(EnSellnuts* this, GlobalContext* globalCtx) {
@@ -1058,7 +1042,7 @@ void EnSellnuts_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnSellnuts* this = THIS;
     Player* player = PLAYER;
 
-    this->unk_328 += 1;
+    this->unk_328++;
     if (player->transformation == PLAYER_FORM_DEKU) {
         if (gSaveContext.day == 3) {
             this->unk_33A = 2;
@@ -1150,7 +1134,7 @@ void func_80ADD7CC(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
         Matrix_Scale(this->unk_354, this->unk_358, this->unk_35C, MTXMODE_APPLY);
     }
 
-    if (((this->unk_34C == 9) || (this->unk_34C == 0x14) || (this->unk_34C == 22)) &&
+    if (((this->unk_34C == 9) || (this->unk_34C == 20) || (this->unk_34C == 22)) &&
         ((limbIndex == 16) || (limbIndex == 21) || (limbIndex == 27))) {
         Matrix_Scale(this->unk_360, this->unk_360, this->unk_360, MTXMODE_APPLY);
     }
