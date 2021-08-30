@@ -160,7 +160,7 @@ void func_80BA5400(EnRailgibud* this, GlobalContext* globalCtx) {
     this->unk_294 = Lib_SegmentedToVirtual(path->points);
     this->unk_298 = D_80BA82F8;
     this->unk_29C = path->count;
-    if ((D_80BA82F8 == 0)) {
+    if (D_80BA82F8 == 0) {
         s32 i;
 
         for (i = 1; i < this->unk_29C && i < 10; i++) {
@@ -457,13 +457,13 @@ void func_80BA6158(EnRailgibud* this) {
 }
 
 void func_80BA61A0(EnRailgibud* this, GlobalContext* globalCtx) {
-    Math_SmoothStepToS(&this->actor.world.rot.y, BINANG_ROT180(this->actor.yawTowardsPlayer), 5, 0xDAC, 0xC8);
+    Math_SmoothStepToS(&this->actor.world.rot.y, BINANG_ROT180(this->actor.yawTowardsPlayer), 5, 3500, 200);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (this->unk_3F2 > 60) {
         func_80BA6284(this);
         this->unk_3F2 = 0;
     } else {
-        this->unk_3E2 = Math_SinS(this->unk_3F2 * 0xFA0) * (9583.0f * ((60 - this->unk_3F2) / 60.0f));
+        this->unk_3E2 = Math_SinS(this->unk_3F2 * 0xFA0) * (0x256F * ((60 - this->unk_3F2) / 60.0f));
         this->unk_3F2++;
     }
 }
@@ -475,21 +475,21 @@ void func_80BA6284(EnRailgibud* this) {
 }
 
 void func_80BA62D4(EnRailgibud* this, GlobalContext* globalCtx) {
-    Math_SmoothStepToS(&this->unk_3E2, 0, 1, 0x64, 0);
-    Math_SmoothStepToS(&this->unk_3E8, 0, 1, 0x64, 0);
+    Math_SmoothStepToS(&this->unk_3E2, 0, 1, 100, 0);
+    Math_SmoothStepToS(&this->unk_3E8, 0, 1, 100, 0);
     if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) < 5.0f) {
         if (this->actor.speedXZ > 0.2f) {
             this->actor.speedXZ -= 0.2f;
         } else {
             this->actor.speedXZ = 0.0f;
         }
-        Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 1, 0xC8, 0xA);
+        Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 1, 200, 10);
         this->actor.world.rot.y = this->actor.shape.rot.y;
         if (this->actor.world.rot.y == this->actor.home.rot.y) {
             func_80BA57A8(this);
         }
     } else {
-        Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_YawToPoint(&this->actor, &this->actor.home.pos), 0x1C2);
+        Math_ScaledStepToS(&this->actor.shape.rot.y, Actor_YawToPoint(&this->actor, &this->actor.home.pos), 450);
         this->actor.world.rot = this->actor.shape.rot;
     }
     if (func_80BA6D10(this, globalCtx)) {
@@ -577,8 +577,8 @@ void func_80BA66C8(EnRailgibud* this, GlobalContext* globalCtx) {
             }
         }
     } else {
-        Math_SmoothStepToS(&this->unk_3E2, 0, 1, 0xFA, 0);
-        Math_SmoothStepToS(&this->unk_3E8, 0, 1, 0xFA, 0);
+        Math_SmoothStepToS(&this->unk_3E2, 0, 1, 250, 0);
+        Math_SmoothStepToS(&this->unk_3E8, 0, 1, 250, 0);
         this->unk_3F2++;
     }
 
@@ -644,10 +644,10 @@ void func_80BA6B30(EnRailgibud* this) {
 
 void func_80BA6B9C(EnRailgibud* this, GlobalContext* globalCtx) {
     s16 temp_v0 = (this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - this->unk_3E8;
-    s16 phi_a2 = CLAMP(temp_v0, -0x1F4, 0x1F4);
+    s16 phi_a2 = CLAMP(temp_v0, -500, 500);
 
     temp_v0 -= this->unk_3E2;
-    temp_v0 = CLAMP(temp_v0, -0x1F4, 0x1F4);
+    temp_v0 = CLAMP(temp_v0, -500, 500);
 
     if (BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y) >= 0) {
         this->unk_3E8 += ABS_ALT(phi_a2);
@@ -775,7 +775,7 @@ s32 func_80BA7088(EnRailgibud* this, GlobalContext* globalCtx) {
     sp3C = Math_Vec3f_StepTo(&this->actor.world.pos, &sp40, 10.0f);
     temp_s0_2 = Math_SmoothStepToS(&this->actor.shape.rot.y, player->actor.shape.rot.y, 1, 0x1770, 0x64);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if (gSaveContext.playerForm == 4) {
+    if (gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
         sp38 = Math_SmoothStepToF(&this->actor.shape.yOffset, -1500.0f, 1.0f, 150.0f, 0.0f);
     }
 
@@ -839,8 +839,8 @@ void func_80BA7434(EnRailgibud* this, GlobalContext* globalCtx) {
                 }
             }
         } else if (Player_GetMask(globalCtx) != PLAYER_MASK_GIBDO_MASK) {
-            this->actor.flags &= ~9;
-            this->actor.flags |= 5;
+            this->actor.flags &= ~(0x8 | 0x1);
+            this->actor.flags |= (0x4 | 0x1);
             if (this->unk_3F8 == 1) {
                 this->actor.hintId = 0x2A;
             } else {
@@ -948,7 +948,7 @@ void EnRailgibud_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
          (limbIndex == 11) || (limbIndex == 14) || (limbIndex == 16) || (limbIndex == 17) || (limbIndex == 18) ||
          (limbIndex == 20) || (limbIndex == 21) || (limbIndex == 22) || (limbIndex == 24) || (limbIndex == 25))) {
         SysMatrix_GetStateTranslation(&this->unk_1D8[this->unk_28C]);
-        this->unk_28C += 1;
+        this->unk_28C++;
     }
 }
 
@@ -998,7 +998,7 @@ void func_80BA7B6C(EnRailgibud* this, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    if (gSaveContext.entranceIndex != 0x2090) {
+    if (gSaveContext.entranceIndex != 0x2090) { // NOT Cutscene: Music Box House Opens
         Actor_MarkForDeath(&this->actor);
     }
     func_80BA7CF0(this);
@@ -1089,16 +1089,14 @@ s32 func_80BA7DC8(EnRailgibud* this, GlobalContext* globalCtx) {
                     func_800BDC5C(&this->skelAnime, sAnimations, 10);
                     break;
             }
-        } else {
-            if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
-                if (this->unk_3F0 == 15) {
-                    this->unk_3F0 = 16;
-                    func_800BDC5C(&this->skelAnime, sAnimations, 16);
-                } else if (this->unk_3F0 == 18) {
-                    this->unk_3F0 = 19;
-                    func_800BDC5C(&this->skelAnime, sAnimations, 19);
-                    func_80BA7D14(this);
-                }
+        } else if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+            if (this->unk_3F0 == 15) {
+                this->unk_3F0 = 16;
+                func_800BDC5C(&this->skelAnime, sAnimations, 16);
+            } else if (this->unk_3F0 == 18) {
+                this->unk_3F0 = 19;
+                func_800BDC5C(&this->skelAnime, sAnimations, 19);
+                func_80BA7D14(this);
             }
         }
 

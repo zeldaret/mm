@@ -4603,7 +4603,7 @@ beginseg
     name "ovl_En_Railgibud"
     compress
     include "build/src/overlays/actors/ovl_En_Railgibud/z_en_railgibud.o"
-    include "build/data/ovl_En_Railgibud/ovl_En_Railgibud.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Railgibud/ovl_En_Railgibud_reloc.o"
 endseg
 
 beginseg
