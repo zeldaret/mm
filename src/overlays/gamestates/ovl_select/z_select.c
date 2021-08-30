@@ -283,31 +283,36 @@ void func_8080194C(SelectContext* this) {
     CLOSE_DISPS(gfxCtx);
 }
 
-void func_808019FC(SelectContext* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/func_808019FC.s")
+void func_808019FC(SelectContext* this) {
+    GraphicsContext* gfxCtx = this->state.gfxCtx;
+    GfxPrint printer;
 
-#ifdef NON_MATCHING
+    OPEN_DISPS(gfxCtx);
+
+    func_8012C4C0(gfxCtx);
+
+    GfxPrint_Init(&printer);
+    GfxPrint_Open(&printer, POLY_OPA_DISP);
+    func_80801594(this, &printer);
+    POLY_OPA_DISP = GfxPrint_Close(&printer);
+    GfxPrint_Destroy(&printer);
+
+    CLOSE_DISPS(gfxCtx);
+}
+
 void func_80801A64(SelectContext* this) {
-    s32 pad;
-    Viewport sp2C;
+    GraphicsContext* gfxCtx = this->state.gfxCtx;
 
-    func_8012CF0C(this->state.gfxCtx, 1, 1, 0U, 0, 0);
-    sp2C.bottomY = 0xF0;
-    sp2C.rightX = 0x140;
-    sp2C.leftX = 0;
-    sp2C.topY = 0;
-    View_SetViewport(&this->view, &sp2C);
+    func_8012CF0C(gfxCtx, 1, 1, 0, 0, 0);
+
+    SET_FULLSCREEN_VIEWPORT(&this->view);
     View_RenderView(&this->view, 0xF);
-    if (this->state.running == 0) {
+    if (!this->state.running) {
         func_808019FC(this);
     } else {
         func_8080194C(this);
     }
 }
-#else
-void func_80801A64(SelectContext* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/func_80801A64.s")
-#endif
 
 void Select_Main(GameState* thisx) {
     SelectContext* this = (SelectContext*)thisx;

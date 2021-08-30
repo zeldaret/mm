@@ -24,6 +24,17 @@
     (curState)->nextGameStateInit = (GameStateFunc)newInit; \
     (curState)->nextGameStateSize = sizeof(newStruct)
 
+#define SET_FULLSCREEN_VIEWPORT(view)      \
+    {                                      \
+        Viewport viewport;                 \
+        viewport.bottomY = SCREEN_HEIGHT;  \
+        viewport.rightX = SCREEN_WIDTH;    \
+        viewport.topY = 0;                 \
+        viewport.leftX = 0;                \
+        View_SetViewport(view, &viewport); \
+    }                                      \
+    (void)0
+
 #define PLAYER ((Player*)globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first)
 
 // linkAge still exists in MM, but is always set to 0 (always adult)
