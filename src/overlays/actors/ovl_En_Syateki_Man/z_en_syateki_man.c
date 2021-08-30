@@ -56,7 +56,7 @@ const ActorInit En_Syateki_Man_InitVars = {
     (ActorFunc)EnSyatekiMan_Draw,
 };
 
-static ActorAnimationEntry D_809C9180[] = {
+static ActorAnimationEntry sAnimations[] = {
     { &D_0600D9D0, 1.0f, 0.0f, 0.0f, 0, -8.0f },
     { &D_0600DFEC, 1.0f, 0.0f, 0.0f, 0, -8.0f },
     { &D_0600D2F8, 1.0f, 0.0f, 0.0f, 2, -8.0f },
@@ -70,42 +70,42 @@ static s16 D_809C91C8[] = {
 };
 
 static EnSyatekiManUnkStruct D_809C91D0[] = {
-    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, 0x00000130 },
-    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, 0x00000020 },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, 0x00000000 },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, 0x00000010 },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, 0x00000020 },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, 0x00000030 },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, 0x00000040 },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, 0x00000001 },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, 0x00000011 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x00000000 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x00000100 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x00000200 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x00000300 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x00000420 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x00000520 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x00000601 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x00000702 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x00000801 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x00000902 },
+    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, 0x130 },
+    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, 0x20 },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, 0x0 },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, 0x10 },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, 0x20 },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, 0x30 },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, 0x40 },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, 0x1 },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, 0x11 },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x0 },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x100 },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x200 },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x300 },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x420 },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x520 },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x601 },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x702 },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x801 },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x902 },
 };
 
 static EnSyatekiManUnkStruct D_809C934C[] = {
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x00000000 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x00000100 },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, 0x00000001 },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, 0x00000011 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x00000202 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x00000302 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x00000003 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x00000103 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x00000423 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x00000204 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x00000304 },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x00000424 },
-    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, 0x00000025 },
-    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, 0x00000136 },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x0 },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x100 },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, 0x1 },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, 0x11 },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x202 },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x302 },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x3 },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x103 },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x423 },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x204 },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x304 },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, 0x424 },
+    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, 0x25 },
+    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, 0x136 },
 };
 
 static EnSyatekiManUnkStruct* D_809C9464[] = {
@@ -214,7 +214,7 @@ void func_809C6848(EnSyatekiMan* this, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx)) {
         u16 sp22;
 
-        func_800BDC5C(&this->skelAnime, D_809C9180, 2);
+        func_800BDC5C(&this->skelAnime, sAnimations, 2);
         sp22 = Text_GetFaceReaction(globalCtx, 0x31);
         if (sp22 != 0) {
             func_801518B0(globalCtx, sp22, &this->actor);
@@ -266,7 +266,6 @@ void func_809C6A04(EnSyatekiMan* this, GlobalContext* globalCtx) {
                 func_801518B0(globalCtx, 0xA30, &this->actor);
                 this->unk_284 = 0xA30;
             } else if (gSaveContext.rupees < 20) {
-                globalCtx = globalCtx;
                 play_sound(NA_SE_SY_ERROR);
                 func_801518B0(globalCtx, 0xA31, &this->actor);
                 this->unk_284 = 0xA31;
@@ -319,27 +318,27 @@ void func_809C6C2C(EnSyatekiMan* this, GlobalContext* globalCtx) {
 
     if (func_80147624(globalCtx)) {
         switch (this->unk_284) {
-            case 2600:
-            case 2601:
+            case 0xA28:
+            case 0xA29:
                 func_801518B0(globalCtx, 0xA2A, &this->actor);
                 this->unk_284 = 0xA2A;
                 break;
 
-            case 2603:
-            case 2604:
-            case 2613:
+            case 0xA2B:
+            case 0xA2C:
+            case 0xA35:
                 globalCtx->msgCtx.unk11F22 = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 player->actor.freezeTimer = 0;
                 func_80112AFC(globalCtx);
-                globalCtx->interfaceCtx.hbaAmmo = 0x50;
-                func_80123F2C(globalCtx, 0x50);
+                globalCtx->interfaceCtx.hbaAmmo = 80;
+                func_80123F2C(globalCtx, 80);
                 this->unk_26A = 1;
                 this->actionFunc = func_809C80C0;
                 func_801A2BB8(0x25);
                 break;
 
-            case 2610:
+            case 0xA32:
                 if (gSaveContext.weekEventReg[63] & 2) {
                     func_801477B4(globalCtx);
                     player->stateFlags1 &= ~0x20;
@@ -354,13 +353,13 @@ void func_809C6C2C(EnSyatekiMan* this, GlobalContext* globalCtx) {
                 }
                 break;
 
-            case 2611:
+            case 0xA33:
                 func_801518B0(globalCtx, 0xA2A, &this->actor);
                 this->unk_284 = 0xA2A;
                 this->unk_26A = 4;
                 break;
 
-            case 2612:
+            case 0xA34:
                 globalCtx->msgCtx.unk11F22 = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 player->actor.freezeTimer = 0;
@@ -418,14 +417,14 @@ void func_809C6E30(EnSyatekiMan* this, GlobalContext* globalCtx) {
 
     if (this->skelAnime.animCurrentSeg == &D_0600D2F8) {
         if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
-            func_800BDC5C(&this->skelAnime, D_809C9180, 0);
+            func_800BDC5C(&this->skelAnime, sAnimations, 0);
         }
     }
 }
 
 void func_809C6F98(EnSyatekiMan* this, GlobalContext* globalCtx) {
     switch (gSaveContext.playerForm) {
-        case 4:
+        case PLAYER_FORM_HUMAN:
             Actor_SetAllChestFlag(globalCtx, Actor_GetAllChestFlag(globalCtx) + 1);
             if (CURRENT_DAY != 3) {
                 if (!(this->unk_282 & 1)) {
@@ -446,7 +445,7 @@ void func_809C6F98(EnSyatekiMan* this, GlobalContext* globalCtx) {
             }
             break;
 
-        case 3:
+        case PLAYER_FORM_DEKU:
             if (CURRENT_DAY != 3) {
                 if (!(this->unk_282 & 2)) {
                     this->unk_282 |= 2;
@@ -466,7 +465,7 @@ void func_809C6F98(EnSyatekiMan* this, GlobalContext* globalCtx) {
             }
             break;
 
-        case 2:
+        case PLAYER_FORM_ZORA:
             if (CURRENT_DAY != 3) {
                 if (!(this->unk_282 & 8)) {
                     this->unk_282 |= 8;
@@ -486,7 +485,7 @@ void func_809C6F98(EnSyatekiMan* this, GlobalContext* globalCtx) {
             }
             break;
 
-        case 1:
+        case PLAYER_FORM_GORON:
             if (CURRENT_DAY != 3) {
                 if (!(this->unk_282 & 4)) {
                     this->unk_282 |= 4;
@@ -592,41 +591,41 @@ void func_809C7620(EnSyatekiMan* this, GlobalContext* globalCtx) {
 
     if (func_80147624(globalCtx)) {
         switch (this->unk_284) {
-            case 1000:
-            case 1001:
-            case 1002:
-            case 1003:
+            case 0x3E8:
+            case 0x3E9:
+            case 0x3EA:
+            case 0x3EB:
                 func_801518B0(globalCtx, 0x3F6, &this->actor);
                 this->unk_284 = 0x3F6;
                 break;
 
-            case 1004:
+            case 0x3EC:
                 func_801518B0(globalCtx, 0x3ED, &this->actor);
                 this->unk_284 = 0x3ED;
                 break;
 
-            case 1006:
+            case 0x3EE:
                 func_801518B0(globalCtx, 0x3EF, &this->actor);
                 this->unk_284 = 0x3EF;
                 break;
 
-            case 1008:
+            case 0x3F0:
                 func_801518B0(globalCtx, 0x3F1, &this->actor);
                 this->unk_284 = 0x3F1;
                 break;
 
-            case 1010:
+            case 0x3F2:
                 func_801518B0(globalCtx, 0x3F3, &this->actor);
                 this->unk_284 = 0x3F3;
                 break;
 
-            case 1012:
+            case 0x3F4:
                 func_801518B0(globalCtx, 0x3F5, &this->actor);
                 this->unk_284 = 0x3F5;
                 break;
 
-            case 1021:
-            case 1023:
+            case 0x3FD:
+            case 0x3FF:
                 if (this->unk_26A == 4U) {
                     if (this->unk_284 == 0x3FD) {
                         func_801518B0(globalCtx, 0x3FE, &this->actor);
@@ -647,8 +646,8 @@ void func_809C7620(EnSyatekiMan* this, GlobalContext* globalCtx) {
                 }
                 break;
 
-            case 1022:
-            case 1024:
+            case 0x3FE:
+            case 0x400:
                 globalCtx->msgCtx.unk11F22 = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 player->actor.freezeTimer = 0;
@@ -660,7 +659,7 @@ void func_809C7620(EnSyatekiMan* this, GlobalContext* globalCtx) {
                 this->actionFunc = func_809C8808;
                 break;
 
-            case 1025:
+            case 0x401:
                 if (gSaveContext.weekEventReg[63] & 2) {
                     func_801477B4(globalCtx);
                     gSaveContext.weekEventReg[63] &= (u8)~1;
@@ -673,7 +672,7 @@ void func_809C7620(EnSyatekiMan* this, GlobalContext* globalCtx) {
                 }
                 break;
 
-            case 1027:
+            case 0x403:
                 if (gSaveContext.weekEventReg[63] & 2) {
                     func_801477B4(globalCtx);
                     gSaveContext.weekEventReg[63] &= (u8)~1;
@@ -686,16 +685,16 @@ void func_809C7620(EnSyatekiMan* this, GlobalContext* globalCtx) {
                 }
                 break;
 
-            case 1026:
-            case 1028:
+            case 0x402:
+            case 0x404:
                 func_801518B0(globalCtx, 0x3F6, &this->actor);
                 this->unk_284 = 0x3F6;
                 this->unk_26A = 4;
                 break;
 
-            case 1029:
-            case 1030:
-            case 1031:
+            case 0x405:
+            case 0x406:
+            case 0x407:
                 globalCtx->msgCtx.unk11F22 = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 player->actor.freezeTimer = 0;
@@ -782,7 +781,7 @@ void func_809C7C14(EnSyatekiMan* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
     if (func_800B84D0(&this->actor, globalCtx)) {
-        if ((CURRENT_DAY == 3) && (gSaveContext.time > 0x8000)) {
+        if ((CURRENT_DAY == 3) && (gSaveContext.time > CLOCK_TIME(12, 00))) {
             func_801518B0(globalCtx, 0xA36, &this->actor);
             this->unk_284 = 0xA36;
         } else {
@@ -1047,7 +1046,7 @@ void func_809C8610(EnSyatekiMan* this, GlobalContext* globalCtx) {
 void func_809C8710(EnSyatekiMan* this, GlobalContext* globalCtx) {
     Vec3f sp24;
 
-    if (gSaveContext.playerForm == 0) {
+    if (gSaveContext.playerForm == PLAYER_FORM_FIERCE_DEITY) {
         sp24 = D_809C9480;
     } else {
         sp24 = D_809C948C;
