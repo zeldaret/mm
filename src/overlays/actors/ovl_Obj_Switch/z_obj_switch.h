@@ -5,7 +5,7 @@
 
 struct ObjSwitch;
 
-typedef void (*ObjSwitchActionFunc)(struct ObjSwitch* this, GlobalContext* globalCtx);
+typedef void (*ObjSwitchActionFunc)(struct ObjSwitch*, GlobalContext*);
 
 typedef struct ObjSwitch {
     /* 0x0000 */ Actor actor;

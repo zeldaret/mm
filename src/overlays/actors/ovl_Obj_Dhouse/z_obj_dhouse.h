@@ -5,7 +5,7 @@
 
 struct ObjDhouse;
 
-typedef void (*ObjDhouseActionFunc)(struct ObjDhouse* this, GlobalContext* globalCtx);
+typedef void (*ObjDhouseActionFunc)(struct ObjDhouse*, GlobalContext*);
 
 typedef struct ObjDhouse {
     /* 0x0000 */ Actor actor;

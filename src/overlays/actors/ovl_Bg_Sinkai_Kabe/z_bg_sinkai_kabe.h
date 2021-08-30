@@ -5,7 +5,7 @@
 
 struct BgSinkaiKabe;
 
-typedef void (*BgSinkaiKabeActionFunc)(struct BgSinkaiKabe* this, GlobalContext* globalCtx);
+typedef void (*BgSinkaiKabeActionFunc)(struct BgSinkaiKabe*, GlobalContext*);
 
 typedef struct BgSinkaiKabe {
     /* 0x0000 */ Actor actor;

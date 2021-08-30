@@ -5,7 +5,7 @@
 
 struct EnDs2n;
 
-typedef void (*EnDs2nActionFunc)(struct EnDs2n* this, GlobalContext* globalCtx);
+typedef void (*EnDs2nActionFunc)(struct EnDs2n*, GlobalContext*);
 
 typedef struct EnDs2n {
     /* 0x0000 */ Actor actor;

@@ -5,7 +5,7 @@
 
 struct EnNeoReeba;
 
-typedef void (*EnNeoReebaActionFunc)(struct EnNeoReeba* this, GlobalContext* globalCtx);
+typedef void (*EnNeoReebaActionFunc)(struct EnNeoReeba*, GlobalContext*);
 
 typedef struct EnNeoReeba {
     /* 0x0000 */ Actor actor;

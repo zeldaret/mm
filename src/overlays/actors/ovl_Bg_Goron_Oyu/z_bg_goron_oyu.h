@@ -5,7 +5,7 @@
 
 struct BgGoronOyu;
 
-typedef void (*BgGoronOyuActionFunc)(struct BgGoronOyu* this, GlobalContext* globalCtx);
+typedef void (*BgGoronOyuActionFunc)(struct BgGoronOyu*, GlobalContext*);
 
 typedef struct BgGoronOyu {
     /* 0x0000 */ Actor actor;
