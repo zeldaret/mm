@@ -198,7 +198,7 @@ s32 func_80A52944(EnDnq* this) {
     s16 phi_v1 = 0;
 
     if (this->unk_386 == 0) {
-        func_80A5257C(this, 0xC);
+        func_80A5257C(this, 12);
         this->unk_38C = 1;
         this->actor.shape.rot.y = this->actor.world.rot.y;
         this->unk_386 = 1;
@@ -207,10 +207,10 @@ s32 func_80A52944(EnDnq* this) {
     } else if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
         this->unk_386++;
         if (this->unk_386 >= 6) {
-            func_80A5257C(this, 0xC);
+            func_80A5257C(this, 12);
             this->unk_386 = 1;
             phi_v1 = this->unk_38C * 0x2000;
-        } else if (this->unk_386 < 4) {
+        } else if (this->unk_386 <= 3) {
             this->unk_38C = -this->unk_38C;
             this->skelAnime.animCurrentFrame = 0.0f;
             phi_v1 = this->unk_38C * 0x2000;
@@ -338,7 +338,7 @@ void func_80A52DC8(EnDnq* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
     s16 yaw = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
 
-    if (yaw < 0x3801) {
+    if (yaw <= 0x3800) {
         func_8013AED4(&this->unk_37C, 3, 7);
     } else {
         func_8013AED4(&this->unk_37C, 0, 7);
@@ -346,7 +346,7 @@ void func_80A52DC8(EnDnq* this, GlobalContext* globalCtx) {
 
     if (!(gSaveContext.weekEventReg[23] & 0x20)) {
         this->unk_390 = 70.0f;
-        if (func_80114F2C(0x17) && !func_801690CC(globalCtx) && (func_80152498(&globalCtx->msgCtx) == 0) &&
+        if (func_80114F2C(ITEM_DEKU_PRINCESS) && !func_801690CC(globalCtx) && (func_80152498(&globalCtx->msgCtx) == 0) &&
             (ActorCutscene_GetCurrentIndex() == -1)) {
             if ((DECR(this->unk_384) == 0) && (gSaveContext.weekEventReg[29] & 0x40)) {
                 func_801518B0(globalCtx, 0x969, NULL);
