@@ -706,7 +706,6 @@ beginseg
     name "ovl_select"
     compress
     include "build/src/overlays/gamestates/ovl_select/z_select.o"
-    include "build/data/ovl_select/ovl_select.data.o"
     include "build/data/ovl_select/ovl_select.reloc.o"
 endseg
 

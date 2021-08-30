@@ -8,9 +8,11 @@ struct SelectContext;
 void Select_Init(GameState* thisx);
 void Select_Destroy(GameState* thisx);
 
+typedef void (*Select_LoadFunc)(struct SelectContext*, u32, s32);
+
 typedef struct {
     /* 0x00 */ char* name;
-    /* 0x04 */ void (*loadFunc)(struct SelectContext*, u32, s32);
+    /* 0x04 */ Select_LoadFunc loadFunc;
     /* 0x08 */ s32 entranceIndex;
 } SceneSelectEntry; // size = 0xC
 
