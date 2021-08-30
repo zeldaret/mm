@@ -381,7 +381,7 @@ void func_80A9B554(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
             temp_f24 = Math_SinS(temp_s1_3);
             temp_f28 = Math_CosS(temp_s1_3);
             unkStruct2->unk_04.x = (temp_f24 * 225.5f) + spB8.x;
-            if (i % 2) {
+            if (i & 1) {
                 unkStruct2->unk_04.y = (Rand_ZeroOne() * D_80A9D880[unkStruct1Temp->unk_00].unk_00) + spB8.y;
             } else {
                 unkStruct2->unk_04.y = temp_f6 - (Rand_ZeroOne() * 350.0f);
@@ -489,11 +489,11 @@ void func_80A9BD24(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
         }
 
         if (unkStruct->unk_0000[i].unk_34 == 2) {
-            if (Math3D_XZLengthSquared(unkStruct->unk_0000[i].unk_14.x, unkStruct->unk_0000[i].unk_14.z) > SQ(440.0000227272f)) {
+            if (Math3D_XZLengthSquared(unkStruct->unk_0000[i].unk_14.x, unkStruct->unk_0000[i].unk_14.z) > SQ(440.0f) + 0.02f) {
                 unkStruct->unk_0000[i].unk_34 = 3;
             }
         } else if (unkStruct->unk_0000[i].unk_34 == 3) {
-            if (Math3D_XZLengthSquared(unkStruct->unk_0000[i].unk_14.x, unkStruct->unk_0000[i].unk_14.z) > SQ(528.00002840909f)) {
+            if (Math3D_XZLengthSquared(unkStruct->unk_0000[i].unk_14.x, unkStruct->unk_0000[i].unk_14.z) > 278784.03f) {
                 func_80A9B554(this, globalCtx, unkStruct, &unkStruct->unk_0000[i]);
                 func_8019F128(NA_SE_EV_GLASSBROKEN_IMPACT);
                 unkStruct->unk_0000[i].unk_34 = 4;
@@ -576,7 +576,7 @@ void func_80A9C228(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
                 spB8.x = (Math_SinS(temp_s0) * temp_f20) + spC8->unk_14.x;
                 spB8.z = (Math_CosS(temp_s0) * temp_f20) + spC8->unk_14.z;
 
-                if (Math3D_XZLengthSquared(spB8.x, spB8.z) < SQ(550.00002727272f)) {
+                if (Math3D_XZLengthSquared(spB8.x, spB8.z) < SQ(550.0f) + 0.03f) {
                     spB8.x += this->dyna.actor.home.pos.x;
                     spB8.y = spC8->unk_14.y + this->unk_16C + 20.0f;
                     spB8.z += this->dyna.actor.home.pos.z;
