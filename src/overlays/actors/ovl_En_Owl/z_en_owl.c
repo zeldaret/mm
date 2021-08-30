@@ -50,9 +50,9 @@ typedef enum {
 extern AnimationHeader D_06001168;
 extern Gfx D_06001200[];
 extern AnimationHeader D_06001ADC;
-extern UNK_PTR D_06008EB8;
-extern UNK_PTR D_060092B8;
-extern UNK_PTR D_060096B8;
+extern TexturePtr D_06008EB8;
+extern TexturePtr D_060092B8;
+extern TexturePtr D_060096B8;
 extern FlexSkeletonHeader D_0600C5F8;
 extern AnimationHeader D_0600C6D4;
 extern AnimationHeader D_0600CB94;
@@ -127,7 +127,7 @@ void EnOwl_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actor.cutscene = this->unk_400[0];
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    if (ENOWL_GET_Type(&this->actor) == ENOWL_GET_Type_30) {
+    if (ENOWL_GET_TYPE(&this->actor) == ENOWL_GET_TYPE_30) {
         Actor_SetScale(&this->actor, 0.1f);
         this->actor.update = func_8095CCF4;
         this->actor.draw = func_8095D074;
@@ -154,25 +154,25 @@ void EnOwl_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_40B = this->unk_408 = 0;
     this->unk_40C = 4;
     this->unk_406 = -1;
-    owlType = ENOWL_GET_Type(&this->actor);
-    switchFlag = ENOWL_GET_SwitchFlag(&this->actor);
+    owlType = ENOWL_GET_TYPE(&this->actor);
+    switchFlag = ENOWL_GET_SWITCHFLAG(&this->actor);
 
     switch (owlType) {
-        case ENOWL_GET_Type_1:
+        case ENOWL_GET_TYPE_1:
             if ((switchFlag < 0x7F) && Flags_GetSwitch(globalCtx, switchFlag)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
             break;
 
-        case ENOWL_GET_Type_2:
+        case ENOWL_GET_TYPE_2:
             if (gSaveContext.inventory.items[14] == 14) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
             break;
 
-        case ENOWL_GET_Type_3:
+        case ENOWL_GET_TYPE_3:
             if (CHECK_QUEST_ITEM(15)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
@@ -186,11 +186,11 @@ void EnOwl_Init(Actor* thisx, GlobalContext* globalCtx) {
     func_8095A510(this, globalCtx);
 
     switch (owlType) {
-        case ENOWL_GET_Type_1:
+        case ENOWL_GET_TYPE_1:
             this->actionFunc = func_8095AEC0;
             break;
 
-        case ENOWL_GET_Type_2:
+        case ENOWL_GET_TYPE_2:
             this->actionFunc = func_8095BE0C;
             if (gSaveContext.weekEventReg[9] & 0x20) {
                 this->actor.textId = 0xBF0;
@@ -199,11 +199,11 @@ void EnOwl_Init(Actor* thisx, GlobalContext* globalCtx) {
             }
             break;
 
-        case ENOWL_GET_Type_3:
+        case ENOWL_GET_TYPE_3:
             this->actionFunc = func_8095AFEC;
             break;
 
-        case ENOWL_GET_Type_1000:
+        case ENOWL_GET_TYPE_1000:
             this->actionFunc = func_8095BF20;
             break;
 
@@ -218,7 +218,7 @@ void EnOwl_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnOwl_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnOwl* this = THIS;
 
-    if (ENOWL_GET_Type(&this->actor) != ENOWL_GET_Type_30) {
+    if (ENOWL_GET_TYPE(&this->actor) != ENOWL_GET_TYPE_30) {
         Collider_DestroyCylinder(globalCtx, &this->collider);
     }
 }
@@ -264,7 +264,7 @@ void func_8095AA70(EnOwl* this) {
 }
 
 void func_8095AAD0(EnOwl* this, GlobalContext* globalCtx) {
-    s32 switchFlag = ENOWL_GET_SwitchFlag(&this->actor);
+    s32 switchFlag = ENOWL_GET_SWITCHFLAG(&this->actor);
 
     if (switchFlag < 0x7F) {
         Actor_SetSwitchFlag(globalCtx, switchFlag);
@@ -403,12 +403,12 @@ void func_8095AFEC(EnOwl* this, GlobalContext* globalCtx) {
 
 s32 func_8095B06C(EnOwl* this) {
     if ((this->actor.world.pos.y + 2.0f) < this->unk_3F0) {
-        this->actor.world.pos.y = this->actor.world.pos.y + 2.0f;
+        this->actor.world.pos.y += 2.0f;
         return false;
     }
 
     if (this->unk_3F0 < (this->actor.world.pos.y - 2.0f)) {
-        this->actor.world.pos.y = this->actor.world.pos.y - 2.0f;
+        this->actor.world.pos.y -= 2.0f;
         return false;
     }
 
@@ -1085,7 +1085,7 @@ void func_8095CCF4(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
 
-    this->actor.world.pos.y = this->actor.world.pos.y - 1.0f;
+    this->actor.world.pos.y -= 1.0f;
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, 10.0f, 10.0f, 4);
     if (this->actor.bgCheckFlags & 1) {
         this->unk_3DA = (this->unk_3DA >> 3) * 7;
