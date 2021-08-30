@@ -423,7 +423,7 @@ void func_80876BD0(EnDodongo* this, GlobalContext* globalCtx, s32 arg2) {
 
 void func_80876CAC(EnDodongo* this) {
     this->unk_300 = 10;
-    this->collider1.base.colType = 3;
+    this->collider1.base.colType = COLTYPE_HIT3;
     this->unk_340 = 0.75f;
     this->unk_344 = 1.125f;
     this->unk_33C = 1.0f;
@@ -437,7 +437,7 @@ void func_80876D28(EnDodongo* this, GlobalContext* globalCtx) {
         this->timer = 0;
         this->actor.colorFilterTimer = 0;
         this->unk_300 = 0;
-        this->collider1.base.colType = 0;
+        this->collider1.base.colType = COLTYPE_HIT0;
         this->unk_33C = 0.0f;
         func_800BF7CC(globalCtx, &this->actor, &this->unk_348[0], 9, 2, this->unk_334 * 0.3f, this->unk_334 * 0.2f);
         this->actor.flags |= 0x400;
@@ -462,7 +462,7 @@ void func_80876DC4(EnDodongo* this, GlobalContext* globalCtx) {
 
     if (this->unk_32C.r > 30) {
         this->unk_32C.r -= 16;
-        this->unk_32C.g += -0x10;
+        this->unk_32C.g += -16;
     }
 
     if (this->unk_32C.b < 30) {
@@ -503,7 +503,7 @@ void func_80876DC4(EnDodongo* this, GlobalContext* globalCtx) {
     sp74.z = (Rand_ZeroFloat(0.1f) + 0.15f) * -temp_f22 * this->unk_334;
     func_800B0EB0(globalCtx, &sp68, &sp80, &sp74, &this->unk_32C, &this->unk_330, sp64, sp62, 0x14);
 
-    sp68.x = this->unk_348[0].x + ((temp_f20 * 6.0f) * this->unk_334);
+    sp68.x = this->unk_348[0].x + (temp_f20 * 6.0f * this->unk_334);
     sp68.z = this->unk_348[0].z - (temp_f22 * 6.0f * this->unk_334);
     sp80.x *= -1.0f;
     sp80.z = sp80.z * -1.0f;
@@ -534,7 +534,7 @@ s32 func_80877278(EnDodongo* this, GlobalContext* globalCtx) {
             Math_Vec3f_Diff(&explosive->world.pos, &this->unk_308, &sp44);
             if ((fabsf(sp44.x) < 20.0f) && (fabsf(sp44.y) < 10.0f) && (fabsf(sp44.z) < 20.0f)) {
                 this->actor.child = explosive;
-                explosive->freezeTimer = 30000;
+                explosive->freezeTimer = 30000; // 25 minutes
                 return true;
             }
         }
@@ -656,7 +656,7 @@ void func_8087784C(EnDodongo* this, GlobalContext* globalCtx) {
         func_800B9010(&this->actor, NA_SE_EN_DODO_J_FIRE - SFX_FLAG);
         frame = this->skelAnime.animCurrentFrame - 29.0f;
         end = frame >> 1;
-        if (end >= 4) {
+        if (end > 3) {
             end = 3;
         }
 
@@ -732,7 +732,7 @@ void func_80877E60(EnDodongo* this, GlobalContext* globalCtx) {
 
     if (this->actor.child != NULL) {
         Math_Vec3f_Copy(&this->actor.child->world.pos, &this->unk_308);
-        this->actor.child->freezeTimer = 30000;
+        this->actor.child->freezeTimer = 30000; // 25 minutes
     }
 
     if (func_801378B8(&this->skelAnime, 28.0f)) {
@@ -760,7 +760,7 @@ void func_80877E60(EnDodongo* this, GlobalContext* globalCtx) {
             }
 
             Audio_PlayActorSound2(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
-            if (this->actor.colChkInfo.health < 5) {
+            if (this->actor.colChkInfo.health <= 4) {
                 this->actor.colChkInfo.health = 0;
                 func_800BBA88(globalCtx, &this->actor);
             } else {
@@ -985,7 +985,7 @@ void EnDodongo_UpdateDamage(EnDodongo* this, GlobalContext* globalCtx) {
         if ((i != ARRAY_COUNT(this->collider1Elements)) &&
             ((this->unk_300 != 10) || !(this->collider1.elements[i].info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
             func_80876D28(this, globalCtx);
-            if (this->actor.colChkInfo.damageEffect != 15) {
+            if (this->actor.colChkInfo.damageEffect != 0xF) {
                 if (!func_800BE22C(&this->actor)) {
                     func_800BBA88(globalCtx, &this->actor);
                     if (this->actor.colChkInfo.damageEffect == 3) {
