@@ -177,13 +177,8 @@ void func_809947B0(GlobalContext* globalCtx, EnSkb* this, Vec3f* inPos) {
     velocity.y += (Rand_ZeroOne() - 0.5f) * 4.0f;
     EffectSsHahen_Spawn(globalCtx, &pos, &velocity, &accel, 0, ((Rand_ZeroOne() * 5.0f) + 12.0f) * 0.8f,
                         HAHEN_OBJECT_DEFAULT, 10, NULL);
-    func_800BBFB0(globalCtx, &pos, 10.0f, 1, 0x96, 0, 1);
+    func_800BBFB0(globalCtx, &pos, 10.0f, 1, 150, 0, 1);
 }
-
-static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_CONTINUE),
-    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_STOP),
-};
 
 void func_8099495C(EnSkb* this, GlobalContext* globalCtx) {
     SkelAnime_Init(globalCtx, &this->skelAnime, &D_06005EF8, &D_06003584, this->jointTable, this->morphTable, 20);
@@ -209,6 +204,11 @@ void func_80994A9C(EnSkb* this, GlobalContext* globalCtx) {
     func_809954F8(this);
 }
 
+static InitChainEntry sInitChain[] = {
+    ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_STOP),
+};
+
 void EnSkb_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnSkb* this = THIS;
     s32 pad;
@@ -230,7 +230,10 @@ void EnSkb_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.home.pos = this->actor.world.pos;
     this->unk_3D6 = ENSKB_GET_F0(&this->actor);
     this->actor.floorHeight = this->actor.world.pos.y;
-    if ((globalCtx->sceneNum == SCENE_BOTI) && (gSaveContext.sceneSetupIndex == 1) && (globalCtx->csCtx.unk_12 == 0)) {
+
+    if ((globalCtx->sceneNum == SCENE_BOTI) && 
+        (gSaveContext.sceneSetupIndex == 1) && 
+        (globalCtx->csCtx.unk_12 == 0)) {
         this->actor.flags |= 0x100000;
     }
 
@@ -305,7 +308,7 @@ void func_80994E94(EnSkb* this, GlobalContext* globalCtx) {
 
     Math_ApproachZeroF(&this->actor.shape.yOffset, 1.0f, 800.0f);
     Math_ApproachF(&this->actor.shape.shadowScale, 25.0f, 1.0f, 2.5f);
-    if ((globalCtx->gameplayFrames & 1) == 0) {
+    if ((globalCtx->gameplayFrames % 2) == 0) {
         func_809947B0(globalCtx, this, &this->actor.world.pos);
     }
 
@@ -351,8 +354,8 @@ void func_80995068(EnSkb* this, GlobalContext* globalCtx) {
         this->actionFunc = func_80995190;
         this->actor.speedXZ = 0.0f;
     } else if (Player_GetMask(globalCtx) != PLAYER_MASK_CAPTAINS_HAT) {
-        this->actor.flags |= 5;
-        this->actor.flags &= ~9;
+        this->actor.flags |= (0x4 | 0x1);
+        this->actor.flags &= ~(0x8 | 0x1);
         this->actor.hintId = 0x55;
         this->actor.colChkInfo.mass = MASS_HEAVY;
         func_80995A30(this);
@@ -388,8 +391,8 @@ void func_80995190(EnSkb* this, GlobalContext* globalCtx) {
 }
 
 void func_80995244(EnSkb* this, GlobalContext* globalCtx) {
-    this->actor.flags &= ~9;
-    this->actor.flags |= 5;
+    this->actor.flags &= ~(0x8 | 0x1);
+    this->actor.flags |= (0x4 | 0x1);
     this->unk_3E2 = 0;
 
     switch (this->unk_3DE) {
@@ -471,9 +474,9 @@ void func_8099556C(EnSkb* this, GlobalContext* globalCtx) {
     s16 sp26;
 
     if (this->skelAnime.animCurrentFrame < 15.0f) {
-        sp26 = (this->skelAnime.animCurrentFrame - 7.5f);
+        sp26 = this->skelAnime.animCurrentFrame - 7.5f;
     } else {
-        sp26 = (22.5f - this->skelAnime.animCurrentFrame);
+        sp26 = 22.5f - this->skelAnime.animCurrentFrame;
     }
 
     if (func_801378B8(&this->skelAnime, 22.5f)) {
@@ -734,14 +737,14 @@ void func_809961E4(EnSkb* this, GlobalContext* globalCtx) {
     }
     this->unk_3E4 = 0;
     this->actor.flags &= ~1;
-    func_800F0568(globalCtx, &this->actor.world.pos, 0x28, 0x3833);
+    func_800F0568(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_STALKID_DEAD);
     this->unk_3DE = 7;
     this->actionFunc = func_80996284;
 }
 
 void func_80996284(EnSkb* this, GlobalContext* globalCtx) {
     if (this->unk_3D8 & 0x80) {
-        if (1) {};
+        if (1) {}
         Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0x10);
         func_80996474(this);
     }
@@ -813,7 +816,7 @@ void func_809964DC(EnSkb* this, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_80996544(EnSkbUnkStruct arg0, EnSkbUnkStruct arg1) {
+s32 func_80996544(EnSkbVec2f arg0, EnSkbVec2f arg1) {
     s32 ret;
 
     if ((arg1.x * arg0.z) < (arg0.x * arg1.z)) {
@@ -828,8 +831,8 @@ s32 func_80996544(EnSkbUnkStruct arg0, EnSkbUnkStruct arg1) {
 s32 func_80996594(EnSkb* this, GlobalContext* globalCtx) {
     s32 temp_s2;
     s32 j;
-    EnSkbUnkStruct sp60;
-    EnSkbUnkStruct sp58;
+    EnSkbVec2f sp60;
+    EnSkbVec2f sp58;
     s32 sp54 = true;
     f32 worldZ;
     s32 i = 0;
@@ -845,7 +848,7 @@ s32 func_80996594(EnSkb* this, GlobalContext* globalCtx) {
     j = 1;
     temp_s2 = func_80996544(sp60, sp58);
 
-    if (1) {};
+    if (1) {}
 
     do {
         i++;
@@ -1011,7 +1014,7 @@ void func_80996BEC(EnSkb* this, GlobalContext* globalCtx) {
         end = 14;
     }
 
-    func_800F0568(globalCtx, &this->actor.world.pos, 30, 0x28CB);
+    func_800F0568(globalCtx, &this->actor.world.pos, 30, NA_SE_EV_ICE_BROKEN);
 
     for (i = 0; i < end; i++) {
         yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_234[i]);
@@ -1042,8 +1045,8 @@ void func_80996D68(EnSkb* this, GlobalContext* globalCtx) {
 }
 
 void EnSkb_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnSkb* this = THIS;
     s32 pad;
+    EnSkb* this = THIS;
 
     this->actionFunc(this, globalCtx);
     if ((this->actionFunc != func_80995E64) && (this->actionFunc != func_80996284) &&
@@ -1072,7 +1075,7 @@ s32 EnSkb_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
         if (!(this->unk_3D8 & 2)) {
             OPEN_DISPS(globalCtx->state.gfxCtx);
 
-            sins = fabsf(Math_SinS(globalCtx->gameplayFrames * 0x1770) * 95.0f) + 160.0f;
+            sins = fabsf(Math_SinS(globalCtx->gameplayFrames * 6000) * 95.0f) + 160.0f;
 
             gDPPipeSync(POLY_OPA_DISP++);
             gDPSetEnvColor(POLY_OPA_DISP++, sins, sins, sins, 255);

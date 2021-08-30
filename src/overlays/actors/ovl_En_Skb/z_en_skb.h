@@ -12,7 +12,7 @@ typedef void (*EnSkbActionFunc)(struct EnSkb*, GlobalContext*);
 typedef struct {
     f32 x;
     f32 z;
-} EnSkbUnkStruct;
+} EnSkbVec2f;
 
 typedef struct EnSkb {
     /* 0x0000 */ Actor actor;
