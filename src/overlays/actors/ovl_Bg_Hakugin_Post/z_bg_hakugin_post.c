@@ -144,7 +144,7 @@ void func_80A9AFB4(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
     s32 i;
     s32 j;
 
-    if (unkStruct->count < 12) {
+    if (unkStruct->count < ARRAY_COUNT(unkStruct->unk_0000)) {
         for (i = 0; i < unkStruct->count; i++) {
             if ((unkStruct->unk_0000[i].unk_34 == 0) ||
                 (this->dyna.actor.world.pos.y < unkStruct->unk_0000[i].unk_08.y)) {
@@ -305,7 +305,7 @@ void func_80A9B554(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
     s32 i;
     s16 val;
     BgHakuginPostUnkStruct2* unkStruct2;
-    BgHakuginPostUnkStruct1* temp_unkStruct1;
+    BgHakuginPostUnkStruct1* unkStruct1Temp;
     f32 temp_f24;
     f32 temp_f0;
     f32 temp_f20;
@@ -338,16 +338,16 @@ void func_80A9B554(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
         unkStruct2->unk_04.z = (temp_f28 * temp_f20) + spB8.z;
 
         temp_f0 = (unkStruct2->unk_00 - 0.002f);
-        temp_f22 = (temp_f0 * -23.68421f) + 1.0f;
+        temp_f22 = (temp_f0 * -(450.0f / 19.0f)) + 1.0f;
         unkStruct2->unk_10.x = (Rand_ZeroOne() * 60.0f);
-        temp_f20 = (temp_f0 * 0.5263158f) + 0.06f;
+        temp_f20 = (temp_f0 * (10.0f / 19.0f)) + 0.06f;
 
         unkStruct2->unk_10.x = (((unkStruct2->unk_10.x - 30.0f) + (temp_f24 * 50.0f)) * temp_f22) + (spAC.x * temp_f20);
         unkStruct2->unk_10.y = (((Rand_ZeroOne() * 102.0f) + 18.0f) * temp_f22) + (spAC.y * temp_f20);
         temp_f0 = spAC.z;
         unkStruct2->unk_10.z =
             ((((Rand_ZeroOne() * 60.0f) - 30.0f) + (temp_f28 * 50.0f)) * temp_f22) + (temp_f0 * temp_f20);
-        unkStruct2->unk_1C = 0.90999997f - ((0.04f - unkStruct2->unk_00) * 26.31579f * 0.02f);
+        unkStruct2->unk_1C = 0.90999997f - ((0.04f - unkStruct2->unk_00) * (500.0f / 19.0f) * 0.02f);
         unkStruct2->unk_20.x = Rand_Next() >> 0x10;
         unkStruct2->unk_20.y = Rand_Next() >> 0x10;
         unkStruct2->unk_20.z = Rand_Next() >> 0x10;
@@ -367,12 +367,12 @@ void func_80A9B554(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
                       (Rand_Next() >> 0x1A) + 0x82, (Rand_Next() >> 0x1A) + 0x6E);
     }
 
-    temp_unkStruct1 = func_80A9B32C(unkStruct, unkStruct1);
-    if (temp_unkStruct1 != NULL) {
+    unkStruct1Temp = func_80A9B32C(unkStruct, unkStruct1);
+    if (unkStruct1Temp != NULL) {
         temp_f6 = (this->unk_16C + func_80A9B2B8(unkStruct)) - 40.0f;
-        spB8.x = temp_unkStruct1->unk_14.x + this->dyna.actor.world.pos.x;
-        spB8.y = temp_unkStruct1->unk_14.y + this->unk_16C;
-        spB8.z = temp_unkStruct1->unk_14.z + this->dyna.actor.world.pos.z;
+        spB8.x = unkStruct1Temp->unk_14.x + this->dyna.actor.world.pos.x;
+        spB8.y = unkStruct1Temp->unk_14.y + this->unk_16C;
+        spB8.z = unkStruct1Temp->unk_14.z + this->dyna.actor.world.pos.z;
 
         for (i = 65, val = 0; i < ARRAY_COUNT(unkStruct->unk_02A4); i++, val += 0x4A7) {
             unkStruct2 = &unkStruct->unk_02A4[i];
@@ -381,8 +381,8 @@ void func_80A9B554(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
             temp_f24 = Math_SinS(temp_s1_3);
             temp_f28 = Math_CosS(temp_s1_3);
             unkStruct2->unk_04.x = (temp_f24 * 225.5f) + spB8.x;
-            if (i & 1) {
-                unkStruct2->unk_04.y = (Rand_ZeroOne() * D_80A9D880[temp_unkStruct1->unk_00].unk_00) + spB8.y;
+            if (i % 2) {
+                unkStruct2->unk_04.y = (Rand_ZeroOne() * D_80A9D880[unkStruct1Temp->unk_00].unk_00) + spB8.y;
             } else {
                 unkStruct2->unk_04.y = temp_f6 - (Rand_ZeroOne() * 350.0f);
             }
@@ -390,7 +390,7 @@ void func_80A9B554(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
             unkStruct2->unk_10.x = Rand_ZeroOne() + (temp_f24 * 7.0f);
             unkStruct2->unk_10.y = 0.0f;
             unkStruct2->unk_10.z = Rand_ZeroOne() + (temp_f28 * 7.0f);
-            unkStruct2->unk_1C = 0.90999997f - ((0.04f - unkStruct2->unk_00) * 26.31579f * 0.075f);
+            unkStruct2->unk_1C = 0.90999997f - ((0.04f - unkStruct2->unk_00) * (500.0f / 19.0f) * 0.075f);
             unkStruct2->unk_20.x = Rand_Next() >> 0x10;
             unkStruct2->unk_20.y = Rand_Next() >> 0x10;
             unkStruct2->unk_20.z = Rand_Next() >> 0x10;
@@ -466,10 +466,10 @@ void func_80A9BD24(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
                     if (unkStruct->unk_0000[i].unk_2F & 1) {
                         unkStruct->unk_0000[i].unk_2F &= ~2;
                     } else {
-                        unkStruct->unk_0000[i].unk_2F |= 3;
+                        unkStruct->unk_0000[i].unk_2F |= (2 | 1);
                     }
                 } else {
-                    unkStruct->unk_0000[i].unk_2F &= ~3;
+                    unkStruct->unk_0000[i].unk_2F &= ~(2 | 1);
                 }
             } else {
                 if (unkStruct->unk_0000[i].unk_14.y <
@@ -480,20 +480,20 @@ void func_80A9BD24(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
                     if ((unkStruct->unk_0000[i].unk_2F & 1) != 0) {
                         unkStruct->unk_0000[i].unk_2F &= ~2;
                     } else {
-                        unkStruct->unk_0000[i].unk_2F |= 3;
+                        unkStruct->unk_0000[i].unk_2F |= (2 | 1);
                     }
                 } else {
-                    unkStruct->unk_0000[i].unk_2F &= ~3;
+                    unkStruct->unk_0000[i].unk_2F &= ~(2 | 1);
                 }
             }
         }
 
         if (unkStruct->unk_0000[i].unk_34 == 2) {
-            if (Math3D_XZLengthSquared(unkStruct->unk_0000[i].unk_14.x, unkStruct->unk_0000[i].unk_14.z) > 193600.02f) {
+            if (Math3D_XZLengthSquared(unkStruct->unk_0000[i].unk_14.x, unkStruct->unk_0000[i].unk_14.z) > SQ(440.0000227272f)) {
                 unkStruct->unk_0000[i].unk_34 = 3;
             }
         } else if (unkStruct->unk_0000[i].unk_34 == 3) {
-            if (Math3D_XZLengthSquared(unkStruct->unk_0000[i].unk_14.x, unkStruct->unk_0000[i].unk_14.z) > 278784.03f) {
+            if (Math3D_XZLengthSquared(unkStruct->unk_0000[i].unk_14.x, unkStruct->unk_0000[i].unk_14.z) > SQ(528.00002840909f)) {
                 func_80A9B554(this, globalCtx, unkStruct, &unkStruct->unk_0000[i]);
                 func_8019F128(NA_SE_EV_GLASSBROKEN_IMPACT);
                 unkStruct->unk_0000[i].unk_34 = 4;
@@ -513,7 +513,7 @@ void func_80A9C058(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
     s32 pad;
     Vec3f sp44;
     s32 pad2[2];
-    s16 sp3A;
+    s16 quake;
 
     if (this->unk_170 == 0) {
         for (i = 0; i < unkStruct->count; i++) {
@@ -524,10 +524,10 @@ void func_80A9C058(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
                 sp44.y = this->unk_16C + unkStruct1->unk_14.y;
                 sp44.z = this->dyna.actor.home.pos.z + unkStruct1->unk_14.z;
                 func_8013ECE0(Math3D_DistanceSquared(&sp44, &PLAYER->actor.world.pos), 255, 20, 150);
-                sp3A = Quake_Add(globalCtx->cameraPtrs[globalCtx->activeCamera], 3);
-                Quake_SetSpeed(sp3A, 0x4E20);
-                Quake_SetQuakeValues(sp3A, 7, 0, 0, 0);
-                Quake_SetCountdown(sp3A, 12);
+                quake = Quake_Add(ACTIVE_CAM, 3);
+                Quake_SetSpeed(quake, 20000);
+                Quake_SetQuakeValues(quake, 7, 0, 0, 0);
+                Quake_SetCountdown(quake, 12);
                 if (this->unk_179 <= 0) {
                     func_8019F128(NA_SE_EV_STONEDOOR_STOP);
                     this->unk_179 = 40;
@@ -541,14 +541,14 @@ void func_80A9C058(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
 void func_80A9C18C(BgHakuginPost* this, GlobalContext* globalCtx) {
     s32 pad;
     Player* player = PLAYER;
-    Camera* camera = ACTIVE_CAM;
+    Camera* activeCam = ACTIVE_CAM;
     s16 quake;
 
     func_8013ECE0(Math3D_XZDistanceSquared(player->actor.world.pos.x, player->actor.world.pos.z,
                                            this->dyna.actor.home.pos.x, this->dyna.actor.home.pos.z),
                   255, 20, 150);
-    quake = Quake_Add(camera, 3);
-    Quake_SetSpeed(quake, 0x4350);
+    quake = Quake_Add(activeCam, 3);
+    Quake_SetSpeed(quake, 17232);
     Quake_SetQuakeValues(quake, 6, 0, 0, 0);
     Quake_SetCountdown(quake, 20);
 }
@@ -576,7 +576,7 @@ void func_80A9C228(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
                 spB8.x = (Math_SinS(temp_s0) * temp_f20) + spC8->unk_14.x;
                 spB8.z = (Math_CosS(temp_s0) * temp_f20) + spC8->unk_14.z;
 
-                if (Math3D_XZLengthSquared(spB8.x, spB8.z) < 302500.03f) {
+                if (Math3D_XZLengthSquared(spB8.x, spB8.z) < SQ(550.00002727272f)) {
                     spB8.x += this->dyna.actor.home.pos.x;
                     spB8.y = spC8->unk_14.y + this->unk_16C + 20.0f;
                     spB8.z += this->dyna.actor.home.pos.z;
@@ -602,9 +602,9 @@ void func_80A9C228(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
                 spB8.x = Math_SinS(temp_s0) * temp_f20;
                 spB8.z = Math_CosS(temp_s0) * temp_f20;
 
-                spAC.x = spB8.x * 0.014545455f;
+                spAC.x = spB8.x * (4.0f / 275.0f);
                 spAC.y = 0.0f;
-                spAC.z = spB8.z * 0.014545455f;
+                spAC.z = spB8.z * (4.0f / 275.0f);
 
                 spB8.x += unkStruct->unk_0000[i].unk_14.x + this->dyna.actor.home.pos.x;
                 spB8.y = unkStruct->unk_0000[i].unk_14.y + this->unk_16C;
@@ -635,7 +635,7 @@ void func_80A9C634(BgHakuginPost* this, GlobalContext* globalCtx) {
         temp_f20 = ((Rand_ZeroOne() * 0.3f) + 1.0f) * 220.0f;
 
         spB8.x = Math_SinS(temp_s4);
-        spB8.y = i * -8.571428f;
+        spB8.y = i * -(60.0f / 7.0f);
         spB8.z = Math_CosS(temp_s4);
 
         spAC.x = spB8.x * 19.0f;
@@ -649,7 +649,7 @@ void func_80A9C634(BgHakuginPost* this, GlobalContext* globalCtx) {
         spA0.x = spAC.x * -0.08f;
         spA0.y = 0.8f;
         spA0.z = spAC.z * -0.08f;
-        func_800B0DE0(globalCtx, &spB8, &spAC, &spA0, &D_80A9D8E4, &D_80A9D8E8, (s32)(Rand_ZeroOne() * 400.0f) + 0x9C4,
+        func_800B0DE0(globalCtx, &spB8, &spAC, &spA0, &D_80A9D8E4, &D_80A9D8E8, (s32)(Rand_ZeroOne() * 400.0f) + 2500,
                       -250);
     }
 }
@@ -791,7 +791,7 @@ void func_80A9CD00(BgHakuginPost* this) {
 
 void func_80A9CD14(BgHakuginPost* this, GlobalContext* globalCtx) {
     f32 temp_f12 =
-        (Math_SinS(((this->unk_16C - this->unk_164) * 32768.0f) / (this->unk_168 - this->unk_164)) * 140.0f) + 4.0f;
+        (Math_SinS(((this->unk_16C - this->unk_164) * 0x8000) / (this->unk_168 - this->unk_164)) * 140.0f) + 4.0f;
 
     temp_f12 = CLAMP_MAX(temp_f12, 40.0f);
     this->unk_16C += temp_f12;
@@ -866,7 +866,7 @@ void func_80A9D0A0(BgHakuginPost* this) {
 
 void func_80A9D0B4(BgHakuginPost* this, GlobalContext* globalCtx) {
     f32 sp24 = (this->unk_164 + this->unk_160) - func_80A9B2B8(&D_80A9E028);
-    f32 temp_f14 = (Math_SinS(((this->unk_16C - sp24) * 32768.0f) / (this->unk_168 - sp24)) * 140.0f) + 4.0f;
+    f32 temp_f14 = (Math_SinS(((this->unk_16C - sp24) * 0x8000) / (this->unk_168 - sp24)) * 140.0f) + 4.0f;
 
     temp_f14 = CLAMP_MAX(temp_f14, 40.0f);
     this->unk_16C -= temp_f14;
