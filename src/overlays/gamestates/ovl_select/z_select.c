@@ -6,14 +6,72 @@
 
 #include "z_select.h"
 #include "alloca.h"
+#include "overlays/gamestates/ovl_title/z_title.h"
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/D_80802390.s")
 
-void func_80800910(SelectContext* this, s32);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/func_80800910.s")
+void func_80800910(SelectContext* this) {
+    {
+        GameState* state = &this->state;
+        state->running = false; 
+    }
 
-void func_80800930(SelectContext* this, s32);
+    SET_NEXT_GAMESTATE(&this->state, Title_Init, TitleContext);
+}
+
+extern s8 D_801BDBB0;
+
+#ifdef NON_EQUIVALENT
+void func_80800930(SelectContext* this, u32 arg1, s32 arg2) {
+    gSaveContext.fileNum;
+
+    if (gSaveContext.fileNum == 0xFF) {
+        func_80144968();
+    }
+
+    gSaveContext.buttonStatus[0] = BTN_ENABLED;
+    gSaveContext.buttonStatus[1] = BTN_ENABLED;
+    gSaveContext.buttonStatus[2] = BTN_ENABLED;
+    gSaveContext.buttonStatus[3] = BTN_ENABLED;
+    gSaveContext.buttonStatus[4] = BTN_ENABLED;
+    gSaveContext.unk_3F1E = 0;
+    gSaveContext.unk_3F20 = 0;
+    gSaveContext.unk_3F22 = 0;
+    gSaveContext.unk_3F24 = 0;
+
+    // NA_BGM_STOP: 0x100000FF
+    func_801A89A8(0x100000FF);
+    gSaveContext.entranceIndex = arg1;
+
+    if (arg2 != 0) {
+        gSaveContext.entranceIndex = Entrance_CreateIndex((s32) arg1 >> 9, arg2, arg1 & 0xF);
+    }
+    if (gSaveContext.entranceIndex == 0xC000) {
+        gSaveContext.day = 0;
+        gSaveContext.time = CLOCK_TIME(6, 0) - 1;
+    }
+
+    gSaveContext.respawn[0].entranceIndex = 0xFFFF;
+    gSaveContext.seqIndex = 0xFF;
+    gSaveContext.nightSeqIndex = 0xFF;
+    gSaveContext.showTitleCard = true;
+    gSaveContext.respawnFlag = 0;
+    gSaveContext.respawn[4].entranceIndex = 0xFF;
+    gSaveContext.respawn[5].entranceIndex = 0xFF;
+    gSaveContext.respawn[6].entranceIndex = 0xFF;
+    gSaveContext.respawn[7].entranceIndex = 0xFF;
+    D_801BDBB0 = 0;
+
+    {
+        GameState* state = &this->state;
+        state->running = false; 
+    }
+    SET_NEXT_GAMESTATE(&this->state, Play_Init, GlobalContext);
+}
+#else
+void func_80800930(SelectContext* this, u32, s32);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/func_80800930.s")
+#endif
 
 void func_80800A44(SelectContext* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/func_80800A44.s")
@@ -111,8 +169,97 @@ void func_80801620(SelectContext* this, GfxPrint* printer, s32 arg2);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/func_80801620.s")
 #endif
 
-void func_808016E8(SelectContext* this, GfxPrint* printer, u16 arg2);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/func_808016E8.s")
+void func_808016E8(SelectContext* this, GfxPrint* printer, u16 arg2) {
+    const char* phi_a2;
+    const char* phi_a2_2;
+
+    GfxPrint_SetPos(printer, 4, 25);
+    GfxPrint_SetColor(printer, 255, 255, 55, 255);
+    switch (arg2) {
+        case 0:
+            // clang-format off
+            gSaveContext.time = CLOCK_TIME(12, 0); phi_a2 = "\x8dｵﾋﾙ\x8cｼﾞｬﾗ";
+            // clang-format on
+            break;
+
+        case 0x8000:
+
+            gSaveContext.time = CLOCK_TIME(6, 0)+1; phi_a2 = "\x8dｱｻ \x8cｼﾞｬﾗ";
+            // clang-format on
+            break;
+
+        case 0x8800:
+            // clang-format off
+            gSaveContext.time = CLOCK_TIME(18, 1);
+            phi_a2 = "\x8dﾖﾙ \x8cｼﾞｬﾗ";
+            break;
+
+        case 0xFFF0:
+            // clang-format off
+            gSaveContext.time = CLOCK_TIME(12, 0); phi_a2 = "ﾃﾞﾓ00";
+            // clang-format on
+            break;
+        case 0xFFF1:
+            phi_a2 = "ﾃﾞﾓ01";
+            break;
+        case 0xFFF2:
+            phi_a2 = "ﾃﾞﾓ02";
+            break;
+        case 0xFFF3:
+            phi_a2 = "ﾃﾞﾓ03";
+            break;
+        case 0xFFF4:
+            phi_a2 = "ﾃﾞﾓ04";
+            break;
+        case 0xFFF5:
+            phi_a2 = "ﾃﾞﾓ05";
+            break;
+        case 0xFFF6:
+            phi_a2 = "ﾃﾞﾓ06";
+            break;
+        case 0xFFF7:
+            phi_a2 = "ﾃﾞﾓ07";
+            break;
+        case 0xFFF8:
+            phi_a2 = "ﾃﾞﾓ08";
+            break;
+        case 0xFFF9:
+            phi_a2 = "ﾃﾞﾓ09";
+            break;
+        case 0xFFFA:
+            phi_a2 = "ﾃﾞﾓ0A";
+            break;
+
+        default:
+            phi_a2 = "???";
+            break;
+    }
+    gSaveContext.environmentTime = gSaveContext.time;
+    GfxPrint_Printf(printer, "Stage:\x8c%s", phi_a2);
+
+    GfxPrint_SetPos(printer, 23, 25);
+    GfxPrint_SetColor(printer, 255, 255, 55, 255);
+
+    switch (gSaveContext.day) {
+        case 1: 
+            phi_a2_2 = "\x8dｻｲｼｮﾉﾋ";
+        break;
+        case 2: 
+            phi_a2_2 = "\x8dﾂｷﾞﾉﾋ";
+        break;
+        case 3: 
+             phi_a2_2 = "\x8dｻｲｺﾞﾉﾋ";
+        break;
+        case 4: 
+            phi_a2_2 = "\x8dｸﾘｱｰﾉﾋ";
+        break;
+        default: 
+            gSaveContext.day = 1;
+            phi_a2_2 = "\x8dｻｲｼｮﾉﾋ";
+        break;
+    }
+    GfxPrint_Printf(printer, "Day:\x8d%s", phi_a2_2);
+}
 
 void func_8080194C(SelectContext* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
