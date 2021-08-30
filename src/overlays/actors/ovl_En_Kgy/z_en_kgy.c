@@ -104,7 +104,7 @@ void EnKgy_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     cs = this->actor.cutscene;
-    for (i = 0; i < 6; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->unk_2D4); i++) {
         this->unk_2D4[i] = cs;
         if (cs != -1) {
             this->actor.cutscene = cs;
@@ -113,7 +113,7 @@ void EnKgy_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     Lights_PointNoGlowSetInfo(&this->lightInfo, this->actor.world.pos.x, this->actor.world.pos.y,
-                              this->actor.world.pos.z, 0xFF, 0x40, 0x40, -1);
+                              this->actor.world.pos.z, 255, 64, 64, -1);
     this->lightNode = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->lightInfo);
     this->unk_300 = -1;
     this->actor.flags &= ~1;
@@ -775,7 +775,7 @@ void func_80B41E18(EnKgy* this, GlobalContext* globalCtx) {
                             func_80B40BC0(this, 1);
                             if (this->unk_29C & 8) {
                                 player->unk_A87 = 0;
-                                this->unk_29C &= 0xFFF7;
+                                this->unk_29C &= ~8;
                             }
                             func_80B40EBC(this, globalCtx, temp);
                             break;
@@ -1170,7 +1170,7 @@ void func_80B43074(EnKgy* this, GlobalContext* globalCtx) {
         gSPDisplayList(&gfx[1], D_040021A8);
         gSPDisplayList(&gfx[2], D_0600E8F0);
     }
-    POLY_OPA_DISP = gfx + 3;
+    POLY_OPA_DISP = &gfx[3];
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
