@@ -310,7 +310,7 @@ s32 func_8092CE38(EnDns* this) {
         if (this->unk_2D2 == 2) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_JUMP);
         }
-        this->unk_2D2 += 1;
+        this->unk_2D2++;
         if (this->unk_2D2 >= 3) {
             this->unk_2D2 = 0;
         }
@@ -327,7 +327,7 @@ s32 func_8092CE38(EnDns* this) {
                 this->actor.shape.rot.y = this->actor.world.rot.y;
                 frame *= 2520;
                 this->actor.shape.rot.y += frame;
-                this->unk_2E4 -= -3.0769231f;
+                this->unk_2E4 -= -(40.0f / 13.0f);
             }
         } else {
             if (func_801378B8(&this->skelAnime, 0.0f) || func_801378B8(&this->skelAnime, 6.0f) ||
@@ -336,7 +336,7 @@ s32 func_8092CE38(EnDns* this) {
             }
 
             if (this->skelAnime.animCurrentFrame > 7.0f) {
-                this->unk_2E4 += -1.5384616f;
+                this->unk_2E4 += -(20.0f / 13.0f);
             }
         }
         sp2C.x = this->unk_2E4;
@@ -531,18 +531,17 @@ void EnDns_Update(Actor* thisx, GlobalContext* globalCtx) {
         func_8092D5E8(this, globalCtx);
         SkelAnime_FrameUpdateMatrix(&this->skelAnime);
         func_8092C5C0(this);
-        return;
+    } else {
+        this->actionFunc(this, globalCtx);
+        SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+        func_8092C934(this);
+        func_8092C86C(this, globalCtx);
+        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+        func_8013C964(&this->actor, globalCtx, 80.0f, 40.0f, 0, this->unk_2C6 & 7);
+        Actor_SetHeight(&this->actor, 34.0f);
+        func_8092C6FC(this, globalCtx);
+        func_8092C5C0(this);
     }
-
-    this->actionFunc(this, globalCtx);
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-    func_8092C934(this);
-    func_8092C86C(this, globalCtx);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
-    func_8013C964(&this->actor, globalCtx, 80.0f, 40.0f, 0, this->unk_2C6 & 7);
-    Actor_SetHeight(&this->actor, 34.0f);
-    func_8092C6FC(this, globalCtx);
-    func_8092C5C0(this);
 }
 
 s32 func_8092D954(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4, s32 arg5) {
