@@ -436,12 +436,13 @@ CameraModeValue D_801B4890[] = {
 };
 
 /**
- * Setting    Mode      Function
- * -------    ------    --------
- * NORMAL0    NORMAL    NORM1
+ * Setting     Mode         Function
+ * --------    ---------    --------
+ * NORMAL0     BOOMERANG    SUBJ1
+ * DUNGEON0    BOOMERANG    SUBJ1
+ * ROOM0       BOOMERANG    SUBJ1
  */
 CameraModeValue D_801B48B0[] = {
-    /* CAM_FUNC_SUBJ1 */
 	{ 0x0005, 0 },
 	{ 50, 1 },
 	{ 50, 2 },
@@ -454,12 +455,47 @@ CameraModeValue D_801B48B0[] = {
 };
 
 /**
- * Setting    Mode      Function
- * -------    ------    --------
- * NORMAL0    NORMAL    NORM1
+ * Setting      Mode         Function
+ * ---------    ---------    --------
+ * NORMAL0      SLINGSHOT    SUBJ1
+ * FUKAN0       SLINGSHOT    SUBJ1
+ * NORMAL1      SLINGSHOT    SUBJ1
+ * NANAME       SLINGSHOT    SUBJ1
+ * CIRCLE0      SLINGSHOT    SUBJ1
+ * FIXED0       SLINGSHOT    SUBJ1
+ * DUNGEON0     SLINGSHOT    SUBJ1
+ * DUNGEON1     SLINGSHOT    SUBJ1
+ * CIRCLE3      SLINGSHOT    SUBJ1
+ * FIXED3       SLINGSHOT    SUBJ1
+ * TOWER0       SLINGSHOT    SUBJ1
+ * JCRUISING    SLINGSHOT    SUBJ1
+ * CLIMEMAZE    SLINGSHOT    SUBJ1
+ * DUNGEON2     SLINGSHOT    SUBJ1
+ * BOSS_SHIGE   SLINGSHOT    SUBJ1
+ * KEEPBACK     SLINGSHOT    SUBJ1
+ * CHUBOSS      SLINGSHOT    SUBJ1
+ * FUKAN1       SLINGSHOT    SUBJ1
+ * DUNGEON3     SLINGSHOT    SUBJ1
+ * ROOM0        SLINGSHOT    SUBJ1
+ * CIRCLE9      SLINGSHOT    SUBJ1
+ * ONTHEPOLE    SLINGSHOT    SUBJ1
+ * INBUSH       SLINGSHOT    SUBJ1
+ * BOSS_LAST    SLINGSHOT    SUBJ1
+ * BOSS_INI     SLINGSHOT    SUBJ1
+ * BOSS_HAK     SLINGSHOT    SUBJ1
+ * NORMAL2      SLINGSHOT    SUBJ1
+ * BOMBBOWL     SLINGSHOT    SUBJ1
+ * KOKKOGAME    SLINGSHOT    SUBJ1
+ * GIANT        SLINGSHOT    SUBJ1
+ * ROOM1        SLINGSHOT    SUBJ1
+ * SOKONASI     SLINGSHOT    SUBJ1
+ * FORCEKEEP    SLINGSHOT    SUBJ1
+ * PARALLEL1    SLINGSHOT    SUBJ1
+ * ROOM2        SLINGSHOT    SUBJ1
+ * NORMAL4      SLINGSHOT    SUBJ1
+ * DUNGEON4     SLINGSHOT    SUBJ1
  */
 CameraModeValue D_801B48D4[] = {
-    /* CAM_FUNC_SUBJ1 */
 	{ 0xFFF9, 0 },
 	{ 0x000E, 1 },
 	{ 50, 2 },
@@ -472,12 +508,29 @@ CameraModeValue D_801B48D4[] = {
 };
 
 /**
- * Setting    Mode      Function
- * -------    ------    --------
- * NORMAL0    NORMAL    NORM1
+ * Setting      Mode      Function
+ * ---------    ------    --------
+ * NORMAL0      CLIMBZ    JUMP2
+ * NORMAL3      CLIMBZ    JUMP2
+ * FUKAN0       CLIMBZ    JUMP2
+ * NORMAL1      CLIMBZ    JUMP2
+ * NANAME       CLIMBZ    JUMP2
+ * TOWER0       CLIMBZ    JUMP2
+ * FUKAN1       CLIMBZ    JUMP2
+ * INBUSH       CLIMBZ    JUMP2
+ * BOSS_INI     CLIMBZ    JUMP2
+ * BOSS_KON     CLIMBZ    JUMP2
+ * MORAY        CLIMBZ    JUMP2
+ * NORMAL2      CLIMBZ    JUMP2
+ * WHIRLPOOL    CLIMBZ    JUMP2
+ * KOKKOGAME    CLIMBZ    JUMP2
+ * GIANT        CLIMBZ    JUMP2
+ * WATER2       CLIMBZ    JUMP2
+ * FORCEKEEP    CLIMBZ    JUMP2
+ * PARALLEL1    CLIMBZ    JUMP2
+ * NORMAL4      CLIMBZ    JUMP2
  */
 CameraModeValue D_801B48F8[] = {
-    /* CAM_FUNC_JUMP2 */
 	{ -20, 0 },
 	{ 0x0118, 1 },
 	{ 0x0140, 2 },
@@ -490,12 +543,23 @@ CameraModeValue D_801B48F8[] = {
 };
 
 /**
- * Setting    Mode      Function
- * -------    ------    --------
- * NORMAL0    NORMAL    NORM1
+ * Setting      Mode    Function
+ * ---------    ----    --------
+ * NORMAL0      JUMP    NORM1
+ * NORMAL3      JUMP    NORM1
+ * NORMAL1      JUMP    NORM1
+ * NANAME       JUMP    NORM1
+ * CLIMEMAZE    JUMP    NORM1
+ * KEEPBACK     JUMP    NORM1
+ * BOSS_KON     JUMP    NORM1
+ * MORAY        JUMP    NORM1
+ * WHIRLPOOL    JUMP    NORM1
+ * WATER2       JUMP    NORM1
+ * FORCEKEEP    JUMP    NORM1
+ * PARALLEL1    JUMP    NORM1
+ * NORMAL4      JUMP    NORM1
  */
 CameraModeValue D_801B491C[] = {
-    /* CAM_FUNC_NORM1 */
 	{ -20, 0 },
 	{ 0x00F0, 1 },
 	{ 0x0154, 2 },
