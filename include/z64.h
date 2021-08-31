@@ -873,7 +873,10 @@ typedef struct {
     /* 0x1202E */ u16 unk1202E;
     /* 0x12030 */ s16 unk_12030;
     /* 0x12032 */ UNK_TYPE1 unk_12032[0x2];
-    /* 0x12034 */ UNK_TYPE1 pad12034[0xE];
+    /* 0x12034 */ UNK_TYPE1 pad12034[0x6];
+    /* 0x1203A */ s16 unk1203A;
+    /* 0x1203C */ s16 unk1203C;
+    /* 0x1203E */ s16 pad1203E;
     /* 0x12040 */ Actor* unkActor;
     /* 0x12044 */ s16 unk12044;
     /* 0x12046 */ s16 unk12046;

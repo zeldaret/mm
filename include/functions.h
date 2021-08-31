@@ -2638,7 +2638,7 @@ void func_80148B98(GlobalContext* globalCtx, u8 bParm2);
 // void func_80149454(void);
 // void func_801496C8(void);
 // void func_8014995C(void);
-// void func_80149C18(void);
+void func_80149C18(GlobalContext* globalCtx);
 // void func_80149EBC(void);
 void func_80149F74(GlobalContext* globalCtx, u32** ppuParm2);
 // void func_8014AAD0(void);
@@ -2651,7 +2651,7 @@ void func_8014CC14(GlobalContext* globalCtx, u16 codePointIndex, s32* offset, f3
 void func_8014D304(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_8014D62C(void);
 // void func_8014D7B4(void);
-// void func_80150A84(void);
+void func_80150A84(GlobalContext* globalCtx);
 void func_80150D08(GlobalContext* globalCtx, u32 uParm2);
 // void func_801514B0(void);
 void Message_StartTextbox(GlobalContext* globalCtx, u16 textId, Actor* Actor);

@@ -283,7 +283,38 @@ void Message_StartTextbox(GlobalContext* globalCtx, u16 textId, Actor* Actor) {
     globalCtx->msgCtx.ocarinaMode = 0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80151938.s")
+
+void func_80151938(GlobalContext* globalCtx, u16 textId) {
+    MessageContext* msgCtx = &globalCtx->msgCtx;
+    InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
+    
+
+    msgCtx->unk11F10 = 0;
+    func_80150D08(globalCtx, (u32)textId);
+    func_80150A84(globalCtx);
+    msgCtx->unk11F22 = 5;
+    msgCtx->unk12023 = 8;
+    msgCtx->unk12024 = 0;
+    
+    if (interfaceCtx->unk_222 == 0) {
+        if (textId != 0x1B93) {
+            func_8011552C(globalCtx, 0x10);
+        }
+        else if (textId != 0xF8) {
+            func_8011552C(globalCtx, 6);
+        }
+    }
+    {
+        s16 t = msgCtx->unk1203A;
+        msgCtx->unk1203C = t;
+    }
+    if (globalCtx->pauseCtx.unk_1F0 != 0) {
+        msgCtx->unk11FFE[3] = 0x22;
+        msgCtx->unk11FFE[4] = 0x15E;
+        func_80149C18(globalCtx);
+        msgCtx->unk12023 = 1;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80151A68.s")
 
