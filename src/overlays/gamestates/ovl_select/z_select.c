@@ -440,45 +440,38 @@ void func_80800A44(SelectContext* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/func_80800A44.s")
 #endif
 
-#ifdef NON_MATCHING
-void func_808013B8(SelectContext* this, GfxPrint* arg1) {
-    s32 temp_hi;
-    s32 temp_s0;
-    s32 temp_v0;
-    s32 phi_s0;
-    char* phi_a2;
-
-    GfxPrint_SetColor(arg1, 0xFFU, 0x9BU, 0x96U, 0xFFU);
-    GfxPrint_SetPos(arg1, 0xC, 2);
-    GfxPrint_Printf(arg1, "ZELDA MAP SELECT");
-    GfxPrint_SetColor(arg1, 0xFFU, 0xFFU, 0xFFU, 0xFFU);
-    phi_s0 = 0;
-    do {
-        GfxPrint_SetPos(arg1, 9, phi_s0 + 4);
-        temp_v0 = this->unk_210;
-        temp_hi = (s32)(this->unk_24C + phi_s0 + temp_v0) % temp_v0;
-        if (temp_hi == this->unk_218) {
-            GfxPrint_SetColor(arg1, 0xFFU, 0x14U, 0x14U, 0xFFU);
-        } else {
-            GfxPrint_SetColor(arg1, 0xC8U, 0xC8U, 0x37U, 0xFFU);
-        }
-        phi_a2 = this->scenes[temp_hi].name;
-        if (phi_a2 == NULL) {
-            phi_a2 = "**Null**";
-        }
-        GfxPrint_Printf(arg1, "%s", phi_a2);
-        temp_s0 = phi_s0 + 1;
-        phi_s0 = temp_s0;
-    } while (temp_s0 != 0x14);
-    GfxPrint_SetColor(arg1, 0x9BU, 0x37U, 0x96U, 0xFFU);
-    GfxPrint_SetPos(arg1, 0x14, 0x1A);
-    GfxPrint_Printf(arg1, "OPT=%d", this->unk_248);
-}
-#else
 // Select_PrintMenu
-void func_808013B8(SelectContext* this, GfxPrint* printer);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/func_808013B8.s")
-#endif
+void func_808013B8(SelectContext* this, GfxPrint* printer) {
+    s32 i;
+
+    GfxPrint_SetColor(printer, 255, 155, 150, 255);
+    GfxPrint_SetPos(printer, 12, 2);
+    GfxPrint_Printf(printer, "ZELDA MAP SELECT");
+
+    GfxPrint_SetColor(printer, 255, 255, 255, 255);
+    for (i = 0; i < 20; i++) {
+        s32 sceneIndex;
+        char* sceneName;
+
+        GfxPrint_SetPos(printer, 9, i + 4);
+        sceneIndex = (this->unk_24C + i + this->unk_210) % this->unk_210;
+        if (sceneIndex == this->unk_218) {
+            GfxPrint_SetColor(printer, 255, 20, 20, 255);
+        } else {
+            GfxPrint_SetColor(printer, 200, 200, 55, 255);
+        }
+
+        sceneName = this->scenes[sceneIndex].name;
+        if (sceneName == NULL) {
+            sceneName = "**Null**";
+        }
+        GfxPrint_Printf(printer, "%s", sceneName);
+    }
+
+    GfxPrint_SetColor(printer, 155, 55, 150, 255);
+    GfxPrint_SetPos(printer, 20, 26);
+    GfxPrint_Printf(printer, "OPT=%d", this->unk_248);
+}
 
 // clang-format off
 const char* D_80802334[12] = {
