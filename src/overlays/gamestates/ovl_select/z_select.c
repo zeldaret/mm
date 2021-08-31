@@ -506,46 +506,42 @@ char* D_80802364[][2] = {
 };
 // clang-format on
 
-#ifdef NON_MATCHING
-void func_80801620(SelectContext* this, GfxPrint* printer, s32 arg2) {
+void func_80801620(SelectContext* this, GfxPrint* printer, s32 playerForm) {
+    s32 pad;
     s32 sp20;
-    char*(*temp_a0)[2];
-    s32 temp_v0;
-    char*(*phi_v1)[2];
+    char* (*temp_a0)[2];
+    char* (*phi_v1)[2];
     s32 phi_v0;
 
-    if ((arg2 >= 0) && (arg2 < 5)) {
-        temp_a0 = &D_80802364[arg2];
-        phi_v1 = temp_a0 + 8;
+    if ((playerForm >= PLAYER_FORM_FIERCE_DEITY) && (playerForm < PLAYER_FORM_MAX)) {
+        temp_a0 = &D_80802364[playerForm];
+        phi_v1 = temp_a0 + 1;
         phi_v0 = 8;
-    loop_3:
-        temp_v0 = phi_v0 - 8;
-        phi_v0 = temp_v0;
-        if (phi_v1 == 0) {
-            phi_v1 += -8;
-            if (temp_v0 >= 0) {
-                goto loop_3;
+
+        // This loop doesn't do anything
+        for (;phi_v0 >= 0; phi_v0 -= 8) {
+            if (phi_v1 != 0) {
+                break;
             }
+            phi_v1--;
         }
-        sp20 = *temp_a0;
+        if (phi_v1) {}
+
+        sp20 = **temp_a0;
     } else {
-        sp20 = 0;
-    }
-    GfxPrint_SetPos(printer, 4, 0x1A);
-    GfxPrint_SetColor(printer, 0xFFU, 0xFFU, 0x37U, 0xFFU);
-    if (sp20 != 0) {
-        GfxPrint_Printf(printer, "Age:%s", sp20);
-        return;
+        sp20 = NULL;
     }
 
-    // clang-format off
-    GfxPrint_Printf(printer, "Age:" "???" "(%d)", arg2);
-    // clang-format on
+    GfxPrint_SetPos(printer, 4, 26);
+    GfxPrint_SetColor(printer, 255, 255, 55, 255);
+    if (sp20 != NULL) {
+        GfxPrint_Printf(printer, "Age:%s", sp20);
+    } else {
+        // clang-format off
+        GfxPrint_Printf(printer, "Age:" "???" "(%d)", playerForm);
+        // clang-format on
+    }
 }
-#else
-void func_80801620(SelectContext* this, GfxPrint* printer, s32 arg2);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/func_80801620.s")
-#endif
 
 void func_808016E8(SelectContext* this, GfxPrint* printer, u16 arg2) {
     const char* phi_a2;
