@@ -220,8 +220,225 @@ void func_80800930(SelectContext* this, u32, s32);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/func_80800930.s")
 #endif
 
+#ifdef NON_EQUIVALENT
+void func_80800A44(SelectContext* this) {
+    s32 pad[5];
+    Input* controller1; // sp24?
+
+    controller1 = CONTROLLER1(this);
+
+    if (this->unk_25C == 0) {
+        if (CHECK_BTN_ALL(controller1->press.button, BTN_A) || CHECK_BTN_ALL(controller1->press.button, BTN_START)) {
+            s16 phi_v1;
+
+            for (phi_v1 = 0; phi_v1 < ARRAY_COUNT(gSaveContext.unk_3EC0); phi_v1++) {
+                gSaveContext.unk_3DD0[phi_v1] = 0;
+                gSaveContext.unk_3DE0[phi_v1] = 0;
+                gSaveContext.unk_3E18[phi_v1] = 0;
+                gSaveContext.unk_3E50[phi_v1] = 0;
+                gSaveContext.unk_3E88[phi_v1] = 0;
+                gSaveContext.unk_3EC0[phi_v1] = 0;
+            }
+
+            gSaveContext.minigameState = 0;
+            if (this->scenes[this->unk_218].loadFunc != NULL) {
+                this->scenes[this->unk_218].loadFunc(this, this->scenes[this->unk_218].entranceIndex, this->unk_248);
+            }
+        }
+        if (CHECK_BTN_ALL(controller1->press.button, BTN_B)) {
+    s32 phi_v1_2;
+            phi_v1_2 = gSaveContext.playerForm - 1;
+            if (phi_v1_2 < 0) {
+                phi_v1_2 = 4U;
+            }
+            gSaveContext.playerForm = phi_v1_2;
+        }
+        if (CHECK_BTN_ALL(controller1->press.button, BTN_Z)) {
+            if (gSaveContext.cutscene == 0x8000) {
+                gSaveContext.cutscene = 0;
+            } else if (gSaveContext.cutscene == 0) {
+                gSaveContext.cutscene = 0x8800;
+            } else if (gSaveContext.cutscene == 0x8800) {
+                gSaveContext.cutscene = 0xFFF0;
+            } else if (gSaveContext.cutscene == 0xFFF0) {
+                gSaveContext.cutscene = 0xFFF1;
+            } else if (gSaveContext.cutscene == 0xFFF1) {
+                gSaveContext.cutscene = 0xFFF2;
+            } else if (gSaveContext.cutscene == 0xFFF2) {
+                gSaveContext.cutscene = 0xFFF3;
+            } else if (gSaveContext.cutscene == 0xFFF3) {
+                gSaveContext.cutscene = 0xFFF4;
+            } else if (gSaveContext.cutscene == 0xFFF4) {
+                gSaveContext.cutscene = 0xFFF5;
+            } else if (gSaveContext.cutscene == 0xFFF5) {
+                gSaveContext.cutscene = 0xFFF6;
+            } else if (gSaveContext.cutscene == 0xFFF6) {
+                gSaveContext.cutscene = 0xFFF7;
+            } else if (gSaveContext.cutscene == 0xFFF7) {
+                gSaveContext.cutscene = 0xFFF8;
+            } else if (gSaveContext.cutscene == 0xFFF8) {
+                gSaveContext.cutscene = 0xFFF9;
+            } else if (gSaveContext.cutscene == 0xFFF9) {
+                gSaveContext.cutscene = 0xFFFA;
+            } else if (gSaveContext.cutscene == 0xFFFA) {
+                gSaveContext.cutscene = 0x8000;
+            }
+
+        } else if (CHECK_BTN_ALL(controller1->press.button, BTN_R)) {
+
+            if (gSaveContext.cutscene ==  0x8000) {
+                gSaveContext.cutscene = 0xFFFA;
+            } else if (gSaveContext.cutscene ==  0) {
+                gSaveContext.cutscene = 0x8000;
+            } else if (gSaveContext.cutscene ==  0x8800) {
+                gSaveContext.cutscene = 0;
+            } else if (gSaveContext.cutscene ==  0xFFF0) {
+                gSaveContext.cutscene = 0x8800;
+            } else if (gSaveContext.cutscene ==  0xFFF1) {
+                gSaveContext.cutscene = 0xFFF0;
+            } else if (gSaveContext.cutscene ==  0xFFF2) {
+                gSaveContext.cutscene = 0xFFF1;
+            } else if (gSaveContext.cutscene ==  0xFFF3) {
+                gSaveContext.cutscene = 0xFFF2;
+            } else if (gSaveContext.cutscene ==  0xFFF4) {
+                gSaveContext.cutscene = 0xFFF3;
+            } else if (gSaveContext.cutscene ==  0xFFF5) {
+                gSaveContext.cutscene = 0xFFF4;
+            } else if (gSaveContext.cutscene ==  0xFFF6) {
+                gSaveContext.cutscene = 0xFFF5;
+            } else if (gSaveContext.cutscene ==  0xFFF7) {
+                gSaveContext.cutscene = 0xFFF6;
+            } else if (gSaveContext.cutscene ==  0xFFF8) {
+                gSaveContext.cutscene = 0xFFF7;
+            } else if (gSaveContext.cutscene ==  0xFFF9) {
+                gSaveContext.cutscene = 0xFFF8;
+            } else if (gSaveContext.cutscene ==  0xFFFA) {
+                gSaveContext.cutscene = 0xFFF9;
+            }
+
+        }
+        gSaveContext.isNight = 0;
+        if (gSaveContext.cutscene == 0x8800) {
+            gSaveContext.isNight = 1;
+        }
+        if (CHECK_BTN_ALL(controller1->press.button, BTN_CUP)) {
+            this->unk_248 += -1;
+        }
+        if (CHECK_BTN_ALL(controller1->press.button, BTN_CDOWN)) {
+            this->unk_248 += 1;
+        }
+        if (CHECK_BTN_ALL(controller1->press.button, BTN_CLEFT)) {
+            if (gSaveContext.day >= 2) {
+                gSaveContext.day--;
+            }
+        }
+        if (CHECK_BTN_ALL(controller1->cur.button, BTN_CRIGHT)) {
+            if (gSaveContext.day < 4) {
+                gSaveContext.day++;
+            }
+        }
+        if (controller1->rel.stick_y != 0) {
+            this->unk_260 = (gGameInfo->data[126] * controller1->rel.stick_y) / 7;
+        } else {
+            if (CHECK_BTN_ALL(controller1->press.button, BTN_DUP)) {
+                if (this->unk_26C == 1) {
+                    this->unk_264 = 0;
+                }
+                if (this->unk_264 == 0) {
+                    this->unk_264 = 0x14;
+                    this->unk_26C = 1;
+                    play_sound(0x1800);
+                    this->unk_260 = gGameInfo->data[126];
+                }
+            }
+            if (CHECK_BTN_ALL(controller1->cur.button, BTN_DUP) && (this->unk_264 == 0)) {
+                play_sound(0x1800);
+                this->unk_260 = gGameInfo->data[126] * 3;
+            }
+            if (CHECK_BTN_ALL(controller1->press.button, BTN_DDOWN)) {
+                if (1 == this->unk_270) {
+                    this->unk_268 = 0;
+                }
+                if (this->unk_268 == 0) {
+                    this->unk_268 = 0x14;
+                    this->unk_270 = 1;
+                    play_sound(0x1800);
+                    this->unk_260 = - gGameInfo->data[126];
+                }
+            }
+            if (CHECK_BTN_ALL(controller1->cur.button, BTN_DDOWN) && (this->unk_268 == 0)) {
+                play_sound(0x1800);
+                this->unk_260 = gGameInfo->data[126] * 3;
+            }
+            if (CHECK_BTN_ALL(controller1->press.button, BTN_DLEFT) || CHECK_BTN_ALL(controller1->cur.button, BTN_DLEFT)) {
+                play_sound(0x1800);
+                this->unk_260 = gGameInfo->data[126];
+            }
+            if (CHECK_BTN_ALL(controller1->press.button, BTN_DRIGHT) || CHECK_BTN_ALL(controller1->cur.button, BTN_DRIGHT)) {
+                play_sound(0x1800);
+                this->unk_260 = gGameInfo->data[126];
+            }
+        }
+    }
+    if (CHECK_BTN_ALL(controller1->press.button, BTN_L)) {
+        this->unk_21C++;
+        this->unk_21C = (this->unk_21C + 7) % 7;
+        this->unk_24C = this->unk_220[this->unk_21C];
+        this->unk_218 = this->unk_220[this->unk_21C];
+    }
+    this->unk_25C = this->unk_25C + this->unk_260;
+    if (this->unk_25C < -7) {
+        this->unk_260 = 0;
+        this->unk_218++;
+        this->unk_218 = (this->unk_218 + this->unk_210) % this->unk_210;
+        this->unk_25C = 0;
+        if (((this->unk_24C + this->unk_210 + 0x13) % this->unk_210) == this->unk_218) {
+            this->unk_24C++;
+            this->unk_24C = (this->unk_24C + this->unk_210) % this->unk_210;
+        }
+    }
+
+    if (this->unk_25C >= 8) {
+        this->unk_260 = 0;
+        this->unk_25C = 0;
+        if (this->unk_24C == this->unk_218) {
+            this->unk_24C -= 2;
+            this->unk_24C = (this->unk_24C + this->unk_210) % this->unk_210;
+        }
+
+        this->unk_218--;
+        this->unk_218 = (this->unk_218 + this->unk_210) % this->unk_210;
+        if (((this->unk_24C + this->unk_210) % this->unk_210) == this->unk_218) {
+            this->unk_24C--;
+            this->unk_24C = (this->unk_24C + this->unk_210) % this->unk_210;
+        }
+    }
+
+    this->unk_218 = (this->unk_218 + this->unk_210) % this->unk_210;
+    this->unk_24C = (this->unk_24C + this->unk_210) % this->unk_210;
+    gGameInfo->data[2576] = this->unk_218;
+    gGameInfo->data[2577] = this->unk_24C;
+    gGameInfo->data[2578] = this->unk_21C;
+    
+    if (this->unk_264 != 0) {
+        this->unk_264 = this->unk_264 - 1;
+        this->unk_264 = this->unk_264 - 1;
+    }
+    if (this->unk_264 == 0) {
+        this->unk_26C = 0;
+    }
+
+    if (this->unk_268 != 0) {
+        this->unk_268--;
+    }
+    if (this->unk_268 == 0) {
+        this->unk_270 = 0;
+    }
+}
+#else
 void func_80800A44(SelectContext* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/func_80800A44.s")
+#endif
 
 #ifdef NON_MATCHING
 void func_808013B8(SelectContext* this, GfxPrint* arg1) {
@@ -503,13 +720,13 @@ void Select_Init(GameState* thisx) {
     this->scenes = D_80801C80;
     this->unk_24C = 0;
     this->unk_218 = 0;
-    this->unk_220 = 0;
-    this->unk_224 = 0x13;
-    this->unk_228 = 0x25;
-    this->unk_22C = 0x33;
-    this->unk_230 = 0x3B;
-    this->unk_234 = 0x49;
-    this->unk_238 = 0x5B;
+    this->unk_220[0] = 0;
+    this->unk_220[1] = 0x13;
+    this->unk_220[2] = 0x25;
+    this->unk_220[3] = 0x33;
+    this->unk_220[4] = 0x3B;
+    this->unk_220[5] = 0x49;
+    this->unk_220[6] = 0x5B;
     this->unk_21C = 0;
     this->unk_248 = 0;
     this->unk_210 = 0x8F;

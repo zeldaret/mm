@@ -24,13 +24,7 @@ typedef struct SelectContext {
     /* 0x214 */ SceneSelectEntry* scenes;
     /* 0x218 */ UNK_TYPE4 unk_218;
     /* 0x21C */ UNK_TYPE4 unk_21C;
-    /* 0x220 */ UNK_TYPE4 unk_220;
-    /* 0x224 */ UNK_TYPE4 unk_224;
-    /* 0x228 */ UNK_TYPE4 unk_228;
-    /* 0x22C */ UNK_TYPE4 unk_22C;
-    /* 0x230 */ UNK_TYPE4 unk_230;
-    /* 0x234 */ UNK_TYPE4 unk_234;
-    /* 0x238 */ UNK_TYPE4 unk_238;
+    /* 0x220 */ s32 unk_220[7];
     /* 0x23C */ UNK_TYPE4 unk_23C;
     /* 0x240 */ UNK_TYPE4 unk_240;
     /* 0x244 */ UNK_TYPE4 unk_244;
