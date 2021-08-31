@@ -42,7 +42,37 @@ void func_80147564(GlobalContext *globalCtx) {
     D_801F6B20 = 0xA;
 }
 
+#ifdef NON_MATCHING
+u32 func_80147624(GlobalContext *globalCtx) {
+    Input* input;
+    //MessageContext* msgCtx;
+    //MessageContext* msgCtx = &globalCtx->msgCtx;
+
+    input = CONTROLLER1(globalCtx);
+    if ((globalCtx->msgCtx.unk12020 == 0x10) || (globalCtx->msgCtx.unk12020 == 0x11)) {
+        if (CHECK_BTN_ALL(input->press.button, BTN_A)) {
+            play_sound(NA_SE_SY_MESSAGE_PASS);
+             
+        }
+        return CHECK_BTN_ALL(input->press.button, BTN_A);
+    }else{
+        u32 temp_a0;
+        if(CHECK_BTN_ALL(input->press.button, BTN_A) ||  CHECK_BTN_ALL(input->press.button,BTN_B) || CHECK_BTN_ALL(input->press.button, BTN_CUP)) {
+            play_sound(NA_SE_SY_MESSAGE_PASS);
+        }
+        temp_a0 = CHECK_BTN_ALL(input->press.button, BTN_A);
+        if (!CHECK_BTN_ALL(input->press.button, BTN_A)) {
+            temp_a0 = CHECK_BTN_ALL(input->press.button, BTN_B);
+            if (!CHECK_BTN_ALL(input->press.button, BTN_B)) {
+                temp_a0 = CHECK_BTN_ALL(input->press.button, BTN_CUP);
+            }
+        }
+        return temp_a0;
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80147624.s")
+#endif
 
 #ifdef NON_MATCHING
 
@@ -87,7 +117,44 @@ void func_801477B4(GlobalContext *globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80148558.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80148B98.s")
+extern s16 D_801CFD80;
+
+void func_80148B98(GlobalContext *globalCtx, u8 bParm2) {
+    s8 stickY;
+    s32 phi_v1;
+    MessageContext *msgCtx = &globalCtx->msgCtx;
+    stickY = CONTROLLER1(globalCtx)->rel.stick_y;
+    
+        if ((stickY >= 0x1E)) {
+            if(D_801CFD80 == 0){
+            D_801CFD80 = 1;
+            msgCtx->choiceIndex--;
+            if (msgCtx->choiceIndex >= 0x81) {
+                msgCtx->choiceIndex = 0;
+                return;
+            }
+            play_sound(NA_SE_SY_CURSOR);
+            return;
+        }
+        }
+        if ((stickY < -0x1D)) {
+            if(D_801CFD80 == 0){
+            D_801CFD80 = 1;
+            msgCtx->choiceIndex++;
+            if (bParm2 < msgCtx->choiceIndex) {
+                msgCtx->choiceIndex = bParm2;
+                return;
+            }
+            play_sound(NA_SE_SY_CURSOR);
+            return;
+        }
+        }
+    phi_v1 = (stickY < 0 ? -stickY : stickY);
+    if (phi_v1 < 0x1E) {
+        D_801CFD80 = 0;
+    }
+}
+
 
 void func_80148CBC(GlobalContext *globalCtx, UNK_PTR puParm2, u8 arg2) {
     MessageContext* msgCtx;
@@ -270,7 +337,6 @@ u32 func_80151C9C(GlobalContext *globalCtx) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80151C9C.s")
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80151DA4.s")
 
 void func_80152434(GlobalContext *globalCtx, u16 arg2) {
