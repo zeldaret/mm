@@ -102,7 +102,7 @@ void ObjLightblock_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->collider.dim.radius = typeVars->radius;
         this->collider.dim.height = typeVars->height;
         this->collider.dim.yShift = typeVars->yShift;
-        this->opacity = 255;
+        this->alpha = 255;
         func_80AF3AC8(this);
     }
 }
@@ -170,10 +170,10 @@ void func_80AF3C34(ObjLightblock* this, GlobalContext* globalCtx) {
         ActorCutscene_Stop(temp_a0);
         Actor_MarkForDeath(&this->dyna.actor);
     } else if (this->timer < 61) {
-        if (this->opacity >= 41) {
-            this->opacity -= 40;
+        if (this->alpha >= 41) {
+            this->alpha -= 40;
         } else {
-            this->opacity = 0;
+            this->alpha = 0;
             this->dyna.actor.draw = NULL;
             func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
         }
@@ -190,11 +190,11 @@ void ObjLightblock_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjLightblock* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
-    if (this->opacity < 255) {
+    if (this->alpha < 255) {
         func_8012C2DC(globalCtx->state.gfxCtx);
         gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, this->opacity);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, this->alpha);
         gSPDisplayList(POLY_XLU_DISP++, D_06000178);
     } else {
         func_8012C28C(globalCtx->state.gfxCtx);
