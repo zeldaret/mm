@@ -6722,7 +6722,7 @@ void Camera_Init(Camera* camera, View* view, CollisionContext* colCtx, GlobalCon
     camera->pitchUpdateRateInv = 16.0f;
     sCameraShrinkWindowVal = 0x20;
     sCameraInterfaceAlpha = 0;
-    camera->setting = camera->prevSetting= CAM_SET_FREE0;
+    camera->setting = camera->prevSetting = CAM_SET_FREE0;
     camera->bgCamDataId = camera->prevBgCamDataId = -1;
     camera->flags2 = 0;
     camera->mode = CAM_MODE_NORMAL;
@@ -6915,7 +6915,7 @@ s32 Camera_CheckWater(Camera* camera) {
                 prevBgId = camera->bgId;
                 camera->bgId = BGCHECK_SCENE;
                 waterPrevCamSetting = &camera->waterPrevCamSetting;
-                Camera_ChangeSettingFlags(camera, waterCamIdx, 2);
+                Camera_ChangeSettingFlags(camera, waterCamIdx, 2); // TODO: Setting?
                 *waterPrevCamSetting = camera->setting;
                 camera->bgId = prevBgId;
             }
@@ -7501,6 +7501,7 @@ s32 Camera_ChangeDataIdx(Camera* camera, s32 bgCamDataId) {
     }
 
     camera->flags1 |= 0x40;
+    // Sets camera setting based on bg/scene data
     if ((Camera_ChangeSettingFlags(camera, setting, 5) >= 0) || (sCameraSettings[camera->setting].unk_04 & 0x80000000)) {
         camera->bgCamDataId = bgCamDataId;
         camera->flags1 |= 4;
