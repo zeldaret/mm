@@ -31,7 +31,7 @@
 #define FLG_ADJSLOPE (1 << 0)
 #define FLG_OFFGROUND (1 << 7)
 
-#define CAM_TRACKED_PLAYER(camera) ((Player*)camera->trackedActor)
+#define CAM_TRACKED_PLAYER(camera) ((Player*)camera->trackActor)
 
 typedef enum {
     /* 0x00 */ CAM_SET_NONE,
@@ -798,8 +798,8 @@ typedef struct Camera {
     /* 0x074 */ Vec3f eyeNext;
     /* 0x080 */ Vec3f skyboxOffset;
     /* 0x08C */ struct GlobalContext* globalCtx;
-    /* 0x090 */ struct Player* trackedActor; // trackedActor Is likely Actor* not Player*. This is the actor the camera focuses on
-    /* 0x094 */ PosRot trackedActorPosRot;
+    /* 0x090 */ struct Player* trackActor; // trackActor Is likely Actor* not Player*. This is the actor the camera focuses on
+    /* 0x094 */ PosRot trackActorPosRot;
     /* 0x0A8 */ struct Actor* target; // targetedActor
     /* 0x0AC */ PosRot targetPosRot;
     /* 0x0C0 */ f32 rUpdateRateInv;

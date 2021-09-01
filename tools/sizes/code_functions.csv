@@ -633,9 +633,9 @@ asm/non_matchings/code/z_camera/Camera_LERPCeilF.s,Camera_LERPCeilF,0x800CB330,0
 asm/non_matchings/code/z_camera/Camera_LERPCeilS.s,Camera_LERPCeilS,0x800CB398,0x25
 asm/non_matchings/code/z_camera/Camera_LERPFloorS.s,Camera_LERPFloorS,0x800CB42C,0x25
 asm/non_matchings/code/z_camera/Camera_LERPCeilVec3f.s,Camera_LERPCeilVec3f,0x800CB4C0,0x21
-asm/non_matchings/code/z_camera/Camera_SetUpdateRatesNormal.s,Camera_SetUpdateRatesNormal,0x800CB544,0x10
-asm/non_matchings/code/z_camera/Camera_SetUpdateRatesSlow.s,Camera_SetUpdateRatesSlow,0x800CB584,0x16
-asm/non_matchings/code/z_camera/Camera_SetUpdateRatesFast.s,Camera_SetUpdateRatesFast,0x800CB5DC,0xC
+asm/non_matchings/code/z_camera/Camera_SetUpdateRatesFastPitch.s,Camera_SetUpdateRatesFastPitch,0x800CB544,0x10
+asm/non_matchings/code/z_camera/Camera_SetUpdateRatesFastYaw.s,Camera_SetUpdateRatesFastYaw,0x800CB584,0x16
+asm/non_matchings/code/z_camera/Camera_SetUpdateRatesSlow.s,Camera_SetUpdateRatesSlow,0x800CB5DC,0xC
 asm/non_matchings/code/z_camera/Camera_Vec3sToVec3f.s,Camera_Vec3sToVec3f,0x800CB60C,0x1A
 asm/non_matchings/code/z_camera/Camera_AngleDiffAndScale.s,Camera_AngleDiffAndScale,0x800CB674,0x15
 asm/non_matchings/code/z_camera/Camera_UpdateAtActorOffset.s,Camera_UpdateAtActorOffset,0x800CB6C8,0xE
@@ -647,7 +647,7 @@ asm/non_matchings/code/z_camera/func_800CB828.s,func_800CB828,0x800CB828,0xB
 asm/non_matchings/code/z_camera/func_800CB854.s,func_800CB854,0x800CB854,0xB
 asm/non_matchings/code/z_camera/func_800CB880.s,func_800CB880,0x800CB880,0x12
 asm/non_matchings/code/z_camera/func_800CB8C8.s,func_800CB8C8,0x800CB8C8,0xB
-asm/non_matchings/code/z_camera/func_800CB8F4.s,func_800CB8F4,0x800CB8F4,0xC
+asm/non_matchings/code/z_camera/Camera_IsPlayerFormZora.s,Camera_IsPlayerFormZora,0x800CB8F4,0xC
 asm/non_matchings/code/z_camera/func_800CB924.s,func_800CB924,0x800CB924,0xB
 asm/non_matchings/code/z_camera/func_800CB950.s,func_800CB950,0x800CB950,0x2E
 asm/non_matchings/code/z_camera/func_800CBA08.s,func_800CBA08,0x800CBA08,0xB
@@ -671,7 +671,7 @@ asm/non_matchings/code/z_camera/Camera_GetFloorYLayer.s,Camera_GetFloorYLayer,0x
 asm/non_matchings/code/z_camera/Camera_GetCamDataSetting.s,Camera_GetCamDataSetting,0x800CC740,0x1A
 asm/non_matchings/code/z_camera/Camera_GetSurfaceBgCamData.s,Camera_GetSurfaceBgCamData,0x800CC7A8,0x17
 asm/non_matchings/code/z_camera/Camera_GetDataIdxForPoly.s,Camera_GetDataIdxForPoly,0x800CC804,0x1C
-asm/non_matchings/code/z_camera/Camera_GetWaterBoxDataIdx.s,Camera_GetWaterBoxDataIdx,0x800CC874,0x31
+asm/non_matchings/code/z_camera/Camera_GetWaterBoxCamSetting.s,Camera_GetWaterBoxCamSetting,0x800CC874,0x31
 asm/non_matchings/code/z_camera/func_800CC938.s,func_800CC938,0x800CC938,0x8
 asm/non_matchings/code/z_camera/Camera_XZAngle.s,Camera_XZAngle,0x800CC958,0x1A
 asm/non_matchings/code/z_camera/func_800CC9C0.s,func_800CC9C0,0x800CC9C0,0xCB
