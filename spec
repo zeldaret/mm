@@ -844,8 +844,7 @@ beginseg
     name "ovl_En_Dodongo"
     compress
     include "build/src/overlays/actors/ovl_En_Dodongo/z_en_dodongo.o"
-    include "build/data/ovl_En_Dodongo/ovl_En_Dodongo.data.o"
-    include "build/data/ovl_En_Dodongo/ovl_En_Dodongo.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Dodongo/ovl_En_Dodongo_reloc.o"
 endseg
 
 beginseg
