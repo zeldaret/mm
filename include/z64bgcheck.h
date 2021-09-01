@@ -29,7 +29,7 @@ struct DynaPolyActor;
 #define FUNC_80041EA4_STOP 8
 #define FUNC_80041EA4_VOID_OUT 12
 
-#define WATERBOX_ROOM(p) ((p >> 13) & 0x3F)
+#define WATERBOX_ROOM(p) ((((s32)p) >> 13) & 0x3F)
 
 // bccFlags
 #define BGCHECK_CHECK_WALL (1 << 0)
@@ -51,6 +51,12 @@ struct DynaPolyActor;
 #define COLPOLY_IGNORE_CAMERA (1 << 0)
 #define COLPOLY_IGNORE_ENTITY (1 << 1)
 #define COLPOLY_IGNORE_PROJECTILES (1 << 2)
+
+typedef struct {
+    /* 0x00 */ u16 cameraSType;
+    /* 0x02 */ s16 numCameras;
+    /* 0x04 */ Vec3s* camPosData;
+} CamData;
 
 typedef struct {
     u16 head;
@@ -175,8 +181,8 @@ typedef struct {
     /* 0x14 */ u16 numPolygons; //numPolygons;
     /* 0x18 */ CollisionPoly* polyList; //polygons;
     /* 0x1C */ SurfaceType* surfaceTypeList; //attributes;
-    /* 0x20 */ UNK_PTR cameraDataList; //cameraData;
-    /* 0x24 */ u16 nbWaterBoxes; //numWaterBoxes;
+    /* 0x20 */ CamData* cameraDataList; //cameraData;
+    /* 0x24 */ u16 numWaterBoxes; //nbWaterBoxes MM
     /* 0x28 */ WaterBox* waterBoxes;
 } CollisionHeader; // size = 0x2C
 //#define BgMeshHeader CollisionHeader
@@ -207,7 +213,7 @@ typedef struct {
     /* 0x140C */ s32 polyNodesMax; //u32 maxNodes;
     /* 0x1410 */ s32 polyListMax; //u32 maxPolygons;
     /* 0x1414 */ s32 vtxListMax; //u32 maxVertices;
-} DynaCollisionContext; // size = 0x1420
+} DynaCollisionContext; // size = 0x1418
 
 typedef struct {
     /* 0x00 */ CollisionHeader* colHeader;//sceneMesh;
@@ -221,8 +227,8 @@ typedef struct {
     /* 0x40 */ StaticLookup* lookupTbl; //subdivisions;
     /* 0x44 */ SSNodeList polyNodes; //scenePolyLists;
     /* 0x0050 */ DynaCollisionContext dyna;
-    /* 0x1418 */ u32 memSize; //maxMemory
-    /* 0x141C */ u32 unk141C;
+    /* 0x1468 */ u32 memSize; //maxMemory
+    /* 0x146C */ u32 unk146C;
 } CollisionContext; // size = 0x1470
 
 typedef struct {
@@ -254,13 +260,8 @@ typedef struct {
     /* 0x24 */ f32* distSq;    // distance from posA to poly squared
     /* 0x28 */ f32 chkDist;    // distance from poly
     /* 0x2C */ Actor* actor;
+    /* 0x30 */ s32 bgId;
 } DynaLineTest;
-
-typedef struct {
-    /* 0x00 */ u16 cameraSType;
-    /* 0x02 */ s16 numCameras;
-    /* 0x04 */ Vec3s* camPosData;
-} CamData;
 
 #endif
 

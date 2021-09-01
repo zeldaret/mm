@@ -1,6 +1,9 @@
 #include "global.h"
 #include "vt.h"
 
+// z64math.
+#define Linef LineSegment
+
 // sys_math3d.c
 
 #define Math3D_PointRelativeToCubeFaces func_8017A954
@@ -11,6 +14,13 @@
 #define Math3D_DistPlaneToPos Math3D_NormalizedSignedDistanceFromPlane
 #define Math3D_SurfaceNorm Math3D_NormalVector
 #define Math3D_UDistPlaneToPos Math3D_NormalizedDistanceFromPlane
+#define Math3D_LineVsSph Math3D_ColSphereLineSeg
+#define Math3D_SphVsSph Math3D_ColSphereSphere
+
+#define Math3D_PlaneVsLineSegClosestPoint func_80179678
+s32 Math3D_PlaneVsLineSegClosestPoint(f32 planeAA, f32 planeAB, f32 planeAC, f32 planeADist, f32 planeBA, f32 planeBB,
+    f32 planeBC, f32 planeBDist, Vec3f* linePointA, Vec3f* linePointB,
+    Vec3f* closestPoint);
 
 #define Math3D_TriChkPointParaYDist func_8017BAD0
 s32 Math3D_TriChkPointParaYDist(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 y, f32 z, f32 unk, f32 chkDist, f32 ny);
@@ -1630,7 +1640,7 @@ void BgCheck_Allocate(CollisionContext* colCtx, GlobalContext* globalCtx, Collis
 
     customNodeListMax = -1;
     colCtx->colHeader = colHeader;
-    colCtx->unk141C = 0;
+    colCtx->unk146C = 0;
 
     if (BgCheck_IsSpotScene(globalCtx)) {
         colCtx->memSize = 0xF000;
@@ -1724,11 +1734,11 @@ void BgCheck_Allocate(CollisionContext* colCtx, GlobalContext* globalCtx, Collis
 #endif 
 
 void func_800C3C00(CollisionContext* colCtx, u32 param_2) {
-    colCtx->unk141C |= param_2;
+    colCtx->unk146C |= param_2;
 }
 
 void func_800C3C14(CollisionContext* colCtx, u32 param_2) {
-    colCtx->unk141C &= ~param_2;
+    colCtx->unk146C &= ~param_2;
 }
 
 #define BgCheck_GetCollisionHeader BgCheck_GetActorMeshHeader
@@ -2921,7 +2931,6 @@ void func_800C63C4(GlobalContext* globalCtx, DynaCollisionContext* dyna, s32 bgI
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C641C.s")
 void func_800C641C(GlobalContext* globalCtx, DynaCollisionContext* dyna, s32 bgId) {
     if (DynaPoly_IsBgIdBgActor(bgId)) {
         dyna->bgActorFlags[bgId] |= 0x20;
@@ -2929,7 +2938,6 @@ void func_800C641C(GlobalContext* globalCtx, DynaCollisionContext* dyna, s32 bgI
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C6474.s")
 void func_800C6474(GlobalContext* globalCtx, DynaCollisionContext* dyna, s32 bgId) {
     if (DynaPoly_IsBgIdBgActor(bgId)) {
         dyna->bgActorFlags[bgId] &= ~0x20;
@@ -3059,9 +3067,9 @@ void DynaPoly_ExpandSRT(GlobalContext* globalCtx, DynaCollisionContext* dyna, s3
         return;
     }
 
-    if (!(DYNA_WATERBOX_MAX >= *waterBoxStartIndex + pbgdata->nbWaterBoxes)) {
+    if (!(DYNA_WATERBOX_MAX >= *waterBoxStartIndex + pbgdata->numWaterBoxes)) {
         sprintf(D_801EDAA8, "water_poly Error:[MoveBG OSUGI!!!]");
-        sprintf(D_801EDAF8, "num = %d > %d\n", *waterBoxStartIndex + pbgdata->nbWaterBoxes, DYNA_WATERBOX_MAX);
+        sprintf(D_801EDAF8, "num = %d > %d\n", *waterBoxStartIndex + pbgdata->numWaterBoxes, DYNA_WATERBOX_MAX);
         Fault_AddHungupAndCrashImpl(D_801EDAA8, D_801EDAF8);
     }
 
@@ -3105,7 +3113,7 @@ void DynaPoly_ExpandSRT(GlobalContext* globalCtx, DynaCollisionContext* dyna, s3
 
         *polyStartIndex += pbgdata->numPolygons;
         *vtxStartIndex += pbgdata->numVertices;
-        *waterBoxStartIndex += pbgdata->nbWaterBoxes;
+        *waterBoxStartIndex += pbgdata->numWaterBoxes;
     }
     else {
         SkinMatrix_SetScaleRotateYRPTranslate(
@@ -3219,7 +3227,7 @@ void DynaPoly_ExpandSRT(GlobalContext* globalCtx, DynaCollisionContext* dyna, s3
             }
         }
         
-        for (wi = 0; wi < pbgdata->nbWaterBoxes; wi++)
+        for (wi = 0; wi < pbgdata->numWaterBoxes; wi++)
         {
             Math_Vec3s_ToVec3f(&spB8, &pbgdata->waterBoxes[wi].minPos);
             Math_Vec3f_Copy(&spA0, &spB8);
@@ -3236,7 +3244,7 @@ void DynaPoly_ExpandSRT(GlobalContext* globalCtx, DynaCollisionContext* dyna, s3
 
         *polyStartIndex += pbgdata->numPolygons;
         *vtxStartIndex += pbgdata->numVertices;
-        *waterBoxStartIndex += pbgdata->nbWaterBoxes;
+        *waterBoxStartIndex += pbgdata->numWaterBoxes;
     }
 }
 #else
@@ -3990,112 +3998,986 @@ s32 BgCheck_CheckLineAgainstBgActorSSList(DynaLineTest* dynaLineTest) {
     return result;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C8DC0.s")
+#define  BgCheck_CheckLineAgainstBgActor func_800C8DC0
+/**
+ * Tests if line `posA` `posB` intersects with a dyna poly within BgActor `bgId`
+ * `distSq` is the maximum squared distance to check for a collision
+ * returns true if an intersection occurred, else false
+ * `posB`? and `posResult` return the point of intersection
+ * `outPoly` returns the poly intersected
+ * `distSq` returns the squared distance of the intersection
+ */
+s32 BgCheck_CheckLineAgainstBgActor(CollisionContext* colCtx, u16 xpFlags, Vec3f* posA, Vec3f* posB, Vec3f* posResult,
+    CollisionPoly** outPoly, f32* distSq, s32 bgId, f32 chkDist, s32 bccFlags, Actor* actor) {
+    s32 result = false;
+    DynaLineTest dynaLineTest;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C8EEC.s")
+    dynaLineTest.colCtx = colCtx;
+    dynaLineTest.xpFlags = xpFlags;
+    dynaLineTest.dyna = &colCtx->dyna;
+    dynaLineTest.posA = posA;
+    dynaLineTest.posB = posB;
+    dynaLineTest.posResult = posResult;
+    dynaLineTest.resultPoly = outPoly;
+    dynaLineTest.chkOneFace = (bccFlags & BGCHECK_CHECK_ONE_FACE) != 0;
+    dynaLineTest.distSq = distSq;
+    dynaLineTest.chkDist = chkDist;
+    dynaLineTest.actor = actor;
+    dynaLineTest.bgId = bgId;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C90AC.s")
+    dynaLineTest.ssList = &colCtx->dyna.bgActors[bgId].dynaLookup.wall;
+    if (bccFlags & BGCHECK_CHECK_WALL) {
+        if (BgCheck_CheckLineAgainstBgActorSSList(&dynaLineTest)) {
+            result = true;
+        }
+    }
+    dynaLineTest.ssList = &colCtx->dyna.bgActors[bgId].dynaLookup.floor;
+    if (bccFlags & BGCHECK_CHECK_FLOOR) {
+        if (BgCheck_CheckLineAgainstBgActorSSList(&dynaLineTest)) {
+            result = true;
+        }
+    }
+    dynaLineTest.ssList = &colCtx->dyna.bgActors[bgId].dynaLookup.ceiling;
+    if (bccFlags & BGCHECK_CHECK_CEILING) {
+        if (BgCheck_CheckLineAgainstBgActorSSList(&dynaLineTest)) {
+            result = true;
+        }
+    }
+    return result;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C921C.s")
+/**
+ * Tests if line from `posA` to `posB` passes through a dyna poly.
+ * returns true if so, otherwise false
+ * `outPoly` returns the pointer of the poly intersected.
+ * `outBgId` returns the BgActor index of the poly
+ */
+s32 BgCheck_CheckLineAgainstDyna(CollisionContext* colCtx, u16 xpFlags, Vec3f* posA, Vec3f* posB, Vec3f* posResult,
+    CollisionPoly** outPoly, f32* distSq, s32* outBgId, Actor* actor, f32 chkDist,
+    s32 bccFlags) {
+    s32 pad;
+    s32 i;
+    s32 result = false;
+    Linef line;
+    f32 ay;
+    f32 by;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9380.s")
+    for (i = 0; i < BG_ACTOR_MAX; i++) {
+        if ((colCtx->dyna.bgActorFlags[i] & 1) && !(colCtx->dyna.bgActorFlags[i] & 2)) {
+            if (actor != colCtx->dyna.bgActors[i].actor) {
+                ay = posA->y;
+                by = posB->y;
+                if (!(ay < colCtx->dyna.bgActors[i].minY) || !(by < colCtx->dyna.bgActors[i].minY)) {
+                    if (!(colCtx->dyna.bgActors[i].maxY < ay) || !(colCtx->dyna.bgActors[i].maxY < by)) {
+                        line.a = *posA;
+                        line.b = *posB;
+                        if (Math3D_LineVsSph(&colCtx->dyna.bgActors[i].boundingSphere, &line) != 0) {
+                            if (BgCheck_CheckLineAgainstBgActor(colCtx, xpFlags, posA, posB, posResult, outPoly, distSq,
+                                i, chkDist, bccFlags, actor)) {
+                                *outBgId = i;
+                                result = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return result;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_RelocateMeshHeaderPointers.s")
+#define BgCheck_SphVsFirstDynaPolyList func_800C90AC
+/**
+ * Get first dyna poly intersecting sphere `center` `radius` from list `ssList`
+ * returns true if any poly intersects the sphere, else returns false
+ * `outPoly` returns the pointer of the first poly found that intersects
+ */
+s32 BgCheck_SphVsFirstDynaPolyList(CollisionContext* colCtx, u16 xpFlags, CollisionPoly** outPoly, Vec3f* center,
+    f32 radius, SSList* ssList, Actor* actor, s32 bgId) {
+    CollisionPoly* curPoly;
+    DynaCollisionContext* dyna;
+    SSNode* curNode;
+    s32 curPolyId;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_RelocateMeshHeader.s")
+    if (ssList->head == SS_NULL) {
+        return false;
+    }
+    dyna = &colCtx->dyna;
+    curNode = &dyna->polyNodes.tbl[ssList->head];
+    while (true) {
+        curPolyId = curNode->polyId;
+        curPoly = &dyna->polyList[curPolyId];
+        if (COLPOLY_VIA_FLAG_TEST(curPoly->flags_vIA, xpFlags)
+            || (
+                COLPOLY_VIA_FLAG_TEST(curPoly->flags_vIB, 4) && (
+                (actor != NULL && actor->category != ACTORCAT_PLAYER) 
+                    || (actor == NULL && xpFlags != 1))))
+                    
+                    {
+            if (curNode->next == SS_NULL) {
+                break;
+            }
+            else {
+                curNode = &dyna->polyNodes.tbl[curNode->next];
+                continue;
+            }
+        }
+        if (CollisionPoly_SphVsPoly(curPoly, dyna->vtxList, center, radius)) {
+            *outPoly = curPoly;
+            return true;
+        }
+        if (curNode->next == SS_NULL) {
+            break;
+        }
+        else {
+            curNode = &dyna->polyNodes.tbl[curNode->next];
+            continue;
+        }
+    }
+    return false;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_RelocateAllMeshHeaders.s")
+#define BgCheck_SphVsFirstDynaPolyInBgActor func_800C921C
+/**
+ * Get first dyna poly intersecting sphere `center` `radius` from BgActor `bgId`
+ * returns true if any poly intersects the sphere, else false
+ * `outPoly` returns the pointer of the first poly found that intersects
+ */
+s32 BgCheck_SphVsFirstDynaPolyInBgActor(CollisionContext* colCtx, u16 xpFlags, CollisionPoly** outPoly, Vec3f* center,
+    f32 radius, s32 bgId, u16 bciFlags, Actor* actor) {
+    if (!(bciFlags & BGCHECK_IGNORE_CEILING)) {
+        if (BgCheck_SphVsFirstDynaPolyList(colCtx, xpFlags, outPoly, center, radius,
+            &colCtx->dyna.bgActors[bgId].dynaLookup.ceiling, actor, bgId)) {
+            return true;
+        }
+    }
+    if (!(bciFlags & BGCHECK_IGNORE_WALL)) {
+        if (BgCheck_SphVsFirstDynaPolyList(colCtx, xpFlags, outPoly, center, radius,
+            &colCtx->dyna.bgActors[bgId].dynaLookup.wall, actor, bgId)) {
+            return true;
+        }
+    }
+    if (!(bciFlags & BGCHECK_IGNORE_FLOOR)) {
+        if (BgCheck_SphVsFirstDynaPolyList(colCtx, xpFlags, outPoly, center, radius,
+            &colCtx->dyna.bgActors[bgId].dynaLookup.floor, actor, bgId)) {
+            return true;
+        }
+    }
+    return false;
+}
 
+/**
+ * Gets first dyna poly intersecting sphere `center` `radius`
+ * returns true if poly detected, else false
+ * `outPoly` returns the first intersecting poly, while `outBgId` returns the BgActor index of that poly
+ */
+s32 BgCheck_SphVsFirstDynaPoly(CollisionContext* colCtx, u16 xpFlags, CollisionPoly** outPoly, s32* outBgId,
+    Vec3f* center, f32 radius, Actor* actor, u16 bciFlags) {
+    s32 i = 0;
+    Sphere16 testSphere;
+
+    for (i = 0; i < BG_ACTOR_MAX; i++) {
+        if (!(colCtx->dyna.bgActorFlags[i] & 1) || (colCtx->dyna.bgActorFlags[i] & 2)) {
+            continue;
+        }
+        if (colCtx->dyna.bgActors[i].actor == actor) {
+            continue;
+        }
+        testSphere.center.x = center->x;
+        testSphere.center.y = center->y;
+        testSphere.center.z = center->z;
+        testSphere.radius = radius;
+        if (!Math3D_SphVsSph(&testSphere, &colCtx->dyna.bgActors[i].boundingSphere)) {
+            continue;
+        }
+        if (BgCheck_SphVsFirstDynaPolyInBgActor(colCtx, xpFlags, outPoly, center, radius, i, bciFlags, actor)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+#define CollisionHeader_SegmentedToVirtual BgCheck_RelocateMeshHeaderPointers
+/**
+ * SEGMENTED_TO_VIRTUAL CollisionHeader members
+ */
+void CollisionHeader_SegmentedToVirtual(CollisionHeader* colHeader) {
+    colHeader->vtxList = Lib_SegmentedToVirtual(colHeader->vtxList);
+    colHeader->polyList = Lib_SegmentedToVirtual(colHeader->polyList);
+    if (colHeader->surfaceTypeList) {
+        colHeader->surfaceTypeList = Lib_SegmentedToVirtual(colHeader->surfaceTypeList);
+    }
+    if (colHeader->cameraDataList) {
+        colHeader->cameraDataList = Lib_SegmentedToVirtual(colHeader->cameraDataList);
+    }
+    if (colHeader->waterBoxes) {
+        colHeader->waterBoxes = Lib_SegmentedToVirtual(colHeader->waterBoxes);
+    }
+}
+
+#define CollisionHeader_GetVirtual BgCheck_RelocateMeshHeader
+/**
+ * Convert CollisionHeader Segmented to Virtual addressing
+ */
+void CollisionHeader_GetVirtual(CollisionHeader* colHeader, CollisionHeader** dest) {
+    *dest = Lib_SegmentedToVirtual(colHeader);
+    CollisionHeader_SegmentedToVirtual(*dest);
+}
+
+#define func_800418D0 BgCheck_RelocateAllMeshHeaders
+/**
+ * SEGMENT_TO_VIRTUAL all active BgActor CollisionHeaders
+ */
+void func_800418D0(CollisionContext* colCtx, GlobalContext* globalCtx) {
+    DynaCollisionContext* dyna = &colCtx->dyna;
+    s32 i;
+    u16 flag;
+
+    for (i = 0; i < BG_ACTOR_MAX; i++) {
+        flag = dyna->bgActorFlags[i];
+        if ((flag & 1) && !(flag & 2)) {
+            Actor_SetObjectSegment(globalCtx, dyna->bgActors[i].actor);
+            CollisionHeader_SegmentedToVirtual(dyna->bgActors[i].colHeader);
+        }
+    }
+}
+
+#ifdef NON_MATCHING
+/**
+ * Reset SSNodeList polyCheckTbl
+ */
+void BgCheck_ResetPolyCheckTbl(SSNodeList* nodeList, s32 numPolys) {
+    u8* t;
+
+    for (t = nodeList->polyCheckTbl; t < nodeList->polyCheckTbl + numPolys; t++) {
+        *t = 0;
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9640.s")
+#endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_GetPolygonAttributes.s")
+#define SurfaceType_GetData BgCheck_GetPolygonAttributes
+/**
+ * Get SurfaceType property set
+ */
+u32 SurfaceType_GetData(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId, s32 dataIdx) {
+    CollisionHeader* colHeader;
+    SurfaceType* surfaceTypes;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9704.s")
+    colHeader = BgCheck_GetCollisionHeader(colCtx, bgId);
+    if (colHeader == NULL || poly == NULL) {
+        return 0;
+    }
+    surfaceTypes = colHeader->surfaceTypeList;
+    if (surfaceTypes == NULL) {
+        return 0;
+    }
+    return surfaceTypes[poly->type].data[dataIdx];
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9728.s")
+#define SurfaceType_GetCamDataIndex func_800C9704
+/**
+ * SurfaceType return CamData Index
+ */
+u32 SurfaceType_GetCamDataIndex(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9770.s")
+    return SurfaceType_GetData(colCtx, poly, bgId, 0) & 0xFF;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C97F8.s")
+#define func_80041A4C func_800C9728
+/**
+ * CamData return cameraSType
+ */
+u16 func_80041A4C(CollisionContext* colCtx, u32 camId, s32 bgId) {
+    u16 result;
+    CollisionHeader* colHeader;
+    CamData* camData;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9844.s")
+    colHeader = BgCheck_GetCollisionHeader(colCtx, bgId);
+    if (colHeader == NULL) {
+        return 0;
+    }
+    camData = colHeader->cameraDataList;
+    result = camData[camId].cameraSType;
+    return result;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C98CC.s")
+#define SurfaceType_GetCameraSType func_800C9770
+/**
+ * SurfaceType return cameraSType
+ */
+u16 SurfaceType_GetCameraSType(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    CollisionHeader* colHeader = BgCheck_GetCollisionHeader(colCtx, bgId);
+    CamData* camData;
+    SurfaceType* surfaceTypes;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9924.s")
+    if (colHeader == NULL) {
+        return 0;
+    }
+    camData = colHeader->cameraDataList;
+    if (camData == NULL) {
+        return 0;
+    }
+    surfaceTypes = colHeader->surfaceTypeList;
+    if (surfaceTypes == NULL) {
+        return 0;
+    }
+    return func_80041A4C(colCtx, SurfaceType_GetCamDataIndex(colCtx, poly, bgId), bgId);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C99AC.s")
+#define func_80041B24 func_800C97F8
+/**
+ * CamData Get number of cameras
+ */
+u16 func_80041B24(CollisionContext* colCtx, u32 camId, s32 bgId) {
+    CollisionHeader* colHeader = BgCheck_GetCollisionHeader(colCtx, bgId);
+    CamData* camData;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C99D4.s")
+    if (colHeader == NULL) {
+        return 0;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C99FC.s")
+    camData = colHeader->cameraDataList;
+    if (camData == NULL) {
+        return 0;
+    }
+    return camData[camId].numCameras;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9A24.s")
+#define SurfaceType_GetNumCameras func_800C9844
+/**
+ * SurfaceType Get number of cameras
+ */
+u16 SurfaceType_GetNumCameras(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    CollisionHeader* colHeader = BgCheck_GetCollisionHeader(colCtx, bgId);
+    CamData* camData;
+    SurfaceType* surfaceTypes;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9A4C.s")
+    if (colHeader == NULL) {
+        return 0;
+    }
+    camData = colHeader->cameraDataList;
+    if (camData == NULL) {
+        return 0;
+    }
+    surfaceTypes = colHeader->surfaceTypeList;
+    if (surfaceTypes == NULL) {
+        return 0;
+    }
+    return func_80041B24(colCtx, SurfaceType_GetCamDataIndex(colCtx, poly, bgId), bgId);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9A7C.s")
+#define func_80041C10 func_800C98CC
+/**
+ * CamData Get camPosData
+ */
+Vec3s* func_80041C10(CollisionContext* colCtx, s32 camId, s32 bgId) {
+    CollisionHeader* colHeader = BgCheck_GetCollisionHeader(colCtx, bgId);
+    CamData* cameraDataList;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9AB0.s")
+    if (colHeader == NULL) {
+        return NULL;
+    }
+    cameraDataList = colHeader->cameraDataList;
+    if (cameraDataList == NULL) {
+        return NULL;
+    }
+    return (Vec3s*)Lib_SegmentedToVirtual(cameraDataList[camId].camPosData);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9AE4.s")
+#define SurfaceType_GetCamPosData func_800C9924
+/**
+ * SurfaceType Get camPosData
+ */
+Vec3s* SurfaceType_GetCamPosData(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    CollisionHeader* colHeader = BgCheck_GetCollisionHeader(colCtx, bgId);
+    CamData* camData;
+    SurfaceType* surfaceTypes;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9B18.s")
+    if (colHeader == NULL) {
+        return NULL;
+    }
+    camData = colHeader->cameraDataList;
+    if (camData == NULL) {
+        return NULL;
+    }
+    surfaceTypes = colHeader->surfaceTypeList;
+    if (surfaceTypes == NULL) {
+        return NULL;
+    }
+    return func_80041C10(colCtx, SurfaceType_GetCamDataIndex(colCtx, poly, bgId), bgId);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9B40.s")
+#define SurfaceType_GetSceneExitIndex func_800C99AC
+/**
+ * SurfaceType Get Scene Exit Index
+ */
+u32 SurfaceType_GetSceneExitIndex(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 8 & 0x1F;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9B68.s")
+#define func_80041D4C func_800C99D4
+/**
+ * SurfaceType Get ? Property (& 0x0003 E000)
+ */
+u32 func_80041D4C(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 13 & 0x1F;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9B90.s")
+#define func_80041D70 func_800C99FC
+/**
+ * SurfaceType Get ? Property (& 0x001C 0000)
+ */
+u32 func_80041D70(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 18 & 7;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9BB8.s")
+#define func_80041D94 func_800C9A24
+/**
+ * SurfaceType Get Wall Property (Internal)
+ */
+u32 func_80041D94(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 21 & 0x1F;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9BDC.s")
+#define func_80041DB8 func_800C9A4C
+/**
+ * SurfaceType Get Wall Flags
+ */
+s32 func_80041DB8(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    return D_801B4620[func_80041D94(colCtx, poly, bgId)];
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9C24.s")
+#define func_80041DE4 func_800C9A7C
+/**
+ * SurfaceType Is Wall Flag (1 << 0) Set
+ */
+s32 func_80041DE4(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    return (func_80041DB8(colCtx, poly, bgId) & 1) ? true : false;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9C74.s")
+#define func_80041E18 func_800C9AB0
+/**
+ * SurfaceType Is Wall Flag (1 << 1) Set
+ */
+s32 func_80041E18(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    return (func_80041DB8(colCtx, poly, bgId) & 2) ? true : false;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9C9C.s")
+#define func_80041E4C func_800C9AE4
+/**
+ * SurfaceType Is Wall Flag (1 << 2) Set
+ */
+s32 func_80041E4C(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    return (func_80041DB8(colCtx, poly, bgId) & 4) ? true : false;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9CC4.s")
+#define func_80041E80 func_800C9B18
+/**
+ * unused
+ */
+u32 func_80041E80(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 26 & 0xF;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9CEC.s")
+#define func_80041EA4 func_800C9B40
+/**
+ * SurfaceType Get Floor Property
+ */
+u32 func_80041EA4(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 26 & 0xF;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9D14.s")
+/**
+ * SurfaceType Is Floor Minus 1
+ */
+u32 func_80041EC8(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 30 & 1;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9D50.s")
+#define SurfaceType_IsHorseBlocked func_800C9B90
+/**
+ * SurfaceType Is Horse Blocked
+ */
+u32 SurfaceType_IsHorseBlocked(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 31 & 1;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9D8C.s")
+#define func_80041F10 func_800C9BB8
+u32 func_80041F10(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    return SurfaceType_GetData(colCtx, poly, bgId, 1) & 0xF;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9DDC.s")
+#define SurfaceType_GetSfx func_800C9BDC
+/**
+ * SurfaceType Get Poly Sfx
+ */
+u16 SurfaceType_GetSfx(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    s32 id = func_80041F10(colCtx, poly, bgId);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9E18.s")
+    if (id < 0 || id > 14) {
+        return NA_SE_PL_WALK_GROUND - SFX_FLAG;
+    }
+    return D_801B46A0[id];
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9E40.s")
+/**
+ * SurfaceType Get ? (same indexer as Get Poly Sfx)
+ */
+s32 func_800C9C24(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId, s32 arg3) {
+    s32 id = func_80041F10(colCtx, poly, bgId);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9E88.s")
+    if (id < 0 || id > 14) {
+        return 0;
+    }
+    return D_801B46C0[id] & arg3;
+}
 
+#define SurfaceType_GetSlope func_800C9C74
+/**
+ * SurfaceType get terrain slope surface
+ */
+u32 SurfaceType_GetSlope(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    return SurfaceType_GetData(colCtx, poly, bgId, 1) >> 4 & 3;
+}
+
+#define SurfaceType_GetLightSettingIndex func_800C9C9C
+/** 
+ * SurfaceType get surface lighting setting
+ */
+u32 SurfaceType_GetLightSettingIndex(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    return SurfaceType_GetData(colCtx, poly, bgId, 1) >> 6 & 0x1F;
+}
+
+#define SurfaceType_GetEcho func_800C9CC4
+/**
+ * SurfaceType get echo
+ */
+u32 SurfaceType_GetEcho(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    return SurfaceType_GetData(colCtx, poly, bgId, 1) >> 11 & 0x3F;
+}
+
+#define SurfaceType_IsHookshotSurface func_800C9CEC
+/**
+ * SurfaceType Is Hookshot Surface
+ */
+u32 SurfaceType_IsHookshotSurface(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    return SurfaceType_GetData(colCtx, poly, bgId, 1) >> 17 & 1;
+}
+
+#define SurfaceType_IsIgnoredByEntities func_800C9D14
+/**
+ * CollisionPoly is ignored by entities
+ * Returns true if poly is ignored by entities, else false
+ */
+s32 SurfaceType_IsIgnoredByEntities(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    u32 flags;
+
+    if (BgCheck_GetCollisionHeader(colCtx, bgId) == NULL) {
+        return true;
+    }
+    flags = poly->flags_vIA & 0x4000;
+    return !!flags;
+}
+
+#define SurfaceType_IsIgnoredByProjectiles func_800C9D50
+/**
+ * CollisionPoly is ignored by projectiles
+ * Returns true if poly is ignored by projectiles, else false
+ */
+s32 SurfaceType_IsIgnoredByProjectiles(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    u32 flags;
+
+    if (BgCheck_GetCollisionHeader(colCtx, bgId) == NULL) {
+        return true;
+    }
+    flags = poly->flags_vIA & 0x8000;
+    return !!flags;
+}
+
+#define SurfaceType_IsConveyor func_800C9D8C
+/**
+ * CollisionPoly is conveyor enabled
+ * Returns true if `poly` is a conveyor surface, else false
+ */
+s32 SurfaceType_IsConveyor(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    u32 flags;
+
+    if (BgCheck_GetCollisionHeader(colCtx, bgId) == NULL) {
+        return true;
+    }
+    if (poly == NULL)
+    {
+        return false;
+    }
+    flags = poly->flags_vIB & 0x2000;
+    return !!flags;
+}
+
+s32 func_800C9DDC(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    u32 flags;
+
+    if (BgCheck_GetCollisionHeader(colCtx, bgId) == NULL) {
+        return true;
+    }
+    flags = poly->flags_vIB & 0x4000;
+    return !!flags;
+}
+
+#define SurfaceType_GetConveyorSpeed func_800C9E18
+/**
+ * SurfaceType Get Conveyor Surface Speed
+ */
+u32 SurfaceType_GetConveyorSpeed(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    return SurfaceType_GetData(colCtx, poly, bgId, 1) >> 18 & 7;
+}
+
+/**
+ * SurfaceType Get Conveyor Direction
+ * returns a value between 0-63, representing 360 / 64 degrees of rotation
+ */
+#define SurfaceType_GetConveyorDirection func_800C9E40
+u32 SurfaceType_GetConveyorDirection(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    u32 data;
+
+    data = SurfaceType_GetData(colCtx, poly, bgId, 1) >> 21;
+    if (colCtx->unk146C & 1) {
+        data += 0x20;
+    }
+    return data & 0x3F;
+}
+
+#define SurfaceType_IsWallDamage func_800C9E88
+/**
+ * SurfaceType is Wall Damage
+ */
+u32 SurfaceType_IsWallDamage(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+    return (SurfaceType_GetData(colCtx, poly, bgId, 1) & 0x8000000) ? 1 : 0;
+}
+
+#define WaterBox_GetSurfaceImpl func_800C9EBC
+s32 WaterBox_GetSurfaceImpl(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface,
+WaterBox** outWaterBox, s32* bgId);
+#ifdef NON_MATCHING
+/**
+ * Internal. Get the water surface at point (`x`, `ySurface`, `z`). `ySurface` doubles as position y input
+ * returns true if point is within the xz boundaries of an active water box, else false
+ * `ySurface` returns the water box's surface, while `outWaterBox` returns a pointer to the WaterBox
+ */
+s32 WaterBox_GetSurfaceImpl(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface,
+    WaterBox** outWaterBox, s32* bgId) {
+    CollisionHeader* colHeader = colCtx->colHeader;
+    u32 room;
+    WaterBox* curWaterBox;
+    s32 i = 0;
+    BgActor* bgActor;
+
+    *bgId = BGCHECK_SCENE;
+
+    if (colHeader->numWaterBoxes != 0 && colHeader->waterBoxes != NULL) {
+        for (curWaterBox = colHeader->waterBoxes; curWaterBox < colHeader->waterBoxes + colHeader->numWaterBoxes;
+            curWaterBox++) {
+            room = (curWaterBox->properties >> 13) & 0x3F;
+            if (room == (u32)globalCtx->roomCtx.currRoom.num || room == 0x3F) {
+                if ((curWaterBox->properties & 0x80000) == 0) {
+                    if (curWaterBox->minPos.x < x && x < curWaterBox->minPos.x + curWaterBox->xLength) {
+                        if (curWaterBox->minPos.z < z && z < curWaterBox->minPos.z + curWaterBox->zLength) {
+                            *outWaterBox = curWaterBox;
+                            *ySurface = curWaterBox->minPos.y;
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    for (i = 0; i < BG_ACTOR_MAX; i++)
+    {
+        if ((colCtx->dyna.bgActorFlags[i] & 1) && !(colCtx->dyna.bgActorFlags[i] & 4))
+        {
+            bgActor = &colCtx->dyna.bgActors[i];
+            if (bgActor->colHeader->numWaterBoxes != 0 && bgActor->colHeader->waterBoxes != NULL)
+            {
+                for (curWaterBox = colCtx->dyna.waterboxes.boxes + bgActor->waterboxesStartIndex;
+                    curWaterBox < colCtx->dyna.waterboxes.boxes + bgActor->waterboxesStartIndex + bgActor->colHeader->numWaterBoxes;
+                    curWaterBox++)
+                {
+                    if ((curWaterBox->properties & 0x80000) == 0) {
+                        if (curWaterBox->minPos.x < x && x < curWaterBox->minPos.x + curWaterBox->xLength) {
+                            if (curWaterBox->minPos.z < z && z < curWaterBox->minPos.z + curWaterBox->zLength) {
+                                *outWaterBox = curWaterBox;
+                                *ySurface = curWaterBox->minPos.y;
+                                *bgId = i;
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C9EBC.s")
+#endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800CA1AC.s")
+s32 func_800CA1AC(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface, WaterBox** outWaterBox) {
+    func_800CA1E8(globalCtx, colCtx, x, z, ySurface, outWaterBox);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800CA1E8.s")
 
+s32 func_800CA1E8(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface, WaterBox** outWaterBox) {
+    s32 bgId;
+    return func_800C9EBC(globalCtx, colCtx, x, z, ySurface, outWaterBox, &bgId);
+}
+
+//
+#define WaterBox_GetSurface2 func_800CA22C
+#ifdef NON_MATCHING
+/**
+ * Gets the first active WaterBox at `pos` where WaterBox.properties & 0x80000 == 0
+ * `surfaceChkDist` is the absolute y distance from the water surface to check
+ * returns the index of the waterbox found, or -1 if no waterbox is found
+ * `outWaterBox` returns the pointer to the waterbox found, or NULL if none is found
+ */
+s32 WaterBox_GetSurface2(GlobalContext* globalCtx, CollisionContext* colCtx, Vec3f* pos, f32 surfaceChkDist,
+    WaterBox** outWaterBox, s32* bgId) {
+    CollisionHeader* colHeader;
+    s32 room;
+    s32 i;
+    WaterBox* waterBox;
+
+    *bgId = BGCHECK_SCENE;
+    colHeader = colCtx->colHeader;
+
+    //! @bug: check skips testing BgActor waterboxes
+    if (colHeader->numWaterBoxes == 0 || colHeader->waterBoxes == NULL) {
+        *outWaterBox = NULL;
+        return -1;
+    }
+
+    for (i = 0; i < colHeader->numWaterBoxes; i++) {
+        waterBox = &colHeader->waterBoxes[i];
+
+        room = WATERBOX_ROOM(waterBox->properties);
+        if (!(room == globalCtx->roomCtx.currRoom.num || room == 0x3F)) {
+            continue;
+        }
+        if ((waterBox->properties & 0x80000)) {
+            continue;
+        }
+        if (!(waterBox->minPos.x < pos->x && pos->x < waterBox->minPos.x + waterBox->xLength)) {
+            continue;
+        }
+        if (!(waterBox->minPos.z < pos->z && pos->z < waterBox->minPos.z + waterBox->zLength)) {
+            continue;
+        }
+        if (pos->y - surfaceChkDist < waterBox->minPos.y && waterBox->minPos.y < pos->y + surfaceChkDist) {
+            *outWaterBox = waterBox;
+            return i;
+        }
+    }
+
+    for (i = 0; i < BG_ACTOR_MAX; i++)
+    {
+        WaterBox* iterator;
+        WaterBox* start;
+        BgActor* bgActor;
+        if (!(colCtx->dyna.bgActorFlags[i] & 1)
+            || (colCtx->dyna.bgActorFlags[i] & 4)
+            || (colCtx->dyna.bgActorFlags[i] & 2)) {
+            continue;
+        }
+        bgActor = &colCtx->dyna.bgActors[i];
+        for (iterator = colCtx->dyna.waterboxes.boxes + bgActor->waterboxesStartIndex;
+            iterator < colCtx->dyna.waterboxes.boxes + bgActor->waterboxesStartIndex + bgActor->colHeader->numWaterBoxes;
+            iterator++)
+        {
+            if ((iterator->properties & 0x80000) == 0)
+            {
+                if ((iterator->minPos.x < pos->x) && pos->x < iterator->minPos.x + iterator->xLength) {
+                    if ((iterator->minPos.z < pos->z) && pos->z < iterator->minPos.z + iterator->zLength) {
+                        if (pos->y - surfaceChkDist < iterator->minPos.y && iterator->minPos.y < pos->y + surfaceChkDist) {
+                            *bgId = i;
+                            *outWaterBox = iterator;
+                            return i;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    *outWaterBox = NULL;
+    return -1;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800CA22C.s")
+#endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800CA568.s")
+f32 func_800CA568(CollisionContext* colCtx, s32 waterBoxId, s32 bgId) {
+    CollisionHeader* colHeader;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800CA634.s")
+    colHeader = BgCheck_GetCollisionHeader(colCtx, bgId);
+    if ((colHeader == NULL) || (waterBoxId < 0) || (waterBoxId >= (s32)colHeader->numWaterBoxes)) {
+        return 0.0f;
+    }
+    if (bgId == BGCHECK_SCENE) {
+        return colCtx->colHeader->waterBoxes[waterBoxId].minPos.y;
+    }
+    return (&colCtx->dyna.waterboxes.boxes[colCtx->dyna.bgActors[bgId].waterboxesStartIndex])[waterBoxId].minPos.y;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800CA648.s")
+#define WaterBox_GetCamDataIndex func_800CA634
+/**
+ * WaterBox get CamData index
+ */
+u32 WaterBox_GetCamDataIndex(CollisionContext* colCtx, WaterBox* waterBox) {
+    u32 prop = waterBox->properties >> 0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800CA6B8.s")
+    return prop & 0xFF;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800CA6D8.s")
+#define WaterBox_GetCameraSType func_800CA648
+/**
+ * WaterBox get CamData cameraSType
+ */
+u16 WaterBox_GetCameraSType(CollisionContext* colCtx, WaterBox* waterBox, s32 bgId) {
+    s32 pad[2];
+    u16 result = 0;
+    CollisionHeader* colHeader;
+    CamData* camData;
+    s32 camId;
 
+    colHeader = BgCheck_GetCollisionHeader(colCtx, bgId);
+    if (colHeader == NULL)
+    {
+        return result;
+    }
+    camId = WaterBox_GetCamDataIndex(colCtx, waterBox);
+    camData = colHeader->cameraDataList;
+
+    if (camData == NULL) {
+        return result;
+    }
+
+    result = camData[camId].cameraSType;
+    return result;
+}
+
+void func_800CA6B8(CollisionContext* colCtx, WaterBox* waterBox) {
+    WaterBox_GetCameraSType(colCtx, waterBox, BGCHECK_SCENE);
+}
+
+#define WaterBox_GetLightSettingIndex func_800CA6D8
+/**
+ * WaterBox get lighting settings
+ */
+u32 WaterBox_GetLightSettingIndex(CollisionContext* colCtx, WaterBox* waterBox) {
+    u32 prop = waterBox->properties >> 8;
+    return prop & 0x1F;
+}
+
+#define func_800425B0 func_800CA6F0
+s32 func_800425B0(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface,
+    WaterBox** outWaterBox, s32* bgId);
+#ifdef NON_MATCHING
+/**
+ * Get the water surface at point (`x`, `ySurface`, `z`). `ySurface` doubles as position y input
+ * same as WaterBox_GetSurfaceImpl, but tests if WaterBox properties & 0x80000 != 0
+ * returns true if point is within the xz boundaries of an active water box, else false
+ * `ySurface` returns the water box's surface, while `outWaterBox` returns a pointer to the WaterBox
+ */
+s32 func_800425B0(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface,
+    WaterBox** outWaterBox, s32* bgId) {
+    CollisionHeader* colHeader;
+    u32 room;
+    WaterBox* curWaterBox;
+    s32 i;
+    BgActor* bgActor;
+
+    colHeader = colCtx->colHeader;
+    *outWaterBox = NULL;
+    *bgId = BGCHECK_SCENE;
+
+    if (colHeader->numWaterBoxes == 0 || colHeader->waterBoxes == NULL) {
+        return false;
+    }
+    for (curWaterBox = colHeader->waterBoxes; curWaterBox < colHeader->waterBoxes + colHeader->numWaterBoxes;
+        curWaterBox++) {
+        room = WATERBOX_ROOM(curWaterBox->properties);
+        if (room == (u32)globalCtx->roomCtx.currRoom.num || room == 0x3F) {
+            if ((curWaterBox->properties & 0x80000) != 0) {
+                if (curWaterBox->minPos.x < x && x < curWaterBox->minPos.x + curWaterBox->xLength) {
+                    if (curWaterBox->minPos.z < z && z < curWaterBox->minPos.z + curWaterBox->zLength) {
+                        *outWaterBox = curWaterBox;
+                        *ySurface = curWaterBox->minPos.y;
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+
+    for (i = 0; i < BG_ACTOR_MAX; i++)
+    {
+        if ((colCtx->dyna.bgActorFlags[i] & 1) && !(colCtx->dyna.bgActorFlags[i] & 2))
+        {
+            WaterBox* boxes;
+            boxes = colCtx->dyna.waterboxes.boxes;
+            bgActor = &colCtx->dyna.bgActors[i];
+            if (bgActor->colHeader->numWaterBoxes != 0 && bgActor->colHeader->waterBoxes != NULL)
+            {
+                for (curWaterBox = boxes + bgActor->waterboxesStartIndex;
+                    curWaterBox < boxes + bgActor->waterboxesStartIndex + bgActor->colHeader->numWaterBoxes;
+                    curWaterBox++)
+                {
+                    if ((curWaterBox->properties & 0x80000) != 0) {
+                        if (curWaterBox->minPos.x < x && x < curWaterBox->minPos.x + curWaterBox->xLength) {
+                            if (curWaterBox->minPos.z < z && z < curWaterBox->minPos.z + curWaterBox->zLength) {
+                                *outWaterBox = curWaterBox;
+                                *ySurface = curWaterBox->minPos.y;
+                                *bgId = i;
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800CA6F0.s")
+#endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800CA9D0.s")
+s32 func_800CA9D0(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface, WaterBox** outWaterBox) {
+    s32 bgId;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800CAA14.s")
+    return func_800CA6F0(globalCtx, colCtx, x, z, ySurface, outWaterBox, &bgId);
+}
+
+#define func_800427B4 func_800CAA14
+/**
+ * Get the `closestPoint` to line (`pointA`, `pointB`) formed from the intersection of planes `polyA` and `polyB`
+ * returns true if the `closestPoint` exists, else returns false
+ */
+s32 func_800427B4(CollisionPoly* polyA, CollisionPoly* polyB, Vec3f* pointA, Vec3f* pointB, Vec3f* closestPoint) {
+    f32 n1X;
+    f32 n1Y;
+    f32 n1Z;
+    f32 n2X;
+    f32 n2Y;
+    f32 n2Z;
+    s32 result;
+
+    CollisionPoly_GetNormalF(polyA, &n1X, &n1Y, &n1Z);
+    CollisionPoly_GetNormalF(polyB, &n2X, &n2Y, &n2Z);
+    result = Math3D_PlaneVsLineSegClosestPoint(n1X, n1Y, n1Z, polyA->dist, n2X, n2Y, n2Z, polyB->dist, pointA, pointB,
+        closestPoint);
+    return result;
+}
