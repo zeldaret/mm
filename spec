@@ -3045,8 +3045,7 @@ beginseg
     name "ovl_En_Dnq"
     compress
     include "build/src/overlays/actors/ovl_En_Dnq/z_en_dnq.o"
-    include "build/data/ovl_En_Dnq/ovl_En_Dnq.data.o"
-    include "build/data/ovl_En_Dnq/ovl_En_Dnq.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Dnq/ovl_En_Dnq_reloc.o"
 endseg
 
 beginseg
