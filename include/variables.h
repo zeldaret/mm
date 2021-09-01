@@ -427,7 +427,7 @@ extern s801AEC84 D_801AEC84[13];
 extern f32 actorMovementScale;
 extern f32 D_801AECF0;
 extern f32 D_801AECF4;
-// extern UNK_TYPE1 D_801AED48;
+extern s16 D_801AED48[8];
 // extern UNK_TYPE4 D_801AED58;
 extern Color_RGBA8 actorDefaultHitColor;
 // extern UNK_TYPE1 D_801AED8C;
