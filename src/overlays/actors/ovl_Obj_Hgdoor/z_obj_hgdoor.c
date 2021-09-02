@@ -97,7 +97,7 @@ void ObjHgdoor_SetupCheckShouldOpen(ObjHgdoor* this) {
 
 void ObjHgdoor_CheckShouldOpen(ObjHgdoor* this, GlobalContext* globalCtx) {
     if (!(gSaveContext.weekEventReg[75] & 0x20) && !(gSaveContext.weekEventReg[52] & 0x20) &&
-        (this->dyna.actor.xzDistToPlayer < 100.0f) && (this->dyna.actor.yDistToPlayer < 40.0f) &&
+        (this->dyna.actor.xzDistToPlayer < 100.0f) && (this->dyna.actor.yDirDistToPlayer < 40.0f) &&
         OBJHGDOOR_IS_RIGHT_DOOR(&this->dyna.actor)) {
         ObjHgdoor_SetChild(this, globalCtx);
         ObjHgdoor_SetParent(this, globalCtx);

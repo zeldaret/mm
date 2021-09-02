@@ -928,11 +928,11 @@ void func_8098B464(EnDg* this, GlobalContext* globalCtx) {
     Vec3f sp2C;
 
     sp2C.x = this->actor.world.pos.x;
-    sp2C.y = this->actor.world.pos.y + this->actor.yDistToWater;
+    sp2C.y = this->actor.world.pos.y + this->actor.yDirDistToWater;
     sp2C.z = this->actor.world.pos.z + 20.0f;
     EffectSsGSplash_Spawn(globalCtx, &sp2C, NULL, NULL, 0, 800);
     EffectSsGRipple_Spawn(globalCtx, &sp2C, 100, 500, 30);
-    if (this->actor.yDistToWater > 0.0f) {
+    if (this->actor.yDirDistToWater > 0.0f) {
         this->actor.gravity = 0.0f;
         this->actor.velocity.y = -3.0f;
         this->unk_284 = 10;
@@ -954,7 +954,7 @@ void func_8098B560(EnDg* this, GlobalContext* globalCtx) {
     f32 sp34;
 
     sp54.x = this->actor.world.pos.x;
-    sp54.y = this->actor.world.pos.y + this->actor.yDistToWater;
+    sp54.y = this->actor.world.pos.y + this->actor.yDirDistToWater;
     sp54.z = this->actor.world.pos.z + 20.0f;
     sp48.x = (Math_SinS(this->actor.world.rot.y) * 50.0f) + this->actor.world.pos.x;
     sp48.y = this->actor.home.pos.y + 100.0f;
@@ -969,9 +969,9 @@ void func_8098B560(EnDg* this, GlobalContext* globalCtx) {
         EffectSsGRipple_Spawn(globalCtx, &sp54, 100, 500, 30);
     }
 
-    if (this->actor.yDistToWater > 15.0f) {
+    if (this->actor.yDirDistToWater > 15.0f) {
         this->actor.velocity.y = 0.5f;
-    } else if (this->actor.yDistToWater < 10.0f) {
+    } else if (this->actor.yDirDistToWater < 10.0f) {
         this->actor.velocity.y = -0.5f;
     }
 
@@ -1015,7 +1015,7 @@ void func_8098B88C(EnDg* this, GlobalContext* globalCtx) {
     Vec3f sp34;
 
     sp34.x = this->actor.world.pos.x;
-    sp34.y = this->actor.world.pos.y + this->actor.yDistToWater;
+    sp34.y = this->actor.world.pos.y + this->actor.yDirDistToWater;
     sp34.z = this->actor.world.pos.z + 20.0f;
 
     if (DECR(this->unk_284) == 0) {
@@ -1023,9 +1023,9 @@ void func_8098B88C(EnDg* this, GlobalContext* globalCtx) {
         EffectSsGRipple_Spawn(globalCtx, &sp34, 100, 500, 30);
     }
 
-    if (this->actor.yDistToWater > 15.0f) {
+    if (this->actor.yDirDistToWater > 15.0f) {
         this->actor.velocity.y = 1.0f;
-    } else if (this->actor.yDistToWater < 10.0f) {
+    } else if (this->actor.yDirDistToWater < 10.0f) {
         this->actor.velocity.y = -1.0f;
     }
 

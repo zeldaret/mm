@@ -160,7 +160,7 @@ void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx) {
 
         } else {
             if ((func_801690CC(globalCtx) == 0) && ((player->stateFlags1 & 0x08800000) == 0) &&
-                (this->actor.xzDistToPlayer <= 20.0f) && (yDist = this->actor.yDistToPlayer, (yDist >= -50.0f)) &&
+                (this->actor.xzDistToPlayer <= 20.0f) && (yDist = this->actor.yDirDistToPlayer, (yDist >= -50.0f)) &&
                 (yDist <= 15.0f)) {
                 player->stateFlags1 |= 0x80000000;
                 this->actor.targetMode = 1;
@@ -186,7 +186,7 @@ void DoorAna_GrabLink(DoorAna* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((this->actor.yDistToPlayer <= 0.0f) && (this->actor.xzDistToPlayer > 20.0f)) {
+    if ((this->actor.yDirDistToPlayer <= 0.0f) && (this->actor.xzDistToPlayer > 20.0f)) {
         player = PLAYER;
         player->actor.world.pos.x = (Math_SinS(this->actor.yawTowardsPlayer) * 20.0f) + this->actor.world.pos.x;
         player->actor.world.pos.z = (Math_CosS(this->actor.yawTowardsPlayer) * 20.0f) + this->actor.world.pos.z;

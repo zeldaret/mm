@@ -412,7 +412,7 @@ void EnFirefly_Die(EnFirefly* this, GlobalContext* globalCtx) {
 void EnFirefly_SetupDiveAttack(EnFirefly* this) {
     this->timer = Rand_S16Offset(70, 100);
     this->skelAnime.animPlaybackSpeed = 1.0f;
-    this->targetPitch = ((this->actor.yDistToPlayer > 0.0f) ? -0xC00 : 0xC00) + 0x1554;
+    this->targetPitch = ((this->actor.yDirDistToPlayer > 0.0f) ? -0xC00 : 0xC00) + 0x1554;
     this->actionFunc = EnFirefly_DiveAttack;
 }
 

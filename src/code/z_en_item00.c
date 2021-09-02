@@ -480,10 +480,10 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
 
-    if (!((sp38 != 0) && (this->actor.xzDistToPlayer <= 60.0f) && (this->actor.yDistToPlayer >= -100.0f) &&
-          (this->actor.yDistToPlayer <= 100.0f)) &&
-        !((sp38 == 0) && (this->actor.xzDistToPlayer <= 30.0f) && (this->actor.yDistToPlayer >= -50.0f) &&
-          (this->actor.yDistToPlayer <= 50.0f))) {
+    if (!((sp38 != 0) && (this->actor.xzDistToPlayer <= 60.0f) && (this->actor.yDirDistToPlayer >= -100.0f) &&
+          (this->actor.yDirDistToPlayer <= 100.0f)) &&
+        !((sp38 == 0) && (this->actor.xzDistToPlayer <= 30.0f) && (this->actor.yDirDistToPlayer >= -50.0f) &&
+          (this->actor.yDirDistToPlayer <= 50.0f))) {
         if (!Actor_HasParent(&this->actor, globalCtx)) {
             return;
         }

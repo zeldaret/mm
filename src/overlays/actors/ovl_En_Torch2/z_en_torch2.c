@@ -108,7 +108,7 @@ void EnTorch2_Update(Actor* thisx, GlobalContext* globalCtx) {
             targetAlpha = 0;
         } else if (this->state == TORCH2_STATE_FADING_IN) {
             // Stay semitransparent until the player moves away
-            if ((this->actor.xzDistToPlayer > 32.0f) || (fabsf(this->actor.yDistToPlayer) > 70.0f)) {
+            if ((this->actor.xzDistToPlayer > 32.0f) || (fabsf(this->actor.yDirDistToPlayer) > 70.0f)) {
                 this->state = TORCH2_STATE_SOLID;
             }
             targetAlpha = 60;

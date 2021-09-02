@@ -523,13 +523,13 @@ void EnNiw_Swimming(EnNiw* this, GlobalContext* globalCtx) {
     if (this->actor.bgCheckFlags & 0x20) {
         // still touching water
         this->actor.gravity = 0.0f;
-        if (this->actor.yDistToWater > 15.0f) {
+        if (this->actor.yDirDistToWater > 15.0f) {
             this->actor.world.pos.y += 2.0f;
         }
         if (this->unkTimer250 == 0) {
             this->unkTimer250 = 30;
             Math_Vec3f_Copy(&ripplePos, &this->actor.world.pos);
-            ripplePos.y += this->actor.yDistToWater;
+            ripplePos.y += this->actor.yDirDistToWater;
 
             EffectSsGRipple_Spawn(globalCtx, &ripplePos, 100, 500, 30);
         }
@@ -859,12 +859,12 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->actionFunc = EnNiw_LandBeforeIdle;
         return;
 
-    } else if ((this->actor.bgCheckFlags & 0x20) && (this->actor.yDistToWater > 15.0f) &&
+    } else if ((this->actor.bgCheckFlags & 0x20) && (this->actor.yDirDistToWater > 15.0f) &&
                (this->unknownState28E != 6)) {
         this->actor.velocity.y = 0.0f;
         this->actor.gravity = 0.0f;
         Math_Vec3f_Copy(&pos, &this->actor.world.pos);
-        pos.y += this->actor.yDistToWater;
+        pos.y += this->actor.yDirDistToWater;
         this->unkTimer250 = 30;
         EffectSsGSplash_Spawn(globalCtx, &pos, 0, 0, 0, 400);
         this->unkTimer252 = 0;
