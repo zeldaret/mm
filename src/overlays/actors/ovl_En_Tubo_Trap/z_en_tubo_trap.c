@@ -131,7 +131,7 @@ void EnTuboTrap_SpawnEffectsInWater(EnTuboTrap* this, GlobalContext* globalCtx) 
     Vec3f* actorPos = &this->actor.world.pos;
 
     pos = *actorPos;
-    pos.y += this->actor.yDirDistToWater;
+    pos.y += this->actor.yDirDistToWaterSurface;
 
     EffectSsGSplash_Spawn(globalCtx, &pos, NULL, NULL, 0, 0x190);
 
@@ -166,7 +166,7 @@ void EnTuboTrap_HandleImpact(EnTuboTrap* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
     Player* player2 = PLAYER;
 
-    if ((this->actor.bgCheckFlags & 0x20) && (this->actor.yDirDistToWater > 15.0f)) {
+    if ((this->actor.bgCheckFlags & 0x20) && (this->actor.yDirDistToWaterSurface > 15.0f)) {
         EnTuboTrap_SpawnEffectsInWater(this, globalCtx);
         Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_BOMB_DROP_WATER);
         EnTuboTrap_DropCollectible(this, globalCtx);

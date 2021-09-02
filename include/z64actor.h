@@ -171,7 +171,7 @@ typedef struct Actor {
     /* 0x085 */ u8 floorBgId; // Bg ID of the floor polygon directly below the actor
     /* 0x086 */ s16 wallYaw; // Y rotation of the wall polygon the actor is touching
     /* 0x088 */ f32 floorHeight; // Y position of the floor polygon directly below the actor
-    /* 0x08C */ f32 yDirDistToWater; // Directed Distance to the surface of active waterbox. Negative value means water is below.
+    /* 0x08C */ f32 yDirDistToWaterSurface; // Directed Distance to the surface of active waterbox. Negative value means water is below.
     /* 0x090 */ u16 bgCheckFlags; // See comments below actor struct for wip docs. TODO: macros for these flags
     /* 0x092 */ s16 yawTowardsPlayer; // Y rotation difference between the actor and the player
     /* 0x094 */ f32 xyzDistToPlayerSq; // Squared distance between the actor and the player in the x,y,z axis
