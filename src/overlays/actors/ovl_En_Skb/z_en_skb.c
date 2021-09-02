@@ -426,8 +426,8 @@ void func_809952D8(EnSkb* this) {
 
 void func_8099533C(EnSkb* this, GlobalContext* globalCtx) {
     if (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAINS_HAT) {
-        this->actor.flags &= ~5;
-        this->actor.flags |= 9;
+        this->actor.flags &= ~(0x4 | 0x1);
+        this->actor.flags |= (0x8 | 0x1);
         func_80994F7C(this, globalCtx);
     } else if (Actor_IsActorFacingLink(&this->actor, 0x2AAA) && (this->actor.xzDistToPlayer < 200.0f)) {
         this->actor.hintId = 0x55;
@@ -448,8 +448,8 @@ void func_809953E8(EnSkb* this) {
 
 void func_8099544C(EnSkb* this, GlobalContext* globalCtx) {
     if (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAINS_HAT) {
-        this->actor.flags &= ~5;
-        this->actor.flags |= 9;
+        this->actor.flags &= ~(0x4 | 0x1);
+        this->actor.flags |= (0x8 | 0x1);
         func_80994F7C(this, globalCtx);
     } else if (Actor_IsActorFacingLink(&this->actor, 0x2AAA) && (this->actor.xzDistToPlayer < 200.0f)) {
         this->actor.hintId = 0x55;
@@ -485,8 +485,8 @@ void func_8099556C(EnSkb* this, GlobalContext* globalCtx) {
 
     this->actor.shape.rot.x = Math_SinS(this->unk_3D4 * sp26) * 20000.0f;
     if (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAINS_HAT) {
-        this->actor.flags &= ~5;
-        this->actor.flags |= 9;
+        this->actor.flags &= ~(0x4 | 0x1);
+        this->actor.flags |= (0x8 | 0x1);
         func_80994F7C(this, globalCtx);
     } else if (Actor_IsActorFacingLink(&this->actor, 0x2AAA) && (this->actor.xzDistToPlayer < 200.0f) &&
                (this->skelAnime.animCurrentFrame > 24.0f) && (this->skelAnime.animCurrentFrame < 28.0f)) {
@@ -572,8 +572,8 @@ void func_80995A30(EnSkb* this) {
 
 void func_80995A8C(EnSkb* this, GlobalContext* globalCtx) {
     if (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAINS_HAT) {
-        this->actor.flags &= ~5;
-        this->actor.flags |= 9;
+        this->actor.flags &= ~(0x4 | 0x1);
+        this->actor.flags |= (0x8 | 0x1);
         this->actor.hintId = 0xFF;
         this->actor.colChkInfo.mass = MASS_HEAVY;
         func_800BDC5C(&this->skelAnime, sAnimations, 12);
@@ -980,7 +980,7 @@ void func_8099672C(EnSkb* this, GlobalContext* globalCtx) {
 }
 
 void func_80996AD0(EnSkb* this, GlobalContext* globalCtx) {
-    if (1) {};
+    if (1) {}
 
     if ((this->actionFunc != func_80996284) && (this->unk_3E2 != 1)) {
         if (this->unk_3E4 != 0) {
