@@ -396,7 +396,7 @@ void func_80BA5E18(EnRailgibud* this, GlobalContext* globalCtx) {
                 func_800B8E58(&player->actor, sp32);
                 func_8013ECE0(this->actor.xzDistToPlayer, 240, 1, 12);
                 this->unk_3F2 = 0;
-                label:;
+            label:;
             } else {
                 this->unk_3F2++;
             }
@@ -694,7 +694,7 @@ void func_80BA6DF8(EnRailgibud* this, GlobalContext* globalCtx) {
             this->actor.home = this->actor.world;
         }
         this->collider.base.acFlags &= ~AC_HIT;
-        func_800BE22C(&this->actor);
+        Actor_ApplyDamage(&this->actor);
 
         switch (this->actor.colChkInfo.damageEffect) {
             case 15:
@@ -927,8 +927,8 @@ void func_80BA7878(Actor* thisx, GlobalContext* globalCtx) {
     func_80BA6B30(this);
 }
 
-s32 EnRailgibud_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
-                  Gfx** gfx) {
+s32 EnRailgibud_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                 Actor* thisx, Gfx** gfx) {
     EnRailgibud* this = THIS;
 
     if (limbIndex == 12) {
@@ -940,7 +940,8 @@ s32 EnRailgibud_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** 
     return false;
 }
 
-void EnRailgibud_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+void EnRailgibud_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx,
+                              Gfx** gfx) {
     EnRailgibud* this = THIS;
 
     if ((this->unk_3F6 != 0) &&
@@ -964,18 +965,18 @@ void EnRailgibud_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, this->actor.shape.shadowAlpha);
         gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
 
-        POLY_OPA_DISP =
-            SkelAnime_DrawSV2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
-                              this->skelAnime.dListCount, EnRailgibud_OverrideLimbDraw, EnRailgibud_PostLimbDraw, &this->actor, POLY_OPA_DISP);
+        POLY_OPA_DISP = SkelAnime_DrawSV2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
+                                          this->skelAnime.dListCount, EnRailgibud_OverrideLimbDraw,
+                                          EnRailgibud_PostLimbDraw, &this->actor, POLY_OPA_DISP);
     } else {
         func_8012C2DC(globalCtx->state.gfxCtx);
 
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->actor.shape.shadowAlpha);
         gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
 
-        POLY_XLU_DISP =
-            SkelAnime_DrawSV2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
-                              this->skelAnime.dListCount, EnRailgibud_OverrideLimbDraw, EnRailgibud_PostLimbDraw, &this->actor, POLY_XLU_DISP);
+        POLY_XLU_DISP = SkelAnime_DrawSV2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
+                                          this->skelAnime.dListCount, EnRailgibud_OverrideLimbDraw,
+                                          EnRailgibud_PostLimbDraw, &this->actor, POLY_XLU_DISP);
     }
 
     if (this->unk_3F6 > 0) {
