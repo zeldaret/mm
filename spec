@@ -844,8 +844,7 @@ beginseg
     name "ovl_En_Dodongo"
     compress
     include "build/src/overlays/actors/ovl_En_Dodongo/z_en_dodongo.o"
-    include "build/data/ovl_En_Dodongo/ovl_En_Dodongo.data.o"
-    include "build/data/ovl_En_Dodongo/ovl_En_Dodongo.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Dodongo/ovl_En_Dodongo_reloc.o"
 endseg
 
 beginseg
@@ -906,8 +905,7 @@ beginseg
     name "ovl_En_Holl"
     compress
     include "build/src/overlays/actors/ovl_En_Holl/z_en_holl.o"
-    include "build/data/ovl_En_Holl/ovl_En_Holl.data.o"
-    include "build/data/ovl_En_Holl/ovl_En_Holl.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Holl/ovl_En_Holl_reloc.o"
 endseg
 
 beginseg
@@ -1820,8 +1818,7 @@ beginseg
     name "ovl_Obj_Makeoshihiki"
     compress
     include "build/src/overlays/actors/ovl_Obj_Makeoshihiki/z_obj_makeoshihiki.o"
-    include "build/data/ovl_Obj_Makeoshihiki/ovl_Obj_Makeoshihiki.data.o"
-    include "build/data/ovl_Obj_Makeoshihiki/ovl_Obj_Makeoshihiki.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Makeoshihiki/ovl_Obj_Makeoshihiki_reloc.o"
 endseg
 
 beginseg
@@ -3044,8 +3041,7 @@ beginseg
     name "ovl_En_Dnq"
     compress
     include "build/src/overlays/actors/ovl_En_Dnq/z_en_dnq.o"
-    include "build/data/ovl_En_Dnq/ovl_En_Dnq.data.o"
-    include "build/data/ovl_En_Dnq/ovl_En_Dnq.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Dnq/ovl_En_Dnq_reloc.o"
 endseg
 
 beginseg
@@ -4188,8 +4184,7 @@ beginseg
     name "ovl_En_Kgy"
     compress
     include "build/src/overlays/actors/ovl_En_Kgy/z_en_kgy.o"
-    include "build/data/ovl_En_Kgy/ovl_En_Kgy.data.o"
-    include "build/data/ovl_En_Kgy/ovl_En_Kgy.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Kgy/ovl_En_Kgy_reloc.o"
 endseg
 
 beginseg
@@ -4252,8 +4247,7 @@ beginseg
     name "ovl_En_Bigpo"
     compress
     include "build/src/overlays/actors/ovl_En_Bigpo/z_en_bigpo.o"
-    include "build/data/ovl_En_Bigpo/ovl_En_Bigpo.data.o"
-    include "build/data/ovl_En_Bigpo/ovl_En_Bigpo.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Bigpo/ovl_En_Bigpo_reloc.o"
 endseg
 
 beginseg

@@ -56,6 +56,11 @@
 #define Z_PRIORITY_DMAMGR 17
 #define Z_PRIORITY_IRQMGR 18
 
+#define EQUIP_SLOT_B 0
+#define EQUIP_SLOT_C_LEFT 1
+#define EQUIP_SLOT_C_DOWN 2
+#define EQUIP_SLOT_C_RIGHT 3
+
 typedef struct {
     /* 0x0 */ s16 priority; // Lower means higher priority. -1 means it ignores priority
     /* 0x2 */ s16 length;
@@ -1553,7 +1558,7 @@ struct GlobalContext {
     /* 0x18780 */ void (*func_18780)(Player* player, struct GlobalContext* globalCtx);
     /* 0x18784 */ s32 (*damagePlayer)(struct GlobalContext* globalCtx, s32 damage);
     /* 0x18788 */ void (*talkWithPlayer)(struct GlobalContext* globalCtx, Actor* actor);
-    /* 0x1878C */ void* unk_1878C; //! @TODO: Determine function prototype
+    /* 0x1878C */ void (*unk_1878C)(struct GlobalContext* globalCtx);
     /* 0x18790 */ void* unk_18790; //! @TODO: Determine function prototype
     /* 0x18794 */ void* unk_18794; //! @TODO: Determine function prototype
     /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct GlobalContext* globalCtx, void* talkAnim, s32 arg2);
@@ -1580,7 +1585,7 @@ struct GlobalContext {
     /* 0x18874 */ u8 skyboxId;
     /* 0x18875 */ s8 sceneLoadFlag; // "fade_direction"
     /* 0x18876 */ s16 unk_18876;
-    /* 0x18878 */ s16 unk_18878;
+    /* 0x18878 */ s16 bgCoverAlpha;
     /* 0x1887A */ u16 nextEntranceIndex;
     /* 0x1887C */ s8 unk_1887C;
     /* 0x1887D */ s8 unk_1887D;

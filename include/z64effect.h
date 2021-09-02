@@ -91,12 +91,19 @@ typedef struct {
 } EffBlureInit1; // size = 0x1A0
 
 typedef struct {
-    /* 0x00 */ UNK_TYPE1 pad0[0x8];
-    /* 0x08 */ Color_RGBA8 unk8;
-    /* 0x0C */ Color_RGBA8 unkC;
-    /* 0x10 */ Color_RGBA8 unk10;
-    /* 0x14 */ Color_RGBA8 unk14;
-    /* 0x18 */ UNK_TYPE1 pad18[0xC];
+    /* 0x00 */ s32 calcMode;
+    /* 0x04 */ u16 flags;
+    /* 0x06 */ s16 addAngleChange;
+    /* 0x08 */ u8 p1StartColor[4];
+    /* 0x0C */ u8 p2StartColor[4];
+    /* 0x10 */ u8 p1EndColor[4];
+    /* 0x14 */ u8 p2EndColor[4];
+    /* 0x18 */ u8 elemDuration;
+    /* 0x19 */ u8 unkFlag;
+    /* 0x1A */ u8 drawMode; // 0: simple; 1: simple with alt colors; 2+: smooth
+    /* 0x1B */ u8 mode4Param;
+    /* 0x1C */ Color_RGBA8 altPrimColor; // used with drawMode 1
+    /* 0x20 */ Color_RGBA8 altEnvColor; // used with drawMode 1
 } EffBlureInit2; // size = 0x24
 
 typedef struct {
