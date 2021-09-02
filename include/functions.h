@@ -2135,7 +2135,7 @@ void Interface_ChangeAlpha(u16 param_1);
 // void func_80111CB4(void);
 // void func_801129E4(void);
 void func_80112AFC(GlobalContext* globalCtx);
-// void func_80112B40(void);
+void func_80112B40(GlobalContext* globalCtx, s32 arg1);
 // void func_80112BE4(void);
 // void func_80112C0C(void);
 u32 Item_Give(GlobalContext* globalCtx, u8 param_2);
