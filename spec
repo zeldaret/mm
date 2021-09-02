@@ -844,8 +844,7 @@ beginseg
     name "ovl_En_Dodongo"
     compress
     include "build/src/overlays/actors/ovl_En_Dodongo/z_en_dodongo.o"
-    include "build/data/ovl_En_Dodongo/ovl_En_Dodongo.data.o"
-    include "build/data/ovl_En_Dodongo/ovl_En_Dodongo.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Dodongo/ovl_En_Dodongo_reloc.o"
 endseg
 
 beginseg
@@ -906,8 +905,7 @@ beginseg
     name "ovl_En_Holl"
     compress
     include "build/src/overlays/actors/ovl_En_Holl/z_en_holl.o"
-    include "build/data/ovl_En_Holl/ovl_En_Holl.data.o"
-    include "build/data/ovl_En_Holl/ovl_En_Holl.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Holl/ovl_En_Holl_reloc.o"
 endseg
 
 beginseg
@@ -2180,8 +2178,7 @@ beginseg
     name "ovl_Obj_Kibako2"
     compress
     include "build/src/overlays/actors/ovl_Obj_Kibako2/z_obj_kibako2.o"
-    include "build/data/ovl_Obj_Kibako2/ovl_Obj_Kibako2.data.o"
-    include "build/data/ovl_Obj_Kibako2/ovl_Obj_Kibako2.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Kibako2/ovl_Obj_Kibako2_reloc.o"
 endseg
 
 beginseg
@@ -3039,16 +3036,14 @@ beginseg
     name "ovl_En_Dnk"
     compress
     include "build/src/overlays/actors/ovl_En_Dnk/z_en_dnk.o"
-    include "build/data/ovl_En_Dnk/ovl_En_Dnk.data.o"
-    include "build/data/ovl_En_Dnk/ovl_En_Dnk.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Dnk/ovl_En_Dnk_reloc.o"
 endseg
 
 beginseg
     name "ovl_En_Dnq"
     compress
     include "build/src/overlays/actors/ovl_En_Dnq/z_en_dnq.o"
-    include "build/data/ovl_En_Dnq/ovl_En_Dnq.data.o"
-    include "build/data/ovl_En_Dnq/ovl_En_Dnq.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Dnq/ovl_En_Dnq_reloc.o"
 endseg
 
 beginseg
@@ -4255,8 +4250,7 @@ beginseg
     name "ovl_En_Bigpo"
     compress
     include "build/src/overlays/actors/ovl_En_Bigpo/z_en_bigpo.o"
-    include "build/data/ovl_En_Bigpo/ovl_En_Bigpo.data.o"
-    include "build/data/ovl_En_Bigpo/ovl_En_Bigpo.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Bigpo/ovl_En_Bigpo_reloc.o"
 endseg
 
 beginseg
