@@ -231,9 +231,7 @@ void EnSkb_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_3D6 = ENSKB_GET_F0(&this->actor);
     this->actor.floorHeight = this->actor.world.pos.y;
 
-    if ((globalCtx->sceneNum == SCENE_BOTI) && 
-        (gSaveContext.sceneSetupIndex == 1) && 
-        (globalCtx->csCtx.unk_12 == 0)) {
+    if ((globalCtx->sceneNum == SCENE_BOTI) && (gSaveContext.sceneSetupIndex == 1) && (globalCtx->csCtx.unk_12 == 0)) {
         this->actor.flags |= 0x100000;
     }
 
