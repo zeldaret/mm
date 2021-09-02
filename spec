@@ -1471,8 +1471,7 @@ beginseg
     name "ovl_En_Dns"
     compress
     include "build/src/overlays/actors/ovl_En_Dns/z_en_dns.o"
-    include "build/data/ovl_En_Dns/ovl_En_Dns.data.o"
-    include "build/data/ovl_En_Dns/ovl_En_Dns.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Dns/ovl_En_Dns_reloc.o"
 endseg
 
 beginseg

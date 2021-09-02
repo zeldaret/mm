@@ -379,7 +379,7 @@ void func_80A52DC8(EnDnq* this, GlobalContext* globalCtx) {
 void func_80A52FB8(EnDnq* this, GlobalContext* globalCtx) {
     s16 sp2E = this->actor.yawTowardsPlayer;
 
-    if (func_8010BF58(&this->actor, globalCtx, this->unk_380, 0, &this->unk_1E0)) {
+    if (func_8010BF58(&this->actor, globalCtx, this->unk_380, NULL, &this->unk_1E0)) {
         func_8013AED4(&this->unk_37C, 3, 7);
         this->unk_386 = 0;
         this->actionFunc = func_80A52DC8;
