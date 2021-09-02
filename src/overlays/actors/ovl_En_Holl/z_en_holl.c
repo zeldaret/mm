@@ -139,7 +139,7 @@ void EnHoll_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnHoll_ChangeRooms(GlobalContext* globalCtx) {
     Room tempRoom = globalCtx->roomCtx.currRoom;
-    
+
     globalCtx->roomCtx.currRoom = globalCtx->roomCtx.prevRoom;
     globalCtx->roomCtx.prevRoom = tempRoom;
     globalCtx->roomCtx.activeMemPage ^= 1;
@@ -226,7 +226,7 @@ void EnHoll_TransparentIdle(EnHoll* this, GlobalContext* globalCtx) {
     Actor_CalcOffsetOrientedToDrawRotation(&this->actor, &transformedPlayerPos,
                                            useViewEye ? &globalCtx->view.eye : &player->actor.world.pos);
     enHollTop = (globalCtx->sceneNum == SCENE_PIRATE) ? EN_HOLL_TOP_PIRATE : EN_HOLL_TOP_DEFAULT;
-    
+
     if ((transformedPlayerPos.y > EN_HOLL_BOTTOM_DEFAULT) && (transformedPlayerPos.y < enHollTop) &&
         (fabsf(transformedPlayerPos.x) < EN_HOLL_HALFWIDTH_TRANSPARENT)) {
         if (playerDistFromCentralPlane = fabsf(transformedPlayerPos.z),
@@ -238,7 +238,7 @@ void EnHoll_TransparentIdle(EnHoll* this, GlobalContext* globalCtx) {
             s8 room = transitionActorEntry->sides[playerSide].room;
 
             this->actor.room = room;
-            
+
             if ((this->actor.room != globalCtx->roomCtx.currRoom.num) &&
                 Room_StartRoomTransition(globalCtx, &globalCtx->roomCtx, this->actor.room)) {
                 this->actionFunc = EnHoll_RoomTransitionIdle;
@@ -263,7 +263,7 @@ void EnHoll_VerticalBgCoverIdle(EnHoll* this, GlobalContext* globalCtx) {
             s32 playerSide = (this->actor.yDirDistToPlayer > 0.0f) ? EN_HOLL_ABOVE : EN_HOLL_BELOW;
 
             this->actor.room = globalCtx->doorCtx.transitionActorList[enHollId].sides[playerSide].room;
-            
+
             if ((this->actor.room != globalCtx->roomCtx.currRoom.num) &&
                 Room_StartRoomTransition(globalCtx, &globalCtx->roomCtx, this->actor.room)) {
                 this->actionFunc = EnHoll_RoomTransitionIdle;
