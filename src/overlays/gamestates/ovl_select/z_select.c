@@ -166,12 +166,7 @@ void func_80800910(SelectContext* this) {
     SET_NEXT_GAMESTATE(&this->state, Title_Init, TitleContext);
 }
 
-extern s8 D_801BDBB0;
-
-#ifdef NON_EQUIVALENT
 void func_80800930(SelectContext* this, u32 arg1, s32 arg2) {
-    gSaveContext.fileNum;
-
     if (gSaveContext.fileNum == 0xFF) {
         func_80144968();
     }
@@ -186,12 +181,11 @@ void func_80800930(SelectContext* this, u32 arg1, s32 arg2) {
     gSaveContext.unk_3F22 = 0;
     gSaveContext.unk_3F24 = 0;
 
-    // NA_BGM_STOP: 0x100000FF
-    func_801A89A8(0x100000FF);
+    func_801A89A8(NA_BGM_STOP);
     gSaveContext.entranceIndex = arg1;
 
     if (arg2 != 0) {
-        gSaveContext.entranceIndex = Entrance_CreateIndex((s32)arg1 >> 9, arg2, arg1 & 0xF);
+        gSaveContext.entranceIndex = Entrance_CreateIndex((s32)gSaveContext.entranceIndex >> 9, arg2, gSaveContext.entranceIndex & 0xF);
     }
     if (gSaveContext.entranceIndex == 0xC000) {
         gSaveContext.day = 0;
@@ -209,16 +203,12 @@ void func_80800930(SelectContext* this, u32 arg1, s32 arg2) {
     gSaveContext.respawn[7].entranceIndex = 0xFF;
     D_801BDBB0 = 0;
 
-    {
+    do {
         GameState* state = &this->state;
         state->running = false;
-    }
+    } while(0);
     SET_NEXT_GAMESTATE(&this->state, Play_Init, GlobalContext);
 }
-#else
-void func_80800930(SelectContext* this, u32, s32);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/func_80800930.s")
-#endif
 
 #ifdef NON_EQUIVALENT
 void func_80800A44(SelectContext* this) {
