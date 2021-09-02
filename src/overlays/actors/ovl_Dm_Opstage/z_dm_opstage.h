@@ -5,7 +5,7 @@
 
 struct DmOpstage;
 
-typedef void (*DmOpstageActionFunc)(struct DmOpstage* this, GlobalContext* globalCtx);
+typedef void (*DmOpstageActionFunc)(struct DmOpstage*, GlobalContext*);
 
 typedef struct DmOpstage {
     /* 0x0000 */ Actor actor;

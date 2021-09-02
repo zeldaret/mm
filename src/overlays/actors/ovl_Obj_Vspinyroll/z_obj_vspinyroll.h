@@ -5,7 +5,7 @@
 
 struct ObjVspinyroll;
 
-typedef void (*ObjVspinyrollActionFunc)(struct ObjVspinyroll* this, GlobalContext* globalCtx);
+typedef void (*ObjVspinyrollActionFunc)(struct ObjVspinyroll*, GlobalContext*);
 
 typedef struct ObjVspinyroll {
     /* 0x0000 */ Actor actor;

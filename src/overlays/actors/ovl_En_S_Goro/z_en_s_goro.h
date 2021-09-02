@@ -5,7 +5,7 @@
 
 struct EnSGoro;
 
-typedef void (*EnSGoroActionFunc)(struct EnSGoro* this, GlobalContext* globalCtx);
+typedef void (*EnSGoroActionFunc)(struct EnSGoro*, GlobalContext*);
 
 typedef struct EnSGoro {
     /* 0x0000 */ Actor actor;

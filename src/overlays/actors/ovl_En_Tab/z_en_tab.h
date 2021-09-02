@@ -5,7 +5,7 @@
 
 struct EnTab;
 
-typedef void (*EnTabActionFunc)(struct EnTab* this, GlobalContext* globalCtx);
+typedef void (*EnTabActionFunc)(struct EnTab*, GlobalContext*);
 
 typedef struct EnTab {
     /* 0x0000 */ Actor actor;

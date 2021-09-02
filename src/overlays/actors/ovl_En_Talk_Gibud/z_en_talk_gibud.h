@@ -5,7 +5,7 @@
 
 struct EnTalkGibud;
 
-typedef void (*EnTalkGibudActionFunc)(struct EnTalkGibud* this, GlobalContext* globalCtx);
+typedef void (*EnTalkGibudActionFunc)(struct EnTalkGibud*, GlobalContext*);
 
 typedef struct EnTalkGibud {
     /* 0x0000 */ Actor actor;

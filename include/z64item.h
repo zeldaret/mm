@@ -31,6 +31,7 @@ typedef enum {
     /* 0x14 */ ITEM_POTION_GREEN,
     /* 0x15 */ ITEM_POTION_BLUE,
     /* 0x16 */ ITEM_FAIRY,
+    /* 0x17 */ ITEM_DEKU_PRINCESS,
     /* 0x1E */ ITEM_MUSHROOM = 0x1E,
     /* 0x38 */ ITEM_MASK_ALL_NIGHT = 0x38,
     /* 0x3A */ ITEM_MASK_KEATON = 0x3A,

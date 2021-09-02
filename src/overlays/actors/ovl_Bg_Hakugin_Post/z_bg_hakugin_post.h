@@ -5,7 +5,7 @@
 
 struct BgHakuginPost;
 
-typedef void (*BgHakuginPostActionFunc)(struct BgHakuginPost* this, GlobalContext* globalCtx);
+typedef void (*BgHakuginPostActionFunc)(struct BgHakuginPost*, GlobalContext*);
 
 typedef struct BgHakuginPost {
     /* 0x0000 */ Actor actor;
