@@ -762,7 +762,7 @@ void func_80877E60(EnDodongo* this, GlobalContext* globalCtx) {
             Audio_PlayActorSound2(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
             if (this->actor.colChkInfo.health <= 4) {
                 this->actor.colChkInfo.health = 0;
-                func_800BBA88(globalCtx, &this->actor);
+                Enemy_StartFinishingBlow(globalCtx, &this->actor);
             } else {
                 this->actor.colChkInfo.health -= 4;
             }
@@ -986,8 +986,8 @@ void EnDodongo_UpdateDamage(EnDodongo* this, GlobalContext* globalCtx) {
             ((this->unk_300 != 10) || !(this->collider1.elements[i].info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
             func_80876D28(this, globalCtx);
             if (this->actor.colChkInfo.damageEffect != 0xF) {
-                if (!func_800BE22C(&this->actor)) {
-                    func_800BBA88(globalCtx, &this->actor);
+                if (!Actor_ApplyDamage(&this->actor)) {
+                    Enemy_StartFinishingBlow(globalCtx, &this->actor);
                     if (this->actor.colChkInfo.damageEffect == 3) {
                         func_80876CAC(this);
                         this->timer = 3;
