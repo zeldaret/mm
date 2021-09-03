@@ -836,7 +836,7 @@ void Audio_PlayActorSound2(Actor* actor, u16 sfxId);
 void func_800B8F98(Actor* actor, u16 sfxId);
 void func_800B9010(Actor* actor, u16 sfxId);
 // void func_800B9038(void);
-// void func_800B9084(void);
+void func_800B9084(Actor* actor); // sets a flag in actor
 void func_800B9098(Actor* actor);
 s32 func_800B90AC(GlobalContext* globalCtx, Actor* actor, UNK_TYPE arg2, UNK_TYPE arg3, UNK_TYPE arg4);
 // void func_800B90F4(void);

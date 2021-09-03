@@ -30,6 +30,6 @@ typedef struct EnYb {
     /* 0x420 */ EnYbActionFunc actionFunc;
 } EnYb; // size = 0x424
 
-extern const ActorInit En_Yb_InitVars;
+//extern const ActorInit En_Yb_InitVars;
 
 #endif // Z_EN_YB_H

@@ -61,20 +61,16 @@ static ColliderCylinderInit D_80BFB2B0 = {
 
 UNK_TYPE D_80BFB2DC = 0x06000200;
 
-AnimationHeaderCommon D_80BFB2E0 = { 0x0400DF28, 0x0400CF98,
-};
+extern AnimationHeaderCommon D_0400DF28;
+//extern AnimationHeaderCommon D_0400CF98; // already declared in variables?
+
+AnimationHeaderCommon* D_80BFB2E0[] = { &D_0400DF28, (AnimationHeaderCommon*)&D_0400CF98 };
 
 Vec3f D_80BFB2E8 = { 0.0f, 0.5f, 0.0f};
 
-Vec3f D_80BFB2F4 = { 500.0f, -500.0, 0};
+Vec3f D_80BFB2F4 = { 500.0f, -500.0, 0.0f};
 
-glabel D_80BFB300
-/* 000070 80BFB300 */ .word 0x43FA0000
-/* 000074 80BFB304 */ .word 0xC3FA0000
-/* 000078 80BFB308 */ .word 0x00000000
-/* 00007C 80BFB30C */ .word 0x00000000 // padding?
-
-
+Vec3f D_80BFB300 = { 500.0f, -500.0f, 0.0f};
 
 
 extern u32 D_06005F48;
@@ -278,7 +274,7 @@ void func_80BFA730(EnYb *this, GlobalContext *globalCtx) {
         func_800B3030(globalCtx, &sp60, &D_80BFB2E8, &D_80BFB2E8, 0x64, 0, 2);
     }
 
-    func_800F0568(globalCtx, &this->actor.world.pos, 0x14, 0x3878);
+    Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 0x14, 0x3878);
     if (this->unk414 >= 0xB) {
         this->unk414 -= 10;
     } else {
@@ -335,7 +331,7 @@ void func_80BFA9D4(EnYb *this, GlobalContext *globalCtx) {
           case 0x147C:
               // Spread my dance across the world...  Train its followers...
               //(Translation) I have taught it to you, now make it into a popular dance craze!
-              if (func_8012403C(globalCtx) == 0xE) { // wearing mask of type?
+              if (Player_GetMask(globalCtx) == 0xE) { // wearing mask of type?
                   func_801477B4(globalCtx);
                   this->actionFunc = func_80BFAC88;
 
@@ -406,7 +402,7 @@ void func_80BFAC88(EnYb *this, GlobalContext *globalCtx) {
     } else if (func_800B84D0((Actor *) this, globalCtx)) { // acotr is talking
         func_80BFA2FC(globalCtx);
         this->actionFunc = func_80BFA9D4;
-        if (func_8012403C(globalCtx) == 0xE) {
+        if (Player_GetMask(globalCtx) == 0xE) {
             // Spread my dance across the world...  Train its followers...
             //(Translation) I have taught it to you, now make it into a popular dance craze!
             func_801518B0(globalCtx, 0x147C, (Actor *) this);
@@ -452,7 +448,7 @@ void EnYb_Update(Actor *thisx, GlobalContext *globalCtx) {
 
     if ((this->actor.flags & 1) == 1) {
         Collider_UpdateCylinder((Actor *) this, &this->collider);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
     if ((this->actor.flags & 1) == 1) {
         Actor_SetVelocityAndMoveYRotationAndGravity((Actor *) this);
@@ -476,8 +472,6 @@ void EnYb_Update(Actor *thisx, GlobalContext *globalCtx) {
     }
 }
 
-extern Vec3f D_80BFB2F4;
-extern Vec3f D_80BFB300;
 
 // two separate post limb draw functions reasons unknown
 void func_80BFB074(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, struct Actor *actor) {
@@ -490,7 +484,9 @@ void func_80BFB074(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, 
     }
 }
 
-void func_80BFB0E0(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, struct Actor *actor) {
+//void func_80BFB0E0(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, struct Actor *actor) {
+// this matches...but is the wrong type of function???
+void func_80BFB0E0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor, Gfx** gfx){
     EnYb* this = (EnYb*) actor;
     if (limbIndex == 0xB) {
         SysMatrix_MultiplyVector3fByState(&D_80BFB300, &this->actor.focus.pos);
@@ -517,11 +513,11 @@ void EnYb_Draw(EnYb *this, GlobalContext *globalCtx) {
 
             if (!(&globalCtx->state)){}
 
-            POLY_XLU_DISP = SkelAnime_DrawSV2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, (s32) this->skelAnime.dListCount, 0, func_80BFB0E0, this, POLY_XLU_DISP);
+            POLY_XLU_DISP = SkelAnime_DrawSV2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, (s32) this->skelAnime.dListCount, 0, func_80BFB0E0, &this->actor, POLY_XLU_DISP);
         } else {
             func_8012C28C(globalCtx->state.gfxCtx);
             Scene_SetRenderModeXlu(globalCtx, 0, 1);
-            SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, (s32) this->skelAnime.dListCount, 0, func_80BFB074, this);
+            SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, (s32) this->skelAnime.dListCount, 0, func_80BFB074, &this->actor);
         }
     }
 
