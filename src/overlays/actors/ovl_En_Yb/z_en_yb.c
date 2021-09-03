@@ -62,9 +62,8 @@ static ColliderCylinderInit D_80BFB2B0 = {
 UNK_TYPE D_80BFB2DC = 0x06000200;
 
 extern AnimationHeaderCommon D_0400DF28;
-//extern AnimationHeaderCommon D_0400CF98; // already declared in variables?
 
-AnimationHeaderCommon* D_80BFB2E0[] = { &D_0400DF28, (AnimationHeaderCommon*)&D_0400CF98 };
+AnimationHeaderCommon* D_80BFB2E0[] = { &D_0400DF28, &D_0400CF98 };
 
 Vec3f D_80BFB2E8 = { 0.0f, 0.5f, 0.0f};
 
@@ -73,15 +72,11 @@ Vec3f D_80BFB2F4 = { 500.0f, -500.0, 0.0f};
 Vec3f D_80BFB300 = { 500.0f, -500.0f, 0.0f};
 
 
-extern u32 D_06005F48;
-extern u32 D_06000200;
+extern FlexSkeletonHeader D_06005F48;
+extern AnimationHeader D_06000200;
 
 extern u8 D_801C20BB; // item location for something
 
-// non-equiv: the initsv function is fucked
-// struct is wack, too much padding in a way that makes no sense
-// also some animation function should be decomped first
-#ifdef NON_EQUIVELENT
 void EnYb_Init(EnYb *this, GlobalContext *globalCtx) {
     s16 tempCutscene;
     s32 i;
@@ -89,22 +84,20 @@ void EnYb_Init(EnYb *this, GlobalContext *globalCtx) {
     Actor_SetScale((Actor *) this, 0.01f);
     ActorShape_Init(&this->actor.shape, 0.0f, func_80BFA350, 20.0f);
 
-    // what the fuck is this doing
-    // theory: because this actor uses the same animation as player, his skeleton has something weird
-    //SkelAnime_InitSV(arg1, anime, 0x6005F48, 0x6000200, (this->unk188) & ~0xF, (this->unk2A0) & ~0xF, 0x16);
+    // ???
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06005F48, &D_06000200,
-         &this->limbDrawTbl, &this->transitionDrawTable, ENYB_LIMBCOUNT);
+        (void*)(((s32)&this->limbDrawTbl) & ~0xF), 
+        (void*)((s32)&this->transitionDrawTable & ~0xF), ENYB_LIMBCOUNT);
 
     SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06000200);
 
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, (Actor *) this, &D_80BFB2B0);
-    this->actor.colChkInfo.mass = 0xFF;
+    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80BFB2B0);
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actionFunc = func_80BFAC88;
     this->unk412 = 3;
     this->actor.minVelocityY = -9.0f;
     this->actor.gravity = -1.0f;
 
-    // this might not be defined correctly yet
     func_80BFA444(globalCtx, this, 2, 0, 0.0f);
 
     tempCutscene = this->actor.cutscene;
@@ -131,9 +124,6 @@ void EnYb_Init(EnYb *this, GlobalContext *globalCtx) {
         Actor_MarkForDeath((Actor *) this);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Yb/EnYb_Init.s")
-#endif
 
 void EnYb_Destroy(Actor *thisx, GlobalContext *globalCtx) {
     EnYb* this = (EnYb*) thisx;
@@ -484,8 +474,6 @@ void func_80BFB074(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, 
     }
 }
 
-//void func_80BFB0E0(struct GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, struct Actor *actor) {
-// this matches...but is the wrong type of function???
 void func_80BFB0E0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor, Gfx** gfx){
     EnYb* this = (EnYb*) actor;
     if (limbIndex == 0xB) {
