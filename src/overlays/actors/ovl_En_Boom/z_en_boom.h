@@ -1,13 +1,16 @@
 #ifndef Z_EN_BOOM_H
 #define Z_EN_BOOM_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnBoom;
 
+typedef void (*EnBoomActionFunc)(struct EnBoom*, GlobalContext*);
+
 typedef struct EnBoom {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0xB0];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0xAC];
+    /* 0x01F0 */ EnBoomActionFunc actionFunc;
 } EnBoom; // size = 0x1F4
 
 extern const ActorInit En_Boom_InitVars;

@@ -1,7 +1,3 @@
-This file describes how to manually set up a directory for use with the permuter.
-**You probably don't need to do this!** In normal circumstances, `./import.py`
-does all this for you. See README.md for more details.
-
 * create a directory that will contain all of the input files for the invokation
 * put a compile command into `<dir>/compile.sh` (see e.g. `compile_example.sh`; it will be invoked as `./compile.sh input.c -o output.o`)
 * `gcc -E -P -I header_dir -D'__attribute__(x)=' orig_c_file.c > <dir>/base.c`

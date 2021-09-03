@@ -17,11 +17,6 @@ void EnTorch2_Draw(Actor* thisx, GlobalContext* globalCtx);
 void EnTorch2_UpdateIdle(Actor* thisx, GlobalContext* globalCtx);
 void EnTorch2_UpdateDeath(Actor* thisx, GlobalContext* globalCtx);
 
-extern Gfx D_0401C430[];
-extern Gfx D_04048DF0[];
-extern Gfx D_04057B10[];
-extern Gfx D_04089070[];
-
 const ActorInit En_Torch2_InitVars = {
     ACTOR_EN_TORCH2,
     ACTORCAT_ITEMACTION,

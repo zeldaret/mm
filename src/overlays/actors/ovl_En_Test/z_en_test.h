@@ -1,7 +1,7 @@
 #ifndef Z_EN_TEST_H
 #define Z_EN_TEST_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnTest;
 

@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 // stubbed in NTSC-U
 void Font_LoadChar(GlobalContext* globalCtx, u16 codePointIndex, s32 offset) {
@@ -19,11 +18,11 @@ void Font_LoadMessageBoxEndIcon(Font* font, u16 icon) {
                         FONT_CHAR_TEX_SIZE);
 }
 
-static char sFontOrdering[] = "\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19"
-                              "!\"#$%&\'()*+,-./0123456789:ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                              "\x00\x0D\x0E\x1A"
-                              "afjmosvwxyz{|}~"
-                              "\x7F\x80\x81\x84\x86\x87\x88\x89\x8A\x8B\x8C";
+static u8 sFontOrdering[] = "\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19"
+                            "!\"#$%&\'()*+,-./0123456789:ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                            "\x00\x0D\x0E\x1A"
+                            "afjmosvwxyz{|}~"
+                            "\x7F\x80\x81\x84\x86\x87\x88\x89\x8A\x8B\x8C";
 
 void Font_LoadOrderedFont(Font* font) {
     u32 loadOffset;

@@ -1,4 +1,5 @@
 #include "z_en_nutsball.h"
+#include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
 #define FLAGS 0x00000010
 
@@ -106,7 +107,7 @@ void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx) {
                 (this->collider.base.atFlags & AT_TYPE_ENEMY) && (this->collider.base.atFlags & AT_BOUNCED)) {
                 EnNutsball_InitColliderParams(this);
                 func_8018219C(&player->shieldMf, &worldRot, 0);
-                this->actor.world.rot.y = worldRot.y + 0x8000;
+                this->actor.world.rot.y = BINANG_ROT180(worldRot.y);
                 this->timer = 20;
             } else {
                 spawnBurstPos.x = this->actor.world.pos.x;
@@ -114,9 +115,9 @@ void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx) {
                 spawnBurstPos.z = this->actor.world.pos.z;
                 EffectSsHahen_SpawnBurst(globalCtx, &spawnBurstPos, 6.0f, 0, 7, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
                 if (this->actor.params == 1) {
-                    func_800F0568(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_NUTS_BROKEN);
+                    Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_NUTS_BROKEN);
                 } else {
-                    func_800F0568(globalCtx, &this->actor.world.pos, 20, NA_SE_EN_OCTAROCK_ROCK);
+                    Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, NA_SE_EN_OCTAROCK_ROCK);
                 }
                 Actor_MarkForDeath(&this->actor);
             }
@@ -162,7 +163,7 @@ void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx) {
 void EnNutsball_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnNutsball* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx)
+    OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     SysMatrix_InsertMatrix(&globalCtx->mf_187FC, 1);
     SysMatrix_InsertZRotation_s(this->actor.home.rot.z, 1);

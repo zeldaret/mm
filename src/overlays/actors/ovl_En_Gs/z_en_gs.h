@@ -1,7 +1,7 @@
 #ifndef Z_EN_GS_H
 #define Z_EN_GS_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnGs;
 

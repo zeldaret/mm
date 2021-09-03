@@ -9,7 +9,7 @@ void ObjKzsaku_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjKzsaku_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjKzsaku_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Obj_Kzsaku_InitVars = {
     ACTOR_OBJ_KZSAKU,
     ACTORCAT_PROP,
@@ -21,24 +21,28 @@ const ActorInit Obj_Kzsaku_InitVars = {
     (ActorFunc)ObjKzsaku_Update,
     (ActorFunc)ObjKzsaku_Draw,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kzsaku_0x80C08A80/ObjKzsaku_Init.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kzsaku_0x80C08A80/ObjKzsaku_Destroy.asm")
+extern UNK_TYPE D_06000040;
+extern UNK_TYPE D_06001118;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kzsaku_0x80C08A80/func_80C08B60.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kzsaku/ObjKzsaku_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kzsaku_0x80C08A80/func_80C08B7C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kzsaku/ObjKzsaku_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kzsaku_0x80C08A80/func_80C08BBC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kzsaku/func_80C08B60.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kzsaku_0x80C08A80/func_80C08BD0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kzsaku/func_80C08B7C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kzsaku_0x80C08A80/func_80C08C84.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kzsaku/func_80C08BBC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kzsaku_0x80C08A80/func_80C08CB0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kzsaku/func_80C08BD0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kzsaku_0x80C08A80/ObjKzsaku_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kzsaku/func_80C08C84.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kzsaku_0x80C08A80/ObjKzsaku_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kzsaku/func_80C08CB0.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kzsaku/ObjKzsaku_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kzsaku/ObjKzsaku_Draw.s")

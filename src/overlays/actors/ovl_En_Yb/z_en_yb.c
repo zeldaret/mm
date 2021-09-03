@@ -31,7 +31,15 @@ void func_80BFA350(struct Actor* actor, struct Lights* mapper, struct GlobalCont
 
 void func_80BFA444(GlobalContext* globalCtx, EnYb* this, s16 arg3, s16 arg4, f32 arg5);
 
-/*
+void func_80BFA730(EnYb* this, GlobalContext* globalCtx);
+void func_80BFA868(EnYb* this, GlobalContext* globalCtx);
+void func_80BFA91C(EnYb* this, GlobalContext* globalCtx);
+void func_80BFA9D4(EnYb* this, GlobalContext* globalCtx);
+void func_80BFAB4C(EnYb* this, GlobalContext* globalCtx);
+void func_80BFABF0(EnYb* this, GlobalContext* globalCtx);
+void func_80BFAC88(EnYb* this, GlobalContext* globalCtx);
+void func_80BFAE80(EnYb* this, GlobalContext* globalCtx);
+
 const ActorInit En_Yb_InitVars = {
     ACTOR_EN_YB,
     ACTORCAT_NPC,
@@ -43,13 +51,34 @@ const ActorInit En_Yb_InitVars = {
     (ActorFunc)EnYb_Update,
     (ActorFunc)EnYb_Draw,
 };
-*/
 
-extern u32 D_80BFB2B0;
+//static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_80BFB2B0 = {
+    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_ENEMY, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    { 20, 40, 0, { 0, 0, 0 } },
+};
+
+UNK_TYPE D_80BFB2DC = 0x06000200;
+
+AnimationHeaderCommon D_80BFB2E0 = { 0x0400DF28, 0x0400CF98,
+};
+
+Vec3f D_80BFB2E8 = { 0.0f, 0.5f, 0.0f};
+
+Vec3f D_80BFB2F4 = { 500.0f, -500.0, 0};
+
+glabel D_80BFB300
+/* 000070 80BFB300 */ .word 0x43FA0000
+/* 000074 80BFB304 */ .word 0xC3FA0000
+/* 000078 80BFB308 */ .word 0x00000000
+/* 00007C 80BFB30C */ .word 0x00000000 // padding?
+
+
+
 
 extern u32 D_06005F48;
 extern u32 D_06000200;
-extern u32 D_80BFB2E8;
 
 extern u8 D_801C20BB; // item location for something
 
@@ -107,7 +136,7 @@ void EnYb_Init(EnYb *this, GlobalContext *globalCtx) {
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Yb_0x80BFA100/EnYb_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Yb/EnYb_Init.s")
 #endif
 
 void EnYb_Destroy(Actor *thisx, GlobalContext *globalCtx) {
@@ -155,10 +184,9 @@ void func_80BFA350(struct Actor *actor, struct Lights *mapper, struct GlobalCont
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Yb_0x80BFA100/func_80BFA350.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Yb/func_80BFA350.s")
 #endif
 
-extern AnimationHeaderCommon D_80BFB2E0[];
 
 // weird data
 // fuck it, doing it later, we need song
@@ -194,7 +222,7 @@ void func_80BFA444(GlobalContext *globalCtx, EnYb *this, s16 arg3, s16 arg4, f32
         }
     }
 } // */
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Yb_0x80BFA100/func_80BFA444.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Yb/func_80BFA444.s")
 
 // check if dialogue is possible to start?
 s32 func_80BFA5CC(EnYb *this, GlobalContext *globalCtx) {

@@ -3,12 +3,11 @@
 
 // TODO should be in libultra/os
 
-#include <stdarg.h>
-#include <os.h>
-#include <os_internal.h>
-#include <ultraerror.h>
-#include <ultralog.h>
-#include <sptask.h>
+#include "stdarg.h"
+#include "os.h"
+#include "os_internal.h"
+#include "ultraerror.h"
+#include "ultralog.h"
 
 typedef struct {
     /* 0x0 */ OSMesgQueue* messageQueue;

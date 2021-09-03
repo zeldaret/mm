@@ -8,7 +8,12 @@ void ObjSwprize_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjSwprize_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSwprize_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+void func_80C25654(ObjSwprize* this, GlobalContext* globalCtx);
+void func_80C256AC(ObjSwprize* this, GlobalContext* globalCtx);
+void func_80C2572C(ObjSwprize* this, GlobalContext* globalCtx);
+void func_80C25794(ObjSwprize* this, GlobalContext* globalCtx);
+
+#if 0
 const ActorInit Obj_Swprize_InitVars = {
     ACTOR_OBJ_SWPRIZE,
     ACTORCAT_PROP,
@@ -20,30 +25,31 @@ const ActorInit Obj_Swprize_InitVars = {
     (ActorFunc)ObjSwprize_Update,
     (ActorFunc)NULL,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Swprize_0x80C25360/func_80C25360.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Swprize_0x80C25360/func_80C253D0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Swprize/func_80C25360.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Swprize_0x80C25360/ObjSwprize_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Swprize/func_80C253D0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Swprize_0x80C25360/ObjSwprize_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Swprize/ObjSwprize_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Swprize_0x80C25360/func_80C25640.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Swprize/ObjSwprize_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Swprize_0x80C25360/func_80C25654.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Swprize/func_80C25640.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Swprize_0x80C25360/func_80C25698.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Swprize/func_80C25654.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Swprize_0x80C25360/func_80C256AC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Swprize/func_80C25698.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Swprize_0x80C25360/func_80C25710.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Swprize/func_80C256AC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Swprize_0x80C25360/func_80C2572C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Swprize/func_80C25710.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Swprize_0x80C25360/func_80C25780.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Swprize/func_80C2572C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Swprize_0x80C25360/func_80C25794.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Swprize/func_80C25780.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Swprize_0x80C25360/ObjSwprize_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Swprize/func_80C25794.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Swprize/ObjSwprize_Update.s")

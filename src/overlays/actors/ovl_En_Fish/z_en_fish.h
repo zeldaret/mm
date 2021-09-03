@@ -1,7 +1,7 @@
 #ifndef Z_EN_FISH_H
 #define Z_EN_FISH_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnFish;
 

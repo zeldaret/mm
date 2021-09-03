@@ -1,7 +1,7 @@
 #ifndef _RAMROM_H_
 #define _RAMROM_H_
 
-#include <PR/ultratypes.h>
+#include "PR/ultratypes.h"
 
 typedef struct {
     /* 0x0 */ long type;

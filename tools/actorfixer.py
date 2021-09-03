@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-import os
-import argparse
+import argparse, os
 
 # "old": "new"
 animdict ={
@@ -12,6 +11,15 @@ animdict ={
     "Matrix_Push": "SysMatrix_StatePush",
     "Matrix_Init": "SysMatrix_StateAlloc",
     "Matrix_Put": "SysMatrix_SetCurrentState",
+    "func_800B78B8": "Actor_UpdateBgCheckInfo",
+    "func_8012403C": "Player_GetMask",
+    "func_8012404c": "Player_RemoveMask",
+    "Actor_SpawnWithParentAndCutscene": "Actor_SpawnAsChildAndCutscene",
+    "Actor_SpawnWithParent": "Actor_SpawnAsChild",
+    "func_800BE22C": "Actor_ApplyDamage",
+    "func_800F0568": "Audio_PlaySoundAtPosition",
+    "func_8016970C": "Play_CameraSetAtEye",
+    "func_800BBA88": "Enemy_StartFinishingBlow",
 }
 
 def replace_anim(file):

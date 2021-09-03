@@ -1,13 +1,17 @@
 #ifndef Z_EN_SKB_H
 #define Z_EN_SKB_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnSkb;
 
+typedef void (*EnSkbActionFunc)(struct EnSkb*, GlobalContext*);
+
 typedef struct EnSkb {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x2A4];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0xE4];
+    /* 0x0228 */ EnSkbActionFunc actionFunc;
+    /* 0x022C */ char unk_22C[0x1BC];
 } EnSkb; // size = 0x3E8
 
 extern const ActorInit En_Skb_InitVars;

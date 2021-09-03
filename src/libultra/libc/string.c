@@ -1,6 +1,6 @@
-#include <string.h>
+#include "string.h"
 
-unsigned char* strchr(const unsigned char* s, int c) {
+const char* strchr(const char* s, int c) {
     const unsigned char ch = c;
 
     while (*s != ch) {
@@ -10,11 +10,11 @@ unsigned char* strchr(const unsigned char* s, int c) {
         s++;
     }
 
-    return (unsigned char*)s;
+    return s;
 }
 
-size_t strlen(const unsigned char* s) {
-    const unsigned char* sc = s;
+size_t strlen(const char* s) {
+    const char* sc = s;
 
     while (*sc != '\0') {
         sc++;

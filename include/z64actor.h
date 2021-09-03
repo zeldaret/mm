@@ -1,11 +1,11 @@
 #ifndef _Z64ACTOR_H_
 #define _Z64ACTOR_H_
 
-#include <PR/ultratypes.h>
-#include <z64math.h>
-#include <z64animation.h>
-#include <z64collision_check.h>
-#include <unk.h>
+#include "PR/ultratypes.h"
+#include "z64math.h"
+#include "z64animation.h"
+#include "z64collision_check.h"
+#include "unk.h"
 
 #define MASS_IMMOVABLE 0xFF // Cannot be pushed by OC collisions
 #define MASS_HEAVY 0xFE     // Can only be pushed by OC collisions with IMMOVABLE and HEAVY objects.
@@ -39,7 +39,7 @@ typedef struct {
     /* 0x04 */ s16 cylHeight;
     /* 0x06 */ s16 cylYShift;
     /* 0x08 */ u8 mass;
-} CollisionCheckInfoInit2;
+} CollisionCheckInfoInit2; // size = 0xC
 
 typedef struct {
     /* 0x00 */ DamageTable* damageTable;
@@ -76,6 +76,31 @@ typedef struct {
     /* 0x3A */ s16 unk3A;
 } ActorEnTest20C; // size = 0x3C
 
+struct EnDno_ActorUnkStruct;
+typedef s32 (*EnDno_ActorUnkFunc)(struct GlobalContext*, struct EnDno_ActorUnkStruct*);
+
+typedef struct EnDno_ActorUnkStruct {
+    /* 0x00 */ Vec3f unk_00;
+    /* 0x0C */ UNK_TYPE1 unk_0C[0x4];
+    /* 0x10 */ s16 unk_10;
+    /* 0x12 */ UNK_TYPE1 unk_12[0xA];
+    /* 0x1C */ u8 unk_1C;
+    /* 0x1D */ u8 unk_1D;
+    /* 0x20 */ Vec3f unk_20;
+    /* 0x2C */ Vec3f unk_2C;
+    /* 0x38 */ UNK_TYPE1 unk_38[0x10];
+    /* 0x48 */ struct Actor* unk_48;
+    /* 0x4C */ f32 unk_4C;
+    /* 0x50 */ f32 unk_50;
+    /* 0x54 */ s16 unk_54;
+    /* 0x56 */ s16 unk_56;
+    /* 0x58 */ s32 unk_58;
+    /* 0x5C */ EnDno_ActorUnkFunc unk_5C;
+    /* 0x60 */ EnDno_ActorUnkFunc unk_60;
+    /* 0x64 */ EnDno_ActorUnkFunc unk_64;
+    /* 0x68 */ EnDno_ActorUnkFunc unk_68;
+} EnDno_ActorUnkStruct; // size >= 0x6C
+
 typedef struct {
     /* 0x00 */ s16 id;
     /* 0x02 */ u8 type;
@@ -104,7 +129,6 @@ typedef struct {
     /* 0x18 */ char* name;
     /* 0x1C */ u16 allocType; // bit 0: don't allocate memory, use actorContext->0x250? bit 1: Always keep loaded?
     /* 0x1E */ s8 numLoaded; // original name: "clients"
-    /* 0x1F */ UNK_TYPE1 pad1F[0x1];
 } ActorOverlay; // size = 0x20
 
 typedef void(*ActorShadowFunc)(struct Actor* actor, struct Lights* mapper, struct GlobalContext* globalCtx);
@@ -427,7 +451,7 @@ typedef enum {
     /* 0x076 */ ACTOR_UNSET_76,
     /* 0x077 */ ACTOR_UNSET_77,
     /* 0x078 */ ACTOR_UNSET_78,
-    /* 0x079 */ ACTOR_UNSET_79,
+    /* 0x079 */ ACTOR_EN_FISHING,
     /* 0x07A */ ACTOR_OBJ_OSHIHIKI,
     /* 0x07B */ ACTOR_EFF_DUST,
     /* 0x07C */ ACTOR_BG_UMAJUMP,
@@ -998,5 +1022,15 @@ typedef enum {
     /* 0x2B1 */ ACTOR_EN_RSN,
     /* 0x2B2 */ ACTOR_ID_MAX // originally "ACTOR_DLF_MAX"
 } ActorID;
+
+typedef enum {
+    /* 0x00 */ CLEAR_TAG_SMALL_EXPLOSION,
+    /* 0x01 */ CLEAR_TAG_LARGE_EXPLOSION,
+    /* 0x02 */ CLEAR_TAG_POP,
+    /* 0x03 */ CLEAR_TAG_SMALL_LIGHT_RAYS,
+    /* 0x04 */ CLEAR_TAG_LARGE_LIGHT_RAYS,
+    /* 0x23 */ CLEAR_TAG_SPLASH = 35,
+    /* 0xC8 */ CLEAR_TAG_SMOKE = 200,
+} ClearTagType;
 
 #endif

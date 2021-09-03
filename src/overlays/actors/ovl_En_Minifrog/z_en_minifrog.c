@@ -29,8 +29,6 @@ extern AnimationHeader D_06001534;
 extern FlexSkeletonHeader D_0600B538;
 extern UNK_TYPE4 D_060059A0;
 extern UNK_TYPE4 D_06005BA0;
-extern UNK_TYPE1 D_0400DEA8;
-extern UNK_TYPE1 D_0400E2A8;
 
 const ActorInit En_Minifrog_InitVars = {
     ACTOR_EN_MINIFROG,
@@ -291,7 +289,7 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, GlobalContext* globalCtx) {
             default:
                 func_801477B4(globalCtx);
                 EnMinifrog_SetCamera(this, globalCtx);
-                func_800F0568(globalCtx, &this->actor.world.pos, 30, NA_SE_EN_NPC_FADEAWAY);
+                Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 30, NA_SE_EN_NPC_FADEAWAY);
                 if (this->actor.cutscene != -1) {
                     if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
                         ActorCutscene_Stop(this->actor.cutscene);
