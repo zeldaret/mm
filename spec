@@ -43,7 +43,7 @@ beginseg
     include "build/data/boot/boot_800862E0.data.o"
     include "build/src/boot_O2/padsetup.o"
     include "build/src/boot_O2/boot_80086760.o"
-    include "build/data/boot/boot_80086760.bss.o"
+    include "build/data/boot/boot_80086760.data.o"
     include "build/asm/boot/fp.text.o"
     include "build/src/boot_O2/system_malloc.o"
     include "build/src/boot_O2/rand.o"
