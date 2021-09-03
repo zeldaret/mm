@@ -12,17 +12,16 @@
 #define DEGTORAD(x) ((x) * (M_PI / 180.0f))
 
 typedef union {
+    f64 d;
     struct {
         u32 hi;
         u32 lo;
     } word;
-
-    f64 d;
 } du;
 
 typedef union {
-    u32 i;
     f32 f;
+    u32 i;
 } fu;
 
 extern f32 __libm_qnan_f;

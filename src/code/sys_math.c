@@ -6,7 +6,7 @@ static f32 sFactorialTbl[] = { 1.0f,    1.0f,     2.0f,      6.0f,       24.0f, 
 // Rename to Math_FactorialF
 /**
  * Takes a float, returns the factorial of it(s trunctation), iteratively.
- * Unused.
+ * Unused
  */
 f32 func_80179300(f32 n) {
     f32 ret = 1.0f;
@@ -22,7 +22,7 @@ f32 func_80179300(f32 n) {
 // Rename to Math_Factorial
 /**
  * Takes an int and returns its factorial as a float. Uses the lookup table for n <= 12.
- * Unused.
+ * Unused
  */
 f32 func_80179400(s32 n) {
     f32 ret;
@@ -44,7 +44,7 @@ f32 func_80179400(s32 n) {
 // Rename to Math_PowF
 /**
  * Returns base^{exp} if exp is nonnegative and 1.0f otherwise.
- * Unused.
+ * Unused
  */
 f32 pow_int(f32 base, s32 exp) {
     f32 ret = 1.0f;
