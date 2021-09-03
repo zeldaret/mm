@@ -20,8 +20,8 @@ typedef union {
 } du;
 
 typedef union {
-    f32 f;
     u32 i;
+    f32 f;
 } fu;
 
 extern f32 __libm_qnan_f;

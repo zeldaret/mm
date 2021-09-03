@@ -3,8 +3,9 @@
 #define SQ(x) ((x) * (x))
 #define ROUND(x) (s32)(((x) >= 0.0) ? ((x) + 0.5) : ((x)-0.5))
 
-// A slightly tweaked form of the coefficients of the Maclaurin series of sine up to x^9;
-// the commented versions do not match
+// A slightly tweaked form of the coefficients of the Maclaurin series of sine up to x^9
+// [https://mathworld.wolfram.com/MaclaurinSeries.html]. 
+// The commented versions do not match
 static const du P[] = {
     { 1.0 },                     // 1
     { -0.16666659550427756 },    // -1/3! = 1/6
@@ -19,8 +20,11 @@ static const du pihi = { 3.1415926218032837 };
 
 static const du pilo = { 3.178650954705639E-8 }; // pihi + pilo is the closest double to pi
 
-static const fu zero = { 0.0f };
+static const fu zero = { 0x00000000 };
 
+/**
+ * Returns the sine of a float as a float, using the Maclaurin series and shifting
+ */
 f32 __sinf(f32 x) {
     f64 dx;         // x promoted to double
     f64 xSq;        // square of dx
