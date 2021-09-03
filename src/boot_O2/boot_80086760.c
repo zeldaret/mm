@@ -1,6 +1,6 @@
 #include "global.h"
 #include "PR/fp.h"
-
+#include "math.h"
 
 extern f32 func_80086C70(f32 x);
 extern f32 func_80086CA8(f32 x);
@@ -9,13 +9,24 @@ extern f32 func_80086CE0(f32 x);
 extern f32 func_80086D18(f32 x);
 
 // extern f32 D_80097524;
-extern f32 qNaN0x10000;
+// extern f32 qNaN0x10000;
+
+fu qNaN0x3FFFFF = { 0x7FBFFFFF };
+
+fu qNaN0x10000 = { 0x7F810000 };
+
+fu sNaN0x3FFFFF = { 0x7FFFFFFF };
 
 s32 gUseAtanContFrac;
 
+/**
+ * MathF library
+ * Contains tangent function, wrappers for a number of the handwritten functions in fp, and a suite of arctangents
+ */
 
-/* MathF library */
-
+/**
+ * Tangent function computed using libultra __sinf and __cosf
+ */
 // Math_FTanF
 f32 func_80086760(f32 x) {
     return __sinf(x) / __cosf(x);
@@ -51,7 +62,8 @@ f32 func_80086814(f32 x) {
 }
 
 /**
- * Arctangent approximation using a Taylor series (one quadrant) 
+ * Arctangent approximation using a Maclaurin series [https://mathworld.wolfram.com/MaclaurinSeries.html]
+ * (one quadrant, i.e. |x| < 1)
  */
 // Math_FAtanTaylorQF
 f32 func_80086834(f32 x) {
@@ -80,10 +92,10 @@ f32 func_80086834(f32 x) {
 }
 
 /**
- * Ditto for two quadrants.
- * Uses the formulae arctan(x) = pi/2 - arctan(1/x) 
+ * Ditto for two quadrants, the rest of the range.
+ * Uses the formulae arctan(x) = pi/2 - arctan(1/x)
  * and arctan(x) = pi/4 - arctan( (1-x)/(1+x) )
- * to extend the range in which the Taylor series is a good approximation
+ * to extend the range in which the series computed by func_80086834 is a good approximation
  */
 // Math_FAtanTaylorF
 f32 func_80086880(f32 x) {
@@ -97,7 +109,7 @@ f32 func_80086880(f32 x) {
     } else if (x == 0.0f) {
         return 0.0f;
     } else {
-        return qNaN0x10000;
+        return qNaN0x10000.f;
     }
 
     if (t <= M_SQRT2 - 1.0f) {
@@ -119,6 +131,8 @@ f32 func_80086880(f32 x) {
 
 /**
  * Arctangent approximation using a continued fraction
+ * Cf. https://en.wikipedia.org/wiki/Gauss%27s_continued_fraction#The_series_2F1_2 ,
+ * https://dlmf.nist.gov/4.25#E4
  */
 // Math_FAtanContFracF
 f32 func_800869A4(f32 x) {
@@ -137,10 +151,10 @@ f32 func_800869A4(f32 x) {
         sector = -1;
         x = 1.0f / x;
     } else {
-        return qNaN0x10000;
+        return qNaN0x10000.f;
     }
 
-    // Builds the continued fraction from the innermost fraction
+    // Builds the continued fraction from the innermost fraction out
     sq = SQ(x);
     conv = 0.0f;
     z = 8.0f;
@@ -161,6 +175,7 @@ f32 func_800869A4(f32 x) {
 
 // Math_FAtanF
 /**
+ * Single-argument arctangent, only used by the two-argument function.
  * Nothing else sets the bss variable gUseAtanContFrac, so the Maclaurin series is always used
  */
 f32 func_80086AF0(f32 x) {
@@ -184,7 +199,7 @@ f32 func_80086B30(f32 y, f32 x) {
         } else if (y < 0.0f) {
             return -M_PI / 2;
         } else {
-            return qNaN0x10000;
+            return qNaN0x10000.f;
         }
     } else if (x >= 0.0f) {
         return func_80086AF0(y / x);
