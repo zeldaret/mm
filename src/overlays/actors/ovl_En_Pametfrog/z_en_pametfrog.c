@@ -879,7 +879,8 @@ void EnPametfrog_FallInAir(EnPametfrog* this, GlobalContext* globalCtx) {
     } else {
         this->spinYaw += 0xF00;
         if (this->camId != 0) {
-            Play_CameraSetAtEye(globalCtx, this->camId, &this->actor.world.pos, &Play_GetCamera(globalCtx, this->camId)->eye);
+            Play_CameraSetAtEye(globalCtx, this->camId, &this->actor.world.pos,
+                                &Play_GetCamera(globalCtx, this->camId)->eye);
         }
 
         if (this->actor.bgCheckFlags & 1) {

@@ -13,7 +13,6 @@ extern f32 func_80086D18(f32 x);
 
 s32 gUseAtanContFrac;
 
-
 /**
  * Tangent function computed using libultra __sinf and __cosf
  */
