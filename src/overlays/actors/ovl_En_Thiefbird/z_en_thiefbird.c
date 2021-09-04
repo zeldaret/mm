@@ -326,12 +326,12 @@ s32 func_80C10E98(GlobalContext* globalCtx) {
     s32 sp5C;
 
     for (i = 0; i < ARRAY_COUNT(sp74); i++) {
-        sp74[i] = (s8)ITEM_NONE;
+        sp74[i] = ITEM00_NO_DROP;
     }
 
     if (AMMO(ITEM_BOMB) >= 5) {
         spB0 = 1;
-        sp74[1] = 11;
+        sp74[1] = ITEM00_BOMBS_B;
         if (1) {}
     } else {
         spB0 = 0;
@@ -339,7 +339,7 @@ s32 func_80C10E98(GlobalContext* globalCtx) {
 
     if (AMMO(ITEM_BOW) >= 10) {
         spAC = 1;
-        sp74[5] = 5;
+        sp74[5] = ITEM00_ARROWS_10;
     } else {
         spAC = 0;
     }
@@ -364,7 +364,7 @@ s32 func_80C10E98(GlobalContext* globalCtx) {
     sp5C = phi_s0_2 * 50;
     sp98 = sp98 - sp5C;
 
-    func_80C10DE8(sp74, phi_s0_2, ITEM_POTION_GREEN);
+    func_80C10DE8(sp74, phi_s0_2, ITEM00_RUPEE_PURPLE);
     spA0 = sp98 / 20;
     if (i < spA0) {
         spA0 = i;
@@ -372,7 +372,7 @@ s32 func_80C10E98(GlobalContext* globalCtx) {
     i -= spA0;
     sp98 = sp98 - (spA0 * 20);
 
-    func_80C10DE8(sp74, spA0, 2);
+    func_80C10DE8(sp74, spA0, ITEM00_RUPEE_RED);
     phi_s2 = sp98 / 5;
     if (i < phi_s2) {
         phi_s2 = i;
@@ -380,14 +380,14 @@ s32 func_80C10E98(GlobalContext* globalCtx) {
     i -= phi_s2;
     sp98 = sp98 - (phi_s2 * 5);
 
-    func_80C10DE8(sp74, phi_s2, ITEM_BOW);
+    func_80C10DE8(sp74, phi_s2, ITEM00_RUPEE_BLUE);
     if (i < sp98) {
         spA8 = i;
     } else {
         spA8 = sp98;
     }
 
-    func_80C10DE8(sp74, spA8, 0);
+    func_80C10DE8(sp74, spA8, ITEM00_RUPEE_GREEN);
     if ((spB0 + spAC + phi_s0_2 + spA0 + phi_s2 + spA8) == 0) {
         return false;
     }
@@ -399,7 +399,7 @@ s32 func_80C10E98(GlobalContext* globalCtx) {
             sp64.x = (Math_SinS(phi_s3) * 40.0f) + player->actor.world.pos.x;
             sp64.y = player->actor.world.pos.y + 20.0f;
             sp64.z = (Math_CosS(phi_s3) * 40.0f) + player->actor.world.pos.z;
-            if (sp74[i] != (s8)ITEM_NONE) {
+            if (sp74[i] != ITEM00_NO_DROP) {
                 EnItem00* temp_s1_5 = Item_DropCollectible(globalCtx, &sp64, sp74[i]);
 
                 if (temp_s1_5 != NULL) {
