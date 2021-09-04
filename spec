@@ -5321,9 +5321,7 @@ beginseg
     name "ovl_En_Thiefbird"
     compress
     include "build/src/overlays/actors/ovl_En_Thiefbird/z_en_thiefbird.o"
-    include "build/data/ovl_En_Thiefbird/ovl_En_Thiefbird.data.o"
-    include "build/data/ovl_En_Thiefbird/ovl_En_Thiefbird.bss.o"
-    include "build/data/ovl_En_Thiefbird/ovl_En_Thiefbird.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Thiefbird/ovl_En_Thiefbird_reloc.o"
 endseg
 
 beginseg

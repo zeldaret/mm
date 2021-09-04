@@ -2141,7 +2141,7 @@ void func_80112B40(GlobalContext* globalCtx, s32 arg1);
 u32 Item_Give(GlobalContext* globalCtx, u8 param_2);
 // void func_801143CC(void);
 UNK_TYPE func_80114978(UNK_TYPE arg0);
-// void func_801149A0(void);
+void func_801149A0(s32 arg0, s16 arg1);
 // void func_80114A9C(void);
 // void func_80114B84(void);
 // void func_80114CA0(void);
