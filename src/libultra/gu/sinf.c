@@ -1,7 +1,5 @@
 #include "math.h"
-
-#define SQ(x) ((x) * (x))
-#define ROUND(x) (s32)(((x) >= 0.0) ? ((x) + 0.5) : ((x)-0.5))
+#include "macros.h"
 
 // A slightly tweaked form of the coefficients of the Maclaurin series of sine up to x^9
 // [https://mathworld.wolfram.com/MaclaurinSeries.html].
