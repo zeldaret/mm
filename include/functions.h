@@ -4002,7 +4002,7 @@ void func_801A5CFC(u16 sfxId, Vec3f* param_2, u8 param_3, f32* param_4, f32* par
 // void func_801A7168(void);
 // void func_801A7284(void);
 void func_801A72CC(Vec3f* uParm1);
-// void func_801A7328(void);
+void func_801A7328(Vec3f* vec, s32 sfxId);
 // void func_801A7484(void);
 // void func_801A75E8(void);
 // void func_801A7720(void);
