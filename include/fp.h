@@ -2,9 +2,9 @@
 #define _FP_H_
 #include "ultra64.h"
 
-// extern f32 qNaN0x3FFFFF;
-// extern f32 qNaN0x10000;
-// extern f32 sNaN0x3FFFFF;
+extern f32 qNaN0x3FFFFF;
+extern f32 qNaN0x10000;
+extern f32 sNaN0x3FFFFF;
 
 f32 floorf(f32 x);
 f64 floor(f64 x);
