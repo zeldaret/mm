@@ -73,15 +73,15 @@ f32 func_80086834(f32 x) {
         if (poly + term == poly) {
             break;
         }
-        poly = poly + term;
-        exp = exp * sq;
+        poly += term;
+        exp *= sq;
     }
 
     return poly;
 }
 
 /**
- * Ditto for two quadrants, the rest of the range.
+ * Extends prevous arctangent function to the rest of the real numbers.
  * Uses the formulae arctan(x) = pi/2 - arctan(1/x)
  * and arctan(x) = pi/4 - arctan( (1-x)/(1+x) )
  * to extend the range in which the series computed by func_80086834 is a good approximation
