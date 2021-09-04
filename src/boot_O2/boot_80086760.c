@@ -1,6 +1,9 @@
+/**
+ * MathF library
+ * Contains tangent function, wrappers for a number of the handwritten functions in fp, and a suite of arctangents
+ */
 #include "global.h"
-#include "PR/fp.h"
-#include "math.h"
+#include "fp.h"
 
 extern f32 func_80086C70(f32 x);
 extern f32 func_80086CA8(f32 x);
@@ -8,21 +11,8 @@ extern f32 func_80086D50(f32 x);
 extern f32 func_80086CE0(f32 x);
 extern f32 func_80086D18(f32 x);
 
-// extern f32 D_80097524;
-// extern f32 qNaN0x10000;
-
-fu qNaN0x3FFFFF = { 0x7FBFFFFF };
-
-fu qNaN0x10000 = { 0x7F810000 };
-
-fu sNaN0x3FFFFF = { 0x7FFFFFFF };
-
 s32 gUseAtanContFrac;
 
-/**
- * MathF library
- * Contains tangent function, wrappers for a number of the handwritten functions in fp, and a suite of arctangents
- */
 
 /**
  * Tangent function computed using libultra __sinf and __cosf
@@ -109,7 +99,7 @@ f32 func_80086880(f32 x) {
     } else if (x == 0.0f) {
         return 0.0f;
     } else {
-        return qNaN0x10000.f;
+        return qNaN0x10000;
     }
 
     if (t <= M_SQRT2 - 1.0f) {
@@ -151,7 +141,7 @@ f32 func_800869A4(f32 x) {
         sector = -1;
         x = 1.0f / x;
     } else {
-        return qNaN0x10000.f;
+        return qNaN0x10000;
     }
 
     // Builds the continued fraction from the innermost fraction out
@@ -199,7 +189,7 @@ f32 func_80086B30(f32 y, f32 x) {
         } else if (y < 0.0f) {
             return -M_PI / 2;
         } else {
-            return qNaN0x10000.f;
+            return qNaN0x10000;
         }
     } else if (x >= 0.0f) {
         return func_80086AF0(y / x);
