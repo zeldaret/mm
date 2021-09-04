@@ -1045,7 +1045,8 @@ void EnThiefbird_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 }
 
-s32 func_80C130EC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnThiefbird_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                 Actor* thisx) {
     EnThiefbird* this = THIS;
 
     if ((limbIndex == 10) || (limbIndex == 11)) {
@@ -1060,7 +1061,7 @@ s32 func_80C130EC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return false;
 }
 
-void func_80C1315C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnThiefbird_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static s8 D_80C13698[] = {
         -1, 0, -1, 1, 3, -1, 2, 5, -1, -1, 7, 8, 9, -1, -1, 10, -1, 0, 0, 0,
     };
@@ -1153,7 +1154,7 @@ void EnThiefbird_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                     func_80C130EC, func_80C1315C, &this->actor);
+                     EnThiefbird_OverrideLimbDraw, EnThiefbird_PostLimbDraw, &this->actor);
     if (this->actor.colorFilterTimer > 0) {
         func_800AE5A0(globalCtx);
     }
