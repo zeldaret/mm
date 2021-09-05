@@ -1013,7 +1013,7 @@ s32 func_800C576C(CollisionContext* colCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* arg
 // void func_800C58C8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
 // void func_800C5954(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE2 param_8);
 s32 func_800C5A20(CollisionContext* colCtx, Vec3f* arg1, f32 arg2);
-// void func_800C5A64(void);
+s32 func_800C5A64(CollisionContext* colCtx, Vec3f* arg1, f32 arg2, Actor* actor);
 void BgCheck_ScenePolygonListsInit(SSNodeList* arg0);
 void BgCheck_ScenePolygonListsAlloc(GlobalContext* globalCtx, SSNodeList* lists, s32 numNodes, u32 numPolygons);
 s32 func_800C5B80(u16* arg0);
