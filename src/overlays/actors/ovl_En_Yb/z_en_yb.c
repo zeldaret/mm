@@ -25,9 +25,8 @@ void func_80BFA634(EnYb* this, GlobalContext* globalCtx);
 s32 func_80BFA5CC(EnYb* this, GlobalContext* globalCtx); 
 void func_80BFA67C(EnYb* this);
 
-// custom shadow function neat
-//typedef void(*ActorShadowFunc)(struct Actor* actor, struct Lights* mapper, struct GlobalContext* globalCtx);
-void func_80BFA350(struct Actor* actor, struct Lights* mapper, struct GlobalContext* globalCtx);
+// custom shadow function
+void func_80BFA350(Actor* actor, Lights* mapper, GlobalContext* globalCtx);
 
 void func_80BFA444(GlobalContext* globalCtx, EnYb* this, s16 arg3, s16 arg4, f32 arg5);
 
@@ -63,7 +62,8 @@ UNK_TYPE D_80BFB2DC = 0x06000200;
 
 extern AnimationHeaderCommon D_0400DF28;
 
-AnimationHeaderCommon* D_80BFB2E0[] = { &D_0400DF28, &D_0400CF98 };
+//AnimationHeaderCommon* D_80BFB2E0[] = { &D_0400DF28, &D_0400CF98 };
+LinkAnimationHeader* D_80BFB2E0[] = { &D_0400DF28, &D_0400CF98 };
 
 Vec3f D_80BFB2E8 = { 0.0f, 0.5f, 0.0f};
 
@@ -140,16 +140,17 @@ void func_80BFA2FC(GlobalContext *globalCtx) {
 // custom shadow draw function
 // non-matching: just stack offset
 #ifdef NON_MATCHING
-void func_80BFA350(struct Actor *actor, struct Lights *mapper, struct GlobalContext *globalCtx) {
+void func_80BFA350(Actor *actor, Lights *mapper, GlobalContext *globalCtx) {
     EnYb* this = (EnYb*) actor;
     Vec3f sp34; // currently 30
-    s32 pad;
     f32 tempValue;
+    //s32 pad;
     //s32 pad[2];
 
     if (this->unk414 > 0) {
         if (this->unk412 == 2) {
             // this solves all regalloc
+            // todo try removing .4
             //actor->scale.x = (((27.0f - this->unk404.y) + actor->world.pos.y) * 0.00044444448f) + 0.01f;
             tempValue = (((27.0f - this->unk404.y) + actor->world.pos.y) * 0.00044444448f) + 0.01f;
             actor->scale.x = tempValue;
@@ -165,6 +166,7 @@ void func_80BFA350(struct Actor *actor, struct Lights *mapper, struct GlobalCont
         }
 
         func_800B3FC0((Actor *) actor, mapper, globalCtx);
+        //Math_Vec3f_Copy(&actor->world.pos,  &sp34);
         Math_Vec3f_Copy(&actor->world.pos,  &sp34);
         actor->scale.x = 0.01f;
     }
@@ -174,35 +176,30 @@ void func_80BFA350(struct Actor *actor, struct Lights *mapper, struct GlobalCont
 #endif
 
 
-// weird data
-// fuck it, doing it later, we need song
+// this weird animation function is called from init
 /*
 void func_80BFA444(GlobalContext *globalCtx, EnYb *this, s16 arg3, s16 arg4, f32 arg5) {
-    //AnimationHeaderCommon **sp34;
     //AnimationHeaderCommon **temp_v1;
-    //AnimationHeaderCommon **temp_v1_2;
-    //AnimationHeaderCommon **temp_v1_3;
-    u8 temp_a3;
+    LinkAnimationHeader **temp_v1;
+    u8 temp_a3 = arg4 & 0xFF;
 
-    temp_a3 = arg4 & 0xFF;
     if ((arg3 >= 0) && (arg3 < 3)) {
         if ((arg3 != this->unk412) || (arg4 != 0)) {
             if ( arg3 > 0) {
                 if (temp_a3 == 0) {
                     temp_v1 = &D_80BFB2E0[arg3];
-                    sp34 = temp_v1;
                     SkelAnime_ChangeLinkAnim(globalCtx, &this->skelAnime,
                          temp_v1->unk-4, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount(temp_v1->unk-4), 0, arg5);
                 } else {
-                    temp_v1_2 = &(&D_80BFB2E0)[arg3];
-                    sp34 = temp_v1_2;
-                    SkelAnime_ChangeLinkAnim(globalCtx, &this->skelAnime, (LinkAnimationHeader *) temp_v1_2->unk-4, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount(temp_v1_2->unk-4), 0, arg5);
+                    temp_v1 = &(&D_80BFB2E0)[arg3];
+                    //sp34 = temp_v1_2;
+                    SkelAnime_ChangeLinkAnim(globalCtx, &this->skelAnime, (LinkAnimationHeader *) temp_v1->unk-4, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount(temp_v1->unk-4), 0, arg5);
                 }
             } else {
                 temp_v1_3 = &(&D_80BFB2DC)[arg3];
-                sp34 = temp_v1_3;
+                //sp34 = temp_v1;
                 arg4 = temp_a3;
-                SkelAnime_ChangeAnim(&this->skelAnime, (AnimationHeader *) *temp_v1_3, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount(*temp_v1_3), (f32) arg4, arg5);
+                SkelAnime_ChangeAnim(&this->skelAnime, (AnimationHeader *) *temp_v1, 1.0f, 0.0f, (f32) SkelAnime_GetFrameCount(*temp_v1), (f32) arg4, arg5);
             }
             this->unk412 = arg3;
         }
@@ -275,7 +272,7 @@ void func_80BFA730(EnYb *this, GlobalContext *globalCtx) {
 void func_80BFA868(EnYb *this, GlobalContext *globalCtx) {
     func_80BFA634(this, globalCtx);
     if (func_800B84D0((Actor *) this, globalCtx) != 0) { // is talking?
-        this->actor.flags &= ~ 0x10000;
+        this->actor.flags &= ~0x10000;
         this->actionFunc = func_80BFA9D4;
         //[sound 6954] I am counting on you.
         //[sound 6955](Translation) I am counting on you.
