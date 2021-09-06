@@ -9,4 +9,6 @@ void PrintUtils_Printf(PrintCallback* pfn, const char* fmt, ...) {
     va_start(args, fmt);
 
     PrintUtils_VPrintf(pfn, fmt, args);
+    
+    va_end(args);
 }
