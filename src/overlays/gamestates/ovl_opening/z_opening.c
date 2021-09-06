@@ -6,7 +6,6 @@
 
 #include "z_opening.h"
 
-
 void Opening_SetupForTitleCutscene(OpeningContext* this) {
     static s32 openingEntrances[] = { 0x00001C00, 0x00001C10 };
     static s32 openingCutscenes[] = { 0x0000FFFA, 0x0000FFFA };
