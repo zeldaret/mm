@@ -910,7 +910,7 @@ extern UNK_TYPE1 D_801BA550;
 // extern UNK_TYPE1 D_801BB100;
 // extern UNK_TYPE2 D_801BB124;
 // extern UNK_TYPE2 D_801BB128;
-// extern UNK_TYPE1 D_801BB12C;
+extern u8 D_801BB12C;
 // extern UNK_TYPE1 D_801BB130;
 extern cutscene_update_func sCsStateHandlers1[5];
 extern cutscene_update_func sCsStateHandlers2[5];
