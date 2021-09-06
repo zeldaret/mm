@@ -155,7 +155,6 @@ beginseg
     include "build/src/libultra/io/epirawread.o"
     include "build/src/libultra/io/viswapbuf.o"
     include "build/src/libultra/gu/position.o"
-    include "build/data/boot/position.data.o"
     include "build/src/libultra/io/epirawdma.o"
     include "build/src/libultra/io/sptaskyielded.o"
     include "build/asm/boot/bcmp.text.o"
