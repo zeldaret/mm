@@ -6457,7 +6457,7 @@
     0x808DB454:("EnSw_Init",),
     0x808DB70C:("EnSw_Destroy",),
     0x808DB738:("EnSw_Update",),
-    0x808DB7F4:("func_808DB7F4",),
+    0x808DB7F4:("EnSw_OverrideLimbDraw",),
     0x808DB8DC:("EnSw_Draw",),
     0x808DBE80:("ObjectKankyo_SetupAction",),
     0x808DBE8C:("func_808DBE8C",),
