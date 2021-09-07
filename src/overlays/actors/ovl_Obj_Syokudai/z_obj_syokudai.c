@@ -74,7 +74,35 @@ static void* D_808BCD2C[] = { 0x060003A0, 0x06000B90, 0x06000870 };
 
 static UNK_TYPE D_808BCDE0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Syokudai/ObjSyokudai_Init.s")
+void ObjSyokudai_Init(Actor* thisx, GlobalContext* globalCtx) {
+    ObjSyokudai* this = THIS;
+    s32 pad;
+    s32 paramsHigh = OBJ_SYOKUDAI_GET_PARAMS_HIGH(thisx);
+    s32 paramsLow = OBJ_SYOKUDAI_GET_PARAMS_LOW(thisx);
+
+    Actor_ProcessInitChain(thisx, D_808BCD18);
+    func_800B4AEC(globalCtx, thisx, 50.0f);
+    ActorShape_Init(&thisx->shape, 0.0f, func_800B4B50, 1.0f);
+    Collider_InitAndSetCylinder(globalCtx, &this->colliderCylinder1, thisx, &D_808BCCC0);
+    this->colliderCylinder1.base.colType = D_808BCD28[OBJ_SYOKUDAI_GET_PARAMS_HIGH(thisx)];
+    Collider_InitAndSetCylinder(globalCtx, &this->colliderCylinder2, thisx, &D_808BCCEC);
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
+    Lights_PointGlowSetInfo(&this->lightInfo, thisx->world.pos.x, thisx->world.pos.y + 70.0f, thisx->world.pos.z, 0xFF,
+                            0xFF, 0xB4, -1);
+    this->lightNode = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->lightInfo);
+
+    if (thisx->params & 0x800 || (paramsHigh != 2 || paramsLow != 0x7F) && Flags_GetSwitch(globalCtx, paramsLow)) {
+        s32 paramsMid = OBJ_SYOKUDAI_GET_PARAMS_MID(thisx);
+        this->unk_1DC = -1;
+        if (paramsMid != 0) {
+            D_808BCDE0 = paramsMid;
+        }
+    } else {
+        D_808BCDE0 = 0;
+    }
+    this->unk_1DE = (u32)(Rand_ZeroOne() * 20.0f);
+    Actor_SetHeight(thisx, 60.0f);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Syokudai/ObjSyokudai_Destroy.s")
 
