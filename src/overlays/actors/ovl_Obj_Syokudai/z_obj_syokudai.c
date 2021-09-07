@@ -86,7 +86,7 @@ void ObjSyokudai_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitAndSetCylinder(globalCtx, &this->colliderCylinder1, thisx, &D_808BCCC0);
     this->colliderCylinder1.base.colType = D_808BCD28[OBJ_SYOKUDAI_GET_PARAMS_HIGH(thisx)];
     Collider_InitAndSetCylinder(globalCtx, &this->colliderCylinder2, thisx, &D_808BCCEC);
-    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
+    thisx->colChkInfo.mass = MASS_IMMOVABLE;
     Lights_PointGlowSetInfo(&this->lightInfo, thisx->world.pos.x, thisx->world.pos.y + 70.0f, thisx->world.pos.z, 0xFF,
                             0xFF, 0xB4, -1);
     this->lightNode = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->lightInfo);
@@ -115,4 +115,35 @@ void ObjSyokudai_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Syokudai/ObjSyokudai_Update.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Syokudai/ObjSyokudai_Draw.s")
+void ObjSyokudai_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    ObjSyokudai* this = THIS;
+    s32 pad;
+    s32 paramsMid = OBJ_SYOKUDAI_GET_PARAMS_MID(thisx);
+    f32 scaleFactor;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+    func_8012C28C(globalCtx->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, D_808BCD2C[OBJ_SYOKUDAI_GET_PARAMS_HIGH(thisx)]);
+    if (this->unk_1DC != 0) {
+        s32 paramsMidAdj = (paramsMid * 50) + 100;
+
+        scaleFactor = 1.0f;
+        if (paramsMidAdj < this->unk_1DC) {
+            scaleFactor = ((paramsMidAdj - this->unk_1DC) + 10) / 10.0f;
+        } else if ((this->unk_1DC > 0) && (this->unk_1DC < 20)) {
+            scaleFactor = this->unk_1DC / 20.0f;
+        }
+        scaleFactor *= 0.0027f;
+        func_8012C2DC(globalCtx->state.gfxCtx);
+	gSPSegment(POLY_XLU_DISP++, 0x08, Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, (this->unk_1DE * -20) & 0x1FF, 0x20, 0x80));
+	gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 0, 255);
+	gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
+        SysMatrix_InsertTranslation(0.0f, 52.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_RotateY(BINANG_ROT180(func_800DFCDC(ACTIVE_CAM) - thisx->shape.rot.y), MTXMODE_APPLY);
+        Matrix_Scale(scaleFactor, scaleFactor, scaleFactor, MTXMODE_APPLY);
+	gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+	gSPDisplayList(POLY_XLU_DISP++, D_0407D590);
+    }
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
