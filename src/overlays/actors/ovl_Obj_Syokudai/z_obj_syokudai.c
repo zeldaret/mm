@@ -104,7 +104,14 @@ void ObjSyokudai_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetHeight(thisx, 60.0f);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Syokudai/ObjSyokudai_Destroy.s")
+void ObjSyokudai_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    ObjSyokudai* this = THIS;
+
+    Collider_DestroyCylinder(globalCtx, &this->colliderCylinder1);
+    Collider_DestroyCylinder(globalCtx, &this->colliderCylinder2);
+    LightContext_RemoveLight(globalCtx, &globalCtx->lightCtx, this->lightNode);
+}
+
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Syokudai/ObjSyokudai_Update.s")
 
