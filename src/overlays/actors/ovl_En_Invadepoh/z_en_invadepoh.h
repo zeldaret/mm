@@ -1,7 +1,7 @@
 #ifndef Z_EN_INVADEPOH_H
 #define Z_EN_INVADEPOH_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnInvadepoh;
 

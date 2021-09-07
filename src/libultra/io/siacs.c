@@ -1,7 +1,9 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 u32 __osSiAccessQueueEnabled = 0;
+
+OSMesg siAccessBuf[1];
+OSMesgQueue __osSiAccessQueue;
 
 void __osSiCreateAccessQueue() {
     __osSiAccessQueueEnabled = 1;

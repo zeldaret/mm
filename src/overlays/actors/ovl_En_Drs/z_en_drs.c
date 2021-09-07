@@ -8,6 +8,9 @@ void EnDrs_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnDrs_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDrs_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C1E2D4(EnDrs* this, GlobalContext* globalCtx);
+void func_80C1E3DC(EnDrs* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Drs_InitVars = {
     ACTOR_EN_DRS,
@@ -21,7 +24,6 @@ const ActorInit En_Drs_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80C1E5E0 = {
     { COLTYPE_HIT1, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -29,27 +31,29 @@ static ColliderCylinderInit D_80C1E5E0 = {
     { 16, 62, 0, { 0, 0, 0 } },
 };
 
-
 // sColChkInfoInit
 static CollisionCheckInfoInit2 D_80C1E60C = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
+#endif
 
 extern ColliderCylinderInit D_80C1E5E0;
 extern CollisionCheckInfoInit2 D_80C1E60C;
-#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Drs_0x80C1E290/func_80C1E290.asm")
+extern UNK_TYPE D_06000E70;
+extern UNK_TYPE D_06005A78;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Drs_0x80C1E290/func_80C1E2D4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Drs/func_80C1E290.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Drs_0x80C1E290/func_80C1E3DC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Drs/func_80C1E2D4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Drs_0x80C1E290/EnDrs_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Drs/func_80C1E3DC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Drs_0x80C1E290/EnDrs_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Drs/EnDrs_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Drs_0x80C1E290/EnDrs_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Drs/EnDrs_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Drs_0x80C1E290/func_80C1E4B0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Drs/EnDrs_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Drs_0x80C1E290/func_80C1E568.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Drs/func_80C1E4B0.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Drs/func_80C1E568.s")

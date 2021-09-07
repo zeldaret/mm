@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 /**
  * Assigns the "save" values in PreRender
@@ -148,7 +147,7 @@ void func_8017023C(PreRender* this, Gfx** gfxp, void* buf, void* bufSave) {
     *gfxp = gfx;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_8017023C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/PreRender/func_8017023C.s")
 #endif
 
 void func_8017057C(PreRender* this, Gfx** gfxp) {
@@ -249,7 +248,7 @@ void func_80170798(PreRender* this, Gfx** gfxp) {
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_80170798.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/PreRender/func_80170798.s")
 #endif
 
 void func_80170AE0(PreRender* this, Gfx** gfxp, s32 alpha) {
@@ -284,8 +283,8 @@ void PreRender_AntiAliasAlgorithm(PreRender* this, s32 x, s32 y) {
     s32 pxR2;
     s32 pxG2;
     s32 pxB2;
-    Color_RGB5A1 pxIn;
-    Color_RGB5A1 pxOut;
+    Color_RGBA16 pxIn;
+    Color_RGBA16 pxOut;
     u32 pxR3;
     u32 pxG3;
     u32 pxB3;
@@ -397,9 +396,9 @@ void PreRender_ApplyAntiAliasingFilter(PreRender* this) {
     }
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_801716C4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/PreRender/func_801716C4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_801717F8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/PreRender/func_801717F8.s")
 
 /**
  * Applies filters to the framebuffer prerender to make it look smoother
@@ -426,7 +425,7 @@ void PreRender_ApplyFiltersSlowlyInit(PreRender* this) {
         }
 
         this->unk_4D = 1;
-        StackCheck_Init(&slowlyStackEntry, slowlyStack, &slowlyStack[4096], 0, 0x100, D_801DFC60);
+        StackCheck_Init(&slowlyStackEntry, slowlyStack, &slowlyStack[4096], 0, 0x100, "slowly");
         Slowly_Start(&D_801F6E00, &D_801F7FE8, PreRender_ApplyFilters, this, NULL);
         D_801F6FC0 = true;
     }
@@ -450,7 +449,7 @@ void func_801720C4(PreRender* this) {
     }
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/PreRender/func_801720FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/PreRender/func_801720FC.s")
 
 void func_80172758(Gfx** gfxp, void* timg, void* tlut, u16 width, u16 height, u8 fmt, u8 siz, u16 tt, u16 arg8, f32 x,
                    f32 y, f32 xScale, f32 yScale, u32 flags) {

@@ -1,5 +1,7 @@
 MAKEFLAGS += --no-builtin-rules
 
+# Build options can either be changed by modifying the makefile, or by building with 'make SETTING=value'
+
 # If COMPARE is 1, check the output md5sum after building
 COMPARE ?= 1
 # If NON_MATCHING is 1, define the NON_MATCHING C flag when building
@@ -13,31 +15,41 @@ ifeq ($(NON_MATCHING),1)
   COMPARE := 0
 endif
 
+PROJECT_DIR := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
+
+MAKE = make
+CPPFLAGS += -P
+
 ifeq ($(OS),Windows_NT)
-    DETECTED_OS=windows
+  DETECTED_OS=windows
 else
-    UNAME_S := $(shell uname -s)
-    ifeq ($(UNAME_S),Linux)
-        DETECTED_OS=linux
-    endif
-    ifeq ($(UNAME_S),Darwin)
-        DETECTED_OS=macos
-        MAKE=gmake
-        CPPFLAGS += -xc++
-    endif
+  UNAME_S := $(shell uname -s)
+  ifeq ($(UNAME_S),Linux)
+    DETECTED_OS=linux
+  endif
+  ifeq ($(UNAME_S),Darwin)
+    DETECTED_OS=macos
+    MAKE=gmake
+    CPPFLAGS += -xc++
+  endif
+endif
+
+# Threads to compress and extract assets with, TODO improve later
+ifeq ($(DETECTED_OS),linux)
+  N_THREADS ?= $(shell nproc)
+else
+  N_THREADS ?= 1
 endif
 
 #### Tools ####
 ifeq ($(shell type mips-linux-gnu-ld >/dev/null 2>/dev/null; echo $$?), 0)
   MIPS_BINUTILS_PREFIX := mips-linux-gnu-
 else
-  MIPS_BINUTILS_PREFIX := mips64-elf-
+  $(error Please install or build mips-linux-gnu)
 endif
 
 CC       := tools/ido_recomp/$(DETECTED_OS)/7.1/cc
 CC_OLD   := tools/ido_recomp/$(DETECTED_OS)/5.3/cc
-GCC      := gcc
-QEMU_IRIX ?= ./tools/qemu-mips
 
 # if ORIG_COMPILER is 1, check that either QEMU_IRIX is set or qemu-irix package installed
 ifeq ($(ORIG_COMPILER),1)
@@ -51,47 +63,55 @@ ifeq ($(ORIG_COMPILER),1)
   CC_OLD    = $(QEMU_IRIX) -L tools/ido5.3_compiler tools/ido5.3_compiler/usr/bin/cc
 endif
 
-AS      := $(MIPS_BINUTILS_PREFIX)as
-LD      := $(MIPS_BINUTILS_PREFIX)ld
-OBJCOPY := $(MIPS_BINUTILS_PREFIX)objcopy
-OBJDUMP := $(MIPS_BINUTILS_PREFIX)objdump
+AS         := $(MIPS_BINUTILS_PREFIX)as
+LD         := $(MIPS_BINUTILS_PREFIX)ld
+OBJCOPY    := $(MIPS_BINUTILS_PREFIX)objcopy
+OBJDUMP    := $(MIPS_BINUTILS_PREFIX)objdump
 
-ZAPD := tools/ZAPD/ZAPD.out
+# Check code syntax with host compiler
+CHECK_WARNINGS := -Wall -Wextra -Wno-format-security -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-int-conversion -Wno-unused-but-set-variable -Wno-unused-label
+CC_CHECK   := gcc -fno-builtin -fsyntax-only -fsigned-char -std=gnu90 -D _LANGUAGE_C -D NON_MATCHING -Iinclude -Isrc -Iassets -Ibuild -include stdarg.h $(CHECK_WARNINGS)
+
+CPP        := cpp
+ELF2ROM    := tools/buildtools/elf2rom
+MKLDSCRIPT := tools/buildtools/mkldscript
+YAZ0       := tools/buildtools/yaz0
+ZAPD       := tools/ZAPD/ZAPD.out
 
 OPTFLAGS := -O2 -g3
-ASFLAGS := -march=vr4300 -32
+ASFLAGS := -march=vr4300 -32 -Iinclude
 MIPS_VERSION := -mips2
 
 # we support Microsoft extensions such as anonymous structs, which the compiler does support but warns for their usage. Surpress the warnings with -woff.
-CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm -Iinclude -Isrc -Iassets -Ibuild -I./ -Isrc -Wab,-r4300_mul -woff 624,649,838,712
+CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm -Iinclude -Isrc -Iassets -Ibuild -I. -Wab,-r4300_mul -woff 624,649,838,712
+
+ifeq ($(shell getconf LONG_BIT), 32)
+  # Work around memory allocation bug in QEMU
+  export QEMU_GUEST_BASE := 1
+else
+  # Ensure that gcc treats the code as 32-bit
+  CC_CHECK += -m32
+endif
 
 #### Files ####
 
 # ROM image
-MM_BASEROM ?= baserom.mm.us.rev1.z64
-MM_ROM_NAME ?= mm.us.rev1.rom
-ROM := $(MM_ROM_NAME).z64
-UNCOMPRESSED_ROM := $(MM_ROM_NAME)_uncompressed.z64
-ELF := $(MM_ROM_NAME).elf
+ROMC := mm.us.rev1.rom.z64
+ROM := $(ROMC:.rom.z64=.rom_uncompressed.z64)
+ELF := $(ROM:.z64=.elf)
+# description of ROM segments
+SPEC := spec
+
+# create asm directories
+$(shell mkdir -p asm data)
 
 SRC_DIRS := $(shell find src -type d)
+ASM_DIRS := $(shell find asm -type d -not -path "asm/non_matchings*") $(shell find data -type d)
 ASSET_BIN_DIRS := $(shell find assets/* -type d -not -path "assets/xml*")
 BASEROM_DIRS := $(shell find baserom -type d 2>/dev/null)
-COMP_DIRS := $(BASEROM_DIRS:baserom%=comp%)
-BINARY_DIRS := $(BASEROM_DIRS:baserom%=binary%)
 ASSET_C_FILES := $(shell find assets/ -type f -name "*.c")
 ASSET_FILES_BIN := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.bin))
 ASSET_FILES_OUT := $(foreach f,$(ASSET_FILES_BIN:.bin=.bin.inc.c),build/$f)
-
-# Because we may not have disassembled the code files yet, there might not be any assembly files.
-# Instead, generate a list of assembly files based on what's listed in the linker script.
-S_FILES := $(shell grep build/asm ./linker_scripts/code_script.txt | sed 's/\s*build\///g; s/\.o(\..*)/\.asm/g')
-C_FILES := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
-
-C_O_FILES := $(C_FILES:%.c=build/%.o)
-S_O_FILES := $(S_FILES:asm/%.asm=build/asm/%.o)
-ASSET_O_FILES := $(ASSET_C_FILES:%.c=build/%.o)
-O_FILES := $(C_O_FILES) $(S_O_FILES) $(ASSET_O_FILES)
 
 ## Assets binaries (PNGs, JPGs, etc)
 TEXTURE_FILES_PNG := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.png))
@@ -99,202 +119,169 @@ TEXTURE_FILES_JPG := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.jpg))
 TEXTURE_FILES_OUT := $(foreach f,$(TEXTURE_FILES_PNG:.png=.inc.c),build/$f) \
 					 $(foreach f,$(TEXTURE_FILES_JPG:.jpg=.jpg.inc.c),build/$f) \
 
+C_FILES       := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
+S_FILES       := $(foreach dir,$(ASM_DIRS),$(wildcard $(dir)/*.s))
+O_FILES       := $(foreach f,$(S_FILES:.s=.o),build/$f) \
+                 $(foreach f,$(wildcard baserom/*),build/$f.o) \
+                 $(foreach f,$(C_FILES:.c=.o),build/$f) \
+                 $(foreach f,$(ASSET_C_FILES:.c=.o),build/$f)
+
+# Automatic dependency files
+# (Only asm_processor dependencies are handled for now)
+DEP_FILES := $(O_FILES:.o=.asmproc.d)
+
 # create build directories
-$(shell mkdir -p build/linker_scripts build/asm build/asm/boot build/asm/code build/asm/overlays $(foreach dir, $(COMP_DIRS) $(BINARY_DIRS) $(SRC_DIRS) $(ASSET_BIN_DIRS),$(shell mkdir -p build/$(dir))))
+$(shell mkdir -p build/baserom $(foreach dir,$(SRC_DIRS) $(ASM_DIRS) $(ASSET_BIN_DIRS),build/$(dir)))
 
-# This file defines `ROM_FILES`, `UNCOMPRESSED_ROM_FILES`, and rules for generating `.yaz0` files
-ifneq ($(MAKECMDGOALS), clean)
-ifneq ($(MAKECMDGOALS), distclean)
-$(shell tools/dmadata_dependencies.py \
-	--dmadata-table=tables/dmadata_table.txt \
-	--output-deps=build/rom_dependencies.d)
--include build/rom_dependencies.d
-endif
-endif
+# directory flags
+build/src/boot_O2/%.o: OPTFLAGS := -O2
+build/src/boot_O2_g3/%.o: OPTFLAGS := -O2 -g3
 
-build/src/libultra/os/%: OPTFLAGS := -O1
-build/src/libultra/voice/%: OPTFLAGS := -O2
-build/src/libultra/io/%: OPTFLAGS := -O2
-build/src/libultra/libc/%: OPTFLAGS := -O2
-build/src/libultra/libc/ll%: OPTFLAGS := -O1
-build/src/libultra/libc/ll%: MIPS_VERSION := -mips3 -32
-build/src/libultra/gu/%: OPTFLAGS := -O2
-build/src/libultra/rmon/%: OPTFLAGS := -O2
-build/src/boot_O1/%: OPTFLAGS := -O1
-build/src/boot_O2/%: OPTFLAGS := -O2
-build/src/boot_O2_g3/%: OPTFLAGS := -O2 -g3
-build/src/boot_O2_g3_trapuv/%: OPTFLAGS := -O2 -g3
-build/src/boot_O2_g3_trapuv/%: CFLAGS := $(CFLAGS) -trapuv
+build/src/libultra/os/%.o: OPTFLAGS := -O1
+build/src/libultra/voice/%.o: OPTFLAGS := -O2
+build/src/libultra/io/%.o: OPTFLAGS := -O2
+build/src/libultra/libc/%.o: OPTFLAGS := -O2
+build/src/libultra/gu/%.o: OPTFLAGS := -O2
+build/src/libultra/rmon/%.o: OPTFLAGS := -O2
 
-build/src/libultra/%: CC := $(CC_OLD)
-build/src/libultra/io/%: CC := ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
-build/src/libultra/voice/%: CC := ./tools/preprocess.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
+# file flags
+build/src/boot_O2_g3/fault.o: CFLAGS += -trapuv
+build/src/boot_O2_g3/fault_drawer.o: CFLAGS += -trapuv
 
-CC := ./tools/preprocess.py $(CC) -- $(AS) $(ASFLAGS) --
+build/src/libultra/libc/ll.o: OPTFLAGS := -O1
+build/src/libultra/libc/ll.o: MIPS_VERSION := -mips3 -32
+build/src/libultra/libc/llcvt.o: OPTFLAGS := -O1
+build/src/libultra/libc/llcvt.o: MIPS_VERSION := -mips3 -32
 
-.PHONY: all clean setup diff-init init assetclean distclean assembly
-# make will delete any generated assembly files that are not a prerequisite for anything, so keep it from doing so
-.PRECIOUS: asm/%.asm
-.DEFAULT_GOAL := $(UNCOMPRESSED_ROM)
+# cc & asm-processor
+build/src/boot_O2/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
+build/src/boot_O2_g3/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
 
-# just using build/baserom still probably has some race condiction/dependency bug, but since
-# it is first and should be completed relatively fast, it should not occur all that often.
-$(UNCOMPRESSED_ROM): build/baserom $(TEXTURE_FILES_OUT) $(ASSET_FILES_OUT) $(UNCOMPRESSED_ROM_FILES)
-	./tools/makerom.py ./tables/dmadata_table.txt $@
+build/src/libultra/%.o: CC := python3 tools/asm-processor/build.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
+
+build/src/code/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
+
+build/src/overlays/actors/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
+build/src/overlays/effects/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
+build/src/overlays/fbdemos/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
+build/src/overlays/gamestates/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
+build/src/overlays/kaleido_scope/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
+
+#### Main Targets ###
+
+uncompressed: $(ROM)
 ifeq ($(COMPARE),1)
-	@md5sum $(UNCOMPRESSED_ROM)
+	@md5sum $(ROM)
 	@md5sum -c checksum_uncompressed.md5
 endif
 
-$(ROM): build/baserom $(ROM_FILES)
-	./tools/makerom.py ./tables/dmadata_table.txt $@ -c
+compressed: $(ROMC)
 ifeq ($(COMPARE),1)
-	@md5sum $(ROM)
+	@md5sum $(ROMC)
 	@md5sum -c checksum.md5
 endif
 
-all: $(UNCOMPRESSED_ROM) $(ROM) ;
+.PHONY: all uncompressed compressed clean assetclean distclean disasm init setup
+.DEFAULT_GOAL := uncompressed
+all: compressed
 
-build/code.elf: $(O_FILES) build/linker_scripts/code_script.ld undef.txt build/linker_scripts/object_script.ld build/dmadata_script.ld
-	$(LD) -T build/linker_scripts/code_script.ld -T undef.txt -T build/linker_scripts/object_script.ld -T build/dmadata_script.ld --no-check-sections --accept-unknown-input-arch -Map build/mm.map -N -o $@
+$(ROM): $(ELF)
+	$(ELF2ROM) -cic 6105 $< $@
 
-build/code_pre_dmadata.elf: $(O_FILES) build/linker_scripts/code_script.ld undef.txt build/linker_scripts/object_script.ld
-	$(LD) -r -T build/linker_scripts/code_script.ld -T undef.txt -T build/linker_scripts/object_script.ld --no-check-sections --accept-unknown-input-arch -N -o $@
+$(ROMC): uncompressed
+	python3 tools/z64compress_wrapper.py --mb 32 --matching --threads $(N_THREADS) $(ROM) $@ $(ELF) build/$(SPEC)
 
-build/dmadata_script.txt: tables/dmadata_table.txt build/code_pre_dmadata.elf
-	./tools/dmadata.py ./tables/dmadata_table.txt /dev/null -u -l $@ -e build/code_pre_dmadata.elf
-
-build/dmadata: $(ROM_FILES:build/dmadata=)
-	./tools/dmadata.py ./tables/dmadata_table.txt $@
-
-build/uncompressed_dmadata: $(UNCOMPRESSED_ROM_FILES:build/uncompressed_dmadata=)
-	./tools/dmadata.py ./tables/dmadata_table.txt $@ -u
-
-build/binary/boot build/binary/code: build/code.elf
-	$(OBJCOPY) --dump-section $(notdir $@)=$@ $< /dev/null
-
-build/binary/assets/scenes/%: build/code.elf
-	$(OBJCOPY) --dump-section $*=$@ $< /dev/null
-
-build/binary/overlays/%: build/code.elf
-	$(OBJCOPY) --dump-section $*=$@ $< /dev/null
-
-
-#### ASM rules ####
-
-# Use an empty sentinel file (dep) to track the directory as a dependency, and
-# emulate GNU Make's order-only dependency.
-# The `touch $@; action || rm $@` pattern ensures that the `dep` file is older
-# than the output files from `action`, and only exists if `action` succeeds.
-asm/non_matchings/%/dep: asm/%.asm
-	@mkdir -p $(dir $@)
-	@touch $@
-	./tools/split_asm.py $< asm/non_matchings/$* || rm $@
-
-asm/%.asm: asm/disasm.dep ;
-
-asm/disasm.dep: tables/files.txt tables/functions.txt tables/objects.txt tables/variables.txt tables/vrom_variables.txt
-	@mkdir -p asm
-	@touch $@
-	./tools/disasm.py -d ./asm -l ./tables/files.txt -f ./tables/functions.txt -o ./tables/objects.txt -v ./tables/variables.txt -v ./tables/vrom_variables.txt || rm $@
+$(ELF): $(TEXTURE_FILES_OUT) $(OVERLAY_RELOC_FILES) $(O_FILES) build/ldscript.txt build/undefined_syms.txt
+	$(LD) -T build/undefined_syms.txt -T build/ldscript.txt --no-check-sections --accept-unknown-input-arch --emit-relocs -Map build/mm.map -o $@
 
 
 #### Main commands ####
 
 ## Cleaning ##
 clean:
-	$(RM) -rf $(ROM) $(UNCOMPRESSED_ROM) build
+	$(RM) -rf $(ROMC) $(ROM) $(ELF) build
 
 assetclean:
 	$(RM) -rf $(ASSET_BIN_DIRS)
 	$(RM) -rf build/assets
+	$(RM) -rf .extracted-assets.json
 
 distclean: assetclean clean
-	$(RM) -rf baserom/ asm/ expected/
+	$(RM) -rf asm baserom data
 	$(MAKE) -C tools clean
 
 ## Extraction step
 setup:
 	$(MAKE) -C tools
-	./tools/extract_rom.py $(MM_BASEROM)
-	python3 extract_assets.py
+	python3 tools/fixbaserom.py
+	python3 tools/extract_baserom.py
+	python3 extract_assets.py -t $(N_THREADS)
 
 ## Assembly generation
-assembly: $(S_FILES)
-	@echo "Assembly generated."
+disasm:
+	$(RM) -rf asm data
+	python3 tools/disasm/disasm.py
 
 diff-init: all
 	$(RM) -rf expected/
 	mkdir -p expected/
 	cp -r build expected/build
-	cp $(UNCOMPRESSED_ROM) expected/$(UNCOMPRESSED_ROM)
-	cp $(ROM) expected/$(ROM)
 
 init:
 	$(MAKE) distclean
 	$(MAKE) setup
-	$(MAKE) assembly
+	$(MAKE) disasm
 	$(MAKE) all
 	$(MAKE) diff-init
-
-# Recipes
-
-build/baserom:
-	cp -r baserom/ build/baserom/
-
-# FIXME: The process of splitting rodata changes the assembly files, so we must avoid making .o files for them until that is done.
-# The simplest way to do that is to give them an order dependency on .c files' .o files
-build/asm/%.o: asm/%.asm | $(C_O_FILES)
-	iconv --from UTF-8 --to EUC-JP $^ | $(AS) $(ASFLAGS) -o $@
-
-build/src/overlays/%.o: src/overlays/%.c
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	./tools/overlay.py $@ build/src/overlays/$*_overlay.s
-	$(AS) $(ASFLAGS) build/src/overlays/$*_overlay.s -o build/src/overlays/$*_overlay.o
-
-build/%.o: %.c
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 
 build/assets/%.o: assets/%.c
 	$(CC) -I build/ -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 
+#### Various Recipes ####
+
+build/undefined_syms.txt: undefined_syms.txt
+	$(CPP) $(CPPFLAGS) $< > build/undefined_syms.txt
+
+build/ldscript.txt: $(SPEC)
+	$(CPP) $(CPPFLAGS) $< > build/spec
+	$(MKLDSCRIPT) build/spec $@
+
+build/baserom/%.o: baserom/%
+	$(OBJCOPY) -I binary -O elf32-big $< $@
+
+build/asm/%.o: asm/%.s
+	$(AS) $(ASFLAGS) $< -o $@
+
+build/data/%.o: data/%.s
+	iconv --from UTF-8 --to EUC-JP $< | $(AS) $(ASFLAGS) -o $@
+
+build/src/overlays/%.o: src/overlays/%.c
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
+	$(CC_CHECK) $<
+	@$(OBJDUMP) -d $@ > $(@:.o=.s)
+# TODO: `() || true` is currently necessary to suppress `Error 1 (ignored)` make warnings caused by `test`, but this will go away if 
+# 	the following is moved to a separate rule that is only run once when all the required objects have been compiled. 
+	$(ZAPD) bovl -eh -i $@ -cfg $< --outputpath $(@D)/$(notdir $(@D))_reloc.s
+	(test -f $(@D)/$(notdir $(@D))_reloc.s && $(AS) $(ASFLAGS) $(@D)/$(notdir $(@D))_reloc.s -o $(@D)/$(notdir $(@D))_reloc.o) || true
+
+build/src/%.o: src/%.c
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
+	$(CC_CHECK) $<
+	@$(OBJDUMP) -d $@ > $(@:.o=.s)
+
 build/src/libultra/libc/ll.o: src/libultra/libc/ll.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	@./tools/set_o32abi_bit.py $@
+	$(CC_CHECK) $<
+	python3 tools/set_o32abi_bit.py $@
+	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 
 build/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	@./tools/set_o32abi_bit.py $@
+	$(CC_CHECK) $<
+	python3 tools/set_o32abi_bit.py $@
+	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 
-build/comp/%.yaz0: build/binary/%
-	./tools/yaz0 $< $@
-
-build/comp/assets/audio/%.yaz0: build/baserom/assets/audio/%
-	./tools/yaz0 $< $@
-
-build/comp/assets/misc/%.yaz0: build/baserom/assets/misc/%
-	./tools/yaz0 $< $@
-
-build/comp/assets/objects/%.yaz0: build/baserom/assets/objects/%
-	./tools/yaz0 $< $@
-
-build/comp/assets/textures/%.yaz0: build/baserom/assets/textures/%
-	./tools/yaz0 $< $@
-
-build/%.d: %.c
-	./tools/depend.py $< $@
-
-build/dmadata_script.ld: build/dmadata_script.txt
-	$(GCC) -E -CC -x c -Iinclude $< | grep -v '^#' > $@
-
-build/linker_scripts/%.ld: linker_scripts/%.txt
-	$(GCC) -E -CC -x c -Iinclude $< | grep -v '^#' > $@
-
-build/assets/%.d: assets/%.c
-	$(GCC) $< -Iinclude -I./ -MM -MT 'build/assets/$*.o' > $@
-
-## Build C files from assets
-
+# Build C files from assets
 build/%.inc.c: %.png
 	$(ZAPD) btex -eh -tt $(lastword ,$(subst ., ,$(basename $<))) -i $< -o $@
 
@@ -304,9 +291,4 @@ build/assets/%.bin.inc.c: assets/%.bin
 build/assets/%.jpg.inc.c: assets/%.jpg
 	$(ZAPD) bren -eh -i $< -o $@
 
-# Checks headers dependencies of each C file
-ifneq ($(MAKECMDGOALS), clean)
-ifneq ($(MAKECMDGOALS), distclean)
--include $(C_FILES:%.c=build/%.d)
-endif
-endif
+-include $(DEP_FILES)

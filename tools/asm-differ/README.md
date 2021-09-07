@@ -7,11 +7,11 @@ Nice differ for assembly code (MIPS and AArch64; should be easy to hack to suppo
 ## Dependencies
 
 - Python >= 3.6
-- `python3 -m pip install --user colorama ansiwrap watchdog python-Levenshtein`
+- `python3 -m pip install --user colorama watchdog python-Levenshtein` (also `dataclasses` if on 3.6)
 
 ## Usage
 
-Create a file `diff-settings.sh` in some directory (see the one in this repo for an example). Then from that directory, run
+Create a file `diff_settings.sh` in some directory (see the one in this repo for an example). Then from that directory, run
 
 ```
 /path/to/diff.sh [flags] (function|rom addr)

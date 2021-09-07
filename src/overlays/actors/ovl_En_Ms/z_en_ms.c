@@ -22,14 +22,12 @@ const ActorInit En_Ms_InitVars = {
     (ActorFunc)EnMs_Draw,
 };
 
-
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80952BA0 = {
-    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_HIT_PLAYER, COLSHAPE_JNTSPH, },
+// static ColliderCylinderInitType1 sCylinderInit = {
+static ColliderCylinderInitType1 D_80952BA0 = {
+    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
     { 22, 37, 0, { 0, 0, 0 } },
 };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80952BCC[] = {
@@ -37,23 +35,25 @@ static InitChainEntry D_80952BCC[] = {
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80952BA0;
 extern InitChainEntry D_80952BCC[];
-#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ms_0x80952620/EnMs_Init.asm")
+extern UNK_TYPE D_060005EC;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ms_0x80952620/EnMs_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ms/EnMs_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ms_0x80952620/func_80952734.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ms/EnMs_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ms_0x80952620/func_809527F8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ms/func_80952734.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ms_0x80952620/func_809529AC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ms/func_809527F8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ms_0x80952620/func_80952A1C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ms/func_809529AC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ms_0x80952620/EnMs_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ms/func_80952A1C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Ms_0x80952620/EnMs_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ms/EnMs_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ms/EnMs_Draw.s")

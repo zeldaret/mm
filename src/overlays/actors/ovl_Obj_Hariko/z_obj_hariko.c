@@ -9,6 +9,9 @@ void ObjHariko_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjHariko_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjHariko_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B66A90(ObjHariko* this, GlobalContext* globalCtx);
+void func_80B66AC4(ObjHariko* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Hariko_InitVars = {
     ACTOR_OBJ_HARIKO,
@@ -24,20 +27,22 @@ const ActorInit Obj_Hariko_InitVars = {
 
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Hariko_0x80B66A20/ObjHariko_Init.asm")
+extern UNK_TYPE D_06000080;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Hariko_0x80B66A20/ObjHariko_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hariko/ObjHariko_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Hariko_0x80B66A20/func_80B66A7C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hariko/ObjHariko_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Hariko_0x80B66A20/func_80B66A90.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hariko/func_80B66A7C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Hariko_0x80B66A20/func_80B66AA0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hariko/func_80B66A90.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Hariko_0x80B66A20/func_80B66AC4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hariko/func_80B66AA0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Hariko_0x80B66A20/func_80B66B78.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hariko/func_80B66AC4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Hariko_0x80B66A20/ObjHariko_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hariko/func_80B66B78.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Hariko_0x80B66A20/ObjHariko_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hariko/ObjHariko_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hariko/ObjHariko_Draw.s")

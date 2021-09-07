@@ -1,28 +1,35 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
-u64 osClockRate = 0x0000000003B9ACA0;
-s32 osViClock = 0x02E6D354;
+#define COLD_RESET 0
+
+typedef struct {
+    /* 0x0 */ u32 ins_00; // lui     k0, 0x8000
+    /* 0x4 */ u32 ins_04; // addiu   k0, k0, 0x39e0
+    /* 0x8 */ u32 ins_08; // jr      k0 ; __osException
+    /* 0xC */ u32 ins_0C; // nop
+} struct_exceptionPreamble;
+
+u64 osClockRate = OS_CLOCK_RATE;
+s32 osViClock = VI_NTSC_CLOCK;
 UNK_TYPE4 __osShutdown = 0;
 UNK_TYPE4 __OSGlobalIntMask = 0x003FFF01;
 
-void func_8008A660(void) {
-    D_8009D130.type = 7;
-    D_8009D130.latency = *(u32*)0xA4600014;
-    D_8009D130.pageSize = *(u32*)0xA4600018;
-    D_8009D130.relDuration = *(u32*)0xA460001C;
-    D_8009D130.pulse = *(u32*)0xA4600020;
-    D_8009D1A8.type = 7;
-    D_8009D1A8.latency = *(u32*)0xA4600024;
-    D_8009D1A8.pageSize = *(u32*)0xA4600028;
-    D_8009D1A8.relDuration = *(u32*)0xA460002C;
-    D_8009D1A8.pulse = *(u32*)0xA4600030;
+UNK_TYPE4 D_8009CF70;
+
+void __createSpeedParam(void) {
+    D_8009D130.type = DEVICE_TYPE_INIT;
+    D_8009D130.latency = HW_REG(PI_BSD_DOM1_LAT_REG, u32);
+    D_8009D130.pulse = HW_REG(PI_BSD_DOM1_PWD_REG, u32);
+    D_8009D130.pageSize = HW_REG(PI_BSD_DOM1_PGS_REG, u32);
+    D_8009D130.relDuration = HW_REG(PI_BSD_DOM1_RLS_REG, u32);
+
+    D_8009D1A8.type = DEVICE_TYPE_INIT;
+    D_8009D1A8.latency = HW_REG(PI_BSD_DOM2_LAT_REG, u32);
+    D_8009D1A8.pulse = HW_REG(PI_BSD_DOM2_PWD_REG, u32);
+    D_8009D1A8.pageSize = HW_REG(PI_BSD_DOM2_PGS_REG, u32);
+    D_8009D1A8.relDuration = HW_REG(PI_BSD_DOM2_RLS_REG, u32);
 }
 
-u64 D_80097E50; // this has to be defined in this file for func_8008A6FC to match
-
-// TODO regalloc is messed up here
-// TODO When asm-processor supports -O1, use it here
 void osInitialize(void) {
     u32 pifdata;
 
@@ -32,47 +39,48 @@ void osInitialize(void) {
     __osSetFpcCsr(0x01000800);
     __osSetWatchLo(0x04900000);
 
-    while (__osSiRawReadIo(0x1FC007FC, &pifdata) != 0) {
+    while (__osSiRawReadIo(0x1FC007FC, &pifdata)) {
         ;
     }
-    while (__osSiRawWriteIo(0x1FC007FC, pifdata | 8) != 0) {
+    while (__osSiRawWriteIo(0x1FC007FC, pifdata | 8)) {
         ;
     }
 
-    *(__osExceptionVector*)0x80000000 = *((__osExceptionVector*)__osExceptionPreamble);
-    *(__osExceptionVector*)0x80000080 = *((__osExceptionVector*)__osExceptionPreamble);
-    *(__osExceptionVector*)0x80000100 = *((__osExceptionVector*)__osExceptionPreamble);
-    *(__osExceptionVector*)0x80000180 = *((__osExceptionVector*)__osExceptionPreamble);
+    *(struct_exceptionPreamble*)0x80000000 = *((struct_exceptionPreamble*)__osExceptionPreamble);
+    *(struct_exceptionPreamble*)0x80000080 = *((struct_exceptionPreamble*)__osExceptionPreamble);
+    *(struct_exceptionPreamble*)0x80000100 = *((struct_exceptionPreamble*)__osExceptionPreamble);
+    *(struct_exceptionPreamble*)0x80000180 = *((struct_exceptionPreamble*)__osExceptionPreamble);
 
-    osWritebackDCache((void*)0x80000000, 400);
-    osInvalICache((void*)0x80000000, 400);
-    func_8008A660();
+    osWritebackDCache(0x80000000, 400);
+    osInvalICache(0x80000000, 400);
+    __createSpeedParam();
     osUnmapTLBAll();
     osMapTLBRdb();
-    D_80097E50 = (D_80097E50 * 3) / 4;
 
-    if (osResetType == 0) {
-        _blkclr((u8*)&osAppNmiBuffer, 64);
+    osClockRate = (u64)((osClockRate * 3ll) / 4ull);
+
+    if (osResetType == COLD_RESET) {
+        bzero(osAppNmiBuffer, 64);
     }
 
-    if (osTvType == 0) {
-        osViClock = 0x02F5B2D2;
-    } else if (osTvType == 2) {
-        osViClock = 0x02E6025C;
+    if (osTvType == OS_TV_PAL) {
+        osViClock = VI_PAL_CLOCK;
+    } else if (osTvType == OS_TV_MPAL) {
+        osViClock = VI_MPAL_CLOCK;
     } else {
-        osViClock = 0x02E6D354;
+        osViClock = VI_NTSC_CLOCK;
     }
 
-    if ((__osGetCause() & 0x1000) != 0) {
+    if (__osGetCause() & 0x1000) {
         while (1) {
             ;
         }
     }
 
-    *(u32*)0xA4500008 = 1;
-    *(u32*)0xA4500010 = 16383;
-    *(u32*)0xA4500014 = 15;
+    HW_REG(AI_CONTROL_REG, u32) = 1;
+    HW_REG(AI_DACRATE_REG, u32) = 0x3FFF;
+    HW_REG(AI_BITRATE_REG, u32) = 0xF;
 }
 
-void func_8008A9A8(void) {
+void __osInitialize_autodetect(void) {
 }

@@ -1,7 +1,7 @@
 #ifndef Z_EN_ZL1_H
 #define Z_EN_ZL1_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnZl1;
 

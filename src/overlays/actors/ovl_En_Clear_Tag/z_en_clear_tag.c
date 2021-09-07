@@ -30,17 +30,6 @@ const ActorInit En_Clear_Tag_InitVars = {
     (ActorFunc)EnClearTag_Draw,
 };
 
-extern Gfx D_04030100[]; // Floor shockwave ring
-extern Gfx D_040378F0[]; // gExplosionSplashTex1
-extern Gfx D_04037DF0[]; // gExplosionSplashTex2
-extern Gfx D_040382F0[]; // gExplosionSplashTex3
-extern Gfx D_040387F0[]; // gExplosionSplashTex4
-extern Gfx D_04038CF0[]; // gExplosionSplashTex5
-extern Gfx D_040391F0[]; // gExplosionSplashTex6
-extern Gfx D_040396F0[]; // gExplosionSplashTex7
-extern Gfx D_04039BF0[]; // gExplosionSplashTex8
-extern Gfx D_0403A0F0[]; // gExplosionSplashDL
-
 static Vec3f sZeroVector = { 0.0f, 0.0f, 0.0f };
 
 static Vec3f sLightRayEnvColor[] = {
@@ -582,7 +571,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
     }
 
     if (this->camId != 0) {
-        func_8016970C(globalCtx, this->camId, &this->at, &this->eye);
+        Play_CameraSetAtEye(globalCtx, this->camId, &this->at, &this->eye);
     }
 }
 

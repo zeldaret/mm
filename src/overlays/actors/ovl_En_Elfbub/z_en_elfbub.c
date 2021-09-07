@@ -22,7 +22,6 @@ const ActorInit En_Elfbub_InitVars = {
     (ActorFunc)EnElfbub_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80ACE270 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,18 +29,20 @@ static ColliderCylinderInit D_80ACE270 = {
     { 16, 32, 0, { 0, 0, 0 } },
 };
 
-
-extern ColliderCylinderInit D_80ACE270;
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Elfbub_0x80ACDCD0/EnElfbub_Init.asm")
+extern ColliderCylinderInit D_80ACE270;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Elfbub_0x80ACDCD0/EnElfbub_Destroy.asm")
+extern UNK_TYPE D_06001000;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Elfbub_0x80ACDCD0/func_80ACDE60.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elfbub/EnElfbub_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Elfbub_0x80ACDCD0/func_80ACE030.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elfbub/EnElfbub_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Elfbub_0x80ACDCD0/EnElfbub_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elfbub/func_80ACDE60.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Elfbub_0x80ACDCD0/EnElfbub_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elfbub/func_80ACE030.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elfbub/EnElfbub_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elfbub/EnElfbub_Draw.s")

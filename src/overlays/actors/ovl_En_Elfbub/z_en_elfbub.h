@@ -1,13 +1,16 @@
 #ifndef Z_EN_ELFBUB_H
 #define Z_EN_ELFBUB_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnElfbub;
 
+typedef void (*EnElfbubActionFunc)(struct EnElfbub*, GlobalContext*);
+
 typedef struct EnElfbub {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x60];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x5C];
+    /* 0x01A0 */ EnElfbubActionFunc actionFunc;
 } EnElfbub; // size = 0x1A4
 
 extern const ActorInit En_Elfbub_InitVars;

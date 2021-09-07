@@ -22,7 +22,6 @@ const ActorInit Obj_Y2lift_InitVars = {
     (ActorFunc)ObjY2lift_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B9A940[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
@@ -31,14 +30,17 @@ static InitChainEntry D_80B9A940[] = {
     ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_STOP),
 };
 
-
-extern InitChainEntry D_80B9A940[];
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Y2lift_0x80B9A650/ObjY2lift_Init.asm")
+extern InitChainEntry D_80B9A940[];
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Y2lift_0x80B9A650/ObjY2lift_Destroy.asm")
+extern UNK_TYPE D_06001680;
+extern UNK_TYPE D_060019B0;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Y2lift_0x80B9A650/ObjY2lift_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Y2lift/ObjY2lift_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Y2lift_0x80B9A650/ObjY2lift_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Y2lift/ObjY2lift_Destroy.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Y2lift/ObjY2lift_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Y2lift/ObjY2lift_Draw.s")

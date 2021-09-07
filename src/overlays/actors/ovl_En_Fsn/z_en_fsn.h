@@ -1,7 +1,7 @@
 #ifndef Z_EN_FSN_H
 #define Z_EN_FSN_H
 
-#include <global.h>
+#include "global.h"
 #include "overlays/actors/ovl_En_GirlA/z_en_girla.h"
 
 #define ENFSN_IS_BACKROOM(thisx) ((thisx)->params & 1)
@@ -51,13 +51,8 @@ typedef struct EnFsn {
     /* 0x39C */ s16 delayTimer;
     /* 0x3A0 */ s32 stickAccumX;
     /* 0x3A4 */ s32 stickAccumY;
-    /* 0x3A8 */ f32 cursorX;
-    /* 0x3AC */ f32 cursorY;
-    /* 0x3B0 */ f32 cursorZ;
-    /* 0x3B4 */ s32 cursorColorR;
-    /* 0x3B8 */ s32 cursorColorG;
-    /* 0x3BC */ s32 cursorColorB;
-    /* 0x3C0 */ s32 cursorColorA;
+    /* 0x3A8 */ Vec3f cursorPos;
+    /* 0x3B4 */ Color_RGBAu32 cursorColor;
     /* 0x3C4 */ f32 cursorAnimTween;
     /* 0x3C8 */ u8 cursorAnimState;
     /* 0x3C9 */ u8 drawCursor;

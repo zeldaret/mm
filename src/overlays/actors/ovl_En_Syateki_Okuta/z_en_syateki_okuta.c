@@ -9,6 +9,13 @@ void EnSyatekiOkuta_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiOkuta_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiOkuta_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A362A8(EnSyatekiOkuta* this, GlobalContext* globalCtx);
+void func_80A36350(EnSyatekiOkuta* this, GlobalContext* globalCtx);
+void func_80A363B4(EnSyatekiOkuta* this, GlobalContext* globalCtx);
+void func_80A36488(EnSyatekiOkuta* this, GlobalContext* globalCtx);
+void func_80A36504(EnSyatekiOkuta* this, GlobalContext* globalCtx);
+void func_80A365EC(EnSyatekiOkuta* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Syateki_Okuta_InitVars = {
     ACTOR_EN_SYATEKI_OKUTA,
@@ -22,7 +29,6 @@ const ActorInit En_Syateki_Okuta_InitVars = {
     (ActorFunc)EnSyatekiOkuta_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A37570 = {
     { COLTYPE_HIT3, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,64 +36,65 @@ static ColliderCylinderInit D_80A37570 = {
     { 20, 40, -30, { 0, 0, 0 } },
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80A37B88[] = {
     ICHAIN_S8(hintId, 66, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 6500, ICHAIN_STOP),
 };
 
+#endif
 
 extern ColliderCylinderInit D_80A37570;
 extern InitChainEntry D_80A37B88[];
-#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Okuta_0x80A35FF0/EnSyatekiOkuta_Init.asm")
+extern UNK_TYPE D_0600466C;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Okuta_0x80A35FF0/EnSyatekiOkuta_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/EnSyatekiOkuta_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Okuta_0x80A35FF0/func_80A36148.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/EnSyatekiOkuta_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Okuta_0x80A35FF0/func_80A361B0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A36148.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Okuta_0x80A35FF0/func_80A361F4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A361B0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Okuta_0x80A35FF0/func_80A36260.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A361F4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Okuta_0x80A35FF0/func_80A362A8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A36260.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Okuta_0x80A35FF0/func_80A362F8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A362A8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Okuta_0x80A35FF0/func_80A36350.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A362F8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Okuta_0x80A35FF0/func_80A36360.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A36350.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Okuta_0x80A35FF0/func_80A363B4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A36360.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Okuta_0x80A35FF0/func_80A36444.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A363B4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Okuta_0x80A35FF0/func_80A36488.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A36444.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Okuta_0x80A35FF0/func_80A364C0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A36488.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Okuta_0x80A35FF0/func_80A36504.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A364C0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Okuta_0x80A35FF0/func_80A3657C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A36504.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Okuta_0x80A35FF0/func_80A365EC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A3657C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Okuta_0x80A35FF0/func_80A368E0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A365EC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Okuta_0x80A35FF0/func_80A36A90.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A368E0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Okuta_0x80A35FF0/func_80A36AF8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A36A90.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Okuta_0x80A35FF0/EnSyatekiOkuta_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A36AF8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Okuta_0x80A35FF0/func_80A36CB0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/EnSyatekiOkuta_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Okuta_0x80A35FF0/func_80A370EC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A36CB0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Okuta_0x80A35FF0/func_80A37294.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A370EC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Syateki_Okuta_0x80A35FF0/EnSyatekiOkuta_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A37294.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/EnSyatekiOkuta_Draw.s")

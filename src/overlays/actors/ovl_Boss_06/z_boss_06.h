@@ -1,13 +1,17 @@
 #ifndef Z_BOSS_06_H
 #define Z_BOSS_06_H
 
-#include <global.h>
+#include "global.h"
 
 struct Boss06;
 
+typedef void (*Boss06ActionFunc)(struct Boss06*, GlobalContext*);
+
 typedef struct Boss06 {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x8EC];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0x54];
+    /* 0x0198 */ Boss06ActionFunc actionFunc;
+    /* 0x019C */ char unk_19C[0x894];
 } Boss06; // size = 0xA30
 
 extern const ActorInit Boss_06_InitVars;

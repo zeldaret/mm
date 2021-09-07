@@ -506,8 +506,8 @@ void EnFirefly_FlyAway(EnFirefly* this, GlobalContext* globalCtx) {
         this->timer--;
     }
 
-    if ((fabsf(this->actor.world.pos.y - this->maxAltitude) < 10.0f) &&
-            (Math_Vec3f_DistXZ(&this->actor.world.pos, &this->actor.home.pos) < 20.0f) ||
+    if (((fabsf(this->actor.world.pos.y - this->maxAltitude) < 10.0f) &&
+         (Math_Vec3f_DistXZ(&this->actor.world.pos, &this->actor.home.pos) < 20.0f)) ||
         (this->timer == 0)) {
         EnFirefly_SetupFlyIdle(this);
         return;
@@ -645,7 +645,7 @@ void EnFirefly_UpdateDamage(EnFirefly* this, GlobalContext* globalCtx) {
             this->unk_2E8.y = 0.55f;
             EnFirefly_SetupStunned(this);
         } else {
-            func_800BBA88(globalCtx, &this->actor);
+            Enemy_StartFinishingBlow(globalCtx, &this->actor);
             this->actor.colChkInfo.health = 0;
             this->actor.flags &= ~1;
 

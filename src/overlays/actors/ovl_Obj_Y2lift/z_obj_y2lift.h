@@ -1,7 +1,7 @@
 #ifndef Z_OBJ_Y2LIFT_H
 #define Z_OBJ_Y2LIFT_H
 
-#include <global.h>
+#include "global.h"
 
 struct ObjY2lift;
 

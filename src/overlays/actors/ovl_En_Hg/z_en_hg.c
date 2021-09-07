@@ -30,16 +30,16 @@ void func_80BCF95C(EnHg* this, GlobalContext* globalCtx);
 s32 EnHg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 void EnHg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
-extern FlexSkeletonHeader D_06008580;
-extern AnimationHeader D_0600260C;
-extern AnimationHeader D_06009D44;
-extern AnimationHeader D_0600A164;
 extern AnimationHeader D_06000370;
 extern AnimationHeader D_06001138;
 extern AnimationHeader D_060015D4;
 extern AnimationHeader D_06001960;
-extern AnimationHeader D_0600AE1C;
+extern AnimationHeader D_0600260C;
 extern Gfx D_06005E28[];
+extern FlexSkeletonHeader D_06008580;
+extern AnimationHeader D_06009D44;
+extern AnimationHeader D_0600A164;
+extern AnimationHeader D_0600AE1C;
 
 const ActorInit En_Hg_InitVars = {
     ACTOR_EN_HG,
@@ -184,7 +184,7 @@ void func_80BCF4AC(EnHg* this, GlobalContext* globalCtx) {
     this->actor.speedXZ = 1.6f;
     if (!(player->stateFlags2 & 0x08000000) && !func_80152498(&globalCtx->msgCtx)) {
         if (((this->skelAnime.animCurrentFrame > 9.0f) && (this->skelAnime.animCurrentFrame < 16.0f)) ||
-            (this->skelAnime.animCurrentFrame > 44.0f) && (this->skelAnime.animCurrentFrame < 51.0f)) {
+            ((this->skelAnime.animCurrentFrame > 44.0f) && (this->skelAnime.animCurrentFrame < 51.0f))) {
             Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
             Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x3E8, 0x14);
             this->actor.world.rot.y = this->actor.shape.rot.y;

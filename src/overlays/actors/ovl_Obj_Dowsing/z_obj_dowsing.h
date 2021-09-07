@@ -1,7 +1,7 @@
 #ifndef Z_OBJ_DOWSING_H
 #define Z_OBJ_DOWSING_H
 
-#include <global.h>
+#include "global.h"
 
 struct ObjDowsing;
 

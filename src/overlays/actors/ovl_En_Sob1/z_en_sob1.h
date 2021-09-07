@@ -1,7 +1,7 @@
 #ifndef Z_EN_SOB1_H
 #define Z_EN_SOB1_H
 
-#include <global.h>
+#include "global.h"
 #include "overlays/actors/ovl_En_GirlA/z_en_girla.h"
 
 struct EnSob1;
@@ -40,13 +40,8 @@ typedef struct EnSob1 {
     /* 0x2EC */ EnGirlA* items[3]; // Items on shelf are indexed as: /* 2 1 0 */
     /* 0x2F8 */ s32 stickAccumX;
     /* 0x2FC */ s32 stickAccumY;
-    /* 0x300 */ f32 cursorX;
-    /* 0x304 */ f32 cursorY;
-    /* 0x308 */ f32 cursorZ;
-    /* 0x30C */ s32 cursorColorR;
-    /* 0x310 */ s32 cursorColorG;
-    /* 0x314 */ s32 cursorColorB;
-    /* 0x318 */ s32 cursorColorA;
+    /* 0x300 */ Vec3f cursorPos;
+    /* 0x30C */ Color_RGBAu32 cursorColor;
     /* 0x31C */ f32 cursorAnimTween;
     /* 0x320 */ u8 cursorAnimState;
     /* 0x321 */ u8 drawCursor;

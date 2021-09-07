@@ -1,7 +1,7 @@
 #ifndef Z_EN_OSSAN_H
 #define Z_EN_OSSAN_H
 
-#include <global.h>
+#include "global.h"
 
 #include "overlays/actors/ovl_En_GirlA/z_en_girla.h"
 
@@ -26,13 +26,8 @@ typedef struct EnOssan {
     /* 0x20C */ s32 stickAccumY;
     /* 0x210 */ u8 moveHorizontal;
     /* 0x211 */ u8 moveVertical;
-    /* 0x214 */ f32 cursorX;
-    /* 0x218 */ f32 cursorY;
-    /* 0x21C */ f32 cursorZ;
-    /* 0x220 */ u32 cursorColorR;
-    /* 0x224 */ u32 cursorColorG;
-    /* 0x228 */ u32 cursorColorB;
-    /* 0x22C */ u32 cursorColorA;
+    /* 0x214 */ Vec3f cursorPos;
+    /* 0x220 */ Color_RGBAu32 cursorColor;
     /* 0x230 */ f32 cursorAnimTween;
     /* 0x234 */ u8 cursorAnimState;
     /* 0x235 */ u8 drawCursor;

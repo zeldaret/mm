@@ -38,12 +38,12 @@ void func_80BADF3C(EnSuttari* this, GlobalContext* globalCtx);
 
 extern FlexSkeletonHeader D_0600C240;
 extern AnimationHeader D_0600071C;
-extern AnimationHeader D_060128F4;
-extern AnimationHeader D_06011F84;
-extern AnimationHeader D_06012E84;
-extern AnimationHeader D_0601139C;
-extern AnimationHeader D_06011C38;
 extern AnimationHeader D_06010BDC;
+extern AnimationHeader D_0601139C;
+extern AnimationHeader D_06011F84;
+extern AnimationHeader D_06011C38;
+extern AnimationHeader D_060128F4;
+extern AnimationHeader D_06012E84;
 extern Gfx D_0600AF90[];
 extern Gfx D_06013380[];
 
@@ -154,7 +154,7 @@ void EnSuttari_UpdateCollider(EnSuttari* this, GlobalContext* globalCtx) {
             if (this->actor.colChkInfo.damageEffect == 0xF) {
                 this->flags1 |= 0x100;
                 this->flags1 &= ~0x40;
-                func_800BBA88(globalCtx, &this->actor);
+                Enemy_StartFinishingBlow(globalCtx, &this->actor);
             } else if (this->actor.colChkInfo.damageEffect == 0xE) {
                 this->flags1 |= 0x200;
                 this->flags1 &= ~0x40;
@@ -202,7 +202,8 @@ void EnSuttari_UpdateTime(void) {
 
 s32 func_80BAA904(EnSuttari* this, GlobalContext* globalCtx) {
     Vec3f sp2C;
-    Vec3s sp24;
+    s32 pad;
+    s32 sp24;
 
     sp2C.x = (Math_SinS(this->actor.world.rot.y) * 50.0f) + this->actor.world.pos.x;
     sp2C.y = this->actor.world.pos.y + 100.0f;
@@ -1195,7 +1196,7 @@ void func_80BAD380(EnSuttari* this, GlobalContext* globalCtx) {
             this->actor.speedXZ = 0.0f;
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
                         this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_SMALL_EXPLOSION);
-            func_800F0568(globalCtx, &this->actor.world.pos, 30, NA_SE_IT_BOMB_EXPLOSION);
+            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 30, NA_SE_IT_BOMB_EXPLOSION);
             Actor_MarkForDeath(&this->actor);
             return;
         }

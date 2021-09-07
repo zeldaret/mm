@@ -22,7 +22,6 @@ const ActorInit En_Tsn_InitVars = {
     (ActorFunc)EnTsn_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80AE1190 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_ENEMY, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -30,48 +29,51 @@ static ColliderCylinderInit D_80AE1190 = {
     { 30, 40, 0, { 0, 0, 0 } },
 };
 
-
-extern ColliderCylinderInit D_80AE1190;
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tsn_0x80ADFCA0/func_80ADFCA0.asm")
+extern ColliderCylinderInit D_80AE1190;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tsn_0x80ADFCA0/func_80ADFCEC.asm")
+extern UNK_TYPE D_06001198;
+extern UNK_TYPE D_060092FC;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tsn_0x80ADFCA0/EnTsn_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tsn/func_80ADFCA0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tsn_0x80ADFCA0/EnTsn_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tsn/func_80ADFCEC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tsn_0x80ADFCA0/func_80ADFF84.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tsn/EnTsn_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tsn_0x80ADFCA0/func_80AE0010.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tsn/EnTsn_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tsn_0x80ADFCA0/func_80AE0304.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tsn/func_80ADFF84.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tsn_0x80ADFCA0/func_80AE0418.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tsn/func_80AE0010.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tsn_0x80ADFCA0/func_80AE0460.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tsn/func_80AE0304.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tsn_0x80ADFCA0/func_80AE04C4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tsn/func_80AE0418.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tsn_0x80ADFCA0/func_80AE04FC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tsn/func_80AE0460.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tsn_0x80ADFCA0/func_80AE0698.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tsn/func_80AE04C4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tsn_0x80ADFCA0/func_80AE0704.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tsn/func_80AE04FC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tsn_0x80ADFCA0/func_80AE0C88.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tsn/func_80AE0698.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tsn_0x80ADFCA0/func_80AE0D10.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tsn/func_80AE0704.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tsn_0x80ADFCA0/func_80AE0D78.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tsn/func_80AE0C88.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tsn_0x80ADFCA0/EnTsn_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tsn/func_80AE0D10.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tsn_0x80ADFCA0/func_80AE0F84.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tsn/func_80AE0D78.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tsn_0x80ADFCA0/func_80AE0FA8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tsn/EnTsn_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tsn_0x80ADFCA0/func_80AE1024.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tsn/func_80AE0F84.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tsn_0x80ADFCA0/EnTsn_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tsn/func_80AE0FA8.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tsn/func_80AE1024.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tsn/EnTsn_Draw.s")

@@ -1,40 +1,40 @@
 #ifndef _Z64_H_
 #define _Z64_H_
 
-#include <stdarg.h>
-#include <stdbool.h>
-#include <stdint.h>
+#include "stdarg.h"
+#include "stdbool.h"
+#include "stdint.h"
 
-#include <PR/ultratypes.h>
-#include <PR/gbi.h>
-#include <PR/sched.h>
-#include <io/controller.h>
-#include <osint.h>
-#include <viint.h>
-#include <math.h>
-#include <os.h>
-#include <stdlib.h>
-#include <xstdio.h>
-#include <unk.h>
+#include "PR/ultratypes.h"
+#include "PR/gbi.h"
+#include "io/controller.h"
+#include "osint.h"
+#include "viint.h"
+#include "math.h"
+#include "os.h"
+#include "stdlib.h"
+#include "xstdio.h"
+#include "unk.h"
 
-#include <sfx.h>
-#include <color.h>
-#include <ichain.h>
+#include "sfx.h"
+#include "color.h"
+#include "ichain.h"
 
-#include <z64actor.h>
-#include <z64animation.h>
-#include <z64bgcheck.h>
-#include <z64collision_check.h>
-#include <z64cutscene.h>
-#include <z64dma.h>
-#include <z64effect.h>
-#include <z64item.h>
-#include <z64light.h>
-#include <z64math.h>
-#include <z64object.h>
+#include "z64actor.h"
+#include "z64animation.h"
+#include "z64bgcheck.h"
+#include "z64collision_check.h"
+#include "z64cutscene.h"
+#include "z64dma.h"
+#include "z64effect.h"
+#include "z64item.h"
+#include "z64light.h"
+#include "z64math.h"
+#include "z64object.h"
 #include "z64player.h"
-#include <z64scene.h>
-#include <z64save.h>
+#include "z64scene.h"
+#include "z64save.h"
+#include "z64transition.h"
 
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
@@ -45,6 +45,7 @@
 #define Z_THREAD_ID_IDLE     1
 #define Z_THREAD_ID_SLOWLY   2
 #define Z_THREAD_ID_MAIN     3
+#define Z_THREAD_ID_SCHED    5
 #define Z_THREAD_ID_DMAMGR  18
 #define Z_THREAD_ID_IRQMGR  19
 
@@ -54,6 +55,11 @@
 #define Z_PRIORITY_MAIN   12
 #define Z_PRIORITY_DMAMGR 17
 #define Z_PRIORITY_IRQMGR 18
+
+#define EQUIP_SLOT_B 0
+#define EQUIP_SLOT_C_LEFT 1
+#define EQUIP_SLOT_C_DOWN 2
+#define EQUIP_SLOT_C_RIGHT 3
 
 typedef struct {
     /* 0x0 */ s16 priority; // Lower means higher priority. -1 means it ignores priority
@@ -266,6 +272,19 @@ typedef struct {
     /* 0x20308 */ u16 tailMagic; // 5678
 } GfxPool; // size = 0x20310
 
+typedef struct {
+    /* 0x00 */ u16*     fb1;
+    /* 0x04 */ u16*     swapBuffer;
+    /* 0x08 */ OSViMode* viMode;
+    /* 0x0C */ u32      features;
+    /* 0x10 */ u8       unk_10;
+    /* 0x11 */ s8       updateRate;
+    /* 0x12 */ s8       updateRate2;
+    /* 0x13 */ u8       unk_13;
+    /* 0x14 */ f32      xScale;
+    /* 0x18 */ f32      yScale;
+} CfbInfo; // size = 0x1C
+
 typedef struct GraphicsContext {
     /* 0x000 */ Gfx* polyOpaBuffer;
     /* 0x004 */ Gfx* polyXluBuffer;
@@ -321,7 +340,8 @@ typedef struct {
     /* 0x08 */ u32 rodataSize;
     /* 0x0C */ u32 bssSize;
     /* 0x10 */ u32 nRelocations;
-} OverlayRelocationSection; // size = 0x14
+    /* 0x14 */ u32 relocations[1];
+} OverlayRelocationSection; // size >= 0x18
 
 typedef struct {
     /* 0x00 */ s16 intPart[16];
@@ -375,13 +395,6 @@ typedef struct {
     /* 0xC */ s32 rightX;
 } Viewport; // size = 0x10
 
-typedef struct {
-    /* 0x0 */ unsigned int inst1;
-    /* 0x4 */ unsigned int inst2;
-    /* 0x8 */ unsigned int inst3;
-    /* 0xC */ unsigned int inst4;
-} __osExceptionVector; // size = 0x10
-
 typedef void*(*fault_address_converter_func)(void* addr, void* arg);
 
 typedef void(*fault_client_func)(void* arg1, void* arg2);
@@ -392,7 +405,7 @@ typedef void(*func_ptr)(void);
 
 typedef void(*osCreateThread_func)(void*);
 
-typedef void*(*printf_func)(void*, char*, size_t);
+typedef void* (*PrintCallback)(void*, const char*, u32);
 
 typedef enum {
     SLOWLY_CALLBACK_NO_ARGS,
@@ -722,8 +735,8 @@ typedef struct {
     /* 0x242 */ s16 heartsEnvR[2];
     /* 0x246 */ s16 heartsEnvG[2];
     /* 0x24A */ s16 heartsEnvB[2];
-    /* 0x24E */ s16 unk_24E;
-    /* 0x250 */ s16 unk_250;
+    /* 0x24E */ s16 health;
+    /* 0x250 */ s16 unkTimer;
     /* 0x252 */ s16 lifeSizeChange;
     /* 0x254 */ s16 lifeSizeChangeDirection; // 1 means shrinking, 0 growing
     /* 0x256 */ s16 unk_256;
@@ -954,7 +967,10 @@ typedef struct {
     /* 0x1207C */ s32 bankRupees; 
     /* 0x12080 */ UNK_TYPE1 pad12080[0x31];
     /* 0x120B1 */ u8 unk120B1;
-    /* 0x120B2 */ UNK_TYPE1 pad120B2[0x2E];
+    /* 0x120B2 */ UNK_TYPE1 pad120B2[0x22];
+    /* 0x120D4 */ UNK_TYPE2 unk120D4;
+    /* 0x120D6 */ UNK_TYPE2 unk120D6;
+    /* 0x120D8 */ UNK_TYPE1 pad120D8[0x8];
 } MessageContext; // size = 0x120E0
 
 typedef struct ActorBgMbarChair ActorBgMbarChair;
@@ -987,8 +1003,6 @@ typedef struct ActorEnBom ActorEnBom;
 typedef struct ActorEnFirefly ActorEnFirefly;
 
 typedef struct ActorObjBell ActorObjBell;
-
-typedef struct DaytelopContext DaytelopContext;
 
 typedef struct ActorBgIknvObj ActorBgIknvObj;
 
@@ -1027,10 +1041,6 @@ typedef struct {
     /* 0x844 */ void* fb;
 } FaultThreadStruct; // size = 0x848
 
-typedef struct FileChooseContext FileChooseContext;
-
-typedef void(*filechoose_update_func)(FileChooseContext* globalCtx);
-
 typedef struct FireObj FireObj;
 
 typedef struct FireObjLight FireObjLight;
@@ -1039,11 +1049,7 @@ typedef struct GameAlloc GameAlloc;
 
 typedef struct GameState GameState;
 
-typedef struct OpeningContext OpeningContext;
-
 typedef struct PreNMIContext PreNMIContext;
-
-typedef struct TitleContext TitleContext;
 
 typedef struct GameAllocNode GameAllocNode;
 
@@ -1078,136 +1084,11 @@ struct GameState {
     /* 0xA3 */ UNK_TYPE1 unkA3;
 }; // size = 0xA4
 
-struct OpeningContext {
-    /* 0x000 */ GameState common;
-    /* 0x0A4 */ UNK_TYPE1 padA4[0x4];
-    /* 0x0A8 */ View view;
-}; // size = 0x210
-
 struct PreNMIContext {
     /* 0x00 */ GameState state;
     /* 0xA4 */ u32 timer;
     /* 0xA8 */ UNK_TYPE4 unkA8;
 }; // size = 0xAC
-
-struct TitleContext {
-    /* 0x000 */ GameState state;
-    /* 0x0A4 */ u8* staticSegment;
-    /* 0x0A8 */ View view;
-    /* 0x210 */ SramContext sramCtx;
-    /* 0x238 */ s16 mode;
-    /* 0x23A */ s16 timer;
-    /* 0x23C */ s16 coverAlpha;
-    /* 0x23E */ s16 addAlpha;
-    /* 0x240 */ s16 visibleDuration;
-    /* 0x242 */ s16 ult;
-    /* 0x244 */ s16 uls;
-    /* 0x246 */ u8 exit;
-}; // size = 0x248
-
-struct DaytelopContext {
-    /* 0x000 */ GameState common;
-    /* 0x0A4 */ UNK_TYPE1 padA4[0xC];
-    /* 0x0B0 */ View view;
-    /* 0x218 */ UNK_TYPE1 pad218[0x28];
-    /* 0x240 */ s16 transitionCountdown;
-    /* 0x242 */ s16 unk242;
-    /* 0x244 */ s16 unk244;
-    /* 0x246 */ UNK_TYPE1 pad246[0x2];
-}; // size = 0x248
-
-struct FileChooseContext {
-    /* 0x00000 */ GameState state;
-    /* 0x000A8 */ u8* staticSegment;
-    /* 0x000AC */ u8* parameterSegment;
-    /* 0x000B0 */ u8* titleSegment;
-    /* 0x000B8 */ View view;
-    /* 0x00220 */ SramContext sramCtx;
-    /* 0x00248 */ SkyboxContext skyboxCtx;
-    /* 0x00470 */ MessageContext msgCtx;
-    /* 0x12550 */ Font font;
-    /* 0x242E0 */ EnvironmentContext envCtx;
-    /* 0x243E0 */ Vtx* unk_243E0;
-    /* 0x243E4 */ Vtx* unk_243E4;
-    /* 0x243E8 */ Vtx* unk_243E8;
-    /* 0x243EC */ Vtx* unk_243EC;
-    /* 0x243F0 */ Vtx* unk_243F0;
-    /* 0x243F4 */ u8   newf[6][4];
-    /* 0x2440C */ u16  unk_2440C[4];
-    /* 0x24414 */ u8   unk_24414[8][4];
-    /* 0x24434 */ s16  healthCapacity[4];
-    /* 0x2443C */ s16  health[4];
-    /* 0x24444 */ u32  unk_24444[4];
-    /* 0x24454 */ s8   unk_24454[4];
-    /* 0x24458 */ u16  unk_24458[4];
-    /* 0x24460 */ s16  unk_24460[4];
-    /* 0x24468 */ u8   unk_24468[4];
-    /* 0x2446C */ s16  rupees[4];
-    /* 0x24474 */ u8   unk_24474[4];
-    /* 0x24478 */ u8   unk_24478[4];
-    /* 0x2447C */ u8   unk_2447C[4];
-    /* 0x24480 */ s16  unk_24480;
-    /* 0x24482 */ s16  unk_24482;
-    /* 0x24484 */ s16  unk_24484;
-    /* 0x24486 */ s16  unk_24486;
-    /* 0x24488 */ s16  unk_24488;
-    /* 0x2448A */ s16  unk_2448A;
-    /* 0x2448C */ s16  unk_2448C;
-    /* 0x2448E */ s16  unk_2448E;
-    /* 0x24490 */ s16  unk_24490;
-    /* 0x24492 */ s16  unk_24492[3];
-    /* 0x24498 */ s16  unk_24498;
-    /* 0x2449A */ s16  unk_2449A[6];
-    /* 0x244A6 */ s16  unk_244A6;
-    /* 0x244A8 */ s16  unk_244A8;
-    /* 0x244AA */ s16  unk_244AA;
-    /* 0x244AC */ s16  unk_244AC;
-    /* 0x244AE */ s16  unk_244AE;
-    /* 0x244B0 */ s16  unk_244B0[3];
-    /* 0x244B6 */ s16  unk_244B6[2];
-    /* 0x244BA */ s16  unk_244BA;
-    /* 0x244BC */ s16  unk_244BC[3];
-    /* 0x244C2 */ s16  unk_244C2[3];
-    /* 0x244C8 */ s16  unk_244C8[3];
-    /* 0x244CE */ s16  unk_244CE[3];
-    /* 0x244D4 */ s16  unk_244D4[3];
-    /* 0x244DA */ s16  unk_244DA[4];
-    /* 0x244E2 */ s16  unk_244E2;
-    /* 0x244E4 */ s16  unk_244E4;
-    /* 0x244E6 */ s16  unk_244E6;
-    /* 0x244E8 */ s16  unk_244E8;
-    /* 0x244EA */ s16  unk_244EA[4];
-    /* 0x244F2 */ s16  unk_244F2;
-    /* 0x244F4 */ s16  unk_244F4;
-    /* 0x244F6 */ s16  unk_244F6[2];
-    /* 0x244FA */ s16  unk_244FA;
-    /* 0x244FC */ s16  unk_244FC;
-    /* 0x244FE */ s16  unk_244FE;
-    /* 0x24500 */ s16  unk_24500;
-    /* 0x24502 */ s16  unk_24502;
-    /* 0x24504 */ s16  unk_24504;
-    /* 0x24506 */ s16  unk_24506;
-    /* 0x24508 */ s16  unk_24508;
-    /* 0x2450A */ s16  unk_2450A;
-    /* 0x2450C */ f32  unk_2450C;
-    /* 0x24510 */ s16  unk_24510;
-    /* 0x24512 */ s16  unk_24512;
-    /* 0x24514 */ s16  unk_24514;
-    /* 0x24516 */ s16  unk_24516;
-    /* 0x24518 */ s16  unk_24518;
-    /* 0x2451A */ s16  unk_2451A;
-    /* 0x2451C */ s16  unk_2451C;
-    /* 0x2451E */ s16  unk_2451E[5];
-    /* 0x24528 */ s16  unk_24528;
-    /* 0x2452A */ s16  unk_2452A;
-    /* 0x2452C */ s16  unk_2452C[4];
-    /* 0x24534 */ s16  unk_24534[4];
-    /* 0x2453C */ s16  unk_2453C[4];
-    /* 0x24544 */ s16  unk_24544[4];
-    /* 0x2454C */ s16  unk_2454C;
-    /* 0x2454E */ s16  unk_2454E;
-    /* 0x24550 */ s16  unk_24550;
-}; // size = 0x24558
 
 typedef struct GlobalContext GlobalContext;
 
@@ -1365,6 +1246,11 @@ typedef struct IrqMgrClient_t {
 } IrqMgrClient; // size = 0x8
 
 typedef struct {
+    /* 0x0 */ s16 type;
+    /* 0x2 */ u8 misc[30];
+} OSScMsg;
+
+typedef struct {
     /* 0x000 */ OSScMsg verticalRetraceMesg;
     /* 0x020 */ OSScMsg prenmiMsg;
     /* 0x040 */ OSScMsg nmiMsg;
@@ -1411,25 +1297,41 @@ typedef struct {
 #define OS_SC_RCP_MASK          0x0003
 #define OS_SC_TYPE_MASK         0x0007
 
+#define OS_SC_DP                0x0001
+#define OS_SC_SP                0x0002
+#define OS_SC_YIELD             0x0010
+#define OS_SC_YIELDED           0x0020
+
+typedef struct OSScTask {
+    /* 0x00 */ struct OSScTask* next;
+    /* 0x04 */ u32      state;
+    /* 0x08 */ u32      flags;
+    /* 0x0C */ CfbInfo* framebuffer;
+    /* 0x10 */ OSTask   list;
+    /* 0x50 */ OSMesgQueue* msgQ;
+    /* 0x54 */ OSMesg   msg;
+} OSScTask; // size = 0x58
+
 typedef struct {
-    /* 0x000 */ OSMesgQueue interruptQ;
-    /* 0x018 */ OSMesg intMsgBuf[64];
-    /* 0x118 */ OSMesgQueue cmdQ;
-    /* 0x130 */ OSMesg cmdMsgBuf[8];
-    /* 0x150 */ OSThread thread;
-    /* 0x300 */ UNK_TYPE4 unk300;
-    /* 0x304 */ UNK_TYPE4 unk304;
-    /* 0x308 */ UNK_TYPE4 unk308;
-    /* 0x30C */ UNK_TYPE4 unk30C;
-    /* 0x310 */ UNK_TYPE4 unk310;
-    /* 0x314 */ UNK_TYPE4 unk314;
-    /* 0x318 */ s32 unk318;
-    /* 0x31C */ UNK_TYPE1 pad31C[0x4];
-    /* 0x320 */ UNK_TYPE4 unk320;
-    /* 0x324 */ UNK_TYPE4 unk324;
-    /* 0x328 */ UNK_TYPE1 pad328[0x7];
-    /* 0x32F */ s8 unk32F;
-    /* 0x330 */ IrqMgrClient irqClient;
+    /* 0x0000 */ OSMesgQueue interruptQ;
+    /* 0x0018 */ OSMesg      intBuf[64];
+    /* 0x0118 */ OSMesgQueue cmdQ;
+    /* 0x0130 */ OSMesg      cmdMsgBuf[8];
+    /* 0x0150 */ OSThread    thread;
+    /* 0x0300 */ OSScTask*   audioListHead;
+    /* 0x0304 */ OSScTask*   gfxListHead;
+    /* 0x0308 */ OSScTask*   audioListTail;
+    /* 0x030C */ OSScTask*   gfxListTail;
+    /* 0x0310 */ OSScTask*   curRSPTask;
+    /* 0x0314 */ OSScTask*   curRDPTask;
+    /* 0x0318 */ s32         retraceCount;
+    /* 0x0318 */ s32         doAudio;
+    /* 0x0320 */ CfbInfo*    curBuf;
+    /* 0x0324 */ CfbInfo*    pendingSwapBuf1;
+    /* 0x0328 */ CfbInfo*    pendingSwapBuf2;
+    /* 0x032C */ char unk_32C[0x3];
+    /* 0x032F */ u8 shouldUpdateVi;
+    /* 0x0330 */ IrqMgrClient irqClient;
 } SchedContext; // size = 0x338
 
 typedef struct StackEntry_t {
@@ -1656,7 +1558,7 @@ struct GlobalContext {
     /* 0x18780 */ void (*func_18780)(Player* player, struct GlobalContext* globalCtx);
     /* 0x18784 */ s32 (*damagePlayer)(struct GlobalContext* globalCtx, s32 damage);
     /* 0x18788 */ void (*talkWithPlayer)(struct GlobalContext* globalCtx, Actor* actor);
-    /* 0x1878C */ void* unk_1878C; //! @TODO: Determine function prototype
+    /* 0x1878C */ void (*unk_1878C)(struct GlobalContext* globalCtx);
     /* 0x18790 */ void* unk_18790; //! @TODO: Determine function prototype
     /* 0x18794 */ void* unk_18794; //! @TODO: Determine function prototype
     /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct GlobalContext* globalCtx, void* talkAnim, s32 arg2);
@@ -1683,7 +1585,7 @@ struct GlobalContext {
     /* 0x18874 */ u8 skyboxId;
     /* 0x18875 */ s8 sceneLoadFlag; // "fade_direction"
     /* 0x18876 */ s16 unk_18876;
-    /* 0x18878 */ s16 unk_18878;
+    /* 0x18878 */ s16 bgCoverAlpha;
     /* 0x1887A */ u16 nextEntranceIndex;
     /* 0x1887C */ s8 unk_1887C;
     /* 0x1887D */ s8 unk_1887D;

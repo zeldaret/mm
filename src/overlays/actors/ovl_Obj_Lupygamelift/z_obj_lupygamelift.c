@@ -22,7 +22,6 @@ const ActorInit Obj_Lupygamelift_InitVars = {
     (ActorFunc)ObjLupygamelift_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80AF0740[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
@@ -31,24 +30,27 @@ static InitChainEntry D_80AF0740[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-
-extern InitChainEntry D_80AF0740[];
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lupygamelift_0x80AF0170/ObjLupygamelift_Init.asm")
+extern InitChainEntry D_80AF0740[];
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lupygamelift_0x80AF0170/ObjLupygamelift_Destroy.asm")
+extern UNK_TYPE D_060048D0;
+extern UNK_TYPE D_060071B8;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lupygamelift_0x80AF0170/func_80AF0394.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lupygamelift/ObjLupygamelift_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lupygamelift_0x80AF0170/func_80AF04BC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lupygamelift/ObjLupygamelift_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lupygamelift_0x80AF0170/func_80AF04D8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lupygamelift/func_80AF0394.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lupygamelift_0x80AF0170/func_80AF0514.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lupygamelift/func_80AF04BC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lupygamelift_0x80AF0170/func_80AF0530.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lupygamelift/func_80AF04D8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lupygamelift_0x80AF0170/ObjLupygamelift_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lupygamelift/func_80AF0514.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Lupygamelift_0x80AF0170/ObjLupygamelift_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lupygamelift/func_80AF0530.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lupygamelift/ObjLupygamelift_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Lupygamelift/ObjLupygamelift_Draw.s")

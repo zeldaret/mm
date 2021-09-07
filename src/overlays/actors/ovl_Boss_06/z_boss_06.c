@@ -9,6 +9,12 @@ void Boss06_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void Boss06_Update(Actor* thisx, GlobalContext* globalCtx);
 void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809F24C8(Boss06* this, GlobalContext* globalCtx);
+void func_809F2B64(Boss06* this, GlobalContext* globalCtx);
+void func_809F2C44(Boss06* this, GlobalContext* globalCtx);
+void func_809F2E34(Boss06* this, GlobalContext* globalCtx);
+void func_809F2EE8(Boss06* this, GlobalContext* globalCtx);
+
 #if 0
 // static DamageTable sDamageTable = {
 static DamageTable D_809F4080 = {
@@ -46,7 +52,6 @@ static DamageTable D_809F4080 = {
     /* Powder Keg     */ DMG_ENTRY(0, 0xF),
 };
 
-
 const ActorInit Boss_06_InitVars = {
     ACTOR_BOSS_06,
     ACTORCAT_BOSS,
@@ -59,7 +64,6 @@ const ActorInit Boss_06_InitVars = {
     (ActorFunc)Boss06_Draw,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_809F40C0 = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -67,37 +71,40 @@ static ColliderCylinderInit D_809F40C0 = {
     { 90, 140, 10, { 0, 0, 0 } },
 };
 
+#endif
 
 extern DamageTable D_809F4080;
 extern ColliderCylinderInit D_809F40C0;
-#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Boss_06_0x809F2120/func_809F2120.asm")
+extern UNK_TYPE D_06018BD0;
+extern UNK_TYPE D_06019490;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Boss_06_0x809F2120/func_809F2140.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_06/func_809F2120.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Boss_06_0x809F2120/Boss06_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_06/func_809F2140.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Boss_06_0x809F2120/Boss06_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_06/Boss06_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Boss_06_0x809F2120/func_809F23CC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_06/Boss06_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Boss_06_0x809F2120/func_809F24A8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_06/func_809F23CC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Boss_06_0x809F2120/func_809F24C8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_06/func_809F24A8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Boss_06_0x809F2120/func_809F2B64.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_06/func_809F24C8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Boss_06_0x809F2120/func_809F2C44.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_06/func_809F2B64.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Boss_06_0x809F2120/func_809F2E14.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_06/func_809F2C44.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Boss_06_0x809F2120/func_809F2E34.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_06/func_809F2E14.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Boss_06_0x809F2120/func_809F2ED0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_06/func_809F2E34.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Boss_06_0x809F2120/func_809F2EE8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_06/func_809F2ED0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Boss_06_0x809F2120/Boss06_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_06/func_809F2EE8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Boss_06_0x809F2120/Boss06_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_06/Boss06_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_06/Boss06_Draw.s")

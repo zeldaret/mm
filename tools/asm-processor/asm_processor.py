@@ -269,6 +269,43 @@ class Section:
         assert self.sh_type == SHT_SYMTAB
         return self.symbol_entries[self.sh_info:]
 
+    def relocate_mdebug(self, original_offset):
+        assert self.sh_type == SHT_MIPS_DEBUG
+        new_data = bytearray(self.data)
+        shift_by = self.sh_offset - original_offset
+
+        # Update the file-relative offsets in the Symbolic HDRR
+        hdrr_magic, hdrr_vstamp, hdrr_ilineMax, hdrr_cbLine, \
+            hdrr_cbLineOffset, hdrr_idnMax, hdrr_cbDnOffset, hdrr_ipdMax, \
+            hdrr_cbPdOffset, hdrr_isymMax, hdrr_cbSymOffset, hdrr_ioptMax, \
+            hdrr_cbOptOffset, hdrr_iauxMax, hdrr_cbAuxOffset, hdrr_issMax, \
+            hdrr_cbSsOffset, hdrr_issExtMax, hdrr_cbSsExtOffset, hdrr_ifdMax, \
+            hdrr_cbFdOffset, hdrr_crfd, hdrr_cbRfdOffset, hdrr_iextMax, \
+            hdrr_cbExtOffset = struct.unpack(">HHIIIIIIIIIIIIIIIIIIIIIII", self.data[0:0x60])
+
+        assert hdrr_magic == 0x7009 , "Invalid magic value for .mdebug symbolic header"
+
+        hdrr_cbLineOffset += shift_by
+        hdrr_cbDnOffset += shift_by
+        hdrr_cbPdOffset += shift_by
+        hdrr_cbSymOffset += shift_by
+        hdrr_cbOptOffset += shift_by
+        hdrr_cbAuxOffset += shift_by
+        hdrr_cbSsOffset += shift_by
+        hdrr_cbSsExtOffset += shift_by
+        hdrr_cbFdOffset += shift_by
+        hdrr_cbRfdOffset += shift_by
+        hdrr_cbExtOffset += shift_by
+
+        new_data[0:0x60] = struct.pack(">HHIIIIIIIIIIIIIIIIIIIIIII", hdrr_magic, hdrr_vstamp, hdrr_ilineMax, hdrr_cbLine, \
+            hdrr_cbLineOffset, hdrr_idnMax, hdrr_cbDnOffset, hdrr_ipdMax, \
+            hdrr_cbPdOffset, hdrr_isymMax, hdrr_cbSymOffset, hdrr_ioptMax, \
+            hdrr_cbOptOffset, hdrr_iauxMax, hdrr_cbAuxOffset, hdrr_issMax, \
+            hdrr_cbSsOffset, hdrr_issExtMax, hdrr_cbSsExtOffset, hdrr_ifdMax, \
+            hdrr_cbFdOffset, hdrr_crfd, hdrr_cbRfdOffset, hdrr_iextMax, \
+            hdrr_cbExtOffset)
+
+        self.data = bytes(new_data)
 
 class ElfFile:
     def __init__(self, data):
@@ -317,7 +354,7 @@ class ElfFile:
         s.late_init(self.sections)
         return s
 
-    def drop_irrelevant_sections(self):
+    def drop_mdebug_gptab(self):
         # We can only drop sections at the end, since otherwise section
         # references might be wrong. Luckily, these sections typically are.
         while self.sections[-1].sh_type in [SHT_MIPS_DEBUG, SHT_MIPS_GPTAB]:
@@ -340,7 +377,11 @@ class ElfFile:
         for s in self.sections:
             if s.sh_type != SHT_NOBITS and s.sh_type != SHT_NULL:
                 pad_out(s.sh_addralign)
+                old_offset = s.sh_offset
                 s.sh_offset = outidx
+                if s.sh_type == SHT_MIPS_DEBUG and s.sh_offset != old_offset:
+                    # The .mdebug section has moved, relocate offsets
+                    s.relocate_mdebug(old_offset)
                 write_out(s.data)
 
         pad_out(4)
@@ -610,6 +651,7 @@ class GlobalAsmBlock:
             skip_next = False
             needs_double = (self.late_rodata_alignment != 0)
             extra_mips1_nop = False
+            jtbl_size = 11 if state.mips1 else 9
             for i in range(size):
                 if skip_next:
                     skip_next = False
@@ -625,14 +667,13 @@ class GlobalAsmBlock:
                 #   generate a jump table)
                 # - we have at least 10 more instructions to go in this function (otherwise our
                 #   function size computation will be wrong since the delay slot goes unused)
-                jtbl_size = 11 if state.mips1 else 9
                 if (not needs_double and state.use_jtbl_for_rodata and i >= 1 and
                         size - i >= 5 and num_instr - len(late_rodata_fn_output) >= jtbl_size + 1):
                     cases = " ".join("case {}:".format(case) for case in range(size - i))
                     late_rodata_fn_output.append("switch (*(volatile int*)0) { " + cases + " ; }")
                     late_rodata_fn_output.extend([""] * (jtbl_size - 1))
                     jtbl_rodata_size = (size - i) * 4
-                    extra_mips1_nop = True
+                    extra_mips1_nop = i != 2
                     break
                 dummy_bytes = state.next_late_rodata_hex()
                 late_rodata_dummy_bytes.append(dummy_bytes)
@@ -843,7 +884,7 @@ def parse_source(f, opt, framepointer, mips1, input_enc, output_enc, out_depende
 
     return asm_functions
 
-def fixup_objfile(objfile_name, functions, asm_prelude, assembler, output_enc):
+def fixup_objfile(objfile_name, functions, asm_prelude, assembler, output_enc, drop_mdebug_gptab):
     SECTIONS = ['.data', '.text', '.rodata', '.bss']
 
     with open(objfile_name, 'rb') as f:
@@ -939,9 +980,12 @@ def fixup_objfile(objfile_name, functions, asm_prelude, assembler, output_enc):
         with open(o_name, 'rb') as f:
             asm_objfile = ElfFile(f.read())
 
-        # Remove some clutter from objdump output
+        # Remove clutter from objdump output for tests, and make the tests
+        # portable by avoiding absolute paths. Outside of tests .mdebug is
+        # useful for showing source together with asm, though.
         mdebug_section = objfile.find_section('.mdebug')
-        objfile.drop_irrelevant_sections()
+        if drop_mdebug_gptab:
+            objfile.drop_mdebug_gptab()
 
         # Unify reginfo sections
         target_reginfo = objfile.find_section('.reginfo')
@@ -1188,8 +1232,9 @@ def run_wrapped(argv, outfile, functions):
     parser.add_argument('--post-process', dest='objfile', help="path to .o file to post-process")
     parser.add_argument('--assembler', dest='assembler', help="assembler command (e.g. \"mips-linux-gnu-as -march=vr4300 -mabi=32\")")
     parser.add_argument('--asm-prelude', dest='asm_prelude', help="path to a file containing a prelude to the assembly file (with .set and .macro directives, e.g.)")
-    parser.add_argument('--input-enc', default='latin1', help="Input encoding (default: latin1)")
-    parser.add_argument('--output-enc', default='latin1', help="Output encoding (default: latin1)")
+    parser.add_argument('--input-enc', default='latin1', help="input encoding (default: %(default)s)")
+    parser.add_argument('--output-enc', default='latin1', help="output encoding (default: %(default)s)")
+    parser.add_argument('--drop-mdebug-gptab', dest='drop_mdebug_gptab', action='store_true', help="drop mdebug and gptab sections")
     parser.add_argument('-framepointer', dest='framepointer', action='store_true')
     parser.add_argument('-mips1', dest='mips1', action='store_true')
     parser.add_argument('-g3', dest='g3', action='store_true')
@@ -1223,7 +1268,7 @@ def run_wrapped(argv, outfile, functions):
         if args.asm_prelude:
             with open(args.asm_prelude, 'rb') as f:
                 asm_prelude = f.read()
-        fixup_objfile(args.objfile, functions, asm_prelude, args.assembler, args.output_enc)
+        fixup_objfile(args.objfile, functions, asm_prelude, args.assembler, args.output_enc, args.drop_mdebug_gptab)
 
 def run(argv, outfile=sys.stdout.buffer, functions=None):
     try:

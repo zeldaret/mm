@@ -8,6 +8,8 @@ void EnHitTag_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnHitTag_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHitTag_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BE20E8(EnHitTag* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Hit_Tag_InitVars = {
     ACTOR_EN_HIT_TAG,
@@ -21,7 +23,6 @@ const ActorInit En_Hit_Tag_InitVars = {
     (ActorFunc)NULL,
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80BE21F0 = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -29,14 +30,14 @@ static ColliderCylinderInit D_80BE21F0 = {
     { 16, 32, 0, { 0, 0, 0 } },
 };
 
-
-extern ColliderCylinderInit D_80BE21F0;
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hit_Tag_0x80BE2030/EnHitTag_Init.asm")
+extern ColliderCylinderInit D_80BE21F0;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hit_Tag_0x80BE2030/EnHitTag_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hit_Tag/EnHitTag_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hit_Tag_0x80BE2030/func_80BE20E8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hit_Tag/EnHitTag_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Hit_Tag_0x80BE2030/EnHitTag_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hit_Tag/func_80BE20E8.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hit_Tag/EnHitTag_Update.s")

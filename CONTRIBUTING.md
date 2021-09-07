@@ -53,6 +53,10 @@ You should [join the Discord](https://discord.zelda64.dev/) to say hello and get
 We track who is working on what on the [Trello board](https://trello.com/b/ruxw9n6m/majoras-mask-decompilation).
 After joining the Discord, ask to be added to the Trello board so you can claim your code file and avoid duplicate work. You may need to add a card if a card for your file does not currently exist.
 
+The work flow is: Reserve a file, decompile it, submit a PR, and then repeat while addressing review comments. The expectation is that one reservation goes to one file which ends up in a one file PR.
+
+Please note that unless it is communicated beforehand you will be expected to fully complete the file if you reserve it on Trello. Exceptions are always easy to approve if it's communicated to the team. Real life circumstances can prevent someone from finishing. In these cases they should link their repo/branch in the trello and unreserve immediately. Communicate any issues with your reservations as early as possible.
+
 Style Guide & Conventions
 -------------------------
 
@@ -98,7 +102,7 @@ void CollisionCheck_SpawnWaterDroplets(GlobalContext* globalCtx, Vec3f* v) {
     // ... 
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_collision_check/CollisionCheck_SpawnWaterDroplets.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_collision_check/CollisionCheck_SpawnWaterDroplets.s")
 #endif
 ```
 
@@ -119,8 +123,7 @@ Documenting is more than just adding comments. Documenting also includes:
 - Using (or adding) constants, enums, and macros when possible
 - Explaining sections of code that are not straightforward
 
-Overlays are not required to be documented at this time, but `code/` and `boot/` should be documented as much as possible.
-When an overlay documentation has been started, it will be required to be completed.
+Overlays are not required to be documented at this time, but `code/` and `boot/` should be documented. When documentation on a file has been started it should be as complete as possible.
 
 For right now, object segment symbols should not be documented/renamed.
 These will be given names when object reconstruction is ready.

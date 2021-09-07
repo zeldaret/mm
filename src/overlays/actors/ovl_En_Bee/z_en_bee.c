@@ -9,6 +9,9 @@ void EnBee_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBee_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBee_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B5A9E8(EnBee* this, GlobalContext* globalCtx);
+void func_80B5AC3C(EnBee* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit En_Bee_InitVars = {
     ACTOR_EN_BEE,
@@ -21,7 +24,6 @@ const ActorInit En_Bee_InitVars = {
     (ActorFunc)EnBee_Update,
     (ActorFunc)EnBee_Draw,
 };
-
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80B5B214 = {
@@ -59,7 +61,6 @@ static DamageTable D_80B5B214 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B5B234 = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON, OC2_TYPE_1, COLSHAPE_CYLINDER, },
@@ -67,25 +68,27 @@ static ColliderCylinderInit D_80B5B234 = {
     { 6, 13, -4, { 0, 0, 0 } },
 };
 
+#endif
 
 extern DamageTable D_80B5B214;
 extern ColliderCylinderInit D_80B5B234;
-#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bee_0x80B5A720/EnBee_Init.asm")
+extern UNK_TYPE D_0600005C;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bee_0x80B5A720/EnBee_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bee/EnBee_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bee_0x80B5A720/func_80B5A854.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bee/EnBee_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bee_0x80B5A720/func_80B5A9E8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bee/func_80B5A854.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bee_0x80B5A720/func_80B5ABC4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bee/func_80B5A9E8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bee_0x80B5A720/func_80B5AC3C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bee/func_80B5ABC4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bee_0x80B5A720/func_80B5AF80.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bee/func_80B5AC3C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bee_0x80B5A720/EnBee_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bee/func_80B5AF80.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Bee_0x80B5A720/EnBee_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bee/EnBee_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bee/EnBee_Draw.s")

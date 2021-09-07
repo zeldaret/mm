@@ -1,7 +1,7 @@
 #ifndef Z_EN_SUTTARI_H
 #define Z_EN_SUTTARI_H
 
-#include <global.h>
+#include "global.h"
 #include "overlays/actors/ovl_En_Fsn/z_en_fsn.h"
 
 struct EnSuttari;

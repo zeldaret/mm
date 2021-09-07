@@ -9,6 +9,10 @@ void ObjArmos_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjArmos_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjArmos_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809A54E0(ObjArmos* this, GlobalContext* globalCtx);
+void func_809A562C(ObjArmos* this, GlobalContext* globalCtx);
+void func_809A57F4(ObjArmos* this, GlobalContext* globalCtx);
+
 #if 0
 const ActorInit Obj_Armos_InitVars = {
     ACTOR_OBJ_ARMOS,
@@ -22,7 +26,6 @@ const ActorInit Obj_Armos_InitVars = {
     (ActorFunc)ObjArmos_Draw,
 };
 
-
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_809A5BC0[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
@@ -32,40 +35,42 @@ static InitChainEntry D_809A5BC0[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
-
-extern InitChainEntry D_809A5BC0[];
 #endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Armos_0x809A4E00/func_809A4E00.asm")
+extern InitChainEntry D_809A5BC0[];
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Armos_0x809A4E00/func_809A4E68.asm")
+extern UNK_TYPE D_0600033C;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Armos_0x809A4E00/func_809A4F00.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/func_809A4E00.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Armos_0x809A4E00/func_809A500C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/func_809A4E68.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Armos_0x809A4E00/func_809A518C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/func_809A4F00.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Armos_0x809A4E00/ObjArmos_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/func_809A500C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Armos_0x809A4E00/ObjArmos_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/func_809A518C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Armos_0x809A4E00/func_809A54B4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/ObjArmos_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Armos_0x809A4E00/func_809A54E0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/ObjArmos_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Armos_0x809A4E00/func_809A5610.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/func_809A54B4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Armos_0x809A4E00/func_809A562C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/func_809A54E0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Armos_0x809A4E00/func_809A57D8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/func_809A5610.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Armos_0x809A4E00/func_809A57F4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/func_809A562C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Armos_0x809A4E00/ObjArmos_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/func_809A57D8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Armos_0x809A4E00/func_809A5960.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/func_809A57F4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Armos_0x809A4E00/func_809A5A3C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/ObjArmos_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Armos_0x809A4E00/ObjArmos_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/func_809A5960.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/func_809A5A3C.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/ObjArmos_Draw.s")
