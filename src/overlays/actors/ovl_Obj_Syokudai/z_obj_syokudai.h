@@ -11,6 +11,7 @@ typedef struct ObjSyokudai {
     /* 0x190 */ ColliderCylinder colliderCylinder2;
     /* 0x1DC */ s16 unk_1DC;
     /* 0x1DE */ u8 unk_1DE;
+    /* 0x1DF */ s8 unk1DF;
     /* 0x1E0 */ LightNode* lightNode;
     /* 0x1E4 */ LightInfo lightInfo;
 } ObjSyokudai; // size = 0x1F4

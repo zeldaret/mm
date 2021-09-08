@@ -1,4 +1,5 @@
 #include "z_obj_syokudai.h"
+#include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
 
 #define FLAGS 0x00000410
 
@@ -8,6 +9,9 @@ void ObjSyokudai_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjSyokudai_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjSyokudai_Draw(Actor* thisx, GlobalContext* globalCtx);
+
+extern u64 D_801DB4B0;
+extern u64 D_801DB4B8;
 
 const ActorInit Obj_Syokudai_InitVars = {
     ACTOR_OBJ_SYOKUDAI,
@@ -112,8 +116,148 @@ void ObjSyokudai_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     LightContext_RemoveLight(globalCtx, &globalCtx->lightCtx, this->lightNode);
 }
 
+void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx) {
+    ObjSyokudai* this = THIS;
+    Player* player = PLAYER;
+    s32 paramsLow;
+    s32 paramsHigh;
+    f32 sp64;
+    f32 sp60;
+    s32 sp5C;
+    u8 sp5B;
+    Vec3f posDiffFromSword;
+    Actor* collider2HurtboxActor;
+    s32 paramsMid;
+    s32 phi_t0 = 0;
+    u32 collider2HurtboxDmgFlags = 0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Syokudai/ObjSyokudai_Update.s")
+    sp5C = -1;
+    paramsLow = OBJ_SYOKUDAI_GET_PARAMS_LOW(thisx);
+    paramsHigh = OBJ_SYOKUDAI_GET_PARAMS_HIGH(thisx);
+    sp5B = 0;
+    paramsMid = OBJ_SYOKUDAI_GET_PARAMS_MID(thisx);
+    if (this->unk1DF != 0) {
+        if (ActorCutscene_GetCurrentIndex() != thisx->cutscene) {
+            if (ActorCutscene_GetCanPlayNext(thisx->cutscene) != 0) {
+                ActorCutscene_StartAndSetUnkLinkFields(thisx->cutscene, thisx);
+                if (this->unk1DF > 0) {
+                    Actor_SetSwitchFlag(globalCtx, paramsLow);
+                }
+            } else {
+                ActorCutscene_SetIntentToPlay(thisx->cutscene);
+            }
+        } else if (func_800F22C4(thisx->cutscene, thisx) != 0) {
+            this->unk_1DC = -1;
+            this->unk1DF = 0;
+        }
+    } else {
+        func_800CA1E8(globalCtx, &globalCtx->colCtx, thisx->world.pos.x, thisx->world.pos.z, &sp60, &sp64);
+        if ((thisx->params != 0) && ((sp60 - thisx->world.pos.y) > 52.0f)) {
+            this->unk_1DC = 0;
+            if (paramsHigh == 1) {
+                Actor_UnsetSwitchFlag(globalCtx, paramsLow);
+                if (paramsMid != 0) {
+                    this->unk_1DC = 1;
+                }
+            }
+        } else {
+            if ((thisx->params & 0x800) != 0) {
+                this->unk_1DC = -1;
+            }
+            if (paramsMid != 0) {
+                if (Flags_GetSwitch(globalCtx, paramsLow)) {
+                    if (this->unk_1DC == 0) {
+                        if (paramsHigh != 0) {
+                            this->unk_1DC = -1;
+                        } else {
+                            this->unk1DF = -1;
+                        }
+                    } else if (this->unk_1DC > 0) {
+                        this->unk_1DC = -1;
+                    }
+                } else if (this->unk_1DC < 0) {
+                    this->unk_1DC = 0x14;
+                }
+            }
+            if ((this->colliderCylinder2.base.acFlags & 2) != 0) {
+                collider2HurtboxDmgFlags = this->colliderCylinder2.info.acHitInfo->toucher.dmgFlags;
+                if ((this->colliderCylinder2.info.acHitInfo->toucher.dmgFlags & 0x820) != 0) {
+                    phi_t0 = 1;
+                }
+            } else if (player->itemActionParam == 7) {
+                Math_Vec3f_Diff(&player->swordInfo[0].tip, &thisx->world.pos, &posDiffFromSword);
+                posDiffFromSword.y -= 67.0f;
+                if (SQXYZ(posDiffFromSword) < 400.0f) {
+                    phi_t0 = -1;
+                }
+            }
+            if (phi_t0 != 0) {
+                if (this->unk_1DC != 0) {
+                    if (phi_t0 < 0) {
+                        if (player->unk_B28 == 0) {
+                            player->unk_B28 = 0xD2;
+                            func_8019F1C0(&thisx->projectedPos, 0x2822);
+                        } else if (player->unk_B28 < 0xC8) {
+                            player->unk_B28 = 0xC8;
+                        }
+                    } else if ((collider2HurtboxDmgFlags & 0x20) != 0) {
+                        collider2HurtboxActor = this->colliderCylinder2.base.ac;
+                        if ((collider2HurtboxActor->update != NULL) && (collider2HurtboxActor->id == ACTOR_EN_ARROW)) {
+                            collider2HurtboxActor->params = 0;
+                            ((EnArrow*)collider2HurtboxActor)->unk_1C0 = 0x800;
+                        }
+                    }
+                    if (this->unk_1DC >= 0) {
+                        if ((this->unk_1DC < ((paramsMid * 50) + 100)) && (paramsHigh != 0)) {
+                            this->unk_1DC = (paramsMid * 50) + 100;
+                        }
+                    }
+                } else if ((paramsHigh != 0) && (((phi_t0 > 0) && ((collider2HurtboxDmgFlags & 0x800) != 0)) || ((phi_t0 < 0) && (player->unk_B28 != 0)))) {
+                    if ((phi_t0 < 0) && (player->unk_B28 < 0xC8)) {
+                        player->unk_B28 = 0xC8;
+                    }
+                    if (paramsMid == 0) {
+                        if ((paramsHigh == 2) && (paramsLow == 0x7F)) {
+                            this->unk_1DC = -1;
+                        } else if (thisx->cutscene >= 0) {
+                            this->unk1DF = 1;
+                        } else {
+                            Actor_SetSwitchFlag(globalCtx, paramsLow);
+                            this->unk_1DC = -1;
+                        }
+                    } else {
+                        if (++D_808BCDE0 >= paramsMid) {
+                            this->unk1DF = 1;
+                        } else {
+                            this->unk_1DC = (paramsMid * 50) + 110;
+                        }
+                    }
+                    func_801A5CFC(0x2822, &thisx->projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
+                }
+            }
+        }
+    }
+    Collider_UpdateCylinder(thisx, &this->colliderCylinder1);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->colliderCylinder1.base);
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->colliderCylinder1.base);
+    Collider_UpdateCylinder(thisx, &this->colliderCylinder2);
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->colliderCylinder2.base);
+    if ((this->unk_1DC > 0) && (--this->unk_1DC == 0) && (paramsHigh != 0)) {
+        D_808BCDE0--;
+    }
+    if (this->unk_1DC != 0) {
+        if ((this->unk_1DC < 0) || (this->unk_1DC >= 20)) {
+            sp5C = 0xFA;
+        } else {
+            sp5C = ((this->unk_1DC * 250.0f) / 20.0f);
+        }
+        sp5B = (u32) (Rand_ZeroOne() * 0x7F) + 0x80;
+        func_800B9010(thisx, 0x2031);
+    }
+    Lights_PointSetColorAndRadius(&this->lightInfo, sp5B, (u32) (sp5B * 0.7f) & 0xFF, 0, sp5C);
+    this->unk_1DE++;
+}
+
 
 void ObjSyokudai_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjSyokudai* this = THIS;
