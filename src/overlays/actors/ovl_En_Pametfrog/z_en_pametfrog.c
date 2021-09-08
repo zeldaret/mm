@@ -982,7 +982,7 @@ void EnPametfrog_SetupSpawnFrog(EnPametfrog* this, GlobalContext* globalCtx) {
     vec1.z = (Math_CosS(yaw) * 20.0f) + this->actor.world.pos.z;
     this->collider.base.ocFlags1 &= ~OC1_ON;
     func_800B0DE0(globalCtx, &vec1, &D_801D15B0, &D_801D15B0, &primColor, &envColor, 800, 50);
-    func_800F0568(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_NPC_APPEAR);
+    Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_NPC_APPEAR);
     Actor_SetRoomClearedTemp(globalCtx, globalCtx->roomCtx.currRoom.num);
 
     for (i = 0; i < 25; i++) {
@@ -1287,7 +1287,7 @@ void EnPametfrog_ApplyDamageEffect(EnPametfrog* this, GlobalContext* globalCtx) 
         if ((this->drawEffect != GEKKO_DRAW_EFFECT_FROZEN) ||
             !(this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
             if (this->actor.params == GEKKO_PRE_SNAPPER) {
-                if (func_800BE22C(&this->actor) == 0) {
+                if (Actor_ApplyDamage(&this->actor) == 0) {
                     func_801A2ED8();
                 }
 
@@ -1320,10 +1320,10 @@ void EnPametfrog_ApplyDamageEffect(EnPametfrog* this, GlobalContext* globalCtx) 
                     }
                     EnPametfrog_SetupDamage(this);
                 }
-            } else if (func_800BE22C(&this->actor) == 0) {
+            } else if (Actor_ApplyDamage(&this->actor) == 0) {
                 this->collider.base.acFlags &= ~AC_ON;
                 EnPametfrog_ApplyMagicArrowEffects(this, globalCtx);
-                func_800BBA88(globalCtx, &this->actor);
+                Enemy_StartFinishingBlow(globalCtx, &this->actor);
                 this->actor.flags &= ~1;
                 func_801A2ED8();
                 EnPametfrog_SetupCutscene(this);

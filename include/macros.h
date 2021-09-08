@@ -24,6 +24,8 @@
 
 #define PLAYER ((Player*)globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first)
 
+#define FIRST_ENEMY ((Actor*)globalCtx->actorCtx.actorList[ACTORCAT_ENEMY].first)
+
 // linkAge still exists in MM, but is always set to 0 (always adult)
 // There are remnants of these macros from OOT, but they are essentially useless
 //#define LINK_IS_CHILD (gSaveContext.linkAge != 0)
@@ -47,6 +49,8 @@
 #define ALL_EQUIP_VALUE(equip) ((gSaveContext.inventory.equipment & gEquipMasks[equip]) >> gEquipShifts[equip])
 #define CUR_EQUIP_VALUE(equip) ((gSaveContext.equips.equipment & gEquipMasks[equip]) >> gEquipShifts[equip])
 #define CUR_UPG_VALUE(upg) ((gSaveContext.inventory.upgrades & gUpgradeMasks[upg]) >> gUpgradeShifts[upg])
+#define TAKE_EQUIPPED_ITEM(equip) (gSaveContext.equips.equipment = ((((void)0, gSaveContext.equips.equipment) & (gEquipNegMasks[equip])) | (u16)(0 << gEquipShifts[equip])))
+#define CUR_FORM_EQUIP(button) (gSaveContext.equips.buttonItems[gSaveContext.playerForm == PLAYER_FORM_HUMAN ? 0 : gSaveContext.playerForm][button])
 #define CHECK_QUEST_ITEM(item) (((void)0, gSaveContext.inventory.questItems) & gBitFlags[item])
 
 #define CAPACITY(upg, value) gUpgradeCapacities[upg][value]

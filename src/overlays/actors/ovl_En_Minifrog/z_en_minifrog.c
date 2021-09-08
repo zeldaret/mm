@@ -289,7 +289,7 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, GlobalContext* globalCtx) {
             default:
                 func_801477B4(globalCtx);
                 EnMinifrog_SpawnDust(this, globalCtx);
-                func_800F0568(globalCtx, &this->actor.world.pos, 30, NA_SE_EN_NPC_FADEAWAY);
+                Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 30, NA_SE_EN_NPC_FADEAWAY);
                 if (this->actor.cutscene != -1) {
                     if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
                         ActorCutscene_Stop(this->actor.cutscene);

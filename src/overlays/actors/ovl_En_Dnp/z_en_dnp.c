@@ -321,7 +321,7 @@ void func_80B3D338(EnDnp* this, GlobalContext* globalCtx) {
 }
 
 void func_80B3D3F8(EnDnp* this, GlobalContext* globalCtx) {
-    if (func_8010BF58(&this->actor, globalCtx, D_80B3DE58, 0, &this->unk_328)) {
+    if (func_8010BF58(&this->actor, globalCtx, D_80B3DE58, NULL, &this->unk_328)) {
         func_8013AED4(&this->unk_322, 3, 7);
         this->unk_322 &= ~8;
         this->actionFunc = func_80B3D2D4;
