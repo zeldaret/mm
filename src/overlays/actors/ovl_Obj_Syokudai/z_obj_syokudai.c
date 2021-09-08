@@ -119,14 +119,15 @@ void ObjSyokudai_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     ObjSyokudai* this = THIS;
+    s32 pad0[1];
     s32 paramsLow = OBJ_SYOKUDAI_GET_PARAMS_LOW(thisx);
     s32 paramsHigh = OBJ_SYOKUDAI_GET_PARAMS_HIGH(thisx);
     s32 paramsMid = OBJ_SYOKUDAI_GET_PARAMS_MID(thisx);
-    s32 pad0[3];
-    s32 sp5C = -1;
-    u8 sp5B = 0;
     f32 sp64;
     f32 sp60;
+    s32 sp5C = -1;
+    u8 sp5B = 0;
+    s32 pad1[2];
 
     if (this->unk1DF != 0) {
         if (ActorCutscene_GetCurrentIndex() != thisx->cutscene) {
