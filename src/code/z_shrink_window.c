@@ -44,12 +44,10 @@ void ShrinkWindow_Init(void) {
     bzero(gShrinkWindowContextPtr, sizeof(gShrinkWindowContext));
 }
 
-// Rename to ShrinkWindow_Destroy
 void ShrinkWindow_Destroy(void) {
     gShrinkWindowContextPtr = NULL;
 }
 
-// Rename to ShrinkWindow_Update
 void ShrinkWindow_Update(s32 framerateDivisor) {
     s32 step;
     s32 nextMagnitude;
