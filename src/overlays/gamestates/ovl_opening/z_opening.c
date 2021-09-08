@@ -7,8 +7,8 @@
 #include "z_opening.h"
 
 void Opening_SetupForTitleCutscene(OpeningContext* this) {
-    static s32 openingEntrances[] = { 0x00001C00, 0x00001C10 };
-    static s32 openingCutscenes[] = { 0x0000FFFA, 0x0000FFFA };
+    static s32 openingEntrances[] = { 0x1C00, 0x1C10 };
+    static s32 openingCutscenes[] = { 0xFFFA, 0xFFFA };
 
     gSaveContext.eventInf[1] &= 0x7F;
     gSaveContext.gameMode = 1;
