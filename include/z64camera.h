@@ -37,9 +37,9 @@ typedef enum {
     /* 0x00 */ CAM_SET_NONE,
     /* 0x01 */ CAM_SET_NORMAL0,
     /* 0x02 */ CAM_SET_NORMAL3,
-    /* 0x03 */ CAM_SET_CIRCLE5,
-    /* 0x04 */ CAM_SET_HORSE0,
-    /* 0x05 */ CAM_SET_ZORA0,
+    /* 0x03 */ CAM_SET_CIRCLE5, // "Diving into the water from the surface, not as zora"
+    /* 0x04 */ CAM_SET_HORSE, // "HORSE0"
+    /* 0x05 */ CAM_SET_ZORA, // "ZORA0"
     /* 0x06 */ CAM_SET_PREREND0,
     /* 0x07 */ CAM_SET_PREREND1,
     /* 0x08 */ CAM_SET_DOORC,
@@ -60,7 +60,7 @@ typedef enum {
     /* 0x17 */ CAM_SET_WARP0,
     /* 0x18 */ CAM_SET_DEATH,
     /* 0x19 */ CAM_SET_REBIRTH,
-    /* 0x1A */ CAM_SET_TREASURE,
+    /* 0x1A */ CAM_SET_TREASURE, // Treasure Chest Shop in East Clock Town, minigame location
     /* 0x1B */ CAM_SET_TRANSFORM,
     /* 0x1C */ CAM_SET_ATTENTION,
     /* 0x1D */ CAM_SET_WARP1,
@@ -85,11 +85,11 @@ typedef enum {
     /* 0x30 */ CAM_SET_CLIMEMAZE,
     /* 0x31 */ CAM_SET_SIDED,
     /* 0x32 */ CAM_SET_DUNGEON2,
-    /* 0x33 */ CAM_SET_BOSS_SHIGE,
+    /* 0x33 */ CAM_SET_BOSS_ODOLWA, // Odolwa's Lair, also used in GBT entrance: "BOSS_SHIGE"
     /* 0x34 */ CAM_SET_KEEPBACK,
     /* 0x35 */ CAM_SET_CIRCLE6,
     /* 0x36 */ CAM_SET_CIRCLE7,
-    /* 0x37 */ CAM_SET_CHUBOSS,
+    /* 0x37 */ CAM_SET_MINIBOSS, // "CHUBOSS"
     /* 0x38 */ CAM_SET_RFIXED1,
     /* 0x39 */ CAM_SET_TRESURE1,
     /* 0x3A */ CAM_SET_BOMBBASKET,
@@ -102,18 +102,18 @@ typedef enum {
     /* 0x41 */ CAM_SET_CIRCLE9,
     /* 0x42 */ CAM_SET_ONTHEPOLE,
     /* 0x43 */ CAM_SET_INBUSH,
-    /* 0x44 */ CAM_SET_BOSS_LAST,
-    /* 0x45 */ CAM_SET_BOSS_INI,
-    /* 0x46 */ CAM_SET_BOSS_HAK,
-    /* 0x47 */ CAM_SET_BOSS_KON,
+    /* 0x44 */ CAM_SET_BOSS_MAJORA, // Majora's Lair: "BOSS_LAST" 
+    /* 0x45 */ CAM_SET_BOSS_TWINMOLD, // Twinmold's Lair: "BOSS_INI"
+    /* 0x46 */ CAM_SET_BOSS_GOHT, // Goht's Lair: "BOSS_HAK" 
+    /* 0x47 */ CAM_SET_BOSS_GYORG, // Gyorg's Lair: "BOSS_KON"
     /* 0x48 */ CAM_SET_CONNECT0,
-    /* 0x49 */ CAM_SET_MORAY,
+    /* 0x49 */ CAM_SET_PINNACLE_ROCK, // "MORAY"
     /* 0x4A */ CAM_SET_NORMAL2,
     /* 0x4B */ CAM_SET_BOMBBOWL,
     /* 0x4C */ CAM_SET_CIRCLEA,
-    /* 0x4D */ CAM_SET_WHIRLPOOL,
-    /* 0x4E */ CAM_SET_KOKKOGAME,
-    /* 0x4F */ CAM_SET_GIANT,
+    /* 0x4D */ CAM_SET_WHIRLPOOL, // Great Bay Temple Central Room Whirlpool
+    /* 0x4E */ CAM_SET_CUCCO_SHACK, // "KOKKOGAME"
+    /* 0x4F */ CAM_SET_GIANT, // "Giants Mask in Twinmold's Lair"
     /* 0x50 */ CAM_SET_SCENE0,
     /* 0x51 */ CAM_SET_ROOM1,
     /* 0x52 */ CAM_SET_WATER2,
@@ -123,7 +123,7 @@ typedef enum {
     /* 0x56 */ CAM_SET_START1,
     /* 0x57 */ CAM_SET_ROOM2,
     /* 0x58 */ CAM_SET_NORMAL4,
-    /* 0x59 */ CAM_SET_SHELL,
+    /* 0x59 */ CAM_SET_ELEGY_SHELL, // "SHELL"
     /* 0x5A */ CAM_SET_DUNGEON4,
     /* 0x5B */ CAM_SET_MAX
 } CameraSettingType;
@@ -132,9 +132,9 @@ typedef enum {
     /* 0x00 */ CAM_MODE_NORMAL,
     /* 0x01 */ CAM_MODE_JUMP,
     /* 0x02 */ CAM_MODE_GORONDASH,
-    /* 0x03 */ CAM_MODE_NUTSSHOT,
+    /* 0x03 */ CAM_MODE_DEKUSHOT, // "CAM_MODE_NUTSSHOT"
     /* 0x04 */ CAM_MODE_BOWARROWZ,
-    /* 0x05 */ CAM_MODE_NUTSFLY,
+    /* 0x05 */ CAM_MODE_DEKUFLY, // "CAM_MODE_NUTSFLY"
     /* 0x06 */ CAM_MODE_FIRSTPERSON, // "SUBJECT"
     /* 0x07 */ CAM_MODE_BOOMFOLLLOW, // "BOOKEEPON"
     /* 0x08 */ CAM_MODE_ZORAFIN,
@@ -144,7 +144,7 @@ typedef enum {
     /* 0x0C */ CAM_MODE_SLINGSHOT, // "PACHINCO"
     /* 0x0D */ CAM_MODE_BOWARROW,
     /* 0x0E */ CAM_MODE_BATTLE,
-    /* 0x0F */ CAM_MODE_NUTSHIDE,
+    /* 0x0F */ CAM_MODE_DEKUHIDE, // "CAM_MODE_NUTSHIDE"
     /* 0x10 */ CAM_MODE_STILL,
     /* 0x11 */ CAM_MODE_CHARGE,
     /* 0x12 */ CAM_MODE_CLIMB,
@@ -154,7 +154,7 @@ typedef enum {
     /* 0x16 */ CAM_MODE_HANG,
     /* 0x17 */ CAM_MODE_HANGZ,
     /* 0x18 */ CAM_MODE_PUSHPULL,
-    /* 0x19 */ CAM_MODE_NUTSFLYZ,
+    /* 0x19 */ CAM_MODE_DEKUFLYZ, // "CAM_MODE_NUTSFLYZ"
     /* 0x1A */ CAM_MODE_GORONJUMP,
     /* 0x1B */ CAM_MODE_BOOMERANG,
     /* 0x1C */ CAM_MODE_CHARGEZ,
@@ -523,7 +523,7 @@ typedef struct {
 typedef struct {
     /* 0x00 */ PosRot eyePosRotTarget;
     /* 0x14 */ s16 fov;
-    /* 0x18 */ struct Player* player;
+    /* 0x18 */ struct Actor* trackActor;
 } Fixed1Anim; // size = 0x1C
 
 typedef struct {
@@ -798,7 +798,7 @@ typedef struct Camera {
     /* 0x074 */ Vec3f eyeNext;
     /* 0x080 */ Vec3f skyboxOffset;
     /* 0x08C */ struct GlobalContext* globalCtx;
-    /* 0x090 */ struct Player* trackActor; // trackActor Is likely Actor* not Player*. This is the actor the camera focuses on
+    /* 0x090 */ struct Actor* trackActor; // trackActor Is likely Actor* not Player*. This is the actor the camera focuses on
     /* 0x094 */ PosRot trackActorPosRot;
     /* 0x0A8 */ struct Actor* target; // targetedActor
     /* 0x0AC */ PosRot targetPosRot;

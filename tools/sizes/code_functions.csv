@@ -775,7 +775,7 @@ asm/non_matchings/code/z_camera/Camera_Stub800DE0E0.s,Camera_Stub800DE0E0,0x800D
 asm/non_matchings/code/z_camera/Camera_InitPlayerSettings.s,Camera_InitPlayerSettings,0x800DE0EC,0x87
 asm/non_matchings/code/z_camera/Camera_ChangeStatus.s,Camera_ChangeStatus,0x800DE308,0x7
 asm/non_matchings/code/z_camera/Camera_CheckWater.s,Camera_CheckWater,0x800DE324,0xC2
-asm/non_matchings/code/z_camera/Camera_OutdoorEarthquakeDay3.s,Camera_OutdoorEarthquakeDay3,0x800DE62C,0x85
+asm/non_matchings/code/z_camera/Camera_EarthquakeDay3.s,Camera_EarthquakeDay3,0x800DE62C,0x85
 asm/non_matchings/code/z_camera/Camera_SetRoomHotFlag.s,Camera_SetRoomHotFlag,0x800DE840,0x14
 asm/non_matchings/code/z_camera/func_800DE890.s,func_800DE890,0x800DE890,0x31
 asm/non_matchings/code/z_camera/func_800DE954.s,func_800DE954,0x800DE954,0x17
@@ -806,7 +806,7 @@ asm/non_matchings/code/z_camera/Camera_Copy.s,Camera_Copy,0x800E007C,0x4C
 asm/non_matchings/code/z_camera/Camera_GetDbgCamEnabled.s,Camera_GetDbgCamEnabled,0x800E01AC,0x3
 asm/non_matchings/code/z_camera/Camera_GetSkyboxOffset.s,Camera_GetSkyboxOffset,0x800E01B8,0x9
 asm/non_matchings/code/z_camera/Camera_SetCameraData.s,Camera_SetCameraData,0x800E01DC,0x13
-asm/non_matchings/code/z_camera/func_800E0228.s,func_800E0228,0x800E0228,0x4
+asm/non_matchings/code/z_camera/Camera_GetNegOne.s,Camera_GetNegOne,0x800E0228,0x4
 asm/non_matchings/code/z_camera/func_800E0238.s,func_800E0238,0x800E0238,0x1D
 asm/non_matchings/code/z_camera/Camera_SetToTrackActor.s,Camera_SetToTrackActor,0x800E02AC,0x17
 asm/non_matchings/code/z_camera/func_800E0308.s,func_800E0308,0x800E0308,0x5
