@@ -14,10 +14,16 @@
  * FORCEKEEP    NORMAL    NORM1
  * NORMAL4      NORMAL    NORM1
  */
-CameraModeValue D_801B4710[] = {
-    { -20, 0 },    { 0x0118, 1 }, { 0x0140, 2 }, { 10, 3 },     { 0x0016, 4 },
-    { 0x000F, 5 }, { 0x0028, 6 }, { 60, 7 },     { 0x0054, 8 }, { 0x0083, 9 },
-};
+CameraModeValue D_801B4710[] = { { -20, CAM_DATA_00 },
+                                 { 0x0118, CAM_DATA_01 },
+                                 { 0x0140, CAM_DATA_02 },
+                                 { 10, CAM_DATA_03 },
+                                 { 0x0016, CAM_DATA_04 },
+                                 { 0x000F, CAM_DATA_05 },
+                                 { 0x0028, CAM_DATA_06 },
+                                 { 60, CAM_DATA_07 },
+                                 { 0x0054, CAM_DATA_08 },
+                                 { 0x0083, 9 } };
 
 /**
  * Setting      Mode        Function
@@ -37,8 +43,18 @@ CameraModeValue D_801B4710[] = {
  * NORMAL4      TARGET      PARA1
  */
 CameraModeValue D_801B4738[] = {
-    { 0, 0 },      { 350, 1 },    { 50, 2 }, { 0, 3 },      { 0, 10 },  { 0x0005, 4 },
-    { 0x0005, 5 }, { 0x002D, 7 }, { 50, 8 }, { 0x2002, 9 }, { 60, 11 }, { 0, 12 },
+    { 0, CAM_DATA_00 },
+    { 350, CAM_DATA_01 },
+    { 50, CAM_DATA_02 },
+    { 0, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x002D, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x2002, CAM_DATA_09 },
+    { 60, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /**
@@ -64,8 +80,18 @@ CameraModeValue D_801B4738[] = {
  * NORMAL4         FOLLOWTARGET    KEEP1
  */
 CameraModeValue D_801B4768[] = {
-    { -30, 0 }, { 180, 1 },     { 200, 2 },    { 20, 13 }, { 0x0028, 14 }, { -5, 15 },
-    { 10, 16 }, { 0x000F, 17 }, { 0x002D, 7 }, { 60, 8 },  { 0x2001, 9 },  { 30, 11 },
+    { -30, CAM_DATA_00 },
+    { 180, CAM_DATA_01 },
+    { 200, CAM_DATA_02 },
+    { 20, CAM_DATA_13 },
+    { 0x0028, CAM_DATA_14 },
+    { -5, CAM_DATA_15 },
+    { 10, CAM_DATA_16 },
+    { 0x000F, CAM_DATA_17 },
+    { 0x002D, CAM_DATA_07 },
+    { 60, CAM_DATA_08 },
+    { 0x2001, CAM_DATA_09 },
+    { 30, CAM_DATA_11 },
 };
 
 /**
@@ -90,8 +116,19 @@ CameraModeValue D_801B4768[] = {
  * NORMAL4         BATTLE    BATT1
  */
 CameraModeValue D_801B4798[] = {
-    { -30, 0 },     { 0x0096, 1 }, { 250, 2 },    { 10, 13 },    { 60, 14 },     { -5, 15 },     { 20, 16 },
-    { 0x0023, 17 }, { 0x0037, 7 }, { 0x0046, 8 }, { 0x2002, 9 }, { 0x0019, 11 }, { 0x0028, 18 },
+    { -30, CAM_DATA_00 },
+    { 0x0096, CAM_DATA_01 },
+    { 250, CAM_DATA_02 },
+    { 10, CAM_DATA_13 },
+    { 60, CAM_DATA_14 },
+    { -5, CAM_DATA_15 },
+    { 20, CAM_DATA_16 },
+    { 0x0023, CAM_DATA_17 },
+    { 0x0037, CAM_DATA_07 },
+    { 0x0046, CAM_DATA_08 },
+    { 0x2002, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_11 },
+    { 0x0028, CAM_DATA_18 },
 };
 
 /**
@@ -139,7 +176,15 @@ CameraModeValue D_801B4798[] = {
  * DUNGEON4       FIRSTPERSON    SUBJ1
  */
 CameraModeValue D_801B47CC[] = {
-    { 0, 0 }, { 0x0005, 1 }, { 50, 2 }, { 10, 4 }, { 0, 19 }, { 0, 17 }, { 0, 18 }, { 0x002D, 7 }, { 0, 9 },
+    { 0, CAM_DATA_00 },
+    { 0x0005, CAM_DATA_01 },
+    { 50, CAM_DATA_02 },
+    { 10, CAM_DATA_04 },
+    { 0, CAM_DATA_19 },
+    { 0, CAM_DATA_17 },
+    { 0, CAM_DATA_18 },
+    { 0x002D, CAM_DATA_07 },
+    { 0, CAM_DATA_09 },
 };
 
 /**
@@ -174,8 +219,19 @@ CameraModeValue D_801B47CC[] = {
  * DUNGEON4       TALK    KEEP3
  */
 CameraModeValue D_801B47F0[] = {
-    { -20, 0 },     { 80, 1 },     { 0x0096, 2 }, { 50, 13 }, { 0x0005, 14 }, { 20, 15 }, { 0x0005, 16 },
-    { 0x0028, 17 }, { 0x0023, 7 }, { 50, 8 },     { 20, 4 },  { 0x3500, 9 },  { 60, 18 },
+    { -20, CAM_DATA_00 },
+    { 80, CAM_DATA_01 },
+    { 0x0096, CAM_DATA_02 },
+    { 50, CAM_DATA_13 },
+    { 0x0005, CAM_DATA_14 },
+    { 20, CAM_DATA_15 },
+    { 0x0005, CAM_DATA_16 },
+    { 0x0028, CAM_DATA_17 },
+    { 0x0023, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 20, CAM_DATA_04 },
+    { 0x3500, CAM_DATA_09 },
+    { 60, CAM_DATA_18 },
 };
 
 /**
@@ -203,8 +259,15 @@ CameraModeValue D_801B47F0[] = {
  * NORMAL4        CLIMB    JUMP2
  */
 CameraModeValue D_801B4824[] = {
-    { -20, 0 },    { 0x0118, 1 }, { 0x0140, 2 }, { 20, 20 }, { 0x0005, 4 },
-    { 0x0005, 5 }, { 60, 7 },     { 0x0028, 8 }, { 0, 9 },
+    { -20, CAM_DATA_00 },
+    { 0x0118, CAM_DATA_01 },
+    { 0x0140, CAM_DATA_02 },
+    { 20, CAM_DATA_20 },
+    { 0x0005, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 60, CAM_DATA_07 },
+    { 0x0028, CAM_DATA_08 },
+    { 0, CAM_DATA_09 },
 };
 
 /**
@@ -249,8 +312,15 @@ CameraModeValue D_801B4824[] = {
  * DUNGEON4       BOWARROW    SUBJ1
  */
 CameraModeValue D_801B4848[] = {
-    { 0xFFF9, 0 }, { 0x000E, 1 }, { 50, 2 },     { 10, 4 },     { 0, 19 },
-    { -30, 17 },   { -5, 18 },    { 0x002D, 7 }, { 0x2000, 9 },
+    { 0xFFF9, CAM_DATA_00 },
+    { 0x000E, CAM_DATA_01 },
+    { 50, CAM_DATA_02 },
+    { 10, CAM_DATA_04 },
+    { 0, CAM_DATA_19 },
+    { -30, CAM_DATA_17 },
+    { -5, CAM_DATA_18 },
+    { 0x002D, CAM_DATA_07 },
+    { 0x2000, CAM_DATA_09 },
 };
 
 /**
@@ -301,8 +371,15 @@ CameraModeValue D_801B4848[] = {
  * DUNGEON4       BOWARROWZ    SUBJ1
  */
 CameraModeValue D_801B486C[] = {
-    { 20, 0 },  { 0x0046, 1 }, { 0x0046, 2 }, { 10, 4 },     { 0xFF88, 19 },
-    { 20, 17 }, { 0, 18 },     { 0x002D, 7 }, { 0x2000, 9 },
+    { 20, CAM_DATA_00 },
+    { 0x0046, CAM_DATA_01 },
+    { 0x0046, CAM_DATA_02 },
+    { 10, CAM_DATA_04 },
+    { 0xFF88, CAM_DATA_19 },
+    { 20, CAM_DATA_17 },
+    { 0, CAM_DATA_18 },
+    { 0x002D, CAM_DATA_07 },
+    { 0x2000, CAM_DATA_09 },
 };
 
 /**
@@ -346,14 +423,14 @@ CameraModeValue D_801B486C[] = {
  * DUNGEON4       HOOKSHOT    SPEC5
  */
 CameraModeValue D_801B4890[] = {
-    { -20, 0 },    // yOffset
-    { 80, 1 },     // eyeDist
-    { 250, 2 },    // minDistForRot
-    { 45, 3 },     // fovTarget
-    { 60, 7 },     // atMaxLERPScale
-    { 40, 8 },     // timerInit
-    { 6, 12 },     // pitch
-    { 0x2000, 9 }, // flags
+    { -20, CAM_DATA_00 },    // yOffset
+    { 80, CAM_DATA_01 },     // eyeDist
+    { 250, CAM_DATA_02 },    // minDistForRot
+    { 45, CAM_DATA_03 },     // fovTarget
+    { 60, CAM_DATA_07 },     // atMaxLERPScale
+    { 40, CAM_DATA_08 },     // timerInit
+    { 6, CAM_DATA_12 },      // pitch
+    { 0x2000, CAM_DATA_09 }, // flags
 };
 
 /**
@@ -364,7 +441,15 @@ CameraModeValue D_801B4890[] = {
  * ROOM0       BOOMERANG    SUBJ1
  */
 CameraModeValue D_801B48B0[] = {
-    { 0x0005, 0 }, { 50, 1 }, { 50, 2 }, { 10, 4 }, { 0, 19 }, { 0, 17 }, { 0, 18 }, { 0x002D, 7 }, { 0x2000, 9 },
+    { 0x0005, CAM_DATA_00 },
+    { 50, CAM_DATA_01 },
+    { 50, CAM_DATA_02 },
+    { 10, CAM_DATA_04 },
+    { 0, CAM_DATA_19 },
+    { 0, CAM_DATA_17 },
+    { 0, CAM_DATA_18 },
+    { 0x002D, CAM_DATA_07 },
+    { 0x2000, CAM_DATA_09 },
 };
 
 /**
@@ -409,8 +494,15 @@ CameraModeValue D_801B48B0[] = {
  * DUNGEON4       SLINGSHOT    SUBJ1
  */
 CameraModeValue D_801B48D4[] = {
-    { 0xFFF9, 0 }, { 0x000E, 1 }, { 50, 2 },     { 10, 4 },     { 0, 19 },
-    { -50, 17 },   { -10, 18 },   { 0x002D, 7 }, { 0x2000, 9 },
+    { 0xFFF9, CAM_DATA_00 },
+    { 0x000E, CAM_DATA_01 },
+    { 50, CAM_DATA_02 },
+    { 10, CAM_DATA_04 },
+    { 0, CAM_DATA_19 },
+    { -50, CAM_DATA_17 },
+    { -10, CAM_DATA_18 },
+    { 0x002D, CAM_DATA_07 },
+    { 0x2000, CAM_DATA_09 },
 };
 
 /**
@@ -437,8 +529,15 @@ CameraModeValue D_801B48D4[] = {
  * NORMAL4        CLIMBZ    JUMP2
  */
 CameraModeValue D_801B48F8[] = {
-    { -20, 0 },    { 0x0118, 1 }, { 0x0140, 2 }, { 20, 20 },    { 0x03E7, 4 },
-    { 0x0005, 5 }, { 60, 7 },     { 0x0028, 8 }, { 0x2006, 9 },
+    { -20, CAM_DATA_00 },
+    { 0x0118, CAM_DATA_01 },
+    { 0x0140, CAM_DATA_02 },
+    { 20, CAM_DATA_20 },
+    { 0x03E7, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 60, CAM_DATA_07 },
+    { 0x0028, CAM_DATA_08 },
+    { 0x2006, CAM_DATA_09 },
 };
 
 /**
@@ -459,8 +558,16 @@ CameraModeValue D_801B48F8[] = {
  * NORMAL4        JUMP    NORM1
  */
 CameraModeValue D_801B491C[] = {
-    { -20, 0 },    { 0x00F0, 1 }, { 0x0154, 2 }, { 10, 3 }, { 30, 4 },
-    { 0x000C, 5 }, { 0x0028, 6 }, { 60, 7 },     { 50, 8 }, { 0x008B, 9 },
+    { -20, CAM_DATA_00 },
+    { 0x00F0, CAM_DATA_01 },
+    { 0x0154, CAM_DATA_02 },
+    { 10, CAM_DATA_03 },
+    { 30, CAM_DATA_04 },
+    { 0x000C, CAM_DATA_05 },
+    { 0x0028, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x008B, CAM_DATA_09 },
 };
 
 /**
@@ -490,8 +597,18 @@ CameraModeValue D_801B491C[] = {
  * NORMAL4        HANG    PARA1
  */
 CameraModeValue D_801B4944[] = {
-    { -40, 0 },    { 0x0140, 1 }, { 50, 2 }, { 0x0028, 3 }, { 0, 10 },  { 0x0008, 4 },
-    { 0x0005, 5 }, { 60, 7 },     { 50, 8 }, { 0x0086, 9 }, { 60, 11 }, { 0x000C, 12 },
+    { -40, CAM_DATA_00 },
+    { 0x0140, CAM_DATA_01 },
+    { 50, CAM_DATA_02 },
+    { 0x0028, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0008, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 60, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x0086, CAM_DATA_09 },
+    { 60, CAM_DATA_11 },
+    { 0x000C, CAM_DATA_12 },
 };
 
 /**
@@ -521,8 +638,18 @@ CameraModeValue D_801B4944[] = {
  * NORMAL4        HANGZ    PARA1
  */
 CameraModeValue D_801B4974[] = {
-    { 0xFFB0, 0 }, { 300, 1 },    { 50, 2 }, { 0x0046, 3 }, { 0, 10 },  { 0x000C, 4 },
-    { 0x0005, 5 }, { 0x002D, 7 }, { 50, 8 }, { 0x2086, 9 }, { 60, 11 }, { 0x0002, 12 },
+    { 0xFFB0, CAM_DATA_00 },
+    { 300, CAM_DATA_01 },
+    { 50, CAM_DATA_02 },
+    { 0x0046, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x000C, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x002D, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x2086, CAM_DATA_09 },
+    { 60, CAM_DATA_11 },
+    { 0x0002, CAM_DATA_12 },
 };
 
 /**
@@ -547,8 +674,18 @@ CameraModeValue D_801B4974[] = {
  * NORMAL4        FREEFALL    PARA1
  */
 CameraModeValue D_801B49A4[] = {
-    { -10, 0 },    { 0x0140, 1 }, { 100, 2 }, { 0x0046, 3 }, { 0, 10 },  { 0x0004, 4 },
-    { 0x0005, 5 }, { 0x0046, 7 }, { 20, 8 },  { 0x0088, 9 }, { 60, 11 }, { 0x000C, 12 },
+    { -10, CAM_DATA_00 },
+    { 0x0140, CAM_DATA_01 },
+    { 100, CAM_DATA_02 },
+    { 0x0046, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0004, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0046, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 0x0088, CAM_DATA_09 },
+    { 60, CAM_DATA_11 },
+    { 0x000C, CAM_DATA_12 },
 };
 
 /**
@@ -578,8 +715,18 @@ CameraModeValue D_801B49A4[] = {
  * NORMAL4        CHARGE    PARA1
  */
 CameraModeValue D_801B49D4[] = {
-    { 0xFFB0, 0 }, { 300, 1 }, { -20, 2 }, { 50, 3 }, { 0, 10 },  { 50, 4 },
-    { 0x0005, 5 }, { 80, 7 },  { 20, 8 },  { 0, 9 },  { 60, 11 }, { 10, 12 },
+    { 0xFFB0, CAM_DATA_00 },
+    { 300, CAM_DATA_01 },
+    { -20, CAM_DATA_02 },
+    { 50, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 50, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 80, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 0, CAM_DATA_09 },
+    { 60, CAM_DATA_11 },
+    { 10, CAM_DATA_12 },
 };
 
 /**
@@ -588,8 +735,18 @@ CameraModeValue D_801B49D4[] = {
  * NORMAL0    CHARGEZ    PARA1
  */
 CameraModeValue D_801B4A04[] = {
-    { 0xFFB0, 0 }, { 300, 1 }, { -20, 2 }, { 0x0028, 3 }, { 0, 10 },  { 50, 4 },
-    { 0x0005, 5 }, { 80, 7 },  { 20, 8 },  { 0x0002, 9 }, { 60, 11 }, { 0, 12 },
+    { 0xFFB0, CAM_DATA_00 },
+    { 300, CAM_DATA_01 },
+    { -20, CAM_DATA_02 },
+    { 0x0028, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 50, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 80, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 0x0002, CAM_DATA_09 },
+    { 60, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /**
@@ -605,8 +762,16 @@ CameraModeValue D_801B4A04[] = {
  * NORMAL4        STILL    NORM1
  */
 CameraModeValue D_801B4A34[] = {
-    { -20, 0 }, { 0x0118, 1 }, { 0x0140, 2 }, { 10, 3 }, { 100, 4 },
-    { 100, 5 }, { 100, 6 },    { 60, 7 },     { 20, 8 }, { 0xF023, 9 },
+    { -20, CAM_DATA_00 },
+    { 0x0118, CAM_DATA_01 },
+    { 0x0140, CAM_DATA_02 },
+    { 10, CAM_DATA_03 },
+    { 100, CAM_DATA_04 },
+    { 100, CAM_DATA_05 },
+    { 100, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 0xF023, CAM_DATA_09 },
 };
 
 /**
@@ -632,8 +797,18 @@ CameraModeValue D_801B4A34[] = {
  * NORMAL4        PUSHPULL    PARA1
  */
 CameraModeValue D_801B4A5C[] = {
-    { 0, 0 },      { 350, 1 },    { 0x0005, 2 }, { 0x002D, 3 }, { 0, 10 },  { 0x0005, 4 },
-    { 0x0005, 5 }, { 0x0046, 7 }, { 30, 8 },     { 0x2022, 9 }, { 80, 11 }, { 0, 12 },
+    { 0, CAM_DATA_00 },
+    { 350, CAM_DATA_01 },
+    { 0x0005, CAM_DATA_02 },
+    { 0x002D, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0046, CAM_DATA_07 },
+    { 30, CAM_DATA_08 },
+    { 0x2022, CAM_DATA_09 },
+    { 80, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /**
@@ -668,8 +843,18 @@ CameraModeValue D_801B4A5C[] = {
  * NORMAL4        BOOMFOLLOW    KEEP1
  */
 CameraModeValue D_801B4A8C[] = {
-    { -5, 0 },      { 220, 1 },     { 0x00F0, 2 }, { 0x0005, 13 }, { 0x004B, 14 }, { 10, 15 },
-    { 0x0005, 16 }, { 0x0028, 17 }, { 50, 7 },     { 0x0028, 8 },  { 0x2001, 9 },  { 30, 11 },
+    { -5, CAM_DATA_00 },
+    { 220, CAM_DATA_01 },
+    { 0x00F0, CAM_DATA_02 },
+    { 0x0005, CAM_DATA_13 },
+    { 0x004B, CAM_DATA_14 },
+    { 10, CAM_DATA_15 },
+    { 0x0005, CAM_DATA_16 },
+    { 0x0028, CAM_DATA_17 },
+    { 50, CAM_DATA_07 },
+    { 0x0028, CAM_DATA_08 },
+    { 0x2001, CAM_DATA_09 },
+    { 30, CAM_DATA_11 },
 };
 
 /**
@@ -713,7 +898,15 @@ CameraModeValue D_801B4A8C[] = {
  * DUNGEON4       DEKUSHOT    SUBJ1
  */
 CameraModeValue D_801B4ABC[] = {
-    { 0, 0 }, { 0x0005, 1 }, { 50, 2 }, { 10, 4 }, { 0, 19 }, { 50, 17 }, { 0x0041, 18 }, { 0x002D, 7 }, { 0, 9 },
+    { 0, CAM_DATA_00 },
+    { 0x0005, CAM_DATA_01 },
+    { 50, CAM_DATA_02 },
+    { 10, CAM_DATA_04 },
+    { 0, CAM_DATA_19 },
+    { 50, CAM_DATA_17 },
+    { 0x0041, CAM_DATA_18 },
+    { 0x002D, CAM_DATA_07 },
+    { 0, CAM_DATA_09 },
 };
 
 /**
@@ -749,8 +942,16 @@ CameraModeValue D_801B4ABC[] = {
  * DUNGEON4       GORONDASH    NORM1
  */
 CameraModeValue D_801B4AE0[] = {
-    { 50, 0 }, { 0x00A0, 1 }, { 0x00FF, 2 }, { 0xFFFE, 3 }, { 0x000C, 4 },
-    { 10, 5 }, { 0x0028, 6 }, { 0x005C, 7 }, { 0x0058, 8 }, { 0x0087, 9 },
+    { 50, CAM_DATA_00 },
+    { 0x00A0, CAM_DATA_01 },
+    { 0x00FF, CAM_DATA_02 },
+    { 0xFFFE, CAM_DATA_03 },
+    { 0x000C, CAM_DATA_04 },
+    { 10, CAM_DATA_05 },
+    { 0x0028, CAM_DATA_06 },
+    { 0x005C, CAM_DATA_07 },
+    { 0x0058, CAM_DATA_08 },
+    { 0x0087, CAM_DATA_09 },
 };
 
 /**
@@ -786,8 +987,18 @@ CameraModeValue D_801B4AE0[] = {
  * DUNGEON4       DEKUHIDE    PARA1
  */
 CameraModeValue D_801B4B08[] = {
-    { 100, 0 },    { 300, 1 }, { -20, 2 }, { 0x0028, 3 }, { 0, 10 },  { 0x0004, 4 },
-    { 0x0005, 5 }, { 80, 7 },  { 60, 8 },  { 0xFF22, 9 }, { 80, 11 }, { 20, 12 },
+    { 100, CAM_DATA_00 },
+    { 300, CAM_DATA_01 },
+    { -20, CAM_DATA_02 },
+    { 0x0028, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0004, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 80, CAM_DATA_07 },
+    { 60, CAM_DATA_08 },
+    { 0xFF22, CAM_DATA_09 },
+    { 80, CAM_DATA_11 },
+    { 20, CAM_DATA_12 },
 };
 
 /**
@@ -823,8 +1034,16 @@ CameraModeValue D_801B4B08[] = {
  * DUNGEON4       DEKUFLY    NORM1
  */
 CameraModeValue D_801B4B38[] = {
-    { 0xFFB0, 0 }, { 0x0118, 1 }, { 0x0140, 2 }, { 0x0028, 3 }, { 20, 4 },
-    { 0x000C, 5 }, { 0x0028, 6 }, { 80, 7 },     { 80, 8 },     { 0x0083, 9 },
+    { 0xFFB0, CAM_DATA_00 },
+    { 0x0118, CAM_DATA_01 },
+    { 0x0140, CAM_DATA_02 },
+    { 0x0028, CAM_DATA_03 },
+    { 20, CAM_DATA_04 },
+    { 0x000C, CAM_DATA_05 },
+    { 0x0028, CAM_DATA_06 },
+    { 80, CAM_DATA_07 },
+    { 80, CAM_DATA_08 },
+    { 0x0083, CAM_DATA_09 },
 };
 
 /**
@@ -860,8 +1079,18 @@ CameraModeValue D_801B4B38[] = {
  * DUNGEON4       DEKUFLYZ    PARA1
  */
 CameraModeValue D_801B4B60[] = {
-    { 0xFFBA, 0 }, { 350, 1 },    { 10, 2 }, { 10, 3 },     { 0, 10 },  { 0x0005, 4 },
-    { 0x0005, 5 }, { 0x0046, 7 }, { 90, 8 }, { 0x200E, 9 }, { 90, 11 }, { 0, 12 },
+    { 0xFFBA, CAM_DATA_00 },
+    { 350, CAM_DATA_01 },
+    { 10, CAM_DATA_02 },
+    { 10, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0046, CAM_DATA_07 },
+    { 90, CAM_DATA_08 },
+    { 0x200E, CAM_DATA_09 },
+    { 90, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /**
@@ -871,8 +1100,16 @@ CameraModeValue D_801B4B60[] = {
  * DUNGEON0    GORONJUMP    NORM1
  */
 CameraModeValue D_801B4B90[] = {
-    { -10, 0 },    { 0x00A0, 1 }, { 0x0190, 2 }, { 0, 3 },  { 0x0012, 4 },
-    { 0x000C, 5 }, { 0x0028, 6 }, { 80, 7 },     { 60, 8 }, { 0x008F, 9 },
+    { -10, CAM_DATA_00 },
+    { 0x00A0, CAM_DATA_01 },
+    { 0x0190, CAM_DATA_02 },
+    { 0, CAM_DATA_03 },
+    { 0x0012, CAM_DATA_04 },
+    { 0x000C, CAM_DATA_05 },
+    { 0x0028, CAM_DATA_06 },
+    { 80, CAM_DATA_07 },
+    { 60, CAM_DATA_08 },
+    { 0x008F, CAM_DATA_09 },
 };
 
 /**
@@ -921,7 +1158,15 @@ CameraModeValue D_801B4B90[] = {
  * DUNGEON4       ZORAFIN    SUBJ1
  */
 CameraModeValue D_801B4BB8[] = {
-    { 0x0005, 0 }, { 100, 1 }, { 100, 2 }, { 10, 4 }, { 0, 19 }, { 0, 17 }, { 0, 18 }, { 0x002D, 7 }, { 0x2000, 9 },
+    { 0x0005, CAM_DATA_00 },
+    { 100, CAM_DATA_01 },
+    { 100, CAM_DATA_02 },
+    { 10, CAM_DATA_04 },
+    { 0, CAM_DATA_19 },
+    { 0, CAM_DATA_17 },
+    { 0, CAM_DATA_18 },
+    { 0x002D, CAM_DATA_07 },
+    { 0x2000, CAM_DATA_09 },
 };
 
 /*=====================================================================
@@ -935,8 +1180,16 @@ CameraModeValue D_801B4BB8[] = {
  * NORMAL3    NORMAL    JUMP3
  */
 CameraModeValue D_801B4BDC[] = {
-    { -40, 0 },    { 0x0118, 1 }, { 300, 2 }, { 20, 3 },  { 0x000F, 4 },
-    { 0x0005, 5 }, { 0x0028, 6 }, { 60, 7 },  { 100, 8 }, { 0x0084, 9 },
+    { -40, CAM_DATA_00 },
+    { 0x0118, CAM_DATA_01 },
+    { 300, CAM_DATA_02 },
+    { 20, CAM_DATA_03 },
+    { 0x000F, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0028, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 100, CAM_DATA_08 },
+    { 0x0084, CAM_DATA_09 },
 };
 
 /**
@@ -945,8 +1198,18 @@ CameraModeValue D_801B4BDC[] = {
  * NORMAL3    TARGET    PARA1
  */
 CameraModeValue D_801B4C04[] = {
-    { -50, 0 },    { 0x0118, 1 }, { 0x0028, 2 }, { 10, 3 },     { 0, 10 },  { 0x000F, 4 },
-    { 0x0005, 5 }, { 60, 7 },     { 100, 8 },    { 0x2003, 9 }, { 80, 11 }, { 0, 12 },
+    { -50, CAM_DATA_00 },
+    { 0x0118, CAM_DATA_01 },
+    { 0x0028, CAM_DATA_02 },
+    { 10, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x000F, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 60, CAM_DATA_07 },
+    { 100, CAM_DATA_08 },
+    { 0x2003, CAM_DATA_09 },
+    { 80, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /**
@@ -958,8 +1221,16 @@ CameraModeValue D_801B4C04[] = {
  * WATER2         FREEFALL    JUMP3
  */
 CameraModeValue D_801B4C34[] = {
-    { 0, 0 },      { 80, 1 },     { 100, 2 }, { 30, 3 }, { 10, 4 },
-    { 0x0005, 5 }, { 0x0028, 6 }, { 80, 7 },  { 20, 8 }, { 0x0004, 9 },
+    { 0, CAM_DATA_00 },
+    { 80, CAM_DATA_01 },
+    { 100, CAM_DATA_02 },
+    { 30, CAM_DATA_03 },
+    { 10, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0028, CAM_DATA_06 },
+    { 80, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 0x0004, CAM_DATA_09 },
 };
 
 /**
@@ -969,8 +1240,16 @@ CameraModeValue D_801B4C34[] = {
  * WATER2     GORONJUMP    JUMP3
  */
 CameraModeValue D_801B4C5C[] = {
-    { -40, 0 },    { 0x0096, 1 }, { 0x00F0, 2 }, { -5, 3 },     { 0x0012, 4 },
-    { 0x0005, 5 }, { 0x0028, 6 }, { 0x0046, 7 }, { 0x0028, 8 }, { 0x000C, 9 },
+    { -40, CAM_DATA_00 },
+    { 0x0096, CAM_DATA_01 },
+    { 0x00F0, CAM_DATA_02 },
+    { -5, CAM_DATA_03 },
+    { 0x0012, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0028, CAM_DATA_06 },
+    { 0x0046, CAM_DATA_07 },
+    { 0x0028, CAM_DATA_08 },
+    { 0x000C, CAM_DATA_09 },
 };
 
 /**
@@ -980,8 +1259,16 @@ CameraModeValue D_801B4C5C[] = {
  * WATER2     NUTSFLY    JUMP3
  */
 CameraModeValue D_801B4C84[] = {
-    { -40, 0 },    { 0x0096, 1 }, { 250, 2 }, { 10, 3 }, { 0x0012, 4 },
-    { 0x0005, 5 }, { 60, 6 },     { 60, 7 },  { 60, 8 }, { 0x0005, 9 },
+    { -40, CAM_DATA_00 },
+    { 0x0096, CAM_DATA_01 },
+    { 250, CAM_DATA_02 },
+    { 10, CAM_DATA_03 },
+    { 0x0012, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 60, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 60, CAM_DATA_08 },
+    { 0x0005, CAM_DATA_09 },
 };
 
 /**
@@ -991,8 +1278,16 @@ CameraModeValue D_801B4C84[] = {
  * WATER2     NUTSHIDE    JUMP3
  */
 CameraModeValue D_801B4CAC[] = {
-    { 0xFFC4, 0 }, { 0x0096, 1 }, { 250, 2 }, { -15, 3 },    { 0x0012, 4 },
-    { 0x0005, 5 }, { 60, 6 },     { 60, 7 },  { 0x0028, 8 }, { 0x0085, 9 },
+    { 0xFFC4, CAM_DATA_00 },
+    { 0x0096, CAM_DATA_01 },
+    { 250, CAM_DATA_02 },
+    { -15, CAM_DATA_03 },
+    { 0x0012, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 60, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 0x0028, CAM_DATA_08 },
+    { 0x0085, CAM_DATA_09 },
 };
 
 /**
@@ -1002,8 +1297,16 @@ CameraModeValue D_801B4CAC[] = {
  * WATER2     STILL    NORM1
  */
 CameraModeValue D_801B4CD4[] = {
-    { -40, 0 }, { 80, 1 },  { 300, 2 }, { 20, 3 }, { 100, 4 },
-    { 100, 5 }, { 100, 6 }, { 60, 7 },  { 20, 8 }, { 0xF023, 9 },
+    { -40, CAM_DATA_00 },
+    { 80, CAM_DATA_01 },
+    { 300, CAM_DATA_02 },
+    { 20, CAM_DATA_03 },
+    { 100, CAM_DATA_04 },
+    { 100, CAM_DATA_05 },
+    { 100, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 0xF023, CAM_DATA_09 },
 };
 
 /**
@@ -1013,8 +1316,16 @@ CameraModeValue D_801B4CD4[] = {
  * BOSS_GYORG  GORONDASH    JUMP3
  */
 CameraModeValue D_801B4CFC[] = {
-    { -40, 0 },    { 180, 1 },    { 200, 2 }, { 0x0005, 3 }, { 20, 4 },
-    { 0x0005, 5 }, { 0x0028, 6 }, { 80, 7 },  { 0x0023, 8 }, { 0x000C, 9 },
+    { -40, CAM_DATA_00 },
+    { 180, CAM_DATA_01 },
+    { 200, CAM_DATA_02 },
+    { 0x0005, CAM_DATA_03 },
+    { 20, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0028, CAM_DATA_06 },
+    { 80, CAM_DATA_07 },
+    { 0x0023, CAM_DATA_08 },
+    { 0x000C, CAM_DATA_09 },
 };
 
 /*=====================================================================
@@ -1028,10 +1339,10 @@ CameraModeValue D_801B4CFC[] = {
  * CIRCLE5    NORMAL    UNIQ2
  */
 CameraModeValue D_801B4D24[] = {
-    { -40, 0 },
+    { -40, CAM_DATA_00 },
     { 60, 1 },
-    { 60, 7 },
-    { 0x0002, 9 },
+    { 60, CAM_DATA_07 },
+    { 0x0002, CAM_DATA_09 },
 };
 
 /**
@@ -1040,10 +1351,10 @@ CameraModeValue D_801B4D24[] = {
  * CIRCLE5    TARGET    UNIQ2
  */
 CameraModeValue D_801B4D34[] = {
-    { -30, 0 },
+    { -30, CAM_DATA_00 },
     { 0x002D, 1 },
-    { 100, 7 },
-    { 0x2001, 9 },
+    { 100, CAM_DATA_07 },
+    { 0x2001, CAM_DATA_09 },
 };
 
 /*=====================================================================
@@ -1057,15 +1368,15 @@ CameraModeValue D_801B4D34[] = {
  * HORSE0     NORMAL    NORM3
  */
 CameraModeValue D_801B4D44[] = {
-    { -50, 0 },    // yOffset
-    { 220, 1 },    // distMin
-    { 250, 2 },    // distMax
-    { 10, 3 },     // yawUpdateRateInv
-    { 10, 4 },     // pitchUpdateRateInv
-    { 20, 5 },     // fovTarget
-    { 60, 7 },     // maxAtLERPScale
-    { 80, 8 },     // pitchTarget
-    { 0x0620, 9 }, // flags
+    { -50, CAM_DATA_00 },    // yOffset
+    { 220, CAM_DATA_01 },    // distMin
+    { 250, CAM_DATA_02 },    // distMax
+    { 10, CAM_DATA_03 },     // yawUpdateRateInv
+    { 10, CAM_DATA_04 },     // pitchUpdateRateInv
+    { 20, CAM_DATA_05 },     // fovTarget
+    { 60, CAM_DATA_07 },     // maxAtLERPScale
+    { 80, CAM_DATA_08 },     // pitchTarget
+    { 0x0620, CAM_DATA_09 }, // flags
 };
 
 /**
@@ -1074,15 +1385,15 @@ CameraModeValue D_801B4D44[] = {
  * HORSE0     TARGET    NORM3
  */
 CameraModeValue D_801B4D68[] = {
-    { -40, 0 },    // yOffset
-    { 180, 1 },    // distMin
-    { 200, 2 },    // distMax
-    { -3, 3 },     // yawUpdateRateInv
-    { 2, 4 },      // pitchUpdateRateInv
-    { 100, 5 },    // fovTarget
-    { 50, 7 },     // maxAtLERPScale
-    { 90, 8 },     // pitchTarget
-    { 0x2602, 9 }, // flags
+    { -40, CAM_DATA_00 },    // yOffset
+    { 180, CAM_DATA_01 },    // distMin
+    { 200, CAM_DATA_02 },    // distMax
+    { -3, CAM_DATA_03 },     // yawUpdateRateInv
+    { 2, CAM_DATA_04 },      // pitchUpdateRateInv
+    { 100, CAM_DATA_05 },    // fovTarget
+    { 50, CAM_DATA_07 },     // maxAtLERPScale
+    { 90, CAM_DATA_08 },     // pitchTarget
+    { 0x2602, CAM_DATA_09 }, // flags
 };
 
 /**
@@ -1091,15 +1402,15 @@ CameraModeValue D_801B4D68[] = {
  * HORSE0     JUMP    NORM3
  */
 CameraModeValue D_801B4D8C[] = {
-    { -50, 0 },    // yOffset
-    { 220, 1 },    // distMin
-    { 260, 2 },    // distMax
-    { 10, 3 },     // yawUpdateRateInv
-    { 10, 4 },     // pitchUpdateRateInv
-    { 20, 5 },     // fovTarget
-    { 60, 7 },     // maxAtLERPScale
-    { 50, 8 },     // pitchTarge
-    { 0x0600, 9 }, // flags
+    { -50, CAM_DATA_00 },    // yOffset
+    { 220, CAM_DATA_01 },    // distMin
+    { 260, CAM_DATA_02 },    // distMax
+    { 10, CAM_DATA_03 },     // yawUpdateRateInv
+    { 10, CAM_DATA_04 },     // pitchUpdateRateInv
+    { 20, CAM_DATA_05 },     // fovTarget
+    { 60, CAM_DATA_07 },     // maxAtLERPScale
+    { 50, CAM_DATA_08 },     // pitchTarge
+    { 0x0600, CAM_DATA_09 }, // flags
 };
 
 /**
@@ -1108,8 +1419,15 @@ CameraModeValue D_801B4D8C[] = {
  * HORSE0     BOWARROW    SUBJ1
  */
 CameraModeValue D_801B4DB0[] = {
-    { 0xFFF9, 0 }, { 0x000E, 1 }, { 100, 2 },    { 10, 4 },     { 0, 19 },
-    { -30, 17 },   { -5, 18 },    { 0x0028, 7 }, { 0x2600, 9 },
+    { 0xFFF9, CAM_DATA_00 },
+    { 0x000E, CAM_DATA_01 },
+    { 100, CAM_DATA_02 },
+    { 10, CAM_DATA_04 },
+    { 0, CAM_DATA_19 },
+    { -30, CAM_DATA_17 },
+    { -5, CAM_DATA_18 },
+    { 0x0028, CAM_DATA_07 },
+    { 0x2600, CAM_DATA_09 },
 };
 
 /**
@@ -1118,8 +1436,15 @@ CameraModeValue D_801B4DB0[] = {
  * HORSE0     SLINGSHOT    SUBJ1
  */
 CameraModeValue D_801B4DD4[] = {
-    { 0xFFF9, 0 }, { 0x000E, 1 }, { 100, 2 },    { 10, 4 },     { 0, 19 },
-    { -50, 17 },   { -10, 18 },   { 0x002D, 7 }, { 0x2000, 9 },
+    { 0xFFF9, CAM_DATA_00 },
+    { 0x000E, CAM_DATA_01 },
+    { 100, CAM_DATA_02 },
+    { 10, CAM_DATA_04 },
+    { 0, CAM_DATA_19 },
+    { -50, CAM_DATA_17 },
+    { -10, CAM_DATA_18 },
+    { 0x002D, CAM_DATA_07 },
+    { 0x2000, CAM_DATA_09 },
 };
 
 /**
@@ -1128,8 +1453,19 @@ CameraModeValue D_801B4DD4[] = {
  * HORSE0     BATTLE    BATT1
  */
 CameraModeValue D_801B4DF8[] = {
-    { 0xFFC4, 0 }, { 180, 1 }, { 0x0118, 2 }, { 10, 13 },    { 60, 14 },     { -5, 15 },     { 20, 16 },
-    { 60, 17 },    { 60, 7 },  { 60, 8 },     { 0x2002, 9 }, { 0x0019, 11 }, { 0x0028, 18 },
+    { 0xFFC4, CAM_DATA_00 },
+    { 180, CAM_DATA_01 },
+    { 0x0118, CAM_DATA_02 },
+    { 10, CAM_DATA_13 },
+    { 60, CAM_DATA_14 },
+    { -5, CAM_DATA_15 },
+    { 20, CAM_DATA_16 },
+    { 60, CAM_DATA_17 },
+    { 60, CAM_DATA_07 },
+    { 60, CAM_DATA_08 },
+    { 0x2002, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_11 },
+    { 0x0028, CAM_DATA_18 },
 };
 
 /**
@@ -1138,8 +1474,18 @@ CameraModeValue D_801B4DF8[] = {
  * HORSE0     FOLLOWTARGET    KEEP1
  */
 CameraModeValue D_801B4E2C[] = {
-    { 0xFFC4, 0 },  { 180, 1 },     { 220, 2 },    { 0x0019, 13 }, { 0x002D, 14 }, { -5, 15 },
-    { 0x000F, 16 }, { 0x000F, 17 }, { 0x002D, 7 }, { 50, 8 },      { 0x2601, 9 },  { 20, 11 },
+    { 0xFFC4, CAM_DATA_00 },
+    { 180, CAM_DATA_01 },
+    { 220, CAM_DATA_02 },
+    { 0x0019, CAM_DATA_13 },
+    { 0x002D, CAM_DATA_14 },
+    { -5, CAM_DATA_15 },
+    { 0x000F, CAM_DATA_16 },
+    { 0x000F, CAM_DATA_17 },
+    { 0x002D, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x2601, CAM_DATA_09 },
+    { 20, CAM_DATA_11 },
 };
 
 /**
@@ -1148,8 +1494,19 @@ CameraModeValue D_801B4E2C[] = {
  * HORSE0     TALK    KEEP3
  */
 CameraModeValue D_801B4E5C[] = {
-    { -50, 0 },  { 0x008C, 1 }, { 200, 2 }, { 0x0028, 13 }, { 10, 14 },    { 0, 15 },  { 0x0005, 16 },
-    { 100, 17 }, { 0x002D, 7 }, { 50, 8 },  { 20, 4 },      { 0x3500, 9 }, { 60, 18 },
+    { -50, CAM_DATA_00 },
+    { 0x008C, CAM_DATA_01 },
+    { 200, CAM_DATA_02 },
+    { 0x0028, CAM_DATA_13 },
+    { 10, CAM_DATA_14 },
+    { 0, CAM_DATA_15 },
+    { 0x0005, CAM_DATA_16 },
+    { 100, CAM_DATA_17 },
+    { 0x002D, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 20, CAM_DATA_04 },
+    { 0x3500, CAM_DATA_09 },
+    { 60, CAM_DATA_18 },
 };
 
 /**
@@ -1158,15 +1515,15 @@ CameraModeValue D_801B4E5C[] = {
  * HORSE0     STILL    NORM3
  */
 CameraModeValue D_801B4E90[] = {
-    { -40, 0 },    // yOffset
-    { 180, 1 },    // distMin
-    { 200, 2 },    // distMax
-    { -3, 3 },     // yawUpdateRateInv
-    { 100, 4 },    // pitchUpdateRateInv
-    { 100, 5 },    // fovTarget
-    { 60, 7 },     // maxAtLERPScale
-    { 10, 8 },     // pitchTarget
-    { 0xFF80, 9 }, // flags
+    { -40, CAM_DATA_00 },    // yOffset
+    { 180, CAM_DATA_01 },    // distMin
+    { 200, CAM_DATA_02 },    // distMax
+    { -3, CAM_DATA_03 },     // yawUpdateRateInv
+    { 100, CAM_DATA_04 },    // pitchUpdateRateInv
+    { 100, CAM_DATA_05 },    // fovTarget
+    { 60, CAM_DATA_07 },     // maxAtLERPScale
+    { 10, CAM_DATA_08 },     // pitchTarget
+    { 0xFF80, CAM_DATA_09 }, // flags
 };
 
 /*=====================================================================
@@ -1180,15 +1537,15 @@ CameraModeValue D_801B4E90[] = {
  * ZORA0      NORMAL    NORM3
  */
 CameraModeValue D_801B4EB4[] = {
-    { -20, 0 },    // yOffset
-    { 250, 1 },    // distMin
-    { 250, 2 },    // distMax
-    { 0, 3 },      // yawUpdateRateInv
-    { 20, 4 },     // pitchUpdateRateInv
-    { 20, 5 },     // fovTarget
-    { 60, 7 },     // maxAtLERPScale
-    { 50, 8 },     // pitchTarget
-    { 0x0680, 9 }, // flags
+    { -20, CAM_DATA_00 },    // yOffset
+    { 250, CAM_DATA_01 },    // distMin
+    { 250, CAM_DATA_02 },    // distMax
+    { 0, CAM_DATA_03 },      // yawUpdateRateInv
+    { 20, CAM_DATA_04 },     // pitchUpdateRateInv
+    { 20, CAM_DATA_05 },     // fovTarget
+    { 60, CAM_DATA_07 },     // maxAtLERPScale
+    { 50, CAM_DATA_08 },     // pitchTarget
+    { 0x0680, CAM_DATA_09 }, // flags
 };
 
 /*=====================================================================
@@ -1202,7 +1559,7 @@ CameraModeValue D_801B4EB4[] = {
  * PREREND0    NORMAL    FIXD3
  */
 CameraModeValue D_801B4ED8[] = {
-    { 0x0000, 9 }, // flags
+    { 0x0000, CAM_DATA_09 }, // flags
 };
 
 /*=====================================================================
@@ -1216,7 +1573,8 @@ CameraModeValue D_801B4ED8[] = {
  * PREREND1    NORMAL    UNIQ7
  */
 CameraModeValue D_801B4EDC[] = {
-    { 60, 7 }, { 0x0000, 9 }, // flags
+    { 60, CAM_DATA_07 },
+    { 0x0000, CAM_DATA_09 }, // flags
 };
 
 /*=====================================================================
@@ -1230,7 +1588,9 @@ CameraModeValue D_801B4EDC[] = {
  * DOORC      NORMAL    SPEC9
  */
 CameraModeValue D_801B4EE4[] = {
-    { -5, 0 }, { 60, 7 }, { 0x4202, 9 }, // flags
+    { -5, CAM_DATA_00 },
+    { 60, CAM_DATA_07 },
+    { 0x4202, CAM_DATA_09 }, // flags
 };
 
 /*=====================================================================
@@ -1244,7 +1604,7 @@ CameraModeValue D_801B4EE4[] = {
  * DEMO0      NORMAL    DEMO1
  */
 CameraModeValue D_801B4EF0[] = {
-    { 0x3200, 9 }, // flags
+    { 0x3200, CAM_DATA_09 }, // flags
 };
 
 /*=====================================================================
@@ -1265,7 +1625,7 @@ CameraModeValue D_801B4EF0[] = {
  * CONNECT0     NORMAL    DEMO0
  */
 CameraModeValue D_801B4EF4[] = {
-    { 0xFF00, 9 }, // flags
+    { 0xFF00, CAM_DATA_09 }, // flags
 };
 
 /*=====================================================================
@@ -1282,8 +1642,16 @@ CameraModeValue D_801B4EF4[] = {
  * INBUSH     PUSHPULL    NORM1
  */
 CameraModeValue D_801B4EF8[] = {
-    { -40, 0 }, { 0x0258, 1 }, { 0x0258, 2 }, { 0x002D, 3 }, { 50, 4 },
-    { 10, 5 },  { 50, 6 },     { 0x002D, 7 }, { 90, 8 },     { 0x0042, 9 },
+    { -40, CAM_DATA_00 },
+    { 0x0258, CAM_DATA_01 },
+    { 0x0258, CAM_DATA_02 },
+    { 0x002D, CAM_DATA_03 },
+    { 50, CAM_DATA_04 },
+    { 10, CAM_DATA_05 },
+    { 50, CAM_DATA_06 },
+    { 0x002D, CAM_DATA_07 },
+    { 90, CAM_DATA_08 },
+    { 0x0042, CAM_DATA_09 },
 };
 
 /**
@@ -1293,8 +1661,18 @@ CameraModeValue D_801B4EF8[] = {
  * FUKAN1     TARGET    PARA1
  */
 CameraModeValue D_801B4F20[] = {
-    { -40, 0 },    { 0x0190, 1 }, { 0x0019, 2 }, { 60, 3 },     { 0, 10 },  { 0x0005, 4 },
-    { 0x0005, 5 }, { 60, 7 },     { 60, 8 },     { 0x2002, 9 }, { 80, 11 }, { 0, 12 },
+    { -40, CAM_DATA_00 },
+    { 0x0190, CAM_DATA_01 },
+    { 0x0019, CAM_DATA_02 },
+    { 60, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 60, CAM_DATA_07 },
+    { 60, CAM_DATA_08 },
+    { 0x2002, CAM_DATA_09 },
+    { 80, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /**
@@ -1304,8 +1682,16 @@ CameraModeValue D_801B4F20[] = {
  * FUKAN1     JUMP    NORM1
  */
 CameraModeValue D_801B4F50[] = {
-    { -40, 0 }, { 0x0258, 1 }, { 0x0258, 2 }, { 0x002D, 3 }, { 50, 4 },
-    { 10, 5 },  { 50, 6 },     { 0x002D, 7 }, { 60, 8 },     { 0x008B, 9 },
+    { -40, CAM_DATA_00 },
+    { 0x0258, CAM_DATA_01 },
+    { 0x0258, CAM_DATA_02 },
+    { 0x002D, CAM_DATA_03 },
+    { 50, CAM_DATA_04 },
+    { 10, CAM_DATA_05 },
+    { 50, CAM_DATA_06 },
+    { 0x002D, CAM_DATA_07 },
+    { 60, CAM_DATA_08 },
+    { 0x008B, CAM_DATA_09 },
 };
 
 /**
@@ -1314,8 +1700,16 @@ CameraModeValue D_801B4F50[] = {
  * FUKAN0     STILL    NORM1
  */
 CameraModeValue D_801B4F78[] = {
-    { -40, 0 }, { 0x0258, 1 }, { 0x0258, 2 }, { 0x002D, 3 }, { 100, 4 },
-    { 100, 5 }, { 100, 6 },    { 0x002D, 7 }, { 20, 8 },     { 0xF023, 9 },
+    { -40, CAM_DATA_00 },
+    { 0x0258, CAM_DATA_01 },
+    { 0x0258, CAM_DATA_02 },
+    { 0x002D, CAM_DATA_03 },
+    { 100, CAM_DATA_04 },
+    { 100, CAM_DATA_05 },
+    { 100, CAM_DATA_06 },
+    { 0x002D, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 0xF023, CAM_DATA_09 },
 };
 
 /*=====================================================================
@@ -1329,8 +1723,16 @@ CameraModeValue D_801B4F78[] = {
  * NORMAL1    NORMAL    NORM1
  */
 CameraModeValue D_801B4FA0[] = {
-    { -20, 0 },    { 0x0118, 1 }, { 0x0140, 2 }, { 0x000F, 3 }, { 0x0012, 4 },
-    { 0x000C, 5 }, { 0x0046, 6 }, { 60, 7 },     { 80, 8 },     { 0x0002, 9 },
+    { -20, CAM_DATA_00 },
+    { 0x0118, CAM_DATA_01 },
+    { 0x0140, CAM_DATA_02 },
+    { 0x000F, CAM_DATA_03 },
+    { 0x0012, CAM_DATA_04 },
+    { 0x000C, CAM_DATA_05 },
+    { 0x0046, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 80, CAM_DATA_08 },
+    { 0x0002, CAM_DATA_09 },
 };
 
 /**
@@ -1339,8 +1741,16 @@ CameraModeValue D_801B4FA0[] = {
  * NORMAL1    STILL    NORM1
  */
 CameraModeValue D_801B4FC8[] = {
-    { -20, 0 }, { 0x0118, 1 }, { 0x0140, 2 }, { 0x000F, 3 }, { 100, 4 },
-    { 100, 5 }, { 100, 6 },    { 60, 7 },     { 20, 8 },     { 0xF023, 9 },
+    { -20, CAM_DATA_00 },
+    { 0x0118, CAM_DATA_01 },
+    { 0x0140, CAM_DATA_02 },
+    { 0x000F, CAM_DATA_03 },
+    { 100, CAM_DATA_04 },
+    { 100, CAM_DATA_05 },
+    { 100, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 0xF023, CAM_DATA_09 },
 };
 
 /*=====================================================================
@@ -1354,8 +1764,16 @@ CameraModeValue D_801B4FC8[] = {
  * NANAME     NORMAL    NORM4
  */
 CameraModeValue D_801B4FF0[] = {
-    { -20, 0 },    { 0x0118, 1 }, { 0x0140, 2 }, { 10, 3 }, { 0x0012, 4 },
-    { 0x000C, 5 }, { 0x0028, 6 }, { 60, 7 },     { 80, 8 }, { 0x0003, 9 },
+    { -20, CAM_DATA_00 },
+    { 0x0118, CAM_DATA_01 },
+    { 0x0140, CAM_DATA_02 },
+    { 10, CAM_DATA_03 },
+    { 0x0012, CAM_DATA_04 },
+    { 0x000C, CAM_DATA_05 },
+    { 0x0028, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 80, CAM_DATA_08 },
+    { 0x0003, CAM_DATA_09 },
 };
 
 /*=====================================================================
@@ -1369,7 +1787,13 @@ CameraModeValue D_801B4FF0[] = {
  * CIRCLE0    NORMAL    FIXD2
  */
 CameraModeValue D_801B5018[] = {
-    { -40, 0 }, { 0x0028, 1 }, { 0x3200, 2 }, { 10, 4 }, { 20, 5 }, { 60, 7 }, { 0x0001, 9 },
+    { -40, CAM_DATA_00 },
+    { 0x0028, CAM_DATA_01 },
+    { 0x3200, CAM_DATA_02 },
+    { 10, CAM_DATA_04 },
+    { 20, CAM_DATA_05 },
+    { 60, CAM_DATA_07 },
+    { 0x0001, CAM_DATA_09 },
 };
 
 /**
@@ -1380,7 +1804,13 @@ CameraModeValue D_801B5018[] = {
  * CIRCLE9    FOLLOWTARGET    FIXD2
  */
 CameraModeValue D_801B5034[] = {
-    { -40, 0 }, { 0x0028, 1 }, { 0x3200, 2 }, { 100, 4 }, { 80, 5 }, { 60, 7 }, { 0x2040, 9 },
+    { -40, CAM_DATA_00 },
+    { 0x0028, CAM_DATA_01 },
+    { 0x3200, CAM_DATA_02 },
+    { 100, CAM_DATA_04 },
+    { 80, CAM_DATA_05 },
+    { 60, CAM_DATA_07 },
+    { 0x2040, CAM_DATA_09 },
 };
 
 /**
@@ -1391,7 +1821,13 @@ CameraModeValue D_801B5034[] = {
  * CIRCLE9    TALK    FIXD2
  */
 CameraModeValue D_801B5050[] = {
-    { -40, 0 }, { 0x0028, 1 }, { 200, 2 }, { 100, 4 }, { 50, 5 }, { 0x002D, 7 }, { 0x2080, 9 },
+    { -40, CAM_DATA_00 },
+    { 0x0028, CAM_DATA_01 },
+    { 200, CAM_DATA_02 },
+    { 100, CAM_DATA_04 },
+    { 50, CAM_DATA_05 },
+    { 0x002D, CAM_DATA_07 },
+    { 0x2080, CAM_DATA_09 },
 };
 
 /*=====================================================================
@@ -1405,10 +1841,10 @@ CameraModeValue D_801B5050[] = {
  * FIXED0     NORMAL    FIXD1
  */
 CameraModeValue D_801B506C[] = {
-    { -40, 0 },
-    { 10, 4 },
-    { 60, 7 },
-    { 0, 9 },
+    { -40, CAM_DATA_00 },
+    { 10, CAM_DATA_04 },
+    { 60, CAM_DATA_07 },
+    { 0, CAM_DATA_09 },
 };
 
 /*=====================================================================
@@ -1422,12 +1858,12 @@ CameraModeValue D_801B506C[] = {
  * SPIRAL     NORMAL    SPEC8
  */
 CameraModeValue D_801B507C[] = {
-    { -40, 0 },    // yOffset
-    { 50, 4 },     // eyeStepScale
-    { 80, 5 },     // posStepScale
-    { 60, 7 },     // fov
-    { 10, 12 },    // maxDoorCutsceneCounter
-    { 0x0001, 9 }, // flags
+    { -40, CAM_DATA_00 },    // yOffset
+    { 50, CAM_DATA_04 },     // eyeStepScale
+    { 80, CAM_DATA_05 },     // posStepScale
+    { 60, CAM_DATA_07 },     // fov
+    { 10, CAM_DATA_12 },     // maxDoorCutsceneCounter
+    { 0x0001, CAM_DATA_09 }, // flags
 };
 
 /*=====================================================================
@@ -1441,8 +1877,16 @@ CameraModeValue D_801B507C[] = {
  * DUNGEON0    NORMAL    NORM1
  */
 CameraModeValue D_801B5094[] = {
-    { -20, 0 },    { 0x0096, 1 }, { 250, 2 }, { 0x0005, 3 }, { 0x0012, 4 },
-    { 0x0005, 5 }, { 0x002D, 6 }, { 60, 7 },  { 80, 8 },     { 0x0083, 9 },
+    { -20, CAM_DATA_00 },
+    { 0x0096, CAM_DATA_01 },
+    { 250, CAM_DATA_02 },
+    { 0x0005, CAM_DATA_03 },
+    { 0x0012, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x002D, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 80, CAM_DATA_08 },
+    { 0x0083, CAM_DATA_09 },
 };
 
 /**
@@ -1458,8 +1902,18 @@ CameraModeValue D_801B5094[] = {
  * ROOM2         TARGET    PARA1
  */
 CameraModeValue D_801B50BC[] = {
-    { 0, 0 },      { 200, 1 },    { 0x0019, 2 }, { 0x0005, 3 }, { 0, 10 },  { 0x0005, 4 },
-    { 0x0005, 5 }, { 0x002D, 7 }, { 50, 8 },     { 0x2042, 9 }, { 80, 11 }, { 0, 12 },
+    { 0, CAM_DATA_00 },
+    { 200, CAM_DATA_01 },
+    { 0x0019, CAM_DATA_02 },
+    { 0x0005, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x002D, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x2042, CAM_DATA_09 },
+    { 80, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /**
@@ -1473,8 +1927,18 @@ CameraModeValue D_801B50BC[] = {
  * DUNGEON4     FOLLOWTARGET    KEEP1
  */
 CameraModeValue D_801B50EC[] = {
-    { -20, 0 },     { 0x0078, 1 },  { 0x008C, 2 }, { 0x0019, 13 }, { 0x002D, 14 }, { -5, 15 },
-    { 0x000F, 16 }, { 0x000F, 17 }, { 0x002D, 7 }, { 50, 8 },      { 0x2001, 9 },  { 20, 11 },
+    { -20, CAM_DATA_00 },
+    { 0x0078, CAM_DATA_01 },
+    { 0x008C, CAM_DATA_02 },
+    { 0x0019, CAM_DATA_13 },
+    { 0x002D, CAM_DATA_14 },
+    { -5, CAM_DATA_15 },
+    { 0x000F, CAM_DATA_16 },
+    { 0x000F, CAM_DATA_17 },
+    { 0x002D, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x2001, CAM_DATA_09 },
+    { 20, CAM_DATA_11 },
 };
 
 /**
@@ -1487,8 +1951,19 @@ CameraModeValue D_801B50EC[] = {
  * DUNGEON4     BATTLE    BATT1
  */
 CameraModeValue D_801B511C[] = {
-    { -30, 0 },     { 0x0096, 1 }, { 0x00F0, 2 }, { 10, 13 },    { 50, 14 },     { 0x0005, 15 }, { 10, 16 },
-    { 0x0019, 17 }, { 50, 7 },     { 60, 8 },     { 0x2002, 9 }, { 0x0019, 11 }, { 50, 18 },
+    { -30, CAM_DATA_00 },
+    { 0x0096, CAM_DATA_01 },
+    { 0x00F0, CAM_DATA_02 },
+    { 10, CAM_DATA_13 },
+    { 50, CAM_DATA_14 },
+    { 0x0005, CAM_DATA_15 },
+    { 10, CAM_DATA_16 },
+    { 0x0019, CAM_DATA_17 },
+    { 50, CAM_DATA_07 },
+    { 60, CAM_DATA_08 },
+    { 0x2002, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_11 },
+    { 50, CAM_DATA_18 },
 };
 
 /**
@@ -1506,8 +1981,18 @@ CameraModeValue D_801B511C[] = {
  * DUNGEON4      BOOMFOLLOW    KEEP1
  */
 CameraModeValue D_801B5150[] = {
-    { -5, 0 },      { 0x0096, 1 },  { 0x00F0, 2 }, { 0x0005, 13 }, { 0x0041, 14 }, { 10, 15 },
-    { 0x0005, 16 }, { 0x0028, 17 }, { 0x0037, 7 }, { 0x0028, 8 },  { 0x2001, 9 },  { 30, 11 },
+    { -5, CAM_DATA_00 },
+    { 0x0096, CAM_DATA_01 },
+    { 0x00F0, CAM_DATA_02 },
+    { 0x0005, CAM_DATA_13 },
+    { 0x0041, CAM_DATA_14 },
+    { 10, CAM_DATA_15 },
+    { 0x0005, CAM_DATA_16 },
+    { 0x0028, CAM_DATA_17 },
+    { 0x0037, CAM_DATA_07 },
+    { 0x0028, CAM_DATA_08 },
+    { 0x2001, CAM_DATA_09 },
+    { 30, CAM_DATA_11 },
 };
 
 /**
@@ -1516,8 +2001,16 @@ CameraModeValue D_801B5150[] = {
  * DUNGEON0    JUMP    NORM1
  */
 CameraModeValue D_801B5180[] = {
-    { -20, 0 },    { 0x0096, 1 }, { 250, 2 }, { 0x0005, 3 }, { 0x0018, 4 },
-    { 0x0005, 5 }, { 50, 6 },     { 60, 7 },  { 50, 8 },     { 0x008B, 9 },
+    { -20, CAM_DATA_00 },
+    { 0x0096, CAM_DATA_01 },
+    { 250, CAM_DATA_02 },
+    { 0x0005, CAM_DATA_03 },
+    { 0x0018, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 50, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x008B, CAM_DATA_09 },
 };
 
 /**
@@ -1537,8 +2030,18 @@ CameraModeValue D_801B5180[] = {
  * DUNGEON4      FREEFALL    PARA1
  */
 CameraModeValue D_801B51A8[] = {
-    { -10, 0 },    { 250, 1 },    { 100, 2 }, { 0x0046, 3 }, { 0, 10 },      { 0x0004, 4 },
-    { 0x0005, 5 }, { 0x0046, 7 }, { 10, 8 },  { 0x0088, 9 }, { 0x0046, 11 }, { 0x000C, 12 },
+    { -10, CAM_DATA_00 },
+    { 250, CAM_DATA_01 },
+    { 100, CAM_DATA_02 },
+    { 0x0046, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0004, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0046, CAM_DATA_07 },
+    { 10, CAM_DATA_08 },
+    { 0x0088, CAM_DATA_09 },
+    { 0x0046, CAM_DATA_11 },
+    { 0x000C, CAM_DATA_12 },
 };
 
 /**
@@ -1558,7 +2061,15 @@ CameraModeValue D_801B51A8[] = {
  * DUNGEON4      CLIMB    JUMP2
  */
 CameraModeValue D_801B51D8[] = {
-    { -40, 0 }, { 0x0096, 1 }, { 250, 2 }, { 20, 20 }, { 0x0005, 4 }, { 0x0005, 5 }, { 60, 7 }, { 20, 8 }, { 0, 9 },
+    { -40, CAM_DATA_00 },
+    { 0x0096, CAM_DATA_01 },
+    { 250, CAM_DATA_02 },
+    { 20, CAM_DATA_20 },
+    { 0x0005, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 60, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 0, CAM_DATA_09 },
 };
 
 /**
@@ -1578,8 +2089,15 @@ CameraModeValue D_801B51D8[] = {
  * DUNGEON4      CLIMBZ    JUMP2
  */
 CameraModeValue D_801B51FC[] = {
-    { -40, 0 },    { 250, 1 }, { 250, 2 },    { 20, 20 },    { 0x03E7, 4 },
-    { 0x0005, 5 }, { 60, 7 },  { 0x0028, 8 }, { 0x2006, 9 },
+    { -40, CAM_DATA_00 },
+    { 250, CAM_DATA_01 },
+    { 250, CAM_DATA_02 },
+    { 20, CAM_DATA_20 },
+    { 0x03E7, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 60, CAM_DATA_07 },
+    { 0x0028, CAM_DATA_08 },
+    { 0x2006, CAM_DATA_09 },
 };
 
 /**
@@ -1599,8 +2117,18 @@ CameraModeValue D_801B51FC[] = {
  * DUNGEON4      CHARGE    PARA1
  */
 CameraModeValue D_801B5220[] = {
-    { 0, 0 },      { 250, 1 }, { -20, 2 }, { 50, 3 }, { 0, 10 },  { 50, 4 },
-    { 0x0005, 5 }, { 60, 7 },  { 20, 8 },  { 0, 9 },  { 60, 11 }, { 10, 12 },
+    { 0, CAM_DATA_00 },
+    { 250, CAM_DATA_01 },
+    { -20, CAM_DATA_02 },
+    { 50, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 50, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 60, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 0, CAM_DATA_09 },
+    { 60, CAM_DATA_11 },
+    { 10, CAM_DATA_12 },
 };
 
 /**
@@ -1609,8 +2137,18 @@ CameraModeValue D_801B5220[] = {
  * DUNGEON0    CHARGEZ    PARA1
  */
 CameraModeValue D_801B5250[] = {
-    { 50, 0 },     { 250, 1 }, { -20, 2 }, { 0x0028, 3 }, { 0, 10 },  { 50, 4 },
-    { 0x0005, 5 }, { 80, 7 },  { 20, 8 },  { 0x0002, 9 }, { 60, 11 }, { 0, 12 },
+    { 50, CAM_DATA_00 },
+    { 250, CAM_DATA_01 },
+    { -20, CAM_DATA_02 },
+    { 0x0028, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 50, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 80, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 0x0002, CAM_DATA_09 },
+    { 60, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /**
@@ -1629,8 +2167,18 @@ CameraModeValue D_801B5250[] = {
  * DUNGEON4      HANG    PARA1
  */
 CameraModeValue D_801B5280[] = {
-    { -40, 0 },    { 220, 1 }, { 50, 2 }, { 0x0028, 3 }, { 0, 10 },  { 0x000C, 4 },
-    { 0x0005, 5 }, { 60, 7 },  { 10, 8 }, { 0x0086, 9 }, { 60, 11 }, { 0x000C, 12 },
+    { -40, CAM_DATA_00 },
+    { 220, CAM_DATA_01 },
+    { 50, CAM_DATA_02 },
+    { 0x0028, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x000C, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 60, CAM_DATA_07 },
+    { 10, CAM_DATA_08 },
+    { 0x0086, CAM_DATA_09 },
+    { 60, CAM_DATA_11 },
+    { 0x000C, CAM_DATA_12 },
 };
 
 /**
@@ -1649,8 +2197,18 @@ CameraModeValue D_801B5280[] = {
  * DUNGEON4      HANGZ    PARA1
  */
 CameraModeValue D_801B52B0[] = {
-    { 0xFFB0, 0 }, { 250, 1 },    { 50, 2 }, { 0x0046, 3 }, { 0, 10 },  { 10, 4 },
-    { 0x0005, 5 }, { 0x002D, 7 }, { 10, 8 }, { 0x2086, 9 }, { 60, 11 }, { 0x0002, 12 },
+    { 0xFFB0, CAM_DATA_00 },
+    { 250, CAM_DATA_01 },
+    { 50, CAM_DATA_02 },
+    { 0x0046, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 10, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x002D, CAM_DATA_07 },
+    { 10, CAM_DATA_08 },
+    { 0x2086, CAM_DATA_09 },
+    { 60, CAM_DATA_11 },
+    { 0x0002, CAM_DATA_12 },
 };
 
 /**
@@ -1659,8 +2217,16 @@ CameraModeValue D_801B52B0[] = {
  * DUNGEON0    STILL    NORM1
  */
 CameraModeValue D_801B52E0[] = {
-    { -10, 0 }, { 180, 1 }, { 220, 2 }, { 10, 3 }, { 100, 4 },
-    { 100, 5 }, { 100, 6 }, { 60, 7 },  { 10, 8 }, { 0xF003, 9 },
+    { -10, CAM_DATA_00 },
+    { 180, CAM_DATA_01 },
+    { 220, CAM_DATA_02 },
+    { 10, CAM_DATA_03 },
+    { 100, CAM_DATA_04 },
+    { 100, CAM_DATA_05 },
+    { 100, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 10, CAM_DATA_08 },
+    { 0xF003, CAM_DATA_09 },
 };
 
 /**
@@ -1674,8 +2240,18 @@ CameraModeValue D_801B52E0[] = {
  * DUNGEON4      PUSHPULL    PARA1
  */
 CameraModeValue D_801B5308[] = {
-    { 0, 0 },      { 250, 1 },    { 0x0005, 2 }, { 30, 3 },     { 0, 10 },  { 0x0005, 4 },
-    { 0x0005, 5 }, { 0x0046, 7 }, { 30, 8 },     { 0x2022, 9 }, { 80, 11 }, { 0, 12 },
+    { 0, CAM_DATA_00 },
+    { 250, CAM_DATA_01 },
+    { 0x0005, CAM_DATA_02 },
+    { 30, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0046, CAM_DATA_07 },
+    { 30, CAM_DATA_08 },
+    { 0x2022, CAM_DATA_09 },
+    { 80, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /*=====================================================================
@@ -1689,8 +2265,15 @@ CameraModeValue D_801B5308[] = {
  * ITEM0      NORMAL    KEEP4
  */
 CameraModeValue D_801B5338[] = {
-    { 0x0005, 0 }, { 0x0046, 1 }, { 0x0019, 3 }, { 0, 10 },      { 0, 18 },
-    { 0x002D, 7 }, { 0xFF02, 9 }, { 0x0019, 4 }, { 0x0006, 12 },
+    { 0x0005, CAM_DATA_00 },
+    { 0x0046, CAM_DATA_01 },
+    { 0x0019, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0, CAM_DATA_18 },
+    { 0x002D, CAM_DATA_07 },
+    { 0xFF02, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_04 },
+    { 0x0006, CAM_DATA_12 },
 };
 
 /**
@@ -1699,8 +2282,15 @@ CameraModeValue D_801B5338[] = {
  * ITEM0      JUMP    KEEP4
  */
 CameraModeValue D_801B535C[] = {
-    { -30, 0 }, { 0x0023, 1 }, { 0x0028, 3 }, { 0, 10 },      { 0x0006, 18 },
-    { 80, 7 },  { 0xFF02, 9 }, { 0x0019, 4 }, { 0x0006, 12 },
+    { -30, CAM_DATA_00 },
+    { 0x0023, CAM_DATA_01 },
+    { 0x0028, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0006, CAM_DATA_18 },
+    { 80, CAM_DATA_07 },
+    { 0xFF02, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_04 },
+    { 0x0006, CAM_DATA_12 },
 };
 
 /**
@@ -1709,7 +2299,15 @@ CameraModeValue D_801B535C[] = {
  * ITEM0      NUTSSHOT    KEEP4
  */
 CameraModeValue D_801B5380[] = {
-    { -15, 0 }, { 90, 1 }, { -8, 3 }, { 0, 10 }, { 0, 18 }, { 60, 7 }, { 0xFF02, 9 }, { 0x0019, 4 }, { 0x0006, 12 },
+    { -15, CAM_DATA_00 },
+    { 90, CAM_DATA_01 },
+    { -8, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0, CAM_DATA_18 },
+    { 60, CAM_DATA_07 },
+    { 0xFF02, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_04 },
+    { 0x0006, CAM_DATA_12 },
 };
 
 /**
@@ -1718,8 +2316,15 @@ CameraModeValue D_801B5380[] = {
  * ITEM0      GORONDASH    KEEP4
  */
 CameraModeValue D_801B53A4[] = {
-    { 20, 0 },     { 0x002D, 1 }, { 0x0037, 3 }, { 0, 10 },      { 0x000C, 18 },
-    { 0x0037, 7 }, { 0xFF02, 9 }, { 0x0019, 4 }, { 0x0006, 12 },
+    { 20, CAM_DATA_00 },
+    { 0x002D, CAM_DATA_01 },
+    { 0x0037, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x000C, CAM_DATA_18 },
+    { 0x0037, CAM_DATA_07 },
+    { 0xFF02, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_04 },
+    { 0x0006, CAM_DATA_12 },
 };
 
 /**
@@ -1728,8 +2333,15 @@ CameraModeValue D_801B53A4[] = {
  * ITEM0      NUTSFLY    KEEP4
  */
 CameraModeValue D_801B53C8[] = {
-    { 10, 0 },     { 0x0046, 1 }, { 30, 3 },     { 0, 10 },      { 0x0004, 18 },
-    { 0x002A, 7 }, { 0xFF02, 9 }, { 0x0019, 4 }, { 0x0006, 12 },
+    { 10, CAM_DATA_00 },
+    { 0x0046, CAM_DATA_01 },
+    { 30, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0004, CAM_DATA_18 },
+    { 0x002A, CAM_DATA_07 },
+    { 0xFF02, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_04 },
+    { 0x0006, CAM_DATA_12 },
 };
 
 /*=====================================================================
@@ -1743,8 +2355,15 @@ CameraModeValue D_801B53C8[] = {
  * ITEM1      NORMAL    KEEP4
  */
 CameraModeValue D_801B53EC[] = {
-    { -45, 0 },    { 0x004B, 1 }, { 0xFFF4, 3 }, { 0x00A5, 10 }, { 0x0005, 18 },
-    { 0x0046, 7 }, { 0xFF02, 9 }, { 0x0019, 4 }, { 0x0006, 12 },
+    { -45, CAM_DATA_00 },
+    { 0x004B, CAM_DATA_01 },
+    { 0xFFF4, CAM_DATA_03 },
+    { 0x00A5, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_18 },
+    { 0x0046, CAM_DATA_07 },
+    { 0xFF02, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_04 },
+    { 0x0006, CAM_DATA_12 },
 };
 
 /**
@@ -1753,8 +2372,15 @@ CameraModeValue D_801B53EC[] = {
  * ITEM1      JUMP    KEEP4
  */
 CameraModeValue D_801B5410[] = {
-    { -40, 0 },    { 0x0046, 1 }, { 20, 3 },     { 0x008C, 10 }, { 0x0005, 18 },
-    { 0x0046, 7 }, { 0xFF02, 9 }, { 0x0019, 4 }, { 0x0006, 12 },
+    { -40, CAM_DATA_00 },
+    { 0x0046, CAM_DATA_01 },
+    { 20, CAM_DATA_03 },
+    { 0x008C, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_18 },
+    { 0x0046, CAM_DATA_07 },
+    { 0xFF02, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_04 },
+    { 0x0006, CAM_DATA_12 },
 };
 
 /**
@@ -1763,8 +2389,15 @@ CameraModeValue D_801B5410[] = {
  * ITEM1      NUTSSHOT    KEEP4
  */
 CameraModeValue D_801B5434[] = {
-    { -20, 0 },    { 0x0055, 1 }, { -5, 3 },     { 0x008C, 10 }, { 0x000F, 18 },
-    { 0x0046, 7 }, { 0xFF02, 9 }, { 0x0019, 4 }, { 0x0006, 12 },
+    { -20, CAM_DATA_00 },
+    { 0x0055, CAM_DATA_01 },
+    { -5, CAM_DATA_03 },
+    { 0x008C, CAM_DATA_10 },
+    { 0x000F, CAM_DATA_18 },
+    { 0x0046, CAM_DATA_07 },
+    { 0xFF02, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_04 },
+    { 0x0006, CAM_DATA_12 },
 };
 
 /**
@@ -1773,8 +2406,15 @@ CameraModeValue D_801B5434[] = {
  * ITEM1      GORONDASH    KEEP4
  */
 CameraModeValue D_801B5458[] = {
-    { -50, 0 },    { 0x005F, 1 }, { -15, 3 },    { 0x00A0, 10 }, { 0x0006, 18 },
-    { 0x0046, 7 }, { 0xFF02, 9 }, { 0x0019, 4 }, { 0x0006, 12 },
+    { -50, CAM_DATA_00 },
+    { 0x005F, CAM_DATA_01 },
+    { -15, CAM_DATA_03 },
+    { 0x00A0, CAM_DATA_10 },
+    { 0x0006, CAM_DATA_18 },
+    { 0x0046, CAM_DATA_07 },
+    { 0xFF02, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_04 },
+    { 0x0006, CAM_DATA_12 },
 };
 
 /**
@@ -1783,8 +2423,15 @@ CameraModeValue D_801B5458[] = {
  * ITEM1      NUTSFLY    KEEP4
  */
 CameraModeValue D_801B547C[] = {
-    { 0xFFC4, 0 }, { 0x0046, 1 }, { -15, 3 },    { 0xFF74, 10 }, { 30, 18 },
-    { 0x0046, 7 }, { 0xFF0C, 9 }, { 0x0019, 4 }, { 0x0006, 12 },
+    { 0xFFC4, CAM_DATA_00 },
+    { 0x0046, CAM_DATA_01 },
+    { -15, CAM_DATA_03 },
+    { 0xFF74, CAM_DATA_10 },
+    { 30, CAM_DATA_18 },
+    { 0x0046, CAM_DATA_07 },
+    { 0xFF0C, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_04 },
+    { 0x0006, CAM_DATA_12 },
 };
 
 /*=====================================================================
@@ -1798,8 +2445,15 @@ CameraModeValue D_801B547C[] = {
  * ITEM2      NORMAL    KEEP4
  */
 CameraModeValue D_801B54A0[] = {
-    { -40, 0 },    { 0x006E, 1 }, { 0x0005, 3 }, { 0x0096, 10 }, { 0x0005, 18 },
-    { 0x0041, 7 }, { 0xFF02, 9 }, { 0x0019, 4 }, { 0x0006, 12 },
+    { -40, CAM_DATA_00 },
+    { 0x006E, CAM_DATA_01 },
+    { 0x0005, CAM_DATA_03 },
+    { 0x0096, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_18 },
+    { 0x0041, CAM_DATA_07 },
+    { 0xFF02, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_04 },
+    { 0x0006, CAM_DATA_12 },
 };
 
 /**
@@ -1808,8 +2462,15 @@ CameraModeValue D_801B54A0[] = {
  * ITEM2      JUMP    KEEP4
  */
 CameraModeValue D_801B54C4[] = {
-    { 0xFFC4, 0 }, { 0x0082, 1 }, { -10, 3 },    { 0x00AA, 10 }, { 0x0005, 18 },
-    { 0x0041, 7 }, { 0xFF02, 9 }, { 0x0019, 4 }, { 0x0006, 12 },
+    { 0xFFC4, CAM_DATA_00 },
+    { 0x0082, CAM_DATA_01 },
+    { -10, CAM_DATA_03 },
+    { 0x00AA, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_18 },
+    { 0x0041, CAM_DATA_07 },
+    { 0xFF02, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_04 },
+    { 0x0006, CAM_DATA_12 },
 };
 
 /**
@@ -1818,8 +2479,15 @@ CameraModeValue D_801B54C4[] = {
  * ITEM2      NUTSSHOT    KEEP4
  */
 CameraModeValue D_801B54E8[] = {
-    { -40, 0 },    { 0x006E, 1 }, { 0, 3 },      { 0x008C, 10 }, { 0x0005, 18 },
-    { 0x0041, 7 }, { 0xFF02, 9 }, { 0x0019, 4 }, { 0x0006, 12 },
+    { -40, CAM_DATA_00 },
+    { 0x006E, CAM_DATA_01 },
+    { 0, CAM_DATA_03 },
+    { 0x008C, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_18 },
+    { 0x0041, CAM_DATA_07 },
+    { 0xFF02, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_04 },
+    { 0x0006, CAM_DATA_12 },
 };
 
 /**
@@ -1828,8 +2496,15 @@ CameraModeValue D_801B54E8[] = {
  * ITEM2      GORONDASH    KEEP4
  */
 CameraModeValue D_801B550C[] = {
-    { -50, 0 },    { 0x008C, 1 }, { -10, 3 },    { 0x00A0, 10 }, { 0x0005, 18 },
-    { 0x0046, 7 }, { 0xFF02, 9 }, { 0x0019, 4 }, { 0x0006, 12 },
+    { -50, CAM_DATA_00 },
+    { 0x008C, CAM_DATA_01 },
+    { -10, CAM_DATA_03 },
+    { 0x00A0, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_18 },
+    { 0x0046, CAM_DATA_07 },
+    { 0xFF02, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_04 },
+    { 0x0006, CAM_DATA_12 },
 };
 
 /**
@@ -1838,8 +2513,15 @@ CameraModeValue D_801B550C[] = {
  * ITEM2      NUTSFLY    KEEP4
  */
 CameraModeValue D_801B5530[] = {
-    { 0xFFC4, 0 }, { 0x0078, 1 }, { -8, 3 },     { 0x0096, 10 }, { 0x0005, 18 },
-    { 0x0046, 7 }, { 0xFF02, 9 }, { 0x0019, 4 }, { 0x0006, 12 },
+    { 0xFFC4, CAM_DATA_00 },
+    { 0x0078, CAM_DATA_01 },
+    { -8, CAM_DATA_03 },
+    { 0x0096, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_18 },
+    { 0x0046, CAM_DATA_07 },
+    { 0xFF02, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_04 },
+    { 0x0006, CAM_DATA_12 },
 };
 
 /*=====================================================================
@@ -1853,8 +2535,15 @@ CameraModeValue D_801B5530[] = {
  * ITEM3      NORMAL    KEEP4
  */
 CameraModeValue D_801B5554[] = {
-    { -15, 0 },    { 0x0041, 1 }, { 50, 3 },     { 0xFF65, 10 }, { 0x0005, 18 },
-    { 0x004B, 7 }, { 0xFF0C, 9 }, { 0x0019, 4 }, { 0x0006, 12 },
+    { -15, CAM_DATA_00 },
+    { 0x0041, CAM_DATA_01 },
+    { 50, CAM_DATA_03 },
+    { 0xFF65, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_18 },
+    { 0x004B, CAM_DATA_07 },
+    { 0xFF0C, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_04 },
+    { 0x0006, CAM_DATA_12 },
 };
 
 /**
@@ -1863,8 +2552,15 @@ CameraModeValue D_801B5554[] = {
  * ITEM3      JUMP    KEEP4
  */
 CameraModeValue D_801B5578[] = {
-    { -20, 0 },    { 60, 1 },     { 50, 3 },     { 0xFF65, 10 }, { 0x0005, 18 },
-    { 0x004B, 7 }, { 0xFF0C, 9 }, { 0x0019, 4 }, { 0x0006, 12 },
+    { -20, CAM_DATA_00 },
+    { 60, CAM_DATA_01 },
+    { 50, CAM_DATA_03 },
+    { 0xFF65, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_18 },
+    { 0x004B, CAM_DATA_07 },
+    { 0xFF0C, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_04 },
+    { 0x0006, CAM_DATA_12 },
 };
 
 /**
@@ -1873,8 +2569,15 @@ CameraModeValue D_801B5578[] = {
  * ITEM3      NUTSSHOT    KEEP4
  */
 CameraModeValue D_801B559C[] = {
-    { -15, 0 },    { 60, 1 },     { 0x0028, 3 }, { 0x00AA, 10 }, { 0x0005, 18 },
-    { 0x004B, 7 }, { 0xFF02, 9 }, { 0x0019, 4 }, { 0x0006, 12 },
+    { -15, CAM_DATA_00 },
+    { 60, CAM_DATA_01 },
+    { 0x0028, CAM_DATA_03 },
+    { 0x00AA, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_18 },
+    { 0x004B, CAM_DATA_07 },
+    { 0xFF02, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_04 },
+    { 0x0006, CAM_DATA_12 },
 };
 
 /**
@@ -1883,8 +2586,15 @@ CameraModeValue D_801B559C[] = {
  * ITEM3      GORONDASH    KEEP4
  */
 CameraModeValue D_801B55C0[] = {
-    { -25, 0 },    { 0x005F, 1 }, { 50, 3 },     { 0xFF65, 10 }, { 0x0005, 18 },
-    { 0x004B, 7 }, { 0xFF0C, 9 }, { 0x0019, 4 }, { 0x0006, 12 },
+    { -25, CAM_DATA_00 },
+    { 0x005F, CAM_DATA_01 },
+    { 50, CAM_DATA_03 },
+    { 0xFF65, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_18 },
+    { 0x004B, CAM_DATA_07 },
+    { 0xFF0C, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_04 },
+    { 0x0006, CAM_DATA_12 },
 };
 
 /**
@@ -1893,8 +2603,15 @@ CameraModeValue D_801B55C0[] = {
  * ITEM3      NUTSFLY    KEEP4
  */
 CameraModeValue D_801B55E4[] = {
-    { -20, 0 },    { 0x004B, 1 }, { 0x002D, 3 }, { 0xFF6A, 10 }, { -5, 18 },
-    { 0x004B, 7 }, { 0xFF0C, 9 }, { 0x0019, 4 }, { 0x0006, 12 },
+    { -20, CAM_DATA_00 },
+    { 0x004B, CAM_DATA_01 },
+    { 0x002D, CAM_DATA_03 },
+    { 0xFF6A, CAM_DATA_10 },
+    { -5, CAM_DATA_18 },
+    { 0x004B, CAM_DATA_07 },
+    { 0xFF0C, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_04 },
+    { 0x0006, CAM_DATA_12 },
 };
 
 /*=====================================================================
@@ -1908,7 +2625,15 @@ CameraModeValue D_801B55E4[] = {
  * WARP0      NORMAL    KEEP4
  */
 CameraModeValue D_801B5608[] = {
-    { -45, 0 }, { 0x00A5, 1 }, { 0, 3 }, { 0x00B2, 10 }, { 0, 18 }, { 0x002D, 7 }, { 0xFF4E, 9 }, { 30, 4 }, { 10, 12 },
+    { -45, CAM_DATA_00 },
+    { 0x00A5, CAM_DATA_01 },
+    { 0, CAM_DATA_03 },
+    { 0x00B2, CAM_DATA_10 },
+    { 0, CAM_DATA_18 },
+    { 0x002D, CAM_DATA_07 },
+    { 0xFF4E, CAM_DATA_09 },
+    { 30, CAM_DATA_04 },
+    { 10, CAM_DATA_12 },
 };
 
 /**
@@ -1917,7 +2642,15 @@ CameraModeValue D_801B5608[] = {
  * WARP0      JUMP    KEEP4
  */
 CameraModeValue D_801B562C[] = {
-    { 0xFFC9, 0 }, { 180, 1 }, { 0, 3 }, { 0x00B2, 10 }, { 0, 18 }, { 0x002D, 7 }, { 0xFF4E, 9 }, { 30, 4 }, { 10, 12 },
+    { 0xFFC9, CAM_DATA_00 },
+    { 180, CAM_DATA_01 },
+    { 0, CAM_DATA_03 },
+    { 0x00B2, CAM_DATA_10 },
+    { 0, CAM_DATA_18 },
+    { 0x002D, CAM_DATA_07 },
+    { 0xFF4E, CAM_DATA_09 },
+    { 30, CAM_DATA_04 },
+    { 10, CAM_DATA_12 },
 };
 
 /**
@@ -1926,7 +2659,15 @@ CameraModeValue D_801B562C[] = {
  * WARP0      NUTSSHOT    KEEP4
  */
 CameraModeValue D_801B5650[] = {
-    { -20, 0 }, { 0x00AF, 1 }, { 0, 3 }, { 0x00B2, 10 }, { 0, 18 }, { 0x002D, 7 }, { 0xFF4E, 9 }, { 30, 4 }, { 10, 12 },
+    { -20, CAM_DATA_00 },
+    { 0x00AF, CAM_DATA_01 },
+    { 0, CAM_DATA_03 },
+    { 0x00B2, CAM_DATA_10 },
+    { 0, CAM_DATA_18 },
+    { 0x002D, CAM_DATA_07 },
+    { 0xFF4E, CAM_DATA_09 },
+    { 30, CAM_DATA_04 },
+    { 10, CAM_DATA_12 },
 };
 
 /**
@@ -1936,7 +2677,15 @@ CameraModeValue D_801B5650[] = {
  */
 CameraModeValue D_801B5674[] = {
 
-    { -50, 0 }, { 220, 1 }, { 0, 3 }, { 0x00B2, 10 }, { 0, 18 }, { 0x002D, 7 }, { 0xFF4E, 9 }, { 30, 4 }, { 10, 12 },
+    { -50, CAM_DATA_00 },
+    { 220, CAM_DATA_01 },
+    { 0, CAM_DATA_03 },
+    { 0x00B2, CAM_DATA_10 },
+    { 0, CAM_DATA_18 },
+    { 0x002D, CAM_DATA_07 },
+    { 0xFF4E, CAM_DATA_09 },
+    { 30, CAM_DATA_04 },
+    { 10, CAM_DATA_12 },
 };
 
 /**
@@ -1945,7 +2694,15 @@ CameraModeValue D_801B5674[] = {
  * WARP0      NUTSFLY    KEEP4
  */
 CameraModeValue D_801B5698[] = {
-    { 0xFFC4, 0 }, { 200, 1 }, { 0, 3 }, { 0x00B2, 10 }, { 0, 18 }, { 0x002D, 7 }, { 0xFF4E, 9 }, { 30, 4 }, { 10, 12 },
+    { 0xFFC4, CAM_DATA_00 },
+    { 200, CAM_DATA_01 },
+    { 0, CAM_DATA_03 },
+    { 0x00B2, CAM_DATA_10 },
+    { 0, CAM_DATA_18 },
+    { 0x002D, CAM_DATA_07 },
+    { 0xFF4E, CAM_DATA_09 },
+    { 30, CAM_DATA_04 },
+    { 10, CAM_DATA_12 },
 };
 
 /*=====================================================================
@@ -1959,7 +2716,15 @@ CameraModeValue D_801B5698[] = {
  * DEATH      NORMAL    KEEP4
  */
 CameraModeValue D_801B56BC[] = {
-    { 0xFFBA, 0 }, { 0x00A0, 1 }, { 0, 3 }, { 0, 10 }, { 10, 18 }, { 60, 7 }, { 0xFF00, 9 }, { 0x0005, 4 }, { 100, 12 },
+    { 0xFFBA, CAM_DATA_00 },
+    { 0x00A0, CAM_DATA_01 },
+    { 0, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 10, CAM_DATA_18 },
+    { 60, CAM_DATA_07 },
+    { 0xFF00, CAM_DATA_09 },
+    { 0x0005, CAM_DATA_04 },
+    { 100, CAM_DATA_12 },
 };
 
 /**
@@ -1970,8 +2735,15 @@ CameraModeValue D_801B56BC[] = {
  * DEATH      NUTSFLY      KEEP4
  */
 CameraModeValue D_801B56E0[] = {
-    { 0xFFBA, 0 }, { 0x00A0, 1 }, { 0, 3 },      { 0, 10 },   { 0x0005, 18 },
-    { 60, 7 },     { 0xFF00, 9 }, { 0x0005, 4 }, { 100, 12 },
+    { 0xFFBA, CAM_DATA_00 },
+    { 0x00A0, CAM_DATA_01 },
+    { 0, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_18 },
+    { 60, CAM_DATA_07 },
+    { 0xFF00, CAM_DATA_09 },
+    { 0x0005, CAM_DATA_04 },
+    { 100, CAM_DATA_12 },
 };
 
 /**
@@ -1980,8 +2752,15 @@ CameraModeValue D_801B56E0[] = {
  * DEATH      NUTSSHOT    KEEP4
  */
 CameraModeValue D_801B5704[] = {
-    { 0xFFBA, 0 }, { 0x0096, 1 }, { 0, 3 },      { 0, 10 },   { 0x0005, 18 },
-    { 60, 7 },     { 0xFF00, 9 }, { 0x0005, 4 }, { 100, 12 },
+    { 0xFFBA, CAM_DATA_00 },
+    { 0x0096, CAM_DATA_01 },
+    { 0, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_18 },
+    { 60, CAM_DATA_07 },
+    { 0xFF00, CAM_DATA_09 },
+    { 0x0005, CAM_DATA_04 },
+    { 100, CAM_DATA_12 },
 };
 
 /*=====================================================================
@@ -1998,8 +2777,15 @@ CameraModeValue D_801B5704[] = {
  * REBIRTH    NUTSFLY      KEEP4
  */
 CameraModeValue D_801B5728[] = {
-    { 0xFFC4, 0 }, { 0x00A0, 1 }, { 30, 3 },     { 0x00A0, 10 }, { 10, 18 },
-    { 60, 7 },     { 0xFF06, 9 }, { 0x0005, 4 }, { 100, 12 },
+    { 0xFFC4, CAM_DATA_00 },
+    { 0x00A0, CAM_DATA_01 },
+    { 30, CAM_DATA_03 },
+    { 0x00A0, CAM_DATA_10 },
+    { 10, CAM_DATA_18 },
+    { 60, CAM_DATA_07 },
+    { 0xFF06, CAM_DATA_09 },
+    { 0x0005, CAM_DATA_04 },
+    { 100, CAM_DATA_12 },
 };
 
 /**
@@ -2008,8 +2794,15 @@ CameraModeValue D_801B5728[] = {
  * REBIRTH    NUTSSHOT    KEEP4
  */
 CameraModeValue D_801B574C[] = {
-    { -20, 0 }, { 0x008C, 1 }, { 30, 3 },     { 0x00A0, 10 }, { 10, 18 },
-    { 60, 7 },  { 0xFF06, 9 }, { 0x0005, 4 }, { 100, 12 },
+    { -20, CAM_DATA_00 },
+    { 0x008C, CAM_DATA_01 },
+    { 30, CAM_DATA_03 },
+    { 0x00A0, CAM_DATA_10 },
+    { 10, CAM_DATA_18 },
+    { 60, CAM_DATA_07 },
+    { 0xFF06, CAM_DATA_09 },
+    { 0x0005, CAM_DATA_04 },
+    { 100, CAM_DATA_12 },
 };
 
 /*=====================================================================
@@ -2023,9 +2816,9 @@ CameraModeValue D_801B574C[] = {
  * TREASURE    NORMAL    DEMO2
  */
 CameraModeValue D_801B5770[] = {
-    { 60, 7 },     // fov
-    { 30, 8 },     // unk_04
-    { 0xFF00, 9 }, // flags
+    { 60, CAM_DATA_07 },     // fov
+    { 30, CAM_DATA_08 },     // unk_04
+    { 0xFF00, CAM_DATA_09 }, // flags
 };
 
 /*=====================================================================
@@ -2039,8 +2832,16 @@ CameraModeValue D_801B5770[] = {
  * DUNGEON1    NORMAL    NORM1
  */
 CameraModeValue D_801B577C[] = {
-    { -20, 0 }, { 350, 1 },    { 0x0190, 2 }, { 0x002D, 3 }, { 50, 4 },
-    { 20, 5 },  { 0x0046, 6 }, { 50, 7 },     { 80, 8 },     { 0x0083, 9 },
+    { -20, CAM_DATA_00 },
+    { 350, CAM_DATA_01 },
+    { 0x0190, CAM_DATA_02 },
+    { 0x002D, CAM_DATA_03 },
+    { 50, CAM_DATA_04 },
+    { 20, CAM_DATA_05 },
+    { 0x0046, CAM_DATA_06 },
+    { 50, CAM_DATA_07 },
+    { 80, CAM_DATA_08 },
+    { 0x0083, CAM_DATA_09 },
 };
 
 /**
@@ -2049,8 +2850,16 @@ CameraModeValue D_801B577C[] = {
  * DUNGEON1    JUMP    NORM1
  */
 CameraModeValue D_801B57A4[] = {
-    { -20, 0 }, { 350, 1 }, { 0x0190, 2 }, { 0x0028, 3 }, { 50, 4 },
-    { 20, 5 },  { 50, 6 },  { 50, 7 },     { 50, 8 },     { 0x008B, 9 },
+    { -20, CAM_DATA_00 },
+    { 350, CAM_DATA_01 },
+    { 0x0190, CAM_DATA_02 },
+    { 0x0028, CAM_DATA_03 },
+    { 50, CAM_DATA_04 },
+    { 20, CAM_DATA_05 },
+    { 50, CAM_DATA_06 },
+    { 50, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x008B, CAM_DATA_09 },
 };
 
 /**
@@ -2059,8 +2868,16 @@ CameraModeValue D_801B57A4[] = {
  * DUNGEON1    STILL    NORM1
  */
 CameraModeValue D_801B57CC[] = {
-    { -20, 0 }, { 350, 1 }, { 0x0190, 2 }, { 0x002D, 3 }, { 100, 4 },
-    { 100, 5 }, { 100, 6 }, { 50, 7 },     { 20, 8 },     { 0xF023, 9 },
+    { -20, CAM_DATA_00 },
+    { 350, CAM_DATA_01 },
+    { 0x0190, CAM_DATA_02 },
+    { 0x002D, CAM_DATA_03 },
+    { 100, CAM_DATA_04 },
+    { 100, CAM_DATA_05 },
+    { 100, CAM_DATA_06 },
+    { 50, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 0xF023, CAM_DATA_09 },
 };
 
 /**
@@ -2070,8 +2887,18 @@ CameraModeValue D_801B57CC[] = {
  * ONTHEPOLL    PUSHPULL    PARA1
  */
 CameraModeValue D_801B57F4[] = {
-    { 0, 0 },      { 250, 1 },    { 0x0005, 2 }, { 30, 3 },     { 0, 10 },  { 0x0005, 4 },
-    { 0x0005, 5 }, { 0x0046, 7 }, { 30, 8 },     { 0x2022, 9 }, { 30, 11 }, { 0, 12 },
+    { 0, CAM_DATA_00 },
+    { 250, CAM_DATA_01 },
+    { 0x0005, CAM_DATA_02 },
+    { 30, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0046, CAM_DATA_07 },
+    { 30, CAM_DATA_08 },
+    { 0x2022, CAM_DATA_09 },
+    { 30, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /*=====================================================================
@@ -2085,10 +2912,10 @@ CameraModeValue D_801B57F4[] = {
  * FIXED1     NORMAL    FIXD1
  */
 CameraModeValue D_801B5824[] = {
-    { -40, 0 },
-    { 100, 4 },
-    { 60, 7 },
-    { 0xFF00, 9 },
+    { -40, CAM_DATA_00 },
+    { 100, CAM_DATA_04 },
+    { 60, CAM_DATA_07 },
+    { 0xFF00, CAM_DATA_09 },
 };
 
 /*=====================================================================
@@ -2102,10 +2929,10 @@ CameraModeValue D_801B5824[] = {
  * FIXED2     NORMAL    FIXD1
  */
 CameraModeValue D_801B5834[] = {
-    { -40, 0 },
-    { 10, 4 },
-    { 60, 7 },
-    { 0xFF00, 9 },
+    { -40, CAM_DATA_00 },
+    { 10, CAM_DATA_04 },
+    { 60, CAM_DATA_07 },
+    { 0xFF00, CAM_DATA_09 },
 };
 
 /*=====================================================================
@@ -2119,7 +2946,14 @@ CameraModeValue D_801B5834[] = {
  * MAZE       NORMAL    PARA2
  */
 CameraModeValue D_801B5844[] = {
-    { 0xFFDD, 0 }, { 0x00A0, 2 }, { 0x0041, 1 }, { -5, 3 }, { 0x0002, 4 }, { 0x0046, 7 }, { 0x0063, 8 }, { 0x0002, 9 },
+    { 0xFFDD, CAM_DATA_00 },
+    { 0x00A0, CAM_DATA_02 },
+    { 0x0041, CAM_DATA_01 },
+    { -5, CAM_DATA_03 },
+    { 0x0002, CAM_DATA_04 },
+    { 0x0046, CAM_DATA_07 },
+    { 0x0063, CAM_DATA_08 },
+    { 0x0002, CAM_DATA_09 },
 };
 
 /*=====================================================================
@@ -2133,7 +2967,14 @@ CameraModeValue D_801B5844[] = {
  * REMOTEBOMB    NORMAL    NORM2
  */
 CameraModeValue D_801B5864[] = {
-    { 20, 0 }, { 200, 1 }, { 0x0320, 2 }, { 0x000F, 3 }, { 0x0006, 4 }, { 0x0046, 7 }, { 0x0028, 8 }, { 0x0002, 9 },
+    { 20, CAM_DATA_00 },
+    { 200, CAM_DATA_01 },
+    { 0x0320, CAM_DATA_02 },
+    { 0x000F, CAM_DATA_03 },
+    { 0x0006, CAM_DATA_04 },
+    { 0x0046, CAM_DATA_07 },
+    { 0x0028, CAM_DATA_08 },
+    { 0x0002, CAM_DATA_09 },
 };
 
 /*=====================================================================
@@ -2147,7 +2988,13 @@ CameraModeValue D_801B5864[] = {
  * CIRCLE1    NORMAL    FIXD2
  */
 CameraModeValue D_801B5884[] = {
-    { -40, 0 }, { 0x0028, 1 }, { 0x3200, 2 }, { 10, 4 }, { 20, 5 }, { 60, 7 }, { 0xFF01, 9 },
+    { -40, CAM_DATA_00 },
+    { 0x0028, CAM_DATA_01 },
+    { 0x3200, CAM_DATA_02 },
+    { 10, CAM_DATA_04 },
+    { 20, CAM_DATA_05 },
+    { 60, CAM_DATA_07 },
+    { 0xFF01, CAM_DATA_09 },
 };
 
 /*=====================================================================
@@ -2161,7 +3008,13 @@ CameraModeValue D_801B5884[] = {
  * CIRCLE2    NORMAL    FIXD2
  */
 CameraModeValue D_801B58A0[] = {
-    { -40, 0 }, { 0x0028, 1 }, { 0x3200, 2 }, { 100, 4 }, { 80, 5 }, { 60, 7 }, { 0xFF00, 9 },
+    { -40, CAM_DATA_00 },
+    { 0x0028, CAM_DATA_01 },
+    { 0x3200, CAM_DATA_02 },
+    { 100, CAM_DATA_04 },
+    { 80, CAM_DATA_05 },
+    { 60, CAM_DATA_07 },
+    { 0xFF00, CAM_DATA_09 },
 };
 
 /*=====================================================================
@@ -2175,7 +3028,13 @@ CameraModeValue D_801B58A0[] = {
  * CIRCLE3    NORMAL    FIXD2
  */
 CameraModeValue D_801B58BC[] = {
-    { -40, 0 }, { 0x0028, 1 }, { 0x3200, 2 }, { 100, 4 }, { 80, 5 }, { 60, 7 }, { 0, 9 },
+    { -40, CAM_DATA_00 },
+    { 0x0028, CAM_DATA_01 },
+    { 0x3200, CAM_DATA_02 },
+    { 100, CAM_DATA_04 },
+    { 80, CAM_DATA_05 },
+    { 60, CAM_DATA_07 },
+    { 0, CAM_DATA_09 },
 };
 
 /*=====================================================================
@@ -2189,7 +3048,13 @@ CameraModeValue D_801B58BC[] = {
  * CIRCLE4    NORMAL    FIXD2
  */
 CameraModeValue D_801B58D8[] = {
-    { -40, 0 }, { 0x0028, 1 }, { 0x3200, 2 }, { 100, 4 }, { 10, 5 }, { 60, 7 }, { 0xFF09, 9 },
+    { -40, CAM_DATA_00 },
+    { 0x0028, CAM_DATA_01 },
+    { 0x3200, CAM_DATA_02 },
+    { 100, CAM_DATA_04 },
+    { 10, CAM_DATA_05 },
+    { 60, CAM_DATA_07 },
+    { 0xFF09, CAM_DATA_09 },
 };
 
 /*=====================================================================
@@ -2203,10 +3068,10 @@ CameraModeValue D_801B58D8[] = {
  * FIXED3     NORMAL    FIXD1
  */
 CameraModeValue D_801B58F4[] = {
-    { -40, 0 },
-    { 100, 4 },
-    { 60, 7 },
-    { 0, 9 },
+    { -40, CAM_DATA_00 },
+    { 100, CAM_DATA_04 },
+    { 60, CAM_DATA_07 },
+    { 0, CAM_DATA_09 },
 };
 
 /*=====================================================================
@@ -2220,7 +3085,15 @@ CameraModeValue D_801B58F4[] = {
  * TOWER0    NORMAL    NORM0
  */
 CameraModeValue D_801B5904[] = {
-    { 0, 0 }, { 350, 1 }, { 0x0190, 2 }, { 20, 21 }, { 20, 4 }, { 50, 6 }, { 0x0041, 7 }, { 50, 8 }, { 0x0001, 9 },
+    { 0, CAM_DATA_00 },
+    { 350, CAM_DATA_01 },
+    { 0x0190, CAM_DATA_02 },
+    { 20, CAM_DATA_21 },
+    { 20, CAM_DATA_04 },
+    { 50, CAM_DATA_06 },
+    { 0x0041, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x0001, CAM_DATA_09 },
 };
 
 /**
@@ -2229,8 +3102,16 @@ CameraModeValue D_801B5904[] = {
  * TOWER0    JUMP    NORM1
  */
 CameraModeValue D_801B5928[] = {
-    { -20, 0 },    { 0x0154, 1 }, { 0x0190, 2 }, { 10, 3 }, { 30, 4 },
-    { 0x000C, 5 }, { 0x0028, 6 }, { 0x0041, 7 }, { 50, 8 }, { 0x008B, 9 },
+    { -20, CAM_DATA_00 },
+    { 0x0154, CAM_DATA_01 },
+    { 0x0190, CAM_DATA_02 },
+    { 10, CAM_DATA_03 },
+    { 30, CAM_DATA_04 },
+    { 0x000C, CAM_DATA_05 },
+    { 0x0028, CAM_DATA_06 },
+    { 0x0041, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x008B, CAM_DATA_09 },
 };
 
 /**
@@ -2239,8 +3120,16 @@ CameraModeValue D_801B5928[] = {
  * TOWER0     STILL    NORM1
  */
 CameraModeValue D_801B5950[] = {
-    { 0, 0 },   { 350, 1 }, { 0x0190, 2 }, { 10, 3 }, { 100, 4 },
-    { 100, 5 }, { 100, 6 }, { 0x0041, 7 }, { 20, 8 }, { 0xF023, 9 },
+    { 0, CAM_DATA_00 },
+    { 350, CAM_DATA_01 },
+    { 0x0190, CAM_DATA_02 },
+    { 10, CAM_DATA_03 },
+    { 100, CAM_DATA_04 },
+    { 100, CAM_DATA_05 },
+    { 100, CAM_DATA_06 },
+    { 0x0041, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 0xF023, CAM_DATA_09 },
 };
 
 /*=====================================================================
@@ -2254,8 +3143,18 @@ CameraModeValue D_801B5950[] = {
  * PARALLEL0    NORMAL    PARA1
  */
 CameraModeValue D_801B5978[] = {
-    { 0, 0 },      { 0x0190, 1 }, { 20, 2 }, { 0, 3 },      { 0, 10 },  { 20, 4 },
-    { 0x0005, 5 }, { 0x0046, 7 }, { 50, 8 }, { 0x200A, 9 }, { 80, 11 }, { 0, 12 },
+    { 0, CAM_DATA_00 },
+    { 0x0190, CAM_DATA_01 },
+    { 20, CAM_DATA_02 },
+    { 0, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 20, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0046, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x200A, CAM_DATA_09 },
+    { 80, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /*=====================================================================
@@ -2269,8 +3168,16 @@ CameraModeValue D_801B5978[] = {
  * NORMALD    NORMAL    NORM1
  */
 CameraModeValue D_801B59A8[] = {
-    { 0, 0 },      { 0x0190, 1 }, { 0x01F4, 2 }, { 0x000F, 3 }, { 0x0012, 4 },
-    { 0x000C, 5 }, { 0x0023, 6 }, { 0x0046, 7 }, { 30, 8 },     { 0xFF03, 9 },
+    { 0, CAM_DATA_00 },
+    { 0x0190, CAM_DATA_01 },
+    { 0x01F4, CAM_DATA_02 },
+    { 0x000F, CAM_DATA_03 },
+    { 0x0012, CAM_DATA_04 },
+    { 0x000C, CAM_DATA_05 },
+    { 0x0023, CAM_DATA_06 },
+    { 0x0046, CAM_DATA_07 },
+    { 30, CAM_DATA_08 },
+    { 0xFF03, CAM_DATA_09 },
 };
 
 /*=====================================================================
@@ -2284,7 +3191,15 @@ CameraModeValue D_801B59A8[] = {
  * SUBJECTD    NORMAL    SUBJ1
  */
 CameraModeValue D_801B59D0[] = {
-    { 0, 0 }, { 0x0005, 1 }, { 50, 2 }, { 10, 4 }, { 0, 19 }, { 0, 17 }, { 10, 18 }, { 0x002D, 7 }, { 0xFF00, 9 },
+    { 0, CAM_DATA_00 },
+    { 0x0005, CAM_DATA_01 },
+    { 50, CAM_DATA_02 },
+    { 10, CAM_DATA_04 },
+    { 0, CAM_DATA_19 },
+    { 0, CAM_DATA_17 },
+    { 10, CAM_DATA_18 },
+    { 0x002D, CAM_DATA_07 },
+    { 0xFF00, CAM_DATA_09 },
 };
 
 /*=====================================================================
@@ -2298,9 +3213,9 @@ CameraModeValue D_801B59D0[] = {
  * START0     NORMAL    UNIQ0
  */
 CameraModeValue D_801B59F4[] = {
-    { 0, 0 },
-    { 100, 4 },
-    { 0x0001, 9 },
+    { 0, CAM_DATA_00 },
+    { 100, CAM_DATA_04 },
+    { 0x0001, CAM_DATA_09 },
 };
 
 /*=====================================================================
@@ -2314,9 +3229,9 @@ CameraModeValue D_801B59F4[] = {
  * START2     NORMAL    UNIQ0
  */
 CameraModeValue D_801B5A00[] = {
-    { 0, 0 },
-    { 30, 4 },
-    { 0x0011, 9 },
+    { 0, CAM_DATA_00 },
+    { 30, CAM_DATA_04 },
+    { 0x0011, CAM_DATA_09 },
 };
 
 /*=====================================================================
@@ -2330,7 +3245,15 @@ CameraModeValue D_801B5A00[] = {
  * JCRUISING    NORMAL    SUBJ1
  */
 CameraModeValue D_801B5A0C[] = {
-    { 20, 0 }, { 90, 1 }, { 80, 2 }, { 10, 4 }, { 0, 19 }, { 50, 17 }, { 0xFF38, 18 }, { 0x002D, 7 }, { 0, 9 },
+    { 20, CAM_DATA_00 },
+    { 90, CAM_DATA_01 },
+    { 80, CAM_DATA_02 },
+    { 10, CAM_DATA_04 },
+    { 0, CAM_DATA_19 },
+    { 50, CAM_DATA_17 },
+    { 0xFF38, CAM_DATA_18 },
+    { 0x002D, CAM_DATA_07 },
+    { 0, CAM_DATA_09 },
 };
 
 /*=====================================================================
@@ -2345,8 +3268,19 @@ CameraModeValue D_801B5A0C[] = {
  */
 CameraModeValue D_801B5A30[] = {
     /* CAM_FUNC_PARA1 */
-    { 0, 0 },      { 0x0190, 1 }, { 50, 2 },     { 0, 3 },       { 0, 10 }, { 0x0005, 4 }, { 0x0005, 5 },
-    { 0x002D, 7 }, { 50, 8 },     { 0x2002, 9 }, { 0x0046, 11 }, { 0, 12 }, { 50, 18 },
+    { 0, CAM_DATA_00 },
+    { 0x0190, CAM_DATA_01 },
+    { 50, CAM_DATA_02 },
+    { 0, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x002D, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x2002, CAM_DATA_09 },
+    { 0x0046, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
+    { 50, CAM_DATA_18 },
 };
 
 /**
@@ -2356,8 +3290,18 @@ CameraModeValue D_801B5A30[] = {
  */
 CameraModeValue D_801B5A64[] = {
     /* CAM_FUNC_PARA1 */
-    { 0, 0 },      { 0x0190, 1 }, { 10, 2 }, { 0, 3 },      { 0xFFA6, 10 }, { 20, 4 },
-    { 0x0005, 5 }, { 0x0046, 7 }, { 50, 8 }, { 0x202E, 9 }, { 0x0046, 11 }, { 0, 12 },
+    { 0, CAM_DATA_00 },
+    { 0x0190, CAM_DATA_01 },
+    { 10, CAM_DATA_02 },
+    { 0, CAM_DATA_03 },
+    { 0xFFA6, CAM_DATA_10 },
+    { 20, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0046, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x202E, CAM_DATA_09 },
+    { 0x0046, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /**
@@ -2367,8 +3311,16 @@ CameraModeValue D_801B5A64[] = {
  */
 CameraModeValue D_801B5A94[] = {
     /* CAM_FUNC_NORM1 */
-    { -10, 0 }, { 270, 1 },    { 300, 2 }, { 20, 3 }, { 0x001C, 4 },
-    { 20, 5 },  { 0x0041, 6 }, { 60, 7 },  { 80, 8 }, { 0x0083, 9 },
+    { -10, CAM_DATA_00 },
+    { 270, CAM_DATA_01 },
+    { 300, CAM_DATA_02 },
+    { 20, CAM_DATA_03 },
+    { 0x001C, CAM_DATA_04 },
+    { 20, CAM_DATA_05 },
+    { 0x0041, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 80, CAM_DATA_08 },
+    { 0x0083, CAM_DATA_09 },
 };
 
 /**
@@ -2378,8 +3330,19 @@ CameraModeValue D_801B5A94[] = {
  */
 CameraModeValue D_801B5ABC[] = {
     /* CAM_FUNC_BATT1 */
-    { -40, 0 }, { 200, 1 }, { 0x00F0, 2 }, { 50, 13 },    { 20, 14 },     { 0x0005, 15 }, { 10, 16 },
-    { 20, 17 }, { 50, 7 },  { 60, 8 },     { 0x2002, 9 }, { 0x0019, 11 }, { 0x0028, 18 },
+    { -40, CAM_DATA_00 },
+    { 200, CAM_DATA_01 },
+    { 0x00F0, CAM_DATA_02 },
+    { 50, CAM_DATA_13 },
+    { 20, CAM_DATA_14 },
+    { 0x0005, CAM_DATA_15 },
+    { 10, CAM_DATA_16 },
+    { 20, CAM_DATA_17 },
+    { 50, CAM_DATA_07 },
+    { 60, CAM_DATA_08 },
+    { 0x2002, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_11 },
+    { 0x0028, CAM_DATA_18 },
 };
 
 /**
@@ -2389,8 +3352,16 @@ CameraModeValue D_801B5ABC[] = {
  */
 CameraModeValue D_801B5AF0[] = {
     /* CAM_FUNC_NORM1 */
-    { -20, 0 }, { 270, 1 }, { 300, 2 }, { 0x0028, 3 }, { 50, 4 },
-    { 20, 5 },  { 50, 6 },  { 60, 7 },  { 50, 8 },     { 0x008B, 9 },
+    { -20, CAM_DATA_00 },
+    { 270, CAM_DATA_01 },
+    { 300, CAM_DATA_02 },
+    { 0x0028, CAM_DATA_03 },
+    { 50, CAM_DATA_04 },
+    { 20, CAM_DATA_05 },
+    { 50, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x008B, CAM_DATA_09 },
 };
 
 /**
@@ -2400,8 +3371,16 @@ CameraModeValue D_801B5AF0[] = {
  */
 CameraModeValue D_801B5B18[] = {
     /* CAM_FUNC_NORM1 */
-    { -10, 0 }, { 270, 1 }, { 300, 2 }, { 20, 3 }, { 100, 4 },
-    { 100, 5 }, { 100, 6 }, { 60, 7 },  { 20, 8 }, { 0xF023, 9 },
+    { -10, CAM_DATA_00 },
+    { 270, CAM_DATA_01 },
+    { 300, CAM_DATA_02 },
+    { 20, CAM_DATA_03 },
+    { 100, CAM_DATA_04 },
+    { 100, CAM_DATA_05 },
+    { 100, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 0xF023, CAM_DATA_09 },
 };
 
 /**
@@ -2411,8 +3390,18 @@ CameraModeValue D_801B5B18[] = {
  */
 CameraModeValue D_801B5B40[] = {
     /* CAM_FUNC_PARA1 */
-    { 0, 0 },      { 200, 1 },    { 0x0005, 2 }, { 0x000F, 3 }, { 0, 10 },  { 0x0005, 4 },
-    { 0x0005, 5 }, { 0x0046, 7 }, { 30, 8 },     { 0x2022, 9 }, { 30, 11 }, { 0, 12 },
+    { 0, CAM_DATA_00 },
+    { 200, CAM_DATA_01 },
+    { 0x0005, CAM_DATA_02 },
+    { 0x000F, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0046, CAM_DATA_07 },
+    { 30, CAM_DATA_08 },
+    { 0x2022, CAM_DATA_09 },
+    { 30, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /**
@@ -2422,8 +3411,16 @@ CameraModeValue D_801B5B40[] = {
  */
 CameraModeValue D_801B5B70[] = {
     /* CAM_FUNC_NORM1 */
-    { -20, 0 },    { 250, 1 },    { 350, 2 },    { 10, 3 }, { 0x0018, 4 },
-    { 0x000C, 5 }, { 0x0028, 6 }, { 0x0041, 7 }, { 80, 8 }, { 0x0083, 9 },
+    { -20, CAM_DATA_00 },
+    { 250, CAM_DATA_01 },
+    { 350, CAM_DATA_02 },
+    { 10, CAM_DATA_03 },
+    { 0x0018, CAM_DATA_04 },
+    { 0x000C, CAM_DATA_05 },
+    { 0x0028, CAM_DATA_06 },
+    { 0x0041, CAM_DATA_07 },
+    { 80, CAM_DATA_08 },
+    { 0x0083, CAM_DATA_09 },
 };
 
 /**
@@ -2433,8 +3430,18 @@ CameraModeValue D_801B5B70[] = {
  */
 CameraModeValue D_801B5B98[] = {
     /* CAM_FUNC_KEEP1 */
-    { -50, 0 },     { 300, 1 },     { 350, 2 }, { 10, 13 }, { 20, 14 },    { 0x0005, 15 },
-    { 0x000C, 16 }, { 0x0046, 17 }, { 60, 7 },  { 30, 8 },  { 0x2000, 9 }, { 20, 11 },
+    { -50, CAM_DATA_00 },
+    { 300, CAM_DATA_01 },
+    { 350, CAM_DATA_02 },
+    { 10, CAM_DATA_13 },
+    { 20, CAM_DATA_14 },
+    { 0x0005, CAM_DATA_15 },
+    { 0x000C, CAM_DATA_16 },
+    { 0x0046, CAM_DATA_17 },
+    { 60, CAM_DATA_07 },
+    { 30, CAM_DATA_08 },
+    { 0x2000, CAM_DATA_09 },
+    { 20, CAM_DATA_11 },
 };
 
 /**
@@ -2444,8 +3451,19 @@ CameraModeValue D_801B5B98[] = {
  */
 CameraModeValue D_801B5BC8[] = {
     /* CAM_FUNC_KEEP3 */
-    { -20, 0 },     { 230, 1 },    { 260, 2 }, { 20, 13 }, { 10, 14 },    { 20, 15 },     { 0x000F, 16 },
-    { 0x0028, 17 }, { 0x0037, 7 }, { 20, 8 },  { 20, 4 },  { 0x3520, 9 }, { 0x0028, 18 },
+    { -20, CAM_DATA_00 },
+    { 230, CAM_DATA_01 },
+    { 260, CAM_DATA_02 },
+    { 20, CAM_DATA_13 },
+    { 10, CAM_DATA_14 },
+    { 20, CAM_DATA_15 },
+    { 0x000F, CAM_DATA_16 },
+    { 0x0028, CAM_DATA_17 },
+    { 0x0037, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 20, CAM_DATA_04 },
+    { 0x3520, CAM_DATA_09 },
+    { 0x0028, CAM_DATA_18 },
 };
 
 /**
@@ -2455,8 +3473,19 @@ CameraModeValue D_801B5BC8[] = {
  */
 CameraModeValue D_801B5BFC[] = {
     /* CAM_FUNC_BATT1 */
-    { 0xFFC4, 0 }, { 200, 1 }, { 220, 2 }, { 20, 13 },    { 10, 14 }, { 0, 15 },      { 10, 16 },
-    { 60, 17 },    { 60, 7 },  { 20, 8 },  { 0x2002, 9 }, { 10, 11 }, { 0x0028, 18 },
+    { 0xFFC4, CAM_DATA_00 },
+    { 200, CAM_DATA_01 },
+    { 220, CAM_DATA_02 },
+    { 20, CAM_DATA_13 },
+    { 10, CAM_DATA_14 },
+    { 0, CAM_DATA_15 },
+    { 10, CAM_DATA_16 },
+    { 60, CAM_DATA_17 },
+    { 60, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 0x2002, CAM_DATA_09 },
+    { 10, CAM_DATA_11 },
+    { 0x0028, CAM_DATA_18 },
 };
 
 /**
@@ -2466,8 +3495,16 @@ CameraModeValue D_801B5BFC[] = {
  */
 CameraModeValue D_801B5C30[] = {
     /* CAM_FUNC_NORM1 */
-    { -20, 0 },    { 250, 1 },    { 350, 2 },    { 10, 3 }, { 30, 4 },
-    { 0x000C, 5 }, { 0x0028, 6 }, { 0x0041, 7 }, { 50, 8 }, { 0x008B, 9 },
+    { -20, CAM_DATA_00 },
+    { 250, CAM_DATA_01 },
+    { 350, CAM_DATA_02 },
+    { 10, CAM_DATA_03 },
+    { 30, CAM_DATA_04 },
+    { 0x000C, CAM_DATA_05 },
+    { 0x0028, CAM_DATA_06 },
+    { 0x0041, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x008B, CAM_DATA_09 },
 };
 
 /**
@@ -2477,8 +3514,16 @@ CameraModeValue D_801B5C30[] = {
  */
 CameraModeValue D_801B5C58[] = {
     /* CAM_FUNC_NORM1 */
-    { -20, 0 }, { 250, 1 }, { 350, 2 },    { 10, 3 },     { 100, 4 },
-    { 100, 5 }, { 100, 6 }, { 0x0041, 7 }, { 0x000F, 8 }, { 0xF023, 9 },
+    { -20, CAM_DATA_00 },
+    { 250, CAM_DATA_01 },
+    { 350, CAM_DATA_02 },
+    { 10, CAM_DATA_03 },
+    { 100, CAM_DATA_04 },
+    { 100, CAM_DATA_05 },
+    { 100, CAM_DATA_06 },
+    { 0x0041, CAM_DATA_07 },
+    { 0x000F, CAM_DATA_08 },
+    { 0xF023, CAM_DATA_09 },
 };
 
 /**
@@ -2488,8 +3533,18 @@ CameraModeValue D_801B5C58[] = {
  */
 CameraModeValue D_801B5C80[] = {
     /* CAM_FUNC_PARA1 */
-    { 100, 0 },    { 300, 1 }, { -20, 2 }, { 0x0028, 3 }, { 0, 10 },  { 0x0004, 4 },
-    { 0x0005, 5 }, { 80, 7 },  { 60, 8 },  { 0x0022, 9 }, { 60, 11 }, { 20, 12 },
+    { 100, CAM_DATA_00 },
+    { 300, CAM_DATA_01 },
+    { -20, CAM_DATA_02 },
+    { 0x0028, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0004, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 80, CAM_DATA_07 },
+    { 60, CAM_DATA_08 },
+    { 0x0022, CAM_DATA_09 },
+    { 60, CAM_DATA_11 },
+    { 20, CAM_DATA_12 },
 };
 
 /**
@@ -2499,7 +3554,13 @@ CameraModeValue D_801B5C80[] = {
  */
 CameraModeValue D_801B5CB0[] = {
     /* CAM_FUNC_FIXD2 */
-    { -40, 0 }, { 60, 1 }, { 0x3200, 2 }, { 10, 4 }, { 20, 5 }, { 60, 7 }, { 0xFF03, 9 },
+    { -40, CAM_DATA_00 },
+    { 60, CAM_DATA_01 },
+    { 0x3200, CAM_DATA_02 },
+    { 10, CAM_DATA_04 },
+    { 20, CAM_DATA_05 },
+    { 60, CAM_DATA_07 },
+    { 0xFF03, CAM_DATA_09 },
 };
 
 /**
@@ -2509,7 +3570,13 @@ CameraModeValue D_801B5CB0[] = {
  */
 CameraModeValue D_801B5CCC[] = {
     /* CAM_FUNC_FIXD2 */
-    { -40, 0 }, { 0x0028, 1 }, { 200, 2 }, { 10, 4 }, { 20, 5 }, { 60, 7 }, { 0xFF20, 9 },
+    { -40, CAM_DATA_00 },
+    { 0x0028, CAM_DATA_01 },
+    { 200, CAM_DATA_02 },
+    { 10, CAM_DATA_04 },
+    { 20, CAM_DATA_05 },
+    { 60, CAM_DATA_07 },
+    { 0xFF20, CAM_DATA_09 },
 };
 
 /**
@@ -2519,8 +3586,16 @@ CameraModeValue D_801B5CCC[] = {
  */
 CameraModeValue D_801B5CE8[] = {
     /* CAM_FUNC_NORM1 */
-    { -15, 0 },    { 220, 1 },    { 0x0118, 2 }, { 0x0011, 3 }, { 0x000E, 4 },
-    { 0x0005, 5 }, { 0x0041, 6 }, { 0x0046, 7 }, { 0x004B, 8 }, { 0x0083, 9 },
+    { -15, CAM_DATA_00 },
+    { 220, CAM_DATA_01 },
+    { 0x0118, CAM_DATA_02 },
+    { 0x0011, CAM_DATA_03 },
+    { 0x000E, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0041, CAM_DATA_06 },
+    { 0x0046, CAM_DATA_07 },
+    { 0x004B, CAM_DATA_08 },
+    { 0x0083, CAM_DATA_09 },
 };
 
 /**
@@ -2530,8 +3605,18 @@ CameraModeValue D_801B5CE8[] = {
  */
 CameraModeValue D_801B5D10[] = {
     /* CAM_FUNC_KEEP1 */
-    { 0, 0 },       { 200, 1 },     { 250, 2 }, { 0x0019, 13 }, { 0x002D, 14 }, { 0x0028, 15 },
-    { 0x000F, 16 }, { 0x0028, 17 }, { 60, 7 },  { 60, 8 },      { 0x2001, 9 },  { 20, 11 },
+    { 0, CAM_DATA_00 },
+    { 200, CAM_DATA_01 },
+    { 250, CAM_DATA_02 },
+    { 0x0019, CAM_DATA_13 },
+    { 0x002D, CAM_DATA_14 },
+    { 0x0028, CAM_DATA_15 },
+    { 0x000F, CAM_DATA_16 },
+    { 0x0028, CAM_DATA_17 },
+    { 60, CAM_DATA_07 },
+    { 60, CAM_DATA_08 },
+    { 0x2001, CAM_DATA_09 },
+    { 20, CAM_DATA_11 },
 };
 
 /**
@@ -2541,8 +3626,19 @@ CameraModeValue D_801B5D10[] = {
  */
 CameraModeValue D_801B5D40[] = {
     /* CAM_FUNC_BATT1 */
-    { -25, 0 },     { 180, 1 }, { 220, 2 }, { 10, 13 },    { 0x0028, 14 }, { 10, 15 }, { 0, 16 },
-    { 0x0028, 17 }, { 60, 7 },  { 50, 8 },  { 0x2002, 9 }, { 20, 11 },     { 50, 18 },
+    { -25, CAM_DATA_00 },
+    { 180, CAM_DATA_01 },
+    { 220, CAM_DATA_02 },
+    { 10, CAM_DATA_13 },
+    { 0x0028, CAM_DATA_14 },
+    { 10, CAM_DATA_15 },
+    { 0, CAM_DATA_16 },
+    { 0x0028, CAM_DATA_17 },
+    { 60, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x2002, CAM_DATA_09 },
+    { 20, CAM_DATA_11 },
+    { 50, CAM_DATA_18 },
 };
 
 /**
@@ -2552,8 +3648,16 @@ CameraModeValue D_801B5D40[] = {
  */
 CameraModeValue D_801B5D74[] = {
     /* CAM_FUNC_NORM1 */
-    { -15, 0 },    { 220, 1 }, { 0x0118, 2 }, { 0x0010, 3 }, { 0x000C, 4 },
-    { 0x0005, 5 }, { 60, 6 },  { 0x0046, 7 }, { 0x0028, 8 }, { 0x008B, 9 },
+    { -15, CAM_DATA_00 },
+    { 220, CAM_DATA_01 },
+    { 0x0118, CAM_DATA_02 },
+    { 0x0010, CAM_DATA_03 },
+    { 0x000C, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 60, CAM_DATA_06 },
+    { 0x0046, CAM_DATA_07 },
+    { 0x0028, CAM_DATA_08 },
+    { 0x008B, CAM_DATA_09 },
 };
 
 /**
@@ -2563,8 +3667,16 @@ CameraModeValue D_801B5D74[] = {
  */
 CameraModeValue D_801B5D9C[] = {
     /* CAM_FUNC_NORM1 */
-    { -15, 0 }, { 220, 1 }, { 0x0118, 2 }, { 0x0010, 3 }, { 100, 4 },
-    { 100, 5 }, { 100, 6 }, { 0x0046, 7 }, { 20, 8 },     { 0xF023, 9 },
+    { -15, CAM_DATA_00 },
+    { 220, CAM_DATA_01 },
+    { 0x0118, CAM_DATA_02 },
+    { 0x0010, CAM_DATA_03 },
+    { 100, CAM_DATA_04 },
+    { 100, CAM_DATA_05 },
+    { 100, CAM_DATA_06 },
+    { 0x0046, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 0xF023, CAM_DATA_09 },
 };
 
 /**
@@ -2574,10 +3686,10 @@ CameraModeValue D_801B5D9C[] = {
  */
 CameraModeValue D_801B5DC4[] = {
     /* CAM_FUNC_FIXD1 */
-    { -40, 0 },
-    { 10, 4 },
-    { 60, 7 },
-    { 0xFF10, 9 },
+    { -40, CAM_DATA_00 },
+    { 10, CAM_DATA_04 },
+    { 60, CAM_DATA_07 },
+    { 0xFF10, CAM_DATA_09 },
 };
 
 /**
@@ -2587,8 +3699,16 @@ CameraModeValue D_801B5DC4[] = {
  */
 CameraModeValue D_801B5DD4[] = {
     /* CAM_FUNC_NORM1 */
-    { -20, 0 }, { 80, 1 },     { 0x0078, 2 }, { -10, 3 },    { 0x000F, 4 },
-    { 20, 5 },  { 0x0028, 6 }, { 0x0046, 7 }, { 0x0046, 8 }, { 0x0082, 9 },
+    { -20, CAM_DATA_00 },
+    { 80, CAM_DATA_01 },
+    { 0x0078, CAM_DATA_02 },
+    { -10, CAM_DATA_03 },
+    { 0x000F, CAM_DATA_04 },
+    { 20, CAM_DATA_05 },
+    { 0x0028, CAM_DATA_06 },
+    { 0x0046, CAM_DATA_07 },
+    { 0x0046, CAM_DATA_08 },
+    { 0x0082, CAM_DATA_09 },
 };
 
 /**
@@ -2598,8 +3718,18 @@ CameraModeValue D_801B5DD4[] = {
  */
 CameraModeValue D_801B5DFC[] = {
     /* CAM_FUNC_PARA1 */
-    { 0xFFC4, 0 }, { 0x0226, 1 }, { 0, 2 },  { 0x0041, 3 }, { 0, 10 },  { 0x0005, 4 },
-    { 0x0005, 5 }, { 0x004B, 7 }, { 50, 8 }, { 0x2042, 9 }, { 60, 11 }, { 0, 12 },
+    { 0xFFC4, CAM_DATA_00 },
+    { 0x0226, CAM_DATA_01 },
+    { 0, CAM_DATA_02 },
+    { 0x0041, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x004B, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x2042, CAM_DATA_09 },
+    { 60, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /**
@@ -2609,7 +3739,13 @@ CameraModeValue D_801B5DFC[] = {
  */
 CameraModeValue D_801B5E2C[] = {
     /* CAM_FUNC_FIXD2 */
-    { 0x0046, 0 }, { 50, 1 }, { 0x3200, 2 }, { 100, 4 }, { 30, 5 }, { 0x0046, 7 }, { 0x0001, 9 },
+    { 0x0046, CAM_DATA_00 },
+    { 50, CAM_DATA_01 },
+    { 0x3200, CAM_DATA_02 },
+    { 100, CAM_DATA_04 },
+    { 30, CAM_DATA_05 },
+    { 0x0046, CAM_DATA_07 },
+    { 0x0001, CAM_DATA_09 },
 };
 
 /**
@@ -2619,7 +3755,13 @@ CameraModeValue D_801B5E2C[] = {
  */
 CameraModeValue D_801B5E48[] = {
     /* CAM_FUNC_FIXD2 */
-    { -40, 0 }, { 0x0028, 1 }, { 0x3200, 2 }, { 100, 4 }, { 20, 5 }, { 60, 7 }, { 0xFF08, 9 },
+    { -40, CAM_DATA_00 },
+    { 0x0028, CAM_DATA_01 },
+    { 0x3200, CAM_DATA_02 },
+    { 100, CAM_DATA_04 },
+    { 20, CAM_DATA_05 },
+    { 60, CAM_DATA_07 },
+    { 0xFF08, CAM_DATA_09 },
 };
 
 /**
@@ -2629,8 +3771,16 @@ CameraModeValue D_801B5E48[] = {
  */
 CameraModeValue D_801B5E64[] = {
     /* CAM_FUNC_NORM1 */
-    { -20, 0 }, { 0x0320, 1 }, { 0x0320, 2 }, { 60, 3 }, { 50, 4 },
-    { 10, 5 },  { 50, 6 },     { 0x002D, 7 }, { 90, 8 }, { 0x0042, 9 },
+    { -20, CAM_DATA_00 },
+    { 0x0320, CAM_DATA_01 },
+    { 0x0320, CAM_DATA_02 },
+    { 60, CAM_DATA_03 },
+    { 50, CAM_DATA_04 },
+    { 10, CAM_DATA_05 },
+    { 50, CAM_DATA_06 },
+    { 0x002D, CAM_DATA_07 },
+    { 90, CAM_DATA_08 },
+    { 0x0042, CAM_DATA_09 },
 };
 
 /**
@@ -2640,8 +3790,16 @@ CameraModeValue D_801B5E64[] = {
  */
 CameraModeValue D_801B5E8C[] = {
     /* CAM_FUNC_NORM1 */
-    { -20, 0 }, { 0x0320, 1 }, { 0x0320, 2 }, { 60, 3 }, { 100, 4 },
-    { 100, 5 }, { 100, 6 },    { 0x002D, 7 }, { 20, 8 }, { 0xF023, 9 },
+    { -20, CAM_DATA_00 },
+    { 0x0320, CAM_DATA_01 },
+    { 0x0320, CAM_DATA_02 },
+    { 60, CAM_DATA_03 },
+    { 100, CAM_DATA_04 },
+    { 100, CAM_DATA_05 },
+    { 100, CAM_DATA_06 },
+    { 0x002D, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 0xF023, CAM_DATA_09 },
 };
 
 /**
@@ -2651,8 +3809,16 @@ CameraModeValue D_801B5E8C[] = {
  */
 CameraModeValue D_801B5EB4[] = {
     /* CAM_FUNC_NORM1 */
-    { -30, 0 }, { 180, 1 }, { 250, 2 },    { -5, 3 }, { 0x0012, 4 },
-    { 20, 5 },  { 60, 6 },  { 0x0037, 7 }, { 50, 8 }, { 0x0082, 9 },
+    { -30, CAM_DATA_00 },
+    { 180, CAM_DATA_01 },
+    { 250, CAM_DATA_02 },
+    { -5, CAM_DATA_03 },
+    { 0x0012, CAM_DATA_04 },
+    { 20, CAM_DATA_05 },
+    { 60, CAM_DATA_06 },
+    { 0x0037, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x0082, CAM_DATA_09 },
 };
 
 /**
@@ -2662,8 +3828,18 @@ CameraModeValue D_801B5EB4[] = {
  */
 CameraModeValue D_801B5EDC[] = {
     /* CAM_FUNC_PARA1 */
-    { -30, 0 },    { 180, 1 },    { 20, 2 }, { 0, 3 },      { 0, 10 },  { 0x0005, 4 },
-    { 0x0005, 5 }, { 0x002D, 7 }, { 50, 8 }, { 0x2042, 9 }, { 80, 11 }, { 0, 12 },
+    { -30, CAM_DATA_00 },
+    { 180, CAM_DATA_01 },
+    { 20, CAM_DATA_02 },
+    { 0, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x002D, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x2042, CAM_DATA_09 },
+    { 80, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /**
@@ -2673,8 +3849,16 @@ CameraModeValue D_801B5EDC[] = {
  */
 CameraModeValue D_801B5F0C[] = {
     /* CAM_FUNC_NORM1 */
-    { -30, 0 }, { 0x00A0, 1 }, { 0x00BE, 2 }, { 0, 3 },  { 30, 4 },
-    { 20, 5 },  { 60, 6 },     { 0x0037, 7 }, { 30, 8 }, { 0x008B, 9 },
+    { -30, CAM_DATA_00 },
+    { 0x00A0, CAM_DATA_01 },
+    { 0x00BE, CAM_DATA_02 },
+    { 0, CAM_DATA_03 },
+    { 30, CAM_DATA_04 },
+    { 20, CAM_DATA_05 },
+    { 60, CAM_DATA_06 },
+    { 0x0037, CAM_DATA_07 },
+    { 30, CAM_DATA_08 },
+    { 0x008B, CAM_DATA_09 },
 };
 
 /**
@@ -2684,8 +3868,16 @@ CameraModeValue D_801B5F0C[] = {
  */
 CameraModeValue D_801B5F34[] = {
     /* CAM_FUNC_NORM1 */
-    { -40, 0 }, { 0x00AA, 1 }, { 200, 2 },    { 0, 3 },  { 100, 4 },
-    { 100, 5 }, { 100, 6 },    { 0x0037, 7 }, { 20, 8 }, { 0xF023, 9 },
+    { -40, CAM_DATA_00 },
+    { 0x00AA, CAM_DATA_01 },
+    { 200, CAM_DATA_02 },
+    { 0, CAM_DATA_03 },
+    { 100, CAM_DATA_04 },
+    { 100, CAM_DATA_05 },
+    { 100, CAM_DATA_06 },
+    { 0x0037, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 0xF023, CAM_DATA_09 },
 };
 
 /**
@@ -2695,8 +3887,18 @@ CameraModeValue D_801B5F34[] = {
  */
 CameraModeValue D_801B5F5C[] = {
     /* CAM_FUNC_PARA1 */
-    { 0, 0 },      { 180, 1 },    { 0x0005, 2 }, { 0x0005, 3 }, { 0, 10 },  { 0x0005, 4 },
-    { 0x0005, 5 }, { 0x0046, 7 }, { 30, 8 },     { 0x2022, 9 }, { 30, 11 }, { 0, 12 },
+    { 0, CAM_DATA_00 },
+    { 180, CAM_DATA_01 },
+    { 0x0005, CAM_DATA_02 },
+    { 0x0005, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0046, CAM_DATA_07 },
+    { 30, CAM_DATA_08 },
+    { 0x2022, CAM_DATA_09 },
+    { 30, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /**
@@ -2706,7 +3908,15 @@ CameraModeValue D_801B5F5C[] = {
  */
 CameraModeValue D_801B5F8C[] = {
     /* CAM_FUNC_SUBJ1 */
-    { 0, 0 }, { 0x0005, 1 }, { 50, 2 }, { 10, 4 }, { 0, 19 }, { 0, 17 }, { 0, 18 }, { 30, 7 }, { 0x0200, 9 },
+    { 0, CAM_DATA_00 },
+    { 0x0005, CAM_DATA_01 },
+    { 50, CAM_DATA_02 },
+    { 10, CAM_DATA_04 },
+    { 0, CAM_DATA_19 },
+    { 0, CAM_DATA_17 },
+    { 0, CAM_DATA_18 },
+    { 30, CAM_DATA_07 },
+    { 0x0200, CAM_DATA_09 },
 };
 
 /**
@@ -2716,7 +3926,15 @@ CameraModeValue D_801B5F8C[] = {
  */
 CameraModeValue D_801B5FB0[] = {
     /* CAM_FUNC_SUBJ1 */
-    { 0, 0 }, { 0x0005, 1 }, { 50, 2 }, { 10, 4 }, { 0, 19 }, { 0, 17 }, { 0, 18 }, { 0x000F, 7 }, { 0x0200, 9 },
+    { 0, CAM_DATA_00 },
+    { 0x0005, CAM_DATA_01 },
+    { 50, CAM_DATA_02 },
+    { 10, CAM_DATA_04 },
+    { 0, CAM_DATA_19 },
+    { 0, CAM_DATA_17 },
+    { 0, CAM_DATA_18 },
+    { 0x000F, CAM_DATA_07 },
+    { 0x0200, CAM_DATA_09 },
 };
 
 /**
@@ -2726,7 +3944,15 @@ CameraModeValue D_801B5FB0[] = {
  */
 CameraModeValue D_801B5FD4[] = {
     /* CAM_FUNC_SUBJ1 */
-    { 0, 0 }, { 0x0005, 1 }, { 50, 2 }, { 10, 4 }, { 0, 19 }, { 0, 17 }, { 0, 18 }, { 30, 7 }, { 0x0210, 9 },
+    { 0, CAM_DATA_00 },
+    { 0x0005, CAM_DATA_01 },
+    { 50, CAM_DATA_02 },
+    { 10, CAM_DATA_04 },
+    { 0, CAM_DATA_19 },
+    { 0, CAM_DATA_17 },
+    { 0, CAM_DATA_18 },
+    { 30, CAM_DATA_07 },
+    { 0x0210, CAM_DATA_09 },
 };
 
 /**
@@ -2736,7 +3962,15 @@ CameraModeValue D_801B5FD4[] = {
  */
 CameraModeValue D_801B5FF8[] = {
     /* CAM_FUNC_SUBJ1 */
-    { 0, 0 }, { 0x0005, 1 }, { 50, 2 }, { 0x0001, 4 }, { 0, 19 }, { 0, 17 }, { 0, 18 }, { 0x002D, 7 }, { 0x0210, 9 },
+    { 0, CAM_DATA_00 },
+    { 0x0005, CAM_DATA_01 },
+    { 50, CAM_DATA_02 },
+    { 0x0001, CAM_DATA_04 },
+    { 0, CAM_DATA_19 },
+    { 0, CAM_DATA_17 },
+    { 0, CAM_DATA_18 },
+    { 0x002D, CAM_DATA_07 },
+    { 0x0210, CAM_DATA_09 },
 };
 
 /**
@@ -2746,8 +3980,16 @@ CameraModeValue D_801B5FF8[] = {
  */
 CameraModeValue D_801B601C[] = {
     /* CAM_FUNC_NORM1 */
-    { 0xFFDD, 0 }, { 100, 1 },    { 220, 2 },    { 0x000F, 3 }, { 0x0011, 4 },
-    { 0x000C, 5 }, { 0x0023, 6 }, { 0x0041, 7 }, { 0x0046, 8 }, { 0x0083, 9 },
+    { 0xFFDD, CAM_DATA_00 },
+    { 100, CAM_DATA_01 },
+    { 220, CAM_DATA_02 },
+    { 0x000F, CAM_DATA_03 },
+    { 0x0011, CAM_DATA_04 },
+    { 0x000C, CAM_DATA_05 },
+    { 0x0023, CAM_DATA_06 },
+    { 0x0041, CAM_DATA_07 },
+    { 0x0046, CAM_DATA_08 },
+    { 0x0083, CAM_DATA_09 },
 };
 
 /**
@@ -2757,8 +3999,18 @@ CameraModeValue D_801B601C[] = {
  */
 CameraModeValue D_801B6044[] = {
     /* CAM_FUNC_PARA1 */
-    { -10, 0 },    { 200, 1 },    { 50, 2 }, { 0, 3 },      { 0, 10 },  { 0x0005, 4 },
-    { 0x0005, 5 }, { 0x0041, 7 }, { 50, 8 }, { 0x2052, 9 }, { 60, 11 }, { 0, 12 },
+    { -10, CAM_DATA_00 },
+    { 200, CAM_DATA_01 },
+    { 50, CAM_DATA_02 },
+    { 0, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0041, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x2052, CAM_DATA_09 },
+    { 60, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /**
@@ -2768,8 +4020,18 @@ CameraModeValue D_801B6044[] = {
  */
 CameraModeValue D_801B6074[] = {
     /* CAM_FUNC_KEEP1 */
-    { -30, 0 }, { 60, 1 },  { 200, 2 },    { 20, 13 }, { 0x0028, 14 }, { -5, 15 },
-    { 10, 16 }, { 30, 17 }, { 0x002D, 7 }, { 60, 8 },  { 0x2001, 9 },  { 30, 11 },
+    { -30, CAM_DATA_00 },
+    { 60, CAM_DATA_01 },
+    { 200, CAM_DATA_02 },
+    { 20, CAM_DATA_13 },
+    { 0x0028, CAM_DATA_14 },
+    { -5, CAM_DATA_15 },
+    { 10, CAM_DATA_16 },
+    { 30, CAM_DATA_17 },
+    { 0x002D, CAM_DATA_07 },
+    { 60, CAM_DATA_08 },
+    { 0x2001, CAM_DATA_09 },
+    { 30, CAM_DATA_11 },
 };
 
 /**
@@ -2779,8 +4041,19 @@ CameraModeValue D_801B6074[] = {
  */
 CameraModeValue D_801B60A4[] = {
     /* CAM_FUNC_KEEP3 */
-    { -20, 0 },     { 50, 1 },     { 100, 2 }, { 50, 13 }, { 0x0005, 14 }, { 20, 15 }, { 0x0005, 16 },
-    { 0x0028, 17 }, { 0x0023, 7 }, { 50, 8 },  { 20, 4 },  { 0x3520, 9 },  { 60, 18 },
+    { -20, CAM_DATA_00 },
+    { 50, CAM_DATA_01 },
+    { 100, CAM_DATA_02 },
+    { 50, CAM_DATA_13 },
+    { 0x0005, CAM_DATA_14 },
+    { 20, CAM_DATA_15 },
+    { 0x0005, CAM_DATA_16 },
+    { 0x0028, CAM_DATA_17 },
+    { 0x0023, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 20, CAM_DATA_04 },
+    { 0x3520, CAM_DATA_09 },
+    { 60, CAM_DATA_18 },
 };
 
 /**
@@ -2790,8 +4063,19 @@ CameraModeValue D_801B60A4[] = {
  */
 CameraModeValue D_801B60D8[] = {
     /* CAM_FUNC_BATT1 */
-    { -25, 0 },     { 100, 1 }, { 0x008C, 2 }, { 10, 13 },    { 0x0028, 14 }, { 0xFFFE, 15 }, { 10, 16 },
-    { 0x0019, 17 }, { 50, 7 },  { 80, 8 },     { 0x2002, 9 }, { 0x0019, 11 }, { 50, 18 },
+    { -25, CAM_DATA_00 },
+    { 100, CAM_DATA_01 },
+    { 0x008C, CAM_DATA_02 },
+    { 10, CAM_DATA_13 },
+    { 0x0028, CAM_DATA_14 },
+    { 0xFFFE, CAM_DATA_15 },
+    { 10, CAM_DATA_16 },
+    { 0x0019, CAM_DATA_17 },
+    { 50, CAM_DATA_07 },
+    { 80, CAM_DATA_08 },
+    { 0x2002, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_11 },
+    { 50, CAM_DATA_18 },
 };
 
 /**
@@ -2801,8 +4085,15 @@ CameraModeValue D_801B60D8[] = {
  */
 CameraModeValue D_801B610C[] = {
     /* CAM_FUNC_JUMP2 */
-    { -20, 0 },    { 100, 1 },    { 220, 2 },    { 20, 20 }, { 0x0005, 4 },
-    { 0x0005, 5 }, { 0x0041, 7 }, { 0x0028, 8 }, { 0, 9 },
+    { -20, CAM_DATA_00 },
+    { 100, CAM_DATA_01 },
+    { 220, CAM_DATA_02 },
+    { 20, CAM_DATA_20 },
+    { 0x0005, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0041, CAM_DATA_07 },
+    { 0x0028, CAM_DATA_08 },
+    { 0, CAM_DATA_09 },
 };
 
 /**
@@ -2812,8 +4103,15 @@ CameraModeValue D_801B610C[] = {
  */
 CameraModeValue D_801B6130[] = {
     /* CAM_FUNC_JUMP2 */
-    { -20, 0 },    { 0x0078, 1 }, { 0x00F0, 2 }, { 20, 20 },    { 0x03E7, 4 },
-    { 0x0005, 5 }, { 60, 7 },     { 0x0028, 8 }, { 0x2006, 9 },
+    { -20, CAM_DATA_00 },
+    { 0x0078, CAM_DATA_01 },
+    { 0x00F0, CAM_DATA_02 },
+    { 20, CAM_DATA_20 },
+    { 0x03E7, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 60, CAM_DATA_07 },
+    { 0x0028, CAM_DATA_08 },
+    { 0x2006, CAM_DATA_09 },
 };
 
 /**
@@ -2823,8 +4121,16 @@ CameraModeValue D_801B6130[] = {
  */
 CameraModeValue D_801B6154[] = {
     /* CAM_FUNC_NORM1 */
-    { -30, 0 },    { 100, 1 }, { 220, 2 },    { 10, 3 }, { 30, 4 },
-    { 0x000C, 5 }, { 80, 6 },  { 0x0041, 7 }, { 30, 8 }, { 0x008B, 9 },
+    { -30, CAM_DATA_00 },
+    { 100, CAM_DATA_01 },
+    { 220, CAM_DATA_02 },
+    { 10, CAM_DATA_03 },
+    { 30, CAM_DATA_04 },
+    { 0x000C, CAM_DATA_05 },
+    { 80, CAM_DATA_06 },
+    { 0x0041, CAM_DATA_07 },
+    { 30, CAM_DATA_08 },
+    { 0x008B, CAM_DATA_09 },
 };
 
 /**
@@ -2834,8 +4140,18 @@ CameraModeValue D_801B6154[] = {
  */
 CameraModeValue D_801B617C[] = {
     /* CAM_FUNC_PARA1 */
-    { -40, 0 },    { 200, 1 },    { 50, 2 }, { 0x0028, 3 }, { 0, 10 },  { 0x0008, 4 },
-    { 0x0005, 5 }, { 0x0041, 7 }, { 50, 8 }, { 0x0086, 9 }, { 60, 11 }, { 0x000C, 12 },
+    { -40, CAM_DATA_00 },
+    { 200, CAM_DATA_01 },
+    { 50, CAM_DATA_02 },
+    { 0x0028, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0008, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0041, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x0086, CAM_DATA_09 },
+    { 60, CAM_DATA_11 },
+    { 0x000C, CAM_DATA_12 },
 };
 
 /**
@@ -2845,8 +4161,18 @@ CameraModeValue D_801B617C[] = {
  */
 CameraModeValue D_801B61AC[] = {
     /* CAM_FUNC_PARA1 */
-    { 0xFFB0, 0 }, { 0x00F0, 1 }, { 50, 2 }, { 0x0046, 3 }, { 0, 10 },  { 0x000C, 4 },
-    { 0x0005, 5 }, { 0x002D, 7 }, { 60, 8 }, { 0x2086, 9 }, { 60, 11 }, { 0x0002, 12 },
+    { 0xFFB0, CAM_DATA_00 },
+    { 0x00F0, CAM_DATA_01 },
+    { 50, CAM_DATA_02 },
+    { 0x0046, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x000C, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x002D, CAM_DATA_07 },
+    { 60, CAM_DATA_08 },
+    { 0x2086, CAM_DATA_09 },
+    { 60, CAM_DATA_11 },
+    { 0x0002, CAM_DATA_12 },
 };
 
 /**
@@ -2856,8 +4182,18 @@ CameraModeValue D_801B61AC[] = {
  */
 CameraModeValue D_801B61DC[] = {
     /* CAM_FUNC_PARA1 */
-    { -10, 0 },    { 200, 1 },    { 100, 2 }, { 0x0046, 3 }, { 0, 10 },      { 0x0004, 4 },
-    { 0x0005, 5 }, { 0x0046, 7 }, { 20, 8 },  { 0x0088, 9 }, { 0x0041, 11 }, { 0x000C, 12 },
+    { -10, CAM_DATA_00 },
+    { 200, CAM_DATA_01 },
+    { 100, CAM_DATA_02 },
+    { 0x0046, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0004, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0046, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 0x0088, CAM_DATA_09 },
+    { 0x0041, CAM_DATA_11 },
+    { 0x000C, CAM_DATA_12 },
 };
 
 /**
@@ -2867,8 +4203,18 @@ CameraModeValue D_801B61DC[] = {
  */
 CameraModeValue D_801B620C[] = {
     /* CAM_FUNC_PARA1 */
-    { 0xFFB0, 0 }, { 0x00F0, 1 }, { -20, 2 }, { 50, 3 }, { 0, 10 },      { 50, 4 },
-    { 0x0005, 5 }, { 80, 7 },     { 20, 8 },  { 0, 9 },  { 0x0041, 11 }, { 10, 12 },
+    { 0xFFB0, CAM_DATA_00 },
+    { 0x00F0, CAM_DATA_01 },
+    { -20, CAM_DATA_02 },
+    { 50, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 50, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 80, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 0, CAM_DATA_09 },
+    { 0x0041, CAM_DATA_11 },
+    { 10, CAM_DATA_12 },
 };
 
 /**
@@ -2878,8 +4224,18 @@ CameraModeValue D_801B620C[] = {
  */
 CameraModeValue D_801B623C[] = {
     /* CAM_FUNC_PARA1 */
-    { 0xFFB0, 0 }, { 0x00F0, 1 }, { -20, 2 }, { 0x0028, 3 }, { 0, 10 },      { 50, 4 },
-    { 0x0005, 5 }, { 80, 7 },     { 20, 8 },  { 0x0002, 9 }, { 0x0041, 11 }, { 0, 12 },
+    { 0xFFB0, CAM_DATA_00 },
+    { 0x00F0, CAM_DATA_01 },
+    { -20, CAM_DATA_02 },
+    { 0x0028, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 50, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 80, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 0x0002, CAM_DATA_09 },
+    { 0x0041, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /**
@@ -2889,8 +4245,16 @@ CameraModeValue D_801B623C[] = {
  */
 CameraModeValue D_801B626C[] = {
     /* CAM_FUNC_NORM1 */
-    { -20, 0 }, { 100, 1 }, { 220, 2 },    { 10, 3 }, { 100, 4 },
-    { 100, 5 }, { 100, 6 }, { 0x0041, 7 }, { 20, 8 }, { 0xF023, 9 },
+    { -20, CAM_DATA_00 },
+    { 100, CAM_DATA_01 },
+    { 220, CAM_DATA_02 },
+    { 10, CAM_DATA_03 },
+    { 100, CAM_DATA_04 },
+    { 100, CAM_DATA_05 },
+    { 100, CAM_DATA_06 },
+    { 0x0041, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 0xF023, CAM_DATA_09 },
 };
 
 /**
@@ -2900,8 +4264,18 @@ CameraModeValue D_801B626C[] = {
  */
 CameraModeValue D_801B6294[] = {
     /* CAM_FUNC_PARA1 */
-    { 0, 0 },      { 200, 1 },    { 0x0005, 2 }, { 0x002D, 3 }, { 0, 10 },  { 0x0005, 4 },
-    { 0x0005, 5 }, { 0x0046, 7 }, { 30, 8 },     { 0x2032, 9 }, { 80, 11 }, { 0, 12 },
+    { 0, CAM_DATA_00 },
+    { 200, CAM_DATA_01 },
+    { 0x0005, CAM_DATA_02 },
+    { 0x002D, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0046, CAM_DATA_07 },
+    { 30, CAM_DATA_08 },
+    { 0x2032, CAM_DATA_09 },
+    { 80, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /**
@@ -2911,8 +4285,18 @@ CameraModeValue D_801B6294[] = {
  */
 CameraModeValue D_801B62C4[] = {
     /* CAM_FUNC_KEEP1 */
-    { -5, 0 },      { 0x0078, 1 },  { 0x008C, 2 }, { 0x0005, 13 }, { 0x0055, 14 }, { 10, 15 },
-    { 0x0005, 16 }, { 0x0019, 17 }, { 0x002D, 7 }, { 50, 8 },      { 0x2001, 9 },  { 30, 11 },
+    { -5, CAM_DATA_00 },
+    { 0x0078, CAM_DATA_01 },
+    { 0x008C, CAM_DATA_02 },
+    { 0x0005, CAM_DATA_13 },
+    { 0x0055, CAM_DATA_14 },
+    { 10, CAM_DATA_15 },
+    { 0x0005, CAM_DATA_16 },
+    { 0x0019, CAM_DATA_17 },
+    { 0x002D, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x2001, CAM_DATA_09 },
+    { 30, CAM_DATA_11 },
 };
 
 /**
@@ -2922,8 +4306,16 @@ CameraModeValue D_801B62C4[] = {
  */
 CameraModeValue D_801B62F4[] = {
     /* CAM_FUNC_NORM1 */
-    { 50, 0 }, { 0x008C, 1 }, { 220, 2 }, { 0, 3 },  { 0x000C, 4 },
-    { 10, 5 }, { 0x0028, 6 }, { 90, 7 },  { 90, 8 }, { 0x0087, 9 },
+    { 50, CAM_DATA_00 },
+    { 0x008C, CAM_DATA_01 },
+    { 220, CAM_DATA_02 },
+    { 0, CAM_DATA_03 },
+    { 0x000C, CAM_DATA_04 },
+    { 10, CAM_DATA_05 },
+    { 0x0028, CAM_DATA_06 },
+    { 90, CAM_DATA_07 },
+    { 90, CAM_DATA_08 },
+    { 0x0087, CAM_DATA_09 },
 };
 
 /**
@@ -2933,8 +4325,18 @@ CameraModeValue D_801B62F4[] = {
  */
 CameraModeValue D_801B631C[] = {
     /* CAM_FUNC_PARA1 */
-    { 100, 0 },    { 220, 1 }, { -20, 2 }, { 0x0028, 3 }, { 0, 10 },  { 0x0004, 4 },
-    { 0x0005, 5 }, { 80, 7 },  { 60, 8 },  { 0xFF22, 9 }, { 80, 11 }, { 20, 12 },
+    { 100, CAM_DATA_00 },
+    { 220, CAM_DATA_01 },
+    { -20, CAM_DATA_02 },
+    { 0x0028, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0004, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 80, CAM_DATA_07 },
+    { 60, CAM_DATA_08 },
+    { 0xFF22, CAM_DATA_09 },
+    { 80, CAM_DATA_11 },
+    { 20, CAM_DATA_12 },
 };
 
 /**
@@ -2944,8 +4346,16 @@ CameraModeValue D_801B631C[] = {
  */
 CameraModeValue D_801B634C[] = {
     /* CAM_FUNC_NORM1 */
-    { 0xFFC4, 0 }, { 0x0096, 1 }, { 250, 2 }, { 0x0028, 3 }, { 20, 4 },
-    { 0x000C, 5 }, { 0x0028, 6 }, { 80, 7 },  { 80, 8 },     { 0x0083, 9 },
+    { 0xFFC4, CAM_DATA_00 },
+    { 0x0096, CAM_DATA_01 },
+    { 250, CAM_DATA_02 },
+    { 0x0028, CAM_DATA_03 },
+    { 20, CAM_DATA_04 },
+    { 0x000C, CAM_DATA_05 },
+    { 0x0028, CAM_DATA_06 },
+    { 80, CAM_DATA_07 },
+    { 80, CAM_DATA_08 },
+    { 0x0083, CAM_DATA_09 },
 };
 
 /**
@@ -2955,8 +4365,18 @@ CameraModeValue D_801B634C[] = {
  */
 CameraModeValue D_801B6374[] = {
     /* CAM_FUNC_PARA1 */
-    { 0xFFC4, 0 }, { 220, 1 }, { 20, 2 }, { 10, 3 },     { 0, 10 },  { 0x0005, 4 },
-    { 0x0005, 5 }, { 60, 7 },  { 90, 8 }, { 0x200E, 9 }, { 90, 11 }, { 0, 12 },
+    { 0xFFC4, CAM_DATA_00 },
+    { 220, CAM_DATA_01 },
+    { 20, CAM_DATA_02 },
+    { 10, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 60, CAM_DATA_07 },
+    { 90, CAM_DATA_08 },
+    { 0x200E, CAM_DATA_09 },
+    { 90, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /**
@@ -2966,8 +4386,16 @@ CameraModeValue D_801B6374[] = {
  */
 CameraModeValue D_801B63A4[] = {
     /* CAM_FUNC_NORM1 */
-    { -10, 0 },    { 0x0078, 1 }, { 0x00F0, 2 }, { 0, 3 },  { 0x0012, 4 },
-    { 0x000C, 5 }, { 0x0028, 6 }, { 80, 7 },     { 60, 8 }, { 0x008F, 9 },
+    { -10, CAM_DATA_00 },
+    { 0x0078, CAM_DATA_01 },
+    { 0x00F0, CAM_DATA_02 },
+    { 0, CAM_DATA_03 },
+    { 0x0012, CAM_DATA_04 },
+    { 0x000C, CAM_DATA_05 },
+    { 0x0028, CAM_DATA_06 },
+    { 80, CAM_DATA_07 },
+    { 60, CAM_DATA_08 },
+    { 0x008F, CAM_DATA_09 },
 };
 
 /**
@@ -2977,8 +4405,18 @@ CameraModeValue D_801B63A4[] = {
  */
 CameraModeValue D_801B63CC[] = {
     /* CAM_FUNC_PARA1 */
-    { 0, 0 },      { 220, 1 },    { 50, 2 }, { 0, 3 },      { 0, 10 },  { 0x0005, 4 },
-    { 0x0005, 5 }, { 0x002D, 7 }, { 50, 8 }, { 0x2002, 9 }, { 60, 11 }, { 0, 12 },
+    { 0, CAM_DATA_00 },
+    { 220, CAM_DATA_01 },
+    { 50, CAM_DATA_02 },
+    { 0, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x002D, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x2002, CAM_DATA_09 },
+    { 60, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /**
@@ -2988,7 +4426,13 @@ CameraModeValue D_801B63CC[] = {
  */
 CameraModeValue D_801B63FC[] = {
     /* CAM_FUNC_FIXD2 */
-    { -10, 0 }, { 0x0028, 1 }, { 0x3200, 2 }, { 100, 4 }, { 20, 5 }, { 60, 7 }, { 0xFF18, 9 },
+    { -10, CAM_DATA_00 },
+    { 0x0028, CAM_DATA_01 },
+    { 0x3200, CAM_DATA_02 },
+    { 100, CAM_DATA_04 },
+    { 20, CAM_DATA_05 },
+    { 60, CAM_DATA_07 },
+    { 0xFF18, CAM_DATA_09 },
 };
 
 /**
@@ -2998,7 +4442,13 @@ CameraModeValue D_801B63FC[] = {
  */
 CameraModeValue D_801B6418[] = {
     /* CAM_FUNC_FIXD2 */
-    { -40, 0 }, { 0x0028, 1 }, { 0x3200, 2 }, { 0x0005, 4 }, { 0x0019, 5 }, { 60, 7 }, { 0x0005, 9 },
+    { -40, CAM_DATA_00 },
+    { 0x0028, CAM_DATA_01 },
+    { 0x3200, CAM_DATA_02 },
+    { 0x0005, CAM_DATA_04 },
+    { 0x0019, CAM_DATA_05 },
+    { 60, CAM_DATA_07 },
+    { 0x0005, CAM_DATA_09 },
 };
 
 /**
@@ -3008,8 +4458,16 @@ CameraModeValue D_801B6418[] = {
  */
 CameraModeValue D_801B6434[] = {
     /* CAM_FUNC_NORM1 */
-    { -15, 0 }, { 60, 1 }, { 0x0258, 2 }, { 0x0023, 3 }, { 0x0028, 4 },
-    { 20, 5 },  { 60, 6 }, { 0x002D, 7 }, { 80, 8 },     { 0x0002, 9 },
+    { -15, CAM_DATA_00 },
+    { 60, CAM_DATA_01 },
+    { 0x0258, CAM_DATA_02 },
+    { 0x0023, CAM_DATA_03 },
+    { 0x0028, CAM_DATA_04 },
+    { 20, CAM_DATA_05 },
+    { 60, CAM_DATA_06 },
+    { 0x002D, CAM_DATA_07 },
+    { 80, CAM_DATA_08 },
+    { 0x0002, CAM_DATA_09 },
 };
 
 /**
@@ -3019,8 +4477,18 @@ CameraModeValue D_801B6434[] = {
  */
 CameraModeValue D_801B645C[] = {
     /* CAM_FUNC_PARA1 */
-    { 0, 0 },      { 300, 1 }, { 0x0005, 2 }, { 0x0023, 3 }, { 0, 10 },  { 0x0005, 4 },
-    { 0x0005, 5 }, { 60, 7 },  { 0x0046, 8 }, { 0x2042, 9 }, { 80, 11 }, { 0, 12 },
+    { 0, CAM_DATA_00 },
+    { 300, CAM_DATA_01 },
+    { 0x0005, CAM_DATA_02 },
+    { 0x0023, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 60, CAM_DATA_07 },
+    { 0x0046, CAM_DATA_08 },
+    { 0x2042, CAM_DATA_09 },
+    { 80, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /**
@@ -3030,8 +4498,16 @@ CameraModeValue D_801B645C[] = {
  */
 CameraModeValue D_801B648C[] = {
     /* CAM_FUNC_NORM1 */
-    { -10, 0 }, { 0x0140, 1 }, { 0x017C, 2 }, { 30, 3 }, { 0x0016, 4 },
-    { 10, 5 },  { 0x0020, 6 }, { 60, 7 },     { 50, 8 }, { 0x008B, 9 },
+    { -10, CAM_DATA_00 },
+    { 0x0140, CAM_DATA_01 },
+    { 0x017C, CAM_DATA_02 },
+    { 30, CAM_DATA_03 },
+    { 0x0016, CAM_DATA_04 },
+    { 10, CAM_DATA_05 },
+    { 0x0020, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x008B, CAM_DATA_09 },
 };
 
 /**
@@ -3041,7 +4517,15 @@ CameraModeValue D_801B648C[] = {
  */
 CameraModeValue D_801B64B4[] = {
     /* CAM_FUNC_JUMP2 */
-    { -20, 0 }, { 0x0118, 1 }, { 0x0140, 2 }, { 20, 20 }, { 0x0005, 4 }, { 0x0005, 5 }, { 60, 7 }, { 50, 8 }, { 0, 9 },
+    { -20, CAM_DATA_00 },
+    { 0x0118, CAM_DATA_01 },
+    { 0x0140, CAM_DATA_02 },
+    { 20, CAM_DATA_20 },
+    { 0x0005, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 60, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0, CAM_DATA_09 },
 };
 
 /**
@@ -3051,8 +4535,15 @@ CameraModeValue D_801B64B4[] = {
  */
 CameraModeValue D_801B64D8[] = {
     /* CAM_FUNC_JUMP2 */
-    { -20, 0 },    { 0x0118, 1 }, { 0x0140, 2 }, { 20, 20 },    { 0x03E7, 4 },
-    { 0x0005, 5 }, { 60, 7 },     { 50, 8 },     { 0x2006, 9 },
+    { -20, CAM_DATA_00 },
+    { 0x0118, CAM_DATA_01 },
+    { 0x0140, CAM_DATA_02 },
+    { 20, CAM_DATA_20 },
+    { 0x03E7, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 60, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x2006, CAM_DATA_09 },
 };
 
 /**
@@ -3062,8 +4553,18 @@ CameraModeValue D_801B64D8[] = {
  */
 CameraModeValue D_801B64FC[] = {
     /* CAM_FUNC_PARA1 */
-    { -40, 0 },    { 0x0140, 1 }, { 50, 2 }, { 0x0028, 3 }, { 0, 10 },  { 0x0008, 4 },
-    { 0x0005, 5 }, { 60, 7 },     { 50, 8 }, { 0x0086, 9 }, { 50, 11 }, { 0x000C, 12 },
+    { -40, CAM_DATA_00 },
+    { 0x0140, CAM_DATA_01 },
+    { 50, CAM_DATA_02 },
+    { 0x0028, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0008, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 60, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x0086, CAM_DATA_09 },
+    { 50, CAM_DATA_11 },
+    { 0x000C, CAM_DATA_12 },
 };
 
 /**
@@ -3073,8 +4574,18 @@ CameraModeValue D_801B64FC[] = {
  */
 CameraModeValue D_801B652C[] = {
     /* CAM_FUNC_PARA1 */
-    { 0xFFB0, 0 }, { 300, 1 },    { 50, 2 }, { 0x0046, 3 }, { 0, 10 },  { 0x000C, 4 },
-    { 0x0005, 5 }, { 0x002D, 7 }, { 50, 8 }, { 0x2086, 9 }, { 50, 11 }, { 0x0002, 12 },
+    { 0xFFB0, CAM_DATA_00 },
+    { 300, CAM_DATA_01 },
+    { 50, CAM_DATA_02 },
+    { 0x0046, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x000C, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x002D, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x2086, CAM_DATA_09 },
+    { 50, CAM_DATA_11 },
+    { 0x0002, CAM_DATA_12 },
 };
 
 /**
@@ -3084,8 +4595,16 @@ CameraModeValue D_801B652C[] = {
  */
 CameraModeValue D_801B655C[] = {
     /* CAM_FUNC_NORM1 */
-    { -15, 0 }, { 0x0154, 1 }, { 350, 2 }, { 30, 3 },     { 100, 4 },
-    { 100, 5 }, { 100, 6 },    { 60, 7 },  { 0x0028, 8 }, { 0xF023, 9 },
+    { -15, CAM_DATA_00 },
+    { 0x0154, CAM_DATA_01 },
+    { 350, CAM_DATA_02 },
+    { 30, CAM_DATA_03 },
+    { 100, CAM_DATA_04 },
+    { 100, CAM_DATA_05 },
+    { 100, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 0x0028, CAM_DATA_08 },
+    { 0xF023, CAM_DATA_09 },
 };
 
 /**
@@ -3095,8 +4614,16 @@ CameraModeValue D_801B655C[] = {
  */
 CameraModeValue D_801B6584[] = {
     /* CAM_FUNC_NORM1 */
-    { 0, 0 },      { 260, 1 }, { 0x0118, 2 }, { 20, 3 }, { 20, 4 },
-    { 0x000C, 5 }, { 50, 6 },  { 60, 7 },     { 80, 8 }, { 0x0082, 9 },
+    { 0, CAM_DATA_00 },
+    { 260, CAM_DATA_01 },
+    { 0x0118, CAM_DATA_02 },
+    { 20, CAM_DATA_03 },
+    { 20, CAM_DATA_04 },
+    { 0x000C, CAM_DATA_05 },
+    { 50, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 80, CAM_DATA_08 },
+    { 0x0082, CAM_DATA_09 },
 };
 
 /**
@@ -3106,8 +4633,18 @@ CameraModeValue D_801B6584[] = {
  */
 CameraModeValue D_801B65AC[] = {
     /* CAM_FUNC_PARA1 */
-    { 10, 0 },     { 260, 1 },    { 50, 2 }, { 0x000F, 3 }, { 0, 10 },  { 0x0005, 4 },
-    { 0x0005, 5 }, { 0x002D, 7 }, { 50, 8 }, { 0x2002, 9 }, { 60, 11 }, { 0, 12 },
+    { 10, CAM_DATA_00 },
+    { 260, CAM_DATA_01 },
+    { 50, CAM_DATA_02 },
+    { 0x000F, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x002D, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x2002, CAM_DATA_09 },
+    { 60, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /**
@@ -3117,8 +4654,18 @@ CameraModeValue D_801B65AC[] = {
  */
 CameraModeValue D_801B65DC[] = {
     /* CAM_FUNC_KEEP1 */
-    { 10, 0 },  { 200, 1 },     { 220, 2 },    { 20, 13 }, { 0x0028, 14 }, { 20, 15 },
-    { 30, 16 }, { 0x000F, 17 }, { 0x002D, 7 }, { 60, 8 },  { 0x2001, 9 },  { 30, 11 },
+    { 10, CAM_DATA_00 },
+    { 200, CAM_DATA_01 },
+    { 220, CAM_DATA_02 },
+    { 20, CAM_DATA_13 },
+    { 0x0028, CAM_DATA_14 },
+    { 20, CAM_DATA_15 },
+    { 30, CAM_DATA_16 },
+    { 0x000F, CAM_DATA_17 },
+    { 0x002D, CAM_DATA_07 },
+    { 60, CAM_DATA_08 },
+    { 0x2001, CAM_DATA_09 },
+    { 30, CAM_DATA_11 },
 };
 
 /**
@@ -3128,8 +4675,19 @@ CameraModeValue D_801B65DC[] = {
  */
 CameraModeValue D_801B660C[] = {
     /* CAM_FUNC_KEEP3 */
-    { 10, 0 },      { 180, 1 },    { 200, 2 }, { 30, 13 }, { 10, 14 },    { 30, 15 }, { 30, 16 },
-    { 0x0046, 17 }, { 0x002D, 7 }, { 50, 8 },  { 20, 4 },  { 0x3540, 9 }, { 60, 18 },
+    { 10, CAM_DATA_00 },
+    { 180, CAM_DATA_01 },
+    { 200, CAM_DATA_02 },
+    { 30, CAM_DATA_13 },
+    { 10, CAM_DATA_14 },
+    { 30, CAM_DATA_15 },
+    { 30, CAM_DATA_16 },
+    { 0x0046, CAM_DATA_17 },
+    { 0x002D, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 20, CAM_DATA_04 },
+    { 0x3540, CAM_DATA_09 },
+    { 60, CAM_DATA_18 },
 };
 
 /**
@@ -3139,8 +4697,19 @@ CameraModeValue D_801B660C[] = {
  */
 CameraModeValue D_801B6640[] = {
     /* CAM_FUNC_BATT1 */
-    { 10, 0 },      { 220, 1 }, { 220, 2 }, { 10, 13 },    { 80, 14 },     { 20, 15 }, { 30, 16 },
-    { 0x0019, 17 }, { 50, 7 },  { 80, 8 },  { 0x2002, 9 }, { 0x0019, 11 }, { 60, 18 },
+    { 10, CAM_DATA_00 },
+    { 220, CAM_DATA_01 },
+    { 220, CAM_DATA_02 },
+    { 10, CAM_DATA_13 },
+    { 80, CAM_DATA_14 },
+    { 20, CAM_DATA_15 },
+    { 30, CAM_DATA_16 },
+    { 0x0019, CAM_DATA_17 },
+    { 50, CAM_DATA_07 },
+    { 80, CAM_DATA_08 },
+    { 0x2002, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_11 },
+    { 60, CAM_DATA_18 },
 };
 
 /**
@@ -3150,7 +4719,15 @@ CameraModeValue D_801B6640[] = {
  */
 CameraModeValue D_801B6674[] = {
     /* CAM_FUNC_SUBJ1 */
-    { 0, 0 }, { 10, 1 }, { 60, 2 }, { 10, 4 }, { 0, 19 }, { 50, 17 }, { 0, 18 }, { 0x002D, 7 }, { 0, 9 },
+    { 0, CAM_DATA_00 },
+    { 10, CAM_DATA_01 },
+    { 60, CAM_DATA_02 },
+    { 10, CAM_DATA_04 },
+    { 0, CAM_DATA_19 },
+    { 50, CAM_DATA_17 },
+    { 0, CAM_DATA_18 },
+    { 0x002D, CAM_DATA_07 },
+    { 0, CAM_DATA_09 },
 };
 
 /**
@@ -3160,8 +4737,16 @@ CameraModeValue D_801B6674[] = {
  */
 CameraModeValue D_801B6698[] = {
     /* CAM_FUNC_NORM1 */
-    { 0, 0 },      { 260, 1 },    { 0x0118, 2 }, { 0x0028, 3 }, { 20, 4 },
-    { 0x000C, 5 }, { 0x0028, 6 }, { 60, 7 },     { 80, 8 },     { 0x008A, 9 },
+    { 0, CAM_DATA_00 },
+    { 260, CAM_DATA_01 },
+    { 0x0118, CAM_DATA_02 },
+    { 0x0028, CAM_DATA_03 },
+    { 20, CAM_DATA_04 },
+    { 0x000C, CAM_DATA_05 },
+    { 0x0028, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 80, CAM_DATA_08 },
+    { 0x008A, CAM_DATA_09 },
 };
 
 /**
@@ -3171,8 +4756,16 @@ CameraModeValue D_801B6698[] = {
  */
 CameraModeValue D_801B66C0[] = {
     /* CAM_FUNC_NORM1 */
-    { 0, 0 },   { 260, 1 }, { 0x0118, 2 }, { 20, 3 }, { 100, 4 },
-    { 100, 5 }, { 100, 6 }, { 60, 7 },     { 20, 8 }, { 0xF023, 9 },
+    { 0, CAM_DATA_00 },
+    { 260, CAM_DATA_01 },
+    { 0x0118, CAM_DATA_02 },
+    { 20, CAM_DATA_03 },
+    { 100, CAM_DATA_04 },
+    { 100, CAM_DATA_05 },
+    { 100, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 0xF023, CAM_DATA_09 },
 };
 
 /**
@@ -3182,8 +4775,16 @@ CameraModeValue D_801B66C0[] = {
  */
 CameraModeValue D_801B66E8[] = {
     /* CAM_FUNC_NORM1 */
-    { 0, 0 },      { 0x0118, 1 }, { 0x0140, 2 }, { -5, 3 }, { 0x0018, 4 },
-    { 0x000C, 5 }, { 0x0020, 6 }, { 0x0041, 7 }, { 80, 8 }, { 0x0083, 9 },
+    { 0, CAM_DATA_00 },
+    { 0x0118, CAM_DATA_01 },
+    { 0x0140, CAM_DATA_02 },
+    { -5, CAM_DATA_03 },
+    { 0x0018, CAM_DATA_04 },
+    { 0x000C, CAM_DATA_05 },
+    { 0x0020, CAM_DATA_06 },
+    { 0x0041, CAM_DATA_07 },
+    { 80, CAM_DATA_08 },
+    { 0x0083, CAM_DATA_09 },
 };
 
 /**
@@ -3193,8 +4794,18 @@ CameraModeValue D_801B66E8[] = {
  */
 CameraModeValue D_801B6710[] = {
     /* CAM_FUNC_KEEP1 */
-    { -30, 0 },     { 0x00F0, 1 }, { 260, 2 }, { 20, 13 },    { 0x0028, 14 }, { 10, 15 },
-    { 0x0005, 16 }, { 60, 17 },    { 50, 7 },  { 0x0028, 8 }, { 0x2000, 9 },  { 30, 11 },
+    { -30, CAM_DATA_00 },
+    { 0x00F0, CAM_DATA_01 },
+    { 260, CAM_DATA_02 },
+    { 20, CAM_DATA_13 },
+    { 0x0028, CAM_DATA_14 },
+    { 10, CAM_DATA_15 },
+    { 0x0005, CAM_DATA_16 },
+    { 60, CAM_DATA_17 },
+    { 50, CAM_DATA_07 },
+    { 0x0028, CAM_DATA_08 },
+    { 0x2000, CAM_DATA_09 },
+    { 30, CAM_DATA_11 },
 };
 
 /**
@@ -3204,8 +4815,19 @@ CameraModeValue D_801B6710[] = {
  */
 CameraModeValue D_801B6740[] = {
     /* CAM_FUNC_BATT1 */
-    { 0xFFC4, 0 }, { 180, 1 },    { 200, 2 }, { 10, 13 },    { 20, 14 }, { 20, 15 },     { 10, 16 },
-    { 20, 17 },    { 0x0046, 7 }, { 50, 8 },  { 0x2002, 9 }, { 10, 11 }, { 0x0028, 18 },
+    { 0xFFC4, CAM_DATA_00 },
+    { 180, CAM_DATA_01 },
+    { 200, CAM_DATA_02 },
+    { 10, CAM_DATA_13 },
+    { 20, CAM_DATA_14 },
+    { 20, CAM_DATA_15 },
+    { 10, CAM_DATA_16 },
+    { 20, CAM_DATA_17 },
+    { 0x0046, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x2002, CAM_DATA_09 },
+    { 10, CAM_DATA_11 },
+    { 0x0028, CAM_DATA_18 },
 };
 
 /**
@@ -3215,8 +4837,16 @@ CameraModeValue D_801B6740[] = {
  */
 CameraModeValue D_801B6774[] = {
     /* CAM_FUNC_NORM1 */
-    { -20, 0 },    { 0x0118, 1 }, { 0x0140, 2 }, { 10, 3 }, { 30, 4 },
-    { 0x000C, 5 }, { 0x0028, 6 }, { 0x0041, 7 }, { 50, 8 }, { 0x008B, 9 },
+    { -20, CAM_DATA_00 },
+    { 0x0118, CAM_DATA_01 },
+    { 0x0140, CAM_DATA_02 },
+    { 10, CAM_DATA_03 },
+    { 30, CAM_DATA_04 },
+    { 0x000C, CAM_DATA_05 },
+    { 0x0028, CAM_DATA_06 },
+    { 0x0041, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x008B, CAM_DATA_09 },
 };
 
 /**
@@ -3226,8 +4856,16 @@ CameraModeValue D_801B6774[] = {
  */
 CameraModeValue D_801B679C[] = {
     /* CAM_FUNC_NORM1 */
-    { 0, 0 },   { 0x0118, 1 }, { 0x0140, 2 }, { 0, 3 },  { 100, 4 },
-    { 100, 5 }, { 100, 6 },    { 0x0041, 7 }, { 20, 8 }, { 0xF023, 9 },
+    { 0, CAM_DATA_00 },
+    { 0x0118, CAM_DATA_01 },
+    { 0x0140, CAM_DATA_02 },
+    { 0, CAM_DATA_03 },
+    { 100, CAM_DATA_04 },
+    { 100, CAM_DATA_05 },
+    { 100, CAM_DATA_06 },
+    { 0x0041, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 0xF023, CAM_DATA_09 },
 };
 
 /**
@@ -3237,8 +4875,16 @@ CameraModeValue D_801B679C[] = {
  */
 CameraModeValue D_801B67C4[] = {
     /* CAM_FUNC_NORM1 */
-    { 20, 0 },     { 350, 1 },    { 0x0190, 2 }, { 0, 3 },      { 0x001A, 4 },
-    { 0x000C, 5 }, { 0x0020, 6 }, { 0x004B, 7 }, { 0x0046, 8 }, { 0x0083, 9 },
+    { 20, CAM_DATA_00 },
+    { 350, CAM_DATA_01 },
+    { 0x0190, CAM_DATA_02 },
+    { 0, CAM_DATA_03 },
+    { 0x001A, CAM_DATA_04 },
+    { 0x000C, CAM_DATA_05 },
+    { 0x0020, CAM_DATA_06 },
+    { 0x004B, CAM_DATA_07 },
+    { 0x0046, CAM_DATA_08 },
+    { 0x0083, CAM_DATA_09 },
 };
 
 /**
@@ -3248,8 +4894,18 @@ CameraModeValue D_801B67C4[] = {
  */
 CameraModeValue D_801B67EC[] = {
     /* CAM_FUNC_PARA1 */
-    { 0, 0 },      { 0x0190, 1 }, { 50, 2 }, { 0, 3 },      { 0, 10 },  { 0x0005, 4 },
-    { 0x0005, 5 }, { 0x0037, 7 }, { 50, 8 }, { 0x2002, 9 }, { 60, 11 }, { 0, 12 },
+    { 0, CAM_DATA_00 },
+    { 0x0190, CAM_DATA_01 },
+    { 50, CAM_DATA_02 },
+    { 0, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0037, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x2002, CAM_DATA_09 },
+    { 60, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /**
@@ -3259,8 +4915,18 @@ CameraModeValue D_801B67EC[] = {
  */
 CameraModeValue D_801B681C[] = {
     /* CAM_FUNC_KEEP1 */
-    { -30, 0 },     { 250, 1 }, { 300, 2 }, { 20, 13 },    { 0x0028, 14 }, { 10, 15 },
-    { 0x0005, 16 }, { 60, 17 }, { 50, 7 },  { 0x0028, 8 }, { 0x2000, 9 },  { 30, 11 },
+    { -30, CAM_DATA_00 },
+    { 250, CAM_DATA_01 },
+    { 300, CAM_DATA_02 },
+    { 20, CAM_DATA_13 },
+    { 0x0028, CAM_DATA_14 },
+    { 10, CAM_DATA_15 },
+    { 0x0005, CAM_DATA_16 },
+    { 60, CAM_DATA_17 },
+    { 50, CAM_DATA_07 },
+    { 0x0028, CAM_DATA_08 },
+    { 0x2000, CAM_DATA_09 },
+    { 30, CAM_DATA_11 },
 };
 
 /**
@@ -3270,8 +4936,19 @@ CameraModeValue D_801B681C[] = {
  */
 CameraModeValue D_801B684C[] = {
     /* CAM_FUNC_BATT1 */
-    { 0, 0 },   { 0x0096, 1 }, { 200, 2 }, { 10, 13 },    { 30, 14 }, { 10, 15 },     { 0, 16 },
-    { 20, 17 }, { 0x0046, 7 }, { 30, 8 },  { 0x2002, 9 }, { 10, 11 }, { 0x0028, 18 },
+    { 0, CAM_DATA_00 },
+    { 0x0096, CAM_DATA_01 },
+    { 200, CAM_DATA_02 },
+    { 10, CAM_DATA_13 },
+    { 30, CAM_DATA_14 },
+    { 10, CAM_DATA_15 },
+    { 0, CAM_DATA_16 },
+    { 20, CAM_DATA_17 },
+    { 0x0046, CAM_DATA_07 },
+    { 30, CAM_DATA_08 },
+    { 0x2002, CAM_DATA_09 },
+    { 10, CAM_DATA_11 },
+    { 0x0028, CAM_DATA_18 },
 };
 
 /**
@@ -3281,8 +4958,16 @@ CameraModeValue D_801B684C[] = {
  */
 CameraModeValue D_801B6880[] = {
     /* CAM_FUNC_NORM1 */
-    { -20, 0 },    { 350, 1 },    { 0x0190, 2 }, { 10, 3 },     { 30, 4 },
-    { 0x000C, 5 }, { 0x0028, 6 }, { 0x004B, 7 }, { 0x0028, 8 }, { 0x008B, 9 },
+    { -20, CAM_DATA_00 },
+    { 350, CAM_DATA_01 },
+    { 0x0190, CAM_DATA_02 },
+    { 10, CAM_DATA_03 },
+    { 30, CAM_DATA_04 },
+    { 0x000C, CAM_DATA_05 },
+    { 0x0028, CAM_DATA_06 },
+    { 0x004B, CAM_DATA_07 },
+    { 0x0028, CAM_DATA_08 },
+    { 0x008B, CAM_DATA_09 },
 };
 
 /**
@@ -3292,8 +4977,16 @@ CameraModeValue D_801B6880[] = {
  */
 CameraModeValue D_801B68A8[] = {
     /* CAM_FUNC_NORM1 */
-    { -20, 0 }, { 0x0118, 1 }, { 0x0140, 2 }, { 10, 3 }, { 100, 4 },
-    { 100, 5 }, { 100, 6 },    { 60, 7 },     { 20, 8 }, { 0xF033, 9 },
+    { -20, CAM_DATA_00 },
+    { 0x0118, CAM_DATA_01 },
+    { 0x0140, CAM_DATA_02 },
+    { 10, CAM_DATA_03 },
+    { 100, CAM_DATA_04 },
+    { 100, CAM_DATA_05 },
+    { 100, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 0xF033, CAM_DATA_09 },
 };
 
 /**
@@ -3303,8 +4996,16 @@ CameraModeValue D_801B68A8[] = {
  */
 CameraModeValue D_801B68D0[] = {
     /* CAM_FUNC_NORM1 */
-    { -20, 0 },    { 0x0118, 1 }, { 0x0140, 2 }, { 10, 3 }, { 20, 4 },
-    { 0x000C, 5 }, { 50, 6 },     { 60, 7 },     { 80, 8 }, { 0x0083, 9 },
+    { -20, CAM_DATA_00 },
+    { 0x0118, CAM_DATA_01 },
+    { 0x0140, CAM_DATA_02 },
+    { 10, CAM_DATA_03 },
+    { 20, CAM_DATA_04 },
+    { 0x000C, CAM_DATA_05 },
+    { 50, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 80, CAM_DATA_08 },
+    { 0x0083, CAM_DATA_09 },
 };
 
 /**
@@ -3314,8 +5015,19 @@ CameraModeValue D_801B68D0[] = {
  */
 CameraModeValue D_801B68F8[] = {
     /* CAM_FUNC_BATT1 */
-    { -25, 0 },     { 220, 1 }, { 220, 2 }, { 10, 13 },    { 80, 14 },     { 0xFFFE, 15 }, { 10, 16 },
-    { 0x0019, 17 }, { 50, 7 },  { 80, 8 },  { 0x2002, 9 }, { 0x0019, 11 }, { 50, 18 },
+    { -25, CAM_DATA_00 },
+    { 220, CAM_DATA_01 },
+    { 220, CAM_DATA_02 },
+    { 10, CAM_DATA_13 },
+    { 80, CAM_DATA_14 },
+    { 0xFFFE, CAM_DATA_15 },
+    { 10, CAM_DATA_16 },
+    { 0x0019, CAM_DATA_17 },
+    { 50, CAM_DATA_07 },
+    { 80, CAM_DATA_08 },
+    { 0x2002, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_11 },
+    { 50, CAM_DATA_18 },
 };
 
 /**
@@ -3325,8 +5037,16 @@ CameraModeValue D_801B68F8[] = {
  */
 CameraModeValue D_801B692C[] = {
     /* CAM_FUNC_NORM1 */
-    { -20, 0 },    { 0x0118, 1 }, { 0x0140, 2 }, { 10, 3 },     { 30, 4 },
-    { 0x000C, 5 }, { 0x0028, 6 }, { 60, 7 },     { 0x0028, 8 }, { 0x008B, 9 },
+    { -20, CAM_DATA_00 },
+    { 0x0118, CAM_DATA_01 },
+    { 0x0140, CAM_DATA_02 },
+    { 10, CAM_DATA_03 },
+    { 30, CAM_DATA_04 },
+    { 0x000C, CAM_DATA_05 },
+    { 0x0028, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 0x0028, CAM_DATA_08 },
+    { 0x008B, CAM_DATA_09 },
 };
 
 /**
@@ -3336,8 +5056,16 @@ CameraModeValue D_801B692C[] = {
  */
 CameraModeValue D_801B6954[] = {
     /* CAM_FUNC_NORM1 */
-    { -20, 0 }, { 0x0118, 1 }, { 0x0140, 2 }, { 10, 3 },     { 100, 4 },
-    { 100, 5 }, { 100, 6 },    { 60, 7 },     { 0x000F, 8 }, { 0xF023, 9 },
+    { -20, CAM_DATA_00 },
+    { 0x0118, CAM_DATA_01 },
+    { 0x0140, CAM_DATA_02 },
+    { 10, CAM_DATA_03 },
+    { 100, CAM_DATA_04 },
+    { 100, CAM_DATA_05 },
+    { 100, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 0x000F, CAM_DATA_08 },
+    { 0xF023, CAM_DATA_09 },
 };
 
 /**
@@ -3347,8 +5075,16 @@ CameraModeValue D_801B6954[] = {
  */
 CameraModeValue D_801B697C[] = {
     /* CAM_FUNC_NORM1 */
-    { 60, 0 }, { 200, 1 }, { 0x0154, 2 }, { 10, 3 }, { 0x000F, 4 },
-    { 10, 5 }, { 50, 6 },  { 0x0055, 7 }, { 90, 8 }, { 0x0087, 9 },
+    { 60, CAM_DATA_00 },
+    { 200, CAM_DATA_01 },
+    { 0x0154, CAM_DATA_02 },
+    { 10, CAM_DATA_03 },
+    { 0x000F, CAM_DATA_04 },
+    { 10, CAM_DATA_05 },
+    { 50, CAM_DATA_06 },
+    { 0x0055, CAM_DATA_07 },
+    { 90, CAM_DATA_08 },
+    { 0x0087, CAM_DATA_09 },
 };
 
 /**
@@ -3358,8 +5094,16 @@ CameraModeValue D_801B697C[] = {
  */
 CameraModeValue D_801B69A4[] = {
     /* CAM_FUNC_JUMP3 */
-    { -20, 0 },    { 0x0118, 1 }, { 0x0140, 2 }, { 10, 3 }, { 20, 4 },
-    { 0x000C, 5 }, { 0x0028, 6 }, { 60, 7 },     { 80, 8 }, { 0x0084, 9 },
+    { -20, CAM_DATA_00 },
+    { 0x0118, CAM_DATA_01 },
+    { 0x0140, CAM_DATA_02 },
+    { 10, CAM_DATA_03 },
+    { 20, CAM_DATA_04 },
+    { 0x000C, CAM_DATA_05 },
+    { 0x0028, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 80, CAM_DATA_08 },
+    { 0x0084, CAM_DATA_09 },
 };
 
 /**
@@ -3369,8 +5113,18 @@ CameraModeValue D_801B69A4[] = {
  */
 CameraModeValue D_801B69CC[] = {
     /* CAM_FUNC_KEEP1 */
-    { -30, 0 }, { 200, 1 },     { 0x00F0, 2 }, { 20, 13 }, { 0x0028, 14 }, { -5, 15 },
-    { 10, 16 }, { 0x000F, 17 }, { 0x002D, 7 }, { 60, 8 },  { 0x2001, 9 },  { 30, 11 },
+    { -30, CAM_DATA_00 },
+    { 200, CAM_DATA_01 },
+    { 0x00F0, CAM_DATA_02 },
+    { 20, CAM_DATA_13 },
+    { 0x0028, CAM_DATA_14 },
+    { -5, CAM_DATA_15 },
+    { 10, CAM_DATA_16 },
+    { 0x000F, CAM_DATA_17 },
+    { 0x002D, CAM_DATA_07 },
+    { 60, CAM_DATA_08 },
+    { 0x2001, CAM_DATA_09 },
+    { 30, CAM_DATA_11 },
 };
 
 /**
@@ -3380,8 +5134,19 @@ CameraModeValue D_801B69CC[] = {
  */
 CameraModeValue D_801B69FC[] = {
     /* CAM_FUNC_BATT1 */
-    { -30, 0 }, { 0x00BE, 1 }, { 250, 2 }, { 10, 13 },    { 50, 14 },     { 0, 15 },  { 10, 16 },
-    { 20, 17 }, { 50, 7 },     { 80, 8 },  { 0x2002, 9 }, { 0x0019, 11 }, { 50, 18 },
+    { -30, CAM_DATA_00 },
+    { 0x00BE, CAM_DATA_01 },
+    { 250, CAM_DATA_02 },
+    { 10, CAM_DATA_13 },
+    { 50, CAM_DATA_14 },
+    { 0, CAM_DATA_15 },
+    { 10, CAM_DATA_16 },
+    { 20, CAM_DATA_17 },
+    { 50, CAM_DATA_07 },
+    { 80, CAM_DATA_08 },
+    { 0x2002, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_11 },
+    { 50, CAM_DATA_18 },
 };
 
 /**
@@ -3391,8 +5156,16 @@ CameraModeValue D_801B69FC[] = {
  */
 CameraModeValue D_801B6A30[] = {
     /* CAM_FUNC_JUMP3 */
-    { -40, 0 },    { 0x00A0, 1 }, { 260, 2 },    { -5, 3 },     { 0x0012, 4 },
-    { 0x0005, 5 }, { 0x0028, 6 }, { 0x0046, 7 }, { 0x0028, 8 }, { 0x000C, 9 },
+    { -40, CAM_DATA_00 },
+    { 0x00A0, CAM_DATA_01 },
+    { 260, CAM_DATA_02 },
+    { -5, CAM_DATA_03 },
+    { 0x0012, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0028, CAM_DATA_06 },
+    { 0x0046, CAM_DATA_07 },
+    { 0x0028, CAM_DATA_08 },
+    { 0x000C, CAM_DATA_09 },
 };
 
 /**
@@ -3402,8 +5175,16 @@ CameraModeValue D_801B6A30[] = {
  */
 CameraModeValue D_801B6A58[] = {
     /* CAM_FUNC_JUMP3 */
-    { -30, 0 },    { 220, 1 }, { 0x0118, 2 }, { 0, 3 },  { 0x0012, 4 },
-    { 0x0005, 5 }, { 60, 6 },  { 60, 7 },     { 60, 8 }, { 0x0005, 9 },
+    { -30, CAM_DATA_00 },
+    { 220, CAM_DATA_01 },
+    { 0x0118, CAM_DATA_02 },
+    { 0, CAM_DATA_03 },
+    { 0x0012, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 60, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 60, CAM_DATA_08 },
+    { 0x0005, CAM_DATA_09 },
 };
 
 /**
@@ -3413,8 +5194,16 @@ CameraModeValue D_801B6A58[] = {
  */
 CameraModeValue D_801B6A80[] = {
     /* CAM_FUNC_JUMP3 */
-    { 0xFFC4, 0 }, { 0x00A0, 1 }, { 0x0118, 2 }, { -15, 3 },    { 0x0012, 4 },
-    { 0x0005, 5 }, { 60, 6 },     { 60, 7 },     { 0x0028, 8 }, { 0x0085, 9 },
+    { 0xFFC4, CAM_DATA_00 },
+    { 0x00A0, CAM_DATA_01 },
+    { 0x0118, CAM_DATA_02 },
+    { -15, CAM_DATA_03 },
+    { 0x0012, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 60, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 0x0028, CAM_DATA_08 },
+    { 0x0085, CAM_DATA_09 },
 };
 
 /**
@@ -3424,8 +5213,16 @@ CameraModeValue D_801B6A80[] = {
  */
 CameraModeValue D_801B6AA8[] = {
     /* CAM_FUNC_NORM1 */
-    { -40, 0 }, { 100, 1 }, { 0x0140, 2 }, { 20, 3 }, { 100, 4 },
-    { 100, 5 }, { 100, 6 }, { 60, 7 },     { 20, 8 }, { 0xF023, 9 },
+    { -40, CAM_DATA_00 },
+    { 100, CAM_DATA_01 },
+    { 0x0140, CAM_DATA_02 },
+    { 20, CAM_DATA_03 },
+    { 100, CAM_DATA_04 },
+    { 100, CAM_DATA_05 },
+    { 100, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 0xF023, CAM_DATA_09 },
 };
 
 /**
@@ -3435,8 +5232,16 @@ CameraModeValue D_801B6AA8[] = {
  */
 CameraModeValue D_801B6AD0[] = {
     /* CAM_FUNC_JUMP3 */
-    { -40, 0 },    { 250, 1 },    { 350, 2 }, { 30, 3 },  { 0x000F, 4 },
-    { 0x0005, 5 }, { 0x0028, 6 }, { 60, 7 },  { 100, 8 }, { 0x0084, 9 },
+    { -40, CAM_DATA_00 },
+    { 250, CAM_DATA_01 },
+    { 350, CAM_DATA_02 },
+    { 30, CAM_DATA_03 },
+    { 0x000F, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0028, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 100, CAM_DATA_08 },
+    { 0x0084, CAM_DATA_09 },
 };
 
 /**
@@ -3446,8 +5251,18 @@ CameraModeValue D_801B6AD0[] = {
  */
 CameraModeValue D_801B6AF8[] = {
     /* CAM_FUNC_PARA1 */
-    { -50, 0 },    { 350, 1 }, { 0x0028, 2 }, { 10, 3 },     { 0, 10 },  { 0x000F, 4 },
-    { 0x0005, 5 }, { 60, 7 },  { 100, 8 },    { 0x2003, 9 }, { 80, 11 }, { 0, 12 },
+    { -50, CAM_DATA_00 },
+    { 350, CAM_DATA_01 },
+    { 0x0028, CAM_DATA_02 },
+    { 10, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x000F, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 60, CAM_DATA_07 },
+    { 100, CAM_DATA_08 },
+    { 0x2003, CAM_DATA_09 },
+    { 80, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /**
@@ -3457,8 +5272,16 @@ CameraModeValue D_801B6AF8[] = {
  */
 CameraModeValue D_801B6B28[] = {
     /* CAM_FUNC_JUMP3 */
-    { -40, 0 },    { 0x0140, 1 }, { 0x0190, 2 }, { -5, 3 },     { 0x0012, 4 },
-    { 0x0005, 5 }, { 0x0028, 6 }, { 60, 7 },     { 0x0028, 8 }, { 0x000C, 9 },
+    { -40, CAM_DATA_00 },
+    { 0x0140, CAM_DATA_01 },
+    { 0x0190, CAM_DATA_02 },
+    { -5, CAM_DATA_03 },
+    { 0x0012, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0028, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 0x0028, CAM_DATA_08 },
+    { 0x000C, CAM_DATA_09 },
 };
 
 /**
@@ -3468,8 +5291,16 @@ CameraModeValue D_801B6B28[] = {
  */
 CameraModeValue D_801B6B50[] = {
     /* CAM_FUNC_JUMP3 */
-    { -40, 0 },    { 300, 1 }, { 350, 2 }, { 10, 3 }, { 0x0012, 4 },
-    { 0x0005, 5 }, { 60, 6 },  { 60, 7 },  { 60, 8 }, { 0x0005, 9 },
+    { -40, CAM_DATA_00 },
+    { 300, CAM_DATA_01 },
+    { 350, CAM_DATA_02 },
+    { 10, CAM_DATA_03 },
+    { 0x0012, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 60, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 60, CAM_DATA_08 },
+    { 0x0005, CAM_DATA_09 },
 };
 
 /**
@@ -3479,8 +5310,16 @@ CameraModeValue D_801B6B50[] = {
  */
 CameraModeValue D_801B6B78[] = {
     /* CAM_FUNC_JUMP3 */
-    { 0xFFC4, 0 }, { 0x0096, 1 }, { 250, 2 }, { -18, 3 },    { 0x0012, 4 },
-    { 0x0005, 5 }, { 60, 6 },     { 60, 7 },  { 0x0028, 8 }, { 0x0085, 9 },
+    { 0xFFC4, CAM_DATA_00 },
+    { 0x0096, CAM_DATA_01 },
+    { 250, CAM_DATA_02 },
+    { -18, CAM_DATA_03 },
+    { 0x0012, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 60, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 0x0028, CAM_DATA_08 },
+    { 0x0085, CAM_DATA_09 },
 };
 
 /**
@@ -3490,8 +5329,16 @@ CameraModeValue D_801B6B78[] = {
  */
 CameraModeValue D_801B6BA0[] = {
     /* CAM_FUNC_NORM1 */
-    { -40, 0 }, { 250, 1 }, { 350, 2 }, { 30, 3 }, { 100, 4 },
-    { 100, 5 }, { 100, 6 }, { 60, 7 },  { 20, 8 }, { 0xF023, 9 },
+    { -40, CAM_DATA_00 },
+    { 250, CAM_DATA_01 },
+    { 350, CAM_DATA_02 },
+    { 30, CAM_DATA_03 },
+    { 100, CAM_DATA_04 },
+    { 100, CAM_DATA_05 },
+    { 100, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 0xF023, CAM_DATA_09 },
 };
 
 /**
@@ -3501,8 +5348,16 @@ CameraModeValue D_801B6BA0[] = {
  */
 CameraModeValue D_801B6BC8[] = {
     /* CAM_FUNC_JUMP3 */
-    { -40, 0 },    { 250, 1 },    { 0x0118, 2 }, { 0x0005, 3 }, { 0x0011, 4 },
-    { 0x0005, 5 }, { 0x0028, 6 }, { 0x004B, 7 }, { 0x0023, 8 }, { 0x000C, 9 },
+    { -40, CAM_DATA_00 },
+    { 250, CAM_DATA_01 },
+    { 0x0118, CAM_DATA_02 },
+    { 0x0005, CAM_DATA_03 },
+    { 0x0011, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0028, CAM_DATA_06 },
+    { 0x004B, CAM_DATA_07 },
+    { 0x0023, CAM_DATA_08 },
+    { 0x000C, CAM_DATA_09 },
 };
 
 /**
@@ -3512,8 +5367,16 @@ CameraModeValue D_801B6BC8[] = {
  */
 CameraModeValue D_801B6BF0[] = {
     /* CAM_FUNC_NORM1 */
-    { -10, 0 },    { 350, 1 }, { 0x0190, 2 }, { 0x000E, 3 }, { 0x0019, 4 },
-    { 0x000E, 5 }, { 60, 6 },  { 0x0041, 7 }, { 0x0046, 8 }, { 0x0083, 9 },
+    { -10, CAM_DATA_00 },
+    { 350, CAM_DATA_01 },
+    { 0x0190, CAM_DATA_02 },
+    { 0x000E, CAM_DATA_03 },
+    { 0x0019, CAM_DATA_04 },
+    { 0x000E, CAM_DATA_05 },
+    { 60, CAM_DATA_06 },
+    { 0x0041, CAM_DATA_07 },
+    { 0x0046, CAM_DATA_08 },
+    { 0x0083, CAM_DATA_09 },
 };
 
 /**
@@ -3523,8 +5386,18 @@ CameraModeValue D_801B6BF0[] = {
  */
 CameraModeValue D_801B6C18[] = {
     /* CAM_FUNC_PARA1 */
-    { 0, 0 },      { 350, 1 }, { 80, 2 }, { 0, 3 },      { 0, 10 },  { 0x0005, 4 },
-    { 0x0005, 5 }, { 50, 7 },  { 50, 8 }, { 0x2002, 9 }, { 60, 11 }, { 0, 12 },
+    { 0, CAM_DATA_00 },
+    { 350, CAM_DATA_01 },
+    { 80, CAM_DATA_02 },
+    { 0, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 50, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x2002, CAM_DATA_09 },
+    { 60, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /**
@@ -3534,8 +5407,16 @@ CameraModeValue D_801B6C18[] = {
  */
 CameraModeValue D_801B6C48[] = {
     /* CAM_FUNC_NORM1 */
-    { -10, 0 }, { 350, 1 },    { 0x01A4, 2 }, { 10, 3 }, { 30, 4 },
-    { 10, 5 },  { 0x0028, 6 }, { 0x0041, 7 }, { 50, 8 }, { 0x008B, 9 },
+    { -10, CAM_DATA_00 },
+    { 350, CAM_DATA_01 },
+    { 0x01A4, CAM_DATA_02 },
+    { 10, CAM_DATA_03 },
+    { 30, CAM_DATA_04 },
+    { 10, CAM_DATA_05 },
+    { 0x0028, CAM_DATA_06 },
+    { 0x0041, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x008B, CAM_DATA_09 },
 };
 
 /**
@@ -3545,8 +5426,16 @@ CameraModeValue D_801B6C48[] = {
  */
 CameraModeValue D_801B6C70[] = {
     /* CAM_FUNC_NORM1 */
-    { -10, 0 }, { 350, 1 }, { 0x0190, 2 }, { 0x000E, 3 }, { 100, 4 },
-    { 100, 5 }, { 100, 6 }, { 0x0041, 7 }, { 0x0010, 8 }, { 0xF023, 9 },
+    { -10, CAM_DATA_00 },
+    { 350, CAM_DATA_01 },
+    { 0x0190, CAM_DATA_02 },
+    { 0x000E, CAM_DATA_03 },
+    { 100, CAM_DATA_04 },
+    { 100, CAM_DATA_05 },
+    { 100, CAM_DATA_06 },
+    { 0x0041, CAM_DATA_07 },
+    { 0x0010, CAM_DATA_08 },
+    { 0xF023, CAM_DATA_09 },
 };
 
 /**
@@ -3556,8 +5445,16 @@ CameraModeValue D_801B6C70[] = {
  */
 CameraModeValue D_801B6C98[] = {
     /* CAM_FUNC_NORM1 */
-    { -30, 0 },    { 300, 1 }, { 0x0140, 2 }, { 0x000F, 3 }, { 0x0016, 4 },
-    { 0x000C, 5 }, { 30, 6 },  { 0x0037, 7 }, { 60, 8 },     { 0x0083, 9 },
+    { -30, CAM_DATA_00 },
+    { 300, CAM_DATA_01 },
+    { 0x0140, CAM_DATA_02 },
+    { 0x000F, CAM_DATA_03 },
+    { 0x0016, CAM_DATA_04 },
+    { 0x000C, CAM_DATA_05 },
+    { 30, CAM_DATA_06 },
+    { 0x0037, CAM_DATA_07 },
+    { 60, CAM_DATA_08 },
+    { 0x0083, CAM_DATA_09 },
 };
 
 /**
@@ -3567,8 +5464,18 @@ CameraModeValue D_801B6C98[] = {
  */
 CameraModeValue D_801B6CC0[] = {
     /* CAM_FUNC_KEEP1 */
-    { -30, 0 }, { 180, 1 },     { 200, 2 },    { 20, 13 }, { 30, 14 },    { -5, 15 },
-    { 10, 16 }, { 0x0028, 17 }, { 0x002D, 7 }, { 60, 8 },  { 0x2001, 9 }, { 30, 11 },
+    { -30, CAM_DATA_00 },
+    { 180, CAM_DATA_01 },
+    { 200, CAM_DATA_02 },
+    { 20, CAM_DATA_13 },
+    { 30, CAM_DATA_14 },
+    { -5, CAM_DATA_15 },
+    { 10, CAM_DATA_16 },
+    { 0x0028, CAM_DATA_17 },
+    { 0x002D, CAM_DATA_07 },
+    { 60, CAM_DATA_08 },
+    { 0x2001, CAM_DATA_09 },
+    { 30, CAM_DATA_11 },
 };
 
 /**
@@ -3578,8 +5485,19 @@ CameraModeValue D_801B6CC0[] = {
  */
 CameraModeValue D_801B6CF0[] = {
     /* CAM_FUNC_KEEP3 */
-    { -30, 0 }, { 0x0041, 1 }, { 0x0046, 2 }, { 10, 13 }, { 10, 14 },    { 0x0005, 15 }, { 0x0005, 16 },
-    { 20, 17 }, { 0x002D, 7 }, { 50, 8 },     { 20, 4 },  { 0x3520, 9 }, { 50, 18 },
+    { -30, CAM_DATA_00 },
+    { 0x0041, CAM_DATA_01 },
+    { 0x0046, CAM_DATA_02 },
+    { 10, CAM_DATA_13 },
+    { 10, CAM_DATA_14 },
+    { 0x0005, CAM_DATA_15 },
+    { 0x0005, CAM_DATA_16 },
+    { 20, CAM_DATA_17 },
+    { 0x002D, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 20, CAM_DATA_04 },
+    { 0x3520, CAM_DATA_09 },
+    { 50, CAM_DATA_18 },
 };
 
 /**
@@ -3589,8 +5507,16 @@ CameraModeValue D_801B6CF0[] = {
  */
 CameraModeValue D_801B6D24[] = {
     /* CAM_FUNC_NORM1 */
-    { -20, 0 },    { 300, 1 },    { 0x0140, 2 }, { 10, 3 }, { 30, 4 },
-    { 0x000C, 5 }, { 0x0028, 6 }, { 0x0037, 7 }, { 30, 8 }, { 0x008B, 9 },
+    { -20, CAM_DATA_00 },
+    { 300, CAM_DATA_01 },
+    { 0x0140, CAM_DATA_02 },
+    { 10, CAM_DATA_03 },
+    { 30, CAM_DATA_04 },
+    { 0x000C, CAM_DATA_05 },
+    { 0x0028, CAM_DATA_06 },
+    { 0x0037, CAM_DATA_07 },
+    { 30, CAM_DATA_08 },
+    { 0x008B, CAM_DATA_09 },
 };
 
 /**
@@ -3600,8 +5526,16 @@ CameraModeValue D_801B6D24[] = {
  */
 CameraModeValue D_801B6D4C[] = {
     /* CAM_FUNC_NORM1 */
-    { -30, 0 }, { 300, 1 }, { 0x0140, 2 }, { 0x000F, 3 }, { 100, 4 },
-    { 100, 5 }, { 100, 6 }, { 0x0037, 7 }, { 0x0019, 8 }, { 0xF023, 9 },
+    { -30, CAM_DATA_00 },
+    { 300, CAM_DATA_01 },
+    { 0x0140, CAM_DATA_02 },
+    { 0x000F, CAM_DATA_03 },
+    { 100, CAM_DATA_04 },
+    { 100, CAM_DATA_05 },
+    { 100, CAM_DATA_06 },
+    { 0x0037, CAM_DATA_07 },
+    { 0x0019, CAM_DATA_08 },
+    { 0xF023, CAM_DATA_09 },
 };
 
 /**
@@ -3611,7 +5545,13 @@ CameraModeValue D_801B6D4C[] = {
  */
 CameraModeValue D_801B6D74[] = {
     /* CAM_FUNC_FIXD2 */
-    { -40, 0 }, { 60, 1 }, { 0x3200, 2 }, { 100, 4 }, { 20, 5 }, { 60, 7 }, { 0xFF0B, 9 },
+    { -40, CAM_DATA_00 },
+    { 60, CAM_DATA_01 },
+    { 0x3200, CAM_DATA_02 },
+    { 100, CAM_DATA_04 },
+    { 20, CAM_DATA_05 },
+    { 60, CAM_DATA_07 },
+    { 0xFF0B, CAM_DATA_09 },
 };
 
 /**
@@ -3621,8 +5561,16 @@ CameraModeValue D_801B6D74[] = {
  */
 CameraModeValue D_801B6D90[] = {
     /* CAM_FUNC_JUMP3 */
-    { -10, 0 },    { 0x0118, 1 }, { 350, 2 }, { 50, 3 }, { 0x000C, 4 },
-    { 0x0005, 5 }, { 30, 6 },     { 60, 7 },  { 80, 8 }, { 0x00A4, 9 },
+    { -10, CAM_DATA_00 },
+    { 0x0118, CAM_DATA_01 },
+    { 350, CAM_DATA_02 },
+    { 50, CAM_DATA_03 },
+    { 0x000C, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 30, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 80, CAM_DATA_08 },
+    { 0x00A4, CAM_DATA_09 },
 };
 
 /**
@@ -3632,8 +5580,16 @@ CameraModeValue D_801B6D90[] = {
  */
 CameraModeValue D_801B6DB8[] = {
     /* CAM_FUNC_JUMP3 */
-    { 0, 0 },      { 180, 1 },    { 300, 2 },    { 30, 3 }, { 0x000C, 4 },
-    { 0x0005, 5 }, { 0x0019, 6 }, { 0x004B, 7 }, { 20, 8 }, { 20, 9 },
+    { 0, CAM_DATA_00 },
+    { 180, CAM_DATA_01 },
+    { 300, CAM_DATA_02 },
+    { 30, CAM_DATA_03 },
+    { 0x000C, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0019, CAM_DATA_06 },
+    { 0x004B, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 20, CAM_DATA_09 },
 };
 
 /**
@@ -3643,8 +5599,16 @@ CameraModeValue D_801B6DB8[] = {
  */
 CameraModeValue D_801B6DE0[] = {
     /* CAM_FUNC_JUMP3 */
-    { -40, 0 },    { 0x0140, 1 }, { 350, 2 },    { -5, 3 },     { 0x000C, 4 },
-    { 0x0005, 5 }, { 0x0019, 6 }, { 0x0041, 7 }, { 0x0028, 8 }, { 0x001C, 9 },
+    { -40, CAM_DATA_00 },
+    { 0x0140, CAM_DATA_01 },
+    { 350, CAM_DATA_02 },
+    { -5, CAM_DATA_03 },
+    { 0x000C, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0019, CAM_DATA_06 },
+    { 0x0041, CAM_DATA_07 },
+    { 0x0028, CAM_DATA_08 },
+    { 0x001C, CAM_DATA_09 },
 };
 
 /**
@@ -3654,8 +5618,16 @@ CameraModeValue D_801B6DE0[] = {
  */
 CameraModeValue D_801B6E08[] = {
     /* CAM_FUNC_JUMP3 */
-    { -40, 0 },    { 300, 1 }, { 350, 2 },    { 10, 3 }, { 0x000F, 4 },
-    { 0x0005, 5 }, { 30, 6 },  { 0x0041, 7 }, { 60, 8 }, { 0x0025, 9 },
+    { -40, CAM_DATA_00 },
+    { 300, CAM_DATA_01 },
+    { 350, CAM_DATA_02 },
+    { 10, CAM_DATA_03 },
+    { 0x000F, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 30, CAM_DATA_06 },
+    { 0x0041, CAM_DATA_07 },
+    { 60, CAM_DATA_08 },
+    { 0x0025, CAM_DATA_09 },
 };
 
 /**
@@ -3665,8 +5637,16 @@ CameraModeValue D_801B6E08[] = {
  */
 CameraModeValue D_801B6E30[] = {
     /* CAM_FUNC_JUMP3 */
-    { 0xFFC4, 0 }, { 0x0096, 1 }, { 250, 2 }, { -18, 3 },    { 0x000F, 4 },
-    { 0x0005, 5 }, { 30, 6 },     { 60, 7 },  { 0x0028, 8 }, { 0x0094, 9 },
+    { 0xFFC4, CAM_DATA_00 },
+    { 0x0096, CAM_DATA_01 },
+    { 250, CAM_DATA_02 },
+    { -18, CAM_DATA_03 },
+    { 0x000F, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 30, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 0x0028, CAM_DATA_08 },
+    { 0x0094, CAM_DATA_09 },
 };
 
 /**
@@ -3676,8 +5656,16 @@ CameraModeValue D_801B6E30[] = {
  */
 CameraModeValue D_801B6E58[] = {
     /* CAM_FUNC_JUMP3 */
-    { -40, 0 },    { 220, 1 }, { 260, 2 },    { 0x0005, 3 }, { 0x0008, 4 },
-    { 0x0005, 5 }, { 20, 6 },  { 0x004B, 7 }, { 0x0023, 8 }, { 0x001C, 9 },
+    { -40, CAM_DATA_00 },
+    { 220, CAM_DATA_01 },
+    { 260, CAM_DATA_02 },
+    { 0x0005, CAM_DATA_03 },
+    { 0x0008, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 20, CAM_DATA_06 },
+    { 0x004B, CAM_DATA_07 },
+    { 0x0023, CAM_DATA_08 },
+    { 0x001C, CAM_DATA_09 },
 };
 
 /**
@@ -3687,8 +5675,16 @@ CameraModeValue D_801B6E58[] = {
  */
 CameraModeValue D_801B6E80[] = {
     /* CAM_FUNC_NORM1 */
-    { 0xFFBA, 0 }, { 250, 1 },    { 0x01F4, 2 }, { 0x0005, 3 }, { 30, 4 },
-    { 0x000C, 5 }, { 0x002D, 6 }, { 50, 7 },     { 0x0046, 8 }, { 0x0083, 9 },
+    { 0xFFBA, CAM_DATA_00 },
+    { 250, CAM_DATA_01 },
+    { 0x01F4, CAM_DATA_02 },
+    { 0x0005, CAM_DATA_03 },
+    { 30, CAM_DATA_04 },
+    { 0x000C, CAM_DATA_05 },
+    { 0x002D, CAM_DATA_06 },
+    { 50, CAM_DATA_07 },
+    { 0x0046, CAM_DATA_08 },
+    { 0x0083, CAM_DATA_09 },
 };
 
 /**
@@ -3698,8 +5694,16 @@ CameraModeValue D_801B6E80[] = {
  */
 CameraModeValue D_801B6EA8[] = {
     /* CAM_FUNC_NORM1 */
-    { -40, 0 }, { 250, 1 }, { 0x01F4, 2 }, { 0x0005, 3 }, { 100, 4 },
-    { 100, 5 }, { 100, 6 }, { 50, 7 },     { 20, 8 },     { 0xF023, 9 },
+    { -40, CAM_DATA_00 },
+    { 250, CAM_DATA_01 },
+    { 0x01F4, CAM_DATA_02 },
+    { 0x0005, CAM_DATA_03 },
+    { 100, CAM_DATA_04 },
+    { 100, CAM_DATA_05 },
+    { 100, CAM_DATA_06 },
+    { 50, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 0xF023, CAM_DATA_09 },
 };
 
 /**
@@ -3709,8 +5713,16 @@ CameraModeValue D_801B6EA8[] = {
  */
 CameraModeValue D_801B6ED0[] = {
     /* CAM_FUNC_NORM1 */
-    { -40, 0 },    { 250, 1 },    { 0x01F4, 2 }, { 0x0005, 3 }, { 0x0019, 4 },
-    { 0x000C, 5 }, { 0x0028, 6 }, { 50, 7 },     { 0x0028, 8 }, { 0x0083, 9 },
+    { -40, CAM_DATA_00 },
+    { 250, CAM_DATA_01 },
+    { 0x01F4, CAM_DATA_02 },
+    { 0x0005, CAM_DATA_03 },
+    { 0x0019, CAM_DATA_04 },
+    { 0x000C, CAM_DATA_05 },
+    { 0x0028, CAM_DATA_06 },
+    { 50, CAM_DATA_07 },
+    { 0x0028, CAM_DATA_08 },
+    { 0x0083, CAM_DATA_09 },
 };
 
 /**
@@ -3720,8 +5732,16 @@ CameraModeValue D_801B6ED0[] = {
  */
 CameraModeValue D_801B6EF8[] = {
     /* CAM_FUNC_NORM1 */
-    { -40, 0 },    { 0x0096, 1 }, { 0x00A0, 2 }, { -15, 3 },    { 0x0019, 4 },
-    { 0x000E, 5 }, { 50, 6 },     { 50, 7 },     { 0x0046, 8 }, { 0x0083, 9 },
+    { -40, CAM_DATA_00 },
+    { 0x0096, CAM_DATA_01 },
+    { 0x00A0, CAM_DATA_02 },
+    { -15, CAM_DATA_03 },
+    { 0x0019, CAM_DATA_04 },
+    { 0x000E, CAM_DATA_05 },
+    { 50, CAM_DATA_06 },
+    { 50, CAM_DATA_07 },
+    { 0x0046, CAM_DATA_08 },
+    { 0x0083, CAM_DATA_09 },
 };
 
 /**
@@ -3731,8 +5751,18 @@ CameraModeValue D_801B6EF8[] = {
  */
 CameraModeValue D_801B6F20[] = {
     /* CAM_FUNC_PARA1 */
-    { -40, 0 },    { 180, 1 }, { 80, 2 }, { 0, 3 },      { 0, 10 },  { 0x0005, 4 },
-    { 0x0005, 5 }, { 50, 7 },  { 50, 8 }, { 0x2002, 9 }, { 60, 11 }, { 0, 12 },
+    { -40, CAM_DATA_00 },
+    { 180, CAM_DATA_01 },
+    { 80, CAM_DATA_02 },
+    { 0, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 50, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x2002, CAM_DATA_09 },
+    { 60, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /**
@@ -3742,8 +5772,16 @@ CameraModeValue D_801B6F20[] = {
  */
 CameraModeValue D_801B6F50[] = {
     /* CAM_FUNC_NORM1 */
-    { -10, 0 }, { 100, 1 },    { 0x0096, 2 }, { 10, 3 }, { 30, 4 },
-    { 10, 5 },  { 0x0028, 6 }, { 0x0046, 7 }, { 50, 8 }, { 0x008B, 9 },
+    { -10, CAM_DATA_00 },
+    { 100, CAM_DATA_01 },
+    { 0x0096, CAM_DATA_02 },
+    { 10, CAM_DATA_03 },
+    { 30, CAM_DATA_04 },
+    { 10, CAM_DATA_05 },
+    { 0x0028, CAM_DATA_06 },
+    { 0x0046, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x008B, CAM_DATA_09 },
 };
 
 /**
@@ -3753,8 +5791,16 @@ CameraModeValue D_801B6F50[] = {
  */
 CameraModeValue D_801B6F78[] = {
     /* CAM_FUNC_NORM1 */
-    { -40, 0 },    { 0x0096, 1 }, { 0x00A0, 2 }, { 0xFFF4, 3 }, { 0x0019, 4 },
-    { 0x000E, 5 }, { 50, 6 },     { 50, 7 },     { 50, 8 },     { 0x0023, 9 },
+    { -40, CAM_DATA_00 },
+    { 0x0096, CAM_DATA_01 },
+    { 0x00A0, CAM_DATA_02 },
+    { 0xFFF4, CAM_DATA_03 },
+    { 0x0019, CAM_DATA_04 },
+    { 0x000E, CAM_DATA_05 },
+    { 50, CAM_DATA_06 },
+    { 50, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x0023, CAM_DATA_09 },
 };
 
 /**
@@ -3764,10 +5810,10 @@ CameraModeValue D_801B6F78[] = {
  */
 CameraModeValue D_801B6FA0[] = {
     /* CAM_FUNC_UNIQ2 */
-    { -40, 0 },
+    { -40, CAM_DATA_00 },
     { 20, 1 },
-    { 60, 7 },
-    { 50, 9 },
+    { 60, CAM_DATA_07 },
+    { 50, CAM_DATA_09 },
 };
 
 /**
@@ -3777,8 +5823,16 @@ CameraModeValue D_801B6FA0[] = {
  */
 CameraModeValue D_801B6FB0[] = {
     /* CAM_FUNC_NORM1 */
-    { -15, 0 },    { 0x0078, 1 }, { 250, 2 }, { 0x0010, 3 }, { 0x0010, 4 },
-    { 0x0005, 5 }, { 0x0041, 6 }, { 60, 7 },  { 0x004B, 8 }, { 0x0083, 9 },
+    { -15, CAM_DATA_00 },
+    { 0x0078, CAM_DATA_01 },
+    { 250, CAM_DATA_02 },
+    { 0x0010, CAM_DATA_03 },
+    { 0x0010, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0041, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 0x004B, CAM_DATA_08 },
+    { 0x0083, CAM_DATA_09 },
 };
 
 /**
@@ -3788,8 +5842,18 @@ CameraModeValue D_801B6FB0[] = {
  */
 CameraModeValue D_801B6FD8[] = {
     /* CAM_FUNC_KEEP1 */
-    { -20, 0 }, { 100, 1 },     { 0x0096, 2 }, { 0, 13 }, { 0x0004, 14 }, { 20, 15 },
-    { 10, 16 }, { 0x0028, 17 }, { 60, 7 },     { 60, 8 }, { 0x2001, 9 },  { 20, 11 },
+    { -20, CAM_DATA_00 },
+    { 100, CAM_DATA_01 },
+    { 0x0096, CAM_DATA_02 },
+    { 0, CAM_DATA_13 },
+    { 0x0004, CAM_DATA_14 },
+    { 20, CAM_DATA_15 },
+    { 10, CAM_DATA_16 },
+    { 0x0028, CAM_DATA_17 },
+    { 60, CAM_DATA_07 },
+    { 60, CAM_DATA_08 },
+    { 0x2001, CAM_DATA_09 },
+    { 20, CAM_DATA_11 },
 };
 
 /**
@@ -3799,8 +5863,19 @@ CameraModeValue D_801B6FD8[] = {
  */
 CameraModeValue D_801B7008[] = {
     /* CAM_FUNC_BATT1 */
-    { -25, 0 },     { 100, 1 }, { 180, 2 }, { 10, 13 },    { 0x0028, 14 }, { 10, 15 }, { 0, 16 },
-    { 0x0028, 17 }, { 60, 7 },  { 50, 8 },  { 0x2002, 9 }, { 20, 11 },     { 50, 18 },
+    { -25, CAM_DATA_00 },
+    { 100, CAM_DATA_01 },
+    { 180, CAM_DATA_02 },
+    { 10, CAM_DATA_13 },
+    { 0x0028, CAM_DATA_14 },
+    { 10, CAM_DATA_15 },
+    { 0, CAM_DATA_16 },
+    { 0x0028, CAM_DATA_17 },
+    { 60, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x2002, CAM_DATA_09 },
+    { 20, CAM_DATA_11 },
+    { 50, CAM_DATA_18 },
 };
 
 /**
@@ -3810,8 +5885,16 @@ CameraModeValue D_801B7008[] = {
  */
 CameraModeValue D_801B703C[] = {
     /* CAM_FUNC_NORM1 */
-    { -15, 0 },    { 0x0078, 1 }, { 250, 2 },    { 0x0010, 3 }, { 0x000C, 4 },
-    { 0x0005, 5 }, { 60, 6 },     { 0x0046, 7 }, { 0x0028, 8 }, { 0x008B, 9 },
+    { -15, CAM_DATA_00 },
+    { 0x0078, CAM_DATA_01 },
+    { 250, CAM_DATA_02 },
+    { 0x0010, CAM_DATA_03 },
+    { 0x000C, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 60, CAM_DATA_06 },
+    { 0x0046, CAM_DATA_07 },
+    { 0x0028, CAM_DATA_08 },
+    { 0x008B, CAM_DATA_09 },
 };
 
 /**
@@ -3821,8 +5904,16 @@ CameraModeValue D_801B703C[] = {
  */
 CameraModeValue D_801B7064[] = {
     /* CAM_FUNC_NORM1 */
-    { -15, 0 }, { 0x0078, 1 }, { 250, 2 },    { 0x0010, 3 }, { 100, 4 },
-    { 100, 5 }, { 100, 6 },    { 0x0046, 7 }, { 20, 8 },     { 0xF023, 9 },
+    { -15, CAM_DATA_00 },
+    { 0x0078, CAM_DATA_01 },
+    { 250, CAM_DATA_02 },
+    { 0x0010, CAM_DATA_03 },
+    { 100, CAM_DATA_04 },
+    { 100, CAM_DATA_05 },
+    { 100, CAM_DATA_06 },
+    { 0x0046, CAM_DATA_07 },
+    { 20, CAM_DATA_08 },
+    { 0xF023, CAM_DATA_09 },
 };
 
 /**
@@ -3832,8 +5923,18 @@ CameraModeValue D_801B7064[] = {
  */
 CameraModeValue D_801B708C[] = {
     /* CAM_FUNC_PARA1 */
-    { 0, 0 },      { 200, 1 },    { 0x0005, 2 }, { 30, 3 },     { 0, 10 },  { 0x0005, 4 },
-    { 0x0005, 5 }, { 0x0046, 7 }, { 30, 8 },     { 0x2022, 9 }, { 80, 11 }, { 0, 12 },
+    { 0, CAM_DATA_00 },
+    { 200, CAM_DATA_01 },
+    { 0x0005, CAM_DATA_02 },
+    { 30, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0046, CAM_DATA_07 },
+    { 30, CAM_DATA_08 },
+    { 0x2022, CAM_DATA_09 },
+    { 80, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /**
@@ -3843,8 +5944,16 @@ CameraModeValue D_801B708C[] = {
  */
 CameraModeValue D_801B70BC[] = {
     /* CAM_FUNC_JUMP3 */
-    { -10, 0 }, { 270, 1 },    { 300, 2 }, { 20, 3 }, { 30, 4 },
-    { 20, 5 },  { 0x0041, 6 }, { 60, 7 },  { 80, 8 }, { 0x0084, 9 },
+    { -10, CAM_DATA_00 },
+    { 270, CAM_DATA_01 },
+    { 300, CAM_DATA_02 },
+    { 20, CAM_DATA_03 },
+    { 30, CAM_DATA_04 },
+    { 20, CAM_DATA_05 },
+    { 0x0041, CAM_DATA_06 },
+    { 60, CAM_DATA_07 },
+    { 80, CAM_DATA_08 },
+    { 0x0084, CAM_DATA_09 },
 };
 
 /**
@@ -3854,8 +5963,18 @@ CameraModeValue D_801B70BC[] = {
  */
 CameraModeValue D_801B70E4[] = {
     /* CAM_FUNC_PARA1 */
-    { -30, 0 },    { 0x0118, 1 }, { 0x0028, 2 }, { 10, 3 },     { 0, 10 },  { 0x000F, 4 },
-    { 0x0005, 5 }, { 60, 7 },     { 100, 8 },    { 0x2003, 9 }, { 60, 11 }, { 0, 12 },
+    { -30, CAM_DATA_00 },
+    { 0x0118, CAM_DATA_01 },
+    { 0x0028, CAM_DATA_02 },
+    { 10, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x000F, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 60, CAM_DATA_07 },
+    { 100, CAM_DATA_08 },
+    { 0x2003, CAM_DATA_09 },
+    { 60, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /**
@@ -3865,8 +5984,19 @@ CameraModeValue D_801B70E4[] = {
  */
 CameraModeValue D_801B7114[] = {
     /* CAM_FUNC_KEEP3 */
-    { -20, 0 },     { 50, 1 },     { 100, 2 }, { 50, 13 }, { 0x0005, 14 }, { 20, 15 }, { 10, 16 },
-    { 0x0028, 17 }, { 0x002D, 7 }, { 50, 8 },  { 20, 4 },  { 0x3500, 9 },  { 60, 18 },
+    { -20, CAM_DATA_00 },
+    { 50, CAM_DATA_01 },
+    { 100, CAM_DATA_02 },
+    { 50, CAM_DATA_13 },
+    { 0x0005, CAM_DATA_14 },
+    { 20, CAM_DATA_15 },
+    { 10, CAM_DATA_16 },
+    { 0x0028, CAM_DATA_17 },
+    { 0x002D, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 20, CAM_DATA_04 },
+    { 0x3500, CAM_DATA_09 },
+    { 60, CAM_DATA_18 },
 };
 
 /**
@@ -3876,8 +6006,16 @@ CameraModeValue D_801B7114[] = {
  */
 CameraModeValue D_801B7148[] = {
     /* CAM_FUNC_JUMP3 */
-    { -40, 0 },    { 180, 1 },    { 200, 2 },    { 0x0005, 3 }, { 20, 4 },
-    { 0x0005, 5 }, { 0x0028, 6 }, { 0x004B, 7 }, { 0x0023, 8 }, { 0x000C, 9 },
+    { -40, CAM_DATA_00 },
+    { 180, CAM_DATA_01 },
+    { 200, CAM_DATA_02 },
+    { 0x0005, CAM_DATA_03 },
+    { 20, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0028, CAM_DATA_06 },
+    { 0x004B, CAM_DATA_07 },
+    { 0x0023, CAM_DATA_08 },
+    { 0x000C, CAM_DATA_09 },
 };
 
 /**
@@ -3887,8 +6025,18 @@ CameraModeValue D_801B7148[] = {
  */
 CameraModeValue D_801B7170[] = {
     /* CAM_FUNC_KEEP1 */
-    { -30, 0 }, { 180, 1 },     { 200, 2 },    { 20, 13 }, { 0x0028, 14 }, { -5, 15 },
-    { 10, 16 }, { 0x000F, 17 }, { 0x002D, 7 }, { 60, 8 },  { 0x2011, 9 },  { 30, 11 },
+    { -30, CAM_DATA_00 },
+    { 180, CAM_DATA_01 },
+    { 200, CAM_DATA_02 },
+    { 20, CAM_DATA_13 },
+    { 0x0028, CAM_DATA_14 },
+    { -5, CAM_DATA_15 },
+    { 10, CAM_DATA_16 },
+    { 0x000F, CAM_DATA_17 },
+    { 0x002D, CAM_DATA_07 },
+    { 60, CAM_DATA_08 },
+    { 0x2011, CAM_DATA_09 },
+    { 30, CAM_DATA_11 },
 };
 
 /**
@@ -3898,8 +6046,19 @@ CameraModeValue D_801B7170[] = {
  */
 CameraModeValue D_801B71A0[] = {
     /* CAM_FUNC_BATT1 */
-    { -30, 0 },     { 0x0096, 1 }, { 250, 2 },    { 10, 13 },    { 60, 14 },     { -5, 15 },     { 20, 16 },
-    { 0x0023, 17 }, { 0x0037, 7 }, { 0x0046, 8 }, { 0x2012, 9 }, { 0x0019, 11 }, { 0x0028, 18 },
+    { -30, CAM_DATA_00 },
+    { 0x0096, CAM_DATA_01 },
+    { 250, CAM_DATA_02 },
+    { 10, CAM_DATA_13 },
+    { 60, CAM_DATA_14 },
+    { -5, CAM_DATA_15 },
+    { 20, CAM_DATA_16 },
+    { 0x0023, CAM_DATA_17 },
+    { 0x0037, CAM_DATA_07 },
+    { 0x0046, CAM_DATA_08 },
+    { 0x2012, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_11 },
+    { 0x0028, CAM_DATA_18 },
 };
 
 /**
@@ -3909,8 +6068,18 @@ CameraModeValue D_801B71A0[] = {
  */
 CameraModeValue D_801B71D4[] = {
     /* CAM_FUNC_PARA1 */
-    { 0, 0 },      { 0x0190, 1 }, { 20, 2 }, { 20, 3 }, { 0, 10 },  { 20, 4 },
-    { 0x0005, 5 }, { 0x0046, 7 }, { 50, 8 }, { 10, 9 }, { 80, 11 }, { 0, 12 },
+    { 0, CAM_DATA_00 },
+    { 0x0190, CAM_DATA_01 },
+    { 20, CAM_DATA_02 },
+    { 20, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 20, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0046, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 10, CAM_DATA_09 },
+    { 80, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /**
@@ -3920,9 +6089,9 @@ CameraModeValue D_801B71D4[] = {
  */
 CameraModeValue D_801B7204[] = {
     /* CAM_FUNC_UNIQ0 */
-    { 0, 0 },
-    { 100, 4 },
-    { 0x0002, 9 },
+    { 0, CAM_DATA_00 },
+    { 100, CAM_DATA_04 },
+    { 0x0002, CAM_DATA_09 },
 };
 
 /**
@@ -3932,8 +6101,19 @@ CameraModeValue D_801B7204[] = {
  */
 CameraModeValue D_801B7210[] = {
     /* CAM_FUNC_KEEP3 */
-    { -10, 0 },     { 0x0078, 1 }, { 180, 2 }, { 50, 13 }, { 0x0005, 14 }, { 10, 15 }, { 0x0005, 16 },
-    { 0x0046, 17 }, { 0x0023, 7 }, { 50, 8 },  { 20, 4 },  { 0x3520, 9 },  { 60, 18 },
+    { -10, CAM_DATA_00 },
+    { 0x0078, CAM_DATA_01 },
+    { 180, CAM_DATA_02 },
+    { 50, CAM_DATA_13 },
+    { 0x0005, CAM_DATA_14 },
+    { 10, CAM_DATA_15 },
+    { 0x0005, CAM_DATA_16 },
+    { 0x0046, CAM_DATA_17 },
+    { 0x0023, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 20, CAM_DATA_04 },
+    { 0x3520, CAM_DATA_09 },
+    { 60, CAM_DATA_18 },
 };
 
 /**
@@ -3943,8 +6123,19 @@ CameraModeValue D_801B7210[] = {
  */
 CameraModeValue D_801B7244[] = {
     /* CAM_FUNC_KEEP3 */
-    { -20, 0 },     { 0x006E, 1 }, { 0x00A0, 2 }, { 80, 13 }, { 0x000F, 14 }, { 10, 15 }, { 0, 16 },
-    { 0x0046, 17 }, { 0x0028, 7 }, { 50, 8 },     { 20, 4 },  { 0x3520, 9 },  { 50, 18 },
+    { -20, CAM_DATA_00 },
+    { 0x006E, CAM_DATA_01 },
+    { 0x00A0, CAM_DATA_02 },
+    { 80, CAM_DATA_13 },
+    { 0x000F, CAM_DATA_14 },
+    { 10, CAM_DATA_15 },
+    { 0, CAM_DATA_16 },
+    { 0x0046, CAM_DATA_17 },
+    { 0x0028, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 20, CAM_DATA_04 },
+    { 0x3520, CAM_DATA_09 },
+    { 50, CAM_DATA_18 },
 };
 
 /**
@@ -3954,8 +6145,15 @@ CameraModeValue D_801B7244[] = {
  */
 CameraModeValue D_801B7278[] = {
     /* CAM_FUNC_KEEP4 */
-    { -45, 0 },    { 0x0096, 1 }, { -10, 3 },    { 0x00A5, 10 }, { 0x0005, 18 },
-    { 0x0046, 7 }, { 0xFF02, 9 }, { 0x0019, 4 }, { 30, 12 },
+    { -45, CAM_DATA_00 },
+    { 0x0096, CAM_DATA_01 },
+    { -10, CAM_DATA_03 },
+    { 0x00A5, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_18 },
+    { 0x0046, CAM_DATA_07 },
+    { 0xFF02, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_04 },
+    { 30, CAM_DATA_12 },
 };
 
 /**
@@ -3965,8 +6163,15 @@ CameraModeValue D_801B7278[] = {
  */
 CameraModeValue D_801B729C[] = {
     /* CAM_FUNC_KEEP4 */
-    { -40, 0 },    { 0x0096, 1 }, { 0x0012, 3 }, { 0x008C, 10 }, { 0x0005, 18 },
-    { 0x0046, 7 }, { 0xFF02, 9 }, { 0x0019, 4 }, { 30, 12 },
+    { -40, CAM_DATA_00 },
+    { 0x0096, CAM_DATA_01 },
+    { 0x0012, CAM_DATA_03 },
+    { 0x008C, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_18 },
+    { 0x0046, CAM_DATA_07 },
+    { 0xFF02, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_04 },
+    { 30, CAM_DATA_12 },
 };
 
 /**
@@ -3976,8 +6181,15 @@ CameraModeValue D_801B729C[] = {
  */
 CameraModeValue D_801B72C0[] = {
     /* CAM_FUNC_KEEP4 */
-    { -20, 0 }, { 0x0096, 1 }, { 0xFFFE, 3 }, { 0x008C, 10 }, { 0x000F, 18 },
-    { 50, 7 },  { 0xFF02, 9 }, { 0x0019, 4 }, { 30, 12 },
+    { -20, CAM_DATA_00 },
+    { 0x0096, CAM_DATA_01 },
+    { 0xFFFE, CAM_DATA_03 },
+    { 0x008C, CAM_DATA_10 },
+    { 0x000F, CAM_DATA_18 },
+    { 50, CAM_DATA_07 },
+    { 0xFF02, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_04 },
+    { 30, CAM_DATA_12 },
 };
 
 /**
@@ -3987,8 +6199,15 @@ CameraModeValue D_801B72C0[] = {
  */
 CameraModeValue D_801B72E4[] = {
     /* CAM_FUNC_KEEP4 */
-    { -50, 0 }, { 0x0096, 1 }, { 0xFFF4, 3 }, { 0x00A0, 10 }, { 0x0006, 18 },
-    { 50, 7 },  { 0xFF02, 9 }, { 0x0019, 4 }, { 30, 12 },
+    { -50, CAM_DATA_00 },
+    { 0x0096, CAM_DATA_01 },
+    { 0xFFF4, CAM_DATA_03 },
+    { 0x00A0, CAM_DATA_10 },
+    { 0x0006, CAM_DATA_18 },
+    { 50, CAM_DATA_07 },
+    { 0xFF02, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_04 },
+    { 30, CAM_DATA_12 },
 };
 
 /**
@@ -3998,8 +6217,15 @@ CameraModeValue D_801B72E4[] = {
  */
 CameraModeValue D_801B7308[] = {
     /* CAM_FUNC_KEEP4 */
-    { 0xFFC4, 0 }, { 0x0096, 1 }, { 0xFFF4, 3 }, { 0xFF74, 10 }, { 30, 18 },
-    { 50, 7 },     { 0xFF0C, 9 }, { 0x0019, 4 }, { 30, 12 },
+    { 0xFFC4, CAM_DATA_00 },
+    { 0x0096, CAM_DATA_01 },
+    { 0xFFF4, CAM_DATA_03 },
+    { 0xFF74, CAM_DATA_10 },
+    { 30, CAM_DATA_18 },
+    { 50, CAM_DATA_07 },
+    { 0xFF0C, CAM_DATA_09 },
+    { 0x0019, CAM_DATA_04 },
+    { 30, CAM_DATA_12 },
 };
 
 /**
@@ -4009,8 +6235,16 @@ CameraModeValue D_801B7308[] = {
  */
 CameraModeValue D_801B732C[] = {
     /* CAM_FUNC_NORM1 */
-    { 0, 0 },      { 0x0096, 1 }, { 250, 2 },    { -5, 3 }, { 0x0010, 4 },
-    { 0x0005, 5 }, { 0x0034, 6 }, { 0x0037, 7 }, { 80, 8 }, { 0x0083, 9 },
+    { 0, CAM_DATA_00 },
+    { 0x0096, CAM_DATA_01 },
+    { 250, CAM_DATA_02 },
+    { -5, CAM_DATA_03 },
+    { 0x0010, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x0034, CAM_DATA_06 },
+    { 0x0037, CAM_DATA_07 },
+    { 80, CAM_DATA_08 },
+    { 0x0083, CAM_DATA_09 },
 };
 
 /**
@@ -4020,8 +6254,18 @@ CameraModeValue D_801B732C[] = {
  */
 CameraModeValue D_801B7354[] = {
     /* CAM_FUNC_PARA1 */
-    { 0, 0 },      { 200, 1 },    { 0x0019, 2 }, { 0x0005, 3 }, { 0, 10 },  { 0x0005, 4 },
-    { 0x0005, 5 }, { 0x002D, 7 }, { 50, 8 },     { 0x2002, 9 }, { 80, 11 }, { 0, 12 },
+    { 0, CAM_DATA_00 },
+    { 200, CAM_DATA_01 },
+    { 0x0019, CAM_DATA_02 },
+    { 0x0005, CAM_DATA_03 },
+    { 0, CAM_DATA_10 },
+    { 0x0005, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 0x002D, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x2002, CAM_DATA_09 },
+    { 80, CAM_DATA_11 },
+    { 0, CAM_DATA_12 },
 };
 
 /**
@@ -4031,8 +6275,16 @@ CameraModeValue D_801B7354[] = {
  */
 CameraModeValue D_801B7384[] = {
     /* CAM_FUNC_NORM1 */
-    { 0, 0 },      { 0x0096, 1 }, { 250, 2 },    { 0, 3 },  { 0x0018, 4 },
-    { 0x0005, 5 }, { 50, 6 },     { 0x0037, 7 }, { 50, 8 }, { 0x008B, 9 },
+    { 0, CAM_DATA_00 },
+    { 0x0096, CAM_DATA_01 },
+    { 250, CAM_DATA_02 },
+    { 0, CAM_DATA_03 },
+    { 0x0018, CAM_DATA_04 },
+    { 0x0005, CAM_DATA_05 },
+    { 50, CAM_DATA_06 },
+    { 0x0037, CAM_DATA_07 },
+    { 50, CAM_DATA_08 },
+    { 0x008B, CAM_DATA_09 },
 };
 
 /**
@@ -4042,8 +6294,16 @@ CameraModeValue D_801B7384[] = {
  */
 CameraModeValue D_801B73AC[] = {
     /* CAM_FUNC_NORM1 */
-    { 0, 0 },   { 180, 1 }, { 220, 2 },    { 0x0005, 3 }, { 100, 4 },
-    { 100, 5 }, { 100, 6 }, { 0x0037, 7 }, { 10, 8 },     { 0xF003, 9 },
+    { 0, CAM_DATA_00 },
+    { 180, CAM_DATA_01 },
+    { 220, CAM_DATA_02 },
+    { 0x0005, CAM_DATA_03 },
+    { 100, CAM_DATA_04 },
+    { 100, CAM_DATA_05 },
+    { 100, CAM_DATA_06 },
+    { 0x0037, CAM_DATA_07 },
+    { 10, CAM_DATA_08 },
+    { 0xF003, CAM_DATA_09 },
 };
 
 CameraMode sCamSetNorm0Modes[] = {

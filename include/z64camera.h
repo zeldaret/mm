@@ -237,6 +237,31 @@ typedef enum {
     /* 0x47 */ CAM_FUNC_MAX
 } CameraFuncType;
 
+typedef enum {
+    /* 0x00 */ CAM_DATA_00,
+    /* 0x01 */ CAM_DATA_01,
+    /* 0x02 */ CAM_DATA_02,
+    /* 0x03 */ CAM_DATA_03,
+    /* 0x04 */ CAM_DATA_04,
+    /* 0x05 */ CAM_DATA_05,
+    /* 0x06 */ CAM_DATA_06,
+    /* 0x07 */ CAM_DATA_07,
+    /* 0x08 */ CAM_DATA_08,
+    /* 0x09 */ CAM_DATA_09,
+    /* 0x0A */ CAM_DATA_10,
+    /* 0x0B */ CAM_DATA_11,
+    /* 0x0C */ CAM_DATA_12,
+    /* 0x0D */ CAM_DATA_13,
+    /* 0x0E */ CAM_DATA_14,
+    /* 0x0F */ CAM_DATA_15,
+    /* 0x10 */ CAM_DATA_16,
+    /* 0x11 */ CAM_DATA_17,
+    /* 0x12 */ CAM_DATA_18,
+    /* 0x13 */ CAM_DATA_19,
+    /* 0x14 */ CAM_DATA_20,
+    /* 0x15 */ CAM_DATA_21,
+} CameraDataType;
+
 typedef struct {
     /* 0x0 */ s16 val;
     /* 0x2 */ s16 param;

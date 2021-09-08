@@ -1121,7 +1121,7 @@ u8 func_800CA648(CollisionContext* colCtx, WaterBox* waterBox, UNK_TYPE4 arg2);
 // void func_800CA6D8(void);
 // void func_800CA6F0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
 // void func_800CA9D0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-// void func_800CAA14(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+s32 func_800CAA14(CollisionPoly* polyA, CollisionPoly* polyB, Vec3f* pointA, Vec3f* pointB, Vec3f* closestPoint);
 void BgCheck2_UpdateActorPosition(CollisionContext* colCtx, s32 index, Actor* actor);
 void BgCheck2_UpdateActorYRotation(CollisionContext* colCtx, s32 index, Actor* actor);
 void BgCheck2_AttachToMesh(CollisionContext* colCtx, Actor* actor, s32 index);
