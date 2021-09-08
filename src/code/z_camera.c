@@ -1078,15 +1078,15 @@ void Camera_ResetAnim(Camera* camera, s32 mode) {
 void Camera_UpdateInterface(s32 flags) {
     s32 interfaceAlpha;
 
-    if ((flags & SHRINKWIN_MASK) != SHRINKWIN_MASK) {
+    if ((flags & SHRINKWIN_MASK) != SHRINKWINVAL_PREV) {
         switch (flags & SHRINKWINVAL_MASK) {
-            case 0x1000:
+            case SHRINKWINVAL_SMALL:
                 sCameraShrinkWindowVal = 0x1A;
                 break;
-            case 0x2000:
+            case SHRINKWINVAL_MEDIUM:
                 sCameraShrinkWindowVal = 0x1B;
                 break;
-            case 0x3000:
+            case SHRINKWINVAL_LARGE:
                 sCameraShrinkWindowVal = 0x20;
                 break;
             default:
@@ -2259,7 +2259,7 @@ s32 Camera_Normal2(Camera* camera) {
 }
 
 /**
- * Riding Epona
+ * Riding Epona and Zora
  */
 s32 Camera_Normal3(Camera *camera) {
     Normal3* norm3 = (Normal3*)camera->paramData;
@@ -2321,7 +2321,7 @@ s32 Camera_Normal3(Camera *camera) {
         anim->distTimer = 0;
         anim->is1200 = 1200;
 
-        if (norm3->interfaceFlags & 2) {
+        if (norm3->interfaceFlags & NORM3_FLG_2) {
             anim->yawTimer = 6;
             Camera_SetFlags(camera, 0x20);
         } else {
@@ -2358,7 +2358,7 @@ s32 Camera_Normal3(Camera *camera) {
     anim->curPitch = Camera_LERPCeilS(phi_v1_2, anim->curPitch, 
         ((1.0f / norm3->pitchUpdateRateInv) * 0.5f) + temp_f2, 5);
 
-    if ((norm3->interfaceFlags & 0x40) || (player->rideActor == NULL)) {
+    if ((norm3->interfaceFlags & NORM3_FLG_40) || (player->rideActor == NULL)) {
         Camera_CalcAtDefault(camera, &sp68, norm3->yOffset, 1);
     } else {
         Camera_CalcAtForHorse(camera, &sp68, norm3->yOffset, &anim->yPosOffset, 1);
@@ -2372,7 +2372,7 @@ s32 Camera_Normal3(Camera *camera) {
     phi_f2 *= 0.002f;
     camera->dist = sp80.r = temp_f2 + phi_f2;
 
-    if (norm3->interfaceFlags & 0x80) {
+    if (norm3->interfaceFlags & NORM3_FLG_80) {
         sp80.pitch = Camera_LERPCeilS(((Actor*)camera->trackActor)->focus.rot.x - anim->curPitch, sp68.pitch, 0.25f, 5);
     } else {
         sp62 = norm3->pitchTarget - anim->curPitch;
@@ -2386,7 +2386,7 @@ s32 Camera_Normal3(Camera *camera) {
         sp80.pitch = -0x1554;
     }
 
-    if (norm3->interfaceFlags & 0x80) {
+    if (norm3->interfaceFlags & NORM3_FLG_80) {
         sp62 = SUB16(((Actor*)camera->trackActor)->focus.rot.y, BINANG_ROT180(sp68.yaw));
         temp_f2 = 1.0f;
     } else {
@@ -2426,7 +2426,7 @@ s32 Camera_Normal3(Camera *camera) {
     }
 
     camera->fov = Camera_LERPCeilF(norm3->fovTarget, camera->fov, camera->fovUpdateRate, 0.1f);
-    if (norm3->interfaceFlags & 0x20) {
+    if (norm3->interfaceFlags & NORM3_FLG_20) {
         camera->roll = Camera_LERPCeilS(0, camera->roll, 0.05f, 5);
     } else {
         camera->roll = Camera_LERPCeilS(0, camera->roll, 0.1f, 5);
@@ -2523,7 +2523,7 @@ s32 Camera_Normal0(Camera* camera) {
         
         anim->unk_18 = 0.0f;
         anim->unk_28 = 120.0f;
-        if (norm0->unk_1E & 4) {
+        if (norm0->unk_1E & NORM0_FLG_4) {
             sp88.pitch = anim->unk_20;
             sp88.yaw = anim->unk_22;
             sp88.r = 100.0f;
@@ -2551,8 +2551,8 @@ s32 Camera_Normal0(Camera* camera) {
     camera->fovUpdateRate = Camera_LERPCeilF(0.05, camera->fovUpdateRate, camera->speedRatio * 0.05f, 0.0001f);
 
 
-    if (!(norm0->unk_1E & 0x80)) {
-        Camera_CalcAtDefault(camera, &sp78, norm0->unk_00, norm0->unk_1E & 1);
+    if (!(norm0->unk_1E & NORM0_FLG_80)) {
+        Camera_CalcAtDefault(camera, &sp78, norm0->unk_00, norm0->unk_1E & NORM0_FLG_1);
         anim->unk_28 = 120.0f;
     } else {
         func_800CD834(camera, &sp78, norm0->unk_00, &anim->unk_24, anim->unk_28);
@@ -2562,7 +2562,7 @@ s32 Camera_Normal0(Camera* camera) {
     }
 
 
-    if (norm0->unk_1E & 4) {
+    if (norm0->unk_1E & NORM0_FLG_4) {
         anim->unk_00.x = sp34->pos.x + anim->unk_0C.x;
         anim->unk_00.z = sp34->pos.z + anim->unk_0C.z;
     }
@@ -2614,7 +2614,7 @@ s32 Camera_Normal0(Camera* camera) {
     *sp40 = *sp38;
 
     if (camera->status == CAM_STATUS_ACTIVE) {
-        if ((camera->globalCtx->envCtx.skyboxDisabled == 0) || (norm0->unk_1E & 0x10)) {
+        if ((camera->globalCtx->envCtx.skyboxDisabled == 0) || (norm0->unk_1E & NORM0_FLG_10)) {
             Camera_BGCheck(camera, sp3C, sp40);
         } else {
             func_800CBFA4(camera, sp3C, sp40, 3);
@@ -4375,7 +4375,7 @@ s32 Camera_KeepOn3(Camera* camera) {
         anim->unk_04 = (f32)(s16)(sp98.yaw - sp80.yaw) / temp_f0;
         anim->unk_08 = (f32)(s16)(sp98.pitch - sp80.pitch) / temp_f0;
         anim->unk_00 = (sp98.r - sp80.r) / temp_f0;
-        sCameraInterfaceFlags = 0xFF00;
+        sCameraInterfaceFlags = SHRINKWINVAL_PREV | IFACE_ALPHA(0xF);
         return true;
     }
 
@@ -4403,7 +4403,7 @@ s32 Camera_KeepOn3(Camera* camera) {
     Camera_UpdateAtActorOffset(camera, &sp3C->pos);
     camera->dist = OLib_Vec3fDist(temp_s0, sp48);
     if (camera->flags2 & 8) {
-        sCameraInterfaceFlags = 0;
+        sCameraInterfaceFlags = SHRINKWINVAL_NONE | IFACE_ALPHA(0);
         Camera_SetUpdateRatesSlow(camera);
         camera->atLERPStepScale = 0.0f;
 
@@ -5426,7 +5426,7 @@ s32 Camera_Unique0(Camera* camera) {
                 if (anim->unk_3C > 0) {
                     anim->unk_3C--;
                     if (anim->unk_3C == 0) {
-                        sCameraInterfaceFlags = 0;
+                        sCameraInterfaceFlags = SHRINKWINVAL_NONE | IFACE_ALPHA(0);
                     }
                 } else {
                     anim->unk_00 = sp40->pos;
@@ -5850,7 +5850,7 @@ s32 Camera_Demo2(Camera* camera) {
             eyeOffset.pitch = 0;
             eyeOffset.yaw = atToEye.yaw;
             anim->unk_0C = 0.1f;
-            sCameraInterfaceFlags = 0x3400;
+            sCameraInterfaceFlags = SHRINKWINVAL_LARGE | IFACE_ALPHA(4);
 
             if (!(((anim->animFrame < 0) || (camera->xzSpeed > 0.001f) ||
                    CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_A) ||
@@ -5869,7 +5869,7 @@ s32 Camera_Demo2(Camera* camera) {
             Camera_SetFlags(camera, 0x10 | 0x4);
             Camera_UnsetFlags(camera, 0x8);
             func_800CC938(camera);
-            sCameraInterfaceFlags = 0;
+            sCameraInterfaceFlags = SHRINKWINVAL_NONE | IFACE_ALPHA(0);
         skipeyeUpdate:
             skipUpdateEye = true;
             break;
@@ -6501,7 +6501,7 @@ s32 Camera_Special8(Camera *camera) {
         Camera_UpdateAtActorOffset(camera, &playerPosRot->pos);
     } else {
         Camera_SetFlags(camera, 0x400 | 0x10);
-        sCameraInterfaceFlags = 0;
+        sCameraInterfaceFlags = SHRINKWINVAL_NONE | IFACE_ALPHA(0);
         if ((camera->xzSpeed > 0.001f) || 
             CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_A) ||
             CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_B) || 
@@ -6641,7 +6641,7 @@ s32 Camera_Special9(Camera *camera) {
         case 999:
         default:
             Camera_SetFlags(camera, 0x400 | 0x10);
-            sCameraInterfaceFlags = 0;
+            sCameraInterfaceFlags = SHRINKWINVAL_NONE | IFACE_ALPHA(0);
 
             if ((camera->xzSpeed > 0.001f) || 
                 CHECK_BTN_ALL(CONTROLLER1(camera->globalCtx)->press.button, BTN_A) ||
@@ -6747,7 +6747,7 @@ void Camera_Init(Camera* camera, View* view, CollisionContext* colCtx, GlobalCon
     camera->up.z = camera->up.x = 0.0f;
     camera->atLERPStepScale = 1;
     camera->up.y = 1.0f;
-    sCameraInterfaceFlags = 0xFF00;
+    sCameraInterfaceFlags = SHRINKWINVAL_PREV | IFACE_ALPHA(0xF);
     sCameraInitCounter = 3;
 }
 
@@ -6851,10 +6851,10 @@ void Camera_InitPlayerSettings(Camera* camera, Player* player) {
     Camera_ResetAnim(camera, camera->mode);
 
     if (camera == &camera->globalCtx->mainCamera) {
-        sCameraInterfaceFlags = 0xB200;
+        sCameraInterfaceFlags = SHRINKWIN_CURVAL | SHRINKWINVAL_LARGE | IFACE_ALPHA(2);
         func_800F15D8(camera);
     } else {
-        sCameraInterfaceFlags = 0x3200;
+        sCameraInterfaceFlags = SHRINKWINVAL_LARGE | IFACE_ALPHA(2);
     }
     Camera_CheckWater(camera);
 }
@@ -7208,10 +7208,10 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
 
     if (camera->status == CAM_STATUS_ACTIVE) {
         if (((sCameraInitCounter != 0) || func_800CB854(camera)) && (camera->camId == CAM_ID_MAIN)){
-            sCameraInterfaceFlags = 0x3200;
+            sCameraInterfaceFlags = SHRINKWINVAL_LARGE | IFACE_ALPHA(2);
             Camera_UpdateInterface(sCameraInterfaceFlags);
         } else if ((camera->globalCtx->unk_18B4A != 0) && (camera->camId != CAM_ID_MAIN)) {
-            sCameraInterfaceFlags = 0xFF00;
+            sCameraInterfaceFlags = SHRINKWINVAL_PREV | IFACE_ALPHA(0xF);
             Camera_UpdateInterface(sCameraInterfaceFlags);
         } else {
             Camera_UpdateInterface(sCameraInterfaceFlags);

@@ -16,9 +16,17 @@
 #define CAM_ID_NONE -1
 #define CAM_ID_ACTIVE -1
 
+#define SHRINKWINVAL_NONE (0x0000)
+#define SHRINKWINVAL_SMALL (0x1000)
+#define SHRINKWINVAL_MEDIUM (0x2000)
+#define SHRINKWINVAL_LARGE (0x3000)
+#define SHRINKWINVAL_NONE_4 (0x4000)
+#define SHRINKWIN_CURVAL (0x8000)
+#define SHRINKWINVAL_PREV (0xF000)
 #define SHRINKWIN_MASK (0xF000)
 #define SHRINKWINVAL_MASK (0x7000)
-#define SHRINKWIN_CURVAL (0x8000)
+
+#define IFACE_ALPHA(alpha) ((alpha) << 8)
 #define IFACE_ALPHA_MASK (0x0F00)
 
 #define RELOAD_PARAMS \
@@ -32,6 +40,25 @@
 #define FLG_OFFGROUND (1 << 7)
 
 #define CAM_TRACKED_PLAYER(camera) ((Player*)camera->trackActor)
+
+#define NORM1_FLG_1 (1 << 0)
+#define NORM1_FLG_2 (1 << 1)
+#define NORM1_FLG_4 (1 << 2)
+#define NORM1_FLG_8 (1 << 3)
+#define NORM1_FLG_10 (1 << 4)
+#define NORM1_FLG_20 (1 << 5)
+#define NORM1_FLG_40 (1 << 6)
+#define NORM1_FLG_80 (1 << 7)
+
+#define NORM3_FLG_2 (1 << 1)
+#define NORM3_FLG_20 (1 << 5)
+#define NORM3_FLG_40 (1 << 6)
+#define NORM3_FLG_80 (1 << 7)
+
+#define NORM0_FLG_1 (1 << 0)
+#define NORM0_FLG_4 (1 << 2)
+#define NORM0_FLG_10 (1 << 4)
+#define NORM0_FLG_80 (1 << 7)
 
 typedef enum {
     /* 0x00 */ CAM_SET_NONE,
@@ -238,16 +265,16 @@ typedef enum {
 } CameraFuncType;
 
 typedef enum {
-    /* 0x00 */ CAM_DATA_00,
+    /* 0x00 */ CAM_DATA_YOFFSET,
     /* 0x01 */ CAM_DATA_01,
     /* 0x02 */ CAM_DATA_02,
-    /* 0x03 */ CAM_DATA_03,
+    /* 0x03 */ CAM_DATA_PITCHTARGET,
     /* 0x04 */ CAM_DATA_04,
     /* 0x05 */ CAM_DATA_05,
-    /* 0x06 */ CAM_DATA_06,
-    /* 0x07 */ CAM_DATA_07,
+    /* 0x06 */ CAM_DATA_YAWDIFFRANGE,
+    /* 0x07 */ CAM_DATA_FOV,
     /* 0x08 */ CAM_DATA_08,
-    /* 0x09 */ CAM_DATA_09,
+    /* 0x09 */ CAM_DATA_FLAGS,
     /* 0x0A */ CAM_DATA_10,
     /* 0x0B */ CAM_DATA_11,
     /* 0x0C */ CAM_DATA_12,
@@ -290,15 +317,15 @@ typedef struct {
 } Normal1Anim;
 
 typedef struct {
-    /* 0x00 */ f32 unk_00;
+    /* 0x00 */ f32 unk_00; // yOffset
     /* 0x04 */ f32 unk_04;
     /* 0x08 */ f32 unk_08;
     /* 0x0C */ f32 unk_0C;
     /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14;
-    /* 0x18 */ f32 unk_18;
+    /* 0x14 */ f32 unk_14; // attenuationYawDiffRange
+    /* 0x18 */ f32 unk_18; // fovTarget
     /* 0x1C */ f32 unk_1C;
-    /* 0x20 */ s16 unk_20;
+    /* 0x20 */ s16 unk_20; // pitchTarget
     /* 0x22 */ s16 unk_22; // interfaceFlags
     /* 0x24 */ Normal1Anim anim;
 } Normal1; // 10
@@ -421,16 +448,16 @@ typedef struct {
 } Jump3Anim;
 
 typedef struct {
-    /* 0x00 */ f32 unk_00;
+    /* 0x00 */ f32 unk_00; // yOffset
     /* 0x04 */ f32 unk_04;
     /* 0x08 */ f32 unk_08;
     /* 0x0C */ f32 unk_0C;
     /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14;
-    /* 0x18 */ f32 unk_18;
+    /* 0x14 */ f32 unk_14; // attenuationYawDiffRange
+    /* 0x18 */ f32 unk_18; // fovTarget
     /* 0x1C */ f32 unk_1C;
     /* 0x20 */ s16 unk_20;
-    /* 0x22 */ s16 unk_22;
+    /* 0x22 */ s16 unk_22; // flags
     /* 0x24 */ Jump3Anim anim;
 } Jump3; // 10
 
