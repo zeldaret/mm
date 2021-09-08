@@ -1076,7 +1076,7 @@ beginseg
     name "ovl_Obj_Syokudai"
     compress
     include "build/src/overlays/actors/ovl_Obj_Syokudai/z_obj_syokudai.o"
-    include "build/data/ovl_Obj_Syokudai/ovl_Obj_Syokudai.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Syokudai/ovl_Obj_Syokudai_reloc.o"
 endseg
 
 beginseg
