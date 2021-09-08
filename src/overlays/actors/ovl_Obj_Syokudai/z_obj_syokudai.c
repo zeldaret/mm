@@ -116,26 +116,18 @@ void ObjSyokudai_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     LightContext_RemoveLight(globalCtx, &globalCtx->lightCtx, this->lightNode);
 }
 
-void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
     ObjSyokudai* this = THIS;
-    Player* player = PLAYER;
-    s32 paramsLow;
-    s32 paramsHigh;
+    s32 paramsLow = OBJ_SYOKUDAI_GET_PARAMS_LOW(thisx);
+    s32 paramsHigh = OBJ_SYOKUDAI_GET_PARAMS_HIGH(thisx);
+    s32 paramsMid = OBJ_SYOKUDAI_GET_PARAMS_MID(thisx);
+    s32 pad0[3];
+    s32 sp5C = -1;
+    u8 sp5B = 0;
     f32 sp64;
     f32 sp60;
-    s32 sp5C;
-    u8 sp5B;
-    Vec3f posDiffFromSword;
-    Actor* collider2HurtboxActor;
-    s32 paramsMid;
-    s32 phi_t0 = 0;
-    u32 collider2HurtboxDmgFlags = 0;
 
-    sp5C = -1;
-    paramsLow = OBJ_SYOKUDAI_GET_PARAMS_LOW(thisx);
-    paramsHigh = OBJ_SYOKUDAI_GET_PARAMS_HIGH(thisx);
-    sp5B = 0;
-    paramsMid = OBJ_SYOKUDAI_GET_PARAMS_MID(thisx);
     if (this->unk1DF != 0) {
         if (ActorCutscene_GetCurrentIndex() != thisx->cutscene) {
             if (ActorCutscene_GetCanPlayNext(thisx->cutscene) != 0) {
@@ -151,8 +143,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx) {
             this->unk1DF = 0;
         }
     } else {
-        func_800CA1E8(globalCtx, &globalCtx->colCtx, thisx->world.pos.x, thisx->world.pos.z, &sp60, &sp64);
-        if ((thisx->params != 0) && ((sp60 - thisx->world.pos.y) > 52.0f)) {
+        if (func_800CA1E8(globalCtx, &globalCtx->colCtx, thisx->world.pos.x, thisx->world.pos.z, &sp60, &sp64) && ((sp60 - thisx->world.pos.y) > 52.0f)) {
             this->unk_1DC = 0;
             if (paramsHigh == 1) {
                 Actor_UnsetSwitchFlag(globalCtx, paramsLow);
@@ -161,7 +152,11 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx) {
                 }
             }
         } else {
-            if ((thisx->params & 0x800) != 0) {
+            u32 collider2HurtboxDmgFlags = 0;
+            s32 phi_t0 = 0;
+            Player* player = PLAYER;
+
+            if (thisx->params & 0x800) {
                 this->unk_1DC = -1;
             }
             if (paramsMid != 0) {
@@ -185,6 +180,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx) {
                     phi_t0 = 1;
                 }
             } else if (player->itemActionParam == 7) {
+                Vec3f posDiffFromSword;
                 Math_Vec3f_Diff(&player->swordInfo[0].tip, &thisx->world.pos, &posDiffFromSword);
                 posDiffFromSword.y -= 67.0f;
                 if (SQXYZ(posDiffFromSword) < 400.0f) {
@@ -201,7 +197,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx) {
                             player->unk_B28 = 0xC8;
                         }
                     } else if ((collider2HurtboxDmgFlags & 0x20) != 0) {
-                        collider2HurtboxActor = this->colliderCylinder2.base.ac;
+                        Actor* collider2HurtboxActor = this->colliderCylinder2.base.ac;
                         if ((collider2HurtboxActor->update != NULL) && (collider2HurtboxActor->id == ACTOR_EN_ARROW)) {
                             collider2HurtboxActor->params = 0;
                             ((EnArrow*)collider2HurtboxActor)->unk_1C0 = 0x800;
