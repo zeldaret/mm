@@ -562,11 +562,11 @@ asm/non_matchings/code/z_bgcheck/BgCheck_RelocateAllMeshHeaders.s,BgCheck_Reloca
 asm/non_matchings/code/z_bgcheck/func_800C9640.s,func_800C9640,0x800C9640,0x15
 asm/non_matchings/code/z_bgcheck/BgCheck_GetPolygonAttributes.s,BgCheck_GetPolygonAttributes,0x800C9694,0x1C
 asm/non_matchings/code/z_bgcheck/func_800C9704.s,func_800C9704,0x800C9704,0x9
-asm/non_matchings/code/z_bgcheck/func_800C9728.s,func_800C9728,0x800C9728,0x12
+asm/non_matchings/code/z_bgcheck/BgCheck_GetBgCamDataSetting.s,BgCheck_GetBgCamDataSetting,0x800C9728,0x12
 asm/non_matchings/code/z_bgcheck/func_800C9770.s,func_800C9770,0x800C9770,0x22
 asm/non_matchings/code/z_bgcheck/func_800C97F8.s,func_800C97F8,0x800C97F8,0x13
 asm/non_matchings/code/z_bgcheck/func_800C9844.s,func_800C9844,0x800C9844,0x22
-asm/non_matchings/code/z_bgcheck/func_800C98CC.s,func_800C98CC,0x800C98CC,0x16
+asm/non_matchings/code/z_bgcheck/BgCheck_GetBgCamDataVec3s.s,BgCheck_GetBgCamDataVec3s,0x800C98CC,0x16
 asm/non_matchings/code/z_bgcheck/func_800C9924.s,func_800C9924,0x800C9924,0x22
 asm/non_matchings/code/z_bgcheck/func_800C99AC.s,func_800C99AC,0x800C99AC,0xA
 asm/non_matchings/code/z_bgcheck/func_800C99D4.s,func_800C99D4,0x800C99D4,0xA
@@ -669,8 +669,8 @@ asm/non_matchings/code/z_camera/Camera_GetFloorYNorm.s,Camera_GetFloorYNorm,0x80
 asm/non_matchings/code/z_camera/Camera_GetFloorY.s,Camera_GetFloorY,0x800CC56C,0x17
 asm/non_matchings/code/z_camera/Camera_GetFloorYLayer.s,Camera_GetFloorYLayer,0x800CC5C8,0x5E
 asm/non_matchings/code/z_camera/Camera_GetCamDataSetting.s,Camera_GetCamDataSetting,0x800CC740,0x1A
-asm/non_matchings/code/z_camera/Camera_GetSurfaceBgCamData.s,Camera_GetSurfaceBgCamData,0x800CC7A8,0x17
-asm/non_matchings/code/z_camera/Camera_GetDataIdxForPoly.s,Camera_GetDataIdxForPoly,0x800CC804,0x1C
+asm/non_matchings/code/z_camera/Camera_GetCamDataVec3s.s,Camera_GetCamDataVec3s,0x800CC7A8,0x17
+asm/non_matchings/code/z_camera/Camera_GetBgCamDataId.s,Camera_GetBgCamDataId,0x800CC804,0x1C
 asm/non_matchings/code/z_camera/Camera_GetWaterBoxCamSetting.s,Camera_GetWaterBoxCamSetting,0x800CC874,0x31
 asm/non_matchings/code/z_camera/func_800CC938.s,func_800CC938,0x800CC938,0x8
 asm/non_matchings/code/z_camera/Camera_XZAngle.s,Camera_XZAngle,0x800CC958,0x1A
@@ -2536,8 +2536,8 @@ asm/non_matchings/code/z_play/Play_CameraChangeSetting.s,Play_CameraChangeSettin
 asm/non_matchings/code/z_play/func_80169AFC.s,func_80169AFC,0x80169AFC,0x32
 asm/non_matchings/code/z_play/Play_CameraGetUID.s,Play_CameraGetUID,0x80169BC4,0xD
 asm/non_matchings/code/z_play/func_80169BF8.s,func_80169BF8,0x80169BF8,0x1B
-asm/non_matchings/code/z_play/func_80169C64.s,func_80169C64,0x80169C64,0x8
-asm/non_matchings/code/z_play/func_80169C84.s,func_80169C84,0x80169C84,0xE
+asm/non_matchings/code/z_play/Play_GetCsCamDataSetting.s,Play_GetCsCamDataSetting,0x80169C64,0x8
+asm/non_matchings/code/z_play/Play_GetCsCamDataVec3s.s,Play_GetCsCamDataVec3s,0x80169C84,0xE
 asm/non_matchings/code/z_play/convert_scene_number_among_shared_scenes.s,convert_scene_number_among_shared_scenes,0x80169CBC,0x21
 asm/non_matchings/code/z_play/func_80169D40.s,func_80169D40,0x80169D40,0x23
 asm/non_matchings/code/z_play/func_80169DCC.s,func_80169DCC,0x80169DCC,0x28

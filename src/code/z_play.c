@@ -106,9 +106,9 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169BF8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169C64.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_GetCsCamDataSetting.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169C84.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_GetCsCamDataVec3s.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/convert_scene_number_among_shared_scenes.s")
 
