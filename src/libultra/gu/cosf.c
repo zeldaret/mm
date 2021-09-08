@@ -3,7 +3,7 @@
 
 // A slightly tweaked form of the coefficients of the Maclaurin series of sine up to x^9
 // [https://mathworld.wolfram.com/MaclaurinSeries.html].
-// The commented versions do not match
+// The commented versions do not match.
 static const du P[] = {
     { 1.0 },                     // 1
     { -0.16666659550427756 },    // -1/3! = 1/6
@@ -22,7 +22,7 @@ static const fu zero = { 0x00000000 };
 
 /**
  * Computes the cosine of a float, returning a float. It essentially computes sin(x+pi/2) by the same method as __sinf,
- * without as many size checks
+ * without as many size checks.
  */
 f32 __cosf(f32 x) {
     f32 absx;

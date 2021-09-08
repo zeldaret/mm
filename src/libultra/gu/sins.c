@@ -79,7 +79,7 @@ static s16 sintable[0x400] = {
 
 /**
  * Compute the sine of a hex angle and return a short, using a lookup table for the first quadrant, extrapolating to the
- * others using the equivalents of sin(pi-x) = sin(x) and sin(pi+x) = -sin(x)
+ * others using the equivalents of sin(pi-x) = sin(x) and sin(pi+x) = -sin(x).
  */
 s16 sins(u16 x) {
     s16 val;
