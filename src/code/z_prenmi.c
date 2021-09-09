@@ -22,12 +22,11 @@ void PreNMI_Draw(PreNMIContext* prenmiCtx) {
     func_8012CF0C(gfxCtx, 1, 1, 0, 0, 0);
 
     OPEN_DISPS(gfxCtx);
-    
+
     func_8012C470(gfxCtx);
 
-    gDPSetFillColor(POLY_OPA_DISP++,
-                    (GPACK_RGBA5551(255, 255, 255, 1) << 16) | GPACK_RGBA5551(255, 255, 255, 1));
-    gDPFillRectangle(POLY_OPA_DISP++, 0, prenmiCtx->timer + 100, 320 /*SCREEN_WIDTH*/ - 1, prenmiCtx->timer + 100);
+    gDPSetFillColor(POLY_OPA_DISP++, (GPACK_RGBA5551(255, 255, 255, 1) << 16) | GPACK_RGBA5551(255, 255, 255, 1));
+    gDPFillRectangle(POLY_OPA_DISP++, 0, prenmiCtx->timer + 100, SCREEN_WIDTH - 1, prenmiCtx->timer + 100);
 
     CLOSE_DISPS(gfxCtx);
 }
