@@ -10,8 +10,9 @@ void ObjSyokudai_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjSyokudai_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-extern u64 D_801DB4B0;
-extern u64 D_801DB4B8;
+extern Gfx D_060003A0[]; // sObjectSyokudaiTypeSwitchCausesFlameDL
+extern Gfx D_06000870[]; // sObjectSyokudaiTypeNoSwitchDL
+extern Gfx D_06000B90[]; // sObjectSyokudaiTypeFlameCausesSwitchDL
 
 const ActorInit Obj_Syokudai_InitVars = {
     ACTOR_OBJ_SYOKUDAI,
@@ -25,7 +26,7 @@ const ActorInit Obj_Syokudai_InitVars = {
     (ActorFunc)ObjSyokudai_Draw,
 };
 
-static ColliderCylinderInit D_808BCCC0 = {
+static ColliderCylinderInit sStandColliderInit = {
     {
         COLTYPE_METAL,
         AT_NONE,
@@ -45,7 +46,7 @@ static ColliderCylinderInit D_808BCCC0 = {
     { 12, 45, 0, { 0, 0, 0 } },
 };
 
-static ColliderCylinderInit D_808BCCEC = {
+static ColliderCylinderInit sFlameColliderInit = {
     {
         COLTYPE_NONE,
         AT_NONE,
@@ -65,44 +66,45 @@ static ColliderCylinderInit D_808BCCEC = {
     { 15, 45, 45, { 0, 0, 0 } },
 };
 
-static InitChainEntry D_808BCD18[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 800, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_STOP),
 };
 
-static u8 D_808BCD28[] = { 0x09, 0x0B, 0x0B };
+static u8 sColTypes[] = { 0x09, 0x0B, 0x0B };
 
-static void* D_808BCD2C[] = { 0x060003A0, 0x06000B90, 0x06000870 };
+static Gfx* sDLists[] = { D_060003A0, D_06000B90, D_06000870 };
 
-static UNK_TYPE D_808BCDE0;
+static s32 sNumLitTorchesInGroup;
 
 void ObjSyokudai_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjSyokudai* this = THIS;
     s32 pad;
-    s32 paramsHigh = OBJ_SYOKUDAI_GET_PARAMS_HIGH(thisx);
-    s32 paramsLow = OBJ_SYOKUDAI_GET_PARAMS_LOW(thisx);
+    s32 type = OBJ_SYOKUDAI_GET_TYPE(thisx);
+    s32 switchFlag = OBJ_SYOKUDAI_GET_SWITCH_FLAG(thisx);
 
-    Actor_ProcessInitChain(thisx, D_808BCD18);
+    Actor_ProcessInitChain(thisx, sInitChain);
     func_800B4AEC(globalCtx, thisx, 50.0f);
     ActorShape_Init(&thisx->shape, 0.0f, func_800B4B50, 1.0f);
-    Collider_InitAndSetCylinder(globalCtx, &this->colliderCylinder1, thisx, &D_808BCCC0);
-    this->colliderCylinder1.base.colType = D_808BCD28[OBJ_SYOKUDAI_GET_PARAMS_HIGH(thisx)];
-    Collider_InitAndSetCylinder(globalCtx, &this->colliderCylinder2, thisx, &D_808BCCEC);
+    Collider_InitAndSetCylinder(globalCtx, &this->standCollider, thisx, &sStandColliderInit);
+    this->standCollider.base.colType = sColTypes[OBJ_SYOKUDAI_GET_TYPE(thisx)];
+    Collider_InitAndSetCylinder(globalCtx, &this->flameCollider, thisx, &sFlameColliderInit);
     thisx->colChkInfo.mass = MASS_IMMOVABLE;
     Lights_PointGlowSetInfo(&this->lightInfo, thisx->world.pos.x, thisx->world.pos.y + 70.0f, thisx->world.pos.z, 0xFF,
                             0xFF, 0xB4, -1);
     this->lightNode = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->lightInfo);
 
-    if (thisx->params & 0x800 || ((paramsHigh != 2 || paramsLow != 0x7F) && Flags_GetSwitch(globalCtx, paramsLow))) {
-        s32 paramsMid = OBJ_SYOKUDAI_GET_PARAMS_MID(thisx);
+    if (OBJ_SYOKUDAI_GET_START_LIT(thisx) ||
+        ((type != OBJ_SYOKUDAI_TYPE_NO_SWITCH || switchFlag != 0x7F) && Flags_GetSwitch(globalCtx, switchFlag))) {
+        s32 groupSize = OBJ_SYOKUDAI_GET_GROUP_SIZE(thisx);
         this->unk_1DC = -1;
-        if (paramsMid != 0) {
-            D_808BCDE0 = paramsMid;
+        if (groupSize != 0) {
+            sNumLitTorchesInGroup = groupSize;
         }
     } else {
-        D_808BCDE0 = 0;
+        sNumLitTorchesInGroup = 0;
     }
     this->unk_1DE = (u32)(Rand_ZeroOne() * 20.0f);
     Actor_SetHeight(thisx, 60.0f);
@@ -111,17 +113,17 @@ void ObjSyokudai_Init(Actor* thisx, GlobalContext* globalCtx) {
 void ObjSyokudai_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjSyokudai* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->colliderCylinder1);
-    Collider_DestroyCylinder(globalCtx, &this->colliderCylinder2);
+    Collider_DestroyCylinder(globalCtx, &this->standCollider);
+    Collider_DestroyCylinder(globalCtx, &this->flameCollider);
     LightContext_RemoveLight(globalCtx, &globalCtx->lightCtx, this->lightNode);
 }
 
 void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     ObjSyokudai* this = THIS;
-    s32 paramsMid = OBJ_SYOKUDAI_GET_PARAMS_MID(thisx);
-    s32 paramsLow = OBJ_SYOKUDAI_GET_PARAMS_LOW(thisx);
-    s32 paramsHigh = OBJ_SYOKUDAI_GET_PARAMS_HIGH(thisx);
+    s32 groupSize = OBJ_SYOKUDAI_GET_GROUP_SIZE(thisx);
+    s32 switchFlag = OBJ_SYOKUDAI_GET_SWITCH_FLAG(thisx);
+    s32 type = OBJ_SYOKUDAI_GET_TYPE(thisx);
     s32 pad0;
     f32 sp64;
     f32 sp60;
@@ -135,7 +137,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
             if (ActorCutscene_GetCanPlayNext(thisx->cutscene) != 0) {
                 ActorCutscene_StartAndSetUnkLinkFields(thisx->cutscene, thisx);
                 if (this->unk1DF > 0) {
-                    Actor_SetSwitchFlag(globalCtx, paramsLow);
+                    Actor_SetSwitchFlag(globalCtx, switchFlag);
                 }
             } else {
                 ActorCutscene_SetIntentToPlay(thisx->cutscene);
@@ -148,24 +150,24 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
         if (func_800CA1E8(globalCtx, &globalCtx->colCtx, thisx->world.pos.x, thisx->world.pos.z, &sp60, &sp64) &&
             ((sp60 - thisx->world.pos.y) > 52.0f)) {
             this->unk_1DC = 0;
-            if (paramsHigh == 1) {
-                Actor_UnsetSwitchFlag(globalCtx, paramsLow);
-                if (paramsMid != 0) {
+            if (type == OBJ_SYOKUDAI_TYPE_FLAME_CAUSES_SWITCH) {
+                Actor_UnsetSwitchFlag(globalCtx, switchFlag);
+                if (groupSize != 0) {
                     this->unk_1DC = 1;
                 }
             }
         } else {
             s32 phi_t0 = 0;
-            u32 collider2HurtboxDmgFlags = 0;
+            u32 flameColliderHurtboxDmgFlags = 0;
             player = PLAYER;
 
-            if (thisx->params & 0x800) {
+            if (OBJ_SYOKUDAI_GET_START_LIT(thisx)) {
                 this->unk_1DC = -1;
             }
-            if (paramsMid != 0) {
-                if (Flags_GetSwitch(globalCtx, paramsLow)) {
+            if (groupSize != 0) {
+                if (Flags_GetSwitch(globalCtx, switchFlag)) {
                     if (this->unk_1DC == 0) {
-                        if (paramsHigh != 0) {
+                        if (type != OBJ_SYOKUDAI_TYPE_SWITCH_CAUSES_FLAME) {
                             this->unk_1DC = -1;
                         } else {
                             this->unk1DF = -1;
@@ -177,9 +179,9 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                     this->unk_1DC = 0x14;
                 }
             }
-            if (this->colliderCylinder2.base.acFlags & 2) {
-                collider2HurtboxDmgFlags = this->colliderCylinder2.info.acHitInfo->toucher.dmgFlags;
-                if ((this->colliderCylinder2.info.acHitInfo->toucher.dmgFlags & 0x820) != 0) {
+            if (this->flameCollider.base.acFlags & 2) {
+                flameColliderHurtboxDmgFlags = this->flameCollider.info.acHitInfo->toucher.dmgFlags;
+                if ((this->flameCollider.info.acHitInfo->toucher.dmgFlags & 0x820) != 0) {
                     phi_t0 = 1;
                 }
             } else if (player->itemActionParam == 7) {
@@ -200,37 +202,40 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                         } else if (player->unk_B28 < 0xC8) {
                             player->unk_B28 = 0xC8;
                         }
-                    } else if ((collider2HurtboxDmgFlags & 0x20) != 0) {
-                        Actor* collider2HurtboxActor = this->colliderCylinder2.base.ac;
-                        if ((collider2HurtboxActor->update != NULL) && (collider2HurtboxActor->id == ACTOR_EN_ARROW)) {
-                            collider2HurtboxActor->params = 0;
-                            ((EnArrow*)collider2HurtboxActor)->unk_1C0 = 0x800;
+                    } else if (flameColliderHurtboxDmgFlags & 0x20) {
+                        Actor* flameColliderHurtboxActor = this->flameCollider.base.ac;
+                        if ((flameColliderHurtboxActor->update != NULL) &&
+                            (flameColliderHurtboxActor->id == ACTOR_EN_ARROW)) {
+                            flameColliderHurtboxActor->params = 0;
+                            ((EnArrow*)flameColliderHurtboxActor)->unk_1C0 = 0x800;
                         }
                     }
                     if (this->unk_1DC >= 0) {
-                        if ((this->unk_1DC < ((paramsMid * 50) + 100)) && (paramsHigh != 0)) {
-                            this->unk_1DC = (paramsMid * 50) + 100;
+                        if ((this->unk_1DC < ((groupSize * 50) + 100)) &&
+                            (type != OBJ_SYOKUDAI_TYPE_SWITCH_CAUSES_FLAME)) {
+                            this->unk_1DC = (groupSize * 50) + 100;
                         }
                     }
-                } else if ((paramsHigh != 0) && (((phi_t0 > 0) && ((collider2HurtboxDmgFlags & 0x800) != 0)) ||
-                                                 ((phi_t0 < 0) && (player->unk_B28 != 0)))) {
+                } else if ((type != OBJ_SYOKUDAI_TYPE_SWITCH_CAUSES_FLAME) &&
+                           (((phi_t0 > 0) && ((flameColliderHurtboxDmgFlags & 0x800) != 0)) ||
+                            ((phi_t0 < 0) && (player->unk_B28 != 0)))) {
                     if ((phi_t0 < 0) && (player->unk_B28 < 0xC8)) {
                         player->unk_B28 = 0xC8;
                     }
-                    if (paramsMid == 0) {
-                        if ((paramsHigh == 2) && (paramsLow == 0x7F)) {
+                    if (groupSize == 0) {
+                        if ((type == OBJ_SYOKUDAI_TYPE_NO_SWITCH) && (switchFlag == 0x7F)) {
                             this->unk_1DC = -1;
                         } else if (thisx->cutscene >= 0) {
                             this->unk1DF = 1;
                         } else {
-                            Actor_SetSwitchFlag(globalCtx, paramsLow);
+                            Actor_SetSwitchFlag(globalCtx, switchFlag);
                             this->unk_1DC = -1;
                         }
                     } else {
-                        if (++D_808BCDE0 >= paramsMid) {
+                        if (++sNumLitTorchesInGroup >= groupSize) {
                             this->unk1DF = 1;
                         } else {
-                            this->unk_1DC = (paramsMid * 50) + 110;
+                            this->unk_1DC = (groupSize * 50) + 110;
                         }
                     }
                     func_801A5CFC(0x2822, &thisx->projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
@@ -238,13 +243,13 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
             }
         }
     }
-    Collider_UpdateCylinder(thisx, &this->colliderCylinder1);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->colliderCylinder1.base);
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->colliderCylinder1.base);
-    Collider_UpdateCylinder(thisx, &this->colliderCylinder2);
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->colliderCylinder2.base);
-    if ((this->unk_1DC > 0) && (--this->unk_1DC == 0) && (paramsHigh != 0)) {
-        D_808BCDE0--;
+    Collider_UpdateCylinder(thisx, &this->standCollider);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->standCollider.base);
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->standCollider.base);
+    Collider_UpdateCylinder(thisx, &this->flameCollider);
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->flameCollider.base);
+    if ((this->unk_1DC > 0) && (--this->unk_1DC == 0) && (type != OBJ_SYOKUDAI_TYPE_SWITCH_CAUSES_FLAME)) {
+        sNumLitTorchesInGroup--;
     }
     if (this->unk_1DC != 0) {
         s32 pad2;
@@ -265,19 +270,19 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
 void ObjSyokudai_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjSyokudai* this = THIS;
     s32 pad;
-    s32 paramsMid = OBJ_SYOKUDAI_GET_PARAMS_MID(thisx);
+    s32 groupSize = OBJ_SYOKUDAI_GET_GROUP_SIZE(thisx);
     f32 scaleFactor;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_808BCD2C[OBJ_SYOKUDAI_GET_PARAMS_HIGH(thisx)]);
+    gSPDisplayList(POLY_OPA_DISP++, sDLists[OBJ_SYOKUDAI_GET_TYPE(thisx)]);
     if (this->unk_1DC != 0) {
-        s32 paramsMidAdj = (paramsMid * 50) + 100;
+        s32 groupSizeAdj = (groupSize * 50) + 100;
 
         scaleFactor = 1.0f;
-        if (paramsMidAdj < this->unk_1DC) {
-            scaleFactor = ((paramsMidAdj - this->unk_1DC) + 10) / 10.0f;
+        if (groupSizeAdj < this->unk_1DC) {
+            scaleFactor = ((groupSizeAdj - this->unk_1DC) + 10) / 10.0f;
         } else if ((this->unk_1DC > 0) && (this->unk_1DC < 20)) {
             scaleFactor = this->unk_1DC / 20.0f;
         }
