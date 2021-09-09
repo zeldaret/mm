@@ -131,7 +131,7 @@ typedef struct {
 } ScaleRotPos; // size = 0x20
 //#define ActorMeshParams ScaleRotPos
 
-typedef struct CollisionPoly {
+typedef struct {
     /* 0x00 */ u16 type;
     union {
         u16 vtxData[3];

@@ -22,6 +22,8 @@ s32 Math3D_PlaneVsLineSegClosestPoint(f32 planeAA, f32 planeAB, f32 planeAC, f32
     f32 planeBC, f32 planeBDist, Vec3f* linePointA, Vec3f* linePointB,
     Vec3f* closestPoint);
 
+s32 func_8017A304(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 z, f32 x, f32 chkDist);
+
 #define Math3D_TriChkPointParaYDist func_8017BAD0
 s32 Math3D_TriChkPointParaYDist(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 y, f32 z, f32 unk, f32 chkDist, f32 ny);
 
@@ -31,6 +33,10 @@ s32 Math3D_TriChkPointParaYIntersectDist(Vec3f* a, Vec3f* b, Vec3f* c, f32 nx, f
 #define Math3D_TriChkLineSegParaYIntersect func_8017C008
 s32 Math3D_TriChkLineSegParaYIntersect(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32 nz, f32 originDist, f32 z,
     f32 x, f32* yIntersect, f32 y0, f32 y1);
+
+#define Math3D_TriChkPointParaYIntersectInsideTri2 func_8017C494
+s32 Math3D_TriChkPointParaYIntersectInsideTri2(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32 nz, f32 originDist,
+    f32 z, f32 x, f32* yIntersect, f32 chkDist);
 
 #define Math3D_TriChkPointParaXDist func_8017C540
 s32 Math3D_TriChkPointParaXDist(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 y, f32 z, f32 unk, f32 chkDist, f32 nx);
@@ -62,6 +68,7 @@ s32 Math3D_YZInSphere(Sphere16* sphere, f32 y, f32 z);
 #define Math3D_TriChkPointParaYIntersectInsideTri func_8017BEE0
 s32 Math3D_TriChkPointParaYIntersectInsideTri(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32 nz, f32 originDist,
     f32 z, f32 x, f32* yIntersect, f32 chkDist);
+
 // idk
 #define LogUtils_HungupThread Fault_AddHungupAndCrash
 
@@ -180,11 +187,43 @@ void BgCheck_Vec3fToVec3s(BgVertex* vertex, Vec3f* vector) {
     vertex->pos.z = vector->z;
 }
 
-f32 func_800BFD84(CollisionPoly *polygon, f32 param_2, f32 param_3) {
-    return ((COLPOLY_GET_NORMAL(polygon->normal.x * param_2 + polygon->normal.z * param_3)) + (f32) polygon->dist) / ((f32) -(s32) polygon->normal.y * COLPOLY_NORMAL_FRAC);
+f32 func_800BFD84(CollisionPoly *polygon, f32 arg1, f32 arg2) {
+    return ((COLPOLY_GET_NORMAL(polygon->normal.x * arg1 + polygon->normal.z * arg2)) + (f32) polygon->dist) / ((f32) -(s32) polygon->normal.y * COLPOLY_NORMAL_FRAC);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800BFDEC.s")
+/**
+* Unused
+*/
+s32 func_800BFDEC(CollisionPoly* polyA, CollisionPoly* polyB, u32* outVtxId0, u32* outVtxId1) {
+    s32 vtxIdA[3];
+    s32 vtxIdB[3];
+    s32 i;
+    s32 j;
+    s32 count;
+    
+    *outVtxId0 = *outVtxId1 = 0;
+    for (i = 0; i < 3; i++)
+    {
+        vtxIdA[i] = COLPOLY_VTX_INDEX(polyA->vtxData[i]);
+        vtxIdB[i] = COLPOLY_VTX_INDEX(polyB->vtxData[i]);
+    }
+
+    count = 0;
+    for (i = 0; i < 2; i++) {
+        for (j = i + 1; j < 3; j++) {
+            if (vtxIdA[i] == vtxIdB[j]) {
+                if (count == 0) {
+                    *outVtxId0 = vtxIdA[i];
+                }
+                else if (count == 1) {
+                    *outVtxId1 = vtxIdA[i];
+                }
+                count++;
+            }
+        }
+    }
+    return count;
+}
 
 #define CollisionPoly_GetMinY BgCheck_PolygonGetMinY
 s16 BgCheck_PolygonGetMinY(CollisionPoly* poly, BgVertex* vertices) {
@@ -328,7 +367,44 @@ s32 CollisionPoly_CheckYIntersectApprox1(CollisionPoly* poly, Vec3s* vtxList, f3
 
 #define CollisionPoly_CheckYIntersect func_800C0474
 s32 CollisionPoly_CheckYIntersect(CollisionPoly* poly, Vec3s* vtxList, f32 x, f32 z, f32* yIntersect, f32 chkDist);
+#ifdef NON_MATCHING
+/**
+ * Checks if point (`x`,`z`) is within `chkDist` of `poly`, computing `yIntersect` if true
+ * Determinant max 0.0f (checks if on or within poly)
+ */
+s32 CollisionPoly_CheckYIntersect(CollisionPoly* poly, Vec3s* vtxList, f32 x, f32 z, f32* yIntersect, f32 chkDist) {
+    static Vec3f polyVerts[3]; //D_801EDA18
+    Vec3s* sVerts;
+    f32 nx;
+    f32 ny;
+    f32 nz;
+
+    sVerts = &vtxList[COLPOLY_VTX_INDEX(poly->flags_vIA)];
+    polyVerts[0].x = sVerts->x;
+    polyVerts[0].y = sVerts->y;
+    polyVerts[0].z = sVerts->z;
+    sVerts = &vtxList[COLPOLY_VTX_INDEX(poly->flags_vIB)];
+    polyVerts[1].x = sVerts->x;
+    polyVerts[1].y = sVerts->y;
+    polyVerts[1].z = sVerts->z;
+    sVerts = &vtxList[poly->vIC];
+    polyVerts[2].x = sVerts->x;
+    polyVerts[2].y = sVerts->y;
+    polyVerts[2].z = sVerts->z;
+
+    if (!func_8017A304(&polyVerts[0], &polyVerts[1], &polyVerts[2], z, x, chkDist)) {
+        return 0;
+    }
+    nx = COLPOLY_GET_NORMAL(poly->normal.x); 
+    ny = COLPOLY_GET_NORMAL(poly->normal.y); 
+    nz = COLPOLY_GET_NORMAL(poly->normal.z);
+    return Math3D_TriChkPointParaYIntersectInsideTri2(&polyVerts[0], &polyVerts[1], &polyVerts[2],
+        nx, ny, nz,
+        poly->dist, z, x, yIntersect, chkDist);
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C0474.s")
+#endif
 
 #define CollisionPoly_CheckYIntersectApprox2 func_800C0668
 s32 CollisionPoly_CheckYIntersectApprox2(CollisionPoly* poly, Vec3s* vtxList, f32 x, f32 z, f32* yIntersect) {
@@ -3315,7 +3391,27 @@ void DynaPoly_Setup(GlobalContext* globalCtx, DynaCollisionContext* dyna) {
     dyna->bitFlag &= ~DYNAPOLY_INVALIDATE_LOOKUP;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800C756C.s")
+/**
+ * Compute the number of dynamic resources in use? 
+ */
+void func_800C756C(DynaCollisionContext* dyna, s32* numPolygons, s32* numVertices, s32* numWaterBoxes) {
+    s32 i;
+    CollisionHeader* colHeader;
+
+    *numPolygons = 0;
+    *numVertices = 0;
+    *numWaterBoxes = 0;
+
+    for (i = 0; i < BG_ACTOR_MAX; i++)
+    {
+        if ((dyna->bgActorFlags[i] & 1) && !(dyna->bgActorFlags[i] & 2) && !(dyna->bgActorFlags[i] & 4)) {
+            colHeader = dyna->bgActors[i].colHeader;
+            *numPolygons += colHeader->numPolygons;
+            *numVertices += colHeader->numVertices;
+            *numWaterBoxes += colHeader->numWaterBoxes;
+        }
+    }
+}
 
 #define DynaPoly_UpdateBgActorTransforms BgCheck_UpdateAllActorMeshes
 /**

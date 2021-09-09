@@ -1055,7 +1055,7 @@ void BgCheck_CalcWaterboxDimensions(Vec3f* minPos, Vec3f* maxXPos, Vec3f* maxZPo
 void BgCheck_AddActorMeshToLists(GlobalContext* globalCtx, DynaCollisionContext* dyna, s32 index, s32* currVertices, s32* currPolygons, s32* currWaterboxes);
 void BgCheck_ResetFlagsIfLoadedActor(GlobalContext* globalCtx, DynaCollisionContext* dyna, Actor* actor);
 void BgCheck_Update(GlobalContext* globalCtx, DynaCollisionContext* dyna);
-void func_800C756C(s32 param_1, s32* param_2, s32* param_3, s32* param_4);
+void func_800C756C(DynaCollisionContext* dyna, s32* numPolygons, s32* numVertices, s32* numWaterBoxes);
 void BgCheck_UpdateAllActorMeshes(GlobalContext* globalCtx, DynaCollisionContext* dyna);
 // void func_800C76EC(void);
 // void func_800C7974(void);
