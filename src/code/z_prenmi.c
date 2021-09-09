@@ -16,8 +16,6 @@ void PreNMI_Update(PreNMIContext* prenmiCtx) {
     prenmiCtx->timer--;
 }
 
-// #ifdef NON_MATCHING
-// Minor reordering around call to func_8012C470
 void PreNMI_Draw(PreNMIContext* prenmiCtx) {
     GraphicsContext* gfxCtx = prenmiCtx->state.gfxCtx;
 
@@ -28,13 +26,11 @@ void PreNMI_Draw(PreNMIContext* prenmiCtx) {
     func_8012C470(gfxCtx);
 
     gDPSetFillColor(POLY_OPA_DISP++,
-                    (GPACK_RGBA5551(0xFF, 0xFF, 0xFF, 1) << 16) | GPACK_RGBA5551(0xFF, 0xFF, 0xFF, 1));
+                    (GPACK_RGBA5551(255, 255, 255, 1) << 16) | GPACK_RGBA5551(255, 255, 255, 1));
     gDPFillRectangle(POLY_OPA_DISP++, 0, prenmiCtx->timer + 100, 320 /*SCREEN_WIDTH*/ - 1, prenmiCtx->timer + 100);
+
     CLOSE_DISPS(gfxCtx);
 }
-// #else
-// #pragma GLOBAL_ASM("asm/non_matchings/code/z_prenmi/PreNMI_Draw.s")
-// #endif
 
 void PreNMI_Main(PreNMIContext* prenmiCtx) {
     PreNMI_Update(prenmiCtx);
