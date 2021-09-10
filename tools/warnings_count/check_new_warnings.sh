@@ -6,11 +6,29 @@ set -e
 DIR="$(dirname "$(readlink -f "$0")")"
 cd "$DIR/../.."
 
-make distclean
-make setup 2> >(tee tools/warnings_count/warnings_setup_new.txt)
-make disasm 2> >(tools/warnings_count/warnings_disasm_new.txt)
-make all 2> >(tools/warnings_count/warnings_build_new.txt)
+remove_ansi_codes () {
+    perl -pe '
+    s/\e\[[\x30-\x3f]*[\x20-\x2f]*[\x40-\x7e]//g;
+    s/\e[PX^_].*?\e\\//g;
+    s/\e\][^\a]*(?:\a|\e\\)//g;
+    s/\e[\[\]A-Z\\^_@]//g;' $1
+}
 
-python3 tools/warnings_count/compare_warnings.py tools/warnings_count/warnings_setup_current.txt tools/warnings_count/warnings_setup_new.txt
-python3 tools/warnings_count/compare_warnings.py tools/warnings_count/warnings_disasm_current.txt tools/warnings_count/warnings_disasm_new.txt
-python3 tools/warnings_count/compare_warnings.py tools/warnings_count/warnings_build_current.txt tools/warnings_count/warnings_build_new.txt
+make_warnings () {
+    make $1 2> >(tee tools/warnings_count/warnings_temp.txt) \
+    && remove_ansi_codes tools/warnings_count/warnings_temp.txt > tools/warnings_count/warnings_$2_new.txt \
+    && rm tools/warnings_count/warnings_temp.txt
+}
+
+compare_warnings () {
+    python3 tools/warnings_count/compare_warnings.py tools/warnings_count/warnings_$1_current.txt tools/warnings_count/warnings_$1_new.txt    
+}
+
+make distclean
+make_warnings setup setup
+make_warnings disasm disasm
+make_warnings all build
+
+compare_warnings setup
+compare_warnings disasm
+compare_warnings build
