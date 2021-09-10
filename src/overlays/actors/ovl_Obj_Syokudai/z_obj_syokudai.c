@@ -249,7 +249,8 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                             this->litTimer = (groupSize * 50) + 110;
                         }
                     }
-                    func_801A5CFC(NA_SE_EV_FLAME_IGNITION, &thisx->projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
+                    func_801A5CFC(NA_SE_EV_FLAME_IGNITION, &thisx->projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
+                                  &D_801DB4B8);
                 }
             }
         }
