@@ -79,7 +79,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_STOP),
 };
 
-static u8 sColTypes[] = { 0x09, 0x0B, 0x0B };
+static u8 sColTypes[] = { COLTYPE_METAL, COLTYPE_WOOD, COLTYPE_WOOD };
 
 static Gfx* sDLists[] = { D_060003A0, D_06000B90, D_06000870 };
 
