@@ -165,7 +165,7 @@ void BgLotus_WaitToAppear(BgLotus* this, GlobalContext* globalCtx) {
 void BgLotus_Update(Actor* thisx, GlobalContext* globalCtx) {
     BgLotus* this = THIS;
     s32 pad;
-    void* sp2C;
+    WaterBox* sp2C;
 
     func_800CA1E8(globalCtx, &globalCtx->colCtx, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.z,
                   &this->height, &sp2C);
