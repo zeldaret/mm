@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_syokudai.c
+ * Overlay: ovl_Obj_Syokudai
+ * Description: Torch
+ */
+
 #include "z_obj_syokudai.h"
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
 

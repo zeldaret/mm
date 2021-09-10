@@ -234,7 +234,7 @@ s32 EnFirefly_SeekTorch(EnFirefly* this, GlobalContext* globalCtx) {
     }
 
     while (findTorch != NULL) {
-        if ((findTorch->actor.id == ACTOR_OBJ_SYOKUDAI) && (findTorch->unk_1DC != 0)) {
+        if ((findTorch->actor.id == ACTOR_OBJ_SYOKUDAI) && (findTorch->litTimer != 0)) {
             currentDist = Actor_DistanceBetweenActors(&this->actor, &findTorch->actor);
             if (currentDist < currentMinDist) {
                 currentMinDist = currentDist;
