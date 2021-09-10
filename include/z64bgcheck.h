@@ -58,7 +58,7 @@ typedef struct {
     /* 0x0C */ s16 fov;
     /* 0x0E */ s16 unk_0E;
     /* 0x10 */ s16 unk_10;
-} SubBgCamData;
+} SubCamData;
 
 typedef struct {
     /* 0x00 */ u16 setting;

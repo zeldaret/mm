@@ -7843,6 +7843,7 @@ CameraSetting sCameraSettings[] = {
     { 0x03FFFFFF, 0x00000005, sCamSetDungeon4Modes },     // CAM_SET_DUNGEON4
 };
 
+// sCsCamDataSettings
 static s16 D_801B9CB0[26] = { CAM_SET_ELEGY_SHELL, CAM_SET_SIDED,   CAM_SET_JCRUISING, CAM_SET_NONE,
                               CAM_SET_SUBJECTD,    CAM_SET_NORMALD, CAM_SET_NONE,      CAM_SET_NONE,
                               CAM_SET_NONE,        CAM_SET_WARP1,   CAM_SET_ATTENTION, CAM_SET_CONNECT0,
@@ -7851,6 +7852,7 @@ static s16 D_801B9CB0[26] = { CAM_SET_ELEGY_SHELL, CAM_SET_SIDED,   CAM_SET_JCRU
                               CAM_SET_ITEM3,       CAM_SET_ITEM2,   CAM_SET_ITEM1,     CAM_SET_ITEM0,
                               CAM_SET_STOP0,       CAM_SET_NONE };
 
+// sCsCamDataSettingsIndex
 static s16* D_801B9CE4 = &D_801B9CB0[25];
 
 s32 Camera_Noop(Camera* camera);

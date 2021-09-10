@@ -1097,7 +1097,7 @@ void Camera_UpdateInterface(s32 flags) {
                 break;
         }
 
-        if (flags & SHRINKWIN_CURVAL) {
+        if (flags & SHRINKWIN_MAG) {
             ShrinkWindow_SetLetterboxMagnitude(sCameraShrinkWindowVal);
         } else {
             ShrinkWindow_SetLetterboxTarget(sCameraShrinkWindowVal);
@@ -2441,11 +2441,11 @@ s32 Camera_Normal3(Camera *camera) {
 }
 
 s32 Camera_Normal4(Camera* camera) {
-    SubBgCamData* bgCamData;
+    SubCamData* bgCamData;
     s16 roll;
 
     if (RELOAD_PARAMS) {
-        bgCamData = (SubBgCamData*)Camera_GetCamDataVec3s(camera, camera->bgCamDataId);
+        bgCamData = (SubCamData*)Camera_GetCamDataVec3s(camera, camera->bgCamDataId);
         D_801EDBF0 = bgCamData->rot.z;
     }
 
@@ -2473,7 +2473,7 @@ s32 Camera_Normal0(Camera* camera) {
     PosRot* sp34 = &camera->trackActorPosRot;
     Normal0Anim* anim = &norm0->anim;
     f32 phi_f0;
-    SubBgCamData* bgCamData;
+    SubCamData* bgCamData;
     s16 temp_v1_2;
     s16 phi_a1;
     s16 phi_a0;
@@ -2502,7 +2502,7 @@ s32 Camera_Normal0(Camera* camera) {
     sCameraInterfaceFlags = norm0->unk_1E;
 
     if ((camera->animState == 0) || (camera->animState == 10) || (camera->animState == 20)) {
-        bgCamData = (SubBgCamData*)Camera_GetCamDataVec3s(camera, camera->bgCamDataId);
+        bgCamData = (SubCamData*)Camera_GetCamDataVec3s(camera, camera->bgCamDataId);
         Camera_Vec3sToVec3f(&anim->unk_00, &bgCamData->pos);
         anim->unk_20 = bgCamData->rot.x;
         anim->unk_22 = bgCamData->rot.y;
@@ -2650,7 +2650,7 @@ s32 Camera_Parallel1(Camera *camera) {
     s16 sp72;
     s16 tangle;
     Parallel1Anim* anim = &para1->anim;
-    SubBgCamData* bgCamData;
+    SubCamData* bgCamData;
     s32 new_var3;
     f32 sp60;
     s16 new_var2; 
@@ -2729,7 +2729,7 @@ s32 Camera_Parallel1(Camera *camera) {
             if ((para1->unk_26 & (0x8 | 0x4 | 0x2)) == (0x8 | 0x2)) {
                 anim->unk_22 = 1;
                 sp50 = 0.8f - ((68.0f / sp60) * -0.2f);
-                bgCamData = (SubBgCamData*)Camera_GetCamDataVec3s(camera, camera->bgCamDataId);
+                bgCamData = (SubCamData*)Camera_GetCamDataVec3s(camera, camera->bgCamDataId);
                 anim->unk_20 = bgCamData->rot.x;
                 anim->unk_1E = bgCamData->rot.y;
                 anim->unk_08 = (bgCamData->fov == -1) ? para1->unk_14 : (bgCamData->fov > 360) ? bgCamData->fov * 0.01f : bgCamData->fov;
@@ -4679,7 +4679,7 @@ s32 Camera_Fixed1(Camera *camera) {
     VecSph sp7C;
     u32 negOne;
     Vec3f adjustedPos;
-    SubBgCamData* bgCamData;
+    SubCamData* bgCamData;
     Vec3f* eye = &camera->eye;
     Vec3f* at = &camera->at;
     PosRot* playerPosRot = &camera->trackActorPosRot;
@@ -4697,7 +4697,7 @@ s32 Camera_Fixed1(Camera *camera) {
         // Pass
     } else {
         values = sCameraSettings[camera->setting].cameraModes[camera->mode].values; // sp54
-        bgCamData = (SubBgCamData*)Camera_GetCamDataVec3s(camera, camera->bgCamDataId);
+        bgCamData = (SubCamData*)Camera_GetCamDataVec3s(camera, camera->bgCamDataId);
         Camera_Vec3sToVec3f(&anim->eyePosRotTarget.pos, &bgCamData->pos);
 
         anim->eyePosRotTarget.rot = bgCamData->rot;
@@ -4780,7 +4780,7 @@ s32 Camera_Fixed2(Camera* camera) {
     PosRot* sp34 = &camera->trackActorPosRot;
     f32 temp_f0_3;
     f32 new_var;
-    SubBgCamData* bgCamData;
+    SubCamData* bgCamData;
     VecSph sp80;
     PosRot* sp7C;
     PosRot* sp78;
@@ -4811,7 +4811,7 @@ s32 Camera_Fixed2(Camera* camera) {
         fixd2->unk_14 = NEXTSETTING;
         fixd2->unk_18 = NEXTSETTING;
         anim->unk_1C = fixd2->unk_14 * 100.0f;
-        bgCamData = (SubBgCamData*)Camera_GetCamDataVec3s(camera, camera->bgCamDataId);
+        bgCamData = (SubCamData*)Camera_GetCamDataVec3s(camera, camera->bgCamDataId);
         if (bgCamData != NULL) {
             if ((fixd2->unk_18 & 2) == 0) {
                 Camera_Vec3sToVec3f(&anim->unk_00, &bgCamData->pos);
@@ -5315,7 +5315,7 @@ s32 Camera_Unique0(Camera* camera) {
     Vec3f sp8C;
     VecSph sp84;
     VecSph sp7C;
-    SubBgCamData* bgCamData;
+    SubCamData* bgCamData;
     f32 sp74;
     s32 pad;
     s16 temp_v1;
@@ -5348,7 +5348,7 @@ s32 Camera_Unique0(Camera* camera) {
 
     switch (camera->animState) {
         case 0:
-            bgCamData = (SubBgCamData*)Camera_GetCamDataVec3s(camera, camera->bgCamDataId);
+            bgCamData = (SubCamData*)Camera_GetCamDataVec3s(camera, camera->bgCamDataId);
             Camera_Vec3sToVec3f(&anim->unk_1C, &bgCamData->pos);
             camera->eye = camera->eyeNext = anim->unk_1C;
             anim->unk_34 = bgCamData->rot;
@@ -6542,7 +6542,7 @@ s32 Camera_Special9(Camera *camera) {
     Special9Params* params = &spec9->params;
     Special9Anim* anim = &params->anim;
     s32 sp50[1];
-    SubBgCamData* bgCamData;
+    SubCamData* bgCamData;
     
     spA4 = Camera_GetTrackedActorHeight(camera);
     csIndex = ActorCutscene_GetCurrentIndex();
@@ -6589,7 +6589,7 @@ s32 Camera_Special9(Camera *camera) {
             if (spec9->doorParams.timer1 <= 0) {
                 camera->animState++;
                 if (params->unk_08 & 1) {
-                    bgCamData = (SubBgCamData*)Camera_GetCamDataVec3s(camera, camera->bgCamDataId);
+                    bgCamData = (SubCamData*)Camera_GetCamDataVec3s(camera, camera->bgCamDataId);
                     Camera_Vec3sToVec3f(sp44, &bgCamData->pos);
                     spB8 = *sp4C = *sp44;
                 } else {
@@ -6854,7 +6854,7 @@ void Camera_InitPlayerSettings(Camera* camera, Player* player) {
     Camera_ResetAnim(camera, camera->mode);
 
     if (camera == &camera->globalCtx->mainCamera) {
-        sCameraInterfaceFlags = SHRINKWIN_CURVAL | SHRINKWINVAL_LARGE | IFACE_ALPHA(2);
+        sCameraInterfaceFlags = SHRINKWIN_MAG | SHRINKWINVAL_LARGE | IFACE_ALPHA(2);
         func_800F15D8(camera);
     } else {
         sCameraInterfaceFlags = SHRINKWINVAL_LARGE | IFACE_ALPHA(2);
