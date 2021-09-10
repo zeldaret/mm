@@ -133,7 +133,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
     s32 switchFlag = OBJ_SYOKUDAI_GET_SWITCH_FLAG(thisx);
     s32 type = OBJ_SYOKUDAI_GET_TYPE(thisx);
     s32 pad0;
-    UNK_PTR waterBox;
+    WaterBox* waterBox;
     f32 waterSurface;
     s32 lightRadius = -1;
     u8 lightIntensity = 0;
