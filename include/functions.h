@@ -3991,7 +3991,7 @@ UNK_TYPE func_801A51F0(UNK_TYPE arg0);
 void func_801A5BD0(s32 param_1);
 // void func_801A5C28(void);
 // void func_801A5C8C(void);
-void func_801A5CFC(s16 param_1, Vec3f* param_2, u8 param_3, f32* param_4, f32* param_5, s8* param_6);
+void func_801A5CFC(u16 sfxId, Vec3f* param_2, u8 param_3, f32* param_4, f32* param_5, s8* param_6);
 // void func_801A5DDC(void);
 // void func_801A5F7C(void);
 // void func_801A6430(void);
