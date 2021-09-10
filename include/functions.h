@@ -1686,7 +1686,7 @@ s16 ActorCutscene_GetLength(s16 index);
 // void func_800F2178(void);
 s16 ActorCutscene_GetCurrentCamera(s16 index);
 // void func_800F21CC(void);
-s32 func_800F22C4(s8 param_1, Actor* actor);
+s32 func_800F22C4(s16 param_1, Actor* actor);
 void ActorCutscene_SetReturnCamera(s16 index);
 // void func_800F23E0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 // void func_800F2478(void);
