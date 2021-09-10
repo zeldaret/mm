@@ -47,7 +47,7 @@ void SetAlternateHeaders::DeclareReferencesLate(const std::string& prefix)
 		}
 
 		parent->AddDeclarationArray(
-			segmentOffset, DeclarationAlignment::None, headers.size() * 4, "SCmdBase*",
+			segmentOffset, DeclarationAlignment::None, headers.size() * 4, "SceneCmd*",
 			StringHelper::Sprintf("%sAlternateHeaders0x%06X", prefix.c_str(), segmentOffset), 0,
 			declaration);
 	}

@@ -127,7 +127,7 @@ void ZCutscene::DeclareVar(const std::string& prefix, const std::string& bodyStr
 		auxName = StringHelper::Sprintf("%sCutsceneData0x%06X", prefix.c_str(), rawDataIndex);
 
 	parent->AddDeclarationArray(getSegmentOffset(), DeclarationAlignment::Align4,
-	                            DeclarationPadding::Pad16, GetRawDataSize(), "s32", auxName, 0,
+	                            DeclarationPadding::Pad16, GetRawDataSize(), "CutsceneData", auxName, 0,
 	                            bodyStr);
 }
 
@@ -478,7 +478,7 @@ CutsceneCameraPoint::CutsceneCameraPoint(const std::vector<uint8_t>& rawData, ui
 	continueFlag = data[rawDataIndex + 0];
 	cameraRoll = data[rawDataIndex + 1];
 	nextPointFrame = BitConverter::ToInt16BE(data, rawDataIndex + 2);
-	viewAngle = BitConverter::ToInt32BE(data, rawDataIndex + 4);
+	viewAngle = BitConverter::ToFloatBE(data, rawDataIndex + 4);
 
 	posX = BitConverter::ToInt16BE(data, rawDataIndex + 8);
 	posY = BitConverter::ToInt16BE(data, rawDataIndex + 10);
@@ -554,10 +554,13 @@ std::string CutsceneCommandSetCameraPos::GenerateSourceCode(uint32_t baseAddress
 
 	for (size_t i = 0; i < entries.size(); i++)
 	{
-		result += StringHelper::Sprintf("        %s(%i, %i, %i, 0x%06X, %i, %i, %i, %i),\n",
-		                                posStr.c_str(), entries[i]->continueFlag,
+		std::string continueMacro = "CS_CMD_CONTINUE";
+		if (entries[i]->continueFlag != 0) 
+			continueMacro = "CS_CMD_STOP";
+		result += StringHelper::Sprintf("        %s(%s, 0x%02X, %i, %ff, %i, %i, %i, 0x%04X),\n",
+		                                posStr.c_str(), continueMacro.c_str(),
 		                                entries[i]->cameraRoll, entries[i]->nextPointFrame,
-		                                *(uint32_t*)&entries[i]->viewAngle, entries[i]->posX,
+		                                entries[i]->viewAngle, entries[i]->posX,
 		                                entries[i]->posY, entries[i]->posZ, entries[i]->unused);
 	}
 

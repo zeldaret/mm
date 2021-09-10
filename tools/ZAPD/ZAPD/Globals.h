@@ -75,6 +75,7 @@ public:
 	bool warnNoOffset = false;
 	bool errorNoOffset = false;
 	bool verboseUnaccounted = false;
+	bool gccCompat = false;
 
 	std::vector<ZFile*> files;
 	std::vector<int32_t> segments;

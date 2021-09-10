@@ -49,7 +49,7 @@ public:
 	int8_t continueFlag;
 	int8_t cameraRoll;
 	int16_t nextPointFrame;
-	uint32_t viewAngle;
+	float viewAngle;
 	int16_t posX, posY, posZ;
 	int16_t unused;
 

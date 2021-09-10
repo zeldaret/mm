@@ -213,6 +213,10 @@ int main(int argc, char* argv[])
 		{
 			Globals::Instance->currentExporter = argv[++i];
 		}
+		else if (arg == "--gcc-compat")  // GCC compatibility
+		{
+			Globals::Instance->gccCompat = true;
+		}
 	}
 
 	// Parse File Mode

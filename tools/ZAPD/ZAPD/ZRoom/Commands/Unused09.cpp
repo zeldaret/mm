@@ -12,7 +12,7 @@ std::string Unused09::GetBodySourceCode() const
 
 std::string Unused09::GetCommandCName() const
 {
-	return "SCmdBase";
+	return "SceneCmd";
 }
 
 RoomCommand Unused09::GetRoomCommand() const
