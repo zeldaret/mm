@@ -189,7 +189,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                     this->litTimer = 20;
                 }
             }
-            if (this->flameCollider.base.acFlags & 2) {
+            if (this->flameCollider.base.acFlags & AC_HARD) {
                 flameColliderHurtboxDmgFlags = this->flameCollider.info.acHitInfo->toucher.dmgFlags;
                 if ((this->flameCollider.info.acHitInfo->toucher.dmgFlags & 0x820) != 0) {
                     interactionType = 1;
@@ -208,7 +208,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                     if (interactionType < 0) {
                         if (player->unk_B28 == 0) {
                             player->unk_B28 = 0xD2;
-                            func_8019F1C0(&thisx->projectedPos, 0x2822);
+                            func_8019F1C0(&thisx->projectedPos, NA_SE_EV_FLAME_IGNITION);
                         } else if (player->unk_B28 < 0xC8) {
                             player->unk_B28 = 0xC8;
                         }
@@ -249,7 +249,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                             this->litTimer = (groupSize * 50) + 110;
                         }
                     }
-                    func_801A5CFC(0x2822, &thisx->projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
+                    func_801A5CFC(NA_SE_EV_FLAME_IGNITION, &thisx->projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
                 }
             }
         }
@@ -266,13 +266,13 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
         s32 pad2;
 
         if ((this->litTimer < 0) || (this->litTimer >= 20)) {
-            lightRadius = 0xFA;
+            lightRadius = 250;
         } else {
             lightRadius = ((this->litTimer * 250.0f) / 20.0f);
         }
-        lightIntensity = Rand_ZeroOne() * 0x7F;
-        lightIntensity += 0x80;
-        func_800B9010(thisx, 0x2031);
+        lightIntensity = Rand_ZeroOne() * 127;
+        lightIntensity += 128;
+        func_800B9010(thisx, NA_SE_EV_TORCH - SFX_FLAG);
     }
     Lights_PointSetColorAndRadius(&this->lightInfo, lightIntensity, lightIntensity * 0.7f, 0, lightRadius);
     this->flameTexScroll++;
