@@ -189,7 +189,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                     this->litTimer = 20;
                 }
             }
-            if (this->flameCollider.base.acFlags & AC_HARD) {
+            if (this->flameCollider.base.acFlags & AC_HIT) {
                 flameColliderHurtboxDmgFlags = this->flameCollider.info.acHitInfo->toucher.dmgFlags;
                 if ((this->flameCollider.info.acHitInfo->toucher.dmgFlags & 0x820) != 0) {
                     interactionType = 1;
