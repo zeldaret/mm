@@ -98,15 +98,17 @@ void ObjSyokudai_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (OBJ_SYOKUDAI_GET_START_LIT(thisx) ||
         ((type != OBJ_SYOKUDAI_TYPE_NO_SWITCH || switchFlag != 0x7F) && Flags_GetSwitch(globalCtx, switchFlag))) {
+
         s32 groupSize = OBJ_SYOKUDAI_GET_GROUP_SIZE(thisx);
-        this->unk_1DC = -1;
+
+        this->litTimer = -1;
         if (groupSize != 0) {
             sNumLitTorchesInGroup = groupSize;
         }
     } else {
         sNumLitTorchesInGroup = 0;
     }
-    this->unk_1DE = (u32)(Rand_ZeroOne() * 20.0f);
+    this->flameTexScroll = (u32)(Rand_ZeroOne() * 20.0f);
     Actor_SetHeight(thisx, 60.0f);
 }
 
@@ -125,77 +127,79 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
     s32 switchFlag = OBJ_SYOKUDAI_GET_SWITCH_FLAG(thisx);
     s32 type = OBJ_SYOKUDAI_GET_TYPE(thisx);
     s32 pad0;
-    f32 sp64;
-    f32 sp60;
-    s32 sp5C = -1;
-    u8 sp5B = 0;
+    UNK_PTR waterBox;
+    f32 waterSurface;
+    s32 lightRadius = -1;
+    u8 lightIntensity = 0;
     Player* player;
     s32 pad1;
 
-    if (this->unk1DF != 0) {
+    if (this->pendingAction != OBJ_SYOKUDAI_PENDING_ACTION_NONE) {
         if (ActorCutscene_GetCurrentIndex() != thisx->cutscene) {
             if (ActorCutscene_GetCanPlayNext(thisx->cutscene) != 0) {
                 ActorCutscene_StartAndSetUnkLinkFields(thisx->cutscene, thisx);
-                if (this->unk1DF > 0) {
+                if (this->pendingAction > OBJ_SYOKUDAI_PENDING_ACTION_NONE) {
                     Actor_SetSwitchFlag(globalCtx, switchFlag);
                 }
             } else {
                 ActorCutscene_SetIntentToPlay(thisx->cutscene);
             }
         } else if (func_800F22C4(thisx->cutscene, thisx) != 0) {
-            this->unk_1DC = -1;
-            this->unk1DF = 0;
+            this->litTimer = -1;
+            this->pendingAction = OBJ_SYOKUDAI_PENDING_ACTION_NONE;
         }
     } else {
-        if (func_800CA1E8(globalCtx, &globalCtx->colCtx, thisx->world.pos.x, thisx->world.pos.z, &sp60, &sp64) &&
-            ((sp60 - thisx->world.pos.y) > 52.0f)) {
-            this->unk_1DC = 0;
+        if (func_800CA1E8(globalCtx, &globalCtx->colCtx, thisx->world.pos.x, thisx->world.pos.z, &waterSurface,
+                          &waterBox) &&
+            ((waterSurface - thisx->world.pos.y) > 52.0f)) {
+
+            this->litTimer = 0;
             if (type == OBJ_SYOKUDAI_TYPE_FLAME_CAUSES_SWITCH) {
                 Actor_UnsetSwitchFlag(globalCtx, switchFlag);
                 if (groupSize != 0) {
-                    this->unk_1DC = 1;
+                    this->litTimer = 1;
                 }
             }
         } else {
-            s32 phi_t0 = 0;
+            s32 interactionType = 0;
             u32 flameColliderHurtboxDmgFlags = 0;
             player = PLAYER;
 
             if (OBJ_SYOKUDAI_GET_START_LIT(thisx)) {
-                this->unk_1DC = -1;
+                this->litTimer = -1;
             }
             if (groupSize != 0) {
                 if (Flags_GetSwitch(globalCtx, switchFlag)) {
-                    if (this->unk_1DC == 0) {
+                    if (this->litTimer == 0) {
                         if (type != OBJ_SYOKUDAI_TYPE_SWITCH_CAUSES_FLAME) {
-                            this->unk_1DC = -1;
+                            this->litTimer = -1;
                         } else {
-                            this->unk1DF = -1;
+                            this->pendingAction = OBJ_SYOKUDAI_PENDING_ACTION_CUTSCENE_NO_SWITCH;
                         }
-                    } else if (this->unk_1DC > 0) {
-                        this->unk_1DC = -1;
+                    } else if (this->litTimer > 0) {
+                        this->litTimer = -1;
                     }
-                } else if (this->unk_1DC < 0) {
-                    this->unk_1DC = 0x14;
+                } else if (this->litTimer < 0) {
+                    this->litTimer = 20;
                 }
             }
             if (this->flameCollider.base.acFlags & 2) {
                 flameColliderHurtboxDmgFlags = this->flameCollider.info.acHitInfo->toucher.dmgFlags;
                 if ((this->flameCollider.info.acHitInfo->toucher.dmgFlags & 0x820) != 0) {
-                    phi_t0 = 1;
+                    interactionType = 1;
                 }
             } else if (player->itemActionParam == 7) {
                 Vec3f posDiffFromSword;
 
                 Math_Vec3f_Diff(&player->swordInfo[0].tip, &thisx->world.pos, &posDiffFromSword);
                 posDiffFromSword.y -= 67.0f;
-                if (SQXYZ(posDiffFromSword) < 400.0f) {
-                    phi_t0 = -1;
+                if (SQXYZ(posDiffFromSword) < SQ(20.0f)) {
+                    interactionType = -1;
                 }
             }
-            if (phi_t0 != 0) {
-                if (this->unk_1DC != 0) {
-                    if (phi_t0 < 0) {
+            if (interactionType != 0) {
+                if (this->litTimer != 0) {
+                    if (interactionType < 0) {
                         if (player->unk_B28 == 0) {
                             player->unk_B28 = 0xD2;
                             func_8019F1C0(&thisx->projectedPos, 0x2822);
@@ -204,38 +208,39 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                         }
                     } else if (flameColliderHurtboxDmgFlags & 0x20) {
                         Actor* flameColliderHurtboxActor = this->flameCollider.base.ac;
+
                         if ((flameColliderHurtboxActor->update != NULL) &&
                             (flameColliderHurtboxActor->id == ACTOR_EN_ARROW)) {
+
                             flameColliderHurtboxActor->params = 0;
                             ((EnArrow*)flameColliderHurtboxActor)->unk_1C0 = 0x800;
                         }
                     }
-                    if (this->unk_1DC >= 0) {
-                        if ((this->unk_1DC < ((groupSize * 50) + 100)) &&
-                            (type != OBJ_SYOKUDAI_TYPE_SWITCH_CAUSES_FLAME)) {
-                            this->unk_1DC = (groupSize * 50) + 100;
-                        }
+                    if ((this->litTimer >= 0) && (this->litTimer < ((groupSize * 50) + 100)) &&
+                        (type != OBJ_SYOKUDAI_TYPE_SWITCH_CAUSES_FLAME)) {
+
+                        this->litTimer = (groupSize * 50) + 100;
                     }
                 } else if ((type != OBJ_SYOKUDAI_TYPE_SWITCH_CAUSES_FLAME) &&
-                           (((phi_t0 > 0) && ((flameColliderHurtboxDmgFlags & 0x800) != 0)) ||
-                            ((phi_t0 < 0) && (player->unk_B28 != 0)))) {
-                    if ((phi_t0 < 0) && (player->unk_B28 < 0xC8)) {
+                           (((interactionType > 0) && ((flameColliderHurtboxDmgFlags & 0x800) != 0)) ||
+                            ((interactionType < 0) && (player->unk_B28 != 0)))) {
+                    if ((interactionType < 0) && (player->unk_B28 < 0xC8)) {
                         player->unk_B28 = 0xC8;
                     }
                     if (groupSize == 0) {
                         if ((type == OBJ_SYOKUDAI_TYPE_NO_SWITCH) && (switchFlag == 0x7F)) {
-                            this->unk_1DC = -1;
+                            this->litTimer = -1;
                         } else if (thisx->cutscene >= 0) {
-                            this->unk1DF = 1;
+                            this->pendingAction = OBJ_SYOKUDAI_PENDING_ACTION_CUTSCENE_AND_SWITCH;
                         } else {
                             Actor_SetSwitchFlag(globalCtx, switchFlag);
-                            this->unk_1DC = -1;
+                            this->litTimer = -1;
                         }
                     } else {
                         if (++sNumLitTorchesInGroup >= groupSize) {
-                            this->unk1DF = 1;
+                            this->pendingAction = OBJ_SYOKUDAI_PENDING_ACTION_CUTSCENE_AND_SWITCH;
                         } else {
-                            this->unk_1DC = (groupSize * 50) + 110;
+                            this->litTimer = (groupSize * 50) + 110;
                         }
                     }
                     func_801A5CFC(0x2822, &thisx->projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
@@ -248,23 +253,23 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->standCollider.base);
     Collider_UpdateCylinder(thisx, &this->flameCollider);
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->flameCollider.base);
-    if ((this->unk_1DC > 0) && (--this->unk_1DC == 0) && (type != OBJ_SYOKUDAI_TYPE_SWITCH_CAUSES_FLAME)) {
+    if ((this->litTimer > 0) && (--this->litTimer == 0) && (type != OBJ_SYOKUDAI_TYPE_SWITCH_CAUSES_FLAME)) {
         sNumLitTorchesInGroup--;
     }
-    if (this->unk_1DC != 0) {
+    if (this->litTimer != 0) {
         s32 pad2;
 
-        if ((this->unk_1DC < 0) || (this->unk_1DC >= 20)) {
-            sp5C = 0xFA;
+        if ((this->litTimer < 0) || (this->litTimer >= 20)) {
+            lightRadius = 0xFA;
         } else {
-            sp5C = ((this->unk_1DC * 250.0f) / 20.0f);
+            lightRadius = ((this->litTimer * 250.0f) / 20.0f);
         }
-        sp5B = Rand_ZeroOne() * 0x7F;
-        sp5B += 0x80;
+        lightIntensity = Rand_ZeroOne() * 0x7F;
+        lightIntensity += 0x80;
         func_800B9010(thisx, 0x2031);
     }
-    Lights_PointSetColorAndRadius(&this->lightInfo, sp5B, sp5B * 0.7f, 0, sp5C);
-    this->unk_1DE++;
+    Lights_PointSetColorAndRadius(&this->lightInfo, lightIntensity, lightIntensity * 0.7f, 0, lightRadius);
+    this->flameTexScroll++;
 }
 
 void ObjSyokudai_Draw(Actor* thisx, GlobalContext* globalCtx) {
@@ -277,20 +282,20 @@ void ObjSyokudai_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, sDLists[OBJ_SYOKUDAI_GET_TYPE(thisx)]);
-    if (this->unk_1DC != 0) {
+    if (this->litTimer != 0) {
         s32 groupSizeAdj = (groupSize * 50) + 100;
 
         scaleFactor = 1.0f;
-        if (groupSizeAdj < this->unk_1DC) {
-            scaleFactor = ((groupSizeAdj - this->unk_1DC) + 10) / 10.0f;
-        } else if ((this->unk_1DC > 0) && (this->unk_1DC < 20)) {
-            scaleFactor = this->unk_1DC / 20.0f;
+        if (groupSizeAdj < this->litTimer) {
+            scaleFactor = ((groupSizeAdj - this->litTimer) + 10) / 10.0f;
+        } else if ((this->litTimer > 0) && (this->litTimer < 20)) {
+            scaleFactor = this->litTimer / 20.0f;
         }
         scaleFactor *= 0.0027f;
         func_8012C2DC(globalCtx->state.gfxCtx);
         gSPSegment(POLY_XLU_DISP++, 0x08,
-                   Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, (this->unk_1DE * -20) & 0x1FF,
-                                    0x20, 0x80));
+                   Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0,
+                                    (this->flameTexScroll * -20) & 0x1FF, 0x20, 0x80));
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 0, 255);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
         SysMatrix_InsertTranslation(0.0f, 52.0f, 0.0f, MTXMODE_APPLY);
