@@ -220,7 +220,7 @@ typedef struct {
     /* 0x7 */ u8 unk7;
 } FireObjLightParams; // size = 0x8
 
-//! @TODO: Make this use `sizeof(AnyFontTextureSymbol)`
+//! TODO: Make this use `sizeof(AnyFontTextureSymbol)`
 #define FONT_CHAR_TEX_SIZE ((16 * 16) / 2)
 
 // Font textures are loaded into here
@@ -1551,7 +1551,7 @@ struct GlobalContext {
     /* 0x18760 */ DoorContext doorCtx;
     /* 0x18768 */ void (*playerInit)(Player* player, struct GlobalContext* globalCtx, FlexSkeletonHeader* skelHeader);
     /* 0x1876C */ void (*playerUpdate)(Player* player, struct GlobalContext* globalCtx, Input* input);
-    /* 0x18770 */ void* unk_18770; //! @TODO: Determine function prototype
+    /* 0x18770 */ void* unk_18770; //! TODO: Determine function prototype
     /* 0x18774 */ s32 (*startPlayerFishing)(struct GlobalContext* globalCtx);
     /* 0x18778 */ s32 (*grabPlayer)(struct GlobalContext* globalCtx, Player* player);
     /* 0x1877C */ s32 (*startPlayerCutscene)(struct GlobalContext* globalCtx, Player* player, s32 mode);
@@ -1559,8 +1559,8 @@ struct GlobalContext {
     /* 0x18784 */ s32 (*damagePlayer)(struct GlobalContext* globalCtx, s32 damage);
     /* 0x18788 */ void (*talkWithPlayer)(struct GlobalContext* globalCtx, Actor* actor);
     /* 0x1878C */ void (*unk_1878C)(struct GlobalContext* globalCtx);
-    /* 0x18790 */ void* unk_18790; //! @TODO: Determine function prototype
-    /* 0x18794 */ void* unk_18794; //! @TODO: Determine function prototype
+    /* 0x18790 */ void* unk_18790; //! TODO: Determine function prototype
+    /* 0x18794 */ void* unk_18794; //! TODO: Determine function prototype
     /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct GlobalContext* globalCtx, void* talkAnim, s32 arg2);
     /* 0x1879C */ s16 unk_1879C[10];
     /* 0x187B0 */ MtxF projectionMatrix;

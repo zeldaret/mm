@@ -81,7 +81,7 @@ typedef enum {
     /* 2 */ ENSOB1_CUTSCENESTATE_PLAYING
 } EnSob1CutsceneState;
 
-//! @TODO: Add enum for objIndices index based on what the object is for
+//! TODO: Add enum for objIndices index based on what the object is for
 
 extern const ActorInit En_Sob1_InitVars;
 
