@@ -228,7 +228,8 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                         this->litTimer = (groupSize * 50) + 100;
                     }
                 } else if ((type != OBJ_SYOKUDAI_TYPE_SWITCH_CAUSES_FLAME) &&
-                           (((interaction > OBJ_SYOKUDAI_INTERACTION_NONE) && ((flameColliderHurtboxDmgFlags & 0x800) != 0)) ||
+                           (((interaction > OBJ_SYOKUDAI_INTERACTION_NONE) &&
+                             ((flameColliderHurtboxDmgFlags & 0x800) != 0)) ||
                             ((interaction < OBJ_SYOKUDAI_INTERACTION_NONE) && (player->unk_B28 != 0)))) {
                     if ((interaction < OBJ_SYOKUDAI_INTERACTION_NONE) && (player->unk_B28 < 0xC8)) {
                         player->unk_B28 = 0xC8;
