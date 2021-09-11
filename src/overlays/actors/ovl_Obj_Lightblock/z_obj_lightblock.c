@@ -169,8 +169,8 @@ void func_80AF3C34(ObjLightblock* this, GlobalContext* globalCtx) {
         temp_a0 = this->dyna.actor.cutscene;
         ActorCutscene_Stop(temp_a0);
         Actor_MarkForDeath(&this->dyna.actor);
-    } else if (this->timer < 61) {
-        if (this->alpha >= 41) {
+    } else if (this->timer <= 60) {
+        if (this->alpha > 40) {
             this->alpha -= 40;
         } else {
             this->alpha = 0;
