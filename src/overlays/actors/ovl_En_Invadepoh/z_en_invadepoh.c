@@ -4002,21 +4002,15 @@ void func_80B4C730(EnInvadepoh* this, GlobalContext* globalCtx) {
     Vec3f sp4C;
     Vec3f sp40;
     s16 diff;
-    s8 temp_v1;
+    s16 pad;
     s16 sp3A;
-    s8 temp_v0;
+    s16 pad2;
 
     func_80B44700(this);
     func_80B44EFC(this, globalCtx);
     func_80B43E6C(this, 6, 2000, 100);
-    if (1) {}
-    temp_v1 = this->pathIndex;
-    temp_v0 = this->endPoint;
-    phi_a2 = temp_v0 - 1;
-    if (temp_v1 < temp_v0) {
-        phi_a2 = temp_v1;
-    } else if (temp_v1_3) {
-    }
+
+    phi_a2 = ((this->pathIndex < this->endPoint) ? this->pathIndex : this->endPoint - 1 );
 
     Math_Vec3s_ToVec3f(&sp4C, &this->pathPoints[phi_a2]);
     Math_Vec3s_ToVec3f(&sp40, &this->pathPoints[phi_a2 + 1]);
@@ -4039,7 +4033,7 @@ void func_80B4C730(EnInvadepoh* this, GlobalContext* globalCtx) {
     temp_v1_3 = globalCtx->gameplayFrames % 128;
     if ((temp_v1_3 & 0x40) != 0) {
         sp3A = Math_Vec3f_Yaw(&this->actor.world.pos, &sp68->actor.world.pos);
-        if (temp_v1_3 == 64) {
+        if (temp_v1_3 == 0x40) {
             this->behaviorInfo.unk4C = 0;
         }
 

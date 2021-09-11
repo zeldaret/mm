@@ -341,7 +341,7 @@ void Scene_HeaderCmdEnvLightSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
  * Loads different texture files for each region of the world.
  * These later are stored in segment 0x06, and used in maps.
  */
-s32 Scene_LoadAreaTextures(GlobalContext* globalCtx, s32 fileIndex) {
+void Scene_LoadAreaTextures(GlobalContext* globalCtx, s32 fileIndex) {
     static RomFile sceneTextureFiles[9] = {
         { 0, 0 }, // Default
         { (u32)_scene_texture_01SegmentRomStart, (u32)_scene_texture_01SegmentRomEnd },
@@ -358,10 +358,8 @@ s32 Scene_LoadAreaTextures(GlobalContext* globalCtx, s32 fileIndex) {
 
     if (size != 0) {
         globalCtx->roomCtx.unk74 = THA_AllocEndAlign16(&globalCtx->state.heap, size);
-        return DmaMgr_SendRequest0(globalCtx->roomCtx.unk74, vromStart, size);
+        DmaMgr_SendRequest0(globalCtx->roomCtx.unk74, vromStart, size);
     }
-
-    // UB: Undefined behaviour to not have a return statement here, but it breaks matching to add one.
 }
 
 // SceneTableEntry Header Command 0x11: Skybox Settings

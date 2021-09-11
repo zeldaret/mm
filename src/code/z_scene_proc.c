@@ -241,7 +241,7 @@ f32 Scene_LagrangeInterp(s32 n, f32 x[], f32 fx[], f32 xp) {
     s32 i;
     s32 j;
 
-    for (i = 0, weightsPtr = weights, xPtr1 = x, fxPtr = fx, weightsPtr = weightsPtr; i < n; i++) {
+    for (i = 0, xPtr1 = x, fxPtr = fx, weightsPtr = weights; i < n; i++) {
         for (xVal = *xPtr1, m = 1.0f, j = 0, xPtr2 = x; j < n; j++) {
             if (j != i) {
                 m *= xVal - (*xPtr2);

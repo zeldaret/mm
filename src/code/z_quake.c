@@ -607,7 +607,7 @@ void Quake2_Update(void) {
             sQuake2Context.countdown = 2;
             player = PLAYER;
 
-            if (&player->actor != NULL) {
+            if (player != NULL) {
                 func_800B8248(&playerPosRot, player);
             }
 

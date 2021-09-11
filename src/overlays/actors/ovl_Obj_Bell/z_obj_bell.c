@@ -126,8 +126,6 @@ s32 func_80A35510(ObjBell* this, s32 arg1) {
 
     if (((arg1 == 0) && (this->unk_21C < 1000.0f)) || ((arg1 == 1) && (this->unk_21C < 4000.0f)) || (arg1 == 2)) {
         phi_a3 = true;
-    } else {
-        phi_a3 = phi_a3;
     }
 
     switch (arg1) {

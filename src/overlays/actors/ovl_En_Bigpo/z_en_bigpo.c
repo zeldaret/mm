@@ -784,7 +784,6 @@ void EnBigpo_AdjustPoAlpha(EnBigpo* this, s32 alphaDiff) {
         this->actor.scale.x = newXYScale;
         this->actor.scale.z = newXYScale;
         this->actor.scale.y = (0.007f - (0.007f * lowerAlpha)) + 0.007f;
-        lowerAlpha = lowerAlpha;
     } else {
         Actor_SetScale(&this->actor, lowerAlpha * 0.007f);
         this->actor.world.pos.y = this->savedHeight + (lowerAlpha * 15.0f);
