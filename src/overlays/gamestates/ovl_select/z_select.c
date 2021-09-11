@@ -210,11 +210,12 @@ void func_80800930(SelectContext* this, u32 arg1, s32 arg2) {
     SET_NEXT_GAMESTATE(&this->state, Play_Init, GlobalContext);
 }
 
-#ifdef NON_MATCHING
+// Select_UpdateMenu
 void func_80800A44(SelectContext* this) {
+    s32 phi_v1_2;
     Input* controller1;
-    s32 pad;
-    s32 pad2[2];
+    s32 stick_y;
+    s32 pad[2];
     s16 phi_v1;
     s32 sp20;
 
@@ -239,7 +240,6 @@ void func_80800A44(SelectContext* this) {
         }
 
         if (CHECK_BTN_ALL(controller1->press.button, BTN_B)) {
-            s32 phi_v1_2;
 
             phi_v1_2 = gSaveContext.playerForm - 1;
             if (phi_v1_2 < 0) {
@@ -335,8 +335,9 @@ void func_80800A44(SelectContext* this) {
         }
 
         sp20 = R_UPDATE_RATE;
-        if (controller1->rel.stick_y != 0) {
-            this->unk_260 = (sp20 * controller1->rel.stick_y) / 7;
+        stick_y = controller1->rel.stick_y;
+        if (stick_y != 0) {
+            this->unk_260 = (sp20 * stick_y) / 7;
         } else {
             if (CHECK_BTN_ALL(controller1->press.button, BTN_DUP)) {
                 if (this->unk_26C == 1) {
@@ -442,10 +443,6 @@ void func_80800A44(SelectContext* this) {
         this->unk_270 = 0;
     }
 }
-#else
-void func_80800A44(SelectContext* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_select/func_80800A44.s")
-#endif
 
 // Select_PrintMenu
 void func_808013B8(SelectContext* this, GfxPrint* printer) {
