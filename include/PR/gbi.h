@@ -1749,14 +1749,15 @@ _DW({									\
 #define	gSPSprite2DBase(pkt, s)	gDma1p(pkt, G_SPRITE2D_BASE, s, sizeof(uSprite), 0)
 #define	gsSPSprite2DBase(s)	gsDma1p(G_SPRITE2D_BASE, s, sizeof(uSprite), 0)
 
+// _gI prevents shadowing
 /*
  * RSP short command (no DMA required) macros
  */
 #define	gImmp0(pkt, c)							\
 {									\
-	Gfx *_g = (Gfx *)(pkt);						\
+	Gfx *_gI = (Gfx *)(pkt);						\
 									\
-	_g->words.w0 = _SHIFTL((c), 24, 8);				\
+	_gI->words.w0 = _SHIFTL((c), 24, 8);				\
 }
 
 #define	gsImmp0(c)							\
@@ -1766,10 +1767,10 @@ _DW({									\
 
 #define	gImmp1(pkt, c, p0)						\
 _DW({									\
-	Gfx *_g = (Gfx *)(pkt);						\
+	Gfx *_gI = (Gfx *)(pkt);						\
 									\
-	_g->words.w0 = _SHIFTL((c), 24, 8);				\
-	_g->words.w1 = (unsigned int)(p0);				\
+	_gI->words.w0 = _SHIFTL((c), 24, 8);				\
+	_gI->words.w1 = (unsigned int)(p0);				\
 })
 
 #define	gsImmp1(c, p0)							\
@@ -1779,10 +1780,10 @@ _DW({									\
 
 #define	gImmp2(pkt, c, p0, p1)						\
 {									\
-	Gfx *_g = (Gfx *)(pkt);						\
+	Gfx *_gI = (Gfx *)(pkt);						\
 									\
-	_g->words.w0 = _SHIFTL((c), 24, 8);				\
-	_g->words.w1 = _SHIFTL((p0), 16, 16) | _SHIFTL((p1), 8, 8);	\
+	_gI->words.w0 = _SHIFTL((c), 24, 8);				\
+	_gI->words.w1 = _SHIFTL((p0), 16, 16) | _SHIFTL((p1), 8, 8);	\
 }
 
 #define	gsImmp2(c, p0, p1)						\
@@ -1792,10 +1793,10 @@ _DW({									\
 
 #define	gImmp3(pkt, c, p0, p1, p2)					\
 {									\
-	Gfx *_g = (Gfx *)(pkt);						\
+	Gfx *_gI = (Gfx *)(pkt);						\
 									\
-	_g->words.w0 = _SHIFTL((c), 24, 8);				\
-	_g->words.w1 = (_SHIFTL((p0), 16, 16) | _SHIFTL((p1), 8, 8) |	\
+	_gI->words.w0 = _SHIFTL((c), 24, 8);				\
+	_gI->words.w1 = (_SHIFTL((p0), 16, 16) | _SHIFTL((p1), 8, 8) |	\
 			_SHIFTL((p2), 0, 8));				\
 }
 
@@ -1807,11 +1808,11 @@ _DW({									\
 
 #define	gImmp21(pkt, c, p0, p1, dat)					\
 _DW({									\
-	Gfx *_g = (Gfx *)(pkt);						\
+	Gfx *_gI = (Gfx *)(pkt);						\
 									\
-	_g->words.w0 = (_SHIFTL((c), 24, 8)  | _SHIFTL((p0), 8, 16) |	\
+	_gI->words.w0 = (_SHIFTL((c), 24, 8)  | _SHIFTL((p0), 8, 16) |	\
 			_SHIFTL((p1), 0, 8));				\
-	_g->words.w1 = (unsigned int) (dat);				\
+	_gI->words.w1 = (unsigned int) (dat);				\
 })
 
 #define	gsImmp21(c, p0, p1, dat)					\

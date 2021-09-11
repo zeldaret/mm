@@ -428,7 +428,7 @@ s32 func_8013FD74(View* view) {
 
     gDPPipeSync(OVERLAY_DISP++);
     {
-        s32 pad;
+        s32 pad2;
         Gfx* overlay;
 
         overlay = OVERLAY_DISP;
