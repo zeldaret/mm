@@ -195,11 +195,11 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                     interaction = OBJ_SYOKUDAI_INTERACTION_ARROW_FA;
                 }
             } else if (player->itemActionParam == 7) {
-                Vec3f posDiffFromStick;
+                Vec3f posDiffFromStickTip;
 
-                Math_Vec3f_Diff(&player->swordInfo[0].tip, &thisx->world.pos, &posDiffFromStick);
-                posDiffFromStick.y -= 67.0f;
-                if (SQXYZ(posDiffFromStick) < SQ(20.0f)) {
+                Math_Vec3f_Diff(&player->swordInfo[0].tip, &thisx->world.pos, &posDiffFromStickTip);
+                posDiffFromStickTip.y -= 67.0f;
+                if (SQXYZ(posDiffFromStickTip) < SQ(20.0f)) {
                     interaction = OBJ_SYOKUDAI_INTERACTION_STICK;
                 }
             }
