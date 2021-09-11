@@ -222,7 +222,6 @@ void func_80800A44(SelectContext* this) {
     controller1 = CONTROLLER1(this);
 
     if (this->unk_25C == 0) {
-
         if (CHECK_BTN_ALL(controller1->press.button, BTN_A) || CHECK_BTN_ALL(controller1->press.button, BTN_START)) {
             for (phi_v1 = 0; phi_v1 < ARRAY_COUNT(gSaveContext.unk_3EC0); phi_v1++) {
                 gSaveContext.unk_3DD0[phi_v1] = 0;
@@ -234,8 +233,8 @@ void func_80800A44(SelectContext* this) {
             }
             gSaveContext.minigameState = 0;
 
-            if (this->scenes[this->unk_218].loadFunc != NULL) {
-                this->scenes[this->unk_218].loadFunc(this, this->scenes[this->unk_218].entranceIndex, this->unk_248);
+            if (this->scenes[this->currentScene].loadFunc != NULL) {
+                this->scenes[this->currentScene].loadFunc(this, this->scenes[this->currentScene].entranceIndex, this->opt);
             }
         }
 
@@ -315,11 +314,12 @@ void func_80800A44(SelectContext* this) {
             gSaveContext.isNight = true;
         }
 
+        // user can change "opt", but it doesn't do anything
         if (CHECK_BTN_ALL(controller1->press.button, BTN_CUP)) {
-            this->unk_248 += -1;
+            this->opt--;
         }
         if (CHECK_BTN_ALL(controller1->press.button, BTN_CDOWN)) {
-            this->unk_248 += 1;
+            this->opt++;
         }
 
         if (CHECK_BTN_ALL(controller1->press.button, BTN_CLEFT)) {
@@ -344,7 +344,7 @@ void func_80800A44(SelectContext* this) {
                     this->unk_264 = 0;
                 }
                 if (this->unk_264 == 0) {
-                    this->unk_264 = 0x14;
+                    this->unk_264 = 20;
                     this->unk_26C = 1;
 
                     play_sound(0x1800);
@@ -362,7 +362,7 @@ void func_80800A44(SelectContext* this) {
                     this->unk_268 = 0;
                 }
                 if (this->unk_268 == 0) {
-                    this->unk_268 = 0x14;
+                    this->unk_268 = 20;
                     this->unk_270 = 1;
                     play_sound(0x1800);
                     this->unk_260 = -sp20;
@@ -387,8 +387,8 @@ void func_80800A44(SelectContext* this) {
 
     if (CHECK_BTN_ALL(controller1->press.button, BTN_L)) {
         this->unk_21C++;
-        this->unk_21C = (this->unk_21C + 7) % 7;
-        this->unk_218 = this->unk_24C = this->unk_220[this->unk_21C];
+        this->unk_21C = (this->unk_21C + ARRAY_COUNT(this->unk_220)) % ARRAY_COUNT(this->unk_220);
+        this->currentScene = this->unk_24C = this->unk_220[this->unk_21C];
     }
 
     this->unk_25C += this->unk_260;
@@ -397,35 +397,35 @@ void func_80800A44(SelectContext* this) {
         this->unk_260 = 0;
         this->unk_25C = 0;
 
-        this->unk_218++;
-        this->unk_218 = (this->unk_218 + this->unk_210) % this->unk_210;
+        this->currentScene++;
+        this->currentScene = (this->currentScene + this->count) % this->count;
 
-        if (this->unk_218 == ((this->unk_24C + this->unk_210 + 0x13) % this->unk_210)) {
+        if (this->currentScene == ((this->unk_24C + this->count + 0x13) % this->count)) {
             this->unk_24C++;
-            this->unk_24C = (this->unk_24C + this->unk_210) % this->unk_210;
+            this->unk_24C = (this->unk_24C + this->count) % this->count;
         }
     }
 
     if (this->unk_25C >= 8) {
         this->unk_260 = 0;
         this->unk_25C = 0;
-        if (this->unk_218 == this->unk_24C) {
+        if (this->currentScene == this->unk_24C) {
             this->unk_24C -= 2;
-            this->unk_24C = (this->unk_24C + this->unk_210) % this->unk_210;
+            this->unk_24C = (this->unk_24C + this->count) % this->count;
         }
 
-        this->unk_218--;
-        this->unk_218 = (this->unk_218 + this->unk_210) % this->unk_210;
-        if (this->unk_218 == ((this->unk_24C + this->unk_210) % this->unk_210)) {
+        this->currentScene--;
+        this->currentScene = (this->currentScene + this->count) % this->count;
+        if (this->currentScene == ((this->unk_24C + this->count) % this->count)) {
             this->unk_24C--;
-            this->unk_24C = (this->unk_24C + this->unk_210) % this->unk_210;
+            this->unk_24C = (this->unk_24C + this->count) % this->count;
         }
     }
 
-    this->unk_218 = (this->unk_218 + this->unk_210) % this->unk_210;
-    this->unk_24C = (this->unk_24C + this->unk_210) % this->unk_210;
+    this->currentScene = (this->currentScene + this->count) % this->count;
+    this->unk_24C = (this->unk_24C + this->count) % this->count;
 
-    gGameInfo->data[2576] = this->unk_218;
+    gGameInfo->data[2576] = this->currentScene;
     gGameInfo->data[2577] = this->unk_24C;
     gGameInfo->data[2578] = this->unk_21C;
 
@@ -458,8 +458,8 @@ void func_808013B8(SelectContext* this, GfxPrint* printer) {
         char* sceneName;
 
         GfxPrint_SetPos(printer, 9, i + 4);
-        sceneIndex = (this->unk_24C + i + this->unk_210) % this->unk_210;
-        if (sceneIndex == this->unk_218) {
+        sceneIndex = (this->unk_24C + i + this->count) % this->count;
+        if (sceneIndex == this->currentScene) {
             GfxPrint_SetColor(printer, 255, 20, 20, 255);
         } else {
             GfxPrint_SetColor(printer, 200, 200, 55, 255);
@@ -474,7 +474,7 @@ void func_808013B8(SelectContext* this, GfxPrint* printer) {
 
     GfxPrint_SetColor(printer, 155, 55, 150, 255);
     GfxPrint_SetPos(printer, 20, 26);
-    GfxPrint_Printf(printer, "OPT=%d", this->unk_248);
+    GfxPrint_Printf(printer, "OPT=%d", this->opt);
 }
 
 // clang-format off
@@ -712,21 +712,21 @@ void Select_Init(GameState* thisx) {
 
     this->scenes = D_80801C80;
     this->unk_24C = 0;
-    this->unk_218 = 0;
+    this->currentScene = 0;
     this->unk_220[0] = 0;
-    this->unk_220[1] = 0x13;
-    this->unk_220[2] = 0x25;
-    this->unk_220[3] = 0x33;
-    this->unk_220[4] = 0x3B;
-    this->unk_220[5] = 0x49;
-    this->unk_220[6] = 0x5B;
+    this->unk_220[1] = 19;
+    this->unk_220[2] = 37;
+    this->unk_220[3] = 51;
+    this->unk_220[4] = 59;
+    this->unk_220[5] = 73;
+    this->unk_220[6] = 91;
     this->unk_21C = 0;
-    this->unk_248 = 0;
-    this->unk_210 = 0x8F;
+    this->opt = 0;
+    this->count = ARRAY_COUNT(D_80801C80);
 
     ShrinkWindow_Init();
     View_Init(&this->view, this->state.gfxCtx);
-    this->view.flags = 0xA;
+    this->view.flags = (0x08 | 0x02);
     this->unk_25C = 0;
     this->unk_260 = 0;
     this->unk_264 = 0;
@@ -735,8 +735,8 @@ void Select_Init(GameState* thisx) {
     this->unk_270 = 0;
     this->unk_274 = 0;
 
-    if ((dREG(80) >= 0) && (dREG(80) < this->unk_210)) {
-        this->unk_218 = dREG(80);
+    if ((dREG(80) >= 0) && (dREG(80) < this->count)) {
+        this->currentScene = dREG(80);
         this->unk_24C = dREG(81);
         this->unk_21C = dREG(82);
     }
