@@ -30,7 +30,9 @@ const ActorInit Dm_Nb_InitVars = {
 extern AnimationHeader D_06000990;
 extern FlexSkeletonHeader D_06008C40;
 
-static ActorAnimationEntryS D_80C1E200[] = { &D_06000990, 1.0f, 0, -1, 0, 0 };
+static ActorAnimationEntryS D_80C1E200[] = {
+    { &D_06000990, 1.0f, 0, -1, 0, 0 },
+};
 
 s32 func_80C1DED0(DmNb* this, s32 arg1) {
     s32 ret = 0;

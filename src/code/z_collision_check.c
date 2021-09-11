@@ -3877,7 +3877,7 @@ void CollisionCheck_SpawnShieldParticles(GlobalContext* globalCtx, Vec3f* v) {
         35.0f,
         30.0f,
         8,
-        { 0, 0, 0, 0, 128, 255, 0, 300 },
+        { 0, 0, 0, { 0, 128, 255 }, 0, 300 },
         1,
     };
     s32 effectIndex;
@@ -3932,7 +3932,7 @@ void CollisionCheck_SpawnShieldParticlesWood(GlobalContext* globalCtx, Vec3f* v,
         35.0f,
         30.0f,
         8,
-        { 0, 0, 0, 0, 128, 255, 0, 300 },
+        { 0, 0, 0, { 0, 128, 255 }, 0, 300 },
         0,
     };
     s32 effectIndex;

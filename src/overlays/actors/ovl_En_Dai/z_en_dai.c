@@ -388,13 +388,13 @@ s32 func_80B3EC84(EnDai* this) {
 
 s32 func_80B3ED88(EnDai* this) {
     static f32 D_80B3FDE8[] = { 22.0f, 0.0f, 0.0f };
-
     static f32 D_80B3FDF4[] = { 29.0f, 3.0f, 9.0f };
-
     static s16 D_80B3FE00[] = { 1, 2, 3 };
-
     static Vec3f D_80B3FE08[] = {
-        1.0f, 1.0f, 1.0f, 1.0f, 1.2f, 1.2f, 1.0f, 0.7f, 0.8f, 1.0f, 1.0f, 1.0f,
+        { 1.0f, 1.0f, 1.0f },
+        { 1.0f, 1.2f, 1.2f },
+        { 1.0f, 0.7f, 0.8f },
+        { 1.0f, 1.0f, 1.0f },
     };
 
     s32 i;
