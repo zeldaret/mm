@@ -1,5 +1,5 @@
-#ifndef _MACROS_H_
-#define _MACROS_H_
+#ifndef MACROS_H
+#define MACROS_H
 
 #include "convert.h"
 #include "stdint.h"
@@ -123,4 +123,4 @@
         (b) = _temp;      \
     }
 
-#endif // _MACROS_H_
+#endif // MACROS_H

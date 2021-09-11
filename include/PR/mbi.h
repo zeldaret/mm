@@ -1,5 +1,5 @@
-#ifndef _MBI_H_
-#define	_MBI_H_
+#ifndef MBI_H
+#define	MBI_H
 
 /**************************************************************************
  *									  *
@@ -95,4 +95,4 @@
 #define NULL 0
 #endif
 
-#endif /* !_MBI_H_ */
+#endif /* !MBI_H */

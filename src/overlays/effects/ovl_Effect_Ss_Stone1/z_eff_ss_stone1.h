@@ -1,5 +1,5 @@
-#ifndef _Z64_EFFECT_SS_STONE1_H_
-#define _Z64_EFFECT_SS_STONE1_H_
+#ifndef Z64_EFFECT_SS_STONE1_H
+#define Z64_EFFECT_SS_STONE1_H
 
 #include "global.h"
 

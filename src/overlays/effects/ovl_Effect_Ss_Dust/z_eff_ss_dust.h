@@ -1,5 +1,5 @@
-#ifndef _Z64_EFFECT_SS_DUST_H_
-#define _Z64_EFFECT_SS_DUST_H_
+#ifndef Z64_EFFECT_SS_DUST_H
+#define Z64_EFFECT_SS_DUST_H
 
 #include "global.h"
 

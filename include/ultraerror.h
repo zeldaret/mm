@@ -1,6 +1,6 @@
-#ifndef _ULTRAERROR_H_
-#define _ULTRAERROR_H_
+#ifndef ULTRAERROR_H
+#define ULTRAERROR_H
 
-typedef void (*OSErrorHandler)(/* ECOFF does not store param types */);
+typedef void (*OSErrorHandler)(void /* ECOFF does not store param types */);
 
 #endif

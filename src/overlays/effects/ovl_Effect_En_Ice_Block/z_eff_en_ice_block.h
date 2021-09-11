@@ -1,5 +1,5 @@
-#ifndef _Z64_EFFECT_EN_ICE_BLOCK_H_
-#define _Z64_EFFECT_EN_ICE_BLOCK_H_
+#ifndef Z64_EFFECT_EN_ICE_BLOCK_H
+#define Z64_EFFECT_EN_ICE_BLOCK_H
 
 #include "global.h"
 

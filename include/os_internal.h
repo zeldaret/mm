@@ -1,5 +1,5 @@
-#ifndef _OS_INTERNAL_H_
-#define _OS_INTERNAL_H_
+#ifndef OS_INTERNAL_H
+#define OS_INTERNAL_H
 
 typedef struct  {
     /* 0x00 */ OSMesgQueue* queue;

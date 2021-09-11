@@ -1,5 +1,5 @@
-#ifndef _Z64_EFFECT_SS_G_SPLASH_H_
-#define _Z64_EFFECT_SS_G_SPLASH_H_
+#ifndef Z64_EFFECT_SS_G_SPLASH_H
+#define Z64_EFFECT_SS_G_SPLASH_H
 
 #include "global.h"
 

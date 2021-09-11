@@ -1,4 +1,4 @@
-#ifndef _BSTRING_H_
-#define _BSTRING_H_
+#ifndef BSTRING_H
+#define BSTRING_H
 
 #endif

@@ -1,5 +1,5 @@
-#ifndef _INITVARS_H_
-#define _INITVARS_H_
+#ifndef INITVARS_H
+#define INITVARS_H
 
 extern ActorInit Arms_Hook_InitVars;
 extern ActorInit Arrow_Fire_InitVars;

@@ -1,5 +1,5 @@
-#ifndef _OSINT_H_
-#define _OSINT_H_
+#ifndef OSINT_H
+#define OSINT_H
 
 // TODO should be in libultra/os
 

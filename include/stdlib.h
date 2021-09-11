@@ -1,5 +1,5 @@
-#ifndef _STDLIB_H_
-#define _STDLIB_H_
+#ifndef STDLIB_H
+#define STDLIB_H
 
 typedef struct {
     /* 0x0 */ int quot;

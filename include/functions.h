@@ -1,5 +1,5 @@
-#ifndef _FUNCTIONS_H_
-#define _FUNCTIONS_H_
+#ifndef FUNCTIONS_H
+#define FUNCTIONS_H
 
 #include "z64.h"
 
@@ -1904,7 +1904,7 @@ void Lights_BindPointWithReference(Lights* lights, LightParams* params, Vec3f* p
 void Lights_BindPoint(Lights* lights, LightParams* params, GlobalContext* globalCtx);
 void Lights_BindDirectional(Lights* lights, LightParams* params, void* unused);
 void Lights_BindAll(Lights* lights, LightNode* listHead, Vec3f* refPos, GlobalContext* globalCtx);
-LightNode* Lights_FindBufSlot();
+LightNode* Lights_FindBufSlot(void);
 void Lights_FreeNode(LightNode* light);
 void LightContext_Init(GlobalContext* globalCtx, LightContext* lightCtx);
 void LightContext_SetAmbientColor(LightContext* lightCtx, u8 r, u8 g, u8 b);
@@ -3465,7 +3465,7 @@ void func_80183070(void);
 // void func_80185460(void);
 //void Slowly_Main(SlowlyTask* slowly);
 //void Slowly_ThreadEntry(SlowlyTask* slowly);
-void Slowly_Start(SlowlyTask* slowly, void* stack, void (*callback)(), void* callbackArg0, void* callbackArg1);
+void Slowly_Start(SlowlyTask* slowly, void* stack, void (*callback)(void), void* callbackArg0, void* callbackArg1);
 void Slowly_Stop(SlowlyTask* slowly);
 // void func_801857C0(void);
 // char* func_801857D0(void);

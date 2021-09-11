@@ -1,5 +1,5 @@
-#ifndef _Z64ACTOR_H_
-#define _Z64ACTOR_H_
+#ifndef Z64ACTOR_H
+#define Z64ACTOR_H
 
 #include "PR/ultratypes.h"
 #include "z64math.h"

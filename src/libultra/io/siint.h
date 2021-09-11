@@ -1,4 +1,4 @@
-#ifndef _SIINT_H_
-#define _SIINT_H_
+#ifndef SIINT_H
+#define SIINT_H
 
 #endif

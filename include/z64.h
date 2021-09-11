@@ -1,5 +1,5 @@
-#ifndef _Z64_H_
-#define _Z64_H_
+#ifndef Z64_H
+#define Z64_H
 
 #include "stdarg.h"
 #include "stdbool.h"

@@ -1,5 +1,5 @@
-#ifndef _VIINT_H_
-#define _VIINT_H_
+#ifndef VIINT_H
+#define VIINT_H
 
 // TODO should be in libultra/io
 

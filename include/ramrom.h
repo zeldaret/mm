@@ -1,5 +1,5 @@
-#ifndef _RAMROM_H_
-#define _RAMROM_H_
+#ifndef RAMROM_H
+#define RAMROM_H
 
 #include "PR/ultratypes.h"
 

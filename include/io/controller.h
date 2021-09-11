@@ -1,5 +1,5 @@
-#ifndef _CONTROLLER_H_
-#define _CONTROLLER_H_
+#ifndef CONTROLLER_H
+#define CONTROLLER_H
 
 #include "PR/ultratypes.h"
 #include "PR/pfs.h"

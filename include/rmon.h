@@ -1,4 +1,4 @@
-#ifndef _RMON_H_
-#define _RMON_H_
+#ifndef RMON_H
+#define RMON_H
 
 #endif

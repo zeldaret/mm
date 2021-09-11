@@ -1,5 +1,5 @@
-#ifndef _Z64_EFFECT_SS_G_SPK_H_
-#define _Z64_EFFECT_SS_G_SPK_H_
+#ifndef Z64_EFFECT_SS_G_SPK_H
+#define Z64_EFFECT_SS_G_SPK_H
 
 #include "global.h"
 

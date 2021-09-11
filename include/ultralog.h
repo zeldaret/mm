@@ -1,5 +1,5 @@
-#ifndef _ULTRALOG_H_
-#define _ULTRALOG_H_
+#ifndef ULTRALOG_H
+#define ULTRALOG_H
 
 #include "PR/ultratypes.h"
 

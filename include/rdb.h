@@ -1,5 +1,5 @@
-#ifndef _RDB_H_
-#define _RDB_H_
+#ifndef RDB_H
+#define RDB_H
 
 typedef struct {
     /* 0x0 */ unsigned int type : 2;

@@ -1,4 +1,4 @@
-#ifndef _ASSERT_H_
-#define _ASSERT_H_
+#ifndef ASSERT_H
+#define ASSERT_H
 
 #endif

@@ -1,5 +1,5 @@
-#ifndef _Z64_OPENING_H_
-#define _Z64_OPENING_H_
+#ifndef Z64_OPENING_H
+#define Z64_OPENING_H
 
 #include "global.h"
 

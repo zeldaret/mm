@@ -1,5 +1,5 @@
-#ifndef _Z_COLLISION_CHECK_H_
-#define _Z_COLLISION_CHECK_H_
+#ifndef Z_COLLISION_CHECK_H
+#define Z_COLLISION_CHECK_H
 
 #include "PR/ultratypes.h"
 #include "z64math.h"

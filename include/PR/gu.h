@@ -1,5 +1,5 @@
-#ifndef _GU_H_
-#define _GU_H_
+#ifndef GU_H
+#define GU_H
 
 typedef struct {
     /* 0x0 */ unsigned char* base;

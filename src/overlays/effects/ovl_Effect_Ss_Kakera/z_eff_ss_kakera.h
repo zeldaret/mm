@@ -1,5 +1,5 @@
-#ifndef _Z64_EFFECT_SS_KAKERA_H_
-#define _Z64_EFFECT_SS_KAKERA_H_
+#ifndef Z64_EFFECT_SS_KAKERA_H
+#define Z64_EFFECT_SS_KAKERA_H
 
 #include "global.h"
 

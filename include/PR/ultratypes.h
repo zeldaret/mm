@@ -1,5 +1,5 @@
-#ifndef _ULTRATYPES_H_
-#define _ULTRATYPES_H_
+#ifndef ULTRATYPES_H
+#define ULTRATYPES_H
 
 typedef signed char            s8;
 typedef unsigned char          u8;

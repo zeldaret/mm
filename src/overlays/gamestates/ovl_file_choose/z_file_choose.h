@@ -1,5 +1,5 @@
-#ifndef _Z64_FILE_CHOOSE_H_
-#define _Z64_FILE_CHOOSE_H_
+#ifndef Z64_FILE_CHOOSE_H
+#define Z64_FILE_CHOOSE_H
 
 #include "global.h"
 

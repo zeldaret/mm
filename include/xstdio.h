@@ -1,5 +1,5 @@
-#ifndef _XSTDIO_H_
-#define _XSTDIO_H_
+#ifndef XSTDIO_H
+#define XSTDIO_H
 #include "stdarg.h"
 
 

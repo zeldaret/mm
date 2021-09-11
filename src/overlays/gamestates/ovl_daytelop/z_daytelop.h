@@ -1,5 +1,5 @@
-#ifndef _Z64_DAYTELOP_H_
-#define _Z64_DAYTELOP_H_
+#ifndef Z64_DAYTELOP_H
+#define Z64_DAYTELOP_H
 
 #include "global.h"
 

@@ -1,5 +1,5 @@
-#ifndef _OS_H_
-#define _OS_H_
+#ifndef OS_H
+#define OS_H
 
 #include "ultra64/thread.h"
 #include "ultra64/message.h"
