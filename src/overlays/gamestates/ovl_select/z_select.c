@@ -210,18 +210,18 @@ void func_80800930(SelectContext* this, u32 arg1, s32 arg2) {
     SET_NEXT_GAMESTATE(&this->state, Play_Init, GlobalContext);
 }
 
-#ifdef NON_EQUIVALENT
+#ifdef NON_MATCHING
 void func_80800A44(SelectContext* this) {
-    s32 pad;
     Input* controller1;
-    s32 pad2;
-    s32 sp20;
-    SceneSelectEntry* temp_v0_2;
+    s32 pad;
+    s32 pad2[2];
     s16 phi_v1;
+    s32 sp20;
 
     controller1 = CONTROLLER1(this);
 
     if (this->unk_25C == 0) {
+
         if (CHECK_BTN_ALL(controller1->press.button, BTN_A) || CHECK_BTN_ALL(controller1->press.button, BTN_START)) {
             for (phi_v1 = 0; phi_v1 < ARRAY_COUNT(gSaveContext.unk_3EC0); phi_v1++) {
                 gSaveContext.unk_3DD0[phi_v1] = 0;
@@ -232,9 +232,9 @@ void func_80800A44(SelectContext* this) {
                 gSaveContext.unk_3EC0[phi_v1] = 0;
             }
             gSaveContext.minigameState = 0;
-            temp_v0_2 = &this->scenes[this->unk_218];
-            if (temp_v0_2->loadFunc != NULL) {
-                temp_v0_2->loadFunc(this, temp_v0_2->entranceIndex, this->unk_248);
+
+            if (this->scenes[this->unk_218].loadFunc != NULL) {
+                this->scenes[this->unk_218].loadFunc(this, this->scenes[this->unk_218].entranceIndex, this->unk_248);
             }
         }
 
@@ -333,7 +333,8 @@ void func_80800A44(SelectContext* this) {
                 gSaveContext.day++;
             }
         }
-        sp20 = gGameInfo->data[126];
+
+        sp20 = R_UPDATE_RATE;
         if (controller1->rel.stick_y != 0) {
             this->unk_260 = (sp20 * controller1->rel.stick_y) / 7;
         } else {
@@ -392,13 +393,13 @@ void func_80800A44(SelectContext* this) {
     this->unk_25C += this->unk_260;
 
     if (this->unk_25C < -7) {
-        this->unk_218++;
-        this->unk_218 = (this->unk_218 + this->unk_210) % this->unk_210;
-
         this->unk_260 = 0;
         this->unk_25C = 0;
 
-        if (((this->unk_24C + this->unk_210 + 0x13) % this->unk_210) == this->unk_218) {
+        this->unk_218++;
+        this->unk_218 = (this->unk_218 + this->unk_210) % this->unk_210;
+
+        if (this->unk_218 == ((this->unk_24C + this->unk_210 + 0x13) % this->unk_210)) {
             this->unk_24C++;
             this->unk_24C = (this->unk_24C + this->unk_210) % this->unk_210;
         }
@@ -407,14 +408,14 @@ void func_80800A44(SelectContext* this) {
     if (this->unk_25C >= 8) {
         this->unk_260 = 0;
         this->unk_25C = 0;
-        if (this->unk_24C == this->unk_218) {
+        if (this->unk_218 == this->unk_24C) {
             this->unk_24C -= 2;
             this->unk_24C = (this->unk_24C + this->unk_210) % this->unk_210;
         }
 
         this->unk_218--;
         this->unk_218 = (this->unk_218 + this->unk_210) % this->unk_210;
-        if (((this->unk_24C + this->unk_210) % this->unk_210) == this->unk_218) {
+        if (this->unk_218 == ((this->unk_24C + this->unk_210) % this->unk_210)) {
             this->unk_24C--;
             this->unk_24C = (this->unk_24C + this->unk_210) % this->unk_210;
         }
@@ -422,6 +423,7 @@ void func_80800A44(SelectContext* this) {
 
     this->unk_218 = (this->unk_218 + this->unk_210) % this->unk_210;
     this->unk_24C = (this->unk_24C + this->unk_210) % this->unk_210;
+
     gGameInfo->data[2576] = this->unk_218;
     gGameInfo->data[2577] = this->unk_24C;
     gGameInfo->data[2578] = this->unk_21C;
