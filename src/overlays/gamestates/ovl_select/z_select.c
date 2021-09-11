@@ -8,8 +8,58 @@
 #include "alloca.h"
 #include "overlays/gamestates/ovl_title/z_title.h"
 
-void func_80800930(SelectContext* this, u32, s32);
-void func_80800910(SelectContext* this);
+void func_80800910(SelectContext* this) {
+    {
+        GameState* state = &this->state;
+        state->running = false;
+    }
+
+    SET_NEXT_GAMESTATE(&this->state, Title_Init, TitleContext);
+}
+
+void func_80800930(SelectContext* this, u32 arg1, s32 arg2) {
+    if (gSaveContext.fileNum == 0xFF) {
+        func_80144968();
+    }
+
+    gSaveContext.buttonStatus[0] = BTN_ENABLED;
+    gSaveContext.buttonStatus[1] = BTN_ENABLED;
+    gSaveContext.buttonStatus[2] = BTN_ENABLED;
+    gSaveContext.buttonStatus[3] = BTN_ENABLED;
+    gSaveContext.buttonStatus[4] = BTN_ENABLED;
+    gSaveContext.unk_3F1E = 0;
+    gSaveContext.unk_3F20 = 0;
+    gSaveContext.unk_3F22 = 0;
+    gSaveContext.unk_3F24 = 0;
+
+    func_801A89A8(NA_BGM_STOP);
+    gSaveContext.entranceIndex = arg1;
+
+    if (arg2 != 0) {
+        gSaveContext.entranceIndex = Entrance_CreateIndex((s32)gSaveContext.entranceIndex >> 9, arg2, gSaveContext.entranceIndex & 0xF);
+    }
+    if (gSaveContext.entranceIndex == 0xC000) {
+        gSaveContext.day = 0;
+        gSaveContext.time = CLOCK_TIME(6, 0) - 1;
+    }
+
+    gSaveContext.respawn[0].entranceIndex = 0xFFFF;
+    gSaveContext.seqIndex = 0xFF;
+    gSaveContext.nightSeqIndex = 0xFF;
+    gSaveContext.showTitleCard = true;
+    gSaveContext.respawnFlag = 0;
+    gSaveContext.respawn[4].entranceIndex = 0xFF;
+    gSaveContext.respawn[5].entranceIndex = 0xFF;
+    gSaveContext.respawn[6].entranceIndex = 0xFF;
+    gSaveContext.respawn[7].entranceIndex = 0xFF;
+    D_801BDBB0 = 0;
+
+    do {
+        GameState* state = &this->state;
+        state->running = false;
+    } while(0);
+    SET_NEXT_GAMESTATE(&this->state, Play_Init, GlobalContext);
+}
 
 SceneSelectEntry D_80801C80[] = {
     { "  0:OP\x8Cﾃﾞﾓ\x8Dﾖｳ ｼﾝﾘﾝ", func_80800930, 0x1C00 },
@@ -156,59 +206,6 @@ SceneSelectEntry D_80801C80[] = {
     { "X 1:SPOT00", func_80800930, 0x1C00 },
     { "title", (void*)func_80800910, 0x0000 },
 };
-
-void func_80800910(SelectContext* this) {
-    {
-        GameState* state = &this->state;
-        state->running = false;
-    }
-
-    SET_NEXT_GAMESTATE(&this->state, Title_Init, TitleContext);
-}
-
-void func_80800930(SelectContext* this, u32 arg1, s32 arg2) {
-    if (gSaveContext.fileNum == 0xFF) {
-        func_80144968();
-    }
-
-    gSaveContext.buttonStatus[0] = BTN_ENABLED;
-    gSaveContext.buttonStatus[1] = BTN_ENABLED;
-    gSaveContext.buttonStatus[2] = BTN_ENABLED;
-    gSaveContext.buttonStatus[3] = BTN_ENABLED;
-    gSaveContext.buttonStatus[4] = BTN_ENABLED;
-    gSaveContext.unk_3F1E = 0;
-    gSaveContext.unk_3F20 = 0;
-    gSaveContext.unk_3F22 = 0;
-    gSaveContext.unk_3F24 = 0;
-
-    func_801A89A8(NA_BGM_STOP);
-    gSaveContext.entranceIndex = arg1;
-
-    if (arg2 != 0) {
-        gSaveContext.entranceIndex = Entrance_CreateIndex((s32)gSaveContext.entranceIndex >> 9, arg2, gSaveContext.entranceIndex & 0xF);
-    }
-    if (gSaveContext.entranceIndex == 0xC000) {
-        gSaveContext.day = 0;
-        gSaveContext.time = CLOCK_TIME(6, 0) - 1;
-    }
-
-    gSaveContext.respawn[0].entranceIndex = 0xFFFF;
-    gSaveContext.seqIndex = 0xFF;
-    gSaveContext.nightSeqIndex = 0xFF;
-    gSaveContext.showTitleCard = true;
-    gSaveContext.respawnFlag = 0;
-    gSaveContext.respawn[4].entranceIndex = 0xFF;
-    gSaveContext.respawn[5].entranceIndex = 0xFF;
-    gSaveContext.respawn[6].entranceIndex = 0xFF;
-    gSaveContext.respawn[7].entranceIndex = 0xFF;
-    D_801BDBB0 = 0;
-
-    do {
-        GameState* state = &this->state;
-        state->running = false;
-    } while(0);
-    SET_NEXT_GAMESTATE(&this->state, Play_Init, GlobalContext);
-}
 
 // Select_UpdateMenu
 void func_80800A44(SelectContext* this) {
