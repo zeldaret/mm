@@ -53,6 +53,7 @@ void AudioMgr_HandleRetrace(AudioMgr* audioMgr) {
                     retryCount--;
                     Sched_SendAudioCancelMsg(audioMgr->sched);
                 } else {
+                    // "Enough already! Die!"
                     osSyncPrintf("audioMgr.c:もうダメ！死ぬ！\n");
                     osDestroyThread(NULL);
                     break;
