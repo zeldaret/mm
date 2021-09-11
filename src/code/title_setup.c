@@ -50,10 +50,10 @@ void TitleSetup_InitImpl(GameState* gameState) {
     func_800E9360();
     TitleSetup_GameStateResetContext();
 
-    gameState->running = 0;
-
-setNextGamestate
-    :; // This label is probably a leftover of a debug ifdef, it's essential to not have gameState->running reordered!
+    {
+        GameState* state = gameState;
+        state->running = 0;
+    }
     SET_NEXT_GAMESTATE(gameState, Title_Init, TitleContext);
 }
 
