@@ -135,6 +135,7 @@ void EnDekunuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_Init(globalCtx, &this->skelAnime, &D_06002468, &D_0600326C, this->jointTable, this->morphTable, 10);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
+    
     this->unk_194 = ENDEKUNUTS_GET_FF00(&this->actor);
     thisx->params &= 0xFF;
     if ((this->unk_194 == ENDEKUNUTS_GET_FF00_FF) || (this->unk_194 == ENDEKUNUTS_GET_FF00_0)) {

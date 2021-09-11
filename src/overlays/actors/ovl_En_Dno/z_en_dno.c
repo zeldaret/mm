@@ -900,7 +900,7 @@ void func_80A73408(EnDno* this, GlobalContext* globalCtx) {
     }
 
     if ((func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) && (this->unk_32C == 17)) {
-        if (0) {};
+        if (1) {}
         func_8013E1C8(&this->skelAnime, sAnimations, 18, &this->unk_32C);
     }
 }
