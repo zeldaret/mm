@@ -15,14 +15,14 @@
         gSaveContext.weekEventReg[92] &= (u8) ~(1 | 2 | 4);                                     \
         gSaveContext.weekEventReg[92] =                                                         \
             gSaveContext.weekEventReg[92] | (u8)(gSaveContext.weekEventReg[92] & ~(1 | 2 | 4)); \
-    }
+    } (void)0
 
 #define SET_FLAGS_START_RACE                                                                          \
     {                                                                                                 \
         gSaveContext.weekEventReg[92] &= (u8) ~(1 | 2 | 4);                                           \
         gSaveContext.weekEventReg[92] =                                                               \
             gSaveContext.weekEventReg[92] | (u8)((gSaveContext.weekEventReg[92] & ~(1 | 2 | 4)) | 1); \
-    }
+    } (void)0
 
 void EnIn_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnIn_Destroy(Actor* thisx, GlobalContext* globalCtx);
