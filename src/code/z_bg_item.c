@@ -12,8 +12,8 @@ void BgCheck3_LoadMesh(GlobalContext* globalCtx, DynaPolyActor* actor, Collision
     CollisionHeader* header;
 
     header = NULL;
-    BgCheck_RelocateMeshHeader(meshHeader, &header);
-    actor->bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, actor, header);
+    CollisionHeader_GetVirtual(meshHeader, &header);
+    actor->bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &actor->actor, header);
 }
 
 void BgCheck3_ResetFlags(DynaPolyActor* actor) {
@@ -28,10 +28,10 @@ void func_800CAE9C(DynaPolyActor* actor) {
     actor->unk_158 |= 2;
 }
 
-void func_800CAEB0(CollisionContext* colCtx, s32 index) {
+void func_800CAEB0(CollisionContext* colCtx, s32 bgId) {
     DynaPolyActor* actor;
 
-    actor = BgCheck_GetActorOfMesh(colCtx, index);
+    actor = DynaPoly_GetActor(colCtx, bgId);
     if (actor != (DynaPolyActor*)0x0) {
         func_800CAE9C(actor);
     }
@@ -41,10 +41,10 @@ void func_800CAEE0(DynaPolyActor* actor) {
     actor->unk_158 |= 4;
 }
 
-void func_800CAEF4(CollisionContext* colCtx, s32 index) {
+void func_800CAEF4(CollisionContext* colCtx, s32 bgId) {
     DynaPolyActor* actor;
 
-    actor = BgCheck_GetActorOfMesh(colCtx, index);
+    actor = DynaPoly_GetActor(colCtx, bgId);
     if (actor != (DynaPolyActor*)0x0) {
         func_800CAEE0(actor);
     }

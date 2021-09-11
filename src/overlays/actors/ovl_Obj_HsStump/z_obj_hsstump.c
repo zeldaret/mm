@@ -130,7 +130,7 @@ void ObjHsStump_Appear(ObjHsStump* this, GlobalContext* globalCtx) {
 void ObjHsStump_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjHsStump* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void ObjHsStump_Update(Actor* thisx, GlobalContext* globalCtx) {

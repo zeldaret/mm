@@ -946,19 +946,19 @@ void func_8098B464(EnDg* this, GlobalContext* globalCtx) {
 
 void func_8098B560(EnDg* this, GlobalContext* globalCtx) {
     Vec3f sp54;
-    Vec3f sp48;
+    Vec3f pos;
     s16 sp46 = 0;
-    WaterBox* sp40;
-    f32 sp3C;
-    s32 sp38;
+    WaterBox* waterBox;
+    f32 waterSurface;
+    CollisionPoly* poly;
     f32 sp34;
 
     sp54.x = this->actor.world.pos.x;
     sp54.y = this->actor.world.pos.y + this->actor.yDistToWater;
     sp54.z = this->actor.world.pos.z + 20.0f;
-    sp48.x = (Math_SinS(this->actor.world.rot.y) * 50.0f) + this->actor.world.pos.x;
-    sp48.y = this->actor.home.pos.y + 100.0f;
-    sp48.z = (Math_CosS(this->actor.world.rot.y) * 50.0f) + this->actor.world.pos.z;
+    pos.x = (Math_SinS(this->actor.world.rot.y) * 50.0f) + this->actor.world.pos.x;
+    pos.y = this->actor.home.pos.y + 100.0f;
+    pos.z = (Math_CosS(this->actor.world.rot.y) * 50.0f) + this->actor.world.pos.z;
 
     if (DECR(this->unk_284) == 0) {
         if (!(this->unk_280 & 4)) {
@@ -975,9 +975,9 @@ void func_8098B560(EnDg* this, GlobalContext* globalCtx) {
         this->actor.velocity.y = -0.5f;
     }
 
-    sp34 = func_800C4000(globalCtx, &globalCtx->colCtx, &sp38, &sp48);
+    sp34 = BgCheck_EntityRaycastFloor2(globalCtx, &globalCtx->colCtx, &poly, &pos);
     if (this->actor.bgCheckFlags & 8) {
-        if (!func_800CA1AC(globalCtx, &globalCtx->colCtx, sp48.x, sp48.z, &sp3C, &sp40)) {
+        if (!WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, pos.x, pos.z, &waterSurface, &waterBox)) {
             if (sp34 > -100.0f) {
                 this->unk_280 &= ~4;
                 this->actionFunc = func_8098B88C;
@@ -985,7 +985,7 @@ void func_8098B560(EnDg* this, GlobalContext* globalCtx) {
                 sp46 = this->actor.wallYaw;
             }
         } else if (sp34 > -100.0f) {
-            if (sp3C < sp34) {
+            if (waterSurface < sp34) {
                 this->unk_280 &= ~4;
                 this->actionFunc = func_8098B88C;
             } else {

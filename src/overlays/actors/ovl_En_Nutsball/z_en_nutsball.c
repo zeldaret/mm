@@ -88,7 +88,7 @@ void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx) {
     Vec3s worldRot;
     Vec3f spawnBurstPos;
     f32 spdXZ;
-    u32 bgId;
+    s32 bgId;
     CollisionPoly* poly;
 
     if (!(player->stateFlags1 & 0x300000C0)) {
@@ -134,8 +134,8 @@ void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx) {
         if (this->actor.bgCheckFlags & 8) {
             if (func_800C9A4C(&globalCtx2->colCtx, this->actor.wallPoly, this->actor.wallBgId) & 0x30) {
                 this->actor.bgCheckFlags &= ~8;
-                if (func_800C55C4(&globalCtx2->colCtx, &this->actor.prevPos, &worldPos, &this->actor.world.pos, &poly,
-                                  1, 0, 0, 1, &bgId)) {
+                if (BgCheck_EntityLineTest1(&globalCtx2->colCtx, &this->actor.prevPos, &worldPos, &this->actor.world.pos, &poly,
+                                  true, false, false, true, &bgId)) {
                     if (func_800C9A4C(&globalCtx2->colCtx, poly, bgId) & 0x30) {
                         this->actor.world.pos.x += this->actor.velocity.x * 0.01f;
                         this->actor.world.pos.z += this->actor.velocity.z * 0.01f;

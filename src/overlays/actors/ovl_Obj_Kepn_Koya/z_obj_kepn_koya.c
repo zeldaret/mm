@@ -36,7 +36,7 @@ void ObjKepnKoya_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->dyna.actor, 0.1f);
     BcCheck3_BgActorInit(&this->dyna, 0);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_0600805C);
-    if (this->dyna.bgId == 0x32) {
+    if (this->dyna.bgId == BG_ACTOR_MAX) {
         Actor_MarkForDeath(&this->dyna.actor);
     }
 }
@@ -44,7 +44,7 @@ void ObjKepnKoya_Init(Actor* thisx, GlobalContext* globalCtx) {
 void ObjKepnKoya_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjKepnKoya* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void ObjKepnKoya_Update(Actor* thisx, GlobalContext* globalCtx) {

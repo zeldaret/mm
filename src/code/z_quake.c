@@ -417,8 +417,8 @@ void Quake2_ClearType(s32 type) {
 }
 
 s32 Quake2_GetFloorQuake(Player* player) {
-    if (func_800C9D8C(&sQuake2Context.globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId) == 0) {
-        return func_800C9E18(&sQuake2Context.globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId);
+    if (SurfaceType_IsConveyor(&sQuake2Context.globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId) == 0) {
+        return SurfaceType_GetConveyorSpeed(&sQuake2Context.globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId);
     }
     return 0;
 }

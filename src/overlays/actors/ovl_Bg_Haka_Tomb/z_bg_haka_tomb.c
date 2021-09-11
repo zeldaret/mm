@@ -50,7 +50,7 @@ void BgHakaTomb_Init(Actor* thisx, GlobalContext* globalCtx) {
 void BgHakaTomb_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgHakaTomb* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void func_80BD6624(BgHakaTomb* this) {

@@ -38,7 +38,7 @@ void BgLbfshot_Init(Actor* thisx, GlobalContext* globalCtx) {
 void BgLbfshot_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgLbfshot* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 void BgLbfshot_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_800BDFC0(globalCtx, D_06000228);

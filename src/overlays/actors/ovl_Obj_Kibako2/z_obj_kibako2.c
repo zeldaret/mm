@@ -177,7 +177,7 @@ void ObjKibako2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjKibako2* this = THIS;
 
     Collider_DestroyCylinder(globalCtx, &this->collider);
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 s32 ObjKibako2_ShouldBreak(ObjKibako2* this) {

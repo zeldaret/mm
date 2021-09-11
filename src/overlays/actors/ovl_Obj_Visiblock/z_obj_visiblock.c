@@ -41,7 +41,7 @@ void ObjVisiblock_Init(Actor* thisx, GlobalContext* globalCtx) {
 void ObjVisiblock_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjVisiblock* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void ObjVisiblock_Draw(Actor* thisx, GlobalContext* globalCtx) {

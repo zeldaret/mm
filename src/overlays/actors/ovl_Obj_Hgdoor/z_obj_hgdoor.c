@@ -74,11 +74,11 @@ void ObjHgdoor_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->dyna.actor, 0.1f);
     BcCheck3_BgActorInit(&this->dyna, 1);
     if (OBJHGDOOR_IS_RIGHT_DOOR(&this->dyna.actor)) {
-        BgCheck_RelocateMeshHeader(&D_06001D10, &header);
+        CollisionHeader_GetVirtual(&D_06001D10, &header);
     } else {
-        BgCheck_RelocateMeshHeader(&D_060018C0, &header);
+        CollisionHeader_GetVirtual(&D_060018C0, &header);
     }
-    this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, header);
+    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, header);
     this->rotation = 0;
     this->timer = 0;
     this->cutscene = this->dyna.actor.cutscene;
@@ -88,7 +88,7 @@ void ObjHgdoor_Init(Actor* thisx, GlobalContext* globalCtx) {
 void ObjHgdoor_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjHgdoor* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void ObjHgdoor_SetupCheckShouldOpen(ObjHgdoor* this) {

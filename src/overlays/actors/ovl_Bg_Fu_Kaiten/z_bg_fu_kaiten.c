@@ -31,8 +31,8 @@ void BgFuKaiten_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_SetScale(thisx, 1.0);
     BcCheck3_BgActorInit(&THIS->bg, 3);
-    BgCheck_RelocateMeshHeader(&D_06002D30, &header);
-    THIS->bg.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &THIS->bg, header);
+    CollisionHeader_GetVirtual(&D_06002D30, &header);
+    THIS->bg.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &THIS->bg, header);
 
     THIS->bouceHeight = 0.0;
     THIS->rotationSpeed = 0;
@@ -41,7 +41,7 @@ void BgFuKaiten_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgFuKaiten_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, THIS->bg.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, THIS->bg.bgId);
 }
 
 void BgFuKaiten_UpdateRotation(BgFuKaiten* this) {

@@ -371,7 +371,7 @@ void EnPametfrog_StopCutscene(EnPametfrog* this, GlobalContext* globalCtx) {
 
 void EnPametfrog_PlaceSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
     CollisionPoly* poly;
-    u32 bgId;
+    s32 bgId;
     Vec3f vec1;
     Vec3f vec2;
     Vec3f vec3;
@@ -387,7 +387,7 @@ void EnPametfrog_PlaceSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
     vec3.x = this->actor.child->world.pos.x;
     vec3.y = this->actor.child->world.pos.y - 150.0f;
     vec3.z = this->actor.child->world.pos.z;
-    if (func_800C55C4(&globalCtx->colCtx, &vec2, &vec3, &vec1, &poly, 0, 1, 0, 1, &bgId) != 0) {
+    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &vec2, &vec3, &vec1, &poly, false, true, false, true, &bgId)) {
         this->actor.child->floorHeight = vec1.y;
     } else {
         this->actor.child->floorHeight = this->actor.home.pos.y;
@@ -633,11 +633,11 @@ void EnPametfrog_WallCrawl(EnPametfrog* this, GlobalContext* globalCtx) {
         vec2.x = this->actor.world.pos.x - this->unk_2DC.x * 25.0f;
         vec2.y = this->actor.world.pos.y - this->unk_2DC.y * 25.0f;
         vec2.z = this->actor.world.pos.z - this->unk_2DC.z * 25.0f;
-        if (func_800C55C4(&globalCtx->colCtx, &vec1, &vec2, &worldPos2, &poly2, 1, 1, 1, 1, &bgId2) != 0) {
+        if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &vec1, &vec2, &worldPos2, &poly2, true, true, true, true, &bgId2)) {
             vec2.x = this->unk_2D0.x * doubleSpeedXZ + vec1.x;
             vec2.y = this->unk_2D0.y * doubleSpeedXZ + vec1.y;
             vec2.z = this->unk_2D0.z * doubleSpeedXZ + vec1.z;
-            if (func_800C55C4(&globalCtx->colCtx, &vec1, &vec2, &worldPos1, &poly1, 1, 1, 1, 1, &bgId1) != 0) {
+            if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &vec1, &vec2, &worldPos1, &poly1, true, true, true, true, &bgId1)) {
                 isSuccess = func_8086A2CC(this, poly1);
                 Math_Vec3f_Copy(&this->actor.world.pos, &worldPos1);
                 this->actor.floorBgId = bgId1;

@@ -113,11 +113,11 @@ s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, 
     s16 x;
     s16 y;
     f32 distance;
-    CollisionPoly* unk1;
+    CollisionPoly* poly;
     Camera* camera;
     Actor* actors[2];
     s32 ret = 0;
-    u32 unk2;
+    s32 bgId;
 
     camera = ACTIVE_CAM;
 
@@ -142,7 +142,7 @@ s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, 
         ret |= 0x3d;
     }
 
-    if (func_800C576C(&globalCtx->colCtx, pos, &camera->eye, &screenSpace, &unk1, 1, 1, 1, 1, &unk2) != 0) {
+    if (BgCheck_ProjectileLineTest(&globalCtx->colCtx, pos, &camera->eye, &screenSpace, &poly, true, true, true, true, &bgId)) {
         func_8013A41C(0x3c);
         ret |= 0x3c;
     }

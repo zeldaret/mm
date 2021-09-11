@@ -122,7 +122,7 @@ void EnDnb_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnDnb_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnDnb* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void EnDnb_Update(Actor* thisx, GlobalContext* globalCtx) {

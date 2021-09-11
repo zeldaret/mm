@@ -41,7 +41,7 @@ void BgTobira01_Open(BgTobira01* this, GlobalContext* globalCtx) {
         }
     } else if (!(gSaveContext.weekEventReg[88] & 0x40) && (this->timer == 0) && (globalCtx->actorCtx.unk1F5 != 0) &&
                (globalCtx->actorCtx.unk1F4 == 0) &&
-               (func_800C99AC(&globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId) == 6)) {
+               (SurfaceType_GetSceneExitIndex(&globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId) == 6)) {
         this->playCutscene = true;
         this->unk_16C = 0; // this variable is not used anywhere else
     }
@@ -85,7 +85,7 @@ void BgTobira01_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgTobira01* this = THIS;
     s32 pad;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void BgTobira01_Update(Actor* thisx, GlobalContext* globalCtx) {

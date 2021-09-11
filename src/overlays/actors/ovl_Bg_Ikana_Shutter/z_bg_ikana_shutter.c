@@ -81,7 +81,7 @@ void BgIkanaShutter_Init(Actor* thisx, GlobalContext* globalCtx) {
 void BgIkanaShutter_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgIkanaShutter* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void func_80BD5828(BgIkanaShutter* this) {

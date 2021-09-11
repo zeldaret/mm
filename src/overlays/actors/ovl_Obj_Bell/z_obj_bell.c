@@ -275,7 +275,7 @@ void ObjBell_Init(Actor* thisx, GlobalContext* globalCtx) {
 void ObjBell_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjBell* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     Collider_DestroySphere(globalCtx, &this->collider1);
     Collider_DestroySphere(globalCtx, &this->collider2);
 }

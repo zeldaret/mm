@@ -174,7 +174,7 @@ void BgKin2Fence_Init(Actor* thisx, GlobalContext* globalCtx) {
 void BgKin2Fence_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgKin2Fence* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyJntSph(globalCtx, &this->collider);
 }
 

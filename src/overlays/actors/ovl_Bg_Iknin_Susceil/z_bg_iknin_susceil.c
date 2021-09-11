@@ -118,7 +118,7 @@ void BgIkninSusceil_Init(Actor* thisx, GlobalContext* globalCtx) {
 void BgIkninSusceil_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgIkninSusceil* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void func_80C0AB14(BgIkninSusceil* this) {

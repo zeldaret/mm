@@ -201,14 +201,14 @@ void EnSuttari_UpdateTime(void) {
 }
 
 s32 func_80BAA904(EnSuttari* this, GlobalContext* globalCtx) {
-    Vec3f sp2C;
+    Vec3f pos;
     s32 pad;
-    s32 sp24;
+    CollisionPoly* poly;
 
-    sp2C.x = (Math_SinS(this->actor.world.rot.y) * 50.0f) + this->actor.world.pos.x;
-    sp2C.y = this->actor.world.pos.y + 100.0f;
-    sp2C.z = (Math_CosS(this->actor.world.rot.y) * 50.0f) + this->actor.world.pos.z;
-    if (func_800C4000(globalCtx, &globalCtx->colCtx, &sp24, &sp2C) > -500.0f) {
+    pos.x = (Math_SinS(this->actor.world.rot.y) * 50.0f) + this->actor.world.pos.x;
+    pos.y = this->actor.world.pos.y + 100.0f;
+    pos.z = (Math_CosS(this->actor.world.rot.y) * 50.0f) + this->actor.world.pos.z;
+    if (BgCheck_EntityRaycastFloor2(globalCtx, &globalCtx->colCtx, &poly, &pos) > -500.0f) {
         return false;
     }
     return true;

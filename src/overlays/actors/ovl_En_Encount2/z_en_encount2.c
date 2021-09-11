@@ -101,8 +101,8 @@ void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionHeader* colHeader = NULL;
 
     BcCheck3_BgActorInit(&this->dyna, 0);
-    BgCheck_RelocateMeshHeader(&D_06002420, &colHeader);
-    this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
+    CollisionHeader_GetVirtual(&D_06002420, &colHeader);
+    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
     ActorShape_Init(&this->dyna.actor.shape, 0.0f, func_800B3FC0, 25.0f);
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
     Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->dyna.actor, &sJntSphInit, &this->colElement);
@@ -133,7 +133,7 @@ void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnEncount2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnEncount2* this = THIS;
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyJntSph(globalCtx, &this->collider);
 }
 
