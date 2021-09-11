@@ -3272,7 +3272,7 @@ extern u8 D_801F4E30;
 // extern UNK_TYPE1 D_801F4E68;
 extern f32 D_801F4E70;
 // extern UNK_TYPE1 D_801F4E74;
-// extern UNK_TYPE1 D_801F4E78;
+extern u16 D_801F4E78;
 extern s16 D_801F4E7A;
 // extern UNK_TYPE1 D_801F4E80;
 // extern UNK_TYPE1 D_801F4EE0;

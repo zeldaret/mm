@@ -7,7 +7,7 @@ struct EnDno;
 
 typedef void (*EnDnoActionFunc)(struct EnDno*, GlobalContext*);
 
-#define ENDNO_GET_F(thisx) (u32)((thisx)->params & 0xF)
+#define ENDNO_GET_F(thisx) ((thisx)->params & 0xF)
 #define ENDNO_GET_7F(thisx) ((thisx)->params & 0x7F)
 #define ENDNO_GET_7F0(thisx) (((thisx)->params >> 4) & 0x7F)
 #define ENDNO_GET_3F80(thisx) (((thisx)->params >> 7) & 0x7F)
