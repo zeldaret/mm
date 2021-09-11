@@ -230,7 +230,7 @@ void EnOssan_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnOssan* this = THIS;
     s16 id;
 
-    //! @bug Condition is impossible, params cannot be both greater then 1 AND less then 0.
+    //! @bug Condition is impossible, params cannot be both greater then 1 AND less then 0; should have been ||
     if (this->actor.params > ENOSSAN_PART_TIME_WORKER && this->actor.params < ENOSSAN_CURIOSITY_SHOP_MAN) {
         Actor_MarkForDeath(&this->actor);
         return;

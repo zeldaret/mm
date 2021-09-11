@@ -603,18 +603,20 @@ void SkelAnime_AnimateFrame(AnimationHeader* animationSeg, s32 currentFrame, s32
     JointIndex* index = Lib_SegmentedToVirtual(animationHeader->jointIndices);
     AnimationRotationValue* rotationValueTable = Lib_SegmentedToVirtual(animationHeader->frameData);
     AnimationRotationValue* frameRotationValueTable = &rotationValueTable[currentFrame];
-    s32 i;
     u16 limit = animationHeader->staticIndexMax;
+    s32 i;
 
     for (i = 0; i < limbCount; i++) {
-        // Debug prints here, this is needed to prevent loop unrolling
-        if (0) {
-            if (0) {};
+        if /* DISABLES CODE */ (0) {
+            if ((dst == NULL) || (index == NULL) || (rotationValueTable == NULL) || (frameRotationValueTable == NULL)) {
+                // stubbed debug log prints
+            }
         }
         dst->x = index->x >= limit ? frameRotationValueTable[index->x] : rotationValueTable[index->x];
         dst->y = index->y >= limit ? frameRotationValueTable[index->y] : rotationValueTable[index->y];
         dst->z = index->z >= limit ? frameRotationValueTable[index->z] : rotationValueTable[index->z];
-        index++, dst++;
+        index++;
+        dst++;
     }
 }
 
@@ -1415,7 +1417,7 @@ void SkelAnime_InitSkin(GlobalContext* globalCtx, SkelAnime* skelAnime, Skeleton
     skelAnime->transitionDrawTbl = zelda_malloc(sizeof(*skelAnime->transitionDrawTbl) * skelAnime->limbCount);
 
     // Debug prints here, required to match.
-    if (1) {};
+    if (1) {}
 
     if (animationSeg != NULL) {
         SkelAnime_ChangeAnimDefaultRepeat(skelAnime, animationSeg);

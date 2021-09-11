@@ -125,6 +125,7 @@ s32 func_80B3CA20(EnDnp* this) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_DEKUHIME_GREET2);
         }
     } else if ((this->unk_340 == 17) && (this->unk_340 == 18)) {
+        //! @bug: impossible to enter this block, condition should have been ||
         if (func_801378B8(&this->skelAnime, 7.0f) || func_801378B8(&this->skelAnime, 15.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_DEKUHIME_WALK);
         }
