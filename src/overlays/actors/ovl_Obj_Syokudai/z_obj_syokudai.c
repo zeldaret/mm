@@ -167,7 +167,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                 }
             }
         } else {
-            s32 interactionType = 0;
+            s32 interaction = OBJ_SYOKUDAI_INTERACTION_NONE;
             u32 flameColliderHurtboxDmgFlags = 0;
             player = PLAYER;
 
@@ -192,20 +192,20 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
             if (this->flameCollider.base.acFlags & AC_HIT) {
                 flameColliderHurtboxDmgFlags = this->flameCollider.info.acHitInfo->toucher.dmgFlags;
                 if ((this->flameCollider.info.acHitInfo->toucher.dmgFlags & 0x820) != 0) {
-                    interactionType = 1;
+                    interaction = OBJ_SYOKUDAI_INTERACTION_ARROW_FA;
                 }
             } else if (player->itemActionParam == 7) {
-                Vec3f posDiffFromSword;
+                Vec3f posDiffFromStick;
 
-                Math_Vec3f_Diff(&player->swordInfo[0].tip, &thisx->world.pos, &posDiffFromSword);
-                posDiffFromSword.y -= 67.0f;
-                if (SQXYZ(posDiffFromSword) < SQ(20.0f)) {
-                    interactionType = -1;
+                Math_Vec3f_Diff(&player->swordInfo[0].tip, &thisx->world.pos, &posDiffFromStick);
+                posDiffFromStick.y -= 67.0f;
+                if (SQXYZ(posDiffFromStick) < SQ(20.0f)) {
+                    interaction = OBJ_SYOKUDAI_INTERACTION_STICK;
                 }
             }
-            if (interactionType != 0) {
+            if (interaction != OBJ_SYOKUDAI_INTERACTION_NONE) {
                 if (this->litTimer != 0) {
-                    if (interactionType < 0) {
+                    if (interaction < OBJ_SYOKUDAI_INTERACTION_NONE) {
                         if (player->unk_B28 == 0) {
                             player->unk_B28 = 0xD2;
                             func_8019F1C0(&thisx->projectedPos, NA_SE_EV_FLAME_IGNITION);
@@ -228,9 +228,9 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                         this->litTimer = (groupSize * 50) + 100;
                     }
                 } else if ((type != OBJ_SYOKUDAI_TYPE_SWITCH_CAUSES_FLAME) &&
-                           (((interactionType > 0) && ((flameColliderHurtboxDmgFlags & 0x800) != 0)) ||
-                            ((interactionType < 0) && (player->unk_B28 != 0)))) {
-                    if ((interactionType < 0) && (player->unk_B28 < 0xC8)) {
+                           (((interaction > OBJ_SYOKUDAI_INTERACTION_NONE) && ((flameColliderHurtboxDmgFlags & 0x800) != 0)) ||
+                            ((interaction < OBJ_SYOKUDAI_INTERACTION_NONE) && (player->unk_B28 != 0)))) {
+                    if ((interaction < OBJ_SYOKUDAI_INTERACTION_NONE) && (player->unk_B28 < 0xC8)) {
                         player->unk_B28 = 0xC8;
                     }
                     if (groupSize == 0) {

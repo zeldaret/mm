@@ -30,6 +30,12 @@ typedef enum {
     /*  1 */ OBJ_SYOKUDAI_PENDING_ACTION_CUTSCENE_AND_SWITCH
 } ObjSyokudaiPendingActions;
 
+typedef enum {
+    /* -1 */ OBJ_SYOKUDAI_INTERACTION_STICK = -1,
+    /*  0 */ OBJ_SYOKUDAI_INTERACTION_NONE,
+    /*  1 */ OBJ_SYOKUDAI_INTERACTION_ARROW_FA
+} ObjSyokudaiInteractions;
+
 #define OBJ_SYOKUDAI_GET_TYPE(thisx) (thisx->params >> 0xC) // 0=gold, 1=black, 2=brown
 #define OBJ_SYOKUDAI_GET_START_LIT(thisx) (thisx->params & 0x800)
 #define OBJ_SYOKUDAI_GET_GROUP_SIZE(thisx) ((thisx->params >> 7) & 0xF)
