@@ -843,7 +843,7 @@ void Fault_ThreadEntry(void* arg) {
         } while (!sFaultContext->exitDebugger);
 
         while (!sFaultContext->exitDebugger) {
-            ;
+
         }
 
         Fault_ResumeThread(faultedThread);

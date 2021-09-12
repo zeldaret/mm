@@ -33,9 +33,7 @@ s32 func_8013A240(GlobalContext* globalCtx) {
                     seen = 0;
             }
 
-            if (actor->id) {
-                ; // Needed to match
-            }
+            if (1) {}
 
             switch (actor->id) {
                 case ACTOR_EN_KAKASI:

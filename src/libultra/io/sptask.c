@@ -3,7 +3,7 @@
 #define _osVirtualToPhysical(ptr)              \
     if (ptr != NULL) {                         \
         ptr = (void*)osVirtualToPhysical(ptr); \
-    }
+    } (void)0
 
 static OSTask sTmpTask;
 
@@ -39,22 +39,22 @@ void osSpTaskLoad(OSTask* intp) {
     __osSpSetStatus(SP_CLR_SIG0 | SP_CLR_SIG1 | SP_CLR_SIG2 | SP_SET_INTR_BREAK);
 
     while (__osSpSetPc((void*)SP_IMEM_START) == -1) {
-        ;
+
     }
     while (__osSpRawStartDma(1, (void*)(SP_IMEM_START - sizeof(*tp)), tp, sizeof(OSTask)) == -1) {
-        ;
+
     }
     while (__osSpDeviceBusy()) {
-        ;
+
     }
     while (__osSpRawStartDma(1, (void*)SP_IMEM_START, tp->t.ucode_boot, tp->t.ucode_boot_size) == -1) {
-        ;
+
     }
 }
 
 void osSpTaskStartGo(OSTask* tp) {
     while (__osSpDeviceBusy()) {
-        ;
+
     }
     __osSpSetStatus(SP_SET_INTR_BREAK | SP_CLR_SSTEP | SP_CLR_BROKE | SP_CLR_HALT);
 }

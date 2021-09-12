@@ -7,8 +7,8 @@ struct EnDaiku;
 
 typedef void (*EnDaikuActionFunc)(struct EnDaiku*, GlobalContext*);
 
-#define ENDAIKU_GET_FF(thisx) ((thisx)->params & 0xFF);
-#define ENDAIKU_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF);
+#define ENDAIKU_GET_FF(thisx) ((thisx)->params & 0xFF)
+#define ENDAIKU_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF)
 
 enum {
     /* 0x0 */ ENDAIKU_PARAMS_FF_0,

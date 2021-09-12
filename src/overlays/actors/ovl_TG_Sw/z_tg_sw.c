@@ -88,7 +88,6 @@ void TGSw_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void TGSw_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    ;
 }
 
 void TGSw_Update(Actor* thisx, GlobalContext* globalCtx) {

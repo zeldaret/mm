@@ -63,7 +63,6 @@ void GameState_SetFBFilter(Gfx** gfx, u32 arg1) {
 }
 
 void Game_Nop80173534(GameState* gamestate) {
-    ;
 }
 
 void GameState_Draw(GameState* gamestate, GraphicsContext* gfxCtx) {
@@ -195,7 +194,7 @@ void Game_StateInit(GameState* gamestate, GameStateFunc gameStateInit, GraphicsC
     gfxCtx->viConfigXScale = gViConfigXScale;
     gfxCtx->viConfigYScale = gViConfigYScale;
     gamestate->nextGameStateInit = NULL;
-    gamestate->nextGameStateSize = 0U;
+    gamestate->nextGameStateSize = 0;
 
 lblUnk:;
     Gamealloc_Init(&gamestate->alloc);
@@ -219,7 +218,7 @@ void Game_StateFini(GameState* gamestate) {
     func_8019E014();
     osRecvMesg(&gamestate->gfxCtx->unk5C, 0, 1);
 
-    if (gamestate->destroy != 0) {
+    if (gamestate->destroy != NULL) {
         gamestate->destroy(gamestate);
     }
 

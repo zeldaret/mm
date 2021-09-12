@@ -21,9 +21,7 @@ int osSetTimer(OSTimer* t, OSTime value, OSTime interval, OSMesgQueue* mq, OSMes
     saveMask = __osDisableInt();
 
     if (__osTimerList->next != __osTimerList) {
-        if (0) {
-            ;
-        }
+        if (1) {}
         spC = __osTimerList->next;
         sp14 = osGetCount();
         sp10 = sp14 - __osTimerCounter;

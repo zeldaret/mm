@@ -52,7 +52,7 @@ void BgTobira01_Open(BgTobira01* this, GlobalContext* globalCtx) {
         this->timer++;
     } else {
         this->timer--;
-    };
+    }
 
     this->timer = CLAMP(this->timer, 0, 60);
 

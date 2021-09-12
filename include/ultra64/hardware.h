@@ -13,18 +13,19 @@
 #define AI_STATUS_AI_BUSY  (1 << 30)
 #define AI_STATUS_AI_FULL  (1 << 31)
 
+// Where there are two names for the same register, we use the top one
 #define VI_STATUS_REG          0x04400000
 #define VI_CONTROL_REG         0x04400000
-#define VI_ORIGIN_REG          0x04400004
 #define VI_DRAM_ADDR_REG       0x04400004
+#define VI_ORIGIN_REG          0x04400004
 #define VI_WIDTH_REG           0x04400008
 #define VI_H_WIDTH_REG         0x04400008
 #define VI_INTR_REG            0x0440000C
 #define VI_V_INTER_REG         0x0440000C
 #define VI_CURRENT_REG         0x04400010
 #define VI_V_CURRENT_LINE_REG  0x04400010
-#define VI_BURST_REG           0x04400014
 #define VI_TIMING_REG          0x04400014
+#define VI_BURST_REG           0x04400014
 #define VI_V_SYNC_REG          0x04400018 //VI vertical sync
 #define VI_H_SYNC_REG          0x0440001C //VI horizontal sync
 #define VI_LEAP_REG            0x04400020 //VI horizontal sync leap
@@ -52,6 +53,8 @@
 #define SP_DMA_BUSY_REG   0x04040018
 #define SP_PC_REG         0x04080000
 
+
+// Use PI_DOMAIN1_REG and PI_DOMAIN2_REG only in loops over regs
 #define PI_DRAM_ADDR_REG     0x04600000 //PI DRAM address
 #define PI_CART_ADDR_REG     0x04600004 //PI pbus (cartridge) address
 #define PI_RD_LEN_REG        0x04600008 //PI read length

@@ -27,9 +27,7 @@ void View_Init(View* view, GraphicsContext* gfxCtx) {
     view->unk164 = 0;
     view->flags = 1 | 2 | 4;
 
-    if (1) {
-        ;
-    }
+    if (1) {}
 
     view->scale = 1.0f;
     view->up.y = 1.0f;

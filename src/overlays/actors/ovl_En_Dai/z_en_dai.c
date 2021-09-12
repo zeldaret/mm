@@ -651,7 +651,6 @@ void func_80B3F78C(EnDai* this, GlobalContext* globalCtx) {
     static AnimationHeader* D_80B3FE58[] = {
         &D_060107B0, &D_06010FB0, &D_060117B0, &D_06010FB0, &D_06011FB0, &D_060127B0,
     };
-
     s32 pad;
 
     if (globalCtx->actorCtx.unkB != 0) {

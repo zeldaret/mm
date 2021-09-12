@@ -40,10 +40,10 @@ void osInitialize(void) {
     __osSetWatchLo(0x04900000);
 
     while (__osSiRawReadIo(0x1FC007FC, &pifdata)) {
-        ;
+        
     }
     while (__osSiRawWriteIo(0x1FC007FC, pifdata | 8)) {
-        ;
+        
     }
 
     *(struct_exceptionPreamble*)0x80000000 = *((struct_exceptionPreamble*)__osExceptionPreamble);
@@ -73,7 +73,7 @@ void osInitialize(void) {
 
     if (__osGetCause() & 0x1000) {
         while (1) {
-            ;
+            
         }
     }
 

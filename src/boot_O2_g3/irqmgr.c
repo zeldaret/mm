@@ -126,9 +126,7 @@ void IrqMgr_ThreadEntry(IrqMgr* irqmgr) {
     interrupt = 0;
     stop = 0;
     while (stop == 0) {
-        if (stop) {
-            ;
-        }
+        if (1) {}
 
         osRecvMesg(&irqmgr->irqQueue, (OSMesg*)&interrupt, 1);
         switch (interrupt) {

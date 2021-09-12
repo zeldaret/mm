@@ -85,7 +85,7 @@ OSTime __osInsertTimer(OSTimer* t) {
 
     for (timep = __osTimerList->next, tim = t->value; timep != __osTimerList && tim > timep->value;
          tim -= timep->value, timep = timep->next) {
-        ;
+
     }
     t->value = tim;
     if (timep != __osTimerList) {
