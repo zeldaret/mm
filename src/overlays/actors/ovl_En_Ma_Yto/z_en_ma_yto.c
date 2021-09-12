@@ -67,7 +67,7 @@ void func_80B90E50(EnMaYto* this, s16);
 void EnMaYto_SetRomaniFaceExpression(EnMaYto* this, s16 overrideEyeTexIndex, s16 mouthTexIndex);
 void EnMaYto_SetFaceExpression(EnMaYto* this, s16 overrideEyeTexIndex, s16 mouthIndex);
 void EnMaYto_InitFaceExpression(EnMaYto* this);
-s32 EnMaYto_HasSpokeToPlayerToday();
+s32 EnMaYto_HasSpokeToPlayerToday(void);
 
 s32 EnMaYto_HasSpokeToPlayer(void);
 void EnMaYto_SetTalkedFlag(void);
