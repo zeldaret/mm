@@ -2775,7 +2775,7 @@ void func_80B48FB0(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.textId = 0x3330;
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, &D_06009E58, this->limbDrawTable,
                          this->transitionDrawTable, 23);
-        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 6, D_80B4EB00, 2, &D_801D15BC, 100, 0.03, 0.3, 0.03);
+        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 6, D_80B4EB00, 2, &D_801D15BC, 100, 0.03f, 0.3f, 0.03f);
         func_80B444F4(this, globalCtx);
         EnInvadepoh_SetPathPointToWorldPos(this, 0);
         func_800B4AEC(globalCtx, &this->actor, 50.0f);
@@ -3127,7 +3127,7 @@ void func_80B49F88(Actor* thisx, GlobalContext* globalCtx) {
         func_80B44F58();
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, &D_06014088, this->limbDrawTable,
                          this->transitionDrawTable, 23);
-        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 1, &D_801D15BC, 100, 0.03, 0.3, 0.03);
+        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 1, &D_801D15BC, 100, 0.03f, 0.3f, 0.03f);
         func_80B44540(this, globalCtx);
         func_80B44570(this);
         func_80B44C24(this, globalCtx);

@@ -109,7 +109,7 @@ void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->dyna.actor.targetMode = 6;
     this->dyna.actor.colChkInfo.health = 1;
-    this->scale = 0.1;
+    this->scale = 0.1f;
     this->switchFlag = GET_ENCOUNT2_SWITCH_FLAG(this);
 
     if (this->switchFlag == 0x7F) {
@@ -162,7 +162,7 @@ void EnEncount2_Popped(EnEncount2* this, GlobalContext* globalCtx) {
     Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, curPos.x, curPos.y, curPos.z, 255, 255, 200,
                 CLEAR_TAG_LARGE_EXPLOSION);
 
-    for (i = 0; i < ARRAY_COUNT(this->particles) / 2; ++i) {
+    for (i = 0; i < ARRAY_COUNT(this->particles) / 2; i++) {
         EnEncount2_InitParticles(this, &curPos, 10);
     }
 
