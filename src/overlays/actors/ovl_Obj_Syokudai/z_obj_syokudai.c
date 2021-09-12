@@ -107,7 +107,7 @@ void ObjSyokudai_Init(Actor* thisx, GlobalContext* globalCtx) {
 
         s32 groupSize = OBJ_SYOKUDAI_GET_GROUP_SIZE(thisx);
 
-        this->litTimer = -1;
+        this->snuffTimer = OBJ_SYOKUDAI_SNUFF_NEVER;
         if (groupSize != 0) {
             sNumLitTorchesInGroup = groupSize;
         }
@@ -151,7 +151,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                 ActorCutscene_SetIntentToPlay(thisx->cutscene);
             }
         } else if (func_800F22C4(thisx->cutscene, thisx) != 0) {
-            this->litTimer = -1;
+            this->snuffTimer = OBJ_SYOKUDAI_SNUFF_NEVER;
             this->pendingAction = OBJ_SYOKUDAI_PENDING_ACTION_NONE;
         }
     } else {
@@ -159,11 +159,11 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                           &waterBox) &&
             ((waterSurface - thisx->world.pos.y) > 52.0f)) {
 
-            this->litTimer = 0;
+            this->snuffTimer = OBJ_SYOKUDAI_SNUFF_OUT;
             if (type == OBJ_SYOKUDAI_TYPE_FLAME_CAUSES_SWITCH) {
                 Actor_UnsetSwitchFlag(globalCtx, switchFlag);
                 if (groupSize != 0) {
-                    this->litTimer = 1;
+                    this->snuffTimer = 1;
                 }
             }
         } else {
@@ -172,21 +172,21 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
             player = PLAYER;
 
             if (OBJ_SYOKUDAI_GET_START_LIT(thisx)) {
-                this->litTimer = -1;
+                this->snuffTimer = OBJ_SYOKUDAI_SNUFF_NEVER;
             }
             if (groupSize != 0) {
                 if (Flags_GetSwitch(globalCtx, switchFlag)) {
-                    if (this->litTimer == 0) {
+                    if (this->snuffTimer == OBJ_SYOKUDAI_SNUFF_OUT) {
                         if (type != OBJ_SYOKUDAI_TYPE_SWITCH_CAUSES_FLAME) {
-                            this->litTimer = -1;
+                            this->snuffTimer = OBJ_SYOKUDAI_SNUFF_NEVER;
                         } else {
                             this->pendingAction = OBJ_SYOKUDAI_PENDING_ACTION_CUTSCENE_NO_SWITCH;
                         }
-                    } else if (this->litTimer > 0) {
-                        this->litTimer = -1;
+                    } else if (this->snuffTimer > OBJ_SYOKUDAI_SNUFF_OUT) {
+                        this->snuffTimer = OBJ_SYOKUDAI_SNUFF_NEVER;
                     }
-                } else if (this->litTimer < 0) {
-                    this->litTimer = 20;
+                } else if (this->snuffTimer <= OBJ_SYOKUDAI_SNUFF_NEVER) {
+                    this->snuffTimer = 20;
                 }
             }
             if (this->flameCollider.base.acFlags & AC_HIT) {
@@ -204,7 +204,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                 }
             }
             if (interaction != OBJ_SYOKUDAI_INTERACTION_NONE) {
-                if (this->litTimer != 0) {
+                if (this->snuffTimer != OBJ_SYOKUDAI_SNUFF_OUT) {
                     if (interaction <= OBJ_SYOKUDAI_INTERACTION_STICK) {
                         if (player->unk_B28 == 0) {
                             player->unk_B28 = 0xD2;
@@ -222,10 +222,11 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                             ((EnArrow*)flameColliderHurtboxActor)->unk_1C0 = 0x800;
                         }
                     }
-                    if ((this->litTimer >= 0) && (this->litTimer < ((groupSize * 50) + 100)) &&
+                    if ((this->snuffTimer > OBJ_SYOKUDAI_SNUFF_NEVER) &&
+                        (this->snuffTimer < ((groupSize * 50) + 100)) &&
                         (type != OBJ_SYOKUDAI_TYPE_SWITCH_CAUSES_FLAME)) {
 
-                        this->litTimer = (groupSize * 50) + 100;
+                        this->snuffTimer = (groupSize * 50) + 100;
                     }
                 } else if ((type != OBJ_SYOKUDAI_TYPE_SWITCH_CAUSES_FLAME) &&
                            (((interaction >= OBJ_SYOKUDAI_INTERACTION_ARROW_FA) &&
@@ -236,18 +237,18 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                     }
                     if (groupSize == 0) {
                         if ((type == OBJ_SYOKUDAI_TYPE_NO_SWITCH) && (switchFlag == 0x7F)) {
-                            this->litTimer = -1;
+                            this->snuffTimer = OBJ_SYOKUDAI_SNUFF_NEVER;
                         } else if (thisx->cutscene >= 0) {
                             this->pendingAction = OBJ_SYOKUDAI_PENDING_ACTION_CUTSCENE_AND_SWITCH;
                         } else {
                             Actor_SetSwitchFlag(globalCtx, switchFlag);
-                            this->litTimer = -1;
+                            this->snuffTimer = OBJ_SYOKUDAI_SNUFF_NEVER;
                         }
                     } else {
                         if (++sNumLitTorchesInGroup >= groupSize) {
                             this->pendingAction = OBJ_SYOKUDAI_PENDING_ACTION_CUTSCENE_AND_SWITCH;
                         } else {
-                            this->litTimer = (groupSize * 50) + 110;
+                            this->snuffTimer = (groupSize * 50) + 110;
                         }
                     }
                     func_801A5CFC(NA_SE_EV_FLAME_IGNITION, &thisx->projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
@@ -261,16 +262,17 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->standCollider.base);
     Collider_UpdateCylinder(thisx, &this->flameCollider);
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->flameCollider.base);
-    if ((this->litTimer > 0) && (--this->litTimer == 0) && (type != OBJ_SYOKUDAI_TYPE_SWITCH_CAUSES_FLAME)) {
+    if ((this->snuffTimer > OBJ_SYOKUDAI_SNUFF_OUT) && (--this->snuffTimer == OBJ_SYOKUDAI_SNUFF_OUT) &&
+        (type != OBJ_SYOKUDAI_TYPE_SWITCH_CAUSES_FLAME)) {
         sNumLitTorchesInGroup--;
     }
-    if (this->litTimer != 0) {
+    if (this->snuffTimer != OBJ_SYOKUDAI_SNUFF_OUT) {
         s32 pad2;
 
-        if ((this->litTimer < 0) || (this->litTimer >= 20)) {
+        if ((this->snuffTimer <= OBJ_SYOKUDAI_SNUFF_NEVER) || (this->snuffTimer >= 20)) {
             lightRadius = 250;
         } else {
-            lightRadius = ((this->litTimer * 250.0f) / 20.0f);
+            lightRadius = ((this->snuffTimer * 250.0f) / 20.0f);
         }
         lightIntensity = Rand_ZeroOne() * 127;
         lightIntensity += 128;
@@ -290,14 +292,14 @@ void ObjSyokudai_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, sDLists[OBJ_SYOKUDAI_GET_TYPE(thisx)]);
-    if (this->litTimer != 0) {
+    if (this->snuffTimer != OBJ_SYOKUDAI_SNUFF_OUT) {
         s32 groupSizeAdj = (groupSize * 50) + 100;
 
         scaleFactor = 1.0f;
-        if (groupSizeAdj < this->litTimer) {
-            scaleFactor = ((groupSizeAdj - this->litTimer) + 10) / 10.0f;
-        } else if ((this->litTimer > 0) && (this->litTimer < 20)) {
-            scaleFactor = this->litTimer / 20.0f;
+        if (groupSizeAdj < this->snuffTimer) {
+            scaleFactor = ((groupSizeAdj - this->snuffTimer) + 10) / 10.0f;
+        } else if ((this->snuffTimer > OBJ_SYOKUDAI_SNUFF_OUT) && (this->snuffTimer < 20)) {
+            scaleFactor = this->snuffTimer / 20.0f;
         }
         scaleFactor *= 0.0027f;
         func_8012C2DC(globalCtx->state.gfxCtx);
