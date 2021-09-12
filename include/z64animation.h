@@ -24,19 +24,19 @@ typedef struct {
     /* 0x007 */ u8 nextLimbIndex;   // The parent limb's next limb index into the limb table.
     /* 0x008 */ Gfx* displayLists[1]; // Display lists for the limb. Index 0 is the normal display list, index 1 is the
                                       // far model display list.
-} StandardLimb; // Size = 0xC
+} StandardLimb;                       // Size = 0xC
 
 // Model has limbs with only rigid meshes
 typedef struct {
     /* 0x000 */ void** skeletonSeg; // Segment address of SkelLimbIndex.
-    /* 0x004 */ u8 limbCount;          // Number of limbs in the model.
-} SkeletonHeader; // size = 0x8
+    /* 0x004 */ u8 limbCount;       // Number of limbs in the model.
+} SkeletonHeader;                   // size = 0x8
 
 // Model has limbs with flexible meshes
 typedef struct {
     /* 0x000 */ SkeletonHeader sh;
-    /* 0x008 */ u8 dListCount;         // Number of display lists in the model.
-} FlexSkeletonHeader; // size = 0xC
+    /* 0x008 */ u8 dListCount; // Number of display lists in the model.
+} FlexSkeletonHeader;          // size = 0xC
 
 typedef s16 AnimationRotationValue;
 
@@ -53,7 +53,7 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ AnimationHeaderCommon common;
-    /* 0x04 */ s16* frameData;         // referenced as tbl
+    /* 0x04 */ s16* frameData;           // referenced as tbl
     /* 0x08 */ JointIndex* jointIndices; // referenced as ref_tbl
     /* 0x0C */ u16 staticIndexMax;
 } AnimationHeader; // size = 0x10
@@ -151,7 +151,7 @@ struct SkelAnime {
     /* 0x01 */ u8 mode;
     /* 0x02 */ u8 dListCount;
     /* 0x03 */ s8 unk03;
-    /* 0x04 */ void** skeleton;   // An array of pointers to limbs. Can be StandardLimb, LodLimb, or SkinLimb.
+    /* 0x04 */ void** skeleton; // An array of pointers to limbs. Can be StandardLimb, LodLimb, or SkinLimb.
     /* 0x08 */
     union {
         AnimationHeader* animCurrentSeg;
@@ -167,7 +167,10 @@ struct SkelAnime {
     /* 0x24 */ Vec3s* transitionDrawTbl; // morf_joint
     /* 0x28 */ f32 transCurrentFrame;
     /* 0x2C */ f32 transitionStep;
-    /* 0x30 */ s32 (*animUpdate)();
+    /* 0x30 */ union {
+        s32 (*animUpdate)(SkelAnime* skelAnime);
+        s32 (*linkAnimUpdate)(struct GlobalContext* globalCtx, SkelAnime* skelAnime);
+    };
     /* 0x34 */ s8 initFlags;
     /* 0x35 */ u8 flags;
     /* 0x36 */ s16 prevFrameRot;

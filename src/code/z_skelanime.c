@@ -1134,15 +1134,15 @@ void SkelAnime_InitLinkAnimetion(GlobalContext* globalCtx, SkelAnime* skelAnime,
 
 void func_801360A8(SkelAnime* skelAnime) {
     if (skelAnime->mode < 2) {
-        skelAnime->animUpdate = func_80136288;
+        skelAnime->linkAnimUpdate = func_80136288;
     } else {
-        skelAnime->animUpdate = func_8013631C;
+        skelAnime->linkAnimUpdate = func_8013631C;
     }
     skelAnime->transCurrentFrame = 0.0f;
 }
 
 s32 func_801360E0(GlobalContext* globalCtx, SkelAnime* skelAnime) {
-    return skelAnime->animUpdate(globalCtx, skelAnime);
+    return skelAnime->linkAnimUpdate(globalCtx, skelAnime);
 }
 
 s32 func_80136104(GlobalContext* globalCtx, SkelAnime* skelAnime) {
@@ -1226,7 +1226,7 @@ void SkelAnime_ChangeLinkAnim(GlobalContext* globalCtx, SkelAnime* skelAnime,
             SkelAnime_CopyVec3s(skelAnime, skelAnime->transitionDrawTbl, skelAnime->limbDrawTbl);
             transitionRate = -transitionRate;
         } else {
-            skelAnime->animUpdate = func_80136104;
+            skelAnime->linkAnimUpdate = func_80136104;
             SkelAnime_LoadLinkAnimetion(globalCtx, linkAnimationHeaderSeg, (s32)frame, skelAnime->limbCount,
                                         skelAnime->transitionDrawTbl);
         }

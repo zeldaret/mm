@@ -291,7 +291,7 @@ void __osSiRelAccess(void);
 s32 osContInit(OSMesgQueue* mq, u8* bitpattern, OSContStatus* data);
 void __osContGetInitData(u8* pattern, OSContStatus* data);
 void __osPackRequestData(u8 cmd);
-void osCreateThread(OSThread* t, OSId id, void* entry, void* arg, void* sp, OSPri p);
+void osCreateThread(OSThread* t, OSId id, osCreateThread_func entry, void* arg, void* sp, OSPri p);
 s32 osContStartReadData(OSMesgQueue* mq);
 void osContGetReadData(OSContPad* data);
 void __osPackReadData(void);

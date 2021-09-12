@@ -21,11 +21,12 @@ void Slowly_Main(SlowlyTask* slowly) {
     slowly->status |= SLOWLY_STATUS_DONE;
 }
 
-void Slowly_ThreadEntry(SlowlyTask* slowly) {
+void Slowly_ThreadEntry(void* arg) {
+    SlowlyTask* slowly = (SlowlyTask*)arg;
     Slowly_Main(slowly);
 }
 
-void Slowly_Start(SlowlyTask* slowly, void* stack, void (*callback)(), void* callbackArg0, void* callbackArg1) {
+void Slowly_Start(SlowlyTask* slowly, void* stack, void (*callback)(void), void* callbackArg0, void* callbackArg1) {
     bzero(slowly, sizeof(SlowlyTask));
 
     slowly->callbackArgCount = SLOWLY_CALLBACK_TWO_ARGS;
