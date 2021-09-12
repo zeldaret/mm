@@ -144,7 +144,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
         if (ActorCutscene_GetCurrentIndex() != thisx->cutscene) {
             if (ActorCutscene_GetCanPlayNext(thisx->cutscene) != 0) {
                 ActorCutscene_StartAndSetUnkLinkFields(thisx->cutscene, thisx);
-                if (this->pendingAction > OBJ_SYOKUDAI_PENDING_ACTION_NONE) {
+                if (this->pendingAction >= OBJ_SYOKUDAI_PENDING_ACTION_CUTSCENE_AND_SWITCH) {
                     Actor_SetSwitchFlag(globalCtx, switchFlag);
                 }
             } else {
@@ -195,17 +195,17 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                     interaction = OBJ_SYOKUDAI_INTERACTION_ARROW_FA;
                 }
             } else if (player->itemActionParam == 7) {
-                Vec3f posDiffFromStickTip;
+                Vec3f stickTipSeparationVec;
 
-                Math_Vec3f_Diff(&player->swordInfo[0].tip, &thisx->world.pos, &posDiffFromStickTip);
-                posDiffFromStickTip.y -= 67.0f;
-                if (SQXYZ(posDiffFromStickTip) < SQ(20.0f)) {
+                Math_Vec3f_Diff(&player->swordInfo[0].tip, &thisx->world.pos, &stickTipSeparationVec);
+                stickTipSeparationVec.y -= 67.0f;
+                if (SQXYZ(stickTipSeparationVec) < SQ(20.0f)) {
                     interaction = OBJ_SYOKUDAI_INTERACTION_STICK;
                 }
             }
             if (interaction != OBJ_SYOKUDAI_INTERACTION_NONE) {
                 if (this->litTimer != 0) {
-                    if (interaction < OBJ_SYOKUDAI_INTERACTION_NONE) {
+                    if (interaction <= OBJ_SYOKUDAI_INTERACTION_STICK) {
                         if (player->unk_B28 == 0) {
                             player->unk_B28 = 0xD2;
                             func_8019F1C0(&thisx->projectedPos, NA_SE_EV_FLAME_IGNITION);
@@ -228,9 +228,9 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                         this->litTimer = (groupSize * 50) + 100;
                     }
                 } else if ((type != OBJ_SYOKUDAI_TYPE_SWITCH_CAUSES_FLAME) &&
-                           (((interaction > OBJ_SYOKUDAI_INTERACTION_NONE) &&
-                             ((flameColliderHurtboxDmgFlags & 0x800) != 0)) ||
-                            ((interaction < OBJ_SYOKUDAI_INTERACTION_NONE) && (player->unk_B28 != 0)))) {
+                           (((interaction >= OBJ_SYOKUDAI_INTERACTION_ARROW_FA) &&
+                             (flameColliderHurtboxDmgFlags & 0x800)) ||
+                            ((interaction <= OBJ_SYOKUDAI_INTERACTION_STICK) && (player->unk_B28 != 0)))) {
                     if ((interaction < OBJ_SYOKUDAI_INTERACTION_NONE) && (player->unk_B28 < 0xC8)) {
                         player->unk_B28 = 0xC8;
                     }
