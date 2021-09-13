@@ -16,5 +16,6 @@ public:
 
 	std::string GetCommandCName() const override;
 	RoomCommand GetRoomCommand() const override;
+
 private:
 };

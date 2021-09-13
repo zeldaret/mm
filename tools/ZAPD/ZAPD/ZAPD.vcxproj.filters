@@ -377,9 +377,6 @@
     <ClInclude Include="ZRoom\Commands\SetCutscenes.h">
       <Filter>Header Files\Z64\ZRoom\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\lib\json\include\nlohmann\json.hpp">
-      <Filter>Header Files\Libraries</Filter>
-    </ClInclude>
     <ClInclude Include="..\lib\stb\stb_image.h">
       <Filter>Header Files\Libraries</Filter>
     </ClInclude>

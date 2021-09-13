@@ -352,7 +352,7 @@ public:
 	int16_t rotX, rotY, rotZ;
 	int32_t startPosX, startPosY, startPosZ;
 	int32_t endPosX, endPosY, endPosZ;
-	int32_t normalX, normalY, normalZ;
+	float normalX, normalY, normalZ;
 
 	ActorAction(const std::vector<uint8_t>& rawData, uint32_t rawDataIndex);
 };
@@ -412,8 +412,13 @@ class ZCutsceneBase : public ZResource
 {
 public:
 	ZCutsceneBase(ZFile* nParent);
-	virtual std::string GetBodySourceCode() = 0;
+
+	std::string GetBodySourceCode() const override = 0;
+
 	virtual void DeclareVar(const std::string& prefix, const std::string& bodyStr) const = 0;
+
+	std::string GetSourceTypeName() const override;
+
 	virtual uint32_t getSegmentOffset() const = 0;
 };
 
@@ -425,7 +430,7 @@ public:
 
 	void ParseRawData() override;
 
-	std::string GetBodySourceCode() override;
+	std::string GetBodySourceCode() const override;
 	void DeclareVar(const std::string& prefix, const std::string& bodyStr) const override;
 	std::string GetSourceOutputCode(const std::string& prefix) override;
 	size_t GetRawDataSize() const override;

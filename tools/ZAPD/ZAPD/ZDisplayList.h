@@ -324,7 +324,6 @@ protected:
 
 public:
 	std::string sceneSegName;
-	ZRoom* scene;
 	std::vector<uint64_t> instructions;
 	std::string curPrefix;
 
@@ -359,7 +358,7 @@ public:
 	Declaration* DeclareVar(const std::string& prefix, const std::string& bodyStr);
 
 	void TextureGenCheck(std::string prefix);
-	static bool TextureGenCheck(ZRoom* scene, ZFile* parent, std::string prefix, int32_t texWidth,
+	static bool TextureGenCheck(ZFile* parent, std::string prefix, int32_t texWidth,
 	                            int32_t texHeight, uint32_t texAddr, uint32_t texSeg,
 	                            F3DZEXTexFormats texFmt, F3DZEXTexSizes texSiz, bool texLoaded,
 	                            bool texIsPalette, ZDisplayList* self);
@@ -373,7 +372,7 @@ public:
 	std::string ProcessGfxDis(const std::string& prefix);
 
 	bool IsExternalResource() const override;
-	virtual std::string GetExternalExtension() const override;
+	std::string GetExternalExtension() const override;
 	std::string GetSourceTypeName() const override;
 
 	ZResourceType GetResourceType() const override;

@@ -249,7 +249,7 @@ ZOverlay* ZOverlay::FromBuild(fs::path buildPath, fs::path cfgFolderPath)
 	return ovl;
 }
 
-std::string ZOverlay::GetSourceOutputCode(const std::string& prefix)
+std::string ZOverlay::GetSourceOutputCode([[maybe_unused]] const std::string& prefix)
 {
 	std::string output = "";
 

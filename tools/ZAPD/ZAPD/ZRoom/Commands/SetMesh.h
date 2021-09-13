@@ -95,6 +95,7 @@ public:
 
 	PolygonTypeBase(ZFile* nParent, const std::vector<uint8_t>& nRawData, uint32_t nRawDataIndex,
 	                ZRoom* nRoom);
+	virtual ~PolygonTypeBase() = default;
 
 	virtual void ParseRawData() = 0;
 	virtual void DeclareReferences(const std::string& prefix) = 0;
@@ -112,7 +113,6 @@ public:
 	std::string GetDefaultName(const std::string& prefix) const;
 
 protected:
-
 	uint32_t rawDataIndex;
 	ZFile* parent;
 	ZRoom* zRoom;
@@ -181,7 +181,6 @@ public:
 	std::string GetBodySourceCode() const override;
 
 	RoomCommand GetRoomCommand() const override;
-	size_t GetRawDataSize() const override;
 	std::string GetCommandCName() const override;
 
 private:

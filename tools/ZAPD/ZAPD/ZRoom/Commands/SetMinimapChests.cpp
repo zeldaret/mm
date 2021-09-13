@@ -1,7 +1,7 @@
 #include "SetMinimapChests.h"
 
-#include "Utils/BitConverter.h"
 #include "Globals.h"
+#include "Utils/BitConverter.h"
 #include "Utils/StringHelper.h"
 #include "ZFile.h"
 #include "ZRoom/ZRoom.h"
@@ -62,11 +62,6 @@ std::string SetMinimapChests::GetCommandCName() const
 RoomCommand SetMinimapChests::GetRoomCommand() const
 {
 	return RoomCommand::SetMinimapChests;
-}
-
-size_t SetMinimapChests::GetRawDataSize() const
-{
-	return ZRoomCommand::GetRawDataSize() + (chests.size() * 10);
 }
 
 MinimapChest::MinimapChest(const std::vector<uint8_t>& rawData, uint32_t rawDataIndex)

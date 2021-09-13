@@ -1,8 +1,8 @@
 #include "ZAnimation.h"
 #include <utility>
+#include "Globals.h"
 #include "Utils/BitConverter.h"
 #include "Utils/File.h"
-#include "Globals.h"
 #include "Utils/StringHelper.h"
 #include "ZFile.h"
 
@@ -23,7 +23,7 @@ void ZAnimation::ParseRawData()
 	frameCount = BitConverter::ToInt16BE(parent->GetRawData(), rawDataIndex + 0);
 }
 
-std::string ZAnimation::GetSourceOutputCode(const std::string& prefix)
+std::string ZAnimation::GetSourceOutputCode([[maybe_unused]] const std::string& prefix)
 {
 	return "";
 }
@@ -40,7 +40,7 @@ ZNormalAnimation::ZNormalAnimation(ZFile* nParent) : ZAnimation(nParent)
 	limit = 0;
 }
 
-std::string ZNormalAnimation::GetSourceOutputCode(const std::string& prefix)
+std::string ZNormalAnimation::GetSourceOutputCode([[maybe_unused]] const std::string& prefix)
 {
 	if (parent != nullptr)
 	{
@@ -138,7 +138,7 @@ ZLinkAnimation::ZLinkAnimation(ZFile* nParent) : ZAnimation(nParent)
 	segmentAddress = 0;
 }
 
-std::string ZLinkAnimation::GetSourceOutputCode(const std::string& prefix)
+std::string ZLinkAnimation::GetSourceOutputCode([[maybe_unused]] const std::string& prefix)
 {
 	if (parent != nullptr)
 	{
@@ -195,7 +195,7 @@ TransformData::TransformData(ZFile* parent, const std::vector<uint8_t>& rawData,
 {
 }
 
-std::string TransformData::GetBody(const std::string& prefix) const
+std::string TransformData::GetBody([[maybe_unused]] const std::string& prefix) const
 {
 	return StringHelper::Sprintf("0x%04X, 0x%04X, %i, %i, %ff", unk_00, unk_02, unk_04, unk_06,
 	                             unk_08);
@@ -243,8 +243,8 @@ void ZCurveAnimation::ParseRawData()
 	unk_0C = BitConverter::ToInt16BE(rawData, rawDataIndex + 12);
 	unk_10 = BitConverter::ToInt16BE(rawData, rawDataIndex + 14);
 
-	limbCount =
-		BitConverter::ToUInt8BE(rawData, Seg2Filespace(skelOffset, parent->baseAddress) + 4);
+	uint32_t limbCountAddress = Seg2Filespace(skelOffset, parent->baseAddress) + 4;
+	limbCount = BitConverter::ToUInt8BE(rawData, limbCountAddress);
 
 	size_t transformDataSize = 0;
 	size_t copyValuesSize = 0;
@@ -577,7 +577,7 @@ std::string ZLegacyAnimation::GetBodySourceCode() const
 	return body;
 }
 
-std::string ZLegacyAnimation::GetSourceOutputCode(const std::string& prefix)
+std::string ZLegacyAnimation::GetSourceOutputCode([[maybe_unused]] const std::string& prefix)
 {
 	std::string body = GetBodySourceCode();
 

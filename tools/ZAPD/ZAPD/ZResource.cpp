@@ -114,11 +114,23 @@ void ZResource::ParseXML(tinyxml2::XMLElement* reader)
 	}
 }
 
-void ZResource::Save(const fs::path& outFolder)
+void ZResource::ParseRawData()
 {
 }
 
-void ZResource::PreGenSourceFiles()
+void ZResource::DeclareReferences([[maybe_unused]] const std::string& prefix)
+{
+}
+
+void ZResource::ParseRawDataLate()
+{
+}
+
+void ZResource::DeclareReferencesLate([[maybe_unused]] const std::string& prefix)
+{
+}
+
+void ZResource::Save([[maybe_unused]] const fs::path& outFolder)
 {
 }
 
@@ -177,27 +189,14 @@ std::string ZResource::GetBodySourceCode() const
 	return "ERROR";
 }
 
-std::string ZResource::GetSourceOutputCode(const std::string& prefix)
+std::string ZResource::GetSourceOutputCode([[maybe_unused]] const std::string& prefix)
 {
 	return "";
 }
 
-std::string ZResource::GetSourceOutputHeader(const std::string& prefix)
+std::string ZResource::GetSourceOutputHeader([[maybe_unused]] const std::string& prefix)
 {
 	return "";
-}
-
-void ZResource::ParseRawData()
-{
-}
-
-void ZResource::DeclareReferences(const std::string& prefix)
-{
-}
-
-std::string ZResource::GetSourceTypeName() const
-{
-	return "u8";
 }
 
 ZResourceType ZResource::GetResourceType() const

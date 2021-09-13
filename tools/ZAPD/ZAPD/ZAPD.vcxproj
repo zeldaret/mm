@@ -229,7 +229,6 @@ python3 ZAPD/genbuildinfo.py</Command>
     <ClInclude Include="..\lib\elfio\elfio\elfio_symbols.hpp" />
     <ClInclude Include="..\lib\elfio\elfio\elfio_utils.hpp" />
     <ClInclude Include="..\lib\elfio\elfio\elf_types.hpp" />
-    <ClInclude Include="..\lib\json\include\nlohmann\json.hpp" />
     <ClInclude Include="..\lib\libgfxd\gbi.h" />
     <ClInclude Include="..\lib\libgfxd\gfxd.h" />
     <ClInclude Include="..\lib\libgfxd\priv.h" />

@@ -27,10 +27,10 @@ void ExporterExample_Room::Save(ZResource* res, fs::path outPath, BinaryWriter* 
 	//MemoryStream* memStream = new MemoryStream();
 	//BinaryWriter* writer = new BinaryWriter(memStream);
 
-	for (int i = 0; i < room->commands.size() * 8; i++)
+	for (uint i = 0; i < room->commands.size() * 8; i++)
 		writer->Write((uint8_t)0);
 
-	for (int i = 0; i < room->commands.size(); i++)
+	for (uint i = 0; i < room->commands.size(); i++)
 	{
 		ZRoomCommand* cmd = room->commands[i];
 		

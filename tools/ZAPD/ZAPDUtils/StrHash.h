@@ -6,6 +6,7 @@
 
 typedef uint32_t strhash;
 
+[[maybe_unused]]
 static strhash CRC32B(unsigned char* message, int32_t size)
 {
 	int32_t byte = 0, crc = 0;
@@ -28,6 +29,7 @@ static strhash CRC32B(unsigned char* message, int32_t size)
 	return ~(uint32_t)(crc);
 }
 
+[[maybe_unused]]
 constexpr static strhash CRC32BCT(const char* message, int32_t size)
 {
 	int32_t byte = 0, crc = 0;

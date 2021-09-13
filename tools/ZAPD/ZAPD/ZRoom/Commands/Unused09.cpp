@@ -7,7 +7,7 @@ Unused09::Unused09(ZFile* nParent) : ZRoomCommand(nParent)
 
 std::string Unused09::GetBodySourceCode() const
 {
-	return StringHelper::Sprintf("{ %s, 0x00, 0x00 }", GetCommandHex().c_str());
+	return "SCENE_CMD_UNK_09()";
 }
 
 std::string Unused09::GetCommandCName() const

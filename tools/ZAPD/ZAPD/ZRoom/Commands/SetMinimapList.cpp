@@ -1,7 +1,7 @@
 #include "SetMinimapList.h"
 
-#include "Utils/BitConverter.h"
 #include "Globals.h"
+#include "Utils/BitConverter.h"
 #include "Utils/StringHelper.h"
 #include "ZFile.h"
 #include "ZRoom/ZRoom.h"
@@ -75,11 +75,6 @@ std::string SetMinimapList::GetCommandCName() const
 RoomCommand SetMinimapList::GetRoomCommand() const
 {
 	return RoomCommand::SetMinimapList;
-}
-
-size_t SetMinimapList::GetRawDataSize() const
-{
-	return ZRoomCommand::GetRawDataSize() + (minimaps.size() * 10);
 }
 
 MinimapEntry::MinimapEntry(const std::vector<uint8_t>& rawData, uint32_t rawDataIndex)

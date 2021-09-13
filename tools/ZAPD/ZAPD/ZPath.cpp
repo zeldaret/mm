@@ -1,7 +1,7 @@
 #include "ZPath.h"
 
-#include "Utils/BitConverter.h"
 #include "Globals.h"
+#include "Utils/BitConverter.h"
 #include "Utils/StringHelper.h"
 #include "ZFile.h"
 
@@ -80,7 +80,7 @@ std::string ZPath::GetBodySourceCode() const
 	return declaration;
 }
 
-std::string ZPath::GetSourceOutputCode(const std::string& prefix)
+std::string ZPath::GetSourceOutputCode([[maybe_unused]] const std::string& prefix)
 {
 	std::string declaration = GetBodySourceCode();
 

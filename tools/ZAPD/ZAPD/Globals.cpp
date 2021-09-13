@@ -1,7 +1,7 @@
 #include "Globals.h"
-#include <algorithm>
 #include <Utils/File.h>
 #include <Utils/Path.h>
+#include <algorithm>
 #include "tinyxml2.h"
 
 using namespace tinyxml2;
@@ -204,7 +204,7 @@ ZResourceExporter* Globals::GetExporter(ZResourceType resType)
 	auto exporters = *GetExporterMap();
 
 	if (currentExporter != "" && exporters[currentExporter]->exporters.find(resType) !=
-		exporters[currentExporter]->exporters.end())
+	                                 exporters[currentExporter]->exporters.end())
 		return exporters[currentExporter]->exporters[resType];
 	else
 		return nullptr;

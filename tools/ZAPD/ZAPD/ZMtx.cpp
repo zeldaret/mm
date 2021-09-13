@@ -48,7 +48,7 @@ void ZMtx::DeclareVar(const std::string& prefix, const std::string& bodyStr) con
 	                       GetSourceTypeName(), auxName, bodyStr);
 }
 
-std::string ZMtx::GetBodySourceCode()
+std::string ZMtx::GetBodySourceCode() const
 {
 	std::string bodyStr = "\n";
 

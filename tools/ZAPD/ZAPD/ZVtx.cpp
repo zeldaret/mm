@@ -42,7 +42,7 @@ std::string ZVtx::GetBodySourceCode() const
 	                             a);
 }
 
-std::string ZVtx::GetSourceOutputCode(const std::string& prefix)
+std::string ZVtx::GetSourceOutputCode([[maybe_unused]] const std::string& prefix)
 {
 	std::string output = GetBodySourceCode();
 

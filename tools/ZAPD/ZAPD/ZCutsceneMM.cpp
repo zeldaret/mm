@@ -12,7 +12,7 @@ ZCutsceneMM::~ZCutsceneMM()
 		delete cmd;
 }
 
-std::string ZCutsceneMM::GetBodySourceCode()
+std::string ZCutsceneMM::GetBodySourceCode() const
 {
 	std::string output = "";
 

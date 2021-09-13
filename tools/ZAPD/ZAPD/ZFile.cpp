@@ -4,10 +4,10 @@
 #include <algorithm>
 #include <cassert>
 #include <unordered_set>
-#include "Utils/Directory.h"
-#include "Utils/File.h"
 #include "Globals.h"
 #include "OutputFormatter.h"
+#include "Utils/Directory.h"
+#include "Utils/File.h"
 #include "Utils/Path.h"
 #include "ZAnimation.h"
 #include "ZArray.h"
@@ -71,7 +71,8 @@ ZFile::~ZFile()
 	}
 }
 
-void ZFile::ParseXML(ZFileMode mode, XMLElement* reader, std::string filename, bool placeholderMode)
+void ZFile::ParseXML(ZFileMode mode, XMLElement* reader, std::string filename,
+                     [[maybe_unused]] bool placeholderMode)
 {
 	if (filename == "")
 		name = reader->Attribute("Name");
@@ -275,8 +276,10 @@ void ZFile::ExtractResources()
 	if (!Directory::Exists(GetSourceOutputFolderPath().string()))
 		Directory::CreateDirectory(GetSourceOutputFolderPath().string());
 
-	for (ZResource* res : resources)
-		res->PreGenSourceFiles();
+	for (size_t i = 0; i < resources.size(); i++)
+		resources[i]->ParseRawDataLate();
+	for (size_t i = 0; i < resources.size(); i++)
+		resources[i]->DeclareReferencesLate(name);
 
 	if (Globals::Instance->genSourceFile)
 		GenerateSourceFiles(Globals::Instance->outputPath);
@@ -306,8 +309,10 @@ void ZFile::ExtractResources()
 
 	if (memStream->GetLength() > 0)
 	{
-		File::WriteAllBytes(StringHelper::Sprintf("%s%s.bin", Globals::Instance->outputPath.string().c_str(), GetName().c_str()),
-			memStream->ToVector());
+		File::WriteAllBytes(StringHelper::Sprintf("%s%s.bin",
+		                                          Globals::Instance->outputPath.string().c_str(),
+		                                          GetName().c_str()),
+		                    memStream->ToVector());
 	}
 
 	writer.Close();
@@ -372,12 +377,8 @@ Declaration* ZFile::AddDeclarationArray(uint32_t address, DeclarationAlignment a
                                         size_t size, std::string varType, std::string varName,
                                         size_t arrayItemCnt, std::string body)
 {
-	assert(GETSEGNUM(address) == 0);
-	AddDeclarationDebugChecks(address);
-
-	declarations[address] =
-		new Declaration(alignment, size, varType, varName, true, arrayItemCnt, body);
-	return declarations[address];
+	return AddDeclarationArray(address, alignment, DeclarationPadding::None, size, varType, varName,
+	                           arrayItemCnt, body);
 }
 
 Declaration* ZFile::AddDeclarationArray(uint32_t address, DeclarationAlignment alignment,
@@ -393,18 +394,6 @@ Declaration* ZFile::AddDeclarationArray(uint32_t address, DeclarationAlignment a
 }
 
 Declaration* ZFile::AddDeclarationArray(uint32_t address, DeclarationAlignment alignment,
-                                        size_t size, std::string varType, std::string varName,
-                                        size_t arrayItemCnt, std::string body, bool isExternal)
-{
-	assert(GETSEGNUM(address) == 0);
-	AddDeclarationDebugChecks(address);
-
-	declarations[address] =
-		new Declaration(alignment, size, varType, varName, true, arrayItemCnt, body, isExternal);
-	return declarations[address];
-}
-
-Declaration* ZFile::AddDeclarationArray(uint32_t address, DeclarationAlignment alignment,
                                         DeclarationPadding padding, size_t size,
                                         std::string varType, std::string varName,
                                         size_t arrayItemCnt, std::string body)
@@ -412,9 +401,28 @@ Declaration* ZFile::AddDeclarationArray(uint32_t address, DeclarationAlignment a
 	assert(GETSEGNUM(address) == 0);
 	AddDeclarationDebugChecks(address);
 
-	declarations[address] =
-		new Declaration(alignment, padding, size, varType, varName, true, arrayItemCnt, body);
-	return declarations[address];
+	Declaration* decl = GetDeclaration(address);
+	if (decl == nullptr)
+	{
+		decl =
+			new Declaration(alignment, padding, size, varType, varName, true, arrayItemCnt, body);
+		declarations[address] = decl;
+	}
+	else
+	{
+		if (decl->isPlaceholder)
+			decl->varName = varName;
+		decl->alignment = alignment;
+		decl->padding = padding;
+		decl->size = size;
+		decl->varType = varType;
+		decl->isArray = true;
+		decl->arrayItemCnt = arrayItemCnt;
+		if (body != "" && decl->text == "")
+			decl->text = body;
+	}
+
+	return decl;
 }
 
 Declaration* ZFile::AddDeclarationPlaceholder(uint32_t address)
@@ -1225,7 +1233,7 @@ std::string ZFile::ProcessExterns()
 	return output;
 }
 
-std::string ZFile::ProcessTextureIntersections(std::string prefix)
+std::string ZFile::ProcessTextureIntersections([[maybe_unused]] std::string prefix)
 {
 	if (texturesResources.empty())
 		return "";

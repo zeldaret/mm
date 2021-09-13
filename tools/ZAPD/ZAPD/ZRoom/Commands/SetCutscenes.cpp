@@ -1,13 +1,19 @@
 #include "SetCutscenes.h"
 
-#include "Utils/BitConverter.h"
 #include "Globals.h"
+#include "Utils/BitConverter.h"
 #include "Utils/StringHelper.h"
 #include "ZFile.h"
 #include "ZRoom/ZRoom.h"
 
 SetCutscenes::SetCutscenes(ZFile* nParent) : ZRoomCommand(nParent)
 {
+}
+
+SetCutscenes::~SetCutscenes()
+{
+	for (ZCutsceneBase* cutscene : cutscenes)
+		delete cutscene;
 }
 
 void SetCutscenes::ParseRawData()
@@ -76,12 +82,6 @@ void SetCutscenes::ParseRawData()
 	}
 }
 
-SetCutscenes::~SetCutscenes()
-{
-	for (ZCutsceneBase* cutscene : cutscenes)
-		delete cutscene;
-}
-
 std::string SetCutscenes::GetBodySourceCode() const
 {
 	std::string listName = parent->GetDeclarationPtrName(cmdArg2);
@@ -90,11 +90,6 @@ std::string SetCutscenes::GetBodySourceCode() const
 		return StringHelper::Sprintf("SCENE_CMD_CUTSCENE_LIST(%i, %s)", numCutscenes,
 		                             listName.c_str());
 	return StringHelper::Sprintf("SCENE_CMD_CUTSCENE_DATA(%s)", listName.c_str());
-}
-
-size_t SetCutscenes::GetRawDataSize() const
-{
-	return ZRoomCommand::GetRawDataSize();
 }
 
 std::string SetCutscenes::GetCommandCName() const

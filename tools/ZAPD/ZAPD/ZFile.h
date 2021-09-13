@@ -1,8 +1,8 @@
 #pragma once
 
+#include <Utils/Directory.h>
 #include <string>
 #include <vector>
-#include <Utils/Directory.h>
 #include "ZTexture.h"
 #include "tinyxml2.h"
 
@@ -57,9 +57,6 @@ public:
 	Declaration* AddDeclarationArray(uint32_t address, DeclarationAlignment alignment, size_t size,
 	                                 std::string varType, std::string varName, size_t arrayItemCnt,
 	                                 std::string body);
-	Declaration* AddDeclarationArray(uint32_t address, DeclarationAlignment alignment, size_t size,
-	                                 std::string varType, std::string varName, size_t arrayItemCnt,
-	                                 std::string body, bool isExternal);
 	Declaration* AddDeclarationArray(uint32_t address, DeclarationAlignment alignment, size_t size,
 	                                 std::string varType, std::string varName,
 	                                 std::string arrayItemCntStr, std::string body);

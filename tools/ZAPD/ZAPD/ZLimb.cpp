@@ -1,7 +1,7 @@
 #include "ZLimb.h"
 #include <cassert>
-#include "Utils/BitConverter.h"
 #include "Globals.h"
+#include "Utils/BitConverter.h"
 #include "Utils/StringHelper.h"
 
 REGISTER_ZFILENODE(Limb, ZLimb);
@@ -101,7 +101,7 @@ Struct_800A598C::Struct_800A598C(ZFile* parent, const std::vector<uint8_t>& rawD
 {
 }
 
-void Struct_800A598C::PreGenSourceFiles(const std::string& prefix)
+void Struct_800A598C::DeclareReferences(const std::string& prefix)
 {
 	std::string entryStr;
 
@@ -240,7 +240,7 @@ Struct_800A5E28::~Struct_800A5E28()
 	delete unk_8_dlist;
 }
 
-void Struct_800A5E28::PreGenSourceFiles(const std::string& prefix)
+void Struct_800A5E28::DeclareReferences(const std::string& prefix)
 {
 	if (unk_4 != 0)
 	{
@@ -256,7 +256,7 @@ void Struct_800A5E28::PreGenSourceFiles(const std::string& prefix)
 
 		for (auto& child : unk_4_arr)
 		{
-			child.PreGenSourceFiles(prefix);
+			child.DeclareReferences(prefix);
 			entryStr +=
 				StringHelper::Sprintf("    { %s },%s", child.GetSourceOutputCode(prefix).c_str(),
 			                          (++i < arrayItemCnt) ? "\n" : "");
@@ -446,7 +446,7 @@ void ZLimb::ParseRawData()
 	{
 	case ZLimbType::LOD:
 		dList2Ptr = BitConverter::ToUInt32BE(rawData, rawDataIndex + 12);
-		// Intended fallthrough
+		[[fallthrough]];
 	case ZLimbType::Standard:
 		dListPtr = BitConverter::ToUInt32BE(rawData, rawDataIndex + 8);
 		break;
@@ -733,7 +733,7 @@ std::string ZLimb::GetSourceOutputCodeSkin_Type_4(const std::string& prefix)
 			StringHelper::Sprintf("%sSkinLimb_%s_%06X", prefix.c_str(),
 		                          Struct_800A5E28::GetSourceTypeName().c_str(), skinSegmentOffset);
 
-		segmentStruct.PreGenSourceFiles(prefix);
+		segmentStruct.DeclareReferences(prefix);
 		std::string entryStr = segmentStruct.GetSourceOutputCode(prefix);
 
 		parent->AddDeclaration(skinSegmentOffset, DeclarationAlignment::None,

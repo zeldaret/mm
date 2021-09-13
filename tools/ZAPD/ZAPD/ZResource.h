@@ -30,6 +30,7 @@ enum class ZResourceType
 	Error,
 	Animation,
 	Array,
+	AltHeader,
 	Background,
 	Blob,
 	CollisionHeader,
@@ -42,10 +43,13 @@ enum class ZResourceType
 	Room,
 	RoomCommand,
 	Scalar,
+	Scene,
 	Skeleton,
 	String,
 	Symbol,
 	Texture,
+	TextureAnimation,
+	TextureAnimationParams,
 	Vector,
 	Vertex,
 };
@@ -77,18 +81,19 @@ public:
 	virtual void ParseXML(tinyxml2::XMLElement* reader);
 	virtual void ParseRawData();
 	virtual void DeclareReferences(const std::string& prefix);
+	virtual void ParseRawDataLate();
+	virtual void DeclareReferencesLate(const std::string& prefix);
 	virtual std::string GetBodySourceCode() const;
 
 	virtual std::string GetSourceOutputCode(const std::string& prefix);
 	virtual std::string GetSourceOutputHeader(const std::string& prefix);
-	virtual void PreGenSourceFiles();
 	virtual void CalcHash();
 	virtual void Save(const fs::path& outFolder);
 
 	// Properties
 	virtual bool IsExternalResource() const;
 	virtual bool DoesSupportArray() const;  // Can this type be wrapped in an <Array> node?
-	virtual std::string GetSourceTypeName() const;
+	virtual std::string GetSourceTypeName() const = 0;
 	virtual ZResourceType GetResourceType() const = 0;
 	virtual std::string GetExternalExtension() const;
 
