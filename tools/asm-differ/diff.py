@@ -9,7 +9,6 @@ from typing import (
     Iterator,
     List,
     Match,
-    NamedTuple,
     NoReturn,
     Optional,
     Pattern,
@@ -41,7 +40,7 @@ if __name__ == "__main__":
     sys.path.pop(0)
 
     try:
-        import argcomplete  # type: ignore
+        import argcomplete
     except ModuleNotFoundError:
         argcomplete = None
 
@@ -117,25 +116,35 @@ if __name__ == "__main__":
         one non-stripped. Requires objdump from binutils 2.33+.""",
     )
     parser.add_argument(
-        "--source",
         "-c",
+        "--source",
         dest="source",
         action="store_true",
         help="Show source code (if possible). Only works with -o or -e.",
     )
     parser.add_argument(
-        "--source-old-binutils",
         "-C",
+        "--source-old-binutils",
         dest="source_old_binutils",
         action="store_true",
-        help="Tweak --source handling to make it work with binutils < 2.33. Implies --source.",
+        help="""Tweak --source handling to make it work with binutils < 2.33.
+        Implies --source.""",
     )
     parser.add_argument(
         "-L",
         "--line-numbers",
-        dest="line_numbers",
-        action="store_true",
-        help="Include column of source line numbers in output, when available",
+        dest="show_line_numbers",
+        action="store_const",
+        const=True,
+        help="""Show source line numbers in output, when available. May be enabled by
+        default depending on diff_settings.py.""",
+    )
+    parser.add_argument(
+        "--no-line-numbers",
+        dest="show_line_numbers",
+        action="store_const",
+        const=False,
+        help="Hide source line numbers in output.",
     )
     parser.add_argument(
         "--inlines",
@@ -333,8 +342,8 @@ MISSING_PREREQUISITES = (
 )
 
 try:
-    from colorama import Back, Fore, Style  # type: ignore
-    import watchdog  # type: ignore
+    from colorama import Back, Fore, Style
+    import watchdog
 except ModuleNotFoundError as e:
     fail(MISSING_PREREQUISITES.format(e.name))
 
@@ -353,6 +362,7 @@ class ProjectSettings:
     mapfile: Optional[str]
     source_directories: Optional[List[str]]
     source_extensions: List[str]
+    show_line_numbers_default: bool
 
 
 @dataclass
@@ -412,6 +422,7 @@ def create_project_settings(settings: Dict[str, Any]) -> ProjectSettings:
         objdump_executable=get_objdump_executable(settings.get("objdump_executable")),
         map_format=settings.get("map_format", "gnu"),
         mw_build_dir=settings.get("mw_build_dir", "build/"),
+        show_line_numbers_default=settings.get("show_line_numbers_default", True),
     )
 
 
@@ -438,6 +449,10 @@ def create_config(args: argparse.Namespace, project: ProjectSettings) -> Config:
             )
         compress = Compress(args.compress_sameinstr, True)
 
+    show_line_numbers = args.show_line_numbers
+    if show_line_numbers is None:
+        show_line_numbers = project.show_line_numbers_default
+
     return Config(
         arch=get_arch(project.arch_str),
         # Build/objdump options
@@ -457,7 +472,7 @@ def create_config(args: argparse.Namespace, project: ProjectSettings) -> Config:
         skip_lines=args.skip_lines,
         compress=compress,
         show_branches=args.show_branches,
-        show_line_numbers=args.line_numbers,
+        show_line_numbers=show_line_numbers,
         stop_jrra=args.stop_jrra,
         ignore_large_imms=args.ignore_large_imms,
         ignore_addr_diffs=args.ignore_addr_diffs,
@@ -931,19 +946,12 @@ def run_make_capture_output(
     )
 
 
-def restrict_to_function(dump: str, fn_name: str, config: Config) -> str:
-    out: List[str] = []
-    search = f"<{fn_name}>:"
-    found = False
-    for line in dump.split("\n"):
-        if found:
-            if len(out) >= config.max_function_size_lines:
-                out.append("\t\t...")
-                break
-            out.append(line)
-        elif search in line:
-            found = True
-    return "\n".join(out)
+def restrict_to_function(dump: str, fn_name: str) -> str:
+    try:
+        ind = dump.index("\n", dump.index(f"<{fn_name}>:"))
+        return dump[ind + 1 :]
+    except ValueError:
+        return ""
 
 
 def serialize_data_references(references: List[Tuple[int, int, str]]) -> str:
@@ -989,7 +997,7 @@ def run_objdump(cmd: ObjdumpCommand, config: Config, project: ProjectSettings) -
         raise e
 
     if restrict is not None:
-        out = restrict_to_function(out, restrict, config)
+        out = restrict_to_function(out, restrict)
 
     if config.diff_obj:
         with open(target, "rb") as f:
@@ -1126,7 +1134,8 @@ def parse_elf_data_references(data: bytes) -> List[Tuple[int, int, str]]:
     assert e_shnum != 0  # don't support > 0xFF00 sections
     assert e_shstrndx != 0
 
-    class Section(NamedTuple):
+    @dataclass
+    class Section:
         sh_name: int
         sh_type: int
         sh_flags: int
@@ -1607,15 +1616,15 @@ class Line:
     original: str
     normalized_original: str
     scorable_line: str
-    line_num: Optional[int]
-    branch_target: Optional[int]
-    source_filename: Optional[str]
-    source_line_num: Optional[int]
-    source_lines: List[str]
-    comment: Optional[str]
+    line_num: Optional[int] = None
+    branch_target: Optional[int] = None
+    source_filename: Optional[str] = None
+    source_line_num: Optional[int] = None
+    source_lines: List[str] = field(default_factory=list)
+    comment: Optional[str] = None
 
 
-def process(lines: List[str], config: Config) -> List[Line]:
+def process(dump: str, config: Config) -> List[Line]:
     arch = config.arch
     normalizer = arch.difference_normalizer(config)
     skip_next = False
@@ -1624,9 +1633,11 @@ def process(lines: List[str], config: Config) -> List[Line]:
     source_line_num = None
 
     i = 0
+    num_instr = 0
     data_refs: Dict[int, Dict[str, List[int]]] = defaultdict(lambda: defaultdict(list))
     output: List[Line] = []
     stop_after_delay_slot = False
+    lines = dump.split("\n")
     while i < len(lines):
         row = lines[i]
         i += 1
@@ -1641,6 +1652,18 @@ def process(lines: List[str], config: Config) -> List[Line]:
             from_section = parts[3]
             data_refs[text_offset][from_section].append(from_offset)
             continue
+
+        if config.diff_obj and num_instr >= config.max_function_size_lines:
+            output.append(
+                Line(
+                    mnemonic="...",
+                    diff_row="...",
+                    original="...",
+                    normalized_original="...",
+                    scorable_line="...",
+                )
+            )
+            break
 
         # This regex is conservative, and assumes the file path does not contain "weird"
         # characters like colons, tabs, or angle brackets.
@@ -1694,12 +1717,6 @@ def process(lines: List[str], config: Config) -> List[Line]:
                     original=ref_str,
                     normalized_original=ref_str,
                     scorable_line="<data-ref>",
-                    line_num=None,
-                    branch_target=None,
-                    source_filename=None,
-                    source_line_num=None,
-                    source_lines=[],
-                    comment=None,
                 )
             )
 
@@ -1779,6 +1796,7 @@ def process(lines: List[str], config: Config) -> List[Line]:
                 comment=comment,
             )
         )
+        num_instr += 1
         source_lines = []
 
         if config.stop_jrra and mnemonic == "jr" and row_parts[1].strip() == "ra":
@@ -1844,9 +1862,10 @@ def diff_sequences(
 
     rem1 = remap(seq1)
     rem2 = remap(seq2)
-    import Levenshtein  # type: ignore
+    import Levenshtein
 
-    return Levenshtein.opcodes(rem1, rem2)  # type: ignore
+    ret: List[Tuple[str, int, int, int, int]] = Levenshtein.opcodes(rem1, rem2)
+    return ret
 
 
 def diff_lines(
@@ -2006,15 +2025,12 @@ class Diff:
     score: int
 
 
-def do_diff(basedump: str, mydump: str, config: Config) -> Diff:
+def do_diff(lines1: List[Line], lines2: List[Line], config: Config) -> Diff:
     if config.source:
-        import cxxfilt  # type: ignore
+        import cxxfilt
     arch = config.arch
     fmt = config.formatter
     output: List[OutputLine] = []
-
-    lines1 = process(basedump.split("\n"), config)
-    lines2 = process(mydump.split("\n"), config)
 
     sc1 = symbol_formatter("base-reg", 0)
     sc2 = symbol_formatter("my-reg", 0)
@@ -2401,10 +2417,10 @@ def debounced_fs_watch(
     config: Config,
     project: ProjectSettings,
 ) -> None:
-    import watchdog.events  # type: ignore
-    import watchdog.observers  # type: ignore
+    import watchdog.events
+    import watchdog.observers
 
-    class WatchEventHandler(watchdog.events.FileSystemEventHandler):  # type: ignore
+    class WatchEventHandler(watchdog.events.FileSystemEventHandler):
         def __init__(
             self, queue: "queue.Queue[float]", file_targets: List[str]
         ) -> None:
@@ -2484,7 +2500,7 @@ class Display:
 
     def __init__(self, basedump: str, mydump: str, config: Config) -> None:
         self.config = config
-        self.basedump = basedump
+        self.base_lines = process(basedump, config)
         self.mydump = mydump
         self.emsg = None
         self.last_refresh_key = None
@@ -2494,7 +2510,8 @@ class Display:
         if self.emsg is not None:
             return (self.emsg, self.emsg)
 
-        diff_output = do_diff(self.basedump, self.mydump, self.config)
+        my_lines = process(self.mydump, self.config)
+        diff_output = do_diff(self.base_lines, my_lines, self.config)
         last_diff_output = self.last_diff_output or diff_output
         if self.config.threeway != "base" or not self.last_diff_output:
             self.last_diff_output = diff_output
@@ -2502,7 +2519,10 @@ class Display:
         meta, diff_lines = align_diffs(last_diff_output, diff_output, self.config)
         diff_lines = diff_lines[self.config.skip_lines :]
         output = self.config.formatter.table(meta, diff_lines)
-        refresh_key = [[col.key2 for col in x[1:]] for x in diff_lines]
+        refresh_key = (
+            [[col.key2 for col in x[1:]] for x in diff_lines],
+            diff_output.score,
+        )
         return (output, refresh_key)
 
     def run_less(
