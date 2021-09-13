@@ -58,14 +58,14 @@ int _Printf(PrintCallback pfn, void* arg, const char* fmt, va_list ap) {
         while ((c = *s) != 0 && c != '%') {
             s++;
         }
-        _PROUT((char*)fmt, s - fmt);
+        _PROUT(fmt, s - fmt);
         if (c == 0) {
             return x.nchar;
         }
         fmt = ++s;
         x.flags = 0;
         // TODO the cast isn't necessary because strchr should take it in as const, but it currently doesn't
-        for (; (t = strchr((char*)fchar, *s)) != NULL; s++) {
+        for (; (t = strchr(fchar, *s)) != NULL; s++) {
             x.flags |= fbit[t - fchar];
         }
         if (*s == '*') {
@@ -109,7 +109,7 @@ int _Printf(PrintCallback pfn, void* arg, const char* fmt, va_list ap) {
         _PROUT((char*)(&x.s[x.n1]), x.n2);
         _PAD(x.nz2, zeroes, 1);
         _PAD(x.width, spaces, x.flags & FLAGS_MINUS);
-        fmt = (char*)s + 1;
+        fmt = s + 1;
     }
 }
 
