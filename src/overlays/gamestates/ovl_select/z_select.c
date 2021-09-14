@@ -17,9 +17,9 @@ void Select_LoadTitle(SelectContext* this) {
     SET_NEXT_GAMESTATE(&this->state, Title_Init, TitleContext);
 }
 
-void Select_LoadGame(SelectContext* this, u32 arg1, s32 arg2) {
+void Select_LoadGame(SelectContext* this, u32 entranceIndex, s32 opt) {
     if (gSaveContext.fileNum == 0xFF) {
-        func_80144968();
+        Sram_InitDebugSave();
     }
 
     gSaveContext.buttonStatus[0] = BTN_ENABLED;
@@ -32,11 +32,11 @@ void Select_LoadGame(SelectContext* this, u32 arg1, s32 arg2) {
     gSaveContext.unk_3F22 = 0;
     gSaveContext.unk_3F24 = 0;
 
-    func_801A89A8(NA_BGM_STOP);
-    gSaveContext.entranceIndex = arg1;
+    Audio_QueueSeqCmd(NA_BGM_STOP);
+    gSaveContext.entranceIndex = entranceIndex;
 
-    if (arg2 != 0) {
-        gSaveContext.entranceIndex = Entrance_CreateIndex((s32)gSaveContext.entranceIndex >> 9, arg2, gSaveContext.entranceIndex & 0xF);
+    if (opt != 0) {
+        gSaveContext.entranceIndex = Entrance_CreateIndex((s32)gSaveContext.entranceIndex >> 9, opt, gSaveContext.entranceIndex & 0xF);
     }
     if (gSaveContext.entranceIndex == 0xC000) {
         gSaveContext.day = 0;
@@ -470,8 +470,7 @@ void Select_PrintMenu(SelectContext* this, GfxPrint* printer) {
 }
 
 // clang-format off
-// sLoadingMessages
-const char* D_80802334[] = {
+const char* sLoadingMessages[] = {
     // "Please wait a minute",
     "\x8Dｼﾊﾞﾗｸｵﾏﾁｸﾀﾞｻｲ",
     // "Hold on a sec",
@@ -505,8 +504,8 @@ void Select_PrintLoadingMessage(SelectContext* this, GfxPrint* printer) {
     GfxPrint_SetPos(printer, 10, 15);
     GfxPrint_SetColor(printer, 255, 255, 255, 255);
 
-    index = Rand_ZeroOne() * ARRAY_COUNT(D_80802334);
-    GfxPrint_Printf(printer, "%s", D_80802334[index]);
+    index = Rand_ZeroOne() * ARRAY_COUNT(sLoadingMessages);
+    GfxPrint_Printf(printer, "%s", sLoadingMessages[index]);
 }
 
 // clang-format off
