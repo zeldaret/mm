@@ -98,8 +98,8 @@ void ObjSyokudai_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->standCollider.base.colType = sColTypes[OBJ_SYOKUDAI_GET_TYPE(thisx)];
     Collider_InitAndSetCylinder(globalCtx, &this->flameCollider, thisx, &sFlameColliderInit);
     thisx->colChkInfo.mass = MASS_IMMOVABLE;
-    Lights_PointGlowSetInfo(&this->lightInfo, thisx->world.pos.x, thisx->world.pos.y + 70.0f, thisx->world.pos.z, 0xFF,
-                            0xFF, 0xB4, -1);
+    Lights_PointGlowSetInfo(&this->lightInfo, thisx->world.pos.x, thisx->world.pos.y + OBJ_SYOKUDAI_GLOW_HEIGHT,
+                            thisx->world.pos.z, 0xFF, 0xFF, 0xB4, -1);
     this->lightNode = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->lightInfo);
 
     if (OBJ_SYOKUDAI_GET_START_LIT(thisx) ||
@@ -114,7 +114,7 @@ void ObjSyokudai_Init(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         sNumLitTorchesInGroup = 0;
     }
-    this->flameTexScroll = (u32)(Rand_ZeroOne() * 20.0f);
+    this->flameTexScroll = (u32)(Rand_ZeroOne() * OBJ_SYOKUDAI_SNUFF_DEFAULT);
     Actor_SetHeight(thisx, 60.0f);
 }
 
@@ -157,13 +157,13 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
     } else {
         if (func_800CA1E8(globalCtx, &globalCtx->colCtx, thisx->world.pos.x, thisx->world.pos.z, &waterSurface,
                           &waterBox) &&
-            ((waterSurface - thisx->world.pos.y) > 52.0f)) {
+            ((waterSurface - thisx->world.pos.y) > OBJ_SYOKUDAI_FLAME_HEIGHT)) {
 
             this->snuffTimer = OBJ_SYOKUDAI_SNUFF_OUT;
             if (type == OBJ_SYOKUDAI_TYPE_FLAME_CAUSES_SWITCH) {
                 Actor_UnsetSwitchFlag(globalCtx, switchFlag);
                 if (groupSize != 0) {
-                    this->snuffTimer = 1;
+                    this->snuffTimer = OBJ_SYOKUDAI_SNUFF_GROUP_BY_WATER;
                 }
             }
         } else {
@@ -186,20 +186,20 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                         this->snuffTimer = OBJ_SYOKUDAI_SNUFF_NEVER;
                     }
                 } else if (this->snuffTimer <= OBJ_SYOKUDAI_SNUFF_NEVER) {
-                    this->snuffTimer = 20;
+                    this->snuffTimer = OBJ_SYOKUDAI_SNUFF_DEFAULT;
                 }
             }
             if (this->flameCollider.base.acFlags & AC_HIT) {
                 flameColliderHurtboxDmgFlags = this->flameCollider.info.acHitInfo->toucher.dmgFlags;
-                if ((this->flameCollider.info.acHitInfo->toucher.dmgFlags & 0x820) != 0) {
+                if (this->flameCollider.info.acHitInfo->toucher.dmgFlags & 0x820) {
                     interaction = OBJ_SYOKUDAI_INTERACTION_ARROW_FA;
                 }
             } else if (player->itemActionParam == 7) {
                 Vec3f stickTipSeparationVec;
 
                 Math_Vec3f_Diff(&player->swordInfo[0].tip, &thisx->world.pos, &stickTipSeparationVec);
-                stickTipSeparationVec.y -= 67.0f;
-                if (SQXYZ(stickTipSeparationVec) < SQ(20.0f)) {
+                stickTipSeparationVec.y -= OBJ_SYOKUDAI_STICK_IGNITION_HEIGHT;
+                if (SQXYZ(stickTipSeparationVec) < SQ(OBJ_SYOKUDAI_STICK_IGNITION_RADIUS)) {
                     interaction = OBJ_SYOKUDAI_INTERACTION_STICK;
                 }
             }
@@ -223,10 +223,10 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                         }
                     }
                     if ((this->snuffTimer > OBJ_SYOKUDAI_SNUFF_NEVER) &&
-                        (this->snuffTimer < ((groupSize * 50) + 100)) &&
+                        (this->snuffTimer < (OBJ_SYOKUDAI_SNUFF_TIMER_INITIAL(groupSize))) &&
                         (type != OBJ_SYOKUDAI_TYPE_SWITCH_CAUSES_FLAME)) {
 
-                        this->snuffTimer = (groupSize * 50) + 100;
+                        this->snuffTimer = OBJ_SYOKUDAI_SNUFF_TIMER_INITIAL(groupSize);
                     }
                 } else if ((type != OBJ_SYOKUDAI_TYPE_SWITCH_CAUSES_FLAME) &&
                            (((interaction >= OBJ_SYOKUDAI_INTERACTION_ARROW_FA) &&
@@ -248,7 +248,8 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                         if (++sNumLitTorchesInGroup >= groupSize) {
                             this->pendingAction = OBJ_SYOKUDAI_PENDING_ACTION_CUTSCENE_AND_SWITCH;
                         } else {
-                            this->snuffTimer = (groupSize * 50) + 110;
+                            this->snuffTimer =
+                                OBJ_SYOKUDAI_SNUFF_TIMER_INITIAL(groupSize) + OBJ_SYOKUDAI_SNUFF_TIMER_JUST_LIT_BONUS;
                         }
                     }
                     func_801A5CFC(NA_SE_EV_FLAME_IGNITION, &thisx->projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
@@ -269,10 +270,10 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
     if (this->snuffTimer != OBJ_SYOKUDAI_SNUFF_OUT) {
         s32 pad2;
 
-        if ((this->snuffTimer <= OBJ_SYOKUDAI_SNUFF_NEVER) || (this->snuffTimer >= 20)) {
-            lightRadius = 250;
+        if ((this->snuffTimer <= OBJ_SYOKUDAI_SNUFF_NEVER) || (this->snuffTimer >= OBJ_SYOKUDAI_SNUFF_DEFAULT)) {
+            lightRadius = OBJ_SYOKUDAI_LIGHT_RADIUS_MAX;
         } else {
-            lightRadius = ((this->snuffTimer * 250.0f) / 20.0f);
+            lightRadius = (f32)this->snuffTimer * OBJ_SYOKUDAI_LIGHT_RADIUS_MAX / OBJ_SYOKUDAI_SNUFF_DEFAULT;
         }
         lightIntensity = Rand_ZeroOne() * 127;
         lightIntensity += 128;
@@ -286,31 +287,32 @@ void ObjSyokudai_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjSyokudai* this = THIS;
     s32 pad;
     s32 groupSize = OBJ_SYOKUDAI_GET_GROUP_SIZE(thisx);
-    f32 scaleFactor;
+    f32 flameScale;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, sDLists[OBJ_SYOKUDAI_GET_TYPE(thisx)]);
     if (this->snuffTimer != OBJ_SYOKUDAI_SNUFF_OUT) {
-        s32 groupSizeAdj = (groupSize * 50) + 100;
+        s32 snuffTimerInitial = OBJ_SYOKUDAI_SNUFF_TIMER_INITIAL(groupSize);
 
-        scaleFactor = 1.0f;
-        if (groupSizeAdj < this->snuffTimer) {
-            scaleFactor = ((groupSizeAdj - this->snuffTimer) + 10) / 10.0f;
-        } else if ((this->snuffTimer > OBJ_SYOKUDAI_SNUFF_OUT) && (this->snuffTimer < 20)) {
-            scaleFactor = this->snuffTimer / 20.0f;
+        flameScale = 1.0f;
+        if (snuffTimerInitial < this->snuffTimer) {
+            flameScale = (f32)(snuffTimerInitial - this->snuffTimer + OBJ_SYOKUDAI_SNUFF_TIMER_JUST_LIT_BONUS) /
+                         OBJ_SYOKUDAI_SNUFF_TIMER_JUST_LIT_BONUS;
+        } else if ((this->snuffTimer > OBJ_SYOKUDAI_SNUFF_OUT) && (this->snuffTimer < OBJ_SYOKUDAI_SNUFF_DEFAULT)) {
+            flameScale = (f32)this->snuffTimer / OBJ_SYOKUDAI_SNUFF_DEFAULT;
         }
-        scaleFactor *= 0.0027f;
+        flameScale *= 0.0027f;
         func_8012C2DC(globalCtx->state.gfxCtx);
         gSPSegment(POLY_XLU_DISP++, 0x08,
                    Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0,
-                                    (this->flameTexScroll * -20) & 0x1FF, 0x20, 0x80));
+                                    (this->flameTexScroll * -OBJ_SYOKUDAI_SNUFF_DEFAULT) & 0x1FF, 0x20, 0x80));
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 0, 255);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
-        SysMatrix_InsertTranslation(0.0f, 52.0f, 0.0f, MTXMODE_APPLY);
+        SysMatrix_InsertTranslation(0.0f, OBJ_SYOKUDAI_FLAME_HEIGHT, 0.0f, MTXMODE_APPLY);
         Matrix_RotateY(BINANG_ROT180(func_800DFCDC(ACTIVE_CAM) - thisx->shape.rot.y), MTXMODE_APPLY);
-        Matrix_Scale(scaleFactor, scaleFactor, scaleFactor, MTXMODE_APPLY);
+        Matrix_Scale(flameScale, flameScale, flameScale, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, D_0407D590);
     }
