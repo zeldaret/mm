@@ -142,7 +142,8 @@ s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, 
         ret |= 0x3d;
     }
 
-    if (BgCheck_ProjectileLineTest(&globalCtx->colCtx, pos, &camera->eye, &screenSpace, &poly, true, true, true, true, &bgId)) {
+    if (BgCheck_ProjectileLineTest(&globalCtx->colCtx, pos, &camera->eye, &screenSpace, &poly, true, true, true, true,
+                                   &bgId)) {
         func_8013A41C(0x3c);
         ret |= 0x3c;
     }

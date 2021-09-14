@@ -633,11 +633,13 @@ void EnPametfrog_WallCrawl(EnPametfrog* this, GlobalContext* globalCtx) {
         vec2.x = this->actor.world.pos.x - this->unk_2DC.x * 25.0f;
         vec2.y = this->actor.world.pos.y - this->unk_2DC.y * 25.0f;
         vec2.z = this->actor.world.pos.z - this->unk_2DC.z * 25.0f;
-        if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &vec1, &vec2, &worldPos2, &poly2, true, true, true, true, &bgId2)) {
+        if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &vec1, &vec2, &worldPos2, &poly2, true, true, true, true,
+                                    &bgId2)) {
             vec2.x = this->unk_2D0.x * doubleSpeedXZ + vec1.x;
             vec2.y = this->unk_2D0.y * doubleSpeedXZ + vec1.y;
             vec2.z = this->unk_2D0.z * doubleSpeedXZ + vec1.z;
-            if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &vec1, &vec2, &worldPos1, &poly1, true, true, true, true, &bgId1)) {
+            if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &vec1, &vec2, &worldPos1, &poly1, true, true, true, true,
+                                        &bgId1)) {
                 isSuccess = func_8086A2CC(this, poly1);
                 Math_Vec3f_Copy(&this->actor.world.pos, &worldPos1);
                 this->actor.floorBgId = bgId1;
@@ -879,7 +881,8 @@ void EnPametfrog_FallInAir(EnPametfrog* this, GlobalContext* globalCtx) {
     } else {
         this->spinYaw += 0xF00;
         if (this->camId != 0) {
-            Play_CameraSetAtEye(globalCtx, this->camId, &this->actor.world.pos, &Play_GetCamera(globalCtx, this->camId)->eye);
+            Play_CameraSetAtEye(globalCtx, this->camId, &this->actor.world.pos,
+                                &Play_GetCamera(globalCtx, this->camId)->eye);
         }
 
         if (this->actor.bgCheckFlags & 1) {

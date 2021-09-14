@@ -1,18 +1,81 @@
 #include "global.h"
 #include "vt.h"
 
-/*
-u32 D_801B4620[32] = {
-    0,
-    1,
-    3,
-    5,
-    8,
-    0x10,
-    0x20,
-    0x40
+static u32 D_801B4620[32] = {
+    0, 1, 3, 5, 8, 16, 32, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
-*/
+
+// SurfaceType_GetSfx
+static u16 D_801B46A0[] = {
+    /* 0x00 */ NA_SE_PL_WALK_GROUND - SFX_FLAG,
+    /* 0x01 */ NA_SE_PL_WALK_SAND - SFX_FLAG,
+    /* 0x02 */ NA_SE_PL_WALK_CONCRETE - SFX_FLAG,
+    /* 0x03 */ NA_SE_PL_WALK_DIRT - SFX_FLAG,
+    /* 0x04 */ NA_SE_PL_WALK_WATER0 - SFX_FLAG,
+    /* 0x05 */ NA_SE_PL_WALK_WATER1 - SFX_FLAG,
+    /* 0x06 */ NA_SE_PL_WALK_WATER2 - SFX_FLAG,
+    /* 0x07 */ NA_SE_PL_WALK_MAGMA - SFX_FLAG,
+    /* 0x08 */ NA_SE_PL_WALK_GRASS - SFX_FLAG,
+    /* 0x09 */ NA_SE_PL_WALK_GLASS - SFX_FLAG,
+    /* 0x0A */ NA_SE_PL_WALK_LADDER - SFX_FLAG,
+    /* 0x0B */ NA_SE_PL_WALK_GROUND - SFX_FLAG,
+    /* 0x0C */ NA_SE_PL_WALK_ICE - SFX_FLAG,
+    /* 0x0D */ NA_SE_PL_WALK_IRON - SFX_FLAG,
+    /* 0x0E */ NA_SE_PL_WALK_SNOW - SFX_FLAG
+};
+
+static u8 D_801B46C0[] = {
+    /* 0x00 */ 1,
+    /* 0x01 */ 1,
+    /* 0x02 */ 0,
+    /* 0x03 */ 1,
+    /* 0x04 */ 0,
+    /* 0x05 */ 0,
+    /* 0x06 */ 0,
+    /* 0x07 */ 0,
+    /* 0x08 */ 0,
+    /* 0x09 */ 0,
+    /* 0x0A */ 0,
+    /* 0x0B */ 0,
+    /* 0x0C */ 0,
+    /* 0x0D */ 0,
+    /* 0x0E */ 1
+};
+
+static s16 spotScenes[] = {
+    SCENE_F01,
+};
+
+typedef struct {
+    s16 sceneId;
+    u32 memSize;
+} BgCheckSceneMemEntry;
+
+static BgCheckSceneMemEntry sceneMemList[] = {
+    { SCENE_00KEIKOKU, 0xC800 },
+};
+
+static BgCheckSceneSubdivisionEntry sceneSubdivisionList[] = {
+    { SCENE_00KEIKOKU, { 36, 1, 36 }, -1 },
+    { SCENE_30GYOSON, { 40, 1, 40 }, -1 },
+    { SCENE_31MISAKI, { 40, 1, 40 }, -1 },
+};
+
+static BgSpecialSceneMaxObjects customDynapolyMem[] = { { SCENE_21MITURINMAE, 1000, 600, 512 } };
+
+char D_801ED950[80];
+char D_801ED9A0[80];
+Vec3f D_801ED9F0[3]; // polyVerts
+Vec3f D_801EDA18[3]; // polyVerts //not ok
+MtxF D_801EDA40;
+Vec3f D_801EDA80[3]; // polyVerts
+char D_801EDAA8[80];
+char D_801EDAF8[80];
+Vec3f D_801EDB48[3]; // polyVerts
+Vec3f D_801EDB70[3];
+Plane D_801EDB98;
+Sphere16 D_801EDBA8;
+TriNorm D_801EDBB0;
 
 // z64math.
 #define Linef LineSegment
@@ -32,8 +95,8 @@ u32 D_801B4620[32] = {
 
 #define Math3D_PlaneVsLineSegClosestPoint func_80179678
 s32 Math3D_PlaneVsLineSegClosestPoint(f32 planeAA, f32 planeAB, f32 planeAC, f32 planeADist, f32 planeBA, f32 planeBB,
-    f32 planeBC, f32 planeBDist, Vec3f* linePointA, Vec3f* linePointB,
-    Vec3f* closestPoint);
+                                      f32 planeBC, f32 planeBDist, Vec3f* linePointA, Vec3f* linePointB,
+                                      Vec3f* closestPoint);
 
 s32 func_8017A304(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 z, f32 x, f32 chkDist);
 
@@ -41,35 +104,38 @@ s32 func_8017A304(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 z, f32 x, f32 chkDist);
 s32 Math3D_TriChkPointParaYDist(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 y, f32 z, f32 unk, f32 chkDist, f32 ny);
 
 #define Math3D_TriChkPointParaYIntersectDist func_8017BE30
-s32 Math3D_TriChkPointParaYIntersectDist(Vec3f* a, Vec3f* b, Vec3f* c, f32 nx, f32 ny, f32 nz, f32 dist, f32 z, f32 x, f32* yIntersect, f32 chkDist);
+s32 Math3D_TriChkPointParaYIntersectDist(Vec3f* a, Vec3f* b, Vec3f* c, f32 nx, f32 ny, f32 nz, f32 dist, f32 z, f32 x,
+                                         f32* yIntersect, f32 chkDist);
 
 #define Math3D_TriChkLineSegParaYIntersect func_8017C008
 s32 Math3D_TriChkLineSegParaYIntersect(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32 nz, f32 originDist, f32 z,
-    f32 x, f32* yIntersect, f32 y0, f32 y1);
+                                       f32 x, f32* yIntersect, f32 y0, f32 y1);
 
 #define Math3D_TriChkPointParaYIntersectInsideTri2 func_8017C494
 s32 Math3D_TriChkPointParaYIntersectInsideTri2(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32 nz, f32 originDist,
-    f32 z, f32 x, f32* yIntersect, f32 chkDist);
+                                               f32 z, f32 x, f32* yIntersect, f32 chkDist);
 
 #define Math3D_TriChkPointParaXDist func_8017C540
 s32 Math3D_TriChkPointParaXDist(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 y, f32 z, f32 unk, f32 chkDist, f32 nx);
 
 #define Math3D_TriChkPointParaXIntersect func_8017C850
-s32 Math3D_TriChkPointParaXIntersect(Vec3f* a, Vec3f* b, Vec3f* c, f32 nx, f32 ny, f32 nz, f32 dist, f32 y, f32 z, f32* xIntersect);
+s32 Math3D_TriChkPointParaXIntersect(Vec3f* a, Vec3f* b, Vec3f* c, f32 nx, f32 ny, f32 nz, f32 dist, f32 y, f32 z,
+                                     f32* xIntersect);
 
 #define Math3D_TriChkLineSegParaXIntersect func_8017C980
 s32 Math3D_TriChkLineSegParaXIntersect(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32 nz, f32 originDist, f32 y,
-    f32 z, f32* xIntersect, f32 x0, f32 x1);
+                                       f32 z, f32* xIntersect, f32 x0, f32 x1);
 
 #define Math3D_TriChkLineSegParaZDist func_8017CB7C
 s32 Math3D_TriChkLineSegParaZDist(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 y, f32 z, f32 unk, f32 chkDist, f32 nz);
 
 #define Math3D_TriChkPointParaZIntersect func_8017CEF0
-s32 Math3D_TriChkPointParaZIntersect(Vec3f* a, Vec3f* b, Vec3f* c, f32 nx, f32 ny, f32 nz, f32 dist, f32 x, f32 y, f32* zIntersect);
+s32 Math3D_TriChkPointParaZIntersect(Vec3f* a, Vec3f* b, Vec3f* c, f32 nx, f32 ny, f32 nz, f32 dist, f32 x, f32 y,
+                                     f32* zIntersect);
 
 #define Math3D_TriChkLineSegParaZIntersect func_8017D020
 s32 Math3D_TriChkLineSegParaZIntersect(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32 nz, f32 originDist, f32 x,
-    f32 y, f32* zIntersect, f32 z0, f32 z1);
+                                       f32 y, f32* zIntersect, f32 z0, f32 z1);
 
 #define Math3D_XZInSphere func_8017F9C0
 s32 Math3D_XZInSphere(Sphere16* sphere, f32 x, f32 z);
@@ -80,32 +146,28 @@ s32 Math3D_YZInSphere(Sphere16* sphere, f32 y, f32 z);
 
 #define Math3D_TriChkPointParaYIntersectInsideTri func_8017BEE0
 s32 Math3D_TriChkPointParaYIntersectInsideTri(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32 nz, f32 originDist,
-    f32 z, f32 x, f32* yIntersect, f32 chkDist);
-
-// idk
-#define LogUtils_HungupThread Fault_AddHungupAndCrash
+                                              f32 z, f32 x, f32* yIntersect, f32 chkDist);
 
 void BgCheck_GetStaticLookupIndicesFromPos(CollisionContext* colCtx, Vec3f* pos, Vec3i* sector);
 
 f32 BgCheck_RaycastFloorDyna(DynaRaycast* dynaRaycast);
 
 s32 BgCheck_SphVsDynaWall(CollisionContext* colCtx, u16 xpFlags, f32* outX, f32* outZ, Vec3f* pos, f32 radius,
-    CollisionPoly** outPoly, s32* outBgId, Actor* actor);
+                          CollisionPoly** outPoly, s32* outBgId, Actor* actor);
 
 s32 BgCheck_CheckLineImpl(CollisionContext* colCtx, u16 xpFlags1, u16 xpFlags2, Vec3f* posA, Vec3f* posB,
-    Vec3f* posResult, CollisionPoly** outPoly, s32* outBgId, Actor* actor, f32 chkDist,
-    u32 bccFlags);
+                          Vec3f* posResult, CollisionPoly** outPoly, s32* outBgId, Actor* actor, f32 chkDist,
+                          u32 bccFlags);
 
 s32 BgCheck_CheckDynaCeiling(CollisionContext* colCtx, u16 xpFlags, f32* outY, Vec3f* pos, f32 chkDist,
-    CollisionPoly** outPoly, s32* outBgId, Actor* actor);
+                             CollisionPoly** outPoly, s32* outBgId, Actor* actor);
 
 s32 BgCheck_CheckLineAgainstDyna(CollisionContext* colCtx, u16 xpFlags, Vec3f* posA, Vec3f* posB, Vec3f* posResult,
-    CollisionPoly** outPoly, f32* distSq, s32* outBgId, Actor* actor, f32 chkDist,
-    s32 bccFlags);
+                                 CollisionPoly** outPoly, f32* distSq, s32* outBgId, Actor* actor, f32 chkDist,
+                                 s32 bccFlags);
 
 s32 BgCheck_SphVsFirstDynaPoly(CollisionContext* colCtx, u16 xpFlags, CollisionPoly** outPoly, s32* outBgId,
-    Vec3f* center, f32 radius, Actor* actor, u16 bciFlags);
-
+                               Vec3f* center, f32 radius, Actor* actor, u16 bciFlags);
 
 void SSNode_SetValue(SSNode* node, s16* polyIndex, u16 next) {
     node->polyId = *polyIndex;
@@ -148,9 +210,8 @@ void DynaSSNodeList_ResetCount(DynaSSNodeList* list) {
 }
 
 u16 DynaSSNodeList_GetNextNodeIdx(DynaSSNodeList* list) {
-    u16 index;
+    u16 index = list->count++;
 
-    index = list->count++;
     if (list->maxNodes <= index) {
         return SS_NULL;
     }
@@ -171,22 +232,22 @@ void BgCheck_Vec3fToVec3s(BgVertex* vertex, Vec3f* vector) {
 }
 
 f32 func_800BFD84(CollisionPoly* poly, f32 arg1, f32 arg2) {
-    return ((COLPOLY_GET_NORMAL(poly->normal.x * arg1 + poly->normal.z * arg2)) + (f32)poly->dist) / ((f32) -(s32)poly->normal.y * COLPOLY_NORMAL_FRAC);
+    return (COLPOLY_GET_NORMAL(poly->normal.x * arg1 + poly->normal.z * arg2) + poly->dist) /
+           (-poly->normal.y * COLPOLY_NORMAL_FRAC);
 }
 
 /**
-* Unused
-*/
+ * Unused
+ */
 s32 func_800BFDEC(CollisionPoly* polyA, CollisionPoly* polyB, u32* outVtxId0, u32* outVtxId1) {
     s32 vtxIdA[3];
     s32 vtxIdB[3];
     s32 i;
     s32 j;
     s32 count;
-    
+
     *outVtxId0 = *outVtxId1 = 0;
-    for (i = 0; i < 3; i++)
-    {
+    for (i = 0; i < 3; i++) {
         vtxIdA[i] = COLPOLY_VTX_INDEX(polyA->vtxData[i]);
         vtxIdB[i] = COLPOLY_VTX_INDEX(polyB->vtxData[i]);
     }
@@ -197,8 +258,7 @@ s32 func_800BFDEC(CollisionPoly* polyA, CollisionPoly* polyB, u32* outVtxId0, u3
             if (vtxIdA[i] == vtxIdB[j]) {
                 if (count == 0) {
                     *outVtxId0 = vtxIdA[i];
-                }
-                else if (count == 1) {
+                } else if (count == 1) {
                     *outVtxId1 = vtxIdA[i];
                 }
                 count++;
@@ -237,7 +297,6 @@ void CollisionPoly_GetNormalF(CollisionPoly* poly, f32* nx, f32* ny, f32* nz) {
 /**
  * Compute transform matrix mapping +y (up) to the collision poly's normal
  */
-//func_80038A28
 void func_800C0094(CollisionPoly* poly, f32 tx, f32 ty, f32 tz, MtxF* dest) {
     f32 nx;
     f32 ny;
@@ -258,8 +317,7 @@ void func_800C0094(CollisionPoly* poly, f32 tx, f32 ty, f32 tz, MtxF* dest) {
         inv_z_f14 = 1.0f / z_f14;
         phi_f14 = ny * inv_z_f14;
         phi_f12 = nz * inv_z_f14;
-    }
-    else {
+    } else {
         phi_f14 = 1.0f;
         phi_f12 = 0.0f;
     }
@@ -283,7 +341,7 @@ void func_800C0094(CollisionPoly* poly, f32 tx, f32 ty, f32 tz, MtxF* dest) {
 
 f32 CollisionPoly_GetPointDistanceFromPlane(CollisionPoly* poly, Vec3f* point) {
     return (poly->normal.x * point->x + poly->normal.y * point->y + poly->normal.z * point->z) * COLPOLY_NORMAL_FRAC +
-        poly->dist;
+           poly->dist;
 }
 
 void CollisionPoly_GetVertices(CollisionPoly* poly, Vec3s* vtxList, Vec3f* dest) {
@@ -305,20 +363,18 @@ void CollisionPoly_GetVerticesByBgId(CollisionPoly* poly, s32 bgId, CollisionCon
             dest[0].x = dest[0].y = dest[0].z = dest[1].x = dest[1].y = dest[1].z = dest[2].z = 0.0f;
             return;
         }
-    }
-    else {
+    } else {
         if (bgId == BGCHECK_SCENE) {
             vtxList = colCtx->colHeader->vtxList;
-        }
-        else {
+        } else {
             vtxList = colCtx->dyna.vtxList;
         }
         CollisionPoly_GetVertices(poly, vtxList, dest);
     }
 }
 
-extern Vec3f D_801ED9F0[3]; //polyVerts
-s32 CollisionPoly_CheckYIntersectApprox1(CollisionPoly* poly, Vec3s* vtxList, f32 x, f32 z, f32* yIntersect, f32 chkDist) {
+s32 CollisionPoly_CheckYIntersectApprox1(CollisionPoly* poly, Vec3s* vtxList, f32 x, f32 z, f32* yIntersect,
+                                         f32 chkDist) {
     f32 nx;
     f32 ny;
     f32 nz;
@@ -337,18 +393,18 @@ s32 CollisionPoly_CheckYIntersectApprox1(CollisionPoly* poly, Vec3s* vtxList, f3
     ny = COLPOLY_GET_NORMAL(poly->normal.y);
     nz = COLPOLY_GET_NORMAL(poly->normal.z);
 
-    return Math3D_TriChkPointParaYIntersectDist(&D_801ED9F0[0], &D_801ED9F0[1], &D_801ED9F0[2], nx, ny, nz, poly->dist, z,
-        x, yIntersect, chkDist);
+    return Math3D_TriChkPointParaYIntersectDist(&D_801ED9F0[0], &D_801ED9F0[1], &D_801ED9F0[2], nx, ny, nz, poly->dist,
+                                                z, x, yIntersect, chkDist);
 }
 
-s32 CollisionPoly_CheckYIntersect(CollisionPoly* poly, Vec3s* vtxList, f32 x, f32 z, f32* yIntersect, f32 chkDist);
-#ifdef NON_MATCHING
 /**
  * Checks if point (`x`,`z`) is within `chkDist` of `poly`, computing `yIntersect` if true
  * Determinant max 0.0f (checks if on or within poly)
  */
+s32 CollisionPoly_CheckYIntersect(CollisionPoly* poly, Vec3s* vtxList, f32 x, f32 z, f32* yIntersect, f32 chkDist);
+#ifdef NON_MATCHING
 s32 CollisionPoly_CheckYIntersect(CollisionPoly* poly, Vec3s* vtxList, f32 x, f32 z, f32* yIntersect, f32 chkDist) {
-    static Vec3f polyVerts[3]; //D_801EDA18
+    static Vec3f polyVerts[3]; // D_801EDA18
     Vec3s* sVerts;
     f32 nx;
     f32 ny;
@@ -370,12 +426,11 @@ s32 CollisionPoly_CheckYIntersect(CollisionPoly* poly, Vec3s* vtxList, f32 x, f3
     if (!func_8017A304(&polyVerts[0], &polyVerts[1], &polyVerts[2], z, x, chkDist)) {
         return 0;
     }
-    nx = COLPOLY_GET_NORMAL(poly->normal.x); 
-    ny = COLPOLY_GET_NORMAL(poly->normal.y); 
+    nx = COLPOLY_GET_NORMAL(poly->normal.x);
+    ny = COLPOLY_GET_NORMAL(poly->normal.y);
     nz = COLPOLY_GET_NORMAL(poly->normal.z);
-    return Math3D_TriChkPointParaYIntersectInsideTri2(&polyVerts[0], &polyVerts[1], &polyVerts[2],
-        nx, ny, nz,
-        poly->dist, z, x, yIntersect, chkDist);
+    return Math3D_TriChkPointParaYIntersectInsideTri2(&polyVerts[0], &polyVerts[1], &polyVerts[2], nx, ny, nz,
+                                                      poly->dist, z, x, yIntersect, chkDist);
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/CollisionPoly_CheckYIntersect.s")
@@ -385,7 +440,6 @@ s32 CollisionPoly_CheckYIntersectApprox2(CollisionPoly* poly, Vec3s* vtxList, f3
     return CollisionPoly_CheckYIntersectApprox1(poly, vtxList, x, z, yIntersect, 1.0f);
 }
 
-extern Vec3f D_801EDA80[3]; //polyVerts
 s32 CollisionPoly_CheckXIntersectApprox(CollisionPoly* poly, Vec3s* vtxList, f32 y, f32 z, f32* xIntersect) {
     f32 nx;
     f32 ny;
@@ -393,11 +447,10 @@ s32 CollisionPoly_CheckXIntersectApprox(CollisionPoly* poly, Vec3s* vtxList, f32
 
     CollisionPoly_GetVertices(poly, vtxList, D_801EDA80);
     CollisionPoly_GetNormalF(poly, &nx, &ny, &nz);
-    return Math3D_TriChkPointParaXIntersect(&D_801EDA80[0], &D_801EDA80[1], &D_801EDA80[2], nx, ny, nz, poly->dist, y, z,
-        xIntersect);
+    return Math3D_TriChkPointParaXIntersect(&D_801EDA80[0], &D_801EDA80[1], &D_801EDA80[2], nx, ny, nz, poly->dist, y,
+                                            z, xIntersect);
 }
 
-extern Vec3f D_801EDB48[3]; //polyVerts
 s32 CollisionPoly_CheckZIntersectApprox(CollisionPoly* poly, Vec3s* vtxList, f32 x, f32 y, f32* zIntersect) {
     f32 nx;
     f32 ny;
@@ -405,34 +458,30 @@ s32 CollisionPoly_CheckZIntersectApprox(CollisionPoly* poly, Vec3s* vtxList, f32
 
     CollisionPoly_GetVertices(poly, vtxList, D_801EDB48);
     CollisionPoly_GetNormalF(poly, &nx, &ny, &nz);
-    return Math3D_TriChkPointParaZIntersect(&D_801EDB48[0], &D_801EDB48[1], &D_801EDB48[2], nx, ny, nz, poly->dist, x, y,
-        zIntersect);
+    return Math3D_TriChkPointParaZIntersect(&D_801EDB48[0], &D_801EDB48[1], &D_801EDB48[2], nx, ny, nz, poly->dist, x,
+                                            y, zIntersect);
 }
 
 s32 CollisionPoly_LineVsPoly(func_800C07F0_args* a0);
 #ifdef NON_MATCHING
-//#define polyVerts D_801EDB70
-//#define plane D_801EDB98
 s32 CollisionPoly_LineVsPoly(func_800C07F0_args* a0) {
-    static Vec3f polyVerts[3];
-    static Plane plane;
+    static Vec3f polyVerts[3]; // D_801EDB70
+    static Plane plane;        // D_801EDB98
     f32 planeDistA;
     f32 planeDistB;
     f32 planeDistDelta;
 
     plane.originDist = a0->poly->dist;
-    planeDistA =
-        COLPOLY_GET_NORMAL(a0->poly->normal.x * a0->posA->x + a0->poly->normal.y * a0->posA->y + a0->poly->normal.z * a0->posA->z) +
-        plane.originDist;
-    planeDistB =
-        COLPOLY_GET_NORMAL(a0->poly->normal.x * a0->posB->x + a0->poly->normal.y * a0->posB->y + a0->poly->normal.z * a0->posB->z) +
-        plane.originDist;
+    planeDistA = COLPOLY_GET_NORMAL(a0->poly->normal.x * a0->posA->x + a0->poly->normal.y * a0->posA->y +
+                                    a0->poly->normal.z * a0->posA->z) +
+                 plane.originDist;
+    planeDistB = COLPOLY_GET_NORMAL(a0->poly->normal.x * a0->posB->x + a0->poly->normal.y * a0->posB->y +
+                                    a0->poly->normal.z * a0->posB->z) +
+                 plane.originDist;
 
     planeDistDelta = planeDistA - planeDistB;
-    if ((planeDistA >= 0.0f && planeDistB >= 0.0f)
-        || (planeDistA < 0.0f && planeDistB < 0.0f)
-        || ((a0->chkOneFace != 0) && (planeDistA < 0.0f && planeDistB > 0.0f))
-        || IS_ZERO(planeDistDelta)) {
+    if ((planeDistA >= 0.0f && planeDistB >= 0.0f) || (planeDistA < 0.0f && planeDistB < 0.0f) ||
+        ((a0->chkOneFace != 0) && (planeDistA < 0.0f && planeDistB > 0.0f)) || IS_ZERO(planeDistDelta)) {
         return false;
     }
 
@@ -441,61 +490,42 @@ s32 CollisionPoly_LineVsPoly(func_800C07F0_args* a0) {
     Math3D_Lerp(a0->posA, a0->posB, planeDistA / planeDistDelta, a0->planeIntersect);
 
     if ((fabsf(plane.normal.x) > 0.5f &&
-        Math3D_TriChkPointParaXDist(
-            &polyVerts[0],
-            &polyVerts[1],
-            &polyVerts[2],
-            a0->planeIntersect->y,
-            a0->planeIntersect->z,
-            0.0f,
-            a0->chkDist,
-            plane.normal.x))
-        || (fabsf(plane.normal.y) > 0.5f &&
-            Math3D_TriChkPointParaYDist(
-                &polyVerts[0],
-                &polyVerts[1],
-                &polyVerts[2],
-                a0->planeIntersect->z,
-                a0->planeIntersect->x,
-                0.0f,
-                a0->chkDist,
-                plane.normal.y))
-        || (fabsf(plane.normal.z) > 0.5f &&
-            Math3D_TriChkLineSegParaZDist(
-                &polyVerts[0],
-                &polyVerts[1],
-                &polyVerts[2],
-                a0->planeIntersect->x,
-                a0->planeIntersect->y,
-                0.0f,
-                a0->chkDist,
-                plane.normal.z))) {
+         Math3D_TriChkPointParaXDist(&polyVerts[0], &polyVerts[1], &polyVerts[2], a0->planeIntersect->y,
+                                     a0->planeIntersect->z, 0.0f, a0->chkDist, plane.normal.x)) ||
+        (fabsf(plane.normal.y) > 0.5f &&
+         Math3D_TriChkPointParaYDist(&polyVerts[0], &polyVerts[1], &polyVerts[2], a0->planeIntersect->z,
+                                     a0->planeIntersect->x, 0.0f, a0->chkDist, plane.normal.y)) ||
+        (fabsf(plane.normal.z) > 0.5f &&
+         Math3D_TriChkLineSegParaZDist(&polyVerts[0], &polyVerts[1], &polyVerts[2], a0->planeIntersect->x,
+                                       a0->planeIntersect->y, 0.0f, a0->chkDist, plane.normal.z))) {
         return true;
     }
     return false;
 }
-#undef polyVerts
-#undef plane 
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/CollisionPoly_LineVsPoly.s")
 #endif
 
+s32 CollisionPoly_SphVsPoly(CollisionPoly* poly, Vec3s* vtxList, Vec3f* center, f32 radius);
+#ifdef NON_MATCHING
+// OK but .bss order issues
+s32 CollisionPoly_SphVsPoly(CollisionPoly* poly, Vec3s* vtxList, Vec3f* center, f32 radius) {
+    static Sphere16 sphere; // D_801EDBA8
+    static TriNorm tri;     // D_801EDBB0
+    Vec3f intersect;
+
+    CollisionPoly_GetVertices(poly, vtxList, tri.vtx);
+    CollisionPoly_GetNormalF(poly, &tri.plane.normal.x, &tri.plane.normal.y, &tri.plane.normal.z);
+    tri.plane.originDist = poly->dist;
+    sphere.center.x = center->x;
+    sphere.center.y = center->y;
+    sphere.center.z = center->z;
+    sphere.radius = radius;
+    return Math3D_ColSphereTri(&sphere, &tri, &intersect);
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/CollisionPoly_SphVsPoly.s")
-//OK
-//s32 CollisionPoly_SphVsPoly(CollisionPoly* poly, Vec3s* vtxList, Vec3f* center, f32 radius) {
-//    static Sphere16 sphere; //D_801EDBA8
-//    static TriNorm tri; //D_801EDBB0
-//    Vec3f intersect;
-//
-//    CollisionPoly_GetVertices(poly, vtxList, tri.vtx);
-//    CollisionPoly_GetNormalF(poly, &tri.plane.normal.x, &tri.plane.normal.y, &tri.plane.normal.z);
-//    tri.plane.originDist = poly->dist;
-//    sphere.center.x = center->x;
-//    sphere.center.y = center->y;
-//    sphere.center.z = center->z;
-//    sphere.radius = radius;
-//    return Math3D_ColSphereTri(&sphere, &tri, &intersect);
-//}
+#endif
 
 #ifdef NON_MATCHING
 /**
@@ -507,7 +537,7 @@ s32 CollisionPoly_LineVsPoly(func_800C07F0_args* a0) {
  * `polyId` is the index of the poly in polyList to insert into the lookup table
  */
 void StaticLookup_AddPolyToSSList(CollisionContext* colCtx, SSList* ssList, CollisionPoly* polyList, Vec3s* vtxList,
-    s16 polyId) {
+                                  s16 polyId) {
     SSNode* curNode;
     SSNode* nextNode;
     s32 polyYMin;
@@ -558,20 +588,18 @@ void StaticLookup_AddPolyToSSList(CollisionContext* colCtx, SSList* ssList, Coll
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/StaticLookup_AddPolyToSSList.s")
-#endif 
+#endif
 
 /**
  * Add CollisionPoly to StaticLookup list
  */
 void StaticLookup_AddPoly(StaticLookup* lookup, CollisionContext* colCtx, CollisionPoly* polyList, Vec3s* vtxList,
-    s16 index) {
+                          s16 index) {
     if (polyList[index].normal.y > COLPOLY_SNORMAL(0.5f)) {
         StaticLookup_AddPolyToSSList(colCtx, &lookup->floor, polyList, vtxList, index);
-    }
-    else if (polyList[index].normal.y < COLPOLY_SNORMAL(-0.8f)) {
+    } else if (polyList[index].normal.y < COLPOLY_SNORMAL(-0.8f)) {
         StaticLookup_AddPolyToSSList(colCtx, &lookup->ceiling, polyList, vtxList, index);
-    }
-    else {
+    } else {
         StaticLookup_AddPolyToSSList(colCtx, &lookup->wall, polyList, vtxList, index);
     }
 }
@@ -583,7 +611,7 @@ void StaticLookup_AddPoly(StaticLookup* lookup, CollisionContext* colCtx, Collis
  * if (flags & 1), ignore polys with a normal.y < 0 (from vertical walls to ceilings)
  */
 f32 BgCheck_RaycastFloorStaticList(CollisionContext* colCtx, u16 xpFlags, SSList* ssList, CollisionPoly** outPoly,
-    Vec3f* pos, f32 yIntersectMin, f32 chkDist, s32 flags, Actor* actor, s32 arg9) {
+                                   Vec3f* pos, f32 yIntersectMin, f32 chkDist, s32 flags, Actor* actor, s32 arg9) {
     SSNode* curNode;
     s32 polyId;
     f32 result;
@@ -602,12 +630,11 @@ f32 BgCheck_RaycastFloorStaticList(CollisionContext* colCtx, u16 xpFlags, SSList
         polyId = curNode->polyId;
         colPoly = &colCtx->colHeader->polyList[polyId];
 
-        if ( (flags & 1) && (colPoly->normal.y < 0)
-            || ( (arg9 & 0x20) && ((colCtx->colHeader->surfaceTypeList[colPoly->type].data[0] >> 0x1E) & 1))
-            || COLPOLY_VIA_FLAG_TEST(colPoly->flags_vIA, xpFlags)
-            || (COLPOLY_VIA_FLAG_TEST(colPoly->flags_vIB, 4)
-                && ( (actor != NULL && actor->category != ACTORCAT_PLAYER) || (actor == NULL && xpFlags != 1))))
-        {
+        if ((flags & 1) && (colPoly->normal.y < 0) ||
+            ((arg9 & 0x20) && ((colCtx->colHeader->surfaceTypeList[colPoly->type].data[0] >> 0x1E) & 1)) ||
+            COLPOLY_VIA_FLAG_TEST(colPoly->flags_vIA, xpFlags) ||
+            (COLPOLY_VIA_FLAG_TEST(colPoly->flags_vIB, 4) &&
+             ((actor != NULL && actor->category != ACTORCAT_PLAYER) || (actor == NULL && xpFlags != 1)))) {
             if (curNode->next == SS_NULL) {
                 break;
             }
@@ -621,8 +648,7 @@ f32 BgCheck_RaycastFloorStaticList(CollisionContext* colCtx, u16 xpFlags, SSList
             break;
         }
 
-        if (CollisionPoly_CheckYIntersect(colPoly, colCtx->colHeader->vtxList, pos->x,
-            pos->z, &yIntersect, chkDist)) {
+        if (CollisionPoly_CheckYIntersect(colPoly, colCtx->colHeader->vtxList, pos->x, pos->z, &yIntersect, chkDist)) {
             // if poly is closer to pos without going over
             if (yIntersect < pos->y && result < yIntersect) {
                 result = yIntersect;
@@ -643,12 +669,14 @@ f32 BgCheck_RaycastFloorStaticList(CollisionContext* colCtx, u16 xpFlags, SSList
  * returns yIntersect of the closest poly, or `yIntersectMin`
  * stores the pointer of the closest poly to `outPoly`
  */
-f32 BgCheck_RaycastFloorStatic(StaticLookup* lookup, CollisionContext* colCtx, u16 xpFlags, CollisionPoly** poly, Vec3f* pos, u32 arg5, f32 chkDist, f32 yIntersectMin, Actor* actor) {
+f32 BgCheck_RaycastFloorStatic(StaticLookup* lookup, CollisionContext* colCtx, u16 xpFlags, CollisionPoly** poly,
+                               Vec3f* pos, u32 arg5, f32 chkDist, f32 yIntersectMin, Actor* actor) {
     s32 flag; // skip polys with normal.y < 0
     f32 yIntersect = yIntersectMin;
 
     if (arg5 & 4) {
-        yIntersect = BgCheck_RaycastFloorStaticList(colCtx, xpFlags, &lookup->floor, poly, pos, yIntersect, chkDist, 0, actor, arg5);
+        yIntersect = BgCheck_RaycastFloorStaticList(colCtx, xpFlags, &lookup->floor, poly, pos, yIntersect, chkDist, 0,
+                                                    actor, arg5);
     }
 
     if ((arg5 & 2) || (arg5 & 8)) {
@@ -656,8 +684,8 @@ f32 BgCheck_RaycastFloorStatic(StaticLookup* lookup, CollisionContext* colCtx, u
         if (arg5 & 0x10) {
             flag = 1;
         }
-        yIntersect =
-            BgCheck_RaycastFloorStaticList(colCtx, xpFlags, &lookup->wall, poly, pos, yIntersect, chkDist, flag, actor, arg5);
+        yIntersect = BgCheck_RaycastFloorStaticList(colCtx, xpFlags, &lookup->wall, poly, pos, yIntersect, chkDist,
+                                                    flag, actor, arg5);
     }
 
     if (arg5 & 1) {
@@ -665,8 +693,8 @@ f32 BgCheck_RaycastFloorStatic(StaticLookup* lookup, CollisionContext* colCtx, u
         if (arg5 & 0x10) {
             flag = 1;
         }
-        yIntersect =
-            BgCheck_RaycastFloorStaticList(colCtx, xpFlags, &lookup->ceiling, poly, pos, yIntersect, chkDist, flag, actor, arg5);
+        yIntersect = BgCheck_RaycastFloorStaticList(colCtx, xpFlags, &lookup->ceiling, poly, pos, yIntersect, chkDist,
+                                                    flag, actor, arg5);
     }
 
     return yIntersect;
@@ -679,7 +707,7 @@ f32 BgCheck_RaycastFloorStatic(StaticLookup* lookup, CollisionContext* colCtx, u
  * `invXZlength` is 1 / sqrt( sq(poly.normal.x) + sq(poly.normal.z) )
  */
 s32 BgCheck_ComputeWallDisplacement(CollisionContext* colCtx, CollisionPoly* poly, f32* posX, f32* posZ, f32 nx, f32 ny,
-    f32 nz, f32 invXZlength, f32 planeDist, f32 radius, CollisionPoly** wallPolyPtr) {
+                                    f32 nz, f32 invXZlength, f32 planeDist, f32 radius, CollisionPoly** wallPolyPtr) {
     f32 displacement = (radius - planeDist) * invXZlength;
 
     *posX += displacement * nx;
@@ -688,9 +716,7 @@ s32 BgCheck_ComputeWallDisplacement(CollisionContext* colCtx, CollisionPoly* pol
     if (*wallPolyPtr == NULL) {
         *wallPolyPtr = poly;
         return true;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
@@ -702,7 +728,7 @@ s32 BgCheck_ComputeWallDisplacement(CollisionContext* colCtx, CollisionPoly* pol
  * `outPoly` returns the pointer to the nearest poly collided with, or NULL
  */
 s32 BgCheck_SphVsStaticWall(StaticLookup* lookup, CollisionContext* colCtx, u16 xpFlags, f32* outX, f32* outZ,
-    Vec3f* pos, f32 radius, CollisionPoly** outPoly, Actor* actor) {
+                            Vec3f* pos, f32 radius, CollisionPoly** outPoly, Actor* actor) {
     Vec3f resultPos;
     f32 zTemp;
     f32 xTemp;
@@ -747,8 +773,7 @@ s32 BgCheck_SphVsStaticWall(StaticLookup* lookup, CollisionContext* colCtx, u16 
         vtxB = &vtxList[COLPOLY_VTX_INDEX(curPoly->flags_vIB)];
         vtxC = &vtxList[curPoly->vIC];
 
-        if (pos->y < vtxA->y &&
-            pos->y < vtxB->y && pos->y < vtxC->y) {
+        if (pos->y < vtxA->y && pos->y < vtxB->y && pos->y < vtxC->y) {
             break;
         }
 
@@ -757,28 +782,23 @@ s32 BgCheck_SphVsStaticWall(StaticLookup* lookup, CollisionContext* colCtx, u16 
         nz = COLPOLY_GET_NORMAL(curPoly->normal.z);
         normalXZ = sqrtf(SQ(nx) + SQ(nz));
         planeDist = Math3D_DistPlaneToPos(nx, ny, nz, curPoly->dist, &resultPos);
-        if (radius < fabsf(planeDist) 
-            || COLPOLY_VIA_FLAG_TEST(curPoly->flags_vIA, xpFlags)
-            || (COLPOLY_VIA_FLAG_TEST(curPoly->flags_vIB, 4)
-                && ((actor != NULL && actor->category != ACTORCAT_PLAYER) || (actor == NULL && xpFlags != 1)))) {
+        if (radius < fabsf(planeDist) || COLPOLY_VIA_FLAG_TEST(curPoly->flags_vIA, xpFlags) ||
+            (COLPOLY_VIA_FLAG_TEST(curPoly->flags_vIB, 4) &&
+             ((actor != NULL && actor->category != ACTORCAT_PLAYER) || (actor == NULL && xpFlags != 1)))) {
             if (curNode->next == SS_NULL) {
                 break;
-            }
-            else {
+            } else {
                 curNode = &colCtx->polyNodes.tbl[curNode->next];
                 continue;
             }
         }
-
-        //ASSERT(!IS_ZERO(normalXZ), "!IS_ZERO(ac_size)", "../z_bgcheck.c", __LINE__);
 
         invNormalXZ = 1.0f / normalXZ;
         temp_f16 = fabsf(nz) * invNormalXZ;
         if (temp_f16 < 0.4f) {
             if (curNode->next == SS_NULL) {
                 break;
-            }
-            else {
+            } else {
                 curNode = &colCtx->polyNodes.tbl[curNode->next];
                 continue;
             }
@@ -791,15 +811,13 @@ s32 BgCheck_SphVsStaticWall(StaticLookup* lookup, CollisionContext* colCtx, u16 
 
         if (zTemp < zMin) {
             zMin = zTemp;
-        }
-        else if (zMax < zTemp) {
+        } else if (zMax < zTemp) {
             zMax = zTemp;
         }
         zTemp = vtxC->z;
         if (zTemp < zMin) {
             zMin = zTemp;
-        }
-        else if (zTemp > zMax) {
+        } else if (zTemp > zMax) {
             zMax = zTemp;
         }
 
@@ -809,8 +827,7 @@ s32 BgCheck_SphVsStaticWall(StaticLookup* lookup, CollisionContext* colCtx, u16 
         if (resultPos.z < zMin || resultPos.z > zMax) {
             if (curNode->next == SS_NULL) {
                 break;
-            }
-            else {
+            } else {
                 curNode = &colCtx->polyNodes.tbl[curNode->next];
                 continue;
             }
@@ -818,10 +835,9 @@ s32 BgCheck_SphVsStaticWall(StaticLookup* lookup, CollisionContext* colCtx, u16 
         if (CollisionPoly_CheckZIntersectApprox(curPoly, vtxList, resultPos.x, pos->y, &intersect)) {
             f32 test = intersect - resultPos.z;
             if (fabsf(test) <= radius / temp_f16) {
-                if ((test) * nz <= 4.0f) {
+                if ((test)*nz <= 4.0f) {
                     if (BgCheck_ComputeWallDisplacement(colCtx, curPoly, &resultPos.x, &resultPos.z, nx, ny, nz,
-                        invNormalXZ, planeDist, radius, outPoly))
-                    {
+                                                        invNormalXZ, planeDist, radius, outPoly)) {
                         result = true;
                     }
                 }
@@ -829,8 +845,7 @@ s32 BgCheck_SphVsStaticWall(StaticLookup* lookup, CollisionContext* colCtx, u16 
         }
         if (curNode->next == SS_NULL) {
             break;
-        }
-        else {
+        } else {
             curNode = &colCtx->polyNodes.tbl[curNode->next];
         }
     }
@@ -853,28 +868,23 @@ s32 BgCheck_SphVsStaticWall(StaticLookup* lookup, CollisionContext* colCtx, u16 
         nz = COLPOLY_GET_NORMAL(curPoly->normal.z);
         normalXZ = sqrtf(SQ(nx) + SQ(nz));
         planeDist = Math3D_DistPlaneToPos(nx, ny, nz, curPoly->dist, &resultPos);
-        if (radius < fabsf(planeDist) 
-            || COLPOLY_VIA_FLAG_TEST(curPoly->flags_vIA, xpFlags)
-            || (COLPOLY_VIA_FLAG_TEST(curPoly->flags_vIB, 4)
-                && ((actor != NULL && actor->category != ACTORCAT_PLAYER) || (actor == NULL && xpFlags != 1)))) {
+        if (radius < fabsf(planeDist) || COLPOLY_VIA_FLAG_TEST(curPoly->flags_vIA, xpFlags) ||
+            (COLPOLY_VIA_FLAG_TEST(curPoly->flags_vIB, 4) &&
+             ((actor != NULL && actor->category != ACTORCAT_PLAYER) || (actor == NULL && xpFlags != 1)))) {
             if (curNode->next == SS_NULL) {
                 break;
-            }
-            else {
+            } else {
                 curNode = &colCtx->polyNodes.tbl[curNode->next];
                 continue;
             }
         }
-
-        //ASSERT(!IS_ZERO(normalXZ), "!IS_ZERO(ac_size)", "../z_bgcheck.c", __LINE__);
 
         invNormalXZ = 1.0f / normalXZ;
         temp_f16 = fabsf(nx) * invNormalXZ;
         if (temp_f16 < 0.4f) {
             if (curNode->next == SS_NULL) {
                 break;
-            }
-            else {
+            } else {
                 curNode = &colCtx->polyNodes.tbl[curNode->next];
                 continue;
             }
@@ -887,15 +897,13 @@ s32 BgCheck_SphVsStaticWall(StaticLookup* lookup, CollisionContext* colCtx, u16 
 
         if (xTemp < xMin) {
             xMin = xTemp;
-        }
-        else if (xMax < xTemp) {
+        } else if (xMax < xTemp) {
             xMax = xTemp;
         }
         xTemp = vtxC->x;
         if (xTemp < xMin) {
             xMin = xTemp;
-        }
-        else if (xMax < xTemp) {
+        } else if (xMax < xTemp) {
             xMax = xTemp;
         }
 
@@ -905,8 +913,7 @@ s32 BgCheck_SphVsStaticWall(StaticLookup* lookup, CollisionContext* colCtx, u16 
         if (resultPos.x < xMin || xMax < resultPos.x) {
             if (curNode->next == SS_NULL) {
                 break;
-            }
-            else {
+            } else {
                 curNode = &colCtx->polyNodes.tbl[curNode->next];
                 continue;
             }
@@ -914,10 +921,9 @@ s32 BgCheck_SphVsStaticWall(StaticLookup* lookup, CollisionContext* colCtx, u16 
         if (CollisionPoly_CheckXIntersectApprox(curPoly, vtxList, pos->y, resultPos.z, &intersect)) {
             f32 test = intersect - resultPos.x;
             if (fabsf(test) <= radius / temp_f16) {
-                if ((test) * nx <= 4.0f) {
+                if ((test)*nx <= 4.0f) {
                     if (BgCheck_ComputeWallDisplacement(colCtx, curPoly, &resultPos.x, &resultPos.z, nx, ny, nz,
-                        invNormalXZ, planeDist, radius, outPoly))
-                    {
+                                                        invNormalXZ, planeDist, radius, outPoly)) {
                         result = true;
                     }
                 }
@@ -925,8 +931,7 @@ s32 BgCheck_SphVsStaticWall(StaticLookup* lookup, CollisionContext* colCtx, u16 
         }
         if (curNode->next == SS_NULL) {
             break;
-        }
-        else {
+        } else {
             curNode = &colCtx->polyNodes.tbl[curNode->next];
             continue;
         }
@@ -944,12 +949,12 @@ s32 BgCheck_SphVsStaticWall(StaticLookup* lookup, CollisionContext* colCtx, u16 
  * `outY` returns the y coordinate needed to not collide with `outPoly`
  */
 s32 BgCheck_CheckStaticCeiling(StaticLookup* lookup, u16 xpFlags, CollisionContext* colCtx, f32* outY, Vec3f* pos,
-    f32 checkHeight, CollisionPoly** outPoly, Actor* actor);
+                               f32 checkHeight, CollisionPoly** outPoly, Actor* actor);
 #ifdef NON_MATCHING
 s32 BgCheck_CheckStaticCeiling(StaticLookup* lookup, u16 xpFlags, CollisionContext* colCtx, f32* outY, Vec3f* pos,
-    f32 checkHeight, CollisionPoly** outPoly, Actor* actor) {
+                               f32 checkHeight, CollisionPoly** outPoly, Actor* actor) {
     s32 result = false;
-    //u16 nextId;
+    // u16 nextId;
     CollisionPoly* curPoly;
     CollisionPoly* polyList;
     f32 ceilingY;
@@ -969,14 +974,12 @@ s32 BgCheck_CheckStaticCeiling(StaticLookup* lookup, u16 xpFlags, CollisionConte
     while (true) {
         curPolyId = curNode->polyId;
         curPoly = &polyList[curPolyId];
-        if (COLPOLY_VIA_FLAG_TEST(colCtx->colHeader->polyList[curPolyId].flags_vIA, xpFlags)
-            || ( 
-                COLPOLY_VIA_FLAG_TEST(colCtx->colHeader->polyList[curPolyId].flags_vIB, 4) 
-                && ((actor != NULL && actor->category != ACTORCAT_PLAYER) || (actor == NULL && xpFlags != 1 )))) {
+        if (COLPOLY_VIA_FLAG_TEST(colCtx->colHeader->polyList[curPolyId].flags_vIA, xpFlags) ||
+            (COLPOLY_VIA_FLAG_TEST(colCtx->colHeader->polyList[curPolyId].flags_vIB, 4) &&
+             ((actor != NULL && actor->category != ACTORCAT_PLAYER) || (actor == NULL && xpFlags != 1)))) {
             if (curNode->next == SS_NULL) {
                 break;
-            }
-            else {
+            } else {
                 curNode = &colCtx->polyNodes.tbl[curNode->next];
                 continue;
             }
@@ -994,8 +997,7 @@ s32 BgCheck_CheckStaticCeiling(StaticLookup* lookup, u16 xpFlags, CollisionConte
         }
         if (curNode->next == SS_NULL) {
             break;
-        }
-        else {
+        } else {
             curNode = &colCtx->polyNodes.tbl[curNode->next];
             continue;
         }
@@ -1004,7 +1006,7 @@ s32 BgCheck_CheckStaticCeiling(StaticLookup* lookup, u16 xpFlags, CollisionConte
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_CheckStaticCeiling.s")
-#endif 
+#endif
 
 /**
  * Tests if line `posA` to `posB` intersects with a static poly in list `ssList`. Uses polyCheckTbl
@@ -1016,17 +1018,17 @@ s32 BgCheck_CheckStaticCeiling(StaticLookup* lookup, u16 xpFlags, CollisionConte
 s32 BgCheck_CheckLineAgainstSSList(struct_func_800C1D7C* arg0);
 #ifdef NON_MATCHING
 s32 BgCheck_CheckLineAgainstSSList(struct_func_800C1D7C* arg0) {
-    
+
     CollisionContext* colCtx;
     s32 result;
-    Vec3f polyIntersect; //sp7C
+    Vec3f polyIntersect; // sp7C
 
     SSNode* curNode;
     u8* checkedPoly;
-    //CollisionPoly* polyList;
+    // CollisionPoly* polyList;
     f32 minY;
     f32 distSq;
-    func_800C07F0_args test; //sp50
+    func_800C07F0_args test; // sp50
     s16 polyId;
 
     result = false;
@@ -1038,7 +1040,7 @@ s32 BgCheck_CheckLineAgainstSSList(struct_func_800C1D7C* arg0) {
     test.vtxList = colCtx->colHeader->vtxList;
     test.posA = arg0->posA;
     test.posB = arg0->posB;
-    test.planeIntersect = &polyIntersect; //reorder maybe
+    test.planeIntersect = &polyIntersect; // reorder maybe
     test.chkOneFace = arg0->bccFlags & BGCHECK_CHECK_ONE_FACE;
     test.chkDist = arg0->chkDist;
 
@@ -1047,14 +1049,14 @@ s32 BgCheck_CheckLineAgainstSSList(struct_func_800C1D7C* arg0) {
         test.poly = &colCtx->colHeader->polyList[polyId];
         checkedPoly = &colCtx->polyNodes.polyCheckTbl[polyId];
 
-        if (*checkedPoly == true || COLPOLY_VIA_FLAG_TEST(test.poly->flags_vIA, arg0->xpFlags1)
-            || !(arg0->xpFlags2 == 0 || COLPOLY_VIA_FLAG_TEST(test.poly->flags_vIA, arg0->xpFlags2))
-            || (COLPOLY_VIA_FLAG_TEST(test.poly->flags_vIB, 4) && ((arg0->actor != NULL && arg0->actor->category != ACTORCAT_PLAYER) || (arg0->actor == NULL && arg0->xpFlags1 != 1))))
-        {
+        if (*checkedPoly == true || COLPOLY_VIA_FLAG_TEST(test.poly->flags_vIA, arg0->xpFlags1) ||
+            !(arg0->xpFlags2 == 0 || COLPOLY_VIA_FLAG_TEST(test.poly->flags_vIA, arg0->xpFlags2)) ||
+            (COLPOLY_VIA_FLAG_TEST(test.poly->flags_vIB, 4) &&
+             ((arg0->actor != NULL && arg0->actor->category != ACTORCAT_PLAYER) ||
+              (arg0->actor == NULL && arg0->xpFlags1 != 1)))) {
             if (curNode->next == SS_NULL) {
                 break;
-            }
-            else {
+            } else {
                 curNode = &arg0->colCtx->polyNodes.tbl[curNode->next];
                 continue;
             }
@@ -1081,7 +1083,7 @@ s32 BgCheck_CheckLineAgainstSSList(struct_func_800C1D7C* arg0) {
     }
     return result;
 }
-#else 
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_CheckLineAgainstSSList.s")
 #endif
 
@@ -1124,10 +1126,10 @@ s32 BgCheck_CheckLineInSubdivision(struct_func_800C1D7C* arg0) {
  * `outPoly` returns the pointer of the first poly found that intersects
  */
 s32 BgCheck_SphVsFirstStaticPolyList(SSNode* node, u16 xpFlags, CollisionContext* colCtx, Vec3f* center, f32 radius,
-    CollisionPoly** outPoly, Actor* actor);
+                                     CollisionPoly** outPoly, Actor* actor);
 #ifdef NON_MATCHING
 s32 BgCheck_SphVsFirstStaticPolyList(SSNode* node, u16 xpFlags, CollisionContext* colCtx, Vec3f* center, f32 radius,
-    CollisionPoly** outPoly, Actor* actor) {
+                                     CollisionPoly** outPoly, Actor* actor) {
     Vec3s* vtxList;
     CollisionPoly* polyList;
     CollisionPoly* curPoly;
@@ -1141,9 +1143,9 @@ s32 BgCheck_SphVsFirstStaticPolyList(SSNode* node, u16 xpFlags, CollisionContext
     while (true) {
         curPolyId = node->polyId;
         curPoly = &polyList[curPolyId];
-        if (COLPOLY_VIA_FLAG_TEST(colCtx->colHeader->polyList[curPolyId].flags_vIA, xpFlags)
-            || (COLPOLY_VIA_FLAG_TEST(colCtx->colHeader->polyList[curPolyId].flags_vIB, 4)
-                && ((actor != NULL && actor->category != ACTORCAT_PLAYER) || (actor == NULL && xpFlags != 1)))) {
+        if (COLPOLY_VIA_FLAG_TEST(colCtx->colHeader->polyList[curPolyId].flags_vIA, xpFlags) ||
+            (COLPOLY_VIA_FLAG_TEST(colCtx->colHeader->polyList[curPolyId].flags_vIB, 4) &&
+             ((actor != NULL && actor->category != ACTORCAT_PLAYER) || (actor == NULL && xpFlags != 1)))) {
             if (node->next != SS_NULL) {
                 node = &colCtx->polyNodes.tbl[node->next];
                 continue;
@@ -1179,22 +1181,22 @@ s32 BgCheck_SphVsFirstStaticPolyList(SSNode* node, u16 xpFlags, CollisionContext
  * `outPoly` returns the first poly found that intersects
  */
 s32 BgCheck_SphVsFirstStaticPoly(StaticLookup* lookup, u16 xpFlags, CollisionContext* colCtx, Vec3f* center, f32 radius,
-    CollisionPoly** outPoly, u16 bciFlags, Actor* actor) {
+                                 CollisionPoly** outPoly, u16 bciFlags, Actor* actor) {
     if (lookup->floor.head != SS_NULL && !(bciFlags & BGCHECK_IGNORE_FLOOR) &&
         BgCheck_SphVsFirstStaticPolyList(&colCtx->polyNodes.tbl[lookup->floor.head], xpFlags, colCtx, center, radius,
-            outPoly, actor)) {
+                                         outPoly, actor)) {
         return true;
     }
 
     if (lookup->wall.head != SS_NULL && !(bciFlags & BGCHECK_IGNORE_WALL) &&
         BgCheck_SphVsFirstStaticPolyList(&colCtx->polyNodes.tbl[lookup->wall.head], xpFlags, colCtx, center, radius,
-            outPoly, actor)) {
+                                         outPoly, actor)) {
         return true;
     }
 
     if (lookup->ceiling.head != SS_NULL && !(bciFlags & BGCHECK_IGNORE_CEILING) &&
         BgCheck_SphVsFirstStaticPolyList(&colCtx->polyNodes.tbl[lookup->ceiling.head], xpFlags, colCtx, center, radius,
-            outPoly, actor)) {
+                                         outPoly, actor)) {
         return true;
     }
 
@@ -1241,22 +1243,19 @@ void BgCheck_GetStaticLookupIndicesFromPos(CollisionContext* colCtx, Vec3f* pos,
 
     if (sector->x < 0) {
         sector->x = 0;
-    }
-    else if (sector->x >= colCtx->subdivAmount.x) {
+    } else if (sector->x >= colCtx->subdivAmount.x) {
         sector->x = colCtx->subdivAmount.x - 1;
     }
 
     if (sector->y < 0) {
         sector->y = 0;
-    }
-    else if (sector->y >= colCtx->subdivAmount.y) {
+    } else if (sector->y >= colCtx->subdivAmount.y) {
         sector->y = colCtx->subdivAmount.y - 1;
     }
 
     if (sector->z < 0) {
         sector->z = 0;
-    }
-    else if (sector->z >= colCtx->subdivAmount.z) {
+    } else if (sector->z >= colCtx->subdivAmount.z) {
         sector->z = colCtx->subdivAmount.z - 1;
     }
 }
@@ -1322,8 +1321,8 @@ void BgCheck_GetSubdivisionMaxBounds(CollisionContext* colCtx, Vec3f* pos, s32* 
  * `subdivMaxX`, `subdivMaxY`, `subdivMaxZ` returns the maximum subdivision x, y, z indices
  */
 void BgCheck_GetPolySubdivisionBounds(CollisionContext* colCtx, Vec3s* vtxList, CollisionPoly* polyList,
-    s32* subdivMinX, s32* subdivMinY, s32* subdivMinZ, s32* subdivMaxX,
-    s32* subdivMaxY, s32* subdivMaxZ, s16 polyId) {
+                                      s32* subdivMinX, s32* subdivMinY, s32* subdivMinZ, s32* subdivMaxX,
+                                      s32* subdivMaxY, s32* subdivMaxZ, s16 polyId) {
     u16* vtxDataTemp;
     Vec3f minVtx;
     Vec3f maxVtx;
@@ -1347,22 +1346,19 @@ void BgCheck_GetPolySubdivisionBounds(CollisionContext* colCtx, Vec3s* vtxList, 
 
         if (minVtx.x > x) {
             minVtx.x = x;
-        }
-        else if (maxVtx.x < x) {
+        } else if (maxVtx.x < x) {
             maxVtx.x = x;
         }
 
         if (minVtx.y > y) {
             minVtx.y = y;
-        }
-        else if (maxVtx.y < y) {
+        } else if (maxVtx.y < y) {
             maxVtx.y = y;
         }
 
         if (minVtx.z > z) {
             minVtx.z = z;
-        }
-        else if (maxVtx.z < z) {
+        } else if (maxVtx.z < z) {
             maxVtx.z = z;
         }
     }
@@ -1432,33 +1428,33 @@ s32 BgCheck_PolyIntersectsSubdivision(Vec3f* min, Vec3f* max, CollisionPoly* pol
     dist = poly->dist;
 
     if (Math3D_TriChkLineSegParaYIntersect(&va, &vb, &vc, nx, ny, nz, dist, min->z, min->x, &intersect, min->y,
-        max->y) ||
+                                           max->y) ||
         Math3D_TriChkLineSegParaYIntersect(&va, &vb, &vc, nx, ny, nz, dist, max->z, min->x, &intersect, min->y,
-            max->y) ||
+                                           max->y) ||
         Math3D_TriChkLineSegParaYIntersect(&va, &vb, &vc, nx, ny, nz, dist, min->z, max->x, &intersect, min->y,
-            max->y) ||
+                                           max->y) ||
         Math3D_TriChkLineSegParaYIntersect(&va, &vb, &vc, nx, ny, nz, dist, max->z, max->x, &intersect, min->y,
-            max->y)) {
+                                           max->y)) {
         return true;
     }
     if (Math3D_TriChkLineSegParaZIntersect(&va, &vb, &vc, nx, ny, nz, dist, min->x, min->y, &intersect, min->z,
-        max->z) ||
+                                           max->z) ||
         Math3D_TriChkLineSegParaZIntersect(&va, &vb, &vc, nx, ny, nz, dist, min->x, max->y, &intersect, min->z,
-            max->z) ||
+                                           max->z) ||
         Math3D_TriChkLineSegParaZIntersect(&va, &vb, &vc, nx, ny, nz, dist, max->x, min->y, &intersect, min->z,
-            max->z) ||
+                                           max->z) ||
         Math3D_TriChkLineSegParaZIntersect(&va, &vb, &vc, nx, ny, nz, dist, max->x, max->y, &intersect, min->z,
-            max->z)) {
+                                           max->z)) {
         return true;
     }
     if (Math3D_TriChkLineSegParaXIntersect(&va, &vb, &vc, nx, ny, nz, dist, min->y, min->z, &intersect, min->x,
-        max->x) ||
+                                           max->x) ||
         Math3D_TriChkLineSegParaXIntersect(&va, &vb, &vc, nx, ny, nz, dist, min->y, max->z, &intersect, min->x,
-            max->x) ||
+                                           max->x) ||
         Math3D_TriChkLineSegParaXIntersect(&va, &vb, &vc, nx, ny, nz, dist, max->y, min->z, &intersect, min->x,
-            max->x) ||
+                                           max->x) ||
         Math3D_TriChkLineSegParaXIntersect(&va, &vb, &vc, nx, ny, nz, dist, max->y, max->z, &intersect, min->x,
-            max->x)) {
+                                           max->x)) {
         return true;
     }
 
@@ -1506,7 +1502,7 @@ u32 BgCheck_InitializeStaticLookup(CollisionContext* colCtx, GlobalContext* glob
     f32 subdivLengthZ;
 
     for (spA4 = lookupTbl;
-        spA4 < (colCtx->subdivAmount.x * colCtx->subdivAmount.y * colCtx->subdivAmount.z + lookupTbl); spA4++) {
+         spA4 < (colCtx->subdivAmount.x * colCtx->subdivAmount.y * colCtx->subdivAmount.z + lookupTbl); spA4++) {
         spA4->floor.head = SS_NULL;
         spA4->wall.head = SS_NULL;
         spA4->ceiling.head = SS_NULL;
@@ -1522,7 +1518,7 @@ u32 BgCheck_InitializeStaticLookup(CollisionContext* colCtx, GlobalContext* glob
 
     for (polyIdx = 0; polyIdx < polyMax; polyIdx++) {
         BgCheck_GetPolySubdivisionBounds(colCtx, vtxList, polyList, &sxMin, &syMin, &szMin, &sxMax, &syMax, &szMax,
-            polyIdx);
+                                         polyIdx);
         spA4 = szMin * sp98 + lookupTbl;
         curSubdivMin.z = (colCtx->subdivLength.z * szMin + colCtx->minBounds.z) - BGCHECK_SUBDIV_OVERLAP;
         curSubdivMax.z = curSubdivMin.z + subdivLengthZ;
@@ -1560,13 +1556,7 @@ u32 BgCheck_InitializeStaticLookup(CollisionContext* colCtx, GlobalContext* glob
 /**
  * Is current scene a SPOT scene
  */
-s32 BgCheck_IsSpotScene(GlobalContext* globalCtx);
-#ifdef NON_MATCHING
-//OK, needs data migration
 s32 BgCheck_IsSpotScene(GlobalContext* globalCtx) {
-    static s16 spotScenes[] = {
-        SCENE_F01,
-    };
     s16* i;
 
     for (i = spotScenes; i < spotScenes + ARRAY_COUNT(spotScenes); i++) {
@@ -1576,25 +1566,11 @@ s32 BgCheck_IsSpotScene(GlobalContext* globalCtx) {
     }
     return false;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_IsSpotScene.s")
-#endif
-
-typedef struct {
-    s16 sceneId;
-    u32 memSize;
-} BgCheckSceneMemEntry;
 
 /**
  * Get custom scene memSize
  */
-s32 BgCheck_TryGetCustomMemsize(s32 sceneId, u32* memSize);
-#ifdef NON_MATCHING
-// OK
 s32 BgCheck_TryGetCustomMemsize(s32 sceneId, u32* memSize) {
-    static BgCheckSceneMemEntry sceneMemList[] = {
-        { SCENE_00KEIKOKU, 0xC800 },
-    };
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(sceneMemList); i++) {
@@ -1605,9 +1581,6 @@ s32 BgCheck_TryGetCustomMemsize(s32 sceneId, u32* memSize) {
     }
     return false;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_TryGetCustomMemsize.s")
-#endif
 
 /**
  * Compute subdivLength for scene mesh lookup, for a single dimension
@@ -1622,20 +1595,14 @@ void BgCheck_SetSubdivisionDimension(f32 min, s32 subdivAmount, f32* max, f32* s
     *max = *subdivLength * subdivAmount + min;
 }
 
-//BgSpecialSceneMaxObjects customDynapolyMem[] = { //bgSpecialSceneMaxObjects
-//    { SCENE_21MITURINMAE, 1000, 600, 512}
-//};
-
 s32 BgCheck_GetSpecialSceneMaxObjects(GlobalContext* globalCtx, u32* maxNodes, u32* maxPolygons, u32* maxVertices) {
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(bgSpecialSceneMaxObjects); i++)
-    {
-        if (globalCtx->sceneNum == bgSpecialSceneMaxObjects[i].sceneId)
-        {
-            *maxNodes = bgSpecialSceneMaxObjects[i].maxNodes;
-            *maxPolygons = bgSpecialSceneMaxObjects[i].maxPolygons;
-            *maxVertices = bgSpecialSceneMaxObjects[i].maxVertices;
+    for (i = 0; i < ARRAY_COUNT(customDynapolyMem); i++) {
+        if (globalCtx->sceneNum == customDynapolyMem[i].sceneId) {
+            *maxNodes = customDynapolyMem[i].maxNodes;
+            *maxPolygons = customDynapolyMem[i].maxPolygons;
+            *maxVertices = customDynapolyMem[i].maxVertices;
             return true;
         }
     }
@@ -1648,11 +1615,6 @@ s32 BgCheck_GetSpecialSceneMaxObjects(GlobalContext* globalCtx, u32* maxNodes, u
 void BgCheck_Allocate(CollisionContext* colCtx, GlobalContext* globalCtx, CollisionHeader* colHeader);
 #ifdef NON_MATCHING
 void BgCheck_Allocate(CollisionContext* colCtx, GlobalContext* globalCtx, CollisionHeader* colHeader) {
-#define sceneSubdivisionList bgSpecialSceneMeshSubdivisions
-    //static BgCheckSceneSubdivisionEntry sceneSubdivisionList[] = {
-    //    { SCENE_HAKADAN, { 23, 7, 14 }, -1 },
-    //    { SCENE_BMORI1, { 38, 1, 38 }, -1 },
-    //};
     u32 tblMax;
     u32 memSize;
     u32 lookupTblMemSize;
@@ -1674,23 +1636,17 @@ void BgCheck_Allocate(CollisionContext* colCtx, GlobalContext* globalCtx, Collis
         colCtx->subdivAmount.x = 16;
         colCtx->subdivAmount.y = 4;
         colCtx->subdivAmount.z = 16;
-    }
-    else {
+    } else {
         if (BgCheck_TryGetCustomMemsize(globalCtx->sceneNum, &customMemSize)) {
             colCtx->memSize = customMemSize;
-        }
-        else {
+        } else {
             colCtx->memSize = 0x23000;
         }
-        // /* BGCheck Normal Size %dbyte  */\n
-        //osSyncPrintf("/* BGCheck ノーマルサイズ %dbyte  */\n", colCtx->memSize);
         colCtx->dyna.polyNodesMax = 1000;
         colCtx->dyna.polyListMax = 544;
         colCtx->dyna.vtxListMax = 512;
-        BgCheck_GetSpecialSceneMaxObjects(globalCtx,
-            &colCtx->dyna.polyNodesMax,
-            &colCtx->dyna.polyListMax,
-            &colCtx->dyna.vtxListMax);
+        BgCheck_GetSpecialSceneMaxObjects(globalCtx, &colCtx->dyna.polyNodesMax, &colCtx->dyna.polyListMax,
+                                          &colCtx->dyna.vtxListMax);
         useCustomSubdivisions = false;
 
         for (i = 0; i < ARRAY_COUNT(sceneSubdivisionList); i++) {
@@ -1712,7 +1668,7 @@ void BgCheck_Allocate(CollisionContext* colCtx, GlobalContext* globalCtx, Collis
         &globalCtx->state.heap,
         colCtx->subdivAmount.x * sizeof(StaticLookup) * colCtx->subdivAmount.y * colCtx->subdivAmount.z, ~1);
     if (colCtx->lookupTbl == NULL) {
-        LogUtils_HungupThread("../z_bgcheck.c", 3955);
+        Fault_AddHungupAndCrash("../z_bgcheck.c", 3955);
     }
     colCtx->minBounds.x = colCtx->colHeader->minBounds.x;
     colCtx->minBounds.y = colCtx->colHeader->minBounds.y;
@@ -1721,23 +1677,22 @@ void BgCheck_Allocate(CollisionContext* colCtx, GlobalContext* globalCtx, Collis
     colCtx->maxBounds.y = colCtx->colHeader->maxBounds.y;
     colCtx->maxBounds.z = colCtx->colHeader->maxBounds.z;
     BgCheck_SetSubdivisionDimension(colCtx->minBounds.x, colCtx->subdivAmount.x, &colCtx->maxBounds.x,
-        &colCtx->subdivLength.x, &colCtx->subdivLengthInv.x);
+                                    &colCtx->subdivLength.x, &colCtx->subdivLengthInv.x);
     BgCheck_SetSubdivisionDimension(colCtx->minBounds.y, colCtx->subdivAmount.y, &colCtx->maxBounds.y,
-        &colCtx->subdivLength.y, &colCtx->subdivLengthInv.y);
+                                    &colCtx->subdivLength.y, &colCtx->subdivLengthInv.y);
     BgCheck_SetSubdivisionDimension(colCtx->minBounds.z, colCtx->subdivAmount.z, &colCtx->maxBounds.z,
-        &colCtx->subdivLength.z, &colCtx->subdivLengthInv.z);
+                                    &colCtx->subdivLength.z, &colCtx->subdivLengthInv.z);
     memSize = colCtx->subdivAmount.x * sizeof(StaticLookup) * colCtx->subdivAmount.y * colCtx->subdivAmount.z +
-        colCtx->colHeader->numPolygons * sizeof(u8) + colCtx->dyna.polyNodesMax * sizeof(SSNode) +
-        colCtx->dyna.polyListMax * sizeof(CollisionPoly) + colCtx->dyna.vtxListMax * sizeof(Vec3s) +
-        sizeof(CollisionContext);
+              colCtx->colHeader->numPolygons * sizeof(u8) + colCtx->dyna.polyNodesMax * sizeof(SSNode) +
+              colCtx->dyna.polyListMax * sizeof(CollisionPoly) + colCtx->dyna.vtxListMax * sizeof(Vec3s) +
+              sizeof(CollisionContext);
     if (customNodeListMax > 0) {
         // tblMax is set without checking if customNodeListMax will result in a memory overflow
         // this is a non-issue as long as sceneSubdivisionList.nodeListMax is -1
         tblMax = customNodeListMax;
-    }
-    else {
+    } else {
         if (colCtx->memSize < memSize) {
-            LogUtils_HungupThread("../z_bgcheck.c", 4011);
+            Fault_AddHungupAndCrash("../z_bgcheck.c", 4011);
         }
         tblMax = (colCtx->memSize - memSize) / sizeof(SSNode);
     }
@@ -1746,23 +1701,20 @@ void BgCheck_Allocate(CollisionContext* colCtx, GlobalContext* globalCtx, Collis
     SSNodeList_Alloc(globalCtx, &colCtx->polyNodes, tblMax, colCtx->colHeader->numPolygons);
 
     lookupTblMemSize = BgCheck_InitializeStaticLookup(colCtx, globalCtx, colCtx->lookupTbl);
-    //osSyncPrintf(VT_FGCOL(GREEN));
-    //osSyncPrintf("/*---結局 BG使用サイズ %dbyte---*/\n", memSize + lookupTblMemSize);
-    //osSyncPrintf(VT_RST);
 
     DynaPoly_Init(globalCtx, &colCtx->dyna);
     DynaPoly_Alloc(globalCtx, &colCtx->dyna);
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_Allocate.s")
-#endif 
+#endif
 
-void func_800C3C00(CollisionContext* colCtx, u32 param_2) {
-    colCtx->unk146C |= param_2;
+void func_800C3C00(CollisionContext* colCtx, u32 arg1) {
+    colCtx->unk146C |= arg1;
 }
 
-void func_800C3C14(CollisionContext* colCtx, u32 param_2) {
-    colCtx->unk146C &= ~param_2;
+void func_800C3C14(CollisionContext* colCtx, u32 arg1) {
+    colCtx->unk146C &= ~arg1;
 }
 
 /**
@@ -1803,7 +1755,7 @@ s32 BgCheck_PosInStaticBoundingBox(CollisionContext* colCtx, Vec3f* pos) {
  * returns the poly found in `outPoly`, and the bgId of the entity in `outBgId`
  */
 f32 BgCheck_RaycastFloorImpl(GlobalContext* globalCtx, CollisionContext* colCtx, u16 xpFlags, CollisionPoly** outPoly,
-    s32* outBgId, Vec3f* pos, Actor* actor, u32 arg7, f32 chkDist, s32 arg9) {
+                             s32* outBgId, Vec3f* pos, Actor* actor, u32 arg7, f32 chkDist, s32 arg9) {
     f32 yIntersectDyna;
     f32 yIntersect;
     StaticLookup* lookupTbl;
@@ -1826,7 +1778,8 @@ f32 BgCheck_RaycastFloorImpl(GlobalContext* globalCtx, CollisionContext* colCtx,
             checkPos.y -= colCtx->subdivLength.y;
             continue;
         }
-        yIntersect = BgCheck_RaycastFloorStatic(lookup, colCtx, xpFlags, outPoly, pos, arg7, chkDist, BGCHECK_Y_MIN, actor);
+        yIntersect =
+            BgCheck_RaycastFloorStatic(lookup, colCtx, xpFlags, outPoly, pos, arg7, chkDist, BGCHECK_Y_MIN, actor);
         if (yIntersect > BGCHECK_Y_MIN) {
             break;
         }
@@ -1882,7 +1835,7 @@ f32 BgCheck_EntityRaycastFloor1(CollisionContext* colCtx, CollisionPoly** outPol
  * returns yIntersect of the poly found, or BGCHECK_Y_MIN if no poly detected
  */
 f32 BgCheck_EntityRaycastFloor2(GlobalContext* globalCtx, CollisionContext* colCtx, CollisionPoly** outPoly,
-    Vec3f* pos) {
+                                Vec3f* pos) {
     s32 bgId;
 
     return BgCheck_RaycastFloorImpl(globalCtx, colCtx, COLPOLY_IGNORE_ENTITY, outPoly, &bgId, pos, NULL, 0x1C, 1.0f, 0);
@@ -1893,7 +1846,7 @@ f32 BgCheck_EntityRaycastFloor2(GlobalContext* globalCtx, CollisionContext* colC
  * returns yIntersect of the poly found, or BGCHECK_Y_MIN if no poly detected
  */
 f32 BgCheck_EntityRaycastFloor2_1(GlobalContext* globalCtx, CollisionContext* colCtx, CollisionPoly** outPoly,
-    Vec3f* pos) {
+                                  Vec3f* pos) {
     s32 bgId;
 
     return BgCheck_RaycastFloorImpl(globalCtx, colCtx, COLPOLY_IGNORE_ENTITY, outPoly, &bgId, pos, NULL, 0x1C, 1.0f, 1);
@@ -1911,7 +1864,8 @@ f32 BgCheck_EntityRaycastFloor3(CollisionContext* colCtx, CollisionPoly** outPol
  * Public raycast toward floor
  * returns yIntersect of the poly found, or BGCHECK_Y_MIN if no poly detected
  */
-f32 BgCheck_EntityRaycastFloor5(CollisionContext* colCtx, CollisionPoly** outPoly, s32* outBgId, Actor* actor, Vec3f* pos) {
+f32 BgCheck_EntityRaycastFloor5(CollisionContext* colCtx, CollisionPoly** outPoly, s32* outBgId, Actor* actor,
+                                Vec3f* pos) {
     return BgCheck_RaycastFloorImpl(NULL, colCtx, COLPOLY_IGNORE_ENTITY, outPoly, outBgId, pos, actor, 0x1C, 1.0f, 0);
 }
 
@@ -1919,8 +1873,8 @@ f32 BgCheck_EntityRaycastFloor5(CollisionContext* colCtx, CollisionPoly** outPol
  * Public raycast toward floor
  * returns yIntersect of the poly found, or BGCHECK_Y_MIN if no poly detected
  */
-f32 BgCheck_EntityRaycastFloor5_2(GlobalContext* globalCtx, CollisionContext* colCtx, CollisionPoly** outPoly, s32* bgId,
-    Actor* actor, Vec3f* pos) {
+f32 BgCheck_EntityRaycastFloor5_2(GlobalContext* globalCtx, CollisionContext* colCtx, CollisionPoly** outPoly,
+                                  s32* bgId, Actor* actor, Vec3f* pos) {
     return BgCheck_RaycastFloorImpl(globalCtx, colCtx, COLPOLY_IGNORE_ENTITY, outPoly, bgId, pos, actor, 0x1C, 1.0f, 0);
 }
 
@@ -1928,8 +1882,8 @@ f32 BgCheck_EntityRaycastFloor5_2(GlobalContext* globalCtx, CollisionContext* co
  * Public raycast toward floor
  * returns yIntersect of the poly found, or BGCHECK_Y_MIN if no poly detected
  */
-f32 BgCheck_EntityRaycastFloor5_3(GlobalContext* globalCtx, CollisionContext* colCtx, CollisionPoly** outPoly, s32* bgId,
-    Actor* actor, Vec3f* pos) {
+f32 BgCheck_EntityRaycastFloor5_3(GlobalContext* globalCtx, CollisionContext* colCtx, CollisionPoly** outPoly,
+                                  s32* bgId, Actor* actor, Vec3f* pos) {
     return BgCheck_RaycastFloorImpl(globalCtx, colCtx, COLPOLY_IGNORE_ENTITY, outPoly, bgId, pos, actor, 0x3C, 1.0f, 0);
 }
 
@@ -1938,7 +1892,7 @@ f32 BgCheck_EntityRaycastFloor5_3(GlobalContext* globalCtx, CollisionContext* co
  * returns yIntersect of the poly found, or BGCHECK_Y_MIN if no poly detected
  */
 f32 BgCheck_EntityRaycastFloor6(CollisionContext* colCtx, CollisionPoly** outPoly, s32* bgId, Actor* actor, Vec3f* pos,
-    f32 chkDist) {
+                                f32 chkDist) {
     return BgCheck_RaycastFloorImpl(NULL, colCtx, COLPOLY_IGNORE_ENTITY, outPoly, bgId, pos, actor, 0x1C, chkDist, 0);
 }
 
@@ -1947,7 +1901,7 @@ f32 BgCheck_EntityRaycastFloor6(CollisionContext* colCtx, CollisionPoly** outPol
  * returns yIntersect of the poly found, or BGCHECK_Y_MIN if no poly detected
  */
 f32 BgCheck_EntityRaycastFloor7(CollisionContext* colCtx, CollisionPoly** outPoly, s32* bgId, Actor* actor,
-    Vec3f* pos) {
+                                Vec3f* pos) {
     return BgCheck_RaycastFloorImpl(NULL, colCtx, COLPOLY_IGNORE_ENTITY, outPoly, bgId, pos, actor, 0x06, 1.0f, 0);
 }
 
@@ -1995,7 +1949,7 @@ f32 BgCheck_CameraRaycastFloor2(CollisionContext* colCtx, CollisionPoly** outPol
  * returns yIntersect of the poly found, or BGCHECK_Y_MIN if no poly detected
  */
 f32 BgCheck_EntityRaycastFloor8(CollisionContext* colCtx, CollisionPoly** outPoly, s32* bgId, Actor* actor,
-    Vec3f* pos) {
+                                Vec3f* pos) {
     return BgCheck_RaycastFloorImpl(NULL, colCtx, COLPOLY_IGNORE_ENTITY, outPoly, bgId, pos, actor, 0x02, 1.0f, 0);
 }
 
@@ -2008,7 +1962,7 @@ f32 BgCheck_EntityRaycastFloor9(CollisionContext* colCtx, CollisionPoly** outPol
 }
 
 s32 BgCheck_CheckWallImpl(CollisionContext* colCtx, u16 xpFlags, Vec3f* posResult, Vec3f* posNext, Vec3f* posPrev,
-    f32 radius, CollisionPoly** outPoly, s32* outBgId, Actor* actor, f32 checkHeight, u8 argA);
+                          f32 radius, CollisionPoly** outPoly, s32* outBgId, Actor* actor, f32 checkHeight, u8 argA);
 #ifdef NON_MATCHING
 /**
  * Tests if moving from `posPrev` to `posNext` will collide with a "wall"
@@ -2018,7 +1972,7 @@ s32 BgCheck_CheckWallImpl(CollisionContext* colCtx, u16 xpFlags, Vec3f* posResul
  * `outPoly` returns the closest poly detected, while `outBgId` returns the poly owner
  */
 s32 BgCheck_CheckWallImpl(CollisionContext* colCtx, u16 xpFlags, Vec3f* posResult, Vec3f* posNext, Vec3f* posPrev,
-    f32 radius, CollisionPoly** outPoly, s32* outBgId, Actor* actor, f32 checkHeight, u8 argA) {
+                          f32 radius, CollisionPoly** outPoly, s32* outBgId, Actor* actor, f32 checkHeight, u8 argA) {
     StaticLookup* lookupTbl;
     f32 temp_f0;
     s32 result;
@@ -2055,7 +2009,7 @@ s32 BgCheck_CheckWallImpl(CollisionContext* colCtx, u16 xpFlags, Vec3f* posResul
         if ((checkHeight + dy) < 5.0f) {
             //! @bug checkHeight is not applied to posPrev/posNext
             result = BgCheck_CheckLineImpl(colCtx, xpFlags, COLPOLY_IGNORE_NONE, posPrev, posNext, &posIntersect, &poly,
-                &bgId, actor, 1.0f, BGCHECK_CHECK_ALL & ~BGCHECK_CHECK_CEILING);
+                                           &bgId, actor, 1.0f, BGCHECK_CHECK_ALL & ~BGCHECK_CHECK_CEILING);
             if (result) {
                 ny = COLPOLY_GET_NORMAL(poly->normal.y);
                 // if poly is floor, push result underneath the floor
@@ -2063,13 +2017,11 @@ s32 BgCheck_CheckWallImpl(CollisionContext* colCtx, u16 xpFlags, Vec3f* posResul
                     posResult->x = posIntersect.x;
                     if (checkHeight > 1.0f) {
                         posResult->y = posIntersect.y - 1.0f;
-                    }
-                    else {
+                    } else {
                         posResult->y = posIntersect.y - checkHeight;
                     }
                     posResult->z = posIntersect.z;
-                    if (actor != NULL)
-                    {
+                    if (actor != NULL) {
                         actor->bgCheckFlags |= 0x1000;
                     }
                 }
@@ -2084,12 +2036,11 @@ s32 BgCheck_CheckWallImpl(CollisionContext* colCtx, u16 xpFlags, Vec3f* posResul
                 *outPoly = poly;
                 *outBgId = bgId;
             }
-        }
-        else {
+        } else {
             // if the radius is less than the distance travelled on the xz plane, also test for floor collisions
             bccFlags = SQ(radius) < (SQ(dx) + SQ(dz))
-                ? (BGCHECK_CHECK_ALL & ~BGCHECK_CHECK_CEILING)
-                : (BGCHECK_CHECK_ALL & ~BGCHECK_CHECK_FLOOR & ~BGCHECK_CHECK_CEILING);
+                           ? (BGCHECK_CHECK_ALL & ~BGCHECK_CHECK_CEILING)
+                           : (BGCHECK_CHECK_ALL & ~BGCHECK_CHECK_FLOOR & ~BGCHECK_CHECK_CEILING);
 
             // perform a straight line test to see if a line at posNext.y + checkHeight from posPrev.xz to posNext.xz
             // passes through any wall and possibly floor polys
@@ -2098,7 +2049,7 @@ s32 BgCheck_CheckWallImpl(CollisionContext* colCtx, u16 xpFlags, Vec3f* posResul
             checkLinePrev = *posPrev;
             checkLinePrev.y = checkLineNext.y;
             result = BgCheck_CheckLineImpl(colCtx, xpFlags, COLPOLY_IGNORE_NONE, &checkLinePrev, &checkLineNext,
-                &posIntersect, &poly, &bgId, actor, 1.0f, bccFlags);
+                                           &posIntersect, &poly, &bgId, actor, 1.0f, bccFlags);
 
             if (result) {
                 nx2 = COLPOLY_GET_NORMAL(poly->normal.x);
@@ -2120,9 +2071,7 @@ s32 BgCheck_CheckWallImpl(CollisionContext* colCtx, u16 xpFlags, Vec3f* posResul
                             actor->bgCheckFlags |= 0x1000;
                         }
                     }
-                }
-                else
-                {
+                } else {
                     result = false;
                 }
             }
@@ -2134,7 +2083,7 @@ s32 BgCheck_CheckWallImpl(CollisionContext* colCtx, u16 xpFlags, Vec3f* posResul
     sphCenter.y += checkHeight;
     // test if sphere (sphCenter, radius) collides with a dynamic wall, displacing the x/z coordinates
     if (BgCheck_SphVsDynaWall(colCtx, xpFlags, &posResult->x, &posResult->z, &sphCenter, radius, outPoly, outBgId,
-        actor)) {
+                              actor)) {
         result = true;
         dynaPolyCollision = true;
         sphCenter = *posResult;
@@ -2145,14 +2094,14 @@ s32 BgCheck_CheckWallImpl(CollisionContext* colCtx, u16 xpFlags, Vec3f* posResul
         // possible bug? if the sphere's radius is smaller than the distance to a subdivision boundary, some static
         // polys will be missed
         BgCheck_SphVsStaticWall(BgCheck_GetNearestStaticLookup(colCtx, lookupTbl, posResult), colCtx, xpFlags,
-            &posResult->x, &posResult->z, &sphCenter, radius, outPoly, actor)) {
+                                &posResult->x, &posResult->z, &sphCenter, radius, outPoly, actor)) {
         *outBgId = BGCHECK_SCENE;
         result = true;
     }
     // if a collision with a dyna poly was detected
     if (dynaPolyCollision || *outBgId != BGCHECK_SCENE) {
         if (BgCheck_CheckLineImpl(colCtx, xpFlags, COLPOLY_IGNORE_NONE, posPrev, posResult, &posIntersect2, &poly,
-            &bgId2, actor, 1.0f, BGCHECK_CHECK_ONE_FACE | BGCHECK_CHECK_WALL)) {
+                                  &bgId2, actor, 1.0f, BGCHECK_CHECK_ONE_FACE | BGCHECK_CHECK_WALL)) {
             nx3 = COLPOLY_GET_NORMAL(poly->normal.x);
             nz3 = COLPOLY_GET_NORMAL(poly->normal.z);
             n3XZDist = sqrtf(SQ(nx3) + SQ(nz3));
@@ -2174,7 +2123,7 @@ s32 BgCheck_CheckWallImpl(CollisionContext* colCtx, u16 xpFlags, Vec3f* posResul
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_CheckWallImpl.s")
-#endif 
+#endif
 
 /**
  * Public. Tests if moving from `posPrev` to `posNext` will collide with a "wall"
@@ -2184,11 +2133,11 @@ s32 BgCheck_CheckWallImpl(CollisionContext* colCtx, u16 xpFlags, Vec3f* posResul
  * `outPoly` returns the closest poly detected
  */
 s32 BgCheck_EntitySphVsWall1(CollisionContext* colCtx, Vec3f* posResult, Vec3f* posNext, Vec3f* posPrev, f32 radius,
-    CollisionPoly** outPoly, f32 checkHeight) {
+                             CollisionPoly** outPoly, f32 checkHeight) {
     s32 bgId;
 
     return BgCheck_CheckWallImpl(colCtx, COLPOLY_IGNORE_ENTITY, posResult, posNext, posPrev, radius, outPoly, &bgId,
-        NULL, checkHeight, 0);
+                                 NULL, checkHeight, 0);
 }
 
 /**
@@ -2199,9 +2148,9 @@ s32 BgCheck_EntitySphVsWall1(CollisionContext* colCtx, Vec3f* posResult, Vec3f* 
  * `outPoly` returns the closest poly detected, while `outBgId` returns the poly owner
  */
 s32 BgCheck_EntitySphVsWall2(CollisionContext* colCtx, Vec3f* posResult, Vec3f* posNext, Vec3f* posPrev, f32 radius,
-    CollisionPoly** outPoly, s32* outBgId, f32 checkHeight) {
+                             CollisionPoly** outPoly, s32* outBgId, f32 checkHeight) {
     return BgCheck_CheckWallImpl(colCtx, COLPOLY_IGNORE_ENTITY, posResult, posNext, posPrev, radius, outPoly, outBgId,
-        NULL, checkHeight, 0);
+                                 NULL, checkHeight, 0);
 }
 
 /**
@@ -2213,9 +2162,9 @@ s32 BgCheck_EntitySphVsWall2(CollisionContext* colCtx, Vec3f* posResult, Vec3f* 
  * `outPoly` returns the closest poly detected, while `outBgId` returns the poly owner
  */
 s32 BgCheck_EntitySphVsWall3(CollisionContext* colCtx, Vec3f* posResult, Vec3f* posNext, Vec3f* posPrev, f32 radius,
-    CollisionPoly** outPoly, s32* outBgId, Actor* actor, f32 checkHeight) {
+                             CollisionPoly** outPoly, s32* outBgId, Actor* actor, f32 checkHeight) {
     return BgCheck_CheckWallImpl(colCtx, COLPOLY_IGNORE_ENTITY, posResult, posNext, posPrev, radius, outPoly, outBgId,
-        actor, checkHeight, 0);
+                                 actor, checkHeight, 0);
 }
 
 /**
@@ -2228,9 +2177,9 @@ s32 BgCheck_EntitySphVsWall3(CollisionContext* colCtx, Vec3f* posResult, Vec3f* 
  * `outPoly` returns the closest poly detected, while `outBgId` returns the poly owner
  */
 s32 BgCheck_EntitySphVsWall4(CollisionContext* colCtx, Vec3f* posResult, Vec3f* posNext, Vec3f* posPrev, f32 radius,
-    CollisionPoly** outPoly, s32* outBgId, Actor* actor, f32 checkHeight) {
+                             CollisionPoly** outPoly, s32* outBgId, Actor* actor, f32 checkHeight) {
     return BgCheck_CheckWallImpl(colCtx, COLPOLY_IGNORE_ENTITY, posResult, posNext, posPrev, radius, outPoly, outBgId,
-        actor, checkHeight, 1);
+                                 actor, checkHeight, 1);
 }
 
 /**
@@ -2241,7 +2190,7 @@ s32 BgCheck_EntitySphVsWall4(CollisionContext* colCtx, Vec3f* posResult, Vec3f* 
  * `outY` returns the y coordinate of pos needed to not collide with `outPoly`
  */
 s32 BgCheck_CheckCeilingImpl(CollisionContext* colCtx, u16 xpFlags, f32* outY, Vec3f* pos, f32 checkHeight,
-    CollisionPoly** outPoly, s32* outBgId, Actor* actor) {
+                             CollisionPoly** outPoly, s32* outBgId, Actor* actor) {
     StaticLookup* lookupTbl;
     StaticLookup* lookup;
     s32 result;
@@ -2289,7 +2238,7 @@ s32 BgCheck_AnyCheckCeiling(CollisionContext* colCtx, f32* outY, Vec3f* pos, f32
  * `outY` returns the displaced y coordinate needed to not collide with the poly
  */
 s32 BgCheck_EntityCheckCeiling(CollisionContext* colCtx, f32* outY, Vec3f* pos, f32 checkHeight,
-    CollisionPoly** outPoly, s32* outBgId, Actor* actor) {
+                               CollisionPoly** outPoly, s32* outBgId, Actor* actor) {
     return BgCheck_CheckCeilingImpl(colCtx, COLPOLY_IGNORE_ENTITY, outY, pos, checkHeight, outPoly, outBgId, actor);
 }
 
@@ -2301,15 +2250,15 @@ s32 BgCheck_EntityCheckCeiling(CollisionContext* colCtx, f32* outY, Vec3f* pos, 
  * `outPoly` returns the pointer to the intersected poly, while `outBgId` returns the entity the poly belongs to
  */
 s32 BgCheck_CheckLineImpl(CollisionContext* colCtx, u16 xpFlags1, u16 xpFlags2, Vec3f* posA, Vec3f* posB,
-    Vec3f* posResult, CollisionPoly** outPoly, s32* outBgId, Actor* actor, f32 chkDist,
-    u32 bccFlags) {
+                          Vec3f* posResult, CollisionPoly** outPoly, s32* outBgId, Actor* actor, f32 chkDist,
+                          u32 bccFlags) {
     StaticLookup* lookupTbl;
     StaticLookup* iLookup;
     s32 subdivMin[3];
     s32 subdivMax[3];
     s32 i;
     s32 result;
-    //f32 distSq;
+    // f32 distSq;
     Vec3f posBTemp;
     struct_func_800C1D7C bup;
     Vec3f sectorMin;
@@ -2369,8 +2318,7 @@ s32 BgCheck_CheckLineImpl(CollisionContext* colCtx, u16 xpFlags1, u16 xpFlags2, 
 
                 for (k = subdivMin[0]; k < subdivMax[0] + 1; k++) {
 
-                    if (Math3D_LineVsCube(&sectorMin, &sectorMax, posA, &posBTemp))
-                    {
+                    if (Math3D_LineVsCube(&sectorMin, &sectorMax, posA, &posBTemp)) {
                         bup.lookup = lookup;
 
                         if (BgCheck_CheckLineInSubdivision(&bup)) {
@@ -2392,21 +2340,18 @@ s32 BgCheck_CheckLineImpl(CollisionContext* colCtx, u16 xpFlags1, u16 xpFlags2, 
             sectorMin.z += colCtx->subdivLength.z;
             sectorMax.z += colCtx->subdivLength.z;
         }
-    }
-    else if (BgCheck_PosInStaticBoundingBox(colCtx, posA) == false) {
+    } else if (BgCheck_PosInStaticBoundingBox(colCtx, posA) == false) {
         return false;
-    }
-    else {
+    } else {
         bup.lookup = BgCheck_GetNearestStaticLookup(colCtx, lookupTbl, posA);
-        result =
-            BgCheck_CheckLineInSubdivision(&bup);
+        result = BgCheck_CheckLineInSubdivision(&bup);
         if (result) {
             bup.outDistSq = Math3D_Vec3fDistSq(posResult, posA);
         }
     }
     if ((bccFlags & BGCHECK_CHECK_DYNA) &&
-        BgCheck_CheckLineAgainstDyna(colCtx, xpFlags1, posA, &posBTemp, posResult, outPoly, &bup.outDistSq, outBgId, actor,
-            chkDist, bccFlags)) {
+        BgCheck_CheckLineAgainstDyna(colCtx, xpFlags1, posA, &posBTemp, posResult, outPoly, &bup.outDistSq, outBgId,
+                                     actor, chkDist, bccFlags)) {
         result = true;
     }
     return result;
@@ -2444,10 +2389,10 @@ u32 BgCheck_GetBccFlags(s32 chkWall, s32 chkFloor, s32 chkCeil, s32 chkOneFace, 
  * returns true if it does, else false
  */
 s32 BgCheck_CameraLineTest1(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult,
-    CollisionPoly** outPoly, s32 chkWall, s32 chkFloor, s32 chkCeil, s32 chkOneFace,
-    s32* bgId) {
+                            CollisionPoly** outPoly, s32 chkWall, s32 chkFloor, s32 chkCeil, s32 chkOneFace,
+                            s32* bgId) {
     return BgCheck_CheckLineImpl(colCtx, COLPOLY_IGNORE_CAMERA, COLPOLY_IGNORE_NONE, posA, posB, posResult, outPoly,
-        bgId, NULL, 1.0f, BgCheck_GetBccFlags(chkWall, chkFloor, chkCeil, chkOneFace, true));
+                                 bgId, NULL, 1.0f, BgCheck_GetBccFlags(chkWall, chkFloor, chkCeil, chkOneFace, true));
 }
 
 /**
@@ -2455,10 +2400,10 @@ s32 BgCheck_CameraLineTest1(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, 
  * returns true if it does, else false
  */
 s32 BgCheck_CameraLineTest2(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult,
-    CollisionPoly** outPoly, s32 chkWall, s32 chkFloor, s32 chkCeil, s32 chkOneFace,
-    s32* bgId) {
+                            CollisionPoly** outPoly, s32 chkWall, s32 chkFloor, s32 chkCeil, s32 chkOneFace,
+                            s32* bgId) {
     return BgCheck_CheckLineImpl(colCtx, COLPOLY_IGNORE_NONE, COLPOLY_IGNORE_CAMERA, posA, posB, posResult, outPoly,
-        bgId, NULL, 1.0f, BgCheck_GetBccFlags(chkWall, chkFloor, chkCeil, chkOneFace, true));
+                                 bgId, NULL, 1.0f, BgCheck_GetBccFlags(chkWall, chkFloor, chkCeil, chkOneFace, true));
 }
 
 /**
@@ -2466,10 +2411,10 @@ s32 BgCheck_CameraLineTest2(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, 
  * returns true if it does, else false
  */
 s32 BgCheck_EntityLineTest1(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult,
-    CollisionPoly** outPoly, s32 chkWall, s32 chkFloor, s32 chkCeil, s32 chkOneFace,
-    s32* bgId) {
+                            CollisionPoly** outPoly, s32 chkWall, s32 chkFloor, s32 chkCeil, s32 chkOneFace,
+                            s32* bgId) {
     return BgCheck_CheckLineImpl(colCtx, COLPOLY_IGNORE_ENTITY, COLPOLY_IGNORE_NONE, posA, posB, posResult, outPoly,
-        bgId, NULL, 1.0f, BgCheck_GetBccFlags(chkWall, chkFloor, chkCeil, chkOneFace, true));
+                                 bgId, NULL, 1.0f, BgCheck_GetBccFlags(chkWall, chkFloor, chkCeil, chkOneFace, true));
 }
 
 /**
@@ -2477,10 +2422,10 @@ s32 BgCheck_EntityLineTest1(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, 
  * returns true if it does, else false
  */
 s32 BgCheck_EntityLineTest2(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult,
-    CollisionPoly** outPoly, s32 chkWall, s32 chkFloor, s32 chkCeil, s32 chkOneFace, s32* bgId,
-    Actor* actor) {
+                            CollisionPoly** outPoly, s32 chkWall, s32 chkFloor, s32 chkCeil, s32 chkOneFace, s32* bgId,
+                            Actor* actor) {
     return BgCheck_CheckLineImpl(colCtx, COLPOLY_IGNORE_ENTITY, COLPOLY_IGNORE_NONE, posA, posB, posResult, outPoly,
-        bgId, actor, 1.0f, BgCheck_GetBccFlags(chkWall, chkFloor, chkCeil, chkOneFace, true));
+                                 bgId, actor, 1.0f, BgCheck_GetBccFlags(chkWall, chkFloor, chkCeil, chkOneFace, true));
 }
 
 /**
@@ -2488,11 +2433,11 @@ s32 BgCheck_EntityLineTest2(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, 
  * returns true if it does, else false
  */
 s32 BgCheck_EntityLineTest3(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult,
-    CollisionPoly** outPoly, s32 chkWall, s32 chkFloor, s32 chkCeil, s32 chkOneFace, s32* bgId,
-    Actor* actor, f32 chkDist) {
+                            CollisionPoly** outPoly, s32 chkWall, s32 chkFloor, s32 chkCeil, s32 chkOneFace, s32* bgId,
+                            Actor* actor, f32 chkDist) {
     return BgCheck_CheckLineImpl(colCtx, COLPOLY_IGNORE_ENTITY, COLPOLY_IGNORE_NONE, posA, posB, posResult, outPoly,
-        bgId, actor, chkDist,
-        BgCheck_GetBccFlags(chkWall, chkFloor, chkCeil, chkOneFace, true));
+                                 bgId, actor, chkDist,
+                                 BgCheck_GetBccFlags(chkWall, chkFloor, chkCeil, chkOneFace, true));
 }
 
 /**
@@ -2500,11 +2445,11 @@ s32 BgCheck_EntityLineTest3(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, 
  * returns true if it does, else false
  */
 s32 BgCheck_ProjectileLineTest(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult,
-    CollisionPoly** outPoly, s32 chkWall, s32 chkFloor, s32 chkCeil, s32 chkOneFace,
-    s32* bgId) {
+                               CollisionPoly** outPoly, s32 chkWall, s32 chkFloor, s32 chkCeil, s32 chkOneFace,
+                               s32* bgId) {
     return BgCheck_CheckLineImpl(colCtx, COLPOLY_IGNORE_PROJECTILES, COLPOLY_IGNORE_NONE, posA, posB, posResult,
-        outPoly, bgId, NULL, 1.0f,
-        BgCheck_GetBccFlags(chkWall, chkFloor, chkCeil, chkOneFace, true));
+                                 outPoly, bgId, NULL, 1.0f,
+                                 BgCheck_GetBccFlags(chkWall, chkFloor, chkCeil, chkOneFace, true));
 }
 
 /**
@@ -2512,7 +2457,7 @@ s32 BgCheck_ProjectileLineTest(CollisionContext* colCtx, Vec3f* posA, Vec3f* pos
  * returns true if it does, else false
  */
 s32 BgCheck_AnyLineTest1(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** outPoly,
-    s32 chkOneFace) {
+                         s32 chkOneFace) {
     return BgCheck_AnyLineTest2(colCtx, posA, posB, posResult, outPoly, true, true, true, chkOneFace);
 }
 
@@ -2521,11 +2466,11 @@ s32 BgCheck_AnyLineTest1(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec
  * returns true if it does, else false
  */
 s32 BgCheck_AnyLineTest2(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** outPoly,
-    s32 chkWall, s32 chkFloor, s32 chkCeil, s32 chkOneFace) {
+                         s32 chkWall, s32 chkFloor, s32 chkCeil, s32 chkOneFace) {
     s32 bgId;
 
     return BgCheck_CheckLineImpl(colCtx, COLPOLY_IGNORE_NONE, COLPOLY_IGNORE_NONE, posA, posB, posResult, outPoly,
-        &bgId, NULL, 1.0f, BgCheck_GetBccFlags(chkWall, chkFloor, chkCeil, chkOneFace, true));
+                                 &bgId, NULL, 1.0f, BgCheck_GetBccFlags(chkWall, chkFloor, chkCeil, chkOneFace, true));
 }
 
 /**
@@ -2533,9 +2478,9 @@ s32 BgCheck_AnyLineTest2(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec
  * returns true if it does, else false
  */
 s32 BgCheck_AnyLineTest3(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** outPoly,
-    s32 chkWall, s32 chkFloor, s32 chkCeil, s32 chkOneFace, s32* bgId) {
+                         s32 chkWall, s32 chkFloor, s32 chkCeil, s32 chkOneFace, s32* bgId) {
     return BgCheck_CheckLineImpl(colCtx, COLPOLY_IGNORE_NONE, COLPOLY_IGNORE_NONE, posA, posB, posResult, outPoly, bgId,
-        NULL, 1.0f, BgCheck_GetBccFlags(chkWall, chkFloor, chkCeil, chkOneFace, true));
+                                 NULL, 1.0f, BgCheck_GetBccFlags(chkWall, chkFloor, chkCeil, chkOneFace, true));
 }
 
 /**
@@ -2546,16 +2491,15 @@ s32 BgCheck_AnyLineTest3(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec
  * `outBgId` returns the bgId of the entity that owns `outPoly`
  */
 s32 BgCheck_SphVsFirstPolyImpl(CollisionContext* colCtx, u16 xpFlags, CollisionPoly** outPoly, s32* outBgId,
-    Vec3f* center, f32 radius, Actor* actor, u16 bciFlags) {
+                               Vec3f* center, f32 radius, Actor* actor, u16 bciFlags) {
     StaticLookup* lookup;
 
     *outBgId = BGCHECK_SCENE;
     lookup = BgCheck_GetStaticLookup(colCtx, colCtx->lookupTbl, center);
     if (lookup == NULL) {
         return false;
-    }
-    else if (BgCheck_SphVsFirstStaticPoly(lookup, xpFlags, colCtx, center, radius, outPoly, bciFlags, actor) ||
-        BgCheck_SphVsFirstDynaPoly(colCtx, xpFlags, outPoly, outBgId, center, radius, actor, bciFlags)) {
+    } else if (BgCheck_SphVsFirstStaticPoly(lookup, xpFlags, colCtx, center, radius, outPoly, bciFlags, actor) ||
+               BgCheck_SphVsFirstDynaPoly(colCtx, xpFlags, outPoly, outBgId, center, radius, actor, bciFlags)) {
         return true;
     }
     return false;
@@ -2569,7 +2513,7 @@ s32 BgCheck_SphVsFirstPoly(CollisionContext* colCtx, Vec3f* center, f32 radius) 
     s32 bgId;
 
     return BgCheck_SphVsFirstPolyImpl(colCtx, COLPOLY_IGNORE_NONE, &poly, &bgId, center, radius, NULL,
-        BGCHECK_IGNORE_NONE);
+                                      BGCHECK_IGNORE_NONE);
 }
 
 /**
@@ -2580,7 +2524,7 @@ s32 BgCheck_SphVsFirstWall(CollisionContext* colCtx, Vec3f* center, f32 radius) 
     s32 bgId;
 
     return BgCheck_SphVsFirstPolyImpl(colCtx, COLPOLY_IGNORE_NONE, &poly, &bgId, center, radius, NULL,
-        BGCHECK_IGNORE_FLOOR | BGCHECK_IGNORE_CEILING);
+                                      BGCHECK_IGNORE_FLOOR | BGCHECK_IGNORE_CEILING);
 }
 
 /**
@@ -2762,8 +2706,8 @@ void DynaPoly_AllocVtxList(GlobalContext* globalCtx, Vec3s** vtxList, s32 numVtx
 }
 
 /**
-* Init dyna.waterBoxList
-*/
+ * Init dyna.waterBoxList
+ */
 void DynaPoly_InitWaterBoxList(DynaSSWaterboxList* waterBoxList) {
     waterBoxList->unk0 = 0;
     waterBoxList->boxes = NULL;
@@ -2819,7 +2763,7 @@ void DynaPoly_Alloc(GlobalContext* globalCtx, DynaCollisionContext* dyna) {
 
     DynaPoly_NullVtxList(&dyna->vtxList);
     DynaPoly_AllocVtxList(globalCtx, &dyna->vtxList, dyna->vtxListMax);
-    
+
     DynaPoly_InitWaterBoxList(&dyna->waterboxes);
     DynaPoly_AllocWaterBoxList(globalCtx, &dyna->waterboxes, 30);
 
@@ -2832,7 +2776,7 @@ void DynaPoly_Alloc(GlobalContext* globalCtx, DynaCollisionContext* dyna) {
  * original name: DynaPolyInfo_setActor
  */
 s32 DynaPoly_SetBgActor(GlobalContext* globalCtx, DynaCollisionContext* dyna, Actor* actor,
-    CollisionHeader* colHeader) {
+                        CollisionHeader* colHeader) {
     s32 bgId;
     s32 foundSlot = false;
 
@@ -2931,13 +2875,14 @@ void func_800C6554(GlobalContext* globalCtx, DynaCollisionContext* dyna) {
     dyna->bitFlag |= DYNAPOLY_INVALIDATE_LOOKUP;
 }
 
-void BgCheck_CalcWaterboxDimensions(Vec3f* minPos, Vec3f* maxXPos, Vec3f* maxZPos, Vec3s* minPosOut, s16* xLength, s16* zLength) {
+void BgCheck_CalcWaterboxDimensions(Vec3f* minPos, Vec3f* maxXPos, Vec3f* maxZPos, Vec3s* minPosOut, s16* xLength,
+                                    s16* zLength) {
     f32 temp;
 
     minPosOut->x = minPos->x;
     minPosOut->y = minPos->y;
     minPosOut->z = minPos->z;
-   
+
     if (maxXPos->x < minPosOut->x) {
         minPosOut->x = maxXPos->x;
     }
@@ -2981,36 +2926,35 @@ void BgCheck_CalcWaterboxDimensions(Vec3f* minPos, Vec3f* maxXPos, Vec3f* maxZPo
 }
 
 #ifdef NON_MATCHING
-//extern MtxF D_801EDA40
 /**
  * original name: DynaPolyInfo_expandSRT
  */
 void DynaPoly_ExpandSRT(GlobalContext* globalCtx, DynaCollisionContext* dyna, s32 bgId, s32* vtxStartIndex,
-    s32* polyStartIndex, s32* waterBoxStartIndex) {
+                        s32* polyStartIndex, s32* waterBoxStartIndex) {
     Actor* actor;
     s32 pad;
     s32 pad2;
     f32 numVtxInverse;
     s32 i;
-    Vec3f pos; //sp170
+    Vec3f pos; // sp170
     Sphere16* sphere;
     Vec3s* dVtxList;
     Vec3s* point;
-    Vec3f newCenterPoint; //sp158
+    Vec3f newCenterPoint; // sp158
 
     f32 newRadiusSq;
     CollisionHeader* pbgdata;
-    Vec3f newVtx; //sp144
-    Vec3f vtxA; //sp138
-    Vec3f vtxB; //sp12C
-    Vec3f vtxC; //sp120
+    Vec3f newVtx; // sp144
+    Vec3f vtxA;   // sp138
+    Vec3f vtxB;   // sp12C
+    Vec3f vtxC;   // sp120
     Vec3f newNormal;
     s32 wi;
-    Vec3f spB8; //waterbox ?
+    Vec3f spB8; // waterbox ?
     Vec3f spAC;
-    Vec3f spA0; //waterbox ?
+    Vec3f spA0; // waterbox ?
     Vec3f sp94;
-    Vec3f sp88; //waterbox ?
+    Vec3f sp88; // waterbox ?
     Vec3f sp7C;
     WaterBox* waterBox;
 
@@ -3047,8 +2991,7 @@ void DynaPoly_ExpandSRT(GlobalContext* globalCtx, DynaCollisionContext* dyna, s3
         Fault_AddHungupAndCrashImpl(D_801EDAA8, D_801EDAF8);
     }
 
-    if (!(dyna->bitFlag & DYNAPOLY_INVALIDATE_LOOKUP) &&
-        BgActor_IsTransformUnchanged(&dyna->bgActors[bgId])) {
+    if (!(dyna->bitFlag & DYNAPOLY_INVALIDATE_LOOKUP) && BgActor_IsTransformUnchanged(&dyna->bgActors[bgId])) {
         s32 pi;
         for (pi = *polyStartIndex; pi < *polyStartIndex + pbgdata->numPolygons; pi++) {
             CollisionPoly* poly = &dyna->polyList[pi];
@@ -3059,15 +3002,13 @@ void DynaPoly_ExpandSRT(GlobalContext* globalCtx, DynaCollisionContext* dyna, s3
                     s16 polyIndex = pi;
                     DynaSSNodeList_SetSSListHead(&dyna->polyNodes, &dyna->bgActors[bgId].dynaLookup.floor, &polyIndex);
                 }
-            }
-            else if (normalY < COLPOLY_SNORMAL(-0.8f)) {
+            } else if (normalY < COLPOLY_SNORMAL(-0.8f)) {
                 if (!(dyna->bgActorFlags[bgId] & 8)) {
                     s16 polyIndex = pi;
                     DynaSSNodeList_SetSSListHead(&dyna->polyNodes, &dyna->bgActors[bgId].dynaLookup.ceiling,
-                        &polyIndex);
+                                                 &polyIndex);
                 }
-            }
-            else {
+            } else {
                 s16 polyIndex = pi;
                 DynaSSNodeList_SetSSListHead(&dyna->polyNodes, &dyna->bgActors[bgId].dynaLookup.wall, &polyIndex);
             }
@@ -3076,25 +3017,19 @@ void DynaPoly_ExpandSRT(GlobalContext* globalCtx, DynaCollisionContext* dyna, s3
         *polyStartIndex += pbgdata->numPolygons;
         *vtxStartIndex += pbgdata->numVertices;
         *waterBoxStartIndex += pbgdata->numWaterBoxes;
-    }
-    else {
+    } else {
         SkinMatrix_SetScaleRotateYRPTranslate(
-            &D_801EDA40,
-            dyna->bgActors[bgId].curTransform.scale.x,
-            dyna->bgActors[bgId].curTransform.scale.y,
-            dyna->bgActors[bgId].curTransform.scale.z,
-            dyna->bgActors[bgId].curTransform.rot.x,
-            dyna->bgActors[bgId].curTransform.rot.y, 
-            dyna->bgActors[bgId].curTransform.rot.z,
-            dyna->bgActors[bgId].curTransform.pos.x,
-            dyna->bgActors[bgId].curTransform.pos.y,
+            &D_801EDA40, dyna->bgActors[bgId].curTransform.scale.x, dyna->bgActors[bgId].curTransform.scale.y,
+            dyna->bgActors[bgId].curTransform.scale.z, dyna->bgActors[bgId].curTransform.rot.x,
+            dyna->bgActors[bgId].curTransform.rot.y, dyna->bgActors[bgId].curTransform.rot.z,
+            dyna->bgActors[bgId].curTransform.pos.x, dyna->bgActors[bgId].curTransform.pos.y,
             dyna->bgActors[bgId].curTransform.pos.z);
 
         if (pbgdata->numVertices != 0 && pbgdata->numPolygons != 0) {
             numVtxInverse = 1.0f / pbgdata->numVertices;
             newCenterPoint.x = newCenterPoint.y = newCenterPoint.z = 0.0f;
             for (i = 0; i < pbgdata->numVertices; i++) {
-                Vec3f vtx; //spF4
+                Vec3f vtx;  // spF4
                 Vec3f vtxT; // spE8 Vtx after mtx transform
                 Math_Vec3s_ToVec3f(&vtx, &pbgdata->vtxList[i]);
                 SkinMatrix_Vec3fMtxFMultXYZ(&D_801EDA40, &vtx, &vtxT);
@@ -3102,11 +3037,9 @@ void DynaPoly_ExpandSRT(GlobalContext* globalCtx, DynaCollisionContext* dyna, s3
 
                 if (i == 0) {
                     dyna->bgActors[bgId].minY = dyna->bgActors[bgId].maxY = vtxT.y;
-                }
-                else if (vtxT.y < dyna->bgActors[bgId].minY) {
+                } else if (vtxT.y < dyna->bgActors[bgId].minY) {
                     dyna->bgActors[bgId].minY = vtxT.y;
-                }
-                else if (dyna->bgActors[bgId].maxY < vtxT.y) {
+                } else if (dyna->bgActors[bgId].maxY < vtxT.y) {
                     dyna->bgActors[bgId].maxY = vtxT.y;
                 }
                 newCenterPoint.x += vtxT.x;
@@ -3177,20 +3110,17 @@ void DynaPoly_ExpandSRT(GlobalContext* globalCtx, DynaCollisionContext* dyna, s3
                 if (newNormal.y > 0.5f) {
                     s16 polyId = *polyStartIndex + i;
                     DynaSSNodeList_SetSSListHead(&dyna->polyNodes, &dyna->bgActors[bgId].dynaLookup.floor, &polyId);
-                }
-                else if (newNormal.y < -0.8f) {
+                } else if (newNormal.y < -0.8f) {
                     s16 polyId = *polyStartIndex + i;
                     DynaSSNodeList_SetSSListHead(&dyna->polyNodes, &dyna->bgActors[bgId].dynaLookup.ceiling, &polyId);
-                }
-                else {
+                } else {
                     s16 polyId = *polyStartIndex + i;
                     DynaSSNodeList_SetSSListHead(&dyna->polyNodes, &dyna->bgActors[bgId].dynaLookup.wall, &polyId);
                 }
             }
         }
-        
-        for (wi = 0; wi < pbgdata->numWaterBoxes; wi++)
-        {
+
+        for (wi = 0; wi < pbgdata->numWaterBoxes; wi++) {
             Math_Vec3s_ToVec3f(&spB8, &pbgdata->waterBoxes[wi].minPos);
             Math_Vec3f_Copy(&spA0, &spB8);
             spA0.x += pbgdata->waterBoxes[wi].xLength;
@@ -3200,7 +3130,8 @@ void DynaPoly_ExpandSRT(GlobalContext* globalCtx, DynaCollisionContext* dyna, s3
             SkinMatrix_Vec3fMtxFMultXYZ(&D_801EDA40, &spA0, &sp94);
             SkinMatrix_Vec3fMtxFMultXYZ(&D_801EDA40, &sp88, &sp7C);
             waterBox = &dyna->waterboxes.boxes[*waterBoxStartIndex + wi];
-            BgCheck_CalcWaterboxDimensions(&spAC, &sp94, &sp7C, &waterBox->minPos, &waterBox->xLength, &waterBox->zLength);
+            BgCheck_CalcWaterboxDimensions(&spAC, &sp94, &sp7C, &waterBox->minPos, &waterBox->xLength,
+                                           &waterBox->zLength);
             waterBox->properties = pbgdata->waterBoxes[wi].properties;
         }
 
@@ -3211,7 +3142,7 @@ void DynaPoly_ExpandSRT(GlobalContext* globalCtx, DynaCollisionContext* dyna, s3
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/DynaPoly_ExpandSRT.s")
-#endif 
+#endif
 
 void BgCheck_ResetFlagsIfLoadedActor(GlobalContext* globalCtx, DynaCollisionContext* dyna, Actor* actor) {
     DynaPolyActor* dynaActor;
@@ -3276,7 +3207,7 @@ void DynaPoly_Setup(GlobalContext* globalCtx, DynaCollisionContext* dyna) {
 }
 
 /**
- * Compute the number of dynamic resources in use? 
+ * Compute the number of dynamic resources in use?
  */
 void func_800C756C(DynaCollisionContext* dyna, s32* numPolygons, s32* numVertices, s32* numWaterBoxes) {
     s32 i;
@@ -3286,8 +3217,7 @@ void func_800C756C(DynaCollisionContext* dyna, s32* numPolygons, s32* numVertice
     *numVertices = 0;
     *numWaterBoxes = 0;
 
-    for (i = 0; i < BG_ACTOR_MAX; i++)
-    {
+    for (i = 0; i < BG_ACTOR_MAX; i++) {
         if ((dyna->bgActorFlags[i] & 1) && !(dyna->bgActorFlags[i] & 2) && !(dyna->bgActorFlags[i] & 4)) {
             colHeader = dyna->bgActors[i].colHeader;
             *numPolygons += colHeader->numPolygons;
@@ -3334,18 +3264,14 @@ f32 BgCheck_RaycastFloorDynaList(DynaRaycast* dynaRaycast, u32 listType) {
 
     while (true) {
         id = curNode->polyId;
-        if (
-            COLPOLY_VIA_FLAG_TEST(polyList[id].flags_vIA, dynaRaycast->xpFlags) || (
-                COLPOLY_VIA_FLAG_TEST(polyList[id].flags_vIB, 4) && (
-                    (dynaRaycast->actor != NULL && dynaRaycast->actor->category != ACTORCAT_PLAYER)
-                    || (dynaRaycast->actor == NULL && dynaRaycast->xpFlags != 1)
-                )
-            ) || ((dynaRaycast->unk_24 & 0x20) && func_800C9B68(dynaRaycast->colCtx, &polyList[id], dynaRaycast->unk1C))
-                ) {
+        if (COLPOLY_VIA_FLAG_TEST(polyList[id].flags_vIA, dynaRaycast->xpFlags) ||
+            (COLPOLY_VIA_FLAG_TEST(polyList[id].flags_vIB, 4) &&
+             ((dynaRaycast->actor != NULL && dynaRaycast->actor->category != ACTORCAT_PLAYER) ||
+              (dynaRaycast->actor == NULL && dynaRaycast->xpFlags != 1))) ||
+            ((dynaRaycast->unk_24 & 0x20) && func_800C9B68(dynaRaycast->colCtx, &polyList[id], dynaRaycast->unk1C))) {
             if (curNode->next == SS_NULL) {
                 break;
-            }
-            else {
+            } else {
                 curNode = &dynaRaycast->dyna->polyNodes.tbl[curNode->next];
                 continue;
             }
@@ -3354,22 +3280,20 @@ f32 BgCheck_RaycastFloorDynaList(DynaRaycast* dynaRaycast, u32 listType) {
             COLPOLY_GET_NORMAL(polyList[id].normal.y) < 0.0f) {
             if (curNode->next == SS_NULL) {
                 break;
-            }
-            else {
+            } else {
                 curNode = &dynaRaycast->dyna->polyNodes.tbl[curNode->next];
                 continue;
             }
         }
         if (CollisionPoly_CheckYIntersectApprox1(&polyList[id], dynaRaycast->dyna->vtxList, dynaRaycast->pos->x,
-            dynaRaycast->pos->z, &yIntersect, dynaRaycast->chkDist) &&
+                                                 dynaRaycast->pos->z, &yIntersect, dynaRaycast->chkDist) &&
             yIntersect < dynaRaycast->pos->y && result < yIntersect) {
             result = yIntersect;
             *dynaRaycast->resultPoly = &dynaRaycast->dyna->polyList[id];
         }
         if (curNode->next == SS_NULL) {
             break;
-        }
-        else {
+        } else {
             curNode = &dynaRaycast->dyna->polyNodes.tbl[curNode->next];
             continue;
         }
@@ -3414,7 +3338,7 @@ f32 BgCheck_RaycastFloorDyna(DynaRaycast* dynaRaycast) {
         if (dynaRaycast->actor == dynaRaycast->colCtx->dyna.bgActors[i].actor ||
             dynaRaycast->pos->y < dynaRaycast->colCtx->dyna.bgActors[i].minY ||
             !Math3D_XZInSphere(&dynaRaycast->colCtx->dyna.bgActors[i].boundingSphere, dynaRaycast->pos->x,
-                dynaRaycast->pos->z)) {
+                               dynaRaycast->pos->z)) {
             continue;
         }
 
@@ -3469,9 +3393,9 @@ f32 BgCheck_RaycastFloorDyna(DynaRaycast* dynaRaycast) {
             poly = &dynaRaycast->dyna->bgActors[*dynaRaycast->bgId].colHeader->polyList[polyIndex];
 
             SkinMatrix_SetScaleRotateYRPTranslate(&srpMtx, curTransform->scale.x, curTransform->scale.y,
-                curTransform->scale.z, curTransform->rot.x, curTransform->rot.y,
-                curTransform->rot.z, curTransform->pos.x, curTransform->pos.y,
-                curTransform->pos.z);
+                                                  curTransform->scale.z, curTransform->rot.x, curTransform->rot.y,
+                                                  curTransform->rot.z, curTransform->pos.x, curTransform->pos.y,
+                                                  curTransform->pos.z);
 
             vtxList = dynaRaycast->dyna->bgActors[*dynaRaycast->bgId].colHeader->vtxList;
 
@@ -3488,8 +3412,8 @@ f32 BgCheck_RaycastFloorDyna(DynaRaycast* dynaRaycast) {
                 polyNorm.z *= 1.0f / magnitude;
                 polyDist = -DOTXYZ(polyNorm, polyVtx[0]);
                 if (Math3D_TriChkPointParaYIntersectInsideTri(&polyVtx[0], &polyVtx[1], &polyVtx[2], polyNorm.x,
-                    polyNorm.y, polyNorm.z, polyDist, dynaRaycast->pos->z,
-                    dynaRaycast->pos->x, &intersect, dynaRaycast->chkDist)) {
+                                                              polyNorm.y, polyNorm.z, polyDist, dynaRaycast->pos->z,
+                                                              dynaRaycast->pos->x, &intersect, dynaRaycast->chkDist)) {
                     if (fabsf(intersect - result) < 1.0f) {
 
                         result = intersect;
@@ -3502,20 +3426,11 @@ f32 BgCheck_RaycastFloorDyna(DynaRaycast* dynaRaycast) {
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/BgCheck_RaycastFloorDyna.s")
-#endif 
+#endif
 
-s32 BgCheck_SphVsDynaWallInBgActor(CollisionContext* colCtx,
-    u16 xpFlags,
-    DynaCollisionContext* dyna,
-    SSList* ssList,
-    f32* outX,
-    f32* outZ,
-    CollisionPoly** outPoly,
-    s32* outBgId,
-    Vec3f* pos,
-    f32 radius,
-    s32 bgId,
-    Actor* actor);
+s32 BgCheck_SphVsDynaWallInBgActor(CollisionContext* colCtx, u16 xpFlags, DynaCollisionContext* dyna, SSList* ssList,
+                                   f32* outX, f32* outZ, CollisionPoly** outPoly, s32* outBgId, Vec3f* pos, f32 radius,
+                                   s32 bgId, Actor* actor);
 #ifdef NON_MATCHING
 /**
  * Performs collision detection on a BgActor's wall polys on sphere `pos`, `radius`
@@ -3524,20 +3439,10 @@ s32 BgCheck_SphVsDynaWallInBgActor(CollisionContext* colCtx,
  * `outPoly` returns the pointer to the nearest poly collided with, or NULL
  * `outBgId` returns `bgId` if the poly SurfaceType's wall damage flag is not set, else ?
  */
-s32 BgCheck_SphVsDynaWallInBgActor(
-        CollisionContext* colCtx,
-        u16 xpFlags,
-        DynaCollisionContext* dyna,
-        SSList* ssList,
-        f32* outX,
-        f32* outZ,
-        CollisionPoly** outPoly,
-        s32* outBgId,
-        Vec3f* pos,
-        f32 radius,
-        s32 bgId,
-        Actor* actor) {
-    
+s32 BgCheck_SphVsDynaWallInBgActor(CollisionContext* colCtx, u16 xpFlags, DynaCollisionContext* dyna, SSList* ssList,
+                                   f32* outX, f32* outZ, CollisionPoly** outPoly, s32* outBgId, Vec3f* pos, f32 radius,
+                                   s32 bgId, Actor* actor) {
+
     f32 temp;
     f32 intersect;
     s32 result = false;
@@ -3575,17 +3480,12 @@ s32 BgCheck_SphVsDynaWallInBgActor(
         normalXZ = sqrtf(SQ(nx) + SQ(nz));
 
         planeDist = Math3D_DistPlaneToPos(nx, ny, nz, poly->dist, &resultPos);
-        if (radius < fabsf(planeDist) || COLPOLY_VIA_FLAG_TEST(poly->flags_vIA, xpFlags)
-            || (
-                (COLPOLY_VIA_FLAG_TEST(poly->flags_vIB, 4)) && (
-                    (actor != NULL && actor->category != ACTORCAT_PLAYER) || (actor == NULL && xpFlags != 1)
-                )
-            )
-            ) {
+        if (radius < fabsf(planeDist) || COLPOLY_VIA_FLAG_TEST(poly->flags_vIA, xpFlags) ||
+            ((COLPOLY_VIA_FLAG_TEST(poly->flags_vIB, 4)) &&
+             ((actor != NULL && actor->category != ACTORCAT_PLAYER) || (actor == NULL && xpFlags != 1)))) {
             if (curNode->next == SS_NULL) {
                 break;
-            }
-            else {
+            } else {
                 curNode = &dyna->polyNodes.tbl[curNode->next];
                 continue;
             }
@@ -3595,8 +3495,7 @@ s32 BgCheck_SphVsDynaWallInBgActor(
         if (temp_f18 < 0.4f) {
             if (curNode->next == SS_NULL) {
                 break;
-            }
-            else {
+            } else {
                 curNode = &dyna->polyNodes.tbl[curNode->next];
                 continue;
             }
@@ -3609,16 +3508,14 @@ s32 BgCheck_SphVsDynaWallInBgActor(
         zTemp = dyna->vtxList[COLPOLY_VTX_INDEX(poly->flags_vIB)].z;
         if (zTemp < zMin) {
             zMin = zTemp;
-        }
-        else if (zTemp > zMax) {
+        } else if (zTemp > zMax) {
             zMax = zTemp;
         }
 
         zTemp = dyna->vtxList[poly->vIC].z;
         if (zTemp < zMin) {
             zMin = zTemp;
-        }
-        else if (zMax < zTemp) {
+        } else if (zMax < zTemp) {
             zMax = zTemp;
         }
 
@@ -3627,8 +3524,7 @@ s32 BgCheck_SphVsDynaWallInBgActor(
         if (resultPos.z < zMin || zMax < resultPos.z) {
             if (curNode->next == SS_NULL) {
                 break;
-            }
-            else {
+            } else {
                 curNode = &dyna->polyNodes.tbl[curNode->next];
                 continue;
             }
@@ -3637,7 +3533,7 @@ s32 BgCheck_SphVsDynaWallInBgActor(
             if (fabsf(intersect - resultPos.z) <= radius / temp_f18) {
                 if ((intersect - resultPos.z) * nz <= 4.0f) {
                     if (BgCheck_ComputeWallDisplacement(colCtx, poly, &resultPos.x, &resultPos.z, nx, ny, nz,
-                        invNormalXZ, planeDist, radius, outPoly)) {
+                                                        invNormalXZ, planeDist, radius, outPoly)) {
                         *outBgId = bgId;
                     }
                     result = true;
@@ -3658,12 +3554,12 @@ s32 BgCheck_SphVsDynaWallInBgActor(
         normalXZ = sqrtf(SQ(nx) + SQ(nz));
 
         planeDist = Math3D_DistPlaneToPos(nx, ny, nz, poly->dist, &resultPos);
-        if (radius < fabsf(planeDist) || COLPOLY_VIA_FLAG_TEST(poly->flags_vIA, xpFlags)
-            || (COLPOLY_VIA_FLAG_TEST(poly->flags_vIB, 4) && ((actor != NULL && actor->category != ACTORCAT_PLAYER) || (actor == NULL && xpFlags != 1)))) {
+        if (radius < fabsf(planeDist) || COLPOLY_VIA_FLAG_TEST(poly->flags_vIA, xpFlags) ||
+            (COLPOLY_VIA_FLAG_TEST(poly->flags_vIB, 4) &&
+             ((actor != NULL && actor->category != ACTORCAT_PLAYER) || (actor == NULL && xpFlags != 1)))) {
             if (curNode->next == SS_NULL) {
                 break;
-            }
-            else {
+            } else {
                 curNode = &dyna->polyNodes.tbl[curNode->next];
                 continue;
             }
@@ -3674,8 +3570,7 @@ s32 BgCheck_SphVsDynaWallInBgActor(
         if (temp_f18 < 0.4f) {
             if (curNode->next == SS_NULL) {
                 break;
-            }
-            else {
+            } else {
                 curNode = &dyna->polyNodes.tbl[curNode->next];
                 continue;
             }
@@ -3688,15 +3583,13 @@ s32 BgCheck_SphVsDynaWallInBgActor(
 
         if (xTemp < xMin) {
             xMin = xTemp;
-        }
-        else if (xMax < xTemp) {
+        } else if (xMax < xTemp) {
             xMax = xTemp;
         }
         xTemp = dyna->vtxList[poly->vIC].x;
         if (xTemp < xMin) {
             xMin = xTemp;
-        }
-        else if (xMax < xTemp) {
+        } else if (xMax < xTemp) {
             xMax = xTemp;
         }
 
@@ -3705,8 +3598,7 @@ s32 BgCheck_SphVsDynaWallInBgActor(
         if (resultPos.x < xMin || xMax < resultPos.x) {
             if (curNode->next == SS_NULL) {
                 break;
-            }
-            else {
+            } else {
                 curNode = &dyna->polyNodes.tbl[curNode->next];
                 continue;
             }
@@ -3717,7 +3609,7 @@ s32 BgCheck_SphVsDynaWallInBgActor(
             if (fabsf(xIntersectDist) <= radius / temp_f18) {
                 if (xIntersectDist * nx <= 4.0f) {
                     if (BgCheck_ComputeWallDisplacement(colCtx, poly, &resultPos.x, &resultPos.z, nx, ny, nz,
-                        invNormalXZ, planeDist, radius, outPoly)) {
+                                                        invNormalXZ, planeDist, radius, outPoly)) {
                         *outBgId = bgId;
                     }
                     result = true;
@@ -3746,7 +3638,7 @@ s32 BgCheck_SphVsDynaWallInBgActor(
  * If `actor` is not NULL, an BgActor bound to that actor will be ignored
  */
 s32 BgCheck_SphVsDynaWall(CollisionContext* colCtx, u16 xpFlags, f32* outX, f32* outZ, Vec3f* pos, f32 radius,
-    CollisionPoly** outPoly, s32* outBgId, Actor* actor) {
+                          CollisionPoly** outPoly, s32* outBgId, Actor* actor) {
     Vec3f resultPos;
     s32 result;
     f32 r;
@@ -3777,14 +3669,14 @@ s32 BgCheck_SphVsDynaWall(CollisionContext* colCtx, u16 xpFlags, f32* outX, f32*
         dx = bgActor->boundingSphere.center.x - resultPos.x;
         dz = bgActor->boundingSphere.center.z - resultPos.z;
         if (SQ(r) < (SQ(dx) + SQ(dz)) || (!Math3D_XYInSphere(&bgActor->boundingSphere, resultPos.x, resultPos.y) &&
-            !Math3D_YZInSphere(&bgActor->boundingSphere, resultPos.y, resultPos.z))) {
+                                          !Math3D_YZInSphere(&bgActor->boundingSphere, resultPos.y, resultPos.z))) {
             bgActor->boundingSphere.radius -= (s16)radius;
             continue;
         }
         bgActor->boundingSphere.radius -= (s16)radius;
         if (BgCheck_SphVsDynaWallInBgActor(colCtx, xpFlags, &colCtx->dyna,
-            &(colCtx->dyna.bgActors + i)->dynaLookup.wall, outX, outZ, outPoly, outBgId,
-            &resultPos, radius, i, actor)) {
+                                           &(colCtx->dyna.bgActors + i)->dynaLookup.wall, outX, outZ, outPoly, outBgId,
+                                           &resultPos, radius, i, actor)) {
             resultPos.x = *outX;
             resultPos.z = *outZ;
             result = true;
@@ -3800,7 +3692,8 @@ s32 BgCheck_SphVsDynaWall(CollisionContext* colCtx, u16 xpFlags, f32* outX, f32*
  * `outY` returns the y coordinate needed to not collide with `outPoly`
  */
 s32 BgCheck_CheckDynaCeilingList(CollisionContext* colCtx, u16 xpFlags, DynaCollisionContext* dyna, SSList* ssList,
-    f32* outY, Vec3f* pos, f32 checkHeight, CollisionPoly** outPoly, Actor* actor, s32 bgId) {
+                                 f32* outY, Vec3f* pos, f32 checkHeight, CollisionPoly** outPoly, Actor* actor,
+                                 s32 bgId) {
     s16 polyId;
     SSNode* curNode;
     CollisionPoly* poly;
@@ -3823,16 +3716,12 @@ s32 BgCheck_CheckDynaCeilingList(CollisionContext* colCtx, u16 xpFlags, DynaColl
     while (true) {
         polyId = curNode->polyId;
         poly = &dyna->polyList[polyId];
-        if (COLPOLY_VIA_FLAG_TEST(poly->flags_vIA, xpFlags)
-            || (
-                COLPOLY_VIA_FLAG_TEST(poly->flags_vIB, 4) && (
-                    (actor != NULL && actor->category != 2) || (actor == NULL && xpFlags != 1))
-                )
-            ) {
+        if (COLPOLY_VIA_FLAG_TEST(poly->flags_vIA, xpFlags) ||
+            (COLPOLY_VIA_FLAG_TEST(poly->flags_vIB, 4) &&
+             ((actor != NULL && actor->category != 2) || (actor == NULL && xpFlags != 1)))) {
             if (curNode->next == SS_NULL) {
                 break;
-            }
-            else {
+            } else {
                 curNode = &dyna->polyNodes.tbl[curNode->next];
                 continue;
             }
@@ -3841,8 +3730,7 @@ s32 BgCheck_CheckDynaCeilingList(CollisionContext* colCtx, u16 xpFlags, DynaColl
         if (checkHeight < Math3D_UDistPlaneToPos(nx, ny, nz, poly->dist, &testPos)) {
             if (curNode->next == SS_NULL) {
                 break;
-            }
-            else {
+            } else {
                 curNode = &dyna->polyNodes.tbl[curNode->next];
                 continue;
             }
@@ -3858,8 +3746,7 @@ s32 BgCheck_CheckDynaCeilingList(CollisionContext* colCtx, u16 xpFlags, DynaColl
         }
         if (curNode->next == SS_NULL) {
             break;
-        }
-        else {
+        } else {
             curNode = &dyna->polyNodes.tbl[curNode->next];
             continue;
         }
@@ -3875,7 +3762,7 @@ s32 BgCheck_CheckDynaCeilingList(CollisionContext* colCtx, u16 xpFlags, DynaColl
  * `outY` returns the y coordinate needed to not collide with `outPoly`, or `pos`.y + `chkDist` if no collision occurs
  */
 s32 BgCheck_CheckDynaCeiling(CollisionContext* colCtx, u16 xpFlags, f32* outY, Vec3f* pos, f32 chkDist,
-    CollisionPoly** outPoly, s32* outBgId, Actor* actor) {
+                             CollisionPoly** outPoly, s32* outBgId, Actor* actor) {
     s32 i = 0;
     s32 result = false;
     f32 resultY;
@@ -3896,7 +3783,7 @@ s32 BgCheck_CheckDynaCeiling(CollisionContext* colCtx, u16 xpFlags, f32* outY, V
             continue;
         }
         if (BgCheck_CheckDynaCeilingList(colCtx, xpFlags, &colCtx->dyna, &colCtx->dyna.bgActors[i].dynaLookup.ceiling,
-            &tempY, pos, chkDist, &poly, actor, i) &&
+                                         &tempY, pos, chkDist, &poly, actor, i) &&
             tempY < resultY) {
 
             resultY = tempY;
@@ -3937,21 +3824,16 @@ s32 BgCheck_CheckLineAgainstBgActorSSList(DynaLineTest* dynaLineTest) {
     while (true) {
         polyId = curNode->polyId;
         test.poly = &dynaLineTest->dyna->polyList[polyId];
-        if (COLPOLY_VIA_FLAG_TEST(test.poly->flags_vIA, dynaLineTest->xpFlags)
-            || (
-                COLPOLY_VIA_FLAG_TEST(test.poly->flags_vIB, 4) && (
-                    (dynaLineTest->actor != NULL && dynaLineTest->actor->category != ACTORCAT_PLAYER)
-                    || (dynaLineTest->actor == NULL && dynaLineTest->xpFlags != 1)
-                )
-            ) ) {
+        if (COLPOLY_VIA_FLAG_TEST(test.poly->flags_vIA, dynaLineTest->xpFlags) ||
+            (COLPOLY_VIA_FLAG_TEST(test.poly->flags_vIB, 4) &&
+             ((dynaLineTest->actor != NULL && dynaLineTest->actor->category != ACTORCAT_PLAYER) ||
+              (dynaLineTest->actor == NULL && dynaLineTest->xpFlags != 1)))) {
             if (curNode->next == SS_NULL) {
                 break;
-            }
-            else {
+            } else {
                 curNode = &dynaLineTest->dyna->polyNodes.tbl[curNode->next];
             }
-        }
-        else {
+        } else {
             if (CollisionPoly_LineVsPoly(&test)) {
                 distSq = Math3D_Vec3fDistSq(dynaLineTest->posA, test.planeIntersect);
                 if (distSq < *dynaLineTest->distSq) {
@@ -3964,8 +3846,7 @@ s32 BgCheck_CheckLineAgainstBgActorSSList(DynaLineTest* dynaLineTest) {
             }
             if (curNode->next == SS_NULL) {
                 break;
-            }
-            else {
+            } else {
                 curNode = &dynaLineTest->dyna->polyNodes.tbl[curNode->next];
             }
         }
@@ -3982,7 +3863,8 @@ s32 BgCheck_CheckLineAgainstBgActorSSList(DynaLineTest* dynaLineTest) {
  * `distSq` returns the squared distance of the intersection
  */
 s32 BgCheck_CheckLineAgainstBgActor(CollisionContext* colCtx, u16 xpFlags, Vec3f* posA, Vec3f* posB, Vec3f* posResult,
-    CollisionPoly** outPoly, f32* distSq, s32 bgId, f32 chkDist, s32 bccFlags, Actor* actor) {
+                                    CollisionPoly** outPoly, f32* distSq, s32 bgId, f32 chkDist, s32 bccFlags,
+                                    Actor* actor) {
     s32 result = false;
     DynaLineTest dynaLineTest;
 
@@ -4027,8 +3909,8 @@ s32 BgCheck_CheckLineAgainstBgActor(CollisionContext* colCtx, u16 xpFlags, Vec3f
  * `outBgId` returns the BgActor index of the poly
  */
 s32 BgCheck_CheckLineAgainstDyna(CollisionContext* colCtx, u16 xpFlags, Vec3f* posA, Vec3f* posB, Vec3f* posResult,
-    CollisionPoly** outPoly, f32* distSq, s32* outBgId, Actor* actor, f32 chkDist,
-    s32 bccFlags) {
+                                 CollisionPoly** outPoly, f32* distSq, s32* outBgId, Actor* actor, f32 chkDist,
+                                 s32 bccFlags) {
     s32 pad;
     s32 i;
     s32 result = false;
@@ -4047,7 +3929,7 @@ s32 BgCheck_CheckLineAgainstDyna(CollisionContext* colCtx, u16 xpFlags, Vec3f* p
                         line.b = *posB;
                         if (Math3D_LineVsSph(&colCtx->dyna.bgActors[i].boundingSphere, &line) != 0) {
                             if (BgCheck_CheckLineAgainstBgActor(colCtx, xpFlags, posA, posB, posResult, outPoly, distSq,
-                                i, chkDist, bccFlags, actor)) {
+                                                                i, chkDist, bccFlags, actor)) {
                                 *outBgId = i;
                                 result = true;
                             }
@@ -4066,7 +3948,7 @@ s32 BgCheck_CheckLineAgainstDyna(CollisionContext* colCtx, u16 xpFlags, Vec3f* p
  * `outPoly` returns the pointer of the first poly found that intersects
  */
 s32 BgCheck_SphVsFirstDynaPolyList(CollisionContext* colCtx, u16 xpFlags, CollisionPoly** outPoly, Vec3f* center,
-    f32 radius, SSList* ssList, Actor* actor, s32 bgId) {
+                                   f32 radius, SSList* ssList, Actor* actor, s32 bgId) {
     CollisionPoly* curPoly;
     DynaCollisionContext* dyna;
     SSNode* curNode;
@@ -4080,17 +3962,14 @@ s32 BgCheck_SphVsFirstDynaPolyList(CollisionContext* colCtx, u16 xpFlags, Collis
     while (true) {
         curPolyId = curNode->polyId;
         curPoly = &dyna->polyList[curPolyId];
-        if (COLPOLY_VIA_FLAG_TEST(curPoly->flags_vIA, xpFlags)
-            || (
-                COLPOLY_VIA_FLAG_TEST(curPoly->flags_vIB, 4) && (
-                (actor != NULL && actor->category != ACTORCAT_PLAYER) 
-                    || (actor == NULL && xpFlags != 1))))
-                    
-                    {
+        if (COLPOLY_VIA_FLAG_TEST(curPoly->flags_vIA, xpFlags) ||
+            (COLPOLY_VIA_FLAG_TEST(curPoly->flags_vIB, 4) &&
+             ((actor != NULL && actor->category != ACTORCAT_PLAYER) || (actor == NULL && xpFlags != 1))))
+
+        {
             if (curNode->next == SS_NULL) {
                 break;
-            }
-            else {
+            } else {
                 curNode = &dyna->polyNodes.tbl[curNode->next];
                 continue;
             }
@@ -4101,8 +3980,7 @@ s32 BgCheck_SphVsFirstDynaPolyList(CollisionContext* colCtx, u16 xpFlags, Collis
         }
         if (curNode->next == SS_NULL) {
             break;
-        }
-        else {
+        } else {
             curNode = &dyna->polyNodes.tbl[curNode->next];
             continue;
         }
@@ -4116,22 +3994,22 @@ s32 BgCheck_SphVsFirstDynaPolyList(CollisionContext* colCtx, u16 xpFlags, Collis
  * `outPoly` returns the pointer of the first poly found that intersects
  */
 s32 BgCheck_SphVsFirstDynaPolyInBgActor(CollisionContext* colCtx, u16 xpFlags, CollisionPoly** outPoly, Vec3f* center,
-    f32 radius, s32 bgId, u16 bciFlags, Actor* actor) {
+                                        f32 radius, s32 bgId, u16 bciFlags, Actor* actor) {
     if (!(bciFlags & BGCHECK_IGNORE_CEILING)) {
         if (BgCheck_SphVsFirstDynaPolyList(colCtx, xpFlags, outPoly, center, radius,
-            &colCtx->dyna.bgActors[bgId].dynaLookup.ceiling, actor, bgId)) {
+                                           &colCtx->dyna.bgActors[bgId].dynaLookup.ceiling, actor, bgId)) {
             return true;
         }
     }
     if (!(bciFlags & BGCHECK_IGNORE_WALL)) {
         if (BgCheck_SphVsFirstDynaPolyList(colCtx, xpFlags, outPoly, center, radius,
-            &colCtx->dyna.bgActors[bgId].dynaLookup.wall, actor, bgId)) {
+                                           &colCtx->dyna.bgActors[bgId].dynaLookup.wall, actor, bgId)) {
             return true;
         }
     }
     if (!(bciFlags & BGCHECK_IGNORE_FLOOR)) {
         if (BgCheck_SphVsFirstDynaPolyList(colCtx, xpFlags, outPoly, center, radius,
-            &colCtx->dyna.bgActors[bgId].dynaLookup.floor, actor, bgId)) {
+                                           &colCtx->dyna.bgActors[bgId].dynaLookup.floor, actor, bgId)) {
             return true;
         }
     }
@@ -4144,7 +4022,7 @@ s32 BgCheck_SphVsFirstDynaPolyInBgActor(CollisionContext* colCtx, u16 xpFlags, C
  * `outPoly` returns the first intersecting poly, while `outBgId` returns the BgActor index of that poly
  */
 s32 BgCheck_SphVsFirstDynaPoly(CollisionContext* colCtx, u16 xpFlags, CollisionPoly** outPoly, s32* outBgId,
-    Vec3f* center, f32 radius, Actor* actor, u16 bciFlags) {
+                               Vec3f* center, f32 radius, Actor* actor, u16 bciFlags) {
     s32 i = 0;
     Sphere16 testSphere;
 
@@ -4489,7 +4367,7 @@ u32 SurfaceType_GetSlope(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId
     return SurfaceType_GetData(colCtx, poly, bgId, 1) >> 4 & 3;
 }
 
-/** 
+/**
  * SurfaceType get surface lighting setting
  */
 u32 SurfaceType_GetLightSettingIndex(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
@@ -4548,8 +4426,7 @@ s32 SurfaceType_IsConveyor(CollisionContext* colCtx, CollisionPoly* poly, s32 bg
     if (BgCheck_GetCollisionHeader(colCtx, bgId) == NULL) {
         return true;
     }
-    if (poly == NULL)
-    {
+    if (poly == NULL) {
         return false;
     }
     flags = poly->flags_vIB & 0x2000;
@@ -4601,7 +4478,7 @@ u32 SurfaceType_IsWallDamage(CollisionContext* colCtx, CollisionPoly* poly, s32 
  * `ySurface` returns the water box's surface, while `outWaterBox` returns a pointer to the WaterBox
  */
 s32 WaterBox_GetSurfaceImpl(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface,
-    WaterBox** outWaterBox, s32* bgId) {
+                            WaterBox** outWaterBox, s32* bgId) {
     CollisionHeader* colHeader = colCtx->colHeader;
     u32 room;
     WaterBox* curWaterBox;
@@ -4612,7 +4489,7 @@ s32 WaterBox_GetSurfaceImpl(GlobalContext* globalCtx, CollisionContext* colCtx, 
 
     if (colHeader->numWaterBoxes != 0 && colHeader->waterBoxes != NULL) {
         for (curWaterBox = colHeader->waterBoxes; curWaterBox < colHeader->waterBoxes + colHeader->numWaterBoxes;
-            curWaterBox++) {
+             curWaterBox++) {
             room = (curWaterBox->properties >> 13) & 0x3F;
             if (room == (u32)globalCtx->roomCtx.currRoom.num || room == 0x3F) {
                 if ((curWaterBox->properties & 0x80000) == 0) {
@@ -4628,17 +4505,14 @@ s32 WaterBox_GetSurfaceImpl(GlobalContext* globalCtx, CollisionContext* colCtx, 
         }
     }
 
-    for (i = 0; i < BG_ACTOR_MAX; i++)
-    {
-        if ((colCtx->dyna.bgActorFlags[i] & 1) && !(colCtx->dyna.bgActorFlags[i] & 4))
-        {
+    for (i = 0; i < BG_ACTOR_MAX; i++) {
+        if ((colCtx->dyna.bgActorFlags[i] & 1) && !(colCtx->dyna.bgActorFlags[i] & 4)) {
             bgActor = &colCtx->dyna.bgActors[i];
-            if (bgActor->colHeader->numWaterBoxes != 0 && bgActor->colHeader->waterBoxes != NULL)
-            {
+            if (bgActor->colHeader->numWaterBoxes != 0 && bgActor->colHeader->waterBoxes != NULL) {
                 for (curWaterBox = colCtx->dyna.waterboxes.boxes + bgActor->waterboxesStartIndex;
-                    curWaterBox < colCtx->dyna.waterboxes.boxes + bgActor->waterboxesStartIndex + bgActor->colHeader->numWaterBoxes;
-                    curWaterBox++)
-                {
+                     curWaterBox <
+                     colCtx->dyna.waterboxes.boxes + bgActor->waterboxesStartIndex + bgActor->colHeader->numWaterBoxes;
+                     curWaterBox++) {
                     if ((curWaterBox->properties & 0x80000) == 0) {
                         if (curWaterBox->minPos.x < x && x < curWaterBox->minPos.x + curWaterBox->xLength) {
                             if (curWaterBox->minPos.z < z && z < curWaterBox->minPos.z + curWaterBox->zLength) {
@@ -4659,12 +4533,13 @@ s32 WaterBox_GetSurfaceImpl(GlobalContext* globalCtx, CollisionContext* colCtx, 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/WaterBox_GetSurfaceImpl.s")
 #endif
 
-s32 WaterBox_GetSurface1(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface, WaterBox** outWaterBox) {
+s32 WaterBox_GetSurface1(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface,
+                         WaterBox** outWaterBox) {
     WaterBox_GetSurface1_2(globalCtx, colCtx, x, z, ySurface, outWaterBox);
 }
 
-
-s32 WaterBox_GetSurface1_2(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface, WaterBox** outWaterBox) {
+s32 WaterBox_GetSurface1_2(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface,
+                           WaterBox** outWaterBox) {
     s32 bgId;
     return WaterBox_GetSurfaceImpl(globalCtx, colCtx, x, z, ySurface, outWaterBox, &bgId);
 }
@@ -4677,7 +4552,7 @@ s32 WaterBox_GetSurface1_2(GlobalContext* globalCtx, CollisionContext* colCtx, f
  * `outWaterBox` returns the pointer to the waterbox found, or NULL if none is found
  */
 s32 WaterBox_GetSurface2(GlobalContext* globalCtx, CollisionContext* colCtx, Vec3f* pos, f32 surfaceChkDist,
-    WaterBox** outWaterBox, s32* bgId) {
+                         WaterBox** outWaterBox, s32* bgId) {
     CollisionHeader* colHeader;
     s32 room;
     s32 i;
@@ -4714,26 +4589,24 @@ s32 WaterBox_GetSurface2(GlobalContext* globalCtx, CollisionContext* colCtx, Vec
         }
     }
 
-    for (i = 0; i < BG_ACTOR_MAX; i++)
-    {
+    for (i = 0; i < BG_ACTOR_MAX; i++) {
         WaterBox* iterator;
         WaterBox* start;
         BgActor* bgActor;
-        if (!(colCtx->dyna.bgActorFlags[i] & 1)
-            || (colCtx->dyna.bgActorFlags[i] & 4)
-            || (colCtx->dyna.bgActorFlags[i] & 2)) {
+        if (!(colCtx->dyna.bgActorFlags[i] & 1) || (colCtx->dyna.bgActorFlags[i] & 4) ||
+            (colCtx->dyna.bgActorFlags[i] & 2)) {
             continue;
         }
         bgActor = &colCtx->dyna.bgActors[i];
         for (iterator = colCtx->dyna.waterboxes.boxes + bgActor->waterboxesStartIndex;
-            iterator < colCtx->dyna.waterboxes.boxes + bgActor->waterboxesStartIndex + bgActor->colHeader->numWaterBoxes;
-            iterator++)
-        {
-            if ((iterator->properties & 0x80000) == 0)
-            {
+             iterator <
+             colCtx->dyna.waterboxes.boxes + bgActor->waterboxesStartIndex + bgActor->colHeader->numWaterBoxes;
+             iterator++) {
+            if ((iterator->properties & 0x80000) == 0) {
                 if ((iterator->minPos.x < pos->x) && pos->x < iterator->minPos.x + iterator->xLength) {
                     if ((iterator->minPos.z < pos->z) && pos->z < iterator->minPos.z + iterator->zLength) {
-                        if (pos->y - surfaceChkDist < iterator->minPos.y && iterator->minPos.y < pos->y + surfaceChkDist) {
+                        if (pos->y - surfaceChkDist < iterator->minPos.y &&
+                            iterator->minPos.y < pos->y + surfaceChkDist) {
                             *bgId = i;
                             *outWaterBox = iterator;
                             return i;
@@ -4784,8 +4657,7 @@ u16 WaterBox_GetCameraSType(CollisionContext* colCtx, WaterBox* waterBox, s32 bg
     s32 camId;
 
     colHeader = BgCheck_GetCollisionHeader(colCtx, bgId);
-    if (colHeader == NULL)
-    {
+    if (colHeader == NULL) {
         return result;
     }
     camId = WaterBox_GetCamDataIndex(colCtx, waterBox);
@@ -4819,7 +4691,7 @@ u32 WaterBox_GetLightSettingIndex(CollisionContext* colCtx, WaterBox* waterBox) 
  * `ySurface` returns the water box's surface, while `outWaterBox` returns a pointer to the WaterBox
  */
 s32 func_800CA6F0(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface,
-    WaterBox** outWaterBox, s32* bgId) {
+                  WaterBox** outWaterBox, s32* bgId) {
     CollisionHeader* colHeader;
     u32 room;
     WaterBox* curWaterBox;
@@ -4834,7 +4706,7 @@ s32 func_800CA6F0(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32
         return false;
     }
     for (curWaterBox = colHeader->waterBoxes; curWaterBox < colHeader->waterBoxes + colHeader->numWaterBoxes;
-        curWaterBox++) {
+         curWaterBox++) {
         room = WATERBOX_ROOM(curWaterBox->properties);
         if (room == (u32)globalCtx->roomCtx.currRoom.num || room == 0x3F) {
             if ((curWaterBox->properties & 0x80000) != 0) {
@@ -4849,19 +4721,15 @@ s32 func_800CA6F0(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32
         }
     }
 
-    for (i = 0; i < BG_ACTOR_MAX; i++)
-    {
-        if ((colCtx->dyna.bgActorFlags[i] & 1) && !(colCtx->dyna.bgActorFlags[i] & 2))
-        {
+    for (i = 0; i < BG_ACTOR_MAX; i++) {
+        if ((colCtx->dyna.bgActorFlags[i] & 1) && !(colCtx->dyna.bgActorFlags[i] & 2)) {
             WaterBox* boxes;
             boxes = colCtx->dyna.waterboxes.boxes;
             bgActor = &colCtx->dyna.bgActors[i];
-            if (bgActor->colHeader->numWaterBoxes != 0 && bgActor->colHeader->waterBoxes != NULL)
-            {
+            if (bgActor->colHeader->numWaterBoxes != 0 && bgActor->colHeader->waterBoxes != NULL) {
                 for (curWaterBox = boxes + bgActor->waterboxesStartIndex;
-                    curWaterBox < boxes + bgActor->waterboxesStartIndex + bgActor->colHeader->numWaterBoxes;
-                    curWaterBox++)
-                {
+                     curWaterBox < boxes + bgActor->waterboxesStartIndex + bgActor->colHeader->numWaterBoxes;
+                     curWaterBox++) {
                     if ((curWaterBox->properties & 0x80000) != 0) {
                         if (curWaterBox->minPos.x < x && x < curWaterBox->minPos.x + curWaterBox->xLength) {
                             if (curWaterBox->minPos.z < z && z < curWaterBox->minPos.z + curWaterBox->zLength) {
@@ -4882,7 +4750,8 @@ s32 func_800CA6F0(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800CA6F0.s")
 #endif
 
-s32 func_800CA9D0(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface, WaterBox** outWaterBox) {
+s32 func_800CA9D0(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface,
+                  WaterBox** outWaterBox) {
     s32 bgId;
 
     return func_800CA6F0(globalCtx, colCtx, x, z, ySurface, outWaterBox, &bgId);
@@ -4904,6 +4773,6 @@ s32 func_800CAA14(CollisionPoly* polyA, CollisionPoly* polyB, Vec3f* pointA, Vec
     CollisionPoly_GetNormalF(polyA, &n1X, &n1Y, &n1Z);
     CollisionPoly_GetNormalF(polyB, &n2X, &n2Y, &n2Z);
     result = Math3D_PlaneVsLineSegClosestPoint(n1X, n1Y, n1Z, polyA->dist, n2X, n2Y, n2Z, polyB->dist, pointA, pointB,
-        closestPoint);
+                                               closestPoint);
     return result;
 }

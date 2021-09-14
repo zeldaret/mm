@@ -46,8 +46,8 @@ void BgLotus_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     BcCheck3_BgActorInit(&this->dyna, 1);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000A20);
-    this->dyna.actor.floorHeight =
-        BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &thisx->floorPoly, &bgId, &this->dyna.actor, &this->dyna.actor.world.pos);
+    this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &thisx->floorPoly, &bgId,
+                                                               &this->dyna.actor, &this->dyna.actor.world.pos);
     this->timer2 = 96;
     this->dyna.actor.world.rot.y = Rand_Next() >> 0x10;
     this->actionFunc = BgLotus_Wait;
@@ -168,7 +168,7 @@ void BgLotus_Update(Actor* thisx, GlobalContext* globalCtx) {
     WaterBox* waterBox;
 
     WaterBox_GetSurface1_2(globalCtx, &globalCtx->colCtx, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.z,
-                  &this->height, &waterBox);
+                           &this->height, &waterBox);
     this->actionFunc(this, globalCtx);
 }
 

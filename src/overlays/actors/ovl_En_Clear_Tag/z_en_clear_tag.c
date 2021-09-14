@@ -975,8 +975,8 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
                  * `ySurface` returns the water box's surface, while `outWaterBox` returns a pointer to the WaterBox
                  */
                 ySurface = effect->position.y;
-                if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, effect->position.x + vec.x, effect->position.z + vec.z,
-                                  &ySurface, &waterBox)) {
+                if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, effect->position.x + vec.x,
+                                         effect->position.z + vec.z, &ySurface, &waterBox)) {
                     if ((effect->position.y - ySurface) < 200.0f) {
                         // Draw the splash effect.
                         SysMatrix_InsertTranslation(effect->position.x + vec.x, ySurface, effect->position.z + vec.z,

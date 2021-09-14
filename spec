@@ -457,8 +457,6 @@ beginseg
     include "build/data/code/z_actor.bss.o"
     include "build/src/code/z_actor_dlftbls.o"
     include "build/src/code/z_bgcheck.o"
-    include "build/data/code/z_bgcheck.data.o"
-    include "build/data/code/z_bgcheck.bss.o"
     include "build/src/code/z_bg_collect.o"
     include "build/src/code/z_bg_item.o"
     include "build/src/code/code_800CB000.o"

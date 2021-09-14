@@ -23,11 +23,11 @@ void BgCheck2_UpdateActorPosition(CollisionContext* colCtx, s32 bgId, Actor* act
     }
 
     SkinMatrix_SetScaleRotateYRPTranslate(
-        &currMatrix, colCtx->dyna.bgActors[bgId].curTransform.scale.x,
-        colCtx->dyna.bgActors[bgId].curTransform.scale.y, colCtx->dyna.bgActors[bgId].curTransform.scale.z,
-        colCtx->dyna.bgActors[bgId].curTransform.rot.x, colCtx->dyna.bgActors[bgId].curTransform.rot.y,
-        colCtx->dyna.bgActors[bgId].curTransform.rot.z, colCtx->dyna.bgActors[bgId].curTransform.pos.x,
-        colCtx->dyna.bgActors[bgId].curTransform.pos.y, colCtx->dyna.bgActors[bgId].curTransform.pos.z);
+        &currMatrix, colCtx->dyna.bgActors[bgId].curTransform.scale.x, colCtx->dyna.bgActors[bgId].curTransform.scale.y,
+        colCtx->dyna.bgActors[bgId].curTransform.scale.z, colCtx->dyna.bgActors[bgId].curTransform.rot.x,
+        colCtx->dyna.bgActors[bgId].curTransform.rot.y, colCtx->dyna.bgActors[bgId].curTransform.rot.z,
+        colCtx->dyna.bgActors[bgId].curTransform.pos.x, colCtx->dyna.bgActors[bgId].curTransform.pos.y,
+        colCtx->dyna.bgActors[bgId].curTransform.pos.z);
 
     SkinMatrix_Vec3fMtxFMultXYZ(&prevMatrixInv, &actor->world.pos, &posWithInv);
     SkinMatrix_Vec3fMtxFMultXYZ(&currMatrix, &posWithInv, &newPos);
