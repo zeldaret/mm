@@ -61,7 +61,7 @@ void Select_LoadGame(SelectContext* this, u32 entranceIndex, s32 opt) {
     SET_NEXT_GAMESTATE(&this->state, Play_Init, GlobalContext);
 }
 
-SceneSelectEntry D_80801C80[] = {
+static SceneSelectEntry sScenes[] = {
     { "  0:OP\x8Cﾃﾞﾓ\x8Dﾖｳ ｼﾝﾘﾝ", Select_LoadGame, 0x1C00 },
     { "  0-0:\x8Dﾏﾖｲ ﾉ ﾓﾘ", Select_LoadGame, 0xC400 },
     { "  1:\x8Cﾀｳﾝ \x8Dｺｳｶﾞｲ", Select_LoadGame, 0x5400 },
@@ -210,20 +210,20 @@ SceneSelectEntry D_80801C80[] = {
 void Select_UpdateMenu(SelectContext* this) {
     s32 playerForm;
     Input* controller1 = CONTROLLER1(this);
-    s32 stick_y;
+    s32 stickY;
     s32 pad[2];
-    s16 phi_v1;
+    s16 i;
     s32 updateRate;
 
-    if (this->unk_25C == 0) {
+    if (this->verticalInputAccumulator == 0) {
         if (CHECK_BTN_ALL(controller1->press.button, BTN_A) || CHECK_BTN_ALL(controller1->press.button, BTN_START)) {
-            for (phi_v1 = 0; phi_v1 < ARRAY_COUNT(gSaveContext.unk_3EC0); phi_v1++) {
-                gSaveContext.unk_3DD0[phi_v1] = 0;
-                gSaveContext.unk_3DE0[phi_v1] = 0;
-                gSaveContext.unk_3E18[phi_v1] = 0;
-                gSaveContext.unk_3E50[phi_v1] = 0;
-                gSaveContext.unk_3E88[phi_v1] = 0;
-                gSaveContext.unk_3EC0[phi_v1] = 0;
+            for (i = 0; i < ARRAY_COUNT(gSaveContext.unk_3EC0); i++) {
+                gSaveContext.unk_3DD0[i] = 0;
+                gSaveContext.unk_3DE0[i] = 0;
+                gSaveContext.unk_3E18[i] = 0;
+                gSaveContext.unk_3E50[i] = 0;
+                gSaveContext.unk_3E88[i] = 0;
+                gSaveContext.unk_3EC0[i] = 0;
             }
             gSaveContext.minigameState = 0;
 
@@ -307,7 +307,6 @@ void Select_UpdateMenu(SelectContext* this) {
             gSaveContext.isNight = true;
         }
 
-        // user can change "opt", but it doesn't do anything
         if (CHECK_BTN_ALL(controller1->press.button, BTN_CUP)) {
             this->opt--;
         }
@@ -328,112 +327,112 @@ void Select_UpdateMenu(SelectContext* this) {
         }
 
         updateRate = R_UPDATE_RATE;
-        stick_y = controller1->rel.stick_y;
-        if (stick_y != 0) {
-            this->cursorVelocity = (updateRate * stick_y) / 7;
+        stickY = controller1->rel.stick_y;
+        if (stickY != 0) {
+            this->verticalInput = (updateRate * stickY) / 7;
         } else {
             if (CHECK_BTN_ALL(controller1->press.button, BTN_DUP)) {
-                if (this->unk_26C == 1) {
-                    this->unk_264 = 0;
+                if (this->lockUp == 1) {
+                    this->timerUp = 0;
                 }
-                if (this->unk_264 == 0) {
-                    this->unk_264 = 20;
-                    this->unk_26C = 1;
+                if (this->timerUp == 0) {
+                    this->timerUp = 20;
+                    this->lockUp = 1;
 
                     play_sound(NA_SE_IT_SWORD_IMPACT);
-                    this->cursorVelocity = updateRate;
+                    this->verticalInput = updateRate;
                 }
             }
 
-            if (CHECK_BTN_ALL(controller1->cur.button, BTN_DUP) && (this->unk_264 == 0)) {
+            if (CHECK_BTN_ALL(controller1->cur.button, BTN_DUP) && (this->timerUp == 0)) {
                 play_sound(NA_SE_IT_SWORD_IMPACT);
-                this->cursorVelocity = updateRate * 3;
+                this->verticalInput = updateRate * 3;
             }
 
             if (CHECK_BTN_ALL(controller1->press.button, BTN_DDOWN)) {
-                if (this->unk_270 == 1) {
-                    this->unk_268 = 0;
+                if (this->lockDown == 1) {
+                    this->timerDown = 0;
                 }
-                if (this->unk_268 == 0) {
-                    this->unk_268 = 20;
-                    this->unk_270 = 1;
+                if (this->timerDown == 0) {
+                    this->timerDown = 20;
+                    this->lockDown = 1;
                     play_sound(NA_SE_IT_SWORD_IMPACT);
-                    this->cursorVelocity = -updateRate;
+                    this->verticalInput = -updateRate;
                 }
             }
-            if (CHECK_BTN_ALL(controller1->cur.button, BTN_DDOWN) && (this->unk_268 == 0)) {
+            if (CHECK_BTN_ALL(controller1->cur.button, BTN_DDOWN) && (this->timerDown == 0)) {
                 play_sound(NA_SE_IT_SWORD_IMPACT);
-                this->cursorVelocity = -updateRate * 3;
+                this->verticalInput = -updateRate * 3;
             }
 
             if (CHECK_BTN_ALL(controller1->press.button, BTN_DLEFT) || CHECK_BTN_ALL(controller1->cur.button, BTN_DLEFT)) {
                 play_sound(NA_SE_IT_SWORD_IMPACT);
-                this->cursorVelocity = updateRate;
+                this->verticalInput = updateRate;
             }
 
             if (CHECK_BTN_ALL(controller1->press.button, BTN_DRIGHT) || CHECK_BTN_ALL(controller1->cur.button, BTN_DRIGHT)) {
                 play_sound(NA_SE_IT_SWORD_IMPACT);
-                this->cursorVelocity = -updateRate;
+                this->verticalInput = -updateRate;
             }
         }
     }
 
     if (CHECK_BTN_ALL(controller1->press.button, BTN_L)) {
-        this->unk_21C++;
-        this->unk_21C = (this->unk_21C + ARRAY_COUNT(this->unk_220)) % ARRAY_COUNT(this->unk_220);
-        this->currentScene = this->cursorPos = this->unk_220[this->unk_21C];
+        this->pageDownIndex++;
+        this->pageDownIndex = (this->pageDownIndex + ARRAY_COUNT(this->pageDownStops)) % ARRAY_COUNT(this->pageDownStops);
+        this->currentScene = this->topDisplayedScene = this->pageDownStops[this->pageDownIndex];
     }
 
-    this->unk_25C += this->cursorVelocity;
+    this->verticalInputAccumulator += this->verticalInput;
 
-    if (this->unk_25C < -7) {
-        this->cursorVelocity = 0;
-        this->unk_25C = 0;
+    if (this->verticalInputAccumulator < -7) {
+        this->verticalInput = 0;
+        this->verticalInputAccumulator = 0;
 
         this->currentScene++;
         this->currentScene = (this->currentScene + this->count) % this->count;
 
-        if (this->currentScene == ((this->cursorPos + this->count + 19) % this->count)) {
-            this->cursorPos++;
-            this->cursorPos = (this->cursorPos + this->count) % this->count;
+        if (this->currentScene == ((this->topDisplayedScene + 19 + this->count) % this->count)) {
+            this->topDisplayedScene++;
+            this->topDisplayedScene = (this->topDisplayedScene + this->count) % this->count;
         }
     }
 
-    if (this->unk_25C > 7) {
-        this->cursorVelocity = 0;
-        this->unk_25C = 0;
-        if (this->currentScene == this->cursorPos) {
-            this->cursorPos -= 2;
-            this->cursorPos = (this->cursorPos + this->count) % this->count;
+    if (this->verticalInputAccumulator > 7) {
+        this->verticalInput = 0;
+        this->verticalInputAccumulator = 0;
+        if (this->currentScene == this->topDisplayedScene) {
+            this->topDisplayedScene -= 2;
+            this->topDisplayedScene = (this->topDisplayedScene + this->count) % this->count;
         }
 
         this->currentScene--;
         this->currentScene = (this->currentScene + this->count) % this->count;
-        if (this->currentScene == ((this->cursorPos + this->count) % this->count)) {
-            this->cursorPos--;
-            this->cursorPos = (this->cursorPos + this->count) % this->count;
+        if (this->currentScene == ((this->topDisplayedScene + this->count) % this->count)) {
+            this->topDisplayedScene--;
+            this->topDisplayedScene = (this->topDisplayedScene + this->count) % this->count;
         }
     }
 
     this->currentScene = (this->currentScene + this->count) % this->count;
-    this->cursorPos = (this->cursorPos + this->count) % this->count;
+    this->topDisplayedScene = (this->topDisplayedScene + this->count) % this->count;
 
     dREG(80) = this->currentScene;
-    dREG(81) = this->cursorPos;
-    dREG(82) = this->unk_21C;
+    dREG(81) = this->topDisplayedScene;
+    dREG(82) = this->pageDownIndex;
 
-    if (this->unk_264 != 0) {
-        this->unk_264--;
+    if (this->timerUp != 0) {
+        this->timerUp--;
     }
-    if (this->unk_264 == 0) {
-        this->unk_26C = 0;
+    if (this->timerUp == 0) {
+        this->lockUp = 0;
     }
 
-    if (this->unk_268 != 0) {
-        this->unk_268--;
+    if (this->timerDown != 0) {
+        this->timerDown--;
     }
-    if (this->unk_268 == 0) {
-        this->unk_270 = 0;
+    if (this->timerDown == 0) {
+        this->lockDown = 0;
     }
 }
 
@@ -450,7 +449,7 @@ void Select_PrintMenu(SelectContext* this, GfxPrint* printer) {
         char* sceneName;
 
         GfxPrint_SetPos(printer, 9, i + 4);
-        sceneIndex = (this->cursorPos + i + this->count) % this->count;
+        sceneIndex = (this->topDisplayedScene + i + this->count) % this->count;
         if (sceneIndex == this->currentScene) {
             GfxPrint_SetColor(printer, 255, 20, 20, 255);
         } else {
@@ -470,7 +469,7 @@ void Select_PrintMenu(SelectContext* this, GfxPrint* printer) {
 }
 
 // clang-format off
-const char* sLoadingMessages[] = {
+static const char* sLoadingMessages[] = {
     // "Please wait a minute",
     "\x8Dｼﾊﾞﾗｸｵﾏﾁｸﾀﾞｻｲ",
     // "Hold on a sec",
@@ -510,7 +509,7 @@ void Select_PrintLoadingMessage(SelectContext* this, GfxPrint* printer) {
 
 // clang-format off
 // Second column is unused
-const char* D_80802364[][2] = {
+static const char* sFormLabel[][2] = {
     // "17 (Adult)" // 17 (Daitetsujin)
     {"\x8D""17(ｵﾄﾅ)",    "\x8D""17(ﾀﾞｲﾃﾂｼﾞﾝ)"},
     // "30 (Goron)" // 30 (Ice Cream -1)
@@ -532,7 +531,7 @@ void Select_PrintAgeSetting(SelectContext* this, GfxPrint* printer, s32 playerFo
     s32 phi_v0;
 
     if ((playerForm >= PLAYER_FORM_FIERCE_DEITY) && (playerForm < PLAYER_FORM_MAX)) {
-        temp_a0 = &D_80802364[playerForm];
+        temp_a0 = &sFormLabel[playerForm];
         phi_v1 = temp_a0 + 1;
 
         // This loop doesn't do anything
@@ -740,35 +739,35 @@ void Select_Init(GameState* thisx) {
     this->state.main = Select_Main;
     this->state.destroy = Select_Destroy;
 
-    this->scenes = D_80801C80;
-    this->cursorPos = 0;
+    this->scenes = sScenes;
+    this->topDisplayedScene = 0;
     this->currentScene = 0;
-    this->unk_220[0] = 0;
-    this->unk_220[1] = 19;
-    this->unk_220[2] = 37;
-    this->unk_220[3] = 51;
-    this->unk_220[4] = 59;
-    this->unk_220[5] = 73;
-    this->unk_220[6] = 91;
-    this->unk_21C = 0;
+    this->pageDownStops[0] = 0;
+    this->pageDownStops[1] = 19;
+    this->pageDownStops[2] = 37;
+    this->pageDownStops[3] = 51;
+    this->pageDownStops[4] = 59;
+    this->pageDownStops[5] = 73;
+    this->pageDownStops[6] = 91;
+    this->pageDownIndex = 0;
     this->opt = 0;
-    this->count = ARRAY_COUNT(D_80801C80);
+    this->count = ARRAY_COUNT(sScenes);
 
     ShrinkWindow_Init();
     View_Init(&this->view, this->state.gfxCtx);
     this->view.flags = (0x08 | 0x02);
-    this->unk_25C = 0;
-    this->cursorVelocity = 0;
-    this->unk_264 = 0;
-    this->unk_268 = 0;
-    this->unk_26C = 0;
-    this->unk_270 = 0;
+    this->verticalInputAccumulator = 0;
+    this->verticalInput = 0;
+    this->timerUp = 0;
+    this->timerDown = 0;
+    this->lockUp = 0;
+    this->lockDown = 0;
     this->unk_274 = 0;
 
     if ((dREG(80) >= 0) && (dREG(80) < this->count)) {
         this->currentScene = dREG(80);
-        this->cursorPos = dREG(81);
-        this->unk_21C = dREG(82);
+        this->topDisplayedScene = dREG(81);
+        this->pageDownIndex = dREG(82);
     }
 
     Game_SetFramerateDivisor(&this->state, 1);
