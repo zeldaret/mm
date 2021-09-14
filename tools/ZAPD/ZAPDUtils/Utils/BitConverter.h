@@ -136,7 +136,8 @@ public:
 		static_assert(sizeof(uint64_t) == sizeof(double), "expected 64-bit double");
 		// Checks if the float format on the platform the ZAPD binary is running on supports the
 		// same float format as the object file.
-		static_assert(std::numeric_limits<float>::is_iec559, "expected IEC559 floats on host machine");
+		static_assert(std::numeric_limits<float>::is_iec559,
+		              "expected IEC559 floats on host machine");
 		std::memcpy(&value, &floatData, sizeof(value));
 		return value;
 	}
@@ -152,7 +153,8 @@ public:
 		static_assert(sizeof(uint64_t) == sizeof(double), "expected 64-bit double");
 		// Checks if the float format on the platform the ZAPD binary is running on supports the
 		// same float format as the object file.
-		static_assert(std::numeric_limits<double>::is_iec559, "expected IEC559 doubles on host machine");
+		static_assert(std::numeric_limits<double>::is_iec559,
+		              "expected IEC559 doubles on host machine");
 		std::memcpy(&value, &floatData, sizeof(value));
 		return value;
 	}

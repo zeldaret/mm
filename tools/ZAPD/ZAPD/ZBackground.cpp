@@ -1,9 +1,9 @@
 #include "ZBackground.h"
-#include "BitConverter.h"
-#include "File.h"
 #include "Globals.h"
-#include "Path.h"
-#include "StringHelper.h"
+#include "Utils/BitConverter.h"
+#include "Utils/File.h"
+#include "Utils/Path.h"
+#include "Utils/StringHelper.h"
 #include "ZFile.h"
 
 REGISTER_ZFILENODE(Background, ZBackground);
@@ -160,7 +160,7 @@ void ZBackground::Save(const fs::path& outFolder)
 	File::WriteAllBytes(filepath.string(), data);
 }
 
-std::string ZBackground::GetBodySourceCode()
+std::string ZBackground::GetBodySourceCode() const
 {
 	std::string bodyStr = "    ";
 

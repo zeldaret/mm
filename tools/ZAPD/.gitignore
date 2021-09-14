@@ -333,5 +333,7 @@ ASALocalRun/
 *.o
 *.d
 lib/libgfxd/libgfxd.a
+ExporterTest/ExporterTest.a
+ZAPDUtils/ZAPDUtils.a
 .vscode/
 ZAPD/BuildInfo.h
