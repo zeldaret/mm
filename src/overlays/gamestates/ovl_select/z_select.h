@@ -25,7 +25,7 @@ typedef struct SelectContext {
     /* 0x21C */ s32 pageDownIndex; // Index of pageDownStops
     /* 0x220 */ s32 pageDownStops[7];
     /* 0x23C */ char unk_23C[0xC];
-    /* 0x248 */ s32 opt;
+    /* 0x248 */ s32 opt; // This name is the one the menu uses to show this value. It can be used to change in which entrance the player spawns in the selected scene
     /* 0x24C */ s32 topDisplayedScene; // The scene which is currently at the top of the screen
     /* 0x250 */ char unk_250[0xC];
     /* 0x25C */ s32 verticalInputAccumulator;

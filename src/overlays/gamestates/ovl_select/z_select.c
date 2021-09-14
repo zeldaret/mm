@@ -164,32 +164,32 @@ static SceneSelectEntry sScenes[] = {
     { " 31:\x8Dﾐｻｷ", Select_LoadGame, 0x6A00 },
     // " 32: Outside of Pirates' Fortress" (" 32: Pirates' Fortress - Exterior")
     { " 32:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾏｴ", Select_LoadGame, 0x7000 },
-    // " 32-0: Pirates' Fortress" (" 32-0: Pirates' Fortress --- Courtyard")
+    // " 32-0: Pirates' Fortress" (" 32-0: Pirates' Fortress - Courtyard")
     { " 32-0:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞ", Select_LoadGame, 0x2200 },
-    // " 32-1: Pirates' Fortress - Telescope" (" 32-1: Pirates' Fortress --- Secret Entrance (Looking Through
+    // " 32-1: Pirates' Fortress - Telescope" (" 32-1: Pirates' Fortress - Secret Entrance (Looking Through
     // Telescope)")
     { " 32-1:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞ ﾎﾞｳｴﾝｷｮｳ", Select_LoadGame, 0x22A0 },
-    // " 32-2: Pirates' Fortress - Interior 0" (" 32-2: Pirates' Fortress --- Throne Room")
+    // " 32-2: Pirates' Fortress - Interior 0" (" 32-2: Pirates' Fortress - Throne Room")
     { " 32-2:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ0", Select_LoadGame, 0x4000 },
-    // " 32-3: Pirates' Fortress - Interior 1" (" 32-3: Pirates' Fortress --- View of Throne Room, Wasp Nest")
+    // " 32-3: Pirates' Fortress - Interior 1" (" 32-3: Pirates' Fortress - View of Throne Room, Wasp Nest")
     { " 32-3:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ1", Select_LoadGame, 0x4010 },
-    // " 32-4: Pirates' Fortress - Interior 2" (" 32-4: Pirates' Fortress --- Tempting Treasure Chest, Leading to 32-5")
+    // " 32-4: Pirates' Fortress - Interior 2" (" 32-4: Pirates' Fortress - Tempting Treasure Chest, Leading to 32-5")
     { " 32-4:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ2", Select_LoadGame, 0x4020 },
-    // " 32-5: Pirates' Fortress - Interior 3" (" 32-5: Pirates' Fortress --- Zora Egg Room, One Shell Blade")
+    // " 32-5: Pirates' Fortress - Interior 3" (" 32-5: Pirates' Fortress - Zora Egg Room, One Shell Blade")
     { " 32-5:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ3", Select_LoadGame, 0x4030 },
-    // " 32-6: Pirates' Fortress - Interior 4" (" 32-6: Pirates' Fortress --- Oil Drum Room, Leading to 32-7")
+    // " 32-6: Pirates' Fortress - Interior 4" (" 32-6: Pirates' Fortress - Oil Drum Room, Leading to 32-7")
     { " 32-6:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ4", Select_LoadGame, 0x4040 },
-    // " 32-7: Pirates' Fortress - Interior 5" (" 32-7: Pirates' Fortress --- Zora Egg Room, One Shell Blade")
+    // " 32-7: Pirates' Fortress - Interior 5" (" 32-7: Pirates' Fortress - Zora Egg Room, One Shell Blade")
     { " 32-7:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ5", Select_LoadGame, 0x4050 },
-    // " 32-8: Pirates' Fortress - Interior 6" (" 32-8: Pirates' Fortress --- Fenced Indoor Walkway, Leading to 32-9")
+    // " 32-8: Pirates' Fortress - Interior 6" (" 32-8: Pirates' Fortress - Fenced Indoor Walkway, Leading to 32-9")
     { " 32-8:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ6", Select_LoadGame, 0x4060 },
-    // " 32-9: Pirates' Fortress - Interior 7" (" 32-9: Pirates' Fortress --- Zora Egg Room, One Desbreko & Treasure
+    // " 32-9: Pirates' Fortress - Interior 7" (" 32-9: Pirates' Fortress - Zora Egg Room, One Desbreko & Treasure
     // Chest")
     { " 32-9:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ7", Select_LoadGame, 0x4070 },
-    // " 32-10: Pirates' Fortress - Interior 8" (" 32-10: Pirates' Fortress --- End of Secret Entrance (Telescope
+    // " 32-10: Pirates' Fortress - Interior 8" (" 32-10: Pirates' Fortress - End of Secret Entrance (Telescope
     // Room)")
     { " 32-10:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ8", Select_LoadGame, 0x4080 },
-    // " 32-11: Pirates' Fortress - Interior 9" (" 32-11: Pirates' Fortress --- Start of Secret Entrance")
+    // " 32-11: Pirates' Fortress - Interior 9" (" 32-11: Pirates' Fortress - Start of Secret Entrance")
     { " 32-11:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ9", Select_LoadGame, 0x4090 },
     // " 33: Zora Shrine" (" 33: Zora Hall")
     { " 33:\x8Cｿﾞｰﾗ \x8Dﾉ ﾎｺﾗ", Select_LoadGame, 0x6000 },
@@ -718,6 +718,7 @@ void Select_PrintCutsceneSetting(SelectContext* this, GfxPrint* printer, u16 csI
     GfxPrint_SetPos(printer, 4, 25);
     GfxPrint_SetColor(printer, 255, 255, 55, 255);
 
+    // "-jara" used in these strings is a Kokiri speech quirk word
     switch (csIndex) {
         case 0:
             // clang-format off
