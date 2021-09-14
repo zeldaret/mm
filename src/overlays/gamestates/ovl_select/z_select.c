@@ -166,7 +166,8 @@ static SceneSelectEntry sScenes[] = {
     { " 32:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾏｴ", Select_LoadGame, 0x7000 },
     // " 32-0: Pirates' Fortress" (" 32-0: Pirates' Fortress --- Courtyard")
     { " 32-0:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞ", Select_LoadGame, 0x2200 },
-    // " 32-1: Pirates' Fortress - Telescope" (" 32-1: Pirates' Fortress --- Secret Entrance (Looking Through Telescope)")
+    // " 32-1: Pirates' Fortress - Telescope" (" 32-1: Pirates' Fortress --- Secret Entrance (Looking Through
+    // Telescope)")
     { " 32-1:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞ ﾎﾞｳｴﾝｷｮｳ", Select_LoadGame, 0x22A0 },
     // " 32-2: Pirates' Fortress - Interior 0" (" 32-2: Pirates' Fortress --- Throne Room")
     { " 32-2:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ0", Select_LoadGame, 0x4000 },
@@ -182,9 +183,11 @@ static SceneSelectEntry sScenes[] = {
     { " 32-7:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ5", Select_LoadGame, 0x4050 },
     // " 32-8: Pirates' Fortress - Interior 6" (" 32-8: Pirates' Fortress --- Fenced Indoor Walkway, Leading to 32-9")
     { " 32-8:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ6", Select_LoadGame, 0x4060 },
-    // " 32-9: Pirates' Fortress - Interior 7" (" 32-9: Pirates' Fortress --- Zora Egg Room, One Desbreko & Treasure Chest")
+    // " 32-9: Pirates' Fortress - Interior 7" (" 32-9: Pirates' Fortress --- Zora Egg Room, One Desbreko & Treasure
+    // Chest")
     { " 32-9:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ7", Select_LoadGame, 0x4070 },
-    // " 32-10: Pirates' Fortress - Interior 8" (" 32-10: Pirates' Fortress --- End of Secret Entrance (Telescope Room)")
+    // " 32-10: Pirates' Fortress - Interior 8" (" 32-10: Pirates' Fortress --- End of Secret Entrance (Telescope
+    // Room)")
     { " 32-10:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ8", Select_LoadGame, 0x4080 },
     // " 32-11: Pirates' Fortress - Interior 9" (" 32-11: Pirates' Fortress --- Start of Secret Entrance")
     { " 32-11:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ9", Select_LoadGame, 0x4090 },
