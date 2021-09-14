@@ -26,10 +26,10 @@ typedef struct SelectContext {
     /* 0x220 */ s32 unk_220[7];
     /* 0x23C */ char unk_23C[0xC];
     /* 0x248 */ s32 opt;
-    /* 0x24C */ s32 unk_24C;
+    /* 0x24C */ s32 cursorPos;
     /* 0x250 */ char unk_250[0xC];
-    /* 0x25C */ s32 unk_25C;
-    /* 0x260 */ s32 unk_260; // direction (?)
+    /* 0x25C */ s32 unk_25C; // accumulator?
+    /* 0x260 */ s32 cursorVelocity;
     /* 0x264 */ s32 unk_264; // timer1
     /* 0x268 */ s32 unk_268; // timer2
     /* 0x26C */ s32 unk_26C; // bool?

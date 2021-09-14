@@ -1,14 +1,14 @@
 /*
  * File: z_select.c
  * Overlay: ovl_select
- * Description:
+ * Description: Debug map select
  */
 
 #include "z_select.h"
 #include "alloca.h"
 #include "overlays/gamestates/ovl_title/z_title.h"
 
-void func_80800910(SelectContext* this) {
+void Select_LoadTitle(SelectContext* this) {
     {
         GameState* state = &this->state;
         state->running = false;
@@ -17,7 +17,7 @@ void func_80800910(SelectContext* this) {
     SET_NEXT_GAMESTATE(&this->state, Title_Init, TitleContext);
 }
 
-void func_80800930(SelectContext* this, u32 arg1, s32 arg2) {
+void Select_LoadGame(SelectContext* this, u32 arg1, s32 arg2) {
     if (gSaveContext.fileNum == 0xFF) {
         func_80144968();
     }
@@ -62,161 +62,158 @@ void func_80800930(SelectContext* this, u32 arg1, s32 arg2) {
 }
 
 SceneSelectEntry D_80801C80[] = {
-    { "  0:OP\x8Cﾃﾞﾓ\x8Dﾖｳ ｼﾝﾘﾝ", func_80800930, 0x1C00 },
-    { "  0-0:\x8Dﾏﾖｲ ﾉ ﾓﾘ", func_80800930, 0xC400 },
-    { "  1:\x8Cﾀｳﾝ \x8Dｺｳｶﾞｲ", func_80800930, 0x5400 },
-    { "  1-0:\x8Dﾃﾝﾓﾝｶﾝｿｸｼﾞｮ", func_80800930, 0x4C00 },
-    { "  1-1:\x8Dﾃﾝﾓﾝｶﾝｿｸｼﾞｮ ﾃﾞ ﾎﾞｳｴﾝｷｮｳ", func_80800930, 0x54A0 },
-    { "  1-2:\x8Cｲｶｰﾅ \x8Dﾉ ﾊｶﾊﾞ", func_80800930, 0x8000 },
-    { "  2:\x8Cﾛﾏﾆｰ \x8Dﾎﾞｸｼﾞｮｳ", func_80800930, 0x6400 },
-    { "  3:\x8Cﾐﾙｸﾛｰﾄﾞ", func_80800930, 0x3E00 },
-    { "  4:\x8Dｵﾓﾔ", func_80800930, 0x610 },
-    { "  5:\x8Dｳｼｺﾞﾔ", func_80800930, 0x600 },
-    { "  6:\x8Cｺｯｺ \x8Dｺﾞﾔ", func_80800930, 0x7E00 },
-    { "  7:\x8Cﾄﾞｯｸﾞﾚｰｽ\x8Dｼﾞｮｳ", func_80800930, 0x7C00 },
-    { "  8:\x8Cｺﾞｰﾏﾝ ﾄﾗｯｸ", func_80800930, 0xCE00 },
-    { " 10:\x8Dﾔﾏｻﾞﾄ -ﾌﾕ-", func_80800930, 0x9A00 },
-    { " 10-0:\x8Dﾔﾏｻﾞﾄ -ﾊﾙ-", func_80800930, 0xAE00 },
-    { " 10-1:\x8Dﾔﾏｻﾞﾄ ﾉ ｶｼﾞﾔ", func_80800930, 0x5200 },
-    { " 11:\x8Cｺﾞﾛﾝ\x8D ﾉ ｻﾄ -ﾌﾕ-", func_80800930, 0x9400 },
-    { " 11-0:\x8Cｺﾞﾛﾝ\x8D ﾉ ｻﾄ -ﾊﾙ-", func_80800930, 0x8A00 },
-    { " 11-1:\x8Cｺﾞﾛﾝ\x8D ﾉ ﾎｺﾗ", func_80800930, 0x5E00 },
-    { " 11-2:\x8Dﾊﾅﾚﾔﾏ ﾉ ﾎｺﾗ", func_80800930, 0x1500 },
-    { " 11-3:\x8Cｺﾞﾛﾝ \x8Dﾉ ﾐｾ", func_80800930, 0x7400 },
-    { " 12:\x8Cｽﾉｰﾍｯﾄﾞ", func_80800930, 0xB200 },
-    { " 13:\x8Dﾌﾌﾞｷ ﾉ ﾐﾁ", func_80800930, 0x3200 },
-    { " 14:\x8Dﾕｷﾀﾞﾏ ﾉ ﾐﾁ", func_80800930, 0xB000 },
-    { " 15:\x8Cｺﾞﾛﾝﾚｰｽ \x8Dｼﾞｮｳ", func_80800930, 0xD000 },
-    { " 16:\x8Cｺﾞﾛﾝ \x8Dﾉ ﾊｶ", func_80800930, 0x9600 },
-    { " 17:\x8Dｾﾂｹﾞﾝ \x8Cﾊﾞﾄﾙ \x8D-ﾌﾕ-", func_80800930, 0xB400 },
-    { " 17-0:\x8Dｾﾂｹﾞﾝ \x8Cﾊﾞﾄﾙ \x8D-ﾊﾙ-", func_80800930, 0xB600 },
-    { " 20:\x8Dﾇﾏﾁ", func_80800930, 0x8400 },
-    { " 20-0:\x8Dﾇﾏﾁ ｿﾉｺﾞ", func_80800930, 0xC00 },
-    { " 20-1:\x8Dﾇﾏ ﾉ ｶﾝｺｳｱﾝﾅｲ", func_80800930, 0xA800 },
-    { " 20-2:\x8Dﾏﾎｳｵﾊﾞﾊﾞ ﾉ ｸｽﾘﾔ", func_80800930, 0x400 },
-    { " 21:\x8Cｳｯﾄﾞﾏｳﾝﾃﾝ", func_80800930, 0x8600 },
-    { " 21-0:\x8Cﾃﾞｸ\x8Dﾋﾒ ﾉ ﾛｳﾔ", func_80800930, 0x3010 },
-    { " 22:\x8Cﾃﾞｸﾅｯﾂ \x8Dﾉ ｼﾛ", func_80800930, 0x5000 },
-    { " 22-0:\x8Cｸﾛｽｹ \x8Dﾉ ｱﾅ0", func_80800930, 0x1460 },
-    { " 22-1:\x8Cｸﾛｽｹ \x8Dﾉ ｱﾅ1", func_80800930, 0x14E0 },
-    { " 22-2:\x8Cｸﾛｽｹ \x8Dﾉ ｱﾅ2", func_80800930, 0x1480 },
-    { " 22-3:\x8Cｸﾛｽｹ \x8Dﾉ ｱﾅ3", func_80800930, 0x14F0 },
-    { " 22-4:\x8Cｸﾛｽｹ \x8Dﾉ ｱﾅ4", func_80800930, 0x14C0 },
-    { " 24:\x8Dｹﾓﾉﾐﾁ", func_80800930, 0x7A00 },
-    { " 24-0:\x8Dﾓﾘ ﾉ ｼｬﾃｷｼﾞｮｳ", func_80800930, 0x4200 },
-    { " 25:\x8Cﾃﾞｸ\x8Dｵｳ ﾉ ﾏ", func_80800930, 0x7600 },
-    { " 26:\x8Dﾌｼｷﾞ ﾉ ﾓﾘ", func_80800930, 0xC200 },
-    { " 30:\x8Cｸﾞﾚｰﾄﾍﾞｲ\x8D ﾉ ｶｲｶﾞﾝ", func_80800930, 0x6800 },
-    { " 30-0:\x8Dｶｲﾖｳ ｹﾝｷｭｳｼﾞｮ", func_80800930, 0x5800 },
-    { " 30-1:\x8Dﾘｮｳｼ ﾉ ｲｴ", func_80800930, 0x7200 },
-    { " 30-2:\x8Dﾄﾝｶﾞﾘ ｲﾜ", func_80800930, 0x4400 },
-    { " 31:\x8Dﾐｻｷ", func_80800930, 0x6A00 },
-    { " 32:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾏｴ", func_80800930, 0x7000 },
-    { " 32-0:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞ", func_80800930, 0x2200 },
-    { " 32-1:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞ ﾎﾞｳｴﾝｷｮｳ", func_80800930, 0x22A0 },
-    { " 32-2:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ0", func_80800930, 0x4000 },
-    { " 32-3:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ1", func_80800930, 0x4010 },
-    { " 32-4:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ2", func_80800930, 0x4020 },
-    { " 32-5:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ3", func_80800930, 0x4030 },
-    { " 32-6:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ4", func_80800930, 0x4040 },
-    { " 32-7:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ5", func_80800930, 0x4050 },
-    { " 32-8:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ6", func_80800930, 0x4060 },
-    { " 32-9:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ7", func_80800930, 0x4070 },
-    { " 32-10:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ8", func_80800930, 0x4080 },
-    { " 32-11:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ9", func_80800930, 0x4090 },
-    { " 33:\x8Cｿﾞｰﾗ \x8Dﾉ ﾎｺﾗ", func_80800930, 0x6000 },
-    { " 33-0:\x8Cｿﾞｰﾗ \x8Dﾉ ﾐｾ", func_80800930, 0x9250 },
-    { " 33-1:\x8Cｿﾞｰﾗ \x8Dﾉ ﾋｶｴｼﾂ", func_80800930, 0x9200 },
-    { " 34:\x8Cｸﾞﾚｰﾄﾍﾞｲ", func_80800930, 0xBE00 },
-    { " 35:\x8Dﾀｷｳｴ ﾉ ｹｲﾘｭｳ", func_80800930, 0x8E00 },
-    { " 40:\x8Cﾛｯｸﾋﾞﾙ\x8D ﾉ ﾀﾃｱﾅ", func_80800930, 0xAA00 },
-    { " 40-0:\x8Dﾃﾝﾁ ｷﾞｬｸﾃﾝ", func_80800930, 0xAC00 },
-    { " 41:\x8Cｲｶｰﾅ \x8Dﾍﾉ ﾐﾁ", func_80800930, 0xA000 },
-    { " 42:\x8Cｲｶｰﾅ\x8D ｺｼﾞｮｳ", func_80800930, 0x3400 },
-    { " 42-0:\x8Cｲｶｰﾅ\x8D ﾉ ｺｼﾞｮｳ ﾅｲﾌﾞ", func_80800930, 0x3430 },
-    { " 42-B:\x8Cｲｶｰﾅ\x8D ﾉ ｺｼﾞｮｳ \x8Cﾎﾞｽ\x8Dﾍﾞﾔ", func_80800930, 0xA600 },
-    { " 43:\x8Cｲｶｰﾅ \x8Dｹｲｺｸ", func_80800930, 0x2000 },
-    { " 43-0:\x8Cｲｶｰﾅ \x8Dｹｲｺｸ ﾄﾞｳｸﾂ", func_80800930, 0x20E0 },
-    { " 43-1:\x8Cｾｺﾑ \x8Dﾉ ｲｴ", func_80800930, 0x9800 },
-    { " 43-2:\x8Cｵﾙｺﾞｰﾙ ﾊｳｽ", func_80800930, 0xA400 },
-    { " 50:\x8Cｸﾛｯｸﾀｳﾝ \x8D-ﾋｶﾞｼ-", func_80800930, 0xD200 },
-    { " 50-0:\x8Dﾏﾁ ﾉ ｼｬﾃｷｼﾞｮｳ", func_80800930, 0x3A00 },
-    { " 50-1:\x8Cﾊﾆｰ ｱﾝﾄﾞ ﾀﾞｰﾘﾝ \x8Dﾉ ﾐｾ", func_80800930, 0x800 },
-    { " 50-2:\x8Dﾀｶﾗﾊﾞｺﾔ", func_80800930, 0x2800 },
-    { " 50-3:\x8Cﾅﾍﾞ\x8Dｶﾏ ﾃｲ", func_80800930, 0xBC00 },
-    { " 50-4:\x8Dﾁｮｳﾁｮｳ ﾉ ｲｴ", func_80800930, 0 },
-    { " 50-5:\x8Cﾐﾙｸﾊﾞｰ", func_80800930, 0x2400 },
-    { " 51:\x8Cｸﾛｯｸﾀｳﾝ \x8D-ﾆｼ-", func_80800930, 0xD400 },
-    { " 51-0:\x8Dﾊﾞｸﾀﾞﾝ ﾔ", func_80800930, 0xCA00 },
-    { " 51-1:\x8Cﾏﾆ\x8Dﾔ", func_80800930, 0xE00 },
-    { " 51-2:\x8Dｻﾞｯｶ ﾔ", func_80800930, 0x6200 },
-    { " 51-3:\x8Dｹﾝﾄﾞｳｼﾞｮｳ", func_80800930, 0xA200 },
-    { " 51-4:\x8Dﾎﾟｽﾄﾊｳｽ", func_80800930, 0x5600 },
-    { " 51-5:\x8Dﾀｶﾗｸｼﾞﾔ", func_80800930, 0x6C00 },
-    { " 52:\x8Cｸﾛｯｸﾀｳﾝ \x8D-ｷﾀ-", func_80800930, 0xD600 },
-    { " 53:\x8Cｸﾛｯｸﾀｳﾝ \x8D-ﾐﾅﾐ-", func_80800930, 0xD800 },
-    { " 53-0:\x8Dﾄｹｲﾄｳﾅｲﾌﾞ", func_80800930, 0xC000 },
-    { " 54:\x8Dﾄｹｲﾄｳ ｵｸｼﾞｮｳ", func_80800930, 0x2C00 },
-    { " 55:\x8Dｾﾝﾀｸｼﾞｮｳ", func_80800930, 0xDA00 },
-    { " 55-0:\x8Cﾏﾆ\x8Dﾔ ﾉ ｳﾗｸﾞﾁ", func_80800930, 0xE10 },
-    { " 55-1:\x8Cﾏﾆ\x8Dﾔ ﾉ ﾉｿﾞｷｱﾅ", func_80800930, 0xE20 },
-    { "100:\x8Cｳｯﾄﾞﾏｳﾝﾃﾝ \x8Dﾉ ｼﾝﾃﾞﾝ", func_80800930, 0x3000 },
-    { "100-B:\x8Cｳｯﾄﾞﾏｳﾝﾃﾝ \x8Dﾉ ｼﾝﾃﾞﾝ\x8C-ﾎﾞｽ-", func_80800930, 0x3800 },
-    { "101:\x8Cｽﾉｰﾍｯﾄﾞ \x8Dﾉ ｼﾝﾃﾞﾝ", func_80800930, 0x3C00 },
-    { "101-B:\x8Cｽﾉｰﾍｯﾄﾞ \x8Dﾉ ｼﾝﾃﾞﾝ\x8C-ﾎﾞｽ-", func_80800930, 0x8200 },
-    { "102:\x8Cｸﾞﾚｰﾄﾍﾞｲ \x8Dﾉ ｼﾝﾃﾞﾝ", func_80800930, 0x8C00 },
-    { "102-B:\x8Cｸﾞﾚｰﾄﾍﾞｲ \x8Dﾉ ｼﾝﾃﾞﾝ\x8C-ﾎﾞｽ-", func_80800930, 0xB800 },
-    { "103:\x8Cﾛｯｸﾋﾞﾙ \x8Dﾉ ｼﾝﾃﾞﾝ-ｵﾓﾃｰ", func_80800930, 0x2600 },
-    { "103-0:\x8Cﾛｯｸﾋﾞﾙ \x8Dﾉ ｼﾝﾃﾞﾝ-ｳﾗｰ", func_80800930, 0x2A00 },
-    { "103-B:\x8Cﾛｯｸﾋﾞﾙ \x8Dﾉ ｼﾝﾃﾞﾝ\x8C-ﾎﾞｽ-", func_80800930, 0x6600 },
-    { "104:\x8Cｿｳｹﾞﾝ", func_80800930, 0xC800 },
-    { "104-0:\x8Cﾗｽﾄ ﾃﾞｸ ﾀﾞﾝｼﾞｮﾝ", func_80800930, 0x4E00 },
-    { "104-1:\x8Cﾗｽﾄ ｺﾞﾛﾝ ﾀﾞﾝｼﾞｮﾝ", func_80800930, 0x7800 },
-    { "104-2:\x8Cﾗｽﾄ ｿﾞｰﾗ ﾀﾞﾝｼﾞｮﾝ", func_80800930, 0x8800 },
-    { "104-3:\x8Cﾗｽﾄ ﾘﾝｸ ﾀﾞﾝｼﾞｮﾝ", func_80800930, 0xC600 },
-    { "104-B:\x8Cﾗｽﾄﾀﾞﾝｼﾞｮﾝ -ﾎﾞｽ-", func_80800930, 0x200 },
-    { "119:\x8Cﾃﾞｸﾅｯﾂ \x8Dﾉ ﾎｺﾗ", func_80800930, 0x9E00 },
-    { "121:\x8Dﾋﾐﾂ ﾉ ﾎｺﾗ", func_80800930, 0xBA00 },
-    { "122:\x8Cｵｰﾌﾟﾆﾝｸﾞ ﾀﾞﾝｼﾞｮﾝ", func_80800930, 0x2E00 },
-    { "123:\x8Dｷｮｼﾞﾝ ﾉ ﾏ", func_80800930, 0xCC00 },
-    { "126:\x8Cﾃﾞｸﾅｯﾂ ﾐﾆｹﾞｰﾑ", func_80800930, 0x3600 },
-    { "127-0:\x8Dﾖｳｾｲ ﾉ ｲｽﾞﾐ 0", func_80800930, 0x4600 },
-    { "127-1:\x8Dﾖｳｾｲ ﾉ ｲｽﾞﾐ 1", func_80800930, 0x4610 },
-    { "127-2:\x8Dﾖｳｾｲ ﾉ ｲｽﾞﾐ 2", func_80800930, 0x4620 },
-    { "127-3:\x8Dﾖｳｾｲ ﾉ ｲｽﾞﾐ 3", func_80800930, 0x4630 },
-    { "127-4:\x8Dﾖｳｾｲ ﾉ ｲｽﾞﾐ 4", func_80800930, 0x4640 },
-    { "128:\x8Dﾇﾏ ﾉ ｸﾓﾔｶﾀ", func_80800930, 0x4800 },
-    { "129:\x8Dｳﾐ ﾉ ｸﾓﾔｶﾀ", func_80800930, 0x4A00 },
-    { "130:\x8Dﾊｶ ﾉ ｼﾀ-\x8Cﾀﾞﾝﾍﾟｲ-", func_80800930, 0x5A00 },
-    { "131:\x8Dｲﾄﾞ ﾉ ｼﾀ", func_80800930, 0x9000 },
-    { "132:\x8Dﾕｳﾚｲｺﾞﾔ", func_80800930, 0x9C00 },
-    { "133-0:\x8Dﾊｶ ﾉ ｼﾀ0", func_80800930, 0xA00 },
-    { "133-1:\x8Dﾊｶ ﾉ ｼﾀ1", func_80800930, 0xA10 },
-    { "134-0:\x8Dｶｸｼｱﾅ 0", func_80800930, 0x1400 },
-    { "134-1:\x8Dｶｸｼｱﾅ 1", func_80800930, 0x1410 },
-    { "134-2:\x8Dｶｸｼｱﾅ 2", func_80800930, 0x1420 },
-    { "134-3:\x8Dｶｸｼｱﾅ 3", func_80800930, 0x1430 },
-    { "134-4:\x8Dｶｸｼｱﾅ 4", func_80800930, 0x1440 },
-    { "134-5:\x8Dｶｸｼｱﾅ5", func_80800930, 0x1450 },
-    { "134-7:\x8Dｶｸｼｱﾅ 7", func_80800930, 0x1470 },
-    { "134-9:\x8Dｶｸｼｱﾅ 9", func_80800930, 0x1490 },
-    { "134-10:\x8Dｶｸｼｱﾅ10", func_80800930, 0x14A0 },
-    { "134-11:\x8Dｶｸｼｱﾅ11", func_80800930, 0x14B0 },
-    { "134-13:\x8Dｶｸｼｱﾅ13", func_80800930, 0x14D0 },
-    { "X 1:SPOT00", func_80800930, 0x1C00 },
-    { "title", (void*)func_80800910, 0x0000 },
+    { "  0:OP\x8Cﾃﾞﾓ\x8Dﾖｳ ｼﾝﾘﾝ", Select_LoadGame, 0x1C00 },
+    { "  0-0:\x8Dﾏﾖｲ ﾉ ﾓﾘ", Select_LoadGame, 0xC400 },
+    { "  1:\x8Cﾀｳﾝ \x8Dｺｳｶﾞｲ", Select_LoadGame, 0x5400 },
+    { "  1-0:\x8Dﾃﾝﾓﾝｶﾝｿｸｼﾞｮ", Select_LoadGame, 0x4C00 },
+    { "  1-1:\x8Dﾃﾝﾓﾝｶﾝｿｸｼﾞｮ ﾃﾞ ﾎﾞｳｴﾝｷｮｳ", Select_LoadGame, 0x54A0 },
+    { "  1-2:\x8Cｲｶｰﾅ \x8Dﾉ ﾊｶﾊﾞ", Select_LoadGame, 0x8000 },
+    { "  2:\x8Cﾛﾏﾆｰ \x8Dﾎﾞｸｼﾞｮｳ", Select_LoadGame, 0x6400 },
+    { "  3:\x8Cﾐﾙｸﾛｰﾄﾞ", Select_LoadGame, 0x3E00 },
+    { "  4:\x8Dｵﾓﾔ", Select_LoadGame, 0x610 },
+    { "  5:\x8Dｳｼｺﾞﾔ", Select_LoadGame, 0x600 },
+    { "  6:\x8Cｺｯｺ \x8Dｺﾞﾔ", Select_LoadGame, 0x7E00 },
+    { "  7:\x8Cﾄﾞｯｸﾞﾚｰｽ\x8Dｼﾞｮｳ", Select_LoadGame, 0x7C00 },
+    { "  8:\x8Cｺﾞｰﾏﾝ ﾄﾗｯｸ", Select_LoadGame, 0xCE00 },
+    { " 10:\x8Dﾔﾏｻﾞﾄ -ﾌﾕ-", Select_LoadGame, 0x9A00 },
+    { " 10-0:\x8Dﾔﾏｻﾞﾄ -ﾊﾙ-", Select_LoadGame, 0xAE00 },
+    { " 10-1:\x8Dﾔﾏｻﾞﾄ ﾉ ｶｼﾞﾔ", Select_LoadGame, 0x5200 },
+    { " 11:\x8Cｺﾞﾛﾝ\x8D ﾉ ｻﾄ -ﾌﾕ-", Select_LoadGame, 0x9400 },
+    { " 11-0:\x8Cｺﾞﾛﾝ\x8D ﾉ ｻﾄ -ﾊﾙ-", Select_LoadGame, 0x8A00 },
+    { " 11-1:\x8Cｺﾞﾛﾝ\x8D ﾉ ﾎｺﾗ", Select_LoadGame, 0x5E00 },
+    { " 11-2:\x8Dﾊﾅﾚﾔﾏ ﾉ ﾎｺﾗ", Select_LoadGame, 0x1500 },
+    { " 11-3:\x8Cｺﾞﾛﾝ \x8Dﾉ ﾐｾ", Select_LoadGame, 0x7400 },
+    { " 12:\x8Cｽﾉｰﾍｯﾄﾞ", Select_LoadGame, 0xB200 },
+    { " 13:\x8Dﾌﾌﾞｷ ﾉ ﾐﾁ", Select_LoadGame, 0x3200 },
+    { " 14:\x8Dﾕｷﾀﾞﾏ ﾉ ﾐﾁ", Select_LoadGame, 0xB000 },
+    { " 15:\x8Cｺﾞﾛﾝﾚｰｽ \x8Dｼﾞｮｳ", Select_LoadGame, 0xD000 },
+    { " 16:\x8Cｺﾞﾛﾝ \x8Dﾉ ﾊｶ", Select_LoadGame, 0x9600 },
+    { " 17:\x8Dｾﾂｹﾞﾝ \x8Cﾊﾞﾄﾙ \x8D-ﾌﾕ-", Select_LoadGame, 0xB400 },
+    { " 17-0:\x8Dｾﾂｹﾞﾝ \x8Cﾊﾞﾄﾙ \x8D-ﾊﾙ-", Select_LoadGame, 0xB600 },
+    { " 20:\x8Dﾇﾏﾁ", Select_LoadGame, 0x8400 },
+    { " 20-0:\x8Dﾇﾏﾁ ｿﾉｺﾞ", Select_LoadGame, 0xC00 },
+    { " 20-1:\x8Dﾇﾏ ﾉ ｶﾝｺｳｱﾝﾅｲ", Select_LoadGame, 0xA800 },
+    { " 20-2:\x8Dﾏﾎｳｵﾊﾞﾊﾞ ﾉ ｸｽﾘﾔ", Select_LoadGame, 0x400 },
+    { " 21:\x8Cｳｯﾄﾞﾏｳﾝﾃﾝ", Select_LoadGame, 0x8600 },
+    { " 21-0:\x8Cﾃﾞｸ\x8Dﾋﾒ ﾉ ﾛｳﾔ", Select_LoadGame, 0x3010 },
+    { " 22:\x8Cﾃﾞｸﾅｯﾂ \x8Dﾉ ｼﾛ", Select_LoadGame, 0x5000 },
+    { " 22-0:\x8Cｸﾛｽｹ \x8Dﾉ ｱﾅ0", Select_LoadGame, 0x1460 },
+    { " 22-1:\x8Cｸﾛｽｹ \x8Dﾉ ｱﾅ1", Select_LoadGame, 0x14E0 },
+    { " 22-2:\x8Cｸﾛｽｹ \x8Dﾉ ｱﾅ2", Select_LoadGame, 0x1480 },
+    { " 22-3:\x8Cｸﾛｽｹ \x8Dﾉ ｱﾅ3", Select_LoadGame, 0x14F0 },
+    { " 22-4:\x8Cｸﾛｽｹ \x8Dﾉ ｱﾅ4", Select_LoadGame, 0x14C0 },
+    { " 24:\x8Dｹﾓﾉﾐﾁ", Select_LoadGame, 0x7A00 },
+    { " 24-0:\x8Dﾓﾘ ﾉ ｼｬﾃｷｼﾞｮｳ", Select_LoadGame, 0x4200 },
+    { " 25:\x8Cﾃﾞｸ\x8Dｵｳ ﾉ ﾏ", Select_LoadGame, 0x7600 },
+    { " 26:\x8Dﾌｼｷﾞ ﾉ ﾓﾘ", Select_LoadGame, 0xC200 },
+    { " 30:\x8Cｸﾞﾚｰﾄﾍﾞｲ\x8D ﾉ ｶｲｶﾞﾝ", Select_LoadGame, 0x6800 },
+    { " 30-0:\x8Dｶｲﾖｳ ｹﾝｷｭｳｼﾞｮ", Select_LoadGame, 0x5800 },
+    { " 30-1:\x8Dﾘｮｳｼ ﾉ ｲｴ", Select_LoadGame, 0x7200 },
+    { " 30-2:\x8Dﾄﾝｶﾞﾘ ｲﾜ", Select_LoadGame, 0x4400 },
+    { " 31:\x8Dﾐｻｷ", Select_LoadGame, 0x6A00 },
+    { " 32:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾏｴ", Select_LoadGame, 0x7000 },
+    { " 32-0:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞ", Select_LoadGame, 0x2200 },
+    { " 32-1:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞ ﾎﾞｳｴﾝｷｮｳ", Select_LoadGame, 0x22A0 },
+    { " 32-2:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ0", Select_LoadGame, 0x4000 },
+    { " 32-3:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ1", Select_LoadGame, 0x4010 },
+    { " 32-4:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ2", Select_LoadGame, 0x4020 },
+    { " 32-5:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ3", Select_LoadGame, 0x4030 },
+    { " 32-6:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ4", Select_LoadGame, 0x4040 },
+    { " 32-7:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ5", Select_LoadGame, 0x4050 },
+    { " 32-8:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ6", Select_LoadGame, 0x4060 },
+    { " 32-9:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ7", Select_LoadGame, 0x4070 },
+    { " 32-10:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ8", Select_LoadGame, 0x4080 },
+    { " 32-11:\x8Dｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ9", Select_LoadGame, 0x4090 },
+    { " 33:\x8Cｿﾞｰﾗ \x8Dﾉ ﾎｺﾗ", Select_LoadGame, 0x6000 },
+    { " 33-0:\x8Cｿﾞｰﾗ \x8Dﾉ ﾐｾ", Select_LoadGame, 0x9250 },
+    { " 33-1:\x8Cｿﾞｰﾗ \x8Dﾉ ﾋｶｴｼﾂ", Select_LoadGame, 0x9200 },
+    { " 34:\x8Cｸﾞﾚｰﾄﾍﾞｲ", Select_LoadGame, 0xBE00 },
+    { " 35:\x8Dﾀｷｳｴ ﾉ ｹｲﾘｭｳ", Select_LoadGame, 0x8E00 },
+    { " 40:\x8Cﾛｯｸﾋﾞﾙ\x8D ﾉ ﾀﾃｱﾅ", Select_LoadGame, 0xAA00 },
+    { " 40-0:\x8Dﾃﾝﾁ ｷﾞｬｸﾃﾝ", Select_LoadGame, 0xAC00 },
+    { " 41:\x8Cｲｶｰﾅ \x8Dﾍﾉ ﾐﾁ", Select_LoadGame, 0xA000 },
+    { " 42:\x8Cｲｶｰﾅ\x8D ｺｼﾞｮｳ", Select_LoadGame, 0x3400 },
+    { " 42-0:\x8Cｲｶｰﾅ\x8D ﾉ ｺｼﾞｮｳ ﾅｲﾌﾞ", Select_LoadGame, 0x3430 },
+    { " 42-B:\x8Cｲｶｰﾅ\x8D ﾉ ｺｼﾞｮｳ \x8Cﾎﾞｽ\x8Dﾍﾞﾔ", Select_LoadGame, 0xA600 },
+    { " 43:\x8Cｲｶｰﾅ \x8Dｹｲｺｸ", Select_LoadGame, 0x2000 },
+    { " 43-0:\x8Cｲｶｰﾅ \x8Dｹｲｺｸ ﾄﾞｳｸﾂ", Select_LoadGame, 0x20E0 },
+    { " 43-1:\x8Cｾｺﾑ \x8Dﾉ ｲｴ", Select_LoadGame, 0x9800 },
+    { " 43-2:\x8Cｵﾙｺﾞｰﾙ ﾊｳｽ", Select_LoadGame, 0xA400 },
+    { " 50:\x8Cｸﾛｯｸﾀｳﾝ \x8D-ﾋｶﾞｼ-", Select_LoadGame, 0xD200 },
+    { " 50-0:\x8Dﾏﾁ ﾉ ｼｬﾃｷｼﾞｮｳ", Select_LoadGame, 0x3A00 },
+    { " 50-1:\x8Cﾊﾆｰ ｱﾝﾄﾞ ﾀﾞｰﾘﾝ \x8Dﾉ ﾐｾ", Select_LoadGame, 0x800 },
+    { " 50-2:\x8Dﾀｶﾗﾊﾞｺﾔ", Select_LoadGame, 0x2800 },
+    { " 50-3:\x8Cﾅﾍﾞ\x8Dｶﾏ ﾃｲ", Select_LoadGame, 0xBC00 },
+    { " 50-4:\x8Dﾁｮｳﾁｮｳ ﾉ ｲｴ", Select_LoadGame, 0 },
+    { " 50-5:\x8Cﾐﾙｸﾊﾞｰ", Select_LoadGame, 0x2400 },
+    { " 51:\x8Cｸﾛｯｸﾀｳﾝ \x8D-ﾆｼ-", Select_LoadGame, 0xD400 },
+    { " 51-0:\x8Dﾊﾞｸﾀﾞﾝ ﾔ", Select_LoadGame, 0xCA00 },
+    { " 51-1:\x8Cﾏﾆ\x8Dﾔ", Select_LoadGame, 0xE00 },
+    { " 51-2:\x8Dｻﾞｯｶ ﾔ", Select_LoadGame, 0x6200 },
+    { " 51-3:\x8Dｹﾝﾄﾞｳｼﾞｮｳ", Select_LoadGame, 0xA200 },
+    { " 51-4:\x8Dﾎﾟｽﾄﾊｳｽ", Select_LoadGame, 0x5600 },
+    { " 51-5:\x8Dﾀｶﾗｸｼﾞﾔ", Select_LoadGame, 0x6C00 },
+    { " 52:\x8Cｸﾛｯｸﾀｳﾝ \x8D-ｷﾀ-", Select_LoadGame, 0xD600 },
+    { " 53:\x8Cｸﾛｯｸﾀｳﾝ \x8D-ﾐﾅﾐ-", Select_LoadGame, 0xD800 },
+    { " 53-0:\x8Dﾄｹｲﾄｳﾅｲﾌﾞ", Select_LoadGame, 0xC000 },
+    { " 54:\x8Dﾄｹｲﾄｳ ｵｸｼﾞｮｳ", Select_LoadGame, 0x2C00 },
+    { " 55:\x8Dｾﾝﾀｸｼﾞｮｳ", Select_LoadGame, 0xDA00 },
+    { " 55-0:\x8Cﾏﾆ\x8Dﾔ ﾉ ｳﾗｸﾞﾁ", Select_LoadGame, 0xE10 },
+    { " 55-1:\x8Cﾏﾆ\x8Dﾔ ﾉ ﾉｿﾞｷｱﾅ", Select_LoadGame, 0xE20 },
+    { "100:\x8Cｳｯﾄﾞﾏｳﾝﾃﾝ \x8Dﾉ ｼﾝﾃﾞﾝ", Select_LoadGame, 0x3000 },
+    { "100-B:\x8Cｳｯﾄﾞﾏｳﾝﾃﾝ \x8Dﾉ ｼﾝﾃﾞﾝ\x8C-ﾎﾞｽ-", Select_LoadGame, 0x3800 },
+    { "101:\x8Cｽﾉｰﾍｯﾄﾞ \x8Dﾉ ｼﾝﾃﾞﾝ", Select_LoadGame, 0x3C00 },
+    { "101-B:\x8Cｽﾉｰﾍｯﾄﾞ \x8Dﾉ ｼﾝﾃﾞﾝ\x8C-ﾎﾞｽ-", Select_LoadGame, 0x8200 },
+    { "102:\x8Cｸﾞﾚｰﾄﾍﾞｲ \x8Dﾉ ｼﾝﾃﾞﾝ", Select_LoadGame, 0x8C00 },
+    { "102-B:\x8Cｸﾞﾚｰﾄﾍﾞｲ \x8Dﾉ ｼﾝﾃﾞﾝ\x8C-ﾎﾞｽ-", Select_LoadGame, 0xB800 },
+    { "103:\x8Cﾛｯｸﾋﾞﾙ \x8Dﾉ ｼﾝﾃﾞﾝ-ｵﾓﾃｰ", Select_LoadGame, 0x2600 },
+    { "103-0:\x8Cﾛｯｸﾋﾞﾙ \x8Dﾉ ｼﾝﾃﾞﾝ-ｳﾗｰ", Select_LoadGame, 0x2A00 },
+    { "103-B:\x8Cﾛｯｸﾋﾞﾙ \x8Dﾉ ｼﾝﾃﾞﾝ\x8C-ﾎﾞｽ-", Select_LoadGame, 0x6600 },
+    { "104:\x8Cｿｳｹﾞﾝ", Select_LoadGame, 0xC800 },
+    { "104-0:\x8Cﾗｽﾄ ﾃﾞｸ ﾀﾞﾝｼﾞｮﾝ", Select_LoadGame, 0x4E00 },
+    { "104-1:\x8Cﾗｽﾄ ｺﾞﾛﾝ ﾀﾞﾝｼﾞｮﾝ", Select_LoadGame, 0x7800 },
+    { "104-2:\x8Cﾗｽﾄ ｿﾞｰﾗ ﾀﾞﾝｼﾞｮﾝ", Select_LoadGame, 0x8800 },
+    { "104-3:\x8Cﾗｽﾄ ﾘﾝｸ ﾀﾞﾝｼﾞｮﾝ", Select_LoadGame, 0xC600 },
+    { "104-B:\x8Cﾗｽﾄﾀﾞﾝｼﾞｮﾝ -ﾎﾞｽ-", Select_LoadGame, 0x200 },
+    { "119:\x8Cﾃﾞｸﾅｯﾂ \x8Dﾉ ﾎｺﾗ", Select_LoadGame, 0x9E00 },
+    { "121:\x8Dﾋﾐﾂ ﾉ ﾎｺﾗ", Select_LoadGame, 0xBA00 },
+    { "122:\x8Cｵｰﾌﾟﾆﾝｸﾞ ﾀﾞﾝｼﾞｮﾝ", Select_LoadGame, 0x2E00 },
+    { "123:\x8Dｷｮｼﾞﾝ ﾉ ﾏ", Select_LoadGame, 0xCC00 },
+    { "126:\x8Cﾃﾞｸﾅｯﾂ ﾐﾆｹﾞｰﾑ", Select_LoadGame, 0x3600 },
+    { "127-0:\x8Dﾖｳｾｲ ﾉ ｲｽﾞﾐ 0", Select_LoadGame, 0x4600 },
+    { "127-1:\x8Dﾖｳｾｲ ﾉ ｲｽﾞﾐ 1", Select_LoadGame, 0x4610 },
+    { "127-2:\x8Dﾖｳｾｲ ﾉ ｲｽﾞﾐ 2", Select_LoadGame, 0x4620 },
+    { "127-3:\x8Dﾖｳｾｲ ﾉ ｲｽﾞﾐ 3", Select_LoadGame, 0x4630 },
+    { "127-4:\x8Dﾖｳｾｲ ﾉ ｲｽﾞﾐ 4", Select_LoadGame, 0x4640 },
+    { "128:\x8Dﾇﾏ ﾉ ｸﾓﾔｶﾀ", Select_LoadGame, 0x4800 },
+    { "129:\x8Dｳﾐ ﾉ ｸﾓﾔｶﾀ", Select_LoadGame, 0x4A00 },
+    { "130:\x8Dﾊｶ ﾉ ｼﾀ-\x8Cﾀﾞﾝﾍﾟｲ-", Select_LoadGame, 0x5A00 },
+    { "131:\x8Dｲﾄﾞ ﾉ ｼﾀ", Select_LoadGame, 0x9000 },
+    { "132:\x8Dﾕｳﾚｲｺﾞﾔ", Select_LoadGame, 0x9C00 },
+    { "133-0:\x8Dﾊｶ ﾉ ｼﾀ0", Select_LoadGame, 0xA00 },
+    { "133-1:\x8Dﾊｶ ﾉ ｼﾀ1", Select_LoadGame, 0xA10 },
+    { "134-0:\x8Dｶｸｼｱﾅ 0", Select_LoadGame, 0x1400 },
+    { "134-1:\x8Dｶｸｼｱﾅ 1", Select_LoadGame, 0x1410 },
+    { "134-2:\x8Dｶｸｼｱﾅ 2", Select_LoadGame, 0x1420 },
+    { "134-3:\x8Dｶｸｼｱﾅ 3", Select_LoadGame, 0x1430 },
+    { "134-4:\x8Dｶｸｼｱﾅ 4", Select_LoadGame, 0x1440 },
+    { "134-5:\x8Dｶｸｼｱﾅ5", Select_LoadGame, 0x1450 },
+    { "134-7:\x8Dｶｸｼｱﾅ 7", Select_LoadGame, 0x1470 },
+    { "134-9:\x8Dｶｸｼｱﾅ 9", Select_LoadGame, 0x1490 },
+    { "134-10:\x8Dｶｸｼｱﾅ10", Select_LoadGame, 0x14A0 },
+    { "134-11:\x8Dｶｸｼｱﾅ11", Select_LoadGame, 0x14B0 },
+    { "134-13:\x8Dｶｸｼｱﾅ13", Select_LoadGame, 0x14D0 },
+    { "X 1:SPOT00", Select_LoadGame, 0x1C00 },
+    { "title", (void*)Select_LoadTitle, 0x0000 },
 };
 
-// Select_UpdateMenu
-void func_80800A44(SelectContext* this) {
-    s32 phi_v1_2;
-    Input* controller1;
+void Select_UpdateMenu(SelectContext* this) {
+    s32 playerForm;
+    Input* controller1 = CONTROLLER1(this);
     s32 stick_y;
     s32 pad[2];
     s16 phi_v1;
-    s32 sp20;
-
-    controller1 = CONTROLLER1(this);
+    s32 updateRate;
 
     if (this->unk_25C == 0) {
         if (CHECK_BTN_ALL(controller1->press.button, BTN_A) || CHECK_BTN_ALL(controller1->press.button, BTN_START)) {
@@ -236,12 +233,11 @@ void func_80800A44(SelectContext* this) {
         }
 
         if (CHECK_BTN_ALL(controller1->press.button, BTN_B)) {
-
-            phi_v1_2 = gSaveContext.playerForm - 1;
-            if (phi_v1_2 < 0) {
-                phi_v1_2 = 4;
+            playerForm = gSaveContext.playerForm - 1;
+            if (playerForm < PLAYER_FORM_FIERCE_DEITY) {
+                playerForm = PLAYER_FORM_HUMAN;
             }
-            gSaveContext.playerForm = phi_v1_2;
+            gSaveContext.playerForm = playerForm;
         }
 
         if (CHECK_BTN_ALL(controller1->press.button, BTN_Z)) {
@@ -331,10 +327,10 @@ void func_80800A44(SelectContext* this) {
             }
         }
 
-        sp20 = R_UPDATE_RATE;
+        updateRate = R_UPDATE_RATE;
         stick_y = controller1->rel.stick_y;
         if (stick_y != 0) {
-            this->unk_260 = (sp20 * stick_y) / 7;
+            this->cursorVelocity = (updateRate * stick_y) / 7;
         } else {
             if (CHECK_BTN_ALL(controller1->press.button, BTN_DUP)) {
                 if (this->unk_26C == 1) {
@@ -344,14 +340,14 @@ void func_80800A44(SelectContext* this) {
                     this->unk_264 = 20;
                     this->unk_26C = 1;
 
-                    play_sound(0x1800);
-                    this->unk_260 = sp20;
+                    play_sound(NA_SE_IT_SWORD_IMPACT);
+                    this->cursorVelocity = updateRate;
                 }
             }
 
             if (CHECK_BTN_ALL(controller1->cur.button, BTN_DUP) && (this->unk_264 == 0)) {
-                play_sound(0x1800);
-                this->unk_260 = sp20 * 3;
+                play_sound(NA_SE_IT_SWORD_IMPACT);
+                this->cursorVelocity = updateRate * 3;
             }
 
             if (CHECK_BTN_ALL(controller1->press.button, BTN_DDOWN)) {
@@ -361,23 +357,23 @@ void func_80800A44(SelectContext* this) {
                 if (this->unk_268 == 0) {
                     this->unk_268 = 20;
                     this->unk_270 = 1;
-                    play_sound(0x1800);
-                    this->unk_260 = -sp20;
+                    play_sound(NA_SE_IT_SWORD_IMPACT);
+                    this->cursorVelocity = -updateRate;
                 }
             }
             if (CHECK_BTN_ALL(controller1->cur.button, BTN_DDOWN) && (this->unk_268 == 0)) {
-                play_sound(0x1800);
-                this->unk_260 = (-sp20) * 3;
+                play_sound(NA_SE_IT_SWORD_IMPACT);
+                this->cursorVelocity = -updateRate * 3;
             }
 
             if (CHECK_BTN_ALL(controller1->press.button, BTN_DLEFT) || CHECK_BTN_ALL(controller1->cur.button, BTN_DLEFT)) {
-                play_sound(0x1800);
-                this->unk_260 = sp20;
+                play_sound(NA_SE_IT_SWORD_IMPACT);
+                this->cursorVelocity = updateRate;
             }
 
             if (CHECK_BTN_ALL(controller1->press.button, BTN_DRIGHT) || CHECK_BTN_ALL(controller1->cur.button, BTN_DRIGHT)) {
-                play_sound(0x1800);
-                this->unk_260 = -sp20;
+                play_sound(NA_SE_IT_SWORD_IMPACT);
+                this->cursorVelocity = -updateRate;
             }
         }
     }
@@ -385,46 +381,46 @@ void func_80800A44(SelectContext* this) {
     if (CHECK_BTN_ALL(controller1->press.button, BTN_L)) {
         this->unk_21C++;
         this->unk_21C = (this->unk_21C + ARRAY_COUNT(this->unk_220)) % ARRAY_COUNT(this->unk_220);
-        this->currentScene = this->unk_24C = this->unk_220[this->unk_21C];
+        this->currentScene = this->cursorPos = this->unk_220[this->unk_21C];
     }
 
-    this->unk_25C += this->unk_260;
+    this->unk_25C += this->cursorVelocity;
 
     if (this->unk_25C < -7) {
-        this->unk_260 = 0;
+        this->cursorVelocity = 0;
         this->unk_25C = 0;
 
         this->currentScene++;
         this->currentScene = (this->currentScene + this->count) % this->count;
 
-        if (this->currentScene == ((this->unk_24C + this->count + 0x13) % this->count)) {
-            this->unk_24C++;
-            this->unk_24C = (this->unk_24C + this->count) % this->count;
+        if (this->currentScene == ((this->cursorPos + this->count + 19) % this->count)) {
+            this->cursorPos++;
+            this->cursorPos = (this->cursorPos + this->count) % this->count;
         }
     }
 
-    if (this->unk_25C >= 8) {
-        this->unk_260 = 0;
+    if (this->unk_25C > 7) {
+        this->cursorVelocity = 0;
         this->unk_25C = 0;
-        if (this->currentScene == this->unk_24C) {
-            this->unk_24C -= 2;
-            this->unk_24C = (this->unk_24C + this->count) % this->count;
+        if (this->currentScene == this->cursorPos) {
+            this->cursorPos -= 2;
+            this->cursorPos = (this->cursorPos + this->count) % this->count;
         }
 
         this->currentScene--;
         this->currentScene = (this->currentScene + this->count) % this->count;
-        if (this->currentScene == ((this->unk_24C + this->count) % this->count)) {
-            this->unk_24C--;
-            this->unk_24C = (this->unk_24C + this->count) % this->count;
+        if (this->currentScene == ((this->cursorPos + this->count) % this->count)) {
+            this->cursorPos--;
+            this->cursorPos = (this->cursorPos + this->count) % this->count;
         }
     }
 
     this->currentScene = (this->currentScene + this->count) % this->count;
-    this->unk_24C = (this->unk_24C + this->count) % this->count;
+    this->cursorPos = (this->cursorPos + this->count) % this->count;
 
-    gGameInfo->data[2576] = this->currentScene;
-    gGameInfo->data[2577] = this->unk_24C;
-    gGameInfo->data[2578] = this->unk_21C;
+    dREG(80) = this->currentScene;
+    dREG(81) = this->cursorPos;
+    dREG(82) = this->unk_21C;
 
     if (this->unk_264 != 0) {
         this->unk_264--;
@@ -441,8 +437,7 @@ void func_80800A44(SelectContext* this) {
     }
 }
 
-// Select_PrintMenu
-void func_808013B8(SelectContext* this, GfxPrint* printer) {
+void Select_PrintMenu(SelectContext* this, GfxPrint* printer) {
     s32 i;
 
     GfxPrint_SetColor(printer, 255, 155, 150, 255);
@@ -455,7 +450,7 @@ void func_808013B8(SelectContext* this, GfxPrint* printer) {
         char* sceneName;
 
         GfxPrint_SetPos(printer, 9, i + 4);
-        sceneIndex = (this->unk_24C + i + this->count) % this->count;
+        sceneIndex = (this->cursorPos + i + this->count) % this->count;
         if (sceneIndex == this->currentScene) {
             GfxPrint_SetColor(printer, 255, 20, 20, 255);
         } else {
@@ -475,52 +470,74 @@ void func_808013B8(SelectContext* this, GfxPrint* printer) {
 }
 
 // clang-format off
-const char* D_80802334[12] = {
+// sLoadingMessages
+const char* D_80802334[] = {
+    // "Please wait a minute",
     "\x8Dｼﾊﾞﾗｸｵﾏﾁｸﾀﾞｻｲ",
+    // "Hold on a sec",
     "\x8Dﾁｮｯﾄ ﾏｯﾃﾈ",
+    // "Wait a moment",
     "\x8Cｳｪｲﾄ ｱ ﾓｰﾒﾝﾄ",
+    // "Loading",
     "\x8Cﾛｰﾄﾞ\x8Dﾁｭｳ",
+    // "Now working",
     "\x8Dﾅｳ ﾜｰｷﾝｸﾞ",
+    // "Now creating",
     "\x8Dｲﾏ ﾂｸｯﾃﾏｽ",
+    // "It's not broken",
     "\x8Dｺｼｮｳｼﾞｬﾅｲﾖ",
+    // "Coffee Break",
     "\x8Cｺｰﾋｰ ﾌﾞﾚｲｸ",
+    // "Please set B side",
     "\x8C" "Bﾒﾝｦｾｯﾄｼﾃｸﾀﾞｻｲ",
+    // "Be patient, now",
     "\x8Dｼﾞｯﾄ\x8Cｶﾞﾏﾝ\x8Dﾉ\x8Cｺ\x8Dﾃﾞｱｯﾀ",
+    // "Please wait just a minute",
     "\x8Dｲﾏｼﾊﾞﾗｸｵﾏﾁｸﾀﾞｻｲ",
+    // "Don't worry, don't worry. Take a break, take a break",
     "\x8Dｱﾜﾃﾅｲｱﾜﾃﾅｲ｡ﾋﾄﾔｽﾐﾋﾄﾔｽﾐ｡",
 };
 // clang-format on
 
-void func_80801594(SelectContext* this, GfxPrint* printer) {
+void Select_PrintLoadingMessage(SelectContext* this, GfxPrint* printer) {
+    s32 index;
+
     GfxPrint_SetPos(printer, 10, 15);
     GfxPrint_SetColor(printer, 255, 255, 255, 255);
-    GfxPrint_Printf(printer, "%s", D_80802334[(s32)(Rand_ZeroOne() * ARRAY_COUNT(D_80802334))]);
+
+    index = Rand_ZeroOne() * ARRAY_COUNT(D_80802334);
+    GfxPrint_Printf(printer, "%s", D_80802334[index]);
 }
 
 // clang-format off
-char* D_80802364[][2] = {
+// Second column is unused
+const char* D_80802364[][2] = {
+    // "17 (Adult)" // 17 (Daitetsujin)
     {"\x8D""17(ｵﾄﾅ)",    "\x8D""17(ﾀﾞｲﾃﾂｼﾞﾝ)"},
+    // "30 (Goron)" // 30 (Ice Cream -1)
     {"\x8C""30(ｺﾞﾛﾝ)",   "\x8C""30(ｱｲｽｸﾘｰﾑ-1)"},
+    // "78 (Zora)" // 78 (Carmen +1)
     {"\x8C""78(ｿﾞｰﾗ)",   "\x8C""78(ｶﾙﾒﾝ+1)"},
+    // "12 (Deku)" // 12 (Majestic)
     {"\x8C""12(ﾃﾞｸﾅｯﾂ)", "\x8C""12(ﾏｼﾞｪｽﾃｨｯｸ)"},
+    // "5 (Child)" // 5 (NTT Kodomo)
     {"\x8D""5(ｺﾄﾞﾓ)",    "\x8C""5(NTTｺﾄﾞﾓ)"},
 };
 // clang-format on
 
-void func_80801620(SelectContext* this, GfxPrint* printer, s32 playerForm) {
+void Select_PrintAgeSetting(SelectContext* this, GfxPrint* printer, s32 playerForm) {
     s32 pad;
-    s32 sp20;
-    char* (*temp_a0)[2];
-    char* (*phi_v1)[2];
+    const char* age;
+    const char* (*temp_a0)[2];
+    const char* (*phi_v1)[2];
     s32 phi_v0;
 
     if ((playerForm >= PLAYER_FORM_FIERCE_DEITY) && (playerForm < PLAYER_FORM_MAX)) {
         temp_a0 = &D_80802364[playerForm];
         phi_v1 = temp_a0 + 1;
-        phi_v0 = 8;
 
         // This loop doesn't do anything
-        for (;phi_v0 >= 0; phi_v0 -= 8) {
+        for (phi_v0 = 8; phi_v0 >= 0; phi_v0 -= 8) {
             if (phi_v1 != 0) {
                 break;
             }
@@ -528,15 +545,15 @@ void func_80801620(SelectContext* this, GfxPrint* printer, s32 playerForm) {
         }
         if (phi_v1) {}
 
-        sp20 = **temp_a0;
+        age = (*temp_a0)[0];
     } else {
-        sp20 = NULL;
+        age = NULL;
     }
 
     GfxPrint_SetPos(printer, 4, 26);
     GfxPrint_SetColor(printer, 255, 255, 55, 255);
-    if (sp20 != NULL) {
-        GfxPrint_Printf(printer, "Age:%s", sp20);
+    if (age != NULL) {
+        GfxPrint_Printf(printer, "Age:%s", age);
     } else {
         // clang-format off
         GfxPrint_Printf(printer, "Age:" "???" "(%d)", playerForm);
@@ -544,98 +561,115 @@ void func_80801620(SelectContext* this, GfxPrint* printer, s32 playerForm) {
     }
 }
 
-void func_808016E8(SelectContext* this, GfxPrint* printer, u16 arg2) {
-    const char* phi_a2;
-    const char* phi_a2_2;
+void Select_PrintCutsceneSetting(SelectContext* this, GfxPrint* printer, u16 csIndex) {
+    const char* stage;
+    const char* day;
 
     GfxPrint_SetPos(printer, 4, 25);
     GfxPrint_SetColor(printer, 255, 255, 55, 255);
-    switch (arg2) {
+
+    switch (csIndex) {
         case 0:
             // clang-format off
-            gSaveContext.time = CLOCK_TIME(12, 0); phi_a2 = "\x8Dｵﾋﾙ\x8Cｼﾞｬﾗ";
+            gSaveContext.time = CLOCK_TIME(12, 0); stage = "\x8Dｵﾋﾙ\x8Cｼﾞｬﾗ";
             // clang-format on
             break;
 
         case 0x8000:
             // clang-format off
-            gSaveContext.time = CLOCK_TIME(6, 0) + 1; phi_a2 = "\x8Dｱｻ \x8Cｼﾞｬﾗ";
+            gSaveContext.time = CLOCK_TIME(6, 0) + 1; stage = "\x8Dｱｻ \x8Cｼﾞｬﾗ";
             // clang-format on
             break;
 
         case 0x8800:
             gSaveContext.time = CLOCK_TIME(18, 1);
-            phi_a2 = "\x8Dﾖﾙ \x8Cｼﾞｬﾗ";
+            stage = "\x8Dﾖﾙ \x8Cｼﾞｬﾗ";
             break;
 
         case 0xFFF0:
             // clang-format off
-            gSaveContext.time = CLOCK_TIME(12, 0); phi_a2 = "ﾃﾞﾓ00";
+            gSaveContext.time = CLOCK_TIME(12, 0); stage = "ﾃﾞﾓ00";
             // clang-format on
             break;
         case 0xFFF1:
-            phi_a2 = "ﾃﾞﾓ01";
+            // "Cutscene 01"
+            stage = "ﾃﾞﾓ01";
             break;
         case 0xFFF2:
-            phi_a2 = "ﾃﾞﾓ02";
+            // "Cutscene 02"
+            stage = "ﾃﾞﾓ02";
             break;
         case 0xFFF3:
-            phi_a2 = "ﾃﾞﾓ03";
+            // "Cutscene 03"
+            stage = "ﾃﾞﾓ03";
             break;
         case 0xFFF4:
-            phi_a2 = "ﾃﾞﾓ04";
+            // "Cutscene 04"
+            stage = "ﾃﾞﾓ04";
             break;
         case 0xFFF5:
-            phi_a2 = "ﾃﾞﾓ05";
+            // "Cutscene 05"
+            stage = "ﾃﾞﾓ05";
             break;
         case 0xFFF6:
-            phi_a2 = "ﾃﾞﾓ06";
+            // "Cutscene 06"
+            stage = "ﾃﾞﾓ06";
             break;
         case 0xFFF7:
-            phi_a2 = "ﾃﾞﾓ07";
+            // "Cutscene 07"
+            stage = "ﾃﾞﾓ07";
             break;
         case 0xFFF8:
-            phi_a2 = "ﾃﾞﾓ08";
+            // "Cutscene 08"
+            stage = "ﾃﾞﾓ08";
             break;
         case 0xFFF9:
-            phi_a2 = "ﾃﾞﾓ09";
+            // "Cutscene 09"
+            stage = "ﾃﾞﾓ09";
             break;
         case 0xFFFA:
-            phi_a2 = "ﾃﾞﾓ0A";
+            // "Cutscene 0A"
+            stage = "ﾃﾞﾓ0A";
             break;
 
         default:
-            phi_a2 = "???";
+            stage = "???";
             break;
     }
     gSaveContext.environmentTime = gSaveContext.time;
-    GfxPrint_Printf(printer, "Stage:\x8C%s", phi_a2);
+    GfxPrint_Printf(printer, "Stage:\x8C%s", stage);
 
     GfxPrint_SetPos(printer, 23, 25);
     GfxPrint_SetColor(printer, 255, 255, 55, 255);
 
     switch (gSaveContext.day) {
         case 1:
-            phi_a2_2 = "\x8Dｻｲｼｮﾉﾋ";
+            // "The First Day"
+            day = "\x8Dｻｲｼｮﾉﾋ";
             break;
         case 2:
-            phi_a2_2 = "\x8Dﾂｷﾞﾉﾋ";
+            // "The Next Day"
+            day = "\x8Dﾂｷﾞﾉﾋ";
             break;
         case 3:
-            phi_a2_2 = "\x8Dｻｲｺﾞﾉﾋ";
+            // "The Final Day"
+            day = "\x8Dｻｲｺﾞﾉﾋ";
             break;
         case 4:
-            phi_a2_2 = "\x8Dｸﾘｱｰﾉﾋ";
+            // "Clear Day"
+            day = "\x8Dｸﾘｱｰﾉﾋ";
             break;
         default:
             gSaveContext.day = 1;
-            phi_a2_2 = "\x8Dｻｲｼｮﾉﾋ";
+            // "The First Day"
+            day = "\x8Dｻｲｼｮﾉﾋ";
             break;
     }
-    GfxPrint_Printf(printer, "Day:\x8D%s", phi_a2_2);
+
+    GfxPrint_Printf(printer, "Day:\x8D%s", day);
 }
 
-void func_8080194C(SelectContext* this) {
+void Select_DrawMenu(SelectContext* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
     GfxPrint* printer;
 
@@ -647,9 +681,9 @@ void func_8080194C(SelectContext* this) {
     GfxPrint_Init(printer);
     GfxPrint_Open(printer, POLY_OPA_DISP);
 
-    func_808013B8(this, printer);
-    func_80801620(this, printer, ((void)0, gSaveContext.playerForm));
-    func_808016E8(this, printer, ((void)0, gSaveContext.cutscene));
+    Select_PrintMenu(this, printer);
+    Select_PrintAgeSetting(this, printer, ((void)0, gSaveContext.playerForm));
+    Select_PrintCutsceneSetting(this, printer, ((void)0, gSaveContext.cutscene));
 
     POLY_OPA_DISP = GfxPrint_Close(printer);
     GfxPrint_Destroy(printer);
@@ -657,7 +691,7 @@ void func_8080194C(SelectContext* this) {
     CLOSE_DISPS(gfxCtx);
 }
 
-void func_808019FC(SelectContext* this) {
+void Select_DrawLoadingScreen(SelectContext* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
     GfxPrint printer;
 
@@ -667,14 +701,16 @@ void func_808019FC(SelectContext* this) {
 
     GfxPrint_Init(&printer);
     GfxPrint_Open(&printer, POLY_OPA_DISP);
-    func_80801594(this, &printer);
+
+    Select_PrintLoadingMessage(this, &printer);
+
     POLY_OPA_DISP = GfxPrint_Close(&printer);
     GfxPrint_Destroy(&printer);
 
     CLOSE_DISPS(gfxCtx);
 }
 
-void func_80801A64(SelectContext* this) {
+void Select_Draw(SelectContext* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
 
     func_8012CF0C(gfxCtx, 1, 1, 0, 0, 0);
@@ -682,24 +718,22 @@ void func_80801A64(SelectContext* this) {
     SET_FULLSCREEN_VIEWPORT(&this->view);
     View_RenderView(&this->view, 0xF);
     if (!this->state.running) {
-        func_808019FC(this);
+        Select_DrawLoadingScreen(this);
     } else {
-        func_8080194C(this);
+        Select_DrawMenu(this);
     }
 }
 
 void Select_Main(GameState* thisx) {
     SelectContext* this = (SelectContext*)thisx;
 
-    func_80800A44(this);
-    func_80801A64(this);
+    Select_UpdateMenu(this);
+    Select_Draw(this);
 }
 
 void Select_Destroy(GameState* thisx) {
     ShrinkWindow_Fini();
 }
-
-extern SceneSelectEntry D_80801C80[];
 
 void Select_Init(GameState* thisx) {
     SelectContext* this = (SelectContext*)thisx;
@@ -708,7 +742,7 @@ void Select_Init(GameState* thisx) {
     this->state.destroy = Select_Destroy;
 
     this->scenes = D_80801C80;
-    this->unk_24C = 0;
+    this->cursorPos = 0;
     this->currentScene = 0;
     this->unk_220[0] = 0;
     this->unk_220[1] = 19;
@@ -725,7 +759,7 @@ void Select_Init(GameState* thisx) {
     View_Init(&this->view, this->state.gfxCtx);
     this->view.flags = (0x08 | 0x02);
     this->unk_25C = 0;
-    this->unk_260 = 0;
+    this->cursorVelocity = 0;
     this->unk_264 = 0;
     this->unk_268 = 0;
     this->unk_26C = 0;
@@ -734,7 +768,7 @@ void Select_Init(GameState* thisx) {
 
     if ((dREG(80) >= 0) && (dREG(80) < this->count)) {
         this->currentScene = dREG(80);
-        this->unk_24C = dREG(81);
+        this->cursorPos = dREG(81);
         this->unk_21C = dREG(82);
     }
 
