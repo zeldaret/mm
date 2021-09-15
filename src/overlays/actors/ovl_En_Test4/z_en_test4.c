@@ -33,11 +33,9 @@ const ActorInit En_Test4_InitVars = {
 
 #endif
 
-extern s32 D_80A43340;
-extern s16 D_80A434D0[];
+extern s16 D_80A43340;
 extern s16 D_801F4E7A;
 extern u8 D_801BDBB0;
-extern s16 D_80A434D4;
 extern s32 D_801BDA9C;
 extern s16 D_80A43364[];
 
@@ -47,6 +45,10 @@ extern s16 D_80A4334A[];
 
 extern s16 D_80A43352[];
 extern s16 D_80A4335A[];
+
+
+s16 D_80A434D0[2];
+s16 D_80A434D4;
 
 #ifdef NON_MATCHING
 void func_80A41D70(EnTest4* this, GlobalContext* globalCtx) {
