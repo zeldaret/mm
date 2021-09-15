@@ -689,7 +689,9 @@ endseg
 beginseg
     name "buffers"
     flags NOLOAD
-    include "build/src/buffers/gfxbuffers.o"
+    include "build/src/buffers/gfxyield.o"
+    include "build/src/buffers/gfxstack.o"
+    include "build/src/buffers/gfxpools.o"
     include "build/data/code/buffers.bss.o"
 endseg
 
