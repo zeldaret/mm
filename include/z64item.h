@@ -20,7 +20,8 @@ typedef enum {
 } UpgradeType;
 
 typedef enum {
-    /* 0x01 */ ITEM_BOW = 0x01,
+    /* 0x00 */ ITEM_OCARINA,
+    /* 0x01 */ ITEM_BOW,
     /* 0x06 */ ITEM_BOMB = 0x06,
     /* 0x07 */ ITEM_BOMBCHU,
     /* 0x08 */ ITEM_STICK,
