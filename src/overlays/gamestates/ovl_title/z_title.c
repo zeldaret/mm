@@ -8,7 +8,7 @@
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "static/nintendo_rogo_static/nintendo_rogo_static.h"
 
-void Title_UpdateCounters(TitleContext *this) {
+void Title_UpdateCounters(TitleContext* this) {
     if ((this->coverAlpha == 0) && (this->visibleDuration != 0)) {
         this->timer--;
         this->visibleDuration--;
@@ -18,7 +18,7 @@ void Title_UpdateCounters(TitleContext *this) {
         }
     } else {
         this->coverAlpha += this->addAlpha;
-        
+
         if (this->coverAlpha <= 0) {
             this->coverAlpha = 0;
             this->addAlpha = 12;
@@ -27,33 +27,32 @@ void Title_UpdateCounters(TitleContext *this) {
             this->exit = true;
         }
     }
-    
+
     this->uls = this->ult & 0x7F;
     this->ult++;
 }
 
-void Title_RenderView(TitleContext *this, f32 x, f32 y, f32 z) {
+void Title_RenderView(TitleContext* this, f32 x, f32 y, f32 z) {
     View* view = &this->view;
     Vec3f eye;
-    Vec3f lookAt;
+    Vec3f at;
     Vec3f up;
 
     eye.x = x;
     eye.y = y;
     eye.z = z;
     up.x = up.z = 0.0f;
-    lookAt.x = lookAt.y = lookAt.z = 0.0f;
+    at.x = at.y = at.z = 0.0f;
     up.y = 1.0f;
     func_8013F0D0(view, 30.0f, 10.0f, 12800.0f);
-    View_SetViewOrientation(view, &eye, &lookAt, &up);
+    View_SetViewOrientation(view, &eye, &at, &up);
     View_RenderView(view, 0xF);
 }
 
-void Title_Draw(GameState *thisx) {
+void Title_Draw(GameState* thisx) {
     static s16 titleRotation = 0;
     static Lights1 sTitleLights = gdSPDefLights1(100, 100, 100, 255, 255, 255, 69, 69, 69);
     TitleContext* this = (TitleContext*)thisx;
-
     u16 y;
     u16 idx;
     Vec3f lightDir;
@@ -61,7 +60,7 @@ void Title_Draw(GameState *thisx) {
     Vec3f eye;
     s32 pad[2];
 
-    OPEN_DISPS(this->state.gfxCtx);
+    OPEN_DISPS(this->gameState.gfxCtx);
 
     lightDir.x = 69.0f;
     lightDir.y = 69.0f;
@@ -75,20 +74,20 @@ void Title_Draw(GameState *thisx) {
     eye.y = 4002.5417f;
     eye.z = 1119.0837f;
 
-    func_800B7FE0(&object, &eye, &lightDir, this->state.gfxCtx);
+    func_800B7FE0(&object, &eye, &lightDir, this->gameState.gfxCtx);
 
     gSPSetLights1(POLY_OPA_DISP++, sTitleLights);
 
     Title_RenderView(this, 0.0f, 150.0f, 300.0f);
-    func_8012C28C(this->state.gfxCtx);
+    func_8012C28C(this->gameState.gfxCtx);
     SysMatrix_InsertTranslation(-53.0f, -5.0f, 0.0f, MTXMODE_NEW);
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
     SysMatrix_InsertRotation(0, titleRotation, 0, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->state.gfxCtx), G_MTX_LOAD);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->gameState.gfxCtx), G_MTX_LOAD);
     gSPDisplayList(POLY_OPA_DISP++, gNintendo64LogoNDL);
 
-    func_8012C628(this->state.gfxCtx);
+    func_8012C628(this->gameState.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetCycleType(POLY_OPA_DISP++, G_CYC_2CYCLE);
@@ -101,51 +100,51 @@ void Title_Draw(GameState *thisx) {
                       G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, 2, 11);
 
     for (idx = 0, y = 94; idx < 16; idx++, y += 2) {
-        gDPLoadTextureBlock(POLY_OPA_DISP++, &((u8*)gNintendo64LogoTextTex)[0x180 * idx], G_IM_FMT_I,
-                            G_IM_SIZ_8b, 192, 2, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
-                            G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock(POLY_OPA_DISP++, &((u8*)gNintendo64LogoTextTex)[0x180 * idx], G_IM_FMT_I, G_IM_SIZ_8b, 192,
+                            2, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                            G_TX_NOLOD, G_TX_NOLOD);
 
         gDPSetTileSize(POLY_OPA_DISP++, 1, this->uls, (this->ult & 0x7F) - idx * 4, 0, 0);
         gSPTextureRectangle(POLY_OPA_DISP++, 388, y << 2, 1156, (y + 2) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
     }
 
-    func_800FC444(this->state.gfxCtx, 0, 0, 0, this->coverAlpha, 2);
+    func_800FC444(this->gameState.gfxCtx, 0, 0, 0, this->coverAlpha, 2);
 
     titleRotation += 300;
-    
-    CLOSE_DISPS(this->state.gfxCtx);
+
+    CLOSE_DISPS(this->gameState.gfxCtx);
 }
 
 void Title_Main(GameState* thisx) {
     TitleContext* this = (TitleContext*)thisx;
 
-    func_8012CF0C(this->state.gfxCtx, 1, 1, 0, 0, 0);
+    func_8012CF0C(this->gameState.gfxCtx, 1, 1, 0, 0, 0);
 
-    OPEN_DISPS(this->state.gfxCtx);
+    OPEN_DISPS(this->gameState.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x01, this->staticSegment);
 
     Title_UpdateCounters(this);
-    Title_Draw(&this->state);
+    Title_Draw(&this->gameState);
     if (this->exit) {
         gSaveContext.seqIndex = 0xFF;
         gSaveContext.nightSeqIndex = 0xFF;
         gSaveContext.gameMode = 1;
 
         {
-            GameState* state = &this->state;
-            state->running = false;
+            GameState* gameState = &this->gameState;
+            gameState->running = false;
         }
-        SET_NEXT_GAMESTATE(&this->state, Opening_Init, OpeningContext);
+        SET_NEXT_GAMESTATE(&this->gameState, Opening_Init, OpeningContext);
     }
 
-    CLOSE_DISPS(this->state.gfxCtx);
+    CLOSE_DISPS(this->gameState.gfxCtx);
 }
 
 void Title_Destroy(GameState* thisx) {
     TitleContext* this = (TitleContext*)thisx;
 
-    func_80146E40(&this->state, &this->sramCtx);
+    func_80146E40(&this->gameState, &this->sramCtx);
     ShrinkWindow_Fini();
     CIC6105_Nop80081828();
 }
@@ -155,7 +154,7 @@ void Title_Init(GameState* thisx) {
     uintptr_t segmentSize =
         (uintptr_t)_nintendo_rogo_staticSegmentRomEnd - (uintptr_t)_nintendo_rogo_staticSegmentRomStart;
 
-    this->staticSegment = THA_AllocEndAlign16(&this->state.heap, segmentSize);
+    this->staticSegment = THA_AllocEndAlign16(&this->gameState.heap, segmentSize);
     DmaMgr_SendRequest0(this->staticSegment, (uintptr_t)_nintendo_rogo_staticSegmentRomStart, segmentSize);
 
     Game_SetFramerateDivisor(thisx, 1);

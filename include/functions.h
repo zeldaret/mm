@@ -2830,7 +2830,7 @@ void func_80146580(s32 param_1, SramContext* param_2, s32 param_3);
 // void func_80146628(void);
 // void func_80146AA0(void);
 // void func_80146DF8(void);
-void func_80146E40(GameState* state, SramContext* sramCtx);
+void func_80146E40(GameState* gameState, SramContext* sramCtx);
 void Sram_Alloc(GameState* gamestate, SramContext* sramCtx);
 // void func_80146EBC(SramContext* param_1, UNK_TYPE4 param_2, UNK_TYPE4 param_3);
 // void func_80146EE8(void);

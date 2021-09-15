@@ -7,7 +7,7 @@ void Title_Init(GameState* thisx);
 void Title_Destroy(GameState* thisx);
 
 typedef struct {
-    /* 0x000 */ GameState state;
+    /* 0x000 */ GameState gameState;
     /* 0x0A4 */ u8* staticSegment;
     /* 0x0A8 */ View view;
     /* 0x210 */ SramContext sramCtx;
