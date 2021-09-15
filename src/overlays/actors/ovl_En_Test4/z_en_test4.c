@@ -34,7 +34,7 @@ const ActorInit En_Test4_InitVars = {
 
 #endif
 
-extern s16 D_80A43340[];
+extern s32 D_80A43340;
 extern s16 D_80A43342[];
 extern s16 D_80A4334A[];
 extern s16 D_80A43352[];
@@ -48,7 +48,7 @@ s16 D_80A43350[] = {0x1BB3, 0, 0x1BB4, 0x1BB5};
 s16 D_80A43358[] = {0x1BB6, 0, 0x1BB2, 0x1BB2, 0x1BB3, 0};
 s16 D_80A43364[] = {0x4000, 0xC000, 0, 0, 0, 0};
 */
-extern s16 D_80A43340[];
+//extern s32 D_80A43340[];
 extern s16 D_80A43348[];
 extern s16 D_80A43350[];
 extern s16 D_80A43358[];
@@ -303,27 +303,29 @@ void func_80A425E4(EnTest4* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_EQUIVALENT
+#ifdef NON_MATCHING
 void EnTest4_Init(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
     EnTest4* this = THIS;
-    Player* player;
-    ActorCutscene* temp_v0_2;
+    Player* player = PLAYER;
     s8 temp_v0;
 
     temp_v0 = this->actor.cutscene;
     D_80A434D0[0] = temp_v0;
     if (temp_v0 >= 0) {
-        temp_v0_2 = ActorCutscene_GetCutscene(D_80A434D0[0]);
+        ActorCutscene* temp_v0_2 = ActorCutscene_GetCutscene(D_80A434D0[0]);
+
         gSaveContext.eventInf[5] |= 0x04;
         D_80A434D0[1] = temp_v0_2->additionalCutscene;
     } else {
         gSaveContext.eventInf[5] &= (u8)~0x04;
         D_80A434D0[1] = D_80A434D0[0];
     }
-    if ((D_80A43340[0] != 0) || ((gSaveContext.eventInf[3] & 0x80) != 0)) {
-        Actor_MarkForDeath((Actor* ) this);
+
+    if ((D_80A43340 != 0) || ((gSaveContext.eventInf[2] & 0x80) != 0)) {
+        Actor_MarkForDeath(&this->actor);
     } else {
-        D_80A43340[0] = 1;
+        D_80A43340 = 1;
         this->actor.room = -1;
         gSaveContext.unk_3F60 = 0;
         gSaveContext.unk_3F64 = 1000.0f;
@@ -332,26 +334,26 @@ void EnTest4_Init(Actor* thisx, GlobalContext* globalCtx) {
                 gSaveContext.time = 0x4000;
                 gSaveContext.gameMode = 0;
                 do {
-                    GameState* state = &globalCtx->state;
+                    GameState* state = &globalCtx->state; 
                     state->running = false;
                 } while(0);
                 SET_NEXT_GAMESTATE(&globalCtx->state, Daytelop_Init, DaytelopContext);
-                this->unk_144 = (s8) 1;
+                this->unk_144 = 1;
                 gSaveContext.time = 0x4000;
-                Actor_MarkForDeath((Actor* ) this);
+                Actor_MarkForDeath(&this->actor);
             } else {
                 gSaveContext.day = 1;
-                gSaveContext.daysElapsed = 1;
+                pad = gSaveContext.day;
+                gSaveContext.daysElapsed = pad;
                 this->unk_144 = 1;
-                this->actionFunc = func_80A42AB8;
                 this->unk_146 = gSaveContext.time;
+                this->actionFunc = func_80A42AB8;
             }
         } else {
             if (gSaveContext.time == 0x4000) {
                 this->unk_144 = 0;
                 func_80A41D70(this, globalCtx);
-                if ((gSaveContext.cutsceneTrigger == 0) && ((s32) D_80A434D0[this->unk_144] >= 0) && ((globalCtx->actorCtx.unk5 & 2) == 0)) {
-                    player = PLAYER;
+                if (((gSaveContext.cutsceneTrigger) == 0) && (D_80A434D0[this->unk_144] >= 0) && ((globalCtx->actorCtx.unk5 & 2) == 0)) {
                     player->stateFlags1 |= 0x200;
                 }
             } else {
@@ -360,8 +362,8 @@ void EnTest4_Init(Actor* thisx, GlobalContext* globalCtx) {
                 } else {
                     this->unk_144 = 1;
                 }
-                this->actionFunc = func_80A42AB8;
                 this->unk_146 = gSaveContext.time;
+                this->actionFunc = func_80A42AB8;
             }
         }
     }
