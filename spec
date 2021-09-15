@@ -698,7 +698,6 @@ beginseg
     compress
     address 0x80800000
     include "build/src/overlays/gamestates/ovl_title/z_title.o"
-//    include "build/data/ovl_title/ovl_title.data.o"
     include "build/src/overlays/gamestates/ovl_title/ovl_title_reloc.o"
 endseg
 
@@ -8893,7 +8892,6 @@ beginseg
     name "nintendo_rogo_static"
     compress
     romalign 0x1000
-//    include "build/baserom/nintendo_rogo_static.o"
     include "build/assets/static/nintendo_rogo_static/nintendo_rogo_static.o"
     number 1
 endseg
