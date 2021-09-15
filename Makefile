@@ -286,10 +286,6 @@ build/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c
 
 # Build C files from assets
 
-assets/%.c: assets/%.xml
-	$(ZAPD) bsf -eh -i $< -o $(dir $<)
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o build/$(@:.c=.o) $@
-
 build/%.inc.c: %.png
 	$(ZAPD) btex -eh -tt $(subst .,,$(suffix $*)) -i $< -o $@
 
