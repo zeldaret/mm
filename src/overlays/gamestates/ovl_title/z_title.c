@@ -142,7 +142,6 @@ void Title_Main(GameState* thisx) {
     CLOSE_DISPS(this->state.gfxCtx);
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_title/Title_Destroy.s")
 void Title_Destroy(GameState* thisx) {
     TitleContext* this = (TitleContext*)thisx;
 
