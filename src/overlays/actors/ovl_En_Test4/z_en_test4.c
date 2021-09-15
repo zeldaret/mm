@@ -297,80 +297,77 @@ void func_80A425E4(EnTest4* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef MIPS2C_OUTPUT
+#ifdef NON_EQUIVALENT
 void EnTest4_Init(Actor* thisx, GlobalContext* globalCtx) {
-    Actor* sp24;
+    EnTest4* this = THIS;
+    Player* player;
     ActorCutscene* temp_v0_2;
     s8 temp_v0;
-    u16 temp_v0_3;
-    SaveContext* phi_v1;
 
-    temp_v0 = thisx->cutscene;
-    D_80A434D0 = (s16) temp_v0;
-    if ((s32) temp_v0 >= 0) {
-        sp24 = globalCtx->actorCtx.actorList[2].first;
-        temp_v0_2 = ActorCutscene_GetCutscene(D_80A434D0);
-        gSaveContext.unk_1011 = (u8) (gSaveContext.unk_1011 | 4);
-        *(&D_80A434D0 + 2) = (s16) temp_v0_2->additionalCutscene;
+    temp_v0 = this->actor.cutscene;
+    D_80A434D0[0] = temp_v0;
+    if (temp_v0 >= 0) {
+        temp_v0_2 = ActorCutscene_GetCutscene(D_80A434D0[0]);
+        gSaveContext.eventInf[5] |= 0x04;
+        D_80A434D0[1] = temp_v0_2->additionalCutscene;
     } else {
-        gSaveContext.unk_1011 = (u8) (gSaveContext.unk_1011 & 0xFB);
-        *(&D_80A434D0 + 2) = (s16) D_80A434D0;
+        gSaveContext.eventInf[5] &= (u8)~0x04;
+        D_80A434D0[1] = D_80A434D0[0];
     }
-    phi_v1 = &gSaveContext;
-    if ((D_80A43340 != 0) || ((gSaveContext.unk_100E & 0x80) != 0)) {
-        Actor_MarkForDeath(thisx);
-        phi_v1 = &gSaveContext;
+    if ((D_80A43340 != 0) || ((gSaveContext.eventInf[3] & 0x80) != 0)) {
+        Actor_MarkForDeath((Actor* ) this);
     } else {
         D_80A43340 = 1;
-        thisx->room = -1;
+        this->actor.room = -1;
         gSaveContext.unk_3F60 = 0;
         gSaveContext.unk_3F64 = 1000.0f;
-        if (((s32) gSaveContext.day % 5) == 0) {
+        if (CURRENT_DAY == 0) {
             if (gSaveContext.time < 0x402D) {
                 gSaveContext.time = 0x4000;
                 gSaveContext.gameMode = 0;
-                globalCtx->state.running = 0;
-                globalCtx->state.nextGameStateInit = Daytelop_Init;
-                globalCtx->state.nextGameStateSize = 0x248;
-                thisx->unk_144 = (s8) 1;
+                do {
+                    GameState* state = &globalCtx->state;
+                    state->running = false;
+                } while(0);
+                SET_NEXT_GAMESTATE(&globalCtx->state, Daytelop_Init, DaytelopContext);
+                this->unk_144 = (s8) 1;
                 gSaveContext.time = 0x4000;
-                Actor_MarkForDeath(thisx);
-                phi_v1 = &gSaveContext;
+                Actor_MarkForDeath((Actor* ) this);
             } else {
                 gSaveContext.day = 1;
                 gSaveContext.daysElapsed = 1;
-                thisx->unk_144 = (s8) 1;
-                thisx->unk_150 = func_80A42AB8;
-                thisx->unk_146 = (u16) gSaveContext.time;
+                this->unk_144 = 1;
+                this->actionFunc = func_80A42AB8;
+                this->unk_146 = gSaveContext.time;
             }
         } else {
-            temp_v0_3 = gSaveContext.time;
-            if (temp_v0_3 == 0x4000) {
-                thisx->unk_144 = 0;
-                sp24 = globalCtx->actorCtx.actorList[2].first;
-                func_80A41D70(thisx, globalCtx, globalCtx->actorCtx.actorList[2].first);
-                phi_v1 = &gSaveContext;
-                if ((gSaveContext.cutsceneTrigger == 0) && ((s32) *(&D_80A434D0 + (thisx->unk_144 * 2)) >= 0) && ((globalCtx->actorCtx.unk5 & 2) == 0)) {
-                    globalCtx->actorCtx.actorList[2].first->unk_A6C = (s32) (globalCtx->actorCtx.actorList[2].first->unk_A6C | 0x200);
+            if (gSaveContext.time == 0x4000) {
+                this->unk_144 = 0;
+                func_80A41D70(this, globalCtx);
+                if ((gSaveContext.cutsceneTrigger == 0) && ((s32) D_80A434D0[this->unk_144] >= 0) && ((globalCtx->actorCtx.unk5 & 2) == 0)) {
+                    player = PLAYER;
+                    player->stateFlags1 |= 0x200;
                 }
             } else {
-                if (((s32) temp_v0_3 >= 0xC001) || ((s32) temp_v0_3 < 0x4000)) {
-                    thisx->unk_144 = 0;
+                if ((gSaveContext.time >= 0xC001) || (gSaveContext.time < 0x4000)) {
+                    this->unk_144 = 0;
                 } else {
-                    thisx->unk_144 = (s8) 1;
+                    this->unk_144 = 1;
                 }
-                thisx->unk_150 = func_80A42AB8;
-                thisx->unk_146 = (u16) gSaveContext.time;
+                this->actionFunc = func_80A42AB8;
+                this->unk_146 = gSaveContext.time;
             }
         }
     }
-    if (((s32) phi_v1->day % 5) == 3) {
-        func_80A42198(thisx);
+
+    if (CURRENT_DAY == 3) {
+        func_80A42198(this);
     } else {
-        func_80A425E4(thisx, globalCtx);
+        func_80A425E4(this, globalCtx);
     }
-    thisx->unk_14A = (u16) gSaveContext.time;
-    if (((s32) *(&D_80A434D0 + (thisx->unk_144 * 2)) < 0) || ((globalCtx->actorCtx.unk5 & 2) != 0)) {
+
+    this->unk_14A = gSaveContext.time;
+    if ((D_80A434D0[this->unk_144] < 0) || ((globalCtx->actorCtx.unk5 & 2) != 0)) {
         gSaveContext.unk_3F60 = 0;
         gSaveContext.unk_3F64 = 1000.0f;
     }
