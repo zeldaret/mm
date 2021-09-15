@@ -1,0 +1,12 @@
+﻿<Root>
+    <File Name="object_gi_arrowcase" Segment="6">
+        <DList Name="object_gi_arrowcase_DL_0008D0" Offset="0x8D0" />
+        <DList Name="object_gi_arrowcase_DL_0008F0" Offset="0x8F0" />
+        <DList Name="object_gi_arrowcase_DL_000910" Offset="0x910" />
+        <DList Name="object_gi_arrowcase_DL_000930" Offset="0x930" />
+        <DList Name="object_gi_arrowcase_DL_000950" Offset="0x950" />
+        <DList Name="object_gi_arrowcase_DL_000970" Offset="0x970" />
+        <DList Name="object_gi_arrowcase_DL_000990" Offset="0x990" />
+        <DList Name="object_gi_arrowcase_DL_000A80" Offset="0xA80" />
+    </File>
+</Root>

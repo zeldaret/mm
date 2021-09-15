@@ -1,0 +1,9 @@
+﻿<Root>
+    <File Name="object_gi_magicmushroom" Segment="6">
+        <DList Name="object_gi_magicmushroom_DL_000640" Offset="0x640" />
+        <DList Name="object_gi_magicmushroom_DL_000958" Offset="0x958" />
+        <Texture Name="object_gi_magicmushroom_Tex_000960" OutName="tex_000960" Format="i4" Width="16" Height="16" Offset="0x960" />
+        <Texture Name="object_gi_magicmushroom_Tex_0009E0" OutName="tex_0009E0" Format="i4" Width="32" Height="32" Offset="0x9E0" />
+        <Texture Name="object_gi_magicmushroom_Tex_000BE0" OutName="tex_000BE0" Format="i4" Width="32" Height="32" Offset="0xBE0" />
+    </File>
+</Root>

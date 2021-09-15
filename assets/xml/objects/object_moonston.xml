@@ -1,0 +1,9 @@
+﻿<Root>
+    <File Name="object_moonston" Segment="6">
+        <DList Name="object_moonston_DL_000400" Offset="0x400" />
+        <DList Name="object_moonston_DL_0004C8" Offset="0x4C8" />
+        <Texture Name="object_moonston_Tex_000608" OutName="tex_000608" Format="i8" Width="32" Height="32" Offset="0x608" />
+        <Texture Name="object_moonston_Tex_000A08" OutName="tex_000A08" Format="i8" Width="32" Height="64" Offset="0xA08" />
+        <TextureAnimation Name="object_moonston_Matanimheader_001220" Offset="0x1220" />
+    </File>
+</Root>

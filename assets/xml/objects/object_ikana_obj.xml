@@ -1,0 +1,67 @@
+﻿<Root>
+    <File Name="object_ikana_obj" Segment="6">
+        <DList Name="object_ikana_obj_DL_000040" Offset="0x40" />
+        <DList Name="object_ikana_obj_DL_000048" Offset="0x48" />
+        <Collision Name="object_ikana_obj_Colheader_000128" Offset="0x128" />
+        <DList Name="object_ikana_obj_DL_000280" Offset="0x280" />
+        <DList Name="object_ikana_obj_DL_000288" Offset="0x288" />
+        <DList Name="object_ikana_obj_DL_000370" Offset="0x370" />
+        <DList Name="object_ikana_obj_DL_000378" Offset="0x378" />
+        <Collision Name="object_ikana_obj_Colheader_000488" Offset="0x488" />
+        <DList Name="object_ikana_obj_DL_0008C0" Offset="0x8C0" />
+        <DList Name="object_ikana_obj_DL_0008C8" Offset="0x8C8" />
+        <Collision Name="object_ikana_obj_Colheader_000C50" Offset="0xC50" />
+        <DList Name="object_ikana_obj_DL_000CE0" Offset="0xCE0" />
+        <DList Name="object_ikana_obj_DL_000CE8" Offset="0xCE8" />
+        <Collision Name="object_ikana_obj_Colheader_000F28" Offset="0xF28" />
+        <DList Name="object_ikana_obj_DL_001100" Offset="0x1100" />
+        <DList Name="object_ikana_obj_DL_001210" Offset="0x1210" />
+        <TextureAnimation Name="object_ikana_obj_Matanimheader_001228" Offset="0x1228" />
+        <DList Name="object_ikana_obj_DL_0014B0" Offset="0x14B0" />
+        <DList Name="object_ikana_obj_DL_001660" Offset="0x1660" />
+        <TextureAnimation Name="object_ikana_obj_Matanimheader_001678" Offset="0x1678" />
+        <DList Name="object_ikana_obj_DL_001880" Offset="0x1880" />
+        <DList Name="object_ikana_obj_DL_001AC0" Offset="0x1AC0" />
+        <TextureAnimation Name="object_ikana_obj_Matanimheader_001AD8" Offset="0x1AD8" />
+        <DList Name="object_ikana_obj_DL_001E10" Offset="0x1E10" />
+        <DList Name="object_ikana_obj_DL_001E18" Offset="0x1E18" />
+        <Collision Name="object_ikana_obj_Colheader_002358" Offset="0x2358" />
+        <DList Name="object_ikana_obj_DL_004710" Offset="0x4710" />
+        <DList Name="object_ikana_obj_DL_0048A0" Offset="0x48A0" />
+        <Collision Name="object_ikana_obj_Colheader_006368" Offset="0x6368" />
+        <DList Name="object_ikana_obj_DL_007360" Offset="0x7360" />
+        <DList Name="object_ikana_obj_DL_007448" Offset="0x7448" />
+        <TextureAnimation Name="object_ikana_obj_Matanimheader_007B68" Offset="0x7B68" />
+        <Collision Name="object_ikana_obj_Colheader_0084F8" Offset="0x84F8" />
+        <Texture Name="object_ikana_obj_TLUT_008530" OutName="tlut_008530" Format="rgba16" Width="4" Height="4" Offset="0x8530" />
+        <!-- <Blob Name="object_ikana_obj_Blob_008550" Size="0x40" Offset="0x8550" /> -->
+        <Texture Name="object_ikana_obj_TLUT_008590" OutName="tlut_008590" Format="rgba16" Width="4" Height="4" Offset="0x8590" />
+        <Texture Name="object_ikana_obj_Tex_0085B0" OutName="tex_0085B0" Format="rgba16" Width="16" Height="16" Offset="0x85B0" />
+        <Texture Name="object_ikana_obj_Tex_0087B0" OutName="tex_0087B0" Format="ci4" Width="64" Height="64" Offset="0x87B0" />
+        <Texture Name="object_ikana_obj_Tex_008FB0" OutName="tex_008FB0" Format="rgba16" Width="32" Height="64" Offset="0x8FB0" />
+        <Texture Name="object_ikana_obj_Tex_009FB0" OutName="tex_009FB0" Format="rgba16" Width="16" Height="16" Offset="0x9FB0" />
+        <Texture Name="object_ikana_obj_Tex_00A1B0" OutName="tex_00A1B0" Format="rgba16" Width="16" Height="16" Offset="0xA1B0" />
+        <Texture Name="object_ikana_obj_Tex_00A3B0" OutName="tex_00A3B0" Format="rgba16" Width="32" Height="32" Offset="0xA3B0" />
+        <Texture Name="object_ikana_obj_Tex_00ABB0" OutName="tex_00ABB0" Format="rgba16" Width="32" Height="32" Offset="0xABB0" />
+        <Texture Name="object_ikana_obj_Tex_00B3B0" OutName="tex_00B3B0" Format="rgba16" Width="16" Height="16" Offset="0xB3B0" />
+        <Texture Name="object_ikana_obj_Tex_00B5B0" OutName="tex_00B5B0" Format="rgba16" Width="32" Height="32" Offset="0xB5B0" />
+        <Texture Name="object_ikana_obj_Tex_00BDB0" OutName="tex_00BDB0" Format="ci4" Width="16" Height="128" Offset="0xBDB0" />
+        <Texture Name="object_ikana_obj_Tex_00C1B0" OutName="tex_00C1B0" Format="rgba16" Width="16" Height="64" Offset="0xC1B0" />
+        <Texture Name="object_ikana_obj_Tex_00C9B0" OutName="tex_00C9B0" Format="ia8" Width="32" Height="64" Offset="0xC9B0" />
+        <Texture Name="object_ikana_obj_Tex_00D1B0" OutName="tex_00D1B0" Format="rgba16" Width="16" Height="64" Offset="0xD1B0" />
+        <Texture Name="object_ikana_obj_Tex_00D9B0" OutName="tex_00D9B0" Format="rgba16" Width="32" Height="32" Offset="0xD9B0" />
+        <Texture Name="object_ikana_obj_Tex_00E1B0" OutName="tex_00E1B0" Format="ia8" Width="32" Height="64" Offset="0xE1B0" />
+        <Texture Name="object_ikana_obj_Tex_00E9B0" OutName="tex_00E9B0" Format="ia16" Width="16" Height="64" Offset="0xE9B0" />
+        <Texture Name="object_ikana_obj_Tex_00F1B0" OutName="tex_00F1B0" Format="rgba16" Width="32" Height="32" Offset="0xF1B0" />
+        <Texture Name="object_ikana_obj_Tex_00F9B0" OutName="tex_00F9B0" Format="ia16" Width="16" Height="64" Offset="0xF9B0" />
+        <Texture Name="object_ikana_obj_Tex_0101B0" OutName="tex_0101B0" Format="rgba16" Width="32" Height="32" Offset="0x101B0" />
+        <Texture Name="object_ikana_obj_Tex_0109B0" OutName="tex_0109B0" Format="ia8" Width="32" Height="64" Offset="0x109B0" />
+        <Texture Name="object_ikana_obj_Tex_0111B0" OutName="tex_0111B0" Format="rgba16" Width="32" Height="32" Offset="0x111B0" />
+        <Texture Name="object_ikana_obj_Tex_0119B0" OutName="tex_0119B0" Format="rgba16" Width="32" Height="32" Offset="0x119B0" />
+        <DList Name="object_ikana_obj_DL_012B70" Offset="0x12B70" />
+        <DList Name="object_ikana_obj_DL_013EA0" Offset="0x13EA0" />
+        <DList Name="object_ikana_obj_DL_013EA8" Offset="0x13EA8" />
+        <DList Name="object_ikana_obj_DL_014A40" Offset="0x14A40" />
+        <Texture Name="object_ikana_obj_Tex_014BA0" OutName="tex_014BA0" Format="rgba16" Width="32" Height="64" Offset="0x14BA0" />
+    </File>
+</Root>

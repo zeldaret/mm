@@ -1,0 +1,5 @@
+﻿<Root>
+    <File Name="object_gi_stick" Segment="6">
+        <DList Name="object_gi_stick_DL_0004D0" Offset="0x4D0" />
+    </File>
+</Root>

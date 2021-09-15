@@ -107,24 +107,26 @@ $(shell mkdir -p asm data)
 
 SRC_DIRS := $(shell find src -type d)
 ASM_DIRS := $(shell find asm -type d -not -path "asm/non_matchings*") $(shell find data -type d)
-ASSET_BIN_DIRS := $(shell find assets/* -type d -not -path "assets/xml*")
-BASEROM_DIRS := $(shell find baserom -type d 2>/dev/null)
-ASSET_C_FILES := $(shell find assets/ -type f -name "*.c")
-ASSET_FILES_BIN := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.bin))
-ASSET_FILES_OUT := $(foreach f,$(ASSET_FILES_BIN:.bin=.bin.inc.c),build/$f)
 
 ## Assets binaries (PNGs, JPGs, etc)
+ASSET_BIN_DIRS := $(shell find assets/* -type d -not -path "assets/xml*")
+
+ASSET_FILES_XML := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.xml))
+ASSET_FILES_BIN := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.bin))
+ASSET_FILES_OUT := $(foreach f,$(ASSET_FILES_XML:.xml=.c),$f) \
+				   $(foreach f,$(ASSET_FILES_BIN:.bin=.bin.inc.c),build/$f)
+
 TEXTURE_FILES_PNG := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.png))
 TEXTURE_FILES_JPG := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.jpg))
 TEXTURE_FILES_OUT := $(foreach f,$(TEXTURE_FILES_PNG:.png=.inc.c),build/$f) \
 					 $(foreach f,$(TEXTURE_FILES_JPG:.jpg=.jpg.inc.c),build/$f) \
 
-C_FILES       := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
+# source files
+C_FILES       := $(foreach dir,$(SRC_DIRS) $(ASSET_BIN_DIRS),$(wildcard $(dir)/*.c))
 S_FILES       := $(foreach dir,$(ASM_DIRS),$(wildcard $(dir)/*.s))
 O_FILES       := $(foreach f,$(S_FILES:.s=.o),build/$f) \
-                 $(foreach f,$(wildcard baserom/*),build/$f.o) \
                  $(foreach f,$(C_FILES:.c=.o),build/$f) \
-                 $(foreach f,$(ASSET_C_FILES:.c=.o),build/$f)
+                 $(foreach f,$(wildcard baserom/*),build/$f.o)
 
 # Automatic dependency files
 # (Only asm_processor dependencies are handled for now)
@@ -191,7 +193,7 @@ $(ROM): $(ELF)
 $(ROMC): uncompressed
 	python3 tools/z64compress_wrapper.py --mb 32 --matching --threads $(N_THREADS) $(ROM) $@ $(ELF) build/$(SPEC)
 
-$(ELF): $(TEXTURE_FILES_OUT) $(OVERLAY_RELOC_FILES) $(O_FILES) build/ldscript.txt build/undefined_syms.txt
+$(ELF): $(TEXTURE_FILES_OUT) $(ASSET_FILES_OUT) $(O_FILES) build/ldscript.txt build/undefined_syms.txt
 	$(LD) -T build/undefined_syms.txt -T build/ldscript.txt --no-check-sections --accept-unknown-input-arch --emit-relocs -Map build/mm.map -o $@
 
 
@@ -234,9 +236,6 @@ init:
 	$(MAKE) all
 	$(MAKE) diff-init
 
-build/assets/%.o: assets/%.c
-	$(CC) -I build/ -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-
 #### Various Recipes ####
 
 build/undefined_syms.txt: undefined_syms.txt
@@ -246,11 +245,15 @@ build/ldscript.txt: $(SPEC)
 	$(CPP) $(CPPFLAGS) $< > build/spec
 	$(MKLDSCRIPT) build/spec $@
 
-build/baserom/%.o: baserom/%
-	$(OBJCOPY) -I binary -O elf32-big $< $@
-
 build/asm/%.o: asm/%.s
 	$(AS) $(ASFLAGS) $< -o $@
+
+build/assets/%.o: assets/%.c
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
+	$(OBJCOPY) -O binary $@ $@.bin
+
+build/baserom/%.o: baserom/%
+	$(OBJCOPY) -I binary -O elf32-big $< $@
 
 build/data/%.o: data/%.s
 	iconv --from UTF-8 --to EUC-JP $< | $(AS) $(ASFLAGS) -o $@
@@ -282,8 +285,13 @@ build/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 
 # Build C files from assets
+
+assets/%.c: assets/%.xml
+	$(ZAPD) bsf -eh -i $< -o $(dir $<)
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o build/$(@:.c=.o) $@
+
 build/%.inc.c: %.png
-	$(ZAPD) btex -eh -tt $(lastword ,$(subst ., ,$(basename $<))) -i $< -o $@
+	$(ZAPD) btex -eh -tt $(subst .,,$(suffix $*)) -i $< -o $@
 
 build/assets/%.bin.inc.c: assets/%.bin
 	$(ZAPD) bblb -eh -i $< -o $@

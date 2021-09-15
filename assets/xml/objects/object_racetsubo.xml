@@ -1,0 +1,11 @@
+﻿<Root>
+    <File Name="object_racetsubo" Segment="6">
+        <DList Name="object_racetsubo_DL_000270" Offset="0x270" />
+        <DList Name="object_racetsubo_DL_000278" Offset="0x278" />
+        <Texture Name="object_racetsubo_Tex_0003E0" OutName="tex_0003E0" Format="rgba16" Width="32" Height="64" Offset="0x3E0" />
+        <Texture Name="object_racetsubo_Tex_0013E0" OutName="tex_0013E0" Format="rgba16" Width="16" Height="16" Offset="0x13E0" />
+        <DList Name="object_racetsubo_DL_001610" Offset="0x1610" />
+        <DList Name="object_racetsubo_DL_001698" Offset="0x1698" />
+        <Texture Name="object_racetsubo_Tex_0016A0" OutName="tex_0016A0" Format="rgba16" Width="16" Height="16" Offset="0x16A0" />
+    </File>
+</Root>

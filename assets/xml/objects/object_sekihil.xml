@@ -1,0 +1,16 @@
+﻿<Root>
+    <File Name="object_sekihil" Segment="6">
+        <DList Name="object_sekihil_DL_000340" Offset="0x340" />
+        <DList Name="object_sekihil_DL_0004C0" Offset="0x4C0" />
+        <DList Name="object_sekihil_DL_0004D0" Offset="0x4D0" />
+        <DList Name="object_sekihil_DL_0005E0" Offset="0x5E0" />
+        <!-- <Blob Name="object_sekihil_Blob_0005F8" Size="0x60" Offset="0x5F8" /> -->
+        <Texture Name="object_sekihil_TLUT_000658" OutName="tlut_000658" Format="rgba16" Width="4" Height="4" Offset="0x658" />
+        <Texture Name="object_sekihil_Tex_000678" OutName="tex_000678" Format="rgba16" Width="32" Height="32" Offset="0x678" />
+        <Texture Name="object_sekihil_Tex_000E78" OutName="tex_000E78" Format="rgba16" Width="32" Height="64" Offset="0xE78" />
+        <Texture Name="object_sekihil_Tex_001E78" OutName="tex_001E78" Format="ia4" Width="128" Height="16" Offset="0x1E78" />
+        <Texture Name="object_sekihil_Tex_002278" OutName="tex_002278" Format="ci4" Width="64" Height="64" Offset="0x2278" />
+        <Texture Name="object_sekihil_Tex_002A78" OutName="tex_002A78" Format="ia4" Width="128" Height="32" Offset="0x2A78" />
+        <Collision Name="object_sekihil_Colheader_0033F8" Offset="0x33F8" />
+    </File>
+</Root>

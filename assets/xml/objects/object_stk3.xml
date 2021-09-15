@@ -1,0 +1,11 @@
+﻿<Root>
+    <File Name="object_stk3" Segment="6">
+        <Animation Name="object_stk3_Anim_001374" Offset="0x1374" />
+        <Animation Name="object_stk3_Anim_001EDC" Offset="0x1EDC" />
+        <Animation Name="object_stk3_Anim_002CD8" Offset="0x2CD8" />
+        <Animation Name="object_stk3_Anim_0039F0" Offset="0x39F0" />
+        <Animation Name="object_stk3_Anim_004554" Offset="0x4554" />
+        <Animation Name="object_stk3_Anim_0051C0" Offset="0x51C0" />
+        <Animation Name="object_stk3_Anim_005F44" Offset="0x5F44" />
+    </File>
+</Root>

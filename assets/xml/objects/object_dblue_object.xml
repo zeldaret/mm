@@ -1,0 +1,78 @@
+﻿<Root>
+    <File Name="object_dblue_object" Segment="6">
+        <DList Name="object_dblue_object_DL_0002C0" Offset="0x2C0" />
+        <DList Name="object_dblue_object_DL_0002C8" Offset="0x2C8" />
+        <Collision Name="object_dblue_object_Colheader_0005C4" Offset="0x5C4" />
+        <DList Name="object_dblue_object_DL_001E60" Offset="0x1E60" />
+        <DList Name="object_dblue_object_DL_001E68" Offset="0x1E68" />
+        <Collision Name="object_dblue_object_Colheader_002E78" Offset="0x2E78" />
+        <DList Name="object_dblue_object_DL_003250" Offset="0x3250" />
+        <DList Name="object_dblue_object_DL_003358" Offset="0x3358" />
+        <Collision Name="object_dblue_object_Colheader_003540" Offset="0x3540" />
+        <DList Name="object_dblue_object_DL_003770" Offset="0x3770" />
+        <DList Name="object_dblue_object_DL_0038D0" Offset="0x38D0" />
+        <DList Name="object_dblue_object_DL_004840" Offset="0x4840" />
+        <DList Name="object_dblue_object_DL_004848" Offset="0x4848" />
+        <DList Name="object_dblue_object_DL_0052B0" Offset="0x52B0" />
+        <DList Name="object_dblue_object_DL_0052B8" Offset="0x52B8" />
+        <Collision Name="object_dblue_object_Colheader_005D28" Offset="0x5D28" />
+        <DList Name="object_dblue_object_DL_0061B0" Offset="0x61B0" />
+        <DList Name="object_dblue_object_DL_0061B8" Offset="0x61B8" />
+        <DList Name="object_dblue_object_DL_0069D0" Offset="0x69D0" />
+        <DList Name="object_dblue_object_DL_0069D8" Offset="0x69D8" />
+        <Collision Name="object_dblue_object_Colheader_006EA8" Offset="0x6EA8" />
+        <Collision Name="object_dblue_object_Colheader_00714C" Offset="0x714C" />
+        <DList Name="object_dblue_object_DL_008770" Offset="0x8770" />
+        <DList Name="object_dblue_object_DL_008778" Offset="0x8778" />
+        <DList Name="object_dblue_object_DL_00A520" Offset="0xA520" />
+        <DList Name="object_dblue_object_DL_00A528" Offset="0xA528" />
+        <Collision Name="object_dblue_object_Colheader_00AED0" Offset="0xAED0" />
+        <DList Name="object_dblue_object_DL_00B280" Offset="0xB280" />
+        <DList Name="object_dblue_object_DL_00B430" Offset="0xB430" />
+        <TextureAnimation Name="object_dblue_object_Matanimheader_00B448" Offset="0xB448" />
+        <DList Name="object_dblue_object_DL_00B8F0" Offset="0xB8F0" />
+        <DList Name="object_dblue_object_DL_00B8F8" Offset="0xB8F8" />
+        <Collision Name="object_dblue_object_Colheader_00BC08" Offset="0xBC08" />
+        <DList Name="object_dblue_object_DL_00BF40" Offset="0xBF40" />
+        <DList Name="object_dblue_object_DL_00BF48" Offset="0xBF48" />
+        <Collision Name="object_dblue_object_Colheader_00C180" Offset="0xC180" />
+        <DList Name="object_dblue_object_DL_00C4B0" Offset="0xC4B0" />
+        <DList Name="object_dblue_object_DL_00C4B8" Offset="0xC4B8" />
+        <Collision Name="object_dblue_object_Colheader_00C700" Offset="0xC700" />
+        <DList Name="object_dblue_object_DL_00CAA0" Offset="0xCAA0" />
+        <DList Name="object_dblue_object_DL_00CC08" Offset="0xCC08" />
+        <TextureAnimation Name="object_dblue_object_Matanimheader_00CC18" Offset="0xCC18" />
+        <DList Name="object_dblue_object_DL_00CD10" Offset="0xCD10" />
+        <DList Name="object_dblue_object_DL_00CDD8" Offset="0xCDD8" />
+        <TextureAnimation Name="object_dblue_object_Matanimheader_00CE00" Offset="0xCE00" />
+        <DList Name="object_dblue_object_DL_00D110" Offset="0xD110" />
+        <DList Name="object_dblue_object_DL_00D220" Offset="0xD220" />
+        <TextureAnimation Name="object_dblue_object_Matanimheader_00D250" Offset="0xD250" />
+        <Collision Name="object_dblue_object_Colheader_00D3DC" Offset="0xD3DC" />
+        <Texture Name="object_dblue_object_TLUT_00D410" OutName="tlut_00D410" Format="rgba16" Width="4" Height="4" Offset="0xD410" />
+        <!-- <Blob Name="object_dblue_object_Blob_00D430" Size="0x420" Offset="0xD430" /> -->
+        <Texture Name="object_dblue_object_TLUT_00D850" OutName="tlut_00D850" Format="rgba16" Width="4" Height="4" Offset="0xD850" />
+        <!-- <Blob Name="object_dblue_object_Blob_00D870" Size="0x60" Offset="0xD870" /> -->
+        <Texture Name="object_dblue_object_Tex_00D8D0" OutName="tex_00D8D0" Format="rgba16" Width="16" Height="64" Offset="0xD8D0" />
+        <Texture Name="object_dblue_object_Tex_00E0D0" OutName="tex_00E0D0" Format="rgba16" Width="8" Height="16" Offset="0xE0D0" />
+        <Texture Name="object_dblue_object_Tex_00E1D0" OutName="tex_00E1D0" Format="rgba16" Width="32" Height="64" Offset="0xE1D0" />
+        <Texture Name="object_dblue_object_Tex_00F1D0" OutName="tex_00F1D0" Format="rgba16" Width="16" Height="32" Offset="0xF1D0" />
+        <Texture Name="object_dblue_object_Tex_00F5D0" OutName="tex_00F5D0" Format="rgba16" Width="16" Height="64" Offset="0xF5D0" />
+        <Texture Name="object_dblue_object_Tex_00FDD0" OutName="tex_00FDD0" Format="rgba16" Width="16" Height="32" Offset="0xFDD0" />
+        <Texture Name="object_dblue_object_Tex_0101D0" OutName="tex_0101D0" Format="rgba16" Width="32" Height="64" Offset="0x101D0" />
+        <Texture Name="object_dblue_object_Tex_0111D0" OutName="tex_0111D0" Format="rgba16" Width="32" Height="32" Offset="0x111D0" />
+        <Texture Name="object_dblue_object_Tex_0119D0" OutName="tex_0119D0" Format="ci4" Width="8" Height="16" Offset="0x119D0" />
+        <Texture Name="object_dblue_object_Tex_011A10" OutName="tex_011A10" Format="rgba16" Width="32" Height="32" Offset="0x11A10" />
+        <!-- <Blob Name="object_dblue_object_Blob_012210" Size="0x1D60" Offset="0x12210" /> -->
+        <Texture Name="object_dblue_object_Tex_013F70" OutName="tex_013F70" Format="ci4" Width="64" Height="64" Offset="0x13F70" />
+        <Texture Name="object_dblue_object_Tex_014770" OutName="tex_014770" Format="rgba16" Width="32" Height="32" Offset="0x14770" />
+        <Texture Name="object_dblue_object_Tex_014F70" OutName="tex_014F70" Format="rgba16" Width="32" Height="32" Offset="0x14F70" />
+        <Texture Name="object_dblue_object_Tex_015770" OutName="tex_015770" Format="ia8" Width="32" Height="64" Offset="0x15770" />
+        <Texture Name="object_dblue_object_Tex_015F70" OutName="tex_015F70" Format="rgba16" Width="32" Height="32" Offset="0x15F70" />
+        <Texture Name="object_dblue_object_Tex_016770" OutName="tex_016770" Format="rgba16" Width="32" Height="32" Offset="0x16770" />
+        <Texture Name="object_dblue_object_Tex_016F70" OutName="tex_016F70" Format="rgba16" Width="32" Height="32" Offset="0x16F70" />
+        <Texture Name="object_dblue_object_Tex_017770" OutName="tex_017770" Format="ia8" Width="32" Height="32" Offset="0x17770" />
+        <DList Name="object_dblue_object_DL_017D00" Offset="0x17D00" />
+        <Texture Name="object_dblue_object_Tex_017E58" OutName="tex_017E58" Format="rgba16" Width="32" Height="64" Offset="0x17E58" />
+    </File>
+</Root>

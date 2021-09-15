@@ -1,0 +1,11 @@
+﻿<Root>
+    <File Name="object_d_lift" Segment="6">
+        <DList Name="object_d_lift_DL_000180" Offset="0x180" />
+        <Texture Name="object_d_lift_Tex_000298" OutName="tex_000298" Format="rgba16" Width="32" Height="32" Offset="0x298" />
+        <Collision Name="object_d_lift_Colheader_000BA0" Offset="0xBA0" />
+        <DList Name="object_d_lift_DL_000D10" Offset="0xD10" />
+        <Collision Name="object_d_lift_Colheader_000F00" Offset="0xF00" />
+        <Texture Name="object_d_lift_Tex_000F30" OutName="tex_000F30" Format="i8" Width="64" Height="16" Offset="0xF30" />
+        <Texture Name="object_d_lift_Tex_001330" OutName="tex_001330" Format="i8" Width="64" Height="64" Offset="0x1330" />
+    </File>
+</Root>

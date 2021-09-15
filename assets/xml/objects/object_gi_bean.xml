@@ -1,0 +1,5 @@
+﻿<Root>
+    <File Name="object_gi_bean" Segment="6">
+        <DList Name="object_gi_bean_DL_000580" Offset="0x580" />
+    </File>
+</Root>

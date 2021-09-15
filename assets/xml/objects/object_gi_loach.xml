@@ -1,0 +1,10 @@
+﻿<Root>
+    <File Name="object_gi_loach" Segment="6">
+        <DList Name="object_gi_loach_DL_0007F0" Offset="0x7F0" />
+        <DList Name="object_gi_loach_DL_000D30" Offset="0xD30" />
+        <Texture Name="object_gi_loach_Tex_000D38" OutName="tex_000D38" Format="i8" Width="32" Height="32" Offset="0xD38" />
+        <Texture Name="object_gi_loach_Tex_001138" OutName="tex_001138" Format="ia8" Width="16" Height="16" Offset="0x1138" />
+        <Texture Name="object_gi_loach_Tex_001238" OutName="tex_001238" Format="ia8" Width="16" Height="16" Offset="0x1238" />
+        <Texture Name="object_gi_loach_Tex_001338" OutName="tex_001338" Format="ia8" Width="16" Height="16" Offset="0x1338" />
+    </File>
+</Root>

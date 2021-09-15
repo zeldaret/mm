@@ -1,0 +1,59 @@
+﻿<Root>
+    <File Name="object_obj_tokeidai" Segment="6">
+        <Texture Name="object_obj_tokeidai_TLUT_000000" OutName="tlut_000000" Format="rgba16" Width="4" Height="4" Offset="0x0" />
+        <Texture Name="object_obj_tokeidai_TLUT_000020" OutName="tlut_000020" Format="rgba16" Width="4" Height="4" Offset="0x20" />
+        <Texture Name="object_obj_tokeidai_Tex_000040" OutName="tex_000040" Format="i8" Width="64" Height="64" Offset="0x40" />
+        <Texture Name="object_obj_tokeidai_Tex_001040" OutName="tex_001040" Format="rgba16" Width="32" Height="32" Offset="0x1040" />
+        <Texture Name="object_obj_tokeidai_Tex_001840" OutName="tex_001840" Format="rgba16" Width="32" Height="32" Offset="0x1840" />
+        <Texture Name="object_obj_tokeidai_Tex_002040" OutName="tex_002040" Format="rgba16" Width="32" Height="32" Offset="0x2040" />
+        <Texture Name="object_obj_tokeidai_Tex_002840" OutName="tex_002840" Format="rgba16" Width="32" Height="32" Offset="0x2840" />
+        <Texture Name="object_obj_tokeidai_Tex_003040" OutName="tex_003040" Format="rgba16" Width="16" Height="32" Offset="0x3040" />
+        <Texture Name="object_obj_tokeidai_Tex_003440" OutName="tex_003440" Format="rgba16" Width="8" Height="32" Offset="0x3440" />
+        <Texture Name="object_obj_tokeidai_Tex_003640" OutName="tex_003640" Format="rgba16" Width="16" Height="16" Offset="0x3640" />
+        <Texture Name="object_obj_tokeidai_Tex_003840" OutName="tex_003840" Format="rgba16" Width="16" Height="16" Offset="0x3840" />
+        <Texture Name="object_obj_tokeidai_Tex_003A40" OutName="tex_003A40" Format="rgba16" Width="16" Height="16" Offset="0x3A40" />
+        <Texture Name="object_obj_tokeidai_Tex_003C40" OutName="tex_003C40" Format="rgba16" Width="16" Height="32" Offset="0x3C40" />
+        <Texture Name="object_obj_tokeidai_Tex_004040" OutName="tex_004040" Format="rgba16" Width="16" Height="16" Offset="0x4040" />
+        <Texture Name="object_obj_tokeidai_Tex_004240" OutName="tex_004240" Format="rgba16" Width="32" Height="16" Offset="0x4240" />
+        <Texture Name="object_obj_tokeidai_Tex_004640" OutName="tex_004640" Format="rgba16" Width="32" Height="16" Offset="0x4640" />
+        <Texture Name="object_obj_tokeidai_Tex_004A40" OutName="tex_004A40" Format="rgba16" Width="32" Height="16" Offset="0x4A40" />
+        <Texture Name="object_obj_tokeidai_Tex_004E40" OutName="tex_004E40" Format="rgba16" Width="32" Height="16" Offset="0x4E40" />
+        <Texture Name="object_obj_tokeidai_Tex_005240" OutName="tex_005240" Format="ci4" Width="64" Height="64" Offset="0x5240" />
+        <Texture Name="object_obj_tokeidai_Tex_005A40" OutName="tex_005A40" Format="ci4" Width="64" Height="64" Offset="0x5A40" />
+        <Texture Name="object_obj_tokeidai_Tex_006240" OutName="tex_006240" Format="rgba16" Width="8" Height="8" Offset="0x6240" />
+        <!-- <Blob Name="object_obj_tokeidai_Blob_0062C0" Size="0x1000" Offset="0x62C0" /> -->
+        <Texture Name="object_obj_tokeidai_Tex_0072C0" OutName="tex_0072C0" Format="ia8" Width="32" Height="64" Offset="0x72C0" />
+        <Texture Name="object_obj_tokeidai_Tex_007AC0" OutName="tex_007AC0" Format="i8" Width="32" Height="32" Offset="0x7AC0" />
+        <Texture Name="object_obj_tokeidai_Tex_007EC0" OutName="tex_007EC0" Format="i4" Width="64" Height="64" Offset="0x7EC0" />
+        <Texture Name="object_obj_tokeidai_Tex_0086C0" OutName="tex_0086C0" Format="i4" Width="64" Height="64" Offset="0x86C0" />
+        <Texture Name="object_obj_tokeidai_Tex_008EC0" OutName="tex_008EC0" Format="i4" Width="64" Height="64" Offset="0x8EC0" />
+        <DList Name="object_obj_tokeidai_DL_009A00" Offset="0x9A00" />
+        <DList Name="object_obj_tokeidai_DL_009A08" Offset="0x9A08" />
+        <Texture Name="object_obj_tokeidai_Tex_009B48" OutName="tex_009B48" Format="rgba16" Width="32" Height="32" Offset="0x9B48" />
+        <Texture Name="object_obj_tokeidai_Tex_00A348" OutName="tex_00A348" Format="i4" Width="64" Height="64" Offset="0xA348" />
+        <DList Name="object_obj_tokeidai_DL_00B0C0" Offset="0xB0C0" />
+        <DList Name="object_obj_tokeidai_DL_00B208" Offset="0xB208" />
+        <TextureAnimation Name="object_obj_tokeidai_Matanimheader_00B4E4" Offset="0xB4E4" />
+        <DList Name="object_obj_tokeidai_DL_00BA70" Offset="0xBA70" />
+        <DList Name="object_obj_tokeidai_DL_00BA78" Offset="0xBA78" />
+        <DList Name="object_obj_tokeidai_DL_00BEE0" Offset="0xBEE0" />
+        <DList Name="object_obj_tokeidai_DL_00BEE8" Offset="0xBEE8" />
+        <DList Name="object_obj_tokeidai_DL_00C360" Offset="0xC360" />
+        <DList Name="object_obj_tokeidai_DL_00C368" Offset="0xC368" />
+        <DList Name="object_obj_tokeidai_DL_00CF20" Offset="0xCF20" />
+        <DList Name="object_obj_tokeidai_DL_00CF28" Offset="0xCF28" />
+        <DList Name="object_obj_tokeidai_DL_00D380" Offset="0xD380" />
+        <DList Name="object_obj_tokeidai_DL_00D388" Offset="0xD388" />
+        <DList Name="object_obj_tokeidai_DL_00D8E0" Offset="0xD8E0" />
+        <DList Name="object_obj_tokeidai_DL_00D8E8" Offset="0xD8E8" />
+        <Texture Name="object_obj_tokeidai_Tex_00DAC0" OutName="tex_00DAC0" Format="rgba16" Width="16" Height="32" Offset="0xDAC0" />
+        <DList Name="object_obj_tokeidai_DL_00E810" Offset="0xE810" />
+        <DList Name="object_obj_tokeidai_DL_00E818" Offset="0xE818" />
+        <DList Name="object_obj_tokeidai_DL_00F510" Offset="0xF510" />
+        <DList Name="object_obj_tokeidai_DL_00F518" Offset="0xF518" />
+        <Texture Name="object_obj_tokeidai_Tex_00F7F8" OutName="tex_00F7F8" Format="rgba16" Width="16" Height="32" Offset="0xF7F8" />
+        <Texture Name="object_obj_tokeidai_Tex_00FBF8" OutName="tex_00FBF8" Format="rgba16" Width="64" Height="32" Offset="0xFBF8" />
+        <Texture Name="object_obj_tokeidai_Tex_010BF8" OutName="tex_010BF8" Format="rgba16" Width="64" Height="32" Offset="0x10BF8" />
+        <Texture Name="object_obj_tokeidai_Tex_011BF8" OutName="tex_011BF8" Format="rgba16" Width="8" Height="8" Offset="0x11BF8" />
+    </File>
+</Root>

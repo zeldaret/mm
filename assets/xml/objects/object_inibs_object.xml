@@ -1,0 +1,35 @@
+﻿<Root>
+    <File Name="object_inibs_object" Segment="6">
+        <DList Name="object_inibs_object_DL_001C10" Offset="0x1C10" />
+        <DList Name="object_inibs_object_DL_001DC0" Offset="0x1DC0" />
+        <TextureAnimation Name="object_inibs_object_Matanimheader_002598" Offset="0x2598" />
+        <Collision Name="object_inibs_object_Colheader_004BA0" Offset="0x4BA0" />
+        <DList Name="object_inibs_object_DL_006140" Offset="0x6140" />
+        <DList Name="object_inibs_object_DL_0062D8" Offset="0x62D8" />
+        <TextureAnimation Name="object_inibs_object_Matanimheader_006858" Offset="0x6858" />
+        <Collision Name="object_inibs_object_Colheader_008EF4" Offset="0x8EF4" />
+        <DList Name="object_inibs_object_DL_0090A0" Offset="0x90A0" />
+        <DList Name="object_inibs_object_DL_0090A8" Offset="0x90A8" />
+        <Collision Name="object_inibs_object_Colheader_00930C" Offset="0x930C" />
+        <DList Name="object_inibs_object_DL_009460" Offset="0x9460" />
+        <DList Name="object_inibs_object_DL_009468" Offset="0x9468" />
+        <Collision Name="object_inibs_object_Colheader_009600" Offset="0x9600" />
+        <DList Name="object_inibs_object_DL_009A90" Offset="0x9A90" />
+        <DList Name="object_inibs_object_DL_009A98" Offset="0x9A98" />
+        <Collision Name="object_inibs_object_Colheader_009EA8" Offset="0x9EA8" />
+        <DList Name="object_inibs_object_DL_00A020" Offset="0xA020" />
+        <DList Name="object_inibs_object_DL_00A028" Offset="0xA028" />
+        <Collision Name="object_inibs_object_Colheader_00A200" Offset="0xA200" />
+        <DList Name="object_inibs_object_DL_00A430" Offset="0xA430" />
+        <DList Name="object_inibs_object_DL_00A438" Offset="0xA438" />
+        <Collision Name="object_inibs_object_Colheader_00A6A8" Offset="0xA6A8" />
+        <Texture Name="object_inibs_object_Tex_00A6E0" OutName="tex_00A6E0" Format="rgba16" Width="32" Height="32" Offset="0xA6E0" />
+        <Texture Name="object_inibs_object_Tex_00AEE0" OutName="tex_00AEE0" Format="rgba16" Width="32" Height="32" Offset="0xAEE0" />
+        <Texture Name="object_inibs_object_Tex_00B6E0" OutName="tex_00B6E0" Format="rgba16" Width="32" Height="64" Offset="0xB6E0" />
+        <Texture Name="object_inibs_object_Tex_00C6E0" OutName="tex_00C6E0" Format="rgba16" Width="32" Height="32" Offset="0xC6E0" />
+        <Texture Name="object_inibs_object_Tex_00CEE0" OutName="tex_00CEE0" Format="rgba16" Width="32" Height="32" Offset="0xCEE0" />
+        <Texture Name="object_inibs_object_Tex_00D6E0" OutName="tex_00D6E0" Format="rgba16" Width="32" Height="32" Offset="0xD6E0" />
+        <Texture Name="object_inibs_object_Tex_00DEE0" OutName="tex_00DEE0" Format="rgba16" Width="32" Height="32" Offset="0xDEE0" />
+        <Texture Name="object_inibs_object_Tex_00E6E0" OutName="tex_00E6E0" Format="rgba16" Width="32" Height="32" Offset="0xE6E0" />
+    </File>
+</Root>

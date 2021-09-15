@@ -1,0 +1,57 @@
+﻿<Root>
+    <File Name="object_yb" Segment="6">
+        <Animation Name="object_yb_Anim_000200" Offset="0x200" />
+        <!-- <Blob Name="object_yb_Blob_002080" Size="0x30" Offset="0x2080" /> -->
+        <!-- <Blob Name="object_yb_Blob_002D50" Size="0x30" Offset="0x2D50" /> -->
+        <DList Name="object_yb_DL_003400" Offset="0x3400" />
+        <DList Name="object_yb_DL_003610" Offset="0x3610" />
+        <DList Name="object_yb_DL_0037B0" Offset="0x37B0" />
+        <DList Name="object_yb_DL_003900" Offset="0x3900" />
+        <DList Name="object_yb_DL_003BC8" Offset="0x3BC8" />
+        <DList Name="object_yb_DL_003D68" Offset="0x3D68" />
+        <DList Name="object_yb_DL_003EB8" Offset="0x3EB8" />
+        <DList Name="object_yb_DL_004108" Offset="0x4108" />
+        <DList Name="object_yb_DL_004110" Offset="0x4110" />
+        <DList Name="object_yb_DL_004310" Offset="0x4310" />
+        <DList Name="object_yb_DL_0047F8" Offset="0x47F8" />
+        <DList Name="object_yb_DL_004970" Offset="0x4970" />
+        <DList Name="object_yb_DL_004978" Offset="0x4978" />
+        <DList Name="object_yb_DL_004AA0" Offset="0x4AA0" />
+        <DList Name="object_yb_DL_004BC0" Offset="0x4BC0" />
+        <DList Name="object_yb_DL_004D98" Offset="0x4D98" />
+        <DList Name="object_yb_DL_004EC0" Offset="0x4EC0" />
+        <DList Name="object_yb_DL_004FE0" Offset="0x4FE0" />
+        <Texture Name="object_yb_TLUT_0051B8" OutName="tlut_0051B8" Format="rgba16" Width="16" Height="16" Offset="0x51B8" />
+        <Texture Name="object_yb_Tex_0053B8" OutName="tex_0053B8" Format="ci8" Width="8" Height="8" Offset="0x53B8" />
+        <Texture Name="object_yb_Tex_0053F8" OutName="tex_0053F8" Format="ci8" Width="8" Height="16" Offset="0x53F8" />
+        <Texture Name="object_yb_Tex_005478" OutName="tex_005478" Format="ci8" Width="16" Height="16" Offset="0x5478" />
+        <Texture Name="object_yb_Tex_005578" OutName="tex_005578" Format="ci8" Width="16" Height="16" Offset="0x5578" />
+        <Texture Name="object_yb_Tex_005678" OutName="tex_005678" Format="ci8" Width="16" Height="16" Offset="0x5678" />
+        <Texture Name="object_yb_Tex_005778" OutName="tex_005778" Format="ci8" Width="8" Height="16" Offset="0x5778" />
+        <Texture Name="object_yb_Tex_0057F8" OutName="tex_0057F8" Format="ci8" Width="16" Height="16" Offset="0x57F8" />
+        <Texture Name="object_yb_Tex_0058F8" OutName="tex_0058F8" Format="ci8" Width="32" Height="32" Offset="0x58F8" />
+        <Texture Name="object_yb_Tex_005CF8" OutName="tex_005CF8" Format="i8" Width="16" Height="16" Offset="0x5CF8" />
+        <Limb Name="object_yb_Standardlimb_005DF8" Type="Standard" Offset="0x5DF8" />
+        <Limb Name="object_yb_Standardlimb_005E04" Type="Standard" Offset="0x5E04" />
+        <Limb Name="object_yb_Standardlimb_005E10" Type="Standard" Offset="0x5E10" />
+        <Limb Name="object_yb_Standardlimb_005E1C" Type="Standard" Offset="0x5E1C" />
+        <Limb Name="object_yb_Standardlimb_005E28" Type="Standard" Offset="0x5E28" />
+        <Limb Name="object_yb_Standardlimb_005E34" Type="Standard" Offset="0x5E34" />
+        <Limb Name="object_yb_Standardlimb_005E40" Type="Standard" Offset="0x5E40" />
+        <Limb Name="object_yb_Standardlimb_005E4C" Type="Standard" Offset="0x5E4C" />
+        <Limb Name="object_yb_Standardlimb_005E58" Type="Standard" Offset="0x5E58" />
+        <Limb Name="object_yb_Standardlimb_005E64" Type="Standard" Offset="0x5E64" />
+        <Limb Name="object_yb_Standardlimb_005E70" Type="Standard" Offset="0x5E70" />
+        <Limb Name="object_yb_Standardlimb_005E7C" Type="Standard" Offset="0x5E7C" />
+        <Limb Name="object_yb_Standardlimb_005E88" Type="Standard" Offset="0x5E88" />
+        <Limb Name="object_yb_Standardlimb_005E94" Type="Standard" Offset="0x5E94" />
+        <Limb Name="object_yb_Standardlimb_005EA0" Type="Standard" Offset="0x5EA0" />
+        <Limb Name="object_yb_Standardlimb_005EAC" Type="Standard" Offset="0x5EAC" />
+        <Limb Name="object_yb_Standardlimb_005EB8" Type="Standard" Offset="0x5EB8" />
+        <Limb Name="object_yb_Standardlimb_005EC4" Type="Standard" Offset="0x5EC4" />
+        <Limb Name="object_yb_Standardlimb_005ED0" Type="Standard" Offset="0x5ED0" />
+        <Limb Name="object_yb_Standardlimb_005EDC" Type="Standard" Offset="0x5EDC" />
+        <Limb Name="object_yb_Standardlimb_005EE8" Type="Standard" Offset="0x5EE8" />
+        <Skeleton Name="object_yb_Skel_005F48" Type="Flex" LimbType="Standard" Offset="0x5F48" />
+    </File>
+</Root>

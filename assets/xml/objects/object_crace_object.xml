@@ -1,0 +1,8 @@
+﻿<Root>
+    <File Name="object_crace_object" Segment="6">
+        <DList Name="object_crace_object_DL_0003A0" Offset="0x3A0" />
+        <Texture Name="object_crace_object_TLUT_000540" OutName="tlut_000540" Format="rgba16" Width="4" Height="4" Offset="0x540" />
+        <Texture Name="object_crace_object_Tex_000560" OutName="tex_000560" Format="ci4" Width="32" Height="128" Offset="0x560" />
+        <Collision Name="object_crace_object_Colheader_000E00" Offset="0xE00" />
+    </File>
+</Root>

@@ -1,0 +1,25 @@
+﻿<Root>
+    <File Name="object_kujiya" Segment="6">
+        <Mtx Name="object_kujiya_Mtx_002A40" Offset="0x2A40" />
+        <DList Name="object_kujiya_DL_002A80" Offset="0x2A80" />
+        <DList Name="object_kujiya_DL_003030" Offset="0x3030" />
+        <DList Name="object_kujiya_DL_003248" Offset="0x3248" />
+        <DList Name="object_kujiya_DL_003358" Offset="0x3358" />
+        <DList Name="object_kujiya_DL_0034A8" Offset="0x34A8" />
+        <DList Name="object_kujiya_DL_0035B8" Offset="0x35B8" />
+        <DList Name="object_kujiya_DL_0036B0" Offset="0x36B0" />
+        <DList Name="object_kujiya_DL_0037C0" Offset="0x37C0" />
+        <DList Name="object_kujiya_DL_003C80" Offset="0x3C80" />
+        <DList Name="object_kujiya_DL_003D58" Offset="0x3D58" />
+        <Texture Name="object_kujiya_Tex_003E68" OutName="tex_003E68" Format="i8" Width="64" Height="16" Offset="0x3E68" />
+        <Texture Name="object_kujiya_Tex_004268" OutName="tex_004268" Format="rgba16" Width="16" Height="32" Offset="0x4268" />
+        <Texture Name="object_kujiya_Tex_004668" OutName="tex_004668" Format="i8" Width="4" Height="4" Offset="0x4668" />
+        <Texture Name="object_kujiya_Tex_004678" OutName="tex_004678" Format="rgba16" Width="16" Height="32" Offset="0x4678" />
+        <Texture Name="object_kujiya_Tex_004A78" OutName="tex_004A78" Format="rgba16" Width="16" Height="32" Offset="0x4A78" />
+        <Texture Name="object_kujiya_Tex_004E78" OutName="tex_004E78" Format="rgba16" Width="16" Height="64" Offset="0x4E78" />
+        <Texture Name="object_kujiya_Tex_005678" OutName="tex_005678" Format="rgba16" Width="16" Height="16" Offset="0x5678" />
+        <Texture Name="object_kujiya_Tex_005878" OutName="tex_005878" Format="rgba16" Width="4" Height="32" Offset="0x5878" />
+        <Texture Name="object_kujiya_Tex_005978" OutName="tex_005978" Format="rgba16" Width="32" Height="32" Offset="0x5978" />
+        <TextureAnimation Name="object_kujiya_Matanimheader_006198" Offset="0x6198" />
+    </File>
+</Root>

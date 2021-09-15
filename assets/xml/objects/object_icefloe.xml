@@ -1,0 +1,7 @@
+﻿<Root>
+    <File Name="object_icefloe" Segment="6">
+        <DList Name="object_icefloe_DL_0001E0" Offset="0x1E0" />
+        <Texture Name="object_icefloe_Tex_0002C8" OutName="tex_0002C8" Format="rgba16" Width="32" Height="32" Offset="0x2C8" />
+        <Collision Name="object_icefloe_Colheader_000C90" Offset="0xC90" />
+    </File>
+</Root>

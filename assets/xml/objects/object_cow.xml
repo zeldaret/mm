@@ -1,0 +1,38 @@
+﻿<Root>
+    <File Name="object_cow" Segment="6">
+        <Animation Name="object_cow_Anim_0001CC" Offset="0x1CC" />
+        <DList Name="object_cow_DL_001A80" Offset="0x1A80" />
+        <DList Name="object_cow_DL_001FE8" Offset="0x1FE8" />
+        <DList Name="object_cow_DL_002368" Offset="0x2368" />
+        <DList Name="object_cow_DL_002628" Offset="0x2628" />
+        <DList Name="object_cow_DL_002760" Offset="0x2760" />
+        <Texture Name="object_cow_TLUT_002880" OutName="tlut_002880" Format="rgba16" Width="16" Height="16" Offset="0x2880" />
+        <Texture Name="object_cow_Tex_002A80" OutName="tex_002A80" Format="ci8" Width="16" Height="16" Offset="0x2A80" />
+        <Texture Name="object_cow_Tex_002B80" OutName="tex_002B80" Format="ci8" Width="8" Height="8" Offset="0x2B80" />
+        <Texture Name="object_cow_Tex_002BC0" OutName="tex_002BC0" Format="ci8" Width="16" Height="16" Offset="0x2BC0" />
+        <Texture Name="object_cow_Tex_002CC0" OutName="tex_002CC0" Format="i8" Width="64" Height="64" Offset="0x2CC0" />
+        <Texture Name="object_cow_Tex_003CC0" OutName="tex_003CC0" Format="ci8" Width="8" Height="16" Offset="0x3CC0" />
+        <Texture Name="object_cow_Tex_003D40" OutName="tex_003D40" Format="rgba16" Width="16" Height="16" Offset="0x3D40" />
+        <Texture Name="object_cow_Tex_003F40" OutName="tex_003F40" Format="ci8" Width="8" Height="16" Offset="0x3F40" />
+        <Limb Name="object_cow_Standardlimb_003FC0" Type="Standard" Offset="0x3FC0" />
+        <Limb Name="object_cow_Standardlimb_003FCC" Type="Standard" Offset="0x3FCC" />
+        <Limb Name="object_cow_Standardlimb_003FD8" Type="Standard" Offset="0x3FD8" />
+        <Limb Name="object_cow_Standardlimb_003FE4" Type="Standard" Offset="0x3FE4" />
+        <Limb Name="object_cow_Standardlimb_003FF0" Type="Standard" Offset="0x3FF0" />
+        <Skeleton Name="object_cow_Skel_004010" Type="Flex" LimbType="Standard" Offset="0x4010" />
+        <Animation Name="object_cow_Anim_004264" Offset="0x4264" />
+        <Animation Name="object_cow_Anim_004348" Offset="0x4348" />
+        <DList Name="object_cow_DL_0046F0" Offset="0x46F0" />
+        <DList Name="object_cow_DL_0047D0" Offset="0x47D0" />
+        <DList Name="object_cow_DL_0048D0" Offset="0x48D0" />
+        <DList Name="object_cow_DL_0049D0" Offset="0x49D0" />
+        <DList Name="object_cow_DL_004AD0" Offset="0x4AD0" />
+        <Limb Name="object_cow_Standardlimb_004BE0" Type="Standard" Offset="0x4BE0" />
+        <Limb Name="object_cow_Standardlimb_004BEC" Type="Standard" Offset="0x4BEC" />
+        <Limb Name="object_cow_Standardlimb_004BF8" Type="Standard" Offset="0x4BF8" />
+        <Limb Name="object_cow_Standardlimb_004C04" Type="Standard" Offset="0x4C04" />
+        <Limb Name="object_cow_Standardlimb_004C10" Type="Standard" Offset="0x4C10" />
+        <Skeleton Name="object_cow_Skel_004C30" Type="Flex" LimbType="Standard" Offset="0x4C30" />
+        <Animation Name="object_cow_Anim_004E98" Offset="0x4E98" />
+    </File>
+</Root>

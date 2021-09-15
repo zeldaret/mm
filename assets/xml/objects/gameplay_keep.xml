@@ -1,0 +1,1415 @@
+﻿<Root>
+    <File Name="gameplay_keep" Segment="4">
+        <Texture Name="gameplay_keep_Tex_000000" OutName="tex_000000" Format="i4" Width="16" Height="16" Offset="0x0" />
+        <DList Name="gameplay_keep_DL_000320" Offset="0x320" />
+        <DList Name="gameplay_keep_DL_0003E0" Offset="0x3E0" />
+        <Texture Name="gameplay_keep_Tex_000508" OutName="tex_000508" Format="i8" Width="16" Height="32" Offset="0x508" />
+        <Texture Name="gameplay_keep_Tex_000708" OutName="tex_000708" Format="i8" Width="8" Height="8" Offset="0x708" />
+        <DList Name="gameplay_keep_DL_0008D0" Offset="0x8D0" />
+        <Texture Name="gameplay_keep_Tex_000988" OutName="tex_000988" Format="rgba16" Width="16" Height="32" Offset="0x988" />
+        <DList Name="gameplay_keep_DL_0019B0" Offset="0x19B0" />
+        <DList Name="gameplay_keep_DL_001B20" Offset="0x1B20" />
+        <DList Name="gameplay_keep_DL_001BC8" Offset="0x1BC8" />
+        <DList Name="gameplay_keep_DL_001C60" Offset="0x1C60" />
+        <DList Name="gameplay_keep_DL_001D00" Offset="0x1D00" />
+        <DList Name="gameplay_keep_DL_001D28" Offset="0x1D28" />
+        <DList Name="gameplay_keep_DL_001DC8" Offset="0x1DC8" />
+        <DList Name="gameplay_keep_DL_001E58" Offset="0x1E58" />
+        <DList Name="gameplay_keep_DL_001F08" Offset="0x1F08" />
+        <DList Name="gameplay_keep_DL_001FA8" Offset="0x1FA8" />
+        <DList Name="gameplay_keep_DL_002038" Offset="0x2038" />
+        <DList Name="gameplay_keep_DL_0020C8" Offset="0x20C8" />
+        <DList Name="gameplay_keep_DL_002168" Offset="0x2168" />
+        <DList Name="gameplay_keep_DL_0021A8" Offset="0x21A8" />
+        <DList Name="gameplay_keep_DL_002480" Offset="0x2480" />
+        <DList Name="gameplay_keep_DL_002508" Offset="0x2508" />
+        <DList Name="gameplay_keep_DL_002590" Offset="0x2590" />
+        <DList Name="gameplay_keep_DL_002618" Offset="0x2618" />
+        <DList Name="gameplay_keep_DL_0026A0" Offset="0x26A0" />
+        <DList Name="gameplay_keep_DL_002728" Offset="0x2728" />
+        <DList Name="gameplay_keep_DL_0027B0" Offset="0x27B0" />
+        <DList Name="gameplay_keep_DL_002838" Offset="0x2838" />
+        <DList Name="gameplay_keep_DL_0028C0" Offset="0x28C0" />
+        <Texture Name="gameplay_keep_TLUT_002908" OutName="tlut_002908" Format="rgba16" Width="16" Height="16" Offset="0x2908" />
+        <Texture Name="gameplay_keep_Tex_002B08" OutName="tex_002B08" Format="rgba16" Width="8" Height="8" Offset="0x2B08" />
+        <Texture Name="gameplay_keep_Tex_002B88" OutName="tex_002B88" Format="rgba16" Width="16" Height="16" Offset="0x2B88" />
+        <Texture Name="gameplay_keep_Tex_002D88" OutName="tex_002D88" Format="ci8" Width="8" Height="8" Offset="0x2D88" />
+        <Texture Name="gameplay_keep_Tex_002DC8" OutName="tex_002DC8" Format="i8" Width="8" Height="8" Offset="0x2DC8" />
+        <Texture Name="gameplay_keep_Tex_002E08" OutName="tex_002E08" Format="rgba16" Width="16" Height="16" Offset="0x2E08" />
+        <Texture Name="gameplay_keep_Tex_003008" OutName="tex_003008" Format="i8" Width="8" Height="8" Offset="0x3008" />
+        <Blob Name="gameplay_keep_Blob_003050" Size="0x20" Offset="0x3050" />
+        <DList Name="gameplay_keep_DL_0032B0" Offset="0x32B0" />
+        <Blob Name="gameplay_keep_Blob_003400" Size="0x9D0" Offset="0x3400" />
+        <DList Name="gameplay_keep_DL_005360" Offset="0x5360" />
+        <DList Name="gameplay_keep_DL_0056C0" Offset="0x56C0" />
+        <DList Name="gameplay_keep_DL_005A10" Offset="0x5A10" />
+        <Blob Name="gameplay_keep_Blob_005DB8" Size="0x200" Offset="0x5DB8" />
+        <Texture Name="gameplay_keep_TLUT_005FB8" OutName="tlut_005FB8" Format="rgba16" Width="16" Height="16" Offset="0x5FB8" />
+        <Texture Name="gameplay_keep_TLUT_0061B8" OutName="tlut_0061B8" Format="rgba16" Width="16" Height="16" Offset="0x61B8" />
+        <Texture Name="gameplay_keep_Tex_0063B8" OutName="tex_0063B8" Format="ci8" Width="64" Height="32" Offset="0x63B8" />
+        <Texture Name="gameplay_keep_Tex_006BB8" OutName="tex_006BB8" Format="ci8" Width="32" Height="32" Offset="0x6BB8" />
+        <Texture Name="gameplay_keep_Tex_006FB8" OutName="tex_006FB8" Format="ci8" Width="8" Height="8" Offset="0x6FB8" />
+        <Texture Name="gameplay_keep_Tex_006FF8" OutName="tex_006FF8" Format="ci8" Width="16" Height="16" Offset="0x6FF8" />
+        <Texture Name="gameplay_keep_Tex_0070F8" OutName="tex_0070F8" Format="rgba32" Width="32" Height="32" Offset="0x70F8" />
+        <Texture Name="gameplay_keep_Tex_0080F8" OutName="tex_0080F8" Format="rgba16" Width="64" Height="32" Offset="0x80F8" />
+        <Texture Name="gameplay_keep_Tex_0090F8" OutName="tex_0090F8" Format="rgba16" Width="16" Height="16" Offset="0x90F8" />
+        <Texture Name="gameplay_keep_Tex_0092F8" OutName="tex_0092F8" Format="rgba16" Width="32" Height="32" Offset="0x92F8" />
+        <Texture Name="gameplay_keep_Tex_009AF8" OutName="tex_009AF8" Format="ci8" Width="32" Height="32" Offset="0x9AF8" />
+        <Texture Name="gameplay_keep_Tex_009EF8" OutName="tex_009EF8" Format="ci8" Width="32" Height="32" Offset="0x9EF8" />
+        <Texture Name="gameplay_keep_Tex_00A2F8" OutName="tex_00A2F8" Format="ci8" Width="8" Height="8" Offset="0xA2F8" />
+        <Texture Name="gameplay_keep_Tex_00A338" OutName="tex_00A338" Format="ci8" Width="16" Height="32" Offset="0xA338" />
+        <Texture Name="gameplay_keep_Tex_00A538" OutName="tex_00A538" Format="i8" Width="32" Height="32" Offset="0xA538" />
+        <DList Name="gameplay_keep_DL_00B260" Offset="0xB260" />
+        <Texture Name="gameplay_keep_TLUT_00B6B0" OutName="tlut_00B6B0" Format="rgba16" Width="16" Height="16" Offset="0xB6B0" />
+        <Texture Name="gameplay_keep_Tex_00B8B0" OutName="tex_00B8B0" Format="ci8" Width="32" Height="32" Offset="0xB8B0" />
+        <Texture Name="gameplay_keep_Tex_00BCB0" OutName="tex_00BCB0" Format="ci8" Width="64" Height="32" Offset="0xBCB0" />
+        <Texture Name="gameplay_keep_Tex_00C4B0" OutName="tex_00C4B0" Format="ci8" Width="32" Height="16" Offset="0xC4B0" />
+        <Texture Name="gameplay_keep_Tex_00C6B0" OutName="tex_00C6B0" Format="ci8" Width="16" Height="16" Offset="0xC6B0" />
+        <Texture Name="gameplay_keep_Tex_00C7B0" OutName="tex_00C7B0" Format="rgba16" Width="8" Height="8" Offset="0xC7B0" />
+        <Texture Name="gameplay_keep_Tex_00C830" OutName="tex_00C830" Format="rgba16" Width="16" Height="16" Offset="0xC830" />
+        <Texture Name="gameplay_keep_Tex_00CA30" OutName="tex_00CA30" Format="rgba16" Width="16" Height="16" Offset="0xCA30" />
+        <Texture Name="gameplay_keep_Tex_00CC30" OutName="tex_00CC30" Format="i8" Width="16" Height="16" Offset="0xCC30" />
+        <Blob Name="gameplay_keep_Blob_00CD30" Size="0x210" Offset="0xCD30" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00CF40" Offset="0xCF40" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00CF48" Offset="0xCF48" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00CF50" Offset="0xCF50" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00CF58" Offset="0xCF58" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00CF60" Offset="0xCF60" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00CF68" Offset="0xCF68" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00CF70" Offset="0xCF70" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00CF78" Offset="0xCF78" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00CF80" Offset="0xCF80" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00CF88" Offset="0xCF88" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00CF90" Offset="0xCF90" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00CF98" Offset="0xCF98" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00CFA0" Offset="0xCFA0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00CFA8" Offset="0xCFA8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00CFB0" Offset="0xCFB0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00CFB8" Offset="0xCFB8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00CFC0" Offset="0xCFC0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00CFC8" Offset="0xCFC8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00CFD0" Offset="0xCFD0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00CFD8" Offset="0xCFD8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00CFE0" Offset="0xCFE0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00CFE8" Offset="0xCFE8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00CFF0" Offset="0xCFF0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00CFF8" Offset="0xCFF8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D000" Offset="0xD000" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D008" Offset="0xD008" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D010" Offset="0xD010" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D018" Offset="0xD018" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D020" Offset="0xD020" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D028" Offset="0xD028" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D030" Offset="0xD030" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D038" Offset="0xD038" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D040" Offset="0xD040" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D048" Offset="0xD048" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D050" Offset="0xD050" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D058" Offset="0xD058" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D060" Offset="0xD060" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D068" Offset="0xD068" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D070" Offset="0xD070" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D078" Offset="0xD078" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D080" Offset="0xD080" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D088" Offset="0xD088" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D090" Offset="0xD090" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D098" Offset="0xD098" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D0A0" Offset="0xD0A0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D0A8" Offset="0xD0A8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D0B0" Offset="0xD0B0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D0B8" Offset="0xD0B8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D0C0" Offset="0xD0C0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D0C8" Offset="0xD0C8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D0D0" Offset="0xD0D0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D0D8" Offset="0xD0D8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D0E0" Offset="0xD0E0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D0E8" Offset="0xD0E8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D0F0" Offset="0xD0F0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D0F8" Offset="0xD0F8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D100" Offset="0xD100" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D108" Offset="0xD108" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D110" Offset="0xD110" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D118" Offset="0xD118" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D120" Offset="0xD120" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D128" Offset="0xD128" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D130" Offset="0xD130" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D138" Offset="0xD138" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D140" Offset="0xD140" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D148" Offset="0xD148" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D150" Offset="0xD150" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D158" Offset="0xD158" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D160" Offset="0xD160" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D168" Offset="0xD168" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D170" Offset="0xD170" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D178" Offset="0xD178" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D180" Offset="0xD180" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D188" Offset="0xD188" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D190" Offset="0xD190" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D198" Offset="0xD198" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D1A0" Offset="0xD1A0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D1A8" Offset="0xD1A8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D1B0" Offset="0xD1B0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D1B8" Offset="0xD1B8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D1C0" Offset="0xD1C0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D1C8" Offset="0xD1C8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D1D0" Offset="0xD1D0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D1D8" Offset="0xD1D8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D1E0" Offset="0xD1E0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D1E8" Offset="0xD1E8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D1F0" Offset="0xD1F0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D1F8" Offset="0xD1F8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D200" Offset="0xD200" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D208" Offset="0xD208" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D210" Offset="0xD210" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D218" Offset="0xD218" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D220" Offset="0xD220" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D228" Offset="0xD228" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D230" Offset="0xD230" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D238" Offset="0xD238" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D240" Offset="0xD240" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D248" Offset="0xD248" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D250" Offset="0xD250" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D258" Offset="0xD258" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D260" Offset="0xD260" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D268" Offset="0xD268" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D270" Offset="0xD270" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D278" Offset="0xD278" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D280" Offset="0xD280" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D288" Offset="0xD288" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D290" Offset="0xD290" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D298" Offset="0xD298" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D2A0" Offset="0xD2A0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D2A8" Offset="0xD2A8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D2B0" Offset="0xD2B0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D2B8" Offset="0xD2B8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D2C0" Offset="0xD2C0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D2C8" Offset="0xD2C8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D2D0" Offset="0xD2D0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D2D8" Offset="0xD2D8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D2E0" Offset="0xD2E0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D2E8" Offset="0xD2E8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D2F0" Offset="0xD2F0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D2F8" Offset="0xD2F8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D300" Offset="0xD300" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D308" Offset="0xD308" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D310" Offset="0xD310" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D318" Offset="0xD318" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D320" Offset="0xD320" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D328" Offset="0xD328" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D330" Offset="0xD330" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D338" Offset="0xD338" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D340" Offset="0xD340" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D348" Offset="0xD348" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D350" Offset="0xD350" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D358" Offset="0xD358" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D360" Offset="0xD360" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D368" Offset="0xD368" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D370" Offset="0xD370" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D378" Offset="0xD378" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D380" Offset="0xD380" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D388" Offset="0xD388" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D390" Offset="0xD390" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D398" Offset="0xD398" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D3A0" Offset="0xD3A0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D3A8" Offset="0xD3A8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D3B0" Offset="0xD3B0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D3B8" Offset="0xD3B8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D3C0" Offset="0xD3C0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D3C8" Offset="0xD3C8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D3D0" Offset="0xD3D0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D3D8" Offset="0xD3D8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D3E0" Offset="0xD3E0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D3E8" Offset="0xD3E8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D3F0" Offset="0xD3F0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D3F8" Offset="0xD3F8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D400" Offset="0xD400" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D408" Offset="0xD408" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D410" Offset="0xD410" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D418" Offset="0xD418" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D420" Offset="0xD420" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D428" Offset="0xD428" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D430" Offset="0xD430" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D438" Offset="0xD438" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D440" Offset="0xD440" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D448" Offset="0xD448" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D450" Offset="0xD450" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D458" Offset="0xD458" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D460" Offset="0xD460" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D468" Offset="0xD468" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D470" Offset="0xD470" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D478" Offset="0xD478" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D480" Offset="0xD480" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D488" Offset="0xD488" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D490" Offset="0xD490" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D498" Offset="0xD498" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D4A0" Offset="0xD4A0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D4A8" Offset="0xD4A8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D4B0" Offset="0xD4B0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D4B8" Offset="0xD4B8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D4C0" Offset="0xD4C0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D4C8" Offset="0xD4C8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D4D0" Offset="0xD4D0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D4D8" Offset="0xD4D8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D4E0" Offset="0xD4E0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D4E8" Offset="0xD4E8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D4F0" Offset="0xD4F0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D4F8" Offset="0xD4F8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D500" Offset="0xD500" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D508" Offset="0xD508" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D510" Offset="0xD510" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D518" Offset="0xD518" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D520" Offset="0xD520" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D528" Offset="0xD528" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D530" Offset="0xD530" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D538" Offset="0xD538" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D540" Offset="0xD540" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D548" Offset="0xD548" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D550" Offset="0xD550" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D558" Offset="0xD558" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D560" Offset="0xD560" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D568" Offset="0xD568" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D570" Offset="0xD570" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D578" Offset="0xD578" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D580" Offset="0xD580" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D588" Offset="0xD588" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D590" Offset="0xD590" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D598" Offset="0xD598" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D5A0" Offset="0xD5A0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D5A8" Offset="0xD5A8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D5B0" Offset="0xD5B0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D5B8" Offset="0xD5B8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D5C0" Offset="0xD5C0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D5C8" Offset="0xD5C8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D5D0" Offset="0xD5D0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D5D8" Offset="0xD5D8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D5E0" Offset="0xD5E0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D5E8" Offset="0xD5E8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D5F0" Offset="0xD5F0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D5F8" Offset="0xD5F8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D600" Offset="0xD600" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D608" Offset="0xD608" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D610" Offset="0xD610" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D618" Offset="0xD618" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D620" Offset="0xD620" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D628" Offset="0xD628" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D630" Offset="0xD630" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D638" Offset="0xD638" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D640" Offset="0xD640" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D648" Offset="0xD648" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D650" Offset="0xD650" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D658" Offset="0xD658" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D660" Offset="0xD660" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D668" Offset="0xD668" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D670" Offset="0xD670" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D678" Offset="0xD678" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D680" Offset="0xD680" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D688" Offset="0xD688" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D690" Offset="0xD690" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D698" Offset="0xD698" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D6A0" Offset="0xD6A0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D6A8" Offset="0xD6A8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D6B0" Offset="0xD6B0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D6B8" Offset="0xD6B8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D6C0" Offset="0xD6C0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D6C8" Offset="0xD6C8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D6D0" Offset="0xD6D0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D6D8" Offset="0xD6D8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D6E0" Offset="0xD6E0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D6E8" Offset="0xD6E8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D6F0" Offset="0xD6F0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D6F8" Offset="0xD6F8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D700" Offset="0xD700" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D708" Offset="0xD708" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D710" Offset="0xD710" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D718" Offset="0xD718" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D720" Offset="0xD720" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D728" Offset="0xD728" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D730" Offset="0xD730" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D738" Offset="0xD738" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D740" Offset="0xD740" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D748" Offset="0xD748" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D750" Offset="0xD750" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D758" Offset="0xD758" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D760" Offset="0xD760" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D768" Offset="0xD768" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D770" Offset="0xD770" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D778" Offset="0xD778" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D780" Offset="0xD780" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D788" Offset="0xD788" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D790" Offset="0xD790" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D798" Offset="0xD798" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D7A0" Offset="0xD7A0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D7A8" Offset="0xD7A8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D7B0" Offset="0xD7B0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D7B8" Offset="0xD7B8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D7C0" Offset="0xD7C0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D7C8" Offset="0xD7C8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D7D0" Offset="0xD7D0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D7D8" Offset="0xD7D8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D7E0" Offset="0xD7E0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D7E8" Offset="0xD7E8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D7F0" Offset="0xD7F0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D7F8" Offset="0xD7F8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D800" Offset="0xD800" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D808" Offset="0xD808" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D810" Offset="0xD810" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D818" Offset="0xD818" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D820" Offset="0xD820" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D828" Offset="0xD828" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D830" Offset="0xD830" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D838" Offset="0xD838" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D840" Offset="0xD840" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D848" Offset="0xD848" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D850" Offset="0xD850" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D858" Offset="0xD858" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D860" Offset="0xD860" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D868" Offset="0xD868" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D870" Offset="0xD870" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D878" Offset="0xD878" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D880" Offset="0xD880" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D888" Offset="0xD888" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D890" Offset="0xD890" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D898" Offset="0xD898" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D8A0" Offset="0xD8A0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D8A8" Offset="0xD8A8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D8B0" Offset="0xD8B0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D8B8" Offset="0xD8B8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D8C0" Offset="0xD8C0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D8C8" Offset="0xD8C8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D8D0" Offset="0xD8D0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D8D8" Offset="0xD8D8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D8E0" Offset="0xD8E0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D8E8" Offset="0xD8E8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D8F0" Offset="0xD8F0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D8F8" Offset="0xD8F8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D900" Offset="0xD900" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D908" Offset="0xD908" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D910" Offset="0xD910" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D918" Offset="0xD918" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D920" Offset="0xD920" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D928" Offset="0xD928" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D930" Offset="0xD930" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D938" Offset="0xD938" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D940" Offset="0xD940" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D948" Offset="0xD948" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D950" Offset="0xD950" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D958" Offset="0xD958" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D960" Offset="0xD960" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D968" Offset="0xD968" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D970" Offset="0xD970" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D978" Offset="0xD978" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D980" Offset="0xD980" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D988" Offset="0xD988" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D990" Offset="0xD990" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D998" Offset="0xD998" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D9A0" Offset="0xD9A0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D9A8" Offset="0xD9A8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D9B0" Offset="0xD9B0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D9B8" Offset="0xD9B8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D9C0" Offset="0xD9C0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D9C8" Offset="0xD9C8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D9D0" Offset="0xD9D0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D9D8" Offset="0xD9D8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D9E0" Offset="0xD9E0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D9E8" Offset="0xD9E8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D9F0" Offset="0xD9F0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00D9F8" Offset="0xD9F8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DA00" Offset="0xDA00" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DA08" Offset="0xDA08" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DA10" Offset="0xDA10" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DA18" Offset="0xDA18" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DA20" Offset="0xDA20" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DA28" Offset="0xDA28" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DA30" Offset="0xDA30" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DA38" Offset="0xDA38" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DA40" Offset="0xDA40" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DA48" Offset="0xDA48" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DA50" Offset="0xDA50" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DA58" Offset="0xDA58" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DA60" Offset="0xDA60" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DA68" Offset="0xDA68" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DA70" Offset="0xDA70" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DA78" Offset="0xDA78" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DA80" Offset="0xDA80" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DA88" Offset="0xDA88" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DA90" Offset="0xDA90" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DA98" Offset="0xDA98" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DAA0" Offset="0xDAA0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DAA8" Offset="0xDAA8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DAB0" Offset="0xDAB0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DAB8" Offset="0xDAB8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DAC0" Offset="0xDAC0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DAC8" Offset="0xDAC8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DAD0" Offset="0xDAD0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DAD8" Offset="0xDAD8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DAE0" Offset="0xDAE0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DAE8" Offset="0xDAE8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DAF0" Offset="0xDAF0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DAF8" Offset="0xDAF8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DB00" Offset="0xDB00" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DB08" Offset="0xDB08" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DB10" Offset="0xDB10" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DB18" Offset="0xDB18" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DB20" Offset="0xDB20" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DB28" Offset="0xDB28" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DB30" Offset="0xDB30" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DB38" Offset="0xDB38" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DB40" Offset="0xDB40" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DB48" Offset="0xDB48" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DB50" Offset="0xDB50" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DB58" Offset="0xDB58" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DB60" Offset="0xDB60" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DB68" Offset="0xDB68" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DB70" Offset="0xDB70" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DB78" Offset="0xDB78" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DB80" Offset="0xDB80" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DB88" Offset="0xDB88" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DB90" Offset="0xDB90" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DB98" Offset="0xDB98" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DBA0" Offset="0xDBA0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DBA8" Offset="0xDBA8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DBB0" Offset="0xDBB0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DBB8" Offset="0xDBB8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DBC0" Offset="0xDBC0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DBC8" Offset="0xDBC8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DBD0" Offset="0xDBD0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DBD8" Offset="0xDBD8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DBE0" Offset="0xDBE0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DBE8" Offset="0xDBE8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DBF0" Offset="0xDBF0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DBF8" Offset="0xDBF8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DC00" Offset="0xDC00" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DC08" Offset="0xDC08" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DC10" Offset="0xDC10" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DC18" Offset="0xDC18" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DC20" Offset="0xDC20" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DC28" Offset="0xDC28" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DC30" Offset="0xDC30" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DC38" Offset="0xDC38" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DC40" Offset="0xDC40" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DC48" Offset="0xDC48" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DC50" Offset="0xDC50" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DC58" Offset="0xDC58" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DC60" Offset="0xDC60" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DC68" Offset="0xDC68" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DC70" Offset="0xDC70" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DC78" Offset="0xDC78" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DC80" Offset="0xDC80" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DC88" Offset="0xDC88" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DC90" Offset="0xDC90" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DC98" Offset="0xDC98" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DCA0" Offset="0xDCA0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DCA8" Offset="0xDCA8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DCB0" Offset="0xDCB0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DCB8" Offset="0xDCB8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DCC0" Offset="0xDCC0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DCC8" Offset="0xDCC8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DCD0" Offset="0xDCD0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DCD8" Offset="0xDCD8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DCE0" Offset="0xDCE0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DCE8" Offset="0xDCE8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DCF0" Offset="0xDCF0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DCF8" Offset="0xDCF8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DD00" Offset="0xDD00" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DD08" Offset="0xDD08" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DD10" Offset="0xDD10" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DD18" Offset="0xDD18" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DD20" Offset="0xDD20" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DD28" Offset="0xDD28" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DD30" Offset="0xDD30" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DD38" Offset="0xDD38" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DD40" Offset="0xDD40" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DD48" Offset="0xDD48" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DD50" Offset="0xDD50" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DD58" Offset="0xDD58" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DD60" Offset="0xDD60" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DD68" Offset="0xDD68" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DD70" Offset="0xDD70" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DD78" Offset="0xDD78" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DD80" Offset="0xDD80" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DD88" Offset="0xDD88" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DD90" Offset="0xDD90" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DD98" Offset="0xDD98" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DDA0" Offset="0xDDA0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DDA8" Offset="0xDDA8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DDB0" Offset="0xDDB0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DDB8" Offset="0xDDB8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DDC0" Offset="0xDDC0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DDC8" Offset="0xDDC8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DDD0" Offset="0xDDD0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DDD8" Offset="0xDDD8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DDE0" Offset="0xDDE0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DDE8" Offset="0xDDE8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DDF0" Offset="0xDDF0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DDF8" Offset="0xDDF8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DE00" Offset="0xDE00" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DE08" Offset="0xDE08" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DE10" Offset="0xDE10" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DE18" Offset="0xDE18" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DE20" Offset="0xDE20" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DE28" Offset="0xDE28" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DE30" Offset="0xDE30" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DE38" Offset="0xDE38" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DE40" Offset="0xDE40" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DE48" Offset="0xDE48" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DE50" Offset="0xDE50" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DE58" Offset="0xDE58" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DE60" Offset="0xDE60" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DE68" Offset="0xDE68" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DE70" Offset="0xDE70" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DE78" Offset="0xDE78" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DE80" Offset="0xDE80" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DE88" Offset="0xDE88" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DE90" Offset="0xDE90" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DE98" Offset="0xDE98" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DEA0" Offset="0xDEA0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DEA8" Offset="0xDEA8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DEB0" Offset="0xDEB0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DEB8" Offset="0xDEB8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DEC0" Offset="0xDEC0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DEC8" Offset="0xDEC8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DED0" Offset="0xDED0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DED8" Offset="0xDED8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DEE0" Offset="0xDEE0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DEE8" Offset="0xDEE8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DEF0" Offset="0xDEF0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DEF8" Offset="0xDEF8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DF00" Offset="0xDF00" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DF08" Offset="0xDF08" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DF10" Offset="0xDF10" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DF18" Offset="0xDF18" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DF20" Offset="0xDF20" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DF28" Offset="0xDF28" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DF30" Offset="0xDF30" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DF38" Offset="0xDF38" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DF40" Offset="0xDF40" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DF48" Offset="0xDF48" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DF50" Offset="0xDF50" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DF58" Offset="0xDF58" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DF60" Offset="0xDF60" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DF68" Offset="0xDF68" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DF70" Offset="0xDF70" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DF78" Offset="0xDF78" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DF80" Offset="0xDF80" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DF88" Offset="0xDF88" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DF90" Offset="0xDF90" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DF98" Offset="0xDF98" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DFA0" Offset="0xDFA0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DFA8" Offset="0xDFA8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DFB0" Offset="0xDFB0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DFB8" Offset="0xDFB8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DFC0" Offset="0xDFC0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DFC8" Offset="0xDFC8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DFD0" Offset="0xDFD0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DFD8" Offset="0xDFD8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DFE0" Offset="0xDFE0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DFE8" Offset="0xDFE8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DFF0" Offset="0xDFF0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00DFF8" Offset="0xDFF8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E000" Offset="0xE000" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E008" Offset="0xE008" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E010" Offset="0xE010" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E018" Offset="0xE018" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E020" Offset="0xE020" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E028" Offset="0xE028" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E030" Offset="0xE030" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E038" Offset="0xE038" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E040" Offset="0xE040" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E048" Offset="0xE048" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E050" Offset="0xE050" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E058" Offset="0xE058" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E060" Offset="0xE060" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E068" Offset="0xE068" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E070" Offset="0xE070" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E078" Offset="0xE078" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E080" Offset="0xE080" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E088" Offset="0xE088" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E090" Offset="0xE090" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E098" Offset="0xE098" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E0A0" Offset="0xE0A0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E0A8" Offset="0xE0A8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E0B0" Offset="0xE0B0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E0B8" Offset="0xE0B8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E0C0" Offset="0xE0C0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E0C8" Offset="0xE0C8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E0D0" Offset="0xE0D0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E0D8" Offset="0xE0D8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E0E0" Offset="0xE0E0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E0E8" Offset="0xE0E8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E0F0" Offset="0xE0F0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E0F8" Offset="0xE0F8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E100" Offset="0xE100" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E108" Offset="0xE108" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E110" Offset="0xE110" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E118" Offset="0xE118" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E120" Offset="0xE120" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E128" Offset="0xE128" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E130" Offset="0xE130" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E138" Offset="0xE138" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E140" Offset="0xE140" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E148" Offset="0xE148" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E150" Offset="0xE150" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E158" Offset="0xE158" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E160" Offset="0xE160" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E168" Offset="0xE168" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E170" Offset="0xE170" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E178" Offset="0xE178" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E180" Offset="0xE180" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E188" Offset="0xE188" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E190" Offset="0xE190" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E198" Offset="0xE198" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E1A0" Offset="0xE1A0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E1A8" Offset="0xE1A8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E1B0" Offset="0xE1B0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E1B8" Offset="0xE1B8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E1C0" Offset="0xE1C0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E1C8" Offset="0xE1C8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E1D0" Offset="0xE1D0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E1D8" Offset="0xE1D8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E1E0" Offset="0xE1E0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E1E8" Offset="0xE1E8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E1F0" Offset="0xE1F0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E1F8" Offset="0xE1F8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E200" Offset="0xE200" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E208" Offset="0xE208" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E210" Offset="0xE210" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E218" Offset="0xE218" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E220" Offset="0xE220" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E228" Offset="0xE228" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E230" Offset="0xE230" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E238" Offset="0xE238" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E240" Offset="0xE240" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E248" Offset="0xE248" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E250" Offset="0xE250" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E258" Offset="0xE258" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E260" Offset="0xE260" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E268" Offset="0xE268" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E270" Offset="0xE270" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E278" Offset="0xE278" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E280" Offset="0xE280" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E288" Offset="0xE288" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E290" Offset="0xE290" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E298" Offset="0xE298" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E2A0" Offset="0xE2A0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E2A8" Offset="0xE2A8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E2B0" Offset="0xE2B0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E2B8" Offset="0xE2B8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E2C0" Offset="0xE2C0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E2C8" Offset="0xE2C8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E2D0" Offset="0xE2D0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E2D8" Offset="0xE2D8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E2E0" Offset="0xE2E0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E2E8" Offset="0xE2E8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E2F0" Offset="0xE2F0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E2F8" Offset="0xE2F8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E300" Offset="0xE300" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E308" Offset="0xE308" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E310" Offset="0xE310" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E318" Offset="0xE318" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E320" Offset="0xE320" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E328" Offset="0xE328" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E330" Offset="0xE330" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E338" Offset="0xE338" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E340" Offset="0xE340" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E348" Offset="0xE348" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E350" Offset="0xE350" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E358" Offset="0xE358" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E360" Offset="0xE360" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E368" Offset="0xE368" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E370" Offset="0xE370" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E378" Offset="0xE378" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E380" Offset="0xE380" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E388" Offset="0xE388" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E390" Offset="0xE390" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E398" Offset="0xE398" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E3A0" Offset="0xE3A0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E3A8" Offset="0xE3A8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E3B0" Offset="0xE3B0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E3B8" Offset="0xE3B8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E3C0" Offset="0xE3C0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E3C8" Offset="0xE3C8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E3D0" Offset="0xE3D0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E3D8" Offset="0xE3D8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E3E0" Offset="0xE3E0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E3E8" Offset="0xE3E8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E3F0" Offset="0xE3F0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E3F8" Offset="0xE3F8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E400" Offset="0xE400" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E408" Offset="0xE408" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E410" Offset="0xE410" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E418" Offset="0xE418" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E420" Offset="0xE420" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E428" Offset="0xE428" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E430" Offset="0xE430" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E438" Offset="0xE438" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E440" Offset="0xE440" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E448" Offset="0xE448" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E450" Offset="0xE450" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E458" Offset="0xE458" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E460" Offset="0xE460" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E468" Offset="0xE468" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E470" Offset="0xE470" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E478" Offset="0xE478" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E480" Offset="0xE480" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E488" Offset="0xE488" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E490" Offset="0xE490" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E498" Offset="0xE498" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E4A0" Offset="0xE4A0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E4A8" Offset="0xE4A8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E4B0" Offset="0xE4B0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E4B8" Offset="0xE4B8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E4C0" Offset="0xE4C0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E4C8" Offset="0xE4C8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E4D0" Offset="0xE4D0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E4D8" Offset="0xE4D8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E4E0" Offset="0xE4E0" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E4E8" Offset="0xE4E8" />
+        <PlayerAnimation Name="gameplay_keep_Linkanim_00E4F0" Offset="0xE4F0" />
+        <DList Name="gameplay_keep_DL_00E5C0" Offset="0xE5C0" />
+        <Collision Name="gameplay_keep_Colheader_00E710" Offset="0xE710" />
+        <Animation Name="gameplay_keep_Anim_00EB7C" Offset="0xEB7C" />
+        <DList Name="gameplay_keep_DL_00ED80" Offset="0xED80" />
+        <DList Name="gameplay_keep_DL_00F2B8" Offset="0xF2B8" />
+        <DList Name="gameplay_keep_DL_00F350" Offset="0xF350" />
+        <DList Name="gameplay_keep_DL_00F438" Offset="0xF438" />
+        <DList Name="gameplay_keep_DL_00F4C0" Offset="0xF4C0" />
+        <DList Name="gameplay_keep_DL_00F548" Offset="0xF548" />
+        <DList Name="gameplay_keep_DL_00F5D0" Offset="0xF5D0" />
+        <DList Name="gameplay_keep_DL_00F658" Offset="0xF658" />
+        <DList Name="gameplay_keep_DL_00F6E0" Offset="0xF6E0" />
+        <DList Name="gameplay_keep_DL_00F768" Offset="0xF768" />
+        <DList Name="gameplay_keep_DL_00F7F0" Offset="0xF7F0" />
+        <Texture Name="gameplay_keep_Tex_00F878" OutName="tex_00F878" Format="rgba16" Width="16" Height="32" Offset="0xF878" />
+        <Texture Name="gameplay_keep_Tex_00FC78" OutName="tex_00FC78" Format="rgba16" Width="16" Height="32" Offset="0xFC78" />
+        <Texture Name="gameplay_keep_Tex_010078" OutName="tex_010078" Format="rgba16" Width="32" Height="32" Offset="0x10078" />
+        <Texture Name="gameplay_keep_Tex_010878" OutName="tex_010878" Format="rgba16" Width="16" Height="32" Offset="0x10878" />
+        <Texture Name="gameplay_keep_Tex_010C78" OutName="tex_010C78" Format="rgba16" Width="32" Height="32" Offset="0x10C78" />
+        <Limb Name="gameplay_keep_Standardlimb_011478" Type="Standard" Offset="0x11478" />
+        <Limb Name="gameplay_keep_Standardlimb_011484" Type="Standard" Offset="0x11484" />
+        <Limb Name="gameplay_keep_Standardlimb_011490" Type="Standard" Offset="0x11490" />
+        <Limb Name="gameplay_keep_Standardlimb_01149C" Type="Standard" Offset="0x1149C" />
+        <Limb Name="gameplay_keep_Standardlimb_0114A8" Type="Standard" Offset="0x114A8" />
+        <Limb Name="gameplay_keep_Standardlimb_0114B4" Type="Standard" Offset="0x114B4" />
+        <Limb Name="gameplay_keep_Standardlimb_0114C0" Type="Standard" Offset="0x114C0" />
+        <Limb Name="gameplay_keep_Standardlimb_0114CC" Type="Standard" Offset="0x114CC" />
+        <Limb Name="gameplay_keep_Standardlimb_0114D8" Type="Standard" Offset="0x114D8" />
+        <Limb Name="gameplay_keep_Standardlimb_0114E4" Type="Standard" Offset="0x114E4" />
+        <Skeleton Name="gameplay_keep_Skel_011518" Type="Normal" LimbType="Standard" Offset="0x11518" />
+        <Animation Name="gameplay_keep_Anim_0117A8" Offset="0x117A8" />
+        <Collision Name="gameplay_keep_Colheader_0118D8" Offset="0x118D8" />
+        <DList Name="gameplay_keep_DL_011BD0" Offset="0x11BD0" />
+        <DList Name="gameplay_keep_DL_0121B0" Offset="0x121B0" />
+        <DList Name="gameplay_keep_DL_012260" Offset="0x12260" />
+        <DList Name="gameplay_keep_DL_012308" Offset="0x12308" />
+        <DList Name="gameplay_keep_DL_012390" Offset="0x12390" />
+        <DList Name="gameplay_keep_DL_012418" Offset="0x12418" />
+        <DList Name="gameplay_keep_DL_0124A0" Offset="0x124A0" />
+        <DList Name="gameplay_keep_DL_012528" Offset="0x12528" />
+        <DList Name="gameplay_keep_DL_0125B0" Offset="0x125B0" />
+        <DList Name="gameplay_keep_DL_012638" Offset="0x12638" />
+        <DList Name="gameplay_keep_DL_0126C0" Offset="0x126C0" />
+        <Limb Name="gameplay_keep_Standardlimb_012748" Type="Standard" Offset="0x12748" />
+        <Limb Name="gameplay_keep_Standardlimb_012754" Type="Standard" Offset="0x12754" />
+        <Limb Name="gameplay_keep_Standardlimb_012760" Type="Standard" Offset="0x12760" />
+        <Limb Name="gameplay_keep_Standardlimb_01276C" Type="Standard" Offset="0x1276C" />
+        <Limb Name="gameplay_keep_Standardlimb_012778" Type="Standard" Offset="0x12778" />
+        <Limb Name="gameplay_keep_Standardlimb_012784" Type="Standard" Offset="0x12784" />
+        <Limb Name="gameplay_keep_Standardlimb_012790" Type="Standard" Offset="0x12790" />
+        <Limb Name="gameplay_keep_Standardlimb_01279C" Type="Standard" Offset="0x1279C" />
+        <Limb Name="gameplay_keep_Standardlimb_0127A8" Type="Standard" Offset="0x127A8" />
+        <Limb Name="gameplay_keep_Standardlimb_0127B4" Type="Standard" Offset="0x127B4" />
+        <Skeleton Name="gameplay_keep_Skel_0127E8" Type="Flex" LimbType="Standard" Offset="0x127E8" />
+        <Animation Name="gameplay_keep_Anim_012860" Offset="0x12860" />
+        <Animation Name="gameplay_keep_Anim_0128BC" Offset="0x128BC" />
+        <Texture Name="gameplay_keep_Tex_0128D0" OutName="tex_0128D0" Format="rgba16" Width="16" Height="128" Offset="0x128D0" />
+        <Texture Name="gameplay_keep_Tex_0138D0" OutName="tex_0138D0" Format="rgba16" Width="32" Height="16" Offset="0x138D0" />
+        <DList Name="gameplay_keep_DL_013FF0" Offset="0x13FF0" />
+        <DList Name="gameplay_keep_DL_014370" Offset="0x14370" />
+        <Limb Name="gameplay_keep_Lodlimb_014510" Type="LOD" Offset="0x14510" />
+        <Limb Name="gameplay_keep_Lodlimb_014520" Type="LOD" Offset="0x14520" />
+        <Limb Name="gameplay_keep_Lodlimb_014530" Type="LOD" Offset="0x14530" />
+        <Limb Name="gameplay_keep_Lodlimb_014540" Type="LOD" Offset="0x14540" />
+        <Skeleton Name="gameplay_keep_Skel_014560" Type="Normal" LimbType="Standard" Offset="0x14560" />
+        <Texture Name="gameplay_keep_Tex_014570" OutName="tex_014570" Format="rgba32" Width="16" Height="32" Offset="0x14570" />
+        <Texture Name="gameplay_keep_Tex_014D70" OutName="tex_014D70" Format="ia8" Width="64" Height="64" Offset="0x14D70" />
+        <DList Name="gameplay_keep_DL_015DB0" Offset="0x15DB0" />
+        <Texture Name="gameplay_keep_Tex_015E40" OutName="tex_015E40" Format="rgba16" Width="8" Height="8" Offset="0x15E40" />
+        <DList Name="gameplay_keep_DL_015FA0" Offset="0x15FA0" />
+        <Texture Name="gameplay_keep_Tex_016060" OutName="tex_016060" Format="rgba16" Width="8" Height="8" Offset="0x16060" />
+        <DList Name="gameplay_keep_DL_016360" Offset="0x16360" />
+        <Texture Name="gameplay_keep_Tex_0164D0" OutName="tex_0164D0" Format="ia16" Width="32" Height="32" Offset="0x164D0" />
+        <Texture Name="gameplay_keep_Tex_016CD0" OutName="tex_016CD0" Format="ia16" Width="32" Height="32" Offset="0x16CD0" />
+        <Texture Name="gameplay_keep_Tex_0174D0" OutName="tex_0174D0" Format="ia16" Width="32" Height="32" Offset="0x174D0" />
+        <Texture Name="gameplay_keep_Tex_017CD0" OutName="tex_017CD0" Format="ia16" Width="32" Height="32" Offset="0x17CD0" />
+        <Texture Name="gameplay_keep_Tex_0184D0" OutName="tex_0184D0" Format="ia16" Width="32" Height="32" Offset="0x184D0" />
+        <Texture Name="gameplay_keep_Tex_018CD0" OutName="tex_018CD0" Format="ia16" Width="32" Height="32" Offset="0x18CD0" />
+        <Texture Name="gameplay_keep_Tex_0194D0" OutName="tex_0194D0" Format="ia16" Width="32" Height="32" Offset="0x194D0" />
+        <Texture Name="gameplay_keep_Tex_019CD0" OutName="tex_019CD0" Format="ia16" Width="32" Height="32" Offset="0x19CD0" />
+        <DList Name="gameplay_keep_DL_01A4D0" Offset="0x1A4D0" />
+        <DList Name="gameplay_keep_DL_01A538" Offset="0x1A538" />
+        <DList Name="gameplay_keep_DL_01A590" Offset="0x1A590" />
+        <DList Name="gameplay_keep_DL_01A620" Offset="0x1A620" />
+        <Texture Name="gameplay_keep_Tex_01A6B0" OutName="tex_01A6B0" Format="rgba16" Width="16" Height="16" Offset="0x1A6B0" />
+        <Texture Name="gameplay_keep_Tex_01A8B0" OutName="tex_01A8B0" Format="i8" Width="16" Height="32" Offset="0x1A8B0" />
+        <Texture Name="gameplay_keep_Tex_01AAB0" OutName="tex_01AAB0" Format="i8" Width="16" Height="32" Offset="0x1AAB0" />
+        <DList Name="gameplay_keep_DL_01ACF0" Offset="0x1ACF0" />
+        <DList Name="gameplay_keep_DL_01C430" Offset="0x1C430" />
+        <Texture Name="gameplay_keep_Tex_01CAF8" OutName="tex_01CAF8" Format="rgba16" Width="32" Height="32" Offset="0x1CAF8" />
+        <Texture Name="gameplay_keep_Tex_01D2F8" OutName="tex_01D2F8" Format="rgba16" Width="32" Height="64" Offset="0x1D2F8" />
+        <Texture Name="gameplay_keep_Tex_01E2F8" OutName="tex_01E2F8" Format="rgba16" Width="16" Height="8" Offset="0x1E2F8" />
+        <Texture Name="gameplay_keep_Tex_01E3F8" OutName="tex_01E3F8" Format="rgba16" Width="16" Height="16" Offset="0x1E3F8" />
+        <Texture Name="gameplay_keep_Tex_01E5F8" OutName="tex_01E5F8" Format="rgba16" Width="8" Height="16" Offset="0x1E5F8" />
+        <Texture Name="gameplay_keep_Tex_01E6F8" OutName="tex_01E6F8" Format="rgba16" Width="32" Height="16" Offset="0x1E6F8" />
+        <Texture Name="gameplay_keep_Tex_01EAF8" OutName="tex_01EAF8" Format="rgba16" Width="16" Height="16" Offset="0x1EAF8" />
+        <DList Name="gameplay_keep_DL_01ED00" Offset="0x1ED00" />
+        <DList Name="gameplay_keep_DL_01ED90" Offset="0x1ED90" />
+        <DList Name="gameplay_keep_DL_01F0F0" Offset="0x1F0F0" />
+        <Texture Name="gameplay_keep_Tex_01F200" OutName="tex_01F200" Format="i8" Width="8" Height="8" Offset="0x1F200" />
+        <DList Name="gameplay_keep_DL_01F300" Offset="0x1F300" />
+        <Texture Name="gameplay_keep_Tex_01F340" OutName="tex_01F340" Format="ia8" Width="32" Height="32" Offset="0x1F340" />
+        <Texture Name="gameplay_keep_Tex_01F740" OutName="tex_01F740" Format="ia4" Width="16" Height="16" Offset="0x1F740" />
+        <Texture Name="gameplay_keep_Tex_01F7C0" OutName="tex_01F7C0" Format="ia8" Width="16" Height="16" Offset="0x1F7C0" />
+        <Texture Name="gameplay_keep_Tex_01F8C0" OutName="tex_01F8C0" Format="ia8" Width="16" Height="24" Offset="0x1F8C0" />
+        <DList Name="gameplay_keep_DL_01FA40" Offset="0x1FA40" />
+        <Texture Name="gameplay_keep_Tex_01FBE0" OutName="tex_01FBE0" Format="rgba16" Width="32" Height="32" Offset="0x1FBE0" />
+        <Animation Name="gameplay_keep_Anim_0204B4" Offset="0x204B4" />
+        <Animation Name="gameplay_keep_Anim_0205A0" Offset="0x205A0" />
+        <Animation Name="gameplay_keep_Anim_020658" Offset="0x20658" />
+        <DList Name="gameplay_keep_DL_020B30" Offset="0x20B30" />
+        <DList Name="gameplay_keep_DL_020BB8" Offset="0x20BB8" />
+        <DList Name="gameplay_keep_DL_020D00" Offset="0x20D00" />
+        <Texture Name="gameplay_keep_Tex_020E38" OutName="tex_020E38" Format="rgba16" Width="32" Height="64" Offset="0x20E38" />
+        <DList Name="gameplay_keep_DL_0221B8" Offset="0x221B8" />
+        <Texture Name="gameplay_keep_Tex_0222E8" OutName="tex_0222E8" Format="i4" Width="32" Height="64" Offset="0x222E8" />
+        <Texture Name="gameplay_keep_Tex_0226E8" OutName="tex_0226E8" Format="i8" Width="8" Height="128" Offset="0x226E8" />
+        <Limb Name="gameplay_keep_Standardlimb_022AE8" Type="Standard" Offset="0x22AE8" />
+        <Limb Name="gameplay_keep_Standardlimb_022AF4" Type="Standard" Offset="0x22AF4" />
+        <Limb Name="gameplay_keep_Standardlimb_022B00" Type="Standard" Offset="0x22B00" />
+        <Limb Name="gameplay_keep_Standardlimb_022B0C" Type="Standard" Offset="0x22B0C" />
+        <Skeleton Name="gameplay_keep_Skel_022B28" Type="Normal" LimbType="Standard" Offset="0x22B28" />
+        <Animation Name="gameplay_keep_Anim_022BE8" Offset="0x22BE8" />
+        <Animation Name="gameplay_keep_Anim_022CA8" Offset="0x22CA8" />
+        <Animation Name="gameplay_keep_Anim_022D90" Offset="0x22D90" />
+        <Animation Name="gameplay_keep_Anim_022E68" Offset="0x22E68" />
+        <Blob Name="gameplay_keep_zeroes_unk_00022E78" Size="0xA8" Offset="0x22E78" />
+        <Animation Name="gameplay_keep_Anim_022FF0" Offset="0x22FF0" />
+        <Collision Name="gameplay_keep_Colheader_023100" Offset="0x23100" />
+        <DList Name="gameplay_keep_DL_023130" Offset="0x23130" />
+        <DList Name="gameplay_keep_DL_023210" Offset="0x23210" />
+        <DList Name="gameplay_keep_DL_023288" Offset="0x23288" />
+        <DList Name="gameplay_keep_DL_023348" Offset="0x23348" />
+        <DList Name="gameplay_keep_DL_0233B8" Offset="0x233B8" />
+        <DList Name="gameplay_keep_DL_023428" Offset="0x23428" />
+        <DList Name="gameplay_keep_DL_023480" Offset="0x23480" />
+        <DList Name="gameplay_keep_DL_0234F0" Offset="0x234F0" />
+        <Texture Name="gameplay_keep_Tex_023508" OutName="tex_023508" Format="i8" Width="64" Height="64" Offset="0x23508" />
+        <Texture Name="gameplay_keep_Tex_024510" OutName="tex_024510" Format="i8" Width="64" Height="32" Offset="0x24510" />
+        <Texture Name="gameplay_keep_Tex_024D10" OutName="tex_024D10" Format="i8" Width="64" Height="32" Offset="0x24D10" />
+        <DList Name="gameplay_keep_DL_025850" Offset="0x25850" />
+        <DList Name="gameplay_keep_DL_025970" Offset="0x25970" />
+        <DList Name="gameplay_keep_DL_025DD0" Offset="0x25DD0" />
+        <DList Name="gameplay_keep_DL_025EF0" Offset="0x25EF0" />
+        <Texture Name="gameplay_keep_Tex_026010" OutName="tex_026010" Format="i8" Width="32" Height="32" Offset="0x26010" />
+        <Texture Name="gameplay_keep_Tex_026410" OutName="tex_026410" Format="i8" Width="32" Height="32" Offset="0x26410" />
+        <DList Name="gameplay_keep_DL_0268F0" Offset="0x268F0" />
+        <Texture Name="gameplay_keep_Tex_0269E0" OutName="tex_0269E0" Format="i8" Width="32" Height="64" Offset="0x269E0" />
+        <Texture Name="gameplay_keep_Tex_0271E0" OutName="tex_0271E0" Format="i8" Width="32" Height="64" Offset="0x271E0" />
+        <DList Name="gameplay_keep_DL_027CA0" Offset="0x27CA0" />
+        <Blob Name="gameplay_keep_Blob_027DD0" Size="0x420" Offset="0x27DD0" />
+        <DList Name="gameplay_keep_DL_0282D0" Offset="0x282D0" />
+        <Texture Name="gameplay_keep_Tex_0283B8" OutName="tex_0283B8" Format="i4" Width="64" Height="64" Offset="0x283B8" />
+        <Texture Name="gameplay_keep_Tex_028BB8" OutName="tex_028BB8" Format="i8" Width="32" Height="32" Offset="0x28BB8" />
+        <TextureAnimation Name="gameplay_keep_Matanimheader_028FEC" Offset="0x28FEC" />
+        <Blob Name="gameplay_keep_Blob_028FFC" Size="0x24" Offset="0x28FFC" />
+        <Animation Name="gameplay_keep_Anim_029140" Offset="0x29140" />
+        <Texture Name="gameplay_keep_Tex_029150" OutName="tex_029150" Format="i8" Width="32" Height="64" Offset="0x29150" />
+        <DList Name="gameplay_keep_DL_029990" Offset="0x29990" />
+        <DList Name="gameplay_keep_DL_029A58" Offset="0x29A58" />
+        <DList Name="gameplay_keep_DL_029B20" Offset="0x29B20" />
+        <DList Name="gameplay_keep_DL_029BE8" Offset="0x29BE8" />
+        <DList Name="gameplay_keep_DL_029CB0" Offset="0x29CB0" />
+        <DList Name="gameplay_keep_DL_029CF0" Offset="0x29CF0" />
+        <DList Name="gameplay_keep_DL_029D10" Offset="0x29D10" />
+        <Texture Name="gameplay_keep_Tex_029EF8" OutName="tex_029EF8" Format="rgba16" Width="32" Height="64" Offset="0x29EF8" />
+        <Limb Name="gameplay_keep_Standardlimb_02AEF8" Type="Standard" Offset="0x2AEF8" />
+        <Limb Name="gameplay_keep_Standardlimb_02AF04" Type="Standard" Offset="0x2AF04" />
+        <Limb Name="gameplay_keep_Standardlimb_02AF10" Type="Standard" Offset="0x2AF10" />
+        <Limb Name="gameplay_keep_Standardlimb_02AF1C" Type="Standard" Offset="0x2AF1C" />
+        <Limb Name="gameplay_keep_Standardlimb_02AF28" Type="Standard" Offset="0x2AF28" />
+        <Limb Name="gameplay_keep_Standardlimb_02AF34" Type="Standard" Offset="0x2AF34" />
+        <Skeleton Name="gameplay_keep_Skel_02AF58" Type="Flex" LimbType="Standard" Offset="0x2AF58" />
+        <Animation Name="gameplay_keep_Anim_02B2E8" Offset="0x2B2E8" />
+        <Animation Name="gameplay_keep_Anim_02B494" Offset="0x2B494" />
+        <DList Name="gameplay_keep_DL_02B6B0" Offset="0x2B6B0" />
+        <DList Name="gameplay_keep_DL_02B748" Offset="0x2B748" />
+        <DList Name="gameplay_keep_DL_02B7E0" Offset="0x2B7E0" />
+        <DList Name="gameplay_keep_DL_02B888" Offset="0x2B888" />
+        <DList Name="gameplay_keep_DL_02B920" Offset="0x2B920" />
+        <DList Name="gameplay_keep_DL_02B9B8" Offset="0x2B9B8" />
+        <DList Name="gameplay_keep_DL_02BA68" Offset="0x2BA68" />
+        <DList Name="gameplay_keep_DL_02BB00" Offset="0x2BB00" />
+        <DList Name="gameplay_keep_DL_02BB98" Offset="0x2BB98" />
+        <Texture Name="gameplay_keep_Tex_02BC30" OutName="tex_02BC30" Format="ia8" Width="32" Height="32" Offset="0x2BC30" />
+        <Texture Name="gameplay_keep_Tex_02C030" OutName="tex_02C030" Format="ia8" Width="16" Height="32" Offset="0x2C030" />
+        <Texture Name="gameplay_keep_Tex_02C230" OutName="tex_02C230" Format="ia8" Width="32" Height="32" Offset="0x2C230" />
+        <Texture Name="gameplay_keep_Tex_02C630" OutName="tex_02C630" Format="ia8" Width="16" Height="16" Offset="0x2C630" />
+        <Texture Name="gameplay_keep_Tex_02C730" OutName="tex_02C730" Format="i4" Width="16" Height="16" Offset="0x2C730" />
+        <TextureAnimation Name="gameplay_keep_Matanimheader_02C818" Offset="0x2C818" />
+        <TextureAnimation Name="gameplay_keep_Matanimheader_02C890" Offset="0x2C890" />
+        <TextureAnimation Name="gameplay_keep_Matanimheader_02C908" Offset="0x2C908" />
+        <TextureAnimation Name="gameplay_keep_Matanimheader_02C980" Offset="0x2C980" />
+        <TextureAnimation Name="gameplay_keep_Matanimheader_02C9F8" Offset="0x2C9F8" />
+        <Limb Name="gameplay_keep_Standardlimb_02CA08" Type="Standard" Offset="0x2CA08" />
+        <Limb Name="gameplay_keep_Standardlimb_02CA14" Type="Standard" Offset="0x2CA14" />
+        <Limb Name="gameplay_keep_Standardlimb_02CA20" Type="Standard" Offset="0x2CA20" />
+        <Limb Name="gameplay_keep_Standardlimb_02CA2C" Type="Standard" Offset="0x2CA2C" />
+        <Limb Name="gameplay_keep_Standardlimb_02CA38" Type="Standard" Offset="0x2CA38" />
+        <Limb Name="gameplay_keep_Standardlimb_02CA44" Type="Standard" Offset="0x2CA44" />
+        <Limb Name="gameplay_keep_Standardlimb_02CA50" Type="Standard" Offset="0x2CA50" />
+        <Limb Name="gameplay_keep_Standardlimb_02CA5C" Type="Standard" Offset="0x2CA5C" />
+        <Limb Name="gameplay_keep_Standardlimb_02CA68" Type="Standard" Offset="0x2CA68" />
+        <Skeleton Name="gameplay_keep_Skel_02CA98" Type="Flex" LimbType="Standard" Offset="0x2CA98" />
+        <Texture Name="gameplay_keep_Tex_02CAA8" OutName="tex_02CAA8" Format="i4" Width="16" Height="16" Offset="0x2CAA8" />
+        <Texture Name="gameplay_keep_Tex_02CB30" OutName="tex_02CB30" Format="i8" Width="16" Height="16" Offset="0x2CB30" />
+        <Texture Name="gameplay_keep_Tex_02CC30" OutName="tex_02CC30" Format="rgba16" Width="32" Height="32" Offset="0x2CC30" />
+        <Texture Name="gameplay_keep_Tex_02D430" OutName="tex_02D430" Format="i8" Width="32" Height="64" Offset="0x2D430" />
+        <Texture Name="gameplay_keep_Tex_02DC30" OutName="tex_02DC30" Format="i8" Width="32" Height="64" Offset="0x2DC30" />
+        <DList Name="gameplay_keep_DL_02E510" Offset="0x2E510" />
+        <Animation Name="gameplay_keep_Anim_02E65C" Offset="0x2E65C" />
+        <DList Name="gameplay_keep_DL_02E910" Offset="0x2E910" />
+        <DList Name="gameplay_keep_DL_02E9A8" Offset="0x2E9A8" />
+        <DList Name="gameplay_keep_DL_02EAB8" Offset="0x2EAB8" />
+        <Texture Name="gameplay_keep_Tex_02EBC8" OutName="tex_02EBC8" Format="rgba16" Width="16" Height="16" Offset="0x2EBC8" />
+        <Texture Name="gameplay_keep_Tex_02EDC8" OutName="tex_02EDC8" Format="rgba16" Width="32" Height="8" Offset="0x2EDC8" />
+        <Limb Name="gameplay_keep_Standardlimb_02EFC8" Type="Standard" Offset="0x2EFC8" />
+        <Limb Name="gameplay_keep_Standardlimb_02EFD4" Type="Standard" Offset="0x2EFD4" />
+        <Limb Name="gameplay_keep_Standardlimb_02EFE0" Type="Standard" Offset="0x2EFE0" />
+        <Limb Name="gameplay_keep_Standardlimb_02EFEC" Type="Standard" Offset="0x2EFEC" />
+        <Limb Name="gameplay_keep_Standardlimb_02EFF8" Type="Standard" Offset="0x2EFF8" />
+        <Limb Name="gameplay_keep_Standardlimb_02F004" Type="Standard" Offset="0x2F004" />
+        <Skeleton Name="gameplay_keep_Skel_02F028" Type="Flex" LimbType="Standard" Offset="0x2F028" />
+        <Animation Name="gameplay_keep_Anim_02F0EC" Offset="0x2F0EC" />
+        <Texture Name="gameplay_keep_Tex_02F100" OutName="tex_02F100" Format="i8" Width="64" Height="64" Offset="0x2F100" />
+        <DList Name="gameplay_keep_DL_030100" Offset="0x30100" />
+        <DList Name="gameplay_keep_DL_0301B0" Offset="0x301B0" />
+        <Texture Name="gameplay_keep_Tex_030270" OutName="tex_030270" Format="ia8" Width="32" Height="32" Offset="0x30270" />
+        <Texture Name="gameplay_keep_Tex_030670" OutName="tex_030670" Format="ia8" Width="32" Height="32" Offset="0x30670" />
+        <Texture Name="gameplay_keep_Tex_030A70" OutName="tex_030A70" Format="ia8" Width="32" Height="32" Offset="0x30A70" />
+        <Texture Name="gameplay_keep_Tex_030E70" OutName="tex_030E70" Format="ia8" Width="32" Height="32" Offset="0x30E70" />
+        <Texture Name="gameplay_keep_Tex_031270" OutName="tex_031270" Format="ia8" Width="32" Height="32" Offset="0x31270" />
+        <Texture Name="gameplay_keep_Tex_031670" OutName="tex_031670" Format="ia8" Width="32" Height="32" Offset="0x31670" />
+        <Texture Name="gameplay_keep_Tex_031A70" OutName="tex_031A70" Format="ia8" Width="32" Height="32" Offset="0x31A70" />
+        <Texture Name="gameplay_keep_Tex_031E70" OutName="tex_031E70" Format="ia8" Width="32" Height="32" Offset="0x31E70" />
+        <DList Name="gameplay_keep_DL_032270" Offset="0x32270" />
+        <Texture Name="gameplay_keep_Tex_032310" OutName="tex_032310" Format="rgba32" Width="16" Height="64" Offset="0x32310" />
+        <Texture Name="gameplay_keep_Tex_033310" OutName="tex_033310" Format="i4" Width="32" Height="24" Offset="0x33310" />
+        <Texture Name="gameplay_keep_Tex_033490" OutName="tex_033490" Format="i4" Width="32" Height="24" Offset="0x33490" />
+        <Texture Name="gameplay_keep_Tex_033610" OutName="tex_033610" Format="i4" Width="32" Height="24" Offset="0x33610" />
+        <Texture Name="gameplay_keep_Tex_033790" OutName="tex_033790" Format="i4" Width="32" Height="24" Offset="0x33790" />
+        <Texture Name="gameplay_keep_Tex_033910" OutName="tex_033910" Format="i4" Width="32" Height="24" Offset="0x33910" />
+        <Texture Name="gameplay_keep_Tex_033A90" OutName="tex_033A90" Format="i4" Width="32" Height="24" Offset="0x33A90" />
+        <Texture Name="gameplay_keep_Tex_033C10" OutName="tex_033C10" Format="i4" Width="32" Height="24" Offset="0x33C10" />
+        <Texture Name="gameplay_keep_Tex_033D90" OutName="tex_033D90" Format="i4" Width="32" Height="24" Offset="0x33D90" />
+        <Texture Name="gameplay_keep_Tex_033F10" OutName="tex_033F10" Format="i4" Width="32" Height="24" Offset="0x33F10" />
+        <Texture Name="gameplay_keep_Tex_034090" OutName="tex_034090" Format="i4" Width="32" Height="24" Offset="0x34090" />
+        <Texture Name="gameplay_keep_Tex_034210" OutName="tex_034210" Format="i4" Width="32" Height="24" Offset="0x34210" />
+        <Texture Name="gameplay_keep_Tex_034390" OutName="tex_034390" Format="i4" Width="32" Height="24" Offset="0x34390" />
+        <Texture Name="gameplay_keep_Tex_034510" OutName="tex_034510" Format="i4" Width="32" Height="24" Offset="0x34510" />
+        <Texture Name="gameplay_keep_Tex_034690" OutName="tex_034690" Format="i4" Width="32" Height="24" Offset="0x34690" />
+        <Texture Name="gameplay_keep_Tex_034810" OutName="tex_034810" Format="i4" Width="32" Height="24" Offset="0x34810" />
+        <Texture Name="gameplay_keep_Tex_034990" OutName="tex_034990" Format="i4" Width="32" Height="24" Offset="0x34990" />
+        <Texture Name="gameplay_keep_Tex_034B10" OutName="tex_034B10" Format="i4" Width="32" Height="24" Offset="0x34B10" />
+        <Texture Name="gameplay_keep_Tex_034C90" OutName="tex_034C90" Format="i4" Width="32" Height="24" Offset="0x34C90" />
+        <Texture Name="gameplay_keep_Tex_034E10" OutName="tex_034E10" Format="i4" Width="32" Height="24" Offset="0x34E10" />
+        <Texture Name="gameplay_keep_Tex_034F90" OutName="tex_034F90" Format="i4" Width="32" Height="24" Offset="0x34F90" />
+        <Texture Name="gameplay_keep_Tex_035110" OutName="tex_035110" Format="i4" Width="32" Height="24" Offset="0x35110" />
+        <Texture Name="gameplay_keep_Tex_035290" OutName="tex_035290" Format="i4" Width="32" Height="24" Offset="0x35290" />
+        <Texture Name="gameplay_keep_Tex_035410" OutName="tex_035410" Format="i4" Width="32" Height="24" Offset="0x35410" />
+        <Texture Name="gameplay_keep_Tex_035590" OutName="tex_035590" Format="i4" Width="32" Height="24" Offset="0x35590" />
+        <DList Name="gameplay_keep_DL_035710" Offset="0x35710" />
+        <Texture Name="gameplay_keep_Tex_0357B0" OutName="tex_0357B0" Format="ia8" Width="32" Height="64" Offset="0x357B0" />
+        <Texture Name="gameplay_keep_Tex_035FB0" OutName="tex_035FB0" Format="ia8" Width="32" Height="64" Offset="0x35FB0" />
+        <Texture Name="gameplay_keep_Tex_0367B0" OutName="tex_0367B0" Format="i8" Width="64" Height="64" Offset="0x367B0" />
+        <DList Name="gameplay_keep_DL_0377B0" Offset="0x377B0" />
+        <DList Name="gameplay_keep_DL_037850" Offset="0x37850" />
+        <Texture Name="gameplay_keep_Tex_0378F0" OutName="tex_0378F0" Format="i8" Width="32" Height="40" Offset="0x378F0" />
+        <Texture Name="gameplay_keep_Tex_037DF0" OutName="tex_037DF0" Format="i8" Width="32" Height="40" Offset="0x37DF0" />
+        <Texture Name="gameplay_keep_Tex_0382F0" OutName="tex_0382F0" Format="i8" Width="32" Height="40" Offset="0x382F0" />
+        <Texture Name="gameplay_keep_Tex_0387F0" OutName="tex_0387F0" Format="i8" Width="32" Height="40" Offset="0x387F0" />
+        <Texture Name="gameplay_keep_Tex_038CF0" OutName="tex_038CF0" Format="i8" Width="32" Height="40" Offset="0x38CF0" />
+        <Texture Name="gameplay_keep_Tex_0391F0" OutName="tex_0391F0" Format="i8" Width="32" Height="40" Offset="0x391F0" />
+        <Texture Name="gameplay_keep_Tex_0396F0" OutName="tex_0396F0" Format="i8" Width="32" Height="40" Offset="0x396F0" />
+        <Texture Name="gameplay_keep_Tex_039BF0" OutName="tex_039BF0" Format="i8" Width="32" Height="40" Offset="0x39BF0" />
+        <DList Name="gameplay_keep_DL_03A0F0" Offset="0x3A0F0" />
+        <Texture Name="gameplay_keep_Tex_03A190" OutName="tex_03A190" Format="ia8" Width="32" Height="32" Offset="0x3A190" />
+        <Texture Name="gameplay_keep_Tex_03A590" OutName="tex_03A590" Format="ia8" Width="32" Height="32" Offset="0x3A590" />
+        <Texture Name="gameplay_keep_Tex_03A990" OutName="tex_03A990" Format="ia8" Width="32" Height="32" Offset="0x3A990" />
+        <Texture Name="gameplay_keep_Tex_03AD90" OutName="tex_03AD90" Format="ia8" Width="32" Height="32" Offset="0x3AD90" />
+        <Texture Name="gameplay_keep_Tex_03B190" OutName="tex_03B190" Format="ia8" Width="32" Height="32" Offset="0x3B190" />
+        <Texture Name="gameplay_keep_Tex_03B590" OutName="tex_03B590" Format="ia8" Width="32" Height="32" Offset="0x3B590" />
+        <Texture Name="gameplay_keep_Tex_03B990" OutName="tex_03B990" Format="ia8" Width="32" Height="32" Offset="0x3B990" />
+        <Texture Name="gameplay_keep_Tex_03BD90" OutName="tex_03BD90" Format="ia8" Width="32" Height="32" Offset="0x3BD90" />
+        <DList Name="gameplay_keep_DL_03C190" Offset="0x3C190" />
+        <Texture Name="gameplay_keep_Tex_03C230" OutName="tex_03C230" Format="i4" Width="32" Height="96" Offset="0x3C230" />
+        <Texture Name="gameplay_keep_Tex_03C830" OutName="tex_03C830" Format="i4" Width="32" Height="96" Offset="0x3C830" />
+        <Texture Name="gameplay_keep_Tex_03CE30" OutName="tex_03CE30" Format="i4" Width="32" Height="96" Offset="0x3CE30" />
+        <Texture Name="gameplay_keep_Tex_03D430" OutName="tex_03D430" Format="i4" Width="32" Height="96" Offset="0x3D430" />
+        <Texture Name="gameplay_keep_Tex_03DA30" OutName="tex_03DA30" Format="i4" Width="32" Height="96" Offset="0x3DA30" />
+        <Texture Name="gameplay_keep_Tex_03E030" OutName="tex_03E030" Format="i4" Width="32" Height="96" Offset="0x3E030" />
+        <Texture Name="gameplay_keep_Tex_03E630" OutName="tex_03E630" Format="i4" Width="32" Height="96" Offset="0x3E630" />
+        <Texture Name="gameplay_keep_Tex_03EC30" OutName="tex_03EC30" Format="i4" Width="32" Height="96" Offset="0x3EC30" />
+        <DList Name="gameplay_keep_DL_03F230" Offset="0x3F230" />
+        <Texture Name="gameplay_keep_Tex_03F300" OutName="tex_03F300" Format="i8" Width="32" Height="64" Offset="0x3F300" />
+        <Texture Name="gameplay_keep_Tex_03FB00" OutName="tex_03FB00" Format="i8" Width="32" Height="64" Offset="0x3FB00" />
+        <Texture Name="gameplay_keep_Tex_040300" OutName="tex_040300" Format="i8" Width="32" Height="64" Offset="0x40300" />
+        <Texture Name="gameplay_keep_Tex_040B00" OutName="tex_040B00" Format="i8" Width="32" Height="64" Offset="0x40B00" />
+        <Texture Name="gameplay_keep_Tex_041300" OutName="tex_041300" Format="i8" Width="32" Height="64" Offset="0x41300" />
+        <Texture Name="gameplay_keep_Tex_041B00" OutName="tex_041B00" Format="i8" Width="32" Height="64" Offset="0x41B00" />
+        <Texture Name="gameplay_keep_Tex_042300" OutName="tex_042300" Format="i8" Width="32" Height="64" Offset="0x42300" />
+        <Texture Name="gameplay_keep_Tex_042B00" OutName="tex_042B00" Format="i8" Width="32" Height="64" Offset="0x42B00" />
+        <Texture Name="gameplay_keep_Tex_043300" OutName="tex_043300" Format="i8" Width="32" Height="64" Offset="0x43300" />
+        <Texture Name="gameplay_keep_Tex_043B00" OutName="tex_043B00" Format="i8" Width="32" Height="64" Offset="0x43B00" />
+        <DList Name="gameplay_keep_DL_044300" Offset="0x44300" />
+        <Texture Name="gameplay_keep_Tex_0443B0" OutName="tex_0443B0" Format="i8" Width="32" Height="32" Offset="0x443B0" />
+        <Texture Name="gameplay_keep_Tex_0447B0" OutName="tex_0447B0" Format="i8" Width="32" Height="32" Offset="0x447B0" />
+        <Texture Name="gameplay_keep_Tex_044BB0" OutName="tex_044BB0" Format="i8" Width="32" Height="32" Offset="0x44BB0" />
+        <Texture Name="gameplay_keep_Tex_044FB0" OutName="tex_044FB0" Format="i8" Width="32" Height="32" Offset="0x44FB0" />
+        <Texture Name="gameplay_keep_Tex_0453B0" OutName="tex_0453B0" Format="i8" Width="32" Height="32" Offset="0x453B0" />
+        <DList Name="gameplay_keep_DL_048DF0" Offset="0x48DF0" />
+        <Texture Name="gameplay_keep_TLUT_04A460" OutName="tlut_04A460" Format="rgba16" Width="16" Height="16" Offset="0x4A460" />
+        <Texture Name="gameplay_keep_Tex_04A660" OutName="tex_04A660" Format="ci8" Width="16" Height="16" Offset="0x4A660" />
+        <Texture Name="gameplay_keep_Tex_04A760" OutName="tex_04A760" Format="ci8" Width="16" Height="32" Offset="0x4A760" />
+        <Texture Name="gameplay_keep_Tex_04A960" OutName="tex_04A960" Format="ci8" Width="16" Height="16" Offset="0x4A960" />
+        <Texture Name="gameplay_keep_Tex_04AA60" OutName="tex_04AA60" Format="ci8" Width="8" Height="8" Offset="0x4AA60" />
+        <Texture Name="gameplay_keep_Tex_04AAA0" OutName="tex_04AAA0" Format="ci8" Width="8" Height="8" Offset="0x4AAA0" />
+        <Texture Name="gameplay_keep_Tex_04AAE0" OutName="tex_04AAE0" Format="ci8" Width="16" Height="16" Offset="0x4AAE0" />
+        <Texture Name="gameplay_keep_Tex_04ABE0" OutName="tex_04ABE0" Format="ci8" Width="8" Height="16" Offset="0x4ABE0" />
+        <Texture Name="gameplay_keep_Tex_04AC60" OutName="tex_04AC60" Format="ci8" Width="8" Height="16" Offset="0x4AC60" />
+        <Texture Name="gameplay_keep_Tex_04ACE0" OutName="tex_04ACE0" Format="ci8" Width="8" Height="8" Offset="0x4ACE0" />
+        <Texture Name="gameplay_keep_Tex_04AD20" OutName="tex_04AD20" Format="ci8" Width="32" Height="32" Offset="0x4AD20" />
+        <Texture Name="gameplay_keep_Tex_04B120" OutName="tex_04B120" Format="ci8" Width="32" Height="64" Offset="0x4B120" />
+        <Texture Name="gameplay_keep_Tex_04B920" OutName="tex_04B920" Format="ci8" Width="32" Height="64" Offset="0x4B920" />
+        <Texture Name="gameplay_keep_Tex_04C120" OutName="tex_04C120" Format="ci8" Width="32" Height="64" Offset="0x4C120" />
+        <Texture Name="gameplay_keep_Tex_04C920" OutName="tex_04C920" Format="ci8" Width="8" Height="16" Offset="0x4C920" />
+        <Texture Name="gameplay_keep_Tex_04C9A0" OutName="tex_04C9A0" Format="ci8" Width="32" Height="32" Offset="0x4C9A0" />
+        <Texture Name="gameplay_keep_Tex_04CDA0" OutName="tex_04CDA0" Format="rgba16" Width="32" Height="64" Offset="0x4CDA0" />
+        <Texture Name="gameplay_keep_Tex_04DDA0" OutName="tex_04DDA0" Format="i8" Width="32" Height="32" Offset="0x4DDA0" />
+        <Texture Name="gameplay_keep_Tex_04E1A0" OutName="tex_04E1A0" Format="ci8" Width="8" Height="16" Offset="0x4E1A0" />
+        <Texture Name="gameplay_keep_Tex_04E220" OutName="tex_04E220" Format="i8" Width="64" Height="64" Offset="0x4E220" />
+        <DList Name="gameplay_keep_DL_04F250" Offset="0x4F250" />
+        <Texture Name="gameplay_keep_Tex_04F2C0" OutName="tex_04F2C0" Format="ia16" Width="32" Height="64" Offset="0x4F2C0" />
+        <DList Name="gameplay_keep_DL_050550" Offset="0x50550" />
+        <DList Name="gameplay_keep_DL_050648" Offset="0x50648" />
+        <DList Name="gameplay_keep_DL_0506E0" Offset="0x506E0" />
+        <DList Name="gameplay_keep_DL_050D10" Offset="0x50D10" />
+        <Texture Name="gameplay_keep_Tex_050E80" OutName="tex_050E80" Format="i4" Width="32" Height="32" Offset="0x50E80" />
+        <DList Name="gameplay_keep_DL_0510B0" Offset="0x510B0" />
+        <DList Name="gameplay_keep_DL_051180" Offset="0x51180" />
+        <DList Name="gameplay_keep_DL_051238" Offset="0x51238" />
+        <Animation Name="gameplay_keep_Anim_05140C" Offset="0x5140C" />
+        <DList Name="gameplay_keep_DL_051420" Offset="0x51420" />
+        <DList Name="gameplay_keep_DL_0514C0" Offset="0x514C0" />
+        <DList Name="gameplay_keep_DL_0514D0" Offset="0x514D0" />
+        <DList Name="gameplay_keep_DL_051510" Offset="0x51510" />
+        <DList Name="gameplay_keep_DL_0515B0" Offset="0x515B0" />
+        <DList Name="gameplay_keep_DL_0515C0" Offset="0x515C0" />
+        <DList Name="gameplay_keep_DL_051600" Offset="0x51600" />
+        <DList Name="gameplay_keep_DL_0516A0" Offset="0x516A0" />
+        <DList Name="gameplay_keep_DL_0516B0" Offset="0x516B0" />
+        <DList Name="gameplay_keep_DL_0516F0" Offset="0x516F0" />
+        <DList Name="gameplay_keep_DL_051790" Offset="0x51790" />
+        <DList Name="gameplay_keep_DL_0517A0" Offset="0x517A0" />
+        <DList Name="gameplay_keep_DL_0517E0" Offset="0x517E0" />
+        <DList Name="gameplay_keep_DL_051880" Offset="0x51880" />
+        <DList Name="gameplay_keep_DL_051890" Offset="0x51890" />
+        <DList Name="gameplay_keep_DL_0518D0" Offset="0x518D0" />
+        <DList Name="gameplay_keep_DL_051970" Offset="0x51970" />
+        <DList Name="gameplay_keep_DL_051980" Offset="0x51980" />
+        <DList Name="gameplay_keep_DL_0519C0" Offset="0x519C0" />
+        <DList Name="gameplay_keep_DL_051A60" Offset="0x51A60" />
+        <DList Name="gameplay_keep_DL_051A70" Offset="0x51A70" />
+        <DList Name="gameplay_keep_DL_051AB0" Offset="0x51AB0" />
+        <DList Name="gameplay_keep_DL_051B50" Offset="0x51B50" />
+        <DList Name="gameplay_keep_DL_051B60" Offset="0x51B60" />
+        <DList Name="gameplay_keep_DL_051BA0" Offset="0x51BA0" />
+        <DList Name="gameplay_keep_DL_051C50" Offset="0x51C50" />
+        <DList Name="gameplay_keep_DL_051C60" Offset="0x51C60" />
+        <Texture Name="gameplay_keep_Tex_051D30" OutName="tex_051D30" Format="rgba16" Width="16" Height="64" Offset="0x51D30" />
+        <Texture Name="gameplay_keep_Tex_052530" OutName="tex_052530" Format="rgba16" Width="8" Height="16" Offset="0x52530" />
+        <Limb Name="gameplay_keep_Standardlimb_052630" Type="Standard" Offset="0x52630" />
+        <Limb Name="gameplay_keep_Standardlimb_05263C" Type="Standard" Offset="0x5263C" />
+        <Limb Name="gameplay_keep_Standardlimb_052648" Type="Standard" Offset="0x52648" />
+        <Limb Name="gameplay_keep_Standardlimb_052654" Type="Standard" Offset="0x52654" />
+        <Limb Name="gameplay_keep_Standardlimb_052660" Type="Standard" Offset="0x52660" />
+        <Limb Name="gameplay_keep_Standardlimb_05266C" Type="Standard" Offset="0x5266C" />
+        <Limb Name="gameplay_keep_Standardlimb_052678" Type="Standard" Offset="0x52678" />
+        <Limb Name="gameplay_keep_Standardlimb_052684" Type="Standard" Offset="0x52684" />
+        <Limb Name="gameplay_keep_Standardlimb_052690" Type="Standard" Offset="0x52690" />
+        <Limb Name="gameplay_keep_Standardlimb_05269C" Type="Standard" Offset="0x5269C" />
+        <Limb Name="gameplay_keep_Standardlimb_0526A8" Type="Standard" Offset="0x526A8" />
+        <Limb Name="gameplay_keep_Standardlimb_0526B4" Type="Standard" Offset="0x526B4" />
+        <Limb Name="gameplay_keep_Standardlimb_0526C0" Type="Standard" Offset="0x526C0" />
+        <Limb Name="gameplay_keep_Standardlimb_0526CC" Type="Standard" Offset="0x526CC" />
+        <Limb Name="gameplay_keep_Standardlimb_0526D8" Type="Standard" Offset="0x526D8" />
+        <Limb Name="gameplay_keep_Standardlimb_0526E4" Type="Standard" Offset="0x526E4" />
+        <Limb Name="gameplay_keep_Standardlimb_0526F0" Type="Standard" Offset="0x526F0" />
+        <Limb Name="gameplay_keep_Standardlimb_0526FC" Type="Standard" Offset="0x526FC" />
+        <Limb Name="gameplay_keep_Standardlimb_052708" Type="Standard" Offset="0x52708" />
+        <Limb Name="gameplay_keep_Standardlimb_052714" Type="Standard" Offset="0x52714" />
+        <Limb Name="gameplay_keep_Standardlimb_052720" Type="Standard" Offset="0x52720" />
+        <Limb Name="gameplay_keep_Standardlimb_05272C" Type="Standard" Offset="0x5272C" />
+        <Limb Name="gameplay_keep_Standardlimb_052738" Type="Standard" Offset="0x52738" />
+        <Skeleton Name="gameplay_keep_Skel_0527A0" Type="Normal" LimbType="Standard" Offset="0x527A0" />
+        <DList Name="gameplay_keep_DL_0527F0" Offset="0x527F0" />
+        <DList Name="gameplay_keep_DL_0528B0" Offset="0x528B0" />
+        <Texture Name="gameplay_keep_Tex_052940" OutName="tex_052940" Format="rgba16" Width="32" Height="32" Offset="0x52940" />
+        <Texture Name="gameplay_keep_Tex_053140" OutName="tex_053140" Format="rgba16" Width="32" Height="32" Offset="0x53140" />
+        <Texture Name="gameplay_keep_Tex_053940" OutName="tex_053940" Format="i4" Width="64" Height="64" Offset="0x53940" />
+        <Texture Name="gameplay_keep_Tex_054140" OutName="tex_054140" Format="i4" Width="64" Height="64" Offset="0x54140" />
+        <DList Name="gameplay_keep_DL_054940" Offset="0x54940" />
+        <DList Name="gameplay_keep_DL_0549A8" Offset="0x549A8" />
+        <DList Name="gameplay_keep_DL_054A90" Offset="0x54A90" />
+        <Texture Name="gameplay_keep_Tex_054AF0" OutName="tex_054AF0" Format="i4" Width="16" Height="16" Offset="0x54AF0" />
+        <DList Name="gameplay_keep_DL_054C90" Offset="0x54C90" />
+        <Texture Name="gameplay_keep_Tex_054D90" OutName="tex_054D90" Format="i4" Width="16" Height="16" Offset="0x54D90" />
+        <Texture Name="gameplay_keep_Tex_054E10" OutName="tex_054E10" Format="i8" Width="16" Height="16" Offset="0x54E10" />
+        <Blob Name="gameplay_keep_Blob_054F10" Size="0x10" Offset="0x54F10" />
+        <Texture Name="gameplay_keep_Tex_054F20" OutName="tex_054F20" Format="i8" Width="32" Height="32" Offset="0x54F20" />
+        <DList Name="gameplay_keep_DL_055360" Offset="0x55360" />
+        <DList Name="gameplay_keep_DL_055620" Offset="0x55620" />
+        <DList Name="gameplay_keep_DL_055628" Offset="0x55628" />
+        <Texture Name="gameplay_keep_Tex_0557F0" OutName="tex_0557F0" Format="rgba16" Width="32" Height="32" Offset="0x557F0" />
+        <Texture Name="gameplay_keep_Tex_055FF0" OutName="tex_055FF0" Format="i4" Width="64" Height="64" Offset="0x55FF0" />
+        <DList Name="gameplay_keep_DL_057B10" Offset="0x57B10" />
+        <Texture Name="gameplay_keep_Tex_057FE8" OutName="tex_057FE8" Format="rgba16" Width="8" Height="16" Offset="0x57FE8" />
+        <Texture Name="gameplay_keep_Tex_0580E8" OutName="tex_0580E8" Format="rgba16" Width="16" Height="16" Offset="0x580E8" />
+        <Texture Name="gameplay_keep_Tex_0582E8" OutName="tex_0582E8" Format="rgba16" Width="32" Height="32" Offset="0x582E8" />
+        <Texture Name="gameplay_keep_Tex_058AE8" OutName="tex_058AE8" Format="rgba16" Width="8" Height="8" Offset="0x58AE8" />
+        <DList Name="gameplay_keep_DL_058BA0" Offset="0x58BA0" />
+        <Texture Name="gameplay_keep_Tex_058C30" OutName="tex_058C30" Format="rgba16" Width="16" Height="16" Offset="0x58C30" />
+        <Collision Name="gameplay_keep_Colheader_058F30" Offset="0x58F30" />
+        <DList Name="gameplay_keep_DL_0590E0" Offset="0x590E0" />
+        <DList Name="gameplay_keep_DL_059310" Offset="0x59310" />
+        <Collision Name="gameplay_keep_Colheader_0594C8" Offset="0x594C8" />
+        <DList Name="gameplay_keep_DL_059680" Offset="0x59680" />
+        <Collision Name="gameplay_keep_Colheader_059840" Offset="0x59840" />
+        <DList Name="gameplay_keep_DL_0599F0" Offset="0x599F0" />
+        <Collision Name="gameplay_keep_Colheader_059BA0" Offset="0x59BA0" />
+        <DList Name="gameplay_keep_DL_059D50" Offset="0x59D50" />
+        <Collision Name="gameplay_keep_Colheader_059F00" Offset="0x59F00" />
+        <DList Name="gameplay_keep_DL_05A0B0" Offset="0x5A0B0" />
+        <Collision Name="gameplay_keep_Colheader_05A270" Offset="0x5A270" />
+        <DList Name="gameplay_keep_DL_05A430" Offset="0x5A430" />
+        <DList Name="gameplay_keep_DL_05A600" Offset="0x5A600" />
+        <Texture Name="gameplay_keep_Tex_05A6B0" OutName="tex_05A6B0" Format="i8" Width="16" Height="16" Offset="0x5A6B0" />
+        <DList Name="gameplay_keep_DL_05AAB0" Offset="0x5AAB0" />
+        <DList Name="gameplay_keep_DL_05AED0" Offset="0x5AED0" />
+        <DList Name="gameplay_keep_DL_05B430" Offset="0x5B430" />
+        <Texture Name="gameplay_keep_Tex_05B6F0" OutName="tex_05B6F0" Format="rgba16" Width="32" Height="32" Offset="0x5B6F0" />
+        <Texture Name="gameplay_keep_Tex_05BEF0" OutName="tex_05BEF0" Format="rgba16" Width="32" Height="32" Offset="0x5BEF0" />
+        <Texture Name="gameplay_keep_Tex_05C6F0" OutName="tex_05C6F0" Format="rgba16" Width="32" Height="32" Offset="0x5C6F0" />
+        <Texture Name="gameplay_keep_Tex_05CEF0" OutName="tex_05CEF0" Format="rgba16" Width="32" Height="32" Offset="0x5CEF0" />
+        <Texture Name="gameplay_keep_Tex_05D6F0" OutName="tex_05D6F0" Format="rgba16" Width="32" Height="32" Offset="0x5D6F0" />
+        <Texture Name="gameplay_keep_Tex_05DEF0" OutName="tex_05DEF0" Format="rgba16" Width="32" Height="32" Offset="0x5DEF0" />
+        <Texture Name="gameplay_keep_Tex_05E6F0" OutName="tex_05E6F0" Format="rgba16" Width="32" Height="32" Offset="0x5E6F0" />
+        <Texture Name="gameplay_keep_Tex_05EEF0" OutName="tex_05EEF0" Format="rgba16" Width="32" Height="32" Offset="0x5EEF0" />
+        <DList Name="gameplay_keep_DL_05F6F0" Offset="0x5F6F0" />
+        <Texture Name="gameplay_keep_Tex_05F7C0" OutName="tex_05F7C0" Format="rgba16" Width="32" Height="32" Offset="0x5F7C0" />
+        <Texture Name="gameplay_keep_Tex_05FFC0" OutName="tex_05FFC0" Format="rgba16" Width="32" Height="32" Offset="0x5FFC0" />
+        <Texture Name="gameplay_keep_Tex_0607C0" OutName="tex_0607C0" Format="rgba16" Width="32" Height="32" Offset="0x607C0" />
+        <Texture Name="gameplay_keep_Tex_060FC0" OutName="tex_060FC0" Format="rgba16" Width="32" Height="32" Offset="0x60FC0" />
+        <Texture Name="gameplay_keep_Tex_0617C0" OutName="tex_0617C0" Format="rgba16" Width="32" Height="32" Offset="0x617C0" />
+        <Texture Name="gameplay_keep_Tex_061FC0" OutName="tex_061FC0" Format="rgba16" Width="4" Height="4" Offset="0x61FC0" />
+        <Texture Name="gameplay_keep_Tex_061FE0" OutName="tex_061FE0" Format="rgba16" Width="4" Height="4" Offset="0x61FE0" />
+        <Texture Name="gameplay_keep_Tex_062000" OutName="tex_062000" Format="rgba16" Width="4" Height="4" Offset="0x62000" />
+        <Texture Name="gameplay_keep_Tex_062020" OutName="tex_062020" Format="rgba16" Width="4" Height="4" Offset="0x62020" />
+        <Texture Name="gameplay_keep_Tex_062040" OutName="tex_062040" Format="rgba16" Width="4" Height="4" Offset="0x62040" />
+        <Texture Name="gameplay_keep_Tex_062060" OutName="tex_062060" Format="rgba16" Width="4" Height="4" Offset="0x62060" />
+        <DList Name="gameplay_keep_DL_0622C0" Offset="0x622C0" />
+        <Texture Name="gameplay_keep_Tex_062390" OutName="tex_062390" Format="rgba16" Width="32" Height="32" Offset="0x62390" />
+        <Texture Name="gameplay_keep_Tex_062B90" OutName="tex_062B90" Format="rgba16" Width="32" Height="32" Offset="0x62B90" />
+        <Texture Name="gameplay_keep_Tex_063390" OutName="tex_063390" Format="rgba16" Width="32" Height="32" Offset="0x63390" />
+        <Texture Name="gameplay_keep_Tex_063B90" OutName="tex_063B90" Format="rgba16" Width="4" Height="4" Offset="0x63B90" />
+        <Texture Name="gameplay_keep_Tex_063BB0" OutName="tex_063BB0" Format="rgba16" Width="4" Height="4" Offset="0x63BB0" />
+        <Texture Name="gameplay_keep_Tex_063BD0" OutName="tex_063BD0" Format="rgba16" Width="32" Height="32" Offset="0x63BD0" />
+        <Texture Name="gameplay_keep_Tex_0643D0" OutName="tex_0643D0" Format="rgba16" Width="32" Height="32" Offset="0x643D0" />
+        <Texture Name="gameplay_keep_Tex_064BD0" OutName="tex_064BD0" Format="rgba16" Width="32" Height="32" Offset="0x64BD0" />
+        <Texture Name="gameplay_keep_Tex_0653D0" OutName="tex_0653D0" Format="rgba16" Width="32" Height="32" Offset="0x653D0" />
+        <Texture Name="gameplay_keep_Tex_065BD0" OutName="tex_065BD0" Format="rgba16" Width="32" Height="32" Offset="0x65BD0" />
+        <Texture Name="gameplay_keep_Tex_0663D0" OutName="tex_0663D0" Format="rgba16" Width="32" Height="32" Offset="0x663D0" />
+        <Texture Name="gameplay_keep_Tex_066BD0" OutName="tex_066BD0" Format="rgba16" Width="64" Height="32" Offset="0x66BD0" />
+        <Texture Name="gameplay_keep_Tex_067BD0" OutName="tex_067BD0" Format="rgba16" Width="32" Height="32" Offset="0x67BD0" />
+        <Texture Name="gameplay_keep_Tex_0683D0" OutName="tex_0683D0" Format="rgba16" Width="32" Height="32" Offset="0x683D0" />
+        <Texture Name="gameplay_keep_Tex_068BD0" OutName="tex_068BD0" Format="rgba16" Width="32" Height="16" Offset="0x68BD0" />
+        <Texture Name="gameplay_keep_Tex_068FD0" OutName="tex_068FD0" Format="rgba16" Width="32" Height="16" Offset="0x68FD0" />
+        <Texture Name="gameplay_keep_Tex_0693D0" OutName="tex_0693D0" Format="rgba16" Width="64" Height="8" Offset="0x693D0" />
+        <Texture Name="gameplay_keep_Tex_0697D0" OutName="tex_0697D0" Format="rgba16" Width="64" Height="32" Offset="0x697D0" />
+        <DList Name="gameplay_keep_DL_06A800" Offset="0x6A800" />
+        <Texture Name="gameplay_keep_Tex_06A880" OutName="tex_06A880" Format="i8" Width="16" Height="16" Offset="0x6A880" />
+        <DList Name="gameplay_keep_DL_06AB30" Offset="0x6AB30" />
+        <Texture Name="gameplay_keep_Tex_06ABF8" OutName="tex_06ABF8" Format="rgba16" Width="36" Height="36" Offset="0x6ABF8" />
+        <TextureAnimation Name="gameplay_keep_Matanimheader_06B6A0" Offset="0x6B6A0" />
+        <TextureAnimation Name="gameplay_keep_Matanimheader_06B730" Offset="0x6B730" />
+        <Blob Name="gameplay_keep_Blob_06B750" Size="0x3D0" Offset="0x6B750" />
+        <DList Name="gameplay_keep_DL_06BFE0" Offset="0x6BFE0" />
+        <DList Name="gameplay_keep_DL_06C098" Offset="0x6C098" />
+        <DList Name="gameplay_keep_DL_06C1E8" Offset="0x6C1E8" />
+        <Texture Name="gameplay_keep_Tex_06C350" OutName="tex_06C350" Format="i4" Width="64" Height="64" Offset="0x6C350" />
+        <Texture Name="gameplay_keep_Tex_06CB50" OutName="tex_06CB50" Format="i4" Width="64" Height="64" Offset="0x6CB50" />
+        <Texture Name="gameplay_keep_Tex_06D350" OutName="tex_06D350" Format="i4" Width="64" Height="64" Offset="0x6D350" />
+        <Texture Name="gameplay_keep_Tex_06DB50" OutName="tex_06DB50" Format="i4" Width="64" Height="64" Offset="0x6DB50" />
+        <Texture Name="gameplay_keep_Tex_06E350" OutName="tex_06E350" Format="i4" Width="64" Height="64" Offset="0x6E350" />
+        <Blob Name="gameplay_keep_Blob_06EB50" Size="0x30" Offset="0x6EB50" />
+        <Texture Name="gameplay_keep_Tex_06EB80" OutName="tex_06EB80" Format="i4" Width="64" Height="64" Offset="0x6EB80" />
+        <DList Name="gameplay_keep_DL_06F380" Offset="0x6F380" />
+        <DList Name="gameplay_keep_DL_06F9F0" Offset="0x6F9F0" />
+        <DList Name="gameplay_keep_DL_06FAE0" Offset="0x6FAE0" />
+        <DList Name="gameplay_keep_DL_06FE20" Offset="0x6FE20" />
+        <DList Name="gameplay_keep_DL_06FF68" Offset="0x6FF68" />
+        <Texture Name="gameplay_keep_Tex_0700B0" OutName="tex_0700B0" Format="rgba16" Width="16" Height="32" Offset="0x700B0" />
+        <Texture Name="gameplay_keep_Tex_0704B0" OutName="tex_0704B0" Format="rgba16" Width="16" Height="16" Offset="0x704B0" />
+        <DList Name="gameplay_keep_DL_0706E0" Offset="0x706E0" />
+        <DList Name="gameplay_keep_DL_070730" Offset="0x70730" />
+        <Texture Name="gameplay_keep_Tex_0707F0" OutName="tex_0707F0" Format="i4" Width="32" Height="32" Offset="0x707F0" />
+        <Texture Name="gameplay_keep_Tex_0709F0" OutName="tex_0709F0" Format="i4" Width="64" Height="64" Offset="0x709F0" />
+        <TextureAnimation Name="gameplay_keep_Matanimheader_0711F8" Offset="0x711F8" />
+        <DList Name="gameplay_keep_DL_071230" Offset="0x71230" />
+        <TextureAnimation Name="gameplay_keep_Matanimheader_0712F8" Offset="0x712F8" />
+        <Texture Name="gameplay_keep_Tex_071300" OutName="tex_071300" Format="i4" Width="32" Height="64" Offset="0x71300" />
+        <Texture Name="gameplay_keep_Tex_071700" OutName="tex_071700" Format="i4" Width="32" Height="64" Offset="0x71700" />
+        <Texture Name="gameplay_keep_Tex_071B00" OutName="tex_071B00" Format="i4" Width="32" Height="64" Offset="0x71B00" />
+        <Texture Name="gameplay_keep_Tex_071F00" OutName="tex_071F00" Format="i4" Width="32" Height="64" Offset="0x71F00" />
+        <Texture Name="gameplay_keep_Tex_072300" OutName="tex_072300" Format="i4" Width="32" Height="64" Offset="0x72300" />
+        <Texture Name="gameplay_keep_Tex_072700" OutName="tex_072700" Format="i4" Width="32" Height="64" Offset="0x72700" />
+        <Texture Name="gameplay_keep_Tex_072B00" OutName="tex_072B00" Format="i4" Width="32" Height="64" Offset="0x72B00" />
+        <Texture Name="gameplay_keep_Tex_072F00" OutName="tex_072F00" Format="i4" Width="32" Height="64" Offset="0x72F00" />
+        <Texture Name="gameplay_keep_Tex_073300" OutName="tex_073300" Format="i4" Width="32" Height="64" Offset="0x73300" />
+        <Texture Name="gameplay_keep_Tex_073700" OutName="tex_073700" Format="i4" Width="32" Height="64" Offset="0x73700" />
+        <Texture Name="gameplay_keep_Tex_073B00" OutName="tex_073B00" Format="i4" Width="32" Height="64" Offset="0x73B00" />
+        <Texture Name="gameplay_keep_Tex_073F00" OutName="tex_073F00" Format="i4" Width="32" Height="64" Offset="0x73F00" />
+        <DList Name="gameplay_keep_DL_074330" Offset="0x74330" />
+        <Blob Name="gameplay_keep_DL_0743F0" Size="0x10" Offset="0x743F0" />
+        <Texture Name="gameplay_keep_Tex_074400" OutName="tex_074400" Format="i4" Width="32" Height="64" Offset="0x74400" />
+        <Texture Name="gameplay_keep_Tex_074800" OutName="tex_074800" Format="i4" Width="32" Height="64" Offset="0x74800" />
+        <Texture Name="gameplay_keep_Tex_074C00" OutName="tex_074C00" Format="i4" Width="32" Height="64" Offset="0x74C00" />
+        <Texture Name="gameplay_keep_Tex_075000" OutName="tex_075000" Format="i4" Width="32" Height="64" Offset="0x75000" />
+        <Texture Name="gameplay_keep_Tex_075400" OutName="tex_075400" Format="i4" Width="32" Height="64" Offset="0x75400" />
+        <Texture Name="gameplay_keep_Tex_075800" OutName="tex_075800" Format="i4" Width="32" Height="32" Offset="0x75800" />
+        <DList Name="gameplay_keep_DL_075A40" Offset="0x75A40" />
+        <Texture Name="gameplay_keep_Tex_075AA8" OutName="tex_075AA8" Format="i4" Width="16" Height="16" Offset="0x75AA8" />
+        <DList Name="gameplay_keep_DL_075B30" Offset="0x75B30" />
+        <Texture Name="gameplay_keep_Tex_075BC0" OutName="tex_075BC0" Format="ia16" Width="32" Height="64" Offset="0x75BC0" />
+        <DList Name="gameplay_keep_DL_076BC0" Offset="0x76BC0" />
+        <Texture Name="gameplay_keep_Tex_076C40" OutName="tex_076C40" Format="ia16" Width="32" Height="32" Offset="0x76C40" />
+        <DList Name="gameplay_keep_DL_077480" Offset="0x77480" />
+        <Texture Name="gameplay_keep_Tex_0774D0" OutName="tex_0774D0" Format="i8" Width="16" Height="64" Offset="0x774D0" />
+        <DList Name="gameplay_keep_DL_077990" Offset="0x77990" />
+        <Texture Name="gameplay_keep_Tex_077A40" OutName="tex_077A40" Format="ia8" Width="32" Height="128" Offset="0x77A40" />
+        <DList Name="gameplay_keep_DL_078A80" Offset="0x78A80" />
+        <Texture Name="gameplay_keep_Tex_078B10" OutName="tex_078B10" Format="rgba16" Width="32" Height="64" Offset="0x78B10" />
+        <Texture Name="gameplay_keep_Tex_079B10" OutName="tex_079B10" Format="i4" Width="64" Height="31" Offset="0x79B10" />
+        <Texture Name="gameplay_keep_Tex_079EF0" OutName="tex_079EF0" Format="i4" Width="64" Height="16" Offset="0x79EF0" />
+        <Texture Name="gameplay_keep_Tex_07A0F0" OutName="tex_07A0F0" Format="i4" Width="64" Height="17" Offset="0x7A0F0" />
+        <Texture Name="gameplay_keep_Tex_07A310" OutName="tex_07A310" Format="i4" Width="64" Height="31" Offset="0x7A310" />
+        <Texture Name="gameplay_keep_Tex_07A6F0" OutName="tex_07A6F0" Format="i4" Width="64" Height="16" Offset="0x7A6F0" />
+        <Texture Name="gameplay_keep_Tex_07A8F0" OutName="tex_07A8F0" Format="i4" Width="64" Height="17" Offset="0x7A8F0" />
+        <DList Name="gameplay_keep_DL_07AB10" Offset="0x7AB10" />
+        <DList Name="gameplay_keep_DL_07AB58" Offset="0x7AB58" />
+        <DList Name="gameplay_keep_DL_07AB70" Offset="0x7AB70" />
+        <DList Name="gameplay_keep_DL_07AE00" Offset="0x7AE00" />
+        <DList Name="gameplay_keep_DL_07AFB0" Offset="0x7AFB0" />
+        <DList Name="gameplay_keep_DL_07B0B8" Offset="0x7B0B8" />
+        <Texture Name="gameplay_keep_Tex_07B0C0" OutName="tex_07B0C0" Format="i8" Width="64" Height="64" Offset="0x7B0C0" />
+        <Texture Name="gameplay_keep_Tex_07C0C0" OutName="tex_07C0C0" Format="i8" Width="64" Height="64" Offset="0x7C0C0" />
+        <DList Name="gameplay_keep_DL_07D260" Offset="0x7D260" />
+        <DList Name="gameplay_keep_DL_07D348" Offset="0x7D348" />
+        <Texture Name="gameplay_keep_Tex_07D350" OutName="tex_07D350" Format="i8" Width="16" Height="32" Offset="0x7D350" />
+        <DList Name="gameplay_keep_DL_07D590" Offset="0x7D590" />
+        <DList Name="gameplay_keep_DL_07D650" Offset="0x7D650" />
+        <Texture Name="gameplay_keep_Tex_07D710" OutName="tex_07D710" Format="i4" Width="32" Height="64" Offset="0x7D710" />
+        <Texture Name="gameplay_keep_Tex_07DB10" OutName="tex_07DB10" Format="i4" Width="32" Height="64" Offset="0x7DB10" />
+        <Texture Name="gameplay_keep_Tex_07DF10" OutName="tex_07DF10" Format="i8" Width="32" Height="64" Offset="0x7DF10" />
+        <DList Name="gameplay_keep_DL_07E8C0" Offset="0x7E8C0" />
+        <Texture Name="gameplay_keep_Tex_07EA08" OutName="tex_07EA08" Format="i8" Width="32" Height="64" Offset="0x7EA08" />
+        <TextureAnimation Name="gameplay_keep_Matanimheader_07F218" Offset="0x7F218" />
+        <DList Name="gameplay_keep_DL_07F260" Offset="0x7F260" />
+        <Texture Name="gameplay_keep_Tex_07F2E8" OutName="tex_07F2E8" Format="ia16" Width="32" Height="64" Offset="0x7F2E8" />
+        <DList Name="gameplay_keep_DL_080FC0" Offset="0x80FC0" />
+        <DList Name="gameplay_keep_DL_080FC8" Offset="0x80FC8" />
+        <Texture Name="gameplay_keep_Tex_0813A0" OutName="tex_0813A0" Format="i8" Width="16" Height="32" Offset="0x813A0" />
+        <TextureAnimation Name="gameplay_keep_Matanimheader_0815D0" Offset="0x815D0" />
+        <DList Name="gameplay_keep_DL_081620" Offset="0x81620" />
+        <DList Name="gameplay_keep_DL_081628" Offset="0x81628" />
+        <Texture Name="gameplay_keep_Tex_0816C0" OutName="tex_0816C0" Format="rgba16" Width="16" Height="32" Offset="0x816C0" />
+        <Blob Name="gameplay_keep_Blob_081AC0" Size="0x1A90" Offset="0x81AC0" />
+        <DList Name="gameplay_keep_DL_084790" Offset="0x84790" />
+        <DList Name="gameplay_keep_DL_0847E0" Offset="0x847E0" />
+        <DList Name="gameplay_keep_DL_084850" Offset="0x84850" />
+        <DList Name="gameplay_keep_DL_0848C0" Offset="0x848C0" />
+        <DList Name="gameplay_keep_DL_084930" Offset="0x84930" />
+        <DList Name="gameplay_keep_DL_0849A0" Offset="0x849A0" />
+        <DList Name="gameplay_keep_DL_084A10" Offset="0x84A10" />
+        <DList Name="gameplay_keep_DL_084A80" Offset="0x84A80" />
+        <DList Name="gameplay_keep_DL_084AF0" Offset="0x84AF0" />
+        <DList Name="gameplay_keep_DL_084B60" Offset="0x84B60" />
+        <DList Name="gameplay_keep_DL_084BD0" Offset="0x84BD0" />
+        <DList Name="gameplay_keep_DL_084C48" Offset="0x84C48" />
+        <DList Name="gameplay_keep_DL_084CF0" Offset="0x84CF0" />
+        <DList Name="gameplay_keep_DL_084D70" Offset="0x84D70" />
+        <DList Name="gameplay_keep_DL_084DD8" Offset="0x84DD8" />
+        <DList Name="gameplay_keep_DL_084E50" Offset="0x84E50" />
+        <DList Name="gameplay_keep_DL_084EA0" Offset="0x84EA0" />
+        <DList Name="gameplay_keep_DL_084F10" Offset="0x84F10" />
+        <DList Name="gameplay_keep_DL_084F80" Offset="0x84F80" />
+        <DList Name="gameplay_keep_DL_084FF0" Offset="0x84FF0" />
+        <DList Name="gameplay_keep_DL_085060" Offset="0x85060" />
+        <DList Name="gameplay_keep_DL_0850D0" Offset="0x850D0" />
+        <DList Name="gameplay_keep_DL_085140" Offset="0x85140" />
+        <DList Name="gameplay_keep_DL_0851B0" Offset="0x851B0" />
+        <DList Name="gameplay_keep_DL_085220" Offset="0x85220" />
+        <DList Name="gameplay_keep_DL_085290" Offset="0x85290" />
+        <DList Name="gameplay_keep_DL_085308" Offset="0x85308" />
+        <DList Name="gameplay_keep_DL_0853B0" Offset="0x853B0" />
+        <DList Name="gameplay_keep_DL_085418" Offset="0x85418" />
+        <DList Name="gameplay_keep_DL_085490" Offset="0x85490" />
+        <Blob Name="gameplay_keep_Blob_085510" Size="0x140" Offset="0x85510" />
+        <DList Name="gameplay_keep_DL_089070" Offset="0x89070" />
+        <Texture Name="gameplay_keep_TLUT_08A420" OutName="tlut_08A420" Format="rgba16" Width="16" Height="16" Offset="0x8A420" />
+        <Texture Name="gameplay_keep_Tex_08A620" OutName="tex_08A620" Format="rgba16" Width="16" Height="16" Offset="0x8A620" />
+        <Texture Name="gameplay_keep_Tex_08A820" OutName="tex_08A820" Format="rgba16" Width="16" Height="16" Offset="0x8A820" />
+        <Texture Name="gameplay_keep_Tex_08AA20" OutName="tex_08AA20" Format="rgba16" Width="16" Height="16" Offset="0x8AA20" />
+        <Texture Name="gameplay_keep_Tex_08AC20" OutName="tex_08AC20" Format="rgba16" Width="16" Height="32" Offset="0x8AC20" />
+        <Texture Name="gameplay_keep_Tex_08B020" OutName="tex_08B020" Format="rgba16" Width="16" Height="32" Offset="0x8B020" />
+        <Texture Name="gameplay_keep_Tex_08B420" OutName="tex_08B420" Format="ci8" Width="8" Height="8" Offset="0x8B420" />
+        <Texture Name="gameplay_keep_Tex_08B460" OutName="tex_08B460" Format="ci8" Width="32" Height="32" Offset="0x8B460" />
+        <Texture Name="gameplay_keep_Tex_08B860" OutName="tex_08B860" Format="ci8" Width="16" Height="16" Offset="0x8B860" />
+        <Texture Name="gameplay_keep_Tex_08B960" OutName="tex_08B960" Format="ci8" Width="32" Height="64" Offset="0x8B960" />
+        <Texture Name="gameplay_keep_Tex_08C160" OutName="tex_08C160" Format="ci8" Width="8" Height="16" Offset="0x8C160" />
+        <Texture Name="gameplay_keep_Tex_08C1E0" OutName="tex_08C1E0" Format="ci8" Width="16" Height="16" Offset="0x8C1E0" />
+        <Texture Name="gameplay_keep_Tex_08C2E0" OutName="tex_08C2E0" Format="ci8" Width="32" Height="32" Offset="0x8C2E0" />
+        <Texture Name="gameplay_keep_Tex_08C6E0" OutName="tex_08C6E0" Format="ci8" Width="32" Height="32" Offset="0x8C6E0" />
+        <Texture Name="gameplay_keep_Tex_08CAE0" OutName="tex_08CAE0" Format="ci8" Width="16" Height="32" Offset="0x8CAE0" />
+        <Texture Name="gameplay_keep_Tex_08CCE0" OutName="tex_08CCE0" Format="ci8" Width="16" Height="32" Offset="0x8CCE0" />
+        <Texture Name="gameplay_keep_Tex_08CEE0" OutName="tex_08CEE0" Format="ci8" Width="32" Height="32" Offset="0x8CEE0" />
+        <Texture Name="gameplay_keep_Tex_08D2E0" OutName="tex_08D2E0" Format="rgba16" Width="8" Height="16" Offset="0x8D2E0" />
+        <Texture Name="gameplay_keep_Tex_08D3E0" OutName="tex_08D3E0" Format="i8" Width="64" Height="32" Offset="0x8D3E0" />
+        <Texture Name="gameplay_keep_Tex_08DBE0" OutName="tex_08DBE0" Format="i8" Width="32" Height="32" Offset="0x8DBE0" />
+        <Texture Name="gameplay_keep_Tex_08DFE0" OutName="tex_08DFE0" Format="i8" Width="32" Height="32" Offset="0x8DFE0" />
+        <Texture Name="gameplay_keep_Tex_08E3E0" OutName="tex_08E3E0" Format="i8" Width="32" Height="32" Offset="0x8E3E0" />
+        <Texture Name="gameplay_keep_Tex_08E7E0" OutName="tex_08E7E0" Format="i8" Width="32" Height="32" Offset="0x8E7E0" />
+        <Texture Name="gameplay_keep_Tex_08EBE0" OutName="tex_08EBE0" Format="i8" Width="32" Height="32" Offset="0x8EBE0" />
+        <Texture Name="gameplay_keep_Tex_08EFE0" OutName="tex_08EFE0" Format="i8" Width="32" Height="32" Offset="0x8EFE0" />
+        <Texture Name="gameplay_keep_Tex_08F3E0" OutName="tex_08F3E0" Format="i8" Width="32" Height="32" Offset="0x8F3E0" />
+        <Texture Name="gameplay_keep_Tex_08F7E0" OutName="tex_08F7E0" Format="i8" Width="32" Height="32" Offset="0x8F7E0" />
+        <Texture Name="gameplay_keep_Tex_08FBE0" OutName="tex_08FBE0" Format="i8" Width="32" Height="64" Offset="0x8FBE0" />
+        <Texture Name="gameplay_keep_Tex_0903E0" OutName="tex_0903E0" Format="i8" Width="32" Height="64" Offset="0x903E0" />
+        <Texture Name="gameplay_keep_Tex_090BE0" OutName="tex_090BE0" Format="i8" Width="32" Height="64" Offset="0x90BE0" />
+        <Texture Name="gameplay_keep_Tex_0913E0" OutName="tex_0913E0" Format="i8" Width="32" Height="64" Offset="0x913E0" />
+        <Texture Name="gameplay_keep_Tex_091BE0" OutName="tex_091BE0" Format="ia8" Width="16" Height="16" Offset="0x91BE0" />
+        <Texture Name="gameplay_keep_Tex_091CE0" OutName="tex_091CE0" Format="ia8" Width="16" Height="16" Offset="0x91CE0" />
+        <Texture Name="gameplay_keep_Tex_091DE0" OutName="tex_091DE0" Format="i4" Width="32" Height="32" Offset="0x91DE0" />
+        <Texture Name="gameplay_keep_Tex_091FE0" OutName="tex_091FE0" Format="i4" Width="32" Height="32" Offset="0x91FE0" />
+        <Texture Name="gameplay_keep_Tex_0921E0" OutName="tex_0921E0" Format="i4" Width="32" Height="32" Offset="0x921E0" />
+        <Texture Name="gameplay_keep_Tex_0923E0" OutName="tex_0923E0" Format="i4" Width="32" Height="32" Offset="0x923E0" />
+    </File>
+</Root>

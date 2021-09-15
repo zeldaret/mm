@@ -1,0 +1,29 @@
+﻿<Root>
+    <File Name="object_nwc" Segment="6">
+        <DList Name="object_nwc_DL_0002E0" Offset="0x2E0" />
+        <DList Name="object_nwc_DL_0002E8" Offset="0x2E8" />
+        <Texture Name="object_nwc_Tex_0004D0" OutName="tex_0004D0" Format="rgba16" Width="8" Height="8" Offset="0x4D0" />
+        <Texture Name="object_nwc_Tex_000550" OutName="tex_000550" Format="rgba16" Width="8" Height="8" Offset="0x550" />
+        <Texture Name="object_nwc_Tex_0005D0" OutName="tex_0005D0" Format="rgba16" Width="16" Height="16" Offset="0x5D0" />
+        <Texture Name="object_nwc_Tex_0007D0" OutName="tex_0007D0" Format="rgba16" Width="16" Height="16" Offset="0x7D0" />
+        <Texture Name="object_nwc_Tex_0009D0" OutName="tex_0009D0" Format="rgba16" Width="16" Height="16" Offset="0x9D0" />
+        <TextureAnimation Name="object_nwc_Matanimheader_000BEC" Offset="0xBEC" />
+        <Texture Name="object_nwc_Tex_000C00" OutName="tex_000C00" Format="rgba16" Width="32" Height="32" Offset="0xC00" />
+        <DList Name="object_nwc_DL_001440" Offset="0x1440" />
+        <DList Name="object_nwc_DL_0014B8" Offset="0x14B8" />
+        <DList Name="object_nwc_DL_001520" Offset="0x1520" />
+        <Texture Name="object_nwc_Tex_001550" OutName="tex_001550" Format="rgba16" Width="16" Height="16" Offset="0x1550" />
+        <Texture Name="object_nwc_Tex_001750" OutName="tex_001750" Format="rgba16" Width="4" Height="4" Offset="0x1750" />
+        <DList Name="object_nwc_DL_001860" Offset="0x1860" />
+        <DList Name="object_nwc_DL_0018D0" Offset="0x18D0" />
+        <DList Name="object_nwc_DL_001940" Offset="0x1940" />
+        <DList Name="object_nwc_DL_001960" Offset="0x1960" />
+        <DList Name="object_nwc_DL_0019B8" Offset="0x19B8" />
+        <DList Name="object_nwc_DL_001A10" Offset="0x1A10" />
+        <!-- <Blob Name="object_nwc_Blob_001A38" Size="0x108" Offset="0x1A38" /> -->
+        <DList Name="object_nwc_DL_001B80" Offset="0x1B80" />
+        <DList Name="object_nwc_DL_001BE8" Offset="0x1BE8" />
+        <DList Name="object_nwc_DL_001C10" Offset="0x1C10" />
+        <DList Name="object_nwc_DL_001C58" Offset="0x1C58" />
+    </File>
+</Root>

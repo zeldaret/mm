@@ -1,0 +1,114 @@
+﻿<Root>
+    <File Name="object_bigslime" Segment="6">
+        <Animation Name="object_bigslime_Anim_000994" Offset="0x994" />
+        <Animation Name="object_bigslime_Anim_0010F4" Offset="0x10F4" />
+        <Animation Name="object_bigslime_Anim_001B08" Offset="0x1B08" />
+        <Animation Name="object_bigslime_Anim_001E14" Offset="0x1E14" />
+        <Animation Name="object_bigslime_Anim_001F20" Offset="0x1F20" />
+        <Animation Name="object_bigslime_Anim_00225C" Offset="0x225C" />
+        <Animation Name="object_bigslime_Anim_00276C" Offset="0x276C" />
+        <Animation Name="object_bigslime_Anim_002E0C" Offset="0x2E0C" />
+        <Animation Name="object_bigslime_Anim_0030E4" Offset="0x30E4" />
+        <Animation Name="object_bigslime_Anim_00347C" Offset="0x347C" />
+        <Animation Name="object_bigslime_Anim_0039C4" Offset="0x39C4" />
+        <Animation Name="object_bigslime_Anim_003F28" Offset="0x3F28" />
+        <Animation Name="object_bigslime_Anim_004298" Offset="0x4298" />
+        <Animation Name="object_bigslime_Anim_004680" Offset="0x4680" />
+        <Animation Name="object_bigslime_Anim_004894" Offset="0x4894" />
+        <Animation Name="object_bigslime_Anim_004D50" Offset="0x4D50" />
+        <Animation Name="object_bigslime_Anim_0050B8" Offset="0x50B8" />
+        <Animation Name="object_bigslime_Anim_0052EC" Offset="0x52EC" />
+        <Animation Name="object_bigslime_Anim_005694" Offset="0x5694" />
+        <Animation Name="object_bigslime_Anim_005D54" Offset="0x5D54" />
+        <Animation Name="object_bigslime_Anim_0066B4" Offset="0x66B4" />
+        <Animation Name="object_bigslime_Anim_0069FC" Offset="0x69FC" />
+        <Animation Name="object_bigslime_Anim_0070C4" Offset="0x70C4" />
+        <Animation Name="object_bigslime_Anim_007790" Offset="0x7790" />
+        <DList Name="object_bigslime_DL_009D90" Offset="0x9D90" />
+        <DList Name="object_bigslime_DL_009FF0" Offset="0x9FF0" />
+        <DList Name="object_bigslime_DL_00A250" Offset="0xA250" />
+        <DList Name="object_bigslime_DL_00A510" Offset="0xA510" />
+        <DList Name="object_bigslime_DL_00AAF8" Offset="0xAAF8" />
+        <DList Name="object_bigslime_DL_00ABB0" Offset="0xABB0" />
+        <DList Name="object_bigslime_DL_00AC78" Offset="0xAC78" />
+        <DList Name="object_bigslime_DL_00AD88" Offset="0xAD88" />
+        <DList Name="object_bigslime_DL_00AE98" Offset="0xAE98" />
+        <DList Name="object_bigslime_DL_00AF50" Offset="0xAF50" />
+        <DList Name="object_bigslime_DL_00B030" Offset="0xB030" />
+        <DList Name="object_bigslime_DL_00B140" Offset="0xB140" />
+        <DList Name="object_bigslime_DL_00B250" Offset="0xB250" />
+        <DList Name="object_bigslime_DL_00B4D8" Offset="0xB4D8" />
+        <DList Name="object_bigslime_DL_00B660" Offset="0xB660" />
+        <DList Name="object_bigslime_DL_00B770" Offset="0xB770" />
+        <DList Name="object_bigslime_DL_00B880" Offset="0xB880" />
+        <DList Name="object_bigslime_DL_00B9A8" Offset="0xB9A8" />
+        <DList Name="object_bigslime_DL_00BB30" Offset="0xBB30" />
+        <DList Name="object_bigslime_DL_00BC40" Offset="0xBC40" />
+        <DList Name="object_bigslime_DL_00BD50" Offset="0xBD50" />
+        <DList Name="object_bigslime_DL_00BE78" Offset="0xBE78" />
+        <Texture Name="object_bigslime_TLUT_00C028" OutName="tlut_00C028" Format="rgba16" Width="16" Height="16" Offset="0xC028" />
+        <Texture Name="object_bigslime_TLUT_00C228" OutName="tlut_00C228" Format="rgba16" Width="16" Height="16" Offset="0xC228" />
+        <Texture Name="object_bigslime_TLUT_00C428" OutName="tlut_00C428" Format="rgba16" Width="16" Height="16" Offset="0xC428" />
+        <Texture Name="object_bigslime_Tex_00C628" OutName="tex_00C628" Format="rgba16" Width="8" Height="8" Offset="0xC628" />
+        <Texture Name="object_bigslime_Tex_00C6A8" OutName="tex_00C6A8" Format="rgba16" Width="16" Height="16" Offset="0xC6A8" />
+        <Texture Name="object_bigslime_Tex_00C8A8" OutName="tex_00C8A8" Format="rgba16" Width="16" Height="16" Offset="0xC8A8" />
+        <Texture Name="object_bigslime_Tex_00CAA8" OutName="tex_00CAA8" Format="rgba16" Width="16" Height="32" Offset="0xCAA8" />
+        <Texture Name="object_bigslime_Tex_00CEA8" OutName="tex_00CEA8" Format="ci8" Width="16" Height="32" Offset="0xCEA8" />
+        <Texture Name="object_bigslime_Tex_00D0A8" OutName="tex_00D0A8" Format="rgba16" Width="16" Height="16" Offset="0xD0A8" />
+        <Texture Name="object_bigslime_Tex_00D2A8" OutName="tex_00D2A8" Format="rgba16" Width="16" Height="8" Offset="0xD2A8" />
+        <Texture Name="object_bigslime_Tex_00D3A8" OutName="tex_00D3A8" Format="rgba16" Width="8" Height="8" Offset="0xD3A8" />
+        <Texture Name="object_bigslime_Tex_00D428" OutName="tex_00D428" Format="rgba16" Width="32" Height="16" Offset="0xD428" />
+        <Texture Name="object_bigslime_Tex_00D828" OutName="tex_00D828" Format="ci8" Width="32" Height="32" Offset="0xD828" />
+        <Texture Name="object_bigslime_Tex_00DC28" OutName="tex_00DC28" Format="ci8" Width="16" Height="32" Offset="0xDC28" />
+        <Limb Name="object_bigslime_Standardlimb_00DE28" Type="Standard" Offset="0xDE28" />
+        <Limb Name="object_bigslime_Standardlimb_00DE34" Type="Standard" Offset="0xDE34" />
+        <Limb Name="object_bigslime_Standardlimb_00DE40" Type="Standard" Offset="0xDE40" />
+        <Limb Name="object_bigslime_Standardlimb_00DE4C" Type="Standard" Offset="0xDE4C" />
+        <Limb Name="object_bigslime_Standardlimb_00DE58" Type="Standard" Offset="0xDE58" />
+        <Limb Name="object_bigslime_Standardlimb_00DE64" Type="Standard" Offset="0xDE64" />
+        <Limb Name="object_bigslime_Standardlimb_00DE70" Type="Standard" Offset="0xDE70" />
+        <Limb Name="object_bigslime_Standardlimb_00DE7C" Type="Standard" Offset="0xDE7C" />
+        <Limb Name="object_bigslime_Standardlimb_00DE88" Type="Standard" Offset="0xDE88" />
+        <Limb Name="object_bigslime_Standardlimb_00DE94" Type="Standard" Offset="0xDE94" />
+        <Limb Name="object_bigslime_Standardlimb_00DEA0" Type="Standard" Offset="0xDEA0" />
+        <Limb Name="object_bigslime_Standardlimb_00DEAC" Type="Standard" Offset="0xDEAC" />
+        <Limb Name="object_bigslime_Standardlimb_00DEB8" Type="Standard" Offset="0xDEB8" />
+        <Limb Name="object_bigslime_Standardlimb_00DEC4" Type="Standard" Offset="0xDEC4" />
+        <Limb Name="object_bigslime_Standardlimb_00DED0" Type="Standard" Offset="0xDED0" />
+        <Limb Name="object_bigslime_Standardlimb_00DEDC" Type="Standard" Offset="0xDEDC" />
+        <Limb Name="object_bigslime_Standardlimb_00DEE8" Type="Standard" Offset="0xDEE8" />
+        <Limb Name="object_bigslime_Standardlimb_00DEF4" Type="Standard" Offset="0xDEF4" />
+        <Limb Name="object_bigslime_Standardlimb_00DF00" Type="Standard" Offset="0xDF00" />
+        <Limb Name="object_bigslime_Standardlimb_00DF0C" Type="Standard" Offset="0xDF0C" />
+        <Limb Name="object_bigslime_Standardlimb_00DF18" Type="Standard" Offset="0xDF18" />
+        <Limb Name="object_bigslime_Standardlimb_00DF24" Type="Standard" Offset="0xDF24" />
+        <Limb Name="object_bigslime_Standardlimb_00DF30" Type="Standard" Offset="0xDF30" />
+        <Skeleton Name="object_bigslime_Skel_00DF98" Type="Flex" LimbType="Standard" Offset="0xDF98" />
+        <Animation Name="object_bigslime_Anim_00F048" Offset="0xF048" />
+        <Animation Name="object_bigslime_Anim_00F3F0" Offset="0xF3F0" />
+        <Animation Name="object_bigslime_Anim_00F990" Offset="0xF990" />
+        <DList Name="object_bigslime_DL_00F9D0" Offset="0xF9D0" />
+        <DList Name="object_bigslime_DL_00FB40" Offset="0xFB40" />
+        <Texture Name="object_bigslime_Tex_00FC28" OutName="tex_00FC28" Format="i4" Width="32" Height="64" Offset="0xFC28" />
+        <!-- <Blob Name="object_bigslime_zeroes_unk_00010028" Size="0x400" Offset="0x10028" /> -->
+        <Texture Name="object_bigslime_Tex_010428" OutName="tex_010428" Format="i4" Width="16" Height="16" Offset="0x10428" />
+        <!-- <Blob Name="object_bigslime_zeroes_unk_000104A8" Size="0x88" Offset="0x104A8" /> -->
+        <DList Name="object_bigslime_DL_010530" Offset="0x10530" />
+        <DList Name="object_bigslime_DL_0105E8" Offset="0x105E8" />
+        <DList Name="object_bigslime_DL_010B80" Offset="0x10B80" />
+        <TextureAnimation Name="object_bigslime_Matanimheader_010C48" Offset="0x10C48" />
+        <DList Name="object_bigslime_DL_010DB0" Offset="0x10DB0" />
+        <TextureAnimation Name="object_bigslime_Matanimheader_010EC8" Offset="0x10EC8" />
+        <DList Name="object_bigslime_DL_010F20" Offset="0x10F20" />
+        <DList Name="object_bigslime_DL_010FE0" Offset="0x10FE0" />
+        <TextureAnimation Name="object_bigslime_Matanimheader_011008" Offset="0x11008" />
+        <DList Name="object_bigslime_DL_011050" Offset="0x11050" />
+        <DList Name="object_bigslime_DL_0113B0" Offset="0x113B0" />
+        <Texture Name="object_bigslime_Tex_011580" OutName="tex_011580" Format="i4" Width="16" Height="16" Offset="0x11580" />
+        <Texture Name="object_bigslime_Tex_011600" OutName="tex_011600" Format="i8" Width="32" Height="32" Offset="0x11600" />
+        <Texture Name="object_bigslime_Tex_011A00" OutName="tex_011A00" Format="rgba16" Width="32" Height="32" Offset="0x11A00" />
+        <Texture Name="object_bigslime_Tex_012200" OutName="tex_012200" Format="i4" Width="64" Height="64" Offset="0x12200" />
+        <Texture Name="object_bigslime_Tex_012A00" OutName="tex_012A00" Format="i4" Width="64" Height="64" Offset="0x12A00" />
+        <Texture Name="object_bigslime_Tex_013200" OutName="tex_013200" Format="i4" Width="32" Height="32" Offset="0x13200" />
+    </File>
+</Root>

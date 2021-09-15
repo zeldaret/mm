@@ -26,6 +26,21 @@ typedef struct {
                                       // far model display list.
 } StandardLimb; // Size = 0xC
 
+typedef struct {
+    /* 0x00 */ Vec3s jointPos; // Root is position in model space, children are relative to parent
+    /* 0x06 */ u8 child;
+    /* 0x07 */ u8 sibling;
+    /* 0x08 */ Gfx* dLists[2]; // Near and far
+} LodLimb; // size = 0x10
+
+typedef struct {
+    /* 0x00 */ Vec3s jointPos; // Root is position in model space, children are relative to parent
+    /* 0x06 */ u8 child;
+    /* 0x07 */ u8 sibling;
+    /* 0x08 */ s32 unk_8; // Type of data contained in segment
+    /* 0x0C */ void* segment; // Segment address of data. Currently unclear what.
+} SkinLimb; // size = 0x10
+
 // Model has limbs with only rigid meshes
 typedef struct {
     /* 0x000 */ void** skeletonSeg; // Segment address of SkelLimbIndex.
@@ -248,6 +263,43 @@ typedef s32 (*OverrideCurveLimbDraw)(struct GlobalContext* globalCtx, SkelAnimeC
                                      struct Actor* actor);
 typedef void (*PostCurveLimbDraw)(struct GlobalContext* globalCtx, SkelAnimeCurve* skelCuve, s32 limbIndex,
                                   struct Actor* actor);
+
+// TODO the name of this struct is imported from OoT and cannot change until the ZAPD name also changes
+typedef struct {
+    /* 0x000 */ u16 unk_0;
+    /* 0x002 */ s16 unk_2;
+    /* 0x004 */ s16 unk_4;
+    /* 0x006 */ s8 unk_6;
+    /* 0x007 */ s8 unk_7;
+    /* 0x008 */ s8 unk_8;
+    /* 0x009 */ u8 unk_9;
+} Struct_800A57C0; // size = 0xA
+
+// TODO the name of this struct is imported from OoT and cannot change until the ZAPD name also changes
+typedef struct {
+    /* 0x000 */ u8  unk_0;
+    /* 0x002 */ s16 x;
+    /* 0x004 */ s16 y;
+    /* 0x006 */ s16 z;
+    /* 0x008 */ u8  unk_8;
+} Struct_800A598C_2; // size = 0xA
+
+// TODO the name of this struct is imported from OoT and cannot change until the ZAPD name also changes
+typedef struct {
+    /* 0x000 */ u16 unk_0;
+    /* 0x002 */ u16 unk_2;
+    /* 0x004 */ u16 unk_4;
+    /* 0x008 */ Struct_800A57C0* unk_8;
+    /* 0x00C */ Struct_800A598C_2* unk_C;
+} Struct_800A598C; // size = 0x10
+
+// TODO the name of this struct is imported from OoT and cannot change until the ZAPD name also changes
+typedef struct {
+    /* 0x000 */ u16 unk_0;
+    /* 0x002 */ u16 unk_2;
+    /* 0x004 */ Struct_800A598C* unk_4;
+    /* 0x008 */ Gfx* unk_8;
+} Struct_800A5E28; // size = 0xC
 
 typedef struct struct_80B8E1A8 {
     /* 0x00 */ AnimationHeader* animationSeg;

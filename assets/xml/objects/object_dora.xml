@@ -1,0 +1,17 @@
+﻿<Root>
+    <File Name="object_dora" Segment="6">
+        <DList Name="object_dora_DL_000180" Offset="0x180" />
+        <Texture Name="object_dora_Tex_000280" OutName="tex_000280" Format="rgba16" Width="32" Height="64" Offset="0x280" />
+        <Texture Name="object_dora_Tex_001280" OutName="tex_001280" Format="rgba16" Width="32" Height="32" Offset="0x1280" />
+        <DList Name="object_dora_DL_002080" Offset="0x2080" />
+        <DList Name="object_dora_DL_002180" Offset="0x2180" />
+        <DList Name="object_dora_DL_002280" Offset="0x2280" />
+        <DList Name="object_dora_DL_002380" Offset="0x2380" />
+        <Texture Name="object_dora_Tex_002480" OutName="tex_002480" Format="rgba16" Width="32" Height="64" Offset="0x2480" />
+        <Texture Name="object_dora_Tex_003480" OutName="tex_003480" Format="rgba16" Width="32" Height="32" Offset="0x3480" />
+        <DList Name="object_dora_DL_003FD0" Offset="0x3FD0" />
+        <DList Name="object_dora_DL_004160" Offset="0x4160" />
+        <Texture Name="object_dora_Tex_004208" OutName="tex_004208" Format="rgba16" Width="32" Height="32" Offset="0x4208" />
+        <Texture Name="object_dora_Tex_004A08" OutName="tex_004A08" Format="rgba16" Width="16" Height="64" Offset="0x4A08" />
+    </File>
+</Root>

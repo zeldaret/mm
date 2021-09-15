@@ -1,0 +1,11 @@
+﻿<Root>
+    <File Name="object_gi_ghost" Segment="6">
+        <Texture Name="object_gi_ghost_Tex_000000" OutName="tex_000000" Format="i8" Width="16" Height="32" Offset="0x0" />
+        <Texture Name="object_gi_ghost_Tex_000200" OutName="tex_000200" Format="i8" Width="16" Height="32" Offset="0x200" />
+        <DList Name="object_gi_ghost_DL_000950" Offset="0x950" />
+        <DList Name="object_gi_ghost_DL_000970" Offset="0x970" />
+        <DList Name="object_gi_ghost_DL_000990" Offset="0x990" />
+        <DList Name="object_gi_ghost_DL_000BE0" Offset="0xBE0" />
+        <DList Name="object_gi_ghost_DL_000CF0" Offset="0xCF0" />
+    </File>
+</Root>

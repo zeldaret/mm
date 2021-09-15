@@ -1,0 +1,76 @@
+﻿<Root>
+    <File Name="object_zo" Segment="6">
+        <Animation Name="object_zo_Anim_000598" Offset="0x598" />
+        <Animation Name="object_zo_Anim_000D48" Offset="0xD48" />
+        <Animation Name="object_zo_Anim_00219C" Offset="0x219C" />
+        <Animation Name="object_zo_Anim_002898" Offset="0x2898" />
+        <Texture Name="object_zo_Tex_0028B0" OutName="tex_0028B0" Format="ia8" Width="16" Height="16" Offset="0x28B0" />
+        <DList Name="object_zo_DL_0029F0" Offset="0x29F0" />
+        <DList Name="object_zo_DL_002A50" Offset="0x2A50" />
+        <Texture Name="object_zo_Tex_002A70" OutName="tex_002A70" Format="i8" Width="16" Height="16" Offset="0x2A70" />
+        <DList Name="object_zo_DL_002BA0" Offset="0x2BA0" />
+        <DList Name="object_zo_DL_002C10" Offset="0x2C10" />
+        <Animation Name="object_zo_Anim_003610" Offset="0x3610" />
+        <Animation Name="object_zo_Anim_004168" Offset="0x4168" />
+        <Animation Name="object_zo_Anim_004248" Offset="0x4248" />
+        <Texture Name="object_zo_TLUT_004260" OutName="tlut_004260" Format="rgba16" Width="16" Height="16" Offset="0x4260" />
+        <Texture Name="object_zo_Tex_004460" OutName="tex_004460" Format="ci8" Width="32" Height="32" Offset="0x4460" />
+        <Texture Name="object_zo_Tex_004860" OutName="tex_004860" Format="ci8" Width="32" Height="64" Offset="0x4860" />
+        <Texture Name="object_zo_Tex_005060" OutName="tex_005060" Format="ci8" Width="8" Height="8" Offset="0x5060" />
+        <!-- <Blob Name="object_zo_Blob_0050A0" Size="0x1800" Offset="0x50A0" /> -->
+        <Texture Name="object_zo_Tex_0068A0" OutName="tex_0068A0" Format="rgba16" Width="32" Height="32" Offset="0x68A0" />
+        <Texture Name="object_zo_Tex_0070A0" OutName="tex_0070A0" Format="ci8" Width="16" Height="16" Offset="0x70A0" />
+        <Texture Name="object_zo_Tex_0071A0" OutName="tex_0071A0" Format="ci8" Width="8" Height="8" Offset="0x71A0" />
+        <DList Name="object_zo_DL_00A2A0" Offset="0xA2A0" />
+        <DList Name="object_zo_DL_00A448" Offset="0xA448" />
+        <DList Name="object_zo_DL_00A7C0" Offset="0xA7C0" />
+        <DList Name="object_zo_DL_00AA38" Offset="0xAA38" />
+        <DList Name="object_zo_DL_00ABD8" Offset="0xABD8" />
+        <DList Name="object_zo_DL_00AD70" Offset="0xAD70" />
+        <DList Name="object_zo_DL_00AF08" Offset="0xAF08" />
+        <DList Name="object_zo_DL_00B148" Offset="0xB148" />
+        <DList Name="object_zo_DL_00B3A8" Offset="0xB3A8" />
+        <DList Name="object_zo_DL_00B688" Offset="0xB688" />
+        <DList Name="object_zo_DL_00B890" Offset="0xB890" />
+        <DList Name="object_zo_DL_00BAF0" Offset="0xBAF0" />
+        <DList Name="object_zo_DL_00BDD0" Offset="0xBDD0" />
+        <DList Name="object_zo_DL_00BFD8" Offset="0xBFD8" />
+        <DList Name="object_zo_DL_00C2B8" Offset="0xC2B8" />
+        <DList Name="object_zo_DL_00C590" Offset="0xC590" />
+        <DList Name="object_zo_DL_00C858" Offset="0xC858" />
+        <DList Name="object_zo_DL_00CB38" Offset="0xCB38" />
+        <DList Name="object_zo_DL_00CE10" Offset="0xCE10" />
+        <Limb Name="object_zo_Standardlimb_00D0D8" Type="Standard" Offset="0xD0D8" />
+        <Limb Name="object_zo_Standardlimb_00D0E4" Type="Standard" Offset="0xD0E4" />
+        <Limb Name="object_zo_Standardlimb_00D0F0" Type="Standard" Offset="0xD0F0" />
+        <Limb Name="object_zo_Standardlimb_00D0FC" Type="Standard" Offset="0xD0FC" />
+        <Limb Name="object_zo_Standardlimb_00D108" Type="Standard" Offset="0xD108" />
+        <Limb Name="object_zo_Standardlimb_00D114" Type="Standard" Offset="0xD114" />
+        <Limb Name="object_zo_Standardlimb_00D120" Type="Standard" Offset="0xD120" />
+        <Limb Name="object_zo_Standardlimb_00D12C" Type="Standard" Offset="0xD12C" />
+        <Limb Name="object_zo_Standardlimb_00D138" Type="Standard" Offset="0xD138" />
+        <Limb Name="object_zo_Standardlimb_00D144" Type="Standard" Offset="0xD144" />
+        <Limb Name="object_zo_Standardlimb_00D150" Type="Standard" Offset="0xD150" />
+        <Limb Name="object_zo_Standardlimb_00D15C" Type="Standard" Offset="0xD15C" />
+        <Limb Name="object_zo_Standardlimb_00D168" Type="Standard" Offset="0xD168" />
+        <Limb Name="object_zo_Standardlimb_00D174" Type="Standard" Offset="0xD174" />
+        <Limb Name="object_zo_Standardlimb_00D180" Type="Standard" Offset="0xD180" />
+        <Limb Name="object_zo_Standardlimb_00D18C" Type="Standard" Offset="0xD18C" />
+        <Limb Name="object_zo_Standardlimb_00D198" Type="Standard" Offset="0xD198" />
+        <Limb Name="object_zo_Standardlimb_00D1A4" Type="Standard" Offset="0xD1A4" />
+        <Limb Name="object_zo_Standardlimb_00D1B0" Type="Standard" Offset="0xD1B0" />
+        <Skeleton Name="object_zo_Skel_00D208" Type="Flex" LimbType="Standard" Offset="0xD208" />
+        <DList Name="object_zo_DL_00D220" Offset="0xD220" />
+        <DList Name="object_zo_DL_00D288" Offset="0xD288" />
+        <DList Name="object_zo_DL_00D2A0" Offset="0xD2A0" />
+        <DList Name="object_zo_DL_00D2B8" Offset="0xD2B8" />
+        <Animation Name="object_zo_Anim_00DE20" Offset="0xDE20" />
+        <Animation Name="object_zo_Anim_00DF54" Offset="0xDF54" />
+        <Animation Name="object_zo_Anim_00E400" Offset="0xE400" />
+        <Animation Name="object_zo_Anim_00EDF0" Offset="0xEDF0" />
+        <Animation Name="object_zo_Anim_00F4E8" Offset="0xF4E8" />
+        <Animation Name="object_zo_Anim_00FDF0" Offset="0xFDF0" />
+        <Animation Name="object_zo_Anim_010B18" Offset="0x10B18" />
+        <Animation Name="object_zo_Anim_011424" Offset="0x11424" />
+    </File>
+</Root>

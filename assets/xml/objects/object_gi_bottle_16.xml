@@ -1,0 +1,8 @@
+﻿<Root>
+    <File Name="object_gi_bottle_16" Segment="6">
+        <DList Name="object_gi_bottle_16_DL_0009A0" Offset="0x9A0" />
+        <DList Name="object_gi_bottle_16_DL_000D18" Offset="0xD18" />
+        <Texture Name="object_gi_bottle_16_Tex_000D20" OutName="tex_000D20" Format="i8" Width="32" Height="32" Offset="0xD20" />
+        <Texture Name="object_gi_bottle_16_Tex_001120" OutName="tex_001120" Format="i4" Width="32" Height="32" Offset="0x1120" />
+    </File>
+</Root>

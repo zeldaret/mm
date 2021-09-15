@@ -1,0 +1,7 @@
+﻿<Root>
+    <File Name="object_gi_map" Segment="6">
+        <DList Name="object_gi_map_DL_0003C0" Offset="0x3C0" />
+        <DList Name="object_gi_map_DL_000B70" Offset="0xB70" />
+        <Texture Name="object_gi_map_Tex_000D60" OutName="tex_000D60" Format="i8" Width="32" Height="32" Offset="0xD60" />
+    </File>
+</Root>

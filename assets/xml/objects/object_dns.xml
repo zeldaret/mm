@@ -1,0 +1,42 @@
+﻿<Root>
+    <File Name="object_dns" Segment="6">
+        <Animation Name="object_dns_Anim_0002A8" Offset="0x2A8" />
+        <Animation Name="object_dns_Anim_000734" Offset="0x734" />
+        <Animation Name="object_dns_Anim_0008F4" Offset="0x8F4" />
+        <Animation Name="object_dns_Anim_000BD8" Offset="0xBD8" />
+        <Animation Name="object_dns_Anim_000D58" Offset="0xD58" />
+        <Animation Name="object_dns_Anim_000FEC" Offset="0xFEC" />
+        <DList Name="object_dns_DL_001640" Offset="0x1640" />
+        <DList Name="object_dns_DL_0016F0" Offset="0x16F0" />
+        <DList Name="object_dns_DL_0017A0" Offset="0x17A0" />
+        <DList Name="object_dns_DL_0018B8" Offset="0x18B8" />
+        <DList Name="object_dns_DL_0019B8" Offset="0x19B8" />
+        <DList Name="object_dns_DL_001A50" Offset="0x1A50" />
+        <DList Name="object_dns_DL_001AD8" Offset="0x1AD8" />
+        <DList Name="object_dns_DL_001B90" Offset="0x1B90" />
+        <DList Name="object_dns_DL_001C20" Offset="0x1C20" />
+        <DList Name="object_dns_DL_001CB0" Offset="0x1CB0" />
+        <DList Name="object_dns_DL_001D40" Offset="0x1D40" />
+        <DList Name="object_dns_DL_001DD8" Offset="0x1DD8" />
+        <Texture Name="object_dns_Tex_001E68" OutName="tex_001E68" Format="rgba16" Width="32" Height="32" Offset="0x1E68" />
+        <Texture Name="object_dns_Tex_002668" OutName="tex_002668" Format="rgba16" Width="16" Height="16" Offset="0x2668" />
+        <Texture Name="object_dns_Tex_002868" OutName="tex_002868" Format="rgba16" Width="8" Height="8" Offset="0x2868" />
+        <!-- <Blob Name="object_dns_Blob_0028E8" Size="0x180" Offset="0x28E8" /> -->
+        <DList Name="object_dns_DL_002C48" Offset="0x2C48" />
+        <Limb Name="object_dns_Standardlimb_002D18" Type="Standard" Offset="0x2D18" />
+        <Limb Name="object_dns_Standardlimb_002D24" Type="Standard" Offset="0x2D24" />
+        <Limb Name="object_dns_Standardlimb_002D30" Type="Standard" Offset="0x2D30" />
+        <Limb Name="object_dns_Standardlimb_002D3C" Type="Standard" Offset="0x2D3C" />
+        <Limb Name="object_dns_Standardlimb_002D48" Type="Standard" Offset="0x2D48" />
+        <Limb Name="object_dns_Standardlimb_002D54" Type="Standard" Offset="0x2D54" />
+        <Limb Name="object_dns_Standardlimb_002D60" Type="Standard" Offset="0x2D60" />
+        <Limb Name="object_dns_Standardlimb_002D6C" Type="Standard" Offset="0x2D6C" />
+        <Limb Name="object_dns_Standardlimb_002D78" Type="Standard" Offset="0x2D78" />
+        <Limb Name="object_dns_Standardlimb_002D84" Type="Standard" Offset="0x2D84" />
+        <Limb Name="object_dns_Standardlimb_002D90" Type="Standard" Offset="0x2D90" />
+        <Limb Name="object_dns_Standardlimb_002D9C" Type="Standard" Offset="0x2D9C" />
+        <Skeleton Name="object_dns_Skel_002DD8" Type="Normal" LimbType="Standard" Offset="0x2DD8" />
+        <Animation Name="object_dns_Anim_003310" Offset="0x3310" />
+        <Animation Name="object_dns_Anim_0034EC" Offset="0x34EC" />
+    </File>
+</Root>

@@ -1,0 +1,6 @@
+﻿<Root>
+    <File Name="object_gi_magicpot" Segment="6">
+        <DList Name="object_gi_magicpot_DL_000580" Offset="0x580" />
+        <DList Name="object_gi_magicpot_DL_000EE0" Offset="0xEE0" />
+    </File>
+</Root>

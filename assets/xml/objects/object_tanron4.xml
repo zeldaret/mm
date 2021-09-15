@@ -1,0 +1,24 @@
+﻿<Root>
+    <File Name="object_tanron4" Segment="6">
+        <Animation Name="object_tanron4_Anim_000058" Offset="0x58" />
+        <Animation Name="object_tanron4_Anim_000168" Offset="0x168" />
+        <DList Name="object_tanron4_DL_000300" Offset="0x300" />
+        <DList Name="object_tanron4_DL_0003A0" Offset="0x3A0" />
+        <DList Name="object_tanron4_DL_000440" Offset="0x440" />
+        <DList Name="object_tanron4_DL_0004B0" Offset="0x4B0" />
+        <DList Name="object_tanron4_DL_000550" Offset="0x550" />
+        <Texture Name="object_tanron4_Tex_0005C8" OutName="tex_0005C8" Format="rgba16" Width="32" Height="16" Offset="0x5C8" />
+        <Texture Name="object_tanron4_Tex_0009C8" OutName="tex_0009C8" Format="rgba16" Width="32" Height="16" Offset="0x9C8" />
+        <Limb Name="object_tanron4_Standardlimb_000DC8" Type="Standard" Offset="0xDC8" />
+        <Limb Name="object_tanron4_Standardlimb_000DD4" Type="Standard" Offset="0xDD4" />
+        <Limb Name="object_tanron4_Standardlimb_000DE0" Type="Standard" Offset="0xDE0" />
+        <Limb Name="object_tanron4_Standardlimb_000DEC" Type="Standard" Offset="0xDEC" />
+        <Limb Name="object_tanron4_Standardlimb_000DF8" Type="Standard" Offset="0xDF8" />
+        <Limb Name="object_tanron4_Standardlimb_000E04" Type="Standard" Offset="0xE04" />
+        <Limb Name="object_tanron4_Standardlimb_000E10" Type="Standard" Offset="0xE10" />
+        <Limb Name="object_tanron4_Standardlimb_000E1C" Type="Standard" Offset="0xE1C" />
+        <Limb Name="object_tanron4_Standardlimb_000E28" Type="Standard" Offset="0xE28" />
+        <Limb Name="object_tanron4_Standardlimb_000E34" Type="Standard" Offset="0xE34" />
+        <Skeleton Name="object_tanron4_Skel_000E68" Type="Flex" LimbType="Standard" Offset="0xE68" />
+    </File>
+</Root>

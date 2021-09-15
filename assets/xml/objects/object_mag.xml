@@ -1,0 +1,28 @@
+﻿<Root>
+    <File Name="object_mag" Segment="6">
+        <Texture Name="object_mag_Tex_000000" OutName="tex_000000" Format="rgba32" Width="144" Height="64" Offset="0x0" />
+        <Texture Name="object_mag_Tex_009000" OutName="tex_009000" Format="i8" Width="104" Height="16" Offset="0x9000" />
+        <Texture Name="object_mag_Tex_009680" OutName="tex_009680" Format="i8" Width="104" Height="16" Offset="0x9680" />
+        <Texture Name="object_mag_Tex_009D00" OutName="tex_009D00" Format="i8" Width="72" Height="8" Offset="0x9D00" />
+        <Texture Name="object_mag_Tex_009F40" OutName="tex_009F40" Format="i4" Width="64" Height="64" Offset="0x9F40" />
+        <Texture Name="object_mag_Tex_00A740" OutName="tex_00A740" Format="i4" Width="64" Height="64" Offset="0xA740" />
+        <Texture Name="object_mag_Tex_00AF40" OutName="tex_00AF40" Format="i4" Width="64" Height="64" Offset="0xAF40" />
+        <Texture Name="object_mag_Tex_00B740" OutName="tex_00B740" Format="i4" Width="64" Height="64" Offset="0xB740" />
+        <Texture Name="object_mag_Tex_00BF40" OutName="tex_00BF40" Format="i4" Width="64" Height="64" Offset="0xBF40" />
+        <Texture Name="object_mag_Tex_00C740" OutName="tex_00C740" Format="i4" Width="64" Height="64" Offset="0xC740" />
+        <Texture Name="object_mag_Tex_00CF40" OutName="tex_00CF40" Format="i4" Width="64" Height="64" Offset="0xCF40" />
+        <Texture Name="object_mag_Tex_00D740" OutName="tex_00D740" Format="i4" Width="64" Height="64" Offset="0xD740" />
+        <Texture Name="object_mag_Tex_00DF40" OutName="tex_00DF40" Format="i4" Width="64" Height="64" Offset="0xDF40" />
+        <Texture Name="object_mag_Tex_00E740" OutName="tex_00E740" Format="i4" Width="64" Height="64" Offset="0xE740" />
+        <Texture Name="object_mag_Tex_00EF40" OutName="tex_00EF40" Format="i4" Width="64" Height="64" Offset="0xEF40" />
+        <Texture Name="object_mag_Tex_00F740" OutName="tex_00F740" Format="i4" Width="64" Height="64" Offset="0xF740" />
+        <Texture Name="object_mag_Tex_00FF40" OutName="tex_00FF40" Format="i8" Width="32" Height="32" Offset="0xFF40" />
+        <Texture Name="object_mag_Tex_010340" OutName="tex_010340" Format="i8" Width="32" Height="32" Offset="0x10340" />
+        <Texture Name="object_mag_Tex_010740" OutName="tex_010740" Format="i8" Width="32" Height="32" Offset="0x10740" />
+        <Texture Name="object_mag_Tex_010B40" OutName="tex_010B40" Format="i8" Width="32" Height="32" Offset="0x10B40" />
+        <Texture Name="object_mag_Tex_010F40" OutName="tex_010F40" Format="ia8" Width="128" Height="16" Offset="0x10F40" />
+        <Texture Name="object_mag_Tex_011740" OutName="tex_011740" Format="i4" Width="256" Height="9" Offset="0x11740" />
+        <Texture Name="object_mag_Tex_011BC0" OutName="tex_011BC0" Format="i4" Width="144" Height="9" Offset="0x11BC0" />
+        <Texture Name="object_mag_Tex_011E48" OutName="tex_011E48" Format="rgba32" Width="128" Height="112" Offset="0x11E48" />
+    </File>
+</Root>

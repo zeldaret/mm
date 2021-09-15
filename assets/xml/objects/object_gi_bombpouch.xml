@@ -1,0 +1,12 @@
+﻿<Root>
+    <File Name="object_gi_bombpouch" Segment="6">
+        <DList Name="object_gi_bombpouch_DL_000AD0" Offset="0xAD0" />
+        <DList Name="object_gi_bombpouch_DL_000AF0" Offset="0xAF0" />
+        <DList Name="object_gi_bombpouch_DL_000B10" Offset="0xB10" />
+        <DList Name="object_gi_bombpouch_DL_000B30" Offset="0xB30" />
+        <DList Name="object_gi_bombpouch_DL_000B50" Offset="0xB50" />
+        <DList Name="object_gi_bombpouch_DL_000B70" Offset="0xB70" />
+        <DList Name="object_gi_bombpouch_DL_000B90" Offset="0xB90" />
+        <DList Name="object_gi_bombpouch_DL_000D98" Offset="0xD98" />
+    </File>
+</Root>

@@ -1,0 +1,62 @@
+﻿<Root>
+    <File Name="object_fsn" Segment="6">
+        <DList Name="object_fsn_DL_002A20" Offset="0x2A20" />
+        <DList Name="object_fsn_DL_002D88" Offset="0x2D88" />
+        <DList Name="object_fsn_DL_002EF0" Offset="0x2EF0" />
+        <DList Name="object_fsn_DL_0034C8" Offset="0x34C8" />
+        <DList Name="object_fsn_DL_003600" Offset="0x3600" />
+        <DList Name="object_fsn_DL_003718" Offset="0x3718" />
+        <DList Name="object_fsn_DL_003860" Offset="0x3860" />
+        <DList Name="object_fsn_DL_003998" Offset="0x3998" />
+        <DList Name="object_fsn_DL_003AB0" Offset="0x3AB0" />
+        <DList Name="object_fsn_DL_003BF8" Offset="0x3BF8" />
+        <DList Name="object_fsn_DL_003CF0" Offset="0x3CF0" />
+        <DList Name="object_fsn_DL_003DD8" Offset="0x3DD8" />
+        <DList Name="object_fsn_DL_003F20" Offset="0x3F20" />
+        <DList Name="object_fsn_DL_003FF8" Offset="0x3FF8" />
+        <DList Name="object_fsn_DL_0040E0" Offset="0x40E0" />
+        <DList Name="object_fsn_DL_004228" Offset="0x4228" />
+        <Texture Name="object_fsn_TLUT_004300" OutName="tlut_004300" Format="rgba16" Width="16" Height="16" Offset="0x4300" />
+        <Texture Name="object_fsn_TLUT_004500" OutName="tlut_004500" Format="rgba16" Width="16" Height="16" Offset="0x4500" />
+        <Texture Name="object_fsn_TLUT_004700" OutName="tlut_004700" Format="rgba16" Width="16" Height="16" Offset="0x4700" />
+        <Texture Name="object_fsn_TLUT_004900" OutName="tlut_004900" Format="rgba16" Width="16" Height="16" Offset="0x4900" />
+        <Texture Name="object_fsn_Tex_004B00" OutName="tex_004B00" Format="rgba16" Width="16" Height="16" Offset="0x4B00" />
+        <Texture Name="object_fsn_TLUT_004D00" OutName="tlut_004D00" Format="rgba16" Width="16" Height="16" Offset="0x4D00" />
+        <Texture Name="object_fsn_TLUT_004F00" OutName="tlut_004F00" Format="rgba16" Width="16" Height="16" Offset="0x4F00" />
+        <Texture Name="object_fsn_TLUT_005100" OutName="tlut_005100" Format="rgba16" Width="16" Height="16" Offset="0x5100" />
+        <Texture Name="object_fsn_TLUT_005300" OutName="tlut_005300" Format="rgba16" Width="16" Height="16" Offset="0x5300" />
+        <Texture Name="object_fsn_Tex_005500" OutName="tex_005500" Format="ci8" Width="16" Height="16" Offset="0x5500" />
+        <Texture Name="object_fsn_Tex_005600" OutName="tex_005600" Format="ci8" Width="8" Height="8" Offset="0x5600" />
+        <Texture Name="object_fsn_Tex_005640" OutName="tex_005640" Format="ci8" Width="8" Height="16" Offset="0x5640" />
+        <Texture Name="object_fsn_Tex_0056C0" OutName="tex_0056C0" Format="rgba16" Width="16" Height="16" Offset="0x56C0" />
+        <Texture Name="object_fsn_Tex_0058C0" OutName="tex_0058C0" Format="rgba16" Width="16" Height="16" Offset="0x58C0" />
+        <Texture Name="object_fsn_Tex_005AC0" OutName="tex_005AC0" Format="ci8" Width="16" Height="16" Offset="0x5AC0" />
+        <!-- <Blob Name="object_fsn_Blob_005BC0" Size="0x400" Offset="0x5BC0" /> -->
+        <Texture Name="object_fsn_Tex_005FC0" OutName="tex_005FC0" Format="ci8" Width="8" Height="8" Offset="0x5FC0" />
+        <Texture Name="object_fsn_Tex_006000" OutName="tex_006000" Format="ci8" Width="16" Height="16" Offset="0x6000" />
+        <Texture Name="object_fsn_Tex_006100" OutName="tex_006100" Format="ci8" Width="32" Height="32" Offset="0x6100" />
+        <Texture Name="object_fsn_Tex_006500" OutName="tex_006500" Format="ci8" Width="8" Height="8" Offset="0x6500" />
+        <Texture Name="object_fsn_Tex_006540" OutName="tex_006540" Format="rgba16" Width="32" Height="32" Offset="0x6540" />
+        <!-- <Blob Name="object_fsn_Blob_006D40" Size="0x4900" Offset="0x6D40" /> -->
+        <Animation Name="object_fsn_Anim_00B654" Offset="0xB654" />
+        <!-- <Blob Name="object_fsn_Blob_00B664" Size="0xC" Offset="0xB664" /> -->
+        <Animation Name="object_fsn_Anim_00B9D8" Offset="0xB9D8" />
+        <Animation Name="object_fsn_Anim_00C26C" Offset="0xC26C" />
+        <Animation Name="object_fsn_Anim_00C58C" Offset="0xC58C" />
+        <Animation Name="object_fsn_Anim_00CB3C" Offset="0xCB3C" />
+        <Animation Name="object_fsn_Anim_00D354" Offset="0xD354" />
+        <Animation Name="object_fsn_Anim_00DE34" Offset="0xDE34" />
+        <Animation Name="object_fsn_Anim_00E3EC" Offset="0xE3EC" />
+        <Animation Name="object_fsn_Anim_00F00C" Offset="0xF00C" />
+        <DList Name="object_fsn_DL_00F180" Offset="0xF180" />
+        <DList Name="object_fsn_DL_00F218" Offset="0xF218" />
+        <Texture Name="object_fsn_Tex_00F2B0" OutName="tex_00F2B0" Format="rgba16" Width="32" Height="32" Offset="0xF2B0" />
+        <Texture Name="object_fsn_Tex_00FAB0" OutName="tex_00FAB0" Format="rgba16" Width="8" Height="8" Offset="0xFAB0" />
+        <!-- <Blob Name="object_fsn_Blob_00FB30" Size="0x3040" Offset="0xFB30" /> -->
+        <Animation Name="object_fsn_Anim_012C34" Offset="0x12C34" />
+        <Animation Name="object_fsn_Anim_0131FC" Offset="0x131FC" />
+        <!-- <Blob Name="object_fsn_Blob_01320C" Size="0x124" Offset="0x1320C" /> -->
+        <Animation Name="object_fsn_Anim_0138B0" Offset="0x138B0" />
+        <Animation Name="object_fsn_Anim_01430C" Offset="0x1430C" />
+    </File>
+</Root>

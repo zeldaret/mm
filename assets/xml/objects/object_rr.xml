@@ -1,0 +1,8 @@
+﻿<Root>
+    <File Name="object_rr" Segment="6">
+        <DList Name="object_rr_DL_000470" Offset="0x470" />
+        <Texture Name="object_rr_Tex_000800" OutName="tex_000800" Format="rgba16" Width="16" Height="16" Offset="0x800" />
+        <Texture Name="object_rr_Tex_000A00" OutName="tex_000A00" Format="rgba16" Width="16" Height="16" Offset="0xA00" />
+        <Texture Name="object_rr_Tex_000C00" OutName="tex_000C00" Format="ia16" Width="16" Height="16" Offset="0xC00" />
+    </File>
+</Root>

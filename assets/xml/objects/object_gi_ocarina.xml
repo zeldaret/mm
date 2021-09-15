@@ -1,0 +1,7 @@
+﻿<Root>
+    <File Name="object_gi_ocarina" Segment="6">
+        <Texture Name="object_gi_ocarina_Tex_000000" OutName="tex_000000" Format="i8" Width="16" Height="16" Offset="0x0" />
+        <DList Name="object_gi_ocarina_DL_0008C0" Offset="0x8C0" />
+        <DList Name="object_gi_ocarina_DL_000AF8" Offset="0xAF8" />
+    </File>
+</Root>

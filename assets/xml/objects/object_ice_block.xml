@@ -1,0 +1,15 @@
+﻿<Root>
+    <File Name="object_ice_block" Segment="6">
+        <DList Name="object_ice_block_DL_0001A0" Offset="0x1A0" />
+        <DList Name="object_ice_block_DL_000310" Offset="0x310" />
+        <TextureAnimation Name="object_ice_block_Matanimheader_000328" Offset="0x328" />
+        <Collision Name="object_ice_block_Colheader_000438" Offset="0x438" />
+        <DList Name="object_ice_block_DL_0007F0" Offset="0x7F0" />
+        <DList Name="object_ice_block_DL_0009B8" Offset="0x9B8" />
+        <TextureAnimation Name="object_ice_block_Matanimheader_0009D0" Offset="0x9D0" />
+        <DList Name="object_ice_block_DL_000A30" Offset="0xA30" />
+        <DList Name="object_ice_block_DL_000A38" Offset="0xA38" />
+        <Texture Name="object_ice_block_Tex_000AE0" OutName="tex_000AE0" Format="i4" Width="64" Height="64" Offset="0xAE0" />
+        <Texture Name="object_ice_block_Tex_0012E0" OutName="tex_0012E0" Format="i4" Width="64" Height="64" Offset="0x12E0" />
+    </File>
+</Root>

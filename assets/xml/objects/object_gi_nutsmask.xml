@@ -1,0 +1,9 @@
+﻿<Root>
+    <File Name="object_gi_nutsmask" Segment="6">
+        <DList Name="object_gi_nutsmask_DL_000B50" Offset="0xB50" />
+        <DList Name="object_gi_nutsmask_DL_000F20" Offset="0xF20" />
+        <Texture Name="object_gi_nutsmask_Tex_000F28" OutName="tex_000F28" Format="i8" Width="32" Height="32" Offset="0xF28" />
+        <Texture Name="object_gi_nutsmask_Tex_001328" OutName="tex_001328" Format="i8" Width="16" Height="16" Offset="0x1328" />
+        <Texture Name="object_gi_nutsmask_Tex_001428" OutName="tex_001428" Format="ia8" Width="64" Height="32" Offset="0x1428" />
+    </File>
+</Root>

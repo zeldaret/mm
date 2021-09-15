@@ -1,0 +1,8 @@
+﻿<Root>
+    <File Name="object_gi_soul" Segment="6">
+        <Texture Name="object_gi_soul_Tex_000000" OutName="tex_000000" Format="i8" Width="32" Height="32" Offset="0x0" />
+        <DList Name="object_gi_soul_DL_000BD0" Offset="0xBD0" />
+        <DList Name="object_gi_soul_DL_000DB8" Offset="0xDB8" />
+        <DList Name="object_gi_soul_DL_000EF0" Offset="0xEF0" />
+    </File>
+</Root>

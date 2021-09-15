@@ -1,0 +1,61 @@
+﻿<Root>
+    <File Name="object_ani" Segment="6">
+        <Animation Name="object_ani_Anim_0007FC" Offset="0x7FC" />
+        <Animation Name="object_ani_Anim_000C14" Offset="0xC14" />
+        <Animation Name="object_ani_Anim_0011CC" Offset="0x11CC" />
+        <Animation Name="object_ani_Anim_001584" Offset="0x1584" />
+        <Animation Name="object_ani_Anim_001D48" Offset="0x1D48" />
+        <Animation Name="object_ani_Anim_0027A0" Offset="0x27A0" />
+        <Limb Name="object_ani_Standardlimb_0027B0" Type="Standard" Offset="0x27B0" />
+        <Limb Name="object_ani_Standardlimb_0027BC" Type="Standard" Offset="0x27BC" />
+        <Limb Name="object_ani_Standardlimb_0027C8" Type="Standard" Offset="0x27C8" />
+        <Limb Name="object_ani_Standardlimb_0027D4" Type="Standard" Offset="0x27D4" />
+        <Limb Name="object_ani_Standardlimb_0027E0" Type="Standard" Offset="0x27E0" />
+        <Limb Name="object_ani_Standardlimb_0027EC" Type="Standard" Offset="0x27EC" />
+        <Limb Name="object_ani_Standardlimb_0027F8" Type="Standard" Offset="0x27F8" />
+        <Limb Name="object_ani_Standardlimb_002804" Type="Standard" Offset="0x2804" />
+        <Limb Name="object_ani_Standardlimb_002810" Type="Standard" Offset="0x2810" />
+        <Limb Name="object_ani_Standardlimb_00281C" Type="Standard" Offset="0x281C" />
+        <Limb Name="object_ani_Standardlimb_002828" Type="Standard" Offset="0x2828" />
+        <Limb Name="object_ani_Standardlimb_002834" Type="Standard" Offset="0x2834" />
+        <Limb Name="object_ani_Standardlimb_002840" Type="Standard" Offset="0x2840" />
+        <Limb Name="object_ani_Standardlimb_00284C" Type="Standard" Offset="0x284C" />
+        <Limb Name="object_ani_Standardlimb_002858" Type="Standard" Offset="0x2858" />
+        <Skeleton Name="object_ani_Skel_0028A0" Type="Flex" LimbType="Standard" Offset="0x28A0" />
+        <DList Name="object_ani_DL_004860" Offset="0x4860" />
+        <DList Name="object_ani_DL_004A50" Offset="0x4A50" />
+        <DList Name="object_ani_DL_004B38" Offset="0x4B38" />
+        <DList Name="object_ani_DL_004C30" Offset="0x4C30" />
+        <DList Name="object_ani_DL_004E20" Offset="0x4E20" />
+        <DList Name="object_ani_DL_004F08" Offset="0x4F08" />
+        <DList Name="object_ani_DL_005000" Offset="0x5000" />
+        <DList Name="object_ani_DL_005270" Offset="0x5270" />
+        <DList Name="object_ani_DL_005420" Offset="0x5420" />
+        <DList Name="object_ani_DL_005668" Offset="0x5668" />
+        <DList Name="object_ani_DL_005778" Offset="0x5778" />
+        <DList Name="object_ani_DL_005928" Offset="0x5928" />
+        <DList Name="object_ani_DL_005C50" Offset="0x5C50" />
+        <DList Name="object_ani_DL_005D60" Offset="0x5D60" />
+        <Texture Name="object_ani_TLUT_005E58" OutName="tlut_005E58" Format="rgba16" Width="16" Height="16" Offset="0x5E58" />
+        <Texture Name="object_ani_Tex_006058" OutName="tex_006058" Format="ci8" Width="8" Height="8" Offset="0x6058" />
+        <Texture Name="object_ani_Tex_006098" OutName="tex_006098" Format="ci8" Width="8" Height="8" Offset="0x6098" />
+        <Texture Name="object_ani_Tex_0060D8" OutName="tex_0060D8" Format="i8" Width="8" Height="8" Offset="0x60D8" />
+        <Texture Name="object_ani_Tex_006118" OutName="tex_006118" Format="ci8" Width="16" Height="16" Offset="0x6118" />
+        <Texture Name="object_ani_Tex_006218" OutName="tex_006218" Format="ci8" Width="16" Height="16" Offset="0x6218" />
+        <Texture Name="object_ani_TLUT_006318" OutName="tlut_006318" Format="rgba16" Width="16" Height="16" Offset="0x6318" />
+        <!-- <Blob Name="object_ani_Blob_006518" Size="0x380" Offset="0x6518" /> -->
+        <Texture Name="object_ani_Tex_006898" OutName="tex_006898" Format="ci8" Width="16" Height="16" Offset="0x6898" />
+        <Texture Name="object_ani_Tex_006998" OutName="tex_006998" Format="ci8" Width="8" Height="8" Offset="0x6998" />
+        <Texture Name="object_ani_Tex_0069D8" OutName="tex_0069D8" Format="ci8" Width="8" Height="8" Offset="0x69D8" />
+        <Texture Name="object_ani_Tex_006A18" OutName="tex_006A18" Format="ci8" Width="16" Height="16" Offset="0x6A18" />
+        <!-- <Blob Name="object_ani_Blob_006B18" Size="0x800" Offset="0x6B18" /> -->
+        <DList Name="object_ani_DL_007B58" Offset="0x7B58" />
+        <Animation Name="object_ani_Anim_009220" Offset="0x9220" />
+        <Animation Name="object_ani_Anim_009734" Offset="0x9734" />
+        <Animation Name="object_ani_Anim_009D34" Offset="0x9D34" />
+        <Animation Name="object_ani_Anim_00A460" Offset="0xA460" />
+        <Animation Name="object_ani_Anim_00A978" Offset="0xA978" />
+        <Animation Name="object_ani_Anim_00B2B0" Offset="0xB2B0" />
+        <Animation Name="object_ani_Anim_00B8AC" Offset="0xB8AC" />
+    </File>
+</Root>

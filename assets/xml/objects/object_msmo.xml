@@ -1,0 +1,9 @@
+﻿<Root>
+    <File Name="object_msmo" Segment="6">
+        <DList Name="object_msmo_DL_000E70" Offset="0xE70" />
+        <Texture Name="object_msmo_Tex_001320" OutName="tex_001320" Format="i8" Width="16" Height="16" Offset="0x1320" />
+        <Texture Name="object_msmo_Tex_001420" OutName="tex_001420" Format="i8" Width="16" Height="16" Offset="0x1420" />
+        <Texture Name="object_msmo_Tex_001520" OutName="tex_001520" Format="i8" Width="16" Height="16" Offset="0x1520" />
+        <Texture Name="object_msmo_Tex_001620" OutName="tex_001620" Format="i4" Width="16" Height="16" Offset="0x1620" />
+    </File>
+</Root>

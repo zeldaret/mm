@@ -1,0 +1,8 @@
+﻿<Root>
+    <File Name="object_hakugin_demo" Segment="6">
+        <Animation Name="object_hakugin_demo_Anim_001420" Offset="0x1420" />
+        <Animation Name="object_hakugin_demo_Anim_001A4C" Offset="0x1A4C" />
+        <Animation Name="object_hakugin_demo_Anim_002704" Offset="0x2704" />
+        <Animation Name="object_hakugin_demo_Anim_003378" Offset="0x3378" />
+    </File>
+</Root>

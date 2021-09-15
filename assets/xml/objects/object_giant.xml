@@ -1,0 +1,63 @@
+﻿<Root>
+    <File Name="object_giant" Segment="6">
+        <Animation Name="object_giant_Anim_002168" Offset="0x2168" />
+        <!-- <Blob Name="object_giant_Blob_003D40" Size="0x90" Offset="0x3D40" /> -->
+        <DList Name="object_giant_DL_003DD0" Offset="0x3DD0" />
+        <DList Name="object_giant_DL_0040C0" Offset="0x40C0" />
+        <DList Name="object_giant_DL_004200" Offset="0x4200" />
+        <DList Name="object_giant_DL_004438" Offset="0x4438" />
+        <DList Name="object_giant_DL_004560" Offset="0x4560" />
+        <DList Name="object_giant_DL_0046A0" Offset="0x46A0" />
+        <DList Name="object_giant_DL_0048D8" Offset="0x48D8" />
+        <DList Name="object_giant_DL_004A00" Offset="0x4A00" />
+        <DList Name="object_giant_DL_004B10" Offset="0x4B10" />
+        <DList Name="object_giant_DL_004C38" Offset="0x4C38" />
+        <DList Name="object_giant_DL_004D58" Offset="0x4D58" />
+        <DList Name="object_giant_DL_004EC0" Offset="0x4EC0" />
+        <DList Name="object_giant_DL_004FD0" Offset="0x4FD0" />
+        <DList Name="object_giant_DL_0050F8" Offset="0x50F8" />
+        <DList Name="object_giant_DL_005218" Offset="0x5218" />
+        <Texture Name="object_giant_TLUT_005380" OutName="tlut_005380" Format="rgba16" Width="16" Height="16" Offset="0x5380" />
+        <Texture Name="object_giant_Tex_005580" OutName="tex_005580" Format="ci8" Width="16" Height="16" Offset="0x5580" />
+        <Texture Name="object_giant_Tex_005680" OutName="tex_005680" Format="ci8" Width="16" Height="16" Offset="0x5680" />
+        <Texture Name="object_giant_Tex_005780" OutName="tex_005780" Format="ci8" Width="16" Height="16" Offset="0x5780" />
+        <Texture Name="object_giant_Tex_005880" OutName="tex_005880" Format="ci8" Width="16" Height="16" Offset="0x5880" />
+        <Texture Name="object_giant_Tex_005980" OutName="tex_005980" Format="ci8" Width="16" Height="16" Offset="0x5980" />
+        <!-- <Blob Name="object_giant_Blob_005A80" Size="0x1800" Offset="0x5A80" /> -->
+        <Texture Name="object_giant_Tex_007280" OutName="tex_007280" Format="ci8" Width="16" Height="16" Offset="0x7280" />
+        <Texture Name="object_giant_Tex_007380" OutName="tex_007380" Format="ci8" Width="16" Height="32" Offset="0x7380" />
+        <DList Name="object_giant_DL_007610" Offset="0x7610" />
+        <Texture Name="object_giant_Tex_0076C0" OutName="tex_0076C0" Format="rgba16" Width="16" Height="16" Offset="0x76C0" />
+        <Limb Name="object_giant_Standardlimb_0078C0" Type="Standard" Offset="0x78C0" />
+        <Limb Name="object_giant_Standardlimb_0078CC" Type="Standard" Offset="0x78CC" />
+        <Limb Name="object_giant_Standardlimb_0078D8" Type="Standard" Offset="0x78D8" />
+        <Limb Name="object_giant_Standardlimb_0078E4" Type="Standard" Offset="0x78E4" />
+        <Limb Name="object_giant_Standardlimb_0078F0" Type="Standard" Offset="0x78F0" />
+        <Limb Name="object_giant_Standardlimb_0078FC" Type="Standard" Offset="0x78FC" />
+        <Limb Name="object_giant_Standardlimb_007908" Type="Standard" Offset="0x7908" />
+        <Limb Name="object_giant_Standardlimb_007914" Type="Standard" Offset="0x7914" />
+        <Limb Name="object_giant_Standardlimb_007920" Type="Standard" Offset="0x7920" />
+        <Limb Name="object_giant_Standardlimb_00792C" Type="Standard" Offset="0x792C" />
+        <Limb Name="object_giant_Standardlimb_007938" Type="Standard" Offset="0x7938" />
+        <Limb Name="object_giant_Standardlimb_007944" Type="Standard" Offset="0x7944" />
+        <Limb Name="object_giant_Standardlimb_007950" Type="Standard" Offset="0x7950" />
+        <Limb Name="object_giant_Standardlimb_00795C" Type="Standard" Offset="0x795C" />
+        <Limb Name="object_giant_Standardlimb_007968" Type="Standard" Offset="0x7968" />
+        <Skeleton Name="object_giant_Skel_0079B0" Type="Flex" LimbType="Standard" Offset="0x79B0" />
+        <Animation Name="object_giant_Anim_008394" Offset="0x8394" />
+        <Animation Name="object_giant_Anim_0096E4" Offset="0x96E4" />
+        <Animation Name="object_giant_Anim_00A1C4" Offset="0xA1C4" />
+        <Animation Name="object_giant_Anim_00ACA4" Offset="0xACA4" />
+        <Animation Name="object_giant_Anim_00B784" Offset="0xB784" />
+        <Animation Name="object_giant_Anim_00C5D4" Offset="0xC5D4" />
+        <Animation Name="object_giant_Anim_00D040" Offset="0xD040" />
+        <Animation Name="object_giant_Anim_00DE84" Offset="0xDE84" />
+        <Animation Name="object_giant_Anim_0102A4" Offset="0x102A4" />
+        <Animation Name="object_giant_Anim_0116E4" Offset="0x116E4" />
+        <Animation Name="object_giant_Anim_012A38" Offset="0x12A38" />
+        <Animation Name="object_giant_Anim_013004" Offset="0x13004" />
+        <Animation Name="object_giant_Anim_013FE8" Offset="0x13FE8" />
+        <Animation Name="object_giant_Anim_015334" Offset="0x15334" />
+        <Animation Name="object_giant_Anim_017944" Offset="0x17944" />
+    </File>
+</Root>

@@ -1,0 +1,9 @@
+﻿<Root>
+    <File Name="object_gi_m_arrow" Segment="6">
+        <DList Name="object_gi_m_arrow_DL_000AE0" Offset="0xAE0" />
+        <DList Name="object_gi_m_arrow_DL_000CA0" Offset="0xCA0" />
+        <DList Name="object_gi_m_arrow_DL_000CC0" Offset="0xCC0" />
+        <DList Name="object_gi_m_arrow_DL_000CE0" Offset="0xCE0" />
+        <DList Name="object_gi_m_arrow_DL_000D00" Offset="0xD00" />
+    </File>
+</Root>

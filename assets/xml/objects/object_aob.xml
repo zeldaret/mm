@@ -1,0 +1,53 @@
+﻿<Root>
+    <File Name="object_aob" Segment="6">
+        <Animation Name="object_aob_Anim_00007C" Offset="0x7C" />
+        <Limb Name="object_aob_Standardlimb_000090" Type="Standard" Offset="0x90" />
+        <Limb Name="object_aob_Standardlimb_00009C" Type="Standard" Offset="0x9C" />
+        <Limb Name="object_aob_Standardlimb_0000A8" Type="Standard" Offset="0xA8" />
+        <Limb Name="object_aob_Standardlimb_0000B4" Type="Standard" Offset="0xB4" />
+        <Limb Name="object_aob_Standardlimb_0000C0" Type="Standard" Offset="0xC0" />
+        <Limb Name="object_aob_Standardlimb_0000CC" Type="Standard" Offset="0xCC" />
+        <Limb Name="object_aob_Standardlimb_0000D8" Type="Standard" Offset="0xD8" />
+        <Limb Name="object_aob_Standardlimb_0000E4" Type="Standard" Offset="0xE4" />
+        <Limb Name="object_aob_Standardlimb_0000F0" Type="Standard" Offset="0xF0" />
+        <Limb Name="object_aob_Standardlimb_0000FC" Type="Standard" Offset="0xFC" />
+        <Limb Name="object_aob_Standardlimb_000108" Type="Standard" Offset="0x108" />
+        <Limb Name="object_aob_Standardlimb_000114" Type="Standard" Offset="0x114" />
+        <Limb Name="object_aob_Standardlimb_000120" Type="Standard" Offset="0x120" />
+        <Limb Name="object_aob_Standardlimb_00012C" Type="Standard" Offset="0x12C" />
+        <Limb Name="object_aob_Standardlimb_000138" Type="Standard" Offset="0x138" />
+        <Skeleton Name="object_aob_Skel_000180" Type="Flex" LimbType="Standard" Offset="0x180" />
+        <Texture Name="object_aob_TLUT_000198" OutName="tlut_000198" Format="rgba16" Width="16" Height="16" Offset="0x198" />
+        <Texture Name="object_aob_Tex_000398" OutName="tex_000398" Format="ci8" Width="16" Height="16" Offset="0x398" />
+        <Texture Name="object_aob_Tex_000498" OutName="tex_000498" Format="ci8" Width="8" Height="8" Offset="0x498" />
+        <Texture Name="object_aob_Tex_0004D8" OutName="tex_0004D8" Format="ci8" Width="16" Height="16" Offset="0x4D8" />
+        <Texture Name="object_aob_Tex_0005D8" OutName="tex_0005D8" Format="ci8" Width="8" Height="8" Offset="0x5D8" />
+        <Texture Name="object_aob_Tex_000618" OutName="tex_000618" Format="ci8" Width="8" Height="8" Offset="0x618" />
+        <Texture Name="object_aob_TEx_000658" OutName="tex_000658" Format="rgba16" Width="32" Height="32" Offset="0x658" /> 
+        <Texture Name="object_aob_TEx_000E58" OutName="tex_000E58" Format="rgba16" Width="32" Height="32" Offset="0xE58" /> 
+        <Texture Name="object_aob_TEx_001658" OutName="tex_001658" Format="rgba16" Width="32" Height="32" Offset="0x1658" /> 
+        <Texture Name="object_aob_Tex_001E58" OutName="tex_001E58" Format="ci8" Width="16" Height="16" Offset="0x1E58" />
+        <Texture Name="object_aob_Tex_001F58" OutName="tex_001F58" Format="ci8" Width="8" Height="8" Offset="0x1F58" />
+        <Texture Name="object_aob_Tex_001F98" OutName="tex_001F98" Format="ci8" Width="8" Height="8" Offset="0x1F98" />
+        <DList Name="object_aob_DL_003D18" Offset="0x3D18" />
+        <DList Name="object_aob_DL_0044D8" Offset="0x44D8" />
+        <DList Name="object_aob_DL_0046E0" Offset="0x46E0" />
+        <DList Name="object_aob_DL_004810" Offset="0x4810" />
+        <DList Name="object_aob_DL_0049B8" Offset="0x49B8" />
+        <DList Name="object_aob_DL_004BC0" Offset="0x4BC0" />
+        <DList Name="object_aob_DL_004CF0" Offset="0x4CF0" />
+        <DList Name="object_aob_DL_004E98" Offset="0x4E98" />
+        <DList Name="object_aob_DL_005138" Offset="0x5138" />
+        <DList Name="object_aob_DL_005208" Offset="0x5208" />
+        <DList Name="object_aob_DL_0052D8" Offset="0x52D8" />
+        <DList Name="object_aob_DL_0053A8" Offset="0x53A8" />
+        <DList Name="object_aob_DL_005478" Offset="0x5478" />
+        <DList Name="object_aob_DL_005548" Offset="0x5548" />
+        <DList Name="object_aob_DL_005618" Offset="0x5618" />
+        <Animation Name="object_aob_Anim_0058EC" Offset="0x58EC" />
+        <Animation Name="object_aob_Anim_006040" Offset="0x6040" />
+        <Animation Name="object_aob_Anim_0068B4" Offset="0x68B4" />
+        <Animation Name="object_aob_Anim_00700C" Offset="0x700C" />
+        <Animation Name="object_aob_Anim_007758" Offset="0x7758" />
+    </File>
+</Root>

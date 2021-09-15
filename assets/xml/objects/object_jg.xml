@@ -1,0 +1,100 @@
+﻿<Root>
+    <File Name="object_jg" Segment="6">
+        <DList Name="object_jg_DL_003C50" Offset="0x3C50" />
+        <DList Name="object_jg_DL_003DC8" Offset="0x3DC8" />
+        <DList Name="object_jg_DL_004068" Offset="0x4068" />
+        <DList Name="object_jg_DL_004410" Offset="0x4410" />
+        <DList Name="object_jg_DL_004688" Offset="0x4688" />
+        <DList Name="object_jg_DL_004928" Offset="0x4928" />
+        <DList Name="object_jg_DL_004CD0" Offset="0x4CD0" />
+        <DList Name="object_jg_DL_004F50" Offset="0x4F50" />
+        <DList Name="object_jg_DL_005440" Offset="0x5440" />
+        <DList Name="object_jg_DL_0054F0" Offset="0x54F0" />
+        <DList Name="object_jg_DL_0055A8" Offset="0x55A8" />
+        <DList Name="object_jg_DL_005770" Offset="0x5770" />
+        <DList Name="object_jg_DL_005968" Offset="0x5968" />
+        <DList Name="object_jg_DL_005A48" Offset="0x5A48" />
+        <DList Name="object_jg_DL_005B28" Offset="0x5B28" />
+        <DList Name="object_jg_DL_005EE8" Offset="0x5EE8" />
+        <DList Name="object_jg_DL_006018" Offset="0x6018" />
+        <DList Name="object_jg_DL_006130" Offset="0x6130" />
+        <DList Name="object_jg_DL_006378" Offset="0x6378" />
+        <DList Name="object_jg_DL_006678" Offset="0x6678" />
+        <DList Name="object_jg_DL_0067A8" Offset="0x67A8" />
+        <DList Name="object_jg_DL_0068C0" Offset="0x68C0" />
+        <DList Name="object_jg_DL_006B08" Offset="0x6B08" />
+        <DList Name="object_jg_DL_006E08" Offset="0x6E08" />
+        <Animation Name="object_jg_Anim_0077CC" Offset="0x77CC" />
+        <Animation Name="object_jg_Anim_009440" Offset="0x9440" />
+        <Animation Name="object_jg_Anim_00A07C" Offset="0xA07C" />
+        <DList Name="object_jg_DL_00A3B0" Offset="0xA3B0" />
+        <Texture Name="object_jg_Tex_00A530" OutName="tex_00A530" Format="rgba16" Width="32" Height="32" Offset="0xA530" />
+        <Texture Name="object_jg_Tex_00AD30" OutName="tex_00AD30" Format="rgba16" Width="16" Height="16" Offset="0xAD30" />
+        <Animation Name="object_jg_Anim_00BDD8" Offset="0xBDD8" />
+        <Animation Name="object_jg_Anim_00C7A8" Offset="0xC7A8" />
+        <Animation Name="object_jg_Anim_00D630" Offset="0xD630" />
+        <Animation Name="object_jg_Anim_00DB54" Offset="0xDB54" />
+        <Animation Name="object_jg_Anim_00E8FC" Offset="0xE8FC" />
+        <Animation Name="object_jg_Anim_00FE48" Offset="0xFE48" />
+        <Animation Name="object_jg_Anim_011F50" Offset="0x11F50" />
+        <Animation Name="object_jg_Anim_0129F4" Offset="0x129F4" />
+        <Animation Name="object_jg_Anim_013DD8" Offset="0x13DD8" />
+        <Animation Name="object_jg_Anim_01436C" Offset="0x1436C" />
+        <Texture Name="object_jg_TLUT_014380" OutName="tlut_014380" Format="rgba16" Width="16" Height="16" Offset="0x14380" />
+        <Texture Name="object_jg_Tex_014580" OutName="tex_014580" Format="ci8" Width="8" Height="8" Offset="0x14580" />
+        <Texture Name="object_jg_Tex_0145C0" OutName="tex_0145C0" Format="ci8" Width="32" Height="16" Offset="0x145C0" />
+        <Texture Name="object_jg_Tex_0147C0" OutName="tex_0147C0" Format="ci8" Width="32" Height="32" Offset="0x147C0" />
+        <Texture Name="object_jg_Tex_014BC0" OutName="tex_014BC0" Format="ci8" Width="32" Height="32" Offset="0x14BC0" />
+        <Texture Name="object_jg_Tex_014FC0" OutName="tex_014FC0" Format="ci8" Width="16" Height="16" Offset="0x14FC0" />
+        <Texture Name="object_jg_Tex_0150C0" OutName="tex_0150C0" Format="rgba16" Width="8" Height="16" Offset="0x150C0" />
+        <Texture Name="object_jg_Tex_0151C0" OutName="tex_0151C0" Format="rgba16" Width="8" Height="8" Offset="0x151C0" />
+        <Texture Name="object_jg_Tex_015240" OutName="tex_015240" Format="rgba16" Width="16" Height="32" Offset="0x15240" />
+        <Texture Name="object_jg_Tex_015640" OutName="tex_015640" Format="ci8" Width="8" Height="8" Offset="0x15640" />
+        <Texture Name="object_jg_Tex_015680" OutName="tex_015680" Format="ci8" Width="8" Height="8" Offset="0x15680" />
+        <Texture Name="object_jg_Tex_0156C0" OutName="tex_0156C0" Format="ci8" Width="8" Height="8" Offset="0x156C0" />
+        <Texture Name="object_jg_Tex_015700" OutName="tex_015700" Format="rgba16" Width="32" Height="64" Offset="0x15700" />
+        <Texture Name="object_jg_Tex_016700" OutName="tex_016700" Format="ci8" Width="16" Height="16" Offset="0x16700" />
+        <Texture Name="object_jg_Tex_016800" OutName="tex_016800" Format="ci8" Width="16" Height="32" Offset="0x16800" />
+        <Texture Name="object_jg_Tex_016A00" OutName="tex_016A00" Format="ci8" Width="32" Height="32" Offset="0x16A00" />
+        <Texture Name="object_jg_Tex_016E00" OutName="tex_016E00" Format="ci8" Width="32" Height="64" Offset="0x16E00" />
+        <Animation Name="object_jg_Anim_018CE4" Offset="0x18CE4" />
+        <Animation Name="object_jg_Anim_01ADC0" Offset="0x1ADC0" />
+        <Limb Name="object_jg_Standardlimb_01ADD0" Type="Standard" Offset="0x1ADD0" />
+        <Limb Name="object_jg_Standardlimb_01ADDC" Type="Standard" Offset="0x1ADDC" />
+        <Limb Name="object_jg_Standardlimb_01ADE8" Type="Standard" Offset="0x1ADE8" />
+        <Limb Name="object_jg_Standardlimb_01ADF4" Type="Standard" Offset="0x1ADF4" />
+        <Limb Name="object_jg_Standardlimb_01AE00" Type="Standard" Offset="0x1AE00" />
+        <Limb Name="object_jg_Standardlimb_01AE0C" Type="Standard" Offset="0x1AE0C" />
+        <Limb Name="object_jg_Standardlimb_01AE18" Type="Standard" Offset="0x1AE18" />
+        <Limb Name="object_jg_Standardlimb_01AE24" Type="Standard" Offset="0x1AE24" />
+        <Limb Name="object_jg_Standardlimb_01AE30" Type="Standard" Offset="0x1AE30" />
+        <Limb Name="object_jg_Standardlimb_01AE3C" Type="Standard" Offset="0x1AE3C" />
+        <Limb Name="object_jg_Standardlimb_01AE48" Type="Standard" Offset="0x1AE48" />
+        <Limb Name="object_jg_Standardlimb_01AE54" Type="Standard" Offset="0x1AE54" />
+        <Limb Name="object_jg_Standardlimb_01AE60" Type="Standard" Offset="0x1AE60" />
+        <Limb Name="object_jg_Standardlimb_01AE6C" Type="Standard" Offset="0x1AE6C" />
+        <Limb Name="object_jg_Standardlimb_01AE78" Type="Standard" Offset="0x1AE78" />
+        <Limb Name="object_jg_Standardlimb_01AE84" Type="Standard" Offset="0x1AE84" />
+        <Limb Name="object_jg_Standardlimb_01AE90" Type="Standard" Offset="0x1AE90" />
+        <Limb Name="object_jg_Standardlimb_01AE9C" Type="Standard" Offset="0x1AE9C" />
+        <Limb Name="object_jg_Standardlimb_01AEA8" Type="Standard" Offset="0x1AEA8" />
+        <Limb Name="object_jg_Standardlimb_01AEB4" Type="Standard" Offset="0x1AEB4" />
+        <Limb Name="object_jg_Standardlimb_01AEC0" Type="Standard" Offset="0x1AEC0" />
+        <Limb Name="object_jg_Standardlimb_01AECC" Type="Standard" Offset="0x1AECC" />
+        <Limb Name="object_jg_Standardlimb_01AED8" Type="Standard" Offset="0x1AED8" />
+        <Limb Name="object_jg_Standardlimb_01AEE4" Type="Standard" Offset="0x1AEE4" />
+        <Limb Name="object_jg_Standardlimb_01AEF0" Type="Standard" Offset="0x1AEF0" />
+        <Limb Name="object_jg_Standardlimb_01AEFC" Type="Standard" Offset="0x1AEFC" />
+        <Limb Name="object_jg_Standardlimb_01AF08" Type="Standard" Offset="0x1AF08" />
+        <Limb Name="object_jg_Standardlimb_01AF14" Type="Standard" Offset="0x1AF14" />
+        <Limb Name="object_jg_Standardlimb_01AF20" Type="Standard" Offset="0x1AF20" />
+        <Limb Name="object_jg_Standardlimb_01AF2C" Type="Standard" Offset="0x1AF2C" />
+        <Limb Name="object_jg_Standardlimb_01AF38" Type="Standard" Offset="0x1AF38" />
+        <Limb Name="object_jg_Standardlimb_01AF44" Type="Standard" Offset="0x1AF44" />
+        <Limb Name="object_jg_Standardlimb_01AF50" Type="Standard" Offset="0x1AF50" />
+        <Limb Name="object_jg_Standardlimb_01AF5C" Type="Standard" Offset="0x1AF5C" />
+        <Skeleton Name="object_jg_Skel_01AFF0" Type="Flex" LimbType="Standard" Offset="0x1AFF0" />
+        <Animation Name="object_jg_Anim_01B1E8" Offset="0x1B1E8" />
+        <!-- <Blob Name="object_jg_Blob_01B1F8" Size="0x28" Offset="0x1B1F8" /> -->
+    </File>
+</Root>
