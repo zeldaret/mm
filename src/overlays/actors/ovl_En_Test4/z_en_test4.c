@@ -45,6 +45,9 @@ extern s8 D_801BDBC8;
 extern s16 D_80A43342[];
 extern s16 D_80A4334A[];
 
+extern s16 D_80A43352[];
+extern s16 D_80A4335A[];
+
 #ifdef NON_MATCHING
 void func_80A41D70(EnTest4* this, GlobalContext* globalCtx) {
     if (this->unk_144 != 0) {
@@ -93,8 +96,47 @@ void func_80A41D70(EnTest4* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test4/func_80A41D70.s")
 #endif
 
+#ifdef NON_MATCHING
+void func_80A41FA4(EnTest4* this, GlobalContext* globalCtx) {
+    if (this->unk_144 != 0) {
+        func_80151A68(globalCtx, D_80A43352[CURRENT_DAY]);
+    } else if ((D_80A434D0[this->unk_144] < 0) || ((globalCtx->actorCtx.unk5 & 2) != 0)) {
+        Sram_IncrementDay();
+        gSaveContext.time = 0x4000;
+        func_8010EE74(globalCtx, CURRENT_DAY);
+        func_80151A68(globalCtx, D_80A4335A[CURRENT_DAY]);
+        D_801BDBC8 = 0xFE;
+        func_800FB758(globalCtx);
+        func_800FEAF4(&globalCtx->envCtx);
+        this->actionFunc = func_80A42AB8;
+    }
+
+    if (gSaveContext.cutsceneTrigger == 0) {
+        if ((D_80A434D0[this->unk_144] >= 0) && ((globalCtx->actorCtx.unk5 & 2) == 0)) {
+            this->actionFunc = func_80A42F20;
+            D_80A434D4 = D_80A434D0[this->unk_144];
+            this->unk_145 = 0;
+            gSaveContext.eventInf[1] |= 0x80;
+        } else if (this->unk_144 == 0) {
+            play_sound(0x2813U);
+        } else {
+            func_8019F128(0x28AE);
+        }
+    } else {
+        this->actionFunc = func_80A42AB8;
+        if (this->unk_144 == 0) {
+            this->unk_144 = 1;
+        } else {
+            this->unk_144 = 0;
+        }
+
+        this->unk_146 = gSaveContext.time += 0x2D;
+    }
+}
+#else
 void func_80A41FA4(EnTest4* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test4/func_80A41FA4.s")
+#endif
 
 void func_80A42198(EnTest4* this) {
     if ((gSaveContext.time >= 0x4000) && (gSaveContext.time < 0xC001)) {
