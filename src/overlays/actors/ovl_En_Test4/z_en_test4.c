@@ -33,24 +33,36 @@ const ActorInit En_Test4_InitVars = {
 
 #endif
 
-extern s16 D_80A43340;
-extern s16 D_801F4E7A;
-extern u8 D_801BDBB0;
-extern s32 D_801BDA9C;
-extern s16 D_80A43364[];
-
-extern s8 D_801BDBC8;
+extern s16 D_80A43340[];
 extern s16 D_80A43342[];
 extern s16 D_80A4334A[];
-
 extern s16 D_80A43352[];
 extern s16 D_80A4335A[];
+extern s16 D_80A43364[];
+
+/*
+s16 D_80A43340[] = {0, 0, 0x1BB4, 0x1BB5};
+s16 D_80A43348[] = {0x1BB6, 0, 0x1BB2, 0x1BB2};
+s16 D_80A43350[] = {0x1BB3, 0, 0x1BB4, 0x1BB5};
+s16 D_80A43358[] = {0x1BB6, 0, 0x1BB2, 0x1BB2, 0x1BB3, 0};
+s16 D_80A43364[] = {0x4000, 0xC000, 0, 0, 0, 0};
+*/
+extern s16 D_80A43340[];
+extern s16 D_80A43348[];
+extern s16 D_80A43350[];
+extern s16 D_80A43358[];
+extern s16 D_80A43364[];
+
+
+
+extern s32 D_801BDA9C;
+extern u8 D_801BDBC8;
+
 
 
 s16 D_80A434D0[2];
 s16 D_80A434D4;
 
-#ifdef NON_MATCHING
 void func_80A41D70(EnTest4* this, GlobalContext* globalCtx) {
     if (this->unk_144 != 0) {
         func_80151A68(globalCtx, D_80A43342[CURRENT_DAY]);
@@ -93,20 +105,16 @@ void func_80A41D70(EnTest4* this, GlobalContext* globalCtx) {
         this->unk_146 = gSaveContext.time += CLOCK_TIME(0, 1);
     }
 }
-#else
-void func_80A41D70(EnTest4* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test4/func_80A41D70.s")
-#endif
 
 #ifdef NON_MATCHING
 void func_80A41FA4(EnTest4* this, GlobalContext* globalCtx) {
     if (this->unk_144 != 0) {
-        func_80151A68(globalCtx, D_80A43352[CURRENT_DAY]);
+        func_80151A68(globalCtx, D_80A43350[CURRENT_DAY+1]);
     } else if ((D_80A434D0[this->unk_144] < 0) || ((globalCtx->actorCtx.unk5 & 2) != 0)) {
         Sram_IncrementDay();
         gSaveContext.time = 0x4000;
         func_8010EE74(globalCtx, CURRENT_DAY);
-        func_80151A68(globalCtx, D_80A4335A[CURRENT_DAY]);
+        func_80151A68(globalCtx, D_80A43358[CURRENT_DAY+1]);
         D_801BDBC8 = 0xFE;
         func_800FB758(globalCtx);
         func_800FEAF4(&globalCtx->envCtx);
@@ -316,10 +324,10 @@ void EnTest4_Init(Actor* thisx, GlobalContext* globalCtx) {
         gSaveContext.eventInf[5] &= (u8)~0x04;
         D_80A434D0[1] = D_80A434D0[0];
     }
-    if ((D_80A43340 != 0) || ((gSaveContext.eventInf[3] & 0x80) != 0)) {
+    if ((D_80A43340[0] != 0) || ((gSaveContext.eventInf[3] & 0x80) != 0)) {
         Actor_MarkForDeath((Actor* ) this);
     } else {
-        D_80A43340 = 1;
+        D_80A43340[0] = 1;
         this->actor.room = -1;
         gSaveContext.unk_3F60 = 0;
         gSaveContext.unk_3F64 = 1000.0f;
