@@ -1,7 +1,7 @@
-WARNING: Intersection detected from 0x000968:0x000A10 (object_gi_reserve01_DL_000968), conflicts with 0x000990 (object_gi_reserve01_Blob_000990)
-WARNING: Intersection detected from 0x000990:0x000A10 (object_gi_reserve01_Blob_000990), conflicts with 0x0009B8 (object_gi_reserve01_Blob_0009B8)
-WARNING: Intersection detected from 0x0009B8:0x000A10 (object_gi_reserve01_Blob_0009B8), conflicts with 0x0009E0 (object_gi_reserve01_Blob_0009E0)
-WARNING: Intersection detected from 0x0009E0:0x000A10 (object_gi_reserve01_Blob_0009E0), conflicts with 0x000A08 (object_gi_reserve01_Blob_000A08)
+WARNING: Intersection detected from 0x000968:0x000A10 (object_gi_reserve01_DL_000968), conflicts with 0x000990 (object_gi_reserve01_DL_000990)
+WARNING: Intersection detected from 0x000990:0x000A10 (object_gi_reserve01_DL_000990), conflicts with 0x0009B8 (object_gi_reserve01_DL_0009B8)
+WARNING: Intersection detected from 0x0009B8:0x000A10 (object_gi_reserve01_DL_0009B8), conflicts with 0x0009E0 (object_gi_reserve01_DL_0009E0)
+WARNING: Intersection detected from 0x0009E0:0x000A10 (object_gi_reserve01_DL_0009E0), conflicts with 0x000A08 (object_gi_reserve01_DL_000A08)
 WARNING: Intersection detected from 0x0080F0:0x008108 (object_link_boy_DL_0080F0), conflicts with 0x008100 (object_link_boy_DL_008100)
 WARNING: Intersection detected from 0x01DB40:0x01DB88 (object_link_child_DL_01DB40), conflicts with 0x01DB60 (object_link_child_DL_01DB60)
 When processing file assets/xml/scenes/Z2_SECOM/Z2_SECOM.xml: in input binary file Z2_SECOM, offset 0x001920:
