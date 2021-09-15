@@ -2923,7 +2923,6 @@ beginseg
     name "ovl_En_Test4"
     compress
     include "build/src/overlays/actors/ovl_En_Test4/z_en_test4.o"
-    include "build/data/ovl_En_Test4/ovl_En_Test4.data.o"
     include "build/data/ovl_En_Test4/ovl_En_Test4.reloc.o"
 endseg
 

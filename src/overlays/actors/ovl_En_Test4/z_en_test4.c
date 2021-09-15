@@ -19,7 +19,6 @@ void EnTest4_Update(Actor* thisx, GlobalContext* globalCtx);
 void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx);
 void func_80A42F20(EnTest4* this, GlobalContext* globalCtx);
 
-#if 0
 const ActorInit En_Test4_InitVars = {
     ACTOR_EN_TEST4,
     ACTORCAT_SWITCH,
@@ -32,33 +31,15 @@ const ActorInit En_Test4_InitVars = {
     (ActorFunc)NULL,
 };
 
-#endif
-
-extern s32 D_80A43340;
-extern s16 D_80A43342[];
-extern s16 D_80A4334A[];
-extern s16 D_80A43352[];
-extern s16 D_80A4335A[];
-extern u16 D_80A43364[];
-
-/*
-s16 D_80A43340[] = {0, 0, 0x1BB4, 0x1BB5};
-s16 D_80A43348[] = {0x1BB6, 0, 0x1BB2, 0x1BB2};
-s16 D_80A43350[] = {0x1BB3, 0, 0x1BB4, 0x1BB5};
-s16 D_80A43358[] = {0x1BB6, 0, 0x1BB2, 0x1BB2, 0x1BB3, 0};
-s16 D_80A43364[] = {0x4000, 0xC000, 0, 0, 0, 0};
-*/
-//extern s32 D_80A43340[];
-extern s16 D_80A43348[];
-extern s16 D_80A43350[];
-extern s16 D_80A43358[];
-extern u16 D_80A43364[];
-
+s32 D_80A43340 = 0;
+s16 D_80A43344[] = {0x1BB4, 0x1BB5, 0x1BB6};
+s16 D_80A4334C[] = {0x1BB2, 0x1BB2, 0x1BB3};
+s16 D_80A43354[] = {0x1BB4, 0x1BB5, 0x1BB6};
+s16 D_80A4335C[] = {0x1BB2, 0x1BB2, 0x1BB3};
+u16 D_80A43364[] = {CLOCK_TIME(6, 0), CLOCK_TIME(18, 0)};
 
 
 extern s32 D_801BDA9C;
-extern u8 D_801BDBC8;
-
 
 
 s16 D_80A434D0[2];
@@ -66,12 +47,12 @@ s16 D_80A434D4;
 
 void func_80A41D70(EnTest4* this, GlobalContext* globalCtx) {
     if (this->unk_144 != 0) {
-        func_80151A68(globalCtx, D_80A43342[CURRENT_DAY]);
+        func_80151A68(globalCtx, D_80A43344[CURRENT_DAY-1]);
     } else if ((D_80A434D0[this->unk_144] < 0) || ((globalCtx->actorCtx.unk5 & 2) != 0)) {
         if (globalCtx->actorCtx.unk5 & 2) {
             Sram_IncrementDay();
             gSaveContext.time = CLOCK_TIME(6, 0);
-            func_80151A68(globalCtx, D_80A4334A[CURRENT_DAY]);
+            func_80151A68(globalCtx, D_80A4334C[CURRENT_DAY-1]);
         } else {
             this->unk_144 = 0;
             this->unk_146 = gSaveContext.time += CLOCK_TIME(0, 1);
@@ -109,12 +90,12 @@ void func_80A41D70(EnTest4* this, GlobalContext* globalCtx) {
 
 void func_80A41FA4(EnTest4* this, GlobalContext* globalCtx) {
     if (this->unk_144 != 0) {
-        func_80151A68(globalCtx, D_80A43352[CURRENT_DAY]);
+        func_80151A68(globalCtx, D_80A43354[CURRENT_DAY-1]);
     } else if ((D_80A434D0[this->unk_144] < 0) || ((globalCtx->actorCtx.unk5 & 2) != 0)) {
         Sram_IncrementDay();
         gSaveContext.time = 0x4000;
         func_8010EE74(globalCtx, CURRENT_DAY);
-        func_80151A68(globalCtx, D_80A4335A[CURRENT_DAY]);
+        func_80151A68(globalCtx, D_80A4335C[CURRENT_DAY-1]);
         D_801BDBC8 = 0xFE;
         func_800FB758(globalCtx);
         func_800FEAF4(&globalCtx->envCtx);
