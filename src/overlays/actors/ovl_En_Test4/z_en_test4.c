@@ -72,9 +72,9 @@ void func_80A41D70(EnTest4* this, GlobalContext* globalCtx) {
             this->unk_145 = 0;
             gSaveContext.eventInf[1] |= 0x80;
         } else if (this->unk_144 == 0) {
-            play_sound(0x2813);
+            play_sound(NA_SE_EV_CHICKEN_CRY_M);
         } else {
-            func_8019F128(0x28AE);
+            func_8019F128(NA_SE_EV_DOG_CRY_EVENING);
         }
     } else {
         this->actionFunc = func_80A42AB8;
@@ -93,7 +93,7 @@ void func_80A41FA4(EnTest4* this, GlobalContext* globalCtx) {
         func_80151A68(globalCtx, D_80A43354[CURRENT_DAY-1]);
     } else if ((D_80A434D0[this->unk_144] < 0) || ((globalCtx->actorCtx.unk5 & 2) != 0)) {
         Sram_IncrementDay();
-        gSaveContext.time = 0x4000;
+        gSaveContext.time = CLOCK_TIME(6, 0);
         func_8010EE74(globalCtx, CURRENT_DAY);
         func_80151A68(globalCtx, D_80A4335C[CURRENT_DAY-1]);
         D_801BDBC8 = 0xFE;
@@ -109,9 +109,9 @@ void func_80A41FA4(EnTest4* this, GlobalContext* globalCtx) {
             this->unk_145 = 0;
             gSaveContext.eventInf[1] |= 0x80;
         } else if (this->unk_144 == 0) {
-            play_sound(0x2813U);
+            play_sound(NA_SE_EV_CHICKEN_CRY_M);
         } else {
-            func_8019F128(0x28AE);
+            func_8019F128(NA_SE_EV_DOG_CRY_EVENING);
         }
     } else {
         this->actionFunc = func_80A42AB8;
@@ -126,153 +126,153 @@ void func_80A41FA4(EnTest4* this, GlobalContext* globalCtx) {
 }
 
 void func_80A42198(EnTest4* this) {
-    if ((gSaveContext.time >= 0x4000) && (gSaveContext.time < 0xC001)) {
-        if (gSaveContext.time < 0xBAAA) {
-            this->unk_148 = 0xBAAA;
-        } else if (gSaveContext.time < 0xBBBB) {
-            this->unk_148 = 0xBBBB;
-        } else if (gSaveContext.time < 0xBCCC) {
-            this->unk_148 = 0xBCCC;
-        } else if (gSaveContext.time < 0xBDDD) {
-            this->unk_148 = 0xBDDD;
-        } else if (gSaveContext.time < 0xBEEE) {
-            this->unk_148 = 0xBEEE;
+    if ((gSaveContext.time >= CLOCK_TIME(6, 0)) && (gSaveContext.time <= CLOCK_TIME(18, 0))) {
+        if (gSaveContext.time < CLOCK_TIME(17, 30)) {
+            this->unk_148 = CLOCK_TIME(17, 30);
+        } else if (gSaveContext.time < CLOCK_TIME(17, 36)) {
+            this->unk_148 = CLOCK_TIME(17, 36);
+        } else if (gSaveContext.time < CLOCK_TIME(17, 42)) {
+            this->unk_148 = CLOCK_TIME(17, 42);
+        } else if (gSaveContext.time < CLOCK_TIME(17, 48)) {
+            this->unk_148 = CLOCK_TIME(17, 48);
+        } else if (gSaveContext.time < CLOCK_TIME(17, 54)) {
+            this->unk_148 = CLOCK_TIME(17, 54);
         } else {
-            this->unk_148 = 0;
+            this->unk_148 = CLOCK_TIME(0, 0);
         }
-    } else if (gSaveContext.time >= 0x4001) {
-        this->unk_148 = 0;
-    } else if (gSaveContext.time < 0x1C7) {
-        this->unk_148 = 0x1C7;
-    } else if (gSaveContext.time < 0x38E) {
-        this->unk_148 = 0x38E;
-    } else if (gSaveContext.time < 0x555) {
-        this->unk_148 = 0x555;
-    } else if (gSaveContext.time < 0x71C) {
-        this->unk_148 = 0x71C;
-    } else if (gSaveContext.time < 0x8E3) {
-        this->unk_148 = 0x8E3;
-    } else if (gSaveContext.time < 0xAAA) {
-        this->unk_148 = 0xAAA;
-    } else if (gSaveContext.time < 0xC71) {
-        this->unk_148 = 0xC71;
-    } else if (gSaveContext.time < 0xE38) {
-        this->unk_148 = 0xE38;
-    } else if (gSaveContext.time < 0xFFF) {
-        this->unk_148 = 0xFFF;
-    } else if (gSaveContext.time < 0x11C6) {
-        this->unk_148 = 0x11C6;
-    } else if (gSaveContext.time < 0x138D) {
-        this->unk_148 = 0x138D;
-    } else if (gSaveContext.time < 0x1555) {
-        this->unk_148 = 0x1555;
-    } else if (gSaveContext.time < 0x171C) {
-        this->unk_148 = 0x171C;
-    } else if (gSaveContext.time < 0x18E3) {
-        this->unk_148 = 0x18E3;
-    } else if (gSaveContext.time < 0x1AAA) {
-        this->unk_148 = 0x1AAA;
-    } else if (gSaveContext.time < 0x1C71) {
-        this->unk_148 = 0x1C71;
-    } else if (gSaveContext.time < 0x1E38) {
-        this->unk_148 = 0x1E38;
-    } else if (gSaveContext.time < 0x2000) {
-        this->unk_148 = 0x2000;
-    } else if (gSaveContext.time < 0x21C7) {
-        this->unk_148 = 0x21C7;
-    } else if (gSaveContext.time < 0x238E) {
-        this->unk_148 = 0x238E;
-    } else if (gSaveContext.time < 0x2555) {
-        this->unk_148 = 0x2555;
-    } else if (gSaveContext.time < 0x271C) {
-        this->unk_148 = 0x271C;
-    } else if (gSaveContext.time < 0x28E3) {
-        this->unk_148 = 0x28E3;
-    } else if (gSaveContext.time < 0x2AAA) {
-        this->unk_148 = 0x2AAA;
-    } else if (gSaveContext.time < 0x2C71) {
-        this->unk_148 = 0x2C71;
-    } else if (gSaveContext.time < 0x2E38) {
-        this->unk_148 = 0x2E38;
-    } else if (gSaveContext.time < 0x2FFF) {
-        this->unk_148 = 0x2FFF;
-    } else if (gSaveContext.time < 0x31C6) {
-        this->unk_148 = 0x31C6;
-    } else if (gSaveContext.time < 0x338D) {
-        this->unk_148 = 0x338D;
-    } else if (gSaveContext.time < 0x3555) {
-        this->unk_148 = 0x3555;
-    } else if (gSaveContext.time < 0x3638) {
-        this->unk_148 = 0x3638;
-    } else if (gSaveContext.time < 0x371C) {
-        this->unk_148 = 0x371C;
-    } else if (gSaveContext.time < 0x37FF) {
-        this->unk_148 = 0x37FF;
-    } else if (gSaveContext.time < 0x38E3) {
-        this->unk_148 = 0x38E3;
-    } else if (gSaveContext.time < 0x39C6) {
-        this->unk_148 = 0x39C6;
-    } else if (gSaveContext.time < 0x3AAA) {
-        this->unk_148 = 0x3AAA;
-    } else if (gSaveContext.time < 0x3B32) {
-        this->unk_148 = 0x3B32;
-    } else if (gSaveContext.time < 0x3BBB) {
-        this->unk_148 = 0x3BBB;
-    } else if (gSaveContext.time < 0x3C43) {
-        this->unk_148 = 0x3C43;
-    } else if (gSaveContext.time < 0x3CCC) {
-        this->unk_148 = 0x3CCC;
-    } else if (gSaveContext.time < 0x3D55) {
-        this->unk_148 = 0x3D55;
-    } else if (gSaveContext.time < 0x3DDD) {
-        this->unk_148 = 0x3DDD;
-    } else if (gSaveContext.time < 0x3E66) {
-        this->unk_148 = 0x3E66;
-    } else if (gSaveContext.time < 0x3EEE) {
-        this->unk_148 = 0x3EEE;
-    } else if (gSaveContext.time < 0x3F77) {
-        this->unk_148 = 0x3F77;
-    } else if (gSaveContext.time < 0x4000) {
-        this->unk_148 = 0x4000;
+    } else if (gSaveContext.time > CLOCK_TIME(6, 0)) {
+        this->unk_148 = CLOCK_TIME(0, 0);
+    } else if (gSaveContext.time < CLOCK_TIME(0, 10)) {
+        this->unk_148 = CLOCK_TIME(0, 10);
+    } else if (gSaveContext.time < CLOCK_TIME(0, 20)) {
+        this->unk_148 = CLOCK_TIME(0, 20);
+    } else if (gSaveContext.time < CLOCK_TIME(0, 30)) {
+        this->unk_148 = CLOCK_TIME(0, 30);
+    } else if (gSaveContext.time < CLOCK_TIME(0, 40)) {
+        this->unk_148 = CLOCK_TIME(0, 40);
+    } else if (gSaveContext.time < CLOCK_TIME(0, 50)) {
+        this->unk_148 = CLOCK_TIME(0, 50);
+    } else if (gSaveContext.time < CLOCK_TIME(1, 0)) {
+        this->unk_148 = CLOCK_TIME(1, 0);
+    } else if (gSaveContext.time < CLOCK_TIME(1, 10)) {
+        this->unk_148 = CLOCK_TIME(1, 10);
+    } else if (gSaveContext.time < CLOCK_TIME(1, 20)) {
+        this->unk_148 = CLOCK_TIME(1, 20);
+    } else if (gSaveContext.time < CLOCK_TIME(1, 30)-1) {
+        this->unk_148 = CLOCK_TIME(1, 30)-1;
+    } else if (gSaveContext.time < CLOCK_TIME(1, 40)-1) {
+        this->unk_148 = CLOCK_TIME(1, 40)-1;
+    } else if (gSaveContext.time < CLOCK_TIME(1, 50)-1) {
+        this->unk_148 = CLOCK_TIME(1, 50)-1;
+    } else if (gSaveContext.time < CLOCK_TIME(2, 0)) {
+        this->unk_148 = CLOCK_TIME(2, 0);
+    } else if (gSaveContext.time < CLOCK_TIME(2, 10)) {
+        this->unk_148 = CLOCK_TIME(2, 10);
+    } else if (gSaveContext.time < CLOCK_TIME(2, 20)) {
+        this->unk_148 = CLOCK_TIME(2, 20);
+    } else if (gSaveContext.time < CLOCK_TIME(2, 30)) {
+        this->unk_148 = CLOCK_TIME(2, 30);
+    } else if (gSaveContext.time < CLOCK_TIME(2, 40)) {
+        this->unk_148 = CLOCK_TIME(2, 40);
+    } else if (gSaveContext.time < CLOCK_TIME(2, 50)) {
+        this->unk_148 = CLOCK_TIME(2, 50);
+    } else if (gSaveContext.time < CLOCK_TIME(3, 0)) {
+        this->unk_148 = CLOCK_TIME(3, 0);
+    } else if (gSaveContext.time < CLOCK_TIME(3, 10)) {
+        this->unk_148 = CLOCK_TIME(3, 10);
+    } else if (gSaveContext.time < CLOCK_TIME(3, 20)) {
+        this->unk_148 = CLOCK_TIME(3, 20);
+    } else if (gSaveContext.time < CLOCK_TIME(3, 30)) {
+        this->unk_148 = CLOCK_TIME(3, 30);
+    } else if (gSaveContext.time < CLOCK_TIME(3, 40)) {
+        this->unk_148 = CLOCK_TIME(3, 40);
+    } else if (gSaveContext.time < CLOCK_TIME(3, 50)) {
+        this->unk_148 = CLOCK_TIME(3, 50);
+    } else if (gSaveContext.time < CLOCK_TIME(4, 0)) {
+        this->unk_148 = CLOCK_TIME(4, 0);
+    } else if (gSaveContext.time < CLOCK_TIME(4, 10)) {
+        this->unk_148 = CLOCK_TIME(4, 10);
+    } else if (gSaveContext.time < CLOCK_TIME(4, 20)) {
+        this->unk_148 = CLOCK_TIME(4, 20);
+    } else if (gSaveContext.time < CLOCK_TIME(4, 30)-1) {
+        this->unk_148 = CLOCK_TIME(4, 30)-1;
+    } else if (gSaveContext.time < CLOCK_TIME(4, 40)-1) {
+        this->unk_148 = CLOCK_TIME(4, 40)-1;
+    } else if (gSaveContext.time < CLOCK_TIME(4, 50)-1) {
+        this->unk_148 = CLOCK_TIME(4, 50)-1;
+    } else if (gSaveContext.time < CLOCK_TIME(5, 0)) {
+        this->unk_148 = CLOCK_TIME(5, 0);
+    } else if (gSaveContext.time < CLOCK_TIME(5, 5)) {
+        this->unk_148 = CLOCK_TIME(5, 5);
+    } else if (gSaveContext.time < CLOCK_TIME(5, 10)) {
+        this->unk_148 = CLOCK_TIME(5, 10);
+    } else if (gSaveContext.time < CLOCK_TIME(5, 15)-1) {
+        this->unk_148 = CLOCK_TIME(5, 15)-1;
+    } else if (gSaveContext.time < CLOCK_TIME(5, 20)) {
+        this->unk_148 = CLOCK_TIME(5, 20);
+    } else if (gSaveContext.time < CLOCK_TIME(5, 25)-1) {
+        this->unk_148 = CLOCK_TIME(5, 25)-1;
+    } else if (gSaveContext.time < CLOCK_TIME(5, 30)) {
+        this->unk_148 = CLOCK_TIME(5, 30);
+    } else if (gSaveContext.time < CLOCK_TIME(5, 33)-1) {
+        this->unk_148 = CLOCK_TIME(5, 33)-1;
+    } else if (gSaveContext.time < CLOCK_TIME(5, 36)) {
+        this->unk_148 = CLOCK_TIME(5, 36);
+    } else if (gSaveContext.time < CLOCK_TIME(5, 39)-1) {
+        this->unk_148 = CLOCK_TIME(5, 39)-1;
+    } else if (gSaveContext.time < CLOCK_TIME(5, 42)) {
+        this->unk_148 = CLOCK_TIME(5, 42);
+    } else if (gSaveContext.time < CLOCK_TIME(5, 45)) {
+        this->unk_148 = CLOCK_TIME(5, 45);
+    } else if (gSaveContext.time < CLOCK_TIME(5, 48)) {
+        this->unk_148 = CLOCK_TIME(5, 48);
+    } else if (gSaveContext.time < CLOCK_TIME(5, 51)) {
+        this->unk_148 = CLOCK_TIME(5, 51);
+    } else if (gSaveContext.time < CLOCK_TIME(5, 54)) {
+        this->unk_148 = CLOCK_TIME(5, 54);
+    } else if (gSaveContext.time < CLOCK_TIME(5, 57)) {
+        this->unk_148 = CLOCK_TIME(5, 57);
+    } else if (gSaveContext.time < CLOCK_TIME(6, 0)) {
+        this->unk_148 = CLOCK_TIME(6, 0);
     }
 }
 
 void func_80A425E4(EnTest4* this, GlobalContext* globalCtx) {
     gSaveContext.unk_3F64 = 1000.0f;
 
-    if ((gSaveContext.time >= 0x4000) && (gSaveContext.time < 0xC000)) {
-        if (gSaveContext.time < 0xBAAA) {
-            this->unk_148 = 0xBAAA;
-        } else if (gSaveContext.time < 0xBBBB) {
-            this->unk_148 = 0xBBBB;
-        } else if (gSaveContext.time < 0xBCCC) {
-            this->unk_148 = 0xBCCC;
-        } else if (gSaveContext.time < 0xBDDD) {
-            this->unk_148 = 0xBDDD;
-        } else if (gSaveContext.time < 0xBEEE) {
-            this->unk_148 = 0xBEEE;
+    if ((gSaveContext.time >= CLOCK_TIME(6, 0)) && (gSaveContext.time < CLOCK_TIME(18, 0))) {
+        if (gSaveContext.time < CLOCK_TIME(17, 30)) {
+            this->unk_148 = CLOCK_TIME(17, 30);
+        } else if (gSaveContext.time < CLOCK_TIME(17, 36)) {
+            this->unk_148 = CLOCK_TIME(17, 36);
+        } else if (gSaveContext.time < CLOCK_TIME(17, 42)) {
+            this->unk_148 = CLOCK_TIME(17, 42);
+        } else if (gSaveContext.time < CLOCK_TIME(17, 48)) {
+            this->unk_148 = CLOCK_TIME(17, 48);
+        } else if (gSaveContext.time < CLOCK_TIME(17, 54)) {
+            this->unk_148 = CLOCK_TIME(17, 54);
         } else {
-            this->unk_148 = 0x3AAA;
+            this->unk_148 = CLOCK_TIME(5, 30);
         }
     } else {
-        if (gSaveContext.time < 0x3AAA) {
-            this->unk_148 = 0x3AAA;
-        } else if (gSaveContext.time < 0x3BBB) {
-            this->unk_148 = 0x3BBB;
-        } else if (gSaveContext.time < 0x3CCC) {
-            this->unk_148 = 0x3CCC;
+        if (gSaveContext.time < CLOCK_TIME(5, 30)) {
+            this->unk_148 = CLOCK_TIME(5, 30);
+        } else if (gSaveContext.time < CLOCK_TIME(5, 36)) {
+            this->unk_148 = CLOCK_TIME(5, 36);
+        } else if (gSaveContext.time < CLOCK_TIME(5, 42)) {
+            this->unk_148 = CLOCK_TIME(5, 42);
             gSaveContext.unk_3F64 -= 50.0f;
-        } else if (gSaveContext.time < 0x3DDD) {
-            this->unk_148 = 0x3DDD;
+        } else if (gSaveContext.time < CLOCK_TIME(5, 48)) {
+            this->unk_148 = CLOCK_TIME(5, 48);
             gSaveContext.unk_3F64 -= 100.0f;
-        } else if (gSaveContext.time < 0x3EEE) {
-            this->unk_148 = 0x3EEE;
+        } else if (gSaveContext.time < CLOCK_TIME(5, 54)) {
+            this->unk_148 = CLOCK_TIME(5, 54);
             gSaveContext.unk_3F64 -= 150.0f;
-        } else if (gSaveContext.time < 0x4000) {
-            this->unk_148 = 0xBAAA;
+        } else if (gSaveContext.time < CLOCK_TIME(6, 0)) {
+            this->unk_148 = CLOCK_TIME(17, 30);
             gSaveContext.unk_3F64 -= 200.0f;
         } else {
-            this->unk_148 = 0xBAAA;
+            this->unk_148 = CLOCK_TIME(17, 30);
         }
 
         if ((D_80A434D0[this->unk_144] < 0) || ((globalCtx->actorCtx.unk5 & 2) != 0) || (CURRENT_DAY == 3) || (gSaveContext.time >= CLOCK_TIME(17, 0))) {
@@ -289,9 +289,8 @@ void EnTest4_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnTest4* this = THIS;
     Player* player = PLAYER;
-    s8 temp_v0;
+    s8 temp_v0 = this->actor.cutscene;
 
-    temp_v0 = this->actor.cutscene;
     D_80A434D0[0] = temp_v0;
     if (temp_v0 >= 0) {
         ActorCutscene* temp_v0_2 = ActorCutscene_GetCutscene(D_80A434D0[0]);
@@ -311,8 +310,8 @@ void EnTest4_Init(Actor* thisx, GlobalContext* globalCtx) {
         gSaveContext.unk_3F60 = 0;
         gSaveContext.unk_3F64 = 1000.0f;
         if (CURRENT_DAY == 0) {
-            if (gSaveContext.time < 0x402D) {
-                gSaveContext.time = 0x4000;
+            if (gSaveContext.time < CLOCK_TIME(6, 1)) {
+                gSaveContext.time = CLOCK_TIME(6, 0);
                 gSaveContext.gameMode = 0;
                 do {
                     GameState* state = &globalCtx->state; 
@@ -320,7 +319,7 @@ void EnTest4_Init(Actor* thisx, GlobalContext* globalCtx) {
                 } while(0);
                 SET_NEXT_GAMESTATE(&globalCtx->state, Daytelop_Init, DaytelopContext);
                 this->unk_144 = 1;
-                gSaveContext.time = 0x4000;
+                gSaveContext.time = CLOCK_TIME(6, 0);
                 Actor_MarkForDeath(&this->actor);
             } else {
                 gSaveContext.day = 1;
@@ -331,14 +330,14 @@ void EnTest4_Init(Actor* thisx, GlobalContext* globalCtx) {
                 this->actionFunc = func_80A42AB8;
             }
         } else {
-            if (gSaveContext.time == 0x4000) {
+            if (gSaveContext.time == CLOCK_TIME(6, 0)) {
                 this->unk_144 = 0;
                 func_80A41D70(this, globalCtx);
                 if (((gSaveContext.cutsceneTrigger) == 0) && (D_80A434D0[this->unk_144] >= 0) && ((globalCtx->actorCtx.unk5 & 2) == 0)) {
                     player->stateFlags1 |= 0x200;
                 }
             } else {
-                if ((gSaveContext.time >= 0xC001) || (gSaveContext.time < 0x4000)) {
+                if ((gSaveContext.time > CLOCK_TIME(18, 0)) || (gSaveContext.time < CLOCK_TIME(6, 0))) {
                     this->unk_144 = 0;
                 } else {
                     this->unk_144 = 1;
@@ -371,7 +370,6 @@ void EnTest4_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #ifdef NON_EQUIVALENT
 void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
-    //static s16 D_80A43364[] = {0x4000, 0xC000, 0, 0, 0, 0};
     Player* player;
     s16 temp_a2;
     s16 new_var2;
@@ -400,9 +398,9 @@ void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
                 globalCtx->actorCtx.unk5 &= ~0x04;
             }
             goto dummy_label_821378; dummy_label_821378: ;
-            //if (D_80A43364[this->unk_144] != 0x4000) {
-            //if (D_80A43364[new_var] != 0x4000)
-            if (new_var2 != 0x4000)
+            //if (D_80A43364[this->unk_144] != CLOCK_TIME(6, 0)) {
+            //if (D_80A43364[new_var] != CLOCK_TIME(6, 0))
+            if (new_var2 != CLOCK_TIME(6, 0))
             {
                 func_80A41FA4(this, globalCtx);
             } else {
@@ -419,7 +417,6 @@ void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
                         gSaveContext.unk_3F64 = 0.0f;
                         func_80169DCC(globalCtx, 0, Entrance_CreateIndexFromSpawn(0), player->unk_3CE, 0xBFF, &player->unk_3C0, player->unk_3CC);
                         func_80169EFC(globalCtx);
-                        //temp_v1_3 = ((s32*)(player->unk_390))[0x150/4];
                         new_var3 = player->rideActor;
                         if ((player->stateFlags1 & 0x800000) && (((new_var3->unk_150 == 0)) || (new_var3->unk_150 == 2))) {
                             if (CURRENT_DAY < 3)
@@ -505,16 +502,16 @@ void func_80A42F20(EnTest4* this, GlobalContext* globalCtx) {
             this->unk_145 = 1;
         }
         return;
-    } else if (this->unk_145 < 0x3C) {
+    } else if (this->unk_145 < 60) {
         this->unk_145++;
-        if (this->unk_145 == 0xA) {
+        if (this->unk_145 == 10) {
             if (this->unk_144 == 0) {
-                play_sound(0x2813);
+                play_sound(NA_SE_EV_CHICKEN_CRY_M);
             } else {
-                func_8019F128(0x28AE);
+                func_8019F128(NA_SE_EV_DOG_CRY_EVENING);
             }
         }
-        if (this->unk_145 == 0x3C) {
+        if (this->unk_145 == 60) {
             Player* player = PLAYER;
 
             gSaveContext.time += CLOCK_TIME(0, 1);
@@ -562,7 +559,7 @@ void func_80A430C8(EnTest4* this, GlobalContext* globalCtx) {
 }
 
 void func_80A431C8(EnTest4* this, GlobalContext* globalCtx) {
-    if (((gSaveContext.time >= 0xBAAA) && (gSaveContext.time < 0xF555) && (globalCtx->envCtx.unk_F2[0] != 0)) || (globalCtx->envCtx.unk_F2[2] != 0)) {
+    if (((gSaveContext.time >= CLOCK_TIME(17, 30)) && (gSaveContext.time < CLOCK_TIME(23, 0)) && (globalCtx->envCtx.unk_F2[0] != 0)) || (globalCtx->envCtx.unk_F2[2] != 0)) {
         D_801BDBB0 = 0;
         globalCtx->envCtx.unk_E3 = 2;
     }
@@ -572,11 +569,10 @@ void func_80A431C8(EnTest4* this, GlobalContext* globalCtx) {
 }
 
 void func_80A4323C(EnTest4* this, GlobalContext* globalCtx) {
-    s32 temp_v0;
+    s32 temp_v0 = (this->actor.params >> 0xA) * 0x64;
 
-    temp_v0 = ((s32) this->actor.params >> 0xA) * 0x64;
     if (temp_v0 > 0) {
-        D_801F4E7A = (s16) temp_v0;
+        D_801F4E7A = temp_v0;
     }
 }
 
