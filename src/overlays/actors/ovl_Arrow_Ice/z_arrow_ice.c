@@ -60,7 +60,7 @@ void ArrowIce_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void ArrowIce_Charge(ArrowIce* this, GlobalContext* globalCtx) {
     EnArrow* arrow = (EnArrow*)this->actor.parent;
-    
+
     if ((arrow == NULL) || (arrow->actor.update == NULL)) {
         Actor_MarkForDeath(&this->actor);
         return;
@@ -102,7 +102,7 @@ void ArrowIce_Hit(ArrowIce* this, GlobalContext* globalCtx) {
             scale = 310.0f;
         } else {
             scale = this->actor.projectedW;
-            scale = ((scale - 50.0f) * (1.0f / 3.0f)) + 10.0f;
+            scale = (scale - 50.0f) * (1.0f / 3.0f) + 10.0f;
         }
     }
 
