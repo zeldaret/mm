@@ -14,8 +14,6 @@ void ArrowIce_Charge(ArrowIce* this, GlobalContext* globalCtx);
 void ArrowIce_Hit(ArrowIce* this, GlobalContext* globalCtx);
 void ArrowIce_Fly(ArrowIce* this, GlobalContext* globalCtx);
 
-void ArrowIce_SetupAction(ArrowIce* this, ArrowIceActionFunc actionFunc);
-
 #include "z_arrow_ice_gfx.c"
 
 s32 unused; // Needed for bss
