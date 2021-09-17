@@ -11,9 +11,9 @@ void ArrowIce_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ArrowIce_Update(Actor* thisx, GlobalContext* globalCtx);
 void ArrowIce_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_809224DC(ArrowIce* this, GlobalContext* globalCtx);
-void func_80922628(ArrowIce* this, GlobalContext* globalCtx);
-void func_809227F4(ArrowIce* this, GlobalContext* globalCtx);
+void ArrowIce_Charge(ArrowIce* this, GlobalContext* globalCtx);
+void ArrowIce_Hit(ArrowIce* this, GlobalContext* globalCtx);
+void ArrowIce_Fly(ArrowIce* this, GlobalContext* globalCtx);
 
 void ArrowIce_SetupAction(ArrowIce* this, ArrowIceActionFunc actionFunc);
 
@@ -47,7 +47,7 @@ void ArrowIce_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->radius = 0;
     this->unk_158 = 1.0f;
-    ArrowIce_SetupAction(this, func_809224DC);
+    ArrowIce_SetupAction(this, ArrowIce_Charge);
     Actor_SetScale(&this->actor, 0.01f);
     this->alpha = 0x64;
     this->timer = 0;
@@ -59,7 +59,7 @@ void ArrowIce_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     (void)"消滅"; // Unreferenced in retail, means "Disappearance"
 }
 
-void func_809224DC(ArrowIce* this, GlobalContext* globalCtx) {
+void ArrowIce_Charge(ArrowIce* this, GlobalContext* globalCtx) {
     EnArrow* arrow;
 
     arrow = (EnArrow*)this->actor.parent;
@@ -81,7 +81,7 @@ void func_809224DC(ArrowIce* this, GlobalContext* globalCtx) {
     if (arrow->actor.parent == NULL) {
         this->unkPos = this->actor.world.pos;
         this->radius = 10;
-        ArrowIce_SetupAction(this, func_809227F4);
+        ArrowIce_SetupAction(this, ArrowIce_Fly);
         this->alpha = 255;
     }
 }
@@ -92,7 +92,7 @@ void func_809225D0(Vec3f* unkPos, Vec3f* icePos, f32 scale) {
     unkPos->z += ((icePos->z - unkPos->z) * scale);
 }
 
-void func_80922628(ArrowIce* this, GlobalContext* globalCtx) {
+void ArrowIce_Hit(ArrowIce* this, GlobalContext* globalCtx) {
     f32 scale;
     f32 offset;
     u16 timer;
@@ -144,7 +144,7 @@ void func_80922628(ArrowIce* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_809227F4(ArrowIce* this, GlobalContext* globalCtx) {
+void ArrowIce_Fly(ArrowIce* this, GlobalContext* globalCtx) {
     EnArrow* arrow;
     f32 distanceScaled;
     s32 pad;
@@ -166,7 +166,7 @@ void func_809227F4(ArrowIce* this, GlobalContext* globalCtx) {
 
     if (arrow->unk_261 & 1) {
         Audio_PlayActorSound2(&this->actor, NA_SE_IT_EXPLOSION_ICE);
-        ArrowIce_SetupAction(this, func_80922628);
+        ArrowIce_SetupAction(this, ArrowIce_Hit);
         this->timer = 32;
         this->alpha = 255;
     } else if (arrow->unk_260 < 34) {
