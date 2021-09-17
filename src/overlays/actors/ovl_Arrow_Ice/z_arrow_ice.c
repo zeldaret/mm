@@ -1,5 +1,4 @@
 #include "z_arrow_ice.h"
-
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
 
 #define FLAGS 0x02000010
