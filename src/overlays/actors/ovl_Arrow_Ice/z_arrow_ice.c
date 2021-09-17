@@ -37,8 +37,6 @@ static InitChainEntry sInitChain[] = {
 
 extern Gfx D_0E0002E0[];
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/D_80924200.s")
-
 void ArrowIce_SetupAction(ArrowIce* this, ArrowIceActionFunc actionFunc) {
     this->actionFunc = actionFunc;
 }
@@ -58,6 +56,7 @@ void ArrowIce_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 void ArrowIce_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     func_80115D5C(globalCtx);
+    (void)"消滅"; // Unreferenced in retail, means "Disappearance"
 }
 
 void func_809224DC(ArrowIce* this, GlobalContext* globalCtx) {
