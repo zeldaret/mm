@@ -19,6 +19,8 @@ void ArrowIce_SetupAction(ArrowIce* this, ArrowIceActionFunc actionFunc);
 
 #include "z_arrow_ice_gfx.c"
 
+s32 unused; // Needed for bss
+
 const ActorInit Arrow_Ice_InitVars = {
     ACTOR_ARROW_ICE,
     ACTORCAT_ITEMACTION,
