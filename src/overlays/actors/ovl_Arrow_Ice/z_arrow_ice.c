@@ -54,7 +54,7 @@ void ArrowIce_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ArrowIce_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    func_80115D5C(globalCtx);
+    func_80115D5C(&globalCtx->state);
     (void)"消滅"; // Unreferenced in retail, means "Disappearance"
 }
 
