@@ -115,7 +115,7 @@ void ArrowIce_Hit(ArrowIce* this, GlobalContext* globalCtx) {
             this->unk_158 += ((2.0f - this->unk_158) * 0.1f);
             if (this->timer < 16) {
                 if (1) {}
-                this->alpha = ((this->timer * 0x23) - 0x118);
+                this->alpha = ((this->timer * 35) - 280);
             }
         }
     }
