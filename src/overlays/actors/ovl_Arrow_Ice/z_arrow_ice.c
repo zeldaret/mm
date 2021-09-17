@@ -141,11 +141,10 @@ void ArrowIce_Hit(ArrowIce* this, GlobalContext* globalCtx) {
 }
 
 void ArrowIce_Fly(ArrowIce* this, GlobalContext* globalCtx) {
-    EnArrow* arrow;
+    EnArrow* arrow = (EnArrow*)this->actor.parent;
     f32 distanceScaled;
     s32 pad;
 
-    arrow = (EnArrow*)this->actor.parent;
     if ((arrow == NULL) || (arrow->actor.update == NULL)) {
         Actor_MarkForDeath(&this->actor);
         return;
