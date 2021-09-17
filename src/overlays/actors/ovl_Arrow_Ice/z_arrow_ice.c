@@ -35,7 +35,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_STOP),
 };
 
-extern UNK_TYPE D_0E0002E0;
+extern Gfx D_0E0002E0[];
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/D_80924200.s")
 
@@ -189,4 +189,50 @@ void ArrowIce_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Arrow_Ice/ArrowIce_Draw.s")
+void ArrowIce_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    ArrowIce* this = THIS;
+    s32 pad;
+    Actor* transform;
+    u32 stateFrames = globalCtx->state.frames;
+    EnArrow* arrow = (EnArrow*)this->actor.parent;
+
+    if ((arrow != NULL) && (arrow->actor.update != NULL) && (this->unk_146 < 255)) {
+        transform = (arrow->unk_261 & 2) ? &this->actor : &arrow->actor;
+
+        OPEN_DISPS(globalCtx->state.gfxCtx);
+
+        SysMatrix_InsertTranslation(transform->world.pos.x, transform->world.pos.y, transform->world.pos.z,
+                                    MTXMODE_NEW);
+        Matrix_RotateY(transform->shape.rot.y, MTXMODE_APPLY);
+        SysMatrix_InsertXRotation_s(transform->shape.rot.x, MTXMODE_APPLY);
+        SysMatrix_InsertZRotation_s(transform->shape.rot.z, MTXMODE_APPLY);
+        Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
+        if (this->unk_15C > 0.0f) {
+            POLY_XLU_DISP = func_8012BFC4(POLY_XLU_DISP);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, (s32)(this->unk_15C * 10.0f) & 0xFF,
+                            (s32)(50.0f * this->unk_15C) & 0xFF, (s32)(150.0f * this->unk_15C) & 0xFF);
+            gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_DISABLE);
+            gDPSetColorDither(POLY_XLU_DISP++, G_CD_DISABLE);
+            gSPDisplayList(POLY_XLU_DISP++, D_0E0002E0);
+        }
+        func_8012C2DC(globalCtx->state.gfxCtx);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 170, 255, 255, (s32)(this->unk_148 * 0.5f) & 0xFF);
+        gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, 128);
+        SysMatrix_InsertRotation(0x4000, 0, 0, MTXMODE_APPLY);
+        if (this->unk_146 != 0) {
+            SysMatrix_InsertTranslation(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        } else {
+            SysMatrix_InsertTranslation(0.0f, 1500.0f, 0.0f, MTXMODE_APPLY);
+        }
+        Matrix_Scale(this->unk_144 * 0.2f, this->unk_158 * 3.0f, this->unk_144 * 0.2f, MTXMODE_APPLY);
+        SysMatrix_InsertTranslation(0.0f, -700.0f, 0.0f, MTXMODE_APPLY);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_XLU_DISP++, D_80924060);
+        gSPDisplayList(POLY_XLU_DISP++,
+                       Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 511 - (stateFrames * 5) % 512, 0, 128, 32, 1,
+                                        511 - (stateFrames * 10) % 512, 511 - (stateFrames * 10) % 512, 4, 16));
+        gSPDisplayList(POLY_XLU_DISP++, D_80924110);
+
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
+    }
+}
