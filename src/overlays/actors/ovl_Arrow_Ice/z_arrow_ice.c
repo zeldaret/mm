@@ -45,12 +45,12 @@ void ArrowIce_Init(Actor* thisx, GlobalContext* globalCtx) {
     ArrowIce* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->unk_144 = 0;
+    this->radius = 0;
     this->unk_158 = 1.0f;
     ArrowIce_SetupAction(this, func_809224DC);
     Actor_SetScale(&this->actor, 0.01f);
-    this->unk_148 = 0x64;
-    this->unk_146 = 0;
+    this->alpha = 0x64;
+    this->timer = 0;
     this->unk_15C = 0.0f;
 }
 
@@ -68,8 +68,8 @@ void func_809224DC(ArrowIce* this, GlobalContext* globalCtx) {
         return;
     }
 
-    if (this->unk_144 < 10) {
-        this->unk_144 += 1;
+    if (this->radius < 10) {
+        this->radius += 1;
     }
     // copy position and rotation from arrow
     this->actor.world.pos = arrow->actor.world.pos;
@@ -79,10 +79,10 @@ void func_809224DC(ArrowIce* this, GlobalContext* globalCtx) {
 
     // if arrow has no parent, player has fired the arrow
     if (arrow->actor.parent == NULL) {
-        this->unk_14C = this->actor.world.pos;
-        this->unk_144 = 10;
+        this->unkPos = this->actor.world.pos;
+        this->radius = 10;
         ArrowIce_SetupAction(this, func_809227F4);
-        this->unk_148 = 255;
+        this->alpha = 255;
     }
 }
 
@@ -108,23 +108,23 @@ void func_80922628(ArrowIce* this, GlobalContext* globalCtx) {
         }
     }
 
-    timer = this->unk_146;
+    timer = this->timer;
     if (timer != 0) {
-        this->unk_146 -= 1;
+        this->timer -= 1;
 
-        if (this->unk_146 >= 8) {
-            offset = ((this->unk_146 - 8) * (1.0f / 24.0f));
+        if (this->timer >= 8) {
+            offset = ((this->timer - 8) * (1.0f / 24.0f));
             offset = SQ(offset);
-            this->unk_144 = (((1.0f - offset) * scale) + 10.0f);
+            this->radius = (((1.0f - offset) * scale) + 10.0f);
             this->unk_158 += ((2.0f - this->unk_158) * 0.1f);
-            if (this->unk_146 < 16) {
+            if (this->timer < 16) {
                 if (1) {}
-                this->unk_148 = ((this->unk_146 * 0x23) - 0x118);
+                this->alpha = ((this->timer * 0x23) - 0x118);
             }
         }
     }
 
-    if (this->unk_146 >= 9) {
+    if (this->timer >= 9) {
         if (this->unk_15C < 1.0f) {
             this->unk_15C += 0.25f;
         }
@@ -134,12 +134,12 @@ void func_80922628(ArrowIce* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (this->unk_146 < 8) {
-        this->unk_148 = 0;
+    if (this->timer < 8) {
+        this->alpha = 0;
     }
 
-    if (this->unk_146 == 0) {
-        this->unk_146 = 255;
+    if (this->timer == 0) {
+        this->timer = 255;
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -157,23 +157,23 @@ void func_809227F4(ArrowIce* this, GlobalContext* globalCtx) {
     // copy position and rotation from arrow
     this->actor.world.pos = arrow->actor.world.pos;
     this->actor.shape.rot = arrow->actor.shape.rot;
-    distanceScaled = Math_Vec3f_DistXYZ(&this->unk_14C, &this->actor.world.pos) * (1.0f / 24.0f);
+    distanceScaled = Math_Vec3f_DistXYZ(&this->unkPos, &this->actor.world.pos) * (1.0f / 24.0f);
     this->unk_158 = distanceScaled;
     if (distanceScaled < 1.0f) {
         this->unk_158 = 1.0f;
     }
-    func_809225D0(&this->unk_14C, &this->actor.world.pos, 0.05f);
+    func_809225D0(&this->unkPos, &this->actor.world.pos, 0.05f);
 
     if (arrow->unk_261 & 1) {
         Audio_PlayActorSound2(&this->actor, NA_SE_IT_EXPLOSION_ICE);
         ArrowIce_SetupAction(this, func_80922628);
-        this->unk_146 = 32;
-        this->unk_148 = 255;
+        this->timer = 32;
+        this->alpha = 255;
     } else if (arrow->unk_260 < 34) {
-        if (this->unk_148 < 35) {
+        if (this->alpha < 35) {
             Actor_MarkForDeath(&this->actor);
         } else {
-            this->unk_148 -= 25;
+            this->alpha -= 25;
         }
     }
 }
@@ -195,7 +195,7 @@ void ArrowIce_Draw(Actor* thisx, GlobalContext* globalCtx) {
     u32 stateFrames = globalCtx->state.frames;
     EnArrow* arrow = (EnArrow*)this->actor.parent;
 
-    if ((arrow != NULL) && (arrow->actor.update != NULL) && (this->unk_146 < 255)) {
+    if ((arrow != NULL) && (arrow->actor.update != NULL) && (this->timer < 255)) {
         transform = (arrow->unk_261 & 2) ? &this->actor : &arrow->actor;
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -219,15 +219,15 @@ void ArrowIce_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         // Draw ice on the arrow
         func_8012C2DC(globalCtx->state.gfxCtx);
-        gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 170, 255, 255, (s32)(this->unk_148 * 0.5f) & 0xFF);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 170, 255, 255, (s32)(this->alpha * 0.5f) & 0xFF);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, 128);
         SysMatrix_InsertRotation(0x4000, 0, 0, MTXMODE_APPLY);
-        if (this->unk_146 != 0) {
+        if (this->timer != 0) {
             SysMatrix_InsertTranslation(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         } else {
             SysMatrix_InsertTranslation(0.0f, 1500.0f, 0.0f, MTXMODE_APPLY);
         }
-        Matrix_Scale(this->unk_144 * 0.2f, this->unk_158 * 3.0f, this->unk_144 * 0.2f, MTXMODE_APPLY);
+        Matrix_Scale(this->radius * 0.2f, this->unk_158 * 3.0f, this->radius * 0.2f, MTXMODE_APPLY);
         SysMatrix_InsertTranslation(0.0f, -700.0f, 0.0f, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, sTextureDL);
