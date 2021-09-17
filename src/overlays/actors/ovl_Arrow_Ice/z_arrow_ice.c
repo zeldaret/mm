@@ -97,13 +97,11 @@ void ArrowIce_Hit(ArrowIce* this, GlobalContext* globalCtx) {
 
     if (this->actor.projectedW < 50.0f) {
         scale = 10.0f;
+    } else if (950.0f < this->actor.projectedW) {
+        scale = 310.0f;
     } else {
-        if (950.0f < this->actor.projectedW) {
-            scale = 310.0f;
-        } else {
-            scale = this->actor.projectedW;
-            scale = (scale - 50.0f) * (1.0f / 3.0f) + 10.0f;
-        }
+        scale = this->actor.projectedW;
+        scale = (scale - 50.0f) * (1.0f / 3.0f) + 10.0f;
     }
 
     timer = this->timer;
