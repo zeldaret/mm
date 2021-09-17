@@ -178,6 +178,7 @@ void ArrowIce_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if ((globalCtx->msgCtx.unk11F22 == 0xE) || (globalCtx->msgCtx.unk11F22 == 0x12)) {
         Actor_MarkForDeath(&this->actor);
+        return;
     } else {
         this->actionFunc(this, globalCtx);
     }
