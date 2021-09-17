@@ -59,9 +59,8 @@ void ArrowIce_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ArrowIce_Charge(ArrowIce* this, GlobalContext* globalCtx) {
-    EnArrow* arrow;
-
-    arrow = (EnArrow*)this->actor.parent;
+    EnArrow* arrow = (EnArrow*)this->actor.parent;
+    
     if ((arrow == NULL) || (arrow->actor.update == NULL)) {
         Actor_MarkForDeath(&this->actor);
         return;
