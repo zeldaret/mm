@@ -206,6 +206,8 @@ void ArrowIce_Draw(Actor* thisx, GlobalContext* globalCtx) {
         SysMatrix_InsertXRotation_s(transform->shape.rot.x, MTXMODE_APPLY);
         SysMatrix_InsertZRotation_s(transform->shape.rot.z, MTXMODE_APPLY);
         Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
+
+        // Draw blue effect over the screen when arrow hits
         if (this->unk_15C > 0.0f) {
             POLY_XLU_DISP = func_8012BFC4(POLY_XLU_DISP);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, (s32)(this->unk_15C * 10.0f) & 0xFF,
@@ -214,6 +216,8 @@ void ArrowIce_Draw(Actor* thisx, GlobalContext* globalCtx) {
             gDPSetColorDither(POLY_XLU_DISP++, G_CD_DISABLE);
             gSPDisplayList(POLY_XLU_DISP++, D_0E0002E0);
         }
+
+        // Draw ice on the arrow
         func_8012C2DC(globalCtx->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 170, 255, 255, (s32)(this->unk_148 * 0.5f) & 0xFF);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, 128);
@@ -226,11 +230,11 @@ void ArrowIce_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_Scale(this->unk_144 * 0.2f, this->unk_158 * 3.0f, this->unk_144 * 0.2f, MTXMODE_APPLY);
         SysMatrix_InsertTranslation(0.0f, -700.0f, 0.0f, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, D_80924060);
+        gSPDisplayList(POLY_XLU_DISP++, sTextureDL);
         gSPDisplayList(POLY_XLU_DISP++,
                        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 511 - (stateFrames * 5) % 512, 0, 128, 32, 1,
                                         511 - (stateFrames * 10) % 512, 511 - (stateFrames * 10) % 512, 4, 16));
-        gSPDisplayList(POLY_XLU_DISP++, D_80924110);
+        gSPDisplayList(POLY_XLU_DISP++, sVertexDL);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
