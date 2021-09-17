@@ -1,3 +1,9 @@
+/*
+ * File: z_arrow_ice.c
+ * Overlay: ovl_Arrow_Ice
+ * Description: Ice Arrow. Spawned as a child of a normal arrow.
+ */
+
 #include "z_arrow_ice.h"
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
 
