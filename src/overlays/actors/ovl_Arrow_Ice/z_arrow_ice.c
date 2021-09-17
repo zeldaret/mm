@@ -51,7 +51,7 @@ void ArrowIce_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_158 = 1.0f;
     ArrowIce_SetupAction(this, ArrowIce_Charge);
     Actor_SetScale(&this->actor, 0.01f);
-    this->alpha = 0x64;
+    this->alpha = 100;
     this->timer = 0;
     this->unk_15C = 0.0f;
 }
