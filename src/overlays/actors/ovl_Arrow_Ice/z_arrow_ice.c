@@ -106,7 +106,7 @@ void ArrowIce_Hit(ArrowIce* this, GlobalContext* globalCtx) {
 
     timer = this->timer;
     if (timer != 0) {
-        this->timer -= 1;
+        this->timer--;
 
         if (this->timer >= 8) {
             offset = ((this->timer - 8) * (1.0f / 24.0f));
