@@ -14,7 +14,7 @@ void ArrowIce_Charge(ArrowIce* this, GlobalContext* globalCtx);
 void ArrowIce_Hit(ArrowIce* this, GlobalContext* globalCtx);
 void ArrowIce_Fly(ArrowIce* this, GlobalContext* globalCtx);
 
-#include "z_arrow_ice_gfx.c"
+#include "overlays/ovl_Arrow_Ice/ovl_Arrow_Ice.c"
 
 s32 unused; // Needed for bss
 
@@ -226,11 +226,11 @@ void ArrowIce_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_Scale(this->radius * 0.2f, this->unk_158 * 3.0f, this->radius * 0.2f, MTXMODE_APPLY);
         SysMatrix_InsertTranslation(0.0f, -700.0f, 0.0f, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, sTextureDL);
+        gSPDisplayList(POLY_XLU_DISP++, sIceArrowDL);
         gSPDisplayList(POLY_XLU_DISP++,
                        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 511 - (stateFrames * 5) % 512, 0, 128, 32, 1,
                                         511 - (stateFrames * 10) % 512, 511 - (stateFrames * 10) % 512, 4, 16));
-        gSPDisplayList(POLY_XLU_DISP++, sVertexDL);
+        gSPDisplayList(POLY_XLU_DISP++, sIceArrowVtxDL);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
