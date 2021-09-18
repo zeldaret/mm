@@ -114,50 +114,42 @@ void func_801477B4(GlobalContext *globalCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80147818.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80147F18.s")
-
+ 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80148558.s")
 
-extern s16 D_801CFD80;
 
-#ifdef NON_MATCHING
+
 void func_80148B98(GlobalContext *globalCtx, u8 bParm2) {
-    s8 stickY;
-    s32 phi_v1;
+    static s16 held = 0;
     MessageContext *msgCtx = &globalCtx->msgCtx;
-    stickY = CONTROLLER1(globalCtx)->rel.stick_y;
+    Input* curInput = CONTROLLER1(globalCtx);
     
-        if ((stickY >= 0x1E)) {
-            if(D_801CFD80 == 0){
-            D_801CFD80 = 1;
-            msgCtx->choiceIndex--;
-            if (msgCtx->choiceIndex >= 0x81) {
-                msgCtx->choiceIndex = 0;
-                return;
-            }
+    if ((curInput->rel.stick_y > 29) && held == 0) {
+        held = 1;
+        msgCtx->choiceIndex--;
+        if (msgCtx->choiceIndex > 128) {
+            msgCtx->choiceIndex = 0;
+        }else{
             play_sound(NA_SE_SY_CURSOR);
-            return;
         }
-        }
-        if ((stickY < -0x1D)) {
-            if(D_801CFD80 == 0){
-            D_801CFD80 = 1;
-            msgCtx->choiceIndex++;
-            if (bParm2 < msgCtx->choiceIndex) {
-                msgCtx->choiceIndex = bParm2;
-                return;
-            }
+        return;
+    }
+    
+    else if ((curInput->rel.stick_y < -29) && held == 0) {
+        held = 1;
+        msgCtx->choiceIndex++;
+        if (msgCtx->choiceIndex > bParm2) {
+            msgCtx->choiceIndex = bParm2;
+        }else{
             play_sound(NA_SE_SY_CURSOR);
-            return;
         }
+        return;
+    }else{
+        if (ABS_ALT(curInput->rel.stick_y) < 30) {
+            held = 0;
         }
-    phi_v1 = (stickY < 0 ? -stickY : stickY);
-    if (phi_v1 < 0x1E) {
-        D_801CFD80 = 0;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80148B98.s")
-#endif
 
 void func_80148CBC(GlobalContext *globalCtx, UNK_PTR puParm2, u8 arg2) {
     MessageContext* msgCtx;
