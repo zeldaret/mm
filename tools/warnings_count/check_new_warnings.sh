@@ -5,7 +5,7 @@ set -e
 
 # Terminal colour codes
 # when $TERM is empty (non-interactive shell), then expand tput with '-T xterm-256color'
-[[ ${TERM}=="" ]] && TPUTTERM='-T xterm-256color' \
+[[ ${TERM}=="" ]] && TPUTTERM='-T dumb' \
                   || TPUTTERM=''
 
 declare -r BOLD=`tput ${TPUTTERM} bold`
