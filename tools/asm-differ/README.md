@@ -1,6 +1,6 @@
 # asm-differ
 
-Nice differ for assembly code (MIPS and AArch64; should be easy to hack to support other instruction sets).
+Nice differ for assembly code (MIPS, PPC and AArch64; should be easy to hack to support other instruction sets).
 
 ![](screenshot.png)
 
@@ -13,7 +13,7 @@ Nice differ for assembly code (MIPS and AArch64; should be easy to hack to suppo
 
 Create a file `diff_settings.sh` in some directory (see the one in this repo for an example). Then from that directory, run
 
-```
+```bash
 /path/to/diff.sh [flags] (function|rom addr)
 ```
 
@@ -25,7 +25,7 @@ Recommended flags are `-mwo` (automatically run `make` on source file changes, a
 
 If invoking the script **exactly** as `./diff.py`, the following should be added to the `.bashrc` according to argcomplete's instructions:
 
-```sh
+```bash
 eval "$(register-python-argcomplete ./diff.py)"
 ```
 
@@ -33,8 +33,24 @@ If that doesn't work, run `register-python-argcomplete ./diff.py` in your termin
 
 If setup correctly (don't forget to restart the shell), `complete | grep ./diff.py` should output:
 
-```
+```bash
 complete -o bashdefault -o default -o nospace -F _python_argcomplete ./diff.py
 ```
 
 Note for developers or for general troubleshooting: run `export _ARC_DEBUG=` to enable debug output during tab-completion, it may show otherwise silenced errors. Use `unset _ARC_DEBUG` or restart the terminal to disable.
+
+### Contributing
+
+Contributions are very welcome! Some notes on workflow:
+
+`black` is used for code formatting. You can either run `black diff.py` manually, or set up a pre-commit hook:
+```bash
+pip install pre-commit black
+pre-commit install
+```
+
+Type annotations are used for all Python code. `mypy` should pass without any errors.
+
+PRs that skip the above are still welcome, however.
+
+The targeted Python version is 3.6. There are currently no tests.
