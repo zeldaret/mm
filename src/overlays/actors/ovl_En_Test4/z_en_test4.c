@@ -31,29 +31,32 @@ const ActorInit En_Test4_InitVars = {
     (ActorFunc)NULL,
 };
 
-s32 D_80A43340 = 0;
-s16 D_80A43344[] = { 0x1BB4, 0x1BB5, 0x1BB6 };
-s16 D_80A4334C[] = { 0x1BB2, 0x1BB2, 0x1BB3 };
-s16 D_80A43354[] = { 0x1BB4, 0x1BB5, 0x1BB6 };
-s16 D_80A4335C[] = { 0x1BB2, 0x1BB2, 0x1BB3 };
-u16 D_80A43364[] = { CLOCK_TIME(6, 0), CLOCK_TIME(18, 0) };
+// singleton?
+static s32 D_80A43340 = false;
+// "Night of ..."
+static s16 sNightMessages1[] = { 0x1BB4, 0x1BB5, 0x1BB6 };
+// "Dawn of ..."
+static s16 sDayMessages1[] = { 0x1BB2, 0x1BB2, 0x1BB3 };
+// "Night of ..."
+static s16 sNightMessages2[] = { 0x1BB4, 0x1BB5, 0x1BB6 };
+// "Dawn of ..."
+static s16 sDayMessages2[] = { 0x1BB2, 0x1BB2, 0x1BB3 };
+static u16 D_80A43364[] = { CLOCK_TIME(6, 0), CLOCK_TIME(18, 0) };
 
-// sCutscenes
-s16 D_80A434D0[2];
-//
-s16 D_80A434D4;
+static s16 sCutscenes[2];
+static s16 sCurrentCs;
 
 void func_80A41D70(EnTest4* this, GlobalContext* globalCtx) {
-    if (this->csIdx != 0) {
-        func_80151A68(globalCtx, D_80A43344[CURRENT_DAY - 1]);
-    } else if ((D_80A434D0[this->csIdx] < 0) || ((globalCtx->actorCtx.unk5 & 2) != 0)) {
+    if (this->isDay != 0) {
+        func_80151A68(globalCtx, sNightMessages1[CURRENT_DAY - 1]);
+    } else if ((sCutscenes[this->isDay] < 0) || ((globalCtx->actorCtx.unk5 & 2) != 0)) {
         if (globalCtx->actorCtx.unk5 & 2) {
             Sram_IncrementDay();
             gSaveContext.time = CLOCK_TIME(6, 0);
-            func_80151A68(globalCtx, D_80A4334C[CURRENT_DAY - 1]);
+            func_80151A68(globalCtx, sDayMessages1[CURRENT_DAY - 1]);
         } else {
-            this->csIdx = 0;
-            this->unk_146 = gSaveContext.time += CLOCK_TIME(0, 1);
+            this->isDay = 0;
+            this->unk_146 = gSaveContext.time += CLOCK_TIME_MINUTE;
         }
 
         func_8010EE74(globalCtx, CURRENT_DAY);
@@ -64,36 +67,36 @@ void func_80A41D70(EnTest4* this, GlobalContext* globalCtx) {
     }
 
     if (gSaveContext.cutsceneTrigger == 0) {
-        if ((D_80A434D0[this->csIdx] >= 0) && ((globalCtx->actorCtx.unk5 & 2) == 0)) {
+        if ((sCutscenes[this->isDay] >= 0) && ((globalCtx->actorCtx.unk5 & 2) == 0)) {
             this->actionFunc = func_80A42F20;
-            D_80A434D4 = D_80A434D0[this->csIdx];
-            this->unk_145 = 0;
+            sCurrentCs = sCutscenes[this->isDay];
+            this->transitionCsTimer = 0;
             gSaveContext.eventInf[1] |= 0x80;
-        } else if (this->csIdx == 0) {
+        } else if (this->isDay == 0) {
             play_sound(NA_SE_EV_CHICKEN_CRY_M);
         } else {
             func_8019F128(NA_SE_EV_DOG_CRY_EVENING);
         }
     } else {
         this->actionFunc = func_80A42AB8;
-        if (this->csIdx == 0) {
-            this->csIdx = 1;
+        if (this->isDay == 0) {
+            this->isDay = 1;
         } else {
-            this->csIdx = 0;
+            this->isDay = 0;
         }
 
-        this->unk_146 = gSaveContext.time += CLOCK_TIME(0, 1);
+        this->unk_146 = gSaveContext.time += CLOCK_TIME_MINUTE;
     }
 }
 
 void func_80A41FA4(EnTest4* this, GlobalContext* globalCtx) {
-    if (this->csIdx != 0) {
-        func_80151A68(globalCtx, D_80A43354[CURRENT_DAY - 1]);
-    } else if ((D_80A434D0[this->csIdx] < 0) || ((globalCtx->actorCtx.unk5 & 2) != 0)) {
+    if (this->isDay != 0) {
+        func_80151A68(globalCtx, sNightMessages2[CURRENT_DAY - 1]);
+    } else if ((sCutscenes[this->isDay] < 0) || ((globalCtx->actorCtx.unk5 & 2) != 0)) {
         Sram_IncrementDay();
         gSaveContext.time = CLOCK_TIME(6, 0);
         func_8010EE74(globalCtx, CURRENT_DAY);
-        func_80151A68(globalCtx, D_80A4335C[CURRENT_DAY - 1]);
+        func_80151A68(globalCtx, sDayMessages2[CURRENT_DAY - 1]);
         D_801BDBC8 = 0xFE;
         func_800FB758(globalCtx);
         func_800FEAF4(&globalCtx->envCtx);
@@ -101,25 +104,25 @@ void func_80A41FA4(EnTest4* this, GlobalContext* globalCtx) {
     }
 
     if (gSaveContext.cutsceneTrigger == 0) {
-        if ((D_80A434D0[this->csIdx] >= 0) && ((globalCtx->actorCtx.unk5 & 2) == 0)) {
+        if ((sCutscenes[this->isDay] >= 0) && ((globalCtx->actorCtx.unk5 & 2) == 0)) {
             this->actionFunc = func_80A42F20;
-            D_80A434D4 = D_80A434D0[this->csIdx];
-            this->unk_145 = 0;
+            sCurrentCs = sCutscenes[this->isDay];
+            this->transitionCsTimer = 0;
             gSaveContext.eventInf[1] |= 0x80;
-        } else if (this->csIdx == 0) {
+        } else if (this->isDay == 0) {
             play_sound(NA_SE_EV_CHICKEN_CRY_M);
         } else {
             func_8019F128(NA_SE_EV_DOG_CRY_EVENING);
         }
     } else {
         this->actionFunc = func_80A42AB8;
-        if (this->csIdx == 0) {
-            this->csIdx = 1;
+        if (this->isDay == 0) {
+            this->isDay = 1;
         } else {
-            this->csIdx = 0;
+            this->isDay = 0;
         }
 
-        this->unk_146 = gSaveContext.time += 0x2D;
+        this->unk_146 = gSaveContext.time += CLOCK_TIME_MINUTE;
     }
 }
 
@@ -273,7 +276,7 @@ void func_80A425E4(EnTest4* this, GlobalContext* globalCtx) {
             this->unk_148 = CLOCK_TIME(17, 30);
         }
 
-        if ((D_80A434D0[this->csIdx] < 0) || ((globalCtx->actorCtx.unk5 & 2) != 0) || (CURRENT_DAY == 3) ||
+        if ((sCutscenes[this->isDay] < 0) || ((globalCtx->actorCtx.unk5 & 2) != 0) || (CURRENT_DAY == 3) ||
             (gSaveContext.time >= CLOCK_TIME(17, 0))) {
             gSaveContext.unk_3F64 = 1000.0f;
         }
@@ -290,21 +293,21 @@ void EnTest4_Init(Actor* thisx, GlobalContext* globalCtx) {
     Player* player = PLAYER;
     s8 temp_v0 = this->actor.cutscene;
 
-    D_80A434D0[0] = temp_v0;
+    sCutscenes[0] = temp_v0;
     if (temp_v0 >= 0) {
-        ActorCutscene* temp_v0_2 = ActorCutscene_GetCutscene(D_80A434D0[0]);
+        ActorCutscene* temp_v0_2 = ActorCutscene_GetCutscene(sCutscenes[0]);
 
         gSaveContext.eventInf[5] |= 0x04;
-        D_80A434D0[1] = temp_v0_2->additionalCutscene;
+        sCutscenes[1] = temp_v0_2->additionalCutscene;
     } else {
         gSaveContext.eventInf[5] &= (u8)~0x04;
-        D_80A434D0[1] = D_80A434D0[0];
+        sCutscenes[1] = sCutscenes[0];
     }
 
-    if ((D_80A43340 != 0) || ((gSaveContext.eventInf[2] & 0x80) != 0)) {
+    if (D_80A43340 || (gSaveContext.eventInf[2] & 0x80)) {
         Actor_MarkForDeath(&this->actor);
     } else {
-        D_80A43340 = 1;
+        D_80A43340 = true;
         this->actor.room = -1;
         gSaveContext.unk_3F60 = 0;
         gSaveContext.unk_3F64 = 1000.0f;
@@ -317,30 +320,30 @@ void EnTest4_Init(Actor* thisx, GlobalContext* globalCtx) {
                     state->running = false;
                 } while (0);
                 SET_NEXT_GAMESTATE(&globalCtx->state, Daytelop_Init, DaytelopContext);
-                this->csIdx = 1;
+                this->isDay = 1;
                 gSaveContext.time = CLOCK_TIME(6, 0);
                 Actor_MarkForDeath(&this->actor);
             } else {
                 gSaveContext.day = 1;
                 pad = gSaveContext.day;
                 gSaveContext.daysElapsed = pad;
-                this->csIdx = 1;
+                this->isDay = 1;
                 this->unk_146 = gSaveContext.time;
                 this->actionFunc = func_80A42AB8;
             }
         } else {
             if (gSaveContext.time == CLOCK_TIME(6, 0)) {
-                this->csIdx = 0;
+                this->isDay = 0;
                 func_80A41D70(this, globalCtx);
-                if (((gSaveContext.cutsceneTrigger) == 0) && (D_80A434D0[this->csIdx] >= 0) &&
-                    ((globalCtx->actorCtx.unk5 & 2) == 0)) {
+                if ((gSaveContext.cutsceneTrigger == 0) && (sCutscenes[this->isDay] >= 0) &&
+                    !(globalCtx->actorCtx.unk5 & 2)) {
                     player->stateFlags1 |= 0x200;
                 }
             } else {
                 if ((gSaveContext.time > CLOCK_TIME(18, 0)) || (gSaveContext.time < CLOCK_TIME(6, 0))) {
-                    this->csIdx = 0;
+                    this->isDay = 0;
                 } else {
-                    this->csIdx = 1;
+                    this->isDay = 1;
                 }
                 this->unk_146 = gSaveContext.time;
                 this->actionFunc = func_80A42AB8;
@@ -355,7 +358,7 @@ void EnTest4_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->unk_14A = gSaveContext.time;
-    if ((D_80A434D0[this->csIdx] < 0) || ((globalCtx->actorCtx.unk5 & 2) != 0)) {
+    if ((sCutscenes[this->isDay] < 0) || (globalCtx->actorCtx.unk5 & 2)) {
         gSaveContext.unk_3F60 = 0;
         gSaveContext.unk_3F64 = 1000.0f;
     }
@@ -373,7 +376,7 @@ void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
     if ((globalCtx->unk_18B4A == 0) && (func_801690CC(globalCtx) == 0) && (globalCtx->numSetupActors <= 0) &&
         (globalCtx->roomCtx.unk31 == 0) && (func_8016A168() == 0)) {
         s16 temp_a2;
-        u16 temp_a0 = D_80A43364[this->csIdx];
+        u16 temp_a0 = D_80A43364[this->isDay];
         s16 temp_a3;
         s16 temp_v1_3;
         s16 new_var;
@@ -398,7 +401,7 @@ void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
                     Actor_MarkForDeath(&this->actor);
                     gSaveContext.eventInf[1] |= 0x80;
                 } else {
-                    if (((D_80A434D0[this->csIdx] < 0) || (globalCtx->actorCtx.unk5 & 2)) &&
+                    if (((sCutscenes[this->isDay] < 0) || (globalCtx->actorCtx.unk5 & 2)) &&
                         CURRENT_DAY != 3) {
                         func_80A41FA4(this, globalCtx);
                     } else {
@@ -425,17 +428,17 @@ void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
                 }
             }
 
-            if ((D_80A434D0[this->csIdx] >= 0) && ((globalCtx->actorCtx.unk5 & 2) == 0)) {
+            if ((sCutscenes[this->isDay] >= 0) && ((globalCtx->actorCtx.unk5 & 2) == 0)) {
                 player->stateFlags1 |= 0x200;
                 this->unk_146 = gSaveContext.time;
             } else {
-                if (this->csIdx == 0) {
-                    this->csIdx = 1;
+                if (this->isDay == 0) {
+                    this->isDay = 1;
                 } else {
-                    this->csIdx = 0;
+                    this->isDay = 0;
                 }
 
-                this->unk_146 = gSaveContext.time += 0x2D;
+                this->unk_146 = gSaveContext.time += CLOCK_TIME_MINUTE;
             }
         } else if ((new_var * temp_v1_3) <= 0) {
             func_801A0124(&this->actor.projectedPos, (this->actor.params >> 5) & 0xF);
@@ -475,45 +478,44 @@ void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
 }
 
 void func_80A42F20(EnTest4* this, GlobalContext* globalCtx) {
-    if (!this->unk_145) {
-        if (D_80A434D4 >= 0) {
-            if (ActorCutscene_GetCanPlayNext(D_80A434D4) == 0) {
-                ActorCutscene_SetIntentToPlay(D_80A434D4);
+    if (!this->transitionCsTimer) {
+        if (sCurrentCs >= 0) {
+            if (ActorCutscene_GetCanPlayNext(sCurrentCs) == 0) {
+                ActorCutscene_SetIntentToPlay(sCurrentCs);
             } else {
-                ActorCutscene_Start(D_80A434D4, &this->actor);
-                this->unk_145 = 1;
+                ActorCutscene_Start(sCurrentCs, &this->actor);
+                this->transitionCsTimer = 1;
             }
         } else {
-            this->unk_145 = 1;
+            this->transitionCsTimer = 1;
         }
-        return;
-    } else if (this->unk_145 < 60) {
-        this->unk_145++;
-        if (this->unk_145 == 10) {
-            if (this->csIdx == 0) {
+    } else if (this->transitionCsTimer < 60) {
+        this->transitionCsTimer++;
+        if (this->transitionCsTimer == 10) {
+            if (this->isDay == 0) {
                 play_sound(NA_SE_EV_CHICKEN_CRY_M);
             } else {
                 func_8019F128(NA_SE_EV_DOG_CRY_EVENING);
             }
         }
-        if (this->unk_145 == 60) {
+        if (this->transitionCsTimer == 60) {
             Player* player = PLAYER;
 
-            gSaveContext.time += CLOCK_TIME(0, 1);
+            gSaveContext.time += CLOCK_TIME_MINUTE;
             this->unk_146 = gSaveContext.time;
             globalCtx->numSetupActors = -globalCtx->numSetupActors;
             player->stateFlags1 &= ~0x200;
         }
     } else {
         this->actionFunc = func_80A42AB8;
-        if (this->csIdx == 0) {
-            this->csIdx = 1;
+        if (this->isDay == 0) {
+            this->isDay = 1;
         } else {
-            this->csIdx = 0;
+            this->isDay = 0;
         }
 
-        if (D_80A434D4 >= 0) {
-            ActorCutscene_Stop(D_80A434D4);
+        if (sCurrentCs >= 0) {
+            ActorCutscene_Stop(sCurrentCs);
         }
         gSaveContext.unk_3F22 = 0;
         gSaveContext.eventInf[1] &= (u8)~0x80;
@@ -522,6 +524,7 @@ void func_80A42F20(EnTest4* this, GlobalContext* globalCtx) {
 }
 
 void func_80A430C8(EnTest4* this, GlobalContext* globalCtx) {
+    // rain?
     if ((CURRENT_DAY == 2) && (gSaveContext.time >= CLOCK_TIME(7, 0)) && (gSaveContext.time < CLOCK_TIME(17, 30)) &&
         (globalCtx->envCtx.unk_F2[2] == 0)) {
         D_801BDBB0 = 1;

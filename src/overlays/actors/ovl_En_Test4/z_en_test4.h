@@ -9,8 +9,8 @@ typedef void (*EnTest4ActionFunc)(struct EnTest4*, GlobalContext*);
 
 typedef struct EnTest4 {
     /* 0x0000 */ Actor actor;
-    /* 0x0144 */ s8 csIdx;
-    /* 0x0145 */ u8 unk_145; // timer?
+    /* 0x0144 */ s8 isDay;
+    /* 0x0145 */ u8 transitionCsTimer;
     /* 0x0146 */ u16 unk_146; // currentTime?
     /* 0x0148 */ u16 unk_148; // something time related
     /* 0x014A */ u16 unk_14A; // another time

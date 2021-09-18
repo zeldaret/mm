@@ -2923,8 +2923,11 @@ beginseg
     name "ovl_En_Test4"
     compress
     include "build/src/overlays/actors/ovl_En_Test4/z_en_test4.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_En_Test4/ovl_En_Test4_reloc.o"
+#else
     include "build/data/ovl_En_Test4/ovl_En_Test4.reloc.o"
-    //include "build/src/overlays/actors/ovl_En_Test4/ovl_En_Test4_reloc.o"
+#endif
 endseg
 
 beginseg

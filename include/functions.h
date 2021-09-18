@@ -2878,7 +2878,7 @@ void func_80150D08(GlobalContext* globalCtx, u32 uParm2);
 // void func_801514B0(void);
 void func_801518B0(GlobalContext* globalCtx, u16 textId, Actor* Actor);
 void func_80151938(GlobalContext* globalCtx, u16 textId);
-void func_80151A68(GlobalContext* globalCtx, u16 param_2);
+void func_80151A68(GlobalContext* globalCtx, u16 textId);
 void func_80151BB4(GlobalContext* globalCtx, u32 uParm2);
 // void func_80151C9C(void);
 // void func_80151DA4(void);
