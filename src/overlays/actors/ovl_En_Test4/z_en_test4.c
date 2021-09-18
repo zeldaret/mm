@@ -38,8 +38,6 @@ s16 D_80A43354[] = { 0x1BB4, 0x1BB5, 0x1BB6 };
 s16 D_80A4335C[] = { 0x1BB2, 0x1BB2, 0x1BB3 };
 u16 D_80A43364[] = { CLOCK_TIME(6, 0), CLOCK_TIME(18, 0) };
 
-extern s32 D_801BDA9C;
-
 // sCutscenes
 s16 D_80A434D0[2];
 //
@@ -369,66 +367,49 @@ void EnTest4_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnTest4_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-#ifdef NON_EQUIVALENT
 void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
-    Player* player;
-    //u16 temp_a0;
+    Player* player = PLAYER;
 
-    player = PLAYER;
-    if ((globalCtx->unk_18B4A == 0) && ((func_801690CC(globalCtx) == 0)) && (globalCtx->numSetupActors <= 0) &&
+    if ((globalCtx->unk_18B4A == 0) && (func_801690CC(globalCtx) == 0) && (globalCtx->numSetupActors <= 0) &&
         (globalCtx->roomCtx.unk31 == 0) && (func_8016A168() == 0)) {
         s16 temp_a2;
-        s16 new_var2;
+        u16 temp_a0 = D_80A43364[this->csIdx];
         s16 temp_a3;
-        s32 temp_v1_3;
+        s16 temp_v1_3;
         s16 new_var;
-        u16 time = gSaveContext.time; // temp_v0
 
-        //temp_a2 = time - D_80A43364[this->csIdx];
-        temp_a2 = time - D_80A43364[this->csIdx];
-
+        temp_a3 = gSaveContext.time - temp_a0;
+        temp_a2 = this->unk_146 - temp_a0;
         temp_v1_3 = this->unk_14A - this->unk_148;
+        new_var = gSaveContext.time - this->unk_148;
 
-        new_var2 = D_80A43364[this->csIdx];
-        temp_a3 = this->unk_146 - new_var2;
-
-        new_var = time;
-        new_var -= this->unk_148;
-
-        if (((temp_a2) * (temp_a3)) <= 0) {
+        if ((temp_a3 * temp_a2) <= 0) {
             gSaveContext.unk_3CA7 = 1;
-                //dummy_label_595134: ;
             if (globalCtx->actorCtx.unk5 & 0x04) {
-                //dummy_label_899688: ;
-                //if (1) { } if (1) { } if (1) { } if (1) { } if (1) { }
                 globalCtx->actorCtx.unk5 &= ~0x04;
             }
 
-            if (new_var2 != CLOCK_TIME(6, 0))
-            {
-            //dummy_label_993871: ;
+            if (temp_a0 != CLOCK_TIME(6, 0)) {
                 func_80A41FA4(this, globalCtx);
             }
-            else if (new_var2 == CLOCK_TIME(6, 0))
-            {
+            else if (temp_a0 == CLOCK_TIME(6, 0)) {
                 if (CURRENT_DAY == 3) {
                     func_8011C808(globalCtx);
-                    Actor_MarkForDeath((Actor*)this);
+                    Actor_MarkForDeath(&this->actor);
                     gSaveContext.eventInf[1] |= 0x80;
                 } else {
-                    if ((((D_80A434D0)[this->csIdx] < 0) || ((globalCtx->actorCtx.unk5 & 2) != 0)) &&
-                        (CURRENT_DAY != 3)) {
+                    if (((D_80A434D0[this->csIdx] < 0) || (globalCtx->actorCtx.unk5 & 2)) &&
+                        CURRENT_DAY != 3) {
                         func_80A41FA4(this, globalCtx);
                     } else {
-                        EnHorse* new_var3;
-
                         gSaveContext.unk_3F64 = 0.0f;
                         func_80169DCC(globalCtx, 0, Entrance_CreateIndexFromSpawn(0), player->unk_3CE, 0xBFF,
                                       &player->unk_3C0, player->unk_3CC);
                         func_80169EFC(globalCtx);
                         if (player->stateFlags1 & 0x800000) {
-                            new_var3 = player->rideActor;
-                            if ((new_var3->unk_150 == 0) || (new_var3->unk_150 == 2)) {
+                            EnHorse* rideActor = (EnHorse*)player->rideActor;
+
+                            if ((rideActor->unk_150 == 0) || (rideActor->unk_150 == 2)) {
                                 if (CURRENT_DAY < 3) {
                                     D_801BDA9C = 1;
                                 } else {
@@ -436,6 +417,7 @@ void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
                                 }
                             }
                         }
+
                         gSaveContext.respawnFlag = -4;
                         gSaveContext.eventInf[2] |= 0x80;
                         Actor_MarkForDeath(&this->actor);
@@ -455,13 +437,7 @@ void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
 
                 this->unk_146 = gSaveContext.time += 0x2D;
             }
-
-            //return;
-        }else
-
-        // if (((gSaveContext.time - this->unk_148) * (this->unk_14A - this->unk_148)) <= 0)
-        // if (((gSaveContext.time - this->unk_148) * temp_v1_3) <= 0)
-        if ((new_var * temp_v1_3) <= 0) {
+        } else if ((new_var * temp_v1_3) <= 0) {
             func_801A0124(&this->actor.projectedPos, (this->actor.params >> 5) & 0xF);
             this->unk_14A = gSaveContext.time;
 
@@ -497,9 +473,6 @@ void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test4/func_80A42AB8.s")
-#endif
 
 void func_80A42F20(EnTest4* this, GlobalContext* globalCtx) {
     if (!this->unk_145) {
