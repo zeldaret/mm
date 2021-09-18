@@ -2624,7 +2624,7 @@ void func_80147198(SramContext* param_1);
 // void Sram_nop8014750C(UNK_TYPE4 param_1);
 // void func_80147520(void);
 void func_80147564(GlobalContext* globalCtx);
-s32 func_80147624(GlobalContext* globalCtx);
+u32 func_80147624(GlobalContext* globalCtx);
 s32 func_80147734(GlobalContext* globalCtx);
 void func_801477B4(GlobalContext* globalCtx);
 void func_80147818(GlobalContext* globalCtx, UNK_PTR puParm2, UNK_TYPE4 uParm3, UNK_TYPE4 uParm4);

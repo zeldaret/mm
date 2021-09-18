@@ -76,29 +76,33 @@ u32 func_80147624(GlobalContext *globalCtx) {
 
 #ifdef NON_MATCHING
 
-u32 func_80147734(GlobalContext *globalCtx) {
-    s32 ret_value;
-    Input* controller;
+s32 func_80147734(GlobalContext *globalCtx) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
+    Input* controller = CONTROLLER1(globalCtx);
 
-    if(msgCtx->unk12020 == 0x10 ||msgCtx->unk12020 == 0x11){
-        return CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_A);
+    if(msgCtx->unk12020 == 0x10 || msgCtx->unk12020 == 0x11){
+        return CHECK_BTN_ALL(controller->press.button, BTN_A);
+    }else{
+       return CHECK_BTN_ALL(controller->press.button, BTN_A) || CHECK_BTN_ALL(controller->press.button, BTN_B) 
+            ||  CHECK_BTN_ALL(controller->press.button, BTN_CUP);
     }
-    controller = CONTROLLER1(globalCtx);
-    ret_value = CHECK_BTN_ALL(controller->press.button, BTN_A);
-    if(ret_value == 0){
-        ret_value = CHECK_BTN_ALL(controller->press.button, BTN_B);
-        if(ret_value == 0){
-            ret_value = CHECK_BTN_ALL(controller->press.button, BTN_CUP);
-        }
-    }
-    return ret_value;
 }
 
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80147734.s")
 #endif
 
+void func_801477B4(GlobalContext *globalCtx) {
+    MessageContext *msgCtx;
+
+    msgCtx = &globalCtx->msgCtx;
+    if (globalCtx->msgCtx.unk11F10 != 0) {
+        msgCtx->unk12023 = 2;
+        msgCtx->msgMode = 0x43;
+        msgCtx->unk12020 = 0;
+        play_sound(0U);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80147818.s")
 
