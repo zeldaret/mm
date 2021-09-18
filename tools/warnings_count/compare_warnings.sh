@@ -1,13 +1,16 @@
 #!/bin/bash
 
-
 # Terminal colour codes
-BOLD=`tput bold`
-RED=`tput setaf 1`
-PURPLE=`tput setaf 5`
-WHITE=`tput setaf 7`
-BLINK=`tput blink`
-RST=`tput sgr0`
+# when $TERM is empty (non-interactive shell), then expand tput with '-T xterm-256color'
+[[ ${TERM}=="" ]] && TPUTTERM='-T xterm-256color' \
+                  || TPUTTERM=''
+
+declare -r BOLD=`tput ${TPUTTERM} bold`
+declare -r RED=`tput ${TPUTTERM} setaf 1`
+declare -r PURPLE=`tput ${TPUTTERM} setaf 5`
+declare -r WHITE=`tput ${TPUTTERM} setaf 7`
+declare -r BLINK=`tput ${TPUTTERM} blink`
+declare -r RST=`tput ${TPUTTERM} sgr0`
 
 read CURRENT_LINES CURRENT <<< $(wc -l "tools/warnings_count/warnings_$1_current.txt")
 read NEW_LINES NEW <<< $(wc -l "tools/warnings_count/warnings_$1_new.txt")
