@@ -67,7 +67,7 @@ void func_80A41D70(EnTest4* this, GlobalContext* globalCtx) {
     }
 
     if (gSaveContext.cutsceneTrigger == 0) {
-        if ((sCutscenes[this->isDay] >= 0) && ((globalCtx->actorCtx.unk5 & 2) == 0)) {
+        if ((sCutscenes[this->isDay] >= 0) && !(globalCtx->actorCtx.unk5 & 2)) {
             this->actionFunc = func_80A42F20;
             sCurrentCs = sCutscenes[this->isDay];
             this->transitionCsTimer = 0;
@@ -334,23 +334,21 @@ void EnTest4_Init(Actor* thisx, GlobalContext* globalCtx) {
                 this->unk_146 = gSaveContext.time;
                 this->actionFunc = func_80A42AB8;
             }
-        } else {
-            if (gSaveContext.time == CLOCK_TIME(6, 0)) {
-                this->isDay = 0;
-                func_80A41D70(this, globalCtx);
-                if ((gSaveContext.cutsceneTrigger == 0) && (sCutscenes[this->isDay] >= 0) &&
-                    !(globalCtx->actorCtx.unk5 & 2)) {
-                    player->stateFlags1 |= 0x200;
-                }
-            } else {
-                if ((gSaveContext.time > CLOCK_TIME(18, 0)) || (gSaveContext.time < CLOCK_TIME(6, 0))) {
-                    this->isDay = 0;
-                } else {
-                    this->isDay = 1;
-                }
-                this->unk_146 = gSaveContext.time;
-                this->actionFunc = func_80A42AB8;
+        } else if (gSaveContext.time == CLOCK_TIME(6, 0)) {
+            this->isDay = 0;
+            func_80A41D70(this, globalCtx);
+            if ((gSaveContext.cutsceneTrigger == 0) && (sCutscenes[this->isDay] >= 0) &&
+                !(globalCtx->actorCtx.unk5 & 2)) {
+                player->stateFlags1 |= 0x200;
             }
+        } else {
+            if ((gSaveContext.time > CLOCK_TIME(18, 0)) || (gSaveContext.time < CLOCK_TIME(6, 0))) {
+                this->isDay = 0;
+            } else {
+                this->isDay = 1;
+            }
+            this->unk_146 = gSaveContext.time;
+            this->actionFunc = func_80A42AB8;
         }
     }
 
@@ -402,31 +400,28 @@ void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
                     func_8011C808(globalCtx);
                     Actor_MarkForDeath(&this->actor);
                     gSaveContext.eventInf[1] |= 0x80;
+                } else if (((sCutscenes[this->isDay] < 0) || (globalCtx->actorCtx.unk5 & 2)) && CURRENT_DAY != 3) {
+                    func_80A41FA4(this, globalCtx);
                 } else {
-                    if (((sCutscenes[this->isDay] < 0) || (globalCtx->actorCtx.unk5 & 2)) &&
-                        CURRENT_DAY != 3) {
-                        func_80A41FA4(this, globalCtx);
-                    } else {
-                        gSaveContext.unk_3F64 = 0.0f;
-                        func_80169DCC(globalCtx, 0, Entrance_CreateIndexFromSpawn(0), player->unk_3CE, 0xBFF,
-                                      &player->unk_3C0, player->unk_3CC);
-                        func_80169EFC(globalCtx);
-                        if (player->stateFlags1 & 0x800000) {
-                            EnHorse* rideActor = (EnHorse*)player->rideActor;
+                    gSaveContext.unk_3F64 = 0.0f;
+                    func_80169DCC(globalCtx, 0, Entrance_CreateIndexFromSpawn(0), player->unk_3CE, 0xBFF,
+                                  &player->unk_3C0, player->unk_3CC);
+                    func_80169EFC(globalCtx);
+                    if (player->stateFlags1 & 0x800000) {
+                        EnHorse* rideActor = (EnHorse*)player->rideActor;
 
-                            if ((rideActor->unk_150 == 0) || (rideActor->unk_150 == 2)) {
-                                if (CURRENT_DAY < 3) {
-                                    D_801BDA9C = 1;
-                                } else {
-                                    D_801BDA9C = 0;
-                                }
+                        if ((rideActor->unk_150 == 0) || (rideActor->unk_150 == 2)) {
+                            if (CURRENT_DAY < 3) {
+                                D_801BDA9C = 1;
+                            } else {
+                                D_801BDA9C = 0;
                             }
                         }
-
-                        gSaveContext.respawnFlag = -4;
-                        gSaveContext.eventInf[2] |= 0x80;
-                        Actor_MarkForDeath(&this->actor);
                     }
+
+                    gSaveContext.respawnFlag = -4;
+                    gSaveContext.eventInf[2] |= 0x80;
+                    Actor_MarkForDeath(&this->actor);
                 }
             }
 
