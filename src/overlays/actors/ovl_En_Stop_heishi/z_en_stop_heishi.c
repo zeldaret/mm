@@ -164,7 +164,28 @@ void func_80AE750C(EnStopheishi* this, s32 arg1) { // Set anim?
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stop_heishi/func_80AE75C8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stop_heishi/func_80AE7718.s")
+void func_80AE7718(EnStopheishi* this) {
+    if (this->unk_272 != 0) {
+        this->unk_272--;
+    }
+    this->unk_25E = -0xBB8;
+    this->unk_260 = 0;
+    if (this->unk_284 < 6) {
+        this->unk_260 = 0x1770;
+        if (!(this->unk_284 & 7)) {
+            this->unk_260 = -0x1770;
+        }
+        if (this->unk_272 == 0) {
+            this->unk_284++;
+            this->unk_272 = 10;
+            if (this->unk_284 >= 6) {
+                this->unk_272 = 50;
+            }
+        }
+    } else if ((this->unk_272 == 0) && (Quake_NumActiveQuakes() != 0) && (this->unk_284 >= 6)) {
+        this->unk_284 = 0;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stop_heishi/func_80AE77D4.s")
 
@@ -184,23 +205,22 @@ void func_80AE7E9C(EnStopheishi* this) {
     this->actor.speedXZ = 0.0f;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stop_heishi/func_80AE7F34.s")
-void func_80AE7F34(EnStopheishi* this, GlobalContext* globalCtx) {
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stop_heishi/func_80AE7F34.s")
+/*void func_80AE7F34(EnStopheishi* this, GlobalContext* globalCtx) {
     Player* player;
     s16 sp32;
     f32 zDistToPlayer;
     f32 xDistToPlayer;
     s16 yawDiff;
     s32 yawDiffAbs;
-    u32 temp_v0;
-    u32 temp_v0_1;
-    u32 temp_v1;
+    u8 temp_v0;
+    u8 temp_v0_1;
     s16 phi_a2;
     u16 phi_t8;
 
     player = PLAYER;
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-    if ((this->unk_268 == 5) && (((s32)this->skelAnime.animCurrentFrame & 1) != 0)) {
+    if ((this->unk_268 == 5) && (((s32)this->skelAnime.animCurrentFrame % 2) != 0)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_SOLDIER_WALK);
     }
     if (gSaveContext.day != 3) {
@@ -213,14 +233,14 @@ void func_80AE7F34(EnStopheishi* this, GlobalContext* globalCtx) {
     if (gSaveContext.isNight != 0) {
         sp32 = 0x20;
     }
-
     phi_a2 = 0;
     switch (player->transformation) {
         case PLAYER_FORM_HUMAN:
             // temp_v1 = gSaveContext.roomInf[126][5];
-            temp_v0_1 = (u32)(gSaveContext.roomInf[126][5] & 0xFF000000) >> 0x18;
-            temp_v0 = (u32)(gSaveContext.roomInf[126][5] & 0xFF0000) >> 0x10;
+            temp_v0_1 = (gSaveContext.roomInf[126][5] & 0xFF000000) >> 0x18;
+
             if ((temp_v0_1 == 0x10) || (temp_v0_1 == 0x4D) || (temp_v0_1 == 0x4E) || (temp_v0_1 == 0x4F) ||
+                    (temp_v0 = (gSaveContext.roomInf[126][5] & 0xFF0000) >> 0x10),
                 ((temp_v0 == 0x10)) || (temp_v0 == 0x4D) || (temp_v0 == 0x4E) || (temp_v0 == 0x4F)) {
                 if (this->unk_265 != 0) {
                     phi_a2 = 1;
@@ -266,16 +286,17 @@ void func_80AE7F34(EnStopheishi* this, GlobalContext* globalCtx) {
         this->collider.dim.height = 0x3C;
     }
     if (phi_a2 != 4) {
+        //this->unk_27C += (this->unk_276 * 8) + sp32 + (phi_a2 * 2);
         this->unk_27C = this->unk_276 * 8;
         this->unk_27C = this->unk_27C + sp32;
         this->unk_27C = this->unk_27C + (phi_a2 * 2);
     } else {
-         this->unk_27C = 0x40;
-         if (sp32 != 0) {
+        this->unk_27C = 0x40;
+        if (sp32 != 0) {
             this->unk_27C = 0x48;
         }
-        //this->unk_27C = sp32 != 0 ? 0x48 : 0x40;
-        this->unk_27C = this->unk_27C + (this->unk_276 * 2);
+        // this->unk_27C = sp32 != 0 ? 0x48 : 0x40;
+        this->unk_27C += (this->unk_276 * 2);
     }
     if (gSaveContext.day != 3) {
         this->actor.textId = D_80AE88DC[this->unk_27C].textId;
@@ -285,20 +306,17 @@ void func_80AE7F34(EnStopheishi* this, GlobalContext* globalCtx) {
         this->unk_27E = D_80AE897C[this->unk_27C].unk_02;
     }
     if (this->unk_27E != 0) {
-        temp_v1 = gSaveContext.roomInf[126][5];
-        temp_v0 = (u32)(temp_v1 & 0xFF000000) >> 0x18;
-        if ((temp_v0 == 0x10) || (temp_v0 == 0x4D) || (temp_v0 == 0x4E) || (temp_v0 == 0x4F) ||
-            (temp_v0_1 = (u32)(temp_v1 & 0xFF0000) >> 0x10, (temp_v0_1 == 0x10)) || (temp_v0_1 == 0x4D) ||
-            (temp_v0_1 == 0x4E) || (temp_v0_1 == 0x4F)) {
-            this->actor.textId = this->actor.textId;
+        // temp_v1 = gSaveContext.roomInf[126][5];
+        temp_v0 = (gSaveContext.roomInf[126][5] & 0xFF000000) >> 0x18;
+        temp_v0_1 = (gSaveContext.roomInf[126][5] & 0xFF0000) >> 0x10;
+        if ((temp_v0 == 0x10) || (temp_v0 == 0x4D) || (temp_v0 == 0x4E) || (temp_v0 == 0x4F) || (temp_v0_1 == 0x10) ||
+            (temp_v0_1 == 0x4D) || (temp_v0_1 == 0x4E) || (temp_v0_1 == 0x4F)) {
             if (this->actor.textId == 0x516) {
                 this->actor.textId = 0x56C;
             } else {
-                phi_t8 = 0x56EU;
                 if (this->actor.textId == 0x520) {
-                    this->actor.textId = phi_t8;
-                }
-                if (this->actor.textId == 0x52A) {
+                    this->actor.textId = 0x56EU;
+                } else if (this->actor.textId == 0x52A) {
                     this->actor.textId = 0x570;
                 } else if (this->actor.textId == 0x534) {
                     this->actor.textId = 0x572;
@@ -328,16 +346,22 @@ void func_80AE7F34(EnStopheishi* this, GlobalContext* globalCtx) {
             } else if (this->actor.textId == 0x52C) {
                 this->actor.textId = 0x569;
             } else {
-                phi_t8 = 0x56BU;
-                if (this->actor.textId == 0x536) {
-                    this->actor.textId = phi_t8;
-                }
+                this->actor.textId = this->actor.textId == 0x536 ? 0x56B : this->actor.textId;
+                // phi_t8 = 0x56BU;
+                // if (this->actor.textId == 0x536) {
+                //    this->actor.textId = phi_t8;
+                //}
             }
         }
     }
     yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
-    yawDiffAbs = ABS(yawDiff);
 
+    // ABS macro doesn't work here
+    if (yawDiff < 0) {
+        yawDiffAbs = -yawDiff;
+    } else {
+        yawDiffAbs = yawDiff;
+    }
     if (func_800B84D0(&this->actor, globalCtx) != 0) {
         this->skelAnime.animPlaybackSpeed = 1.0f;
         func_80AE854C(&this->actor, globalCtx);
@@ -346,7 +370,7 @@ void func_80AE7F34(EnStopheishi* this, GlobalContext* globalCtx) {
     if (yawDiffAbs < 0x4BB9) {
         func_800B8614(&this->actor, globalCtx, 70.0f);
     }
-}
+}*/
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stop_heishi/func_80AE854C.s")
 
