@@ -119,6 +119,7 @@ void func_801477B4(GlobalContext *globalCtx) {
 
 extern s16 D_801CFD80;
 
+#ifdef NON_MATCHING
 void func_80148B98(GlobalContext *globalCtx, u8 bParm2) {
     s8 stickY;
     s32 phi_v1;
@@ -154,7 +155,9 @@ void func_80148B98(GlobalContext *globalCtx, u8 bParm2) {
         D_801CFD80 = 0;
     }
 }
-
+#else
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80148B98.s")
+#endif
 
 void func_80148CBC(GlobalContext *globalCtx, UNK_PTR puParm2, u8 arg2) {
     MessageContext* msgCtx;
@@ -287,7 +290,6 @@ void Message_StartTextbox(GlobalContext* globalCtx, u16 textId, Actor* Actor) {
 void func_80151938(GlobalContext* globalCtx, u16 textId) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
     InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
-    
 
     msgCtx->unk11F10 = 0;
     func_80150D08(globalCtx, (u32)textId);
@@ -304,13 +306,10 @@ void func_80151938(GlobalContext* globalCtx, u16 textId) {
             func_8011552C(globalCtx, 6);
         }
     }
-    {
-        s16 t = msgCtx->unk1203A;
-        msgCtx->unk1203C = t;
-    }
+    msgCtx->unk1203C = msgCtx->unk1203A;
     if (globalCtx->pauseCtx.unk_1F0 != 0) {
-        msgCtx->unk11FFE[3] = 0x22;
-        msgCtx->unk11FFE[4] = 0x15E;
+        msgCtx->unk12004 = 0x22; 
+        msgCtx->unk12006 = 0x15E;
         func_80149C18(globalCtx);
         msgCtx->unk12023 = 1;
     }

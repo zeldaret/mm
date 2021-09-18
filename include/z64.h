@@ -859,7 +859,10 @@ typedef struct {
     /* 0x11FF4 */ s16 unk11FF4;
     /* 0x11FF6 */ s16 unk11FF6;
     /* 0x11FF8 */ UNK_TYPE1 unk11FF8[0x6];
-    /* 0x11FFE */ s16 unk11FFE[0x10];
+    /* 0x11FFE */ s16 unk11FFE[0x3];
+    /* 0x12004 */ s16 unk12004;
+    /* 0x12006 */ s16 unk12006;
+    /* 0x12008 */ u8 unk12008[0x16];
     /* 0x1201E */ u16 unk1201E;
     /* 0x12020 */ u8 unk12020;
     /* 0x12021 */ u8 choiceIndex;
