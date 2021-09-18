@@ -126,154 +126,156 @@ void func_80A41FA4(EnTest4* this, GlobalContext* globalCtx) {
     }
 }
 
+// Bells on last day
 void func_80A42198(EnTest4* this) {
     if ((gSaveContext.time >= CLOCK_TIME(6, 0)) && (gSaveContext.time <= CLOCK_TIME(18, 0))) {
         if (gSaveContext.time < CLOCK_TIME(17, 30)) {
-            this->unk_148 = CLOCK_TIME(17, 30);
+            this->nextBellTime = CLOCK_TIME(17, 30);
         } else if (gSaveContext.time < CLOCK_TIME(17, 36)) {
-            this->unk_148 = CLOCK_TIME(17, 36);
+            this->nextBellTime = CLOCK_TIME(17, 36);
         } else if (gSaveContext.time < CLOCK_TIME(17, 42)) {
-            this->unk_148 = CLOCK_TIME(17, 42);
+            this->nextBellTime = CLOCK_TIME(17, 42);
         } else if (gSaveContext.time < CLOCK_TIME(17, 48)) {
-            this->unk_148 = CLOCK_TIME(17, 48);
+            this->nextBellTime = CLOCK_TIME(17, 48);
         } else if (gSaveContext.time < CLOCK_TIME(17, 54)) {
-            this->unk_148 = CLOCK_TIME(17, 54);
+            this->nextBellTime = CLOCK_TIME(17, 54);
         } else {
-            this->unk_148 = CLOCK_TIME(0, 0);
+            this->nextBellTime = CLOCK_TIME(0, 0);
         }
     } else if (gSaveContext.time > CLOCK_TIME(6, 0)) {
-        this->unk_148 = CLOCK_TIME(0, 0);
+        this->nextBellTime = CLOCK_TIME(0, 0);
     } else if (gSaveContext.time < CLOCK_TIME(0, 10)) {
-        this->unk_148 = CLOCK_TIME(0, 10);
+        this->nextBellTime = CLOCK_TIME(0, 10);
     } else if (gSaveContext.time < CLOCK_TIME(0, 20)) {
-        this->unk_148 = CLOCK_TIME(0, 20);
+        this->nextBellTime = CLOCK_TIME(0, 20);
     } else if (gSaveContext.time < CLOCK_TIME(0, 30)) {
-        this->unk_148 = CLOCK_TIME(0, 30);
+        this->nextBellTime = CLOCK_TIME(0, 30);
     } else if (gSaveContext.time < CLOCK_TIME(0, 40)) {
-        this->unk_148 = CLOCK_TIME(0, 40);
+        this->nextBellTime = CLOCK_TIME(0, 40);
     } else if (gSaveContext.time < CLOCK_TIME(0, 50)) {
-        this->unk_148 = CLOCK_TIME(0, 50);
+        this->nextBellTime = CLOCK_TIME(0, 50);
     } else if (gSaveContext.time < CLOCK_TIME(1, 0)) {
-        this->unk_148 = CLOCK_TIME(1, 0);
+        this->nextBellTime = CLOCK_TIME(1, 0);
     } else if (gSaveContext.time < CLOCK_TIME(1, 10)) {
-        this->unk_148 = CLOCK_TIME(1, 10);
+        this->nextBellTime = CLOCK_TIME(1, 10);
     } else if (gSaveContext.time < CLOCK_TIME(1, 20)) {
-        this->unk_148 = CLOCK_TIME(1, 20);
+        this->nextBellTime = CLOCK_TIME(1, 20);
     } else if (gSaveContext.time < CLOCK_TIME(1, 30) - 1) {
-        this->unk_148 = CLOCK_TIME(1, 30) - 1;
+        this->nextBellTime = CLOCK_TIME(1, 30) - 1;
     } else if (gSaveContext.time < CLOCK_TIME(1, 40) - 1) {
-        this->unk_148 = CLOCK_TIME(1, 40) - 1;
+        this->nextBellTime = CLOCK_TIME(1, 40) - 1;
     } else if (gSaveContext.time < CLOCK_TIME(1, 50) - 1) {
-        this->unk_148 = CLOCK_TIME(1, 50) - 1;
+        this->nextBellTime = CLOCK_TIME(1, 50) - 1;
     } else if (gSaveContext.time < CLOCK_TIME(2, 0)) {
-        this->unk_148 = CLOCK_TIME(2, 0);
+        this->nextBellTime = CLOCK_TIME(2, 0);
     } else if (gSaveContext.time < CLOCK_TIME(2, 10)) {
-        this->unk_148 = CLOCK_TIME(2, 10);
+        this->nextBellTime = CLOCK_TIME(2, 10);
     } else if (gSaveContext.time < CLOCK_TIME(2, 20)) {
-        this->unk_148 = CLOCK_TIME(2, 20);
+        this->nextBellTime = CLOCK_TIME(2, 20);
     } else if (gSaveContext.time < CLOCK_TIME(2, 30)) {
-        this->unk_148 = CLOCK_TIME(2, 30);
+        this->nextBellTime = CLOCK_TIME(2, 30);
     } else if (gSaveContext.time < CLOCK_TIME(2, 40)) {
-        this->unk_148 = CLOCK_TIME(2, 40);
+        this->nextBellTime = CLOCK_TIME(2, 40);
     } else if (gSaveContext.time < CLOCK_TIME(2, 50)) {
-        this->unk_148 = CLOCK_TIME(2, 50);
+        this->nextBellTime = CLOCK_TIME(2, 50);
     } else if (gSaveContext.time < CLOCK_TIME(3, 0)) {
-        this->unk_148 = CLOCK_TIME(3, 0);
+        this->nextBellTime = CLOCK_TIME(3, 0);
     } else if (gSaveContext.time < CLOCK_TIME(3, 10)) {
-        this->unk_148 = CLOCK_TIME(3, 10);
+        this->nextBellTime = CLOCK_TIME(3, 10);
     } else if (gSaveContext.time < CLOCK_TIME(3, 20)) {
-        this->unk_148 = CLOCK_TIME(3, 20);
+        this->nextBellTime = CLOCK_TIME(3, 20);
     } else if (gSaveContext.time < CLOCK_TIME(3, 30)) {
-        this->unk_148 = CLOCK_TIME(3, 30);
+        this->nextBellTime = CLOCK_TIME(3, 30);
     } else if (gSaveContext.time < CLOCK_TIME(3, 40)) {
-        this->unk_148 = CLOCK_TIME(3, 40);
+        this->nextBellTime = CLOCK_TIME(3, 40);
     } else if (gSaveContext.time < CLOCK_TIME(3, 50)) {
-        this->unk_148 = CLOCK_TIME(3, 50);
+        this->nextBellTime = CLOCK_TIME(3, 50);
     } else if (gSaveContext.time < CLOCK_TIME(4, 0)) {
-        this->unk_148 = CLOCK_TIME(4, 0);
+        this->nextBellTime = CLOCK_TIME(4, 0);
     } else if (gSaveContext.time < CLOCK_TIME(4, 10)) {
-        this->unk_148 = CLOCK_TIME(4, 10);
+        this->nextBellTime = CLOCK_TIME(4, 10);
     } else if (gSaveContext.time < CLOCK_TIME(4, 20)) {
-        this->unk_148 = CLOCK_TIME(4, 20);
+        this->nextBellTime = CLOCK_TIME(4, 20);
     } else if (gSaveContext.time < CLOCK_TIME(4, 30) - 1) {
-        this->unk_148 = CLOCK_TIME(4, 30) - 1;
+        this->nextBellTime = CLOCK_TIME(4, 30) - 1;
     } else if (gSaveContext.time < CLOCK_TIME(4, 40) - 1) {
-        this->unk_148 = CLOCK_TIME(4, 40) - 1;
+        this->nextBellTime = CLOCK_TIME(4, 40) - 1;
     } else if (gSaveContext.time < CLOCK_TIME(4, 50) - 1) {
-        this->unk_148 = CLOCK_TIME(4, 50) - 1;
+        this->nextBellTime = CLOCK_TIME(4, 50) - 1;
     } else if (gSaveContext.time < CLOCK_TIME(5, 0)) {
-        this->unk_148 = CLOCK_TIME(5, 0);
+        this->nextBellTime = CLOCK_TIME(5, 0);
     } else if (gSaveContext.time < CLOCK_TIME(5, 5)) {
-        this->unk_148 = CLOCK_TIME(5, 5);
+        this->nextBellTime = CLOCK_TIME(5, 5);
     } else if (gSaveContext.time < CLOCK_TIME(5, 10)) {
-        this->unk_148 = CLOCK_TIME(5, 10);
+        this->nextBellTime = CLOCK_TIME(5, 10);
     } else if (gSaveContext.time < CLOCK_TIME(5, 15) - 1) {
-        this->unk_148 = CLOCK_TIME(5, 15) - 1;
+        this->nextBellTime = CLOCK_TIME(5, 15) - 1;
     } else if (gSaveContext.time < CLOCK_TIME(5, 20)) {
-        this->unk_148 = CLOCK_TIME(5, 20);
+        this->nextBellTime = CLOCK_TIME(5, 20);
     } else if (gSaveContext.time < CLOCK_TIME(5, 25) - 1) {
-        this->unk_148 = CLOCK_TIME(5, 25) - 1;
+        this->nextBellTime = CLOCK_TIME(5, 25) - 1;
     } else if (gSaveContext.time < CLOCK_TIME(5, 30)) {
-        this->unk_148 = CLOCK_TIME(5, 30);
+        this->nextBellTime = CLOCK_TIME(5, 30);
     } else if (gSaveContext.time < CLOCK_TIME(5, 33) - 1) {
-        this->unk_148 = CLOCK_TIME(5, 33) - 1;
+        this->nextBellTime = CLOCK_TIME(5, 33) - 1;
     } else if (gSaveContext.time < CLOCK_TIME(5, 36)) {
-        this->unk_148 = CLOCK_TIME(5, 36);
+        this->nextBellTime = CLOCK_TIME(5, 36);
     } else if (gSaveContext.time < CLOCK_TIME(5, 39) - 1) {
-        this->unk_148 = CLOCK_TIME(5, 39) - 1;
+        this->nextBellTime = CLOCK_TIME(5, 39) - 1;
     } else if (gSaveContext.time < CLOCK_TIME(5, 42)) {
-        this->unk_148 = CLOCK_TIME(5, 42);
+        this->nextBellTime = CLOCK_TIME(5, 42);
     } else if (gSaveContext.time < CLOCK_TIME(5, 45)) {
-        this->unk_148 = CLOCK_TIME(5, 45);
+        this->nextBellTime = CLOCK_TIME(5, 45);
     } else if (gSaveContext.time < CLOCK_TIME(5, 48)) {
-        this->unk_148 = CLOCK_TIME(5, 48);
+        this->nextBellTime = CLOCK_TIME(5, 48);
     } else if (gSaveContext.time < CLOCK_TIME(5, 51)) {
-        this->unk_148 = CLOCK_TIME(5, 51);
+        this->nextBellTime = CLOCK_TIME(5, 51);
     } else if (gSaveContext.time < CLOCK_TIME(5, 54)) {
-        this->unk_148 = CLOCK_TIME(5, 54);
+        this->nextBellTime = CLOCK_TIME(5, 54);
     } else if (gSaveContext.time < CLOCK_TIME(5, 57)) {
-        this->unk_148 = CLOCK_TIME(5, 57);
+        this->nextBellTime = CLOCK_TIME(5, 57);
     } else if (gSaveContext.time < CLOCK_TIME(6, 0)) {
-        this->unk_148 = CLOCK_TIME(6, 0);
+        this->nextBellTime = CLOCK_TIME(6, 0);
     }
 }
 
+// Bells on first and second day
 void func_80A425E4(EnTest4* this, GlobalContext* globalCtx) {
     gSaveContext.unk_3F64 = 1000.0f;
 
     if ((gSaveContext.time >= CLOCK_TIME(6, 0)) && (gSaveContext.time < CLOCK_TIME(18, 0))) {
         if (gSaveContext.time < CLOCK_TIME(17, 30)) {
-            this->unk_148 = CLOCK_TIME(17, 30);
+            this->nextBellTime = CLOCK_TIME(17, 30);
         } else if (gSaveContext.time < CLOCK_TIME(17, 36)) {
-            this->unk_148 = CLOCK_TIME(17, 36);
+            this->nextBellTime = CLOCK_TIME(17, 36);
         } else if (gSaveContext.time < CLOCK_TIME(17, 42)) {
-            this->unk_148 = CLOCK_TIME(17, 42);
+            this->nextBellTime = CLOCK_TIME(17, 42);
         } else if (gSaveContext.time < CLOCK_TIME(17, 48)) {
-            this->unk_148 = CLOCK_TIME(17, 48);
+            this->nextBellTime = CLOCK_TIME(17, 48);
         } else if (gSaveContext.time < CLOCK_TIME(17, 54)) {
-            this->unk_148 = CLOCK_TIME(17, 54);
+            this->nextBellTime = CLOCK_TIME(17, 54);
         } else {
-            this->unk_148 = CLOCK_TIME(5, 30);
+            this->nextBellTime = CLOCK_TIME(5, 30);
         }
     } else {
         if (gSaveContext.time < CLOCK_TIME(5, 30)) {
-            this->unk_148 = CLOCK_TIME(5, 30);
+            this->nextBellTime = CLOCK_TIME(5, 30);
         } else if (gSaveContext.time < CLOCK_TIME(5, 36)) {
-            this->unk_148 = CLOCK_TIME(5, 36);
+            this->nextBellTime = CLOCK_TIME(5, 36);
         } else if (gSaveContext.time < CLOCK_TIME(5, 42)) {
-            this->unk_148 = CLOCK_TIME(5, 42);
+            this->nextBellTime = CLOCK_TIME(5, 42);
             gSaveContext.unk_3F64 -= 50.0f;
         } else if (gSaveContext.time < CLOCK_TIME(5, 48)) {
-            this->unk_148 = CLOCK_TIME(5, 48);
+            this->nextBellTime = CLOCK_TIME(5, 48);
             gSaveContext.unk_3F64 -= 100.0f;
         } else if (gSaveContext.time < CLOCK_TIME(5, 54)) {
-            this->unk_148 = CLOCK_TIME(5, 54);
+            this->nextBellTime = CLOCK_TIME(5, 54);
             gSaveContext.unk_3F64 -= 150.0f;
         } else if (gSaveContext.time < CLOCK_TIME(6, 0)) {
-            this->unk_148 = CLOCK_TIME(17, 30);
+            this->nextBellTime = CLOCK_TIME(17, 30);
             gSaveContext.unk_3F64 -= 200.0f;
         } else {
-            this->unk_148 = CLOCK_TIME(17, 30);
+            this->nextBellTime = CLOCK_TIME(17, 30);
         }
 
         if ((sCutscenes[this->isDay] < 0) || ((globalCtx->actorCtx.unk5 & 2) != 0) || (CURRENT_DAY == 3) ||
@@ -287,6 +289,7 @@ void func_80A425E4(EnTest4* this, GlobalContext* globalCtx) {
 }
 
 #ifdef NON_MATCHING
+// 1 instruction in the wrong place
 void EnTest4_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnTest4* this = THIS;
@@ -357,7 +360,7 @@ void EnTest4_Init(Actor* thisx, GlobalContext* globalCtx) {
         func_80A425E4(this, globalCtx);
     }
 
-    this->unk_14A = gSaveContext.time;
+    this->lastBellTime = gSaveContext.time;
     if ((sCutscenes[this->isDay] < 0) || (globalCtx->actorCtx.unk5 & 2)) {
         gSaveContext.unk_3F60 = 0;
         gSaveContext.unk_3F64 = 1000.0f;
@@ -378,13 +381,13 @@ void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
         s16 temp_a2;
         u16 temp_a0 = D_80A43364[this->isDay];
         s16 temp_a3;
-        s16 temp_v1_3;
+        s16 bellDiff;
         s16 new_var;
 
         temp_a3 = gSaveContext.time - temp_a0;
         temp_a2 = this->unk_146 - temp_a0;
-        temp_v1_3 = this->unk_14A - this->unk_148;
-        new_var = gSaveContext.time - this->unk_148;
+        bellDiff = this->lastBellTime - this->nextBellTime;
+        new_var = gSaveContext.time - this->nextBellTime;
 
         if ((temp_a3 * temp_a2) <= 0) {
             gSaveContext.unk_3CA7 = 1;
@@ -394,8 +397,7 @@ void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
 
             if (temp_a0 != CLOCK_TIME(6, 0)) {
                 func_80A41FA4(this, globalCtx);
-            }
-            else if (temp_a0 == CLOCK_TIME(6, 0)) {
+            } else if (temp_a0 == CLOCK_TIME(6, 0)) {
                 if (CURRENT_DAY == 3) {
                     func_8011C808(globalCtx);
                     Actor_MarkForDeath(&this->actor);
@@ -440,12 +442,12 @@ void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
 
                 this->unk_146 = gSaveContext.time += CLOCK_TIME_MINUTE;
             }
-        } else if ((new_var * temp_v1_3) <= 0) {
+        } else if ((new_var * bellDiff) <= 0) {
             func_801A0124(&this->actor.projectedPos, (this->actor.params >> 5) & 0xF);
-            this->unk_14A = gSaveContext.time;
+            this->lastBellTime = gSaveContext.time;
 
             if (CURRENT_DAY == 3) {
-                if ((this->unk_148 == 0) &&
+                if ((this->nextBellTime == CLOCK_TIME(0, 0)) &&
                     ((gSaveContext.inventory.items[ITEM_OCARINA] == ITEM_NONE) || (globalCtx->sceneNum == 0x6F))) {
                     s32 phi_v0;
                     u32 entranceIndex = gSaveContext.entranceIndex;
@@ -543,7 +545,7 @@ void func_80A430C8(EnTest4* this, GlobalContext* globalCtx) {
     }
 
     if (D_801BDBB0 == 1) {
-        this->unk_14C = 1;
+        this->state = TEST4_STATE_1;
     }
 }
 
@@ -554,8 +556,9 @@ void func_80A431C8(EnTest4* this, GlobalContext* globalCtx) {
         D_801BDBB0 = 0;
         globalCtx->envCtx.unk_E3 = 2;
     }
+
     if (D_801BDBB0 == 0) {
-        this->unk_14C = 0;
+        this->state = TEST4_STATE_0;
     }
 }
 
@@ -573,12 +576,13 @@ void EnTest4_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (!(player->stateFlags1 & 2)) {
         this->actionFunc(this, globalCtx);
+
         if (func_800FE4B8(globalCtx) != 0) {
-            switch (this->unk_14C) {
-                case 0:
+            switch (this->state) {
+                case TEST4_STATE_0:
                     func_80A430C8(this, globalCtx);
                     break;
-                case 1:
+                case TEST4_STATE_1:
                     func_80A431C8(this, globalCtx);
                     break;
             }
