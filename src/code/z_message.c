@@ -108,6 +108,7 @@ u32 func_80147734(GlobalContext *globalCtx) {
 
 
 
+#ifdef NON_MATCHING
 void func_80148B98(GlobalContext *globalCtx, u8 bParm2) {
     static s16 held = 0;
     MessageContext *msgCtx = &globalCtx->msgCtx;
@@ -139,6 +140,9 @@ void func_80148B98(GlobalContext *globalCtx, u8 bParm2) {
         }
     }
 }
+#else
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80148B98.s")
+#endif
 
 void func_80148CBC(GlobalContext *globalCtx, UNK_PTR puParm2, u8 arg2) {
     MessageContext* msgCtx;
