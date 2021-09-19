@@ -1819,10 +1819,7 @@ typedef struct {
     /* 0x14 */ u8* dhtPtr[4];
     /* 0x24 */ void* imageData;
     /* 0x28 */ u8 mode; // 0 if Y V0 is 1 and 2 if Y V0 is 2
-    ///* 0x29 */ char unk_29[3];
-    ///* 0x2C */ char unk_2C[4];
     /* 0x30 */ OSScTask scTask;
-    ///* 0x88 */ char unk_88[0x10];
     /* 0x98 */ OSMesgQueue mq;
     /* 0xB0 */ OSMesg msg;
     /* 0xB4 */ JpegWork* workBuf;
