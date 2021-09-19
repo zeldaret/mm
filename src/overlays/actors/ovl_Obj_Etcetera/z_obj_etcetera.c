@@ -63,7 +63,7 @@ void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 floorBgId;
     Vec3f somePos;
 
-    index = (this->actor.params & 0xFF80) >> 7;
+    index = (this->dyna.actor.params & 0xFF80) >> 7;
     if ((index < 0) || (index >= 4)) {
         index = 0;
     }
@@ -71,20 +71,25 @@ void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (objectIndex >= 0) {
         this->unk_278 = (u8)objectIndex;
     }
-    somePos.x = this->actor.world.pos.x;
-    somePos.y = this->actor.world.pos.y + 10.0f;
-    somePos.z = this->actor.world.pos.z;
-    func_800C411C(&globalCtx->colCtx, &this->actor.floorPoly, &floorBgId, &this->actor, &somePos);
-    this->actor.floorBgId = floorBgId;
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80A7C790);
-    Collider_UpdateCylinder(&this->actor, &this->collider);
+    somePos.x = this->dyna.actor.world.pos.x;
+    somePos.y = this->dyna.actor.world.pos.y + 10.0f;
+    somePos.z = this->dyna.actor.world.pos.z;
+    func_800C411C(&globalCtx->colCtx, &this->dyna.actor.floorPoly, &floorBgId, &this->dyna.actor, &somePos);
+    this->dyna.actor.floorBgId = floorBgId;
+    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &D_80A7C790);
+    Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
     this->actionFunc = func_80A7C308;
-    Actor_SetScale(&this->actor, 0.01f);
-    this->actor.scale.y = 0.02f;
+    Actor_SetScale(&this->dyna.actor, 0.01f);
+    this->dyna.actor.scale.y = 0.02f;
     this->unk_276 = 0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Etcetera/ObjEtcetera_Destroy.s")
+void ObjEtcetera_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    ObjEtcetera* this = THIS;
+
+    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    Collider_DestroyCylinder(globalCtx, &this->collider);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Etcetera/func_80A7BDC8.s")
 
