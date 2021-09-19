@@ -3440,7 +3440,7 @@ extern u64 lastRenderFrameTimestamp;
 extern OSMesgQueue siEventCallbackQueue;
 extern OSMesg siEventCallbackBuffer[1];
 extern u32 gSegments[NUM_SEGMENTS];
-extern SchedContext schedContext;
+extern SchedContext gSchedContext;
 extern IrqMgrClient mainIrqmgrCallbackNode;
 extern OSMesgQueue mainIrqmgrCallbackQueue;
 extern OSMesg mainIrqCallbackBuffer[60];

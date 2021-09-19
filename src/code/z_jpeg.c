@@ -2,72 +2,102 @@
 #include "z64jpeg.h"
 #include "vt.h"
 
-#ifdef MIPS2C_OUTPUT
-s32 func_80182C90(void*); // extern
-s32 func_80182CA0(); // extern
-extern s32 D_801BDAC0;
-extern s32 D_801BDAC4;
-extern s32 D_801BDAC8;
-extern s32 D_801BDACC;
-extern void* D_801BDAF0;
+#if 0
+extern OSTask_t sJpegTask;
+// Jpeg_ScheduleDecoderTask
+void func_800F42A0(JpegContext* ctx) {
+    // static OSTask_t sJpegTask = {
+    //     M_NJPEGTASK,          // type
+    //     0,                    // flags
+    //     NULL,                 // ucode_boot
+    //     0,                    // ucode_boot_size
+    //     gJpegUCode,           // ucode
+    //     0x1000,               // ucode_size
+    //     gJpegUCodeData,       // ucode_data
+    //     0x800,                // ucode_data_size
+    //     NULL,                 // dram_stack
+    //     0,                    // dram_stack_size
+    //     NULL,                 // output_buff
+    //     NULL,                 // output_buff_size
+    //     NULL,                 // data_ptr
+    //     sizeof(JpegTaskData), // data_size
+    //     NULL,                 // yield_data_ptr
+    //     0x200,                // yield_data_size
+    // };
 
-void func_800F42A0(void* arg0) {
-    void* sp24;
-    OSMesgQueue* sp18;
-    OSMesgQueue* temp_t0;
-    s32* temp_t5;
-    void* temp_a3;
-    void* temp_t8;
-    void* temp_v1;
-    s32* phi_t5;
-    void* phi_t8;
+    JpegWork* workBuf = ctx->workBuf;
+    s32 pad[2];
 
-    temp_a3 = arg0;
-    temp_v1 = temp_a3->unk_A4;
-    temp_v1->unk_0 = (s32) (temp_v1 + 0x6C0);
-    temp_v1->unk_4 = 4;
-    temp_v1->unk_C = (void* ) (temp_v1 + 0x220);
-    temp_v1->unk_10 = (void* ) (temp_v1 + 0x2A0);
-    temp_v1->unk_14 = (void* ) (temp_v1 + 0x320);
-    temp_v1->unk_8 = (s32) temp_a3->unk_28;
-    D_801BDAC4 = 0;
-    arg0 = temp_a3;
-    sp24 = temp_v1;
-    D_801BDAC8 = func_80182C90(temp_a3);
-    D_801BDACC = func_80182CA0();
-    D_801BDAF0 = (void* ) (temp_v1 + 0x20);
-    D_801BDAF0 = temp_v1;
-    temp_t0 = arg0 + 0x88;
-    arg0->unk_30 = 0;
-    arg0->unk_38 = 2;
-    arg0->unk_80 = temp_t0;
-    arg0->unk_84 = 0;
-    arg0->unk_3C = 0;
-    phi_t5 = &D_801BDAC0;
-    phi_t8 = arg0;
-    do {
-        temp_t5 = phi_t5 + 0xC;
-        temp_t8 = phi_t8 + 0xC;
-        temp_t8->unk_34 = (s32) *phi_t5;
-        temp_t8->unk_38 = (s32) temp_t5->unk_-8;
-        temp_t8->unk_3C = (s32) temp_t5->unk_-4;
-        phi_t5 = temp_t5;
-        phi_t8 = temp_t8;
-    } while (temp_t5 != (&D_801BDAC0 + 0x3C));
-    temp_t8->unk_40 = (s32) temp_t5->unk_0;
-    sp18 = temp_t0;
-    osSendMesg(&schedContext.cmdQ, arg0 + 0x30, 1);
-    Sched_SendEntryMsg(&schedContext);
-    osRecvMesg(sp18, NULL, 1);
+    workBuf->taskData.address = PHYSICAL_TO_VIRTUAL(&workBuf->data);
+    workBuf->taskData.mode = ctx->mode;
+    workBuf->taskData.mbCount = 4;
+    workBuf->taskData.qTableYPtr = PHYSICAL_TO_VIRTUAL(&workBuf->qTableY);
+    workBuf->taskData.qTableUPtr = PHYSICAL_TO_VIRTUAL(&workBuf->qTableU);
+    workBuf->taskData.qTableVPtr = PHYSICAL_TO_VIRTUAL(&workBuf->qTableV);
+
+    sJpegTask.flags = 0;
+    sJpegTask.ucode_boot = SysUcode_GetUCodeBoot();
+    sJpegTask.ucode_boot_size = SysUcode_GetUCodeBootSize();
+    sJpegTask.yield_data_ptr = (u64*)&workBuf->yieldData;
+    sJpegTask.data_ptr = (u64*)&workBuf->taskData;
+
+    ctx->scTask.next = NULL;
+    ctx->scTask.flags = OS_SC_NEEDS_RSP;
+    ctx->scTask.msgQ = &ctx->mq;
+    ctx->scTask.msg = NULL;
+    ctx->scTask.framebuffer = NULL;
+    ctx->scTask.list.t = sJpegTask;
+
+    osSendMesg(&gSchedContext.cmdQ, (OSMesg)&ctx->scTask, OS_MESG_BLOCK);
+    Sched_SendEntryMsg(&gSchedContext); // osScKickEntryMsg
+    osRecvMesg(&ctx->mq, NULL, OS_MESG_BLOCK);
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_jpeg/func_800F42A0.s")
 #endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_jpeg/func_800F43BC.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/code/z_jpeg/func_800F43BC.s")
+// Jpeg_CopyToZbuffer
+void func_800F43BC(u16* src, u16* zbuffer, s32 x, s32 y) {
+    u16* dst = zbuffer + (((y * SCREEN_WIDTH) + x) * 16);
+    s32 i;
+
+    for (i = 0; i < 16; i++) {
+        dst[0] = src[0];
+        dst[1] = src[1];
+        dst[2] = src[2];
+        dst[3] = src[3];
+        dst[4] = src[4];
+        dst[5] = src[5];
+        dst[6] = src[6];
+        dst[7] = src[7];
+        dst[8] = src[8];
+        dst[9] = src[9];
+        dst[10] = src[10];
+        dst[11] = src[11];
+        dst[12] = src[12];
+        dst[13] = src[13];
+        dst[14] = src[14];
+        dst[15] = src[15];
+
+        src += 16;
+        dst += SCREEN_WIDTH;
+    }
+}
+
 
 #define Jpeg_GetUnalignedU16 func_800F44F4
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_jpeg/func_800F44F4.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/code/z_jpeg/func_800F44F4.s")
+u16 func_800F44F4(u8* ptr) {
+    if (((u32)ptr & 1) == 0) {
+        // Read the value normally if it's aligned to a 16-bit address.
+        return *(u16*)ptr;
+    } else {
+        // Read unaligned values using two separate aligned memory accesses when it's not.
+        return *(u16*)(ptr - 1) << 8 | (*(u16*)(ptr + 1) >> 8);
+    }
+}
+
 
 //#pragma GLOBAL_ASM("asm/non_matchings/code/z_jpeg/func_800F4540.s")
 // Jpeg_ParseMarkers
