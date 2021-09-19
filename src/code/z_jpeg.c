@@ -70,6 +70,62 @@ void func_800F42A0(JpegContext* ctx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_jpeg/func_800F42A0.s")
 #endif
 
+#if 0
+extern s32 D_801BDAC0;
+extern s32 D_801BDAC4;
+extern s32 D_801BDAC8;
+extern s32 D_801BDACC;
+extern s8* D_801BDAF0;
+
+void func_800F42A0(JpegContext* ctx) {
+    JpegWork* sp24;
+    OSMesgQueue* sp18;
+    JpegContext* temp_t8;
+    JpegWork* temp_v1;
+    OSMesgQueue* temp_t0;
+    s32* temp_t5;
+    s32* phi_t5;
+    JpegContext* phi_t8;
+
+    temp_v1 = ctx->workBuf;
+    temp_v1->taskData.address = (u32) temp_v1->data;
+    temp_v1->taskData.mbCount = 4;
+    temp_v1->taskData.qTableYPtr = (u32) &temp_v1->qTableY;
+    temp_v1->taskData.qTableUPtr = (u32) &temp_v1->qTableU;
+    temp_v1->taskData.qTableVPtr = (u32) &temp_v1->qTableV;
+    temp_v1->taskData.mode = (u32) ctx->mode;
+    D_801BDAC4 = 0;
+    ctx = ctx;
+    sp24 = temp_v1;
+    D_801BDAC8 = func_80182C90();
+    D_801BDACC = func_80182CA0();
+    D_801BDAF0 = (s8* ) temp_v1->yieldData;
+    D_801BDAF0 = (s8* ) temp_v1;
+    temp_t0 = &ctx->mq;
+    ctx->scTask.next = NULL;
+    ctx->scTask.flags = 2;
+    ctx->scTask.msgQ = temp_t0;
+    ctx->scTask.msg = NULL;
+    ctx->scTask.framebuffer = NULL;
+    phi_t5 = &D_801BDAC0;
+    phi_t8 = ctx;
+    do {
+        temp_t5 = phi_t5 + 0xC;
+        temp_t8 = phi_t8 + 0xC;
+        temp_t8->scTask.state = *phi_t5;
+        temp_t8->scTask.flags = temp_t5->unk_-8;
+        temp_t8->scTask.framebuffer = temp_t5->unk_-4;
+        phi_t5 = temp_t5;
+        phi_t8 = temp_t8;
+    } while (temp_t5 != (&D_801BDAC0 + 0x3C));
+    temp_t8->scTask.list.t.type = temp_t5->unk_0;
+    sp18 = temp_t0;
+    osSendMesg(&gSchedContext.cmdQ, (void* ) &ctx->scTask, 1);
+    Sched_SendEntryMsg(&gSchedContext);
+    osRecvMesg(sp18, NULL, 1);
+}
+#endif
+
 // Jpeg_CopyToZbuffer
 void func_800F43BC(u16* src, u16* zbuffer, s32 x, s32 y) {
     u16* dst = zbuffer + (((y * SCREEN_WIDTH) + x) * 16);
@@ -110,10 +166,7 @@ u16 func_800F44F4(u8* ptr) {
     }
 }
 
-
-//#pragma GLOBAL_ASM("asm/non_matchings/code/z_jpeg/func_800F4540.s")
-// Jpeg_ParseMarkers
-void func_800F4540(u8* ptr, JpegContext* ctx) {
+void Jpeg_ParseMarkers(u8* ptr, JpegContext* ctx) {
     u32 exit = false;
 
     ctx->dqtCount = 0;
@@ -244,28 +297,27 @@ s32 func_800F470C(void* data, void* zbuffer, void* work, u32 workSize) {
     }
 
     osCreateMesgQueue(&ctx.mq, &ctx.msg, 1);
-    // MsgEvent_SendNullTask
-    func_8010C1B0();
+    MsgEvent_SendNullTask();
 
     ctx.workBuf = workBuff;
 
-    func_800F4540(data, &ctx);
+    Jpeg_ParseMarkers(data, &ctx);
 
     switch (ctx.dqtCount) {
         case 1:
-            func_801A9B10(ctx.dqtPtr[0], &workBuff->qTableY, 3);
+            JpegUtils_ProcessQuantizationTable(ctx.dqtPtr[0], &workBuff->qTableY, 3);
             break;
 
         case 2:
-            func_801A9B10(ctx.dqtPtr[0], &workBuff->qTableY, 1);
-            func_801A9B10(ctx.dqtPtr[1], &workBuff->qTableU, 1);
-            func_801A9B10(ctx.dqtPtr[1], &workBuff->qTableV, 1);
+            JpegUtils_ProcessQuantizationTable(ctx.dqtPtr[0], &workBuff->qTableY, 1);
+            JpegUtils_ProcessQuantizationTable(ctx.dqtPtr[1], &workBuff->qTableU, 1);
+            JpegUtils_ProcessQuantizationTable(ctx.dqtPtr[1], &workBuff->qTableV, 1);
             break;
 
         case 3:
-            func_801A9B10(ctx.dqtPtr[0], &workBuff->qTableY, 1);
-            func_801A9B10(ctx.dqtPtr[1], &workBuff->qTableU, 1);
-            func_801A9B10(ctx.dqtPtr[2], &workBuff->qTableV, 1);
+            JpegUtils_ProcessQuantizationTable(ctx.dqtPtr[0], &workBuff->qTableY, 1);
+            JpegUtils_ProcessQuantizationTable(ctx.dqtPtr[1], &workBuff->qTableU, 1);
+            JpegUtils_ProcessQuantizationTable(ctx.dqtPtr[2], &workBuff->qTableV, 1);
             break;
 
 
@@ -305,7 +357,6 @@ s32 func_800F470C(void* data, void* zbuffer, void* work, u32 workSize) {
 
     x = y = 0;
     for (i = 0; i < 300; i+=4) {
-
         if (!func_801AA020(&decoder, (u16*)workBuff->data, 4, (i != 0), &state)) {
             func_800F42A0(&ctx);
 

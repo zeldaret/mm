@@ -489,7 +489,7 @@
             0x801A5BC0 : "[PADDING]",
             0x801A5BD0 : "code_801A5BD0",
             0x801A7B10 : "code_801A7B10",
-            0x801AA020 : "code_801AA020",
+            0x801AA020 : "jpegdecoder",
             0x801AA610 : "z_game_over",
             0x801AAAA0 : "z_construct",
 
@@ -651,7 +651,8 @@
             0x801E0EC0 : "code_801A51F0",
             0x801E1050 : "code_801A5BD0",
             0x801E1070 : "code_801A7B10",
-            0x801E1100 : "code_801AA020",
+            0x801A9B10 : "jpegutils",
+            0x801E1100 : "jpegdecoder",
             0x801E1110 : "z_game_over",
             0x801E1180 : "",
 
@@ -709,7 +710,7 @@
             0x801FD5A0 : "code_801A51F0",
             0x801FE7C0 : "code_801A5BD0",
             0x801FFD00 : "code_801A7B10",
-            0x80208E90 : "code_801AA020",
+            0x80208E90 : "jpegdecoder",
             0x80208EA0 : "gfxbuffers",
             0x8024A4C0 : "buffers",
         },

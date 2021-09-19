@@ -6,4 +6,4 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_nmi_buff/Nmi_GetPrenmiHasStarted.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_nmi_buff/func_8010C1B0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_nmi_buff/MsgEvent_SendNullTask.s")
