@@ -3593,10 +3593,10 @@ asm/non_matchings/code/jpegutils/JpegUtils_ProcessHuffmanTableImpl.s,JpegUtils_P
 asm/non_matchings/code/jpegutils/JpegUtils_ProcessHuffmanTable.s,JpegUtils_ProcessHuffmanTable,0x801A9DCC,0x36
 asm/non_matchings/code/jpegutils/JpegUtils_SetHuffmanTableOld.s,JpegUtils_SetHuffmanTableOld,0x801A9EA4,0x2A
 asm/non_matchings/code/jpegutils/JpegUtils_ProcessHuffmanTableImplOld.s,JpegUtils_ProcessHuffmanTableImplOld,0x801A9F4C,0x35
-asm/non_matchings/code/jpegdecoder/func_801AA020.s,func_801AA020,0x801AA020,0x8A
-asm/non_matchings/code/jpegdecoder/func_801AA248.s,func_801AA248,0x801AA248,0x67
-asm/non_matchings/code/jpegdecoder/func_801AA3E4.s,func_801AA3E4,0x801AA3E4,0x4F
-asm/non_matchings/code/jpegdecoder/func_801AA520.s,func_801AA520,0x801AA520,0x3C
+asm/non_matchings/code/jpegdecoder/JpegDecoder_Decode.s,JpegDecoder_Decode,0x801AA020,0x8A
+asm/non_matchings/code/jpegdecoder/JpegDecoder_ProcessMcu.s,JpegDecoder_ProcessMcu,0x801AA248,0x67
+asm/non_matchings/code/jpegdecoder/JpegDecoder_ParseNextSymbol.s,JpegDecoder_ParseNextSymbol,0x801AA3E4,0x4F
+asm/non_matchings/code/jpegdecoder/JpegDecoder_ReadBits.s,JpegDecoder_ReadBits,0x801AA520,0x3C
 asm/non_matchings/code/z_game_over/func_801AA610.s,func_801AA610,0x801AA610,0x5
 asm/non_matchings/code/z_game_over/func_801AA624.s,func_801AA624,0x801AA624,0x1A
 asm/non_matchings/code/z_game_over/func_801AA68C.s,func_801AA68C,0x801AA68C,0x105

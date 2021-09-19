@@ -680,7 +680,6 @@ beginseg
     include "build/data/code/code_801A7B10.bss.o"
     include "build/src/code/jpegutils.o"
     include "build/src/code/jpegdecoder.o"
-    include "build/data/code/jpegdecoder.bss.o"
     include "build/src/code/z_game_over.o"
     include "build/src/code/z_construct.o"
     include "build/data/code/code_801D9090.data.o"

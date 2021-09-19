@@ -357,7 +357,7 @@ s32 func_800F470C(void* data, void* zbuffer, void* work, u32 workSize) {
 
     x = y = 0;
     for (i = 0; i < 300; i+=4) {
-        if (!func_801AA020(&decoder, (u16*)workBuff->data, 4, (i != 0), &state)) {
+        if (!JpegDecoder_Decode(&decoder, (u16*)workBuff->data, 4, (i != 0), &state)) {
             func_800F42A0(&ctx);
 
             for (j = 0; j < 4; j++) {

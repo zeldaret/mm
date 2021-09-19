@@ -3841,11 +3841,11 @@ extern OSMesg D_80203290[1];
 // extern UNK_TYPE4 D_80208E6C;
 // extern UNK_TYPE4 D_80208E70;
 // extern UNK_TYPE4 D_80208E74;
-// extern UNK_TYPE1 D_80208E90;
-// extern UNK_TYPE1 D_80208E94;
-// extern UNK_TYPE1 D_80208E98;
-// extern UNK_TYPE1 D_80208E99;
-// extern UNK_TYPE1 D_80208E9C;
+// extern UNK_TYPE1 sJpegBitStreamPtr;
+// extern UNK_TYPE1 sJpegBitStreamByteIdx;
+// extern UNK_TYPE1 sJpegBitStreamBitIdx;
+// extern UNK_TYPE1 sJpegBitStreamDontSkip;
+// extern UNK_TYPE1 sJpegBitStreamCurWord;
 
 // post-code buffers
 extern u8 gGfxSPTaskYieldBuffer[OS_YIELD_DATA_SIZE];
