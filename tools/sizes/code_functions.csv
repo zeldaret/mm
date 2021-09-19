@@ -1208,10 +1208,10 @@ asm/non_matchings/code/z_horse/func_800F40A0.s,func_800F40A0,0x800F40A0,0x2F
 asm/non_matchings/code/z_horse/func_800F415C.s,func_800F415C,0x800F415C,0x22
 asm/non_matchings/code/z_horse/func_800F41E4.s,func_800F41E4,0x800F41E4,0x2F
 asm/non_matchings/code/z_jpeg/func_800F42A0.s,func_800F42A0,0x800F42A0,0x47
-asm/non_matchings/code/z_jpeg/func_800F43BC.s,func_800F43BC,0x800F43BC,0x4E
-asm/non_matchings/code/z_jpeg/func_800F44F4.s,func_800F44F4,0x800F44F4,0x13
+asm/non_matchings/code/z_jpeg/Jpeg_CopyToZbuffer.s,Jpeg_CopyToZbuffer,0x800F43BC,0x4E
+asm/non_matchings/code/z_jpeg/Jpeg_GetUnalignedU16.s,Jpeg_GetUnalignedU16,0x800F44F4,0x13
 asm/non_matchings/code/z_jpeg/Jpeg_ParseMarkers.s,Jpeg_ParseMarkers,0x800F4540,0x73
-asm/non_matchings/code/z_jpeg/func_800F470C.s,func_800F470C,0x800F470C,0xC1
+asm/non_matchings/code/z_jpeg/Jpeg_Decode.s,Jpeg_Decode,0x800F470C,0xC1
 asm/non_matchings/code/z_kaleido_setup/func_800F4A10.s,func_800F4A10,0x800F4A10,0x7F
 asm/non_matchings/code/z_kaleido_setup/func_800F4C0C.s,func_800F4C0C,0x800F4C0C,0x85
 asm/non_matchings/code/z_kaleido_setup/func_800F4E20.s,func_800F4E20,0x800F4E20,0x42

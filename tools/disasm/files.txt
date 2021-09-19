@@ -522,6 +522,7 @@
             0x801BD910 : "",
             0x801BDA70 : "z_horse",
             0x801BDAC0 : "z_jpeg",
+            0x801BDB00 : "z_kaleido_setup",
             0x801BDB30 : "z_kanfont",
             0x801BDB90 : "z_kankyo",
             0x801BE960 : "z_lib",

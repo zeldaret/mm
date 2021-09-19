@@ -67,7 +67,7 @@ void func_800F42A0(JpegContext* ctx) {
     osRecvMesg(&ctx->mq, NULL, OS_MESG_BLOCK);
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_jpeg/func_800F42A0.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/code/z_jpeg/func_800F42A0.s")
 #endif
 
 #if 0
@@ -126,8 +126,62 @@ void func_800F42A0(JpegContext* ctx) {
 }
 #endif
 
-// Jpeg_CopyToZbuffer
-void func_800F43BC(u16* src, u16* zbuffer, s32 x, s32 y) {
+extern u64 D_801AD370[];
+extern u64 D_801E3F40[];
+
+
+void func_800F42A0(JpegContext* ctx) {
+    static OSTask_t sJpegTask = {
+        M_NJPEGTASK,          // type
+        0,                    // flags
+        NULL,                 // ucode_boot
+        0,                    // ucode_boot_size
+        //gJpegUCode,           // ucode
+        D_801AD370,
+        0x1000,               // ucode_size
+        //gJpegUCodeData,       // ucode_data
+        D_801E3F40,
+        0x800,                // ucode_data_size
+        NULL,                 // dram_stack
+        0,                    // dram_stack_size
+        NULL,                 // output_buff
+        NULL,                 // output_buff_size
+        NULL,                 // data_ptr
+        sizeof(JpegTaskData), // data_size
+        NULL,                 // yield_data_ptr
+        0x200,                // yield_data_size
+    };
+
+    JpegWork* workBuf = ctx->workBuf;
+    s32 pad[2];
+
+    workBuf->taskData.address = &workBuf->data;
+    workBuf->taskData.mode = ctx->mode;
+    workBuf->taskData.mbCount = 4;
+    workBuf->taskData.qTableYPtr = &workBuf->qTableY;
+    workBuf->taskData.qTableUPtr = &workBuf->qTableU;
+    workBuf->taskData.qTableVPtr = &workBuf->qTableV;
+
+    sJpegTask.flags = 0;
+    sJpegTask.ucode_boot = func_80182C90();//SysUcode_GetUCodeBoot();
+    sJpegTask.ucode_boot_size = func_80182CA0();//SysUcode_GetUCodeBootSize();
+    sJpegTask.yield_data_ptr = (u64*)&workBuf->yieldData;
+    sJpegTask.data_ptr = (u64*)&workBuf->taskData;
+
+    ctx->scTask.next = NULL;
+    ctx->scTask.flags = OS_SC_NEEDS_RSP;
+    ctx->scTask.msgQ = &ctx->mq;
+    ctx->scTask.msg = NULL;
+    ctx->scTask.framebuffer = NULL;
+    ctx->scTask.list.t = sJpegTask;
+
+    osSendMesg(&gSchedContext.cmdQ, (OSMesg)&ctx->scTask, OS_MESG_BLOCK);
+    Sched_SendEntryMsg(&gSchedContext); // osScKickEntryMsg
+    osRecvMesg(&ctx->mq, NULL, OS_MESG_BLOCK);
+}
+
+
+void Jpeg_CopyToZbuffer(u16* src, u16* zbuffer, s32 x, s32 y) {
     u16* dst = zbuffer + (((y * SCREEN_WIDTH) + x) * 16);
     s32 i;
 
@@ -154,9 +208,7 @@ void func_800F43BC(u16* src, u16* zbuffer, s32 x, s32 y) {
     }
 }
 
-
-#define Jpeg_GetUnalignedU16 func_800F44F4
-u16 func_800F44F4(u8* ptr) {
+u16 Jpeg_GetUnalignedU16(u8* ptr) {
     if (((u32)ptr & 1) == 0) {
         // Read the value normally if it's aligned to a 16-bit address.
         return *(u16*)ptr;
@@ -186,67 +238,42 @@ void Jpeg_ParseMarkers(u8* ptr, JpegContext* ctx) {
                 }
                 case MARKER_SOI: {
                     // Start of Image
-                  // osSyncPrintf("MARKER_SOI\n");
                     break;
                 }
                 case MARKER_APP0: {
                     // Application marker for JFIF
-                  // osSyncPrintf("MARKER_APP0 %d\n", Jpeg_GetUnalignedU16(ptr));
                     ptr += Jpeg_GetUnalignedU16(ptr);
                     break;
                 }
                 case MARKER_APP1: {
                     // Application marker for EXIF
-                  // osSyncPrintf("MARKER_APP1 %d\n", Jpeg_GetUnalignedU16(ptr));
                     ptr += Jpeg_GetUnalignedU16(ptr);
                     break;
                 }
                 case MARKER_APP2: {
-                  // osSyncPrintf("MARKER_APP2 %d\n", Jpeg_GetUnalignedU16(ptr));
                     ptr += Jpeg_GetUnalignedU16(ptr);
                     break;
                 }
                 case MARKER_DQT: {
                     // Define Quantization Table, stored for later processing
-                  // osSyncPrintf("MARKER_DQT %d %d %02x\n", ctx->dqtCount, Jpeg_GetUnalignedU16(ptr), ptr[2]);
                     ctx->dqtPtr[ctx->dqtCount++] = ptr + 2;
                     ptr += Jpeg_GetUnalignedU16(ptr);
                     break;
                 }
                 case MARKER_DHT: {
                     // Define Huffman Table, stored for later processing
-                  // osSyncPrintf("MARKER_DHT %d %d %02x\n", ctx->dhtCount, Jpeg_GetUnalignedU16(ptr), ptr[2]);
                     ctx->dhtPtr[ctx->dhtCount++] = ptr + 2;
                     ptr += Jpeg_GetUnalignedU16(ptr);
                     break;
                 }
                 case MARKER_DRI: {
                     // Define Restart Interval
-                  // osSyncPrintf("MARKER_DRI %d\n", Jpeg_GetUnalignedU16(ptr));
                     ptr += Jpeg_GetUnalignedU16(ptr);
                     break;
                 }
                 case MARKER_SOF: {
                     // Start of Frame, stores important metadata of the image.
                     // Only used for extracting the sampling factors (ctx->mode).
-                  // osSyncPrintf("MARKER_SOF   %d "
-                  //               "精度%02x " // accuracy
-                  //               "垂直%d "   // vertical
-                  //               "水平%d "   // horizontal
-                  //               "compo%02x "
-                  //               "(1:Y)%d (H0=2,V0=1(422) or 2(420))%02x (量子化テーブル)%02x "
-                  //               "(2:Cb)%d (H1=1,V1=1)%02x (量子化テーブル)%02x "
-                  //               "(3:Cr)%d (H2=1,V2=1)%02x (量子化テーブル)%02x\n",
-                  //               Jpeg_GetUnalignedU16(ptr),
-                  //               ptr[2],                        // precision
-                  //               Jpeg_GetUnalignedU16(ptr + 3), // height
-                  //               Jpeg_GetUnalignedU16(ptr + 5), // width
-                  //               ptr[7],                        // component count (assumed to be 3)
-                  //               ptr[8], ptr[9], ptr[10],       // Y component
-                  //               ptr[11], ptr[12], ptr[13],     // Cb component
-                  //               ptr[14], ptr[15], ptr[16]      // Cr component
-                  //  );
-
 
                     if (ptr[9] == 0x21) {
                         // component Y : V0 == 1
@@ -260,19 +287,16 @@ void Jpeg_ParseMarkers(u8* ptr, JpegContext* ctx) {
                 }
                 case MARKER_SOS: {
                     // Start of Scan marker, indicates the start of the image data.
-                  // osSyncPrintf("MARKER_SOS %d\n", Jpeg_GetUnalignedU16(ptr));
                     ptr += Jpeg_GetUnalignedU16(ptr);
                     ctx->imageData = ptr;
                     break;
                 }
                 case MARKER_EOI: {
                     // End of Image
-                  // osSyncPrintf("MARKER_EOI\n");
                     exit = true;
                     break;
                 }
                 default: {
-                  // osSyncPrintf("マーカー不明 %02x\n", ptr[-1]); // "Unknown marker"
                     ptr += Jpeg_GetUnalignedU16(ptr);
                     break;
                 }
@@ -281,7 +305,7 @@ void Jpeg_ParseMarkers(u8* ptr, JpegContext* ctx) {
     }
 }
 
-s32 func_800F470C(void* data, void* zbuffer, void* work, u32 workSize) {
+s32 Jpeg_Decode(void* data, void* zbuffer, void* work, u32 workSize) {
     s32 y;
     s32 x;
     s32 j;
@@ -361,7 +385,7 @@ s32 func_800F470C(void* data, void* zbuffer, void* work, u32 workSize) {
             func_800F42A0(&ctx);
 
             for (j = 0; j < 4; j++) {
-               func_800F43BC(workBuff->data[j], zbuffer, x, y);
+               Jpeg_CopyToZbuffer(workBuff->data[j], zbuffer, x, y);
                x++;
 
                if (x >= 20) {
