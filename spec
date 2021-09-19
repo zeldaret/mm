@@ -678,6 +678,7 @@ beginseg
     include "build/data/code/code_801A5BD0.bss.o"
     include "build/src/code/code_801A7B10.o"
     include "build/data/code/code_801A7B10.bss.o"
+    include "build/data/code/audio_rodata.rodata.o"
     include "build/src/code/jpegutils.o"
     include "build/src/code/jpegdecoder.o"
     include "build/src/code/z_game_over.o"

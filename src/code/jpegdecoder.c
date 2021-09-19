@@ -6,8 +6,6 @@ u8 sJpegBitStreamBitIdx;
 u8 sJpegBitStreamDontSkip;
 u32 sJpegBitStreamCurWord;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/jpegdecoder/D_801E1100.s")
-
 s32 JpegDecoder_Decode(JpegDecoder* decoder, u16* mcuBuff, s32 count, u8 isFollowing, JpegDecoderState* state) {
     s16 pad;
     s16 unk0;
