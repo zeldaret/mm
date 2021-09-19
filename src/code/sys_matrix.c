@@ -88,9 +88,9 @@ void SysMatrix_StatePop(void) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/SysMatrix_InsertRotationAroundUnitVector_s.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/func_80182C90.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/SysUcode_GetUCodeBoot.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/func_80182CA0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/SysUcode_GetUCodeBootSize.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/func_80182CBC.s")
 

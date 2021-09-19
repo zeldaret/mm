@@ -97,8 +97,8 @@ void func_800F42A0(JpegContext* ctx) {
     D_801BDAC4 = 0;
     ctx = ctx;
     sp24 = temp_v1;
-    D_801BDAC8 = func_80182C90();
-    D_801BDACC = func_80182CA0();
+    D_801BDAC8 = SysUcode_GetUCodeBoot();
+    D_801BDACC = SysUcode_GetUCodeBootSize();
     D_801BDAF0 = (s8* ) temp_v1->yieldData;
     D_801BDAF0 = (s8* ) temp_v1;
     temp_t0 = &ctx->mq;
@@ -126,21 +126,15 @@ void func_800F42A0(JpegContext* ctx) {
 }
 #endif
 
-extern u64 D_801AD370[];
-extern u64 D_801E3F40[];
-
-
 void func_800F42A0(JpegContext* ctx) {
     static OSTask_t sJpegTask = {
         M_NJPEGTASK,          // type
         0,                    // flags
         NULL,                 // ucode_boot
         0,                    // ucode_boot_size
-        //gJpegUCode,           // ucode
-        D_801AD370,
+        gJpegUCode,           // ucode
         0x1000,               // ucode_size
-        //gJpegUCodeData,       // ucode_data
-        D_801E3F40,
+        gJpegUCodeData,       // ucode_data
         0x800,                // ucode_data_size
         NULL,                 // dram_stack
         0,                    // dram_stack_size
@@ -163,8 +157,8 @@ void func_800F42A0(JpegContext* ctx) {
     workBuf->taskData.qTableVPtr = &workBuf->qTableV;
 
     sJpegTask.flags = 0;
-    sJpegTask.ucode_boot = func_80182C90();//SysUcode_GetUCodeBoot();
-    sJpegTask.ucode_boot_size = func_80182CA0();//SysUcode_GetUCodeBootSize();
+    sJpegTask.ucode_boot = SysUcode_GetUCodeBoot();
+    sJpegTask.ucode_boot_size = SysUcode_GetUCodeBootSize();
     sJpegTask.yield_data_ptr = (u64*)&workBuf->yieldData;
     sJpegTask.data_ptr = (u64*)&workBuf->taskData;
 

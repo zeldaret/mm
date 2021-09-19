@@ -495,7 +495,7 @@
             0x801AAAA0 : "z_construct",
 
             # .data section
-            0x801AAAB0 : "z_en_a_keep",
+            0x801AAAB0 : "rsp",
             0x801ADE60 : "",
             0x801ADEC0 : "z_en_item00",
             0x801AE240 : "z_eff_blure",
@@ -655,7 +655,7 @@
             0x801E1070 : "code_801A7B10",
             0x801E1100 : "audio_rodata",
             0x801E1110 : "z_game_over",
-            0x801E1180 : "",
+            0x801E1180 : "rsp",
 
             # .bss section
             0x801E3FA0 : "code_801E3FA0",

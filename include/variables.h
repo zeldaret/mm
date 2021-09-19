@@ -365,7 +365,7 @@ extern u16 viRetrace;
 extern DmaEntry dmadata[1568];
 // extern UNK_TYPE1 D_80186028;
 // extern UNK_TYPE1 D_801AAAB0;
-// extern UNK_TYPE1 D_801AD370;
+extern u64 gJpegUCode[];
 extern ActorInit En_A_Obj_InitVars;
 extern ColliderCylinderInit enAObjCylinderInit;
 extern InitChainEntry enAObjInitVar;
@@ -3143,7 +3143,7 @@ extern UNK_PTR D_801E10B0;
 // extern UNK_TYPE1 D_801E1E80;
 // extern UNK_TYPE1 D_801E2160;
 // extern UNK_TYPE1 D_801E3790;
-// extern UNK_TYPE1 D_801E3F40;
+extern u64 gJpegUCodeData[];
 // extern UNK_TYPE1 D_801E3FA0;
 
 // bss

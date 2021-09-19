@@ -431,7 +431,7 @@ beginseg
     compress
     after "dmadata"
     include "build/src/code/z_en_a_keep.o"
-    include "build/data/code/z_en_a_keep.data.o"
+    include "build/data/code/rsp.data.o"
     include "build/data/code/code_801ADE60.data.o"
     include "build/data/code/code_801E3FA0.bss.o"
     include "build/src/code/z_en_item00.o"
@@ -684,7 +684,7 @@ beginseg
     include "build/src/code/z_game_over.o"
     include "build/src/code/z_construct.o"
     include "build/data/code/code_801D9090.data.o"
-    include "build/data/code/code_801E1180.rodata.o"
+    include "build/data/code/rsp.rodata.o"
 endseg
 
 beginseg
