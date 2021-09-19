@@ -3213,7 +3213,6 @@ beginseg
     name "ovl_Obj_Etcetera"
     compress
     include "build/src/overlays/actors/ovl_Obj_Etcetera/z_obj_etcetera.o"
-    include "build/data/ovl_Obj_Etcetera/ovl_Obj_Etcetera.data.o"
     include "build/data/ovl_Obj_Etcetera/ovl_Obj_Etcetera.reloc.o"
 endseg
 
