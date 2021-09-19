@@ -131,4 +131,7 @@ void func_80A7C690(ObjEtcetera* this, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Etcetera/func_80A7C718.s")
+void func_80A7C718(ObjEtcetera* this, GlobalContext* globalCtx) {
+    func_8012C5B0(globalCtx->state.gfxCtx);
+    SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, NULL, NULL, &this->dyna.actor);
+}
