@@ -1,7 +1,7 @@
 /*
  * File: z_bg_hakugin_post.c
  * Overlay: ovl_Bg_Hakugin_Post
- * Description:
+ * Description: Snowhead Temple Central Pillar
  */
 
 #include "z_bg_hakugin_post.h"
@@ -92,8 +92,8 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-void func_80A9ACD0(void* arg0) {
-    bzero(arg0, sizeof(BgHakuginPostUnkStruct));
+void func_80A9ACD0(BgHakuginPostUnkStruct* arg0) {
+    bzero((void*)arg0, sizeof(BgHakuginPostUnkStruct));
 }
 
 void func_80A9ACF0(void) {
@@ -277,21 +277,21 @@ void func_80A9B46C(BgHakuginPost* this, GlobalContext* globalCtx) {
     s32 sp28;
     s32 sp24;
 
-    if (Flags_GetSwitch(globalCtx, sp30) != 0) {
+    if (Flags_GetSwitch(globalCtx, sp30)) {
         sp28 = true;
     } else {
         sp28 = false;
     }
 
-    if (Flags_GetSwitch(globalCtx, sp2C) != 0) {
+    if (Flags_GetSwitch(globalCtx, sp2C)) {
         sp24 = true;
     } else {
         sp24 = false;
     }
 
-    if ((this->unk_170 == false) && (sp28 == true)) {
+    if (!this->unk_170 && (sp28 == 1)) {
         Actor_UnsetSwitchFlag(globalCtx, sp2C);
-    } else if ((this->unk_174 == false) && (sp24 == true)) {
+    } else if (!this->unk_174 && (sp24 == 1)) {
         Actor_UnsetSwitchFlag(globalCtx, sp30);
     }
 
@@ -328,26 +328,25 @@ void func_80A9B554(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
 
     for (i = 0, val = 0; i < 65; i++, val += 0x3F0) {
         unkStruct2 = &unkStruct->unk_02A4[i];
-        unkStruct2->unk_00 = (Rand_ZeroOne() * 0.038f) + 0.002f;
+        unkStruct2->unk_00 = Rand_ZeroOne() * 0.038f + 0.002f;
         temp_f24 = Math_SinS(val);
         temp_f28 = Math_CosS(val);
         temp_f20 = Rand_ZeroOne();
         temp_f20 = (1.0f - SQ(temp_f20)) * 198.0f;
-        unkStruct2->unk_04.x = (temp_f24 * temp_f20) + spB8.x;
-        unkStruct2->unk_04.y = (Rand_ZeroOne() * spE4) + spB8.y;
-        unkStruct2->unk_04.z = (temp_f28 * temp_f20) + spB8.z;
+        unkStruct2->unk_04.x = temp_f24 * temp_f20 + spB8.x;
+        unkStruct2->unk_04.y = Rand_ZeroOne() * spE4 + spB8.y;
+        unkStruct2->unk_04.z = temp_f28 * temp_f20 + spB8.z;
 
-        temp_f0 = (unkStruct2->unk_00 - 0.002f);
-        temp_f22 = (temp_f0 * -(450.0f / 19.0f)) + 1.0f;
-        unkStruct2->unk_10.x = (Rand_ZeroOne() * 60.0f);
-        temp_f20 = (temp_f0 * (10.0f / 19.0f)) + 0.06f;
+        temp_f0 = unkStruct2->unk_00 - 0.002f;
+        temp_f22 = temp_f0 * -(450.0f / 19.0f) + 1.0f;
+        unkStruct2->unk_10.x = Rand_ZeroOne() * 60.0f;
+        temp_f20 = temp_f0 * (10.0f / 19.0f) + 0.06f;
 
-        unkStruct2->unk_10.x = (((unkStruct2->unk_10.x - 30.0f) + (temp_f24 * 50.0f)) * temp_f22) + (spAC.x * temp_f20);
-        unkStruct2->unk_10.y = (((Rand_ZeroOne() * 102.0f) + 18.0f) * temp_f22) + (spAC.y * temp_f20);
+        unkStruct2->unk_10.x = ((unkStruct2->unk_10.x - 30.0f) + temp_f24 * 50.0f) * temp_f22 + spAC.x * temp_f20;
+        unkStruct2->unk_10.y = (Rand_ZeroOne() * 102.0f + 18.0f) * temp_f22 + spAC.y * temp_f20;
         temp_f0 = spAC.z;
-        unkStruct2->unk_10.z =
-            ((((Rand_ZeroOne() * 60.0f) - 30.0f) + (temp_f28 * 50.0f)) * temp_f22) + (temp_f0 * temp_f20);
-        unkStruct2->unk_1C = 0.90999997f - ((0.04f - unkStruct2->unk_00) * (500.0f / 19.0f) * 0.02f);
+        unkStruct2->unk_10.z = ((Rand_ZeroOne() * 60.0f - 30.0f) + temp_f28 * 50.0f) * temp_f22 + temp_f0 * temp_f20;
+        unkStruct2->unk_1C = 0.90999997f - (0.04f - unkStruct2->unk_00) * (500.0f / 19.0f) * 0.02f;
         unkStruct2->unk_20.x = Rand_Next() >> 0x10;
         unkStruct2->unk_20.y = Rand_Next() >> 0x10;
         unkStruct2->unk_20.z = Rand_Next() >> 0x10;
@@ -359,38 +358,38 @@ void func_80A9B554(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
     }
 
     for (i = 0, val = 0; i < 22; i++, val += 0xBA2) {
-        temp_f20 = (Rand_ZeroOne() * 60.0f) + 220.0f;
-        spA0.x = (Math_SinS(val) * temp_f20) + spB8.x;
-        spA0.y = (((Rand_ZeroOne() * 1.2f) - 0.1f) * spE4) + spB8.y;
-        spA0.z = (Math_CosS(val) * temp_f20) + spB8.z;
+        temp_f20 = Rand_ZeroOne() * 60.0f + 220.0f;
+        spA0.x = Math_SinS(val) * temp_f20 + spB8.x;
+        spA0.y = (Rand_ZeroOne() * 1.2f - 0.1f) * spE4 + spB8.y;
+        spA0.z = Math_CosS(val) * temp_f20 + spB8.z;
         func_800B0E48(globalCtx, &spA0, &D_801D15B0, &D_80A9D8EC, &D_80A9D8E4, &D_80A9D8E8,
                       (Rand_Next() >> 0x1A) + 0x82, (Rand_Next() >> 0x1A) + 0x6E);
     }
 
     unkStruct1Temp = func_80A9B32C(unkStruct, unkStruct1);
     if (unkStruct1Temp != NULL) {
-        temp_f6 = (this->unk_16C + func_80A9B2B8(unkStruct)) - 40.0f;
+        temp_f6 = this->unk_16C + func_80A9B2B8(unkStruct) - 40.0f;
         spB8.x = unkStruct1Temp->unk_14.x + this->dyna.actor.world.pos.x;
         spB8.y = unkStruct1Temp->unk_14.y + this->unk_16C;
         spB8.z = unkStruct1Temp->unk_14.z + this->dyna.actor.world.pos.z;
 
         for (i = 65, val = 0; i < ARRAY_COUNT(unkStruct->unk_02A4); i++, val += 0x4A7) {
             unkStruct2 = &unkStruct->unk_02A4[i];
-            unkStruct2->unk_00 = (Rand_ZeroOne() * 0.007f) + 0.002f;
+            unkStruct2->unk_00 = Rand_ZeroOne() * 0.007f + 0.002f;
             temp_s1_3 = (Rand_Next() & 0x7FF) + val;
             temp_f24 = Math_SinS(temp_s1_3);
             temp_f28 = Math_CosS(temp_s1_3);
-            unkStruct2->unk_04.x = (temp_f24 * 225.5f) + spB8.x;
+            unkStruct2->unk_04.x = temp_f24 * 225.5f + spB8.x;
             if (i & 1) {
-                unkStruct2->unk_04.y = (Rand_ZeroOne() * D_80A9D880[unkStruct1Temp->unk_00].unk_00) + spB8.y;
+                unkStruct2->unk_04.y = Rand_ZeroOne() * D_80A9D880[unkStruct1Temp->unk_00].unk_00 + spB8.y;
             } else {
-                unkStruct2->unk_04.y = temp_f6 - (Rand_ZeroOne() * 350.0f);
+                unkStruct2->unk_04.y = temp_f6 - Rand_ZeroOne() * 350.0f;
             }
-            unkStruct2->unk_04.z = (temp_f28 * 225.5f) + spB8.z;
-            unkStruct2->unk_10.x = Rand_ZeroOne() + (temp_f24 * 7.0f);
+            unkStruct2->unk_04.z = temp_f28 * 225.5f + spB8.z;
+            unkStruct2->unk_10.x = Rand_ZeroOne() + temp_f24 * 7.0f;
             unkStruct2->unk_10.y = 0.0f;
-            unkStruct2->unk_10.z = Rand_ZeroOne() + (temp_f28 * 7.0f);
-            unkStruct2->unk_1C = 0.90999997f - ((0.04f - unkStruct2->unk_00) * (500.0f / 19.0f) * 0.075f);
+            unkStruct2->unk_10.z = Rand_ZeroOne() + temp_f28 * 7.0f;
+            unkStruct2->unk_1C = 0.90999997f - (0.04f - unkStruct2->unk_00) * (500.0f / 19.0f) * 0.075f;
             unkStruct2->unk_20.x = Rand_Next() >> 0x10;
             unkStruct2->unk_20.y = Rand_Next() >> 0x10;
             unkStruct2->unk_20.z = Rand_Next() >> 0x10;
@@ -448,8 +447,8 @@ void func_80A9BD24(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
         }
 
         unkStruct->unk_0000[i].unk_14.x += Math_SinS(unkStruct->unk_0000[i].unk_28) * unkStruct->unk_0000[i].unk_20;
-        unkStruct->unk_0000[i].unk_14.z = (Math_CosS(unkStruct->unk_0000[i].unk_28) * unkStruct->unk_0000[i].unk_20) +
-                                          unkStruct->unk_0000[i].unk_14.z;
+        unkStruct->unk_0000[i].unk_14.z =
+            Math_CosS(unkStruct->unk_0000[i].unk_28) * unkStruct->unk_0000[i].unk_20 + unkStruct->unk_0000[i].unk_14.z;
         unkStruct->unk_0000[i].unk_14.y += unkStruct->unk_0000[i].unk_24;
 
         if ((unkStruct->unk_0000[i].unk_34 == 1) || (unkStruct->unk_0000[i].unk_34 == 2)) {
@@ -477,7 +476,7 @@ void func_80A9BD24(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
                     unkStruct->unk_0000[i].unk_14.y =
                         unkStruct->unk_0000[j].unk_14.y + D_80A9D880[unkStruct->unk_0000[j].unk_00].unk_00;
                     unkStruct->unk_0000[i].unk_24 = 0.0f;
-                    if ((unkStruct->unk_0000[i].unk_2F & 1) != 0) {
+                    if (unkStruct->unk_0000[i].unk_2F & 1) {
                         unkStruct->unk_0000[i].unk_2F &= ~2;
                     } else {
                         unkStruct->unk_0000[i].unk_2F |= (2 | 1);
@@ -489,7 +488,8 @@ void func_80A9BD24(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
         }
 
         if (unkStruct->unk_0000[i].unk_34 == 2) {
-            if (Math3D_XZLengthSquared(unkStruct->unk_0000[i].unk_14.x, unkStruct->unk_0000[i].unk_14.z) > SQ(440.0f) + 0.02f) {
+            if (Math3D_XZLengthSquared(unkStruct->unk_0000[i].unk_14.x, unkStruct->unk_0000[i].unk_14.z) >
+                SQ(440.0f) + 0.02f) {
                 unkStruct->unk_0000[i].unk_34 = 3;
             }
         } else if (unkStruct->unk_0000[i].unk_34 == 3) {
@@ -573,8 +573,8 @@ void func_80A9C228(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
             for (j = 0, val = 0; j < 3; j++, val += 0x5555) {
                 temp_f20 = Rand_ZeroOne() * 264.0f;
                 temp_s0 = (Rand_Next() & 0xFFF) + val;
-                spB8.x = (Math_SinS(temp_s0) * temp_f20) + spC8->unk_14.x;
-                spB8.z = (Math_CosS(temp_s0) * temp_f20) + spC8->unk_14.z;
+                spB8.x = Math_SinS(temp_s0) * temp_f20 + spC8->unk_14.x;
+                spB8.z = Math_CosS(temp_s0) * temp_f20 + spC8->unk_14.z;
 
                 if (Math3D_XZLengthSquared(spB8.x, spB8.z) < SQ(550.0f) + 0.03f) {
                     spB8.x += this->dyna.actor.home.pos.x;
@@ -597,7 +597,7 @@ void func_80A9C228(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
 
         if ((unkStruct->unk_0000[i].unk_2F & 2) && (spC4 != NULL) && ((spC4->unk_34 == 3) || (spC4->unk_34 == 4))) {
             for (j = 0, val = 0; j < 18; j++, val += 0xE38) {
-                temp_f20 = ((Rand_ZeroOne() * 0.3f) + 1.0f) * 220.0f;
+                temp_f20 = (Rand_ZeroOne() * 0.3f + 1.0f) * 220.0f;
                 temp_s0 = (Rand_Next() & 0xFFF) + val;
                 spB8.x = Math_SinS(temp_s0) * temp_f20;
                 spB8.z = Math_CosS(temp_s0) * temp_f20;
@@ -631,7 +631,7 @@ void func_80A9C634(BgHakuginPost* this, GlobalContext* globalCtx) {
     f32 temp_f20;
 
     for (i = 0; i < 70; i++) {
-        temp_s4 = (s32)(Rand_ZeroOne() * 6553.0f) + (i * 0x1999);
+        temp_s4 = (s32)(Rand_ZeroOne() * 6553.0f) + i * 0x1999;
         temp_f20 = ((Rand_ZeroOne() * 0.3f) + 1.0f) * 220.0f;
 
         spB8.x = Math_SinS(temp_s4);
@@ -668,7 +668,8 @@ void func_80A9C854(BgHakuginPost* this, GlobalContext* globalCtx) {
 
             for (i = 0; i < D_80A9E028.count; i++) {
                 ColliderCylinder* collider = D_80A9E028.unk_0000[i].collider;
-                if ((collider != NULL) && (Flags_GetSwitch(globalCtx, D_80A9E028.unk_0000[i].unk_2E) != 0)) {
+
+                if ((collider != NULL) && Flags_GetSwitch(globalCtx, D_80A9E028.unk_0000[i].unk_2E)) {
                     sp28 = false;
                     break;
                 }
@@ -734,7 +735,9 @@ void func_80A9CAA8(BgHakuginPost* this, GlobalContext* globalCtx) {
     Math_Vec3f_Copy(&this->dyna.actor.home.pos, &D_80A9E028.unk_0000[0].unk_08);
     Math_Vec3f_Copy(&this->dyna.actor.world.pos, &this->dyna.actor.home.pos);
     this->unk_168 = this->dyna.actor.home.pos.y;
-    if (1) {};
+
+    if (1) {}
+
     this->unk_164 = this->unk_168 - 1800.0f;
     if (this->unk_170 != 0) {
         for (i = 0; i < D_80A9E028.count; i++) {
@@ -791,7 +794,7 @@ void func_80A9CD00(BgHakuginPost* this) {
 
 void func_80A9CD14(BgHakuginPost* this, GlobalContext* globalCtx) {
     f32 temp_f12 =
-        (Math_SinS(((this->unk_16C - this->unk_164) * 0x8000) / (this->unk_168 - this->unk_164)) * 140.0f) + 4.0f;
+        Math_SinS((this->unk_16C - this->unk_164) * 0x8000 / (this->unk_168 - this->unk_164)) * 140.0f + 4.0f;
 
     temp_f12 = CLAMP_MAX(temp_f12, 40.0f);
     this->unk_16C += temp_f12;
@@ -866,7 +869,7 @@ void func_80A9D0A0(BgHakuginPost* this) {
 
 void func_80A9D0B4(BgHakuginPost* this, GlobalContext* globalCtx) {
     f32 sp24 = (this->unk_164 + this->unk_160) - func_80A9B2B8(&D_80A9E028);
-    f32 temp_f14 = (Math_SinS(((this->unk_16C - sp24) * 0x8000) / (this->unk_168 - sp24)) * 140.0f) + 4.0f;
+    f32 temp_f14 = Math_SinS((this->unk_16C - sp24) * 0x8000 / (this->unk_168 - sp24)) * 140.0f + 4.0f;
 
     temp_f14 = CLAMP_MAX(temp_f14, 40.0f);
     this->unk_16C -= temp_f14;
@@ -982,7 +985,7 @@ void BgHakuginPost_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80A9C058(this, globalCtx, &D_80A9E028);
     func_80A9C228(this, globalCtx, &D_80A9E028);
     temp = func_80A9B2B8(&D_80A9E028);
-    this->dyna.actor.scale.y = (temp + this->unk_16C) - this->dyna.actor.home.pos.y;
+    this->dyna.actor.scale.y = temp + this->unk_16C - this->dyna.actor.home.pos.y;
     this->dyna.actor.scale.y *= 0.0025f;
     if (thisx->scale.y < 0.0001f) {
         thisx->scale.y = 0.0001f;
