@@ -27,7 +27,6 @@ s32 JpegUtils_ParseHuffmanCodesLengths(u8* ptr, u8* codesLengths) {
         off++;
     }
 
-
     codesLengths[count] = 0;
     return count;
 }

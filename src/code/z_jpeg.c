@@ -240,23 +240,25 @@ s32 Jpeg_Decode(void* data, void* zbuffer, void* work, u32 workSize) {
             JpegUtils_ProcessQuantizationTable(ctx.dqtPtr[2], &workBuff->qTableV, 1);
             break;
 
-
         default:
             return -1;
     }
 
     switch (ctx.dhtCount) {
         case 1:
-            if (JpegUtils_ProcessHuffmanTable(ctx.dhtPtr[0], &hTables[0], workBuff->codesLengths, workBuff->codes, 4) != 0) {
+            if (JpegUtils_ProcessHuffmanTable(ctx.dhtPtr[0], &hTables[0], workBuff->codesLengths, workBuff->codes, 4)) {
                 return -1;
             }
             break;
 
         case 4:
             if (JpegUtils_ProcessHuffmanTable(ctx.dhtPtr[0], &hTables[0], workBuff->codesLengths, workBuff->codes, 1)) {
-            } else if (JpegUtils_ProcessHuffmanTable(ctx.dhtPtr[1], &hTables[1], workBuff->codesLengths, workBuff->codes, 1)){
-            } else if (JpegUtils_ProcessHuffmanTable(ctx.dhtPtr[2], &hTables[2], workBuff->codesLengths, workBuff->codes, 1)) {
-            } else if (JpegUtils_ProcessHuffmanTable(ctx.dhtPtr[3], &hTables[3], workBuff->codesLengths, workBuff->codes, 1)==0) {
+            } else if (JpegUtils_ProcessHuffmanTable(ctx.dhtPtr[1], &hTables[1], workBuff->codesLengths,
+                                                     workBuff->codes, 1)) {
+            } else if (JpegUtils_ProcessHuffmanTable(ctx.dhtPtr[2], &hTables[2], workBuff->codesLengths,
+                                                     workBuff->codes, 1)) {
+            } else if (!JpegUtils_ProcessHuffmanTable(ctx.dhtPtr[3], &hTables[3], workBuff->codesLengths,
+                                                      workBuff->codes, 1)) {
                 break;
             }
             return -1;
@@ -276,19 +278,19 @@ s32 Jpeg_Decode(void* data, void* zbuffer, void* work, u32 workSize) {
     decoder.unk_18 = 0;
 
     x = y = 0;
-    for (i = 0; i < 300; i+=4) {
+    for (i = 0; i < 300; i += 4) {
         if (!JpegDecoder_Decode(&decoder, (u16*)workBuff->data, 4, (i != 0), &state)) {
             Jpeg_ScheduleDecoderTask(&ctx);
 
             for (j = 0; j < 4; j++) {
-               Jpeg_CopyToZbuffer(workBuff->data[j], zbuffer, x, y);
-               x++;
+                Jpeg_CopyToZbuffer(workBuff->data[j], zbuffer, x, y);
+                x++;
 
-               if (x >= 20) {
-                   x = 0;
-                   y++;
-               }
-           }
+                if (x >= 20) {
+                    x = 0;
+                    y++;
+                }
+            }
         }
     }
 
