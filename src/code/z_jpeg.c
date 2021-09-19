@@ -327,16 +327,16 @@ s32 func_800F470C(void* data, void* zbuffer, void* work, u32 workSize) {
 
     switch (ctx.dhtCount) {
         case 1:
-            if (func_801A9DCC(ctx.dhtPtr[0], &hTables[0], workBuff->codesLengths, workBuff->codes, 4) != 0) {
+            if (JpegUtils_ProcessHuffmanTable(ctx.dhtPtr[0], &hTables[0], workBuff->codesLengths, workBuff->codes, 4) != 0) {
                 return -1;
             }
             break;
 
         case 4:
-            if (func_801A9DCC(ctx.dhtPtr[0], &hTables[0], workBuff->codesLengths, workBuff->codes, 1)) {
-            } else if (func_801A9DCC(ctx.dhtPtr[1], &hTables[1], workBuff->codesLengths, workBuff->codes, 1)){
-            } else if (func_801A9DCC(ctx.dhtPtr[2], &hTables[2], workBuff->codesLengths, workBuff->codes, 1)) {
-            } else if (func_801A9DCC(ctx.dhtPtr[3], &hTables[3], workBuff->codesLengths, workBuff->codes, 1)==0) {
+            if (JpegUtils_ProcessHuffmanTable(ctx.dhtPtr[0], &hTables[0], workBuff->codesLengths, workBuff->codes, 1)) {
+            } else if (JpegUtils_ProcessHuffmanTable(ctx.dhtPtr[1], &hTables[1], workBuff->codesLengths, workBuff->codes, 1)){
+            } else if (JpegUtils_ProcessHuffmanTable(ctx.dhtPtr[2], &hTables[2], workBuff->codesLengths, workBuff->codes, 1)) {
+            } else if (JpegUtils_ProcessHuffmanTable(ctx.dhtPtr[3], &hTables[3], workBuff->codesLengths, workBuff->codes, 1)==0) {
                 break;
             }
             return -1;
@@ -374,5 +374,3 @@ s32 func_800F470C(void* data, void* zbuffer, void* work, u32 workSize) {
 
     return 0;
 }
-
-
