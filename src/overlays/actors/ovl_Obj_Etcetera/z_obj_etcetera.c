@@ -12,8 +12,8 @@ void func_80A7BF08(ObjEtcetera* this, GlobalContext* globalCtx);
 void func_80A7C168(ObjEtcetera* this, GlobalContext* globalCtx);
 void func_80A7C1F0(ObjEtcetera* this, GlobalContext* globalCtx);
 void func_80A7C308(ObjEtcetera* this, GlobalContext* globalCtx);
-void func_80A7C690(ObjEtcetera* this, GlobalContext* globalCtx);
-void func_80A7C718(ObjEtcetera* this, GlobalContext* globalCtx);
+void func_80A7C690(Actor* thisx, GlobalContext* globalCtx);
+void func_80A7C718(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit Obj_Etcetera_InitVars = {
     ACTOR_OBJ_ETCETERA,
@@ -137,8 +137,8 @@ void ObjEtcetera_Update(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider);
 }
 
-void func_80A7C690(ObjEtcetera* this, GlobalContext* globalCtx) {
-    s32 pad;
+void func_80A7C690(Actor* thisx, GlobalContext* globalCtx) {
+    ObjEtcetera* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -149,7 +149,9 @@ void func_80A7C690(ObjEtcetera* this, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-void func_80A7C718(ObjEtcetera* this, GlobalContext* globalCtx) {
+void func_80A7C718(Actor* thisx, GlobalContext* globalCtx) {
+    ObjEtcetera* this = THIS;
+
     func_8012C5B0(globalCtx->state.gfxCtx);
     SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, NULL, NULL, &this->dyna.actor);
 }
