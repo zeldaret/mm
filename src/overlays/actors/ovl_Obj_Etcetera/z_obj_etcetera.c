@@ -12,6 +12,7 @@ void func_80A7BF08(ObjEtcetera* this, GlobalContext* globalCtx);
 void func_80A7C168(ObjEtcetera* this, GlobalContext* globalCtx);
 void func_80A7C1F0(ObjEtcetera* this, GlobalContext* globalCtx);
 void func_80A7C308(ObjEtcetera* this, GlobalContext* globalCtx);
+void func_80A7C690(ObjEtcetera* this, GlobalContext* globalCtx);
 
 const ActorInit Obj_Etcetera_InitVars = {
     ACTOR_OBJ_ETCETERA,
@@ -97,7 +98,18 @@ void ObjEtcetera_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Etcetera/func_80A7BF08.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Etcetera/func_80A7C168.s")
+void func_80A7C168(ObjEtcetera* this, GlobalContext* globalCtx) {
+    if (func_800CAF70(&this->dyna) != 0) {
+        this->unk_276 = (u16)this->unk_276 | 1;
+    } else {
+        this->unk_276 = (u16)this->unk_276 & ~1;
+    }
+    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) != 0) {
+        this->dyna.actor.draw = func_80A7C690;
+        this->actionFunc = func_80A7BF08;
+    }
+    func_80A7BDC8(this, globalCtx);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Etcetera/func_80A7C1F0.s")
 
