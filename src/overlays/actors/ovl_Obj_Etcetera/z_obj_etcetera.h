@@ -9,7 +9,7 @@ typedef void (*ObjEtceteraActionFunc)(struct ObjEtcetera*, GlobalContext*);
 
 typedef struct ObjEtcetera {
     /* 0x0000 */ DynaPolyActor dyna;
-    /* 0x015C */ char unk_15C[0x44];
+    /* 0x015C */ SkelAnime skelAnime;
     /* 0x01A0 */ ColliderCylinder collider;
     /* 0x01EC */ char unk_1EC[0x8A];
     /* 0x0276 */ s16 unk_276;

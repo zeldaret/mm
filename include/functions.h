@@ -1761,7 +1761,7 @@ void func_800F9824(GlobalContext* globalCtx, EnvironmentContext* envCtx, View* v
 // void func_800FA39C(void);
 // void func_800FA3C4(void);
 // void func_800FA9FC(void);
-// void func_800FAAB4(void);
+void func_800FAAB4(GlobalContext* globalCtx, u8 param_2);
 // void func_800FAC20(void);
 // void func_800FAF74(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5);
 // void func_800FB010(void);

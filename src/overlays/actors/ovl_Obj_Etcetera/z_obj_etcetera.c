@@ -103,7 +103,21 @@ void ObjEtcetera_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Etcetera/func_80A7C308.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Etcetera/ObjEtcetera_Update.s")
+void ObjEtcetera_Update(Actor* thisx, GlobalContext* globalCtx) {
+    ObjEtcetera* this = THIS;
+    CollisionPoly* floorPoly;
+    u8 floorBgId;
+
+    floorBgId = this->dyna.actor.floorBgId;
+    if (floorBgId == 0x32) {
+        floorPoly = this->dyna.actor.floorPoly;
+        if ((floorPoly != NULL) && (((u16)this->unk_276 & 1) != 0)) {
+            func_800FAAB4(globalCtx, func_800C9C9C(&globalCtx->colCtx, floorPoly, floorBgId));
+        }
+    }
+    this->actionFunc(this, globalCtx);
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Etcetera/func_80A7C690.s")
 
