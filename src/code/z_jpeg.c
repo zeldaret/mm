@@ -14,119 +14,10 @@
 #define MARKER_COM 0xFE
 #define MARKER_EOI 0xD9
 
-void func_800F42A0(JpegContext* ctx);
-
-#if 0
-extern OSTask_t sJpegTask;
-// Jpeg_ScheduleDecoderTask
-void func_800F42A0(JpegContext* ctx) {
-    // static OSTask_t sJpegTask = {
-    //     M_NJPEGTASK,          // type
-    //     0,                    // flags
-    //     NULL,                 // ucode_boot
-    //     0,                    // ucode_boot_size
-    //     gJpegUCode,           // ucode
-    //     0x1000,               // ucode_size
-    //     gJpegUCodeData,       // ucode_data
-    //     0x800,                // ucode_data_size
-    //     NULL,                 // dram_stack
-    //     0,                    // dram_stack_size
-    //     NULL,                 // output_buff
-    //     NULL,                 // output_buff_size
-    //     NULL,                 // data_ptr
-    //     sizeof(JpegTaskData), // data_size
-    //     NULL,                 // yield_data_ptr
-    //     0x200,                // yield_data_size
-    // };
-
-    JpegWork* workBuf = ctx->workBuf;
-    s32 pad[2];
-
-    workBuf->taskData.address = PHYSICAL_TO_VIRTUAL(&workBuf->data);
-    workBuf->taskData.mode = ctx->mode;
-    workBuf->taskData.mbCount = 4;
-    workBuf->taskData.qTableYPtr = PHYSICAL_TO_VIRTUAL(&workBuf->qTableY);
-    workBuf->taskData.qTableUPtr = PHYSICAL_TO_VIRTUAL(&workBuf->qTableU);
-    workBuf->taskData.qTableVPtr = PHYSICAL_TO_VIRTUAL(&workBuf->qTableV);
-
-    sJpegTask.flags = 0;
-    sJpegTask.ucode_boot = SysUcode_GetUCodeBoot();
-    sJpegTask.ucode_boot_size = SysUcode_GetUCodeBootSize();
-    sJpegTask.yield_data_ptr = (u64*)&workBuf->yieldData;
-    sJpegTask.data_ptr = (u64*)&workBuf->taskData;
-
-    ctx->scTask.next = NULL;
-    ctx->scTask.flags = OS_SC_NEEDS_RSP;
-    ctx->scTask.msgQ = &ctx->mq;
-    ctx->scTask.msg = NULL;
-    ctx->scTask.framebuffer = NULL;
-    ctx->scTask.list.t = sJpegTask;
-
-    osSendMesg(&gSchedContext.cmdQ, (OSMesg)&ctx->scTask, OS_MESG_BLOCK);
-    Sched_SendEntryMsg(&gSchedContext); // osScKickEntryMsg
-    osRecvMesg(&ctx->mq, NULL, OS_MESG_BLOCK);
-}
-#else
-//#pragma GLOBAL_ASM("asm/non_matchings/code/z_jpeg/func_800F42A0.s")
-#endif
-
-#if 0
-extern s32 D_801BDAC0;
-extern s32 D_801BDAC4;
-extern s32 D_801BDAC8;
-extern s32 D_801BDACC;
-extern s8* D_801BDAF0;
-
-void func_800F42A0(JpegContext* ctx) {
-    JpegWork* sp24;
-    OSMesgQueue* sp18;
-    JpegContext* temp_t8;
-    JpegWork* temp_v1;
-    OSMesgQueue* temp_t0;
-    s32* temp_t5;
-    s32* phi_t5;
-    JpegContext* phi_t8;
-
-    temp_v1 = ctx->workBuf;
-    temp_v1->taskData.address = (u32) temp_v1->data;
-    temp_v1->taskData.mbCount = 4;
-    temp_v1->taskData.qTableYPtr = (u32) &temp_v1->qTableY;
-    temp_v1->taskData.qTableUPtr = (u32) &temp_v1->qTableU;
-    temp_v1->taskData.qTableVPtr = (u32) &temp_v1->qTableV;
-    temp_v1->taskData.mode = (u32) ctx->mode;
-    D_801BDAC4 = 0;
-    ctx = ctx;
-    sp24 = temp_v1;
-    D_801BDAC8 = SysUcode_GetUCodeBoot();
-    D_801BDACC = SysUcode_GetUCodeBootSize();
-    D_801BDAF0 = (s8* ) temp_v1->yieldData;
-    D_801BDAF0 = (s8* ) temp_v1;
-    temp_t0 = &ctx->mq;
-    ctx->scTask.next = NULL;
-    ctx->scTask.flags = 2;
-    ctx->scTask.msgQ = temp_t0;
-    ctx->scTask.msg = NULL;
-    ctx->scTask.framebuffer = NULL;
-    phi_t5 = &D_801BDAC0;
-    phi_t8 = ctx;
-    do {
-        temp_t5 = phi_t5 + 0xC;
-        temp_t8 = phi_t8 + 0xC;
-        temp_t8->scTask.state = *phi_t5;
-        temp_t8->scTask.flags = temp_t5->unk_-8;
-        temp_t8->scTask.framebuffer = temp_t5->unk_-4;
-        phi_t5 = temp_t5;
-        phi_t8 = temp_t8;
-    } while (temp_t5 != (&D_801BDAC0 + 0x3C));
-    temp_t8->scTask.list.t.type = temp_t5->unk_0;
-    sp18 = temp_t0;
-    osSendMesg(&gSchedContext.cmdQ, (void* ) &ctx->scTask, 1);
-    Sched_SendEntryMsg(&gSchedContext);
-    osRecvMesg(sp18, NULL, 1);
-}
-#endif
-
-void func_800F42A0(JpegContext* ctx) {
+/**
+ * Configures and schedules a JPEG decoder task and waits for it to finish.
+ */
+void Jpeg_ScheduleDecoderTask(JpegContext* ctx) {
     static OSTask_t sJpegTask = {
         M_NJPEGTASK,          // type
         0,                    // flags
@@ -174,7 +65,9 @@ void func_800F42A0(JpegContext* ctx) {
     osRecvMesg(&ctx->mq, NULL, OS_MESG_BLOCK);
 }
 
-
+/**
+ * Copies a 16x16 block of decoded image data to the Z-buffer.
+ */
 void Jpeg_CopyToZbuffer(u16* src, u16* zbuffer, s32 x, s32 y) {
     u16* dst = zbuffer + (((y * SCREEN_WIDTH) + x) * 16);
     s32 i;
@@ -202,6 +95,12 @@ void Jpeg_CopyToZbuffer(u16* src, u16* zbuffer, s32 x, s32 y) {
     }
 }
 
+/**
+ * Reads an u16 from a possibly unaligned address in memory.
+ *
+ * Replaces unaligned 16-bit reads with a pair of aligned reads, allowing for reading the possibly
+ * unaligned values in JPEG header files.
+ */
 u16 Jpeg_GetUnalignedU16(u8* ptr) {
     if (((u32)ptr & 1) == 0) {
         // Read the value normally if it's aligned to a 16-bit address.
@@ -212,6 +111,10 @@ u16 Jpeg_GetUnalignedU16(u8* ptr) {
     }
 }
 
+/**
+ * Parses the markers in the JPEG file, storing information such as the pointer to the image data
+ * in `ctx` for later processing.
+ */
 void Jpeg_ParseMarkers(u8* ptr, JpegContext* ctx) {
     u32 exit = false;
 
@@ -376,7 +279,7 @@ s32 Jpeg_Decode(void* data, void* zbuffer, void* work, u32 workSize) {
     x = y = 0;
     for (i = 0; i < 300; i+=4) {
         if (!JpegDecoder_Decode(&decoder, (u16*)workBuff->data, 4, (i != 0), &state)) {
-            func_800F42A0(&ctx);
+            Jpeg_ScheduleDecoderTask(&ctx);
 
             for (j = 0; j < 4; j++) {
                Jpeg_CopyToZbuffer(workBuff->data[j], zbuffer, x, y);
