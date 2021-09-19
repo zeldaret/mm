@@ -1765,8 +1765,6 @@ typedef struct {
     /* 0x20 */ u16 fracPart[4][4];
 } MatrixInternal; // size = 0x40
 
-
-
 typedef struct {
     /* 0x00 */ u16 table[8*8];
 } JpegQuantizationTable; // size = 0x80
@@ -1839,6 +1837,5 @@ typedef struct {
     /* 0x0E */ s16 unk_0E;
     /* 0x10 */ s16 unk_10;
 } JpegDecoderState; // size = 0x14
-
 
 #endif
