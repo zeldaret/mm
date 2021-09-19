@@ -3588,8 +3588,11 @@ beginseg
     name "ovl_Obj_Aqua"
     compress
     include "build/src/overlays/actors/ovl_Obj_Aqua/z_obj_aqua.o"
-    //include "build/data/ovl_Obj_Aqua/ovl_Obj_Aqua.data.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_Obj_Aqua/ovl_Obj_Aqua_reloc.o"
+#else
     include "build/data/ovl_Obj_Aqua/ovl_Obj_Aqua.reloc.o"
+#endif
 endseg
 
 beginseg
