@@ -119,6 +119,16 @@ void ObjEtcetera_Update(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Etcetera/func_80A7C690.s")
+void func_80A7C690(ObjEtcetera* this, GlobalContext* globalCtx) {
+    s32 pad;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    func_8012C28C(globalCtx->state.gfxCtx);
+    gSPDisplayList(POLY_OPA_DISP++, this->unk_27C);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Etcetera/func_80A7C718.s")
