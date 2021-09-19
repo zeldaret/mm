@@ -2212,8 +2212,7 @@ beginseg
     name "ovl_En_Skb"
     compress
     include "build/src/overlays/actors/ovl_En_Skb/z_en_skb.o"
-    include "build/data/ovl_En_Skb/ovl_En_Skb.data.o"
-    include "build/data/ovl_En_Skb/ovl_En_Skb.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Skb/ovl_En_Skb_reloc.o"
 endseg
 
 beginseg
@@ -3692,8 +3691,7 @@ beginseg
     name "ovl_En_Sellnuts"
     compress
     include "build/src/overlays/actors/ovl_En_Sellnuts/z_en_sellnuts.o"
-    include "build/data/ovl_En_Sellnuts/ovl_En_Sellnuts.data.o"
-    include "build/data/ovl_En_Sellnuts/ovl_En_Sellnuts.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Sellnuts/ovl_En_Sellnuts_reloc.o"
 endseg
 
 beginseg
