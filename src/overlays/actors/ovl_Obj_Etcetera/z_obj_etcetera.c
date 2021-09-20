@@ -50,13 +50,15 @@ static ColliderCylinderInit D_80A7C790 = {
 };
 
 extern ColliderCylinderInit D_80A7C790;
+extern CollisionHeader D_0400E710;
+extern CollisionHeader D_040118D8;
 
 static s16 D_80A7C7BC[] = { 0x0001, 0x0001, 0x0001, 0x0001 };
 
 static f32 D_80A7C7C4[] = { -1.0, -1.0, -1.0, -0.7, 0.0, 0.7, 1.0, 0.7, 0.0,
                             -0.7, -1.0, -0.7, 0.0,  0.7, 1.0, 0.7, 0.0, -0.7 };
 
-static s32 D_80A7C80C[] = { 0x0400E710, 0x0400E710, 0x040118D8, 0x040118D8, 0x00000000 };
+static CollisionHeader* D_80A7C80C[] = { &D_0400E710, &D_0400E710, &D_040118D8, &D_040118D8, NULL };
 
 void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
