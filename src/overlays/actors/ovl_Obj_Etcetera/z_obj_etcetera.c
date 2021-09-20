@@ -12,6 +12,7 @@ void func_80A7BF08(ObjEtcetera* this, GlobalContext* globalCtx);
 void func_80A7C168(ObjEtcetera* this, GlobalContext* globalCtx);
 void func_80A7C1F0(ObjEtcetera* this, GlobalContext* globalCtx);
 void func_80A7C308(ObjEtcetera* this, GlobalContext* globalCtx);
+void func_80A7BDC8(ObjEtcetera* this, GlobalContext* globalCtx);
 void func_80A7C690(Actor* thisx, GlobalContext* globalCtx);
 void func_80A7C718(Actor* thisx, GlobalContext* globalCtx);
 
@@ -93,7 +94,18 @@ void ObjEtcetera_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Etcetera/func_80A7BDC8.s")
+void func_80A7BDC8(ObjEtcetera* this, GlobalContext* globalCtx) {
+    if (this->unk_274 > 0) {
+        Actor_SetScale(&this->dyna.actor,
+                       (D_80A7C7C4[globalCtx->gameplayFrames % 18] * (0.0001f * this->unk_274)) + 0.01f);
+        this->dyna.actor.scale.y = 0.02f;
+        this->unk_274 -= 1;
+    dummy_label:; // POSSIBLE FAKE MATCH
+        return;
+    }
+    Actor_SetScale(&this->dyna.actor, 0.01f);
+    this->dyna.actor.scale.y = 0.02f;
+}
 
 void func_80A7BE8C(ObjEtcetera* this) {
     SkelAnime_ChangeAnim(&this->skelAnime, (AnimationHeader*)&D_040117A8, 1.0f, 0.0f,
