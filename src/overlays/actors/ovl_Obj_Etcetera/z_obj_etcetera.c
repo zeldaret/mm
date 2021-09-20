@@ -114,7 +114,49 @@ void func_80A7BE8C(ObjEtcetera* this) {
     this->actionFunc = func_80A7C168;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Etcetera/func_80A7BF08.s")
+void func_80A7BF08(ObjEtcetera* this, GlobalContext* globalCtx) {
+    s16 temp_v0_2;
+    Player* player = PLAYER;
+
+    if ((player->stateFlags3 & 0x200) && (this->dyna.actor.xzDistToPlayer < 20.0f)) {
+        SkelAnime_ChangeAnim(&this->skelAnime, (AnimationHeader*)&D_0400EB7C, 1.0f, 0.0f,
+                             SkelAnime_GetFrameCount((AnimationHeaderCommon*)&D_0400EB7C), 2, 0.0f);
+        this->dyna.actor.draw = func_80A7C718;
+        this->actionFunc = func_80A7C1F0;
+        Actor_SetScale(&this->dyna.actor, 0.01f);
+        this->dyna.actor.scale.y = 0.02f;
+        this->unk_270 = 0.003f;
+        this->unk_274 = 30;
+        this->unk_276 &= ~1;
+    } else if ((player->stateFlags3 & 0x2000) && (this->dyna.actor.xzDistToPlayer < 30.0f) &&
+               (this->dyna.actor.yDistToPlayer > 0.0f)) {
+        temp_v0_2 = 10 - (s32)(this->dyna.actor.yDistToPlayer * 0.05f);
+        if (this->unk_274 < temp_v0_2) {
+            this->unk_274 = temp_v0_2;
+        }
+    } else {
+        if (func_800CAF70(&this->dyna) != 0) {
+            if ((this->unk_276 & 1) == 0) {
+                this->unk_274 = 10;
+                func_80A7BE8C(this);
+            } else if ((player->actor.speedXZ > 0.1f) || ((player->unk_ABC < 0.0f) && !(player->stateFlags3 & 0x100))) {
+                this->unk_274 = 10;
+            }
+            this->unk_276 |= 1;
+        } else {
+            if (this->unk_276 & 1) {
+                this->unk_274 = 10;
+                func_80A7BE8C(this);
+            }
+            this->unk_276 &= ~1;
+        }
+    }
+    if ((this->collider.base.acFlags & 2) != 0) {
+        this->unk_274 = 10;
+        func_80A7BE8C(this);
+    }
+    func_80A7BDC8(this, globalCtx);
+}
 
 void func_80A7C168(ObjEtcetera* this, GlobalContext* globalCtx) {
     if (func_800CAF70(&this->dyna) != 0) {
