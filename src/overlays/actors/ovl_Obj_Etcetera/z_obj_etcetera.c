@@ -118,9 +118,9 @@ void func_80A7BE8C(ObjEtcetera* this) {
 
 void func_80A7C168(ObjEtcetera* this, GlobalContext* globalCtx) {
     if (func_800CAF70(&this->dyna) != 0) {
-        this->unk_276 = (u16)this->unk_276 | 1;
+        this->unk_276 |= 1;
     } else {
-        this->unk_276 = (u16)this->unk_276 & ~1;
+        this->unk_276 &= ~1;
     }
     if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) != 0) {
         this->dyna.actor.draw = func_80A7C690;
@@ -137,9 +137,9 @@ void func_80A7C1F0(ObjEtcetera* this, GlobalContext* globalCtx) {
     f32 scaleTemp;
 
     if (func_800CAF70(dyna) != 0) {
-        this->unk_276 = (u16)this->unk_276 | 1;
+        this->unk_276 |= 1;
     } else {
-        this->unk_276 = (u16)this->unk_276 & ~1;
+        this->unk_276 &= ~1;
     }
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     if (0 < this->unk_274) {
@@ -170,7 +170,7 @@ void ObjEtcetera_Update(Actor* thisx, GlobalContext* globalCtx) {
     floorBgId = this->dyna.actor.floorBgId;
     if (floorBgId == 0x32) {
         floorPoly = this->dyna.actor.floorPoly;
-        if ((floorPoly != NULL) && (((u16)this->unk_276 & 1) != 0)) {
+        if ((floorPoly != NULL) && ((this->unk_276 & 1) != 0)) {
             func_800FAAB4(globalCtx, func_800C9C9C(&globalCtx->colCtx, floorPoly, floorBgId));
         }
     }
