@@ -22,7 +22,7 @@ typedef struct ObjUm {
     /* 0x2B2 */ char unk_2B2[0x2]; // padding probably
     /* 0x2B4 */ UNK_TYPE unk_2B4;
 
-    /* 0x2B8 */ Actor* unk_2B8; // EnHorse*
+    /* 0x2B8 */ EnHorse* unk_2B8;
 
     /* 0x2BC */ s32 unk_2BC;
     /* 0x2BE */ s32 unk_2BE;

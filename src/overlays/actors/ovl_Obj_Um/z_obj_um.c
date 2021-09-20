@@ -34,7 +34,6 @@ void func_80B7AE58(ObjUm* this, GlobalContext* globalCtx);
 
 void ObjUm_SetupAction(ObjUm* this, ObjUmActionFunc actionFunc);
 
-#if 0
 const ActorInit Obj_Um_InitVars = {
     ACTOR_OBJ_UM,
     ACTORCAT_NPC,
@@ -46,57 +45,22 @@ const ActorInit Obj_Um_InitVars = {
     (ActorFunc)ObjUm_Update,
     (ActorFunc)ObjUm_Draw,
 };
-#endif
 
-/*
-f32 func_800C3FA0(s32, ?*, void*, void*); // extern
-f32 func_800C4000(GlobalContext*, CollisionContext*, CollisionPoly**, f32*); // extern
-? func_800F415C(void*, ?*, ?); // extern
-? func_8017B7F8(?*, s16, f32*, f32*, f32*); // extern
-? func_801A3F54(?); // extern
-? func_80B781DC(ObjUm* arg0, EnHorse* arg1, EnHorse* arg2, GlobalContext* arg3); // static
-? func_80B783E0(ObjUm* arg0, GlobalContext* arg1, s32 arg2, EnHorse* arg3); // static
-? func_80B78764(ObjUm* arg0, GlobalContext* arg1, EnHorse* arg2, EnHorse* arg3); // static
-? func_80B78A54(ObjUm* arg0, GlobalContext* arg1, s32 arg2, EnHorse* arg3, EnHorse* arg4); // static
-s32 func_80B795A0(GlobalContext*, ObjUm*, s32); // static
-s32 func_80B79734(GlobalContext* arg0, ObjUm* arg1, s32 arg2, s32*); // static
-? func_80B7984C(GlobalContext* arg0, Actor* arg1, s32 arg2, s32* arg3); // static
-s32 func_80B79BA0(ObjUm* arg0, GlobalContext* arg1); // static
-void func_80B7AF30(void* arg0, s32 arg1); // static
-void func_80B7B93C(GlobalContext* arg0, Vec3f* arg1); // static
-extern f32 D_80B7C320;
-extern f32 D_80B7C324;
-extern f32 D_80B7C398;
-extern f32 D_80B7C39C;
-extern f32 D_80B7C3A0;
-extern f32 D_80B7C3CC;
-extern f32 D_80B7C3F4;
-extern f32 D_80B7C3F8;
-extern f32 D_80B7C3FC;
-extern f32 D_80B7C400;
-static ? D_80B7C110; // unable to generate initializer
-static ? D_80B7C128; // unable to generate initializer
-static ? D_80B7C164; // unable to generate initializer
-static ? D_80B7C25C; // unable to generate initializer
-static ? D_80B7C260; // unable to generate initializer
-static ? D_80B7C274; // unable to generate initializer
-static ? D_80B7C284; // unable to generate initializer
-static ? D_80B7C290; // unable to generate initializer
-static ? D_80B7C29C; // unable to generate initializer
-static ? D_80B7C2A8; // unable to generate initializer
-static ? D_80B7C2B4; // unable to generate initializer
-static ? D_80B7C2CC; // unable to generate initializer
-static ? D_80B7C2E4; // unable to generate initializer
-static ? D_80B7C2FC; // unable to generate initializer
-static ? D_80B7C308; // unable to generate initializer
-static ? D_80B7C314; // unable to generate initializer
-ColliderCylinderInit D_80B7C138 = {
-    {3, 0, 9, 0, 0x10, 1},
-    {1, {0, 0, 0}, {0x20, 0, 0}, 0, 1, 0},
-    {0x28, 0x40, 0, {0, 0, 0}},
-};
-InitChainEntry D_80B7C254[2]; // unable to generate initializer
-*/
+
+
+// global?
+extern Vec3s D_801D15BC;
+
+extern FlexSkeletonHeader D_06011DF8;
+extern AnimationHeader D_06012CC0;
+extern CollisionHeader D_06007E20;
+extern CollisionHeader D_06007F50;
+
+extern Gfx D_06000040[];
+extern Gfx D_06000910[];
+extern Gfx D_060011E0[];
+
+extern Gfx D_04075A40[];
 
 
 
@@ -107,8 +71,6 @@ extern TexturePtr D_060170D0;
 extern TexturePtr D_060174D0;
 extern TexturePtr D_060178D0;
 
-extern TexturePtr D_80B7C110[];
-/*
 TexturePtr D_80B7C110[] = {
     &D_060164D0,
     &D_060168D0,
@@ -117,24 +79,25 @@ TexturePtr D_80B7C110[] = {
     &D_060174D0,
     &D_060178D0,
 };
-*/
 
 extern TexturePtr D_06017CD0;
 extern TexturePtr D_06017ED0;
 extern TexturePtr D_060182D0;
 extern TexturePtr D_060180D0;
 
-extern TexturePtr D_80B7C128[];
-/*
 TexturePtr D_80B7C128[] = {
     &D_06017CD0,
     &D_06017ED0,
     &D_060182D0,
     &D_060180D0,
 };
-*/
 
-extern ColliderCylinderInit D_80B7C138;
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_80B7C138 = {
+    { COLTYPE_HIT3, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_1, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK1, { 0x00000000, 0x00, 0x00 }, { 0x00000020, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+    { 40, 64, 0, { 0, 0, 0 } },
+};
 
 typedef struct {
     /* 0x00 */ UNK_TYPE unk_00;
@@ -144,33 +107,89 @@ typedef struct {
     /* 0x10 */ UNK_TYPE unk_10;
 } struct_80B7C254; // size = 0x14
 
-extern struct_80B7C254 D_80B7C164[0xC];
+// TODO
+struct_80B7C254 D_80B7C164[12] = {
+    {2, 0, 0, 1.0f, 0x28},
+    {4, 1, 0, 1.0f, 0x28},
+    {3, 2, 0, 1.0f, 0x28},
+    {3, 4, 0, 1.0f, 0x28},
+    {5, 3, 1, -1.0f, 0x1E},
+    {7, 3, 1, 1.0f, 0x1E},
+    {0, 0xD, 1, -1.0f, 0x3C},
+    {1, 0xE, 1, 1.0f, 0x3C},
+    {0xD, 0xA, 0, 1.0f, 0x28},
+    {0xE, 8, 0, 1.0f, 0x28},
+    {8, 5, 0, 1.0f, 0x1E},
+    {0xA, 7, 0, 1.0f, 0x1E},
+};
 
-extern InitChainEntry D_80B7C254[2];
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80B7C254[] = {
+    ICHAIN_F32(uncullZoneScale, 1200, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_STOP),
+};
 
 typedef struct {
     /* 0x00 */ AnimationHeader* unk_00;
     /* 0x04 */ s32 unk_04;
 } struct_80B7C25C; // size = 0x08
 
-extern struct_80B7C25C D_80B7C25C[3]; // [5]?
-// D_80B7C25C
-// D_80B7C260
+extern AnimationHeader D_06012CC0;
+extern AnimationHeader D_0601213C;
+extern AnimationHeader D_06019E10;
+extern AnimationHeader D_060126C4;
 
-//extern AnimationHeader D_80B7C274[];
-extern struct_80B7C25C D_80B7C274[];
-//extern u64 D_80B7C274[];
 
-extern Vec3f D_80B7C284;
-extern Vec3f D_80B7C290;
-extern Vec3f D_80B7C29C;
-extern Gfx* D_80B7C2A8[];
-// D_80B7C2B4
-// D_80B7C2CC
-// D_80B7C2E4
-extern Vec3f D_80B7C2FC;
-extern Vec3f D_80B7C308;
-extern Vec3f D_80B7C314;
+// [3]? [5]?
+struct_80B7C25C D_80B7C25C[] = {
+    {&D_06012CC0, 1},
+    {&D_0601213C, 1},
+    {&D_06019E10, 0}
+};
+
+struct_80B7C25C D_80B7C274[] = {
+    {NULL, 0},
+    {&D_060126C4, 0}
+};
+
+Vec3f D_80B7C284 = {4223.0f, -979.0f, 4098.0f};
+Vec3f D_80B7C290 = {4223.0f, -980.0f, -4083.0f};
+Vec3f D_80B7C29C = {0.0f, -1.0f, 0.0f};
+Gfx* D_80B7C2A8[] = {D_06000040, D_06000910, D_060011E0};
+
+s32 D_80B7C2B4 [] = {
+    0x00000000,
+    0x060052B0,
+    0x06003C60,
+    0x06003C60,
+    0x06003C60,
+    0x060067C0,
+};
+
+s32 D_80B7C2CC[] = {
+    0x00000000,
+    0x00000000,
+    0x06004B60,
+    0x060043E0,
+    0x00000000,
+    0x00000000,
+};
+
+s32 D_80B7C2E4[] = {
+    0x00000000,
+    0x4485C000,
+    0x4485C000,
+    0x4485C000,
+    0x4485C000,
+    0x45034000,
+};
+
+Vec3f D_80B7C2FC = {2000.0f, 1070.0f, 0.0f};
+Vec3f D_80B7C308 = {2500.0f, 200.0f, 0.0f};
+Vec3f D_80B7C314 = {2000.0f, 0.0f, -2000.0f};
+
+
 
 // actionfuncs
 void func_80B7A144(ObjUm* this, GlobalContext* globalCtx);
@@ -203,21 +222,6 @@ void func_80B7B18C(ObjUm* this, GlobalContext* globalCtx, s32);
 s32 func_80B78D08(ObjUm* this, GlobalContext* globalCtx);
 void func_80B78E88(ObjUm* this, GlobalContext* globalCtx, s16 arg2);
 void func_80B77770(ObjUm* this, GlobalContext* globalCtx);
-
-
-// global?
-extern Vec3s D_801D15BC;
-
-extern FlexSkeletonHeader D_06011DF8;
-extern AnimationHeader D_06012CC0;
-extern CollisionHeader D_06007E20;
-extern CollisionHeader D_06007F50;
-
-extern Gfx D_06000040[];
-extern Gfx D_06000910[];
-extern Gfx D_060011E0[];
-
-extern Gfx D_04075A40[];
 
 void func_80B77770(ObjUm* this, GlobalContext* globalCtx) {
     s16 rotY = this->dyna.actor.shape.rot.y;
@@ -403,7 +407,7 @@ s32 func_80B781DC(ObjUm* this, EnHorse* arg2, EnHorse* arg3, GlobalContext* glob
                 }
             }
         }
-        phi_s0 = phi_s0++;
+        phi_s0++;
     }
 
     if (phi_s3 != -1) {
@@ -872,7 +876,7 @@ void ObjUm_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void func_80B79524(ObjUm* this) {
     Actor_MarkForDeath(&this->dyna.actor);
     if (this->unk_2B8 != NULL) {
-        Actor_MarkForDeath(this->unk_2B8);
+        Actor_MarkForDeath(&this->unk_2B8->actor);
     }
 }
 
@@ -1134,10 +1138,10 @@ s32 func_80B79BA0(ObjUm* this, GlobalContext* globalCtx) {
 
         if (1) {}
 
-        phi_a2 = this->unk_2B8->shape.rot.y - this->dyna.actor.shape.rot.y;
+        phi_a2 = this->unk_2B8->actor.shape.rot.y - this->dyna.actor.shape.rot.y;
         if (fabsf(phi_a2) < 2730.0f) {
             if (fabsf(phi_a2) < 100.0f) {
-                this->dyna.actor.shape.rot.y = this->unk_2B8->shape.rot.y;
+                this->dyna.actor.shape.rot.y = this->unk_2B8->actor.shape.rot.y;
             } else if (phi_a2 > 0) {
                 this->dyna.actor.shape.rot.y = this->dyna.actor.shape.rot.y + 0x64;
                 phi_a2 = 0x64;
@@ -1695,7 +1699,7 @@ void func_80B7B18C(ObjUm* this, GlobalContext* globalCtx, s32 arg2) {
         this->unk_304 = arg2;
         if (arg2 != -1) {
             if (this->unk_2B8 != NULL) {
-                ((EnHorse*)this->unk_2B8)->unk_538 = arg2;
+                this->unk_2B8->unk_538 = arg2;
             }
             if (sp3C) {
                 SkelAnime_ChangeAnimTransitionStop(&this->unk_160, D_80B7C25C[arg2].unk_00, -3.0f);
@@ -1731,9 +1735,9 @@ void ObjUm_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_UpdateBgCheckInfo(globalCtx, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 0x1C);
 
     if (this->unk_2B8 != NULL) {
-        this->unk_2B8->world.pos.x = this->dyna.actor.world.pos.x;
-        this->unk_2B8->world.pos.y = this->dyna.actor.floorHeight;
-        this->unk_2B8->world.pos.z = this->dyna.actor.world.pos.z;
+        this->unk_2B8->actor.world.pos.x = this->dyna.actor.world.pos.x;
+        this->unk_2B8->actor.world.pos.y = this->dyna.actor.floorHeight;
+        this->unk_2B8->actor.world.pos.z = this->dyna.actor.world.pos.z;
     }
 
     if (this->unk_2F4 & 0x10) {
@@ -1894,6 +1898,7 @@ void func_80B7B93C(GlobalContext* globalCtx, Vec3f* arg1) {
     }
 }
 #else
+void func_80B7B93C(GlobalContext* globalCtx, Vec3f* arg1);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Um/func_80B7B93C.s")
 #endif
 
@@ -2064,39 +2069,11 @@ void func_80B7BEA4(Vec3f* arg0, s16 arg1, Vec3f* arg2, u8 arg3, GlobalContext* g
     sp100 = SkinMatrix_MtxFToNewMtx(globalCtx->state.gfxCtx, &sp40);
     if (sp100 != NULL) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
-        /*
-        temp_s0 = globalCtx->state.gfxCtx;
-        temp_v0_2 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_2 + 8;
-        temp_v0_2->words.w1 = (u32) &D_801D1DE0;
-        temp_v0_2->words.w0 = 0xDA380003;
-        */
-        gSPMatrix(POLY_OPA_DISP++, &D_801D1DE0, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        /*
-        temp_s0->polyOpa.p = Gfx_CallSetupDL(temp_s0->polyOpa.p, 0x2CU);
-        temp_v0_3 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_3 + 8;
-        temp_v0_3->words.w0 = 0xFA000000;
-        */
+        gSPMatrix(POLY_OPA_DISP++, &D_801D1DE0, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x2C);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, arg3);
-
-        /*
-        temp_v0_3->words.w1 = (u32) arg3;
-        temp_v0_4 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_4 + 8;
-        temp_v0_4->words.w1 = (u32) sp100;
-        temp_v0_4->words.w0 = 0xDA380003;
-        */
         gSPMatrix(POLY_OPA_DISP++, sp100, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-
-        /*
-        temp_v0_5 = temp_s0->polyOpa.p;
-        temp_s0->polyOpa.p = temp_v0_5 + 8;
-        temp_v0_5->words.w1 = 0x04075A40;
-        temp_v0_5->words.w0 = 0xDE000000;
-        */
         gSPDisplayList(POLY_OPA_DISP++, D_04075A40);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
