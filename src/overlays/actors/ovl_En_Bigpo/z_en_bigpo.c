@@ -869,7 +869,7 @@ void EnBigpo_SelectRandomFireLocations(EnBigpo* this, GlobalContext* globalCtx) 
     s32 fireCount = 0;
 
     // count the number of possible fires we can find (4 in vanilla)
-    for (enemyPtr = FIRST_ENEMY; enemyPtr != NULL; enemyPtr = enemyPtr->next) {
+    for (enemyPtr = GET_FIRST_ENEMY(globalCtx); enemyPtr != NULL; enemyPtr = enemyPtr->next) {
         if (enemyPtr->id == ACTOR_EN_BIGPO && enemyPtr->params == ENBIGPO_POSSIBLEFIRE) {
             fireCount++;
         }
@@ -887,7 +887,7 @@ void EnBigpo_SelectRandomFireLocations(EnBigpo* this, GlobalContext* globalCtx) 
 
     // for available possiblefires, pick three to be random fires
     for (fireIndex = 0; fireIndex < ARRAY_COUNT(this->fires); fireIndex++, fireCount--) {
-        enemyPtr = FIRST_ENEMY;
+        enemyPtr = GET_FIRST_ENEMY(globalCtx);
         randomIndex = ((s32)Rand_ZeroFloat(fireCount)) % fireCount;
 
         while (enemyPtr != NULL) {
@@ -920,7 +920,7 @@ void EnBigpo_SelectRandomFireLocations(EnBigpo* this, GlobalContext* globalCtx) 
     }
 
     // remove unused fires
-    for (enemyPtr = FIRST_ENEMY; enemyPtr != NULL; enemyPtr = enemyPtr->next) {
+    for (enemyPtr = GET_FIRST_ENEMY(globalCtx); enemyPtr != NULL; enemyPtr = enemyPtr->next) {
         if (enemyPtr->id == ACTOR_EN_BIGPO && enemyPtr->params == ENBIGPO_POSSIBLEFIRE) {
             randomFirePo = (EnBigpo*)enemyPtr;
             randomFirePo->actionFunc = EnBigpo_Die;
