@@ -109,7 +109,7 @@ void func_80A7BDC8(ObjEtcetera* this, GlobalContext* globalCtx) {
 
 void func_80A7BE8C(ObjEtcetera* this) {
     SkelAnime_ChangeAnim(&this->skelAnime, (AnimationHeader*)&D_040117A8, 1.0f, 0.0f,
-                         (f32)SkelAnime_GetFrameCount((AnimationHeaderCommon*)&D_040117A8), 2, 0.0f);
+                         SkelAnime_GetFrameCount((AnimationHeaderCommon*)&D_040117A8), 2, 0.0f);
     this->dyna.actor.draw = func_80A7C718;
     this->actionFunc = func_80A7C168;
 }
@@ -136,7 +136,7 @@ void func_80A7BF08(ObjEtcetera* this, GlobalContext* globalCtx) {
         }
     } else {
         if (func_800CAF70(&this->dyna) != 0) {
-            if ((this->unk_276 & 1) == 0) {
+            if (!(this->unk_276 & 1)) {
                 this->unk_274 = 10;
                 func_80A7BE8C(this);
             } else if ((player->actor.speedXZ > 0.1f) || ((player->unk_ABC < 0.0f) && !(player->stateFlags3 & 0x100))) {
@@ -151,7 +151,7 @@ void func_80A7BF08(ObjEtcetera* this, GlobalContext* globalCtx) {
             this->unk_276 &= ~1;
         }
     }
-    if ((this->collider.base.acFlags & 2) != 0) {
+    if ((this->collider.base.acFlags & 2)) {
         this->unk_274 = 10;
         func_80A7BE8C(this);
     }
@@ -159,12 +159,12 @@ void func_80A7BF08(ObjEtcetera* this, GlobalContext* globalCtx) {
 }
 
 void func_80A7C168(ObjEtcetera* this, GlobalContext* globalCtx) {
-    if (func_800CAF70(&this->dyna) != 0) {
+    if (func_800CAF70(&this->dyna)) {
         this->unk_276 |= 1;
     } else {
         this->unk_276 &= ~1;
     }
-    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) != 0) {
+    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
         this->dyna.actor.draw = func_80A7C690;
         this->actionFunc = func_80A7BF08;
     }
@@ -178,7 +178,7 @@ void func_80A7C1F0(ObjEtcetera* this, GlobalContext* globalCtx) {
     DynaPolyActor* dyna = &this->dyna;
     f32 scaleTemp;
 
-    if (func_800CAF70(dyna) != 0) {
+    if (func_800CAF70(dyna)) {
         this->unk_276 |= 1;
     } else {
         this->unk_276 &= ~1;
@@ -212,7 +212,7 @@ void ObjEtcetera_Update(Actor* thisx, GlobalContext* globalCtx) {
     floorBgId = this->dyna.actor.floorBgId;
     if (floorBgId == 0x32) {
         floorPoly = this->dyna.actor.floorPoly;
-        if ((floorPoly != NULL) && ((this->unk_276 & 1) != 0)) {
+        if ((floorPoly != NULL) && ((this->unk_276 & 1))) {
             func_800FAAB4(globalCtx, func_800C9C9C(&globalCtx->colCtx, floorPoly, floorBgId));
         }
     }
