@@ -51,7 +51,11 @@ static ColliderCylinderInit D_80A7C790 = {
 
 extern ColliderCylinderInit D_80A7C790;
 extern CollisionHeader D_0400E710;
+extern Gfx D_0400ED80;
+extern SkeletonHeader D_04011518;
 extern CollisionHeader D_040118D8;
+extern Gfx D_04011BD0;
+extern SkeletonHeader D_040127E8;
 
 static s16 D_80A7C7BC[] = { 0x0001, 0x0001, 0x0001, 0x0001 };
 
@@ -74,7 +78,7 @@ void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
     objectIndex = Object_GetIndex(&globalCtx->objectCtx, D_80A7C7BC[index]);
     if (objectIndex >= 0) {
-        this->unk_278 = (u8)objectIndex;
+        this->unk_278 = objectIndex;
     }
     somePos.x = this->dyna.actor.world.pos.x;
     somePos.y = this->dyna.actor.world.pos.y + 10.0f;
