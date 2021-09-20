@@ -6,12 +6,54 @@
 struct EnDns;
 
 typedef void (*EnDnsActionFunc)(struct EnDns*, GlobalContext*);
+typedef s32 (*EnDnsFunc)(struct EnDns*, GlobalContext*);
+
+#define ENDNS_GET_7(thisx) ((thisx)->params & 7)
+#define ENDNS_GET_4000(thisx) ((thisx)->params & 0x4000)
+#define ENDNS_GET_8000(thisx) ((thisx)->params & 0x8000)
+
+enum {
+    /* 0x0 */ ENDNS_GET_7_0,
+    /* 0x1 */ ENDNS_GET_7_1,
+    /* 0x2 */ ENDNS_GET_7_2,
+    /* 0x3 */ ENDNS_GET_7_3,
+};
 
 typedef struct EnDns {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x44];
-    /* 0x0188 */ EnDnsActionFunc actionFunc;
-    /* 0x018C */ char unk_18C[0x174];
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ SkelAnime skelAnime;
+    /* 0x188 */ EnDnsActionFunc actionFunc;
+    /* 0x18C */ ColliderCylinder collider;
+    /* 0x1D8 */ u8 unk_1D8;
+    /* 0x1D9 */ UNK_TYPE1 unk_1D9[0x3];
+    /* 0x1DC */ s32 unk_1DC;
+    /* 0x1E0 */ s32* unk_1E0;
+    /* 0x1E4 */ Gfx* unk_1E4[13];
+    /* 0x218 */ Vec3f unk_218;
+    /* 0x224 */ Vec3s unk_224;
+    /* 0x22A */ Vec3s jointTable[13];
+    /* 0x278 */ Vec3s morphTable[13];
+    /* 0x2C6 */ u16 unk_2C6;
+    /* 0x2C8 */ u16 unk_2C8;
+    /* 0x2CA */ UNK_TYPE1 unk_2CA[0x2];
+    /* 0x2CC */ s16 unk_2CC;
+    /* 0x2CE */ s16 unk_2CE;
+    /* 0x2D0 */ s16 unk_2D0;
+    /* 0x2D2 */ s16 unk_2D2;
+    /* 0x2D4 */ s16 unk_2D4;
+    /* 0x2D6 */ s16 unk_2D6;
+    /* 0x2D8 */ s16 unk_2D8;
+    /* 0x2DA */ s16 unk_2DA;
+    /* 0x2DC */ s16 unk_2DC;
+    /* 0x2DE */ s16 unk_2DE;
+    /* 0x2E0 */ s16 unk_2E0;
+    /* 0x2E4 */ f32 unk_2E4;
+    /* 0x2E8 */ UNK_TYPE1 unk_2E8[0x4];
+    /* 0x2EC */ f32 unk_2EC;
+    /* 0x2F0 */ f32 unk_2F0;
+    /* 0x2F4 */ EnDnsFunc unk_2F4;
+    /* 0x2F8 */ s32 unk_2F8;
+    /* 0x2FC */ s32 unk_2FC;
 } EnDns; // size = 0x300
 
 extern const ActorInit En_Dns_InitVars;

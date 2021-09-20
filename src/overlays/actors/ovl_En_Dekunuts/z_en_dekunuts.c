@@ -548,7 +548,7 @@ void func_808BE4D4(EnDekunuts* this, GlobalContext* globalCtx) {
         sp40.y = this->actor.world.pos.y + 18.0f;
         sp40.z = this->actor.world.pos.z;
         EffectSsDeadDb_Spawn(globalCtx, &sp40, &D_801D15B0, &D_801D15B0, &D_808BEF90, &D_808BEF94, 200, 0, 13);
-        func_800F0568(globalCtx, &this->actor.world.pos, 11, NA_SE_EN_EXTINCT);
+        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 11, NA_SE_EN_EXTINCT);
         sp40.y = this->actor.world.pos.y + 10.0f;
         EffectSsHahen_SpawnBurst(globalCtx, &sp40, 3.0f, 0, 12, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
         Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0xE0);
@@ -582,8 +582,8 @@ void func_808BE73C(EnDekunuts* this, GlobalContext* globalCtx) {
         if ((this->unk_18E != 10) || !(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
             func_808BD3B4(this, globalCtx);
             if ((this->actor.colChkInfo.mass == 50) || (this->actor.params != ENDEKUNUTS_GET_FF00_0)) {
-                if ((this->actor.params != ENDEKUNUTS_GET_FF00_1) && !func_800BE22C(&this->actor)) {
-                    func_800BBA88(globalCtx, &this->actor);
+                if ((this->actor.params != ENDEKUNUTS_GET_FF00_1) && !Actor_ApplyDamage(&this->actor)) {
+                    Enemy_StartFinishingBlow(globalCtx, &this->actor);
                 }
 
                 if (this->actor.params == ENDEKUNUTS_GET_FF00_1) {
@@ -639,7 +639,7 @@ void func_808BE73C(EnDekunuts* this, GlobalContext* globalCtx) {
             func_808BDE7C(this);
         } else if (this->actor.colChkInfo.health != 0) {
             this->actor.colChkInfo.health = 0;
-            func_800BBA88(globalCtx, &this->actor);
+            Enemy_StartFinishingBlow(globalCtx, &this->actor);
             func_808BE294(this, 0);
         }
     }
