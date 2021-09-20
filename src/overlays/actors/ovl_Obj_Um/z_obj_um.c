@@ -1567,14 +1567,12 @@ void func_80B7AEFC(ObjUm* this, GlobalContext* globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->unk_160);
 }
 
-void func_80B7AF30(ObjUm* this, GlobalContext* globalCtx);
-#ifdef NON_MATCHING
 void func_80B7AF30(ObjUm* this, GlobalContext* globalCtx) {
     if (!(this->unk_2F4 & 1)) {
         this->dyna.actor.shape.rot.x = 0;
         this->dyna.actor.shape.rot.z = 0;
     } else {
-        UNK_TYPE sp44;
+        CollisionPoly* sp44;
         s32 pad;
         s32 pad2;
         Vec3f sp30;
@@ -1586,14 +1584,14 @@ void func_80B7AF30(ObjUm* this, GlobalContext* globalCtx) {
         this->unk_2D0 = this->unk_2C4;
         this->unk_2E8 = this->unk_2DC;
 
-        this->unk_2D0.y = func_800C3FA0(&globalCtx->colCtx, &sp44, &this->unk_2C4, &this->unk_2DC);
+        this->unk_2D0.y = func_800C3FA0(&globalCtx->colCtx, &sp44, &this->unk_2C4);
         if (this->unk_2D0.y == -32000.0f) {
             this->unk_2D0.y = this->dyna.actor.floorHeight;
         }
 
         if (1) { } 
 
-        this->unk_2E8.y = func_800C3FA0(&globalCtx->colCtx, &sp44, &this->unk_2DC, &this->unk_2DC);
+        this->unk_2E8.y = func_800C3FA0(&globalCtx->colCtx, &sp44, &this->unk_2DC);
         if (this->unk_2E8.y == -32000.0f) {
             this->unk_2E8.y = this->dyna.actor.floorHeight;
         }
@@ -1610,9 +1608,6 @@ void func_80B7AF30(ObjUm* this, GlobalContext* globalCtx) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Um/func_80B7AF30.s")
-#endif
 
 void func_80B7B154(ObjUm* this, GlobalContext* globalCtx) {
     SkelAnime_ChangeAnimDefaultStop(&this->unk_160, &D_06012CC0);
