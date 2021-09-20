@@ -155,40 +155,6 @@ struct_80B7C25C D_80B7C274[] = {
 
 Vec3f D_80B7C284 = {4223.0f, -979.0f, 4098.0f};
 Vec3f D_80B7C290 = {4223.0f, -980.0f, -4083.0f};
-Vec3f D_80B7C29C = {0.0f, -1.0f, 0.0f};
-Gfx* D_80B7C2A8[] = {D_06000040, D_06000910, D_060011E0};
-
-s32 D_80B7C2B4 [] = {
-    0x00000000,
-    0x060052B0,
-    0x06003C60,
-    0x06003C60,
-    0x06003C60,
-    0x060067C0,
-};
-
-s32 D_80B7C2CC[] = {
-    0x00000000,
-    0x00000000,
-    0x06004B60,
-    0x060043E0,
-    0x00000000,
-    0x00000000,
-};
-
-s32 D_80B7C2E4[] = {
-    0x00000000,
-    0x4485C000,
-    0x4485C000,
-    0x4485C000,
-    0x4485C000,
-    0x45034000,
-};
-
-Vec3f D_80B7C2FC = {2000.0f, 1070.0f, 0.0f};
-Vec3f D_80B7C308 = {2500.0f, 200.0f, 0.0f};
-Vec3f D_80B7C314 = {2000.0f, 0.0f, -2000.0f};
-
 
 
 // actionfuncs
@@ -1880,8 +1846,6 @@ s32 func_80B7B598(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Um/func_80B7B598.s")
 #endif
 
-#ifdef NON_MATCHING
-// Needs to import data
 void func_80B7B93C(GlobalContext* globalCtx, Vec3f* arg1) {
     Vec3f sp8C = {0.0f, -1.0f, 0.0f};
     Gfx* sp80[] = {D_06000040, D_06000910, D_060011E0};
@@ -1897,10 +1861,38 @@ void func_80B7B93C(GlobalContext* globalCtx, Vec3f* arg1) {
         EffectSsHahen_Spawn(globalCtx, arg1, &sp70, &sp8C, 1, 0x64, 0x1FC, 0xA, sp80[(s32)(Rand_ZeroOne() * ARRAY_COUNT(sp80))]);
     }
 }
-#else
-void func_80B7B93C(GlobalContext* globalCtx, Vec3f* arg1);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Um/func_80B7B93C.s")
-#endif
+
+s32 D_80B7C2B4 [] = {
+    0x00000000,
+    0x060052B0,
+    0x06003C60,
+    0x06003C60,
+    0x06003C60,
+    0x060067C0,
+};
+
+s32 D_80B7C2CC[] = {
+    0x00000000,
+    0x00000000,
+    0x06004B60,
+    0x060043E0,
+    0x00000000,
+    0x00000000,
+};
+
+s32 D_80B7C2E4[] = {
+    0x00000000,
+    0x4485C000,
+    0x4485C000,
+    0x4485C000,
+    0x4485C000,
+    0x45034000,
+};
+
+Vec3f D_80B7C2FC = {2000.0f, 1070.0f, 0.0f};
+Vec3f D_80B7C308 = {2500.0f, 200.0f, 0.0f};
+Vec3f D_80B7C314 = {2000.0f, 0.0f, -2000.0f};
+
 
 #ifdef MIPS_2_C_OUTPUT
 void func_80B7BABC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor) {
