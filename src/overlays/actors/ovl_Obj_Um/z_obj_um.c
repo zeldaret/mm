@@ -47,10 +47,6 @@ const ActorInit Obj_Um_InitVars = {
 };
 
 
-
-// global?
-extern Vec3s D_801D15BC;
-
 extern FlexSkeletonHeader D_06011DF8;
 extern AnimationHeader D_06012CC0;
 extern CollisionHeader D_06007E20;
@@ -93,7 +89,7 @@ TexturePtr D_80B7C128[] = {
 };
 
 // static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80B7C138 = {
+static ColliderCylinderInit sCylinderInit = {
     { COLTYPE_HIT3, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK1, { 0x00000000, 0x00, 0x00 }, { 0x00000020, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
     { 40, 64, 0, { 0, 0, 0 } },
@@ -125,7 +121,7 @@ struct_80B7C254 D_80B7C164[12] = {
 
 
 // static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80B7C254[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneScale, 1200, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_STOP),
 };
@@ -711,7 +707,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_2F4 = 0;
     this->dyna.actor.gravity = -3.5f;
 
-    Actor_ProcessInitChain((Actor* ) this, D_80B7C254);
+    Actor_ProcessInitChain((Actor* ) this, sInitChain);
     ActorShape_Init(&this->dyna.actor.shape, 0.0f, NULL, 50.0f);
     SkelAnime_InitSV(globalCtx, &this->unk_160, &D_06011DF8, NULL, this->unk_1A4, this->unk_228, 0x16);
     SkelAnime_ChangeAnimDefaultRepeat(&this->unk_160, &D_06012CC0);
@@ -816,8 +812,8 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
 
-    Collider_InitAndSetCylinder(globalCtx, &this->unk_424[0], (Actor* ) this, &D_80B7C138);
-    Collider_InitAndSetCylinder(globalCtx, &this->unk_424[1], (Actor* ) this, &D_80B7C138);
+    Collider_InitAndSetCylinder(globalCtx, &this->unk_424[0], (Actor* ) this, &sCylinderInit);
+    Collider_InitAndSetCylinder(globalCtx, &this->unk_424[1], (Actor* ) this, &sCylinderInit);
 
     return;
 }
@@ -1862,7 +1858,7 @@ void func_80B7B93C(GlobalContext* globalCtx, Vec3f* arg1) {
     }
 }
 
-s32 D_80B7C2B4 [] = {
+Gfx* D_80B7C2B4 [] = {
     0x00000000,
     0x060052B0,
     0x06003C60,
@@ -1871,7 +1867,7 @@ s32 D_80B7C2B4 [] = {
     0x060067C0,
 };
 
-s32 D_80B7C2CC[] = {
+Gfx* D_80B7C2CC[] = {
     0x00000000,
     0x00000000,
     0x06004B60,
@@ -1880,13 +1876,13 @@ s32 D_80B7C2CC[] = {
     0x00000000,
 };
 
-s32 D_80B7C2E4[] = {
-    0x00000000,
-    0x4485C000,
-    0x4485C000,
-    0x4485C000,
-    0x4485C000,
-    0x45034000,
+f32 D_80B7C2E4[] = {
+    0.0f,
+    1070.0f,
+    1070.0f,
+    1070.0f,
+    1070.0f,
+    2100.0f,
 };
 
 Vec3f D_80B7C2FC = {2000.0f, 1070.0f, 0.0f};
