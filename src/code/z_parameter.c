@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010CB80.s")

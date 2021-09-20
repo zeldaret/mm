@@ -393,12 +393,12 @@ void func_80876B08(EnDodongo* this, GlobalContext* globalCtx) {
     s16 yDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
     if (ABS_ALT(yDiff) < 0x4000) {
-        if (!(player->stateFlags1 & 0x00800000) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK)) {
+        if (!(player->stateFlags1 & 0x00800000) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE)) {
             func_808777A8(this);
         } else {
             func_80877494(this);
         }
-    } else if (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK) {
+    } else if (Player_GetMask(globalCtx) != PLAYER_MASK_STONE) {
         func_80878354(this);
     } else {
         func_80877494(this);
@@ -591,7 +591,7 @@ void func_80877500(EnDodongo* this, GlobalContext* globalCtx) {
     }
 
     if ((Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < 400.0f) &&
-        (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK)) {
+        (Player_GetMask(globalCtx) != PLAYER_MASK_STONE)) {
         temp_v1 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
         Math_ScaledStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0x1F4);
         if (this->actor.xzDistToPlayer < (100.0f * this->unk_334)) {
@@ -602,7 +602,7 @@ void func_80877500(EnDodongo* this, GlobalContext* globalCtx) {
         }
     } else {
         if ((Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 150.0f) ||
-            (Player_GetMask(globalCtx) == PLAYER_MASK_STONE_MASK)) {
+            (Player_GetMask(globalCtx) == PLAYER_MASK_STONE)) {
             Math_ScaledStepToS(&this->actor.world.rot.y, Actor_YawToPoint(&this->actor, &this->actor.home.pos), 0x1F4);
         }
 
@@ -832,7 +832,7 @@ void func_80878424(EnDodongo* this, GlobalContext* globalCtx) {
 
     this->timer++;
     if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
-        if (!(player->stateFlags1 & 0x800000) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK)) {
+        if (!(player->stateFlags1 & 0x800000) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE)) {
             this->collider1.base.atFlags &= ~AT_ON;
             func_808777A8(this);
         } else {

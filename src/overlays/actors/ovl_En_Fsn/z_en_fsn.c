@@ -967,7 +967,7 @@ void EnFsn_MakeOffer(EnFsn* this, GlobalContext* globalCtx) {
                         this->getItemId = GI_RUPEE_PURPLE;
                         break;
                     case 200:
-                        this->getItemId = GI_RUPEE_GOLD;
+                        this->getItemId = GI_RUPEE_HUGE;
                         break;
                 }
                 this->actionFunc = EnFsn_GiveItem;

@@ -136,7 +136,7 @@ void EnItem00_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->unk154 = 0.044999998f;
             shadowOffset = 320.0f;
             break;
-        case ITEM00_RUPEE_ORANGE:
+        case ITEM00_RUPEE_HUGE:
             Actor_SetScale(&this->actor, 0.044999998f);
             this->unk154 = 0.044999998f;
             shadowOffset = 750.0f;
@@ -205,8 +205,8 @@ void EnItem00_Init(Actor* thisx, GlobalContext* globalCtx) {
         case ITEM00_RUPEE_PURPLE:
             Item_Give(globalCtx, ITEM_RUPEE_PURPLE);
             break;
-        case ITEM00_RUPEE_ORANGE:
-            Item_Give(globalCtx, ITEM_RUPEE_GOLD);
+        case ITEM00_RUPEE_HUGE:
+            Item_Give(globalCtx, ITEM_RUPEE_HUGE);
             break;
         case ITEM00_HEART:
             Item_Give(globalCtx, ITEM_HEART);
@@ -510,9 +510,9 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
             this->unk1A4 = 1;
             Item_Give(globalCtx, ITEM_RUPEE_PURPLE);
             break;
-        case ITEM00_RUPEE_ORANGE:
+        case ITEM00_RUPEE_HUGE:
             this->unk1A4 = 1;
-            Item_Give(globalCtx, ITEM_RUPEE_GOLD);
+            Item_Give(globalCtx, ITEM_RUPEE_HUGE);
             break;
         case ITEM00_STICK:
             getItemId = GI_STICKS_1;
@@ -596,7 +596,7 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
             break;
     }
 
-    if ((this->actor.params <= ITEM00_RUPEE_RED) || (this->actor.params == ITEM00_RUPEE_ORANGE)) {
+    if ((this->actor.params <= ITEM00_RUPEE_RED) || (this->actor.params == ITEM00_RUPEE_HUGE)) {
         play_sound(NA_SE_SY_GET_RUPY);
     } else if (getItemId != GI_NONE) {
         if (Actor_HasParent(&this->actor, globalCtx)) {
@@ -640,7 +640,7 @@ void EnItem00_Draw(Actor* thisx, GlobalContext* globalCtx) {
             case ITEM00_RUPEE_GREEN:
             case ITEM00_RUPEE_BLUE:
             case ITEM00_RUPEE_RED:
-            case ITEM00_RUPEE_ORANGE:
+            case ITEM00_RUPEE_HUGE:
             case ITEM00_RUPEE_PURPLE:
                 EnItem00_DrawRupee(this, globalCtx);
                 break;
@@ -1177,7 +1177,7 @@ void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3
 #endif
 
 s32 D_801AE194[32] = { ITEM00_NO_DROP,     ITEM00_RUPEE_GREEN,     ITEM00_RUPEE_BLUE,  ITEM00_NO_DROP,
-                       ITEM00_RUPEE_RED,   ITEM00_RUPEE_PURPLE,    ITEM00_NO_DROP,     ITEM00_RUPEE_ORANGE,
+                       ITEM00_RUPEE_RED,   ITEM00_RUPEE_PURPLE,    ITEM00_NO_DROP,     ITEM00_RUPEE_HUGE,
                        ITEM00_COMPASS,     ITEM00_MUSHROOM_CLOUD,  ITEM00_HEART,       ITEM00_3_HEARTS,
                        ITEM00_HEART_PIECE, ITEM00_HEART_CONTAINER, ITEM00_MAGIC_SMALL, ITEM00_MAGIC_LARGE,
                        ITEM00_FLEXIBLE,    ITEM00_BIG_FAIRY,       ITEM00_NO_DROP,     ITEM00_NUTS_10,

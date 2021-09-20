@@ -256,7 +256,7 @@ typedef enum {
     /* 0x10 */ ITEM00_MASK,
     /* 0x11 */ ITEM00_SMALL_KEY,
     /* 0x12 */ ITEM00_FLEXIBLE,
-    /* 0x13 */ ITEM00_RUPEE_ORANGE,
+    /* 0x13 */ ITEM00_RUPEE_HUGE,
     /* 0x14 */ ITEM00_RUPEE_PURPLE,
     /* 0x15 */ ITEM00_3_HEARTS,
     /* 0x16 */ ITEM00_SHIELD_HERO,
