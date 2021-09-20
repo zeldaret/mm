@@ -2039,8 +2039,8 @@ void func_80B7BABC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Um/func_80B7BABC.s")
 #endif
 
-#ifdef NON_EQUIVALENT
 void func_80B7BEA4(Vec3f* arg0, s16 arg1, Vec3f* arg2, u8 arg3, GlobalContext* globalCtx) {
+    f32 temp;
     Vec3f sp108;
     CollisionPoly* sp104;
     Mtx* sp100;
@@ -2048,11 +2048,11 @@ void func_80B7BEA4(Vec3f* arg0, s16 arg1, Vec3f* arg2, u8 arg3, GlobalContext* g
     MtxF sp80;
     MtxF sp40;
 
-    sp108.x = arg0->x;
-    sp108.y = arg0->y + 1.0f;
-    sp108.z = arg0->z;
-    if (sp104 != 0) {
-        func_800C0094(sp104, arg0->x, func_800C4000(globalCtx, &globalCtx->colCtx, &sp104, &sp108), arg0->z, (MtxF* ) &spC0);
+    VEC_SET(sp108, arg0->x, arg0->y + 1.0f, arg0->z);
+
+    temp = func_800C4000(globalCtx, &globalCtx->colCtx, &sp104, &sp108);
+    if (sp104 != NULL) {
+        func_800C0094(sp104, arg0->x, temp, arg0->z, &spC0);
     } else {
         SkinMatrix_SetTranslate(&spC0, arg0->x, arg0->y, arg0->z);
     }
@@ -2073,7 +2073,6 @@ void func_80B7BEA4(Vec3f* arg0, s16 arg1, Vec3f* arg2, u8 arg3, GlobalContext* g
         */
         gSPMatrix(POLY_OPA_DISP++, &D_801D1DE0, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        sp100 = sp100;
         /*
         temp_s0->polyOpa.p = Gfx_CallSetupDL(temp_s0->polyOpa.p, 0x2CU);
         temp_v0_3 = temp_s0->polyOpa.p;
@@ -2081,7 +2080,7 @@ void func_80B7BEA4(Vec3f* arg0, s16 arg1, Vec3f* arg2, u8 arg3, GlobalContext* g
         temp_v0_3->words.w0 = 0xFA000000;
         */
         POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x2C);
-        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, arg3);
 
         /*
         temp_v0_3->words.w1 = (u32) arg3;
@@ -2103,10 +2102,6 @@ void func_80B7BEA4(Vec3f* arg0, s16 arg1, Vec3f* arg2, u8 arg3, GlobalContext* g
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }
-#else
-void func_80B7BEA4(Vec3f* arg0, s16 arg1, Vec3f* arg2, u8 arg3, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Um/func_80B7BEA4.s")
-#endif
 
 void ObjUm_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
