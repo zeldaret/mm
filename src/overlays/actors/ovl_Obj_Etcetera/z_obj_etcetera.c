@@ -129,7 +129,36 @@ void func_80A7C168(ObjEtcetera* this, GlobalContext* globalCtx) {
     func_80A7BDC8(this, globalCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Etcetera/func_80A7C1F0.s")
+void func_80A7C1F0(ObjEtcetera* this, GlobalContext* globalCtx) {
+    // In order to match, we are seemingly required to access scale.x at one point
+    // without using this. We can create a thisx or dyna pointer to achieve that, but
+    // it's more likely they used dyna given that func_800CAF70 takes a DynaPolyActor.
+    DynaPolyActor* dyna = &this->dyna;
+    f32 scaleTemp;
+
+    if (func_800CAF70(dyna) != 0) {
+        this->unk_276 = (u16)this->unk_276 | 1;
+    } else {
+        this->unk_276 = (u16)this->unk_276 & ~1;
+    }
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    if (0 < this->unk_274) {
+        this->unk_274--;
+    } else {
+        this->dyna.actor.draw = func_80A7C690;
+        this->actionFunc = func_80A7BF08;
+        Actor_SetScale(&this->dyna.actor, 0.01f);
+        this->dyna.actor.scale.y = 0.02f;
+        this->unk_274 = 0;
+        this->unk_270 = 0.0f;
+        return;
+    }
+    this->unk_270 *= 0.8f;
+    this->unk_270 -= (this->dyna.actor.scale.x - 0.01f) * 0.4f;
+    scaleTemp = dyna->actor.scale.x + this->unk_270;
+    Actor_SetScale(&this->dyna.actor, scaleTemp);
+    this->dyna.actor.scale.y = 2.0f * scaleTemp;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Etcetera/func_80A7C308.s")
 
