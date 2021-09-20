@@ -439,7 +439,7 @@ void func_80B77770(ObjUm* this, GlobalContext* globalCtx) {
     sp58->unk8 = (f32) temp_t8_5->z;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B77770.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Um/func_80B77770.s")
 #endif
 
 #ifdef NON_MATCHING
@@ -500,7 +500,7 @@ s32 func_80B77FA4(ObjUm* this, GlobalContext* globalCtx) {
     return 0;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B77FA4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Um/func_80B77FA4.s")
 #endif
 
 #ifdef NON_EQUIVALENT
@@ -561,7 +561,7 @@ s32 func_80B781DC(ObjUm* this, EnHorse* arg2, EnHorse* arg3, GlobalContext* glob
 }
 #else
 s32 func_80B781DC(ObjUm* this, EnHorse* arg2, EnHorse* arg3, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B781DC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Um/func_80B781DC.s")
 #endif
 
 s32 func_80B783E0(ObjUm* this, GlobalContext* globalCtx, s32 arg2, EnHorse* arg3) {
@@ -988,7 +988,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
     return;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/ObjUm_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Um/ObjUm_Init.s")
 #endif
 
 void ObjUm_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -1790,7 +1790,7 @@ void func_80B7AF30(ObjUm* this, GlobalContext* globalCtx) {
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7AF30.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Um/func_80B7AF30.s")
 #endif
 
 void func_80B7B154(ObjUm* this, GlobalContext* globalCtx) {
@@ -1856,7 +1856,7 @@ void func_80B7B18C(ObjUm* this, GlobalContext* globalCtx, s32 arg2) {
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7B18C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Um/func_80B7B18C.s")
 #endif
 
 void ObjUm_Update(Actor* thisx, GlobalContext* globalCtx) {
@@ -2009,7 +2009,7 @@ s32 func_80B7B598(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 }
 #else
 s32 func_80B7B598(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7B598.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Um/func_80B7B598.s")
 #endif
 
 #ifdef NON_MATCHING
@@ -2030,7 +2030,7 @@ void func_80B7B93C(GlobalContext* globalCtx, Vec3f* arg1) {
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7B93C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Um/func_80B7B93C.s")
 #endif
 
 #ifdef MIPS_2_C_OUTPUT
@@ -2172,7 +2172,7 @@ block_18:
 }
 #else
 void func_80B7BABC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7BABC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Um/func_80B7BABC.s")
 #endif
 
 #ifdef NON_EQUIVALENT
@@ -2241,7 +2241,7 @@ void func_80B7BEA4(Vec3f* arg0, s16 arg1, Vec3f* arg2, u8 arg3, GlobalContext* g
 }
 #else
 void func_80B7BEA4(Vec3f* arg0, s16 arg1, Vec3f* arg2, u8 arg3, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Um_0x80B77770/func_80B7BEA4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Um/func_80B7BEA4.s")
 #endif
 
 void ObjUm_Draw(Actor* thisx, GlobalContext* globalCtx) {
