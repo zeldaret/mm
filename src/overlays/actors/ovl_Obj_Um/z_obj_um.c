@@ -675,19 +675,16 @@ void func_80B78EFC(ObjUm* this, GlobalContext* globalCtx, s16 arg2) {
     player->actor.focus.rot.y += arg2;
 }
 
-#ifdef NON_MATCHING
 void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     ObjUm* this = THIS;
     s32 sp54 = true;
-    Vec3s sp48;
     s32 i;
 
     BcCheck3_BgActorInit(&this->dyna, 0);
     this->unk_350 = 0;
 
     this->unk_2C4 = this->dyna.actor.world.pos;
-
     this->unk_2DC = this->dyna.actor.world.pos;
     this->unk_308 = this->dyna.actor.world.pos;
 
@@ -707,7 +704,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_2F4 = 0;
     this->dyna.actor.gravity = -3.5f;
 
-    Actor_ProcessInitChain((Actor* ) this, sInitChain);
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     ActorShape_Init(&this->dyna.actor.shape, 0.0f, NULL, 50.0f);
     SkelAnime_InitSV(globalCtx, &this->unk_160, &D_06011DF8, NULL, this->unk_1A4, this->unk_228, 0x16);
     SkelAnime_ChangeAnimDefaultRepeat(&this->unk_160, &D_06012CC0);
@@ -715,12 +712,11 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_2AC = 0;
     func_80B7B154(this, globalCtx);
 
-    // needs extra lh
-    this->unk_2AE = ((this->dyna.actor.params & 0xFF00) >> 8);
-    this->unk_2B0 = (this->dyna.actor.params & 0xFF);
+    this->unk_2AE = (thisx->params & 0xFF00) >> 8;
+    this->unk_2B0 = (thisx->params & 0xFF);
 
-    if ((gSaveContext.weekEventReg[0x16] & 1) == 0) {
-        Actor_MarkForDeath((Actor* ) this);
+    if (!(gSaveContext.weekEventReg[0x16] & 1)) {
+        Actor_MarkForDeath(&this->dyna.actor);
         return;
     }
 
@@ -728,14 +724,14 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
         ObjUm_SetupAction(this, func_80B7AEFC);
     } else if (this->unk_2AE == 1) {
         this->unk_2BC = this->unk_2B0;
-        if ((gSaveContext.weekEventReg[0x1F] & 0x80) != 0) {
+        if (gSaveContext.weekEventReg[0x1F] & 0x80) {
             sp54 = false;
             this->unk_2F4 |= 0x100;
             ObjUm_SetupAction(this, func_80B7A144);
             func_800FE484();
         } else {
-            if (((gSaveContext.weekEventReg[0x38] & 0x80) != 0) || (s32) (gSaveContext.time) >= 0xCAAA || (s32) gSaveContext.time < 0x4001 || ((gSaveContext.weekEventReg[0x36]) & 1) != 0 || ((gSaveContext.weekEventReg[0x36] & 2) != 0)) {
-                Actor_MarkForDeath((Actor* ) this);
+            if ((gSaveContext.weekEventReg[0x22] & 0x80)  || gSaveContext.time >= CLOCK_TIME(19, 0) || (s32) gSaveContext.time <= CLOCK_TIME(6, 0) || (gSaveContext.weekEventReg[0x34] & 1) || (gSaveContext.weekEventReg[0x34] & 2)) {
+                Actor_MarkForDeath(&this->dyna.actor);
                 return;
             }
             this->dyna.actor.targetMode = 6;
@@ -743,12 +739,12 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
             ObjUm_SetupAction(this, func_80B79A50);
         }
     } else if (this->unk_2AE == 2) {
-        if ((gSaveContext.weekEventReg[0x1F] & 0x80) == 0 || (((gSaveContext.weekEventReg[0x34]) & 1) != 0)) {
-            Actor_MarkForDeath((Actor* ) this);
+        if (!(gSaveContext.weekEventReg[0x1F] & 0x80) || (gSaveContext.weekEventReg[0x34] & 1)) {
+            Actor_MarkForDeath(&this->dyna.actor);
             return;
         }
 
-        if ((gSaveContext.weekEventReg[0x34] & 2) == 0) {
+        if (!(gSaveContext.weekEventReg[0x34] & 2)) {
             this->unk_2BC = this->unk_2B0;
             sp54 = false;
             func_800FE484();
@@ -757,10 +753,11 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
             func_80B78E88(this, globalCtx, 0);
         }
     } else if (this->unk_2AE == 3) {
-        if ((gSaveContext.weekEventReg[0x36] & 0x80) == 0) {
-            Actor_MarkForDeath((Actor* ) this);
+        if (!(gSaveContext.weekEventReg[0x1F] & 0x80)) {
+            Actor_MarkForDeath(&this->dyna.actor);
             return;
         }
+
         this->unk_2BC = this->unk_2B0;
         sp54 = false;
         func_800FE484();
@@ -768,8 +765,8 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_354 = 0;
         func_80B78E88(this, globalCtx, 0);
     } else if (this->unk_2AE == 4) {
-        if ((gSaveContext.weekEventReg[0x34] & 1) == 0 || (gSaveContext.weekEventReg[0x3B] & 2) != 0) {
-            Actor_MarkForDeath((Actor* ) this);
+        if (!(gSaveContext.weekEventReg[0x34] & 1) || (gSaveContext.weekEventReg[0x3B] & 2)) {
+            Actor_MarkForDeath(&this->dyna.actor);
             return;
         }
 
@@ -785,41 +782,35 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
         ObjUm_SetupAction(this, func_80B7AEFC);
     }
 
-    sp48 = D_801D15BC;
-
-    this->unk_2FE = sp48;
-    this->unk_2F8 = sp48;
+    this->unk_2F8 = this->unk_2FE = D_801D15BC;;
 
     if (sp54) {
-        BcCheck3_BgActorInit((DynaPolyActor* ) this, 0);
-        BgCheck3_LoadMesh(globalCtx, (DynaPolyActor* ) this, &D_06007E20);
+        BcCheck3_BgActorInit(&this->dyna, 0);
+        BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06007E20);
     } else {
-        BcCheck3_BgActorInit((DynaPolyActor* ) this, 3);
-        BgCheck3_LoadMesh(globalCtx, (DynaPolyActor* ) this, &D_06007F50);
+        BcCheck3_BgActorInit(&this->dyna, 3);
+        BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06007F50);
     }
 
     if (this->dyna.bgId == 0x32) {
-        Actor_MarkForDeath((Actor* ) this);
-        return ;
+        Actor_MarkForDeath(&this->dyna.actor);
+        return;
     }
 
     func_800C636C(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 
-    this->unk_2B8 = Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0xD, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, (s16) 0, (s16) (s32) this->dyna.actor.shape.rot.y, (s16) 0, 0x8012);
+    this->unk_2B8 = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_HORSE, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, 0, this->dyna.actor.shape.rot.y, 0, 0x8012);
 
     if (this->unk_2B8 == NULL) {
-        Actor_MarkForDeath((Actor* ) this);
+        Actor_MarkForDeath(&this->dyna.actor);
         return;
     }
 
-    Collider_InitAndSetCylinder(globalCtx, &this->unk_424[0], (Actor* ) this, &sCylinderInit);
-    Collider_InitAndSetCylinder(globalCtx, &this->unk_424[1], (Actor* ) this, &sCylinderInit);
+    Collider_InitAndSetCylinder(globalCtx, &this->unk_424[0], &this->dyna.actor, &sCylinderInit);
+    Collider_InitAndSetCylinder(globalCtx, &this->unk_424[1], &this->dyna.actor, &sCylinderInit);
 
     return;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Um/ObjUm_Init.s")
-#endif
 
 void ObjUm_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjUm* this = THIS;
@@ -871,32 +862,32 @@ s32 func_80B795A0(GlobalContext* globalCtx, ObjUm* this, s32 arg2) {
                 globalCtx->sceneLoadFlag = 0x14;
                 phi_v1 = true;
             } else {
-                func_800E8EA0(globalCtx, (Actor* ) this, 0x33B5U);
+                func_800E8EA0(globalCtx, &this->dyna.actor, 0x33B5U);
                 func_8019F230();
                 func_80151BB4(globalCtx, 6U);
                 phi_v1 = false;
             }
             break;
         case 0x33BB:
-            func_800E8EA0(globalCtx, (Actor* ) this, 0x33BCU);
+            func_800E8EA0(globalCtx, &this->dyna.actor, 0x33BCU);
             phi_v1 = false;
             break;
         case 0x33BC:
-            func_800E8EA0(globalCtx, (Actor* ) this, 0x33BDU);
+            func_800E8EA0(globalCtx, &this->dyna.actor, 0x33BDU);
             phi_v1 = false;
             break;
         case 0x33BD:
             if (globalCtx->msgCtx.choiceIndex == 0) {
-                func_800E8EA0(globalCtx, (Actor* ) this, 0x33BEU);
+                func_800E8EA0(globalCtx, &this->dyna.actor, 0x33BEU);
                 func_8019F230();
             } else {
-                func_800E8EA0(globalCtx, (Actor* ) this, 0x33BFU);
+                func_800E8EA0(globalCtx, &this->dyna.actor, 0x33BFU);
                 func_8019F208();
             }
             phi_v1 = false;
             break;
         case 0x33BE:
-            func_800E8EA0(globalCtx, (Actor* ) this, 0x33BCU);
+            func_800E8EA0(globalCtx, &this->dyna.actor, 0x33BCU);
             phi_v1 = false;
             break;
     }
@@ -950,7 +941,7 @@ s32 func_80B7984C(GlobalContext* globalCtx, ObjUm* this, s32 arg2, s32* arg3) {
         return 0;
     }
     if (*arg3 == 2) {
-        func_801518B0(globalCtx, this->dyna.actor.textId, (Actor* ) this);
+        func_801518B0(globalCtx, this->dyna.actor.textId, &this->dyna.actor);
         *arg3 = 1;
         return 0;
     }
@@ -960,7 +951,7 @@ s32 func_80B7984C(GlobalContext* globalCtx, ObjUm* this, s32 arg2, s32* arg3) {
         return 0;
     }
 
-    if (func_800B84D0((Actor* ) this, globalCtx) != 0) {
+    if (func_800B84D0(&this->dyna.actor, globalCtx) != 0) {
         *arg3 = 1;
         return 1;
     }
@@ -984,10 +975,10 @@ s32 func_80B7984C(GlobalContext* globalCtx, ObjUm* this, s32 arg2, s32* arg3) {
     }
 
     if (this->dyna.actor.xyzDistToPlayerSq <= 2500.0f) {
-        if (func_800B8614((Actor* ) this, globalCtx, 50.0f) != 0) {
+        if (func_800B8614(&this->dyna.actor, globalCtx, 50.0f) != 0) {
             this->dyna.actor.textId = func_80B797EC(globalCtx, this, arg2);
         }
-    } else if (func_800B863C((Actor* ) this, globalCtx) != 0) {
+    } else if (func_800B863C(&this->dyna.actor, globalCtx) != 0) {
         this->dyna.actor.textId = func_80B797EC(globalCtx, this, arg2);
     }
 
@@ -1321,7 +1312,7 @@ void func_80B7A494(ObjUm* this, GlobalContext* globalCtx) {
             }
         }
     } else {
-        Actor_SetVelocityAndMoveYRotationAndGravity((Actor* ) this);
+        Actor_SetVelocityAndMoveYRotationAndGravity(&this->dyna.actor);
         func_80B78DF0(this, globalCtx);
     }
 }
@@ -1366,7 +1357,7 @@ void func_80B7A614(ObjUm* this, GlobalContext* globalCtx) {
             sp20 = ActorCutscene_GetAdditionalCutscene(sp20);
         }
         if (ActorCutscene_GetCanPlayNext(sp20) != 0) {
-            ActorCutscene_StartAndSetUnkLinkFields(sp20, (Actor* ) this);
+            ActorCutscene_StartAndSetUnkLinkFields(sp20, &this->dyna.actor);
             ObjUm_SetupAction(this, func_80B7A494);
             this->unk_2F4 &= ~0x80;
         } else {
@@ -1374,7 +1365,7 @@ void func_80B7A614(ObjUm* this, GlobalContext* globalCtx) {
         }
     }
 
-    Actor_SetVelocityAndMoveYRotationAndGravity((Actor* ) this);
+    Actor_SetVelocityAndMoveYRotationAndGravity(&this->dyna.actor);
     func_80B78DF0(this, globalCtx);
 }
 
@@ -1682,7 +1673,7 @@ void func_80B7B18C(ObjUm* this, GlobalContext* globalCtx, s32 arg2) {
 
     if (this->unk_420 != this->unk_2AC / 0x199A) {
         this->unk_420 = this->unk_2AC / 0x199A;
-        Audio_PlayActorSound2((Actor* ) this, 0x2958U);
+        Audio_PlayActorSound2(&this->dyna.actor, 0x2958U);
     }
 }
 #else
