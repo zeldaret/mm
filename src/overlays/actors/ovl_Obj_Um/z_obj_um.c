@@ -1614,14 +1614,15 @@ void func_80B7B154(ObjUm* this, GlobalContext* globalCtx) {
     this->unk_304 = 0;
 }
 
-#ifdef NON_EQUIVALENT
 void func_80B7B18C(ObjUm* this, GlobalContext* globalCtx, s32 arg2) {
     s32 sp3C;
+    s32 temp;
     s32 sp34;
     f32 phi_f0;
 
     sp34 = arg2;
     phi_f0 = 0.0f;
+
     if (D_80B7C25C[arg2].unk_04 != 0) {
         this->unk_2F4 |= 2;
     } else {
@@ -1637,7 +1638,7 @@ void func_80B7B18C(ObjUm* this, GlobalContext* globalCtx, s32 arg2) {
     }
     this->unk_160.animPlaybackSpeed = phi_f0;
 
-    if ((this->unk_2F4 & 0x800) != 0) {
+    if (this->unk_2F4 & 0x800) {
         this->unk_160.animPlaybackSpeed = 1.0f;
         arg2 = -1;
     }
@@ -1649,31 +1650,35 @@ void func_80B7B18C(ObjUm* this, GlobalContext* globalCtx, s32 arg2) {
             if (this->unk_2B8 != NULL) {
                 this->unk_2B8->unk_538 = arg2;
             }
+
             if (sp3C) {
                 SkelAnime_ChangeAnimTransitionStop(&this->unk_160, D_80B7C25C[arg2].unk_00, -3.0f);
             } else {
                 SkelAnime_ChangeAnimDefaultStop(&this->unk_160, D_80B7C25C[arg2].unk_00);
             }
         } else {
-            if (this->unk_2B8 != NULL) {
-                ((EnHorse*)this->unk_2B8)->unk_538 = sp34;
+            EnHorse* unk_2B8 = this->unk_2B8;
+
+            if (unk_2B8 != NULL) {
+                unk_2B8->unk_538 = sp34;
             }
+
             if (sp3C) {
-                SkelAnime_ChangeAnimTransitionStop(&this->unk_160, D_80B7C274[-arg2].unk_00, -10.0f);
+                temp = 3-arg2;
+                SkelAnime_ChangeAnimTransitionStop(&this->unk_160, D_80B7C25C[temp].unk_00, -10.0f);
             } else {
-                SkelAnime_ChangeAnimDefaultStop(&this->unk_160, (D_80B7C274[-arg2].unk_00));
+                temp = 3-arg2;
+                SkelAnime_ChangeAnimDefaultStop(&this->unk_160, D_80B7C25C[temp].unk_00);
             }
         }
     }
 
-    if (this->unk_420 != this->unk_2AC / 0x199A) {
+    if (this->unk_2AC / 0x199A != this->unk_420) {
         this->unk_420 = this->unk_2AC / 0x199A;
-        Audio_PlayActorSound2(&this->dyna.actor, 0x2958U);
+        if (!D_80B7C25C) {}
+        Audio_PlayActorSound2(&this->dyna.actor, 0x2958);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Um/func_80B7B18C.s")
-#endif
 
 void ObjUm_Update(Actor* thisx, GlobalContext* globalCtx) {
     ObjUm* this = THIS;
