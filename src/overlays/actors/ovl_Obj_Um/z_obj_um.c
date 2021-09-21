@@ -149,8 +149,6 @@ struct_80B7C25C D_80B7C274[] = {
     {&D_060126C4, 0}
 };
 
-Vec3f D_80B7C284 = {4223.0f, -979.0f, 4098.0f};
-Vec3f D_80B7C290 = {4223.0f, -980.0f, -4083.0f};
 
 
 // actionfuncs
@@ -1754,21 +1752,13 @@ void ObjUm_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-
-#ifdef NON_EQUIVALENT
 s32 func_80B7B598(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    ObjUm* this = THIS;
+    ObjUm* this = thisx;
     Player* player = PLAYER;
-    Vec3f sp5C;
-    Vec3f sp50;
-    Gfx* sp44;
-    Gfx* sp40;
-    s16 sp3E;
-    Vec3f sp30;
+    s32 pad;
     s16 temp_v0_3;
-
-    sp5C = D_80B7C284;
-    sp50 = D_80B7C290;
+    Vec3f sp5C = {4223.0f, -979.0f, 4098.0f};
+    Vec3f sp50 = {4223.0f, -980.0f, -4083.0f};
 
     if ((limbIndex >= 0xB) && (this->unk_2AE == 0)) {
         *dList = NULL;
@@ -1791,31 +1781,30 @@ s32 func_80B7B598(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
         if ((this->unk_2F4 & 2) != 0) {
             rot->x = this->unk_2AC;
         }
-        SysMatrix_MultiplyVector3fByState((Vec3f* ) &sp50, &this->unk_2DC);
+        SysMatrix_MultiplyVector3fByState(&sp50, &this->unk_2DC);
     } else if ((limbIndex == 0xD) && ((this->unk_2F4 & 8) != 0)) {
         if ((func_8013D5E8(this->dyna.actor.shape.rot.y, 0x4E20, this->dyna.actor.yawTowardsPlayer) != 0) && (this->dyna.actor.xzDistToPlayer < 500.0f)) {
-            sp30 = player->actor.world.pos;
-            sp30.y = player->bodyPartsPos[7].y + 3.0f;
+            s16 sp3E;
+            Vec3f sp30 = player->actor.world.pos;
 
+            sp30.y = player->bodyPartsPos[7].y + 3.0f;
             sp3E = Math_Vec3f_Yaw(&this->dyna.actor.focus.pos, &sp30) - this->dyna.actor.shape.rot.y;
             temp_v0_3 = Math_Atan2S(this->dyna.actor.focus.pos.y - sp30.y, Math3D_XZLength(sp30.x - this->dyna.actor.focus.pos.x, sp30.z - this->dyna.actor.focus.pos.z));
-            this->unk_2FE.x = (s16) (rot->x + sp3E);
-            this->unk_2FE.y = (s16) rot->y;
-            this->unk_2FE.z = (s16) (rot->z + temp_v0_3);
-            Math_SmoothStepToS(&this->unk_2F8.x, this->unk_2FE.x, 4, 0x3E8, (s16) 1);
-            Math_SmoothStepToS(&this->unk_2F8.z, this->unk_2FE.z, 4, 0x3E8, (s16) 1);
+            this->unk_2FE.x = (rot->x + sp3E);
+            this->unk_2FE.y = rot->y;
+            this->unk_2FE.z = (rot->z + temp_v0_3);
+            Math_SmoothStepToS(&this->unk_2F8.x, this->unk_2FE.x, 4, 0x3E8, 1);
+            Math_SmoothStepToS(&this->unk_2F8.z, this->unk_2FE.z, 4, 0x3E8, 1);
             this->unk_2F8.y = (s16) rot->y;
             rot->x = this->unk_2F8.x;
             rot->z = this->unk_2F8.z;
-
-            // return 0;
         } else {
-            this->unk_2FE.x = (s16) rot->x;
-            this->unk_2FE.y = (s16) rot->y;
-            this->unk_2FE.z = (s16) rot->z;
-            Math_SmoothStepToS(&this->unk_2F8.x, this->unk_2FE.x, 4, 0x3E8, (s16) 1);
-            Math_SmoothStepToS(&this->unk_2F8.z, this->unk_2FE.z, 4, 0x3E8, (s16) 1);
-            this->unk_2F8.y = (s16) rot->y;
+            this->unk_2FE.x = rot->x;
+            this->unk_2FE.y = rot->y;
+            this->unk_2FE.z = rot->z;
+            Math_SmoothStepToS(&this->unk_2F8.x, this->unk_2FE.x, 4, 0x3E8, 1);
+            Math_SmoothStepToS(&this->unk_2F8.z, this->unk_2FE.z, 4, 0x3E8, 1);
+            this->unk_2F8.y = rot->y;
             rot->x = this->unk_2F8.x;
             rot->z = this->unk_2F8.z;
         }
@@ -1824,10 +1813,6 @@ s32 func_80B7B598(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     }
     return 0;
 }
-#else
-s32 func_80B7B598(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Um/func_80B7B598.s")
-#endif
 
 void func_80B7B93C(GlobalContext* globalCtx, Vec3f* arg1) {
     Vec3f sp8C = {0.0f, -1.0f, 0.0f};
