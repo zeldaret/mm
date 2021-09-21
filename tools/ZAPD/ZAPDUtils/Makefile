@@ -1,23 +1,28 @@
-CXXFLAGS = -Wall -O2 -g -std=c++17
-OBJ = Utils/BinaryWriter.o Utils/MemoryStream.o
-LIB = ZAPDUtils.a
+# Only used for standalone compilation, usually inherits these from the main makefile
+CXXFLAGS ?= -Wall -Wextra -O2 -g -std=c++17
 
-CPPFLAGS-$(MT) += -DCONFIG_MT
-CPPFLAGS += $(CPPFLAGS-y)
+SRC_DIRS  := $(shell find -type d -not -path "*build*")
+CPP_FILES := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.cpp))
+H_FILES   := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.h))
 
-.PHONY: all
+O_FILES   := $(foreach f,$(CPP_FILES:.cpp=.o),build/$f)
+LIB       := ZAPDUtils.a
+
+# create build directories
+$(shell mkdir -p $(foreach dir,$(SRC_DIRS),build/$(dir)))
+
 all: $(LIB)
 
-.PHONY: clean
 clean:
-	rm -f $(OBJ) $(LIB)
+	rm -rf build $(LIB)
 
-.INTERMEDIATE: $(OBJ)
+format:
+	clang-format-11 -i $(CPP_FILES) $(H_FILES)
 
-$(OBJ): Utils/BinaryReader.cpp Utils/BinaryWriter.cpp Utils/MemoryStream.cpp
+.PHONY: all clean format
 
-$(LIB): $(OBJ)
+build/%.o: %.cpp
+	$(CXX) $(CXXFLAGS) $(OPTFLAGS) -c $(OUTPUT_OPTION) $<
+
+$(LIB): $(O_FILES)
 	$(AR) rcs $@ $^
-
-%.o: %.cpp
-	$(COMPILE.c) $(OUTPUT_OPTION) $(CXXFLAGS) $< -I ./ -I ../ZAPD -I ../lib/tinyxml2

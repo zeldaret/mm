@@ -1,7 +1,6 @@
 #include <Utils/Directory.h>
 #include <Utils/File.h>
 #include <Utils/Path.h>
-#include "BuildInfo.h"
 #include "Globals.h"
 #include "Overlays/ZOverlay.h"
 #include "ZAnimation.h"
@@ -24,6 +23,8 @@
 #include "tinyxml2.h"
 
 using namespace tinyxml2;
+
+extern const char gBuildHash[];
 
 bool Parse(const fs::path& xmlFilePath, const fs::path& basePath, ZFileMode fileMode);
 

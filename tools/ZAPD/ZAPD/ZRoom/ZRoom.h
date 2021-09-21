@@ -34,7 +34,7 @@ public:
 	void DeclareReferencesLate(const std::string& prefix) override;
 
 	void DeclareVar(const std::string& prefix, const std::string body);
-	std::string GetBodySourceCode() const;
+	std::string GetBodySourceCode() const override;
 
 	std::string GetDefaultName(const std::string& prefix) const;
 	size_t GetDeclarationSizeFromNeighbor(uint32_t declarationAddress);

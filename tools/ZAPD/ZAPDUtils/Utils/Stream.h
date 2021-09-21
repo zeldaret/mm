@@ -20,6 +20,7 @@ enum class Endianess
 class Stream
 {
 public:
+	virtual ~Stream() = default;
 	virtual uint64_t GetLength() = 0;
 	uint64_t GetBaseAddress() { return baseAddress; }
 

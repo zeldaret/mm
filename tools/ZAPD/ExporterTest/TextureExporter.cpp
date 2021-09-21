@@ -1,7 +1,7 @@
 #include "TextureExporter.h"
 #include "../ZAPD/ZFile.h"
 
-void ExporterExample_Texture::Save(ZResource* res, fs::path outPath, BinaryWriter* writer)
+void ExporterExample_Texture::Save(ZResource* res, [[maybe_unused]]fs::path outPath, BinaryWriter* writer)
 {
 	ZTexture* tex = (ZTexture*)res;
 
