@@ -232,11 +232,11 @@ void func_80A7C308(ObjEtcetera* this, GlobalContext* globalCtx) {
             case TYPE_PINK_FLOWER_SPAWNED_FROM_MAD_SCRUB:
                 SkelAnime_Init(globalCtx, &this->skelAnime, &D_04011518, &D_0400EB7C, this->limbDrawTbl,
                                this->transitionDrawTbl, 11);
-                this->unk_27C = &D_0400ED80;
+                this->displayListPtr = &D_0400ED80;
                 break;
             case TYPE_GOLD_FLOWER:
             case TYPE_GOLD_FLOWER_SPAWNED_FROM_MAD_SCRUB:
-                this->unk_27C = &D_04011BD0;
+                this->displayListPtr = &D_04011BD0;
                 SkelAnime_Init(globalCtx, &this->skelAnime, &D_040127E8, &D_0400EB7C, this->limbDrawTbl,
                                this->transitionDrawTbl, 11);
                 this->collider.dim.height = 20;
@@ -293,7 +293,7 @@ void func_80A7C690(Actor* thisx, GlobalContext* globalCtx) {
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     func_8012C28C(globalCtx->state.gfxCtx);
-    gSPDisplayList(POLY_OPA_DISP++, this->unk_27C);
+    gSPDisplayList(POLY_OPA_DISP++, this->displayListPtr);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
