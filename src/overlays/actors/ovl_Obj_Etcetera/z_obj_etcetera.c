@@ -56,7 +56,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 extern ColliderCylinderInit D_80A7C790;
 
-static s16 D_80A7C7BC[] = { 0x0001, 0x0001, 0x0001, 0x0001 };
+static s16 objectIds[] = { GAMEPLAY_KEEP, GAMEPLAY_KEEP, GAMEPLAY_KEEP, GAMEPLAY_KEEP };
 
 static f32 flutterValues[] = { -1.0, -1.0, -1.0, -0.7, 0.0, 0.7, 1.0, 0.7, 0.0,
                                -0.7, -1.0, -0.7, 0.0,  0.7, 1.0, 0.7, 0.0, -0.7 };
@@ -73,7 +73,7 @@ void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
     if ((type < TYPE_PINK_FLOWER) || (type >= NUMBER_OF_TYPES)) {
         type = TYPE_PINK_FLOWER;
     }
-    objectIndex = Object_GetIndex(&globalCtx->objectCtx, D_80A7C7BC[type]);
+    objectIndex = Object_GetIndex(&globalCtx->objectCtx, objectIds[type]);
     if (objectIndex >= 0) {
         this->objIndex = objectIndex;
     }
