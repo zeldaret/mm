@@ -279,7 +279,7 @@ s32 func_80B77FA4(ObjUm* this, GlobalContext* globalCtx) {
     sp44 = Lib_SegmentedToVirtual(path->points);
     func_801A89A8(0x8003);
 
-    temp_v0 = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_HORSE, sp44[0].x, sp44[0].y, sp44[0].z, 0, this->dyna.actor.shape.rot.y, 0, 0x2013);
+    temp_v0 = (EnHorse*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_HORSE, sp44[0].x, sp44[0].y, sp44[0].z, 0, this->dyna.actor.shape.rot.y, 0, 0x2013);
     this->unk_358 = temp_v0;
 
     temp_v0->unk_540 = temp_v0->actor.world.pos;
@@ -301,7 +301,7 @@ s32 func_80B77FA4(ObjUm* this, GlobalContext* globalCtx) {
     temp_v0->curRaceWaypoint = 1;
 
 
-    temp_v0_2 = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_HORSE, sp44[1].x, sp44[1].y, sp44[1].z, 0, this->dyna.actor.shape.rot.y, 0, 0x2014);
+    temp_v0_2 = (EnHorse*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_HORSE, sp44[1].x, sp44[1].y, sp44[1].z, 0, this->dyna.actor.shape.rot.y, 0, 0x2014);
     this->unk_35C = temp_v0_2;
 
     temp_v0_2->unk_540 = temp_v0_2->actor.world.pos;
@@ -787,7 +787,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     func_800C636C(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 
-    this->unk_2B8 = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_HORSE, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, 0, this->dyna.actor.shape.rot.y, 0, 0x8012);
+    this->unk_2B8 = (EnHorse*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_HORSE, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, 0, this->dyna.actor.shape.rot.y, 0, 0x8012);
 
     if (this->unk_2B8 == NULL) {
         Actor_MarkForDeath(&this->dyna.actor);
@@ -980,6 +980,7 @@ s32 func_80B79A24(s32 arg0) {
     return 0;
 }
 
+
 void func_80B79A50(ObjUm* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
@@ -1075,7 +1076,7 @@ s32 func_80B79BA0(ObjUm* this, GlobalContext* globalCtx) {
 
     if (this->unk_2B8 != 0) {
         this->dyna.actor.world.rot.y = Math_Vec3f_Yaw(&this->dyna.actor.world.pos, &sp50);
-        func_800F415C(this->unk_2B8, &sp50, 0x190);
+        func_800F415C(&this->unk_2B8->actor, &sp50, 0x190);
 
         if (1) {}
 
@@ -1605,11 +1606,8 @@ void func_80B7B154(ObjUm* this, GlobalContext* globalCtx) {
 void func_80B7B18C(ObjUm* this, GlobalContext* globalCtx, s32 arg2) {
     s32 sp3C;
     s32 temp;
-    s32 sp34;
-    f32 phi_f0;
-
-    sp34 = arg2;
-    phi_f0 = 0.0f;
+    s32 sp34 = arg2;
+    f32 phi_f0 = 0.0f;
 
     if (D_80B7C25C[arg2].unk_04 != 0) {
         this->unk_2F4 |= 2;
@@ -1663,7 +1661,8 @@ void func_80B7B18C(ObjUm* this, GlobalContext* globalCtx, s32 arg2) {
 
     if (this->unk_2AC / 0x199A != this->unk_420) {
         this->unk_420 = this->unk_2AC / 0x199A;
-        if (!D_80B7C25C) {}
+        // Required to match
+        if (!&D_80B7C25C[0]) {}
         Audio_PlayActorSound2(&this->dyna.actor, 0x2958);
     }
 }
@@ -1747,7 +1746,7 @@ void ObjUm_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 func_80B7B598(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    ObjUm* this = thisx;
+    ObjUm* this = THIS;
     Player* player = PLAYER;
     s32 pad;
     s16 temp_v0_3;
@@ -1824,8 +1823,8 @@ void func_80B7B93C(GlobalContext* globalCtx, Vec3f* arg1) {
     }
 }
 
-void func_80B7BABC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor) {
-    ObjUm* this = actor;
+void func_80B7BABC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    ObjUm* this = THIS;
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
     Mtx *mtx_s3;
     Gfx* spFC [] = {
@@ -1934,7 +1933,7 @@ void func_80B7BABC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 
     }
     if (limbIndex == 0xD) {
-        SysMatrix_GetStateTranslation(&actor->focus.pos);
+        SysMatrix_GetStateTranslation(&this->dyna.actor.focus.pos);
     }
 }
 

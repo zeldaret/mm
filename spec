@@ -4173,7 +4173,7 @@ beginseg
     name "ovl_Obj_Um"
     compress
     include "build/src/overlays/actors/ovl_Obj_Um/z_obj_um.o"
-    include "build/data/ovl_Obj_Um/ovl_Obj_Um.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Um/ovl_Obj_Um_reloc.o"
 endseg
 
 beginseg
