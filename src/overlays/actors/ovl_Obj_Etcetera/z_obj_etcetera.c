@@ -19,8 +19,8 @@ void func_80A7C168(ObjEtcetera* this, GlobalContext* globalCtx);
 void ObjEtcetera_DoSpecialFlutter(ObjEtcetera* this, GlobalContext* globalCtx);
 void func_80A7C308(ObjEtcetera* this, GlobalContext* globalCtx);
 void ObjEtcetera_DoNormalFlutter(ObjEtcetera* this, GlobalContext* globalCtx);
-void func_80A7C690(Actor* thisx, GlobalContext* globalCtx);
-void func_80A7C718(Actor* thisx, GlobalContext* globalCtx);
+void ObjEtcetera_DrawWithoutSkelAnime(Actor* thisx, GlobalContext* globalCtx);
+void ObjEtcetera_DrawWithSkelAnime(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit Obj_Etcetera_InitVars = {
     ACTOR_OBJ_ETCETERA,
@@ -113,7 +113,7 @@ void ObjEtcetera_DoNormalFlutter(ObjEtcetera* this, GlobalContext* globalCtx) {
 void func_80A7BE8C(ObjEtcetera* this) {
     SkelAnime_ChangeAnim(&this->skelAnime, &D_040117A8, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_040117A8.common), 2,
                          0.0f);
-    this->dyna.actor.draw = func_80A7C718;
+    this->dyna.actor.draw = ObjEtcetera_DrawWithSkelAnime;
     this->actionFunc = func_80A7C168;
 }
 
@@ -124,7 +124,7 @@ void func_80A7BF08(ObjEtcetera* this, GlobalContext* globalCtx) {
     if ((player->stateFlags3 & 0x200) && (this->dyna.actor.xzDistToPlayer < 20.0f)) {
         SkelAnime_ChangeAnim(&this->skelAnime, &D_0400EB7C, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_0400EB7C.common), 2,
                              0.0f);
-        this->dyna.actor.draw = func_80A7C718;
+        this->dyna.actor.draw = ObjEtcetera_DrawWithSkelAnime;
         this->actionFunc = ObjEtcetera_DoSpecialFlutter;
         Actor_SetScale(&this->dyna.actor, 0.01f);
         this->dyna.actor.scale.y = 0.02f;
@@ -168,7 +168,7 @@ void func_80A7C168(ObjEtcetera* this, GlobalContext* globalCtx) {
         this->burrowFlag &= ~1;
     }
     if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
-        this->dyna.actor.draw = func_80A7C690;
+        this->dyna.actor.draw = ObjEtcetera_DrawWithoutSkelAnime;
         this->actionFunc = func_80A7BF08;
     }
     ObjEtcetera_DoNormalFlutter(this, globalCtx);
@@ -190,7 +190,7 @@ void ObjEtcetera_DoSpecialFlutter(ObjEtcetera* this, GlobalContext* globalCtx) {
     if (0 < this->flutterTimer) {
         this->flutterTimer--;
     } else {
-        this->dyna.actor.draw = func_80A7C690;
+        this->dyna.actor.draw = ObjEtcetera_DrawWithoutSkelAnime;
         this->actionFunc = func_80A7BF08;
         Actor_SetScale(&this->dyna.actor, 0.01f);
         this->dyna.actor.scale.y = 0.02f;
@@ -245,7 +245,7 @@ void func_80A7C308(ObjEtcetera* this, GlobalContext* globalCtx) {
         switch (type) {
             case TYPE_PINK_FLOWER:
             case TYPE_GOLD_FLOWER:
-                this->dyna.actor.draw = func_80A7C690;
+                this->dyna.actor.draw = ObjEtcetera_DrawWithoutSkelAnime;
                 this->actionFunc = func_80A7BF08;
                 Actor_SetScale(&this->dyna.actor, 0.01f);
                 this->dyna.actor.scale.y = 0.02f;
@@ -257,7 +257,7 @@ void func_80A7C308(ObjEtcetera* this, GlobalContext* globalCtx) {
                 sp34 = &this->skelAnime;
                 SkelAnime_ChangeAnim(sp34, &D_0400EB7C, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_0400EB7C.common), 2,
                                      0.0f);
-                this->dyna.actor.draw = func_80A7C718;
+                this->dyna.actor.draw = ObjEtcetera_DrawWithSkelAnime;
                 this->actionFunc = ObjEtcetera_DoSpecialFlutter;
                 Actor_SetScale(&this->dyna.actor, 0.0f);
                 this->flutterTimer = 30;
@@ -285,7 +285,7 @@ void ObjEtcetera_Update(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
-void func_80A7C690(Actor* thisx, GlobalContext* globalCtx) {
+void ObjEtcetera_DrawWithoutSkelAnime(Actor* thisx, GlobalContext* globalCtx) {
     ObjEtcetera* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -297,7 +297,7 @@ void func_80A7C690(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-void func_80A7C718(Actor* thisx, GlobalContext* globalCtx) {
+void ObjEtcetera_DrawWithSkelAnime(Actor* thisx, GlobalContext* globalCtx) {
     ObjEtcetera* this = THIS;
 
     func_8012C5B0(globalCtx->state.gfxCtx);
