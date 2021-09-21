@@ -19,8 +19,8 @@ void ObjEtcetera_ReturnToIdle(ObjEtcetera* this, GlobalContext* globalCtx);
 void ObjEtcetera_DoSpecialFlutter(ObjEtcetera* this, GlobalContext* globalCtx);
 void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx);
 void ObjEtcetera_DoNormalFlutter(ObjEtcetera* this, GlobalContext* globalCtx);
-void ObjEtcetera_DrawWithoutSkelAnime(Actor* thisx, GlobalContext* globalCtx);
-void ObjEtcetera_DrawWithSkelAnime(Actor* thisx, GlobalContext* globalCtx);
+void ObjEtcetera_DrawIdle(Actor* thisx, GlobalContext* globalCtx);
+void ObjEtcetera_DrawAnimated(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit Obj_Etcetera_InitVars = {
     ACTOR_OBJ_ETCETERA,
@@ -113,7 +113,7 @@ void ObjEtcetera_DoNormalFlutter(ObjEtcetera* this, GlobalContext* globalCtx) {
 void ObjEtcetera_SwitchToIdleAnimations(ObjEtcetera* this) {
     SkelAnime_ChangeAnim(&this->skelAnime, &D_040117A8, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_040117A8.common), 2,
                          0.0f);
-    this->dyna.actor.draw = ObjEtcetera_DrawWithSkelAnime;
+    this->dyna.actor.draw = ObjEtcetera_DrawAnimated;
     this->actionFunc = ObjEtcetera_ReturnToIdle;
 }
 
@@ -125,7 +125,7 @@ void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx) {
         // Link is launching himself out of the Deku Flower
         SkelAnime_ChangeAnim(&this->skelAnime, &D_0400EB7C, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_0400EB7C.common), 2,
                              0.0f);
-        this->dyna.actor.draw = ObjEtcetera_DrawWithSkelAnime;
+        this->dyna.actor.draw = ObjEtcetera_DrawAnimated;
         this->actionFunc = ObjEtcetera_DoSpecialFlutter;
         Actor_SetScale(&this->dyna.actor, 0.01f);
         this->dyna.actor.scale.y = 0.02f;
@@ -174,7 +174,7 @@ void ObjEtcetera_ReturnToIdle(ObjEtcetera* this, GlobalContext* globalCtx) {
         this->burrowFlag &= ~1;
     }
     if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
-        this->dyna.actor.draw = ObjEtcetera_DrawWithoutSkelAnime;
+        this->dyna.actor.draw = ObjEtcetera_DrawIdle;
         this->actionFunc = ObjEtcetera_Idle;
     }
     ObjEtcetera_DoNormalFlutter(this, globalCtx);
@@ -196,7 +196,7 @@ void ObjEtcetera_DoSpecialFlutter(ObjEtcetera* this, GlobalContext* globalCtx) {
     if (0 < this->flutterTimer) {
         this->flutterTimer--;
     } else {
-        this->dyna.actor.draw = ObjEtcetera_DrawWithoutSkelAnime;
+        this->dyna.actor.draw = ObjEtcetera_DrawIdle;
         this->actionFunc = ObjEtcetera_Idle;
         Actor_SetScale(&this->dyna.actor, 0.01f);
         this->dyna.actor.scale.y = 0.02f;
@@ -251,7 +251,7 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
         switch (type) {
             case TYPE_PINK_FLOWER:
             case TYPE_GOLD_FLOWER:
-                this->dyna.actor.draw = ObjEtcetera_DrawWithoutSkelAnime;
+                this->dyna.actor.draw = ObjEtcetera_DrawIdle;
                 this->actionFunc = ObjEtcetera_Idle;
                 Actor_SetScale(&this->dyna.actor, 0.01f);
                 this->dyna.actor.scale.y = 0.02f;
@@ -263,7 +263,7 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
                 sp34 = &this->skelAnime;
                 SkelAnime_ChangeAnim(sp34, &D_0400EB7C, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_0400EB7C.common), 2,
                                      0.0f);
-                this->dyna.actor.draw = ObjEtcetera_DrawWithSkelAnime;
+                this->dyna.actor.draw = ObjEtcetera_DrawAnimated;
                 this->actionFunc = ObjEtcetera_DoSpecialFlutter;
                 Actor_SetScale(&this->dyna.actor, 0.0f);
                 this->flutterTimer = 30;
@@ -291,7 +291,7 @@ void ObjEtcetera_Update(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
-void ObjEtcetera_DrawWithoutSkelAnime(Actor* thisx, GlobalContext* globalCtx) {
+void ObjEtcetera_DrawIdle(Actor* thisx, GlobalContext* globalCtx) {
     ObjEtcetera* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -303,7 +303,7 @@ void ObjEtcetera_DrawWithoutSkelAnime(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-void ObjEtcetera_DrawWithSkelAnime(Actor* thisx, GlobalContext* globalCtx) {
+void ObjEtcetera_DrawAnimated(Actor* thisx, GlobalContext* globalCtx) {
     ObjEtcetera* this = THIS;
 
     func_8012C5B0(globalCtx->state.gfxCtx);
