@@ -11108,7 +11108,7 @@
     0x80A7BF08:("ObjEtcetera_Idle",),
     0x80A7C168:("func_80A7C168",),
     0x80A7C1F0:("ObjEtcetera_DoSpecialFlutter",),
-    0x80A7C308:("func_80A7C308",),
+    0x80A7C308:("ObjEtcetera_Setup",),
     0x80A7C5EC:("ObjEtcetera_Update",),
     0x80A7C690:("ObjEtcetera_DrawWithoutSkelAnime",),
     0x80A7C718:("ObjEtcetera_DrawWithSkelAnime",),

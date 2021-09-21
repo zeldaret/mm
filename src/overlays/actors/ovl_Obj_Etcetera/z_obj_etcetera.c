@@ -17,7 +17,7 @@ void ObjEtcetera_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx);
 void func_80A7C168(ObjEtcetera* this, GlobalContext* globalCtx);
 void ObjEtcetera_DoSpecialFlutter(ObjEtcetera* this, GlobalContext* globalCtx);
-void func_80A7C308(ObjEtcetera* this, GlobalContext* globalCtx);
+void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx);
 void ObjEtcetera_DoNormalFlutter(ObjEtcetera* this, GlobalContext* globalCtx);
 void ObjEtcetera_DrawWithoutSkelAnime(Actor* thisx, GlobalContext* globalCtx);
 void ObjEtcetera_DrawWithSkelAnime(Actor* thisx, GlobalContext* globalCtx);
@@ -84,7 +84,7 @@ void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->dyna.actor.floorBgId = floorBgId;
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
-    this->actionFunc = func_80A7C308;
+    this->actionFunc = ObjEtcetera_Setup;
     Actor_SetScale(&this->dyna.actor, 0.01f);
     this->dyna.actor.scale.y = 0.02f;
     this->burrowFlag = 0;
@@ -205,7 +205,7 @@ void ObjEtcetera_DoSpecialFlutter(ObjEtcetera* this, GlobalContext* globalCtx) {
     this->dyna.actor.scale.y = 2.0f * scaleTemp;
 }
 
-void func_80A7C308(ObjEtcetera* this, GlobalContext* globalCtx) {
+void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
     CollisionHeader* sp5C = NULL;
     ObjEtceteraType type;
     CollisionHeader* allCollisionHeaders[] = { &D_0400E710, &D_0400E710, &D_040118D8, &D_040118D8 };
