@@ -1017,6 +1017,11 @@ def perm_refer_to_var(
     ensure(ins_cands)
 
     cond = copy.deepcopy(expr)
+
+    # Repeat the condition up to two times: if (x && x && x) {} sometimes helps.
+    for i in range(random.choice((0, 0, 0, 0, 0, 1, 2, 2))):
+        cond = ca.BinaryOp("&&", cond, copy.deepcopy(expr))
+
     stmt = ca.If(cond=cond, iftrue=ca.Compound(block_items=[]), iffalse=None)
     tob, toi, _ = random.choice(ins_cands)
     ast_util.insert_statement(tob, toi, stmt)
@@ -1459,6 +1464,32 @@ def perm_add_mask(
     replace_node(fn.body, expr, new_expr)
 
 
+def perm_xor_zero(
+    fn: ca.FuncDef, ast: ca.FileAST, indices: Indices, region: Region, random: Random
+) -> None:
+    """Add ^0 to a random expression of integer type, or *1 to floats."""
+    typemap = build_typemap(ast)
+
+    # Find a random expression
+    cands: List[Expression] = get_block_expressions(fn.body, region)
+    ensure(cands)
+
+    expr = random.choice(cands)
+    type: SimpleType = decayed_expr_type(expr, typemap)
+    int_types = ["int", "char", "long", "short", "signed", "unsigned"]
+
+    if allowed_basic_type(type, typemap, int_types):
+        new_expr = ca.BinaryOp("^", expr, ca.Constant("int", "0"))
+    elif allowed_basic_type(type, typemap, ["float"]):
+        new_expr = ca.BinaryOp("*", expr, ca.Constant("float", "1.0f"))
+    elif allowed_basic_type(type, typemap, ["double"]):
+        new_expr = ca.BinaryOp("*", expr, ca.Constant("double", "1.0"))
+    else:
+        raise RandomizationFailure
+
+    replace_node(fn.body, expr, new_expr)
+
+
 def perm_float_literal(
     fn: ca.FuncDef, ast: ca.FileAST, indices: Indices, region: Region, random: Random
 ) -> None:
@@ -1878,6 +1909,7 @@ class Randomizer:
             (perm_expand_expr, 20),
             (perm_reorder_stmts, 20),
             (perm_add_mask, 15),
+            (perm_xor_zero, 10),
             (perm_cast_simple, 10),
             (perm_refer_to_var, 10),
             (perm_float_literal, 10),
