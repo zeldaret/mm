@@ -694,7 +694,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     ActorShape_Init(&this->dyna.actor.shape, 0.0f, NULL, 50.0f);
-    SkelAnime_InitSV(globalCtx, &this->unk_160, &D_06011DF8, NULL, this->unk_1A4, this->unk_228, 0x16);
+    SkelAnime_InitSV(globalCtx, &this->unk_160, &D_06011DF8, NULL, this->jointTable, this->morphTable, UM_LIMB_MAX);
     SkelAnime_ChangeAnimDefaultRepeat(&this->unk_160, &D_06012CC0);
 
     this->unk_2AC = 0;
@@ -1745,7 +1745,7 @@ void ObjUm_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_80B7B598(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 ObjUm_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     ObjUm* this = THIS;
     Player* player = PLAYER;
     s32 pad;
@@ -1753,11 +1753,12 @@ s32 func_80B7B598(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     Vec3f sp5C = {4223.0f, -979.0f, 4098.0f};
     Vec3f sp50 = {4223.0f, -980.0f, -4083.0f};
 
-    if ((limbIndex >= 0xB) && (this->unk_2AE == 0)) {
+    if ((limbIndex >= UM_LIMB_CREMIA_ROOT) && (this->unk_2AE == 0)) {
         *dList = NULL;
-        return 0;
+        return false;
     }
-    if (limbIndex == 0xD) {
+
+    if (limbIndex == UM_LIMB_CREMIA_HEAD) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B7C110[this->unk_4D0]));
@@ -1765,17 +1766,17 @@ s32 func_80B7B598(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
-    if (limbIndex == 3) {
+    if (limbIndex == UM_LIMB_WAGGON_RIGHT_WHEEL) {
         if ((this->unk_2F4 & 2) != 0) {
             rot->x = -this->unk_2AC;
         }
         SysMatrix_MultiplyVector3fByState(&sp5C, &this->unk_2C4);
-    } else if (limbIndex == 4) {
+    } else if (limbIndex == UM_LIMB_WAGGON_LEFT_WHEEL) {
         if ((this->unk_2F4 & 2) != 0) {
             rot->x = this->unk_2AC;
         }
         SysMatrix_MultiplyVector3fByState(&sp50, &this->unk_2DC);
-    } else if ((limbIndex == 0xD) && ((this->unk_2F4 & 8) != 0)) {
+    } else if ((limbIndex == UM_LIMB_CREMIA_HEAD) && ((this->unk_2F4 & 8) != 0)) {
         if ((func_8013D5E8(this->dyna.actor.shape.rot.y, 0x4E20, this->dyna.actor.yawTowardsPlayer) != 0) && (this->dyna.actor.xzDistToPlayer < 500.0f)) {
             s16 sp3E;
             Vec3f sp30 = player->actor.world.pos;
@@ -1801,10 +1802,11 @@ s32 func_80B7B598(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
             rot->x = this->unk_2F8.x;
             rot->z = this->unk_2F8.z;
         }
-    } else if ((limbIndex == 7) && ((this->unk_2F4 & 0x80) != 0)) {
+    } else if ((limbIndex == UM_LIMB_WAGGON_BONNET) && ((this->unk_2F4 & 0x80) != 0)) {
         *dList = NULL;
     }
-    return 0;
+
+    return false;
 }
 
 void func_80B7B93C(GlobalContext* globalCtx, Vec3f* arg1) {
@@ -1823,7 +1825,7 @@ void func_80B7B93C(GlobalContext* globalCtx, Vec3f* arg1) {
     }
 }
 
-void func_80B7BABC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void ObjUm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     ObjUm* this = THIS;
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
     Mtx *mtx_s3;
@@ -1857,7 +1859,7 @@ void func_80B7BABC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 
     spC0.y += 1700.0f;
 
-    if (limbIndex == 5) {
+    if (limbIndex == UM_LIMB_WAGGON_05) {
         Vec3f spA4 = {2000.0f, 1070.0f, 0.0f};
 
 
@@ -1865,13 +1867,13 @@ void func_80B7BABC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         this->unk_2F4 |= 0x20;
     }
 
-    if (limbIndex == 5) {
+    if (limbIndex == UM_LIMB_WAGGON_05) {
         Vec3f sp98 = {2500.0f, 200.0f, 0.0f};
 
         SysMatrix_MultiplyVector3fByState(&sp98, &this->unk_4BC);
     }
 
-    if (limbIndex == 5) {
+    if (limbIndex == UM_LIMB_WAGGON_05) {
         Vec3f *new_var;
         Vec3f sp88;
         Vec3s sp80;
@@ -1932,7 +1934,7 @@ void func_80B7BABC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         CLOSE_DISPS(gfxCtx);
 
     }
-    if (limbIndex == 0xD) {
+    if (limbIndex == UM_LIMB_CREMIA_HEAD) {
         SysMatrix_GetStateTranslation(&this->dyna.actor.focus.pos);
     }
 }
@@ -1979,7 +1981,7 @@ void ObjUm_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f sp34;
 
     this->unk_2F4 |= 1;
-    SkelAnime_DrawSV(globalCtx, this->unk_160.skeleton, this->unk_160.limbDrawTbl, this->unk_160.dListCount, func_80B7B598, func_80B7BABC, &this->dyna.actor);
+    SkelAnime_DrawSV(globalCtx, this->unk_160.skeleton, this->unk_160.limbDrawTbl, this->unk_160.dListCount, ObjUm_OverrideLimbDraw, ObjUm_PostLimbDraw, &this->dyna.actor);
     sp34.x = 0.45f;
     sp34.y = 0.0f;
     sp34.z = 0.7f;
