@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_etcetera.c
+ * Overlay: ovl_Obj_Etcetera
+ * Description: Deku Flower
+ */
+
 #include "z_obj_etcetera.h"
 
 #define FLAGS 0x00000010
