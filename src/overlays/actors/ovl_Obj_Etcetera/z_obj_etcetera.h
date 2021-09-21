@@ -4,7 +4,6 @@
 #include "global.h"
 
 #define OBJETCETERA_TYPE(thisx) (((thisx)->params & 0xFF80) >> 7)
-#define OBJETCETERA_CAN_BURROW_INTO_FLOWER(this) (((this)->burrowFlag & 1) != 0)
 
 typedef enum {
     /*  0   */ TYPE_PINK_FLOWER,

@@ -141,7 +141,7 @@ void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx) {
         }
     } else {
         if (func_800CAF70(&this->dyna)) {
-            if (!OBJETCETERA_CAN_BURROW_INTO_FLOWER(this)) {
+            if (!(this->burrowFlag & 1)) {
                 // Link is walking onto the Deku Flower, or falling on it from a height
                 this->flutterTimer = 10;
                 ObjEtcetera_SwitchToIdleAnimations(this);
@@ -152,7 +152,7 @@ void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx) {
             }
             this->burrowFlag |= 1;
         } else {
-            if (OBJETCETERA_CAN_BURROW_INTO_FLOWER(this)) {
+            if (this->burrowFlag & 1) {
                 // Link is walking off the Deku Flower
                 this->flutterTimer = 10;
                 ObjEtcetera_SwitchToIdleAnimations(this);
@@ -283,7 +283,7 @@ void ObjEtcetera_Update(Actor* thisx, GlobalContext* globalCtx) {
     floorBgId = this->dyna.actor.floorBgId;
     if (floorBgId == 0x32) {
         floorPoly = this->dyna.actor.floorPoly;
-        if (floorPoly != NULL && OBJETCETERA_CAN_BURROW_INTO_FLOWER(this)) {
+        if (floorPoly != NULL && this->burrowFlag & 1) {
             func_800FAAB4(globalCtx, func_800C9C9C(&globalCtx->colCtx, floorPoly, floorBgId));
         }
     }
