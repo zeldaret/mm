@@ -15758,7 +15758,7 @@
     0x80BA51D0:("D_80BA51D0","f32","",0x4),
     0x80BA51D4:("D_80BA51D4","f32","",0x4),
     0x80BA80A0:("En_Railgibud_InitVars","UNK_TYPE1","",0x1),
-    0x80BA80C0:("D_80BA80C0","UNK_PTR","",0x4),
+    0x80BA80C0:("sAnimations","UNK_PTR","",0x4),
     0x80BA82A0:("D_80BA82A0","UNK_TYPE1","",0x1),
     0x80BA82CC:("D_80BA82CC","UNK_TYPE1","",0x1),
     0x80BA82EC:("D_80BA82EC","UNK_PTR","",0x4),
