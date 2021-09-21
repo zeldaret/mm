@@ -272,15 +272,14 @@ void func_80B77770(ObjUm* this, GlobalContext* globalCtx) {
     this->unk_360[14] = this->unk_360[4];
 }
 
-#ifdef NON_MATCHING
-// regalloc
 s32 func_80B77FA4(ObjUm* this, GlobalContext* globalCtx) {
-    s32 pad[2];
+    Path *path = &globalCtx->setupPathList[this->unk_2BC];
+    s16 new_var;
     Vec3s* sp44;
     EnHorse* temp_v0;
     EnHorse* temp_v0_2;
 
-    sp44 = Lib_SegmentedToVirtual(globalCtx->setupPathList[this->unk_2BC].points);
+    sp44 = Lib_SegmentedToVirtual(path->points);
     func_801A89A8(0x8003);
 
     temp_v0 = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_HORSE, sp44[0].x, sp44[0].y, sp44[0].z, 0, this->dyna.actor.shape.rot.y, 0, 0x2013);
@@ -305,7 +304,7 @@ s32 func_80B77FA4(ObjUm* this, GlobalContext* globalCtx) {
     temp_v0->curRaceWaypoint = 1;
 
 
-    temp_v0_2 = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_HORSE, (f32) sp44[1].x, (f32) sp44[1].y, (f32) sp44[1].z, (s16) 0, (s16) (s32) this->dyna.actor.shape.rot.y, (s16) 0, (s16) 0x2014);
+    temp_v0_2 = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_HORSE, sp44[1].x, sp44[1].y, sp44[1].z, 0, this->dyna.actor.shape.rot.y, 0, 0x2014);
     this->unk_35C = temp_v0_2;
 
     temp_v0_2->unk_540 = temp_v0_2->actor.world.pos;
@@ -329,9 +328,6 @@ s32 func_80B77FA4(ObjUm* this, GlobalContext* globalCtx) {
     this->unk_314[2] = 4;
     return 0;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Um/func_80B77FA4.s")
-#endif
 
 #ifdef NON_EQUIVALENT
 s32 func_80B781DC(ObjUm* this, EnHorse* arg2, EnHorse* arg3, GlobalContext* globalCtx) {
@@ -1914,6 +1910,8 @@ void func_80B7BABC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         s32 sp7C;
         f32 sp70[] = {2000.0f, 0.0f, -2000.0f};
 
+        if (!sp7C) {}
+
         sp80.x = 0;
         sp80.z = 0;
         sp88.x = 6800.0f;
@@ -1950,13 +1948,12 @@ void func_80B7BABC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
                 gSPMatrix(POLY_OPA_DISP++, mtx_s3, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
                 if (spFC[this->unk_314[sp7C]] != NULL) {
-                    s32 new_var2;
+                    s32 pad;
 
                     gSPDisplayList(POLY_OPA_DISP++, spFC[this->unk_314[sp7C]]);
 
-                    new_var2 = sp7C;
-                    if (spE4[this->unk_314[new_var2]] != NULL) {
-                        gSPDisplayList(POLY_OPA_DISP++, spE4[this->unk_314[new_var2]]);
+                    if (spE4[this->unk_314[sp7C]] != 0) {
+                        gSPDisplayList(POLY_OPA_DISP++, spE4[this->unk_314[sp7C]]);
                     }
                 }
             } else {
