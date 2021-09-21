@@ -1849,6 +1849,130 @@ void func_80B7B93C(GlobalContext* globalCtx, Vec3f* arg1) {
     }
 }
 
+/*
+*/
+
+#ifdef NON_MATCHING
+void func_80B7BABC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor) {
+    ObjUm* this = actor;
+    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+    Mtx *mtx_s3;
+
+    Gfx* spFC [] = {
+        0x00000000,
+        0x060052B0,
+        0x06003C60,
+        0x06003C60,
+        0x06003C60,
+        0x060067C0,
+    };
+
+    Gfx* spE4[] = {
+        0x00000000,
+        0x00000000,
+        0x06004B60,
+        0x060043E0,
+        0x00000000,
+        0x00000000,
+    };
+
+    f32 spCC[] = {
+        0.0f,
+        1070.0f,
+        1070.0f,
+        1070.0f,
+        1070.0f,
+        2100.0f,
+    };
+
+    Vec3f spC0 = D_801D15B0;
+
+    Vec3f spB4;
+
+    f32 spB0;
+
+    spC0.y += 1700.0f;
+
+    if (limbIndex == 5) {
+        Vec3f spA4 = {2000.0f, 1070.0f, 0.0f};
+
+
+        SysMatrix_MultiplyVector3fByState(&spA4, &this->unk_308);
+        this->unk_2F4 |= 0x20;
+    }
+
+    if (limbIndex == 5) {
+        Vec3f sp98 = {2500.0f, 200.0f, 0.0f};
+
+        SysMatrix_MultiplyVector3fByState(&sp98, &this->unk_4BC);
+    }
+
+    if (limbIndex == 5) {
+        Vec3f *new_var;
+        Vec3f sp88;
+        Vec3s sp80;
+        s32 sp7C;
+        f32 sp70[] = {2000.0f, 0.0f, -2000.0f};
+
+        sp80.x = 0;
+        sp80.z = 0;
+        sp88.x = 6800.0f;
+        OPEN_DISPS(gfxCtx);
+
+        for (sp7C = 0; sp7C < 3; sp7C++) {
+            sp88.y = sp70[sp7C];
+            sp88.z = spCC[this->unk_314[sp7C]];
+
+            if (this->unk_314[sp7C] == 5) {
+                sp80.y = 0x4000;
+            } else {
+                sp80.y = -0x4000;
+            }
+
+            SysMatrix_StatePush();
+            SysMatrix_RotateAndTranslateState(&sp88, &sp80);
+            mtx_s3 = Matrix_NewMtx(gfxCtx);
+            new_var = &this->unk_32C[sp7C];
+            SysMatrix_MultiplyVector3fByState(&spC0, &spB4);
+            SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->projectionMatrix, &spB4, new_var, &spB0);
+            if (this->unk_320[sp7C] != 0) {
+                this->unk_320[sp7C] = 0;
+                if (this->unk_314[sp7C] == 1) {
+                    func_80B7B93C(globalCtx, &spB4);
+                } else {
+                    EffectSsHitMark_SpawnFixedScale(globalCtx, 0, &spB4);
+                }
+            }
+            SysMatrix_StatePop();
+
+            if (mtx_s3 != NULL) {
+                if (globalCtx) {}
+                gSPMatrix(POLY_OPA_DISP++, mtx_s3, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+                if (spFC[this->unk_314[sp7C]] != NULL) {
+                    s32 new_var2;
+
+                    gSPDisplayList(POLY_OPA_DISP++, spFC[this->unk_314[sp7C]]);
+
+                    new_var2 = sp7C;
+                    if (spE4[this->unk_314[new_var2]] != NULL) {
+                        gSPDisplayList(POLY_OPA_DISP++, spE4[this->unk_314[new_var2]]);
+                    }
+                }
+            } else {
+                return;
+            }
+        }
+
+        CLOSE_DISPS(gfxCtx);
+
+    }
+    if (limbIndex == 0xD) {
+        SysMatrix_GetStateTranslation(&actor->focus.pos);
+    }
+}
+#else
+
 Gfx* D_80B7C2B4 [] = {
     0x00000000,
     0x060052B0,
@@ -1880,145 +2004,6 @@ Vec3f D_80B7C2FC = {2000.0f, 1070.0f, 0.0f};
 Vec3f D_80B7C308 = {2500.0f, 200.0f, 0.0f};
 Vec3f D_80B7C314 = {2000.0f, 0.0f, -2000.0f};
 
-
-#ifdef MIPS_2_C_OUTPUT
-void func_80B7BABC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor) {
-    ? spFC;
-    ? spE4;
-    ? spCC;
-    f32 spC4;
-    ? spC0;
-    ? spB4;
-    f32 spB0;
-    ? spA4;
-    ? sp98;
-    f32 sp90;
-    f32 sp8C;
-    f32 sp88;
-    s16 sp84;
-    s16 sp82;
-    s16 sp80;
-    f32 sp70;
-    MtxF* sp4C;
-    Gfx* temp_v0;
-    Gfx* temp_v0_2;
-    Gfx* temp_v0_3;
-    GraphicsContext* temp_s2;
-    Mtx* temp_s3;
-    s32 temp_s6;
-    s32 phi_v0;
-    f32* phi_s5;
-    Actor* phi_s0;
-    Vec3f* phi_s7;
-    s32 phi_s6;
-
-    temp_s2 = globalCtx->state.gfxCtx;
-    spFC.unk0 = (s32) D_80B7C2B4.unk0;
-    spFC.unk4 = (s32) D_80B7C2B4.unk4;
-    spFC.unkC = (s32) D_80B7C2B4.unkC;
-    spFC.unk8 = (s32) D_80B7C2B4.unk8;
-    spFC.unk10 = (s32) D_80B7C2B4.unk10;
-    spFC.unk14 = (s32) D_80B7C2B4.unk14;
-    spE4.unk4 = (s32) D_80B7C2CC.unk4;
-    spE4.unk0 = (s32) D_80B7C2CC.unk0;
-    spE4.unk8 = (s32) D_80B7C2CC.unk8;
-    spE4.unkC = (s32) D_80B7C2CC.unkC;
-    spE4.unk14 = (s32) D_80B7C2CC.unk14;
-    spE4.unk10 = (s32) D_80B7C2CC.unk10;
-    spCC.unk0 = (s32) D_80B7C2E4.unk0;
-    spCC.unk4 = (s32) D_80B7C2E4.unk4;
-    spCC.unk8 = (s32) D_80B7C2E4.unk8;
-    spCC.unkC = (s32) D_80B7C2E4.unkC;
-    spCC.unk10 = (s32) D_80B7C2E4.unk10;
-    spCC.unk14 = (s32) D_80B7C2E4.unk14;
-    spC0.unk0 = (f32) D_801D15B0.x;
-    spC0.unk4 = (f32) D_801D15B0.y;
-    spC0.unk8 = (f32) D_801D15B0.z;
-    spC4 += D_80B7C3F4;
-    if (limbIndex == 5) {
-        spA4.unk0 = (s32) D_80B7C2FC.unk0;
-        spA4.unk4 = (s32) D_80B7C2FC.unk4;
-        spA4.unk8 = (s32) D_80B7C2FC.unk8;
-        SysMatrix_MultiplyVector3fByState((Vec3f* ) &spA4, actor + 0x308);
-        actor->unk2F4 = (s32) (actor->unk2F4 | 0x20);
-    }
-    phi_v0 = 5;
-    if (limbIndex == 5) {
-        sp98.unk0 = (s32) D_80B7C308.unk0;
-        sp98.unk4 = (s32) D_80B7C308.unk4;
-        sp98.unk8 = (s32) D_80B7C308.unk8;
-        SysMatrix_MultiplyVector3fByState((Vec3f* ) &sp98, actor + 0x4BC);
-        phi_v0 = 5;
-    }
-    if (limbIndex == phi_v0) {
-        sp70.unk0 = (s32) D_80B7C314.unk0;
-        sp70.unk4 = (s32) D_80B7C314.unk4;
-        sp70.unk8 = (s32) D_80B7C314.unk8;
-        sp80 = 0;
-        sp84 = 0;
-        sp88 = D_80B7C3F8;
-        sp4C = &globalCtx->projectionMatrix;
-        phi_s5 = &sp70;
-        phi_s0 = actor;
-        phi_s7 = actor + 0x32C;
-        phi_s6 = 0;
-loop_6:
-        sp90 = *phi_s5;
-        sp8C = *(&spCC + (phi_s0->unk314 * 4));
-        if (phi_s0->unk314 == 5) {
-            sp82 = 0x4000;
-        } else {
-            sp82 = -0x4000;
-        }
-        SysMatrix_StatePush();
-        SysMatrix_RotateAndTranslateState((Vec3f* ) &sp88, (Vec3s* ) &sp80);
-        temp_s3 = Matrix_NewMtx(temp_s2);
-        SysMatrix_MultiplyVector3fByState((Vec3f* ) &spC0, (Vec3f* ) &spB4);
-        SkinMatrix_Vec3fMtxFMultXYZW(sp4C, (Vec3f* ) &spB4, phi_s7, &spB0);
-        if (phi_s0->unk320 != 0) {
-            phi_s0->unk320 = 0;
-            if (phi_s0->unk314 == 1) {
-                func_80B7B93C(globalCtx, (Vec3f* ) &spB4);
-            } else {
-                EffectSsHitMark_SpawnFixedScale(globalCtx, 0, (Vec3f* ) &spB4);
-            }
-        }
-        SysMatrix_StatePop();
-        if (temp_s3 != 0) {
-            temp_v0 = temp_s2->polyOpa.p;
-            temp_s2->polyOpa.p = temp_v0 + 8;
-            temp_v0->words.w1 = (u32) temp_s3;
-            temp_v0->words.w0 = 0xDA380003;
-            temp_s6 = phi_s6 + 0xC;
-            if (*(&spFC + (phi_s0->unk314 * 4)) != 0) {
-                temp_v0_2 = temp_s2->polyOpa.p;
-                temp_s2->polyOpa.p = temp_v0_2 + 8;
-                temp_v0_2->words.w0 = 0xDE000000;
-                temp_v0_2->words.w1 = *(&spFC + (phi_s0->unk314 * 4));
-                if ((sp + (phi_s0->unk314 * 4))->unkE4 != 0) {
-                    temp_v0_3 = temp_s2->polyOpa.p;
-                    temp_s2->polyOpa.p = temp_v0_3 + 8;
-                    temp_v0_3->words.w0 = 0xDE000000;
-                    temp_v0_3->words.w1 = (sp + (phi_s0->unk314 * 4))->unkE4;
-                }
-            }
-            phi_s5 += 4;
-            phi_s0 += 4;
-            phi_s7 += 0xC;
-            phi_s6 = temp_s6;
-            if (temp_s6 == 0x24) {
-                goto block_18;
-            }
-            goto loop_6;
-        }
-    } else {
-block_18:
-        if (limbIndex == 0xD) {
-            SysMatrix_GetStateTranslation((Vec3f* ) &actor->focus);
-        }
-    }
-}
-#else
 void func_80B7BABC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Um/func_80B7BABC.s")
 #endif
