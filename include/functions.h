@@ -834,6 +834,7 @@ void func_800B8E58(Actor* actor, u16 sfxId);
 void Audio_PlayActorSound2(Actor* actor, u16 sfxId);
 // void func_800B8FC0(void);
 void func_800B8F98(Actor* actor, u16 sfxId);
+void func_800B8FE8(Actor* actor, u16 sfxId);
 void func_800B9010(Actor* actor, u16 sfxId);
 // void func_800B9038(void);
 // void func_800B9084(void);
