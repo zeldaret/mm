@@ -14,7 +14,7 @@ void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjEtcetera_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjEtcetera_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80A7BF08(ObjEtcetera* this, GlobalContext* globalCtx);
+void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx);
 void func_80A7C168(ObjEtcetera* this, GlobalContext* globalCtx);
 void ObjEtcetera_DoSpecialFlutter(ObjEtcetera* this, GlobalContext* globalCtx);
 void func_80A7C308(ObjEtcetera* this, GlobalContext* globalCtx);
@@ -117,7 +117,7 @@ void func_80A7BE8C(ObjEtcetera* this) {
     this->actionFunc = func_80A7C168;
 }
 
-void func_80A7BF08(ObjEtcetera* this, GlobalContext* globalCtx) {
+void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx) {
     s16 minFlutterTimer;
     Player* player = PLAYER;
 
@@ -138,7 +138,7 @@ void func_80A7BF08(ObjEtcetera* this, GlobalContext* globalCtx) {
             this->flutterTimer = minFlutterTimer;
         }
     } else {
-        if (func_800CAF70(&this->dyna) != 0) {
+        if (func_800CAF70(&this->dyna)) {
             if (!OBJETCETERA_CAN_BURROW_INTO_FLOWER(this)) {
                 this->flutterTimer = 10;
                 func_80A7BE8C(this);
@@ -169,7 +169,7 @@ void func_80A7C168(ObjEtcetera* this, GlobalContext* globalCtx) {
     }
     if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
         this->dyna.actor.draw = ObjEtcetera_DrawWithoutSkelAnime;
-        this->actionFunc = func_80A7BF08;
+        this->actionFunc = ObjEtcetera_Idle;
     }
     ObjEtcetera_DoNormalFlutter(this, globalCtx);
 }
@@ -191,7 +191,7 @@ void ObjEtcetera_DoSpecialFlutter(ObjEtcetera* this, GlobalContext* globalCtx) {
         this->flutterTimer--;
     } else {
         this->dyna.actor.draw = ObjEtcetera_DrawWithoutSkelAnime;
-        this->actionFunc = func_80A7BF08;
+        this->actionFunc = ObjEtcetera_Idle;
         Actor_SetScale(&this->dyna.actor, 0.01f);
         this->dyna.actor.scale.y = 0.02f;
         this->flutterTimer = 0;
@@ -246,7 +246,7 @@ void func_80A7C308(ObjEtcetera* this, GlobalContext* globalCtx) {
             case TYPE_PINK_FLOWER:
             case TYPE_GOLD_FLOWER:
                 this->dyna.actor.draw = ObjEtcetera_DrawWithoutSkelAnime;
-                this->actionFunc = func_80A7BF08;
+                this->actionFunc = ObjEtcetera_Idle;
                 Actor_SetScale(&this->dyna.actor, 0.01f);
                 this->dyna.actor.scale.y = 0.02f;
                 this->dyna.actor.focus.pos.y = this->dyna.actor.home.pos.y + 10.0f;
