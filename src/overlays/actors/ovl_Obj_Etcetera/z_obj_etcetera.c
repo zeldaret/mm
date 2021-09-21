@@ -15,7 +15,7 @@ void ObjEtcetera_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjEtcetera_Update(Actor* thisx, GlobalContext* globalCtx);
 
 void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx);
-void func_80A7C168(ObjEtcetera* this, GlobalContext* globalCtx);
+void ObjEtcetera_ReturnToIdle(ObjEtcetera* this, GlobalContext* globalCtx);
 void ObjEtcetera_DoSpecialFlutter(ObjEtcetera* this, GlobalContext* globalCtx);
 void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx);
 void ObjEtcetera_DoNormalFlutter(ObjEtcetera* this, GlobalContext* globalCtx);
@@ -110,11 +110,11 @@ void ObjEtcetera_DoNormalFlutter(ObjEtcetera* this, GlobalContext* globalCtx) {
     this->dyna.actor.scale.y = 0.02f;
 }
 
-void func_80A7BE8C(ObjEtcetera* this) {
+void ObjEtcetera_SwitchToIdleAnimations(ObjEtcetera* this) {
     SkelAnime_ChangeAnim(&this->skelAnime, &D_040117A8, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_040117A8.common), 2,
                          0.0f);
     this->dyna.actor.draw = ObjEtcetera_DrawWithSkelAnime;
-    this->actionFunc = func_80A7C168;
+    this->actionFunc = ObjEtcetera_ReturnToIdle;
 }
 
 void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx) {
@@ -141,7 +141,7 @@ void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx) {
         if (func_800CAF70(&this->dyna)) {
             if (!OBJETCETERA_CAN_BURROW_INTO_FLOWER(this)) {
                 this->flutterTimer = 10;
-                func_80A7BE8C(this);
+                ObjEtcetera_SwitchToIdleAnimations(this);
             } else if ((player->actor.speedXZ > 0.1f) || ((player->unk_ABC < 0.0f) && !(player->stateFlags3 & 0x100))) {
                 this->flutterTimer = 10;
             }
@@ -149,19 +149,19 @@ void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx) {
         } else {
             if (OBJETCETERA_CAN_BURROW_INTO_FLOWER(this)) {
                 this->flutterTimer = 10;
-                func_80A7BE8C(this);
+                ObjEtcetera_SwitchToIdleAnimations(this);
             }
             this->burrowFlag &= ~1;
         }
     }
     if ((this->collider.base.acFlags & 2)) {
         this->flutterTimer = 10;
-        func_80A7BE8C(this);
+        ObjEtcetera_SwitchToIdleAnimations(this);
     }
     ObjEtcetera_DoNormalFlutter(this, globalCtx);
 }
 
-void func_80A7C168(ObjEtcetera* this, GlobalContext* globalCtx) {
+void ObjEtcetera_ReturnToIdle(ObjEtcetera* this, GlobalContext* globalCtx) {
     if (func_800CAF70(&this->dyna)) {
         this->burrowFlag |= 1;
     } else {
