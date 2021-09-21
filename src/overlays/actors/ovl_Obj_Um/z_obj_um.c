@@ -327,9 +327,9 @@ s32 func_80B77FA4(ObjUm* this, GlobalContext* globalCtx) {
     return 0;
 }
 
-#ifdef NON_EQUIVALENT
+#ifdef NON_MATCHING
 s32 func_80B781DC(ObjUm* this, EnHorse* arg2, EnHorse* arg3, GlobalContext* globalCtx) {
-    struct_80B7C254* phi_s0 = D_80B7C164;
+    s32 temp_v0;
     s32 phi_s3;
     s32 phi_s2;
     s32 phi_s4;
@@ -337,48 +337,51 @@ s32 func_80B781DC(ObjUm* this, EnHorse* arg2, EnHorse* arg3, GlobalContext* glob
     s32 i;
 
     phi_s3 = -1;
-    phi_s2 = 0;
     phi_s4 = 0;
+    phi_s2 = 0;
     phi_f20 = 0.0f;
     for (i = 0; i < ARRAY_COUNT(D_80B7C164); i++) {
-        if (arg2->unk_550 == phi_s0->unk_00) {
-            if (arg3->unk_550 != phi_s0->unk_04) {
-                if (phi_s0->unk_00 != 3) {
-                    if (phi_s0->unk_04 != 3 || Player_GetMask(globalCtx) != PLAYER_MASK_CIRCUS_LEADERS_MASK) {
-                        phi_s3 = phi_s0->unk_04;
-                        phi_s4 = phi_s0->unk_08;
-                        phi_f20 = phi_s0->unk_0C;
-                        phi_s2 = phi_s0->unk_10;
+        if (arg2->unk_550 == D_80B7C164[i].unk_00) {
+            if (arg3->unk_550 != D_80B7C164[i].unk_04) {
+                if (D_80B7C164[i].unk_00 != 3) {
+                    if (D_80B7C164[i].unk_04 != 3 || Player_GetMask(globalCtx) != PLAYER_MASK_CIRCUS_LEADERS_MASK) {
+                        phi_s3 = D_80B7C164[i].unk_04;
+                        phi_s4 = D_80B7C164[i].unk_08;
+                        phi_f20 = D_80B7C164[i].unk_0C;
+                        phi_s2 = D_80B7C164[i].unk_10;
                     }
-                } else {
-                    if (((arg2->unk_54C != 5) || (phi_s0->unk_04 != 2)) && ((arg2->unk_54C != 7) || (phi_s0->unk_04 != 4))) {
-                        phi_s3 = phi_s0->unk_04;
-                        phi_s4 = phi_s0->unk_08;
-                        phi_f20 = phi_s0->unk_0C;
-                        if ((2.0f * Rand_ZeroOne()) < 1.0f) {
-                            phi_f20 = phi_s0->unk_0C * -1.0f;
-                        }
-                        phi_s2 = phi_s0->unk_10;
+                } else if (((arg2->unk_54C != 5) || (D_80B7C164[i].unk_04 != 2)) && ((arg2->unk_54C != 7) || (D_80B7C164[i].unk_04 != 4))) {
+                    phi_s3 = D_80B7C164[i].unk_04;
+                    phi_s4 = D_80B7C164[i].unk_08;
+                    phi_f20 = D_80B7C164[i].unk_0C;
+                    if ((2.0f * Rand_ZeroOne()) < 1.0f) {
+                        phi_f20 *= -1.0f;
                     }
+                    phi_s2 = D_80B7C164[i].unk_10;
                 }
+            // Semicolon seems to be required...
+            ;
             }
         }
-        phi_s0++;
     }
 
-    if (phi_s3 != -1) {
-        arg2->unk_540 = arg2->actor.world.pos;
-        arg2->unk_550 = phi_s3;
-        arg2->unk_55C = phi_s2;
-        arg2->unk_560 = phi_s2;
-        arg2->unk_564 = phi_s4;
-        arg2->unk_568 = phi_f20;
-        arg2->unk_54C = arg2->unk_550;
-        if (phi_s3 == 3) {
-            arg2->unk_558 = Rand_ZeroOne() * 3.0f;
-        } else {
-            arg2->unk_558 = 0;
-        }
+    if (phi_s3 == -1) {
+        return 0;
+    }
+
+    arg2->unk_540 = arg2->actor.world.pos;
+    arg2->unk_54C = arg2->unk_550;
+    arg2->unk_550 = phi_s3;
+    arg2->unk_55C = phi_s2;
+    arg2->unk_560 = phi_s2;
+    arg2->unk_564 = phi_s4;
+    arg2->unk_568 = phi_f20;
+
+    if (phi_s3 == 3) {
+        arg2->unk_558 = (s32) (Rand_ZeroOne() * 3.0f);
+    dummy_label_437827: ;
+    } else {
+        arg2->unk_558 = 0;
     }
 
     return 0;
@@ -1829,9 +1832,6 @@ void func_80B7B93C(GlobalContext* globalCtx, Vec3f* arg1) {
         EffectSsHahen_Spawn(globalCtx, arg1, &sp70, &sp8C, 1, 0x64, 0x1FC, 0xA, sp80[(s32)(Rand_ZeroOne() * ARRAY_COUNT(sp80))]);
     }
 }
-
-/*
-*/
 
 #ifdef NON_MATCHING
 void func_80B7BABC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor) {
