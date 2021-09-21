@@ -44,7 +44,9 @@ if __name__ == "__main__":
     except ModuleNotFoundError:
         argcomplete = None
 
-    parser = argparse.ArgumentParser(description="Diff MIPS, PPC or AArch64 assembly.")
+    parser = argparse.ArgumentParser(
+        description="Diff MIPS, PPC, AArch64, or ARM32 assembly."
+    )
 
     start_argument = parser.add_argument(
         "start",
@@ -200,7 +202,7 @@ if __name__ == "__main__":
         "--ignore-addr-diffs",
         dest="ignore_addr_diffs",
         action="store_true",
-        help="Ignore address differences. Currently only affects AArch64.",
+        help="Ignore address differences. Currently only affects AArch64 and ARM32.",
     )
     parser.add_argument(
         "-B",
@@ -427,6 +429,8 @@ def create_project_settings(settings: Dict[str, Any]) -> ProjectSettings:
 
 
 def create_config(args: argparse.Namespace, project: ProjectSettings) -> Config:
+    arch = get_arch(project.arch_str)
+
     formatter: Formatter
     if args.format == "plain":
         formatter = PlainFormatter(column_width=args.column_width)
@@ -435,7 +439,7 @@ def create_config(args: argparse.Namespace, project: ProjectSettings) -> Config:
     elif args.format == "html":
         formatter = HtmlFormatter()
     elif args.format == "json":
-        formatter = JsonFormatter(arch_str=project.arch_str)
+        formatter = JsonFormatter(arch_str=arch.name)
     else:
         raise ValueError(f"Unsupported --format: {args.format}")
 
@@ -454,7 +458,7 @@ def create_config(args: argparse.Namespace, project: ProjectSettings) -> Config:
         show_line_numbers = project.show_line_numbers_default
 
     return Config(
-        arch=get_arch(project.arch_str),
+        arch=arch,
         # Build/objdump options
         diff_obj=args.diff_obj,
         make=args.make,
@@ -503,13 +507,10 @@ def get_objdump_executable(objdump_executable: Optional[str]) -> str:
 
 
 def get_arch(arch_str: str) -> "ArchSettings":
-    if arch_str == "mips":
-        return MIPS_SETTINGS
-    if arch_str == "aarch64":
-        return AARCH64_SETTINGS
-    if arch_str == "ppc":
-        return PPC_SETTINGS
-    return fail(f"Unknown architecture: {arch_str}")
+    for settings in ARCH_SETTINGS:
+        if arch_str == settings.name:
+            return settings
+    raise ValueError(f"Unknown architecture: {arch_str}")
 
 
 BUFFER_CMD: List[str] = ["tail", "-c", str(10 ** 9)]
@@ -996,17 +997,37 @@ def run_objdump(cmd: ObjdumpCommand, config: Config, project: ProjectSettings) -
             fail("** Try using --source-old-binutils instead of --source **")
         raise e
 
-    if restrict is not None:
-        out = restrict_to_function(out, restrict)
-
+    obj_data: Optional[bytes] = None
     if config.diff_obj:
         with open(target, "rb") as f:
-            data = f.read()
-        out = serialize_data_references(parse_elf_data_references(data)) + out
+            obj_data = f.read()
+
+    return preprocess_objdump_out(restrict, obj_data, out)
+
+
+def preprocess_objdump_out(
+    restrict: Optional[str], obj_data: Optional[bytes], objdump_out: str
+) -> str:
+    """
+    Preprocess the output of objdump into a format that `process()` expects.
+    This format is suitable for saving to disk with `--write-asm`.
+
+    - Optionally filter the output to a single function (`restrict`)
+    - Otherwise, strip objdump header (7 lines)
+    - Prepend .data references ("DATAREF" lines) when working with object files
+    """
+    out = objdump_out
+
+    if restrict is not None:
+        out = restrict_to_function(out, restrict)
     else:
         for i in range(7):
             out = out[out.find("\n") + 1 :]
         out = out.rstrip("\n")
+
+    if obj_data:
+        out = serialize_data_references(parse_elf_data_references(obj_data)) + out
+
     return out
 
 
@@ -1289,7 +1310,7 @@ def dump_binary(
         end_addr = eval_int(end, "End address must be an integer expression.")
     else:
         end_addr = start_addr + config.max_function_size_bytes
-    objdump_flags = ["-Dz", "-bbinary", "-EB"]
+    objdump_flags = ["-Dz", "-bbinary"] + ["-EB" if config.arch.big_endian else "-EL"]
     flags1 = [
         f"--start-address={start_addr + config.base_shift}",
         f"--stop-address={end_addr + config.base_shift}",
@@ -1368,8 +1389,26 @@ class DifferenceNormalizerAArch64(DifferenceNormalizer):
         return row
 
 
+class DifferenceNormalizerARM32(DifferenceNormalizer):
+    def __init__(self, config: Config) -> None:
+        super().__init__(config)
+
+    def _normalize_arch_specific(self, mnemonic: str, row: str) -> str:
+        if self.config.ignore_addr_diffs:
+            row = self._normalize_bl(mnemonic, row)
+        return row
+
+    def _normalize_bl(self, mnemonic: str, row: str) -> str:
+        if mnemonic != "bl":
+            return row
+
+        row, _ = split_off_address(row)
+        return row + "<ignore>"
+
+
 @dataclass
 class ArchSettings:
+    name: str
     re_int: Pattern[str]
     re_comment: Pattern[str]
     re_reg: Pattern[str]
@@ -1382,6 +1421,7 @@ class ArchSettings:
     arch_flags: List[str] = field(default_factory=list)
     branch_likely_instructions: Set[str] = field(default_factory=set)
     difference_normalizer: Type[DifferenceNormalizer] = DifferenceNormalizer
+    big_endian: Optional[bool] = True
 
 
 MIPS_BRANCH_LIKELY_INSTRUCTIONS = {
@@ -1411,6 +1451,33 @@ MIPS_BRANCH_INSTRUCTIONS = MIPS_BRANCH_LIKELY_INSTRUCTIONS.union(
         "bc1f",
     }
 )
+
+ARM32_PREFIXES = {"b", "bl"}
+ARM32_CONDS = {
+    "",
+    "eq",
+    "ne",
+    "cs",
+    "cc",
+    "mi",
+    "pl",
+    "vs",
+    "vc",
+    "hi",
+    "ls",
+    "ge",
+    "lt",
+    "gt",
+    "le",
+    "al",
+}
+ARM32_SUFFIXES = {"", ".n", ".w"}
+ARM32_BRANCH_INSTRUCTIONS = {
+    f"{prefix}{cond}{suffix}"
+    for prefix in ARM32_PREFIXES
+    for cond in ARM32_CONDS
+    for suffix in ARM32_SUFFIXES
+}
 
 AARCH64_BRANCH_INSTRUCTIONS = {
     "bl",
@@ -1463,6 +1530,7 @@ PPC_BRANCH_INSTRUCTIONS = {
 }
 
 MIPS_SETTINGS = ArchSettings(
+    name="mips",
     re_int=re.compile(r"[0-9]+"),
     re_comment=re.compile(r"<.*?>"),
     re_reg=re.compile(
@@ -1477,7 +1545,30 @@ MIPS_SETTINGS = ArchSettings(
     instructions_with_address_immediates=MIPS_BRANCH_INSTRUCTIONS.union({"jal", "j"}),
 )
 
+MIPSEL_SETTINGS = replace(MIPS_SETTINGS, name="mipsel", big_endian=False)
+
+ARM32_SETTINGS = ArchSettings(
+    name="arm32",
+    re_int=re.compile(r"[0-9]+"),
+    re_comment=re.compile(r"(<.*?>|//.*$)"),
+    # Includes:
+    #   - General purpose registers: r0..13
+    #   - Frame pointer registers: lr (r14), pc (r15)
+    #   - VFP/NEON registers: s0..31, d0..31, q0..15, fpscr, fpexc, fpsid
+    # SP should not be in this list.
+    re_reg=re.compile(
+        r"\$?\b([rq][0-9]|[rq]1[0-5]|pc|lr|[ds][12]?[0-9]|[ds]3[01]|fp(scr|exc|sid))\b"
+    ),
+    re_sprel=re.compile(r"sp, #-?(0x[0-9a-fA-F]+|[0-9]+)\b"),
+    re_large_imm=re.compile(r"-?[1-9][0-9]{2,}|-?0x[0-9a-f]{3,}"),
+    re_imm=re.compile(r"(?<!sp, )#-?(0x[0-9a-fA-F]+|[0-9]+)\b"),
+    branch_instructions=ARM32_BRANCH_INSTRUCTIONS,
+    instructions_with_address_immediates=ARM32_BRANCH_INSTRUCTIONS.union({"adr"}),
+    difference_normalizer=DifferenceNormalizerARM32,
+)
+
 AARCH64_SETTINGS = ArchSettings(
+    name="aarch64",
     re_int=re.compile(r"[0-9]+"),
     re_comment=re.compile(r"(<.*?>|//.*$)"),
     # GPRs and FP registers: X0-X30, W0-W30, [DSHQ]0..31
@@ -1492,6 +1583,7 @@ AARCH64_SETTINGS = ArchSettings(
 )
 
 PPC_SETTINGS = ArchSettings(
+    name="ppc",
     re_int=re.compile(r"[0-9]+"),
     re_comment=re.compile(r"(<.*?>|//.*$)"),
     re_reg=re.compile(r"\$?\b([rf][0-9]+)\b"),
@@ -1501,6 +1593,14 @@ PPC_SETTINGS = ArchSettings(
     branch_instructions=PPC_BRANCH_INSTRUCTIONS,
     instructions_with_address_immediates=PPC_BRANCH_INSTRUCTIONS.union({"bl"}),
 )
+
+ARCH_SETTINGS = [
+    MIPS_SETTINGS,
+    MIPSEL_SETTINGS,
+    ARM32_SETTINGS,
+    AARCH64_SETTINGS,
+    PPC_SETTINGS,
+]
 
 
 def hexify_int(row: str, pat: Match[str], arch: ArchSettings) -> str:
@@ -1599,6 +1699,12 @@ def process_ppc_reloc(row: str, prev: str) -> str:
     elif "R_PPC_EMB_SDA21" in row:
         # small data area
         pass
+    return before + repl + after
+
+
+def process_arm_reloc(row: str, prev: str, arch: ArchSettings) -> str:
+    before, imm, after = parse_relocated_line(prev)
+    repl = row.split()[-1]
     return before + repl + after
 
 
@@ -1744,6 +1850,8 @@ def process(dump: str, config: Config) -> List[Line]:
                 original = process_mips_reloc(reloc_row, original, arch)
             elif "R_PPC_" in reloc_row:
                 original = process_ppc_reloc(reloc_row, original)
+            elif "R_ARM_" in reloc_row:
+                original = process_arm_reloc(reloc_row, original, arch)
             else:
                 break
             i += 1
@@ -2623,7 +2731,10 @@ def main() -> None:
     diff_settings.apply(settings, args)  # type: ignore
     project = create_project_settings(settings)
 
-    config = create_config(args, project)
+    try:
+        config = create_config(args, project)
+    except ValueError as e:
+        fail(str(e))
 
     if config.algorithm == "levenshtein":
         try:
