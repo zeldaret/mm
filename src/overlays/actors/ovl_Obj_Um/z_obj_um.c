@@ -103,7 +103,6 @@ typedef struct {
     /* 0x10 */ UNK_TYPE unk_10;
 } struct_80B7C254; // size = 0x14
 
-// TODO
 struct_80B7C254 D_80B7C164[12] = {
     {2, 0, 0, 1.0f, 0x28},
     {4, 1, 0, 1.0f, 0x28},
@@ -327,24 +326,20 @@ s32 func_80B77FA4(ObjUm* this, GlobalContext* globalCtx) {
     return 0;
 }
 
-#ifdef NON_MATCHING
 s32 func_80B781DC(ObjUm* this, EnHorse* arg2, EnHorse* arg3, GlobalContext* globalCtx) {
     s32 temp_v0;
-    s32 phi_s3;
-    s32 phi_s2;
-    s32 phi_s4;
-    f32 phi_f20;
+    s32 phi_s3 = -1;
+    s32 phi_s4 = 0;
+    s32 phi_s2 = 0;
+    f32 phi_f20 = 0.0f;
     s32 i;
+    s32 mask;
 
-    phi_s3 = -1;
-    phi_s4 = 0;
-    phi_s2 = 0;
-    phi_f20 = 0.0f;
     for (i = 0; i < ARRAY_COUNT(D_80B7C164); i++) {
         if (arg2->unk_550 == D_80B7C164[i].unk_00) {
             if (arg3->unk_550 != D_80B7C164[i].unk_04) {
                 if (D_80B7C164[i].unk_00 != 3) {
-                    if (D_80B7C164[i].unk_04 != 3 || Player_GetMask(globalCtx) != PLAYER_MASK_CIRCUS_LEADERS_MASK) {
+                    if (D_80B7C164[i].unk_04 != 3 || ((mask = Player_GetMask(globalCtx)), PLAYER_MASK_CIRCUS_LEADERS_MASK != mask)) {
                         phi_s3 = D_80B7C164[i].unk_04;
                         phi_s4 = D_80B7C164[i].unk_08;
                         phi_f20 = D_80B7C164[i].unk_0C;
@@ -386,10 +381,6 @@ s32 func_80B781DC(ObjUm* this, EnHorse* arg2, EnHorse* arg3, GlobalContext* glob
 
     return 0;
 }
-#else
-s32 func_80B781DC(ObjUm* this, EnHorse* arg2, EnHorse* arg3, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Um/func_80B781DC.s")
-#endif
 
 s32 func_80B783E0(ObjUm* this, GlobalContext* globalCtx, s32 arg2, EnHorse* arg3) {
     Path* sp6C = &globalCtx->setupPathList[this->unk_2BC];
