@@ -16,9 +16,9 @@ void ObjEtcetera_Update(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80A7BF08(ObjEtcetera* this, GlobalContext* globalCtx);
 void func_80A7C168(ObjEtcetera* this, GlobalContext* globalCtx);
-void func_80A7C1F0(ObjEtcetera* this, GlobalContext* globalCtx);
+void ObjEtcetera_DoSpecialFlutter(ObjEtcetera* this, GlobalContext* globalCtx);
 void func_80A7C308(ObjEtcetera* this, GlobalContext* globalCtx);
-void ObjEtcetera_PerformFlutter(ObjEtcetera* this, GlobalContext* globalCtx);
+void ObjEtcetera_DoNormalFlutter(ObjEtcetera* this, GlobalContext* globalCtx);
 void func_80A7C690(Actor* thisx, GlobalContext* globalCtx);
 void func_80A7C718(Actor* thisx, GlobalContext* globalCtx);
 
@@ -34,8 +34,7 @@ const ActorInit Obj_Etcetera_InitVars = {
     (ActorFunc)NULL,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80A7C790 = {
+static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_NONE,
         AT_NONE,
@@ -83,7 +82,7 @@ void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
     somePos.z = this->dyna.actor.world.pos.z;
     func_800C411C(&globalCtx->colCtx, &this->dyna.actor.floorPoly, &floorBgId, &this->dyna.actor, &somePos);
     this->dyna.actor.floorBgId = floorBgId;
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &D_80A7C790);
+    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
     this->actionFunc = func_80A7C308;
     Actor_SetScale(&this->dyna.actor, 0.01f);
@@ -98,7 +97,7 @@ void ObjEtcetera_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-void ObjEtcetera_PerformFlutter(ObjEtcetera* this, GlobalContext* globalCtx) {
+void ObjEtcetera_DoNormalFlutter(ObjEtcetera* this, GlobalContext* globalCtx) {
     if (this->flutterTimer > 0) {
         Actor_SetScale(&this->dyna.actor,
                        (flutterValues[globalCtx->gameplayFrames % 18] * (0.0001f * this->flutterTimer)) + 0.01f);
@@ -126,10 +125,10 @@ void func_80A7BF08(ObjEtcetera* this, GlobalContext* globalCtx) {
         SkelAnime_ChangeAnim(&this->skelAnime, &D_0400EB7C, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_0400EB7C.common), 2,
                              0.0f);
         this->dyna.actor.draw = func_80A7C718;
-        this->actionFunc = func_80A7C1F0;
+        this->actionFunc = ObjEtcetera_DoSpecialFlutter;
         Actor_SetScale(&this->dyna.actor, 0.01f);
         this->dyna.actor.scale.y = 0.02f;
-        this->unk_270 = 0.003f;
+        this->specialFlutterScale = 0.003f;
         this->flutterTimer = 30;
         this->burrowFlag &= ~1;
     } else if ((player->stateFlags3 & 0x2000) && (this->dyna.actor.xzDistToPlayer < 30.0f) &&
@@ -159,7 +158,7 @@ void func_80A7BF08(ObjEtcetera* this, GlobalContext* globalCtx) {
         this->flutterTimer = 10;
         func_80A7BE8C(this);
     }
-    ObjEtcetera_PerformFlutter(this, globalCtx);
+    ObjEtcetera_DoNormalFlutter(this, globalCtx);
 }
 
 void func_80A7C168(ObjEtcetera* this, GlobalContext* globalCtx) {
@@ -172,10 +171,10 @@ void func_80A7C168(ObjEtcetera* this, GlobalContext* globalCtx) {
         this->dyna.actor.draw = func_80A7C690;
         this->actionFunc = func_80A7BF08;
     }
-    ObjEtcetera_PerformFlutter(this, globalCtx);
+    ObjEtcetera_DoNormalFlutter(this, globalCtx);
 }
 
-void func_80A7C1F0(ObjEtcetera* this, GlobalContext* globalCtx) {
+void ObjEtcetera_DoSpecialFlutter(ObjEtcetera* this, GlobalContext* globalCtx) {
     // In order to match, we are seemingly required to access scale.x at one point
     // without using this. We can create a thisx or dyna pointer to achieve that, but
     // it's more likely they used dyna given that func_800CAF70 takes a DynaPolyActor.
@@ -196,12 +195,12 @@ void func_80A7C1F0(ObjEtcetera* this, GlobalContext* globalCtx) {
         Actor_SetScale(&this->dyna.actor, 0.01f);
         this->dyna.actor.scale.y = 0.02f;
         this->flutterTimer = 0;
-        this->unk_270 = 0.0f;
+        this->specialFlutterScale = 0.0f;
         return;
     }
-    this->unk_270 *= 0.8f;
-    this->unk_270 -= (this->dyna.actor.scale.x - 0.01f) * 0.4f;
-    scaleTemp = dyna->actor.scale.x + this->unk_270;
+    this->specialFlutterScale *= 0.8f;
+    this->specialFlutterScale -= (this->dyna.actor.scale.x - 0.01f) * 0.4f;
+    scaleTemp = dyna->actor.scale.x + this->specialFlutterScale;
     Actor_SetScale(&this->dyna.actor, scaleTemp);
     this->dyna.actor.scale.y = 2.0f * scaleTemp;
 }
@@ -259,10 +258,10 @@ void func_80A7C308(ObjEtcetera* this, GlobalContext* globalCtx) {
                 SkelAnime_ChangeAnim(sp34, &D_0400EB7C, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_0400EB7C.common), 2,
                                      0.0f);
                 this->dyna.actor.draw = func_80A7C718;
-                this->actionFunc = func_80A7C1F0;
+                this->actionFunc = ObjEtcetera_DoSpecialFlutter;
                 Actor_SetScale(&this->dyna.actor, 0.0f);
                 this->flutterTimer = 30;
-                this->unk_270 = 0.0f;
+                this->specialFlutterScale = 0.0f;
                 this->dyna.actor.focus.pos.y = this->dyna.actor.home.pos.y + 10.0f;
                 this->dyna.actor.targetMode = 3;
                 break;

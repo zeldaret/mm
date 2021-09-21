@@ -11107,7 +11107,7 @@
     0x80A7BE8C:("func_80A7BE8C",),
     0x80A7BF08:("func_80A7BF08",),
     0x80A7C168:("func_80A7C168",),
-    0x80A7C1F0:("func_80A7C1F0",),
+    0x80A7C1F0:("ObjEtcetera_DoSpecialFlutter",),
     0x80A7C308:("func_80A7C308",),
     0x80A7C5EC:("ObjEtcetera_Update",),
     0x80A7C690:("func_80A7C690",),
