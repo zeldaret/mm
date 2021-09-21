@@ -122,6 +122,7 @@ void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
     if ((player->stateFlags3 & 0x200) && (this->dyna.actor.xzDistToPlayer < 20.0f)) {
+        // Link is launching himself out of the Deku Flower
         SkelAnime_ChangeAnim(&this->skelAnime, &D_0400EB7C, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_0400EB7C.common), 2,
                              0.0f);
         this->dyna.actor.draw = ObjEtcetera_DrawWithSkelAnime;
@@ -133,6 +134,7 @@ void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx) {
         this->burrowFlag &= ~1;
     } else if ((player->stateFlags3 & 0x2000) && (this->dyna.actor.xzDistToPlayer < 30.0f) &&
                (this->dyna.actor.yDistToPlayer > 0.0f)) {
+        // Link is slowly hovering down to the Deku Flower
         minFlutterTimer = 10 - (s32)(this->dyna.actor.yDistToPlayer * 0.05f);
         if (this->flutterTimer < minFlutterTimer) {
             this->flutterTimer = minFlutterTimer;
@@ -140,21 +142,25 @@ void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx) {
     } else {
         if (func_800CAF70(&this->dyna)) {
             if (!OBJETCETERA_CAN_BURROW_INTO_FLOWER(this)) {
+                // Link is walking onto the Deku Flower, or falling on it from a height
                 this->flutterTimer = 10;
                 ObjEtcetera_SwitchToIdleAnimations(this);
             } else if ((player->actor.speedXZ > 0.1f) || ((player->unk_ABC < 0.0f) && !(player->stateFlags3 & 0x100))) {
+                // Link is walking on top of the Deku Flower, is at the very start of burrowing, or is at the very start
+                // of launching
                 this->flutterTimer = 10;
             }
             this->burrowFlag |= 1;
         } else {
             if (OBJETCETERA_CAN_BURROW_INTO_FLOWER(this)) {
+                // Link is walking off the Deku Flower
                 this->flutterTimer = 10;
                 ObjEtcetera_SwitchToIdleAnimations(this);
             }
             this->burrowFlag &= ~1;
         }
     }
-    if ((this->collider.base.acFlags & 2)) {
+    if ((this->collider.base.acFlags & AC_HIT)) {
         this->flutterTimer = 10;
         ObjEtcetera_SwitchToIdleAnimations(this);
     }
