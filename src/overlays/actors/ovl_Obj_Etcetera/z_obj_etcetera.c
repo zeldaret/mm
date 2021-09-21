@@ -70,7 +70,7 @@ void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 floorBgId;
     Vec3f somePos;
 
-    type = OBJ_ETCETERA_TYPE(&this->dyna.actor);
+    type = OBJETCETERA_TYPE(&this->dyna.actor);
     if ((type < TYPE_PINK_FLOWER) || (type >= NUMBER_OF_TYPES)) {
         type = TYPE_PINK_FLOWER;
     }
@@ -88,7 +88,7 @@ void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc = func_80A7C308;
     Actor_SetScale(&this->dyna.actor, 0.01f);
     this->dyna.actor.scale.y = 0.02f;
-    this->unk_276 = 0;
+    this->burrowFlag = 0;
 }
 
 void ObjEtcetera_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -131,7 +131,7 @@ void func_80A7BF08(ObjEtcetera* this, GlobalContext* globalCtx) {
         this->dyna.actor.scale.y = 0.02f;
         this->unk_270 = 0.003f;
         this->flutterTimer = 30;
-        this->unk_276 &= ~1;
+        this->burrowFlag &= ~1;
     } else if ((player->stateFlags3 & 0x2000) && (this->dyna.actor.xzDistToPlayer < 30.0f) &&
                (this->dyna.actor.yDistToPlayer > 0.0f)) {
         minFlutterTimer = 10 - (s32)(this->dyna.actor.yDistToPlayer * 0.05f);
@@ -140,19 +140,19 @@ void func_80A7BF08(ObjEtcetera* this, GlobalContext* globalCtx) {
         }
     } else {
         if (func_800CAF70(&this->dyna) != 0) {
-            if (!(this->unk_276 & 1)) {
+            if (!OBJETCETERA_CAN_BURROW_INTO_FLOWER(this)) {
                 this->flutterTimer = 10;
                 func_80A7BE8C(this);
             } else if ((player->actor.speedXZ > 0.1f) || ((player->unk_ABC < 0.0f) && !(player->stateFlags3 & 0x100))) {
                 this->flutterTimer = 10;
             }
-            this->unk_276 |= 1;
+            this->burrowFlag |= 1;
         } else {
-            if (this->unk_276 & 1) {
+            if (OBJETCETERA_CAN_BURROW_INTO_FLOWER(this)) {
                 this->flutterTimer = 10;
                 func_80A7BE8C(this);
             }
-            this->unk_276 &= ~1;
+            this->burrowFlag &= ~1;
         }
     }
     if ((this->collider.base.acFlags & 2)) {
@@ -164,9 +164,9 @@ void func_80A7BF08(ObjEtcetera* this, GlobalContext* globalCtx) {
 
 void func_80A7C168(ObjEtcetera* this, GlobalContext* globalCtx) {
     if (func_800CAF70(&this->dyna)) {
-        this->unk_276 |= 1;
+        this->burrowFlag |= 1;
     } else {
-        this->unk_276 &= ~1;
+        this->burrowFlag &= ~1;
     }
     if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
         this->dyna.actor.draw = func_80A7C690;
@@ -183,9 +183,9 @@ void func_80A7C1F0(ObjEtcetera* this, GlobalContext* globalCtx) {
     f32 scaleTemp;
 
     if (func_800CAF70(dyna)) {
-        this->unk_276 |= 1;
+        this->burrowFlag |= 1;
     } else {
-        this->unk_276 &= ~1;
+        this->burrowFlag &= ~1;
     }
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     if (0 < this->flutterTimer) {
@@ -213,7 +213,7 @@ void func_80A7C308(ObjEtcetera* this, GlobalContext* globalCtx) {
     SkelAnime* sp34;
     CollisionHeader* thisCollisionHeader;
 
-    type = OBJ_ETCETERA_TYPE(&this->dyna.actor);
+    type = OBJETCETERA_TYPE(&this->dyna.actor);
     if ((type < TYPE_PINK_FLOWER) || (type >= NUMBER_OF_TYPES)) {
         type = TYPE_PINK_FLOWER;
     }
@@ -226,7 +226,7 @@ void func_80A7C308(ObjEtcetera* this, GlobalContext* globalCtx) {
             BgCheck_RelocateMeshHeader(thisCollisionHeader, &sp5C);
         }
         this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, sp5C);
-        type = OBJ_ETCETERA_TYPE(&this->dyna.actor);
+        type = OBJETCETERA_TYPE(&this->dyna.actor);
         switch (type) {
             case TYPE_PINK_FLOWER:
             case TYPE_PINK_FLOWER_SPAWNED_FROM_MAD_SCRUB:
@@ -242,7 +242,7 @@ void func_80A7C308(ObjEtcetera* this, GlobalContext* globalCtx) {
                 this->collider.dim.height = 20;
                 break;
         }
-        type = OBJ_ETCETERA_TYPE(&this->dyna.actor);
+        type = OBJETCETERA_TYPE(&this->dyna.actor);
         switch (type) {
             case TYPE_PINK_FLOWER:
             case TYPE_GOLD_FLOWER:
@@ -278,7 +278,7 @@ void ObjEtcetera_Update(Actor* thisx, GlobalContext* globalCtx) {
     floorBgId = this->dyna.actor.floorBgId;
     if (floorBgId == 0x32) {
         floorPoly = this->dyna.actor.floorPoly;
-        if ((floorPoly != NULL) && ((this->unk_276 & 1))) {
+        if (floorPoly != NULL && OBJETCETERA_CAN_BURROW_INTO_FLOWER(this)) {
             func_800FAAB4(globalCtx, func_800C9C9C(&globalCtx->colCtx, floorPoly, floorBgId));
         }
     }

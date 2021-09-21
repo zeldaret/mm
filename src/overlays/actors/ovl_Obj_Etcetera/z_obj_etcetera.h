@@ -3,7 +3,8 @@
 
 #include "global.h"
 
-#define OBJ_ETCETERA_TYPE(thisx) (((thisx)->params & 0xFF80) >> 7)
+#define OBJETCETERA_TYPE(thisx) (((thisx)->params & 0xFF80) >> 7)
+#define OBJETCETERA_CAN_BURROW_INTO_FLOWER(this) (((this)->burrowFlag & 1) != 0)
 
 typedef enum {
     /*  0   */ TYPE_PINK_FLOWER,
@@ -26,7 +27,7 @@ typedef struct ObjEtcetera {
     /* 0x022E */ Vec3s transitionDrawTbl[11];
     /* 0x0270 */ f32 unk_270;
     /* 0x0274 */ s16 flutterTimer;
-    /* 0x0276 */ u16 unk_276;
+    /* 0x0276 */ u16 burrowFlag;
     /* 0x0278 */ s8 objIndex;
     /* 0x027C */ Gfx* displayListPtr;
     /* 0x0280 */ ObjEtceteraActionFunc actionFunc;
