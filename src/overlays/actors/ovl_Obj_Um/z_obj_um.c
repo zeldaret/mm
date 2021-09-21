@@ -1824,12 +1824,10 @@ void func_80B7B93C(GlobalContext* globalCtx, Vec3f* arg1) {
     }
 }
 
-#ifdef NON_MATCHING
 void func_80B7BABC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor) {
     ObjUm* this = actor;
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
     Mtx *mtx_s3;
-
     Gfx* spFC [] = {
         0x00000000,
         0x060052B0,
@@ -1838,7 +1836,6 @@ void func_80B7BABC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         0x06003C60,
         0x060067C0,
     };
-
     Gfx* spE4[] = {
         0x00000000,
         0x00000000,
@@ -1847,7 +1844,6 @@ void func_80B7BABC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         0x00000000,
         0x00000000,
     };
-
     f32 spCC[] = {
         0.0f,
         1070.0f,
@@ -1856,11 +1852,8 @@ void func_80B7BABC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         1070.0f,
         2100.0f,
     };
-
     Vec3f spC0 = D_801D15B0;
-
     Vec3f spB4;
-
     f32 spB0;
 
     spC0.y += 1700.0f;
@@ -1894,8 +1887,8 @@ void func_80B7BABC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         OPEN_DISPS(gfxCtx);
 
         for (sp7C = 0; sp7C < 3; sp7C++) {
-            sp88.y = sp70[sp7C];
-            sp88.z = spCC[this->unk_314[sp7C]];
+            sp88.z = sp70[sp7C];
+            sp88.y = spCC[this->unk_314[sp7C]];
 
             if (this->unk_314[sp7C] == 5) {
                 sp80.y = 0x4000;
@@ -1944,42 +1937,6 @@ void func_80B7BABC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         SysMatrix_GetStateTranslation(&actor->focus.pos);
     }
 }
-#else
-
-Gfx* D_80B7C2B4 [] = {
-    0x00000000,
-    0x060052B0,
-    0x06003C60,
-    0x06003C60,
-    0x06003C60,
-    0x060067C0,
-};
-
-Gfx* D_80B7C2CC[] = {
-    0x00000000,
-    0x00000000,
-    0x06004B60,
-    0x060043E0,
-    0x00000000,
-    0x00000000,
-};
-
-f32 D_80B7C2E4[] = {
-    0.0f,
-    1070.0f,
-    1070.0f,
-    1070.0f,
-    1070.0f,
-    2100.0f,
-};
-
-Vec3f D_80B7C2FC = {2000.0f, 1070.0f, 0.0f};
-Vec3f D_80B7C308 = {2500.0f, 200.0f, 0.0f};
-Vec3f D_80B7C314 = {2000.0f, 0.0f, -2000.0f};
-
-void func_80B7BABC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Um/func_80B7BABC.s")
-#endif
 
 void func_80B7BEA4(Vec3f* arg0, s16 arg1, Vec3f* arg2, u8 arg3, GlobalContext* globalCtx) {
     f32 temp;
