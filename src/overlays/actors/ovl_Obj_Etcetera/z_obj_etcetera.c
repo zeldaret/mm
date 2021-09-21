@@ -76,7 +76,7 @@ void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
     objectIndex = Object_GetIndex(&globalCtx->objectCtx, D_80A7C7BC[index]);
     if (objectIndex >= 0) {
-        this->unk_278 = objectIndex;
+        this->objIndex = objectIndex;
     }
     somePos.x = this->dyna.actor.world.pos.x;
     somePos.y = this->dyna.actor.world.pos.y + 10.0f;
@@ -217,8 +217,8 @@ void func_80A7C308(ObjEtcetera* this, GlobalContext* globalCtx) {
     if ((index < 0) || (index >= 4)) {
         index = 0;
     }
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->unk_278)) {
-        this->dyna.actor.objBankIndex = this->unk_278;
+    if (Object_IsLoaded(&globalCtx->objectCtx, this->objIndex)) {
+        this->dyna.actor.objBankIndex = this->objIndex;
         Actor_SetObjectSegment(globalCtx, &this->dyna.actor);
         BcCheck3_BgActorInit(&this->dyna, 1);
         thisCollisionHeader = allCollisionHeaders[index];
