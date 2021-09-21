@@ -62,8 +62,6 @@ static s16 D_80A7C7BC[] = { 0x0001, 0x0001, 0x0001, 0x0001 };
 static f32 D_80A7C7C4[] = { -1.0, -1.0, -1.0, -0.7, 0.0, 0.7, 1.0, 0.7, 0.0,
                             -0.7, -1.0, -0.7, 0.0,  0.7, 1.0, 0.7, 0.0, -0.7 };
 
-static CollisionHeader* D_80A7C80C[] = { &D_0400E710, &D_0400E710, &D_040118D8, &D_040118D8, NULL };
-
 void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     ObjEtcetera* this = THIS;
@@ -208,7 +206,69 @@ void func_80A7C1F0(ObjEtcetera* this, GlobalContext* globalCtx) {
     this->dyna.actor.scale.y = 2.0f * scaleTemp;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Etcetera/func_80A7C308.s")
+void func_80A7C308(ObjEtcetera* this, GlobalContext* globalCtx) {
+    CollisionHeader* sp5C = NULL;
+    s32 index;
+    CollisionHeader* allCollisionHeaders[] = { &D_0400E710, &D_0400E710, &D_040118D8, &D_040118D8 };
+    SkelAnime* sp34;
+    CollisionHeader* thisCollisionHeader;
+
+    index = (this->dyna.actor.params & 0xFF80) >> 7;
+    if ((index < 0) || (index >= 4)) {
+        index = 0;
+    }
+    if (Object_IsLoaded(&globalCtx->objectCtx, this->unk_278)) {
+        this->dyna.actor.objBankIndex = this->unk_278;
+        Actor_SetObjectSegment(globalCtx, &this->dyna.actor);
+        BcCheck3_BgActorInit(&this->dyna, 1);
+        thisCollisionHeader = allCollisionHeaders[index];
+        if (thisCollisionHeader != 0) {
+            BgCheck_RelocateMeshHeader(thisCollisionHeader, &sp5C);
+        }
+        this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, sp5C);
+        index = (this->dyna.actor.params & 0xFF80) >> 7;
+        switch (index) {
+            case 0:
+            case 1:
+                SkelAnime_Init(globalCtx, &this->skelAnime, &D_04011518, (AnimationHeader*)&D_0400EB7C,
+                               this->limbDrawTbl, this->transitionDrawTbl, 11);
+                this->unk_27C = &D_0400ED80;
+                break;
+            case 2:
+            case 3:
+                this->unk_27C = &D_04011BD0;
+                SkelAnime_Init(globalCtx, &this->skelAnime, &D_040127E8, (AnimationHeader*)&D_0400EB7C,
+                               this->limbDrawTbl, this->transitionDrawTbl, 11);
+                this->collider.dim.height = 20;
+                break;
+        }
+        index = (this->dyna.actor.params & 0xFF80) >> 7;
+        switch (index) {
+            case 0:
+            case 2:
+                this->dyna.actor.draw = func_80A7C690;
+                this->actionFunc = func_80A7BF08;
+                Actor_SetScale(&this->dyna.actor, 0.01f);
+                this->dyna.actor.scale.y = 0.02f;
+                this->dyna.actor.focus.pos.y = this->dyna.actor.home.pos.y + 10.0f;
+                this->dyna.actor.targetMode = 3;
+                break;
+            case 1:
+            case 3:
+                sp34 = &this->skelAnime;
+                SkelAnime_ChangeAnim(sp34, (AnimationHeader*)&D_0400EB7C, 1.0f, 0.0f,
+                                     SkelAnime_GetFrameCount((AnimationHeaderCommon*)&D_0400EB7C), 2, 0.0f);
+                this->dyna.actor.draw = func_80A7C718;
+                this->actionFunc = func_80A7C1F0;
+                Actor_SetScale(&this->dyna.actor, 0.0f);
+                this->unk_274 = 30;
+                this->unk_270 = 0.0f;
+                this->dyna.actor.focus.pos.y = this->dyna.actor.home.pos.y + 10.0f;
+                this->dyna.actor.targetMode = 3;
+                break;
+        }
+    }
+}
 
 void ObjEtcetera_Update(Actor* thisx, GlobalContext* globalCtx) {
     ObjEtcetera* this = THIS;
