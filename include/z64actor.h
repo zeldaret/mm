@@ -236,7 +236,6 @@ typedef struct {
     /* 0x15A */ s16 pad15A;
 } DynaPolyActor; // size = 0x15C
 
-
 typedef enum {
     /* 0x00 */ ITEM00_RUPEE_GREEN,
     /* 0x01 */ ITEM00_RUPEE_BLUE,

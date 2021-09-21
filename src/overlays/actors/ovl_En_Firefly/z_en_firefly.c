@@ -645,7 +645,7 @@ void EnFirefly_UpdateDamage(EnFirefly* this, GlobalContext* globalCtx) {
             this->unk_2E8.y = 0.55f;
             EnFirefly_SetupStunned(this);
         } else {
-            func_800BBA88(globalCtx, &this->actor);
+            Enemy_StartFinishingBlow(globalCtx, &this->actor);
             this->actor.colChkInfo.health = 0;
             this->actor.flags &= ~1;
 

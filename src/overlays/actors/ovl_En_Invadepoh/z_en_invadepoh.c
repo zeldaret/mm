@@ -2307,7 +2307,7 @@ void func_80B479E8(EnInvadepoh* this, GlobalContext* globalCtx) {
     }
 
     if (this->actionTimer == 8) {
-        func_800BBA88(globalCtx, &this->actor);
+        Enemy_StartFinishingBlow(globalCtx, &this->actor);
     }
 
     this->actionTimer--;
@@ -2372,7 +2372,7 @@ void func_80B47D30(Actor* thisx, GlobalContext* globalCtx) {
         thisx->gravity = 0.0f;
         thisx->velocity.y = acAttached->velocity.y * 0.5f;
         thisx->velocity.y = CLAMP(thisx->velocity.y, -30.0f, 30.0f);
-        func_800F0568(globalCtx, &thisx->world.pos, 50, NA_SE_EN_INVADER_DEAD);
+        Audio_PlaySoundAtPosition(globalCtx, &thisx->world.pos, 50, NA_SE_EN_INVADER_DEAD);
         func_80B47830(this);
     }
 

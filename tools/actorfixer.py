@@ -32,6 +32,10 @@ animdict ={
     "func_800B81E0": "Actor_GetFocus",
     "func_800B8214": "Actor_GetWorld",
     "func_800B8248": "Actor_GetWorldPosShapeRot",
+    "func_800BE22C": "Actor_ApplyDamage",
+    "func_800F0568": "Audio_PlaySoundAtPosition",
+    "func_8016970C": "Play_CameraSetAtEye",
+    "func_800BBA88": "Enemy_StartFinishingBlow",
 }
 
 def replace_anim(file):
