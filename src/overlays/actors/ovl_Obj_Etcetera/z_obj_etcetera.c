@@ -112,8 +112,8 @@ void func_80A7BDC8(ObjEtcetera* this, GlobalContext* globalCtx) {
 }
 
 void func_80A7BE8C(ObjEtcetera* this) {
-    SkelAnime_ChangeAnim(&this->skelAnime, (AnimationHeader*)&D_040117A8, 1.0f, 0.0f,
-                         SkelAnime_GetFrameCount((AnimationHeaderCommon*)&D_040117A8), 2, 0.0f);
+    SkelAnime_ChangeAnim(&this->skelAnime, &D_040117A8, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_040117A8.common), 2,
+                         0.0f);
     this->dyna.actor.draw = func_80A7C718;
     this->actionFunc = func_80A7C168;
 }
@@ -123,8 +123,8 @@ void func_80A7BF08(ObjEtcetera* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
     if ((player->stateFlags3 & 0x200) && (this->dyna.actor.xzDistToPlayer < 20.0f)) {
-        SkelAnime_ChangeAnim(&this->skelAnime, (AnimationHeader*)&D_0400EB7C, 1.0f, 0.0f,
-                             SkelAnime_GetFrameCount((AnimationHeaderCommon*)&D_0400EB7C), 2, 0.0f);
+        SkelAnime_ChangeAnim(&this->skelAnime, &D_0400EB7C, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_0400EB7C.common), 2,
+                             0.0f);
         this->dyna.actor.draw = func_80A7C718;
         this->actionFunc = func_80A7C1F0;
         Actor_SetScale(&this->dyna.actor, 0.01f);
@@ -230,15 +230,15 @@ void func_80A7C308(ObjEtcetera* this, GlobalContext* globalCtx) {
         switch (index) {
             case 0:
             case 1:
-                SkelAnime_Init(globalCtx, &this->skelAnime, &D_04011518, (AnimationHeader*)&D_0400EB7C,
-                               this->limbDrawTbl, this->transitionDrawTbl, 11);
+                SkelAnime_Init(globalCtx, &this->skelAnime, &D_04011518, &D_0400EB7C, this->limbDrawTbl,
+                               this->transitionDrawTbl, 11);
                 this->unk_27C = &D_0400ED80;
                 break;
             case 2:
             case 3:
                 this->unk_27C = &D_04011BD0;
-                SkelAnime_Init(globalCtx, &this->skelAnime, &D_040127E8, (AnimationHeader*)&D_0400EB7C,
-                               this->limbDrawTbl, this->transitionDrawTbl, 11);
+                SkelAnime_Init(globalCtx, &this->skelAnime, &D_040127E8, &D_0400EB7C, this->limbDrawTbl,
+                               this->transitionDrawTbl, 11);
                 this->collider.dim.height = 20;
                 break;
         }
@@ -256,8 +256,8 @@ void func_80A7C308(ObjEtcetera* this, GlobalContext* globalCtx) {
             case 1:
             case 3:
                 sp34 = &this->skelAnime;
-                SkelAnime_ChangeAnim(sp34, (AnimationHeader*)&D_0400EB7C, 1.0f, 0.0f,
-                                     SkelAnime_GetFrameCount((AnimationHeaderCommon*)&D_0400EB7C), 2, 0.0f);
+                SkelAnime_ChangeAnim(sp34, &D_0400EB7C, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_0400EB7C.common), 2,
+                                     0.0f);
                 this->dyna.actor.draw = func_80A7C718;
                 this->actionFunc = func_80A7C1F0;
                 Actor_SetScale(&this->dyna.actor, 0.0f);
