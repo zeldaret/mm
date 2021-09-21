@@ -11103,7 +11103,7 @@
     0x80A7AFA8:("EnJso2_Draw",),
     0x80A7BC70:("ObjEtcetera_Init",),
     0x80A7BD80:("ObjEtcetera_Destroy",),
-    0x80A7BDC8:("func_80A7BDC8",),
+    0x80A7BDC8:("ObjEtcetera_PerformFlutter",),
     0x80A7BE8C:("func_80A7BE8C",),
     0x80A7BF08:("func_80A7BF08",),
     0x80A7C168:("func_80A7C168",),

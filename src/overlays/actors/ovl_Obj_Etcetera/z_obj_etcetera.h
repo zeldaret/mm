@@ -14,7 +14,7 @@ typedef struct ObjEtcetera {
     /* 0x01EC */ Vec3s limbDrawTbl[11];
     /* 0x022E */ Vec3s transitionDrawTbl[11];
     /* 0x0270 */ f32 unk_270;
-    /* 0x0274 */ s16 unk_274;
+    /* 0x0274 */ s16 flutterTimer;
     /* 0x0276 */ u16 unk_276;
     /* 0x0278 */ s8 unk_278;
     /* 0x027C */ Gfx* unk_27C;

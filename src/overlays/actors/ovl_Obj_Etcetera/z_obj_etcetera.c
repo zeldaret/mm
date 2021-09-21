@@ -18,7 +18,7 @@ void func_80A7BF08(ObjEtcetera* this, GlobalContext* globalCtx);
 void func_80A7C168(ObjEtcetera* this, GlobalContext* globalCtx);
 void func_80A7C1F0(ObjEtcetera* this, GlobalContext* globalCtx);
 void func_80A7C308(ObjEtcetera* this, GlobalContext* globalCtx);
-void func_80A7BDC8(ObjEtcetera* this, GlobalContext* globalCtx);
+void ObjEtcetera_PerformFlutter(ObjEtcetera* this, GlobalContext* globalCtx);
 void func_80A7C690(Actor* thisx, GlobalContext* globalCtx);
 void func_80A7C718(Actor* thisx, GlobalContext* globalCtx);
 
@@ -59,8 +59,8 @@ extern ColliderCylinderInit D_80A7C790;
 
 static s16 D_80A7C7BC[] = { 0x0001, 0x0001, 0x0001, 0x0001 };
 
-static f32 D_80A7C7C4[] = { -1.0, -1.0, -1.0, -0.7, 0.0, 0.7, 1.0, 0.7, 0.0,
-                            -0.7, -1.0, -0.7, 0.0,  0.7, 1.0, 0.7, 0.0, -0.7 };
+static f32 flutterValues[] = { -1.0, -1.0, -1.0, -0.7, 0.0, 0.7, 1.0, 0.7, 0.0,
+                               -0.7, -1.0, -0.7, 0.0,  0.7, 1.0, 0.7, 0.0, -0.7 };
 
 void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
@@ -98,12 +98,12 @@ void ObjEtcetera_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-void func_80A7BDC8(ObjEtcetera* this, GlobalContext* globalCtx) {
-    if (this->unk_274 > 0) {
+void ObjEtcetera_PerformFlutter(ObjEtcetera* this, GlobalContext* globalCtx) {
+    if (this->flutterTimer > 0) {
         Actor_SetScale(&this->dyna.actor,
-                       (D_80A7C7C4[globalCtx->gameplayFrames % 18] * (0.0001f * this->unk_274)) + 0.01f);
+                       (flutterValues[globalCtx->gameplayFrames % 18] * (0.0001f * this->flutterTimer)) + 0.01f);
         this->dyna.actor.scale.y = 0.02f;
-        this->unk_274 -= 1;
+        this->flutterTimer--;
     dummy_label:; // POSSIBLE FAKE MATCH
         return;
     }
@@ -119,7 +119,7 @@ void func_80A7BE8C(ObjEtcetera* this) {
 }
 
 void func_80A7BF08(ObjEtcetera* this, GlobalContext* globalCtx) {
-    s16 temp_v0_2;
+    s16 minFlutterTimer;
     Player* player = PLAYER;
 
     if ((player->stateFlags3 & 0x200) && (this->dyna.actor.xzDistToPlayer < 20.0f)) {
@@ -130,36 +130,36 @@ void func_80A7BF08(ObjEtcetera* this, GlobalContext* globalCtx) {
         Actor_SetScale(&this->dyna.actor, 0.01f);
         this->dyna.actor.scale.y = 0.02f;
         this->unk_270 = 0.003f;
-        this->unk_274 = 30;
+        this->flutterTimer = 30;
         this->unk_276 &= ~1;
     } else if ((player->stateFlags3 & 0x2000) && (this->dyna.actor.xzDistToPlayer < 30.0f) &&
                (this->dyna.actor.yDistToPlayer > 0.0f)) {
-        temp_v0_2 = 10 - (s32)(this->dyna.actor.yDistToPlayer * 0.05f);
-        if (this->unk_274 < temp_v0_2) {
-            this->unk_274 = temp_v0_2;
+        minFlutterTimer = 10 - (s32)(this->dyna.actor.yDistToPlayer * 0.05f);
+        if (this->flutterTimer < minFlutterTimer) {
+            this->flutterTimer = minFlutterTimer;
         }
     } else {
         if (func_800CAF70(&this->dyna) != 0) {
             if (!(this->unk_276 & 1)) {
-                this->unk_274 = 10;
+                this->flutterTimer = 10;
                 func_80A7BE8C(this);
             } else if ((player->actor.speedXZ > 0.1f) || ((player->unk_ABC < 0.0f) && !(player->stateFlags3 & 0x100))) {
-                this->unk_274 = 10;
+                this->flutterTimer = 10;
             }
             this->unk_276 |= 1;
         } else {
             if (this->unk_276 & 1) {
-                this->unk_274 = 10;
+                this->flutterTimer = 10;
                 func_80A7BE8C(this);
             }
             this->unk_276 &= ~1;
         }
     }
     if ((this->collider.base.acFlags & 2)) {
-        this->unk_274 = 10;
+        this->flutterTimer = 10;
         func_80A7BE8C(this);
     }
-    func_80A7BDC8(this, globalCtx);
+    ObjEtcetera_PerformFlutter(this, globalCtx);
 }
 
 void func_80A7C168(ObjEtcetera* this, GlobalContext* globalCtx) {
@@ -172,7 +172,7 @@ void func_80A7C168(ObjEtcetera* this, GlobalContext* globalCtx) {
         this->dyna.actor.draw = func_80A7C690;
         this->actionFunc = func_80A7BF08;
     }
-    func_80A7BDC8(this, globalCtx);
+    ObjEtcetera_PerformFlutter(this, globalCtx);
 }
 
 void func_80A7C1F0(ObjEtcetera* this, GlobalContext* globalCtx) {
@@ -188,14 +188,14 @@ void func_80A7C1F0(ObjEtcetera* this, GlobalContext* globalCtx) {
         this->unk_276 &= ~1;
     }
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-    if (0 < this->unk_274) {
-        this->unk_274--;
+    if (0 < this->flutterTimer) {
+        this->flutterTimer--;
     } else {
         this->dyna.actor.draw = func_80A7C690;
         this->actionFunc = func_80A7BF08;
         Actor_SetScale(&this->dyna.actor, 0.01f);
         this->dyna.actor.scale.y = 0.02f;
-        this->unk_274 = 0;
+        this->flutterTimer = 0;
         this->unk_270 = 0.0f;
         return;
     }
@@ -261,7 +261,7 @@ void func_80A7C308(ObjEtcetera* this, GlobalContext* globalCtx) {
                 this->dyna.actor.draw = func_80A7C718;
                 this->actionFunc = func_80A7C1F0;
                 Actor_SetScale(&this->dyna.actor, 0.0f);
-                this->unk_274 = 30;
+                this->flutterTimer = 30;
                 this->unk_270 = 0.0f;
                 this->dyna.actor.focus.pos.y = this->dyna.actor.home.pos.y + 10.0f;
                 this->dyna.actor.targetMode = 3;
