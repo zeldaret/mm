@@ -50,12 +50,6 @@ static ColliderCylinderInit D_80A7C790 = {
 };
 
 extern ColliderCylinderInit D_80A7C790;
-extern CollisionHeader D_0400E710;
-extern Gfx D_0400ED80;
-extern SkeletonHeader D_04011518;
-extern CollisionHeader D_040118D8;
-extern Gfx D_04011BD0;
-extern SkeletonHeader D_040127E8;
 
 static s16 D_80A7C7BC[] = { 0x0001, 0x0001, 0x0001, 0x0001 };
 
