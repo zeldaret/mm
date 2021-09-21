@@ -279,7 +279,7 @@ void EnSkb_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80994DA8(EnSkb* this, GlobalContext* globalCtx) {
-    if (Actor_IsActorFacingLink(&this->actor, 0x11C7) && (this->actor.xzDistToPlayer < 60.0f) &&
+    if (Actor_IsActorFacingPlayer(&this->actor, 0x11C7) && (this->actor.xzDistToPlayer < 60.0f) &&
         (Player_GetMask(globalCtx) != PLAYER_MASK_CAPTAINS_HAT)) {
         func_80995C24(this);
     } else {
@@ -317,7 +317,7 @@ void func_80994E94(EnSkb* this, GlobalContext* globalCtx) {
 }
 
 void func_80994F7C(EnSkb* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, globalCtx)) {
         this->unk_3E2 = 1;
         if (this->unk_3E0 == 1) {
             func_801518B0(globalCtx, 0x13F8, &this->actor);
@@ -327,7 +327,7 @@ void func_80994F7C(EnSkb* this, GlobalContext* globalCtx) {
         }
         this->actionFunc = func_80995190;
         this->actor.speedXZ = 0.0f;
-    } else if (Actor_IsActorFacingLink(&this->actor, 0x2AAA) && !(this->collider.base.acFlags & AC_HIT)) {
+    } else if (Actor_IsActorFacingPlayer(&this->actor, 0x2AAA) && !(this->collider.base.acFlags & AC_HIT)) {
         func_800B8614(&this->actor, globalCtx, 100.0f);
     }
 }
@@ -338,7 +338,7 @@ void func_8099504C(EnSkb* this) {
 }
 
 void func_80995068(EnSkb* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, globalCtx)) {
         this->unk_3E2 = 1;
         if (this->unk_3E0 == 1) {
             func_801518B0(globalCtx, 0x13F8, &this->actor);
@@ -427,7 +427,7 @@ void func_8099533C(EnSkb* this, GlobalContext* globalCtx) {
         this->actor.flags &= ~(0x4 | 0x1);
         this->actor.flags |= (0x8 | 0x1);
         func_80994F7C(this, globalCtx);
-    } else if (Actor_IsActorFacingLink(&this->actor, 0x2AAA) && (this->actor.xzDistToPlayer < 200.0f)) {
+    } else if (Actor_IsActorFacingPlayer(&this->actor, 0x2AAA) && (this->actor.xzDistToPlayer < 200.0f)) {
         this->actor.hintId = 0x55;
         this->actor.colChkInfo.mass = MASS_HEAVY;
         func_8099571C(this);
@@ -449,7 +449,7 @@ void func_8099544C(EnSkb* this, GlobalContext* globalCtx) {
         this->actor.flags &= ~(0x4 | 0x1);
         this->actor.flags |= (0x8 | 0x1);
         func_80994F7C(this, globalCtx);
-    } else if (Actor_IsActorFacingLink(&this->actor, 0x2AAA) && (this->actor.xzDistToPlayer < 200.0f)) {
+    } else if (Actor_IsActorFacingPlayer(&this->actor, 0x2AAA) && (this->actor.xzDistToPlayer < 200.0f)) {
         this->actor.hintId = 0x55;
         this->actor.colChkInfo.mass = MASS_HEAVY;
         func_8099571C(this);
@@ -486,7 +486,7 @@ void func_8099556C(EnSkb* this, GlobalContext* globalCtx) {
         this->actor.flags &= ~(0x4 | 0x1);
         this->actor.flags |= (0x8 | 0x1);
         func_80994F7C(this, globalCtx);
-    } else if (Actor_IsActorFacingLink(&this->actor, 0x2AAA) && (this->actor.xzDistToPlayer < 200.0f) &&
+    } else if (Actor_IsActorFacingPlayer(&this->actor, 0x2AAA) && (this->actor.xzDistToPlayer < 200.0f) &&
                (this->skelAnime.animCurrentFrame > 24.0f) && (this->skelAnime.animCurrentFrame < 28.0f)) {
         this->actor.hintId = 0x55;
         this->actor.colChkInfo.mass = MASS_HEAVY;
@@ -591,7 +591,7 @@ void func_80995A8C(EnSkb* this, GlobalContext* globalCtx) {
 
     if ((this->actor.xzDistToPlayer > 800.0f) || func_80996594(this, globalCtx)) {
         func_809958F4(this);
-    } else if (Actor_IsActorFacingLink(&this->actor, 0x11C7) && (this->actor.xzDistToPlayer < 60.0f)) {
+    } else if (Actor_IsActorFacingPlayer(&this->actor, 0x11C7) && (this->actor.xzDistToPlayer < 60.0f)) {
         func_80995C24(this);
     }
 }
@@ -1055,7 +1055,7 @@ void EnSkb_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_8099672C(this, globalCtx);
     if ((this->actionFunc != func_8099630C) && (this->actionFunc != func_809963D8) &&
         (this->actionFunc != func_80995E64)) {
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveForward(&this->actor);
     }
 
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 15.0f, 30.0f, 60.0f, 0x1D);

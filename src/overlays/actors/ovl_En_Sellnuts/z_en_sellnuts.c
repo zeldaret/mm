@@ -350,7 +350,7 @@ void func_80ADB544(EnSellnuts* this, GlobalContext* globalCtx) {
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0x7D0, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, globalCtx)) {
         if (func_800B8708(globalCtx) == 0x2A) {
             player->actor.textId = D_80ADD928[this->unk_33A];
             this->unk_340 = player->actor.textId;
@@ -497,7 +497,7 @@ void func_80ADBBEC(EnSellnuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80ADBC60(EnSellnuts* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, globalCtx)) {
         func_801518B0(globalCtx, this->unk_340, &this->actor);
         this->actionFunc = func_80ADB0D8;
     } else {
@@ -706,7 +706,7 @@ void func_80ADC580(EnSellnuts* this, GlobalContext* globalCtx) {
 void func_80ADC5A4(EnSellnuts* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, globalCtx)) {
         player->linearVelocity = 0.0f;
         this->actor.flags &= ~0x10000;
         func_801518B0(globalCtx, this->unk_340, &this->actor);
@@ -1053,10 +1053,10 @@ void EnSellnuts_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_33A = 0;
     }
 
-    Actor_SetHeight(&this->actor, 60.0f);
+    Actor_SetFocus(&this->actor, 60.0f);
     Actor_SetScale(&this->actor, 0.01f);
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveForward(&this->actor);
     this->actionFunc(this, globalCtx);
     if (this->unk_338 & 8) {
         func_800B9010(&this->actor, NA_SE_EN_AKINDO_FLY - SFX_FLAG);

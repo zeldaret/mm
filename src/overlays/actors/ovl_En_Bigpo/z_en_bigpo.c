@@ -821,7 +821,7 @@ void EnBigpo_ScoopSoulAppearing(EnBigpo* this, GlobalContext* globalCtx) {
 
 void EnBigpo_SetupScoopSoulIdle(EnBigpo* this) {
     this->savedHeight = this->actor.world.pos.y;
-    Actor_SetHeight(&this->actor, -10.0f);
+    Actor_SetFocus(&this->actor, -10.0f);
     this->idleTimer = 400;    // 20 seconds
     this->actor.flags |= 0x1; // targetable ON
     this->actionFunc = EnBigpo_ScoopSoulIdle;
@@ -1182,16 +1182,16 @@ void EnBigpo_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
     if ((this->actionFunc != EnBigpo_SpawnCutsceneStage6) && (this->actionFunc != EnBigpo_SpawnCutsceneStage4)) {
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveForward(&this->actor);
     }
     if (this->actionFunc == EnBigpo_LanternFalling) {
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 27.0f, 60.0f, 4);
     }
 
     if (this->actor.draw == EnBigpo_DrawScoopSoul) {
-        Actor_SetHeight(&this->actor, -10.0f);
+        Actor_SetFocus(&this->actor, -10.0f);
     } else {
-        Actor_SetHeight(&this->actor, 42.0f);
+        Actor_SetFocus(&this->actor, 42.0f);
     }
 
     EnBigpo_UpdateColor(this);

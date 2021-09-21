@@ -220,7 +220,7 @@ s32 func_8092CAD0(EnDns* this, GlobalContext* globalCtx) {
     s32 ret = false;
 
     if (this->unk_2C6 & 7) {
-        if (func_800B84D0(&this->actor, globalCtx)) {
+        if (Actor_IsTalking(&this->actor, globalCtx)) {
             func_8013AED4(&this->unk_2C6, 0, 7);
             this->unk_2C6 &= ~0x10;
             if (ENDNS_GET_4000(&this->actor)) {
@@ -426,7 +426,7 @@ void func_8092D330(EnDns* this, GlobalContext* globalCtx) {
         sp30.x = Math_SinS(this->unk_2D4) * this->unk_2EC;
         sp30.z = Math_CosS(this->unk_2D4) * this->unk_2EC;
         Math_ApproachS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp30), 3, 0x2AA8);
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveForward(&this->actor);
     }
     if ((this->unk_2C6 & 0x100) && (DECR(this->unk_2D0) == 0)) {
         this->unk_2C6 &= ~0x100;
@@ -538,7 +538,7 @@ void EnDns_Update(Actor* thisx, GlobalContext* globalCtx) {
         func_8092C86C(this, globalCtx);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
         func_8013C964(&this->actor, globalCtx, 80.0f, 40.0f, 0, this->unk_2C6 & 7);
-        Actor_SetHeight(&this->actor, 34.0f);
+        Actor_SetFocus(&this->actor, 34.0f);
         func_8092C6FC(this, globalCtx);
         func_8092C5C0(this);
     }

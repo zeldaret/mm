@@ -324,7 +324,7 @@ s32* func_80A52CF8(EnDnq* this, GlobalContext* globalCtx) {
 s32 func_80A52D44(EnDnq* this, GlobalContext* globalCtx) {
     s32 ret = false;
 
-    if ((this->unk_37C & 7) && func_800B84D0(&this->actor, globalCtx)) {
+    if ((this->unk_37C & 7) && Actor_IsTalking(&this->actor, globalCtx)) {
         func_8013AED4(&this->unk_37C, 0, 7);
         this->unk_380 = func_80A52CF8(this, globalCtx);
         this->actionFunc = func_80A52FB8;
@@ -461,7 +461,7 @@ void EnDnq_Update(Actor* thisx, GlobalContext* globalCtx) {
         func_8013C964(&this->actor, globalCtx, this->unk_390, fabsf(this->actor.yDistToPlayer) + 1.0f, 0,
                       this->unk_37C & 7);
         this->actor.xzDistToPlayer = this->unk_394;
-        Actor_SetHeight(&this->actor, 46.0f);
+        Actor_SetFocus(&this->actor, 46.0f);
         func_80A52604(this, globalCtx);
     }
 }

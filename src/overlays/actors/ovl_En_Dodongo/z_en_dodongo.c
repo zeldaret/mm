@@ -528,7 +528,7 @@ s32 func_80877278(EnDodongo* this, GlobalContext* globalCtx) {
     // Bugfix from OoT
     while (explosive != NULL) {
         if (!explosive->params && (explosive->parent == NULL) && (explosive->update != NULL) &&
-            (explosive != player->unk_388) &&
+            (explosive != player->interactRangeActor) &&
             (((explosive->id == ACTOR_EN_BOM) && (((EnBom*)explosive)->timer > 0)) ||
              ((explosive->id == ACTOR_EN_BOMBF) && (((EnBombf*)explosive)->timer > 0)))) {
             Math_Vec3f_Diff(&explosive->world.pos, &this->unk_308, &sp44);
@@ -1029,7 +1029,7 @@ void EnDodongo_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
     EnDodongo_UpdateDamage(this, globalCtx);
     this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveForward(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 75.0f, 60.0f, 70.0f, 0x1D);
     if (this->actor.bgCheckFlags & 2) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_GERUDOFT_DOWN);

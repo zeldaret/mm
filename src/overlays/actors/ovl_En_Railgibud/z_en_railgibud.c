@@ -283,7 +283,7 @@ void func_80BA57F8(EnRailgibud* this, GlobalContext* globalCtx) {
     } else {
         this->unk_298 = 0;
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveForward(&this->actor);
 }
 
 void func_80BA59F0(EnRailgibud* this) {
@@ -325,7 +325,7 @@ void func_80BA5B64(EnRailgibud* this, GlobalContext* globalCtx) {
     this->actor.world.rot = this->actor.shape.rot;
     Math_SmoothStepToS(&this->unk_3E2, 0, 1, 0x64, 0);
     Math_SmoothStepToS(&this->unk_3E8, 0, 1, 0x64, 0);
-    if (func_80BA6D10(this, globalCtx) && Actor_IsActorFacingLink(&this->actor, 0x38E3)) {
+    if (func_80BA6D10(this, globalCtx) && Actor_IsActorFacingPlayer(&this->actor, 0x38E3)) {
         if ((this->unk_3F4 == 0) && (this->actor.xzDistToPlayer <= 45.0f)) {
             player->actor.freezeTimer = 0;
             if ((gSaveContext.playerForm == PLAYER_FORM_GORON) || (gSaveContext.playerForm == PLAYER_FORM_DEKU)) {
@@ -494,7 +494,7 @@ void func_80BA62D4(EnRailgibud* this, GlobalContext* globalCtx) {
     }
     if (func_80BA6D10(this, globalCtx)) {
         if ((gSaveContext.playerForm != PLAYER_FORM_GORON) && (gSaveContext.playerForm != PLAYER_FORM_DEKU) &&
-            Actor_IsActorFacingLink(&this->actor, 0x38E3)) {
+            Actor_IsActorFacingPlayer(&this->actor, 0x38E3)) {
             func_80BA5AF0(this);
         }
     }
@@ -789,7 +789,7 @@ s32 func_80BA7088(EnRailgibud* this, GlobalContext* globalCtx) {
 void func_80BA71E4(EnRailgibud* this, GlobalContext* globalCtx) {
     if ((this->actionFunc == func_80BA5B64) || (this->actionFunc == func_80BA62D4) ||
         (this->actionFunc == func_80BA64AC)) {
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveForward(&this->actor);
     }
 }
 
@@ -854,7 +854,7 @@ void func_80BA7434(EnRailgibud* this, GlobalContext* globalCtx) {
 
 void func_80BA7578(EnRailgibud* this, GlobalContext* globalCtx) {
     if ((this->unk_400 == 0) && (this->unk_3F8 == 0)) {
-        if (func_800B84D0(&this->actor, globalCtx)) {
+        if (Actor_IsTalking(&this->actor, globalCtx)) {
             this->unk_3FA = 1;
             func_801518B0(globalCtx, 0x13B2, &this->actor);
             this->unk_400 = 0x13B2;
