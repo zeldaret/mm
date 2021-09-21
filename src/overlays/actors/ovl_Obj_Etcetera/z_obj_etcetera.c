@@ -66,15 +66,15 @@ void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     ObjEtcetera* this = THIS;
     s32 objectIndex;
-    s32 index;
+    ObjEtceteraType type;
     s32 floorBgId;
     Vec3f somePos;
 
-    index = (this->dyna.actor.params & 0xFF80) >> 7;
-    if ((index < 0) || (index >= 4)) {
-        index = 0;
+    type = OBJ_ETCETERA_TYPE(&this->dyna.actor);
+    if ((type < TYPE_PINK_FLOWER) || (type >= NUMBER_OF_TYPES)) {
+        type = TYPE_PINK_FLOWER;
     }
-    objectIndex = Object_GetIndex(&globalCtx->objectCtx, D_80A7C7BC[index]);
+    objectIndex = Object_GetIndex(&globalCtx->objectCtx, D_80A7C7BC[type]);
     if (objectIndex >= 0) {
         this->objIndex = objectIndex;
     }
@@ -208,44 +208,44 @@ void func_80A7C1F0(ObjEtcetera* this, GlobalContext* globalCtx) {
 
 void func_80A7C308(ObjEtcetera* this, GlobalContext* globalCtx) {
     CollisionHeader* sp5C = NULL;
-    s32 index;
+    ObjEtceteraType type;
     CollisionHeader* allCollisionHeaders[] = { &D_0400E710, &D_0400E710, &D_040118D8, &D_040118D8 };
     SkelAnime* sp34;
     CollisionHeader* thisCollisionHeader;
 
-    index = (this->dyna.actor.params & 0xFF80) >> 7;
-    if ((index < 0) || (index >= 4)) {
-        index = 0;
+    type = OBJ_ETCETERA_TYPE(&this->dyna.actor);
+    if ((type < TYPE_PINK_FLOWER) || (type >= NUMBER_OF_TYPES)) {
+        type = TYPE_PINK_FLOWER;
     }
     if (Object_IsLoaded(&globalCtx->objectCtx, this->objIndex)) {
         this->dyna.actor.objBankIndex = this->objIndex;
         Actor_SetObjectSegment(globalCtx, &this->dyna.actor);
         BcCheck3_BgActorInit(&this->dyna, 1);
-        thisCollisionHeader = allCollisionHeaders[index];
+        thisCollisionHeader = allCollisionHeaders[type];
         if (thisCollisionHeader != 0) {
             BgCheck_RelocateMeshHeader(thisCollisionHeader, &sp5C);
         }
         this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, sp5C);
-        index = (this->dyna.actor.params & 0xFF80) >> 7;
-        switch (index) {
-            case 0:
-            case 1:
+        type = OBJ_ETCETERA_TYPE(&this->dyna.actor);
+        switch (type) {
+            case TYPE_PINK_FLOWER:
+            case TYPE_PINK_FLOWER_SPAWNED_FROM_MAD_SCRUB:
                 SkelAnime_Init(globalCtx, &this->skelAnime, &D_04011518, &D_0400EB7C, this->limbDrawTbl,
                                this->transitionDrawTbl, 11);
                 this->unk_27C = &D_0400ED80;
                 break;
-            case 2:
-            case 3:
+            case TYPE_GOLD_FLOWER:
+            case TYPE_GOLD_FLOWER_SPAWNED_FROM_MAD_SCRUB:
                 this->unk_27C = &D_04011BD0;
                 SkelAnime_Init(globalCtx, &this->skelAnime, &D_040127E8, &D_0400EB7C, this->limbDrawTbl,
                                this->transitionDrawTbl, 11);
                 this->collider.dim.height = 20;
                 break;
         }
-        index = (this->dyna.actor.params & 0xFF80) >> 7;
-        switch (index) {
-            case 0:
-            case 2:
+        type = OBJ_ETCETERA_TYPE(&this->dyna.actor);
+        switch (type) {
+            case TYPE_PINK_FLOWER:
+            case TYPE_GOLD_FLOWER:
                 this->dyna.actor.draw = func_80A7C690;
                 this->actionFunc = func_80A7BF08;
                 Actor_SetScale(&this->dyna.actor, 0.01f);
@@ -253,8 +253,8 @@ void func_80A7C308(ObjEtcetera* this, GlobalContext* globalCtx) {
                 this->dyna.actor.focus.pos.y = this->dyna.actor.home.pos.y + 10.0f;
                 this->dyna.actor.targetMode = 3;
                 break;
-            case 1:
-            case 3:
+            case TYPE_PINK_FLOWER_SPAWNED_FROM_MAD_SCRUB:
+            case TYPE_GOLD_FLOWER_SPAWNED_FROM_MAD_SCRUB:
                 sp34 = &this->skelAnime;
                 SkelAnime_ChangeAnim(sp34, &D_0400EB7C, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_0400EB7C.common), 2,
                                      0.0f);

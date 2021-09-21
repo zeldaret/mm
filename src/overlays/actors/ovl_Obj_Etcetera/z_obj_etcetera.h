@@ -3,6 +3,17 @@
 
 #include "global.h"
 
+#define OBJ_ETCETERA_TYPE(thisx) (((thisx)->params & 0xFF80) >> 7)
+
+typedef enum {
+    /*  0   */ TYPE_PINK_FLOWER,
+    /*  1   */ TYPE_PINK_FLOWER_SPAWNED_FROM_MAD_SCRUB,
+    /*  2   */ TYPE_GOLD_FLOWER,
+    /*  3   */ TYPE_GOLD_FLOWER_SPAWNED_FROM_MAD_SCRUB,
+} ObjEtceteraType;
+
+#define NUMBER_OF_TYPES 4
+
 struct ObjEtcetera;
 
 typedef void (*ObjEtceteraActionFunc)(struct ObjEtcetera*, GlobalContext*);
