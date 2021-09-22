@@ -71,7 +71,7 @@ void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f somePos;
 
     type = OBJETCETERA_TYPE(&this->dyna.actor);
-    if ((type < TYPE_PINK_FLOWER) || (type >= NUMBER_OF_TYPES)) {
+    if ((type < TYPE_PINK_FLOWER) || (type >= NUMBER_OF_FLOWER_TYPES)) {
         type = TYPE_PINK_FLOWER;
     }
     objectIndex = Object_GetIndex(&globalCtx->objectCtx, objectIds[type]);
@@ -220,7 +220,7 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
     CollisionHeader* thisCollisionHeader;
 
     type = OBJETCETERA_TYPE(&this->dyna.actor);
-    if ((type < TYPE_PINK_FLOWER) || (type >= NUMBER_OF_TYPES)) {
+    if ((type < TYPE_PINK_FLOWER) || (type >= NUMBER_OF_FLOWER_TYPES)) {
         type = TYPE_PINK_FLOWER;
     }
     if (Object_IsLoaded(&globalCtx->objectCtx, this->objIndex)) {

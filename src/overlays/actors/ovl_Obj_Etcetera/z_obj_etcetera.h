@@ -12,7 +12,7 @@ typedef enum {
     /*  3   */ TYPE_GOLD_FLOWER_SPAWNED_FROM_MAD_SCRUB,
 } ObjEtceteraType;
 
-#define NUMBER_OF_TYPES 4
+#define NUMBER_OF_FLOWER_TYPES 4
 
 struct ObjEtcetera;
 
