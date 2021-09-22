@@ -20,7 +20,7 @@ static void ExporterParseFileMode(std::string buildMode, ZFileMode& fileMode)
 		fileMode = (ZFileMode)ExporterFileMode::ModeExample3;
 }
 
-static void ExporterParseArgs(int argc, char* argv[], int& i)
+static void ExporterParseArgs([[maybe_unused]]int argc, char* argv[], int& i)
 {
 	std::string arg = argv[i];
 

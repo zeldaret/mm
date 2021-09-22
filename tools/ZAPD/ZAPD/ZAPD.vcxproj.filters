@@ -383,9 +383,6 @@
     <ClInclude Include="..\lib\stb\stb_image_write.h">
       <Filter>Header Files\Libraries</Filter>
     </ClInclude>
-    <ClInclude Include="..\lib\tinygtlf\tiny_gltf.h">
-      <Filter>Header Files\Libraries</Filter>
-    </ClInclude>
     <ClInclude Include="Overlays\ZOverlay.h">
       <Filter>Header Files\Z64</Filter>
     </ClInclude>
@@ -507,9 +504,7 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="..\lib\assimp-built\assimp-vc142-mt.dll">
-      <Filter>Resource Files</Filter>
-    </CopyFileToFolders>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

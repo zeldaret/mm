@@ -1,6 +1,11 @@
-import attr
+from dataclasses import dataclass
 
 
-@attr.s
+@dataclass
+class ServerError(Exception):
+    message: str
+
+
+@dataclass
 class CandidateConstructionFailure(Exception):
-    message: str = attr.ib()
+    message: str

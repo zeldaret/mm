@@ -31,6 +31,7 @@ You can configure a bit your ZAPD build with the following options:
   - Debugging symbols enabled (`-g3`). They are disabled by default.
   - `OPTIMIZATION_ON=0`: Disables optimizations (`-O0`).
   - `DEPRECATION_OFF=1`: Disables deprecation warnings.
+- `LLD=1`: builds with the LLVM linker `ld.lld` instead of the system default.
 
 As an example, if you want to build ZAPD with optimizations disabled and use the address sanitizer, you could use the following command:
 

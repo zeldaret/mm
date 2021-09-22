@@ -23,7 +23,7 @@ public:
 	void ParseRawData() override;
 
 	void DeclareVar(const std::string& prefix, const std::string body);
-	std::string GetBodySourceCode() const;
+	std::string GetBodySourceCode() const override;
 	std::string GetSourceOutputCode(const std::string& prefix) override;
 
 	std::string GetSourceTypeName() const override;
