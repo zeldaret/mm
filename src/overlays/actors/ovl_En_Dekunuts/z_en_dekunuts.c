@@ -224,8 +224,8 @@ void func_808BD49C(EnDekunuts* this, GlobalContext* globalCtx) {
     }
 
     if (phi_v1 && ((this->actor.xzDistToPlayer > 160.0f) || (this->actor.params != ENDEKUNUTS_GET_FF00_0)) &&
-        (((this->actor.params == ENDEKUNUTS_GET_FF00_0) && (fabsf(this->actor.yDirDistToPlayer) < 120.0f)) ||
-         ((this->actor.params == ENDEKUNUTS_GET_FF00_2) && (this->actor.yDirDistToPlayer > -60.0f)) ||
+        (((this->actor.params == ENDEKUNUTS_GET_FF00_0) && (fabsf(this->actor.playerHeightRel) < 120.0f)) ||
+         ((this->actor.params == ENDEKUNUTS_GET_FF00_2) && (this->actor.playerHeightRel > -60.0f)) ||
          (this->actor.params == ENDEKUNUTS_GET_FF00_1)) &&
         ((this->unk_190 == 0) || (this->actor.xzDistToPlayer < 480.0f))) {
         this->skelAnime.animPlaybackSpeed = 1.0f;

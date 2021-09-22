@@ -458,7 +458,7 @@ void EnDnq_Update(Actor* thisx, GlobalContext* globalCtx) {
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
         this->unk_394 = this->actor.xzDistToPlayer;
         func_80A52C6C(this, globalCtx);
-        func_8013C964(&this->actor, globalCtx, this->unk_390, fabsf(this->actor.yDirDistToPlayer) + 1.0f, 0,
+        func_8013C964(&this->actor, globalCtx, this->unk_390, fabsf(this->actor.playerHeightRel) + 1.0f, 0,
                       this->unk_37C & 7);
         this->actor.xzDistToPlayer = this->unk_394;
         Actor_SetHeight(&this->actor, 46.0f);

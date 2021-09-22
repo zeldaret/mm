@@ -396,7 +396,7 @@ void func_80BAAF1C(EnSuttari* this) {
 }
 
 void func_80BAAFDC(EnSuttari* this, GlobalContext* globalCtx) {
-    if ((this->actor.xzDistToPlayer < 500.0f) && (this->actor.yDirDistToPlayer < 100.0f)) {
+    if ((this->actor.xzDistToPlayer < 500.0f) && (this->actor.playerHeightRel < 100.0f)) {
         Vec3f effectVelOffset = { 0.0f, 0.0f, 0.0f };
         Vec3f effectPos;
         Vec3f effectVel;
@@ -428,7 +428,7 @@ void func_80BAAFDC(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BAB1A0(EnSuttari* this, GlobalContext* globalCtx) {
-    if ((this->actor.xzDistToPlayer < 500.0f) && (this->actor.yDirDistToPlayer < 100.0f)) {
+    if ((this->actor.xzDistToPlayer < 500.0f) && (this->actor.playerHeightRel < 100.0f)) {
         Vec3f effectVelOffset = { 0.0f, 0.0f, 0.0f };
         Vec3f effectPos;
         Vec3f effectVel;
@@ -988,7 +988,7 @@ void func_80BACA14(EnSuttari* this, GlobalContext* globalCtx) {
     func_80BABA90(this, 0, 0);
     func_80BAB434(this);
     if (player->transformation == PLAYER_FORM_GORON || player->transformation == PLAYER_FORM_ZORA) {
-        if (this->actor.yDirDistToPlayer < 60.0f && this->actor.xzDistToPlayer < 500.0f) {
+        if (this->actor.playerHeightRel < 60.0f && this->actor.xzDistToPlayer < 500.0f) {
             this->unk3F2 = this->unk2DE;
             this->actionFunc = func_80BACBB0;
         }
@@ -1013,7 +1013,7 @@ void func_80BACBB0(EnSuttari* this, GlobalContext* globalCtx) {
     if (player->transformation == PLAYER_FORM_HUMAN || player->transformation == PLAYER_FORM_DEKU) {
         this->actionFunc = func_80BACA14;
     }
-    if ((this->actor.yDirDistToPlayer < 60.0f) && (this->actor.xzDistToPlayer < 500.0f)) {
+    if ((this->actor.playerHeightRel < 60.0f) && (this->actor.xzDistToPlayer < 500.0f)) {
         if (this->actor.bgCheckFlags & 8) {
             target = this->actor.wallYaw;
         } else if (func_80BAA904(this, globalCtx)) {
@@ -1043,7 +1043,7 @@ void func_80BACD2C(EnSuttari* this, GlobalContext* globalCtx) {
     if (player->transformation == PLAYER_FORM_HUMAN || player->transformation == PLAYER_FORM_DEKU) {
         this->actionFunc = func_80BACA14;
     }
-    if ((this->actor.yDirDistToPlayer < 60.0f) && (this->actor.xzDistToPlayer < 500.0f)) {
+    if ((this->actor.playerHeightRel < 60.0f) && (this->actor.xzDistToPlayer < 500.0f)) {
         this->actionFunc = func_80BACBB0;
         Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.2f, 0.1f);
     } else {

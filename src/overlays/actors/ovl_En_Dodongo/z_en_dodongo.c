@@ -595,7 +595,7 @@ void func_80877500(EnDodongo* this, GlobalContext* globalCtx) {
         temp_v1 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
         Math_ScaledStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0x1F4);
         if (this->actor.xzDistToPlayer < (100.0f * this->unk_334)) {
-            if ((ABS_ALT(temp_v1) < 0x1388) && (this->actor.yDirDistToPlayer < 60.0f) &&
+            if ((ABS_ALT(temp_v1) < 0x1388) && (this->actor.playerHeightRel < 60.0f) &&
                 !(player->stateFlags1 & 0x800000)) {
                 func_808777A8(this);
             }

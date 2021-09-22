@@ -34,7 +34,7 @@ void TGSw_ActionDecider(TGSw* this, GlobalContext* globalCtx) {
         scaledAbsoluteRotY = ABS_ALT(this->actor.world.rot.y) * 4.0f;
         scaledAbsoluteRotZ = ABS_ALT(this->actor.world.rot.z) * 4.0f;
 
-        if ((scaledAbsoluteRotZ < this->actor.xzDistToPlayer) || (scaledAbsoluteRotY < this->actor.yDirDistToPlayer)) {
+        if ((scaledAbsoluteRotZ < this->actor.xzDistToPlayer) || (scaledAbsoluteRotY < this->actor.playerHeightRel)) {
             return;
         }
         unk1F4 = globalCtx->actorCtx.unk1F4;

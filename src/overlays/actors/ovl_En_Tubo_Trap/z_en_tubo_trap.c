@@ -226,7 +226,7 @@ void EnTuboTrap_Idle(EnTuboTrap* this, GlobalContext* globalCtx) {
 
     if ((this->actor.xzDistToPlayer < 200.0f) && (this->actor.world.pos.y <= player->actor.world.pos.y)) {
         startingRotation = this->actor.home.rot.z;
-        if ((startingRotation == 0) || (this->actor.yDirDistToPlayer <= (startingRotation * 10.0f))) {
+        if ((startingRotation == 0) || (this->actor.playerHeightRel <= (startingRotation * 10.0f))) {
             func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, ACTORCAT_ENEMY);
             currentHeight = this->actor.world.pos.y;
             this->actor.flags |= 0x11; // always update and can target

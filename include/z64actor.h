@@ -176,7 +176,7 @@ typedef struct Actor {
     /* 0x092 */ s16 yawTowardsPlayer; // Y rotation difference between the actor and the player
     /* 0x094 */ f32 xyzDistToPlayerSq; // Squared distance between the actor and the player in the x,y,z axis
     /* 0x098 */ f32 xzDistToPlayer; // Distance between the actor and the player in the XZ plane
-    /* 0x09C */ f32 yDirDistToPlayer; // Directed Distance is negative if the player is below.
+    /* 0x09C */ f32 playerHeightRel; // Directed Distance is negative if the player is below.
     /* 0x0A0 */ CollisionCheckInfo colChkInfo; // Variables related to the Collision Check system
     /* 0x0BC */ ActorShape shape; // Variables related to the physical shape of the actor
     /* 0x0EC */ Vec3f projectedPos; // Position of the actor in projected space
