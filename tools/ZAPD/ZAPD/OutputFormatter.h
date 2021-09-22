@@ -8,7 +8,6 @@ class OutputFormatter
 {
 private:
 	const uint32_t tabSize;
-	const uint32_t defaultIndent;
 	const uint32_t lineLimit;
 
 	uint32_t col;
