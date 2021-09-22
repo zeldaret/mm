@@ -221,6 +221,7 @@ setup:
 disasm:
 	$(RM) -rf asm data
 	python3 tools/disasm/disasm.py
+	python3 replace_asm.py
 
 diff-init: all
 	$(RM) -rf expected/

@@ -1,0 +1,9 @@
+// Format:
+// file path
+//      offset: new line
+
+asm/non_matchings/overlays/ovl_En_Tru/func_80A85F84.s
+    000A78: lui         $at, %hi(D_80A8B25C+12)
+    000A88: lwc1        $f4, %lo(D_80A8B25C+12)($at)
+    000BDC: lui         $t8, %hi(D_80A8B25C+12)
+    000BF0: addiu       $t8, $t8, %lo(D_80A8B25C+12)
