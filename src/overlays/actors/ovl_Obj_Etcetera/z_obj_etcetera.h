@@ -22,8 +22,8 @@ typedef struct ObjEtcetera {
     /* 0x0000 */ DynaPolyActor dyna;
     /* 0x015C */ SkelAnime skelAnime;
     /* 0x01A0 */ ColliderCylinder collider;
-    /* 0x01EC */ Vec3s limbDrawTbl[11];
-    /* 0x022E */ Vec3s transitionDrawTbl[11];
+    /* 0x01EC */ Vec3s jointTable[11];
+    /* 0x022E */ Vec3s morphTable[11];
     /* 0x0270 */ f32 intenseOscillationScale;
     /* 0x0274 */ s16 oscillationTimer;
     /* 0x0276 */ u16 burrowFlag;

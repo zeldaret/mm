@@ -68,7 +68,7 @@ void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 objectIndex;
     ObjEtceteraType type;
     s32 floorBgId;
-    Vec3f somePos;
+    Vec3f pos;
 
     type = OBJETCETERA_TYPE(&this->dyna.actor);
     if ((type < TYPE_PINK_FLOWER) || (type >= NUMBER_OF_FLOWER_TYPES)) {
@@ -78,10 +78,10 @@ void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (objectIndex >= 0) {
         this->objIndex = objectIndex;
     }
-    somePos.x = this->dyna.actor.world.pos.x;
-    somePos.y = this->dyna.actor.world.pos.y + 10.0f;
-    somePos.z = this->dyna.actor.world.pos.z;
-    func_800C411C(&globalCtx->colCtx, &this->dyna.actor.floorPoly, &floorBgId, &this->dyna.actor, &somePos);
+    pos.x = this->dyna.actor.world.pos.x;
+    pos.y = this->dyna.actor.world.pos.y + 10.0f;
+    pos.z = this->dyna.actor.world.pos.z;
+    func_800C411C(&globalCtx->colCtx, &this->dyna.actor.floorPoly, &floorBgId, &this->dyna.actor, &pos);
     this->dyna.actor.floorBgId = floorBgId;
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
@@ -236,15 +236,15 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
         switch (type) {
             case TYPE_PINK_FLOWER:
             case TYPE_PINK_FLOWER_SPAWNED_FROM_MAD_SCRUB:
-                SkelAnime_Init(globalCtx, &this->skelAnime, &D_04011518, &D_0400EB7C, this->limbDrawTbl,
-                               this->transitionDrawTbl, 11);
+                SkelAnime_Init(globalCtx, &this->skelAnime, &D_04011518, &D_0400EB7C, this->jointTable,
+                               this->morphTable, 11);
                 this->displayListPtr = &D_0400ED80;
                 break;
             case TYPE_GOLD_FLOWER:
             case TYPE_GOLD_FLOWER_SPAWNED_FROM_MAD_SCRUB:
                 this->displayListPtr = &D_04011BD0;
-                SkelAnime_Init(globalCtx, &this->skelAnime, &D_040127E8, &D_0400EB7C, this->limbDrawTbl,
-                               this->transitionDrawTbl, 11);
+                SkelAnime_Init(globalCtx, &this->skelAnime, &D_040127E8, &D_0400EB7C, this->jointTable,
+                               this->morphTable, 11);
                 this->collider.dim.height = 20;
                 break;
         }
@@ -261,8 +261,8 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
                 break;
             case TYPE_PINK_FLOWER_SPAWNED_FROM_MAD_SCRUB:
             case TYPE_GOLD_FLOWER_SPAWNED_FROM_MAD_SCRUB:
-                SkelAnime_ChangeAnim(&this->skelAnime, &D_0400EB7C, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_0400EB7C.common), 2,
-                                     0.0f);
+                SkelAnime_ChangeAnim(&this->skelAnime, &D_0400EB7C, 1.0f, 0.0f,
+                                     SkelAnime_GetFrameCount(&D_0400EB7C.common), 2, 0.0f);
                 this->dyna.actor.draw = ObjEtcetera_DrawAnimated;
                 this->actionFunc = ObjEtcetera_DoIntenseOscillation;
                 Actor_SetScale(&this->dyna.actor, 0.0f);
