@@ -155,7 +155,6 @@ beginseg
     include "build/src/libultra/io/epirawread.o"
     include "build/src/libultra/io/viswapbuf.o"
     include "build/src/libultra/gu/position.o"
-    include "build/data/boot/position.data.o"
     include "build/src/libultra/io/epirawdma.o"
     include "build/src/libultra/io/sptaskyielded.o"
     include "build/asm/boot/bcmp.text.o"
@@ -2214,8 +2213,7 @@ beginseg
     name "ovl_En_Skb"
     compress
     include "build/src/overlays/actors/ovl_En_Skb/z_en_skb.o"
-    include "build/data/ovl_En_Skb/ovl_En_Skb.data.o"
-    include "build/data/ovl_En_Skb/ovl_En_Skb.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Skb/ovl_En_Skb_reloc.o"
 endseg
 
 beginseg
@@ -3296,9 +3294,7 @@ beginseg
     name "ovl_Bg_Hakugin_Post"
     compress
     include "build/src/overlays/actors/ovl_Bg_Hakugin_Post/z_bg_hakugin_post.o"
-    include "build/data/ovl_Bg_Hakugin_Post/ovl_Bg_Hakugin_Post.data.o"
-    include "build/data/ovl_Bg_Hakugin_Post/ovl_Bg_Hakugin_Post.bss.o"
-    include "build/data/ovl_Bg_Hakugin_Post/ovl_Bg_Hakugin_Post.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Hakugin_Post/ovl_Bg_Hakugin_Post_reloc.o"
 endseg
 
 beginseg
@@ -3694,8 +3690,7 @@ beginseg
     name "ovl_En_Sellnuts"
     compress
     include "build/src/overlays/actors/ovl_En_Sellnuts/z_en_sellnuts.o"
-    include "build/data/ovl_En_Sellnuts/ovl_En_Sellnuts.data.o"
-    include "build/data/ovl_En_Sellnuts/ovl_En_Sellnuts.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Sellnuts/ovl_En_Sellnuts_reloc.o"
 endseg
 
 beginseg
@@ -4602,8 +4597,7 @@ beginseg
     name "ovl_En_Railgibud"
     compress
     include "build/src/overlays/actors/ovl_En_Railgibud/z_en_railgibud.o"
-    include "build/data/ovl_En_Railgibud/ovl_En_Railgibud.data.o"
-    include "build/data/ovl_En_Railgibud/ovl_En_Railgibud.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Railgibud/ovl_En_Railgibud_reloc.o"
 endseg
 
 beginseg
