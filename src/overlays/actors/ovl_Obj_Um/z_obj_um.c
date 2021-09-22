@@ -67,6 +67,7 @@ extern TexturePtr D_060170D0;
 extern TexturePtr D_060174D0;
 extern TexturePtr D_060178D0;
 
+// eyeTextures
 TexturePtr D_80B7C110[] = {
     &D_060164D0,
     &D_060168D0,
@@ -81,6 +82,7 @@ extern TexturePtr D_06017ED0;
 extern TexturePtr D_060182D0;
 extern TexturePtr D_060180D0;
 
+// mouthTextures
 TexturePtr D_80B7C128[] = {
     &D_06017CD0,
     &D_06017ED0,
@@ -309,7 +311,7 @@ s32 func_80B77FA4(ObjUm* this, GlobalContext* globalCtx) {
     temp_v0_2->unk_54C = 0xF;
     temp_v0_2->unk_550 = 8;
 
-    temp_v0_2->unk_554 = (s32) this->unk_2BC;
+    temp_v0_2->unk_554 = this->unk_2BC;
     temp_v0_2->unk_568 = 0.0f;
     temp_v0_2->unk_56C = 0.0f;
     temp_v0_2->unk_55C = 0x28;
@@ -688,7 +690,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_4BC = this->dyna.actor.world.pos;
 
     this->unk_4CC = 0;
-    this->unk_4D4 = 0;
+    this->mouthTexIndex = 0;
     this->unk_2F4 = 0;
     this->dyna.actor.gravity = -3.5f;
 
@@ -770,7 +772,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
         ObjUm_SetupAction(this, func_80B7AEFC);
     }
 
-    this->unk_2F8 = this->unk_2FE = D_801D15BC;;
+    this->unk_2F8 = this->unk_2FE = D_801D15BC;
 
     if (sp54) {
         BcCheck3_BgActorInit(&this->dyna, 0);
@@ -1000,18 +1002,18 @@ void func_80B79A50(ObjUm* this, GlobalContext* globalCtx) {
     switch (globalCtx->msgCtx.unk11F04) {
         default:
             this->unk_4CC = 0;
-            this->unk_4D4 = 0;
+            this->mouthTexIndex = 0;
             break;
 
         case 0x33B7:
         case 0x33B4:
             this->unk_4CC = 0;
-            this->unk_4D4 = 1;
+            this->mouthTexIndex = 1;
             break;
 
         case 0x33B5:
             this->unk_4CC = 3;
-            this->unk_4D4 = 1;
+            this->mouthTexIndex = 1;
             break;
     }
 }
@@ -1101,7 +1103,7 @@ s32 func_80B79BA0(ObjUm* this, GlobalContext* globalCtx) {
             }
         }
 
-        if (this->unk_2F4 & 0x14) {
+        if (this->unk_2F4 & (0x10 | 0x04)) {
             func_80B78EFC(this, globalCtx, phi_a2);
         }
     }
@@ -1157,12 +1159,12 @@ void func_80B7A070(ObjUm* this, GlobalContext* globalCtx) {
     switch (globalCtx->msgCtx.unk11F04) {
         case 0x33B6:
             this->unk_4CC = 1;
-            this->unk_4D4 = 1;
+            this->mouthTexIndex = 1;
             break;
 
         default:
             this->unk_4CC = 0;
-            this->unk_4D4 = 0;
+            this->mouthTexIndex = 0;
             break;
     }
 }
@@ -1193,18 +1195,18 @@ void func_80B7A1B4(ObjUm* this, GlobalContext* globalCtx) {
     switch (globalCtx->msgCtx.unk11F04) {
         case 0x33B8:
             this->unk_4CC = 0;
-            this->unk_4D4 = 3;
+            this->mouthTexIndex = 3;
             break;
 
         case 0x33B9:
             this->unk_4CC = 2;
-            this->unk_4D4 = 0;
+            this->mouthTexIndex = 0;
             break;
 
         default:
             this->unk_2F4 &= ~0x800;
             this->unk_4CC = 0;
-            this->unk_4D4 = 0;
+            this->mouthTexIndex = 0;
             break;
     }
 }
@@ -1393,20 +1395,20 @@ void func_80B7A860(ObjUm* this, GlobalContext* globalCtx) {
     switch (globalCtx->msgCtx.unk11F04) {
         case 0x33BA:
             this->unk_4CC = 2;
-            this->unk_4D4 = 3;
+            this->mouthTexIndex = 3;
             break;
 
         case 0x33BB:
             if (IS_ZERO(this->unk_160.animCurrentFrame) && !(this->unk_2F4 & 0x1000)) {
-                this->unk_2F4 = this->unk_2F4 | 0x1000;
+                this->unk_2F4 |= 0x1000;
                 this->unk_4CC = 4;
-                this->unk_4D4 = 0;
+                this->mouthTexIndex = 0;
             } else if (IS_ZERO(this->unk_160.transCurrentFrame)) {
                 this->unk_4CC = 2;
-                this->unk_4D4 = 2;
+                this->mouthTexIndex = 2;
             } else {
                 this->unk_4CC = 5;
-                this->unk_4D4 = 0;
+                this->mouthTexIndex = 0;
             }
 
             this->unk_2F4 |= 0x800;
@@ -1416,13 +1418,13 @@ void func_80B7A860(ObjUm* this, GlobalContext* globalCtx) {
             if (IS_ZERO(this->unk_160.animCurrentFrame) && !(this->unk_2F4 & 0x1000)) {
                 this->unk_2F4 |= 0x1000;
                 this->unk_4CC = 4;
-                this->unk_4D4 = 0;
+                this->mouthTexIndex = 0;
             } else if (IS_ZERO(this->unk_160.transCurrentFrame)) {
                 this->unk_4CC = 2;
-                this->unk_4D4 = 2;
+                this->mouthTexIndex = 2;
             } else {
                 this->unk_4CC = 5;
-                this->unk_4D4 = 0;
+                this->mouthTexIndex = 0;
             }
             this->unk_2F4 |= 0x800;
             break;
@@ -1431,13 +1433,13 @@ void func_80B7A860(ObjUm* this, GlobalContext* globalCtx) {
             if (IS_ZERO(this->unk_160.animCurrentFrame) && !(this->unk_2F4 & 0x1000)) {
                 this->unk_2F4 |= 0x1000;
                 this->unk_4CC = 4;
-                this->unk_4D4 = 0;
+                this->mouthTexIndex = 0;
             } else if (IS_ZERO(this->unk_160.transCurrentFrame)) {
                 this->unk_4CC = 2;
             } else {
                 this->unk_4CC = 5;
             }
-            this->unk_4D4 = 0;
+            this->mouthTexIndex = 0;
             this->unk_4D8 = 0;
             this->unk_2F4 |= 0x800;
             break;
@@ -1445,24 +1447,24 @@ void func_80B7A860(ObjUm* this, GlobalContext* globalCtx) {
         case 0x33BE:
             this->unk_2F4 |= 0x800;
             this->unk_4CC = 2;
-            this->unk_4D4 = 3;
+            this->mouthTexIndex = 3;
             break;
 
         case 0x33BF:
             this->unk_4D8++;
             if (IS_ZERO(this->unk_160.transCurrentFrame) && this->unk_4D8 >= 6) {
                 this->unk_4CC = 0;
-                this->unk_4D4 = 0;
+                this->mouthTexIndex = 0;
             } else {
                 this->unk_4CC = 2;
-                this->unk_4D4 = 2;
+                this->mouthTexIndex = 2;
             }
             this->unk_2F4 &= ~0x800;
             break;
 
         default:
             this->unk_4CC = 0;
-            this->unk_4D4 = 0;
+            this->mouthTexIndex = 0;
             break;
     }
 }
@@ -1568,7 +1570,7 @@ void func_80B7AF30(ObjUm* this, GlobalContext* globalCtx) {
 
         this->unk_2F4 &= ~1;
 
-        if (1) { } 
+        if (1) { }
 
         this->unk_2D0 = this->unk_2C4;
         this->unk_2E8 = this->unk_2DC;
@@ -1698,49 +1700,49 @@ void ObjUm_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80B7AF30(this, globalCtx);
     switch (this->unk_4CC) {
         case 0:
-            switch (this->unk_4D0) {
+            switch (this->eyeTexIndex) {
                 case 0:
                     if (Rand_ZeroOne() < 0.025f) {
-                        this->unk_4D0 = 1;
+                        this->eyeTexIndex = 1;
                     }
                     break;
 
                 case 1:
                     if (Rand_ZeroOne() < 0.6f) {
-                        this->unk_4D0 = 2;
+                        this->eyeTexIndex = 2;
                     }
                     break;
 
                 case 2:
                     if (Rand_ZeroOne() < 0.6f) {
-                        this->unk_4D0 = 0;
+                        this->eyeTexIndex = 0;
                     }
                     break;
 
                 default:
-                    this->unk_4D0 = 0;
+                    this->eyeTexIndex = 0;
                     break;
             }
             break;
 
         case 1:
-            this->unk_4D0 = 3;
+            this->eyeTexIndex = 3;
             break;
         case 2:
-            this->unk_4D0 = 4;
+            this->eyeTexIndex = 4;
             break;
         case 3:
-            this->unk_4D0 = 5;
+            this->eyeTexIndex = 5;
             break;
         case 4:
-            this->unk_4D0 = 2;
+            this->eyeTexIndex = 2;
             break;
         case 5:
-            this->unk_4D0 = 0;
+            this->eyeTexIndex = 0;
             break;
         default:
             this->unk_4CC = 0;
-            this->unk_4D0 = 0;
+            this->eyeTexIndex = 0;
             break;
     }
 }
@@ -1761,22 +1763,22 @@ s32 ObjUm_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     if (limbIndex == UM_LIMB_CREMIA_HEAD) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B7C110[this->unk_4D0]));
-        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80B7C128[this->unk_4D4]));
+        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B7C110[this->eyeTexIndex]));
+        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80B7C128[this->mouthTexIndex]));
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
     if (limbIndex == UM_LIMB_WAGGON_RIGHT_WHEEL) {
-        if ((this->unk_2F4 & 2) != 0) {
+        if (this->unk_2F4 & 2) {
             rot->x = -this->unk_2AC;
         }
         SysMatrix_MultiplyVector3fByState(&sp5C, &this->unk_2C4);
     } else if (limbIndex == UM_LIMB_WAGGON_LEFT_WHEEL) {
-        if ((this->unk_2F4 & 2) != 0) {
+        if (this->unk_2F4 & 2) {
             rot->x = this->unk_2AC;
         }
         SysMatrix_MultiplyVector3fByState(&sp50, &this->unk_2DC);
-    } else if ((limbIndex == UM_LIMB_CREMIA_HEAD) && ((this->unk_2F4 & 8) != 0)) {
+    } else if ((limbIndex == UM_LIMB_CREMIA_HEAD) && (this->unk_2F4 & 8)) {
         if ((func_8013D5E8(this->dyna.actor.shape.rot.y, 0x4E20, this->dyna.actor.yawTowardsPlayer) != 0) && (this->dyna.actor.xzDistToPlayer < 500.0f)) {
             s16 sp3E;
             Vec3f sp30 = player->actor.world.pos;
@@ -1784,12 +1786,12 @@ s32 ObjUm_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
             sp30.y = player->bodyPartsPos[7].y + 3.0f;
             sp3E = Math_Vec3f_Yaw(&this->dyna.actor.focus.pos, &sp30) - this->dyna.actor.shape.rot.y;
             temp_v0_3 = Math_Atan2S(this->dyna.actor.focus.pos.y - sp30.y, Math3D_XZLength(sp30.x - this->dyna.actor.focus.pos.x, sp30.z - this->dyna.actor.focus.pos.z));
-            this->unk_2FE.x = (rot->x + sp3E);
+            this->unk_2FE.x = rot->x + sp3E;
             this->unk_2FE.y = rot->y;
-            this->unk_2FE.z = (rot->z + temp_v0_3);
+            this->unk_2FE.z = rot->z + temp_v0_3;
             Math_SmoothStepToS(&this->unk_2F8.x, this->unk_2FE.x, 4, 0x3E8, 1);
             Math_SmoothStepToS(&this->unk_2F8.z, this->unk_2FE.z, 4, 0x3E8, 1);
-            this->unk_2F8.y = (s16) rot->y;
+            this->unk_2F8.y = rot->y;
             rot->x = this->unk_2F8.x;
             rot->z = this->unk_2F8.z;
         } else {
@@ -1939,7 +1941,7 @@ void ObjUm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     }
 }
 
-void func_80B7BEA4(Vec3f* arg0, s16 arg1, Vec3f* arg2, u8 arg3, GlobalContext* globalCtx) {
+void func_80B7BEA4(Vec3f* arg0, s16 arg1, Vec3f* arg2, u8 alpha, GlobalContext* globalCtx) {
     f32 temp;
     Vec3f sp108;
     CollisionPoly* sp104;
@@ -1967,7 +1969,7 @@ void func_80B7BEA4(Vec3f* arg0, s16 arg1, Vec3f* arg2, u8 arg3, GlobalContext* g
 
         gSPMatrix(POLY_OPA_DISP++, &D_801D1DE0, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x2C);
-        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, arg3);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, alpha);
         gSPMatrix(POLY_OPA_DISP++, sp100, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, D_04075A40);
 
@@ -1985,6 +1987,6 @@ void ObjUm_Draw(Actor* thisx, GlobalContext* globalCtx) {
     sp34.x = 0.45f;
     sp34.y = 0.0f;
     sp34.z = 0.7f;
-    func_80B7BEA4(&this->unk_4BC, this->dyna.actor.shape.rot.y, &sp34, 0xB4, globalCtx);
+    func_80B7BEA4(&this->unk_4BC, this->dyna.actor.shape.rot.y, &sp34, 180, globalCtx);
     func_80B77770(this, globalCtx);
 }

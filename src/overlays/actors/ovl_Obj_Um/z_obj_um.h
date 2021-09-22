@@ -40,18 +40,18 @@ typedef struct ObjUm {
     /* 0x160 */ SkelAnime unk_160;
     /* 0x1A4 */ Vec3s jointTable[UM_LIMB_MAX];
     /* 0x228 */ Vec3s morphTable[UM_LIMB_MAX];
-    /* 0x2AC */ s16 unk_2AC;
-    /* 0x2AE */ s16 unk_2AE;
+    /* 0x2AC */ s16 unk_2AC; // x angle
+    /* 0x2AE */ s16 unk_2AE; // type
     /* 0x2B0 */ s16 unk_2B0;
     /* 0x2B4 */ s32 unk_2B4;
     /* 0x2B8 */ EnHorse* unk_2B8;
-    /* 0x2BC */ s32 unk_2BC;
-    /* 0x2BE */ s32 unk_2BE;
+    /* 0x2BC */ s32 unk_2BC; // pathIndex?
+    /* 0x2BE */ s32 unk_2BE; // pointIndex?
     /* 0x2C4 */ Vec3f unk_2C4;
     /* 0x2D0 */ Vec3f unk_2D0;
     /* 0x2DC */ Vec3f unk_2DC;
     /* 0x2E8 */ Vec3f unk_2E8;
-    /* 0x2F4 */ s32 unk_2F4;
+    /* 0x2F4 */ s32 unk_2F4; // flags?
     /* 0x2BC */ Vec3s unk_2F8;
     /* 0x2FE */ Vec3s unk_2FE;
     /* 0x304 */ s32 unk_304;
@@ -67,10 +67,10 @@ typedef struct ObjUm {
     /* 0x420 */ s32 unk_420;
     /* 0x424 */ ColliderCylinder unk_424[2]; // horses
     /* 0x4BC */ Vec3f unk_4BC;
-    /* 0x4C8 */ u16 unk_4C8;
+    /* 0x4C8 */ u16 unk_4C8; // time?
     /* 0x4CC */ s32 unk_4CC;
-    /* 0x4D0 */ s32 unk_4D0;
-    /* 0x4D4 */ s32 unk_4D4;
+    /* 0x4D0 */ s32 eyeTexIndex;
+    /* 0x4D4 */ s32 mouthTexIndex;
     /* 0x4D8 */ s32 unk_4D8;
     /* 0x4DC */ s32 unk_4DC;
     /* 0x4E0 */ s32 unk_4E0;
