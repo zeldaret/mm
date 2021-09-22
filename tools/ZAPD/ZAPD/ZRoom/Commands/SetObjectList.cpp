@@ -1,8 +1,8 @@
 #include "SetObjectList.h"
 
-#include "BitConverter.h"
 #include "Globals.h"
-#include "StringHelper.h"
+#include "Utils/BitConverter.h"
+#include "Utils/StringHelper.h"
 #include "ZFile.h"
 #include "ZRoom/ZNames.h"
 #include "ZRoom/ZRoom.h"
@@ -55,11 +55,6 @@ std::string SetObjectList::GetBodySourceCode() const
 {
 	std::string listName = parent->GetDeclarationPtrName(cmdArg2);
 	return StringHelper::Sprintf("SCENE_CMD_OBJECT_LIST(%i, %s)", objects.size(), listName.c_str());
-}
-
-size_t SetObjectList::GetRawDataSize() const
-{
-	return ZRoomCommand::GetRawDataSize() + (objects.size() * 2);
 }
 
 std::string SetObjectList::GetCommandCName() const
