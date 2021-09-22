@@ -873,7 +873,7 @@ void func_8099672C(EnSkb* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
     if ((this->unk_3DE != 6) && (this->unk_3DE != 7)) {
-        if ((this->actor.bgCheckFlags & 0x60) && (this->actor.yDistToWater >= 40.0f)) {
+        if ((this->actor.bgCheckFlags & 0x60) && (this->actor.yDirDistToWater >= 40.0f)) {
             this->actor.colChkInfo.health = 0;
             this->unk_3E4 = 0;
             func_809961E4(this, globalCtx);
