@@ -213,10 +213,10 @@ void ObjEtcetera_DoIntenseOscillation(ObjEtcetera* this, GlobalContext* globalCt
 }
 
 void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
-    CollisionHeader* sp5C = NULL;
+    CollisionHeader* colHeader = NULL;
     ObjEtceteraType type;
-    CollisionHeader* allCollisionHeaders[] = { &D_0400E710, &D_0400E710, &D_040118D8, &D_040118D8 };
-    SkelAnime* sp34;
+    CollisionHeader* collisionHeaders[] = { &D_0400E710, &D_0400E710, &D_040118D8, &D_040118D8 };
+    s32 pad;
     CollisionHeader* thisCollisionHeader;
 
     type = OBJETCETERA_TYPE(&this->dyna.actor);
@@ -227,11 +227,11 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
         this->dyna.actor.objBankIndex = this->objIndex;
         Actor_SetObjectSegment(globalCtx, &this->dyna.actor);
         BcCheck3_BgActorInit(&this->dyna, 1);
-        thisCollisionHeader = allCollisionHeaders[type];
+        thisCollisionHeader = collisionHeaders[type];
         if (thisCollisionHeader != 0) {
-            BgCheck_RelocateMeshHeader(thisCollisionHeader, &sp5C);
+            BgCheck_RelocateMeshHeader(thisCollisionHeader, &colHeader);
         }
-        this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, sp5C);
+        this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
         type = OBJETCETERA_TYPE(&this->dyna.actor);
         switch (type) {
             case TYPE_PINK_FLOWER:
@@ -261,8 +261,7 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
                 break;
             case TYPE_PINK_FLOWER_SPAWNED_FROM_MAD_SCRUB:
             case TYPE_GOLD_FLOWER_SPAWNED_FROM_MAD_SCRUB:
-                sp34 = &this->skelAnime;
-                SkelAnime_ChangeAnim(sp34, &D_0400EB7C, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_0400EB7C.common), 2,
+                SkelAnime_ChangeAnim(&this->skelAnime, &D_0400EB7C, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_0400EB7C.common), 2,
                                      0.0f);
                 this->dyna.actor.draw = ObjEtcetera_DrawAnimated;
                 this->actionFunc = ObjEtcetera_DoIntenseOscillation;
