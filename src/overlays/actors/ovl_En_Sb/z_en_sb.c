@@ -142,7 +142,7 @@ void EnSb_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void EnSb_SpawnBubbles(GlobalContext* globalCtx, EnSb* this) {
     s32 bubbleCount;
 
-    if (this->actor.yDirDistToWaterSurface > 0.0f) {
+    if (this->actor.depthInWater > 0.0f) {
         for (bubbleCount = 0; bubbleCount < 10; bubbleCount++) {
             EffectSsBubble_Spawn(globalCtx, &this->actor.world.pos, 10.0f, 10.0f, 30.0f, 0.25f);
         }
@@ -170,7 +170,7 @@ void EnSb_SetupWaitOpen(EnSb* this) {
 
 void EnSb_SetupLunge(EnSb* this) {
     f32 frameCount = SkelAnime_GetFrameCount(&D_06000124.common);
-    f32 playbackSpeed = this->actor.yDirDistToWaterSurface > 0.0f ? 1.0f : 0.0f;
+    f32 playbackSpeed = this->actor.depthInWater > 0.0f ? 1.0f : 0.0f;
 
     SkelAnime_ChangeAnim(&this->skelAnime, &D_06000124, playbackSpeed, 0.0f, frameCount, 2, 0);
     this->state = SHELLBLADE_LUNGE;
@@ -192,7 +192,7 @@ void EnSb_SetupIdle(EnSb* this, s32 changeSpeed) {
     }
     this->state = SHELLBLADE_WAIT_CLOSED;
     if (changeSpeed) {
-        if (this->actor.yDirDistToWaterSurface > 0.0f) {
+        if (this->actor.depthInWater > 0.0f) {
             this->actor.speedXZ = -5.0f;
             if (this->actor.velocity.y < 0.0f) {
                 this->actor.velocity.y = 2.1f;
@@ -253,7 +253,7 @@ void EnSb_TurnAround(EnSb* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, invertedYaw, 1, 0x1F40, 0xA);
     if (this->actor.shape.rot.y == invertedYaw) {
         this->actor.world.rot.y = this->yawAngle;
-        if (this->actor.yDirDistToWaterSurface > 0.0f) {
+        if (this->actor.depthInWater > 0.0f) {
             this->actor.velocity.y = 3.0f;
             this->actor.speedXZ = 5.0f;
             this->actor.gravity = -0.35f;
@@ -271,7 +271,7 @@ void EnSb_TurnAround(EnSb* this, GlobalContext* globalCtx) {
 void EnSb_Lunge(EnSb* this, GlobalContext* globalCtx) {
     Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f);
     if (this->actor.velocity.y <= -0.1f || this->actor.bgCheckFlags & 2) {
-        if (!(this->actor.yDirDistToWaterSurface > 0.0f)) {
+        if (!(this->actor.depthInWater > 0.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
         }
         this->actor.bgCheckFlags &= ~2;
@@ -289,7 +289,7 @@ void EnSb_Bounce(EnSb* this, GlobalContext* globalCtx) {
         if (this->bounceCounter != 0) {
             this->bounceCounter--;
             this->attackTimer = 1;
-            if (this->actor.yDirDistToWaterSurface > 0.0f) {
+            if (this->actor.depthInWater > 0.0f) {
                 this->actor.velocity.y = 3.0f;
                 this->actor.speedXZ = 5.0f;
                 this->actor.gravity = -0.35f;
@@ -364,7 +364,7 @@ void EnSb_Update(Actor* thisx, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
     if (this->isDead) {
-        if (this->actor.yDirDistToWaterSurface > 0.0f) {
+        if (this->actor.depthInWater > 0.0f) {
             this->actor.params = 4;
         } else {
             this->actor.params = 1;
@@ -394,7 +394,7 @@ void EnSb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 
     if (this->isDrawn != false) {
         if (limbIndex < 7) {
-            phi_a2 = (this->actor.yDirDistToWaterSurface > 0) ? 4 : 1;
+            phi_a2 = (this->actor.depthInWater > 0) ? 4 : 1;
             func_800BBCEC(thisx, globalCtx, phi_a2, dList);
         }
         if (limbIndex == 6) {
