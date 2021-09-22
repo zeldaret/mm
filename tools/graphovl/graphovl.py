@@ -44,7 +44,10 @@ def capture_definitions(content):
 
 # Capture all function definitions in the block, name only
 def capture_definition_names(content):
-    return [x.group().split("(")[0] for x in re.finditer(func_defs_regexpr, content)]
+    definitions = []
+    for x in re.finditer(func_defs_regexpr, content):
+        definitions.append(x.group().split("(")[0])
+    return definitions
 
 setupaction_regexpr = re.compile(r"_SetupAction+\([^\)]*\)(\.[^\)]*\))?;")
 
@@ -72,10 +75,13 @@ def get_code_body(content, funcname) -> str:
 
     all_lines = content.splitlines(True)
     for raw_line in all_lines[line_num:len(all_lines)]:
-        if raw_line.count("{") > 0:
-            bracket_count += raw_line.count("{")
-        if raw_line.count("}") > 0:
-            bracket_count -= raw_line.count("}")
+        # Ignore commented stuff
+        if "//" in raw_line:
+            raw_line = raw_line[:raw_line.index("//")]
+
+        bracket_count += raw_line.count("{")
+        bracket_count -= raw_line.count("}")
+
         if bracket_count == 0:
             break
         else:

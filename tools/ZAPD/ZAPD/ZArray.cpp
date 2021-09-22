@@ -1,7 +1,7 @@
 #include "ZArray.h"
 #include <cassert>
 #include "Globals.h"
-#include "StringHelper.h"
+#include "Utils/StringHelper.h"
 #include "ZFile.h"
 
 REGISTER_ZFILENODE(Array, ZArray);
@@ -53,7 +53,7 @@ void ZArray::ParseXML(tinyxml2::XMLElement* reader)
 	}
 }
 
-std::string ZArray::GetSourceOutputCode(const std::string& prefix)
+std::string ZArray::GetSourceOutputCode([[maybe_unused]] const std::string& prefix)
 {
 	std::string output = "";
 
@@ -70,6 +70,11 @@ std::string ZArray::GetSourceOutputCode(const std::string& prefix)
 		                            resList.at(0)->GetSourceTypeName(), name, arrayCnt, output);
 
 	return "";
+}
+
+std::string ZArray::GetSourceTypeName() const
+{
+	return resList.at(0)->GetSourceTypeName();
 }
 
 size_t ZArray::GetRawDataSize() const
