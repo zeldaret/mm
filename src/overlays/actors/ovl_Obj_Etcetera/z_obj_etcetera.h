@@ -24,8 +24,8 @@ typedef struct ObjEtcetera {
     /* 0x01A0 */ ColliderCylinder collider;
     /* 0x01EC */ Vec3s limbDrawTbl[11];
     /* 0x022E */ Vec3s transitionDrawTbl[11];
-    /* 0x0270 */ f32 specialFlutterScale;
-    /* 0x0274 */ s16 flutterTimer;
+    /* 0x0270 */ f32 intenseOscillationScale;
+    /* 0x0274 */ s16 oscillationTimer;
     /* 0x0276 */ u16 burrowFlag;
     /* 0x0278 */ s8 objIndex;
     /* 0x027C */ Gfx* displayListPtr;

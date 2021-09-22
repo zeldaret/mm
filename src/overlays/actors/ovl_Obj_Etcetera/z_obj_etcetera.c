@@ -14,11 +14,9 @@ void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjEtcetera_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjEtcetera_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx);
-void ObjEtcetera_ReturnToIdle(ObjEtcetera* this, GlobalContext* globalCtx);
-void ObjEtcetera_DoSpecialFlutter(ObjEtcetera* this, GlobalContext* globalCtx);
+void ObjEtcetera_PlaySmallFlutterAnimation(ObjEtcetera* this, GlobalContext* globalCtx);
+void ObjEtcetera_DoIntenseOscillation(ObjEtcetera* this, GlobalContext* globalCtx);
 void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx);
-void ObjEtcetera_DoNormalFlutter(ObjEtcetera* this, GlobalContext* globalCtx);
 void ObjEtcetera_DrawIdle(Actor* thisx, GlobalContext* globalCtx);
 void ObjEtcetera_DrawAnimated(Actor* thisx, GlobalContext* globalCtx);
 
@@ -58,8 +56,11 @@ extern ColliderCylinderInit D_80A7C790;
 
 static s16 objectIds[] = { GAMEPLAY_KEEP, GAMEPLAY_KEEP, GAMEPLAY_KEEP, GAMEPLAY_KEEP };
 
-static f32 flutterValues[] = { -1.0, -1.0, -1.0, -0.7, 0.0, 0.7, 1.0, 0.7, 0.0,
-                               -0.7, -1.0, -0.7, 0.0,  0.7, 1.0, 0.7, 0.0, -0.7 };
+// Most interactions with a Deku Flower cause it to slightly oscillate on the X and Z axes.
+// When these small oscillations happen, the game determines how to scale the appropriate
+// axes by using this table.
+static f32 oscillationTable[] = { -1.0, -1.0, -1.0, -0.7, 0.0, 0.7, 1.0, 0.7, 0.0,
+                                  -0.7, -1.0, -0.7, 0.0,  0.7, 1.0, 0.7, 0.0, -0.7 };
 
 void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
@@ -97,12 +98,12 @@ void ObjEtcetera_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-void ObjEtcetera_DoNormalFlutter(ObjEtcetera* this, GlobalContext* globalCtx) {
-    if (this->flutterTimer > 0) {
+void ObjEtcetera_DoNormalOscillation(ObjEtcetera* this, GlobalContext* globalCtx) {
+    if (this->oscillationTimer > 0) {
         Actor_SetScale(&this->dyna.actor,
-                       (flutterValues[globalCtx->gameplayFrames % 18] * (0.0001f * this->flutterTimer)) + 0.01f);
+                       (oscillationTable[globalCtx->gameplayFrames % 18] * (0.0001f * this->oscillationTimer)) + 0.01f);
         this->dyna.actor.scale.y = 0.02f;
-        this->flutterTimer--;
+        this->oscillationTimer--;
     dummy_label:; // POSSIBLE FAKE MATCH
         return;
     }
@@ -110,15 +111,15 @@ void ObjEtcetera_DoNormalFlutter(ObjEtcetera* this, GlobalContext* globalCtx) {
     this->dyna.actor.scale.y = 0.02f;
 }
 
-void ObjEtcetera_SwitchToIdleAnimations(ObjEtcetera* this) {
+void ObjEtcetera_StartSmallFlutterAnimation(ObjEtcetera* this) {
     SkelAnime_ChangeAnim(&this->skelAnime, &D_040117A8, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_040117A8.common), 2,
                          0.0f);
     this->dyna.actor.draw = ObjEtcetera_DrawAnimated;
-    this->actionFunc = ObjEtcetera_ReturnToIdle;
+    this->actionFunc = ObjEtcetera_PlaySmallFlutterAnimation;
 }
 
 void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx) {
-    s16 minFlutterTimer;
+    s16 minOscillationTimer;
     Player* player = PLAYER;
 
     if ((player->stateFlags3 & 0x200) && (this->dyna.actor.xzDistToPlayer < 20.0f)) {
@@ -126,48 +127,48 @@ void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx) {
         SkelAnime_ChangeAnim(&this->skelAnime, &D_0400EB7C, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_0400EB7C.common), 2,
                              0.0f);
         this->dyna.actor.draw = ObjEtcetera_DrawAnimated;
-        this->actionFunc = ObjEtcetera_DoSpecialFlutter;
+        this->actionFunc = ObjEtcetera_DoIntenseOscillation;
         Actor_SetScale(&this->dyna.actor, 0.01f);
         this->dyna.actor.scale.y = 0.02f;
-        this->specialFlutterScale = 0.003f;
-        this->flutterTimer = 30;
+        this->intenseOscillationScale = 0.003f;
+        this->oscillationTimer = 30;
         this->burrowFlag &= ~1;
     } else if ((player->stateFlags3 & 0x2000) && (this->dyna.actor.xzDistToPlayer < 30.0f) &&
                (this->dyna.actor.yDistToPlayer > 0.0f)) {
-        // Link is slowly hovering down to the Deku Flower
-        minFlutterTimer = 10 - (s32)(this->dyna.actor.yDistToPlayer * 0.05f);
-        if (this->flutterTimer < minFlutterTimer) {
-            this->flutterTimer = minFlutterTimer;
+        // Link is hovering above the Deku Flower
+        minOscillationTimer = 10 - (s32)(this->dyna.actor.yDistToPlayer * 0.05f);
+        if (this->oscillationTimer < minOscillationTimer) {
+            this->oscillationTimer = minOscillationTimer;
         }
     } else {
         if (func_800CAF70(&this->dyna)) {
             if (!(this->burrowFlag & 1)) {
                 // Link is walking onto the Deku Flower, or falling on it from a height
-                this->flutterTimer = 10;
-                ObjEtcetera_SwitchToIdleAnimations(this);
+                this->oscillationTimer = 10;
+                ObjEtcetera_StartSmallFlutterAnimation(this);
             } else if ((player->actor.speedXZ > 0.1f) || ((player->unk_ABC < 0.0f) && !(player->stateFlags3 & 0x100))) {
                 // Link is walking on top of the Deku Flower, is at the very start of burrowing, or is at the very start
                 // of launching
-                this->flutterTimer = 10;
+                this->oscillationTimer = 10;
             }
             this->burrowFlag |= 1;
         } else {
             if (this->burrowFlag & 1) {
                 // Link is walking off the Deku Flower
-                this->flutterTimer = 10;
-                ObjEtcetera_SwitchToIdleAnimations(this);
+                this->oscillationTimer = 10;
+                ObjEtcetera_StartSmallFlutterAnimation(this);
             }
             this->burrowFlag &= ~1;
         }
     }
     if ((this->collider.base.acFlags & AC_HIT)) {
-        this->flutterTimer = 10;
-        ObjEtcetera_SwitchToIdleAnimations(this);
+        this->oscillationTimer = 10;
+        ObjEtcetera_StartSmallFlutterAnimation(this);
     }
-    ObjEtcetera_DoNormalFlutter(this, globalCtx);
+    ObjEtcetera_DoNormalOscillation(this, globalCtx);
 }
 
-void ObjEtcetera_ReturnToIdle(ObjEtcetera* this, GlobalContext* globalCtx) {
+void ObjEtcetera_PlaySmallFlutterAnimation(ObjEtcetera* this, GlobalContext* globalCtx) {
     if (func_800CAF70(&this->dyna)) {
         this->burrowFlag |= 1;
     } else {
@@ -177,10 +178,10 @@ void ObjEtcetera_ReturnToIdle(ObjEtcetera* this, GlobalContext* globalCtx) {
         this->dyna.actor.draw = ObjEtcetera_DrawIdle;
         this->actionFunc = ObjEtcetera_Idle;
     }
-    ObjEtcetera_DoNormalFlutter(this, globalCtx);
+    ObjEtcetera_DoNormalOscillation(this, globalCtx);
 }
 
-void ObjEtcetera_DoSpecialFlutter(ObjEtcetera* this, GlobalContext* globalCtx) {
+void ObjEtcetera_DoIntenseOscillation(ObjEtcetera* this, GlobalContext* globalCtx) {
     // In order to match, we are seemingly required to access scale.x at one point
     // without using this. We can create a thisx or dyna pointer to achieve that, but
     // it's more likely they used dyna given that func_800CAF70 takes a DynaPolyActor.
@@ -193,20 +194,20 @@ void ObjEtcetera_DoSpecialFlutter(ObjEtcetera* this, GlobalContext* globalCtx) {
         this->burrowFlag &= ~1;
     }
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-    if (0 < this->flutterTimer) {
-        this->flutterTimer--;
+    if (0 < this->oscillationTimer) {
+        this->oscillationTimer--;
     } else {
         this->dyna.actor.draw = ObjEtcetera_DrawIdle;
         this->actionFunc = ObjEtcetera_Idle;
         Actor_SetScale(&this->dyna.actor, 0.01f);
         this->dyna.actor.scale.y = 0.02f;
-        this->flutterTimer = 0;
-        this->specialFlutterScale = 0.0f;
+        this->oscillationTimer = 0;
+        this->intenseOscillationScale = 0.0f;
         return;
     }
-    this->specialFlutterScale *= 0.8f;
-    this->specialFlutterScale -= (this->dyna.actor.scale.x - 0.01f) * 0.4f;
-    scaleTemp = dyna->actor.scale.x + this->specialFlutterScale;
+    this->intenseOscillationScale *= 0.8f;
+    this->intenseOscillationScale -= (this->dyna.actor.scale.x - 0.01f) * 0.4f;
+    scaleTemp = dyna->actor.scale.x + this->intenseOscillationScale;
     Actor_SetScale(&this->dyna.actor, scaleTemp);
     this->dyna.actor.scale.y = 2.0f * scaleTemp;
 }
@@ -264,10 +265,10 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
                 SkelAnime_ChangeAnim(sp34, &D_0400EB7C, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_0400EB7C.common), 2,
                                      0.0f);
                 this->dyna.actor.draw = ObjEtcetera_DrawAnimated;
-                this->actionFunc = ObjEtcetera_DoSpecialFlutter;
+                this->actionFunc = ObjEtcetera_DoIntenseOscillation;
                 Actor_SetScale(&this->dyna.actor, 0.0f);
-                this->flutterTimer = 30;
-                this->specialFlutterScale = 0.0f;
+                this->oscillationTimer = 30;
+                this->intenseOscillationScale = 0.0f;
                 this->dyna.actor.focus.pos.y = this->dyna.actor.home.pos.y + 10.0f;
                 this->dyna.actor.targetMode = 3;
                 break;
