@@ -17,9 +17,8 @@ void Main(void* arg) {
     sysHeap = gSystemHeap;
     fb = 0x80780000;
     startHeapSize = fb - sysHeap;
-    
     SystemArena_Init(sysHeap, startHeapSize);
-    
+
     static_context_init();
 
     R_ENABLE_ARENA_DBG = 0;
@@ -41,10 +40,12 @@ void Main(void* arg) {
 
     StackCheck_Init(&padmgrStackEntry, padmgrStack, padmgrStack + sizeof(padmgrStack), 0, 0x100, "padmgr");
     Padmgr_Start(&siEventCallbackQueue, &gIrqMgr, 7, Z_PRIORITY_PADMGR, padmgrStack + sizeof(padmgrStack));
+    
     AudioMgr_Unlock(&audioContext);
 
     StackCheck_Init(&graphStackEntry, graphStack, graphStack + sizeof(graphStack), 0, 0x100, "graph");
-    osCreateThread(&graphOSThread, 4, Graph_ThreadEntry, arg, graphStack + sizeof(graphStack), Z_PRIORITY_GRAPH);
+    osCreateThread(&graphOSThread, Z_THREAD_ID_GRAPH, Graph_ThreadEntry, arg, graphStack + sizeof(graphStack),
+                   Z_PRIORITY_GRAPH);
     osStartThread(&graphOSThread);
 
     exit = false;
@@ -57,10 +58,10 @@ void Main(void* arg) {
         }
 
         switch (*msg) {
-            case 4:
+            case OS_SC_PRE_NMI_MSG:
                 Nmi_SetPrenmiStart();
                 break;
-            case 3:
+            case OS_SC_NMI_MSG:
                 exit = true;
                 break;
         }
