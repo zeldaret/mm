@@ -60,8 +60,7 @@
         <Texture Name="object_cs_Tex_00E120" OutName="tex_00E120" Format="i8" Width="16" Height="16" Offset="0xE120" />
         <!-- <Blob Name="object_cs_Blob_00E220" Size="0x1400" Offset="0xE220" /> -->
         <Texture Name="object_cs_Tex_00F620" OutName="tex_00F620" Format="i8" Width="8" Height="8" Offset="0xF620" />
-        <Animation Name="object_cs_Anim_00F674" Offset="0xF674" />
-        <Animation Name="object_cs_Anim_00F6A4" Offset="0xF6A4" />
+        <!-- <Blob Name="object_cs_Blob_00E220" Size="0x1400" Offset="0xE220" /> -->
         <TextureAnimation Name="object_cs_Matanimheader_00F6E4" Offset="0xF6E4" />
         <Limb Name="object_cs_Standardlimb_00F6EC" Type="Standard" Offset="0xF6EC" />
         <Limb Name="object_cs_Standardlimb_00F6F8" Type="Standard" Offset="0xF6F8" />

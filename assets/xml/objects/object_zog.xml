@@ -102,7 +102,6 @@
         <Limb Name="object_zog_Standardlimb_0290F4" Type="Standard" Offset="0x290F4" />
         <Limb Name="object_zog_Standardlimb_029100" Type="Standard" Offset="0x29100" />
         <Limb Name="object_zog_Standardlimb_02910C" Type="Standard" Offset="0x2910C" />
-        <Skeleton Name="object_zog_Skel_029170" Type="Normal" LimbType="Standard" Offset="0x29170" />
-        <!-- <Blob Name="object_zog_Blob_029178" Size="0x8" Offset="0x29178" /> -->
+        <Skeleton Name="object_zog_Skel_029170" Type="Flex" LimbType="Standard" Offset="0x29170" />
     </File>
 </Root>

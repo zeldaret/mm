@@ -30,9 +30,7 @@
         <Texture Name="object_ds2n_Tex_005D18" OutName="tex_005D18" Format="ci8" Width="16" Height="16" Offset="0x5D18" />
         <!-- <Blob Name="object_ds2n_Blob_005E18" Size="0x400" Offset="0x5E18" /> -->
         <Texture Name="object_ds2n_Tex_006218" OutName="tex_006218" Format="ci8" Width="32" Height="16" Offset="0x6218" />
-        <Animation Name="object_ds2n_Anim_006434" Offset="0x6434" />
-        <!-- <Blob Name="object_ds2n_Blob_006444" Size="0x1B4C" Offset="0x6444" /> -->
-        <Animation Name="object_ds2n_Anim_008038" Offset="0x8038" />
+        <!-- <Blob Name="object_ds2n_Blob_006418" Size="0x1B78" Offset="0x6418" /> -->
         <Limb Name="object_ds2n_Standardlimb_008050" Type="Standard" Offset="0x8050" />
         <Limb Name="object_ds2n_Standardlimb_00805C" Type="Standard" Offset="0x805C" />
         <Limb Name="object_ds2n_Standardlimb_008068" Type="Standard" Offset="0x8068" />

@@ -37,9 +37,7 @@
         <Texture Name="object_fsn_Tex_006100" OutName="tex_006100" Format="ci8" Width="32" Height="32" Offset="0x6100" />
         <Texture Name="object_fsn_Tex_006500" OutName="tex_006500" Format="ci8" Width="8" Height="8" Offset="0x6500" />
         <Texture Name="object_fsn_Tex_006540" OutName="tex_006540" Format="rgba16" Width="32" Height="32" Offset="0x6540" />
-        <!-- <Blob Name="object_fsn_Blob_006D40" Size="0x4900" Offset="0x6D40" /> -->
-        <Animation Name="object_fsn_Anim_00B654" Offset="0xB654" />
-        <!-- <Blob Name="object_fsn_Blob_00B664" Size="0xC" Offset="0xB664" /> -->
+        <!-- <Blob Name="object_fsn_Blob_006D40" Size="0x4C98" Offset="0x6D40" /> -->
         <Animation Name="object_fsn_Anim_00B9D8" Offset="0xB9D8" />
         <Animation Name="object_fsn_Anim_00C26C" Offset="0xC26C" />
         <Animation Name="object_fsn_Anim_00C58C" Offset="0xC58C" />

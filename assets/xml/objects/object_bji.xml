@@ -34,9 +34,7 @@
         <!-- <Blob Name="object_bji_Blob_0049F0" Size="0x400" Offset="0x49F0" /> -->
         <Texture Name="object_bji_Tex_004DF0" OutName="tex_004DF0" Format="ci8" Width="8" Height="8" Offset="0x4DF0" />
         <Texture Name="object_bji_Tex_004E30" OutName="tex_004E30" Format="ci8" Width="8" Height="8" Offset="0x4E30" />
-        <!-- <Blob Name="object_bji_Blob_004E70" Size="0x800" Offset="0x4E70" /> -->
-        <Animation Name="object_bji_Anim_005684" Offset="0x5684" />
-        <!-- <Blob Name="object_bji_Blob_005694" Size="0x8" Offset="0x5694" /> -->
+        <!-- <Blob Name="object_bji_Blob_004E70" Size="0x82C" Offset="0x4E70" /> -->
         <Limb Name="object_bji_Standardlimb_00569C" Type="Standard" Offset="0x569C" />
         <Limb Name="object_bji_Standardlimb_0056A8" Type="Standard" Offset="0x56A8" />
         <Limb Name="object_bji_Standardlimb_0056B4" Type="Standard" Offset="0x56B4" />

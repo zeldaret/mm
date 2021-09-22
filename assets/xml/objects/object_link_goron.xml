@@ -81,7 +81,7 @@
         <Limb Name="object_link_goron_Standardlimb_017790" Type="Standard" Offset="0x17790" />
         <Limb Name="object_link_goron_Standardlimb_01779C" Type="Standard" Offset="0x1779C" />
         <Skeleton Name="object_link_goron_Skel_0177B8" Type="Flex" LimbType="Standard" Offset="0x177B8" />
-        <Animation Name="object_link_goron_Anim_0178D0" Offset="0x178D0" />
+        <!-- <Blob Name="object_link_goron_Blob_0178D0" Size="0x10" Offset="0x178D0" /> -->
         <Limb Name="object_link_goron_Lodlimb_0178E0" Type="LOD" Offset="0x178E0" />
         <Limb Name="object_link_goron_Lodlimb_0178F0" Type="LOD" Offset="0x178F0" />
         <Limb Name="object_link_goron_Lodlimb_017900" Type="LOD" Offset="0x17900" />
