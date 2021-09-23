@@ -96,6 +96,7 @@ extern GraphicsContext* __gfxCtx;
         s32 __dispPad
 
 #define CLOSE_DISPS(gfxCtx) \
+    (void)0;                \
     }                       \
     (void)0
 

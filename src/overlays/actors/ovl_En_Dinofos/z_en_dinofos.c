@@ -278,7 +278,7 @@ static InitChainEntry sInitChain[] = {
 
 void EnDinofos_Init(Actor* thisx, GlobalContext* globalCtx) {
     static s32 D_8089E364 = 0;
-    static EffBlureInit2 D_8089E368 = {
+    static EffectBlureInit2 D_8089E368 = {
         0, 8, 0, { 255, 255, 255, 255 }, { 255, 255, 255, 64 }, { 255, 255, 255, 0 }, { 255, 255, 255, 0 }, 8,
         0, 2, 0, { 0, 0, 0, 0 },         { 0, 0, 0, 0 },
     };
@@ -288,7 +288,7 @@ void EnDinofos_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B42F8, 90.0f);
-    Effect_Add(globalCtx, &this->unk_2A0, 2, 0, 0, &D_8089E368);
+    Effect_Add(globalCtx, &this->unk_2A0, EFFECT_BLURE2, 0, 0, &D_8089E368);
     Collider_InitAndSetJntSph(globalCtx, &this->colliderJntSph, &this->actor, &sJntSphInit,
                               this->colliderJntSphElement);
     Collider_InitAndSetQuad(globalCtx, &this->colliderQuad, &this->actor, &sQuadInit);
@@ -936,7 +936,7 @@ void func_8089C56C(EnDinofos* this, GlobalContext* globalCtx) {
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x800);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
-        func_800A8514(Effect_GetParams(this->unk_2A0));
+        EffectBlure_AddSpace(Effect_GetByIndex(this->unk_2A0));
         this->colliderQuad.base.atFlags &= ~AT_ON;
         func_8089A9B0(this, globalCtx);
     } else if (func_801378B8(&this->skelAnime, 7.0f)) {
@@ -1454,7 +1454,7 @@ void func_8089DC84(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         SysMatrix_MultiplyVector3fByState(&D_8089E398, &sp5C);
         Collider_SetQuadVertices(&this->colliderQuad, &sp5C, &sp68, &sp74, &sp80);
         if (this->colliderQuad.base.atFlags & AT_ON) {
-            func_800A81F0(Effect_GetParams(this->unk_2A0), &sp68, &sp5C);
+            EffectBlure_AddVertex(Effect_GetByIndex(this->unk_2A0), &sp68, &sp5C);
         }
         this->unk_292 = this->unk_290;
     }

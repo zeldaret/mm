@@ -401,7 +401,7 @@ s32 func_80B41528(GlobalContext* globalCtx) {
 }
 
 void func_80B415A8(GlobalContext* globalCtx, Vec3f* arg1) {
-    static EffShieldParticleInit D_80B43298 = {
+    static EffectShieldParticleInit D_80B43298 = {
         16,
         { 0, 0, 0 },
         { 0, 200, 255, 255 },
@@ -426,7 +426,7 @@ void func_80B415A8(GlobalContext* globalCtx, Vec3f* arg1) {
     D_80B43298.lightPoint.y = D_80B43298.position.y;
     D_80B43298.lightPoint.z = D_80B43298.position.z;
 
-    Effect_Add(globalCtx, &effectIndex, 3, 0, 1, &D_80B43298);
+    Effect_Add(globalCtx, &effectIndex, EFFECT_SHIELD_PARTICLE, 0, 1, &D_80B43298);
 }
 
 void func_80B4163C(EnKgy* this, GlobalContext* globalCtx) {

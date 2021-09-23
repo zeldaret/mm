@@ -288,7 +288,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnDodongo_Init(Actor* thisx, GlobalContext* globalCtx) {
-    static EffBlureInit2 D_80879308 = {
+    static EffectBlureInit2 D_80879308 = {
         2, 8, 0, { 255, 255, 255, 255 }, { 255, 255, 255, 64 }, { 255, 255, 255, 0 }, { 255, 255, 255, 0 }, 8,
         0, 0, 0, { 0, 0, 0, 0 },         { 0, 0, 0, 0 },
     };
@@ -315,7 +315,7 @@ void EnDodongo_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->collider2.elements[i].info.bumper.dmgFlags = 0x77C34FE6;
     }
 
-    Effect_Add(globalCtx, &this->unk_338, 2, 0, 0, &D_80879308);
+    Effect_Add(globalCtx, &this->unk_338, EFFECT_BLURE2, 0, 0, &D_80879308);
     if (this->actor.params == 0) {
         Actor_SetScale(&this->actor, 3.0f / 160.0f);
         this->unk_334 = 1.0f;
@@ -1099,7 +1099,7 @@ void EnDodongo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     }
 
     if ((limbIndex == 30) && (this->actionFunc == func_80878424) && (this->timer != this->unk_304)) {
-        func_800A81F0(Effect_GetParams(this->unk_338), &this->unk_320, &this->unk_348[4]);
+        EffectBlure_AddVertex(Effect_GetByIndex(this->unk_338), &this->unk_320, &this->unk_348[4]);
         this->unk_304 = this->timer;
     }
 }
