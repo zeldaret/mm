@@ -1,7 +1,7 @@
 #include "SetCsCamera.h"
 
-#include "BitConverter.h"
-#include "StringHelper.h"
+#include "Utils/BitConverter.h"
+#include "Utils/StringHelper.h"
 #include "ZFile.h"
 #include "ZRoom/ZRoom.h"
 
@@ -110,11 +110,6 @@ std::string SetCsCamera::GetBodySourceCode() const
 	std::string listName = parent->GetDeclarationPtrName(cmdArg2);
 	return StringHelper::Sprintf("SCENE_CMD_ACTOR_CUTSCENE_CAM_LIST(%i, %s)", cameras.size(),
 	                             listName.c_str());
-}
-
-size_t SetCsCamera::GetRawDataSize() const
-{
-	return ZRoomCommand::GetRawDataSize() + (cameras.size() * 8) + (points.size() * 6);
 }
 
 std::string SetCsCamera::GetCommandCName() const

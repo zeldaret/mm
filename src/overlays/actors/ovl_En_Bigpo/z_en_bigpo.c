@@ -179,10 +179,10 @@ static u8 D_80B65078[] = {
 
 // used in limbdraw
 static Vec3f D_80B65084[] = {
-    { 2000.0f, 4000.0f, 0.0f,},
-    {-1000.0f, 1500.0f, -2000.0f,},
-    {-1000.0f, 1500.0f, 2000.0f,},
-}; 
+    { 2000.0f, 4000.0f, 0.0f },
+    { -1000.0f, 1500.0f, -2000.0f },
+    { -1000.0f, 1500.0f, 2000.0f },
+};
 
 void EnBigpo_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
@@ -231,7 +231,7 @@ void EnBigpo_Init(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     if (thisx->params == ENBIGPO_REGULAR) { // the well poe, starts immediately
-        thisx->flags &= ~0x10; // always update OFF
+        thisx->flags &= ~0x10;              // always update OFF
         this->unkBool204 = true;
         EnBigpo_InitWellBigpo(this);
     } else if (thisx->params == ENBIGPO_SUMMONED) { // dampe type

@@ -159,7 +159,7 @@ typedef struct {
     /* 0x3F45 */ u8 zTargetSetting;      // 0: Switch; 1: Hold
     /* 0x3F46 */ u16 unk_3F46;           // "NottoriBgm"
     /* 0x3F48 */ u8 unk_3F48;            // "fade_go"
-    /* 0x3F4A */ u16 unk_3F4A;           // "next_daytime"
+    /* 0x3F4A */ u16 nextCutsceneIndex;  // "next_daytime"
     /* 0x3F4C */ u8 cutsceneTrigger;     // "doukidemo"
     /* 0x3F4D */ u8 unk_3F4D;            // "Kenjya_no"
     /* 0x3F4E */ u16 nextDayTime;        // "next_zelda_time"
