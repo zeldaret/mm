@@ -460,7 +460,7 @@ void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
                     } else {
                         globalCtx->nextEntranceIndex = 0xD800;
                     }
-                    gSaveContext.unk_3F4A = 0xFFF1;
+                    gSaveContext.nextCutsceneIndex = 0xFFF1;
                     globalCtx->sceneLoadFlag = 0x14;
                     globalCtx->unk_1887F = 2;
                     player->stateFlags1 |= 0x200;
