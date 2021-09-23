@@ -318,7 +318,8 @@ beginseg
     name "icon_item_gameover_static"
     compress
     romalign 0x1000
-    include "build/baserom/icon_item_gameover_static.o"
+    include "build/assets/static/icon_item_gameover_static/icon_item_gameover_static.o"
+    number 12
 endseg
 
 beginseg
@@ -732,8 +733,7 @@ beginseg
     name "ovl_daytelop"
     compress
     include "build/src/overlays/gamestates/ovl_daytelop/z_daytelop.o"
-    include "build/data/ovl_daytelop/ovl_daytelop.data.o"
-    include "build/data/ovl_daytelop/ovl_daytelop.reloc.o"
+    include "build/src/overlays/gamestates/ovl_daytelop/ovl_daytelop_reloc.o"
 endseg
 
 beginseg
@@ -3808,8 +3808,7 @@ beginseg
     name "ovl_Obj_Lightblock"
     compress
     include "build/src/overlays/actors/ovl_Obj_Lightblock/z_obj_lightblock.o"
-    include "build/data/ovl_Obj_Lightblock/ovl_Obj_Lightblock.data.o"
-    include "build/data/ovl_Obj_Lightblock/ovl_Obj_Lightblock.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Lightblock/ovl_Obj_Lightblock_reloc.o"
 endseg
 
 beginseg
@@ -8928,28 +8927,32 @@ beginseg
     name "daytelop_static"
     compress
     romalign 0x1000
-    include "build/baserom/daytelop_static.o"
+    include "build/assets/static/daytelop_static/daytelop_static.o"
+    number 9
 endseg
 
 beginseg
     name "ger_daytelop_static"
     compress
     romalign 0x1000
-    include "build/baserom/ger_daytelop_static.o"
+    include "build/assets/static/ger_daytelop_static/ger_daytelop_static.o"
+    number 9
 endseg
 
 beginseg
     name "fra_daytelop_static"
     compress
     romalign 0x1000
-    include "build/baserom/fra_daytelop_static.o"
+    include "build/assets/static/fra_daytelop_static/fra_daytelop_static.o"
+    number 9
 endseg
 
 beginseg
     name "esp_daytelop_static"
     compress
     romalign 0x1000
-    include "build/baserom/esp_daytelop_static.o"
+    include "build/assets/static/esp_daytelop_static/esp_daytelop_static.o"
+    number 9
 endseg
 
 beginseg
