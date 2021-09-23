@@ -22,7 +22,7 @@ void View_Init(View* view, GraphicsContext* gfxCtx) {
     view->viewport.bottomY = 240;
     view->viewport.leftX = 0;
     view->viewport.rightX = 320;
-    view->magic = 0x56494557; // "VIEW"
+    view->magic = 'VIEW';
 
     view->unk164 = 0;
     view->flags = 1 | 2 | 4;
