@@ -709,7 +709,7 @@ void Fault_ProcessClients(void) {
     s32 idx = 0;
 
     while (iter != NULL) {
-        if (iter->callback) {
+        if (iter->callback != NULL) {
             Fault_FillScreenBlack();
             FaultDrawer_SetCharPad(-2, 0);
             FaultDrawer_Printf("\x1A\x38"
