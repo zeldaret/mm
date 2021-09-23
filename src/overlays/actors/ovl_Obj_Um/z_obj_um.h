@@ -41,10 +41,10 @@ typedef struct ObjUm {
     /* 0x1A4 */ Vec3s jointTable[UM_LIMB_MAX];
     /* 0x228 */ Vec3s morphTable[UM_LIMB_MAX];
     /* 0x2AC */ s16 unk_2AC; // x angle
-    /* 0x2AE */ s16 unk_2AE; // type
+    /* 0x2AE */ s16 type;
     /* 0x2B0 */ s16 unk_2B0;
     /* 0x2B4 */ s32 unk_2B4;
-    /* 0x2B8 */ EnHorse* unk_2B8;
+    /* 0x2B8 */ EnHorse* donkey;
     /* 0x2BC */ s32 unk_2BC; // pathIndex?
     /* 0x2BE */ s32 unk_2BE; // pointIndex?
     /* 0x2C4 */ Vec3f unk_2C4;
@@ -59,10 +59,10 @@ typedef struct ObjUm {
     /* 0x314 */ s32 unk_314[3];
     /* 0x320 */ s32 unk_320[3];
     /* 0x32C */ Vec3f unk_32C[3];
-    /* 0x350 */ s32 unk_350;
-    /* 0x354 */ s32 unk_354;
-    /* 0x358 */ EnHorse* unk_358;
-    /* 0x35C */ EnHorse* unk_35C;
+    /* 0x350 */ s32 unk_350; // unused counter?
+    /* 0x354 */ s32 unk_354; // unused?
+    /* 0x358 */ EnHorse* bandit1;
+    /* 0x35C */ EnHorse* bandit2;
     /* 0x360 */ Vec3f unk_360[0x10];
     /* 0x420 */ s32 unk_420;
     /* 0x424 */ ColliderCylinder unk_424[2]; // horses
@@ -77,5 +77,15 @@ typedef struct ObjUm {
 } ObjUm; // size = 0x4E4
 
 extern const ActorInit Obj_Um_InitVars;
+
+typedef enum {
+    /* 0 */ OBJ_UM_TYPE_0, // on Termina Field
+    /* 1 */ OBJ_UM_TYPE_1, // on ranch
+    /* 2 */ OBJ_UM_TYPE_2, // pre-minigame
+    /* 3 */ OBJ_UM_TYPE_3, // minigame
+    /* 4 */ OBJ_UM_TYPE_4  // post-minigame
+} ObjUmType;
+
+#define OBJ_UM_PARSE_TYPE(params) ((params) & 0xFF00) >> 8
 
 #endif // Z_OBJ_UM_H

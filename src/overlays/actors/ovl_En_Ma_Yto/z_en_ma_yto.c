@@ -1088,7 +1088,7 @@ void EnMaYto_PostMilkRunEnd(EnMaYto* this, GlobalContext* globalCtx) {
         // Termina Field
         globalCtx->nextEntranceIndex = 0x54D0;
     } else {
-        // Romani Ranch
+        // Romani's Ranch
         globalCtx->nextEntranceIndex = 0x6480;
     }
     gSaveContext.nextCutsceneIndex = 0;

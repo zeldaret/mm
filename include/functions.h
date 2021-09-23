@@ -132,6 +132,7 @@ void StackCheck_Cleanup(StackEntry* entry);
 StackStatus StackCheck_GetState(StackEntry* entry);
 u32 StackCheck_CheckAll(void);
 u32 StackCheck_Check(StackEntry* entry);
+
 void GfxPrint_InitDlist(GfxPrint* printer);
 void GfxPrint_SetColor(GfxPrint* printer, u32 r, u32 g, u32 b, u32 a);
 void GfxPrint_SetPosPx(GfxPrint* printer, s32 x, s32 y);
@@ -148,8 +149,10 @@ void GfxPrint_Open(GfxPrint* printer, Gfx* dList);
 Gfx* GfxPrint_Close(GfxPrint* printer);
 s32 GfxPrint_VPrintf(GfxPrint* printer, const char* fmt, va_list args);
 s32 GfxPrint_Printf(GfxPrint* printer, const char* fmt, ...);
+
 void MtxConv_F2L(MatrixInternal* m1, MtxF* m2);
 void MtxConv_L2F(MtxF* m1, MatrixInternal* m2);
+
 void __assert(const char* file, u32 lineNum);
 // void func_800862B4(void);
 void* SystemArena_MallocMin1(u32 size);
