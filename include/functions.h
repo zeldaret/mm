@@ -1547,7 +1547,7 @@ s32 func_800E8FA4(Actor* actor, Vec3f* param_2, Vec3s* param_3, Vec3s* param_4);
 s32 func_800E9138(GlobalContext* globalCtx, Actor* actor, Vec3s* param_3, Vec3s* param_4, f32 param_5);
 s32 func_800E9250(GlobalContext* globalCtx, Actor* actor, Vec3s* param_3, Vec3s* param_4, Vec3f param_5);
 u8 func_800E9360(void);
-void static_context_init(void);
+void GameInfo_Init(void);
 // void func_800E9470(void);
 void DebugDisplay_AddObject(f32 posX, f32 posY, f32 posZ, s16 rotX, s16 rotY, s16 rotZ, f32 scaleX, f32 scaleY, f32 scaleZ, u8 red, u8 green, u8 blue, u8 alpha, s16 type, GraphicsContext* gfxCtx);
 void DebugDisplay_DrawObjects(GlobalContext* globalCtx);

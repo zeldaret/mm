@@ -2,9 +2,9 @@
 
 GameInfo* gGameInfo;
 
-// #pragma GLOBAL_ASM("asm/non_matchings/code/z_debug/static_context_init.s")
-void static_context_init(void) {
+void GameInfo_Init(void) {
     s32 i;
+
     gGameInfo = (GameInfo*)SystemArena_Malloc(sizeof(GameInfo));
     if (1) {}
     gGameInfo->unk_00 = 0;
