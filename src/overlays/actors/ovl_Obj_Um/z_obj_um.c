@@ -147,7 +147,7 @@ struct_80B7C25C D_80B7C25C[] = {
 
 // actionfuncs
 void func_80B7A144(ObjUm* this, GlobalContext* globalCtx);
-void func_80B79A50(ObjUm* this, GlobalContext* globalCtx);
+void ObjUm_RanchWait(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7A400(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7AC94(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7AE58(ObjUm* this, GlobalContext* globalCtx);
@@ -705,9 +705,9 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
 #endif
     }
 
-    if (this->type == OBJ_UM_TYPE_0) {
+    if (this->type == OBJ_UM_TYPE_TERMINA_FIELD) {
         ObjUm_SetupAction(this, func_80B7AEFC);
-    } else if (this->type == OBJ_UM_TYPE_1) {
+    } else if (this->type == OBJ_UM_TYPE_RANCH) {
         this->unk_2BC = this->unk_2B0;
         if (gSaveContext.weekEventReg[0x1F] & 0x80) {
             sp54 = false;
@@ -722,7 +722,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
 
             this->dyna.actor.targetMode = 6;
             this->unk_2B4 = 0;
-            ObjUm_SetupAction(this, func_80B79A50);
+            ObjUm_SetupAction(this, ObjUm_RanchWait);
         }
     } else if (this->type == OBJ_UM_TYPE_2) {
         if (!(gSaveContext.weekEventReg[0x1F] & 0x80) || (gSaveContext.weekEventReg[0x34] & 1)) {
@@ -738,7 +738,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->unk_354 = 0;
             ObjUm_RotatePlayer(this, globalCtx, 0);
         }
-    } else if (this->type == OBJ_UM_TYPE_3) {
+    } else if (this->type == OBJ_UM_TYPE_MILK_RUN_MINIGAME) {
         if (!(gSaveContext.weekEventReg[0x1F] & 0x80)) {
             Actor_MarkForDeath(&this->dyna.actor);
             return;
@@ -764,7 +764,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
         ObjUm_RotatePlayer(this, globalCtx, 0);
         func_801A3098(0x19);
     } else {
-        this->type = OBJ_UM_TYPE_0;
+        this->type = OBJ_UM_TYPE_TERMINA_FIELD;
         ObjUm_SetupAction(this, func_80B7AEFC);
     }
 
@@ -952,7 +952,7 @@ s32 func_80B7984C(GlobalContext* globalCtx, ObjUm* this, s32 arg2, s32* arg3) {
     }
 
     phi_v1 = this->dyna.actor.yawTowardsPlayer - this->dyna.actor.shape.rot.y;
-    temp_v0_2 = ABS_ALT((s16)phi_v1);
+    temp_v0_2 = ABS_ALT(phi_v1);
 
     if (temp_v0_2 >= 0x4E20) {
         return 0;
@@ -975,13 +975,13 @@ s32 func_80B7984C(GlobalContext* globalCtx, ObjUm* this, s32 arg2, s32* arg3) {
 
 s32 func_80B79A24(s32 arg0) {
     if ((arg0 == 1) || (arg0 == 2) || (arg0 == 3)) {
-        return 1;
+        return true;
     }
-    return 0;
+
+    return false;
 }
 
-
-void func_80B79A50(ObjUm* this, GlobalContext* globalCtx) {
+void ObjUm_RanchWait(ObjUm* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
     this->dyna.actor.flags |= 1;
@@ -1756,7 +1756,7 @@ s32 ObjUm_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     Vec3f sp5C = {4223.0f, -979.0f, 4098.0f};
     Vec3f sp50 = {4223.0f, -980.0f, -4083.0f};
 
-    if ((limbIndex >= UM_LIMB_CREMIA_ROOT) && (this->type == OBJ_UM_TYPE_0)) {
+    if ((limbIndex >= UM_LIMB_CREMIA_ROOT) && (this->type == OBJ_UM_TYPE_TERMINA_FIELD)) {
         *dList = NULL;
         return false;
     }

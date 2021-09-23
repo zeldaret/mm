@@ -14484,7 +14484,7 @@
     0x80B797EC:("func_80B797EC",),
     0x80B7984C:("func_80B7984C",),
     0x80B79A24:("func_80B79A24",),
-    0x80B79A50:("func_80B79A50",),
+    0x80B79A50:("ObjUm_RanchWait",),
     0x80B79BA0:("func_80B79BA0",),
     0x80B79F10:("func_80B79F10",),
     0x80B79FFC:("func_80B79FFC",),

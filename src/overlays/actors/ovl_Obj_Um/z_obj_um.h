@@ -79,11 +79,11 @@ typedef struct ObjUm {
 extern const ActorInit Obj_Um_InitVars;
 
 typedef enum {
-    /* 0 */ OBJ_UM_TYPE_0, // on Termina Field
-    /* 1 */ OBJ_UM_TYPE_1, // on ranch
-    /* 2 */ OBJ_UM_TYPE_2, // pre-minigame
-    /* 3 */ OBJ_UM_TYPE_3, // minigame
-    /* 4 */ OBJ_UM_TYPE_4  // post-minigame
+    /* 0 */ OBJ_UM_TYPE_TERMINA_FIELD,
+    /* 1 */ OBJ_UM_TYPE_RANCH,
+    /* 2 */ OBJ_UM_TYPE_2, // milk road, pre-minigame
+    /* 3 */ OBJ_UM_TYPE_MILK_RUN_MINIGAME,
+    /* 4 */ OBJ_UM_TYPE_4  // milk road, post-minigame
 } ObjUmType;
 
 #define OBJ_UM_PARSE_TYPE(params) ((params) & 0xFF00) >> 8
