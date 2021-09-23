@@ -1,3 +1,0 @@
-When processing file assets/xml/scenes/Z2_SECOM/Z2_SECOM.xml: in input binary file Z2_SECOM, offset 0x001920:
-	[97mTextureCyclingParams::DeclareReferences:[0m[95m warning: [0m[97mTexCycle declared here points to unknown texture at address 0x020047F0. Please declare the texture in the XML to use the proper symbol.
-[0m
