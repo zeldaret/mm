@@ -71,8 +71,6 @@
 #define CHECK_BTN_ALL(state, combo) (~((state) | ~(combo)) == 0)
 #define CHECK_BTN_ANY(state, combo) (((state) & (combo)) != 0)
 
-// extern GraphicsContext* __gfxCtx;
-
 #define WORK_DISP __gfxCtx->work.p
 #define POLY_OPA_DISP __gfxCtx->polyOpa.p
 #define POLY_XLU_DISP __gfxCtx->polyXlu.p
