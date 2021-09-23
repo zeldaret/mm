@@ -4,8 +4,8 @@
 #include <string>
 #include <vector>
 #include "ZFile.h"
-#include "ZRoom/ZRoom.h"
-#include "ZTexture.h"
+
+class ZRoom;
 
 enum class VerbosityLevel
 {
@@ -35,6 +35,25 @@ public:
 	GameConfig() = default;
 };
 
+typedef void (*ExporterSetFunc)(ZFile*);
+typedef bool (*ExporterSetFuncBool)(ZFileMode fileMode);
+typedef void (*ExporterSetFuncVoid)(int argc, char* argv[], int& i);
+typedef void (*ExporterSetFuncVoid2)(std::string buildMode, ZFileMode& fileMode);
+typedef void (*ExporterSetFuncVoid3)();
+
+class ExporterSet
+{
+public:
+	std::map<ZResourceType, ZResourceExporter*> exporters;
+	ExporterSetFuncVoid parseArgsFunc = nullptr;
+	ExporterSetFuncVoid2 parseFileModeFunc = nullptr;
+	ExporterSetFuncBool processFileModeFunc = nullptr;
+	ExporterSetFunc beginFileFunc = nullptr;
+	ExporterSetFunc endFileFunc = nullptr;
+	ExporterSetFuncVoid3 beginXMLFunc = nullptr;
+	ExporterSetFuncVoid3 endXMLFunc = nullptr;
+};
+
 class Globals
 {
 public:
@@ -56,6 +75,7 @@ public:
 	bool warnNoOffset = false;
 	bool errorNoOffset = false;
 	bool verboseUnaccounted = false;
+	bool gccCompat = false;
 
 	std::vector<ZFile*> files;
 	std::vector<int32_t> segments;
@@ -64,6 +84,10 @@ public:
 	ZRoom* lastScene;
 	std::map<uint32_t, std::string> symbolMap;
 
+	std::string currentExporter;
+	static std::map<std::string, ExporterSet*>* GetExporterMap();
+	static void AddExporter(std::string exporterName, ExporterSet* exporterSet);
+
 	Globals();
 	std::string FindSymbolSegRef(int32_t segNumber, uint32_t symbolAddress);
 	void ReadConfigFile(const std::string& configFilePath);
@@ -71,20 +95,6 @@ public:
 	void GenSymbolMap(const std::string& symbolMapPath);
 	void AddSegment(int32_t segment, ZFile* file);
 	bool HasSegment(int32_t segment);
+	ZResourceExporter* GetExporter(ZResourceType resType);
+	ExporterSet* GetExporterSet();
 };
-
-/*
- * Note: In being able to track references across files, there are a few major files that make use
- * of segments...
- * Segment 1: nintendo_rogo_static/title_static
- * Segment 2: parameter_static
- * Segment 4: gameplay_keep
- * Segment 5: gameplay_field_keep, gameplay_dangeon_keep
- * Segment 7: link_animetion
- * Segment 8: icon_item_static
- * Segment 9: icon_item_24_static
- * Segment 12: icon_item_field_static, icon_item_dungeon_static
- * Segment 13: icon_item_nes_static
- *
- * I'm thinking a config file could be usable, but I'll have to experiment...
- */
