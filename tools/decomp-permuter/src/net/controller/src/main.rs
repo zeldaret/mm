@@ -112,6 +112,7 @@ enum ServerUpdate {
         overhead_us: i64,
         #[serde(skip)]
         compressed_source: Option<Vec<u8>>,
+        #[serde(default)]
         has_source: bool,
         #[serde(flatten)]
         more_props: HashMap<String, serde_json::Value>,
