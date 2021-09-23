@@ -38,7 +38,7 @@ void ZVtx::ParseRawData()
 
 std::string ZVtx::GetBodySourceCode() const
 {
-	return StringHelper::Sprintf("VTX(%i, %i, %i, %i, %i, %i, %i, %i, %i)", x, y, z, s, t, r, g, b,
+	return StringHelper::Sprintf("    VTX(%i, %i, %i, %i, %i, %i, %i, %i, %i)", x, y, z, s, t, r, g, b,
 	                             a);
 }
 
