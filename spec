@@ -3808,8 +3808,7 @@ beginseg
     name "ovl_Obj_Lightblock"
     compress
     include "build/src/overlays/actors/ovl_Obj_Lightblock/z_obj_lightblock.o"
-    include "build/data/ovl_Obj_Lightblock/ovl_Obj_Lightblock.data.o"
-    include "build/data/ovl_Obj_Lightblock/ovl_Obj_Lightblock.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Lightblock/ovl_Obj_Lightblock_reloc.o"
 endseg
 
 beginseg
