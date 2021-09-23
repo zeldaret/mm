@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-import sys
-import re
+from dataclasses import dataclass, field
 import os
+import re
 import string
 import subprocess
-from typing import List, Tuple, Match
-
-OBJDUMP = ["mips-linux-gnu-objdump", "-m", "mips:4300", "-drz"]
+import sys
+from typing import List, Match, Pattern, Set, Tuple
 
 # Ignore registers, for cleaner output. (We don't do this right now, but it can
 # be useful for debugging.)
@@ -20,15 +19,24 @@ ign_branch_targets = True
 # Skip branch-likely delay slots. (They aren't interesting on IDO.)
 skip_bl_delay_slots = True
 
-num_re = re.compile(r"[0-9]+")
-full_num_re = re.compile(r"\b[0-9]+\b")
-comments = re.compile(r"<.*?>")
-regs = re.compile(r"\$?\b(a[0-3]|t[0-9]|s[0-8]|at|v[01]|f[12]?[0-9]|f3[01]|fp|ra)\b")
-sp_offset = re.compile(r",([1-9][0-9]*|0x[1-9a-f][0-9a-f]*)\((sp|s8)\)")
-includes_sp = re.compile(r"\b(sp|s8)\b")
-forbidden = set(string.ascii_letters + "_")
 skip_lines = 1
-branch_likely_instructions = [
+re_int = re.compile(r"[0-9]+")
+re_int_full = re.compile(r"\b[0-9]+\b")
+
+
+@dataclass
+class ArchSettings:
+    objdump: List[str]
+    re_comment: Pattern[str]
+    re_reg: Pattern[str]
+    re_sprel: Pattern[str]
+    re_includes_sp: Pattern[str]
+    branch_instructions: Set[str]
+    forbidden: Set[str] = field(default_factory=lambda: set(string.ascii_letters + "_"))
+    branch_likely_instructions: Set[str] = field(default_factory=set)
+
+
+MIPS_BRANCH_LIKELY_INSTRUCTIONS = {
     "beql",
     "bnel",
     "beqzl",
@@ -39,8 +47,8 @@ branch_likely_instructions = [
     "bltzl",
     "bc1tl",
     "bc1fl",
-]
-branch_instructions = [
+}
+MIPS_BRANCH_INSTRUCTIONS = {
     "b",
     "j",
     "beq",
@@ -53,7 +61,30 @@ branch_instructions = [
     "bltz",
     "bc1t",
     "bc1f",
-] + branch_likely_instructions
+}.union(MIPS_BRANCH_LIKELY_INSTRUCTIONS)
+
+MIPS_SETTINGS: ArchSettings = ArchSettings(
+    re_comment=re.compile(r"<.*?>"),
+    re_reg=re.compile(
+        r"\$?\b(a[0-3]|t[0-9]|s[0-8]|at|v[01]|f[12]?[0-9]|f3[01]|k[01]|fp|ra)\b"  # leave out $zero
+    ),
+    re_sprel=re.compile(r"(?<=,)([0-9]+|0x[0-9a-f]+)\((sp|s8)\)"),
+    re_includes_sp=re.compile(r"\b(sp|s8)\b"),
+    objdump=["mips-linux-gnu-objdump", "-drz", "-m", "mips:4300"],
+    branch_likely_instructions=MIPS_BRANCH_LIKELY_INSTRUCTIONS,
+    branch_instructions=MIPS_BRANCH_INSTRUCTIONS,
+)
+
+
+def get_arch(o_file: str) -> ArchSettings:
+    # https://refspecs.linuxfoundation.org/elf/gabi4+/ch4.eheader.html
+    with open(o_file, "rb") as f:
+        f.seek(18)
+        arch_magic = f.read(2)
+    if arch_magic == b"\0\x08":
+        return MIPS_SETTINGS
+    # TODO: support PPC ("\0\x14"), ARM ("0\x28")
+    raise Exception("Bad ELF")
 
 
 def parse_relocated_line(line: str) -> Tuple[str, str, str]:
@@ -73,7 +104,9 @@ def parse_relocated_line(line: str) -> Tuple[str, str, str]:
     return before, imm, after
 
 
-def simplify_objdump(input_lines: List[str], *, stack_differences: bool) -> List[str]:
+def simplify_objdump(
+    input_lines: List[str], arch: ArchSettings, *, stack_differences: bool
+) -> List[str]:
     output_lines: List[str] = []
     nops = 0
     skip_next = False
@@ -101,7 +134,10 @@ def simplify_objdump(input_lines: List[str], *, stack_differences: bool) -> List
             # relocations.
             if imm != "0" and imm != "imm" and imm != "addr":
                 repl += "+" + imm if int(imm, 0) > 0 else imm
-            if "R_MIPS_LO16" in row:
+            if any(
+                reloc in row
+                for reloc in ["R_MIPS_LO16", "R_MIPS_LITERAL", "R_MIPS_GPREL16"]
+            ):
                 repl = f"%lo({repl})"
             elif "R_MIPS_HI16" in row:
                 # Ideally we'd pair up R_MIPS_LO16 and R_MIPS_HI16 to generate a
@@ -112,7 +148,7 @@ def simplify_objdump(input_lines: List[str], *, stack_differences: bool) -> List
                 assert "R_MIPS_26" in row, f"unknown relocation type '{row}'"
             output_lines[-1] = before + repl + after
             continue
-        row = re.sub(comments, "", row)
+        row = re.sub(arch.re_comment, "", row)
         row = row.rstrip()
         row = "\t".join(row.split("\t")[2:])  # [20:]
         if not row:
@@ -121,15 +157,15 @@ def simplify_objdump(input_lines: List[str], *, stack_differences: bool) -> List
             skip_next = False
             row = "<skipped>"
         if ign_regs:
-            row = re.sub(regs, "<reg>", row)
+            row = re.sub(arch.re_reg, "<reg>", row)
         row_parts = row.split("\t")
         if len(row_parts) == 1:
             row_parts.append("")
         mnemonic, instr_args = row_parts
         if not stack_differences:
-            if mnemonic == "addiu" and includes_sp.search(instr_args):
-                row = re.sub(full_num_re, "imm", row)
-        if mnemonic in branch_instructions:
+            if mnemonic == "addiu" and arch.re_includes_sp.search(instr_args):
+                row = re.sub(re_int_full, "imm", row)
+        if mnemonic in arch.branch_instructions:
             if ign_branch_targets:
                 instr_parts = instr_args.split(",")
                 instr_parts[-1] = "<target>"
@@ -143,17 +179,17 @@ def simplify_objdump(input_lines: List[str], *, stack_differences: bool) -> List
                 if len(full) <= 1:
                     return full
                 start, end = pat.span()
-                if start and row[start - 1] in forbidden:
+                if start and row[start - 1] in arch.forbidden:
                     return full
-                if end < len(row) and row[end] in forbidden:
+                if end < len(row) and row[end] in arch.forbidden:
                     return full
                 return hex(int(full))
 
-            row = re.sub(num_re, fn, row)
-        if mnemonic in branch_likely_instructions and skip_bl_delay_slots:
+            row = re.sub(re_int, fn, row)
+        if mnemonic in arch.branch_likely_instructions and skip_bl_delay_slots:
             skip_next = True
         if not stack_differences:
-            row = re.sub(sp_offset, ",addr(sp)", row)
+            row = re.sub(arch.re_sprel, "addr(sp)", row)
         # row = row.replace(',', ', ')
         if row == "nop":
             # strip trailing nops; padding is irrelevant to us
@@ -166,10 +202,12 @@ def simplify_objdump(input_lines: List[str], *, stack_differences: bool) -> List
     return output_lines
 
 
-def objdump(o_filename: str, *, stack_differences: bool = False) -> List[str]:
-    output = subprocess.check_output(OBJDUMP + [o_filename])
+def objdump(
+    o_filename: str, arch: ArchSettings, *, stack_differences: bool = False
+) -> List[str]:
+    output = subprocess.check_output(arch.objdump + [o_filename])
     lines = output.decode("utf-8").splitlines()
-    return simplify_objdump(lines, stack_differences=stack_differences)
+    return simplify_objdump(lines, arch, stack_differences=stack_differences)
 
 
 if __name__ == "__main__":
@@ -181,6 +219,6 @@ if __name__ == "__main__":
         print(f"Source file {sys.argv[1]} is not readable.", file=sys.stderr)
         sys.exit(1)
 
-    lines = objdump(sys.argv[1])
+    lines = objdump(sys.argv[1], MIPS_SETTINGS)
     for row in lines:
         print(row)
