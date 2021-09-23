@@ -26,6 +26,7 @@ void Slowly_ThreadEntry(void* arg) {
     Slowly_Main(slowly);
 }
 
+// This function can take three different callbacks, but we have to cast to one to keep the warnings at bay.
 void Slowly_Start(SlowlyTask* slowly, void* stack, void (*callback)(void), void* callbackArg0, void* callbackArg1) {
     bzero(slowly, sizeof(SlowlyTask));
 

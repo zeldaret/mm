@@ -874,7 +874,7 @@ void Fault_Start(void) {
     osStartThread(&sFaultContext->thread);
 }
 
-void Fault_HangupFaultClient(const char* arg0, char* arg1) {
+void Fault_HangupFaultClient(const char* arg0, const char* arg1) {
     osSyncPrintf("HungUp on Thread %d\n", osGetThreadId(NULL));
     osSyncPrintf("%s\n", arg0 ? arg0 : "(NULL)");
     osSyncPrintf("%s\n", arg1 ? arg1 : "(NULL)");
@@ -883,15 +883,16 @@ void Fault_HangupFaultClient(const char* arg0, char* arg1) {
     FaultDrawer_Printf("%s\n", arg1 ? arg1 : "(NULL)");
 }
 
-void Fault_AddHungupAndCrashImpl(const char* arg0, char* arg1) {
+void Fault_AddHungupAndCrashImpl(char* arg0, char* arg1) {
     FaultClient client;
-    char padd[4];
-    Fault_AddClient(&client, (fault_client_func)Fault_HangupFaultClient, (void*)arg0, arg1);
+    s32 pad;
+
+    Fault_AddClient(&client, (fault_client_func)Fault_HangupFaultClient, arg0, arg1);
     *(u32*)0x11111111 = 0; // trigger an exception
 }
 
 void Fault_AddHungupAndCrash(const char* filename, u32 line) {
-    char msg[256];
+    char msg[0x100];
     sprintf(msg, "HungUp %s:%d", filename, line);
     Fault_AddHungupAndCrashImpl(msg, NULL);
 }

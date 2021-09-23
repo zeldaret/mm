@@ -48,6 +48,7 @@ void AudioMgr_HandleRetrace(AudioMgr* audioMgr) {
             osRecvMesg(&audioMgr->cmdQ, (OSMesg*)&msg, OS_MESG_BLOCK);
             osStopTimer(&timer);
             if (msg == timerMsgVal) {
+                // The last argument was probably supposed to read the type, but cannot be written like that.
                 osSyncPrintf("AUDIO SP TIMEOUT %08x %08x\n", audioMgr->rspTask, audioMgr->rspTask->task);
                 if (retryCount >= 0) {
                     retryCount--;
