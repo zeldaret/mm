@@ -1,8 +1,5 @@
 #pragma once
 
-#include <vector>
-
-#include "HighLevel/HLTexture.h"
 #include "ImageBackend.h"
 #include "ZResource.h"
 #include "tinyxml2.h"
@@ -62,14 +59,12 @@ public:
 	void FromBinary(uint32_t nRawDataIndex, int32_t nWidth, int32_t nHeight, TextureType nType,
 	                bool nIsPalette);
 	void FromPNG(const fs::path& pngFilePath, TextureType texType);
-	void FromHLTexture(HLTexture* hlTex);
-
 	static TextureType GetTextureTypeFromString(std::string str);
 
 	void ParseXML(tinyxml2::XMLElement* reader) override;
 	void ParseRawData() override;
 	void DeclareReferences(const std::string& prefix) override;
-	std::string GetBodySourceCode() const;
+	std::string GetBodySourceCode() const override;
 	void CalcHash() override;
 	void Save(const fs::path& outFolder) override;
 

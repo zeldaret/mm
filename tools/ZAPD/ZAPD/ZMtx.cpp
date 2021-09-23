@@ -1,6 +1,6 @@
 #include "ZMtx.h"
-#include "BitConverter.h"
-#include "StringHelper.h"
+#include "Utils/BitConverter.h"
+#include "Utils/StringHelper.h"
 #include "ZFile.h"
 
 REGISTER_ZFILENODE(Mtx, ZMtx);
@@ -48,7 +48,7 @@ void ZMtx::DeclareVar(const std::string& prefix, const std::string& bodyStr) con
 	                       GetSourceTypeName(), auxName, bodyStr);
 }
 
-std::string ZMtx::GetBodySourceCode()
+std::string ZMtx::GetBodySourceCode() const
 {
 	std::string bodyStr = "\n";
 

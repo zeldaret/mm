@@ -440,7 +440,7 @@ void func_80B3EEDC(EnDai* this, GlobalContext* globalCtx) {
 }
 
 void func_80B3EF90(EnDai* this, GlobalContext* globalCtx) {
-    if (func_8010BF58(&this->actor, globalCtx, D_80B3FC8C, 0, &this->unk_1D0)) {
+    if (func_8010BF58(&this->actor, globalCtx, D_80B3FC8C, NULL, &this->unk_1D0)) {
         func_8013AED4(&this->unk_1CE, 3, 7);
         this->unk_1D0 = 0;
         this->actionFunc = func_80B3F00C;
