@@ -58,15 +58,15 @@ void Idle_InitCodeAndMemory(void) {
     oldSize = sDmaMgrDmaBuffSize;
     sDmaMgrDmaBuffSize = 0;
 
-    DmaMgr_SendRequestImpl(&dmaReq, _codeSegmentStart, _codeSegmentRomStart, _codeSegmentRomEnd - _codeSegmentRomStart,
-                           0, &queue, 0);
+    DmaMgr_SendRequestImpl(&dmaReq, SEGMENT_START(code), SEGMENT_ROM_START(code),
+                           SEGMENT_ROM_END(code) - SEGMENT_ROM_START(code), 0, &queue, 0);
     Idle_InitScreen();
     Idle_InitMemory();
     osRecvMesg(&queue, NULL, 1);
 
     sDmaMgrDmaBuffSize = oldSize;
 
-    Idle_ClearMemory(_codeSegmentBssStart, _codeSegmentBssEnd);
+    Idle_ClearMemory(SEGMENT_BSS_START(code), SEGMENT_BSS_END(code));
 }
 
 void Main_ThreadEntry(void* arg) {
