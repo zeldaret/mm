@@ -35,6 +35,7 @@
 #include "z64scene.h"
 #include "z64save.h"
 #include "z64transition.h"
+#include "regs.h"
 
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
@@ -237,15 +238,27 @@ typedef struct {
     /* 0x11D88 */ u8 unk_11D88;
 } Font; // size = 0x11D8C
 
+// Game Info aka. Static Context
+// Data normally accessed through REG macros (see regs.h)
 typedef struct {
-    /* 0x0000 */ u8 unk0;
-    /* 0x0001 */ u8 unk1;
-    /* 0x0002 */ u8 unk2;
-    /* 0x0003 */ u8 unk3;
-    /* 0x0004 */ u32 unk4;
-    /* 0x0008 */ UNK_TYPE1 pad8[0xC];
-    /* 0x0014 */ s16 data[2784]; // Accessed through REG macros
+    /* 0x00 */ u8  unk_00; // regPage;?   // 1 is first page
+    /* 0x01 */ u8  unk_01; // regGroup;?  // "register" group (R, RS, RO, RP etc.)
+    /* 0x02 */ u8  unk_02; // regCur;?    // selected register within page
+    /* 0x03 */ u8  unk_03; // dpadLast;?
+    /* 0x04 */ u32 unk_04; // repeat;?
+    /* 0x08 */ char pad_08[0xC];
+    /* 0x14 */ s16 data[REG_GROUPS * REG_PER_GROUP]; // 0xAE0 entries
 } GameInfo; // size = 0x15D4
+
+// typedef struct {
+//     /* 0x0000 */ u8 unk0;
+//     /* 0x0001 */ u8 unk1;
+//     /* 0x0002 */ u8 unk2;
+//     /* 0x0003 */ u8 unk3;
+//     /* 0x0004 */ u32 unk4;
+//     /* 0x0008 */ UNK_TYPE1 pad8[0xC];
+//     /* 0x0014 */ s16 data[2784]; // Accessed through REG macros
+// } GameInfo; // size = 0x15D4
 
 typedef struct {
     /* 0x0000 */ u32    size;
