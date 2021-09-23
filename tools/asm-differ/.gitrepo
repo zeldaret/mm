@@ -6,7 +6,7 @@
 [subrepo]
 	remote = https://github.com/simonlindholm/asm-differ.git
 	branch = main
-	commit = 1dfba80e1b36bb31c9ea64cb04583e7b36d839a6
-	parent = f14e8c9d9e68107609c9eeb4408bbfd1cd850eee
+	commit = 55bba23ad53dea059db783bb5598bc0c299863e6
+	parent = d3fd19b21c07664e488216b515b0e9a4ecbfa578
 	method = merge
 	cmdver = 0.4.3
