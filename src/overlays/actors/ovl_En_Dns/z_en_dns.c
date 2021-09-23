@@ -275,9 +275,9 @@ s32 func_8092CC68(GlobalContext* globalCtx) {
     return ret;
 }
 
-s32 func_8092CCEC(EnDns* this, GlobalContext* globalCtx) {
+s32 func_8092CCEC(Actor* thisx, GlobalContext* globalCtx) {
+    EnDns* this = (EnDns*)thisx;
     Player* player = PLAYER;
-    s32 pad;
     Vec3f sp3C = player->actor.world.pos;
     Vec3f sp30 = this->actor.world.pos;
     s16 sp2E;
@@ -400,7 +400,7 @@ void func_8092D1B8(EnDns* this, GlobalContext* globalCtx) {
             func_8092C63C(this, 2);
             this->actionFunc = EnDns_DoNothing;
         } else if (gSaveContext.eventInf[1] & 0x40) {
-            func_8092CCEC(this, globalCtx);
+            func_8092CCEC(&this->actor, globalCtx);
             func_8092C63C(this, 2);
             this->actionFunc = func_8092D330;
         }

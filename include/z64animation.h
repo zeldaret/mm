@@ -198,6 +198,8 @@ typedef void (*PostLimbDrawSV)(struct GlobalContext* globalCtx, s32 limbIndex, G
 
 typedef void (*UnkActorDraw)(struct GlobalContext* globalCtx, s32 limbIndex, struct Actor* actor);
 
+typedef void (*UnkActorDraw2)(struct GlobalContext* globalCtx, s32 limbIndex, struct Actor* actor, Gfx** gfx);
+
 typedef void (*AnimationEntryCallback)(struct GlobalContext*, AnimationEntryType*);
 
 extern u32 link_animetion_segment;

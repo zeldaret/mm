@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_hakugin_post.h"
+#include "prevent_bss_reordering.h"
 
 #define FLAGS 0x00000030
 
