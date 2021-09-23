@@ -983,7 +983,7 @@ extern u8 kanfontOrdering[92];
 // extern UNK_TYPE1 D_801BDBBC;
 // extern UNK_TYPE1 D_801BDBC0;
 // extern UNK_TYPE1 D_801BDBC4;
-// extern UNK_TYPE1 D_801BDBC8;
+extern u8 D_801BDBC8;
 // extern UNK_TYPE1 D_801BDBCC;
 // extern UNK_TYPE1 D_801BDCF4;
 // extern UNK_TYPE1 D_801BE38E;

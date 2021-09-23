@@ -34,7 +34,7 @@
 //#define LINK_IS_CHILD (gSaveContext.linkAge != 0)
 #define LINK_IS_ADULT (gSaveContext.linkAge == 0)
 
-#define CURRENT_DAY (gSaveContext.day % 5)
+#define CURRENT_DAY (((void)0, gSaveContext.day) % 5)
 
 #define CLOCK_TIME(hr, min) ((s32)(((hr) * 60 + (min)) * 0x10000 / (24 * 60)))
 
