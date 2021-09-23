@@ -4014,7 +4014,7 @@ void func_801A7794(u32 param_1, u32 param_2, u32 param_3);
 // void func_801A7B10(void);
 // void func_801A7D04(void);
 // void func_801A7D84(void);
-void Audio_QueueSeqCmd(s32 arg0);
+void Audio_QueueSeqCmd(u32 arg0);
 // void func_801A89D0(void);
 s32 func_801A8A50(s32 param1);
 // void func_801A8ABC(void);

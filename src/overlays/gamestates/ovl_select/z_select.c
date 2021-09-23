@@ -10,8 +10,8 @@
 
 void Select_LoadTitle(SelectContext* this) {
     {
-        GameState* state = &this->state;
-        state->running = false;
+        GameState* gameState = &this->state;
+        gameState->running = false;
     }
 
     SET_NEXT_GAMESTATE(&this->state, Title_Init, TitleContext);
@@ -56,8 +56,8 @@ void Select_LoadGame(SelectContext* this, u32 entranceIndex, s32 opt) {
     D_801BDBB0 = 0;
 
     do {
-        GameState* state = &this->state;
-        state->running = false;
+        GameState* gameState = &this->state;
+        gameState->running = false;
     } while (0);
     SET_NEXT_GAMESTATE(&this->state, Play_Init, GlobalContext);
 }
