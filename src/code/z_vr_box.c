@@ -39,97 +39,101 @@ void func_801431E8(GameState* gamestate, SkyboxContext* skyboxCtx, s16 skyType) 
     GlobalContext* globalCtx = (GlobalContext*)gamestate;
     u32 size;
     void* offset;
-    s32 pad;
 
     skyboxCtx->rotZ = 0.0f;
 
-    if (skyType != 1) {
-        if (skyType != 2) {
-            return;
-        }
-    } else {
-        // Send a DMA request for the cloudy sky texture
-        skyboxCtx->skyboxStaticSegment[0] = &D_80025D00;
-        size = (u32)_d2_cloud_staticSegmentRomEnd - (u32)_d2_cloud_staticSegmentRomStart;
-        offset = (void*)ALIGN8((u32)skyboxCtx->skyboxStaticSegment[0] + size);
-        DmaMgr_SendRequest0(skyboxCtx->skyboxStaticSegment[0], (u32)_d2_cloud_staticSegmentRomStart, size);
+    switch (skyType) {
+        case 1:
+            // Send a DMA request for the cloudy sky texture
+            skyboxCtx->skyboxStaticSegment[0] = &D_80025D00;
+            size = (u32)_d2_cloud_staticSegmentRomEnd - (u32)_d2_cloud_staticSegmentRomStart;
+            offset = (void*)ALIGN8((u32)skyboxCtx->skyboxStaticSegment[0] + size);
+            DmaMgr_SendRequest0(skyboxCtx->skyboxStaticSegment[0], (u32)_d2_cloud_staticSegmentRomStart, size);
 
-        // Send a DMA request for the clear sky texture
-        skyboxCtx->skyboxStaticSegment[1] = offset;
-        size = (u32)_d2_fine_staticSegmentRomEnd - (u32)_d2_fine_staticSegmentRomStart;
-        offset = (void*)ALIGN8((u32)offset + size);
-        DmaMgr_SendRequest0(skyboxCtx->skyboxStaticSegment[1], (u32)_d2_fine_staticSegmentRomStart, size);
+            // Send a DMA request for the clear sky texture
+            skyboxCtx->skyboxStaticSegment[1] = offset;
+            size = (u32)_d2_fine_staticSegmentRomEnd - (u32)_d2_fine_staticSegmentRomStart;
+            offset = (void*)ALIGN8((u32)offset + size);
+            DmaMgr_SendRequest0(skyboxCtx->skyboxStaticSegment[1], (u32)_d2_fine_staticSegmentRomStart, size);
 
-        // Send a DMA request for the skybox palette
-        skyboxCtx->skyboxPaletteStaticSegment = offset;
-        size = (u32)_d2_fine_pal_staticSegmentRomEnd - (u32)_d2_fine_pal_staticSegmentRomStart;
-        offset = (void*)ALIGN8((u32)offset + size);
-        DmaMgr_SendRequest0(skyboxCtx->skyboxPaletteStaticSegment, (u32)_d2_fine_pal_staticSegmentRomStart, size);
+            // Send a DMA request for the skybox palette
+            skyboxCtx->skyboxPaletteStaticSegment = offset;
+            size = (u32)_d2_fine_pal_staticSegmentRomEnd - (u32)_d2_fine_pal_staticSegmentRomStart;
+            offset = (void*)ALIGN8((u32)offset + size);
+            DmaMgr_SendRequest0(skyboxCtx->skyboxPaletteStaticSegment, (u32)_d2_fine_pal_staticSegmentRomStart, size);
 
-        skyboxCtx->primR = 145;
-        skyboxCtx->primG = 120;
-        skyboxCtx->primB = 155;
+            skyboxCtx->primR = 145;
+            skyboxCtx->primG = 120;
+            skyboxCtx->primB = 155;
 
-        skyboxCtx->envR = 40;
-        skyboxCtx->envG = 0;
-        skyboxCtx->envB = 40;
+            skyboxCtx->envR = 40;
+            skyboxCtx->envG = 0;
+            skyboxCtx->envB = 40;
 
-        // Inverted Stone Tower Temple and Inverted Stone Tower
-        if ((globalCtx->sceneNum == SCENE_F41) || (globalCtx->sceneNum == SCENE_INISIE_R)) {
-            skyboxCtx->rotZ = 3.15000009537f;
-        }
+            // Inverted Stone Tower Temple and Inverted Stone Tower
+            if ((globalCtx->sceneNum == SCENE_F41) || (globalCtx->sceneNum == SCENE_INISIE_R)) {
+                skyboxCtx->rotZ = 3.15000009537f;
+            }
+            break;
+        case 2:
+        default:
+            break;
     }
 }
 
 void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyType) {
     u32 size;
 
-    if (1) {}
+    // if (1) {}
 
-    if (skyType == 1) {
-        osCreateMesgQueue(&skyboxCtx->loadQueue, &skyboxCtx->loadMsg, 1);
+    switch (skyType) {
+        case 1:
+            osCreateMesgQueue(&skyboxCtx->loadQueue, &skyboxCtx->loadMsg, 1);
 
-        if (globalCtx->envCtx.unk_10 == 0) {
-            // Send a DMA request for the clear sky texture
-            size = (u32)_d2_fine_staticSegmentRomEnd - (u32)_d2_fine_staticSegmentRomStart;
+            if (globalCtx->envCtx.unk_10 == 0) {
+                // Send a DMA request for the clear sky texture
+                size = (u32)_d2_fine_staticSegmentRomEnd - (u32)_d2_fine_staticSegmentRomStart;
 
-            DmaMgr_SendRequestImpl(&skyboxCtx->unk188, skyboxCtx->skyboxStaticSegment[0],
-                                   (u32)_d2_fine_staticSegmentRomStart, size, 0, &skyboxCtx->loadQueue, NULL);
-        } else {
-            // Send a DMA request for the cloudy sky texture
-            size = (u32)_d2_cloud_staticSegmentRomEnd - (u32)_d2_cloud_staticSegmentRomStart;
+                DmaMgr_SendRequestImpl(&skyboxCtx->unk188, skyboxCtx->skyboxStaticSegment[0],
+                                       (u32)_d2_fine_staticSegmentRomStart, size, 0, &skyboxCtx->loadQueue, NULL);
+            } else {
+                // Send a DMA request for the cloudy sky texture
+                size = (u32)_d2_cloud_staticSegmentRomEnd - (u32)_d2_cloud_staticSegmentRomStart;
 
-            DmaMgr_SendRequestImpl(&skyboxCtx->unk188, skyboxCtx->skyboxStaticSegment[0],
-                                   (u32)_d2_cloud_staticSegmentRomStart, size, 0, &skyboxCtx->loadQueue, NULL);
-        }
+                DmaMgr_SendRequestImpl(&skyboxCtx->unk188, skyboxCtx->skyboxStaticSegment[0],
+                                       (u32)_d2_cloud_staticSegmentRomStart, size, 0, &skyboxCtx->loadQueue, NULL);
+            }
 
-        osRecvMesg(&skyboxCtx->loadQueue, NULL, 1);
-        osCreateMesgQueue(&skyboxCtx->loadQueue, &skyboxCtx->loadMsg, 1);
+            osRecvMesg(&skyboxCtx->loadQueue, NULL, 1);
+            osCreateMesgQueue(&skyboxCtx->loadQueue, &skyboxCtx->loadMsg, 1);
 
-        if (globalCtx->envCtx.unk_11 == 0) {
-            // Send a DMA request for the clear sky texture
-            size = (u32)_d2_fine_staticSegmentRomEnd - (u32)_d2_fine_staticSegmentRomStart;
+            if (globalCtx->envCtx.unk_11 == 0) {
+                // Send a DMA request for the clear sky texture
+                size = (u32)_d2_fine_staticSegmentRomEnd - (u32)_d2_fine_staticSegmentRomStart;
 
-            DmaMgr_SendRequestImpl(&skyboxCtx->unk1A8, skyboxCtx->skyboxStaticSegment[1],
-                                   (u32)_d2_fine_staticSegmentRomStart, size, 0, &skyboxCtx->loadQueue, NULL);
-        } else {
-            // Send a DMA request for the cloudy sky texture
-            size = (u32)_d2_cloud_staticSegmentRomEnd - (u32)_d2_cloud_staticSegmentRomStart;
+                DmaMgr_SendRequestImpl(&skyboxCtx->unk1A8, skyboxCtx->skyboxStaticSegment[1],
+                                       (u32)_d2_fine_staticSegmentRomStart, size, 0, &skyboxCtx->loadQueue, NULL);
+            } else {
+                // Send a DMA request for the cloudy sky texture
+                size = (u32)_d2_cloud_staticSegmentRomEnd - (u32)_d2_cloud_staticSegmentRomStart;
 
-            DmaMgr_SendRequestImpl(&skyboxCtx->unk1A8, skyboxCtx->skyboxStaticSegment[1],
-                                   (u32)_d2_cloud_staticSegmentRomStart, size, 0, &skyboxCtx->loadQueue, NULL);
-        }
+                DmaMgr_SendRequestImpl(&skyboxCtx->unk1A8, skyboxCtx->skyboxStaticSegment[1],
+                                       (u32)_d2_cloud_staticSegmentRomStart, size, 0, &skyboxCtx->loadQueue, NULL);
+            }
 
-        osRecvMesg(&skyboxCtx->loadQueue, NULL, 1);
-        osCreateMesgQueue(&skyboxCtx->loadQueue, &skyboxCtx->loadMsg, 1);
+            osRecvMesg(&skyboxCtx->loadQueue, NULL, 1);
+            osCreateMesgQueue(&skyboxCtx->loadQueue, &skyboxCtx->loadMsg, 1);
 
-        size = (u32)_d2_fine_pal_staticSegmentRomEnd - (u32)_d2_fine_pal_staticSegmentRomStart;
+            size = (u32)_d2_fine_pal_staticSegmentRomEnd - (u32)_d2_fine_pal_staticSegmentRomStart;
 
-        // Send a DMA request for the skybox palette
-        DmaMgr_SendRequestImpl(&skyboxCtx->unk1C8, skyboxCtx->skyboxPaletteStaticSegment,
-                               (u32)_d2_fine_pal_staticSegmentRomStart, size, 0, &skyboxCtx->loadQueue, NULL);
+            // Send a DMA request for the skybox palette
+            DmaMgr_SendRequestImpl(&skyboxCtx->unk1C8, skyboxCtx->skyboxPaletteStaticSegment,
+                                   (u32)_d2_fine_pal_staticSegmentRomStart, size, 0, &skyboxCtx->loadQueue, NULL);
 
-        osRecvMesg(&skyboxCtx->loadQueue, NULL, 1);
+            osRecvMesg(&skyboxCtx->loadQueue, NULL, 1);
+            break;
+        default:
+            break;
     }
 }
 

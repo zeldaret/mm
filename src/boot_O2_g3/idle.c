@@ -43,7 +43,7 @@ void Idle_InitMemory(void) {
     void* memEnd = OS_PHYSICAL_TO_K0(osMemSize);
 
     Idle_ClearMemory(0x80000400, gFramebuffer1);
-    Idle_ClearMemory(D_80025D00, bootproc);
+    Idle_ClearMemory(D_80025D00, (void*)bootproc);
     Idle_ClearMemory(gGfxSPTaskYieldBuffer, memEnd);
 }
 
@@ -70,7 +70,7 @@ void Idle_InitCodeAndMemory(void) {
 }
 
 void Main_ThreadEntry(void* arg) {
-    StackCheck_Init(&sIrqMgrStackInfo, sIrqMgrStack, sIrqMgrStack + sizeof(sIrqMgrStack), 0, 256, "irqmgr");
+    StackCheck_Init(&sIrqMgrStackInfo, sIrqMgrStack, sIrqMgrStack + sizeof(sIrqMgrStack), 0, 0x100, "irqmgr");
     IrqMgr_Init(&gIrqMgr, &sIrqMgrStackInfo, Z_PRIORITY_IRQMGR, 1);
     DmaMgr_Start();
     Idle_InitCodeAndMemory();
@@ -107,7 +107,7 @@ void Idle_InitVideo(void) {
 void Idle_ThreadEntry(void* arg) {
     Idle_InitVideo();
     osCreatePiManager(150, &gPiMgrCmdQ, sPiMgrCmdBuff, ARRAY_COUNT(sPiMgrCmdBuff));
-    StackCheck_Init(&sMainStackInfo, sMainStack, sMainStack + sizeof(sMainStack), 0, 1024, "main");
+    StackCheck_Init(&sMainStackInfo, sMainStack, sMainStack + sizeof(sMainStack), 0, 0x400, "main");
     osCreateThread(&gMainThread, Z_THREAD_ID_MAIN, Main_ThreadEntry, arg, sMainStack + sizeof(sMainStack),
                    Z_PRIORITY_MAIN);
     osStartThread(&gMainThread);
