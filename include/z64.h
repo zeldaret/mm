@@ -250,16 +250,6 @@ typedef struct {
     /* 0x14 */ s16 data[REG_GROUPS * REG_PER_GROUP]; // 0xAE0 entries
 } GameInfo; // size = 0x15D4
 
-// typedef struct {
-//     /* 0x0000 */ u8 unk0;
-//     /* 0x0001 */ u8 unk1;
-//     /* 0x0002 */ u8 unk2;
-//     /* 0x0003 */ u8 unk3;
-//     /* 0x0004 */ u32 unk4;
-//     /* 0x0008 */ UNK_TYPE1 pad8[0xC];
-//     /* 0x0014 */ s16 data[2784]; // Accessed through REG macros
-// } GameInfo; // size = 0x15D4
-
 typedef struct {
     /* 0x0000 */ u32    size;
     /* 0x0004 */ void*  bufp;
