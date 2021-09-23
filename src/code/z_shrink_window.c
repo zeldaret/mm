@@ -1,6 +1,6 @@
 /**
  * File: z_shrink_window.c
- * Description: Draws black top/bottom/side borders on the viewing window (e.g. Z-targeting)
+ * Description: Draws black top/bottom/side borders on the viewing window (e.g. Z-targeting, talking to NPC)
  */
 #include "global.h"
 
@@ -49,21 +49,19 @@ void ShrinkWindow_Destroy(void) {
 }
 
 void ShrinkWindow_Update(s32 framerateDivisor) {
-    s32 step;
+    s32 step = ((framerateDivisor == 3) ? 10 : 30 / framerateDivisor);
     s32 nextMagnitude;
-
-    step = ((framerateDivisor == 3) ? 10 : 30 / framerateDivisor );
 
     nextMagnitude = gShrinkWindowContextPtr->letterboxMagnitude;
     Math_StepToIGet(&nextMagnitude, gShrinkWindowContextPtr->letterboxTarget, step);
     gShrinkWindowContextPtr->letterboxMagnitude = nextMagnitude;
-    
+
     nextMagnitude = gShrinkWindowContextPtr->pillarboxMagnitude;
     Math_StepToIGet(&nextMagnitude, gShrinkWindowContextPtr->pillarboxTarget, step);
     gShrinkWindowContextPtr->pillarboxMagnitude = nextMagnitude;
 }
 
-void ShrinkWindow_Draw(GraphicsContext *gfxCtx) {
+void ShrinkWindow_Draw(GraphicsContext* gfxCtx) {
     Gfx* gfx;
     s8 letterboxMagnitude = gShrinkWindowContextPtr->letterboxMagnitude;
     s8 pillarboxMagnitude = gShrinkWindowContextPtr->pillarboxMagnitude;
@@ -85,7 +83,8 @@ void ShrinkWindow_Draw(GraphicsContext *gfxCtx) {
         gDPSetRenderMode(gfx++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
         gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 0);
         gDPFillRectangle(gfx++, 0, letterboxMagnitude, gScreenWidth, letterboxMagnitude + 1);
-        gDPFillRectangle(gfx++, 0, gScreenHeight - letterboxMagnitude - 1, gScreenWidth, gScreenHeight - letterboxMagnitude);
+        gDPFillRectangle(gfx++, 0, gScreenHeight - letterboxMagnitude - 1, gScreenWidth,
+                         gScreenHeight - letterboxMagnitude);
 
         gDPPipeSync(gfx++);
         OVERLAY_DISP = gfx++;
@@ -100,7 +99,7 @@ void ShrinkWindow_Draw(GraphicsContext *gfxCtx) {
         gDPPipeSync(gfx++);
         gDPSetCycleType(gfx++, G_CYC_FILL);
         gDPSetRenderMode(gfx++, G_RM_NOOP, G_RM_NOOP2);
-        gDPSetFillColor(gfx++,  (GPACK_RGBA5551(0, 0, 0, 1) << 16) | GPACK_RGBA5551(0, 0, 0, 1));
+        gDPSetFillColor(gfx++, (GPACK_RGBA5551(0, 0, 0, 1) << 16) | GPACK_RGBA5551(0, 0, 0, 1));
 
         gDPFillRectangle(gfx++, 0, 0, pillarboxMagnitude - 1, gScreenHeight - 1);
         gDPFillRectangle(gfx++, gScreenWidth - pillarboxMagnitude, 0, gScreenWidth - 1, gScreenHeight - 1);
@@ -111,7 +110,8 @@ void ShrinkWindow_Draw(GraphicsContext *gfxCtx) {
         gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 0);
 
         gDPFillRectangle(gfx++, pillarboxMagnitude, 0, pillarboxMagnitude + 2, gScreenHeight);
-        gDPFillRectangle(gfx++, gScreenWidth - pillarboxMagnitude - 2, 0, gScreenWidth - pillarboxMagnitude, gScreenHeight);
+        gDPFillRectangle(gfx++, gScreenWidth - pillarboxMagnitude - 2, 0, gScreenWidth - pillarboxMagnitude,
+                         gScreenHeight);
 
         gDPPipeSync(gfx++);
         OVERLAY_DISP = gfx++;
