@@ -123,7 +123,7 @@ void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
     if ((player->stateFlags3 & 0x200) && (this->dyna.actor.xzDistToPlayer < 20.0f)) {
-        // Link is launching himself out of the Deku Flower
+        // Player is launching out of the Deku Flower
         SkelAnime_ChangeAnim(&this->skelAnime, &D_0400EB7C, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_0400EB7C.common), 2,
                              0.0f);
         this->dyna.actor.draw = ObjEtcetera_DrawAnimated;
@@ -135,7 +135,7 @@ void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx) {
         this->burrowFlag &= ~1;
     } else if ((player->stateFlags3 & 0x2000) && (this->dyna.actor.xzDistToPlayer < 30.0f) &&
                (this->dyna.actor.yDistToPlayer > 0.0f)) {
-        // Link is hovering above the Deku Flower
+        // Player is hovering above the Deku Flower
         minOscillationTimer = 10 - (s32)(this->dyna.actor.yDistToPlayer * 0.05f);
         if (this->oscillationTimer < minOscillationTimer) {
             this->oscillationTimer = minOscillationTimer;
@@ -143,18 +143,18 @@ void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx) {
     } else {
         if (func_800CAF70(&this->dyna)) {
             if (!(this->burrowFlag & 1)) {
-                // Link is walking onto the Deku Flower, or falling on it from a height
+                // Player is walking onto the Deku Flower, or falling on it from a height
                 this->oscillationTimer = 10;
                 ObjEtcetera_StartSmallFlutterAnimation(this);
             } else if ((player->actor.speedXZ > 0.1f) || ((player->unk_ABC < 0.0f) && !(player->stateFlags3 & 0x100))) {
-                // Link is walking on top of the Deku Flower, is at the very start of burrowing, or is at the very start
+                // Player is walking on top of the Deku Flower, is at the very start of burrowing, or is at the very start
                 // of launching
                 this->oscillationTimer = 10;
             }
             this->burrowFlag |= 1;
         } else {
             if (this->burrowFlag & 1) {
-                // Link is walking off the Deku Flower
+                // Player is walking off the Deku Flower
                 this->oscillationTimer = 10;
                 ObjEtcetera_StartSmallFlutterAnimation(this);
             }
