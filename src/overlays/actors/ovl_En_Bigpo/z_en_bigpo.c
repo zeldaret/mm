@@ -179,21 +179,9 @@ static u8 D_80B65078[] = {
 
 // used in limbdraw
 static Vec3f D_80B65084[] = {
-    {
-        2000.0f,
-        4000.0f,
-        0.0f,
-    },
-    {
-        -1000.0f,
-        1500.0f,
-        -2000.0f,
-    },
-    {
-        -1000.0f,
-        1500.0f,
-        2000.0f,
-    },
+    { 2000.0f, 4000.0f, 0.0f },
+    { -1000.0f, 1500.0f, -2000.0f },
+    { -1000.0f, 1500.0f, 2000.0f },
 };
 
 void EnBigpo_Init(Actor* thisx, GlobalContext* globalCtx2) {
