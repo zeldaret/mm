@@ -91,9 +91,7 @@ void ArrowIce_Charge(ArrowIce* this, GlobalContext* globalCtx) {
 }
 
 void func_809225D0(Vec3f* unkPos, Vec3f* icePos, f32 scale) {
-    unkPos->x += ((icePos->x - unkPos->x) * scale);
-    unkPos->y += ((icePos->y - unkPos->y) * scale);
-    unkPos->z += ((icePos->z - unkPos->z) * scale);
+    VEC3F_LERPIMPDST(unkPos, unkPos, icePos, scale);
 }
 
 void ArrowIce_Hit(ArrowIce* this, GlobalContext* globalCtx) {
