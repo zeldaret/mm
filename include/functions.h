@@ -927,7 +927,7 @@ void* ActorOverlayTable_FaultAddrConv(void* arg0, void* arg1); // ActorOverlayTa
 void ActorOverlayTable_Init(void); // ActorOverlayTable_Init
 void ActorOverlayTable_Cleanup(void); // ActorOverlayTable_Cleanup
 void SSNode_SetValue(SSNode* node, s16* polyIndex, u16 next);
-void SSList_SetNull(u16* head);
+void SSList_SetNull(SSList* head);
 void SSNodeList_SetSSListHead(SSNodeList* list, SSList* ssList, s16* polyIndex);
 void DynaSSNodeList_SetSSListHead(DynaSSNodeList* list, SSList* ssList, s16* polyIndex);
 void DynaSSNodeList_Initialize(GlobalContext* globalCtx, DynaSSNodeList* list);
@@ -1013,8 +1013,8 @@ void DynaPoly_NullPolyList(CollisionPoly** polyList);
 void DynaPoly_AllocPolyList(GlobalContext* globalCtx, CollisionPoly** polyList, s32 numPolys);
 void DynaPoly_NullVtxList(Vec3s** vtxList);
 void DynaPoly_AllocVtxList(GlobalContext* globalCtx, Vec3s** vtxList, s32 numVtx);
-void DynaPoly_InitWaterBoxList(DynaSSWaterboxList* waterBoxList);
-void DynaPoly_AllocWaterBoxList(GlobalContext* globalCtx, DynaSSWaterboxList* waterBoxList, s32 numWaterBoxes);
+void DynaPoly_InitWaterBoxList(DynaWaterBoxList* waterBoxList);
+void DynaPoly_AllocWaterBoxList(GlobalContext* globalCtx, DynaWaterBoxList* waterBoxList, s32 numWaterBoxes);
 void DynaPoly_SetBgActorPrevTransform(GlobalContext* globalCtx, BgActor* bgActor);
 s32 DynaPoly_IsBgIdBgActor(s32 bgId);
 void DynaPoly_Init(GlobalContext* globalCtx, DynaCollisionContext* dyna);
