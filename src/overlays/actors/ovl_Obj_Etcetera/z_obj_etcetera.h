@@ -28,7 +28,7 @@ typedef struct ObjEtcetera {
     /* 0x0274 */ s16 oscillationTimer;
     /* 0x0276 */ u16 burrowFlag;
     /* 0x0278 */ s8 objIndex;
-    /* 0x027C */ Gfx* displayListPtr;
+    /* 0x027C */ Gfx* dList;
     /* 0x0280 */ ObjEtceteraActionFunc actionFunc;
 } ObjEtcetera; // size = 0x284
 
