@@ -300,10 +300,10 @@ void EnTest4_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (temp_v0 >= 0) {
         ActorCutscene* temp_v0_2 = ActorCutscene_GetCutscene(sCutscenes[0]);
 
-        gSaveContext.eventInf[5] |= 0x04;
+        gSaveContext.eventInf[5] |= 0x4;
         sCutscenes[1] = temp_v0_2->additionalCutscene;
     } else {
-        gSaveContext.eventInf[5] &= (u8)~0x04;
+        gSaveContext.eventInf[5] &= (u8)~0x4;
         sCutscenes[1] = sCutscenes[0];
     }
 
@@ -389,8 +389,8 @@ void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
 
         if ((temp_a3 * temp_a2) <= 0) {
             gSaveContext.unk_3CA7 = 1;
-            if (globalCtx->actorCtx.unk5 & 0x04) {
-                globalCtx->actorCtx.unk5 &= ~0x04;
+            if (globalCtx->actorCtx.unk5 & 0x4) {
+                globalCtx->actorCtx.unk5 &= ~0x4;
             }
 
             if (temp_a0 != CLOCK_TIME(6, 0)) {
@@ -443,7 +443,7 @@ void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
 
             if (CURRENT_DAY == 3) {
                 if ((this->nextBellTime == CLOCK_TIME(0, 0)) &&
-                    ((gSaveContext.inventory.items[ITEM_OCARINA] == ITEM_NONE) || (globalCtx->sceneNum == 0x6F))) {
+                    ((gSaveContext.inventory.items[ITEM_OCARINA] == ITEM_NONE) || (globalCtx->sceneNum == SCENE_CLOCKTOWER))) {
                     s32 phi_v0;
                     u32 entranceIndex = gSaveContext.entranceIndex;
 
@@ -455,7 +455,7 @@ void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
                     func_80169DCC(globalCtx, 1, entranceIndex, player->unk_3CE, phi_v0, &player->unk_3C0,
                                   player->unk_3CC);
 
-                    if ((globalCtx->sceneNum == 0x29) || (globalCtx->sceneNum == 0x2D)) {
+                    if ((globalCtx->sceneNum == SCENE_TENMON_DAI) || (globalCtx->sceneNum == SCENE_00KEIKOKU)) {
                         globalCtx->nextEntranceIndex = 0x5400;
                     } else {
                         globalCtx->nextEntranceIndex = 0xD800;
