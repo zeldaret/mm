@@ -140,14 +140,14 @@ u32 JpegUtils_ProcessHuffmanTableImplOld(u8* dht, JpegHuffmanTableOld* ht, u8* c
     count2 = count = JpegUtils_ParseHuffmanCodesLengths(dht, codesLengths);
 
     if (count == 0 || (isAc && count > 0x100) || (!isAc && count > 0x10)) {
-        return 1;
+        return true;
     }
 
     if (JpegUtils_GetHuffmanCodes(codesLengths, codes) != count2) {
-        return 1;
+        return true;
     }
 
     JpegUtils_SetHuffmanTableOld(dht + 0x10, ht, codesLengths, codes, count2, isAc);
 
-    return 0;
+    return false;
 }
