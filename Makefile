@@ -42,7 +42,7 @@ else
 endif
 
 #### Tools ####
-ifeq ($(shell type mips-linux-gnu-ld >/dev/null 2>/dev/null; echo $$?), 0)
+ifeq ($(shell command -v mips-linux-gnu-ld >/dev/null 2>&1; echo $$?), 0)
   MIPS_BINUTILS_PREFIX := mips-linux-gnu-
 else
   $(error Please install or build mips-linux-gnu)
@@ -68,11 +68,27 @@ LD         := $(MIPS_BINUTILS_PREFIX)ld
 OBJCOPY    := $(MIPS_BINUTILS_PREFIX)objcopy
 OBJDUMP    := $(MIPS_BINUTILS_PREFIX)objdump
 
+
 # Check code syntax with host compiler
-CHECK_WARNINGS := -Wall -Wextra -Wpedantic -Wno-format-security -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-int-conversion -Wno-unused-label -Wno-long-long -Wno-c11-extensions -Wno-c99-extensions -Wtautological-overlap-compare
-# CHECK_WARNINGS := -Weverything -Wno-unknown-pragmas -Wno-padded -Wno-missing-braces -Wno-missing-variable-declarations -Wno-unused-variable -Wno-unused-parameter -Wno-unused-label -Wno-long-long -Wno-missing-prototypes -Wno-unused-macros -Wno-comma -Wno-float-equal -Wno-unreachable-code -Wno-tautological-overlap-compare -Wno-shorten-64-to-32 -Wno-missing-noreturn -Wno-float-equal -Wno-reserved-id-macro -Wno-implicit-fallthrough -Wno-cast-align -Wno-c99-extensions -Wno-c11-extensions -Wno-double-promotion -Wno-bad-function-cast -Wno-shift-sign-overflow -Wno-float-conversion -Wno-sign-conversion -Wno-implicit-float-conversion -Wno-implicit-int-float-conversion -Wno-implicit-int-conversion -Wno-int-conversion -Wno-four-char-constants -Wno-class-varargs
-# -Wimplicit-fallthrough -Wdouble-promotion -Wimplicit-float-conversion -Wint-conversion
-CC_CHECK   := clang -fno-builtin -fsyntax-only -funsigned-char -std=gnu90 -D _LANGUAGE_C -D NON_MATCHING -Iinclude -Isrc -Iassets -Ibuild -include stdarg.h $(CHECK_WARNINGS)
+
+ifeq ($(shell command -v clang >/dev/null 2>&1; echo $$?),0)
+  CC_CHECK_COMP := clang
+else
+  CC_CHECK_COMP := gcc
+endif
+
+CHECK_WARNINGS_ON  := -Wall -Wextra -Wstrict-prototypes -Wshadow
+CHECK_WARNINGS_OFF := -Wno-format-security -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-int-conversion -Wno-unused-label
+
+ifeq ($(CC_CHECK_COMP),clang)
+CHECK_WARNINGS_ON  += -Wpedantic 
+CHECK_WARNINGS_OFF += -Wno-long-long -Wno-c11-extensions -Wno-c99-extensions -Wno-tautological-overlap-compare -Wno-four-char-constants
+else
+CHECK_WARNINGS_OFF += -Wno-unused-but-set-variable -Wno-multichar
+endif
+
+CHECK_WARNINGS := $(CHECK_WARNINGS_ON) $(CHECK_WARNINGS_OFF)
+CC_CHECK := $(CC_CHECK_COMP) -fno-builtin -fsyntax-only -funsigned-char -std=gnu90 -D _LANGUAGE_C -D NON_MATCHING -Iinclude -Isrc -Iassets -Ibuild -include stdarg.h $(CHECK_WARNINGS)
 
 CPP        := cpp
 ELF2ROM    := tools/buildtools/elf2rom
