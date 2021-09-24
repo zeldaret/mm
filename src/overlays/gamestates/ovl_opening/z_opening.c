@@ -10,7 +10,7 @@ void Opening_SetupForTitleCutscene(OpeningContext* this) {
     static s32 openingEntrances[] = { 0x1C00, 0x1C10 };
     static s32 openingCutscenes[] = { 0xFFFA, 0xFFFA };
 
-    gSaveContext.eventInf[1] &= 0x7F;
+    gSaveContext.eventInf[1] &= ~0x80;
     gSaveContext.gameMode = 1;
 
     func_80144890();
@@ -23,10 +23,10 @@ void Opening_SetupForTitleCutscene(OpeningContext* this) {
     gSaveContext.day = 1;
 
     {
-        GameState* thisx = &this->state;
+        GameState* thisx = &this->gameState;
         thisx->running = false;
     }
-    SET_NEXT_GAMESTATE(&this->state, Play_Init, GlobalContext);
+    SET_NEXT_GAMESTATE(&this->gameState, Play_Init, GlobalContext);
     gSaveContext.playerForm = PLAYER_FORM_HUMAN;
 }
 
@@ -37,7 +37,7 @@ void func_80803EA0(OpeningContext* this) {
 void Opening_Main(GameState* thisx) {
     OpeningContext* this = (OpeningContext*)thisx;
 
-    func_8012CF0C(this->state.gfxCtx, 0, 1, 0, 0, 0);
+    func_8012CF0C(this->gameState.gfxCtx, 0, 1, 0, 0, 0);
     Opening_SetupForTitleCutscene(this);
     func_80803EA0(this);
 }
@@ -49,12 +49,12 @@ void Opening_Destroy(GameState* thisx) {
 void Opening_Init(GameState* thisx) {
     OpeningContext* this = (OpeningContext*)thisx;
 
-    Game_SetFramerateDivisor(&this->state, 1);
-    SysMatrix_StateAlloc(&this->state);
+    Game_SetFramerateDivisor(&this->gameState, 1);
+    SysMatrix_StateAlloc(&this->gameState);
     ShrinkWindow_Init();
-    View_Init(&this->view, this->state.gfxCtx);
-    this->state.main = Opening_Main;
-    this->state.destroy = Opening_Destroy;
+    View_Init(&this->view, this->gameState.gfxCtx);
+    this->gameState.main = Opening_Main;
+    this->gameState.destroy = Opening_Destroy;
 
     gSaveContext.respawnFlag = 0;
     gSaveContext.respawn[4].entranceIndex = 0xFF;
