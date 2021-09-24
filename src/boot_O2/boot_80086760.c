@@ -68,7 +68,7 @@ f32 func_80086834(f32 x) {
     f32 term;
 
     // Calculate the series until adding more terms does not change the float
-    while (1) {
+    while (true) {
         term = *c++ * exp;
         if (poly + term == poly) {
             break;
