@@ -199,7 +199,7 @@ void ObjEtcetera_DoIntenseOscillation(ObjEtcetera* this, GlobalContext* globalCt
         this->burrowFlag &= ~1;
     }
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-    if (0 < this->oscillationTimer) {
+    if (this->oscillationTimer > 0) {
         this->oscillationTimer--;
     } else {
         this->dyna.actor.draw = ObjEtcetera_DrawIdle;
