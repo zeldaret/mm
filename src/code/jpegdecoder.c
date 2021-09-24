@@ -92,14 +92,14 @@ s32 JpegDecoder_ProcessMcu(JpegHuffmanTable* hTable0, JpegHuffmanTable* hTable1,
     s16 coeff;
 
     if (JpegDecoder_ParseNextSymbol(hTable0, &coeff, &zeroCount)) {
-        return 1;
+        return true;
     }
 
     *unk += coeff;
     mcu[i++] = *unk;
     while (i < 8 * 8) {
         if (JpegDecoder_ParseNextSymbol(hTable1, &coeff, &zeroCount)) {
-            return 1;
+            return true;
         }
 
         if (coeff == 0) {
@@ -121,7 +121,7 @@ s32 JpegDecoder_ProcessMcu(JpegHuffmanTable* hTable0, JpegHuffmanTable* hTable1,
         }
     }
 
-    return 0;
+    return false;
 }
 
 s32 JpegDecoder_ParseNextSymbol(JpegHuffmanTable* hTable, s16* outCoeff, s8* outZeroCount) {
