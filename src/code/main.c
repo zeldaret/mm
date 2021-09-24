@@ -24,7 +24,7 @@ void Main(void* arg) {
     R_ENABLE_ARENA_DBG = 0;
 
     osCreateMesgQueue(&siEventCallbackQueue, siEventCallbackBuffer, ARRAY_COUNT(siEventCallbackBuffer));
-    osSetEventMesg(5, &siEventCallbackQueue, NULL);
+    osSetEventMesg(OS_EVENT_SI, &siEventCallbackQueue, NULL);
 
     osCreateMesgQueue(&mainIrqmgrCallbackQueue, mainIrqCallbackBuffer, ARRAY_COUNT(mainIrqCallbackBuffer));
 
