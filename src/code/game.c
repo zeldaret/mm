@@ -89,8 +89,11 @@ void GameState_Draw(GameState* gamestate, GraphicsContext* gfxCtx) {
     Graph_BranchDlist(_polyOpa, nextDisplayList);
     gfxCtx->polyOpa.p = nextDisplayList;
 
-lblUnk:; // Label prevents reordering, if(1) around the above block don't seem to help unlike in OoT
-    func_800E9F78(gfxCtx);
+    // Block prevents reordering, if(1) around the above block don't seem to help unlike in OoT
+    {
+        s32 pad;
+        func_800E9F78(gfxCtx);
+    }
 
     if (R_ENABLE_ARENA_DBG != 0) {
         SpeedMeter_DrawTimeEntries(&D_801F7FF0, gfxCtx);

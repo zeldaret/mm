@@ -500,6 +500,7 @@ u16 func_808F3DD4(GlobalContext* globalCtx, EnIn* this, u32 arg2) {
     u16 textId = 0;
 
     if (Player_GetMask(globalCtx) == PLAYER_MASK_CIRCUS_LEADERS_MASK) {
+        s32 pad;
         if (!(gSaveContext.weekEventReg[63] & 0x40)) {
             return 0x34A9;
         } else if (this->unk4AC & 8) {
@@ -507,7 +508,6 @@ u16 func_808F3DD4(GlobalContext* globalCtx, EnIn* this, u32 arg2) {
         } else {
             textId = 0x34AF;
         }
-    dummy_label_895710:; // POSSIBLE FAKE MATCH
     } else {
         switch (arg2) {
             case 0:
@@ -1259,9 +1259,9 @@ s32 func_808F5728(GlobalContext* globalCtx, EnIn* this, s32 arg2, s32* arg3) {
         return 1;
     }
     if (*arg3 == 1) {
+        s32 pad;
         player = PLAYER;
         func_808F5994(this, globalCtx, &player->actor.world.pos, 0xC80);
-    dummy_label_895711:; // POSSIBLE FAKE MATCH
     } else {
         rotDiff = this->actor.home.rot.y - this->actor.world.rot.y;
         if (rotDiff > 0x320) {
