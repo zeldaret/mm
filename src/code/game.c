@@ -202,7 +202,7 @@ void Game_StateInit(GameState* gamestate, GameStateFunc gameStateInit, GraphicsC
 
     {
         s32 pad;
-        
+
         Gamealloc_Init(&gamestate->alloc);
         Game_InitHeap(gamestate, 0x100000);
         Game_SetFramerateDivisor(gamestate, 3);

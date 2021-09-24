@@ -130,7 +130,7 @@ void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx) {
 
             if (dooranaType == DOORANA_TYPE_ADJACENT) {
                 s32 pad;
-                
+
                 // 300 uses scene exit addresses, not static DoorAna entrance addresses,
                 // eg. deku playground gets address in the NCT scene exit table
 
