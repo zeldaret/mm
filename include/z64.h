@@ -1784,12 +1784,12 @@ typedef struct {
 } JpegHuffmanTableOld; // size = 0x300
 
 typedef struct {
-    /* 0x00 */ u32 address;
+    /* 0x00 */ void* address;
     /* 0x04 */ u32 mbCount;
     /* 0x08 */ u32 mode;
-    /* 0x0C */ u32 qTableYPtr;
-    /* 0x10 */ u32 qTableUPtr;
-    /* 0x14 */ u32 qTableVPtr;
+    /* 0x0C */ void* qTableYPtr;
+    /* 0x10 */ void* qTableUPtr;
+    /* 0x14 */ void* qTableVPtr;
     /* 0x18 */ char unk_18[0x8];
 } JpegTaskData; // size = 0x20
 
