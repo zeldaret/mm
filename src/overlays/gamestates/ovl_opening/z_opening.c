@@ -10,7 +10,7 @@ void Opening_SetupForTitleCutscene(OpeningContext* this) {
     static s32 openingEntrances[] = { 0x1C00, 0x1C10 };
     static s32 openingCutscenes[] = { 0xFFFA, 0xFFFA };
 
-    gSaveContext.eventInf[1] &= ~0x80;
+    gSaveContext.eventInf[1] &= (u8)~0x80;
     gSaveContext.gameMode = 1;
 
     func_80144890();
