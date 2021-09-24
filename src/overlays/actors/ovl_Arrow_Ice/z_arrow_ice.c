@@ -39,7 +39,7 @@ const ActorInit Arrow_Ice_InitVars = {
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_STOP),
 };
- 
+
 extern Gfx D_0E0002E0[];
 
 void ArrowIce_SetupAction(ArrowIce* this, ArrowIceActionFunc actionFunc) {
