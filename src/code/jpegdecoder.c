@@ -92,14 +92,14 @@ s32 JpegDecoder_ProcessMcu(JpegHuffmanTable* hTable0, JpegHuffmanTable* hTable1,
     s16 coeff;
 
     if (JpegDecoder_ParseNextSymbol(hTable0, &coeff, &zeroCount)) {
-        return 1;
+        return true;
     }
 
     *unk += coeff;
     mcu[i++] = *unk;
     while (i < 8 * 8) {
         if (JpegDecoder_ParseNextSymbol(hTable1, &coeff, &zeroCount)) {
-            return 1;
+            return true;
         }
 
         if (coeff == 0) {
@@ -121,7 +121,7 @@ s32 JpegDecoder_ProcessMcu(JpegHuffmanTable* hTable0, JpegHuffmanTable* hTable1,
         }
     }
 
-    return 0;
+    return false;
 }
 
 s32 JpegDecoder_ParseNextSymbol(JpegHuffmanTable* hTable, s16* outCoeff, s8* outZeroCount) {
@@ -130,7 +130,7 @@ s32 JpegDecoder_ParseNextSymbol(JpegHuffmanTable* hTable, s16* outCoeff, s8* out
     u16 codeOff = 0;
     u16 buff = JpegDecoder_ReadBits(16);
 
-    for (codeIdx = 0; codeIdx < 16; codeIdx++) {
+    for (codeIdx = 0; codeIdx < ARRAY_COUNT(hTable->codesB); codeIdx++) {
         if (hTable->codesB[codeIdx] == 0xFFFF) {
             continue;
         }
@@ -141,8 +141,8 @@ s32 JpegDecoder_ParseNextSymbol(JpegHuffmanTable* hTable, s16* outCoeff, s8* out
         }
     }
 
-    if (codeIdx >= 16) {
-        return 1;
+    if (codeIdx >= ARRAY_COUNT(hTable->codesB)) {
+        return true;
     }
 
     sym = hTable->symbols[hTable->codeOffs[codeIdx] + codeOff - hTable->codesA[codeIdx]];
@@ -158,7 +158,7 @@ s32 JpegDecoder_ParseNextSymbol(JpegHuffmanTable* hTable, s16* outCoeff, s8* out
         }
     }
 
-    return 0;
+    return false;
 }
 
 u16 JpegDecoder_ReadBits(u8 len) {
@@ -176,7 +176,7 @@ u16 JpegDecoder_ReadBits(u8 len) {
             }
         }
 
-        sJpegBitStreamDontSkip = (data == 0xFF) ? 1 : 0;
+        sJpegBitStreamDontSkip = (data == 0xFF) ? true : false;
 
         sJpegBitStreamCurWord <<= 8;
         sJpegBitStreamCurWord |= data;

@@ -106,14 +106,14 @@ u32 JpegUtils_ProcessHuffmanTable(u8* dht, JpegHuffmanTable* ht, u8* codesLength
 
         codeCount = JpegUtils_ProcessHuffmanTableImpl(dht, &ht[idx], codesLengths, codes, ac);
         if (codeCount == 0) {
-            return 1;
+            return true;
         }
 
         dht += 16;
         ht[idx].symbols = dht;
         dht += codeCount;
     }
-    return 0;
+    return false;
 }
 
 void JpegUtils_SetHuffmanTableOld(u8* data, JpegHuffmanTableOld* ht, u8* codesLengths, u16* codes, s16 count, u8 isAc) {
