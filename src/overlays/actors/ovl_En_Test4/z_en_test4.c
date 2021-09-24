@@ -1,7 +1,7 @@
 /*
  * File: z_en_test4.c
  * Overlay: ovl_En_Test4
- * Description:
+ * Description: Day transition effects
  */
 
 #include "z_en_test4.h"
