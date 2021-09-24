@@ -74,7 +74,7 @@ extern char spaces[];
 extern char zeroes[];
 extern OSTimer* __osTimerList;
 // extern UNK_TYPE4 D_80097F80;
-extern float D_80097F90;
+// extern float D_80097F90;
 // extern UNK_TYPE1 D_80097FA0;
 // extern UNK_TYPE1 D_80097FA4;
 // extern UNK_TYPE1 D_80097FA5;
@@ -860,16 +860,16 @@ extern camera_update_func cameraUpdateFuncs[71];
 // extern UNK_TYPE2 D_801B9F0C;
 extern UNK_TYPE4 D_801B9F10;
 extern DamageTable sDamageTablePresets[23];
-extern f32 damageMultipliers[16];
-extern Collider defaultCollider;
-extern ColliderTouch defaultColliderTouch;
-extern ColliderBump defaultColliderBump;
-extern ColliderInfo defaultColliderInfo;
-extern ColliderJntSphElementDim defaultColliderJntSphElementDim;
-extern Cylinder16 defaultColliderCylinderDim;
-extern TriNorm defaultColliderTrisElementDim;
-extern ColliderQuadDim defaultColliderQuadDim;
-extern Vec3f defaultLinePoint;
+// extern f32 damageMultipliers[16];
+// extern Collider defaultCollider;
+// extern ColliderTouch defaultColliderTouch;
+// extern ColliderBump defaultColliderBump;
+// extern ColliderInfo defaultColliderInfo;
+// extern ColliderJntSphElementDim defaultColliderJntSphElementDim;
+// extern Cylinder16 defaultColliderCylinderDim;
+// extern TriNorm defaultColliderTrisElementDim;
+// extern ColliderQuadDim defaultColliderQuadDim;
+// extern Vec3f defaultLinePoint;
 extern ColChkResetFunc sATResetFuncs[COLSHAPE_MAX];
 extern ColChkResetFunc sACResetFuncs[COLSHAPE_MAX];
 extern ColChkResetFunc sOCResetFuncs[COLSHAPE_MAX];
@@ -878,11 +878,11 @@ extern HitInfo sHitInfo[14];
 extern ColChkApplyFunc sColChkApplyFuncs[COLSHAPE_MAX];
 extern ColChkVsFunc sACVsFuncs[COLSHAPE_MAX][COLSHAPE_MAX];
 extern ColChkVsFunc sOCVsFuncs[COLSHAPE_MAX][COLSHAPE_MAX];
-extern CollisionCheckInfo defaultColChkInfo;
+// extern CollisionCheckInfo defaultColChkInfo;
 extern ColChkApplyFunc sApplyDamageFuncs[COLSHAPE_MAX];
 extern ColChkLineFunc sOCLineCheckFuncs[COLSHAPE_MAX];
-extern EffShieldParticleInit shieldParticleInitMetal;
-extern EffShieldParticleInit shieldParticleInitWood;
+// extern EffShieldParticleInit shieldParticleInitMetal;
+// extern EffShieldParticleInit shieldParticleInitWood;
 extern UNK_TYPE1 D_801BA550;
 // extern UNK_TYPE1 D_801BA750;
 // extern UNK_TYPE1 D_801BA790;
@@ -1425,7 +1425,7 @@ extern s32 D_801C5E88[]; // D_801C5E88
 extern s32 D_801C5E9C[]; // D_801C5E9C
 extern s32 D_801C5EB0[]; // D_801C5EB0
 extern s16 D_801C5EC4[]; // D_801C5EC4
-extern struct_801C5F44 D_801C5F44[]; // D_801C5F44
+// extern struct_801C5F44 D_801C5F44[]; // D_801C5F44
 // extern UNK_TYPE4 D_801C5FC0;
 // extern UNK_TYPE4 D_801C5FC4;
 // extern UNK_TYPE4 D_801C5FC8;

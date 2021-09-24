@@ -1382,52 +1382,52 @@ void CollisionCheck_NoBlood(GlobalContext* globalCtx, Collider* collider, Vec3f*
 #ifdef NON_MATCHING
 // needs in-function static bss
 void CollisionCheck_BlueBlood(GlobalContext* globalCtx, Collider* collider, Vec3f* v) {
-    static EffSparkParams D_801EEC00;
+    static EffSparkParams params;
     s32 effectIndex;
 
-    D_801EEC00.position.x = v->x;
-    D_801EEC00.position.x = v->y;
-    D_801EEC00.position.x = v->z;
-    D_801EEC00.particleFactor1 = 5;
-    D_801EEC00.particleFactor2 = 5;
-    D_801EEC00.colorStart[0].r = 10;
-    D_801EEC00.colorStart[0].g = 10;
-    D_801EEC00.colorStart[0].b = 200;
-    D_801EEC00.colorStart[0].a = 255;
-    D_801EEC00.colorStart[1].r = 0;
-    D_801EEC00.colorStart[1].g = 0;
-    D_801EEC00.colorStart[1].b = 128;
-    D_801EEC00.colorStart[1].a = 255;
-    D_801EEC00.colorStart[2].r = 0;
-    D_801EEC00.colorStart[2].g = 0;
-    D_801EEC00.colorStart[2].b = 128;
-    D_801EEC00.colorStart[2].a = 255;
-    D_801EEC00.colorStart[3].r = 0;
-    D_801EEC00.colorStart[3].g = 0;
-    D_801EEC00.colorStart[3].b = 128;
-    D_801EEC00.colorStart[3].a = 255;
-    D_801EEC00.colorEnd[0].r = 0;
-    D_801EEC00.colorEnd[0].g = 0;
-    D_801EEC00.colorEnd[0].b = 32;
-    D_801EEC00.colorEnd[0].a = 0;
-    D_801EEC00.colorEnd[1].r = 0;
-    D_801EEC00.colorEnd[1].g = 0;
-    D_801EEC00.colorEnd[1].b = 32;
-    D_801EEC00.colorEnd[1].a = 0;
-    D_801EEC00.colorEnd[2].r = 0;
-    D_801EEC00.colorEnd[2].g = 0;
-    D_801EEC00.colorEnd[2].b = 64;
-    D_801EEC00.colorEnd[2].a = 0;
-    D_801EEC00.colorEnd[3].r = 0;
-    D_801EEC00.colorEnd[3].g = 0;
-    D_801EEC00.colorEnd[3].b = 64;
-    D_801EEC00.colorEnd[3].a = 0;
-    D_801EEC00.age = 0;
-    D_801EEC00.duration = 16;
-    D_801EEC00.velocity = 8.0f;
-    D_801EEC00.gravity = -1.0f;
+    params.position.x = v->x;
+    params.position.x = v->y;
+    params.position.x = v->z;
+    params.particleFactor1 = 5;
+    params.particleFactor2 = 5;
+    params.colorStart[0].r = 10;
+    params.colorStart[0].g = 10;
+    params.colorStart[0].b = 200;
+    params.colorStart[0].a = 255;
+    params.colorStart[1].r = 0;
+    params.colorStart[1].g = 0;
+    params.colorStart[1].b = 128;
+    params.colorStart[1].a = 255;
+    params.colorStart[2].r = 0;
+    params.colorStart[2].g = 0;
+    params.colorStart[2].b = 128;
+    params.colorStart[2].a = 255;
+    params.colorStart[3].r = 0;
+    params.colorStart[3].g = 0;
+    params.colorStart[3].b = 128;
+    params.colorStart[3].a = 255;
+    params.colorEnd[0].r = 0;
+    params.colorEnd[0].g = 0;
+    params.colorEnd[0].b = 32;
+    params.colorEnd[0].a = 0;
+    params.colorEnd[1].r = 0;
+    params.colorEnd[1].g = 0;
+    params.colorEnd[1].b = 32;
+    params.colorEnd[1].a = 0;
+    params.colorEnd[2].r = 0;
+    params.colorEnd[2].g = 0;
+    params.colorEnd[2].b = 64;
+    params.colorEnd[2].a = 0;
+    params.colorEnd[3].r = 0;
+    params.colorEnd[3].g = 0;
+    params.colorEnd[3].b = 64;
+    params.colorEnd[3].a = 0;
+    params.age = 0;
+    params.duration = 16;
+    params.velocity = 8.0f;
+    params.gravity = -1.0f;
 
-    Effect_Add(globalCtx, &effectIndex, 0, 0, 1, &D_801EEC00);
+    Effect_Add(globalCtx, &effectIndex, 0, 0, 1, &params);
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_collision_check/CollisionCheck_BlueBlood.s")
@@ -1440,51 +1440,51 @@ void CollisionCheck_BlueBlood(GlobalContext* globalCtx, Collider* collider, Vec3
 #ifdef NON_MATCHING
 // needs in-function static bss
 void CollisionCheck_GreenBlood(GlobalContext* globalCtx, Collider* collider, Vec3f* v) {
-    static EffSparkParams D_801EF0C8;
+    static EffSparkParams params;
     s32 effectIndex;
 
-    D_801EF0C8.position.x = v->x;
-    D_801EF0C8.position.x = v->y;
-    D_801EF0C8.position.x = v->z;
-    D_801EF0C8.particleFactor1 = 5;
-    D_801EF0C8.particleFactor2 = 5;
-    D_801EF0C8.colorStart[0].r = 10;
-    D_801EF0C8.colorStart[0].g = 200;
-    D_801EF0C8.colorStart[0].b = 10;
-    D_801EF0C8.colorStart[0].a = 255;
-    D_801EF0C8.colorStart[1].r = 0;
-    D_801EF0C8.colorStart[1].g = 128;
-    D_801EF0C8.colorStart[1].b = 0;
-    D_801EF0C8.colorStart[1].a = 255;
-    D_801EF0C8.colorStart[2].r = 0;
-    D_801EF0C8.colorStart[2].g = 128;
-    D_801EF0C8.colorStart[2].b = 0;
-    D_801EF0C8.colorStart[2].a = 255;
-    D_801EF0C8.colorStart[3].r = 0;
-    D_801EF0C8.colorStart[3].g = 128;
-    D_801EF0C8.colorStart[3].b = 0;
-    D_801EF0C8.colorStart[3].a = 255;
-    D_801EF0C8.colorEnd[0].r = 0;
-    D_801EF0C8.colorEnd[0].g = 32;
-    D_801EF0C8.colorEnd[0].b = 0;
-    D_801EF0C8.colorEnd[0].a = 0;
-    D_801EF0C8.colorEnd[1].r = 0;
-    D_801EF0C8.colorEnd[1].g = 32;
-    D_801EF0C8.colorEnd[1].b = 0;
-    D_801EF0C8.colorEnd[1].a = 0;
-    D_801EF0C8.colorEnd[2].r = 0;
-    D_801EF0C8.colorEnd[2].g = 64;
-    D_801EF0C8.colorEnd[2].b = 0;
-    D_801EF0C8.colorEnd[2].a = 0;
-    D_801EF0C8.colorEnd[3].r = 0;
-    D_801EF0C8.colorEnd[3].g = 64;
-    D_801EF0C8.colorEnd[3].b = 0;
-    D_801EF0C8.colorEnd[3].a = 0;
-    D_801EF0C8.age = 0;
-    D_801EF0C8.duration = 16;
-    D_801EF0C8.velocity = 8.0f;
-    D_801EF0C8.gravity = -1.0f;
-    Effect_Add(globalCtx, &effectIndex, 0, 0, 1, &D_801EF0C8);
+    params.position.x = v->x;
+    params.position.x = v->y;
+    params.position.x = v->z;
+    params.particleFactor1 = 5;
+    params.particleFactor2 = 5;
+    params.colorStart[0].r = 10;
+    params.colorStart[0].g = 200;
+    params.colorStart[0].b = 10;
+    params.colorStart[0].a = 255;
+    params.colorStart[1].r = 0;
+    params.colorStart[1].g = 128;
+    params.colorStart[1].b = 0;
+    params.colorStart[1].a = 255;
+    params.colorStart[2].r = 0;
+    params.colorStart[2].g = 128;
+    params.colorStart[2].b = 0;
+    params.colorStart[2].a = 255;
+    params.colorStart[3].r = 0;
+    params.colorStart[3].g = 128;
+    params.colorStart[3].b = 0;
+    params.colorStart[3].a = 255;
+    params.colorEnd[0].r = 0;
+    params.colorEnd[0].g = 32;
+    params.colorEnd[0].b = 0;
+    params.colorEnd[0].a = 0;
+    params.colorEnd[1].r = 0;
+    params.colorEnd[1].g = 32;
+    params.colorEnd[1].b = 0;
+    params.colorEnd[1].a = 0;
+    params.colorEnd[2].r = 0;
+    params.colorEnd[2].g = 64;
+    params.colorEnd[2].b = 0;
+    params.colorEnd[2].a = 0;
+    params.colorEnd[3].r = 0;
+    params.colorEnd[3].g = 64;
+    params.colorEnd[3].b = 0;
+    params.colorEnd[3].a = 0;
+    params.age = 0;
+    params.duration = 16;
+    params.velocity = 8.0f;
+    params.gravity = -1.0f;
+    Effect_Add(globalCtx, &effectIndex, 0, 0, 1, &params);
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_collision_check/CollisionCheck_GreenBlood.s")
@@ -3682,19 +3682,19 @@ void Collider_SetTrisDim(GlobalContext* globalCtx, ColliderTris* collider, s32 i
 #ifdef NON_MATCHING
 // needs in-function static bss
 void Collider_UpdateSpheres(s32 limb, ColliderJntSph* collider) {
-    static Vec3f D_801EE1C0;
-    static Vec3f D_801EE1D0;
+    static Vec3f src;
+    static Vec3f dst;
     s32 i;
 
     for (i = 0; i < collider->count; i++) {
         if (limb == collider->elements[i].dim.limb) {
-            D_801EE1C0.x = collider->elements[i].dim.modelSphere.center.x;
-            D_801EE1C0.y = collider->elements[i].dim.modelSphere.center.y;
-            D_801EE1C0.z = collider->elements[i].dim.modelSphere.center.z;
-            SysMatrix_MultiplyVector3fByState(&D_801EE1C0, &D_801EE1D0);
-            collider->elements[i].dim.worldSphere.center.x = D_801EE1D0.x;
-            collider->elements[i].dim.worldSphere.center.y = D_801EE1D0.y;
-            collider->elements[i].dim.worldSphere.center.z = D_801EE1D0.z;
+            src.x = collider->elements[i].dim.modelSphere.center.x;
+            src.y = collider->elements[i].dim.modelSphere.center.y;
+            src.z = collider->elements[i].dim.modelSphere.center.z;
+            SysMatrix_MultiplyVector3fByState(&src, &dst);
+            collider->elements[i].dim.worldSphere.center.x = dst.x;
+            collider->elements[i].dim.worldSphere.center.y = dst.y;
+            collider->elements[i].dim.worldSphere.center.z = dst.z;
             collider->elements[i].dim.worldSphere.radius =
                 collider->elements[i].dim.modelSphere.radius * collider->elements[i].dim.scale;
         }
@@ -3726,17 +3726,17 @@ void Collider_UpdateSpheresElement(ColliderJntSph* collider, s32 index, Actor* a
 #ifdef NON_MATCHING
 // needs in-function static bss
 void Collider_UpdateSphere(s32 limb, ColliderSphere* collider) {
-    static Vec3f D_801EE1E0;
-    static Vec3f D_801EE1F0;
+    static Vec3f src;
+    static Vec3f dst;
 
     if (limb == collider->dim.limb) {
-        D_801EE1E0.x = collider->dim.modelSphere.center.x;
-        D_801EE1E0.y = collider->dim.modelSphere.center.y;
-        D_801EE1E0.z = collider->dim.modelSphere.center.z;
-        SysMatrix_MultiplyVector3fByState(&D_801EE1E0, &D_801EE1F0);
-        collider->dim.worldSphere.center.x = D_801EE1F0.x;
-        collider->dim.worldSphere.center.y = D_801EE1F0.y;
-        collider->dim.worldSphere.center.z = D_801EE1F0.z;
+        src.x = collider->dim.modelSphere.center.x;
+        src.y = collider->dim.modelSphere.center.y;
+        src.z = collider->dim.modelSphere.center.z;
+        SysMatrix_MultiplyVector3fByState(&src, &dst);
+        collider->dim.worldSphere.center.x = dst.x;
+        collider->dim.worldSphere.center.y = dst.y;
+        collider->dim.worldSphere.center.z = dst.z;
         collider->dim.worldSphere.radius = collider->dim.modelSphere.radius * collider->dim.scale;
     }
 }
@@ -3751,52 +3751,52 @@ void Collider_UpdateSphere(s32 limb, ColliderSphere* collider) {
 #ifdef NON_MATCHING
 // needs in-function static bss
 void CollisionCheck_SpawnRedBlood(GlobalContext* globalCtx, Vec3f* v) {
-    static EffSparkParams D_801EE200;
+    static EffSparkParams params;
     s32 effectIndex;
 
-    D_801EE200.position.x = v->x;
-    D_801EE200.position.x = v->y;
-    D_801EE200.position.x = v->z;
-    D_801EE200.particleFactor1 = 5;
-    D_801EE200.particleFactor2 = 5;
-    D_801EE200.colorStart[0].r = 128;
-    D_801EE200.colorStart[0].g = 0;
-    D_801EE200.colorStart[0].b = 64;
-    D_801EE200.colorStart[0].a = 255;
-    D_801EE200.colorStart[1].r = 128;
-    D_801EE200.colorStart[1].g = 0;
-    D_801EE200.colorStart[1].b = 64;
-    D_801EE200.colorStart[1].a = 255;
-    D_801EE200.colorStart[2].r = 255;
-    D_801EE200.colorStart[2].g = 128;
-    D_801EE200.colorStart[2].b = 0;
-    D_801EE200.colorStart[2].a = 255;
-    D_801EE200.colorStart[3].r = 255;
-    D_801EE200.colorStart[3].g = 128;
-    D_801EE200.colorStart[3].b = 0;
-    D_801EE200.colorStart[3].a = 255;
-    D_801EE200.colorEnd[0].r = 64;
-    D_801EE200.colorEnd[0].g = 0;
-    D_801EE200.colorEnd[0].b = 32;
-    D_801EE200.colorEnd[0].a = 0;
-    D_801EE200.colorEnd[1].r = 64;
-    D_801EE200.colorEnd[1].g = 0;
-    D_801EE200.colorEnd[1].b = 32;
-    D_801EE200.colorEnd[1].a = 0;
-    D_801EE200.colorEnd[2].r = 128;
-    D_801EE200.colorEnd[2].g = 0;
-    D_801EE200.colorEnd[2].b = 64;
-    D_801EE200.colorEnd[2].a = 0;
-    D_801EE200.colorEnd[3].r = 128;
-    D_801EE200.colorEnd[3].g = 0;
-    D_801EE200.colorEnd[3].b = 64;
-    D_801EE200.colorEnd[3].a = 0;
-    D_801EE200.age = 0;
-    D_801EE200.duration = 16;
-    D_801EE200.velocity = 8.0f;
-    D_801EE200.gravity = -1.0f;
+    params.position.x = v->x;
+    params.position.x = v->y;
+    params.position.x = v->z;
+    params.particleFactor1 = 5;
+    params.particleFactor2 = 5;
+    params.colorStart[0].r = 128;
+    params.colorStart[0].g = 0;
+    params.colorStart[0].b = 64;
+    params.colorStart[0].a = 255;
+    params.colorStart[1].r = 128;
+    params.colorStart[1].g = 0;
+    params.colorStart[1].b = 64;
+    params.colorStart[1].a = 255;
+    params.colorStart[2].r = 255;
+    params.colorStart[2].g = 128;
+    params.colorStart[2].b = 0;
+    params.colorStart[2].a = 255;
+    params.colorStart[3].r = 255;
+    params.colorStart[3].g = 128;
+    params.colorStart[3].b = 0;
+    params.colorStart[3].a = 255;
+    params.colorEnd[0].r = 64;
+    params.colorEnd[0].g = 0;
+    params.colorEnd[0].b = 32;
+    params.colorEnd[0].a = 0;
+    params.colorEnd[1].r = 64;
+    params.colorEnd[1].g = 0;
+    params.colorEnd[1].b = 32;
+    params.colorEnd[1].a = 0;
+    params.colorEnd[2].r = 128;
+    params.colorEnd[2].g = 0;
+    params.colorEnd[2].b = 64;
+    params.colorEnd[2].a = 0;
+    params.colorEnd[3].r = 128;
+    params.colorEnd[3].g = 0;
+    params.colorEnd[3].b = 64;
+    params.colorEnd[3].a = 0;
+    params.age = 0;
+    params.duration = 16;
+    params.velocity = 8.0f;
+    params.gravity = -1.0f;
 
-    Effect_Add(globalCtx, &effectIndex, 0, 0, 1, &D_801EE200);
+    Effect_Add(globalCtx, &effectIndex, 0, 0, 1, &params);
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_collision_check/CollisionCheck_SpawnRedBlood.s")
@@ -3809,52 +3809,52 @@ void CollisionCheck_SpawnRedBlood(GlobalContext* globalCtx, Vec3f* v) {
 #ifdef NON_MATCHING
 // needs in-function static bss
 void CollisionCheck_SpawnWaterDroplets(GlobalContext* globalCtx, Vec3f* v) {
-    static EffSparkParams D_801EE738;
+    static EffSparkParams params;
     s32 effectIndex;
 
-    D_801EE738.position.x = v->x;
-    D_801EE738.position.x = v->y;
-    D_801EE738.position.x = v->z;
-    D_801EE738.particleFactor1 = 5;
-    D_801EE738.particleFactor2 = 5;
-    D_801EE738.colorStart[0].r = 255;
-    D_801EE738.colorStart[0].g = 255;
-    D_801EE738.colorStart[0].b = 255;
-    D_801EE738.colorStart[0].a = 255;
-    D_801EE738.colorStart[1].r = 100;
-    D_801EE738.colorStart[1].g = 100;
-    D_801EE738.colorStart[1].b = 100;
-    D_801EE738.colorStart[1].a = 100;
-    D_801EE738.colorStart[2].r = 100;
-    D_801EE738.colorStart[2].g = 100;
-    D_801EE738.colorStart[2].b = 100;
-    D_801EE738.colorStart[2].a = 100;
-    D_801EE738.colorStart[3].r = 100;
-    D_801EE738.colorStart[3].g = 100;
-    D_801EE738.colorStart[3].b = 100;
-    D_801EE738.colorStart[3].a = 100;
-    D_801EE738.colorEnd[0].r = 50;
-    D_801EE738.colorEnd[0].g = 50;
-    D_801EE738.colorEnd[0].b = 50;
-    D_801EE738.colorEnd[0].a = 50;
-    D_801EE738.colorEnd[1].r = 50;
-    D_801EE738.colorEnd[1].g = 50;
-    D_801EE738.colorEnd[1].b = 50;
-    D_801EE738.colorEnd[1].a = 50;
-    D_801EE738.colorEnd[2].r = 50;
-    D_801EE738.colorEnd[2].g = 50;
-    D_801EE738.colorEnd[2].b = 50;
-    D_801EE738.colorEnd[2].a = 50;
-    D_801EE738.colorEnd[3].r = 0;
-    D_801EE738.colorEnd[3].g = 0;
-    D_801EE738.colorEnd[3].b = 0;
-    D_801EE738.colorEnd[3].a = 0;
-    D_801EE738.age = 0;
-    D_801EE738.duration = 16;
-    D_801EE738.velocity = 8.0f;
-    D_801EE738.gravity = -1.0f;
+    params.position.x = v->x;
+    params.position.x = v->y;
+    params.position.x = v->z;
+    params.particleFactor1 = 5;
+    params.particleFactor2 = 5;
+    params.colorStart[0].r = 255;
+    params.colorStart[0].g = 255;
+    params.colorStart[0].b = 255;
+    params.colorStart[0].a = 255;
+    params.colorStart[1].r = 100;
+    params.colorStart[1].g = 100;
+    params.colorStart[1].b = 100;
+    params.colorStart[1].a = 100;
+    params.colorStart[2].r = 100;
+    params.colorStart[2].g = 100;
+    params.colorStart[2].b = 100;
+    params.colorStart[2].a = 100;
+    params.colorStart[3].r = 100;
+    params.colorStart[3].g = 100;
+    params.colorStart[3].b = 100;
+    params.colorStart[3].a = 100;
+    params.colorEnd[0].r = 50;
+    params.colorEnd[0].g = 50;
+    params.colorEnd[0].b = 50;
+    params.colorEnd[0].a = 50;
+    params.colorEnd[1].r = 50;
+    params.colorEnd[1].g = 50;
+    params.colorEnd[1].b = 50;
+    params.colorEnd[1].a = 50;
+    params.colorEnd[2].r = 50;
+    params.colorEnd[2].g = 50;
+    params.colorEnd[2].b = 50;
+    params.colorEnd[2].a = 50;
+    params.colorEnd[3].r = 0;
+    params.colorEnd[3].g = 0;
+    params.colorEnd[3].b = 0;
+    params.colorEnd[3].a = 0;
+    params.age = 0;
+    params.duration = 16;
+    params.velocity = 8.0f;
+    params.gravity = -1.0f;
 
-    Effect_Add(globalCtx, &effectIndex, 0, 0, 1, &D_801EE738);
+    Effect_Add(globalCtx, &effectIndex, 0, 0, 1, &params);
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_collision_check/CollisionCheck_SpawnWaterDroplets.s")

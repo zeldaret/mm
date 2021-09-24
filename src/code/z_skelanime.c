@@ -938,17 +938,17 @@ AnimationEntry* SkelAnime_NextEntry(AnimationContext* animationCtx, AnimationTyp
 void SkelAnime_LoadLinkAnimetion(GlobalContext* globalCtx, LinkAnimationHeader* linkAnimetionSeg, s32 frame,
                                  s32 limbCount, void* ram) {
     AnimationEntry* entry;
-    LinkAnimationHeader* LinkAnimationHeader;
+    LinkAnimationHeader* linkAnimationHeader;
     s32 pad;
 
     entry = SkelAnime_NextEntry(&globalCtx->animationCtx, ANIMATION_LINKANIMETION);
 
     if (entry != NULL) {
-        LinkAnimationHeader = Lib_SegmentedToVirtual(linkAnimetionSeg);
+        linkAnimationHeader = Lib_SegmentedToVirtual(linkAnimetionSeg);
         osCreateMesgQueue(&entry->types.type0.msgQueue, &entry->types.type0.msg, 1);
         DmaMgr_SendRequestImpl(
             &entry->types.type0.req, ram,
-            LINK_ANIMETION_OFFSET(LinkAnimationHeader->segment, (sizeof(Vec3s) * limbCount + 2) * frame),
+            LINK_ANIMETION_OFFSET(linkAnimationHeader->segment, (sizeof(Vec3s) * limbCount + 2) * frame),
             sizeof(Vec3s) * limbCount + 2, 0, &entry->types.type0.msgQueue, NULL);
     }
 }

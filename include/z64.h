@@ -399,8 +399,6 @@ typedef void*(*fault_address_converter_func)(void* addr, void* arg);
 
 typedef void(*fault_client_func)(void* arg1, void* arg2);
 
-typedef unsigned long(*func)(void);
-
 typedef void(*func_ptr)(void);
 
 typedef void(*osCreateThread_func)(void*);
