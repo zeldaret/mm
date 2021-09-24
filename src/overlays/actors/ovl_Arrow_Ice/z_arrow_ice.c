@@ -73,7 +73,7 @@ void ArrowIce_Charge(ArrowIce* this, GlobalContext* globalCtx) {
     }
 
     if (this->radius < 10) {
-        this->radius += 1;
+        this->radius++;
     }
     // copy position and rotation from arrow
     this->actor.world.pos = arrow->actor.world.pos;
