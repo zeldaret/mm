@@ -16,7 +16,7 @@
 /**
  * Configures and schedules a JPEG decoder task and waits for it to finish.
  */
-void Jpeg_ScheduleDecoderTask(JpegContext* ctx) {
+void Jpeg_ScheduleDecoderTask(JpegContext* jpegCtx) {
     static OSTask_t sJpegTask = {
         M_NJPEGTASK,          // type
         0,                    // flags
@@ -36,11 +36,11 @@ void Jpeg_ScheduleDecoderTask(JpegContext* ctx) {
         0x200,                // yield_data_size
     };
 
-    JpegWork* workBuf = ctx->workBuf;
+    JpegWork* workBuf = jpegCtx->workBuf;
     s32 pad[2];
 
     workBuf->taskData.address = &workBuf->data;
-    workBuf->taskData.mode = ctx->mode;
+    workBuf->taskData.mode = jpegCtx->mode;
     workBuf->taskData.mbCount = 4;
     workBuf->taskData.qTableYPtr = &workBuf->qTableY;
     workBuf->taskData.qTableUPtr = &workBuf->qTableU;
@@ -52,16 +52,16 @@ void Jpeg_ScheduleDecoderTask(JpegContext* ctx) {
     sJpegTask.yield_data_ptr = (u64*)&workBuf->yieldData;
     sJpegTask.data_ptr = (u64*)&workBuf->taskData;
 
-    ctx->scTask.next = NULL;
-    ctx->scTask.flags = OS_SC_NEEDS_RSP;
-    ctx->scTask.msgQ = &ctx->mq;
-    ctx->scTask.msg = NULL;
-    ctx->scTask.framebuffer = NULL;
-    ctx->scTask.list.t = sJpegTask;
+    jpegCtx->scTask.next = NULL;
+    jpegCtx->scTask.flags = OS_SC_NEEDS_RSP;
+    jpegCtx->scTask.msgQ = &jpegCtx->mq;
+    jpegCtx->scTask.msg = NULL;
+    jpegCtx->scTask.framebuffer = NULL;
+    jpegCtx->scTask.list.t = sJpegTask;
 
-    osSendMesg(&gSchedContext.cmdQ, (OSMesg)&ctx->scTask, OS_MESG_BLOCK);
+    osSendMesg(&gSchedContext.cmdQ, (OSMesg)&jpegCtx->scTask, OS_MESG_BLOCK);
     Sched_SendEntryMsg(&gSchedContext); // osScKickEntryMsg
-    osRecvMesg(&ctx->mq, NULL, OS_MESG_BLOCK);
+    osRecvMesg(&jpegCtx->mq, NULL, OS_MESG_BLOCK);
 }
 
 /**
@@ -112,13 +112,13 @@ u16 Jpeg_GetUnalignedU16(u8* ptr) {
 
 /**
  * Parses the markers in the JPEG file, storing information such as the pointer to the image data
- * in `ctx` for later processing.
+ * in `jpegCtx` for later processing.
  */
-void Jpeg_ParseMarkers(u8* ptr, JpegContext* ctx) {
+void Jpeg_ParseMarkers(u8* ptr, JpegContext* jpegCtx) {
     u32 exit = false;
 
-    ctx->dqtCount = 0;
-    ctx->dhtCount = 0;
+    jpegCtx->dqtCount = 0;
+    jpegCtx->dhtCount = 0;
 
     while (true) {
         if (exit) {
@@ -152,13 +152,13 @@ void Jpeg_ParseMarkers(u8* ptr, JpegContext* ctx) {
                 }
                 case MARKER_DQT: {
                     // Define Quantization Table, stored for later processing
-                    ctx->dqtPtr[ctx->dqtCount++] = ptr + 2;
+                    jpegCtx->dqtPtr[jpegCtx->dqtCount++] = ptr + 2;
                     ptr += Jpeg_GetUnalignedU16(ptr);
                     break;
                 }
                 case MARKER_DHT: {
                     // Define Huffman Table, stored for later processing
-                    ctx->dhtPtr[ctx->dhtCount++] = ptr + 2;
+                    jpegCtx->dhtPtr[jpegCtx->dhtCount++] = ptr + 2;
                     ptr += Jpeg_GetUnalignedU16(ptr);
                     break;
                 }
@@ -169,14 +169,14 @@ void Jpeg_ParseMarkers(u8* ptr, JpegContext* ctx) {
                 }
                 case MARKER_SOF: {
                     // Start of Frame, stores important metadata of the image.
-                    // Only used for extracting the sampling factors (ctx->mode).
+                    // Only used for extracting the sampling factors (jpegCtx->mode).
 
                     if (ptr[9] == 0x21) {
                         // component Y : V0 == 1
-                        ctx->mode = 0;
+                        jpegCtx->mode = 0;
                     } else if (ptr[9] == 0x22) {
                         // component Y : V0 == 2
-                        ctx->mode = 2;
+                        jpegCtx->mode = 2;
                     }
                     ptr += Jpeg_GetUnalignedU16(ptr);
                     break;
@@ -184,7 +184,7 @@ void Jpeg_ParseMarkers(u8* ptr, JpegContext* ctx) {
                 case MARKER_SOS: {
                     // Start of Scan marker, indicates the start of the image data.
                     ptr += Jpeg_GetUnalignedU16(ptr);
-                    ctx->imageData = ptr;
+                    jpegCtx->imageData = ptr;
                     break;
                 }
                 case MARKER_EOI: {
@@ -206,7 +206,7 @@ s32 Jpeg_Decode(void* data, void* zbuffer, void* work, u32 workSize) {
     s32 x;
     s32 j;
     s32 i;
-    JpegContext ctx;
+    JpegContext jpegCtx;
     JpegHuffmanTable hTables[4];
     JpegDecoder decoder;
     JpegDecoderState state;
@@ -216,48 +216,48 @@ s32 Jpeg_Decode(void* data, void* zbuffer, void* work, u32 workSize) {
         return -1;
     }
 
-    osCreateMesgQueue(&ctx.mq, &ctx.msg, 1);
+    osCreateMesgQueue(&jpegCtx.mq, &jpegCtx.msg, 1);
     MsgEvent_SendNullTask();
 
-    ctx.workBuf = workBuff;
+    jpegCtx.workBuf = workBuff;
 
-    Jpeg_ParseMarkers(data, &ctx);
+    Jpeg_ParseMarkers(data, &jpegCtx);
 
-    switch (ctx.dqtCount) {
+    switch (jpegCtx.dqtCount) {
         case 1:
-            JpegUtils_ProcessQuantizationTable(ctx.dqtPtr[0], &workBuff->qTableY, 3);
+            JpegUtils_ProcessQuantizationTable(jpegCtx.dqtPtr[0], &workBuff->qTableY, 3);
             break;
 
         case 2:
-            JpegUtils_ProcessQuantizationTable(ctx.dqtPtr[0], &workBuff->qTableY, 1);
-            JpegUtils_ProcessQuantizationTable(ctx.dqtPtr[1], &workBuff->qTableU, 1);
-            JpegUtils_ProcessQuantizationTable(ctx.dqtPtr[1], &workBuff->qTableV, 1);
+            JpegUtils_ProcessQuantizationTable(jpegCtx.dqtPtr[0], &workBuff->qTableY, 1);
+            JpegUtils_ProcessQuantizationTable(jpegCtx.dqtPtr[1], &workBuff->qTableU, 1);
+            JpegUtils_ProcessQuantizationTable(jpegCtx.dqtPtr[1], &workBuff->qTableV, 1);
             break;
 
         case 3:
-            JpegUtils_ProcessQuantizationTable(ctx.dqtPtr[0], &workBuff->qTableY, 1);
-            JpegUtils_ProcessQuantizationTable(ctx.dqtPtr[1], &workBuff->qTableU, 1);
-            JpegUtils_ProcessQuantizationTable(ctx.dqtPtr[2], &workBuff->qTableV, 1);
+            JpegUtils_ProcessQuantizationTable(jpegCtx.dqtPtr[0], &workBuff->qTableY, 1);
+            JpegUtils_ProcessQuantizationTable(jpegCtx.dqtPtr[1], &workBuff->qTableU, 1);
+            JpegUtils_ProcessQuantizationTable(jpegCtx.dqtPtr[2], &workBuff->qTableV, 1);
             break;
 
         default:
             return -1;
     }
 
-    switch (ctx.dhtCount) {
+    switch (jpegCtx.dhtCount) {
         case 1:
-            if (JpegUtils_ProcessHuffmanTable(ctx.dhtPtr[0], &hTables[0], workBuff->codesLengths, workBuff->codes, 4)) {
+            if (JpegUtils_ProcessHuffmanTable(jpegCtx.dhtPtr[0], &hTables[0], workBuff->codesLengths, workBuff->codes, 4)) {
                 return -1;
             }
             break;
 
         case 4:
-            if (JpegUtils_ProcessHuffmanTable(ctx.dhtPtr[0], &hTables[0], workBuff->codesLengths, workBuff->codes, 1)) {
-            } else if (JpegUtils_ProcessHuffmanTable(ctx.dhtPtr[1], &hTables[1], workBuff->codesLengths,
+            if (JpegUtils_ProcessHuffmanTable(jpegCtx.dhtPtr[0], &hTables[0], workBuff->codesLengths, workBuff->codes, 1)) {
+            } else if (JpegUtils_ProcessHuffmanTable(jpegCtx.dhtPtr[1], &hTables[1], workBuff->codesLengths,
                                                      workBuff->codes, 1)) {
-            } else if (JpegUtils_ProcessHuffmanTable(ctx.dhtPtr[2], &hTables[2], workBuff->codesLengths,
+            } else if (JpegUtils_ProcessHuffmanTable(jpegCtx.dhtPtr[2], &hTables[2], workBuff->codesLengths,
                                                      workBuff->codes, 1)) {
-            } else if (!JpegUtils_ProcessHuffmanTable(ctx.dhtPtr[3], &hTables[3], workBuff->codesLengths,
+            } else if (!JpegUtils_ProcessHuffmanTable(jpegCtx.dhtPtr[3], &hTables[3], workBuff->codesLengths,
                                                       workBuff->codes, 1)) {
                 break;
             }
@@ -267,8 +267,8 @@ s32 Jpeg_Decode(void* data, void* zbuffer, void* work, u32 workSize) {
             return -1;
     }
 
-    decoder.imageData = ctx.imageData;
-    decoder.mode = ctx.mode;
+    decoder.imageData = jpegCtx.imageData;
+    decoder.mode = jpegCtx.mode;
     decoder.unk_05 = 2;
 
     decoder.hTablePtrs[0] = &hTables[0];
@@ -280,7 +280,7 @@ s32 Jpeg_Decode(void* data, void* zbuffer, void* work, u32 workSize) {
     x = y = 0;
     for (i = 0; i < 300; i += 4) {
         if (!JpegDecoder_Decode(&decoder, (u16*)workBuff->data, 4, (i != 0), &state)) {
-            Jpeg_ScheduleDecoderTask(&ctx);
+            Jpeg_ScheduleDecoderTask(&jpegCtx);
 
             for (j = 0; j < 4; j++) {
                 Jpeg_CopyToZbuffer(workBuff->data[j], zbuffer, x, y);
