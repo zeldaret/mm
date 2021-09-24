@@ -200,21 +200,24 @@ void Game_StateInit(GameState* gamestate, GameStateFunc gameStateInit, GraphicsC
     gamestate->nextGameStateInit = NULL;
     gamestate->nextGameStateSize = 0U;
 
-lblUnk:;
-    Gamealloc_Init(&gamestate->alloc);
-    Game_InitHeap(gamestate, 0x100000);
-    Game_SetFramerateDivisor(gamestate, 3);
+    {
+        s32 pad;
+        
+        Gamealloc_Init(&gamestate->alloc);
+        Game_InitHeap(gamestate, 0x100000);
+        Game_SetFramerateDivisor(gamestate, 3);
 
-    gameStateInit(gamestate);
+        gameStateInit(gamestate);
 
-    func_80140CE0(&D_801F8010);
-    func_801420C0(&D_801F8020);
-    func_801418B0(&sMonoColors);
-    func_80140898(&D_801F8048);
-    func_801773A0(&D_801F7FF0);
-    func_8013ED9C();
+        func_80140CE0(&D_801F8010);
+        func_801420C0(&D_801F8020);
+        func_801418B0(&sMonoColors);
+        func_80140898(&D_801F8048);
+        func_801773A0(&D_801F7FF0);
+        func_8013ED9C();
 
-    osSendMesg(&gamestate->gfxCtx->unk5C, NULL, 1);
+        osSendMesg(&gamestate->gfxCtx->unk5C, NULL, 1);
+    }
 }
 
 void Game_StateFini(GameState* gamestate) {

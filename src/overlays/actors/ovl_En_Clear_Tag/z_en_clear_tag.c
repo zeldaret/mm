@@ -244,6 +244,7 @@ void EnClearTag_CreateLightRayEffect(EnClearTag* this, Vec3f* position, Vec3f* v
     // Look for an available effect to allocate a light ray effect to.
     for (i = 0; i < ARRAY_COUNT(this->effect) - 1; i++, effect++) {
         if (effect->type == CLEAR_TAG_EFFECT_AVAILABLE) {
+            s32 pad;
             effect->type = CLEAR_TAG_EFFECT_LIGHT_RAYS;
 
             effect->position = *position;
@@ -271,7 +272,6 @@ void EnClearTag_CreateLightRayEffect(EnClearTag* this, Vec3f* position, Vec3f* v
 
             break;
         }
-    dummy:;
     }
 }
 
