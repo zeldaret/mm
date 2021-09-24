@@ -98,7 +98,7 @@ s32 JpegDecoder_ProcessMcu(JpegHuffmanTable* hTable0, JpegHuffmanTable* hTable1,
     *unk += coeff;
     mcu[i++] = *unk;
     while (i < 8 * 8) {
-        if (JpegDecoder_ParseNextSymbol(hTable1, &coeff, &zeroCount) != 0) {
+        if (JpegDecoder_ParseNextSymbol(hTable1, &coeff, &zeroCount)) {
             return 1;
         }
 
