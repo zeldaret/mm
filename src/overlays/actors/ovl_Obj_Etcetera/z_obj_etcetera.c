@@ -61,9 +61,11 @@ static s16 objectIds[] = {
     GAMEPLAY_KEEP,
 };
 
-// Most interactions with a Deku Flower cause it to slightly oscillate on the X and Z axes.
-// When these small oscillations happen, the game determines how to scale the appropriate
-// axes by using this table.
+/**
+ * Most interactions with a Deku Flower cause it to slightly oscillate on the X and Z axes.
+ * When these small oscillations happen, the game determines how to scale the appropriate
+ * axes by using this table.
+ */
 static f32 oscillationTable[] = {
     -1.0, -1.0, -1.0, -0.7, 0.0, 0.7, 1.0, 0.7, 0.0, -0.7, -1.0, -0.7, 0.0, 0.7, 1.0, 0.7, 0.0, -0.7,
 };
