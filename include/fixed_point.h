@@ -1,5 +1,5 @@
-#ifndef FP_H
-#define FP_H
+#ifndef FIXED_POINT_H
+#define FIXED_POINT_H
 #include "ultra64.h"
 
 extern f32 qNaN0x3FFFFF;

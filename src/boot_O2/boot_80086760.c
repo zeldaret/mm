@@ -3,7 +3,7 @@
  * Contains tangent function, wrappers for a number of the handwritten functions in fp, and a suite of arctangents
  */
 #include "global.h"
-#include "fp.h"
+#include "fixed_point.h"
 
 extern f32 func_80086C70(f32 x);
 extern f32 func_80086CA8(f32 x);
