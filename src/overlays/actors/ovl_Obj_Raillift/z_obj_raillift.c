@@ -234,6 +234,7 @@ void ObjRaillift_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
     if (OBJRAILLIFT_SHOULD_REACT_TO_WEIGHT(thisx)) {
+        s32 pad;
         this->isWeightOnPrev = this->isWeightOn;
         if (func_800CAF70(&this->dyna)) {
             this->isWeightOn = true;
@@ -251,7 +252,6 @@ void ObjRaillift_Update(Actor* thisx, GlobalContext* globalCtx) {
         target = this->isWeightOn ? -8.0f : 0.0f;
         Math_StepToF(&this->cycleSpeed, target, step);
         this->dyna.actor.shape.yOffset = ((Math_SinS(this->cycle) * this->maxHeight) + this->cycleSpeed) * 10.0f;
-    dummy:;
     }
     if (OBJRAILLIFT_GET_TYPE(thisx) == DEKU_FLOWER_PLATFORM && this->dyna.actor.child != NULL) {
         if (this->dyna.actor.child->update == NULL) {
