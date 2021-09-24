@@ -83,7 +83,7 @@ void func_80ACB6A0(ObjAqua* this, GlobalContext* globalCtx) {
     }
     sp58.x = this->actor.world.pos.x;
     sp58.z = this->actor.world.pos.z;
-    EffectSsGSplash_Spawn(globalCtx, &sp58, NULL, NULL, 0, 0x12C);
+    EffectSsGSplash_Spawn(globalCtx, &sp58, NULL, NULL, 0, 300);
 }
 
 void func_80ACB7F4(ObjAqua* this, GlobalContext* globalCtx) {
@@ -136,9 +136,9 @@ s32 func_80ACBA60(ObjAqua* this, GlobalContext* globalCtx) {
     if (func_800C9EBC(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &ySurface,
                       &waterBox, &bgId) &&
         (this->actor.world.pos.y < ySurface)) {
-        return 1;
+        return true;
     }
-    return 0;
+    return false;
 }
 
 void ObjAqua_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -152,7 +152,7 @@ void ObjAqua_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 60.0f);
-    if (0) {};
+    if (1) {};
     this->actor.shape.shadowAlpha = 140;
     this->alpha = 255;
     if (func_80ACBA60(this, globalCtx)) {
@@ -181,11 +181,11 @@ void func_80ACBC8C(ObjAqua* this, GlobalContext* globalCtx) {
         if (this->actor.bgCheckFlags & 1) {
             func_80ACB7F4(this, globalCtx);
             func_80ACBA10(this);
-            Audio_PlayActorSound2(&this->actor, 0x2920);
+            Audio_PlayActorSound2(&this->actor, NA_SE_EV_BOTTLE_WATERING);
             func_80ACBD34(this);
         } else {
             func_80ACB6A0(this, globalCtx);
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 0x28, 0x2817);
+            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 0x28, NA_SE_EV_BOMB_DROP_WATER);
             Actor_MarkForDeath(&this->actor);
         }
     } else if (this->counter <= 0) {
@@ -247,7 +247,7 @@ void ObjAqua_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     if (this->counter > 0) {
-        this->counter -= 1;
+        this->counter--;
     }
     this->actionFunc(this, globalCtx);
     if (this->actor.update) {
@@ -273,7 +273,7 @@ void ObjAqua_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjAqua* this = THIS;
     s32 framesTemp;
     s32 pad;
-    s16 cameraTemp = func_800DFCDC(globalCtx->cameraPtrs[globalCtx->activeCamera]) + 0x8000;
+    s16 yaw = func_800DFCDC(globalCtx->cameraPtrs[globalCtx->activeCamera]) + 0x8000;
     s32 actionFuncTemp = this->actionFunc == func_80ACBDFC;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -288,12 +288,13 @@ void ObjAqua_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 150, 255, 0);
     if (actionFuncTemp) {
         s16 rotation = Math_SinS(this->unk_198) * 8000.0f;
+
         SysMatrix_InsertZRotation_s(rotation, 1);
         Matrix_Scale(1.3f, 1.0f, 1.0f, 1);
         SysMatrix_InsertZRotation_s(rotation * -1, 1);
         Matrix_Scale(10.0f / 13.0f, 1.0f, 1.0f, 1);
     }
-    Matrix_RotateY(cameraTemp, 1);
+    Matrix_RotateY(yaw, 1);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, D_0407D590);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
