@@ -54,13 +54,19 @@ static ColliderCylinderInit sCylinderInit = {
 
 extern ColliderCylinderInit D_80A7C790;
 
-static s16 objectIds[] = { GAMEPLAY_KEEP, GAMEPLAY_KEEP, GAMEPLAY_KEEP, GAMEPLAY_KEEP };
+static s16 objectIds[] = {
+    GAMEPLAY_KEEP,
+    GAMEPLAY_KEEP,
+    GAMEPLAY_KEEP,
+    GAMEPLAY_KEEP,
+};
 
 // Most interactions with a Deku Flower cause it to slightly oscillate on the X and Z axes.
 // When these small oscillations happen, the game determines how to scale the appropriate
 // axes by using this table.
-static f32 oscillationTable[] = { -1.0, -1.0, -1.0, -0.7, 0.0, 0.7, 1.0, 0.7, 0.0,
-                                  -0.7, -1.0, -0.7, 0.0,  0.7, 1.0, 0.7, 0.0, -0.7 };
+static f32 oscillationTable[] = {
+    -1.0, -1.0, -1.0, -0.7, 0.0, 0.7, 1.0, 0.7, 0.0, -0.7, -1.0, -0.7, 0.0, 0.7, 1.0, 0.7, 0.0, -0.7,
+};
 
 void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
@@ -147,8 +153,8 @@ void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx) {
                 this->oscillationTimer = 10;
                 ObjEtcetera_StartSmallFlutterAnimation(this);
             } else if ((player->actor.speedXZ > 0.1f) || ((player->unk_ABC < 0.0f) && !(player->stateFlags3 & 0x100))) {
-                // Player is walking on top of the Deku Flower, is at the very start of burrowing, or is at the very start
-                // of launching
+                // Player is walking on top of the Deku Flower, is at the very start of burrowing, or is at the very
+                // start of launching
                 this->oscillationTimer = 10;
             }
             this->burrowFlag |= 1;
