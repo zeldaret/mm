@@ -107,15 +107,15 @@ void ObjEtcetera_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void ObjEtcetera_DoNormalOscillation(ObjEtcetera* this, GlobalContext* globalCtx) {
     if (this->oscillationTimer > 0) {
+        s32 pad;
         Actor_SetScale(&this->dyna.actor,
                        (oscillationTable[globalCtx->gameplayFrames % 18] * (0.0001f * this->oscillationTimer)) + 0.01f);
         this->dyna.actor.scale.y = 0.02f;
         this->oscillationTimer--;
-    dummy_label:; // POSSIBLE FAKE MATCH
-        return;
+    } else {
+        Actor_SetScale(&this->dyna.actor, 0.01f);
+        this->dyna.actor.scale.y = 0.02f;
     }
-    Actor_SetScale(&this->dyna.actor, 0.01f);
-    this->dyna.actor.scale.y = 0.02f;
 }
 
 void ObjEtcetera_StartSmallFlutterAnimation(ObjEtcetera* this) {
