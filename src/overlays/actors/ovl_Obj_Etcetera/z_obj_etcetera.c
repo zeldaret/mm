@@ -286,7 +286,7 @@ void ObjEtcetera_Update(Actor* thisx, GlobalContext* globalCtx) {
     u8 floorBgId;
 
     floorBgId = this->dyna.actor.floorBgId;
-    if (floorBgId == 0x32) {
+    if (floorBgId == BGCHECK_SCENE) {
         floorPoly = this->dyna.actor.floorPoly;
         if (floorPoly != NULL && this->burrowFlag & 1) {
             func_800FAAB4(globalCtx, func_800C9C9C(&globalCtx->colCtx, floorPoly, floorBgId));
