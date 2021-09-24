@@ -81,7 +81,7 @@ CHECK_WARNINGS_ON  := -Wall -Wextra -Wstrict-prototypes -Wshadow
 CHECK_WARNINGS_OFF := -Wno-format-security -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-int-conversion -Wno-unused-label
 
 ifeq ($(CC_CHECK_COMP),clang)
-CHECK_WARNINGS_ON  += -Wpedantic 
+CHECK_WARNINGS_ON  += -Wpedantic
 CHECK_WARNINGS_OFF += -Wno-long-long -Wno-c11-extensions -Wno-c99-extensions -Wno-tautological-overlap-compare -Wno-four-char-constants
 else
 CHECK_WARNINGS_OFF += -Wno-unused-but-set-variable -Wno-multichar
