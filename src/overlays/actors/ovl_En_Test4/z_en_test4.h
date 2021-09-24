@@ -9,7 +9,7 @@ typedef void (*EnTest4ActionFunc)(struct EnTest4*, GlobalContext*);
 
 typedef struct EnTest4 {
     /* 0x0000 */ Actor actor;
-    /* 0x0144 */ s8 isDay;
+    /* 0x0144 */ s8 unk_144; // 0 on night, 1 on day
     /* 0x0145 */ u8 transitionCsTimer;
     /* 0x0146 */ u16 unk_146;
     /* 0x0148 */ u16 nextBellTime; // Next time the bell will sound
