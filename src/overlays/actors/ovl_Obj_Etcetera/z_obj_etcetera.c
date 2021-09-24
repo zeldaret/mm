@@ -72,11 +72,10 @@ void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     ObjEtcetera* this = THIS;
     s32 objectIndex;
-    ObjEtceteraType type;
+    ObjEtceteraType type = OBJETCETERA_TYPE(&this->dyna.actor);
     s32 floorBgId;
     Vec3f pos;
 
-    type = OBJETCETERA_TYPE(&this->dyna.actor);
     if ((type < TYPE_PINK_FLOWER) || (type >= NUMBER_OF_FLOWER_TYPES)) {
         type = TYPE_PINK_FLOWER;
     }
