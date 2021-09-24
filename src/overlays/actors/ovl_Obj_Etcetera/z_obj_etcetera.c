@@ -283,9 +283,8 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
 void ObjEtcetera_Update(Actor* thisx, GlobalContext* globalCtx) {
     ObjEtcetera* this = THIS;
     CollisionPoly* floorPoly;
-    u8 floorBgId;
+    u8 floorBgId = this->dyna.actor.floorBgId;
 
-    floorBgId = this->dyna.actor.floorBgId;
     if (floorBgId == BGCHECK_SCENE) {
         floorPoly = this->dyna.actor.floorPoly;
         if (floorPoly != NULL && this->burrowFlag & 1) {
