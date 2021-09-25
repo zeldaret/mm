@@ -1,7 +1,7 @@
 /*
  * File: z_en_owl.c
  * Overlay: ovl_En_Owl
- * Description: Owl
+ * Description: Kaepora Gaebora (Owl)
  */
 
 #include "z_en_owl.h"
@@ -110,8 +110,8 @@ void func_8095A510(EnOwl* this, GlobalContext* globalCtx) {
 }
 
 void EnOwl_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnOwl* this = THIS;
     s32 pad;
+    EnOwl* this = THIS;
     s32 i;
     s16 cutscene = this->actor.cutscene;
     s32 owlType;
@@ -274,7 +274,7 @@ void func_8095AAD0(EnOwl* this, GlobalContext* globalCtx) {
 }
 
 void func_8095AB1C(EnOwl* this, GlobalContext* globalCtx) {
-    if (!(this->unk_3DA & 0x3F)) {
+    if ((this->unk_3DA % 64) == 0) {
         func_8095AAD0(this, globalCtx);
     }
 }
@@ -311,7 +311,7 @@ void func_8095ABF0(EnOwl* this, GlobalContext* globalCtx) {
 void func_8095AC50(EnOwl* this, GlobalContext* globalCtx) {
     if (func_800B867C(&this->actor, globalCtx)) {
         func_801A89A8(0x110000FF);
-        if (!(this->unk_3DA & 0x3F)) {
+        if ((this->unk_3DA % 64) == 0) {
             func_8095AAD0(this, globalCtx);
         } else {
             this->actionFlags &= ~2;
@@ -417,9 +417,8 @@ s32 func_8095B06C(EnOwl* this) {
 
 void func_8095B0C8(EnOwl* this) {
     s32 pad;
-    Vec3s* points;
+    Vec3s* points = (Vec3s*)Lib_SegmentedToVirtual(this->path->points);
 
-    points = (Vec3s*)Lib_SegmentedToVirtual(this->path->points);
     points += this->unk_3F8;
     this->unk_3EC = Math_FAtan2F(points->z - this->actor.world.pos.z, points->x - this->actor.world.pos.x);
     this->unk_3F0 = points->y;
@@ -532,7 +531,7 @@ void func_8095B650(EnOwl* this, GlobalContext* globalCtx) {
 }
 
 void func_8095B6C8(EnOwl* this, GlobalContext* globalCtx) {
-    if ((this->actionFlags & 1) != 0) {
+    if (this->actionFlags & 1) {
         SkelAnime_ChangeAnim(this->skelAnime3, &D_0600CB94, -1.0f, SkelAnime_GetFrameCount(&D_0600CB94.common), 0.0f, 2,
                              0.0f);
         this->unk_414 = func_8095C484;
@@ -545,23 +544,22 @@ void func_8095B6C8(EnOwl* this, GlobalContext* globalCtx) {
 void func_8095B76C(EnOwl* this, GlobalContext* globalCtx) {
     s32 pad;
     s16 sp4A;
-    f32 sp44;
+    f32 sp44 = func_80122524(&this->actor, this->path, this->unk_3F8, &sp4A);
     Vec3s* points;
 
-    sp44 = func_80122524(&this->actor, this->path, this->unk_3F8, &sp4A);
     Math_SmoothStepToS(&this->actor.world.rot.y, sp4A, 6, 0x800, 0x200);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (sp44 < SQ(this->actor.speedXZ)) {
-
         this->actor.speedXZ = 0.0f;
         points = (Vec3s*)Lib_SegmentedToVirtual(this->path->points);
         points += this->unk_3F8;
-        if (1) {};
-        this->actor.world.pos.x = points->x;
-        this->actor.world.pos.z = points->z;
-        if (1) {};
 
-        this->unk_3F8 += 1;
+        do {
+            this->actor.world.pos.x = points->x;
+            this->actor.world.pos.z = points->z;
+        } while(0);
+
+        this->unk_3F8++;
         if (this->path->count <= this->unk_3F8) {
             this->actionFunc = func_8095B6C8;
             return;
@@ -574,7 +572,7 @@ void func_8095B76C(EnOwl* this, GlobalContext* globalCtx) {
             func_8095ACEC(this);
         }
         func_8095B0C8(this);
-    } else if (sp44 < 441.0f) {
+    } else if (sp44 < SQ(21.0f)) {
         if (this->actor.speedXZ > 1.0f) {
             this->actor.speedXZ -= 1.0f;
         } else {
@@ -889,8 +887,8 @@ void func_8095C568(EnOwl* this) {
 }
 
 void EnOwl_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnOwl* this = THIS;
     s32 pad;
+    EnOwl* this = THIS;
     s16 sp36;
 
     if (this->actor.draw != NULL) {
@@ -936,7 +934,7 @@ void EnOwl_Update(Actor* thisx, GlobalContext* globalCtx) {
                     case 1:
                         this->unk_409--;
                         if (this->unk_409 != 0) {
-                            sp36 = Math_CosS(this->unk_409 << 0xD) * 4096.0f;
+                            sp36 = Math_CosS(this->unk_409 * 0x2000) * 0x1000;
                         } else {
                             if (this->actionFlags & 2) {
                                 this->unk_3DA = 0;
@@ -999,7 +997,7 @@ void EnOwl_Update(Actor* thisx, GlobalContext* globalCtx) {
                             break;
 
                         case 3:
-                            sp36 = Math_SinS(this->unk_409 << 0xC) * 5000.0f;
+                            sp36 = Math_SinS(this->unk_409 * 0x1000) * 5000.0f;
                             if (this->unk_409 <= 0) {
                                 this->unk_40A = (s32)Rand_ZeroFloat(20.0f) + 60;
                                 this->unk_408 = 0;
@@ -1008,7 +1006,7 @@ void EnOwl_Update(Actor* thisx, GlobalContext* globalCtx) {
                             break;
 
                         case 4:
-                            sp36 = Math_SinS(this->unk_409 << 0xD) * 5000.0f;
+                            sp36 = Math_SinS(this->unk_409 * 0x2000) * 5000.0f;
                             if (this->unk_409 <= 0) {
                                 this->unk_40A = (s32)Rand_ZeroFloat(20.0f) + 60;
                                 this->unk_408 = 0;
@@ -1055,7 +1053,7 @@ void EnOwl_Update(Actor* thisx, GlobalContext* globalCtx) {
                 }
             }
 
-            if (sp36) {};
+            if (sp36) {}
             this->unk_3DC = (u16)((this->unk_3DA << 2) << 8) + sp36;
             this->unk_3D8 = ABS(this->unk_3DC) >> 3;
         } else {
@@ -1155,8 +1153,8 @@ void EnOwl_Draw(Actor* thisx, GlobalContext* globalCtx) {
         &D_060092B8,
         &D_060096B8,
     };
-    EnOwl* this = THIS;
     s32 pad;
+    EnOwl* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
