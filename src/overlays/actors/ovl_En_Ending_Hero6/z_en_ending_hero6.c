@@ -30,7 +30,7 @@ extern Gfx D_060070C0[];
 extern Gfx D_06006FB0[];
 extern Gfx D_06006E80[];
 extern Gfx D_06006D70[];
-extern Gfx D_0600A390[];
+extern Gfx D_0600A390_dl[];
 
 // object_dt
 extern TexturePtr D_06007350;
@@ -40,7 +40,7 @@ extern TexturePtr D_0600A790;
 extern TexturePtr D_0600AB90;
 
 extern TexturePtr D_06007750;
-// extern TexturePtr D_0600A390;
+extern TexturePtr D_0600A390_tex;
 extern TexturePtr D_0600A490;
 
 const ActorInit En_Ending_Hero6_InitVars = {
@@ -55,23 +55,23 @@ const ActorInit En_Ending_Hero6_InitVars = {
     (ActorFunc)EnEndingHero6_Draw,
 };
 
-static FlexSkeletonHeader* D_80C24200[] = { &D_0600B0CC, &D_06007908, &D_06007150, &D_0600D640, &D_0600A850,
+static FlexSkeletonHeader* sSkeletons[] = { &D_0600B0CC, &D_06007908, &D_06007150, &D_0600D640, &D_0600A850,
                                             &D_0600A850, &D_0600A850, &D_0600A850, &D_0600A850 };
 
-static AnimationHeader* D_80C24224[] = { &D_06000BE0, &D_060011C0, &D_06000E50, &D_06002A84, &D_06002FA0,
-                                         &D_06002FA0, &D_06002FA0, &D_06002FA0, &D_06002FA0 };
+static AnimationHeader* sAnimations[] = { &D_06000BE0, &D_060011C0, &D_06000E50, &D_06002A84, &D_06002FA0,
+                                          &D_06002FA0, &D_06002FA0, &D_06002FA0, &D_06002FA0 };
 
-static s32 D_80C24248[] = { 15, 20, 17, 17, 17, 17, 17, 17, 17 };
+static s32 sLimbCounts[] = { 15, 20, 17, 17, 17, 17, 17, 17, 17 };
 
 void EnEndingHero6_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnEndingHero6* this = THIS;
 
-    this->actor.colChkInfo.mass = 255;
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, D_80C24200[this->npcIndex], D_80C24224[this->npcIndex],
-                     this->limbDrawTable, this->transitionDrawTable, D_80C24248[this->npcIndex]);
+    SkelAnime_InitSV(globalCtx, &this->skelAnime, sSkeletons[this->npcIndex], sAnimations[this->npcIndex],
+                     this->limbDrawTable, this->transitionDrawTable, sLimbCounts[this->npcIndex]);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
     func_80C23DDC(this);
 }
@@ -81,8 +81,8 @@ void EnEndingHero6_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80C23D60(EnEndingHero6* this, s32 npcIndex) {
     this->animIndex = npcIndex;
-    this->frameCount = SkelAnime_GetFrameCount(&D_80C24224[npcIndex]->common);
-    SkelAnime_ChangeAnim(&this->skelAnime, D_80C24224[this->animIndex], 1.0f, 0.f, this->frameCount, 0, 0.0f);
+    this->frameCount = SkelAnime_GetFrameCount(&sAnimations[npcIndex]->common);
+    SkelAnime_ChangeAnim(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.f, this->frameCount, 0, 0.0f);
 }
 
 void func_80C23DDC(EnEndingHero6* this) {
@@ -104,11 +104,11 @@ void EnEndingHero6_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actor.shape.rot.y = this->actor.world.rot.y;
 
-    if (this->unk288 == 0) {
+    if (this->blinkTimer == 0) {
         this->eyeState++;
         if (this->eyeState >= 3) {
             this->eyeState = 0;
-            this->unk288 = (s16)Rand_ZeroFloat(60.0f) + 20;
+            this->blinkTimer = (s16)Rand_ZeroFloat(60.0f) + 20;
         }
     }
 
@@ -117,8 +117,8 @@ void EnEndingHero6_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1DU);
 }
 
-void func_80C23F14(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static Gfx* D_80C2426C[] = { D_060070C0, D_06006FB0, D_06006E80, D_06006D70, D_0600A390 };
+void EnEndingHero6_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    static Gfx* D_80C2426C[] = { D_060070C0, D_06006FB0, D_06006E80, D_06006D70, D_0600A390_dl };
     EnEndingHero6* this = THIS;
     s32 index;
 
@@ -134,9 +134,9 @@ void func_80C23F14(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 
 void EnEndingHero6_Draw(Actor* thisx, GlobalContext* globalCtx) {
     static TexturePtr D_80C24280[] = { &D_06007350, &D_06009590, &D_06009F90, &D_0600A790, &D_0600AB90 };
-    static TexturePtr D_80C24294[] = { &D_06007750, &D_0600A390, &D_0600A490 };
-    EnEndingHero6* this = THIS;
+    static TexturePtr D_80C24294[] = { &D_06007750, &D_0600A390_tex, &D_0600A490 };
     s32 pad;
+    EnEndingHero6* this = THIS;
     s32 index = 0;
 
     if (this->unk290 == 1) {
@@ -178,7 +178,7 @@ void EnEndingHero6_Draw(Actor* thisx, GlobalContext* globalCtx) {
                 }
 
                 SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
-                                 this->skelAnime.dListCount, NULL, func_80C23F14, &this->actor);
+                                 this->skelAnime.dListCount, NULL, EnEndingHero6_PostLimbDraw, &this->actor);
             }
         }
 

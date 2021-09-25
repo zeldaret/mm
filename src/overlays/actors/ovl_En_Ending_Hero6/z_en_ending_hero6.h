@@ -17,7 +17,7 @@ typedef struct EnEndingHero6 {
     /* 0x0280 */ s32 npcIndex;
     /* 0x0284 */ s8 unk284;
     /* 0x0286 */ s16 unk286;
-    /* 0x0288 */ s16 unk288;
+    /* 0x0288 */ s16 blinkTimer;
     /* 0x028A */ s16 eyeState;
     /* 0x028C */ f32 frameCount;
     /* 0x0290 */ s16 unk290;
