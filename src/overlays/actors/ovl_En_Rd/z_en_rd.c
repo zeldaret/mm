@@ -577,7 +577,8 @@ void func_808D506C(EnRd* this, GlobalContext* globalCtx) {
     }
 
     if ((ABS_ALT(sp36) < 0x1554) && (Actor_DistanceBetweenActors(&this->actor, &player->actor) <= 150.0f)) {
-        if (!(player->stateFlags1 & 0x2C6080) && !(player->stateFlags2 & 0x4080)) {
+        if (!(player->stateFlags1 & (0x200000 | 0x80000 | 0x40000 | 0x4000 | 0x2000 | 0x80)) &&
+            !(player->stateFlags2 & 0x4080)) {
             if (this->unk_3ED == 0) {
                 if (!(this->unk_3DC & 0x80)) {
                     player->actor.freezeTimer = 40;
@@ -655,8 +656,9 @@ void func_808D5440(EnRd* this, GlobalContext* globalCtx) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
 
-    if (!(player->stateFlags1 & 0x2C6080) && !(player->stateFlags2 & 0x4080) &&
-        (player->transformation != PLAYER_FORM_GORON) && (player->transformation != PLAYER_FORM_DEKU) &&
+    if (!(player->stateFlags1 & (0x200000 | 0x80000 | 0x40000 | 0x4000 | 0x2000 | 0x80)) &&
+        !(player->stateFlags2 & 0x4080) && (player->transformation != PLAYER_FORM_GORON) &&
+        (player->transformation != PLAYER_FORM_DEKU) &&
         (Actor_DistanceToPoint(&player->actor, &this->actor.home.pos) < 150.0f)) {
         this->actor.targetMode = 0;
         func_808D4FE0(this, globalCtx);
@@ -1045,7 +1047,7 @@ void func_808D66A0(EnRd* this, GlobalContext* globalCtx) {
     phi_v0 -= this->unk_3D8;
     phi_v0 = CLAMP(phi_v0, -0x1F4, 0x1F4);
 
-    if ((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y) >= 0) {
+    if (BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y) >= 0) {
         this->unk_3DA += ABS_ALT(temp_v0);
         this->unk_3D8 += ABS_ALT(phi_v0);
     } else {
