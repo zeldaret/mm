@@ -78,7 +78,7 @@ void func_80ACB6A0(ObjAqua* this, GlobalContext* globalCtx) {
     for (i = 0; i < 4; i++) {
         sp58.x = this->actor.world.pos.x + Math_SinS((s32)(Rand_ZeroOne() * 7200.0f) + angleOffset) * 8.0f;
         sp58.z = this->actor.world.pos.z + Math_CosS((s32)(Rand_ZeroOne() * 7200.0f) + angleOffset) * 8.0f;
-        EffectSsGSplash_Spawn(globalCtx, &sp58, NULL, NULL, 0, 0x78);
+        EffectSsGSplash_Spawn(globalCtx, &sp58, NULL, NULL, 0, 120);
         angleOffset += 0x4000;
     }
     sp58.x = this->actor.world.pos.x;
