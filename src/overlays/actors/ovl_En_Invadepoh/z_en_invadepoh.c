@@ -2681,7 +2681,7 @@ void func_80B48AD4(EnInvadepoh* this, GlobalContext* globalCtx) {
     }
 
     if (this->rand == 0) {
-        s32 pad;
+        s32 requiredScopeTemp;
 
         if ((this->actor.xzDistToPlayer < 350.0f) && ((globalCtx->gameplayFrames & 0x60) != 0)) {
             player = PLAYER;

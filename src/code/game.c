@@ -91,7 +91,7 @@ void GameState_Draw(GameState* gamestate, GraphicsContext* gfxCtx) {
 
     // Block prevents reordering, if(1) around the above block don't seem to help unlike in OoT
     {
-        s32 pad;
+        s32 requiredScopeTemp;
 
         func_800E9F78(gfxCtx);
     }
@@ -204,7 +204,7 @@ void Game_StateInit(GameState* gamestate, GameStateFunc gameStateInit, GraphicsC
     gamestate->nextGameStateSize = 0U;
 
     {
-        s32 pad;
+        s32 requiredScopeTemp;
 
         Gamealloc_Init(&gamestate->alloc);
         Game_InitHeap(gamestate, 0x100000);

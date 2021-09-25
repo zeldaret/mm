@@ -500,7 +500,7 @@ u16 func_808F3DD4(GlobalContext* globalCtx, EnIn* this, u32 arg2) {
     u16 textId = 0;
 
     if (Player_GetMask(globalCtx) == PLAYER_MASK_CIRCUS_LEADERS_MASK) {
-        s32 pad;
+        s32 requiredScopeTemp;
 
         if (!(gSaveContext.weekEventReg[63] & 0x40)) {
             return 0x34A9;
@@ -1260,7 +1260,7 @@ s32 func_808F5728(GlobalContext* globalCtx, EnIn* this, s32 arg2, s32* arg3) {
         return 1;
     }
     if (*arg3 == 1) {
-        s32 pad;
+        s32 requiredScopeTemp;
 
         player = PLAYER;
         func_808F5994(this, globalCtx, &player->actor.world.pos, 0xC80);
