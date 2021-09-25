@@ -92,6 +92,7 @@ void GameState_Draw(GameState* gamestate, GraphicsContext* gfxCtx) {
     // Block prevents reordering, if(1) around the above block don't seem to help unlike in OoT
     {
         s32 pad;
+        
         func_800E9F78(gfxCtx);
     }
 
