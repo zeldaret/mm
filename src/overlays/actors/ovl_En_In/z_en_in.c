@@ -1261,7 +1261,7 @@ s32 func_808F5728(GlobalContext* globalCtx, EnIn* this, s32 arg2, s32* arg3) {
     }
     if (*arg3 == 1) {
         s32 pad;
-        
+
         player = PLAYER;
         func_808F5994(this, globalCtx, &player->actor.world.pos, 0xC80);
     } else {

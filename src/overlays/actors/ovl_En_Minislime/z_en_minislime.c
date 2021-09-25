@@ -325,7 +325,7 @@ void EnMinislime_IceArrowDamage(EnMinislime* this, GlobalContext* globalCtx) {
         } else if (this->frozenTimer > 0) {
             if ((this->frozenTimer < 20) || ((this->frozenTimer < 40) && ((this->frozenTimer % 2) != 0))) {
                 s32 pad;
-                
+
                 invFrozenTimer = 1.0f / this->frozenTimer;
                 randFloat = Rand_ZeroFloat(invFrozenTimer);
                 randSign = Rand_ZeroOne() < 0.5f ? -1 : 1;
