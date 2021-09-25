@@ -14,9 +14,9 @@ typedef enum {
     /* 02 */ UM_LIMB_WAGGON_ROOT,
     /* 03 */ UM_LIMB_WAGGON_RIGHT_WHEEL,
     /* 04 */ UM_LIMB_WAGGON_LEFT_WHEEL,
-    /* 05 */ UM_LIMB_WAGGON_05, // FLOOR?
+    /* 05 */ UM_LIMB_WAGGON_CART_BED,
     /* 06 */ UM_LIMB_WAGGON_HAND_BRAKE,
-    /* 07 */ UM_LIMB_WAGGON_BONNET,
+    /* 07 */ UM_LIMB_WAGGON_CART_COVER,
     /* 08 */ UM_LIMB_WAGGON_LEFT_LEAF_SPRING,
     /* 09 */ UM_LIMB_WAGGON_RIGHT_LEAF_SPRING,
     /* 10 */ UM_LIMB_WAGGON_STEERING_WHEEL,
@@ -65,7 +65,7 @@ typedef struct ObjUm {
     /* 0x35C */ EnHorse* bandit2;
     /* 0x360 */ Vec3f unk_360[0x10];
     /* 0x420 */ s32 unk_420;
-    /* 0x424 */ ColliderCylinder unk_424[2]; // horses
+    /* 0x424 */ ColliderCylinder banditsCollisions[2];
     /* 0x4BC */ Vec3f unk_4BC;
     /* 0x4C8 */ u16 unk_4C8; // time?
     /* 0x4CC */ s32 unk_4CC;
@@ -81,9 +81,9 @@ extern const ActorInit Obj_Um_InitVars;
 typedef enum {
     /* 0 */ OBJ_UM_TYPE_TERMINA_FIELD,
     /* 1 */ OBJ_UM_TYPE_RANCH,
-    /* 2 */ OBJ_UM_TYPE_2, // milk road, pre-minigame
+    /* 2 */ OBJ_UM_TYPE_PRE_MILK_RUN, // milk road, pre-minigame
     /* 3 */ OBJ_UM_TYPE_MILK_RUN_MINIGAME,
-    /* 4 */ OBJ_UM_TYPE_4  // milk road, post-minigame
+    /* 4 */ OBJ_UM_TYPE_POST_MILK_RUN  // milk road, post-minigame
 } ObjUmType;
 
 #define OBJ_UM_PARSE_TYPE(params) ((params) & 0xFF00) >> 8
