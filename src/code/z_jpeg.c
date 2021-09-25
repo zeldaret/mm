@@ -252,6 +252,7 @@ s32 Jpeg_Decode(void* data, void* zbuffer, void* work, u32 workSize) {
             break;
 
         case 4:
+            // This chained if-else have printfs in them on debug
             if (JpegUtils_ProcessHuffmanTable(jpegCtx.dhtPtr[0], &hTables[0], workBuff->codesLengths, workBuff->codes, 1)) {
             } else if (JpegUtils_ProcessHuffmanTable(jpegCtx.dhtPtr[1], &hTables[1], workBuff->codesLengths,
                                                      workBuff->codes, 1)) {
