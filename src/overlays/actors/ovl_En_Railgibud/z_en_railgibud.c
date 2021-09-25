@@ -392,6 +392,7 @@ void func_80BA5E18(EnRailgibud* this, GlobalContext* globalCtx) {
         case 1:
             if (this->unk_3F2 == 20) {
                 s16 pad;
+                
                 sp32 = player->ageProperties->unk_92 + 0x6805;
                 globalCtx->damagePlayer(globalCtx, -8);
                 func_800B8E58(&player->actor, sp32);

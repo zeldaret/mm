@@ -2682,6 +2682,7 @@ void func_80B48AD4(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     if (this->rand == 0) {
         s32 pad;
+        
         if ((this->actor.xzDistToPlayer < 350.0f) && ((globalCtx->gameplayFrames & 0x60) != 0)) {
             player = PLAYER;
             temp_v1 = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f;

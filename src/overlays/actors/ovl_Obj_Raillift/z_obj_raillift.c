@@ -235,6 +235,7 @@ void ObjRaillift_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
     if (OBJRAILLIFT_SHOULD_REACT_TO_WEIGHT(thisx)) {
         s32 pad;
+        
         this->isWeightOnPrev = this->isWeightOn;
         if (func_800CAF70(&this->dyna)) {
             this->isWeightOn = true;
