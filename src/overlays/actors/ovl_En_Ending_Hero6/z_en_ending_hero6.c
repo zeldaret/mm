@@ -18,14 +18,12 @@ extern FlexSkeletonHeader D_06007908; // object_bai
 extern FlexSkeletonHeader D_06007150; // object_toryo
 extern FlexSkeletonHeader D_0600D640; // object_sdn
 extern FlexSkeletonHeader D_0600A850; // object_daiku
-extern FlexSkeletonHeader D_0600A850;
 
 extern AnimationHeader D_06000BE0; // object_dt
 extern AnimationHeader D_060011C0; // object_bai
 extern AnimationHeader D_06000E50; // object_toryo
 extern AnimationHeader D_06002A84; // object_sdn
 extern AnimationHeader D_06002FA0; // object_daiku
-extern AnimationHeader D_06002FA0;
 
 // object_daiku
 extern Gfx D_060070C0[];
