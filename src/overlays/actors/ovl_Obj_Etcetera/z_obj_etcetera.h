@@ -6,13 +6,12 @@
 #define DEKU_FLOWER_TYPE(thisx) (((thisx)->params & 0xFF80) >> 7)
 
 typedef enum {
-    /*  0   */ TYPE_PINK_FLOWER,
-    /*  1   */ TYPE_PINK_FLOWER_SPAWNED_FROM_MAD_SCRUB,
-    /*  2   */ TYPE_GOLD_FLOWER,
-    /*  3   */ TYPE_GOLD_FLOWER_SPAWNED_FROM_MAD_SCRUB,
-} ObjEtceteraType;
-
-#define NUMBER_OF_FLOWER_TYPES 4
+    /* 0 */ DEKU_FLOWER_TYPE_PINK,
+    /* 1 */ DEKU_FLOWER_TYPE_PINK_SPAWNED_FROM_MAD_SCRUB,
+    /* 2 */ DEKU_FLOWER_TYPE_GOLD,
+    /* 3 */ DEKU_FLOWER_TYPE_GOLD_SPAWNED_FROM_MAD_SCRUB,
+    /* 4 */ DEKU_FLOWER_TYPE_MAX,
+} DekuFlowerType;
 
 struct ObjEtcetera;
 

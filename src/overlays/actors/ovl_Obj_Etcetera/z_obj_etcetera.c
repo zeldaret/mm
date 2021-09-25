@@ -74,12 +74,12 @@ void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     ObjEtcetera* this = THIS;
     s32 objectIndex;
-    ObjEtceteraType type = DEKU_FLOWER_TYPE(&this->dyna.actor);
+    DekuFlowerType type = DEKU_FLOWER_TYPE(&this->dyna.actor);
     s32 floorBgId;
     Vec3f pos;
 
-    if ((type < TYPE_PINK_FLOWER) || (type >= NUMBER_OF_FLOWER_TYPES)) {
-        type = TYPE_PINK_FLOWER;
+    if ((type < DEKU_FLOWER_TYPE_PINK) || (type >= DEKU_FLOWER_TYPE_MAX)) {
+        type = DEKU_FLOWER_TYPE_PINK;
     }
     objectIndex = Object_GetIndex(&globalCtx->objectCtx, objectIds[type]);
     if (objectIndex >= 0) {
@@ -222,14 +222,14 @@ void ObjEtcetera_DoIntenseOscillation(ObjEtcetera* this, GlobalContext* globalCt
 
 void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
     CollisionHeader* colHeader = NULL;
-    ObjEtceteraType type;
+    DekuFlowerType type;
     CollisionHeader* collisionHeaders[] = { &D_0400E710, &D_0400E710, &D_040118D8, &D_040118D8 };
     s32 pad;
     CollisionHeader* thisCollisionHeader;
 
     type = DEKU_FLOWER_TYPE(&this->dyna.actor);
-    if ((type < TYPE_PINK_FLOWER) || (type >= NUMBER_OF_FLOWER_TYPES)) {
-        type = TYPE_PINK_FLOWER;
+    if ((type < DEKU_FLOWER_TYPE_PINK) || (type >= DEKU_FLOWER_TYPE_MAX)) {
+        type = DEKU_FLOWER_TYPE_PINK;
     }
     if (Object_IsLoaded(&globalCtx->objectCtx, this->objIndex)) {
         this->dyna.actor.objBankIndex = this->objIndex;
@@ -242,14 +242,14 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
         this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
         type = DEKU_FLOWER_TYPE(&this->dyna.actor);
         switch (type) {
-            case TYPE_PINK_FLOWER:
-            case TYPE_PINK_FLOWER_SPAWNED_FROM_MAD_SCRUB:
+            case DEKU_FLOWER_TYPE_PINK:
+            case DEKU_FLOWER_TYPE_PINK_SPAWNED_FROM_MAD_SCRUB:
                 SkelAnime_Init(globalCtx, &this->skelAnime, &D_04011518, &D_0400EB7C, this->jointTable,
                                this->morphTable, 11);
                 this->dList = &D_0400ED80;
                 break;
-            case TYPE_GOLD_FLOWER:
-            case TYPE_GOLD_FLOWER_SPAWNED_FROM_MAD_SCRUB:
+            case DEKU_FLOWER_TYPE_GOLD:
+            case DEKU_FLOWER_TYPE_GOLD_SPAWNED_FROM_MAD_SCRUB:
                 this->dList = &D_04011BD0;
                 SkelAnime_Init(globalCtx, &this->skelAnime, &D_040127E8, &D_0400EB7C, this->jointTable,
                                this->morphTable, 11);
@@ -258,8 +258,8 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
         }
         type = DEKU_FLOWER_TYPE(&this->dyna.actor);
         switch (type) {
-            case TYPE_PINK_FLOWER:
-            case TYPE_GOLD_FLOWER:
+            case DEKU_FLOWER_TYPE_PINK:
+            case DEKU_FLOWER_TYPE_GOLD:
                 this->dyna.actor.draw = ObjEtcetera_DrawIdle;
                 this->actionFunc = ObjEtcetera_Idle;
                 Actor_SetScale(&this->dyna.actor, 0.01f);
@@ -267,8 +267,8 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
                 this->dyna.actor.focus.pos.y = this->dyna.actor.home.pos.y + 10.0f;
                 this->dyna.actor.targetMode = 3;
                 break;
-            case TYPE_PINK_FLOWER_SPAWNED_FROM_MAD_SCRUB:
-            case TYPE_GOLD_FLOWER_SPAWNED_FROM_MAD_SCRUB:
+            case DEKU_FLOWER_TYPE_PINK_SPAWNED_FROM_MAD_SCRUB:
+            case DEKU_FLOWER_TYPE_GOLD_SPAWNED_FROM_MAD_SCRUB:
                 SkelAnime_ChangeAnim(&this->skelAnime, &D_0400EB7C, 1.0f, 0.0f,
                                      SkelAnime_GetFrameCount(&D_0400EB7C.common), 2, 0.0f);
                 this->dyna.actor.draw = ObjEtcetera_DrawAnimated;
