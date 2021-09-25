@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-#define OBJETCETERA_TYPE(thisx) (((thisx)->params & 0xFF80) >> 7)
+#define DEKU_FLOWER_TYPE(thisx) (((thisx)->params & 0xFF80) >> 7)
 
 typedef enum {
     /*  0   */ TYPE_PINK_FLOWER,

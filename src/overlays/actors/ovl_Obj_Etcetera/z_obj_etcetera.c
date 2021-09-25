@@ -74,7 +74,7 @@ void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     ObjEtcetera* this = THIS;
     s32 objectIndex;
-    ObjEtceteraType type = OBJETCETERA_TYPE(&this->dyna.actor);
+    ObjEtceteraType type = DEKU_FLOWER_TYPE(&this->dyna.actor);
     s32 floorBgId;
     Vec3f pos;
 
@@ -227,7 +227,7 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
     s32 pad;
     CollisionHeader* thisCollisionHeader;
 
-    type = OBJETCETERA_TYPE(&this->dyna.actor);
+    type = DEKU_FLOWER_TYPE(&this->dyna.actor);
     if ((type < TYPE_PINK_FLOWER) || (type >= NUMBER_OF_FLOWER_TYPES)) {
         type = TYPE_PINK_FLOWER;
     }
@@ -240,7 +240,7 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
             BgCheck_RelocateMeshHeader(thisCollisionHeader, &colHeader);
         }
         this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
-        type = OBJETCETERA_TYPE(&this->dyna.actor);
+        type = DEKU_FLOWER_TYPE(&this->dyna.actor);
         switch (type) {
             case TYPE_PINK_FLOWER:
             case TYPE_PINK_FLOWER_SPAWNED_FROM_MAD_SCRUB:
@@ -256,7 +256,7 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
                 this->collider.dim.height = 20;
                 break;
         }
-        type = OBJETCETERA_TYPE(&this->dyna.actor);
+        type = DEKU_FLOWER_TYPE(&this->dyna.actor);
         switch (type) {
             case TYPE_PINK_FLOWER:
             case TYPE_GOLD_FLOWER:
