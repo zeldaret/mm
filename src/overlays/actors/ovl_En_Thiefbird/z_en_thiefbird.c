@@ -165,7 +165,7 @@ void EnThiefbird_Init(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_060061A0, &D_06000604, this->jointTable, this->morphTable, 17);
     Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
 
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
         dim = &this->collider.elements[i].dim;
         dim->worldSphere.radius = dim->modelSphere.radius;
         dim->worldSphere.center.x = this->actor.world.pos.x;
@@ -196,9 +196,9 @@ void func_80C10984(EnThiefbird* this, s32 arg1) {
     s32 i;
     EnThiefbirdUnkStruct* ptr = &this->unk_3F0[0];
 
-    for (i = 0; i < 0x28; i++, ptr++) {
+    for (i = 0; i < ARRAY_COUNT(this->unk_3F0); i++, ptr++) {
         if (ptr->unk_22 == 0) {
-            ptr->unk_22 = (s32)Rand_ZeroFloat(20.0f) + 0x28;
+            ptr->unk_22 = (s32)Rand_ZeroFloat(20.0f) + 40;
             ptr->unk_00.x = randPlusMinusPoint5Scaled(30.0f) + this->actor.focus.pos.x;
             ptr->unk_00.y = randPlusMinusPoint5Scaled(30.0f) + this->actor.focus.pos.y;
             ptr->unk_00.z = randPlusMinusPoint5Scaled(30.0f) + this->actor.focus.pos.z;
@@ -218,7 +218,7 @@ void func_80C10984(EnThiefbird* this, s32 arg1) {
 
 s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
     static UNK_TYPE D_80C13680[] = { &D_06004348, &D_06004B88, &D_060055E0 };
-    s32 itemFound = false;
+    s32 isItemFound = false;
     s32 phi_a3 = 0;
     s32 i = 18;
     s32 phi_t0_3;
@@ -226,7 +226,7 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
 
     for (; i < ARRAY_COUNT(gSaveContext.inventory.items); i++) {
         if ((gSaveContext.inventory.items[i] >= ITEM_BOTTLE) && (gSaveContext.inventory.items[i] <= ITEM_POTION_BLUE)) {
-            itemFound = true;
+            isItemFound = true;
             sp1E = gSaveContext.inventory.items[i];
             break;
         }
@@ -239,15 +239,15 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (itemFound && (phi_a3 != 0)) {
+    if (isItemFound && (phi_a3 != 0)) {
         if (Rand_ZeroOne() < 0.6f) {
-            itemFound = false;
+            isItemFound = false;
         } else {
             phi_a3 = 0;
         }
     }
 
-    if (itemFound) {
+    if (isItemFound) {
         func_801149A0(sp1E, i);
         this->unk_3E8 = &D_060033B0;
         if (!func_80152498(&globalCtx->msgCtx)) {
@@ -362,7 +362,7 @@ s32 func_80C10E98(GlobalContext* globalCtx) {
     i = sp5C - phi_s0_2;
     if (i) {}
     sp5C = phi_s0_2 * 50;
-    sp98 = sp98 - sp5C;
+    sp98 -= sp5C;
 
     func_80C10DE8(sp74, phi_s0_2, ITEM00_RUPEE_PURPLE);
     spA0 = sp98 / 20;
@@ -370,7 +370,7 @@ s32 func_80C10E98(GlobalContext* globalCtx) {
         spA0 = i;
     }
     i -= spA0;
-    sp98 = sp98 - (spA0 * 20);
+    sp98 -= spA0 * 20;
 
     func_80C10DE8(sp74, spA0, ITEM00_RUPEE_RED);
     phi_s2 = sp98 / 5;
@@ -378,7 +378,7 @@ s32 func_80C10E98(GlobalContext* globalCtx) {
         phi_s2 = i;
     }
     i -= phi_s2;
-    sp98 = sp98 - (phi_s2 * 5);
+    sp98 -= phi_s2 * 5;
 
     func_80C10DE8(sp74, phi_s2, ITEM00_RUPEE_BLUE);
     if (i < sp98) {
@@ -496,6 +496,7 @@ void func_80C11590(EnThiefbird* this, GlobalContext* globalCtx) {
     if (!Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_192, 5, 0x300, 0x10) && (sp38 != 0) &&
         (Rand_ZeroOne() < 0.1f)) {
         s16 yaw = Actor_YawToPoint(&this->actor, &this->actor.home.pos) - this->actor.shape.rot.y;
+
         if (yaw > 0) {
             this->unk_192 += Rand_S16Offset(4096, 4096);
         } else {
@@ -560,6 +561,7 @@ void func_80C1193C(EnThiefbird* this, GlobalContext* globalCtx) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.wallYaw, 6, 0x1000, 0x100);
     } else if (Actor_IsActorFacingLink(&this->actor, 0x3C00) || (this->actor.xzDistToPlayer > 120.0f)) {
         s16 rot = BINANG_ROT180(this->actor.yawTowardsPlayer - player->actor.shape.rot.y);
+
         if (rot > 0x4000) {
             rot = this->actor.yawTowardsPlayer + 0x3000;
         } else if (rot < -0x4000) {
@@ -653,7 +655,7 @@ void func_80C11DF0(EnThiefbird* this, GlobalContext* globalCtx) {
         this->actor.shape.rot.y += this->unk_192;
     }
 
-    if ((this->actor.bgCheckFlags & 1) || (this->actor.floorHeight == -32000.0f)) {
+    if ((this->actor.bgCheckFlags & 1) || (this->actor.floorHeight == BGCHECK_Y_MIN)) {
         for (i = 0; i < ARRAY_COUNT(this->unk_350); i++) {
             func_800B3030(globalCtx, &this->unk_350[i], &D_801D15B0, &D_801D15B0, 0x8C, 0, 0);
         }
@@ -742,7 +744,7 @@ void func_80C1215C(EnThiefbird* this, GlobalContext* globalCtx) {
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_192, 6, 0x1000, 0x100);
     Math_SmoothStepToS(&this->actor.shape.rot.x, this->unk_190, 5, 0x100, 0x10);
-    sp2C = (this->unk_18E * 153.6f) + 2048.0f;
+    sp2C = (this->unk_18E * 153.6f) + 0x800;
     this->actor.shape.rot.z = Math_SinS(this->unk_18E * 0x1999) * sp2C;
     if (this->unk_18E == 0) {
         if (this->unk_3E8 != 0) {
@@ -947,7 +949,7 @@ void func_80C12B1C(EnThiefbird* this, GlobalContext* globalCtx) {
             if (i != ARRAY_COUNT(this->colliderElements)) {
                 sph = &this->collider.elements[i];
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, sph->info.bumper.hitPos.x,
-                            sph->info.bumper.hitPos.y, sph->info.bumper.hitPos.z, 0, 0, 0, 4);
+                            sph->info.bumper.hitPos.y, sph->info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
             }
         } else if (this->actor.colChkInfo.damageEffect == 2) {
             this->unk_18C = 0;
@@ -992,14 +994,14 @@ void func_80C12D00(EnThiefbird* this) {
                 ptr->unk_0C.y = -0.5f;
             }
 
-            if (i & 1) {
+            if ((i % 2) != 0) {
                 phi_f20 = -1.0f;
             } else {
                 phi_f20 = 1.0f;
             }
 
-            ptr->unk_20 = Math_SinS(ptr->unk_1C * 0x7D0) * 8192.0f;
-            ptr->unk_1E += (s16)(1638.0f * fabsf(Math_SinS(ptr->unk_1C * 0xBB8)) * phi_f20);
+            ptr->unk_20 = Math_SinS(ptr->unk_1C * 0x7D0) * 0x2000;
+            ptr->unk_1E += (s16)(0x666 * fabsf(Math_SinS(ptr->unk_1C * 0xBB8)) * phi_f20);
         }
     }
 }
@@ -1063,7 +1065,7 @@ s32 EnThiefbird_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** 
 
 void EnThiefbird_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static s8 D_80C13698[] = {
-        -1, 0, -1, 1, 3, -1, 2, 5, -1, -1, 7, 8, 9, -1, -1, 10, -1, 0, 0, 0,
+        -1, 0, -1, 1, 3, -1, 2, 5, -1, -1, 7, 8, 9, -1, -1, 10, -1,
     };
     EnThiefbird* this = THIS;
     s32 pad;
