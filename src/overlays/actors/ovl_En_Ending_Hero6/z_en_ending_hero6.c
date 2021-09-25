@@ -1,3 +1,9 @@
+/*
+ * File: z_en_ending_hero6.c
+ * Overlay: ovl_En_Ending_Hero6
+ * Description:
+ */
+
 #include "z_en_ending_hero6.h"
 
 #define FLAGS 0x00000009
@@ -71,7 +77,7 @@ void EnEndingHero6_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;
     SkelAnime_InitSV(globalCtx, &this->skelAnime, sSkeletons[this->npcIndex], sAnimations[this->npcIndex],
-                     this->limbDrawTable, this->transitionDrawTable, sLimbCounts[this->npcIndex]);
+                     this->jointTable, this->morphTable, sLimbCounts[this->npcIndex]);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
     func_80C23DDC(this);
 }
@@ -114,7 +120,7 @@ void EnEndingHero6_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1DU);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
 }
 
 void EnEndingHero6_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
