@@ -189,12 +189,12 @@ void EnPoh_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80B2C910(Vec3f* vec, GlobalContext* globalCtx) {
-    Camera* camera = ACTIVE_CAM;
+    Camera* activeCam = ACTIVE_CAM;
     Vec3f sp20;
     f32 temp_f0;
 
-    if (camera != NULL) {
-        Math_Vec3f_Diff(&camera->eye, &camera->at, &sp20);
+    if (activeCam != NULL) {
+        Math_Vec3f_Diff(&activeCam->eye, &activeCam->at, &sp20);
         temp_f0 = Math3D_Vec3fMagnitude(&sp20);
         if (temp_f0 > 1.0f) {
             temp_f0 = 11.0f / temp_f0;
@@ -216,7 +216,7 @@ void func_80B2C9B8(EnPoh* this, GlobalContext* globalCtx) {
         this->unk_18D--;
     }
 
-    if (!this->unk_18D) {
+    if (this->unk_18D == 0) {
         this->unk_18D = 32;
     }
 }
@@ -415,7 +415,7 @@ void func_80B2D300(EnPoh* this, GlobalContext* globalCtx) {
     if (this->unk_18E < 8) {
         sp38 = func_800DFCDC(ACTIVE_CAM) + 0x4800;
         if (this->unk_18E < 5) {
-            sp3A = (this->unk_18E * 4096) - 0x4000;
+            sp3A = (this->unk_18E * 0x1000) - 0x4000;
             sp44.y = (Math_SinS(sp3A) * 23.0f) + (this->actor.world.pos.y + 40.0f);
             sp40 = Math_CosS(sp3A) * 23.0f;
             sp44.x = (Math_SinS(sp38) * sp40) + this->actor.world.pos.x;
@@ -511,7 +511,7 @@ void func_80B2D7D4(EnPoh* this, GlobalContext* globalCtx) {
     }
 
     func_80B2C9B8(this, globalCtx);
-    this->unk_197 = this->unk_18C * 7.96875f;
+    this->unk_197 = this->unk_18C * (255.0f / 32.0f);
     if (this->unk_18C == 0) {
         this->unk_190 = Rand_S16Offset(100, 50);
         this->colliderCylinder.info.bumper.dmgFlags = 0x40001;
@@ -537,11 +537,11 @@ void func_80B2D980(EnPoh* this, GlobalContext* globalCtx) {
     }
 
     func_80B2C9B8(this, globalCtx);
-    this->unk_197 = this->unk_18C * 7.96875f;
+    this->unk_197 = this->unk_18C * (255.0f / 32.0f);
     if (this->unk_18C == 32) {
         this->unk_190 = Rand_S16Offset(700, 300);
         this->unk_18C = 0;
-        this->colliderCylinder.info.bumper.dmgFlags = 0xF7CBFFFE;
+        this->colliderCylinder.info.bumper.dmgFlags = ~0x8340001;
         func_80B2CB60(this);
     }
 }
@@ -559,7 +559,7 @@ void func_80B2DB44(EnPoh* this, GlobalContext* globalCtx) {
     f32 sp24;
 
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-    sp24 = Math_SinS(this->unk_18D * 2048) * 3.0f;
+    sp24 = Math_SinS(this->unk_18D * 0x800) * 3.0f;
     this->actor.world.pos.x -= sp24 * Math_CosS(this->actor.shape.rot.y);
     this->actor.world.pos.z += sp24 * Math_SinS(this->actor.shape.rot.y);
     Math_ScaledStepToS(&this->actor.world.rot.y, BINANG_ROT180(this->actor.yawTowardsPlayer), 0x71C);
@@ -591,7 +591,7 @@ void func_80B2DC50(EnPoh* this, GlobalContext* globalCtx) {
 }
 
 void func_80B2DD2C(EnPoh* this, GlobalContext* globalCtx) {
-    if ((this->actor.bgCheckFlags & 1) || (this->actor.floorHeight <= -32000.0f)) {
+    if ((this->actor.bgCheckFlags & 1) || (this->actor.floorHeight <= BGCHECK_Y_MIN)) {
         EffectSsHahen_SpawnBurst(globalCtx, &this->actor.world.pos, 6.0f, 0, 1, 1, 15, OBJECT_PO, 10, D_06002D28);
         func_80B2E0B0(this);
     }
@@ -606,20 +606,20 @@ void func_80B2DDF8(EnPoh* this, s32 arg1) {
     this->unk_197 = CLAMP(this->unk_197 + arg1, 0, 255);
 
     if (arg1 < 0) {
-        temp_f2 = this->unk_197 * 0.003921569f;
+        temp_f2 = this->unk_197 * (1.0f / 255.0f);
         this->actor.scale.x = this->actor.scale.z = (0.0056000003f * temp_f2) + 0.0014000001f;
         this->actor.scale.y = (0.007f - (0.007f * temp_f2)) + 0.007f;
     } else {
         temp_f2 = 1.0f;
-        this->actor.scale.x = this->actor.scale.y = this->actor.scale.z = this->unk_197 * 0.000027450982f;
-        this->actor.world.pos.y = this->actor.home.pos.y + (0.05882353f * this->unk_197);
+        this->actor.scale.x = this->actor.scale.y = this->actor.scale.z = this->unk_197 * (7.0f / (255.0f * 1000));
+        this->actor.world.pos.y = this->actor.home.pos.y + ((15.0f / 255.0f) * this->unk_197);
     }
 
     this->unk_194 = 100.0f * temp_f2;
     this->unk_195 = 0;
     this->unk_196 = 150.0f * temp_f2;
     Lights_PointNoGlowSetInfo(&this->lightInfo, this->actor.world.pos.x, this->actor.world.pos.y,
-                              this->actor.world.pos.z, 100, 0, 150, this->unk_197 * 0.78431374f);
+                              this->actor.world.pos.z, 100, 0, 150, this->unk_197 * (200.0f / 255.0f));
 }
 
 void func_80B2E0B0(EnPoh* this) {
@@ -673,18 +673,18 @@ void func_80B2E230(EnPoh* this, GlobalContext* globalCtx) {
     }
 
     func_800B8A1C(&this->actor, globalCtx, 0xBA, 35.0f, 60.0f);
-    this->actor.world.pos.y = (Math_SinS(this->unk_18D * 2048) * 5.0f) + this->actor.home.pos.y;
+    this->actor.world.pos.y = (Math_SinS(this->unk_18D * 0x800) * 5.0f) + this->actor.home.pos.y;
     if (this->unk_18D) {
         this->unk_18D--;
     }
 
-    if (!this->unk_18D) {
+    if (this->unk_18D == 0) {
         this->unk_18D = 32;
     }
 
     Actor_SetHeight(&this->actor, -10.0f);
     Lights_PointNoGlowSetInfo(&this->lightInfo, this->actor.world.pos.x, this->actor.world.pos.y,
-                              this->actor.world.pos.z, 0x64, 0, 0x96, this->unk_197 * 0.78431374f);
+                              this->actor.world.pos.z, 100, 0, 150, this->unk_197 * (40.0f / 51.0f));
 }
 
 void func_80B2E3B0(EnPoh* this) {
@@ -845,12 +845,12 @@ void EnPoh_Update(Actor* thisx, GlobalContext* globalCtx2) {
     if (this->unk_298 > 0.0f) {
         Math_StepToF(&this->unk_298, 0.0f, 0.05f);
         if (this->unk_197 != 255) {
-            if (this->unk_197 * 0.003921569f < this->unk_197) {
-                this->unk_298 = this->unk_197 * 0.003921569f;
+            if (this->unk_197 * (1.0f / 255.0f) < this->unk_197) {
+                this->unk_298 = this->unk_197 * (1.0f / 255.0f);
             }
         }
 
-        this->unk_29C = (this->unk_298 + 1.0f) * 0.225f;
+        this->unk_29C = (this->unk_298 + 1.0f) * (9.0f / 40.0f);
         this->unk_29C = CLAMP_MAX(this->unk_29C, 0.45f);
     }
 }
@@ -873,7 +873,7 @@ s32 EnPoh_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
 
 void EnPoh_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     static s8 D_80B2F71C[] = {
-        -1, -1, -1, -1, 4, 5, -1, -1, -1, 0, 1, -1, -1, -1, -1, -1, 2, -1, -1, 3, -1, 0, 0, 0,
+        -1, -1, -1, -1, 4, 5, -1, -1, -1, 0, 1, -1, -1, -1, -1, -1, 2, -1, -1, 3, -1,
     };
     static Vec3f D_80B2F734[] = {
         { -600.0f, 500.0f, 1700.0f },
@@ -900,7 +900,7 @@ void EnPoh_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
         Lights_PointGlowSetInfo(&this->lightInfo, this->colliderSph.elements[0].dim.worldSphere.center.x + (s32)sp60.x,
                                 this->colliderSph.elements[0].dim.worldSphere.center.y + (s32)sp60.y,
                                 this->colliderSph.elements[0].dim.worldSphere.center.z + (s32)sp60.z, this->unk_198,
-                                this->unk_199, this->unk_19A, this->unk_19B * 0.78431374f);
+                                this->unk_199, this->unk_19A, this->unk_19B * (200.0f / 255.0f));
     }
 
     temp_s3 = D_80B2F71C[limbIndex];
