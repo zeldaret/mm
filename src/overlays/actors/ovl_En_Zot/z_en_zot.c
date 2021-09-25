@@ -311,10 +311,10 @@ s32 func_80B96E5C(EnZot* this) {
     temp_f14 = points->z - this->actor.world.pos.z;
     this->actor.world.rot.y = Math_Atan2S(temp_f12, temp_f14);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, 2000, 200);
-    phi_f2 = SQ(this->actor.speedXZ) * 9.0f;
+    phi_f2 = SQ(this->actor.speedXZ) * SQ(3.0f);
 
     if (this->unk_2D4 == 0) {
-        phi_f2 = 400.0f;
+        phi_f2 = SQ(20.0f);
     }
 
     if ((SQ(temp_f12) + SQ(temp_f14)) < phi_f2) {
@@ -345,7 +345,7 @@ s32 func_80B96FB0(EnZot* this) {
     this->actor.world.rot.y = Math_Atan2S(temp_f12, temp_f14);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, 2000, 200);
 
-    if ((SQ(temp_f12) + SQ(temp_f14)) < 100.0f) {
+    if ((SQ(temp_f12) + SQ(temp_f14)) < SQ(10.0f)) {
         if (this->unk_2F2 & 0x20) {
             this->unk_2D4--;
             if (this->unk_2D4 < 0) {
@@ -372,7 +372,7 @@ void func_80B97100(EnZot* this, GlobalContext* globalCtx) {
 void func_80B97110(EnZot* this, GlobalContext* globalCtx) {
     u16 textId;
 
-    if (gSaveContext.playerForm == 2) {
+    if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
         textId = 0x125F;
         if (gSaveContext.weekEventReg[28] & 0x80) {
             textId = 0x1261;
@@ -423,7 +423,7 @@ void func_80B972E8(EnZot* this, GlobalContext* globalCtx) {
     u16 textId;
 
     if (gSaveContext.weekEventReg[29] & 0x10) {
-        if (gSaveContext.playerForm == 2) {
+        if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
             textId = 0x126A;
             if (gSaveContext.weekEventReg[29] & 1) {
                 textId = 0x126D;
@@ -438,7 +438,7 @@ void func_80B972E8(EnZot* this, GlobalContext* globalCtx) {
                 gSaveContext.weekEventReg[29] |= 2;
             }
         }
-    } else if (gSaveContext.playerForm == 2) {
+    } else if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
         textId = 0x1265;
         if (gSaveContext.weekEventReg[29] & 4) {
             textId = 0x1266;
@@ -1356,14 +1356,11 @@ void EnZot_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 Gfx* func_80B99580(GraphicsContext* gfxCtx) {
-    Gfx* gfx = gfxCtx->polyOpa.d;
+    Gfx* dList = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 2);
 
-    gfx -= 2;
-    gfxCtx->polyOpa.d = gfx;
+    gSPEndDisplayList(dList);
 
-    gSPEndDisplayList(gfx);
-
-    return gfx;
+    return dList;
 }
 
 s32 EnZot_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
