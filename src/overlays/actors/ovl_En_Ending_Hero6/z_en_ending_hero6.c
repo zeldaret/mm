@@ -13,7 +13,38 @@ void func_80C23D60(EnEndingHero6* this, s32 npcIndex);
 void func_80C23DDC(EnEndingHero6* this);
 void func_80C23E18(EnEndingHero6* this, GlobalContext* globalCtx);
 
-#if 0
+extern FlexSkeletonHeader D_0600B0CC; // object_dt
+extern FlexSkeletonHeader D_06007908; // object_bai
+extern FlexSkeletonHeader D_06007150; // object_toryo
+extern FlexSkeletonHeader D_0600D640; // object_sdn
+extern FlexSkeletonHeader D_0600A850; // object_daiku
+extern FlexSkeletonHeader D_0600A850;
+
+extern AnimationHeader D_06000BE0; // object_dt
+extern AnimationHeader D_060011C0; // object_bai
+extern AnimationHeader D_06000E50; // object_toryo
+extern AnimationHeader D_06002A84; // object_sdn
+extern AnimationHeader D_06002FA0; // object_daiku
+extern AnimationHeader D_06002FA0;
+
+// object_daiku
+extern Gfx D_060070C0[];
+extern Gfx D_06006FB0[];
+extern Gfx D_06006E80[];
+extern Gfx D_06006D70[];
+extern Gfx D_0600A390[];
+
+// object_dt
+extern TexturePtr D_06007350;
+extern TexturePtr D_06009590;
+extern TexturePtr D_06009F90;
+extern TexturePtr D_0600A790;
+extern TexturePtr D_0600AB90;
+
+extern TexturePtr D_06007750;
+// extern TexturePtr D_0600A390;
+extern TexturePtr D_0600A490;
+
 const ActorInit En_Ending_Hero6_InitVars = {
     ACTOR_EN_ENDING_HERO6,
     ACTORCAT_NPC,
@@ -25,19 +56,14 @@ const ActorInit En_Ending_Hero6_InitVars = {
     (ActorFunc)EnEndingHero6_Update,
     (ActorFunc)EnEndingHero6_Draw,
 };
-#endif
 
-extern FlexSkeletonHeader* D_80C24200[];
-extern AnimationHeader* D_80C24224[];
+static FlexSkeletonHeader* D_80C24200[] = { &D_0600B0CC, &D_06007908, &D_06007150, &D_0600D640, &D_0600A850,
+                                            &D_0600A850, &D_0600A850, &D_0600A850, &D_0600A850 };
 
-extern s32 D_80C24248[];
+static AnimationHeader* D_80C24224[] = { &D_06000BE0, &D_060011C0, &D_06000E50, &D_06002A84, &D_06002FA0,
+                                         &D_06002FA0, &D_06002FA0, &D_06002FA0, &D_06002FA0 };
 
-// object_daiku
-extern Gfx* D_80C2426C[];
-
-// object_dt
-extern TexturePtr D_80C24280[];
-extern TexturePtr D_80C24294[];
+static s32 D_80C24248[] = { 15, 20, 17, 17, 17, 17, 17, 17, 17 };
 
 void EnEndingHero6_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnEndingHero6* this = THIS;
@@ -94,6 +120,7 @@ void EnEndingHero6_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80C23F14(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    static Gfx* D_80C2426C[] = { D_060070C0, D_06006FB0, D_06006E80, D_06006D70, D_0600A390 };
     EnEndingHero6* this = THIS;
     s32 index;
 
@@ -108,6 +135,8 @@ void func_80C23F14(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 }
 
 void EnEndingHero6_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    static TexturePtr D_80C24280[] = { &D_06007350, &D_06009590, &D_06009F90, &D_0600A790, &D_0600AB90 };
+    static TexturePtr D_80C24294[] = { &D_06007750, &D_0600A390, &D_0600A490 };
     EnEndingHero6* this = THIS;
     s32 pad;
     s32 index = 0;
