@@ -74,7 +74,7 @@ void ObjEtcetera_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     ObjEtcetera* this = THIS;
     s32 objectIndex;
-    DekuFlowerType type = DEKU_FLOWER_TYPE(&this->dyna.actor);
+    s32 type = DEKU_FLOWER_TYPE(&this->dyna.actor);
     s32 floorBgId;
     Vec3f pos;
 
@@ -222,7 +222,7 @@ void ObjEtcetera_DoIntenseOscillation(ObjEtcetera* this, GlobalContext* globalCt
 
 void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
     CollisionHeader* colHeader = NULL;
-    DekuFlowerType type;
+    s32 type;
     CollisionHeader* collisionHeaders[] = { &D_0400E710, &D_0400E710, &D_040118D8, &D_040118D8 };
     s32 pad;
     CollisionHeader* thisCollisionHeader;
@@ -231,6 +231,7 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
     if ((type < DEKU_FLOWER_TYPE_PINK) || (type >= DEKU_FLOWER_TYPE_MAX)) {
         type = DEKU_FLOWER_TYPE_PINK;
     }
+
     if (Object_IsLoaded(&globalCtx->objectCtx, this->objIndex)) {
         this->dyna.actor.objBankIndex = this->objIndex;
         Actor_SetObjectSegment(globalCtx, &this->dyna.actor);
@@ -240,6 +241,7 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
             BgCheck_RelocateMeshHeader(thisCollisionHeader, &colHeader);
         }
         this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
+
         type = DEKU_FLOWER_TYPE(&this->dyna.actor);
         switch (type) {
             case DEKU_FLOWER_TYPE_PINK:
@@ -256,6 +258,7 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
                 this->collider.dim.height = 20;
                 break;
         }
+
         type = DEKU_FLOWER_TYPE(&this->dyna.actor);
         switch (type) {
             case DEKU_FLOWER_TYPE_PINK:
