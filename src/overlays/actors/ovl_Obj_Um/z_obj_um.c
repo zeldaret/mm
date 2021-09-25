@@ -1525,7 +1525,7 @@ void func_80B7AD34(ObjUm* this, GlobalContext* globalCtx) {
         ActorCutscene_Stop((s16) this->dyna.actor.cutscene);
         func_801A3F54(0);
         gSaveContext.weekEventReg[0x3B] |= 2;
-        gSaveContext.unk_3F4A = 0xFFF3;
+        gSaveContext.nextCutsceneIndex = 0xFFF3;
         globalCtx->nextEntranceIndex = 0x5400;
         globalCtx->unk_1887F = 0x40;
         gSaveContext.nextTransition = 3;
