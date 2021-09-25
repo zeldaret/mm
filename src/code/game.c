@@ -68,14 +68,14 @@ void Game_Nop80173534(GameState* gamestate) {
 
 void GameState_Draw(GameState* gamestate, GraphicsContext* gfxCtx) {
     Gfx* nextDisplayList;
-    Gfx* _polyOpa;
-    // Unused vars impact regalloc
-    Gfx* temp_t2;
-    u32 temp_v1;
+    Gfx* polyOpa;
 
-    _polyOpa = gfxCtx->polyOpa.p;
-    nextDisplayList = Graph_GfxPlusOne(gfxCtx->polyOpa.p);
-    gSPDisplayList(gfxCtx->overlay.p++, nextDisplayList);
+    OPEN_DISPS(gfxCtx);
+
+    polyOpa = POLY_OPA_DISP;
+    nextDisplayList = Graph_GfxPlusOne(POLY_OPA_DISP);
+
+    gSPDisplayList(OVERLAY_DISP++, nextDisplayList);
 
     if (R_FB_FILTER_TYPE && R_FB_FILTER_ENV_COLOR(3) == 0) {
         GameState_SetFBFilter(&nextDisplayList, (u32)gfxCtx->zbuffer);
@@ -86,8 +86,8 @@ void GameState_Draw(GameState* gamestate, GraphicsContext* gfxCtx) {
     }
 
     gSPEndDisplayList(nextDisplayList++);
-    Graph_BranchDlist(_polyOpa, nextDisplayList);
-    gfxCtx->polyOpa.p = nextDisplayList;
+    Graph_BranchDlist(polyOpa, nextDisplayList);
+    POLY_OPA_DISP = nextDisplayList;
 
     // Block prevents reordering, if(1) around the above block don't seem to help unlike in OoT
     {
@@ -99,6 +99,8 @@ void GameState_Draw(GameState* gamestate, GraphicsContext* gfxCtx) {
         SpeedMeter_DrawTimeEntries(&D_801F7FF0, gfxCtx);
         SpeedMeter_DrawAllocEntries(&D_801F7FF0, gfxCtx, gamestate);
     }
+
+    CLOSE_DISPS(gfxCtx);
 }
 
 void Game_ResetSegments(GraphicsContext* gfxCtx) {
