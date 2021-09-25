@@ -166,7 +166,7 @@ void func_808D8940(EnSw* this, GlobalContext* globalCtx) {
     s32 temp_f4;
     s16 temp_s0;
 
-    temp_s0 = (Rand_ZeroOne() - 0.5f) * 65536.0f;
+    temp_s0 = (Rand_ZeroOne() - 0.5f) * 0x10000;
     spA0.y = this->actor.floorHeight;
 
     for (i = 0; i < 8; i++, temp_s0 += 0x1FFE) {
@@ -311,7 +311,7 @@ s32 func_808D91C4(EnSw* this, CollisionPoly* arg1) {
         return false;
     }
 
-    temp_f12 = (sp38.x * this->unk_368.x) + (sp38.y * this->unk_368.y) + (sp38.z * this->unk_368.z);
+    temp_f12 = DOTXYZ(sp38, this->unk_368.x);
     if (fabsf(temp_f12) >= 0.999f) {
         return false;
     }
@@ -515,7 +515,7 @@ s32 func_808D99C8(EnSw* this, GlobalContext* globalCtx) {
         return false;
     }
 
-    if ((this->actor.xyzDistToPlayerSq < ((sREG(16) * 10) + 0xEA60)) && (globalCtx->actorCtx.unk1F5 != 0) &&
+    if ((this->actor.xyzDistToPlayerSq < ((sREG(16) * 10) + 60000)) && (globalCtx->actorCtx.unk1F5 != 0) &&
         (globalCtx->actorCtx.unk1F4 == 0)) {
         this->actor.colChkInfo.damage = 4;
         phi_v1 = true;
@@ -676,7 +676,7 @@ s32 func_808DA08C(EnSw* this, GlobalContext* globalCtx) {
 
         if (this->actor.colChkInfo.damageEffect == 4) {
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
-                        this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 4);
+                        this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
         }
 
         if (this->unk_412 == 10) {
