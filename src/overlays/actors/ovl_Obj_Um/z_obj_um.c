@@ -299,9 +299,9 @@ s32 ObjUm_InitBandits(ObjUm* this, GlobalContext* globalCtx) {
     bandit2->unk_588 = this->dyna.actor.shape.rot.y;
     bandit2->curRaceWaypoint = 2;
 
-    this->unk_314[0] = 4;
-    this->unk_314[1] = 4;
-    this->unk_314[2] = 4;
+    this->potsLife[0] = 4;
+    this->potsLife[1] = 4;
+    this->potsLife[2] = 4;
 
     return 0;
 }
@@ -456,33 +456,33 @@ s32 func_80B78764(ObjUm* this, GlobalContext* globalCtx, EnHorse* arg2, EnHorse*
 
         if ((arg2->unk_550 == 3) && !(this->flags & OBJ_UM_FLAG_2000)) {
             s32 phi_v1_2 = -1;
-            if (this->unk_314[0] != 1) {
+            if (this->potsLife[0] != 1) {
                 phi_v1_2 = 0;
             }
 
-            if (this->unk_314[1] != 1) {
+            if (this->potsLife[1] != 1) {
                 if ((phi_v1_2 == -1) || (phi_v1_2 == 0 && Rand_ZeroOne() < 0.3f)) {
                     phi_v1_2 = 1;
                 }
             }
 
-            if (this->unk_314[2] != 1) {
+            if (this->potsLife[2] != 1) {
                 if ((phi_v1_2 == -1) || (phi_v1_2 != -1 && Rand_ZeroOne() < 0.3f)) {
                     phi_v1_2 = 2;
                 }
             }
 
-            if (this->unk_314[phi_v1_2] != 1) {
+            if (this->potsLife[phi_v1_2] != 1) {
                 this->unk_320[phi_v1_2] = true;
-                if (this->unk_314[phi_v1_2] == 2) {
+                if (this->potsLife[phi_v1_2] == 2) {
                     func_8019F1C0(&this->unk_32C[phi_v1_2], NA_SE_EV_MILK_POT_BROKEN);
                 } else {
                     func_8019F1C0(&this->unk_32C[phi_v1_2], NA_SE_EV_MILK_POT_DAMAGE);
                 }
 
-                this->unk_314[phi_v1_2]--;
-                if (this->unk_314[phi_v1_2] <= 0) {
-                    this->unk_314[phi_v1_2] = 1;
+                this->potsLife[phi_v1_2]--;
+                if (this->potsLife[phi_v1_2] <= 0) {
+                    this->potsLife[phi_v1_2] = 1;
                 }
             }
         }
@@ -606,7 +606,7 @@ void ObjUm_SetupAction(ObjUm* this, ObjUmActionFunc actionFunc) {
 void ObjUm_SetPlayerPosition(ObjUm* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
-    if (this->flags & OBJ_UM_FLAG_0020) {
+    if (this->flags & OBJ_UM_FLAG_DRAWN_FLOOR) {
         player->actor.world.pos = this->unk_308;
         player->actor.prevPos = this->unk_308;
     }
@@ -656,7 +656,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_308 = this->dyna.actor.world.pos;
 
     for (i = 0; i < 3; i++) {
-        this->unk_314[i] = 5;
+        this->potsLife[i] = 5;
         this->unk_320[i] = false;
         this->unk_32C[i] = D_801D15B0;
     }
@@ -684,12 +684,8 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     // if (!AliensDefeated)
     if (!(gSaveContext.weekEventReg[0x16] & 1)) {
-
-#ifndef NOT_DEBUG_PRINT
-#else
         Actor_MarkForDeath(&this->dyna.actor);
         return;
-#endif
     }
 
     if (this->type == OBJ_UM_TYPE_TERMINA_FIELD) {
@@ -992,7 +988,7 @@ void ObjUm_RanchWait(ObjUm* this, GlobalContext* globalCtx) {
     this->dyna.actor.flags |= 1;
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     ObjUm_UpdateAnim(this, globalCtx, 2);
-    this->flags |= OBJ_UM_FLAG_0008;
+    this->flags |= OBJ_UM_FLAG_WAITING;
     if (gSaveContext.time > CLOCK_TIME(18, 0) && gSaveContext.time <= CLOCK_TIME(19, 0)) {
         if (!(player->stateFlags1 & 0x800000)) {
             func_80B7984C(globalCtx, this, 0, &this->unk_2B4);
@@ -1133,7 +1129,7 @@ ObjUmPathState ObjUm_UpdatePath(ObjUm* this, GlobalContext* globalCtx) {
 
 void func_80B79F10(ObjUm* this, GlobalContext* globalCtx) {
     this->unk_2AC += 1000;
-    this->flags &= ~OBJ_UM_FLAG_0008;
+    this->flags &= ~OBJ_UM_FLAG_WAITING;
     ObjUm_UpdateAnim(this, globalCtx, 0);
 
     switch (ObjUm_UpdatePath(this, globalCtx)) {
@@ -1345,7 +1341,7 @@ void func_80B7A614(ObjUm* this, GlobalContext* globalCtx) {
             this->arePotsBroken = true;
 
             for (i = 0; i != 3; i++) {
-                if (this->unk_314[i] != 1) {
+                if (this->potsLife[i] != 1) {
                     this->arePotsBroken = false;
                     break;
                 }
@@ -1416,6 +1412,7 @@ void func_80B7A860(ObjUm* this, GlobalContext* globalCtx) {
             this->mouthTexIndex = 3;
             break;
 
+        // "We'll go through here as fast as we can"
         case 0x33BB:
             if (IS_ZERO(this->skelAnime.animCurrentFrame) && !(this->flags & OBJ_UM_FLAG_1000)) {
                 this->flags |= OBJ_UM_FLAG_1000;
@@ -1432,6 +1429,7 @@ void func_80B7A860(ObjUm* this, GlobalContext* globalCtx) {
             this->flags |= OBJ_UM_FLAG_0800;
             break;
 
+        // "Chase pursuers with your arrows"
         case 0x33BC:
             if (IS_ZERO(this->skelAnime.animCurrentFrame) && !(this->flags & OBJ_UM_FLAG_1000)) {
                 this->flags |= OBJ_UM_FLAG_1000;
@@ -1447,6 +1445,7 @@ void func_80B7A860(ObjUm* this, GlobalContext* globalCtx) {
             this->flags |= OBJ_UM_FLAG_0800;
             break;
 
+        // "Understand?"
         case 0x33BD:
             if (IS_ZERO(this->skelAnime.animCurrentFrame) && !(this->flags & OBJ_UM_FLAG_1000)) {
                 this->flags |= OBJ_UM_FLAG_1000;
@@ -1711,7 +1710,7 @@ void ObjUm_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->flags &= ~OBJ_UM_FLAG_0010;
     }
     else if (this->flags & OBJ_UM_FLAG_0004) {
-        func_80123F2C(globalCtx, ~2);
+        func_80123F2C(globalCtx, ~0x02);
         this->flags &= ~OBJ_UM_FLAG_0004;
     }
 
@@ -1792,6 +1791,7 @@ s32 ObjUm_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
+
     if (limbIndex == UM_LIMB_WAGGON_RIGHT_WHEEL) {
         if (this->flags & OBJ_UM_FLAG_0002) {
             rot->x = -this->unk_2AC;
@@ -1802,7 +1802,7 @@ s32 ObjUm_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
             rot->x = this->unk_2AC;
         }
         SysMatrix_MultiplyVector3fByState(&sp50, &this->unk_2DC);
-    } else if ((limbIndex == UM_LIMB_CREMIA_HEAD) && (this->flags & OBJ_UM_FLAG_0008)) {
+    } else if ((limbIndex == UM_LIMB_CREMIA_HEAD) && (this->flags & OBJ_UM_FLAG_WAITING)) {
         if ((func_8013D5E8(this->dyna.actor.shape.rot.y, 0x4E20, this->dyna.actor.yawTowardsPlayer) != 0) && (this->dyna.actor.xzDistToPlayer < 500.0f)) {
             s16 sp3E;
             Vec3f sp30 = player->actor.world.pos;
@@ -1828,7 +1828,7 @@ s32 ObjUm_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
             rot->x = this->unk_2F8.x;
             rot->z = this->unk_2F8.z;
         }
-    } else if ((limbIndex == UM_LIMB_WAGGON_CART_COVER) && ((this->flags & OBJ_UM_FLAG_0080) != 0)) {
+    } else if ((limbIndex == UM_LIMB_WAGGON_CART_COVER) && (this->flags & OBJ_UM_FLAG_0080)) {
         *dList = NULL;
     }
 
@@ -1889,7 +1889,7 @@ void ObjUm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
         Vec3f spA4 = {2000.0f, 1070.0f, 0.0f};
 
         SysMatrix_MultiplyVector3fByState(&spA4, &this->unk_308);
-        this->flags |= OBJ_UM_FLAG_0020;
+        this->flags |= OBJ_UM_FLAG_DRAWN_FLOOR;
     }
 
     if (limbIndex == UM_LIMB_WAGGON_CART_BED) {
@@ -1914,9 +1914,9 @@ void ObjUm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 
         for (sp7C = 0; sp7C < 3; sp7C++) {
             sp88.z = sp70[sp7C];
-            sp88.y = spCC[this->unk_314[sp7C]];
+            sp88.y = spCC[this->potsLife[sp7C]];
 
-            if (this->unk_314[sp7C] == 5) {
+            if (this->potsLife[sp7C] == 5) {
                 sp80.y = 0x4000;
             } else {
                 sp80.y = -0x4000;
@@ -1930,7 +1930,7 @@ void ObjUm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
             SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->projectionMatrix, &spB4, new_var, &spB0);
             if (this->unk_320[sp7C]) {
                 this->unk_320[sp7C] = false;
-                if (this->unk_314[sp7C] == 1) {
+                if (this->potsLife[sp7C] == 1) {
                     func_80B7B93C(globalCtx, &spB4);
                 } else {
                     EffectSsHitMark_SpawnFixedScale(globalCtx, 0, &spB4);
@@ -1942,13 +1942,13 @@ void ObjUm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
                 if (globalCtx) {}
                 gSPMatrix(POLY_OPA_DISP++, mtx_s3, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                if (spFC[this->unk_314[sp7C]] != NULL) {
+                if (spFC[this->potsLife[sp7C]] != NULL) {
                     s32 pad;
 
-                    gSPDisplayList(POLY_OPA_DISP++, spFC[this->unk_314[sp7C]]);
+                    gSPDisplayList(POLY_OPA_DISP++, spFC[this->potsLife[sp7C]]);
 
-                    if (spE4[this->unk_314[sp7C]] != NULL) {
-                        gSPDisplayList(POLY_OPA_DISP++, spE4[this->unk_314[sp7C]]);
+                    if (spE4[this->potsLife[sp7C]] != NULL) {
+                        gSPDisplayList(POLY_OPA_DISP++, spE4[this->potsLife[sp7C]]);
                     }
                 }
             } else {
@@ -2010,11 +2010,15 @@ void ObjUm_PrintStruct(ObjUm* this, GlobalContext* globalCtx, GfxPrint* printer)
 
     GfxPrint_SetColor(printer, 255, 255, 255, 255);
 
+    GfxPrint_SetPos(printer, 28, 1);
+    GfxPrint_Printf(printer, "gTime:%X", gSaveContext.time);
+
     GfxPrint_SetPos(printer, x-7, ++y);
     GfxPrint_Printf(printer, "actionFunc:%X", ((u32)this->actionFunc - (u32)func_80B77770) + SEGMENT_START(ovl_Obj_Um));
 
-    GfxPrint_SetPos(printer, x-3, ++y);
-    GfxPrint_Printf(printer, "xAngle:%X", this->unk_2AC);
+    // GfxPrint_SetPos(printer, x-3, ++y);
+    // GfxPrint_Printf(printer, "xAngle:%X", this->unk_2AC);
+
     GfxPrint_SetPos(printer, x-1, ++y);
     GfxPrint_Printf(printer, "type:%X", this->type);
     GfxPrint_SetPos(printer, x, ++y);
@@ -2027,20 +2031,34 @@ void ObjUm_PrintStruct(ObjUm* this, GlobalContext* globalCtx, GfxPrint* printer)
     GfxPrint_SetPos(printer, x-5, ++y);
     GfxPrint_Printf(printer, "pointIdx:%X", this->pointIdx);
 
-    GfxPrint_SetPos(printer, x-2, ++y);
-    GfxPrint_Printf(printer, "flags:%X", this->flags);
+    // GfxPrint_SetPos(printer, x-2, ++y);
+    // GfxPrint_Printf(printer, "flags:%X", this->flags);
 
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "304:%X", this->unk_304);
 
-    GfxPrint_SetPos(printer, x-2, ++y);
-    GfxPrint_Printf(printer, "308.x:%f", this->unk_308.x);
+    // GfxPrint_SetPos(printer, x-2, ++y);
+    // GfxPrint_Printf(printer, "308.x:%f", this->unk_308.x);
+    // GfxPrint_SetPos(printer, x-2, ++y);
+    // GfxPrint_Printf(printer, "308.y:%f", this->unk_308.y);
+    // GfxPrint_SetPos(printer, x-2, ++y);
+    // GfxPrint_Printf(printer, "308.z:%f", this->unk_308.z);
+
+    if (this->type == OBJ_UM_TYPE_MILK_RUN_MINIGAME) {
+        GfxPrint_SetPos(printer, x-8, ++y);
+        GfxPrint_Printf(printer, "potsLife[0]:%i", this->potsLife[0]);
+        GfxPrint_SetPos(printer, x-8, ++y);
+        GfxPrint_Printf(printer, "potsLife[1]:%i", this->potsLife[1]);
+        GfxPrint_SetPos(printer, x-8, ++y);
+        GfxPrint_Printf(printer, "potsLife[2]:%i", this->potsLife[2]);
+    }
 
     GfxPrint_SetPos(printer, x-2, ++y);
-    GfxPrint_Printf(printer, "308.y:%f", this->unk_308.y);
-
+    GfxPrint_Printf(printer, "320[0]:%i", this->unk_320[0]);
     GfxPrint_SetPos(printer, x-2, ++y);
-    GfxPrint_Printf(printer, "308.z:%f", this->unk_308.z);
+    GfxPrint_Printf(printer, "320[1]:%i", this->unk_320[1]);
+    GfxPrint_SetPos(printer, x-2, ++y);
+    GfxPrint_Printf(printer, "320[2]:%i", this->unk_320[2]);
 
     GfxPrint_SetPos(printer, x-1, ++y);
     GfxPrint_Printf(printer, "time:%X", this->unk_4C8);
@@ -2054,25 +2072,54 @@ void ObjUm_PrintStruct(ObjUm* this, GlobalContext* globalCtx, GfxPrint* printer)
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "4DC:%X", this->unk_4DC);
 
-    GfxPrint_SetPos(printer, x-10, ++y);
-    GfxPrint_Printf(printer, "arePotsBroken:%s", BOOLSTR(this->arePotsBroken));
+    if (this->type == OBJ_UM_TYPE_MILK_RUN_MINIGAME) {
+        GfxPrint_SetPos(printer, x-10, ++y);
+        GfxPrint_Printf(printer, "arePotsBroken:%s", BOOLSTR(this->arePotsBroken));
+    }
 
+
+    y = 20;
+
+    GfxPrint_SetPos(printer, 1, ++y);
+    GfxPrint_Printf(printer, "Flags:");
+    GfxPrint_SetPos(printer, 1, ++y);
+    GfxPrint_Printf(printer, "   8 4 2 1");
+    GfxPrint_SetPos(printer, 1, ++y);
+    GfxPrint_Printf(printer, "1  %i %i %i %i", (this->flags & 0x08)>>3, (this->flags & 0x04)>>2, (this->flags & 0x02)>>1, this->flags & 0x01);
+    GfxPrint_SetPos(printer, 1, ++y);
+    GfxPrint_Printf(printer, "2  %i %i %i %i", (this->flags & 0x80)>>7, (this->flags & 0x40)>>6, (this->flags & 0x20)>>5, (this->flags & 0x10)>>4);
+    GfxPrint_SetPos(printer, 1, ++y);
+    GfxPrint_Printf(printer, "3  %i %i %i %i", (this->flags & 0x800)>>11, (this->flags & 0x400)>>10, (this->flags & 0x200)>>9, (this->flags & 0x100)>>8);
+    GfxPrint_SetPos(printer, 1, ++y);
+    GfxPrint_Printf(printer, "4      %i %i", (this->flags & 0x2000)>>13, (this->flags & 0x1000)>>12);
 }
 
 void ObjUm_DrawStruct(ObjUm* this, GlobalContext* globalCtx) {
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
     GfxPrint printer;
+    Gfx* gfxRef;
+    Gfx* gfx;
 
     OPEN_DISPS(gfxCtx);
 
     func_8012C4C0(gfxCtx);
 
     GfxPrint_Init(&printer);
-    GfxPrint_Open(&printer, POLY_XLU_DISP);
+
+    gfxRef = POLY_OPA_DISP;
+    gfx = Graph_GfxPlusOne(gfxRef);
+    gSPDisplayList(OVERLAY_DISP++, gfx);
+
+    GfxPrint_Open(&printer, gfx);
 
     ObjUm_PrintStruct(this, globalCtx, &printer);
 
-    POLY_XLU_DISP = GfxPrint_Close(&printer);
+    gfx = GfxPrint_Close(&printer);
+
+    gSPEndDisplayList(gfx++);
+    Graph_BranchDlist(gfxRef, gfx);
+    POLY_OPA_DISP = gfx;
+
     GfxPrint_Destroy(&printer);
 
     CLOSE_DISPS(gfxCtx);

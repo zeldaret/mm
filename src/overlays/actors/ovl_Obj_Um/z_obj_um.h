@@ -56,7 +56,7 @@ typedef struct ObjUm {
     /* 0x2FE */ Vec3s unk_2FE;
     /* 0x304 */ s32 unk_304;
     /* 0x308 */ Vec3f unk_308;
-    /* 0x314 */ s32 unk_314[3];
+    /* 0x314 */ s32 potsLife[3];
     /* 0x320 */ s32 unk_320[3];
     /* 0x32C */ Vec3f unk_32C[3];
     /* 0x350 */ s32 unk_350; // unused counter?
@@ -64,7 +64,7 @@ typedef struct ObjUm {
     /* 0x358 */ EnHorse* bandit1;
     /* 0x35C */ EnHorse* bandit2;
     /* 0x360 */ Vec3f unk_360[16];
-    /* 0x420 */ s32 unk_420;
+    /* 0x420 */ s32 unk_420; // ?
     /* 0x424 */ ColliderCylinder banditsCollisions[2];
     /* 0x4BC */ Vec3f unk_4BC;
     /* 0x4C8 */ u16 unk_4C8; // time?
@@ -90,18 +90,18 @@ typedef enum {
 
 #define OBJ_UM_FLAG_0000 0x0000
 #define OBJ_UM_FLAG_0001 0x0001
-#define OBJ_UM_FLAG_0002 0x0002
+#define OBJ_UM_FLAG_0002 0x0002 // moving animation?
 #define OBJ_UM_FLAG_0004 0x0004
-#define OBJ_UM_FLAG_0008 0x0008
+#define OBJ_UM_FLAG_WAITING 0x0008 // Waiting in the Ranch
 #define OBJ_UM_FLAG_0010 0x0010
-#define OBJ_UM_FLAG_0020 0x0020
+#define OBJ_UM_FLAG_DRAWN_FLOOR 0x0020
 #define OBJ_UM_FLAG_0040 0x0040
-#define OBJ_UM_FLAG_0080 0x0080
+#define OBJ_UM_FLAG_0080 0x0080 // DRAW_COVER?
 #define OBJ_UM_FLAG_0100 0x0100
-#define OBJ_UM_FLAG_0200 0x0200
-#define OBJ_UM_FLAG_0400 0x0400
+#define OBJ_UM_FLAG_0200 0x0200 // Something bandit1
+#define OBJ_UM_FLAG_0400 0x0400 // Something bandit2
 #define OBJ_UM_FLAG_0800 0x0800
 #define OBJ_UM_FLAG_1000 0x1000
-#define OBJ_UM_FLAG_2000 0x2000
+#define OBJ_UM_FLAG_2000 0x2000 // MINIGAME_FINISHED
 
 #endif // Z_OBJ_UM_H
