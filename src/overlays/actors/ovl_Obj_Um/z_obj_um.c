@@ -26,6 +26,9 @@ void func_80B7A7AC(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7AD34(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7AE58(ObjUm* this, GlobalContext* globalCtx);
 
+void ObjUm_StopAnim(ObjUm* this, GlobalContext* globalCtx);
+void ObjUm_UpdateAnim(ObjUm* this, GlobalContext* globalCtx, s32);
+
 void ObjUm_SetupAction(ObjUm* this, ObjUmActionFunc actionFunc);
 
 const ActorInit Obj_Um_InitVars = {
@@ -159,11 +162,6 @@ void func_80B7AB78(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7ABE4(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7AD34(ObjUm* this, GlobalContext* globalCtx);
 
-
-void ObjUm_StopAnim(ObjUm* this, GlobalContext* globalCtx);
-
-void ObjUm_UpdateAnim(ObjUm* this, GlobalContext* globalCtx, s32);
-
 void func_80B77770(ObjUm* this, GlobalContext* globalCtx) {
     s16 rotY = this->dyna.actor.shape.rot.y;
     Vec3f sp108;
@@ -252,7 +250,7 @@ void func_80B77770(ObjUm* this, GlobalContext* globalCtx) {
 }
 
 s32 ObjUm_InitBandits(ObjUm* this, GlobalContext* globalCtx) {
-    Path *path = &globalCtx->setupPathList[this->unk_2BC];
+    Path *path = &globalCtx->setupPathList[this->pathIdx];
     s16 pad;
     Vec3s* spawnPoints;
     EnHorse* bandit1;
@@ -269,7 +267,7 @@ s32 ObjUm_InitBandits(ObjUm* this, GlobalContext* globalCtx) {
     bandit1->unk_54C = 0xF;
     bandit1->unk_550 = 0xA;
 
-    bandit1->unk_554 = this->unk_2BC;
+    bandit1->unk_554 = this->pathIdx;
     bandit1->unk_568 = 0.0f;
     bandit1->unk_56C = 0.0f;
     bandit1->unk_558 = 0;
@@ -290,7 +288,7 @@ s32 ObjUm_InitBandits(ObjUm* this, GlobalContext* globalCtx) {
     bandit2->unk_54C = 0xF;
     bandit2->unk_550 = 8;
 
-    bandit2->unk_554 = this->unk_2BC;
+    bandit2->unk_554 = this->pathIdx;
     bandit2->unk_568 = 0.0f;
     bandit2->unk_56C = 0.0f;
     bandit2->unk_55C = 0x28;
@@ -365,7 +363,7 @@ s32 func_80B781DC(ObjUm* this, EnHorse* arg2, EnHorse* arg3, GlobalContext* glob
 }
 
 s32 func_80B783E0(ObjUm* this, GlobalContext* globalCtx, s32 arg2, EnHorse* arg3) {
-    Path* sp6C = &globalCtx->setupPathList[this->unk_2BC];
+    Path* sp6C = &globalCtx->setupPathList[this->pathIdx];
     s32 sp68;
     Vec3s* sp64;
     f32 phi_f12;
@@ -435,14 +433,12 @@ s32 func_80B783E0(ObjUm* this, GlobalContext* globalCtx, s32 arg2, EnHorse* arg3
     arg3->unk_570.y = arg3->actor.world.pos.y + (arg3->actor.velocity.y * 0.5f) + arg3->actor.colChkInfo.displacement.y;
     arg3->unk_570.z = arg3->actor.world.pos.z + (arg3->actor.velocity.z * 0.5f) + arg3->actor.colChkInfo.displacement.z;
 
-    phi_v1_2 = (s16) (arg3->actor.world.rot.y - arg3->actor.shape.rot.y);
+    phi_v1_2 = BINANG_SUB(arg3->actor.world.rot.y, arg3->actor.shape.rot.y);
 
     if (phi_v1_2 > 0x190) {
         phi_v1_2 = 0x190;
-    } else {
-        if (phi_v1_2 < -0x190) {
-            phi_v1_2 = -0x190;
-        }
+    } else if (phi_v1_2 < -0x190) {
+        phi_v1_2 = -0x190;
     }
 
     arg3->actor.shape.rot.y = arg3->actor.shape.rot.y + phi_v1_2;
@@ -675,8 +671,8 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     ActorShape_Init(&this->dyna.actor.shape, 0.0f, NULL, 50.0f);
-    SkelAnime_InitSV(globalCtx, &this->unk_160, &D_06011DF8, NULL, this->jointTable, this->morphTable, UM_LIMB_MAX);
-    SkelAnime_ChangeAnimDefaultRepeat(&this->unk_160, &D_06012CC0);
+    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06011DF8, NULL, this->jointTable, this->morphTable, UM_LIMB_MAX);
+    SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06012CC0);
 
     this->unk_2AC = 0;
     ObjUm_StopAnim(this, globalCtx);
@@ -697,14 +693,16 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (this->type == OBJ_UM_TYPE_TERMINA_FIELD) {
         ObjUm_SetupAction(this, ObjUm_TerminaFieldIdle);
     } else if (this->type == OBJ_UM_TYPE_RANCH) {
-        this->unk_2BC = this->unk_2B0;
+        this->pathIdx = this->unk_2B0;
         if (gSaveContext.weekEventReg[0x1F] & 0x80) {
             sp54 = false;
             this->unk_2F4 |= 0x100;
             ObjUm_SetupAction(this, func_80B7A144);
             func_800FE484();
         } else {
-            if ((gSaveContext.weekEventReg[0x22] & 0x80)  || gSaveContext.time >= CLOCK_TIME(19, 0) || gSaveContext.time <= CLOCK_TIME(6, 0) || (gSaveContext.weekEventReg[0x34] & 1) || (gSaveContext.weekEventReg[0x34] & 2)) {
+            if ((gSaveContext.weekEventReg[0x22] & 0x80) || gSaveContext.time >= CLOCK_TIME(19, 0)
+                 || gSaveContext.time <= CLOCK_TIME(6, 0) || (gSaveContext.weekEventReg[0x34] & 1)
+                 || (gSaveContext.weekEventReg[0x34] & 2)) {
                 Actor_MarkForDeath(&this->dyna.actor);
                 return;
             }
@@ -720,7 +718,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         if (!(gSaveContext.weekEventReg[0x34] & 2)) {
-            this->unk_2BC = this->unk_2B0;
+            this->pathIdx = this->unk_2B0;
             sp54 = false;
             func_800FE484();
             ObjUm_SetupAction(this, ObjUm_PreMilkRunStartCs);
@@ -733,7 +731,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
             return;
         }
 
-        this->unk_2BC = this->unk_2B0;
+        this->pathIdx = this->unk_2B0;
         sp54 = false;
         func_800FE484();
         ObjUm_SetupAction(this, ObjUm_StartCs);
@@ -745,7 +743,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
             return;
         }
 
-        this->unk_2BC = this->unk_2B0;
+        this->pathIdx = this->unk_2B0;
         sp54 = false;
         func_800FE484();
         ObjUm_SetupAction(this, func_80B7AE58);
@@ -810,6 +808,7 @@ void func_80B79524(ObjUm* this) {
 }
 
 void func_80B79560(GlobalContext* globalCtx, ObjUm* this, s32 arg2, u16 textId) {
+    // "Thanks, I rely on you"
     if (textId == 0x33BF) {
         ObjUm_SetupAction(this, ObjUm_StartCs);
     }
@@ -822,7 +821,9 @@ s32 func_80B795A0(GlobalContext* globalCtx, ObjUm* this, s32 arg2) {
     Player* player;
 
     switch (textId) {
+        // "I'll go to town"
         case 0x33B4:
+        // "Want a ride?"
         case 0x33CF:
             gSaveContext.weekEventReg[0x1F] |= 0x40;
             if (globalCtx->msgCtx.choiceIndex == 0) {
@@ -844,14 +845,20 @@ s32 func_80B795A0(GlobalContext* globalCtx, ObjUm* this, s32 arg2) {
                 phi_v1 = false;
             }
             break;
+
+        // "I'll go as fast as I can!"
         case 0x33BB:
             func_800E8EA0(globalCtx, &this->dyna.actor, 0x33BC);
             phi_v1 = false;
             break;
+
+        // "Chase pursuers with your arrows."
         case 0x33BC:
             func_800E8EA0(globalCtx, &this->dyna.actor, 0x33BD);
             phi_v1 = false;
             break;
+
+        // "Understand?"
         case 0x33BD:
             if (globalCtx->msgCtx.choiceIndex == 0) {
                 func_800E8EA0(globalCtx, &this->dyna.actor, 0x33BE);
@@ -862,6 +869,8 @@ s32 func_80B795A0(GlobalContext* globalCtx, ObjUm* this, s32 arg2) {
             }
             phi_v1 = false;
             break;
+
+        // "I'll tell you again!"
         case 0x33BE:
             func_800E8EA0(globalCtx, &this->dyna.actor, 0x33BC);
             phi_v1 = false;
@@ -974,7 +983,7 @@ void ObjUm_RanchWait(ObjUm* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
     this->dyna.actor.flags |= 1;
-    SkelAnime_FrameUpdateMatrix(&this->unk_160);
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     ObjUm_UpdateAnim(this, globalCtx, 2);
     this->unk_2F4 |= 8;
     if (gSaveContext.time > CLOCK_TIME(18, 0) && gSaveContext.time <= CLOCK_TIME(19, 0)) {
@@ -992,12 +1001,15 @@ void ObjUm_RanchWait(ObjUm* this, GlobalContext* globalCtx) {
             this->mouthTexIndex = 0;
             break;
 
+        // "I'm worried about my sister"
         case 0x33B7:
+        // "I'll deliver milk"
         case 0x33B4:
             this->unk_4CC = 0;
             this->mouthTexIndex = 1;
             break;
 
+        // "I'll leave at 7"
         case 0x33B5:
             this->unk_4CC = 3;
             this->mouthTexIndex = 1;
@@ -1005,8 +1017,16 @@ void ObjUm_RanchWait(ObjUm* this, GlobalContext* globalCtx) {
     }
 }
 
-s32 ObjUm_UpdatePath(ObjUm* this, GlobalContext* globalCtx) {
-    Path* path = &globalCtx->setupPathList[this->unk_2BC];
+typedef enum {
+    /* 0 */ OBJUM_PATH_STATE_0,
+    /* 1 */ OBJUM_PATH_STATE_1,
+    /* 2 */ OBJUM_PATH_STATE_FINISH,
+    /* 3 */ OBJUM_PATH_STATE_3,
+    /* 4 */ OBJUM_PATH_STATE_4,
+} ObjUmPathState;
+
+ObjUmPathState ObjUm_UpdatePath(ObjUm* this, GlobalContext* globalCtx) {
+    Path* path = &globalCtx->setupPathList[this->pathIdx];
     s32 pathCount;
     Vec3s* pathPoints;
     f32 phi_f12;
@@ -1016,51 +1036,51 @@ s32 ObjUm_UpdatePath(ObjUm* this, GlobalContext* globalCtx) {
     f32 sp48;
     f32 sp44;
     s32 aux;
-    s32 sp3C;
+    ObjUmPathState sp3C;
     s16 phi_a2;
 
     pathCount = path->count;
     pathPoints = Lib_SegmentedToVirtual(path->points);
-    sp3C = 0;
+    sp3C = OBJUM_PATH_STATE_0;
 
     if (pathCount == 0) {
         return 0;
     }
 
-    Math_Vec3s_ToVec3f(&sp50, &pathPoints[this->unk_2BE]);
+    Math_Vec3s_ToVec3f(&sp50, &pathPoints[this->pointIdx]);
 
-    if (this->unk_2BE == 0) {
+    if (this->pointIdx == 0) {
         phi_f12 = pathPoints[1].x - pathPoints[0].x;
         phi_f14 = pathPoints[1].z - pathPoints[0].z;
-    } else if ((this->unk_2BE + 1) == path->count) {
+    } else if ((this->pointIdx + 1) == path->count) {
         phi_f12 = pathPoints[path->count-1].x - pathPoints[path->count-2].x;
         phi_f14 = pathPoints[path->count-1].z - pathPoints[path->count-2].z;
     } else {
-        phi_f12 = pathPoints[this->unk_2BE+1].x - pathPoints[this->unk_2BE-1].x;
-        phi_f14 = pathPoints[this->unk_2BE+1].z - pathPoints[this->unk_2BE-1].z;
+        phi_f12 = pathPoints[this->pointIdx+1].x - pathPoints[this->pointIdx-1].x;
+        phi_f14 = pathPoints[this->pointIdx+1].z - pathPoints[this->pointIdx-1].z;
     }
 
     aux = Math_Atan2S(phi_f12, phi_f14);
 
     func_8017B7F8(&sp50, aux, &sp4C, &sp48, &sp44);
     if (((this->dyna.actor.world.pos.x * sp4C) + (sp48 * this->dyna.actor.world.pos.z) + sp44) > 0.0f) {
-        this->unk_2BE++;
+        this->pointIdx++;
 
-        if (this->unk_2BE >= (pathCount - 7)) {
-            sp3C = 3;
+        if (this->pointIdx >= (pathCount - 7)) {
+            sp3C = OBJUM_PATH_STATE_3;
         }
-        if (this->unk_2BE >= (pathCount - 3)) {
-            sp3C = 1;
+        if (this->pointIdx >= (pathCount - 3)) {
+            sp3C = OBJUM_PATH_STATE_1;
         }
-        if (this->unk_2BE >= (pathCount - 2)) {
-            sp3C = 4;
+        if (this->pointIdx >= (pathCount - 2)) {
+            sp3C = OBJUM_PATH_STATE_4;
         }
-        if (this->unk_2BE >= pathCount) {
-            this->unk_2BE = 0;
-            sp3C = 2;
+        if (this->pointIdx >= pathCount) {
+            this->pointIdx = 0;
+            sp3C = OBJUM_PATH_STATE_FINISH;
         }
 
-        Math_Vec3s_ToVec3f(&sp50, &pathPoints[this->unk_2BE]);
+        Math_Vec3s_ToVec3f(&sp50, &pathPoints[this->pointIdx]);
     }
 
     if (this->donkey != NULL) {
@@ -1110,8 +1130,8 @@ void func_80B79F10(ObjUm* this, GlobalContext* globalCtx) {
     ObjUm_UpdateAnim(this, globalCtx, 0);
 
     switch (ObjUm_UpdatePath(this, globalCtx)) {
-        case 1:
-        case 2:
+        case OBJUM_PATH_STATE_1:
+        case OBJUM_PATH_STATE_FINISH:
             if (gSaveContext.weekEventReg[0x1F] & 0x80) {
                 ActorCutscene_Stop(this->dyna.actor.cutscene);
                 globalCtx->nextEntranceIndex = 0x3E50;
@@ -1215,8 +1235,8 @@ void func_80B7A2AC(ObjUm* this, GlobalContext* globalCtx) {
     ObjUm_UpdateAnim(this, globalCtx, 0);
 
     switch (ObjUm_UpdatePath(this, globalCtx)) {
-        case 1:
-        case 2:
+        case OBJUM_PATH_STATE_1:
+        case OBJUM_PATH_STATE_FINISH:
             globalCtx->nextEntranceIndex = 0xCE40;
             globalCtx->unk_1887F = 0x40;
             gSaveContext.nextTransition = 3;
@@ -1267,8 +1287,8 @@ void func_80B7A494(ObjUm* this, GlobalContext* globalCtx) {
     ObjUm_UpdateAnim(this, globalCtx, 1);
 
     switch (ObjUm_UpdatePath(this, globalCtx)) {
-        case 1:
-        case 2:
+        case OBJUM_PATH_STATE_1:
+        case OBJUM_PATH_STATE_FINISH:
             gSaveContext.seqIndex = 0xFF;
             gSaveContext.weekEventReg[0x1F] &= (u8)~0x80;
             gSaveContext.nightSeqIndex = 0xFF;
@@ -1309,7 +1329,7 @@ void func_80B7A614(ObjUm* this, GlobalContext* globalCtx) {
     this->unk_2F4 |= 0x80;
     ObjUm_UpdateAnim(this, globalCtx, 1);
 
-    if (ObjUm_UpdatePath(this, globalCtx) == 3 && this->unk_4DC == 0) {
+    if (ObjUm_UpdatePath(this, globalCtx) == OBJUM_PATH_STATE_3 && this->unk_4DC == 0) {
         this->unk_4DC = 1;
     } else if (this->unk_4DC > 0) {
         if (this->unk_4DC == 1) {
@@ -1390,11 +1410,11 @@ void func_80B7A860(ObjUm* this, GlobalContext* globalCtx) {
             break;
 
         case 0x33BB:
-            if (IS_ZERO(this->unk_160.animCurrentFrame) && !(this->unk_2F4 & 0x1000)) {
+            if (IS_ZERO(this->skelAnime.animCurrentFrame) && !(this->unk_2F4 & 0x1000)) {
                 this->unk_2F4 |= 0x1000;
                 this->unk_4CC = 4;
                 this->mouthTexIndex = 0;
-            } else if (IS_ZERO(this->unk_160.transCurrentFrame)) {
+            } else if (IS_ZERO(this->skelAnime.transCurrentFrame)) {
                 this->unk_4CC = 2;
                 this->mouthTexIndex = 2;
             } else {
@@ -1406,11 +1426,11 @@ void func_80B7A860(ObjUm* this, GlobalContext* globalCtx) {
             break;
 
         case 0x33BC:
-            if (IS_ZERO(this->unk_160.animCurrentFrame) && !(this->unk_2F4 & 0x1000)) {
+            if (IS_ZERO(this->skelAnime.animCurrentFrame) && !(this->unk_2F4 & 0x1000)) {
                 this->unk_2F4 |= 0x1000;
                 this->unk_4CC = 4;
                 this->mouthTexIndex = 0;
-            } else if (IS_ZERO(this->unk_160.transCurrentFrame)) {
+            } else if (IS_ZERO(this->skelAnime.transCurrentFrame)) {
                 this->unk_4CC = 2;
                 this->mouthTexIndex = 2;
             } else {
@@ -1421,11 +1441,11 @@ void func_80B7A860(ObjUm* this, GlobalContext* globalCtx) {
             break;
 
         case 0x33BD:
-            if (IS_ZERO(this->unk_160.animCurrentFrame) && !(this->unk_2F4 & 0x1000)) {
+            if (IS_ZERO(this->skelAnime.animCurrentFrame) && !(this->unk_2F4 & 0x1000)) {
                 this->unk_2F4 |= 0x1000;
                 this->unk_4CC = 4;
                 this->mouthTexIndex = 0;
-            } else if (IS_ZERO(this->unk_160.transCurrentFrame)) {
+            } else if (IS_ZERO(this->skelAnime.transCurrentFrame)) {
                 this->unk_4CC = 2;
             } else {
                 this->unk_4CC = 5;
@@ -1443,7 +1463,7 @@ void func_80B7A860(ObjUm* this, GlobalContext* globalCtx) {
 
         case 0x33BF:
             this->unk_4D8++;
-            if (IS_ZERO(this->unk_160.transCurrentFrame) && this->unk_4D8 >= 6) {
+            if (IS_ZERO(this->skelAnime.transCurrentFrame) && this->unk_4D8 >= 6) {
                 this->unk_4CC = 0;
                 this->mouthTexIndex = 0;
             } else {
@@ -1475,7 +1495,7 @@ void func_80B7ABE4(ObjUm* this, GlobalContext* globalCtx) {
 
     ObjUm_UpdateAnim(this, globalCtx, 0);
     switch (ObjUm_UpdatePath(this, globalCtx)) {
-        case 2:
+        case OBJUM_PATH_STATE_FINISH:
             func_80B79524(this);
             break;
 
@@ -1518,7 +1538,7 @@ void func_80B7AD34(ObjUm* this, GlobalContext* globalCtx) {
     this->unk_2AC += 0x3E8;
     ObjUm_UpdateAnim(this, globalCtx, 0);
 
-    if ((ObjUm_UpdatePath(this, globalCtx) == 4) && !(gSaveContext.weekEventReg[0x3B] & 2)) {
+    if ((ObjUm_UpdatePath(this, globalCtx) == OBJUM_PATH_STATE_4) && !(gSaveContext.weekEventReg[0x3B] & 2)) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
         func_801A3F54(0);
         gSaveContext.weekEventReg[0x3B] |= 2;
@@ -1551,7 +1571,7 @@ void func_80B7AE58(ObjUm* this, GlobalContext* globalCtx) {
 
 void ObjUm_TerminaFieldIdle(ObjUm* this, GlobalContext* globalCtx) {
     ObjUm_UpdateAnim(this, globalCtx, 2);
-    SkelAnime_FrameUpdateMatrix(&this->unk_160);
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
 }
 
 void func_80B7AF30(ObjUm* this, GlobalContext* globalCtx) {
@@ -1597,7 +1617,7 @@ void func_80B7AF30(ObjUm* this, GlobalContext* globalCtx) {
 }
 
 void ObjUm_StopAnim(ObjUm* this, GlobalContext* globalCtx) {
-    SkelAnime_ChangeAnimDefaultStop(&this->unk_160, &D_06012CC0);
+    SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, &D_06012CC0);
     this->unk_304 = 0;
 }
 
@@ -1620,15 +1640,15 @@ void ObjUm_UpdateAnim(ObjUm* this, GlobalContext* globalCtx, s32 index) {
     } else if (index == 2) {
         animPlaybackSpeed = 1.0f;
     }
-    this->unk_160.animPlaybackSpeed = animPlaybackSpeed;
+    this->skelAnime.animPlaybackSpeed = animPlaybackSpeed;
 
     if (this->unk_2F4 & 0x800) {
-        this->unk_160.animPlaybackSpeed = 1.0f;
+        this->skelAnime.animPlaybackSpeed = 1.0f;
         index = -1;
     }
 
     changeAnim = index != this->unk_304;
-    if ((SkelAnime_FrameUpdateMatrix(&this->unk_160) != 0) || changeAnim) {
+    if ((SkelAnime_FrameUpdateMatrix(&this->skelAnime) != 0) || changeAnim) {
         this->unk_304 = index;
 
         if (index != -1) {
@@ -1637,9 +1657,9 @@ void ObjUm_UpdateAnim(ObjUm* this, GlobalContext* globalCtx, s32 index) {
             }
 
             if (changeAnim) {
-                SkelAnime_ChangeAnimTransitionStop(&this->unk_160, D_80B7C25C[index].anim, -3.0f);
+                SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, D_80B7C25C[index].anim, -3.0f);
             } else {
-                SkelAnime_ChangeAnimDefaultStop(&this->unk_160, D_80B7C25C[index].anim);
+                SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, D_80B7C25C[index].anim);
             }
         } else {
             EnHorse* donkey = this->donkey;
@@ -1650,10 +1670,10 @@ void ObjUm_UpdateAnim(ObjUm* this, GlobalContext* globalCtx, s32 index) {
 
             if (changeAnim) {
                 temp = 3 - index;
-                SkelAnime_ChangeAnimTransitionStop(&this->unk_160, D_80B7C25C[temp].anim, -10.0f);
+                SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, D_80B7C25C[temp].anim, -10.0f);
             } else {
                 temp = 3 - index;
-                SkelAnime_ChangeAnimDefaultStop(&this->unk_160, D_80B7C25C[temp].anim);
+                SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, D_80B7C25C[temp].anim);
             }
         }
     }
@@ -1979,19 +1999,23 @@ void ObjUm_PrintStruct(ObjUm* this, GlobalContext* globalCtx, GfxPrint* printer)
     s32 i = 5;
 
     GfxPrint_SetColor(printer, 255, 255, 255, 255);
+
+    GfxPrint_SetPos(printer, 23, ++i);
+    GfxPrint_Printf(printer, "actionFunc:%X", ((u32)this->actionFunc - (u32)func_80B77770) + 0x80B77770);
+
     GfxPrint_SetPos(printer, 27, ++i);
     GfxPrint_Printf(printer, "xAngle:%X", this->unk_2AC);
     GfxPrint_SetPos(printer, 29, ++i);
     GfxPrint_Printf(printer, "type:%X", this->type);
     GfxPrint_SetPos(printer, 30, ++i);
     GfxPrint_Printf(printer, "2B0:%X", this->unk_2B0);
-    GfxPrint_SetPos(printer, 30, ++i);
-    GfxPrint_Printf(printer, "2B4:%X", this->unk_2B4);
+    GfxPrint_SetPos(printer, 28, ++i);
+    GfxPrint_Printf(printer, "! 2B4:%X", this->unk_2B4);
 
     GfxPrint_SetPos(printer, 29, ++i);
-    GfxPrint_Printf(printer, "path:%X", this->unk_2BC);
-    GfxPrint_SetPos(printer, 28, ++i);
-    GfxPrint_Printf(printer, "point:%X", this->unk_2BE);
+    GfxPrint_Printf(printer, "path:%X", this->pathIdx);
+    GfxPrint_SetPos(printer, 23, ++i);
+    GfxPrint_Printf(printer, "pointIdx:%X", this->pointIdx);
 
     GfxPrint_SetPos(printer, 28, ++i);
     GfxPrint_Printf(printer, "flags:%X", this->unk_2F4);
@@ -2051,7 +2075,7 @@ void ObjUm_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f sp34;
 
     this->unk_2F4 |= 1;
-    SkelAnime_DrawSV(globalCtx, this->unk_160.skeleton, this->unk_160.limbDrawTbl, this->unk_160.dListCount, ObjUm_OverrideLimbDraw, ObjUm_PostLimbDraw, &this->dyna.actor);
+    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, ObjUm_OverrideLimbDraw, ObjUm_PostLimbDraw, &this->dyna.actor);
     sp34.x = 0.45f;
     sp34.y = 0.0f;
     sp34.z = 0.7f;

@@ -37,7 +37,7 @@ typedef enum {
 typedef struct ObjUm {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ ObjUmActionFunc actionFunc;
-    /* 0x160 */ SkelAnime unk_160;
+    /* 0x160 */ SkelAnime skelAnime;
     /* 0x1A4 */ Vec3s jointTable[UM_LIMB_MAX];
     /* 0x228 */ Vec3s morphTable[UM_LIMB_MAX];
     /* 0x2AC */ s16 unk_2AC; // x angle
@@ -45,8 +45,8 @@ typedef struct ObjUm {
     /* 0x2B0 */ s16 unk_2B0;
     /* 0x2B4 */ s32 unk_2B4;
     /* 0x2B8 */ EnHorse* donkey;
-    /* 0x2BC */ s32 unk_2BC; // pathIndex?
-    /* 0x2BE */ s32 unk_2BE; // pointIndex?
+    /* 0x2BC */ s32 pathIdx;
+    /* 0x2BE */ s32 pointIdx;
     /* 0x2C4 */ Vec3f unk_2C4;
     /* 0x2D0 */ Vec3f unk_2D0;
     /* 0x2DC */ Vec3f unk_2DC;
@@ -63,7 +63,7 @@ typedef struct ObjUm {
     /* 0x354 */ s32 unk_354; // unused?
     /* 0x358 */ EnHorse* bandit1;
     /* 0x35C */ EnHorse* bandit2;
-    /* 0x360 */ Vec3f unk_360[0x10];
+    /* 0x360 */ Vec3f unk_360[16];
     /* 0x420 */ s32 unk_420;
     /* 0x424 */ ColliderCylinder banditsCollisions[2];
     /* 0x4BC */ Vec3f unk_4BC;
@@ -83,7 +83,7 @@ typedef enum {
     /* 1 */ OBJ_UM_TYPE_RANCH,
     /* 2 */ OBJ_UM_TYPE_PRE_MILK_RUN, // milk road, pre-minigame
     /* 3 */ OBJ_UM_TYPE_MILK_RUN_MINIGAME,
-    /* 4 */ OBJ_UM_TYPE_POST_MILK_RUN  // milk road, post-minigame
+    /* 4 */ OBJ_UM_TYPE_POST_MILK_RUN // milk road, post-minigame
 } ObjUmType;
 
 #define OBJ_UM_PARSE_TYPE(params) ((params) & 0xFF00) >> 8
