@@ -73,7 +73,7 @@ typedef struct ObjUm {
     /* 0x4D4 */ s32 mouthTexIndex;
     /* 0x4D8 */ s32 unk_4D8;
     /* 0x4DC */ s32 unk_4DC;
-    /* 0x4E0 */ s32 unk_4E0;
+    /* 0x4E0 */ s32 arePotsBroken;
 } ObjUm; // size = 0x4E4
 
 extern const ActorInit Obj_Um_InitVars;

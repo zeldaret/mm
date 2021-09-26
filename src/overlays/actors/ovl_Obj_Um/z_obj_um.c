@@ -517,12 +517,13 @@ s32 func_80B78764(ObjUm* this, GlobalContext* globalCtx, EnHorse* arg2, EnHorse*
     return 0;
 }
 
+// ObjUm_UpdateBandits...
 s32 func_80B78A54(ObjUm* this, GlobalContext* globalCtx, s32 arg2, EnHorse* arg3, EnHorse* arg4) {
-    if (this->banditsCollisions[arg2].base.acFlags & 2) {
+    if (this->banditsCollisions[arg2].base.acFlags & AC_HIT) {
         if (arg3->unk_550 == 3) {
             s16 sp36 = Math_Vec3f_Yaw(&this->dyna.actor.world.pos, &arg3->actor.world.pos) - this->dyna.actor.shape.rot.y;
 
-            this->banditsCollisions[arg2].base.acFlags &= ~0x02;
+            this->banditsCollisions[arg2].base.acFlags &= ~AC_HIT;
             func_8019F1C0(&arg3->actor.projectedPos, NA_SE_EN_CUTBODY);
             arg3->unk_54C = 0xF;
 
@@ -591,6 +592,7 @@ s32 ObjUm_UpdateBanditsCollisions(ObjUm* this, GlobalContext* globalCtx) {
     return 0;
 }
 
+// ObjUm_UpdateBandits?
 s32 func_80B78DF0(ObjUm* this, GlobalContext* globalCtx) {
     func_80B78C18(this, globalCtx);
     ObjUm_UpdateBanditsCollisions(this, globalCtx);
@@ -695,11 +697,15 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
     } else if (this->type == OBJ_UM_TYPE_RANCH) {
         this->pathIdx = this->unk_2B0;
         if (gSaveContext.weekEventReg[0x1F] & 0x80) {
+            // In cutscene
+
             sp54 = false;
             this->flags |= OBJ_UM_FLAG_0100;
             ObjUm_SetupAction(this, func_80B7A144);
             func_800FE484();
         } else {
+            // Waiting for player
+
             if ((gSaveContext.weekEventReg[0x22] & 0x80) || gSaveContext.time >= CLOCK_TIME(19, 0)
                  || gSaveContext.time <= CLOCK_TIME(6, 0) || (gSaveContext.weekEventReg[0x34] & 1)
                  || (gSaveContext.weekEventReg[0x34] & 2)) {
@@ -979,6 +985,7 @@ s32 func_80B79A24(s32 arg0) {
     return false;
 }
 
+// 0x80b79a30
 void ObjUm_RanchWait(ObjUm* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
@@ -1294,7 +1301,7 @@ void func_80B7A494(ObjUm* this, GlobalContext* globalCtx) {
             gSaveContext.nightSeqIndex = 0xFF;
 
             if (!(gSaveContext.weekEventReg[0x34] & 1) && !(gSaveContext.weekEventReg[0x34] & 2)) {
-                if (this->unk_4E0 == 0) {
+                if (this->arePotsBroken == false) {
                     globalCtx->nextEntranceIndex = 0x3E60;
                     globalCtx->unk_1887F = 0x40;
                     gSaveContext.nextTransition = 3;
@@ -1335,11 +1342,11 @@ void func_80B7A614(ObjUm* this, GlobalContext* globalCtx) {
         if (this->unk_4DC == 1) {
             s32 i;
 
-            this->unk_4E0 = 1;
+            this->arePotsBroken = true;
 
             for (i = 0; i != 3; i++) {
                 if (this->unk_314[i] != 1) {
-                    this->unk_4E0 = 0;
+                    this->arePotsBroken = false;
                     break;
                 }
             }
@@ -1355,7 +1362,7 @@ void func_80B7A614(ObjUm* this, GlobalContext* globalCtx) {
     if (this->flags & OBJ_UM_FLAG_2000) {
         s32 sp20 = ActorCutscene_GetAdditionalCutscene(this->dyna.actor.cutscene);
 
-        if (this->unk_4E0 != 0) {
+        if (this->arePotsBroken) {
             sp20 = ActorCutscene_GetAdditionalCutscene(sp20);
         }
         if (ActorCutscene_GetCanPlayNext(sp20)) {
@@ -1375,7 +1382,7 @@ void func_80B7A7AC(ObjUm* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
     this->unk_4DC = 0;
-    this->unk_4E0 = 0;
+    this->arePotsBroken = false;
     player->stateFlags1 &= ~0x20;
     ObjUm_SetPlayerPosition(this, globalCtx);
     ObjUm_RotatePlayer(this, globalCtx, 0x7FFF);
@@ -1995,57 +2002,60 @@ void func_80B7BEA4(Vec3f* arg0, s16 arg1, Vec3f* arg2, u8 alpha, GlobalContext* 
 
 
 #ifndef NOT_DEBUG_PRINT
+#define BOOLSTR(x) ((x) ? "true" : "false")
+
 void ObjUm_PrintStruct(ObjUm* this, GlobalContext* globalCtx, GfxPrint* printer) {
-    s32 i = 5;
+    s32 x = 27;
+    s32 y = 7;
 
     GfxPrint_SetColor(printer, 255, 255, 255, 255);
 
-    GfxPrint_SetPos(printer, 23, ++i);
-    GfxPrint_Printf(printer, "actionFunc:%X", ((u32)this->actionFunc - (u32)func_80B77770) + 0x80B77770);
+    GfxPrint_SetPos(printer, x-7, ++y);
+    GfxPrint_Printf(printer, "actionFunc:%X", ((u32)this->actionFunc - (u32)func_80B77770) + SEGMENT_START(ovl_Obj_Um));
 
-    GfxPrint_SetPos(printer, 27, ++i);
+    GfxPrint_SetPos(printer, x-3, ++y);
     GfxPrint_Printf(printer, "xAngle:%X", this->unk_2AC);
-    GfxPrint_SetPos(printer, 29, ++i);
+    GfxPrint_SetPos(printer, x-1, ++y);
     GfxPrint_Printf(printer, "type:%X", this->type);
-    GfxPrint_SetPos(printer, 30, ++i);
+    GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "2B0:%X", this->unk_2B0);
-    GfxPrint_SetPos(printer, 28, ++i);
+    GfxPrint_SetPos(printer, x-2, ++y);
     GfxPrint_Printf(printer, "! 2B4:%X", this->unk_2B4);
 
-    GfxPrint_SetPos(printer, 29, ++i);
+    GfxPrint_SetPos(printer, x-1, ++y);
     GfxPrint_Printf(printer, "path:%X", this->pathIdx);
-    GfxPrint_SetPos(printer, 23, ++i);
+    GfxPrint_SetPos(printer, x-5, ++y);
     GfxPrint_Printf(printer, "pointIdx:%X", this->pointIdx);
 
-    GfxPrint_SetPos(printer, 28, ++i);
+    GfxPrint_SetPos(printer, x-2, ++y);
     GfxPrint_Printf(printer, "flags:%X", this->flags);
 
-    GfxPrint_SetPos(printer, 30, ++i);
+    GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "304:%X", this->unk_304);
 
-    GfxPrint_SetPos(printer, 28, ++i);
+    GfxPrint_SetPos(printer, x-2, ++y);
     GfxPrint_Printf(printer, "308.x:%f", this->unk_308.x);
 
-    GfxPrint_SetPos(printer, 28, ++i);
+    GfxPrint_SetPos(printer, x-2, ++y);
     GfxPrint_Printf(printer, "308.y:%f", this->unk_308.y);
 
-    GfxPrint_SetPos(printer, 28, ++i);
+    GfxPrint_SetPos(printer, x-2, ++y);
     GfxPrint_Printf(printer, "308.z:%f", this->unk_308.z);
 
-    GfxPrint_SetPos(printer, 29, ++i);
+    GfxPrint_SetPos(printer, x-1, ++y);
     GfxPrint_Printf(printer, "time:%X", this->unk_4C8);
 
-    GfxPrint_SetPos(printer, 30, ++i);
+    GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "4CC:%X", this->unk_4CC);
 
-    // GfxPrint_SetPos(printer, 30, ++i);
+    // GfxPrint_SetPos(printer, x, ++y);
     // GfxPrint_Printf(printer, "4D8:%X", this->unk_4D8);
 
-    GfxPrint_SetPos(printer, 30, ++i);
+    GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "4DC:%X", this->unk_4DC);
 
-    GfxPrint_SetPos(printer, 30, ++i);
-    GfxPrint_Printf(printer, "4E0:%X", this->unk_4E0);
+    GfxPrint_SetPos(printer, x-10, ++y);
+    GfxPrint_Printf(printer, "arePotsBroken:%s", BOOLSTR(this->arePotsBroken));
 
 }
 
@@ -2058,11 +2068,11 @@ void ObjUm_DrawStruct(ObjUm* this, GlobalContext* globalCtx) {
     func_8012C4C0(gfxCtx);
 
     GfxPrint_Init(&printer);
-    GfxPrint_Open(&printer, POLY_OPA_DISP);
+    GfxPrint_Open(&printer, POLY_XLU_DISP);
 
     ObjUm_PrintStruct(this, globalCtx, &printer);
 
-    POLY_OPA_DISP = GfxPrint_Close(&printer);
+    POLY_XLU_DISP = GfxPrint_Close(&printer);
     GfxPrint_Destroy(&printer);
 
     CLOSE_DISPS(gfxCtx);
