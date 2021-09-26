@@ -220,15 +220,14 @@ void func_80ACBDCC(ObjAqua* this) {
     this->actionFunc = func_80ACBDFC;
 }
 
-#ifdef NON_MATCHING
 void func_80ACBDFC(ObjAqua* this, GlobalContext* globalCtx) {
-    f32 temp = this->counter * 3.25f;
     s32 pad;
+    f32 temp = this->counter;
 
-    this->alpha = (s32)(temp) + 10;
+    this->alpha = (s32)(temp * 3.25f) + 10;
     this->actor.shape.shadowAlpha = this->alpha;
     this->unk_198 += 1000;
-    if (AQUA_HOT(&this->actor)) {
+    if (AQUA_HOT(&this->actor) == 1) {
         f32 temp_f2 = this->actor.scale.x * 10000.0f;
 
         EffectSsBubble_Spawn(globalCtx, &this->actor.world.pos, temp_f2 * -0.5f, temp_f2, temp_f2,
@@ -238,9 +237,6 @@ void func_80ACBDFC(ObjAqua* this, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->actor);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Aqua/func_80ACBDFC.s")
-#endif
 
 void ObjAqua_Update(Actor* thisx, GlobalContext* globalCtx) {
     ObjAqua* this = THIS;
