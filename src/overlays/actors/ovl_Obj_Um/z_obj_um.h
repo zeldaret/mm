@@ -51,7 +51,7 @@ typedef struct ObjUm {
     /* 0x2D0 */ Vec3f unk_2D0;
     /* 0x2DC */ Vec3f unk_2DC;
     /* 0x2E8 */ Vec3f unk_2E8;
-    /* 0x2F4 */ s32 unk_2F4; // flags?
+    /* 0x2F4 */ s32 flags;
     /* 0x2BC */ Vec3s unk_2F8;
     /* 0x2FE */ Vec3s unk_2FE;
     /* 0x304 */ s32 unk_304;
@@ -87,5 +87,21 @@ typedef enum {
 } ObjUmType;
 
 #define OBJ_UM_PARSE_TYPE(params) ((params) & 0xFF00) >> 8
+
+#define OBJ_UM_FLAG_0000 0x0000
+#define OBJ_UM_FLAG_0001 0x0001
+#define OBJ_UM_FLAG_0002 0x0002
+#define OBJ_UM_FLAG_0004 0x0004
+#define OBJ_UM_FLAG_0008 0x0008
+#define OBJ_UM_FLAG_0010 0x0010
+#define OBJ_UM_FLAG_0020 0x0020
+#define OBJ_UM_FLAG_0040 0x0040
+#define OBJ_UM_FLAG_0080 0x0080
+#define OBJ_UM_FLAG_0100 0x0100
+#define OBJ_UM_FLAG_0200 0x0200
+#define OBJ_UM_FLAG_0400 0x0400
+#define OBJ_UM_FLAG_0800 0x0800
+#define OBJ_UM_FLAG_1000 0x1000
+#define OBJ_UM_FLAG_2000 0x2000
 
 #endif // Z_OBJ_UM_H
