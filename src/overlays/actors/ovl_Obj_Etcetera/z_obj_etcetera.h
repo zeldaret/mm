@@ -18,17 +18,17 @@ struct ObjEtcetera;
 typedef void (*ObjEtceteraActionFunc)(struct ObjEtcetera*, GlobalContext*);
 
 typedef struct ObjEtcetera {
-    /* 0x0000 */ DynaPolyActor dyna;
-    /* 0x015C */ SkelAnime skelAnime;
-    /* 0x01A0 */ ColliderCylinder collider;
-    /* 0x01EC */ Vec3s jointTable[11];
-    /* 0x022E */ Vec3s morphTable[11];
-    /* 0x0270 */ f32 intenseOscillationScale;
-    /* 0x0274 */ s16 oscillationTimer;
-    /* 0x0276 */ u16 burrowFlag;
-    /* 0x0278 */ s8 objIndex;
-    /* 0x027C */ Gfx* dList;
-    /* 0x0280 */ ObjEtceteraActionFunc actionFunc;
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ SkelAnime skelAnime;
+    /* 0x1A0 */ ColliderCylinder collider;
+    /* 0x1EC */ Vec3s jointTable[11];
+    /* 0x22E */ Vec3s morphTable[11];
+    /* 0x270 */ f32 intenseOscillationScale;
+    /* 0x274 */ s16 oscillationTimer;
+    /* 0x276 */ u16 burrowFlag;
+    /* 0x278 */ s8 objIndex;
+    /* 0x27C */ Gfx* dList;
+    /* 0x280 */ ObjEtceteraActionFunc actionFunc;
 } ObjEtcetera; // size = 0x284
 
 extern const ActorInit Obj_Etcetera_InitVars;
