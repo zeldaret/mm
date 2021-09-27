@@ -835,9 +835,9 @@ typedef struct {
 } PreRenderParams; // size = 0x28
 
 typedef struct UnkMsgStruct{
-    /* 0x0000 */ u16 unk0000;
-    /* 0x0002 */ u16 unk0002;
-    /* 0x0004 */ s32 unk0004;
+    /* 0x0000 */ u16 textId;
+    /* 0x0002 */ u16 typePos;
+    /* 0x0004 */ const char* segment;
 } UnkMsgStruct; // size = 0x8;
 
 typedef struct {

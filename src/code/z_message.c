@@ -154,52 +154,36 @@ void func_80148CBC(GlobalContext *globalCtx, UNK_PTR puParm2, u8 arg2) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80149C18.s")
 
-#ifdef NON_EQUIVALENT
-
 void func_80149EBC(GlobalContext *globalCtx, u16 arg2) {
+    const char* foundSegment;
+    const char* nextSegment;
+    const char* segment;
+    UnkMsgStruct* msgEntry = *globalCtx->msgCtx.unk12080;
     Font *font;
-    s32 temp_a1;
-    s32 temp_a1_2;
-    s32 temp_a2;
-    UnkMsgStruct** temp_v1;
-    u16 temp_v0_3;
-    u16 phi_v0;
-    s8 *phi_v1;
 
-    temp_v1 = globalCtx->msgCtx.unk12080;
-    phi_v0 = temp_v1[0]->unk0000;
-    temp_a2 = temp_v1[0]->unk0004;
-    while(phi_v0 != 0xFFFF){
-         if ((arg2 & 0xFFFF) == phi_v0) {
-            temp_a1 = temp_v1[0]->unk0004;
-            font = &globalCtx->msgCtx.font;
-            font->messageStart = temp_a1 - temp_a2;
-            font->messageEnd = temp_v1[1]->unk0004 - temp_a1;
+    segment = msgEntry->segment;
+    while(msgEntry->textId != 0xFFFF){
+        font = &globalCtx->msgCtx.font;
+        if (msgEntry->textId == arg2) {
+            foundSegment = msgEntry->segment;
+            msgEntry++;
+            nextSegment = msgEntry->segment;
+            font->messageStart = foundSegment - segment;
+            font->messageEnd =  nextSegment - foundSegment;
             return;
         }
-        phi_v0 = temp_v1[1]->unk0000;
-        temp_v1 += 1;
-        if (phi_v0 == 0xFFFF) {
-            // Duplicate return node #4. Try simplifying control flow for better match
-            temp_v1 = globalCtx->msgCtx.unk12080;
-            temp_a1 = temp_v1[0]->unk0004;
-            font = &globalCtx->msgCtx.font;
-            font->messageStart = temp_a1 - temp_a2;
-            font->messageEnd = temp_v1[1]->unk0004 - temp_a1;
-            return;
-        }
+        msgEntry++;
     }
-    
-    temp_v1 =  globalCtx->msgCtx.unk12080;
-    temp_a1 = temp_v1[0]->unk0004;
     font = &globalCtx->msgCtx.font;
-    font->messageStart = temp_a1 - temp_a2;
-    font->messageEnd = temp_v1[1]->unk0004 - temp_a1;
-}
+    msgEntry = *globalCtx->msgCtx.unk12080;
+    foundSegment = msgEntry->segment;
+    msgEntry++;
+    nextSegment = msgEntry->segment;
+    font->messageStart = foundSegment - segment;
+    font->messageEnd = nextSegment - foundSegment;
 
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80149EBC.s")
-#endif
+    
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80149F74.s")
 
