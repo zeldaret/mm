@@ -13,6 +13,46 @@
 
 #define NOT_DEBUG_PRINT 1
 
+/**
+ * weekEventReg flags checked by this actor:
+ * - gSaveContext.weekEventReg[0x16] & 0x01: Aliens defeated
+ *     If false: The actor doesn't spawn
+ * - gSaveContext.weekEventReg[0x1F] & 0x40
+ *     If true: Cremia doesn't explain again she'll deliever milk to town
+ * - gSaveContext.weekEventReg[0x1F] & 0x80
+ *     If true: Triggers cutscene on Romani's Ranch
+ * - gSaveContext.weekEventReg[0x22] & 0x80
+ *     If true: Doesn't spawn on Romani's Ranch
+ * - gSaveContext.weekEventReg[0x34] & 0x01
+ *     If true: Doesn't spawn on Romani's Ranch or Milk Road
+ * - gSaveContext.weekEventReg[0x34] & 0x02
+ *     If true: Doesn't spawn on Romani's Ranch or Milk Road
+ * - gSaveContext.weekEventReg[0x3B] & 0x02
+ *     If true: Doesn't spawn again on Milk Road
+ * 
+ * weekEventReg flags set by this actor:
+ * - gSaveContext.weekEventReg[0x1F] |= 0x40: Cremia offered a ride
+ *     Cremia offered a ride accross the Milk Road to Player
+ * - gSaveContext.weekEventReg[0x1F] |= 0x80: Player is in Milk Run
+ *     Player accepts the ride and is with Cremia during the Milk Run.
+ * - gSaveContext.weekEventReg[0x22] |= 0x80: Cremia does Milk Run alone
+ *     Player didn't interact or didn't accept the ride
+ * - gSaveContext.weekEventReg[0x34] |= 0x01: Won Milk Run minigame
+ *     At least one pot is safe. Turns off the "Lose Milk Run minigame"
+ * - gSaveContext.weekEventReg[0x34] |= 0x02: Lose Milk Run minigame
+ *     Every pot was broken by bandits. Turns off the ""Win" Milk Run minigame"
+ * - gSaveContext.weekEventReg[0x3B] |= 0x02: ?
+ *     Passed through Milk Road after winning the Milk Run
+ * 
+ * weekEventReg flags unset by this actor:
+ * - gSaveContext.weekEventReg[0x1F] &= (u8)~0x80
+ *     Turned off when the Milk Run finishes
+ * - gSaveContext.weekEventReg[0x34] &= (u8)~0x01
+ *     Turned off if Player lose the Milk Run
+ * - gSaveContext.weekEventReg[0x34] &= (u8)~0x02
+ *     Turned off if Player wins the Milk Run
+ */
+
 void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjUm_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjUm_Update(Actor* thisx, GlobalContext* globalCtx);
@@ -686,7 +726,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->initialPathIdx = OBJ_UM_PARSE_PATH_IDX(thisx->params);
 
     // if (!AliensDefeated)
-    if (!(gSaveContext.weekEventReg[0x16] & 1)) {
+    if (!(gSaveContext.weekEventReg[0x16] & 0x01)) {
         Actor_MarkForDeath(&this->dyna.actor);
         return;
     }
@@ -706,8 +746,8 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
             // Waiting for player
 
             if ((gSaveContext.weekEventReg[0x22] & 0x80) || gSaveContext.time >= CLOCK_TIME(19, 0)
-                 || gSaveContext.time <= CLOCK_TIME(6, 0) || (gSaveContext.weekEventReg[0x34] & 1)
-                 || (gSaveContext.weekEventReg[0x34] & 2)) {
+                 || gSaveContext.time <= CLOCK_TIME(6, 0) || (gSaveContext.weekEventReg[0x34] & 0x01)
+                 || (gSaveContext.weekEventReg[0x34] & 0x02)) {
                 Actor_MarkForDeath(&this->dyna.actor);
                 return;
             }
@@ -717,12 +757,12 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
             ObjUm_SetupAction(this, ObjUm_RanchWait);
         }
     } else if (this->type == OBJ_UM_TYPE_PRE_MILK_RUN) {
-        if (!(gSaveContext.weekEventReg[0x1F] & 0x80) || (gSaveContext.weekEventReg[0x34] & 1)) {
+        if (!(gSaveContext.weekEventReg[0x1F] & 0x80) || (gSaveContext.weekEventReg[0x34] & 0x01)) {
             Actor_MarkForDeath(&this->dyna.actor);
             return;
         }
 
-        if (!(gSaveContext.weekEventReg[0x34] & 2)) {
+        if (!(gSaveContext.weekEventReg[0x34] & 0x02)) {
             this->pathIdx = this->initialPathIdx;
             sp54 = false;
             func_800FE484();
@@ -743,7 +783,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_354 = 0;
         ObjUm_RotatePlayer(this, globalCtx, 0);
     } else if (this->type == OBJ_UM_TYPE_POST_MILK_RUN) {
-        if (!(gSaveContext.weekEventReg[0x34] & 1) || (gSaveContext.weekEventReg[0x3B] & 2)) {
+        if (!(gSaveContext.weekEventReg[0x34] & 0x01) || (gSaveContext.weekEventReg[0x3B] & 0x02)) {
             Actor_MarkForDeath(&this->dyna.actor);
             return;
         }
@@ -905,13 +945,16 @@ s32 func_80B79734(GlobalContext* globalCtx, ObjUm* this, s32 arg2) {
     return ret;
 }
 
+// ChooseText?
 u16 func_80B797EC(GlobalContext* globalCtx, ObjUm* this, s32 arg2) {
     u16 textId;
 
     if (gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
         if (gSaveContext.weekEventReg[0x1F] & 0x40) {
+            // "Want a ride?"
             textId = 0x33CF;
         } else {
+            // "I'll deliver milk"
             textId = 0x33B4;
         }
     } else {
@@ -1300,7 +1343,7 @@ void func_80B7A494(ObjUm* this, GlobalContext* globalCtx) {
             gSaveContext.weekEventReg[0x1F] &= (u8)~0x80;
             gSaveContext.nightSeqIndex = 0xFF;
 
-            if (!(gSaveContext.weekEventReg[0x34] & 1) && !(gSaveContext.weekEventReg[0x34] & 2)) {
+            if (!(gSaveContext.weekEventReg[0x34] & 0x01) && !(gSaveContext.weekEventReg[0x34] & 0x02)) {
                 if (this->arePotsBroken == false) {
                     globalCtx->nextEntranceIndex = 0x3E60;
                     globalCtx->unk_1887F = 0x40;
@@ -1549,15 +1592,16 @@ void func_80B7AD34(ObjUm* this, GlobalContext* globalCtx) {
     this->wheelRot += 1000;
     ObjUm_UpdateAnim(this, globalCtx, 0);
 
-    if ((ObjUm_UpdatePath(this, globalCtx) == OBJUM_PATH_STATE_4) && !(gSaveContext.weekEventReg[0x3B] & 2)) {
+    if ((ObjUm_UpdatePath(this, globalCtx) == OBJUM_PATH_STATE_4) && !(gSaveContext.weekEventReg[0x3B] & 0x02)) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
         func_801A3F54(0);
-        gSaveContext.weekEventReg[0x3B] |= 2;
+        gSaveContext.weekEventReg[0x3B] |= 0x02;
         gSaveContext.nextCutsceneIndex = 0xFFF3;
         globalCtx->nextEntranceIndex = 0x5400;
         globalCtx->unk_1887F = 0x40;
         gSaveContext.nextTransition = 3;
         globalCtx->sceneLoadFlag = 0x14;
+        // A bit more than an hour
         gSaveContext.time += 0xAAC;
     }
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->dyna.actor);
@@ -1840,24 +1884,24 @@ s32 ObjUm_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     return false;
 }
 
-void func_80B7B93C(GlobalContext* globalCtx, Vec3f* arg1) {
+void ObjUm_SpawnFragments(GlobalContext* globalCtx, Vec3f* potPos) {
     Vec3f sp8C = {0.0f, -1.0f, 0.0f};
-    Gfx* sp80[] = {D_06000040, D_06000910, D_060011E0};
+    Gfx* potFragments[] = {D_06000040, D_06000910, D_060011E0};
     s32 i;
     Vec3f sp70;
 
-    EffectSsHitMark_SpawnFixedScale(globalCtx, 0, arg1);
+    EffectSsHitMark_SpawnFixedScale(globalCtx, 0, potPos);
 
     for (i = 0; i < 20; i++) {
         sp70.x = (Rand_ZeroOne() * 20.0f) - 10.0f;
         sp70.y = -((Rand_ZeroOne() * 20.0f) - 10.0f);
         sp70.z = (Rand_ZeroOne() * 20.0f) - 10.0f;
-        EffectSsHahen_Spawn(globalCtx, arg1, &sp70, &sp8C, 1, 100, OBJECT_UM, 10, sp80[(s32)(Rand_ZeroOne() * ARRAY_COUNT(sp80))]);
+        EffectSsHahen_Spawn(globalCtx, potPos, &sp70, &sp8C, 1, 100, OBJECT_UM, 10, potFragments[(s32)(Rand_ZeroOne() * ARRAY_COUNT(potFragments))]);
     }
 }
 
-extern Gfx D_060052B0[]; // broken pot?
-extern Gfx D_06003C60[]; // minigame pot?
+extern Gfx D_060052B0[]; // gUmBrokenMinigamePotDL
+extern Gfx D_06003C60[]; // gUmMinigamePotDL
 extern Gfx D_060067C0[]; // pre-minigame pot?
 extern Gfx D_06004B60[];
 extern Gfx D_060043E0[];
@@ -1891,7 +1935,7 @@ void ObjUm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
         2100.0f
     };
     Vec3f spC0 = D_801D15B0;
-    Vec3f spB4;
+    Vec3f calcPotPos;
     f32 spB0;
 
     spC0.y += 1700.0f;
@@ -1906,29 +1950,28 @@ void ObjUm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     if (limbIndex == UM_LIMB_WAGGON_CART_BED) {
         Vec3f sp98 = {2500.0f, 200.0f, 0.0f};
 
-        // TODO: test commenting this line
         SysMatrix_MultiplyVector3fByState(&sp98, &this->cartBedPos);
     }
 
     if (limbIndex == UM_LIMB_WAGGON_CART_BED) {
-        Vec3f *new_var;
+        Vec3f *potPos;
         Vec3f sp88;
         Vec3s sp80;
-        s32 sp7C;
+        s32 i;
         f32 sp70[] = {2000.0f, 0.0f, -2000.0f};
 
-        if (!sp7C) {}
+        if (!i) {}
 
         sp80.x = 0;
         sp80.z = 0;
         sp88.x = 6800.0f;
         OPEN_DISPS(gfxCtx);
 
-        for (sp7C = 0; sp7C < 3; sp7C++) {
-            sp88.z = sp70[sp7C];
-            sp88.y = spCC[this->potsLife[sp7C]];
+        for (i = 0; i < ARRAY_COUNT(this->potsLife); i++) {
+            sp88.z = sp70[i];
+            sp88.y = spCC[this->potsLife[i]];
 
-            if (this->potsLife[sp7C] == 5) {
+            if (this->potsLife[i] == 5) {
                 sp80.y = 0x4000;
             } else {
                 sp80.y = -0x4000;
@@ -1937,15 +1980,16 @@ void ObjUm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
             SysMatrix_StatePush();
             SysMatrix_RotateAndTranslateState(&sp88, &sp80);
             mtx_s3 = Matrix_NewMtx(gfxCtx);
-            new_var = &this->potPos[sp7C];
-            SysMatrix_MultiplyVector3fByState(&spC0, &spB4);
-            SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->projectionMatrix, &spB4, new_var, &spB0);
-            if (this->wasPotHit[sp7C]) {
-                this->wasPotHit[sp7C] = false;
-                if (this->potsLife[sp7C] == 1) {
-                    func_80B7B93C(globalCtx, &spB4);
+            potPos = &this->potPos[i];
+            SysMatrix_MultiplyVector3fByState(&spC0, &calcPotPos);
+            SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->projectionMatrix, &calcPotPos, potPos, &spB0);
+
+            if (this->wasPotHit[i]) {
+                this->wasPotHit[i] = false;
+                if (this->potsLife[i] == 1) {
+                    ObjUm_SpawnFragments(globalCtx, &calcPotPos);
                 } else {
-                    EffectSsHitMark_SpawnFixedScale(globalCtx, 0, &spB4);
+                    EffectSsHitMark_SpawnFixedScale(globalCtx, 0, &calcPotPos);
                 }
             }
             SysMatrix_StatePop();
@@ -1954,13 +1998,13 @@ void ObjUm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
                 if (globalCtx) {}
                 gSPMatrix(POLY_OPA_DISP++, mtx_s3, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                if (spFC[this->potsLife[sp7C]] != NULL) {
+                if (spFC[this->potsLife[i]] != NULL) {
                     s32 pad;
 
-                    gSPDisplayList(POLY_OPA_DISP++, spFC[this->potsLife[sp7C]]);
+                    gSPDisplayList(POLY_OPA_DISP++, spFC[this->potsLife[i]]);
 
-                    if (spE4[this->potsLife[sp7C]] != NULL) {
-                        gSPDisplayList(POLY_OPA_DISP++, spE4[this->potsLife[sp7C]]);
+                    if (spE4[this->potsLife[i]] != NULL) {
+                        gSPDisplayList(POLY_OPA_DISP++, spE4[this->potsLife[i]]);
                     }
                 }
             } else {
@@ -2018,7 +2062,7 @@ void func_80B7BEA4(Vec3f* cartBedPos, s16 arg1, Vec3f* arg2, u8 alpha, GlobalCon
 
 void ObjUm_PrintStruct(ObjUm* this, GlobalContext* globalCtx, GfxPrint* printer) {
     s32 x = 31;
-    s32 y = 7;
+    s32 y = 3;
     s32 i;
     uintptr_t actionFuncReloc;
 
@@ -2041,8 +2085,8 @@ void ObjUm_PrintStruct(ObjUm* this, GlobalContext* globalCtx, GfxPrint* printer)
     GfxPrint_SetPos(printer, x-2, ++y);
     GfxPrint_Printf(printer, "! 2B4:%X", this->unk_2B4);
 
-    GfxPrint_SetPos(printer, x-1, ++y);
-    GfxPrint_Printf(printer, "path:%X", this->pathIdx);
+    //GfxPrint_SetPos(printer, x-1, ++y);
+    //GfxPrint_Printf(printer, "path:%X", this->pathIdx);
     GfxPrint_SetPos(printer, x-5, ++y);
     GfxPrint_Printf(printer, "pointIdx:%X", this->pointIdx);
 
@@ -2132,6 +2176,28 @@ void ObjUm_PrintStruct(ObjUm* this, GlobalContext* globalCtx, GfxPrint* printer)
             GfxPrint_Printf(printer, "%s", &flagsMap[i][7]);
         }
     }
+
+
+
+    y = 20;
+    x = 29;
+
+    GfxPrint_SetPos(printer, x-2, ++y);
+    GfxPrint_Printf(printer, "weekEvent");
+    // GfxPrint_SetPos(printer, x, ++y);
+    // GfxPrint_Printf(printer, "[0x16]&0x01: %i", gSaveContext.weekEventReg[0x16] & 0x01);
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "[1F]&40:%i", gSaveContext.weekEventReg[0x1F] & 0x40 ? 1 : 0);
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "[1F]&80:%i", gSaveContext.weekEventReg[0x1F] & 0x80 ? 1 : 0);
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "[22]&80:%i", gSaveContext.weekEventReg[0x22] & 0x80 ? 1 : 0);
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "[34]&01:%i", gSaveContext.weekEventReg[0x34] & 0x01 ? 1 : 0);
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "[34]&02:%i", gSaveContext.weekEventReg[0x34] & 0x02 ? 1 : 0);
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "[3B]&02:%i", gSaveContext.weekEventReg[0x3B] & 0x02 ? 1 : 0);
 }
 
 void ObjUm_DrawStruct(ObjUm* this, GlobalContext* globalCtx) {

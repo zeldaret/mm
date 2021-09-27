@@ -14511,7 +14511,7 @@
     0x80B7B18C:("ObjUm_UpdateAnim",),
     0x80B7B368:("ObjUm_Update",),
     0x80B7B598:("ObjUm_OverrideLimbDraw",),
-    0x80B7B93C:("func_80B7B93C",),
+    0x80B7B93C:("ObjUm_SpawnFragments",),
     0x80B7BABC:("ObjUm_PostLimbDraw",),
     0x80B7BEA4:("func_80B7BEA4",),
     0x80B7C03C:("ObjUm_Draw",),
