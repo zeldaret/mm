@@ -40,7 +40,7 @@ typedef struct ObjUm {
     /* 0x160 */ SkelAnime skelAnime;
     /* 0x1A4 */ Vec3s jointTable[UM_LIMB_MAX];
     /* 0x228 */ Vec3s morphTable[UM_LIMB_MAX];
-    /* 0x2AC */ s16 unk_2AC; // x angle
+    /* 0x2AC */ s16 wheelRot;
     /* 0x2AE */ s16 type;
     /* 0x2B0 */ s16 initialPathIdx;
     /* 0x2B4 */ s32 unk_2B4;
@@ -58,7 +58,7 @@ typedef struct ObjUm {
     /* 0x308 */ Vec3f unk_308;
     /* 0x314 */ s32 potsLife[3];
     /* 0x320 */ s32 wasPotHit[3]; // resets to false in the same frame
-    /* 0x32C */ Vec3f unk_32C[3];
+    /* 0x32C */ Vec3f potPos[3];
     /* 0x350 */ s32 unk_350; // unused counter?
     /* 0x354 */ s32 unk_354; // unused?
     /* 0x358 */ EnHorse* bandit1;
@@ -66,8 +66,8 @@ typedef struct ObjUm {
     /* 0x360 */ Vec3f unk_360[16];
     /* 0x420 */ s32 unk_420; // ?
     /* 0x424 */ ColliderCylinder banditsCollisions[2];
-    /* 0x4BC */ Vec3f unk_4BC;
-    /* 0x4C8 */ u16 unk_4C8; // time?
+    /* 0x4BC */ Vec3f cartBedPos;
+    /* 0x4C8 */ u16 lastTime;
     /* 0x4CC */ s32 unk_4CC;
     /* 0x4D0 */ s32 eyeTexIndex;
     /* 0x4D4 */ s32 mouthTexIndex;
@@ -91,7 +91,7 @@ typedef enum {
 
 #define OBJ_UM_FLAG_0000 0x0000
 #define OBJ_UM_FLAG_0001 0x0001
-#define OBJ_UM_FLAG_0002 0x0002 // moving animation?
+#define OBJ_UM_FLAG_MOVING 0x0002
 #define OBJ_UM_FLAG_0004 0x0004
 #define OBJ_UM_FLAG_WAITING 0x0008 // Waiting in the Ranch
 #define OBJ_UM_FLAG_0010 0x0010

@@ -306,6 +306,7 @@ s32 ObjUm_InitBandits(ObjUm* this, GlobalContext* globalCtx) {
     return 0;
 }
 
+// BanditAttack?
 s32 func_80B781DC(ObjUm* this, EnHorse* arg2, EnHorse* arg3, GlobalContext* globalCtx) {
     s32 temp_v0;
     s32 phi_s3 = -1;
@@ -455,34 +456,35 @@ s32 func_80B78764(ObjUm* this, GlobalContext* globalCtx, EnHorse* arg2, EnHorse*
         arg2->unk_55C = 0;
 
         if ((arg2->unk_550 == 3) && !(this->flags & OBJ_UM_FLAG_MINIGAME_FINISHED)) {
-            s32 phi_v1_2 = -1;
+            s32 potIndex = -1;
+
             if (this->potsLife[0] != 1) {
-                phi_v1_2 = 0;
+                potIndex = 0;
             }
 
             if (this->potsLife[1] != 1) {
-                if ((phi_v1_2 == -1) || (phi_v1_2 == 0 && Rand_ZeroOne() < 0.3f)) {
-                    phi_v1_2 = 1;
+                if ((potIndex == -1) || (potIndex == 0 && Rand_ZeroOne() < 0.3f)) {
+                    potIndex = 1;
                 }
             }
 
             if (this->potsLife[2] != 1) {
-                if ((phi_v1_2 == -1) || (phi_v1_2 != -1 && Rand_ZeroOne() < 0.3f)) {
-                    phi_v1_2 = 2;
+                if ((potIndex == -1) || (potIndex != -1 && Rand_ZeroOne() < 0.3f)) {
+                    potIndex = 2;
                 }
             }
 
-            if (this->potsLife[phi_v1_2] != 1) {
-                this->wasPotHit[phi_v1_2] = true;
-                if (this->potsLife[phi_v1_2] == 2) {
-                    func_8019F1C0(&this->unk_32C[phi_v1_2], NA_SE_EV_MILK_POT_BROKEN);
+            if (this->potsLife[potIndex] != 1) {
+                this->wasPotHit[potIndex] = true;
+                if (this->potsLife[potIndex] == 2) {
+                    func_8019F1C0(&this->potPos[potIndex], NA_SE_EV_MILK_POT_BROKEN);
                 } else {
-                    func_8019F1C0(&this->unk_32C[phi_v1_2], NA_SE_EV_MILK_POT_DAMAGE);
+                    func_8019F1C0(&this->potPos[potIndex], NA_SE_EV_MILK_POT_DAMAGE);
                 }
 
-                this->potsLife[phi_v1_2]--;
-                if (this->potsLife[phi_v1_2] <= 0) {
-                    this->potsLife[phi_v1_2] = 1;
+                this->potsLife[potIndex]--;
+                if (this->potsLife[potIndex] <= 0) {
+                    this->potsLife[potIndex] = 1;
                 }
             }
         }
@@ -555,6 +557,7 @@ s32 func_80B78A54(ObjUm* this, GlobalContext* globalCtx, s32 arg2, EnHorse* arg3
     return 0;
 }
 
+// ObjUm_UpdateBanditLogic?
 s32 func_80B78C18(ObjUm* this, GlobalContext* globalCtx) {
     EnHorse* bandit1 = this->bandit1;
     EnHorse* bandit2 = this->bandit2;
@@ -658,13 +661,13 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
     for (i = 0; i < 3; i++) {
         this->potsLife[i] = 5;
         this->wasPotHit[i] = false;
-        this->unk_32C[i] = D_801D15B0;
+        this->potPos[i] = D_801D15B0;
     }
 
     this->donkey = NULL;
     this->unk_354 = 0;
     this->unk_420 = 0;
-    this->unk_4BC = this->dyna.actor.world.pos;
+    this->cartBedPos = this->dyna.actor.world.pos;
 
     this->unk_4CC = 0;
     this->mouthTexIndex = 0;
@@ -676,7 +679,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06011DF8, NULL, this->jointTable, this->morphTable, UM_LIMB_MAX);
     SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06012CC0);
 
-    this->unk_2AC = 0;
+    this->wheelRot = 0;
     ObjUm_StopAnim(this, globalCtx);
 
     this->type = OBJ_UM_PARSE_TYPE(thisx->params);
@@ -793,8 +796,8 @@ void ObjUm_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
     BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_32C); i++) {
-        func_801A72CC(&this->unk_32C[i]);
+    for (i = 0; i < ARRAY_COUNT(this->potPos); i++) {
+        func_801A72CC(&this->potPos[i]);
     }
 
     Collider_DestroyCylinder(globalCtx, &this->banditsCollisions[0]);
@@ -1128,7 +1131,7 @@ ObjUmPathState ObjUm_UpdatePath(ObjUm* this, GlobalContext* globalCtx) {
 }
 
 void func_80B79F10(ObjUm* this, GlobalContext* globalCtx) {
-    this->unk_2AC += 1000;
+    this->wheelRot += 1000;
     this->flags &= ~OBJ_UM_FLAG_WAITING;
     ObjUm_UpdateAnim(this, globalCtx, 0);
 
@@ -1157,7 +1160,7 @@ void func_80B79FFC(ObjUm* this, GlobalContext* globalCtx) {
 
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        this->unk_4C8 = gSaveContext.time;
+        this->lastTime = gSaveContext.time;
         ObjUm_SetupAction(this, func_80B7A0E0);
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
@@ -1183,7 +1186,7 @@ void func_80B7A070(ObjUm* this, GlobalContext* globalCtx) {
 
 void func_80B7A0E0(ObjUm* this, GlobalContext* globalCtx) {
     ObjUm_UpdateAnim(this, globalCtx, 2);
-    if (gSaveContext.time != this->unk_4C8) {
+    if (gSaveContext.time != this->lastTime) {
         ObjUm_UpdateAnim(this, globalCtx, 0);
         ObjUm_SetupAction(this, func_80B7A070);
     }
@@ -1225,16 +1228,16 @@ void ObjUm_PreMilkRunDialogueHandler(ObjUm* this, GlobalContext* globalCtx) {
 
 void func_80B7A240(ObjUm* this, GlobalContext* globalCtx) {
     ObjUm_UpdateAnim(this, globalCtx, 2);
-    if (gSaveContext.time != this->unk_4C8) {
+    if (gSaveContext.time != this->lastTime) {
         ObjUm_SetupAction(this, func_80B7A2AC);
     }
 
-    this->unk_4C8 = gSaveContext.time;
+    this->lastTime = gSaveContext.time;
     ObjUm_PreMilkRunDialogueHandler(this, globalCtx);
 }
 
 void func_80B7A2AC(ObjUm* this, GlobalContext* globalCtx) {
-    this->unk_2AC += 1000;
+    this->wheelRot += 1000;
     ObjUm_UpdateAnim(this, globalCtx, 0);
 
     switch (ObjUm_UpdatePath(this, globalCtx)) {
@@ -1247,11 +1250,11 @@ void func_80B7A2AC(ObjUm* this, GlobalContext* globalCtx) {
             break;
 
         default:
-            if (gSaveContext.time == this->unk_4C8) {
+            if (gSaveContext.time == this->lastTime) {
                 ObjUm_SetupAction(this, func_80B7A240);
             }
 
-            this->unk_4C8 = gSaveContext.time;
+            this->lastTime = gSaveContext.time;
             Actor_SetVelocityAndMoveYRotationAndGravity(&this->dyna.actor);
             ObjUm_PreMilkRunDialogueHandler(this, globalCtx);
             break;
@@ -1261,7 +1264,7 @@ void func_80B7A2AC(ObjUm* this, GlobalContext* globalCtx) {
 void func_80B7A394(ObjUm* this, GlobalContext* globalCtx) {
     ObjUm_SetPlayerPosition(this, globalCtx);
     this->flags |= OBJ_UM_FLAG_0004;
-    if (gSaveContext.time != this->unk_4C8) {
+    if (gSaveContext.time != this->lastTime) {
         ObjUm_UpdateAnim(this, globalCtx, 0);
         ObjUm_SetupAction(this, func_80B7A2AC);
     }
@@ -1275,17 +1278,18 @@ void ObjUm_PreMilkRunStartCs(ObjUm* this, GlobalContext* globalCtx) {
     player->stateFlags1 |= 0x20;
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        this->unk_4C8 = gSaveContext.time;
+        this->lastTime = gSaveContext.time;
         ObjUm_SetupAction(this, func_80B7A394);
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
     }
 }
 
+// MinigameLoop?
 void func_80B7A494(ObjUm* this, GlobalContext* globalCtx) {
     ObjUm_SetPlayerPosition(this, globalCtx);
     ObjUm_RotatePlayer(this, globalCtx, 0x7FFF);
-    this->unk_2AC += 2000;
+    this->wheelRot += 2000;
     this->flags |= OBJ_UM_FLAG_0010;
     ObjUm_UpdateAnim(this, globalCtx, 1);
 
@@ -1327,7 +1331,7 @@ void func_80B7A614(ObjUm* this, GlobalContext* globalCtx) {
 
     ObjUm_SetPlayerPosition(this, globalCtx);
     ObjUm_RotatePlayer(this, globalCtx, 0x7FFF);
-    this->unk_2AC += 2000;
+    this->wheelRot += 2000;
     this->flags |= OBJ_UM_FLAG_0010;
     this->flags |= OBJ_UM_FLAG_PLAYING_MINIGAME;
     ObjUm_UpdateAnim(this, globalCtx, 1);
@@ -1488,16 +1492,16 @@ void func_80B7A860(ObjUm* this, GlobalContext* globalCtx) {
 
 void func_80B7AB78(ObjUm* this, GlobalContext* globalCtx) {
     ObjUm_UpdateAnim(this, globalCtx, 2);
-    if (gSaveContext.time != this->unk_4C8) {
+    if (gSaveContext.time != this->lastTime) {
         ObjUm_SetupAction(this, func_80B7ABE4);
     }
 
-    this->unk_4C8 = gSaveContext.time;
+    this->lastTime = gSaveContext.time;
     func_80B7A860(this, globalCtx);
 }
 
 void func_80B7ABE4(ObjUm* this, GlobalContext* globalCtx) {
-    this->unk_2AC += 1000;
+    this->wheelRot += 1000;
 
     ObjUm_UpdateAnim(this, globalCtx, 0);
     switch (ObjUm_UpdatePath(this, globalCtx)) {
@@ -1506,10 +1510,11 @@ void func_80B7ABE4(ObjUm* this, GlobalContext* globalCtx) {
             break;
 
         default:
-            if (gSaveContext.time == this->unk_4C8) {
+            if (gSaveContext.time == this->lastTime) {
                 ObjUm_SetupAction(this, func_80B7AB78);
             }
-            this->unk_4C8 = gSaveContext.time;
+
+            this->lastTime = gSaveContext.time;
             Actor_SetVelocityAndMoveYRotationAndGravity(&this->dyna.actor);
             func_80B7A860(this, globalCtx);
             break;
@@ -1527,7 +1532,7 @@ void ObjUm_StartCs(ObjUm* this, GlobalContext* globalCtx) {
 
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        this->unk_4C8 = gSaveContext.time;
+        this->lastTime = gSaveContext.time;
         ObjUm_SetupAction(this, func_80B7ABE4);
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
@@ -1541,7 +1546,7 @@ void func_80B7AD34(ObjUm* this, GlobalContext* globalCtx) {
     ObjUm_SetPlayerPosition(this, globalCtx);
     ObjUm_RotatePlayer(this, globalCtx, 0);
     this->flags |= OBJ_UM_FLAG_0004;
-    this->unk_2AC += 1000;
+    this->wheelRot += 1000;
     ObjUm_UpdateAnim(this, globalCtx, 0);
 
     if ((ObjUm_UpdatePath(this, globalCtx) == OBJUM_PATH_STATE_4) && !(gSaveContext.weekEventReg[0x3B] & 2)) {
@@ -1598,14 +1603,14 @@ void func_80B7AF30(ObjUm* this, GlobalContext* globalCtx) {
         this->unk_2E8 = this->unk_2DC;
 
         this->unk_2D0.y = func_800C3FA0(&globalCtx->colCtx, &sp44, &this->unk_2C4);
-        if (this->unk_2D0.y == -32000.0f) {
+        if (this->unk_2D0.y == BGCHECK_Y_MIN) {
             this->unk_2D0.y = this->dyna.actor.floorHeight;
         }
 
         if (1) { }
 
         this->unk_2E8.y = func_800C3FA0(&globalCtx->colCtx, &sp44, &this->unk_2DC);
-        if (this->unk_2E8.y == -32000.0f) {
+        if (this->unk_2E8.y == BGCHECK_Y_MIN) {
             this->unk_2E8.y = this->dyna.actor.floorHeight;
         }
 
@@ -1615,7 +1620,7 @@ void func_80B7AF30(ObjUm* this, GlobalContext* globalCtx) {
 
         this->dyna.actor.shape.rot.x = (s16) Math_Atan2S(sp30.y - this->dyna.actor.world.pos.y, sqrtf(SQ(sp30.x - this->dyna.actor.world.pos.x) + SQ(sp30.z - this->dyna.actor.world.pos.z)));
         this->dyna.actor.shape.rot.z = (s16) -Math_Atan2S(sp30.y - this->unk_2D0.y, sqrtf(SQ(sp30.x - this->unk_2D0.x) + SQ(sp30.z - this->unk_2D0.z)));
-        if (this->flags & OBJ_UM_FLAG_0002) {
+        if (this->flags & OBJ_UM_FLAG_MOVING) {
             this->dyna.actor.shape.rot.x += BINANG_SUB((Rand_ZeroOne() * 100.0f), 50.0f);
             this->dyna.actor.shape.rot.z += BINANG_SUB((Rand_ZeroOne() * 100.0f), 50.0f);
         }
@@ -1634,9 +1639,9 @@ void ObjUm_UpdateAnim(ObjUm* this, GlobalContext* globalCtx, s32 index) {
     f32 animPlaybackSpeed = 0.0f;
 
     if (D_80B7C25C[index].unk_04) {
-        this->flags |= OBJ_UM_FLAG_0002;
+        this->flags |= OBJ_UM_FLAG_MOVING;
     } else {
-        this->flags &= ~OBJ_UM_FLAG_0002;
+        this->flags &= ~OBJ_UM_FLAG_MOVING;
     }
 
     if (index == 0) {
@@ -1684,8 +1689,8 @@ void ObjUm_UpdateAnim(ObjUm* this, GlobalContext* globalCtx, s32 index) {
         }
     }
 
-    if (this->unk_2AC / 0x199A != this->unk_420) {
-        this->unk_420 = this->unk_2AC / 0x199A;
+    if (this->wheelRot / 0x199A != this->unk_420) {
+        this->unk_420 = this->wheelRot / 0x199A;
         // Required to match
         if (!&D_80B7C25C[0]) {}
         Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_CART_WHEEL);
@@ -1793,13 +1798,13 @@ s32 ObjUm_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     }
 
     if (limbIndex == UM_LIMB_WAGGON_RIGHT_WHEEL) {
-        if (this->flags & OBJ_UM_FLAG_0002) {
-            rot->x = -this->unk_2AC;
+        if (this->flags & OBJ_UM_FLAG_MOVING) {
+            rot->x = -this->wheelRot;
         }
         SysMatrix_MultiplyVector3fByState(&sp5C, &this->unk_2C4);
     } else if (limbIndex == UM_LIMB_WAGGON_LEFT_WHEEL) {
-        if (this->flags & OBJ_UM_FLAG_0002) {
-            rot->x = this->unk_2AC;
+        if (this->flags & OBJ_UM_FLAG_MOVING) {
+            rot->x = this->wheelRot;
         }
         SysMatrix_MultiplyVector3fByState(&sp50, &this->unk_2DC);
     } else if ((limbIndex == UM_LIMB_CREMIA_HEAD) && (this->flags & OBJ_UM_FLAG_WAITING)) {
@@ -1851,25 +1856,31 @@ void func_80B7B93C(GlobalContext* globalCtx, Vec3f* arg1) {
     }
 }
 
+extern Gfx D_060052B0[]; // broken pot?
+extern Gfx D_06003C60[]; // minigame pot?
+extern Gfx D_060067C0[]; // pre-minigame pot?
+extern Gfx D_06004B60[];
+extern Gfx D_060043E0[];
+
 void ObjUm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     ObjUm* this = THIS;
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
     Mtx *mtx_s3;
     Gfx* spFC [] = {
-        0x00000000,
-        0x060052B0,
-        0x06003C60,
-        0x06003C60,
-        0x06003C60,
-        0x060067C0,
+        NULL,
+        D_060052B0,
+        D_06003C60,
+        D_06003C60,
+        D_06003C60,
+        D_060067C0
     };
     Gfx* spE4[] = {
-        0x00000000,
-        0x00000000,
-        0x06004B60,
-        0x060043E0,
-        0x00000000,
-        0x00000000,
+        NULL,
+        NULL,
+        D_06004B60,
+        D_060043E0,
+        NULL,
+        NULL
     };
     f32 spCC[] = {
         0.0f,
@@ -1877,7 +1888,7 @@ void ObjUm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
         1070.0f,
         1070.0f,
         1070.0f,
-        2100.0f,
+        2100.0f
     };
     Vec3f spC0 = D_801D15B0;
     Vec3f spB4;
@@ -1895,7 +1906,8 @@ void ObjUm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     if (limbIndex == UM_LIMB_WAGGON_CART_BED) {
         Vec3f sp98 = {2500.0f, 200.0f, 0.0f};
 
-        SysMatrix_MultiplyVector3fByState(&sp98, &this->unk_4BC);
+        // TODO: test commenting this line
+        SysMatrix_MultiplyVector3fByState(&sp98, &this->cartBedPos);
     }
 
     if (limbIndex == UM_LIMB_WAGGON_CART_BED) {
@@ -1925,7 +1937,7 @@ void ObjUm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
             SysMatrix_StatePush();
             SysMatrix_RotateAndTranslateState(&sp88, &sp80);
             mtx_s3 = Matrix_NewMtx(gfxCtx);
-            new_var = &this->unk_32C[sp7C];
+            new_var = &this->potPos[sp7C];
             SysMatrix_MultiplyVector3fByState(&spC0, &spB4);
             SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->projectionMatrix, &spB4, new_var, &spB0);
             if (this->wasPotHit[sp7C]) {
@@ -1964,7 +1976,7 @@ void ObjUm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     }
 }
 
-void func_80B7BEA4(Vec3f* arg0, s16 arg1, Vec3f* arg2, u8 alpha, GlobalContext* globalCtx) {
+void func_80B7BEA4(Vec3f* cartBedPos, s16 arg1, Vec3f* arg2, u8 alpha, GlobalContext* globalCtx) {
     f32 temp;
     Vec3f sp108;
     CollisionPoly* sp104;
@@ -1973,13 +1985,13 @@ void func_80B7BEA4(Vec3f* arg0, s16 arg1, Vec3f* arg2, u8 alpha, GlobalContext* 
     MtxF sp80;
     MtxF sp40;
 
-    VEC_SET(sp108, arg0->x, arg0->y + 1.0f, arg0->z);
+    VEC_SET(sp108, cartBedPos->x, cartBedPos->y + 1.0f, cartBedPos->z);
 
     temp = func_800C4000(globalCtx, &globalCtx->colCtx, &sp104, &sp108);
     if (sp104 != NULL) {
-        func_800C0094(sp104, arg0->x, temp, arg0->z, &spC0);
+        func_800C0094(sp104, cartBedPos->x, temp, cartBedPos->z, &spC0);
     } else {
-        SkinMatrix_SetTranslate(&spC0, arg0->x, arg0->y, arg0->z);
+        SkinMatrix_SetTranslate(&spC0, cartBedPos->x, cartBedPos->y, cartBedPos->z);
     }
 
     SkinMatrix_MulYRotation( &spC0, arg1);
@@ -2019,8 +2031,8 @@ void ObjUm_PrintStruct(ObjUm* this, GlobalContext* globalCtx, GfxPrint* printer)
     actionFuncReloc = (uintptr_t)this->actionFunc - (uintptr_t)func_80B77770 + SEGMENT_START(ovl_Obj_Um);
     GfxPrint_Printf(printer, "actionFunc:%X", actionFuncReloc & 0x0000FFFF);
 
-    // GfxPrint_SetPos(printer, x-3, ++y);
-    // GfxPrint_Printf(printer, "xAngle:%X", this->unk_2AC);
+    // GfxPrint_SetPos(printer, x-5, ++y);
+    // GfxPrint_Printf(printer, "wheelRot:%X", this->wheelRot);
 
     GfxPrint_SetPos(printer, x-1, ++y);
     GfxPrint_Printf(printer, "type:%X", this->type);
@@ -2038,7 +2050,7 @@ void ObjUm_PrintStruct(ObjUm* this, GlobalContext* globalCtx, GfxPrint* printer)
     // GfxPrint_Printf(printer, "flags:%X", this->flags);
 
     GfxPrint_SetPos(printer, x, ++y);
-    GfxPrint_Printf(printer, "304:%X", this->unk_304);
+    GfxPrint_Printf(printer, "304:%i", this->unk_304);
 
     // GfxPrint_SetPos(printer, x-2, ++y);
     // GfxPrint_Printf(printer, "308.x:%f", this->unk_308.x);
@@ -2064,7 +2076,7 @@ void ObjUm_PrintStruct(ObjUm* this, GlobalContext* globalCtx, GfxPrint* printer)
     }
 
     GfxPrint_SetPos(printer, x-1, ++y);
-    GfxPrint_Printf(printer, "time:%X", this->unk_4C8);
+    GfxPrint_Printf(printer, "time:%X", this->lastTime);
 
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "4CC:%X", this->unk_4CC);
@@ -2100,7 +2112,7 @@ void ObjUm_PrintStruct(ObjUm* this, GlobalContext* globalCtx, GfxPrint* printer)
     for (i = 0; i < 16; i++) {
         static char* flagsMap[] = {
             "OBJ_UM_FLAG_0001",
-            "OBJ_UM_FLAG_0002",
+            "OBJ_UM_FLAG_MOVING",
             "OBJ_UM_FLAG_0004",
             "OBJ_UM_FLAG_WAITING",
             "OBJ_UM_FLAG_0010",
@@ -2164,7 +2176,7 @@ void ObjUm_Draw(Actor* thisx, GlobalContext* globalCtx) {
     sp34.x = 0.45f;
     sp34.y = 0.0f;
     sp34.z = 0.7f;
-    func_80B7BEA4(&this->unk_4BC, this->dyna.actor.shape.rot.y, &sp34, 180, globalCtx);
+    func_80B7BEA4(&this->cartBedPos, this->dyna.actor.shape.rot.y, &sp34, 180, globalCtx);
     func_80B77770(this, globalCtx);
 
 #ifndef NOT_DEBUG_PRINT
