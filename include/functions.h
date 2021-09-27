@@ -681,8 +681,8 @@ void func_800B3030(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f*
 // void func_800B31BC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6);
 void EffectSsIceSmoke_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale);
 // void EffectSsIceBlock_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5);
-// void func_800B32D0(GameState* gamestate);
-// void func_800B3644(void);
+void FlagSet_Update(GameState* gamestate);
+void FlagSet_Draw(GameState* gameState);
 void DLF_LoadGameState(GameStateOverlay* gameState);
 void DLF_FreeGameState(GameStateOverlay* gameState);
 void Actor_PrintLists(ActorContext* actorCtx);

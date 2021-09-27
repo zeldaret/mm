@@ -132,7 +132,7 @@ s32 entryIndex = 0;
 u32 currentBit = 0;
 s32 timer = 0;
 
-void func_800B32D0(GameState* gameState) {
+void FlagSet_Update(GameState* gameState) {
 
     GlobalContext* globalCtx = (GlobalContext*)gameState;
     Input* input = CONTROLLER1(globalCtx);
@@ -175,7 +175,7 @@ void func_800B32D0(GameState* gameState) {
 
     if (CHECK_BTN_ALL(input->press.button, BTN_DDOWN)) {
         entryIndex++;
-        if ((D_801AE8F0[entryIndex].value) == NULL) {
+        if (D_801AE8F0[entryIndex].value == NULL) { // End of array
             entryIndex--;
         }
         timer = 10;
@@ -208,7 +208,7 @@ void func_800B32D0(GameState* gameState) {
 
         } else if (CHECK_BTN_ALL(input->cur.button, BTN_DDOWN)) {
             entryIndex++;
-            if ((D_801AE8F0[entryIndex].value) == NULL) {
+            if (D_801AE8F0[entryIndex].value == NULL) { // End of array
                 entryIndex--;
             }
             timer = 2;
@@ -231,7 +231,7 @@ void func_800B32D0(GameState* gameState) {
 
     /* Other controls */
 
-    // A toggles a value
+    // A toggles the selected flag
     if (CHECK_BTN_ALL(input->press.button, BTN_A)) {
         *D_801AE8F0[entryIndex].value ^= (1 << currentBit);
     }
@@ -240,7 +240,7 @@ void func_800B32D0(GameState* gameState) {
         timer--;
     }
 
-    // Start + B will reset the first two flag arrays
+    // Hold Start and press B will reset the first two flag arrays
     if (CHECK_BTN_ALL(input->cur.button, BTN_START)) {
         if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
             s16 i;
@@ -260,7 +260,7 @@ void func_800B32D0(GameState* gameState) {
 
 extern s32 D_801ED890;
 
-void func_800B3644(GameState* gameState) {
+void FlagSet_Draw(GameState* gameState) {
     GraphicsContext* gfxCtx = gameState->gfxCtx;
     Gfx* gfx;
     Gfx* polyOpa;
@@ -280,18 +280,23 @@ void func_800B3644(GameState* gameState) {
     GfxPrint_Printf(&printer, D_801AE8F0[entryIndex].name);
     GfxPrint_SetPos(&printer, 12, 15);
 
+    // Print the flag bits in the current byte, largest to smallest
     for (D_801ED890 = 7; D_801ED890 >= 0; D_801ED890--) {
+        // Highlight current flag bit in white, rest in grey
         if ((u32)D_801ED890 == currentBit) {
             GfxPrint_SetColor(&printer, 200, 200, 200, 255);
         } else {
             GfxPrint_SetColor(&printer, 100, 100, 100, 255);
         }
+
+        // Display 1 if flag set and 0 if not
         if (*D_801AE8F0[entryIndex].value & (1 << D_801ED890)) {
             GfxPrint_Printf(&printer, "1");
         } else {
             GfxPrint_Printf(&printer, "0");
         }
 
+        // Add a space after each group of 4
         if ((D_801ED890 % 4) == 0) {
             GfxPrint_Printf(&printer, " ");
         }
@@ -306,5 +311,3 @@ void func_800B3644(GameState* gameState) {
 
     CLOSE_DISPS(gfxCtx);
 }
-
-#pragma GLOBAL_ASM("asm/non_matchings/code/flg_set/D_801DC9B8.s")
