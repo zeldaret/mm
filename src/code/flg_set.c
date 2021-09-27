@@ -1,3 +1,14 @@
+/**
+ * File: flg_set.c
+ * Description: Event Editor, used to view and edit weekEventReg, eventInf and maskMaskBit flags.
+ * Controls:
+ *  + Left and Right: select different flags/bits in array element
+ *  + Up and Down: select array element (byte) 1 up/down
+ *  C Up and Down: select array element (byte) 10 up/down
+ *  A: toggle flag
+ *  B: exit
+ *  Hold Start and press B: clear all weekEventReg and eventInf flags
+ */
 #include "global.h"
 
 FlagSetEntry D_801AE8F0[] = {
@@ -112,7 +123,7 @@ FlagSetEntry D_801AE8F0[] = {
     { &gSaveContext.maskMaskBit[0], "mask_mask_bit[0]" },
     { &gSaveContext.maskMaskBit[1], "mask_mask_bit[1]" },
     { &gSaveContext.maskMaskBit[2], "mask_mask_bit[2]" },
-    { NULL, "" }, // used in the code
+    { NULL, 0 }, // used in the code
 };
 
 s32 D_801AEC70 = 0; // entryIdx
@@ -227,7 +238,7 @@ void func_800B32D0(GameState* gameState) {
             }
         }
 
-    // Pressing B will exit
+        // Pressing B will exit
     } else if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
         globalCtx->pauseCtx.debugState = 0;
     }
