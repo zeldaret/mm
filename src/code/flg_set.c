@@ -112,6 +112,7 @@ FlagSetEntry D_801AE8F0[] = {
     { &gSaveContext.weekEventReg[97], "week_event_reg[97]" },
     { &gSaveContext.weekEventReg[98], "week_event_reg[98]" },
     { &gSaveContext.weekEventReg[99], "week_event_reg[99]" },
+
     { &gSaveContext.eventInf[0], "event_inf[0]" },
     { &gSaveContext.eventInf[1], "event_inf[1]" },
     { &gSaveContext.eventInf[2], "event_inf[2]" },
@@ -120,110 +121,123 @@ FlagSetEntry D_801AE8F0[] = {
     { &gSaveContext.eventInf[5], "event_inf[5]" },
     { &gSaveContext.eventInf[6], "event_inf[6]" },
     { &gSaveContext.eventInf[7], "event_inf[7]" },
+
     { &gSaveContext.maskMaskBit[0], "mask_mask_bit[0]" },
     { &gSaveContext.maskMaskBit[1], "mask_mask_bit[1]" },
     { &gSaveContext.maskMaskBit[2], "mask_mask_bit[2]" },
-    { NULL, 0 }, // used in the code
+    { NULL, 0 }, // used in the code to detect array end
 };
 
-s32 D_801AEC70 = 0; // entryIdx
-u32 D_801AEC74 = 0; // curBit
-s32 D_801AEC78 = 0; // timer
+s32 entryIndex = 0;
+u32 currentBit = 0;
+s32 timer = 0;
 
 void func_800B32D0(GameState* gameState) {
 
     GlobalContext* globalCtx = (GlobalContext*)gameState;
-    Input* input = &globalCtx->state.input[0];
+    Input* input = CONTROLLER1(globalCtx);
+
+    /* Intra-byte navigation */
 
     if (CHECK_BTN_ALL(input->press.button, BTN_DLEFT)) {
-        D_801AEC74++;
-        D_801AEC78 = 10;
+        currentBit++;
+        timer = 10;
     }
 
     if (CHECK_BTN_ALL(input->press.button, BTN_DRIGHT)) {
-        D_801AEC74--;
-        D_801AEC78 = 10;
+        currentBit--;
+        timer = 10;
     }
 
-    if (D_801AEC78 == 0) {
+    if (timer == 0) {
         if (CHECK_BTN_ALL(input->cur.button, BTN_DLEFT)) {
-            D_801AEC74++;
-            D_801AEC78 = 2;
+            currentBit++;
+            timer = 2;
         }
         if (CHECK_BTN_ALL(input->cur.button, BTN_DRIGHT)) {
-            D_801AEC74--;
-            D_801AEC78 = 2;
+            currentBit--;
+            timer = 2;
         }
     }
 
-    D_801AEC74 %= 8;
+    /* Navigation between bytes */
+
+    currentBit %= 8;
+
+    // + Up/Down, scroll 1 at a time
     if (CHECK_BTN_ALL(input->press.button, BTN_DUP)) {
-        D_801AEC70--;
-        if (D_801AEC70 < 0) {
-            D_801AEC70 = 0;
+        entryIndex--;
+        if (entryIndex < 0) {
+            entryIndex = 0;
         }
-        D_801AEC78 = 10;
+        timer = 10;
     }
 
     if (CHECK_BTN_ALL(input->press.button, BTN_DDOWN)) {
-        D_801AEC70++;
-        if ((D_801AE8F0[D_801AEC70].value) == NULL) {
-            D_801AEC70--;
+        entryIndex++;
+        if ((D_801AE8F0[entryIndex].value) == NULL) {
+            entryIndex--;
         }
-        D_801AEC78 = 10;
+        timer = 10;
     }
 
+    // C buttons scroll 10 at a time
     if (CHECK_BTN_ALL(input->press.button, BTN_CUP)) {
-        D_801AEC70 -= 10;
-        if (D_801AEC70 < 0) {
-            D_801AEC70 = 0;
+        entryIndex -= 10;
+        if (entryIndex < 0) {
+            entryIndex = 0;
         }
-        D_801AEC78 = 10;
+        timer = 10;
     }
 
     if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN)) {
-        D_801AEC70 += 10;
-        if (D_801AEC70 > 100) {
-            D_801AEC70 = 100;
+        entryIndex += 10;
+        if (entryIndex > 100) {
+            entryIndex = 100;
         }
-        D_801AEC78 = 10;
+        timer = 10;
     }
 
-    if (D_801AEC78 == 0) {
+    if (timer == 0) {
         if (CHECK_BTN_ALL(input->cur.button, BTN_DUP)) {
-            D_801AEC70--;
-            if (D_801AEC70 < 0) {
-                D_801AEC70 = 0;
+            entryIndex--;
+            if (entryIndex < 0) {
+                entryIndex = 0;
             }
-            D_801AEC78 = 2;
+            timer = 2;
+
         } else if (CHECK_BTN_ALL(input->cur.button, BTN_DDOWN)) {
-            D_801AEC70++;
-            if ((D_801AE8F0[D_801AEC70].value) == NULL) {
-                D_801AEC70--;
+            entryIndex++;
+            if ((D_801AE8F0[entryIndex].value) == NULL) {
+                entryIndex--;
             }
-            D_801AEC78 = 2;
+            timer = 2;
+
         } else if (CHECK_BTN_ALL(input->cur.button, BTN_CUP)) {
-            D_801AEC70 -= 10;
-            if (D_801AEC70 < 0) {
-                D_801AEC70 = 0;
+            entryIndex -= 10;
+            if (entryIndex < 0) {
+                entryIndex = 0;
             }
-            D_801AEC78 = 2;
+            timer = 2;
+
         } else if (CHECK_BTN_ALL(input->cur.button, BTN_CDOWN)) {
-            D_801AEC70 += 10;
-            if (D_801AEC70 > 100) {
-                D_801AEC70 = 100;
+            entryIndex += 10;
+            if (entryIndex > 100) {
+                entryIndex = 100;
             }
-            D_801AEC78 = 2;
+            timer = 2;
         }
     }
+
+    /* Other controls */
 
     // A toggles a value
     if (CHECK_BTN_ALL(input->press.button, BTN_A)) {
-        *D_801AE8F0[D_801AEC70].value ^= (1 << D_801AEC74);
+        *D_801AE8F0[entryIndex].value ^= (1 << currentBit);
     }
 
-    if (D_801AEC78 != 0) {
-        D_801AEC78--;
+    if (timer != 0) {
+        timer--;
     }
 
     // Start + B will reset the first two flag arrays
@@ -263,16 +277,16 @@ void func_800B3644(GameState* gameState) {
     GfxPrint_Open(&printer, gfx);
     GfxPrint_SetColor(&printer, 250, 50, 50, 255);
     GfxPrint_SetPos(&printer, 8, 13);
-    GfxPrint_Printf(&printer, D_801AE8F0[D_801AEC70].name);
+    GfxPrint_Printf(&printer, D_801AE8F0[entryIndex].name);
     GfxPrint_SetPos(&printer, 12, 15);
 
     for (D_801ED890 = 7; D_801ED890 >= 0; D_801ED890--) {
-        if ((u32)D_801ED890 == D_801AEC74) {
+        if ((u32)D_801ED890 == currentBit) {
             GfxPrint_SetColor(&printer, 200, 200, 200, 255);
         } else {
             GfxPrint_SetColor(&printer, 100, 100, 100, 255);
         }
-        if (*D_801AE8F0[D_801AEC70].value & (1 << D_801ED890)) {
+        if (*D_801AE8F0[entryIndex].value & (1 << D_801ED890)) {
             GfxPrint_Printf(&printer, "1");
         } else {
             GfxPrint_Printf(&printer, "0");
