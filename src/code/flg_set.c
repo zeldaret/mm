@@ -125,7 +125,7 @@ FlagSetEntry D_801AE8F0[] = {
     { &gSaveContext.maskMaskBit[0], "mask_mask_bit[0]" },
     { &gSaveContext.maskMaskBit[1], "mask_mask_bit[1]" },
     { &gSaveContext.maskMaskBit[2], "mask_mask_bit[2]" },
-    { NULL, 0 }, // used in the code to detect array end
+    { NULL, NULL }, // used in the code to detect array end
 };
 
 s32 entryIndex = 0;
