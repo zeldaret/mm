@@ -42,7 +42,7 @@ typedef struct ObjUm {
     /* 0x228 */ Vec3s morphTable[UM_LIMB_MAX];
     /* 0x2AC */ s16 unk_2AC; // x angle
     /* 0x2AE */ s16 type;
-    /* 0x2B0 */ s16 unk_2B0;
+    /* 0x2B0 */ s16 initialPathIdx;
     /* 0x2B4 */ s32 unk_2B4;
     /* 0x2B8 */ EnHorse* donkey;
     /* 0x2BC */ s32 pathIdx;
@@ -57,7 +57,7 @@ typedef struct ObjUm {
     /* 0x304 */ s32 unk_304;
     /* 0x308 */ Vec3f unk_308;
     /* 0x314 */ s32 potsLife[3];
-    /* 0x320 */ s32 unk_320[3];
+    /* 0x320 */ s32 wasPotHit[3]; // resets to false in the same frame
     /* 0x32C */ Vec3f unk_32C[3];
     /* 0x350 */ s32 unk_350; // unused counter?
     /* 0x354 */ s32 unk_354; // unused?
@@ -86,7 +86,8 @@ typedef enum {
     /* 4 */ OBJ_UM_TYPE_POST_MILK_RUN // milk road, post-minigame
 } ObjUmType;
 
-#define OBJ_UM_PARSE_TYPE(params) ((params) & 0xFF00) >> 8
+#define OBJ_UM_PARSE_TYPE(params) (((params) & 0xFF00) >> 8)
+#define OBJ_UM_PARSE_PATH_IDX(params) ((params) & 0xFF)
 
 #define OBJ_UM_FLAG_0000 0x0000
 #define OBJ_UM_FLAG_0001 0x0001
@@ -96,12 +97,12 @@ typedef enum {
 #define OBJ_UM_FLAG_0010 0x0010
 #define OBJ_UM_FLAG_DRAWN_FLOOR 0x0020
 #define OBJ_UM_FLAG_0040 0x0040
-#define OBJ_UM_FLAG_0080 0x0080 // DRAW_COVER?
+#define OBJ_UM_FLAG_PLAYING_MINIGAME 0x0080
 #define OBJ_UM_FLAG_0100 0x0100
 #define OBJ_UM_FLAG_0200 0x0200 // Something bandit1
 #define OBJ_UM_FLAG_0400 0x0400 // Something bandit2
 #define OBJ_UM_FLAG_0800 0x0800
 #define OBJ_UM_FLAG_1000 0x1000
-#define OBJ_UM_FLAG_2000 0x2000 // MINIGAME_FINISHED
+#define OBJ_UM_FLAG_MINIGAME_FINISHED 0x2000
 
 #endif // Z_OBJ_UM_H
