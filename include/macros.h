@@ -37,8 +37,7 @@
 #define CURRENT_DAY (((void)0, gSaveContext.day) % 5)
 
 #define CLOCK_TIME(hr, min) ((s32)(((hr) * 60 + (min)) * 0x10000 / (24 * 60)))
-// Equivalent to CLOCK_TIME(0, 1)
-#define CLOCK_TIME_MINUTE   (0x2D)
+#define CLOCK_TIME_MINUTE  (CLOCK_TIME(0, 1))
 
 #define SLOT(item) gItemSlots[item]
 #define AMMO(item) gSaveContext.inventory.ammo[SLOT(item)]
