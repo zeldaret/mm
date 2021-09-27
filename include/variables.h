@@ -418,7 +418,7 @@ extern EffectSsInfo EffectSS2Info;
 // extern UNK_TYPE1 D_801AE48C;
 // extern UNK_TYPE1 D_801AE490;
 extern EffectSsOverlay particleOverlayTable[39];
-extern UNK_PTR D_801AE8F0;
+extern FlagSetEntry D_801AE8F0[];
 // extern UNK_TYPE4 D_801AEC70;
 // extern UNK_TYPE4 D_801AEC74;
 // extern UNK_TYPE4 D_801AEC78;
