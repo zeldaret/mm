@@ -442,7 +442,8 @@ void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
 
             if (CURRENT_DAY == 3) {
                 if ((this->nextBellTime == CLOCK_TIME(0, 0)) &&
-                    ((gSaveContext.inventory.items[ITEM_OCARINA] == ITEM_NONE) || (globalCtx->sceneNum == SCENE_CLOCKTOWER))) {
+                    ((gSaveContext.inventory.items[ITEM_OCARINA] == ITEM_NONE) ||
+                     (globalCtx->sceneNum == SCENE_CLOCKTOWER))) {
                     s32 phi_v0;
                     u32 entranceIndex = gSaveContext.entranceIndex;
 
@@ -523,7 +524,7 @@ void func_80A430C8(EnTest4* this, GlobalContext* globalCtx) {
     if ((CURRENT_DAY == 2) && (gSaveContext.time >= CLOCK_TIME(7, 0)) && (gSaveContext.time < CLOCK_TIME(17, 30)) &&
         (globalCtx->envCtx.unk_F2[2] == 0)) {
         // rain?
-        
+
         D_801BDBB0 = 1;
         func_800FD78C(globalCtx);
         globalCtx->envCtx.unk_E3 = 1;
