@@ -107,7 +107,7 @@ void ObjEtcetera_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void ObjEtcetera_DoNormalOscillation(ObjEtcetera* this, GlobalContext* globalCtx) {
     if (this->oscillationTimer > 0) {
-        s32 pad;
+        s32 requiredScopeTemp;
 
         Actor_SetScale(&this->dyna.actor,
                        (oscillationTable[globalCtx->gameplayFrames % 18] * (0.0001f * this->oscillationTimer)) + 0.01f);
