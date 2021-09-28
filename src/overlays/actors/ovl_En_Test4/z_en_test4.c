@@ -31,15 +31,14 @@ const ActorInit En_Test4_InitVars = {
     (ActorFunc)NULL,
 };
 
-// singleton?
 static s32 sIsLoaded = false;
 // "Night of ..."
 static s16 sNightMessages1[] = { 0x1BB4, 0x1BB5, 0x1BB6 };
-// "Dawn of ..."
+// "Dawn of ..." (Note: first two message are the same)
 static s16 sDayMessages1[] = { 0x1BB2, 0x1BB2, 0x1BB3 };
 // "Night of ..."
 static s16 sNightMessages2[] = { 0x1BB4, 0x1BB5, 0x1BB6 };
-// "Dawn of ..."
+// "Dawn of ..." (Note: first two message are the same)
 static s16 sDayMessages2[] = { 0x1BB2, 0x1BB2, 0x1BB3 };
 static u16 D_80A43364[] = { CLOCK_TIME(6, 0), CLOCK_TIME(18, 0) };
 
