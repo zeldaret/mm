@@ -10,7 +10,7 @@ s32 PrintUtils_Printf(PrintCallback* pfn, const char* fmt, ...) {
     va_start(args, fmt);
 
     ret = PrintUtils_VPrintf(pfn, fmt, args);
-    
+
     va_end(args);
 
     return ret;
