@@ -142,9 +142,9 @@ void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx) {
         this->oscillationTimer = 30;
         this->burrowFlag &= ~1;
     } else if ((player->stateFlags3 & 0x2000) && (this->dyna.actor.xzDistToPlayer < 30.0f) &&
-               (this->dyna.actor.yDistToPlayer > 0.0f)) {
+               (this->dyna.actor.playerHeightRel > 0.0f)) {
         // Player is hovering above the Deku Flower
-        minOscillationTimer = 10 - (s32)(this->dyna.actor.yDistToPlayer * 0.05f);
+        minOscillationTimer = 10 - (s32)(this->dyna.actor.playerHeightRel * 0.05f);
         if (this->oscillationTimer < minOscillationTimer) {
             this->oscillationTimer = minOscillationTimer;
         }
