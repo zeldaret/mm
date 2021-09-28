@@ -112,7 +112,7 @@ static ColliderJntSphInit sJntSphInit = {
         COLSHAPE_JNTSPH,
     },
     1,
-    sJntSphElementsInit, // sJntSphElementsInit,
+    sJntSphElementsInit,
 };
 
 static DamageTable sDamageTable = {
@@ -291,17 +291,17 @@ void func_80B2CD14(EnPoh* this) {
 
 void func_80B2CD64(EnPoh* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
-    s16 yDiff;
+    s16 yawDiff;
 
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     if (this->unk_18E != 0) {
         this->unk_18E--;
     }
 
-    yDiff = this->actor.yawTowardsPlayer - player->actor.shape.rot.y;
-    if (yDiff > 0x3000) {
+    yawDiff = this->actor.yawTowardsPlayer - player->actor.shape.rot.y;
+    if (yawDiff > 0x3000) {
         Math_ScaledStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer + 0x3000, 0x71C);
-    } else if (yDiff < -0x3000) {
+    } else if (yawDiff < -0x3000) {
         Math_ScaledStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer - 0x3000, 0x71C);
     } else {
         Math_ScaledStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0x71C);
@@ -720,7 +720,7 @@ void func_80B2E438(EnPoh* this, GlobalContext* globalCtx) {
                     Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG,
                                 this->colliderCylinder.info.bumper.hitPos.x,
                                 this->colliderCylinder.info.bumper.hitPos.y,
-                                this->colliderCylinder.info.bumper.hitPos.z, 0, 0, 0, 4);
+                                this->colliderCylinder.info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
                 }
                 func_80B2CFF8(this);
             }
@@ -1013,7 +1013,7 @@ void func_80B2F37C(Actor* thisx, GlobalContext* globalCtx) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 170, 255, this->unk_197);
         gDPSetEnvColor(POLY_XLU_DISP++, this->unk_194, this->unk_195, this->unk_196, 255);
 
-        SysMatrix_InsertYRotation_f((func_800DFCDC(ACTIVE_CAM) + 0x8000) * 0.0000958738f, MTXMODE_APPLY);
+        SysMatrix_InsertYRotation_f((func_800DFCDC(ACTIVE_CAM) + 0x8000) * (M_PI / 32768), MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, D_06003850);
