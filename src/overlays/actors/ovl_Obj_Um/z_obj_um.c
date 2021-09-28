@@ -63,8 +63,7 @@ void func_80B7A0E0(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7A494(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7A614(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7A7AC(ObjUm* this, GlobalContext* globalCtx);
-void func_80B7AD34(ObjUm* this, GlobalContext* globalCtx);
-void func_80B7AE58(ObjUm* this, GlobalContext* globalCtx);
+void ObjUm_PostMilkRunStartCs(ObjUm* this, GlobalContext* globalCtx);
 
 void ObjUm_StopAnim(ObjUm* this, GlobalContext* globalCtx);
 void ObjUm_UpdateAnim(ObjUm* this, GlobalContext* globalCtx, s32);
@@ -187,7 +186,7 @@ void func_80B7A144(ObjUm* this, GlobalContext* globalCtx);
 void ObjUm_RanchWait(ObjUm* this, GlobalContext* globalCtx);
 void ObjUm_PreMilkRunStartCs(ObjUm* this, GlobalContext* globalCtx);
 void ObjUm_StartCs(ObjUm* this, GlobalContext* globalCtx);
-void func_80B7AE58(ObjUm* this, GlobalContext* globalCtx);
+void ObjUm_PostMilkRunStartCs(ObjUm* this, GlobalContext* globalCtx);
 void ObjUm_TerminaFieldIdle(ObjUm* this, GlobalContext* globalCtx);
 void func_80B79F10(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7A0E0(ObjUm* this, GlobalContext* globalCtx);
@@ -791,7 +790,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->pathIdx = this->initialPathIdx;
         sp54 = false;
         func_800FE484();
-        ObjUm_SetupAction(this, func_80B7AE58);
+        ObjUm_SetupAction(this, ObjUm_PostMilkRunStartCs);
         this->unk_354 = 0;
         ObjUm_RotatePlayer(this, globalCtx, 0);
         func_801A3098(0x19);
@@ -945,8 +944,7 @@ s32 func_80B79734(GlobalContext* globalCtx, ObjUm* this, s32 arg2) {
     return ret;
 }
 
-// ChooseText?
-u16 func_80B797EC(GlobalContext* globalCtx, ObjUm* this, s32 arg2) {
+u16 ObjUm_RanchGetDialogue(GlobalContext* globalCtx, ObjUm* this, s32 arg2) {
     u16 textId;
 
     if (gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
@@ -1000,7 +998,7 @@ s32 func_80B7984C(GlobalContext* globalCtx, ObjUm* this, s32 arg2, s32* arg3) {
     phi_v1 = this->dyna.actor.yawTowardsPlayer - this->dyna.actor.shape.rot.y;
     temp_v0_2 = ABS_ALT(phi_v1);
 
-    if (temp_v0_2 >= 0x4E20) {
+    if (temp_v0_2 >= 20000) {
         return 0;
     }
 
@@ -1010,10 +1008,10 @@ s32 func_80B7984C(GlobalContext* globalCtx, ObjUm* this, s32 arg2, s32* arg3) {
 
     if (this->dyna.actor.xyzDistToPlayerSq <= SQ(50.0f)) {
         if (func_800B8614(&this->dyna.actor, globalCtx, 50.0f) != 0) {
-            this->dyna.actor.textId = func_80B797EC(globalCtx, this, arg2);
+            this->dyna.actor.textId = ObjUm_RanchGetDialogue(globalCtx, this, arg2);
         }
     } else if (func_800B863C(&this->dyna.actor, globalCtx) != 0) {
-        this->dyna.actor.textId = func_80B797EC(globalCtx, this, arg2);
+        this->dyna.actor.textId = ObjUm_RanchGetDialogue(globalCtx, this, arg2);
     }
 
     return 0;
@@ -1607,7 +1605,7 @@ void func_80B7AD34(ObjUm* this, GlobalContext* globalCtx) {
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->dyna.actor);
 }
 
-void func_80B7AE58(ObjUm* this, GlobalContext* globalCtx) {
+void ObjUm_PostMilkRunStartCs(ObjUm* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
     player->stateFlags1 |= 0x20;
@@ -1620,7 +1618,7 @@ void func_80B7AE58(ObjUm* this, GlobalContext* globalCtx) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         ObjUm_SetupAction(this, func_80B7AD34);
     } else {
-        ActorCutscene_SetIntentToPlay((s16) this->dyna.actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
     }
 }
 
@@ -1757,8 +1755,7 @@ void ObjUm_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (this->flags & OBJ_UM_FLAG_0010) {
         func_80123F2C(globalCtx, 0x63);
         this->flags &= ~OBJ_UM_FLAG_0010;
-    }
-    else if (this->flags & OBJ_UM_FLAG_0004) {
+    } else if (this->flags & OBJ_UM_FLAG_0004) {
         func_80123F2C(globalCtx, ~0x02);
         this->flags &= ~OBJ_UM_FLAG_0004;
     }
