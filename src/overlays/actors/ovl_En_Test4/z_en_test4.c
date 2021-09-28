@@ -520,9 +520,10 @@ void func_80A42F20(EnTest4* this, GlobalContext* globalCtx) {
 }
 
 void func_80A430C8(EnTest4* this, GlobalContext* globalCtx) {
-    // rain?
     if ((CURRENT_DAY == 2) && (gSaveContext.time >= CLOCK_TIME(7, 0)) && (gSaveContext.time < CLOCK_TIME(17, 30)) &&
         (globalCtx->envCtx.unk_F2[2] == 0)) {
+        // rain?
+        
         D_801BDBB0 = 1;
         func_800FD78C(globalCtx);
         globalCtx->envCtx.unk_E3 = 1;
