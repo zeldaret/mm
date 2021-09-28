@@ -1069,8 +1069,8 @@ void func_808D6814(EnRd* this, GlobalContext* globalCtx) {
         return;
     }
 
-    if (this->collider.base.acFlags & 2) {
-        this->collider.base.acFlags &= ~2;
+    if (this->collider.base.acFlags & AC_HIT) {
+        this->collider.base.acFlags &= ~AC_HIT;
         this->unk_3F0 = this->actor.colChkInfo.damageEffect;
 
         if (this->unk_3EF == 13) {
