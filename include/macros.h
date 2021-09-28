@@ -1,8 +1,9 @@
 #ifndef _MACROS_H_
 #define _MACROS_H_
 
-#include "convert.h"
 #include "stdint.h"
+#include "convert.h"
+#include "z64.h"
 
 #define ARRAY_COUNT(arr) (s32)(sizeof(arr) / sizeof(arr[0]))
 #define ARRAY_COUNTU(arr) (u32)(sizeof(arr) / sizeof(arr[0]))
@@ -34,7 +35,7 @@
 //#define LINK_IS_CHILD (gSaveContext.linkAge != 0)
 #define LINK_IS_ADULT (gSaveContext.linkAge == 0)
 
-#define CURRENT_DAY (gSaveContext.day % 5)
+#define CURRENT_DAY (((void)0, gSaveContext.day) % 5)
 
 #define CLOCK_TIME(hr, min) ((s32)(((hr) * 60 + (min)) * 0x10000 / (24 * 60)))
 
@@ -115,6 +116,8 @@ extern GraphicsContext* __gfxCtx;
 #define CLAMP(x, min, max) ((x) < (min) ? (min) : (x) > (max) ? (max) : (x))
 #define CLAMP_MAX(x, max) ((x) > (max) ? (max) : (x))
 #define CLAMP_MIN(x, min) ((x) < (min) ? (min) : (x))
+
+#define ROUND(x) (s32)(((x) >= 0.0) ? ((x) + 0.5) : ((x) - 0.5))
 
 #define SWAP(type, a, b)  \
     {                     \

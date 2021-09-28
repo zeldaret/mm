@@ -685,7 +685,7 @@ void EnMa4_SetupBeginHorsebackGame(EnMa4* this) {
 
 void EnMa4_BeginHorsebackGame(EnMa4* this, GlobalContext* globalCtx) {
     globalCtx->nextEntranceIndex = 0x6400;
-    gSaveContext.unk_3F4A = 0xFFF0;
+    gSaveContext.nextCutsceneIndex = 0xFFF0;
     globalCtx->sceneLoadFlag = 0x14;
     globalCtx->unk_1887F = 0x50;
     gSaveContext.nextTransition = 3;
@@ -776,7 +776,7 @@ void EnMa4_HorsebackGameEnd(EnMa4* this, GlobalContext* globalCtx) {
     } else if (sFrameCounter == 50) {
         globalCtx->actorCtx.unk268 = 0;
         globalCtx->nextEntranceIndex = 0x6410;
-        gSaveContext.unk_3F4A = 0;
+        gSaveContext.nextCutsceneIndex = 0;
         sFrameCounter = 0;
         globalCtx->sceneLoadFlag = 0x14;
 
@@ -883,7 +883,7 @@ void EnMa4_SetupBeginDescribeThemCs(EnMa4* this) {
 
 void EnMa4_BeginDescribeThemCs(EnMa4* this, GlobalContext* globalCtx) {
     globalCtx->nextEntranceIndex = 0x6400;
-    gSaveContext.unk_3F4A = 0xFFF5;
+    gSaveContext.nextCutsceneIndex = 0xFFF5;
     globalCtx->sceneLoadFlag = 0x14;
     globalCtx->unk_1887F = 0x40;
     gSaveContext.nextTransition = 2;
