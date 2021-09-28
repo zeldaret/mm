@@ -424,7 +424,7 @@
     0x801AE48C:("D_801AE48C","Color_RGBA8","",0x4),
     0x801AE490:("D_801AE490","Color_RGBA8","[4]",0x10),
     0x801AE4A0:("particleOverlayTable","EffectSsOverlay","[39]",0x444),
-    0x801AE8F0:("D_801AE8F0","UNK_PTR","",0x4),
+    0x801AE8F0:("entries","UNK_PTR","",0x4),
     0x801AEC70:("entryIndex","UNK_TYPE4","",0x4),
     0x801AEC74:("currentBit","UNK_TYPE4","",0x4),
     0x801AEC78:("timer","UNK_TYPE4","",0x4),

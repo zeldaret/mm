@@ -418,7 +418,7 @@ extern EffectSsInfo EffectSS2Info;
 // extern UNK_TYPE1 D_801AE48C;
 // extern UNK_TYPE1 D_801AE490;
 extern EffectSsOverlay particleOverlayTable[39];
-extern FlagSetEntry D_801AE8F0[];
+// extern FlagSetEntry entries[];
 // extern s32 entryIndex;
 // extern u32 currentBit;
 // extern s32 timer;

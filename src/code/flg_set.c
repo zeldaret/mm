@@ -11,7 +11,7 @@
  */
 #include "global.h"
 
-FlagSetEntry D_801AE8F0[] = {
+static FlagSetEntry entries[] = {
     { &gSaveContext.weekEventReg[0], "week_event_reg[0]" },
     { &gSaveContext.weekEventReg[1], "week_event_reg[1]" },
     { &gSaveContext.weekEventReg[2], "week_event_reg[2]" },
@@ -125,12 +125,13 @@ FlagSetEntry D_801AE8F0[] = {
     { &gSaveContext.maskMaskBit[0], "mask_mask_bit[0]" },
     { &gSaveContext.maskMaskBit[1], "mask_mask_bit[1]" },
     { &gSaveContext.maskMaskBit[2], "mask_mask_bit[2]" },
+
     { NULL, NULL }, // used in the code to detect array end
 };
 
-s32 entryIndex = 0;
-u32 currentBit = 0;
-s32 timer = 0;
+static s32 entryIndex = 0;
+static u32 currentBit = 0;
+static s32 timer = 0;
 
 void FlagSet_Update(GameState* gameState) {
 
@@ -175,7 +176,7 @@ void FlagSet_Update(GameState* gameState) {
 
     if (CHECK_BTN_ALL(input->press.button, BTN_DDOWN)) {
         entryIndex++;
-        if (D_801AE8F0[entryIndex].value == NULL) { // End of array
+        if (entries[entryIndex].value == NULL) { // End of array
             entryIndex--;
         }
         timer = 10;
@@ -208,7 +209,7 @@ void FlagSet_Update(GameState* gameState) {
 
         } else if (CHECK_BTN_ALL(input->cur.button, BTN_DDOWN)) {
             entryIndex++;
-            if (D_801AE8F0[entryIndex].value == NULL) { // End of array
+            if (entries[entryIndex].value == NULL) { // End of array
                 entryIndex--;
             }
             timer = 2;
@@ -233,7 +234,7 @@ void FlagSet_Update(GameState* gameState) {
 
     // A toggles the selected flag
     if (CHECK_BTN_ALL(input->press.button, BTN_A)) {
-        *D_801AE8F0[entryIndex].value ^= (1 << currentBit);
+        *entries[entryIndex].value ^= (1 << currentBit);
     }
 
     if (timer != 0) {
@@ -244,10 +245,10 @@ void FlagSet_Update(GameState* gameState) {
     if (CHECK_BTN_ALL(input->cur.button, BTN_START)) {
         if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
             s16 i;
-            for (i = 0; i < 100; i++) {
+            for (i = 0; i < ARRAY_COUNT(gSaveContext.weekEventReg); i++) {
                 gSaveContext.weekEventReg[i] = 0;
             }
-            for (i = 0; i < 8; i++) {
+            for (i = 0; i < ARRAY_COUNT(gSaveContext.eventInf); i++) {
                 gSaveContext.eventInf[i] = 0;
             }
         }
@@ -277,7 +278,7 @@ void FlagSet_Draw(GameState* gameState) {
     GfxPrint_Open(&printer, gfx);
     GfxPrint_SetColor(&printer, 250, 50, 50, 255);
     GfxPrint_SetPos(&printer, 8, 13);
-    GfxPrint_Printf(&printer, D_801AE8F0[entryIndex].name);
+    GfxPrint_Printf(&printer, entries[entryIndex].name);
     GfxPrint_SetPos(&printer, 12, 15);
 
     // Print the flag bits in the current byte, largest to smallest
@@ -290,7 +291,7 @@ void FlagSet_Draw(GameState* gameState) {
         }
 
         // Display 1 if flag set and 0 if not
-        if (*D_801AE8F0[entryIndex].value & (1 << D_801ED890)) {
+        if (*entries[entryIndex].value & (1 << D_801ED890)) {
             GfxPrint_Printf(&printer, "1");
         } else {
             GfxPrint_Printf(&printer, "0");
