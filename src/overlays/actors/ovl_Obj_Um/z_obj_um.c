@@ -60,7 +60,6 @@ void ObjUm_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80B7A070(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7A0E0(ObjUm* this, GlobalContext* globalCtx);
-void func_80B7A494(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7A614(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7A7AC(ObjUm* this, GlobalContext* globalCtx);
 void ObjUm_PostMilkRunStartCs(ObjUm* this, GlobalContext* globalCtx);
@@ -188,18 +187,18 @@ void ObjUm_PreMilkRunStartCs(ObjUm* this, GlobalContext* globalCtx);
 void ObjUm_StartCs(ObjUm* this, GlobalContext* globalCtx);
 void ObjUm_PostMilkRunStartCs(ObjUm* this, GlobalContext* globalCtx);
 void ObjUm_TerminaFieldIdle(ObjUm* this, GlobalContext* globalCtx);
-void func_80B79F10(ObjUm* this, GlobalContext* globalCtx);
+void ObjUm_RanchWaitPathFinished(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7A0E0(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7A070(ObjUm* this, GlobalContext* globalCtx);
-void func_80B79FFC(ObjUm* this, GlobalContext* globalCtx);
+void ObjUm_RanchStartCs(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7A2AC(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7A240(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7A394(ObjUm* this, GlobalContext* globalCtx);
-void func_80B7A494(ObjUm* this, GlobalContext* globalCtx);
+void ObjUm_MilkRunWaitForEnd(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7A614(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7AB78(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7ABE4(ObjUm* this, GlobalContext* globalCtx);
-void func_80B7AD34(ObjUm* this, GlobalContext* globalCtx);
+void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, GlobalContext* globalCtx);
 
 void func_80B77770(ObjUm* this, GlobalContext* globalCtx) {
     s16 rotY = this->dyna.actor.shape.rot.y;
@@ -930,6 +929,7 @@ s32 func_80B79734(GlobalContext* globalCtx, ObjUm* this, s32 arg2) {
 
     switch (func_80152498(msgCtx)) {
         case 2:
+            // TODO: test
             func_80B79560(globalCtx, this, arg2, this->dyna.actor.textId);
             return true;
 
@@ -1039,7 +1039,7 @@ void ObjUm_RanchWait(ObjUm* this, GlobalContext* globalCtx) {
         }
     } else if (!func_80B79A24(this->unk_2B4) && gSaveContext.time > CLOCK_TIME(19, 0)) {
         gSaveContext.weekEventReg[0x22] |= 0x80;
-        ObjUm_SetupAction(this, func_80B79F10);
+        ObjUm_SetupAction(this, ObjUm_RanchWaitPathFinished);
     }
 
     switch (globalCtx->msgCtx.unk11F04) {
@@ -1171,7 +1171,7 @@ ObjUmPathState ObjUm_UpdatePath(ObjUm* this, GlobalContext* globalCtx) {
     return sp3C;
 }
 
-void func_80B79F10(ObjUm* this, GlobalContext* globalCtx) {
+void ObjUm_RanchWaitPathFinished(ObjUm* this, GlobalContext* globalCtx) {
     this->wheelRot += 1000;
     this->flags &= ~OBJ_UM_FLAG_WAITING;
     ObjUm_UpdateAnim(this, globalCtx, 0);
@@ -1196,7 +1196,7 @@ void func_80B79F10(ObjUm* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B79FFC(ObjUm* this, GlobalContext* globalCtx) {
+void ObjUm_RanchStartCs(ObjUm* this, GlobalContext* globalCtx) {
     ObjUm_UpdateAnim(this, globalCtx, 2);
 
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
@@ -1209,7 +1209,7 @@ void func_80B79FFC(ObjUm* this, GlobalContext* globalCtx) {
 }
 
 void func_80B7A070(ObjUm* this, GlobalContext* globalCtx) {
-    func_80B79F10(this, globalCtx);
+    ObjUm_RanchWaitPathFinished(this, globalCtx);
     ObjUm_RotatePlayer(this, globalCtx, 0);
 
     switch (globalCtx->msgCtx.unk11F04) {
@@ -1241,7 +1241,7 @@ void func_80B7A144(ObjUm* this, GlobalContext* globalCtx) {
     this->flags |= OBJ_UM_FLAG_0004;
     player->stateFlags1 |= 0x20;
     ObjUm_UpdateAnim(this, globalCtx, 2);
-    ObjUm_SetupAction(this, func_80B79FFC);
+    ObjUm_SetupAction(this, ObjUm_RanchStartCs);
 }
 
 void ObjUm_PreMilkRunDialogueHandler(ObjUm* this, GlobalContext* globalCtx) {
@@ -1326,8 +1326,7 @@ void ObjUm_PreMilkRunStartCs(ObjUm* this, GlobalContext* globalCtx) {
     }
 }
 
-// MinigameLoop?
-void func_80B7A494(ObjUm* this, GlobalContext* globalCtx) {
+void ObjUm_MilkRunWaitForEnd(ObjUm* this, GlobalContext* globalCtx) {
     ObjUm_SetPlayerPosition(this, globalCtx);
     ObjUm_RotatePlayer(this, globalCtx, 0x7FFF);
     this->wheelRot += 2000;
@@ -1408,7 +1407,7 @@ void func_80B7A614(ObjUm* this, GlobalContext* globalCtx) {
         }
         if (ActorCutscene_GetCanPlayNext(sp20)) {
             ActorCutscene_StartAndSetUnkLinkFields(sp20, &this->dyna.actor);
-            ObjUm_SetupAction(this, func_80B7A494);
+            ObjUm_SetupAction(this, ObjUm_MilkRunWaitForEnd);
             this->flags &= ~OBJ_UM_FLAG_PLAYING_MINIGAME;
         } else {
             ActorCutscene_SetIntentToPlay(sp20);
@@ -1580,7 +1579,7 @@ void ObjUm_StartCs(ObjUm* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B7AD34(ObjUm* this, GlobalContext* globalCtx) {
+void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
     player->stateFlags1 |= 0x20;
@@ -1616,7 +1615,7 @@ void ObjUm_PostMilkRunStartCs(ObjUm* this, GlobalContext* globalCtx) {
 
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        ObjUm_SetupAction(this, func_80B7AD34);
+        ObjUm_SetupAction(this, ObjUm_PostMilkRunWaitPathFinished);
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
     }
@@ -1756,7 +1755,7 @@ void ObjUm_Update(Actor* thisx, GlobalContext* globalCtx) {
         func_80123F2C(globalCtx, 0x63);
         this->flags &= ~OBJ_UM_FLAG_0010;
     } else if (this->flags & OBJ_UM_FLAG_0004) {
-        func_80123F2C(globalCtx, ~0x02);
+        func_80123F2C(globalCtx, -3);
         this->flags &= ~OBJ_UM_FLAG_0004;
     }
 
