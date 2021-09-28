@@ -3284,7 +3284,7 @@ void func_80179B34(float fParm1, f32 fParm2, f32 fParm5, f32 fParm6, f32 param_5
 // void func_80179D74(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
 void Math3D_ScaleAndAdd(Vec3f* a, Vec3f* b, f32 scale, Vec3f* dst);
 void Math3D_Lerp(Vec3f* a, Vec3f* b, f32 t, Vec3f* dst);
-s32 Math3D_Parallel(Vec3f* a, Vec3f* b);
+f32 Math3D_Parallel(Vec3f* a, Vec3f* b);
 s32 Math3D_AngleBetweenVectors(Vec3f* a, Vec3f* b, f32* angle);
 void func_80179F64(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3);
 s32 Math3D_XZBoundCheck(f32 xMin, f32 xMax, f32 zMin, f32 zMax, f32 x, f32 z);

@@ -3229,9 +3229,11 @@ beginseg
     name "ovl_Obj_Mine"
     compress
     include "build/src/overlays/actors/ovl_Obj_Mine/z_obj_mine.o"
-    include "build/data/ovl_Obj_Mine/ovl_Obj_Mine.data.o"
-    include "build/data/ovl_Obj_Mine/ovl_Obj_Mine.bss.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_Obj_Mine/ovl_Obj_Mine_reloc.o"
+#else
     include "build/data/ovl_Obj_Mine/ovl_Obj_Mine.reloc.o"
+#endif
 endseg
 
 beginseg
