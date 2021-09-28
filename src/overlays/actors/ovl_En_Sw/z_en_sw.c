@@ -311,7 +311,7 @@ s32 func_808D91C4(EnSw* this, CollisionPoly* arg1) {
         return false;
     }
 
-    temp_f12 = DOTXYZ(sp38, this->unk_368.x);
+    temp_f12 = DOTXYZ(sp38, this->unk_368);
     if (fabsf(temp_f12) >= 0.999f) {
         return false;
     }
