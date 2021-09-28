@@ -1108,7 +1108,7 @@ u32 func_800C9D8C(CollisionContext* param_1, CollisionPoly* param_2, s32 param_3
 u32 func_800C9E18(CollisionContext* colCtx, CollisionPoly* polygon, s32 index);
 u32 func_800C9E40(CollisionContext* colCtx, CollisionPoly* polygon, s32 index);
 u32 func_800C9E88(CollisionContext* colCtx, CollisionPoly* polygon, s32 index);
-// void func_800C9EBC(GlobalContext* globalCtx, CollisionContext* colCtx, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+s32 func_800C9EBC(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface, WaterBox** outWaterBox, s32* bgId);
 s32 func_800CA1AC(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface, WaterBox** outWaterBox);
 s32 func_800CA1E8(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface, WaterBox** outWaterBox);
 // void func_800CA22C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);

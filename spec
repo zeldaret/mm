@@ -3584,8 +3584,7 @@ beginseg
     name "ovl_Obj_Aqua"
     compress
     include "build/src/overlays/actors/ovl_Obj_Aqua/z_obj_aqua.o"
-    include "build/data/ovl_Obj_Aqua/ovl_Obj_Aqua.data.o"
-    include "build/data/ovl_Obj_Aqua/ovl_Obj_Aqua.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Aqua/ovl_Obj_Aqua_reloc.o"
 endseg
 
 beginseg
