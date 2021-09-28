@@ -1517,6 +1517,21 @@ typedef struct {
     /* 0x00 */ u16 state;
 } GameOverContext; // size = 0x02
 
+typedef struct {
+    /* 0x00 */ u8 unk_0;
+    /* 0x02 */ s16 unk_2;
+    /* 0x04 */ Vec3f unk_4;
+    /* 0x10 */ Vec3f unk_10;
+    /* 0x1C */ Vec3f unk_1C;
+    /* 0x28 */ char unk28[4];
+    /* 0x2C */ s16 unk_2C;
+    /* 0x2E */ char unk2E[2];
+    /* 0x30 */ s16 unk_30;
+    /* 0x32 */ char unk32[2];
+    /* 0x34 */ f32 unk_34;
+    /* 0x38 */ char unk38[0x10];
+} Boss07Effect;
+
 struct GlobalContext {
     /* 0x00000 */ GameState state;
     /* 0x000A4 */ s16 sceneNum;
@@ -1581,7 +1596,7 @@ struct GlobalContext {
     /* 0x18864 */ Path* setupPathList;
     /* 0x18868 */ void* unk_18868;
     /* 0x1886C */ AnimatedMaterial* sceneMaterialAnims;
-    /* 0x18870 */ void* specialEffects;
+    /* 0x18870 */ Boss07Effect* specialEffects;
     /* 0x18874 */ u8 skyboxId;
     /* 0x18875 */ s8 sceneLoadFlag; // "fade_direction"
     /* 0x18876 */ s16 unk_18876;
