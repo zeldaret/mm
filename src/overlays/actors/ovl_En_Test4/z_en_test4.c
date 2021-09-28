@@ -32,7 +32,7 @@ const ActorInit En_Test4_InitVars = {
 };
 
 // singleton?
-static s32 D_80A43340 = false;
+static s32 sIsLoaded = false;
 // "Night of ..."
 static s16 sNightMessages1[] = { 0x1BB4, 0x1BB5, 0x1BB6 };
 // "Dawn of ..."
@@ -307,10 +307,10 @@ void EnTest4_Init(Actor* thisx, GlobalContext* globalCtx) {
         sCutscenes[1] = sCutscenes[0];
     }
 
-    if (D_80A43340 || (gSaveContext.eventInf[2] & 0x80)) {
+    if (sIsLoaded || (gSaveContext.eventInf[2] & 0x80)) {
         Actor_MarkForDeath(&this->actor);
     } else {
-        D_80A43340 = true;
+        sIsLoaded = true;
         this->actor.room = -1;
         gSaveContext.unk_3F60 = 0;
         gSaveContext.unk_3F64 = 1000.0f;

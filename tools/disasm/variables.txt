@@ -11771,7 +11771,7 @@
     0x80A41D68:("D_80A41D68","UNK_TYPE1","",0x1),
     0x80A41D6C:("D_80A41D6C","UNK_TYPE1","",0x1),
     0x80A43320:("En_Test4_InitVars","ActorInit","",0x20),
-    0x80A43340:("D_80A43340","s32","[3]",0x6),
+    0x80A43340:("sIsLoaded","s32","[3]",0x6),
     0x80A43342:("sNightMessages1","s16","[3]",0x6),
     0x80A4334A:("sDayMessages1","s16","[3]",0x6),
     0x80A43352:("sNightMessages2","s16","[3]",0x6),
