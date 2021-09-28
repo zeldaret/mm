@@ -43,8 +43,8 @@ beginseg
     include "build/data/boot/boot_800862E0.data.o"
     include "build/src/boot_O2/padsetup.o"
     include "build/src/boot_O2/boot_80086760.o"
-    include "build/data/boot/boot_80086760.bss.o"
     include "build/asm/boot/fp.text.o"
+    include "build/data/boot/fp.data.o"
     include "build/src/boot_O2/system_malloc.o"
     include "build/src/boot_O2/rand.o"
     include "build/src/boot_O2/__osMalloc.o"
@@ -633,7 +633,6 @@ beginseg
     include "build/src/code/sys_math.o"
     include "build/src/code/sys_math3d.o"
     include "build/data/code/sys_math3d.bss.o"
-    include "build/data/code/code_801D1570.data.o"
     include "build/data/code/code_801D15B0.data.o"
     include "build/src/code/sys_math_atan.o"
     include "build/src/code/sys_matrix.o"
@@ -698,8 +697,7 @@ beginseg
     compress
     address 0x80800000
     include "build/src/overlays/gamestates/ovl_title/z_title.o"
-    include "build/data/ovl_title/ovl_title.data.o"
-    include "build/data/ovl_title/ovl_title.reloc.o"
+    include "build/src/overlays/gamestates/ovl_title/ovl_title_reloc.o"
 endseg
 
 beginseg
@@ -1075,9 +1073,7 @@ beginseg
     name "ovl_Obj_Syokudai"
     compress
     include "build/src/overlays/actors/ovl_Obj_Syokudai/z_obj_syokudai.o"
-    include "build/data/ovl_Obj_Syokudai/ovl_Obj_Syokudai.data.o"
-    include "build/data/ovl_Obj_Syokudai/ovl_Obj_Syokudai.bss.o"
-    include "build/data/ovl_Obj_Syokudai/ovl_Obj_Syokudai.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Syokudai/ovl_Obj_Syokudai_reloc.o"
 endseg
 
 beginseg
@@ -2489,8 +2485,7 @@ beginseg
     name "ovl_En_Syateki_Man"
     compress
     include "build/src/overlays/actors/ovl_En_Syateki_Man/z_en_syateki_man.o"
-    include "build/data/ovl_En_Syateki_Man/ovl_En_Syateki_Man.data.o"
-    include "build/data/ovl_En_Syateki_Man/ovl_En_Syateki_Man.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Syateki_Man/ovl_En_Syateki_Man_reloc.o"
 endseg
 
 beginseg
@@ -3588,8 +3583,7 @@ beginseg
     name "ovl_Obj_Aqua"
     compress
     include "build/src/overlays/actors/ovl_Obj_Aqua/z_obj_aqua.o"
-    include "build/data/ovl_Obj_Aqua/ovl_Obj_Aqua.data.o"
-    include "build/data/ovl_Obj_Aqua/ovl_Obj_Aqua.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Aqua/ovl_Obj_Aqua_reloc.o"
 endseg
 
 beginseg
@@ -8886,7 +8880,8 @@ beginseg
     name "nintendo_rogo_static"
     compress
     romalign 0x1000
-    include "build/baserom/nintendo_rogo_static.o"
+    include "build/assets/static/nintendo_rogo_static/nintendo_rogo_static.o"
+    number 1
 endseg
 
 beginseg
