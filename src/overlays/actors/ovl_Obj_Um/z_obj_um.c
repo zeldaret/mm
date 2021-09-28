@@ -194,13 +194,13 @@ void ObjUm_RanchStartCs(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7A2AC(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7A240(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7A394(ObjUm* this, GlobalContext* globalCtx);
-void ObjUm_MilkRunWaitForEnd(ObjUm* this, GlobalContext* globalCtx);
+void ObjUm_RunMinigame(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7A614(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7AB78(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7ABE4(ObjUm* this, GlobalContext* globalCtx);
 void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, GlobalContext* globalCtx);
 
-void func_80B77770(ObjUm* this, GlobalContext* globalCtx) {
+void ObjUm_UpdateBanditsPositions(ObjUm* this, GlobalContext* globalCtx) {
     s16 rotY = this->dyna.actor.shape.rot.y;
     Vec3f sp108;
     Vec3f spFC;
@@ -218,6 +218,7 @@ void func_80B77770(ObjUm* this, GlobalContext* globalCtx) {
     Vec3f sp6C;
     Vec3f sp60 = this->dyna.actor.world.pos;
 
+    // Loop unroll?
     this->unk_360[15] = sp60;
     sp6C = sp60;
     this->unk_360[14] = sp6C;
@@ -1326,7 +1327,7 @@ void ObjUm_PreMilkRunStartCs(ObjUm* this, GlobalContext* globalCtx) {
     }
 }
 
-void ObjUm_MilkRunWaitForEnd(ObjUm* this, GlobalContext* globalCtx) {
+void ObjUm_RunMinigame(ObjUm* this, GlobalContext* globalCtx) {
     ObjUm_SetPlayerPosition(this, globalCtx);
     ObjUm_RotatePlayer(this, globalCtx, 0x7FFF);
     this->wheelRot += 2000;
@@ -1407,7 +1408,7 @@ void func_80B7A614(ObjUm* this, GlobalContext* globalCtx) {
         }
         if (ActorCutscene_GetCanPlayNext(sp20)) {
             ActorCutscene_StartAndSetUnkLinkFields(sp20, &this->dyna.actor);
-            ObjUm_SetupAction(this, ObjUm_MilkRunWaitForEnd);
+            ObjUm_SetupAction(this, ObjUm_RunMinigame);
             this->flags &= ~OBJ_UM_FLAG_PLAYING_MINIGAME;
         } else {
             ActorCutscene_SetIntentToPlay(sp20);
@@ -2035,7 +2036,7 @@ void func_80B7BEA4(Vec3f* cartBedPos, s16 arg1, Vec3f* arg2, u8 alpha, GlobalCon
     }
 
     SkinMatrix_MulYRotation( &spC0, arg1);
-    SkinMatrix_SetScale(&sp80, arg2->x, 1.0f, arg2->z);
+    SkinMatrix_SetScale(&sp80, arg2->x*10, 1.0f, arg2->z*10);
     SkinMatrix_MtxFMtxFMult(&spC0, &sp80, &sp40);
 
     sp100 = SkinMatrix_MtxFToNewMtx(globalCtx->state.gfxCtx, &sp40);
@@ -2068,7 +2069,7 @@ void ObjUm_PrintStruct(ObjUm* this, GlobalContext* globalCtx, GfxPrint* printer)
     GfxPrint_Printf(printer, "gTime:%X", gSaveContext.time);
 
     GfxPrint_SetPos(printer, x-7, ++y);
-    actionFuncReloc = (uintptr_t)this->actionFunc - (uintptr_t)func_80B77770 + SEGMENT_START(ovl_Obj_Um);
+    actionFuncReloc = (uintptr_t)this->actionFunc - (uintptr_t)ObjUm_UpdateBanditsPositions + SEGMENT_START(ovl_Obj_Um);
     GfxPrint_Printf(printer, "actionFunc:%X", actionFuncReloc & 0x0000FFFF);
 
     // GfxPrint_SetPos(printer, x-5, ++y);
@@ -2239,7 +2240,7 @@ void ObjUm_Draw(Actor* thisx, GlobalContext* globalCtx) {
     sp34.y = 0.0f;
     sp34.z = 0.7f;
     func_80B7BEA4(&this->cartBedPos, this->dyna.actor.shape.rot.y, &sp34, 180, globalCtx);
-    func_80B77770(this, globalCtx);
+    ObjUm_UpdateBanditsPositions(this, globalCtx);
 
 #ifndef NOT_DEBUG_PRINT
     ObjUm_DrawStruct(this, globalCtx);
