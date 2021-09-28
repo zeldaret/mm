@@ -18,7 +18,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80144890.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80144968.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/Sram_InitDebugSave.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80144A94.s")
 

@@ -2310,7 +2310,7 @@ asm/non_matchings/code/z_sram_NES/Sram_CalcChecksum.s,Sram_CalcChecksum,0x801445
 asm/non_matchings/code/z_sram_NES/func_80144628.s,func_80144628,0x80144628,0x17
 asm/non_matchings/code/z_sram_NES/Sram_GenerateRandomSaveFields.s,Sram_GenerateRandomSaveFields,0x80144684,0x83
 asm/non_matchings/code/z_sram_NES/func_80144890.s,func_80144890,0x80144890,0x36
-asm/non_matchings/code/z_sram_NES/func_80144968.s,func_80144968,0x80144968,0x4B
+asm/non_matchings/code/z_sram_NES/Sram_InitDebugSave.s,Sram_InitDebugSave,0x80144968,0x4B
 asm/non_matchings/code/z_sram_NES/func_80144A94.s,func_80144A94,0x80144A94,0xF9
 asm/non_matchings/code/z_sram_NES/func_80144E78.s,func_80144E78,0x80144E78,0x17D
 asm/non_matchings/code/z_sram_NES/func_8014546C.s,func_8014546C,0x8014546C,0x8B
