@@ -11,7 +11,7 @@
  */
 #include "global.h"
 
-static FlagSetEntry entries[] = {
+static FlagSetEntry sFlagEntries[] = {
     { &gSaveContext.weekEventReg[0], "week_event_reg[0]" },
     { &gSaveContext.weekEventReg[1], "week_event_reg[1]" },
     { &gSaveContext.weekEventReg[2], "week_event_reg[2]" },
@@ -129,9 +129,9 @@ static FlagSetEntry entries[] = {
     { NULL, NULL }, // used in the code to detect array end
 };
 
-static s32 entryIndex = 0;
-static u32 currentBit = 0;
-static s32 timer = 0;
+static s32 sEntryIndex = 0;
+static u32 sCurrentBit = 0;
+static s32 sTimer = 0;
 
 void FlagSet_Update(GameState* gameState) {
 
@@ -141,92 +141,92 @@ void FlagSet_Update(GameState* gameState) {
     /* Intra-byte navigation */
 
     if (CHECK_BTN_ALL(input->press.button, BTN_DLEFT)) {
-        currentBit++;
-        timer = 10;
+        sCurrentBit++;
+        sTimer = 10;
     }
 
     if (CHECK_BTN_ALL(input->press.button, BTN_DRIGHT)) {
-        currentBit--;
-        timer = 10;
+        sCurrentBit--;
+        sTimer = 10;
     }
 
-    if (timer == 0) {
+    if (sTimer == 0) {
         if (CHECK_BTN_ALL(input->cur.button, BTN_DLEFT)) {
-            currentBit++;
-            timer = 2;
+            sCurrentBit++;
+            sTimer = 2;
         }
         if (CHECK_BTN_ALL(input->cur.button, BTN_DRIGHT)) {
-            currentBit--;
-            timer = 2;
+            sCurrentBit--;
+            sTimer = 2;
         }
     }
 
     /* Navigation between bytes */
 
-    currentBit %= 8;
+    sCurrentBit %= 8;
 
     // + Up/Down, scroll 1 at a time
     if (CHECK_BTN_ALL(input->press.button, BTN_DUP)) {
-        entryIndex--;
-        if (entryIndex < 0) {
-            entryIndex = 0;
+        sEntryIndex--;
+        if (sEntryIndex < 0) {
+            sEntryIndex = 0;
         }
-        timer = 10;
+        sTimer = 10;
     }
 
     if (CHECK_BTN_ALL(input->press.button, BTN_DDOWN)) {
-        entryIndex++;
-        if (entries[entryIndex].value == NULL) { // End of array
-            entryIndex--;
+        sEntryIndex++;
+        if (sFlagEntries[sEntryIndex].value == NULL) { // End of array
+            sEntryIndex--;
         }
-        timer = 10;
+        sTimer = 10;
     }
 
     // C buttons scroll 10 at a time
     if (CHECK_BTN_ALL(input->press.button, BTN_CUP)) {
-        entryIndex -= 10;
-        if (entryIndex < 0) {
-            entryIndex = 0;
+        sEntryIndex -= 10;
+        if (sEntryIndex < 0) {
+            sEntryIndex = 0;
         }
-        timer = 10;
+        sTimer = 10;
     }
 
     if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN)) {
-        entryIndex += 10;
-        if (entryIndex > 100) {
-            entryIndex = 100;
+        sEntryIndex += 10;
+        if (sEntryIndex > 100) {
+            sEntryIndex = 100;
         }
-        timer = 10;
+        sTimer = 10;
     }
 
-    if (timer == 0) {
+    if (sTimer == 0) {
         if (CHECK_BTN_ALL(input->cur.button, BTN_DUP)) {
-            entryIndex--;
-            if (entryIndex < 0) {
-                entryIndex = 0;
+            sEntryIndex--;
+            if (sEntryIndex < 0) {
+                sEntryIndex = 0;
             }
-            timer = 2;
+            sTimer = 2;
 
         } else if (CHECK_BTN_ALL(input->cur.button, BTN_DDOWN)) {
-            entryIndex++;
-            if (entries[entryIndex].value == NULL) { // End of array
-                entryIndex--;
+            sEntryIndex++;
+            if (sFlagEntries[sEntryIndex].value == NULL) { // End of array
+                sEntryIndex--;
             }
-            timer = 2;
+            sTimer = 2;
 
         } else if (CHECK_BTN_ALL(input->cur.button, BTN_CUP)) {
-            entryIndex -= 10;
-            if (entryIndex < 0) {
-                entryIndex = 0;
+            sEntryIndex -= 10;
+            if (sEntryIndex < 0) {
+                sEntryIndex = 0;
             }
-            timer = 2;
+            sTimer = 2;
 
         } else if (CHECK_BTN_ALL(input->cur.button, BTN_CDOWN)) {
-            entryIndex += 10;
-            if (entryIndex > 100) {
-                entryIndex = 100;
+            sEntryIndex += 10;
+            if (sEntryIndex > 100) {
+                sEntryIndex = 100;
             }
-            timer = 2;
+            sTimer = 2;
         }
     }
 
@@ -234,11 +234,11 @@ void FlagSet_Update(GameState* gameState) {
 
     // A toggles the selected flag
     if (CHECK_BTN_ALL(input->press.button, BTN_A)) {
-        *entries[entryIndex].value ^= (1 << currentBit);
+        *sFlagEntries[sEntryIndex].value ^= (1 << sCurrentBit);
     }
 
-    if (timer != 0) {
-        timer--;
+    if (sTimer != 0) {
+        sTimer--;
     }
 
     // Hold Start and press B will reset the first two flag arrays
@@ -278,20 +278,20 @@ void FlagSet_Draw(GameState* gameState) {
     GfxPrint_Open(&printer, gfx);
     GfxPrint_SetColor(&printer, 250, 50, 50, 255);
     GfxPrint_SetPos(&printer, 8, 13);
-    GfxPrint_Printf(&printer, entries[entryIndex].name);
+    GfxPrint_Printf(&printer, sFlagEntries[sEntryIndex].name);
     GfxPrint_SetPos(&printer, 12, 15);
 
     // Print the flag bits in the current byte, largest to smallest
     for (D_801ED890 = 7; D_801ED890 >= 0; D_801ED890--) {
         // Highlight current flag bit in white, rest in grey
-        if ((u32)D_801ED890 == currentBit) {
+        if ((u32)D_801ED890 == sCurrentBit) {
             GfxPrint_SetColor(&printer, 200, 200, 200, 255);
         } else {
             GfxPrint_SetColor(&printer, 100, 100, 100, 255);
         }
 
         // Display 1 if flag set and 0 if not
-        if (*entries[entryIndex].value & (1 << D_801ED890)) {
+        if (*sFlagEntries[sEntryIndex].value & (1 << D_801ED890)) {
             GfxPrint_Printf(&printer, "1");
         } else {
             GfxPrint_Printf(&printer, "0");

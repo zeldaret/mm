@@ -1770,5 +1770,4 @@ typedef struct {
     /* 0x04 */ const char* name;
 } FlagSetEntry; // size = 0x08
 
-
 #endif
