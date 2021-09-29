@@ -61,7 +61,9 @@ def fix_sfx_flag(id):
     if(id.endswith(' - SFX_FLAG')):
         splitdata = id.split('-')
         return splitdata[0].strip(), ' -' + splitdata[1]
-    if not(int(id,16) & 0x800):
+    if id.endswith("U"):
+        id = id[:-1]
+    if not(int(id, 16) & 0x800):
         newid = '0x' + format(int(id,16) + 0x800,'X')
         sfxFlag = ' - SFX_FLAG'
     else :

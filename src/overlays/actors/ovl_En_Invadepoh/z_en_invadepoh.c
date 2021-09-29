@@ -1699,7 +1699,7 @@ void func_80B4627C(EnInvadepoh* this, GlobalContext* globalCtx) {
         } else {
             func_80B454BC(this, globalCtx);
             func_80B452EC(this, globalCtx);
-            func_801A89A8(0x800D);
+            Audio_QueueSeqCmd(0x800D);
             func_80B46F88(this);
         }
     } else if (D_80B4E940 == 3) {
@@ -1987,7 +1987,7 @@ void func_80B46EE8(EnInvadepoh* this, GlobalContext* globalCtx) {
     this->actionTimer--;
     if (this->actionTimer <= 0) {
         ActorCutscene_Stop(D_80B50404[0]);
-        func_801A89A8(0x800D);
+        Audio_QueueSeqCmd(0x800D);
         func_80B46F88(this);
     }
 }
@@ -2041,7 +2041,7 @@ void func_80B47108(EnInvadepoh* this, GlobalContext* globalCtx) {
     this->actionTimer--;
     if (this->actionTimer <= 0) {
         globalCtx->nextEntranceIndex = 0x6460;
-        gSaveContext.unk_3F4A = 0;
+        gSaveContext.nextCutsceneIndex = 0;
         globalCtx->sceneLoadFlag = 0x14;
         globalCtx->unk_1887F = 0x49;
         gSaveContext.nextTransition = 0x48;
@@ -2059,7 +2059,7 @@ void func_80B471C0(EnInvadepoh* this) {
 void func_80B471E0(EnInvadepoh* this, GlobalContext* globalCtx) {
     if (D_80B4E998) {
         globalCtx->nextEntranceIndex = 0x6470;
-        gSaveContext.unk_3F4A = 0;
+        gSaveContext.nextCutsceneIndex = 0;
         globalCtx->sceneLoadFlag = 0x14;
         globalCtx->unk_1887F = 0x48;
         gSaveContext.nextTransition = 0x48;
@@ -2082,7 +2082,7 @@ void func_80B47278(EnInvadepoh* this) {
 
 void func_80B47298(EnInvadepoh* this, GlobalContext* globalCtx) {
     globalCtx->nextEntranceIndex = 0x6400;
-    gSaveContext.unk_3F4A = 0xFFF3;
+    gSaveContext.nextCutsceneIndex = 0xFFF3;
     globalCtx->sceneLoadFlag = 0x14;
     globalCtx->unk_1887F = 0x48;
     gSaveContext.nextTransition = 0x48;

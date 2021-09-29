@@ -9,7 +9,9 @@ typedef void (*EnArrowActionFunc)(struct EnArrow*, GlobalContext*);
 
 typedef struct EnArrow {
     /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x130];
+    /* 0x0144 */ char unk_144[0x7C];
+    /* 0x01C0 */ s32 unk_1C0;
+    /* 0x01C4 */ char unk_1C4[0xB0];
     /* 0x0274 */ EnArrowActionFunc actionFunc;
 } EnArrow; // size = 0x278
 
