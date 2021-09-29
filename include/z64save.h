@@ -196,4 +196,6 @@ typedef enum {
     /* 0xFF */ BTN_DISABLED = 0xFF
 } ButtonStatus;
 
+typedef struct FileChooseContext FileChooseContext;
+
 #endif

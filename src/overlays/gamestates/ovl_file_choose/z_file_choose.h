@@ -6,7 +6,7 @@
 void FileChoose_Init(GameState* thisx);
 void FileChoose_Destroy(GameState* thisx);
 
-typedef struct {
+struct FileChooseContext{
     /* 0x00000 */ GameState state;
     /* 0x000A8 */ u8* staticSegment;
     /* 0x000AC */ u8* parameterSegment;
@@ -97,6 +97,6 @@ typedef struct {
     /* 0x2454C */ s16  unk_2454C;
     /* 0x2454E */ s16  unk_2454E;
     /* 0x24550 */ s16  unk_24550;
-} FileChooseContext; // size = 0x24558
+}; // size = 0x24558
 
 #endif

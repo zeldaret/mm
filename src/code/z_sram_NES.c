@@ -1,4 +1,5 @@
 #include "global.h"
+#include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
 
 void func_80143A10(u8 owlId) {
     gSaveContext.owlActivationFlags = ((void)0, gSaveContext.owlActivationFlags) | (u16)gBitFlags[owlId];
@@ -157,7 +158,32 @@ void Sram_GenerateRandomSaveFields(void) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/Sram_GenerateRandomSaveFields.s")
 #endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80144890.s")
+extern UNK_TYPE D_801C6898;
+extern UNK_TYPE D_801C68C0;
+//#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80144890.s")
+void func_80144890(void) {
+    gSaveContext.playerForm = PLAYER_FORM_HUMAN;
+    gSaveContext.daysElapsed = 0;
+    gSaveContext.day = 0;
+    gSaveContext.time = CLOCK_TIME(6, 0)-1;
+    func_80144628();
+
+    Lib_MemCpy(gSaveContext.newf, &D_801C6898, 0x28);
+    Lib_MemCpy(&gSaveContext.equips, &D_801C68C0, 0x22);
+    Lib_MemCpy(&gSaveContext.inventory, &gSaveDefaultInventory, 0x88);
+    Lib_MemCpy(&gSaveContext.checksum, &gSaveDefaultChecksum, 2);
+
+    gSaveContext.horseData.scene = SCENE_F01;
+    gSaveContext.horseData.pos.x = -1420;
+    gSaveContext.horseData.pos.y = 257;
+    gSaveContext.horseData.pos.z = -1285;
+    gSaveContext.horseData.angle = -0x7554;
+
+    gSaveContext.nextCutsceneIndex = 0;
+    gSaveContext.magicLevel = 0;
+    Sram_GenerateRandomSaveFields();
+}
+
 
 extern UNK_TYPE D_801C6970;
 extern UNK_TYPE D_801C6998;
@@ -219,7 +245,12 @@ void Sram_InitDebugSave(void) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80146E40.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/Sram_Alloc.s")
+void Sram_Alloc(GameState* gamestate, SramContext* sramCtx) {
+    if (gSaveContext.unk_3F3F != 0) {
+        sramCtx->flashReadBuff = THA_AllocEndAlign16(&gamestate->heap, 0x4000);
+        sramCtx->status = 0;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80146EBC.s")
 
@@ -239,10 +270,60 @@ void Sram_InitDebugSave(void) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80147198.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80147314.s")
+typedef struct {
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ s32 unk_04;
+} struct_801C6840;
 
+extern struct_801C6840 D_801C6840[];
+extern struct_801C6840 D_801C6850[];
+
+#ifdef NON_MATCHING
+void func_80147314(SramContext* sramCtx, s32 arg1) {
+    s32 pad;
+
+    gSaveContext.isOwlSave = 0;
+    gSaveContext.newf[0] = 0;
+    gSaveContext.newf[1] = 0;
+    gSaveContext.newf[2] = 0;
+    gSaveContext.newf[3] = 0;
+    gSaveContext.newf[4] = 0;
+    gSaveContext.newf[5] = 0;
+    gSaveContext.checksum = 0;
+    gSaveContext.checksum = Sram_CalcChecksum((u8* ) &gSaveContext, 0x3CA0);
+    Lib_MemCpy(sramCtx->flashReadBuff, &gSaveContext, 0x3CA0);
+    func_80146EBC(sramCtx, D_801C6840[arg1].unk_00, D_801C6850[arg1].unk_00);
+    func_80146EBC(sramCtx, D_801C6840[arg1].unk_04, D_801C6850[arg1].unk_00);
+    gSaveContext.isOwlSave = 1;
+    gSaveContext.newf[0] = 'Z';
+    gSaveContext.newf[1] = 'E';
+    gSaveContext.newf[2] = 'L';
+    gSaveContext.newf[3] = 'D';
+    gSaveContext.newf[4] = 'A';
+    gSaveContext.newf[5] = '3';
+}
+#else
+void func_80147314(SramContext* sramCtx, s32 arg1);
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80147314.s")
+#endif
+
+#ifdef NON_MATCHING
+void func_80147414(SramContext* sramCtx, s32 arg1, s32 arg2) {
+    s32 pad;
+
+    bzero(sramCtx->flashReadBuff, 0x4000);
+    if (func_80185968(sramCtx->flashReadBuff, D_801C6840[arg1].unk_00, D_801C6850[arg1].unk_00) != 0) {
+        func_80185968(sramCtx->flashReadBuff, D_801C6840[arg1].unk_04, D_801C6850[arg1].unk_04);
+    }
+
+    Lib_MemCpy(&gSaveContext, sramCtx->flashReadBuff, 0x3CA0);
+    func_80146EBC(sramCtx, D_801C6840[arg2].unk_00, D_801C6850[arg2].unk_00);
+    func_80146EBC(sramCtx, D_801C6840[arg2].unk_04, D_801C6850[arg2].unk_00);
+}
+#else
+void func_80147414(SramContext* sramCtx, s32 arg1, s32 arg2);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80147414.s")
+#endif
 
 void Sram_nop8014750C(s32 arg0) {
-
 }
