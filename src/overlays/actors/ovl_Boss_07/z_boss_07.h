@@ -104,7 +104,7 @@ typedef struct Boss07 {
     /* 0x17C8 */ char unk17C8[0x10];
     /* 0x17D8 */ s16 unk_17D8;
     /* 0x17DA */ s16 unk_17DA;
-    /* 0x17DA */ char unk17DC[4];
+    /* 0x17DA */ s16 unk_17DC;
     /* 0x17E0 */ f32 unk_17E0;
     /* 0x17E4 */ f32 unk_17E4;
     /* 0x17E8 */ f32 unk_17E8;
@@ -154,7 +154,8 @@ typedef struct Boss07 {
     /* 0x3E44 */ char unk3E44[0x6D00];
     /* 0xAB44 */ f32 unk_AB44;
     /* 0xAB48 */ u8 unk_AB48;
-    /* 0xAB48 */ char unkAB49[0x7F];
+    /* 0xAB4C */ f32 unk_AB4C;
+    /* 0xAB50 */ f32 unk_AB50[30];
     /* 0xABC8 */ u32 unk_ABC8;
     /* 0xABCC */ s32 unk_ABCC;
     /* 0xABD0 */ s16 unk_ABD0;
@@ -163,9 +164,12 @@ typedef struct Boss07 {
     /* 0xABE0 */ Vec3f unk_ABE0;
     /* 0xABEC */ Vec3f unk_ABEC;
     /* 0xABF8 */ Vec3f unk_ABF8;
-    /* 0xAC04 */ char unkAC04[8];
+    /* 0xAC04 */ f32 unk_AC04;
+    /* 0xAC08 */ f32 unk_AC08;
     /* 0xAC0C */ f32 unk_AC0C;
-    /* 0xAC10 */ char unkAC10[0x10];
+    /* 0xAC10 */ char unkAC10[4];
+    /* 0xAC14 */ f32 unk_AC14;
+    /* 0xAC18 */ char unkAC18[8];
 } Boss07; // size = 0xAC20
 
 extern const ActorInit Boss_07_InitVars;
