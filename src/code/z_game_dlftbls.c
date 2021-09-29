@@ -7,8 +7,8 @@
 
 #define GAMESTATE_OVERLAY(name, init, destroy, size)                                                         \
     {                                                                                                        \
-        NULL, (uintptr_t)_ovl_##name##SegmentRomStart, (uintptr_t)_ovl_##name##SegmentRomEnd, _ovl_##name##SegmentStart, \
-            _ovl_##name##SegmentEnd, 0, init, destroy, 0, 0, 0, size                                         \
+        NULL, SEGMENT_ROM_START(ovl_##name), SEGMENT_ROM_END(ovl_##name), SEGMENT_START(ovl_##name), \
+            SEGMENT_END(ovl_##name), 0, init, destroy, 0, 0, 0, size                                         \
     }
 #define GAMESTATE_OVERLAY_INTERNAL(init, destroy, size) \
     { NULL, 0, 0, NULL, NULL, 0, init, destroy, 0, 0, 0, size }
@@ -23,4 +23,4 @@ GameStateOverlay gGameStateOverlayTable[] = {
     GAMESTATE_OVERLAY(daytelop, Daytelop_Init, Daytelop_Destroy, sizeof(DaytelopContext)),
 };
 
-s32 graphNumGameStates = 7;
+s32 graphNumGameStates = ARRAY_COUNT(gGameStateOverlayTable);
