@@ -174,7 +174,7 @@ typedef struct {
     /* 0x3F5C */ s32 unk_3F5C;           // "bet_rupees"
     /* 0x3F60 */ u8 unk_3F60;            // "framescale_flag"
     /* 0x3F64 */ f32 unk_3F64;           // "framescale_scale"
-    /* 0x3F68 */ u32 unk_3F68[5][120];
+    /* 0x3F68 */ u32 cycleSceneFlags[120][5];
     /* 0x48C8 */ u16 unk_48C8; // "scene_id_mix"
     /* 0x48CA */ u8 unk_48CA[27];
 } SaveContext; // size = 0x48C8

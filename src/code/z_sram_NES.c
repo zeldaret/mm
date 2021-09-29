@@ -232,7 +232,7 @@ void Sram_InitDebugSave(void) {
     gSaveContext.weekEventReg[0x3B] |= 0x04;
     gSaveContext.weekEventReg[0x1F] |= 0x04;
 
-    gSaveContext.unk_3F68[4][16] = 1;
+    gSaveContext.cycleSceneFlags[99][1] = 1;
     gSaveContext.roomInf[99][1] = 1;
     gSaveContext.magicLevel = 0;
 
@@ -245,7 +245,24 @@ void Sram_InitDebugSave(void) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_8014546C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80145698.s")
+void func_80145698(SramContext* sramCtx) {
+    s32 i;
+
+    for (i = 0; i < ARRAY_COUNT(gSaveContext.cycleSceneFlags); i++) {
+        gSaveContext.roomInf[i][0] = gSaveContext.cycleSceneFlags[i][0];
+        gSaveContext.roomInf[i][1] = gSaveContext.cycleSceneFlags[i][1];
+        gSaveContext.roomInf[i][2] = gSaveContext.cycleSceneFlags[i][2];
+        gSaveContext.roomInf[i][3] = gSaveContext.cycleSceneFlags[i][3];
+        gSaveContext.roomInf[i][4] = gSaveContext.cycleSceneFlags[i][4];
+    }
+
+    gSaveContext.checksum = 0;
+    gSaveContext.checksum = Sram_CalcChecksum((u8* ) &gSaveContext, 0x100CU);
+    if (gSaveContext.unk_3F3F != 0) {
+        Lib_MemCpy(sramCtx->flashReadBuff, &gSaveContext, 0x100C);
+        Lib_MemCpy((sramCtx->flashReadBuff + 0x2000/4), &gSaveContext, 0x100C);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_801457CC.s")
 
@@ -266,7 +283,11 @@ void Sram_Alloc(GameState* gamestate, SramContext* sramCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80146EBC.s")
+void func_80146EBC(SramContext* sramCtx, s32 curPage, s32 numPages) {
+    sramCtx->curPage = curPage;
+    sramCtx->numPages = numPages;
+    func_80185F64(sramCtx->flashReadBuff, curPage, numPages);
+}
 
 
 void func_80146EE8(GameState* gameState) {
@@ -276,7 +297,7 @@ void func_80146EE8(GameState* gameState) {
 
     gSaveContext.unk_05 = 1;
     gSaveContext.isOwlSave = false;
-    func_80145698(sramCtx, globalCtx);
+    func_80145698(sramCtx);
     func_80185F64(sramCtx->flashReadBuff, D_801C67C8[gSaveContext.fileNum * 2], D_801C6818[gSaveContext.fileNum * 2]);
 }
 

@@ -2825,7 +2825,7 @@ void Sram_InitDebugSave(void);
 // void func_80144A94(void);
 // void func_80144E78(void);
 void func_8014546C(SramContext* sramCtx);
-// void func_80145698(void);
+void func_80145698(SramContext* sramCtx);
 void func_801457CC(GameState* gamestate, SramContext* sramCtx);
 void func_80146580(s32 param_1, SramContext* sramCtx, s32 param_3);
 // void func_80146628(void);
