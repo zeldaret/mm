@@ -15,9 +15,9 @@ void EnEndingHero6_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnEndingHero6_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnEndingHero6_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80C23D60(EnEndingHero6* this, s32 npcIndex);
-void func_80C23DDC(EnEndingHero6* this);
-void func_80C23E18(EnEndingHero6* this, GlobalContext* globalCtx);
+void EnEndingHero6_InitSkelAnime(EnEndingHero6* this, s32 npcIndex);
+void EnEndingHero6_SetupIdle(EnEndingHero6* this);
+void EnEndingHero6_Idle(EnEndingHero6* this, GlobalContext* globalCtx);
 
 extern FlexSkeletonHeader D_0600B0CC; // object_dt
 extern FlexSkeletonHeader D_06007908; // object_bai
@@ -79,33 +79,33 @@ void EnEndingHero6_Init(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_InitSV(globalCtx, &this->skelAnime, sSkeletons[this->npcIndex], sAnimations[this->npcIndex],
                      this->jointTable, this->morphTable, sLimbCounts[this->npcIndex]);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
-    func_80C23DDC(this);
+    EnEndingHero6_SetupIdle(this);
 }
 
 void EnEndingHero6_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-void func_80C23D60(EnEndingHero6* this, s32 npcIndex) {
+void EnEndingHero6_InitSkelAnime(EnEndingHero6* this, s32 npcIndex) {
     this->animIndex = npcIndex;
     this->frameCount = SkelAnime_GetFrameCount(&sAnimations[npcIndex]->common);
     SkelAnime_ChangeAnim(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.f, this->frameCount, 0, 0.0f);
 }
 
-void func_80C23DDC(EnEndingHero6* this) {
-    func_80C23D60(this, this->npcIndex);
-    this->unk290 = 1;
-    this->actionFunc = func_80C23E18;
+void EnEndingHero6_SetupIdle(EnEndingHero6* this) {
+    EnEndingHero6_InitSkelAnime(this, this->npcIndex);
+    this->isIdle = 1;
+    this->actionFunc = EnEndingHero6_Idle;
 }
 
-void func_80C23E18(EnEndingHero6* this, GlobalContext* globalCtx) {
+void EnEndingHero6_Idle(EnEndingHero6* this, GlobalContext* globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
 }
 
 void EnEndingHero6_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnEndingHero6* this = THIS;
 
-    if (this->unk286 != 0) {
-        this->unk286--;
+    if (this->timer != 0) {
+        this->timer--;
     }
 
     this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -145,47 +145,45 @@ void EnEndingHero6_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnEndingHero6* this = THIS;
     s32 index = 0;
 
-    if (this->unk290 == 1) {
+    if (this->isIdle == 1) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         func_8012C28C(globalCtx->state.gfxCtx);
         func_8012C2DC(globalCtx->state.gfxCtx);
 
-        if (this->unk284 >= 0) {
-            if (Object_IsLoaded(&globalCtx->objectCtx, this->unk284) != 0) {
-                gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->unk284].segment);
+        if (this->objectIndex >= 0 && Object_IsLoaded(&globalCtx->objectCtx, this->objectIndex)) {
+            gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->objectIndex].segment);
 
-                switch (this->npcIndex) {
-                    case 4:
-                        gDPSetEnvColor(POLY_OPA_DISP++, 170, 10, 70, 255);
-                        break;
-                    case 5:
-                        gDPSetEnvColor(POLY_OPA_DISP++, 170, 200, 255, 255);
-                        break;
-                    case 6:
-                        gDPSetEnvColor(POLY_OPA_DISP++, 0, 230, 70, 255);
-                        break;
-                    case 7:
-                        gDPSetEnvColor(POLY_OPA_DISP++, 200, 0, 150, 255);
-                        break;
-                    case 8:
-                        gDPSetEnvColor(POLY_OPA_DISP++, 245, 155, 0, 255);
-                        break;
-                }
-
-                if (this->npcIndex == 0) {
-                    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80C24280[this->eyeState]));
-
-                    if (this->eyeState < 3) {
-                        index = this->eyeState;
-                    }
-
-                    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80C24294[index]));
-                }
-
-                SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
-                                 this->skelAnime.dListCount, NULL, EnEndingHero6_PostLimbDraw, &this->actor);
+            switch (this->npcIndex) {
+                case 4:
+                    gDPSetEnvColor(POLY_OPA_DISP++, 170, 10, 70, 255);
+                    break;
+                case 5:
+                    gDPSetEnvColor(POLY_OPA_DISP++, 170, 200, 255, 255);
+                    break;
+                case 6:
+                    gDPSetEnvColor(POLY_OPA_DISP++, 0, 230, 70, 255);
+                    break;
+                case 7:
+                    gDPSetEnvColor(POLY_OPA_DISP++, 200, 0, 150, 255);
+                    break;
+                case 8:
+                    gDPSetEnvColor(POLY_OPA_DISP++, 245, 155, 0, 255);
+                    break;
             }
+
+            if (this->npcIndex == 0) {
+                gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80C24280[this->eyeState]));
+
+                if (this->eyeState < 3) {
+                    index = this->eyeState;
+                }
+
+                gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80C24294[index]));
+            }
+
+            SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
+                    this->skelAnime.dListCount, NULL, EnEndingHero6_PostLimbDraw, &this->actor);
         }
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
