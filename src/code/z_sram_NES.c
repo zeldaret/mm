@@ -254,9 +254,36 @@ void Sram_Alloc(GameState* gamestate, SramContext* sramCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80146EE8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80146F5C.s")
+extern s32 D_801C67C8[];
+extern s32 D_801C67F0[];
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80147008.s")
+void func_80146F5C(GameState* gameState) {
+    s32 cutscene;
+    s32 day;
+    u16 time;
+    GlobalContext* globalCtx = (GlobalContext*)gameState;
+
+    cutscene = gSaveContext.cutscene;
+    time = gSaveContext.time;
+    day = gSaveContext.day;
+    gSaveContext.weekEventReg[0x54] &= (u8)0xDF;
+
+    func_80143B0C(globalCtx);
+    func_8014546C(&globalCtx->sramCtx);
+
+    gSaveContext.day = day;
+    gSaveContext.time = time;
+    gSaveContext.cutscene = cutscene;
+    func_80185F64(globalCtx->sramCtx.flashReadBuff, D_801C67C8[gSaveContext.fileNum * 2], D_801C67F0[gSaveContext.fileNum * 2]);
+}
+
+
+void func_80147008(SramContext* sramCtx, u32 curPage, u32 numPages) {
+    sramCtx->curPage = curPage;
+    sramCtx->numPages = numPages;
+    sramCtx->status = 1;
+}
+
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80147020.s")
 
