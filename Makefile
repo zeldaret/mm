@@ -266,8 +266,8 @@ build/data/%.o: data/%.s
 	iconv --from UTF-8 --to EUC-JP $< | $(AS) $(ASFLAGS) -o $@
 
 build/src/overlays/%.o: src/overlays/%.c
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	$(CC_CHECK) $<
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 # TODO: `() || true` is currently necessary to suppress `Error 1 (ignored)` make warnings caused by `test`, but this will go away if 
 # 	the following is moved to a separate rule that is only run once when all the required objects have been compiled. 
@@ -276,21 +276,21 @@ build/src/overlays/%.o: src/overlays/%.c
 	$(RM_MDEBUG)
 
 build/src/%.o: src/%.c
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	$(CC_CHECK) $<
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 	$(RM_MDEBUG)
 
 build/src/libultra/libc/ll.o: src/libultra/libc/ll.c
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	$(CC_CHECK) $<
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	python3 tools/set_o32abi_bit.py $@
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 	$(RM_MDEBUG)
 
 build/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c
-	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	$(CC_CHECK) $<
+	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	python3 tools/set_o32abi_bit.py $@
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 	$(RM_MDEBUG)

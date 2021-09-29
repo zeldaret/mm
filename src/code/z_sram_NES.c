@@ -6,15 +6,8 @@
 extern s32 D_801C6818[];
 extern s32 D_801C67C8[];
 extern s32 D_801C67F0[];
-
-// fake probably
-typedef struct {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-} struct_801C6840;
-
-extern struct_801C6840 D_801C6840[];
-extern struct_801C6840 D_801C6850[];
+extern s32 D_801C6840[];
+extern s32 D_801C6850[];
 
 extern UNK_TYPE D_801C6898;
 extern UNK_TYPE D_801C68C0;
@@ -43,7 +36,13 @@ void func_80143A54(void) {
     gSaveContext.save.roomInf[123][2] = 0x1DB0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80143AC4.s")
+void func_80143AC4(void) {
+    gSaveContext.save.weekEventReg[55] &= 0xFD;
+    gSaveContext.save.weekEventReg[90] &= 0xFE;
+    gSaveContext.save.weekEventReg[89] &= 0xBF;
+    gSaveContext.save.weekEventReg[89] &= 0xF7;
+    gSaveContext.save.weekEventReg[85] &= 0x7F;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80143B0C.s")
 
@@ -63,7 +62,18 @@ void Sram_IncrementDay(void) {
     gSaveContext.save.weekEventReg[0x55] &= (u8)~0x02;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/Sram_CalcChecksum.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/Sram_CalcChecksum.s")
+u16 Sram_CalcChecksum(void* data, size_t count) {
+    u8* dataPtr = data;
+    u16 chkSum = 0;
+
+    while (count-- > 0) {
+        chkSum += *dataPtr;
+        dataPtr++;
+    }
+    return chkSum;
+}
+
 
 void func_80144628(void) {
     gSaveContext.save.entranceIndex = 0x1C00;
@@ -270,10 +280,10 @@ void func_80145698(SramContext* sramCtx) {
     }
 
     gSaveContext.save.checksum = 0;
-    gSaveContext.save.checksum = Sram_CalcChecksum((u8* ) &gSaveContext, 0x100CU);
+    gSaveContext.save.checksum = Sram_CalcChecksum(&gSaveContext, sizeof(Save));
     if (gSaveContext.unk_3F3F != 0) {
-        Lib_MemCpy(sramCtx->flashReadBuff, &gSaveContext, 0x100C);
-        Lib_MemCpy((sramCtx->flashReadBuff + 0x2000/4), &gSaveContext, 0x100C);
+        Lib_MemCpy(*sramCtx->saveBuf, &gSaveContext, sizeof(Save));
+        Lib_MemCpy(&(*sramCtx->saveBuf)[0x2000], &gSaveContext, sizeof(Save));
     }
 }
 
@@ -291,7 +301,7 @@ void func_80145698(SramContext* sramCtx) {
 
 void Sram_Alloc(GameState* gamestate, SramContext* sramCtx) {
     if (gSaveContext.unk_3F3F != 0) {
-        sramCtx->flashReadBuff = THA_AllocEndAlign16(&gamestate->heap, 0x4000);
+        sramCtx->saveBuf = THA_AllocEndAlign16(&gamestate->heap, 0x4000);
         sramCtx->status = 0;
     }
 }
@@ -299,7 +309,7 @@ void Sram_Alloc(GameState* gamestate, SramContext* sramCtx) {
 void func_80146EBC(SramContext* sramCtx, s32 curPage, s32 numPages) {
     sramCtx->curPage = curPage;
     sramCtx->numPages = numPages;
-    func_80185F64(sramCtx->flashReadBuff, curPage, numPages);
+    func_80185F64(sramCtx->saveBuf, curPage, numPages);
 }
 
 
@@ -311,7 +321,7 @@ void func_80146EE8(GameState* gameState) {
     gSaveContext.save.firstCycleFlag = 1;
     gSaveContext.save.isOwlSave = false;
     func_80145698(sramCtx);
-    func_80185F64(sramCtx->flashReadBuff, D_801C67C8[gSaveContext.fileNum * 2], D_801C6818[gSaveContext.fileNum * 2]);
+    func_80185F64(sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2], D_801C6818[gSaveContext.fileNum * 2]);
 }
 
 
@@ -332,16 +342,14 @@ void func_80146F5C(GameState* gameState) {
     gSaveContext.save.day = day;
     gSaveContext.save.time = time;
     gSaveContext.save.cutscene = cutscene;
-    func_80185F64(globalCtx->sramCtx.flashReadBuff, D_801C67C8[gSaveContext.fileNum * 2], D_801C67F0[gSaveContext.fileNum * 2]);
+    func_80185F64(globalCtx->sramCtx.saveBuf, D_801C67C8[gSaveContext.fileNum * 2], D_801C67F0[gSaveContext.fileNum * 2]);
 }
-
 
 void func_80147008(SramContext* sramCtx, u32 curPage, u32 numPages) {
     sramCtx->curPage = curPage;
     sramCtx->numPages = numPages;
     sramCtx->status = 1;
 }
-
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80147020.s")
 
@@ -353,23 +361,27 @@ void func_80147008(SramContext* sramCtx, u32 curPage, u32 numPages) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80147198.s")
 
-#ifdef NON_MATCHING
-void func_80147314(SramContext* sramCtx, s32 arg1) {
+void func_80147314(SramContext* sramCtx, s32 fileNum) {
     s32 pad;
 
-    gSaveContext.save.isOwlSave = 0;
-    gSaveContext.save.playerData.newf[0] = 0;
-    gSaveContext.save.playerData.newf[1] = 0;
-    gSaveContext.save.playerData.newf[2] = 0;
-    gSaveContext.save.playerData.newf[3] = 0;
-    gSaveContext.save.playerData.newf[4] = 0;
-    gSaveContext.save.playerData.newf[5] = 0;
+    gSaveContext.save.isOwlSave = false;
+
+    gSaveContext.save.playerData.newf[0] = '\0';
+    gSaveContext.save.playerData.newf[1] = '\0';
+    gSaveContext.save.playerData.newf[2] = '\0';
+    gSaveContext.save.playerData.newf[3] = '\0';
+    gSaveContext.save.playerData.newf[4] = '\0';
+    gSaveContext.save.playerData.newf[5] = '\0';
+
     gSaveContext.save.checksum = 0;
-    gSaveContext.save.checksum = Sram_CalcChecksum((u8* ) &gSaveContext, 0x3CA0);
-    Lib_MemCpy(sramCtx->flashReadBuff, &gSaveContext, 0x3CA0);
-    func_80146EBC(sramCtx, D_801C6840[arg1].unk_00, D_801C6850[arg1].unk_00);
-    func_80146EBC(sramCtx, D_801C6840[arg1].unk_04, D_801C6850[arg1].unk_00);
-    gSaveContext.save.isOwlSave = 1;
+    gSaveContext.save.checksum = Sram_CalcChecksum(&gSaveContext, 0x3CA0);
+
+    Lib_MemCpy(sramCtx->saveBuf, &gSaveContext, 0x3CA0);
+    func_80146EBC(sramCtx, D_801C6840[fileNum*2], D_801C6850[fileNum*2]);
+    func_80146EBC(sramCtx, D_801C6840[fileNum*2+1], D_801C6850[fileNum*2]);
+
+    gSaveContext.save.isOwlSave = true;
+
     gSaveContext.save.playerData.newf[0] = 'Z';
     gSaveContext.save.playerData.newf[1] = 'E';
     gSaveContext.save.playerData.newf[2] = 'L';
@@ -377,28 +389,25 @@ void func_80147314(SramContext* sramCtx, s32 arg1) {
     gSaveContext.save.playerData.newf[4] = 'A';
     gSaveContext.save.playerData.newf[5] = '3';
 }
-#else
-void func_80147314(SramContext* sramCtx, s32 arg1);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80147314.s")
-#endif
 
-#ifdef NON_MATCHING
-void func_80147414(SramContext* sramCtx, s32 arg1, s32 arg2) {
+void func_80147414(SramContext* sramCtx, s32 fileNum, s32 arg2) {
     s32 pad;
 
-    bzero(sramCtx->flashReadBuff, 0x4000);
-    if (func_80185968(sramCtx->flashReadBuff, D_801C6840[arg1].unk_00, D_801C6850[arg1].unk_00) != 0) {
-        func_80185968(sramCtx->flashReadBuff, D_801C6840[arg1].unk_04, D_801C6850[arg1].unk_04);
+    // Clear save buffer
+    bzero(sramCtx->saveBuf, sizeof(*sramCtx->saveBuf));
+
+    // Read save file
+    if (func_80185968(sramCtx->saveBuf, D_801C6840[fileNum*2], D_801C6850[fileNum*2]) != 0) {
+        // If failed, read backup save file
+        func_80185968(sramCtx->saveBuf, D_801C6840[fileNum*2+1], D_801C6850[fileNum*2+1]);
     }
 
-    Lib_MemCpy(&gSaveContext, sramCtx->flashReadBuff, 0x3CA0);
-    func_80146EBC(sramCtx, D_801C6840[arg2].unk_00, D_801C6850[arg2].unk_00);
-    func_80146EBC(sramCtx, D_801C6840[arg2].unk_04, D_801C6850[arg2].unk_00);
+    // Copy buffer to save context
+    Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, 0x3CA0);
+
+    func_80146EBC(sramCtx, D_801C6840[arg2*2], D_801C6850[arg2*2]);
+    func_80146EBC(sramCtx, D_801C6840[arg2*2+1], D_801C6850[arg2*2]);
 }
-#else
-void func_80147414(SramContext* sramCtx, s32 arg1, s32 arg2);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80147414.s")
-#endif
 
 void Sram_nop8014750C(s32 arg0) {
 }
