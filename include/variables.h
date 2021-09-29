@@ -910,7 +910,7 @@ extern UNK_TYPE1 D_801BA550;
 // extern UNK_TYPE1 D_801BB100;
 // extern UNK_TYPE2 D_801BB124;
 // extern UNK_TYPE2 D_801BB128;
-// extern UNK_TYPE1 D_801BB12C;
+extern u8 D_801BB12C;
 // extern UNK_TYPE1 D_801BB130;
 extern cutscene_update_func sCsStateHandlers1[5];
 extern cutscene_update_func sCsStateHandlers2[5];
@@ -949,7 +949,7 @@ extern GameStateOverlay daytelopGameStateInfo;
 // extern UNK_TYPE2 D_801BDA74;
 // extern UNK_TYPE2 D_801BDA78;
 // extern UNK_TYPE2 D_801BDA7C;
-// extern UNK_TYPE4 D_801BDA9C;
+extern s32 D_801BDA9C;
 extern UNK_TYPE4 D_801BDAA0;
 // extern UNK_TYPE4 D_801BDAA4;
 // extern UNK_TYPE2 D_801BDAA8;
@@ -977,13 +977,13 @@ extern u8 kanfontOrdering[92];
 // extern UNK_TYPE1 D_801BDBA0;
 // extern UNK_TYPE1 D_801BDBA4;
 // extern UNK_TYPE1 D_801BDBA8;
-// extern UNK_TYPE1 D_801BDBB0;
+extern u8 D_801BDBB0;
 // extern UNK_TYPE1 D_801BDBB4;
 // extern UNK_TYPE1 D_801BDBB8;
 // extern UNK_TYPE1 D_801BDBBC;
 // extern UNK_TYPE1 D_801BDBC0;
 // extern UNK_TYPE1 D_801BDBC4;
-// extern UNK_TYPE1 D_801BDBC8;
+extern u8 D_801BDBC8;
 // extern UNK_TYPE1 D_801BDBCC;
 // extern UNK_TYPE1 D_801BDCF4;
 // extern UNK_TYPE1 D_801BE38E;
@@ -1670,7 +1670,7 @@ extern PadMgr* padmgrContext;
 // extern UNK_TYPE4 controllerInputsCaptured;
 // extern UNK_TYPE4 D_801D1538;
 extern UNK_PTR D_801D1540;
-extern f32 D_801D1570[13];
+// extern f32 sFactorialTbl[13];
 extern Vec3f D_801D15B0;
 extern Vec3s D_801D15BC;
 extern RSPMatrix D_801D1DE0;
@@ -1876,8 +1876,8 @@ extern UNK_PTR D_801DB478[7];
 // extern UNK_TYPE1 D_801DB49C;
 // extern UNK_TYPE2 D_801DB4A0;
 extern UNK_TYPE D_801DB4A4;
-// extern UNK_TYPE1 D_801DB4B0;
-// extern UNK_TYPE1 D_801DB4B8;
+extern f32 D_801DB4B0;
+extern s8 D_801DB4B8;
 // extern UNK_TYPE1 D_801DB4C0;
 // extern UNK_TYPE1 D_801DB4C4;
 // extern UNK_TYPE1 D_801DB4C8;
@@ -3312,7 +3312,7 @@ extern u8 actorCutsceneNextCutscenes[16];
 extern f32 D_801F4E70;
 // extern UNK_TYPE1 D_801F4E74;
 // extern UNK_TYPE1 D_801F4E78;
-// extern UNK_TYPE1 D_801F4E7A;
+extern s16 D_801F4E7A;
 // extern UNK_TYPE1 D_801F4E80;
 // extern UNK_TYPE1 D_801F4EE0;
 // extern UNK_TYPE1 D_801F4EE8;
@@ -3954,8 +3954,14 @@ extern UNK_TYPE D_0400E3D8;
 extern UNK_TYPE D_0400E408;
 extern UNK_TYPE D_0400E410;
 extern UNK_TYPE D_0400E418;
-extern UNK_TYPE D_0400EB7C;
-extern UNK_TYPE D_040117A8;
+extern CollisionHeader D_0400E710; // Pink Deku Flower collision
+extern AnimationHeader D_0400EB7C; // Deku Flower intense flutter animation
+extern Gfx D_0400ED80; // Pink Deku Flower display list
+extern SkeletonHeader D_04011518; // Pink Deku Flower skeleton
+extern AnimationHeader D_040117A8; // Deku Flower small flutter animation
+extern CollisionHeader D_040118D8; // Gold Deku Flower collision
+extern Gfx D_04011BD0; // Gold Deku Flower display list
+extern SkeletonHeader D_040127E8; // Gold Deku Flower skeleton
 extern UNK_TYPE D_04012860;
 extern UNK_TYPE D_040128BC;
 extern UNK_TYPE D_04015FA0;

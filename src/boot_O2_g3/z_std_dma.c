@@ -213,8 +213,7 @@ void DmaMgr_Start(void) {
     DmaEntry* iter;
     u32 idx;
 
-    DmaMgr_DMARomToRam((u32)_dmadataSegmentRomStart, (u32)dmadata,
-                       (u32)_dmadataSegmentRomEnd - (u32)_dmadataSegmentRomStart);
+    DmaMgr_DMARomToRam(SEGMENT_ROM_START(dmadata), dmadata, SEGMENT_ROM_SIZE(dmadata));
 
 dummy_label:;
 
