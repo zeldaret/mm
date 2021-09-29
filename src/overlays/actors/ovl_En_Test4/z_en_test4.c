@@ -290,7 +290,7 @@ void func_80A425E4(EnTest4* this, GlobalContext* globalCtx) {
 #ifdef NON_MATCHING
 // 1 instruction in the wrong place
 void EnTest4_Init(Actor* thisx, GlobalContext* globalCtx) {
-    s32 pad;
+    s32 dayTemp;
     EnTest4* this = THIS;
     Player* player = PLAYER;
     s8 temp_v0 = this->actor.cutscene;
@@ -327,8 +327,8 @@ void EnTest4_Init(Actor* thisx, GlobalContext* globalCtx) {
                 Actor_MarkForDeath(&this->actor);
             } else {
                 gSaveContext.day = 1;
-                pad = gSaveContext.day;
-                gSaveContext.daysElapsed = pad;
+                dayTemp = gSaveContext.day;
+                gSaveContext.daysElapsed = dayTemp;
                 this->unk_144 = 1;
                 this->unk_146 = gSaveContext.time;
                 this->actionFunc = func_80A42AB8;
