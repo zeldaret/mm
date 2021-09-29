@@ -1144,7 +1144,7 @@ void func_80BAD230(EnSuttari* this, GlobalContext* globalCtx) {
         this->textId = 0x2A31;
         func_801518B0(globalCtx, this->textId, &this->actor);
         this->flags1 |= 0x4000;
-        func_801A89A8(0x8003);
+        Audio_QueueSeqCmd(0x8003);
         this->actionFunc = func_80BAD380;
     } else {
         ActorCutscene_SetIntentToPlay(this->cutscenes[1]);
@@ -1205,7 +1205,7 @@ void func_80BAD380(EnSuttari* this, GlobalContext* globalCtx) {
                 gSaveContext.weekEventReg[0x21] |= 8;
             }
             this->actor.speedXZ = 0.0f;
-            func_801A89A8(0x101400FF);
+            Audio_QueueSeqCmd(0x101400FF);
             this->flags2 |= 4;
             EnSuttari_SetNextEntrance(globalCtx, 0xD670);
         } else {
@@ -1438,7 +1438,7 @@ void EnSuttari_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnSuttari* this = THIS;
 
     if ((globalCtx->sceneNum == SCENE_BACKTOWN) && !(this->flags2 & 4)) {
-        func_801A89A8(0x101400FF);
+        Audio_QueueSeqCmd(0x101400FF);
     }
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }

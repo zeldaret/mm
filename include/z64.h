@@ -16,6 +16,7 @@
 #include "xstdio.h"
 #include "unk.h"
 
+#include "bgm.h"
 #include "sfx.h"
 #include "color.h"
 #include "ichain.h"
