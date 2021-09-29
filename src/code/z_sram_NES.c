@@ -24,7 +24,24 @@ void func_80143A10(u8 owlId) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80143A54.s")
+void func_80143A54(void) {
+    //gSaveContext.save.roomInf[127][3] = (gSaveContext.save.roomInf[127][3] & 0xFFFF) | 0x130000;
+    //gSaveContext.save.roomInf[127][3] = (gSaveContext.save.roomInf[127][3] & 0xFFFF0000) | 0xA;
+    //gSaveContext.save.roomInf[127][4] = 0x1770;
+    //gSaveContext.save.roomInf[127][6] = (gSaveContext.save.roomInf[127][6] & 0xFFFF0000) | 0x27;
+    //gSaveContext.save.roomInf[127][6] = (gSaveContext.save.roomInf[127][6] & 0xFFFF) | 0xA0000;
+    //gSaveContext.save.roomInf[123][0] = 0x1D4C;
+    //gSaveContext.save.roomInf[123][1] = 0x1D4C;
+    //gSaveContext.save.roomInf[123][2] = 0x1DB0;
+    gSaveContext.roomInf[127][3] = (gSaveContext.roomInf[127][3] & 0xFFFF) | 0x130000;
+    gSaveContext.roomInf[127][3] = (gSaveContext.roomInf[127][3] & 0xFFFF0000) | 0xA;
+    gSaveContext.roomInf[127][4] = 0x1770;
+    gSaveContext.roomInf[127][6] = (gSaveContext.roomInf[127][6] & 0xFFFF0000) | 0x27;
+    gSaveContext.roomInf[127][6] = (gSaveContext.roomInf[127][6] & 0xFFFF) | 0xA0000;
+    gSaveContext.roomInf[123][0] = 0x1D4C;
+    gSaveContext.roomInf[123][1] = 0x1D4C;
+    gSaveContext.roomInf[123][2] = 0x1DB0;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80143AC4.s")
 
