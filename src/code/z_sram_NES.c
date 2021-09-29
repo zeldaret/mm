@@ -1,6 +1,22 @@
 #include "global.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
 
+
+
+extern s32 D_801C6818[];
+extern s32 D_801C67C8[];
+extern s32 D_801C67F0[];
+
+// fake probably
+typedef struct {
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ s32 unk_04;
+} struct_801C6840;
+
+extern struct_801C6840 D_801C6840[];
+extern struct_801C6840 D_801C6850[];
+
+
 void func_80143A10(u8 owlId) {
     gSaveContext.owlActivationFlags = ((void)0, gSaveContext.owlActivationFlags) | (u16)gBitFlags[owlId];
     if (gSaveContext.unk_44 == 0xFF) {
@@ -252,10 +268,18 @@ void Sram_Alloc(GameState* gamestate, SramContext* sramCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80146EBC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80146EE8.s")
 
-extern s32 D_801C67C8[];
-extern s32 D_801C67F0[];
+void func_80146EE8(GameState* gameState) {
+    s32 pad;
+    GlobalContext* globalCtx = (GlobalContext*)gameState;
+    SramContext* sramCtx = &globalCtx->sramCtx;
+
+    gSaveContext.unk_05 = 1;
+    gSaveContext.isOwlSave = false;
+    func_80145698(sramCtx, globalCtx);
+    func_80185F64(sramCtx->flashReadBuff, D_801C67C8[gSaveContext.fileNum * 2], D_801C6818[gSaveContext.fileNum * 2]);
+}
+
 
 void func_80146F5C(GameState* gameState) {
     s32 cutscene;
@@ -294,14 +318,6 @@ void func_80147008(SramContext* sramCtx, u32 curPage, u32 numPages) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80147150.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80147198.s")
-
-typedef struct {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-} struct_801C6840;
-
-extern struct_801C6840 D_801C6840[];
-extern struct_801C6840 D_801C6850[];
 
 #ifdef NON_MATCHING
 void func_80147314(SramContext* sramCtx, s32 arg1) {
