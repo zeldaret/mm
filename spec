@@ -712,8 +712,7 @@ beginseg
     name "ovl_opening"
     compress
     include "build/src/overlays/gamestates/ovl_opening/z_opening.o"
-    include "build/data/ovl_opening/ovl_opening.data.o"
-    include "build/data/ovl_opening/ovl_opening.reloc.o"
+    include "build/src/overlays/gamestates/ovl_opening/ovl_opening_reloc.o"
 endseg
 
 beginseg

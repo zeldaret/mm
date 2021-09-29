@@ -2820,7 +2820,7 @@ void Sram_IncrementDay(void);
 u32 Sram_CalcChecksum(u8* data, u32 length);
 // void func_80144628(void);
 // void Sram_GenerateRandomSaveFields(void);
-// void func_80144890(void);
+void func_80144890(void);
 // void func_80144968(void);
 // void func_80144A94(void);
 // void func_80144E78(void);
