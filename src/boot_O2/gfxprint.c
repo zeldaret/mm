@@ -172,7 +172,7 @@ Gfx* GfxPrint_Close(GfxPrint* this) {
 }
 
 void GfxPrint_VPrintf(GfxPrint* this, const char* fmt, va_list args) {
-    PrintUtils_VPrintf(&this->callback, fmt, args);
+    PrintUtils_VPrintf((PrintCallback*)&this->callback, fmt, args);
 }
 
 void GfxPrint_Printf(GfxPrint* this, const char* fmt, ...) {
@@ -180,4 +180,6 @@ void GfxPrint_Printf(GfxPrint* this, const char* fmt, ...) {
     va_start(args, fmt);
 
     GfxPrint_VPrintf(this, fmt, args);
+    
+    va_end(args);
 }
