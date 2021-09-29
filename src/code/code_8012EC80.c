@@ -220,7 +220,7 @@ s32 func_8012EE34(s16 arg0) {
         }
     }
 
-    if (gSaveContext.roomInf[125][num] & gBitFlags[arg0 - (num << 5)]) {
+    if (gSaveContext.save.roomInf[125][num] & gBitFlags[arg0 - (num << 5)]) {
         return 1;
     }
 
@@ -266,23 +266,23 @@ void func_8012EF0C(s16 arg0) {
             }
 
             // Required to match
-            gSaveContext.roomInf[125][phi_v1] =
-                gSaveContext.roomInf[125][phi_v1] | gBitFlags[(s16)(*new_var)[phi_v0] - (phi_v1 << 5)];
+            gSaveContext.save.roomInf[125][phi_v1] =
+                gSaveContext.save.roomInf[125][phi_v1] | gBitFlags[(s16)(*new_var)[phi_v0] - (phi_v1 << 5)];
             phi_v0++;
         }
 
         if ((*new_var) == D_801C2380[0]) {
-            gSaveContext.unk_F60 |= 3;
+            gSaveContext.save.mapsVisible |= 3;
         } else if ((*new_var) == D_801C2380[1]) {
-            gSaveContext.unk_F60 |= 0x1C;
+            gSaveContext.save.mapsVisible |= 0x1C;
         } else if ((*new_var) == D_801C2380[2]) {
-            gSaveContext.unk_F60 |= 0xE0;
+            gSaveContext.save.mapsVisible |= 0xE0;
         } else if ((*new_var) == D_801C2380[3]) {
-            gSaveContext.unk_F60 |= 0x100;
+            gSaveContext.save.mapsVisible |= 0x100;
         } else if ((*new_var) == D_801C2380[4]) {
-            gSaveContext.unk_F60 |= 0x1E00;
+            gSaveContext.save.mapsVisible |= 0x1E00;
         } else if ((*new_var) == D_801C2380[5]) {
-            gSaveContext.unk_F60 |= 0x6000;
+            gSaveContext.save.mapsVisible |= 0x6000;
         }
     }
 
@@ -296,11 +296,11 @@ void func_8012F0EC(s16 arg0);
 // regalloc
 void func_8012F1BC(s16 sceneIndex) {
     if (sceneIndex == SCENE_KINSTA1) {
-        gSaveContext.roomInf[126][0] = ((((gSaveContext.roomInf[126][0] & 0xFFFF0000) >> 0x10) + 1) << 0x10) |
-                                       (gSaveContext.roomInf[126][0] & 0xFFFF);
+        gSaveContext.save.roomInf[126][0] = ((((gSaveContext.save.roomInf[126][0] & 0xFFFF0000) >> 0x10) + 1) << 0x10) |
+                                       (gSaveContext.save.roomInf[126][0] & 0xFFFF);
     } else {
-        gSaveContext.roomInf[126][0] =
-            ((gSaveContext.roomInf[126][0] + 1) & 0xFFFF) | (gSaveContext.roomInf[126][0] & 0xFFFF0000);
+        gSaveContext.save.roomInf[126][0] =
+            ((gSaveContext.save.roomInf[126][0] + 1) & 0xFFFF) | (gSaveContext.save.roomInf[126][0] & 0xFFFF0000);
     }
 }
 #else
@@ -310,9 +310,9 @@ void func_8012F1BC(s16 arg0);
 
 s16 func_8012F22C(s16 sceneIndex) {
     if (sceneIndex == SCENE_KINSTA1) {
-        return (gSaveContext.roomInf[126][0] & 0xFFFF0000) >> 0x10;
+        return (gSaveContext.save.roomInf[126][0] & 0xFFFF0000) >> 0x10;
     } else {
-        return gSaveContext.roomInf[126][0] & 0xFFFF;
+        return gSaveContext.save.roomInf[126][0] & 0xFFFF;
     }
 }
 

@@ -10,7 +10,7 @@
 
 #define THIS ((EnToto*)thisx)
 
-#define ENTOTO_WEEK_EVENT_FLAGS (gSaveContext.weekEventReg[50] & 1 || gSaveContext.weekEventReg[51] & 0x80)
+#define ENTOTO_WEEK_EVENT_FLAGS (gSaveContext.save.weekEventReg[50] & 1 || gSaveContext.save.weekEventReg[51] & 0x80)
 
 void EnToto_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnToto_Destroy(Actor* thisx, GlobalContext* globalCtx);
@@ -199,7 +199,7 @@ void EnToto_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    if (globalCtx->sceneNum == 0x15 && (gSaveContext.time >= 0x4000 && gSaveContext.time < 0xE555)) {
+    if (globalCtx->sceneNum == 0x15 && (gSaveContext.save.time >= 0x4000 && gSaveContext.save.time < 0xE555)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -264,7 +264,7 @@ void func_80BA39C8(EnToto* this, GlobalContext* globalCtx) {
         return;
     }
 
-    if ((globalCtx->sceneNum == 0x15 && !(gSaveContext.time >= 0x4000 && gSaveContext.time < 0xED02)) ||
+    if ((globalCtx->sceneNum == 0x15 && !(gSaveContext.save.time >= 0x4000 && gSaveContext.save.time < 0xED02)) ||
         (globalCtx->sceneNum != 0x15 && func_80BA397C(this, 0x2000))) {
         if (this->unk2B6 != 0) {
             this->text = D_80BA5044;
@@ -449,7 +449,7 @@ s32 func_80BA4204(EnToto* this, GlobalContext* globalCtx) {
 
     if (DECR(this->unk2B1) == 0) {
         if (!ENTOTO_WEEK_EVENT_FLAGS) {
-            temp_v1_2 = &D_80BA50DC[gSaveContext.playerForm - 1];
+            temp_v1_2 = &D_80BA50DC[gSaveContext.save.playerForm - 1];
             func_801518B0(globalCtx, (this->text->unk0 == 6) ? temp_v1_2->unk0 : temp_v1_2->unk4, NULL);
         }
         return 1;
@@ -528,7 +528,7 @@ s32 func_80BA4530(EnToto* this, GlobalContext* globalCtx) {
         return this->text->unk1;
     }
     if (player->actor.bgCheckFlags & 1) {
-        temp_s0 = &D_80BA50DC[gSaveContext.playerForm - 1];
+        temp_s0 = &D_80BA50DC[gSaveContext.save.playerForm - 1];
         if (func_80BA44D4(temp_s0, player)) {
             Math_Vec3s_ToVec3f(&player->actor.world.pos, &temp_s0->unk6);
             player->actor.shape.rot.y = 0;
@@ -541,7 +541,7 @@ s32 func_80BA4530(EnToto* this, GlobalContext* globalCtx) {
                     if (this->unk2B1 < 10) {
                         this->unk2B1++;
                         if (this->unk2B1 >= 10) {
-                            tmp = gSaveContext.playerForm; // Needed for regalloc possible FAKE MATCH
+                            tmp = gSaveContext.save.playerForm; // Needed for regalloc possible FAKE MATCH
                             func_801518B0(globalCtx, D_80BA50DC[tmp - 1].unk2, NULL);
                         }
                     }
@@ -556,23 +556,23 @@ s32 func_80BA4530(EnToto* this, GlobalContext* globalCtx) {
 
 s32 func_80BA46D8(EnToto* this, GlobalContext* globalCtx) {
     func_800B7298(globalCtx, NULL, 0x44);
-    func_80152434(globalCtx, D_80BA5120[gSaveContext.playerForm == 4 ? 0 : gSaveContext.playerForm]);
+    func_80152434(globalCtx, D_80BA5120[gSaveContext.save.playerForm == 4 ? 0 : gSaveContext.save.playerForm]);
     return 0;
 }
 
 s32 func_80BA4740(EnToto* this, GlobalContext* globalCtx) {
     if (globalCtx->msgCtx.unk1202A == 4) {
-        if (gSaveContext.playerForm == 4) {
-            gSaveContext.weekEventReg[56] |= 0x10;
+        if (gSaveContext.save.playerForm == 4) {
+            gSaveContext.save.weekEventReg[56] |= 0x10;
         }
-        if (gSaveContext.playerForm == 3) {
-            gSaveContext.weekEventReg[56] |= 0x20;
+        if (gSaveContext.save.playerForm == 3) {
+            gSaveContext.save.weekEventReg[56] |= 0x20;
         }
-        if (gSaveContext.playerForm == 2) {
-            gSaveContext.weekEventReg[56] |= 0x40;
+        if (gSaveContext.save.playerForm == 2) {
+            gSaveContext.save.weekEventReg[56] |= 0x40;
         }
-        if (gSaveContext.playerForm == 1) {
-            gSaveContext.weekEventReg[56] |= 0x80;
+        if (gSaveContext.save.playerForm == 1) {
+            gSaveContext.save.weekEventReg[56] |= 0x80;
         }
         return 1;
     }
@@ -584,20 +584,20 @@ s32 func_80BA47E0(EnToto* this, GlobalContext* globalCtx) {
     s32 i;
 
     this->unk2B3 = 0;
-    if (gSaveContext.weekEventReg[56] & 0x10) {
+    if (gSaveContext.save.weekEventReg[56] & 0x10) {
         this->unk2B3 += 1;
     }
-    if (gSaveContext.weekEventReg[56] & 0x20) {
+    if (gSaveContext.save.weekEventReg[56] & 0x20) {
         this->unk2B3 += 2;
     }
-    if (gSaveContext.weekEventReg[56] & 0x40) {
+    if (gSaveContext.save.weekEventReg[56] & 0x40) {
         this->unk2B3 += 4;
     }
-    if (gSaveContext.weekEventReg[56] & 0x80) {
+    if (gSaveContext.save.weekEventReg[56] & 0x80) {
         this->unk2B3 += 8;
     }
     for (i = 0; i < 4; i++) {
-        if (gSaveContext.playerForm != (i + 1) && (D_80BA5128[i] & this->unk2B3)) {
+        if (gSaveContext.save.playerForm != (i + 1) && (D_80BA5128[i] & this->unk2B3)) {
             Math_Vec3s_ToVec3f(&spawnPos, &D_80BA50DC[i].unk6);
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_PLAYER, spawnPos.x, spawnPos.y, spawnPos.z, i + 2, 0, 0,
                         -1);
@@ -634,9 +634,9 @@ s32 func_80BA4A00(EnToto* this, GlobalContext* globalCtx) {
             func_800B7298(globalCtx, NULL, 0x45);
             if (this->unk2B3 == 0xF) {
                 if (CURRENT_DAY == 1) {
-                    gSaveContext.weekEventReg[50] |= 1;
+                    gSaveContext.save.weekEventReg[50] |= 1;
                 } else {
-                    gSaveContext.weekEventReg[51] |= 0x80;
+                    gSaveContext.save.weekEventReg[51] |= 0x80;
                 }
             } else {
                 func_80BA402C(this, globalCtx);

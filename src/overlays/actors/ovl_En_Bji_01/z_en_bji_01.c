@@ -131,44 +131,44 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
     switch (this->actor.params) {
         case ENBJI01_PARAMS_DEFAULT:
         case ENBJI01_PARAMS_FINISHED_CONVERSATION:
-            switch (gSaveContext.playerForm) {
+            switch (gSaveContext.save.playerForm) {
                 case PLAYER_FORM_DEKU:
-                    if (gSaveContext.weekEventReg[17] & 0x10) {
-                        if (gSaveContext.weekEventReg[74] & 0x80) {
+                    if (gSaveContext.save.weekEventReg[17] & 0x10) {
+                        if (gSaveContext.save.weekEventReg[74] & 0x80) {
                             this->textId = 0x5F4;
                         } else {
                             this->textId = 0x5E2;
                         }
                     } else {
                         this->textId = 0x5EC;
-                        gSaveContext.weekEventReg[17] |= 0x10;
+                        gSaveContext.save.weekEventReg[17] |= 0x10;
                     }
                     break;
                 case PLAYER_FORM_HUMAN:
                     if (Player_GetMask(globalCtx) == PLAYER_MASK_KAFEIS_MASK) {
                         this->textId = 0x236A;
-                    } else if (gSaveContext.weekEventReg[74] & 0x10) {
+                    } else if (gSaveContext.save.weekEventReg[74] & 0x10) {
                         this->textId = 0x5F6;
                     } else {
                         this->textId = 0x5F5;
-                        gSaveContext.weekEventReg[74] |= 0x10;
+                        gSaveContext.save.weekEventReg[74] |= 0x10;
                     }
                     break;
                 case PLAYER_FORM_GORON:
                 case PLAYER_FORM_ZORA:
-                    if (gSaveContext.weekEventReg[75] & 8) {
+                    if (gSaveContext.save.weekEventReg[75] & 8) {
                         this->textId = 0x5E4;
                     } else {
                         this->textId = 0x5DC;
-                        gSaveContext.weekEventReg[75] |= 8;
+                        gSaveContext.save.weekEventReg[75] |= 8;
                     }
                     break;
             }
             break;
         case ENBJI01_PARAMS_LOOKED_THROUGH_TELESCOPE:
-            switch (gSaveContext.playerForm) {
+            switch (gSaveContext.save.playerForm) {
                 case PLAYER_FORM_DEKU:
-                    if (gSaveContext.weekEventReg[74] & 0x80) {
+                    if (gSaveContext.save.weekEventReg[74] & 0x80) {
                         this->textId = 0x5F2;
                     } else {
                         this->textId = 0x5F1;
@@ -188,9 +188,9 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
                             this->textId = 0x5EA;
                             break;
                         case 3:
-                            tempDay = gSaveContext.day;
+                            tempDay = gSaveContext.save.day;
                             tempTimeBeforeMoonCrash =
-                                ((-(tempDay % 5 << 0x10) - ((u16)(gSaveContext.time - 0x4000))) + 0x40000);
+                                ((-(tempDay % 5 << 0x10) - ((u16)(gSaveContext.save.time - 0x4000))) + 0x40000);
                             if (tempTimeBeforeMoonCrash < 2730.6667f) { /* 1 hr */
                                 this->textId = 0x5E8;
                             } else {
@@ -226,7 +226,7 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
                         break;
                     case 1:
                         func_8019F230();
-                        switch (gSaveContext.playerForm) {
+                        switch (gSaveContext.save.playerForm) {
                             case PLAYER_FORM_DEKU:
                                 func_80151938(globalCtx, 0x5F0);
                                 break;
@@ -354,7 +354,7 @@ void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->moonsTear =
         (ObjMoonStone*)func_ActorCategoryIterateById(globalCtx, NULL, ACTORCAT_PROP, ACTOR_OBJ_MOON_STONE);
 
-    switch (gSaveContext.entranceIndex) {
+    switch (gSaveContext.save.entranceIndex) {
         case 0x4C00: /* Observatory from ECT */
         case 0x4C10: /* Observatory from Termina Field door */
             this->actor.params = ENBJI01_PARAMS_DEFAULT;

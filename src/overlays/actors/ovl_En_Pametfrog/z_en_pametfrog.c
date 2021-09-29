@@ -191,7 +191,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 10, ICHAIN_STOP),
 };
 
-// gSaveContext.weekEventReg[KEY] = VALUE
+// gSaveContext.save.weekEventReg[KEY] = VALUE
 // KEY | VALUE
 static s32 isFrogReturnedFlags[] = {
     (32 << 8) | 0x40, // Woodfall Temple Frog Returned
@@ -213,7 +213,7 @@ void EnPametfrog_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->params = CLAMP(this->actor.params, 1, 4);
     if (Actor_GetRoomCleared(globalCtx, globalCtx->roomCtx.currRoom.num)) {
         Actor_MarkForDeath(&this->actor);
-        if (!(gSaveContext.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
+        if (!(gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
               (u8)isFrogReturnedFlags[this->actor.params - 1])) {
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_MINIFROG, this->actor.world.pos.x,
                         this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, this->params);

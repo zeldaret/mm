@@ -146,7 +146,7 @@ void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx) {
                 globalCtx->msgCtx.unk11F22 = 0x4D;
                 globalCtx->msgCtx.unk120D6 = 0;
                 globalCtx->msgCtx.unk120D4 = 0;
-                gSaveContext.owlSaveLocation = OBJ_WARPSTONE_GET_ID(this);
+                gSaveContext.save.owlSaveLocation = OBJ_WARPSTONE_GET_ID(this);
             } else {
                 func_801477B4(globalCtx);
             }

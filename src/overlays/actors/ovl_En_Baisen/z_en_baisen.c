@@ -74,14 +74,14 @@ void EnBaisen_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->paramCopy = this->actor.params;
     if (this->actor.params == 0) {
         this->unk290 = true;
-        if (!(gSaveContext.weekEventReg[63] & 0x80) && ((gSaveContext.day != 3) || !gSaveContext.isNight)) {
+        if (!(gSaveContext.save.weekEventReg[63] & 0x80) && ((gSaveContext.save.day != 3) || !gSaveContext.save.isNight)) {
             Actor_MarkForDeath(&this->actor);
         }
     } else {
         this->collider.dim.radius = 30;
         this->collider.dim.height = 60;
         this->collider.dim.yShift = 0;
-        if ((gSaveContext.weekEventReg[63] & 0x80) || ((gSaveContext.day == 3) && (gSaveContext.isNight))) {
+        if ((gSaveContext.save.weekEventReg[63] & 0x80) || ((gSaveContext.save.day == 3) && (gSaveContext.save.isNight))) {
             Actor_MarkForDeath(&this->actor);
         }
     }
@@ -156,7 +156,7 @@ void func_80BE887C(EnBaisen* this, GlobalContext* globalCtx) {
     } else {
         if (this->paramCopy != 0) {
             this->textIdIndex = 0;
-            if (gSaveContext.weekEventReg[60] & 8) {
+            if (gSaveContext.save.weekEventReg[60] & 8) {
                 this->textIdIndex = 1;
             }
             if (Player_GetMask(globalCtx) == PLAYER_MASK_COUPLES_MASK) {
@@ -249,7 +249,7 @@ void EnBaisen_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->unusedCounter--;
     }
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    if ((this->paramCopy != 0) && (gSaveContext.day == 3) && gSaveContext.isNight) {
+    if ((this->paramCopy != 0) && (gSaveContext.save.day == 3) && gSaveContext.save.isNight) {
         Actor_MarkForDeath(&this->actor);
         return;
     }

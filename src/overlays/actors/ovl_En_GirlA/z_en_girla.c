@@ -188,7 +188,7 @@ s32 EnGirlA_CanBuyPotionRed(GlobalContext* globalCtx, EnGirlA* this) {
     if (!func_80114E90()) {
         return CANBUY_RESULT_NEED_EMPTY_BOTTLE;
     }
-    if (gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     return CANBUY_RESULT_SUCCESS_2;
@@ -198,23 +198,23 @@ s32 EnGirlA_CanBuyPotionGreen(GlobalContext* globalCtx, EnGirlA* this) {
     if (!func_80114E90()) {
         return CANBUY_RESULT_NEED_EMPTY_BOTTLE;
     }
-    if (gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     return CANBUY_RESULT_SUCCESS_2;
 }
 
 s32 EnGirlA_CanBuyPotionBlue(GlobalContext* globalCtx, EnGirlA* this) {
-    if (!(gSaveContext.weekEventReg[53] & 8)) {
+    if (!(gSaveContext.save.weekEventReg[53] & 8)) {
         return CANBUY_RESULT_CANNOT_GET_NOW;
     }
     if (!func_80114E90()) {
         return CANBUY_RESULT_NEED_EMPTY_BOTTLE;
     }
-    if (!(gSaveContext.weekEventReg[53] & 0x10)) {
+    if (!(gSaveContext.save.weekEventReg[53] & 0x10)) {
         return CANBUY_RESULT_SUCCESS_2;
     }
-    if (gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     return CANBUY_RESULT_SUCCESS_2;
@@ -227,7 +227,7 @@ s32 EnGirlA_CanBuyArrows(GlobalContext* globalCtx, EnGirlA* this) {
     if (AMMO(ITEM_BOW) >= CUR_CAPACITY(UPG_QUIVER)) {
         return CANBUY_RESULT_NO_ROOM_2;
     }
-    if (gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     return CANBUY_RESULT_SUCCESS_2;
@@ -237,7 +237,7 @@ s32 EnGirlA_CanBuyNuts(GlobalContext* globalCtx, EnGirlA* this) {
     if (CUR_CAPACITY(UPG_NUTS) != 0 && AMMO(ITEM_NUT) >= CUR_CAPACITY(UPG_NUTS)) {
         return CANBUY_RESULT_NO_ROOM;
     }
-    if (gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     if (func_80114978(ITEM_NUT) == ITEM_NONE) {
@@ -250,7 +250,7 @@ s32 EnGirlA_CanBuyShieldHero(GlobalContext* globalCtx, EnGirlA* this) {
     if (CUR_EQUIP_VALUE_VOID(EQUIP_SHIELD) != 0) {
         return CANBUY_RESULT_NO_ROOM;
     }
-    if (gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     return CANBUY_RESULT_SUCCESS_1;
@@ -260,7 +260,7 @@ s32 EnGirlA_CanBuyStick(GlobalContext* globalCtx, EnGirlA* this) {
     if (CUR_CAPACITY(UPG_STICK) != 0 && AMMO(ITEM_STICK) >= CUR_CAPACITY(UPG_STICK)) {
         return CANBUY_RESULT_NO_ROOM;
     }
-    if (gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     if (func_80114978(ITEM_STICK) == ITEM_NONE) {
@@ -270,7 +270,7 @@ s32 EnGirlA_CanBuyStick(GlobalContext* globalCtx, EnGirlA* this) {
 }
 
 s32 EnGirlA_CanBuyMaskAllNight(GlobalContext* globalCtx, EnGirlA* this) {
-    if (gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     return CANBUY_RESULT_SUCCESS_2;
@@ -280,7 +280,7 @@ s32 EnGirlA_CanBuyBombBagCuriosityShop(GlobalContext* globalCtx, EnGirlA* this) 
     if (CUR_UPG_VALUE_VOID(UPG_BOMB_BAG) >= 2) {
         return CANBUY_RESULT_CANNOT_GET_NOW;
     }
-    if (gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     return CANBUY_RESULT_SUCCESS_2;
@@ -293,7 +293,7 @@ s32 EnGirlA_CanBuyBombBag20BombShop(GlobalContext* globalCtx, EnGirlA* this) {
     if (CUR_UPG_VALUE_VOID(UPG_BOMB_BAG) >= 2) {
         return CANBUY_RESULT_HAVE_BETTER;
     }
-    if (gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     return CANBUY_RESULT_SUCCESS_1;
@@ -306,7 +306,7 @@ s32 EnGirlA_CanBuyBombBag30BombShop(GlobalContext* globalCtx, EnGirlA* this) {
     if (CUR_UPG_VALUE_VOID(UPG_BOMB_BAG) == 3) {
         return CANBUY_RESULT_HAVE_BETTER;
     }
-    if (gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     return CANBUY_RESULT_SUCCESS_1;
@@ -319,7 +319,7 @@ s32 EnGirlA_CanBuyBombchus(GlobalContext* globalCtx, EnGirlA* this) {
     if (AMMO(ITEM_BOMBCHU) >= CUR_CAPACITY(UPG_BOMB_BAG)) {
         return CANBUY_RESULT_NO_ROOM;
     }
-    if (gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     if (func_80114978(ITEM_BOMBCHU) == ITEM_NONE) {
@@ -335,21 +335,21 @@ s32 EnGirlA_CanBuyBombs(GlobalContext* globalCtx, EnGirlA* this) {
     if (AMMO(ITEM_BOMB) >= CUR_CAPACITY(UPG_BOMB_BAG)) {
         return CANBUY_RESULT_NO_ROOM;
     }
-    if (gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     return CANBUY_RESULT_SUCCESS_2;
 }
 
 s32 EnGirlA_CanBuyBottle(GlobalContext* globalCtx, EnGirlA* this) {
-    if (gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     return CANBUY_RESULT_SUCCESS_1;
 }
 
 s32 EnGirlA_CanBuySword(GlobalContext* globalCtx, EnGirlA* this) {
-    if (gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     return CANBUY_RESULT_SUCCESS_1;
@@ -359,7 +359,7 @@ s32 EnGirlA_CanBuyShieldMirror(GlobalContext* globalCtx, EnGirlA* this) {
     if (CUR_EQUIP_VALUE_VOID(EQUIP_SHIELD) != 0) {
         return CANBUY_RESULT_NO_ROOM;
     }
-    if (gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     return CANBUY_RESULT_SUCCESS_1;
@@ -369,7 +369,7 @@ s32 EnGirlA_CanBuyFairy(GlobalContext* globalCtx, EnGirlA* this) {
     if (!func_80114E90()) {
         return CANBUY_RESULT_NEED_EMPTY_BOTTLE;
     }
-    if (gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     return CANBUY_RESULT_SUCCESS_2;

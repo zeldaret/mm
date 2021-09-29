@@ -179,7 +179,7 @@ void EnThiefbird_Init(Actor* thisx, GlobalContext* globalCtx) {
         D_80C1392C = 1;
         Math_Vec3f_Copy(&D_80C13920, &this->actor.world.pos);
         Actor_MarkForDeath(&this->actor);
-    } else if ((gSaveContext.roomInf[126][5] & 0xFF000000) >> 0x18) {
+    } else if ((gSaveContext.save.roomInf[126][5] & 0xFF000000) >> 0x18) {
         Actor_MarkForDeath(&this->actor);
     } else {
         func_80C11538(this);
@@ -224,17 +224,17 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
     s32 phi_t0_3;
     s16 sp1E = 0;
 
-    for (; i < ARRAY_COUNT(gSaveContext.inventory.items); i++) {
-        if ((gSaveContext.inventory.items[i] >= ITEM_BOTTLE) && (gSaveContext.inventory.items[i] <= ITEM_POTION_BLUE)) {
+    for (; i < ARRAY_COUNT(gSaveContext.save.inventory.items); i++) {
+        if ((gSaveContext.save.inventory.items[i] >= ITEM_BOTTLE) && (gSaveContext.save.inventory.items[i] <= ITEM_POTION_BLUE)) {
             isItemFound = true;
-            sp1E = gSaveContext.inventory.items[i];
+            sp1E = gSaveContext.save.inventory.items[i];
             break;
         }
     }
 
-    if (gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
+    if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
         phi_a3 = CUR_EQUIP_VALUE_VOID(EQUIP_SWORD);
-        if (gSaveContext.inventory.items[gItemSlots[16]] == ITEM_SWORD_GREAT_FAIRY) {
+        if (gSaveContext.save.inventory.items[gItemSlots[16]] == ITEM_SWORD_GREAT_FAIRY) {
             phi_a3 += 4;
         }
     }
@@ -281,10 +281,10 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
         return false;
     }
 
-    if (!((gSaveContext.roomInf[126][5] & 0xFF000000) >> 0x18)) {
-        gSaveContext.roomInf[126][5] = (gSaveContext.roomInf[126][5] & 0xFFFFFF) | ((phi_t0_3 & 0xFF) << 0x18);
+    if (!((gSaveContext.save.roomInf[126][5] & 0xFF000000) >> 0x18)) {
+        gSaveContext.save.roomInf[126][5] = (gSaveContext.save.roomInf[126][5] & 0xFFFFFF) | ((phi_t0_3 & 0xFF) << 0x18);
     } else {
-        gSaveContext.roomInf[126][5] = (gSaveContext.roomInf[126][5] & 0xFF00FFFF) | ((phi_t0_3 & 0xFF) << 0x10);
+        gSaveContext.save.roomInf[126][5] = (gSaveContext.save.roomInf[126][5] & 0xFF00FFFF) | ((phi_t0_3 & 0xFF) << 0x10);
     }
 
     return true;
@@ -344,7 +344,7 @@ s32 func_80C10E98(GlobalContext* globalCtx) {
         spAC = 0;
     }
 
-    sp98 = (gSaveContext.rupees / 4) * 3;
+    sp98 = (gSaveContext.save.playerData.rupees / 4) * 3;
     phi_s0_2 = sp98 / 50;
     sp5C = (-spB0 - spAC);
     sp5C += 8;
@@ -580,8 +580,8 @@ void func_80C1193C(EnThiefbird* this, GlobalContext* globalCtx) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_THIEFBIRD_VOICE);
             if (!(this->collider.base.atFlags & AT_BOUNCED)) {
                 if ((D_80C1392C != 0) && CUR_UPG_VALUE(UPG_QUIVER) &&
-                    (!((gSaveContext.roomInf[126][5] & 0xFF000000) >> 0x18) ||
-                     !((gSaveContext.roomInf[126][5] & 0xFF0000) >> 0x10)) &&
+                    (!((gSaveContext.save.roomInf[126][5] & 0xFF000000) >> 0x18) ||
+                     !((gSaveContext.save.roomInf[126][5] & 0xFF0000) >> 0x10)) &&
                     (Rand_ZeroOne() < 0.5f) && func_80C10B0C(this, globalCtx)) {
                     func_80C1242C(this);
                 } else if (func_80C10E98(globalCtx)) {

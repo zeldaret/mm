@@ -172,10 +172,10 @@ s32 EnOssan_TestItemSelected(GlobalContext* globalCtx) {
 }
 
 void EnOssan_CheckValidSpawn(EnOssan* this) {
-    switch (gSaveContext.day) {
+    switch (gSaveContext.save.day) {
         case 1:
         case 2:
-            if (gSaveContext.time <= CLOCK_TIME(21, 30) && gSaveContext.time > CLOCK_TIME(6, 00)) {
+            if (gSaveContext.save.time <= CLOCK_TIME(21, 30) && gSaveContext.save.time > CLOCK_TIME(6, 00)) {
                 if (this->actor.params != ENOSSAN_CURIOSITY_SHOP_MAN) {
                     Actor_MarkForDeath(&this->actor);
                 }
@@ -187,7 +187,7 @@ void EnOssan_CheckValidSpawn(EnOssan* this) {
             if (this->actor.params == ENOSSAN_CURIOSITY_SHOP_MAN) {
                 Actor_MarkForDeath(&this->actor);
             }
-            if (!(gSaveContext.time <= CLOCK_TIME(22, 00) && gSaveContext.time >= CLOCK_TIME(6, 00))) {
+            if (!(gSaveContext.save.time <= CLOCK_TIME(22, 00) && gSaveContext.save.time >= CLOCK_TIME(6, 00))) {
                 if (this->actor.params != ENOSSAN_CURIOSITY_SHOP_MAN) {
                     Actor_MarkForDeath(&this->actor);
                 }
@@ -1352,19 +1352,19 @@ u16 EnOssan_GetWelcomeCuriosityShopMan(EnOssan* this, GlobalContext* globalCtx) 
     switch (player->transformation) {
         case PLAYER_FORM_DEKU:
             this->animationIdx = 10;
-            if (gSaveContext.weekEventReg[0x12] & 0x10) {
+            if (gSaveContext.save.weekEventReg[0x12] & 0x10) {
                 return sWelcomeDekuTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
             }
             return sWelcomeDekuFirstTimeTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
         case PLAYER_FORM_ZORA:
             this->animationIdx = 8;
-            if (gSaveContext.weekEventReg[0x12] & 8) {
+            if (gSaveContext.save.weekEventReg[0x12] & 8) {
                 return sWelcomeZoraTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
             }
             return sWelcomeZoraFirstTimeTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
         case PLAYER_FORM_GORON:
             this->animationIdx = 6;
-            if (gSaveContext.weekEventReg[0x12] & 4) {
+            if (gSaveContext.save.weekEventReg[0x12] & 4) {
                 return sWelcomeGoronTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
             }
             return sWelcomeGoronFirstTimeTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
@@ -1383,17 +1383,17 @@ u16 EnOssan_GetWelcomePartTimeWorker(EnOssan* this, GlobalContext* globalCtx) {
     }
     switch (player->transformation) {
         case PLAYER_FORM_DEKU:
-            if (gSaveContext.weekEventReg[0x37] & 0x10) {
+            if (gSaveContext.save.weekEventReg[0x37] & 0x10) {
                 return sWelcomeDekuTextIds[ENOSSAN_PART_TIME_WORKER];
             }
             return sWelcomeDekuFirstTimeTextIds[ENOSSAN_PART_TIME_WORKER];
         case PLAYER_FORM_ZORA:
-            if (gSaveContext.weekEventReg[0x37] & 8) {
+            if (gSaveContext.save.weekEventReg[0x37] & 8) {
                 return sWelcomeZoraTextIds[ENOSSAN_PART_TIME_WORKER];
             }
             return sWelcomeZoraFirstTimeTextIds[ENOSSAN_PART_TIME_WORKER];
         case PLAYER_FORM_GORON:
-            if (gSaveContext.weekEventReg[0x37] & 4) {
+            if (gSaveContext.save.weekEventReg[0x37] & 4) {
                 return sWelcomeGoronTextIds[ENOSSAN_PART_TIME_WORKER];
             }
             return sWelcomeGoronFirstTimeTextIds[ENOSSAN_PART_TIME_WORKER];
@@ -1404,22 +1404,22 @@ u16 EnOssan_GetWelcomePartTimeWorker(EnOssan* this, GlobalContext* globalCtx) {
 void EnOssan_SetHaveMet(EnOssan* this) {
     switch (this->textId) {
         case 0x06A9:
-            gSaveContext.weekEventReg[0x12] |= 0x10;
+            gSaveContext.save.weekEventReg[0x12] |= 0x10;
             break;
         case 0x06C6:
-            gSaveContext.weekEventReg[0x37] |= 0x10;
+            gSaveContext.save.weekEventReg[0x37] |= 0x10;
             break;
         case 0x06A7:
-            gSaveContext.weekEventReg[0x12] |= 8;
+            gSaveContext.save.weekEventReg[0x12] |= 8;
             break;
         case 0x06C4:
-            gSaveContext.weekEventReg[0x37] |= 8;
+            gSaveContext.save.weekEventReg[0x37] |= 8;
             break;
         case 0x06A5:
-            gSaveContext.weekEventReg[0x12] |= 4;
+            gSaveContext.save.weekEventReg[0x12] |= 4;
             break;
         case 0x06C2:
-            gSaveContext.weekEventReg[0x37] |= 4;
+            gSaveContext.save.weekEventReg[0x37] |= 4;
             break;
     }
 }

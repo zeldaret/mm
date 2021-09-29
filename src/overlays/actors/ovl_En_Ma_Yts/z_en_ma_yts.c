@@ -167,7 +167,7 @@ void EnMaYts_InitAnimation(EnMaYts* this, GlobalContext* globalCtx) {
         case MA_YTS_TYPE_SITTING:
             this->actor.targetMode = 6;
             // Day 1 or "Winning" the alien invasion
-            if (CURRENT_DAY == 1 || (gSaveContext.weekEventReg[0x16] & 1)) {
+            if (CURRENT_DAY == 1 || (gSaveContext.save.weekEventReg[0x16] & 1)) {
                 EnMaYts_ChangeAnim(this, 14);
             } else {
                 EnMaYts_ChangeAnim(this, 18);
@@ -200,14 +200,14 @@ s32 EnMaYts_CheckValidSpawn(EnMaYts* this, GlobalContext* globalCtx) {
 
                 case 2:
                     // Failing the alien invasion
-                    if (!(gSaveContext.weekEventReg[0x16] & 1)) {
+                    if (!(gSaveContext.save.weekEventReg[0x16] & 1)) {
                         return false;
                     }
                     break;
 
                 case 3:
                     // "Winning" the alien invasion
-                    if (gSaveContext.weekEventReg[0x16] & 1) {
+                    if (gSaveContext.save.weekEventReg[0x16] & 1) {
                         return false;
                     }
                     break;
@@ -216,16 +216,16 @@ s32 EnMaYts_CheckValidSpawn(EnMaYts* this, GlobalContext* globalCtx) {
 
         case MA_YTS_TYPE_BARN:
             // Failing the alien invasion
-            if (!(gSaveContext.weekEventReg[0x16] & 1)) {
+            if (!(gSaveContext.save.weekEventReg[0x16] & 1)) {
                 return false;
-            } else if (gSaveContext.time >= CLOCK_TIME(20, 0) && CURRENT_DAY == 3) {
+            } else if (gSaveContext.save.time >= CLOCK_TIME(20, 0) && CURRENT_DAY == 3) {
                 return false;
             }
             break;
 
         case MA_YTS_TYPE_SLEEPING:
             // "Winning" the alien invasion
-            if (gSaveContext.weekEventReg[0x16] & 1) {
+            if (gSaveContext.save.weekEventReg[0x16] & 1) {
                 return false;
             }
             break;
@@ -271,7 +271,7 @@ void EnMaYts_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->hasBow = false;
     }
 
-    if (CURRENT_DAY == 1 || (gSaveContext.weekEventReg[0x16] & 1)) {
+    if (CURRENT_DAY == 1 || (gSaveContext.save.weekEventReg[0x16] & 1)) {
         this->overrideEyeTexIndex = 0;
         this->eyeTexIndex = 0;
         this->mouthTexIndex = 0;
@@ -289,7 +289,7 @@ void EnMaYts_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->mouthTexIndex = 0;
         this->unk_32C = 2;
         EnMaYts_SetupEndCreditsHandler(this);
-    } else if (CURRENT_DAY == 2 && gSaveContext.isNight == 1 && (gSaveContext.weekEventReg[0x16] & 1)) {
+    } else if (CURRENT_DAY == 2 && gSaveContext.save.isNight == 1 && (gSaveContext.save.weekEventReg[0x16] & 1)) {
         EnMaYts_SetupStartDialogue(this);
     } else {
         EnMaYts_SetupDoNothing(this);
@@ -318,10 +318,10 @@ void EnMaYts_StartDialogue(EnMaYts* this, GlobalContext* globalCtx) {
     s16 sp26 = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
 
     if (func_800B84D0(&this->actor, globalCtx)) { // if (Actor_IsTalking)
-        if (!(gSaveContext.playerForm == PLAYER_FORM_HUMAN)) {
-            if (!(gSaveContext.weekEventReg[0x41] & 0x80)) {
+        if (!(gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
+            if (!(gSaveContext.save.weekEventReg[0x41] & 0x80)) {
                 // Saying to non-human Link: "Cremia went to town."
-                gSaveContext.weekEventReg[0x41] |= 0x80;
+                gSaveContext.save.weekEventReg[0x41] |= 0x80;
                 EnMaYts_SetFaceExpression(this, 0, 0);
                 func_801518B0(globalCtx, 0x335F, &this->actor);
                 this->textId = 0x335F;
@@ -333,8 +333,8 @@ void EnMaYts_StartDialogue(EnMaYts* this, GlobalContext* globalCtx) {
                 func_80151BB4(globalCtx, 5);
             }
         } else if (Player_GetMask(globalCtx) != PLAYER_MASK_NONE) {
-            if (!(gSaveContext.weekEventReg[0x41] & 0x40)) {
-                gSaveContext.weekEventReg[0x41] |= 0x40;
+            if (!(gSaveContext.save.weekEventReg[0x41] & 0x40)) {
+                gSaveContext.save.weekEventReg[0x41] |= 0x40;
                 EnMaYts_SetFaceExpression(this, 0, 0);
                 func_801518B0(globalCtx, 0x3363, &this->actor);
                 this->textId = 0x3363;
@@ -344,14 +344,14 @@ void EnMaYts_StartDialogue(EnMaYts* this, GlobalContext* globalCtx) {
                 this->textId = 0x3366;
                 func_80151BB4(globalCtx, 5);
             }
-        } else if (!(gSaveContext.weekEventReg[0x15] & 0x20)) {
+        } else if (!(gSaveContext.save.weekEventReg[0x15] & 0x20)) {
             EnMaYts_SetFaceExpression(this, 0, 0);
             func_801518B0(globalCtx, 0x3367, &this->actor);
             this->textId = 0x3367;
         } else {
-            if (!(gSaveContext.weekEventReg[0x41] & 0x20)) {
+            if (!(gSaveContext.save.weekEventReg[0x41] & 0x20)) {
                 // Saying to Grasshopper: "Cremia went to town."
-                gSaveContext.weekEventReg[0x41] |= 0x20;
+                gSaveContext.save.weekEventReg[0x41] |= 0x20;
                 EnMaYts_SetFaceExpression(this, 4, 2);
                 func_801518B0(globalCtx, 0x3369, &this->actor);
                 this->textId = 0x3369;

@@ -209,7 +209,7 @@ void EnRailgibud_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     func_80BA5400(this, globalCtx);
     this->unk_3F2 = 0;
-    this->unk_402 = gSaveContext.time;
+    this->unk_402 = gSaveContext.save.time;
     this->unk_404 = 0;
     this->unk_3F8 = 0;
     this->unk_400 = 0;
@@ -224,7 +224,7 @@ void EnRailgibud_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    if (gSaveContext.weekEventReg[14] & 4) {
+    if (gSaveContext.save.weekEventReg[14] & 4) {
         Actor_MarkForDeath(&this->actor);
     }
 
@@ -328,7 +328,7 @@ void func_80BA5B64(EnRailgibud* this, GlobalContext* globalCtx) {
     if (func_80BA6D10(this, globalCtx) && Actor_IsActorFacingLink(&this->actor, 0x38E3)) {
         if ((this->unk_3F4 == 0) && (this->actor.xzDistToPlayer <= 45.0f)) {
             player->actor.freezeTimer = 0;
-            if ((gSaveContext.playerForm == PLAYER_FORM_GORON) || (gSaveContext.playerForm == PLAYER_FORM_DEKU)) {
+            if ((gSaveContext.save.playerForm == PLAYER_FORM_GORON) || (gSaveContext.save.playerForm == PLAYER_FORM_DEKU)) {
                 func_80BA6054(this);
             } else if (globalCtx->grabPlayer(globalCtx, player)) {
                 func_80BA5DBC(this);
@@ -493,7 +493,7 @@ void func_80BA62D4(EnRailgibud* this, GlobalContext* globalCtx) {
         this->actor.world.rot = this->actor.shape.rot;
     }
     if (func_80BA6D10(this, globalCtx)) {
-        if ((gSaveContext.playerForm != PLAYER_FORM_GORON) && (gSaveContext.playerForm != PLAYER_FORM_DEKU) &&
+        if ((gSaveContext.save.playerForm != PLAYER_FORM_GORON) && (gSaveContext.save.playerForm != PLAYER_FORM_DEKU) &&
             Actor_IsActorFacingLink(&this->actor, 0x38E3)) {
             func_80BA5AF0(this);
         }
@@ -775,7 +775,7 @@ s32 func_80BA7088(EnRailgibud* this, GlobalContext* globalCtx) {
     sp3C = Math_Vec3f_StepTo(&this->actor.world.pos, &sp40, 10.0f);
     temp_s0_2 = Math_SmoothStepToS(&this->actor.shape.rot.y, player->actor.shape.rot.y, 1, 0x1770, 0x64);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if (gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
+    if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
         sp38 = Math_SmoothStepToF(&this->actor.shape.yOffset, -1500.0f, 1.0f, 150.0f, 0.0f);
     }
 
@@ -999,7 +999,7 @@ void func_80BA7B6C(EnRailgibud* this, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    if (gSaveContext.entranceIndex != 0x2090) { // NOT Cutscene: Music Box House Opens
+    if (gSaveContext.save.entranceIndex != 0x2090) { // NOT Cutscene: Music Box House Opens
         Actor_MarkForDeath(&this->actor);
     }
     func_80BA7CF0(this);

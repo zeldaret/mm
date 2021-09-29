@@ -34,12 +34,12 @@ void BgTobira01_Open(BgTobira01* this, GlobalContext* globalCtx) {
             ActorCutscene_Stop(0x7C);
         } else if (ActorCutscene_GetCanPlayNext(cutsceneId)) {
             ActorCutscene_StartAndSetUnkLinkFields(cutsceneId, &this->dyna.actor);
-            gSaveContext.weekEventReg[88] |= 0x40;
+            gSaveContext.save.weekEventReg[88] |= 0x40;
             this->playCutscene = false;
         } else {
             ActorCutscene_SetIntentToPlay(cutsceneId);
         }
-    } else if (!(gSaveContext.weekEventReg[88] & 0x40) && (this->timer == 0) && (globalCtx->actorCtx.unk1F5 != 0) &&
+    } else if (!(gSaveContext.save.weekEventReg[88] & 0x40) && (this->timer == 0) && (globalCtx->actorCtx.unk1F5 != 0) &&
                (globalCtx->actorCtx.unk1F4 == 0) &&
                (func_800C99AC(&globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId) == 6)) {
         this->playCutscene = true;
@@ -48,7 +48,7 @@ void BgTobira01_Open(BgTobira01* this, GlobalContext* globalCtx) {
 
     prevTimer = this->timer;
 
-    if (gSaveContext.weekEventReg[88] & 0x40) {
+    if (gSaveContext.save.weekEventReg[88] & 0x40) {
         this->timer++;
     } else {
         this->timer--;
@@ -63,8 +63,8 @@ void BgTobira01_Open(BgTobira01* this, GlobalContext* globalCtx) {
         this->timer2 = 180;
     }
 
-    if (!(player->stateFlags1 & 0x40) && (gSaveContext.weekEventReg[88] & 0x40) && (DECR(this->timer2) == 0)) {
-        gSaveContext.weekEventReg[88] &= (u8)~0x40;
+    if (!(player->stateFlags1 & 0x40) && (gSaveContext.save.weekEventReg[88] & 0x40) && (DECR(this->timer2) == 0)) {
+        gSaveContext.save.weekEventReg[88] &= (u8)~0x40;
     }
 }
 
@@ -74,9 +74,9 @@ void BgTobira01_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     BcCheck3_BgActorInit(&this->dyna, 1);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_060011C0);
-    gSaveContext.weekEventReg[88] &= (u8)~0x40;
+    gSaveContext.save.weekEventReg[88] &= (u8)~0x40;
     Actor_SetScale(&this->dyna.actor, 1.0f);
-    this->timer2 = gSaveContext.isNight;
+    this->timer2 = gSaveContext.save.isNight;
     this->timer = 0;
     this->actionFunc = BgTobira01_Open;
 }

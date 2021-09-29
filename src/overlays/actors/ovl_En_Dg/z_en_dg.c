@@ -357,9 +357,9 @@ void func_80989BF8(EnDg* this) {
     if (this->unk_286 < 14) {
         if (this->unk_286 % 2) {
             D_8098C2A8[this->unk_286].unk_04 =
-                0x3538 + ((gSaveContext.weekEventReg[42 + (this->unk_286 / 2)] & 0xF0) >> 4);
+                0x3538 + ((gSaveContext.save.weekEventReg[42 + (this->unk_286 / 2)] & 0xF0) >> 4);
         } else {
-            D_8098C2A8[this->unk_286].unk_04 = 0x3538 + (gSaveContext.weekEventReg[42 + (this->unk_286 / 2)] & 0xF);
+            D_8098C2A8[this->unk_286].unk_04 = 0x3538 + (gSaveContext.save.weekEventReg[42 + (this->unk_286 / 2)] & 0xF);
         }
     } else {
         Actor_MarkForDeath(&this->actor);

@@ -92,7 +92,7 @@ void func_80BE61D0(EnDaiku2* this) {
 
 void EnDaiku2_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnDaiku2* this = THIS;
-    s32 day = gSaveContext.day;
+    s32 day = gSaveContext.save.day;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 40.0f);
@@ -175,10 +175,10 @@ s32 func_80BE64C0(EnDaiku2* this, GlobalContext* globalCtx) {
 }
 
 void func_80BE65B4(EnDaiku2* this, GlobalContext* globalCtx) {
-    switch (gSaveContext.day - 1) {
+    switch (gSaveContext.save.day - 1) {
         case 0:
             this->unk_28A = 0;
-            if (gSaveContext.weekEventReg[64] & 2) {
+            if (gSaveContext.save.weekEventReg[64] & 2) {
                 this->unk_28A = 6;
             }
             func_80BE6408(this, 8);
@@ -186,7 +186,7 @@ void func_80BE65B4(EnDaiku2* this, GlobalContext* globalCtx) {
 
         case 1:
             this->unk_28A = 2;
-            if (gSaveContext.weekEventReg[64] & 4) {
+            if (gSaveContext.save.weekEventReg[64] & 4) {
                 this->unk_28A = 7;
             }
             func_80BE6408(this, 8);
@@ -213,7 +213,7 @@ void func_80BE65B4(EnDaiku2* this, GlobalContext* globalCtx) {
 
 void func_80BE66E4(EnDaiku2* this, GlobalContext* globalCtx) {
     f32 sp9C = this->skelAnime.animCurrentFrame;
-    s32 sp98 = gSaveContext.day - 1;
+    s32 sp98 = gSaveContext.save.day - 1;
     s32 i;
     Vec3f sp88;
     Vec3f sp7C;
@@ -291,7 +291,7 @@ void func_80BE66E4(EnDaiku2* this, GlobalContext* globalCtx) {
 }
 
 void func_80BE6B40(EnDaiku2* this, GlobalContext* globalCtx) {
-    s32 day = gSaveContext.day;
+    s32 day = gSaveContext.save.day;
 
     this->unk_288 = 1;
     if ((day != 3) && Flags_GetSwitch(globalCtx, this->unk_278)) {
@@ -305,7 +305,7 @@ void func_80BE6B40(EnDaiku2* this, GlobalContext* globalCtx) {
 void func_80BE6BC0(EnDaiku2* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0x0);
     if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
-        s32 day = gSaveContext.day - 1;
+        s32 day = gSaveContext.save.day - 1;
 
         func_801477B4(globalCtx);
 
@@ -319,11 +319,11 @@ void func_80BE6BC0(EnDaiku2* this, GlobalContext* globalCtx) {
         } else {
             switch (day) {
                 case 0:
-                    gSaveContext.weekEventReg[64] |= 2;
+                    gSaveContext.save.weekEventReg[64] |= 2;
                     break;
 
                 case 1:
-                    gSaveContext.weekEventReg[64] |= 4;
+                    gSaveContext.save.weekEventReg[64] |= 4;
                     break;
             }
             func_80BE65B4(this, globalCtx);

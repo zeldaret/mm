@@ -198,14 +198,14 @@ void EnZot_Init(Actor* thisx, GlobalContext* globalCtx2) {
             func_80B96BEC(this, 2, 0);
             this->actor.colChkInfo.cylRadius = 0;
             this->actor.shape.yOffset = -1400.0f;
-            if (!(gSaveContext.weekEventReg[55] & 0x80)) {
+            if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
                 Actor_MarkForDeath(&this->actor);
             }
             break;
 
         case 18:
             this->actionFunc = func_80B99384;
-            if (!(gSaveContext.weekEventReg[55] & 0x80)) {
+            if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
                 Actor_MarkForDeath(&this->actor);
             }
             break;
@@ -233,7 +233,7 @@ void EnZot_Init(Actor* thisx, GlobalContext* globalCtx2) {
             break;
     }
 
-    if ((ENZOT_GET_1F(thisx) >= 2) && (ENZOT_GET_1F(thisx) < 11) && (gSaveContext.weekEventReg[55] & 0x80)) {
+    if ((ENZOT_GET_1F(thisx) >= 2) && (ENZOT_GET_1F(thisx) < 11) && (gSaveContext.save.weekEventReg[55] & 0x80)) {
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -243,7 +243,7 @@ void EnZot_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
     Collider_DestroyCylinder(globalCtx, &this->collider);
     if (ENZOT_GET_1F(&this->actor) == 8) {
-        gSaveContext.weekEventReg[41] &= (u8)~0x20;
+        gSaveContext.save.weekEventReg[41] &= (u8)~0x20;
     }
 }
 
@@ -372,19 +372,19 @@ void func_80B97100(EnZot* this, GlobalContext* globalCtx) {
 void func_80B97110(EnZot* this, GlobalContext* globalCtx) {
     u16 textId;
 
-    if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
+    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
         textId = 0x125F;
-        if (gSaveContext.weekEventReg[28] & 0x80) {
+        if (gSaveContext.save.weekEventReg[28] & 0x80) {
             textId = 0x1261;
         } else {
-            gSaveContext.weekEventReg[28] |= 0x80;
+            gSaveContext.save.weekEventReg[28] |= 0x80;
         }
     } else {
         textId = 0x125C;
-        if (gSaveContext.weekEventReg[28] & 0x40) {
+        if (gSaveContext.save.weekEventReg[28] & 0x40) {
             textId = 0x125E;
         } else {
-            gSaveContext.weekEventReg[28] |= 0x40;
+            gSaveContext.save.weekEventReg[28] |= 0x40;
         }
     }
     func_801518B0(globalCtx, textId, &this->actor);
@@ -422,35 +422,35 @@ void func_80B97240(EnZot* this, GlobalContext* globalCtx) {
 void func_80B972E8(EnZot* this, GlobalContext* globalCtx) {
     u16 textId;
 
-    if (gSaveContext.weekEventReg[29] & 0x10) {
-        if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
+    if (gSaveContext.save.weekEventReg[29] & 0x10) {
+        if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
             textId = 0x126A;
-            if (gSaveContext.weekEventReg[29] & 1) {
+            if (gSaveContext.save.weekEventReg[29] & 1) {
                 textId = 0x126D;
             } else {
-                gSaveContext.weekEventReg[29] |= 1;
+                gSaveContext.save.weekEventReg[29] |= 1;
             }
         } else {
             textId = 0x1267;
-            if (gSaveContext.weekEventReg[29] & 2) {
+            if (gSaveContext.save.weekEventReg[29] & 2) {
                 textId = 0x1269;
             } else {
-                gSaveContext.weekEventReg[29] |= 2;
+                gSaveContext.save.weekEventReg[29] |= 2;
             }
         }
-    } else if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
+    } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
         textId = 0x1265;
-        if (gSaveContext.weekEventReg[29] & 4) {
+        if (gSaveContext.save.weekEventReg[29] & 4) {
             textId = 0x1266;
         } else {
-            gSaveContext.weekEventReg[29] |= 4;
+            gSaveContext.save.weekEventReg[29] |= 4;
         }
     } else {
         textId = 0x1262;
-        if (gSaveContext.weekEventReg[29] & 8) {
+        if (gSaveContext.save.weekEventReg[29] & 8) {
             textId = 0x1264;
         } else {
-            gSaveContext.weekEventReg[29] |= 8;
+            gSaveContext.save.weekEventReg[29] |= 8;
         }
     }
     func_801518B0(globalCtx, textId, &this->actor);
@@ -479,7 +479,7 @@ void func_80B973BC(EnZot* this, GlobalContext* globalCtx) {
                 break;
 
             case 0x1275:
-                if (gSaveContext.rupees < 10) {
+                if (gSaveContext.save.playerData.rupees < 10) {
                     func_80151938(globalCtx, 0x1277);
                 } else {
                     func_80151938(globalCtx, 0x1278);
@@ -571,15 +571,15 @@ void func_80B97708(EnZot* this, GlobalContext* globalCtx) {
     }
 
     if (phi_v1 != 0) {
-        gSaveContext.weekEventReg[29] |= 0x10;
+        gSaveContext.save.weekEventReg[29] |= 0x10;
         this->actor.flags |= 0x10000;
         if (phi_v1 == 5) {
-            if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
+            if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
                 this->actor.textId = 0x126E;
             } else {
                 this->actor.textId = 0x1272;
             }
-        } else if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
+        } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
             this->actor.textId = 0x1273;
         } else {
             this->actor.textId = 0x1276;
@@ -596,61 +596,61 @@ void func_80B9787C(EnZot* this, GlobalContext* globalCtx) {
     u16 textId;
 
     if (this->actor.textId == 0) {
-        if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
+        if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
             switch (ENZOT_GET_1F(&this->actor)) {
                 case 2:
-                    if (gSaveContext.weekEventReg[37] & 0x40) {
+                    if (gSaveContext.save.weekEventReg[37] & 0x40) {
                         textId = 0x127E;
                     } else {
                         textId = 0x127C;
-                        gSaveContext.weekEventReg[37] |= 0x40;
+                        gSaveContext.save.weekEventReg[37] |= 0x40;
                     }
                     break;
 
                 case 3:
-                    if (gSaveContext.weekEventReg[38] & 1) {
+                    if (gSaveContext.save.weekEventReg[38] & 1) {
                         textId = 0x1284;
                     } else {
                         textId = 0x1282;
-                        gSaveContext.weekEventReg[38] |= 1;
+                        gSaveContext.save.weekEventReg[38] |= 1;
                     }
                     break;
 
                 default:
-                    if (gSaveContext.weekEventReg[38] & 4) {
+                    if (gSaveContext.save.weekEventReg[38] & 4) {
                         textId = 0x128A;
                     } else {
                         textId = 0x1288;
-                        gSaveContext.weekEventReg[38] |= 4;
+                        gSaveContext.save.weekEventReg[38] |= 4;
                     }
                     break;
             }
         } else {
             switch (ENZOT_GET_1F(&this->actor)) {
                 case 2:
-                    if (gSaveContext.weekEventReg[37] & 0x20) {
+                    if (gSaveContext.save.weekEventReg[37] & 0x20) {
                         textId = 0x127B;
                     } else {
                         textId = 0x1279;
-                        gSaveContext.weekEventReg[37] |= 0x20;
+                        gSaveContext.save.weekEventReg[37] |= 0x20;
                     }
                     break;
 
                 case 3:
-                    if (gSaveContext.weekEventReg[37] & 0x80) {
+                    if (gSaveContext.save.weekEventReg[37] & 0x80) {
                         textId = 0x1281;
                     } else {
                         textId = 0x127F;
-                        gSaveContext.weekEventReg[37] |= 0x80;
+                        gSaveContext.save.weekEventReg[37] |= 0x80;
                     }
                     break;
 
                 default:
-                    if (gSaveContext.weekEventReg[38] & 2) {
+                    if (gSaveContext.save.weekEventReg[38] & 2) {
                         textId = 0x1287;
                     } else {
                         textId = 0x1285;
-                        gSaveContext.weekEventReg[38] |= 2;
+                        gSaveContext.save.weekEventReg[38] |= 2;
                     }
                     break;
             }
@@ -719,7 +719,7 @@ void func_80B97B5C(EnZot* this, GlobalContext* globalCtx) {
 void func_80B97BF8(EnZot* this, GlobalContext* globalCtx) {
     u16 textId;
 
-    if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
+    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
         textId = 0x128C;
     } else {
         textId = 0x128B;
@@ -798,7 +798,7 @@ void func_80B97E4C(EnZot* this, GlobalContext* globalCtx) {
                 this->actionFunc = func_80B97D6C;
                 this->unk_2F2 |= 4;
                 func_80B96BEC(this, 3, 0);
-                gSaveContext.weekEventReg[38] |= 8;
+                gSaveContext.save.weekEventReg[38] |= 8;
                 break;
 
             case 0x128B:
@@ -815,8 +815,8 @@ void func_80B97FD0(EnZot* this, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx)) {
         this->actionFunc = func_80B97E4C;
         func_80B97BF8(this, globalCtx);
-    } else if (gSaveContext.weekEventReg[38] & 8) {
-        if ((this->actor.xzDistToPlayer < 120.0f) && (gSaveContext.playerForm == PLAYER_FORM_ZORA)) {
+    } else if (gSaveContext.save.weekEventReg[38] & 8) {
+        if ((this->actor.xzDistToPlayer < 120.0f) && (gSaveContext.save.playerForm == PLAYER_FORM_ZORA)) {
             this->unk_2F2 |= 4;
             this->actionFunc = func_80B97E0C;
             func_80B96BEC(this, 6, 2);
@@ -846,38 +846,38 @@ void func_80B98178(EnZot* this, GlobalContext* globalCtx) {
 
     switch (ENZOT_GET_1F(&this->actor)) {
         case 6:
-            if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
+            if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
                 if (CURRENT_DAY == 3) {
                     textId = 0x129D;
-                } else if (gSaveContext.weekEventReg[39] & 1) {
+                } else if (gSaveContext.save.weekEventReg[39] & 1) {
                     textId = 0x129C;
                 } else {
                     textId = 0x129B;
-                    gSaveContext.weekEventReg[39] |= 1;
+                    gSaveContext.save.weekEventReg[39] |= 1;
                 }
-            } else if (gSaveContext.weekEventReg[38] & 0x80) {
+            } else if (gSaveContext.save.weekEventReg[38] & 0x80) {
                 textId = 0x1293;
             } else {
                 textId = 0x1291;
-                gSaveContext.weekEventReg[38] |= 0x80;
+                gSaveContext.save.weekEventReg[38] |= 0x80;
             }
             break;
 
         case 7:
-            if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
-                if (gSaveContext.weekEventReg[39] & 4) {
+            if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+                if (gSaveContext.save.weekEventReg[39] & 4) {
                     textId = 0x12AA;
                 } else {
                     textId = 0x12A6;
-                    gSaveContext.weekEventReg[39] |= 4;
+                    gSaveContext.save.weekEventReg[39] |= 4;
                 }
             } else if (Flags_GetSwitch(globalCtx, this->actor.home.rot.z & 0x7F)) {
                 textId = 0x12A0;
-            } else if (gSaveContext.weekEventReg[39] & 2) {
+            } else if (gSaveContext.save.weekEventReg[39] & 2) {
                 textId = 0x12A5;
             } else {
                 textId = 0x12A2;
-                gSaveContext.weekEventReg[39] |= 2;
+                gSaveContext.save.weekEventReg[39] |= 2;
             }
             break;
 
@@ -889,18 +889,18 @@ void func_80B98178(EnZot* this, GlobalContext* globalCtx) {
         case 16:
         case 17:
             phi_v0 = (ENZOT_GET_1F(&this->actor) * 4) - 44;
-            if (gSaveContext.weekEventReg[79] & 1) {
+            if (gSaveContext.save.weekEventReg[79] & 1) {
                 phi_v0 += 2;
             }
 
-            if (gSaveContext.playerForm != PLAYER_FORM_ZORA) {
+            if (gSaveContext.save.playerForm != PLAYER_FORM_ZORA) {
                 phi_v0++;
             }
             textId = phi_v0 + 0x1302;
             break;
 
         default:
-            if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
+            if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
                 textId = 0x129F;
             } else {
                 textId = 0x1295;
@@ -1086,18 +1086,18 @@ void func_80B98998(EnZot* this, GlobalContext* globalCtx) {
 void func_80B98A4C(EnZot* this, GlobalContext* globalCtx) {
     u16 textId;
 
-    if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
-        if (gSaveContext.weekEventReg[39] & 0x80) {
+    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+        if (gSaveContext.save.weekEventReg[39] & 0x80) {
             textId = 0x12B6;
         } else {
             textId = 0x12B4;
-            gSaveContext.weekEventReg[39] |= 0x80;
+            gSaveContext.save.weekEventReg[39] |= 0x80;
         }
-    } else if (gSaveContext.weekEventReg[39] & 0x40) {
+    } else if (gSaveContext.save.weekEventReg[39] & 0x40) {
         textId = 0x12B3;
     } else {
         textId = 0x12B1;
-        gSaveContext.weekEventReg[39] |= 0x40;
+        gSaveContext.save.weekEventReg[39] |= 0x40;
     }
     func_801518B0(globalCtx, textId, &this->actor);
 }
@@ -1115,14 +1115,14 @@ void func_80B98AD0(EnZot* this, GlobalContext* globalCtx) {
             case 0x12B8:
                 func_801477B4(globalCtx);
                 this->actionFunc = func_80B98CA8;
-                gSaveContext.weekEventReg[41] &= (u8)~0x20;
+                gSaveContext.save.weekEventReg[41] &= (u8)~0x20;
                 func_8019C300(0);
                 break;
 
             case 0x12BA:
                 func_801477B4(globalCtx);
                 this->actionFunc = func_80B98CA8;
-                gSaveContext.weekEventReg[41] |= 0x20;
+                gSaveContext.save.weekEventReg[41] |= 0x20;
                 func_8019C300(0);
                 break;
 
@@ -1137,7 +1137,7 @@ void func_80B98AD0(EnZot* this, GlobalContext* globalCtx) {
 void func_80B98BF4(EnZot* this, GlobalContext* globalCtx) {
     if (func_800B84D0(&this->actor, globalCtx)) {
         this->actor.flags &= ~0x10000;
-        if (gSaveContext.weekEventReg[41] & 0x20) {
+        if (gSaveContext.save.weekEventReg[41] & 0x20) {
             func_801518B0(globalCtx, 0x12B7, &this->actor);
             this->actionFunc = func_80B98AD0;
         } else {
@@ -1164,32 +1164,32 @@ void func_80B98CA8(EnZot* this, GlobalContext* globalCtx) {
             func_800B8614(&this->actor, globalCtx, 120.0f);
         }
 
-        if ((gSaveContext.playerForm == PLAYER_FORM_ZORA) || (this->actor.xzDistToPlayer < 100.0f)) {
+        if ((gSaveContext.save.playerForm == PLAYER_FORM_ZORA) || (this->actor.xzDistToPlayer < 100.0f)) {
             func_800B874C(&this->actor, globalCtx, 120.0, 100.0f);
         }
     }
 
     if (this->actor.xzDistToPlayer > 100.0f) {
-        gSaveContext.weekEventReg[41] &= (u8)~0x20;
+        gSaveContext.save.weekEventReg[41] &= (u8)~0x20;
     }
 }
 
 void func_80B98E10(EnZot* this, GlobalContext* globalCtx) {
     u16 textId;
 
-    if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
+    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
         if (Flags_GetSwitch(globalCtx, this->actor.home.rot.z & 0x7F)) {
-            if (gSaveContext.weekEventReg[40] & 4) {
+            if (gSaveContext.save.weekEventReg[40] & 4) {
                 textId = 0x12C5;
             } else {
                 textId = 0x12C3;
-                gSaveContext.weekEventReg[40] |= 4;
+                gSaveContext.save.weekEventReg[40] |= 4;
             }
-        } else if (gSaveContext.weekEventReg[40] & 2) {
+        } else if (gSaveContext.save.weekEventReg[40] & 2) {
             textId = 0x12C2;
         } else {
             textId = 0x12C0;
-            gSaveContext.weekEventReg[40] |= 2;
+            gSaveContext.save.weekEventReg[40] |= 2;
         }
     } else {
         if (Flags_GetSwitch(globalCtx, this->actor.home.rot.z & 0x7F)) {
@@ -1199,10 +1199,10 @@ void func_80B98E10(EnZot* this, GlobalContext* globalCtx) {
                 textId = 0x12BE;
                 this->unk_2F2 |= 0x10;
             }
-        } else if (gSaveContext.weekEventReg[40] & 1) {
+        } else if (gSaveContext.save.weekEventReg[40] & 1) {
             textId = 0x12BC;
         } else {
-            gSaveContext.weekEventReg[40] |= 1;
+            gSaveContext.save.weekEventReg[40] |= 1;
             this->unk_2F2 |= 4;
             textId = 0x12BB;
         }
@@ -1264,18 +1264,18 @@ void func_80B990A4(EnZot* this, GlobalContext* globalCtx) {
 void func_80B99160(EnZot* this, GlobalContext* globalCtx) {
     u16 textId;
 
-    if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
-        if (gSaveContext.weekEventReg[40] & 0x10) {
+    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+        if (gSaveContext.save.weekEventReg[40] & 0x10) {
             textId = 0x12CD;
         } else {
             textId = 0x12CA;
-            gSaveContext.weekEventReg[40] |= 0x10;
+            gSaveContext.save.weekEventReg[40] |= 0x10;
         }
-    } else if (gSaveContext.weekEventReg[40] & 8) {
+    } else if (gSaveContext.save.weekEventReg[40] & 8) {
         textId = 0x12C9;
     } else {
         textId = 0x12C6;
-        gSaveContext.weekEventReg[40] |= 8;
+        gSaveContext.save.weekEventReg[40] |= 8;
     }
     func_801518B0(globalCtx, textId, &this->actor);
 }

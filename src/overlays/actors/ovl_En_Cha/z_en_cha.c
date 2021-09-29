@@ -63,7 +63,7 @@ void EnCha_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.home.rot.z = 0;
     this->actionFunc = EnCha_Idle;
     this->actor.home.rot.x = this->actor.home.rot.z;
-    gSaveContext.weekEventReg[60] &= 0xFB;
+    gSaveContext.save.weekEventReg[60] &= 0xFB;
 }
 
 void EnCha_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -85,16 +85,16 @@ void EnCha_Ring(EnCha* this, GlobalContext* globalCtx) {
 }
 
 void EnCha_Idle(EnCha* this, GlobalContext* globalCtx) {
-    if (gSaveContext.weekEventReg[60] & 4) {
+    if (gSaveContext.save.weekEventReg[60] & 4) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_DOOR_BELL);
-        gSaveContext.weekEventReg[60] &= 0xFB;
+        gSaveContext.save.weekEventReg[60] &= 0xFB;
         this->actor.home.rot.z = 0x7D0;
     }
     if (this->collider.base.acFlags & AC_HIT) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_DOOR_BELL);
         this->actor.home.rot.z = 0x7D0;
-        if (!(gSaveContext.weekEventReg[51] & 4)) {
-            gSaveContext.weekEventReg[51] |= 4;
+        if (!(gSaveContext.save.weekEventReg[51] & 4)) {
+            gSaveContext.save.weekEventReg[51] |= 4;
             this->actionFunc = EnCha_Ring;
         }
     }

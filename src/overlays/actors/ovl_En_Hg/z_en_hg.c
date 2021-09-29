@@ -132,7 +132,7 @@ void EnHg_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
-    if ((gSaveContext.weekEventReg[0x4B] & 0x20) || (gSaveContext.weekEventReg[0x34] & 0x20)) {
+    if ((gSaveContext.save.weekEventReg[0x4B] & 0x20) || (gSaveContext.save.weekEventReg[0x34] & 0x20)) {
         Actor_MarkForDeath(&this->actor);
     }
     this->actor.targetMode = 1;
@@ -309,7 +309,7 @@ void func_80BCF95C(EnHg* this, GlobalContext* globalCtx) {
                     func_800BDC5C(&this->skelAnime, sAnimations, 1);
                     break;
                 case 6:
-                    gSaveContext.weekEventReg[0x4B] |= 0x20;
+                    gSaveContext.save.weekEventReg[0x4B] |= 0x20;
                     Actor_MarkForDeath(&this->actor);
                     break;
             }
@@ -363,7 +363,7 @@ void func_80BCFC0C(EnHg* this, GlobalContext* globalCtx) {
             D_80BD00C8 = false;
         }
         if (globalCtx->msgCtx.unk1202A == 3) {
-            if (globalCtx->msgCtx.unk1202E == 7 && gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
+            if (globalCtx->msgCtx.unk1202E == 7 && gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
                 if (INV_CONTENT(0x41) == 0x41) {
                     this->unk218 = 3;
                 } else {
@@ -374,8 +374,8 @@ void func_80BCFC0C(EnHg* this, GlobalContext* globalCtx) {
         } else {
             if (this->actor.xzDistToPlayer < 60.0f && fabsf(this->actor.yDistToPlayer) < 40.0f) {
                 if ((this->actionFunc != func_80BCF8A0) && (this->actionFunc != func_80BCF95C)) {
-                    if (!(gSaveContext.weekEventReg[0x3D] & 2)) {
-                        gSaveContext.weekEventReg[0x3D] |= 2;
+                    if (!(gSaveContext.save.weekEventReg[0x3D] & 2)) {
+                        gSaveContext.save.weekEventReg[0x3D] |= 2;
                         this->unk218 = 0;
                     } else {
                         this->unk218 = 2;

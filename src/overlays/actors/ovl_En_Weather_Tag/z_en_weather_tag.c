@@ -71,7 +71,7 @@ void EnWeatherTag_Init(Actor* thisx, GlobalContext* globalCtx) {
             EnWeatherTag_SetupAction(this, func_80966A08);
             break;
         case WEATHERTAG_TYPE_UNK1:
-            if (gSaveContext.weekEventReg[0x34] & 0x20) { // if cleared STT
+            if (gSaveContext.save.weekEventReg[0x34] & 0x20) { // if cleared STT
                 Actor_MarkForDeath(&this->actor);
             }
             EnWeatherTag_SetupAction(this, func_80966B08);
@@ -246,7 +246,7 @@ void func_80966BF4(EnWeatherTag* this, GlobalContext* globalCtx) {
     if (func_800EE29C(globalCtx, 0x237) != 0) {
         tmpAction = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x237)];
         if ((globalCtx->csCtx.frames >= tmpAction->startFrame) && (tmpAction->unk0 >= 2)) {
-            switch (gSaveContext.day) {
+            switch (gSaveContext.save.day) {
                 case 0:
                 case 1:
                 default:
@@ -276,7 +276,7 @@ void func_80966BF4(EnWeatherTag* this, GlobalContext* globalCtx) {
 void func_80966D20(EnWeatherTag* this, GlobalContext* globalCtx) {
     u8 newUnk20;
 
-    switch (gSaveContext.day) {
+    switch (gSaveContext.save.day) {
         case 0:
         case 1:
         default:
@@ -445,7 +445,7 @@ void func_809674C8(EnWeatherTag* this, GlobalContext* globalCtx) {
 
     if (Actor_XZDistanceBetweenActors(&player->actor, &this->actor) < WEATHER_TAG_RANGE100(this)) {
         if (CURRENT_DAY == 2) {
-            if ((gSaveContext.time >= 0x4AAA) && (gSaveContext.time < 0xBAAA) && (globalCtx->envCtx.unk_F2[2] == 0)) {
+            if ((gSaveContext.save.time >= 0x4AAA) && (gSaveContext.save.time < 0xBAAA) && (globalCtx->envCtx.unk_F2[2] == 0)) {
 
                 D_801BDBB0 = 1;
                 func_800FD78C(globalCtx);
@@ -480,11 +480,11 @@ void EnWeatherTag_Update(Actor* thisx, GlobalContext* globalCtx) {
         (!FrameAdvance_IsEnabled(globalCtx)) && (globalCtx->sceneLoadFlag == 0) &&
         (ActorCutscene_GetCurrentIndex() == -1) && (globalCtx->csCtx.state == 0)) {
 
-        oldTime = gSaveContext.time;
-        gSaveContext.time = (u16)REG(0xF) + oldTime; // cast req
+        oldTime = gSaveContext.save.time;
+        gSaveContext.save.time = (u16)REG(0xF) + oldTime; // cast req
         if (REG(0xF) != 0) {
-            oldTime = gSaveContext.time;
-            gSaveContext.time = (u16)gSaveContext.unk_14 + oldTime;
+            oldTime = gSaveContext.save.time;
+            gSaveContext.save.time = (u16)gSaveContext.save.daySpeed + oldTime;
         }
     }
 }

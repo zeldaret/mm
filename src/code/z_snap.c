@@ -12,8 +12,8 @@ s32 func_8013A240(GlobalContext* globalCtx) {
     s32 seen;
     s32 count = 0;
 
-    gSaveContext.roomInf[123][3] = 0;
-    gSaveContext.roomInf[123][4] = 0;
+    gSaveContext.save.roomInf[123][3] = 0;
+    gSaveContext.save.roomInf[123][4] = 0;
 
     if (globalCtx->sceneNum == SCENE_20SICHITAI) {
         func_8013A41C(1);
@@ -76,19 +76,19 @@ s32 func_8013A240(GlobalContext* globalCtx) {
 
 void func_8013A41C(s32 flag) {
     if (flag < 0x20) {
-        gSaveContext.roomInf[123][3] |= (1 << flag);
+        gSaveContext.save.roomInf[123][3] |= (1 << flag);
     } else {
         flag &= 0x1F;
-        gSaveContext.roomInf[123][4] |= (1 << flag);
+        gSaveContext.save.roomInf[123][4] |= (1 << flag);
     }
 }
 
 void func_8013A46C(s32 flag) {
     if (flag < 0x20) {
-        gSaveContext.roomInf[123][3] &= ~(1 << flag);
+        gSaveContext.save.roomInf[123][3] &= ~(1 << flag);
     } else {
         flag &= 0x1F;
-        gSaveContext.roomInf[123][4] &= ~(1 << flag);
+        gSaveContext.save.roomInf[123][4] &= ~(1 << flag);
     }
 }
 
@@ -96,10 +96,10 @@ u32 func_8013A4C4(s32 flag) {
     SaveContext* saveCtx = &gSaveContext;
 
     if (flag < 0x20) {
-        return saveCtx->roomInf[123][3] & (1 << flag);
+        return saveCtx->save.roomInf[123][3] & (1 << flag);
     } else {
         flag &= 0x1F;
-        return saveCtx->roomInf[123][4] & (1 << flag);
+        return saveCtx->save.roomInf[123][4] & (1 << flag);
     }
 }
 

@@ -34,7 +34,7 @@ const ActorInit Obj_Mu_Pict_InitVars = {
 void ObjMuPict_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjMuPict* this = THIS;
 
-    if (!(gSaveContext.weekEventReg[75] & 0x20) && !(gSaveContext.weekEventReg[52] & 0x20)) {
+    if (!(gSaveContext.save.weekEventReg[75] & 0x20) && !(gSaveContext.save.weekEventReg[52] & 0x20)) {
         Actor_MarkForDeath(&this->actor);
     }
 

@@ -60,7 +60,7 @@ void ObjMilkBin_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->disableDraw = 0;
     this->type = thisx->params;
 
-    if ((this->type == OBJ_MILK_BIN_TYPE_2) && !(gSaveContext.weekEventReg[0x34] & 1)) {
+    if ((this->type == OBJ_MILK_BIN_TYPE_2) && !(gSaveContext.save.weekEventReg[0x34] & 1)) {
         this->disableDraw |= 1;
     }
 }
@@ -76,14 +76,14 @@ void ObjMilkBin_Update(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
 
     if (this->type == OBJ_MILK_BIN_TYPE_1) {
-        if (gSaveContext.weekEventReg[0x16] & 1) {
-            if (((gSaveContext.day == 2) && (gSaveContext.isNight == 1)) || (gSaveContext.day >= 3)) {
+        if (gSaveContext.save.weekEventReg[0x16] & 1) {
+            if (((gSaveContext.save.day == 2) && (gSaveContext.save.isNight == 1)) || (gSaveContext.save.day >= 3)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
         }
     } else if (this->type == OBJ_MILK_BIN_TYPE_2) {
-        if (gSaveContext.weekEventReg[0x34] & 1) {
+        if (gSaveContext.save.weekEventReg[0x34] & 1) {
             this->disableDraw &= ~1;
         } else {
             this->disableDraw |= 1;

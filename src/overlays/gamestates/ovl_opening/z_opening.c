@@ -15,19 +15,19 @@ void Opening_SetupForTitleCutscene(OpeningContext* this) {
 
     func_80144890();
 
-    gSaveContext.entranceIndex = openingEntrances[D_801BB12C];
-    gSaveContext.nextCutsceneIndex = gSaveContext.cutscene = openingCutscenes[D_801BB12C];
+    gSaveContext.save.entranceIndex = openingEntrances[D_801BB12C];
+    gSaveContext.nextCutsceneIndex = gSaveContext.save.cutscene = openingCutscenes[D_801BB12C];
     gSaveContext.sceneSetupIndex = 0;
 
-    gSaveContext.time = CLOCK_TIME(8, 0);
-    gSaveContext.day = 1;
+    gSaveContext.save.time = CLOCK_TIME(8, 0);
+    gSaveContext.save.day = 1;
 
     {
         GameState* thisx = &this->gameState;
         thisx->running = false;
     }
     SET_NEXT_GAMESTATE(&this->gameState, Play_Init, GlobalContext);
-    gSaveContext.playerForm = PLAYER_FORM_HUMAN;
+    gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
 }
 
 void func_80803EA0(OpeningContext* this) {

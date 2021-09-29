@@ -198,9 +198,9 @@ u16 EnSob1_GetTalkOption(EnSob1* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
     if (this->shopType == BOMB_SHOP) {
-        if (gSaveContext.day == 1 && gSaveContext.time >= CLOCK_TIME(6, 00)) {
+        if (gSaveContext.save.day == 1 && gSaveContext.save.time >= CLOCK_TIME(6, 00)) {
             return 0x648;
-        } else if (gSaveContext.weekEventReg[0x21] & 8) {
+        } else if (gSaveContext.save.weekEventReg[0x21] & 8) {
             return 0x649;
         } else {
             return 0x64A;
@@ -270,58 +270,58 @@ u16 EnSob1_GetWelcome(EnSob1* this, GlobalContext* globalCtx) {
     } else if (this->shopType == ZORA_SHOP) {
         switch (player->transformation) {
             case PLAYER_FORM_HUMAN:
-                if (gSaveContext.weekEventReg[0x39] & 0x10) {
+                if (gSaveContext.save.weekEventReg[0x39] & 0x10) {
                     return 0x12CF;
                 }
-                gSaveContext.weekEventReg[0x39] |= 0x10;
+                gSaveContext.save.weekEventReg[0x39] |= 0x10;
                 return 0x12CE;
             case PLAYER_FORM_DEKU:
-                if (gSaveContext.weekEventReg[0x39] & 0x20) {
+                if (gSaveContext.save.weekEventReg[0x39] & 0x20) {
                     return 0x12D1;
                 }
-                gSaveContext.weekEventReg[0x39] |= 0x20;
+                gSaveContext.save.weekEventReg[0x39] |= 0x20;
                 return 0x12D0;
             case PLAYER_FORM_GORON:
-                if (gSaveContext.weekEventReg[0x39] & 0x40) {
+                if (gSaveContext.save.weekEventReg[0x39] & 0x40) {
                     return 0x12D3;
                 }
-                gSaveContext.weekEventReg[0x39] |= 0x40;
+                gSaveContext.save.weekEventReg[0x39] |= 0x40;
                 return 0x12D2;
             case PLAYER_FORM_ZORA:
-                if (gSaveContext.weekEventReg[0x39] & 0x80) {
+                if (gSaveContext.save.weekEventReg[0x39] & 0x80) {
                     return 0x12D5;
                 }
-                gSaveContext.weekEventReg[0x39] |= 0x80;
+                gSaveContext.save.weekEventReg[0x39] |= 0x80;
                 return 0x12D4;
             default:
                 return 0x12CE;
         }
     } else if (this->shopType == GORON_SHOP) {
         if (player->transformation != PLAYER_FORM_GORON) {
-            if (gSaveContext.weekEventReg[0x3A] & 4) {
+            if (gSaveContext.save.weekEventReg[0x3A] & 4) {
                 return 0xBB9;
             }
-            gSaveContext.weekEventReg[0x3A] |= 4;
+            gSaveContext.save.weekEventReg[0x3A] |= 4;
             return 0xBB8;
         } else {
-            if (gSaveContext.weekEventReg[0x3A] & 8) {
+            if (gSaveContext.save.weekEventReg[0x3A] & 8) {
                 return 0xBBB;
             }
-            gSaveContext.weekEventReg[0x3A] |= 8;
+            gSaveContext.save.weekEventReg[0x3A] |= 8;
             return 0xBBA;
         }
     } else if (this->shopType == GORON_SHOP_SPRING) {
         if (player->transformation != PLAYER_FORM_GORON) {
-            if (gSaveContext.weekEventReg[0x3A] & 0x10) {
+            if (gSaveContext.save.weekEventReg[0x3A] & 0x10) {
                 return 0xBBD;
             }
-            gSaveContext.weekEventReg[0x3A] |= 0x10;
+            gSaveContext.save.weekEventReg[0x3A] |= 0x10;
             return 0xBBC;
         } else {
-            if (gSaveContext.weekEventReg[0x3A] & 0x20) {
+            if (gSaveContext.save.weekEventReg[0x3A] & 0x20) {
                 return 0xBBF;
             }
-            gSaveContext.weekEventReg[0x3A] |= 0x20;
+            gSaveContext.save.weekEventReg[0x3A] |= 0x20;
             return 0xBBE;
         }
     }
@@ -330,11 +330,11 @@ u16 EnSob1_GetWelcome(EnSob1* this, GlobalContext* globalCtx) {
 
 u16 EnSob1_GetGoodbye(EnSob1* this) {
     if (this->shopType == BOMB_SHOP) {
-        if (gSaveContext.day == 1) {
+        if (gSaveContext.save.day == 1) {
             return 0x64C;
-        } else if (gSaveContext.day == 2) {
+        } else if (gSaveContext.save.day == 2) {
             return 0x64D;
-        } else if (!gSaveContext.isNight) {
+        } else if (!gSaveContext.save.isNight) {
             return 0x64E;
         } else {
             return 0x64F;
@@ -396,7 +396,7 @@ void EnSob1_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->shopType = ZORA_SHOP;
             break;
         case GORON_SHOP:
-            if (gSaveContext.weekEventReg[0x21] & 0x80) {
+            if (gSaveContext.save.weekEventReg[0x21] & 0x80) {
                 this->shopType = GORON_SHOP_SPRING;
             } else {
                 this->shopType = GORON_SHOP;
@@ -1379,7 +1379,7 @@ void EnSob1_InitShop(EnSob1* this, GlobalContext* globalCtx) {
         this->actor.world.pos.y += posOffset->y;
         this->actor.world.pos.z += posOffset->z;
         shopItems = sShops[this->shopType];
-        if ((this->shopType == BOMB_SHOP) && (gSaveContext.weekEventReg[0x21] & 8)) {
+        if ((this->shopType == BOMB_SHOP) && (gSaveContext.save.weekEventReg[0x21] & 8)) {
             sShops[this->shopType][0].shopItemId = SI_BOMB_BAG_30_2;
         }
 

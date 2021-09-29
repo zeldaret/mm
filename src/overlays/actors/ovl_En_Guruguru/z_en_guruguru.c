@@ -85,7 +85,7 @@ void EnGuruguru_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (this->actor.params != 2) {
         Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     }
-    if (!gSaveContext.isNight) {
+    if (!gSaveContext.save.isNight) {
         if (this->actor.params == 0) {
             func_80BC6E10(this);
         } else if (this->actor.params == 2) {
@@ -125,10 +125,10 @@ void func_80BC6E10(EnGuruguru* this) {
     this->textIdIndex = 0;
     this->unk270 = 0;
     if (this->actor.params == 0) {
-        if (gSaveContext.weekEventReg[38] & 0x10) {
+        if (gSaveContext.save.weekEventReg[38] & 0x10) {
             this->textIdIndex = 1;
         }
-    } else if (gSaveContext.weekEventReg[38] & 0x40) {
+    } else if (gSaveContext.save.weekEventReg[38] & 0x40) {
         this->textIdIndex = 2;
     } else {
         this->textIdIndex = 3;
@@ -137,8 +137,8 @@ void func_80BC6E10(EnGuruguru* this) {
     this->headZRotTarget = 0;
     this->unk268 = 1;
     this->actor.textId = textIDs[this->textIdIndex];
-    if ((this->textIdIndex == 0 || this->textIdIndex == 1) && (gSaveContext.weekEventReg[77] & 4)) {
-        if (!(gSaveContext.weekEventReg[88] & 4)) {
+    if ((this->textIdIndex == 0 || this->textIdIndex == 1) && (gSaveContext.save.weekEventReg[77] & 4)) {
+        if (!(gSaveContext.save.weekEventReg[88] & 4)) {
             this->actor.textId = 0x295F;
         } else {
             this->actor.textId = 0x2960;
@@ -159,7 +159,7 @@ void func_80BC6F14(EnGuruguru* this, GlobalContext* globalCtx) {
         this->textIdIndex = 3;
         if (player->transformation == PLAYER_FORM_DEKU) {
             this->textIdIndex = 13;
-            if (gSaveContext.weekEventReg[79] & 4) {
+            if (gSaveContext.save.weekEventReg[79] & 4) {
                 this->textIdIndex = 14;
             }
         }
@@ -218,16 +218,16 @@ void func_80BC7068(EnGuruguru* this, GlobalContext* globalCtx) {
         this->headZRotTarget = 0;
         if ((this->textIdIndex == 13) || (this->textIdIndex == 14)) {
             func_80151BB4(globalCtx, 0x13);
-            gSaveContext.weekEventReg[79] |= 4;
+            gSaveContext.save.weekEventReg[79] |= 4;
             func_80BC6E10(this);
             return;
         }
         if (this->actor.params == 0) {
             if (this->actor.textId == 0x295F) {
-                gSaveContext.weekEventReg[88] |= 4;
+                gSaveContext.save.weekEventReg[88] |= 4;
             }
             if (this->actor.textId == 0x292A) {
-                gSaveContext.weekEventReg[38] |= 0x10;
+                gSaveContext.save.weekEventReg[38] |= 0x10;
             }
             func_80151BB4(globalCtx, 0x13);
             func_80BC6E10(this);
@@ -238,7 +238,7 @@ void func_80BC7068(EnGuruguru* this, GlobalContext* globalCtx) {
             return;
         }
         if (this->textIdIndex == 12) {
-            gSaveContext.weekEventReg[38] |= 0x40;
+            gSaveContext.save.weekEventReg[38] |= 0x40;
             func_801A3B48(0);
             func_80151BB4(globalCtx, 0x36);
             func_80151BB4(globalCtx, 0x13);
@@ -303,7 +303,7 @@ void func_80BC7440(EnGuruguru* this, GlobalContext* globalCtx) {
         func_801A3B48(1);
         func_800B8500(&this->actor, globalCtx, 400.0f, 400.0f, -1);
         this->unk268 = 0;
-        gSaveContext.weekEventReg[38] |= 0x40;
+        gSaveContext.save.weekEventReg[38] |= 0x40;
         this->actionFunc = func_80BC7520;
     } else {
         func_800B8A1C(&this->actor, globalCtx, GI_MASK_BREMEN, 300.0f, 300.0f);
@@ -325,7 +325,7 @@ void EnGuruguru_Update(Actor* thisx, GlobalContext* globalCtx) {
     Player* player = PLAYER;
     s16 yawTemp;
 
-    if (!gSaveContext.isNight) {
+    if (!gSaveContext.save.isNight) {
         if (this->actor.params == 1) {
             Actor_MarkForDeath(&this->actor);
             return;

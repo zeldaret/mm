@@ -70,7 +70,7 @@ static UNK_TYPE4* D_808A4D74[] = {
     &D_06005BA0,
 };
 
-// gSaveContext.weekEventReg[KEY] = VALUE
+// gSaveContext.save.weekEventReg[KEY] = VALUE
 // KEY | VALUE
 static u16 isFrogReturnedFlags[] = {
     (0 << 8) | 0x00,  // NULL
@@ -118,7 +118,7 @@ void EnMinifrog_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (1) {}
     if (!EN_MINIFROG_IS_RETURNED(this)) {
         if ((this->frogIndex == MINIFROG_YELLOW) ||
-            ((gSaveContext.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] &
+            ((gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] &
               (u8)isFrogReturnedFlags[this->frogIndex]))) {
             Actor_MarkForDeath(&this->actor);
         } else {
@@ -133,7 +133,7 @@ void EnMinifrog_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->actionFunc = EnMinifrog_SetupYellowFrogDialog;
 
             // Not spoken to MINIFROG_YELLOW
-            if (!(gSaveContext.weekEventReg[34] & 1)) {
+            if (!(gSaveContext.save.weekEventReg[34] & 1)) {
                 this->actor.flags |= 0x10000;
             }
 
@@ -144,7 +144,7 @@ void EnMinifrog_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->actor.flags &= ~1;
 
             // Frog has been returned
-            if ((gSaveContext.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] &
+            if ((gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] &
                  (u8)isFrogReturnedFlags[this->frogIndex])) {
                 this->actionFunc = EnMinifrog_SetupNextFrogInit;
             } else {
@@ -275,14 +275,14 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, GlobalContext* globalCtx) {
                 func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
                 break;
             case 0xD82:                                     // "What has brought you all this way?"
-                if (gSaveContext.weekEventReg[33] & 0x80) { // Mountain village is unfrozen
+                if (gSaveContext.save.weekEventReg[33] & 0x80) { // Mountain village is unfrozen
                     func_80151938(globalCtx, 0xD83); // "Could it be... Has spring finally come to the mountains?"
                 } else {
                     func_80151938(globalCtx, 0xD86); // "Could it be... You came all this way looking for me?"
                 }
 
-                flag = gSaveContext.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8];
-                gSaveContext.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] =
+                flag = gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8];
+                gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] =
                     flag | (u8)isFrogReturnedFlags[this->frogIndex];
                 break;
             case 0xD85: // "I understand. I shall head for the mountains immediately."
@@ -522,7 +522,7 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, GlobalContext* globalCtx) {
                                 // you've lost a little weight..."
                         func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
                         this->actor.flags &= ~0x10000;
-                        gSaveContext.weekEventReg[34] |= 1; // Spoken to MINIFROG_YELLOW
+                        gSaveContext.save.weekEventReg[34] |= 1; // Spoken to MINIFROG_YELLOW
                         break;
                     case 0xD78: // "Unfortunately, it seems not all of our members have gathered."
                     case 0xD79: // "Perhaps it is because winter was too long? They must not have realized that spring
@@ -536,11 +536,11 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, GlobalContext* globalCtx) {
                         globalCtx->msgCtx.unk11F10 = 0;
                         break;
                     case 0xD7C: // "The conducting was spectacular. And all of our members rose to the occasion!"
-                        if (gSaveContext.weekEventReg[35] & 0x80) { // Obtained Heart Piece
+                        if (gSaveContext.save.weekEventReg[35] & 0x80) { // Obtained Heart Piece
                             func_80151938(globalCtx, 0xD7E);
                         } else {
                             func_80151938(globalCtx, 0xD7D); // Get Heart Piece
-                            gSaveContext.weekEventReg[35] |= 0x80;
+                            gSaveContext.save.weekEventReg[35] |= 0x80;
                         }
                         break;
                     case 0xD7D: // "This is how deeply we were moved by your spectacular conducting..."
@@ -568,7 +568,7 @@ void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, GlobalContext* globalCtx
     EnMinifrog_JumpTimer(this);
     if (func_800B84D0(&this->actor, globalCtx)) {
         this->actionFunc = EnMinifrog_YellowFrogDialog;
-        if (!(gSaveContext.weekEventReg[34] & 1)) { // Not spoken with MINIFROG_YELLOW
+        if (!(gSaveContext.save.weekEventReg[34] & 1)) { // Not spoken with MINIFROG_YELLOW
             func_801518B0(globalCtx, 0xD76,
                           &this->actor); // "I have been waiting for you, Don Gero. Forgive me if I'm mistaken, but it
                                          // looks like you've lost a little weight..."

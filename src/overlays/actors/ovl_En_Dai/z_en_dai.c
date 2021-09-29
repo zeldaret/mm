@@ -191,7 +191,7 @@ s32 func_80B3E69C(EnDai* this, GlobalContext* globalCtx) {
     s32 ret = false;
 
     if ((globalCtx->csCtx.state != 0) && (globalCtx->sceneNum == SCENE_12HAKUGINMAE) &&
-        (globalCtx->csCtx.unk_12 == 0) && !(gSaveContext.weekEventReg[30] & 1)) {
+        (globalCtx->csCtx.unk_12 == 0) && !(gSaveContext.save.weekEventReg[30] & 1)) {
         if (!(this->unk_1CE & 0x10)) {
             Actor_SetSwitchFlag(globalCtx, 20);
             this->unk_1CE |= (0x80 | 0x10);
@@ -206,7 +206,7 @@ s32 func_80B3E69C(EnDai* this, GlobalContext* globalCtx) {
     } else if (this->unk_1CE & 0x10) {
         this->unk_1CE &= ~0x10;
         this->unk_1CE |= 0x200;
-        gSaveContext.weekEventReg[30] |= 1;
+        gSaveContext.save.weekEventReg[30] |= 1;
         this->actionFunc = func_80B3F00C;
     }
 
@@ -538,7 +538,7 @@ void EnDai_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_1CE = 0;
     this->unk_1D6 = 0;
 
-    if (gSaveContext.weekEventReg[33] & 0x80) {
+    if (gSaveContext.save.weekEventReg[33] & 0x80) {
         func_8013AED4(&this->unk_1CE, 3, 7);
         this->unk_1CE |= 0x80;
         this->unk_1CD = 0xFF;
@@ -546,7 +546,7 @@ void EnDai_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
 
-    if (gSaveContext.weekEventReg[30] & 1) {
+    if (gSaveContext.save.weekEventReg[30] & 1) {
         Actor_MarkForDeath(&this->actor);
         return;
     }

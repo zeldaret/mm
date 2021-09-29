@@ -217,7 +217,7 @@ s32 func_80B3CF60(EnDnp* this, GlobalContext* globalCtx) {
         this->unk_322 |= 8;
         this->actionFunc = func_80B3D3F8;
         ret = true;
-    } else if (!(gSaveContext.weekEventReg[23] & 0x20) && Actor_HasParent(&this->actor, globalCtx)) {
+    } else if (!(gSaveContext.save.weekEventReg[23] & 0x20) && Actor_HasParent(&this->actor, globalCtx)) {
         func_8013AED4(&this->unk_322, 0, 7);
         this->unk_322 &= ~0x500;
         this->actor.parent = NULL;
@@ -258,10 +258,10 @@ void func_80B3D11C(EnDnp* this, GlobalContext* globalCtx) {
     u32 temp_v0;
     s32 val;
 
-    if (!(gSaveContext.weekEventReg[29] & 0x40) && (globalCtx->sceneNum == SCENE_MITURIN) &&
+    if (!(gSaveContext.save.weekEventReg[29] & 0x40) && (globalCtx->sceneNum == SCENE_MITURIN) &&
         (globalCtx->csCtx.unk_12 == 0)) {
         this->unk_322 |= 0x20;
-        gSaveContext.weekEventReg[29] |= 0x40;
+        gSaveContext.save.weekEventReg[29] |= 0x40;
     }
 
     if (func_800EE29C(globalCtx, 0x65)) {
@@ -348,7 +348,7 @@ void func_80B3D47C(EnDnp* this, GlobalContext* globalCtx) {
 void func_80B3D558(EnDnp* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
-        gSaveContext.weekEventReg[23] |= 0x20;
+        gSaveContext.save.weekEventReg[23] |= 0x20;
     } else {
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
     }
@@ -376,12 +376,12 @@ void EnDnp_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.cutscene = 0x10;
         this->actionFunc = func_80B3D47C;
     } else if (((ENDNP_GET_7(&this->actor) == ENDNP_GET_7_0) && !func_80114F2C(0x17) &&
-                !(gSaveContext.weekEventReg[23] & 0x20)) ||
-               ((ENDNP_GET_7(&this->actor) == ENDNP_GET_7_2) && (gSaveContext.weekEventReg[23] & 0x20))) {
+                !(gSaveContext.save.weekEventReg[23] & 0x20)) ||
+               ((ENDNP_GET_7(&this->actor) == ENDNP_GET_7_2) && (gSaveContext.save.weekEventReg[23] & 0x20))) {
         Actor_SetScale(&this->actor, 0.0085f);
         func_8013AED4(&this->unk_322, 3, 7);
         this->unk_322 |= 0x400;
-        if ((globalCtx->sceneNum == SCENE_MITURIN) && (gSaveContext.weekEventReg[29] & 0x40)) {
+        if ((globalCtx->sceneNum == SCENE_MITURIN) && (gSaveContext.save.weekEventReg[29] & 0x40)) {
             this->unk_322 |= 0x20;
             func_80B3CC38(this, 1);
         }
@@ -417,7 +417,7 @@ void EnDnp_Update(Actor* thisx, GlobalContext* globalCtx) {
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
         sp2C = this->collider.dim.radius + 50;
         sp28 = this->collider.dim.height + 30;
-        if ((this->unk_322 & 0x400) && !(gSaveContext.weekEventReg[23] & 0x20)) {
+        if ((this->unk_322 & 0x400) && !(gSaveContext.save.weekEventReg[23] & 0x20)) {
             func_800B8A1C(&this->actor, globalCtx, 0xBA, sp2C, sp28);
         }
         func_8013C964(&this->actor, globalCtx, sp2C, sp28, 0, this->unk_322 & 7);

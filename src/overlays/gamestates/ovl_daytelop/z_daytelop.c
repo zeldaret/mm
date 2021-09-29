@@ -70,11 +70,11 @@ void Daytelop_Update(DaytelopContext* this, GameState* gameState) {
 
     this->transitionCountdown--;
     if (this->transitionCountdown == 0) {
-        if (gSaveContext.day < 9) {
+        if (gSaveContext.save.day < 9) {
             gSaveContext.gameMode = 0;
         } else {
             gSaveContext.nextCutsceneIndex = 0xFFF6;
-            gSaveContext.day = 1;
+            gSaveContext.save.day = 1;
         }
 
         {
@@ -83,7 +83,7 @@ void Daytelop_Update(DaytelopContext* this, GameState* gameState) {
         }
 
         SET_NEXT_GAMESTATE(&this->state, Play_Init, GlobalContext);
-        gSaveContext.time = CLOCK_TIME(6, 0);
+        gSaveContext.save.time = CLOCK_TIME(6, 0);
         D_801BDBC8 = 0xFE;
     } else if (this->transitionCountdown == 90) {
         this->fadeInState = DAYTELOP_HOURSTEXT_FADEIN;
@@ -132,7 +132,7 @@ void Daytelop_Draw(DaytelopContext* this) {
     OPEN_DISPS(gfxCtx);
     func_8012C628(this->state.gfxCtx);
 
-    if (gSaveContext.day >= 9) {
+    if (gSaveContext.save.day >= 9) {
         // Draw a white screen
         gDPSetRenderMode(POLY_OPA_DISP++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
         gDPSetCombineMode(POLY_OPA_DISP++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
@@ -145,12 +145,12 @@ void Daytelop_Draw(DaytelopContext* this) {
     gDPSetRenderMode(POLY_OPA_DISP++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
 
-    if (gSaveContext.day >= 9) {
+    if (gSaveContext.save.day >= 9) {
         gDPSetAlphaCompare(POLY_OPA_DISP++, G_AC_NONE);
     }
 
     // Draw the left side of the "Dawn of" texture
-    if (gSaveContext.day < 9) {
+    if (gSaveContext.save.day < 9) {
         gDPLoadTextureBlock_4b(POLY_OPA_DISP++, sDayLeftTextures[CURRENT_DAY - 1], G_IM_FMT_I, 128, 64, 0,
                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                G_TX_NOLOD, G_TX_NOLOD);
@@ -163,7 +163,7 @@ void Daytelop_Draw(DaytelopContext* this) {
                         0x0400, 0x0400);
 
     // Draw the right side of the "Dawn of" texture
-    if (gSaveContext.day < 9) {
+    if (gSaveContext.save.day < 9) {
         gDPLoadTextureBlock_4b(POLY_OPA_DISP++, sDayRightTextures[CURRENT_DAY - 1], G_IM_FMT_I, 128, 64, 0,
                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                G_TX_NOLOD, G_TX_NOLOD);
@@ -176,7 +176,7 @@ void Daytelop_Draw(DaytelopContext* this) {
                         0x0400, 0x0400);
 
     // Draw the "Hours left" texture
-    if (gSaveContext.day < 9) {
+    if (gSaveContext.save.day < 9) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetRenderMode(POLY_OPA_DISP++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->alpha);
@@ -234,8 +234,8 @@ void Daytelop_Init(GameState* thisx) {
     this->transitionCountdown = 140;
     this->fadeInState = DAYTELOP_HOURSTEXT_OFF;
 
-    if (gSaveContext.day < 9) {
-        if (gSaveContext.day == 0) {
+    if (gSaveContext.save.day < 9) {
+        if (gSaveContext.save.day == 0) {
             func_80143AC4();
         }
         Sram_IncrementDay();

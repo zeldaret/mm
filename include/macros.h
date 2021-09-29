@@ -43,8 +43,8 @@
 
 // linkAge still exists in MM, but is always set to 0 (always adult)
 // There are remnants of these macros from OOT, but they are essentially useless
-//#define LINK_IS_CHILD (gSaveContext.linkAge != 0)
-#define LINK_IS_ADULT (gSaveContext.linkAge == 0)
+//#define LINK_IS_CHILD (gSaveContext.save.linkAge != 0)
+#define LINK_IS_ADULT (gSaveContext.save.linkAge == 0)
 
 #define CURRENT_DAY (((void)0, gSaveContext.save.day) % 5)
 
@@ -52,23 +52,23 @@
 #define CLOCK_TIME_MINUTE  (CLOCK_TIME(0, 1))
 
 #define SLOT(item) gItemSlots[item]
-#define AMMO(item) gSaveContext.inventory.ammo[SLOT(item)]
-#define INV_CONTENT(item) gSaveContext.inventory.items[SLOT(item)]
+#define AMMO(item) gSaveContext.save.inventory.ammo[SLOT(item)]
+#define INV_CONTENT(item) gSaveContext.save.inventory.items[SLOT(item)]
 
 #define ALL_EQUIP_VALUE_VOID(equip) \
-    ((((void)0, gSaveContext.inventory.equipment) & gEquipMasks[equip]) >> gEquipShifts[equip])
+    ((((void)0, gSaveContext.save.inventory.equipment) & gEquipMasks[equip]) >> gEquipShifts[equip])
 #define CUR_EQUIP_VALUE_VOID(equip) \
-    ((((void)0, gSaveContext.equips.equipment) & gEquipMasks[equip]) >> gEquipShifts[equip])
+    ((((void)0, gSaveContext.save.equips.equipment) & gEquipMasks[equip]) >> gEquipShifts[equip])
 #define CUR_UPG_VALUE_VOID(upg) \
-    ((((void)0, gSaveContext.inventory.upgrades) & gUpgradeMasks[upg]) >> gUpgradeShifts[upg])
+    ((((void)0, gSaveContext.save.inventory.upgrades) & gUpgradeMasks[upg]) >> gUpgradeShifts[upg])
 
-#define ALL_EQUIP_VALUE(equip) ((gSaveContext.inventory.equipment & gEquipMasks[equip]) >> gEquipShifts[equip])
-#define CUR_EQUIP_VALUE(equip) ((gSaveContext.equips.equipment & gEquipMasks[equip]) >> gEquipShifts[equip])
-#define CUR_UPG_VALUE(upg) ((gSaveContext.inventory.upgrades & gUpgradeMasks[upg]) >> gUpgradeShifts[upg])
-#define TAKE_EQUIPPED_ITEM(equip) (gSaveContext.equips.equipment = ((((void)0, gSaveContext.equips.equipment) & (gEquipNegMasks[equip])) | (u16)(0 << gEquipShifts[equip])))
-#define CUR_FORM_EQUIP(button) (gSaveContext.equips.buttonItems[gSaveContext.playerForm == PLAYER_FORM_HUMAN ? 0 : gSaveContext.playerForm][button])
-#define CHECK_QUEST_ITEM(item) (((void)0, gSaveContext.inventory.questItems) & gBitFlags[item])
-#define REMOVE_QUEST_ITEM(item) (gSaveContext.inventory.questItems = (((void)0, gSaveContext.inventory.questItems) & (-1 - gBitFlags[item])))
+#define ALL_EQUIP_VALUE(equip) ((gSaveContext.save.inventory.equipment & gEquipMasks[equip]) >> gEquipShifts[equip])
+#define CUR_EQUIP_VALUE(equip) ((gSaveContext.save.equips.equipment & gEquipMasks[equip]) >> gEquipShifts[equip])
+#define CUR_UPG_VALUE(upg) ((gSaveContext.save.inventory.upgrades & gUpgradeMasks[upg]) >> gUpgradeShifts[upg])
+#define TAKE_EQUIPPED_ITEM(equip) (gSaveContext.save.equips.equipment = ((((void)0, gSaveContext.save.equips.equipment) & (gEquipNegMasks[equip])) | (u16)(0 << gEquipShifts[equip])))
+#define CUR_FORM_EQUIP(button) (gSaveContext.save.equips.buttonItems[gSaveContext.save.playerForm == PLAYER_FORM_HUMAN ? 0 : gSaveContext.save.playerForm][button])
+#define CHECK_QUEST_ITEM(item) (((void)0, gSaveContext.save.inventory.questItems) & gBitFlags[item])
+#define REMOVE_QUEST_ITEM(item) (gSaveContext.save.inventory.questItems = (((void)0, gSaveContext.save.inventory.questItems) & (-1 - gBitFlags[item])))
 
 #define CAPACITY(upg, value) gUpgradeCapacities[upg][value]
 #define CUR_CAPACITY(upg) CAPACITY(upg, CUR_UPG_VALUE(upg) - 4)
