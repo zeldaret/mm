@@ -35,7 +35,7 @@ typedef struct SelectContext {
     /* 0x26C */ s32 lockUp;
     /* 0x270 */ s32 lockDown;
     /* 0x274 */ s32 unk_274; // unused
-    /* 0x278 */ char unk_278[0x08];
+    /* 0x278 */ UNK_TYPE1 unk_278[0x08];
 } SelectContext; // size = 0x280
 
 #endif
