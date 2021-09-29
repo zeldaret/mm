@@ -5518,8 +5518,7 @@ beginseg
     name "ovl_En_Ending_Hero6"
     compress
     include "build/src/overlays/actors/ovl_En_Ending_Hero6/z_en_ending_hero6.o"
-    include "build/data/ovl_En_Ending_Hero6/ovl_En_Ending_Hero6.data.o"
-    include "build/data/ovl_En_Ending_Hero6/ovl_En_Ending_Hero6.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Ending_Hero6/ovl_En_Ending_Hero6_reloc.o"
 endseg
 
 beginseg
