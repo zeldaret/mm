@@ -160,7 +160,6 @@ void Sram_GenerateRandomSaveFields(void) {
 
 extern UNK_TYPE D_801C6898;
 extern UNK_TYPE D_801C68C0;
-//#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80144890.s")
 void func_80144890(void) {
     gSaveContext.playerForm = PLAYER_FORM_HUMAN;
     gSaveContext.daysElapsed = 0;
@@ -223,7 +222,6 @@ void Sram_InitDebugSave(void) {
 
     Sram_GenerateRandomSaveFields();
 }
-
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80144A94.s")
 

@@ -3573,7 +3573,7 @@ asm/non_matchings/code/code_801A5BD0/func_801A794C.s,func_801A794C,0x801A794C,0x
 asm/non_matchings/code/code_801A7B10/func_801A7B10.s,func_801A7B10,0x801A7B10,0x7D
 asm/non_matchings/code/code_801A7B10/func_801A7D04.s,func_801A7D04,0x801A7D04,0x20
 asm/non_matchings/code/code_801A7B10/func_801A7D84.s,func_801A7D84,0x801A7D84,0x309
-asm/non_matchings/code/code_801A7B10/func_801A89A8.s,func_801A89A8,0x801A89A8,0xA
+asm/non_matchings/code/code_801A7B10/Audio_QueueSeqCmd.s,Audio_QueueSeqCmd,0x801A89A8,0xA
 asm/non_matchings/code/code_801A7B10/func_801A89D0.s,func_801A89D0,0x801A89D0,0x20
 asm/non_matchings/code/code_801A7B10/func_801A8A50.s,func_801A8A50,0x801A8A50,0x1B
 asm/non_matchings/code/code_801A7B10/func_801A8ABC.s,func_801A8ABC,0x801A8ABC,0x16
