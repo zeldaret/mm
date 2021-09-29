@@ -696,24 +696,21 @@ beginseg
     compress
     address 0x80800000
     include "build/src/overlays/gamestates/ovl_title/z_title.o"
-    include "build/data/ovl_title/ovl_title.data.o"
-    include "build/data/ovl_title/ovl_title.reloc.o"
+    include "build/src/overlays/gamestates/ovl_title/ovl_title_reloc.o"
 endseg
 
 beginseg
     name "ovl_select"
     compress
     include "build/src/overlays/gamestates/ovl_select/z_select.o"
-    include "build/data/ovl_select/ovl_select.data.o"
-    include "build/data/ovl_select/ovl_select.reloc.o"
+    include "build/src/overlays/gamestates/ovl_select/ovl_select_reloc.o"
 endseg
 
 beginseg
     name "ovl_opening"
     compress
     include "build/src/overlays/gamestates/ovl_opening/z_opening.o"
-    include "build/data/ovl_opening/ovl_opening.data.o"
-    include "build/data/ovl_opening/ovl_opening.reloc.o"
+    include "build/src/overlays/gamestates/ovl_opening/ovl_opening_reloc.o"
 endseg
 
 beginseg
@@ -1182,8 +1179,7 @@ beginseg
     name "ovl_En_Rd"
     compress
     include "build/src/overlays/actors/ovl_En_Rd/z_en_rd.o"
-    include "build/data/ovl_En_Rd/ovl_En_Rd.data.o"
-    include "build/data/ovl_En_Rd/ovl_En_Rd.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Rd/ovl_En_Rd_reloc.o"
 endseg
 
 beginseg
@@ -2916,9 +2912,11 @@ beginseg
     name "ovl_En_Test4"
     compress
     include "build/src/overlays/actors/ovl_En_Test4/z_en_test4.o"
-    include "build/data/ovl_En_Test4/ovl_En_Test4.data.o"
-    include "build/data/ovl_En_Test4/ovl_En_Test4.bss.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_En_Test4/ovl_En_Test4_reloc.o"
+#else
     include "build/data/ovl_En_Test4/ovl_En_Test4.reloc.o"
+#endif
 endseg
 
 beginseg
@@ -3207,8 +3205,7 @@ beginseg
     name "ovl_Obj_Etcetera"
     compress
     include "build/src/overlays/actors/ovl_Obj_Etcetera/z_obj_etcetera.o"
-    include "build/data/ovl_Obj_Etcetera/ovl_Obj_Etcetera.data.o"
-    include "build/data/ovl_Obj_Etcetera/ovl_Obj_Etcetera.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Etcetera/ovl_Obj_Etcetera_reloc.o"
 endseg
 
 beginseg
@@ -3583,8 +3580,7 @@ beginseg
     name "ovl_Obj_Aqua"
     compress
     include "build/src/overlays/actors/ovl_Obj_Aqua/z_obj_aqua.o"
-    include "build/data/ovl_Obj_Aqua/ovl_Obj_Aqua.data.o"
-    include "build/data/ovl_Obj_Aqua/ovl_Obj_Aqua.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Aqua/ovl_Obj_Aqua_reloc.o"
 endseg
 
 beginseg
@@ -4487,8 +4483,7 @@ beginseg
     name "ovl_En_Zot"
     compress
     include "build/src/overlays/actors/ovl_En_Zot/z_en_zot.o"
-    include "build/data/ovl_En_Zot/ovl_En_Zot.data.o"
-    include "build/data/ovl_En_Zot/ovl_En_Zot.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Zot/ovl_En_Zot_reloc.o"
 endseg
 
 beginseg
@@ -5312,9 +5307,7 @@ beginseg
     name "ovl_En_Thiefbird"
     compress
     include "build/src/overlays/actors/ovl_En_Thiefbird/z_en_thiefbird.o"
-    include "build/data/ovl_En_Thiefbird/ovl_En_Thiefbird.data.o"
-    include "build/data/ovl_En_Thiefbird/ovl_En_Thiefbird.bss.o"
-    include "build/data/ovl_En_Thiefbird/ovl_En_Thiefbird.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Thiefbird/ovl_En_Thiefbird_reloc.o"
 endseg
 
 beginseg
@@ -5524,8 +5517,7 @@ beginseg
     name "ovl_En_Ending_Hero6"
     compress
     include "build/src/overlays/actors/ovl_En_Ending_Hero6/z_en_ending_hero6.o"
-    include "build/data/ovl_En_Ending_Hero6/ovl_En_Ending_Hero6.data.o"
-    include "build/data/ovl_En_Ending_Hero6/ovl_En_Ending_Hero6.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Ending_Hero6/ovl_En_Ending_Hero6_reloc.o"
 endseg
 
 beginseg
@@ -8881,7 +8873,8 @@ beginseg
     name "nintendo_rogo_static"
     compress
     romalign 0x1000
-    include "build/baserom/nintendo_rogo_static.o"
+    include "build/assets/static/nintendo_rogo_static/nintendo_rogo_static.o"
+    number 1
 endseg
 
 beginseg
