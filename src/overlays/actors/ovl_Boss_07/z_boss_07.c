@@ -639,7 +639,6 @@ extern u16 D_06041B30[];
 extern u16 D_06042330[];
 extern u16 D_06043330[];
 
-
 void func_809F4980(Actor* arg0) {
     Audio_PlayActorSound2(arg0, NA_SE_EN_FOLLOWERS_DAMAGE);
 }
@@ -992,7 +991,7 @@ void Boss07_Init(Actor* thisx, GlobalContext* globalCtx2) {
             } else {
                 func_809F7400(this, globalCtx, 50);
                 this->unk_77C = 1.0f;
-                func_801A89A8(0x8069);
+                Audio_QueueSeqCmd(0x8069);
             }
             SkelAnime_InitSV(globalCtx, &this->skelAnime1, &D_060335F0, &D_0603CBD0, this->jointTable1,
                              this->morphTable1, 28);
@@ -1112,7 +1111,7 @@ void func_809F5E88(Boss07* this, GlobalContext* globalCtx) {
                     func_8019FE74(&D_801D6654, 0.0f, 0x3C);
                 }
                 if (this->unk_ABC8 == 112) {
-                    func_801A89A8(0x8069);
+                    Audio_QueueSeqCmd(0x8069);
                 }
                 if (this->unk_ABC8 == 137) {
                     Actor_TitleCardCreate(globalCtx, &globalCtx->actorCtx.titleCtxt,
@@ -1156,7 +1155,7 @@ void func_809F5E88(Boss07* this, GlobalContext* globalCtx) {
 void func_809F64F4(Boss07* this, GlobalContext* globalCtx) {
     s32 i;
 
-    func_801A89A8(0x100100FF);
+    Audio_QueueSeqCmd(0x100100FF);
     func_809F4FAC(globalCtx);
     this->actionFunc = func_809F65F4;
     this->unk_794 = 0.7f;
@@ -1180,7 +1179,7 @@ void func_809F64F4(Boss07* this, GlobalContext* globalCtx) {
 }
 
 #ifdef NON_MATCHING
-void func_809F65F4(Boss07 *this, GlobalContext *globalCtx) {
+void func_809F65F4(Boss07* this, GlobalContext* globalCtx) {
     s32 i;
     s32 spC0 = 0;
     Vec3f spB4;
@@ -1190,11 +1189,11 @@ void func_809F65F4(Boss07 *this, GlobalContext *globalCtx) {
     Camera* temp_s0;
     spA4 = 0.0f;
     spA0 = 0.1f;
-    
+
     temp_s0 = Play_GetCamera(globalCtx, 0);
     this->unk_15C = 1000;
     func_809F4CBC(this, 1.0f);
-    switch(this->unk_ABD0) {
+    switch (this->unk_ABD0) {
         case 0:
             if (ActorCutscene_GetCurrentIndex() == -1) {
                 func_800EA0D4(globalCtx, &globalCtx->csCtx);
@@ -1216,7 +1215,7 @@ void func_809F65F4(Boss07 *this, GlobalContext *globalCtx) {
             this->unk_AC04 = this->actor.shape.rot.y * M_PI / 0x8000;
             this->unk_AC08 = this->unk_AC0C = D_80A09A58->unk_180C = 0.0f;
             func_809F49A0(1, 0x71AC, 0x263A);
-            for(i = 0; i < 30; i++) {
+            for (i = 0; i < 30; i++) {
                 this->unk_AB50[i] = func_809F49C0() - 1.0f;
             }
             func_8016566C(150);
@@ -1283,14 +1282,15 @@ void func_809F65F4(Boss07 *this, GlobalContext *globalCtx) {
                 spB4.x = 0.0f;
                 spB4.y = this->unk_AC14 + -190.0f;
                 spB4.z = gGameInfo->data[1553] + 390.0f - 380.0f;
-                
+
                 this->unk_ABF8.x = this->actor.focus.pos.x;
                 this->unk_ABF8.y = this->actor.focus.pos.y - 40.0f - 60.0f + 130.0f + gGameInfo->data[1554];
                 this->unk_ABF8.z = this->actor.focus.pos.z;
-                
+
                 spA0 = 1.0f;
 
-                Math_ApproachF(&this->unk_AC14, gGameInfo->data[1555] + 240.0f, 0.05f, 1.0f + (gGameInfo->data[1556] * 0.1f));
+                Math_ApproachF(&this->unk_AC14, gGameInfo->data[1555] + 240.0f, 0.05f,
+                               1.0f + (gGameInfo->data[1556] * 0.1f));
                 spA4 = 2000.0f;
                 this->unk_1D8 = gGameInfo->data[1329] + 10;
                 this->unk_AB48 = 1;
@@ -1345,7 +1345,7 @@ void func_809F65F4(Boss07 *this, GlobalContext *globalCtx) {
                     Math_ApproachF(&D_80A09A58->unk_180C, 30.0f, 0.1f, 1.5f);
                     D_80A09A58->unk_1810 = this->unk_334[2];
                     Math_ApproachF(&this->unk_AB4C, 1.0f, 0.1f, 0.05f);
-                    for(i = 0; i < 30; i++) {
+                    for (i = 0; i < 30; i++) {
                         Math_ApproachF(&this->unk_AB50[i], sp98, 1.0f, sp94);
                     }
                     Math_ApproachF(&globalCtx->envCtx.unk_DC, 1.0f, 1.0f, 0.1f);
@@ -1367,7 +1367,7 @@ void func_809F65F4(Boss07 *this, GlobalContext *globalCtx) {
                 spA8.x = Math_SinS(this->unk_ABC8 * 0x7000) * sp68;
                 spA8.y = Math_SinS(this->unk_ABC8 * 0x5000) * sp68 * 2.5f;
                 spA8.z = Math_CosS(this->unk_ABC8 * 0x8000) * sp68;
-                for(i = 0; i < 2; i++) {
+                for (i = 0; i < 2; i++) {
                     sp6C.x = randPlusMinusPoint5Scaled(500.0f) + this->actor.world.pos.x;
                     sp6C.y = Rand_ZeroFloat(50.0f) + this->actor.world.pos.y + 200.0f;
                     sp6C.z = randPlusMinusPoint5Scaled(500.0f) + this->actor.world.pos.z;
@@ -1419,8 +1419,8 @@ void func_809F7400(Boss07* this, GlobalContext* globalCtx, s16 arg2) {
     this->actor.flags |= 1;
 }
 
-void func_809F748C(Boss07 *this, GlobalContext *globalCtx) {
-    Player *player = PLAYER;
+void func_809F748C(Boss07* this, GlobalContext* globalCtx) {
+    Player* player = PLAYER;
 
     SkelAnime_FrameUpdateMatrix(&this->skelAnime1);
     func_809F4CBC(this, 2.0f);
@@ -1440,9 +1440,9 @@ void func_809F748C(Boss07 *this, GlobalContext *globalCtx) {
     } else if (this->timers[0] == 0) {
         if (gGameInfo->data[1326] == 1) {
             func_809F8E68(this, globalCtx);
-        } else if ((s8) this->actor.colChkInfo.health >= 28) {
+        } else if ((s8)this->actor.colChkInfo.health >= 28) {
             func_809F7D2C(this, globalCtx);
-        } else if (((s8) this->actor.colChkInfo.health <= 12) && (Rand_ZeroOne() < 0.65f)) {
+        } else if (((s8)this->actor.colChkInfo.health <= 12) && (Rand_ZeroOne() < 0.65f)) {
             func_809F8E68(this, globalCtx);
         } else if (Rand_ZeroOne() < 0.3f) {
             func_809F8658(this, globalCtx);
@@ -1454,13 +1454,13 @@ void func_809F748C(Boss07 *this, GlobalContext *globalCtx) {
     this->unk_174 = 1;
 }
 
-void func_809F7688(Boss07 *this, GlobalContext *globalCtx) {
+void func_809F7688(Boss07* this, GlobalContext* globalCtx) {
     this->actionFunc = func_809F76D0;
     SkelAnime_ChangeAnimTransitionStop(&this->skelAnime1, &D_06025878, -5.0f);
     this->unk_14C = 0;
 }
 
-void func_809F76D0(Boss07 *this, GlobalContext *globalCtx) {
+void func_809F76D0(Boss07* this, GlobalContext* globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime1);
     this->unk_794 = 0.7f;
     this->unk_FA0 = 0.7f;
@@ -1478,7 +1478,7 @@ void func_809F76D0(Boss07 *this, GlobalContext *globalCtx) {
     }
 }
 
-void func_809F77A8(Boss07 *this, GlobalContext *globalCtx) {
+void func_809F77A8(Boss07* this, GlobalContext* globalCtx) {
     Audio_PlayActorSound2(&this->actor, 0x3014);
     if (this->unk_14C == 13) {
         func_8019F1C0(&D_80A09A40, 0x3A57);
@@ -1491,38 +1491,36 @@ void func_809F77A8(Boss07 *this, GlobalContext *globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0x4000);
 }
 
-void func_809F783C(Boss07 *this, GlobalContext *globalCtx) {
+void func_809F783C(Boss07* this, GlobalContext* globalCtx) {
     f32 dx;
     f32 dz;
     s16 temp;
     Vec3f sp30;
     s32 pad;
-    
 
     this->actionFunc = func_809F7968;
     this->actor.velocity.y = 25.0f;
     dx = 0.0f - this->actor.world.pos.x;
     dz = 0.0f - this->actor.world.pos.z;
     // temp2 = ;
-    temp = this->actor.yawTowardsPlayer - (s16)(Math_Acot2F(dz,dx) * (M_PI / 0x8000));
+    temp = this->actor.yawTowardsPlayer - (s16)(Math_Acot2F(dz, dx) * (0x8000 / M_PI));
     if (temp < 0) {
         dx = 200.0f;
         SkelAnime_ChangeAnimTransitionStop(&this->skelAnime1, &D_0603D224, -5.0f);
     } else {
         dx = -200.0f;
         SkelAnime_ChangeAnimTransitionStop(&this->skelAnime1, &D_0603D7F0, -5.0f);
-
     }
     Matrix_RotateY(this->actor.yawTowardsPlayer, 0);
     SysMatrix_GetStateTranslationAndScaledX(dx, &sp30);
     dx = sp30.x - this->actor.world.pos.x;
     dz = sp30.z - this->actor.world.pos.z;
-    this->actor.world.rot.y = Math_Acot2F(dz, dx) * (M_PI / 0x8000);
+    this->actor.world.rot.y = Math_Acot2F(dz, dx) * (0x8000 / M_PI);
     this->unk_14C = 0;
     this->actor.speedXZ = 17.0f;
 }
 
-void func_809F7968(Boss07 *this, GlobalContext *globalCtx) {
+void func_809F7968(Boss07* this, GlobalContext* globalCtx) {
     Audio_PlayActorSound2(&this->actor, 0x3014);
     SkelAnime_FrameUpdateMatrix(&this->skelAnime1);
     this->unk_794 = 0.7f;
@@ -1548,7 +1546,7 @@ void func_809F7968(Boss07 *this, GlobalContext *globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0x4000);
 }
 
-void func_809F7AB4(Boss07 *this, GlobalContext *globalCtx) {
+void func_809F7AB4(Boss07* this, GlobalContext* globalCtx) {
     f32 phi_f12;
     f32 phi_f14;
     s32 pad;
@@ -1558,7 +1556,7 @@ void func_809F7AB4(Boss07 *this, GlobalContext *globalCtx) {
     SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime1, &D_0603DD1C, -5.0f);
     phi_f14 = -this->actor.world.pos.x;
     phi_f12 = -this->actor.world.pos.z;
-    sp22 = this->actor.yawTowardsPlayer - (s16)(Math_Acot2F(phi_f12, phi_f14) * (M_PI / 0x8000));
+    sp22 = this->actor.yawTowardsPlayer - (s16)(Math_Acot2F(phi_f12, phi_f14) * (0x8000 / M_PI));
     Matrix_RotateY(this->actor.shape.rot.y, 0);
     if (sp22 < 0) {
         this->skelAnime1.animPlaybackSpeed = 1.0f;
@@ -1576,7 +1574,7 @@ void func_809F7AB4(Boss07 *this, GlobalContext *globalCtx) {
     this->unk_ABCC = 0;
 }
 
-void func_809F7BC4(Boss07 *this, GlobalContext *globalCtx) {
+void func_809F7BC4(Boss07* this, GlobalContext* globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime1);
     if (this->unk_14C == 20) {
         Audio_PlayActorSound2(this, 0x3A53);
@@ -1606,7 +1604,7 @@ void func_809F7BC4(Boss07 *this, GlobalContext *globalCtx) {
     }
 }
 
-void func_809F7D2C(Boss07 *this, GlobalContext *globalCtx) {
+void func_809F7D2C(Boss07* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
     this->actionFunc = func_809F805C;
@@ -1614,7 +1612,7 @@ void func_809F7D2C(Boss07 *this, GlobalContext *globalCtx) {
     if (player->stateFlags3 & 0x100) {
         this->unk_14E = 4;
     } else if (this->actor.xzDistToPlayer <= 300.0f) {
-        if(this->actor.xzDistToPlayer <= 200.0f) {
+        if (this->actor.xzDistToPlayer <= 200.0f) {
             this->unk_14E = 7;
         } else {
             this->unk_14E = 4;
@@ -2421,7 +2419,7 @@ void Boss07_Incarnation_Update(Actor* thisx, GlobalContext* globalCtx2) {
         if ((this->unk_148 != 0) || (gGameInfo->data[1336] != 0)) {
             gGameInfo->data[1336] = 0;
             this->unk_148 = 0;
-            func_801A89A8(0x100100FF);
+            Audio_QueueSeqCmd(0x100100FF);
             func_809FE6B0(this, globalCtx);
         }
     }
@@ -2611,7 +2609,7 @@ void func_809FFA80(Boss07* this, GlobalContext* globalCtx) {
     if ((this->unk_148 != 0) || (gGameInfo->data[1336] != 0)) {
         gGameInfo->data[1336] = 0;
         this->unk_148 = 0;
-        func_801A89A8(0x100100FF);
+        Audio_QueueSeqCmd(0x100100FF);
         func_80A025AC(this, globalCtx);
     }
 }
@@ -3168,7 +3166,7 @@ void Boss07_Mask_Update(Actor* thisx, GlobalContext* globalCtx2) {
     if (D_80A09A71 != 0) {
         D_80A09A71--;
         if (D_80A09A71 == 0) {
-            func_801A89A8(0x806B);
+            Audio_QueueSeqCmd(0x806B);
         }
     }
     Math_Vec3f_Copy(&D_80A09A40, &this->actor.projectedPos);
