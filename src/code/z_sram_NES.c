@@ -13,7 +13,21 @@ void func_80143A10(u8 owlId) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80143B0C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/Sram_IncrementDay.s")
+void Sram_IncrementDay(void) {
+    if (CURRENT_DAY < 4) {
+        gSaveContext.day++;
+        gSaveContext.daysElapsed++;
+    }
+
+    gSaveContext.unk_FE6 = 0;
+    gSaveContext.unk_FE7[0] = 0;
+    gSaveContext.unk_FE7[1] = 0;
+    gSaveContext.unk_FE7[2] = 0;
+    gSaveContext.unk_FE7[3] = 0;
+    gSaveContext.unk_FE7[4] = 0;
+    gSaveContext.weekEventReg[0x49] &= (u8)~0x10;
+    gSaveContext.weekEventReg[0x55] &= (u8)~0x02;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/Sram_CalcChecksum.s")
 
