@@ -158,17 +158,17 @@ void func_80148CBC(GlobalContext *globalCtx, UNK_PTR puParm2, u8 arg2) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80149C18.s")
 
+
+//Message_FindMessageSegment(globalCtx, textId)
 void func_80149EBC(GlobalContext *globalCtx, u16 textId) {
     char* foundSegment;
     char* nextSegment;
     MessageContext* msgCtx = &globalCtx->msgCtx;
+    Font* font = &msgCtx->font;
     UnkMsgStruct* msgEntry = &msgCtx->unk12080[0];
-    Font* font;
-    char* segment;
+    char* segment = msgEntry->segment;
 
-    segment = msgEntry->segment;
     while(msgEntry->textId != 0xFFFF){
-        font = &msgCtx->font;
         if (msgEntry->textId == textId) {
             foundSegment = msgEntry->segment;
             msgEntry++;
@@ -180,9 +180,7 @@ void func_80149EBC(GlobalContext *globalCtx, u16 textId) {
         msgEntry++;
     }
 
-    font = &globalCtx->msgCtx.font;
     msgEntry = &msgCtx->unk12080[0];
-    if(1){}
     foundSegment = msgEntry->segment;
     msgEntry++;
     nextSegment = msgEntry->segment;
