@@ -93,9 +93,7 @@ typedef enum LightType {
     /* 0x02 */ LIGHT_POINT_GLOW
 } LightType;
 
-typedef struct GlobalContext GlobalContext;
-
 typedef void (*LightsBindFunc)(Lights* lights, LightParams* params, Vec3f* vec);
-typedef void (*LightsPosBindFunc)(Lights* lights, LightParams* params, GlobalContext* globalCtx);
+typedef void (*LightsPosBindFunc)(Lights* lights, LightParams* params, struct GlobalContext* globalCtx);
 
 #endif

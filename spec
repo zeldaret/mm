@@ -704,8 +704,7 @@ beginseg
     name "ovl_select"
     compress
     include "build/src/overlays/gamestates/ovl_select/z_select.o"
-    include "build/data/ovl_select/ovl_select.data.o"
-    include "build/data/ovl_select/ovl_select.reloc.o"
+    include "build/src/overlays/gamestates/ovl_select/ovl_select_reloc.o"
 endseg
 
 beginseg
@@ -2914,9 +2913,11 @@ beginseg
     name "ovl_En_Test4"
     compress
     include "build/src/overlays/actors/ovl_En_Test4/z_en_test4.o"
-    include "build/data/ovl_En_Test4/ovl_En_Test4.data.o"
-    include "build/data/ovl_En_Test4/ovl_En_Test4.bss.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_En_Test4/ovl_En_Test4_reloc.o"
+#else
     include "build/data/ovl_En_Test4/ovl_En_Test4.reloc.o"
+#endif
 endseg
 
 beginseg
