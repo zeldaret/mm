@@ -2843,7 +2843,7 @@ void func_80147068(SramContext* param_1);
 void func_80147150(SramContext* param_1);
 void func_80147198(SramContext* param_1);
 void func_80147314(SramContext* sramCtx, s32 fileNum);
-// void func_80147414(void);
+void func_80147414(SramContext* sramCtx, s32 fileNum, s32 arg2);
 // void Sram_nop8014750C(UNK_TYPE4 param_1);
 // void func_80147520(void);
 void func_80147564(GlobalContext* globalCtx);
