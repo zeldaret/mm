@@ -851,7 +851,8 @@ void EnFsn_AskBuyOrSell(EnFsn* this, GlobalContext* globalCtx) {
                 case 0x29D2:
                     if (gSaveContext.save.weekEventReg[0x21] & 4) {
                         this->actor.textId = 0x2A01;
-                    } else if (!(gSaveContext.save.weekEventReg[0x21] & 8) && !(gSaveContext.save.weekEventReg[0x4F] & 0x40)) {
+                    } else if (!(gSaveContext.save.weekEventReg[0x21] & 8) &&
+                               !(gSaveContext.save.weekEventReg[0x4F] & 0x40)) {
                         this->actor.textId = 0x29D3;
                     } else {
                         this->actor.textId = 0x29D4;

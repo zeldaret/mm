@@ -225,7 +225,8 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
     s16 sp1E = 0;
 
     for (; i < ARRAY_COUNT(gSaveContext.save.inventory.items); i++) {
-        if ((gSaveContext.save.inventory.items[i] >= ITEM_BOTTLE) && (gSaveContext.save.inventory.items[i] <= ITEM_POTION_BLUE)) {
+        if ((gSaveContext.save.inventory.items[i] >= ITEM_BOTTLE) &&
+            (gSaveContext.save.inventory.items[i] <= ITEM_POTION_BLUE)) {
             isItemFound = true;
             sp1E = gSaveContext.save.inventory.items[i];
             break;
@@ -282,9 +283,11 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
     }
 
     if (!((gSaveContext.save.roomInf[126][5] & 0xFF000000) >> 0x18)) {
-        gSaveContext.save.roomInf[126][5] = (gSaveContext.save.roomInf[126][5] & 0xFFFFFF) | ((phi_t0_3 & 0xFF) << 0x18);
+        gSaveContext.save.roomInf[126][5] =
+            (gSaveContext.save.roomInf[126][5] & 0xFFFFFF) | ((phi_t0_3 & 0xFF) << 0x18);
     } else {
-        gSaveContext.save.roomInf[126][5] = (gSaveContext.save.roomInf[126][5] & 0xFF00FFFF) | ((phi_t0_3 & 0xFF) << 0x10);
+        gSaveContext.save.roomInf[126][5] =
+            (gSaveContext.save.roomInf[126][5] & 0xFF00FFFF) | ((phi_t0_3 & 0xFF) << 0x10);
     }
 
     return true;

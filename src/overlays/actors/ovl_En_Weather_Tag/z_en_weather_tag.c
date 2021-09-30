@@ -445,7 +445,8 @@ void func_809674C8(EnWeatherTag* this, GlobalContext* globalCtx) {
 
     if (Actor_XZDistanceBetweenActors(&player->actor, &this->actor) < WEATHER_TAG_RANGE100(this)) {
         if (CURRENT_DAY == 2) {
-            if ((gSaveContext.save.time >= 0x4AAA) && (gSaveContext.save.time < 0xBAAA) && (globalCtx->envCtx.unk_F2[2] == 0)) {
+            if ((gSaveContext.save.time >= 0x4AAA) && (gSaveContext.save.time < 0xBAAA) &&
+                (globalCtx->envCtx.unk_F2[2] == 0)) {
 
                 D_801BDBB0 = 1;
                 func_800FD78C(globalCtx);

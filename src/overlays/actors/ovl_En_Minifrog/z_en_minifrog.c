@@ -274,7 +274,7 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, GlobalContext* globalCtx) {
             case 0xD87: // "Ah! You need not say a thing. Upon seeing that face, I understand!" ...
                 func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
                 break;
-            case 0xD82:                                     // "What has brought you all this way?"
+            case 0xD82:                                          // "What has brought you all this way?"
                 if (gSaveContext.save.weekEventReg[33] & 0x80) { // Mountain village is unfrozen
                     func_80151938(globalCtx, 0xD83); // "Could it be... Has spring finally come to the mountains?"
                 } else {

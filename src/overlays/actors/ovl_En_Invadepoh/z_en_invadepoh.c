@@ -673,7 +673,8 @@ void func_80B439B0(s32 arg0, s32 arg1) {
     }
 
     if (!(arg0 & 1)) {
-        gSaveContext.save.roomInf[124][arg0 >> 1] = (gSaveContext.save.roomInf[124][arg0 >> 1] & 0xFFFF0000) | (arg1 & 0xFFFF);
+        gSaveContext.save.roomInf[124][arg0 >> 1] =
+            (gSaveContext.save.roomInf[124][arg0 >> 1] & 0xFFFF0000) | (arg1 & 0xFFFF);
     } else {
         gSaveContext.save.roomInf[124][arg0 >> 1] =
             (gSaveContext.save.roomInf[124][arg0 >> 1] & 0xFFFF) | ((arg1 & 0xFFFF) << 0x10);

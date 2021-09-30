@@ -74,14 +74,16 @@ void EnBaisen_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->paramCopy = this->actor.params;
     if (this->actor.params == 0) {
         this->unk290 = true;
-        if (!(gSaveContext.save.weekEventReg[63] & 0x80) && ((gSaveContext.save.day != 3) || !gSaveContext.save.isNight)) {
+        if (!(gSaveContext.save.weekEventReg[63] & 0x80) &&
+            ((gSaveContext.save.day != 3) || !gSaveContext.save.isNight)) {
             Actor_MarkForDeath(&this->actor);
         }
     } else {
         this->collider.dim.radius = 30;
         this->collider.dim.height = 60;
         this->collider.dim.yShift = 0;
-        if ((gSaveContext.save.weekEventReg[63] & 0x80) || ((gSaveContext.save.day == 3) && (gSaveContext.save.isNight))) {
+        if ((gSaveContext.save.weekEventReg[63] & 0x80) ||
+            ((gSaveContext.save.day == 3) && (gSaveContext.save.isNight))) {
             Actor_MarkForDeath(&this->actor);
         }
     }

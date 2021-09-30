@@ -297,7 +297,7 @@ void func_8012F0EC(s16 arg0);
 void func_8012F1BC(s16 sceneIndex) {
     if (sceneIndex == SCENE_KINSTA1) {
         gSaveContext.save.roomInf[126][0] = ((((gSaveContext.save.roomInf[126][0] & 0xFFFF0000) >> 0x10) + 1) << 0x10) |
-                                       (gSaveContext.save.roomInf[126][0] & 0xFFFF);
+                                            (gSaveContext.save.roomInf[126][0] & 0xFFFF);
     } else {
         gSaveContext.save.roomInf[126][0] =
             ((gSaveContext.save.roomInf[126][0] + 1) & 0xFFFF) | (gSaveContext.save.roomInf[126][0] & 0xFFFF0000);

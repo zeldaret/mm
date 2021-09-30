@@ -328,7 +328,8 @@ void func_80BA5B64(EnRailgibud* this, GlobalContext* globalCtx) {
     if (func_80BA6D10(this, globalCtx) && Actor_IsActorFacingLink(&this->actor, 0x38E3)) {
         if ((this->unk_3F4 == 0) && (this->actor.xzDistToPlayer <= 45.0f)) {
             player->actor.freezeTimer = 0;
-            if ((gSaveContext.save.playerForm == PLAYER_FORM_GORON) || (gSaveContext.save.playerForm == PLAYER_FORM_DEKU)) {
+            if ((gSaveContext.save.playerForm == PLAYER_FORM_GORON) ||
+                (gSaveContext.save.playerForm == PLAYER_FORM_DEKU)) {
                 func_80BA6054(this);
             } else if (globalCtx->grabPlayer(globalCtx, player)) {
                 func_80BA5DBC(this);

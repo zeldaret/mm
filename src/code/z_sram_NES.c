@@ -5,10 +5,9 @@
     ((newf)[0] != 'Z' || (newf)[1] != 'E' || (newf)[2] != 'L' || (newf)[3] != 'D' || (newf)[4] != 'A' || \
      (newf)[5] != '3')
 
-#define CHECK2_NEWF(newf)                                                                                 \
+#define CHECK2_NEWF(newf)                                                                                \
     ((newf)[0] == 'Z' && (newf)[1] == 'E' && (newf)[2] == 'L' && (newf)[3] == 'D' && (newf)[4] == 'A' && \
      (newf)[5] == '3')
-
 
 s32 D_801C5FC0 = 0xC00;
 s32 D_801C5FC4 = 0;
@@ -16,847 +15,171 @@ s32 D_801C5FC8 = 0;
 s32 D_801C5FCC = 0x40000000;
 
 s32 D_801C5FD0[448] = {
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0xC04,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0x80000000,
-    0,
-    0,
-    0,
-    0x80000000,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0x100000,
-    0,
-    0,
-    0x40000002,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0x4000000,
-    0,
-    0,
-    0,
-    2,
-    0,
-    0,
-    0,
-    0x4000000,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0xF,
-    0,
-    0,
-    0,
-    0x70B000,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0x80000000,
-    0,
-    0x400,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0x80000000,
-    0,
-    0,
-    0,
-    0,
-    0x1A00020,
-    0,
-    0,
-    0,
-    0x400,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0x1000,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    2,
-    0x400,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0x80000000,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    2,
-    0,
-    0,
-    0,
-    0x40000000,
-    0,
-    0,
-    0,
-    0,
-    0x10,
-    0,
-    0,
-    0,
-    3,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0x80000000,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0x80000000,
-    0x100400,
-    0,
-    0,
-    0x22,
-    0x400,
-    0,
-    0,
-    0x80,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0x400,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    2,
-    0,
-    0,
-    0,
-    0x80000002,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0x80000000,
-    0xC00,
-    0,
-    0,
-    0x40000000,
-    0x102,
-    0,
-    0,
-    0x400,
-    0,
-    0,
-    0,
-    2,
-    0,
-    0,
-    0,
-    0x40000000,
-    0x70,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0x40000000,
-    0,
-    0,
-    0,
-    0x40000000,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0x100000,
-    0,
-    0,
-    0x80000000,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0x400,
-    0,
-    0,
-    0,
-    0x400,
-    0,
-    0,
-    0,
-    0x100000,
-    0,
-    0,
-    0x80000000,
-    0,
-    0,
-    0,
-    0x100,
-    0x400,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0x80,
-    0,
-    0,
-    0,
-    0x80,
-    0,
-    0,
-    0,
-    0x80000000,
-    0,
-    0,
-    0,
-    0x400,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    1,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    2,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    1,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0x400,
-    0x100000,
-    0,
-    0,
-    0x400,
-    0,
-    0,
-    1,
-    0,
+    0,         0, 0, 0,          0,        0,          0, 0,          0,         0, 0, 0,
+    0,         0, 0, 0,          0,        0,          0, 0,          0,         0, 0, 0,
+    0,         0, 0, 0xC04,      0,        0,          0, 0,          0,         0, 0, 0,
+    0,         0, 0, 0,          0,        0,          0, 0x80000000, 0,         0, 0, 0x80000000,
+    0,         0, 0, 0,          0,        0,          0, 0,          0,         0, 0, 0,
+    0,         0, 0, 0,          0,        0,          0, 0,          0,         0, 0, 0,
+    0x100000,  0, 0, 0x40000002, 0,        0,          0, 0,          0,         0, 0, 0,
+    0x4000000, 0, 0, 0,          2,        0,          0, 0,          0x4000000, 0, 0, 0,
+    0,         0, 0, 0,          0xF,      0,          0, 0,          0x70B000,  0, 0, 0,
+    0,         0, 0, 0,          0,        0x80000000, 0, 0x400,      0,         0, 0, 0,
+    0,         0, 0, 0x80000000, 0,        0,          0, 0,          0x1A00020, 0, 0, 0,
+    0x400,     0, 0, 0,          0,        0,          0, 0x1000,     0,         0, 0, 0,
+    0,         0, 0, 2,          0x400,    0,          0, 0,          0,         0, 0, 0,
+    0,         0, 0, 0x80000000, 0,        0,          0, 0,          0,         0, 0, 2,
+    0,         0, 0, 0x40000000, 0,        0,          0, 0,          0x10,      0, 0, 0,
+    3,         0, 0, 0,          0,        0,          0, 0,          0,         0, 0, 0x80000000,
+    0,         0, 0, 0,          0,        0,          0, 0,          0,         0, 0, 0,
+    0,         0, 0, 0,          0,        0,          0, 0,          0,         0, 0, 0x80000000,
+    0x100400,  0, 0, 0x22,       0x400,    0,          0, 0x80,       0,         0, 0, 0,
+    0,         0, 0, 0,          0x400,    0,          0, 0,          0,         0, 0, 0,
+    0,         0, 0, 0,          0,        0,          0, 0,          0,         0, 0, 2,
+    0,         0, 0, 0x80000002, 0,        0,          0, 0,          0,         0, 0, 0,
+    0,         0, 0, 0,          0,        0,          0, 0x80000000, 0xC00,     0, 0, 0x40000000,
+    0x102,     0, 0, 0x400,      0,        0,          0, 2,          0,         0, 0, 0x40000000,
+    0x70,      0, 0, 0,          0,        0,          0, 0,          0,         0, 0, 0,
+    0,         0, 0, 0x40000000, 0,        0,          0, 0x40000000, 0,         0, 0, 0,
+    0,         0, 0, 0,          0x100000, 0,          0, 0x80000000, 0,         0, 0, 0,
+    0,         0, 0, 0,          0,        0,          0, 0,          0,         0, 0, 0,
+    0,         0, 0, 0,          0,        0,          0, 0,          0,         0, 0, 0,
+    0x400,     0, 0, 0,          0x400,    0,          0, 0,          0x100000,  0, 0, 0x80000000,
+    0,         0, 0, 0x100,      0x400,    0,          0, 0,          0,         0, 0, 0x80,
+    0,         0, 0, 0x80,       0,        0,          0, 0x80000000, 0,         0, 0, 0x400,
+    0,         0, 0, 0,          0,        0,          0, 0,          1,         0, 0, 0,
+    0,         0, 0, 0,          0,        0,          0, 0,          0,         0, 0, 2,
+    0,         0, 0, 0,          0,        0,          0, 0,          0,         0, 0, 0,
+    0,         0, 0, 0,          0,        0,          0, 0,          1,         0, 0, 0,
+    0,         0, 0, 0,          0,        0,          0, 0x400,      0x100000,  0, 0, 0x400,
+    0,         0, 1, 0,
 };
 
 u16 D_801C66D0[100] = {
-    0xFFFC,
-    0xFFFF,
-    0xFFFF,
-    0xFFFF,
-    0,
-    0,
-    0,
-    0xC000,
-    0xC00,
-    0,
-    0xC0,
-    0,
-    0x300,
-    0x3000,
-    0xC000,
-    0xC00,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0xC00C,
-    0xC00C,
-    0xC008,
-    3,
-    0x3000,
-    0,
-    0,
-    0,
-    0xFF00,
-    0xC3F,
-    0x3F,
-    0,
-    0,
-    0xCFFF,
-    0,
-    0,
-    0xC00,
-    0xC00,
-    0,
-    0xC0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0x3C,
-    0x20,
-    0,
-    0x300C,
-    0x3000,
-    0,
-    0xC,
-    0xC0,
-    0,
-    0xFF0,
-    0x300,
-    0,
-    0,
-    0xC00,
-    0,
-    0,
-    0xFFFF,
-    0xFFFF,
-    0xFFFF,
-    0xFFFF,
-    0xFFFF,
-    0xFFFF,
-    0xFFFF,
-    0xC0,
-    0,
-    0xC000,
-    0,
-    3,
-    0,
-    0xC000,
-    0,
-    0xC0,
-    0x300,
-    0,
-    0,
-    0,
-    0xC000,
-    0xFFF0,
-    0,
-    0,
-    0x300,
-    0,
-    0xC000,
-    0xF0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
+    0xFFFC, 0xFFFF, 0xFFFF, 0xFFFF, 0,      0,      0,      0xC000, 0xC00,  0,      0xC0,   0,      0x300,
+    0x3000, 0xC000, 0xC00,  0,      0,      0,      0,      0,      0,      0xC00C, 0xC00C, 0xC008, 3,
+    0x3000, 0,      0,      0,      0xFF00, 0xC3F,  0x3F,   0,      0,      0xCFFF, 0,      0,      0xC00,
+    0xC00,  0,      0xC0,   0,      0,      0,      0,      0,      0,      0,      0,      0x3C,   0x20,
+    0,      0x300C, 0x3000, 0,      0xC,    0xC0,   0,      0xFF0,  0x300,  0,      0,      0xC00,  0,
+    0,      0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xC0,   0,      0xC000, 0,      3,
+    0,      0xC000, 0,      0xC0,   0x300,  0,      0,      0,      0xC000, 0xFFF0, 0,      0,      0x300,
+    0,      0xC000, 0xF0,   0,      0,      0,      0,      0,      0,
 };
 
 s32 D_801C6798[] = {
-    0x00000020,
-    0x00001470,
-    0x000028C0,
-    0x00003D10,
-    0x00005160,
-    0x000065B0,
+    0x00000020, 0x00001470, 0x000028C0, 0x00003D10, 0x00005160, 0x000065B0,
 };
 u8 D_801C67B0[24] = {
-    0xFF,
-    1,
-    0xFF,
-    0xFF,
-    0xFF,
-    0xFF,
-    6,
-    7,
-    8,
-    9,
-    0xA,
-    0xFF,
-    0xC,
-    0xD,
-    0xFF,
-    0xFF,
-    0xFF,
-    0xFF,
-    0xFF,
-    0xFF,
-    0xFF,
-    0xFF,
-    0xFF,
-    0xFF,
+    0xFF, 1,   0xFF, 0xFF, 0xFF, 0xFF, 6,    7,    8,    9,    0xA,  0xFF,
+    0xC,  0xD, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 };
 
-s32 D_801C67C8[1] = {0};
-s32 D_801C67CC[7] = {0x40, 0x80, 0xC0, 0x100, 0x180, 0x200, 0x280};
+s32 D_801C67C8[1] = { 0 };
+s32 D_801C67CC[7] = { 0x40, 0x80, 0xC0, 0x100, 0x180, 0x200, 0x280 };
 
 s32 D_801C67E8[] = {
     0x00000300,
     0x00000380,
 };
 
-s32 D_801C67F0[1] = {0x40};
-s32 D_801C67F4[9] = {0x40, 0x40, 0x40, 0x80, 0x80, 0x80, 0x80, 1, 1};
-s32 D_801C6818[8] = {0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80};
+s32 D_801C67F0[1] = { 0x40 };
+s32 D_801C67F4[9] = { 0x40, 0x40, 0x40, 0x80, 0x80, 0x80, 0x80, 1, 1 };
+s32 D_801C6818[8] = { 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80 };
 
 s32 D_801C6838[] = {
-0x00000001,
-0x00000001,
+    0x00000001,
+    0x00000001,
 };
-s32 D_801C6840[4] = {0x100, 0x180, 0x200, 0x280};
-s32 D_801C6850[8] = {0x80, 0x80, 0x80, 0x80, 0x300, 0x380, 1, 1};
-s32 D_801C6870[8] = {0x100C, 0x100C, 0x100C, 0x100C, 0x3CA0, 0x3CA0, 0x3CA0, 0x3CA0};
-u8 D_801C6890[8] = {1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80};
+s32 D_801C6840[4] = { 0x100, 0x180, 0x200, 0x280 };
+s32 D_801C6850[8] = { 0x80, 0x80, 0x80, 0x80, 0x300, 0x380, 1, 1 };
+s32 D_801C6870[8] = { 0x100C, 0x100C, 0x100C, 0x100C, 0x3CA0, 0x3CA0, 0x3CA0, 0x3CA0 };
+u8 D_801C6890[8] = { 1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80 };
 s32 D_801C6898[] = {
-    0x00000000,
-    0x00000000,
-    0x3E3E3E3E,
-    0x3E3E3E3E,
-    0x00300030,
-    0x00300000,
-    0x00000000,
-    0x00000000,
-    0xFF000000,
-    0xFF000008,
+    0x00000000, 0x00000000, 0x3E3E3E3E, 0x3E3E3E3E, 0x00300030,
+    0x00300000, 0x00000000, 0x00000000, 0xFF000000, 0xFF000008,
 };
 
-//s32 D_801C68C0 = 0x4DFFFFFF;
+// s32 D_801C68C0 = 0x4DFFFFFF;
 
 s32 D_801C68C0[] = {
-    0x4DFFFFFF,
-    0x4DFFFFFF,
-    0x4DFFFFFF,
-    0xFDFFFFFF,
-    0x00FFFFFF,
-    0xFFFFFFFF,
-    0xFFFFFFFF,
-    0xFFFFFFFF,
-    0x00110000,
+    0x4DFFFFFF, 0x4DFFFFFF, 0x4DFFFFFF, 0xFDFFFFFF, 0x00FFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00110000,
 };
-
 
 Inventory gSaveDefaultInventory = {
     {
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
     },
     {
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
-        0xFF,
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
     },
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     0x120000,
     0,
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0 },
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     {
-        {0x15, 0x12, 0x17},
-        {0x14, 0x3E, 0x3E},
-        {0x3E, 0x3E, 0x15},
-        {0x12, 0x17, 0x14},
-        {0x3E, 0x3E, 0x3E},
-        {0x3E, 0x15, 0x12},
-        {0x17, 0x14, 0x3E},
-        {0x3E, 0x3E, 0x3E},
+        { 0x15, 0x12, 0x17 },
+        { 0x14, 0x3E, 0x3E },
+        { 0x3E, 0x3E, 0x15 },
+        { 0x12, 0x17, 0x14 },
+        { 0x3E, 0x3E, 0x3E },
+        { 0x3E, 0x15, 0x12 },
+        { 0x17, 0x14, 0x3E },
+        { 0x3E, 0x3E, 0x3E },
     },
 };
 u16 gSaveDefaultChecksum = 0;
 
-
-
 s32 D_801C6970[] = {
-    0x5A454C44,
-    0x41330000,
-    0x15121714,
-    0x3E3E3E3E,
-    0x00800080,
-    0x00300032,
-    0x00640000,
-    0x01000000,
-    0xFF000000,
-    0xFF000008,
+    0x5A454C44, 0x41330000, 0x15121714, 0x3E3E3E3E, 0x00800080,
+    0x00300032, 0x00640000, 0x01000000, 0xFF000000, 0xFF000008,
 };
 
 s32 D_801C6998[] = {
-    0x4D011300,
-    0x4D013300,
-    0x4D013400,
-    0x09093200,
-    0x00011300,
-    0x000A2307,
-    0x000C2907,
-    0x00011D07,
-    0x00110000,
+    0x4D011300, 0x4D013300, 0x4D013400, 0x09093200, 0x00011300, 0x000A2307, 0x000C2907, 0x00011D07, 0x00110000,
 };
-
 
 Inventory D_801C69BC = {
     {
-        0,
-        1,
-        2,
-        3,
-        4,
-        0x28,
-        6,
-        7,
-        8,
-        9,
-        0xA,
-        0x2D,
-        0xC,
-        0xD,
-        0xE,
-        0xF,
-        0x10,
-        0x2F,
-        0x12,
-        0x13,
-        0x14,
-        0x15,
-        0xFF,
-        0xFF,
+        0, 1, 2, 3, 4, 0x28, 6, 7, 8, 9, 0xA, 0x2D, 0xC, 0xD, 0xE, 0xF, 0x10, 0x2F, 0x12, 0x13, 0x14, 0x15, 0xFF, 0xFF,
     },
     {
-        0x3E,
-        0x38,
-        0x47,
-        0x45,
-        0x40,
-        0x32,
-        0x3A,
-        0x46,
-        0x39,
-        0x42,
-        0x48,
-        0x33,
-        0x3C,
-        0x3D,
-        0x37,
-        0x3F,
-        0x36,
-        0x34,
-        0x43,
-        0x41,
-        0x3B,
-        0x44,
-        0x49,
-        0x35,
+        0x3E, 0x38, 0x47, 0x45, 0x40, 0x32, 0x3A, 0x46, 0x39, 0x42, 0x48, 0x33,
+        0x3C, 0x3D, 0x37, 0x3F, 0x36, 0x34, 0x43, 0x41, 0x3B, 0x44, 0x49, 0x35,
     },
     {
-        1,
-        0x1E,
-        1,
-        1,
-        1,
-        1,
-        0x1E,
-        0x1E,
-        0x1E,
-        0x1E,
-        1,
-        1,
-        1,
-        1,
-        0x1E,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        0,
-        0,
+        1, 0x1E, 1, 1, 1, 1, 0x1E, 0x1E, 0x1E, 0x1E, 1, 1, 1, 1, 0x1E, 1, 1, 1, 1, 1, 1, 1, 0, 0,
     },
     0x120009,
     0x105F7C0,
-    {7, 7, 7, 7, 7, 7, 7, 7, 7, 7},
-    {8, 8, 8, 8, 8, 8, 8, 8, 8, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    { 7, 7, 7, 7, 7, 7, 7, 7, 7, 7 },
+    { 8, 8, 8, 8, 8, 8, 8, 8, 8, 0 },
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     {
-        {0x15, 0x12, 0x17},
-        {0x14, 0x3E, 0x3E},
-        {0x3E, 0x3E, 0x15},
-        {0x12, 0x17, 0x14},
-        {0x3E, 0x3E, 0x3E},
-        {0x3E, 0x15, 0x12},
-        {0x17, 0x14, 0x3E},
-        {0x3E, 0x3E, 0x3E},
+        { 0x15, 0x12, 0x17 },
+        { 0x14, 0x3E, 0x3E },
+        { 0x3E, 0x3E, 0x15 },
+        { 0x12, 0x17, 0x14 },
+        { 0x3E, 0x3E, 0x3E },
+        { 0x3E, 0x15, 0x12 },
+        { 0x17, 0x14, 0x3E },
+        { 0x3E, 0x3E, 0x3E },
     },
 };
 u16 D_801C6A44 = 0;
-u8 D_801C6A48[8] = {0x35, 0x33, 0x34, 0x32, 0x35, 0, 0, 0};
-u8 D_801C6A50[8] = {0x2F, 0x23, 0x29, 0x1D, 0x2F, 0, 0, 0};
-s32 D_801C6A58[6] = {0x68B06A60, 0xB2309A80, 0xD8903E40, 0x864084A0, 0x2040AA30, 0};
+u8 D_801C6A48[8] = { 0x35, 0x33, 0x34, 0x32, 0x35, 0, 0, 0 };
+u8 D_801C6A50[8] = { 0x2F, 0x23, 0x29, 0x1D, 0x2F, 0, 0, 0 };
+s32 D_801C6A58[6] = { 0x68B06A60, 0xB2309A80, 0xD8903E40, 0x864084A0, 0x2040AA30, 0 };
 
 u16 D_801F6AF0;
 u8 D_801F6AF2;
 
 void func_80143A10(u8 owlId) {
-    gSaveContext.save.playerData.owlActivationFlags = ((void)0, gSaveContext.save.playerData.owlActivationFlags) | (u16)gBitFlags[owlId];
+    gSaveContext.save.playerData.owlActivationFlags =
+        ((void)0, gSaveContext.save.playerData.owlActivationFlags) | (u16)gBitFlags[owlId];
     if (gSaveContext.save.playerData.unk_20 == 0xFF) {
         gSaveContext.save.playerData.unk_20 = owlId;
     }
@@ -1389,9 +712,7 @@ void Sram_GenerateRandomSaveFields(void) {
     gSaveContext.save.lotteryCodes[2][2] = Rand_S16Offset(0, 10);
 
     for (i = 0; i < 3; i++) {
-        for (j = 0; j < 3; j++) {
-
-        }
+        for (j = 0; j < 3; j++) {}
     }
 
     i = 0;
@@ -1426,7 +747,7 @@ void Sram_GenerateRandomSaveFields(void) {
                 k = true;
             }
             sp2A++;
-        }while (sp2A < i);
+        } while (sp2A < i);
 
         if (k == false) {
             gSaveContext.save.bomberCode[i] = randBombers;
@@ -1439,7 +760,7 @@ void func_80144890(void) {
     gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
     gSaveContext.save.daysElapsed = 0;
     gSaveContext.save.day = 0;
-    gSaveContext.save.time = CLOCK_TIME(6, 0)-1;
+    gSaveContext.save.time = CLOCK_TIME(6, 0) - 1;
     func_80144628();
 
     Lib_MemCpy(&gSaveContext.save.playerData, &D_801C6898, sizeof(SavePlayerData));
@@ -1609,7 +930,8 @@ void func_80144E78(GameState* gameState, SramContext* sramCtx) {
         gSaveContext.save.entranceIndex = D_801C6A58[gSaveContext.save.owlSaveLocation];
         if (D_801C6A58[gSaveContext.save.owlSaveLocation] == 0x84A0 && (gSaveContext.save.weekEventReg[20] & 0x02)) {
             gSaveContext.save.entranceIndex = 0xCA0;
-        } else if (D_801C6A58[gSaveContext.save.owlSaveLocation] == 0x9A80 && (gSaveContext.save.weekEventReg[33] & 0x80)) {
+        } else if (D_801C6A58[gSaveContext.save.owlSaveLocation] == 0x9A80 &&
+                   (gSaveContext.save.weekEventReg[33] & 0x80)) {
             gSaveContext.save.entranceIndex = 0xAE80;
         }
 
@@ -1624,8 +946,7 @@ void func_80144E78(GameState* gameState, SramContext* sramCtx) {
         if (gSaveContext.save.unk_F65) {
             Lib_MemCpy(D_801D88A0, gSaveContext.save.scarecrowsSong, sizeof(gSaveContext.save.scarecrowsSong));
 
-            for (i = 0; i != ARRAY_COUNT(gSaveContext.save.scarecrowsSong); i++) {
-            }
+            for (i = 0; i != ARRAY_COUNT(gSaveContext.save.scarecrowsSong); i++) {}
         }
 
         func_80170D2C(sramCtx, gSaveContext.fileNum);
@@ -2107,7 +1428,6 @@ void func_80146580(GameState* gameState, SramContext* sramCtx, s32 fileNum) {
     gSaveContext.unk_3F3F = D_801F6AF2;
 }
 
-
 #ifdef NON_MATCHING
 // v0/v1
 void func_80146628(GameState* gameState, SramContext* sramCtx) {
@@ -2290,7 +1610,6 @@ void func_80146EBC(SramContext* sramCtx, s32 curPage, s32 numPages) {
     func_80185F64(*sramCtx->saveBuf, curPage, numPages);
 }
 
-
 void func_80146EE8(GameState* gameState) {
     s32 pad;
     GlobalContext* globalCtx = (GlobalContext*)gameState;
@@ -2322,7 +1641,8 @@ void func_80146F5C(GameState* gameState) {
     gSaveContext.save.day = day;
     gSaveContext.save.time = time;
     gSaveContext.save.cutscene = cutscene;
-    func_80185F64(globalCtx->sramCtx.saveBuf, D_801C67C8[gSaveContext.fileNum * 2], D_801C67F0[gSaveContext.fileNum * 2]);
+    func_80185F64(globalCtx->sramCtx.saveBuf, D_801C67C8[gSaveContext.fileNum * 2],
+                  D_801C67F0[gSaveContext.fileNum * 2]);
 }
 
 void func_80147008(SramContext* sramCtx, u32 curPage, u32 numPages) {
@@ -2341,7 +1661,7 @@ void func_80147020(SramContext* sramCtx) {
 
 void func_80147068(SramContext* sramCtx) {
     if (sramCtx->status == 2) {
-        if (func_80185EC4() != 0) { // if task running
+        if (func_80185EC4() != 0) {     // if task running
             if (func_80185F04() == 0) { // wait for task done
                 // task success
                 sramCtx->status = 4;
@@ -2370,7 +1690,7 @@ void func_80147150(SramContext* sramCtx) {
 
 void func_80147198(SramContext* sramCtx) {
     if (sramCtx->status == 7) {
-        if (func_80185EC4() != 0) { // Is task running
+        if (func_80185EC4() != 0) {     // Is task running
             if (func_80185F04() == 0) { // Wait for task done
                 func_80185DDC(*sramCtx->saveBuf, sramCtx->curPage + 0x80, sramCtx->numPages);
                 sramCtx->status = 8;
@@ -2380,7 +1700,7 @@ void func_80147198(SramContext* sramCtx) {
             }
         }
     } else if (sramCtx->status == 8) {
-        if (func_80185EC4() != 0) { // Is task running
+        if (func_80185EC4() != 0) {     // Is task running
             if (func_80185F04() == 0) { // Wait for task done
                 sramCtx->status = 4;
             } else {
@@ -2414,8 +1734,8 @@ void func_80147314(SramContext* sramCtx, s32 fileNum) {
     gSaveContext.save.checksum = Sram_CalcChecksum(&gSaveContext, 0x3CA0);
 
     Lib_MemCpy(*sramCtx->saveBuf, &gSaveContext, 0x3CA0);
-    func_80146EBC(sramCtx, D_801C6840[fileNum*2], D_801C6850[fileNum*2]);
-    func_80146EBC(sramCtx, D_801C6840[fileNum*2+1], D_801C6850[fileNum*2]);
+    func_80146EBC(sramCtx, D_801C6840[fileNum * 2], D_801C6850[fileNum * 2]);
+    func_80146EBC(sramCtx, D_801C6840[fileNum * 2 + 1], D_801C6850[fileNum * 2]);
 
     gSaveContext.save.isOwlSave = true;
 
@@ -2434,16 +1754,16 @@ void func_80147414(SramContext* sramCtx, s32 fileNum, s32 arg2) {
     bzero(*sramCtx->saveBuf, sizeof(*sramCtx->saveBuf));
 
     // Read save file
-    if (func_80185968(*sramCtx->saveBuf, D_801C6840[fileNum*2], D_801C6850[fileNum*2]) != 0) {
+    if (func_80185968(*sramCtx->saveBuf, D_801C6840[fileNum * 2], D_801C6850[fileNum * 2]) != 0) {
         // If failed, read backup save file
-        func_80185968(*sramCtx->saveBuf, D_801C6840[fileNum*2+1], D_801C6850[fileNum*2+1]);
+        func_80185968(*sramCtx->saveBuf, D_801C6840[fileNum * 2 + 1], D_801C6850[fileNum * 2 + 1]);
     }
 
     // Copy buffer to save context
     Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, 0x3CA0);
 
-    func_80146EBC(sramCtx, D_801C6840[arg2*2], D_801C6850[arg2*2]);
-    func_80146EBC(sramCtx, D_801C6840[arg2*2+1], D_801C6850[arg2*2]);
+    func_80146EBC(sramCtx, D_801C6840[arg2 * 2], D_801C6850[arg2 * 2]);
+    func_80146EBC(sramCtx, D_801C6840[arg2 * 2 + 1], D_801C6850[arg2 * 2]);
 }
 
 void Sram_nop8014750C(s32 arg0) {

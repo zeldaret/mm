@@ -1453,7 +1453,8 @@ void EnTrt_LookToShopkeeperFromShelf(EnTrt* this, GlobalContext* globalCtx) {
 
 void EnTrt_InitShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600FEF0, &D_0600FD34, NULL, NULL, 0);
-    if (!(gSaveContext.save.weekEventReg[0xC] & 8) && !(gSaveContext.save.weekEventReg[0x54] & 0x40) && gSaveContext.save.day >= 2) {
+    if (!(gSaveContext.save.weekEventReg[0xC] & 8) && !(gSaveContext.save.weekEventReg[0x54] & 0x40) &&
+        gSaveContext.save.day >= 2) {
         this->actor.draw = NULL;
     } else {
         this->actor.draw = EnTrt_Draw;
@@ -1471,7 +1472,8 @@ void EnTrt_InitShop(EnTrt* this, GlobalContext* globalCtx) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.colChkInfo.cylRadius = 50;
     this->timer = Rand_S16Offset(40, 20);
-    if (!(gSaveContext.save.weekEventReg[0xC] & 8) && !(gSaveContext.save.weekEventReg[0x54] & 0x40) && gSaveContext.save.day >= 2) {
+    if (!(gSaveContext.save.weekEventReg[0xC] & 8) && !(gSaveContext.save.weekEventReg[0x54] & 0x40) &&
+        gSaveContext.save.day >= 2) {
         this->textId = 0x84A;
         this->actionFunc = EnTrt_ShopkeeperGone;
     } else {

@@ -819,7 +819,8 @@ s16 func_800A7650(s16 dropId) {
         (((dropId == ITEM00_ARROWS_10) || (dropId == ITEM00_ARROWS_30) || (dropId == ITEM00_ARROWS_40) ||
           (dropId == ITEM00_ARROWS_50)) &&
          (INV_CONTENT(ITEM_BOW) == ITEM_NONE)) ||
-        (((dropId == ITEM00_MAGIC_LARGE) || (dropId == ITEM00_MAGIC_SMALL)) && (gSaveContext.save.playerData.magicLevel == 0))) {
+        (((dropId == ITEM00_MAGIC_LARGE) || (dropId == ITEM00_MAGIC_SMALL)) &&
+         (gSaveContext.save.playerData.magicLevel == 0))) {
         return ITEM00_NO_DROP;
     }
 
@@ -1121,7 +1122,8 @@ void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3
                 params = 0xD0;
                 dropId = ITEM00_MAGIC_LARGE;
                 dropQuantity = 1;
-            } else if ((gSaveContext.save.playerData.magicLevel != 0) && ((gSaveContext.save.playerData.magicLevel >> 1) >= gSaveContext.save.playerData.magic)) {
+            } else if ((gSaveContext.save.playerData.magicLevel != 0) &&
+                       ((gSaveContext.save.playerData.magicLevel >> 1) >= gSaveContext.save.playerData.magic)) {
                 params = 0xD0;
                 dropId = ITEM00_MAGIC_LARGE;
                 dropQuantity = 1;

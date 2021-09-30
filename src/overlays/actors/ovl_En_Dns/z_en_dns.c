@@ -390,7 +390,8 @@ void func_8092D1B8(EnDns* this, GlobalContext* globalCtx) {
     }
 
     if (!ENDNS_GET_4000(&this->actor) || (this->unk_2D2 != 0)) {
-        if (!(gSaveContext.save.weekEventReg[23] & 0x20) && !(gSaveContext.eventInf[1] & 0x20) && func_8092CC68(globalCtx)) {
+        if (!(gSaveContext.save.weekEventReg[23] & 0x20) && !(gSaveContext.eventInf[1] & 0x20) &&
+            func_8092CC68(globalCtx)) {
             player->stateFlags1 |= 0x20;
             this->unk_2C6 |= 0x100;
             func_8013AED4(&this->unk_2C6, 4, 7);

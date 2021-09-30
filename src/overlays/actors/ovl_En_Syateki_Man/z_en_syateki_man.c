@@ -982,7 +982,8 @@ void func_809C8488(EnSyatekiMan* this, GlobalContext* globalCtx) {
         this->unk_276 = 0;
         if (this->unk_270 <= 0) {
             if ((s32)((gSaveContext.save.roomInf[127][6] & 0xFFFF0000) >> 0x10) < this->unk_280) {
-                gSaveContext.save.roomInf[127][6] = ((gSaveContext.save.roomInf[127][6]) & 0xFFFF) | ((u16)this->unk_280 << 0x10);
+                gSaveContext.save.roomInf[127][6] =
+                    ((gSaveContext.save.roomInf[127][6]) & 0xFFFF) | ((u16)this->unk_280 << 0x10);
             }
             this->unk_270 = 15;
             if (this->unk_280 >= 0x848) {
