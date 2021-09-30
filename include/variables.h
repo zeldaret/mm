@@ -3979,6 +3979,7 @@ extern UNK_TYPE D_04023130;
 extern Gfx D_04023210[];
 extern UNK_TYPE D_04023288;
 extern Gfx D_04023348[];
+extern Gfx D_040233B8[];
 extern Gfx D_04023428[];
 extern UNK_TYPE D_04025850;
 extern UNK_TYPE D_04025DD0;

@@ -24,7 +24,7 @@ typedef struct {
     Vec3f unk_24[50];
     Vec3f unk_27C[50];
     Vec3f unk_4D4[50];
-    char unk_72C[0xC8];
+    f32 unk_72C[50];
 } Boss07Whip; // size = 0x7F4
 
 typedef struct Boss07 {
@@ -70,7 +70,7 @@ typedef struct Boss07 {
     /* 0x0774 */ u8 unk_774;
     /* 0x0778 */ s32 unk_778;
     /* 0x077C */ f32 unk_77C;
-    /* 0x0780 */ char unk_780[4];
+    /* 0x0780 */ s32 unk_780;
     /* 0x0784 */ s32 unk_784;
     /* 0x0788 */ Vec3s unk_788;
     /* 0x0790 */ f32 unk_790;
