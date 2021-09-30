@@ -486,7 +486,7 @@ void func_80BD9338(EnPamera* this, GlobalContext* globalCtx) {
     func_80BD84F0(this, globalCtx);
     actor = this->actor.child;
     if ((actor != NULL) && (actor->id == ACTOR_EN_DOOR)) {
-        ((EnDoor*)actor)->unk1A7 = -0x32;
+        ((EnDoor*)actor)->unk_1A7 = -0x32;
     }
 }
 

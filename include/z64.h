@@ -1339,7 +1339,7 @@ struct TargetContext {
     /* 0x50 */ TargetContextEntry unk50[3];
     /* 0x8C */ Actor* unk8C;
     /* 0x90 */ Actor* unk90;
-    /* 0x94 */ UNK_TYPE1 pad94[0x4];
+    /* 0x94 */ Actor* unk_94;
 }; // size = 0x98
 
 struct s800B948C {
@@ -1603,6 +1603,8 @@ typedef struct DebugDispObject {
     /* 0x28 */ struct DebugDispObject* next;
     /* 0x2C */ s32 pad; //Padding not in the OOT version
 } DebugDispObject; // size = 0x30
+
+typedef s32 (*func_8013E640_arg6)(GlobalContext*, Actor*, Actor*, void*);
 
 typedef struct {
     /* 0x00 */ u8* value;
