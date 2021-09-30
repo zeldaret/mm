@@ -422,12 +422,17 @@ void func_80146AA0(GameState* gameState, SramContext* sramCtx) {
 void func_80146DF8(SramContext* sramCtx) {
     if (gSaveContext.unk_3F3F) {
         gSaveContext.language = 1;
-        Lib_MemCpy(sramCtx->saveBuf, &gSaveContext.optionId, 6);
+        Lib_MemCpy(*sramCtx->saveBuf, &gSaveContext.optionId, 6);
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80146E40.s")
+void func_80146E40(GameState* gameState, SramContext* sramCtx) {
+    if (&gSaveContext.save) {}
 
+    func_801A3D98(gSaveContext.audioSetting);
+}
+
+// Sram_Init
 void Sram_Alloc(GameState* gamestate, SramContext* sramCtx) {
     if (gSaveContext.unk_3F3F != 0) {
         sramCtx->saveBuf = THA_AllocEndAlign16(&gamestate->heap, 0x4000);
@@ -435,6 +440,9 @@ void Sram_Alloc(GameState* gamestate, SramContext* sramCtx) {
     }
 }
 
+/**
+ * Synchronous flash write
+ */
 void func_80146EBC(SramContext* sramCtx, s32 curPage, s32 numPages) {
     sramCtx->curPage = curPage;
     sramCtx->numPages = numPages;
@@ -453,7 +461,9 @@ void func_80146EE8(GameState* gameState) {
     func_80185F64(sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2], D_801C6818[gSaveContext.fileNum * 2]);
 }
 
-
+/**
+ * Save the game
+ */
 void func_80146F5C(GameState* gameState) {
     s32 cutscene;
     s32 day;
@@ -465,7 +475,7 @@ void func_80146F5C(GameState* gameState) {
     day = gSaveContext.save.day;
     gSaveContext.save.weekEventReg[0x54] &= (u8)0xDF;
 
-    func_80143B0C(globalCtx);
+    func_80143B0C(gameState);
     func_8014546C(&globalCtx->sramCtx);
 
     gSaveContext.save.day = day;
@@ -480,7 +490,13 @@ void func_80147008(SramContext* sramCtx, u32 curPage, u32 numPages) {
     sramCtx->status = 1;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80147020.s")
+void func_80147020(SramContext* sramCtx) {
+    // async flash write
+    func_80185DDC(*sramCtx->saveBuf, sramCtx->curPage, sramCtx->numPages);
+
+    sramCtx->unk_18 = osGetTime();
+    sramCtx->status = 2;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80147068.s")
 

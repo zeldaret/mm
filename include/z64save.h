@@ -162,7 +162,7 @@ typedef struct {
     /* 0x3F3F */ u8 unk_3F3F;                    // original name: flash_flag
     /* 0x3F40 */ u16 optionId;                   // original name: option_id
     /* 0x3F42 */ u8 language;                    // original name: j_n
-    /* 0x3F43 */ u8 audioSetting;                // original name: s_sound
+    /* 0x3F43 */ s8 audioSetting;                // original name: s_sound
     /* 0x3F44 */ u8 languageSetting;             // original name: language
     /* 0x3F45 */ u8 zTargetSetting;              // 0: Switch; 1: Hold
     /* 0x3F46 */ u16 unk_3F46;                   // original name: NottoriBgm
