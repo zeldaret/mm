@@ -43,7 +43,7 @@ void Opening_Main(GameState* thisx) {
 }
 
 void Opening_Destroy(GameState* thisx) {
-    ShrinkWindow_Fini();
+    ShrinkWindow_Destroy();
 }
 
 void Opening_Init(GameState* thisx) {

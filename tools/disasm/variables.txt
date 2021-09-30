@@ -4189,7 +4189,7 @@
     0x801F8160:("siEventCallbackQueue","OSMesgQueue","",0x18),
     0x801F8178:("siEventCallbackBuffer","OSMesg","[1]",0x4),
     0x801F8180:("gSegments","u32","[16]",0x40),
-    0x801F81C0:("schedContext","SchedContext","",0x338),
+    0x801F81C0:("gSchedContext","SchedContext","",0x338),
     0x801F84F8:("mainIrqmgrCallbackNode","IrqMgrClient","",0x8),
     0x801F8500:("mainIrqmgrCallbackQueue","OSMesgQueue","",0x18),
     0x801F8518:("mainIrqCallbackBuffer","OSMesg","[60]",0xf0),
