@@ -41,7 +41,7 @@ const ActorInit En_Stop_heishi_InitVars = {
 };
 
 // static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80AE88B0 = {
+static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_NONE,
         AT_NONE,
@@ -93,24 +93,11 @@ struct_80AE897C D_80AE897C[] = {
     { 0x053E, 0x0000 }, { 0x053F, 0x0000 }, { 0x053F, 0x0000 }, { 0x053F, 0x0000 }, { 0x053F, 0x0000 },
 };
 
-AnimationHeader* D_80AE8A1C[] = {
-    &D_06004AC0, &D_06005320,
-    //};
-    //
-    // AnimationHeader* D_80AE8A24[] = {
-    &D_06006C18, &D_0600DC7C, &D_060057BC, &D_06005D28, &D_060064C0, &D_06000A54,
-    //};
+static AnimationHeader* sAnimations[] = {
+    &D_06004AC0, &D_06005320, &D_06006C18, &D_0600DC7C, &D_060057BC, &D_06005D28, &D_060064C0, &D_06000A54,
 
-    // AnimationHeader* D_80AE8A2C = &D_060057BC;
-
-    // AnimationHeader* D_80AE8A30[] = {
-    //    &D_06005D28,
-    //    &D_060064C0,
-    //    &D_06000A54,
-    //    0x00000000,
 };
 
-extern ColliderCylinderInit D_80AE88B0;
 extern FlexSkeletonHeader D_0600D640;
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stop_heishi/EnStopheishi_Init.s")
@@ -137,7 +124,7 @@ void EnStopheishi_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
     this->actor.targetMode = 0;
     this->actor.gravity = -3.0f;
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80AE88B0);
+    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->unk_280 = this->actor.world.rot.y;
     this->unk_284 = 6;
     func_80AE7E9C(this);
@@ -145,30 +132,60 @@ void EnStopheishi_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stop_heishi/EnStopheishi_Destroy.s")
 
-void func_80AE750C(EnStopheishi* this, s32 arg1) { // Set anim?
-    s32 phi_t0;
+void EnStopHeishi_ChangeAnim(EnStopheishi* this, s32 animIndex) { // Set anim?
+    s32 mode;
     f32 phi_f0;
 
-    this->unk_268 = arg1;
-    this->unk_26C = SkelAnime_GetFrameCount(D_80AE8A1C[arg1]);
-    phi_t0 = 2;
+    this->unk_268 = animIndex;
+    this->currentAnimFrameCount = SkelAnime_GetFrameCount(sAnimations[animIndex]);
+    mode = 2;
     phi_f0 = -10.0f;
-    if ((arg1 >= 2) && (arg1 != 4)) {
-        phi_t0 = 0;
+    if ((animIndex >= 2) && (animIndex != 4)) {
+        mode = 0;
     }
-    if (arg1 == 5) {
+    if (animIndex == 5) {
         phi_f0 = 0.0f;
     }
-    SkelAnime_ChangeAnim(&this->skelAnime, D_80AE8A1C[arg1], 1.0f, 0.0f, this->unk_26C, phi_t0, phi_f0);
+    SkelAnime_ChangeAnim(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f, this->currentAnimFrameCount, mode,
+                         phi_f0);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stop_heishi/func_80AE75C8.s")
+void func_80AE75C8(EnStopheishi* this, GlobalContext* globalCtx) {
+    s32 yawDiff;
+    Player* player;
+    Vec3f playerPos;
+
+    yawDiff = ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.world.rot.y));
+
+    this->unk_260 = 0;
+
+    if (this->actor.xzDistToPlayer < 200.0f) {
+        player = PLAYER;
+        if (yawDiff < 0x4E20) {
+            this->unk_260 = (this->actor.yawTowardsPlayer - this->actor.world.rot.y);
+            if (this->unk_260 >= 0x2711) {
+                this->unk_260 = 0x2710;
+            } else if (this->unk_260 < -0x2710) {
+                this->unk_260 = -0x2710;
+            }
+        }
+
+        Math_Vec3f_Copy(&playerPos, &player->actor.world.pos);
+
+        if ((player->transformation == PLAYER_FORM_DEKU) || (player->transformation == PLAYER_FORM_HUMAN)) {
+            playerPos.y += (57.0f + BREG(34));
+        } else {
+            playerPos.y += (70.0f + BREG(35));
+        }
+        this->pitchToPlayer = Math_Vec3f_Pitch(&this->actor.focus.pos, &playerPos);
+    }
+}
 
 void func_80AE7718(EnStopheishi* this) {
     if (this->unk_272 != 0) {
         this->unk_272--;
     }
-    this->unk_25E = -0xBB8;
+    this->pitchToPlayer = -0xBB8;
     this->unk_260 = 0;
     if (this->unk_284 < 6) {
         this->unk_260 = 0x1770;
@@ -189,15 +206,274 @@ void func_80AE7718(EnStopheishi* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stop_heishi/func_80AE77D4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stop_heishi/func_80AE795C.s")
+/*//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stop_heishi/func_80AE795C.s")
+void func_80AE795C(EnStopheishi* this, GlobalContext* globalCtx) {
+    f32 currentFrame;
+    Vec3f homePos;
+    f32 sp48;
+    Player* player;
+    // f32 temp_f12;
+    // f32 temp_f18;
+    f32 temp_f2;
+    s32 yawDiff;
+    s16 yawHomeToPlayer;
+    f32 phi_f12;
+
+    player = PLAYER;
+    currentFrame = this->skelAnime.animCurrentFrame;
+    yawDiff = ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.home.rot.y));
+    // if ((s32)yawDiff < 0) {
+    //    yawDiff = -(s32)yawDiff;
+    //} else {
+    //    yawDiff = (s32)yawDiff;
+    //}
+    if (yawDiff < 0x2000) {
+        this->unk_280 = this->actor.yawTowardsPlayer;
+    }
+    if (this->unk_274 != 4) {
+        temp_f2 = fabsf((f32)this->actor.yawTowardsPlayer -
+                        (f32)Math_Vec3f_Yaw(&this->actor.home.pos, &player->actor.world.pos)) *
+                  0.01f * 5.0f;
+        if (temp_f2 < 1.0f) {
+            this->skelAnime.animPlaybackSpeed = 1.0f;
+        } else {
+            // if (temp_f2 > 5.0f) {
+            //    phi_f0 = 5.0f;
+            //} else {
+            //    phi_f0 = temp_f2;
+            //}
+            this->skelAnime.animPlaybackSpeed = (temp_f2 > 5.0f) ? 5.0f : temp_f2;
+        }
+    }
+    yawHomeToPlayer = Math_Vec3f_Yaw(&this->actor.home.pos, &player->actor.world.pos);
+    sp48 = fabsf(this->actor.home.pos.x - player->actor.world.pos.x);
+    homePos.y = fabsf(this->actor.home.pos.z - player->actor.world.pos.z);
+    Math_Vec3f_Copy(&homePos, &this->actor.home.pos);
+    if (this->actor.home.rot.y == -0x8000) {
+        if (yawHomeToPlayer > 0) {
+            sp48 *= Math_SinS(this->actor.home.rot.y + 0xC000);
+            homePos.y = Math_CosS(this->actor.home.rot.y + 0xC000) * homePos.y;
+        } else {
+            sp48 *= Math_SinS(this->actor.home.rot.y + 0x4000);
+            homePos.y = Math_CosS(this->actor.home.rot.y + 0x4000) * homePos.y;
+        }
+    } else if (yawHomeToPlayer < this->actor.home.rot.y) {
+        sp48 *= Math_SinS(this->actor.home.rot.y + 0xC000);
+        homePos.y = Math_CosS(this->actor.home.rot.y + 0xC000) * homePos.y;
+    } else {
+        sp48 *= Math_SinS(this->actor.home.rot.y + 0x4000);
+        homePos.y = Math_CosS(this->actor.home.rot.y + 0x4000) * homePos.y;
+    }
+    if (this->unk_288 < sp48) {
+        sp48 = this->unk_288;
+    } else {
+        if (sp48 < -this->unk_288) {
+            sp48 = -this->unk_288;
+        }
+    }
+    homePos.x = homePos.x + sp48;
+    if (this->unk_288 < homePos.y) {
+        homePos.y = this->unk_288;
+    } else {
+        this->unk_288 = -this->unk_288;
+        if (homePos.y < this->unk_288) {
+            homePos.y = this->unk_288;
+        }
+    }
+    // homePos.x = temp_f18;
+    // homePos.y += phi_f12;
+    Math_ApproachF(&this->actor.world.pos.x, homePos.x, 0.5f, this->unk_28C);
+    Math_ApproachF(&this->actor.world.pos.z, homePos.y, 0.5f, this->unk_28C);
+    Math_ApproachF(&this->unk_28C, 50.0f, 0.3f, 1.0f);
+    switch (this->unk_274) {
+        case 0:
+            if (gSaveContext.day != 3) {
+                EnStopHeishi_ChangeAnim(this, 4);
+                this->unk_274 = 2;
+            } else {
+                EnStopHeishi_ChangeAnim(this, 2);
+                this->unk_274 = 1;
+            }
+            break;
+        case 1:
+            EnStopHeishi_ChangeAnim(this, 4);
+            this->unk_274 = 2;
+            break;
+        case 2:
+            if (this->currentAnimFrameCount <= currentFrame) {
+                EnStopHeishi_ChangeAnim(this, 5);
+                this->unk_274 = 3;
+            }
+            break;
+        case 3:
+            if ((fabsf(this->actor.world.pos.x - homePos.x) < 2.0f) &&
+                (fabsf(this->actor.world.pos.z - homePos.z) < 2.0f)) {
+                this->skelAnime.animPlaybackSpeed = 1.0f;
+                EnStopHeishi_ChangeAnim(this, 6);
+                this->unk_274 = 4;
+            }
+            break;
+        case 4:
+            if ((fabsf(this->actor.world.pos.x - homePos.x) > 4.0f) ||
+                (fabsf(this->actor.world.pos.z - homePos.z) > 4.0f)) {
+                EnStopHeishi_ChangeAnim(this, 5);
+                this->unk_274 = 3;
+            }
+            break;
+    }
+    this->unk_264 = 0;
+    this->unk_270 = 0x14;
+    this->pitchToPlayer = 0;
+    Math_Vec3f_Copy(&homePos, &player->actor.world.pos);
+    if ((this->unk_276 == 3) &&
+        ((player->transformation == PLAYER_FORM_DEKU) || (player->transformation == PLAYER_FORM_HUMAN))) {
+        homePos.y += 77.0f + BREG(37);
+        this->pitchToPlayer = Math_Vec3f_Pitch((Vec3f*)&this->actor.focus, &homePos);
+    }
+}*/
+
+void func_80AE795C(EnStopheishi* this, GlobalContext* globalCtx) {
+    f32 sp58;
+    Vec3f oldHomePos;
+    f32 xDiff;
+    f32 zDiff;
+    s16 yawHomeToPlayer;
+    Player* player;
+    s32 yawDiff;
+    //f32 xOffset;
+    f32 temp_f2;
+    //s16 temp_v0;
+    //s32 phi_a0;
+    f32 phi_f0;
+
+    sp58 = this->skelAnime.animCurrentFrame;
+    player = PLAYER;
+    yawDiff = ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.home.rot.y));
+    //temp_v0 =  this->actor.yawTowardsPlayer - this->actor.home.rot.y;
+    //if ((s32)temp_v0 < 0) {
+    //    phi_a0 = -(s32)temp_v0;
+    //} else {
+    //    phi_a0 = (s32)temp_v0;
+    //}
+
+    if (yawDiff < 0x2000) {
+        this->unk_280 =  this->actor.yawTowardsPlayer;
+    }
+    if (this->unk_274 != 4) {
+        temp_f2 = fabsf((f32)this->actor.yawTowardsPlayer - (f32)Math_Vec3f_Yaw(&this->actor.home.pos, &player->actor.world.pos)) *
+                  0.01f * 5.0f;
+        if (temp_f2 < 1.0f) {
+            this->skelAnime.animPlaybackSpeed = 1.0f;
+        } else {
+            if (temp_f2 > 5.0f) {
+                phi_f0 = 5.0f;
+            } else {
+                phi_f0 = temp_f2;
+            }
+            this->skelAnime.animPlaybackSpeed = phi_f0;
+        }
+    }
+    yawHomeToPlayer = Math_Vec3f_Yaw(&this->actor.home.pos, &player->actor.world.pos);
+    xDiff = fabsf(this->actor.home.pos.x - player->actor.world.pos.x);
+    zDiff = fabsf(this->actor.home.pos.z - player->actor.world.pos.z);
+    Math_Vec3f_Copy(&oldHomePos, &this->actor.home.pos);
+    if ( this->actor.home.rot.y == -0x8000) {
+        if (yawHomeToPlayer > 0) {
+            xDiff *= Math_SinS((s16)( this->actor.home.rot.y + 0xC000));
+            zDiff = Math_CosS((s16)(this->actor.home.rot.y + 0xC000)) * zDiff;
+        } else {
+            xDiff *= Math_SinS((s16)( this->actor.home.rot.y + 0x4000));
+            zDiff = Math_CosS((s16)(this->actor.home.rot.y + 0x4000)) * zDiff;
+        }
+    } else if (yawHomeToPlayer < this->actor.home.rot.y) {
+        xDiff *= Math_SinS((s16)( this->actor.home.rot.y + 0xC000));
+        zDiff = Math_CosS((s16)(this->actor.home.rot.y + 0xC000)) * zDiff;
+    } else {
+        xDiff *= Math_SinS((s16)( this->actor.home.rot.y + 0x4000));
+        zDiff = Math_CosS((s16)(this->actor.home.rot.y + 0x4000)) * zDiff;
+    }
+    if (this->unk_288 < xDiff) {
+        xDiff = this->unk_288;
+    } else {
+     //   temp_f0 = -this->unk_288;
+        if (xDiff < -this->unk_288) {
+            xDiff = -this->unk_288;
+        }
+    }
+    //xOffset = oldHomePos.x + xDiff;
+    if (this->unk_288 < zDiff) {
+        zDiff = this->unk_288;
+    } else {
+       // temp_f0_2 = -this->unk_288;
+        if (zDiff < -this->unk_288) {
+            zDiff = -this->unk_288;
+        }
+    }
+    //oldHomePos.x = xOffset;
+    oldHomePos.x += xDiff;
+    oldHomePos.z += zDiff;
+    Math_ApproachF(&this->actor.world.pos.x, oldHomePos.x, 0.5f, this->unk_28C);
+    Math_ApproachF(&this->actor.world.pos.z, oldHomePos.z, 0.5f, this->unk_28C);
+    Math_ApproachF(&this->unk_28C, 50.0f, 0.3f, 1.0f);
+    switch (this->unk_274) {
+        case 0:
+            if (gSaveContext.day != 3) {
+                EnStopHeishi_ChangeAnim(this, 4);
+                this->unk_274 = 2;
+            } else {
+                EnStopHeishi_ChangeAnim(this, 2);
+                this->unk_274 = 1;
+            }
+            break;
+        case 1:
+            EnStopHeishi_ChangeAnim(this, 4);
+            this->unk_274 = 2;
+            break;
+        case 2:
+            if (this->currentAnimFrameCount <= sp58) {
+                EnStopHeishi_ChangeAnim(this, 5);
+                this->unk_274 = 3;
+            }
+            break;
+        case 3:
+            if ((fabsf(this->actor.world.pos.x - oldHomePos.x) < 2.0f) && (fabsf(this->actor.world.pos.z - oldHomePos.z) < 2.0f)) {
+                this->skelAnime.animPlaybackSpeed = 1.0f;
+                EnStopHeishi_ChangeAnim(this, 6);
+                this->unk_274 = 4;
+            }
+            break;
+        case 4:
+            if ((fabsf(this->actor.world.pos.x - oldHomePos.x) > 4.0f) || (fabsf(this->actor.world.pos.z - oldHomePos.z) > 4.0f)) {
+                EnStopHeishi_ChangeAnim(this, 5);
+                this->unk_274 = 3;
+            }
+            break;
+    }
+    this->unk_264 = 0;
+    this->unk_270 = 0x14;
+    this->pitchToPlayer = 0;
+    Math_Vec3f_Copy(&oldHomePos, &player->actor.world.pos);
+
+    if ((this->unk_276 == 3) && ((Math_Vec3f_Copy(&oldHomePos, &player->actor.world.pos),
+        ((player->transformation == PLAYER_FORM_DEKU) || (player->transformation == PLAYER_FORM_HUMAN))))) {
+        oldHomePos.y += 77.0f + (f32)gGameInfo->data[2437];
+        this->pitchToPlayer = Math_Vec3f_Pitch(&this->actor.focus.pos, (Vec3f*)&oldHomePos);
+    }
+}
+
+/*    if ((this->unk_276 == 3) &&
+        ((player->transformation == PLAYER_FORM_DEKU) || (player->transformation == PLAYER_FORM_HUMAN))) {
+        homePos.y += 77.0f + BREG(37);
+        this->pitchToPlayer = Math_Vec3f_Pitch((Vec3f*)&this->actor.focus, &homePos);
+    }*/
 
 void func_80AE7E9C(EnStopheishi* this) {
-    func_80AE750C(this, 2);
+    EnStopHeishi_ChangeAnim(this, 2);
     if ((gSaveContext.day != 3) && (gSaveContext.isNight != 0)) {
-        func_80AE750C(this, 3);
+        EnStopHeishi_ChangeAnim(this, 3);
     }
     if (gSaveContext.day == 3) {
-        func_80AE750C(this, 7);
+        EnStopHeishi_ChangeAnim(this, 7);
     }
     this->unk_274 = 0;
     this->unk_278 = 0;
@@ -262,13 +538,13 @@ void func_80AE7E9C(EnStopheishi* this) {
 
     if (((phi_a2 == 1) || (phi_a2 == 2) || (phi_a2 == 3)) &&
         (((this->unk_268 == 4)) || (this->unk_268 == 5) || (this->unk_268 == 6))) {
-        func_80AE750C(this, 2);
+        EnStopHeishi_ChangeAnim(this, 2);
 
         if ((gSaveContext.day != 3) && (gSaveContext.isNight != 0)) {
-            func_80AE750C(this, 3);
+            EnStopHeishi_ChangeAnim(this, 3);
         }
         if (gSaveContext.day == 3) {
-            func_80AE750C(this, 7);
+            EnStopHeishi_ChangeAnim(this, 7);
         }
     }
     if ((phi_a2 == 0) || (phi_a2 == 4)) {
