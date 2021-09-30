@@ -887,7 +887,7 @@ void Select_Main(GameState* thisx) {
 }
 
 void Select_Destroy(GameState* thisx) {
-    ShrinkWindow_Fini();
+    ShrinkWindow_Destroy();
 }
 
 void Select_Init(GameState* thisx) {

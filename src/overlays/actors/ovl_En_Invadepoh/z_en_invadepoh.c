@@ -2681,6 +2681,8 @@ void func_80B48AD4(EnInvadepoh* this, GlobalContext* globalCtx) {
     }
 
     if (this->rand == 0) {
+        s32 requiredScopeTemp;
+
         if ((this->actor.xzDistToPlayer < 350.0f) && ((globalCtx->gameplayFrames & 0x60) != 0)) {
             player = PLAYER;
             temp_v1 = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f;
@@ -2690,9 +2692,6 @@ void func_80B48AD4(EnInvadepoh* this, GlobalContext* globalCtx) {
             temp_v1 = new_var3 * 0.7f;
             substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
         }
-
-    dummy:;
-
     } else {
         substruct->unk26.x = 0;
         substruct->unk26.y = 0;
