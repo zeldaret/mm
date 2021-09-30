@@ -1,6 +1,10 @@
 #include "global.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
 
+#define CHECK_NEWF(newf)                                                                                 \
+    ((newf)[0] != 'Z' || (newf)[1] != 'E' || (newf)[2] != 'L' || (newf)[3] != 'D' || (newf)[4] != 'A' || \
+     (newf)[5] != '3')
+
 
 
 extern s32 D_801C6818[];
@@ -16,6 +20,9 @@ extern UNK_TYPE D_801C6970;
 extern UNK_TYPE D_801C6998;
 extern u8 D_801C6A48[];
 extern u8 D_801C6A50[];
+extern s32 D_801C67CC[];
+extern s32 D_801C67F4[];
+
 
 
 void func_80143A10(u8 owlId) {
@@ -62,7 +69,6 @@ void Sram_IncrementDay(void) {
     gSaveContext.save.weekEventReg[0x55] &= (u8)~0x02;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/Sram_CalcChecksum.s")
 u16 Sram_CalcChecksum(void* data, size_t count) {
     u8* dataPtr = data;
     u16 chkSum = 0;
@@ -73,7 +79,6 @@ u16 Sram_CalcChecksum(void* data, size_t count) {
     }
     return chkSum;
 }
-
 
 void func_80144628(void) {
     gSaveContext.save.entranceIndex = 0x1C00;
@@ -92,117 +97,73 @@ void func_80144628(void) {
     bzero(&gSaveContext.save.playerData, sizeof(Save) - OFFSETOF(Save, playerData));
 }
 
-#ifdef NON_MATCHING
 void Sram_GenerateRandomSaveFields(void) {
+    s32 randBombers;
     s16 sp2A;
-    s16 temp_a0;
-    s16 temp_s0;
-    s16 temp_v0;
-    s16 temp_v1;
-    s32 temp_v0_2;
-    s32 temp_v0_3;
-    s16 phi_v0;
-    s16 phi_s0;
-    s16 phi_v1;
-    s16 phi_s0_2;
-    s16 phi_s0_3;
     s16 phi_v1_2;
-    s16 phi_s0_4;
-    s32 phi_s1;
-    s32 phi_s0_5;
+    s16 i;
+    s16 j;
+    s32 k;
+    s16 randSpiderHouse;
 
     func_80143A54();
-    gSaveContext.save.lotteryCodes[0][0] = Rand_S16Offset(0, 0xA);
-    gSaveContext.save.lotteryCodes[0][1] = Rand_S16Offset(0, 0xA);
-    gSaveContext.save.lotteryCodes[0][2] = Rand_S16Offset(0, 0xA);
-    gSaveContext.save.lotteryCodes[1][0] = Rand_S16Offset(0, 0xA);
-    gSaveContext.save.lotteryCodes[1][1] = Rand_S16Offset(0, 0xA);
-    gSaveContext.save.lotteryCodes[1][2] = Rand_S16Offset(0, 0xA);
-    gSaveContext.save.lotteryCodes[2][0] = Rand_S16Offset(0, 0xA);
-    gSaveContext.save.lotteryCodes[2][1] = Rand_S16Offset(0, 0xA);
-    gSaveContext.save.lotteryCodes[2][2] = Rand_S16Offset(0, 0xA);
 
-/*
-    phi_s0 = 0;
-    do {
+    gSaveContext.save.lotteryCodes[0][0] = Rand_S16Offset(0, 10);
+    gSaveContext.save.lotteryCodes[0][1] = Rand_S16Offset(0, 10);
+    gSaveContext.save.lotteryCodes[0][2] = Rand_S16Offset(0, 10);
+    gSaveContext.save.lotteryCodes[1][0] = Rand_S16Offset(0, 10);
+    gSaveContext.save.lotteryCodes[1][1] = Rand_S16Offset(0, 10);
+    gSaveContext.save.lotteryCodes[1][2] = Rand_S16Offset(0, 10);
+    gSaveContext.save.lotteryCodes[2][0] = Rand_S16Offset(0, 10);
+    gSaveContext.save.lotteryCodes[2][1] = Rand_S16Offset(0, 10);
+    gSaveContext.save.lotteryCodes[2][2] = Rand_S16Offset(0, 10);
 
-//         phi_v0 = 0;
-// loop_2:
-//         phi_v0 = phi_v0 + 1;
-//         if ((s32) phi_v0 < 3) {
-//             goto loop_2;
-//         }
-
-        for (phi_v0 = 0; phi_v0 < 3; phi_v0++) {
-
-        }
-
-        phi_s0 = phi_s0 + 1;
-    } while ((s32) phi_s0 < 3);
-*/
-    for (phi_s0 = 0; phi_s0 < 3; phi_s0++) {
-        for (phi_v0 = 0; phi_v0 < 3; phi_v0++) {
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < 3; j++) {
 
         }
     }
 
-    phi_s0_2 = 0;
-    sp2A = (s16) (Rand_S16Offset(0, 0x10) & 3);
-    while (phi_s0_2 != 6) {
-        temp_a0 = Rand_S16Offset(0, 0x10) & 3;
-        if (sp2A != temp_a0) {
-            gSaveContext.save.spiderHouseMaskOrder[phi_s0_2] = (s8) temp_a0;
-            phi_s0_2 = (s16) (phi_s0_2 + 1);
-            sp2A = temp_a0;
+    i = 0;
+    sp2A = Rand_S16Offset(0, 16) & 3;
+    k = 6;
+    while (i != k) {
+        randSpiderHouse = Rand_S16Offset(0, 16) & 3;
+        if (sp2A != randSpiderHouse) {
+            gSaveContext.save.spiderHouseMaskOrder[i] = randSpiderHouse;
+            i++;
+            sp2A = randSpiderHouse;
         }
     }
 
     do {
-// loop_8:
-//         temp_v0_2 = Rand_S16Offset(0, 6);
-//         if (temp_v0_2 <= 0) {
-//             goto loop_8;
-//         }
-        do {
-            temp_v0_2 = Rand_S16Offset(0, 6);
-        } while (temp_v0_2 <= 0);
-    } while (temp_v0_2 >= 6);
+        randBombers = Rand_S16Offset(0, 6);
+    } while (randBombers <= 0 || randBombers >= 6);
 
-    gSaveContext.save.bomberCode[0] = (s8) temp_v0_2;
+    gSaveContext.save.bomberCode[0] = randBombers;
 
-    phi_s0_4 = 1;
-    while (phi_s0_4 != 5) {
-        phi_s1 = 0;
-//loop_12:
-//        temp_v0_3 = Rand_S16Offset(0, 6);
-//        if (temp_v0_3 <= 0) {
-//            goto loop_12;
-//        }
-//        if (temp_v0_3 >= 6) {
-//            goto loop_12;
-//        }
+    i = 1;
+    while (i != 5) {
+        k = false;
 
         do {
-            do {
-                temp_v0_3 = Rand_S16Offset(0, 6);
-            } while (temp_v0_3 <= 0);
-        } while (temp_v0_3 >= 6);
+            randBombers = Rand_S16Offset(0, 6);
+        } while (randBombers <= 0 || randBombers >= 6);
 
-        for (phi_v1_2 = 0; phi_v1_2 < phi_s0_4; phi_v1_2++) {
-            if (temp_v0_3 == gSaveContext.save.bomberCode[phi_v1_2]) {
-                phi_s1 = 1;
+        sp2A = 0;
+        do {
+            if (randBombers == gSaveContext.save.bomberCode[sp2A]) {
+                k = true;
             }
-        }
+            sp2A++;
+        }while (sp2A < i);
 
-        if (phi_s1 == 0) {
-            gSaveContext.save.bomberCode[phi_s0_4] = (s8) temp_v0_3;
-            phi_s0_4 = (s16) (phi_s0_4 + 1);
+        if (k == false) {
+            gSaveContext.save.bomberCode[i] = randBombers;
+            i++;
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/Sram_GenerateRandomSaveFields.s")
-#endif
 
 void func_80144890(void) {
     gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
@@ -235,7 +196,7 @@ void Sram_InitDebugSave(void) {
     Lib_MemCpy(&gSaveContext.save.inventory, &D_801C69BC, sizeof(Inventory));
     Lib_MemCpy(&gSaveContext.save.checksum, &D_801C6A44, sizeof(gSaveContext.save.checksum));
 
-    if (gSaveContext.save.playerForm != 4) {
+    if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
         gSaveContext.save.equips.buttonItems[0][2] = D_801C6A48[((void)0, gSaveContext.save.playerForm & 0xFF)];
         gSaveContext.save.equips.cButtonSlots[0][2] = D_801C6A50[((void)0, gSaveContext.save.playerForm & 0xFF)];
     }
@@ -251,7 +212,7 @@ void Sram_InitDebugSave(void) {
     gSaveContext.save.entranceIndex = 0x1C00;
     gSaveContext.save.firstCycleFlag = 1;
 
-    gSaveContext.save.weekEventReg[0xF] |= 0x20;
+    gSaveContext.save.weekEventReg[0x0F] |= 0x20;
     gSaveContext.save.weekEventReg[0x3B] |= 0x04;
     gSaveContext.save.weekEventReg[0x1F] |= 0x04;
 
@@ -262,12 +223,92 @@ void Sram_InitDebugSave(void) {
     Sram_GenerateRandomSaveFields();
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80144A94.s")
+void func_80144A94(SramContext* sramCtx) {
+    s32 i;
+    s32 cutscene = gSaveContext.save.cutscene;
+
+    bzero(sramCtx->saveBuf, sizeof(*sramCtx->saveBuf));
+
+    if (func_80185968(sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2], D_801C67F0[gSaveContext.fileNum * 2]) !=
+        0) {
+        func_80185968(sramCtx->saveBuf, D_801C67CC[gSaveContext.fileNum * 2], D_801C67F4[gSaveContext.fileNum * 2]);
+    }
+    Lib_MemCpy(&gSaveContext.save, sramCtx->saveBuf, sizeof(Save));
+    if (CHECK_NEWF(gSaveContext.save.playerData.newf)) {
+        func_80185968(sramCtx->saveBuf, D_801C67CC[gSaveContext.fileNum * 2], D_801C67F4[gSaveContext.fileNum * 2]);
+        Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, sizeof(Save));
+    }
+    gSaveContext.save.cutscene = cutscene;
+
+    for (i = 0; i < ARRAY_COUNT(gSaveContext.eventInf); i++) {
+        gSaveContext.eventInf[i] = 0;
+    }
+
+    for (i = 0; i < ARRAY_COUNT(gSaveContext.cycleSceneFlags); i++) {
+        gSaveContext.cycleSceneFlags[i][0] = gSaveContext.save.roomInf[i][0];
+        gSaveContext.cycleSceneFlags[i][1] = gSaveContext.save.roomInf[i][1];
+        gSaveContext.cycleSceneFlags[i][2] = gSaveContext.save.roomInf[i][2];
+        gSaveContext.cycleSceneFlags[i][3] = gSaveContext.save.roomInf[i][3];
+        gSaveContext.cycleSceneFlags[i][4] = gSaveContext.save.roomInf[i][4];
+    }
+
+    for (i = 0; i < ARRAY_COUNT(gSaveContext.unk_3DD0); i++) {
+        gSaveContext.unk_3DD0[i] = 0;
+        gSaveContext.unk_3DE0[i] = 0;
+        gSaveContext.unk_3E18[i] = 0;
+        gSaveContext.unk_3E50[i] = 0;
+        gSaveContext.unk_3E88[i] = 0;
+        gSaveContext.unk_3EC0[i] = 0;
+    }
+
+    D_801BDAA0 = 1;
+    D_801BDA9C = 0;
+    gSaveContext.powderKegTimer = 0;
+    gSaveContext.unk_1014 = 0;
+    gSaveContext.jinxTimer = 0;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80144E78.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_8014546C.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_8014546C.s")
+void func_8014546C(SramContext* sramCtx) {
+    s32 i;
 
+    if (gSaveContext.save.isOwlSave) {
+        for (i = 0; i < ARRAY_COUNT(gSaveContext.cycleSceneFlags); i++) {
+            gSaveContext.save.roomInf[i][0] = gSaveContext.cycleSceneFlags[i][0];
+            gSaveContext.save.roomInf[i][1] = gSaveContext.cycleSceneFlags[i][1];
+            gSaveContext.save.roomInf[i][2] = gSaveContext.cycleSceneFlags[i][2];
+            gSaveContext.save.roomInf[i][3] = gSaveContext.cycleSceneFlags[i][3];
+            gSaveContext.save.roomInf[i][4] = gSaveContext.cycleSceneFlags[i][4];
+        }
+
+        gSaveContext.save.checksum = 0;
+        gSaveContext.save.checksum = Sram_CalcChecksum(&gSaveContext, OFFSETOF(SaveContext, fileNum));
+
+        Lib_MemCpy(sramCtx->saveBuf, &gSaveContext, OFFSETOF(SaveContext, fileNum));
+    } else {
+        for (i = 0; i < ARRAY_COUNT(gSaveContext.cycleSceneFlags); i++) {
+            gSaveContext.save.roomInf[i][0] = gSaveContext.cycleSceneFlags[i][0];
+            gSaveContext.save.roomInf[i][1] = gSaveContext.cycleSceneFlags[i][1];
+            gSaveContext.save.roomInf[i][2] = gSaveContext.cycleSceneFlags[i][2];
+            gSaveContext.save.roomInf[i][3] = gSaveContext.cycleSceneFlags[i][3];
+            gSaveContext.save.roomInf[i][4] = gSaveContext.cycleSceneFlags[i][4];
+        }
+
+        gSaveContext.save.checksum = 0;
+        gSaveContext.save.checksum = Sram_CalcChecksum(&gSaveContext, sizeof(Save));
+
+        if (gSaveContext.unk_3F3F) {
+            Lib_MemCpy(sramCtx->saveBuf, &gSaveContext, sizeof(Save));
+            Lib_MemCpy(&(*sramCtx->saveBuf)[0x2000], &gSaveContext, sizeof(Save));
+        }
+    }
+}
+
+/**
+ * Save permanent scene flags, calculate checksum, copy save context to the save buffer
+ */
 void func_80145698(SramContext* sramCtx) {
     s32 i;
 
@@ -289,13 +330,101 @@ void func_80145698(SramContext* sramCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_801457CC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80146580.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80146580.s")
+
+extern u16 D_801F6AF0;
+extern u8 D_801F6AF2;
+
+void func_80146580(GameState* gameState, SramContext* sramCtx, s32 fileNum) {
+    FileChooseContext* fileChooseCtx = (FileChooseContext*)gameState;
+    s32 pad;
+
+    if (gSaveContext.unk_3F3F) {
+        if (fileChooseCtx->unk_2446A[fileNum]) {
+            func_80147314(sramCtx, fileNum);
+            fileChooseCtx->unk_2446A[fileNum] = 0;
+        }
+        bzero(sramCtx->saveBuf, sizeof(*sramCtx->saveBuf));
+        Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, sizeof(Save));
+    }
+    gSaveContext.save.time = D_801F6AF0;
+    gSaveContext.unk_3F3F = D_801F6AF2;
+}
+
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80146628.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80146AA0.s")
+void func_80146AA0(GameState* gameState, SramContext* sramCtx) {
+    s32 phi_v0;
+    u16 phi_v1;
+    FileChooseContext* fileChooseCtx = (FileChooseContext*)gameState;
+    s16 phi_a0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80146DF8.s")
+    if (gSaveContext.unk_3F3F) {
+        func_80144890();
+        if (fileChooseCtx->unk_24480 == 0) {
+            gSaveContext.save.cutscene = 0xFFF0;
+        }
+
+        for (phi_v0 = 0; phi_v0 != ARRAY_COUNT(gSaveContext.save.playerData.playerName); phi_v0++) {
+            gSaveContext.save.playerData.playerName[phi_v0] =
+                fileChooseCtx->unk_24414[fileChooseCtx->unk_24480][phi_v0];
+        }
+
+        gSaveContext.save.playerData.newf[0] = 'Z';
+        gSaveContext.save.playerData.newf[1] = 'E';
+        gSaveContext.save.playerData.newf[2] = 'L';
+        gSaveContext.save.playerData.newf[3] = 'D';
+        gSaveContext.save.playerData.newf[4] = 'A';
+        gSaveContext.save.playerData.newf[5] = '3';
+
+        gSaveContext.save.checksum = Sram_CalcChecksum(&gSaveContext, sizeof(Save));
+
+        Lib_MemCpy(sramCtx->saveBuf, &gSaveContext, sizeof(Save));
+        Lib_MemCpy(&(*sramCtx->saveBuf)[0x2000], &gSaveContext, sizeof(Save));
+
+        for (phi_v1 = 0; phi_v1 < ARRAY_COUNT(gSaveContext.save.playerData.newf); phi_v1++) {
+            fileChooseCtx->newf[fileChooseCtx->unk_24480][phi_v1] = gSaveContext.save.playerData.newf[phi_v1];
+        }
+
+        fileChooseCtx->unk_2440C[fileChooseCtx->unk_24480] = gSaveContext.save.playerData.deaths;
+
+        for (phi_v1 = 0; phi_v1 < ARRAY_COUNT(gSaveContext.save.playerData.playerName); phi_v1++) {
+            fileChooseCtx->unk_24414[fileChooseCtx->unk_24480][phi_v1] =
+                gSaveContext.save.playerData.playerName[phi_v1];
+        }
+
+        fileChooseCtx->healthCapacity[fileChooseCtx->unk_24480] = gSaveContext.save.playerData.healthCapacity;
+        fileChooseCtx->health[fileChooseCtx->unk_24480] = gSaveContext.save.playerData.health;
+        fileChooseCtx->unk_24454[fileChooseCtx->unk_24480] = gSaveContext.save.inventory.dungeonKeys[9];
+        fileChooseCtx->unk_24444[fileChooseCtx->unk_24480] = gSaveContext.save.inventory.questItems;
+        fileChooseCtx->unk_24458[fileChooseCtx->unk_24480] = gSaveContext.save.time;
+        fileChooseCtx->unk_24460[fileChooseCtx->unk_24480] = gSaveContext.save.day;
+        fileChooseCtx->unk_24468[fileChooseCtx->unk_24480] = gSaveContext.save.isOwlSave;
+        fileChooseCtx->rupees[fileChooseCtx->unk_24480] = gSaveContext.save.playerData.rupees;
+        fileChooseCtx->unk_24474[fileChooseCtx->unk_24480] =
+            (gSaveContext.save.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4];
+
+        for (phi_v1 = 0, phi_a0 = 0; phi_v1 < 24; phi_v1++) {
+            if (gSaveContext.save.inventory.masks[(s32)phi_v1] != 0xFF) {
+                phi_a0++;
+            }
+        }
+
+        fileChooseCtx->unk_24478[fileChooseCtx->unk_24480] = phi_a0;
+        fileChooseCtx->unk_2447C[fileChooseCtx->unk_24480] =
+            (gSaveContext.save.inventory.questItems & 0xF0000000) >> 0x1C;
+    }
+    gSaveContext.save.time = D_801F6AF0;
+    gSaveContext.unk_3F3F = D_801F6AF2;
+}
+
+void func_80146DF8(SramContext* sramCtx) {
+    if (gSaveContext.unk_3F3F) {
+        gSaveContext.language = 1;
+        Lib_MemCpy(sramCtx->saveBuf, &gSaveContext.optionId, 6);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80146E40.s")
 

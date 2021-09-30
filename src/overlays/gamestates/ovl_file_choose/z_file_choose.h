@@ -8,6 +8,7 @@ void FileChoose_Destroy(GameState* thisx);
 
 struct FileChooseContext{
     /* 0x00000 */ GameState state;
+    /* 0x000A4 */ Vtx* unk_A4;
     /* 0x000A8 */ u8* staticSegment;
     /* 0x000AC */ u8* parameterSegment;
     /* 0x000B0 */ u8* titleSegment;
@@ -16,22 +17,26 @@ struct FileChooseContext{
     /* 0x00248 */ SkyboxContext skyboxCtx;
     /* 0x00470 */ MessageContext msgCtx;
     /* 0x12550 */ Font font;
+    /* 0x242DC */ UNK_TYPE1 unk_242DC[4];
     /* 0x242E0 */ EnvironmentContext envCtx;
     /* 0x243E0 */ Vtx* unk_243E0;
     /* 0x243E4 */ Vtx* unk_243E4;
     /* 0x243E8 */ Vtx* unk_243E8;
     /* 0x243EC */ Vtx* unk_243EC;
     /* 0x243F0 */ Vtx* unk_243F0;
-    /* 0x243F4 */ u8   newf[6][4];
+    /* 0x243F4 */ u8   newf[2][6];
+    /* 0x24400 */ UNK_TYPE1 unk_24400[0xC];
     /* 0x2440C */ u16  unk_2440C[4];
-    /* 0x24414 */ u8   unk_24414[8][4];
+    /* 0x24414 */ u8   unk_24414[2][8]; // playername
+    /* 0x24424 */ u8   unk_24424[2][8]; // playername
     /* 0x24434 */ s16  healthCapacity[4];
     /* 0x2443C */ s16  health[4];
     /* 0x24444 */ u32  unk_24444[4];
     /* 0x24454 */ s8   unk_24454[4];
     /* 0x24458 */ u16  unk_24458[4];
     /* 0x24460 */ s16  unk_24460[4];
-    /* 0x24468 */ u8   unk_24468[4];
+    /* 0x24468 */ u8   unk_24468[2];
+    /* 0x2446A */ u8   unk_2446A[2];
     /* 0x2446C */ s16  rupees[4];
     /* 0x24474 */ u8   unk_24474[4];
     /* 0x24478 */ u8   unk_24478[4];
