@@ -523,7 +523,7 @@ beginseg
     include "build/src/code/z_msgevent.o"
     include "build/data/code/z_msgevent.data.o"
     include "build/src/code/z_nmi_buff.o"
-    include "build/data/code/z_nmi_buff.bss.o"
+    include "build/src/code/code_8010C1B0.o"
     include "build/src/code/z_olib.o"
     pad_text
     include "build/src/code/z_parameter.o"

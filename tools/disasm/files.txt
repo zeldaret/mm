@@ -398,6 +398,7 @@
             0x8010A000 : "z_map_exp",
             0x8010A760 : "z_msgevent",
             0x8010C0C0 : "z_nmi_buff",
+            0x8010C1B0 : "code_8010C1B0",
             0x8010C230 : "z_olib",
             0x8010CB70 : "[PADDING]",
             0x8010CB80 : "z_parameter",

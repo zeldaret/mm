@@ -349,6 +349,13 @@ typedef struct {
 } OverlayRelocationSection; // size >= 0x18
 
 typedef struct {
+    /* 0x00 */ u32 resetting;
+    /* 0x04 */ u32 resetCount;
+    /* 0x08 */ OSTime duration;
+    /* 0x10 */ OSTime resetTime;
+} NmiBuff; // size >= 0x18
+
+typedef struct {
     /* 0x00 */ s16 intPart[16];
     /* 0x20 */ u16 fracPart[16];
 } RSPMatrix; // size = 0x40
