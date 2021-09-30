@@ -2162,7 +2162,7 @@ void func_801159c0(s16 param_1);
 void func_801159EC(s16 arg0);
 void func_80115A14(s32 arg0, s16 arg1);
 // void Parameter_AddMagic(void);
-// void func_80115D5C(void);
+void func_80115D5C(GameState* gamestate);
 // void func_80115DB4(void);
 // void func_80116088(void);
 // void func_80116114(void);
