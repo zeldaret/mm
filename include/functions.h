@@ -479,7 +479,7 @@ void* osViGetCurrentFramebuffer(void);
 s32 __osSpSetPc(void* data);
 // void __osVoiceContWrite4(void);
 void __osGetHWIntrRoutine(s32 idx, OSMesgQueue** outQueue, OSMesg* outMsg);
-// void __osSetHWIntrRoutine(void);
+void __osSetHWIntrRoutine(s32 idx, OSMesgQueue* queue, OSMesg msg);
 u32 __osGetWatchLo(void);
 void __osSetWatchLo(u32 value);
 f32 fmodf(f32 dividend, f32 divisor);
