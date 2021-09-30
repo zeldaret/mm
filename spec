@@ -570,7 +570,6 @@ beginseg
     include "build/src/code/z_vr_box_draw.o"
     include "build/data/code/z_vr_box_draw.bss.o"
     include "build/src/code/z_sram_NES.o"
-    include "build/data/code/z_sram_NES.bss.o"
     include "build/src/code/z_message.o"
     include "build/data/code/z_message.data.o"
     include "build/data/code/z_message.bss.o"

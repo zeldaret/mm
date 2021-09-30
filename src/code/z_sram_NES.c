@@ -10,9 +10,6 @@
      (newf)[5] == '3')
 
 
-extern u16 D_801F6AF0;
-extern u8 D_801F6AF2;
-
 s32 D_801C5FC0 = 0xC00;
 s32 D_801C5FC4 = 0;
 s32 D_801C5FC8 = 0;
@@ -854,8 +851,9 @@ u16 D_801C6A44 = 0;
 u8 D_801C6A48[8] = {0x35, 0x33, 0x34, 0x32, 0x35, 0, 0, 0};
 u8 D_801C6A50[8] = {0x2F, 0x23, 0x29, 0x1D, 0x2F, 0, 0, 0};
 s32 D_801C6A58[6] = {0x68B06A60, 0xB2309A80, 0xD8903E40, 0x864084A0, 0x2040AA30, 0};
-// u16 D_801F6AF0;
-// u8 D_801F6AF2;
+
+u16 D_801F6AF0;
+u8 D_801F6AF2;
 
 void func_80143A10(u8 owlId) {
     gSaveContext.save.playerData.owlActivationFlags = ((void)0, gSaveContext.save.playerData.owlActivationFlags) | (u16)gBitFlags[owlId];
