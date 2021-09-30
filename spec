@@ -1414,9 +1414,7 @@ beginseg
     name "ovl_Arrow_Ice"
     compress
     include "build/src/overlays/actors/ovl_Arrow_Ice/z_arrow_ice.o"
-    include "build/data/ovl_Arrow_Ice/ovl_Arrow_Ice.data.o"
-    include "build/data/ovl_Arrow_Ice/ovl_Arrow_Ice.bss.o"
-    include "build/data/ovl_Arrow_Ice/ovl_Arrow_Ice.reloc.o"
+    include "build/src/overlays/actors/ovl_Arrow_Ice/ovl_Arrow_Ice_reloc.o"
 endseg
 
 beginseg
