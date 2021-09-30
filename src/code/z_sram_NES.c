@@ -498,13 +498,64 @@ void func_80147020(SramContext* sramCtx) {
     sramCtx->status = 2;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80147068.s")
+void func_80147068(SramContext* sramCtx) {
+    if (sramCtx->status == 2) {
+        if (func_80185EC4() != 0) { // if task running
+            if (func_80185F04() == 0) { // wait for task done
+                // task success
+                sramCtx->status = 4;
+            } else {
+                // task failure
+                sramCtx->status = 4;
+            }
+        }
+    } else if (((osGetTime() - sramCtx->unk_18) * 0x40) / 3000 / 10000 >= 200) {
+        sramCtx->status = 0;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80147138.s")
+void func_80147138(SramContext* sramCtx, s32 curPage, s32 numPages) {
+    sramCtx->curPage = curPage;
+    sramCtx->numPages = numPages;
+    sramCtx->status = 6;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80147150.s")
+void func_80147150(SramContext* sramCtx) {
+    func_80185DDC(*sramCtx->saveBuf, sramCtx->curPage, sramCtx->numPages);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80147198.s")
+    sramCtx->unk_18 = osGetTime();
+    sramCtx->status = 7;
+}
+
+void func_80147198(SramContext* sramCtx) {
+    if (sramCtx->status == 7) {
+        if (func_80185EC4() != 0) { // Is task running
+            if (func_80185F04() == 0) { // Wait for task done
+                func_80185DDC(*sramCtx->saveBuf, sramCtx->curPage + 0x80, sramCtx->numPages);
+                sramCtx->status = 8;
+            } else {
+                func_80185DDC(*sramCtx->saveBuf, sramCtx->curPage + 0x80, sramCtx->numPages);
+                sramCtx->status = 8;
+            }
+        }
+    } else if (sramCtx->status == 8) {
+        if (func_80185EC4() != 0) { // Is task running
+            if (func_80185F04() == 0) { // Wait for task done
+                sramCtx->status = 4;
+            } else {
+                sramCtx->status = 4;
+            }
+        }
+    } else if (((osGetTime() - sramCtx->unk_18) * 0x40) / 3000 / 10000 >= 200) {
+        sramCtx->status = 0;
+        bzero(sramCtx->saveBuf, sizeof(*sramCtx->saveBuf));
+        gSaveContext.save.isOwlSave = 0;
+        gSaveContext.save.checksum = 0;
+        // flash read to buffer then copy to save context
+        func_80185968(sramCtx->saveBuf, sramCtx->curPage, sramCtx->numPages);
+        Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, OFFSETOF(SaveContext, fileNum));
+    }
+}
 
 void func_80147314(SramContext* sramCtx, s32 fileNum) {
     s32 pad;
