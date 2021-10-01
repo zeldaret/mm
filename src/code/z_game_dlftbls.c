@@ -5,10 +5,10 @@
 #include "overlays/gamestates/ovl_select/z_select.h"
 #include "overlays/gamestates/ovl_title/z_title.h"
 
-#define GAMESTATE_OVERLAY(name, init, destroy, size)                                                         \
-    {                                                                                                        \
+#define GAMESTATE_OVERLAY(name, init, destroy, size)                                                 \
+    {                                                                                                \
         NULL, SEGMENT_ROM_START(ovl_##name), SEGMENT_ROM_END(ovl_##name), SEGMENT_START(ovl_##name), \
-            SEGMENT_END(ovl_##name), 0, init, destroy, 0, 0, 0, size                                         \
+            SEGMENT_END(ovl_##name), 0, init, destroy, 0, 0, 0, size                                 \
     }
 #define GAMESTATE_OVERLAY_INTERNAL(init, destroy, size) \
     { NULL, 0, 0, NULL, NULL, 0, init, destroy, 0, 0, 0, size }

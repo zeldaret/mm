@@ -40,7 +40,7 @@ void Main(void* arg) {
 
     StackCheck_Init(&padmgrStackEntry, padmgrStack, padmgrStack + sizeof(padmgrStack), 0, 0x100, "padmgr");
     Padmgr_Start(&siEventCallbackQueue, &gIrqMgr, 7, Z_PRIORITY_PADMGR, padmgrStack + sizeof(padmgrStack));
-    
+
     AudioMgr_Unlock(&audioContext);
 
     StackCheck_Init(&graphStackEntry, graphStack, graphStack + sizeof(graphStack), 0, 0x100, "graph");
