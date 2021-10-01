@@ -216,7 +216,7 @@ void func_80B2C9B8(EnPoh* this, GlobalContext* globalCtx) {
         this->unk_18D--;
     }
 
-    if (this->unk_18D == 0) {
+    if (!this->unk_18D) {
         this->unk_18D = 32;
     }
 }
@@ -611,7 +611,7 @@ void func_80B2DDF8(EnPoh* this, s32 arg1) {
         this->actor.scale.y = (0.007f - (0.007f * temp_f2)) + 0.007f;
     } else {
         temp_f2 = 1.0f;
-        this->actor.scale.x = this->actor.scale.y = this->actor.scale.z = this->unk_197 * (7.0f / (255.0f * 1000));
+        this->actor.scale.x = this->actor.scale.y = this->actor.scale.z = this->unk_197 * 0.000027450982f;
         this->actor.world.pos.y = this->actor.home.pos.y + ((15.0f / 255.0f) * this->unk_197);
     }
 
