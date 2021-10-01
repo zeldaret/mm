@@ -134,7 +134,6 @@ static u32 sCurrentBit = 0;
 static s32 sTimer = 0;
 
 void FlagSet_Update(GameState* gameState) {
-
     GlobalContext* globalCtx = (GlobalContext*)gameState;
     Input* input = CONTROLLER1(globalCtx);
 
@@ -161,11 +160,12 @@ void FlagSet_Update(GameState* gameState) {
         }
     }
 
-    /* Navigation between bytes */
-
+    // Wrap cursor position at beginning/end of line
     sCurrentBit %= 8;
 
-    // + Up/Down, scroll 1 at a time
+    /* Navigation between bytes */
+
+    // + Up/Down scroll 1 at a time
     if (CHECK_BTN_ALL(input->press.button, BTN_DUP)) {
         sEntryIndex--;
         if (sEntryIndex < 0) {
@@ -182,7 +182,7 @@ void FlagSet_Update(GameState* gameState) {
         sTimer = 10;
     }
 
-    // C buttons scroll 10 at a time
+    // C Up/Down scroll 10 at a time
     if (CHECK_BTN_ALL(input->press.button, BTN_CUP)) {
         sEntryIndex -= 10;
         if (sEntryIndex < 0) {
@@ -231,7 +231,6 @@ void FlagSet_Update(GameState* gameState) {
     }
 
     /* Other controls */
-
     // A toggles the selected flag
     if (CHECK_BTN_ALL(input->press.button, BTN_A)) {
         *sFlagEntries[sEntryIndex].value ^= (1 << sCurrentBit);
