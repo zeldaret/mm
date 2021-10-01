@@ -11,13 +11,7 @@ regex_fileDataEntry = re.compile(r"^\s+(?P<section>[^\s]+)\s+(?P<vram>0x[^\s]+)\
 regex_bssEntry = re.compile(r"^\s+(?P<vram>0x[^\s]+)\s+(?P<name>[^\s]+)$")
 regex_label = re.compile(r"^(?P<name>L[0-9A-F]{8})$")
 
-
-File = collections.namedtuple("File", ["name", "vram", "bssVariables"])
-FileEntry = collections.namedtuple("File", ["vram", "bssVariables"])
-Variable = collections.namedtuple("Variable", ["name", "vram"])
-# Compared = collections.namedtuple("Compared", ["expected", "build", "diff"])
-
-VarInfo = collections.namedtuple("Variable", ["file", "vram"])
+VarInfo = collections.namedtuple("VarInfo", ["file", "vram"])
 
 def parseMapFile(mapPath: str):
     with open(mapPath) as f:
@@ -74,18 +68,6 @@ def parseMapFile(mapPath: str):
                     if size > 0:
                         inFile = True
                         currentFile = name
-                        
-    # print(symbolsDict)
-    # resultFileDict = dict()
-
-    # for file in filesList:
-    #     bssCount = len(file.bssVariables)
-
-    #     # Filter out files with no bss
-    #     if bssCount == 0:
-    #         continue
-
-    #     resultFileDict[file.name] = FileEntry(file.vram, file.bssVariables)
 
     return symbolsDict
 
