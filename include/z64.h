@@ -18,10 +18,10 @@
 #include "unk.h"
 
 #include "bgm.h"
-#include "constants.h"
-#include "sfx.h"
 #include "color.h"
 #include "ichain.h"
+#include "screen.h"
+#include "sfx.h"
 
 #include "z64actor.h"
 #include "z64animation.h"
