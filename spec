@@ -522,7 +522,7 @@ beginseg
     include "build/src/code/z_msgevent.o"
     include "build/data/code/z_msgevent.data.o"
     include "build/src/code/z_nmi_buff.o"
-    include "build/data/code/z_nmi_buff.bss.o"
+    include "build/src/code/code_8010C1B0.o"
     include "build/src/code/z_olib.o"
     pad_text
     include "build/src/code/z_parameter.o"
@@ -580,7 +580,6 @@ beginseg
     include "build/src/code/z_player_call.o"
     include "build/data/code/z_player_call.bss.o"
     include "build/src/code/z_shrink_window.o"
-    include "build/data/code/z_shrink_window.bss.o"
     include "build/src/code/db_camera.o"
     include "build/data/code/db_camera.bss.o"
     include "build/data/code/code_801D0B50.data.o"
@@ -1414,9 +1413,7 @@ beginseg
     name "ovl_Arrow_Ice"
     compress
     include "build/src/overlays/actors/ovl_Arrow_Ice/z_arrow_ice.o"
-    include "build/data/ovl_Arrow_Ice/ovl_Arrow_Ice.data.o"
-    include "build/data/ovl_Arrow_Ice/ovl_Arrow_Ice.bss.o"
-    include "build/data/ovl_Arrow_Ice/ovl_Arrow_Ice.reloc.o"
+    include "build/src/overlays/actors/ovl_Arrow_Ice/ovl_Arrow_Ice_reloc.o"
 endseg
 
 beginseg
