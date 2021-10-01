@@ -7,6 +7,7 @@
 
 #include "PR/ultratypes.h"
 #include "PR/gbi.h"
+#include "PR/sched.h"
 #include "io/controller.h"
 #include "osint.h"
 #include "viint.h"
@@ -17,6 +18,7 @@
 #include "unk.h"
 
 #include "bgm.h"
+#include "constants.h"
 #include "sfx.h"
 #include "color.h"
 #include "ichain.h"
@@ -36,12 +38,6 @@
 #include "z64scene.h"
 #include "z64save.h"
 #include "z64transition.h"
-
-#define SCREEN_WIDTH  320
-#define SCREEN_HEIGHT 240
-
-#define SCREEN_WIDTH_HIGH_RES  576
-#define SCREEN_HEIGHT_HIGH_RES 454
 
 #define Z_THREAD_ID_IDLE     1
 #define Z_THREAD_ID_SLOWLY   2
@@ -276,19 +272,6 @@ typedef struct {
     /* 0x06708 */ Gfx polyOpaBuffer[13184];
     /* 0x20308 */ u16 tailMagic; // 5678
 } GfxPool; // size = 0x20310
-
-typedef struct {
-    /* 0x00 */ u16*     fb1;
-    /* 0x04 */ u16*     swapBuffer;
-    /* 0x08 */ OSViMode* viMode;
-    /* 0x0C */ u32      features;
-    /* 0x10 */ u8       unk_10;
-    /* 0x11 */ s8       updateRate;
-    /* 0x12 */ s8       updateRate2;
-    /* 0x13 */ u8       unk_13;
-    /* 0x14 */ f32      xScale;
-    /* 0x18 */ f32      yScale;
-} CfbInfo; // size = 0x1C
 
 typedef struct GraphicsContext {
     /* 0x000 */ Gfx* polyOpaBuffer;
@@ -1252,11 +1235,6 @@ typedef enum {
     QUAKE2_SETUP,
 } Quake2State;
 
-typedef struct IrqMgrClient_t {
-    /* 0x0 */ struct IrqMgrClient_t* next;
-    /* 0x4 */ OSMesgQueue* queue;
-} IrqMgrClient; // size = 0x8
-
 typedef struct {
     /* 0x0 */ s16 type;
     /* 0x2 */ u8 misc[30];
@@ -1299,56 +1277,10 @@ typedef struct {
     /* 0x47F */ UNK_TYPE1 pad47F[0x1];
 } PadMgr; // size = 0x480
 
-#define OS_SC_NEEDS_RDP         0x0001
-#define OS_SC_NEEDS_RSP         0x0002
-#define OS_SC_DRAM_DLIST        0x0004
-#define OS_SC_PARALLEL_TASK     0x0010
-#define OS_SC_LAST_TASK         0x0020
-#define OS_SC_SWAPBUFFER        0x0040
 
-#define OS_SC_RCP_MASK          0x0003
-#define OS_SC_TYPE_MASK         0x0007
-
-#define OS_SC_DP                0x0001
-#define OS_SC_SP                0x0002
-#define OS_SC_YIELD             0x0010
-#define OS_SC_YIELDED           0x0020
-
-typedef struct OSScTask {
-    /* 0x00 */ struct OSScTask* next;
-    /* 0x04 */ u32      state;
-    /* 0x08 */ u32      flags;
-    /* 0x0C */ CfbInfo* framebuffer;
-    /* 0x10 */ OSTask   list;
-    /* 0x50 */ OSMesgQueue* msgQ;
-    /* 0x54 */ OSMesg   msg;
-} OSScTask; // size = 0x58
-
-typedef struct {
-    /* 0x0000 */ OSMesgQueue interruptQ;
-    /* 0x0018 */ OSMesg      intBuf[64];
-    /* 0x0118 */ OSMesgQueue cmdQ;
-    /* 0x0130 */ OSMesg      cmdMsgBuf[8];
-    /* 0x0150 */ OSThread    thread;
-    /* 0x0300 */ OSScTask*   audioListHead;
-    /* 0x0304 */ OSScTask*   gfxListHead;
-    /* 0x0308 */ OSScTask*   audioListTail;
-    /* 0x030C */ OSScTask*   gfxListTail;
-    /* 0x0310 */ OSScTask*   curRSPTask;
-    /* 0x0314 */ OSScTask*   curRDPTask;
-    /* 0x0318 */ s32         retraceCount;
-    /* 0x0318 */ s32         doAudio;
-    /* 0x0320 */ CfbInfo*    curBuf;
-    /* 0x0324 */ CfbInfo*    pendingSwapBuf1;
-    /* 0x0328 */ CfbInfo*    pendingSwapBuf2;
-    /* 0x032C */ char unk_32C[0x3];
-    /* 0x032F */ u8 shouldUpdateVi;
-    /* 0x0330 */ IrqMgrClient irqClient;
-} SchedContext; // size = 0x338
-
-typedef struct StackEntry_t {
-    /* 0x00 */ struct StackEntry_t* next;
-    /* 0x04 */ struct StackEntry_t* prev;
+typedef struct StackEntry {
+    /* 0x00 */ struct StackEntry* next;
+    /* 0x04 */ struct StackEntry* prev;
     /* 0x08 */ u32 head;
     /* 0x0C */ u32 tail;
     /* 0x10 */ u32 initValue;
