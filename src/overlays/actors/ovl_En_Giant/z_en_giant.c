@@ -214,7 +214,21 @@ void EnGiant_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/func_80B02354.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/func_80B023D0.s")
+void func_80B023D0(EnGiant* this, GlobalContext* globalCtx) {
+    if (func_800EE29C(globalCtx, this->unk_24A)) {
+        func_80B02354(this, globalCtx, func_800EE200(globalCtx, this->unk_24A));
+        if (this->unk_24C != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0) {
+            this->unk_24C = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0;
+            func_80B01EE8(this);
+        }
+        func_80B020A0(this);
+    }
+    func_80B02234(this);
+    if (this->unk_24C == 5) {
+        func_800B9010(&this->actor, 0x1063);
+    }
+    func_80B0211C(this);
+}
 
 void func_80B024AC(EnGiant* this, GlobalContext* globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
