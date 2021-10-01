@@ -29,18 +29,40 @@ const ActorInit En_Giant_InitVars = {
 extern AnimationHeader D_06002168;
 extern UNK_TYPE D_06007610;
 extern FlexSkeletonHeader D_060079B0;
+extern AnimationHeader D_06008394;
+extern AnimationHeader D_060096E4;
+extern AnimationHeader D_0600A1C4;
+extern AnimationHeader D_0600ACA4;
+extern AnimationHeader D_0600B784;
+extern AnimationHeader D_0600C5D4;
+extern AnimationHeader D_0600D040;
+extern AnimationHeader D_0600DE84;
+extern AnimationHeader D_060102A4;
 extern AnimationHeader D_060116E4;
+extern AnimationHeader D_06012A38;
 extern AnimationHeader D_06013004;
 extern AnimationHeader D_06013FE8;
+extern AnimationHeader D_06015334;
+extern AnimationHeader D_06017944;
 
-s32 D_80B02950[] = {
-    0x06008394, 0x060096E4, 0x060102A4, 0x060116E4, 0x06012A38, 0x06013004, 0x06013FE8, 0x06015334,
-    0x06017944, 0x0600A1C4, 0x0600D040, 0x0600DE84, 0x0600ACA4, 0x0600B784, 0x0600C5D4,
+AnimationHeader* D_80B02950[] = {
+    &D_06008394, &D_060096E4, &D_060102A4, &D_060116E4, &D_06012A38, &D_06013004, &D_06013FE8, &D_06015334,
+    &D_06017944, &D_0600A1C4, &D_0600D040, &D_0600DE84, &D_0600ACA4, &D_0600B784, &D_0600C5D4,
 };
 
 s32 D_80B0298C[] = { 0x06005A80, 0x06006280, 0x06006A80, 0x00000000, 0x00000000 };
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/func_80B01990.s")
+void func_80B01990(EnGiant* this, s16 arg1) {
+    if ((arg1 >= 0) && (arg1 < 0xF)) {
+        if (((this->unk_248 == 8) && (arg1 != 8)) || ((arg1 == 8) && (this->unk_248 != 8))) {
+            SkelAnime_ChangeAnim(&this->skelAnime, D_80B02950[arg1], 1.0f, 0.0f,
+                                 SkelAnime_GetFrameCount(&D_80B02950[arg1]->common), 2, 10.0f);
+        } else {
+            SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, D_80B02950[arg1]);
+        }
+        this->unk_248 = arg1;
+    }
+}
 
 // Note: if #275 gets merged before this, switch to using the IDs there.
 // This is checking that a Giant is NOT freed...

@@ -34,7 +34,7 @@ typedef struct EnGiant {
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ Vec3s jointTable[16];
     /* 0x1E8 */ Vec3s morphTable[16];
-    /* 0x248 */ char unk_248[0x2];
+    /* 0x248 */ s16 unk_248;
     /* 0x24A */ s16 unk_24A;
     /* 0x24C */ s16 unk_24C;
     /* 0x24E */ s16 unk_24E;
