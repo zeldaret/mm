@@ -42,7 +42,8 @@ s32 D_80B0298C[] = { 0x06005A80, 0x06006280, 0x06006A80, 0x00000000, 0x00000000 
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/EnGiant_Init.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/EnGiant_Destroy.s")
+void EnGiant_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/func_80B01E84.s")
 
