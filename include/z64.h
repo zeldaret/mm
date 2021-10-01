@@ -7,13 +7,14 @@
 
 #include "PR/ultratypes.h"
 #include "PR/gbi.h"
-#include "PR/sched.h"
 #include "io/controller.h"
 #include "osint.h"
 #include "viint.h"
 #include "math.h"
 #include "os.h"
 #include "stdlib.h"
+#include "irqmgr.h"
+#include "scheduler.h"
 #include "xstdio.h"
 #include "unk.h"
 
@@ -1235,24 +1236,6 @@ typedef enum {
     QUAKE2_SETUP,
 } Quake2State;
 
-typedef struct {
-    /* 0x0 */ s16 type;
-    /* 0x2 */ u8 misc[30];
-} OSScMsg;
-
-typedef struct {
-    /* 0x000 */ OSScMsg verticalRetraceMesg;
-    /* 0x020 */ OSScMsg prenmiMsg;
-    /* 0x040 */ OSScMsg nmiMsg;
-    /* 0x060 */ OSMesgQueue irqQueue;
-    /* 0x078 */ OSMesg irqBuffer[8];
-    /* 0x098 */ OSThread thread;
-    /* 0x248 */ IrqMgrClient* callbacks;
-    /* 0x24C */ u8 prenmiStage;
-    /* 0x250 */ OSTime lastPrenmiTime;
-    /* 0x258 */ OSTimer prenmiTimer;
-    /* 0x278 */ OSTime lastFrameTime;
-} IrqMgr; // size = 0x280
 
 typedef struct {
     /* 0x000 */ u8 controllers; // bit 0 is set if controller 1 is plugged in, etc.
