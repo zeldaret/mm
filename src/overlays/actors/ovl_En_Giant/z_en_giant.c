@@ -43,6 +43,7 @@ s32 D_80B0298C[] = { 0x06005A80, 0x06006280, 0x06006A80, 0x00000000, 0x00000000 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/func_80B01990.s")
 
 // Note: if #275 gets merged before this, switch to using the IDs there.
+// This is checking that a Giant is NOT freed...
 s32 func_80B01A74(EnGiant* this) {
     switch (this->actor.params & 0xF) {
         case 2:
