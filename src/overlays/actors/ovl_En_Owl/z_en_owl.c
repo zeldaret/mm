@@ -1096,7 +1096,7 @@ void func_8095CCF4(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->unk_3D8 += this->unk_3DA;
-    this->unk_3DA = this->unk_3DA - (s16)(this->unk_3D8 >> 6);
+    this->unk_3DA -= (s16)(this->unk_3D8 >> 6);
 }
 
 s32 EnOwl_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
