@@ -176,17 +176,17 @@ typedef struct {
 } EffectShieldParticle; // size = 0x1C8
 
 typedef struct {
-    /* 0x00 */ UNK_TYPE2 active;
-    /* 0x02 */ Vec3s position1;
-    /* 0x08 */ Vec3s position2;
+    /* 0x00 */ u16 flags;
+    /* 0x02 */ Vec3s p1;
+    /* 0x08 */ Vec3s p2;
     /* 0x0E */ s16 life;
     /* 0x10 */ UNK_TYPE1 pad10[0x4];
-    /* 0x14 */ UNK_TYPE4 unk14;
+    /* 0x14 */ CollisionPoly* colPoly;
 } EffectTireMarkElement; // size = 0x18
 
 typedef struct {
     /* 0x0 */ s16 unk0;
-    /* 0x2 */ s16 duration;
+    /* 0x2 */ s16 elemDuration;
     /* 0x4 */ Color_RGBA8 color;
 } EffectTireMarkInit; // size = 0x8
 
@@ -194,7 +194,7 @@ typedef struct {
     /* 0x000 */ EffectTireMarkElement elements[64];
     /* 0x600 */ s16 unk600;
     /* 0x602 */ s16 numElements;
-    /* 0x604 */ s16 duration;
+    /* 0x604 */ s16 elemDuration;
     /* 0x606 */ Color_RGBA8 color;
 } EffectTireMark; // size = 0x60C
 

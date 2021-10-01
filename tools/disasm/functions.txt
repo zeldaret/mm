@@ -550,7 +550,7 @@
     0x800AEFA0:("EffectTireMark_Init",),
     0x800AF044:("EffectTireMark_Destroy",),
     0x800AF050:("EffectTireMark_Update",),
-    0x800AF284:("EffectTireMark_InitVertices",),
+    0x800AF284:("EffectTireMark_SetVertices",),
     0x800AF310:("EffectTireMark_Draw",),
     0x800AF710:("Effect_GetGlobalCtx",),
     0x800AF720:("Effect_GetByIndex",),
