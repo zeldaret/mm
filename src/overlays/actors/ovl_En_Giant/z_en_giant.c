@@ -42,12 +42,14 @@ s32 D_80B0298C[] = { 0x06005A80, 0x06006280, 0x06006A80, 0x00000000, 0x00000000 
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/func_80B01990.s")
 
+// Note: if #275 gets merged before this, switch to using the IDs there.
 s32 func_80B01A74(EnGiant* this) {
     switch (this->actor.params & 0xF) {
         case 2:
         case 6:
         case 10:
         case 14:
+            // Odolwa's Remains
             if (!CHECK_QUEST_ITEM(0)) {
                 return 1;
             }
@@ -56,6 +58,7 @@ s32 func_80B01A74(EnGiant* this) {
         case 4:
         case 8:
         case 12:
+            // Goht's Remains
             if (!CHECK_QUEST_ITEM(1)) {
                 return 1;
             }
@@ -64,6 +67,7 @@ s32 func_80B01A74(EnGiant* this) {
         case 7:
         case 11:
         case 15:
+            // Gyorg's Remains
             if (!CHECK_QUEST_ITEM(2)) {
                 return 1;
             }
@@ -72,6 +76,7 @@ s32 func_80B01A74(EnGiant* this) {
         case 5:
         case 9:
         case 13:
+            // Twinmold's Remains
             if (!CHECK_QUEST_ITEM(3)) {
                 return 1;
             }
