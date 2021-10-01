@@ -231,6 +231,7 @@ void FlagSet_Update(GameState* gameState) {
     }
 
     /* Other controls */
+    
     // A toggles the selected flag
     if (CHECK_BTN_ALL(input->press.button, BTN_A)) {
         *sFlagEntries[sEntryIndex].value ^= (1 << sCurrentBit);
