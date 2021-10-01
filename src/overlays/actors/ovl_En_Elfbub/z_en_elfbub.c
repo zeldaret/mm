@@ -77,7 +77,7 @@ void EnElfbub_Init(Actor* thisx, GlobalContext* globalCtx) {
                                     this->actor.world.pos.x, this->actor.world.pos.y + 12.0f, this->actor.world.pos.z,
                                     this->actor.world.rot.x, this->actor.world.rot.y, this->actor.world.rot.z,
                                     ((ENELFBUB_GET_SWITCHFLAG(&this->actor) & 0x7F) << 9) | 2);
-    if (childActor) {
+    if (childActor != NULL) {
         childActor->parent = &this->actor;
     }
 
@@ -102,7 +102,7 @@ void EnElfbub_Pop(EnElfbub* this, GlobalContext* globalCtx) {
     Math_SmoothStepToF(&this->xScale, 0.2f, 0.1f, 1000.0f, 0.0f);
     this->zRotDelta += 1000;
     this->zRot += this->zRotDelta;
-    this->popTimer -= 1;
+    this->popTimer--;
     if (this->popTimer <= 0) {
         pos.x = this->actor.world.pos.x;
         pos.y = this->actor.world.pos.y;
