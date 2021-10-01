@@ -234,7 +234,22 @@ void func_80B024AC(EnGiant* this, GlobalContext* globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/func_80B024D8.s")
+void func_80B024D8(EnGiant* this, GlobalContext* globalCtx) {
+    this->actor.draw = EnGiant_Draw;
+    if (func_800EE29C(globalCtx, this->unk_24A)) {
+        func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, this->unk_24A));
+        if (this->unk_24C != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0) {
+            this->unk_24C = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0;
+            func_80B01EE8(this);
+        }
+        func_80B020A0(this);
+    }
+    if ((GIANT_TYPE(&this->actor) < GIANT_TYPE_MOUNTAIN_2) && (func_80B01A74(this) != 0)) {
+        this->actor.draw = NULL;
+    }
+    func_80B02234(this);
+    func_80B0211C(this);
+}
 
 void EnGiant_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnGiant* this = THIS;
