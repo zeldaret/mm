@@ -20,8 +20,6 @@ def parseMapFile(mapPath: str):
         mapData = mapData[startIndex:]
     # print(len(mapData))
 
-    filesList = list()
-
     symbolsDict = collections.OrderedDict()
 
     inFile = False
@@ -116,11 +114,6 @@ def compareMapFiles(mapFileBuild: str, mapFileExpected: str):
 def printCsv(badFiles, missingFiles, comparedDict, printAll = True):
     print("Symbol Name,Build Address,Build File,Expected Address,Expected File,Difference,GOOD/BAD/MISSING")
 
-    allGood = True
-    allFound = True
-    
-    problemFiles = set.union(badFiles, missingFiles)
-
     # If it's bad or missing, don't need to do anything special.
     # If it's good, check for if it's in a file with bad or missing stuff, and check if print all is on. If none of these, print it.
     
@@ -144,7 +137,6 @@ def printCsv(badFiles, missingFiles, comparedDict, printAll = True):
 
 def main():
     description = "Check that globally visible bss has not been reordered."
-    # TODO
     epilog = """\
     N.B. Since this script reads the map files, it can only see globally visible bss; in-function static bss must be examined with other tools.
     """
@@ -165,34 +157,33 @@ def main():
     if len(badFiles) + len(missingFiles) != 0:
         print("", file=os.sys.stderr)
 
-    if len(badFiles) != 0:
-        print(colorama.Fore.RED + "  BAD" + colorama.Style.RESET_ALL)
+        if len(badFiles) != 0:
+            print(colorama.Fore.RED + "  BAD" + colorama.Style.RESET_ALL)
 
-        for file in badFiles:
-            print(f"bss reordering in {file}", file=os.sys.stderr)
-        print("", file=os.sys.stderr)
-        
-        if not args.no_fun_allowed:
-            print(colorama.Fore.LIGHTWHITE_EX +
-            "  BSS is REORDERED!!\n"
-            "  Oh! MY GOD!!" 
-            + colorama.Style.RESET_ALL, file=os.sys.stderr)
+            for file in badFiles:
+                print(f"bss reordering in {file}", file=os.sys.stderr)
+            print("", file=os.sys.stderr)
+            
+            if not args.no_fun_allowed:
+                print(colorama.Fore.LIGHTWHITE_EX +
+                "  BSS is REORDERED!!\n"
+                "  Oh! MY GOD!!" 
+                + colorama.Style.RESET_ALL, file=os.sys.stderr)
+                print("", file=os.sys.stderr)
+
+        if len(missingFiles) != 0:
+            print(colorama.Fore.YELLOW + "  MISSING" + colorama.Style.RESET_ALL)
+
+            for file in missingFiles:
+                print(f"Symbols missing from {file}", file=os.sys.stderr)
             print("", file=os.sys.stderr)
 
-    if len(missingFiles) != 0:
-        print(colorama.Fore.YELLOW + "  MISSING" + colorama.Style.RESET_ALL)
+            if not args.no_fun_allowed:
+                print(colorama.Fore.LIGHTWHITE_EX + "  Error, should (not) be in here " + colorama.Style.RESET_ALL, file=os.sys.stderr)
+                print("", file=os.sys.stderr)
 
-        for file in missingFiles:
-            print(f"Symbols missing from {file}", file=os.sys.stderr)
-        print("", file=os.sys.stderr)
+            print("Some files appear to be missing symbols. Have they been renamed or declared as static? You may need to remake 'expected'", file=os.sys.stderr)
 
-        if not args.no_fun_allowed:
-            print(colorama.Fore.LIGHTWHITE_EX + "  Error, should (not) be in here " + colorama.Style.RESET_ALL, file=os.sys.stderr)
-            print("", file=os.sys.stderr)
-
-        print("Some files appear to be missing symbols. Have they been renamed or declared as static? You may need to remake 'expected'", file=os.sys.stderr)
-
-    if len(badFiles) + len(missingFiles) != 0:
         return 1
     
     print("", file=os.sys.stderr)
@@ -212,5 +203,5 @@ def main():
     return 0
 
 if __name__ == "__main__":
-    main()
-
+    ret = main()
+    exit(ret)
