@@ -180,6 +180,6 @@ void GfxPrint_Printf(GfxPrint* this, const char* fmt, ...) {
     va_start(args, fmt);
 
     GfxPrint_VPrintf(this, fmt, args);
-    
+
     va_end(args);
 }
