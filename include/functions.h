@@ -1736,7 +1736,7 @@ void Font_LoadOrderedFont(Font* font);
 // void func_800F50D4(void);
 void Kankyo_Init(GlobalContext* globalCtx, EnvironmentContext* envCtx);
 u32 func_800F5954(u8* param_1, u32 param_2, u32 param_3, u8 param_4, u8 param_5);
-// void func_800F5A8C(void);
+f32 func_800F5A8C(u16 param_1, u16 param_2, u16 param_3, GlobalContext* globalContext);
 // void func_800F5B10(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5);
 // void func_800F5CD0(void);
 // void func_800F6834(void);

@@ -212,7 +212,16 @@ void EnGiant_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/func_80B02234.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/func_80B02354.s")
+void func_80B02354(EnGiant* this, GlobalContext* globalCtx, u32 arg2) {
+    CsCmdActorAction* actorAction = globalCtx->csCtx.npcActions[arg2];
+    f32 floatUnk10 = actorAction->unk10;
+    s32 pad[2];
+    f32 floatUnk1C = actorAction->unk1C;
+    f32 functionTemp;
+
+    functionTemp = func_800F5A8C(actorAction->endFrame, actorAction->startFrame, globalCtx->csCtx.frames, globalCtx);
+    this->actor.world.pos.y = ((floatUnk1C - floatUnk10) * functionTemp) + floatUnk10;
+}
 
 void func_80B023D0(EnGiant* this, GlobalContext* globalCtx) {
     if (func_800EE29C(globalCtx, this->unk_24A)) {
