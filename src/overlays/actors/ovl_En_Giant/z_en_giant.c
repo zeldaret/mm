@@ -10,7 +10,6 @@ void EnGiant_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGiant_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80B01990(EnGiant* this, s16 arg1);
-s32 func_80B01A74(EnGiant* this);
 void func_80B023D0(EnGiant* this, GlobalContext* globalCtx);
 void func_80B024AC(EnGiant* this, GlobalContext* globalCtx);
 void func_80B024D8(EnGiant* this, GlobalContext* globalCtx);
@@ -43,7 +42,44 @@ s32 D_80B0298C[] = { 0x06005A80, 0x06006280, 0x06006A80, 0x00000000, 0x00000000 
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/func_80B01990.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/func_80B01A74.s")
+s32 func_80B01A74(EnGiant* this) {
+    switch (this->actor.params & 0xF) {
+        case 2:
+        case 6:
+        case 10:
+        case 14:
+            if (!CHECK_QUEST_ITEM(0)) {
+                return 1;
+            }
+            break;
+        case 0:
+        case 4:
+        case 8:
+        case 12:
+            if (!CHECK_QUEST_ITEM(1)) {
+                return 1;
+            }
+            break;
+        case 3:
+        case 7:
+        case 11:
+        case 15:
+            if (!CHECK_QUEST_ITEM(2)) {
+                return 1;
+            }
+            break;
+        case 1:
+        case 5:
+        case 9:
+        case 13:
+            if (!CHECK_QUEST_ITEM(3)) {
+                return 1;
+            }
+            break;
+    }
+
+    return 0;
+}
 
 void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnGiant* this = THIS;
