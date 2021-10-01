@@ -16,7 +16,6 @@ void EnDai_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDai_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80B3F00C(EnDai* this, GlobalContext* globalCtx);
-void func_80B3EEDC(EnDai* this, GlobalContext* globalCtx);
 void func_80B3EF90(EnDai* this, GlobalContext* globalCtx);
 
 extern AnimationHeader D_060107B0;

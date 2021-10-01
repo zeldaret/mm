@@ -324,6 +324,8 @@ void EnMinislime_IceArrowDamage(EnMinislime* this, GlobalContext* globalCtx) {
             Math_Vec3f_Copy(&this->shakeRefPos, &this->actor.world.pos);
         } else if (this->frozenTimer > 0) {
             if ((this->frozenTimer < 20) || ((this->frozenTimer < 40) && ((this->frozenTimer % 2) != 0))) {
+                s32 requiredScopeTemp;
+
                 invFrozenTimer = 1.0f / this->frozenTimer;
                 randFloat = Rand_ZeroFloat(invFrozenTimer);
                 randSign = Rand_ZeroOne() < 0.5f ? -1 : 1;
@@ -331,7 +333,6 @@ void EnMinislime_IceArrowDamage(EnMinislime* this, GlobalContext* globalCtx) {
                 randFloat = Rand_ZeroFloat(invFrozenTimer);
                 randSign = Rand_ZeroOne() < 0.5f ? -1 : 1;
                 this->actor.world.pos.z = randSign * (invFrozenTimer + randFloat) + this->shakeRefPos.z;
-            dummy:; // required for match
             }
         }
     } else {

@@ -1,13 +1,22 @@
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Union
-import attr
 import bisect
 import copy
-import sys
-import time
-import typing
+from dataclasses import dataclass, field
 from random import Random
+import typing
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    List,
+    Optional,
+    Sequence,
+    Set,
+    Tuple,
+    TypeVar,
+    Union,
+)
 
-from pycparser import c_ast as ca, c_parser, c_generator
+from pycparser import c_ast as ca
 
 from . import ast_util
 from .ast_util import Block, Indices, Statement, Expression
@@ -16,9 +25,9 @@ from .ast_types import (
     Type,
     TypeMap,
     allowed_basic_type,
-    basic_type,
     build_typemap,
     decayed_expr_type,
+    get_decl_type,
     resolve_typedefs,
     same_type,
     set_decl_name,
@@ -30,32 +39,49 @@ from .ast_types import (
 DEBUG_EAGER_TYPES = False
 
 # Randomize the type of introduced temporary variable with this probability
-RANDOMIZE_TYPE_PROB = 0.3
+PROB_RANDOMIZE_TYPE = 0.3
 
 # Reuse an existing var instead of introducing a new temporary one with this probability
-REUSE_VAR_PROB = 0.5
+PROB_REUSE_VAR = 0.5
 
 # When wrapping statements in a new block, use a same-line `do { ... } while(0);`
 # (as opposed to non-same-line `if (1) { ... }`) with this probability.
 # This matches what macros often do.
-INS_BLOCK_DOWHILE_PROB = 0.5
+PROB_INS_BLOCK_DOWHILE = 0.5
 
 # Make a pointer to a temporary expression, rather than copy it by value, with
 # this probability. (This always happens for expressions of struct type,
 # regardless of this probability.)
-TEMP_PTR_PROB = 0.05
+PROB_TEMP_PTR = 0.05
+
+# Instead of emitting an assignment statement, assign the temporary within the
+# first expression it's used in with this probability.
+PROB_TEMP_ASSIGN_AT_FIRST_USE = 0.1
+
+# When creating a temporary for an expression, use the temporary for all equal
+# expressions with this probability.
+PROB_TEMP_REPLACE_ALL = 0.2
+
+# When creating a temporary for an expression, use the temporary for an interval
+# with maximal endpoint with this probability.
+PROB_TEMP_REPLACE_MOST = 0.2
 
 # When substituting a variable by its value, substitute all instances with this
 # probability, rather than just a subrange or the complement of one.
-PROB_REPLACE_ALL = 0.3
+PROB_EXPAND_REPLACE_ALL = 0.3
 
 # When substituting a variable by its value, keep the variable assignment with
 # this probability.
 PROB_KEEP_REPLACED_VAR = 0.2
 
+# Change the return type of an external function to void with this probability.
+PROB_RET_VOID = 0.2
+
 # Number larger than any node index. (If you're trying to compile a 1 GB large
 # C file to matching asm, you have bigger problems than this limit.)
 MAX_INDEX = 10 ** 9
+
+T = TypeVar("T")
 
 
 class RandomizationFailure(Exception):
@@ -70,11 +96,11 @@ def ensure(condition: Any) -> None:
         raise RandomizationFailure
 
 
-@attr.s
+@dataclass
 class Region:
-    start: int = attr.ib()
-    end: int = attr.ib()
-    indices: Optional[Indices] = attr.ib(cmp=False)
+    start: int
+    end: int
+    indices: Optional[Indices] = field(compare=False)
 
     @staticmethod
     def unbounded() -> "Region":
@@ -87,28 +113,28 @@ class Region:
         """Check whether the region contains an entire node."""
         if self.indices is None:
             return True
-        # We assume valid nesting of regions, so it's fine to check just the
-        # node's starting index. (Though for clarify we should probably check
-        # the end index as well, if we refactor the code so it's available.)
-        return self.start < self.indices[node] < self.end
+        return (
+            self.start < self.indices.starts[node]
+            and self.indices.ends[node] < self.end
+        )
 
     def contains_pre(self, node: ca.Node) -> bool:
         """Check whether the region contains a point just before a given node."""
         if self.indices is None:
             return True
-        return self.start < self.indices[node] <= self.end
+        return self.start < self.indices.starts[node] < self.end
 
     def contains_pre_index(self, index: int) -> bool:
         """Check whether the region contains a point just before a given node,
         as specified by its index."""
         if self.indices is None:
             return True
-        return self.start < index <= self.end
+        return self.start < index < self.end
 
 
-def reverse_indices(indices: Indices) -> Dict[int, ca.Node]:
+def reverse_start_indices(indices: Indices) -> Dict[int, ca.Node]:
     ret = {}
-    for k, v in indices.items():
+    for k, v in indices.starts.items():
         ret[v] = k
     return ret
 
@@ -125,10 +151,10 @@ def get_randomization_region(
             if node.string == "_permuter randomizer start":
                 if cur_start is not None:
                     raise Exception("nested PERM_RANDOMIZE not supported")
-                cur_start = indices[node]
+                cur_start = indices.ends[node]
             if node.string == "_permuter randomizer end":
                 assert cur_start is not None, "randomizer end without start"
-                ret.append(Region(cur_start, indices[node], indices))
+                ret.append(Region(cur_start + 1, indices.starts[node] - 1, indices))
                 cur_start = None
 
     Visitor().visit(top_node)
@@ -139,20 +165,15 @@ def get_randomization_region(
 
 
 def get_block_expressions(block: Block, region: Region) -> List[Expression]:
+    """Return a list of all expressions within a block that are also within a
+    given region."""
     exprs: List[Expression] = []
 
-    def rec(block: Block) -> None:
-        for stmt in ast_util.get_block_stmts(block, False):
-            ast_util.for_nested_blocks(stmt, rec)
+    def visitor(expr: Expression) -> None:
+        if region.contains_node(expr):
+            exprs.append(expr)
 
-            def visitor(expr: Expression) -> None:
-                if not region.contains_node(expr):
-                    return
-                exprs.append(expr)
-
-            replace_subexprs(stmt, visitor)
-
-    rec(block)
+    replace_subexprs(block, visitor)
     return exprs
 
 
@@ -173,17 +194,17 @@ def compute_write_locations(
     class Visitor(ca.NodeVisitor):
         def visit_Decl(self, node: ca.Decl) -> None:
             if node.name:
-                add_write(node.name, indices[node])
+                add_write(node.name, indices.starts[node])
             self.generic_visit(node)
 
         def visit_UnaryOp(self, node: ca.UnaryOp) -> None:
             if node.op in ["p++", "p--", "++", "--"] and isinstance(node.expr, ca.ID):
-                add_write(node.expr.name, indices[node])
+                add_write(node.expr.name, indices.starts[node])
             self.generic_visit(node)
 
         def visit_Assignment(self, node: ca.Assignment) -> None:
             if isinstance(node.lvalue, ca.ID):
-                add_write(node.lvalue.name, indices[node])
+                add_write(node.lvalue.name, indices.starts[node])
             self.generic_visit(node)
 
     Visitor().visit(top_node)
@@ -194,7 +215,7 @@ def compute_read_locations(top_node: ca.Node, indices: Indices) -> Dict[str, Lis
     reads: Dict[str, List[int]] = {}
     for node in find_var_reads(top_node):
         var_name = node.name
-        loc = indices[node]
+        loc = indices.starts[node]
         if var_name not in reads:
             reads[var_name] = []
         else:
@@ -234,27 +255,36 @@ def find_var_reads(top_node: ca.Node) -> List[ca.ID]:
 
 
 def visit_replace(top_node: ca.Node, callback: Callable[[ca.Node, bool], Any]) -> None:
-    def rec(orig_node: ca.Node, toplevel: bool = False) -> Any:
+    def empty_statement_to_none(node: Any) -> Any:
+        if isinstance(node, ca.EmptyStatement):
+            return None
+        return node
+
+    def rec(orig_node: ca.Node, toplevel: bool = False, *, lvalue: bool = False) -> Any:
         node: "ca.AnyNode" = typing.cast("ca.AnyNode", orig_node)
-        repl = callback(node, not toplevel)
+        repl = callback(node, not toplevel and not lvalue)
         if repl:
             return repl
         if isinstance(node, ca.Assignment):
+            node.lvalue = rec(node.lvalue, lvalue=True)
             node.rvalue = rec(node.rvalue)
         elif isinstance(node, ca.StructRef):
-            node.name = rec(node.name)
+            node.name = rec(node.name, lvalue=(lvalue and node.type == "."))
         elif isinstance(node, ca.Cast):
             if node.expr:
                 node.expr = rec(node.expr)
         elif isinstance(node, (ca.Constant, ca.ID)):
             pass
         elif isinstance(node, ca.UnaryOp):
-            if node.op not in ["p++", "p--", "++", "--", "&", "sizeof"]:
+            if node.op in ["p++", "p--", "++", "--", "&"]:
+                node.expr = rec(node.expr, lvalue=True)
+            elif node.op != "sizeof":
                 node.expr = rec(node.expr)
         elif isinstance(node, ca.BinaryOp):
             node.left = rec(node.left)
             node.right = rec(node.right)
         elif isinstance(node, ca.FuncCall):
+            # not worth replacing .name
             if node.args:
                 rec(node.args, True)
         elif isinstance(node, ca.ExprList):
@@ -262,7 +292,7 @@ def visit_replace(top_node: ca.Node, callback: Callable[[ca.Node, bool], Any]) -
                 if not isinstance(node.exprs[i], ca.Typename):
                     node.exprs[i] = rec(node.exprs[i])
         elif isinstance(node, ca.ArrayRef):
-            node.name = rec(node.name)
+            node.name = rec(node.name, lvalue=lvalue)
             node.subscript = rec(node.subscript)
         elif isinstance(node, ca.TernaryOp):
             node.cond = rec(node.cond)
@@ -276,18 +306,20 @@ def visit_replace(top_node: ca.Node, callback: Callable[[ca.Node, bool], Any]) -
                 node.init = rec(node.init, isinstance(node.init, ca.InitList))
         elif isinstance(node, ca.For):
             if node.init:
-                node.init = rec(node.init)
+                node.init = empty_statement_to_none(rec(node.init, True))
             if node.cond:
                 node.cond = rec(node.cond)
             if node.next:
-                node.next = rec(node.next, True)
+                node.next = empty_statement_to_none(rec(node.next, True))
             node.stmt = rec(node.stmt, True)
         elif isinstance(node, ca.Compound):
-            for sub in node.block_items or []:
-                rec(sub, True)
+            if node.block_items:
+                for i, sub in enumerate(node.block_items):
+                    node.block_items[i] = rec(sub, True)
         elif isinstance(node, (ca.Case, ca.Default)):
-            for sub in node.stmts or []:
-                rec(sub, True)
+            if node.stmts:
+                for i, sub in enumerate(node.stmts):
+                    node.stmts[i] = rec(sub, True)
         elif isinstance(node, ca.While):
             node.cond = rec(node.cond)
             node.stmt = rec(node.stmt, True)
@@ -351,14 +383,53 @@ def replace_subexprs(top_node: ca.Node, callback: Callable[[Expression], Any]) -
     visit_replace(top_node, expr_filter)
 
 
+def replace_node(top_node: ca.Node, old: ca.Node, new: ca.Node) -> None:
+    visit_replace(top_node, lambda node, _: new if node is old else None)
+
+
+def random_bool(random: Random, prob: float) -> bool:
+    return random.random() < prob
+
+
+def random_weighted(random: Random, values: Sequence[Tuple[T, float]]) -> T:
+    sumprob = 0.0
+    for (val, prob) in values:
+        assert prob >= 0, "Probabilities must be non-negative"
+        sumprob += prob
+    assert sumprob > 0, "Cannot pick randomly from empty set"
+    targetprob = random.uniform(0, sumprob)
+    sumprob = 0.0
+    for (val, prob) in values:
+        sumprob += prob
+        if sumprob > targetprob:
+            return val
+
+    # Float imprecision
+    for (val, prob) in values:
+        if prob > 0:
+            return val
+    assert False, "unreachable"
+
+
 def random_type(random: Random) -> SimpleType:
     new_names: List[str] = []
-    if random.choice([True, False]):
+    if random_bool(random, 0.5):
         new_names.append("unsigned")
-    new_names.append(random.choice(["char", "short", "int", "int"]))
+    new_names.extend(
+        random_weighted(
+            random,
+            [
+                (["char"], 1),
+                (["short"], 1),
+                (["int"], 2),
+                (["long"], 0.5),
+                (["long", "long"], 0.5),
+            ],
+        )
+    )
     idtype = ca.IdentifierType(names=new_names)
     quals = []
-    if random.choice([True, False]):
+    if random_bool(random, 0.5):
         quals = ["volatile"]
     return ca.TypeDecl(declname=None, quals=quals, type=idtype)
 
@@ -388,7 +459,7 @@ def randomize_innermost_type(
 
 
 def get_insertion_points(
-    fn: ca.FuncDef, region: Region
+    fn: ca.FuncDef, region: Region, *, allow_within_decl: bool = False
 ) -> List[Tuple[Block, int, Optional[ca.Node]]]:
     cands: List[Tuple[Block, int, Optional[ca.Node]]] = []
 
@@ -404,6 +475,8 @@ def get_insertion_points(
             cands.append((block, len(stmts), None))
 
     rec(fn.body)
+    if not allow_within_decl:
+        cands = [c for c in cands if not isinstance(c[2], ca.Decl)]
     return cands
 
 
@@ -418,7 +491,7 @@ def maybe_reuse_var(
     typemap: TypeMap,
     random: Random,
 ) -> Optional[str]:
-    if random.uniform(0, 1) > REUSE_VAR_PROB or var is None:
+    if not random_bool(random, PROB_REUSE_VAR) or var is None:
         return None
     var_type: SimpleType = decayed_expr_type(ca.ID(var), typemap)
     if not same_type(var_type, type, typemap, allow_similar=True):
@@ -430,8 +503,8 @@ def maybe_reuse_var(
             return list[ind]
         return None
 
-    assignment_ind = indices[assign_before]
-    expr_ind = indices[orig_expr]
+    assignment_ind = indices.starts[assign_before]
+    expr_ind = indices.starts[orig_expr]
     write = find_next(writes.get(var, []), assignment_ind)
     read = find_next(reads.get(var, []), assignment_ind)
     # TODO: if write/read is within expr, search again from after it (since
@@ -461,11 +534,11 @@ def perm_temp_for_expr(
     writes: Dict[str, List[int]] = compute_write_locations(fn, indices)
     reads: Dict[str, List[int]] = compute_read_locations(fn, indices)
     typemap = build_typemap(ast)
-    candidates: List[Tuple[float, Tuple[Place, Expression, Optional[str]]]] = []
+    candidates: List[Tuple[Tuple[Place, Expression, Optional[str]], float]] = []
 
     # Step 0: decide whether to make a pointer to the chosen expression, or to
     # copy it by value.
-    should_make_ptr = random.uniform(0, 1) < TEMP_PTR_PROB
+    should_make_ptr = random_bool(random, PROB_TEMP_PTR)
 
     def surrounding_writes(expr: Expression, base: Expression) -> Tuple[int, int]:
         """Compute the previous and next write to a variable included in expr,
@@ -476,7 +549,7 @@ def perm_temp_for_expr(
         sub_reads = find_var_reads(expr)
         prev_write = -1
         next_write = MAX_INDEX
-        base_index = indices[base]
+        base_index = indices.starts[base]
         for sub_read in sub_reads:
             var_name = sub_read.name
             if var_name not in writes:
@@ -534,7 +607,7 @@ def perm_temp_for_expr(
                     # assignment too high up.
                     # TODO: also fail on moving past function calls, or
                     # possibly-aliasing writes.
-                    if indices[place[2]] <= prev_write:
+                    if indices.starts[place[2]] <= prev_write:
                         break
 
                     # Make far-away places less likely, and similarly for
@@ -544,7 +617,7 @@ def perm_temp_for_expr(
                     if isinstance(orig_expr, (ca.ID, ca.Constant)):
                         prob *= 0.15 if should_make_ptr else 0.5
                     reuse_cand = random.choice(reuse_cands) if reuse_cands else None
-                    candidates.append((prob, (place, expr, reuse_cand)))
+                    candidates.append(((place, expr, reuse_cand), prob))
 
                 einds[expr] = eind
 
@@ -552,28 +625,17 @@ def perm_temp_for_expr(
 
     rec(fn.body, [])
 
-    ensure(candidates)
-
     # Step 2: decide on a place/expression
-    sumprob = 0.0
-    for (prob, cand) in candidates:
-        sumprob += prob
-    targetprob = random.uniform(0, sumprob)
-    sumprob = 0.0
-    chosen_cand = None
-    for (prob, cand) in candidates:
-        sumprob += prob
-        if sumprob > targetprob:
-            chosen_cand = cand
-            break
+    ensure(candidates)
+    place: Optional[Place]
+    place, expr, reuse_cand = random_weighted(random, candidates)
 
-    assert chosen_cand is not None, "math"
-    place, expr, reuse_cand = chosen_cand
+    if random_bool(random, PROB_TEMP_ASSIGN_AT_FIRST_USE):
+        # Don't emit a statement for the assignment, emit an assignment
+        # expression at the first use instead.
+        place = None
+
     type: SimpleType = decayed_expr_type(expr, typemap)
-
-    # Don't replace effectful expressions. This is a bit expensive to
-    # check, so do it here instead of within the visitor.
-    ensure(not ast_util.is_effectful(expr))
 
     # Always use pointers when replacing structs
     if (
@@ -595,7 +657,10 @@ def perm_temp_for_expr(
     # print("replacing:", to_c(expr))
 
     # Step 3: decide on a variable to hold the expression
-    assign_before = place[2]
+    if place is not None:
+        assign_before = place[2]
+    else:
+        assign_before = orig_expr
     reused_var = maybe_reuse_var(
         reuse_cand,
         assign_before,
@@ -620,39 +685,57 @@ def perm_temp_for_expr(
 
     # Step 4: possibly expand the replacement to include duplicate expressions.
     prev_write, next_write = surrounding_writes(expr, orig_expr)
-    prev_write = max(prev_write, indices[assign_before] - 1)
+    prev_write = max(prev_write, indices.starts[assign_before] - 1)
     replace_cands: List[Expression] = []
 
     def find_duplicates(e: Expression) -> None:
-        if prev_write < indices[e] <= next_write and ast_util.equal_ast(e, orig_expr):
+        if prev_write < indices.starts[e] <= next_write and ast_util.equal_ast(
+            e, orig_expr
+        ):
             replace_cands.append(e)
 
-    replace_subexprs(fn.body, find_duplicates)
+    if ast_util.is_effectful(expr):
+        replace_cands = [orig_expr]
+    else:
+        replace_subexprs(fn.body, find_duplicates)
+
     assert orig_expr in replace_cands
-    index = replace_cands.index(orig_expr)
-    lo_index = random.randint(0, index)
-    hi_index = random.randint(index + 1, len(replace_cands))
+    if random_bool(random, PROB_TEMP_REPLACE_ALL):
+        lo_index = 0
+        hi_index = len(replace_cands)
+    else:
+        index = replace_cands.index(orig_expr)
+        lo_index = random.randint(0, index)
+        hi_index = random.randint(index + 1, len(replace_cands))
+        if random_bool(random, PROB_TEMP_REPLACE_MOST):
+            if random_bool(random, 0.5):
+                lo_index = 0
+            else:
+                hi_index = len(replace_cands)
     replace_cand_set = set(replace_cands[lo_index:hi_index])
 
     # Step 5: replace the chosen expression
     def replacer(e: Expression) -> Optional[Expression]:
         if e in replace_cand_set:
+            ret: Expression = ca.ID(var)
+            if place is None and e is orig_expr:
+                ret = ca.Assignment("=", ret, expr)
             if should_make_ptr:
-                return ca.UnaryOp("*", ca.ID(var))
-            else:
-                return ca.ID(var)
+                ret = ca.UnaryOp("*", ret)
+            return ret
         return None
 
     replace_subexprs(fn.body, replacer)
 
     # Step 6: insert the assignment and any new variable declaration
-    block, index, _ = place
-    assignment = ca.Assignment("=", ca.ID(var), expr)
-    ast_util.insert_statement(block, index, assignment)
+    if place is not None:
+        block, index, _ = place
+        assignment = ca.Assignment("=", ca.ID(var), expr)
+        ast_util.insert_statement(block, index, assignment)
     if not reused:
-        if random.uniform(0, 1) < RANDOMIZE_TYPE_PROB:
+        if random_bool(random, PROB_RANDOMIZE_TYPE):
             type = randomize_type(type, typemap, random)
-        ast_util.insert_decl(fn, var, type)
+        ast_util.insert_decl(fn, var, type, random)
 
 
 def perm_expand_expr(
@@ -675,13 +758,12 @@ def perm_expand_expr(
     # Step 2: find the assignment it uses
     reads = all_reads[var]
     writes = all_writes.get(var, [])
-    read = random.choice(reads)
     i = bisect.bisect_left(writes, index)
     # if i == 0, there is no write to replace the read by.
     ensure(i > 0)
     before = writes[i - 1]
     after = MAX_INDEX if i == len(writes) else writes[i]
-    rev_indices = reverse_indices(indices)
+    rev_indices = reverse_start_indices(indices)
     write = rev_indices[before]
     if (
         isinstance(write, ca.Decl)
@@ -689,11 +771,10 @@ def perm_expand_expr(
         and not isinstance(write.init, ca.InitList)
     ):
         repl_expr = write.init
-    elif isinstance(write, ca.Assignment):
+    elif isinstance(write, ca.Assignment) and write.op == "=":
         repl_expr = write.rvalue
     else:
         raise RandomizationFailure
-    ensure(not ast_util.is_effectful(repl_expr))
 
     # Step 3: pick of the range of variables to replace
     repl_cands = [
@@ -701,7 +782,7 @@ def perm_expand_expr(
     ]
     assert repl_cands, "index is always in repl_cands"
     myi = repl_cands.index(index)
-    if random.uniform(0, 1) >= PROB_REPLACE_ALL and len(repl_cands) > 1:
+    if not random_bool(random, PROB_EXPAND_REPLACE_ALL) and len(repl_cands) > 1:
         # Keep using the variable for a bit in the middle
         side = random.randrange(3)
         H = len(repl_cands)
@@ -712,12 +793,16 @@ def perm_expand_expr(
         repl_cands[loi:hii] = []
         keep_var = True
     else:
-        keep_var = random.uniform(0, 1) < PROB_KEEP_REPLACED_VAR
+        keep_var = random_bool(random, PROB_KEEP_REPLACED_VAR)
     repl_cands_set = set(repl_cands)
+
+    # Don't duplicate effectful expressions.
+    if ast_util.is_effectful(repl_expr):
+        ensure(len(repl_cands) == 1 and not keep_var)
 
     # Step 4: do the replacement
     def callback(expr: ca.Node, is_expr: bool) -> Optional[ca.Node]:
-        if indices[expr] in repl_cands_set:
+        if indices.starts[expr] in repl_cands_set:
             return copy.deepcopy(repl_expr)
         if expr == write and isinstance(write, ca.Assignment) and not keep_var:
             if is_expr:
@@ -756,6 +841,7 @@ def perm_randomize_internal_type(
         def visit_Decl(self, decl: ca.Decl) -> None:
             if isinstance(decl.type, ca.TypeDecl) and decl.name and decl.name in names:
                 decls.append(decl)
+            self.generic_visit(decl)
 
     Visitor().visit(fn)
 
@@ -795,9 +881,10 @@ def perm_randomize_external_type(
 
     ensure(decls)
     decl = random.choice(decls)[0]
+    decl_type = get_decl_type(decl)
 
     typemap = build_typemap(ast)
-    new_type = randomize_innermost_type(decl.type, typemap, random, ensure_changed=True)
+    new_type = randomize_innermost_type(decl_type, typemap, random, ensure_changed=True)
 
     for decl, i in decls:
         decl.type = copy.deepcopy(new_type)
@@ -817,6 +904,7 @@ def perm_randomize_function_type(
         def visit_FuncCall(self, node: ca.FuncCall) -> None:
             if region.contains_node(node) and isinstance(node.name, ca.ID):
                 names.add(node.name.name)
+            self.generic_visit(node)
 
     IdVisitor().visit(fn)
 
@@ -863,14 +951,14 @@ def perm_randomize_function_type(
     assert isinstance(main_fndecl, ca.FuncDecl), "checked above"
     main_decl.type = main_fndecl
 
-    if random.choice([True, False]):
+    if random_bool(random, 0.5):
         # Replace the return type, changing integer signedness/size as well as
         # switching to/from void (which we should perhaps avoid if the function
         # call result is used, but eh, it's annoying to tell).
         type = pointer_decay(main_fndecl.type, typemap)
         if allowed_basic_type(type, typemap, ["void"]):
             main_fndecl.type = random_type(random)
-        elif random.uniform(0, 1) < 0.2:
+        elif random_bool(random, PROB_RET_VOID):
             idtype = ca.IdentifierType(names=["void"])
             main_fndecl.type = ca.TypeDecl(declname=None, quals=[], type=idtype)
         else:
@@ -887,7 +975,8 @@ def perm_randomize_function_type(
         arg = main_fndecl.args.params[ind]
         if isinstance(arg, (ca.ID, ca.EllipsisParam)):
             raise RandomizationFailure
-        type = pointer_decay(arg.type, typemap)
+        arg_type = arg.type if isinstance(arg, ca.Typename) else get_decl_type(arg)
+        type = pointer_decay(arg_type, typemap)
         arg.type = randomize_type(type, typemap, random, ensure_changed=True)
         if isinstance(arg, ca.Decl):
             set_decl_name(arg)
@@ -914,20 +1003,25 @@ def perm_refer_to_var(
     ensure(cands)
     expr = random.choice(cands)
     ensure(not ast_util.is_effectful(expr))
-    type: SimpleType = decayed_expr_type(expr, build_typemap(ast))
+    typemap = build_typemap(ast)
+    type: Type = resolve_typedefs(decayed_expr_type(expr, typemap), typemap)
     if isinstance(type, ca.TypeDecl) and isinstance(type.type, (ca.Struct, ca.Union)):
         expr = ca.UnaryOp("&", expr)
 
-    if random.choice([True, False]):
+    if random_bool(random, 0.5):
         expr = ca.UnaryOp("!", expr)
 
     # Insert it wherever -- possibly outside the randomization region, since regalloc
     # can act at a distance. (Except before a declaration.)
     ins_cands = get_insertion_points(fn, Region.unbounded())
-    ins_cands = [c for c in ins_cands if not isinstance(c[2], ca.Decl)]
     ensure(ins_cands)
 
     cond = copy.deepcopy(expr)
+
+    # Repeat the condition up to two times: if (x && x && x) {} sometimes helps.
+    for i in range(random.choice((0, 0, 0, 0, 0, 1, 2, 2))):
+        cond = ca.BinaryOp("&&", cond, copy.deepcopy(expr))
+
     stmt = ca.If(cond=cond, iftrue=ca.Compound(block_items=[]), iffalse=None)
     tob, toi, _ = random.choice(ins_cands)
     ast_util.insert_statement(tob, toi, stmt)
@@ -960,7 +1054,7 @@ def perm_ins_block(
     if hi < lo:
         lo, hi = hi, lo
     new_block = ca.Compound(block_items=stmts[lo:hi])
-    if random.uniform(0, 1) < INS_BLOCK_DOWHILE_PROB and all(
+    if random_bool(random, PROB_INS_BLOCK_DOWHILE) and all(
         region.contains_node(n) for n in stmts[lo:hi]
     ):
         cond = ca.Constant(type="int", value="0")
@@ -988,12 +1082,11 @@ def perm_empty_stmt(
 
     # Insert the statement wherever, except before a declaration.
     cands = get_insertion_points(fn, Region.unbounded())
-    cands = [c for c in cands if not isinstance(c[2], ca.Decl)]
     ensure(cands)
 
     label_name = f"dummy_label_{random.randint(1, 10**6)}"
 
-    stmts: List[ca.Statement] = []
+    stmts: List[Statement] = []
 
     kind = random.randrange(5)
     if kind == 0:  # if (1) or multiple if (1)
@@ -1057,6 +1150,7 @@ def perm_associative(
         def visit_BinaryOp(self, node: ca.BinaryOp) -> None:
             if node.op in commutative_ops and region.contains_node(node):
                 cands.append(node)
+            self.generic_visit(node)
 
     Visitor().visit(fn.body)
     ensure(cands)
@@ -1066,6 +1160,67 @@ def perm_associative(
         node.op = ">" + node.op[1:]
     elif node.op[0] == ">":
         node.op = "<" + node.op[1:]
+
+
+def perm_condition(
+    fn: ca.FuncDef, ast: ca.FileAST, indices: Indices, region: Region, random: Random
+) -> None:
+    """Change if(x) into if(x != 0), or vice versa. Also handles for/while/do-while."""
+    cands: List[Union[ca.If, ca.While, ca.DoWhile, ca.For]] = []
+
+    class Visitor(ca.NodeVisitor):
+        def visit_If(self, node: ca.If) -> None:
+            cands.append(node)
+            self.generic_visit(node)
+
+        def visit_While(self, node: ca.While) -> None:
+            cands.append(node)
+            self.generic_visit(node)
+
+        def visit_DoWhile(self, node: ca.DoWhile) -> None:
+            cands.append(node)
+            self.generic_visit(node)
+
+        def visit_For(self, node: ca.For) -> None:
+            cands.append(node)
+            self.generic_visit(node)
+
+    Visitor().visit(fn.body)
+    ensure(cands)
+    node = random.choice(cands)
+    if not node.cond:
+        raise RandomizationFailure
+
+    if (
+        isinstance(node.cond, ca.BinaryOp)
+        and node.cond.op in ["==", "!=", "<", ">", "<=", ">="]
+        and random_bool(random, 0.9)
+    ):
+        ensure(node.cond.op in ["==", "!="])
+        ensure(
+            isinstance(node.cond.right, ca.Constant)
+            and node.cond.right.value in ["0", "0U", "0.0", "0.0f"]
+        )
+        if node.cond.op == "==":
+            node.cond = ca.UnaryOp("!", node.cond.left)
+        else:
+            node.cond = node.cond.left
+    else:
+        expr = node.cond
+        op = "!="
+        if isinstance(expr, ca.UnaryOp) and expr.op == "!" and random_bool(random, 0.9):
+            assert not isinstance(expr.expr, ca.Typename)
+            expr = expr.expr
+            op = "=="
+        zero = random_weighted(
+            random,
+            [
+                (ca.Constant("int", "0"), 0.8),
+                (ca.Constant("unsigned int", "0U"), 0.2),
+                (ca.Constant("float", "0.0f"), 0.05),
+            ],
+        )
+        node.cond = ca.BinaryOp(op, expr, zero)
 
 
 def perm_add_self_assignment(
@@ -1079,6 +1234,7 @@ def perm_add_self_assignment(
         def visit_Decl(self, decl: ca.Decl) -> None:
             if decl.name:
                 vars.append(decl.name)
+            self.generic_visit(decl)
 
     Visitor().visit(fn.body)
     ensure(vars)
@@ -1089,14 +1245,22 @@ def perm_add_self_assignment(
     ast_util.insert_statement(where[0], where[1], assignment)
 
 
+def perm_dummy_comma_expr(
+    fn: ca.FuncDef, ast: ca.FileAST, indices: Indices, region: Region, random: Random
+) -> None:
+    """Change x into (0, x) for a random expression x."""
+    cands = get_block_expressions(fn.body, region)
+    ensure(cands)
+    expr = random.choice(cands)
+    new_expr = ca.ExprList([ca.Constant("int", "0"), expr])
+    replace_node(fn.body, expr, new_expr)
+
+
 def perm_reorder_stmts(
     fn: ca.FuncDef, ast: ca.FileAST, indices: Indices, region: Region, random: Random
 ) -> None:
     """Move a statement to another random place."""
-    cands = get_insertion_points(fn, region)
-
-    # Don't reorder declarations, or put statements before them.
-    cands = [c for c in cands if not isinstance(c[2], ca.Decl)]
+    cands = get_insertion_points(fn, region, allow_within_decl=True)
 
     # Figure out candidate statements to be moved. Don't move pragmas; it can
     # cause assertion failures. Don't move blocks; statements are generally not
@@ -1114,16 +1278,108 @@ def perm_reorder_stmts(
 
     ensure(source_inds)
     fromi = random.choice(source_inds)
-    toi = round(random.triangular(0, len(cands) - 1, fromi))
 
-    fromb, fromi, _ = cands[fromi]
-    tob, toi, _ = cands[toi]
+    weighted_cands = []
+    for i in range(len(cands)):
+        dist = max(fromi - i, i - (fromi + 1))
+        if dist == 0:
+            continue
+        # Move distance 1, 2, 3, ... with probabilities
+        # 23%, 12%, 8%, 6%, 4%, 3%, 3%, 2%, 2%, 2%, ...
+        prob = (dist + 1) ** -1.5
+        weighted_cands.append((i, prob))
+    ensure(weighted_cands)
+    toi = random_weighted(random, weighted_cands)
+
+    fromb, fromi, from_stmt = cands[fromi]
+    tob, toi, to_stmt = cands[toi]
+
+    if fromb == tob:
+        ensure(toi != fromi and toi != fromi + 1)
+
+    if isinstance(from_stmt, ca.Decl):
+        # Moving a declaration is tricky, when also preserving C89 compatibility.
+        # We can move it to after another declaration, or to the start of a block.
+        # Alternatively, if the declaration includes an initializer, and we move
+        # it forwards, we can split that out as an assignment.
+        # We don't allow moving the declaration or assignment past the next
+        # occurrence of the variable.
+        ensure(from_stmt.name)
+        var_name = from_stmt.name
+        to_index = indices.starts[to_stmt] if to_stmt else indices.ends[fromb]
+        uses = 0
+
+        class Visitor(ca.NodeVisitor):
+            def visit_ID(self, node: ca.ID) -> None:
+                nonlocal uses
+                if node.name == var_name and indices.starts[node] < to_index:
+                    uses += 1
+
+            def visit_TypeDecl(self, node: ca.TypeDecl) -> None:
+                nonlocal uses
+                if node.declname == var_name and indices.starts[node] < to_index:
+                    uses += 1
+
+        Visitor().visit(fn.body)
+        ensure(uses <= 1)
+
+        to_block_stmts = ast_util.get_block_stmts(tob, False)
+        if toi == 0 or isinstance(to_block_stmts[toi - 1], ca.Decl):
+            # Fine to move
+            pass
+        elif (
+            from_stmt.name
+            and from_stmt.init
+            and not isinstance(from_stmt.init, ca.InitList)
+            and uses > 0
+        ):
+            assignment = ca.Assignment("=", ca.ID(from_stmt.name), from_stmt.init)
+            ast_util.insert_statement(tob, toi, assignment)
+            from_stmt.init = None
+            return
+        else:
+            raise RandomizationFailure
+    else:
+        # Don't put statements before declarations.
+        ensure(not isinstance(to_stmt, ca.Decl))
+
     if fromb == tob and fromi < toi:
         toi -= 1
-    ensure(not (fromb == tob and fromi == toi))
 
     stmt = ast_util.get_block_stmts(fromb, True).pop(fromi)
     ast_util.insert_statement(tob, toi, stmt)
+
+
+def perm_compound_assignment(
+    fn: ca.FuncDef, ast: ca.FileAST, indices: Indices, region: Region, random: Random
+) -> None:
+    """Convert a statement of the form `x = x op y` to `x op= y`, or vice versa."""
+    cands: List[ca.Assignment] = []
+    operators = ["+", "-", "*", "/", "<<", ">>", "^", "|", "&"]
+
+    class Visitor(ca.NodeVisitor):
+        def visit_Assignment(self, node: ca.Assignment) -> None:
+            if region.contains_node(node):
+                if node.op != "=" or (
+                    isinstance(node.rvalue, ca.BinaryOp)
+                    and ast_util.equal_ast(node.lvalue, node.rvalue.left)
+                    and node.rvalue.op in operators
+                ):
+                    cands.append(node)
+            self.generic_visit(node)
+
+    Visitor().visit(fn.body)
+    ensure(cands)
+    node = random.choice(cands)
+
+    if node.op == "=":
+        assert isinstance(node.rvalue, ca.BinaryOp)
+        node.op = node.rvalue.op + node.op
+        node.rvalue = node.rvalue.right
+    else:
+        operator = node.op[:-1]
+        node.op = "="
+        node.rvalue = ca.BinaryOp(operator, copy.deepcopy(node.lvalue), node.rvalue)
 
 
 def perm_inequalities(
@@ -1138,6 +1394,7 @@ def perm_inequalities(
         def visit_BinaryOp(self, node: ca.BinaryOp) -> None:
             if node.op in inequalities and region.contains_node(node):
                 cands.append(node)
+            self.generic_visit(node)
 
     Visitor().visit(fn.body)
     ensure(cands)
@@ -1162,13 +1419,13 @@ def perm_inequalities(
     else:
         if node.op in ["<", ">="]:
             node.op = {"<": "<=", ">=": ">"}[node.op]
-            if random.choice([True, False]):
+            if random_bool(random, 0.5):
                 node.left = plus1(node.left)
             else:
                 node.right = minus1(node.right)
         else:
             node.op = {">": ">=", "<=": "<"}[node.op]
-            if random.choice([True, False]):
+            if random_bool(random, 0.5):
                 node.left = minus1(node.left)
             else:
                 node.right = plus1(node.right)
@@ -1177,8 +1434,9 @@ def perm_inequalities(
 def perm_add_mask(
     fn: ca.FuncDef, ast: ca.FileAST, indices: Indices, region: Region, random: Random
 ) -> None:
-    """Add a mask of 0xFF[FFFFFFFFFFFFFF] to a random expression of integer type.
-    In some cases this mask is optimized out but affects regalloc."""
+    """Add a random amount of masks of 0xFF[FFFFFFFFFFFFFF] to a random expression of integer type.
+    In some cases this mask is optimized out but affects regalloc.
+    The regalloc change seems to cycle with slight differences every n masks."""
     typemap = build_typemap(ast)
 
     # Find expression to add the mask to
@@ -1198,12 +1456,81 @@ def perm_add_mask(
     masks: List[str] = ["0xFF", "0xFFFF", "0xFFFFFFFF", "0xFFFFFFFFFFFFFFFF"]
     mask = random.choice(masks) + random.choice(["", "u"])
 
-    visit_replace(
-        fn.body,
-        lambda n, _: ca.BinaryOp("&", expr, ca.Constant("int", mask))
-        if n is expr
-        else None,
-    )
+    new_expr = ca.BinaryOp("&", expr, ca.Constant("int", mask))
+    if random_bool(random, 0.3):
+        for _ in range(random.randrange(12)):
+            new_expr = ca.BinaryOp("&", new_expr, ca.Constant("int", mask))
+
+    replace_node(fn.body, expr, new_expr)
+
+
+def perm_xor_zero(
+    fn: ca.FuncDef, ast: ca.FileAST, indices: Indices, region: Region, random: Random
+) -> None:
+    """Add ^0 to a random expression of integer type, or *1 to floats."""
+    typemap = build_typemap(ast)
+
+    # Find a random expression
+    cands: List[Expression] = get_block_expressions(fn.body, region)
+    ensure(cands)
+
+    expr = random.choice(cands)
+    type: SimpleType = decayed_expr_type(expr, typemap)
+    int_types = ["int", "char", "long", "short", "signed", "unsigned"]
+
+    if allowed_basic_type(type, typemap, int_types):
+        new_expr = ca.BinaryOp("^", expr, ca.Constant("int", "0"))
+    elif allowed_basic_type(type, typemap, ["float"]):
+        new_expr = ca.BinaryOp("*", expr, ca.Constant("float", "1.0f"))
+    elif allowed_basic_type(type, typemap, ["double"]):
+        new_expr = ca.BinaryOp("*", expr, ca.Constant("double", "1.0"))
+    else:
+        raise RandomizationFailure
+
+    replace_node(fn.body, expr, new_expr)
+
+
+def perm_float_literal(
+    fn: ca.FuncDef, ast: ca.FileAST, indices: Indices, region: Region, random: Random
+) -> None:
+    """Converts a Float Literal"""
+    cands: List[ca.Constant] = []
+
+    class Visitor(ca.NodeVisitor):
+        def visit_Constant(self, node: ca.Constant) -> None:
+            if node.type == "float" and region.contains_node(node):
+                cands.append(node)
+
+    Visitor().visit(fn.body)
+    ensure(cands)
+
+    node = random.choice(cands)
+
+    value: str = node.value.lower()
+    choices: List[str] = [value[:-1]]
+    if value.endswith(".0f"):
+        choices.append(value[:-3] or "0")
+    elif value.endswith(".f"):
+        choices.append(value[:-2] or "0")
+    if value.startswith("0."):
+        choices.append("." + (value[2:] or "0"))
+    elif value.startswith("."):
+        choices.append("0" + value)
+    if value.endswith(".0f"):
+        choices.append((value[:-3] or "0") + ".f")
+    else:
+        choices.append(value[:-1] + "0f")
+
+    ensure(choices)
+    value = random.choice(choices)
+    if value.endswith("f"):
+        type = "float"
+    elif "." in value:
+        type = "double"
+    else:
+        type = "int"
+
+    replace_node(fn.body, node, ca.Constant(type, value))
 
 
 def perm_cast_simple(
@@ -1229,7 +1556,7 @@ def perm_cast_simple(
     integral_type = [["int"], ["char"], ["long"], ["short"], ["long", "long"]]
     floating_type = [["float"], ["double"]]
     new_type: List[str]
-    if random.choice([True, False]):
+    if random_bool(random, 0.5):
         # Cast to integral type, sometimes unsigned
         sign: List[str] = random.choice([[], ["unsigned"]])
         new_type = sign + random.choice(integral_type)
@@ -1238,13 +1565,9 @@ def perm_cast_simple(
         new_type = random.choice(floating_type)
 
     # Surround the original expression with a cast to the chosen type
-    def callback(node: ca.Node, is_expr: bool) -> Optional[ca.Node]:
-        if node is expr:
-            typedecl = ca.TypeDecl(None, [], ca.IdentifierType(new_type))
-            return ca.Cast(ca.Typename(None, [], typedecl), expr)
-        return None
-
-    visit_replace(fn.body, callback)
+    typedecl = ca.TypeDecl(None, [], ca.IdentifierType(new_type))
+    new_expr = ca.Cast(ca.Typename(None, [], typedecl), expr)
+    replace_node(fn.body, expr, new_expr)
 
 
 # struct_ref          # type of a         # easiest conversion
@@ -1287,6 +1610,7 @@ def perm_struct_ref(
         def visit_StructRef(self, node: ca.StructRef) -> None:
             if region.contains_node(node):
                 cands.append(node)
+            self.generic_visit(node)
 
     Visitor().visit(fn.body)
     ensure(cands)
@@ -1294,7 +1618,7 @@ def perm_struct_ref(
     # TODO: Split into separate perm? Need a separate one for arrayrefs, (a + b)[1] to a[b + 1]
     def randomize_associative_binop(left: ca.Node, right: ca.BinaryOp) -> ca.BinaryOp:
         """Try moving parentheses to the left side sometimes (sadly, it seems to matter)"""
-        if random.choice([True, False]) and right.op in ["+", "-"]:
+        if random_bool(random, 0.5) and right.op in ["+", "-"]:
             # ((a + b) - c)
             return ca.BinaryOp(
                 right.op, ca.BinaryOp("+", left, right.left), right.right
@@ -1399,7 +1723,7 @@ def perm_struct_ref(
             changed = True
 
         # Step 4: Convert back to ArrayRef
-        if random.choice([True, False]):
+        if random_bool(random, 0.5):
             # Sanity check that there's at least one dereference
             if isinstance(parent, ca.UnaryOp) and parent.op == "*":
                 apply_child(parent, to_array)
@@ -1407,7 +1731,7 @@ def perm_struct_ref(
                 changed = True
 
     # Step 5: Convert the StructRef type back
-    if random.choice([True, False]):
+    if random_bool(random, 0.5):
         struct_ref.name = addr(struct_ref.name)
         struct_ref.type = "->"
         changed = True
@@ -1429,6 +1753,7 @@ def perm_split_assignment(
                 and region.contains_node(node)
             ):
                 cands.append(node)
+            self.generic_visit(node)
 
     Visitor().visit(fn.body)
     ensure(cands)
@@ -1461,7 +1786,7 @@ def perm_split_assignment(
     vartype = decayed_expr_type(var, typemap)
 
     # Choose which side to move to a new assignment
-    if random.choice([True, False]):
+    if random_bool(random, 0.5):
         side = split.left
         sidetype = decayed_expr_type(side, typemap)
         ensure(same_type(vartype, sidetype, typemap, allow_similar=True))
@@ -1477,6 +1802,99 @@ def perm_split_assignment(
     ast_util.insert_statement(ins_block, ins_index, new_assign)
 
 
+def perm_remove_ast(
+    fn: ca.FuncDef, ast: ca.FileAST, indices: Indices, region: Region, random: Random
+) -> None:
+    """Delete parts of the function that might be unnecessary (mistakes or unnecessary changes from an improved base.c)."""
+    cands: List[Tuple[ca.Node, ca.Node]] = []
+
+    class Visitor(ca.NodeVisitor):
+        def visit_Cast(self, node: ca.Cast) -> None:
+            if region.contains_node(node):
+                cands.append((node, node.expr))
+            self.generic_visit(node)
+
+        # Replace (a & constant) with (a).
+        def visit_BinaryOp(self, node: ca.BinaryOp) -> None:
+            if region.contains_node(node) and node.op == "&":
+                if isinstance(node.left, ca.Constant):
+                    cands.append((node, node.right))
+                if isinstance(node.right, ca.Constant):
+                    cands.append((node, node.left))
+            self.generic_visit(node)
+
+        # Remove if statements that don't have an else
+        def visit_If(self, node: ca.If) -> None:
+            if not node.iffalse and region.contains_node(node):
+                cands.append((node, node.iftrue))
+            self.generic_visit(node)
+
+        # Remove loops
+        def visit_While(self, node: ca.While) -> None:
+            if region.contains_node(node):
+                cands.append((node, node.stmt))
+            self.generic_visit(node)
+
+        def visit_DoWhile(self, node: ca.DoWhile) -> None:
+            if region.contains_node(node):
+                cands.append((node, node.stmt))
+            self.generic_visit(node)
+
+    Visitor().visit(fn.body)
+    ensure(cands)
+
+    cand, expr = random.choice(cands)
+    replace_node(fn.body, cand, expr)
+
+
+def perm_duplicate_assignment(
+    fn: ca.FuncDef, ast: ca.FileAST, indices: Indices, region: Region, random: Random
+) -> None:
+    """Duplicate an assignment, sometimes forcing IDO to reuse a register."""
+    cands = []
+
+    class Visitor(ca.NodeVisitor):
+        def visit_Assignment(self, node: ca.Assignment) -> None:
+            if region.contains_node(node) and node.op == "=":
+                cands.append(node)
+            self.generic_visit(node)
+
+    Visitor().visit(fn.body)
+    ensure(cands)
+    cand = random.choice(cands)
+
+    ins_cands = get_insertion_points(fn, Region.unbounded())
+    ensure(ins_cands)
+
+    dup = copy.deepcopy(cand)
+    tob, toi, _ = random.choice(ins_cands)
+    ast_util.insert_statement(tob, toi, dup)
+
+
+def perm_pad_var_decl(
+    fn: ca.FuncDef, ast: ca.FileAST, indices: Indices, region: Region, random: Random
+) -> None:
+    """Inserts an unused variable to adjust stack offsets. Probably only useful with --stack-diffs enabled."""
+    vars: List[str] = []
+
+    class Visitor(ca.NodeVisitor):
+        def visit_Decl(self, decl: ca.Decl) -> None:
+            if decl.name:
+                vars.append(decl.name)
+            self.generic_visit(decl)
+
+    Visitor().visit(fn.body)
+
+    var = "pad"
+    counter = 1
+    while var in vars:
+        counter += 1
+        var = f"pad{counter}"
+
+    type = random_type(random)
+    ast_util.insert_decl(fn, var, type, random)
+
+
 class Randomizer:
     def __init__(self, rng_seed: int) -> None:
         self.random = Random(rng_seed)
@@ -1489,9 +1907,12 @@ class Randomizer:
         methods = [
             (perm_temp_for_expr, 100),
             (perm_expand_expr, 20),
-            (perm_add_mask, 10),
+            (perm_reorder_stmts, 20),
+            (perm_add_mask, 15),
+            (perm_xor_zero, 10),
             (perm_cast_simple, 10),
             (perm_refer_to_var, 10),
+            (perm_float_literal, 10),
             (perm_randomize_internal_type, 10),
             (perm_randomize_external_type, 5),
             (perm_randomize_function_type, 5),
@@ -1500,15 +1921,18 @@ class Randomizer:
             (perm_ins_block, 10),
             (perm_struct_ref, 10),
             (perm_empty_stmt, 10),
+            (perm_condition, 10),
+            (perm_dummy_comma_expr, 5),
             (perm_add_self_assignment, 5),
-            (perm_reorder_stmts, 5),
             (perm_associative, 5),
             (perm_inequalities, 5),
+            (perm_compound_assignment, 5),
+            (perm_remove_ast, 5),
+            (perm_duplicate_assignment, 5),
+            (perm_pad_var_decl, 1),
         ]
         while True:
-            method = self.random.choice(
-                [x for (elem, prob) in methods for x in [elem] * prob]
-            )
+            method = random_weighted(self.random, methods)
             try:
                 method(fn, ast, indices, region, self.random)
                 break

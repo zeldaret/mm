@@ -20,6 +20,9 @@ animdict ={
     "func_800F0568": "Audio_PlaySoundAtPosition",
     "func_8016970C": "Play_CameraSetAtEye",
     "func_800BBA88": "Enemy_StartFinishingBlow",
+    "ShrinkWindow_Step": "ShrinkWindow_Update",
+    "ShrinkWindow_Fini": "ShrinkWindow_Destroy",
+    "func_801A89A8": "Audio_QueueSeqCmd",
 }
 
 def replace_anim(file):
