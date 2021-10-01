@@ -3346,7 +3346,6 @@ f32 BgCheck_RaycastFloorDyna(DynaRaycast* dynaRaycast) {
             intersect2 = BgCheck_RaycastFloorDynaList(dynaRaycast, DYNA_RAYCAST_FLOORS);
 
             if (dynaRaycast->yIntersect < intersect2) {
-
                 dynaRaycast->yIntersect = intersect2;
                 *dynaRaycast->bgId = i;
                 result = intersect2;
@@ -3384,8 +3383,8 @@ f32 BgCheck_RaycastFloorDyna(DynaRaycast* dynaRaycast) {
         }
         if (!pauseState && (dynaRaycast->colCtx->dyna.bgActorFlags[*dynaRaycast->bgId] & 2)) {
             curTransform = &dynaRaycast->dyna->bgActors[*dynaRaycast->bgId].curTransform;
-            polyMin =
-                &dynaRaycast->dyna->polyList[dynaRaycast->dyna->bgActors[*dynaRaycast->bgId].dynaLookup.polyStartIndex];
+            polyMin = &dynaRaycast->dyna
+                           ->polyList[(u16)dynaRaycast->dyna->bgActors[*dynaRaycast->bgId].dynaLookup.polyStartIndex];
             polyIndex = *dynaRaycast->resultPoly - polyMin;
             poly = &dynaRaycast->dyna->bgActors[*dynaRaycast->bgId].colHeader->polyList[polyIndex];
 
@@ -3429,6 +3428,7 @@ s32 BgCheck_SphVsDynaWallInBgActor(CollisionContext* colCtx, u16 xpFlags, DynaCo
                                    f32* outX, f32* outZ, CollisionPoly** outPoly, s32* outBgId, Vec3f* pos, f32 radius,
                                    s32 bgId, Actor* actor);
 #ifdef NON_MATCHING
+// regalloc, minor instruction ordering
 /**
  * Performs collision detection on a BgActor's wall polys on sphere `pos`, `radius`
  * returns true if a collision was detected
@@ -4468,7 +4468,6 @@ u32 SurfaceType_IsWallDamage(CollisionContext* colCtx, CollisionPoly* poly, s32 
     return (SurfaceType_GetData(colCtx, poly, bgId, 1) & 0x8000000) ? 1 : 0;
 }
 
-#ifdef NON_MATCHING
 /**
  * Internal. Get the water surface at point (`x`, `ySurface`, `z`). `ySurface` doubles as position y input
  * returns true if point is within the xz boundaries of an active water box, else false
@@ -4476,26 +4475,27 @@ u32 SurfaceType_IsWallDamage(CollisionContext* colCtx, CollisionPoly* poly, s32 
  */
 s32 WaterBox_GetSurfaceImpl(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface,
                             WaterBox** outWaterBox, s32* bgId) {
-    CollisionHeader* colHeader = colCtx->colHeader;
+    CollisionHeader* colHeader;
     u32 room;
     WaterBox* curWaterBox;
-    s32 i = 0;
-    BgActor* bgActor;
+    s32 i;
 
     *bgId = BGCHECK_SCENE;
+    colHeader = colCtx->colHeader;
 
     if (colHeader->numWaterBoxes != 0 && colHeader->waterBoxes != NULL) {
         for (curWaterBox = colHeader->waterBoxes; curWaterBox < colHeader->waterBoxes + colHeader->numWaterBoxes;
              curWaterBox++) {
-            room = (curWaterBox->properties >> 13) & 0x3F;
-            if (room == (u32)globalCtx->roomCtx.currRoom.num || room == 0x3F) {
-                if ((curWaterBox->properties & 0x80000) == 0) {
-                    if (curWaterBox->minPos.x < x && x < curWaterBox->minPos.x + curWaterBox->xLength) {
-                        if (curWaterBox->minPos.z < z && z < curWaterBox->minPos.z + curWaterBox->zLength) {
-                            *outWaterBox = curWaterBox;
-                            *ySurface = curWaterBox->minPos.y;
-                            return true;
-                        }
+            room = 0x3F & (curWaterBox->properties >> 13);
+            if (room == globalCtx->roomCtx.currRoom.num || room == 0x3F) {
+                if (curWaterBox->properties & 0x80000) {
+                    continue;
+                }
+                if (curWaterBox->minPos.x < x && x < curWaterBox->minPos.x + curWaterBox->xLength) {
+                    if (curWaterBox->minPos.z < z && z < curWaterBox->minPos.z + curWaterBox->zLength) {
+                        *outWaterBox = curWaterBox;
+                        *ySurface = curWaterBox->minPos.y;
+                        return true;
                     }
                 }
             }
@@ -4503,21 +4503,26 @@ s32 WaterBox_GetSurfaceImpl(GlobalContext* globalCtx, CollisionContext* colCtx, 
     }
 
     for (i = 0; i < BG_ACTOR_MAX; i++) {
-        if ((colCtx->dyna.bgActorFlags[i] & 1) && !(colCtx->dyna.bgActorFlags[i] & 4)) {
+        if (colCtx->dyna.bgActorFlags[i] & 1) {
+            BgActor* bgActor;
+            if (colCtx->dyna.bgActorFlags[i] & 4) {
+                continue;
+            }
             bgActor = &colCtx->dyna.bgActors[i];
             if (bgActor->colHeader->numWaterBoxes != 0 && bgActor->colHeader->waterBoxes != NULL) {
                 for (curWaterBox = colCtx->dyna.waterBoxList.boxes + bgActor->waterboxesStartIndex;
                      curWaterBox < colCtx->dyna.waterBoxList.boxes + bgActor->waterboxesStartIndex +
                                        bgActor->colHeader->numWaterBoxes;
                      curWaterBox++) {
-                    if ((curWaterBox->properties & 0x80000) == 0) {
-                        if (curWaterBox->minPos.x < x && x < curWaterBox->minPos.x + curWaterBox->xLength) {
-                            if (curWaterBox->minPos.z < z && z < curWaterBox->minPos.z + curWaterBox->zLength) {
-                                *outWaterBox = curWaterBox;
-                                *ySurface = curWaterBox->minPos.y;
-                                *bgId = i;
-                                return true;
-                            }
+                    if (curWaterBox->properties & 0x80000) {
+                        continue;
+                    }
+                    if (curWaterBox->minPos.x < x && x < curWaterBox->minPos.x + curWaterBox->xLength) {
+                        if (curWaterBox->minPos.z < z && z < curWaterBox->minPos.z + curWaterBox->zLength) {
+                            *outWaterBox = curWaterBox;
+                            *ySurface = curWaterBox->minPos.y;
+                            *bgId = i;
+                            return true;
                         }
                     }
                 }
@@ -4526,9 +4531,6 @@ s32 WaterBox_GetSurfaceImpl(GlobalContext* globalCtx, CollisionContext* colCtx, 
     }
     return false;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/WaterBox_GetSurfaceImpl.s")
-#endif
 
 s32 WaterBox_GetSurface1(GlobalContext* globalCtx, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface,
                          WaterBox** outWaterBox) {
