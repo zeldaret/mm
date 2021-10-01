@@ -9,7 +9,6 @@ void EnGiant_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGiant_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGiant_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80B01990(EnGiant* this, s16 arg1);
 void func_80B023D0(EnGiant* this, GlobalContext* globalCtx);
 void func_80B024AC(EnGiant* this, GlobalContext* globalCtx);
 void func_80B024D8(EnGiant* this, GlobalContext* globalCtx);
@@ -221,7 +220,27 @@ void EnGiant_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/func_80B024D8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/EnGiant_Update.s")
+void EnGiant_Update(Actor* thisx, GlobalContext* globalCtx) {
+    EnGiant* this = THIS;
+    s32 phi_v0;
+
+    this->actionFunc(this, globalCtx);
+    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    if (this->unk_296 == 0) {
+        phi_v0 = 0;
+    } else {
+        this->unk_296--;
+        phi_v0 = this->unk_296;
+    }
+    if (!phi_v0) {
+        this->unk_296 = Rand_S16Offset(60, 60);
+    }
+    this->unk_294 = this->unk_296;
+    if (this->unk_294 >= 3) {
+        this->unk_294 = 0;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/func_80B02688.s")
 
