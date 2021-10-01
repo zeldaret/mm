@@ -215,7 +215,7 @@ typedef struct {
     struct {
         EffectStatus status;
         EffectTireMark effect;
-    } /* 0x388C */ tireMarks[TIRE_MARK_COUNT];
+    } /* 0x3DF0 */ tireMarks[TIRE_MARK_COUNT];
 } EffectContext; // size = 0x98E0
 
 typedef struct {

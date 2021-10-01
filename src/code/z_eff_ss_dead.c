@@ -23,8 +23,6 @@ void func_800AE2A0(GlobalContext* globalCtx, Color_RGBA8* color, s16 arg2, s16 a
 
     POLY_OPA_DISP = displayListHead;
 
-    if (1) {} // Necessary to match
-
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
@@ -42,8 +40,6 @@ void func_800AE434(GlobalContext* globalCtx, Color_RGBA8* color, s16 arg2, s16 a
     gSPFogPosition(displayListHead++, 0, (s16)(2800.0f * fabsf(cos)) + 1700);
 
     POLY_OPA_DISP = displayListHead;
-
-    if (1) {} // Necessary to match
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -82,8 +78,6 @@ void func_800AE5E4(GlobalContext* globalCtx, Color_RGBA8* color, s16 arg2, s16 a
 
     POLY_XLU_DISP = displayListHead;
 
-    if (1) {} // Necessary to match
-
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
@@ -101,8 +95,6 @@ void func_800AE778(GlobalContext* globalCtx, Color_RGBA8* color, s16 arg2, s16 a
     gSPFogPosition(displayListHead++, 0, (s16)(2800.0f * fabsf(cos)) + 1700);
 
     POLY_XLU_DISP = displayListHead;
-
-    if (1) {} // Necessary to match
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

@@ -284,8 +284,6 @@ void EffectBlure_UpdateFlags(EffectBlureElement* elem) {
         elem->flags &= ~3;
         elem->flags |= 2;
     } else {
-        if (1) {} // Necessary to match
-
         Math_Vec3s_DiffToVec3f(&sp64, &elem->p1, &prev->p1);
         Math_Vec3s_DiffToVec3f(&sp58, &elem->p2, &prev->p2);
         Math_Vec3s_DiffToVec3f(&sp4C, &next->p1, &elem->p1);
@@ -1026,8 +1024,6 @@ void EffectBlure_Draw(void* thisx, GraphicsContext* gfxCtx) {
                             phi_t2 = 1;
                         } else {
                             gSP1Quadrangle(POLY_XLU_DISP++, j - 2, j - 1, j + 1, j, 0);
-
-                            if (1) {} // Necessary to match
 
                             if (this->unkFlag == 1) {
                                 phi_t2 = 0;

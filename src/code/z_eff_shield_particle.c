@@ -1,7 +1,7 @@
 #include "global.h"
 #include "vt.h"
 
-static Vtx sVertices[4] = {
+static Vtx sVertices[] = {
     VTX(-32, -32, 0, 0, 1024, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(32, 32, 0, 1024, 0, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(-32, 32, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),
