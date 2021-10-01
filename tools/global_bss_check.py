@@ -204,7 +204,7 @@ def main():
     print("\n" + colorama.Fore.LIGHTWHITE_EX +
     colorama.Back.RED + "                                  " + colorama.Back.RESET + "\n" +
     colorama.Back.RED + "         CONGRATURATIONS!         " + colorama.Back.RESET + "\n" +
-    colorama.Back.RED + "    All global BSS is correct.    " + colorama.Back.RESET + "\n" +
+    colorama.Back.RED + "    All Global BSS is correct.    " + colorama.Back.RESET + "\n" +
     colorama.Back.RED + "             THANK YOU!           " + colorama.Back.RESET + "\n" +
     colorama.Back.RED + "      You are great decomper!     " + colorama.Back.RESET + "\n" +
     colorama.Back.RED + "                                  " + colorama.Style.RESET_ALL , file=os.sys.stderr)
