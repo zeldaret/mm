@@ -94,7 +94,7 @@ void EnElfbub_Pop(EnElfbub* this, GlobalContext* globalCtx) {
     static Color_RGBA8 sPrimColor = { 255, 255, 255, 255 };
     static Color_RGBA8 sEnvColor = { 150, 150, 150, 0 };
     static Vec3f sAccel = { 0.0f, -0.5f, 0.0f };
-    s32 i;
+    s32 effectCounter;
     Vec3f velocity;
     Vec3f pos;
 
@@ -108,7 +108,7 @@ void EnElfbub_Pop(EnElfbub* this, GlobalContext* globalCtx) {
         pos.y = this->actor.world.pos.y;
         pos.z = this->actor.world.pos.z;
 
-        for (i = 0; i != 20; i++) {
+        for (effectCounter = 0; effectCounter != 20; effectCounter++) {
             velocity.x = (Rand_ZeroOne() - 0.5f) * 7.0f;
             velocity.y = Rand_ZeroOne() * 7.0f;
             velocity.z = (Rand_ZeroOne() - 0.5f) * 7.0f;
