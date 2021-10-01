@@ -3,6 +3,28 @@
 
 #include "global.h"
 
+#define GIANT_TYPE(thisx) ((thisx)->params & 0xF)
+
+typedef enum {
+    /*  0 */ GIANT_TYPE_MOUNTAIN_1,
+    /*  1 */ GIANT_TYPE_CANYON_1,
+    /*  2 */ GIANT_TYPE_SWAMP_1,
+    /*  3 */ GIANT_TYPE_OCEAN_1,
+    /*  4 */ GIANT_TYPE_MOUNTAIN_2,
+    /*  5 */ GIANT_TYPE_CANYON_2,
+    /*  6 */ GIANT_TYPE_SWAMP_2,
+    /*  7 */ GIANT_TYPE_OCEAN_2,
+    /*  8 */ GIANT_TYPE_MOUNTAIN_3,
+    /*  9 */ GIANT_TYPE_CANYON_3,
+    /* 10 */ GIANT_TYPE_SWAMP_3,
+    /* 11 */ GIANT_TYPE_OCEAN_3,
+    /* 12 */ GIANT_TYPE_MOUNTAIN_4,
+    /* 13 */ GIANT_TYPE_CANYON_4,
+    /* 14 */ GIANT_TYPE_SWAMP_4,
+    /* 15 */ GIANT_TYPE_OCEAN_4,
+    /* 16 */ GIANT_TYPE_MAX
+} EnGiantType;
+
 struct EnGiant;
 
 typedef void (*EnGiantActionFunc)(struct EnGiant*, GlobalContext*);

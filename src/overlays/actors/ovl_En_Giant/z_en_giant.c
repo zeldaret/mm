@@ -45,38 +45,38 @@ s32 D_80B0298C[] = { 0x06005A80, 0x06006280, 0x06006A80, 0x00000000, 0x00000000 
 // Note: if #275 gets merged before this, switch to using the IDs there.
 // This is checking that a Giant is NOT freed...
 s32 func_80B01A74(EnGiant* this) {
-    switch (this->actor.params & 0xF) {
-        case 2:
-        case 6:
-        case 10:
-        case 14:
+    switch (GIANT_TYPE(&this->actor)) {
+        case GIANT_TYPE_SWAMP_1:
+        case GIANT_TYPE_SWAMP_2:
+        case GIANT_TYPE_SWAMP_3:
+        case GIANT_TYPE_SWAMP_4:
             // Odolwa's Remains
             if (!CHECK_QUEST_ITEM(0)) {
                 return 1;
             }
             break;
-        case 0:
-        case 4:
-        case 8:
-        case 12:
+        case GIANT_TYPE_MOUNTAIN_1:
+        case GIANT_TYPE_MOUNTAIN_2:
+        case GIANT_TYPE_MOUNTAIN_3:
+        case GIANT_TYPE_MOUNTAIN_4:
             // Goht's Remains
             if (!CHECK_QUEST_ITEM(1)) {
                 return 1;
             }
             break;
-        case 3:
-        case 7:
-        case 11:
-        case 15:
+        case GIANT_TYPE_OCEAN_1:
+        case GIANT_TYPE_OCEAN_2:
+        case GIANT_TYPE_OCEAN_3:
+        case GIANT_TYPE_OCEAN_4:
             // Gyorg's Remains
             if (!CHECK_QUEST_ITEM(2)) {
                 return 1;
             }
             break;
-        case 1:
-        case 5:
-        case 9:
-        case 13:
+        case GIANT_TYPE_CANYON_1:
+        case GIANT_TYPE_CANYON_2:
+        case GIANT_TYPE_CANYON_3:
+        case GIANT_TYPE_CANYON_4:
             // Twinmold's Remains
             if (!CHECK_QUEST_ITEM(3)) {
                 return 1;
@@ -89,9 +89,8 @@ s32 func_80B01A74(EnGiant* this) {
 
 void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnGiant* this = THIS;
-    s32 param;
+    s32 type = GIANT_TYPE(thisx);
 
-    param = this->actor.params & 0xF;
     this->actor.uncullZoneForward = 4000.0f;
     this->actor.uncullZoneScale = 2000.0f;
     this->actor.uncullZoneDownward = 2400.0f;
@@ -105,20 +104,20 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.velocity.y = -10.0f;
     this->actor.minVelocityY = -10.0f;
     this->actor.gravity = -5.0f;
-    switch (param) {
-        case 1:
-        case 5:
-        case 9:
+    switch (type) {
+        case GIANT_TYPE_CANYON_1:
+        case GIANT_TYPE_CANYON_2:
+        case GIANT_TYPE_CANYON_3:
             this->unk_24A = 0x1C6;
             break;
-        case 2:
-        case 6:
-        case 10:
+        case GIANT_TYPE_SWAMP_1:
+        case GIANT_TYPE_SWAMP_2:
+        case GIANT_TYPE_SWAMP_3:
             this->unk_24A = 0x1C7;
             break;
-        case 3:
-        case 7:
-        case 11:
+        case GIANT_TYPE_OCEAN_1:
+        case GIANT_TYPE_OCEAN_2:
+        case GIANT_TYPE_OCEAN_3:
             this->unk_24A = 0x1C8;
             break;
         default:
@@ -126,7 +125,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
     }
 
-    if (param >= 4 && param < 8) {
+    if (type >= GIANT_TYPE_MOUNTAIN_2 && type < GIANT_TYPE_MOUNTAIN_3) {
         if (!(gSaveContext.weekEventReg[0x19] & 2)) {
             Actor_MarkForDeath(&this->actor);
             return;
@@ -142,7 +141,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.gravity = 0.0f;
     }
 
-    if (param >= 0xC && param < 0x10) {
+    if (type >= GIANT_TYPE_MOUNTAIN_4 && type < GIANT_TYPE_MAX) {
         Actor_SetScale(&this->actor, 0.32f);
         this->actionFunc = func_80B024AC;
         SkelAnime_ChangeAnim(&this->skelAnime, &D_06013FE8, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_06013004.common), 0,
@@ -156,12 +155,12 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    if (param >= 4) {
+    if (type >= GIANT_TYPE_MOUNTAIN_2) {
         this->unk_24E = 0xFF;
     }
 
     this->unk_250 = 0xFFFF;
-    if (param >= 8 && param < 0xC) {
+    if (type >= GIANT_TYPE_MOUNTAIN_3 && type < GIANT_TYPE_MOUNTAIN_4) {
         switch (gSaveContext.sceneSetupIndex) {
             case 0:
             case 10:
