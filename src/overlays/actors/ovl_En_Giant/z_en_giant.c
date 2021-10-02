@@ -202,7 +202,17 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnGiant_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/func_80B01E84.s")
+void func_80B01E84(EnGiant* this, s16 arg1) {
+    s16 temp_v0 = arg1 + 1;
+
+    if (this->unk_248 != temp_v0) {
+        if (this->unk_248 != arg1) {
+            func_80B01990(this, arg1);
+        } else {
+            func_80B01990(this, temp_v0);
+        }
+    }
+}
 
 void func_80B01EE8(EnGiant* this) {
     switch (this->unk_24C) {
