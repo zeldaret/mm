@@ -66,7 +66,7 @@ void EnElfbub_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 1.25f);
 
     this->actionFunc = EnElfbub_Idle;
-    this->zRot = randPlusMinusPoint5Scaled(65536.0f);
+    this->zRot = randPlusMinusPoint5Scaled(0x10000);
     this->zRotDelta = 1000;
     this->xScale = 0.08f;
 
@@ -108,7 +108,7 @@ void EnElfbub_Pop(EnElfbub* this, GlobalContext* globalCtx) {
         pos.y = this->actor.world.pos.y;
         pos.z = this->actor.world.pos.z;
 
-        for (effectCounter = 0; effectCounter != 20; effectCounter++) {
+        for (effectCounter = 0; effectCounter < 20; effectCounter++) {
             velocity.x = (Rand_ZeroOne() - 0.5f) * 7.0f;
             velocity.y = Rand_ZeroOne() * 7.0f;
             velocity.z = (Rand_ZeroOne() - 0.5f) * 7.0f;
