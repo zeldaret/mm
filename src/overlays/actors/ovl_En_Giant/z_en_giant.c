@@ -204,7 +204,54 @@ void EnGiant_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/func_80B01E84.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/func_80B01EE8.s")
+void func_80B01EE8(EnGiant* this) {
+    switch (this->unk_24C) {
+        case 1:
+            func_80B01990(this, 7);
+            break;
+        case 2:
+            func_80B01990(this, 8);
+            break;
+        case 5:
+            func_80B01990(this, 5);
+            break;
+        case 6:
+            func_80B01990(this, 2);
+            break;
+        case 7:
+            func_80B01990(this, 7);
+            this->unk_24E = 0;
+            break;
+        case 8:
+            func_80B01990(this, 9);
+            break;
+        case 9:
+            func_80B01990(this, 11);
+            break;
+        case 10:
+            func_80B01990(this, 12);
+            break;
+        case 11:
+            func_80B01990(this, 14);
+            break;
+        case 12:
+            func_80B01990(this, 7);
+            break;
+        case 13:
+            func_80B01990(this, 8);
+            break;
+        case 14:
+            if (this->unk_248 != 8) {
+                func_80B01990(this, 8);
+            }
+            break;
+        case 15:
+            SkelAnime_ChangeAnim(&this->skelAnime, &D_060116E4, 0.0f,
+                                 SkelAnime_GetFrameCount(&D_060116E4.common) - 1.0f,
+                                 SkelAnime_GetFrameCount(&D_060116E4.common), 2, 0.0f);
+            break;
+    }
+}
 
 void func_80B020A0(EnGiant* this) {
     switch (this->unk_24C) {
