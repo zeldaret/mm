@@ -5,10 +5,6 @@
     ((newf)[0] != 'Z' || (newf)[1] != 'E' || (newf)[2] != 'L' || (newf)[3] != 'D' || (newf)[4] != 'A' || \
      (newf)[5] != '3')
 
-#define CHECK2_NEWF(newf)                                                                                \
-    ((newf)[0] == 'Z' && (newf)[1] == 'E' && (newf)[2] == 'L' && (newf)[3] == 'D' && (newf)[4] == 'A' && \
-     (newf)[5] == '3')
-
 s32 D_801C5FC0 = 0xC00;
 s32 D_801C5FC4 = 0;
 s32 D_801C5FC8 = 0;
@@ -1025,15 +1021,6 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
     s32 sp58;
     s32 sp54;
     s32 sp50;
-    void* sp40;
-    s16 temp_s3_3;
-    s32 temp_v1_2;
-    s32 temp_v1_3;
-    s32 temp_v1_4;
-    s32 temp_v1_6;
-    s32 temp_v1_7;
-    s32 temp_v1_8;
-    s32 temp_v1_9;
     u16 temp_s2;
     u16 temp_s2_2;
     u16 temp_s2_3;
@@ -1041,271 +1028,208 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
     u16 temp_s7_2;
     u16 temp_s7_3;
     u16 temp_s7_4;
-    u16 temp_t7;
     u16 temp_v0_2;
     u16 temp_v0_3;
-    u32* temp_fp;
-    u32* temp_fp_2;
-    u32* temp_fp_3;
-    u8 temp_v1;
-    u8 temp_v1_5;
-    void* temp_s3;
-    void* temp_s4;
-    void* temp_t2;
-    void* temp_t2_2;
-    void* temp_t6;
-    void* temp_t6_2;
-    void* temp_t8;
-    void* temp_t8_2;
-    void* temp_t8_3;
-    s32 phi_v1;
-    s32 phi_s3;
     s32 phi_s2;
     s32 phi_s2_2;
-    s32 phi_v1_2;
-    s32 phi_v1_3;
+    u16 phi_v1_2;
+    u16 phi_v1_3;
     s32 phi_v0;
-    s32 phi_v1_4;
+    u16 phi_v1_4;
     s8 phi_a0;
     u16 phi_v1_5;
     u16 phi_s2_3;
     u16 phi_v1_6;
     s32 phi_s2_4;
     u16 phi_v1_7;
-    s32 phi_v1_8;
+    u16 phi_v1_8;
     s32 phi_v0_2;
     u16 phi_v1_9;
-    s8 phi_a0_2;
+    u16 phi_a0_2;
     u16 phi_v1_10;
-    u32* phi_fp;
     u16 phi_s2_5;
     u16 phi_v1_11;
     s8 phi_a0_3;
     s8 phi_a0_4;
 
-    phi_v1 = 0;
+    sp50 = 0;
     phi_v1_2 = 0;
     phi_v1_3 = 0;
     phi_v1_4 = 0;
     phi_v1_7 = 0;
     phi_v1_8 = 0;
     phi_v1_9 = 0;
-    if (gSaveContext.unk_3F3F != 0) {
+    if (gSaveContext.unk_3F3F) {
         sp74 = 0;
         sp76 = 0;
         D_801F6AF0 = gSaveContext.save.time;
         D_801F6AF2 = gSaveContext.unk_3F3F;
-        phi_s3 = 0;
+        sp64 = 0;
 
         while (sp76 < 5) {
-            sp50 = phi_v1;
             sp6E = 0;
             bzero(*sramCtx->saveBuf, sizeof(*sramCtx->saveBuf));
-            sp64 = phi_s3 * 4;
             phi_s2 = 0;
             phi_s2_2 = 0;
             phi_s2_4 = 0;
-            if (func_80185968((void* ) sramCtx->saveBuf, D_801C67C8[phi_s3], D_801C67F0[phi_s3]) != 0) {
+            if (func_80185968(*sramCtx->saveBuf, D_801C67C8[sp64], D_801C67F0[sp64]) != 0) {
                 sp6E = 1;
-                sp50 = phi_v1;
-                if (func_80185968((void* ) sramCtx->saveBuf, D_801C67CC[phi_s3], D_801C67F4[phi_s3]) != 0) {
+                if (func_80185968(*sramCtx->saveBuf, D_801C67CC[sp64], D_801C67F4[sp64]) != 0) {
                     phi_s2 = 1;
                 }
             }
-            sp58 = phi_s3;
-            if (phi_v1 < 2) {
-                //temp_t2 = gamestate + sp76;
-                //temp_t2->unk_24468 = 0;
+
+            sp58 = sp64;
+            if (sp50 < 2) {
                 fileChooseCtx->unk_24468[sp76] = 0;
-                //sp40 = temp_t2 + 0x20000;
-                sp54 = sp58 * 4;
                 if (phi_s2 != 0) {
-                    bzero((void* ) sramCtx->saveBuf, 0x4000);
-                    Lib_MemCpy((void* ) &gSaveContext, (void* ) sramCtx->saveBuf, D_801C6870[sp64]);
+                    bzero(*sramCtx->saveBuf, sizeof(*sramCtx->saveBuf));
+                    Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, D_801C6870[sp64]);
                 } else {
-                    //temp_fp = sp64 + D_801C6870;
-                    Lib_MemCpy((void* ) &gSaveContext, (void* ) sramCtx->saveBuf, D_801C6870[sp64]);
+                    Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, D_801C6870[sp64]);
                     temp_s2 = gSaveContext.save.checksum;
                     gSaveContext.save.checksum = 0;
-                    temp_v0_2 = Sram_CalcChecksum((void* ) &gSaveContext, D_801C6870[sp64]);
-                    //temp_v1 = (u8) gSaveContext.save.playerData.newf;
+                    temp_v0_2 = Sram_CalcChecksum(&gSaveContext, D_801C6870[sp64]);
                     gSaveContext.save.checksum = temp_s2;
-                    if (CHECK_NEWF(gSaveContext.save.playerData.newf) || (temp_s2 != (temp_v0_2 & 0xFFFF))) {
+                    if (CHECK_NEWF(gSaveContext.save.playerData.newf) || (temp_s2 != temp_v0_2)) {
                         sp6E = 1;
-                        if ((gSaveContext.save.playerData.newf[0] == 0x5A) && (gSaveContext.save.playerData.newf[1] == 0x45)) {
+                        if ((gSaveContext.save.playerData.newf[0] == 'Z') && (gSaveContext.save.playerData.newf[1] == 'E')) {
 
                         }
-                        if (func_80185968((void* ) sramCtx->saveBuf, D_801C67C8[sp54 + 1], D_801C67F0[sp54 + 1]) != 0) {
+                        if (func_80185968(*sramCtx->saveBuf, D_801C67C8[sp58 + 1], D_801C67F0[sp58 + 1]) != 0) {
                             phi_s2_2 = 1;
                         }
-                        Lib_MemCpy((void* ) &gSaveContext, (void* ) sramCtx->saveBuf, D_801C6870[sp64]);
+                        Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, D_801C6870[sp64]);
                         temp_s7 = gSaveContext.save.checksum;
                         gSaveContext.save.checksum = 0;
-                        if ((phi_s2_2 != 0) || CHECK_NEWF(gSaveContext.save.playerData.newf) || (temp_s7 != Sram_CalcChecksum((void* ) &gSaveContext, D_801C6870[sp64]))) {
-                            bzero((void* ) sramCtx->saveBuf, 0x4000);
-                            Lib_MemCpy((void* ) &gSaveContext, (void* ) sramCtx->saveBuf, 0x100CU);
-                            sp6E = 0x3E7;
+                        if ((phi_s2_2 != 0) || CHECK_NEWF(gSaveContext.save.playerData.newf) || (temp_s7 != Sram_CalcChecksum(&gSaveContext, D_801C6870[sp64]))) {
+                            bzero(*sramCtx->saveBuf, sizeof(*sramCtx->saveBuf));
+                            Lib_MemCpy(&gSaveContext.save, *sramCtx->saveBuf, sizeof(Save));
+                            sp6E = 999;
                         }
                     }
                 }
 
                 gSaveContext.save.checksum = 0;
-                gSaveContext.save.checksum = Sram_CalcChecksum((void* ) &gSaveContext, *(D_801C6870 + sp54));
-                do {
-                    temp_v1_2 = (phi_v1_2 + 1) & 0xFFFF;
-                    //(gamestate + (sp76 * 6) + phi_v1_2)->unk_243F4 = (u8) gSaveContext.save.playerData.newf[phi_v1_2];
+                gSaveContext.save.checksum = Sram_CalcChecksum(&gSaveContext, D_801C6870[sp58]);
+                phi_v1_2 = 0;
+                while (phi_v1_2 < 6) {
                     fileChooseCtx->newf[sp76][phi_v1_2] = gSaveContext.save.playerData.newf[phi_v1_2];
-                    phi_v1_2 = temp_v1_2;
-                    phi_v1_5 = (u16) temp_v1_2;
-                } while (temp_v1_2 < 6);
+                    phi_v1_2 = phi_v1_2 + 1;
+                    phi_v1_5 = (u16) phi_v1_2;
+                }
 
-                //temp_t8 = gamestate + (sp76 * 6);
-                // if ((temp_t8->unk_243F4 == 0x5A) && (temp_t8->unk_243F5 == 0x45) && (temp_t8->unk_243F6 == 0x4C) && (temp_t8->unk_243F7 == 0x44) && (temp_t8->unk_243F8 == 0x41) && (temp_t8->unk_243F9 == 0x33)) {
-                if (CHECK2_NEWF(gSaveContext.save.playerData.newf)) {
-                    //temp_t8_2 = gamestate + (sp76 * 2);
-                    //temp_t8_2->unk_2440C = (u16) gSaveContext.save.playerData.deaths;
+                if (!CHECK_NEWF(gSaveContext.save.playerData.newf)) {
                     fileChooseCtx->unk_2440C[sp76] = gSaveContext.save.playerData.deaths;
                     phi_a0_3 = 0;
-                    do {
-                        temp_v1_3 = (phi_v1_3 + 1) & 0xFFFF;
-                        //(gamestate + (sp76 * 8) + phi_v1_3)->unk_24414 = (u8) gSaveContext.save.playerData.playerName[phi_v1_3];
+                    phi_v1_3 = 0;
+                    while (phi_v1_3 < 8) {
                         fileChooseCtx->unk_24414[sp76][phi_v1_3] = gSaveContext.save.playerData.playerName[phi_v1_3];
-                        phi_v1_3 = temp_v1_3;
-                    } while (temp_v1_3 < 8);
-                    //temp_t8_2->unk_24434 = (s16) gSaveContext.save.playerData.healthCapacity;
-                    //temp_t8_2->unk_2443C = (s16) gSaveContext.save.playerData.health;
-                    //sp40->unk_4454 = (s8) gSaveContext.unk_D3;
-                    //(gamestate + (sp76 * 4))->unk_24444 = (u32) gSaveContext.save.inventory.questItems;
-                    //temp_t8_2->unk_24458 = (u16) gSaveContext.save.time;
-                    //temp_t8_2->unk_24460 = (s16) gSaveContext.save.day;
-                    //sp40->unk_4468 = (u8) gSaveContext.save.isOwlSave;
-                    //temp_t8_2->unk_2446C = (s16) gSaveContext.save.playerData.rupees;
-                    //sp40->unk_4474 = (s8) ((u32) (gSaveContext.save.inventory.upgrades & *(gUpgradeMasks + 0x10)) >> gUpgradeShifts[4]);
+                        phi_v1_3 = (phi_v1_3 + 1);
+                        phi_v1_3 = phi_v1_3;
+                    }
 
-                    fileChooseCtx->unk_24438[fileChooseCtx->unk_244A6] = gSaveContext.save.playerData.healthCapacity;
-                    fileChooseCtx->unk_24440[fileChooseCtx->unk_244A6] = gSaveContext.save.playerData.health;
-                    fileChooseCtx->unk_24456[fileChooseCtx->unk_244A6] = gSaveContext.save.inventory.dungeonKeys[9];
-                    fileChooseCtx->unk_2444C[fileChooseCtx->unk_244A6] = gSaveContext.save.inventory.questItems;
-                    fileChooseCtx->unk_2445C[fileChooseCtx->unk_244A6] = gSaveContext.save.time;
-                    fileChooseCtx->unk_24464[fileChooseCtx->unk_244A6] = gSaveContext.save.day;
-                    fileChooseCtx->unk_2446A[fileChooseCtx->unk_244A6] = gSaveContext.save.isOwlSave;
-                    fileChooseCtx->unk_24470[fileChooseCtx->unk_244A6] = gSaveContext.save.playerData.rupees;
-                    fileChooseCtx->unk_24476[fileChooseCtx->unk_244A6] =
+                    fileChooseCtx->healthCapacity[fileChooseCtx->unk_244A6] = gSaveContext.save.playerData.healthCapacity;
+                    fileChooseCtx->health[fileChooseCtx->unk_244A6] = gSaveContext.save.playerData.health;
+                    fileChooseCtx->unk_24454[fileChooseCtx->unk_244A6] = gSaveContext.save.inventory.dungeonKeys[9];
+                    fileChooseCtx->unk_24444[fileChooseCtx->unk_244A6] = gSaveContext.save.inventory.questItems;
+
+                    fileChooseCtx->unk_24458[fileChooseCtx->unk_244A6] = gSaveContext.save.time;
+                    fileChooseCtx->unk_24460[fileChooseCtx->unk_244A6] = gSaveContext.save.day;
+                    fileChooseCtx->unk_24468[fileChooseCtx->unk_244A6] = gSaveContext.save.isOwlSave;
+                    fileChooseCtx->rupees[fileChooseCtx->unk_244A6] = gSaveContext.save.playerData.rupees;
+                    fileChooseCtx->unk_24474[fileChooseCtx->unk_244A6] =
                         (gSaveContext.save.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4];
 
                     phi_v0 = 0;
-                    do {
-                        temp_v1_4 = (phi_v1_4 + 1) & 0xFFFF;
-                        phi_v1_4 = temp_v1_4;
+                    phi_v1_4 = 0;
+                    while (phi_v1_4 < 0x18) {
+                        phi_v1_4++;
                         phi_a0 = phi_a0_3;
-                        phi_v1_5 = (u16) temp_v1_4;
+                        phi_v1_5 = (u16) phi_v1_4;
                         if (gSaveContext.save.inventory.masks[phi_v0] != 0xFF) {
                             phi_a0 = (phi_a0_3 + 1) & 0xFFFF;
                         }
-                        phi_v0 = temp_v1_4;
+                        phi_v0 = phi_v1_4;
                         phi_a0_3 = phi_a0;
-                    } while (temp_v1_4 < 0x18);
-                    //sp40->unk_4478 = phi_a0;
+                    }
                     fileChooseCtx->unk_24478[0] = phi_a0;
-                    //sp40->unk_447C = (s8) ((u32) (gSaveContext.save.inventory.questItems & 0xF0000000) >> 0x1C);
                     fileChooseCtx->unk_2447C[0] = (s8) ((u32) (gSaveContext.save.inventory.questItems & 0xF0000000) >> 0x1C);
                 }
+
                 if (sp6E == 1) {
-                    Lib_MemCpy(sramCtx->saveBuf + 0x2000, (void* ) &gSaveContext, 0x100CU);
-                    func_80146EBC(sramCtx, D_801C67C8[phi_s3], *(D_801C6818 + sp64));
+                    Lib_MemCpy(&(*sramCtx->saveBuf)[0x2000], &gSaveContext, 0x100CU);
+                    func_80146EBC(sramCtx, D_801C67C8[sp64], *(D_801C6818 + sp64));
                 } else if (sp6E == 0) {
                     temp_s7_2 = gSaveContext.save.checksum;
                     sp7A = phi_v1_5;
                     phi_v1_6 = phi_v1_5;
-                    if (func_80185968((void* ) sramCtx->saveBuf, D_801C67CC[sp54], D_801C67F4[sp54]) != 0) {
-                        phi_s2_3 = 1U;
+                    if (func_80185968(*sramCtx->saveBuf, D_801C67CC[sp58], D_801C67F4[sp58]) != 0) {
+                        phi_s2_3 = 1;
                     } else {
-                        Lib_MemCpy((void* ) &gSaveContext, (void* ) sramCtx->saveBuf, 0x100CU);
+                        Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, 0x100CU);
                         temp_s2_2 = gSaveContext.save.checksum;
                         gSaveContext.save.checksum = 0;
                         phi_s2_3 = temp_s2_2;
-                        phi_v1_6 = Sram_CalcChecksum((void* ) &gSaveContext, 0x100CU) & 0xFFFF;
+                        phi_v1_6 = Sram_CalcChecksum(&gSaveContext, 0x100CU);
                     }
                     //if (((u8) gSaveContext.save.playerData.newf != 0x5A) || (gSaveContext.unk_25 != 0x45) || (gSaveContext.unk_26 != 0x4C) || (gSaveContext.unk_27 != 0x44) || (gSaveContext.unk_28 != 0x41) || (gSaveContext.unk_29 != 0x33) || (phi_s2_3 != phi_v1_6) || (phi_s2_3 != temp_s7_2)) {
                     if (CHECK_NEWF(gSaveContext.save.playerData.newf) || (phi_s2_3 != phi_v1_6) || (phi_s2_3 != temp_s7_2)) {
-                        func_80185968((void* ) sramCtx->saveBuf, D_801C67C8[phi_s3], D_801C67F0[phi_s3]);
-                        Lib_MemCpy((void* ) &gSaveContext, (void* ) sramCtx->saveBuf, 0x100CU);
-                        Lib_MemCpy(sramCtx->saveBuf + 0x2000, (void* ) &gSaveContext, 0x100CU);
-                        func_80146EBC(sramCtx, D_801C67C8[phi_s3], *(D_801C6818 + sp64));
+                        func_80185968(*sramCtx->saveBuf, D_801C67C8[sp64], D_801C67F0[sp64]);
+                        Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, 0x100CU);
+                        Lib_MemCpy(&(*sramCtx->saveBuf)[0x2000], &gSaveContext, 0x100CU);
+                        func_80146EBC(sramCtx, D_801C67C8[sp64], D_801C6818[sp64]);
                     }
                 }
-            } else if (phi_v1 < 4) {
-                //temp_t8_3 = gamestate + sp76;
-                //temp_t8_3->unk_24468 = 0;
+            } else if (sp50 < 4) {
                 fileChooseCtx->unk_24468[sp76] = 0;
-                //temp_t2_2 = gamestate + (phi_v1 * 6);
-                sp54 = sp58 * 4;
-                //sp40 = temp_t8_3 + 0x20000;
-                //if ((temp_t2_2->unk_243E8 == 0x5A) && (temp_t2_2->unk_243E9 == 0x45) && (temp_t2_2->unk_243EA == 0x4C) && (temp_t2_2->unk_243EB == 0x44) && (temp_t2_2->unk_243EC == 0x41) && (temp_t2_2->unk_243ED == 0x33)) {
-                if (CHECK2_NEWF(gSaveContext.save.playerData.newf)) {
+
+                if (!CHECK_NEWF(gSaveContext.save.playerData.newf)) {
                     if (phi_s2 != 0) {
-                        bzero((void* ) sramCtx->saveBuf, 0x4000);
-                        //temp_fp_2 = sp64 + D_801C6870;
-                        Lib_MemCpy((void* ) &gSaveContext, (void* ) sramCtx->saveBuf, D_801C6870[sp64]);
-                        //phi_fp = temp_fp_2;
+                        bzero(*sramCtx->saveBuf, 0x4000);
+                        Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, D_801C6870[sp64]);
                     } else {
-                        //temp_fp_3 = sp64 + D_801C6870;
-                        Lib_MemCpy((void* ) &gSaveContext, (void* ) sramCtx->saveBuf, D_801C6870[sp64]);
+                        Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, D_801C6870[sp64]);
                         temp_s2_3 = gSaveContext.save.checksum;
                         gSaveContext.save.checksum = 0;
-                        temp_v0_3 = Sram_CalcChecksum((void* ) &gSaveContext, D_801C6870[sp64]);
-                        //temp_v1_5 = (u8) gSaveContext.save.playerData.newf;
+                        temp_v0_3 = Sram_CalcChecksum(&gSaveContext, D_801C6870[sp64]);
                         gSaveContext.save.checksum = temp_s2_3;
-                        //phi_fp = temp_fp_3;
-                        if (CHECK_NEWF(gSaveContext.save.playerData.newf) || (temp_s2_3 != (temp_v0_3 & 0xFFFF))) {
+                        if (CHECK_NEWF(gSaveContext.save.playerData.newf) || (temp_s2_3 != (temp_v0_3))) {
                             sp6E = 1;
                             if ((gSaveContext.save.playerData.newf[0] == 0x5A) && (gSaveContext.save.playerData.newf[1] == 0x45)) {
-
                             }
-                            if (func_80185968((void* ) sramCtx->saveBuf, D_801C67C8[sp54+1], D_801C67F0[sp54+1]) != 0) {
+                            if (func_80185968(*sramCtx->saveBuf, D_801C67C8[sp58+1], D_801C67F0[sp58+1]) != 0) {
                                 phi_s2_4 = 1;
                             }
-                            Lib_MemCpy((void* ) &gSaveContext, (void* ) sramCtx->saveBuf, D_801C6870[sp64]);
+                            Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, D_801C6870[sp64]);
                             temp_s7_3 = gSaveContext.save.checksum;
                             gSaveContext.save.checksum = 0;
-                            if ((phi_s2_4 != 0) || CHECK_NEWF(gSaveContext.save.playerData.newf) || (temp_s7_3 != Sram_CalcChecksum((void* ) &gSaveContext, D_801C6870[sp64]))) {
-                                bzero((void* ) sramCtx->saveBuf, 0x4000);
-                                Lib_MemCpy((void* ) &gSaveContext, (void* ) sramCtx->saveBuf, D_801C6870[sp64]);
-                                sp6E = 0x3E7;
+                            if ((phi_s2_4 != 0) || CHECK_NEWF(gSaveContext.save.playerData.newf) || (temp_s7_3 != Sram_CalcChecksum(&gSaveContext, D_801C6870[sp64]))) {
+                                bzero(*sramCtx->saveBuf, sizeof(*sramCtx->saveBuf));
+                                Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, D_801C6870[sp64]);
+                                sp6E = 999;
                             }
                         }
                     }
+
                     gSaveContext.save.checksum = 0;
-                    gSaveContext.save.checksum = Sram_CalcChecksum((void* ) &gSaveContext, D_801C6870[sp54]);
-                    do {
-                        temp_v1_6 = (phi_v1_7 + 1) & 0xFFFF;
+                    gSaveContext.save.checksum = Sram_CalcChecksum(&gSaveContext, D_801C6870[sp58]);
+                    phi_v1_7 = 0;
+                    while (phi_v1_7 < 6) {
                         //(gamestate + (sp76 * 6) + phi_v1_7)->unk_243F4 = (u8) gSaveContext.save.playerData.newf[phi_v1_7];
                         fileChooseCtx->newf[sp76][phi_v1_7] = gSaveContext.save.playerData.newf[phi_v1_7];
-                        phi_v1_7 = temp_v1_6;
-                        phi_v1_10 = (u16) temp_v1_6;
-                    } while (temp_v1_6 < 6);
-                    //temp_t6 = gamestate + (sp76 * 6);
-                    //if ((temp_t6->unk_243F4 == 0x5A) && (temp_t6->unk_243F5 == 0x45) && (temp_t6->unk_243F6 == 0x4C) && (temp_t6->unk_243F7 == 0x44) && (temp_t6->unk_243F8 == 0x41) && (temp_t6->unk_243F9 == 0x33)) {
-                    if (CHECK2_NEWF(gSaveContext.save.playerData.newf)) {
-                        //temp_t6_2 = gamestate + (sp76 * 2);
-                        //temp_t6_2->unk_2440C = (u16) gSaveContext.save.playerData.deaths;
+                        phi_v1_7++;
+                        phi_v1_10 = phi_v1_7;
+                    }
+
+                    if (!CHECK_NEWF(gSaveContext.save.playerData.newf)) {
                         fileChooseCtx->unk_2440C[sp76] = gSaveContext.save.playerData.deaths;
                         phi_a0_4 = 0;
-                        do {
-                            temp_v1_7 = (phi_v1_8 + 1) & 0xFFFF;
-                            //(gamestate + (sp76 * 8) + phi_v1_8)->unk_24414 = (u8) gSaveContext.save.playerData.playerName[phi_v1_8];
+                        phi_v1_8 = 0;
+                        while (phi_v1_8 < 8) {
                             fileChooseCtx->unk_24414[sp76][phi_v1_8] = gSaveContext.save.playerData.playerName[phi_v1_8];
-                            phi_v1_8 = temp_v1_7;
-                        } while (temp_v1_7 < 8);
-                        //temp_t6_2->unk_24434 = (s16) gSaveContext.save.playerData.healthCapacity;
-                        //temp_t6_2->unk_2443C = (s16) gSaveContext.save.playerData.health;
-                        //sp40->unk_4454 = (s8) gSaveContext.unk_D3;
-                        //(gamestate + (sp76 * 4))->unk_24444 = (u32) gSaveContext.save.inventory.questItems;
-                        //temp_t6_2->unk_24458 = (u16) gSaveContext.save.time;
-                        //temp_t6_2->unk_24460 = (s16) gSaveContext.save.day;
-                        //sp40->unk_4468 = (u8) gSaveContext.save.isOwlSave;
-                        //temp_t6_2->unk_2446C = (s16) gSaveContext.save.playerData.rupees;
-                        //sp40->unk_4474 = (s8) ((u32) (gSaveContext.save.inventory.upgrades & *(gUpgradeMasks + 0x10)) >> gUpgradeShifts[4]);
+                            phi_v1_8++;
+                        }
 
                         fileChooseCtx->healthCapacity[fileChooseCtx->unk_244A6] = gSaveContext.save.playerData.healthCapacity;
                         fileChooseCtx->health[fileChooseCtx->unk_244A6] = gSaveContext.save.playerData.health;
@@ -1319,6 +1243,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                             (gSaveContext.save.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4];
 
                         phi_v0_2 = 0;
+                        phi_v1_9 = 0;
                         while (phi_v1_9 < ARRAY_COUNT(gSaveContext.save.inventory.masks)) {
                             phi_v1_9++;
                             phi_a0_2 = phi_a0_4;
@@ -1329,39 +1254,37 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                             phi_v0_2 = phi_v1_9;
                             phi_a0_4 = phi_a0_2;
                         }
-                        //sp40->unk_4478 = phi_a0_2;
+
                         fileChooseCtx->unk_24478[0] = phi_a0_2;
-                        //sp40->unk_447C = (s8) ((u32) (gSaveContext.save.inventory.questItems & 0xF0000000) >> 0x1C);
                         fileChooseCtx->unk_2447C[0] = (s8) ((u32) (gSaveContext.save.inventory.questItems & 0xF0000000) >> 0x1C);
                     }
 
                     if (sp6E == 1) {
-                        func_80146EBC(sramCtx, D_801C67C8[phi_s3], D_801C67F0[phi_s3]);
-                        func_80146EBC(sramCtx, D_801C67C8[sp54+1], D_801C67F0[sp54+1]);
+                        func_80146EBC(sramCtx, D_801C67C8[sp64], D_801C67F0[sp64]);
+                        func_80146EBC(sramCtx, D_801C67C8[sp58+1], D_801C67F0[sp58+1]);
                     } else if (sp6E == 0) {
                         temp_s7_4 = gSaveContext.save.checksum;
                         sp7A = phi_v1_10;
                         phi_v1_11 = phi_v1_10;
-                        if (func_80185968(*sramCtx->saveBuf, D_801C67C8[sp54+1], D_801C67F0[sp54+1]) != 0) {
-                            phi_s2_5 = 1U;
+                        if (func_80185968(*sramCtx->saveBuf, D_801C67C8[sp58+1], D_801C67F0[sp58+1]) != 0) {
+                            phi_s2_5 = 1;
                         } else {
-                            Lib_MemCpy((void* ) &gSaveContext, (void* ) sramCtx->saveBuf, D_801C6870[sp64]);
+                            Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, D_801C6870[sp64]);
                             gSaveContext.save.checksum = 0;
                             phi_s2_5 = gSaveContext.save.checksum;
-                            phi_v1_11 = Sram_CalcChecksum((void* ) &gSaveContext, D_801C6870[sp64]) & 0xFFFF;
+                            phi_v1_11 = Sram_CalcChecksum(&gSaveContext, D_801C6870[sp64]) & 0xFFFF;
                         }
-                        //if (((u8) gSaveContext.save.playerData.newf != 0x5A) || (gSaveContext.unk_25 != 0x45) || (gSaveContext.unk_26 != 0x4C) || (gSaveContext.unk_27 != 0x44) || (gSaveContext.unk_28 != 0x41) || (gSaveContext.unk_29 != 0x33) || (phi_s2_5 != phi_v1_11) || (phi_s2_5 != temp_s7_4)) {
                         if (CHECK_NEWF(gSaveContext.save.playerData.newf) || (phi_s2_5 != phi_v1_11) || (phi_s2_5 != temp_s7_4)) {
-                            func_80185968((void* ) sramCtx->saveBuf, D_801C67C8[phi_s3], D_801C67F0[phi_s3]);
-                            Lib_MemCpy((void* ) &gSaveContext, (void* ) sramCtx->saveBuf, D_801C6870[sp64]);
-                            func_80146EBC(sramCtx, D_801C67C8[phi_s3], D_801C67F0[phi_s3]);
-                            func_80146EBC(sramCtx, D_801C67C8[sp54+1], D_801C67F0[sp54+1]);
+                            func_80185968(*sramCtx->saveBuf, D_801C67C8[sp64], D_801C67F0[sp64]);
+                            Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, D_801C6870[sp64]);
+                            func_80146EBC(sramCtx, D_801C67C8[sp64], D_801C67F0[sp64]);
+                            func_80146EBC(sramCtx, D_801C67C8[sp58+1], D_801C67F0[sp58+1]);
                         }
                     }
                 } else {
-                    bzero((void* ) sramCtx->saveBuf, 0x4000);
-                    Lib_MemCpy((void* ) &gSaveContext, (void* ) sramCtx->saveBuf, *(D_801C6870 + sp64));
-                    func_80146EBC(sramCtx, D_801C67C8[phi_s3], D_801C67F0[phi_s3]);
+                    bzero(*sramCtx->saveBuf, sizeof(*sramCtx->saveBuf));
+                    Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, *(D_801C6870 + sp64));
+                    func_80146EBC(sramCtx, D_801C67C8[sp64], D_801C67F0[sp64]);
                     func_80146EBC(sramCtx, D_801C67C8[sp58+1], D_801C67F0[sp58+1]);
                 }
             } else {
@@ -1372,7 +1295,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                     gSaveContext.languageSetting = 0;
                     gSaveContext.zTargetSetting = 0;
                 } else {
-                    Lib_MemCpy((void* ) &gSaveContext.optionId, (void* ) sramCtx->saveBuf, 6U);
+                    Lib_MemCpy(&gSaveContext.optionId, *sramCtx->saveBuf, 6U);
                     if (gSaveContext.optionId != 0xA51D) {
                         gSaveContext.optionId = 0xA51D;
                         gSaveContext.language = 1;
@@ -1389,8 +1312,8 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
             //temp_v1_9 = (u16)sp76;
             sp74 = (sp58 + 2) & 0xFFFF;
             //sp76 = temp_t7;
-            phi_v1 = sp76;
-            phi_s3 = (s32) sp74;
+            sp50 = sp76;
+            sp64 = (s32) sp74;
         }
 
         gSaveContext.save.time = D_801F6AF0;
