@@ -10,47 +10,61 @@ s32 D_801C5FC4 = 0;
 s32 D_801C5FC8 = 0;
 s32 D_801C5FCC = 0x40000000;
 
-s32 D_801C5FD0[448] = {
-    0,         0, 0, 0,          0,        0,          0, 0,          0,         0, 0, 0,
-    0,         0, 0, 0,          0,        0,          0, 0,          0,         0, 0, 0,
-    0,         0, 0, 0xC04,      0,        0,          0, 0,          0,         0, 0, 0,
-    0,         0, 0, 0,          0,        0,          0, 0x80000000, 0,         0, 0, 0x80000000,
-    0,         0, 0, 0,          0,        0,          0, 0,          0,         0, 0, 0,
-    0,         0, 0, 0,          0,        0,          0, 0,          0,         0, 0, 0,
-    0x100000,  0, 0, 0x40000002, 0,        0,          0, 0,          0,         0, 0, 0,
-    0x4000000, 0, 0, 0,          2,        0,          0, 0,          0x4000000, 0, 0, 0,
-    0,         0, 0, 0,          0xF,      0,          0, 0,          0x70B000,  0, 0, 0,
-    0,         0, 0, 0,          0,        0x80000000, 0, 0x400,      0,         0, 0, 0,
-    0,         0, 0, 0x80000000, 0,        0,          0, 0,          0x1A00020, 0, 0, 0,
-    0x400,     0, 0, 0,          0,        0,          0, 0x1000,     0,         0, 0, 0,
-    0,         0, 0, 2,          0x400,    0,          0, 0,          0,         0, 0, 0,
-    0,         0, 0, 0x80000000, 0,        0,          0, 0,          0,         0, 0, 2,
-    0,         0, 0, 0x40000000, 0,        0,          0, 0,          0x10,      0, 0, 0,
-    3,         0, 0, 0,          0,        0,          0, 0,          0,         0, 0, 0x80000000,
-    0,         0, 0, 0,          0,        0,          0, 0,          0,         0, 0, 0,
-    0,         0, 0, 0,          0,        0,          0, 0,          0,         0, 0, 0x80000000,
-    0x100400,  0, 0, 0x22,       0x400,    0,          0, 0x80,       0,         0, 0, 0,
-    0,         0, 0, 0,          0x400,    0,          0, 0,          0,         0, 0, 0,
-    0,         0, 0, 0,          0,        0,          0, 0,          0,         0, 0, 2,
-    0,         0, 0, 0x80000002, 0,        0,          0, 0,          0,         0, 0, 0,
-    0,         0, 0, 0,          0,        0,          0, 0x80000000, 0xC00,     0, 0, 0x40000000,
-    0x102,     0, 0, 0x400,      0,        0,          0, 2,          0,         0, 0, 0x40000000,
-    0x70,      0, 0, 0,          0,        0,          0, 0,          0,         0, 0, 0,
-    0,         0, 0, 0x40000000, 0,        0,          0, 0x40000000, 0,         0, 0, 0,
-    0,         0, 0, 0,          0x100000, 0,          0, 0x80000000, 0,         0, 0, 0,
-    0,         0, 0, 0,          0,        0,          0, 0,          0,         0, 0, 0,
-    0,         0, 0, 0,          0,        0,          0, 0,          0,         0, 0, 0,
-    0x400,     0, 0, 0,          0x400,    0,          0, 0,          0x100000,  0, 0, 0x80000000,
-    0,         0, 0, 0x100,      0x400,    0,          0, 0,          0,         0, 0, 0x80,
-    0,         0, 0, 0x80,       0,        0,          0, 0x80000000, 0,         0, 0, 0x400,
-    0,         0, 0, 0,          0,        0,          0, 0,          1,         0, 0, 0,
-    0,         0, 0, 0,          0,        0,          0, 0,          0,         0, 0, 2,
-    0,         0, 0, 0,          0,        0,          0, 0,          0,         0, 0, 0,
-    0,         0, 0, 0,          0,        0,          0, 0,          1,         0, 0, 0,
-    0,         0, 0, 0,          0,        0,          0, 0x400,      0x100000,  0, 0, 0x400,
-    0,         0, 1, 0,
+u32 D_801C5FD0[14][0x20] = {
+    {
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xC04, 0, 0, 0, 0,
+    },
+    {
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x80000000, 0, 0, 0, 0x80000000,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,          0, 0, 0, 0,
+    },
+    {
+        0, 0, 0, 0, 0,         0, 0, 0, 0x100000, 0, 0, 0x40000002, 0,         0, 0, 0,
+        0, 0, 0, 0, 0x4000000, 0, 0, 0, 2,        0, 0, 0,          0x4000000, 0, 0, 0,
+    },
+    {
+        0, 0,          0, 0,     0xF, 0, 0, 0, 0x70B000, 0, 0, 0,          0, 0, 0, 0,
+        0, 0x80000000, 0, 0x400, 0,   0, 0, 0, 0,        0, 0, 0x80000000, 0, 0, 0, 0,
+    },
+    {
+        0x1A00020, 0, 0, 0, 0x400, 0, 0, 0, 0, 0, 0, 0x1000, 0, 0, 0, 0,
+        0,         0, 0, 2, 0x400, 0, 0, 0, 0, 0, 0, 0,      0, 0, 0, 0x80000000,
+    },
+    {
+        0,    0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0x40000000, 0, 0, 0, 0,
+        0x10, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,          0, 0, 0, 0x80000000,
+    },
+    {
+        0, 0, 0, 0, 0, 0, 0, 0,          0,        0, 0, 0,    0,     0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0x80000000, 0x100400, 0, 0, 0x22, 0x400, 0, 0, 0x80,
+    },
+    {
+        0, 0, 0, 0, 0, 0, 0, 0, 0x400, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0x80000002,
+    },
+    {
+        0,     0, 0, 0,          0,     0, 0, 0,     0, 0, 0, 0, 0, 0, 0, 0x80000000,
+        0xC00, 0, 0, 0x40000000, 0x102, 0, 0, 0x400, 0, 0, 0, 2, 0, 0, 0, 0x40000000,
+    },
+    {
+        0x70, 0, 0, 0,          0, 0, 0, 0, 0, 0, 0, 0, 0,        0, 0, 0x40000000,
+        0,    0, 0, 0x40000000, 0, 0, 0, 0, 0, 0, 0, 0, 0x100000, 0, 0, 0x80000000,
+    },
+    {
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x400, 0, 0, 0,
+    },
+    {
+        0x400, 0, 0, 0,    0x100000, 0, 0, 0x80000000, 0, 0, 0, 0x100,      0x400, 0, 0, 0,
+        0,     0, 0, 0x80, 0,        0, 0, 0x80,       0, 0, 0, 0x80000000, 0,     0, 0, 0x400,
+    },
+    {
+        0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0,
+    },
+    {
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x400, 0x100000, 0, 0, 0x400, 0, 0, 1, 0,
+    },
 };
 
+// gDefaultWeekEventReg
 u16 D_801C66D0[100] = {
     0xFFFC, 0xFFFF, 0xFFFF, 0xFFFF, 0,      0,      0,      0xC000, 0xC00,  0,      0xC0,   0,      0x300,
     0x3000, 0xC000, 0xC00,  0,      0,      0,      0,      0,      0,      0xC00C, 0xC00C, 0xC008, 3,
@@ -65,13 +79,14 @@ u16 D_801C66D0[100] = {
 s32 D_801C6798[] = {
     0x00000020, 0x00001470, 0x000028C0, 0x00003D10, 0x00005160, 0x000065B0,
 };
+
+// items?
 u8 D_801C67B0[24] = {
     0xFF, 1,   0xFF, 0xFF, 0xFF, 0xFF, 6,    7,    8,    9,    0xA,  0xFF,
     0xC,  0xD, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 };
 
-s32 D_801C67C8[1] = { 0 };
-s32 D_801C67CC[7] = { 0x40, 0x80, 0xC0, 0x100, 0x180, 0x200, 0x280 };
+s32 D_801C67C8[] = { 0, 0x40, 0x80, 0xC0, 0x100, 0x180, 0x200, 0x280 };
 
 s32 D_801C67E8[] = {
     0x00000300,
@@ -90,30 +105,65 @@ s32 D_801C6840[4] = { 0x100, 0x180, 0x200, 0x280 };
 s32 D_801C6850[8] = { 0x80, 0x80, 0x80, 0x80, 0x300, 0x380, 1, 1 };
 s32 D_801C6870[8] = { 0x100C, 0x100C, 0x100C, 0x100C, 0x3CA0, 0x3CA0, 0x3CA0, 0x3CA0 };
 u8 D_801C6890[8] = { 1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80 };
-s32 D_801C6898[] = {
-    0x00000000, 0x00000000, 0x3E3E3E3E, 0x3E3E3E3E, 0x00300030,
-    0x00300000, 0x00000000, 0x00000000, 0xFF000000, 0xFF000008,
+SavePlayerData D_801C6898 = {
+    { '\0', '\0', '\0', '\0', '\0', '\0', },
+    0, 
+    {  0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, }, 
+    0x0030, 
+    0x0030,
+    0x00,
+    0x30,
+    0x0000,
+    0x0000,
+    0x0000, 
+    0x00, 0x00, 0x00, 0x00, 
+    0xFF, 
+    0x0000, 
+    0xFF,
+    0x0008,
 };
 
-s32 D_801C68C0[] = {
-    0x4DFFFFFF, 0x4DFFFFFF, 0x4DFFFFFF, 0xFDFFFFFF, 0x00FFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00110000,
+ItemEquips D_801C68C0 = {
+    {
+        {0x4D, 0xFF, 0xFF, 0xFF},
+        {0x4D, 0xFF, 0xFF, 0xFF},
+        {0x4D, 0xFF, 0xFF, 0xFF},
+        {0xFD, 0xFF, 0xFF, 0xFF},
+    },
+    {
+        {0, 0xFF, 0xFF, 0xFF},
+        {0xFF, 0xFF, 0xFF, 0xFF},
+        {0xFF, 0xFF, 0xFF, 0xFF},
+        {0xFF, 0xFF, 0xFF, 0xFF},
+    },
+    0x11,
 };
 
 Inventory gSaveDefaultInventory = {
+    // items
+    {
+        ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
+        ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
+        ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
+    },
+    // masks
     {
         0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
         0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
     },
-    {
-        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-    },
+    // ammo
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    // upgrades
     0x120000,
+    // questItems
     0,
+    // dungeonItems
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    // dungeonKeys
     { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0 },
+    // strayFairies
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    // unk_6E
     {
         { 0x15, 0x12, 0x17 },
         { 0x14, 0x3E, 0x3E },
@@ -128,11 +178,13 @@ Inventory gSaveDefaultInventory = {
 
 u16 gSaveDefaultChecksum = 0;
 
+// SavePlayerData
 s32 D_801C6970[] = {
     0x5A454C44, 0x41330000, 0x15121714, 0x3E3E3E3E, 0x00800080,
     0x00300032, 0x00640000, 0x01000000, 0xFF000000, 0xFF000008,
 };
 
+// ItemEquips
 s32 D_801C6998[] = {
     0x4D011300, 0x4D013300, 0x4D013400, 0x09093200, 0x00011300, 0x000A2307, 0x000C2907, 0x00011D07, 0x00110000,
 };
@@ -165,9 +217,9 @@ Inventory D_801C69BC = {
     },
 };
 u16 D_801C6A44 = 0;
-u8 D_801C6A48[8] = { 0x35, 0x33, 0x34, 0x32, 0x35, 0, 0, 0 };
-u8 D_801C6A50[8] = { 0x2F, 0x23, 0x29, 0x1D, 0x2F, 0, 0, 0 };
-s32 D_801C6A58[6] = { 0x68B06A60, 0xB2309A80, 0xD8903E40, 0x864084A0, 0x2040AA30, 0 };
+u8 D_801C6A48[] = { 0x35, 0x33, 0x34, 0x32, 0x35, };
+u8 D_801C6A50[] = { 0x2F, 0x23, 0x29, 0x1D, 0x2F, };
+s32 D_801C6A58[] = { 0x68B06A60, 0xB2309A80, 0xD8903E40, 0x864084A0, 0x2040AA30 };
 
 u16 D_801F6AF0;
 u8 D_801F6AF2;
@@ -817,11 +869,11 @@ void func_80144A94(SramContext* sramCtx) {
 
     if (func_80185968(*sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2], D_801C67F0[gSaveContext.fileNum * 2]) !=
         0) {
-        func_80185968(*sramCtx->saveBuf, D_801C67CC[gSaveContext.fileNum * 2], D_801C67F4[gSaveContext.fileNum * 2]);
+        func_80185968(*sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2 + 1], D_801C67F4[gSaveContext.fileNum * 2]);
     }
     Lib_MemCpy(&gSaveContext.save, sramCtx->saveBuf, sizeof(Save));
     if (CHECK_NEWF(gSaveContext.save.playerData.newf)) {
-        func_80185968(*sramCtx->saveBuf, D_801C67CC[gSaveContext.fileNum * 2], D_801C67F4[gSaveContext.fileNum * 2]);
+        func_80185968(*sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2 + 1], D_801C67F4[gSaveContext.fileNum * 2]);
         Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, sizeof(Save));
     }
     gSaveContext.save.cutscene = cutscene;
@@ -883,7 +935,7 @@ void func_80144E78(GameState* gameState, SramContext* sramCtx) {
         Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[phi_t1 * 2]);
 
         if (CHECK_NEWF(gSaveContext.save.playerData.newf)) {
-            func_80185968(*sramCtx->saveBuf, D_801C67CC[phi_t1 * 2], D_801C67F4[phi_t1 * 2]);
+            func_80185968(*sramCtx->saveBuf, D_801C67C8[phi_t1 * 2 + 1], D_801C67F4[phi_t1 * 2]);
             Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[phi_t1 * 2]);
         }
     }
@@ -1077,7 +1129,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
             phi_s2_4 = 0;
             if (func_80185968(*sramCtx->saveBuf, D_801C67C8[sp64], D_801C67F0[sp64]) != 0) {
                 sp6E = 1;
-                if (func_80185968(*sramCtx->saveBuf, D_801C67CC[sp64], D_801C67F4[sp64]) != 0) {
+                if (func_80185968(*sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F4[sp64]) != 0) {
                     phi_s2 = 1;
                 }
             }
@@ -1176,7 +1228,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                     temp_s7_2 = gSaveContext.save.checksum;
                     sp7A = phi_v1_5;
                     phi_v1_6 = phi_v1_5;
-                    if (func_80185968(*sramCtx->saveBuf, D_801C67CC[sp58], D_801C67F4[sp58]) != 0) {
+                    if (func_80185968(*sramCtx->saveBuf, D_801C67C8[sp58 + 1], D_801C67F4[sp58]) != 0) {
                         phi_s2_3 = 1;
                     } else {
                         Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, 0x100CU);
@@ -1406,7 +1458,7 @@ void func_80146628(GameState* gameState, SramContext* sramCtx) {
                       D_801C67F0[fileChooseCtx->unk_2448E * 2]);
 
         if (1) {}
-        func_80185968(&(*sramCtx->saveBuf)[0x2000], D_801C67CC[fileChooseCtx->unk_2448E * 2],
+        func_80185968(&(*sramCtx->saveBuf)[0x2000], D_801C67C8[fileChooseCtx->unk_2448E * 2 + 1],
                       D_801C67F4[fileChooseCtx->unk_2448E * 2]);
         if (1) {}
 

@@ -58,7 +58,7 @@ typedef struct {
     /* 0x001F */ u8 unk_1F;                      // original name: ocarina_round
     /* 0x0020 */ u8 unk_20;                      // original name: first_memory
     /* 0x0022 */ u16 owlActivationFlags;         // original name: memory_warp_point
-    /* 0x0024 */ u8 unk_48;                      // original name: last_warp_pt
+    /* 0x0024 */ u8 unk_24;                      // original name: last_warp_pt
     /* 0x0026 */ s16 savedSceneNum;              // original name: scene_data_ID
 } SavePlayerData; // size = 0x28
 
