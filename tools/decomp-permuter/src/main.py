@@ -1,245 +1,94 @@
+import argparse
+from dataclasses import dataclass, field
+import itertools
+import multiprocessing
+from multiprocessing import Queue
+import os
+import queue
+import sys
+import threading
+import time
 from typing import (
-    Any,
-    List,
-    Dict,
-    Optional,
     Callable,
-    Optional,
-    Tuple,
+    Dict,
     Iterable,
     Iterator,
-    Union,
+    List,
+    Optional,
+    Tuple,
 )
-import argparse
-import difflib
-import itertools
-import functools
-import os
-import random
-import re
-import sys
-import time
-import traceback
-import multiprocessing
-import copy
-from enum import Enum
-from random import Random
 
-import attr
-import pycparser
-from pycparser import CParser, c_ast as ca
-
-from .error import CandidateConstructionFailure
-from .perm import perm_gen, perm_eval
-from . import ast_util
-from .preprocess import preprocess
+from .candidate import CandidateResult
 from .compiler import Compiler
-from .scorer import Scorer
-from .perm.perm import EvalState
-from .candidate import Candidate, CandidateResult
+from .error import CandidateConstructionFailure
+from .helpers import plural, static_assert_unreachable
+from .net.client import start_client
+from .net.core import ServerError, connect, enable_debug_mode, MAX_PRIO, MIN_PRIO
+from .permuter import (
+    EvalError,
+    EvalResult,
+    Feedback,
+    Finished,
+    Message,
+    NeedMoreWork,
+    Permuter,
+    Task,
+    WorkDone,
+)
+from .preprocess import preprocess
+from .printer import Printer
 from .profiler import Profiler
+from .scorer import Scorer
 
 # The probability that the randomizer continues transforming the output it
 # generated last time.
 DEFAULT_RAND_KEEP_PROB = 0.6
 
 
-@attr.s
+@dataclass
 class Options:
-    directories: List[str] = attr.ib()
-    show_errors: bool = attr.ib(default=False)
-    show_timings: bool = attr.ib(default=False)
-    print_diffs: bool = attr.ib(default=False)
-    stack_differences: bool = attr.ib(default=False)
-    abort_exceptions: bool = attr.ib(default=False)
-    better_only: bool = attr.ib(default=False)
-    stop_on_zero: bool = attr.ib(default=False)
-    keep_prob: float = attr.ib(default=DEFAULT_RAND_KEEP_PROB)
-    force_seed: Optional[str] = attr.ib(default=None)
-    threads: int = attr.ib(default=1)
+    directories: List[str]
+    show_errors: bool = False
+    show_timings: bool = False
+    print_diffs: bool = False
+    stack_differences: bool = False
+    abort_exceptions: bool = False
+    better_only: bool = False
+    best_only: bool = False
+    quiet: bool = False
+    stop_on_zero: bool = False
+    keep_prob: float = DEFAULT_RAND_KEEP_PROB
+    force_seed: Optional[str] = None
+    threads: int = 1
+    use_network: bool = False
+    network_debug: bool = False
+    network_priority: float = 1.0
 
 
-def find_fns(source: str) -> List[str]:
-    fns = re.findall(r"(\w+)\([^()\n]*\)\s*?{", source)
-    return [
-        fn
-        for fn in fns
-        if not fn.startswith("PERM") and fn not in ["if", "for", "switch", "while"]
-    ]
-
-
-@attr.s
-class EvalError:
-    exc_str: str = attr.ib()
-    seed: Optional[Tuple[int, int]] = attr.ib()
-
-
-EvalResult = Union[CandidateResult, EvalError]
-
-
-class Permuter:
-    """
-    Represents a single source from which permutation candidates can be generated,
-    and which keeps track of good scores achieved so far.
-    """
-
-    def __init__(
-        self,
-        dir: str,
-        fn_name: Optional[str],
-        compiler: Compiler,
-        scorer: Scorer,
-        source_file: str,
-        source: str,
-        *,
-        force_rng_seed: Optional[int],
-        keep_prob: float,
-        need_all_sources: bool,
-    ) -> None:
-        self.dir = dir
-        self.random = Random()
-        self.compiler = compiler
-        self.scorer = scorer
-        self.source_file = source_file
-
-        if fn_name is None:
-            fns = find_fns(source)
-            if len(fns) == 0:
-                raise Exception(f"{self.source_file} does not contain any function!")
-            if len(fns) > 1:
-                raise Exception(
-                    f"{self.source_file} must contain only one function, "
-                    "or have a function.txt next to it with a function name."
-                )
-            self.fn_name = fns[0]
-        else:
-            self.fn_name = fn_name
-        self.unique_name = self.fn_name
-
-        self.parser = pycparser.CParser()
-        self.permutations = perm_gen.perm_gen(source)
-
-        self.force_rng_seed = force_rng_seed
-        self.cur_seed: Optional[Tuple[int, int]] = None
-
-        self.keep_prob = keep_prob
-        self.need_all_sources = need_all_sources
-
-        self.base, base_score, self.base_hash = self.create_and_score_base()
-        self.hashes = {self.base_hash}
-        self.cand: Optional[Candidate] = None
-        self.base_score: int = base_score
-        self.best_score: int = base_score
-        self._last_score: Optional[int] = None
-
-    def reseed_random(self) -> None:
-        self.random = Random()
-
-    def create_and_score_base(self) -> Tuple[Candidate, int, str]:
-        base_source = perm_eval.perm_evaluate_one(self.permutations)
-        base_cand = Candidate.from_source(
-            base_source, self.fn_name, self.parser, rng_seed=0
-        )
-        o_file = base_cand.compile(self.compiler, show_errors=True)
-        if not o_file:
-            raise Exception(f"Unable to compile {self.source_file}")
-        base_result = base_cand.score(self.scorer, o_file)
-        return base_cand, base_result.score, base_result.hash
-
-    def need_to_send_source(self, result: CandidateResult) -> bool:
-        if self.need_all_sources:
-            return True
-        if result.score < self.base_score:
-            return True
-        if result.score == self.base_score:
-            return result.hash != self.base_hash
-        return False
-
-    def eval_candidate(self, seed: int) -> CandidateResult:
-        t0 = time.time()
-
-        # Determine if we should keep the last candidate.
-        # Don't keep 0-score candidates; we'll only create new, worse, zeroes.
-        keep = (
-            self.permutations.is_random()
-            and self.random.uniform(0, 1) < self.keep_prob
-            and self._last_score != 0
-        ) or self.force_rng_seed
-
-        self._last_score = None
-
-        # Create a new candidate if we didn't keep the last one (or if the last one didn't exist)
-        # N.B. if we decide to keep the previous candidate, we will skip over the provided seed.
-        # This means we're not guaranteed to test all seeds, but it doesn't really matter since
-        # we're randomizing anyway.
-        if not self.cand or not keep:
-            cand_c = self.permutations.evaluate(seed, EvalState())
-            rng_seed = self.force_rng_seed or random.randrange(1, 10 ** 20)
-            self.cur_seed = (seed, rng_seed)
-            self.cand = Candidate.from_source(
-                cand_c, self.fn_name, self.parser, rng_seed=rng_seed
-            )
-
-        # Randomize the candidate
-        if self.permutations.is_random():
-            self.cand.randomize_ast()
-
-        t1 = time.time()
-
-        self.cand.get_source()
-
-        t2 = time.time()
-
-        o_file = self.cand.compile(self.compiler)
-
-        t3 = time.time()
-
-        result = self.cand.score(self.scorer, o_file)
-
-        t4 = time.time()
-
-        profiler: Profiler = result.profiler
-        profiler.add_stat(Profiler.StatType.perm, t1 - t0)
-        profiler.add_stat(Profiler.StatType.stringify, t2 - t1)
-        profiler.add_stat(Profiler.StatType.compile, t3 - t2)
-        profiler.add_stat(Profiler.StatType.score, t4 - t3)
-
-        self._last_score = result.score
-
-        if not self.need_to_send_source(result):
-            result.source = None
-
-        return result
-
-    def try_eval_candidate(self, seed: int) -> EvalResult:
+def restricted_float(lo: float, hi: float) -> Callable[[str], float]:
+    def convert(x: str) -> float:
         try:
-            return self.eval_candidate(seed)
-        except Exception:
-            return EvalError(exc_str=traceback.format_exc(), seed=self.cur_seed)
+            ret = float(x)
+        except ValueError:
+            raise argparse.ArgumentTypeError(f"invalid float value: '{x}'")
 
-    def diff(self, other_source: str) -> str:
-        # Return a unified white-space-ignoring diff
-        class Line(str):
-            def __eq__(self, other: Any) -> bool:
-                return isinstance(other, str) and self.strip() == other.strip()
+        if ret < lo or ret > hi:
+            raise argparse.ArgumentTypeError(
+                f"value {x} is out of range (must be between {lo} and {hi})"
+            )
+        return ret
 
-            def __hash__(self) -> int:
-                return hash(self.strip())
-
-        a = list(map(Line, self.base.get_source().split("\n")))
-        b = list(map(Line, other_source.split("\n")))
-        return "\n".join(
-            difflib.unified_diff(a, b, fromfile="before", tofile="after", lineterm="")
-        )
+    return convert
 
 
-@attr.s
+@dataclass
 class EvalContext:
-    options: Options = attr.ib()
-    iteration: int = attr.ib(default=0)
-    errors: int = attr.ib(default=0)
-    overall_profiler: Profiler = attr.ib(factory=Profiler)
-    permuters: List[Permuter] = attr.ib(factory=list)
+    options: Options
+    printer: Printer = field(default_factory=Printer)
+    iteration: int = 0
+    errors: int = 0
+    overall_profiler: Profiler = field(default_factory=Profiler)
+    permuters: List[Permuter] = field(default_factory=list)
 
 
 def write_candidate(perm: Permuter, result: CandidateResult) -> None:
@@ -254,7 +103,7 @@ def write_candidate(perm: Permuter, result: CandidateResult) -> None:
         except FileExistsError:
             pass
     source = result.source
-    assert source is not None, "need_to_send_source is wrong!"
+    assert source is not None, "Permuter._need_to_send_source is wrong!"
     with open(os.path.join(output_dir, "source.c"), "x", encoding="utf-8") as f:
         f.write(source)
     with open(os.path.join(output_dir, "score.txt"), "x", encoding="utf-8") as f:
@@ -264,10 +113,15 @@ def write_candidate(perm: Permuter, result: CandidateResult) -> None:
     print(f"wrote to {output_dir}")
 
 
-def post_score(context: EvalContext, permuter: Permuter, result: EvalResult) -> bool:
+def post_score(
+    context: EvalContext, permuter: Permuter, result: EvalResult, who: Optional[str]
+) -> bool:
     if isinstance(result, EvalError):
-        print(f"\n[{permuter.unique_name}] internal permuter failure.")
-        print(result.exc_str)
+        if result.exc_str is not None:
+            context.printer.print(
+                "internal permuter failure.", permuter, who, keep_progress=True
+            )
+            print(result.exc_str)
         if result.seed is not None:
             seed_str = str(result.seed[1])
             if result.seed[0] != 0:
@@ -278,79 +132,61 @@ def post_score(context: EvalContext, permuter: Permuter, result: EvalResult) -> 
         else:
             return False
 
-    profiler = result.profiler
-    score_value = result.score
-    score_hash = result.hash
-
     if context.options.print_diffs:
-        assert result.source is not None, "need_to_send_source is wrong"
+        assert result.source is not None, "Permuter._need_to_send_source is wrong"
         print()
         print(permuter.diff(result.source))
         input("Press any key to continue...")
 
-    context.iteration += 1
-    if score_value is None:
-        context.errors += 1
-    disp_score = "inf" if score_value == permuter.scorer.PENALTY_INF else score_value
-    timings = ""
-    if context.options.show_timings:
+    profiler = result.profiler
+    score_value = result.score
+
+    if profiler is not None:
         for stattype in profiler.time_stats:
             context.overall_profiler.add_stat(stattype, profiler.time_stats[stattype])
+
+    context.iteration += 1
+    if score_value == permuter.scorer.PENALTY_INF:
+        disp_score = "inf"
+        context.errors += 1
+    else:
+        disp_score = str(score_value)
+    timings = ""
+    if context.options.show_timings:
         timings = "  \t" + context.overall_profiler.get_str_stats()
     status_line = f"iteration {context.iteration}, {context.errors} errors, score = {disp_score}{timings}"
 
-    # Note: when updating this if condition, need_to_send_source may also need
-    # to be updated, or else assertion failures will result.
-    if (
-        score_value is not None
-        and score_hash is not None
-        and (
-            score_value < permuter.base_score
-            or (score_value == permuter.base_score and not context.options.better_only)
-        )
-        and score_hash not in permuter.hashes
-    ):
-        if score_value != 0:
-            permuter.hashes.add(score_hash)
-        print("\r" + " " * (len(status_line) + 10) + "\r", end="")
-        if score_value < permuter.best_score:
-            print(
-                f"\u001b[32;1m[{permuter.unique_name}] found new best score! ({score_value} vs {permuter.base_score})\u001b[0m"
-            )
-        elif score_value == permuter.best_score:
-            print(
-                f"\u001b[32;1m[{permuter.unique_name}] tied best score! ({score_value} vs {permuter.base_score})\u001b[0m"
-            )
+    if permuter.should_output(result):
+        former_best = permuter.best_score
+        permuter.record_result(result)
+        if score_value < former_best:
+            color = "\u001b[32;1m"
+            msg = f"found new best score! ({score_value} vs {permuter.base_score})"
+        elif score_value == former_best:
+            color = "\u001b[32;1m"
+            msg = f"tied best score! ({score_value} vs {permuter.base_score})"
         elif score_value < permuter.base_score:
-            print(
-                f"\u001b[33m[{permuter.unique_name}] found a better score! ({score_value} vs {permuter.base_score})\u001b[0m"
-            )
+            color = "\u001b[33m"
+            msg = f"found a better score! ({score_value} vs {permuter.base_score})"
         else:
-            print(
-                f"\u001b[33m[{permuter.unique_name}] found different asm with same score ({score_value})\u001b[0m"
-            )
-        permuter.best_score = min(permuter.best_score, score_value)
+            color = "\u001b[33m"
+            msg = f"found different asm with same score ({score_value})"
+        context.printer.print(msg, permuter, who, color=color)
+
         write_candidate(permuter, result)
-    print("\b" * 10 + " " * 10 + "\r" + status_line, end="", flush=True)
+    if not context.options.quiet:
+        context.printer.progress(status_line)
     return score_value == 0
 
 
-def cycle_seeds(
-    permuters: List[Permuter], force_seed: Optional[int]
-) -> Iterable[Tuple[int, int]]:
+def cycle_seeds(permuters: List[Permuter]) -> Iterable[Tuple[int, int]]:
     """
     Return all possible (permuter index, seed) pairs, cycling over permuters.
     If a permuter is randomized, it will keep repeating seeds infinitely.
     """
     iterators: List[Iterator[Tuple[int, int]]] = []
     for perm_ind, permuter in enumerate(permuters):
-        it: Iterable[int]
-        if not force_seed:
-            it = perm_eval.perm_gen_all_seeds(permuter.permutations, Random())
-        elif permuter.permutations.is_random():
-            it = itertools.repeat(force_seed)
-        else:
-            it = [force_seed]
+        it = permuter.seed_iterator()
         iterators.append(zip(itertools.repeat(perm_ind), it))
 
     i = 0
@@ -367,30 +203,39 @@ def cycle_seeds(
 
 def multiprocess_worker(
     permuters: List[Permuter],
-    input_queue: "multiprocessing.Queue[Optional[Tuple[int, int]]]",
-    output_queue: "multiprocessing.Queue[Tuple[int, EvalResult]]",
+    input_queue: "Queue[Task]",
+    output_queue: "Queue[Feedback]",
 ) -> None:
-    input_queue.cancel_join_thread()
-    output_queue.cancel_join_thread()
-
-    # Don't use the same RNGs as the parent
-    for permuter in permuters:
-        permuter.reseed_random()
-
     try:
         while True:
-            queue_item = input_queue.get()
-            if queue_item is None:
+            # Read a work item from the queue. If none is immediately available,
+            # tell the main thread to fill the queues more, and then block on
+            # the queue.
+            queue_item: Task
+            try:
+                queue_item = input_queue.get(block=False)
+            except queue.Empty:
+                output_queue.put((NeedMoreWork(), -1, None))
+                queue_item = input_queue.get()
+            if isinstance(queue_item, Finished):
+                output_queue.put((queue_item, -1, None))
+                output_queue.close()
                 break
             permuter_index, seed = queue_item
             permuter = permuters[permuter_index]
             result = permuter.try_eval_candidate(seed)
-            output_queue.put((permuter_index, result))
+            if isinstance(result, CandidateResult) and permuter.should_output(result):
+                permuter.record_result(result)
+            output_queue.put((WorkDone(permuter_index, result), -1, None))
+            output_queue.put((NeedMoreWork(), -1, None))
     except KeyboardInterrupt:
         # Don't clutter the output with stack traces; Ctrl+C is the expected
         # way to quit and sends KeyboardInterrupt to all processes.
         # A heartbeat thing here would be good but is too complex.
-        pass
+        # Don't join the queue background thread -- thread joins in relation
+        # to KeyboardInterrupt usually result in deadlocks.
+        input_queue.cancel_join_thread()
+        output_queue.cancel_join_thread()
 
 
 def run(options: Options) -> List[int]:
@@ -406,18 +251,10 @@ def run(options: Options) -> List[int]:
         if time.time() - last_time > 5:
             print()
             print("Aborting stuck process.")
-            traceback.print_exc()
-            sys.exit(1)
+            raise
         print()
         print("Exiting.")
-        if options.threads == 1:
-            # The lru_cache sometimes uses a lot of memory, making normal exit slow
-            # due to GC. But since we're sane people and don't use finalizers for
-            # cleanup, we can just skip GC and exit immediately.
-            os._exit(0)
-        else:
-            # With threads we do need proper cleanup.
-            sys.exit(0)
+        sys.exit(0)
 
 
 def run_inner(options: Options, heartbeat: Callable[[], None]) -> List[int]:
@@ -425,8 +262,8 @@ def run_inner(options: Options, heartbeat: Callable[[], None]) -> List[int]:
 
     context = EvalContext(options)
 
-    force_rng_seed: Optional[int] = None
     force_seed: Optional[int] = None
+    force_rng_seed: Optional[int] = None
     if options.force_seed:
         seed_parts = list(map(int, options.force_seed.split(",")))
         force_rng_seed = seed_parts[-1]
@@ -458,7 +295,7 @@ def run_inner(options: Options, heartbeat: Callable[[], None]) -> List[int]:
         else:
             print(base_c)
 
-        compiler = Compiler(compile_cmd, options.show_errors)
+        compiler = Compiler(compile_cmd, show_errors=options.show_errors)
         scorer = Scorer(target_o, stack_differences=options.stack_differences)
         c_source = preprocess(base_c)
 
@@ -470,9 +307,14 @@ def run_inner(options: Options, heartbeat: Callable[[], None]) -> List[int]:
                 scorer,
                 base_c,
                 c_source,
+                force_seed=force_seed,
                 force_rng_seed=force_rng_seed,
                 keep_prob=options.keep_prob,
+                need_profiler=options.show_timings,
                 need_all_sources=options.print_diffs,
+                show_errors=options.show_errors,
+                best_only=options.best_only,
+                better_only=options.better_only,
             )
         except CandidateConstructionFailure as e:
             print(e.message, file=sys.stderr)
@@ -482,71 +324,179 @@ def run_inner(options: Options, heartbeat: Callable[[], None]) -> List[int]:
         name_counts[permuter.fn_name] = name_counts.get(permuter.fn_name, 0) + 1
     print()
 
+    if not context.permuters:
+        print("No permuters!")
+        return []
+
     for permuter in context.permuters:
         if name_counts[permuter.fn_name] > 1:
             permuter.unique_name += f" ({permuter.dir})"
         print(f"[{permuter.unique_name}] base score = {permuter.best_score}")
 
     found_zero = False
-    perm_seed_iter = cycle_seeds(context.permuters, force_seed)
-    if options.threads == 1:
-        for permuter_index, seed in perm_seed_iter:
+    if options.threads == 1 and not options.use_network:
+        # Simple single-threaded mode. This is not technically needed, but
+        # makes the permuter easier to debug.
+        for permuter_index, seed in cycle_seeds(context.permuters):
             heartbeat()
             permuter = context.permuters[permuter_index]
             result = permuter.try_eval_candidate(seed)
-            if post_score(context, permuter, result):
+            if post_score(context, permuter, result, None):
                 found_zero = True
                 if options.stop_on_zero:
                     break
     else:
-        # Create queues
-        task_queue: "multiprocessing.Queue[Optional[Tuple[int, int]]]" = (
-            multiprocessing.Queue()
-        )
-        results_queue: "multiprocessing.Queue[Tuple[int, EvalResult]]" = (
-            multiprocessing.Queue()
-        )
-        task_queue.cancel_join_thread()
-        results_queue.cancel_join_thread()
+        seed_iterators: List[Optional[Iterator[int]]] = [
+            permuter.seed_iterator()
+            for perm_ind, permuter in enumerate(context.permuters)
+        ]
+        seed_iterators_remaining = len(seed_iterators)
+        next_iterator_index = 0
 
-        def wait_for_result() -> bool:
-            heartbeat()
-            permuter_index, result = results_queue.get()
-            permuter = context.permuters[permuter_index]
-            return post_score(context, permuter, result)
+        # Create queues.
+        worker_task_queue: "Queue[Task]" = Queue()
+        feedback_queue: "Queue[Feedback]" = Queue()
 
-        # Begin workers
+        # Connect to network and create client threads and queues.
+        net_conns: "List[Tuple[threading.Thread, Queue[Task]]]" = []
+        if options.use_network:
+            print("Connecting to permuter@home...")
+            if options.network_debug:
+                enable_debug_mode()
+            first_stats: Optional[Tuple[int, int, float]] = None
+            for perm_index in range(len(context.permuters)):
+                try:
+                    port = connect()
+                except (EOFError, ServerError) as e:
+                    print("Error:", e)
+                    sys.exit(1)
+                thread, queue, stats = start_client(
+                    port,
+                    context.permuters[perm_index],
+                    perm_index,
+                    feedback_queue,
+                    options.network_priority,
+                )
+                net_conns.append((thread, queue))
+                if first_stats is None:
+                    first_stats = stats
+            assert first_stats is not None, "has at least one permuter"
+            clients_str = plural(first_stats[0], "other client")
+            servers_str = plural(first_stats[1], "server")
+            cores_str = plural(int(first_stats[2]), "core")
+            print(f"Connected! {servers_str} online ({cores_str}, {clients_str})")
+
+        # Start local worker threads
         processes: List[multiprocessing.Process] = []
         for i in range(options.threads):
             p = multiprocessing.Process(
                 target=multiprocess_worker,
-                args=(context.permuters, task_queue, results_queue),
+                args=(context.permuters, worker_task_queue, feedback_queue),
             )
             p.start()
             processes.append(p)
 
-        # Feed the task queue with work, but not too much work at a time
-        active_tasks = 0
-        for perm_seed in perm_seed_iter:
-            if active_tasks >= options.threads + 2:
-                active_tasks -= 1
-                if wait_for_result():
+        active_workers = len(processes)
+
+        if not active_workers and not net_conns:
+            print("No workers available! Exiting.")
+            sys.exit(1)
+
+        def process_finish(finish: Finished, source: int) -> None:
+            nonlocal active_workers
+
+            if finish.reason:
+                permuter: Optional[Permuter] = None
+                if source != -1 and len(context.permuters) > 1:
+                    permuter = context.permuters[source]
+                context.printer.print(finish.reason, permuter, None, keep_progress=True)
+
+            if source == -1:
+                active_workers -= 1
+
+        def process_result(work: WorkDone, who: Optional[str]) -> bool:
+            permuter = context.permuters[work.perm_index]
+            return post_score(context, permuter, work.result, who)
+
+        def get_task(perm_index: int) -> Optional[Tuple[int, int]]:
+            nonlocal next_iterator_index, seed_iterators_remaining
+            if perm_index == -1:
+                while seed_iterators_remaining > 0:
+                    task = get_task(next_iterator_index)
+                    next_iterator_index += 1
+                    next_iterator_index %= len(seed_iterators)
+                    if task is not None:
+                        return task
+            else:
+                it = seed_iterators[perm_index]
+                if it is not None:
+                    seed = next(it, None)
+                    if seed is None:
+                        seed_iterators[perm_index] = None
+                        seed_iterators_remaining -= 1
+                    else:
+                        return (perm_index, seed)
+            return None
+
+        # Feed the task queue with work and read from results queue.
+        # We generally match these up one-by-one to avoid overfilling queues,
+        # but workers can ask us to add more tasks into the system if they run
+        # out of work. (This will happen e.g. at the very beginning, when the
+        # queues are empty.)
+        while seed_iterators_remaining > 0:
+            heartbeat()
+            feedback, source, who = feedback_queue.get()
+            if isinstance(feedback, Finished):
+                process_finish(feedback, source)
+            elif isinstance(feedback, Message):
+                context.printer.print(feedback.text, None, who, keep_progress=True)
+            elif isinstance(feedback, WorkDone):
+                if process_result(feedback, who):
                     # Found score 0!
                     found_zero = True
                     if options.stop_on_zero:
                         break
-            task_queue.put(perm_seed)
-            active_tasks += 1
+            elif isinstance(feedback, NeedMoreWork):
+                task = get_task(source)
+                if task is not None:
+                    if source == -1:
+                        worker_task_queue.put(task)
+                    else:
+                        net_conns[source][1].put(task)
+            else:
+                static_assert_unreachable(feedback)
 
-        # Await final results
-        for i in range(active_tasks):
-            wait_for_result()
+        # Signal workers to stop.
+        for i in range(active_workers):
+            worker_task_queue.put(Finished())
 
-        # Stop workers
-        for i in range(options.threads):
-            task_queue.put(None)
+        for conn in net_conns:
+            conn[1].put(Finished())
+
+        # Await final results.
+        while active_workers > 0 or net_conns:
+            heartbeat()
+            feedback, source, who = feedback_queue.get()
+            if isinstance(feedback, Finished):
+                process_finish(feedback, source)
+            elif isinstance(feedback, Message):
+                context.printer.print(feedback.text, None, who, keep_progress=True)
+            elif isinstance(feedback, WorkDone):
+                if not (options.stop_on_zero and found_zero):
+                    if process_result(feedback, who):
+                        found_zero = True
+            elif isinstance(feedback, NeedMoreWork):
+                pass
+            else:
+                static_assert_unreachable(feedback)
+
+        # Wait for workers to finish.
         for p in processes:
             p.join()
+
+        # Wait for network connections to close (currently does not happen).
+        for conn in net_conns:
+            conn[0].join()
 
     if found_zero:
         print("\nFound zero score! Exiting.")
@@ -558,20 +508,21 @@ def main() -> None:
     sys.setrecursionlimit(10000)
 
     # Ideally we would do:
-    #  multiprocessing.set_start_method('spawn')
+    #  multiprocessing.set_start_method("spawn")
     # here, to make multiprocessing behave the same across operating systems.
     # However, that means that arguments to Process are passed across using
     # pickling, which mysteriously breaks with pycparser...
     # (AttributeError: 'CParser' object has no attribute 'p_abstract_declarator_opt')
     # So, for now we live with the defaults, which make multiprocessing work on Linux,
-    # where it uses fork and don't pickle arguments, and break on Windows. Sigh.
+    # where it uses fork and doesn't pickle arguments, and break on Windows. Sigh.
 
     parser = argparse.ArgumentParser(
         description="Randomly permute C files to better match a target binary."
     )
     parser.add_argument(
-        "directory",
+        "directories",
         nargs="+",
+        metavar="directory",
         help="Directory containing base.c, target.o and compile.sh. Multiple directories may be given.",
     )
     parser.add_argument(
@@ -605,10 +556,22 @@ def main() -> None:
         help="Only report scores better than the base.",
     )
     parser.add_argument(
+        "--best-only",
+        dest="best_only",
+        action="store_true",
+        help="Only report ties or new high scores.",
+    )
+    parser.add_argument(
         "--stop-on-zero",
         dest="stop_on_zero",
         action="store_true",
         help="Stop after producing an output with score 0.",
+    )
+    parser.add_argument(
+        "--quiet",
+        dest="quiet",
+        action="store_true",
+        help="Don't print a status line with the number of iterations.",
     )
     parser.add_argument(
         "--stack-diffs",
@@ -620,33 +583,68 @@ def main() -> None:
         "--keep-prob",
         dest="keep_prob",
         metavar="PROB",
-        type=float,
+        type=restricted_float(0.0, 1.0),
         default=DEFAULT_RAND_KEEP_PROB,
-        help="Continue randomizing the previous output with the given probability "
-        f"(float in 0..1, default {DEFAULT_RAND_KEEP_PROB}).",
+        help="""Continue randomizing the previous output with the given probability
+            (float in 0..1, default %(default)s).""",
     )
     parser.add_argument("--seed", dest="force_seed", type=str, help=argparse.SUPPRESS)
     parser.add_argument(
         "-j",
         dest="threads",
         type=int,
-        default=1,
-        help="Number of threads (default: %(default)s).",
+        default=0,
+        help="Number of own threads to use (default: 1 without -J, 0 with -J).",
     )
+    parser.add_argument(
+        "-J",
+        dest="use_network",
+        action="store_true",
+        help="Harness extra compute power through cyberspace (permuter@home).",
+    )
+    parser.add_argument(
+        "--pah-debug",
+        dest="network_debug",
+        action="store_true",
+        help="Enable debug prints for permuter@home.",
+    )
+    parser.add_argument(
+        "--priority",
+        dest="network_priority",
+        metavar="PRIORITY",
+        type=restricted_float(MIN_PRIO, MAX_PRIO),
+        default=1.0,
+        help=f"""Proportion of server resources to use when multiple people
+            are using -J at the same time.
+            Defaults to 1.0, meaning resources are split equally, but can be
+            set to any value within [{MIN_PRIO}, {MAX_PRIO}].
+            Each server runs with a priority threshold, which defaults to 0.1,
+            below which they will not run permuter jobs at all.""",
+    )
+
     args = parser.parse_args()
 
+    threads = args.threads
+    if not threads and not args.use_network:
+        threads = 1
+
     options = Options(
-        directories=args.directory,
+        directories=args.directories,
         show_errors=args.show_errors,
         show_timings=args.show_timings,
         print_diffs=args.print_diffs,
         abort_exceptions=args.abort_exceptions,
         better_only=args.better_only,
+        best_only=args.best_only,
+        quiet=args.quiet,
         stack_differences=args.stack_differences,
         stop_on_zero=args.stop_on_zero,
         keep_prob=args.keep_prob,
         force_seed=args.force_seed,
-        threads=args.threads,
+        threads=threads,
+        use_network=args.use_network,
+        network_debug=args.network_debug,
+        network_priority=args.network_priority,
     )
 
     run(options)

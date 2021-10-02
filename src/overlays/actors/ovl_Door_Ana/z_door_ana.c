@@ -129,13 +129,13 @@ void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx) {
             (player->stateFlags1 & 0x80000000) && (player->unk_AE7 == 0)) {
 
             if (dooranaType == DOORANA_TYPE_ADJACENT) {
+                s32 requiredScopeTemp;
+
                 // 300 uses scene exit addresses, not static DoorAna entrance addresses,
                 // eg. deku playground gets address in the NCT scene exit table
 
                 entranceIndex = GET_DOORANA_ADJACENT_ENTRANCE(this);
                 globalCtx->nextEntranceIndex = globalCtx->setupExitList[entranceIndex];
-            lblUnk_808E03B8:; // required to convince compiler to not use delay slot
-
             } else {
                 // unused in vanilla, the highest params bits can directly index an address
                 entranceIndex = GET_DOORANA_DIRECT_ENTRANCE(this);

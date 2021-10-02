@@ -279,16 +279,8 @@ static InitChainEntry sInitChain[] = {
 void EnDinofos_Init(Actor* thisx, GlobalContext* globalCtx) {
     static s32 D_8089E364 = 0;
     static EffBlureInit2 D_8089E368 = {
-        0,
-        8,
-        0,
-        { 255, 255, 255, 255 }, 
-        { 255, 255, 255, 64 },
-        { 255, 255, 255, 0 },
-        { 255, 255, 255, 0 },
-        8, 0, 2, 0,
-        { 0, 0, 0, 0 },
-        { 0, 0, 0, 0 },
+        0, 8, 0, { 255, 255, 255, 255 }, { 255, 255, 255, 64 }, { 255, 255, 255, 0 }, { 255, 255, 255, 0 }, 8,
+        0, 2, 0, { 0, 0, 0, 0 },         { 0, 0, 0, 0 },
     };
     EnDinofos* this = THIS;
     s32 i;

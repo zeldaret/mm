@@ -9,7 +9,9 @@ struct EnHorse;
 
 typedef struct EnHorse {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0xA4];
+    /* 0x144 */ char unk_144[0x00C];
+    /* 0x150 */ s32 unk_150;
+    /* 0x154 */ char unk_154[0x94];
     /* 0x1E8 */ u32 stateFlags;
     /* 0x1EC */ char unk_1EC[0x3A8];
 } EnHorse; // size = 0x594
