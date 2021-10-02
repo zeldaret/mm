@@ -593,7 +593,7 @@ void EffectBlure_DrawElemHermiteInterpolation(EffectBlure* this, EffectBlureElem
             s32 j2 = 2 * i + 1;
             Vec3f spE0;
             f32 temp_f28 = i / 7.0f;                               // t
-            f32 temp_f0 = temp_f28 * temp_f28;                     // t^2
+            f32 temp_f0 = SQ(temp_f28);                            // t^2
             f32 temp_f2 = temp_f0 * temp_f28;                      // t^3
             f32 temp_f20 = temp_f2 - temp_f0;                      // t^3 - t^2
             f32 temp_f22 = temp_f2 - 2.0f * temp_f0 + temp_f28;    // t^3 - 2t^2 + t
@@ -787,7 +787,7 @@ void EffectBlure_DrawSimpleVertices(GraphicsContext* gfxCtx, EffectBlure* this, 
                 sp1A4.z = ((f32)vtx[4 * i + 2].v.ob[2] + (f32)vtx[4 * i + 3].v.ob[2]) * 0.5f;
 
                 Math_Vec3f_Diff(&sp1A4, &sp1B0, &sp198);
-                scale = sqrtf(SQ(sp198.x) + SQ(sp198.y) + SQ(sp198.z));
+                scale = sqrtf(SQXYZ(sp198));
 
                 if (fabsf(scale) > 0.0005f) {
                     scale = 1.0f / scale;

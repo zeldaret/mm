@@ -66,7 +66,7 @@ void EffectSpark_Init(void* thisx, void* initParamsx) {
             elem->velocity.y = Rand_ZeroOne() - 0.5f;
             elem->velocity.z = Rand_ZeroOne() - 0.5f;
 
-            velocityNorm = sqrtf(SQ(elem->velocity.x) + SQ(elem->velocity.y) + SQ(elem->velocity.z));
+            velocityNorm = sqrtf(SQXYZ(elem->velocity));
 
             if (!(fabsf(velocityNorm) < 0.008f)) {
                 elem->velocity.x *= this->speed * (1.0f / velocityNorm);
