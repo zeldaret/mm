@@ -8,7 +8,7 @@ void EffectBlure_AddVertex(EffectBlure* this, Vec3f* p1, Vec3f* p2) {
     if (this) {}
 
     if (this != NULL) {
-        if (this->numElements >= 16) {
+        if (this->numElements >= ARRAY_COUNT(this->elements)) {
             return;
         }
 
@@ -75,7 +75,7 @@ void EffectBlure_AddSpace(EffectBlure* this) {
 
     if (this != NULL) {
         numElements = this->numElements;
-        if (numElements >= 16) {
+        if (numElements >= ARRAY_COUNT(this->elements)) {
             return;
         }
 
@@ -93,7 +93,7 @@ void EffectBlure_InitElements(EffectBlure* this) {
 
     this->numElements = 0;
 
-    for (i = 0; i < 16; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->elements); i++) {
         elem = &this->elements[i];
 
         elem->state = 2;
@@ -201,7 +201,7 @@ s32 EffectBlure_Update(void* thisx) {
 
     while (true) {
         if (this->elements[0].state == 0) {
-            for (i = 0; i < 15; i++) {
+            for (i = 0; i < ARRAY_COUNT(this->elements) - 1; i++) {
                 this->elements[i] = this->elements[i + 1];
             }
 
@@ -234,7 +234,7 @@ s32 EffectBlure_Update(void* thisx) {
     }
 
     if (this->elemDuration < this->elements[0].timer) {
-        for (i = 0; i < 15; i++) {
+        for (i = 0; i < ARRAY_COUNT(this->elements) - 1; i++) {
             this->elements[i] = this->elements[i + 1];
             if (this->elements[i].timer >= this->elemDuration) {
                 this->elements[i].timer = this->elemDuration;
@@ -483,7 +483,7 @@ void EffectBlure_DrawElemNoInterpolation(EffectBlure* this, EffectBlureElement* 
 
 void EffectBlure_DrawElemHermiteInterpolation(EffectBlure* this, EffectBlureElement* elem, s32 index,
                                               GraphicsContext* gfxCtx) {
-    static Vtx_t baseVtx = VTX_T(0, 0, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF);
+    static Vtx_t baseVtx = VTX_T(0, 0, 0, 0, 0, 255, 255, 255, 255);
     Vtx* vtx;
     Vec3s sp1EC;
     Vec3s sp1E4;
@@ -819,17 +819,17 @@ void EffectBlure_DrawSimpleVertices(GraphicsContext* gfxCtx, EffectBlure* this, 
 }
 
 Vtx_t D_801AE26C[] = {
-    VTX_T(0, 0, 0, 0, 1024, 0xFF, 0xFF, 0xFF, 0xFF),
-    VTX_T(0, 0, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),
-    VTX_T(0, 0, 0, 2048, 1024, 0xFF, 0xFF, 0xFF, 0xFF),
-    VTX_T(0, 0, 0, 2048, 0, 0xFF, 0xFF, 0xFF, 0xFF),
+    VTX_T(0, 0, 0, 0, 1024, 255, 255, 255, 255),
+    VTX_T(0, 0, 0, 0, 0, 255, 255, 255, 255),
+    VTX_T(0, 0, 0, 2048, 1024, 255, 255, 255, 255),
+    VTX_T(0, 0, 0, 2048, 0, 255, 255, 255, 255),
 };
 
 Vtx_t D_801AE2AC[] = {
-    VTX_T(0, 0, 0, 2048, 1024, 0xFF, 0xFF, 0xFF, 0xFF),
-    VTX_T(0, 0, 0, 2048, 0, 0xFF, 0xFF, 0xFF, 0xFF),
-    VTX_T(0, 0, 0, 2048, 1024, 0xFF, 0xFF, 0xFF, 0xFF),
-    VTX_T(0, 0, 0, 2048, 0, 0xFF, 0xFF, 0xFF, 0xFF),
+    VTX_T(0, 0, 0, 2048, 1024, 255, 255, 255, 255),
+    VTX_T(0, 0, 0, 2048, 0, 255, 255, 255, 255),
+    VTX_T(0, 0, 0, 2048, 1024, 255, 255, 255, 255),
+    VTX_T(0, 0, 0, 2048, 0, 255, 255, 255, 255),
 };
 
 void EffectBlure_DrawSimple(EffectBlure* this2, GraphicsContext* gfxCtx) {
@@ -969,14 +969,14 @@ void EffectBlure_Draw(void* thisx, GraphicsContext* gfxCtx) {
                                 vtx[j + 1].v.ob[2] = func_800B09D0(elem->p2.z, elem->p1.z, ratio);
                                 break;
                             case 3:
-                                ratio = ratio * 0.5f;
+                                ratio *= 0.5f;
                                 vtx[j].v.ob[0] = func_800B09D0(elem->p1.x, elem->p2.x, ratio);
                                 vtx[j].v.ob[1] = func_800B09D0(elem->p1.y, elem->p2.y, ratio);
                                 vtx[j].v.ob[2] = func_800B09D0(elem->p1.z, elem->p2.z, ratio);
                                 vtx[j + 1].v.ob[0] = func_800B09D0(elem->p2.x, elem->p1.x, ratio);
                                 vtx[j + 1].v.ob[1] = func_800B09D0(elem->p2.y, elem->p1.y, ratio);
                                 vtx[j + 1].v.ob[2] = func_800B09D0(elem->p2.z, elem->p1.z, ratio);
-                                ratio = ratio + ratio;
+                                ratio *= 2.0f;
                                 break;
                             case 0:
                             default:

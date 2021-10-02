@@ -109,7 +109,6 @@ s32 EffectShieldParticle_Update(void* thisx) {
 
 void EffectShieldParticle_GetColors(EffectShieldParticle* this, Color_RGBA8* primColor, Color_RGBA8* envColor) {
     s32 halfDuration = this->duration * 0.5f;
-    f32 ratio;
 
     if (halfDuration == 0) {
         primColor->r = this->primColorStart.r;
@@ -122,24 +121,26 @@ void EffectShieldParticle_GetColors(EffectShieldParticle* this, Color_RGBA8* pri
         envColor->a = this->envColorStart.a;
     } else if (this->timer < halfDuration) {
         f32 ratio = this->timer / (f32)halfDuration;
-        primColor->r = this->primColorStart.r + (this->primColorMid.r - this->primColorStart.r) * ratio;
-        primColor->g = this->primColorStart.g + (this->primColorMid.g - this->primColorStart.g) * ratio;
-        primColor->b = this->primColorStart.b + (this->primColorMid.b - this->primColorStart.b) * ratio;
-        primColor->a = this->primColorStart.a + (this->primColorMid.a - this->primColorStart.a) * ratio;
-        envColor->r = this->envColorStart.r + (this->envColorMid.r - this->envColorStart.r) * ratio;
-        envColor->g = this->envColorStart.g + (this->envColorMid.g - this->envColorStart.g) * ratio;
-        envColor->b = this->envColorStart.b + (this->envColorMid.b - this->envColorStart.b) * ratio;
-        envColor->a = this->envColorStart.a + (this->envColorMid.a - this->envColorStart.a) * ratio;
+
+        primColor->r = LERPIMP(this->primColorStart.r, this->primColorMid.r, ratio);
+        primColor->g = LERPIMP(this->primColorStart.g, this->primColorMid.g, ratio);
+        primColor->b = LERPIMP(this->primColorStart.b, this->primColorMid.b, ratio);
+        primColor->a = LERPIMP(this->primColorStart.a, this->primColorMid.a, ratio);
+        envColor->r = LERPIMP(this->envColorStart.r, this->envColorMid.r, ratio);
+        envColor->g = LERPIMP(this->envColorStart.g, this->envColorMid.g, ratio);
+        envColor->b = LERPIMP(this->envColorStart.b, this->envColorMid.b, ratio);
+        envColor->a = LERPIMP(this->envColorStart.a, this->envColorMid.a, ratio);
     } else {
         f32 ratio = (this->timer - halfDuration) / (f32)halfDuration;
-        primColor->r = this->primColorMid.r + (this->primColorEnd.r - this->primColorMid.r) * ratio;
-        primColor->g = this->primColorMid.g + (this->primColorEnd.g - this->primColorMid.g) * ratio;
-        primColor->b = this->primColorMid.b + (this->primColorEnd.b - this->primColorMid.b) * ratio;
-        primColor->a = this->primColorMid.a + (this->primColorEnd.a - this->primColorMid.a) * ratio;
-        envColor->r = this->envColorMid.r + (this->envColorEnd.r - this->envColorMid.r) * ratio;
-        envColor->g = this->envColorMid.g + (this->envColorEnd.g - this->envColorMid.g) * ratio;
-        envColor->b = this->envColorMid.b + (this->envColorEnd.b - this->envColorMid.b) * ratio;
-        envColor->a = this->envColorMid.a + (this->envColorEnd.a - this->envColorMid.a) * ratio;
+
+        primColor->r = LERPIMP(this->primColorMid.r, this->primColorEnd.r, ratio);
+        primColor->g = LERPIMP(this->primColorMid.g, this->primColorEnd.g, ratio);
+        primColor->b = LERPIMP(this->primColorMid.b, this->primColorEnd.b, ratio);
+        primColor->a = LERPIMP(this->primColorMid.a, this->primColorEnd.a, ratio);
+        envColor->r = LERPIMP(this->envColorMid.r, this->envColorEnd.r, ratio);
+        envColor->g = LERPIMP(this->envColorMid.g, this->envColorEnd.g, ratio);
+        envColor->b = LERPIMP(this->envColorMid.b, this->envColorEnd.b, ratio);
+        envColor->a = LERPIMP(this->envColorMid.a, this->envColorEnd.a, ratio);
     }
 }
 
@@ -178,9 +179,9 @@ void EffectShieldParticle_Draw(void* thisx, GraphicsContext* gfxCtx) {
             MtxF sp104;
             MtxF spC4;
             MtxF sp84;
-            f32 temp1 = ((elem->endX + elem->startX) * 0.5f);
+            f32 temp1 = (elem->endX + elem->startX) * 0.5f;
             f32 temp2 = elem->endX - elem->startX;
-            f32 temp3 = ((temp2 * (1.0f / 64.0f)) / 0.02f);
+            f32 temp3 = (temp2 * (1.0f / 64.0f)) / 0.02f;
 
             if (temp3 < 1.0f) {
                 temp3 = 1.0f;

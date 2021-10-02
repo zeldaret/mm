@@ -169,22 +169,22 @@ void EffectSpark_Draw(void* thisx, GraphicsContext* gfxCtx) {
         j = 0;
 
         ratio = (f32)this->timer / (f32)this->duration;
-        sp1D3 = this->colorStart[0].r + ((f32)this->colorEnd[0].r - (f32)this->colorStart[0].r) * ratio;
-        sp1D2 = this->colorStart[0].g + ((f32)this->colorEnd[0].g - (f32)this->colorStart[0].g) * ratio;
-        sp1D1 = this->colorStart[0].b + ((f32)this->colorEnd[0].b - (f32)this->colorStart[0].b) * ratio;
-        sp1D0 = this->colorStart[0].a + ((f32)this->colorEnd[0].a - (f32)this->colorStart[0].a) * ratio;
-        sp1CF = this->colorStart[1].r + ((f32)this->colorEnd[1].r - (f32)this->colorStart[1].r) * ratio;
-        sp1CE = this->colorStart[1].g + ((f32)this->colorEnd[1].g - (f32)this->colorStart[1].g) * ratio;
-        sp1CD = this->colorStart[1].b + ((f32)this->colorEnd[1].b - (f32)this->colorStart[1].b) * ratio;
-        sp1CC = this->colorStart[1].a + ((f32)this->colorEnd[1].a - (f32)this->colorStart[1].a) * ratio;
-        sp1CB = this->colorStart[2].r + ((f32)this->colorEnd[2].r - (f32)this->colorStart[2].r) * ratio;
-        sp1CA = this->colorStart[2].g + ((f32)this->colorEnd[2].g - (f32)this->colorStart[2].g) * ratio;
-        sp1C9 = this->colorStart[2].b + ((f32)this->colorEnd[2].b - (f32)this->colorStart[2].b) * ratio;
-        sp1C8 = this->colorStart[2].a + ((f32)this->colorEnd[2].a - (f32)this->colorStart[2].a) * ratio;
-        sp1C7 = this->colorStart[3].r + ((f32)this->colorEnd[3].r - (f32)this->colorStart[3].r) * ratio;
-        sp1C6 = this->colorStart[3].g + ((f32)this->colorEnd[3].g - (f32)this->colorStart[3].g) * ratio;
-        sp1C5 = this->colorStart[3].b + ((f32)this->colorEnd[3].b - (f32)this->colorStart[3].b) * ratio;
-        sp1C4 = this->colorStart[3].a + ((f32)this->colorEnd[3].a - (f32)this->colorStart[3].a) * ratio;
+        sp1D3 = F32_LERPIMP(this->colorStart[0].r, this->colorEnd[0].r, ratio);
+        sp1D2 = F32_LERPIMP(this->colorStart[0].g, this->colorEnd[0].g, ratio);
+        sp1D1 = F32_LERPIMP(this->colorStart[0].b, this->colorEnd[0].b, ratio);
+        sp1D0 = F32_LERPIMP(this->colorStart[0].a, this->colorEnd[0].a, ratio);
+        sp1CF = F32_LERPIMP(this->colorStart[1].r, this->colorEnd[1].r, ratio);
+        sp1CE = F32_LERPIMP(this->colorStart[1].g, this->colorEnd[1].g, ratio);
+        sp1CD = F32_LERPIMP(this->colorStart[1].b, this->colorEnd[1].b, ratio);
+        sp1CC = F32_LERPIMP(this->colorStart[1].a, this->colorEnd[1].a, ratio);
+        sp1CB = F32_LERPIMP(this->colorStart[2].r, this->colorEnd[2].r, ratio);
+        sp1CA = F32_LERPIMP(this->colorStart[2].g, this->colorEnd[2].g, ratio);
+        sp1C9 = F32_LERPIMP(this->colorStart[2].b, this->colorEnd[2].b, ratio);
+        sp1C8 = F32_LERPIMP(this->colorStart[2].a, this->colorEnd[2].a, ratio);
+        sp1C7 = F32_LERPIMP(this->colorStart[3].r, this->colorEnd[3].r, ratio);
+        sp1C6 = F32_LERPIMP(this->colorStart[3].g, this->colorEnd[3].g, ratio);
+        sp1C5 = F32_LERPIMP(this->colorStart[3].b, this->colorEnd[3].b, ratio);
+        sp1C4 = F32_LERPIMP(this->colorStart[3].a, this->colorEnd[3].a, ratio);
 
         for (i = 0; i < this->numElements; i++) {
             MtxF sp12C;

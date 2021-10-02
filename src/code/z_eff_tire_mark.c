@@ -10,7 +10,7 @@ void func_800AE930(CollisionContext* colCtx, EffectTireMark* this, Vec3f* pos, f
     u32 spA0;
     Vec3s* vtxList = colCtx->colHeader->vtxList;
 
-    if ((arg6 != 50) || (this->numElements >= 63) || (colPoly == NULL)) {
+    if ((arg6 != 50) || (this->numElements >= (ARRAY_COUNT(this->elements) - 1)) || (colPoly == NULL)) {
         func_800AEF44(this);
         return;
     }
@@ -138,7 +138,7 @@ void EffectTireMark_Init(void* thisx, void* initParamsx) {
     EffectTireMarkInit* initParams = (EffectTireMarkInit*)initParamsx;
     s32 i;
 
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->elements); i++) {
         EffectTireMark_InitElement(&this->elements[i]);
     }
 
@@ -171,7 +171,7 @@ s32 EffectTireMark_Update(void* thisx) {
     }
 
     if (this->elements[0].life <= 0) {
-        for (j = 0; j < 63; j++) {
+        for (j = 0; j < ARRAY_COUNT(this->elements) - 1; j++) {
             this->elements[j] = this->elements[j + 1];
         }
 
