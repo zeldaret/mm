@@ -206,7 +206,23 @@ void EnGiant_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/func_80B01EE8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/func_80B020A0.s")
+void func_80B020A0(EnGiant* this) {
+    switch (this->unk_24C) {
+        case 6:
+            if (this->skelAnime.animCurrentFrame >= 90.0f && this->unk_24E > 0) {
+                this->unk_24E -= 0xC;
+            }
+            break;
+        case 14:
+            this->unk_24E -= 0xC;
+            break;
+        default:
+            if (this->unk_24E < 0xFF) {
+                this->unk_24E += 8;
+            }
+            break;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/func_80B0211C.s")
 
