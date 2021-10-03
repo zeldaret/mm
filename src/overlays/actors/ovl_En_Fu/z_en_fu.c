@@ -746,8 +746,6 @@ void func_80962F10(EnFu* this) {
     this->actionFunc = func_80962F4C;
 }
 
-#ifdef NON_MATCHING
-// loading gSaveContext.unk_3DE0[4] in the big if is flipped
 void func_80962F4C(EnFu* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
     BgFuKaiten* fuKaiten = (BgFuKaiten*)this->actor.child;
@@ -783,7 +781,7 @@ void func_80962F4C(EnFu* this, GlobalContext* globalCtx) {
     }
 
     if ((!func_800CAF94((DynaPolyActor*)this->actor.child) && (player->actor.bgCheckFlags & 1)) ||
-        (gSaveContext.unk_3DE0[4] == 0) || (this->unk_548 == this->unk_54C)) {
+        (gSaveContext.unk_3DE0[4] < 1) || (this->unk_548 == this->unk_54C)) {
         player->stateFlags3 &= ~0x400000;
         func_80961E88(globalCtx);
         player->stateFlags1 |= 0x20;
@@ -813,9 +811,6 @@ void func_80962F4C(EnFu* this, GlobalContext* globalCtx) {
     }
     func_80962EBC(this, globalCtx);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fu/func_80962F4C.s")
-#endif
 
 void func_80963258(EnFu* this) {
     this->actionFunc = func_8096326C;

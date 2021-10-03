@@ -1720,11 +1720,7 @@ beginseg
     name "ovl_En_Fu"
     compress
     include "build/src/overlays/actors/ovl_En_Fu/z_en_fu.o"
-    #ifdef NON_MATCHING
-        include "build/src/overlays/actors/ovl_En_Fu/ovl_En_Fu_reloc.o"
-    #else
-        include "build/data/ovl_En_Fu/ovl_En_Fu.reloc.o"
-    #endif
+    include "build/src/overlays/actors/ovl_En_Fu/ovl_En_Fu_reloc.o"
 endseg
 
 beginseg
