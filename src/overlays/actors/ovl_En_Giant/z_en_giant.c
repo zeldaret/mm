@@ -47,22 +47,22 @@ extern AnimationHeader D_06013FE8;
 extern AnimationHeader D_06015334;
 extern AnimationHeader D_06017944;
 
-static AnimationHeader* D_80B02950[] = {
+static AnimationHeader* sAnimationTable[] = {
     &D_06008394, &D_060096E4, &D_060102A4, &D_060116E4, &D_06012A38, &D_06013004, &D_06013FE8, &D_06015334,
     &D_06017944, &D_0600A1C4, &D_0600D040, &D_0600DE84, &D_0600ACA4, &D_0600B784, &D_0600C5D4,
 };
 
 static Gfx* D_80B0298C[] = { D_06005A80, D_06006280, D_06006A80, NULL, NULL };
 
-void func_80B01990(EnGiant* this, s16 arg1) {
-    if ((arg1 >= 0) && (arg1 < 0xF)) {
-        if (((this->unk_248 == 8) && (arg1 != 8)) || ((arg1 == 8) && (this->unk_248 != 8))) {
-            SkelAnime_ChangeAnim(&this->skelAnime, D_80B02950[arg1], 1.0f, 0.0f,
-                                 SkelAnime_GetFrameCount(&D_80B02950[arg1]->common), 2, 10.0f);
+void EnGiant_ChangeAnimation(EnGiant* this, s16 nextAnimationId) {
+    if (nextAnimationId >= 0 && nextAnimationId < 15) {
+        if ((this->animationId == 8 && nextAnimationId != 8) || (nextAnimationId == 8 && this->animationId != 8)) {
+            SkelAnime_ChangeAnim(&this->skelAnime, sAnimationTable[nextAnimationId], 1.0f, 0.0f,
+                                 SkelAnime_GetFrameCount(&sAnimationTable[nextAnimationId]->common), 2, 10.0f);
         } else {
-            SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, D_80B02950[arg1]);
+            SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, sAnimationTable[nextAnimationId]);
         }
-        this->unk_248 = arg1;
+        this->animationId = nextAnimationId;
     }
 }
 
@@ -120,7 +120,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.uncullZoneDownward = 2400.0f;
     Actor_SetScale(&this->actor, 0.32f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_060079B0, &D_06002168, this->jointTable, this->morphTable, 16);
-    func_80B01990(this, 7);
+    EnGiant_ChangeAnimation(this, 7);
     this->unk_24C = 0;
     this->actionFunc = func_80B024D8;
     this->actor.draw = NULL;
@@ -206,13 +206,13 @@ void EnGiant_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80B01E84(EnGiant* this, s16 arg1) {
-    s16 temp_v0 = arg1 + 1;
+    s16 temp = arg1 + 1;
 
-    if (this->unk_248 != temp_v0) {
-        if (this->unk_248 != arg1) {
-            func_80B01990(this, arg1);
+    if (this->animationId != temp) {
+        if (this->animationId != arg1) {
+            EnGiant_ChangeAnimation(this, arg1);
         } else {
-            func_80B01990(this, temp_v0);
+            EnGiant_ChangeAnimation(this, temp);
         }
     }
 }
@@ -220,42 +220,42 @@ void func_80B01E84(EnGiant* this, s16 arg1) {
 void func_80B01EE8(EnGiant* this) {
     switch (this->unk_24C) {
         case 1:
-            func_80B01990(this, 7);
+            EnGiant_ChangeAnimation(this, 7);
             break;
         case 2:
-            func_80B01990(this, 8);
+            EnGiant_ChangeAnimation(this, 8);
             break;
         case 5:
-            func_80B01990(this, 5);
+            EnGiant_ChangeAnimation(this, 5);
             break;
         case 6:
-            func_80B01990(this, 2);
+            EnGiant_ChangeAnimation(this, 2);
             break;
         case 7:
-            func_80B01990(this, 7);
+            EnGiant_ChangeAnimation(this, 7);
             this->alpha = 0;
             break;
         case 8:
-            func_80B01990(this, 9);
+            EnGiant_ChangeAnimation(this, 9);
             break;
         case 9:
-            func_80B01990(this, 11);
+            EnGiant_ChangeAnimation(this, 11);
             break;
         case 10:
-            func_80B01990(this, 12);
+            EnGiant_ChangeAnimation(this, 12);
             break;
         case 11:
-            func_80B01990(this, 14);
+            EnGiant_ChangeAnimation(this, 14);
             break;
         case 12:
-            func_80B01990(this, 7);
+            EnGiant_ChangeAnimation(this, 7);
             break;
         case 13:
-            func_80B01990(this, 8);
+            EnGiant_ChangeAnimation(this, 8);
             break;
         case 14:
-            if (this->unk_248 != 8) {
-                func_80B01990(this, 8);
+            if (this->animationId != 8) {
+                EnGiant_ChangeAnimation(this, 8);
             }
             break;
         case 15:
@@ -285,8 +285,8 @@ void func_80B020A0(EnGiant* this) {
 }
 
 void func_80B0211C(EnGiant* this) {
-    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) && (this->unk_248 != 2 || this->unk_24C != 6)) {
-        func_80B01990(this, this->unk_248);
+    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) && (this->animationId != 2 || this->unk_24C != 6)) {
+        EnGiant_ChangeAnimation(this, this->animationId);
         switch (this->unk_24C) {
             case 3:
                 func_80B01E84(this, 0);
@@ -301,14 +301,14 @@ void func_80B0211C(EnGiant* this) {
                 func_80B01E84(this, 2);
                 break;
             case 8:
-                func_80B01990(this, 10);
+                EnGiant_ChangeAnimation(this, 10);
                 break;
             case 9:
             case 11:
-                func_80B01990(this, 7);
+                EnGiant_ChangeAnimation(this, 7);
                 break;
             case 10:
-                func_80B01990(this, 13);
+                EnGiant_ChangeAnimation(this, 13);
                 break;
         }
         SkelAnime_FrameUpdateMatrix(&this->skelAnime);
@@ -317,17 +317,18 @@ void func_80B0211C(EnGiant* this) {
 
 void func_80B02234(EnGiant* this) {
     if (this->actor.draw != NULL && this->alpha > 0) {
-        if (this->unk_248 == 8 && (func_801378B8(&this->skelAnime, 40.0f) || func_801378B8(&this->skelAnime, 100.0f))) {
+        if (this->animationId == 8 &&
+            (func_801378B8(&this->skelAnime, 40.0f) || func_801378B8(&this->skelAnime, 100.0f))) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_KYOJIN_WALK);
         }
-        if (this->unk_248 == 2 && func_801378B8(&this->skelAnime, 40.0f)) {
+        if (this->animationId == 2 && func_801378B8(&this->skelAnime, 40.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_KYOJIN_VOICE_FAIL);
         }
         if (this->sfxId != 0xFFFF &&
-            ((this->unk_248 == 9 && this->skelAnime.animCurrentFrame >= 18.0f) || this->unk_248 == 0xA)) {
+            ((this->animationId == 9 && this->skelAnime.animCurrentFrame >= 18.0f) || this->animationId == 10)) {
             func_800B9010(&this->actor, this->sfxId);
         }
-        if ((this->unk_248 == 0xC && this->skelAnime.animCurrentFrame >= 18.0f) || this->unk_248 == 0xD) {
+        if ((this->animationId == 12 && this->skelAnime.animCurrentFrame >= 18.0f) || this->animationId == 13) {
             func_800B9010(&this->actor, NA_SE_EV_KYOJIN_SIGN - SFX_FLAG);
         }
     }
