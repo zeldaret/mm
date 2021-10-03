@@ -403,7 +403,7 @@ void EnGiant_Update(Actor* thisx, GlobalContext* globalCtx) {
 void func_80B02688(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     if (limbIndex == 1) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
-        gSPDisplayList(POLY_OPA_DISP++, &D_06007610);
+        gSPDisplayList(POLY_OPA_DISP++, D_06007610);
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }
@@ -416,4 +416,39 @@ void func_80B026C4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/EnGiant_Draw.s")
+void EnGiant_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    EnGiant* this = THIS;
+
+    if (this->unk_24E > 0) {
+        OPEN_DISPS(globalCtx->state.gfxCtx);
+
+        if (this->unk_24E >= 255) {
+            func_8012C28C(globalCtx->state.gfxCtx);
+            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B0298C[this->unk_294]));
+            gDPSetEnvColor(POLY_OPA_DISP++, 0x00, 0x00, 0x00, 0xFF);
+            Scene_SetRenderModeXlu(globalCtx, 0, 1);
+            SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
+                             this->skelAnime.dListCount, NULL, func_80B02688, thisx);
+            return;
+        } else if (this->unk_24E > 0) {
+            if (this->unk_24E >= 129) {
+                func_8012C2B4(POLY_XLU_DISP++);
+                Scene_SetRenderModeXlu(globalCtx, 2, 2);
+            } else {
+                func_8012C304(POLY_XLU_DISP++);
+                Scene_SetRenderModeXlu(globalCtx, 1, 2);
+            }
+            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B0298C[this->unk_294]));
+            gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->unk_24E);
+            POLY_XLU_DISP = SkelAnime_DrawSV2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
+                                              this->skelAnime.dListCount, NULL, func_80B026C4, thisx, POLY_XLU_DISP);
+            SysMatrix_InsertMatrix(&this->unk_254, MTXMODE_NEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(POLY_XLU_DISP++, D_06007610);
+        }
+
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
+    }
+}
