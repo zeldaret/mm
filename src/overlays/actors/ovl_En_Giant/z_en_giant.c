@@ -124,7 +124,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_24C = 0;
     this->actionFunc = func_80B024D8;
     this->actor.draw = NULL;
-    this->unk_24E = 0;
+    this->alpha = 0;
     this->actor.velocity.y = -10.0f;
     this->actor.minVelocityY = -10.0f;
     this->actor.gravity = -5.0f;
@@ -180,7 +180,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (type >= GIANT_TYPE_MOUNTAIN_2) {
-        this->unk_24E = 0xFF;
+        this->alpha = 255;
     }
 
     this->sfxId = 0xFFFF;
@@ -233,7 +233,7 @@ void func_80B01EE8(EnGiant* this) {
             break;
         case 7:
             func_80B01990(this, 7);
-            this->unk_24E = 0;
+            this->alpha = 0;
             break;
         case 8:
             func_80B01990(this, 9);
@@ -269,16 +269,16 @@ void func_80B01EE8(EnGiant* this) {
 void func_80B020A0(EnGiant* this) {
     switch (this->unk_24C) {
         case 6:
-            if (this->skelAnime.animCurrentFrame >= 90.0f && this->unk_24E > 0) {
-                this->unk_24E -= 0xC;
+            if (this->skelAnime.animCurrentFrame >= 90.0f && this->alpha > 0) {
+                this->alpha -= 12;
             }
             break;
         case 14:
-            this->unk_24E -= 0xC;
+            this->alpha -= 12;
             break;
         default:
-            if (this->unk_24E < 0xFF) {
-                this->unk_24E += 8;
+            if (this->alpha < 255) {
+                this->alpha += 8;
             }
             break;
     }
@@ -316,7 +316,7 @@ void func_80B0211C(EnGiant* this) {
 }
 
 void func_80B02234(EnGiant* this) {
-    if (this->actor.draw != NULL && this->unk_24E > 0) {
+    if (this->actor.draw != NULL && this->alpha > 0) {
         if (this->unk_248 == 8 && (func_801378B8(&this->skelAnime, 40.0f) || func_801378B8(&this->skelAnime, 100.0f))) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_KYOJIN_WALK);
         }
@@ -423,19 +423,19 @@ void EnGiant_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnGiant* this = THIS;
 
-    if (this->unk_24E > 0) {
+    if (this->alpha > 0) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        if (this->unk_24E >= 255) {
+        if (this->alpha >= 255) {
             func_8012C28C(globalCtx->state.gfxCtx);
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B0298C[this->unk_294]));
-            gDPSetEnvColor(POLY_OPA_DISP++, 0x00, 0x00, 0x00, 0xFF);
+            gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
             Scene_SetRenderModeXlu(globalCtx, 0, 1);
             SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
                              this->skelAnime.dListCount, NULL, func_80B02688, thisx);
             return;
-        } else if (this->unk_24E > 0) {
-            if (this->unk_24E >= 129) {
+        } else if (this->alpha > 0) {
+            if (this->alpha >= 129) {
                 func_8012C2B4(POLY_XLU_DISP++);
                 Scene_SetRenderModeXlu(globalCtx, 2, 2);
             } else {
@@ -443,7 +443,7 @@ void EnGiant_Draw(Actor* thisx, GlobalContext* globalCtx) {
                 Scene_SetRenderModeXlu(globalCtx, 1, 2);
             }
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B0298C[this->unk_294]));
-            gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->unk_24E);
+            gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alpha);
             POLY_XLU_DISP = SkelAnime_DrawSV2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
                                               this->skelAnime.dListCount, NULL, func_80B026C4, thisx, POLY_XLU_DISP);
             SysMatrix_InsertMatrix(&this->unk_254, MTXMODE_NEW);
