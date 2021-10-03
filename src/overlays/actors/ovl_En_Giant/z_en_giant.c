@@ -1,3 +1,9 @@
+/*
+ * File: z_en_giant.c
+ * Overlay: ovl_En_Giant
+ * Description: Giant
+ */
+
 #include "z_en_giant.h"
 
 #define FLAGS 0x00000030
@@ -409,7 +415,7 @@ void func_80B02688(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         gSPDisplayList(POLY_OPA_DISP++, D_06007610);
-        
+
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }
