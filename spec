@@ -3889,7 +3889,7 @@ beginseg
     name "ovl_En_Giant"
     compress
     include "build/src/overlays/actors/ovl_En_Giant/z_en_giant.o"
-    include "build/data/ovl_En_Giant/ovl_En_Giant.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Giant/ovl_En_Giant_reloc.o"
 endseg
 
 beginseg
