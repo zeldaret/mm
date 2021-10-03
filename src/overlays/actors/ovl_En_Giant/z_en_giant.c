@@ -58,7 +58,7 @@ static AnimationHeader* sAnimationTable[] = {
     &D_06017944, &D_0600A1C4, &D_0600D040, &D_0600DE84, &D_0600ACA4, &D_0600B784, &D_0600C5D4,
 };
 
-static Gfx* D_80B0298C[] = { D_06005A80, D_06006280, D_06006A80, NULL, NULL };
+static TexturePtr sFaceTextures[] = { D_06005A80, D_06006280, D_06006A80 };
 
 void EnGiant_ChangeAnimation(EnGiant* this, s16 nextAnimationId) {
     if (nextAnimationId >= 0 && nextAnimationId < 15) {
@@ -388,25 +388,25 @@ void func_80B024D8(EnGiant* this, GlobalContext* globalCtx) {
 
 void EnGiant_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnGiant* this = THIS;
-    s32 phi_v0;
+    s32 blinkTimerTemp;
 
     this->actionFunc(this, globalCtx);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
 
-    if (this->unk_296 == 0) {
-        phi_v0 = 0;
+    if (this->blinkTimer == 0) {
+        blinkTimerTemp = 0;
     } else {
-        this->unk_296--;
-        phi_v0 = this->unk_296;
+        this->blinkTimer--;
+        blinkTimerTemp = this->blinkTimer;
     }
 
-    if (!phi_v0) {
-        this->unk_296 = Rand_S16Offset(60, 60);
+    if (!blinkTimerTemp) {
+        this->blinkTimer = Rand_S16Offset(60, 60);
     }
-    this->unk_294 = this->unk_296;
-    if (this->unk_294 >= 3) {
-        this->unk_294 = 0;
+    this->faceIndex = this->blinkTimer;
+    if (this->faceIndex >= 3) {
+        this->faceIndex = 0;
     }
 }
 
@@ -437,7 +437,7 @@ void EnGiant_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         if (this->alpha >= 255) {
             func_8012C28C(globalCtx->state.gfxCtx);
-            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B0298C[this->unk_294]));
+            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sFaceTextures[this->faceIndex]));
             gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
             Scene_SetRenderModeXlu(globalCtx, 0, 1);
             SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
@@ -451,7 +451,7 @@ void EnGiant_Draw(Actor* thisx, GlobalContext* globalCtx) {
                 func_8012C304(POLY_XLU_DISP++);
                 Scene_SetRenderModeXlu(globalCtx, 1, 2);
             }
-            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B0298C[this->unk_294]));
+            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sFaceTextures[this->faceIndex]));
             gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alpha);
             POLY_XLU_DISP = SkelAnime_DrawSV2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
                                               this->skelAnime.dListCount, NULL, func_80B026C4, thisx, POLY_XLU_DISP);

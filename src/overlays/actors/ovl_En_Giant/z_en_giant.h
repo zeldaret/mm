@@ -47,8 +47,8 @@ typedef struct EnGiant {
     /* 0x24E */ s16 alpha;
     /* 0x250 */ u16 sfxId;
     /* 0x254 */ MtxF unk_254;
-    /* 0x294 */ s16 unk_294;
-    /* 0x296 */ s16 unk_296;
+    /* 0x294 */ s16 faceIndex;
+    /* 0x296 */ s16 blinkTimer;
     /* 0x298 */ EnGiantActionFunc actionFunc;
 } EnGiant; // size = 0x29C
 
