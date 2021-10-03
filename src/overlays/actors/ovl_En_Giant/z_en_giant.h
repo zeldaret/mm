@@ -38,7 +38,7 @@ typedef struct EnGiant {
     /* 0x24A */ u16 unk_24A;
     /* 0x24C */ u16 unk_24C;
     /* 0x24E */ s16 unk_24E;
-    /* 0x250 */ u16 unk_250;
+    /* 0x250 */ u16 sfxId;
     /* 0x252 */ char unk_252[0x42];
     /* 0x294 */ s16 unk_294;
     /* 0x296 */ s16 unk_296;

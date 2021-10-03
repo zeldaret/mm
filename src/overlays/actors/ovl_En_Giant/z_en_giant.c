@@ -180,20 +180,20 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_24E = 0xFF;
     }
 
-    this->unk_250 = 0xFFFF;
+    this->sfxId = 0xFFFF;
     if (type >= GIANT_TYPE_MOUNTAIN_3 && type < GIANT_TYPE_MOUNTAIN_4) {
         switch (gSaveContext.sceneSetupIndex) {
             case 0:
             case 10:
-                this->unk_250 = 0x2183;
+                this->sfxId = NA_SE_EV_KYOJIN_GRATITUDE2 - SFX_FLAG;
                 break;
             case 1:
             case 2:
             case 3:
-                this->unk_250 = 0x2182;
+                this->sfxId = NA_SE_EV_KYOJIN_GRATITUDE1 - SFX_FLAG;
                 break;
             default:
-                this->unk_250 = 0x2181;
+                this->sfxId = NA_SE_EV_KYOJIN_GRATITUDE0 - SFX_FLAG;
                 break;
         }
     }
@@ -320,9 +320,9 @@ void func_80B02234(EnGiant* this) {
         if (this->unk_248 == 2 && func_801378B8(&this->skelAnime, 40.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_KYOJIN_VOICE_FAIL);
         }
-        if (this->unk_250 != 0xFFFF &&
+        if (this->sfxId != 0xFFFF &&
             ((this->unk_248 == 9 && this->skelAnime.animCurrentFrame >= 18.0f) || this->unk_248 == 0xA)) {
-            func_800B9010(&this->actor, this->unk_250);
+            func_800B9010(&this->actor, this->sfxId);
         }
         if ((this->unk_248 == 0xC && this->skelAnime.animCurrentFrame >= 18.0f) || this->unk_248 == 0xD) {
             func_800B9010(&this->actor, NA_SE_EV_KYOJIN_SIGN - SFX_FLAG);
