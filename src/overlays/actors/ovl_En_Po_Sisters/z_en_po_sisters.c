@@ -1030,10 +1030,10 @@ s32 EnPoSisters_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** 
     EnPoSisters* this = THIS;
 
     if ((limbIndex == 1) && (this->unk_191 & 0x40)) {
-        if (this->unk_192 >= 0x11C) {
-            rot->x += (this->unk_192 * 0x1000) + 0xFFEE4000;
+        if (this->unk_192 >= 284) {
+            rot->x += (this->unk_192 - 284) * 0x1000;
         } else {
-            rot->x += (this->unk_192 * 0x1000) + 0xFFFF1000;
+            rot->x += (this->unk_192 - 15) * 0x1000;
         }
     }
 
