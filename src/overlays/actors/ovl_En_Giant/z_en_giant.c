@@ -312,7 +312,23 @@ void func_80B0211C(EnGiant* this) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/func_80B02234.s")
+void func_80B02234(EnGiant* this) {
+    if (this->actor.draw != NULL && this->unk_24E > 0) {
+        if (this->unk_248 == 8 && (func_801378B8(&this->skelAnime, 40.0f) || func_801378B8(&this->skelAnime, 100.0f))) {
+            Audio_PlayActorSound2(&this->actor, NA_SE_EV_KYOJIN_WALK);
+        }
+        if (this->unk_248 == 2 && func_801378B8(&this->skelAnime, 40.0f)) {
+            Audio_PlayActorSound2(&this->actor, NA_SE_EV_KYOJIN_VOICE_FAIL);
+        }
+        if (this->unk_250 != 0xFFFF &&
+            ((this->unk_248 == 9 && this->skelAnime.animCurrentFrame >= 18.0f) || this->unk_248 == 0xA)) {
+            func_800B9010(&this->actor, this->unk_250);
+        }
+        if ((this->unk_248 == 0xC && this->skelAnime.animCurrentFrame >= 18.0f) || this->unk_248 == 0xD) {
+            func_800B9010(&this->actor, NA_SE_EV_KYOJIN_SIGN - SFX_FLAG);
+        }
+    }
+}
 
 void func_80B02354(EnGiant* this, GlobalContext* globalCtx, u32 arg2) {
     CsCmdActorAction* actorAction = globalCtx->csCtx.npcActions[arg2];
