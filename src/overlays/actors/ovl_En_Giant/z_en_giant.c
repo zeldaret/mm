@@ -281,7 +281,36 @@ void func_80B020A0(EnGiant* this) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/func_80B0211C.s")
+void func_80B0211C(EnGiant* this) {
+    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) && (this->unk_248 != 2 || this->unk_24C != 6)) {
+        func_80B01990(this, this->unk_248);
+        switch (this->unk_24C) {
+            case 3:
+                func_80B01E84(this, 0);
+                break;
+            case 4:
+                func_80B01E84(this, 3);
+                break;
+            case 5:
+                func_80B01E84(this, 5);
+                break;
+            case 6:
+                func_80B01E84(this, 2);
+                break;
+            case 8:
+                func_80B01990(this, 10);
+                break;
+            case 9:
+            case 11:
+                func_80B01990(this, 7);
+                break;
+            case 10:
+                func_80B01990(this, 13);
+                break;
+        }
+        SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/func_80B02234.s")
 
