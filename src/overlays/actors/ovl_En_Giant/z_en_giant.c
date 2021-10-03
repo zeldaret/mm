@@ -66,15 +66,12 @@ void EnGiant_ChangeAnimation(EnGiant* this, s16 nextAnimationId) {
     }
 }
 
-// Note: if #275 gets merged before this, switch to using the IDs there.
-// This is checking that a Giant is NOT freed...
-s32 func_80B01A74(EnGiant* this) {
+s32 EnGiant_IsNotFreed(EnGiant* this) {
     switch (GIANT_TYPE(&this->actor)) {
         case GIANT_TYPE_SWAMP_1:
         case GIANT_TYPE_SWAMP_2:
         case GIANT_TYPE_SWAMP_3:
         case GIANT_TYPE_SWAMP_4:
-            // Odolwa's Remains
             if (!CHECK_QUEST_ITEM(0)) {
                 return 1;
             }
@@ -83,7 +80,6 @@ s32 func_80B01A74(EnGiant* this) {
         case GIANT_TYPE_MOUNTAIN_2:
         case GIANT_TYPE_MOUNTAIN_3:
         case GIANT_TYPE_MOUNTAIN_4:
-            // Goht's Remains
             if (!CHECK_QUEST_ITEM(1)) {
                 return 1;
             }
@@ -92,7 +88,6 @@ s32 func_80B01A74(EnGiant* this) {
         case GIANT_TYPE_OCEAN_2:
         case GIANT_TYPE_OCEAN_3:
         case GIANT_TYPE_OCEAN_4:
-            // Gyorg's Remains
             if (!CHECK_QUEST_ITEM(2)) {
                 return 1;
             }
@@ -101,7 +96,6 @@ s32 func_80B01A74(EnGiant* this) {
         case GIANT_TYPE_CANYON_2:
         case GIANT_TYPE_CANYON_3:
         case GIANT_TYPE_CANYON_4:
-            // Twinmold's Remains
             if (!CHECK_QUEST_ITEM(3)) {
                 return 1;
             }
@@ -174,7 +168,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.velocity.y = 0.0f;
         this->actor.minVelocityY = 0.0f;
         this->actor.gravity = 0.0f;
-        if (func_80B01A74(this)) {
+        if (EnGiant_IsNotFreed(this)) {
             Actor_MarkForDeath(&this->actor);
         }
     }
@@ -375,7 +369,7 @@ void func_80B024D8(EnGiant* this, GlobalContext* globalCtx) {
         }
         func_80B020A0(this);
     }
-    if ((GIANT_TYPE(&this->actor) < GIANT_TYPE_MOUNTAIN_2) && (func_80B01A74(this) != 0)) {
+    if (GIANT_TYPE(&this->actor) < GIANT_TYPE_MOUNTAIN_2 && EnGiant_IsNotFreed(this)) {
         this->actor.draw = NULL;
     }
     func_80B02234(this);
