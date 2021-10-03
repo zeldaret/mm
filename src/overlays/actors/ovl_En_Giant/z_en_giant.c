@@ -26,7 +26,7 @@ const ActorInit En_Giant_InitVars = {
 };
 
 extern AnimationHeader D_06002168;
-extern UNK_TYPE D_06007610;
+extern Gfx D_06007610[];
 extern FlexSkeletonHeader D_060079B0;
 extern AnimationHeader D_06008394;
 extern AnimationHeader D_060096E4;
@@ -400,7 +400,13 @@ void EnGiant_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/func_80B02688.s")
+void func_80B02688(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    if (limbIndex == 1) {
+        OPEN_DISPS(globalCtx->state.gfxCtx);
+        gSPDisplayList(POLY_OPA_DISP++, &D_06007610);
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Giant/func_80B026C4.s")
 
