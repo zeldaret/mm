@@ -3457,18 +3457,15 @@ s32 Camera_Battle1(Camera *camera) {
     Vec3f *sp48;
     PosRot *sp40;
 
-    f32 temp_f0_2;
     f32 temp_f12;
     f32 temp_f14;
-    f32 temp_f2_2;
     f32 temp_f2_3;
     s16 temp_v0_5;
     s16 temp_v0_6;
     s32 temp_f4;
-    f32 phi_f0;
     f32 phi_f0_3;
     f32 phi_f12;
-    f32 phi_f0_4;
+
     f32 new_var;
     f32 new_var2;
     f32 new_var3;
@@ -3483,9 +3480,11 @@ s32 Camera_Battle1(Camera *camera) {
     spF0 = false;
     sp8C = &((Actor*)camera->trackActor)->focus;
     sp68 = Camera_GetTrackedActorHeight(camera);
+
     if ((camera->animState != 0) && (camera->animState != 0xA) && (camera->animState != 0x14)) {
     } else {
         CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
+        
         batt1->unk_00 = NEXTSETTING* 0.01f * sp68 * (0.8f - ((68.0f / sp68) * -0.2f));
         batt1->unk_04 = NEXTSETTING;
         batt1->unk_08 = NEXTSETTING;
@@ -3589,12 +3588,7 @@ s32 Camera_Battle1(Camera *camera) {
 
 
     if (anim->unk_16 == 0) {
-        if (sp84 != 0) {
-            phi_f0 = batt1->unk_28;
-        } else {
-            phi_f0 = batt1->unk_24;
-        }
-        camera->atLERPStepScale = Camera_ClampLERPScale(camera, phi_f0);
+        camera->atLERPStepScale = Camera_ClampLERPScale(camera, sp84 ? batt1->unk_28 : batt1->unk_24);
     }
 
     Actor_GetFocus(&sp40->pos, camera->target);
@@ -3608,9 +3602,8 @@ s32 Camera_Battle1(Camera *camera) {
     sp120.y += sp68;
     OLib_Vec3fDiffToVecSphGeo(&spA4, &sp120, &sp40->pos);
     sp104 = func_800CD6CC(camera->target);
-    temp_f2_2 = PREG(86) + 800.0f;
-    if (temp_f2_2 < sp104) {
-        sp104 = temp_f2_2;
+    if (PREG(86) + 800.0f < sp104) {
+        sp104 = PREG(86) + 800.0f;
     }
 
     // new_var5 = sp104; // TODO: Fake temp but helps when used?
@@ -3734,13 +3727,9 @@ s32 Camera_Battle1(Camera *camera) {
                     anim->unk_1A |= 0x1000;
                     spF8 = OLib_Vec3fDist(sp4C, sp8C);
                     spF4 = OLib_Vec3fDist(sp4C, &spC4);
-                    if (anim->unk_1A & 0x10) {
-                        phi_f0_3 = 40.0f;
-                    } else {
-                        phi_f0_3 = 0.0f;
-                    }
+                    phi_f0_3 = (anim->unk_1A & 0x10) ? 40.0f : 0.0f;
                     spF8 = spF8 + phi_f0_3;
-                    func_800B8898(camera->globalCtx, camera->player, &sp5E, &sp5C);
+                    func_800B8898(camera->globalCtx, camera->trackActor, &sp5E, &sp5C);
                     if ((spF4 < spF8) ||((sp5E >= 0) && (sp5E < 0x141) && (sp5C >= 0) && (sp5C < 0xF1)) ) {
                             anim->unk_1A |= 0x10;
                             spB4.yaw = spA4.yaw + 0x8000;
@@ -3805,18 +3794,9 @@ s32 Camera_Battle1(Camera *camera) {
 
     camera->roll = Camera_LERPCeilS(sp88, camera->roll, 0.06f, 5);
     if (func_800CBAAC(camera) != 0) {
-        if ((camera->globalCtx->state.frames & 8) != 0) {
-            phi_f12 = batt1->unk_20 - (batt1->unk_20 * 0.5f);
-        } else {
-            phi_f12 = batt1->unk_20;
-        }
+        phi_f12 = ((camera->globalCtx->state.frames & 8) != 0) ? batt1->unk_20 - (batt1->unk_20 * 0.5f) : batt1->unk_20;
     } else {
-        if (gSaveContext.health <= 16) {
-            phi_f0_4 = 0.8f;
-        } else {
-            phi_f0_4 = 1.0f;
-        }
-        phi_f12 = phi_f0_4 * (sp78 - (sp78 * 0.05f * spEC));
+        phi_f12 = ((gSaveContext.health <= 16) ? 0.8f : 1.0f) * (sp78 - (sp78 * 0.05f * spEC));
     }
     camera->fov = Camera_LERPCeilF(phi_f12, camera->fov, camera->fovUpdateRate, 0.1f);
 
@@ -4117,7 +4097,7 @@ s32 Camera_KeepOn1(Camera *camera) {
                     spF8 = OLib_Vec3fDist(sp44, spA4);
                     spF4 = OLib_Vec3fDist(sp44, &sp7C.pos);
                     spF8 += (anim->unk_18 & 0x10) ? 40 : 0.0f; // TODO: 40.0f?
-                    func_800B8898(camera->globalCtx, camera->player, &sp56, &sp54);
+                    func_800B8898(camera->globalCtx, camera->trackActor, &sp56, &sp54);
                     if ((spF4 < spF8) || ((sp56 >= 0) && (sp56 <= 320) && (sp54 >= 0) && (sp54 <= 240))) {
                         anim->unk_18 |= 0x10;
                         spE0.yaw = (s16)(spD0.yaw + 0x8000);
