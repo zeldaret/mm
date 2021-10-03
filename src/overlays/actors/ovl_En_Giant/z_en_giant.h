@@ -5,23 +5,30 @@
 
 #define GIANT_TYPE(thisx) ((thisx)->params & 0xF)
 
+/**
+ * The giants are divided into types based on where in the game they appear.
+ * - TERMINA_FIELD: These appear in all non-ending cutscenes that take place in Termina Field.
+ * - CLOCK_TOWER_SUCCESS: These appear in the Clock Tower when the Oath to Order is played and all giants are freed.
+ * - GIANTS_CHAMBER_AND_ENDING: These giants appear in the Giant's Chamber or in all cutscenes that play after defeating Majora.
+ * - CLOCK_TOWER_FAILURE: These appear in the Clock Tower when the Oath to Order is played and all giants are NOT freed.
+ **/
 typedef enum {
-    /*  0 */ GIANT_TYPE_MOUNTAIN_1,
-    /*  1 */ GIANT_TYPE_CANYON_1,
-    /*  2 */ GIANT_TYPE_SWAMP_1,
-    /*  3 */ GIANT_TYPE_OCEAN_1,
-    /*  4 */ GIANT_TYPE_MOUNTAIN_2,
-    /*  5 */ GIANT_TYPE_CANYON_2,
-    /*  6 */ GIANT_TYPE_SWAMP_2,
-    /*  7 */ GIANT_TYPE_OCEAN_2,
-    /*  8 */ GIANT_TYPE_MOUNTAIN_3,
-    /*  9 */ GIANT_TYPE_CANYON_3,
-    /* 10 */ GIANT_TYPE_SWAMP_3,
-    /* 11 */ GIANT_TYPE_OCEAN_3,
-    /* 12 */ GIANT_TYPE_MOUNTAIN_4,
-    /* 13 */ GIANT_TYPE_CANYON_4,
-    /* 14 */ GIANT_TYPE_SWAMP_4,
-    /* 15 */ GIANT_TYPE_OCEAN_4,
+    /*  0 */ GIANT_TYPE_MOUNTAIN_TERMINA_FIELD,
+    /*  1 */ GIANT_TYPE_CANYON_TERMINA_FIELD,
+    /*  2 */ GIANT_TYPE_SWAMP_TERMINA_FIELD,
+    /*  3 */ GIANT_TYPE_OCEAN_TERMINA_FIELD,
+    /*  4 */ GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_SUCCESS,
+    /*  5 */ GIANT_TYPE_CANYON_CLOCK_TOWER_SUCCESS,
+    /*  6 */ GIANT_TYPE_SWAMP_CLOCK_TOWER_SUCCESS,
+    /*  7 */ GIANT_TYPE_OCEAN_CLOCK_TOWER_SUCCESS,
+    /*  8 */ GIANT_TYPE_MOUNTAIN_GIANTS_CHAMBER_AND_ENDING,
+    /*  9 */ GIANT_TYPE_CANYON_GIANTS_CHAMBER_AND_ENDING,
+    /* 10 */ GIANT_TYPE_SWAMP_GIANTS_CHAMBER_AND_ENDING,
+    /* 11 */ GIANT_TYPE_OCEAN_GIANTS_CHAMBER_AND_ENDING,
+    /* 12 */ GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_FAILURE,
+    /* 13 */ GIANT_TYPE_CANYON_CLOCK_TOWER_FAILURE,
+    /* 14 */ GIANT_TYPE_SWAMP_CLOCK_TOWER_FAILURE,
+    /* 15 */ GIANT_TYPE_OCEAN_CLOCK_TOWER_FAILURE,
     /* 16 */ GIANT_TYPE_MAX
 } EnGiantType;
 
