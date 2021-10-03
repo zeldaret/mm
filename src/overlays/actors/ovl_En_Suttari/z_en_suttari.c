@@ -154,7 +154,7 @@ void EnSuttari_UpdateCollider(EnSuttari* this, GlobalContext* globalCtx) {
             if (this->actor.colChkInfo.damageEffect == 0xF) {
                 this->flags1 |= 0x100;
                 this->flags1 &= ~0x40;
-                func_800BBA88(globalCtx, &this->actor);
+                Enemy_StartFinishingBlow(globalCtx, &this->actor);
             } else if (this->actor.colChkInfo.damageEffect == 0xE) {
                 this->flags1 |= 0x200;
                 this->flags1 &= ~0x40;
@@ -1144,7 +1144,7 @@ void func_80BAD230(EnSuttari* this, GlobalContext* globalCtx) {
         this->textId = 0x2A31;
         func_801518B0(globalCtx, this->textId, &this->actor);
         this->flags1 |= 0x4000;
-        func_801A89A8(0x8003);
+        Audio_QueueSeqCmd(0x8003);
         this->actionFunc = func_80BAD380;
     } else {
         ActorCutscene_SetIntentToPlay(this->cutscenes[1]);
@@ -1196,7 +1196,7 @@ void func_80BAD380(EnSuttari* this, GlobalContext* globalCtx) {
             this->actor.speedXZ = 0.0f;
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
                         this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_SMALL_EXPLOSION);
-            func_800F0568(globalCtx, &this->actor.world.pos, 30, NA_SE_IT_BOMB_EXPLOSION);
+            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 30, NA_SE_IT_BOMB_EXPLOSION);
             Actor_MarkForDeath(&this->actor);
             return;
         }
@@ -1205,7 +1205,7 @@ void func_80BAD380(EnSuttari* this, GlobalContext* globalCtx) {
                 gSaveContext.weekEventReg[0x21] |= 8;
             }
             this->actor.speedXZ = 0.0f;
-            func_801A89A8(0x101400FF);
+            Audio_QueueSeqCmd(0x101400FF);
             this->flags2 |= 4;
             EnSuttari_SetNextEntrance(globalCtx, 0xD670);
         } else {
@@ -1438,7 +1438,7 @@ void EnSuttari_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnSuttari* this = THIS;
 
     if ((globalCtx->sceneNum == SCENE_BACKTOWN) && !(this->flags2 & 4)) {
-        func_801A89A8(0x101400FF);
+        Audio_QueueSeqCmd(0x101400FF);
     }
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }

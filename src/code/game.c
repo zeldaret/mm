@@ -68,14 +68,14 @@ void Game_Nop80173534(GameState* gamestate) {
 
 void GameState_Draw(GameState* gamestate, GraphicsContext* gfxCtx) {
     Gfx* nextDisplayList;
-    Gfx* _polyOpa;
-    // Unused vars impact regalloc
-    Gfx* temp_t2;
-    u32 temp_v1;
+    Gfx* polyOpa;
 
-    _polyOpa = gfxCtx->polyOpa.p;
-    nextDisplayList = Graph_GfxPlusOne(gfxCtx->polyOpa.p);
-    gSPDisplayList(gfxCtx->overlay.p++, nextDisplayList);
+    OPEN_DISPS(gfxCtx);
+
+    polyOpa = POLY_OPA_DISP;
+    nextDisplayList = Graph_GfxPlusOne(POLY_OPA_DISP);
+
+    gSPDisplayList(OVERLAY_DISP++, nextDisplayList);
 
     if (R_FB_FILTER_TYPE && R_FB_FILTER_ENV_COLOR(3) == 0) {
         GameState_SetFBFilter(&nextDisplayList, (u32)gfxCtx->zbuffer);
@@ -86,16 +86,22 @@ void GameState_Draw(GameState* gamestate, GraphicsContext* gfxCtx) {
     }
 
     gSPEndDisplayList(nextDisplayList++);
-    Graph_BranchDlist(_polyOpa, nextDisplayList);
-    gfxCtx->polyOpa.p = nextDisplayList;
+    Graph_BranchDlist(polyOpa, nextDisplayList);
+    POLY_OPA_DISP = nextDisplayList;
 
-lblUnk:; // Label prevents reordering, if(1) around the above block don't seem to help unlike in OoT
-    func_800E9F78(gfxCtx);
+    // Block prevents reordering, if(1) around the above block don't seem to help unlike in OoT
+    {
+        s32 requiredScopeTemp;
+
+        func_800E9F78(gfxCtx);
+    }
 
     if (R_ENABLE_ARENA_DBG != 0) {
         SpeedMeter_DrawTimeEntries(&D_801F7FF0, gfxCtx);
         SpeedMeter_DrawAllocEntries(&D_801F7FF0, gfxCtx, gamestate);
     }
+
+    CLOSE_DISPS(gfxCtx);
 }
 
 void Game_ResetSegments(GraphicsContext* gfxCtx) {
@@ -170,7 +176,7 @@ void Game_ResizeHeap(GameState* gamestate, u32 size) {
     alloc = &gamestate->alloc;
     THA_Dt(&gamestate->heap);
     Gamealloc_Free(alloc, heapStart);
-    StartHeap_AnalyzeArena(&systemMaxFree, &bytesFree, &bytesAllocated);
+    SystemArena_AnalyzeArena(&systemMaxFree, &bytesFree, &bytesAllocated);
     size = ((systemMaxFree - (sizeof(ArenaNode))) < size) ? (0) : (size);
     if (!size) {
         size = systemMaxFree - (sizeof(ArenaNode));
@@ -197,21 +203,24 @@ void Game_StateInit(GameState* gamestate, GameStateFunc gameStateInit, GraphicsC
     gamestate->nextGameStateInit = NULL;
     gamestate->nextGameStateSize = 0U;
 
-lblUnk:;
-    Gamealloc_Init(&gamestate->alloc);
-    Game_InitHeap(gamestate, 0x100000);
-    Game_SetFramerateDivisor(gamestate, 3);
+    {
+        s32 requiredScopeTemp;
 
-    gameStateInit(gamestate);
+        Gamealloc_Init(&gamestate->alloc);
+        Game_InitHeap(gamestate, 0x100000);
+        Game_SetFramerateDivisor(gamestate, 3);
 
-    func_80140CE0(&D_801F8010);
-    func_801420C0(&D_801F8020);
-    func_801418B0(&sMonoColors);
-    func_80140898(&D_801F8048);
-    func_801773A0(&D_801F7FF0);
-    func_8013ED9C();
+        gameStateInit(gamestate);
 
-    osSendMesg(&gamestate->gfxCtx->unk5C, NULL, 1);
+        func_80140CE0(&D_801F8010);
+        func_801420C0(&D_801F8020);
+        func_801418B0(&sMonoColors);
+        func_80140898(&D_801F8048);
+        func_801773A0(&D_801F7FF0);
+        func_8013ED9C();
+
+        osSendMesg(&gamestate->gfxCtx->unk5C, NULL, 1);
+    }
 }
 
 void Game_StateFini(GameState* gamestate) {

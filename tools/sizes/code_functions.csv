@@ -2310,7 +2310,7 @@ asm/non_matchings/code/z_sram_NES/Sram_CalcChecksum.s,Sram_CalcChecksum,0x801445
 asm/non_matchings/code/z_sram_NES/func_80144628.s,func_80144628,0x80144628,0x17
 asm/non_matchings/code/z_sram_NES/Sram_GenerateRandomSaveFields.s,Sram_GenerateRandomSaveFields,0x80144684,0x83
 asm/non_matchings/code/z_sram_NES/func_80144890.s,func_80144890,0x80144890,0x36
-asm/non_matchings/code/z_sram_NES/func_80144968.s,func_80144968,0x80144968,0x4B
+asm/non_matchings/code/z_sram_NES/Sram_InitDebugSave.s,Sram_InitDebugSave,0x80144968,0x4B
 asm/non_matchings/code/z_sram_NES/func_80144A94.s,func_80144A94,0x80144A94,0xF9
 asm/non_matchings/code/z_sram_NES/func_80144E78.s,func_80144E78,0x80144E78,0x17D
 asm/non_matchings/code/z_sram_NES/func_8014546C.s,func_8014546C,0x8014546C,0x8B
@@ -3573,7 +3573,7 @@ asm/non_matchings/code/code_801A5BD0/func_801A794C.s,func_801A794C,0x801A794C,0x
 asm/non_matchings/code/code_801A7B10/func_801A7B10.s,func_801A7B10,0x801A7B10,0x7D
 asm/non_matchings/code/code_801A7B10/func_801A7D04.s,func_801A7D04,0x801A7D04,0x20
 asm/non_matchings/code/code_801A7B10/func_801A7D84.s,func_801A7D84,0x801A7D84,0x309
-asm/non_matchings/code/code_801A7B10/func_801A89A8.s,func_801A89A8,0x801A89A8,0xA
+asm/non_matchings/code/code_801A7B10/Audio_QueueSeqCmd.s,Audio_QueueSeqCmd,0x801A89A8,0xA
 asm/non_matchings/code/code_801A7B10/func_801A89D0.s,func_801A89D0,0x801A89D0,0x20
 asm/non_matchings/code/code_801A7B10/func_801A8A50.s,func_801A8A50,0x801A8A50,0x1B
 asm/non_matchings/code/code_801A7B10/func_801A8ABC.s,func_801A8ABC,0x801A8ABC,0x16
@@ -3600,4 +3600,4 @@ asm/non_matchings/code/code_801AA020/func_801AA520.s,func_801AA520,0x801AA520,0x
 asm/non_matchings/code/z_game_over/func_801AA610.s,func_801AA610,0x801AA610,0x5
 asm/non_matchings/code/z_game_over/func_801AA624.s,func_801AA624,0x801AA624,0x1A
 asm/non_matchings/code/z_game_over/func_801AA68C.s,func_801AA68C,0x801AA68C,0x105
-asm/non_matchings/code/z_construct/nop_801AAAA0.s,nop_801AAAA0,0x801AAAA0,0x4
+asm/non_matchings/code/z_construct/func_801AAAA0.s,func_801AAAA0,0x801AAAA0,0x4

@@ -234,7 +234,7 @@ s32 EnFirefly_SeekTorch(EnFirefly* this, GlobalContext* globalCtx) {
     }
 
     while (findTorch != NULL) {
-        if ((findTorch->actor.id == ACTOR_OBJ_SYOKUDAI) && (findTorch->unk_1DC != 0)) {
+        if ((findTorch->actor.id == ACTOR_OBJ_SYOKUDAI) && (findTorch->snuffTimer != OBJ_SYOKUDAI_SNUFF_OUT)) {
             currentDist = Actor_DistanceBetweenActors(&this->actor, &findTorch->actor);
             if (currentDist < currentMinDist) {
                 currentMinDist = currentDist;
@@ -645,7 +645,7 @@ void EnFirefly_UpdateDamage(EnFirefly* this, GlobalContext* globalCtx) {
             this->unk_2E8.y = 0.55f;
             EnFirefly_SetupStunned(this);
         } else {
-            func_800BBA88(globalCtx, &this->actor);
+            Enemy_StartFinishingBlow(globalCtx, &this->actor);
             this->actor.colChkInfo.health = 0;
             this->actor.flags &= ~1;
 
