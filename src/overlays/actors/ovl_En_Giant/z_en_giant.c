@@ -348,6 +348,7 @@ void func_80B023D0(EnGiant* this, GlobalContext* globalCtx) {
         }
         func_80B020A0(this);
     }
+
     func_80B02234(this);
     if (this->unk_24C == 5) {
         func_800B9010(&this->actor, 0x1063);
@@ -361,6 +362,7 @@ void func_80B024AC(EnGiant* this, GlobalContext* globalCtx) {
 
 void func_80B024D8(EnGiant* this, GlobalContext* globalCtx) {
     this->actor.draw = EnGiant_Draw;
+
     if (func_800EE29C(globalCtx, this->unk_24A)) {
         func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, this->unk_24A));
         if (this->unk_24C != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0) {
@@ -369,9 +371,11 @@ void func_80B024D8(EnGiant* this, GlobalContext* globalCtx) {
         }
         func_80B020A0(this);
     }
+
     if (GIANT_TYPE(&this->actor) < GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_SUCCESS && EnGiant_IsNotFreed(this)) {
         this->actor.draw = NULL;
     }
+
     func_80B02234(this);
     func_80B0211C(this);
 }
@@ -383,12 +387,14 @@ void EnGiant_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+
     if (this->unk_296 == 0) {
         phi_v0 = 0;
     } else {
         this->unk_296--;
         phi_v0 = this->unk_296;
     }
+
     if (!phi_v0) {
         this->unk_296 = Rand_S16Offset(60, 60);
     }
@@ -401,7 +407,9 @@ void EnGiant_Update(Actor* thisx, GlobalContext* globalCtx) {
 void func_80B02688(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     if (limbIndex == 1) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
+
         gSPDisplayList(POLY_OPA_DISP++, D_06007610);
+        
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }
