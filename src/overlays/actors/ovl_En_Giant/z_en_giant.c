@@ -26,7 +26,10 @@ const ActorInit En_Giant_InitVars = {
 };
 
 extern AnimationHeader D_06002168;
+extern Gfx D_06005A80[];
+extern Gfx D_06006280[];
 extern Gfx D_06007610[];
+extern Gfx D_06006A80[];
 extern FlexSkeletonHeader D_060079B0;
 extern AnimationHeader D_06008394;
 extern AnimationHeader D_060096E4;
@@ -44,12 +47,12 @@ extern AnimationHeader D_06013FE8;
 extern AnimationHeader D_06015334;
 extern AnimationHeader D_06017944;
 
-AnimationHeader* D_80B02950[] = {
+static AnimationHeader* D_80B02950[] = {
     &D_06008394, &D_060096E4, &D_060102A4, &D_060116E4, &D_06012A38, &D_06013004, &D_06013FE8, &D_06015334,
     &D_06017944, &D_0600A1C4, &D_0600D040, &D_0600DE84, &D_0600ACA4, &D_0600B784, &D_0600C5D4,
 };
 
-s32 D_80B0298C[] = { 0x06005A80, 0x06006280, 0x06006A80, 0x00000000, 0x00000000 };
+static Gfx* D_80B0298C[] = { D_06005A80, D_06006280, D_06006A80, NULL, NULL };
 
 void func_80B01990(EnGiant* this, s16 arg1) {
     if ((arg1 >= 0) && (arg1 < 0xF)) {
