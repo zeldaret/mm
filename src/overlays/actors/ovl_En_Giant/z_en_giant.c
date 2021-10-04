@@ -224,7 +224,7 @@ void EnGiant_ChangeToStartOrLoopAnimation(EnGiant* this, s16 requestedAnimationI
     }
 }
 
-void func_80B01EE8(EnGiant* this) {
+void EnGiant_ChangeAnimationBasedOnAction(EnGiant* this) {
     switch (this->action) {
         case 1:
             EnGiant_ChangeAnimation(this, GIANT_ANIMATION_IDLE_LOOP);
@@ -291,7 +291,7 @@ void EnGiant_UpdateAlpha(EnGiant* this) {
     }
 }
 
-void func_80B0211C(EnGiant* this) {
+void EnGiant_PlayAndUpdateAnimation(EnGiant* this) {
     if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) &&
         (this->animationId != GIANT_ANIMATION_FALLING_OVER || this->action != 6)) {
         EnGiant_ChangeAnimation(this, this->animationId);
@@ -360,7 +360,7 @@ void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, GlobalContext* globa
         EnGiant_UpdatePosition(this, globalCtx, func_800EE200(globalCtx, this->unk_24A));
         if (this->action != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0) {
             this->action = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0;
-            func_80B01EE8(this);
+            EnGiant_ChangeAnimationBasedOnAction(this);
         }
         EnGiant_UpdateAlpha(this);
     }
@@ -369,7 +369,7 @@ void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, GlobalContext* globa
     if (this->action == 5) {
         func_800B9010(&this->actor, NA_SE_IT_KYOJIN_BEARING - SFX_FLAG);
     }
-    func_80B0211C(this);
+    EnGiant_PlayAndUpdateAnimation(this);
 }
 
 void EnGiant_PlayClockTowerFailureAnimation(EnGiant* this, GlobalContext* globalCtx) {
@@ -383,7 +383,7 @@ void EnGiant_PerformCutsceneActions(EnGiant* this, GlobalContext* globalCtx) {
         func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, this->unk_24A));
         if (this->action != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0) {
             this->action = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0;
-            func_80B01EE8(this);
+            EnGiant_ChangeAnimationBasedOnAction(this);
         }
         EnGiant_UpdateAlpha(this);
     }
@@ -393,7 +393,7 @@ void EnGiant_PerformCutsceneActions(EnGiant* this, GlobalContext* globalCtx) {
     }
 
     EnGiant_PlaySound(this);
-    func_80B0211C(this);
+    EnGiant_PlayAndUpdateAnimation(this);
 }
 
 void EnGiant_Update(Actor* thisx, GlobalContext* globalCtx) {
