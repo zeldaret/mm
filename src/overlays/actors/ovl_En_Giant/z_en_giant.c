@@ -323,7 +323,7 @@ void func_80B0211C(EnGiant* this) {
     }
 }
 
-void func_80B02234(EnGiant* this) {
+void EnGiant_PlaySound(EnGiant* this) {
     if (this->actor.draw != NULL && this->alpha > 0) {
         if (this->animationId == GIANT_ANIMATION_WALKING_LOOP &&
             (func_801378B8(&this->skelAnime, 40.0f) || func_801378B8(&this->skelAnime, 100.0f))) {
@@ -365,7 +365,7 @@ void func_80B023D0(EnGiant* this, GlobalContext* globalCtx) {
         func_80B020A0(this);
     }
 
-    func_80B02234(this);
+    EnGiant_PlaySound(this);
     if (this->unk_24C == 5) {
         func_800B9010(&this->actor, 0x1063);
     }
@@ -392,7 +392,7 @@ void func_80B024D8(EnGiant* this, GlobalContext* globalCtx) {
         this->actor.draw = NULL;
     }
 
-    func_80B02234(this);
+    EnGiant_PlaySound(this);
     func_80B0211C(this);
 }
 
