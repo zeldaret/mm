@@ -12870,7 +12870,7 @@
     0x80B00F64:("func_80B00F64",),
     0x80B01040:("EnTalkGibud_Draw",),
     0x80B01990:("EnGiant_ChangeAnimation",),
-    0x80B01A74:("EnGiant_IsNotFreed",),
+    0x80B01A74:("EnGiant_IsImprisoned",),
     0x80B01B30:("EnGiant_Init",),
     0x80B01E74:("EnGiant_Destroy",),
     0x80B01E84:("EnGiant_ChangeToStartOrLoopAnimation",),

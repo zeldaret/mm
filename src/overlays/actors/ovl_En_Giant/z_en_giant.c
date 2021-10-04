@@ -71,7 +71,7 @@ void EnGiant_ChangeAnimation(EnGiant* this, s16 newAnimationId) {
     }
 }
 
-s32 EnGiant_IsNotFreed(EnGiant* this) {
+s32 EnGiant_IsImprisoned(EnGiant* this) {
     switch (GIANT_TYPE(&this->actor)) {
         case GIANT_TYPE_SWAMP_TERMINA_FIELD:
         case GIANT_TYPE_SWAMP_CLOCK_TOWER_SUCCESS:
@@ -173,7 +173,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.velocity.y = 0.0f;
         this->actor.minVelocityY = 0.0f;
         this->actor.gravity = 0.0f;
-        if (EnGiant_IsNotFreed(this)) {
+        if (EnGiant_IsImprisoned(this)) {
             Actor_MarkForDeath(&this->actor);
         }
     }
@@ -387,7 +387,7 @@ void EnGiant_PerformCutsceneActions(EnGiant* this, GlobalContext* globalCtx) {
         EnGiant_UpdateAlpha(this);
     }
 
-    if (GIANT_TYPE(&this->actor) < GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_SUCCESS && EnGiant_IsNotFreed(this)) {
+    if (GIANT_TYPE(&this->actor) < GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_SUCCESS && EnGiant_IsImprisoned(this)) {
         this->actor.draw = NULL;
     }
 
