@@ -65,7 +65,7 @@ typedef struct EnGiant {
     /* 0x1E8 */ Vec3s morphTable[16];
     /* 0x248 */ s16 animationId;
     /* 0x24A */ u16 unk_24A;
-    /* 0x24C */ u16 unk_24C;
+    /* 0x24C */ u16 action;
     /* 0x24E */ s16 alpha;
     /* 0x250 */ u16 sfxId;
     /* 0x254 */ MtxF unk_254;

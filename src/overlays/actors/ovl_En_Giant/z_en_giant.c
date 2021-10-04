@@ -122,7 +122,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.32f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_060079B0, &D_06002168, this->jointTable, this->morphTable, 16);
     EnGiant_ChangeAnimation(this, GIANT_ANIMATION_IDLE_LOOP);
-    this->unk_24C = 0;
+    this->action = 0;
     this->actionFunc = func_80B024D8;
     this->actor.draw = NULL;
     this->alpha = 0;
@@ -225,7 +225,7 @@ void EnGiant_ChangeToStartOrLoopAnimation(EnGiant* this, s16 requestedAnimationI
 }
 
 void func_80B01EE8(EnGiant* this) {
-    switch (this->unk_24C) {
+    switch (this->action) {
         case 1:
             EnGiant_ChangeAnimation(this, GIANT_ANIMATION_IDLE_LOOP);
             break;
@@ -273,8 +273,8 @@ void func_80B01EE8(EnGiant* this) {
     }
 }
 
-void func_80B020A0(EnGiant* this) {
-    switch (this->unk_24C) {
+void EnGiant_UpdateAlpha(EnGiant* this) {
+    switch (this->action) {
         case 6:
             if (this->skelAnime.animCurrentFrame >= 90.0f && this->alpha > 0) {
                 this->alpha -= 12;
@@ -293,9 +293,9 @@ void func_80B020A0(EnGiant* this) {
 
 void func_80B0211C(EnGiant* this) {
     if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) &&
-        (this->animationId != GIANT_ANIMATION_FALLING_OVER || this->unk_24C != 6)) {
+        (this->animationId != GIANT_ANIMATION_FALLING_OVER || this->action != 6)) {
         EnGiant_ChangeAnimation(this, this->animationId);
-        switch (this->unk_24C) {
+        switch (this->action) {
             case 3:
                 EnGiant_ChangeToStartOrLoopAnimation(this, GIANT_ANIMATION_LOOK_UP_START);
                 break;
@@ -344,8 +344,8 @@ void EnGiant_PlaySound(EnGiant* this) {
     }
 }
 
-void func_80B02354(EnGiant* this, GlobalContext* globalCtx, u32 arg2) {
-    CsCmdActorAction* actorAction = globalCtx->csCtx.npcActions[arg2];
+void EnGiant_UpdatePosition(EnGiant* this, GlobalContext* globalCtx, u32 actionIndex) {
+    CsCmdActorAction* actorAction = globalCtx->csCtx.npcActions[actionIndex];
     f32 floatUnk10 = actorAction->unk10;
     s32 pad[2];
     f32 floatUnk1C = actorAction->unk1C;
@@ -357,16 +357,16 @@ void func_80B02354(EnGiant* this, GlobalContext* globalCtx, u32 arg2) {
 
 void func_80B023D0(EnGiant* this, GlobalContext* globalCtx) {
     if (func_800EE29C(globalCtx, this->unk_24A)) {
-        func_80B02354(this, globalCtx, func_800EE200(globalCtx, this->unk_24A));
-        if (this->unk_24C != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0) {
-            this->unk_24C = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0;
+        EnGiant_UpdatePosition(this, globalCtx, func_800EE200(globalCtx, this->unk_24A));
+        if (this->action != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0) {
+            this->action = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0;
             func_80B01EE8(this);
         }
-        func_80B020A0(this);
+        EnGiant_UpdateAlpha(this);
     }
 
     EnGiant_PlaySound(this);
-    if (this->unk_24C == 5) {
+    if (this->action == 5) {
         func_800B9010(&this->actor, 0x1063);
     }
     func_80B0211C(this);
@@ -381,11 +381,11 @@ void func_80B024D8(EnGiant* this, GlobalContext* globalCtx) {
 
     if (func_800EE29C(globalCtx, this->unk_24A)) {
         func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, this->unk_24A));
-        if (this->unk_24C != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0) {
-            this->unk_24C = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0;
+        if (this->action != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0) {
+            this->action = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0;
             func_80B01EE8(this);
         }
-        func_80B020A0(this);
+        EnGiant_UpdateAlpha(this);
     }
 
     if (GIANT_TYPE(&this->actor) < GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_SUCCESS && EnGiant_IsNotFreed(this)) {
@@ -420,7 +420,7 @@ void EnGiant_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B02688(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnGiant_PostLimbDrawOpa(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     if (limbIndex == 1) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -430,7 +430,8 @@ void func_80B02688(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     }
 }
 
-void func_80B026C4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+void EnGiant_PostLimbDrawXlu(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx,
+                             Gfx** gfx) {
     EnGiant* this = THIS;
 
     if (limbIndex == 1) {
@@ -451,7 +452,7 @@ void EnGiant_Draw(Actor* thisx, GlobalContext* globalCtx) {
             gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
             Scene_SetRenderModeXlu(globalCtx, 0, 1);
             SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
-                             this->skelAnime.dListCount, NULL, func_80B02688, thisx);
+                             this->skelAnime.dListCount, NULL, EnGiant_PostLimbDrawOpa, thisx);
             return;
         } else if (this->alpha > 0) {
             if (this->alpha >= 129) {
@@ -463,8 +464,9 @@ void EnGiant_Draw(Actor* thisx, GlobalContext* globalCtx) {
             }
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sFaceTextures[this->faceIndex]));
             gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alpha);
-            POLY_XLU_DISP = SkelAnime_DrawSV2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
-                                              this->skelAnime.dListCount, NULL, func_80B026C4, thisx, POLY_XLU_DISP);
+            POLY_XLU_DISP =
+                SkelAnime_DrawSV2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
+                                  this->skelAnime.dListCount, NULL, EnGiant_PostLimbDrawXlu, thisx, POLY_XLU_DISP);
             SysMatrix_InsertMatrix(&this->unk_254, MTXMODE_NEW);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
