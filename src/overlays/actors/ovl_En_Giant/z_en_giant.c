@@ -367,7 +367,7 @@ void func_80B023D0(EnGiant* this, GlobalContext* globalCtx) {
 
     EnGiant_PlaySound(this);
     if (this->action == 5) {
-        func_800B9010(&this->actor, 0x1063);
+        func_800B9010(&this->actor, NA_SE_IT_KYOJIN_BEARING - SFX_FLAG);
     }
     func_80B0211C(this);
 }
