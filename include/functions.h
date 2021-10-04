@@ -2815,7 +2815,7 @@ void func_801434E4(GameState* gamestate, SkyboxContext* skyboxCtx, s16 skyType);
 void func_80143A10(u8 owlId);
 void func_80143A54(void);
 void func_80143AC4(void);
-void func_80143B0C(GameState* gameState);
+//void func_80143B0C(GameState* gameState);
 void Sram_IncrementDay(void);
 u16 Sram_CalcChecksum(void* data, size_t count);
 void func_80144628(void);

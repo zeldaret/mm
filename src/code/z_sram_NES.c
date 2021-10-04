@@ -5,63 +5,31 @@
     ((newf)[0] != 'Z' || (newf)[1] != 'E' || (newf)[2] != 'L' || (newf)[3] != 'D' || (newf)[4] != 'A' || \
      (newf)[5] != '3')
 
-s32 D_801C5FC0 = 0xC00;
-s32 D_801C5FC4 = 0;
-s32 D_801C5FC8 = 0;
-s32 D_801C5FCC = 0x40000000;
-
-u32 D_801C5FD0[14][0x20] = {
-    {
+u32 D_801C5FC0[] = {
+    0xC00, 0, 0, 0x40000000, 
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xC04, 0, 0, 0, 0,
-    },
-    {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x80000000, 0, 0, 0, 0x80000000,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,          0, 0, 0, 0,
-    },
-    {
         0, 0, 0, 0, 0,         0, 0, 0, 0x100000, 0, 0, 0x40000002, 0,         0, 0, 0,
         0, 0, 0, 0, 0x4000000, 0, 0, 0, 2,        0, 0, 0,          0x4000000, 0, 0, 0,
-    },
-    {
         0, 0,          0, 0,     0xF, 0, 0, 0, 0x70B000, 0, 0, 0,          0, 0, 0, 0,
         0, 0x80000000, 0, 0x400, 0,   0, 0, 0, 0,        0, 0, 0x80000000, 0, 0, 0, 0,
-    },
-    {
         0x1A00020, 0, 0, 0, 0x400, 0, 0, 0, 0, 0, 0, 0x1000, 0, 0, 0, 0,
         0,         0, 0, 2, 0x400, 0, 0, 0, 0, 0, 0, 0,      0, 0, 0, 0x80000000,
-    },
-    {
         0,    0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0x40000000, 0, 0, 0, 0,
         0x10, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,          0, 0, 0, 0x80000000,
-    },
-    {
         0, 0, 0, 0, 0, 0, 0, 0,          0,        0, 0, 0,    0,     0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0x80000000, 0x100400, 0, 0, 0x22, 0x400, 0, 0, 0x80,
-    },
-    {
         0, 0, 0, 0, 0, 0, 0, 0, 0x400, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0x80000002,
-    },
-    {
         0,     0, 0, 0,          0,     0, 0, 0,     0, 0, 0, 0, 0, 0, 0, 0x80000000,
         0xC00, 0, 0, 0x40000000, 0x102, 0, 0, 0x400, 0, 0, 0, 2, 0, 0, 0, 0x40000000,
-    },
-    {
         0x70, 0, 0, 0,          0, 0, 0, 0, 0, 0, 0, 0, 0,        0, 0, 0x40000000,
         0,    0, 0, 0x40000000, 0, 0, 0, 0, 0, 0, 0, 0, 0x100000, 0, 0, 0x80000000,
-    },
-    {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x400, 0, 0, 0,
-    },
-    {
         0x400, 0, 0, 0,    0x100000, 0, 0, 0x80000000, 0, 0, 0, 0x100,      0x400, 0, 0, 0,
         0,     0, 0, 0x80, 0,        0, 0, 0x80,       0, 0, 0, 0x80000000, 0,     0, 0, 0x400,
-    },
-    {
         0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0,
-    },
-    {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x400, 0x100000, 0, 0, 0x400, 0, 0, 1, 0,
-    },
 };
 
 // gDefaultWeekEventReg
@@ -93,8 +61,12 @@ s32 D_801C67E8[] = {
     0x00000380,
 };
 
-s32 D_801C67F0[1] = { 0x40 };
-s32 D_801C67F4[9] = { 0x40, 0x40, 0x40, 0x80, 0x80, 0x80, 0x80, 1, 1 };
+s32 D_801C67F0[8] = { 0x40, 0x40, 0x40, 0x40, 0x80, 0x80, 0x80, 0x80 };
+
+s32 D_801C6810[] = {
+    1, 1
+};
+
 s32 D_801C6818[8] = { 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80 };
 
 s32 D_801C6838[] = {
@@ -184,9 +156,10 @@ s32 D_801C6970[] = {
     0x00300032, 0x00640000, 0x01000000, 0xFF000000, 0xFF000008,
 };
 
-// ItemEquips
-s32 D_801C6998[] = {
-    0x4D011300, 0x4D013300, 0x4D013400, 0x09093200, 0x00011300, 0x000A2307, 0x000C2907, 0x00011D07, 0x00110000,
+ItemEquips D_801C6998 = {
+    { { 0x4D, 0x01, 0x13, 0x00 }, {0x4D, 0x01, 0x33, 0x00}, {0x4D, 0x01, 0x34, 0x00}, {0x09, 0x09, 0x32, 0x00} },
+    { { 0x00, 0x01, 0x13, 0x00 }, {0x00, 0x0A, 0x23, 0x07}, {0x00, 0x0C, 0x29, 0x07}, {0x00, 0x01, 0x1D, 0x07} },
+    0x0011,
 };
 
 Inventory D_801C69BC = {
@@ -924,11 +897,11 @@ void func_80144A94(SramContext* sramCtx) {
 
     if (func_80185968(*sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2], D_801C67F0[gSaveContext.fileNum * 2]) !=
         0) {
-        func_80185968(*sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2 + 1], D_801C67F4[gSaveContext.fileNum * 2]);
+        func_80185968(*sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2 + 1], D_801C67F0[gSaveContext.fileNum * 2 + 1]);
     }
     Lib_MemCpy(&gSaveContext.save, sramCtx->saveBuf, sizeof(Save));
     if (CHECK_NEWF(gSaveContext.save.playerData.newf)) {
-        func_80185968(*sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2 + 1], D_801C67F4[gSaveContext.fileNum * 2]);
+        func_80185968(*sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2 + 1], D_801C67F0[gSaveContext.fileNum * 2 + 1]);
         Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, sizeof(Save));
     }
     gSaveContext.save.cutscene = cutscene;
@@ -990,7 +963,7 @@ void func_80144E78(GameState* gameState, SramContext* sramCtx) {
         Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[phi_t1 * 2]);
 
         if (CHECK_NEWF(gSaveContext.save.playerData.newf)) {
-            func_80185968(*sramCtx->saveBuf, D_801C67C8[phi_t1 * 2 + 1], D_801C67F4[phi_t1 * 2]);
+            func_80185968(*sramCtx->saveBuf, D_801C67C8[phi_t1 * 2 + 1], D_801C67F0[phi_t1 * 2 + 1]);
             Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[phi_t1 * 2]);
         }
     }
@@ -1154,7 +1127,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
             sp6E = 0;
             if (func_80185968(*sramCtx->saveBuf, D_801C67C8[sp64], D_801C67F0[sp64]) != 0) {
                 sp6E = 1;
-                if (func_80185968(*sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F4[sp64]) != 0) {
+                if (func_80185968(*sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1]) != 0) {
                     phi_s2 = 1;
                 }
             }
@@ -1254,7 +1227,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                     u16 temp_s7_2;
 
                     temp_s7_2 = gSaveContext.save.checksum;
-                    if (func_80185968(*sramCtx->saveBuf, D_801C67C8[sp58 + 1], D_801C67F4[sp58]) != 0) {
+                    if (func_80185968(*sramCtx->saveBuf, D_801C67C8[sp58 + 1], D_801C67F0[sp58 + 1]) != 0) {
                         phi_s2_3 = 1;
                     } else {
                         Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, 0x100C);
@@ -1500,7 +1473,7 @@ void func_80146628(GameState* gameState, SramContext* sramCtx) {
 
         if (1) {}
         func_80185968(&(*sramCtx->saveBuf)[0x2000], D_801C67C8[fileChooseCtx->unk_2448E * 2 + 1],
-                      D_801C67F4[fileChooseCtx->unk_2448E * 2]);
+                      D_801C67F0[fileChooseCtx->unk_2448E * 2 + 1]);
         if (1) {}
 
         // copy buffer to save context
