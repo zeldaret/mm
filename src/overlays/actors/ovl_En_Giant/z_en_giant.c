@@ -120,7 +120,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.32f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_060079B0, &D_06002168, this->jointTable, this->morphTable, 16);
     EnGiant_ChangeAnimation(this, GIANT_ANIMATION_IDLE_LOOP);
-    this->csAction = 0;
+    this->csAction = GIANT_CS_ACTION_NONE;
     this->actionFunc = EnGiant_PerformCutsceneActions;
     this->actor.draw = NULL;
     this->alpha = 0;
@@ -224,46 +224,46 @@ void EnGiant_ChangeToStartOrLoopAnimation(EnGiant* this, s16 requestedAnimationI
 
 void EnGiant_ChangeAnimationBasedOnAction(EnGiant* this) {
     switch (this->csAction) {
-        case 1:
+        case GIANT_CS_ACTION_IDLE:
             EnGiant_ChangeAnimation(this, GIANT_ANIMATION_IDLE_LOOP);
             break;
-        case 2:
+        case GIANT_CS_ACTION_WALKING:
             EnGiant_ChangeAnimation(this, GIANT_ANIMATION_WALKING_LOOP);
             break;
-        case 5:
+        case GIANT_CS_ACTION_STRUGGLING:
             EnGiant_ChangeAnimation(this, GIANT_ANIMATION_STRUGGLE_START);
             break;
-        case 6:
+        case GIANT_CS_ACTION_FALLING_OVER:
             EnGiant_ChangeAnimation(this, GIANT_ANIMATION_FALLING_OVER);
             break;
-        case 7:
+        case GIANT_CS_ACTION_IDLE_FADE_IN:
             EnGiant_ChangeAnimation(this, GIANT_ANIMATION_IDLE_LOOP);
             this->alpha = 0;
             break;
-        case 8:
+        case GIANT_CS_ACTION_TALKING:
             EnGiant_ChangeAnimation(this, GIANT_ANIMATION_BIG_CALL_START);
             break;
-        case 9:
+        case GIANT_CS_ACTION_DONE_TALKING:
             EnGiant_ChangeAnimation(this, GIANT_ANIMATION_BIG_CALL_END);
             break;
-        case 10:
+        case GIANT_CS_ACTION_TEACHING_OATH_TO_ORDER:
             EnGiant_ChangeAnimation(this, GIANT_ANIMATION_SMALL_CALL_START);
             break;
-        case 11:
+        case GIANT_CS_ACTION_PLAYER_LEARNED_OATH_TO_ORDER:
             EnGiant_ChangeAnimation(this, GIANT_ANIMATION_SMALL_CALL_END);
             break;
-        case 12:
+        case GIANT_CS_ACTION_UNKNOWN_12:
             EnGiant_ChangeAnimation(this, GIANT_ANIMATION_IDLE_LOOP);
             break;
-        case 13:
+        case GIANT_CS_ACTION_UNKNOWN_13:
             EnGiant_ChangeAnimation(this, GIANT_ANIMATION_WALKING_LOOP);
             break;
-        case 14:
+        case GIANT_CS_ACTION_UNKNOWN_14:
             if (this->animationId != GIANT_ANIMATION_WALKING_LOOP) {
                 EnGiant_ChangeAnimation(this, GIANT_ANIMATION_WALKING_LOOP);
             }
             break;
-        case 15:
+        case GIANT_CS_ACTION_HOLDING_UP_MOON_IN_CLOCK_TOWER:
             SkelAnime_ChangeAnim(&this->skelAnime, &D_060116E4, 0.0f,
                                  SkelAnime_GetFrameCount(&D_060116E4.common) - 1.0f,
                                  SkelAnime_GetFrameCount(&D_060116E4.common), 2, 0.0f);
@@ -273,12 +273,12 @@ void EnGiant_ChangeAnimationBasedOnAction(EnGiant* this) {
 
 void EnGiant_UpdateAlpha(EnGiant* this) {
     switch (this->csAction) {
-        case 6:
+        case GIANT_CS_ACTION_FALLING_OVER:
             if (this->skelAnime.animCurrentFrame >= 90.0f && this->alpha > 0) {
                 this->alpha -= 12;
             }
             break;
-        case 14:
+        case GIANT_CS_ACTION_UNKNOWN_14:
             this->alpha -= 12;
             break;
         default:
@@ -291,30 +291,30 @@ void EnGiant_UpdateAlpha(EnGiant* this) {
 
 void EnGiant_PlayAndUpdateAnimation(EnGiant* this) {
     if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) &&
-        (this->animationId != GIANT_ANIMATION_FALLING_OVER || this->csAction != 6)) {
+        (this->animationId != GIANT_ANIMATION_FALLING_OVER || this->csAction != GIANT_CS_ACTION_FALLING_OVER)) {
         EnGiant_ChangeAnimation(this, this->animationId);
         switch (this->csAction) {
-            case 3:
+            case GIANT_CS_ACTION_LOOKING_UP:
                 EnGiant_ChangeToStartOrLoopAnimation(this, GIANT_ANIMATION_LOOK_UP_START);
                 break;
-            case 4:
+            case GIANT_CS_ACTION_RAISING_ARMS:
                 EnGiant_ChangeToStartOrLoopAnimation(this, GIANT_ANIMATION_RAISED_ARMS_START);
                 break;
-            case 5:
+            case GIANT_CS_ACTION_STRUGGLING:
                 EnGiant_ChangeToStartOrLoopAnimation(this, GIANT_ANIMATION_STRUGGLE_START);
                 break;
-            case 6:
+            case GIANT_CS_ACTION_FALLING_OVER:
                 // Unused
                 EnGiant_ChangeToStartOrLoopAnimation(this, GIANT_ANIMATION_FALLING_OVER);
                 break;
-            case 8:
+            case GIANT_CS_ACTION_TALKING:
                 EnGiant_ChangeAnimation(this, GIANT_ANIMATION_BIG_CALL_LOOP);
                 break;
-            case 9:
-            case 11:
+            case GIANT_CS_ACTION_DONE_TALKING:
+            case GIANT_CS_ACTION_PLAYER_LEARNED_OATH_TO_ORDER:
                 EnGiant_ChangeAnimation(this, GIANT_ANIMATION_IDLE_LOOP);
                 break;
-            case 10:
+            case GIANT_CS_ACTION_TEACHING_OATH_TO_ORDER:
                 EnGiant_ChangeAnimation(this, GIANT_ANIMATION_SMALL_CALL_LOOP);
                 break;
         }
@@ -365,7 +365,7 @@ void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, GlobalContext* globa
     }
 
     EnGiant_PlaySound(this);
-    if (this->csAction == 5) {
+    if (this->csAction == GIANT_CS_ACTION_STRUGGLING) {
         func_800B9010(&this->actor, NA_SE_IT_KYOJIN_BEARING - SFX_FLAG);
     }
     EnGiant_PlayAndUpdateAnimation(this);

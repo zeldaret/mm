@@ -65,6 +65,28 @@ typedef enum {
     /* 15 */ GIANT_ANIMATION_MAX
 } GiantAnimationIndex;
 
+/**
+ * Used as values for csAction. The UNKNOWN ones are never used in-game.
+ */
+typedef enum {
+    /*  0 */ GIANT_CS_ACTION_NONE,
+    /*  1 */ GIANT_CS_ACTION_IDLE,
+    /*  2 */ GIANT_CS_ACTION_WALKING,
+    /*  3 */ GIANT_CS_ACTION_LOOKING_UP,
+    /*  4 */ GIANT_CS_ACTION_RAISING_ARMS,
+    /*  5 */ GIANT_CS_ACTION_STRUGGLING,
+    /*  6 */ GIANT_CS_ACTION_FALLING_OVER,
+    /*  7 */ GIANT_CS_ACTION_IDLE_FADE_IN,
+    /*  8 */ GIANT_CS_ACTION_TALKING,
+    /*  9 */ GIANT_CS_ACTION_DONE_TALKING,
+    /* 10 */ GIANT_CS_ACTION_TEACHING_OATH_TO_ORDER,
+    /* 11 */ GIANT_CS_ACTION_PLAYER_LEARNED_OATH_TO_ORDER,
+    /* 12 */ GIANT_CS_ACTION_UNKNOWN_12,
+    /* 13 */ GIANT_CS_ACTION_UNKNOWN_13,
+    /* 14 */ GIANT_CS_ACTION_UNKNOWN_14,
+    /* 15 */ GIANT_CS_ACTION_HOLDING_UP_MOON_IN_CLOCK_TOWER
+} GiantCsActionIndex;
+
 struct EnGiant;
 
 typedef void (*EnGiantActionFunc)(struct EnGiant*, GlobalContext*);
