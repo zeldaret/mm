@@ -15,9 +15,9 @@ void EnGiant_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGiant_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGiant_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80B023D0(EnGiant* this, GlobalContext* globalCtx);
-void func_80B024AC(EnGiant* this, GlobalContext* globalCtx);
-void func_80B024D8(EnGiant* this, GlobalContext* globalCtx);
+void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, GlobalContext* globalCtx);
+void EnGiant_PlayClockTowerFailureAnimation(EnGiant* this, GlobalContext* globalCtx);
+void EnGiant_PerformCutsceneActions(EnGiant* this, GlobalContext* globalCtx);
 
 const ActorInit En_Giant_InitVars = {
     ACTOR_EN_GIANT,
@@ -123,7 +123,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_060079B0, &D_06002168, this->jointTable, this->morphTable, 16);
     EnGiant_ChangeAnimation(this, GIANT_ANIMATION_IDLE_LOOP);
     this->action = 0;
-    this->actionFunc = func_80B024D8;
+    this->actionFunc = EnGiant_PerformCutsceneActions;
     this->actor.draw = NULL;
     this->alpha = 0;
     this->actor.velocity.y = -10.0f;
@@ -157,7 +157,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
         }
         this->unk_24A = 0x1C5;
         Actor_SetScale(&this->actor, 0.32f);
-        this->actionFunc = func_80B023D0;
+        this->actionFunc = EnGiant_PerformClockTowerSuccessActions;
         SkelAnime_ChangeAnim(&this->skelAnime, &D_060116E4, 0.0f, SkelAnime_GetFrameCount(&D_060116E4.common) - 1.0f,
                              SkelAnime_GetFrameCount(&D_060116E4.common), 2, 0.0f);
         this->actor.draw = EnGiant_Draw;
@@ -168,7 +168,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (type >= GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_FAILURE && type < GIANT_TYPE_MAX) {
         Actor_SetScale(&this->actor, 0.32f);
-        this->actionFunc = func_80B024AC;
+        this->actionFunc = EnGiant_PlayClockTowerFailureAnimation;
         SkelAnime_ChangeAnim(&this->skelAnime, &D_06013FE8, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_06013004.common), 0,
                              0.0f);
         this->actor.draw = EnGiant_Draw;
@@ -355,7 +355,7 @@ void EnGiant_UpdatePosition(EnGiant* this, GlobalContext* globalCtx, u32 actionI
     this->actor.world.pos.y = ((floatUnk1C - floatUnk10) * functionTemp) + floatUnk10;
 }
 
-void func_80B023D0(EnGiant* this, GlobalContext* globalCtx) {
+void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, GlobalContext* globalCtx) {
     if (func_800EE29C(globalCtx, this->unk_24A)) {
         EnGiant_UpdatePosition(this, globalCtx, func_800EE200(globalCtx, this->unk_24A));
         if (this->action != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0) {
@@ -372,11 +372,11 @@ void func_80B023D0(EnGiant* this, GlobalContext* globalCtx) {
     func_80B0211C(this);
 }
 
-void func_80B024AC(EnGiant* this, GlobalContext* globalCtx) {
+void EnGiant_PlayClockTowerFailureAnimation(EnGiant* this, GlobalContext* globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
 }
 
-void func_80B024D8(EnGiant* this, GlobalContext* globalCtx) {
+void EnGiant_PerformCutsceneActions(EnGiant* this, GlobalContext* globalCtx) {
     this->actor.draw = EnGiant_Draw;
 
     if (func_800EE29C(globalCtx, this->unk_24A)) {
