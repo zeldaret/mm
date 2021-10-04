@@ -120,7 +120,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.32f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_060079B0, &D_06002168, this->jointTable, this->morphTable, 16);
     EnGiant_ChangeAnimation(this, GIANT_ANIMATION_IDLE_LOOP);
-    this->action = 0;
+    this->csAction = 0;
     this->actionFunc = EnGiant_PerformCutsceneActions;
     this->actor.draw = NULL;
     this->alpha = 0;
@@ -223,7 +223,7 @@ void EnGiant_ChangeToStartOrLoopAnimation(EnGiant* this, s16 requestedAnimationI
 }
 
 void EnGiant_ChangeAnimationBasedOnAction(EnGiant* this) {
-    switch (this->action) {
+    switch (this->csAction) {
         case 1:
             EnGiant_ChangeAnimation(this, GIANT_ANIMATION_IDLE_LOOP);
             break;
@@ -272,7 +272,7 @@ void EnGiant_ChangeAnimationBasedOnAction(EnGiant* this) {
 }
 
 void EnGiant_UpdateAlpha(EnGiant* this) {
-    switch (this->action) {
+    switch (this->csAction) {
         case 6:
             if (this->skelAnime.animCurrentFrame >= 90.0f && this->alpha > 0) {
                 this->alpha -= 12;
@@ -291,9 +291,9 @@ void EnGiant_UpdateAlpha(EnGiant* this) {
 
 void EnGiant_PlayAndUpdateAnimation(EnGiant* this) {
     if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) &&
-        (this->animationId != GIANT_ANIMATION_FALLING_OVER || this->action != 6)) {
+        (this->animationId != GIANT_ANIMATION_FALLING_OVER || this->csAction != 6)) {
         EnGiant_ChangeAnimation(this, this->animationId);
-        switch (this->action) {
+        switch (this->csAction) {
             case 3:
                 EnGiant_ChangeToStartOrLoopAnimation(this, GIANT_ANIMATION_LOOK_UP_START);
                 break;
@@ -357,15 +357,15 @@ void EnGiant_UpdatePosition(EnGiant* this, GlobalContext* globalCtx, u32 actionI
 void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, GlobalContext* globalCtx) {
     if (func_800EE29C(globalCtx, this->unk_24A)) {
         EnGiant_UpdatePosition(this, globalCtx, func_800EE200(globalCtx, this->unk_24A));
-        if (this->action != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0) {
-            this->action = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0;
+        if (this->csAction != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0) {
+            this->csAction = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0;
             EnGiant_ChangeAnimationBasedOnAction(this);
         }
         EnGiant_UpdateAlpha(this);
     }
 
     EnGiant_PlaySound(this);
-    if (this->action == 5) {
+    if (this->csAction == 5) {
         func_800B9010(&this->actor, NA_SE_IT_KYOJIN_BEARING - SFX_FLAG);
     }
     EnGiant_PlayAndUpdateAnimation(this);
@@ -380,8 +380,8 @@ void EnGiant_PerformCutsceneActions(EnGiant* this, GlobalContext* globalCtx) {
 
     if (func_800EE29C(globalCtx, this->unk_24A)) {
         func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, this->unk_24A));
-        if (this->action != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0) {
-            this->action = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0;
+        if (this->csAction != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0) {
+            this->csAction = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0;
             EnGiant_ChangeAnimationBasedOnAction(this);
         }
         EnGiant_UpdateAlpha(this);
