@@ -58,8 +58,6 @@ static AnimationHeader* sAnimationTable[] = {
     &D_06017944, &D_0600A1C4, &D_0600D040, &D_0600DE84, &D_0600ACA4, &D_0600B784, &D_0600C5D4,
 };
 
-static TexturePtr sFaceTextures[] = { D_06005A80, D_06006280, D_06006A80 };
-
 void EnGiant_ChangeAnimation(EnGiant* this, s16 newAnimationId) {
     if (newAnimationId >= GIANT_ANIMATION_LOOK_UP_START && newAnimationId < GIANT_ANIMATION_MAX) {
         if ((this->animationId == GIANT_ANIMATION_WALKING_LOOP && newAnimationId != GIANT_ANIMATION_WALKING_LOOP) ||
@@ -443,6 +441,13 @@ void EnGiant_PostLimbDrawXlu(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
 void EnGiant_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnGiant* this = THIS;
+
+    /**
+     * 0 = eyes fully open face
+     * 1 = eyes half-closed face
+     * 2 = eyes fully closed face
+     */
+    static TexturePtr sFaceTextures[] = { D_06005A80, D_06006280, D_06006A80 };
 
     if (this->alpha > 0) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
