@@ -222,7 +222,10 @@ void EnGiant_ChangeToStartOrLoopAnimation(EnGiant* this, s16 requestedAnimationI
     }
 }
 
-void EnGiant_ChangeAnimationBasedOnAction(EnGiant* this) {
+/**
+ * Immediately switches to the specified animation for this cutscene action.
+ */
+void EnGiant_ChangeAnimationBasedOnCsAction(EnGiant* this) {
     switch (this->csAction) {
         case GIANT_CS_ACTION_IDLE:
             EnGiant_ChangeAnimation(this, GIANT_ANIMATION_IDLE_LOOP);
@@ -289,6 +292,12 @@ void EnGiant_UpdateAlpha(EnGiant* this) {
     }
 }
 
+/**
+ * Plays the currently specified animation and, if the animation is done playing,
+ * switches to the animation appropriate for the current cutscene action. This
+ * function can be used to play the appropriate starting or looping animation for
+ * a given cutscene action, depending on what animation has already been played.
+ */
 void EnGiant_PlayAndUpdateAnimation(EnGiant* this) {
     if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) &&
         (this->animationId != GIANT_ANIMATION_FALLING_OVER || this->csAction != GIANT_CS_ACTION_FALLING_OVER)) {
@@ -359,7 +368,7 @@ void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, GlobalContext* globa
         EnGiant_UpdatePosition(this, globalCtx, func_800EE200(globalCtx, this->unk_24A));
         if (this->csAction != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0) {
             this->csAction = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0;
-            EnGiant_ChangeAnimationBasedOnAction(this);
+            EnGiant_ChangeAnimationBasedOnCsAction(this);
         }
         EnGiant_UpdateAlpha(this);
     }
@@ -382,7 +391,7 @@ void EnGiant_PerformCutsceneActions(EnGiant* this, GlobalContext* globalCtx) {
         func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, this->unk_24A));
         if (this->csAction != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0) {
             this->csAction = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_24A)]->unk0;
-            EnGiant_ChangeAnimationBasedOnAction(this);
+            EnGiant_ChangeAnimationBasedOnCsAction(this);
         }
         EnGiant_UpdateAlpha(this);
     }
