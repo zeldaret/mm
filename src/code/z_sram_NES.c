@@ -5,31 +5,120 @@
     ((newf)[0] != 'Z' || (newf)[1] != 'E' || (newf)[2] != 'L' || (newf)[3] != 'D' || (newf)[4] != 'A' || \
      (newf)[5] != '3')
 
-u32 D_801C5FC0[] = {
-    0xC00, 0, 0, 0x40000000, 
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xC04, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x80000000, 0, 0, 0, 0x80000000,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,          0, 0, 0, 0,
-        0, 0, 0, 0, 0,         0, 0, 0, 0x100000, 0, 0, 0x40000002, 0,         0, 0, 0,
-        0, 0, 0, 0, 0x4000000, 0, 0, 0, 2,        0, 0, 0,          0x4000000, 0, 0, 0,
-        0, 0,          0, 0,     0xF, 0, 0, 0, 0x70B000, 0, 0, 0,          0, 0, 0, 0,
-        0, 0x80000000, 0, 0x400, 0,   0, 0, 0, 0,        0, 0, 0x80000000, 0, 0, 0, 0,
-        0x1A00020, 0, 0, 0, 0x400, 0, 0, 0, 0, 0, 0, 0x1000, 0, 0, 0, 0,
-        0,         0, 0, 2, 0x400, 0, 0, 0, 0, 0, 0, 0,      0, 0, 0, 0x80000000,
-        0,    0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0x40000000, 0, 0, 0, 0,
-        0x10, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,          0, 0, 0, 0x80000000,
-        0, 0, 0, 0, 0, 0, 0, 0,          0,        0, 0, 0,    0,     0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0x80000000, 0x100400, 0, 0, 0x22, 0x400, 0, 0, 0x80,
-        0, 0, 0, 0, 0, 0, 0, 0, 0x400, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0x80000002,
-        0,     0, 0, 0,          0,     0, 0, 0,     0, 0, 0, 0, 0, 0, 0, 0x80000000,
-        0xC00, 0, 0, 0x40000000, 0x102, 0, 0, 0x400, 0, 0, 0, 2, 0, 0, 0, 0x40000000,
-        0x70, 0, 0, 0,          0, 0, 0, 0, 0, 0, 0, 0, 0,        0, 0, 0x40000000,
-        0,    0, 0, 0x40000000, 0, 0, 0, 0, 0, 0, 0, 0, 0x100000, 0, 0, 0x80000000,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x400, 0, 0, 0,
-        0x400, 0, 0, 0,    0x100000, 0, 0, 0x80000000, 0, 0, 0, 0x100,      0x400, 0, 0, 0,
-        0,     0, 0, 0x80, 0,        0, 0, 0x80,       0, 0, 0, 0x80000000, 0,     0, 0, 0x400,
-        0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x400, 0x100000, 0, 0, 0x400, 0, 0, 1, 0,
+u32 D_801C5FC0[][4] = {
+    {0xC00, 0, 0, 0x40000000},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0xC04},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0x80000000},
+    {0, 0, 0, 0x80000000},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0x100000, 0, 0, 0x40000002},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0x4000000, 0, 0, 0},
+    {2, 0, 0, 0},
+    {0x4000000, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0xF, 0, 0, 0},
+    {0x70B000, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0x80000000, 0, 0x400},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0x80000000},
+    {0, 0, 0, 0},
+    {0x1A00020, 0, 0, 0},
+    {0x400, 0, 0, 0},
+    {0, 0, 0, 0x1000},
+    {0, 0, 0, 0},
+    {0, 0, 0, 2},
+    {0x400, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0x80000000},
+    {0, 0, 0, 0},
+    {0, 0, 0, 2},
+    {0, 0, 0, 0x40000000},
+    {0, 0, 0, 0},
+    {0x10, 0, 0, 0},
+    {3, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0x80000000},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0x80000000},
+    {0x100400, 0, 0, 0x22},
+    {0x400, 0, 0, 0x80},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0x400, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 2},
+    {0, 0, 0, 0x80000002},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0x80000000},
+    {0xC00, 0, 0, 0x40000000},
+    {0x102, 0, 0, 0x400},
+    {0, 0, 0, 2},
+    {0, 0, 0, 0x40000000},
+    {0x70, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0x40000000},
+    {0, 0, 0, 0x40000000},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0x100000, 0, 0, 0x80000000},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0x400, 0, 0, 0},
+    {0x400, 0, 0, 0},
+    {0x100000, 0, 0, 0x80000000},
+    {0, 0, 0, 0x100},
+    {0x400, 0, 0, 0},
+    {0, 0, 0, 0x80},
+    {0, 0, 0, 0x80},
+    {0, 0, 0, 0x80000000},
+    {0, 0, 0, 0x400},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {1, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 2},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0},
+    {1, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0x400},
+    {0x100000, 0, 0, 0x400},
+    {0, 0, 1, 0},
 };
 
 // gDefaultWeekEventReg
@@ -340,16 +429,26 @@ void func_80143B0C(GameState* gameState) {
     globalCtx->actorCtx.switchFlags[1] &= temp_v0[1];
     globalCtx->actorCtx.clearedRooms = 0;
     globalCtx->actorCtx.collectibleFlags[0] &= temp_v0[3];
-    gSaveContext.cycleSceneFlags[0][1] = (u32) (D_801C5FC0 & gSaveContext.cycleSceneFlags[0][1]);
-    gSaveContext.cycleSceneFlags[0][2] = (u32) (D_801C5FC4 & gSaveContext.cycleSceneFlags[0][2]);
-    gSaveContext.cycleSceneFlags[0][0] = (s32) (D_801C5FC8 & gSaveContext.cycleSceneFlags[0][0]);
-    gSaveContext.cycleSceneFlags[0][4] = (u32) (D_801C5FCC & gSaveContext.cycleSceneFlags[0][4]);
-    gSaveContext.cycleSceneFlags[0][3] = 0U;
-    gSaveContext.save.roomInf[0][5] = 0U;
-    gSaveContext.save.roomInf[0][6] = 0U;
-    phi_a0 = D_801C5FD0;
+    //gSaveContext.cycleSceneFlags[0][1] = (u32) (D_801C5FC0[0][0] & gSaveContext.cycleSceneFlags[0][1]);
+    //gSaveContext.cycleSceneFlags[0][2] = (u32) (D_801C5FC0[0][1] & gSaveContext.cycleSceneFlags[0][2]);
+    //gSaveContext.cycleSceneFlags[0][0] = (s32) (D_801C5FC0[0][2] & gSaveContext.cycleSceneFlags[0][0]);
+    //gSaveContext.cycleSceneFlags[0][4] = (u32) (D_801C5FC0[0][3] & gSaveContext.cycleSceneFlags[0][4]);
+    //gSaveContext.cycleSceneFlags[0][3] = 0U;
+    //gSaveContext.save.roomInf[0][5] = 0U;
+    //gSaveContext.save.roomInf[0][6] = 0U;
+    phi_a0 = D_801C5FC0[1];
     phi_v1 = &gSaveContext.save.daySpeed;
     phi_a2 = &gSaveContext.save.daysElapsed;
+
+    for (temp_5 = 0; temp_5 < 100; temp_5++) {
+        gSaveContext.cycleSceneFlags[temp_5][1] &= (D_801C5FC0[temp_5][0]);
+        gSaveContext.cycleSceneFlags[temp_5][2] &= (D_801C5FC0[temp_5][1]);
+        gSaveContext.cycleSceneFlags[temp_5][0] &= (D_801C5FC0[temp_5][2]);
+        gSaveContext.cycleSceneFlags[temp_5][4] &= (D_801C5FC0[temp_5][3]);
+        gSaveContext.cycleSceneFlags[temp_5][3] = 0U;
+        gSaveContext.save.roomInf[temp_5][5] = 0U;
+        gSaveContext.save.roomInf[temp_5][6] = 0U;
+    }
 
     // TODO
 #if 0
@@ -377,16 +476,6 @@ void func_80143B0C(GameState* gameState) {
         phi_a2_2 = temp_a2;
     } while (temp_a2 != &gSaveContext.save.roomInf[104][1]);
 #endif
-    dumbTemp = &gSaveContext;
-    dumbTemp += 0x14/4;
-    phi_a0 = D_801C5FD0;
-    while (dumbTemp < (u32*)&gSaveContext + 0xC5C/4) {
-
-        dumbTemp[0x3F68/4] = *phi_a0 & dumbTemp[0x3F68/4];
-
-        phi_a0++;
-        dumbTemp++;
-    }
 
 #if 0
 
@@ -479,68 +568,27 @@ loop_13:
     if (gSaveContext.save.playerData.rupees != 0) {
         gSaveContext.eventInf[7] = (u8) (temp_t1 | 1);
     }
-    temp_v0_5 = gSaveContext.save.inventory.items[gItemSlots[6]];
-    phi_a0_2 = D_801C67B0;
-    if ((temp_v0_5 == 6) && (gSaveContext.save.inventory.ammo[gItemSlots[temp_v0_5 & 0xFF]] != 0)) {
-        gSaveContext.eventInf[7] = (u8) (gSaveContext.eventInf[7] | 2);
+
+    if ((INV_CONTENT(ITEM_BOMB) == ITEM_BOMB) && (AMMO(INV_CONTENT(ITEM_BOMB)) != 0)) {
+        gSaveContext.eventInf[7] |= 2;
     }
-    temp_v0_6 = gSaveContext.save.inventory.items[gItemSlots[9]];
-    if ((temp_v0_6 == 9) && (gSaveContext.save.inventory.ammo[gItemSlots[temp_v0_6 & 0xFF]] != 0)) {
-        gSaveContext.eventInf[7] = (u8) (gSaveContext.eventInf[7] | 4);
+    if ((INV_CONTENT(ITEM_NUT) == ITEM_NUT) && (AMMO(INV_CONTENT(ITEM_NUT)) != 0)) {
+        gSaveContext.eventInf[7] |= 4;
     }
-    temp_v0_7 = gSaveContext.save.inventory.items[gItemSlots[8]];
-    if ((temp_v0_7 == 8) && (gSaveContext.save.inventory.ammo[gItemSlots[temp_v0_7 & 0xFF]] != 0)) {
-        gSaveContext.eventInf[7] = (u8) (gSaveContext.eventInf[7] | 8);
+    if ((INV_CONTENT(ITEM_STICK) == ITEM_STICK) && (AMMO(INV_CONTENT(ITEM_STICK)) != 0)) {
+        gSaveContext.eventInf[7] |= 8;
     }
-    temp_v0_8 = gSaveContext.save.inventory.items[gItemSlots[1]];
-    if ((temp_v0_8 == 1) && (gSaveContext.save.inventory.ammo[gItemSlots[temp_v0_8 & 0xFF]] != 0)) {
-        gSaveContext.eventInf[7] = (u8) (gSaveContext.eventInf[7] | 0x10);
+    if ((INV_CONTENT(ITEM_BOW) == ITEM_BOW) && (AMMO(INV_CONTENT(ITEM_BOW)) != 0)) {
+        gSaveContext.eventInf[7] |= 0x10;
     }
 
-    do {
-        if (*phi_a0_2 != 0xFF) {
-            temp_v0_9 = gSaveContext.save.inventory.items[phi_a1_2];
-            if ((temp_v0_9 != 0xFF) && (phi_a1_2 != 0xD)) {
-                gSaveContext.save.inventory.ammo[gItemSlots[temp_v0_9 & 0xFF]] = 0;
+    
+    for (phi_a1_2 = 0; phi_a1_2 < ARRAY_COUNT(D_801C67B0); phi_a1_2++) {
+        if (D_801C67B0[phi_a1_2] != 0xFF) {
+            if ((gSaveContext.save.inventory.items[phi_a1_2] != 0xFF) && (phi_a1_2 != 0xD)) {
+                AMMO(gSaveContext.save.inventory.items[phi_a1_2]) = 0;
             }
         }
-        temp_a1_2 = phi_a1_2 + 1;
-        phi_a0_2 += 1;
-        phi_a1_2 = temp_a1_2;
-    } while (temp_a1_2 < 0x18);
-
-    for (temp_3 = 0; temp_3 < 6; temp_3++) {
-        temp_a1_3 = gSaveContext.save.inventory.items[0x12 + temp_1];
-        if (temp_a1_3 >= 0x13) {
-            if (temp_a1_3 < 0x28) {
-            phi_s1_2 = 1;
-
-                while (phi_s1_2 != 4) {
-
-                    if (phi_s1_2 == 0) {
-                        phi_a0_3 = gSaveContext.save.playerForm == 4 ? 0 : gSaveContext.save.playerForm;
-                        phi_v0 = gSaveContext.save.equips.buttonItems[phi_a0_3][phi_s1_2];
-                    } else {
-                        phi_v0 = gSaveContext.save.equips.buttonItems[0][phi_s1_2];
-                    }
-
-                    if ((phi_v0) == gSaveContext.save.inventory.items[0x12 + temp_1]) {
-                        if (phi_s1_2 == 0) {
-                            phi_v0_2 = gSaveContext.save.playerForm == 4 ? 0 : gSaveContext.save.playerForm;
-                            gSaveContext.save.equips.buttonItems[0][phi_s1_2] = 0x12;
-                        } else {
-                            gSaveContext.save.equips.buttonItems[0][phi_s1_2] = 0x12;
-                        }
-                        func_80112B40(globalCtx, phi_s1_2 & 0xFF);
-                    }
-
-                    
-                    phi_s1_2++;
-                }
-                gSaveContext.save.inventory.items[0x12 + temp_1] = 0x12;
-            }
-        }
-
     }
 
 
@@ -576,43 +624,33 @@ loop_13:
         }
     }
 
-    gSaveContext.save.inventory.questItems &= -1 - *(gBitFlags + 0x64/4);
+    REMOVE_QUEST_ITEM(25);
+
     if (gSaveContext.save.playerData.health < 0x30) {
         gSaveContext.save.playerData.health = 0x30;
     }
-    temp_a0 = gSaveContext.save.equips.equipment;
-    temp_a1_4 = *gEquipShifts;
 
-    if (((s32) (temp_a0 & gEquipMasks[0]) >> temp_a1_4) < 3) {
-        temp_a3 = *gEquipNegMasks;
-        temp_v1_5 = gSaveContext.save.playerForm;
-        gSaveContext.save.equips.equipment = (1 << temp_a1_4) | (temp_a0 & temp_a3);
-        if (temp_v1_5 == 4) {
-            phi_v0_3 = 0U;
-        } else {
-            phi_v0_3 = temp_v1_5;
-        }
+    //if (((s32) (gSaveContext.save.equips.equipment & gEquipMasks[0]) >> temp_a1_4) < 3) {
+    if (CUR_EQUIP_VALUE_VOID(0) < 3) {
+        gSaveContext.save.equips.equipment = (1 << gEquipShifts[0]) | (gSaveContext.save.equips.equipment & gEquipNegMasks[0]);
+
+        phi_v0_3 = gSaveContext.save.playerForm == 4 ? 0 : gSaveContext.save.playerForm;
         if (phi_v0_3 == 0) {
             temp_a2_3 = gSaveContext.save.roomInf[126][5];
             if (((u32) ((u32) (temp_a2_3 & 0xFF000000) >> 0x18) >= 0x4FU) || ((u32) ((u32) (temp_a2_3 & 0xFF0000) >> 0x10) >= 0x4FU)) {
-                phi_v0_5 = temp_v1_5;
-                if (temp_v1_5 == 4) {
-                    phi_v0_5 = 0U;
-                }
+
+                phi_v0_5 = gSaveContext.save.playerForm == 4 ? 0 : gSaveContext.save.playerForm;
                 gSaveContext.save.equips.buttonItems[phi_v0_5][0] = 0x4F;
-                gSaveContext.save.equips.equipment = (3 << temp_a1_4) | (gSaveContext.save.equips.equipment & temp_a3);
+                gSaveContext.save.equips.equipment = (3 << gEquipShifts[0]) | (gSaveContext.save.equips.equipment & gEquipNegMasks[0]);
             } else {
-                phi_v0_4 = temp_v1_5;
-                if (temp_v1_5 == 4) {
-                    phi_v0_4 = 0U;
-                }
+                phi_v0_4 = gSaveContext.save.playerForm == 4 ? 0 : gSaveContext.save.playerForm;
                 gSaveContext.save.equips.buttonItems[phi_v0_4][0] = 0x4D;
             }
         } else {
             temp_a2_4 = gSaveContext.save.roomInf[126][5];
-            if (((u32) ((u32) (temp_a2_4 & 0xFF000000) >> 0x18) >= 0x4FU) || ((u32) ((u32) (temp_a2_4 & 0xFF0000) >> 0x10) >= 0x4FU)) {
+            if (((u32) ((u32) (temp_a2_4 & 0xFF000000) >> 0x18) >= 0x4F) || ((u32) ((u32) (temp_a2_4 & 0xFF0000) >> 0x10) >= 0x4FU)) {
                 gSaveContext.save.equips.buttonItems[0][0] = 0x4F;
-                gSaveContext.save.equips.equipment = (3 << temp_a1_4) | (gSaveContext.save.equips.equipment & temp_a3);
+                gSaveContext.save.equips.equipment = (3 << gEquipShifts[0]) | (gSaveContext.save.equips.equipment & gEquipNegMasks[0]);
             } else {
                 gSaveContext.save.equips.buttonItems[0][0] = 0x4D;
             }
@@ -626,21 +664,19 @@ loop_13:
         gSaveContext.save.inventory.items[gItemSlots[0x10]] = 0x10;
         phi_v0_6 = (u32) (gSaveContext.save.roomInf[126][5] & 0xFF000000) >> 0x18;
     }
-    phi_a2_3 = gSaveContext.save.roomInf[126][5];
 
-    if (phi_v0_6 == 0x12U) {
+    if (phi_v0_6 == 0x12) {
         while (phi_a1_3 != 6) {
             if (gSaveContext.save.inventory.items[gItemSlots[0x12] + phi_a1_3] == 0xFF) {
                 gSaveContext.save.inventory.items[gItemSlots[0x12] + phi_a1_3] = 0x12;
-                phi_a2_3 = gSaveContext.save.roomInf[126][5];
                 break;
             }
             phi_a1_3 = phi_a1_3 + 1;
         }
     }
 
-    phi_a2_4 = phi_a2_3;
-    if (((u32) (phi_a2_3 & 0xFF0000) >> 0x10) == 0x12) {
+    phi_a2_4 = gSaveContext.save.roomInf[126][5];
+    if (((u32) (phi_a2_4 & 0xFF0000) >> 0x10) == 0x12) {
 
         while (phi_a1_4 != 6) {
             if (gSaveContext.save.inventory.items[gItemSlots[0x12] + phi_a1_4] == 0xFF) {
@@ -656,6 +692,7 @@ loop_13:
     temp_t6_2 = phi_a2_4 & 0xFFFFFF;
     gSaveContext.save.roomInf[126][5] = temp_t6_2;
     gSaveContext.save.roomInf[126][5] = temp_t6_2 & 0xFF00FFFF;
+
     func_801149A0(5, 5);
     func_801149A0(0xB, 0xB);
     func_801149A0(0x11, 0x11);
