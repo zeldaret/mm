@@ -209,7 +209,7 @@ void EnGiant_Destroy(Actor* thisx, GlobalContext* globalCtx) {
  * appear immediately after their respective starting animations. The point of
  * this function is to play the requested start animation if it has not been
  * played yet and play the respetive looping animation otherwise.
- **/
+ */
 void EnGiant_ChangeToStartOrLoopAnimation(EnGiant* this, s16 requestedAnimationId) {
     s16 nextAnimationId = requestedAnimationId + 1;
 

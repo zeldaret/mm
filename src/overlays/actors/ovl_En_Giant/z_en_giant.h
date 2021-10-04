@@ -11,7 +11,7 @@
  * - CLOCK_TOWER_SUCCESS: These appear in the Clock Tower when the Oath to Order is played and all giants are freed.
  * - GIANTS_CHAMBER_AND_ENDING: These giants appear in the Giant's Chamber or in all cutscenes that play after defeating Majora.
  * - CLOCK_TOWER_FAILURE: These appear in the Clock Tower when the Oath to Order is played and all giants are NOT freed.
- **/
+ */
 typedef enum {
     /*  0 */ GIANT_TYPE_MOUNTAIN_TERMINA_FIELD,
     /*  1 */ GIANT_TYPE_CANYON_TERMINA_FIELD,
@@ -34,7 +34,7 @@ typedef enum {
 
 /**
  * These values are used to index into sAnimationTable to pick the appropriate animation.
- **/
+ */
 typedef enum {
     /*  0 */ GIANT_ANIMATION_LOOK_UP_START,
     /*  1 */ GIANT_ANIMATION_LOOK_UP_LOOP,
