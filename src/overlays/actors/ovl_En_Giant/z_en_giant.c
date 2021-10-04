@@ -148,7 +148,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
     }
 
-    if (type >= GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_SUCCESS && type < GIANT_TYPE_MOUNTAIN_GIANTS_CHAMBER_AND_ENDING) {
+    if (GIANT_TYPE_IS_CLOCK_TOWER_SUCCESS(type)) {
         if (!(gSaveContext.weekEventReg[0x19] & 2)) {
             Actor_MarkForDeath(&this->actor);
             return;
@@ -164,7 +164,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.gravity = 0.0f;
     }
 
-    if (type >= GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_FAILURE && type < GIANT_TYPE_MAX) {
+    if (GIANT_TYPE_IS_CLOCK_TOWER_FAILURE(type)) {
         Actor_SetScale(&this->actor, 0.32f);
         this->actionFunc = EnGiant_PlayClockTowerFailureAnimation;
         SkelAnime_ChangeAnim(&this->skelAnime, &D_06013FE8, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_06013004.common), 0,
@@ -178,12 +178,12 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    if (type >= GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_SUCCESS) {
+    if (GIANT_TYPE_IS_NOT_TERMINA_FIELD(type)) {
         this->alpha = 255;
     }
 
     this->sfxId = 0xFFFF;
-    if (type >= GIANT_TYPE_MOUNTAIN_GIANTS_CHAMBER_AND_ENDING && type < GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_FAILURE) {
+    if (GIANT_TYPE_IS_CHAMBER_OR_ENDING(type)) {
         switch (gSaveContext.sceneSetupIndex) {
             case 0:
             case 10:
@@ -387,7 +387,7 @@ void EnGiant_PerformCutsceneActions(EnGiant* this, GlobalContext* globalCtx) {
         EnGiant_UpdateAlpha(this);
     }
 
-    if (GIANT_TYPE(&this->actor) < GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_SUCCESS && EnGiant_IsImprisoned(this)) {
+    if (GIANT_TYPE_IS_TERMINA_FIELD(GIANT_TYPE(&this->actor)) && EnGiant_IsImprisoned(this)) {
         this->actor.draw = NULL;
     }
 
