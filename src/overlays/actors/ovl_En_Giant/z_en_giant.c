@@ -78,7 +78,7 @@ s32 EnGiant_IsImprisoned(EnGiant* this) {
         case GIANT_TYPE_SWAMP_GIANTS_CHAMBER_AND_ENDING:
         case GIANT_TYPE_SWAMP_CLOCK_TOWER_FAILURE:
             if (!CHECK_QUEST_ITEM(0)) {
-                return 1;
+                return true;
             }
             break;
         case GIANT_TYPE_MOUNTAIN_TERMINA_FIELD:
@@ -86,7 +86,7 @@ s32 EnGiant_IsImprisoned(EnGiant* this) {
         case GIANT_TYPE_MOUNTAIN_GIANTS_CHAMBER_AND_ENDING:
         case GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_FAILURE:
             if (!CHECK_QUEST_ITEM(1)) {
-                return 1;
+                return true;
             }
             break;
         case GIANT_TYPE_OCEAN_TERMINA_FIELD:
@@ -94,7 +94,7 @@ s32 EnGiant_IsImprisoned(EnGiant* this) {
         case GIANT_TYPE_OCEAN_GIANTS_CHAMBER_AND_ENDING:
         case GIANT_TYPE_OCEAN_CLOCK_TOWER_FAILURE:
             if (!CHECK_QUEST_ITEM(2)) {
-                return 1;
+                return true;
             }
             break;
         case GIANT_TYPE_CANYON_TERMINA_FIELD:
@@ -102,12 +102,12 @@ s32 EnGiant_IsImprisoned(EnGiant* this) {
         case GIANT_TYPE_CANYON_GIANTS_CHAMBER_AND_ENDING:
         case GIANT_TYPE_CANYON_CLOCK_TOWER_FAILURE:
             if (!CHECK_QUEST_ITEM(3)) {
-                return 1;
+                return true;
             }
             break;
     }
 
-    return 0;
+    return false;
 }
 
 void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
