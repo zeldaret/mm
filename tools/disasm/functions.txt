@@ -12873,7 +12873,7 @@
     0x80B01A74:("EnGiant_IsNotFreed",),
     0x80B01B30:("EnGiant_Init",),
     0x80B01E74:("EnGiant_Destroy",),
-    0x80B01E84:("func_80B01E84",),
+    0x80B01E84:("EnGiant_ChangeToStartOrLoopAnimation",),
     0x80B01EE8:("func_80B01EE8",),
     0x80B020A0:("func_80B020A0",),
     0x80B0211C:("func_80B0211C",),

@@ -60,15 +60,16 @@ static AnimationHeader* sAnimationTable[] = {
 
 static TexturePtr sFaceTextures[] = { D_06005A80, D_06006280, D_06006A80 };
 
-void EnGiant_ChangeAnimation(EnGiant* this, s16 nextAnimationId) {
-    if (nextAnimationId >= 0 && nextAnimationId < 15) {
-        if ((this->animationId == 8 && nextAnimationId != 8) || (nextAnimationId == 8 && this->animationId != 8)) {
-            SkelAnime_ChangeAnim(&this->skelAnime, sAnimationTable[nextAnimationId], 1.0f, 0.0f,
-                                 SkelAnime_GetFrameCount(&sAnimationTable[nextAnimationId]->common), 2, 10.0f);
+void EnGiant_ChangeAnimation(EnGiant* this, s16 newAnimationId) {
+    if (newAnimationId >= GIANT_ANIMATION_LOOK_UP_START && newAnimationId < GIANT_ANIMATION_MAX) {
+        if ((this->animationId == GIANT_ANIMATION_WALKING_LOOP && newAnimationId != GIANT_ANIMATION_WALKING_LOOP) ||
+            (newAnimationId == GIANT_ANIMATION_WALKING_LOOP && this->animationId != GIANT_ANIMATION_WALKING_LOOP)) {
+            SkelAnime_ChangeAnim(&this->skelAnime, sAnimationTable[newAnimationId], 1.0f, 0.0f,
+                                 SkelAnime_GetFrameCount(&sAnimationTable[newAnimationId]->common), 2, 10.0f);
         } else {
-            SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, sAnimationTable[nextAnimationId]);
+            SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, sAnimationTable[newAnimationId]);
         }
-        this->animationId = nextAnimationId;
+        this->animationId = newAnimationId;
     }
 }
 
@@ -120,7 +121,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.uncullZoneDownward = 2400.0f;
     Actor_SetScale(&this->actor, 0.32f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_060079B0, &D_06002168, this->jointTable, this->morphTable, 16);
-    EnGiant_ChangeAnimation(this, 7);
+    EnGiant_ChangeAnimation(this, GIANT_ANIMATION_IDLE_LOOP);
     this->unk_24C = 0;
     this->actionFunc = func_80B024D8;
     this->actor.draw = NULL;
@@ -205,14 +206,20 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnGiant_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-void func_80B01E84(EnGiant* this, s16 arg1) {
-    s16 temp = arg1 + 1;
+/**
+ * The animations in sAnimationTable are organized such that looping animations
+ * appear immediately after their respective starting animations. The point of
+ * this function is to play the requested start animation if it has not been
+ * played yet and play the respetive looping animation otherwise.
+ **/
+void EnGiant_ChangeToStartOrLoopAnimation(EnGiant* this, s16 requestedAnimationId) {
+    s16 nextAnimationId = requestedAnimationId + 1;
 
-    if (this->animationId != temp) {
-        if (this->animationId != arg1) {
-            EnGiant_ChangeAnimation(this, arg1);
+    if (this->animationId != nextAnimationId) {
+        if (this->animationId != requestedAnimationId) {
+            EnGiant_ChangeAnimation(this, requestedAnimationId);
         } else {
-            EnGiant_ChangeAnimation(this, temp);
+            EnGiant_ChangeAnimation(this, nextAnimationId);
         }
     }
 }
@@ -220,42 +227,42 @@ void func_80B01E84(EnGiant* this, s16 arg1) {
 void func_80B01EE8(EnGiant* this) {
     switch (this->unk_24C) {
         case 1:
-            EnGiant_ChangeAnimation(this, 7);
+            EnGiant_ChangeAnimation(this, GIANT_ANIMATION_IDLE_LOOP);
             break;
         case 2:
-            EnGiant_ChangeAnimation(this, 8);
+            EnGiant_ChangeAnimation(this, GIANT_ANIMATION_WALKING_LOOP);
             break;
         case 5:
-            EnGiant_ChangeAnimation(this, 5);
+            EnGiant_ChangeAnimation(this, GIANT_ANIMATION_STRUGGLE_START);
             break;
         case 6:
-            EnGiant_ChangeAnimation(this, 2);
+            EnGiant_ChangeAnimation(this, GIANT_ANIMATION_FALLING_OVER);
             break;
         case 7:
-            EnGiant_ChangeAnimation(this, 7);
+            EnGiant_ChangeAnimation(this, GIANT_ANIMATION_IDLE_LOOP);
             this->alpha = 0;
             break;
         case 8:
-            EnGiant_ChangeAnimation(this, 9);
+            EnGiant_ChangeAnimation(this, GIANT_ANIMATION_BIG_CALL_START);
             break;
         case 9:
-            EnGiant_ChangeAnimation(this, 11);
+            EnGiant_ChangeAnimation(this, GIANT_ANIMATION_BIG_CALL_END);
             break;
         case 10:
-            EnGiant_ChangeAnimation(this, 12);
+            EnGiant_ChangeAnimation(this, GIANT_ANIMATION_SMALL_CALL_START);
             break;
         case 11:
-            EnGiant_ChangeAnimation(this, 14);
+            EnGiant_ChangeAnimation(this, GIANT_ANIMATION_SMALL_CALL_END);
             break;
         case 12:
-            EnGiant_ChangeAnimation(this, 7);
+            EnGiant_ChangeAnimation(this, GIANT_ANIMATION_IDLE_LOOP);
             break;
         case 13:
-            EnGiant_ChangeAnimation(this, 8);
+            EnGiant_ChangeAnimation(this, GIANT_ANIMATION_WALKING_LOOP);
             break;
         case 14:
-            if (this->animationId != 8) {
-                EnGiant_ChangeAnimation(this, 8);
+            if (this->animationId != GIANT_ANIMATION_WALKING_LOOP) {
+                EnGiant_ChangeAnimation(this, GIANT_ANIMATION_WALKING_LOOP);
             }
             break;
         case 15:
@@ -285,30 +292,31 @@ void func_80B020A0(EnGiant* this) {
 }
 
 void func_80B0211C(EnGiant* this) {
-    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) && (this->animationId != 2 || this->unk_24C != 6)) {
+    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) &&
+        (this->animationId != GIANT_ANIMATION_FALLING_OVER || this->unk_24C != 6)) {
         EnGiant_ChangeAnimation(this, this->animationId);
         switch (this->unk_24C) {
             case 3:
-                func_80B01E84(this, 0);
+                EnGiant_ChangeToStartOrLoopAnimation(this, GIANT_ANIMATION_LOOK_UP_START);
                 break;
             case 4:
-                func_80B01E84(this, 3);
+                EnGiant_ChangeToStartOrLoopAnimation(this, GIANT_ANIMATION_RAISED_ARMS_START);
                 break;
             case 5:
-                func_80B01E84(this, 5);
+                EnGiant_ChangeToStartOrLoopAnimation(this, GIANT_ANIMATION_STRUGGLE_START);
                 break;
             case 6:
-                func_80B01E84(this, 2);
+                EnGiant_ChangeToStartOrLoopAnimation(this, GIANT_ANIMATION_FALLING_OVER);
                 break;
             case 8:
-                EnGiant_ChangeAnimation(this, 10);
+                EnGiant_ChangeAnimation(this, GIANT_ANIMATION_BIG_CALL_LOOP);
                 break;
             case 9:
             case 11:
-                EnGiant_ChangeAnimation(this, 7);
+                EnGiant_ChangeAnimation(this, GIANT_ANIMATION_IDLE_LOOP);
                 break;
             case 10:
-                EnGiant_ChangeAnimation(this, 13);
+                EnGiant_ChangeAnimation(this, GIANT_ANIMATION_SMALL_CALL_LOOP);
                 break;
         }
         SkelAnime_FrameUpdateMatrix(&this->skelAnime);
@@ -317,18 +325,20 @@ void func_80B0211C(EnGiant* this) {
 
 void func_80B02234(EnGiant* this) {
     if (this->actor.draw != NULL && this->alpha > 0) {
-        if (this->animationId == 8 &&
+        if (this->animationId == GIANT_ANIMATION_WALKING_LOOP &&
             (func_801378B8(&this->skelAnime, 40.0f) || func_801378B8(&this->skelAnime, 100.0f))) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_KYOJIN_WALK);
         }
-        if (this->animationId == 2 && func_801378B8(&this->skelAnime, 40.0f)) {
+        if (this->animationId == GIANT_ANIMATION_FALLING_OVER && func_801378B8(&this->skelAnime, 40.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_KYOJIN_VOICE_FAIL);
         }
         if (this->sfxId != 0xFFFF &&
-            ((this->animationId == 9 && this->skelAnime.animCurrentFrame >= 18.0f) || this->animationId == 10)) {
+            ((this->animationId == GIANT_ANIMATION_BIG_CALL_START && this->skelAnime.animCurrentFrame >= 18.0f) ||
+             this->animationId == GIANT_ANIMATION_BIG_CALL_LOOP)) {
             func_800B9010(&this->actor, this->sfxId);
         }
-        if ((this->animationId == 12 && this->skelAnime.animCurrentFrame >= 18.0f) || this->animationId == 13) {
+        if ((this->animationId == GIANT_ANIMATION_SMALL_CALL_START && this->skelAnime.animCurrentFrame >= 18.0f) ||
+            this->animationId == GIANT_ANIMATION_SMALL_CALL_LOOP) {
             func_800B9010(&this->actor, NA_SE_EV_KYOJIN_SIGN - SFX_FLAG);
         }
     }

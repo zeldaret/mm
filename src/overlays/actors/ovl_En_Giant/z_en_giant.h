@@ -30,7 +30,29 @@ typedef enum {
     /* 14 */ GIANT_TYPE_SWAMP_CLOCK_TOWER_FAILURE,
     /* 15 */ GIANT_TYPE_OCEAN_CLOCK_TOWER_FAILURE,
     /* 16 */ GIANT_TYPE_MAX
-} EnGiantType;
+} GiantType;
+
+/**
+ * These values are used to index into sAnimationTable to pick the appropriate animation.
+ **/
+typedef enum {
+    /*  0 */ GIANT_ANIMATION_LOOK_UP_START,
+    /*  1 */ GIANT_ANIMATION_LOOK_UP_LOOP,
+    /*  2 */ GIANT_ANIMATION_FALLING_OVER,
+    /*  3 */ GIANT_ANIMATION_RAISED_ARMS_START,
+    /*  4 */ GIANT_ANIMATION_RAISED_ARMS_LOOP,
+    /*  5 */ GIANT_ANIMATION_STRUGGLE_START,
+    /*  6 */ GIANT_ANIMATION_STRUGGLE_LOOP,
+    /*  7 */ GIANT_ANIMATION_IDLE_LOOP,
+    /*  8 */ GIANT_ANIMATION_WALKING_LOOP,
+    /*  9 */ GIANT_ANIMATION_BIG_CALL_START,
+    /* 10 */ GIANT_ANIMATION_BIG_CALL_LOOP,
+    /* 11 */ GIANT_ANIMATION_BIG_CALL_END,
+    /* 12 */ GIANT_ANIMATION_SMALL_CALL_START,
+    /* 13 */ GIANT_ANIMATION_SMALL_CALL_LOOP,
+    /* 14 */ GIANT_ANIMATION_SMALL_CALL_END,
+    /* 15 */ GIANT_ANIMATION_MAX
+} GiantAnimationIndex;
 
 struct EnGiant;
 
