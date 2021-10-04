@@ -306,6 +306,7 @@ void EnGiant_PlayAndUpdateAnimation(EnGiant* this) {
                 EnGiant_ChangeToStartOrLoopAnimation(this, GIANT_ANIMATION_STRUGGLE_START);
                 break;
             case 6:
+                // Unused
                 EnGiant_ChangeToStartOrLoopAnimation(this, GIANT_ANIMATION_FALLING_OVER);
                 break;
             case 8:
