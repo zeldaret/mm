@@ -16,6 +16,12 @@
  * - CLOCK_TOWER_SUCCESS: These appear in the Clock Tower when the Oath to Order is played and all giants are freed.
  * - GIANTS_CHAMBER_AND_ENDING: These giants appear in the Giant's Chamber or in all cutscenes that play after defeating Majora.
  * - CLOCK_TOWER_FAILURE: These appear in the Clock Tower when the Oath to Order is played and all giants are NOT freed.
+ * 
+ * The SWAMP, MOUNTAIN, OCEAN, and CANYON signifiers are used to identify which of the four giants it is,
+ * but the devs were not always consistent about this. For example, the giants in the Giant's Chamber are
+ * always GIANT_TYPE_MOUNTAIN_GIANTS_CHAMBER_AND_ENDING, regardless of which boss was just defeated. These
+ * are named such that EnGiant_IsImprisoned has the expected behavior; the devs were only inconsistent in
+ * the cases where they weren't calling this function.
  */
 typedef enum {
     /*  0 */ GIANT_TYPE_MOUNTAIN_TERMINA_FIELD,
