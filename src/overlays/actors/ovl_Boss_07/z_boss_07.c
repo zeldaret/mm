@@ -1,12 +1,27 @@
 #include "z_boss_07.h"
 #include "overlays/actors/ovl_Obj_Tsubo/z_obj_tsubo.h"
+#include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 
 #define FLAGS 0x00000035
 
 #define THIS ((Boss07*)thisx)
 
-// #define FACING_ANGLE(actor1, actor2) BINANG_SUB(BINANG_ROT180((actor1)->shape.rot.y), (actor2)->shape.rot.y)
 #define FACING_ANGLE(actor1, actor2) ((s16)((actor1)->shape.rot.y - (actor2)->shape.rot.y + 0x8000))
+
+typedef struct {
+    /* 0x00 */ u8 unk_0;
+    /* 0x02 */ s16 unk_2;
+    /* 0x04 */ Vec3f unk_4;
+    /* 0x10 */ Vec3f unk_10;
+    /* 0x1C */ Vec3f unk_1C;
+    /* 0x28 */ char unk28[4];
+    /* 0x2C */ s16 unk_2C;
+    /* 0x2E */ char unk2E[2];
+    /* 0x30 */ s16 unk_30;
+    /* 0x32 */ char unk32[2];
+    /* 0x34 */ f32 unk_34;
+    /* 0x38 */ char unk38[0x10];
+} Boss07Effect;
 
 void Boss07_Init(Actor* thisx, GlobalContext* globalCtx);
 void Boss07_Destroy(Actor* thisx, GlobalContext* globalCtx);
@@ -29,20 +44,27 @@ void Boss07_Mask_Draw(Actor* thisx, GlobalContext* globalCtx);
 void Boss07_Incarnation_Draw(Actor* thisx, GlobalContext* globalCtx);
 void Boss07_Afterimage_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809FDEDC(Boss07* this, GlobalContext* globalCtx);
+void func_809FE068(Boss07* this, GlobalContext* globalCtx);
+void func_809FE2D4(Boss07* this, GlobalContext* globalCtx);
+void func_809FE4B0(Boss07* this, GlobalContext* globalCtx);
+void func_80A05C88(Boss07* this, GlobalContext* globalCtx);
+void func_80A055E0(Boss07* this, GlobalContext* globalCtx);
+void func_80A04768(Boss07* this, GlobalContext* globalCtx);
 void func_809F4BB0(s32 arg0, ColliderJntSph* arg1, Vec3f* arg2);
 s32 func_809FF678(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 void func_809FF6B0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 void func_809FF810(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx);
 void func_80A07740(GlobalContext* globalCtx);
 void func_809FBF94(Boss07* this, GlobalContext* globalCtx);
-void func_80A03238(Boss07* this, GlobalContext* globalCtx, Vec3f* arg2, Vec3f* arg3, Vec3f* arg4, Vec3f* arg5,
+void func_80A03238(Boss07* this, GlobalContext* globalCtx, Vec3f* base, Vec3f* pos, Vec3f* rot, Vec3f* pull,
                    Vec3f* arg6, f32 arg7, u8 arg8, f32 arg9);
-void func_80A036C4(Boss07* this, GlobalContext* globalCtx, Vec3f* arg2, Vec3f* arg3, f32 arg4, f32 arg5);
+void func_80A036C4(Boss07* this, GlobalContext* globalCtx, Vec3f* base, Vec3f* rot, f32 arg4, f32 arg5);
 void func_80A03868(Boss07* this, GlobalContext* globalCtx);
-void func_80A03F18(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Boss07* this);
-void func_809FAA44(Boss07* this, GlobalContext* globalCtx, Vec3f* arg2, Vec3f* arg3, Vec3f* arg4, Vec3f* arg5, f32 arg6,
-                   f32 arg7, f32 arg8, f32 arg9, Vec3s* argA, s16 argB, f32 argC, s32 argD);
-void func_809FB114(Boss07* this, GlobalContext* globalCtx, Vec3f* arg2, Vec3f* arg3, f32 arg4, s32 arg5);
+void func_80A03F18(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
+void Boss07_Wrath_UpdateWhips(Boss07* this, GlobalContext* globalCtx, Vec3f* base, Vec3f* pos, Vec3f* rot, Vec3f* pull, f32 arg6,
+                   f32 arg7, f32 arg8, f32 arg9, Vec3s* argA, s16 argB, f32 scale, s32 whipHand);
+void Boss07_Wrath_DrawWhips(Boss07* this, GlobalContext* globalCtx, Vec3f* base, Vec3f* rot, f32 arg4, s32 whipHand);
 s32 func_809FB504(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 void func_809FB55C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 void func_809FB728(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx);
@@ -142,9 +164,94 @@ void func_80A05608(Boss07* this, GlobalContext* globalCtx);
 void func_80A05B50(Boss07* this, GlobalContext* globalCtx);
 void func_80A05DDC(Boss07* this, GlobalContext* globalCtx);
 
-#if 0
-// static DamageTable sDamageTable = {
-static DamageTable D_80A07980 = {
+// object addresses
+extern AnimationHeader D_06000194;
+extern AnimationHeader D_06000428;
+extern AnimationHeader D_06000D0C;
+extern AnimationHeader D_06002C40;
+extern AnimationHeader D_06002D84;
+extern AnimationHeader D_060031E4;
+extern AnimationHeader D_06003854;
+extern AnimationHeader D_06003A64;
+extern FlexSkeletonHeader D_060099A0;
+extern AnimationHeader D_06009C7C;
+extern AnimationHeader D_06009EA8;
+extern AnimationHeader D_0600A194;
+extern AnimationHeader D_0600A400;
+extern AnimationHeader D_0600A6AC;
+extern AnimationHeader D_0600AB04;
+extern AnimationHeader D_0600AD84;
+extern AnimationHeader D_0600AE40;
+extern Gfx D_0600AFB0[];
+extern Gfx D_0600B020[];
+extern Gfx D_0600C7D8[];
+extern Gfx D_0600CEE8[];
+extern Gfx D_060149A0[];
+extern Gfx D_06016090[];
+extern Gfx D_06017DE0[];
+extern Gfx D_06019328[];
+extern SkeletonHeader D_06019C58;
+extern AnimationHeader D_06019E48;
+extern AnimationHeader D_0601DEB4;
+extern AnimationHeader D_06022BB4;
+extern AnimationHeader D_06023DAC;
+extern AnimationHeader D_06025018;
+extern AnimationHeader D_06025878;
+extern AnimationHeader D_06026204;
+extern AnimationHeader D_060269EC;
+extern AnimationHeader D_06026EA0;
+extern AnimationHeader D_06027270;
+extern Gfx D_0602EE50[];
+extern Gfx D_0602EEC8[];
+extern Gfx D_0602EEF8[];
+extern Gfx D_0602EF68[];
+extern Gfx D_0602EF88[];
+extern Gfx D_0602EFE8[];
+extern Gfx D_0602F640[];
+extern UNK_TYPE D_0602F840; // title card
+extern UNK_TYPE D_06030C40; // title card
+extern UNK_TYPE D_06032040; // title card
+extern FlexSkeletonHeader D_060335F0;
+extern AnimationHeader D_06033F80;
+extern AnimationHeader D_06034E64;
+extern AnimationHeader D_060358C4;
+extern AnimationHeader D_06036A7C;
+extern AnimationHeader D_06037ADC;
+extern AnimationHeader D_0603918C;
+extern AnimationHeader D_0603B330;
+extern AnimationHeader D_0603C4E0;
+extern AnimationHeader D_0603CBD0;
+extern AnimationHeader D_0603D224;
+extern AnimationHeader D_0603D7F0;
+extern AnimationHeader D_0603DD1C;
+extern UNK_TYPE D_0603DD30[];
+extern UNK_TYPE D_0603ED30[];
+extern UNK_TYPE D_0603F130[];
+extern UNK_TYPE D_06040130[];
+extern UNK_TYPE D_06040930[];
+extern UNK_TYPE D_06040B30[];
+extern UNK_TYPE D_06041B30[];
+extern UNK_TYPE D_06042330[];
+extern UNK_TYPE D_06043330[];
+extern UNK_TYPE D_06045B30[];
+
+static s16 D_80A07950[4][3] = {
+    { 255, 255, 100 },
+    { 255, 100, 100 },
+    { 100, 255, 100 },
+    { 100, 100, 255 },
+};
+
+static s16 D_80A07968[4][3] = {
+    { 255, 255, 255 },
+    { 255, 255, 255 },
+    { 255, 255, 255 },
+    { 255, 255, 255 },
+};
+
+#if 1 // use to collapse collision data
+
+static DamageTable sMaskDmgTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
     /* Deku Stick     */ DMG_ENTRY(1, 0xF),
     /* Horse trample  */ DMG_ENTRY(0, 0x0),
@@ -179,8 +286,7 @@ static DamageTable D_80A07980 = {
     /* Powder Keg     */ DMG_ENTRY(2, 0xF),
 };
 
-// static DamageTable sDamageTable = {
-static DamageTable D_80A079A0 = {
+static DamageTable sIncarnationDmgTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
     /* Deku Stick     */ DMG_ENTRY(1, 0xF),
     /* Horse trample  */ DMG_ENTRY(0, 0x0),
@@ -215,8 +321,7 @@ static DamageTable D_80A079A0 = {
     /* Powder Keg     */ DMG_ENTRY(4, 0xC),
 };
 
-// static DamageTable sDamageTable = {
-static DamageTable D_80A079C0 = {
+static DamageTable sWrathDmgTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
     /* Deku Stick     */ DMG_ENTRY(1, 0xE),
     /* Horse trample  */ DMG_ENTRY(0, 0x0),
@@ -251,8 +356,7 @@ static DamageTable D_80A079C0 = {
     /* Powder Keg     */ DMG_ENTRY(2, 0xC),
 };
 
-// static DamageTable sDamageTable = {
-static DamageTable D_80A079E0 = {
+static DamageTable sRemainsDmgTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
     /* Deku Stick     */ DMG_ENTRY(1, 0xF),
     /* Horse trample  */ DMG_ENTRY(0, 0x0),
@@ -287,8 +391,7 @@ static DamageTable D_80A079E0 = {
     /* Powder Keg     */ DMG_ENTRY(2, 0xE),
 };
 
-// static DamageTable sDamageTable = {
-static DamageTable D_80A07A00 = {
+static DamageTable sTopDmgTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
     /* Deku Stick     */ DMG_ENTRY(1, 0xD),
     /* Horse trample  */ DMG_ENTRY(1, 0xE),
@@ -335,333 +438,461 @@ const ActorInit Boss_07_InitVars = {
     (ActorFunc)Boss07_Wrath_Draw,
 };
 
-// static ColliderJntSphElementInit sJntSphElementsInit[11] = {
 static ColliderJntSphElementInit D_80A07A40[11] = {
     {
-        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CEFFFE, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 0, { { 0, 0, 0 }, 20 }, 100 },
     },
     {
-        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CEFFFE, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 1, { { 0, 0, 0 }, 30 }, 100 },
     },
     {
-        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CEFFFE, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 1, { { 0, 0, 0 }, 25 }, 100 },
     },
     {
-        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CEFFFE, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 1, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
-        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CEFFFE, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 1, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
-        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CEFFFE, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 1, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
-        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CEFFFE, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 1, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
-        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CEFFFE, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 1, { { 0, 0, 0 }, 15 }, 150 },
     },
     {
-        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CEFFFE, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 1, { { 0, 0, 0 }, 15 }, 150 },
     },
     {
-        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CEFFFE, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 1, { { 0, 0, 0 }, 15 }, 150 },
     },
     {
-        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CEFFFE, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 1, { { 0, 0, 0 }, 15 }, 150 },
     },
 };
 
-// static ColliderJntSphInit sJntSphInit = {
-static ColliderJntSphInit D_80A07BCC = {
-    { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    11, D_80A07A40, // sJntSphElementsInit,
+static ColliderJntSphInit sWrathJntSphInit1 = {
+    {
+        COLTYPE_HIT3,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_PLAYER,
+        OC2_TYPE_1,
+        COLSHAPE_JNTSPH,
+    },
+    11,
+    D_80A07A40,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80A07BDC = {
-    { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK2, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CEFFFE, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+static ColliderCylinderInit sWrathCylInit = {
+    {
+        COLTYPE_METAL,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK2,
+        { 0xF7CFFFFF, 0x00, 0x10 },
+        { 0xF7CEFFFE, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 80, 200, 0, { 0, 0, 0 } },
 };
 
-// static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_80A07C08[1] = {
     {
-        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x04, 0x10 }, { 0xF7CEFFFE, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_HARD, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x04, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_HARD,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 0, { { 0, 0, 0 }, 36 }, 200 },
     },
 };
 
-// static ColliderJntSphInit sJntSphInit = {
-static ColliderJntSphInit D_80A07C2C = {
-    { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    1, D_80A07C08, // sJntSphElementsInit,
+static ColliderJntSphInit sWrathJntSphInit2 = {
+    {
+        COLTYPE_HIT3,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_PLAYER,
+        OC2_TYPE_1,
+        COLSHAPE_JNTSPH,
+    },
+    1,
+    D_80A07C08,
 };
 
-// static ColliderQuadInit sQuadInit = {
-static ColliderQuadInit D_80A07C3C = {
-    { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_QUAD, },
-    { ELEMTYPE_UNK2, { 0xF7CFFFFF, 0x04, 0x00 }, { 0xF7CEFFFE, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+static ColliderQuadInit sMaskQuadInit1 = {
+    {
+        COLTYPE_METAL,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_HARD | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_QUAD,
+    },
+    {
+        ELEMTYPE_UNK2,
+        { 0xF7CFFFFF, 0x04, 0x00 },
+        { 0xF7CEFFFE, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
 
-// static ColliderQuadInit sQuadInit = {
-static ColliderQuadInit D_80A07C8C = {
-    { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_QUAD, },
-    { ELEMTYPE_UNK2, { 0xF7CFFFFF, 0x04, 0x10 }, { 0xF7CEFFFE, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+static ColliderQuadInit sMaskQuadInit2 = {
+    {
+        COLTYPE_HIT3,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_QUAD,
+    },
+    {
+        ELEMTYPE_UNK2,
+        { 0xF7CFFFFF, 0x04, 0x10 },
+        { 0xF7CEFFFE, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
 
-// static ColliderJntSphElementInit sJntSphElementsInit[11] = {
 static ColliderJntSphElementInit D_80A07CDC[11] = {
     {
-        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CEFFFE, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 0, { { 0, 0, 0 }, 25 }, 100 },
     },
     {
-        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CEFFFE, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 1, { { 0, 0, 0 }, 40 }, 100 },
     },
     {
-        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CEFFFE, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 1, { { 0, 0, 0 }, 0 }, 0 },
     },
     {
-        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CEFFFE, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 1, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
-        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CEFFFE, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 1, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
-        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CEFFFE, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 1, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
-        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CEFFFE, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 1, { { 0, 0, 0 }, 15 }, 100 },
     },
     {
-        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CEFFFE, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 1, { { 0, 0, 0 }, 15 }, 150 },
     },
     {
-        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CEFFFE, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 1, { { 0, 0, 0 }, 15 }, 150 },
     },
     {
-        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CEFFFE, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 1, { { 0, 0, 0 }, 15 }, 150 },
     },
     {
-        { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x10 }, { 0xF7CEFFFE, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK3,
+            { 0xF7CFFFFF, 0x00, 0x10 },
+            { 0xF7CEFFFE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 1, { { 0, 0, 0 }, 15 }, 150 },
     },
 };
 
-// static ColliderJntSphInit sJntSphInit = {
-static ColliderJntSphInit D_80A07E68 = {
-    { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    11, D_80A07CDC, // sJntSphElementsInit,
+static ColliderJntSphInit sIncarnationJntSphInit1 = {
+    {
+        COLTYPE_HIT3,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_PLAYER,
+        OC2_TYPE_1,
+        COLSHAPE_JNTSPH,
+    },
+    11,
+    D_80A07CDC,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80A07E78 = {
-    { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x04, 0x10 }, { 0x00300000, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+static ColliderCylinderInit sShotCylInit = {
+    {
+        COLTYPE_NONE,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0xF7CFFFFF, 0x04, 0x10 },
+        { 0x00300000, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 15, 30, -15, { 0, 0, 0 } },
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80A07EA4 = {
-    { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x04, 0x10 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
+static ColliderCylinderInit sRemainsCylInit = {
+    {
+        COLTYPE_METAL,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0xF7CFFFFF, 0x04, 0x10 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NORMAL,
+        BUMP_ON | BUMP_HOOKABLE,
+        OCELEM_ON,
+    },
     { 50, 100, -50, { 0, 0, 0 } },
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80A07ED0 = {
-    { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x04, 0x10 }, { 0xF7FFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
+static ColliderCylinderInit sTopCylInit = {
+    {
+        COLTYPE_METAL,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_HARD | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0xF7CFFFFF, 0x04, 0x10 },
+        { 0xF7FFFFFF, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NORMAL,
+        BUMP_ON | BUMP_HOOKABLE,
+        OCELEM_ON,
+    },
     { 40, 20, 15, { 0, 0, 0 } },
 };
-
 #endif
 
-extern s16 D_80A07968[4][3];
-extern s16 D_80A07950[4][3];
-extern s16 D_80A07952[3];
-extern DamageTable D_80A07980;
-extern DamageTable D_80A079A0;
-extern DamageTable D_80A079C0;
-extern DamageTable D_80A079E0;
-extern DamageTable D_80A07A00;
-extern ColliderJntSphElementInit D_80A07A40[11];
-extern ColliderJntSphInit D_80A07BCC;
-extern ColliderCylinderInit D_80A07BDC;
-extern ColliderJntSphElementInit D_80A07C08[1];
-extern ColliderJntSphInit D_80A07C2C;
-extern ColliderQuadInit D_80A07C3C;
-extern ColliderQuadInit D_80A07C8C;
-extern ColliderJntSphElementInit D_80A07CDC[11];
-extern ColliderJntSphInit D_80A07E68;
-extern ColliderCylinderInit D_80A07E78;
-extern ColliderCylinderInit D_80A07EA4;
-extern ColliderCylinderInit D_80A07ED0;
-extern Color_RGBA8 D_80A07EFC;
-extern Color_RGBA8 D_80A07F00;
-extern Color_RGBA8 D_80A07F04;
-extern Color_RGBA8 D_80A07F08;
-extern Vec3f D_80A07F0C[4];
-extern Vec3s D_80A07F3C[4];
-extern s16 D_80A07F54[4];
-extern EffTireMarkInit D_80A07F5C;
-extern EffTireMarkInit D_80A07F64;
-extern f32 D_80A07F6C[][3];
-extern Vec3f D_80A07FA8;
-extern Vec3f D_80A07FB4;
-extern Vec3f D_80A07FC0;
-extern Color_RGBA8 D_80A07FCC;
-extern Color_RGBA8 D_80A07FD0;
-extern Vec3f D_80A07FD4;
-extern Vec3f D_80A07FE0;
-extern s8 D_80A07FEC[32];
-extern Vec3f D_80A0800C[11];
-extern s8 D_80A08090[32];
-extern Vec3f D_80A080B0;
-extern s32 D_80A080BC[6];
-extern s32 D_80A080D4[7];
-extern s32 D_80A080F0[8];
-extern s32 D_80A08110[12];
-extern s32 D_80A08140[15];
-extern u8 D_80A0817C[15];
-extern AnimationHeader* D_80A0818C[3];
-extern u8 D_80A08198[8];
-extern u8 D_80A081A0[8];
-extern s8 D_80A081A8[32];
-extern s8 D_80A081C8[32];
-extern Vec3f D_80A081E8[11];
-extern s8 D_80A0826C[32];
-extern Vec3s D_80A0828C[4];
-extern Vec3s D_80A082A4[4];
-extern Vec3f D_80A082BC;
-extern Vec3f D_80A082C8;
-extern Vec3f D_80A082D4;
-extern void* D_80A082E0[2];
-
-// extern Vec3f D_80A084D8;
-
-extern Vec3f D_80A09A40;
-extern u8 D_80A09A4C;
-extern s32 D_80A09A50;
-extern Boss07* D_80A09A54;
-extern Boss07* D_80A09A58;
-extern Boss07* D_80A09A5C;
-extern Boss07* D_80A09A60[4];
-extern u8 D_80A09A70;
-extern u8 D_80A09A71;
-extern Boss07Effect D_80A09A78[50];
-extern s32 D_80A0A888;
-extern s32 D_80A0A88C;
-extern s32 D_80A0A890;
-
-extern UNK_TYPE D_06000194;
-extern UNK_TYPE D_06000428;
-extern AnimationHeader D_06000D0C;
-extern UNK_TYPE D_06002C40;
-extern AnimationHeader D_06002D84;
-extern UNK_TYPE D_06003854;
-extern UNK_TYPE D_06003A64;
-extern FlexSkeletonHeader D_060099A0;
-extern AnimationHeader D_06009C7C;
-extern UNK_TYPE D_06009EA8;
-extern UNK_TYPE D_0600A194;
-extern AnimationHeader D_0600A400;
-extern AnimationHeader D_0600A6AC;
-extern AnimationHeader D_0600AE40;
-extern Gfx D_0600AFB0[];
-extern UNK_TYPE D_0600B020;
-extern UNK_TYPE D_0600C7D8;
-extern Gfx D_0600CEE8[];
-extern Gfx D_060149A0[];
-extern Gfx D_06016090[];
-extern Gfx D_06017DE0[];
-extern Gfx D_06019328[];
-extern SkeletonHeader D_06019C58;
-extern AnimationHeader D_06019E48;
-extern AnimationHeader D_0601DEB4;
-extern AnimationHeader D_06022BB4;
-extern AnimationHeader D_06023DAC;
-extern UNK_TYPE D_06025018;
-extern AnimationHeader D_06025878;
-extern AnimationHeader D_06026204;
-extern AnimationHeader D_060269EC;
-extern AnimationHeader D_06026EA0;
-extern UNK_TYPE D_06027270;
-extern Gfx D_0602EE50[];
-extern Gfx D_0602EEC8[];
-extern Gfx D_0602EEF8[];
-extern Gfx D_0602EF68[];
-extern Gfx D_0602EF88[];
-extern Gfx D_0602EFE8[];
-extern Gfx D_0602F640[];
-extern UNK_TYPE D_0602F840; // title card
-extern UNK_TYPE D_06032040; // title card
-extern FlexSkeletonHeader D_060335F0;
-extern AnimationHeader D_06033F80;
-extern AnimationHeader D_06034E64;
-extern AnimationHeader D_060358C4;
-extern AnimationHeader D_06036A7C;
-extern AnimationHeader D_06037ADC;
-extern AnimationHeader D_0603918C;
-extern AnimationHeader D_0603B330;
-extern AnimationHeader D_0603C4E0;
-extern AnimationHeader D_0603CBD0;
-extern AnimationHeader D_0603D224;
-extern AnimationHeader D_0603D7F0;
-extern AnimationHeader D_0603DD1C;
-extern u16 D_0603DD30[];
-extern u16 D_0603ED30[];
-extern u16 D_0603F130[];
-extern u16 D_06040130[];
-extern u16 D_06040930[];
-extern u16 D_06040B30[];
-extern u16 D_06041B30[];
-extern u16 D_06042330[];
-extern u16 D_06043330[];
+static Vec3f sSfxPoint;
+static u8 sHeartbeatTimer;
+static s32 sWhipSegCount;
+static Boss07* sMajorasWrath;
+static Boss07* sMajoraStatic;
+static Boss07* sMajorasMask;
+static Boss07* sBossRemains[4];
+static u8 D_80A09A70;
+static u8 sMusicStartTimer;
+static Boss07Effect sEffects[50];
+static s32 sSeed0;
+static s32 sSeed1;
+static s32 sSeed2;
 
 void func_809F4980(Actor* arg0) {
     Audio_PlayActorSound2(arg0, NA_SE_EN_FOLLOWERS_DAMAGE);
 }
 
 void func_809F49A0(s32 seedInit0, s32 seedInit1, s32 seedInit2) {
-    D_80A0A888 = seedInit0;
-    D_80A0A88C = seedInit1;
-    D_80A0A890 = seedInit2;
+    sSeed0 = seedInit0;
+    sSeed1 = seedInit1;
+    sSeed2 = seedInit2;
 }
 
 f32 func_809F49C0(void) {
     // Wichmann-Hill algorithm
     f32 randFloat;
 
-    D_80A0A888 = (D_80A0A888 * 171) % 30269;
-    D_80A0A88C = (D_80A0A88C * 172) % 30307;
-    D_80A0A890 = (D_80A0A890 * 170) % 30323;
+    sSeed0 = (sSeed0 * 171) % 30269;
+    sSeed1 = (sSeed1 * 172) % 30307;
+    sSeed2 = (sSeed2 * 170) % 30323;
 
-    randFloat = (D_80A0A888 / 30269.0f) + (D_80A0A88C / 30307.0f) + (D_80A0A890 / 30323.0f);
+    randFloat = (sSeed0 / 30269.0f) + (sSeed1 / 30307.0f) + (sSeed2 / 30323.0f);
     while (randFloat >= 1.0f) {
         randFloat -= 1.0f;
     }
@@ -718,6 +949,8 @@ void func_809F4D10(Vec3f* arg0, f32 arg1) {
 }
 
 void func_809F4D54(Boss07* this, GlobalContext* globalCtx, u8 arg2, u8 arg3) {
+    static Color_RGBA8 sDarkOrange1 = { 60, 50, 20, 255 };
+    static Color_RGBA8 sDarkRed1 = { 40, 30, 30, 255 };
     u8 phi_s1;
     Vec3f spB0;
     Vec3f spA4;
@@ -738,7 +971,7 @@ void func_809F4D54(Boss07* this, GlobalContext* globalCtx, u8 arg2, u8 arg3) {
                 spB0.z = this->unk_1788[phi_s1].z + randPlusMinusPoint5Scaled(20.0f);
                 spB0.x = this->unk_1788[phi_s1].x + randPlusMinusPoint5Scaled(20.0f);
             }
-            func_800B0EB0(globalCtx, &spB0, &spA4, &sp98, &D_80A07EFC, &D_80A07F00, Rand_ZeroFloat(150.0f) + 350.0f, 10,
+            func_800B0EB0(globalCtx, &spB0, &spA4, &sp98, &sDarkOrange1, &sDarkRed1, Rand_ZeroFloat(150.0f) + 350.0f, 10,
                           Rand_ZeroFloat(5.0f) + 14.0f);
         }
     }
@@ -753,6 +986,8 @@ void func_809F4FAC(GlobalContext* globalCtx) {
 }
 
 void func_809F4FF8(GlobalContext* globalCtx, Vec3f* arg1, u8 arg2) {
+    static Color_RGBA8 sDarkOrange2 = { 60, 50, 20, 255 };
+    static Color_RGBA8 sDarkRed2 = { 40, 30, 30, 255 };
     u8 i;
     Vec3f spB0;
     Vec3f spA4;
@@ -767,7 +1002,7 @@ void func_809F4FF8(GlobalContext* globalCtx, Vec3f* arg1, u8 arg2) {
         spB0.x = randPlusMinusPoint5Scaled(30.0f) + arg1->x;
         spB0.y = randPlusMinusPoint5Scaled(30.0f) + (arg1->y + 15.0f);
         spB0.z = randPlusMinusPoint5Scaled(30.0f) + arg1->z;
-        func_800B0EB0(globalCtx, &spB0, &spA4, &sp98, &D_80A07F04, &D_80A07F08, Rand_ZeroFloat(50.0f) + 100.0f, 10,
+        func_800B0EB0(globalCtx, &spB0, &spA4, &sp98, &sDarkOrange2, &sDarkRed2, Rand_ZeroFloat(50.0f) + 100.0f, 10,
                       Rand_ZeroFloat(5.0f) + 14.0f);
     }
 }
@@ -794,18 +1029,18 @@ void func_809F51E8(Boss07* this, GlobalContext* globalCtx, u8 arg2) {
 }
 
 void func_809F52CC(Boss07* this, GlobalContext* globalCtx) {
-    Actor* phi_v0 = globalCtx->actorCtx.actorList[ACTORCAT_EXPLOSIVES].first;
+    Actor* explosive = globalCtx->actorCtx.actorList[ACTORCAT_EXPLOSIVES].first;
 
-    while (phi_v0 != NULL) {
-        f32 dx = phi_v0->world.pos.x - this->actor.world.pos.x;
-        f32 dy = phi_v0->world.pos.y - this->actor.world.pos.y;
-        f32 dz = phi_v0->world.pos.z - this->actor.world.pos.z;
+    while (explosive != NULL) {
+        f32 dx = explosive->world.pos.x - this->actor.world.pos.x;
+        f32 dy = explosive->world.pos.y - this->actor.world.pos.y;
+        f32 dz = explosive->world.pos.z - this->actor.world.pos.z;
 
         if (sqrtf(SQ(dx) + SQ(dy) + SQ(dz)) < 200.0f) {
             func_809F51E8(this, globalCtx, 0);
             return;
         }
-        phi_v0 = phi_v0->next;
+        explosive = explosive->next;
     }
 }
 
@@ -819,7 +1054,7 @@ void func_809F536C(Vec3f* arg0, Vec3f* arg1, Vec3f* arg2) {
 
     sp50.x = 0.0f;
 
-    for (i = 0; i < D_80A09A50; i++, arg1++, arg2++) {
+    for (i = 0; i < sWhipSegCount; i++, arg1++, arg2++) {
         dx = arg1->x - arg0->x;
         dy = arg1->y - arg0->y;
         dz = arg1->z - arg0->z;
@@ -838,19 +1073,37 @@ void func_809F536C(Vec3f* arg0, Vec3f* arg1, Vec3f* arg2) {
 }
 
 void func_809F5494(Boss07* this, GlobalContext* globalCtx) {
-    Actor* phi_s0 = globalCtx->actorCtx.actorList[3].first;
+    Actor* explosive = globalCtx->actorCtx.actorList[ACTORCAT_EXPLOSIVES].first;
 
-    while (phi_s0 != NULL) {
-        if (phi_s0->params == 1) {
-            func_809F536C(&phi_s0->world.pos, this->unk_7AC, this->unk_C5C);
-            func_809F536C(&phi_s0->world.pos, this->unk_FB8, this->unk_1468);
+    while (explosive != NULL) {
+        if (explosive->params == 1) {
+            func_809F536C(&explosive->world.pos, this->rightWhip.pos, this->rightWhip.pull);
+            func_809F536C(&explosive->world.pos, this->leftWhip.pos, this->leftWhip.pull);
         }
-        phi_s0 = phi_s0->next;
+        explosive = explosive->next;
     }
 }
 
+static Vec3f sRemainsStart[4] = {
+    { 70.0f, 70.0f, -70.0f },
+    { 24.0f, 88.0f, -70.0f },
+    { -24.0f, 88.0f, -70.0f },
+    { -70.0f, 70.0f, -70.0f },
+};
+
+static Vec3s sRemainsEnd[4] = {
+    { 712, 0xD500, -416 },
+    { -712, 0x2B00, -420 },
+    { 702, 0xAB00, 415 },
+    { -712, 0x5500, 416 },
+}; // y value here is y rotation, not position
+
 #ifdef NON_MATCHING
+// reordering when loading Boss07_Projectile_Update
 void Boss07_Init(Actor* thisx, GlobalContext* globalCtx2) {
+    static s16 sRemainsParams[4] = { 200, 201, 202, 203 };
+    static EffTireMarkInit sTopTireMarkInit = { 0, 40, { 0, 0, 15, 200 } };
+    static EffTireMarkInit sMaskTireMarkInit = { 0, 40, { 0, 0, 15, 200 } };
     GlobalContext* globalCtx = globalCtx2;
     Boss07* this = THIS;
     s32 i;
@@ -859,72 +1112,76 @@ void Boss07_Init(Actor* thisx, GlobalContext* globalCtx2) {
         this->actor.update = Boss07_Effects_Update;
         this->actor.draw = Boss07_Effects_Draw;
         this->actor.flags &= ~1;
-        D_80A09A58 = this;
+        sMajoraStatic = this;
         D_80A09A70 = 0;
         globalCtx->envCtx.unk_C3 = 0;
         globalCtx->envCtx.unk_E0 = 2;
     } else {
         if (this->actor.params == 0) {
-            Boss07Effect* effect;
-
             this->actor.params = 10;
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BOSS_07, this->actor.world.pos.x,
                         this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 150);
-            globalCtx->specialEffects = D_80A09A78;
-            for (effect = D_80A09A78; effect < &D_80A09A78[50]; effect++) {
-                effect->unk_0 = 0;
+            globalCtx->specialEffects = (void*)sEffects;
+
+            for (i = 0; i < 50; i++) {
+                sEffects[i].unk_0 = 0;
             }
             for (i = 0; i < 4; i++) {
-                D_80A09A60[i] = NULL;
+                sBossRemains[i] = NULL;
             }
         }
+        
         this->actor.targetMode = 5;
         this->actor.colChkInfo.mass = MASS_HEAVY;
         this->actor.gravity = -2.5f;
+        if(1) {}
         if (this->actor.params >= 200) {
             this->actor.update = Boss07_Remains_Update;
             this->actor.draw = Boss07_Remains_Draw;
-            D_80A09A60[(u32)this->actor.params - 200] = this;
+            if(1) {}
+            sBossRemains[this->actor.params - 200] = this;
             if (gSaveContext.eventInf[6] & 2) {
                 Actor_SetScale(&this->actor, 0.03f);
-                this->actor.world.pos.x = D_80A07F3C[this->actor.params - 200].x;
+                this->actor.world.pos.x = sRemainsEnd[this->actor.params - 200].x;
                 this->actor.world.pos.y = 370.0f;
-                this->actor.world.pos.z = D_80A07F3C[this->actor.params - 200].z;
-                this->actor.shape.rot.y = D_80A07F3C[this->actor.params - 200].y;
+                this->actor.world.pos.z = sRemainsEnd[this->actor.params - 200].z;
+                this->actor.shape.rot.y = sRemainsEnd[this->actor.params - 200].y;
                 func_80A04DE0(this, globalCtx);
             } else {
                 func_80A04878(this, globalCtx);
             }
             this->actor.flags &= ~1;
-            this->actor.colChkInfo.damageTable = &D_80A079E0;
+            this->actor.colChkInfo.damageTable = &sRemainsDmgTable;
         } else if (this->actor.params == 180) {
             this->actor.update = Boss07_Top_Update;
             this->actor.draw = Boss07_Top_Draw;
 
             func_80A05AF8(this, globalCtx);
-            this->actor.colChkInfo.damageTable = &D_80A07A00;
+            this->actor.colChkInfo.damageTable = &sTopDmgTable;
             ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, KREG(55) + 9.0f);
             this->actor.shape.shadowAlpha = 180;
-            Collider_InitAndSetCylinder(globalCtx, &this->cyl2, &this->actor, &D_80A07ED0);
-            Effect_Add(globalCtx, &this->effectIndex, 4, 0, 0, &D_80A07F5C);
+            Collider_InitAndSetCylinder(globalCtx, &this->cyl2, &this->actor, &sTopCylInit);
+            Effect_Add(globalCtx, &this->effectIndex, 4, 0, 0, &sTopTireMarkInit);
             this->actor.flags &= ~1;
-        } else if ((this->actor.params == 100) || (this->actor.params == 101)) {
+        } else if ((this->actor.params == 100) || ((this->actor.params & 0xFFFFFFFF) == 101)) {
+            
             this->actor.update = Boss07_Projectile_Update;
             this->actor.draw = Boss07_Projectile_Draw;
+            
             this->actor.flags &= ~1;
-            Collider_InitAndSetCylinder(globalCtx, &this->cyl2, &this->actor, &D_80A07E78);
+            Collider_InitAndSetCylinder(globalCtx, &this->cyl2, &this->actor, &sShotCylInit);
             func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, ACTORCAT_ENEMY);
             this->unk_181C = Rand_ZeroFloat(3.99f);
         } else if ((this->actor.params == 10) || (this->actor.params == 11)) {
-            this->actor.colChkInfo.damageTable = &D_80A07980;
+            this->actor.colChkInfo.damageTable = &sMaskDmgTable;
             ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 15.0f);
-            SkelAnime_Init(globalCtx, &this->skelAnime1, &D_06019C58, &D_06019E48, this->jointTable1, this->morphTable1,
+            SkelAnime_Init(globalCtx, &this->skelAnime, &D_06019C58, &D_06019E48, this->jointTable1, this->morphTable1,
                            19);
             if (this->actor.params == 10) {
                 this->actor.update = Boss07_Mask_Update;
                 this->actor.draw = Boss07_Mask_Draw;
-                Effect_Add(globalCtx, &this->effectIndex, 4, 0, 0, &D_80A07F64);
-                D_80A09A5C = this;
+                Effect_Add(globalCtx, &this->effectIndex, 4, 0, 0, &sMaskTireMarkInit);
+                sMajorasMask = this;
                 if (gSaveContext.eventInf[6] & 2) {
                     this->actor.world.pos.x = 0.0f;
                     this->actor.world.pos.y = sREG(17) + 277.0f;
@@ -938,21 +1195,21 @@ void Boss07_Init(Actor* thisx, GlobalContext* globalCtx2) {
                     this->timers[2] = 200;
                     this->unk_1888 = 50;
                     this->actor.flags |= 1;
-                    D_80A09A71 = 20;
+                    sMusicStartTimer = 20;
                 } else {
                     func_80A016E4(this, globalCtx);
                 }
-                Collider_InitAndSetQuad(globalCtx, &this->quad1, &this->actor, &D_80A07C3C);
-                Collider_InitAndSetQuad(globalCtx, &this->quad2, &this->actor, &D_80A07C8C);
+                Collider_InitAndSetQuad(globalCtx, &this->quad1, &this->actor, &sMaskQuadInit1);
+                Collider_InitAndSetQuad(globalCtx, &this->quad2, &this->actor, &sMaskQuadInit2);
                 this->actor.colChkInfo.health = 14;
                 for (i = 0; i < 4; i++) {
                     Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BOSS_07, 0.0f, 0.0f, 0.0f, 0, 0, 0,
-                                D_80A07F54[i]);
+                                sRemainsParams[i]);
                 }
             }
         } else if ((this->actor.params == 20) || (this->actor.params == 21)) {
             Actor_SetScale(&this->actor, 0.015000001f);
-            SkelAnime_InitSV(globalCtx, &this->skelAnime1, &D_060099A0, &D_0600A6AC, this->jointTable1,
+            SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_060099A0, &D_0600A6AC, this->jointTable1,
                              this->morphTable1, 25);
             if (this->actor.params == 21) {
                 this->timers[0] = this->actor.world.rot.z;
@@ -961,14 +1218,14 @@ void Boss07_Init(Actor* thisx, GlobalContext* globalCtx2) {
                 this->actor.draw = Boss07_Afterimage_Draw;
                 this->actor.flags &= ~1;
             } else {
-                this->actor.colChkInfo.damageTable = &D_80A079A0;
+                this->actor.colChkInfo.damageTable = &sIncarnationDmgTable;
                 this->actor.colChkInfo.health = 30;
                 this->actor.update = Boss07_Incarnation_Update;
                 this->actor.draw = Boss07_Incarnation_Draw;
-                Collider_InitAndSetJntSph(globalCtx, &this->sph1, &this->actor, &D_80A07E68, this->sphElems1);
+                Collider_InitAndSetJntSph(globalCtx, &this->sph1, &this->actor, &sIncarnationJntSphInit1, this->sphElems1);
                 ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 80.0f);
-                this->unk_ABD2 = this->actor.shape.rot.z;
-                if (this->unk_ABD2 != 0) {
+                this->csCamIndex = this->actor.shape.rot.z;
+                if (this->csCamIndex != 0) {
                     func_809FCC70(this, globalCtx);
                 } else {
                     func_809FD5F8(this, globalCtx);
@@ -985,38 +1242,39 @@ void Boss07_Init(Actor* thisx, GlobalContext* globalCtx2) {
                 this->unk_17F4 = 1.0f;
             }
         } else {
-            D_80A09A54 = this;
+            sMajorasWrath = this;
             this->actor.colChkInfo.health = 40;
-            this->actor.colChkInfo.damageTable = &D_80A079C0;
+            this->actor.colChkInfo.damageTable = &sWrathDmgTable;
             Actor_SetScale(&this->actor, 0.01f);
-            this->unk_ABD2 = this->actor.shape.rot.z;
-            if (this->unk_ABD2 != 0) {
+            this->csCamIndex = this->actor.shape.rot.z;
+            if (this->csCamIndex != 0) {
                 func_809F5E14(this, globalCtx);
             } else {
                 func_809F7400(this, globalCtx, 50);
-                this->unk_77C = 1.0f;
+                this->whipScale = 1.0;
                 Audio_QueueSeqCmd(0x8069);
             }
-            SkelAnime_InitSV(globalCtx, &this->skelAnime1, &D_060335F0, &D_0603CBD0, this->jointTable1,
+            SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_060335F0, &D_0603CBD0, this->jointTable1,
                              this->morphTable1, 28);
-            Collider_InitAndSetJntSph(globalCtx, &this->sph1, &this->actor, &D_80A07BCC, this->sphElems1);
-            Collider_InitAndSetJntSph(globalCtx, &this->sph2, &this->actor, &D_80A07C2C, this->sphElems2);
-            Collider_InitAndSetCylinder(globalCtx, &this->cyl1, &this->actor, &D_80A07BDC);
-            this->unk_17E0 = 1.0f;
-            this->unk_794 = 0.7f;
-            this->unk_FA0 = 0.7f;
-            this->unk_798 = 2.0f;
-            this->unk_FA4 = 2.0f;
-            this->unk_79C = 0.0f;
-            this->unk_FA8 = 0.0f;
-            this->unk_790 = -15.0f;
-            this->unk_F9C = -15.0f;
+            Collider_InitAndSetJntSph(globalCtx, &this->sph1, &this->actor, &sWrathJntSphInit1, this->sphElems1);
+            Collider_InitAndSetJntSph(globalCtx, &this->sph2, &this->actor, &sWrathJntSphInit2, this->sphElems2);
+            Collider_InitAndSetCylinder(globalCtx, &this->cyl1, &this->actor, &sWrathCylInit);
+            
+            this->leftWhip.stiffness = this->rightWhip.stiffness = 0.7f;
+            this->leftWhip.drag = this->rightWhip.drag = 2.0f;
+            this->leftWhip.gravity = this->rightWhip.gravity = -15.0f;
+            this->leftWhip.tension = this->rightWhip.tension = 0.0f;
 
-            D_80A09A50 = 44;
+            sWhipSegCount = 44;
+            this->unk_17E0 = 1.0f;
+            
         }
     }
 }
 #else
+static s16 sRemainsParams[4] = { 200, 201, 202, 203 };
+static EffTireMarkInit sTopTireMarkInit = { 0, 40, { 0, 0, 15, 200 } };
+static EffTireMarkInit sMaskTireMarkInit = { 0, 40, { 0, 0, 15, 200 } };
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/Boss07_Init.s")
 #endif
 
@@ -1036,33 +1294,36 @@ void Boss07_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
 
 void func_809F5E14(Boss07* this, GlobalContext* globalCtx) {
     this->actionFunc = func_809F5E88;
-    SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime1, &D_06023DAC, 0.0f);
+    SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06023DAC, 0.0f);
     this->actor.flags &= ~1;
     this->unk_17D8 = 0x7F00;
     this->unk_15C = 20;
     this->unk_17E8 = 5120.0f;
 }
 
-#ifdef NON_MATCHING
 void func_809F5E88(Boss07* this, GlobalContext* globalCtx) {
+    static f32 D_80A07F6C[5][3] = {
+        { 40.0f, 400.0f, 110.0f }, { 80.0f, 450.0f, 110.0f }, { 100.0f, 400.0f, 110.0f },
+        { 60.0f, 390.0f, 110.0f }, { 30.0f, 430.0f, 110.0f },
+    };
     this->unk_15C = 20;
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime1);
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     this->unk_ABC8++;
     SysMatrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0);
     Matrix_RotateY(this->actor.shape.rot.y, 1);
-    switch (this->unk_ABD0) {
+    switch (this->csState) {
         case 0:
             this->unk_ABC8 = 0;
-            this->unk_ABD0 = 1;
-            this->unk_ABF8.z = 0.f;
-            this->unk_ABEC.x = 0.0;
-            this->unk_ABEC.y = gGameInfo->data[1265] + 100.0f - 30.0f + 80.0f;
-            this->unk_ABEC.z = gGameInfo->data[1266] + 270.0f - 150.0f + 30.0f - 50.0f;
-            this->unk_ABF8.x = 0.0f;
-            this->unk_ABF8.y = 180.0f;
+            this->csState = 1;
+            this->csCamNextAt.z = 0.f;
+            this->csCamNextEye.x = 0.0;
+            this->csCamNextEye.y = KREG(17) + 100.0f - 30.0f + 80.0f;
+            this->csCamNextEye.z = KREG(18) + 270.0f - 150.0f + 30.0f - 50.0f;
+            this->csCamNextAt.x = 0.0f;
+            this->csCamNextAt.y = 180.0f;
         case 1:
             if (this->unk_ABC8 < 40) {
-                D_80A09A4C = 3;
+                sHeartbeatTimer = 3;
             }
             if (this->unk_ABC8 > 20) {
                 if (this->unk_ABC8 == 21) {
@@ -1075,9 +1336,10 @@ void func_809F5E88(Boss07* this, GlobalContext* globalCtx) {
                     Math_ApproachZeroF(&this->unk_17E8, 1.0f, 200.0f);
                 }
             }
-            if (this->unk_ABC8 >= 0x3D) {
+            if (this->unk_ABC8 > 60) {
                 Player* player = PLAYER;
                 s32 phi_v1 = 0;
+                if (0) {}
 
                 if (player->transformation == 1) {
                     phi_v1 = 1;
@@ -1089,29 +1351,29 @@ void func_809F5E88(Boss07* this, GlobalContext* globalCtx) {
                     phi_v1 = 4;
                 }
 
-                Math_ApproachF(&this->unk_ABEC.y, D_80A07F6C[phi_v1][0], 0.075f, this->unk_AC0C * 7.0f);
-                Math_ApproachF(&this->unk_ABEC.z, D_80A07F6C[phi_v1][1], 0.075f, this->unk_AC0C * 17.0f);
-                Math_ApproachF(&this->unk_ABF8.y, D_80A07F6C[phi_v1][2], 0.075f, this->unk_AC0C * 7.0f);
-                Math_ApproachF(&this->unk_AC0C, 1.0f, 1.0f, 0.01f);
+                Math_ApproachF(&this->csCamNextEye.y, D_80A07F6C[phi_v1][0], 0.075f, this->csCamSpeedMod * 7.0f);
+                Math_ApproachF(&this->csCamNextEye.z, D_80A07F6C[phi_v1][1], 0.075f, this->csCamSpeedMod * 17.0f);
+                Math_ApproachF(&this->csCamNextAt.y, D_80A07F6C[phi_v1][2], 0.075f, this->csCamSpeedMod * 7.0f);
+                Math_ApproachF(&this->csCamSpeedMod, 1.0f, 1.0f, 0.01f);
                 if (this->unk_ABC8 == 70) {
-                    SkelAnime_ChangeAnimTransitionStop(&this->skelAnime1, &D_06025018, -15.0f);
+                    SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06025018, -15.0f);
                     this->unk_1D4 = SkelAnime_GetFrameCount(&D_06025018);
                     func_8019FE1C(&this->actor.projectedPos, NA_SE_EV_ICE_PILLAR_RISING, 1.0f);
                     Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_SHOUT);
                 }
                 if (this->unk_ABC8 >= 110) {
-                    Math_ApproachF(&this->unk_77C, 1.0f, 1.0f, 0.05f);
-                    this->unk_794 = 0.79999995f;
-                    this->unk_FA0 = 0.79999995f;
-                    this->unk_798 = 1.0f;
-                    this->unk_FA4 = 1.0f;
+                    Math_ApproachF(&this->whipScale, 1.0f, 1.0f, 0.05f);
+                    this->rightWhip.stiffness = 0.79999995f;
+                    this->leftWhip.stiffness = 0.79999995f;
+                    this->rightWhip.drag = 1.0f;
+                    this->leftWhip.drag = 1.0f;
                 }
                 if (this->unk_ABC8 == 127) {
-                    this->unk_77C = 1.0f;
+                    this->whipScale = 1.0f;
                 }
                 if (this->unk_ABC8 == 120) {
                     Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST3_ROD_HOP2_OLD);
-                    func_8019F1C0(&D_80A09A40, NA_SE_EN_LAST3_VOICE_KICK_OLD);
+                    func_8019F1C0(&sSfxPoint, NA_SE_EN_LAST3_VOICE_KICK_OLD);
                     func_8019FE74(&D_801D6654, 0.0f, 0x3C);
                 }
                 if (this->unk_ABC8 == 112) {
@@ -1121,40 +1383,37 @@ void func_809F5E88(Boss07* this, GlobalContext* globalCtx) {
                     Actor_TitleCardCreate(globalCtx, &globalCtx->actorCtx.titleCtxt,
                                           Lib_SegmentedToVirtual(&D_06032040), 0xA0, 0xB4, 0x80, 0x28);
                 }
-                if (func_801378B8(&this->skelAnime1, this->unk_1D4)) {
+                if (func_801378B8(&this->skelAnime, this->unk_1D4)) {
                     s32 i;
                     Camera* sp48 = Play_GetCamera(globalCtx, 0);
 
-                    this->unk_ABD0 = 0;
+                    this->csState = 0;
                     func_809F7400(this, globalCtx, 50);
-                    sp48->eye = this->unk_ABD4;
-                    sp48->eyeNext = this->unk_ABD4;
-                    sp48->at = this->unk_ABE0;
-                    func_80169AFC(globalCtx, this->unk_ABD2, 0);
-                    this->unk_ABD2 = 0;
+                    sp48->eye = this->csCamEye;
+                    sp48->eyeNext = this->csCamEye;
+                    sp48->at = this->csCamAt;
+                    func_80169AFC(globalCtx, this->csCamIndex, 0);
+                    this->csCamIndex = 0;
                     func_800EA0EC(globalCtx, &globalCtx->csCtx);
                     func_800B7298(globalCtx, &this->actor, 6);
                     this->actor.flags |= 1;
                     func_80165690();
-                    if (D_80A09A60[0] != NULL) {
+                    if (sBossRemains[0] != NULL) {
                         for (i = 0; i < 4; i++) {
-                            func_800BC154(globalCtx, &globalCtx->actorCtx, &D_80A09A60[i]->actor, 9);
+                            func_800BC154(globalCtx, &globalCtx->actorCtx, &sBossRemains[i]->actor, 9);
                         }
                     }
                 }
             }
             break;
     }
-    SysMatrix_MultiplyVector3fByState(&this->unk_ABEC, &this->unk_ABD4);
-    SysMatrix_MultiplyVector3fByState(&this->unk_ABF8, &this->unk_ABE0);
-    if (this->unk_ABD2 != 0) {
+    SysMatrix_MultiplyVector3fByState(&this->csCamNextEye, &this->csCamEye);
+    SysMatrix_MultiplyVector3fByState(&this->csCamNextAt, &this->csCamAt);
+    if (this->csCamIndex != 0) {
         ShrinkWindow_SetLetterboxTarget(0x1B);
-        Play_CameraSetAtEye(globalCtx, this->unk_ABD2, &this->unk_ABE0, &this->unk_ABD4);
+        Play_CameraSetAtEye(globalCtx, this->csCamIndex, &this->csCamAt, &this->csCamEye);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_809F5E88.s")
-#endif
 
 void func_809F64F4(Boss07* this, GlobalContext* globalCtx) {
     s32 i;
@@ -1162,32 +1421,33 @@ void func_809F64F4(Boss07* this, GlobalContext* globalCtx) {
     Audio_QueueSeqCmd(0x100100FF);
     func_809F4FAC(globalCtx);
     this->actionFunc = func_809F65F4;
-    this->unk_794 = 0.7f;
-    this->unk_FA0 = 0.7f;
-    this->unk_798 = 2.0f;
-    this->unk_FA4 = 2.0f;
-    this->unk_79C = 0.0f;
-    this->unk_FA8 = 0.0f;
-    this->unk_790 = -15.0f;
-    this->unk_F9C = -15.0f;
-    SkelAnime_ChangeAnimTransitionStop(&this->skelAnime1, &D_06022BB4, 0.0f);
+    this->rightWhip.stiffness = 0.7f;
+    this->leftWhip.stiffness = 0.7f;
+    this->rightWhip.drag = 2.0f;
+    this->leftWhip.drag = 2.0f;
+    this->rightWhip.tension = 0.0f;
+    this->leftWhip.tension = 0.0f;
+    this->rightWhip.gravity = -15.0f;
+    this->leftWhip.gravity = -15.0f;
+    SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06022BB4, 0.0f);
     this->actor.flags &= ~1;
-    this->unk_ABD0 = 0;
+    this->csState = 0;
     this->unk_ABC8 = 0;
-    if (D_80A09A60[0] != NULL) {
+    if (sBossRemains[0] != NULL) {
         for (i = 0; i < 4; i++) {
-            D_80A09A60[i]->unk_14E = 2;
+            sBossRemains[i]->unk_14E = 2;
         }
     }
     this->unk_15C = 1000;
 }
 
 #ifdef NON_MATCHING
+// spA4 and spA0 loaded in wrong order
 void func_809F65F4(Boss07* this, GlobalContext* globalCtx) {
     s32 i;
     s32 spC0 = 0;
     Vec3f spB4;
-    Vec3f spA8 = D_80A07FA8;
+    Vec3f spA8 = {0.0f, 0.0f, 0.0f};
     f32 spA4;
     f32 spA0;
     Camera* temp_s0;
@@ -1197,27 +1457,28 @@ void func_809F65F4(Boss07* this, GlobalContext* globalCtx) {
     temp_s0 = Play_GetCamera(globalCtx, 0);
     this->unk_15C = 1000;
     func_809F4CBC(this, 1.0f);
-    switch (this->unk_ABD0) {
+    switch (this->csState) {
         case 0:
-            if (ActorCutscene_GetCurrentIndex() == -1) {
-                func_800EA0D4(globalCtx, &globalCtx->csCtx);
-                func_800B7298(globalCtx, &this->actor, 1);
-                this->unk_ABD2 = func_801694DC(globalCtx);
-                func_80169590(globalCtx, 0, 1);
-                func_80169590(globalCtx, this->unk_ABD2, 7);
-                Audio_PlayActorSound2(&this->actor, 0x39B8);
+            if (ActorCutscene_GetCurrentIndex() != -1) {
+                break;
             }
+            func_800EA0D4(globalCtx, &globalCtx->csCtx);
+            func_800B7298(globalCtx, &this->actor, 1);
+            this->csCamIndex = func_801694DC(globalCtx);
+            func_80169590(globalCtx, 0, 1);
+            func_80169590(globalCtx, this->csCamIndex, 7);
+            Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST3_DEAD_ROD);
         case 1:
             this->unk_ABC8 = 0;
-            this->unk_ABD0 = 2;
-            this->unk_ABD4.x = temp_s0->eye.x;
-            this->unk_ABD4.y = temp_s0->eye.y;
-            this->unk_ABD4.z = temp_s0->eye.z;
-            this->unk_ABE0.x = temp_s0->at.x;
-            this->unk_ABE0.y = temp_s0->at.y;
-            this->unk_ABE0.z = temp_s0->at.z;
-            this->unk_AC04 = this->actor.shape.rot.y * M_PI / 0x8000;
-            this->unk_AC08 = this->unk_AC0C = D_80A09A58->unk_180C = 0.0f;
+            this->csState = 2;
+            this->csCamEye.x = temp_s0->eye.x;
+            this->csCamEye.y = temp_s0->eye.y;
+            this->csCamEye.z = temp_s0->eye.z;
+            this->csCamAt.x = temp_s0->at.x;
+            this->csCamAt.y = temp_s0->at.y;
+            this->csCamAt.z = temp_s0->at.z;
+            this->csCamRotY = this->actor.shape.rot.y * M_PI / 0x8000;
+            this->csCamRotVel = this->csCamSpeedMod = sMajoraStatic->unk_180C = 0.0f;
             func_809F49A0(1, 0x71AC, 0x263A);
             for (i = 0; i < 30; i++) {
                 this->unk_AB50[i] = func_809F49C0() - 1.0f;
@@ -1225,95 +1486,94 @@ void func_809F65F4(Boss07* this, GlobalContext* globalCtx) {
             func_8016566C(150);
         case 2:
             if (this->unk_ABC8 == 20) {
-                func_8019F1C0(&D_80A09A40, 0x39E3);
+                func_8019F1C0(&sSfxPoint, NA_SE_EN_LAST2_WALK2_OLD);
             }
             if (this->unk_ABC8 == 40) {
-                func_8019F1C0(&D_80A09A40, 0x39E3);
+                func_8019F1C0(&sSfxPoint, NA_SE_EN_LAST2_WALK2_OLD);
             }
             if (this->unk_ABC8 == 60) {
-                func_8019F1C0(&D_80A09A40, 0x39E3);
+                func_8019F1C0(&sSfxPoint, NA_SE_EN_LAST2_WALK2_OLD);
             }
-            if (this->unk_ABC8 == 0x50) {
-                func_8019F1C0(&D_80A09A40, 0x39E3);
+            if (this->unk_ABC8 == 80) {
+                func_8019F1C0(&sSfxPoint, NA_SE_EN_LAST2_WALK2_OLD);
             }
             spB4.x = 0.0f;
             spB4.y = -90.0f;
             spB4.z = 350.0f;
-            this->unk_ABF8.x = this->actor.focus.pos.x;
-            this->unk_ABF8.y = this->actor.focus.pos.y - 40.0f;
-            this->unk_ABF8.z = this->actor.focus.pos.z;
+            this->csCamNextAt.x = this->actor.focus.pos.x;
+            this->csCamNextAt.y = this->actor.focus.pos.y - 40.0f;
+            this->csCamNextAt.z = this->actor.focus.pos.z;
 
             if ((this->unk_ABC8 >= 50) && (this->unk_ABC8 < 80)) {
                 if (this->unk_ABC8 == 50) {
-                    func_8019F1C0(&D_80A09A40, 0x39AF);
+                    func_8019F1C0(&sSfxPoint, NA_SE_EN_LAST3_DEAD_WIND1_OLD);
                 }
                 spB4.x = 30.0f;
                 spB4.z = 120.0f;
-                this->unk_ABF8.y = this->actor.focus.pos.y - 40.0f + 30.0f;
+                this->csCamNextAt.y = this->actor.focus.pos.y - 40.0f + 30.0f;
                 spA4 = 200.0f;
                 spA0 = 1.0f;
             } else if ((this->unk_ABC8 >= 80) && (this->unk_ABC8 < 110)) {
                 if (this->unk_ABC8 == 80) {
-                    this->skelAnime1.animCurrentFrame -= 30.0f;
-                    func_8019F1C0(&D_80A09A40, 0x39B4);
+                    this->skelAnime.animCurrentFrame -= 30.0f;
+                    func_8019F1C0(&sSfxPoint, NA_SE_EN_LAST3_DEAD_WIND2_OLD);
                 }
                 spB4.x = -10.0f;
                 spB4.z = 150.0f;
-                this->unk_ABF8.y = this->actor.focus.pos.y - 40.0f - 60.0f;
+                this->csCamNextAt.y = this->actor.focus.pos.y - 40.0f - 60.0f;
                 spA4 = 200.0f;
                 spA0 = 1.0f;
             } else if ((this->unk_ABC8 >= 110) && (this->unk_ABC8 < 140)) {
                 if (this->unk_ABC8 == 110) {
-                    func_8019F1C0(&D_80A09A40, 0x39B5);
+                    func_8019F1C0(&sSfxPoint, NA_SE_EN_LAST3_DEAD_WIND3_OLD);
                 }
                 spB4.x = -70.0f;
                 spB4.z = 110.0f;
-                this->unk_ABF8.y = this->actor.focus.pos.y - 40.0f + 30.0f;
+                this->csCamNextAt.y = this->actor.focus.pos.y - 40.0f + 30.0f;
                 spA4 = 200.0f;
                 spA0 = 1.0f;
             }
-            if (this->unk_ABC8 >= (gGameInfo->data[1551] + 140)) {
-                this->unk_ABD0 = 4;
-                this->unk_AC14 = gGameInfo->data[1552] + 270.0f + 50.0f;
-                func_8019F1C0(&D_80A09A40, 0x39BF);
+            if (this->unk_ABC8 >= (sREG(15) + 140)) {
+                this->csState = 4;
+                this->csCamEyeMod.y = sREG(16) + 270.0f + 50.0f;
+                func_8019F1C0(&sSfxPoint, NA_SE_EN_LAST3_DEAD_FLOAT);
             } else {
                 break;
             }
         case 4:
-            if ((this->unk_ABC8 >= (gGameInfo->data[1626] + 260)) && (this->unk_ABC8 < (gGameInfo->data[1627] + 370))) {
-                spC0 = gGameInfo->data[1262] + 1;
-                this->unk_AC04 = this->actor.shape.rot.y * M_PI / 0x8000;
+            if ((this->unk_ABC8 >= (sREG(90) + 260)) && (this->unk_ABC8 < (sREG(91) + 370))) {
+                spC0 = KREG(14) + 1;
+                this->csCamRotY = this->actor.shape.rot.y * M_PI / 0x8000;
                 spB4.x = 0.0f;
-                spB4.y = this->unk_AC14 + -190.0f;
-                spB4.z = gGameInfo->data[1553] + 390.0f - 380.0f;
+                spB4.y = this->csCamEyeMod.y + -190.0f;
+                spB4.z = sREG(17) + 390.0f - 380.0f;
 
-                this->unk_ABF8.x = this->actor.focus.pos.x;
-                this->unk_ABF8.y = this->actor.focus.pos.y - 40.0f - 60.0f + 130.0f + gGameInfo->data[1554];
-                this->unk_ABF8.z = this->actor.focus.pos.z;
+                this->csCamNextAt.x = this->actor.focus.pos.x;
+                this->csCamNextAt.y = this->actor.focus.pos.y - 40.0f - 60.0f + sREG(18) + 130.0f;
+                this->csCamNextAt.z = this->actor.focus.pos.z;
 
+                Math_ApproachF(&this->csCamEyeMod.y, sREG(19) + 240.0f, 0.05f, 1.0f + (sREG(20) * 0.1f));
+                spA4 = 2000.0f;
                 spA0 = 1.0f;
 
-                Math_ApproachF(&this->unk_AC14, gGameInfo->data[1555] + 240.0f, 0.05f,
-                               1.0f + (gGameInfo->data[1556] * 0.1f));
-                spA4 = 2000.0f;
-                this->unk_1D8 = gGameInfo->data[1329] + 10;
+                this->unk_1D8 = KREG(81) + 10;
                 this->unk_AB48 = 1;
-                func_8019F1C0(&D_80A09A40, 0x205B);
+                func_8019F1C0(&sSfxPoint, NA_SE_EV_BURN_OUT - SFX_FLAG);
             } else {
                 spB4.x = 0.0f;
                 spB4.y = -190.0f;
                 spB4.z = 390.0f;
-                this->unk_ABF8.x = this->actor.focus.pos.x;
-                this->unk_ABF8.y = this->actor.focus.pos.y - 40.0f - 60.0f;
-                this->unk_ABF8.z = this->actor.focus.pos.z;
+                this->csCamNextAt.x = this->actor.focus.pos.x;
+                this->csCamNextAt.y = this->actor.focus.pos.y - 40.0f - 60.0f;
+                this->csCamNextAt.z = this->actor.focus.pos.z;
                 this->unk_1D8 = 0;
                 if (this->unk_ABC8 > 330) {
                     spA4 = 2000.0f;
                     spA0 = 1.0f;
                 }
-                Math_ApproachZeroF(&this->actor.world.pos.x, 0.1f, this->unk_AC0C);
-                Math_ApproachZeroF(&this->actor.world.pos.z, 0.1f, this->unk_AC0C);
-                Math_ApproachF(&this->unk_AC0C, 5.0f, 1.0f, 0.1f);
+                Math_ApproachZeroF(&this->actor.world.pos.x, 0.1f, this->csCamSpeedMod);
+                Math_ApproachZeroF(&this->actor.world.pos.z, 0.1f, this->csCamSpeedMod);
+                Math_ApproachF(&this->csCamSpeedMod, 5.0f, 1.0f, 0.1f);
             }
             if (this->unk_ABC8 >= 260) {
                 f32 sp98;
@@ -1321,10 +1581,11 @@ void func_809F65F4(Boss07* this, GlobalContext* globalCtx) {
                 s16 temp_a0;
 
                 if (this->unk_ABC8 == 260) {
-                    func_801A479C(&D_80A09A40, 0x39B6, 0x3C);
+                    func_801A479C(&sSfxPoint, NA_SE_EN_LAST3_DEAD_LIGHTS_OLD, 0x3C);
                 }
+
                 globalCtx->envCtx.unk_E5 = 1;
-                globalCtx->envCtx.unk_E6[0] = globalCtx->envCtx.unk_E6[1] = globalCtx->envCtx.unk_E6[2] = 0xFF;
+                globalCtx->envCtx.unk_E6[0] = globalCtx->envCtx.unk_E6[1] = globalCtx->envCtx.unk_E6[2] = 255;
                 if (this->unk_ABC8 < 350) {
                     sp98 = 0.5f;
                     sp94 = 0.02f;
@@ -1333,21 +1594,23 @@ void func_809F65F4(Boss07* this, GlobalContext* globalCtx) {
                     sp98 = 5.0f;
                     sp94 = 0.1f;
                     temp_a0 = (this->unk_ABC8 * 2) - 700;
-                    temp_a0 = CLAMP_MAX(temp_a0, 250);
+                    if (temp_a0 > 250) {
+                        temp_a0 = 250;
+                    }
                     globalCtx->envCtx.unk_E6[3] = temp_a0;
                     if (this->unk_ABC8 == 400) {
                         func_8019FE74(&D_801D6654, 0.0f, 90);
                     }
-                    if (this->unk_ABC8 == (gGameInfo->data[1342] + 440)) {
+                    if (this->unk_ABC8 == (KREG(94) + 440)) {
                         globalCtx->nextEntranceIndex = 0x5400;
                         gSaveContext.nextCutsceneIndex = 0xFFF7;
                         globalCtx->sceneLoadFlag = 0x14;
                     }
                 }
                 if (this->unk_ABC8 > 300) {
-                    D_80A09A58->unk_1808 = 1;
-                    Math_ApproachF(&D_80A09A58->unk_180C, 30.0f, 0.1f, 1.5f);
-                    D_80A09A58->unk_1810 = this->unk_334[2];
+                    sMajoraStatic->unk_1808 = 1;
+                    Math_ApproachF(&sMajoraStatic->unk_180C, 30.0f, 0.1f, 1.5f);
+                    sMajoraStatic->unk_1810 = this->bodyPartsPos[2];
                     Math_ApproachF(&this->unk_AB4C, 1.0f, 0.1f, 0.05f);
                     for (i = 0; i < 30; i++) {
                         Math_ApproachF(&this->unk_AB50[i], sp98, 1.0f, sp94);
@@ -1355,19 +1618,23 @@ void func_809F65F4(Boss07* this, GlobalContext* globalCtx) {
                     Math_ApproachF(&globalCtx->envCtx.unk_DC, 1.0f, 1.0f, 0.1f);
                 }
             }
-            this->unk_AC04 += this->unk_AC08;
-            this->unk_AC08 += 0.0004f;
-            if (this->unk_AC08 > 0.02f) {
-                this->unk_AC08 = 0.02f;
+            this->csCamRotY += this->csCamRotVel;
+            this->csCamRotVel += 0.0004f;
+            if (this->csCamRotVel > 0.02f) {
+                this->csCamRotVel = 0.02f;
             }
-            if (this->unk_ABC8 >= (gGameInfo->data[1629] + 180)) {
-                Vec3f sp84 = D_80A07FB4;
-                Vec3f sp78 = D_80A07FC0;
+            if (this->unk_ABC8 >= (sREG(93) + 180)) {
+                Vec3f sp84 = {0.0f, 10.0f, 0.0f};
+                Vec3f sp78 = {0.0f, -0.5f, 0.0f};
                 Vec3f sp6C;
                 f32 sp68;
 
-                play_sound(0x2159);
-                sp68 = (spC0 == 0) ? 2.0f : (gGameInfo->data[1301] * 0.01f) + 0.2f;
+                play_sound(NA_SE_EV_EARTHQUAKE_LAST2 - SFX_FLAG);
+                if (spC0 == 0) {
+                    sp68 = 2.0f;
+                } else {
+                    sp68 = (KREG(53) * 0.01f) + 0.2f;
+                }
                 spA8.x = Math_SinS(this->unk_ABC8 * 0x7000) * sp68;
                 spA8.y = Math_SinS(this->unk_ABC8 * 0x5000) * sp68 * 2.5f;
                 spA8.z = Math_CosS(this->unk_ABC8 * 0x8000) * sp68;
@@ -1378,43 +1645,46 @@ void func_809F65F4(Boss07* this, GlobalContext* globalCtx) {
                     EffectSsHahen_Spawn(globalCtx, &sp6C, &sp84, &sp78, 0, Rand_ZeroFloat(5.0f) + 20.0f, -1, 0xA, NULL);
                 }
             }
-            if (this->unk_ABC8 >= (gGameInfo->data[1630] + 290)) {
-                this->unk_1D8 = gGameInfo->data[1334] + 25;
-                Math_ApproachZeroF(&this->unk_77C, 1.0f, 0.015f);
+            if (this->unk_ABC8 >= (sREG(94) + 290)) {
+                this->unk_1D8 = KREG(86) + 25;
+                Math_ApproachZeroF(&this->whipScale, 1.0f, 0.015f);
             }
             break;
     }
-    SysMatrix_InsertYRotation_f(this->unk_AC04, 0);
-    SysMatrix_MultiplyVector3fByState(&spB4, &this->unk_ABEC);
-    this->unk_ABEC.x += this->actor.focus.pos.x;
-    this->unk_ABEC.y += this->actor.focus.pos.y;
-    this->unk_ABEC.z += this->actor.focus.pos.z;
+    SysMatrix_InsertYRotation_f(this->csCamRotY, 0);
+    SysMatrix_MultiplyVector3fByState(&spB4, &this->csCamNextEye);
+    this->csCamNextEye.x += this->actor.focus.pos.x;
+    this->csCamNextEye.y += this->actor.focus.pos.y;
+    this->csCamNextEye.z += this->actor.focus.pos.z;
 
-    Math_ApproachF(&this->unk_ABD4.x, this->unk_ABEC.x, spA0, 40.0f + spA4);
-    Math_ApproachF(&this->unk_ABD4.y, this->unk_ABEC.y, spA0, 40.0f + spA4);
-    Math_ApproachF(&this->unk_ABD4.z, this->unk_ABEC.z, spA0, 40.0f + spA4);
+    Math_ApproachF(&this->csCamEye.x, this->csCamNextEye.x, spA0, 40.0f + spA4);
+    Math_ApproachF(&this->csCamEye.y, this->csCamNextEye.y, spA0, 40.0f + spA4);
+    Math_ApproachF(&this->csCamEye.z, this->csCamNextEye.z, spA0, 40.0f + spA4);
 
-    Math_ApproachF(&this->unk_ABE0.x, this->unk_ABF8.x, spA0, 70.0f + spA4);
-    Math_ApproachF(&this->unk_ABE0.y, this->unk_ABF8.y, spA0, 70.0f + spA4);
-    Math_ApproachF(&this->unk_ABE0.z, this->unk_ABF8.z, spA0, 70.0f + spA4);
-    if (this->unk_ABD2 != 0) {
+    Math_ApproachF(&this->csCamAt.x, this->csCamNextAt.x, spA0, 70.0f + spA4);
+    Math_ApproachF(&this->csCamAt.y, this->csCamNextAt.y, spA0, 70.0f + spA4);
+    Math_ApproachF(&this->csCamAt.z, this->csCamNextAt.z, spA0, 70.0f + spA4);
+    if (this->csCamIndex != 0) {
         Vec3f sp5C;
 
-        sp5C.x = this->unk_ABE0.x + spA8.x;
-        sp5C.y = this->unk_ABE0.y + spA8.y;
-        sp5C.z = this->unk_ABE0.z + spA8.z;
-        Play_CameraSetAtEye(globalCtx, this->unk_ABD2, &sp5C, &this->unk_ABD4);
+        sp5C.x = this->csCamAt.x + spA8.x;
+        sp5C.y = this->csCamAt.y + spA8.y;
+        sp5C.z = this->csCamAt.z + spA8.z;
+        Play_CameraSetAtEye(globalCtx, this->csCamIndex, &sp5C, &this->csCamEye);
     }
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime1);
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     this->unk_ABC8++;
 }
 #else
+static Vec3f D_80A07FA8 = { 0.0f, 0.0f, 0.0f };
+static Vec3f D_80A07FB4 = { 0.0f, 10.0f, 0.0f };
+static Vec3f D_80A07FC0 = { 0.0f, -0.5f, 0.0f };
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_809F65F4.s")
 #endif
 
 void func_809F7400(Boss07* this, GlobalContext* globalCtx, s16 arg2) {
     this->actionFunc = func_809F748C;
-    SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime1, &D_0603CBD0, -10.0f);
+    SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_0603CBD0, -10.0f);
     if (arg2 != 0) {
         this->timers[0] = arg2;
     } else {
@@ -1426,23 +1696,23 @@ void func_809F7400(Boss07* this, GlobalContext* globalCtx, s16 arg2) {
 void func_809F748C(Boss07* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime1);
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     func_809F4CBC(this, 2.0f);
-    this->unk_794 = 0.7f;
-    this->unk_FA0 = 0.7f;
-    this->unk_790 = -15.0f;
-    this->unk_F9C = -15.0f;
-    this->unk_798 = 2.0f;
-    this->unk_FA4 = 2.0f;
-    this->unk_79C = 0.0f;
-    this->unk_FA8 = 0.0f;
+    this->rightWhip.stiffness = 0.7f;
+    this->leftWhip.stiffness = 0.7f;
+    this->rightWhip.gravity = -15.0f;
+    this->leftWhip.gravity = -15.0f;
+    this->rightWhip.drag = 2.0f;
+    this->leftWhip.drag = 2.0f;
+    this->rightWhip.tension = 0.0f;
+    this->leftWhip.tension = 0.0f;
     if ((this->actor.xzDistToPlayer <= 200.0f) && (player->actor.world.pos.y < 10.0f)) {
         if (Rand_ZeroOne() < 0.3f) {
             this->actor.xzDistToPlayer = 250.0f;
         }
         func_809F7D2C(this, globalCtx);
     } else if (this->timers[0] == 0) {
-        if (gGameInfo->data[1326] == 1) {
+        if (KREG(78) == 1) {
             func_809F8E68(this, globalCtx);
         } else if ((s8)this->actor.colChkInfo.health >= 28) {
             func_809F7D2C(this, globalCtx);
@@ -1460,20 +1730,20 @@ void func_809F748C(Boss07* this, GlobalContext* globalCtx) {
 
 void func_809F7688(Boss07* this, GlobalContext* globalCtx) {
     this->actionFunc = func_809F76D0;
-    SkelAnime_ChangeAnimTransitionStop(&this->skelAnime1, &D_06025878, -5.0f);
+    SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06025878, -5.0f);
     this->unk_14C = 0;
 }
 
 void func_809F76D0(Boss07* this, GlobalContext* globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime1);
-    this->unk_794 = 0.7f;
-    this->unk_FA0 = 0.7f;
-    this->unk_798 = 2.0f;
-    this->unk_FA4 = 2.0f;
-    this->unk_790 = -15.0f;
-    this->unk_F9C = -15.0f;
-    this->unk_79C = 0.0f;
-    this->unk_FA8 = 0.0f;
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    this->rightWhip.stiffness = 0.7f;
+    this->leftWhip.stiffness = 0.7f;
+    this->rightWhip.drag = 2.0f;
+    this->leftWhip.drag = 2.0f;
+    this->rightWhip.gravity = -15.0f;
+    this->leftWhip.gravity = -15.0f;
+    this->rightWhip.tension = 0.0f;
+    this->leftWhip.tension = 0.0f;
     if (this->unk_14C == 1) {
         this->actor.velocity.y = 35.0f;
         this->actor.world.rot.y = Math_Acot2F(-this->actor.world.pos.z, -this->actor.world.pos.x) * (0x8000 / M_PI);
@@ -1483,11 +1753,11 @@ void func_809F76D0(Boss07* this, GlobalContext* globalCtx) {
 }
 
 void func_809F77A8(Boss07* this, GlobalContext* globalCtx) {
-    Audio_PlayActorSound2(&this->actor, 0x3014);
+    Audio_PlayActorSound2(&this->actor, NA_SE_EN_MIBOSS_JUMP2 - SFX_FLAG);
     if (this->unk_14C == 13) {
-        func_8019F1C0(&D_80A09A40, 0x3A57);
+        func_8019F1C0(&sSfxPoint, NA_SE_EN_LAST3_VOICE_LAUGH_OLD);
     }
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime1);
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     if (this->actor.bgCheckFlags & 1) {
         func_809F7400(this, globalCtx, 1);
         this->unk_156 = 5;
@@ -1510,10 +1780,10 @@ void func_809F783C(Boss07* this, GlobalContext* globalCtx) {
     temp = this->actor.yawTowardsPlayer - (s16)(Math_Acot2F(dz, dx) * (0x8000 / M_PI));
     if (temp < 0) {
         dx = 200.0f;
-        SkelAnime_ChangeAnimTransitionStop(&this->skelAnime1, &D_0603D224, -5.0f);
+        SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_0603D224, -5.0f);
     } else {
         dx = -200.0f;
-        SkelAnime_ChangeAnimTransitionStop(&this->skelAnime1, &D_0603D7F0, -5.0f);
+        SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_0603D7F0, -5.0f);
     }
     Matrix_RotateY(this->actor.yawTowardsPlayer, 0);
     SysMatrix_GetStateTranslationAndScaledX(dx, &sp30);
@@ -1525,18 +1795,18 @@ void func_809F783C(Boss07* this, GlobalContext* globalCtx) {
 }
 
 void func_809F7968(Boss07* this, GlobalContext* globalCtx) {
-    Audio_PlayActorSound2(&this->actor, 0x3014);
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime1);
-    this->unk_794 = 0.7f;
-    this->unk_FA0 = 0.7f;
-    this->unk_798 = 2.0f;
-    this->unk_FA4 = 2.0f;
-    this->unk_790 = -15.0f;
-    this->unk_F9C = -15.0f;
-    this->unk_79C = 0.0f;
-    this->unk_FA8 = 0.0f;
+    Audio_PlayActorSound2(&this->actor, NA_SE_EN_MIBOSS_JUMP2 - SFX_FLAG);
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    this->rightWhip.stiffness = 0.7f;
+    this->leftWhip.stiffness = 0.7f;
+    this->rightWhip.drag = 2.0f;
+    this->leftWhip.drag = 2.0f;
+    this->rightWhip.gravity = -15.0f;
+    this->leftWhip.gravity = -15.0f;
+    this->rightWhip.tension = 0.0f;
+    this->leftWhip.tension = 0.0f;
     if ((this->unk_14C == 10) && (Rand_ZeroOne() < 0.5f)) {
-        func_8019F1C0(&D_80A09A40, 0x3A57);
+        func_8019F1C0(&sSfxPoint, NA_SE_EN_LAST3_VOICE_LAUGH_OLD);
     }
     if ((this->actor.velocity.y < 0.0f) && (this->actor.bgCheckFlags & 1)) {
         if (Rand_ZeroOne() < 0.3f) {
@@ -1557,16 +1827,16 @@ void func_809F7AB4(Boss07* this, GlobalContext* globalCtx) {
     s16 sp22;
 
     this->actionFunc = func_809F7BC4;
-    SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime1, &D_0603DD1C, -5.0f);
+    SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_0603DD1C, -5.0f);
     phi_f14 = -this->actor.world.pos.x;
     phi_f12 = -this->actor.world.pos.z;
     sp22 = this->actor.yawTowardsPlayer - (s16)(Math_Acot2F(phi_f12, phi_f14) * (0x8000 / M_PI));
     Matrix_RotateY(this->actor.shape.rot.y, 0);
     if (sp22 < 0) {
-        this->skelAnime1.animPlaybackSpeed = 1.0f;
+        this->skelAnime.animPlaybackSpeed = 1.0f;
         phi_f14 = 300.0f;
     } else {
-        this->skelAnime1.animPlaybackSpeed = -1.0f;
+        this->skelAnime.animPlaybackSpeed = -1.0f;
         phi_f14 = -300.0f;
     }
     SysMatrix_GetStateTranslationAndScaledX(phi_f14, &this->unk_164);
@@ -1579,22 +1849,22 @@ void func_809F7AB4(Boss07* this, GlobalContext* globalCtx) {
 }
 
 void func_809F7BC4(Boss07* this, GlobalContext* globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime1);
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     if (this->unk_14C == 20) {
-        Audio_PlayActorSound2(this, 0x3A53);
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST3_VOICE_KICK_OLD);
     }
     this->unk_ABCC++;
     if ((this->unk_ABCC % 16) == 0) {
-        func_8019F1C0(&D_80A09A40, 0x39E3);
+        func_8019F1C0(&sSfxPoint, NA_SE_EN_LAST2_WALK2_OLD);
     }
-    this->unk_794 = 0.7f;
-    this->unk_FA0 = 0.7f;
-    this->unk_798 = 2.0f;
-    this->unk_FA4 = 2.0f;
-    this->unk_790 = -15.0f;
-    this->unk_F9C = -15.0f;
-    this->unk_79C = 0.0f;
-    this->unk_FA8 = 0.0f;
+    this->rightWhip.stiffness = 0.7f;
+    this->leftWhip.stiffness = 0.7f;
+    this->rightWhip.drag = 2.0f;
+    this->leftWhip.drag = 2.0f;
+    this->rightWhip.gravity = -15.0f;
+    this->leftWhip.gravity = -15.0f;
+    this->rightWhip.tension = 0.0f;
+    this->leftWhip.tension = 0.0f;
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
     Math_ApproachF(&this->actor.world.pos.x, this->unk_164.x, 0.8f, this->unk_170);
     Math_ApproachF(&this->actor.world.pos.z, this->unk_164.z, 0.8f, this->unk_170);
@@ -1629,37 +1899,37 @@ void func_809F7D2C(Boss07* this, GlobalContext* globalCtx) {
     }
     switch (this->unk_14E) {
         case 0:
-            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime1, &D_06033F80, -5.0f);
+            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06033F80, -5.0f);
             this->unk_1D4 = SkelAnime_GetFrameCount(&D_06033F80);
             break;
         case 1:
-            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime1, &D_06034E64, -5.0f);
+            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06034E64, -5.0f);
             this->unk_1D4 = SkelAnime_GetFrameCount(&D_06034E64);
             break;
         case 2:
-            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime1, &D_060358C4, -5.0f);
+            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_060358C4, -5.0f);
             this->unk_1D4 = SkelAnime_GetFrameCount(&D_060358C4);
             break;
         case 3:
-            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime1, &D_06036A7C, -5.0f);
+            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06036A7C, -5.0f);
             this->unk_1D4 = SkelAnime_GetFrameCount(&D_06036A7C);
             break;
         case 4:
-            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime1, &D_0603C4E0, -5.0f);
+            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_0603C4E0, -5.0f);
             this->unk_1D4 = SkelAnime_GetFrameCount(&D_0603C4E0);
             func_809F4D10(&this->unk_164, 650.0f);
             this->unk_170 = 0.0f;
             break;
         case 5:
-            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime1, &D_06037ADC, -5.0f);
+            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06037ADC, -5.0f);
             this->unk_1D4 = SkelAnime_GetFrameCount(&D_06037ADC);
             break;
         case 6:
-            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime1, &D_0603918C, -5.0f);
+            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_0603918C, -5.0f);
             this->unk_1D4 = SkelAnime_GetFrameCount(&D_0603918C);
             break;
         case 7:
-            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime1, &D_06026204, -5.0f);
+            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06026204, -5.0f);
             this->unk_1D4 = SkelAnime_GetFrameCount(&D_06026204);
             break;
     }
@@ -1667,99 +1937,99 @@ void func_809F7D2C(Boss07* this, GlobalContext* globalCtx) {
 }
 
 void func_809F805C(Boss07* this, GlobalContext* globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime1);
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     func_809F4CBC(this, 2.0f);
-    this->unk_794 = 0.79999995f;
-    this->unk_FA0 = 0.79999995f;
-    this->unk_790 = -5.0f;
-    this->unk_F9C = -5.0f;
-    this->unk_79C = 0.0f;
-    this->unk_FA8 = 0.0f;
-    this->unk_798 = 1.0f;
-    this->unk_FA4 = 1.0f;
-    if (this->unk_14C >= 0x15) {
+    this->rightWhip.stiffness = 0.79999995f;
+    this->leftWhip.stiffness = 0.79999995f;
+    this->rightWhip.gravity = -5.0f;
+    this->leftWhip.gravity = -5.0f;
+    this->rightWhip.tension = 0.0f;
+    this->leftWhip.tension = 0.0f;
+    this->rightWhip.drag = 1.0f;
+    this->leftWhip.drag = 1.0f;
+    if (this->unk_14C > 20) {
         this->unk_174 = 1;
     }
     switch (this->unk_14E) {
         case 0:
-            if (this->unk_14C == (s16)(gGameInfo->data[1340] + 1)) {
-                func_8019F1C0(&D_80A09A40, 0x3A55);
+            if (this->unk_14C == (s16)(KREG(92) + 1)) {
+                func_8019F1C0(&sSfxPoint, NA_SE_EN_LAST3_VOICE_ROD_OLD);
             }
-            if ((this->unk_14C >= 0xF) && (this->unk_14C < 0x12)) {
-                this->unk_79C = 500.0f;
+            if ((this->unk_14C >= 15) && (this->unk_14C < 18)) {
+                this->rightWhip.tension = 500.0f;
             }
             if (this->unk_14C == 9) {
-                this->unk_14F = 0xB;
+                this->unk_14F = 11;
             }
             if (this->unk_14C == 1) {
-                Audio_PlayActorSound2(this, 0x39CD);
+                Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST3_ROD_HOP_OLD);
             }
-            if (this->unk_14C == 0xA) {
-                Audio_PlayActorSound2(this, 0x39CA);
+            if (this->unk_14C == 10) {
+                Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST3_ROD_WIND_OLD);
             }
             break;
         case 1:
-            if (this->unk_14C == (s16)(gGameInfo->data[1339] + 3)) {
-                func_8019F1C0(&D_80A09A40, 0x3A56);
+            if (this->unk_14C == (s16)(KREG(91) + 3)) {
+                func_8019F1C0(&sSfxPoint, NA_SE_EN_LAST3_VOICE_THROW_OLD);
             }
-            if ((this->unk_14C >= 8) && (this->unk_14C < 0x38)) {
-                this->unk_79C = 300.0f;
-                this->unk_FA8 = 300.0f;
+            if ((this->unk_14C >= 8) && (this->unk_14C <= 55)) {
+                this->rightWhip.tension = 300.0f;
+                this->leftWhip.tension = 300.0f;
                 if ((((this->unk_14C + 2) & 3) == 0) && (Rand_ZeroOne() < 0.5f)) {
-                    play_sound(0x39CB);
+                    play_sound(NA_SE_EN_LAST3_ROD_FLOOR_OLD);
                 }
-                if ((this->unk_14C & 3) == 0) {
-                    Audio_PlayActorSound2(this, 0x39CA);
+                if ((this->unk_14C % 4) == 0) {
+                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST3_ROD_WIND_OLD);
                 }
                 Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
             }
             break;
         case 2:
-            if (this->unk_14C == (s16)(gGameInfo->data[1332] + 5)) {
-                func_8019F1C0(&D_80A09A40, 0x3A55);
+            if (this->unk_14C == (s16)(KREG(84) + 5)) {
+                func_8019F1C0(&sSfxPoint, NA_SE_EN_LAST3_VOICE_ROD_OLD);
             }
-            if ((this->unk_14C >= 0x20) && (this->unk_14C < 0x27)) {
-                this->unk_79C = 300.0f;
-                this->unk_FA8 = 300.0f;
+            if ((this->unk_14C >= 32) && (this->unk_14C < 39)) {
+                this->rightWhip.tension = 300.0f;
+                this->leftWhip.tension = 300.0f;
             }
-            if (this->unk_14C == 0x1C) {
-                this->unk_14F = 0xB;
+            if (this->unk_14C == 28) {
+                this->unk_14F = 11;
             }
-            if (this->unk_14C == 0xA) {
-                Audio_PlayActorSound2(this, 0x39CD);
+            if (this->unk_14C == 10) {
+                Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST3_ROD_HOP_OLD);
             }
-            if (this->unk_14C == 0x20) {
-                Audio_PlayActorSound2(this, 0x39CA);
+            if (this->unk_14C == 32) {
+                Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST3_ROD_WIND_OLD);
             }
             break;
         case 3:
-            if (this->unk_14C == (s16)(gGameInfo->data[1332] + 5)) {
-                func_8019F1C0(&D_80A09A40, 0x3A55);
+            if (this->unk_14C == (s16)(KREG(84) + 5)) {
+                func_8019F1C0(&sSfxPoint, NA_SE_EN_LAST3_VOICE_ROD_OLD);
             }
-            if ((this->unk_14C >= 0x1F) && (this->unk_14C < 0x24)) {
-                this->unk_79C = 1200.0f;
+            if ((this->unk_14C > 30) && (this->unk_14C <= 35)) {
+                this->rightWhip.tension = 1200.0f;
             }
-            if (this->unk_14C == 0x17) {
-                this->unk_14F = 0xB;
+            if (this->unk_14C == 23) {
+                this->unk_14F = 11;
             }
             Math_ApproachF(&this->unk_184, -0.1f, 0.5f, 0.1f);
             Math_ApproachF(&this->unk_188, 0.3f, 0.5f, 0.1f);
             if (this->unk_14C == 5) {
-                Audio_PlayActorSound2(this, 0x39CD);
+                Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST3_ROD_HOP_OLD);
             }
-            if (this->unk_14C == 0x1E) {
-                Audio_PlayActorSound2(this, 0x39CA);
+            if (this->unk_14C == 30) {
+                Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST3_ROD_WIND_OLD);
             }
             break;
         case 4:
-            if ((this->unk_14C >= 0x11) && (this->unk_14C < 0x29)) {
-                this->unk_79C = 200.0f;
-                this->unk_FA8 = 200.0f;
+            if ((this->unk_14C > 16) && (this->unk_14C <= 40)) {
+                this->rightWhip.tension = 200.0f;
+                this->leftWhip.tension = 200.0f;
                 if ((this->unk_14C % 8) == 0) {
-                    func_8019F1C0(&D_80A09A40, 0x3A54);
+                    func_8019F1C0(&sSfxPoint, NA_SE_EN_LAST3_VOICE_KOMA_OLD);
                 }
-                Audio_PlayActorSound2(this, 0x31CC);
-                Math_ApproachF(&this->actor.world, this->unk_164.x, 0.1f, this->unk_170);
+                Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST3_ROD_DANCE_OLD - SFX_FLAG);
+                Math_ApproachF(&this->actor.world.pos.x, this->unk_164.x, 0.1f, this->unk_170);
                 Math_ApproachF(&this->actor.world.pos.z, this->unk_164.z, 0.1f, this->unk_170);
                 Math_ApproachF(&this->unk_170, 20.0f, 1.0f, 4.0f);
                 Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x2000);
@@ -1769,74 +2039,74 @@ void func_809F805C(Boss07* this, GlobalContext* globalCtx) {
         case 7:
             this->unk_174 = 0;
             if (this->unk_14C == 3) {
-                Audio_PlayActorSound2(this, 0x3A53);
+                Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST3_VOICE_KICK_OLD);
             }
             break;
         case 5:
-            this->unk_FA0 = 0.7f;
-            this->unk_794 = 0.7f;
-            this->unk_790 = -15.0f;
-            this->unk_F9C = -15.0f;
+            this->leftWhip.stiffness = 0.7f;
+            this->rightWhip.stiffness = 0.7f;
+            this->rightWhip.gravity = -15.0f;
+            this->leftWhip.gravity = -15.0f;
             Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
             this->unk_174 = 1;
             break;
         case 6:
-            if (this->unk_14C == (s16)(gGameInfo->data[1333] + 5)) {
-                func_8019F1C0(&D_80A09A40, 0x3A55);
+            if (this->unk_14C == (s16)(KREG(85) + 5)) {
+                func_8019F1C0(&sSfxPoint, NA_SE_EN_LAST3_VOICE_ROD_OLD);
             }
-            if ((this->unk_14C >= 0xE) && (this->unk_14C < 0x13)) {
-                this->unk_79C = 150.0f;
+            if ((this->unk_14C >= 14) && (this->unk_14C < 19)) {
+                this->rightWhip.tension = 150.0f;
             }
-            if ((this->unk_14C >= 0x17) && (this->unk_14C < 0x1D)) {
-                this->unk_FA8 = 200.0f;
+            if ((this->unk_14C >= 23) && (this->unk_14C < 29)) {
+                this->leftWhip.tension = 200.0f;
             }
-            if ((this->unk_14C >= 0x2B) && (this->unk_14C < 0x31)) {
-                this->unk_79C = 200.0f;
+            if ((this->unk_14C >= 43) && (this->unk_14C < 49)) {
+                this->rightWhip.tension = 200.0f;
             }
             Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
-            if (this->unk_14C == 0x14) {
-                Audio_PlayActorSound2(this, 0x39CD);
-                func_8019F1C0(&D_80A09A40, 0x3A55);
+            if (this->unk_14C == 20) {
+                Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST3_ROD_HOP_OLD);
+                func_8019F1C0(&sSfxPoint, NA_SE_EN_LAST3_VOICE_ROD_OLD);
             }
             if (this->unk_14C == 5) {
-                Audio_PlayActorSound2(this, 0x39CE);
+                Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST3_ROD_HOP2_OLD);
             }
-            if (this->unk_14C == 0x29) {
-                Audio_PlayActorSound2(this, 0x39CA);
-                func_8019F1C0(&D_80A09A40, 0x3A55);
+            if (this->unk_14C == 41) {
+                Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST3_ROD_WIND_OLD);
+                func_8019F1C0(&sSfxPoint, NA_SE_EN_LAST3_VOICE_ROD_OLD);
             }
             break;
     }
-    if (func_801378B8(&this->skelAnime1, this->unk_1D4) || (this->timers[1] == 1)) {
+    if (func_801378B8(&this->skelAnime, this->unk_1D4) || (this->timers[1] == 1)) {
         func_809F7400(this, globalCtx, 0);
     }
 }
 
 void func_809F8658(Boss07* this, GlobalContext* globalCtx) {
     this->actionFunc = func_809F86B8;
-    SkelAnime_ChangeAnimTransitionStop(&this->skelAnime1, &D_06026EA0, -5.0f);
+    SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06026EA0, -5.0f);
     this->unk_1D4 = SkelAnime_GetFrameCount(&D_06026EA0);
     this->unk_14C = 0;
 }
 
 void func_809F86B8(Boss07* this, GlobalContext* globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime1);
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer - 0x800, 3, 0x2000);
     func_809F4CBC(this, 2.0f);
-    this->unk_794 = 0.79999995f;
-    this->unk_FA0 = 0.79999995f;
-    this->unk_798 = 1.0f;
-    this->unk_FA4 = 1.0f;
-    this->unk_790 = -5.0f;
-    this->unk_79C = 0.0f;
-    this->unk_FA8 = 0.0f;
-    this->unk_F9C = -15.0f;
+    this->rightWhip.stiffness = 0.79999995f;
+    this->leftWhip.stiffness = 0.79999995f;
+    this->rightWhip.drag = 1.0f;
+    this->leftWhip.drag = 1.0f;
+    this->rightWhip.gravity = -5.0f;
+    this->rightWhip.tension = 0.0f;
+    this->leftWhip.tension = 0.0f;
+    this->leftWhip.gravity = -15.0f;
     if ((this->unk_14C >= 0xE) && (this->unk_14C < 0x13)) {
-        this->unk_79C = 500.0f;
+        this->rightWhip.tension = 500.0f;
     }
     if (this->unk_14C >= 0x12) {
         func_809F7400(this, globalCtx, Rand_ZeroFloat(20.0f) + 20.0f);
-        play_sound(0x39ED);
+        play_sound(NA_SE_EN_LAST3_ROD_MID_OLD);
     }
 }
 
@@ -1844,46 +2114,46 @@ void func_809F87C8(Boss07* this, GlobalContext* globalCtx) {
     s32 sp2C;
     Player* player = PLAYER;
 
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime1);
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     func_809F4CBC(this, 2.0f);
     player->actor.world.pos = this->unk_F80;
     this->actor.flags &= ~1;
     this->unk_15A = 20;
-    this->unk_F7C += 1;
-    if (this->unk_14C > (s16)(0x2E - this->unk_F7E)) {
-        func_8019F1C0(&D_80A09A40, 0x3A56);
-        play_sound(0x39F1);
+    this->unk_F7C++;
+    if (this->unk_14C > (s16)(46 - this->unk_F7E)) {
+        func_8019F1C0(&sSfxPoint, NA_SE_EN_LAST3_VOICE_THROW_OLD);
+        play_sound(NA_SE_EN_LAST3_COIL_ATTACK_OLD);
         this->actionFunc = func_809F8908;
-        SkelAnime_ChangeAnimTransitionStop(&this->skelAnime1, &D_06027270, -5.0f);
+        SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06027270, -5.0f);
         this->unk_1D4 = SkelAnime_GetFrameCount(&D_06027270);
         this->unk_14C = 0;
     }
-    if ((func_800B64FC(globalCtx, 1000.0f, &this->actor.world, &sp2C) >= 0.0f) && (sp2C == 1)) {
+    if ((func_800B64FC(globalCtx, 1000.0f, &this->actor.world.pos, &sp2C) >= 0.0f) && (sp2C == 1)) {
         func_809F8AB0(this, globalCtx);
     }
 }
 
 void func_809F8908(Boss07* this, GlobalContext* globalCtx) {
-    Player* sp3C = PLAYER;
+    Player* player = PLAYER;
     f32 phi_f0;
     f32 phi_f2;
     s32 sp30;
 
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime1);
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     this->unk_15A = 20;
     if (this->unk_14C == 6) {
         this->unk_F7E = 0;
-        if (&this->actor == sp3C->actor.parent) {
-            sp3C->unk_AE8 = 101;
-            sp3C->actor.parent = NULL;
-            sp3C->unk_394 = 0;
-            if (sp3C->transformation == 3) {
+        if (&this->actor == player->actor.parent) {
+            player->unk_AE8 = 101;
+            player->actor.parent = NULL;
+            player->unk_394 = 0;
+            if (player->transformation == 3) {
                 phi_f0 = 23.0f;
                 phi_f2 = 20.0f;
-            } else if (sp3C->transformation == 1) {
+            } else if (player->transformation == 1) {
                 phi_f0 = 15.0f;
                 phi_f2 = 10.0f;
-            } else if (sp3C->transformation == 0) {
+            } else if (player->transformation == 0) {
                 phi_f0 = 10.0f;
                 phi_f2 = 3.0f;
             } else {
@@ -1894,12 +2164,12 @@ void func_809F8908(Boss07* this, GlobalContext* globalCtx) {
         }
     }
     if (this->unk_14C < 7) {
-        sp3C->actor.world.pos = this->unk_F80;
-        if ((func_800B64FC(globalCtx, 1000.0f, &this->actor.world, &sp30) >= 0.0f) && (sp30 == 1)) {
+        player->actor.world.pos = this->unk_F80;
+        if ((func_800B64FC(globalCtx, 1000.0f, &this->actor.world.pos, &sp30) >= 0.0f) && (sp30 == 1)) {
             func_809F8AB0(this, globalCtx);
         }
     }
-    if (func_801378B8(&this->skelAnime1, this->unk_1D4) != 0) {
+    if (func_801378B8(&this->skelAnime, this->unk_1D4) != 0) {
         func_809F7400(this, globalCtx, 0);
     }
 }
@@ -1913,19 +2183,19 @@ void func_809F8AB0(Boss07* this, GlobalContext* globalCtx) {
     temp_v0 = this->unk_F7E + 10;
     this->unk_780 = this->unk_784 = temp_v0;
 
-    temp_v1 = D_80A09A50 - 1;
+    temp_v1 = sWhipSegCount - 1;
     if (temp_v1 < temp_v0) {
         this->unk_780 = this->unk_784 = temp_v1;
     }
     this->unk_14C = 0;
-    play_sound(0x28E1);
+    play_sound(NA_SE_EV_ELECTRIC_EXPLOSION);
 }
 
 void func_809F8B1C(Boss07* this, GlobalContext* globalCtx) {
     s32 i;
     Player* player = PLAYER;
 
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime1);
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     func_809F4CBC(this, 2.0f);
     player->actor.world.pos = this->unk_F80;
     this->actor.flags &= ~1;
@@ -1941,13 +2211,13 @@ void func_809F8B1C(Boss07* this, GlobalContext* globalCtx) {
     if (this->unk_784 == 0) {
         Math_ApproachF(&globalCtx->envCtx.unk_DC, 1.0f, 1.0f, 0.3f);
         Math_ApproachF(&this->unk_32C, 5.0f, 0.5f, 3.0f);
-        play_sound(0x309A);
+        play_sound(NA_SE_EN_BIRI_SPARK - SFX_FLAG);
     } else {
         this->unk_32C = 0.01f;
     }
     if (this->unk_32C > 4.0f) {
         this->actionFunc = func_809F8D04;
-        SkelAnime_ChangeAnimTransitionStop(&this->skelAnime1, &D_0603B330, -10.0f);
+        SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_0603B330, -10.0f);
         this->unk_1D4 = SkelAnime_GetFrameCount(&D_0603B330);
         this->unk_F7E = 0;
         if (&this->actor == player->actor.parent) {
@@ -1964,7 +2234,7 @@ void func_809F8B1C(Boss07* this, GlobalContext* globalCtx) {
 void func_809F8D04(Boss07* this, GlobalContext* globalCtx) {
     s32 i;
 
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime1);
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     this->unk_15A = 20;
     for (i = 0; i < 2; i++) {
         if (this->unk_780 != 0) {
@@ -1974,10 +2244,10 @@ void func_809F8D04(Boss07* this, GlobalContext* globalCtx) {
     if (this->unk_14C < 70) {
         Math_ApproachF(&this->unk_32C, 5.0f, 0.5f, 3.0f);
         Math_ApproachF(&this->unk_330, 2.5f, 0.5f, 2.0f);
-        play_sound(0x309A);
+        play_sound(NA_SE_EN_BIRI_SPARK - SFX_FLAG);
         Math_ApproachF(&globalCtx->envCtx.unk_DC, 1.0f, 1.0f, 0.3f);
     }
-    if (func_801378B8(&this->skelAnime1, this->unk_1D4)) {
+    if (func_801378B8(&this->skelAnime, this->unk_1D4)) {
         func_809F51E8(this, globalCtx, 1);
     }
 }
@@ -1985,7 +2255,7 @@ void func_809F8D04(Boss07* this, GlobalContext* globalCtx) {
 void func_809F8DEC(Boss07* this, GlobalContext* globalCtx) {
     if (this->actionFunc != func_809F91D4) {
         this->actionFunc = func_809F91D4;
-        SkelAnime_ChangeAnimTransitionStop(&this->skelAnime1, &D_0603B330, -10.0f);
+        SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_0603B330, -10.0f);
         this->unk_1D4 = SkelAnime_GetFrameCount(&D_0603B330);
     }
     this->unk_158 = 10;
@@ -1994,15 +2264,14 @@ void func_809F8DEC(Boss07* this, GlobalContext* globalCtx) {
 
 void func_809F8E68(Boss07* this, GlobalContext* globalCtx) {
     this->actionFunc = func_809F8EC8;
-    SkelAnime_ChangeAnimTransitionStop(&this->skelAnime1, &D_060269EC, -5.0f);
+    SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_060269EC, -5.0f);
     this->unk_1D4 = SkelAnime_GetFrameCount(&D_060269EC);
     this->unk_14C = 0;
 }
 
-#ifdef NON_MATCHING
 void func_809F8EC8(Boss07* this, GlobalContext* globalCtx) {
     this->unk_15A = 20;
-    if (this->unk_14C < (s16)(gGameInfo->data[1288] + 14)) {
+    if (this->unk_14C < (s16)(KREG(40) + 14)) {
         this->unk_778 += 6;
         if (this->unk_778 > 44) {
             this->unk_778 = 44;
@@ -2012,58 +2281,48 @@ void func_809F8EC8(Boss07* this, GlobalContext* globalCtx) {
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BOSS_07, this->actor.world.pos.x, this->actor.world.pos.y,
                     this->actor.world.pos.z, 0, 0, 0, 180);
     }
+    if (1) {}
     if (this->unk_14C == 10) {
-        Audio_PlayActorSound2(this, 0x39CA);
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST3_ROD_WIND_OLD);
     }
-    if (this->unk_14C == (s16)(gGameInfo->data[1288] + 18)) {
-        Audio_PlayActorSound2(this, 0x3A54);
+    if (this->unk_14C == (s16)(KREG(40) + 18)) {
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST3_VOICE_KOMA_OLD);
     }
-    if ((this->unk_14C < (s16)(gGameInfo->data[1288] + 14)) || ((s16)(gGameInfo->data[1289] + 17) < this->unk_14C)) {
-        SkelAnime_FrameUpdateMatrix(&this->skelAnime1);
+    if ((this->unk_14C < (s16)(KREG(40) + 14)) || ((s16)(KREG(41) + 17) < this->unk_14C)) {
+        SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     }
-    if ((this->unk_14C >= (s16)(gGameInfo->data[1288] + 14)) &&
-        ((this->unk_14C <= (s16)(gGameInfo->data[1289] + 17)) ||
-         ((s16)(gGameInfo->data[1290] + 21) <= this->unk_14C))) {
-        this->unk_778 -= gGameInfo->data[1287] + 5;
+    if ((this->unk_14C >= (s16)(KREG(40) + 14)) &&
+        ((this->unk_14C <= (s16)(KREG(41) + 17)) || ((s16)(KREG(42) + 21) <= this->unk_14C))) {
+        this->unk_778 -= KREG(39) + 5;
         if (this->unk_778 < 0) {
             this->unk_778 = 0;
         }
     }
-    Math_ApproachS(&this->actor.shape.rot.y, gGameInfo->data[1256] * 0x100 + this->actor.yawTowardsPlayer + 0xF00, 3,
-                   0x2000);
+    Math_ApproachS(&this->actor.shape.rot.y, KREG(8) * 0x100 + this->actor.yawTowardsPlayer + 0xF00, 3, 0x2000);
     func_809F4CBC(this, 2.0f);
-    this->unk_794 = 0.79999995f;
-    this->unk_FA0 = 0.79999995f;
-    this->unk_798 = 1.0f;
-    this->unk_FA4 = 1.0f;
-    this->unk_790 = -5.0f;
-    this->unk_79C = 0.0f;
-    this->unk_FA8 = 0.0f;
-    this->unk_F9C = -15.0f;
-    if (((s16)(gGameInfo->data[1291] + 12) <= this->unk_14C) && (this->unk_14C <= (s16)(gGameInfo->data[1292] + 17))) {
-        this->unk_79C = gGameInfo->data[1254] + 500.0f;
+    this->leftWhip.stiffness = this->rightWhip.stiffness = 0.79999995f;
+    this->leftWhip.drag = this->rightWhip.drag = 1.0f;
+    this->leftWhip.tension = this->rightWhip.tension = 0.0f;
+    this->rightWhip.gravity = -5.0f;
+    this->leftWhip.gravity = -15.0f;
+    
+    if (((s16)(KREG(43) + 12) <= this->unk_14C) && (this->unk_14C <= (s16)(KREG(44) + 17))) {
+        this->rightWhip.tension = KREG(6) + 500.0f;
     }
-    if (this->unk_14C >= (s16)(gGameInfo->data[1293] + 36)) {
+    if (this->unk_14C >= (s16)(KREG(45) + 36)) {
         func_809F7400(this, globalCtx, Rand_ZeroFloat(20.0f) + 20.0f);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_809F8EC8.s")
-#endif
 
 void func_809F91D4(Boss07* this, GlobalContext* globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime1);
-    func_8019F1C0(&D_80A09A40, 0x301B);
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    func_8019F1C0(&sSfxPoint, NA_SE_EN_COMMON_WEAKENED - SFX_FLAG);
     func_809F4CBC(this, 2.0f);
-    this->unk_794 = 0.7f;
-    this->unk_FA0 = 0.7f;
-    this->unk_790 = -15.0f;
-    this->unk_F9C = -15.0f;
-    this->unk_798 = 2.0f;
-    this->unk_FA4 = 2.0f;
-    this->unk_79C = 0.0f;
-    this->unk_FA8 = 0.0f;
-    if (func_801378B8(&this->skelAnime1, this->unk_1D4)) {
+    this->leftWhip.stiffness = this->rightWhip.stiffness = 0.7f;
+    this->leftWhip.gravity = this->rightWhip.gravity = -15.0f;
+    this->leftWhip.tension = this->rightWhip.tension = 0.0f;
+    this->leftWhip.drag = this->rightWhip.drag = 2.0f;
+    if (func_801378B8(&this->skelAnime, this->unk_1D4)) {
         func_809F51E8(this, globalCtx, 1);
     }
 }
@@ -2073,8 +2332,8 @@ void func_809F9280(Boss07* this, GlobalContext* globalCtx, u8 arg2, u8 arg3) {
         this->actor.colChkInfo.health -= arg2;
     }
     if ((s8)this->actor.colChkInfo.health <= 0) {
-        if (gGameInfo->data[1267] != 0) {
-            func_8019F1C0(&D_80A09A40, NA_SE_EN_LAST3_VOICE_DEAD_OLD);
+        if (KREG(19) != 0) {
+            func_8019F1C0(&sSfxPoint, NA_SE_EN_LAST3_VOICE_DEAD_OLD);
         } else {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST3_VOICE_DEAD_OLD);
         }
@@ -2083,36 +2342,36 @@ void func_809F9280(Boss07* this, GlobalContext* globalCtx, u8 arg2, u8 arg3) {
     } else {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST3_VOICE_DAMAGE2_OLD);
         if (this->actionFunc != func_809F93DC) {
-            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime1, &D_0601DEB4, -10.0f);
+            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_0601DEB4, -10.0f);
             this->actionFunc = func_809F93DC;
             this->unk_1D4 = SkelAnime_GetFrameCount(&D_0601DEB4);
             this->unk_ABCC = 0;
         } else if (arg3 == 14) {
-            if (this->skelAnime1.animCurrentFrame <= (this->unk_1D4 - 5.0f)) {
+            if (this->skelAnime.animCurrentFrame <= (this->unk_1D4 - 5.0f)) {
                 this->unk_158 = 30;
             } else {
-                SkelAnime_ChangeAnimTransitionStop(&this->skelAnime1, &D_0601DEB4, -5.0f);
+                SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_0601DEB4, -5.0f);
             }
         }
     }
 }
 
 void func_809F93DC(Boss07* this, GlobalContext* globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime1);
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     this->unk_ABCC++;
     if ((this->unk_ABCC % 16) == 0) {
-        Audio_PlayActorSound2(&this->actor, 0x39E3);
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_WALK2_OLD);
     }
     func_809F4CBC(this, 2.0f);
-    this->unk_794 = 0.7f;
-    this->unk_FA0 = 0.7f;
-    this->unk_790 = -15.0f;
-    this->unk_F9C = -15.0f;
-    this->unk_798 = 2.0f;
-    this->unk_FA4 = 2.0f;
-    this->unk_79C = 0.0f;
-    this->unk_FA8 = 0.0f;
-    if (func_801378B8(&this->skelAnime1, this->unk_1D4)) {
+    this->rightWhip.stiffness = 0.7f;
+    this->leftWhip.stiffness = 0.7f;
+    this->rightWhip.gravity = -15.0f;
+    this->leftWhip.gravity = -15.0f;
+    this->rightWhip.drag = 2.0f;
+    this->leftWhip.drag = 2.0f;
+    this->rightWhip.tension = 0.0f;
+    this->leftWhip.tension = 0.0f;
+    if (func_801378B8(&this->skelAnime, this->unk_1D4)) {
         func_809F51E8(this, globalCtx, 1);
     }
 }
@@ -2127,29 +2386,29 @@ void func_809F94AC(Vec3f* arg0, f32 arg1, Boss07* this, GlobalContext* globalCtx
     Vec3f sp7C;
 
     if ((arg1 >= 50.0f) && (this->unk_15A == 0)) {
-        Actor* phi_s1 = globalCtx->actorCtx.actorList[6].first;
+        Actor* prop = globalCtx->actorCtx.actorList[ACTORCAT_PROP].first;
 
-        while (phi_s1 != NULL) {
-            if (phi_s1->id == ACTOR_OBJ_TSUBO) {
-                for (i = 10; i < D_80A09A50; i += 3) {
-                    dx = phi_s1->world.pos.x - arg0[i].x;
-                    dy = phi_s1->world.pos.y + 10.0f - arg0[i].y;
-                    dz = phi_s1->world.pos.z - arg0[i].z;
+        while (prop != NULL) {
+            if (prop->id == ACTOR_OBJ_TSUBO) {
+                for (i = 10; i < sWhipSegCount; i += 3) {
+                    dx = prop->world.pos.x - arg0[i].x;
+                    dy = prop->world.pos.y + 10.0f - arg0[i].y;
+                    dz = prop->world.pos.z - arg0[i].z;
 
-                    if (sqrtf(SQ(dx) + SQ(dy) + SQ(dz)) < (gGameInfo->data[1286] + 60.0f)) {
-                        ((ObjTsubo*)phi_s1)->unk19B = 1;
-                        func_809F4FF8(globalCtx, &phi_s1->world.pos, 10);
+                    if (sqrtf(SQ(dx) + SQ(dy) + SQ(dz)) < (KREG(38) + 60.0f)) {
+                        ((ObjTsubo*)prop)->unk19B = 1;
+                        func_809F4FF8(globalCtx, &prop->world.pos, 10);
                     }
                 }
             }
-            phi_s1 = phi_s1->next;
+            prop = prop->next;
         }
     }
     if ((arg1 >= 50.0f) && (this->unk_15A == 0) && (!(player->stateFlags3 & 0x100) || (this->unk_14E == 4))) {
         if ((func_800B64FC(globalCtx, 1000.0f, &this->actor.world.pos, &sp98) >= 0.0f) && (sp98 != 1)) {
             sp98 = -1;
         }
-        for (i = 10; i < D_80A09A50; i += 3) {
+        for (i = 10; i < sWhipSegCount; i += 3) {
             dx = player->actor.world.pos.x - arg0[i].x;
             dy = player->actor.world.pos.y + 30.0f - arg0[i].y;
             dz = player->actor.world.pos.z - arg0[i].z;
@@ -2170,15 +2429,15 @@ void func_809F94AC(Vec3f* arg0, f32 arg1, Boss07* this, GlobalContext* globalCtx
                                       &D_801DB4B8);
                         this->unk_F7C = 0;
                         this->unk_F7E = ((this->actor.xzDistToPlayer - 300.0f) / 22.0f) + 10.0f;
-                        dx1 = player->actor.world.pos.x - this->unk_7A0.x;
-                        dy1 = player->actor.world.pos.y - this->unk_7A0.y + 50.0f;
-                        dz1 = player->actor.world.pos.z - this->unk_7A0.z;
+                        dx1 = player->actor.world.pos.x - this->rightWhip.basePos.x;
+                        dy1 = player->actor.world.pos.y - this->rightWhip.basePos.y + 50.0f;
+                        dz1 = player->actor.world.pos.z - this->rightWhip.basePos.z;
                         dxz1 = sqrtf(SQ(dx1) + SQ(dz1));
                         this->unk_F8C = Math_Acot2F(dz1, dx1);
                         this->unk_F90 = -Math_Acot2F(dxz1, dy1);
                         this->actionFunc = func_809F87C8;
                         this->unk_14C = 0;
-                        this->unk_79C = 0.0f;
+                        this->rightWhip.tension = 0.0f;
                         play_sound(NA_SE_EN_LAST3_GET_LINK_OLD);
                     }
                 } else if ((player->stateFlags1 & 0x400000) && func_809F4C40(this, globalCtx)) {
@@ -2214,8 +2473,8 @@ void func_809F99C4(Boss07* this, GlobalContext* globalCtx) {
             this->sph2.elements[0].info.toucherFlags &= ~2;
             player->unk_B84 = this->actor.yawTowardsPlayer;
             player->unk_B80 = 20.0f;
-            func_809F4FF8(globalCtx, &player->actor.world, 12);
-            play_sound(0x1829);
+            func_809F4FF8(globalCtx, &player->actor.world.pos, 12);
+            play_sound(NA_SE_IT_HOOKSHOT_STICK_OBJ);
         }
         for (i = 0; i < 11; i++) {
             if (this->sph1.elements[i].info.bumperFlags & 2) {
@@ -2239,7 +2498,7 @@ void func_809F99C4(Boss07* this, GlobalContext* globalCtx) {
                         break;
                     case 10:
                         this->unk_1805 = 40;
-                        Audio_PlayActorSound2(&this->actor, 0x389E);
+                        Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
                         break;
                     case 9:
                         this->unk_1805 = 30;
@@ -2276,20 +2535,23 @@ void func_809F99C4(Boss07* this, GlobalContext* globalCtx) {
 }
 
 void func_809F9CEC(Boss07* this, GlobalContext* globalCtx) {
+    static Color_RGBA8 sLightCyan = { 170, 255, 255, 255 };
+    static Color_RGBA8 sLightBlue = { 200, 200, 255, 255 };
+    static Vec3f sIceVel = { 0.0f, -1.0f, 0.0f };
     Vec3f sp8C;
     Vec3f sp80;
     s32 i;
 
-    Audio_PlaySoundAtPosition(globalCtx, this->unk_334, 0x1E, NA_SE_EV_ICE_BROKEN);
+    Audio_PlaySoundAtPosition(globalCtx, this->bodyPartsPos, 0x1E, NA_SE_EV_ICE_BROKEN);
     for (i = 0; i < 30; i++) {
         sp80.x = randPlusMinusPoint5Scaled(7.0f);
         sp80.z = randPlusMinusPoint5Scaled(7.0f);
         sp80.y = Rand_ZeroFloat(6.0f) + 4.0f;
 
-        sp8C.x = this->unk_334[i / 2].x + sp80.x;
-        sp8C.y = this->unk_334[i / 2].y + sp80.y;
-        sp8C.z = this->unk_334[i / 2].z + sp80.z;
-        EffectSsEnIce_Spawn(globalCtx, &sp8C, Rand_ZeroFloat(1.0f) + 1.5f, &sp80, &D_80A07FD4, &D_80A07FCC, &D_80A07FD0,
+        sp8C.x = this->bodyPartsPos[i / 2].x + sp80.x;
+        sp8C.y = this->bodyPartsPos[i / 2].y + sp80.y;
+        sp8C.z = this->bodyPartsPos[i / 2].z + sp80.z;
+        EffectSsEnIce_Spawn(globalCtx, &sp8C, Rand_ZeroFloat(1.0f) + 1.5f, &sp80, &sIceVel, &sLightCyan, &sLightBlue,
                             30);
     }
 }
@@ -2366,7 +2628,7 @@ void func_809F9E94(Boss07* this, GlobalContext* globalCtx) {
             this->unk_1804 = 30;
             this->unk_1806 = 50;
             this->unk_1800 = 1.0f;
-            this->unk_17F8 = (gGameInfo->data[1266] * 0.1f) + 1.0f;
+            this->unk_17F8 = (KREG(18) * 0.1f) + 1.0f;
             this->unk_1805++;
         case 41:
             if (this->unk_1806 == 0) {
@@ -2384,15 +2646,15 @@ void Boss07_Wrath_Update(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     Boss07* this = THIS;
     s32 i;
-    Player* sp78 = PLAYER;
+    Player* player = PLAYER;
 
     globalCtx->envCtx.unk_C1 = 2;
     globalCtx->envCtx.unk_C2 = 0;
     this->actor.hintId = 52;
     Math_ApproachF(&globalCtx->envCtx.unk_DC, 0.0f, 1.0f, 0.03f);
     this->unk_149 = 1;
-    Math_Vec3f_Copy(&D_80A09A40, &this->actor.projectedPos);
-    if (gGameInfo->data[1311] == 0) {
+    Math_Vec3f_Copy(&sSfxPoint, &this->actor.projectedPos);
+    if (KREG(63) == 0) {
         this->unk_174 = 0;
         this->unk_14C += 1;
         Actor_SetScale(&this->actor, 0.015f);
@@ -2419,10 +2681,10 @@ void Boss07_Wrath_Update(Actor* thisx, GlobalContext* globalCtx2) {
             }
         }
     } else {
-        D_80A09A50 = 45;
+        sWhipSegCount = 45;
     }
-    func_809F94AC(this->unk_7AC, this->unk_79C, this, globalCtx);
-    func_809F94AC(this->unk_FB8, this->unk_FA8, this, globalCtx);
+    func_809F94AC(this->rightWhip.pos, this->rightWhip.tension, this, globalCtx);
+    func_809F94AC(this->leftWhip.pos, this->leftWhip.tension, this, globalCtx);
     if (this->unk_158 != 0) {
         for (i = 0; i < 11; i++) {
             this->sph1.elements[i].info.bumperFlags &= ~2;
@@ -2438,19 +2700,19 @@ void Boss07_Wrath_Update(Actor* thisx, GlobalContext* globalCtx2) {
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->sph2.base);
     } else {
         if ((this->unk_174 != 0) && func_809F4C40(this, globalCtx)) {
-            if ((sp78->unk_D57 == 4) && (sp78->itemActionParam != 0xC)) {
+            if ((player->unk_D57 == 4) && (player->itemActionParam != 0xC)) {
                 if ((this->actor.xzDistToPlayer >= 400.0f) && (Rand_ZeroOne() < 0.5f)) {
                     func_809F7AB4(this, globalCtx);
                 } else {
                     func_809F51E8(this, globalCtx, 0);
                 }
             }
-            if ((sp78->unk_ADC != 0) && (this->actor.xzDistToPlayer <= 150.0f)) {
+            if ((player->unk_ADC != 0) && (this->actor.xzDistToPlayer <= 150.0f)) {
                 func_809F51E8(this, globalCtx, 0);
             }
         }
         if ((this->actionFunc != func_809F91D4) && (this->actionFunc != func_809F93DC)) {
-            if ((sp78->stateFlags3 & 0x00001000) && !(sp78->stateFlags3 & 0x00080000) &&
+            if ((player->stateFlags3 & 0x00001000) && !(player->stateFlags3 & 0x00080000) &&
                 (this->actor.xzDistToPlayer <= 250.0f)) {
                 func_809F51E8(this, globalCtx, 0);
             }
@@ -2460,8 +2722,8 @@ void Boss07_Wrath_Update(Actor* thisx, GlobalContext* globalCtx2) {
         func_809F52CC(this, globalCtx);
     }
     func_809F5494(this, globalCtx);
-    if ((gGameInfo->data[1336] != 0) || (this->unk_148 != 0)) {
-        gGameInfo->data[1336] = 0;
+    if ((KREG(88) != 0) || (this->unk_148 != 0)) {
+        KREG(88) = 0;
         this->unk_148 = 0;
         func_809F64F4(this, globalCtx);
     }
@@ -2495,18 +2757,18 @@ void Boss07_Wrath_Update(Actor* thisx, GlobalContext* globalCtx2) {
     if ((this->unk_156 == 1) || (this->unk_156 == 4)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_WALK2_OLD);
     }
-    if (sp78->actor.world.pos.y > 100.0f) {
-        if (sp78->actor.world.pos.z < gGameInfo->data[1330] + -850.0f) {
-            sp78->actor.world.pos.z = gGameInfo->data[1330] + -850.0f;
+    if (player->actor.world.pos.y > 100.0f) {
+        if (player->actor.world.pos.z < KREG(82) + -850.0f) {
+            player->actor.world.pos.z = KREG(82) + -850.0f;
         }
     }
-    if (sp78->actor.world.pos.y < -300.0f) {
-        sp78->actor.world.pos.x = sp78->actor.world.pos.y = sp78->actor.world.pos.z = 0.0f;
+    if (player->actor.world.pos.y < -300.0f) {
+        player->actor.world.pos.x = player->actor.world.pos.y = player->actor.world.pos.z = 0.0f;
     }
 }
 
-#ifdef NON_MATCHING
-void func_809FAA44(Boss07 *this, GlobalContext *globalCtx, Vec3f *arg2, Vec3f *arg3, Vec3f *arg4, Vec3f *arg5, f32 arg6, f32 arg7, f32 arg8, f32 arg9, Vec3s *argA, s16 argB, f32 argC, s32 argD) {
+void Boss07_Wrath_UpdateWhips(Boss07* this, GlobalContext* globalCtx, Vec3f* base, Vec3f* pos, Vec3f* rot, Vec3f* pull, f32 gravity,
+                   f32 stiffness, f32 drag, f32 tension, Vec3s* baseRot, s16 argB, f32 scale, s32 whipHand) {
     s32 i;
     s32 phi_s6;
     f32 temp_f20;
@@ -2514,30 +2776,30 @@ void func_809FAA44(Boss07 *this, GlobalContext *globalCtx, Vec3f *arg2, Vec3f *a
     f32 temp_f26;
     f32 temp_f22;
     f32 phi_f0;
-    Vec3f* temp;
-    s32 pad;
-    Vec3f spB8 = D_80A07FE0;
+    Vec3f* temp = pull;
+    f32 temp1;
+    Vec3f spB8 = {0.0f, 0.0f, 0.0f};
     Vec3f spAC;
     Vec3f spA0;
     Vec3f sp94;
     Vec3f sp88;
     Vec3f sp7C;
 
-    spB8.z = 22.0f * argC;
-    temp = arg5;
-    for(i = 0; i < (s16)D_80A09A50; i++, temp++) {
-        if(i == 0) {
-            arg3[0] = *arg2;
+    spB8.z = 22.0f * scale;
+
+    for (i = 0; i < (s16)sWhipSegCount; i++, pull++) {
+        if (i == 0) {
+            pos[0] = *base;
         } else {
-            Math_ApproachF(&temp->x, 0.0f, 1.0f, arg8);
-            Math_ApproachF(&temp->y, 0.0f, 1.0f, arg8);
-            Math_ApproachF(&temp->z, 0.0f, 1.0f, arg8);
+            Math_ApproachF(&pull->x, 0.0f, 1.0f, drag);
+            Math_ApproachF(&pull->y, 0.0f, 1.0f, drag);
+            Math_ApproachF(&pull->z, 0.0f, 1.0f, drag);
         }
     }
     spAC.z = 20.0f;
-    Matrix_RotateY(argA->y, 0);
-    SysMatrix_InsertXRotation_s(argA->x, 1);
-    SysMatrix_InsertZRotation_s(argA->z, 1);
+    Matrix_RotateY(baseRot->y, 0);
+    SysMatrix_InsertXRotation_s(baseRot->x, 1);
+    SysMatrix_InsertZRotation_s(baseRot->z, 1);
     Matrix_RotateY(0x4000, 1);
     SysMatrix_GetStateTranslationAndScaledZ(spAC.z, &sp94);
     if (argB != 0) {
@@ -2545,17 +2807,22 @@ void func_809FAA44(Boss07 *this, GlobalContext *globalCtx, Vec3f *arg2, Vec3f *a
         SysMatrix_InsertYRotation_f(this->unk_F8C, 0);
         SysMatrix_RotateStateAroundXAxis(this->unk_F90);
     } else {
-        spAC.z = arg9;
+        spAC.z = tension;
     }
     SysMatrix_GetStateTranslationAndScaledZ(spAC.z, &sp7C);
 
-    for(i = 1, phi_s6 = 0; i < (s16)D_80A09A50; i++) {
-        if(i < 6) {
+    pos++;
+    rot++;
+    pull = temp + 1;
+    phi_s6 = 0;
+
+    for (i = 1; i < (s16)sWhipSegCount; i++, pull++, pos++, rot++) {
+        if (i < 6) {
             sp88.x = (6 - i) * sp94.x * 0.2f;
             sp88.y = (6 - i) * sp94.y * 0.2f;
-            sp88.z = (6 - i) * sp94.z * 0.2f; 
+            sp88.z = (6 - i) * sp94.z * 0.2f;
         } else if (argB != 0) {
-            if(argB <= i && i < (s16)(argB + this->unk_F7C)) {
+            if (argB <= i && i < (s16)(argB + this->unk_F7C)) {
                 sp88.y = 0.0f;
                 sp88.x = __sinf(this->actor.yawTowardsPlayer * M_PI / 0x8000 + (phi_s6 * 1.4f)) * 100.0f;
                 sp88.z = __cosf(this->actor.yawTowardsPlayer * M_PI / 0x8000 + (phi_s6 * 1.4f)) * 100.0f;
@@ -2565,111 +2832,110 @@ void func_809FAA44(Boss07 *this, GlobalContext *globalCtx, Vec3f *arg2, Vec3f *a
         } else {
             sp88 = D_801D15B0;
         }
-        temp_f24 = (arg3 + i)->x + (arg5 + i)->x - (arg3 + i - 1)->x + sp88.x + sp7C.x;
-        phi_f0 = (arg3 + i)->y + (arg5 + i)->y + arg6 + sp88.y + sp7C.y;
+        temp_f24 = pos->x + pull->x - (pos - 1)->x + sp88.x + sp7C.x;
+        phi_f0 = pos->y + pull->y + gravity + sp88.y + sp7C.y;
         phi_f0 = CLAMP_MIN(phi_f0, 2.0f);
-        temp_f26 = phi_f0 - (arg3 + i - 1)->y;
-        temp_f20 = (arg3 + i)->z + (arg5 + i)->z - (arg3 + i - 1)->z + sp88.z + sp7C.z;
+        temp_f26 = phi_f0 - (pos - 1)->y;
+        temp_f20 = pos->z + pull->z - (pos - 1)->z + sp88.z + sp7C.z;
         temp_f22 = Math_Acot2F(temp_f20, temp_f24);
-        temp_f20 = -Math_Acot2F(sqrtf(SQ(temp_f24) + SQ(temp_f20)), temp_f26);
-        (arg4 + i - 1)->y = temp_f22;
-        (arg4 + i - 1)->x = temp_f20;
+        temp1 = -Math_Acot2F(sqrtf(SQ(temp_f24) + SQ(temp_f20)), temp_f26);
+        (rot - 1)->y = temp_f22;
+        (rot - 1)->x = temp1;
         SysMatrix_InsertYRotation_f(temp_f22, 0);
-        SysMatrix_RotateStateAroundXAxis(temp_f20);
+        SysMatrix_RotateStateAroundXAxis(temp1);
         SysMatrix_GetStateTranslationAndScaledZ(spB8.z, &spA0);
-        temp_f24 = (arg3 + i)->x;
-        temp_f26 = (arg3 + i)->y;
-        temp_f20 = (arg3 + i)->z;
-        (arg3 + i)->x = (arg3 + i - 1)->x + spA0.x;
-        (arg3 + i)->y = (arg3 + i - 1)->y + spA0.y;
-        (arg3 + i)->z = (arg3 + i - 1)->z + spA0.y;
-        if((i != 0) && (i == argB)) {
+        if (1) {}
+        temp_f24 = pos->x;
+        temp_f26 = pos->y;
+        temp_f20 = pos->z;
+
+        pos->x = (pos - 1)->x + spA0.x;
+        pos->y = (pos - 1)->y + spA0.y;
+        pos->z = (pos - 1)->z + spA0.z;
+
+        if ((i != 0) && (i == argB)) {
             spAC.x = 15.0f;
             spAC.y = -30.0f;
             spAC.z = -12.0f;
             SysMatrix_MultiplyVector3fByState(&spAC, &spA0);
-            this->unk_F80.x = (arg3 + i)->x + spA0.x;
-            this->unk_F80.y = (arg3 + i)->y + spA0.y;
-            this->unk_F80.z = (arg3 + i)->z + spA0.z;
-        } else if ((argD == 0) && (this->actionFunc == func_809F8EC8)) {
-            if (i == gGameInfo->data[1338] + D_80A09A50 - this->unk_778 + 1) {
-                spAC.x = gGameInfo->data[1308];
-                spAC.y = gGameInfo->data[1309];
-                spAC.z = gGameInfo->data[1310];
+            this->unk_F80.x = pos->x + spA0.x;
+            this->unk_F80.y = pos->y + spA0.y;
+            this->unk_F80.z = pos->z + spA0.z;
+        } else if ((whipHand == 0) && (this->actionFunc == func_809F8EC8)) {
+            if (i == KREG(90) + sWhipSegCount - this->unk_778 + 1) {
+                spAC.x = KREG(60);
+                spAC.y = KREG(61);
+                spAC.z = KREG(62);
                 SysMatrix_MultiplyVector3fByState(&spAC, &spA0);
-                this->unk_F80.x = (arg3 + i)->x + spA0.x;
-                this->unk_F80.y = (arg3 + i)->y + spA0.y;
-                this->unk_F80.z = (arg3 + i)->z + spA0.z;
+                this->unk_F80.x = pos->x + spA0.x;
+                this->unk_F80.y = pos->y + spA0.y;
+                this->unk_F80.z = pos->z + spA0.z;
             }
         }
-        (arg5 + i)->x = ((arg3 + i)->x - temp_f24) * arg7;
-        (arg5 + i)->y = ((arg3 + i)->y - temp_f26) * arg7;
-        (arg5 + i)->z = ((arg3 + i)->z - temp_f20) * arg7;
-        if((arg5 + i)->x > 200.0f) {
-            (arg5 + i)->x = 200.0f;
+        pull->x = (pos->x - temp_f24) * stiffness;
+        pull->y = (pos->y - temp_f26) * stiffness;
+        pull->z = (pos->z - temp_f20) * stiffness;
+        if (pull->x > 200.0f) {
+            pull->x = 200.0f;
         }
-        if((arg5 + i)->x < -200.0f) {
-            (arg5 + i)->x = -200.0f;
+        if (pull->x < -200.0f) {
+            pull->x = -200.0f;
         }
-        if((arg5 + i)->y > 200.0f) {
-            (arg5 + i)->y = 200.0f;
+        if (pull->y > 200.0f) {
+            pull->y = 200.0f;
         }
-        if((arg5 + i)->y < -200.0f) {
-            (arg5 + i)->y = -200.0f;
+        if (pull->y < -200.0f) {
+            pull->y = -200.0f;
         }
-        if((arg5 + i)->z > 200.0f) {
-            (arg5 + i)->z = 200.0f;
+        if (pull->z > 200.0f) {
+            pull->z = 200.0f;
         }
-        if((arg5 + i)->z < -200.0f) {
-            (arg5 + i)->z = -200.0f;
+        if (pull->z < -200.0f) {
+            pull->z = -200.0f;
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_809FAA44.s")
-#endif
 
-#ifdef NON_MATCHING
-void func_809FB114(Boss07 *this, GlobalContext *globalCtx, Vec3f *arg2, Vec3f *arg3, f32 arg4, s32 arg5) {
+void Boss07_Wrath_DrawWhips(Boss07* this, GlobalContext* globalCtx, Vec3f* pos, Vec3f* rot, f32 arg4, s32 hand) {
     s32 phi_s6;
-    s32 phi_s1;
+    s32 i;
     f32 phi_f12;
-    f32 one = 1.0f;
-    f32 two = 2.0f;
+    s32 pad[2];
+    Vec3f* vec2 = pos;
+    Vec3f* vec3 = rot;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, D_0602EEC8);
-    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, gGameInfo->data[1584] + 45, 35, 75, 255);
-    phi_s6 = (arg5 == 0) ? this->unk_778 : 0;
-    for(phi_s1 = 0; phi_s1 <= (D_80A09A50 - phi_s6) - 1; phi_s1++) {
-        SysMatrix_InsertTranslation(arg2[phi_s1].x, 0.0f, arg2[phi_s1].z, 0);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sREG(48) + 45, 35, 75, 255);
+    phi_s6 = (hand == 0) ? this->unk_778 : 0;
+    for (i = 0; i < (sWhipSegCount - phi_s6) - 1; i++, pos++, rot++) {
+        SysMatrix_InsertTranslation(pos->x, 0.0f, pos->z, 0);
         Matrix_Scale(1.0f, 0.0f, 1.0f, 1);
-        SysMatrix_InsertYRotation_f(arg3[phi_s1].y, 1);
-        SysMatrix_RotateStateAroundXAxis(arg3[phi_s1].x);
-        phi_f12 = (phi_s1 > 24) ? 0.025f : ((24 - phi_s1) * one * 0.001f) + 0.025f;
-        Matrix_Scale(phi_f12, phi_f12, ((two * arg4) + 0.5f) * 0.01f, 1);
+        SysMatrix_InsertYRotation_f(rot->y, 1);
+        SysMatrix_RotateStateAroundXAxis(rot->x);
+        phi_f12 = (i > 24) ? 0.025f : ((f32)(24 - i) * 1 * 0.001f) + 0.025f;
+        Matrix_Scale(phi_f12, phi_f12, ((2 * arg4) + 0.5f) * 0.01f, 1);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), 2);
         gSPDisplayList(POLY_OPA_DISP++, D_0602EEF8);
     }
+    pos = vec2;
+    rot = vec3;
     gSPDisplayList(POLY_OPA_DISP++, D_0602EE50);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 155, 155, 80, 255);
-    for(phi_s1 = 0; phi_s1 < (D_80A09A50 - phi_s6) - 1; phi_s1++) {
-        SysMatrix_InsertTranslation(arg2[phi_s1].x, arg2[phi_s1].y, arg2[phi_s1].z, 0);
-        SysMatrix_InsertYRotation_f(arg3[phi_s1].y, 1);
-        SysMatrix_RotateStateAroundXAxis(arg3[phi_s1].x);
-        phi_f12 = (phi_s1 > 24) ? 0.025f : ((24 - phi_s1) * one * 0.001f) + 0.025f;
-        Matrix_Scale(phi_f12, phi_f12, ((two * arg4) + 0.5f) * 0.01f, 1);
+    for (i = 0; i < (sWhipSegCount - phi_s6) - 1; i++, pos++, rot++) {
+        SysMatrix_InsertTranslation(pos->x, pos->y, pos->z, 0);
+        SysMatrix_InsertYRotation_f(rot->y, 1);
+        SysMatrix_RotateStateAroundXAxis(rot->x);
+        phi_f12 = (i > 24) ? 0.025f : ((f32)(24 - i) * 1 * 0.001f) + 0.025f;
+        Matrix_Scale(phi_f12, phi_f12, ((2 * arg4) + 0.5f) * 0.01f, 1);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), 2);
         gSPDisplayList(POLY_OPA_DISP++, D_0602EEF8);
     }
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_809FB114.s")
-#endif
 
-s32 func_809FB504(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *thisx) {
+s32 func_809FB504(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     Boss07* this = THIS;
 
     if (limbIndex == 26) {
@@ -2680,22 +2946,36 @@ s32 func_809FB504(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *p
     return false;
 }
 
-void func_809FB55C(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, Actor *thisx) {
+static s8 sWrathColliders[32] = {
+    -1, -1, 2, -1, 7, -1, 8, -1, -1, 9, -1, 10, -1, -1, 1, -1, 5, -1, 6, -1, -1, 3, -1, 4, -1, -1, 0, -1, -1, -1, 0, 0,
+};
+static Vec3f sWrathColliderOffsets[11] = {
+    { 1000.0f, 0.0f, 500.0f }, { 2000.0f, 0.0f, 0.0f }, { 1000.0f, 0.0f, 500.0f }, { 2000.0f, 0.0f, 0.0f },
+    { 2000.0f, 0.0f, 0.0f },   { 2000.0f, 0.0f, 0.0f }, { 2000.0f, 0.0f, 0.0f },   { 2000.0f, 0.0f, 0.0f },
+    { 2000.0f, 0.0f, 0.0f },   { 2000.0f, 0.0f, 0.0f }, { 2000.0f, 0.0f, 0.0f },
+};
+
+static s8 sWrathBodyParts[32] = {
+    -1, -1, 2, -1, 12, -1, 13, 14, -1, 9, -1, 10, 11, -1, 1, -1, 6, 7, 8, -1, -1, 3, 4, 5, -1, -1, 0, -1, -1, -1, 0, 0,
+};
+static Vec3f sWhipOffset = { 1000.0f, 100.0f, 0.0f };
+
+void func_809FB55C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     Boss07* this = THIS;
     s8 sp6B;
     Vec3f sp5C;
     MtxF sp1C;
 
-    sp6B = D_80A08090[limbIndex];
+    sp6B = sWrathBodyParts[limbIndex];
     if (sp6B >= 0) {
-        SysMatrix_GetStateTranslation(&this->unk_334[sp6B]);
+        SysMatrix_GetStateTranslation(&this->bodyPartsPos[sp6B]);
     }
-    sp6B = D_80A07FEC[limbIndex];
+    sp6B = sWrathColliders[limbIndex];
     if (sp6B >= 0) {
         if (this->unk_158 != 0) {
             SysMatrix_GetStateTranslationAndScaledZ(100000.0f, &sp5C);
         } else {
-            SysMatrix_MultiplyVector3fByState(&D_80A0800C[sp6B], &sp5C);
+            SysMatrix_MultiplyVector3fByState(&sWrathColliderOffsets[sp6B], &sp5C);
         }
         func_809F4BB0(sp6B, &this->sph1, &sp5C);
     }
@@ -2703,18 +2983,18 @@ void func_809FB55C(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *
         SysMatrix_GetStateTranslation(&this->actor.focus.pos);
     }
     if (limbIndex == 19) {
-        SysMatrix_MultiplyVector3fByState(&D_80A080B0, &this->unk_7A0);
+        SysMatrix_MultiplyVector3fByState(&sWhipOffset, &this->rightWhip.basePos);
     }
     if (limbIndex == 17) {
         SysMatrix_CopyCurrentState(&sp1C);
-        func_8018219C(&sp1C, &this->unk_788, 0);
+        func_8018219C(&sp1C, &this->rightWhip.baseRot, 0);
     }
     if (limbIndex == 24) {
-        SysMatrix_MultiplyVector3fByState(&D_80A080B0, &this->unk_FAC);
+        SysMatrix_MultiplyVector3fByState(&sWhipOffset, &this->leftWhip.basePos);
     }
     if (limbIndex == 22) {
         SysMatrix_CopyCurrentState(&sp1C);
-        func_8018219C(&sp1C, &this->unk_F94, 0);
+        func_8018219C(&sp1C, &this->leftWhip.baseRot, 0);
     }
     if (limbIndex == 12) {
         SysMatrix_GetStateTranslation(&sp5C);
@@ -2722,20 +3002,21 @@ void func_809FB55C(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *
     }
 }
 
-void func_809FB728(GlobalContext *globalCtx, s32 limbIndex, Actor *thisx) {
+void func_809FB728(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     Boss07* this = THIS;
 
-    if ((limbIndex == 2) || (limbIndex == 4) || (limbIndex == 6) || (limbIndex == 7) || (limbIndex == 9) || (limbIndex == 0xB) || (limbIndex == 0xC) || (limbIndex == 0x10) || (limbIndex == 0x12) || (limbIndex == 0x13) || (limbIndex == 0x15) || (limbIndex == 0x17) || (limbIndex == 0x18) || (limbIndex == 0x1A)) {
+    if ((limbIndex == 2) || (limbIndex == 4) || (limbIndex == 6) || (limbIndex == 7) || (limbIndex == 9) ||
+        (limbIndex == 0xB) || (limbIndex == 0xC) || (limbIndex == 0x10) || (limbIndex == 0x12) || (limbIndex == 0x13) ||
+        (limbIndex == 0x15) || (limbIndex == 0x17) || (limbIndex == 0x18) || (limbIndex == 0x1A)) {
         Matrix_Scale(1.0f, this->unk_17E0, this->unk_17E0, 1);
     }
 }
 
-#ifdef NON_MATCHING
-void func_809FB7D4(Boss07 *this, GlobalContext *globalCtx) {
+void func_809FB7D4(Boss07* this, GlobalContext* globalCtx) {
     s32 i;
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+    GraphicsContext* gfxCtx;
 
-    OPEN_DISPS(gfxCtx);
+    OPEN_DISPS(gfxCtx = globalCtx->state.gfxCtx);
     if ((this->unk_32C > 0.0f) || (this->unk_330 > 0.0f)) {
         func_8012C2DC(globalCtx->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
@@ -2743,16 +3024,17 @@ void func_809FB7D4(Boss07 *this, GlobalContext *globalCtx) {
 
         if (this->unk_32C > 0.0f) {
             gSPDisplayList(POLY_XLU_DISP++, D_04023348);
-            for(i = 0; i < 15; i++) {
-                SysMatrix_InsertTranslation(this->unk_334[i].x, this->unk_334[i].y, this->unk_334[i].z, 0);
+            for (i = 0; i < 15; i++) {
+                SysMatrix_InsertTranslation(this->bodyPartsPos[i].x, this->bodyPartsPos[i].y, this->bodyPartsPos[i].z, 0);
                 SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
                 Matrix_Scale(this->unk_32C, this->unk_32C, this->unk_32C, 1);
                 SysMatrix_InsertZRotation_f(Rand_ZeroFloat(2.0f * M_PI), 1);
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), 2);
                 gSPDisplayList(POLY_XLU_DISP++, D_04023428);
             }
-            for(i = this->unk_780; i >= this->unk_784; i--) {
-                SysMatrix_InsertTranslation(this->unk_7AC[i].x, this->unk_7AC[i].y, this->unk_7AC[i].z, 0);
+            for (i = this->unk_780; i >= this->unk_784; i--) {
+                SysMatrix_InsertTranslation(this->rightWhip.pos[i].x, this->rightWhip.pos[i].y,
+                                            this->rightWhip.pos[i].z, 0);
                 SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
                 Matrix_Scale(1.5f, 1.5f, 1.5f, 1);
                 SysMatrix_InsertZRotation_f(Rand_ZeroFloat(2.0f * M_PI), 1);
@@ -2762,8 +3044,10 @@ void func_809FB7D4(Boss07 *this, GlobalContext *globalCtx) {
         }
         if (this->unk_330 > 0.0f) {
             gSPDisplayList(POLY_XLU_DISP++, D_040233B8);
-            for(i = 0; i < 30; i++) {
-                SysMatrix_InsertTranslation(this->unk_334[i / 2].x + randPlusMinusPoint5Scaled(30.0f), this->unk_334[i / 2].y + randPlusMinusPoint5Scaled(30.0f), this->unk_334[i / 2].z + randPlusMinusPoint5Scaled(30.0f), 0);
+            for (i = 0; i < 30; i++) {
+                SysMatrix_InsertTranslation(this->bodyPartsPos[i / 2].x + randPlusMinusPoint5Scaled(30.0f),
+                                            this->bodyPartsPos[i / 2].y + randPlusMinusPoint5Scaled(30.0f),
+                                            this->bodyPartsPos[i / 2].z + randPlusMinusPoint5Scaled(30.0f), 0);
                 Matrix_Scale(this->unk_330, this->unk_330, this->unk_330, 1);
                 SysMatrix_RotateStateAroundXAxis(Rand_ZeroFloat(2.0f * M_PI));
                 SysMatrix_InsertZRotation_f(Rand_ZeroFloat(2.0f * M_PI), 1);
@@ -2774,98 +3058,91 @@ void func_809FB7D4(Boss07 *this, GlobalContext *globalCtx) {
     }
     CLOSE_DISPS(gfxCtx);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_809FB7D4.s")
-#endif
 
-#ifdef NON_MATCHING
-void func_809FBB9C(Boss07 *this, GlobalContext *globalCtx, Vec3f *arg2) {
+void func_809FBB9C(Boss07* this, GlobalContext* globalCtx, Vec3f* arg2) {
     s32 i;
     f32 temp_f12_2;
     f32 temp_f20;
+    GraphicsContext* gfxCtx;
+    s16* temp;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-    
-    
+    OPEN_DISPS(gfxCtx = globalCtx->state.gfxCtx);
+
     if (this->unk_AB4C > 0.0f) {
         func_809F49A0(1, 0x71B8, 0x263A);
         POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);
         gDPSetCombineMode(POLY_XLU_DISP++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
-        for(i = 0; i < 30; i++) {
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, D_80A07950[0][0], D_80A07950[0][1], D_80A07950[0][2], 40);
+        for (i = 0; i < 30; i++) {
+            temp = D_80A07950[0];
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, temp[0], temp[1], temp[2], 40);
             temp_f20 = (func_809F49C0() * 40.0f) - 30.0f;
-            SysMatrix_InsertTranslation(this->unk_334[2].x, this->unk_334[2].y - 30.0f + 50.0f + temp_f20 + 25.0f, this->unk_334[2].z, 0);
+            SysMatrix_InsertTranslation(this->bodyPartsPos[2].x, this->bodyPartsPos[2].y - 30.0f + 50.0f + temp_f20 + 25.0f,
+                                        this->bodyPartsPos[2].z, 0);
             SysMatrix_InsertTranslation(arg2->x, arg2->y + temp_f20, arg2->z, 0);
             SysMatrix_InsertYRotation_f(func_809F49C0() * M_PI * 2.0f, 1);
             SysMatrix_RotateStateAroundXAxis(-0.024999999f * temp_f20);
             SysMatrix_InsertZRotation_f(func_809F49C0() * M_PI * 2.0f, 1);
             if (this->unk_AB50[i] > 0.0f) {
                 Matrix_Scale(this->unk_AB50[i], 1.0f, 12.0f, 1);
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), 2);
+                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), 2);
                 gSPDisplayList(POLY_XLU_DISP++, D_0602EFE8);
             }
         }
         func_8012C2DC(globalCtx->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, D_04023348);
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, gGameInfo->data[1554] + 220, gGameInfo->data[1552] + 170);
-        gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, gGameInfo->data[1558] + 100, 128);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, (u8)(220 + sREG(18)), (u8)(170 + sREG(16)));
+        gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, (u8)(100 + sREG(22)), 128);
 
-        SysMatrix_InsertTranslation(this->unk_334[2].x, this->unk_334[2].y, this->unk_334[2].z, 0);
+        SysMatrix_InsertTranslation(this->bodyPartsPos[2].x, this->bodyPartsPos[2].y, this->bodyPartsPos[2].z, 0);
         SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
         SysMatrix_InsertZRotation_s(globalCtx->gameplayFrames * 0x80, 1);
-        temp_f12_2 = (gGameInfo->data[1553] + 800) * 0.01f * this->unk_AB4C;
+        temp_f12_2 = (sREG(17) + 800) * 0.01f * this->unk_AB4C;
         Matrix_Scale(temp_f12_2, temp_f12_2, 1.0f, 1);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), 2);
-        gSPDisplayList(POLY_XLU_DISP++, D_04023428);
-    }
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
-}
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_809FBB9C.s")
-#endif
-
-#ifdef NON_MATCHING
-void func_809FBF94(Boss07* this, GlobalContext* globalCtx) {
-    s32 pad;
-    s32 pad2;
-    f32 sp54;
-    f32 sp50;
-    Player* sp4C = PLAYER;
-    // GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
-
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-    if (this->unk_AB44 > 0.0f) {
-        func_8012C2DC(globalCtx->state.gfxCtx);
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)(gGameInfo->data[1588] + 255));
-        gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 0, 0);
-        gSPDisplayList(POLY_XLU_DISP++, D_04023348);
-
-        if (sp4C->transformation == 1) {
-            sp54 = -10.0f;
-            sp50 = -20.0f;
-        } else {
-            sp54 = sp50 = 0.0f;
-        }
-        if (sp4C->transformation == 0) {
-            sp54 -= 43.0f;
-        }
-
-        SysMatrix_InsertTranslation(sp4C->actor.world.pos.x,
-                                    sp4C->actor.world.pos.y + func_800B6FC8(sp4C) - 20.0f + sp54 +
-                                        gGameInfo->data[1596],
-                                    sp4C->actor.world.pos.z + gGameInfo->data[1597] - 15.0f + sp50, 0);
-        SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
-
-        Matrix_Scale(this->unk_AB44, this->unk_AB44, this->unk_AB44, 1);
-        SysMatrix_InsertZRotation_s(globalCtx->gameplayFrames * 0x40, 1);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), 2);
         gSPDisplayList(POLY_XLU_DISP++, D_04023428);
     }
     CLOSE_DISPS(gfxCtx);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_809FBF94.s")
-#endif
+
+void func_809FBF94(Boss07* this, GlobalContext* globalCtx) {
+    s32 pad;
+    GraphicsContext* gfxCtx;
+    f32 sp54;
+    f32 sp50;
+    Player* player;
+    
+
+    OPEN_DISPS(gfxCtx = globalCtx->state.gfxCtx);
+    player = PLAYER;
+
+    if (this->unk_AB44 > 0.0f) {
+        func_8012C2DC(globalCtx->state.gfxCtx);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)(sREG(52) + 255));
+        gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 0, 0);
+        gSPDisplayList(POLY_XLU_DISP++, D_04023348);
+
+        if (player->transformation == 1) {
+            sp54 = -10.0f;
+            sp50 = -20.0f;
+        } else {
+            sp54 = sp50 = 0.0f;
+        }
+        if (player->transformation == 0) {
+            sp54 -= 43.0f;
+        }
+
+        SysMatrix_InsertTranslation(player->actor.world.pos.x,
+                                    player->actor.world.pos.y + func_800B6FC8(player) - 20.0f + sp54 + sREG(60),
+                                    player->actor.world.pos.z + sREG(61) - 15.0f + sp50, 0);
+        SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
+
+        Matrix_Scale(this->unk_AB44, this->unk_AB44, this->unk_AB44, 1);
+        SysMatrix_InsertZRotation_s(globalCtx->gameplayFrames * 0x40, 1);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), 2);
+        gSPDisplayList(POLY_XLU_DISP++, D_04023428);
+    }
+    CLOSE_DISPS(gfxCtx);
+}
 
 void Boss07_Wrath_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
@@ -2882,34 +3159,42 @@ void Boss07_Wrath_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     }
     SysMatrix_InsertYRotation_f(this->unk_184, 1);
     SysMatrix_RotateStateAroundXAxis(this->unk_188);
-    func_801343C0(globalCtx, this->skelAnime1.skeleton, this->skelAnime1.limbDrawTbl, (s32)this->skelAnime1.dListCount,
+    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, (s32)this->skelAnime.dListCount,
                   func_809FB504, func_809FB55C, func_809FB728, &this->actor);
     POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
 
-    if (((gGameInfo->data[1311] == 0) || (gGameInfo->data[1311] == 2)) && (this->unk_149 != 0)) {
-        func_809FAA44(this, globalCtx, &this->unk_7A0, this->unk_7AC, this->unk_A04, this->unk_C5C, this->unk_790,
-                      this->unk_794, this->unk_798, this->unk_79C, &this->unk_788, this->unk_F7E, this->unk_77C, 0);
-        func_809FAA44(this, globalCtx, &this->unk_FAC, this->unk_FB8, this->unk_1210, this->unk_1468, this->unk_F9C,
-                      this->unk_FA0, this->unk_FA4, this->unk_FA8, &this->unk_F94, 0, this->unk_77C, 1);
+    if (((KREG(63) == 0) || (KREG(63) == 2)) && (this->unk_149 != 0)) {
+        Boss07_Wrath_UpdateWhips(this, globalCtx, &this->rightWhip.basePos, this->rightWhip.pos, this->rightWhip.rot,
+                      this->rightWhip.pull, this->rightWhip.gravity, this->rightWhip.stiffness, this->rightWhip.drag,
+                      this->rightWhip.tension, &this->rightWhip.baseRot, this->unk_F7E, this->whipScale, 0);
+        Boss07_Wrath_UpdateWhips(this, globalCtx, &this->leftWhip.basePos, this->leftWhip.pos, this->leftWhip.rot,
+                      this->leftWhip.pull, this->leftWhip.gravity, this->leftWhip.stiffness, this->leftWhip.drag,
+                      this->leftWhip.tension, &this->leftWhip.baseRot, 0, this->whipScale, 1);
     }
-    func_809FB114(this, globalCtx, this->unk_7AC, this->unk_A04, this->unk_77C, 0);
-    func_809FB114(this, globalCtx, this->unk_FB8, this->unk_1210, this->unk_77C, 1);
+    Boss07_Wrath_DrawWhips(this, globalCtx, this->rightWhip.pos, this->rightWhip.rot, this->whipScale, 0);
+    Boss07_Wrath_DrawWhips(this, globalCtx, this->leftWhip.pos, this->leftWhip.rot, this->whipScale, 1);
     if (this->unk_AB48 == 0) {
         func_809FC8B0(sp54, this, globalCtx);
         func_809FC960(sp54, this, globalCtx);
     }
     func_809FB7D4(this, globalCtx);
-    sp58.x = this->unk_334[2].x;
-    sp58.y = this->unk_334[2].y - 30.0f + 50.0f;
-    sp58.z = this->unk_334[2].z;
+    sp58.x = this->bodyPartsPos[2].x;
+    sp58.y = this->bodyPartsPos[2].y - 30.0f + 50.0f;
+    sp58.z = this->bodyPartsPos[2].z;
     func_809FBB9C(this, globalCtx, &sp58);
-    func_800BE680(globalCtx, &this->actor, this->unk_334, 0xF, this->unk_17F8, this->unk_17FC, this->unk_1800,
+    func_800BE680(globalCtx, &this->actor, this->bodyPartsPos, 0xF, this->unk_17F8, this->unk_17FC, this->unk_1800,
                   this->unk_1804);
     this->unk_149 = 0;
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
 void func_809FC4C0(Boss07* this, u8* shadowTexture, f32 arg2) {
+    static s32 sShadowWidths6[6] = { 1, 2, 3, 3, 2, 1 };
+    static s32 sShadowWidths7[7] = { 2, 3, 4, 4, 4, 3, 2 };
+    static s32 sShadowWidths8[8] = { 2, 3, 4, 4, 4, 4, 3, 2 };
+    static s32 sShadowWidths12[12] = { 2, 4, 5, 5, 6, 6, 6, 6, 5, 5, 4, 2 };
+    static s32 sBodyPartsIndex2[15] = { 1, -1, 1, 1, 3, 4, 1, 6, 7, 2, 9, 10, 2, 12, 13 };
+    static u8 sShadowSize[15] = { 3, 2, 2, 1, 3, 3, 1, 3, 3, 1, 0, 3, 1, 0, 3 };
     s32 temp_t0;
     s32 temp_t1;
     s32 temp_v0;
@@ -2922,17 +3207,17 @@ void func_809FC4C0(Boss07* this, u8* shadowTexture, f32 arg2) {
     Vec3f sp68;
 
     for (i = 0; i < 15; i++) {
-        if ((arg2 == 0.0f) || ((j = D_80A08140[i]) >= 0)) {
+        if ((arg2 == 0.0f) || ((j = sBodyPartsIndex2[i]) >= 0)) {
             if (arg2 > 0.0f) {
-                VEC3F_LERPIMPDST(&lerp, &this->unk_334[i], &this->unk_334[j], arg2);
+                VEC3F_LERPIMPDST(&lerp, &this->bodyPartsPos[i], &this->bodyPartsPos[j], arg2);
 
                 sp74.x = lerp.x - this->actor.world.pos.x;
                 sp74.y = lerp.y - this->actor.world.pos.y + 76.0f + 30.0f + 30.0f + 100.0f;
                 sp74.z = lerp.z - this->actor.world.pos.z;
             } else {
-                sp74.x = this->unk_334[i].x - this->actor.world.pos.x;
-                sp74.y = this->unk_334[i].y - this->actor.world.pos.y + 76.0f + 30.0f + 30.0f + 100.0f;
-                sp74.z = this->unk_334[i].z - this->actor.world.pos.z;
+                sp74.x = this->bodyPartsPos[i].x - this->actor.world.pos.x;
+                sp74.y = this->bodyPartsPos[i].y - this->actor.world.pos.y + 76.0f + 30.0f + 30.0f + 100.0f;
+                sp74.z = this->bodyPartsPos[i].z - this->actor.world.pos.z;
             }
             SysMatrix_MultiplyVector3fByState(&sp74, &sp68);
 
@@ -2941,27 +3226,27 @@ void func_809FC4C0(Boss07* this, u8* shadowTexture, f32 arg2) {
             temp_t0 = (u16)(s32)(sp68.x + 32.0f);
             temp_t1 = (u16)((s32)sp68.y << 6);
 
-            if (D_80A0817C[i] == 2) {
+            if (sShadowSize[i] == 2) {
                 for (j = 0, phi_a3 = -0x180; j < 12; j++, phi_a3 += 0x40) {
-                    for (phi_a0 = -D_80A08110[j]; phi_a0 < D_80A08110[j]; phi_a0++) {
+                    for (phi_a0 = -sShadowWidths12[j]; phi_a0 < sShadowWidths12[j]; phi_a0++) {
                         temp_v0 = temp_t0 + phi_a0 + temp_t1 + phi_a3;
                         if ((temp_v0 >= 0) && (temp_v0 < 0x1000)) {
                             shadowTexture[temp_v0] = 255;
                         }
                     }
                 }
-            } else if (D_80A0817C[i] == 1) {
+            } else if (sShadowSize[i] == 1) {
                 for (j = 0, phi_a3 = -0x100; j < 8; j++, phi_a3 += 0x40) {
-                    for (phi_a0 = -D_80A080F0[j]; phi_a0 < D_80A080F0[j]; phi_a0++) {
+                    for (phi_a0 = -sShadowWidths8[j]; phi_a0 < sShadowWidths8[j]; phi_a0++) {
                         temp_v0 = temp_t0 + phi_a0 + temp_t1 + phi_a3;
                         if ((temp_v0 >= 0) && (temp_v0 < 0x1000)) {
                             shadowTexture[temp_v0] = 255;
                         }
                     }
                 }
-            } else if (D_80A0817C[i] == 0) {
+            } else if (sShadowSize[i] == 0) {
                 for (j = 0, phi_a3 = -0xC0; j < 7; j++, phi_a3 += 0x40) {
-                    for (phi_a0 = -D_80A080D4[j]; phi_a0 < D_80A080D4[j] - 1; phi_a0++) {
+                    for (phi_a0 = -sShadowWidths7[j]; phi_a0 < sShadowWidths7[j] - 1; phi_a0++) {
                         temp_v0 = temp_t0 + phi_a0 + temp_t1 + phi_a3;
                         if ((temp_v0 >= 0) && (temp_v0 < 0x1000)) {
                             shadowTexture[temp_v0] = 255;
@@ -2970,7 +3255,7 @@ void func_809FC4C0(Boss07* this, u8* shadowTexture, f32 arg2) {
                 }
             } else {
                 for (j = 0, phi_a3 = -0x80; j < 6; j++, phi_a3 += 0x40) {
-                    for (phi_a0 = -D_80A080BC[j]; phi_a0 < D_80A080BC[j] - 1; phi_a0++) {
+                    for (phi_a0 = -sShadowWidths6[j]; phi_a0 < sShadowWidths6[j] - 1; phi_a0++) {
                         temp_v0 = temp_t0 + phi_a0 + temp_t1 + phi_a3;
                         if ((temp_v0 >= 0) && (temp_v0 < 0x1000)) {
                             shadowTexture[temp_v0] = 255;
@@ -2995,14 +3280,12 @@ void func_809FC8B0(u8* arg0, Boss07* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
-void func_809FC960(u8* arg0, Boss07* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
-    Boss07* this = THIS;
+void func_809FC960(u8* arg0, Boss07* this, GlobalContext* globalCtx) {
+    s32 pad[2];
+    f32 phi_f0;
     GraphicsContext* pad3 = globalCtx->state.gfxCtx;
 
     OPEN_DISPS(pad3);
-    f32 phi_f0;
 
     func_8012C28C(globalCtx->state.gfxCtx);
     phi_f0 = (400.0f - this->actor.world.pos.y) * 0.0025f;
@@ -3019,9 +3302,6 @@ void func_809FC960(u8* arg0, Boss07* thisx, GlobalContext* globalCtx2) {
     gSPDisplayList(POLY_OPA_DISP++, D_0602EF88);
     CLOSE_DISPS(pad3);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_809FC960.s")
-#endif
 
 void func_809FCBC8(Boss07* this) {
     s32 phi_v0 = (Rand_ZeroOne() < 0.5f) ? 0x4000 : -0x4000;
@@ -3036,27 +3316,201 @@ void func_809FCBC8(Boss07* this) {
 
 void func_809FCC70(Boss07* this, GlobalContext* globalCtx) {
     this->actionFunc = func_809FCCCC;
-    SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime1, &D_06002D84, 0.0f);
+    SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06002D84, 0.0f);
     this->actor.flags &= ~1;
     this->unk_17D8 = 0x6E00;
 }
 
+#ifdef NON_MATCHING
+// float literals for 1.0f
+void func_809FCCCC(Boss07* this, GlobalContext* globalCtx) {
+    s32 i;
+    f32 sp58;
+    Camera* sp54;
+
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    this->unk_ABC8++;
+    SysMatrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0);
+    Matrix_RotateY(this->actor.shape.rot.y, 1);
+    sp58 = Math_SinS(this->unk_14C * 0x4500) * 0.3f;
+    switch (this->csState) {
+        case 0:
+            this->unk_ABC8 = 0;
+            this->csState = 1;
+            this->csCamNextAt.z = 0.0f;
+        case 1:
+            this->csState = 2;
+            this->unk_ABC8 = 0;
+            this->csCamNextEye.x = 70.0f;
+            this->csCamNextEye.y = 70.0f;
+            this->csCamNextEye.z = 150.0f;
+            this->csCamNextAt.x = 20.0f;
+            this->csCamNextAt.y = 80.0f;
+            break;
+        case 2:
+            if (this->unk_ABC8 >= 20) {
+                if (this->unk_ABC8 == 20) {
+                    this->unk_17C8[3] = 1.0f;
+                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST1_TRANSFORM);
+                }
+                Math_ApproachF(&this->unk_17B8[3], (this->unk_17C8[3] * sp58) + 1.0f, 1.0f, 0.5f);
+            }
+            if (this->unk_ABC8 > 40) {
+                this->csState = 3;
+                this->unk_ABC8 = 0;
+            }
+            break;
+        case 3:
+            Math_ApproachF(&this->csCamNextEye.x, 0.0f, 0.05f, this->csCamSpeedMod * 40.0f);
+            Math_ApproachF(&this->csCamNextEye.y, 100.0f, 0.05f, this->csCamSpeedMod * 30.0f);
+            Math_ApproachF(&this->csCamNextEye.z, 270.0f, 0.05f, this->csCamSpeedMod * 150.0f);
+            Math_ApproachF(&this->csCamNextAt.x, 0.0f, 0.05f, this->csCamSpeedMod * 20.0f);
+            Math_ApproachF(&this->csCamNextAt.y, 100.0f, 0.05f, this->csCamSpeedMod * 20.0f);
+            Math_ApproachF(&this->csCamSpeedMod, 0.05f, 1.0f, 0.002f);
+            if (this->unk_ABC8 >= 20) {
+                if (this->unk_ABC8 == 20) {
+                    this->unk_17C8[2] = 1.0f;
+                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST1_TRANSFORM);
+                }
+                Math_ApproachF(&this->unk_17B8[2], (this->unk_17C8[2] * sp58) + 1.0f, 1.0f, 0.5f);
+            }
+            if (this->unk_ABC8 >= 50) {
+                if (this->unk_ABC8 == 50) {
+                    this->unk_17C8[1] = 1.0f;
+                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST1_TRANSFORM);
+                }
+                Math_ApproachF(&this->unk_17B8[1], (this->unk_17C8[1] * sp58) + 1.0f, 1.0f, 0.5f);
+            }
+            if (this->unk_ABC8 >= 60) {
+                if (this->unk_ABC8 == 60) {
+                    this->unk_17C8[0] = 1.0f;
+                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST1_TRANSFORM);
+                }
+                Math_ApproachF(this->unk_17B8, (this->unk_17C8[0] * sp58) + 1.0f, 1.0f, 0.5f);
+            }
+            if (this->unk_ABC8 == 80) {
+                this->csState = 4;
+                this->unk_ABC8 = 0;
+                this->unk_17B8[0] = 1.0f;
+                this->unk_17B8[1] = 1.0f;
+                this->unk_17B8[2] = 1.0f;
+                this->unk_17B8[3] = 1.0f;
+            }
+            break;
+        case 4:
+            this->csCamNextEye.x = 0.0f;
+            this->csCamNextEye.y = 120.0f;
+            this->csCamNextEye.z = 140.0f;
+            this->csCamNextAt.y = 170.0f;
+            if (this->unk_ABC8 >= 10) {
+                if (this->unk_ABC8 == 10) {
+                    this->unk_17C8[3] = 1.0f;
+                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST1_GROW_HEAD);
+                }
+                Math_ApproachS(&this->unk_17D8, this->unk_17C8[3] * sp58 * 0x6000, 1, 0x4000);
+            }
+            if (this->unk_ABC8 == 30) {
+                this->csState = 5;
+                this->unk_ABC8 = 0;
+                this->csCamSpeedMod = 0.0f;
+                this->unk_1D4 = 1000.0f;
+                func_80165690();
+            }
+            break;
+        case 5:
+            if (this->unk_ABC8 == 20) {
+                SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06002C40, 0.0f);
+                this->unk_1D4 = SkelAnime_GetFrameCount(&D_06002C40);
+            }
+            if (this->unk_ABC8 >= 20) {
+                sREG(28) = this->unk_ABC8;
+                if ((this->unk_ABC8 == (KREG(16) + 28)) || (this->unk_ABC8 == (KREG(17) + 60))) {
+                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_VOICE_UAUOO2_OLD);
+                }
+                if ((this->unk_ABC8 == (KREG(18) + 38)) || (this->unk_ABC8 == (KREG(19) + 48)) ||
+                    (this->unk_ABC8 == (KREG(20) + 68)) || (this->unk_ABC8 == (KREG(21) + 78))) {
+                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_GYM_B_OLD);
+                }
+                if (this->unk_ABC8 == (KREG(38) + 93)) {
+                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_UAUOO_OLD);
+                }
+            }
+            if (this->unk_ABC8 == 45) {
+                Actor_TitleCardCreate(globalCtx, &globalCtx->actorCtx.titleCtxt, Lib_SegmentedToVirtual(&D_06030C40),
+                                      0xA0, 0xB4, 0x80, 0x28);
+            }
+            if (this->unk_ABC8 == 20) {
+                Audio_QueueSeqCmd(0x806A);
+                this->unk_14A = 1;
+                globalCtx->envCtx.unk_DC = 0.0f;
+            }
+            Math_ApproachF(&this->csCamNextEye.x, -80.0f, 0.05f, this->csCamSpeedMod * 80.0f);
+            Math_ApproachF(&this->csCamNextEye.y, 20.0f, 0.05f, this->csCamSpeedMod * 60.0f);
+            Math_ApproachF(&this->csCamNextEye.z, 220.0f, 0.05f, this->csCamSpeedMod * 180.0f);
+            Math_ApproachF(&this->csCamNextAt.y, 110.0f, 0.05f, this->csCamSpeedMod * 80.0f);
+            Math_ApproachF(&this->csCamSpeedMod, 0.1f, 1.0f, 0.005f);
+            if (func_801378B8(&this->skelAnime, this->unk_1D4)) {
+                sp54 = Play_GetCamera(globalCtx, 0);
+
+                this->csState = 0;
+                func_809FD5F8(this, globalCtx);
+                sp54->eye = this->csCamEye;
+                sp54->eyeNext = this->csCamEye;
+                sp54->at = this->csCamAt;
+                func_80169AFC(globalCtx, this->csCamIndex, 0);
+                this->csCamIndex = 0;
+                func_800EA0EC(globalCtx, &globalCtx->csCtx);
+                func_800B7298(globalCtx, &this->actor, 6);
+                this->actor.flags |= 1;
+            }
+            break;
+    }
+    for (i = 0; i < 4; i++) {
+        Math_ApproachZeroF(&this->unk_17C8[i], 0.5f, 0.1f);
+    }
+    SysMatrix_MultiplyVector3fByState(&this->csCamNextEye, &this->csCamEye);
+    SysMatrix_MultiplyVector3fByState(&this->csCamNextAt, &this->csCamAt);
+    if (this->csCamIndex != 0) {
+        ShrinkWindow_SetLetterboxTarget(0x1B);
+        Play_CameraSetAtEye(globalCtx, this->csCamIndex, &this->csCamAt, &this->csCamEye);
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_809FCCCC.s")
+#endif
 
 void func_809FD5F8(Boss07* this, GlobalContext* globalCtx) {
+    static AnimationHeader* sDanceAnims[3] = { &D_0600A6AC, &D_0600AB04, &D_0600AD84};
+
     this->actionFunc = func_809FD710;
     this->unk_14E = Rand_ZeroFloat(2.999f);
-    SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime1, D_80A0818C[this->unk_14E], -10.0f);
+    SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, sDanceAnims[this->unk_14E], -10.0f);
     this->actor.flags |= 1;
     this->timers[0] = Rand_ZeroFloat(50.0f) + 50.0f;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_809FD710.s")
+void func_809FD710(Boss07* this, GlobalContext* globalCtx) {
+    Player* player = PLAYER;
+
+    if (this->unk_14E < 2) {
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_WAIT_OLD - SFX_FLAG);
+    } else if ((this->unk_14E == 2) && func_801378B8(&this->skelAnime, 5.0f)) {
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_JUMP_OLD);
+    }
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    func_809F4CBC(this, 2.0f);
+    Math_ApproachS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 5, 0x2000);
+    if ((this->timers[0] == 0) || (player->unk_D57 == 4) || (this->actor.xzDistToPlayer <= 300.0f)) {
+        func_809FDB2C(this, globalCtx);
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_VOICE_SURPRISED_OLD);
+    }
+    func_809F4D54(this, globalCtx, 1, 0);
+}
 
 void func_809FD818(Boss07* this, GlobalContext* globalCtx, s16 arg2) {
     if (this->actionFunc != func_809FD89C) {
         this->actionFunc = func_809FD89C;
-        SkelAnime_ChangeAnimTransitionStop(&this->skelAnime1, &D_06009C7C, -10.0f);
+        SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06009C7C, -10.0f);
         this->unk_1D4 = SkelAnime_GetFrameCount(&D_06009C7C);
     }
     this->unk_158 = 10;
@@ -3064,19 +3518,37 @@ void func_809FD818(Boss07* this, GlobalContext* globalCtx, s16 arg2) {
     this->timers[1] = 12;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_809FD89C.s")
+void func_809FD89C(Boss07* this, GlobalContext* globalCtx) {
+    this->actor.shape.shadowAlpha = 0;
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    func_809F4CBC(this, 1.0f);
+    if (this->timers[1] == 1) {
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_HIPLOOP_LAND);
+    }
+    if (func_801378B8(&this->skelAnime, this->unk_1D4)) {
+        SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06009EA8, -5.0f);
+        this->unk_1D4 = 1000.0f;
+    }
+    if (this->unk_1D4 == 1000.0f) {
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_BIRD_OLD - SFX_FLAG);
+    }
+    if (this->timers[0] == 0) {
+        func_809FD5F8(this, globalCtx);
+    }
+    func_809F4D54(this, globalCtx, 1, 1);
+}
 
 void func_809FD984(Boss07* this, GlobalContext* globalCtx, u8 arg2, u8 arg3) {
     if (this->actionFunc != func_809FDAB0) {
         this->actionFunc = func_809FDAB0;
-        SkelAnime_ChangeAnimTransitionStop(&this->skelAnime1, &D_06000D0C, -2.0f);
+        SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06000D0C, -2.0f);
         this->unk_1D4 = SkelAnime_GetFrameCount(&D_06000D0C);
     } else if (arg3 == 14) {
-        if (this->skelAnime1.animCurrentFrame <= (this->unk_1D4 - 5.0f)) {
+        if (this->skelAnime.animCurrentFrame <= (this->unk_1D4 - 5.0f)) {
             this->unk_158 = 30;
             this->unk_15C = 30;
         } else {
-            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime1, (AnimationHeader*)&D_06000D0C, -2.0f);
+            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, (AnimationHeader*)&D_06000D0C, -2.0f);
         }
     }
 
@@ -3094,47 +3566,404 @@ void func_809FD984(Boss07* this, GlobalContext* globalCtx, u8 arg2, u8 arg3) {
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_DAMAGE2_OLD);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_809FDAB0.s")
+void func_809FDAB0(Boss07* this, GlobalContext* globalCtx) {
+    Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_BIRD2_OLD - SFX_FLAG);
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    func_809F4CBC(this, 2.0f);
+    if (func_801378B8(&this->skelAnime, this->unk_1D4)) {
+        func_809FDB2C(this, globalCtx);
+    }
+    func_809F4D54(this, globalCtx, 1, 0);
+}
 
 void func_809FDB2C(Boss07* this, GlobalContext* globalCtx) {
-    SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime1, &D_0600A400, -2.0f);
+    SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_0600A400, -2.0f);
     this->actionFunc = func_809FDBA0;
     this->timers[0] = Rand_ZeroFloat(100.0f) + 150.0f;
     func_809FCBC8(this);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_809FDBA0.s")
+void func_809FDBA0(Boss07* this, GlobalContext* globalCtx) {
+    f32 sp34;
+    f32 sp30;
+    s32 sp2C;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_809FDEDC.s")
+    Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_WALK_OLD - SFX_FLAG);
+    this->unk_AB40++;
+    if (this->unk_AB40 >= 2) {
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_WALK2_OLD);
+        this->unk_AB40 = 0;
+    }
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    if ((func_800B64FC(globalCtx, 5.0f, &this->actor.world.pos, &sp2C) >= 0.0f) && (sp2C == 0)) {
+        func_809FD818(this, globalCtx, 50);
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_DAMAGE_OLD);
+    } else {
+        sp34 = this->unk_164.x - this->actor.world.pos.x;
+        sp30 = this->unk_164.z - this->actor.world.pos.z;
+        if ((this->timers[1] == 0) || (SQ(sp34) + SQ(sp30) < 30000.0f)) {
+            if (Rand_ZeroOne() < 0.3f) {
+                f32 temp_f0 = Rand_ZeroOne();
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_809FDF54.s")
+                if (temp_f0 < 0.25f) {
+                    func_809FDEDC(this, globalCtx);
+                } else if (temp_f0 < 0.5f) {
+                    func_809FE068(this, globalCtx);
+                } else if (temp_f0 < 0.75f) {
+                    func_809FE2D4(this, globalCtx);
+                } else if (temp_f0 < 1.0f) {
+                    func_809FE4B0(this, globalCtx);
+                }
+            } else if (Rand_ZeroOne() < 0.01f) {
+                func_809FD818(this, globalCtx, 50);
+            } else {
+                func_809F4D10(&this->unk_164, 500.0f);
+                this->timers[1] = Rand_ZeroFloat(50.0f) + 20.0f;
+                this->unk_170 = 0.0f;
+            }
+        }
+        Math_ApproachS(&this->actor.world.rot.y, Math_Atan2S(sp34, sp30), 5, this->unk_170);
+        Math_ApproachF(&this->unk_170, 4000.0f, 1.0f, 500.0f);
+        Math_ApproachF(&this->actor.speedXZ, 25.0f, 1.0f, 20.0f);
+        if (this->timers[0] == 0) {
+            func_809FD5F8(this, globalCtx);
+        }
+        if ((this->actor.xzDistToPlayer < 200.0f) && (this->timers[2] == 0)) {
+            func_809FCBC8(this);
+            this->timers[0] = 50;
+            this->timers[2] = 50;
+        }
+        func_809F4D54(this, globalCtx, 3, 0);
+        this->unk_18D6 = 5;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_809FE068.s")
+void func_809FDEDC(Boss07* this, GlobalContext* globalCtx) {
+    this->actionFunc = func_809FDF54;
+    SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06000428, -5.0f);
+    this->timers[0] = Rand_ZeroFloat(50.0f) + 30.0f;
+    this->unk_188C = 0.0f;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_809FE0E4.s")
+void func_809FDF54(Boss07* this, GlobalContext* globalCtx) {
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    func_809F4CBC(this, 3.0f);
+    Math_ApproachS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 3, 0x3000);
+    if (func_801378B8(&this->skelAnime, 4.0f)) {
+        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BOSS_07, this->unk_17A0.x, this->unk_17A0.y,
+                    this->unk_17A0.z, 0, 0, 0, 101);
+    }
+    if (func_801378B8(&this->skelAnime, 9.0f)) {
+        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BOSS_07, this->unk_17AC.x, this->unk_17AC.y,
+                    this->unk_17AC.z, 0, 0, 0, 101);
+    }
+    if (this->timers[0] == 0) {
+        func_809FDB2C(this, globalCtx);
+    }
+    func_809F4D54(this, globalCtx, 1, 0);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_809FE2D4.s")
+void func_809FE068(Boss07* this, GlobalContext* globalCtx) {
+    this->actionFunc = func_809FE0E4;
+    SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06003A64, -5.0f);
+    this->timers[0] = Rand_ZeroFloat(100.0f) + 100.0f;
+    this->timers[1] = 0;
+    this->unk_ABC8 = 0;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_809FE348.s")
+void func_809FE0E4(Boss07* this, GlobalContext* globalCtx) {
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    if (func_801378B8(&this->skelAnime, 5.0f)) {
+        if ((this->unk_ABC8 % 2) == 0) {
+            Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_VOICE_UAUOO1_OLD);
+        } else {
+            Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_VOICE_UAUOO2_OLD);
+        }
+        func_8019F1C0(&sSfxPoint, NA_SE_EN_LAST2_JUMP_OLD);
+        this->unk_ABC8++;
+    }
+    Math_ApproachF(&this->actor.speedXZ, KREG(67) + 10.0f, 1.0f, 3.0f);
+    if (this->timers[1] == 0) {
+        if ((this->unk_14C == 0) && (Rand_ZeroOne() < 0.7f)) {
+            if (Rand_ZeroOne() < 0.75f) {
+                this->unk_180 = randPlusMinusPoint5Scaled(0x10000);
+            } else {
+                this->unk_180 = this->actor.yawTowardsPlayer;
+            }
+        }
+        if (this->actor.bgCheckFlags & 8) {
+            this->timers[1] = 20;
+            this->unk_180 = this->actor.yawTowardsPlayer;
+        }
+    }
+    Math_ApproachS(&this->actor.world.rot.y, this->unk_180, 0xA, 0x1800);
+    if ((this->timers[0] == 0) || (this->actor.xzDistToPlayer <= 200.0f)) {
+        func_809FDB2C(this, globalCtx);
+        if (this->timers[0] != 0) {
+            Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_VOICE_SURPRISED_OLD);
+        }
+    }
+    func_809F4D54(this, globalCtx, 7, 0);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_809FE4B0.s")
+void func_809FE2D4(Boss07* this, GlobalContext* globalCtx) {
+    this->actionFunc = func_809FE348;
+    SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_0600A194, -10.0f);
+    this->timers[0] = Rand_ZeroFloat(50.0f) + 70.0f;
+    this->timers[1] = 0;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_809FE524.s")
+void func_809FE348(Boss07* this, GlobalContext* globalCtx) {
+    Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_MOONWALK_OLD - SFX_FLAG);
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    Math_ApproachF(&this->actor.speedXZ, KREG(69) + -10.0f, 1.0f, 3.0f);
+    if (this->timers[1] == 0) {
+        if ((this->unk_14C == 0) && (Rand_ZeroOne() < 0.5f)) {
+            if (Rand_ZeroOne() < 0.75f) {
+                this->unk_180 = randPlusMinusPoint5Scaled(65536.0f);
+            } else {
+                this->unk_180 = this->actor.yawTowardsPlayer + 0x8000;
+            }
+        }
+        if ((this->actor.bgCheckFlags & 8) != 0) {
+            this->timers[1] = 20;
+            this->unk_180 = this->actor.yawTowardsPlayer + 0x8000;
+        }
+    }
+    Math_ApproachS(&this->actor.world.rot.y, this->unk_180, 0xA, 0x1000);
+    if (this->timers[0] == 0) {
+        func_809FDB2C(this, globalCtx);
+    }
+    func_809F4D54(this, globalCtx, 7, 0);
+}
+
+void func_809FE4B0(Boss07* this, GlobalContext* globalCtx) {
+    this->actionFunc = func_809FE524;
+    SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06000194, -10.0f);
+    this->timers[0] = Rand_ZeroFloat(70.0f) + 70.0f;
+    this->timers[1] = 0;
+}
+
+void func_809FE524(Boss07* this, GlobalContext* globalCtx) {
+    Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_BALLET_OLD - SFX_FLAG);
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    Math_ApproachF(&this->actor.speedXZ, KREG(69) + 10.0f, 1.0f, 1.0f);
+    if (this->timers[1] == 0) {
+        if (((this->unk_14C % 0x40) == 0) && (Rand_ZeroOne() < 0.5f)) {
+            if (Rand_ZeroOne() < 0.75f) {
+                this->unk_180 = randPlusMinusPoint5Scaled(65536.0f);
+            } else {
+                this->unk_180 = this->actor.yawTowardsPlayer;
+            }
+        }
+        if (this->actor.bgCheckFlags & 8) {
+            this->timers[1] = 20;
+            this->unk_180 = this->actor.yawTowardsPlayer;
+        }
+    }
+    Math_ApproachS(&this->actor.world.rot.y, this->unk_180, 0xA, 0x1000);
+    if ((this->timers[0] == 0) || (this->actor.xzDistToPlayer <= 200.0f)) {
+        func_809FDB2C(this, globalCtx);
+        if (this->timers[0] != 0) {
+            Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_VOICE_SURPRISED_OLD);
+        }
+    }
+    this->actor.shape.rot.y += 0x2000;
+}
 
 void func_809FE6B0(Boss07* this, GlobalContext* globalCtx) {
     this->actionFunc = func_809FE734;
     func_809F4FAC(globalCtx);
-    SkelAnime_ChangeAnimTransitionStop(&this->skelAnime1, &D_06000D0C, -2.0f);
+    SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06000D0C, -2.0f);
     this->unk_1D4 = SkelAnime_GetFrameCount(&D_06000D0C);
-    this->unk_ABD0 = 0;
+    this->csState = 0;
     this->unk_ABC8 = 0;
     this->actor.flags &= ~1;
     this->unk_15C = 20;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_809FE734.s")
+void func_809FE734(Boss07* this, GlobalContext* globalCtx) {
+    Player* player = PLAYER;
+    u8 sp4B = 0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_809FEE70.s")
+    this->unk_15C = 20;
+    this->unk_ABC8++;
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    func_809F4CBC(this, 3.0f);
+    switch (this->csState) {
+        case 0:
+            if (ActorCutscene_GetCurrentIndex() != -1) {
+                break;
+            }
+            func_800EA0D4(globalCtx, &globalCtx->csCtx);
+            func_800B7298(globalCtx, &this->actor, 7);
+            this->csCamIndex = func_801694DC(globalCtx);
+            func_80169590(globalCtx, 0, 1);
+            func_80169590(globalCtx, this->csCamIndex, 7);
+            this->unk_ABC8 = 0;
+            this->csState = 10;
+            func_8016566C(150);
+        case 10:
+            sHeartbeatTimer = 5;
+            this->csCamNextEye.x = 0.0f;
+            this->csCamNextEye.y = 30.0f;
+            this->csCamNextEye.z = 210.0f;
+            this->csCamNextAt.x = 0.0f;
+            this->csCamNextAt.y = 150.0f;
+            this->csCamNextAt.z = 0.0f;
+            Math_ApproachF(&this->actor.world.pos.x, 0.0f, 0.1f, 5.0f);
+            Math_ApproachF(&this->actor.world.pos.z, 0.0f, 0.1f, 5.0f);
+            if (func_801378B8(&this->skelAnime, this->unk_1D4)) {
+                this->unk_ABC8 = 0;
+                this->csState = 1;
+                SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06003854, -5.0f);
+            }
+            break;
+        case 1:
+            sHeartbeatTimer = 5;
+            this->csCamNextAt.y = (Math_SinS(this->unk_ABC8 * 0x700) * 15.0f) + 150.0f;
+            if (this->unk_ABC8 == 40) {
+                this->unk_ABC8 = 0;
+                this->csState = 2;
+                this->csCamNextEye.x = -30.0f;
+                this->csCamNextEye.y = 120.0f;
+                this->csCamNextEye.z = 110.0f;
+                this->csCamNextAt.x = -70.0f;
+                this->csCamNextAt.y = 150.0f;
+                this->csCamNextAt.z = -20.0f;
+                this->unk_17E8 = 1.0f;
+                this->unk_17EC = 0.4f;
+                SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_060031E4, -5.0f);
+                this->actor.shape.rot.y = 0;
+                this->actor.world.rot.y = this->actor.shape.rot.y;
+                Math_ApproachF(&this->actor.world.pos.x, 0.0f, 1.0f, 200.0f);
+                Math_ApproachF(&this->actor.world.pos.z, 0.0f, 1.0f, 200.0f);
+                player->actor.world.pos.x = this->actor.world.pos.x;
+                player->actor.world.pos.z = this->actor.world.pos.z + 300.0f;
+                player->actor.world.rot.y = player->actor.shape.rot.y = -0x8000;
+                Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_PUMP_UP_OLD);
+            }
+            break;
+        case 2:
+            sHeartbeatTimer = 5;
+            sp4B = 1;
+            if (this->unk_ABC8 == 40) {
+                this->unk_ABC8 = 0;
+                this->csState = 3;
+                this->csCamNextEye.x = 30.0f;
+                this->csCamNextEye.y = 120.0f;
+                this->csCamNextEye.z = 110.0f;
+                this->csCamNextAt.x = 50.0f;
+                this->csCamNextAt.y = 150.0f;
+                this->csCamNextAt.z = -20.0f;
+                this->unk_17E8 = 1.0f;
+                this->unk_17EC = 0.4f;
+                Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_PUMP_UP_OLD);
+            }
+            break;
+        case 3:
+            sHeartbeatTimer = 5;
+            sp4B = 1;
+            if (this->unk_ABC8 == 40) {
+                this->unk_ABC8 = 0;
+                this->csState = 4;
+                this->csCamNextEye.x = 0.0f;
+                this->csCamNextEye.y = 90.0f;
+                this->csCamNextEye.z = 110.0f;
+                this->csCamNextAt.x = 0.0f;
+                this->csCamNextAt.y = 90.0f;
+                this->csCamNextAt.z = 0.0f;
+                this->unk_17E8 = 1.0f;
+                this->unk_17EC = 0.4f;
+                Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_PUMP_UP_OLD);
+            }
+            break;
+        case 4:
+            sHeartbeatTimer = 5;
+            sp4B = 2;
+            if (this->unk_ABC8 == 10) {
+                Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_PUMP_UP_OLD);
+            }
+            if (this->unk_ABC8 == 40) {
+                Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BOSS_07, this->actor.world.pos.x,
+                            this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, this->csCamIndex, 30);
+                Actor_MarkForDeath(&this->actor);
+            }
+            break;
+    }
+    SysMatrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0);
+    Matrix_RotateY(this->actor.shape.rot.y, 1);
+    SysMatrix_MultiplyVector3fByState(&this->csCamNextEye, &this->csCamEye);
+    SysMatrix_MultiplyVector3fByState(&this->csCamNextAt, &this->csCamAt);
+    if (sp4B == 1) {
+        this->unk_17E0 = (Math_SinS(this->unk_ABC8 * 0x3000) * this->unk_17EC) + this->unk_17E8;
+        Math_ApproachF(&this->unk_17E8, 2.0f, 1.0f, 0.05f);
+        Math_ApproachZeroF(&this->unk_17EC, 1.0f, 0.01f);
+    } else if (sp4B == 2) {
+        this->unk_17E4 = (Math_SinS(this->unk_ABC8 * 0x3000) * this->unk_17EC) + this->unk_17E8;
+        Math_ApproachF(&this->unk_17E8, 2.0f, 1.0f, 0.05f);
+        Math_ApproachZeroF(&this->unk_17EC, 1.0f, 0.01f);
+    }
+    this->unk_17F0 = (Math_SinS(this->unk_ABC8 * 0x2000) * 0.1f) + 1.0f;
+    this->unk_17F4 = (Math_CosS(this->unk_ABC8 * 0x2000) * 0.1f) + 1.0f;
+    if (this->csCamIndex != 0) {
+        ShrinkWindow_SetLetterboxTarget(0x1B);
+        Play_CameraSetAtEye(globalCtx, this->csCamIndex, &this->csCamAt, &this->csCamEye);
+    }
+}
+
+void func_809FEE70(Boss07* this, GlobalContext* globalCtx) {
+    s32 i;
+    s32 j;
+    u8 damage;
+
+    if (this->unk_15C == 0) {
+        for (i = 0; i < 11; i++) {
+            if (this->sph1.elements[i].info.bumperFlags & 2) {
+                for (j = 0; j < 11; j++) {
+                    this->sph1.elements[j].info.bumperFlags &= ~2;
+                }
+                if (this->unk_1804 == 10) {
+                    this->unk_1806 = 0;
+                }
+                switch (this->actor.colChkInfo.damageEffect) {
+                    case 3:
+                        this->unk_1805 = 10;
+                        break;
+                    case 2:
+                        this->unk_1805 = 1;
+                        break;
+                    case 4:
+                        this->unk_1805 = 20;
+                        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x,
+                                    this->actor.focus.pos.y, this->actor.focus.pos.z, 0, 0, 0, 4);
+                        break;
+                    case 10:
+                        this->unk_1805 = 40;
+                        Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                        break;
+                    case 9:
+                        this->unk_1805 = 30;
+                        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x,
+                                    this->actor.focus.pos.y, this->actor.focus.pos.z, 0, 0, 3, 4);
+                        break;
+                }
+
+                if ((this->actionFunc == func_809FD89C) || (this->actionFunc == func_809FDAB0)) {
+                    this->unk_15C = (this->actor.colChkInfo.damageEffect == 12) ? 15 : 5;
+                    damage = this->actor.colChkInfo.damage;
+                    func_809FD984(this, globalCtx, damage, this->actor.colChkInfo.damageEffect);
+                    this->unk_15E = 15;
+                } else {
+                    this->unk_15C = 15;
+                    func_809FD818(this, globalCtx, 150);
+                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_DAMAGE_OLD);
+                }
+                break;
+            }
+        }
+    }
+}
 
 void Boss07_Afterimage_Update(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
@@ -3146,7 +3975,10 @@ void Boss07_Afterimage_Update(Actor* thisx, GlobalContext* globalCtx2) {
 }
 
 #ifdef NON_MATCHING
+// Incorrect load of 0.1f in the first Math_ApproachF
 void Boss07_Incarnation_Update(Actor* thisx, GlobalContext* globalCtx2) {
+    static u8 D_80A08198[8] = { 1, 0, 3, 0, 4, 0, 5, 0 };
+    static u8 D_80A081A0[8] = { 0, 3, 0, 4, 0, 5, 0, 1 };
     GlobalContext* globalCtx = globalCtx2;
     Boss07* this = THIS;
     s32 i;
@@ -3154,7 +3986,7 @@ void Boss07_Incarnation_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
     this->actor.hintId = 51;
     this->unk_14C++;
-    Math_Vec3f_Copy(&D_80A09A40, &this->actor.projectedPos);
+    Math_Vec3f_Copy(&sSfxPoint, &this->actor.projectedPos);
     if (this->unk_14A == 1) {
         Math_ApproachF(&globalCtx->envCtx.unk_DC, 1.0f, 1.0f, 0.1f);
         if (globalCtx->envCtx.unk_DC == 1.0f) {
@@ -3168,7 +4000,7 @@ void Boss07_Incarnation_Update(Actor* thisx, GlobalContext* globalCtx2) {
         globalCtx->envCtx.unk_C1 = D_80A081A0[this->unk_14B];
     }
     Math_ApproachF(&globalCtx->envCtx.unk_DC, 0.0f, 1.0f, 0.03f);
-    if (gGameInfo->data[1311] == 0) {
+    if (KREG(63) == 0) {
         this->unk_174 = 0;
         this->actor.shape.shadowAlpha = 130;
         for (i = 0; i < 3; i++) {
@@ -3183,8 +4015,8 @@ void Boss07_Incarnation_Update(Actor* thisx, GlobalContext* globalCtx2) {
         this->actionFunc(this, globalCtx);
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 50.0f, 200.0f, 100.0f, 5);
-        if ((this->unk_148 != 0) || (gGameInfo->data[1336] != 0)) {
-            gGameInfo->data[1336] = 0;
+        if ((this->unk_148 != 0) || (KREG(88) != 0)) {
+            KREG(88) = 0;
             this->unk_148 = 0;
             Audio_QueueSeqCmd(0x100100FF);
             func_809FE6B0(this, globalCtx);
@@ -3202,18 +4034,21 @@ void Boss07_Incarnation_Update(Actor* thisx, GlobalContext* globalCtx2) {
         Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 1, 0x1000);
     }
     if ((this->unk_18D6 != 0) && !(this->unk_14C & 1)) {
-        Boss07* temp_v0_12 = (Boss07*)Actor_SpawnAsChild(
+        Boss07* afterimage = (Boss07*)Actor_SpawnAsChild(
             &globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_BOSS_07, this->actor.world.pos.x,
             this->actor.world.pos.y, this->actor.world.pos.z, this->actor.world.rot.x, this->actor.world.rot.y, 7, 21);
-        if (temp_v0_12 != NULL) {
+        
+        if (afterimage != NULL) {
             for (i = 0; i < 25; i++) {
-                temp_v0_12->skelAnime1.limbDrawTbl[i] = this->skelAnime1.limbDrawTbl[i];
+                afterimage->skelAnime.limbDrawTbl[i] = this->skelAnime.limbDrawTbl[i];
             }
         }
     }
     func_809F9E94(this, globalCtx);
 }
 #else
+static u8 D_80A08198[8] = { 1, 0, 3, 0, 4, 0, 5, 0 };
+static u8 D_80A081A0[8] = { 0, 3, 0, 4, 0, 5, 0, 1 };
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/Boss07_Incarnation_Update.s")
 #endif
 
@@ -3225,7 +4060,7 @@ void Boss07_Afterimage_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 0, 0, 100, 155, 900, 1099);
-    SkelAnime_DrawSV(globalCtx, sp34->skelAnime1.skeleton, this->skelAnime1.limbDrawTbl, sp34->skelAnime1.dListCount,
+    SkelAnime_DrawSV(globalCtx, sp34->skelAnime.skeleton, this->skelAnime.limbDrawTbl, sp34->skelAnime.dListCount,
                      NULL, NULL, &this->actor);
     POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -3240,6 +4075,23 @@ s32 func_809FF678(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return false;
 }
 
+static s8 sIncarnationColliders[32] = {
+    -1, -1, -1, 1, -1, 9, -1, 10, -1, -1, 5, -1, 6, -1, 1, 3, -1, 4, -1, -1, 7, -1, 8, -1, 0, -1, -1, -1, -1, -1, 0, 0,
+};
+static s8 D_80A081C8[32] = {
+    -1, -1, -1, -1, 2,  -1, -1, -1, -1, 0,  -1, -1, -1, -1, 1, -1,
+    -1, -1, -1, 3,  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0,
+};
+static Vec3f sIncarnationColliderOffsets[11] = {
+    { 2000.0f, 0.0f, 0.0f }, { 3500.0f, -1000.0f, 0.0f }, { 100000.0f, 100000.0f, 100000.0f },
+    { 4000.0f, 0.0f, 0.0f }, { 4000.0f, 0.0f, 0.0f },     { 4000.0f, 0.0f, 0.0f },
+    { 4000.0f, 0.0f, 0.0f }, { 4000.0f, 0.0f, 0.0f },     { 4000.0f, 0.0f, 0.0f },
+    { 4000.0f, 0.0f, 0.0f }, { 4000.0f, 0.0f, 0.0f },
+};
+static s8 sIncarnationBodyParts[32] = {
+    -1, -1, -1, 1, 2, 9, -1, 10, 11, -1, 6, -1, 7, 8, 1, 3, -1, 4, 5, -1, 12, -1, 13, 14, 0, -1, -1, -1, -1, -1, 0, 0,
+};
+
 void func_809FF6B0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     Boss07* this = THIS;
     Vec3f sp28;
@@ -3248,16 +4100,16 @@ void func_809FF6B0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     if (limbIndex == 0x18) {
         SysMatrix_GetStateTranslation(&this->actor.focus.pos);
     }
-    i = D_80A0826C[limbIndex];
+    i = sIncarnationBodyParts[limbIndex];
     if (i >= 0) {
-        SysMatrix_GetStateTranslation(&this->unk_334[i]);
+        SysMatrix_GetStateTranslation(&this->bodyPartsPos[i]);
     }
-    i = D_80A081A8[limbIndex];
+    i = sIncarnationColliders[limbIndex];
     if (i >= 0) {
         if (this->unk_158 != 0) {
             SysMatrix_GetStateTranslationAndScaledZ(100000.0f, &sp28);
         } else {
-            SysMatrix_MultiplyVector3fByState(&D_80A081E8[i], &sp28);
+            SysMatrix_MultiplyVector3fByState(&sIncarnationColliderOffsets[i], &sp28);
         }
         func_809F4BB0(i, &this->sph1, &sp28);
     }
@@ -3307,17 +4159,17 @@ void Boss07_Incarnation_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     if ((this->unk_15E % 2) != 0) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
     }
-    func_801343C0(globalCtx, this->skelAnime1.skeleton, this->skelAnime1.limbDrawTbl, this->skelAnime1.dListCount,
+    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
                   func_809FF678, func_809FF6B0, func_809FF810, &this->actor);
     POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
-    func_800BE680(globalCtx, &this->actor, this->unk_334, 0xF, this->unk_17F8, this->unk_17FC, this->unk_1800,
+    func_800BE680(globalCtx, &this->actor, this->bodyPartsPos, 0xF, this->unk_17F8, this->unk_17FC, this->unk_1800,
                   this->unk_1804);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
 void func_809FFA04(Boss07* this, GlobalContext* globalCtx) {
     this->actionFunc = func_809FFA80;
-    SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime1, &D_06019E48, -20.0f);
+    SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06019E48, -20.0f);
     this->timers[2] = Rand_ZeroFloat(150.0f) + 60.0f;
     this->unk_1870 = 1.0f;
 }
@@ -3331,7 +4183,7 @@ void func_809FFA80(Boss07* this, GlobalContext* globalCtx) {
     s32 pad;
     Player* player = PLAYER;
 
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime1);
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST1_FLOAT_OLD - SFX_FLAG);
     if (this->timers[0] == 0) {
         if (this->timers[2] == 0) {
@@ -3373,8 +4225,8 @@ void func_809FFA80(Boss07* this, GlobalContext* globalCtx) {
     }
     Math_ApproachS(&this->actor.shape.rot.x, 0, 0xA, 0x200);
     Math_ApproachS(&this->actor.shape.rot.z, 0, 0xA, 0x400);
-    if ((this->unk_148 != 0) || (gGameInfo->data[1336] != 0)) {
-        gGameInfo->data[1336] = 0;
+    if ((this->unk_148 != 0) || (KREG(88) != 0)) {
+        KREG(88) = 0;
         this->unk_148 = 0;
         Audio_QueueSeqCmd(0x100100FF);
         func_80A025AC(this, globalCtx);
@@ -3384,7 +4236,7 @@ void func_809FFA80(Boss07* this, GlobalContext* globalCtx) {
 void func_809FFE64(Boss07* this, GlobalContext* globalCtx) {
     this->actionFunc = func_809FFEAC;
     this->unk_14E = 0;
-    this->unk_ABD0 = 0;
+    this->csState = 0;
     this->timers[0] = 30;
     this->unk_18D4 = 0;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST1_ATTACK_OLD);
@@ -3397,7 +4249,7 @@ void func_809FFEAC(Boss07* this, GlobalContext* globalCtx) {
     f32 sp2C;
     f32 sp28;
     f32 sp24;
-    Player* sp20 = PLAYER;
+    Player* player = PLAYER;
 
     this->actor.shape.rot.z -= this->unk_18D4;
     switch (this->unk_14E) {
@@ -3419,9 +4271,9 @@ void func_809FFEAC(Boss07* this, GlobalContext* globalCtx) {
             Math_ApproachS(&this->actor.shape.rot.x, -0x4000, 0xA, 0x400);
             Math_ApproachS(&this->unk_18D4, 0x2000, 1, 0x200);
             if (this->timers[1] != 0) {
-                this->unk_164.x = sp20->actor.world.pos.x;
-                this->unk_164.y = sp20->actor.world.pos.y + 10.0f;
-                this->unk_164.z = sp20->actor.world.pos.z;
+                this->unk_164.x = player->actor.world.pos.x;
+                this->unk_164.y = player->actor.world.pos.y + 10.0f;
+                this->unk_164.z = player->actor.world.pos.z;
             } else {
                 Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST1_ROLLING_OLD - SFX_FLAG);
             }
@@ -3435,7 +4287,7 @@ void func_809FFEAC(Boss07* this, GlobalContext* globalCtx) {
             Math_ApproachS(&this->actor.world.rot.x, sp36, 0xA, this->unk_170);
             Math_ApproachF(&this->unk_170, 3000.0f, 1.0f, 100.0f);
             Math_ApproachF(&this->actor.speedXZ, 20.0f, 1.0f, 2.0f);
-            if (((this->unk_ABD0 == 0) && (sp24 < 100.0f)) || (this->timers[0] == 0)) {
+            if (((this->csState == 0) && (sp24 < 100.0f)) || (this->timers[0] == 0)) {
                 if (Rand_ZeroOne() < 0.25f) {
                     this->unk_14E = 2;
                     this->timers[0] = 30;
@@ -3445,10 +4297,10 @@ void func_809FFEAC(Boss07* this, GlobalContext* globalCtx) {
                     if (Rand_ZeroOne() < 0.3f) {
                         this->timers[1] = 20;
                         Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST1_ATTACK_2ND_OLD);
-                        this->unk_ABD0 = 1;
+                        this->csState = 1;
                     } else {
                         this->timers[1] = 0;
-                        this->unk_ABD0 = 0;
+                        this->csState = 0;
                     }
                     this->timers[0] = 50;
                     this->unk_170 = 0.0f;
@@ -3467,14 +4319,14 @@ void func_809FFEAC(Boss07* this, GlobalContext* globalCtx) {
 
 void func_80A0021C(Boss07* this, GlobalContext* globalCtx) {
     this->actionFunc = func_80A00274;
-    SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime1, &D_0600AE40, -10.0f);
+    SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_0600AE40, -10.0f);
     this->timers[0] = 100;
     this->unk_170 = 0.0f;
 }
 
 void func_80A00274(Boss07* this, GlobalContext* globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime1);
-    func_8019F1C0(&D_80A09A40, NA_SE_EN_COMMON_WEAKENED - SFX_FLAG);
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    func_8019F1C0(&sSfxPoint, NA_SE_EN_COMMON_WEAKENED - SFX_FLAG);
     func_809F4CBC(this, 0.5f);
     Math_ApproachS(&this->actor.shape.rot.x, -0x1000 + 0x4B0 * Math_SinS(this->unk_14C * 0xBB8), 5, 0x800);
     Math_ApproachS(&this->actor.shape.rot.z, -0x1000 + 0x3E8 * Math_SinS(this->unk_14C * 0x9C4), 5, 0x800);
@@ -3524,7 +4376,7 @@ void func_80A00484(Boss07* this, GlobalContext* globalCtx, u8 arg2, Actor* arg3)
 
 void func_80A00554(Boss07* this, GlobalContext* globalCtx) {
     this->unk_15C = 20;
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime1);
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     if (this->actor.bgCheckFlags & 1) {
         func_809F4CBC(this, 1.0f);
         Math_ApproachS(&this->actor.shape.rot.x, -0x4000, 1, 0x1000);
@@ -3574,7 +4426,6 @@ void func_80A006F4(Boss07* this, GlobalContext* globalCtx) {
     this->unk_170 = 0.0f;
 }
 
-#ifdef NON_MATCHING
 void func_80A00720(Boss07* this, GlobalContext* globalCtx) {
     f32 temp_f20;
     f32 temp_f22;
@@ -3612,7 +4463,7 @@ void func_80A00720(Boss07* this, GlobalContext* globalCtx) {
     switch (this->unk_14E) {
         case 0:
             if (this->timers[0] == 25) {
-                func_8019F1C0(&D_80A09A40, NA_SE_EN_LAST1_BLOW_OLD);
+                func_8019F1C0(&sSfxPoint, NA_SE_EN_LAST1_BLOW_OLD);
             }
             if (this->timers[0] == 0) {
                 this->unk_14E = 1;
@@ -3690,9 +4541,9 @@ void func_80A00720(Boss07* this, GlobalContext* globalCtx) {
                     } else {
                         player->unk_B84 = this->actor.yawTowardsPlayer;
                         player->unk_B80 = this->unk_1898 * 0.5f;
-                        D_80A09A58->unk_1808 = 1;
-                        D_80A09A58->unk_180C = this->unk_1898 * 30.0f;
-                        D_80A09A58->unk_1810 = this->unk_18A8;
+                        sMajoraStatic->unk_1808 = 1;
+                        sMajoraStatic->unk_180C = this->unk_1898 * 30.0f;
+                        sMajoraStatic->unk_1810 = this->unk_18A8;
                         Math_ApproachS(&this->unk_18C4, sp118.x, 2, 0x2000);
                         Math_ApproachS(&this->unk_18C6, sp118.y, 2, 0x2000);
                         sp16C.x = this->actor.world.pos.x - this->unk_18A8.x;
@@ -3752,60 +4603,62 @@ void func_80A00720(Boss07* this, GlobalContext* globalCtx) {
                         }
                         SysMatrix_StatePop();
                         for (sp178 = 0; sp178 < 4; sp178++) {
-                            if (D_80A09A60[sp178]->unk_14E < 2) {
-                                sp16C.x = D_80A09A60[sp178]->actor.world.pos.x - this->unk_18A8.x;
-                                sp16C.y = D_80A09A60[sp178]->actor.world.pos.y - this->unk_18A8.y;
-                                sp16C.z = D_80A09A60[sp178]->actor.world.pos.z - this->unk_18A8.z;
-                                sp180 = sqrtf(SQXYZ(sp16C));
-                                SysMatrix_MultiplyVector3fByState(&sp16C, &sp160);
-                                if ((fabsf(sp160.x) < 60.0f) && (fabsf(sp160.y) < 60.0f) && (sp160.z > 40.0f) &&
-                                    (sp160.z <= (this->unk_18C0 * 16.666668f)) && (this->unk_14E != 5)) {
-                                    s32 pad;
-                                    Vec3f spE0;
-                                    Vec3f spD4;
-                                    Vec3f spC8;
+                            if (sBossRemains[sp178]->unk_14E >= 2) {
+                                continue;
+                            }
+                            sp16C.x = sBossRemains[sp178]->actor.world.pos.x - this->unk_18A8.x;
+                            sp16C.y = sBossRemains[sp178]->actor.world.pos.y - this->unk_18A8.y;
+                            sp16C.z = sBossRemains[sp178]->actor.world.pos.z - this->unk_18A8.z;
+                            sp180 = sqrtf(SQXYZ(sp16C));
+                            SysMatrix_MultiplyVector3fByState(&sp16C, &sp160);
+                            if ((fabsf(sp160.x) < 60.0f) && (fabsf(sp160.y) < 60.0f) && (sp160.z > 40.0f) &&
+                                (sp160.z <= (this->unk_18C0 * 16.666668f)) && (this->unk_14E != 5)) {
+                                s32 pad;
+                                Vec3f spE0;
+                                Vec3f spD4;
+                                Vec3f spC8;
 
-                                    this->unk_18D8 += 2;
-                                    this->unk_18C0 = sp180 * 0.062f;
-                                    if (this->unk_18D8 < 5) {
+                                this->unk_18D8 += 2;
+                                this->unk_18C0 = sp180 * 0.062f;
+                                if (this->unk_18D8 < 5) {
+                                    spE0.x =
+                                        sBossRemains[sp178]->actor.world.pos.x + randPlusMinusPoint5Scaled(40.0f);
+                                    spE0.y =
+                                        sBossRemains[sp178]->actor.world.pos.y + randPlusMinusPoint5Scaled(40.0f);
+                                    spE0.z =
+                                        sBossRemains[sp178]->actor.world.pos.z + randPlusMinusPoint5Scaled(40.0f);
+                                    spD4.x = 0.0f;
+                                    spD4.y = 6.0f;
+                                    spD4.z = 0.0f;
+                                    spC8.x = spD4.x * -0.05f;
+                                    spC8.y = spD4.y * -0.05f;
+                                    spC8.z = spD4.z * -0.05f;
+
+                                    func_809F4AE8(globalCtx, &spE0, &spD4, &spC8, Rand_ZeroFloat(10.0f) + 25.0f);
+                                    sBossRemains[sp178]->unk_15E |= 0xA;
+                                } else {
+                                    sBossRemains[sp178]->unk_14E = 2;
+                                    sBossRemains[sp178]->unk_18D6 = 60;
+                                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_FOLLOWERS_DEAD);
+                                    for (pad = 0; pad < 20; pad++) {
                                         spE0.x =
-                                            D_80A09A60[sp178]->actor.world.pos.x + randPlusMinusPoint5Scaled(40.0f);
+                                            sBossRemains[sp178]->actor.world.pos.x + randPlusMinusPoint5Scaled(50.0f);
                                         spE0.y =
-                                            D_80A09A60[sp178]->actor.world.pos.y + randPlusMinusPoint5Scaled(40.0f);
+                                            sBossRemains[sp178]->actor.world.pos.y + randPlusMinusPoint5Scaled(50.0f);
                                         spE0.z =
-                                            D_80A09A60[sp178]->actor.world.pos.z + randPlusMinusPoint5Scaled(40.0f);
-                                        spD4.x = 0.0f;
-                                        spD4.y = 6.0f;
-                                        spD4.z = 0.0f;
+                                            sBossRemains[sp178]->actor.world.pos.z + randPlusMinusPoint5Scaled(50.0f);
+                                        spD4.x = randPlusMinusPoint5Scaled(20.0f);
+                                        spD4.y = randPlusMinusPoint5Scaled(20.0f);
+                                        spD4.z = randPlusMinusPoint5Scaled(20.0f);
                                         spC8.x = spD4.x * -0.05f;
                                         spC8.y = spD4.y * -0.05f;
                                         spC8.z = spD4.z * -0.05f;
-
-                                        func_809F4AE8(globalCtx, &spE0, &spD4, &spC8, Rand_ZeroFloat(10.0f) + 25.0f);
-                                        D_80A09A60[sp178]->unk_15E |= 0xA;
-                                    } else {
-                                        D_80A09A60[sp178]->unk_14E = 2;
-                                        D_80A09A60[sp178]->unk_18D6 = 60;
-                                        Audio_PlayActorSound2(&this->actor, NA_SE_EN_FOLLOWERS_DEAD);
-                                        for (pad = 0; pad < 20; pad++) {
-                                            spE0.x =
-                                                D_80A09A60[sp178]->actor.world.pos.x + randPlusMinusPoint5Scaled(50.0f);
-                                            spE0.y =
-                                                D_80A09A60[sp178]->actor.world.pos.y + randPlusMinusPoint5Scaled(50.0f);
-                                            spE0.z =
-                                                D_80A09A60[sp178]->actor.world.pos.z + randPlusMinusPoint5Scaled(50.0f);
-                                            spD4.x = randPlusMinusPoint5Scaled(20.0f);
-                                            spD4.y = randPlusMinusPoint5Scaled(20.0f);
-                                            spD4.z = randPlusMinusPoint5Scaled(20.0f);
-                                            spC8.x = spD4.x * -0.05f;
-                                            spC8.y = spD4.y * -0.05f;
-                                            spC8.z = spD4.z * -0.05f;
-                                            func_809F4AE8(globalCtx, &spE0, &spD4, &spC8,
-                                                          Rand_ZeroFloat(10.0f) + 25.0f);
-                                        }
+                                        func_809F4AE8(globalCtx, &spE0, &spD4, &spC8,
+                                                        Rand_ZeroFloat(10.0f) + 25.0f);
                                     }
                                 }
                             }
+                            
                         }
                         if (func_800C55C4(&globalCtx->colCtx, &this->unk_18A8, &this->unk_18B4, &sp14C, &sp158, 1, 1, 1,
                                           1, &sp144) &&
@@ -3865,9 +4718,6 @@ void func_80A00720(Boss07* this, GlobalContext* globalCtx) {
             break;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_80A00720.s")
-#endif
 
 void func_80A016E4(Boss07* this, GlobalContext* globalCtx) {
     this->actionFunc = func_80A01750;
@@ -3878,11 +4728,338 @@ void func_80A016E4(Boss07* this, GlobalContext* globalCtx) {
     func_8016566C(this->unk_160);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_80A01750.s")
+static Vec3s sCameraEyes[4] = {
+    { 616, 402, -46 },
+    { -622, 380, -86 },
+    { 400, 300, 463 },
+    { -400, 470, 496 },
+};
+static Vec3s sCameraAts[4] = {
+    { 646, 394, -150 },
+    { -648, 380, -190 },
+    { 502, 321, 438 },
+    { -500, 445, 468 },
+};
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_80A025AC.s")
+void func_80A01750(Boss07* this, GlobalContext* globalCtx) {
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_80A0264C.s")
+    f32 sp8C = 0.0f;
+    Player* player = PLAYER;
+
+    this->unk_ABC8++;
+    SREG(90) = this->unk_160;
+    this->unk_1884 = 1;
+    switch (this->csState) {
+        case 0:
+            this->actor.world.pos.x = 0.0f;
+            this->actor.world.pos.y = 277.0f;
+            this->actor.world.pos.z = -922.5f;
+            if ((player->actor.world.pos.z < 700.0f) && (ActorCutscene_GetCurrentIndex() == -1)) {
+                func_800EA0D4(globalCtx, &globalCtx->csCtx);
+                func_800B7298(globalCtx, &this->actor, 7);
+                this->csCamIndex = func_801694DC(globalCtx);
+                func_80169590(globalCtx, 0, 1);
+                func_80169590(globalCtx, this->csCamIndex, 7);
+                this->unk_ABC8 = 0;
+                this->csState = 1;
+                this->unk_160 = KREG(76) + 150;
+                case 1:
+                    if (this->unk_ABC8 >= 20) {
+                        func_8019F128(NA_SE_EV_LIGHT_GATHER - SFX_FLAG);
+                        Math_ApproachF(&sMajoraStatic->unk_AB44, sREG(50) + 1.0f, 0.05f, sREG(51) + 0.05f);
+                    }
+                    if (this->unk_ABC8 == 35) {
+                        func_800B7298(globalCtx, &this->actor, 0xF);
+                    }
+                    player->actor.world.pos.x = 0.0f;
+                    player->actor.world.pos.z = 700.0f;
+                    player->actor.shape.rot.y = -0x8000;
+                    player->actor.world.rot.y = player->actor.shape.rot.y;
+                    this->csCamEye.x = 0.0f;
+                    this->csCamEye.y = func_800B6FC8(player) + player->actor.world.pos.y - 24.0f;
+                    this->csCamEye.z = player->actor.world.pos.z - 60.0f;
+                    this->csCamAt.x = player->actor.world.pos.x;
+                    this->csCamAt.y = func_800B6FC8(player) + player->actor.world.pos.y - 20.0f;
+                    this->csCamAt.z = player->actor.world.pos.z;
+                    if (player->transformation == 0) {
+                        this->csCamAt.y -= 30.0f;
+                    }
+                    if (this->unk_ABC8 == 75) {
+                        this->unk_ABC8 = 0;
+                        this->csState = 2;
+                        this->csCamEye.x = player->actor.world.pos.x;
+                        this->csCamEye.y = player->actor.world.pos.y + 20.0f;
+                        this->csCamEye.z = player->actor.world.pos.z - 60.0f + 120.0f;
+                        this->csCamAt.x = player->actor.world.pos.x;
+                        this->csCamAt.y = player->actor.world.pos.y + 24.0f + 5.0f;
+                        this->csCamAt.z = player->actor.world.pos.z;
+                    }
+            }
+            break;
+        case 2:
+            this->unk_160 = KREG(77) + 150;
+            if (this->unk_ABC8 >= 20) {
+                Math_ApproachZeroF(&sMajoraStatic->unk_AB44, 1.0f, 0.05f);
+            }
+            if (this->unk_ABC8 == 20) {
+                sBossRemains[0]->unk_14E = 1;
+                sBossRemains[1]->unk_14E = 1;
+                sBossRemains[2]->unk_14E = 1;
+                sBossRemains[3]->unk_14E = 1;
+            }
+            if (this->unk_ABC8 == 0) {
+                func_800B7298(globalCtx, &this->actor, 7);
+            }
+            if (this->unk_ABC8 == 120) {
+                func_800B7298(globalCtx, &this->actor, 0x15);
+            }
+            if (this->unk_ABC8 >= 0x1FU) {
+                Math_ApproachF(&this->csCamAt.y, player->actor.world.pos.y + 24.0f + 20.0f, 0.05f, this->csCamSpeedMod);
+                Math_ApproachF(&this->csCamSpeedMod, 1.0f, 1.0f, 0.01f);
+            }
+            if (this->unk_ABC8 >= 160) {
+                if (this->unk_ABC8 == 160) {
+                    sBossRemains[0]->unk_14E = 2;
+                    sBossRemains[1]->unk_14E = 2;
+                    sBossRemains[2]->unk_14E = 2;
+                    sBossRemains[3]->unk_14E = 2;
+                }
+                if (this->unk_ABC8 == 161) {
+                    sBossRemains[0]->unk_14E = 3;
+                }
+                if ((this->unk_ABC8 == 180) || (this->unk_ABC8 == 200) || (this->unk_ABC8 == 220)) {
+                    this->unk_ABCC++;
+                    sBossRemains[this->unk_ABCC]->unk_14E = 3;
+                }
+                this->csCamEye.x = sCameraEyes[this->unk_ABCC].x;
+                this->csCamEye.y = sCameraEyes[this->unk_ABCC].y;
+                this->csCamEye.z = sCameraEyes[this->unk_ABCC].z;
+                this->csCamAt.x = sCameraAts[this->unk_ABCC].x;
+                this->csCamAt.y = sCameraAts[this->unk_ABCC].y;
+                this->csCamAt.z = sCameraAts[this->unk_ABCC].z;
+                if (this->unk_ABC8 == 250) {
+                    this->csState = 3;
+                    this->unk_ABC8 = 0;
+                    this->csCamEye.x = this->actor.world.pos.x;
+                    this->csCamEye.y = this->actor.world.pos.y;
+                    this->csCamEye.z = 300.0f;
+                    this->csCamAt.x = this->actor.world.pos.x;
+                    this->csCamAt.y = this->actor.world.pos.y;
+                    this->csCamAt.z = this->actor.world.pos.z;
+                    func_80A04DE0(sBossRemains[0], globalCtx);
+                    func_80A04DE0(sBossRemains[1], globalCtx);
+                    func_80A04DE0(sBossRemains[2], globalCtx);
+                    func_80A04DE0(sBossRemains[3], globalCtx);
+                    this->csCamSpeedMod = 0.0f;
+                    sMajoraStatic->unk_AB44 = 0.0f;
+                    Audio_QueueSeqCmd(0x100A00FF);
+                }
+            }
+            break;
+        case 3:
+            this->unk_160 = KREG(78) + 150;
+            if (this->unk_ABC8 >= 15) {
+                Math_ApproachF(&this->csCamEye.z, -700.0f, 0.4f, 100.0f);
+            }
+            if (this->unk_ABC8 >= 55) {
+                if (this->unk_ABC8 == 55) {
+                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_B_PAMET_BREAK);
+                }
+                this->unk_1884 = 0;
+            }
+            if (this->unk_ABC8 >= 75) {
+                s32 i;
+                Vec3f sp78 = { 0.0f, 0.0f, 0.0f };
+                Vec3f sp6C = { 0.0f, -0.5f, 0.0f };
+                Vec3f sp60;
+
+                if (this->unk_ABC8 == 75) {
+                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST1_DEMO_WALL);
+                }
+                sp8C = 2.0f * (this->unk_ABC8 % 2);
+                if ((this->unk_ABC8 % 2) != 0) {
+                    this->actor.world.pos.x += 2.0f;
+                } else {
+                    this->actor.world.pos.x -= 2.0f;
+                }
+                for (i = 0; i < 3; i++) {
+                    sp60.x = this->actor.world.pos.x + randPlusMinusPoint5Scaled(110.0f);
+                    sp60.y = this->actor.world.pos.y + randPlusMinusPoint5Scaled(110.0f);
+                    sp60.z = this->actor.world.pos.z + 10.0f;
+                    EffectSsHahen_Spawn(globalCtx, &sp60, &sp78, &sp6C, 0, (Rand_ZeroOne() * 5.0f) + 10.0f, -1, 10,
+                                        NULL);
+                }
+            }
+            if (this->unk_ABC8 == 110) {
+                this->csState = 4;
+                this->unk_ABC8 = 0;
+                this->csCamEye.x = this->actor.world.pos.x + 200.0f;
+                this->csCamEye.y = this->actor.world.pos.y;
+                this->csCamEye.z = this->actor.world.pos.z + 400.0f;
+                player->actor.world.pos.z = 0.0f;
+                func_800B7298(globalCtx, &this->actor, 1);
+                this->unk_160 = KREG(74) + 200;
+            }
+            break;
+        case 4:
+            this->unk_1884 = 0;
+            if (this->unk_ABC8 >= 10) {
+                Math_ApproachS(&this->unk_160, KREG(72), 1, KREG(73) + 2);
+                if (this->unk_ABC8 == 10) {
+                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST1_DEMO_BREAK);
+                }
+                SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+                Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST1_FLOAT_OLD - SFX_FLAG);
+                Math_ApproachF(&this->unk_1870, 1.0f, 1.0f, 0.02f);
+                Math_ApproachF(&this->actor.world.pos.z, -642.5f, 0.05f, 30.0f);
+                Math_ApproachF(&this->actor.world.pos.y, 350.0f, 0.03f, 2.0f);
+                if (this->unk_ABC8 == 55) {
+                    Actor_TitleCardCreate(globalCtx, &globalCtx->actorCtx.titleCtxt,
+                                          Lib_SegmentedToVirtual(&D_0602F840), 0xA0, 0xB4, 0x80, 0x28);
+                }
+                if (this->unk_ABC8 == 30) {
+                    Audio_QueueSeqCmd(0x806B);
+                }
+                if (this->unk_ABC8 > 100) {
+                    Math_ApproachF(&this->csCamEye.x, player->actor.world.pos.x + 40.0f, 0.1f, this->csCamSpeedMod * 20.0f);
+                    Math_ApproachF(&this->csCamEye.y, player->actor.world.pos.y + 10.0f, 0.1f, this->csCamSpeedMod * 20.0f);
+                    Math_ApproachF(&this->csCamEye.z, player->actor.world.pos.z + 90.0f, 0.1f, this->csCamSpeedMod * 60.0f);
+                    Math_ApproachF(&this->csCamSpeedMod, 1.0f, 1.0f, 0.03f);
+                }
+                if (this->unk_ABC8 == 175) {
+                    Camera* sp5C = Play_GetCamera(globalCtx, 0);
+
+                    this->csState = 0;
+                    func_809FFA04(this, globalCtx);
+                    this->timers[0] = 50;
+                    this->timers[2] = 200;
+                    this->unk_1888 = 50;
+                    this->unk_164.x = 0.0f;
+                    this->unk_164.y = 200.0f;
+                    this->unk_164.z = 0.0f;
+                    this->unk_170 = 0.0f;
+                    sp5C->eye = this->csCamEye;
+                    sp5C->eyeNext = this->csCamEye;
+                    sp5C->at = this->csCamAt;
+                    func_80169AFC(globalCtx, this->csCamIndex, 0);
+                    this->csCamIndex = 0;
+                    func_800EA0EC(globalCtx, &globalCtx->csCtx);
+                    func_800B7298(globalCtx, &this->actor, 6);
+                    this->actor.flags |= 1;
+                    gSaveContext.eventInf[6] |= 2;
+                    func_80165690();
+                }
+            } else if ((this->unk_ABC8 % 2) != 0) {
+                this->actor.world.pos.x += 2.0f;
+            } else {
+                this->actor.world.pos.x -= 2.0f;
+            }
+            Math_ApproachF(&this->csCamAt.x, this->actor.world.pos.x, 0.05f, 10.0f);
+            Math_ApproachF(&this->csCamAt.y, this->actor.world.pos.y, 0.05f, 10.0f);
+            Math_ApproachF(&this->csCamAt.z, this->actor.world.pos.z, 0.05f, 10.0f);
+            break;
+    }
+    if (this->csCamIndex != 0) {
+        Vec3f sp50;
+
+        ShrinkWindow_SetLetterboxTarget(0x1B);
+        sp50.x = this->csCamAt.x;
+        sp50.y = this->csCamAt.y + sp8C;
+        sp50.z = this->csCamAt.z;
+        Play_CameraSetAtEye(globalCtx, this->csCamIndex, &sp50, &this->csCamEye);
+    }
+}
+
+void func_80A025AC(Boss07* this, GlobalContext* globalCtx) {
+    this->actionFunc = func_80A0264C;
+    SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_0600AE40, -10.0f);
+    this->actor.world.rot.y = this->actor.shape.rot.y =
+        Math_Acot2F(-this->actor.world.pos.z, -this->actor.world.pos.x) * (0x8000 / M_PI);
+    this->csState = 0;
+    this->unk_ABC8 = 0;
+    this->actor.flags &= ~1;
+    this->unk_15C = 20;
+}
+
+void func_80A0264C(Boss07* this, GlobalContext* globalCtx) {
+    Player* player = PLAYER;
+    Vec3f sp60;
+    Vec3f sp54;
+
+    this->unk_ABC8++;
+    this->unk_15C = 20;
+    this->unk_1884 = 1;
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    func_809F4CBC(this, 0.5f);
+    Math_ApproachF(&this->actor.world.pos.x, 0.0f, 0.05f, 5.0f);
+    Math_ApproachF(&this->actor.world.pos.z, 0.0f, 0.05f, 5.0f);
+    Math_ApproachF(&this->actor.world.pos.y, 130.0f, 0.05f, 3.0f);
+    SysMatrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0);
+    Matrix_RotateY(this->actor.shape.rot.y, 1);
+    switch (this->csState) {
+        case 0:
+            if (ActorCutscene_GetCurrentIndex() == -1) {
+                func_800EA0D4(globalCtx, &globalCtx->csCtx);
+                func_800B7298(globalCtx, &this->actor, 1U);
+                this->csCamIndex = func_801694DC(globalCtx);
+                func_80169590(globalCtx, 0, 1);
+                func_80169590(globalCtx, this->csCamIndex, 7);
+                this->unk_ABC8 = 0;
+                this->csState = 1;
+                this->csCamNextAt.z = 0.0f;
+                this->unk_18D6 = 120;
+                func_8016566C(150);
+                this->csCamNextEye.x = 0.0f;
+                this->csCamNextEye.y = -30.0f;
+                this->csCamNextEye.z = 270.0f;
+                this->csCamNextAt.x = 0.0f;
+                this->csCamNextAt.y = -30.0f;
+                SysMatrix_MultiplyVector3fByState(&this->csCamNextEye, &this->csCamEye);
+                SysMatrix_MultiplyVector3fByState(&this->csCamNextAt, &this->csCamAt);
+            } else {
+                break;
+            }
+        case 1:
+            player->actor.world.pos.x = 0.0f;
+            player->actor.world.pos.z = BREG(87) + 250.0f;
+            player->actor.world.rot.y = player->actor.shape.rot.y = -0x8000;
+
+            this->unk_1874 = 2;
+            if (this->unk_ABC8 > 60) {
+                Math_ApproachS(&this->actor.shape.rot.x, 0, 0xA, 0x200);
+                Math_ApproachS(&this->actor.shape.rot.z, 0, 0xA, 0x200);
+                Math_ApproachZeroF(&this->unk_1870, 1.0f, 0.01f);
+            } else {
+                this->actor.shape.rot.x += 0x1000;
+                this->actor.shape.rot.z += 0x1200;
+                Math_ApproachZeroF(&this->unk_1870, 1.0f, 0.005f);
+            }
+            if (this->unk_ABC8 > 130) {
+                this->csState = 2;
+            } else {
+                break;
+            }
+        case 2:
+            Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BOSS_07, 0.0f, 0.0f, 0.0f, 0, this->actor.shape.rot.y,
+                        this->csCamIndex, 20);
+            Actor_MarkForDeath(&this->actor);
+            break;
+    }
+
+    SysMatrix_MultiplyVector3fByState(&this->csCamNextEye, &this->csCamEye);
+    SysMatrix_MultiplyVector3fByState(&this->csCamNextAt, &sp60);
+    Math_ApproachF(&this->csCamAt.x, sp60.x, 0.1f, 10.0f);
+    Math_ApproachF(&this->csCamAt.y, sp60.y, 0.1f, 10.0f);
+    Math_ApproachF(&this->csCamAt.z, sp60.z, 0.1f, 10.0f);
+    if (this->csCamIndex != 0) {
+        ShrinkWindow_SetLetterboxTarget(0x1B);
+        sp54 = this->csCamEye;
+        if (sp54.y < 30.0f) {
+            sp54.y = 30.0f;
+        }
+        Play_CameraSetAtEye(globalCtx, this->csCamIndex, &this->csCamAt, &sp54);
+    }
+}
 
 void func_80A02B30(Boss07* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
@@ -3921,7 +5098,7 @@ void Boss07_Mask_Update(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     Boss07* this = THIS;
     s32 i;
-    Player* spA8 = PLAYER;
+    Player* player = PLAYER;
     Vec3f sp9C;
     Vec3f sp90;
     Vec3f sp84;
@@ -3930,20 +5107,20 @@ void Boss07_Mask_Update(Actor* thisx, GlobalContext* globalCtx2) {
     f32 sp68;
 
     this->actor.hintId = 50;
-    if (D_80A09A71 != 0) {
-        D_80A09A71--;
-        if (D_80A09A71 == 0) {
+    if (sMusicStartTimer != 0) {
+        sMusicStartTimer--;
+        if (sMusicStartTimer == 0) {
             Audio_QueueSeqCmd(0x806B);
         }
     }
-    Math_Vec3f_Copy(&D_80A09A40, &this->actor.projectedPos);
-    if ((D_80A09A58 == NULL) || (D_80A09A58->unk_ABD2 == 0)) {
+    Math_Vec3f_Copy(&sSfxPoint, &this->actor.projectedPos);
+    if ((sMajoraStatic == NULL) || (sMajoraStatic->csCamIndex == 0)) {
         this->unk_149 = 1;
         globalCtx->envCtx.unk_C1 = 2;
         globalCtx->envCtx.unk_C2 = 0;
         Math_ApproachF(&globalCtx->envCtx.unk_DC, this->unk_1898, 1.0f, 0.1f);
         this->unk_14C += 1;
-        if (gGameInfo->data[1311] == 0) {
+        if (KREG(63) == 0) {
             this->unk_174 = 0;
             this->unk_1884 = 0;
             this->unk_1874 = 0;
@@ -4004,7 +5181,7 @@ void Boss07_Mask_Update(Actor* thisx, GlobalContext* globalCtx2) {
         SysMatrix_MultiplyVector3fByState(&sp6C, &sp78);
         Collider_SetQuadVertices(&this->quad1, &sp9C, &sp90, &sp84, &sp78);
 
-        sp68 = (spA8->stateFlags3 & 0x200) ? 70.0f : 40.0f;
+        sp68 = (player->stateFlags3 & 0x200) ? 70.0f : 40.0f;
         sp6C.x = -sp68;
         sp6C.y = sp68;
         sp6C.z = -10.0f;
@@ -4020,7 +5197,7 @@ void Boss07_Mask_Update(Actor* thisx, GlobalContext* globalCtx2) {
         SysMatrix_MultiplyVector3fByState(&sp6C, &sp78);
         Collider_SetQuadVertices(&this->quad2, &sp9C, &sp90, &sp84, &sp78);
 
-        if (spA8->stateFlags3 & 0x200) {
+        if (player->stateFlags3 & 0x200) {
             CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->quad2.base);
         } else {
             if ((this->actionFunc != func_80A00274) && (this->actionFunc != func_80A00554)) {
@@ -4048,21 +5225,208 @@ void Boss07_Mask_Update(Actor* thisx, GlobalContext* globalCtx2) {
             sp44.y = sp50.y * -0.05f;
             sp44.z = sp50.z * -0.05f;
             func_809F4AE8(globalCtx, &sp5C, &sp50, &sp44, Rand_ZeroFloat(10.0f) + 25.0f);
-            func_8019F1C0(&D_80A09A40, NA_SE_EV_BURN_OUT - SFX_FLAG);
+            func_8019F1C0(&sSfxPoint, NA_SE_EV_BURN_OUT - SFX_FLAG);
         }
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_80A03238.s")
+void func_80A03238(Boss07* this, GlobalContext* globalCtx, Vec3f* base, Vec3f* pos, Vec3f* rot, Vec3f* pull,
+                   Vec3f* arg6, f32 arg7, u8 arg8, f32 arg9) {
+    f32 temp_f20;
+    f32 temp_f22;
+    f32 temp_f24;
+    f32 phi_f0;
+    f32 phi_f2;
+    f32 temp_f26;
+    s32 i;
+    f32 temp1;
+    f32 temp2;
+    Vec3f sp98 = { 0.0f, 0.0f, 0.0f };
+    Vec3f sp8C;
+    Vec3f sp80;
+    Vec3f* sp7C = pull;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_80A036C4.s")
+    if (this->unk_1874 != 0) {
+        for (i = 0; i < 10; i++) {
+            SysMatrix_StatePush();
+            SysMatrix_InsertZRotation_f(arg9, 1);
+            sp98.x = Math_SinS((2 * i + this->unk_14C) * 0x1600) * 10;
+            sp98.y = 10.0f;
+            sp98.z = 0.0f;
+            SysMatrix_MultiplyVector3fByState(&sp98, &sp8C);
+            pos[i].x += sp8C.x;
+            pos[i].y += sp8C.y;
+            pos[i].z += sp8C.z;
+            SysMatrix_StatePop();
+        }
+    }
+    for (i = 0; i < 10; i++, pull++) {
+        if (i == 0) {
+            pos[0] = *base;
+        } else {
+            Math_ApproachF(&pull->x, 0.0f, 1.0f, 1.0f);
+            Math_ApproachF(&pull->y, 0.0f, 1.0f, 1.0f);
+            Math_ApproachF(&pull->z, 0.0f, 1.0f, 1.0f);
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_80A03868.s")
+    pos++;
+    rot++;
+    pull = sp7C + 1;
+    sp98.x = sp98.y = 0.0f;
+    sp98.z = arg7 * 23.0f;
+    for (i = 1; i < 10; i++, pull++, pos++, rot++) {
+        if (i < 5) {
+            sp80.x = arg6->x * (5 - i) * 0.2f;
+            sp80.y = arg6->y * (5 - i) * 0.2f;
+            sp80.z = arg6->z * (5 - i) * 0.2f;
+        } else {
+            sp80 = D_801D15B0;
+        }
+        temp_f24 = pos->x + pull->x - (pos - 1)->x + sp80.x;
+        if (this->unk_1874 != 0) {
+            phi_f0 = 0.0f;
+        } else if ((arg8 != 0) && ((this->actor.world.pos.y - 30.0f) < (pos - 1)->y)) {
+            phi_f0 = -30.0f;
+        } else {
+            phi_f0 = -3.0f - ((i & 7) * 0.05f);
+        }
+        phi_f2 = pos->y + pull->y + phi_f0 + sp80.y;
+        if (phi_f2 < 2.0f) {
+            phi_f2 = 2.0f;
+        }
+        temp_f22 = phi_f2 - (pos - 1)->y;
+        temp_f20 = pos->z + pull->z - (pos - 1)->z + sp80.x;
+        temp_f26 = Math_Acot2F(temp_f20, temp_f24);
+        temp2 = sqrtf(SQ(temp_f24) + SQ(temp_f20));
+        temp1 = -Math_Acot2F(temp2, temp_f22);
+        (rot - 1)->y = temp_f26;
+        (rot - 1)->x = temp1;
+        SysMatrix_InsertYRotation_f(temp_f26, 0);
+        SysMatrix_RotateStateAroundXAxis(temp1);
+        SysMatrix_GetStateTranslationAndScaledZ(sp98.z, &sp8C);
+        temp_f24 = pos->x;
+        temp_f22 = pos->y;
+        temp_f20 = pos->z;
+        pos->x = (pos - 1)->x + sp8C.x;
+        pos->y = (pos - 1)->y + sp8C.y;
+        pos->z = (pos - 1)->z + sp8C.z;
+        pull->x = (pos->x - temp_f24) * 0.85f;
+        pull->y = (pos->y - temp_f22) * 0.85f;
+        pull->z = (pos->z - temp_f20) * 0.85f;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_80A03F18.s")
+void func_80A036C4(Boss07* this, GlobalContext* globalCtx, Vec3f* arg2, Vec3f* arg3, f32 arg4, f32 arg5) {
+    s32 i;
+    f32 phi_f12;
 
-#ifdef NON_MATCHING
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+    for (i = 0; i < 9; i++, arg2++, arg3++) {
+        SysMatrix_InsertTranslation(arg2->x, arg2->y, arg2->z, 0);
+        SysMatrix_InsertYRotation_f(arg3->y, 1);
+        SysMatrix_RotateStateAroundXAxis(arg3->x);
+        SysMatrix_InsertZRotation_f(arg5, 1);
+        if (i <= 4) {
+            phi_f12 = 0.035f;
+        } else {
+            phi_f12 = 0.035f - (i - 4) * 60.0f * 0.0001f;
+        }
+        Matrix_Scale(phi_f12, phi_f12, arg4 * 0.01f * 2.3f, 1);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), 2);
+        gSPDisplayList(POLY_OPA_DISP++, D_0600B020);
+    }
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+
+void func_80A03868(Boss07* this, GlobalContext* globalCtx) {
+    s32 pad[4];
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+    if (this->actionFunc == func_80A00720) {
+        gSPSegment(POLY_XLU_DISP++, 12,
+                   Gfx_TexScroll(globalCtx->state.gfxCtx, 0, ((s32)this->unk_14C * -0xF) & 0xFF, 0x20, 0x40));
+        gDPPipeSync(POLY_XLU_DISP++);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 60, 200);
+        gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 128);
+        SysMatrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0);
+        Matrix_RotateY(this->actor.shape.rot.y, 1);
+        SysMatrix_InsertXRotation_s(this->actor.shape.rot.x, 1);
+        Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, 1);
+        SysMatrix_StatePush();
+        SysMatrix_StatePush();
+        SysMatrix_StatePush();
+
+        SysMatrix_InsertTranslation(250.0f, 0.0f, 200.0f, 1);
+        Matrix_RotateY(-0xA00, 1);
+        Matrix_Scale(this->unk_1898 * 0.05f, this->unk_1898 * 0.05f, this->unk_188C * 0.05f, 1);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), 2);
+        gSPDisplayList(POLY_XLU_DISP++, D_0600C7D8);
+        SysMatrix_StatePop();
+
+        SysMatrix_InsertTranslation(-250.0f, 0.0f, 200.0f, 1);
+        Matrix_RotateY(0xA00, 1);
+        Matrix_Scale(this->unk_1898 * 0.05f, this->unk_1898 * 0.05f, this->unk_188C * 0.05f, 1);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), 2);
+        gSPDisplayList(POLY_XLU_DISP++, D_0600C7D8);
+        gSPDisplayList(POLY_XLU_DISP++, D_04023348);
+        SysMatrix_StatePop();
+
+        SysMatrix_InsertTranslation(0.0f, 0.0f, 1200.0f, 1);
+        SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
+        Matrix_Scale(this->unk_1890 * 40.0f * this->unk_1898, this->unk_1890 * 40.0f * this->unk_1898, 0.0f, 1);
+        SysMatrix_InsertZRotation_s(this->unk_14C * 0x100, 1);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), 2);
+        gSPDisplayList(POLY_XLU_DISP++, D_04023428);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 60, sREG(89) + 80);
+        Matrix_Scale(6.0f, 6.0f, 0.0f, 1);
+        SysMatrix_InsertZRotation_s(0x4000, 1);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), 2);
+        gSPDisplayList(POLY_XLU_DISP++, D_04023428);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 60, 200);
+        SysMatrix_StatePop();
+
+        SysMatrix_InsertTranslation(0.0f, 0.0f, 1150.0f, 1);
+        SysMatrix_GetStateTranslation(&this->unk_189C);
+        Matrix_Scale(this->unk_1898 * 0.05f, this->unk_1898 * 0.05f, (this->unk_1894 * 0.01f) - 0.01f, 1);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), 2);
+        gSPDisplayList(POLY_XLU_DISP++, D_0600C7D8);
+        SysMatrix_GetStateTranslationAndScaledZ(20100.0f, &this->unk_18A8);
+        if (this->unk_18C0 > 0.0f) {
+            Vec3f sp50;
+
+            SysMatrix_GetStateTranslationAndScaledZ(20000.0f, &sp50);
+            SysMatrix_InsertTranslation(this->unk_18A8.x, this->unk_18A8.y, this->unk_18A8.z, 0);
+            Matrix_RotateY(this->unk_18C6, 1);
+            SysMatrix_InsertXRotation_s(this->unk_18C4, 1);
+            Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, 1);
+            Matrix_Scale(this->unk_1898 * 0.05f, this->unk_1898 * 0.05f, this->unk_18C0 * 0.01f, 1);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), 2);
+            gSPDisplayList(POLY_XLU_DISP++, D_0600C7D8);
+
+            SysMatrix_GetStateTranslationAndScaledZ(20100.0f, &this->unk_18B4);
+            SysMatrix_InsertTranslation(sp50.x, sp50.y, sp50.z, 0);
+            SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_Scale(this->unk_1898 * 5.0f, this->unk_1898 * 5.0f, 0.0f, 1);
+            SysMatrix_InsertZRotation_s(this->unk_14C * 0x100, 1);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), 2);
+            gSPDisplayList(POLY_XLU_DISP++, D_04023348);
+            gSPDisplayList(POLY_XLU_DISP++, D_04023428);
+        }
+    }
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+
+void func_80A03F18(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    Boss07* this = THIS;
+
+    if (limbIndex == 2) {
+        SysMatrix_GetStateTranslationAndScaledX(500.0f, &this->unk_1878);
+    }
+}
+
 void Boss07_Mask_Draw(Actor* thisx, GlobalContext* globalCtx2) {
+    static void* D_80A082E0[2] = { D_06042330, D_06045B30 };
     GlobalContext* globalCtx = globalCtx2;
     Boss07* this = THIS;
     s32 i;
@@ -4070,12 +5434,13 @@ void Boss07_Mask_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     f32 temp_f20;
     f32 temp_f22;
     f32 phi_f24;
-    f32 pad2;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
     Vec3f spA8;
     Vec3f sp9C;
     Vec3f sp90;
+    f32 pad2;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
     temp_f20 = this->unk_186C * (M_PI / 4.0f) * 0.06666667f;
@@ -4086,7 +5451,7 @@ void Boss07_Mask_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
     }
     gSPSegment(POLY_OPA_DISP++, 8, Lib_SegmentedToVirtual(D_80A082E0[this->unk_1884]));
-    SkelAnime_Draw(globalCtx, this->skelAnime1.skeleton, this->skelAnime1.limbDrawTbl, NULL, func_80A03F18,
+    SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, NULL, func_80A03F18,
                    &this->actor);
     POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
     gSPDisplayList(POLY_OPA_DISP++, D_0600AFB0);
@@ -4110,17 +5475,17 @@ void Boss07_Mask_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         SysMatrix_StatePush();
         SysMatrix_InsertZRotation_f(phi_f24, 1);
         SysMatrix_MultiplyVector3fByState(&spA8, &sp9C);
-        this->unk_19F0[i].unk_0.x = this->unk_1878.x + sp9C.x;
-        this->unk_19F0[i].unk_0.y = this->unk_1878.y + sp9C.y;
-        this->unk_19F0[i].unk_0.z = this->unk_1878.z + sp9C.z;
+        this->tentacles[i].base.x = this->unk_1878.x + sp9C.x;
+        this->tentacles[i].base.y = this->unk_1878.y + sp9C.y;
+        this->tentacles[i].base.z = this->unk_1878.z + sp9C.z;
 
         pad2 = (1 - (i * 0.008f)) * this->unk_1870;
         SysMatrix_StatePop();
         if (this->unk_149 != 0) {
-            func_80A03238(this, globalCtx, &this->unk_19F0[i].unk_0, this->unk_19F0[i].unk_C, this->unk_19F0[i].unk_84,
-                          this->unk_19F0[i].unk_FC, &sp90, pad2, phi_s6, phi_f24);
+            func_80A03238(this, globalCtx, &this->tentacles[i].base, this->tentacles[i].pos, this->tentacles[i].rot,
+                          this->tentacles[i].pull, &sp90, pad2, phi_s6, phi_f24);
         }
-        func_80A036C4(this, globalCtx, this->unk_19F0[i].unk_C, this->unk_19F0[i].unk_84, pad2, i * 0.9f);
+        func_80A036C4(this, globalCtx, this->tentacles[i].pos, this->tentacles[i].rot, pad2, i * 0.9f);
         phi_f24 += 0.5f;
         spA8.y += 1.0f;
 
@@ -4130,11 +5495,7 @@ void Boss07_Mask_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     this->unk_149 = 0;
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/Boss07_Mask_Draw.s")
-#endif
 
-#ifdef NON_MATCHING
 void Boss07_Projectile_Update(Actor* thisx, GlobalContext* globalCtx2) {
     s32 i;
     f32 sp58;
@@ -4142,13 +5503,14 @@ void Boss07_Projectile_Update(Actor* thisx, GlobalContext* globalCtx2) {
     f32 sp50;
     GlobalContext* globalCtx = globalCtx2;
     Boss07* this = THIS;
+    f32 pad;
     Player* player = PLAYER;
 
     this->unk_14C++;
     if (this->actor.params == 100) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_FOLLOWERS_BEAM - SFX_FLAG);
     }
-    if (gGameInfo->data[1311] == 0) {
+    if (KREG(63) == 0) {
         Actor_SetScale(&this->actor, 3.5f);
         if (this->unk_14E == 0) {
             sp58 = player->actor.world.pos.x - this->actor.world.pos.x;
@@ -4156,7 +5518,8 @@ void Boss07_Projectile_Update(Actor* thisx, GlobalContext* globalCtx2) {
             sp50 = player->actor.world.pos.z - this->actor.world.pos.z;
 
             this->actor.world.rot.y = Math_Atan2S(sp58, sp50);
-            this->actor.world.rot.x = Math_Atan2S(sp54, sqrtf(SQ(sp58) + SQ(sp50)));
+            pad = sqrtf(SQ(sp58) + SQ(sp50));
+            this->actor.world.rot.x = Math_Atan2S(sp54, pad);
             this->unk_14E = 1;
             this->actor.speedXZ = 30.0f;
             func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, ACTORCAT_ENEMY);
@@ -4183,9 +5546,6 @@ void Boss07_Projectile_Update(Actor* thisx, GlobalContext* globalCtx2) {
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->cyl2.base);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/Boss07_Projectile_Update.s")
-#endif
 
 void Boss07_Projectile_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
@@ -4208,28 +5568,296 @@ void Boss07_Projectile_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_80A04768.s")
+void func_80A04768(Boss07* this, GlobalContext* globalCtx) {
+    Vec3f sp2C;
+    ColliderInfo* hitbox;
+
+    if ((this->unk_15C == 0) && (this->cyl2.base.acFlags & 2)) {
+        this->cyl2.base.acFlags &= ~2;
+        this->unk_15C = 15;
+        hitbox = this->cyl2.info.acHitInfo;
+        if (hitbox->toucher.dmgFlags & 0x80) {
+            func_80A055E0(this, globalCtx);
+        } else {
+            u8 damage = this->actor.colChkInfo.damage;
+
+            this->actor.colChkInfo.health -= damage;
+            this->unk_15E = 15;
+            this->actionFunc = func_80A04E5C;
+            if ((s8)this->actor.colChkInfo.health <= 0) {
+                this->unk_14E = 2;
+                this->unk_18DA = 1;
+                Enemy_StartFinishingBlow(globalCtx, &this->actor);
+                Audio_PlayActorSound2(&this->actor, NA_SE_EN_FOLLOWERS_DEAD);
+            } else {
+                this->unk_14E = 0xA;
+                this->timers[0] = 0xF;
+                func_809F4980(&this->actor);
+            }
+            Matrix_RotateY(this->actor.yawTowardsPlayer, 0);
+            SysMatrix_GetStateTranslationAndScaledZ(-20.0f, &sp2C);
+            this->unk_18CC = sp2C.x;
+            this->unk_18D0 = sp2C.z;
+        }
+    }
+}
 
 void func_80A04878(Boss07* this, GlobalContext* globalCtx) {
     this->actionFunc = func_80A04890;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_80A04890.s")
+void func_80A04890(Boss07* this, GlobalContext* globalCtx) {
+    f32 sp54;
+    f32 sp50;
+    f32 sp4C;
+    f32 phi_f2;
+    s32 pad;
+    f32 sp40;
+    f32 sp3C;
+    f32 sp38;
+    f32 sp34;
+    s16 sp32;
+    s16 sp30;
+    Player* player = PLAYER;
+
+    switch (this->unk_14E) {
+        case 0:
+            Actor_SetScale(&this->actor, 0.0f);
+            this->actor.world.pos.x = player->actor.world.pos.x;
+            this->actor.world.pos.y = player->actor.world.pos.y + 30.0f;
+            this->actor.world.pos.z = player->actor.world.pos.z;
+            if (player->transformation == 0) {
+                this->actor.world.pos.y += 30.0f + KREG(48);
+            }
+            this->unk_164.x = sRemainsStart[this->actor.params - 200].x + player->actor.world.pos.x;
+            this->unk_164.y = sRemainsStart[this->actor.params - 200].y + player->actor.world.pos.y;
+            this->unk_164.z = sRemainsStart[this->actor.params - 200].z + player->actor.world.pos.z;
+            sp54 = this->unk_164.x - this->actor.world.pos.x;
+            sp50 = this->unk_164.y - this->actor.world.pos.y;
+            sp4C = this->unk_164.z - this->actor.world.pos.z;
+            this->actor.world.rot.y = Math_Atan2S(sp54, sp4C);
+            this->actor.world.rot.x = Math_Atan2S(sp50, sqrtf(SQ(sp54) + SQ(sp4C)));
+            this->unk_AB40 = Rand_ZeroFloat(100.0f);
+            break;
+        case 1:
+            this->unk_ABC8++;
+            this->unk_AB40++;
+            this->unk_18C8 += 0x200;
+            Math_ApproachF(&this->unk_188C, 1.2f, 1.0f, 0.1f);
+            Math_ApproachF(&this->actor.scale.x, 0.004f, 0.5f, 0.0002f);
+            this->actor.scale.y = this->actor.scale.z = this->actor.scale.x;
+            if (this->unk_ABC8 > 90) {
+                this->unk_164.x = sRemainsEnd[this->actor.params - 200].x;
+                this->unk_164.y = 370.0f;
+                this->unk_164.z = sRemainsEnd[this->actor.params - 200].z;
+                sp38 = 20.0f;
+                sp34 = 0.5f;
+                sp40 = 4096.0f;
+                sp3C = 400.0f;
+                phi_f2 = 0.0f;
+            } else {
+                phi_f2 = Math_SinS(this->unk_AB40 * 0x300) * 20.0f;
+                sp38 = 1.0f;
+                sp34 = 0.1f;
+                sp40 = 1500.0f;
+                sp3C = 100.0f;
+            }
+            sp54 = this->unk_164.x - this->actor.world.pos.x;
+            sp50 = this->unk_164.y - this->actor.world.pos.y + phi_f2;
+            sp4C = this->unk_164.z - this->actor.world.pos.z;
+            sp30 = Math_Atan2S(sp54, sp4C);
+            sp32 = Math_Atan2S(sp50, sqrtf(SQ(sp54) + SQ(sp4C)));
+            Math_ApproachS(&this->actor.world.rot.y, sp30, 5, this->unk_170);
+            Math_ApproachS(&this->actor.world.rot.x, sp32, 5, this->unk_170);
+            Math_ApproachF(&this->unk_170, sp40, 1.0f, sp3C);
+            Math_ApproachF(&this->actor.speedXZ, sp38, 1.0f, sp34);
+            Actor_SetVelocityXYRotation(&this->actor);
+            Actor_ApplyMovement(&this->actor);
+            this->actor.shape.rot = this->actor.world.rot;
+            break;
+        case 2:
+            Actor_SetScale(&this->actor, 0.0f);
+            this->unk_188C = 0.0f;
+            this->actor.speedXZ = 0.0f;
+            this->actor.world.pos.x = sRemainsEnd[this->actor.params - 200].x * 0.6f;
+            this->actor.world.pos.y = 370.0f;
+            this->actor.world.pos.z = sRemainsEnd[this->actor.params - 200].z * 0.6f;
+            this->actor.shape.rot.y = sRemainsEnd[this->actor.params - 200].y;
+            this->unk_ABCC = 0;
+            break;
+        case 3:
+            this->unk_ABCC++;
+            if (this->unk_ABCC == 10) {
+                Audio_PlayActorSound2(&this->actor, NA_SE_EN_FOLLOWERS_STAY);
+            }
+            Actor_SetScale(&this->actor, 0.03f);
+            Math_ApproachF(&this->actor.world.pos.x, sRemainsEnd[this->actor.params - 200].x, 0.5f, 40.0f);
+            Math_ApproachF(&this->actor.world.pos.z, sRemainsEnd[this->actor.params - 200].z, 0.5f, 22.0f);
+            break;
+    }
+}
 
 void func_80A04DE0(Boss07* this, GlobalContext* globalCtx) {
     this->actionFunc = func_80A04E5C;
     this->actor.gravity = -0.75f;
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 40.0f);
-    Collider_InitAndSetCylinder(globalCtx, &this->cyl2, &this->actor, &D_80A07EA4);
+    Collider_InitAndSetCylinder(globalCtx, &this->cyl2, &this->actor, &sRemainsCylInit);
     this->actor.colChkInfo.health = 5;
     this->unk_14E = 0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_80A04E5C.s")
+void func_80A04E5C(Boss07* this, GlobalContext* globalCtx) {
+    s16 sp7E;
+    s16 sp7C;
+    f32 sp78;
+    f32 sp74;
+    f32 sp70;
+    s32 pad;
+    Vec3f sp60;
+    Vec3f sp54;
+    Vec3f sp48;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_80A055E0.s")
+    switch (this->unk_14E) {
+        case 20:
+            Audio_PlayActorSound2(&this->actor, NA_SE_EV_MUJURA_FOLLOWERS_FLY - SFX_FLAG);
+            this->timers[0] = 80;
+            this->timers[2] = 100.0f + Rand_ZeroFloat(100.0f);
+            this->unk_18C = 5.0f;
+            this->actor.speedXZ = 5.0f;
+            this->unk_164 = D_801D15B0;
+            this->actor.world.rot.y = Math_Atan2S(-this->actor.world.pos.x, -this->actor.world.pos.z);
+            this->unk_14E = 1;
+            this->unk_1888 = 100;
+            this->cyl2.base.colType = 3;
+            this->actor.flags |= 0x201;
+            Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST1_DEMO_BREAK);
+            break;
+        case 1:
+            Audio_PlayActorSound2(&this->actor, NA_SE_EV_MUJURA_FOLLOWERS_FLY - SFX_FLAG);
+            if (this->timers[2] == 0) {
+                this->unk_18DB = 1;
+                this->timers[2] = Rand_ZeroFloat(200.0f) + 100.0f;
+            }
+            if (this->timers[0] == 0) {
+                if (Rand_ZeroOne() < 0.35f) {
+                    this->unk_18C = 1.0f;
+                    this->timers[0] = Rand_ZeroFloat(50.0f) + 30.0f;
+                } else {
+                    func_809F4D10(&this->unk_164, 500.0f);
+                    this->unk_164.y = Rand_ZeroFloat(350.0f) + 100.0f;
+                    this->timers[0] = Rand_ZeroFloat(50.0f) + 20.0f;
+                    this->unk_170 = 0.0f;
+                    this->unk_18C = Rand_ZeroFloat(5.0f) + 5.0f;
+                }
+            }
+            sp78 = this->unk_164.x - this->actor.world.pos.x;
+            sp74 = this->unk_164.y - this->actor.world.pos.y;
+            sp70 = this->unk_164.z - this->actor.world.pos.z;
+            sp7C = Math_Atan2S(sp78, sp70);
+            sp7E = Math_Atan2S(sp74, sqrtf((sp78 * sp78) + (sp70 * sp70)));
+            sp7E += (s16)(Math_SinS(this->unk_14C * 0x1388) * 4000.0f);
+            Math_ApproachS(&this->actor.world.rot.y, sp7C, 0xA, this->unk_170);
+            Math_ApproachS(&this->actor.world.rot.x, sp7E, 5, this->unk_170);
+            Math_ApproachF(&this->unk_170, 2000.0f, 1.0f, 100.0f);
+            Math_ApproachF(&this->actor.speedXZ, this->unk_18C, 1.0f, 1.0f);
+            if ((this->unk_18C < 8.0f) && (func_801690CC(globalCtx) == 0)) {
+                Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
+            } else {
+                Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 0xA, 0x1000);
+            }
+            Actor_SetVelocityXYRotation(&this->actor);
+            Actor_ApplyMovement(&this->actor);
+            if (this->unk_1888 == 0) {
+                Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 50.0f, 100.0f, 100.0f, 5);
+            } else {
+                this->unk_1888--;
+            }
+            func_80A04768(this, globalCtx);
+            break;
+        case 2:
+            Math_ApproachS(&this->actor.shape.rot.x, -0x4000, 1, 0x500);
+            Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+            Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 50.0f, 100.0f, 100.0f, 5);
+            if (this->actor.bgCheckFlags & 1) {
+                if (this->unk_18DA != 0) {
+                    this->unk_18D6 |= 4;
+                }
+                Math_ApproachF(&this->actor.scale.z, 0.0f, 1.0f, 0.001f);
+                if (this->actor.scale.z == 0.0f) {
+                    this->unk_14E = 3;
+                    this->actor.draw = NULL;
+                    this->actor.flags &= ~1;
+                }
+                func_809F4CBC(this, 2.0f);
+            } else {
+                this->actor.shape.rot.z += 0x200;
+            }
+            break;
+        case 10:
+            Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+            this->actor.world.pos.y -= 50.0f;
+            this->actor.prevPos.y -= 50.0f;
+            Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 35.0f, 60.0f, 60.0f, 5);
+            this->actor.world.pos.y += 50.0f;
+            this->actor.prevPos.y += 50.0f;
+            if (this->timers[0] == 0) {
+                this->unk_14E = 1;
+            }
+            break;
+        case 0:
+            break;
+    }
+    if (this->unk_14E < 2) {
+        Collider_UpdateCylinder(&this->actor, &this->cyl2);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->cyl2.base);
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->cyl2.base);
+    }
+    if (this->unk_18DB != 0) {
+        this->unk_18DB = 0;
+        if ((func_809F4C40(this, globalCtx) != 0) && (sMajorasMask->actionFunc != func_80A00720)) {
+            Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BOSS_07, this->actor.world.pos.x,
+                        this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 100);
+        }
+    }
+    if (this->unk_18D6 != 0) {
+        sp60.x = randPlusMinusPoint5Scaled(80.0f) + this->actor.world.pos.x;
+        sp60.z = randPlusMinusPoint5Scaled(80.0f) + this->actor.world.pos.z;
+        if (this->unk_18DA != 0) {
+            sp48.x = sp48.z = 0.0f;
+            sp48.y = 0.03f;
+            sp60.y = Rand_ZeroFloat(10.0f) + this->actor.world.pos.y;
+            EffectSsKFire_Spawn(globalCtx, &sp60, &D_801D15B0, &sp48, Rand_ZeroFloat(30.0f) + 30.0f, 0);
+            Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+        } else {
+            sp60.y = (Rand_ZeroFloat(30.0f) + this->actor.world.pos.y) - 15.0f;
+            sp54.x = 0.0f;
+            sp54.y = 5.0f;
+            sp54.z = 0.0f;
+            sp48.x = sp54.x * -0.05f;
+            sp48.y = sp54.y * -0.05f;
+            sp48.z = sp54.z * -0.05f;
+            func_809F4AE8(globalCtx, &sp60, &sp54, &sp48, Rand_ZeroFloat(10.0f) + 25.0f);
+            Audio_PlayActorSound2(&this->actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_80A05608.s")
+void func_80A055E0(Boss07* this, GlobalContext* globalCtx) {
+    this->actionFunc = func_80A05608;
+    this->timers[0] = 50;
+    this->actor.speedXZ = 0.0f;
+}
+
+void func_80A05608(Boss07* this, GlobalContext* globalCtx) {
+    func_80A04768(this, globalCtx);
+    Collider_UpdateCylinder(&this->actor, &this->cyl2);
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->cyl2.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->cyl2.base);
+    if (this->timers[0] == 0) {
+        this->actionFunc = func_80A04E5C;
+        this->unk_14E = 1;
+    }
+}
 
 void Boss07_Remains_Update(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
@@ -4314,67 +5942,172 @@ void func_80A05AF8(Boss07* this, GlobalContext* globalCtx) {
     this->timers[0] = 200;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_80A05B50.s")
+void func_80A05B50(Boss07* this, GlobalContext* globalCtx) {
+    if (sMajorasWrath->actionFunc == func_809F8EC8) {
+        Math_Vec3f_Copy(&this->actor.world.pos, &sMajorasWrath->unk_F80);
+        this->actor.world.pos.y -= 25.0f + sREG(78);
+    }
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 40.0f, 50.0f, 80.0f, 1);
+    if ((sMajorasWrath->unk_14C >= (s16)(KREG(50) + 21)) || (sMajorasWrath->unk_15C != 0)) {
+        func_80A05C88(this, globalCtx);
+    } else if (this->actor.bgCheckFlags & 8) {
+        func_80A05C88(this, globalCtx);
+        this->actor.speedXZ = -15.0f;
+        CollisionCheck_SpawnShieldParticles(globalCtx, &this->actor.focus.pos);
+        Audio_PlayActorSound2(&this->actor, NA_SE_IT_SHIELD_REFLECT_SW);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_80A05C88.s")
+void func_80A05C88(Boss07* this, GlobalContext* globalCtx) {
+    this->actionFunc = func_80A05DDC;
+    this->actor.gravity = -2.0f;
+    if (sMajorasWrath->unk_15C != 0) {
+        this->timers[0] = sREG(47) + 80;
+        this->timers[1] = sREG(77) + 150;
+    } else {
+        this->timers[0] = sREG(47) + 300;
+        this->timers[1] = sREG(77) + 370;
+        this->actor.velocity.y = (sREG(43) * 0.1f) + 15.0f;
+        this->actor.speedXZ = (sREG(44) * 0.1f) + -3.0f;
+    }
+    this->actor.world.rot.y = (sREG(45) * 0x1000) + sMajorasWrath->actor.shape.rot.y;
+    this->actor.shape.rot.z = Rand_ZeroFloat((sREG(29) + 10) * 256.0f);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_80A05DDC.s")
+void func_80A05DDC(Boss07* this, GlobalContext* globalCtx) {
+    f32 sp4C;
+    f32 sp48;
+
+    func_8019FAD8(&this->actor.projectedPos, NA_SE_EN_LAST3_KOMA_OLD - SFX_FLAG, this->unk_17C * 1.1111112f);
+    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    this->actor.world.pos.x += this->unk_18CC;
+    this->actor.world.pos.z += this->unk_18D0;
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 40.0f, 40.0f, 80.0f, 5);
+    if ((this->unk_158 == 0) && (this->actor.bgCheckFlags & 8)) {
+        this->unk_158 = 10;
+        if (this->unk_17C > 0.01f) {
+            if (this->unk_17C < 0.45f) {
+                this->actor.speedXZ *= -1.0f;
+            } else {
+                this->actor.speedXZ = -10.0f;
+            }
+            CollisionCheck_SpawnShieldParticles(globalCtx, &this->actor.focus.pos);
+            Audio_PlayActorSound2(&this->actor, NA_SE_IT_SHIELD_REFLECT_SW);
+        }
+    }
+    if (this->actor.bgCheckFlags & 1) {
+        if (this->timers[0] < (s16)(sREG(24) + 70)) {
+            if (this->timers[0] >= (s16)(sREG(25) + 35)) {
+                Math_ApproachZeroF(&this->actor.speedXZ, 1.0f, (sREG(17) * 0.01f) + 0.1f);
+                Math_ApproachS(&this->actor.shape.rot.z, (sREG(19) * 0x800) + 0x2000, 1, sREG(18) + 416);
+                Math_ApproachZeroF(&this->unk_17C, 1.0f, (sREG(16) * 0.0001f) + 0.005f);
+                Math_ApproachS(&this->unk_180, (sREG(20) * 0x800) + 0x2000, 1, (sREG(21) * 16) + 192);
+            } else if (this->timers[0] == 0) {
+                Math_ApproachZeroF(&this->actor.speedXZ, 1.0f, (sREG(26) * 0.01f) + 0.5f);
+                Math_ApproachS(&this->actor.shape.rot.z, (sREG(19) * 0x800) + 0x2000, 1, 0x800);
+                Math_ApproachZeroF(&this->unk_17C, 1.0f, (sREG(27) * 0.001f) + 0.024f);
+                Math_ApproachS(&this->unk_180, 0, 2, sREG(28) + 106);
+            } else {
+                Math_ApproachF(&this->actor.speedXZ, sREG(22) + 10.0f, 1.0f, (sREG(23) * 0.01f) + 0.6f);
+                Math_ApproachS(&this->actor.shape.rot.z, (sREG(19) * 0x800) + 0x2000, 1, sREG(18) + 1040);
+                Math_ApproachZeroF(&this->unk_17C, 1.0f, (sREG(16) * 0.0001f) + 0.005f);
+                Math_ApproachS(&this->unk_180, (sREG(29) * 0x800) - 0x800, 1, (sREG(30) * 16) + 832);
+            }
+            this->actor.world.rot.y += this->unk_180;
+        } else {
+            Math_ApproachS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x300);
+            Math_ApproachF(&this->actor.speedXZ, (sREG(48) * 0.1f) + 2.0f + 8.0f, 1.0f,
+                           (sREG(46) * 0.01f) + 0.100000024f + 0.2f);
+        }
+        Math_ApproachZeroF(&this->unk_18CC, 1.0f, 1.0f);
+        Math_ApproachZeroF(&this->unk_18D0, 1.0f, 1.0f);
+        if (this->actor.velocity.y < (sREG(40) + -2.0f)) {
+            this->actor.velocity.y *= -(0.5f + (sREG(41) * 0.01f));
+            Audio_PlayActorSound2(&this->actor, NA_SE_IT_SHIELD_REFLECT_SW);
+            CollisionCheck_SpawnShieldParticles(globalCtx, &this->actor.world.pos);
+            this->actor.speedXZ *= 0.5f + (sREG(57) * 0.01f);
+        } else {
+            this->actor.velocity.y = -0.5f;
+        }
+        sp4C = this->actor.prevPos.x - this->actor.world.pos.x;
+        sp48 = this->actor.prevPos.z - this->actor.world.pos.z;
+        func_800AE930(&globalCtx->colCtx, Effect_GetParams(this->effectIndex), &this->actor.world.pos, 3.0f,
+                      Math_Atan2S(sp4C, sp48), this->actor.floorPoly, this->actor.floorBgId);
+        this->unk_14E = 1;
+    } else if (this->unk_14E != 0) {
+        this->unk_14E = 0;
+        func_800AEF44(Effect_GetParams(this->effectIndex));
+    }
+    this->actor.shape.rot.y = this->actor.world.rot.y;
+    if (this->timers[1] == 0) {
+        EnBom* bomb = (EnBom*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOM, this->actor.world.pos.x,
+                                          this->actor.world.pos.y + 25.0f, this->actor.world.pos.z, 0, 0, 0, 0);
+
+        if (bomb != NULL) {
+            bomb->timer = 0;
+        }
+        Actor_MarkForDeath(&this->actor);
+    } else if (this->timers[1] == 25) {
+        this->unk_15E = 25;
+        func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, 3);
+    }
+}
 
 void func_80A06500(Boss07* this, GlobalContext* globalCtx) {
     s32 i;
-    Boss07* phi_a2;
+    Boss07* top;
     f32 dx;
     f32 dy;
     f32 dz;
 
     if (this->unk_158 == 0) {
-        phi_a2 = (Boss07*)globalCtx->actorCtx.actorList[ACTORCAT_BOSS].first;
+        top = (Boss07*)globalCtx->actorCtx.actorList[ACTORCAT_BOSS].first;
 
-        while (phi_a2 != NULL) {
-            if ((this != phi_a2) && (phi_a2->actor.params == 180) && (phi_a2->unk_158 == 0)) {
-                dx = phi_a2->actor.world.pos.x - this->actor.world.pos.x;
-                dy = phi_a2->actor.world.pos.y - this->actor.world.pos.y;
-                dz = phi_a2->actor.world.pos.z - this->actor.world.pos.z;
+        while (top != NULL) {
+            if ((this != top) && (top->actor.params == 180) && (top->unk_158 == 0)) {
+                dx = top->actor.world.pos.x - this->actor.world.pos.x;
+                dy = top->actor.world.pos.y - this->actor.world.pos.y;
+                dz = top->actor.world.pos.z - this->actor.world.pos.z;
 
-                if (sqrtf(SQ(dx) + SQ(dy) + SQ(dz)) < (gGameInfo->data[1564] + 50.0f)) {
-                    phi_a2->unk_158 = this->unk_158 = 10;
+                if (sqrtf(SQ(dx) + SQ(dy) + SQ(dz)) < (sREG(28) + 50.0f)) {
+                    top->unk_158 = this->unk_158 = 10;
                     this->actor.world.rot.y = Math_Atan2S(dx, dz);
-                    phi_a2->actor.world.rot.y = this->actor.world.rot.y + 0x7FFF;
+                    top->actor.world.rot.y = this->actor.world.rot.y + 0x7FFF;
                     if (this->timers[0] > 0) {
                         this->actor.speedXZ = -10.0f;
                     } else {
                         this->actor.speedXZ = -5.0f;
-                        this->unk_17C = (gGameInfo->data[1625] * 0.01f) + 0.2f;
+                        this->unk_17C = (sREG(89) * 0.01f) + 0.2f;
                         this->unk_180 = 0x800;
                     }
-                    if (phi_a2->timers[0] > 0) {
-                        phi_a2->actor.speedXZ = -10.0f;
+                    if (top->timers[0] > 0) {
+                        top->actor.speedXZ = -10.0f;
                     } else {
-                        phi_a2->actor.speedXZ = -5.0f;
-                        phi_a2->unk_17C = (gGameInfo->data[1625] * 0.01f) + 0.2f;
-                        phi_a2->unk_180 = 0x800;
+                        top->actor.speedXZ = -5.0f;
+                        top->unk_17C = (sREG(89) * 0.01f) + 0.2f;
+                        top->unk_180 = 0x800;
                     }
                     CollisionCheck_SpawnShieldParticles(globalCtx, &this->actor.focus.pos);
-                    CollisionCheck_SpawnShieldParticles(globalCtx, &phi_a2->actor.focus.pos);
+                    CollisionCheck_SpawnShieldParticles(globalCtx, &top->actor.focus.pos);
                     if (this->timers[0] > 80) {
-                        this->actor.shape.rot.z = randPlusMinusPoint5Scaled((gGameInfo->data[1565] + 20) * 256.0f);
+                        this->actor.shape.rot.z = randPlusMinusPoint5Scaled((sREG(29) + 20) * 256.0f);
                         for (i = 0; i < 5; i++) {
                             DECR(this->timers[0]);
                             DECR(this->timers[1]);
                         }
                     }
-                    if (phi_a2->timers[0] > 80) {
-                        phi_a2->actor.shape.rot.z = randPlusMinusPoint5Scaled((gGameInfo->data[1565] + 20) * 256.0f);
+                    if (top->timers[0] > 80) {
+                        top->actor.shape.rot.z = randPlusMinusPoint5Scaled((sREG(29) + 20) * 256.0f);
                         for (i = 0; i < 5; i++) {
-                            DECR(phi_a2->timers[0]);
-                            DECR(phi_a2->timers[1]);
+                            DECR(top->timers[0]);
+                            DECR(top->timers[1]);
                         }
                     }
                     Audio_PlayActorSound2(&this->actor, NA_SE_IT_SHIELD_REFLECT_SW);
                     return;
                 }
             }
-            phi_a2 = (Boss07*)phi_a2->actor.next;
+            top = (Boss07*)top->actor.next;
         }
     }
 }
@@ -4399,9 +6132,9 @@ void func_80A06990(Boss07* this, GlobalContext* globalCtx) {
                     if (player->transformation == 0) {
                         this->actor.speedXZ = -30.0f;
                         this->actor.velocity.y = 10.0f;
-                        if ((s16)(gGameInfo->data[1583] + 100) < this->timers[0]) {
-                            this->timers[0] = gGameInfo->data[1583] + 100;
-                            this->timers[1] = gGameInfo->data[1613] + 170;
+                        if ((s16)(sREG(47) + 100) < this->timers[0]) {
+                            this->timers[0] = sREG(47) + 100;
+                            this->timers[1] = sREG(77) + 170;
                         }
                     } else if (this->actor.colChkInfo.damageEffect == 10) {
                         this->actor.speedXZ = -15.0f;
@@ -4417,7 +6150,7 @@ void func_80A06990(Boss07* this, GlobalContext* globalCtx) {
                 this->actor.world.rot.y = Math_Atan2S(this->cyl2.base.ac->world.pos.x - this->actor.world.pos.x,
                                                       this->cyl2.base.ac->world.pos.z - this->actor.world.pos.z);
                 this->actor.speedXZ = -20.0f;
-                this->actor.velocity.y = gGameInfo->data[1591] + 15.0f;
+                this->actor.velocity.y = sREG(55) + 15.0f;
                 sp38 = 1;
             }
         }
@@ -4425,12 +6158,12 @@ void func_80A06990(Boss07* this, GlobalContext* globalCtx) {
     if (this->actor.bgCheckFlags & 1) {
         if ((func_800B64FC(globalCtx, 5.0f, &this->actor.world.pos, &sp3C) >= 0.0f) && (sp3C == 0)) {
             this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-            this->actor.velocity.y = gGameInfo->data[1591] + 25.0f;
+            this->actor.velocity.y = sREG(55) + 25.0f;
             sp38 = 1;
         }
     }
     if (sp38 && (this->timers[0] > 90)) {
-        this->actor.shape.rot.z = randPlusMinusPoint5Scaled((gGameInfo->data[1565] + 30) * 256.0f);
+        this->actor.shape.rot.z = randPlusMinusPoint5Scaled((sREG(29) + 30) * 256.0f);
         this->timers[0] = Rand_ZeroFloat(10.0f) + 70.0f;
         this->timers[1] = this->timers[0] + 70;
     }
@@ -4458,7 +6191,7 @@ void Boss07_Top_Update(Actor* thisx, GlobalContext* globalCtx2) {
     if (this->unk_178 < -2.0f * M_PI) {
         this->unk_178 += 2.0f * M_PI;
     }
-    if (D_80A09A54->actionFunc == func_809F65F4) {
+    if (sMajorasWrath->actionFunc == func_809F65F4) {
         Actor_MarkForDeath(&this->actor);
     }
     Math_ApproachF(&this->actor.scale.x, (sREG(77) * 0.001f) + 0.06f, 1.0f, 0.012f);
@@ -4486,14 +6219,15 @@ void Boss07_Top_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 }
 
 #ifdef NON_MATCHING
+// reordering in sHeartbeatTimer--
 void Boss07_Effects_Update(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     Boss07* this = THIS;
 
     func_80A07638(globalCtx);
 
-    if (D_80A09A4C != 0) {
-        D_80A09A4C--;
+    if (sHeartbeatTimer != 0) {
+        sHeartbeatTimer--;
         play_sound(NA_SE_EN_LAST2_HEARTBEAT_OLD - SFX_FLAG);
     }
     if (this->unk_1808 != 0) {
@@ -4507,10 +6241,10 @@ void Boss07_Effects_Update(Actor* thisx, GlobalContext* globalCtx2) {
         D_801F4E32 = 0;
     }
     this->unk_ABC8++;
-    switch (this->unk_ABD0) {
+    switch (this->csState) {
         case 0:
-            if ((D_80A09A5C != NULL) && (D_80A09A5C->unk_774 != 0)) {
-                this->unk_ABD0 = 1;
+            if ((sMajorasMask != NULL) && (sMajorasMask->unk_774 != 0)) {
+                this->csState = 1;
                 this->unk_ABC8 = 0;
             }
             break;
@@ -4518,111 +6252,111 @@ void Boss07_Effects_Update(Actor* thisx, GlobalContext* globalCtx2) {
             if (ActorCutscene_GetCurrentIndex() == -1) {
                 func_800EA0D4(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 7);
-                this->unk_ABD2 = func_801694DC(globalCtx);
+                this->csCamIndex = func_801694DC(globalCtx);
                 func_80169590(globalCtx, 0, 1);
-                func_80169590(globalCtx, this->unk_ABD2, 7);
+                func_80169590(globalCtx, this->csCamIndex, 7);
                 this->unk_ABC8 = 0;
-                this->unk_ABD0 = 2;
+                this->csState = 2;
                 func_8016566C(150);
-                this->unk_ABD4.x = D_80A09A60[0]->actor.world.pos.x * 0.7f;
-                this->unk_ABD4.y = D_80A09A60[0]->actor.world.pos.y * 0.7f;
-                this->unk_ABD4.z = D_80A09A60[0]->actor.world.pos.z * 0.7f;
+                this->csCamEye.x = sBossRemains[0]->actor.world.pos.x * 0.7f;
+                this->csCamEye.y = sBossRemains[0]->actor.world.pos.y * 0.7f;
+                this->csCamEye.z = sBossRemains[0]->actor.world.pos.z * 0.7f;
             } else {
                 break;
             }
         case 2:
             if (this->unk_ABC8 == 20) {
-                D_80A09A60[0]->unk_14E = 20;
+                sBossRemains[0]->unk_14E = 20;
             }
-            this->unk_ABE0.x = D_80A09A60[0]->actor.world.pos.x;
-            this->unk_ABE0.y = D_80A09A60[0]->actor.world.pos.y;
-            this->unk_ABE0.z = D_80A09A60[0]->actor.world.pos.z;
+            this->csCamAt.x = sBossRemains[0]->actor.world.pos.x;
+            this->csCamAt.y = sBossRemains[0]->actor.world.pos.y;
+            this->csCamAt.z = sBossRemains[0]->actor.world.pos.z;
             if (this->unk_ABC8 == 40) {
-                this->unk_ABD0 = 3;
+                this->csState = 3;
                 this->unk_ABC8 = 0;
-                this->unk_ABD4.x = D_80A09A60[1]->actor.world.pos.x * 0.7f;
-                this->unk_ABD4.y = D_80A09A60[1]->actor.world.pos.y * 0.7f;
-                this->unk_ABD4.z = D_80A09A60[1]->actor.world.pos.z * 0.7f;
+                this->csCamEye.x = sBossRemains[1]->actor.world.pos.x * 0.7f;
+                this->csCamEye.y = sBossRemains[1]->actor.world.pos.y * 0.7f;
+                this->csCamEye.z = sBossRemains[1]->actor.world.pos.z * 0.7f;
             } else {
                 break;
             }
         case 3:
             if (this->unk_ABC8 == 20) {
-                D_80A09A60[1]->unk_14E = 20;
+                sBossRemains[1]->unk_14E = 20;
             }
-            this->unk_ABE0.x = D_80A09A60[1]->actor.world.pos.x;
-            this->unk_ABE0.y = D_80A09A60[1]->actor.world.pos.y;
-            this->unk_ABE0.z = D_80A09A60[1]->actor.world.pos.z;
+            this->csCamAt.x = sBossRemains[1]->actor.world.pos.x;
+            this->csCamAt.y = sBossRemains[1]->actor.world.pos.y;
+            this->csCamAt.z = sBossRemains[1]->actor.world.pos.z;
             if (this->unk_ABC8 == 40) {
-                this->unk_ABD0 = 4;
+                this->csState = 4;
                 this->unk_ABC8 = 0;
-                this->unk_ABD4.x = D_80A09A60[2]->actor.world.pos.x * 0.7f;
-                this->unk_ABD4.y = D_80A09A60[2]->actor.world.pos.y * 0.7f;
-                this->unk_ABD4.z = D_80A09A60[2]->actor.world.pos.z * 0.7f;
+                this->csCamEye.x = sBossRemains[2]->actor.world.pos.x * 0.7f;
+                this->csCamEye.y = sBossRemains[2]->actor.world.pos.y * 0.7f;
+                this->csCamEye.z = sBossRemains[2]->actor.world.pos.z * 0.7f;
             } else {
                 break;
             }
         case 4:
             if (this->unk_ABC8 == 20) {
-                D_80A09A60[2]->unk_14E = 20;
+                sBossRemains[2]->unk_14E = 20;
             }
-            this->unk_ABE0.x = D_80A09A60[2]->actor.world.pos.x;
-            this->unk_ABE0.y = D_80A09A60[2]->actor.world.pos.y;
-            this->unk_ABE0.z = D_80A09A60[2]->actor.world.pos.z;
+            this->csCamAt.x = sBossRemains[2]->actor.world.pos.x;
+            this->csCamAt.y = sBossRemains[2]->actor.world.pos.y;
+            this->csCamAt.z = sBossRemains[2]->actor.world.pos.z;
             if (this->unk_ABC8 == 40) {
-                this->unk_ABD0 = 5;
+                this->csState = 5;
                 this->unk_ABC8 = 0;
-                this->unk_ABD4.x = D_80A09A60[3]->actor.world.pos.x * 0.7f;
-                this->unk_ABD4.y = D_80A09A60[3]->actor.world.pos.y * 0.7f;
-                this->unk_ABD4.z = D_80A09A60[3]->actor.world.pos.z * 0.7f;
+                this->csCamEye.x = sBossRemains[3]->actor.world.pos.x * 0.7f;
+                this->csCamEye.y = sBossRemains[3]->actor.world.pos.y * 0.7f;
+                this->csCamEye.z = sBossRemains[3]->actor.world.pos.z * 0.7f;
             } else {
                 break;
             }
         case 5:
             if (this->unk_ABC8 == 20) {
-                D_80A09A60[3]->unk_14E = 20;
+                sBossRemains[3]->unk_14E = 20;
             }
-            this->unk_ABE0.x = D_80A09A60[3]->actor.world.pos.x;
-            this->unk_ABE0.y = D_80A09A60[3]->actor.world.pos.y;
-            this->unk_ABE0.z = D_80A09A60[3]->actor.world.pos.z;
+            this->csCamAt.x = sBossRemains[3]->actor.world.pos.x;
+            this->csCamAt.y = sBossRemains[3]->actor.world.pos.y;
+            this->csCamAt.z = sBossRemains[3]->actor.world.pos.z;
             if (this->unk_ABC8 == 40) {
                 Camera* temp_v0_3 = Play_GetCamera(globalCtx, 0);
                 s32 i;
 
-                this->unk_ABD0 = 6;
+                this->csState = 6;
                 this->unk_ABC8 = 0;
-                temp_v0_3->eye = this->unk_ABD4;
-                temp_v0_3->eyeNext = this->unk_ABD4;
-                temp_v0_3->at = this->unk_ABE0;
-                func_80169AFC(globalCtx, this->unk_ABD2, 0);
-                this->unk_ABD2 = 0;
+                temp_v0_3->eye = this->csCamEye;
+                temp_v0_3->eyeNext = this->csCamEye;
+                temp_v0_3->at = this->csCamAt;
+                func_80169AFC(globalCtx, this->csCamIndex, 0);
+                this->csCamIndex = 0;
                 func_800EA0EC(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 6);
                 func_80165690();
                 for (i = 0; i < 4; i++) {
-                    func_800BC154(globalCtx, &globalCtx->actorCtx, &D_80A09A60[i]->actor, 5);
+                    func_800BC154(globalCtx, &globalCtx->actorCtx, &sBossRemains[i]->actor, 5);
                 }
             }
             break;
         case 6:
             break;
     }
-    if (this->unk_ABD2 != 0) {
+    if (this->csCamIndex != 0) {
         if (this->unk_ABC8 < 20) {
             s32 j;
 
             for (j = 0; j < 4; j++) {
-                if ((this->unk_ABC8 & 1) != 0) {
-                    D_80A09A60[j]->actor.world.pos.x += 2.0f;
-                    D_80A09A60[j]->actor.world.pos.z += 2.0f;
+                if ((this->unk_ABC8 % 2) != 0) {
+                    sBossRemains[j]->actor.world.pos.x += 2.0f;
+                    sBossRemains[j]->actor.world.pos.z += 2.0f;
                 } else {
-                    D_80A09A60[j]->actor.world.pos.x -= 2.0f;
-                    D_80A09A60[j]->actor.world.pos.z -= 2.0f;
+                    sBossRemains[j]->actor.world.pos.x -= 2.0f;
+                    sBossRemains[j]->actor.world.pos.z -= 2.0f;
                 }
             }
         }
         ShrinkWindow_SetLetterboxTarget(27);
-        Play_CameraSetAtEye(globalCtx, this->unk_ABD2, &this->unk_ABE0, &this->unk_ABD4);
+        Play_CameraSetAtEye(globalCtx, this->csCamIndex, &this->csCamAt, &this->csCamEye);
     }
 }
 #else

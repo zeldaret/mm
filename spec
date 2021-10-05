@@ -2604,8 +2604,6 @@ beginseg
     name "ovl_Boss_07"
     compress
     include "build/src/overlays/actors/ovl_Boss_07/z_boss_07.o"
-    include "build/data/ovl_Boss_07/ovl_Boss_07.data.o"
-    include "build/data/ovl_Boss_07/ovl_Boss_07.bss.o"
     include "build/data/ovl_Boss_07/ovl_Boss_07.reloc.o"
 endseg
 

@@ -653,7 +653,7 @@ void EffectSsSibuki_SpawnBurst(GlobalContext* globalCtx, Vec3f* pos);
 void EffectSsHitMark_SpawnFixedScale(GlobalContext* globalCtx, s32 type, Vec3f* pos);
 // void EffectSsHitMark_SpawnCustomScale(void);
 // void EffectSsFhgFlash_SpawnShock(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, Vec3f* pzParm3, UNK_TYPE2 uParm4, UNK_TYPE1 param_5);
-// void EffectSsKFire_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE1 param_6);
+void EffectSsKFire_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scaleMax, u8 type);
 void EffectSsSolderSrchBall_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 unused,
                                   s16* linkDetected, s16 drawFlag);
 void EffectSsKakera_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* arg3, s16 gravity, s16 arg5,
@@ -3858,7 +3858,7 @@ void func_8019F540(u8 arg0);
 void func_8019F88C(Vec3f* arg0, u16 sfxId, UNK_TYPE arg2);
 // void func_8019F900(void);
 // void func_8019FA18(void);
-void func_8019FAD8(Vec3f* param_1, u16 param_2, f32 param_3);
+void func_8019FAD8(Vec3f* param_1, u16 sfxId, f32 param_3);
 // void func_8019FB0C(void);
 // void func_8019FC20(void);
 // void func_8019FCB8(void);

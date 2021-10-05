@@ -8,23 +8,23 @@ struct Boss07;
 typedef void (*Boss07ActionFunc)(struct Boss07*, GlobalContext*);
 
 typedef struct {
-    Vec3f unk_0;
-    Vec3f unk_C[10];
-    Vec3f unk_84[10];
-    Vec3f unk_FC[10];
+    Vec3f base;
+    Vec3f pos[10];
+    Vec3f rot[10];
+    Vec3f pull[10];
 } Boss07Tentacle; // size = 0x174
 
 typedef struct {
-    Vec3s unk_0;
-    f32 unk_8;
-    f32 unk_C;
-    f32 unk_10;
-    f32 unk_14;
-    Vec3f unk_18;
-    Vec3f unk_24[50];
-    Vec3f unk_27C[50];
-    Vec3f unk_4D4[50];
-    f32 unk_72C[50];
+    Vec3s baseRot;
+    f32 gravity;
+    f32 stiffness;
+    f32 drag;
+    f32 tension;
+    Vec3f basePos;
+    Vec3f pos[50];
+    Vec3f rot[50];
+    Vec3f pull[50];
+    f32 unk_72C[50]; // unused, probably a stretch factor
 } Boss07Whip; // size = 0x7F4
 
 typedef struct Boss07 {
@@ -54,14 +54,14 @@ typedef struct Boss07 {
     /* 0x0184 */ f32 unk_184;
     /* 0x0188 */ f32 unk_188;
     /* 0x018C */ f32 unk_18C;
-    /* 0x0190 */ SkelAnime skelAnime1;
+    /* 0x0190 */ SkelAnime skelAnime;
     /* 0x01D4 */ f32 unk_1D4;
     /* 0x01D8 */ s32 unk_1D8;
     /* 0x01DC */ Vec3s jointTable1[28];
     /* 0x0284 */ Vec3s morphTable1[28];
     /* 0x032C */ f32 unk_32C;
     /* 0x0330 */ f32 unk_330;
-    /* 0x0334 */ Vec3f unk_334[15];
+    /* 0x0334 */ Vec3f bodyPartsPos[15];
     /* 0x03E8 */ ColliderJntSph sph1;
     /* 0x0408 */ ColliderJntSphElement sphElems1[11];
     /* 0x06C8 */ ColliderJntSph sph2;
@@ -69,39 +69,21 @@ typedef struct Boss07 {
     /* 0x0728 */ ColliderCylinder cyl1;
     /* 0x0774 */ u8 unk_774;
     /* 0x0778 */ s32 unk_778;
-    /* 0x077C */ f32 unk_77C;
+    /* 0x077C */ f32 whipScale;
     /* 0x0780 */ s32 unk_780;
     /* 0x0784 */ s32 unk_784;
-    /* 0x0788 */ Vec3s unk_788;
-    /* 0x0790 */ f32 unk_790;
-    /* 0x0794 */ f32 unk_794;
-    /* 0x0798 */ f32 unk_798;
-    /* 0x079C */ f32 unk_79C;
-    /* 0x07A0 */ Vec3f unk_7A0;
-    /* 0x07A0 */ Vec3f unk_7AC[50];
-    /* 0x0A04 */ Vec3f unk_A04[50];
-    /* 0x0C5C */ Vec3f unk_C5C[50];
-    /* 0x0EB4 */ char unkEB4[0xC8];
+    /* 0x0788 */ Boss07Whip rightWhip;
     /* 0x0F7C */ s16 unk_F7C;
     /* 0x0F7E */ s16 unk_F7E;
     /* 0x0F80 */ Vec3f unk_F80;
     /* 0x0F8C */ f32 unk_F8C;
     /* 0x0F90 */ f32 unk_F90;
-    /* 0x0F94 */ Vec3s unk_F94;
-    /* 0x0F9C */ f32 unk_F9C;
-    /* 0x0FA0 */ f32 unk_FA0;
-    /* 0x0FA4 */ f32 unk_FA4;
-    /* 0x0FA8 */ f32 unk_FA8;
-    /* 0x0FAC */ Vec3f unk_FAC;
-    /* 0x0FB8 */ Vec3f unk_FB8[50];
-    /* 0x1210 */ Vec3f unk_1210[50];
-    /* 0x1468 */ Vec3f unk_1468[50];
-    /* 0x16C0 */ char unk16C0[0xC8];
+    /* 0x0F94 */ Boss07Whip leftWhip;
     /* 0x1788 */ Vec3f unk_1788[2];
     /* 0x17A0 */ Vec3f unk_17A0;
     /* 0x17AC */ Vec3f unk_17AC;
     /* 0x17B8 */ f32 unk_17B8[4];
-    /* 0x17C8 */ char unk17C8[0x10];
+    /* 0x17C8 */ f32 unk_17C8[4];
     /* 0x17D8 */ s16 unk_17D8;
     /* 0x17DA */ s16 unk_17DA;
     /* 0x17DA */ s16 unk_17DC;
@@ -144,32 +126,34 @@ typedef struct Boss07 {
     /* 0x18D4 */ s16 unk_18D4;
     /* 0x18D6 */ s16 unk_18D6;
     /* 0x18D8 */ s16 unk_18D8;
+    /* 0x18DA */ u8 unk_18DA;
+    /* 0x18DB */ u8 unk_18DB;
     /* 0x18DC */ s32 effectIndex;
     /* 0x18E0 */ Vec3f unk_18E0;
     /* 0x18EC */ u8 unk_18EC;
     /* 0x18ED */ u8 unk_18ED;
     /* 0x18F0 */ ColliderQuad quad1;
     /* 0x1970 */ ColliderQuad quad2;
-    /* 0x19F0 */ Boss07Tentacle unk_19F0[25];
-    /* 0x3E44 */ char unk3E44[0x6D00];
+    /* 0x19F0 */ Boss07Tentacle tentacles[25];
+    /* 0x3E44 */ char unk3E44[0x6CFC]; // size suggests 100 element tentacle array
+    /* 0xAB40 */ s16 unk_AB40;
     /* 0xAB44 */ f32 unk_AB44;
     /* 0xAB48 */ u8 unk_AB48;
     /* 0xAB4C */ f32 unk_AB4C;
     /* 0xAB50 */ f32 unk_AB50[30];
     /* 0xABC8 */ u32 unk_ABC8;
     /* 0xABCC */ s32 unk_ABCC;
-    /* 0xABD0 */ s16 unk_ABD0;
-    /* 0xABD2 */ s16 unk_ABD2;
-    /* 0xABD4 */ Vec3f unk_ABD4;
-    /* 0xABE0 */ Vec3f unk_ABE0;
-    /* 0xABEC */ Vec3f unk_ABEC;
-    /* 0xABF8 */ Vec3f unk_ABF8;
-    /* 0xAC04 */ f32 unk_AC04;
-    /* 0xAC08 */ f32 unk_AC08;
-    /* 0xAC0C */ f32 unk_AC0C;
-    /* 0xAC10 */ char unkAC10[4];
-    /* 0xAC14 */ f32 unk_AC14;
-    /* 0xAC18 */ char unkAC18[8];
+    /* 0xABD0 */ s16 csState;
+    /* 0xABD2 */ s16 csCamIndex;
+    /* 0xABD4 */ Vec3f csCamEye;
+    /* 0xABE0 */ Vec3f csCamAt;
+    /* 0xABEC */ Vec3f csCamNextEye;
+    /* 0xABF8 */ Vec3f csCamNextAt;
+    /* 0xAC04 */ f32 csCamRotY;
+    /* 0xAC08 */ f32 csCamRotVel;
+    /* 0xAC0C */ f32 csCamSpeedMod;
+    /* 0xAC10 */ Vec3f csCamEyeMod;
+    /* 0xAC1C */ char unkAC1C[4];
 } Boss07; // size = 0xAC20
 
 extern const ActorInit Boss_07_InitVars;
