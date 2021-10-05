@@ -128,7 +128,11 @@ void EnBaguo_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc = func_80A3B220;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/EnBaguo_Destroy.s")
+void EnBaguo_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnBaguo* this = THIS;
+
+    Collider_DestroyJntSph(globalCtx, &this->collider);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/func_80A3B220.s")
 
