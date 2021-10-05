@@ -14,7 +14,6 @@ void EnBaguo_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnBaguo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBaguo_Update(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
 const ActorInit En_Baguo_InitVars = {
     ACTOR_EN_BAGUO,
     ACTORCAT_ENEMY,
@@ -30,15 +29,30 @@ const ActorInit En_Baguo_InitVars = {
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_80A3C2F0[1] = {
     {
-        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x04, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK0,
+            { 0xF7CFFFFF, 0x04, 0x04 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 1, { { 0, 0, 0 }, 0 }, 1 },
     },
 };
 
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_80A3C314 = {
-    { COLTYPE_HARD, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    1, D_80A3C2F0, // sJntSphElementsInit,
+    {
+        COLTYPE_HARD,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_JNTSPH,
+    },
+    1,
+    D_80A3C2F0, // sJntSphElementsInit,
 };
 
 // static DamageTable sDamageTable = {
@@ -77,11 +91,11 @@ static DamageTable D_80A3C324 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xE),
 };
 
-#endif
+s32 D_80A3C344[] = { 0x00000000, 0x00000000, 0x00000000 };
 
-extern ColliderJntSphElementInit D_80A3C2F0[1];
-extern ColliderJntSphInit D_80A3C314;
-extern DamageTable D_80A3C324;
+s32 D_80A3C350[] = { 0x00000000, 0x00000000, 0x00000000 };
+
+s32 D_80A3C35C[] = { 0x060014C8, 0x060018C8, 0x06001CC8 };
 
 extern UNK_TYPE D_060020E8;
 
