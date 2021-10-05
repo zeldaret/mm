@@ -14,6 +14,8 @@ void EnBaguo_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnBaguo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBaguo_Update(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A3B220(EnBaguo* this, GlobalContext* globalCtx);
+
 const ActorInit En_Baguo_InitVars = {
     ACTOR_EN_BAGUO,
     ACTORCAT_ENEMY,
@@ -97,9 +99,34 @@ s32 D_80A3C350[] = { 0x00000000, 0x00000000, 0x00000000 };
 
 s32 D_80A3C35C[] = { 0x060014C8, 0x060018C8, 0x06001CC8 };
 
-extern UNK_TYPE D_060020E8;
+extern SkeletonHeader D_060020E8;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/EnBaguo_Init.s")
+void EnBaguo_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnBaguo* this = THIS;
+
+    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 0.0f);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &D_060020E8, NULL, this->jointTable, this->morphTable, 3);
+    this->actor.hintId = 0xB;
+    this->unk_1BC = 240.0f;
+    this->unk_1BC += this->actor.world.rot.z * 40.0f;
+    this->actor.world.rot.z = 0;
+    Actor_SetScale(&this->actor, 0.01f);
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
+    this->actor.targetMode = 2;
+    Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->actor, &D_80A3C314, this->colliderElements);
+    this->collider.elements[0].dim.modelSphere.radius = 30;
+    this->collider.elements[0].dim.scale = 1.0f;
+    this->collider.elements[0].dim.modelSphere.center.x = 80;
+    this->collider.elements[0].dim.modelSphere.center.y = 80;
+    this->collider.elements[0].dim.modelSphere.center.z = 0;
+    this->actor.shape.yOffset = -3000.0f;
+    this->actor.gravity = -3.0f;
+    this->actor.colChkInfo.damageTable = &D_80A3C324;
+    this->actor.flags |= 0x8000000;
+    this->actor.flags &= ~1;
+    this->collider.base.acFlags |= AC_HARD;
+    this->actionFunc = func_80A3B220;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/EnBaguo_Destroy.s")
 
