@@ -15,6 +15,8 @@ void EnBaguo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBaguo_Update(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80A3B220(EnBaguo* this, GlobalContext* globalCtx);
+void func_80A3BE60(Actor* thisx, GlobalContext* globalCtx);
+void func_80A3B2CC(EnBaguo* this, GlobalContext* globalCtx);
 
 const ActorInit En_Baguo_InitVars = {
     ACTOR_EN_BAGUO,
@@ -134,7 +136,21 @@ void EnBaguo_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyJntSph(globalCtx, &this->collider);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/func_80A3B220.s")
+void func_80A3B220(EnBaguo* this, GlobalContext* globalCtx) {
+    this->unk_1B6 = 0;
+    if (this->actor.xzDistToPlayer < 200.0f) {
+        if (Player_GetMask(globalCtx) != 0x10) {
+            this->actor.draw = func_80A3BE60;
+            Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_APPEAR);
+            this->actor.world.rot.z = 0;
+            this->actor.world.rot.x = this->actor.world.rot.z;
+            this->actor.flags &= ~0x8000000;
+            this->actor.flags |= 1;
+            this->actionFunc = func_80A3B2CC;
+        }
+    }
+    this->actor.shape.rot.y = this->actor.world.rot.y;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/func_80A3B2CC.s")
 
