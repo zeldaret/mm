@@ -343,24 +343,23 @@ void func_80A3BE24(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     Collider_UpdateSpheres(limbIndex, &this->collider);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/func_80A3BE60.s")
-/*
 void func_80A3BE60(Actor* thisx, GlobalContext* globalCtx) {
     EnBaguo* this = THIS;
-    s32 pad[2];
-    void* virtual;
+    Gfx* tempPolyOpa;
+    s32 pad;
+    s32 eyeIndexTemp;
+    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+    void* virtualAddress;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-
-    func_8012C28C(globalCtx->state.gfxCtx);
-    virtual = Lib_SegmentedToVirtual(D_80A3C35C[this->unk_1B0]);
-    gSPSegment(POLY_OPA_DISP++, 0x08, virtual);
+    func_8012C28C(gfxCtx);
+    tempPolyOpa = gfxCtx->polyOpa.p;
+    eyeIndexTemp = this->unk_1B0;
+    virtualAddress = Lib_SegmentedToVirtual(D_80A3C35C[eyeIndexTemp]);
+    gSPSegment(tempPolyOpa, 0x08, virtualAddress);
+    gfxCtx->polyOpa.p = tempPolyOpa + 1;
     SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, NULL, func_80A3BE24, &this->actor);
-    func_80A3C17C(thisx, globalCtx);
-
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    func_80A3C17C(this, globalCtx);
 }
-*/
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/func_80A3BF0C.s")
 
