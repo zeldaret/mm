@@ -5,7 +5,7 @@
 
 struct EnHintSkb;
 
-typedef void (*EnHintSkbActionFunc)(struct EnHintSkb* this, GlobalContext* globalCtx);
+typedef void (*EnHintSkbActionFunc)(struct EnHintSkb*, GlobalContext*);
 
 typedef struct EnHintSkb {
     /* 0x0000 */ Actor actor;

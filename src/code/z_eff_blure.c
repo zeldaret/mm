@@ -46,7 +46,7 @@ void func_800A81F0(EffectBlure* this, Vec3f* p1, Vec3f* p2) {
                 Math_Vec3f_Scale(&sp154, scale);
 
                 SkinMatrix_SetTranslate(&sp110, sp160.x, sp160.y, sp160.z);
-                Matrix_MakeRotationAroundUnitVector(&spD0, this->addAngle, sp154.x, sp154.y, sp154.z);
+                SkinMatrix_SetRotateAroundVec(&spD0, this->addAngle, sp154.x, sp154.y, sp154.z);
                 SkinMatrix_MtxFMtxFMult(&sp110, &spD0, &sp90);
                 SkinMatrix_SetTranslate(&sp110, -sp160.x, -sp160.y, -sp160.z);
                 SkinMatrix_MtxFMtxFMult(&sp90, &sp110, &sp50);

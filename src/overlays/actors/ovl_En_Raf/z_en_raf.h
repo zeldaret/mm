@@ -5,7 +5,7 @@
 
 struct EnRaf;
 
-typedef void (*EnRafActionFunc)(struct EnRaf* this, GlobalContext* globalCtx);
+typedef void (*EnRafActionFunc)(struct EnRaf*, GlobalContext*);
 
 typedef struct EnRaf {
     /* 0x0000 */ Actor actor;

@@ -145,7 +145,7 @@ void FaultDrawer_FillScreen() {
 #pragma GLOBAL_ASM("asm/non_matchings/boot/fault_drawer/D_80099080.s")
 
 void FaultDrawer_VPrintf(const char* str, char* args) { // va_list
-    _Printf((printf_func)FaultDrawer_FormatStringFunc, sFaultDrawContext, str, args);
+    _Printf((PrintCallback)FaultDrawer_FormatStringFunc, sFaultDrawContext, str, args);
 }
 
 void FaultDrawer_Printf(const char* fmt, ...) {
@@ -153,6 +153,8 @@ void FaultDrawer_Printf(const char* fmt, ...) {
     va_start(args, fmt);
 
     FaultDrawer_VPrintf(fmt, args);
+
+    va_end(args);
 }
 
 void FaultDrawer_DrawText(s32 x, s32 y, const char* fmt, ...) {
@@ -161,6 +163,8 @@ void FaultDrawer_DrawText(s32 x, s32 y, const char* fmt, ...) {
 
     FaultDrawer_SetCursor(x, y);
     FaultDrawer_VPrintf(fmt, args);
+
+    va_end(args);
 }
 
 void FaultDrawer_SetDrawerFB(void* fb, u16 w, u16 h) {

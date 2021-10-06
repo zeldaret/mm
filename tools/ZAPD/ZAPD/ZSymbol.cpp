@@ -1,5 +1,5 @@
 #include "ZSymbol.h"
-#include "StringHelper.h"
+#include "Utils/StringHelper.h"
 #include "ZFile.h"
 
 REGISTER_ZFILENODE(Symbol, ZSymbol);

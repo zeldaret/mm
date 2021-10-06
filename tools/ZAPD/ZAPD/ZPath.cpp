@@ -1,8 +1,8 @@
 #include "ZPath.h"
 
-#include "BitConverter.h"
 #include "Globals.h"
-#include "StringHelper.h"
+#include "Utils/BitConverter.h"
+#include "Utils/StringHelper.h"
 #include "ZFile.h"
 
 REGISTER_ZFILENODE(Path, ZPath);
@@ -80,7 +80,7 @@ std::string ZPath::GetBodySourceCode() const
 	return declaration;
 }
 
-std::string ZPath::GetSourceOutputCode(const std::string& prefix)
+std::string ZPath::GetSourceOutputCode([[maybe_unused]] const std::string& prefix)
 {
 	std::string declaration = GetBodySourceCode();
 

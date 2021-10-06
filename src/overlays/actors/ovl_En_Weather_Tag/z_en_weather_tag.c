@@ -44,7 +44,6 @@ const ActorInit En_Weather_Tag_InitVars = {
 extern f32 D_801F4E74;
 extern u8 D_801BDBB8;
 extern u8 D_801BDBB4;
-extern u8 D_801BDBB0;
 extern u8 D_801F4E30;
 extern s16 D_801F4E7A;
 

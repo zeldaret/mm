@@ -5,7 +5,7 @@
 
 struct EnZoraegg;
 
-typedef void (*EnZoraeggActionFunc)(struct EnZoraegg* this, GlobalContext* globalCtx);
+typedef void (*EnZoraeggActionFunc)(struct EnZoraegg*, GlobalContext*);
 
 typedef struct EnZoraegg {
     /* 0x0000 */ Actor actor;
