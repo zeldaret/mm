@@ -412,7 +412,25 @@ void func_80A3BE60(Actor* thisx, GlobalContext* globalCtx) {
     func_80A3C17C(this, globalCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/func_80A3BF0C.s")
+void func_80A3BF0C(EnBaguo* this, Vec3f* position, Vec3f* velocity, Vec3f* acceleration, f32 scale, s16 timer) {
+    s16 i;
+    EnBaguoUnkStruct* ptr = this->unkStructArray;
+
+    for (i = 0; i < ARRAY_COUNT(this->unkStructArray); i++, ptr++) {
+        if (ptr->isVisible == 0) {
+            ptr->isVisible = 1;
+            ptr->position = *position;
+            ptr->velocity = *velocity;
+            ptr->acceleration = *acceleration;
+            ptr->scale = scale;
+            ptr->timer = timer;
+            ptr->xRotation = (s16)randPlusMinusPoint5Scaled(30000.0f);
+            ptr->yRotation = (s16)randPlusMinusPoint5Scaled(30000.0f);
+            ptr->zRotation = (s16)randPlusMinusPoint5Scaled(30000.0f);
+            return;
+        }
+    }
+}
 
 void func_80A3C008(EnBaguo* this, GlobalContext* globalCtx) {
     s32 i;
@@ -420,16 +438,16 @@ void func_80A3C008(EnBaguo* this, GlobalContext* globalCtx) {
 
     for (i = 0; i < ARRAY_COUNT(this->unkStructArray); i++, ptr++) {
         if (ptr->isVisible) {
-            ptr->xPosition += ptr->xVelocity;
-            ptr->yPosition += ptr->yVelocity;
-            ptr->zPosition += ptr->zVelocity;
+            ptr->position.x += ptr->velocity.x;
+            ptr->position.y += ptr->velocity.y;
+            ptr->position.z += ptr->velocity.z;
             ptr->xRotation += 0xBB8;
             ptr->yRotation += 0xBB8;
             ptr->zRotation += 0xBB8;
-            ptr->xVelocity += ptr->xAcceleration;
-            ptr->yVelocity += ptr->yAcceleration;
-            ptr->zVelocity += ptr->zAcceleration;
-            if (ptr->yPosition < (this->actor.world.pos.y - 10.0f)) {
+            ptr->velocity.x += ptr->acceleration.x;
+            ptr->velocity.y += ptr->acceleration.y;
+            ptr->velocity.z += ptr->acceleration.z;
+            if (ptr->position.y < (this->actor.world.pos.y - 10.0f)) {
                 Math_ApproachZeroF(&ptr->scale, 0.2f, 0.001f);
                 if (ptr->scale <= 0.0001f) {
                     ptr->timer = 0;
@@ -453,7 +471,7 @@ void func_80A3C17C(EnBaguo* this, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     for (i = 0; i < ARRAY_COUNT(this->unkStructArray); i++, ptr++) {
         if (ptr->isVisible != 0) {
-            SysMatrix_InsertTranslation(ptr->xPosition, ptr->yPosition, ptr->zPosition, MTXMODE_NEW);
+            SysMatrix_InsertTranslation(ptr->position.x, ptr->position.y, ptr->position.z, MTXMODE_NEW);
             SysMatrix_InsertXRotation_s(ptr->xRotation, MTXMODE_APPLY);
             Matrix_RotateY(ptr->yRotation, MTXMODE_APPLY);
             SysMatrix_InsertZRotation_s(ptr->zRotation, MTXMODE_APPLY);
