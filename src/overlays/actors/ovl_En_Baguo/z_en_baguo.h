@@ -17,7 +17,7 @@ typedef struct EnBaguoUnkStruct {
     /* 0x2A */ s16 yRotation;
     /* 0x2C */ s16 zRotation;
     /* 0x30 */ f32 scale;
-    /* 0x34 */ char unk_34[0x4];
+    /* 0x34 */ s16 timer;
 } EnBaguoUnkStruct; // size = 0x38
 
 typedef struct EnBaguo {

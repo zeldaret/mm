@@ -20,6 +20,8 @@ void func_80A3B3E0(EnBaguo* this, GlobalContext* globalCtx);
 void func_80A3B5E0(EnBaguo* this, GlobalContext* globalCtx);
 void func_80A3B794(EnBaguo* this);
 void func_80A3B7B8(EnBaguo* this, GlobalContext* globalCtx);
+void func_80A3C008(EnBaguo* this, GlobalContext* globalCtx);
+void func_80A3B958(EnBaguo* this, GlobalContext* globalCtx);
 void func_80A3BE60(Actor* thisx, GlobalContext* globalCtx);
 void func_80A3BE24(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 void func_80A3C17C(EnBaguo* this, GlobalContext* globalCtx);
@@ -290,7 +292,7 @@ void func_80A3B8F8(EnBaguo* this, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->actor);
     }
     if (this->unk_1B4 >= 0x1A) {
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider);
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 }
 
@@ -313,7 +315,7 @@ void EnBaguo_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if ((this->unk_1B6 != 3) && (this->unk_1B6 != 0)) {
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider);
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 
     if (this->unk_1B6 != 3) {
@@ -329,10 +331,10 @@ void EnBaguo_Update(Actor* thisx, GlobalContext* globalCtx) {
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 60.0f, 0x1D);
         if (this->unk_1B6 != 0) {
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider);
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         }
         if (this->unk_1B6 != 3) {
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider);
+            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         }
     }
 }
