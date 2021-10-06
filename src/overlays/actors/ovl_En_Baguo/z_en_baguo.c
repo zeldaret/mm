@@ -216,7 +216,42 @@ void func_80A3B3E0(EnBaguo* this, GlobalContext* globalCtx) {
     this->actionFunc = func_80A3B5E0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/func_80A3B5E0.s")
+void func_80A3B5E0(EnBaguo* this, GlobalContext* globalCtx) {
+    f32 xDistanceFromHome = this->actor.home.pos.x - this->actor.world.pos.x;
+    f32 zDistanceFromHome = this->actor.home.pos.z - this->actor.world.pos.z;
+
+    if ((this->unk_1BC < sqrtf(SQ(xDistanceFromHome) + SQ(zDistanceFromHome))) || (Player_GetMask(globalCtx) == 0x10)) {
+        func_80A3B794(this);
+        return;
+    }
+
+    if (!this->unk_1B4) {
+        this->unk_1B4 = 0x64;
+        this->actor.world.rot.y = this->actor.shape.rot.y;
+        this->actionFunc = func_80A3B3E0;
+        this->actor.speedXZ = 0.0f;
+        return;
+    }
+
+    if (!this->unk_1C0 && this->collider.base.atFlags & AC_HARD) {
+        this->unk_1B8 ^= 1;
+        this->unk_1C0 = 1;
+        this->actor.speedXZ = -7.0f;
+    }
+
+    Math_ApproachF(&this->unk_1C4.x, this->unk_1D0.x, 0.2f, 1000.0f);
+    Math_ApproachF(&this->unk_1C4.z, this->unk_1D0.z, 0.2f, 1000.0f);
+    Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.3f, 0.5f);
+    this->actor.world.rot.x += (s16)this->unk_1C4.x;
+    if (this->unk_1C4.z != 0.0f) {
+        if (this->unk_1B8 == 0) {
+            this->actor.world.rot.z += (s16)this->unk_1C4.z;
+        } else {
+            this->actor.world.rot.z -= (s16)this->unk_1C4.z;
+        }
+    }
+    Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_ROLL - SFX_FLAG);
+}
 
 void func_80A3B794(EnBaguo* this) {
     this->unk_1B6 = 2;
