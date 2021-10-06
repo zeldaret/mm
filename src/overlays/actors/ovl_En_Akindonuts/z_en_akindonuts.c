@@ -1049,7 +1049,7 @@ void func_80BEE73C(EnAkindonuts* this, GlobalContext* globalCtx) {
     s32 itemGiven = func_80123810(globalCtx);
 
     if (itemGiven > 0) {
-        if (itemGiven == 0x2B) {
+        if (itemGiven == ITEM_DEED_MOUNTAIN) {
             player->actor.textId = D_80BF048C[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x15E4) {
@@ -1058,7 +1058,7 @@ void func_80BEE73C(EnAkindonuts* this, GlobalContext* globalCtx) {
             } else {
                 this->actionFunc = func_80BEF18C;
             }
-        } else if (itemGiven == 0x2F) {
+        } else if (itemGiven == ITEM_LETTER_KAFEI) {
             player->actor.textId = D_80BF0494[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x15F9) {
@@ -1067,7 +1067,7 @@ void func_80BEE73C(EnAkindonuts* this, GlobalContext* globalCtx) {
             } else {
                 this->actionFunc = func_80BEF18C;
             }
-        } else if (itemGiven == 0x30) {
+        } else if (itemGiven == ITEM_PENDANT_MEMORIES) {
             player->actor.textId = D_80BF049C[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x160C) {
@@ -1076,7 +1076,7 @@ void func_80BEE73C(EnAkindonuts* this, GlobalContext* globalCtx) {
             } else {
                 this->actionFunc = func_80BEF18C;
             }
-        } else if (itemGiven == 0x31) {
+        } else if (itemGiven == ITEM_TINGLE_MAP) {
             player->actor.textId = D_80BF04A4[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x1621) {
