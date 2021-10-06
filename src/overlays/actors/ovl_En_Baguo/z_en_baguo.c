@@ -21,6 +21,8 @@ void func_80A3B5E0(EnBaguo* this, GlobalContext* globalCtx);
 void func_80A3B794(EnBaguo* this);
 void func_80A3B7B8(EnBaguo* this, GlobalContext* globalCtx);
 void func_80A3BE60(Actor* thisx, GlobalContext* globalCtx);
+void func_80A3BE24(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
+void func_80A3C17C(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit En_Baguo_InitVars = {
     ACTOR_EN_BAGUO,
@@ -99,11 +101,15 @@ static DamageTable D_80A3C324 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xE),
 };
 
+extern Gfx D_060014C8;
+extern Gfx D_060018C8;
+extern Gfx D_06001CC8;
+
 s32 D_80A3C344[] = { 0x00000000, 0x00000000, 0x00000000 };
 
 s32 D_80A3C350[] = { 0x00000000, 0x00000000, 0x00000000 };
 
-s32 D_80A3C35C[] = { 0x060014C8, 0x060018C8, 0x06001CC8 };
+static TexturePtr D_80A3C35C[] = { &D_060014C8, &D_060018C8, &D_06001CC8 };
 
 extern SkeletonHeader D_060020E8;
 
@@ -331,9 +337,30 @@ void EnBaguo_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/func_80A3BE24.s")
+void func_80A3BE24(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    EnBaguo* this = THIS;
+
+    Collider_UpdateSpheres(limbIndex, &this->collider);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/func_80A3BE60.s")
+/*
+void func_80A3BE60(Actor* thisx, GlobalContext* globalCtx) {
+    EnBaguo* this = THIS;
+    s32 pad[2];
+    void* virtual;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    func_8012C28C(globalCtx->state.gfxCtx);
+    virtual = Lib_SegmentedToVirtual(D_80A3C35C[this->unk_1B0]);
+    gSPSegment(POLY_OPA_DISP++, 0x08, virtual);
+    SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, NULL, func_80A3BE24, &this->actor);
+    func_80A3C17C(thisx, globalCtx);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+*/
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/func_80A3BF0C.s")
 
