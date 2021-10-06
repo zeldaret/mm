@@ -5062,8 +5062,7 @@ beginseg
     name "ovl_En_Akindonuts"
     compress
     include "build/src/overlays/actors/ovl_En_Akindonuts/z_en_akindonuts.o"
-    include "build/data/ovl_En_Akindonuts/ovl_En_Akindonuts.data.o"
-    include "build/data/ovl_En_Akindonuts/ovl_En_Akindonuts.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Akindonuts/ovl_En_Akindonuts_reloc.o"
 endseg
 
 beginseg
