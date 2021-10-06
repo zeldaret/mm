@@ -259,7 +259,25 @@ void func_80A3B794(EnBaguo* this) {
     this->actor.speedXZ = 0.0f;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/func_80A3B7B8.s")
+void func_80A3B7B8(EnBaguo* this, GlobalContext* globalCtx) {
+    this->actor.world.rot.y += -0x1518;
+    this->actor.shape.rot.y = this->actor.world.rot.y;
+    if (!(globalCtx->gameplayFrames & 7)) {
+        func_800BBDAC(globalCtx, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f, 10, 8.0f,
+                      500, 10, 1);
+    }
+    Math_ApproachF(&this->actor.shape.yOffset, -3000.0f, 100.0f, 500.0f);
+    Math_ApproachZeroF(&this->actor.shape.shadowScale, 0.3f, 5.0f);
+    if (this->actor.shape.yOffset < -2970.0f) {
+        this->actor.shape.yOffset = -3000.0f;
+        this->actor.draw = func_80A3BE60;
+        Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_APPEAR);
+        this->actor.flags |= 0x8000000;
+        this->actor.flags &= ~1;
+        this->actionFunc = func_80A3B220;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/func_80A3B8F8.s")
 
