@@ -3293,8 +3293,7 @@ beginseg
     name "ovl_Dm_Stk"
     compress
     include "build/src/overlays/actors/ovl_Dm_Stk/z_dm_stk.o"
-    include "build/data/ovl_Dm_Stk/ovl_Dm_Stk.data.o"
-    include "build/data/ovl_Dm_Stk/ovl_Dm_Stk.reloc.o"
+    include "build/src/overlays/actors/ovl_Dm_Stk/ovl_Dm_Stk_reloc.o"
 endseg
 
 beginseg
