@@ -12,7 +12,12 @@ typedef struct EnBaguoUnkStruct {
     /* 0x04 */ f32 x;
     /* 0x08 */ f32 y;
     /* 0x0C */ f32 z;
-    /* 0x10 */ char unk_10[0x18];
+    /* 0x10 */ f32 xVelocity;
+    /* 0x14 */ f32 yVelocity;
+    /* 0x18 */ f32 zVelocity;
+    /* 0x1C */ f32 xAcceleration;
+    /* 0x20 */ f32 yAcceleration;
+    /* 0x24 */ f32 zAcceleration;
     /* 0x28 */ s16 xRotation;
     /* 0x2A */ s16 yRotation;
     /* 0x2C */ s16 zRotation;

@@ -365,7 +365,35 @@ void func_80A3BE60(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/func_80A3BF0C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/func_80A3C008.s")
+void func_80A3C008(EnBaguo* this, GlobalContext* globalCtx) {
+    s32 i;
+    EnBaguoUnkStruct* ptr = this->unkStructArray;
+
+    for (i = 0; i < ARRAY_COUNT(this->unkStructArray); i++, ptr++) {
+        if (ptr->isVisible) {
+            ptr->x += ptr->xVelocity;
+            ptr->y += ptr->yVelocity;
+            ptr->z += ptr->zVelocity;
+            ptr->xRotation += 0xBB8;
+            ptr->yRotation += 0xBB8;
+            ptr->zRotation += 0xBB8;
+            ptr->xVelocity += ptr->xAcceleration;
+            ptr->yVelocity += ptr->yAcceleration;
+            ptr->zVelocity += ptr->zAcceleration;
+            if (ptr->y < (this->actor.world.pos.y - 10.0f)) {
+                Math_ApproachZeroF(&ptr->scale, 0.2f, 0.001f);
+                if (ptr->scale <= 0.0001f) {
+                    ptr->timer = 0;
+                }
+            }
+            if (ptr->timer != 0) {
+                ptr->timer--;
+            } else {
+                ptr->isVisible = 0;
+            }
+        }
+    }
+}
 
 void func_80A3C17C(EnBaguo* this, GlobalContext* globalCtx) {
     s16 i;
