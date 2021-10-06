@@ -34,8 +34,8 @@ typedef struct EnBaguo {
     /* 0x1B8 */ s16 unk_1B8;
     /* 0x1BC */ f32 unk_1BC;
     /* 0x1C0 */ u8 unk_1C0;
-    /* 0x1C4 */ Vec3f unk_1C4;
-    /* 0x1D0 */ Vec3f unk_1D0;
+    /* 0x1C4 */ Vec3f currentRollingRotation;
+    /* 0x1D0 */ Vec3f targetRollingRotation;
     /* 0x1DC */ ColliderJntSph collider;
     /* 0x1FC */ ColliderJntSphElement colliderElements[1];
     /* 0x23C */ NejironParticle particles[30];

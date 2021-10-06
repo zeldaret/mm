@@ -202,13 +202,13 @@ void func_80A3B3E0(EnBaguo* this, GlobalContext* globalCtx) {
     } else {
         phi_v1 = temp_v0;
     }
-    Math_Vec3f_Copy(&this->unk_1D0, &D_801D15B0);
-    Math_Vec3f_Copy(&this->unk_1C4, &D_801D15B0);
+    Math_Vec3f_Copy(&this->targetRollingRotation, &D_801D15B0);
+    Math_Vec3f_Copy(&this->currentRollingRotation, &D_801D15B0);
     if (phi_v1 < 0x2000) {
-        this->unk_1D0.x = 2000.0f;
+        this->targetRollingRotation.x = 2000.0f;
     } else {
         this->unk_1B8 = 0;
-        this->unk_1D0.z = 2000.0f;
+        this->targetRollingRotation.z = 2000.0f;
         if ((s16)(this->actor.yawTowardsPlayer - this->actor.world.rot.y) > 0) {
             this->unk_1B8 = 1;
         }
@@ -242,15 +242,15 @@ void func_80A3B5E0(EnBaguo* this, GlobalContext* globalCtx) {
         this->actor.speedXZ = -7.0f;
     }
 
-    Math_ApproachF(&this->unk_1C4.x, this->unk_1D0.x, 0.2f, 1000.0f);
-    Math_ApproachF(&this->unk_1C4.z, this->unk_1D0.z, 0.2f, 1000.0f);
+    Math_ApproachF(&this->currentRollingRotation.x, this->targetRollingRotation.x, 0.2f, 1000.0f);
+    Math_ApproachF(&this->currentRollingRotation.z, this->targetRollingRotation.z, 0.2f, 1000.0f);
     Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.3f, 0.5f);
-    this->actor.world.rot.x += (s16)this->unk_1C4.x;
-    if (this->unk_1C4.z != 0.0f) {
+    this->actor.world.rot.x += (s16)this->currentRollingRotation.x;
+    if (this->currentRollingRotation.z != 0.0f) {
         if (this->unk_1B8 == 0) {
-            this->actor.world.rot.z += (s16)this->unk_1C4.z;
+            this->actor.world.rot.z += (s16)this->currentRollingRotation.z;
         } else {
-            this->actor.world.rot.z -= (s16)this->unk_1C4.z;
+            this->actor.world.rot.z -= (s16)this->currentRollingRotation.z;
         }
     }
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_ROLL - SFX_FLAG);
