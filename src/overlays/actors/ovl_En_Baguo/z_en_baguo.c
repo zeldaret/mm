@@ -15,8 +15,9 @@ void EnBaguo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBaguo_Update(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80A3B220(EnBaguo* this, GlobalContext* globalCtx);
-void func_80A3BE60(Actor* thisx, GlobalContext* globalCtx);
 void func_80A3B2CC(EnBaguo* this, GlobalContext* globalCtx);
+void func_80A3B3E0(EnBaguo* this, GlobalContext* globalCtx);
+void func_80A3BE60(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit En_Baguo_InitVars = {
     ACTOR_EN_BAGUO,
@@ -152,7 +153,22 @@ void func_80A3B220(EnBaguo* this, GlobalContext* globalCtx) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/func_80A3B2CC.s")
+void func_80A3B2CC(EnBaguo* this, GlobalContext* globalCtx) {
+    this->actor.world.rot.y += 0x1518;
+    this->actor.shape.rot.y = this->actor.world.rot.y;
+    if (!(globalCtx->gameplayFrames & 7)) {
+        func_800BBDAC(globalCtx, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f, 10, 8.0f,
+                      500, 10, 1);
+    }
+    Math_ApproachF(&this->actor.shape.shadowScale, 50.0f, 0.3f, 5.0f);
+    Math_ApproachF(&this->actor.shape.yOffset, 2700.0f, 100.0f, 500.0f);
+    if (this->actor.shape.yOffset > 2650.0f) {
+        this->unk_1B6 = 1;
+        this->actor.shape.yOffset = 2700.0f;
+        this->unk_1B4 = 0x3C;
+        this->actionFunc = func_80A3B3E0;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/func_80A3B3E0.s")
 
