@@ -2865,7 +2865,7 @@ beginseg
     name "ovl_En_Baguo"
     compress
     include "build/src/overlays/actors/ovl_En_Baguo/z_en_baguo.o"
-    include "build/data/ovl_En_Baguo/ovl_En_Baguo.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Baguo/ovl_En_Baguo_reloc.o"
 endseg
 
 beginseg
