@@ -9,9 +9,9 @@ typedef void (*EnBaguoActionFunc)(struct EnBaguo*, GlobalContext*);
 
 typedef struct EnBaguoUnkStruct {
     /* 0x00 */ u8 isVisible;
-    /* 0x04 */ f32 x;
-    /* 0x08 */ f32 y;
-    /* 0x0C */ f32 z;
+    /* 0x04 */ f32 xPosition;
+    /* 0x08 */ f32 yPosition;
+    /* 0x0C */ f32 zPosition;
     /* 0x10 */ f32 xVelocity;
     /* 0x14 */ f32 yVelocity;
     /* 0x18 */ f32 zVelocity;

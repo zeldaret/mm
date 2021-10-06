@@ -371,16 +371,16 @@ void func_80A3C008(EnBaguo* this, GlobalContext* globalCtx) {
 
     for (i = 0; i < ARRAY_COUNT(this->unkStructArray); i++, ptr++) {
         if (ptr->isVisible) {
-            ptr->x += ptr->xVelocity;
-            ptr->y += ptr->yVelocity;
-            ptr->z += ptr->zVelocity;
+            ptr->xPosition += ptr->xVelocity;
+            ptr->yPosition += ptr->yVelocity;
+            ptr->zPosition += ptr->zVelocity;
             ptr->xRotation += 0xBB8;
             ptr->yRotation += 0xBB8;
             ptr->zRotation += 0xBB8;
             ptr->xVelocity += ptr->xAcceleration;
             ptr->yVelocity += ptr->yAcceleration;
             ptr->zVelocity += ptr->zAcceleration;
-            if (ptr->y < (this->actor.world.pos.y - 10.0f)) {
+            if (ptr->yPosition < (this->actor.world.pos.y - 10.0f)) {
                 Math_ApproachZeroF(&ptr->scale, 0.2f, 0.001f);
                 if (ptr->scale <= 0.0001f) {
                     ptr->timer = 0;
@@ -404,7 +404,7 @@ void func_80A3C17C(EnBaguo* this, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     for (i = 0; i < ARRAY_COUNT(this->unkStructArray); i++, ptr++) {
         if (ptr->isVisible != 0) {
-            SysMatrix_InsertTranslation(ptr->x, ptr->y, ptr->z, MTXMODE_NEW);
+            SysMatrix_InsertTranslation(ptr->xPosition, ptr->yPosition, ptr->zPosition, MTXMODE_NEW);
             SysMatrix_InsertXRotation_s(ptr->xRotation, MTXMODE_APPLY);
             Matrix_RotateY(ptr->yRotation, MTXMODE_APPLY);
             SysMatrix_InsertZRotation_s(ptr->zRotation, MTXMODE_APPLY);
