@@ -108,11 +108,6 @@ extern Gfx D_060014C8;
 extern Gfx D_060018C8;
 extern Gfx D_06001CC8;
 
-static Vec3f D_80A3C344 = {0.0f, 0.0f, 0.0f};
-static Vec3f D_80A3C350 = {0.0f, 0.0f, 0.0f};
-
-static TexturePtr D_80A3C35C[] = { &D_060014C8, &D_060018C8, &D_06001CC8 };
-
 extern SkeletonHeader D_060020E8;
 
 void EnBaguo_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -296,8 +291,6 @@ void func_80A3B8F8(EnBaguo* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/func_80A3B958.s")
-/*
 void func_80A3B958(EnBaguo* this, GlobalContext* globalCtx) {
     Vec3f velocity = { 0.0f, 0.0f, 0.0f };
     Vec3f acceleration = { 0.0f, 0.0f, 0.0f };
@@ -344,7 +337,6 @@ void func_80A3B958(EnBaguo* this, GlobalContext* globalCtx) {
         }
     }
 }
-*/
 
 void EnBaguo_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnBaguo* this = THIS;
@@ -398,6 +390,8 @@ void func_80A3BE60(Actor* thisx, GlobalContext* globalCtx) {
     Gfx* gfx;
     s32 eyeIndexTemp;
     void* virtualAddress;
+
+    static TexturePtr D_80A3C35C[] = { &D_060014C8, &D_060018C8, &D_06001CC8 };
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
