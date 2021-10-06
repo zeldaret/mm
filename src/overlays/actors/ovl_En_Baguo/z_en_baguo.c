@@ -279,7 +279,14 @@ void func_80A3B7B8(EnBaguo* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/func_80A3B8F8.s")
+void func_80A3B8F8(EnBaguo* this, GlobalContext* globalCtx) {
+    if (this->unk_1B4 == 0) {
+        Actor_MarkForDeath(&this->actor);
+    }
+    if (this->unk_1B4 >= 0x1A) {
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/func_80A3B958.s")
 
