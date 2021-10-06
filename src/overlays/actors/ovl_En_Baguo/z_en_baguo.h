@@ -16,9 +16,11 @@ typedef struct EnBaguo {
     /* 0x01B0 */ char unk_1B0[0x4];
     /* 0x01B4 */ s16 unk_1B4;
     /* 0x01B6 */ s16 unk_1B6;
-    /* 0x01B8 */ char unk_1B8[0x4];
+    /* 0x01B8 */ s16 unk_1B8;
     /* 0x01BC */ f32 unk_1BC;
-    /* 0x01C0 */ char unk_1C0[0x1C];
+    /* 0x01C0 */ u8 unk_1C0;
+    /* 0x01C4 */ Vec3f unk_1C4;
+    /* 0x01D0 */ Vec3f unk_1D0;
     /* 0x01DC */ ColliderJntSph collider;
     /* 0x01FC */ ColliderJntSphElement colliderElements[1];
     /* 0x023C */ char unk_23C[0x690];

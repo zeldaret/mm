@@ -17,6 +17,7 @@ void EnBaguo_Update(Actor* thisx, GlobalContext* globalCtx);
 void func_80A3B220(EnBaguo* this, GlobalContext* globalCtx);
 void func_80A3B2CC(EnBaguo* this, GlobalContext* globalCtx);
 void func_80A3B3E0(EnBaguo* this, GlobalContext* globalCtx);
+void func_80A3B5E0(EnBaguo* this, GlobalContext* globalCtx);
 void func_80A3BE60(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit En_Baguo_InitVars = {
@@ -170,7 +171,48 @@ void func_80A3B2CC(EnBaguo* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/func_80A3B3E0.s")
+void func_80A3B3E0(EnBaguo* this, GlobalContext* globalCtx) {
+    s16 phi_v1;
+    s16 temp_v0;
+
+    if (this->unk_1B4 != 0) {
+        Math_SmoothStepToS(&this->actor.world.rot.x, 0, 10, 100, 1000);
+        Math_SmoothStepToS(&this->actor.world.rot.z, 0, 10, 100, 1000);
+        if (this->unk_1B4 & 8) {
+            if (fabsf(this->actor.world.rot.y - this->actor.yawTowardsPlayer) > 200.0f) {
+                Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 30, 300, 1000);
+                if (!(globalCtx->gameplayFrames & 7)) {
+                    func_800BBDAC(globalCtx, &this->actor, &this->actor.world.pos,
+                                  this->actor.shape.shadowScale - 20.0f, 10, 8.0f, 500, 10, 1);
+                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_VOICE);
+                }
+            }
+        }
+        this->actor.shape.rot.y = this->actor.world.rot.y;
+        return;
+    }
+    temp_v0 = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
+    if (temp_v0 < 0) {
+        phi_v1 = -temp_v0;
+    } else {
+        phi_v1 = temp_v0;
+    }
+    Math_Vec3f_Copy(&this->unk_1D0, &D_801D15B0);
+    Math_Vec3f_Copy(&this->unk_1C4, &D_801D15B0);
+    if (phi_v1 < 0x2000) {
+        this->unk_1D0.x = 2000.0f;
+    } else {
+        this->unk_1B8 = 0;
+        this->unk_1D0.z = 2000.0f;
+        if ((s16)(this->actor.yawTowardsPlayer - this->actor.world.rot.y) > 0) {
+            this->unk_1B8 = 1;
+        }
+    }
+    this->unk_1B4 = 0x26;
+    this->actor.world.rot.y = this->actor.yawTowardsPlayer;
+    this->unk_1C0 = 0;
+    this->actionFunc = func_80A3B5E0;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/func_80A3B5E0.s")
 
