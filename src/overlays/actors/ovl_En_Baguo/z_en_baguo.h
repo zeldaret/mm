@@ -18,24 +18,37 @@ typedef struct EnBaguoUnkStruct {
 } EnBaguoUnkStruct; // size = 0x38
 
 typedef struct EnBaguo {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ SkelAnime skelAnime;
-    /* 0x0188 */ Vec3s jointTable[3];
-    /* 0x019A */ Vec3s morphTable[3];
-    /* 0x01AC */ EnBaguoActionFunc actionFunc;
-    /* 0x01B0 */ s16 eyeIndex;
-    /* 0x01B2 */ s16 blinkTimer;
-    /* 0x01B4 */ s16 unk_1B4;
-    /* 0x01B6 */ s16 unk_1B6;
-    /* 0x01B8 */ s16 unk_1B8;
-    /* 0x01BC */ f32 unk_1BC;
-    /* 0x01C0 */ u8 unk_1C0;
-    /* 0x01C4 */ Vec3f unk_1C4;
-    /* 0x01D0 */ Vec3f unk_1D0;
-    /* 0x01DC */ ColliderJntSph collider;
-    /* 0x01FC */ ColliderJntSphElement colliderElements[1];
-    /* 0x023C */ EnBaguoUnkStruct unkStructArray[30];
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ SkelAnime skelAnime;
+    /* 0x188 */ Vec3s jointTable[3];
+    /* 0x19A */ Vec3s morphTable[3];
+    /* 0x1AC */ EnBaguoActionFunc actionFunc;
+    /* 0x1B0 */ s16 eyeIndex;
+    /* 0x1B2 */ s16 blinkTimer;
+    /* 0x1B4 */ s16 timer;
+    /* 0x1B6 */ s16 state;
+    /* 0x1B8 */ s16 unk_1B8;
+    /* 0x1BC */ f32 unk_1BC;
+    /* 0x1C0 */ u8 unk_1C0;
+    /* 0x1C4 */ Vec3f unk_1C4;
+    /* 0x1D0 */ Vec3f unk_1D0;
+    /* 0x1DC */ ColliderJntSph collider;
+    /* 0x1FC */ ColliderJntSphElement colliderElements[1];
+    /* 0x23C */ EnBaguoUnkStruct unkStructArray[30];
 } EnBaguo; // size = 0x8CC
+
+/**
+ * NEJIRON_STATE_INACTIVE: The Nejiron is either underground or emerging from underground
+ * NEJIRON_STATE_ACTIVE: The Nejiron is above ground and actively chasing the player
+ * NEJIRON_STATE_RETREATING: The Nejiron is burrowing back underground
+ * NEJIRON_STATE_EXPLODING: The Nejiron has detonated
+ */ 
+typedef enum {
+    /* 0x0 */ NEJIRON_STATE_INACTIVE,
+    /* 0x1 */ NEJIRON_STATE_ACTIVE,
+    /* 0x2 */ NEJIRON_STATE_RETREATING,
+    /* 0x3 */ NEJIRON_STATE_EXPLODING
+} NejironState;
 
 extern const ActorInit En_Baguo_InitVars;
 

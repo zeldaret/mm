@@ -144,7 +144,7 @@ void EnBaguo_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80A3B220(EnBaguo* this, GlobalContext* globalCtx) {
-    this->unk_1B6 = 0;
+    this->state = NEJIRON_STATE_INACTIVE;
     if (this->actor.xzDistToPlayer < 200.0f) {
         if (Player_GetMask(globalCtx) != 0x10) {
             this->actor.draw = func_80A3BE60;
@@ -169,9 +169,9 @@ void func_80A3B2CC(EnBaguo* this, GlobalContext* globalCtx) {
     Math_ApproachF(&this->actor.shape.shadowScale, 50.0f, 0.3f, 5.0f);
     Math_ApproachF(&this->actor.shape.yOffset, 2700.0f, 100.0f, 500.0f);
     if (this->actor.shape.yOffset > 2650.0f) {
-        this->unk_1B6 = 1;
+        this->state = NEJIRON_STATE_ACTIVE;
         this->actor.shape.yOffset = 2700.0f;
-        this->unk_1B4 = 0x3C;
+        this->timer = 60;
         this->actionFunc = func_80A3B3E0;
     }
 }
@@ -180,10 +180,10 @@ void func_80A3B3E0(EnBaguo* this, GlobalContext* globalCtx) {
     s16 phi_v1;
     s16 temp_v0;
 
-    if (this->unk_1B4 != 0) {
+    if (this->timer != 0) {
         Math_SmoothStepToS(&this->actor.world.rot.x, 0, 10, 100, 1000);
         Math_SmoothStepToS(&this->actor.world.rot.z, 0, 10, 100, 1000);
-        if (this->unk_1B4 & 8) {
+        if (this->timer & 8) {
             if (fabsf(this->actor.world.rot.y - this->actor.yawTowardsPlayer) > 200.0f) {
                 Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 30, 300, 1000);
                 if (!(globalCtx->gameplayFrames & 7)) {
@@ -213,7 +213,7 @@ void func_80A3B3E0(EnBaguo* this, GlobalContext* globalCtx) {
             this->unk_1B8 = 1;
         }
     }
-    this->unk_1B4 = 0x26;
+    this->timer = 38;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     this->unk_1C0 = 0;
     this->actionFunc = func_80A3B5E0;
@@ -228,8 +228,8 @@ void func_80A3B5E0(EnBaguo* this, GlobalContext* globalCtx) {
         return;
     }
 
-    if (!this->unk_1B4) {
-        this->unk_1B4 = 0x64;
+    if (!this->timer) {
+        this->timer = 100;
         this->actor.world.rot.y = this->actor.shape.rot.y;
         this->actionFunc = func_80A3B3E0;
         this->actor.speedXZ = 0.0f;
@@ -257,7 +257,7 @@ void func_80A3B5E0(EnBaguo* this, GlobalContext* globalCtx) {
 }
 
 void func_80A3B794(EnBaguo* this) {
-    this->unk_1B6 = 2;
+    this->state = NEJIRON_STATE_RETREATING;
     this->actionFunc = func_80A3B7B8;
     this->actor.speedXZ = 0.0f;
 }
@@ -283,10 +283,10 @@ void func_80A3B7B8(EnBaguo* this, GlobalContext* globalCtx) {
 }
 
 void func_80A3B8F8(EnBaguo* this, GlobalContext* globalCtx) {
-    if (this->unk_1B4 == 0) {
+    if (this->timer == 0) {
         Actor_MarkForDeath(&this->actor);
     }
-    if (this->unk_1B4 >= 0x1A) {
+    if (this->timer >= 26) {
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 }
@@ -297,7 +297,7 @@ void func_80A3B958(EnBaguo* this, GlobalContext* globalCtx) {
     s32 i;
 
     i = false;
-    if (this->unk_1B6 != 3 && this->unk_1B6 != 2) {
+    if (this->state != NEJIRON_STATE_EXPLODING && this->state != NEJIRON_STATE_RETREATING) {
         if (!(this->actor.bgCheckFlags & 1) && this->actor.world.pos.y < (this->actor.home.pos.y - 100.0f)) {
             i = true;
         }
@@ -308,7 +308,7 @@ void func_80A3B958(EnBaguo* this, GlobalContext* globalCtx) {
             this->collider.base.acFlags &= 0xFFFD;
             if (i || this->actor.colChkInfo.damageEffect == 0xE) {
                 func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 8);
-                this->unk_1B6 = 3;
+                this->state = NEJIRON_STATE_EXPLODING;
                 this->actor.speedXZ = 0.0f;
                 this->actor.shape.shadowScale = 0.0f;
                 for (i = 0; i < ARRAY_COUNT(this->unkStructArray); i++) {
@@ -325,7 +325,7 @@ void func_80A3B958(EnBaguo* this, GlobalContext* globalCtx) {
                             this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 2);
                 Audio_PlayActorSound2(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
                 Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_DEAD);
-                this->unk_1B4 = 0x1E;
+                this->timer = 30;
                 this->actor.flags |= 0x8000000;
                 this->actor.flags &= ~1;
                 Actor_SetScale(&this->actor, 0.0f);
@@ -350,15 +350,15 @@ void EnBaguo_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->blinkTimer--;
     }
 
-    if (this->unk_1B4 != 0) {
-        this->unk_1B4--;
+    if (this->timer != 0) {
+        this->timer--;
     }
 
-    if ((this->unk_1B6 != 3) && (this->unk_1B6 != 0)) {
+    if ((this->state != NEJIRON_STATE_EXPLODING) && (this->state != NEJIRON_STATE_INACTIVE)) {
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 
-    if (this->unk_1B6 != 3) {
+    if (this->state != NEJIRON_STATE_EXPLODING) {
         this->actor.shape.rot.x = this->actor.world.rot.x;
         this->actor.shape.rot.z = this->actor.world.rot.z;
         if (this->blinkTimer == 0) {
@@ -370,10 +370,10 @@ void EnBaguo_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 60.0f, 0x1D);
-        if (this->unk_1B6 != 0) {
+        if (this->state != NEJIRON_STATE_INACTIVE) {
             CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         }
-        if (this->unk_1B6 != 3) {
+        if (this->state != NEJIRON_STATE_EXPLODING) {
             CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         }
     }
