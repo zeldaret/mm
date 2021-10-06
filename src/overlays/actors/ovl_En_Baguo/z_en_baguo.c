@@ -311,7 +311,7 @@ void func_80A3B958(EnBaguo* this, GlobalContext* globalCtx) {
                 this->state = NEJIRON_STATE_EXPLODING;
                 this->actor.speedXZ = 0.0f;
                 this->actor.shape.shadowScale = 0.0f;
-                for (i = 0; i < ARRAY_COUNT(this->unkStructArray); i++) {
+                for (i = 0; i < ARRAY_COUNT(this->particles); i++) {
                     acceleration.x = (Rand_ZeroOne() - 0.5f) * 8.0f;
                     acceleration.y = -1.0f;
                     acceleration.z = (Rand_ZeroOne() - 0.5f) * 8.0f;
@@ -414,11 +414,11 @@ void func_80A3BE60(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80A3BF0C(EnBaguo* this, Vec3f* position, Vec3f* velocity, Vec3f* acceleration, f32 scale, s16 timer) {
     s16 i;
-    EnBaguoUnkStruct* ptr = this->unkStructArray;
+    NejironParticle* ptr = this->particles;
 
-    for (i = 0; i < ARRAY_COUNT(this->unkStructArray); i++, ptr++) {
-        if (ptr->isVisible == 0) {
-            ptr->isVisible = 1;
+    for (i = 0; i < ARRAY_COUNT(this->particles); i++, ptr++) {
+        if (!ptr->visible) {
+            ptr->visible = true;
             ptr->position = *position;
             ptr->velocity = *velocity;
             ptr->acceleration = *acceleration;
@@ -434,10 +434,10 @@ void func_80A3BF0C(EnBaguo* this, Vec3f* position, Vec3f* velocity, Vec3f* accel
 
 void func_80A3C008(EnBaguo* this, GlobalContext* globalCtx) {
     s32 i;
-    EnBaguoUnkStruct* ptr = this->unkStructArray;
+    NejironParticle* ptr = this->particles;
 
-    for (i = 0; i < ARRAY_COUNT(this->unkStructArray); i++, ptr++) {
-        if (ptr->isVisible) {
+    for (i = 0; i < ARRAY_COUNT(this->particles); i++, ptr++) {
+        if (ptr->visible) {
             ptr->position.x += ptr->velocity.x;
             ptr->position.y += ptr->velocity.y;
             ptr->position.z += ptr->velocity.z;
@@ -456,7 +456,7 @@ void func_80A3C008(EnBaguo* this, GlobalContext* globalCtx) {
             if (ptr->timer != 0) {
                 ptr->timer--;
             } else {
-                ptr->isVisible = 0;
+                ptr->visible = false;
             }
         }
     }
@@ -464,13 +464,13 @@ void func_80A3C008(EnBaguo* this, GlobalContext* globalCtx) {
 
 void func_80A3C17C(EnBaguo* this, GlobalContext* globalCtx) {
     s16 i;
-    EnBaguoUnkStruct* ptr = this->unkStructArray;
+    NejironParticle* ptr = this->particles;
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
-    for (i = 0; i < ARRAY_COUNT(this->unkStructArray); i++, ptr++) {
-        if (ptr->isVisible != 0) {
+    for (i = 0; i < ARRAY_COUNT(this->particles); i++, ptr++) {
+        if (ptr->visible) {
             SysMatrix_InsertTranslation(ptr->position.x, ptr->position.y, ptr->position.z, MTXMODE_NEW);
             SysMatrix_InsertXRotation_s(ptr->rotation.x, MTXMODE_APPLY);
             Matrix_RotateY(ptr->rotation.y, MTXMODE_APPLY);

@@ -7,15 +7,19 @@ struct EnBaguo;
 
 typedef void (*EnBaguoActionFunc)(struct EnBaguo*, GlobalContext*);
 
-typedef struct EnBaguoUnkStruct {
-    /* 0x00 */ u8 isVisible;
+/**
+ * When a Nejiron explodes, rock particles fly out from where it exploded.
+ * This struct governs how these rock particles behave.
+ */
+typedef struct NejironParticle {
+    /* 0x00 */ u8 visible;
     /* 0x04 */ Vec3f position;
     /* 0x10 */ Vec3f velocity;
     /* 0x1C */ Vec3f acceleration;
     /* 0x28 */ Vec3s rotation;
     /* 0x30 */ f32 scale;
     /* 0x34 */ s16 timer;
-} EnBaguoUnkStruct; // size = 0x38
+} NejironParticle; // size = 0x38
 
 typedef struct EnBaguo {
     /* 0x000 */ Actor actor;
@@ -34,7 +38,7 @@ typedef struct EnBaguo {
     /* 0x1D0 */ Vec3f unk_1D0;
     /* 0x1DC */ ColliderJntSph collider;
     /* 0x1FC */ ColliderJntSphElement colliderElements[1];
-    /* 0x23C */ EnBaguoUnkStruct unkStructArray[30];
+    /* 0x23C */ NejironParticle particles[30];
 } EnBaguo; // size = 0x8CC
 
 /**
