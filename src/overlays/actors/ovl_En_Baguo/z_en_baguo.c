@@ -22,7 +22,7 @@ void func_80A3B794(EnBaguo* this);
 void func_80A3B7B8(EnBaguo* this, GlobalContext* globalCtx);
 void func_80A3BE60(Actor* thisx, GlobalContext* globalCtx);
 void func_80A3BE24(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
-void func_80A3C17C(Actor* thisx, GlobalContext* globalCtx);
+void func_80A3C17C(EnBaguo* this, GlobalContext* globalCtx);
 
 const ActorInit En_Baguo_InitVars = {
     ACTOR_EN_BAGUO,
@@ -365,4 +365,24 @@ void func_80A3BE60(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/func_80A3C008.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/func_80A3C17C.s")
+void func_80A3C17C(EnBaguo* this, GlobalContext* globalCtx) {
+    s16 i;
+    EnBaguoUnkStruct* ptr = this->unkStructArray;
+    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+
+    OPEN_DISPS(gfxCtx);
+    func_8012C28C(globalCtx->state.gfxCtx);
+    for (i = 0; i < ARRAY_COUNT(this->unkStructArray); i++, ptr++) {
+        if (ptr->isVisible != 0) {
+            SysMatrix_InsertTranslation(ptr->x, ptr->y, ptr->z, MTXMODE_NEW);
+            SysMatrix_InsertXRotation_s(ptr->xRotation, MTXMODE_APPLY);
+            Matrix_RotateY(ptr->yRotation, MTXMODE_APPLY);
+            SysMatrix_InsertZRotation_s(ptr->zRotation, MTXMODE_APPLY);
+            Matrix_Scale(ptr->scale, ptr->scale, ptr->scale, MTXMODE_APPLY);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, 1, 255, 255, 255, 255);
+            gSPDisplayList(POLY_OPA_DISP++, &D_0401FA40);
+        }
+    }
+    CLOSE_DISPS(gfxCtx);
+}

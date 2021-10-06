@@ -7,9 +7,18 @@ struct EnBaguo;
 
 typedef void (*EnBaguoActionFunc)(struct EnBaguo*, GlobalContext*);
 
-typedef struct EnBaguoUnknownStruct {
-    /* 0x00 */ char unk_00[0x38];
-} EnBaguoUnknownStruct;
+typedef struct EnBaguoUnkStruct {
+    /* 0x00 */ u8 isVisible;
+    /* 0x04 */ f32 x;
+    /* 0x08 */ f32 y;
+    /* 0x0C */ f32 z;
+    /* 0x10 */ char unk_10[0x18];
+    /* 0x28 */ s16 xRotation;
+    /* 0x2A */ s16 yRotation;
+    /* 0x2C */ s16 zRotation;
+    /* 0x30 */ f32 scale;
+    /* 0x34 */ char unk_34[0x4];
+} EnBaguoUnkStruct; // size = 0x38
 
 typedef struct EnBaguo {
     /* 0x0000 */ Actor actor;
@@ -28,7 +37,7 @@ typedef struct EnBaguo {
     /* 0x01D0 */ Vec3f unk_1D0;
     /* 0x01DC */ ColliderJntSph collider;
     /* 0x01FC */ ColliderJntSphElement colliderElements[1];
-    /* 0x023C */ EnBaguoUnknownStruct unkStructArray[30];
+    /* 0x023C */ EnBaguoUnkStruct unkStructArray[30];
 } EnBaguo; // size = 0x8CC
 
 extern const ActorInit En_Baguo_InitVars;
