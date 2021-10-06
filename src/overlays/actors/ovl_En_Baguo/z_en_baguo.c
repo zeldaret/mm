@@ -18,6 +18,8 @@ void func_80A3B220(EnBaguo* this, GlobalContext* globalCtx);
 void func_80A3B2CC(EnBaguo* this, GlobalContext* globalCtx);
 void func_80A3B3E0(EnBaguo* this, GlobalContext* globalCtx);
 void func_80A3B5E0(EnBaguo* this, GlobalContext* globalCtx);
+void func_80A3B794(EnBaguo* this);
+void func_80A3B7B8(EnBaguo* this, GlobalContext* globalCtx);
 void func_80A3BE60(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit En_Baguo_InitVars = {
@@ -216,7 +218,11 @@ void func_80A3B3E0(EnBaguo* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/func_80A3B5E0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/func_80A3B794.s")
+void func_80A3B794(EnBaguo* this) {
+    this->unk_1B6 = 2;
+    this->actionFunc = func_80A3B7B8;
+    this->actor.speedXZ = 0.0f;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/func_80A3B7B8.s")
 
