@@ -304,8 +304,8 @@ void EnBaguo_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80A3B958(this, globalCtx);
     this->actionFunc(this, globalCtx);
 
-    if (this->unk_1B2 != 0) {
-        this->unk_1B2--;
+    if (this->blinkTimer != 0) {
+        this->blinkTimer--;
     }
 
     if (this->unk_1B4 != 0) {
@@ -319,11 +319,11 @@ void EnBaguo_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (this->unk_1B6 != 3) {
         this->actor.shape.rot.x = this->actor.world.rot.x;
         this->actor.shape.rot.z = this->actor.world.rot.z;
-        if (this->unk_1B2 == 0) {
-            this->unk_1B0++;
-            if (this->unk_1B0 >= 3) {
-                this->unk_1B0 = 0;
-                this->unk_1B2 = Rand_ZeroFloat(60.0f) + 20.0f;
+        if (this->blinkTimer == 0) {
+            this->eyeIndex++;
+            if (this->eyeIndex >= 3) {
+                this->eyeIndex = 0;
+                this->blinkTimer = Rand_ZeroFloat(60.0f) + 20.0f;
             }
         }
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
@@ -353,7 +353,7 @@ void func_80A3BE60(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(gfxCtx);
     tempPolyOpa = gfxCtx->polyOpa.p;
-    eyeIndexTemp = this->unk_1B0;
+    eyeIndexTemp = this->eyeIndex;
     virtualAddress = Lib_SegmentedToVirtual(D_80A3C35C[eyeIndexTemp]);
     gSPSegment(tempPolyOpa, 0x08, virtualAddress);
     gfxCtx->polyOpa.p = tempPolyOpa + 1;

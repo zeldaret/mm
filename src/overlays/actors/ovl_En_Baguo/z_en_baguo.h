@@ -17,8 +17,8 @@ typedef struct EnBaguo {
     /* 0x0188 */ Vec3s jointTable[3];
     /* 0x019A */ Vec3s morphTable[3];
     /* 0x01AC */ EnBaguoActionFunc actionFunc;
-    /* 0x01B0 */ s16 unk_1B0;
-    /* 0x01B2 */ s16 unk_1B2;
+    /* 0x01B0 */ s16 eyeIndex;
+    /* 0x01B2 */ s16 blinkTimer;
     /* 0x01B4 */ s16 unk_1B4;
     /* 0x01B6 */ s16 unk_1B6;
     /* 0x01B8 */ s16 unk_1B8;
