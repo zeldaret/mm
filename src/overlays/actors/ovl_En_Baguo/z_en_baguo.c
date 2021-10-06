@@ -311,7 +311,7 @@ void func_80A3B958(EnBaguo* this, GlobalContext* globalCtx) {
                 this->unk_1B6 = 3;
                 this->actor.speedXZ = 0.0f;
                 this->actor.shape.shadowScale = 0.0f;
-                for (i = 0; i < 30; i++) {
+                for (i = 0; i < ARRAY_COUNT(this->unkStructArray); i++) {
                     acceleration.x = (Rand_ZeroOne() - 0.5f) * 8.0f;
                     acceleration.y = -1.0f;
                     acceleration.z = (Rand_ZeroOne() - 0.5f) * 8.0f;
