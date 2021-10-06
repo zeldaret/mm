@@ -24,6 +24,7 @@ void func_80A3C008(EnBaguo* this, GlobalContext* globalCtx);
 void func_80A3B958(EnBaguo* this, GlobalContext* globalCtx);
 void func_80A3BE60(Actor* thisx, GlobalContext* globalCtx);
 void func_80A3BE24(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
+void func_80A3BF0C(EnBaguo* this, Vec3f* position, Vec3f* velocity, Vec3f* acceleration, f32 scale, s16 timer);
 void func_80A3C17C(EnBaguo* this, GlobalContext* globalCtx);
 
 const ActorInit En_Baguo_InitVars = {
@@ -107,9 +108,8 @@ extern Gfx D_060014C8;
 extern Gfx D_060018C8;
 extern Gfx D_06001CC8;
 
-s32 D_80A3C344[] = { 0x00000000, 0x00000000, 0x00000000 };
-
-s32 D_80A3C350[] = { 0x00000000, 0x00000000, 0x00000000 };
+static Vec3f D_80A3C344 = {0.0f, 0.0f, 0.0f};
+static Vec3f D_80A3C350 = {0.0f, 0.0f, 0.0f};
 
 static TexturePtr D_80A3C35C[] = { &D_060014C8, &D_060018C8, &D_06001CC8 };
 
@@ -297,6 +297,54 @@ void func_80A3B8F8(EnBaguo* this, GlobalContext* globalCtx) {
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/func_80A3B958.s")
+/*
+void func_80A3B958(EnBaguo* this, GlobalContext* globalCtx) {
+    Vec3f velocity = { 0.0f, 0.0f, 0.0f };
+    Vec3f acceleration = { 0.0f, 0.0f, 0.0f };
+    s32 i;
+
+    i = false;
+    if (this->unk_1B6 != 3 && this->unk_1B6 != 2) {
+        if (!(this->actor.bgCheckFlags & 1) && this->actor.world.pos.y < (this->actor.home.pos.y - 100.0f)) {
+            i = true;
+        }
+        if (this->actor.bgCheckFlags & 0x60 && this->actor.yDistToWater >= 40.0f) {
+            i = true;
+        }
+        if ((this->collider.base.acFlags & 2 || i)) {
+            this->collider.base.acFlags &= 0xFFFD;
+            if (i || this->actor.colChkInfo.damageEffect == 0xE) {
+                func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 8);
+                this->unk_1B6 = 3;
+                this->actor.speedXZ = 0.0f;
+                this->actor.shape.shadowScale = 0.0f;
+                for (i = 0; i < 30; i++) {
+                    acceleration.x = (Rand_ZeroOne() - 0.5f) * 8.0f;
+                    acceleration.y = -1.0f;
+                    acceleration.z = (Rand_ZeroOne() - 0.5f) * 8.0f;
+                    velocity.x = (Rand_ZeroOne() - 0.5f) * 14.0f;
+                    velocity.y = Rand_ZeroOne() * 30.0f;
+                    velocity.z = (Rand_ZeroOne() - 0.5f) * 14.0f;
+                    func_80A3BF0C(this, &this->actor.focus.pos, &velocity, &acceleration,
+                                  (Rand_ZeroFloat(1.0f) * 0.01f) + 0.003f, 90);
+                }
+                Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
+                            this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 2);
+                Audio_PlayActorSound2(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
+                Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_DEAD);
+                this->unk_1B4 = 0x1E;
+                this->actor.flags |= 0x8000000;
+                this->actor.flags &= ~1;
+                Actor_SetScale(&this->actor, 0.0f);
+                this->collider.elements->dim.scale = 3.0f;
+                this->collider.elements->info.toucher.damage = 8;
+                Item_DropCollectibleRandom(globalCtx, NULL, &this->actor.world.pos, 0xB0);
+                this->actionFunc = func_80A3B8F8;
+            }
+        }
+    }
+}
+*/
 
 void EnBaguo_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnBaguo* this = THIS;
@@ -347,19 +395,26 @@ void func_80A3BE24(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 
 void func_80A3BE60(Actor* thisx, GlobalContext* globalCtx) {
     EnBaguo* this = THIS;
-    Gfx* tempPolyOpa;
-    s32 pad;
+    Gfx* gfx;
     s32 eyeIndexTemp;
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
     void* virtualAddress;
 
-    func_8012C28C(gfxCtx);
-    tempPolyOpa = gfxCtx->polyOpa.p;
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    func_8012C28C(globalCtx->state.gfxCtx);
+
+    gfx = POLY_OPA_DISP;
+
     eyeIndexTemp = this->eyeIndex;
     virtualAddress = Lib_SegmentedToVirtual(D_80A3C35C[eyeIndexTemp]);
-    gSPSegment(tempPolyOpa, 0x08, virtualAddress);
-    gfxCtx->polyOpa.p = tempPolyOpa + 1;
+    gSPSegment(&gfx[0], 0x08, virtualAddress);
+
+    POLY_OPA_DISP = &gfx[1];
+
     SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, NULL, func_80A3BE24, &this->actor);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+
     func_80A3C17C(this, globalCtx);
 }
 
