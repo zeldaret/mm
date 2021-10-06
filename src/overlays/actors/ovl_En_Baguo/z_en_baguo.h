@@ -12,9 +12,7 @@ typedef struct EnBaguoUnkStruct {
     /* 0x04 */ Vec3f position;
     /* 0x10 */ Vec3f velocity;
     /* 0x1C */ Vec3f acceleration;
-    /* 0x28 */ s16 xRotation;
-    /* 0x2A */ s16 yRotation;
-    /* 0x2C */ s16 zRotation;
+    /* 0x28 */ Vec3s rotation;
     /* 0x30 */ f32 scale;
     /* 0x34 */ s16 timer;
 } EnBaguoUnkStruct; // size = 0x38

@@ -424,9 +424,9 @@ void func_80A3BF0C(EnBaguo* this, Vec3f* position, Vec3f* velocity, Vec3f* accel
             ptr->acceleration = *acceleration;
             ptr->scale = scale;
             ptr->timer = timer;
-            ptr->xRotation = (s16)randPlusMinusPoint5Scaled(30000.0f);
-            ptr->yRotation = (s16)randPlusMinusPoint5Scaled(30000.0f);
-            ptr->zRotation = (s16)randPlusMinusPoint5Scaled(30000.0f);
+            ptr->rotation.x = (s16)randPlusMinusPoint5Scaled(30000.0f);
+            ptr->rotation.y = (s16)randPlusMinusPoint5Scaled(30000.0f);
+            ptr->rotation.z = (s16)randPlusMinusPoint5Scaled(30000.0f);
             return;
         }
     }
@@ -441,9 +441,9 @@ void func_80A3C008(EnBaguo* this, GlobalContext* globalCtx) {
             ptr->position.x += ptr->velocity.x;
             ptr->position.y += ptr->velocity.y;
             ptr->position.z += ptr->velocity.z;
-            ptr->xRotation += 0xBB8;
-            ptr->yRotation += 0xBB8;
-            ptr->zRotation += 0xBB8;
+            ptr->rotation.x += 0xBB8;
+            ptr->rotation.y += 0xBB8;
+            ptr->rotation.z += 0xBB8;
             ptr->velocity.x += ptr->acceleration.x;
             ptr->velocity.y += ptr->acceleration.y;
             ptr->velocity.z += ptr->acceleration.z;
@@ -472,9 +472,9 @@ void func_80A3C17C(EnBaguo* this, GlobalContext* globalCtx) {
     for (i = 0; i < ARRAY_COUNT(this->unkStructArray); i++, ptr++) {
         if (ptr->isVisible != 0) {
             SysMatrix_InsertTranslation(ptr->position.x, ptr->position.y, ptr->position.z, MTXMODE_NEW);
-            SysMatrix_InsertXRotation_s(ptr->xRotation, MTXMODE_APPLY);
-            Matrix_RotateY(ptr->yRotation, MTXMODE_APPLY);
-            SysMatrix_InsertZRotation_s(ptr->zRotation, MTXMODE_APPLY);
+            SysMatrix_InsertXRotation_s(ptr->rotation.x, MTXMODE_APPLY);
+            Matrix_RotateY(ptr->rotation.y, MTXMODE_APPLY);
+            SysMatrix_InsertZRotation_s(ptr->rotation.z, MTXMODE_APPLY);
             Matrix_Scale(ptr->scale, ptr->scale, ptr->scale, MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 1, 255, 255, 255, 255);
