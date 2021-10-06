@@ -283,7 +283,46 @@ void func_80A3B7B8(EnBaguo* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/func_80A3B958.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/EnBaguo_Update.s")
+void EnBaguo_Update(Actor* thisx, GlobalContext* globalCtx) {
+    EnBaguo* this = THIS;
+
+    Actor_SetHeight(&this->actor, 30.0f);
+    func_80A3C008(this, globalCtx);
+    func_80A3B958(this, globalCtx);
+    this->actionFunc(this, globalCtx);
+
+    if (this->unk_1B2 != 0) {
+        this->unk_1B2--;
+    }
+
+    if (this->unk_1B4 != 0) {
+        this->unk_1B4--;
+    }
+
+    if ((this->unk_1B6 != 3) && (this->unk_1B6 != 0)) {
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider);
+    }
+
+    if (this->unk_1B6 != 3) {
+        this->actor.shape.rot.x = this->actor.world.rot.x;
+        this->actor.shape.rot.z = this->actor.world.rot.z;
+        if (this->unk_1B2 == 0) {
+            this->unk_1B0++;
+            if (this->unk_1B0 >= 3) {
+                this->unk_1B0 = 0;
+                this->unk_1B2 = Rand_ZeroFloat(60.0f) + 20.0f;
+            }
+        }
+        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 60.0f, 0x1D);
+        if (this->unk_1B6 != 0) {
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider);
+        }
+        if (this->unk_1B6 != 3) {
+            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider);
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Baguo/func_80A3BE24.s")
 
