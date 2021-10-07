@@ -34,8 +34,8 @@ typedef struct EnBaguo {
     /* 0x1B8 */ s16 zRollDirection; // 0 when rolling to its right, 1 when rolling to its left
     /* 0x1BC */ f32 maxDistanceFromHome;
     /* 0x1C0 */ u8 hardHitFlag;
-    /* 0x1C4 */ Vec3f currentRollingRotation;
-    /* 0x1D0 */ Vec3f targetRollingRotation;
+    /* 0x1C4 */ Vec3f currentRotation;
+    /* 0x1D0 */ Vec3f targetRotation;
     /* 0x1DC */ ColliderJntSph collider;
     /* 0x1FC */ ColliderJntSphElement colliderElements[1];
     /* 0x23C */ NejironParticle particles[30];

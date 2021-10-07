@@ -176,8 +176,13 @@ void EnBaguo_Sit(EnBaguo* this, GlobalContext* globalCtx) {
     s16 yaw;
 
     if (this->timer != 0) {
+        // Depending on how the last roll ended, this actor may be "sitting" on
+        // something other than its legs. This slowly corrects that.
         Math_SmoothStepToS(&this->actor.world.rot.x, 0, 10, 100, 1000);
         Math_SmoothStepToS(&this->actor.world.rot.z, 0, 10, 100, 1000);
+
+        // If this actor isn't mostly facing the player, do a discrete turn towards
+        // them. It takes 8 frames to turn, and we must wait 8 frames to do another.
         if (this->timer & 8) {
             if (fabsf(this->actor.world.rot.y - this->actor.yawTowardsPlayer) > 200.0f) {
                 Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 30, 300, 1000);
@@ -191,15 +196,16 @@ void EnBaguo_Sit(EnBaguo* this, GlobalContext* globalCtx) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
         return;
     }
+
     yaw = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
     absoluteYaw = ABS_ALT(yaw);
-    Math_Vec3f_Copy(&this->targetRollingRotation, &D_801D15B0);
-    Math_Vec3f_Copy(&this->currentRollingRotation, &D_801D15B0);
+    Math_Vec3f_Copy(&this->targetRotation, &D_801D15B0);
+    Math_Vec3f_Copy(&this->currentRotation, &D_801D15B0);
     if (absoluteYaw < 0x2000) {
-        this->targetRollingRotation.x = 2000.0f;
+        this->targetRotation.x = 2000.0f;
     } else {
         this->zRollDirection = 0;
-        this->targetRollingRotation.z = 2000.0f;
+        this->targetRotation.z = 2000.0f;
         if ((s16)(this->actor.yawTowardsPlayer - this->actor.world.rot.y) > 0) {
             this->zRollDirection = 1;
         }
@@ -220,7 +226,7 @@ void EnBaguo_Roll(EnBaguo* this, GlobalContext* globalCtx) {
         return;
     }
 
-    if (!this->timer) {
+    if (this->timer == 0) {
         this->timer = 100;
         this->actor.world.rot.y = this->actor.shape.rot.y;
         this->actionFunc = EnBaguo_Sit;
@@ -234,15 +240,15 @@ void EnBaguo_Roll(EnBaguo* this, GlobalContext* globalCtx) {
         this->actor.speedXZ = -7.0f;
     }
 
-    Math_ApproachF(&this->currentRollingRotation.x, this->targetRollingRotation.x, 0.2f, 1000.0f);
-    Math_ApproachF(&this->currentRollingRotation.z, this->targetRollingRotation.z, 0.2f, 1000.0f);
+    Math_ApproachF(&this->currentRotation.x, this->targetRotation.x, 0.2f, 1000.0f);
+    Math_ApproachF(&this->currentRotation.z, this->targetRotation.z, 0.2f, 1000.0f);
     Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.3f, 0.5f);
-    this->actor.world.rot.x += (s16)this->currentRollingRotation.x;
-    if (this->currentRollingRotation.z != 0.0f) {
+    this->actor.world.rot.x += (s16)this->currentRotation.x;
+    if (this->currentRotation.z != 0.0f) {
         if (this->zRollDirection == 0) {
-            this->actor.world.rot.z += (s16)this->currentRollingRotation.z;
+            this->actor.world.rot.z += (s16)this->currentRotation.z;
         } else {
-            this->actor.world.rot.z -= (s16)this->currentRollingRotation.z;
+            this->actor.world.rot.z -= (s16)this->currentRotation.z;
         }
     }
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_ROLL - SFX_FLAG);
@@ -288,16 +294,21 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, GlobalContext* globalCtx) {
     Vec3f acceleration = { 0.0f, 0.0f, 0.0f };
     s32 i;
 
+    // In order to match, this variable must act as both a boolean to check if
+    // the Nejiron should forcibly explode and as a loop index.
     i = false;
     if (this->state != NEJIRON_STATE_EXPLODING && this->state != NEJIRON_STATE_RETREATING) {
         if (!(this->actor.bgCheckFlags & 1) && this->actor.world.pos.y < (this->actor.home.pos.y - 100.0f)) {
+            // Force a detonation if we're off the ground and have fallen
+            // below our home position (e.g., we rolled off a ledge).
             i = true;
         }
         if (this->actor.bgCheckFlags & 0x60 && this->actor.yDistToWater >= 40.0f) {
+            // Force a detonation if we're too far below the water's surface.
             i = true;
         }
-        if ((this->collider.base.acFlags & 2 || i)) {
-            this->collider.base.acFlags &= 0xFFFD;
+        if ((this->collider.base.acFlags & AC_HIT || i)) {
+            this->collider.base.acFlags &= ~AC_HIT;
             if (i || this->actor.colChkInfo.damageEffect == 0xE) {
                 func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 8);
                 this->state = NEJIRON_STATE_EXPLODING;
@@ -346,7 +357,7 @@ void EnBaguo_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->timer--;
     }
 
-    if ((this->state != NEJIRON_STATE_EXPLODING) && (this->state != NEJIRON_STATE_INACTIVE)) {
+    if (this->state != NEJIRON_STATE_EXPLODING && this->state != NEJIRON_STATE_INACTIVE) {
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 
