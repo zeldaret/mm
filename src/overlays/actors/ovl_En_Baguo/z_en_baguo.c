@@ -116,8 +116,8 @@ void EnBaguo_Init(Actor* thisx, GlobalContext* globalCtx) {
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 0.0f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &D_060020E8, NULL, this->jointTable, this->morphTable, 3);
     this->actor.hintId = 0xB;
-    this->unk_1BC = 240.0f;
-    this->unk_1BC += this->actor.world.rot.z * 40.0f;
+    this->maxDistanceFromHome = 240.0f;
+    this->maxDistanceFromHome += this->actor.world.rot.z * 40.0f;
     this->actor.world.rot.z = 0;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -223,7 +223,8 @@ void func_80A3B5E0(EnBaguo* this, GlobalContext* globalCtx) {
     f32 xDistanceFromHome = this->actor.home.pos.x - this->actor.world.pos.x;
     f32 zDistanceFromHome = this->actor.home.pos.z - this->actor.world.pos.z;
 
-    if ((this->unk_1BC < sqrtf(SQ(xDistanceFromHome) + SQ(zDistanceFromHome))) || (Player_GetMask(globalCtx) == 0x10)) {
+    if ((this->maxDistanceFromHome < sqrtf(SQ(xDistanceFromHome) + SQ(zDistanceFromHome))) ||
+        (Player_GetMask(globalCtx) == 0x10)) {
         func_80A3B794(this);
         return;
     }

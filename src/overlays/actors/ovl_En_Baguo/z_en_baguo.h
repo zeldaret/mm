@@ -32,7 +32,7 @@ typedef struct EnBaguo {
     /* 0x1B4 */ s16 timer;
     /* 0x1B6 */ s16 state;
     /* 0x1B8 */ s16 unk_1B8;
-    /* 0x1BC */ f32 unk_1BC;
+    /* 0x1BC */ f32 maxDistanceFromHome;
     /* 0x1C0 */ u8 unk_1C0;
     /* 0x1C4 */ Vec3f currentRollingRotation;
     /* 0x1D0 */ Vec3f targetRollingRotation;
