@@ -20,12 +20,10 @@ void EnBaguo_Sit(EnBaguo* this, GlobalContext* globalCtx);
 void EnBaguo_Roll(EnBaguo* this, GlobalContext* globalCtx);
 void EnBaguo_StartRetreat(EnBaguo* this);
 void EnBaguo_RetreatUnderground(EnBaguo* this, GlobalContext* globalCtx);
-void EnBaguo_UpdateParticles(EnBaguo* this, GlobalContext* globalCtx);
-void EnBaguo_CheckForDetonation(EnBaguo* this, GlobalContext* globalCtx);
 void EnBaguo_DrawBody(Actor* thisx, GlobalContext* globalCtx);
-void EnBaguo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 void EnBaguo_InitializeParticle(EnBaguo* this, Vec3f* position, Vec3f* velocity, Vec3f* acceleration, f32 scale,
                                 s16 timer);
+void EnBaguo_UpdateParticles(EnBaguo* this, GlobalContext* globalCtx);
 void EnBaguo_DrawRockParticles(EnBaguo* this, GlobalContext* globalCtx);
 
 const ActorInit En_Baguo_InitVars = {
