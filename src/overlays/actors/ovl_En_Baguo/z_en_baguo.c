@@ -39,8 +39,7 @@ const ActorInit En_Baguo_InitVars = {
     (ActorFunc)NULL,
 };
 
-// static ColliderJntSphElementInit sJntSphElementsInit[1] = {
-static ColliderJntSphElementInit D_80A3C2F0[1] = {
+static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
         {
             ELEMTYPE_UNK0,
@@ -54,8 +53,7 @@ static ColliderJntSphElementInit D_80A3C2F0[1] = {
     },
 };
 
-// static ColliderJntSphInit sJntSphInit = {
-static ColliderJntSphInit D_80A3C314 = {
+static ColliderJntSphInit sJntSphInit = {
     {
         COLTYPE_HARD,
         AT_ON | AT_TYPE_ENEMY,
@@ -65,11 +63,10 @@ static ColliderJntSphInit D_80A3C314 = {
         COLSHAPE_JNTSPH,
     },
     1,
-    D_80A3C2F0, // sJntSphElementsInit,
+    sJntSphElementsInit,
 };
 
-// static DamageTable sDamageTable = {
-static DamageTable D_80A3C324 = {
+static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0xF),
     /* Deku Stick     */ DMG_ENTRY(0, 0xF),
     /* Horse trample  */ DMG_ENTRY(0, 0x0),
@@ -107,7 +104,6 @@ static DamageTable D_80A3C324 = {
 extern Gfx D_060014C8;
 extern Gfx D_060018C8;
 extern Gfx D_06001CC8;
-
 extern SkeletonHeader D_060020E8;
 
 void EnBaguo_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -122,7 +118,7 @@ void EnBaguo_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.targetMode = 2;
-    Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->actor, &D_80A3C314, this->colliderElements);
+    Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
     this->collider.elements[0].dim.modelSphere.radius = 30;
     this->collider.elements[0].dim.scale = 1.0f;
     this->collider.elements[0].dim.modelSphere.center.x = 80;
@@ -130,7 +126,7 @@ void EnBaguo_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->collider.elements[0].dim.modelSphere.center.z = 0;
     this->actor.shape.yOffset = -3000.0f;
     this->actor.gravity = -3.0f;
-    this->actor.colChkInfo.damageTable = &D_80A3C324;
+    this->actor.colChkInfo.damageTable = &sDamageTable;
     this->actor.flags |= 0x8000000;
     this->actor.flags &= ~1;
     this->collider.base.acFlags |= AC_HARD;
