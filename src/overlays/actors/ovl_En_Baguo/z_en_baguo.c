@@ -177,8 +177,8 @@ void func_80A3B2CC(EnBaguo* this, GlobalContext* globalCtx) {
 }
 
 void func_80A3B3E0(EnBaguo* this, GlobalContext* globalCtx) {
-    s16 phi_v1;
-    s16 temp_v0;
+    s16 absoluteYaw;
+    s16 yaw;
 
     if (this->timer != 0) {
         Math_SmoothStepToS(&this->actor.world.rot.x, 0, 10, 100, 1000);
@@ -196,26 +196,22 @@ void func_80A3B3E0(EnBaguo* this, GlobalContext* globalCtx) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
         return;
     }
-    temp_v0 = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
-    if (temp_v0 < 0) {
-        phi_v1 = -temp_v0;
-    } else {
-        phi_v1 = temp_v0;
-    }
+    yaw = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
+    absoluteYaw = ABS_ALT(yaw);
     Math_Vec3f_Copy(&this->targetRollingRotation, &D_801D15B0);
     Math_Vec3f_Copy(&this->currentRollingRotation, &D_801D15B0);
-    if (phi_v1 < 0x2000) {
+    if (absoluteYaw < 0x2000) {
         this->targetRollingRotation.x = 2000.0f;
     } else {
-        this->unk_1B8 = 0;
+        this->zRollDirection = 0;
         this->targetRollingRotation.z = 2000.0f;
         if ((s16)(this->actor.yawTowardsPlayer - this->actor.world.rot.y) > 0) {
-            this->unk_1B8 = 1;
+            this->zRollDirection = 1;
         }
     }
     this->timer = 38;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-    this->unk_1C0 = 0;
+    this->hardHitFlag = 0;
     this->actionFunc = func_80A3B5E0;
 }
 
@@ -237,9 +233,9 @@ void func_80A3B5E0(EnBaguo* this, GlobalContext* globalCtx) {
         return;
     }
 
-    if (!this->unk_1C0 && this->collider.base.atFlags & AC_HARD) {
-        this->unk_1B8 ^= 1;
-        this->unk_1C0 = 1;
+    if (!this->hardHitFlag && this->collider.base.atFlags & AC_HARD) {
+        this->zRollDirection ^= 1;
+        this->hardHitFlag = 1;
         this->actor.speedXZ = -7.0f;
     }
 
@@ -248,7 +244,7 @@ void func_80A3B5E0(EnBaguo* this, GlobalContext* globalCtx) {
     Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.3f, 0.5f);
     this->actor.world.rot.x += (s16)this->currentRollingRotation.x;
     if (this->currentRollingRotation.z != 0.0f) {
-        if (this->unk_1B8 == 0) {
+        if (this->zRollDirection == 0) {
             this->actor.world.rot.z += (s16)this->currentRollingRotation.z;
         } else {
             this->actor.world.rot.z -= (s16)this->currentRollingRotation.z;

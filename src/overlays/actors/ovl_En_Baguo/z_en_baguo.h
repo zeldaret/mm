@@ -31,9 +31,9 @@ typedef struct EnBaguo {
     /* 0x1B2 */ s16 blinkTimer;
     /* 0x1B4 */ s16 timer;
     /* 0x1B6 */ s16 state;
-    /* 0x1B8 */ s16 unk_1B8;
+    /* 0x1B8 */ s16 zRollDirection; // 0 when rolling to its right, 1 when rolling to its left
     /* 0x1BC */ f32 maxDistanceFromHome;
-    /* 0x1C0 */ u8 unk_1C0;
+    /* 0x1C0 */ u8 hardHitFlag;
     /* 0x1C4 */ Vec3f currentRollingRotation;
     /* 0x1D0 */ Vec3f targetRollingRotation;
     /* 0x1DC */ ColliderJntSph collider;
