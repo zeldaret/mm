@@ -22,10 +22,10 @@ void func_80A3B794(EnBaguo* this);
 void func_80A3B7B8(EnBaguo* this, GlobalContext* globalCtx);
 void func_80A3C008(EnBaguo* this, GlobalContext* globalCtx);
 void func_80A3B958(EnBaguo* this, GlobalContext* globalCtx);
-void func_80A3BE60(Actor* thisx, GlobalContext* globalCtx);
+void EnBaguo_DrawBody(Actor* thisx, GlobalContext* globalCtx);
 void func_80A3BE24(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 void func_80A3BF0C(EnBaguo* this, Vec3f* position, Vec3f* velocity, Vec3f* acceleration, f32 scale, s16 timer);
-void func_80A3C17C(EnBaguo* this, GlobalContext* globalCtx);
+void EnBaguo_DrawRockParticles(EnBaguo* this, GlobalContext* globalCtx);
 
 const ActorInit En_Baguo_InitVars = {
     ACTOR_EN_BAGUO,
@@ -147,7 +147,7 @@ void func_80A3B220(EnBaguo* this, GlobalContext* globalCtx) {
     this->state = NEJIRON_STATE_INACTIVE;
     if (this->actor.xzDistToPlayer < 200.0f) {
         if (Player_GetMask(globalCtx) != 0x10) {
-            this->actor.draw = func_80A3BE60;
+            this->actor.draw = EnBaguo_DrawBody;
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_APPEAR);
             this->actor.world.rot.z = 0;
             this->actor.world.rot.x = this->actor.world.rot.z;
@@ -270,7 +270,7 @@ void func_80A3B7B8(EnBaguo* this, GlobalContext* globalCtx) {
     Math_ApproachZeroF(&this->actor.shape.shadowScale, 0.3f, 5.0f);
     if (this->actor.shape.yOffset < -2970.0f) {
         this->actor.shape.yOffset = -3000.0f;
-        this->actor.draw = func_80A3BE60;
+        this->actor.draw = EnBaguo_DrawBody;
         Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_APPEAR);
         this->actor.flags |= 0x8000000;
@@ -382,13 +382,12 @@ void func_80A3BE24(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     Collider_UpdateSpheres(limbIndex, &this->collider);
 }
 
-void func_80A3BE60(Actor* thisx, GlobalContext* globalCtx) {
+void EnBaguo_DrawBody(Actor* thisx, GlobalContext* globalCtx) {
+    static TexturePtr sEyeTextures[] = { &D_060014C8, &D_060018C8, &D_06001CC8 };
     EnBaguo* this = THIS;
     Gfx* gfx;
     s32 eyeIndexTemp;
     void* virtualAddress;
-
-    static TexturePtr D_80A3C35C[] = { &D_060014C8, &D_060018C8, &D_06001CC8 };
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -397,7 +396,7 @@ void func_80A3BE60(Actor* thisx, GlobalContext* globalCtx) {
     gfx = POLY_OPA_DISP;
 
     eyeIndexTemp = this->eyeIndex;
-    virtualAddress = Lib_SegmentedToVirtual(D_80A3C35C[eyeIndexTemp]);
+    virtualAddress = Lib_SegmentedToVirtual(sEyeTextures[eyeIndexTemp]);
     gSPSegment(&gfx[0], 0x08, virtualAddress);
 
     POLY_OPA_DISP = &gfx[1];
@@ -406,7 +405,7 @@ void func_80A3BE60(Actor* thisx, GlobalContext* globalCtx) {
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-    func_80A3C17C(this, globalCtx);
+    EnBaguo_DrawRockParticles(this, globalCtx);
 }
 
 void func_80A3BF0C(EnBaguo* this, Vec3f* position, Vec3f* velocity, Vec3f* acceleration, f32 scale, s16 timer) {
@@ -459,7 +458,7 @@ void func_80A3C008(EnBaguo* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A3C17C(EnBaguo* this, GlobalContext* globalCtx) {
+void EnBaguo_DrawRockParticles(EnBaguo* this, GlobalContext* globalCtx) {
     s16 i;
     NejironParticle* ptr = this->particles;
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
