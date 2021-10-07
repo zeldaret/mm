@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * File z_en_baguo.c
+=======
+ * File: z_en_baguo.c
+>>>>>>> Add explanatory comment
  * Overlay: ovl_En_Baguo
  * Description: Nejiron
  */
