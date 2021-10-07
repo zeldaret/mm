@@ -14,17 +14,18 @@ void EnBaguo_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnBaguo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBaguo_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80A3B220(EnBaguo* this, GlobalContext* globalCtx);
-void func_80A3B2CC(EnBaguo* this, GlobalContext* globalCtx);
-void func_80A3B3E0(EnBaguo* this, GlobalContext* globalCtx);
-void func_80A3B5E0(EnBaguo* this, GlobalContext* globalCtx);
-void func_80A3B794(EnBaguo* this);
-void func_80A3B7B8(EnBaguo* this, GlobalContext* globalCtx);
-void func_80A3C008(EnBaguo* this, GlobalContext* globalCtx);
-void func_80A3B958(EnBaguo* this, GlobalContext* globalCtx);
+void EnBaguo_UndergroundIdle(EnBaguo* this, GlobalContext* globalCtx);
+void EnBaguo_EmergeFromUnderground(EnBaguo* this, GlobalContext* globalCtx);
+void EnBaguo_Sit(EnBaguo* this, GlobalContext* globalCtx);
+void EnBaguo_Roll(EnBaguo* this, GlobalContext* globalCtx);
+void EnBaguo_StartRetreat(EnBaguo* this);
+void EnBaguo_RetreatUnderground(EnBaguo* this, GlobalContext* globalCtx);
+void EnBaguo_UpdateParticles(EnBaguo* this, GlobalContext* globalCtx);
+void EnBaguo_CheckForDetonation(EnBaguo* this, GlobalContext* globalCtx);
 void EnBaguo_DrawBody(Actor* thisx, GlobalContext* globalCtx);
-void func_80A3BE24(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
-void func_80A3BF0C(EnBaguo* this, Vec3f* position, Vec3f* velocity, Vec3f* acceleration, f32 scale, s16 timer);
+void EnBaguo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
+void EnBaguo_InitializeParticle(EnBaguo* this, Vec3f* position, Vec3f* velocity, Vec3f* acceleration, f32 scale,
+                                s16 timer);
 void EnBaguo_DrawRockParticles(EnBaguo* this, GlobalContext* globalCtx);
 
 const ActorInit En_Baguo_InitVars = {
@@ -130,7 +131,7 @@ void EnBaguo_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.flags |= 0x8000000;
     this->actor.flags &= ~1;
     this->collider.base.acFlags |= AC_HARD;
-    this->actionFunc = func_80A3B220;
+    this->actionFunc = EnBaguo_UndergroundIdle;
 }
 
 void EnBaguo_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -139,7 +140,7 @@ void EnBaguo_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyJntSph(globalCtx, &this->collider);
 }
 
-void func_80A3B220(EnBaguo* this, GlobalContext* globalCtx) {
+void EnBaguo_UndergroundIdle(EnBaguo* this, GlobalContext* globalCtx) {
     this->state = NEJIRON_STATE_INACTIVE;
     if (this->actor.xzDistToPlayer < 200.0f) {
         if (Player_GetMask(globalCtx) != 0x10) {
@@ -149,13 +150,13 @@ void func_80A3B220(EnBaguo* this, GlobalContext* globalCtx) {
             this->actor.world.rot.x = this->actor.world.rot.z;
             this->actor.flags &= ~0x8000000;
             this->actor.flags |= 1;
-            this->actionFunc = func_80A3B2CC;
+            this->actionFunc = EnBaguo_EmergeFromUnderground;
         }
     }
     this->actor.shape.rot.y = this->actor.world.rot.y;
 }
 
-void func_80A3B2CC(EnBaguo* this, GlobalContext* globalCtx) {
+void EnBaguo_EmergeFromUnderground(EnBaguo* this, GlobalContext* globalCtx) {
     this->actor.world.rot.y += 0x1518;
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (!(globalCtx->gameplayFrames & 7)) {
@@ -168,11 +169,11 @@ void func_80A3B2CC(EnBaguo* this, GlobalContext* globalCtx) {
         this->state = NEJIRON_STATE_ACTIVE;
         this->actor.shape.yOffset = 2700.0f;
         this->timer = 60;
-        this->actionFunc = func_80A3B3E0;
+        this->actionFunc = EnBaguo_Sit;
     }
 }
 
-void func_80A3B3E0(EnBaguo* this, GlobalContext* globalCtx) {
+void EnBaguo_Sit(EnBaguo* this, GlobalContext* globalCtx) {
     s16 absoluteYaw;
     s16 yaw;
 
@@ -208,23 +209,23 @@ void func_80A3B3E0(EnBaguo* this, GlobalContext* globalCtx) {
     this->timer = 38;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     this->hardHitFlag = 0;
-    this->actionFunc = func_80A3B5E0;
+    this->actionFunc = EnBaguo_Roll;
 }
 
-void func_80A3B5E0(EnBaguo* this, GlobalContext* globalCtx) {
+void EnBaguo_Roll(EnBaguo* this, GlobalContext* globalCtx) {
     f32 xDistanceFromHome = this->actor.home.pos.x - this->actor.world.pos.x;
     f32 zDistanceFromHome = this->actor.home.pos.z - this->actor.world.pos.z;
 
     if ((this->maxDistanceFromHome < sqrtf(SQ(xDistanceFromHome) + SQ(zDistanceFromHome))) ||
         (Player_GetMask(globalCtx) == 0x10)) {
-        func_80A3B794(this);
+        EnBaguo_StartRetreat(this);
         return;
     }
 
     if (!this->timer) {
         this->timer = 100;
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        this->actionFunc = func_80A3B3E0;
+        this->actionFunc = EnBaguo_Sit;
         this->actor.speedXZ = 0.0f;
         return;
     }
@@ -249,13 +250,13 @@ void func_80A3B5E0(EnBaguo* this, GlobalContext* globalCtx) {
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_ROLL - SFX_FLAG);
 }
 
-void func_80A3B794(EnBaguo* this) {
+void EnBaguo_StartRetreat(EnBaguo* this) {
     this->state = NEJIRON_STATE_RETREATING;
-    this->actionFunc = func_80A3B7B8;
+    this->actionFunc = EnBaguo_RetreatUnderground;
     this->actor.speedXZ = 0.0f;
 }
 
-void func_80A3B7B8(EnBaguo* this, GlobalContext* globalCtx) {
+void EnBaguo_RetreatUnderground(EnBaguo* this, GlobalContext* globalCtx) {
     this->actor.world.rot.y += -0x1518;
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (!(globalCtx->gameplayFrames & 7)) {
@@ -271,11 +272,11 @@ void func_80A3B7B8(EnBaguo* this, GlobalContext* globalCtx) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_APPEAR);
         this->actor.flags |= 0x8000000;
         this->actor.flags &= ~1;
-        this->actionFunc = func_80A3B220;
+        this->actionFunc = EnBaguo_UndergroundIdle;
     }
 }
 
-void func_80A3B8F8(EnBaguo* this, GlobalContext* globalCtx) {
+void EnBaguo_PostDetonation(EnBaguo* this, GlobalContext* globalCtx) {
     if (this->timer == 0) {
         Actor_MarkForDeath(&this->actor);
     }
@@ -284,7 +285,7 @@ void func_80A3B8F8(EnBaguo* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A3B958(EnBaguo* this, GlobalContext* globalCtx) {
+void EnBaguo_CheckForDetonation(EnBaguo* this, GlobalContext* globalCtx) {
     Vec3f velocity = { 0.0f, 0.0f, 0.0f };
     Vec3f acceleration = { 0.0f, 0.0f, 0.0f };
     s32 i;
@@ -311,8 +312,8 @@ void func_80A3B958(EnBaguo* this, GlobalContext* globalCtx) {
                     velocity.x = (Rand_ZeroOne() - 0.5f) * 14.0f;
                     velocity.y = Rand_ZeroOne() * 30.0f;
                     velocity.z = (Rand_ZeroOne() - 0.5f) * 14.0f;
-                    func_80A3BF0C(this, &this->actor.focus.pos, &velocity, &acceleration,
-                                  (Rand_ZeroFloat(1.0f) * 0.01f) + 0.003f, 90);
+                    EnBaguo_InitializeParticle(this, &this->actor.focus.pos, &velocity, &acceleration,
+                                               (Rand_ZeroFloat(1.0f) * 0.01f) + 0.003f, 90);
                 }
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
                             this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 2);
@@ -325,7 +326,7 @@ void func_80A3B958(EnBaguo* this, GlobalContext* globalCtx) {
                 this->collider.elements->dim.scale = 3.0f;
                 this->collider.elements->info.toucher.damage = 8;
                 Item_DropCollectibleRandom(globalCtx, NULL, &this->actor.world.pos, 0xB0);
-                this->actionFunc = func_80A3B8F8;
+                this->actionFunc = EnBaguo_PostDetonation;
             }
         }
     }
@@ -335,8 +336,8 @@ void EnBaguo_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnBaguo* this = THIS;
 
     Actor_SetHeight(&this->actor, 30.0f);
-    func_80A3C008(this, globalCtx);
-    func_80A3B958(this, globalCtx);
+    EnBaguo_UpdateParticles(this, globalCtx);
+    EnBaguo_CheckForDetonation(this, globalCtx);
     this->actionFunc(this, globalCtx);
 
     if (this->blinkTimer != 0) {
@@ -372,7 +373,7 @@ void EnBaguo_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A3BE24(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnBaguo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnBaguo* this = THIS;
 
     Collider_UpdateSpheres(limbIndex, &this->collider);
@@ -397,14 +398,16 @@ void EnBaguo_DrawBody(Actor* thisx, GlobalContext* globalCtx) {
 
     POLY_OPA_DISP = &gfx[1];
 
-    SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, NULL, func_80A3BE24, &this->actor);
+    SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, NULL, EnBaguo_PostLimbDraw,
+                   &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
     EnBaguo_DrawRockParticles(this, globalCtx);
 }
 
-void func_80A3BF0C(EnBaguo* this, Vec3f* position, Vec3f* velocity, Vec3f* acceleration, f32 scale, s16 timer) {
+void EnBaguo_InitializeParticle(EnBaguo* this, Vec3f* position, Vec3f* velocity, Vec3f* acceleration, f32 scale,
+                                s16 timer) {
     s16 i;
     NejironParticle* ptr = this->particles;
 
@@ -424,7 +427,7 @@ void func_80A3BF0C(EnBaguo* this, Vec3f* position, Vec3f* velocity, Vec3f* accel
     }
 }
 
-void func_80A3C008(EnBaguo* this, GlobalContext* globalCtx) {
+void EnBaguo_UpdateParticles(EnBaguo* this, GlobalContext* globalCtx) {
     s32 i;
     NejironParticle* ptr = this->particles;
 
