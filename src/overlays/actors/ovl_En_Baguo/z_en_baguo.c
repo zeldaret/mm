@@ -204,10 +204,10 @@ void EnBaguo_Sit(EnBaguo* this, GlobalContext* globalCtx) {
     if (absoluteYaw < 0x2000) {
         this->targetRotation.x = 2000.0f;
     } else {
-        this->zRollDirection = 0;
+        this->zRollDirection = NEJIRON_DIRECTION_RIGHT;
         this->targetRotation.z = 2000.0f;
         if ((s16)(this->actor.yawTowardsPlayer - this->actor.world.rot.y) > 0) {
-            this->zRollDirection = 1;
+            this->zRollDirection = NEJIRON_DIRECTION_LEFT;
         }
     }
     this->timer = 38;
@@ -245,7 +245,7 @@ void EnBaguo_Roll(EnBaguo* this, GlobalContext* globalCtx) {
     Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.3f, 0.5f);
     this->actor.world.rot.x += (s16)this->currentRotation.x;
     if (this->currentRotation.z != 0.0f) {
-        if (this->zRollDirection == 0) {
+        if (this->zRollDirection == NEJIRON_DIRECTION_RIGHT) {
             this->actor.world.rot.z += (s16)this->currentRotation.z;
         } else {
             this->actor.world.rot.z -= (s16)this->currentRotation.z;
