@@ -874,8 +874,6 @@ static s32 sSeed0;
 static s32 sSeed1;
 static s32 sSeed2;
 
-#define NON_MATCHING
-
 void Boss07_Remains_DamageSfx(Boss07* this) {
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_FOLLOWERS_DAMAGE);
 }
@@ -1092,7 +1090,6 @@ static Vec3f sRemainsStart[4] = {
     { -24.0f, 88.0f, -70.0f },
     { -70.0f, 70.0f, -70.0f },
 };
-
 static Vec3s sRemainsEnd[4] = {
     { 712, 0xD500, -416 },
     { -712, 0x2B00, -420 },
@@ -2956,7 +2953,6 @@ static Vec3f sWrathColliderOffsets[11] = {
     { 2000.0f, 0.0f, 0.0f },   { 2000.0f, 0.0f, 0.0f }, { 2000.0f, 0.0f, 0.0f },   { 2000.0f, 0.0f, 0.0f },
     { 2000.0f, 0.0f, 0.0f },   { 2000.0f, 0.0f, 0.0f }, { 2000.0f, 0.0f, 0.0f },
 };
-
 static s8 sWrathBodyParts[32] = {
     -1, -1, 2, -1, 12, -1, 13, 14, -1, 9, -1, 10, 11, -1, 1, -1, 6, 7, 8, -1, -1, 3, 4, 5, -1, -1, 0, -1, -1, -1, 0, 0,
 };
@@ -4129,9 +4125,7 @@ void func_809FF6B0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     }
     i = D_80A081C8[limbIndex];
     if (i >= 0) {
-        f32 temp_f12 = this->unk_17B8[i];
-
-        Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
+        Matrix_Scale(this->unk_17B8[i], this->unk_17B8[i], this->unk_17B8[i], 1);
     }
 }
 
@@ -4730,20 +4724,19 @@ void Boss07_Mask_SetupIntro(Boss07* this, GlobalContext* globalCtx) {
     func_8016566C(this->unk_160);
 }
 
-static Vec3s sCameraEyes[4] = {
-    { 616, 402, -46 },
-    { -622, 380, -86 },
-    { 400, 300, 463 },
-    { -400, 470, 496 },
-};
-static Vec3s sCameraAts[4] = {
-    { 646, 394, -150 },
-    { -648, 380, -190 },
-    { 502, 321, 438 },
-    { -500, 445, 468 },
-};
-
 void Boss07_Mask_Intro(Boss07* this, GlobalContext* globalCtx) {
+    static Vec3s sCameraEyes[4] = {
+        { 616, 402, -46 },
+        { -622, 380, -86 },
+        { 400, 300, 463 },
+        { -400, 470, 496 },
+    };
+    static Vec3s sCameraAts[4] = {
+        { 646, 394, -150 },
+        { -648, 380, -190 },
+        { 502, 321, 438 },
+        { -500, 445, 468 },
+    };
     f32 sp8C = 0.0f;
     Player* player = PLAYER;
 
@@ -6224,7 +6217,7 @@ void Boss07_Top_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 void Boss07_Static_Update(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     Boss07* this = THIS;
-
+    
     Boss07_Static_UpdateEffects(globalCtx);
 
     if (sHeartbeatTimer != 0) {
