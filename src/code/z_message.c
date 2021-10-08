@@ -230,9 +230,10 @@ void func_8014CCB4(GlobalContext* globalCtx, s16* arg1, s32* arg2, f32* arg3) {
     k += 0x80;
     msgCtx->unk11F24[t] = 0x815C;
 
+    //k = (k + 10);
+    f += 16.0f * msgCtx->unk12098 * 3.0f;
     *arg1 = t;
-    *arg2 = (s32)(k + 0x80);
-    f += (msgCtx->unk12098 * 16.0f) * 3.0f;
+    *arg2 = k;
     *arg3 = f;
 }
 
