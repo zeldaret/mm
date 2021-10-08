@@ -348,12 +348,12 @@ void func_80151938(GlobalContext* globalCtx, u16 textId) {
     }
 }
 
-void func_80151A68(GlobalContext *globalCtx, u16 param_2) {
+void func_80151A68(GlobalContext *globalCtx, u16 textId) {
     MessageContext *msgCtx = &globalCtx->msgCtx;
     u32 temp = 0x1E;
     
     msgCtx->unk11F10 = 0;
-    func_80150D08(globalCtx, param_2);
+    func_80150D08(globalCtx, textId);
     func_80150A84(globalCtx);
     func_8015B198(globalCtx);
     msgCtx->msgMode = 0x45;
