@@ -144,16 +144,14 @@ void EnBaguo_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnBaguo_UndergroundIdle(EnBaguo* this, GlobalContext* globalCtx) {
     this->action = NEJIRON_ACTION_INACTIVE;
-    if (this->actor.xzDistToPlayer < 200.0f) {
-        if (Player_GetMask(globalCtx) != 0x10) {
-            this->actor.draw = EnBaguo_DrawBody;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_APPEAR);
-            this->actor.world.rot.z = 0;
-            this->actor.world.rot.x = this->actor.world.rot.z;
-            this->actor.flags &= ~0x8000000;
-            this->actor.flags |= 1;
-            this->actionFunc = EnBaguo_EmergeFromUnderground;
-        }
+    if (this->actor.xzDistToPlayer < 200.0f && Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK) {
+        this->actor.draw = EnBaguo_DrawBody;
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_APPEAR);
+        this->actor.world.rot.z = 0;
+        this->actor.world.rot.x = this->actor.world.rot.z;
+        this->actor.flags &= ~0x8000000;
+        this->actor.flags |= 1;
+        this->actionFunc = EnBaguo_EmergeFromUnderground;
     }
     this->actor.shape.rot.y = this->actor.world.rot.y;
 }
@@ -225,7 +223,7 @@ void EnBaguo_Roll(EnBaguo* this, GlobalContext* globalCtx) {
     f32 zDistanceFromHome = this->actor.home.pos.z - this->actor.world.pos.z;
 
     if ((this->maxDistanceFromHome < sqrtf(SQ(xDistanceFromHome) + SQ(zDistanceFromHome))) ||
-        (Player_GetMask(globalCtx) == 0x10)) {
+        (Player_GetMask(globalCtx) == PLAYER_MASK_STONE_MASK)) {
         EnBaguo_StartRetreat(this);
         return;
     }
