@@ -1801,7 +1801,7 @@ void func_80105818(GlobalContext* globalCtx, u32 uParm2, TransitionActorEntry* p
 // void func_80109F78(void);
 s32 func_8010A000(GlobalContext* globalCtx);
 s32 func_8010A074(GlobalContext* globalCtx);
-// void func_8010A0A4(void);
+s32 func_8010A0A4(GlobalContext* globalCtx);
 // void func_8010A0F0(void);
 // void func_8010A164(void);
 // void func_8010A194(void);
