@@ -21,18 +21,12 @@ typedef struct NejironParticle {
     /* 0x34 */ s16 timer;
 } NejironParticle; // size = 0x38
 
-/**
- * NEJIRON_STATE_INACTIVE: The Nejiron is either underground or emerging from underground
- * NEJIRON_STATE_ACTIVE: The Nejiron is above ground and actively chasing the player
- * NEJIRON_STATE_RETREATING: The Nejiron is burrowing back underground
- * NEJIRON_STATE_EXPLODING: The Nejiron has detonated
- */ 
 typedef enum {
-    /* 0x0 */ NEJIRON_STATE_INACTIVE,
-    /* 0x1 */ NEJIRON_STATE_ACTIVE,
-    /* 0x2 */ NEJIRON_STATE_RETREATING,
-    /* 0x3 */ NEJIRON_STATE_EXPLODING
-} NejironState;
+    /* 0x0 */ NEJIRON_ACTION_INACTIVE,   // The Nejiron is either underground or emerging from underground
+    /* 0x1 */ NEJIRON_ACTION_ACTIVE,     // The Nejiron is above ground and actively chasing the player
+    /* 0x2 */ NEJIRON_ACTION_RETREATING, // The Nejiron is burrowing back underground
+    /* 0x3 */ NEJIRON_ACTION_EXPLODING   // The Nejiron has detonated
+} NejironAction;
 
 /**
  * These directions are relative to the Nejiron.
@@ -51,7 +45,7 @@ typedef struct EnBaguo {
     /* 0x1B0 */ s16 eyeIndex;
     /* 0x1B2 */ s16 blinkTimer;
     /* 0x1B4 */ s16 timer;
-    /* 0x1B6 */ s16 state;
+    /* 0x1B6 */ s16 action;
     /* 0x1B8 */ s16 zRollDirection;
     /* 0x1BC */ f32 maxDistanceFromHome;
     /* 0x1C0 */ u8 hardHitFlag;

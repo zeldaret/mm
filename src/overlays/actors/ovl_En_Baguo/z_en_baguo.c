@@ -143,7 +143,7 @@ void EnBaguo_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnBaguo_UndergroundIdle(EnBaguo* this, GlobalContext* globalCtx) {
-    this->state = NEJIRON_STATE_INACTIVE;
+    this->action = NEJIRON_ACTION_INACTIVE;
     if (this->actor.xzDistToPlayer < 200.0f) {
         if (Player_GetMask(globalCtx) != 0x10) {
             this->actor.draw = EnBaguo_DrawBody;
@@ -168,7 +168,7 @@ void EnBaguo_EmergeFromUnderground(EnBaguo* this, GlobalContext* globalCtx) {
     Math_ApproachF(&this->actor.shape.shadowScale, 50.0f, 0.3f, 5.0f);
     Math_ApproachF(&this->actor.shape.yOffset, 2700.0f, 100.0f, 500.0f);
     if (this->actor.shape.yOffset > 2650.0f) {
-        this->state = NEJIRON_STATE_ACTIVE;
+        this->action = NEJIRON_ACTION_ACTIVE;
         this->actor.shape.yOffset = 2700.0f;
         this->timer = 60;
         this->actionFunc = EnBaguo_Sit;
@@ -259,7 +259,7 @@ void EnBaguo_Roll(EnBaguo* this, GlobalContext* globalCtx) {
 }
 
 void EnBaguo_StartRetreat(EnBaguo* this) {
-    this->state = NEJIRON_STATE_RETREATING;
+    this->action = NEJIRON_ACTION_RETREATING;
     this->actionFunc = EnBaguo_RetreatUnderground;
     this->actor.speedXZ = 0.0f;
 }
@@ -301,7 +301,7 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, GlobalContext* globalCtx) {
     // In order to match, this variable must act as both a boolean to check if
     // the Nejiron should forcibly explode and as a loop index.
     i = false;
-    if (this->state != NEJIRON_STATE_EXPLODING && this->state != NEJIRON_STATE_RETREATING) {
+    if (this->action != NEJIRON_ACTION_EXPLODING && this->action != NEJIRON_ACTION_RETREATING) {
         if (!(this->actor.bgCheckFlags & 1) && this->actor.world.pos.y < (this->actor.home.pos.y - 100.0f)) {
             // Force a detonation if we're off the ground and have fallen
             // below our home position (e.g., we rolled off a ledge).
@@ -315,7 +315,7 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, GlobalContext* globalCtx) {
             this->collider.base.acFlags &= ~AC_HIT;
             if (i || this->actor.colChkInfo.damageEffect == 0xE) {
                 func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 8);
-                this->state = NEJIRON_STATE_EXPLODING;
+                this->action = NEJIRON_ACTION_EXPLODING;
                 this->actor.speedXZ = 0.0f;
                 this->actor.shape.shadowScale = 0.0f;
                 for (i = 0; i < ARRAY_COUNT(this->particles); i++) {
@@ -361,11 +361,11 @@ void EnBaguo_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->timer--;
     }
 
-    if (this->state != NEJIRON_STATE_EXPLODING && this->state != NEJIRON_STATE_INACTIVE) {
+    if (this->action != NEJIRON_ACTION_EXPLODING && this->action != NEJIRON_ACTION_INACTIVE) {
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 
-    if (this->state != NEJIRON_STATE_EXPLODING) {
+    if (this->action != NEJIRON_ACTION_EXPLODING) {
         this->actor.shape.rot.x = this->actor.world.rot.x;
         this->actor.shape.rot.z = this->actor.world.rot.z;
         if (this->blinkTimer == 0) {
@@ -377,10 +377,10 @@ void EnBaguo_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 60.0f, 0x1D);
-        if (this->state != NEJIRON_STATE_INACTIVE) {
+        if (this->action != NEJIRON_ACTION_INACTIVE) {
             CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         }
-        if (this->state != NEJIRON_STATE_EXPLODING) {
+        if (this->action != NEJIRON_ACTION_EXPLODING) {
             CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         }
     }
