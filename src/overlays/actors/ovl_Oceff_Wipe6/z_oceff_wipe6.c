@@ -32,7 +32,7 @@ extern u8 D_80BCA91F; // 0x37F (vtx[3].alpha)
 extern u8 D_80BCA93F; // 0x39F (vtx[5].alpha
 extern s16 D_80BCA950; // 0x3B0 (vtx[7].x)
 extern Gfx D_80BCAA40;
-extern Gfx D_80BCAA50; // SetCombine
+extern Gfx D_80BCAA50; // 0x4B0 SetCombine
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe6/OceffWipe6_Init.s")
 void OceffWipe6_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -62,14 +62,12 @@ void OceffWipe6_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe6/OceffWipe6_Draw.s")
-void OceffWipe6_Draw(Actor* thisx, GlobalContext* globalCtx) { /* 2861 */
+void OceffWipe6_Draw(Actor* thisx, GlobalContext* globalCtx) { /* 2582 */
+    s32 _pad;
     OceffWipe6* this = THIS;
     f32 z;
-    s32 pad;
-    u8 alphaTable[3];
-    s32 i;
-    s32 phi_a1;
-    s8* phi_v0;
+    u8 alpha;
+    s32 pad[2];
     Vec3f eye;
     Vtx* vtxPtr;
     Vec3f vec;
@@ -83,33 +81,14 @@ void OceffWipe6_Draw(Actor* thisx, GlobalContext* globalCtx) { /* 2861 */
         z = 1220.0f;
     }
 
+    vtxPtr = &D_80BCA8E0;
     if (this->counter >= 80) {
-        //alphaTable[0] = 0;
-        //alphaTable[1] = 0;
-        alphaTable[2] = ((this->counter * -0xC) + 0x4B0) & 0xFF;
+        alpha = 12 * (1200 - this->counter);
     } else {
-        //alphaTable[0] = 0;
-        //alphaTable[1] = 0;
-        alphaTable[2] = 0xFF;
+        alpha = 0xFF;
     }
 
-    for (i = 0; i < 20; i++)
-    {
-        vtxPtr = &D_80BCA8E0;
-        vtxPtr[i * 2 + 1].v.cn[3] = alphaTable[2];
-    }
-    /*D_80BCA8FF = alphaTable[2];
-    D_80BCA91F = alphaTable[2];
-    D_80BCA93F = alphaTable[2];
-    phi_v0 = &D_80BCA950;
-    do {
-        //temp_v0 = phi_v0 + 0x80;
-        //temp_v0->unk_51 = phi_v1;
-        //temp_v0->unk_31 = phi_v1;
-        //temp_v0->unk_11 = phi_v1;
-        //temp_v0->unk_71 = phi_v1;
-        //phi_v0 = temp_v0;
-    } while (i != &D_80BCAA50);*/
+    vtxPtr[1].v.cn[3] = vtxPtr[3].v.cn[3] = vtxPtr[5].v.cn[3] = vtxPtr[7].v.cn[3] = alpha;
 
     func_8012C2DC(globalCtx->state.gfxCtx);
     SysMatrix_InsertTranslation(eye.x + vec.x, eye.y + vec.y, eye.z + vec.z, MTXMODE_NEW);
