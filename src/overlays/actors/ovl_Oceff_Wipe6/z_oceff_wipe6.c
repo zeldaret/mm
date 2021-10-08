@@ -26,12 +26,13 @@ const ActorInit Oceff_Wipe6_InitVars = {
 
 extern void func_800E01B8(Vec3f*, Camera*);
 extern AnimatedMaterial D_80BCA8D8;
-extern u8 D_80BCA8FF;
-extern u8 D_80BCA91F;
-extern u8 D_80BCA93F;
-extern u8 D_80BCA950;
-extern u8 D_80BCAA40;
-extern s32 D_80BCAA50;
+extern Vtx D_80BCA8E0;
+extern u8 D_80BCA8FF; // 0x35F (vtx[1].alpha)
+extern u8 D_80BCA91F; // 0x37F (vtx[3].alpha)
+extern u8 D_80BCA93F; // 0x39F (vtx[5].alpha
+extern s16 D_80BCA950; // 0x3B0 (vtx[7].x)
+extern Gfx D_80BCAA40;
+extern Gfx D_80BCAA50; // SetCombine
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe6/OceffWipe6_Init.s")
 void OceffWipe6_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -66,7 +67,7 @@ void OceffWipe6_Draw(Actor* thisx, GlobalContext* globalCtx) { /* 2861 */
     f32 z;
     s32 pad;
     u8 alphaTable[3];
-    s32* i;
+    s32 i;
     s32 phi_a1;
     s8* phi_v0;
     Vec3f eye;
@@ -92,7 +93,12 @@ void OceffWipe6_Draw(Actor* thisx, GlobalContext* globalCtx) { /* 2861 */
         alphaTable[2] = 0xFF;
     }
 
-    D_80BCA8FF = alphaTable[2];
+    for (i = 0; i < 20; i++)
+    {
+        vtxPtr = &D_80BCA8E0;
+        vtxPtr[i * 2 + 1].v.cn[3] = alphaTable[2];
+    }
+    /*D_80BCA8FF = alphaTable[2];
     D_80BCA91F = alphaTable[2];
     D_80BCA93F = alphaTable[2];
     phi_v0 = &D_80BCA950;
@@ -103,7 +109,7 @@ void OceffWipe6_Draw(Actor* thisx, GlobalContext* globalCtx) { /* 2861 */
         //temp_v0->unk_11 = phi_v1;
         //temp_v0->unk_71 = phi_v1;
         //phi_v0 = temp_v0;
-    } while (i != &D_80BCAA50);
+    } while (i != &D_80BCAA50);*/
 
     func_8012C2DC(globalCtx->state.gfxCtx);
     SysMatrix_InsertTranslation(eye.x + vec.x, eye.y + vec.y, eye.z + vec.z, MTXMODE_NEW);
