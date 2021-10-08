@@ -2686,7 +2686,7 @@ void func_801588D0(GlobalContext* globalCtx, s16 param_2);
 // void func_80159438(void);
 void func_8015966C(GlobalContext* globalCtx, UNK_PTR puParm2, UNK_TYPE arg3);
 // void func_8015A144(void);
-// void func_8015B198(void);
+void func_8015B198(GlobalContext* globalCtx);
 // void func_8015E750(void);
 void func_8015E7EC(GlobalContext* globalCtx, UNK_PTR puParm2);
 // void func_8015F8A8(UNK_TYPE4 ctxt);

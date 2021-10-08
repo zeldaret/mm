@@ -294,7 +294,35 @@ void func_80151938(GlobalContext* globalCtx, u16 textId) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80151A68.s")
+void func_80151A68(GlobalContext *globalCtx, u16 param_2) {
+    MessageContext *msgCtx = &globalCtx->msgCtx;
+    u32 temp = 0x1E;
+    
+    msgCtx->unk11F10 = 0;
+    func_80150D08(globalCtx, param_2);
+    func_80150A84(globalCtx);
+    func_8015B198(globalCtx);
+    msgCtx->msgMode = 0x45;
+    msgCtx->unk12024 = 0;
+    msgCtx->unk1203C = (msgCtx->unk1203A = (msgCtx->unk1201E = 0));
+    msgCtx->unk12023 = 0x1E;
+    if ((((s32) msgCtx->unk11F04) >= 0x1BB2) && (((s32) msgCtx->unk11F04) < 0x1BB7))
+    {
+        XREG(74) = 0x6A;
+        XREG(75) = 0;
+        XREG(77) = 0x58;
+        XREG(76) = 0x44;
+    }
+    else
+    {
+        XREG(74) = 0x42;
+        XREG(75) = temp;
+        XREG(77) = 0x3C;
+        XREG(76) = 0x1C;
+        msgCtx->unk11F1A[0] = (msgCtx->unk11F1A[1] = (msgCtx->unk11F1A[2] = 0));
+        Interface_ChangeAlpha(1U);
+    }
+}
 
 
 extern u16 D_801C6B28[];

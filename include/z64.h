@@ -851,7 +851,9 @@ typedef struct {
     /* 0x11F0A */ u8 unk11F0A;
     /* 0x11F0B */ UNK_TYPE1 pad11F0B[0x5];
     /* 0x11F10 */ s32 unk11F10;
-    /* 0x11F14 */ UNK_TYPE1 pad11F14[0xE];
+    /* 0x11F14 */ UNK_TYPE1 pad11F14[0x6];
+    /* 0x11F1A */ s16 unk11F1A[3];
+    /* 0x11F20 */ UNK_TYPE1 pad11F20[0x2];
     /* 0x11F22 */ u8 msgMode;
     /* 0x11F23 */ UNK_TYPE1 pad11F23;
     /* 0x11F24 */ u16 unk11F24[0x67];
@@ -863,7 +865,7 @@ typedef struct {
     /* 0x12004 */ s16 unk12004;
     /* 0x12006 */ s16 unk12006;
     /* 0x12008 */ u8 unk12008[0x16];
-    /* 0x1201E */ u16 unk1201E;
+    /* 0x1201E */ s16 unk1201E;
     /* 0x12020 */ u8 unk12020;
     /* 0x12021 */ u8 choiceIndex;
     /* 0x12022 */ u8 unk12022;
