@@ -22,14 +22,10 @@ const ActorInit Oceff_Wipe6_InitVars = {
 };
 
 /* Parameters for gOceffScroll */
-UNK_TYPE1 gOceff6ScrollParams[] = {
-    0xFF, 0x01, 0x20, 0x20, 0xFF, 0x04, 0x20, 0x20
-};
+UNK_TYPE1 gOceff6ScrollParams[] = { 0xFF, 0x01, 0x20, 0x20, 0xFF, 0x04, 0x20, 0x20 };
 
 /* Animated Material Properties for Scrolling Texture */
-AnimatedMaterial gOceff6Scroll = {
-    0xFF, 0x0001, gOceff6ScrollParams
-};
+AnimatedMaterial gOceff6Scroll = { 0xFF, 0x0001, gOceff6ScrollParams };
 
 #include "overlays/ovl_Oceff_Wipe6/ovl_Oceff_Wipe6.c"
 
@@ -84,7 +80,7 @@ void OceffWipe6_Draw(Actor* thisx, GlobalContext* globalCtx) {
         alpha = 0xFF;
     }
 
-    for(i = 1; i < 22; i += 2) {
+    for (i = 1; i < 22; i += 2) {
         gOceff6Vtx[i].v.cn[3] = alpha;
     }
 
