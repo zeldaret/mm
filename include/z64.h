@@ -21,7 +21,6 @@
 #include "bgm.h"
 #include "color.h"
 #include "ichain.h"
-#include "screen.h"
 #include "sfx.h"
 
 #include "z64actor.h"
