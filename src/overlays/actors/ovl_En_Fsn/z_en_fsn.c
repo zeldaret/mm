@@ -76,7 +76,7 @@ const ActorInit En_Fsn_InitVars = {
     (ActorFunc)EnFsn_Draw,
 };
 
-ActorAnimationEntryS sAnimations[] = {
+static ActorAnimationEntryS sAnimations[] = {
     { &D_06012C34, 1.0f, 0, -1, 0, 0 },  { &D_060131FC, 1.0f, 0, -1, 0, 0 }, { &D_0600C58C, 1.0f, 0, -1, 2, 0 },
     { &D_0600C58C, -1.0f, 0, -1, 2, 0 }, { &D_0600E3EC, 1.0f, 0, -1, 2, 0 }, { &D_0600F00C, 1.0f, 0, -1, 0, 0 },
     { &D_0600CB3C, 1.0f, 0, -1, 2, 0 },  { &D_0600D354, 1.0f, 0, -1, 0, 0 }, { &D_060138B0, 1.0f, 0, -1, 2, 0 },
@@ -911,10 +911,7 @@ void EnFsn_DeterminePrice(EnFsn* this, GlobalContext* globalCtx) {
         itemGiven = func_80123810(globalCtx);
         if (itemGiven > 0) {
             if (player->heldItemButton == 0) {
-                buttonItem =
-                    gSaveContext.equips
-                        .buttonItems[(gSaveContext.playerForm == PLAYER_FORM_HUMAN) ? 0 : gSaveContext.playerForm]
-                                    [player->heldItemButton];
+                buttonItem = CUR_FORM_EQUIP(player->heldItemButton);
             } else {
                 buttonItem = gSaveContext.equips.buttonItems[0][player->heldItemButton];
             }

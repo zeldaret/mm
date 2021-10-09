@@ -566,7 +566,6 @@ void EffectSsHahen_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, 
  *     - due to how life is implemented it is capped at 200. Any value over 200 is accepted, but the fragment will
  *       only live for 200 frames
  */
-#ifdef NON_MATCHING
 void EffectSsHahen_SpawnBurst(GlobalContext* globalCtx, Vec3f* pos, f32 burstScale, s16 unused, s16 scale,
                               s16 randScaleRange, s16 count, s16 objId, s16 life, Gfx* dList) {
     s32 i;
@@ -585,9 +584,6 @@ void EffectSsHahen_SpawnBurst(GlobalContext* globalCtx, Vec3f* pos, f32 burstSca
                             life, dList);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_effect_soft_sprite_old_init/EffectSsHahen_SpawnBurst.s")
-#endif
 
 extern Vec3f D_801AE3E0;
 

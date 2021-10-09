@@ -1,13 +1,14 @@
 #include "ZFile.h"
+#include <Utils/BinaryWriter.h>
+#include <Utils/MemoryStream.h>
 #include <algorithm>
 #include <cassert>
 #include <unordered_set>
-#include "Directory.h"
-#include "File.h"
 #include "Globals.h"
-#include "HighLevel/HLModelIntermediette.h"
 #include "OutputFormatter.h"
-#include "Path.h"
+#include "Utils/Directory.h"
+#include "Utils/File.h"
+#include "Utils/Path.h"
 #include "ZAnimation.h"
 #include "ZArray.h"
 #include "ZBackground.h"
@@ -70,7 +71,8 @@ ZFile::~ZFile()
 	}
 }
 
-void ZFile::ParseXML(ZFileMode mode, XMLElement* reader, std::string filename, bool placeholderMode)
+void ZFile::ParseXML(ZFileMode mode, XMLElement* reader, std::string filename,
+                     [[maybe_unused]] bool placeholderMode)
 {
 	if (filename == "")
 		name = reader->Attribute("Name");
@@ -235,7 +237,7 @@ void ZFile::DeclareResourceSubReferences()
 void ZFile::BuildSourceFile()
 {
 	if (!Directory::Exists(Globals::Instance->outputPath))
-		Directory::CreateDirectory(Globals::Instance->outputPath);
+		Directory::CreateDirectory(Globals::Instance->outputPath.string());
 
 	GenerateSourceFiles(Globals::Instance->outputPath);
 }
@@ -269,27 +271,54 @@ const std::vector<uint8_t>& ZFile::GetRawData() const
 void ZFile::ExtractResources()
 {
 	if (!Directory::Exists(Globals::Instance->outputPath))
-		Directory::CreateDirectory(Globals::Instance->outputPath);
+		Directory::CreateDirectory(Globals::Instance->outputPath.string());
 
 	if (!Directory::Exists(GetSourceOutputFolderPath().string()))
 		Directory::CreateDirectory(GetSourceOutputFolderPath().string());
 
-	for (ZResource* res : resources)
-		res->PreGenSourceFiles();
+	for (size_t i = 0; i < resources.size(); i++)
+		resources[i]->ParseRawDataLate();
+	for (size_t i = 0; i < resources.size(); i++)
+		resources[i]->DeclareReferencesLate(name);
 
 	if (Globals::Instance->genSourceFile)
 		GenerateSourceFiles(Globals::Instance->outputPath);
+
+	MemoryStream* memStream = new MemoryStream();
+	BinaryWriter writer = BinaryWriter(memStream);
+
+	ExporterSet* exporterSet = Globals::Instance->GetExporterSet();
+
+	if (exporterSet != nullptr && exporterSet->beginFileFunc != nullptr)
+		exporterSet->beginFileFunc(this);
 
 	for (ZResource* res : resources)
 	{
 		if (Globals::Instance->verbosity >= VerbosityLevel::VERBOSITY_INFO)
 			printf("Saving resource %s\n", res->GetName().c_str());
 
-		res->Save(Globals::Instance->outputPath);
+		res->CalcHash();
+		res->Save(Globals::Instance->outputPath.string());
+
+		// Check if we have an exporter "registered" for this resource type
+		ZResourceExporter* exporter = Globals::Instance->GetExporter(res->GetResourceType());
+
+		if (exporter != nullptr)
+			exporter->Save(res, Globals::Instance->outputPath.string(), &writer);
 	}
 
-	if (Globals::Instance->testMode)
-		GenerateHLIntermediette();
+	if (memStream->GetLength() > 0)
+	{
+		File::WriteAllBytes(StringHelper::Sprintf("%s%s.bin",
+		                                          Globals::Instance->outputPath.string().c_str(),
+		                                          GetName().c_str()),
+		                    memStream->ToVector());
+	}
+
+	writer.Close();
+
+	if (exporterSet != nullptr && exporterSet->endFileFunc != nullptr)
+		exporterSet->endFileFunc(this);
 }
 
 void ZFile::AddResource(ZResource* res)
@@ -348,12 +377,8 @@ Declaration* ZFile::AddDeclarationArray(uint32_t address, DeclarationAlignment a
                                         size_t size, std::string varType, std::string varName,
                                         size_t arrayItemCnt, std::string body)
 {
-	assert(GETSEGNUM(address) == 0);
-	AddDeclarationDebugChecks(address);
-
-	declarations[address] =
-		new Declaration(alignment, size, varType, varName, true, arrayItemCnt, body);
-	return declarations[address];
+	return AddDeclarationArray(address, alignment, DeclarationPadding::None, size, varType, varName,
+	                           arrayItemCnt, body);
 }
 
 Declaration* ZFile::AddDeclarationArray(uint32_t address, DeclarationAlignment alignment,
@@ -369,18 +394,6 @@ Declaration* ZFile::AddDeclarationArray(uint32_t address, DeclarationAlignment a
 }
 
 Declaration* ZFile::AddDeclarationArray(uint32_t address, DeclarationAlignment alignment,
-                                        size_t size, std::string varType, std::string varName,
-                                        size_t arrayItemCnt, std::string body, bool isExternal)
-{
-	assert(GETSEGNUM(address) == 0);
-	AddDeclarationDebugChecks(address);
-
-	declarations[address] =
-		new Declaration(alignment, size, varType, varName, true, arrayItemCnt, body, isExternal);
-	return declarations[address];
-}
-
-Declaration* ZFile::AddDeclarationArray(uint32_t address, DeclarationAlignment alignment,
                                         DeclarationPadding padding, size_t size,
                                         std::string varType, std::string varName,
                                         size_t arrayItemCnt, std::string body)
@@ -388,9 +401,28 @@ Declaration* ZFile::AddDeclarationArray(uint32_t address, DeclarationAlignment a
 	assert(GETSEGNUM(address) == 0);
 	AddDeclarationDebugChecks(address);
 
-	declarations[address] =
-		new Declaration(alignment, padding, size, varType, varName, true, arrayItemCnt, body);
-	return declarations[address];
+	Declaration* decl = GetDeclaration(address);
+	if (decl == nullptr)
+	{
+		decl =
+			new Declaration(alignment, padding, size, varType, varName, true, arrayItemCnt, body);
+		declarations[address] = decl;
+	}
+	else
+	{
+		if (decl->isPlaceholder)
+			decl->varName = varName;
+		decl->alignment = alignment;
+		decl->padding = padding;
+		decl->size = size;
+		decl->varType = varType;
+		decl->isArray = true;
+		decl->arrayItemCnt = arrayItemCnt;
+		if (body != "" && decl->text == "")
+			decl->text = body;
+	}
+
+	return decl;
 }
 
 Declaration* ZFile::AddDeclarationPlaceholder(uint32_t address)
@@ -598,7 +630,7 @@ void ZFile::GenerateSourceFiles(fs::path outputDir)
 					    Globals::Instance->cfg.texturePool.end())
 					{
 						incStr = Globals::Instance->cfg.texturePool[tex->hash].path.string() + "." +
-						         res->GetExternalExtension() + ".inc";
+								 res->GetExternalExtension() + ".inc";
 					}
 				}
 
@@ -658,22 +690,6 @@ void ZFile::GenerateSourceHeaderFiles()
 		printf("Writing H file: %s\n", headerFilename.c_str());
 
 	File::WriteAllText(headerFilename, formatter.GetOutput());
-}
-
-void ZFile::GenerateHLIntermediette()
-{
-	// This is kinda hacky but it gets the job done for now...
-	HLModelIntermediette* mdl = new HLModelIntermediette();
-
-	for (ZResource* res : resources)
-	{
-		if (res->GetResourceType() == ZResourceType::DisplayList ||
-		    res->GetResourceType() == ZResourceType::Skeleton)
-			res->GenerateHLIntermediette(*mdl);
-	}
-
-	// std::string test = mdl->ToOBJFile();
-	// std::string test2 = mdl->ToAssimpFile();
 }
 
 std::string ZFile::GetHeaderInclude()
@@ -1029,9 +1045,7 @@ std::string ZFile::ProcessDeclarations()
 	for (std::pair<uint32_t, Declaration*> item : declarations)
 	{
 		if (item.first < rangeStart || item.first >= rangeEnd)
-		{
 			continue;
-		}
 
 		if (item.second->includePath != "")
 		{
@@ -1219,7 +1233,7 @@ std::string ZFile::ProcessExterns()
 	return output;
 }
 
-std::string ZFile::ProcessTextureIntersections(std::string prefix)
+std::string ZFile::ProcessTextureIntersections([[maybe_unused]] std::string prefix)
 {
 	if (texturesResources.empty())
 		return "";

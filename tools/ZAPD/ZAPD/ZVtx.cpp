@@ -1,6 +1,6 @@
 #include "ZVtx.h"
-#include "BitConverter.h"
-#include "StringHelper.h"
+#include "Utils/BitConverter.h"
+#include "Utils/StringHelper.h"
 #include "ZFile.h"
 
 REGISTER_ZFILENODE(Vtx, ZVtx);
@@ -42,7 +42,7 @@ std::string ZVtx::GetBodySourceCode() const
 	                             a);
 }
 
-std::string ZVtx::GetSourceOutputCode(const std::string& prefix)
+std::string ZVtx::GetSourceOutputCode([[maybe_unused]] const std::string& prefix)
 {
 	std::string output = GetBodySourceCode();
 

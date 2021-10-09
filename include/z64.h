@@ -16,6 +16,7 @@
 #include "xstdio.h"
 #include "unk.h"
 
+#include "bgm.h"
 #include "sfx.h"
 #include "color.h"
 #include "ichain.h"
@@ -45,16 +46,25 @@
 #define Z_THREAD_ID_IDLE     1
 #define Z_THREAD_ID_SLOWLY   2
 #define Z_THREAD_ID_MAIN     3
+#define Z_THREAD_ID_GRAPH    4
 #define Z_THREAD_ID_SCHED    5
 #define Z_THREAD_ID_DMAMGR  18
 #define Z_THREAD_ID_IRQMGR  19
 
-#define Z_PRIORITY_SLOWLY  5
-#define Z_PRIORITY_GRAPH   9
-#define Z_PRIORITY_IDLE   12
-#define Z_PRIORITY_MAIN   12
-#define Z_PRIORITY_DMAMGR 17
-#define Z_PRIORITY_IRQMGR 18
+#define Z_PRIORITY_SLOWLY    5
+#define Z_PRIORITY_GRAPH     9
+#define Z_PRIORITY_AUDIOMGR 11
+#define Z_PRIORITY_IDLE     12
+#define Z_PRIORITY_MAIN     12
+#define Z_PRIORITY_PADMGR   15
+#define Z_PRIORITY_SCHED    16
+#define Z_PRIORITY_DMAMGR   17
+#define Z_PRIORITY_IRQMGR   18
+
+#define EQUIP_SLOT_B 0
+#define EQUIP_SLOT_C_LEFT 1
+#define EQUIP_SLOT_C_DOWN 2
+#define EQUIP_SLOT_C_RIGHT 3
 
 typedef struct {
     /* 0x0 */ s16 priority; // Lower means higher priority. -1 means it ignores priority
@@ -337,6 +347,13 @@ typedef struct {
     /* 0x10 */ u32 nRelocations;
     /* 0x14 */ u32 relocations[1];
 } OverlayRelocationSection; // size >= 0x18
+
+typedef struct {
+    /* 0x00 */ u32 resetting;
+    /* 0x04 */ u32 resetCount;
+    /* 0x08 */ OSTime duration;
+    /* 0x10 */ OSTime resetTime;
+} NmiBuff; // size >= 0x18
 
 typedef struct {
     /* 0x00 */ s16 intPart[16];
@@ -1555,8 +1572,8 @@ struct GlobalContext {
     /* 0x18780 */ void (*func_18780)(Player* player, struct GlobalContext* globalCtx);
     /* 0x18784 */ s32 (*damagePlayer)(struct GlobalContext* globalCtx, s32 damage);
     /* 0x18788 */ void (*talkWithPlayer)(struct GlobalContext* globalCtx, Actor* actor);
-    /* 0x1878C */ void* unk_1878C; //! @TODO: Determine function prototype
-    /* 0x18790 */ void* unk_18790; //! @TODO: Determine function prototype
+    /* 0x1878C */ void (*unk_1878C)(struct GlobalContext* globalCtx);
+    /* 0x18790 */ void (*unk_18790)(struct GlobalContext* globalCtx, s16 arg1, Actor* actor);
     /* 0x18794 */ void* unk_18794; //! @TODO: Determine function prototype
     /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct GlobalContext* globalCtx, void* talkAnim, s32 arg2);
     /* 0x1879C */ s16 unk_1879C[10];
@@ -1582,7 +1599,7 @@ struct GlobalContext {
     /* 0x18874 */ u8 skyboxId;
     /* 0x18875 */ s8 sceneLoadFlag; // "fade_direction"
     /* 0x18876 */ s16 unk_18876;
-    /* 0x18878 */ s16 unk_18878;
+    /* 0x18878 */ s16 bgCoverAlpha;
     /* 0x1887A */ u16 nextEntranceIndex;
     /* 0x1887C */ s8 unk_1887C;
     /* 0x1887D */ s8 unk_1887D;

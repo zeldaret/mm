@@ -1699,7 +1699,7 @@ void func_80B4627C(EnInvadepoh* this, GlobalContext* globalCtx) {
         } else {
             func_80B454BC(this, globalCtx);
             func_80B452EC(this, globalCtx);
-            func_801A89A8(0x800D);
+            Audio_QueueSeqCmd(0x800D);
             func_80B46F88(this);
         }
     } else if (D_80B4E940 == 3) {
@@ -1987,7 +1987,7 @@ void func_80B46EE8(EnInvadepoh* this, GlobalContext* globalCtx) {
     this->actionTimer--;
     if (this->actionTimer <= 0) {
         ActorCutscene_Stop(D_80B50404[0]);
-        func_801A89A8(0x800D);
+        Audio_QueueSeqCmd(0x800D);
         func_80B46F88(this);
     }
 }
@@ -2041,7 +2041,7 @@ void func_80B47108(EnInvadepoh* this, GlobalContext* globalCtx) {
     this->actionTimer--;
     if (this->actionTimer <= 0) {
         globalCtx->nextEntranceIndex = 0x6460;
-        gSaveContext.unk_3F4A = 0;
+        gSaveContext.nextCutsceneIndex = 0;
         globalCtx->sceneLoadFlag = 0x14;
         globalCtx->unk_1887F = 0x49;
         gSaveContext.nextTransition = 0x48;
@@ -2059,7 +2059,7 @@ void func_80B471C0(EnInvadepoh* this) {
 void func_80B471E0(EnInvadepoh* this, GlobalContext* globalCtx) {
     if (D_80B4E998) {
         globalCtx->nextEntranceIndex = 0x6470;
-        gSaveContext.unk_3F4A = 0;
+        gSaveContext.nextCutsceneIndex = 0;
         globalCtx->sceneLoadFlag = 0x14;
         globalCtx->unk_1887F = 0x48;
         gSaveContext.nextTransition = 0x48;
@@ -2082,7 +2082,7 @@ void func_80B47278(EnInvadepoh* this) {
 
 void func_80B47298(EnInvadepoh* this, GlobalContext* globalCtx) {
     globalCtx->nextEntranceIndex = 0x6400;
-    gSaveContext.unk_3F4A = 0xFFF3;
+    gSaveContext.nextCutsceneIndex = 0xFFF3;
     globalCtx->sceneLoadFlag = 0x14;
     globalCtx->unk_1887F = 0x48;
     gSaveContext.nextTransition = 0x48;
@@ -2307,7 +2307,7 @@ void func_80B479E8(EnInvadepoh* this, GlobalContext* globalCtx) {
     }
 
     if (this->actionTimer == 8) {
-        func_800BBA88(globalCtx, &this->actor);
+        Enemy_StartFinishingBlow(globalCtx, &this->actor);
     }
 
     this->actionTimer--;
@@ -2372,7 +2372,7 @@ void func_80B47D30(Actor* thisx, GlobalContext* globalCtx) {
         thisx->gravity = 0.0f;
         thisx->velocity.y = acAttached->velocity.y * 0.5f;
         thisx->velocity.y = CLAMP(thisx->velocity.y, -30.0f, 30.0f);
-        func_800F0568(globalCtx, &thisx->world.pos, 50, NA_SE_EN_INVADER_DEAD);
+        Audio_PlaySoundAtPosition(globalCtx, &thisx->world.pos, 50, NA_SE_EN_INVADER_DEAD);
         func_80B47830(this);
     }
 
@@ -2681,6 +2681,8 @@ void func_80B48AD4(EnInvadepoh* this, GlobalContext* globalCtx) {
     }
 
     if (this->rand == 0) {
+        s32 requiredScopeTemp;
+
         if ((this->actor.xzDistToPlayer < 350.0f) && ((globalCtx->gameplayFrames & 0x60) != 0)) {
             player = PLAYER;
             temp_v1 = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f;
@@ -2690,9 +2692,6 @@ void func_80B48AD4(EnInvadepoh* this, GlobalContext* globalCtx) {
             temp_v1 = new_var3 * 0.7f;
             substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
         }
-
-    dummy:;
-
     } else {
         substruct->unk26.x = 0;
         substruct->unk26.y = 0;

@@ -1,8 +1,8 @@
 #include "SetTransitionActorList.h"
 
-#include "BitConverter.h"
 #include "Globals.h"
-#include "StringHelper.h"
+#include "Utils/BitConverter.h"
+#include "Utils/StringHelper.h"
 #include "ZFile.h"
 #include "ZRoom/ZNames.h"
 #include "ZRoom/ZRoom.h"
@@ -54,11 +54,6 @@ std::string SetTransitionActorList::GetBodySourceCode() const
 	std::string listName = parent->GetDeclarationPtrName(cmdArg2);
 	return StringHelper::Sprintf("SCENE_CMD_TRANSITION_ACTOR_LIST(%i, %s)", transitionActors.size(),
 	                             listName.c_str());
-}
-
-size_t SetTransitionActorList::GetRawDataSize() const
-{
-	return ZRoomCommand::GetRawDataSize() + (transitionActors.size() * 16);
 }
 
 std::string SetTransitionActorList::GetCommandCName() const

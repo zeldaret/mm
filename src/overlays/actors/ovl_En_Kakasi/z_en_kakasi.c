@@ -308,7 +308,7 @@ void func_8096FAAC(EnKakasi* this, GlobalContext* globalCtx) {
 
         Math_ApproachF(&this->unk20C, this->unk210, 0.3f, 10.0f);
 
-        func_8016970C(globalCtx, this->cutsceneCamId, &this->unk220, &this->unk214);
+        Play_CameraSetAtEye(globalCtx, this->cutsceneCamId, &this->unk220, &this->unk214);
         func_80169940(globalCtx, this->cutsceneCamId, this->unk20C);
     }
 }
@@ -1090,7 +1090,7 @@ void EnKakasi_DiggingAway(EnKakasi* this, GlobalContext* globalCtx) {
 
         if (globalCtx->sceneNum == SCENE_8ITEMSHOP) {
             EffectSsGSplash_Spawn(globalCtx, &tempWorldPos, 0, 0, 0, randPlusMinusPoint5Scaled(100.0f) + 200.0f);
-            func_800F0568(globalCtx, &tempWorldPos, 0x32, NA_SE_EV_BOMB_DROP_WATER);
+            Audio_PlaySoundAtPosition(globalCtx, &tempWorldPos, 0x32, NA_SE_EV_BOMB_DROP_WATER);
 
         } else {
             func_800BBDAC(globalCtx, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f, 5,
