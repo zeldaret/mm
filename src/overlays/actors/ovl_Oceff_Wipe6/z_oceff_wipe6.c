@@ -38,7 +38,7 @@ void OceffWipe6_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void OceffWipe6_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    func_80115D5C(globalCtx);
+    func_80115D5C(&globalCtx->state);
     globalCtx->msgCtx.pad12080[0x30] = 0;
 }
 
