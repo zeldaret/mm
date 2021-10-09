@@ -86,70 +86,70 @@ Vec3f D_80971E38[] = {
     { 0.0f, 55.0f, 60.0f },
     { 0.0f, 55.0f, 60.0f },
     { -80.0f, 35.0f, 15.0f },
-    {80.0f, 45.0f, 15.0f,},
-    {-10.0f, 35.0f, 65.0f,},
-    {0.0f, 110.0f, 180.0f,},
-    {0.0f, 60.0f, 70.0f,},
-    {0.0f, 60.0f, 70.0f,},
-    {-80.0f, 50.0f, 40.0f,},
-    {0.0f, -10.0f, 50.0f,},
-    {80.0f, 50.0f, 40.0f,},
-    {0.0f, 120.0f, 40.0f,},
-    {0.0f, 28.0f, -50.0f,},
-    {0.0f, 60.0f, 50.0f,},
-    {0.0f, 80.0f, 160.0f,},
+    { 80.0f, 45.0f, 15.0f },
+    { -10.0f, 35.0f, 65.0f },
+    { 0.0f, 110.0f, 180.0f },
+    { 0.0f, 60.0f, 70.0f },
+    { 0.0f, 60.0f, 70.0f },
+    { -80.0f, 50.0f, 40.0f },
+    { 0.0f, -10.0f, 50.0f },
+    { 80.0f, 50.0f, 40.0f },
+    { 0.0f, 120.0f, 40.0f },
+    { 0.0f, 28.0f, -50.0f },
+    { 0.0f, 60.0f, 50.0f },
+    { 0.0f, 80.0f, 160.0f },
 };
 
 Vec3f D_80971EEC[] = {
-    {12.0f, 1.0f, 2.0f,},
-    {12.0f, 1.0f, 2.0f,},
-    {2.0f, -6.0f, 0.0f,},
-    {12.0f, -6.0f, -10.0f,},
-    {-88.0f, 14.0, -10.0f,},
-    {0.0f, 0.0f, 0.0f,},
-    {0.0f, 0.0f, 0.0f,},
-    {0.0f, 0.0f, 0.0f,},
-    {0.0f, -10.0f, 0.0f,},
-    {0.0f, -10.0f, 0.0f,},
-    {0.0f, -10.0f, 0.0f,},
-    {0.0f, -10.0f, 0.0f,},
-    {0.0f, -10.0f, 0.0f,},
-    {0.0f, 0.0f, 0.0f,},
-    {0.0f, 0.0f, 0.0f,},
+    { 12.0f, 1.0f, 2.0f },
+    { 12.0f, 1.0f, 2.0f },
+    { 2.0f, -6.0f, 0.0f },
+    { 12.0f, -6.0f, -10.0f },
+    { -88.0f, 14.0, -10.0f },
+    { 0.0f, 0.0f, 0.0f },
+    { 0.0f, 0.0f, 0.0f },
+    { 0.0f, 0.0f, 0.0f },
+    { 0.0f, -10.0f, 0.0f },
+    { 0.0f, -10.0f, 0.0f },
+    { 0.0f, -10.0f, 0.0f },
+    { 0.0f, -10.0f, 0.0f },
+    { 0.0f, -10.0f, 0.0f },
+    { 0.0f, 0.0f, 0.0f },
+    { 0.0f, 0.0f, 0.0f },
 };
 
 Vec3f D_80971FA0[] = {
-    {-50.0f, 160.0f, -40.0f,},
-    {-50.0f, 160.0f, -40.0f,},
-    {-20.0f, 80.0f, 60.0f,},
-    {57.0f, 60.0f, 120.0f,},
-    {27.0f, 80.0f, 60.0f,},
-    {-3.0f, 50.0f, 70.0f,},
+    { -50.0f, 160.0f, -40.0f },
+    { -50.0f, 160.0f, -40.0f },
+    { -20.0f, 80.0f, 60.0f },
+    { 57.0f, 60.0f, 120.0f },
+    { 27.0f, 80.0f, 60.0f },
+    { -3.0f, 50.0f, 70.0f },
 };
 
 Vec3f D_80971FE8[] = {
-    {0.0f, 0.0f, 0.0f,},
-    {0.0f, 0.0f, 0.0f,},
-    {-10.0f, -5.0f, 0.0f,},
-    {10.0f, -10.0f, 7.0f,},
-    {20.0f, 5.0f, 2.0f,},
-    {10.0f, 5.0f, 2.0f,},
+    { 0.0f, 0.0f, 0.0f },
+    { 0.0f, 0.0f, 0.0f },
+    { -10.0f, -5.0f, 0.0f },
+    { 10.0f, -10.0f, 7.0f },
+    { 20.0f, 5.0f, 2.0f },
+    { 10.0f, 5.0f, 2.0f },
 };
 
 // both use in digging away function
-Vec3f D_80972030 = { -3.0f, 50.0f, 90.0f, };
-Vec3f D_8097203C = { 10.0f, -15.0f, 2.0f, };
+Vec3f D_80972030 = { -3.0f, 50.0f, 90.0f };
+Vec3f D_8097203C = { 10.0f, -15.0f, 2.0f };
 
 typedef enum {
     /* 0x0 */ ENKAKASI_ANIM_ARMS_CROSSED_ROCKING, // arms crossed and rocking back and forth
     /* 0x1 */ ENKAKASI_ANIM_SIDEWAYS_SHAKING,
-    /* 0x2 */ ENKAKASI_ANIM_HOPPING_REGULAR,    // bounce bounce bounce (repeat)
-    /* 0x3 */ ENKAKASI_ANIM_SPIN_REACH_OFFER,   // spin and then reaching toward player
-    /* 0x4 */ ENKAKASI_ANIM_TWIRL,              // slower cinimatic twirl
-    /* 0x5 */ ENKAKASI_ANIM_ARMS_CROSSED_STILL, // arms crossed but still, also some noise sfx
-    /* 0x6 */ ENKAKASI_ANIM_WAVE,               // "wave" short sideways shake, stops early, partial? unused?
-    /* 0x7 */ ENKAKASI_ANIM_SLOWROLL,           // partial bounch, ends looking left, OFFER anim takes over
-    /* 0x8 */ ENKAKASI_ANIM_IDLE,               // slow stretching wiggle, ends in regular position
+    /* 0x2 */ ENKAKASI_ANIM_HOPPING_REGULAR,      // bounce bounce bounce (repeat)
+    /* 0x3 */ ENKAKASI_ANIM_SPIN_REACH_OFFER,     // spin and then reaching toward player
+    /* 0x4 */ ENKAKASI_ANIM_TWIRL,                // slower cinimatic twirl
+    /* 0x5 */ ENKAKASI_ANIM_ARMS_CROSSED_STILL,   // arms crossed but still, also some noise sfx
+    /* 0x6 */ ENKAKASI_ANIM_WAVE,                 // "wave" short sideways shake, stops early, partial? unused?
+    /* 0x7 */ ENKAKASI_ANIM_SLOWROLL,             // partial bounch, ends looking left, OFFER anim takes over
+    /* 0x8 */ ENKAKASI_ANIM_IDLE,                 // slow stretching wiggle, ends in regular position
 } EnKakasi_Animations;
 
 extern AnimationHeader D_06007444;
@@ -166,7 +166,7 @@ static AnimationHeader* kakasiAnimations[] = {
     &D_06007444, &D_0600686C, &D_060081A4, &D_06007B90, &D_060071EC, &D_06007444, &D_0600686C, &D_060081A4, &D_06000214,
 };
 
-// animation mode, passed to SkelAnime_ChangeAnim
+// animation mode per-anim, passed to SkelAnime_ChangeAnim
 u8 D_8097206C[] = {
     0x00, 0x00, 0x00, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02,
 };
@@ -343,7 +343,7 @@ void EnKakasi_TimeSkipDialogue(EnKakasi* this, GlobalContext* globalCtx) {
     if (gSaveContext.respawnFlag != -4 && gSaveContext.respawnFlag != -8) {
         if (gSaveContext.time != CLOCK_TIME(6, 0) && gSaveContext.time != CLOCK_TIME(18, 0) && !(gSaveContext.eventInf[1] & 0x80)) {
             if (this->actor.textId == 0) {
-                // "Oh, yeah!  How was it? It went by in an instant, right?  I'm still full of energy!"
+                // dialogue after skipped time 'did you feel that? went by in an instant'
                 this->actor.textId = 0x1653;
                 gSaveContext.weekEventReg[0x53] &= (u8) ~1;
                 this->unkMsgState1AC = 5;
@@ -372,8 +372,7 @@ void EnKakasi_IdleStanding(EnKakasi* this, GlobalContext* globalCtx) {
     s16 passedValue1;
     s16 passedValue2;
 
-    // "Yo! Hey, baby!  I'm a stylin' scarecrow wandering in search of pleasant music.
-    // Time will pass in the blink of an eye if you dance with me."
+    // first talk to scarecrow dialogue
     this->actor.textId = 0x1644;
     if (func_800B8718(&this->actor, globalCtx) != 0) {
         this->skelanime.animPlaybackSpeed = 1.0f;
@@ -429,8 +428,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
     f32 currentAnimeFrame = this->skelanime.animCurrentFrame;
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 2000, 0);
-    // "Yo! Hey, baby!  I'm a stylin' scarecrow wandering in search of pleasant music.
-    // Time will pass in the blink of an eye if you dance with me."
+    // if first dialogue
     if (this->actor.textId != 0x1644 && this->animeFrameCount <= currentAnimeFrame &&
         this->animIndex == ENKAKASI_ANIM_SLOWROLL) {
 
@@ -438,8 +436,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
         this->unkCounter1A4 = 0;
     }
 
-    // "Oh, sorry. That's too bad. In that case, come back anytime if you do ...
-    // "How's that? Pretty interesting, isn't it?  But I'm sure I'd like any song
+    // if dialogue: oh sorry come back again
     if (this->actor.textId == 0x1651 || this->actor.textId == 0x1659) {
         if (this->animeFrameCount <= currentAnimeFrame && this->animIndex != ENKAKASI_ANIM_SPIN_REACH_OFFER) {
             if (++this->unkCounter1A4 >= 2) {
@@ -457,12 +454,12 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
     if (this->unkMsgState1AC == func_80152498(&globalCtx->msgCtx) && func_80147624(globalCtx) != 0) {
         func_801477B4(globalCtx);
         if (this->unkMsgState1AC == 5) {
-            // "No, no, daddy-o!  That song doesn't sing to my heart, baby!"
+            // bad song input
             if (this->unkState196 == 2 && this->actor.textId == 0x1647) {
                 func_800B7298(globalCtx, &this->actor, 6);
             }
 
-            // "Oh, yeah!  How was it? It went by in an instant, right?  I'm still full of energy!"
+            // after timeskip
             if (this->actor.textId == 0x1653) {
                 u32 saveContextDay2 = gSaveContext.day;
 
@@ -471,13 +468,13 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
                 }
 
                 if (saveContextDay2 == 3 && gSaveContext.isNight != 0) {
-                    // "But outside it seems to have gotten kind of...dangerous.
+                    // text: dangerous outside
                     this->actor.textId = 0x164F;
                 } else if (gSaveContext.isNight) {
-                    // "If you like, baby, we can forget the time and dance 'til dawn!"
+                    // text: would you like to skip time?
                     this->actor.textId = 0x164E;
                 } else {
-                    // "If you like, baby, we can forget the time and dance until night!"
+                    // text: would you like to skip time? 2
                     this->actor.textId = 0x1645;
                 }
 
@@ -486,10 +483,6 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
 
             } else if (this->actor.textId == 0x165D || this->actor.textId == 0x165F || this->actor.textId == 0x1660 ||
                        this->actor.textId == 0x1652) {
-                // "Oh, sorry! That's too bad.  In that case, see you later!"
-                // "Want to learn it?  No Yes"
-                // "How's that? Pretty interesting, isn't it?  If you learn a new song ...
-                // "Oh, yeah!  In that case, forget the time.  Let's dance!"
                 func_800B7298(globalCtx, &this->actor, 4);
                 if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                     ActorCutscene_Stop(0x7C);
@@ -508,8 +501,6 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
                 return;
 
             } else if (this->actor.textId == 0x1645 || this->actor.textId == 0x164E) {
-                // "If you like, baby, we can forget the time and dance 'til dawn!"
-                // both seem to be the same text
                 this->actor.textId = 0x1650; // "Shall we dance?  No Yes"
                 if (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
                     EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
@@ -517,54 +508,39 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
                 this->unkMsgState1AC = 4;
 
             } else if (this->actor.textId == 0x1644) {
-                // "Yo! Hey, baby!  I'm a scarecrow wandering in search of music.
-                // Time will pass in the blink of an eye if you dance with me."
                 if (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
                     EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
                 }
                 if (gSaveContext.isNight != 0) {
-                    // "If you like, baby, we can forget the time and dance 'til dawn!"
                     this->actor.textId = 0x164E;
                 } else {
-                    // "If you like, baby, we can forget the time and dance until night!"
                     this->actor.textId = 0x1645;
                 }
   
             } else if (this->actor.textId == 0x164F) {
-                // "But outside it seems to have gotten kind of...dangerous.
                 if (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
                     EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
                 }
-                // "Take care..."
                 this->actor.textId = 0x165A;
-            // "Oh, sorry. That's too bad. In that case, come back anytime if you do ...
             } else if (this->actor.textId == 0x1651) {
                 if (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
                     EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
                 }
-                // "By the way..."
                 this->actor.textId = 0x1654;
             } else if (this->actor.textId == 0x1654) {
-                // "I know of a mysterious song that allows you to manipulate the flow of time..."
                 this->actor.textId = 0x1655;
             } else if (this->actor.textId == 0x1655) {
-                // "Do you want to learn it?  No Yes"
                 this->actor.textId = 0x1656;
                 this->unkMsgState1AC = 4;
             } else if (this->actor.textId == 0x1658) {
-                //^ "Oh, yeah!  Now listen up!  If you play that strange song...
-                //v "How's that? Pretty interesting, isn't it?  But I'm sure I'd like any song 
                 this->actor.textId = 0x1659;
             } else if (this->actor.textId == 0x165A) {
-                // Take care...
                 this->actor.textId = 0x165B;
             } else if (this->actor.textId == 0x165B) {
-                // "I know of a mysterious song that allows you to manipulate the flow ..
-                this->actor.textId = 0x165C; // "Would you like to learn it?  No Yes"
+                this->actor.textId = 0x165C;
                 this->unkMsgState1AC = 4;
 
             } else if (this->actor.textId == 0x165E) {
-                // "How's that? Pretty interesting, isn't it?  If you learn a new song ...
                 this->actor.textId = 0x165F;
             } else {
                 EnKakasi_SetupIdleStanding(this);
@@ -575,31 +551,23 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
 
             if (globalCtx->msgCtx.choiceIndex == 1) {
                 func_8019F208(); // play 0x4808 sfx (decide) and calls func_801A75E8
-                // "Do you want to learn it?  No Yes"
                 if (this->actor.textId == 0x1656) {
-                    // "Oh, yeah!  Now listen up!  If you play that strange song ...
                     this->actor.textId = 0x1658;
-                // "Would you like to learn it?  No Yes"
                 } else if (this->actor.textId == 0x165C) {
                     this->actor.textId = 0x165E;
                 } else if (saveContextDay == 3 && gSaveContext.isNight) {
-                    // "But outside it seems to have gotten kind of...dangerous.
                     this->actor.textId = 0x164F;
                 } else {
-                    // "Oh, yeah!  In that case, forget the time.  Let's dance!"
                     this->actor.textId = 0x1652;
                 }
                 EnKakasi_SetAnimation(this, ENKAKASI_ANIM_HOPPING_REGULAR);
             } else {
                 func_8019F230(); // play 0x480A sfx (cancel) and calls func_801A75E8
-                if (this->actor.textId == 0x1656) { // "Do you want to learn it?  No Yes"
-                    // "Oh, sorry. That's too bad.  In that case, let me hear a song written by you, baby!"
+                if (this->actor.textId == 0x1656) { // would you like to learn a song? yes/no
                     this->actor.textId = 0x1657;
-                } else if (this->actor.textId == 0x165C) { // "Would you like to learn it?  No Yes"
-                    // v "Oh, sorry! That's too bad.  In that case, see you later!"
+                } else if (this->actor.textId == 0x165C) { // would you like to learn a song? yes/no
                     this->actor.textId = 0x165D;
                 } else {
-                    // "Oh, sorry. That's too bad. In that case, come back anytime if you do ...
                     this->actor.textId = 0x1651;
                 }
                 this->unkCounter1A4 = 0;
@@ -613,7 +581,6 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
 }
 
 void EnKakasi_SetupSongTeach(EnKakasi* this, GlobalContext* globalCtx) {
-    // "Oh, baby!  That's a nice thing you got there!  Let me hear a song you wrote on that!"
     this->actor.textId = 0x1646;
     func_801518B0(globalCtx, this->actor.textId, &this->actor);
     this->cutsceneCamId = MAIN_CAM;
@@ -696,7 +663,6 @@ void EnKakasi_TeachingSong(EnKakasi* this, GlobalContext* globalCtx) {
             if (this) {}
             this->unkState196 = 2;
             this->cutsceneCamId = 0; // SUBCAM_FREE
-            // "No, no, daddy-o!  That song doesn't sing to my heart, baby!"
             this->actor.textId = 0x1647;
             this->unkState1A8 = 2;
             this->unkMsgState1AC = 5;
@@ -750,24 +716,21 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, GlobalContext* globalCtx) {
     if (this->unk190 == 0) {
         func_801477B4(globalCtx);
         func_800B7298(globalCtx, &this->actor, 0x56);
-        // "Yow! Oh, yeah!  That's a nice tune, baby.  By the way..."
         this->actor.textId = 0x1648;
         func_801518B0(globalCtx, (this->actor.textId), &this->actor);
         this->unkState1A8 = 0;
         this->unk190 = 1;
     }
 
-    // "Yow! Oh, yeah!  That's a nice tune, baby.  By the way..."
     if (this->actor.textId == 0x1648 && this->animIndex == ENKAKASI_ANIM_HOPPING_REGULAR &&
         this->animeFrameCount <= tempAnimFrame) {
         this->unkCounter1A4++;
         if (this->unkCounter1A4 >= 2) {
             EnKakasi_SetAnimation(
-                this, ENKAKASI_ANIM_ARMS_CROSSED_ROCKING); // reach this point when he finishes dancing idle
+                this, ENKAKASI_ANIM_ARMS_CROSSED_ROCKING);
         }
     }
 
-    // "If you want to see me again, play that song you wrote for me here ...
     if (this->actor.textId == 0x164B && this->animIndex == ENKAKASI_ANIM_ARMS_CROSSED_ROCKING &&
         this->animeFrameCount <= tempAnimFrame) {
         this->unkCounter1A4++;
@@ -793,7 +756,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, GlobalContext* globalCtx) {
         this->unkState1A8 = 1;
     }
 
-    if (this->cutsceneCamId != 0) { // SUBCAM_FREE
+    if (this->cutsceneCamId != MAIN_CAM) {
         this->unk22C.y = this->actor.home.pos.y + 50.0f;
         EnKakasi_CheckPlayerPosition(this, globalCtx);
         this->unk238.x = D_80971FA0[this->unk190].x;
@@ -812,7 +775,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, GlobalContext* globalCtx) {
 
     if (this->unkState1A8 != 0 && func_80152498(&globalCtx->msgCtx) == this->unkMsgState1AC &&
         func_80147624(globalCtx) != 0) {
-        // formater gap note
+
         func_801477B4(globalCtx);
 
         if (this->unkMsgState1AC == 5) {
@@ -821,37 +784,27 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, GlobalContext* globalCtx) {
                 this->unk190 = 5;
             }
 
-            // "Yow! Oh, yeah!  That's a nice tune, baby.  By the way..."
             if (this->actor.textId == 0x1648) {
                 func_800B7298(globalCtx, &this->actor, 7);
-                // "I know of a mysterious song that allows you to manipulate the flow of time..."
                 this->actor.textId = 0x1649;
                 if (this->animIndex != ENKAKASI_ANIM_ARMS_CROSSED_ROCKING) {
                     EnKakasi_SetAnimation(this, ENKAKASI_ANIM_ARMS_CROSSED_ROCKING);
                 }
 
-            // "I know of a mysterious song that allows you to manipulate the flow of time..."
             } else if (this->actor.textId == 0x1649) {
-                // "Want to learn it?  No Yes"
                 this->actor.textId = 0x1660;
                 this->unkMsgState1AC = 4;
 
-            // "Oh, yeah!  Now listen up!  If you play that mysterious song ...
             } else if (this->actor.textId == 0x164A) {
-                // "How's that? Pretty interesting, isn't it?  But I like the song you played ..
                 this->actor.textId = 0x164B;
 
-            // "How's that? Pretty interesting, isn't it?  But I like the song you played ..
             } else if (this->actor.textId == 0x164B) {
-                // "If you want to see me again, play that song you wrote for me here ...
                 this->actor.textId = 0x164C;
                 EnKakasi_SetAnimation(this, ENKAKASI_ANIM_TWIRL);
 
             } else {
-                // "If you want to see me again, play that song you wrote for me here ...
-                // "Oh, sorry. That's too bad.  If you'd like to see me again, play ...
                 if (this->actor.textId == 0x164C || this->actor.textId == 0x1661) {
-                    EnKakasi_SetupDigAway(this); // setup for digging anime
+                    EnKakasi_SetupDigAway(this);
                     return;
                 }
             }
@@ -860,11 +813,9 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, GlobalContext* globalCtx) {
             this->unkMsgState1AC = 5;
             if (globalCtx->msgCtx.choiceIndex == 1) {
                 func_8019F208(); // play 0x4808 sfx (decide) and calls func_801A75E8
-                // "Oh, yeah!  Now listen up!  If you play that mysterious song ...
                 this->actor.textId = 0x164A;
             } else {
                 func_8019F230(); // play 0x480A sfx (cancel) and calls func_801A75E8
-                // "Oh, sorry. That's too bad.  If you'd like to see me again, play ...
                 this->actor.textId = 0x1661;
             }
         }
@@ -936,6 +887,8 @@ void EnKakasi_DancingNightAway(EnKakasi* this, GlobalContext* globalCtx) {
     }
 
     func_8096FAAC(this, globalCtx);
+    
+    // switching through manual cutscene states
     switch (this->unk190) {
         case 0:
             // twirling
@@ -1057,7 +1010,7 @@ void EnKakasi_DiggingAway(EnKakasi* this, GlobalContext* globalCtx) {
     Vec3f tempunk238;
     Vec3f tempWorldPos;
 
-    if (this->cutsceneCamId != 0) { // SUBCAM_FREE
+    if (this->cutsceneCamId != MAIN_CAM) {
         this->unk22C.y = this->actor.home.pos.y + 50.0f;
         this->unk238.x = D_80972030.x;
         this->unk238.y = D_80972030.y;
@@ -1168,7 +1121,7 @@ void EnKakasi_RisingOutOfGround(EnKakasi* this, GlobalContext* globalCtx) {
 }
 
 void EnKakasi_SetupIdleRisen(EnKakasi* this) {
-    // "Yowza! Oh, yeah!, We meet again, baby! What great playing, as usual!"
+    // text: great to see you again
     this->actor.textId = 0x164D;
     this->unkState196 = 7;
     this->actionFunc = EnKakasi_IdleRisen;
