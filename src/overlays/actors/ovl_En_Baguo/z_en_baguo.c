@@ -333,7 +333,7 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, GlobalContext* globalCtx) {
                     EnBaguo_InitializeParticle(this, &this->actor.focus.pos, &velocity, &acceleration,
                                                (Rand_ZeroFloat(1.0f) * 0.01f) + 0.003f, 90);
                 }
-                
+
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
                             this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 2);
                 Audio_PlayActorSound2(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
