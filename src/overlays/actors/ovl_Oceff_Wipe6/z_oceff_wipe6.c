@@ -9,7 +9,6 @@ void OceffWipe6_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void OceffWipe6_Update(Actor* thisx, GlobalContext* globalCtx);
 void OceffWipe6_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
 const ActorInit Oceff_Wipe6_InitVars = {
     ACTOR_OCEFF_WIPE6,
     ACTORCAT_ITEMACTION,
@@ -22,17 +21,10 @@ const ActorInit Oceff_Wipe6_InitVars = {
     (ActorFunc)OceffWipe6_Draw,
 };
 
-#endif
-
 extern void func_800E01B8(Vec3f*, Camera*);
 extern AnimatedMaterial D_80BCA8D8;
-extern Vtx D_80BCA8E0;
-extern u8 D_80BCA8FF; // 0x35F (vtx[1].alpha)
-extern u8 D_80BCA91F; // 0x37F (vtx[3].alpha)
-extern u8 D_80BCA93F; // 0x39F (vtx[5].alpha
-extern s16 D_80BCA950; // 0x3B0 (vtx[7].x)
-extern Gfx D_80BCAA40;
-extern Gfx D_80BCAA50; // 0x4B0 SetCombine
+extern Vtx D_80BCA8E0[];
+extern Gfx D_80BCAA40[];
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe6/OceffWipe6_Init.s")
 void OceffWipe6_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -62,41 +54,48 @@ void OceffWipe6_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe6/OceffWipe6_Draw.s")
-void OceffWipe6_Draw(Actor* thisx, GlobalContext* globalCtx) { /* 2582 */
-    s32 _pad;
+void OceffWipe6_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OceffWipe6* this = THIS;
     f32 z;
     u8 alpha;
-    s32 pad[2];
+    s32 i;
+    s32 counter;
     Vec3f eye;
-    Vtx* vtxPtr;
+    s32 pad;
     Vec3f vec;
+    s32 pad2;
 
     eye = ACTIVE_CAM->eye;
     func_800E01B8(&vec, ACTIVE_CAM);
 
     if (this->counter < 32) {
-        z = Math_SinS(this->counter << 0x19) * 1220.f;
+        counter = this->counter;
+        z = Math_SinS(counter * 0x200) * 1220.0f;
     } else {
         z = 1220.0f;
     }
 
-    vtxPtr = &D_80BCA8E0;
     if (this->counter >= 80) {
-        alpha = 12 * (1200 - this->counter);
+        alpha = 12 * (100 - this->counter);
     } else {
         alpha = 0xFF;
     }
 
-    vtxPtr[1].v.cn[3] = vtxPtr[3].v.cn[3] = vtxPtr[5].v.cn[3] = vtxPtr[7].v.cn[3] = alpha;
+    for(i = 1; i < 22; i += 2) {
+        D_80BCA8E0[i].v.cn[3] = alpha;
+    }
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C2DC(globalCtx->state.gfxCtx);
     SysMatrix_InsertTranslation(eye.x + vec.x, eye.y + vec.y, eye.z + vec.z, MTXMODE_NEW);
     Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
     SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
-    SysMatrix_InsertXRotation_s(0x708, 1);
-    SysMatrix_InsertTranslation(0.0f, 0.0f, -z, 1);
+    SysMatrix_InsertXRotation_s(0x708, MTXMODE_APPLY);
+    SysMatrix_InsertTranslation(0.0f, 0.0f, -z, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     AnimatedMat_Draw(globalCtx, &D_80BCA8D8);
     gSPDisplayList(POLY_XLU_DISP++, &D_80BCAA40);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

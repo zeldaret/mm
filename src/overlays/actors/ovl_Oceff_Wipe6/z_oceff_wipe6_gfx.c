@@ -1,6 +1,6 @@
 #include "z_oceff_wipe6.h"
 
-static Vtx D_80BCA8E0 = {
+static Vtx D_80BCA8E0[] = {
     VTX(88, 121, 0, 819, 1024, 0xFF, 0xFF, 0xFF, 0x00),
     VTX(243, 176, 1000, 717, 0, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(143, 46, 0, 614, 1024, 0xFF, 0xFF, 0xFF, 0x00),
@@ -25,7 +25,7 @@ static Vtx D_80BCA8E0 = {
     VTX(243, -176, 1000, 307, 0, 0xFF, 0xFF, 0xFF, 0xFF)
 };
 
-static Gfx D_80BCAA40 = {
+static Gfx D_80BCAA40[] = {
     gsSPTexture(qu016(0.999985), qu016(0.999985), 0, G_TX_RENDERTILE, G_ON),
     gsDPPipeSync(),
     gsDPSetCombineLERP(TEXEL1, PRIMITIVE, PRIM_LOD_FRAC, TEXEL0, TEXEL1, 0, PRIM_LOD_FRAC, TEXEL0, PRIMITIVE, ENVIRONMENT, COMBINED, ENVIRONMENT, COMBINED, 0, SHADE, 0),

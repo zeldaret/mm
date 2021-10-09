@@ -1,0 +1,8 @@
+<Root>
+    <File Name="ovl_Oceff_Wipe6" BaseOffset="0x80BCA5A0" RangeStart="0x0340" RangeEnd="0x05B8" Segment="128">
+        <Array Name="gOceff6Vtx" Count="22" Offset="0x0340">
+            <Vtx/>
+        </Array>
+        <DList Name="gOceff6DL" Offset="0x04A0"/>
+    </File>
+</Root>
