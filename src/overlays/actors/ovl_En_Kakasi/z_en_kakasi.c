@@ -77,7 +77,7 @@ const ActorInit En_Kakasi_InitVars = {
     (ActorFunc)EnKakasi_Draw,
 };
 
-Vec3f D_80971DCC[] = {
+static Vec3f D_80971DCC[] = {
     { 0.0f, 60.0f, 60.0f },   { 40.0f, 40.0f, 50.0f },   { -40.0f, 40.0f, 50.0f },
     { 40.0f, 20.0f, 110.0f }, { -40.0f, 20.0f, 110.0f }, { 0.0f, 80.0f, 60.0f },
     { 50.0f, 40.0f, -30.0f }, { -50.0f, 40.0f, -30.0f }, { 0.0f, 50.0f, 60.0f },
@@ -251,7 +251,7 @@ void EnKakasi_8096F88C(GlobalContext* globalCtx, EnKakasi* this) {
 
 void EnKakasi_CheckAnimateSFX(EnKakasi* this) {
     if (this->animeIndex == ENKAKASI_ANIME_SIDEWAYS_SHAKING || this->animeIndex == ENKAKASI_ANIME_ARMS_CROSSED_STILL) {
-        if (func_801378B8(&this->skelanime, 1.0f) != 0 || func_801378B8(&this->skelanime, 8.0f) != 0) {
+        if (func_801378B8(&this->skelanime, 1.0f) || func_801378B8(&this->skelanime, 8.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_KAKASHI_SWING);
         }
     }
@@ -694,7 +694,7 @@ void EnKakasi_TeachingSong(EnKakasi* this, GlobalContext* globalCtx) {
             this->unkCounter1A4 = 0;
             ActorCutscene_Stop(this->actorCutscenes[0]);
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_YASE_DEAD);
-            if (!this) {}
+            if (this) {}
             this->unkState196 = 2;
             this->cutsceneCamId = 0; // SUBCAM_FREE
             // "No, no, daddy-o!  That song doesn't sing to my heart, baby!"

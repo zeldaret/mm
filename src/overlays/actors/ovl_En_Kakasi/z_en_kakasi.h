@@ -18,7 +18,7 @@ typedef struct EnKakasi {
     /* 0x194 */ s16 aboveGroundStatus; // from params, changed to 2 in init
     /* 0x196 */ s16 unkState196;
     /* 0x19A */ UNK_TYPE1 pad198[0x8];
-    /* 0x1A0 */ s32 animeIndex;
+    /* 0x1A0 */ s32 animIndex;
     /* 0x1A4 */ s32 unkCounter1A4; // counter, counts up to F while he digs away, reused elsewhere
     /* 0x1A8 */ s32 unkState1A8;
     /* 0x1AC */ s16 unkMsgState1AC; // might be dialog state, compared against func(msgCtx)
