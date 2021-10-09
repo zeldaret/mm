@@ -22,7 +22,7 @@ void EnBaguo_UndergroundIdle(EnBaguo* this, GlobalContext* globalCtx);
 void EnBaguo_EmergeFromUnderground(EnBaguo* this, GlobalContext* globalCtx);
 void EnBaguo_Sit(EnBaguo* this, GlobalContext* globalCtx);
 void EnBaguo_Roll(EnBaguo* this, GlobalContext* globalCtx);
-void EnBaguo_StartRetreat(EnBaguo* this);
+void EnBaguo_SetupRetreatUnderground(EnBaguo* this);
 void EnBaguo_RetreatUnderground(EnBaguo* this, GlobalContext* globalCtx);
 void EnBaguo_DrawBody(Actor* thisx, GlobalContext* globalCtx);
 void EnBaguo_InitializeParticle(EnBaguo* this, Vec3f* position, Vec3f* velocity, Vec3f* acceleration, f32 scale,
@@ -224,7 +224,7 @@ void EnBaguo_Roll(EnBaguo* this, GlobalContext* globalCtx) {
 
     if ((this->maxDistanceFromHome < sqrtf(SQ(xDistanceFromHome) + SQ(zDistanceFromHome))) ||
         (Player_GetMask(globalCtx) == PLAYER_MASK_STONE_MASK)) {
-        EnBaguo_StartRetreat(this);
+        EnBaguo_SetupRetreatUnderground(this);
         return;
     }
 
@@ -256,7 +256,7 @@ void EnBaguo_Roll(EnBaguo* this, GlobalContext* globalCtx) {
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_ROLL - SFX_FLAG);
 }
 
-void EnBaguo_StartRetreat(EnBaguo* this) {
+void EnBaguo_SetupRetreatUnderground(EnBaguo* this) {
     this->action = NEJIRON_ACTION_RETREATING;
     this->actionFunc = EnBaguo_RetreatUnderground;
     this->actor.speedXZ = 0.0f;
