@@ -72,29 +72,29 @@ static ColliderJntSphInit sJntSphInit = {
 typedef enum {
     /* 0x0 */ NEJIRON_DMGEFF_NONE,      // Does not interact with the Nejiron at all
     /* 0xE */ NEJIRON_DMGEFF_KILL = 14, // Kills and detonates the Nejiron
-    /* 0xF */ NEJIRON_DMGEFF_HITMARK    // Deals no damage, but displays the appropriate hit mark
+    /* 0xF */ NEJIRON_DMGEFF_RECOIL     // Deals no damage, but displays the appropriate hit mark and recoil animation
 } NejironDamageEffect;
 
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, NEJIRON_DMGEFF_HITMARK),
-    /* Deku Stick     */ DMG_ENTRY(0, NEJIRON_DMGEFF_HITMARK),
+    /* Deku Nut       */ DMG_ENTRY(0, NEJIRON_DMGEFF_RECOIL),
+    /* Deku Stick     */ DMG_ENTRY(0, NEJIRON_DMGEFF_RECOIL),
     /* Horse trample  */ DMG_ENTRY(0, NEJIRON_DMGEFF_NONE),
     /* Explosives     */ DMG_ENTRY(1, NEJIRON_DMGEFF_KILL),
     /* Zora boomerang */ DMG_ENTRY(3, NEJIRON_DMGEFF_KILL),
-    /* Normal arrow   */ DMG_ENTRY(0, NEJIRON_DMGEFF_HITMARK),
+    /* Normal arrow   */ DMG_ENTRY(0, NEJIRON_DMGEFF_RECOIL),
     /* UNK_DMG_0x06   */ DMG_ENTRY(0, NEJIRON_DMGEFF_NONE),
     /* Hookshot       */ DMG_ENTRY(3, NEJIRON_DMGEFF_KILL),
     /* Goron punch    */ DMG_ENTRY(2, NEJIRON_DMGEFF_KILL),
     /* Sword          */ DMG_ENTRY(1, NEJIRON_DMGEFF_KILL),
     /* Goron pound    */ DMG_ENTRY(1, NEJIRON_DMGEFF_KILL),
-    /* Fire arrow     */ DMG_ENTRY(0, NEJIRON_DMGEFF_HITMARK),
-    /* Ice arrow      */ DMG_ENTRY(0, NEJIRON_DMGEFF_HITMARK),
+    /* Fire arrow     */ DMG_ENTRY(0, NEJIRON_DMGEFF_RECOIL),
+    /* Ice arrow      */ DMG_ENTRY(0, NEJIRON_DMGEFF_RECOIL),
     /* Light arrow    */ DMG_ENTRY(1, NEJIRON_DMGEFF_KILL),
     /* Goron spikes   */ DMG_ENTRY(2, NEJIRON_DMGEFF_KILL),
-    /* Deku spin      */ DMG_ENTRY(0, NEJIRON_DMGEFF_HITMARK),
-    /* Deku bubble    */ DMG_ENTRY(0, NEJIRON_DMGEFF_HITMARK),
+    /* Deku spin      */ DMG_ENTRY(0, NEJIRON_DMGEFF_RECOIL),
+    /* Deku bubble    */ DMG_ENTRY(0, NEJIRON_DMGEFF_RECOIL),
     /* Deku launch    */ DMG_ENTRY(1, NEJIRON_DMGEFF_KILL),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, NEJIRON_DMGEFF_HITMARK),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, NEJIRON_DMGEFF_RECOIL),
     /* Zora barrier   */ DMG_ENTRY(0, NEJIRON_DMGEFF_NONE),
     /* Normal shield  */ DMG_ENTRY(0, NEJIRON_DMGEFF_NONE),
     /* Light ray      */ DMG_ENTRY(0, NEJIRON_DMGEFF_NONE),
@@ -322,6 +322,7 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, GlobalContext* globalCtx) {
                 this->action = NEJIRON_ACTION_EXPLODING;
                 this->actor.speedXZ = 0.0f;
                 this->actor.shape.shadowScale = 0.0f;
+
                 for (i = 0; i < ARRAY_COUNT(this->particles); i++) {
                     acceleration.x = (Rand_ZeroOne() - 0.5f) * 8.0f;
                     acceleration.y = -1.0f;
@@ -332,6 +333,7 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, GlobalContext* globalCtx) {
                     EnBaguo_InitializeParticle(this, &this->actor.focus.pos, &velocity, &acceleration,
                                                (Rand_ZeroFloat(1.0f) * 0.01f) + 0.003f, 90);
                 }
+                
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
                             this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 2);
                 Audio_PlayActorSound2(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
@@ -426,19 +428,19 @@ void EnBaguo_DrawBody(Actor* thisx, GlobalContext* globalCtx) {
 void EnBaguo_InitializeParticle(EnBaguo* this, Vec3f* position, Vec3f* velocity, Vec3f* acceleration, f32 scale,
                                 s16 timer) {
     s16 i;
-    NejironParticle* ptr = this->particles;
+    NejironParticle* particle = this->particles;
 
-    for (i = 0; i < ARRAY_COUNT(this->particles); i++, ptr++) {
-        if (!ptr->visible) {
-            ptr->visible = true;
-            ptr->position = *position;
-            ptr->velocity = *velocity;
-            ptr->acceleration = *acceleration;
-            ptr->scale = scale;
-            ptr->timer = timer;
-            ptr->rotation.x = (s16)randPlusMinusPoint5Scaled(30000.0f);
-            ptr->rotation.y = (s16)randPlusMinusPoint5Scaled(30000.0f);
-            ptr->rotation.z = (s16)randPlusMinusPoint5Scaled(30000.0f);
+    for (i = 0; i < ARRAY_COUNT(this->particles); i++, particle++) {
+        if (!particle->visible) {
+            particle->visible = true;
+            particle->position = *position;
+            particle->velocity = *velocity;
+            particle->acceleration = *acceleration;
+            particle->scale = scale;
+            particle->timer = timer;
+            particle->rotation.x = (s16)randPlusMinusPoint5Scaled(30000.0f);
+            particle->rotation.y = (s16)randPlusMinusPoint5Scaled(30000.0f);
+            particle->rotation.z = (s16)randPlusMinusPoint5Scaled(30000.0f);
             return;
         }
     }
@@ -446,29 +448,29 @@ void EnBaguo_InitializeParticle(EnBaguo* this, Vec3f* position, Vec3f* velocity,
 
 void EnBaguo_UpdateParticles(EnBaguo* this, GlobalContext* globalCtx) {
     s32 i;
-    NejironParticle* ptr = this->particles;
+    NejironParticle* particle = this->particles;
 
-    for (i = 0; i < ARRAY_COUNT(this->particles); i++, ptr++) {
-        if (ptr->visible) {
-            ptr->position.x += ptr->velocity.x;
-            ptr->position.y += ptr->velocity.y;
-            ptr->position.z += ptr->velocity.z;
-            ptr->rotation.x += 0xBB8;
-            ptr->rotation.y += 0xBB8;
-            ptr->rotation.z += 0xBB8;
-            ptr->velocity.x += ptr->acceleration.x;
-            ptr->velocity.y += ptr->acceleration.y;
-            ptr->velocity.z += ptr->acceleration.z;
-            if (ptr->position.y < (this->actor.world.pos.y - 10.0f)) {
-                Math_ApproachZeroF(&ptr->scale, 0.2f, 0.001f);
-                if (ptr->scale <= 0.0001f) {
-                    ptr->timer = 0;
+    for (i = 0; i < ARRAY_COUNT(this->particles); i++, particle++) {
+        if (particle->visible) {
+            particle->position.x += particle->velocity.x;
+            particle->position.y += particle->velocity.y;
+            particle->position.z += particle->velocity.z;
+            particle->rotation.x += 0xBB8;
+            particle->rotation.y += 0xBB8;
+            particle->rotation.z += 0xBB8;
+            particle->velocity.x += particle->acceleration.x;
+            particle->velocity.y += particle->acceleration.y;
+            particle->velocity.z += particle->acceleration.z;
+            if (particle->position.y < (this->actor.world.pos.y - 10.0f)) {
+                Math_ApproachZeroF(&particle->scale, 0.2f, 0.001f);
+                if (particle->scale <= 0.0001f) {
+                    particle->timer = 0;
                 }
             }
-            if (ptr->timer != 0) {
-                ptr->timer--;
+            if (particle->timer != 0) {
+                particle->timer--;
             } else {
-                ptr->visible = false;
+                particle->visible = false;
             }
         }
     }
@@ -476,18 +478,18 @@ void EnBaguo_UpdateParticles(EnBaguo* this, GlobalContext* globalCtx) {
 
 void EnBaguo_DrawRockParticles(EnBaguo* this, GlobalContext* globalCtx) {
     s16 i;
-    NejironParticle* ptr = this->particles;
+    NejironParticle* particle = this->particles;
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
-    for (i = 0; i < ARRAY_COUNT(this->particles); i++, ptr++) {
-        if (ptr->visible) {
-            SysMatrix_InsertTranslation(ptr->position.x, ptr->position.y, ptr->position.z, MTXMODE_NEW);
-            SysMatrix_InsertXRotation_s(ptr->rotation.x, MTXMODE_APPLY);
-            Matrix_RotateY(ptr->rotation.y, MTXMODE_APPLY);
-            SysMatrix_InsertZRotation_s(ptr->rotation.z, MTXMODE_APPLY);
-            Matrix_Scale(ptr->scale, ptr->scale, ptr->scale, MTXMODE_APPLY);
+    for (i = 0; i < ARRAY_COUNT(this->particles); i++, particle++) {
+        if (particle->visible) {
+            SysMatrix_InsertTranslation(particle->position.x, particle->position.y, particle->position.z, MTXMODE_NEW);
+            SysMatrix_InsertXRotation_s(particle->rotation.x, MTXMODE_APPLY);
+            Matrix_RotateY(particle->rotation.y, MTXMODE_APPLY);
+            SysMatrix_InsertZRotation_s(particle->rotation.z, MTXMODE_APPLY);
+            Matrix_Scale(particle->scale, particle->scale, particle->scale, MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 1, 255, 255, 255, 255);
             gSPDisplayList(POLY_OPA_DISP++, &D_0401FA40);
