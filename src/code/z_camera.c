@@ -356,7 +356,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800E01AC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800E01B8.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_GetSkyboxOffset.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800E01DC.s")
 

@@ -1290,7 +1290,7 @@
     0x800DFFAC:("func_800DFFAC",),
     0x800E007C:("func_800E007C",),
     0x800E01AC:("func_800E01AC",),
-    0x800E01B8:("func_800E01B8",),
+    0x800E01B8:("Camera_GetSkyboxOffset",),
     0x800E01DC:("func_800E01DC",),
     0x800E0228:("func_800E0228",),
     0x800E0238:("func_800E0238",),

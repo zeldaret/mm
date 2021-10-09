@@ -804,7 +804,7 @@ asm/non_matchings/code/z_camera/Camera_ClearFlags.s,Camera_ClearFlags,0x800DFF84
 asm/non_matchings/code/z_camera/func_800DFFAC.s,func_800DFFAC,0x800DFFAC,0x34
 asm/non_matchings/code/z_camera/func_800E007C.s,func_800E007C,0x800E007C,0x4C
 asm/non_matchings/code/z_camera/func_800E01AC.s,func_800E01AC,0x800E01AC,0x3
-asm/non_matchings/code/z_camera/func_800E01B8.s,func_800E01B8,0x800E01B8,0x9
+asm/non_matchings/code/z_camera/Camera_GetSkyboxOffset.s,Camera_GetSkyboxOffset,0x800E01B8,0x9
 asm/non_matchings/code/z_camera/func_800E01DC.s,func_800E01DC,0x800E01DC,0x13
 asm/non_matchings/code/z_camera/func_800E0228.s,func_800E0228,0x800E0228,0x4
 asm/non_matchings/code/z_camera/func_800E0238.s,func_800E0238,0x800E0238,0x1D
