@@ -21,12 +21,18 @@ const ActorInit Oceff_Wipe6_InitVars = {
     (ActorFunc)OceffWipe6_Draw,
 };
 
-extern void func_800E01B8(Vec3f*, Camera*);
-extern AnimatedMaterial D_80BCA8D8;
-extern Vtx D_80BCA8E0[];
-extern Gfx D_80BCAA40[];
+/* Parameters for gOceffScroll */
+UNK_TYPE1 gOceff6ScrollParams[] = {
+    0xFF, 0x01, 0x20, 0x20, 0xFF, 0x04, 0x20, 0x20
+};
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe6/OceffWipe6_Init.s")
+/* Animated Material Properties for Scrolling Texture */
+AnimatedMaterial gOceff6Scroll = {
+    0xFF, 0x0001, gOceff6ScrollParams
+};
+
+#include "overlays/ovl_Oceff_Wipe6/ovl_Oceff_Wipe6.c"
+
 void OceffWipe6_Init(Actor* thisx, GlobalContext* globalCtx) {
     OceffWipe6* this = THIS;
 
@@ -35,13 +41,11 @@ void OceffWipe6_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.world.pos = ACTIVE_CAM->eye;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe6/OceffWipe6_Destroy.s")
 void OceffWipe6_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     func_80115D5C(globalCtx);
     globalCtx->msgCtx.pad12080[0x30] = 0;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe6/OceffWipe6_Update.s")
 void OceffWipe6_Update(Actor* thisx, GlobalContext* globalCtx) {
     OceffWipe6* this = THIS;
 
@@ -53,7 +57,6 @@ void OceffWipe6_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe6/OceffWipe6_Draw.s")
 void OceffWipe6_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OceffWipe6* this = THIS;
     f32 z;
@@ -66,7 +69,7 @@ void OceffWipe6_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad2;
 
     eye = ACTIVE_CAM->eye;
-    func_800E01B8(&vec, ACTIVE_CAM);
+    Camera_GetSkyboxOffset(&vec, ACTIVE_CAM);
 
     if (this->counter < 32) {
         counter = this->counter;
@@ -82,7 +85,7 @@ void OceffWipe6_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     for(i = 1; i < 22; i += 2) {
-        D_80BCA8E0[i].v.cn[3] = alpha;
+        gOceff6Vtx[i].v.cn[3] = alpha;
     }
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -94,8 +97,8 @@ void OceffWipe6_Draw(Actor* thisx, GlobalContext* globalCtx) {
     SysMatrix_InsertXRotation_s(0x708, MTXMODE_APPLY);
     SysMatrix_InsertTranslation(0.0f, 0.0f, -z, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    AnimatedMat_Draw(globalCtx, &D_80BCA8D8);
-    gSPDisplayList(POLY_XLU_DISP++, &D_80BCAA40);
+    AnimatedMat_Draw(globalCtx, gOceff6Scroll);
+    gSPDisplayList(POLY_XLU_DISP++, gOceff6DL);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

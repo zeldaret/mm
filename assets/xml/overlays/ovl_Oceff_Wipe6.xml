@@ -1,8 +1,17 @@
 <Root>
-    <File Name="ovl_Oceff_Wipe6" BaseOffset="0x80BCA5A0" RangeStart="0x0340" RangeEnd="0x05B8" Segment="128">
+    <File Name="ovl_Oceff_Wipe6" BaseAddress="0x80BCA5A0" RangeStart="0x0330" RangeEnd="0x05C0" Segment="128">
+        <!-- Parameters for gOceffScroll -->
+        <!-- <Array Name="gOceff6ScrollParams" Count"8" Offset="0x0330"> -->
+        <!--     <Byte/> -->
+        <!-- </Array> -->
+
+        <!-- Animated Material Properties for Scrolling Texture -->
+        <!-- <AnimatedMaterial Name="gOceff6Scroll" Offset="0x0338"/> -->
+
         <Array Name="gOceff6Vtx" Count="22" Offset="0x0340">
             <Vtx/>
         </Array>
+        
         <DList Name="gOceff6DL" Offset="0x04A0"/>
     </File>
 </Root>

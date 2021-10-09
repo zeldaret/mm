@@ -4761,7 +4761,6 @@ beginseg
     name "ovl_Oceff_Wipe6"
     compress
     include "build/src/overlays/actors/ovl_Oceff_Wipe6/z_oceff_wipe6.o"
-    include "build/data/ovl_Oceff_Wipe6/ovl_Oceff_Wipe6.data.o"
     include "build/data/ovl_Oceff_Wipe6/ovl_Oceff_Wipe6.reloc.o"
 endseg
 
