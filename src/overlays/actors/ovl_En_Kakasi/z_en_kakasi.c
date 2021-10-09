@@ -8,6 +8,8 @@
 
 #define FLAGS 0x02000019
 
+#define THIS ((EnKakasi*)thisx)
+
 void EnKakasi_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnKakasi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnKakasi_Update(Actor* thisx, GlobalContext* globalCtx);
@@ -149,7 +151,7 @@ typedef enum {
     /* 0x5 */ ENKAKASI_ANIM_ARMS_CROSSED_STILL,   // arms crossed but still, also some noise sfx
     /* 0x6 */ ENKAKASI_ANIM_WAVE,                 // "wave" short sideways shake, stops early, partial? unused?
     /* 0x7 */ ENKAKASI_ANIM_SLOWROLL,             // partial bounch, ends looking left, OFFER anim takes over
-    /* 0x8 */ ENKAKASI_ANIM_IDLE,                 // slow stretching wiggle, ends in regular position
+    /* 0x8 */ ENKAKASI_ANIM_IDLE,               // slow stretching wiggle, ends in regular position
 } EnKakasi_Animations;
 
 extern AnimationHeader D_06007444;
@@ -172,7 +174,7 @@ u8 D_8097206C[] = {
 };
 
 void EnKakasi_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    EnKakasi* this = (EnKakasi*)thisx;
+    EnKakasi* this = THIS;
     
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
@@ -180,7 +182,7 @@ void EnKakasi_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 extern FlexSkeletonHeader D_060065B0;
 
 void EnKakasi_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnKakasi* this = (EnKakasi*)thisx;
+    EnKakasi* this = THIS;
     s32 tempCutscene;
     s32 i;
 
@@ -1147,7 +1149,7 @@ void EnKakasi_RisenDialogue(EnKakasi* this, GlobalContext* globalCtx) {
 }
 
 void EnKakasi_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnKakasi* this = (EnKakasi*)thisx;
+    EnKakasi* this = THIS;
     s32 pad;
 
     SkelAnime_FrameUpdateMatrix(&this->skelanime);
@@ -1193,7 +1195,7 @@ void EnKakasi_LimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 }
 
 void EnKakasi_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    EnKakasi* this = (EnKakasi*)thisx;
+    EnKakasi* this = THIS;
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawSV(globalCtx, this->skelanime.skeleton, this->skelanime.limbDrawTbl, this->skelanime.dListCount, NULL,
                      EnKakasi_LimbDraw, &this->actor);
