@@ -346,7 +346,7 @@ void EnKakasi_TimeSkipDialogue(EnKakasi* this, GlobalContext* globalCtx) {
             if (this->actor.textId == 0) {
                 // "Oh, yeah!  How was it? It went by in an instant, right?  I'm still full of energy!"
                 this->actor.textId = 0x1653;
-                gSaveContext.weekEventReg[0x53] &= ~1;
+                gSaveContext.weekEventReg[0x53] &= (u8) ~1;
                 this->unkMsgState1AC = 5;
                 player->stateFlags1 |= 0x20;
                 this->actor.flags |= 0x10000;
