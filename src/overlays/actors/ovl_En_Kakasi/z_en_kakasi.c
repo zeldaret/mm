@@ -235,11 +235,11 @@ void EnKakasi_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnKakasi_SetAnimation(EnKakasi* this, s32 index) {
-    this->animeIndex = index;
-    this->animeFrameCount = SkelAnime_GetFrameCount(&kakasiAnimations[this->animeIndex]->common);
+    this->animIndex = index;
+    this->animeFrameCount = SkelAnime_GetFrameCount(&kakasiAnimations[this->animIndex]->common);
     // 1: regular playback speed, 0: starting frame
-    SkelAnime_ChangeAnim(&this->skelanime, kakasiAnimations[this->animeIndex], 1.0f, 0.0f, this->animeFrameCount,
-                         D_8097206C[this->animeIndex], -4.0f);
+    SkelAnime_ChangeAnim(&this->skelanime, kakasiAnimations[this->animIndex], 1.0f, 0.0f, this->animeFrameCount,
+                         D_8097206C[this->animIndex], -4.0f);
 }
 
 /*
@@ -250,12 +250,12 @@ void EnKakasi_8096F88C(GlobalContext* globalCtx, EnKakasi* this) {
 }
 
 void EnKakasi_CheckAnimateSFX(EnKakasi* this) {
-    if (this->animeIndex == ENKAKASI_ANIME_SIDEWAYS_SHAKING || this->animeIndex == ENKAKASI_ANIME_ARMS_CROSSED_STILL) {
+    if (this->animIndex == ENKAKASI_ANIME_SIDEWAYS_SHAKING || this->animIndex == ENKAKASI_ANIME_ARMS_CROSSED_STILL) {
         if (func_801378B8(&this->skelanime, 1.0f) || func_801378B8(&this->skelanime, 8.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_KAKASHI_SWING);
         }
     }
-    if (this->animeIndex == ENKAKASI_ANIME_HOPPING_REGULAR || this->animeIndex == ENKAKASI_ANIME_SLOWROLL) {
+    if (this->animIndex == ENKAKASI_ANIME_HOPPING_REGULAR || this->animIndex == ENKAKASI_ANIME_SLOWROLL) {
         if (func_801378B8(&this->skelanime, 4.0f) != 0 || func_801378B8(&this->skelanime, 8.0f) != 0) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_KAKASHI_SWING);
         }
@@ -267,7 +267,7 @@ void EnKakasi_CheckAnimateSFX(EnKakasi* this) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_KAKASHI_ROLL);
         }
     }
-    if (this->animeIndex == ENKAKASI_ANIME_SPIN_REACH_OFFER || this->animeIndex == ENKAKASI_ANIME_TWIRL) {
+    if (this->animIndex == ENKAKASI_ANIME_SPIN_REACH_OFFER || this->animIndex == ENKAKASI_ANIME_TWIRL) {
         if (func_801378B8(&this->skelanime, 1.0f) != 0) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_KAKASH_LONGI_ROLL);
         }
@@ -321,7 +321,7 @@ void func_8096FBB8(EnKakasi* this, GlobalContext* globalCtx) {
         // why not 0 < x < 4? fewer branches
         this->unk190++;
     }
-    if (this->unk190 != 0 && this->animeIndex != ENKAKASI_ANIME_SIDEWAYS_SHAKING) {
+    if (this->unk190 != 0 && this->animIndex != ENKAKASI_ANIME_SIDEWAYS_SHAKING) {
         EnKakasi_SetAnimation(this, ENKAKASI_ANIME_SIDEWAYS_SHAKING);
     }
     if (this->unk190 > 8) {
@@ -389,22 +389,22 @@ void EnKakasi_IdleStanding(EnKakasi* this, GlobalContext* globalCtx) {
     if (globalCtx->actorCtx.unk5 & 0x4) {
         func_800B8898(globalCtx, &this->actor, &passedValue1, &passedValue2);
         if (this->actor.projectedPos.z > -20.0f && passedValue1 > 0 && passedValue1 < 0x140 && passedValue2 > 0 &&
-            passedValue2 < 0xF0 && this->animeIndex != ENKAKASI_ANIME_SIDEWAYS_SHAKING) {
+            passedValue2 < 0xF0 && this->animIndex != ENKAKASI_ANIME_SIDEWAYS_SHAKING) {
             // faster shaking
             EnKakasi_SetAnimation(this, ENKAKASI_ANIME_SIDEWAYS_SHAKING);
             this->skelanime.animPlaybackSpeed = 2.0f;
         }
     } else if (Player_GetMask(globalCtx) == PLAYER_MASK_KAMAROS_MASK) {
-        if (this->animeIndex != ENKAKASI_ANIME_SIDEWAYS_SHAKING) {
+        if (this->animIndex != ENKAKASI_ANIME_SIDEWAYS_SHAKING) {
             EnKakasi_SetAnimation(this, ENKAKASI_ANIME_SIDEWAYS_SHAKING);
             this->skelanime.animPlaybackSpeed = 2.0f;
         }
     } else if (saveContextDay == 3 && gSaveContext.isNight) {
         this->skelanime.animPlaybackSpeed = 1.0f;
-        if (this->animeIndex != ENKAKASI_ANIME_SIDEWAYS_SHAKING) {
+        if (this->animIndex != ENKAKASI_ANIME_SIDEWAYS_SHAKING) {
             EnKakasi_SetAnimation(this, 1);
         }
-    } else if (this->animeIndex != ENKAKASI_ANIME_IDLE) {
+    } else if (this->animIndex != ENKAKASI_ANIME_IDLE) {
         EnKakasi_SetAnimation(this, ENKAKASI_ANIME_IDLE);
     }
     if (this->actor.xzDistToPlayer < 120.0f) {
@@ -415,7 +415,7 @@ void EnKakasi_IdleStanding(EnKakasi* this, GlobalContext* globalCtx) {
 
 void EnKakasi_SetupDialogue(EnKakasi* this) {
     // bug? starts one animation then changes it a few lines down?
-    if (this->animeIndex != ENKAKASI_ANIME_SIDEWAYS_SHAKING) {
+    if (this->animIndex != ENKAKASI_ANIME_SIDEWAYS_SHAKING) {
         EnKakasi_SetAnimation(this, ENKAKASI_ANIME_SIDEWAYS_SHAKING);
     }
 
@@ -433,7 +433,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
     // "Yo! Hey, baby!  I'm a stylin' scarecrow wandering in search of pleasant music.
     // Time will pass in the blink of an eye if you dance with me."
     if (this->actor.textId != 0x1644 && this->animeFrameCount <= currentAnimeFrame &&
-        this->animeIndex == ENKAKASI_ANIME_SLOWROLL) {
+        this->animIndex == ENKAKASI_ANIME_SLOWROLL) {
 
         EnKakasi_SetAnimation(this, ENKAKASI_ANIME_SPIN_REACH_OFFER);
         this->unkCounter1A4 = 0;
@@ -442,7 +442,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
     // "Oh, sorry. That's too bad. In that case, come back anytime if you do ...
     // "How's that? Pretty interesting, isn't it?  But I'm sure I'd like any song
     if (this->actor.textId == 0x1651 || this->actor.textId == 0x1659) {
-        if (this->animeFrameCount <= currentAnimeFrame && this->animeIndex != ENKAKASI_ANIME_SPIN_REACH_OFFER) {
+        if (this->animeFrameCount <= currentAnimeFrame && this->animIndex != ENKAKASI_ANIME_SPIN_REACH_OFFER) {
             if (++this->unkCounter1A4 >= 2) {
                 this->unkCounter1A4 = 0;
                 EnKakasi_SetAnimation(this, ENKAKASI_ANIME_SPIN_REACH_OFFER);
@@ -467,7 +467,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
             if (this->actor.textId == 0x1653) {
                 u32 saveContextDay2 = gSaveContext.day;
 
-                if (this->animeIndex != ENKAKASI_ANIME_SIDEWAYS_SHAKING) {
+                if (this->animIndex != ENKAKASI_ANIME_SIDEWAYS_SHAKING) {
                     EnKakasi_SetAnimation(this, ENKAKASI_ANIME_SIDEWAYS_SHAKING);
                 }
 
@@ -512,7 +512,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
                 // "If you like, baby, we can forget the time and dance 'til dawn!"
                 // both seem to be the same text
                 this->actor.textId = 0x1650; // "Shall we dance?  No Yes"
-                if (this->animeIndex != ENKAKASI_ANIME_SIDEWAYS_SHAKING) {
+                if (this->animIndex != ENKAKASI_ANIME_SIDEWAYS_SHAKING) {
                     EnKakasi_SetAnimation(this, ENKAKASI_ANIME_SIDEWAYS_SHAKING);
                 }
                 this->unkMsgState1AC = 4;
@@ -520,7 +520,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
             } else if (this->actor.textId == 0x1644) {
                 // "Yo! Hey, baby!  I'm a scarecrow wandering in search of music.
                 // Time will pass in the blink of an eye if you dance with me."
-                if (this->animeIndex != ENKAKASI_ANIME_SIDEWAYS_SHAKING) {
+                if (this->animIndex != ENKAKASI_ANIME_SIDEWAYS_SHAKING) {
                     EnKakasi_SetAnimation(this, ENKAKASI_ANIME_SIDEWAYS_SHAKING);
                 }
                 if (gSaveContext.isNight != 0) {
@@ -533,14 +533,14 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
   
             } else if (this->actor.textId == 0x164F) {
                 // "But outside it seems to have gotten kind of...dangerous.
-                if (this->animeIndex != ENKAKASI_ANIME_SIDEWAYS_SHAKING) {
+                if (this->animIndex != ENKAKASI_ANIME_SIDEWAYS_SHAKING) {
                     EnKakasi_SetAnimation(this, ENKAKASI_ANIME_SIDEWAYS_SHAKING);
                 }
                 // "Take care..."
                 this->actor.textId = 0x165A;
             // "Oh, sorry. That's too bad. In that case, come back anytime if you do ...
             } else if (this->actor.textId == 0x1651) {
-                if (this->animeIndex != ENKAKASI_ANIME_SIDEWAYS_SHAKING) {
+                if (this->animIndex != ENKAKASI_ANIME_SIDEWAYS_SHAKING) {
                     EnKakasi_SetAnimation(this, ENKAKASI_ANIME_SIDEWAYS_SHAKING);
                 }
                 // "By the way..."
@@ -604,7 +604,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
                     this->actor.textId = 0x1651;
                 }
                 this->unkCounter1A4 = 0;
-                if (this->animeIndex != ENKAKASI_ANIME_ARMS_CROSSED_ROCKING) {
+                if (this->animIndex != ENKAKASI_ANIME_ARMS_CROSSED_ROCKING) {
                     EnKakasi_SetAnimation(this, ENKAKASI_ANIME_ARMS_CROSSED_ROCKING);
                 }
             }
@@ -717,11 +717,11 @@ void EnKakasi_TeachingSong(EnKakasi* this, GlobalContext* globalCtx) {
 void EnKakasi_PostSongLearnTwirl(EnKakasi* this, GlobalContext* globalCtx) {
     f32 animeFrame = this->skelanime.animCurrentFrame;
 
-    if (this->postTeachTimer == 0 && this->animeIndex != ENKAKASI_ANIME_TWIRL) {
+    if (this->postTeachTimer == 0 && this->animIndex != ENKAKASI_ANIME_TWIRL) {
         EnKakasi_SetAnimation(this, ENKAKASI_ANIME_TWIRL);
         this->skelanime.animPlaybackSpeed = 2.0f;
     }
-    if (this->postTeachTimer == 0 && this->animeIndex == ENKAKASI_ANIME_TWIRL && this->animeFrameCount <= animeFrame) {
+    if (this->postTeachTimer == 0 && this->animIndex == ENKAKASI_ANIME_TWIRL && this->animeFrameCount <= animeFrame) {
         EnKakasi_SetupPostSongLearnDialogue(this, globalCtx);
     }
 }
@@ -759,7 +759,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, GlobalContext* globalCtx) {
     }
 
     // "Yow! Oh, yeah!  That's a nice tune, baby.  By the way..."
-    if (this->actor.textId == 0x1648 && this->animeIndex == ENKAKASI_ANIME_HOPPING_REGULAR &&
+    if (this->actor.textId == 0x1648 && this->animIndex == ENKAKASI_ANIME_HOPPING_REGULAR &&
         this->animeFrameCount <= tempAnimFrame) {
         this->unkCounter1A4++;
         if (this->unkCounter1A4 >= 2) {
@@ -769,7 +769,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, GlobalContext* globalCtx) {
     }
 
     // "If you want to see me again, play that song you wrote for me here ...
-    if (this->actor.textId == 0x164B && this->animeIndex == ENKAKASI_ANIME_ARMS_CROSSED_ROCKING &&
+    if (this->actor.textId == 0x164B && this->animIndex == ENKAKASI_ANIME_ARMS_CROSSED_ROCKING &&
         this->animeFrameCount <= tempAnimFrame) {
         this->unkCounter1A4++;
         if (this->unkCounter1A4 >= 2) {
@@ -827,7 +827,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, GlobalContext* globalCtx) {
                 func_800B7298(globalCtx, &this->actor, 7);
                 // "I know of a mysterious song that allows you to manipulate the flow of time..."
                 this->actor.textId = 0x1649;
-                if (this->animeIndex != ENKAKASI_ANIME_ARMS_CROSSED_ROCKING) {
+                if (this->animIndex != ENKAKASI_ANIME_ARMS_CROSSED_ROCKING) {
                     EnKakasi_SetAnimation(this, ENKAKASI_ANIME_ARMS_CROSSED_ROCKING);
                 }
 
@@ -1042,7 +1042,7 @@ void EnKakasi_DoNothing(EnKakasi* this, GlobalContext* globalCtx) {
 }
 
 void EnKakasi_SetupDigAway(EnKakasi* this) {
-    if (this->animeIndex != ENKAKASI_ANIME_SIDEWAYS_SHAKING) {
+    if (this->animIndex != ENKAKASI_ANIME_SIDEWAYS_SHAKING) {
         EnKakasi_SetAnimation(this, ENKAKASI_ANIME_SIDEWAYS_SHAKING);
     }
     this->unk190 = 0;
@@ -1153,7 +1153,7 @@ void EnKakasi_SetupRiseOutOfGround(EnKakasi* this, GlobalContext* globalCtx) {
 void EnKakasi_RisingOutOfGround(EnKakasi* this, GlobalContext* globalCtx) {
     this->actor.shape.rot.y += 0x3000;
 
-    if (this->animeIndex != ENKAKASI_ANIME_SIDEWAYS_SHAKING) {
+    if (this->animIndex != ENKAKASI_ANIME_SIDEWAYS_SHAKING) {
         EnKakasi_SetAnimation(this, ENKAKASI_ANIME_SIDEWAYS_SHAKING);
     }
     if (this->actor.shape.yOffset < -10.0f) {
