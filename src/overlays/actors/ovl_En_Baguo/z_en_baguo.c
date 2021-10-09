@@ -69,39 +69,45 @@ static ColliderJntSphInit sJntSphInit = {
     sJntSphElementsInit,
 };
 
+typedef enum {
+    /* 0x0 */ NEJIRON_DMGEFF_NONE,      // Does not interact with the Nejiron at all
+    /* 0xE */ NEJIRON_DMGEFF_KILL = 14, // Kills and detonates the Nejiron
+    /* 0xF */ NEJIRON_DMGEFF_HITMARK    // Deals no damage, but displays the appropriate hit mark
+} NejironDamageEffect;
+
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, 0xF),
-    /* Deku Stick     */ DMG_ENTRY(0, 0xF),
-    /* Horse trample  */ DMG_ENTRY(0, 0x0),
-    /* Explosives     */ DMG_ENTRY(1, 0xE),
-    /* Zora boomerang */ DMG_ENTRY(3, 0xE),
-    /* Normal arrow   */ DMG_ENTRY(0, 0xF),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
-    /* Hookshot       */ DMG_ENTRY(3, 0xE),
-    /* Goron punch    */ DMG_ENTRY(2, 0xE),
-    /* Sword          */ DMG_ENTRY(1, 0xE),
-    /* Goron pound    */ DMG_ENTRY(1, 0xE),
-    /* Fire arrow     */ DMG_ENTRY(0, 0xF),
-    /* Ice arrow      */ DMG_ENTRY(0, 0xF),
-    /* Light arrow    */ DMG_ENTRY(1, 0xE),
-    /* Goron spikes   */ DMG_ENTRY(2, 0xE),
-    /* Deku spin      */ DMG_ENTRY(0, 0xF),
-    /* Deku bubble    */ DMG_ENTRY(0, 0xF),
-    /* Deku launch    */ DMG_ENTRY(1, 0xE),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0xF),
-    /* Zora barrier   */ DMG_ENTRY(0, 0x0),
-    /* Normal shield  */ DMG_ENTRY(0, 0x0),
-    /* Light ray      */ DMG_ENTRY(0, 0x0),
-    /* Thrown object  */ DMG_ENTRY(0, 0x0),
-    /* Zora punch     */ DMG_ENTRY(1, 0xE),
-    /* Spin attack    */ DMG_ENTRY(1, 0xE),
-    /* Sword beam     */ DMG_ENTRY(0, 0x0),
-    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
-    /* Unblockable    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
-    /* Powder Keg     */ DMG_ENTRY(1, 0xE),
+    /* Deku Nut       */ DMG_ENTRY(0, NEJIRON_DMGEFF_HITMARK),
+    /* Deku Stick     */ DMG_ENTRY(0, NEJIRON_DMGEFF_HITMARK),
+    /* Horse trample  */ DMG_ENTRY(0, NEJIRON_DMGEFF_NONE),
+    /* Explosives     */ DMG_ENTRY(1, NEJIRON_DMGEFF_KILL),
+    /* Zora boomerang */ DMG_ENTRY(3, NEJIRON_DMGEFF_KILL),
+    /* Normal arrow   */ DMG_ENTRY(0, NEJIRON_DMGEFF_HITMARK),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, NEJIRON_DMGEFF_NONE),
+    /* Hookshot       */ DMG_ENTRY(3, NEJIRON_DMGEFF_KILL),
+    /* Goron punch    */ DMG_ENTRY(2, NEJIRON_DMGEFF_KILL),
+    /* Sword          */ DMG_ENTRY(1, NEJIRON_DMGEFF_KILL),
+    /* Goron pound    */ DMG_ENTRY(1, NEJIRON_DMGEFF_KILL),
+    /* Fire arrow     */ DMG_ENTRY(0, NEJIRON_DMGEFF_HITMARK),
+    /* Ice arrow      */ DMG_ENTRY(0, NEJIRON_DMGEFF_HITMARK),
+    /* Light arrow    */ DMG_ENTRY(1, NEJIRON_DMGEFF_KILL),
+    /* Goron spikes   */ DMG_ENTRY(2, NEJIRON_DMGEFF_KILL),
+    /* Deku spin      */ DMG_ENTRY(0, NEJIRON_DMGEFF_HITMARK),
+    /* Deku bubble    */ DMG_ENTRY(0, NEJIRON_DMGEFF_HITMARK),
+    /* Deku launch    */ DMG_ENTRY(1, NEJIRON_DMGEFF_KILL),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, NEJIRON_DMGEFF_HITMARK),
+    /* Zora barrier   */ DMG_ENTRY(0, NEJIRON_DMGEFF_NONE),
+    /* Normal shield  */ DMG_ENTRY(0, NEJIRON_DMGEFF_NONE),
+    /* Light ray      */ DMG_ENTRY(0, NEJIRON_DMGEFF_NONE),
+    /* Thrown object  */ DMG_ENTRY(0, NEJIRON_DMGEFF_NONE),
+    /* Zora punch     */ DMG_ENTRY(1, NEJIRON_DMGEFF_KILL),
+    /* Spin attack    */ DMG_ENTRY(1, NEJIRON_DMGEFF_KILL),
+    /* Sword beam     */ DMG_ENTRY(0, NEJIRON_DMGEFF_NONE),
+    /* Normal Roll    */ DMG_ENTRY(0, NEJIRON_DMGEFF_NONE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, NEJIRON_DMGEFF_NONE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, NEJIRON_DMGEFF_NONE),
+    /* Unblockable    */ DMG_ENTRY(0, NEJIRON_DMGEFF_NONE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, NEJIRON_DMGEFF_NONE),
+    /* Powder Keg     */ DMG_ENTRY(1, NEJIRON_DMGEFF_KILL),
 };
 
 extern Gfx D_060014C8;
@@ -311,7 +317,7 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, GlobalContext* globalCtx) {
         }
         if ((this->collider.base.acFlags & AC_HIT || i)) {
             this->collider.base.acFlags &= ~AC_HIT;
-            if (i || this->actor.colChkInfo.damageEffect == 0xE) {
+            if (i || this->actor.colChkInfo.damageEffect == NEJIRON_DMGEFF_KILL) {
                 func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 8);
                 this->action = NEJIRON_ACTION_EXPLODING;
                 this->actor.speedXZ = 0.0f;
