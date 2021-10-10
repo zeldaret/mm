@@ -21,7 +21,7 @@ const ActorInit En_Recepgirl_InitVars = {
     (ActorFunc)EnRecepgirl_Draw,
 };
 
-TexturePtr D_80C106B0[] = { 0x600F8F0, 0x600FCF0, 0x60100F0, 0x600FCF0};
+TexturePtr D_80C106B0[] = { 0x600F8F0, 0x600FCF0, 0x60100F0, 0x600FCF0 };
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80C106C0[] = {
