@@ -1196,7 +1196,7 @@ void func_80BAD380(EnSuttari* this, GlobalContext* globalCtx) {
             this->actor.speedXZ = 0.0f;
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
                         this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_SMALL_EXPLOSION);
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 30, NA_SE_IT_BOMB_EXPLOSION);
+            SoundSource_PlaySfxByPos(globalCtx, &this->actor.world.pos, 30, NA_SE_IT_BOMB_EXPLOSION);
             Actor_MarkForDeath(&this->actor);
             return;
         }

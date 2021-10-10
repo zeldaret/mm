@@ -208,7 +208,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                     if (interaction <= OBJ_SYOKUDAI_INTERACTION_STICK) {
                         if (player->unk_B28 == 0) {
                             player->unk_B28 = 0xD2;
-                            func_8019F1C0(&thisx->projectedPos, NA_SE_EV_FLAME_IGNITION);
+                            Audio_PlaySfxByPos(&thisx->projectedPos, NA_SE_EV_FLAME_IGNITION);
                         } else if (player->unk_B28 < 0xC8) {
                             player->unk_B28 = 0xC8;
                         }

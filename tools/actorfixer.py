@@ -17,12 +17,15 @@ animdict ={
     "Actor_SpawnWithParentAndCutscene": "Actor_SpawnAsChildAndCutscene",
     "Actor_SpawnWithParent": "Actor_SpawnAsChild",
     "func_800BE22C": "Actor_ApplyDamage",
-    "func_800F0568": "Audio_PlaySoundAtPosition",
+    "func_800F0568": "SoundSource_PlaySfxByPos",
+    "Audio_PlaySoundAtPosition": "SoundSource_PlaySfxByPos",
     "func_8016970C": "Play_CameraSetAtEye",
     "func_800BBA88": "Enemy_StartFinishingBlow",
     "ShrinkWindow_Step": "ShrinkWindow_Update",
     "ShrinkWindow_Fini": "ShrinkWindow_Destroy",
     "func_801A89A8": "Audio_QueueSeqCmd",
+    "func_8019F1C0": "Audio_PlaySfxByPos",
+    "func_801A72CC": "Audio_StopSfxByPos",
 }
 
 def replace_anim(file):

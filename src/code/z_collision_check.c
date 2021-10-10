@@ -1525,7 +1525,7 @@ void CollisionCheck_HitSolid(GlobalContext* globalCtx, ColliderInfo* info, Colli
         if (collider->actor == NULL) {
             play_sound(NA_SE_IT_SHIELD_BOUND);
         } else {
-            func_8019F1C0(&collider->actor->projectedPos, NA_SE_IT_SHIELD_BOUND);
+            Audio_PlaySfxByPos(&collider->actor->projectedPos, NA_SE_IT_SHIELD_BOUND);
         }
     } else if (flags == TOUCH_SFX_NORMAL) {
         EffectSsHitMark_SpawnFixedScale(globalCtx, 3, hitPos);
@@ -1539,14 +1539,14 @@ void CollisionCheck_HitSolid(GlobalContext* globalCtx, ColliderInfo* info, Colli
         if (collider->actor == NULL) {
             play_sound(NA_SE_IT_SHIELD_BOUND);
         } else {
-            func_8019F1C0(&collider->actor->projectedPos, NA_SE_IT_SHIELD_BOUND);
+            Audio_PlaySfxByPos(&collider->actor->projectedPos, NA_SE_IT_SHIELD_BOUND);
         }
     } else if (flags == TOUCH_SFX_WOOD) {
         EffectSsHitMark_SpawnFixedScale(globalCtx, 1, hitPos);
         if (collider->actor == NULL) {
             play_sound(NA_SE_IT_REFLECTION_WOOD);
         } else {
-            func_8019F1C0(&collider->actor->projectedPos, NA_SE_IT_REFLECTION_WOOD);
+            Audio_PlaySfxByPos(&collider->actor->projectedPos, NA_SE_IT_REFLECTION_WOOD);
         }
     }
 }
@@ -1557,13 +1557,13 @@ void CollisionCheck_HitSolid(GlobalContext* globalCtx, ColliderInfo* info, Colli
 s32 CollisionCheck_SwordHitAudio(Collider* at, ColliderInfo* acInfo) {
     if (at->actor != NULL && at->actor->category == ACTORCAT_PLAYER) {
         if (acInfo->elemType == ELEMTYPE_UNK0) {
-            func_8019F1C0(&at->actor->projectedPos, NA_SE_IT_SWORD_STRIKE);
+            Audio_PlaySfxByPos(&at->actor->projectedPos, NA_SE_IT_SWORD_STRIKE);
         } else if (acInfo->elemType == ELEMTYPE_UNK1) {
-            func_8019F1C0(&at->actor->projectedPos, NA_SE_IT_SWORD_STRIKE_HARD);
+            Audio_PlaySfxByPos(&at->actor->projectedPos, NA_SE_IT_SWORD_STRIKE_HARD);
         } else if (acInfo->elemType == ELEMTYPE_UNK2) {
-            func_8019F1C0(&at->actor->projectedPos, 0);
+            Audio_PlaySfxByPos(&at->actor->projectedPos, 0);
         } else if (acInfo->elemType == ELEMTYPE_UNK3) {
-            func_8019F1C0(&at->actor->projectedPos, 0);
+            Audio_PlaySfxByPos(&at->actor->projectedPos, 0);
         }
     }
     return 1;
@@ -1618,7 +1618,7 @@ void CollisionCheck_HitEffects(GlobalContext* globalCtx, Collider* at, ColliderI
         if (ac->actor == NULL) {
             play_sound(NA_SE_IT_SHIELD_BOUND);
         } else {
-            func_8019F1C0(&ac->actor->projectedPos, NA_SE_IT_SHIELD_BOUND);
+            Audio_PlaySfxByPos(&ac->actor->projectedPos, NA_SE_IT_SHIELD_BOUND);
         }
     }
 }
@@ -3905,7 +3905,7 @@ void CollisionCheck_SpawnShieldParticlesMetal(GlobalContext* globalCtx, Vec3f* v
  */
 void CollisionCheck_SpawnShieldParticlesMetalSound(GlobalContext* globalCtx, Vec3f* v, Vec3f* pos) {
     CollisionCheck_SpawnShieldParticles(globalCtx, v);
-    func_8019F1C0(pos, NA_SE_IT_SHIELD_REFLECT_SW);
+    Audio_PlaySfxByPos(pos, NA_SE_IT_SHIELD_REFLECT_SW);
 }
 
 /**
@@ -3945,7 +3945,7 @@ void CollisionCheck_SpawnShieldParticlesWood(GlobalContext* globalCtx, Vec3f* v,
     shieldParticleInitWood.lightPoint.z = shieldParticleInitWood.position.z;
 
     Effect_Add(globalCtx, &effectIndex, 3, 0, 1, &shieldParticleInitWood);
-    func_8019F1C0(pos, NA_SE_IT_REFLECTION_WOOD);
+    Audio_PlaySfxByPos(pos, NA_SE_IT_REFLECTION_WOOD);
 }
 
 /**

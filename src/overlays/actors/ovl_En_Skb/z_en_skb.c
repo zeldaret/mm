@@ -735,7 +735,7 @@ void func_809961E4(EnSkb* this, GlobalContext* globalCtx) {
     }
     this->unk_3E4 = 0;
     this->actor.flags &= ~1;
-    Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_STALKID_DEAD);
+    SoundSource_PlaySfxByPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_STALKID_DEAD);
     this->unk_3DE = 7;
     this->actionFunc = func_80996284;
 }
@@ -1012,7 +1012,7 @@ void func_80996BEC(EnSkb* this, GlobalContext* globalCtx) {
         end = 14;
     }
 
-    Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 30, NA_SE_EV_ICE_BROKEN);
+    SoundSource_PlaySfxByPos(globalCtx, &this->actor.world.pos, 30, NA_SE_EV_ICE_BROKEN);
 
     for (i = 0; i < end; i++) {
         yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_234[i]);

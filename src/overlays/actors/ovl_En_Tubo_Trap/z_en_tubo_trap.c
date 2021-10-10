@@ -168,7 +168,7 @@ void EnTuboTrap_HandleImpact(EnTuboTrap* this, GlobalContext* globalCtx) {
 
     if ((this->actor.bgCheckFlags & 0x20) && (this->actor.yDistToWater > 15.0f)) {
         EnTuboTrap_SpawnEffectsInWater(this, globalCtx);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_BOMB_DROP_WATER);
+        SoundSource_PlaySfxByPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_BOMB_DROP_WATER);
         EnTuboTrap_DropCollectible(this, globalCtx);
         Actor_MarkForDeath(&this->actor);
         return;
@@ -177,8 +177,8 @@ void EnTuboTrap_HandleImpact(EnTuboTrap* this, GlobalContext* globalCtx) {
     if (this->collider.base.atFlags & AT_BOUNCED) {
         this->collider.base.atFlags &= ~AT_BOUNCED;
         EnTuboTrap_SpawnEffectsOnLand(this, globalCtx);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_IT_SHIELD_REFLECT_SW);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_POT_BROKEN);
+        SoundSource_PlaySfxByPos(globalCtx, &this->actor.world.pos, 40, NA_SE_IT_SHIELD_REFLECT_SW);
+        SoundSource_PlaySfxByPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_POT_BROKEN);
         EnTuboTrap_DropCollectible(this, globalCtx);
         Actor_MarkForDeath(&this->actor);
         return;
@@ -187,8 +187,8 @@ void EnTuboTrap_HandleImpact(EnTuboTrap* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
         EnTuboTrap_SpawnEffectsOnLand(this, globalCtx);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_EXPLOSION);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_POT_BROKEN);
+        SoundSource_PlaySfxByPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_EXPLOSION);
+        SoundSource_PlaySfxByPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_POT_BROKEN);
         EnTuboTrap_DropCollectible(this, globalCtx);
         Actor_MarkForDeath(&this->actor);
         return;
@@ -199,8 +199,8 @@ void EnTuboTrap_HandleImpact(EnTuboTrap* this, GlobalContext* globalCtx) {
 
         if (&player->actor == this->collider.base.at) {
             EnTuboTrap_SpawnEffectsOnLand(this, globalCtx);
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_POT_BROKEN);
-            Audio_PlaySoundAtPosition(globalCtx, &player2->actor.world.pos, 40, NA_SE_PL_BODY_HIT);
+            SoundSource_PlaySfxByPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_POT_BROKEN);
+            SoundSource_PlaySfxByPos(globalCtx, &player2->actor.world.pos, 40, NA_SE_PL_BODY_HIT);
             EnTuboTrap_DropCollectible(this, globalCtx);
             Actor_MarkForDeath(&this->actor);
             return;
@@ -209,7 +209,7 @@ void EnTuboTrap_HandleImpact(EnTuboTrap* this, GlobalContext* globalCtx) {
 
     if ((this->actor.bgCheckFlags & 8) || (this->actor.bgCheckFlags & 1)) {
         EnTuboTrap_SpawnEffectsOnLand(this, globalCtx);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_POT_BROKEN);
+        SoundSource_PlaySfxByPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_POT_BROKEN);
         EnTuboTrap_DropCollectible(this, globalCtx);
         Actor_MarkForDeath(&this->actor);
     }

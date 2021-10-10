@@ -1124,11 +1124,11 @@ asm/non_matchings/code/z_eff_footmark/EffFootmark_Init.s,EffFootmark_Init,0x800E
 asm/non_matchings/code/z_eff_footmark/EffFootmark_Add.s,EffFootmark_Add,0x800EFF04,0x6E
 asm/non_matchings/code/z_eff_footmark/EffFootmark_Update.s,EffFootmark_Update,0x800F00BC,0x43
 asm/non_matchings/code/z_eff_footmark/EffFootmark_Draw.s,EffFootmark_Draw,0x800F01C8,0x72
-asm/non_matchings/code/code_800F0390/func_800F0390.s,func_800F0390,0x800F0390,0xC
-asm/non_matchings/code/code_800F0390/func_800F03C0.s,func_800F03C0,0x800F03C0,0x33
-asm/non_matchings/code/code_800F0390/func_800F048C.s,func_800F048C,0x800F048C,0x37
-asm/non_matchings/code/code_800F0390/func_800F0568.s,func_800F0568,0x800F0568,0xA
-asm/non_matchings/code/code_800F0390/func_800F0590.s,func_800F0590,0x800F0590,0xC
+asm/non_matchings/code/z_sound_source/SoundSource_InitAll.s,SoundSource_InitAll,0x800F0390,0xC
+asm/non_matchings/code/z_sound_source/SoundSource_UpdateAll.s,SoundSource_UpdateAll,0x800F03C0,0x33
+asm/non_matchings/code/z_sound_source/SoundSource_Add.s,SoundSource_Add,0x800F048C,0x37
+asm/non_matchings/code/z_sound_source/SoundSource_PlaySfxByPos.s,SoundSource_PlaySfxByPos,0x800F0568,0xA
+asm/non_matchings/code/z_sound_source/SoundSource_PlaySfxByPosWithReplays.s,SoundSource_PlaySfxByPosWithReplays,0x800F0590,0xC
 asm/non_matchings/code/z_elf_message/func_800F05C0.s,func_800F05C0,0x800F05C0,0x80
 asm/non_matchings/code/code_800F07C0/func_800F07C0.s,func_800F07C0,0x800F07C0,0x32
 asm/non_matchings/code/code_800F07C0/func_800F0888.s,func_800F0888,0x800F0888,0x2F
@@ -3388,7 +3388,7 @@ asm/non_matchings/code/code_8019AF00/func_8019F05C.s,func_8019F05C,0x8019F05C,0x
 asm/non_matchings/code/code_8019AF00/play_sound.s,play_sound,0x8019F0C8,0x18
 asm/non_matchings/code/code_8019AF00/func_8019F128.s,func_8019F128,0x8019F128,0x12
 asm/non_matchings/code/code_8019AF00/func_8019F170.s,func_8019F170,0x8019F170,0x14
-asm/non_matchings/code/code_8019AF00/func_8019F1C0.s,func_8019F1C0,0x8019F1C0,0x12
+asm/non_matchings/code/code_8019AF00/Audio_PlaySfxByPos.s,Audio_PlaySfxByPos,0x8019F1C0,0x12
 asm/non_matchings/code/code_8019AF00/func_8019F208.s,func_8019F208,0x8019F208,0xA
 asm/non_matchings/code/code_8019AF00/func_8019F230.s,func_8019F230,0x8019F230,0xA
 asm/non_matchings/code/code_8019AF00/func_8019F258.s,func_8019F258,0x8019F258,0x2A
@@ -3560,7 +3560,7 @@ asm/non_matchings/code/code_801A5BD0/func_801A6D0C.s,func_801A6D0C,0x801A6D0C,0x
 asm/non_matchings/code/code_801A5BD0/func_801A7084.s,func_801A7084,0x801A7084,0x39
 asm/non_matchings/code/code_801A5BD0/func_801A7168.s,func_801A7168,0x801A7168,0x47
 asm/non_matchings/code/code_801A5BD0/func_801A7284.s,func_801A7284,0x801A7284,0x12
-asm/non_matchings/code/code_801A5BD0/func_801A72CC.s,func_801A72CC,0x801A72CC,0x17
+asm/non_matchings/code/code_801A5BD0/Audio_StopSfxByPos.s,Audio_StopSfxByPos,0x801A72CC,0x17
 asm/non_matchings/code/code_801A5BD0/func_801A7328.s,func_801A7328,0x801A7328,0x57
 asm/non_matchings/code/code_801A5BD0/func_801A7484.s,func_801A7484,0x801A7484,0x59
 asm/non_matchings/code/code_801A5BD0/func_801A75E8.s,func_801A75E8,0x801A75E8,0x4E

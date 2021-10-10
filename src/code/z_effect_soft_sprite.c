@@ -55,11 +55,11 @@ EffectSs* EffectSS_GetTable() {
 
 void EffectSS_Delete(EffectSs* effectSs) {
     if (effectSs->flags & 2) {
-        func_801A72CC(&effectSs->pos);
+        Audio_StopSfxByPos(&effectSs->pos);
     }
 
     if (effectSs->flags & 4) {
-        func_801A72CC(&effectSs->vec);
+        Audio_StopSfxByPos(&effectSs->vec);
     }
 
     EffectSS_ResetEntry(effectSs);

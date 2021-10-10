@@ -2372,7 +2372,7 @@ void func_80B47D30(Actor* thisx, GlobalContext* globalCtx) {
         thisx->gravity = 0.0f;
         thisx->velocity.y = acAttached->velocity.y * 0.5f;
         thisx->velocity.y = CLAMP(thisx->velocity.y, -30.0f, 30.0f);
-        Audio_PlaySoundAtPosition(globalCtx, &thisx->world.pos, 50, NA_SE_EN_INVADER_DEAD);
+        SoundSource_PlaySfxByPos(globalCtx, &thisx->world.pos, 50, NA_SE_EN_INVADER_DEAD);
         func_80B47830(this);
     }
 
