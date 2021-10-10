@@ -3583,7 +3583,6 @@ beginseg
     name "ovl_En_Elforg"
     compress
     include "build/src/overlays/actors/ovl_En_Elforg/z_en_elforg.o"
-    include "build/data/ovl_En_Elforg/ovl_En_Elforg.data.o"
     include "build/data/ovl_En_Elforg/ovl_En_Elforg.reloc.o"
 endseg
 

@@ -9,7 +9,6 @@ void EnElforg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnElforg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnElforg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
 const ActorInit En_Elforg_InitVars = {
     ACTOR_EN_ELFORG,
     ACTORCAT_ITEMACTION,
@@ -29,9 +28,14 @@ static ColliderCylinderInit D_80ACDA30 = {
     { 16, 32, 0, { 0, 0, 0 } },
 };
 
-#endif
 
-extern ColliderCylinderInit D_80ACDA30;
+static s32 D_80ACDA5C[] = { 0x00000000, 0xBD4CCCCD, 0x00000000 };
+
+static s32 D_80ACDA68[] = { 0x00000000, 0xBCCCCCCD, 0x00000000 };
+
+static s32 D_80ACDA74[] = { 0xFFEBDCFF, 0xFFDCDCFF, 0xDCFFDCFF, 0xDCDCFFFF, 0xFFFFC8FF };
+
+static s32 D_80ACDA88[] = { 0xFF9600FF, 0xFF0000FF, 0x00FF00FF, 0x0000FFFF, 0xFFFF00FF };
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACC470.s")
 
