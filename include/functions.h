@@ -3174,7 +3174,7 @@ void* Graph_FaultAddrConvFunc(void* address, void* param);
 void Graph_Init(GraphicsContext* gfxCtx);
 void Graph_Destroy(GraphicsContext* gfxCtx);
 void Graph_TaskSet00(GraphicsContext* gfxCtx, GameState* gameState);
-void Graph_UpdateGame(GameState* state);
+void Graph_UpdateGame(GameState* gameState);
 void Graph_ExecuteAndDraw(GraphicsContext* gfxCtx, GameState* gameState);
 void Graph_Update(GraphicsContext* gfxCtx, GameState* gameState);
 void Graph_ThreadEntry(void* arg);

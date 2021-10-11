@@ -1230,8 +1230,8 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
     s32 i;
 
     gSegments[0] = 0;
-    gSegments[15] = gfxCtx->curFrameBuffer;
-    gSegments[14] = gGfxMasterDL;
+    gSegments[0xF] = gfxCtx->curFrameBuffer;
+    gSegments[0xE] = gGfxMasterDL;
 
     zbuffer = gfxCtx->zbuffer;
 

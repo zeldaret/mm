@@ -99,7 +99,7 @@ typedef struct {
 #define OS_VI_PAL_HPN2      26
 #define OS_VI_PAL_HPF2      27
 
-#define OS_VI_MPAL_LPN1     28	/* MPAL */
+#define OS_VI_MPAL_LPN1     28  /* MPAL */
 #define OS_VI_MPAL_LPF1     29
 #define OS_VI_MPAL_LAN1     30
 #define OS_VI_MPAL_LAF1     31

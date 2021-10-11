@@ -102,12 +102,12 @@ void GameState_Draw(GameState* gamestate, GraphicsContext* gfxCtx) {
 }
 
 void Game_ResetSegments(GraphicsContext* gfxCtx) {
-    gSPSegment(gfxCtx->polyOpa.p++, 0, 0);
-    gSPSegment(gfxCtx->polyOpa.p++, 0xF, gfxCtx->curFrameBuffer);
-    gSPSegment(gfxCtx->polyXlu.p++, 0, 0);
-    gSPSegment(gfxCtx->polyXlu.p++, 0xF, gfxCtx->curFrameBuffer);
-    gSPSegment(gfxCtx->overlay.p++, 0, 0);
-    gSPSegment(gfxCtx->overlay.p++, 0xF, gfxCtx->curFrameBuffer);
+    gSPSegment(gfxCtx->polyOpa.p++, 0x00, 0);
+    gSPSegment(gfxCtx->polyOpa.p++, 0x0F, gfxCtx->curFrameBuffer);
+    gSPSegment(gfxCtx->polyXlu.p++, 0x00, 0);
+    gSPSegment(gfxCtx->polyXlu.p++, 0x0F, gfxCtx->curFrameBuffer);
+    gSPSegment(gfxCtx->overlay.p++, 0x00, 0);
+    gSPSegment(gfxCtx->overlay.p++, 0x0F, gfxCtx->curFrameBuffer);
 }
 
 void func_801736DC(GraphicsContext* gfxCtx) {

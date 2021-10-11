@@ -140,9 +140,8 @@ void Graph_Destroy(GraphicsContext* gfxCtx) {
  * If it does not signal completion in that time, retry or trigger a crash.
  */
 void Graph_TaskSet00(GraphicsContext* gfxCtx, GameState* gameState) {
-    static s32 retryCount = 10; // retry count?
+    static s32 retryCount = 10;
     static s32 cfbIdx = 0;
-
     OSTask_t* task = &gfxCtx->task.list.t;
     OSScTask* scTask = &gfxCtx->task;
     OSTimer timer;
@@ -232,9 +231,9 @@ retry:
     Sched_SendEntryMsg(&gSchedContext);
 }
 
-void Graph_UpdateGame(GameState* state) {
-    Game_UpdateInput(state);
-    Game_IncrementFrameCount(state);
+void Graph_UpdateGame(GameState* gameState) {
+    Game_UpdateInput(gameState);
+    Game_IncrementFrameCount(gameState);
     if (SREG(20) < 3) {
         func_8019E014();
     }

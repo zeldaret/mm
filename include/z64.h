@@ -249,8 +249,8 @@ typedef struct {
     /* 0x0014 */ s16 data[2784]; // Accessed through REG macros
 } GameInfo; // size = 0x15D4
 
-typedef struct IrqMgrClient_t {
-    /* 0x0 */ struct IrqMgrClient_t* next;
+typedef struct IrqMgrClient {
+    /* 0x0 */ struct IrqMgrClient* next;
     /* 0x4 */ OSMesgQueue* queue;
 } IrqMgrClient; // size = 0x8
 
@@ -288,18 +288,18 @@ typedef struct {
 } TwoHeadGfxArena; // size = 0x10
 
 typedef struct {
-    /* 0x0000 0x00 */ Gfx taskStart[9];
-    /* 0x0048 0x09 */ Gfx clearZBuffer[8];      // original name: clear_zb_dl
-    /* 0x0088 0x11 */ Gfx clearFrameBuffer[5];  // original name: clear_fb_dl
-    /* 0x00B0 0x16 */ Gfx setupBuffers[6];      // setup framebuffer and zbuffer
-    /* 0x00E0 0x1C */ Gfx unk_E0[12];           // unused
-    /* 0x0140 0x28 */ Gfx syncSegments[17];
-    /* 0x01C8 0x39 */ Gfx setScissor[2];
-    /* 0x01D8 0x41 */ Gfx unk_1D8[25];          // unused
-    /* 0x02A0 0x54 */ Gfx disps[5];
-    /* 0x02C8 0x59 */ Gfx clearFillRect[3];     // fillrect for clearing buffers
-    /* 0x02E0 0x5C */ Gfx fillRect[3];          // fillrect for general purpose
-    /* 0x02F8 0x5F */ Gfx debugDisp[1];
+    /* 0x000 0x00 */ Gfx taskStart[9];
+    /* 0x048 0x09 */ Gfx clearZBuffer[8];       // original name: clear_zb_dl
+    /* 0x088 0x11 */ Gfx clearFrameBuffer[5];   // original name: clear_fb_dl
+    /* 0x0B0 0x16 */ Gfx setupBuffers[6];       // setup framebuffer and zbuffer
+    /* 0x0E0 0x1C */ Gfx unk_E0[12];            // unused
+    /* 0x140 0x28 */ Gfx syncSegments[17];
+    /* 0x1C8 0x39 */ Gfx setScissor[2];
+    /* 0x1D8 0x41 */ Gfx unk_1D8[25];           // unused
+    /* 0x2A0 0x54 */ Gfx disps[5];
+    /* 0x2C8 0x59 */ Gfx clearFillRect[3];      // fillrect for clearing buffers
+    /* 0x2E0 0x5C */ Gfx fillRect[3];           // fillrect for general purpose
+    /* 0x2F8 0x5F */ Gfx debugDisp[1];
 } GfxMasterList; // size = 0x300
 
 #define GFXPOOL_HEAD_MAGIC 0x1234
@@ -393,25 +393,25 @@ typedef struct GraphicsContext {
 } GraphicsContext; // size = 0x300
 
 typedef struct {
-    /* 0x0000 */ OSMesgQueue interruptQ;
-    /* 0x0018 */ OSMesg      intBuf[64];
-    /* 0x0118 */ OSMesgQueue cmdQ;
-    /* 0x0130 */ OSMesg      cmdMsgBuf[8];
-    /* 0x0150 */ OSThread    thread;
-    /* 0x0300 */ OSScTask*   audioListHead;
-    /* 0x0304 */ OSScTask*   gfxListHead;
-    /* 0x0308 */ OSScTask*   audioListTail;
-    /* 0x030C */ OSScTask*   gfxListTail;
-    /* 0x0310 */ OSScTask*   curRSPTask;
-    /* 0x0314 */ OSScTask*   curRDPTask;
-    /* 0x0318 */ s32         retraceCount;
-    /* 0x0318 */ s32         doAudio;
-    /* 0x0320 */ CfbInfo*    curBuf;
-    /* 0x0324 */ CfbInfo*    pendingSwapBuf1;
-    /* 0x0328 */ CfbInfo*    pendingSwapBuf2;
-    /* 0x032C */ char unk_32C[0x3];
-    /* 0x032F */ u8 shouldUpdateVi;
-    /* 0x0330 */ IrqMgrClient irqClient;
+    /* 0x000 */ OSMesgQueue interruptQ;
+    /* 0x018 */ OSMesg      intBuf[64];
+    /* 0x118 */ OSMesgQueue cmdQ;
+    /* 0x130 */ OSMesg      cmdMsgBuf[8];
+    /* 0x150 */ OSThread    thread;
+    /* 0x300 */ OSScTask*   audioListHead;
+    /* 0x304 */ OSScTask*   gfxListHead;
+    /* 0x308 */ OSScTask*   audioListTail;
+    /* 0x30C */ OSScTask*   gfxListTail;
+    /* 0x310 */ OSScTask*   curRSPTask;
+    /* 0x314 */ OSScTask*   curRDPTask;
+    /* 0x318 */ s32         retraceCount;
+    /* 0x318 */ s32         doAudio;
+    /* 0x320 */ CfbInfo*    curBuf;
+    /* 0x324 */ CfbInfo*    pendingSwapBuf1;
+    /* 0x328 */ CfbInfo*    pendingSwapBuf2;
+    /* 0x32C */ char unk_32C[0x3];
+    /* 0x32F */ u8 shouldUpdateVi;
+    /* 0x330 */ IrqMgrClient irqClient;
 } SchedContext; // size = 0x338
 
 typedef enum IRQ_MSG_TYPE {
@@ -1069,12 +1069,12 @@ typedef struct ActorEnTest ActorEnTest;
 
 typedef struct ActorListEntry ActorListEntry;
 
-typedef struct ArenaNode_t {
+typedef struct ArenaNode {
     /* 0x0 */ s16 magic; // Should always be 0x7373
     /* 0x2 */ s16 isFree;
     /* 0x4 */ u32 size;
-    /* 0x8 */ struct ArenaNode_t* next;
-    /* 0xC */ struct ArenaNode_t* prev;
+    /* 0x8 */ struct ArenaNode* next;
+    /* 0xC */ struct ArenaNode* prev;
 } ArenaNode; // size = 0x10
 
 typedef struct {
@@ -1366,9 +1366,9 @@ typedef struct {
     /* 0x47F */ UNK_TYPE1 pad47F[0x1];
 } PadMgr; // size = 0x480
 
-typedef struct StackEntry_t {
-    /* 0x00 */ struct StackEntry_t* next;
-    /* 0x04 */ struct StackEntry_t* prev;
+typedef struct StackEntry {
+    /* 0x00 */ struct StackEntry* next;
+    /* 0x04 */ struct StackEntry* prev;
     /* 0x08 */ u32 head;
     /* 0x0C */ u32 tail;
     /* 0x10 */ u32 initValue;

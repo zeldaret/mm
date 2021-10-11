@@ -215,7 +215,7 @@ void SkelAnime_LodDrawSV(GlobalContext* globalCtx, void** skeleton, Vec3s* limbD
 
     gfxCtx = globalCtx->state.gfxCtx;
 
-    gSPSegment(gfxCtx->polyOpa.p++, 0xD, mtx);
+    gSPSegment(gfxCtx->polyOpa.p++, 0x0D, mtx);
     SysMatrix_StatePush();
 
     limbEntry = (StandardLimb*)Lib_SegmentedToVirtual(skeleton[0]);
@@ -426,7 +426,7 @@ void SkelAnime_DrawSV(GlobalContext* globalCtx, void** skeleton, Vec3s* limbDraw
 
     gfxCtx = globalCtx->state.gfxCtx;
 
-    gSPSegment(gfxCtx->polyOpa.p++, 0xD, mtx);
+    gSPSegment(gfxCtx->polyOpa.p++, 0x0D, mtx);
 
     SysMatrix_StatePush();
 
@@ -548,7 +548,7 @@ void func_801343C0(GlobalContext* globalCtx, void** skeleton, Vec3s* limbDrawTab
 
     mtx = (RSPMatrix*)GRAPH_ALLOC(globalCtx->state.gfxCtx, ALIGN16(sizeof(RSPMatrix) * dListCount));
 
-    gSPSegment(gfxCtx->polyOpa.p++, 0xD, mtx);
+    gSPSegment(gfxCtx->polyOpa.p++, 0x0D, mtx);
 
     SysMatrix_StatePush();
 
@@ -805,7 +805,7 @@ Gfx* SkelAnime_DrawSV2(GlobalContext* globalCtx, void** skeleton, Vec3s* limbDra
 
     mtx = (RSPMatrix*)GRAPH_ALLOC(globalCtx->state.gfxCtx, ALIGN16(sizeof(RSPMatrix) * dListCount));
 
-    gSPSegment(gfx++, 0xD, mtx);
+    gSPSegment(gfx++, 0x0D, mtx);
 
     SysMatrix_StatePush();
 
