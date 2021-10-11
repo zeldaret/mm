@@ -1,9 +1,8 @@
 #pragma once
 
+#include <Utils/Directory.h>
 #include <string>
 #include <vector>
-#include "Directory.h"
-#include "ZResource.h"
 #include "ZTexture.h"
 #include "tinyxml2.h"
 
@@ -11,13 +10,12 @@ enum class ZFileMode
 {
 	BuildTexture,
 	BuildOverlay,
-	BuildModelIntermediette,
-	BuildAnimationIntermediette,
 	BuildBlob,
 	BuildSourceFile,
 	BuildBackground,
 	Extract,
-	Invalid
+	Invalid,
+	Custom = 1000  // Used for exporter file modes
 };
 
 enum class ZGame
@@ -60,9 +58,6 @@ public:
 	                                 std::string varType, std::string varName, size_t arrayItemCnt,
 	                                 std::string body);
 	Declaration* AddDeclarationArray(uint32_t address, DeclarationAlignment alignment, size_t size,
-	                                 std::string varType, std::string varName, size_t arrayItemCnt,
-	                                 std::string body, bool isExternal);
-	Declaration* AddDeclarationArray(uint32_t address, DeclarationAlignment alignment, size_t size,
 	                                 std::string varType, std::string varName,
 	                                 std::string arrayItemCntStr, std::string body);
 	Declaration* AddDeclarationArray(uint32_t address, DeclarationAlignment alignment,
@@ -99,6 +94,7 @@ protected:
 	fs::path outName = "";
 	fs::path basePath;
 	fs::path xmlFilePath;
+
 	// Keep track of every texture of this ZFile.
 	// The pointers declared here are "borrowed" (somebody else is the owner),
 	// so ZFile shouldn't delete/free those textures.
@@ -110,7 +106,6 @@ protected:
 	void DeclareResourceSubReferences();
 	void GenerateSourceFiles(fs::path outputDir);
 	void GenerateSourceHeaderFiles();
-	void GenerateHLIntermediette();
 	void AddDeclarationDebugChecks(uint32_t address);
 	std::string ProcessDeclarations();
 	void ProcessDeclarationText(Declaration* decl);

@@ -623,8 +623,7 @@ void EnMa4_ChooseNextDialogue(EnMa4* this, GlobalContext* globalCtx) {
                 break;
 
             case 0x3358:
-                if ((gSaveContext.playerForm != PLAYER_FORM_HUMAN) ||
-                    !(CHECK_QUEST_ITEM(14))) {
+                if ((gSaveContext.playerForm != PLAYER_FORM_HUMAN) || !(CHECK_QUEST_ITEM(14))) {
                     func_801518B0(globalCtx, 0x335C, &this->actor);
                     this->textId = 0x335C;
                     func_80151BB4(globalCtx, 5);
@@ -663,8 +662,7 @@ void EnMa4_DialogueHandler(EnMa4* this, GlobalContext* globalCtx) {
 
         case 6: // End conversation
             if (func_80147624(globalCtx) != 0) {
-                if ((globalCtx->msgCtx.unk120B1 == 0) ||
-                    !CHECK_QUEST_ITEM(18)) {
+                if ((globalCtx->msgCtx.unk120B1 == 0) || !CHECK_QUEST_ITEM(18)) {
                     EnMa4_SetupWait(this);
                 }
             }
@@ -687,7 +685,7 @@ void EnMa4_SetupBeginHorsebackGame(EnMa4* this) {
 
 void EnMa4_BeginHorsebackGame(EnMa4* this, GlobalContext* globalCtx) {
     globalCtx->nextEntranceIndex = 0x6400;
-    gSaveContext.unk_3F4A = 0xFFF0;
+    gSaveContext.nextCutsceneIndex = 0xFFF0;
     globalCtx->sceneLoadFlag = 0x14;
     globalCtx->unk_1887F = 0x50;
     gSaveContext.nextTransition = 3;
@@ -752,8 +750,8 @@ void EnMa4_HorsebackGameWait(EnMa4* this, GlobalContext* globalCtx) {
 void EnMa4_SetupHorsebackGameEnd(EnMa4* this, GlobalContext* globalCtx) {
     gSaveContext.weekEventReg[0x8] &= (u8)~0x01;
     this->actionFunc = EnMa4_HorsebackGameEnd;
-    func_801A89A8(0x100000FF);
-    func_801A89A8(0x8041);
+    Audio_QueueSeqCmd(NA_BGM_STOP);
+    Audio_QueueSeqCmd(0x8041);
 }
 
 void EnMa4_HorsebackGameEnd(EnMa4* this, GlobalContext* globalCtx) {
@@ -778,7 +776,7 @@ void EnMa4_HorsebackGameEnd(EnMa4* this, GlobalContext* globalCtx) {
     } else if (sFrameCounter == 50) {
         globalCtx->actorCtx.unk268 = 0;
         globalCtx->nextEntranceIndex = 0x6410;
-        gSaveContext.unk_3F4A = 0;
+        gSaveContext.nextCutsceneIndex = 0;
         sFrameCounter = 0;
         globalCtx->sceneLoadFlag = 0x14;
 
@@ -885,7 +883,7 @@ void EnMa4_SetupBeginDescribeThemCs(EnMa4* this) {
 
 void EnMa4_BeginDescribeThemCs(EnMa4* this, GlobalContext* globalCtx) {
     globalCtx->nextEntranceIndex = 0x6400;
-    gSaveContext.unk_3F4A = 0xFFF5;
+    gSaveContext.nextCutsceneIndex = 0xFFF5;
     globalCtx->sceneLoadFlag = 0x14;
     globalCtx->unk_1887F = 0x40;
     gSaveContext.nextTransition = 2;

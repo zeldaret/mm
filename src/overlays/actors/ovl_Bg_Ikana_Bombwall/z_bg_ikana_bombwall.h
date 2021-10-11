@@ -5,7 +5,7 @@
 
 struct BgIkanaBombwall;
 
-typedef void (*BgIkanaBombwallActionFunc)(struct BgIkanaBombwall* this, GlobalContext* globalCtx);
+typedef void (*BgIkanaBombwallActionFunc)(struct BgIkanaBombwall*, GlobalContext*);
 
 typedef struct BgIkanaBombwall {
     /* 0x0000 */ Actor actor;

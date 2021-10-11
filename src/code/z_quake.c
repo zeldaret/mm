@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 
 QuakeRequest sQuakeRequest[4];

@@ -3,15 +3,20 @@
 
 #include "global.h"
 
+#define LIGHTBLOCK_TYPE(thisx) ((thisx)->params & 1)
+#define LIGHTBLOCK_DESTROYED(thisx) (((thisx)->params >> 8) & 0x7F)
+
 struct ObjLightblock;
 
-typedef void (*ObjLightblockActionFunc)(struct ObjLightblock* this, GlobalContext* globalCtx);
+typedef void (*ObjLightblockActionFunc)(struct ObjLightblock*, GlobalContext*);
 
 typedef struct ObjLightblock {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x64];
+    /* 0x0000 */ DynaPolyActor dyna;
+    /* 0x015C */ ColliderCylinder collider;
     /* 0x01A8 */ ObjLightblockActionFunc actionFunc;
-    /* 0x01AC */ char unk_1AC[0x4];
+    /* 0x01AC */ s8 timer;
+    /* 0x01AD */ u8 alpha;
+    /* 0x01AE */ s8 collisionCounter;
 } ObjLightblock; // size = 0x1B0
 
 extern const ActorInit Obj_Lightblock_InitVars;

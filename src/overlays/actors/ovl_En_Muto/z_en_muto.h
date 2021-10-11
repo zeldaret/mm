@@ -5,7 +5,7 @@
 
 struct EnMuto;
 
-typedef void (*EnMutoActionFunc)(struct EnMuto* this, GlobalContext* globalCtx);
+typedef void (*EnMutoActionFunc)(struct EnMuto*, GlobalContext*);
 
 typedef struct EnMuto {
     /* 0x0000 */ Actor actor;

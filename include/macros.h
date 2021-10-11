@@ -1,8 +1,9 @@
 #ifndef _MACROS_H_
 #define _MACROS_H_
 
-#include "convert.h"
 #include "stdint.h"
+#include "convert.h"
+#include "z64.h"
 
 #define ARRAY_COUNT(arr) (s32)(sizeof(arr) / sizeof(arr[0]))
 #define ARRAY_COUNTU(arr) (u32)(sizeof(arr) / sizeof(arr[0]))
@@ -19,21 +20,36 @@
 // Currently most often called ctxt in MM, TODO: Refactor names when its used
 #define ACTIVE_CAM globalCtx->cameraPtrs[globalCtx->activeCamera]
 #define MAIN_CAM 0
+#define SUBCAM_FREE 0
 
 #define SET_NEXT_GAMESTATE(curState, newInit, newStruct)    \
     (curState)->nextGameStateInit = (GameStateFunc)newInit; \
     (curState)->nextGameStateSize = sizeof(newStruct)
 
+#define SET_FULLSCREEN_VIEWPORT(view)      \
+    {                                      \
+        Viewport viewport;                 \
+        viewport.bottomY = SCREEN_HEIGHT;  \
+        viewport.rightX = SCREEN_WIDTH;    \
+        viewport.topY = 0;                 \
+        viewport.leftX = 0;                \
+        View_SetViewport(view, &viewport); \
+    }                                      \
+    (void)0
+
 #define PLAYER ((Player*)globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first)
+
+#define FIRST_ENEMY ((Actor*)globalCtx->actorCtx.actorList[ACTORCAT_ENEMY].first)
 
 // linkAge still exists in MM, but is always set to 0 (always adult)
 // There are remnants of these macros from OOT, but they are essentially useless
 //#define LINK_IS_CHILD (gSaveContext.linkAge != 0)
 #define LINK_IS_ADULT (gSaveContext.linkAge == 0)
 
-#define CURRENT_DAY (gSaveContext.day % 5)
+#define CURRENT_DAY (((void)0, gSaveContext.day) % 5)
 
 #define CLOCK_TIME(hr, min) ((s32)(((hr) * 60 + (min)) * 0x10000 / (24 * 60)))
+#define CLOCK_TIME_MINUTE  (CLOCK_TIME(0, 1))
 
 #define SLOT(item) gItemSlots[item]
 #define AMMO(item) gSaveContext.inventory.ammo[SLOT(item)]
@@ -49,7 +65,10 @@
 #define ALL_EQUIP_VALUE(equip) ((gSaveContext.inventory.equipment & gEquipMasks[equip]) >> gEquipShifts[equip])
 #define CUR_EQUIP_VALUE(equip) ((gSaveContext.equips.equipment & gEquipMasks[equip]) >> gEquipShifts[equip])
 #define CUR_UPG_VALUE(upg) ((gSaveContext.inventory.upgrades & gUpgradeMasks[upg]) >> gUpgradeShifts[upg])
+#define TAKE_EQUIPPED_ITEM(equip) (gSaveContext.equips.equipment = ((((void)0, gSaveContext.equips.equipment) & (gEquipNegMasks[equip])) | (u16)(0 << gEquipShifts[equip])))
+#define CUR_FORM_EQUIP(button) (gSaveContext.equips.buttonItems[gSaveContext.playerForm == PLAYER_FORM_HUMAN ? 0 : gSaveContext.playerForm][button])
 #define CHECK_QUEST_ITEM(item) (((void)0, gSaveContext.inventory.questItems) & gBitFlags[item])
+#define REMOVE_QUEST_ITEM(item) (gSaveContext.inventory.questItems = (((void)0, gSaveContext.inventory.questItems) & (-1 - gBitFlags[item])))
 
 #define CAPACITY(upg, value) gUpgradeCapacities[upg][value]
 #define CUR_CAPACITY(upg) CAPACITY(upg, CUR_UPG_VALUE(upg) - 4)
@@ -112,6 +131,8 @@ extern GraphicsContext* __gfxCtx;
 #define CLAMP(x, min, max) ((x) < (min) ? (min) : (x) > (max) ? (max) : (x))
 #define CLAMP_MAX(x, max) ((x) > (max) ? (max) : (x))
 #define CLAMP_MIN(x, min) ((x) < (min) ? (min) : (x))
+
+#define ROUND(x) (s32)(((x) >= 0.0) ? ((x) + 0.5) : ((x) - 0.5))
 
 #define SWAP(type, a, b)  \
     {                     \

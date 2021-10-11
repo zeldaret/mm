@@ -48,7 +48,7 @@ void Graph_SetNextGfxPool(GraphicsContext* gfxCtx) {
     gfxCtx->workBuffer = pool->workBuffer;
     gfxCtx->debugBuffer = pool->debugBuffer;
 
-    gfxCtx->curFrameBuffer = SysCfb_GetFbPtr(gfxCtx->framebufferIdx % 2);
+    gfxCtx->curFrameBuffer = (u16*)SysCfb_GetFbPtr(gfxCtx->framebufferIdx % 2);
     gSegments[0x0F] = gfxCtx->curFrameBuffer;
 
     gfxCtx->zbuffer = SysCfb_GetZBuffer();
@@ -344,12 +344,12 @@ void Graph_ThreadEntry(void* arg) {
     u32 size;
     s32 pad[2];
 
-    gZBuffer = StartHeap_Alloc(sizeof(*gZBuffer) + sizeof(*gWorkBuffer) + 64 - 1);
+    gZBuffer = SystemArena_Malloc(sizeof(*gZBuffer) + sizeof(*gWorkBuffer) + 64 - 1);
     gZBuffer = (void*)ALIGN64((u32)gZBuffer);
 
     gWorkBuffer = (void*)((u8*)gZBuffer + sizeof(*gZBuffer));
 
-    gGfxSPTaskOutputBuffer2 = gGfxSPTaskOutputBuffer = StartHeap_Alloc(sizeof(*gGfxSPTaskOutputBuffer));
+    gGfxSPTaskOutputBuffer2 = gGfxSPTaskOutputBuffer = SystemArena_Malloc(sizeof(*gGfxSPTaskOutputBuffer));
 
     gGfxSPTaskOutputBufferEnd = (u8*)gGfxSPTaskOutputBuffer + sizeof(*gGfxSPTaskOutputBuffer);
     gGfxSPTaskOutputBufferEnd2 = (u8*)gGfxSPTaskOutputBuffer2 + sizeof(*gGfxSPTaskOutputBuffer2);
@@ -367,7 +367,7 @@ void Graph_ThreadEntry(void* arg) {
 
         func_800809F4(ovl->vromStart);
 
-        gameState = StartHeap_Alloc(size);
+        gameState = SystemArena_Malloc(size);
 
         bzero(gameState, size);
         Game_StateInit(gameState, ovl->init, &gfxCtx);
@@ -381,7 +381,7 @@ void Graph_ThreadEntry(void* arg) {
         if (size) {}
 
         Game_StateFini(gameState);
-        StartHeap_Free(gameState);
+        SystemArena_Free(gameState);
 
         DLF_FreeGameState(ovl);
     }
