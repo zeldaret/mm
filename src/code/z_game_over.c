@@ -29,16 +29,16 @@ void GameOver_Update(GlobalContext* globalCtx) {
 
             gSaveContext.eventInf[1] &= ~1;
 
-            if (CUR_TRANSFORMATION == 0) {
-                if (gSaveContext.equips.buttonItems[CUR_TRANSFORMATION][0] != ITEM_SWORD_KOKIRI &&
-                    gSaveContext.equips.buttonItems[CUR_TRANSFORMATION][0] != ITEM_SWORD_RAZOR &&
-                    gSaveContext.equips.buttonItems[CUR_TRANSFORMATION][0] != ITEM_SWORD_GILDED &&
-                    gSaveContext.equips.buttonItems[CUR_TRANSFORMATION][0] != ITEM_SWORD_DEITY) {
+            if (CUR_FORM == 0) {
+                if (CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_KOKIRI &&
+                    CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_RAZOR &&
+                    CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_GILDED &&
+                    CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_DEITY) {
 
                     if (gSaveContext.buttonStatus[0] != BTN_ENABLED) {
-                        gSaveContext.equips.buttonItems[CUR_TRANSFORMATION][0] = gSaveContext.buttonStatus[0];
+                        CUR_FORM_EQUIP(EQUIP_SLOT_B) = gSaveContext.buttonStatus[0];
                     } else {
-                        gSaveContext.equips.buttonItems[CUR_TRANSFORMATION][0] = ITEM_NONE;
+                        CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_NONE;
                     }
                 }
             }

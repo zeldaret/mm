@@ -17,7 +17,7 @@ pipeline {
         }
         stage('Check setup warnings') {
             steps {
-                sh 'python3 tools/warnings_count/compare_warnings.py tools/warnings_count/warnings_setup_current.txt tools/warnings_count/warnings_setup_new.txt'
+                sh 'bash -c "./tools/warnings_count/compare_warnings.sh setup"'
             }
         }
         stage('Disasm') {
@@ -27,7 +27,7 @@ pipeline {
         }
         stage('Check disasm warnings') {
             steps {
-                sh 'python3 tools/warnings_count/compare_warnings.py tools/warnings_count/warnings_disasm_current.txt tools/warnings_count/warnings_disasm_new.txt'
+                sh 'bash -c "./tools/warnings_count/compare_warnings.sh disasm"'
             }
         }
         stage('Build') {
@@ -37,7 +37,7 @@ pipeline {
         }
         stage('Check build warnings') {
             steps {
-                sh 'python3 tools/warnings_count/compare_warnings.py tools/warnings_count/warnings_build_current.txt tools/warnings_count/warnings_build_new.txt'
+                sh 'bash -c "./tools/warnings_count/compare_warnings.sh build"'
             }
         }
         stage('Report Progress') {

@@ -556,22 +556,22 @@ s32 func_80BA4530(EnToto* this, GlobalContext* globalCtx) {
 
 s32 func_80BA46D8(EnToto* this, GlobalContext* globalCtx) {
     func_800B7298(globalCtx, NULL, 0x44);
-    func_80152434(globalCtx, D_80BA5120[CUR_TRANSFORMATION]);
+    func_80152434(globalCtx, D_80BA5120[CUR_FORM]);
     return 0;
 }
 
 s32 func_80BA4740(EnToto* this, GlobalContext* globalCtx) {
     if (globalCtx->msgCtx.unk1202A == 4) {
-        if (gSaveContext.playerForm == 4) {
+        if (gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
             gSaveContext.weekEventReg[56] |= 0x10;
         }
-        if (gSaveContext.playerForm == 3) {
+        if (gSaveContext.playerForm == PLAYER_FORM_DEKU) {
             gSaveContext.weekEventReg[56] |= 0x20;
         }
-        if (gSaveContext.playerForm == 2) {
+        if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
             gSaveContext.weekEventReg[56] |= 0x40;
         }
-        if (gSaveContext.playerForm == 1) {
+        if (gSaveContext.playerForm == PLAYER_FORM_GORON) {
             gSaveContext.weekEventReg[56] |= 0x80;
         }
         return 1;

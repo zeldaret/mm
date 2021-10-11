@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Utils/BinaryWriter.h>
 #include <map>
 #include <stdexcept>
 #include <stdint.h>
@@ -8,7 +9,7 @@
 #include "Declaration.h"
 #include "tinyxml2.h"
 
-#include "Directory.h"
+#include <Utils/Directory.h>
 
 #define SEGMENT_SCENE 2
 #define SEGMENT_ROOM 3
@@ -23,13 +24,13 @@
 typedef uint32_t segptr_t;
 
 class ZFile;
-class HLFileIntermediette;
 
 enum class ZResourceType
 {
 	Error,
 	Animation,
 	Array,
+	AltHeader,
 	Background,
 	Blob,
 	CollisionHeader,
@@ -42,10 +43,13 @@ enum class ZResourceType
 	Room,
 	RoomCommand,
 	Scalar,
+	Scene,
 	Skeleton,
 	String,
 	Symbol,
 	Texture,
+	TextureAnimation,
+	TextureAnimationParams,
 	Vector,
 	Vertex,
 };
@@ -77,19 +81,19 @@ public:
 	virtual void ParseXML(tinyxml2::XMLElement* reader);
 	virtual void ParseRawData();
 	virtual void DeclareReferences(const std::string& prefix);
+	virtual void ParseRawDataLate();
+	virtual void DeclareReferencesLate(const std::string& prefix);
 	virtual std::string GetBodySourceCode() const;
 
 	virtual std::string GetSourceOutputCode(const std::string& prefix);
 	virtual std::string GetSourceOutputHeader(const std::string& prefix);
-	virtual void PreGenSourceFiles();
-	virtual void GenerateHLIntermediette(HLFileIntermediette& hlFile);
 	virtual void CalcHash();
 	virtual void Save(const fs::path& outFolder);
 
 	// Properties
 	virtual bool IsExternalResource() const;
 	virtual bool DoesSupportArray() const;  // Can this type be wrapped in an <Array> node?
-	virtual std::string GetSourceTypeName() const;
+	virtual std::string GetSourceTypeName() const = 0;
 	virtual ZResourceType GetResourceType() const = 0;
 	virtual std::string GetExternalExtension() const;
 
@@ -129,6 +133,14 @@ protected:
 	void RegisterOptionalAttribute(const std::string& attr, const std::string& defaultValue = "");
 };
 
+class ZResourceExporter
+{
+public:
+	ZResourceExporter() = default;
+
+	virtual void Save(ZResource* res, fs::path outPath, BinaryWriter* writer) = 0;
+};
+
 uint32_t Seg2Filespace(segptr_t segmentedAddress, uint32_t parentBaseAddress);
 
 typedef ZResource*(ZResourceFactoryFunc)(ZFile* nParent);
@@ -148,3 +160,11 @@ typedef ZResource*(ZResourceFactoryFunc)(ZFile* nParent);
 		}                                                                                          \
 	};                                                                                             \
 	static ZRes_##nodeName inst_ZRes_##nodeName
+
+#define REGISTER_EXPORTER(expFunc)                                                                 \
+	class ZResExp_##expFunc                                                                        \
+	{                                                                                              \
+	public:                                                                                        \
+		ZResExp_##expFunc() { expFunc(); }                                                         \
+	};                                                                                             \
+	static ZResExp_##expFunc inst_ZResExp_##expFunc;

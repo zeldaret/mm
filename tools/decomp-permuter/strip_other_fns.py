@@ -1,5 +1,6 @@
 import re
 import argparse
+from typing import Optional
 from pathlib import Path
 
 
@@ -26,7 +27,7 @@ def strip_other_fns(source: str, keep_fn_name: str) -> str:
     while True:
         fn_regex = re.compile(r"^.*\s+\**(\w+)\(.*\)\s*?{", re.M)
         fn = re.search(fn_regex, remain)
-        if fn == None:
+        if fn is None:
             result += remain
             remain = ""
             break
@@ -45,7 +46,9 @@ def strip_other_fns(source: str, keep_fn_name: str) -> str:
     return result
 
 
-def strip_other_fns_and_write(source: str, fn_name: str, out_filename=None) -> None:
+def strip_other_fns_and_write(
+    source: str, fn_name: str, out_filename: Optional[str] = None
+) -> None:
     stripped = strip_other_fns(source, fn_name)
 
     if out_filename is None:
@@ -55,7 +58,7 @@ def strip_other_fns_and_write(source: str, fn_name: str, out_filename=None) -> N
             f.write(stripped)
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(
         description="Remove all but a single function definition from a file."
     )

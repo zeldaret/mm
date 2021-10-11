@@ -6,6 +6,8 @@ In addition to the default `yaz`, it supports some faster and more compact algor
 
 If you add an algorithm, please make sure `valgrind` reports no memory leaks or other errors before making a pull request. Thank you!
 
+(By the way, `valgrind` works better without the `-march=native -mtune=native` optimizations, so turn those off when testing `valgrind`.)
+
 ## Usage
 This is a command line application. Learn from these common examples and adapt the arguments to your needs:
 ```

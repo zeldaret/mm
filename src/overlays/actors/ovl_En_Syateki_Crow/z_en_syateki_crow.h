@@ -5,7 +5,7 @@
 
 struct EnSyatekiCrow;
 
-typedef void (*EnSyatekiCrowActionFunc)(struct EnSyatekiCrow* this, GlobalContext* globalCtx);
+typedef void (*EnSyatekiCrowActionFunc)(struct EnSyatekiCrow*, GlobalContext*);
 
 typedef struct EnSyatekiCrow {
     /* 0x0000 */ Actor actor;

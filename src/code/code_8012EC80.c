@@ -177,18 +177,18 @@ u16 gScenesPerRegion[11][27] = {
 
 s32 func_8012EC80(GlobalContext* globalCtx) {
     if (gSaveContext.buttonStatus[0] == BTN_DISABLED) {
-        return 0xFF;
-    } else if (gSaveContext.unk_1015 == 0xFF) {
-        return 0xFF;
-    } else if (gSaveContext.equips.buttonItems[CUR_TRANSFORMATION][0] == 0xFF) {
+        return ITEM_NONE;
+    } else if (gSaveContext.unk_1015 == ITEM_NONE) {
+        return ITEM_NONE;
+    } else if (CUR_FORM_EQUIP(EQUIP_SLOT_B) == ITEM_NONE) {
         if (globalCtx->interfaceCtx.unk_21C != 0) {
             if (globalCtx->interfaceCtx.unk_21E != 0) {
                 return globalCtx->interfaceCtx.unk_21E;
             }
         }
-        return 0xFF;
+        return ITEM_NONE;
     } else {
-        return gSaveContext.equips.buttonItems[CUR_TRANSFORMATION][0];
+        return CUR_FORM_EQUIP(EQUIP_SLOT_B);
     }
 }
 
