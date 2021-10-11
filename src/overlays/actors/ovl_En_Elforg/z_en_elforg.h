@@ -12,7 +12,7 @@ typedef struct EnElforg {
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ Vec3s jointTable[10];
     /* 0x1C4 */ ColliderCylinder collider;
-    /* 0x210 */ char unk_210[0x4];
+    /* 0x210 */ Actor* enemy;
     /* 0x214 */ s16 unk_214;
     /* 0x216 */ s16 unk_216;
     /* 0x218 */ s16 unk_218;

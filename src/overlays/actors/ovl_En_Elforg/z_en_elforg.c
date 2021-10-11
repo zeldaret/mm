@@ -213,8 +213,17 @@ Actor* func_80ACD59C(EnElforg* this, GlobalContext* globalCtx) {
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACD610.s")
+void func_80ACD610(EnElforg* this, GlobalContext* globalCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACD6A8.s")
+void func_80ACD6A8(EnElforg* this, GlobalContext* globalCtx) {
+    Actor* enemy;
+
+    enemy = func_80ACD59C(this, globalCtx);
+    if (enemy != NULL && enemy->update != NULL) {
+        this->actionFunc = func_80ACD610;
+        this->enemy = enemy;
+    }
+}
 
 void func_80ACD6EC(EnElforg* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & AC_HIT) {
