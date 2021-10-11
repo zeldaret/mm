@@ -195,7 +195,28 @@ void EnElforg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACD6EC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/EnElforg_Update.s")
+void EnElforg_Update(Actor* thisx, GlobalContext* globalCtx) {
+    EnElforg* this = THIS;
+
+    this->actionFunc(this, globalCtx);
+
+    if (this->unk_21C == 0 && this->unk_220 > 0) {
+        this->unk_220--;
+    } else {
+        this->unk_21C++;
+    }
+
+    if (this->unk_216 < 0) {
+        this->unk_216++;
+        if (this->unk_216 == 0) {
+            this->unk_216 = Rand_ZeroFloat(20.0f) + 20.0f;
+        }
+    } else if (this->unk_216 > 0) {
+        this->unk_216--;
+    } else {
+        this->unk_216 = -Rand_ZeroFloat(20.0f) - 20.0f;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACD878.s")
 
