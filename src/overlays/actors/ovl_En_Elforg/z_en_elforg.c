@@ -169,7 +169,18 @@ void EnElforg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACCBB8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACCBD0.s")
+void func_80ACCBD0(EnElforg* this, GlobalContext* globalCtx) {
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    if ((this->actor.parent == NULL) || (this->actor.parent->update == NULL)) {
+        func_80ACC470(this);
+        this->actionFunc = func_80ACD2E4;
+    } else {
+        this->actor.shape.yOffset += 10.0f * Math_SinS(this->unk_21C << 9);
+        this->actor.world.pos = this->actor.parent->world.pos;
+        this->actor.world.pos.y += 12.0f;
+    }
+    func_80ACCBB8(this, globalCtx);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACCC98.s")
 
