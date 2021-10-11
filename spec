@@ -1202,8 +1202,11 @@ beginseg
     name "ovl_En_Sw"
     compress
     include "build/src/overlays/actors/ovl_En_Sw/z_en_sw.o"
-    include "build/data/ovl_En_Sw/ovl_En_Sw.data.o"
-    include "build/data/ovl_En_Sw/ovl_En_Sw.reloc.o"
+    #ifdef NON_MATCHING
+        include "build/src/overlays/actors/ovl_En_Sw/ovl_En_Sw_reloc.o"
+    #else
+        include "build/data/ovl_En_Sw/ovl_En_Sw.reloc.o"
+    #endif
 endseg
 
 beginseg
