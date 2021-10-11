@@ -206,7 +206,19 @@ void func_80ACCBD0(EnElforg* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACD6A8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACD6EC.s")
+void func_80ACD6EC(EnElforg* this, GlobalContext* globalCtx) {
+    if (this->collider.base.acFlags & AC_HIT) {
+        func_80ACC470(this);
+        this->actionFunc = func_80ACD2E4;
+        this->actor.draw = EnElforg_Draw;
+        this->actor.world.pos.y += 40.0f;
+        this->actor.home.pos.y += 40.0f;
+        Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHIBI_FAIRY_SAVED);
+    } else {
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    }
+    func_80ACCBB8(this, globalCtx);
+}
 
 void EnElforg_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnElforg* this = THIS;
