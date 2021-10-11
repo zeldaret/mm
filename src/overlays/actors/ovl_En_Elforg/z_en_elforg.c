@@ -167,7 +167,9 @@ void EnElforg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACCAC0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACCBB8.s")
+void func_80ACCBB8(EnElforg* this, GlobalContext* globalCtx) {
+    globalCtx->actorCtx.unk5 |= 8;
+}
 
 void func_80ACCBD0(EnElforg* this, GlobalContext* globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
