@@ -149,7 +149,13 @@ void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.shape.rot.y = 0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/EnElforg_Destroy.s")
+void EnElforg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnElforg* this = THIS;
+
+    if ((this->actor.params & 0xF) == 5) {
+        Collider_DestroyCylinder(globalCtx, &this->collider);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACC7E4.s")
 
