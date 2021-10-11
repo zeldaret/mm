@@ -1,3 +1,8 @@
+/**
+ * This file has unmigrated bss. It is not practical to migrate it until we have a better way of dealing with bss
+ * reordering than just prevent_bss_reordering.h: there is too much of it to control, and it cannot be split into
+ * separate files since most of it is at addresses ending in 8.
+ */
 #include "global.h"
 
 void Main(void* arg) {
