@@ -212,8 +212,27 @@ Actor* func_80ACD59C(EnElforg* this, GlobalContext* globalCtx) {
     return NULL;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACD610.s")
-void func_80ACD610(EnElforg* this, GlobalContext* globalCtx);
+void func_80ACD610(EnElforg* this, GlobalContext* globalCtx) {
+    f32 posTemp;
+
+    if (this->enemy->update == NULL) {
+        func_80ACC470(this);
+        this->actionFunc = func_80ACD2E4;
+        this->actor.draw = EnElforg_Draw;
+        Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHIBI_FAIRY_SAVED);
+    } else {
+        posTemp = this->enemy->world.pos.x;
+        this->actor.world.pos.x = posTemp;
+        this->actor.home.pos.x = posTemp;
+        posTemp = this->enemy->world.pos.y + 30.0f;
+        this->actor.world.pos.y = posTemp;
+        this->actor.home.pos.y = posTemp;
+        posTemp = this->enemy->world.pos.z;
+        this->actor.world.pos.z = posTemp;
+        this->actor.home.pos.z = posTemp;
+    }
+    func_80ACCBB8(this, globalCtx);
+}
 
 void func_80ACD6A8(EnElforg* this, GlobalContext* globalCtx) {
     Actor* enemy;
