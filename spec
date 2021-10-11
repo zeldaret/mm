@@ -612,7 +612,7 @@ beginseg
     include "build/data/code/game.bss.o"
     include "build/src/code/gamealloc.o"
     include "build/src/code/graph.o"
-    include "build/src/code/graphutil.o"
+    include "build/src/code/graphalloc.o"
     include "build/src/code/listalloc.o"
     include "build/src/code/main.o"
     include "build/data/code/main.data.o"
