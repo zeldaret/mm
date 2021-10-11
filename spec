@@ -3595,8 +3595,7 @@ beginseg
     name "ovl_En_Elfbub"
     compress
     include "build/src/overlays/actors/ovl_En_Elfbub/z_en_elfbub.o"
-    include "build/data/ovl_En_Elfbub/ovl_En_Elfbub.data.o"
-    include "build/data/ovl_En_Elfbub/ovl_En_Elfbub.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Elfbub/ovl_En_Elfbub_reloc.o"
 endseg
 
 beginseg
