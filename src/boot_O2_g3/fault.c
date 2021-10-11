@@ -8,7 +8,7 @@ void Fault_SleepImpl(u32 duration) {
     Sleep_Cycles(value);
 }
 
-void Fault_AddClient(FaultClient* client, fault_client_func callback, void* param0, void* param1) {
+void Fault_AddClient(FaultClient* client, void* callback, void* param0, void* param1) {
     OSIntMask mask;
     u32 alreadyExists = 0;
 
@@ -79,7 +79,7 @@ void Fault_RemoveClient(FaultClient* client) {
     }
 }
 
-void Fault_AddAddrConvClient(FaultAddrConvClient* client, fault_address_converter_func callback, void* param) {
+void Fault_AddAddrConvClient(FaultAddrConvClient* client, void* callback, void* param) {
     OSIntMask mask;
     u32 alreadyExists = 0;
 
@@ -886,7 +886,7 @@ void Fault_HangupFaultClient(const char* arg0, char* arg1) {
 void Fault_AddHungupAndCrashImpl(const char* arg0, char* arg1) {
     FaultClient client;
     char padd[4];
-    Fault_AddClient(&client, (fault_client_func)Fault_HangupFaultClient, (void*)arg0, arg1);
+    Fault_AddClient(&client, Fault_HangupFaultClient, (void*)arg0, arg1);
     *(u32*)0x11111111 = 0; // trigger an exception
 }
 

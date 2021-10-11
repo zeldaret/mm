@@ -125,8 +125,8 @@ void Graph_Init(GraphicsContext* gfxCtx) {
     gfxCtx->xScale = gViConfigXScale;
     gfxCtx->yScale = gViConfigYScale;
     osCreateMesgQueue(&gfxCtx->queue, gfxCtx->msgBuff, ARRAY_COUNT(gfxCtx->msgBuff));
-    Fault_AddClient(&sGraphFaultClient, (fault_client_func)Graph_FaultClient, NULL, NULL);
-    Fault_AddAddrConvClient(&sGraphFaultAddrConvClient, (fault_address_converter_func)Graph_FaultAddrConvFunc, NULL);
+    Fault_AddClient(&sGraphFaultClient, Graph_FaultClient, NULL, NULL);
+    Fault_AddAddrConvClient(&sGraphFaultAddrConvClient, Graph_FaultAddrConvFunc, NULL);
 }
 
 void Graph_Destroy(GraphicsContext* gfxCtx) {

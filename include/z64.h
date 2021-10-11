@@ -498,10 +498,6 @@ typedef struct {
     /* 0xC */ s32 rightX;
 } Viewport; // size = 0x10
 
-typedef void*(*fault_address_converter_func)(void* addr, void* arg);
-
-typedef void(*fault_client_func)(void* arg1, void* arg2);
-
 typedef unsigned long(*func)(void);
 
 typedef void(*func_ptr)(void);
@@ -1094,22 +1090,18 @@ typedef struct ActorObjBell ActorObjBell;
 
 typedef struct ActorBgIknvObj ActorBgIknvObj;
 
-typedef struct FaultAddrConvClient FaultAddrConvClient;
-
-struct FaultAddrConvClient {
-    /* 0x0 */ FaultAddrConvClient* next;
-    /* 0x4 */ fault_address_converter_func callback;
+typedef struct FaultAddrConvClient {
+    /* 0x0 */ struct FaultAddrConvClient* next;
+    /* 0x4 */ void* (*callback)(void*, void*);
     /* 0x8 */ void* param;
-}; // size = 0xC
+} FaultAddrConvClient; // size = 0xC
 
-typedef struct FaultClient FaultClient;
-
-struct FaultClient {
-    /* 0x0 */ FaultClient* next;
-    /* 0x4 */ fault_client_func callback;
+typedef struct FaultClient {
+    /* 0x0 */ struct FaultClient* next;
+    /* 0x4 */ void (*callback)(void*, void*);
     /* 0x8 */ void* param0;
     /* 0xC */ void* param1;
-}; // size = 0x10
+} FaultClient; // size = 0x10
 
 typedef struct {
     /* 0x000 */ OSThread thread;
