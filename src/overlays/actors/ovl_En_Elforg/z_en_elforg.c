@@ -57,7 +57,16 @@ static s32 D_80ACDA74[] = { 0xFFEBDCFF, 0xFFDCDCFF, 0xDCFFDCFF, 0xDCDCFFFF, 0xFF
 
 static s32 D_80ACDA88[] = { 0xFF9600FF, 0xFF0000FF, 0x00FF00FF, 0x0000FFFF, 0xFFFF00FF };
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACC470.s")
+void func_80ACC470(EnElforg* this) {
+    this->actor.speedXZ = 1.0f;
+    this->unk_224 = 1.0f;
+    this->actor.velocity.y = 0.0f;
+    this->actor.world.rot.y = randPlusMinusPoint5Scaled(65536.0f);
+    this->unk_21C = 0;
+    this->unk_220 = Rand_ZeroFloat(100.0f);
+    this->actor.shape.yOffset = 0.0f;
+    this->skelAnime.animCurrentFrame = (s32)Rand_ZeroFloat(5.0f);
+}
 
 void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
