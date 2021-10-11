@@ -74,9 +74,9 @@ void GameOver_Update(GlobalContext* globalCtx) {
                 gSaveContext.nextTransition = 2;
                 gSaveContext.health = 48;
                 gameOverCtx->state++;
-                if (gSaveContext.inventory.items[SLOT(ITEM_DEED_SWAMP)] == ITEM_DEED_SWAMP) {
-                    gSaveContext.playerForm = 4;
-                    gSaveContext.equippedMask = 0;
+                if (gSaveContext.inventory.items[SLOT(ITEM_MASK_DEKU)] == ITEM_MASK_DEKU) {
+                    gSaveContext.playerForm = PLAYER_FORM_HUMAN;
+                    gSaveContext.equippedMask = PLAYER_MASK_NONE;
                 }
                 func_8013EE24();
             }
