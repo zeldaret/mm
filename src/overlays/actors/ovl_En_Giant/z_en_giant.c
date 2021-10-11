@@ -468,7 +468,6 @@ void EnGiant_Draw(Actor* thisx, GlobalContext* globalCtx) {
             Scene_SetRenderModeXlu(globalCtx, 0, 1);
             SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
                              this->skelAnime.dListCount, NULL, EnGiant_PostLimbDrawOpa, thisx);
-            return;
         } else if (this->alpha > 0) {
             if (this->alpha >= 129) {
                 func_8012C2B4(POLY_XLU_DISP++);
