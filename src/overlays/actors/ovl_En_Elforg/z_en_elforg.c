@@ -200,7 +200,17 @@ void func_80ACCBD0(EnElforg* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACD2E4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACD59C.s")
+Actor* func_80ACD59C(EnElforg* this, GlobalContext* globalCtx) {
+    Actor* enemy;
+
+    for (enemy = globalCtx->actorCtx.actorList[ACTORCAT_ENEMY].first; enemy != NULL; enemy = enemy->next) {
+        if ((enemy->home.pos.x == this->actor.home.pos.x) && (enemy->home.pos.y == this->actor.home.pos.y) &&
+            (enemy->home.pos.z == this->actor.home.pos.z)) {
+            return enemy;
+        }
+    }
+    return NULL;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACD610.s")
 
