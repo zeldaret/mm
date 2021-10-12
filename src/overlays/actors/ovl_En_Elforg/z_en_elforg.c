@@ -242,7 +242,7 @@ void func_80ACCBD0(EnElforg* this, GlobalContext* globalCtx) {
 }
 
 void func_80ACCC98(EnElforg* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     f32 xzDistToPlayer;
     s16 rotationTemp;
     s16 sp34;
