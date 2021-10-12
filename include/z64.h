@@ -288,18 +288,18 @@ typedef struct {
 } TwoHeadGfxArena; // size = 0x10
 
 typedef struct {
-    /* 0x000 0x00 */ Gfx taskStart[9];
-    /* 0x048 0x09 */ Gfx clearZBuffer[8];       // original name: clear_zb_dl
-    /* 0x088 0x11 */ Gfx clearFrameBuffer[5];   // original name: clear_fb_dl
-    /* 0x0B0 0x16 */ Gfx setupBuffers[6];       // setup framebuffer and zbuffer
-    /* 0x0E0 0x1C */ Gfx unk_E0[12];            // unused
-    /* 0x140 0x28 */ Gfx syncSegments[17];
-    /* 0x1C8 0x39 */ Gfx setScissor[2];
-    /* 0x1D8 0x41 */ Gfx unk_1D8[25];           // unused
-    /* 0x2A0 0x54 */ Gfx disps[5];
-    /* 0x2C8 0x59 */ Gfx clearFillRect[3];      // fillrect for clearing buffers
-    /* 0x2E0 0x5C */ Gfx fillRect[3];           // fillrect for general purpose
-    /* 0x2F8 0x5F */ Gfx debugDisp[1];
+    /* 0x000 */ Gfx taskStart[9];
+    /* 0x048 */ Gfx clearZBuffer[8];       // original name: clear_zb_dl
+    /* 0x088 */ Gfx clearFrameBuffer[5];   // original name: clear_fb_dl
+    /* 0x0B0 */ Gfx setupBuffers[6];       // setup framebuffer and zbuffer
+    /* 0x0E0 */ Gfx unk_E0[12];            // unused
+    /* 0x140 */ Gfx syncSegments[17];
+    /* 0x1C8 */ Gfx setScissor[2];
+    /* 0x1D8 */ Gfx unk_1D8[25];           // unused
+    /* 0x2A0 */ Gfx disps[5];
+    /* 0x2C8 */ Gfx clearFillRect[3];      // fillrect for clearing buffers
+    /* 0x2E0 */ Gfx fillRect[3];           // fillrect for general purpose
+    /* 0x2F8 */ Gfx debugDisp[1];
 } GfxMasterList; // size = 0x300
 
 #define GFXPOOL_HEAD_MAGIC 0x1234
