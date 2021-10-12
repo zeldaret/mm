@@ -230,7 +230,21 @@ void func_80ACC994(EnElforg* this, Vec3f* pos) {
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACCAC0.s")
+void func_80ACCAC0(EnElforg* this, Vec3f* pos) {
+    s16 targetAngle;
+
+    this->actor.shape.yOffset += 100.0f * Math_SinS(this->unk_21C << 9);
+    func_80ACC8D4(this, pos);
+    targetAngle = Math_FAtan2F(-(this->actor.world.pos.z - pos->z), -(this->actor.world.pos.x - pos->x));
+    if (this->unk_224 > 2.0f) {
+        Math_SmoothStepToS(&this->actor.world.rot.y, targetAngle, 2, 0x400, 0x100);
+    } else {
+        targetAngle += 0x2000;
+        Math_SmoothStepToS(&this->actor.world.rot.y, targetAngle, 10, 0x200, 0x80);
+    }
+    func_80ACC934(this);
+    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+}
 
 void func_80ACCBB8(EnElforg* this, GlobalContext* globalCtx) {
     globalCtx->actorCtx.unk5 |= 8;
