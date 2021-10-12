@@ -220,21 +220,21 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
     static UNK_TYPE D_80C13680[] = { &D_06004348, &D_06004B88, &D_060055E0 };
     s32 isItemFound = false;
     s32 phi_a3 = 0;
-    s32 i = 18;
-    s32 phi_t0_3;
-    s16 sp1E = 0;
+    s32 slotId = SLOT_BOTTLE_1;
+    s32 itemId1;
+    s16 itemId2 = ITEM_OCARINA;
 
-    for (; i < ARRAY_COUNT(gSaveContext.inventory.items); i++) {
-        if ((gSaveContext.inventory.items[i] >= ITEM_BOTTLE) && (gSaveContext.inventory.items[i] <= ITEM_POTION_BLUE)) {
+    for (; slotId < ARRAY_COUNT(gSaveContext.inventory.items); slotId++) {
+        if ((gSaveContext.inventory.items[slotId] >= ITEM_BOTTLE) && (gSaveContext.inventory.items[slotId] <= ITEM_POTION_BLUE)) {
             isItemFound = true;
-            sp1E = gSaveContext.inventory.items[i];
+            itemId2 = gSaveContext.inventory.items[slotId];
             break;
         }
     }
 
     if (gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
         phi_a3 = CUR_EQUIP_VALUE_VOID(EQUIP_SWORD);
-        if (gSaveContext.inventory.items[gItemSlots[16]] == ITEM_SWORD_GREAT_FAIRY) {
+        if (gSaveContext.inventory.items[SLOT(ITEM_SWORD_GREAT_FAIRY)] == ITEM_SWORD_GREAT_FAIRY) {
             phi_a3 += 4;
         }
     }
@@ -248,12 +248,12 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
     }
 
     if (isItemFound) {
-        func_801149A0(sp1E, i);
+        func_801149A0(itemId2, slotId);
         this->unk_3E8 = &D_060033B0;
         if (!func_80152498(&globalCtx->msgCtx)) {
             func_801518B0(globalCtx, 0xF4, NULL);
         }
-        phi_t0_3 = 0x12;
+        itemId1 = ITEM_BOTTLE;
     } else if (phi_a3 != 0) {
         if (phi_a3 >= 5) {
             if (Rand_ZeroOne() < 0.5f) {
@@ -263,11 +263,11 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
             }
         }
 
-        phi_t0_3 = phi_a3 + 0x4C;
+        itemId1 = phi_a3 + (ITEM_SWORD_KOKIRI - 1);
         if (phi_a3 == 4) {
-            func_801149A0(16, 16);
+            func_801149A0(ITEM_SWORD_GREAT_FAIRY, SLOT_SWORD_GREAT_FAIRY);
             this->unk_3E8 = &D_06003D58;
-            phi_t0_3 = 0x10;
+            itemId1 = ITEM_SWORD_GREAT_FAIRY;
         } else {
             CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_NONE;
             TAKE_EQUIPPED_ITEM(EQUIP_SWORD);
@@ -282,9 +282,9 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
     }
 
     if (!((gSaveContext.roomInf[126][5] & 0xFF000000) >> 0x18)) {
-        gSaveContext.roomInf[126][5] = (gSaveContext.roomInf[126][5] & 0xFFFFFF) | ((phi_t0_3 & 0xFF) << 0x18);
+        gSaveContext.roomInf[126][5] = (gSaveContext.roomInf[126][5] & 0xFFFFFF) | ((itemId1 & 0xFF) << 0x18);
     } else {
-        gSaveContext.roomInf[126][5] = (gSaveContext.roomInf[126][5] & 0xFF00FFFF) | ((phi_t0_3 & 0xFF) << 0x10);
+        gSaveContext.roomInf[126][5] = (gSaveContext.roomInf[126][5] & 0xFF00FFFF) | ((itemId1 & 0xFF) << 0x10);
     }
 
     return true;
@@ -322,16 +322,16 @@ s32 func_80C10E98(GlobalContext* globalCtx) {
     s32 pad2;
     s32 sp98;
     s32 i;
-    s32 sp74[8];
+    s32 dropItem00Ids[8];
     s32 sp5C;
 
-    for (i = 0; i < ARRAY_COUNT(sp74); i++) {
-        sp74[i] = ITEM00_NO_DROP;
+    for (i = 0; i < ARRAY_COUNT(dropItem00Ids); i++) {
+        dropItem00Ids[i] = ITEM00_NO_DROP;
     }
 
     if (AMMO(ITEM_BOMB) >= 5) {
         spB0 = 1;
-        sp74[1] = ITEM00_BOMBS_B;
+        dropItem00Ids[1] = ITEM00_BOMBS_B;
         if (1) {}
     } else {
         spB0 = 0;
@@ -339,7 +339,7 @@ s32 func_80C10E98(GlobalContext* globalCtx) {
 
     if (AMMO(ITEM_BOW) >= 10) {
         spAC = 1;
-        sp74[5] = ITEM00_ARROWS_10;
+        dropItem00Ids[5] = ITEM00_ARROWS_10;
     } else {
         spAC = 0;
     }
@@ -364,7 +364,7 @@ s32 func_80C10E98(GlobalContext* globalCtx) {
     sp5C = phi_s0_2 * 50;
     sp98 -= sp5C;
 
-    func_80C10DE8(sp74, phi_s0_2, ITEM00_RUPEE_PURPLE);
+    func_80C10DE8(dropItem00Ids, phi_s0_2, ITEM00_RUPEE_PURPLE);
     spA0 = sp98 / 20;
     if (i < spA0) {
         spA0 = i;
@@ -372,7 +372,7 @@ s32 func_80C10E98(GlobalContext* globalCtx) {
     i -= spA0;
     sp98 -= spA0 * 20;
 
-    func_80C10DE8(sp74, spA0, ITEM00_RUPEE_RED);
+    func_80C10DE8(dropItem00Ids, spA0, ITEM00_RUPEE_RED);
     phi_s2 = sp98 / 5;
     if (i < phi_s2) {
         phi_s2 = i;
@@ -380,14 +380,14 @@ s32 func_80C10E98(GlobalContext* globalCtx) {
     i -= phi_s2;
     sp98 -= phi_s2 * 5;
 
-    func_80C10DE8(sp74, phi_s2, ITEM00_RUPEE_BLUE);
+    func_80C10DE8(dropItem00Ids, phi_s2, ITEM00_RUPEE_BLUE);
     if (i < sp98) {
         spA8 = i;
     } else {
         spA8 = sp98;
     }
 
-    func_80C10DE8(sp74, spA8, ITEM00_RUPEE_GREEN);
+    func_80C10DE8(dropItem00Ids, spA8, ITEM00_RUPEE_GREEN);
     if ((spB0 + spAC + phi_s0_2 + spA0 + phi_s2 + spA8) == 0) {
         return false;
     }
@@ -395,12 +395,12 @@ s32 func_80C10E98(GlobalContext* globalCtx) {
     {
         Vec3f sp64;
 
-        for (i = 0; i < ARRAY_COUNT(sp74); i++) {
+        for (i = 0; i < ARRAY_COUNT(dropItem00Ids); i++) {
             sp64.x = (Math_SinS(phi_s3) * 40.0f) + player->actor.world.pos.x;
             sp64.y = player->actor.world.pos.y + 20.0f;
             sp64.z = (Math_CosS(phi_s3) * 40.0f) + player->actor.world.pos.z;
-            if (sp74[i] != ITEM00_NO_DROP) {
-                EnItem00* temp_s1_5 = Item_DropCollectible(globalCtx, &sp64, sp74[i]);
+            if (dropItem00Ids[i] != ITEM00_NO_DROP) {
+                EnItem00* temp_s1_5 = Item_DropCollectible(globalCtx, &sp64, dropItem00Ids[i]);
 
                 if (temp_s1_5 != NULL) {
                     temp_s1_5->actor.velocity.y = Rand_ZeroFloat(3.0f) + 6.0f;

@@ -393,7 +393,7 @@ void Scene_HeaderCmdTimeSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
         globalCtx->envCtx.unk_2 = 0;
     }
 
-    if ((gSaveContext.inventory.items[0] == 0xFF) && (globalCtx->envCtx.unk_2 != 0)) {
+    if ((gSaveContext.inventory.items[SLOT_OCARINA] == 0xFF) && (globalCtx->envCtx.unk_2 != 0)) {
         globalCtx->envCtx.unk_2 = 5;
     }
 

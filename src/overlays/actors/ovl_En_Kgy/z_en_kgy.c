@@ -533,19 +533,19 @@ void func_80B41A48(EnKgy* this, GlobalContext* globalCtx) {
 }
 
 void func_80B41ACC(EnKgy* this, GlobalContext* globalCtx) {
-    s32 temp_v0;
+    s32 itemActionParam;
     Player* player = PLAYER;
 
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     if (func_80152498(&globalCtx->msgCtx) == 0x10) {
-        temp_v0 = func_80123810(globalCtx);
-        if (temp_v0 != 0) {
+        itemActionParam = func_80123810(globalCtx);
+        if (itemActionParam != PLAYER_AP_NONE) {
             this->actionFunc = func_80B41E18;
         }
 
-        if (temp_v0 > 0) {
+        if (itemActionParam > PLAYER_AP_NONE) {
             func_801477B4(globalCtx);
-            if (temp_v0 == 0x1B) {
+            if (itemActionParam == PLAYER_AP_BOTTLE_GOLD_DUST) {
                 if (this->unk_29C & 0x10) {
                     this->actor.textId = 0xC55;
                     player->actor.textId = 0xC55;
@@ -562,7 +562,7 @@ void func_80B41ACC(EnKgy* this, GlobalContext* globalCtx) {
                 player->actor.textId = 0xC47;
             }
             this->unk_29C |= 8;
-        } else if (temp_v0 < 0) {
+        } else if (itemActionParam < PLAYER_AP_NONE) {
             if (this->unk_29C & 0x10) {
                 this->actor.textId = 0xC57;
             } else {
@@ -759,7 +759,7 @@ void func_80B41E18(EnKgy* this, GlobalContext* globalCtx) {
                         case 0xC46:
                         case 0xC55:
                             func_80123D50(globalCtx, PLAYER, 0x12, 0x15);
-                            player->unk_A87 = 0;
+                            player->unk_A87 = PLAYER_AP_NONE;
                             this->unk_29C &= ~0x8;
                             globalCtx->msgCtx.unk11F10 = 0;
                             func_80B41368(this, globalCtx, 4);
@@ -774,7 +774,7 @@ void func_80B41E18(EnKgy* this, GlobalContext* globalCtx) {
                         case 0xC47:
                             func_80B40BC0(this, 1);
                             if (this->unk_29C & 8) {
-                                player->unk_A87 = 0;
+                                player->unk_A87 = PLAYER_AP_NONE;
                                 this->unk_29C &= ~8;
                             }
                             func_80B40EBC(this, globalCtx, temp);

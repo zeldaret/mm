@@ -83,13 +83,13 @@ static InitChainEntry sInitChain[] = {
 };
 
 void ObjKibako_SpawnCollectible(ObjKibako* this, GlobalContext* globalCtx) {
-    s32 collectible;
+    s32 dropItem00Id;
 
     if (this->isDropCollected == 0) {
-        collectible = func_800A8150(KIBAKO_COLLECTIBLE_ID(&this->actor));
-        if (collectible >= 0) {
+        dropItem00Id = func_800A8150(KIBAKO_COLLECTIBLE_ID(&this->actor));
+        if (dropItem00Id > ITEM00_NO_DROP) {
             Item_DropCollectible(globalCtx, &this->actor.world.pos,
-                                 collectible | KIBAKO_COLLECTIBLE_FLAG(&this->actor) << 8);
+                                 dropItem00Id | KIBAKO_COLLECTIBLE_FLAG(&this->actor) << 8);
             this->isDropCollected = 1;
         }
     }

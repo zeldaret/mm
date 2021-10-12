@@ -960,26 +960,26 @@ void func_80B9854C(EnZot* this, GlobalContext* globalCtx) {
 }
 
 void func_80B985EC(EnZot* this, GlobalContext* globalCtx) {
-    s32 temp_v0;
+    s32 itemActionParam;
     Player* player = PLAYER;
 
     func_80B98348(this, globalCtx);
     if (func_80152498(&globalCtx->msgCtx) == 0x10) {
-        temp_v0 = func_80123810(globalCtx);
-        if (temp_v0 > 0) {
+        itemActionParam = func_80123810(globalCtx);
+        if (itemActionParam > PLAYER_AP_NONE) {
             func_801477B4(globalCtx);
-            if ((temp_v0 == 0x13) && CHECK_QUEST_ITEM(25) && func_8013A4C4(4)) {
+            if ((itemActionParam == PLAYER_AP_PICTO_BOX) && CHECK_QUEST_ITEM(QUEST_UNK_19) && func_8013A4C4(4)) {
                 if (func_8013A4C4(5) && func_8013A4C4(6)) {
                     player->actor.textId = 0x12AE;
                 } else {
                     player->actor.textId = 0x12AC;
                 }
-                REMOVE_QUEST_ITEM(25);
+                REMOVE_QUEST_ITEM(QUEST_UNK_19);
             } else {
                 player->actor.textId = 0x12AB;
             }
             this->actionFunc = func_80B98728;
-        } else if (temp_v0 < 0) {
+        } else if (itemActionParam < PLAYER_AP_NONE) {
             func_80151938(globalCtx, 0x12AB);
             this->actionFunc = func_80B98728;
         }

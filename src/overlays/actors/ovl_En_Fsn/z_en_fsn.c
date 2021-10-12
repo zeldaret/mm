@@ -918,6 +918,7 @@ void EnFsn_DeterminePrice(EnFsn* this, GlobalContext* globalCtx) {
             this->price = (buttonItem < ITEM_MOON_TEAR) ? gItemPrices[buttonItem] : 0;
             if (this->price > 0) {
                 player->actor.textId = 0x29EF;
+                // player->unk_A87 should be set to itemActionParam?
                 player->unk_A87 = buttonItem;
                 this->actionFunc = EnFsn_MakeOffer;
             } else {

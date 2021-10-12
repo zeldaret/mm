@@ -166,14 +166,14 @@ void EnOwl_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
 
         case ENOWL_GET_TYPE_2:
-            if (gSaveContext.inventory.items[14] == 14) {
+            if (gSaveContext.inventory.items[SLOT_LENS] == ITEM_LENS) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
             break;
 
         case ENOWL_GET_TYPE_3:
-            if (CHECK_QUEST_ITEM(15)) {
+            if (CHECK_QUEST_ITEM(QUEST_SONG_SOARING)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }

@@ -43,6 +43,7 @@ typedef enum {
     /* 0x11 */ QUEST_SONG_SUN,
     /* 0x12 */ QUEST_BOMBERS_NOTEBOOK,
     /* 0x18 */ QUEST_SONG_LULLABY_INTRO = 0x18,
+    /* 0x19 */ QUEST_UNK_19, // Related to PictoBox
 } QuestItem;
 
 typedef enum {
