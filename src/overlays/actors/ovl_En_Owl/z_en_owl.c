@@ -224,7 +224,7 @@ void EnOwl_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_8095A920(EnOwl* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     this->actor.world.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &player->actor.world.pos);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 6, 0x3E8, 0xC8);
@@ -485,7 +485,7 @@ void func_8095B3DC(EnOwl* this, GlobalContext* globalCtx) {
 }
 
 void func_8095B480(EnOwl* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (player->stateFlags3 & 0x10000000) {
         this->actor.textId = 0xBF1;
@@ -1071,7 +1071,7 @@ void EnOwl_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_8095CCF4(Actor* thisx, GlobalContext* globalCtx) {
     EnOwl* this = THIS;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (player->stateFlags3 & 0x10000000) {
         Actor_MarkForDeath(&this->actor);
