@@ -49,13 +49,20 @@ static ColliderCylinderInit D_80ACDA30 = {
     { 16, 32, 0, { 0, 0, 0 } },
 };
 
-static s32 D_80ACDA5C[] = { 0x00000000, 0xBD4CCCCD, 0x00000000 };
+// static Vec3f sVelocity
+static Vec3f D_80ACDA5C = { 0.0f, -0.05f, 0.0f };
 
-static s32 D_80ACDA68[] = { 0x00000000, 0xBCCCCCCD, 0x00000000 };
+// static Vec3f sAcceleration
+static Vec3f D_80ACDA68 = { 0.0f, -0.025f, 0.0f };
 
-static s32 D_80ACDA74[] = { 0xFFEBDCFF, 0xFFDCDCFF, 0xDCFFDCFF, 0xDCDCFFFF, 0xFFFFC8FF };
+static Color_RGBA8 D_80ACDA74[] = {
+    { 255, 235, 220, 255 }, { 255, 220, 220, 255 }, { 220, 255, 220, 255 },
+    { 220, 220, 255, 255 }, { 255, 255, 200, 255 },
+};
 
-static s32 D_80ACDA88[] = { 0xFF9600FF, 0xFF0000FF, 0x00FF00FF, 0x0000FFFF, 0xFFFF00FF };
+static Color_RGBA8 D_80ACDA88[] = {
+    { 255, 150, 0, 255 }, { 255, 0, 0, 255 }, { 0, 255, 0, 255 }, { 0, 0, 255, 255 }, { 255, 255, 0, 255 },
+};
 
 void func_80ACC470(EnElforg* this) {
     this->actor.speedXZ = 1.0f;
@@ -157,7 +164,18 @@ void EnElforg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACC7E4.s")
+void func_80ACC7E4(EnElforg* this, GlobalContext* globalCtx, s32 life) {
+    Vec3f pos;
+    s32 pad;
+    s32 index;
+
+    pos.x = randPlusMinusPoint5Scaled(6.0f) + this->actor.world.pos.x;
+    pos.y = (Rand_ZeroOne() * 6.0f) + this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y);
+    pos.z = randPlusMinusPoint5Scaled(6.0f) + this->actor.world.pos.z;
+    index = (this->unk_218 < 0 || this->unk_218 >= 5) ? 0 : this->unk_218;
+    EffectSsKiraKira_SpawnDispersed(globalCtx, &pos, &D_80ACDA5C, &D_80ACDA68, &D_80ACDA74[index], &D_80ACDA88[index],
+                                    1000, life);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACC8D4.s")
 
