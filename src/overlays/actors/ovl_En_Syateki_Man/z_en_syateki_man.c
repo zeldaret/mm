@@ -175,7 +175,7 @@ void EnSyatekiMan_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 func_809C6720(GlobalContext* globalCtx, Vec3f arg1) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     f32 sp28;
     f32 phi_f0;
     s16 sp22 = Math_Vec3f_Yaw(&player->actor.world.pos, &arg1);
@@ -209,7 +209,7 @@ void func_809C6810(EnSyatekiMan* this, GlobalContext* globalCtx) {
 }
 
 void func_809C6848(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (func_800B84D0(&this->actor, globalCtx)) {
         u16 sp22;
@@ -257,7 +257,7 @@ void func_809C6848(EnSyatekiMan* this, GlobalContext* globalCtx) {
 }
 
 void func_809C6A04(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (func_80147624(globalCtx)) {
         if (globalCtx->msgCtx.choiceIndex == 0) {
@@ -314,7 +314,7 @@ void func_809C6A04(EnSyatekiMan* this, GlobalContext* globalCtx) {
 }
 
 void func_809C6C2C(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (func_80147624(globalCtx)) {
         switch (this->unk_284) {
@@ -373,7 +373,7 @@ void func_809C6C2C(EnSyatekiMan* this, GlobalContext* globalCtx) {
 }
 
 void func_809C6E30(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (player->stateFlags1 & 0x20) {
         player->stateFlags1 |= 0x20;
@@ -524,7 +524,7 @@ void func_809C72D8(EnSyatekiMan* this, GlobalContext* globalCtx) {
 }
 
 void func_809C7380(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (func_80147624(globalCtx)) {
         if (globalCtx->msgCtx.choiceIndex == 0) {
@@ -587,7 +587,7 @@ void func_809C7380(EnSyatekiMan* this, GlobalContext* globalCtx) {
 }
 
 void func_809C7620(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (func_80147624(globalCtx)) {
         switch (this->unk_284) {
@@ -626,7 +626,7 @@ void func_809C7620(EnSyatekiMan* this, GlobalContext* globalCtx) {
 
             case 0x3FD:
             case 0x3FF:
-                if (this->unk_26A == 4U) {
+                if (this->unk_26A == 4) {
                     if (this->unk_284 == 0x3FD) {
                         func_801518B0(globalCtx, 0x3FE, &this->actor);
                         this->unk_284 = 0x3FE;
@@ -707,7 +707,7 @@ void func_809C7620(EnSyatekiMan* this, GlobalContext* globalCtx) {
 }
 
 void func_809C7990(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (player->stateFlags1 & 0x20) {
         player->stateFlags1 |= 0x20;
@@ -749,7 +749,7 @@ void func_809C7990(EnSyatekiMan* this, GlobalContext* globalCtx) {
 }
 
 void func_809C7A90(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (Actor_HasParent(&this->actor, globalCtx)) {
         if (!(gSaveContext.weekEventReg[59] & 0x10)) {
@@ -778,7 +778,7 @@ void func_809C7A90(EnSyatekiMan* this, GlobalContext* globalCtx) {
 }
 
 void func_809C7C14(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (func_800B84D0(&this->actor, globalCtx)) {
         if ((CURRENT_DAY == 3) && (gSaveContext.time > CLOCK_TIME(12, 00))) {
@@ -799,7 +799,7 @@ void func_809C7C14(EnSyatekiMan* this, GlobalContext* globalCtx) {
 }
 
 void func_809C7D14(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (Actor_HasParent(&this->actor, globalCtx)) {
         if (this->unk_284 == 0x407) {
@@ -836,7 +836,7 @@ void func_809C7D14(EnSyatekiMan* this, GlobalContext* globalCtx) {
 }
 
 void func_809C7EB4(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (CURRENT_DAY != 3) {
         if ((func_80152498(&globalCtx->msgCtx) == 6) && func_80147624(globalCtx)) {
@@ -861,7 +861,7 @@ void func_809C7EB4(EnSyatekiMan* this, GlobalContext* globalCtx) {
 }
 
 void func_809C7FFC(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (func_809C6720(globalCtx, D_809C9474)) {
         player->stateFlags1 |= 0x20;
@@ -880,7 +880,7 @@ void func_809C7FFC(EnSyatekiMan* this, GlobalContext* globalCtx) {
 
 void func_809C80C0(EnSyatekiMan* this, GlobalContext* globalCtx) {
     static s16 D_809C9498 = 30;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (D_809C9498 > 0) {
         player->actor.world.pos = D_809C9474;
@@ -910,7 +910,7 @@ void func_809C80C0(EnSyatekiMan* this, GlobalContext* globalCtx) {
 
 void func_809C81D0(EnSyatekiMan* this, GlobalContext* globalCtx) {
     static s16 D_809C949C = 0;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (((this->unk_272 == 0) || (this->unk_26C > 140)) && (D_809C949C == 0) && (this->unk_27C < 4)) {
         D_809C949C = 1;
@@ -1020,7 +1020,7 @@ void func_809C8488(EnSyatekiMan* this, GlobalContext* globalCtx) {
 
 void func_809C8610(EnSyatekiMan* this, GlobalContext* globalCtx) {
     static s32 D_809C94A0 = 0;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     player->stateFlags1 |= 0x20;
     if (globalCtx->interfaceCtx.unk_286 == 0) {
@@ -1067,7 +1067,7 @@ void func_809C8710(EnSyatekiMan* this, GlobalContext* globalCtx) {
 
 void func_809C8808(EnSyatekiMan* this, GlobalContext* globalCtx) {
     static s16 D_809C94A4 = 30;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (D_809C94A4 == 30) {
         if (player->transformation == PLAYER_FORM_FIERCE_DEITY) {
@@ -1104,7 +1104,7 @@ void func_809C898C(EnSyatekiMan* this, GlobalContext* globalCtx) {
         0x00026984, 0x00012852, 0x00011999, 0x00022895, 0x0000056A, 0x0002A451, 0x00004115,
     };
     static s32 D_809C94A8 = 0;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 sp30;
     s32 pad;
     u64 sp20;

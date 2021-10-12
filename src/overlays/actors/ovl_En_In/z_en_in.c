@@ -251,7 +251,7 @@ s32 func_808F3310(EnIn* this, GlobalContext* globalCtx) {
 }
 
 s32 func_808F3334(EnIn* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->colliderJntSph.base.atFlags & AT_HIT) {
         this->colliderJntSph.base.atFlags &= ~AT_HIT;
@@ -275,7 +275,7 @@ s32 func_808F33B8(void) {
 }
 
 void func_808F3414(EnIn* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Vec3f sp30;
 
     if (this->unk23D == 0) {
@@ -1262,7 +1262,7 @@ s32 func_808F5728(GlobalContext* globalCtx, EnIn* this, s32 arg2, s32* arg3) {
     if (*arg3 == 1) {
         s32 requiredScopeTemp;
 
-        player = PLAYER;
+        player = GET_PLAYER(globalCtx);
         func_808F5994(this, globalCtx, &player->actor.world.pos, 0xC80);
     } else {
         rotDiff = this->actor.home.rot.y - this->actor.world.rot.y;
@@ -1516,7 +1516,7 @@ void EnIn_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_808F6334(EnIn* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 newUnk4C8;
 
     newUnk4C8 = func_80152498(&globalCtx->msgCtx);

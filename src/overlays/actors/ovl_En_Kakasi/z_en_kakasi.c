@@ -279,7 +279,7 @@ void EnKakasi_CheckAnimateSFX(EnKakasi* this) {
  * moves the player's position relative to scarecrow during song teach, also each frame of dance the night away
  */
 void EnKakasi_CheckPlayerPosition(EnKakasi* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (globalCtx->sceneNum == SCENE_8ITEMSHOP) {
         player->actor.world.pos.x = -50.0f;
@@ -340,7 +340,7 @@ void EnKakasi_InitTimeSkipDialogue(EnKakasi* this) {
 }
 
 void EnKakasi_TimeSkipDialogue(EnKakasi* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (gSaveContext.respawnFlag != -4 && gSaveContext.respawnFlag != -8) {
         if (gSaveContext.time != CLOCK_TIME(6, 0) && gSaveContext.time != CLOCK_TIME(18, 0) && !(gSaveContext.eventInf[1] & 0x80)) {
@@ -708,7 +708,7 @@ void EnKakasi_SetupPostSongLearnDialogue(EnKakasi* this, GlobalContext* globalCt
 }
 
 void EnKakasi_PostSongLearnDialogue(EnKakasi* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     f32 tempAnimFrame = this->skelanime.animCurrentFrame;
     Vec3f vec3fCopy;
 
@@ -970,7 +970,7 @@ void EnKakasi_DancingNightAway(EnKakasi* this, GlobalContext* globalCtx) {
             // otherwise its the end when camera is back to normal and link is confused
             Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 1000, 0);
             if (this->unk204 == 0) {
-                player = PLAYER;
+                player = GET_PLAYER(globalCtx);
                 
                 func_80169DCC(globalCtx, 0, Entrance_CreateIndexFromSpawn(0), player->unk_3CE, 0xBFF, &player->unk_3C0,
                               player->unk_3CC);

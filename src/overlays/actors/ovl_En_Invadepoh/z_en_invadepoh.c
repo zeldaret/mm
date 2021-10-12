@@ -2684,7 +2684,7 @@ void func_80B48AD4(EnInvadepoh* this, GlobalContext* globalCtx) {
         s32 requiredScopeTemp;
 
         if ((this->actor.xzDistToPlayer < 350.0f) && ((globalCtx->gameplayFrames & 0x60) != 0)) {
-            player = PLAYER;
+            player = GET_PLAYER(globalCtx);
             temp_v1 = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.85f;
             temp_v1 -= this->actor.shape.rot.x;
             substruct->unk26.x = CLAMP(temp_v1, -2500, 2500);
@@ -2744,7 +2744,7 @@ void func_80B48DE4(EnInvadepoh* this) {
 
 void func_80B48E4C(EnInvadepoh* this, GlobalContext* globalCtx) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 temp_v1;
     s16 diff;
 
@@ -3092,7 +3092,7 @@ void func_80B49DA0(EnInvadepoh* this) {
 
 void func_80B49DFC(EnInvadepoh* this, GlobalContext* globalCtx) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 temp_v1;
     s16 diff;
 
@@ -3222,7 +3222,7 @@ void func_80B4A350(EnInvadepoh* this, GlobalContext* globalCtx) {
     Math_StepToS(&this->behaviorInfo.unk4C, 2000, 40);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk304, 6, this->behaviorInfo.unk4C, 40);
     if (this->actor.xzDistToPlayer < 300.0f) {
-        Player* player = PLAYER;
+        Player* player = GET_PLAYER(globalCtx);
 
         temp_v1_2 = Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos);
         temp_v1_2 *= 0.85f;
@@ -3318,7 +3318,7 @@ void func_80B4A7C0(EnInvadepoh* this) {
 
 void func_80B4A81C(EnInvadepoh* this, GlobalContext* globalCtx) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 temp_v1;
     s16 diff;
 
@@ -3554,7 +3554,7 @@ void func_80B4B218(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     if (sp38 && this->actor.update != NULL) {
         SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-        player = PLAYER;
+        player = GET_PLAYER(globalCtx);
         Math_StepToS(&this->behaviorInfo.unk4C, 2000, 40);
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 6, this->behaviorInfo.unk4C, 40);
         temp_v1 = (Math_Vec3f_Pitch(&this->actor.focus.pos, &player->actor.focus.pos) * 0.9f);
@@ -3854,7 +3854,7 @@ void func_80B4BFFC(EnInvadepoh* this) {
 
 void func_80B4C058(EnInvadepoh* this, GlobalContext* globalCtx) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 temp_v1;
     s16 diff;
 
@@ -3886,7 +3886,7 @@ void func_80B4C1BC(EnInvadepoh* this) {
 
 void func_80B4C218(EnInvadepoh* this, GlobalContext* globalCtx) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Actor* temp_v0;
     s16 temp_v1;
     s16 diff;
@@ -4079,7 +4079,7 @@ void func_80B4CAB0(EnInvadepoh* this) {
 
 void func_80B4CB0C(EnInvadepoh* this, GlobalContext* globalCtx) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 temp_v1;
     s16 diff;
 
@@ -4108,7 +4108,7 @@ void func_80B4CC70(EnInvadepoh* this) {
 
 void func_80B4CCCC(EnInvadepoh* this, GlobalContext* globalCtx) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 temp_v1;
     s16 diff;
 
