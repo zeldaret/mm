@@ -234,7 +234,7 @@ void EnMinislime_Disappear(EnMinislime* this, GlobalContext* globalCtx) {
 }
 
 void EnMinislime_SetupFall(EnMinislime* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 yaw;
 
     this->collider.base.atFlags |= AT_ON;
@@ -762,7 +762,7 @@ void EnMinislime_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         if (this->actor.bgCheckFlags & 2) {
-            player = PLAYER;
+            player = GET_PLAYER(globalCtx);
             vec1.x = this->actor.world.pos.x;
             vec1.z = this->actor.world.pos.z;
             vec1.y = player->actor.world.pos.y + player->actor.depthInWater;

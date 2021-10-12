@@ -257,7 +257,7 @@ s32 func_80A52A78(EnDnq* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80A52B68(EnDnq* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     u16 temp = globalCtx->msgCtx.unk11F04;
 
     if ((player->stateFlags1 & 0x40) && (player->targetActor == &this->actor)) {
@@ -297,7 +297,7 @@ s32 func_80A52B68(EnDnq* this, GlobalContext* globalCtx) {
 }
 
 void func_80A52C6C(EnDnq* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 pad;
     Vec3f sp34 = { 0.0f, 0.0f, 110.0f };
     Vec3f sp28;
@@ -335,7 +335,7 @@ s32 func_80A52D44(EnDnq* this, GlobalContext* globalCtx) {
 }
 
 void func_80A52DC8(EnDnq* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 yaw = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
 
     if (yaw <= 0x3800) {

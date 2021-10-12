@@ -972,7 +972,7 @@ void EnPametfrog_SetupSpawnFrog(EnPametfrog* this, GlobalContext* globalCtx) {
     static Vec3f sAccel = { 0.0f, -0.5f, 0.0f };
     static Color_RGBA8 primColor = { 250, 250, 250, 255 };
     static Color_RGBA8 envColor = { 180, 180, 180, 255 };
-    s16 yaw = BINANG_ROT180(func_800DFCDC(ACTIVE_CAM));
+    s16 yaw = BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx)));
     Vec3f vec1;
     Vec3f vel;
     s32 i;
@@ -1245,7 +1245,7 @@ void EnPametfrog_SetupSnapperSpawn(EnPametfrog* this, GlobalContext* globalCtx) 
 
     // Zooms in on Snapper spawn point
     Play_CameraSetAtEye(globalCtx, this->camId, &at, &eye);
-    this->quake = Quake_Add(ACTIVE_CAM, 6);
+    this->quake = Quake_Add(GET_ACTIVE_CAM(globalCtx), 6);
     Quake_SetSpeed(this->quake, 18000);
     Quake_SetQuakeValues(this->quake, 2, 0, 0, 0);
     Quake_SetCountdown(this->quake, 15);
@@ -1268,7 +1268,7 @@ void EnPametfrog_SnapperSpawn(EnPametfrog* this, GlobalContext* globalCtx) {
 void EnPametfrog_SetupTransitionGekkoSnapper(EnPametfrog* this, GlobalContext* globalCtx) {
     this->actor.params = GEKKO_GET_SNAPPER;
     Quake_RemoveFromIdx(this->quake);
-    this->quake = Quake_Add(ACTIVE_CAM, 3);
+    this->quake = Quake_Add(GET_ACTIVE_CAM(globalCtx), 3);
     Quake_SetSpeed(this->quake, 20000);
     Quake_SetQuakeValues(this->quake, 17, 0, 0, 0);
     Quake_SetCountdown(this->quake, 12);

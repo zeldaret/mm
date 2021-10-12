@@ -361,7 +361,7 @@ void EnSb_UpdateDamage(EnSb* this, GlobalContext* globalCtx) {
 void EnSb_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnSb* this = THIS;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->isDead) {
         if (this->actor.depthInWater > 0.0f) {

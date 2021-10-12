@@ -552,7 +552,7 @@ void func_80B9765C(EnZot* this, GlobalContext* globalCtx) {
 }
 
 void func_80B97708(EnZot* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 phi_v1;
 
     func_80B96D4C(this);
@@ -961,7 +961,7 @@ void func_80B9854C(EnZot* this, GlobalContext* globalCtx) {
 
 void func_80B985EC(EnZot* this, GlobalContext* globalCtx) {
     s32 temp_v0;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     func_80B98348(this, globalCtx);
     if (func_80152498(&globalCtx->msgCtx) == 0x10) {

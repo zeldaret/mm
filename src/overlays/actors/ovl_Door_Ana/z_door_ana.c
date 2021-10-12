@@ -118,7 +118,7 @@ void DoorAna_WaitClosed(DoorAna* this, GlobalContext* globalCtx) {
 }
 
 void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 dooranaType = GET_DOORANA_TYPE(this);
     s8 pad[4];
     s32 entranceIndex;
@@ -186,8 +186,8 @@ void DoorAna_GrabLink(DoorAna* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((this->actor.playerHeightRel <= 0.0f) && (this->actor.xzDistToPlayer > 20.0f)) {
-        player = PLAYER;
+    if ((this->actor.yDistToPlayer <= 0.0f) && (this->actor.xzDistToPlayer > 20.0f)) {
+        player = GET_PLAYER(globalCtx);
         player->actor.world.pos.x = (Math_SinS(this->actor.yawTowardsPlayer) * 20.0f) + this->actor.world.pos.x;
         player->actor.world.pos.z = (Math_CosS(this->actor.yawTowardsPlayer) * 20.0f) + this->actor.world.pos.z;
     }
@@ -197,7 +197,7 @@ void DoorAna_Update(Actor* thisx, GlobalContext* globalCtx) {
     DoorAna* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    this->actor.shape.rot.y = BINANG_ROT180(func_800DFCDC(globalCtx->cameraPtrs[globalCtx->activeCamera]));
+    this->actor.shape.rot.y = BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx)));
 }
 
 void DoorAna_Draw(Actor* thisx, GlobalContext* globalCtx) {

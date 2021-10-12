@@ -389,7 +389,7 @@ void func_80876930(EnDodongo* this, GlobalContext* globalCtx, Vec3f* arg2) {
 }
 
 void func_80876B08(EnDodongo* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 yDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
     if (ABS_ALT(yDiff) < 0x4000) {
@@ -521,7 +521,7 @@ s32 func_8087721C(EnDodongo* this) {
 }
 
 s32 func_80877278(EnDodongo* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Actor* explosive = globalCtx->actorCtx.actorList[ACTORCAT_EXPLOSIVES].first;
     Vec3f sp44;
 
@@ -571,7 +571,7 @@ void func_80877494(EnDodongo* this) {
 }
 
 void func_80877500(EnDodongo* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Vec3f sp30;
     s16 temp_v1;
 
@@ -827,7 +827,7 @@ void func_80878354(EnDodongo* this) {
 }
 
 void func_80878424(EnDodongo* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Vec3f sp20;
 
     this->timer++;

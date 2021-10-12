@@ -331,7 +331,7 @@ void func_80BAAB78(EnSuttari* this, GlobalContext* globalCtx) {
             case 0:
                 if (gSaveContext.weekEventReg[0x51] & 1) {
                     this->textId = 0x1455;
-                    ((EnElf*)PLAYER->tatlActor)->unk264 |= 8;
+                    ((EnElf*)GET_PLAYER(globalCtx)->tatlActor)->unk264 |= 8;
                     this->flags2 |= 1;
                 } else {
                     this->textId = 0x1450;
@@ -353,7 +353,7 @@ void func_80BAAB78(EnSuttari* this, GlobalContext* globalCtx) {
             case 0x1453:
                 this->flags1 |= 0x400;
                 gSaveContext.weekEventReg[0x51] |= 1;
-                ((EnElf*)PLAYER->tatlActor)->unk264 |= 8;
+                ((EnElf*)GET_PLAYER(globalCtx)->tatlActor)->unk264 |= 8;
                 this->flags2 |= 1;
                 this->textId = 0x1454;
                 break;
@@ -484,7 +484,7 @@ void EnSuttari_GetPaths(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BAB4F0(EnSuttari* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Vec3f sp30;
 
     if (this->flags1 & 0x80) {
@@ -815,7 +815,7 @@ s32 func_80BAC220(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BAC2FC(EnSuttari* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 curFrame = this->skelAnime.animCurrentFrame;
     s16 frameCount = SkelAnime_GetFrameCount(&sAnimations[this->animationIdx].animation->common);
 
@@ -979,7 +979,7 @@ void func_80BAC6E8(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BACA14(EnSuttari* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->animationIdx == 1 || this->animationIdx == 8) {
         this->animationIdx = 2;
@@ -1006,7 +1006,7 @@ void func_80BACA14(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BACBB0(EnSuttari* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 target;
 
     this->unk3F2 = this->unk2DE;
@@ -1037,7 +1037,7 @@ void func_80BACBB0(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BACD2C(EnSuttari* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     this->unk3F2 = this->unk2DE;
     if (player->transformation == PLAYER_FORM_HUMAN || player->transformation == PLAYER_FORM_DEKU) {
@@ -1170,7 +1170,7 @@ void func_80BAD2B4(EnSuttari* this, GlobalContext* globalCtx) {
 
 void func_80BAD380(EnSuttari* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((player->stateFlags1 & 0x40) && (globalCtx->msgCtx.unk11F04 != 0x2A31)) {
         this->flags1 |= 0x8000;
@@ -1323,7 +1323,7 @@ void func_80BADA9C(EnSuttari* this, GlobalContext* globalCtx) {
                 }
                 this->flags1 &= ~0x400;
                 if (this->flags2 & 1) {
-                    ((EnElf*)PLAYER->tatlActor)->unk264 |= 0x10;
+                    ((EnElf*)GET_PLAYER(globalCtx)->tatlActor)->unk264 |= 0x10;
                     this->flags2 &= ~1;
                 }
                 globalCtx->msgCtx.unk11F22 = 0x43;
@@ -1446,7 +1446,7 @@ void EnSuttari_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void EnSuttari_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnSuttari* this = THIS;
     s32 pad;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     this->actionFunc(this, globalCtx);
     if ((this->flags1 & 8) && (this->flags2 & 0x10) && (player->stateFlags1 & 0x10000000)) {
