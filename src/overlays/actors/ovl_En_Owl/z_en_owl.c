@@ -1,3 +1,9 @@
+/*
+ * File: z_en_owl.c
+ * Overlay: ovl_En_Owl
+ * Description: Kaepora Gaebora (Owl)
+ */
+
 #include "z_en_owl.h"
 
 #define FLAGS 0x00000019
@@ -26,8 +32,33 @@ void func_8095B960(EnOwl* this, GlobalContext* globalCtx);
 void func_8095BA84(EnOwl* this, GlobalContext* globalCtx);
 void func_8095BE0C(EnOwl* this, GlobalContext* globalCtx);
 void func_8095BF20(EnOwl* this, GlobalContext* globalCtx);
+void func_8095BF58(EnOwl* this, GlobalContext* globalCtx);
+void func_8095C1C8(EnOwl* this, GlobalContext* globalCtx);
+void func_8095C328(EnOwl* this);
+void func_8095C408(EnOwl* this);
+void func_8095C484(EnOwl* this);
+void func_8095CCF4(Actor* thisx, GlobalContext* globalCtx);
+void func_8095D074(Actor* thisx, GlobalContext* globalCtx);
+void EnOwl_ChangeMode(EnOwl* this, EnOwlActionFunc actionFunc, EnOwlFunc unkFunc, SkelAnime* skelAnime,
+                      AnimationHeader* animationSeg, f32 transitionRate);
 
-#if 0
+typedef enum {
+    /* 0x00 */ OWL_REPEAT,
+    /* 0x01 */ OWL_OK
+} EnOwlMessageChoice;
+
+extern AnimationHeader D_06001168;
+extern Gfx D_06001200[];
+extern AnimationHeader D_06001ADC;
+extern TexturePtr D_06008EB8;
+extern TexturePtr D_060092B8;
+extern TexturePtr D_060096B8;
+extern FlexSkeletonHeader D_0600C5F8;
+extern AnimationHeader D_0600C6D4;
+extern AnimationHeader D_0600CB94;
+extern AnimationHeader D_0600CDB0;
+extern FlexSkeletonHeader D_060105C0;
+
 const ActorInit En_Owl_InitVars = {
     ACTOR_EN_OWL,
     ACTORCAT_NPC,
@@ -40,137 +71,1137 @@ const ActorInit En_Owl_InitVars = {
     (ActorFunc)EnOwl_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_8095D2F0 = {
-    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_ENEMY, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_ON | AC_TYPE_ENEMY,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 30, 40, 0, { 0, 0, 0 } },
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_8095D31C[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 25, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 1400, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 2000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 2400, ICHAIN_STOP),
 };
 
-#endif
+void func_8095A510(EnOwl* this, GlobalContext* globalCtx) {
+    this->unk_3FC = ENOWL_GET_F000(&this->actor);
+    if (this->unk_3FC == 15) {
+        this->unk_3FC = -1;
+        this->path = NULL;
+    } else {
+        this->unk_3F8 = 0;
+        this->path = &globalCtx->setupPathList[this->unk_3FC];
+    }
+}
 
-extern ColliderCylinderInit D_8095D2F0;
-extern InitChainEntry D_8095D31C[];
+void EnOwl_Init(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    EnOwl* this = THIS;
+    s32 i;
+    s16 cutscene = this->actor.cutscene;
+    s32 owlType;
+    s32 switchFlag;
 
-extern UNK_TYPE D_06001168;
-extern UNK_TYPE D_06001200;
-extern UNK_TYPE D_06001ADC;
-extern UNK_TYPE D_0600C6D4;
-extern UNK_TYPE D_0600CB94;
-extern UNK_TYPE D_0600CDB0;
+    for (i = 0; i < ARRAY_COUNT(this->unk_400); i++) {
+        this->unk_400[i] = cutscene;
+        if (cutscene != -1) {
+            this->actor.cutscene = cutscene;
+            cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095A510.s")
+    this->actor.cutscene = this->unk_400[0];
+    Actor_ProcessInitChain(&this->actor, sInitChain);
+    if (ENOWL_GET_TYPE(&this->actor) == ENOWL_GET_TYPE_30) {
+        Actor_SetScale(&this->actor, 0.1f);
+        this->actor.update = func_8095CCF4;
+        this->actor.draw = func_8095D074;
+        this->actor.flags &= ~1;
+        this->unk_3D8 = 0;
+        this->unk_3DA = 0x320;
+        this->unk_3DC = 0x12C;
+        return;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/EnOwl_Init.s")
+    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 36.0f);
+    SkelAnime_InitSV(globalCtx, &this->skelAnime1, &D_0600C5F8, &D_06001ADC, this->jointTable1, this->morphTable1, 21);
+    SkelAnime_InitSV(globalCtx, &this->skelAnime2, &D_060105C0, &D_0600CDB0, this->jointTable2, this->morphTable2, 16);
+    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
+    this->actor.minVelocityY = -10.0f;
+    this->actor.targetArrowOffset = 500.0f;
+    EnOwl_ChangeMode(this, func_8095BF58, func_8095C484, &this->skelAnime2, &D_0600CDB0, 0.0f);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/EnOwl_Destroy.s")
+    this->actionFlags = 0;
+    this->unk_40D = 0;
+    this->unk_40A = 0;
+    this->unk_409 = 4;
+    this->unk_40B = this->unk_408 = 0;
+    this->unk_40C = 4;
+    this->unk_406 = -1;
+    owlType = ENOWL_GET_TYPE(&this->actor);
+    switchFlag = ENOWL_GET_SWITCHFLAG(&this->actor);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095A920.s")
+    switch (owlType) {
+        case ENOWL_GET_TYPE_1:
+            if ((switchFlag < 0x7F) && Flags_GetSwitch(globalCtx, switchFlag)) {
+                Actor_MarkForDeath(&this->actor);
+                return;
+            }
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095A978.s")
+        case ENOWL_GET_TYPE_2:
+            if (gSaveContext.inventory.items[14] == 14) {
+                Actor_MarkForDeath(&this->actor);
+                return;
+            }
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095A9FC.s")
+        case ENOWL_GET_TYPE_3:
+            if (CHECK_QUEST_ITEM(15)) {
+                Actor_MarkForDeath(&this->actor);
+                return;
+            }
+            break;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095AA70.s")
+    this->unk_3DA = 0;
+    this->unk_3F0 = this->actor.home.pos.y;
+    this->unk_3EC = this->actor.home.rot.y;
+    func_8095A510(this, globalCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095AAD0.s")
+    switch (owlType) {
+        case ENOWL_GET_TYPE_1:
+            this->actionFunc = func_8095AEC0;
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095AB1C.s")
+        case ENOWL_GET_TYPE_2:
+            this->actionFunc = func_8095BE0C;
+            if (gSaveContext.weekEventReg[9] & 0x20) {
+                this->actor.textId = 0xBF0;
+            } else {
+                this->actor.textId = 0xBEA;
+            }
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095AB4C.s")
+        case ENOWL_GET_TYPE_3:
+            this->actionFunc = func_8095AFEC;
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095ABA8.s")
+        case ENOWL_GET_TYPE_1000:
+            this->actionFunc = func_8095BF20;
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095ABF0.s")
+        default:
+            this->actionFlags |= 2;
+            this->unk_3DA = 0x20;
+            this->actionFunc = func_8095BF58;
+            break;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095AC50.s")
+void EnOwl_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnOwl* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095ACEC.s")
+    if (ENOWL_GET_TYPE(&this->actor) != ENOWL_GET_TYPE_30) {
+        Collider_DestroyCylinder(globalCtx, &this->collider);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095AD54.s")
+void func_8095A920(EnOwl* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095AE00.s")
+    this->actor.world.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &player->actor.world.pos);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 6, 0x3E8, 0xC8);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095AE60.s")
+s32 func_8095A978(EnOwl* this, GlobalContext* globalCtx, u16 textId, f32 targetDist, f32 arg4) {
+    if (func_800B84D0(&this->actor, globalCtx)) {
+        return true;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095AEC0.s")
+    this->actor.textId = textId;
+    if (this->actor.xzDistToPlayer < targetDist) {
+        this->actor.flags |= 0x10000;
+        func_800B8500(&this->actor, globalCtx, targetDist, arg4, 0);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095AF2C.s")
+    return false;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095AFEC.s")
+s32 func_8095A9FC(EnOwl* this, GlobalContext* globalCtx, u16 textId) {
+    if (func_800B84D0(&this->actor, globalCtx)) {
+        return true;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095B06C.s")
+    this->actor.textId = textId;
+    if (this->actor.xzDistToPlayer < 120.0f) {
+        func_800B8500(&this->actor, globalCtx, 350.0f, 1000.0f, 0);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095B0C8.s")
+    return false;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095B158.s")
+void func_8095AA70(EnOwl* this) {
+    EnOwl_ChangeMode(this, func_8095C1C8, func_8095C484, &this->skelAnime1, &D_0600CB94, 0.0f);
+    this->eyeTexIndex = 0;
+    this->blinkTimer = Rand_S16Offset(60, 60);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095B1E4.s")
+void func_8095AAD0(EnOwl* this, GlobalContext* globalCtx) {
+    s32 switchFlag = ENOWL_GET_SWITCHFLAG(&this->actor);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095B254.s")
+    if (switchFlag < 0x7F) {
+        Actor_SetSwitchFlag(globalCtx, switchFlag);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095B2F8.s")
+    func_8095AA70(this);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095B3DC.s")
+void func_8095AB1C(EnOwl* this, GlobalContext* globalCtx) {
+    if ((this->unk_3DA % 64) == 0) {
+        func_8095AAD0(this, globalCtx);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095B480.s")
+void func_8095AB4C(EnOwl* this) {
+    if (randPlusMinusPoint5Scaled(1.0f) < 0.0f) {
+        this->actionFlags |= 0x20;
+    } else {
+        this->actionFlags &= ~0x20;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095B574.s")
+// Unused?
+void func_8095ABA8(EnOwl* this) {
+    func_8095AB4C(this);
+    this->unk_40B = 0;
+    this->unk_3DE = 0;
+    this->actionFlags |= 0x10;
+    this->unk_40C = 4;
+    this->unk_408 = 0;
+    this->unk_40A = 0;
+    this->unk_409 = 4;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095B650.s")
+void func_8095ABF0(EnOwl* this, GlobalContext* globalCtx) {
+    if (func_800B867C(&this->actor, globalCtx)) {
+        Audio_QueueSeqCmd(0x110000FF);
+        func_8095AAD0(this, globalCtx);
+        this->actor.flags &= ~0x10000;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095B6C8.s")
+// Unused?
+void func_8095AC50(EnOwl* this, GlobalContext* globalCtx) {
+    if (func_800B867C(&this->actor, globalCtx)) {
+        Audio_QueueSeqCmd(0x110000FF);
+        if ((this->unk_3DA % 64) == 0) {
+            func_8095AAD0(this, globalCtx);
+        } else {
+            this->actionFlags &= ~2;
+            func_8095ABA8(this);
+            this->actionFunc = func_8095AB1C;
+        }
+        this->actor.flags &= ~0x10000;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095B76C.s")
+void func_8095ACEC(EnOwl* this) {
+    this->actionFlags &= ~0x40;
+    if (this->unk_406 >= 0) {
+        if (ActorCutscene_GetCurrentIndex() == this->unk_400[this->unk_406]) {
+            ActorCutscene_Stop(this->unk_400[this->unk_406]);
+        }
+        this->unk_406 = -1;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095B960.s")
+void func_8095AD54(EnOwl* this, GlobalContext* globalCtx) {
+    if ((func_80152498(&globalCtx->msgCtx) == 4) && func_80147624(globalCtx)) {
+        switch (globalCtx->msgCtx.choiceIndex) {
+            case OWL_REPEAT:
+                func_80151938(globalCtx, 0x7D1);
+                this->actionFunc = func_8095AE00;
+                break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095B9FC.s")
+            case OWL_OK:
+                func_80151938(globalCtx, 0x7D3);
+                this->actionFunc = func_8095ABF0;
+                break;
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095BA84.s")
+void func_8095AE00(EnOwl* this, GlobalContext* globalCtx) {
+    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+        func_80151938(globalCtx, 0x7D2);
+        this->actionFunc = func_8095AD54;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095BE0C.s")
+void func_8095AE60(EnOwl* this, GlobalContext* globalCtx) {
+    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+        func_80151938(globalCtx, 0x7D1);
+        this->actionFunc = func_8095AE00;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095BF20.s")
+void func_8095AEC0(EnOwl* this, GlobalContext* globalCtx) {
+    func_8095A920(this, globalCtx);
+    if (func_8095A978(this, globalCtx, 0x7D0, 360.0f, 200.0f)) {
+        func_801A3098(0x45);
+        this->actionFunc = func_8095AE60;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095BF58.s")
+void func_8095AF2C(EnOwl* this, GlobalContext* globalCtx) {
+    switch (func_80152498(&globalCtx->msgCtx)) {
+        case 5:
+            if (func_80147624(globalCtx)) {
+                if (globalCtx->msgCtx.unk11F04 == 0xBFE) {
+                    func_8095ACEC(this);
+                    func_801477B4(globalCtx);
+                    this->actionFunc = func_8095ABF0;
+                } else {
+                    func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                }
+            }
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095BF78.s")
+        case 6:
+            func_8095ACEC(this);
+            this->actionFunc = func_8095ABF0;
+            break;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095C09C.s")
+void func_8095AFEC(EnOwl* this, GlobalContext* globalCtx) {
+    func_8095A920(this, globalCtx);
+    if (func_8095A978(this, globalCtx, 0xBF6, 200.0f, 100.0f)) {
+        func_801A3098(0x45);
+        this->actionFunc = func_8095AF2C;
+        this->unk_406 = 0;
+        this->actionFlags |= 0x40;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095C1C8.s")
+s32 func_8095B06C(EnOwl* this) {
+    if ((this->actor.world.pos.y + 2.0f) < this->unk_3F0) {
+        this->actor.world.pos.y += 2.0f;
+        return false;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095C258.s")
+    if (this->unk_3F0 < (this->actor.world.pos.y - 2.0f)) {
+        this->actor.world.pos.y -= 2.0f;
+        return false;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095C328.s")
+    return true;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095C408.s")
+void func_8095B0C8(EnOwl* this) {
+    s32 pad;
+    Vec3s* points = (Vec3s*)Lib_SegmentedToVirtual(this->path->points);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095C484.s")
+    points += this->unk_3F8;
+    this->unk_3EC = Math_FAtan2F(points->z - this->actor.world.pos.z, points->x - this->actor.world.pos.x);
+    this->unk_3F0 = points->y;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095C510.s")
+void func_8095B158(EnOwl* this) {
+    if (func_801378B8(&this->skelAnime1, 2.0f) || func_801378B8(&this->skelAnime1, 9.0f) ||
+        func_801378B8(&this->skelAnime1, 23.0f) || func_801378B8(&this->skelAnime1, 40.0f) ||
+        func_801378B8(&this->skelAnime1, 58.0f)) {
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_OWL_FLUTTER);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095C568.s")
+void func_8095B1E4(EnOwl* this, GlobalContext* globalCtx) {
+    if (this->actor.speedXZ < 6.0f) {
+        this->actor.speedXZ += 1.0f;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/EnOwl_Update.s")
+    if (this->actor.xzDistToPlayer > 6000.0f) {
+        Actor_MarkForDeath(&this->actor);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095CCF4.s")
+void func_8095B254(EnOwl* this, GlobalContext* globalCtx) {
+    if (this->actor.speedXZ < 6.0f) {
+        this->actor.speedXZ += 1.0f;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095CE18.s")
+    if (this->actionFlags & 1) {
+        EnOwl_ChangeMode(this, func_8095B1E4, func_8095C328, &this->skelAnime1, &D_06001ADC, 0.0f);
+        this->unk_3EA = 6;
+        this->actor.flags |= 0x20;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095CF44.s")
+    func_8095B158(this);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/EnOwl_Draw.s")
+void func_8095B2F8(EnOwl* this, GlobalContext* globalCtx) {
+    func_8095B06C(this);
+    if (this->skelAnime1.animCurrentFrame >= 18.0f) {
+        Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_3EC, 2, 0x200, 0x80);
+        this->actor.shape.rot.y = this->actor.world.rot.y;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095D074.s")
+    if ((this->actor.shape.rot.y == this->unk_3EC) && (this->actionFlags & 1)) {
+        this->actionFunc = func_8095B254;
+        SkelAnime_ChangeAnim(this->skelAnime3, this->skelAnime3->animCurrentSeg, 1.0f, 19.0f,
+                             SkelAnime_GetFrameCount(&D_06001168.common), 2, 0.0f);
+        this->unk_414 = func_8095C484;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Owl/func_8095D24C.s")
+    func_8095B158(this);
+}
+
+void func_8095B3DC(EnOwl* this, GlobalContext* globalCtx) {
+    if (this->actionFlags & 1) {
+        this->actionFunc = func_8095B2F8;
+        SkelAnime_ChangeAnim(this->skelAnime3, &D_06001168, 1.0f, 0.0f, 35.0f, 2, 0.0f);
+        this->unk_414 = func_8095C408;
+        this->unk_3EC = 0x5500;
+        this->actor.world.pos.y += 100.0f;
+        this->unk_3F0 = this->actor.world.pos.y;
+    }
+}
+
+void func_8095B480(EnOwl* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    if (player->stateFlags3 & 0x10000000) {
+        this->actor.textId = 0xBF1;
+        EnOwl_ChangeMode(this, func_8095BF58, func_8095C484, &this->skelAnime2, &D_0600CDB0, 0.0f);
+        this->eyeTexIndex = 0;
+        this->actionFlags &= ~8;
+        this->blinkTimer = Rand_S16Offset(60, 60);
+        this->actor.home.rot.x = 0;
+        this->actionFlags |= 8;
+        func_8095ACEC(this);
+        this->unk_3F0 = this->actor.home.pos.y;
+        this->unk_3EC = this->actor.home.rot.y;
+        this->actor.world.pos = this->actor.home.pos;
+        func_8095A510(this, globalCtx);
+        this->actor.speedXZ = 0.0f;
+        this->actionFunc = func_8095BE0C;
+    }
+}
+
+void func_8095B574(EnOwl* this, GlobalContext* globalCtx) {
+    func_8095A920(this, globalCtx);
+    if (func_800B84D0(&this->actor, globalCtx)) {
+        this->actionFunc = func_8095BA84;
+        func_801A3098(0x45);
+        this->actionFlags |= 0x40;
+        this->unk_406 = 2;
+    } else if (this->actor.xzDistToPlayer < 200.0f) {
+        this->actor.flags |= 0x10000;
+        func_800B8500(&this->actor, globalCtx, 200.0f, 400.0f, 0);
+    } else {
+        this->actor.flags &= ~0x10000;
+    }
+    func_8095B480(this, globalCtx);
+}
+
+void func_8095B650(EnOwl* this, GlobalContext* globalCtx) {
+    if (this->actionFlags & 1) {
+        EnOwl_ChangeMode(this, func_8095B574, func_8095C484, &this->skelAnime2, &D_0600CDB0, 0.0f);
+        this->actor.textId = 0xBF5;
+        this->actionFlags &= ~8;
+    }
+    func_8095B480(this, globalCtx);
+}
+
+void func_8095B6C8(EnOwl* this, GlobalContext* globalCtx) {
+    if (this->actionFlags & 1) {
+        SkelAnime_ChangeAnim(this->skelAnime3, &D_0600CB94, -1.0f, SkelAnime_GetFrameCount(&D_0600CB94.common), 0.0f, 2,
+                             0.0f);
+        this->unk_414 = func_8095C484;
+        this->actionFunc = func_8095B650;
+    }
+    func_8095B158(this);
+    func_8095B480(this, globalCtx);
+}
+
+void func_8095B76C(EnOwl* this, GlobalContext* globalCtx) {
+    s32 pad;
+    s16 sp4A;
+    f32 sp44 = func_80122524(&this->actor, this->path, this->unk_3F8, &sp4A);
+    Vec3s* points;
+
+    Math_SmoothStepToS(&this->actor.world.rot.y, sp4A, 6, 0x800, 0x200);
+    this->actor.shape.rot.y = this->actor.world.rot.y;
+    if (sp44 < SQ(this->actor.speedXZ)) {
+        this->actor.speedXZ = 0.0f;
+        points = (Vec3s*)Lib_SegmentedToVirtual(this->path->points);
+        points += this->unk_3F8;
+
+        do {
+            this->actor.world.pos.x = points->x;
+            this->actor.world.pos.z = points->z;
+        } while(0);
+
+        this->unk_3F8++;
+        if (this->path->count <= this->unk_3F8) {
+            this->actionFunc = func_8095B6C8;
+            return;
+        }
+
+        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_OWL, this->actor.world.pos.x, this->actor.world.pos.y,
+                    this->actor.world.pos.z, 0, 0, 0, 0xF00);
+        this->actor.home.rot.x++;
+        if (this->actor.home.rot.x >= 3) {
+            func_8095ACEC(this);
+        }
+        func_8095B0C8(this);
+    } else if (sp44 < SQ(21.0f)) {
+        if (this->actor.speedXZ > 1.0f) {
+            this->actor.speedXZ -= 1.0f;
+        } else {
+            this->actor.speedXZ = 1.0f;
+        }
+    } else if (this->actor.speedXZ < 6.0f) {
+        this->actor.speedXZ += 1.0f;
+    }
+
+    func_8095B06C(this);
+    func_8095B158(this);
+    func_8095B480(this, globalCtx);
+}
+
+void func_8095B960(EnOwl* this, GlobalContext* globalCtx) {
+    if (this->skelAnime1.animCurrentFrame >= 18.0f) {
+        Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_3EC, 2, 0x200, 0x80);
+        this->actor.shape.rot.y = this->actor.world.rot.y;
+    }
+
+    func_8095B06C(this);
+    if (this->actor.shape.rot.y == this->unk_3EC) {
+        this->actionFunc = func_8095B76C;
+    }
+
+    func_8095B158(this);
+    func_8095B480(this, globalCtx);
+}
+
+void func_8095B9FC(EnOwl* this, GlobalContext* globalCtx) {
+    if (this->actionFlags & 1) {
+        this->actionFunc = func_8095B960;
+        SkelAnime_ChangeAnim(this->skelAnime3, &D_06001168, 1.0f, 0.0f, 35.0f, 2, 0.0f);
+        this->unk_414 = func_8095C408;
+        func_8095B0C8(this);
+    }
+}
+
+void func_8095BA84(EnOwl* this, GlobalContext* globalCtx) {
+    func_8095A920(this, globalCtx);
+
+    switch (func_80152498(&globalCtx->msgCtx)) {
+        case 4:
+            if (func_80147624(globalCtx)) {
+                switch (globalCtx->msgCtx.unk11F04) {
+                    case 0xBEC:
+                        switch (globalCtx->msgCtx.choiceIndex) {
+                            case 0:
+                                func_8019F208();
+                                if (gSaveContext.weekEventReg[9] & 0x40) {
+                                    func_80151938(globalCtx, 0xBF4);
+                                } else {
+                                    gSaveContext.weekEventReg[9] |= 0x40;
+                                    func_80151938(globalCtx, 0xBED);
+                                }
+                                break;
+
+                            case 1:
+                                func_8019F230();
+                                func_80151938(globalCtx, 0xBEF);
+                                break;
+                        }
+                        break;
+
+                    case 0xBF2:
+                        switch (globalCtx->msgCtx.choiceIndex) {
+                            case 0:
+                                func_8019F208();
+                                func_80151938(globalCtx, 0xBF4);
+                                return;
+
+                            case 1:
+                                func_8019F230();
+                                func_80151938(globalCtx, 0xBF3);
+                                return;
+                        }
+                        break;
+                }
+            }
+            break;
+
+        case 5:
+            if (func_80147624(globalCtx)) {
+                switch (globalCtx->msgCtx.unk11F04) {
+                    case 0xBEA:
+                        gSaveContext.weekEventReg[9] |= 0x20;
+                        func_80151938(globalCtx, 0xBEB);
+                        break;
+
+                    case 0xBEB:
+                    case 0xBF0:
+                        func_80151938(globalCtx, 0xBEC);
+                        break;
+
+                    case 0xBED:
+                    case 0xBF4:
+                        func_80151938(globalCtx, 0xBEE);
+                        break;
+
+                    case 0xBEE:
+                        func_801477B4(globalCtx);
+                        Audio_QueueSeqCmd(0x110000FF);
+                        EnOwl_ChangeMode(this, func_8095B9FC, func_8095C484, &this->skelAnime1, &D_0600CB94, 0.0f);
+                        this->eyeTexIndex = 0;
+                        this->blinkTimer = Rand_S16Offset(60, 60);
+                        this->actionFlags |= 8;
+                        this->actor.flags &= ~0x10000;
+                        this->actor.home.rot.x = 0;
+                        func_8095ACEC(this);
+                        this->unk_406 = 0;
+                        this->actionFlags |= 0x40;
+                        break;
+
+                    case 0xBEF:
+                    case 0xBF3:
+                        func_801477B4(globalCtx);
+                        Audio_QueueSeqCmd(0x110000FF);
+                        func_8095ACEC(this);
+                        this->actor.flags &= ~0x10000;
+                        this->actor.textId = 0xBF0;
+                        this->actionFunc = func_8095BE0C;
+                        break;
+
+                    case 0xBF1:
+                        func_80151938(globalCtx, 0xBF2);
+                        break;
+
+                    case 0xBF5:
+                        func_801477B4(globalCtx);
+                        Audio_QueueSeqCmd(0x110000FF);
+                        this->actor.flags &= ~0x10000;
+                        EnOwl_ChangeMode(this, func_8095B3DC, func_8095C484, &this->skelAnime1, &D_0600CB94, 0.0f);
+                        this->eyeTexIndex = 0;
+                        this->blinkTimer = Rand_S16Offset(60, 60);
+                        this->actionFlags |= 8;
+                        func_8095ACEC(this);
+                        break;
+                }
+            }
+            break;
+    }
+}
+
+void func_8095BE0C(EnOwl* this, GlobalContext* globalCtx) {
+    func_8095A920(this, globalCtx);
+    if (func_800B84D0(&this->actor, globalCtx)) {
+        this->actionFunc = func_8095BA84;
+        func_801A3098(0x45);
+        this->unk_406 = 1;
+        this->actionFlags |= 0x40;
+    } else if (this->actor.textId == 0xBF0) {
+        if (this->actor.isTargeted) {
+            func_800B8500(&this->actor, globalCtx, 200.0f, 200.0f, 0);
+        }
+    } else if (this->actor.xzDistToPlayer < 200.0f) {
+        this->actor.flags |= 0x10000;
+        func_800B8500(&this->actor, globalCtx, 200.0f, 200.0f, 0);
+    } else {
+        this->actor.flags &= ~0x10000;
+    }
+}
+
+void func_8095BF20(EnOwl* this, GlobalContext* globalCtx) {
+    func_8095A9FC(this, globalCtx, 0x7D0);
+    this->actionFunc = func_8095ABF0;
+}
+
+void func_8095BF58(EnOwl* this, GlobalContext* globalCtx) {
+    func_8095A920(this, globalCtx);
+}
+
+void func_8095BF78(EnOwl* this, GlobalContext* globalCtx) {
+    this->actor.flags |= 0x20;
+    if (this->actor.xzDistToPlayer > 6000.0f) {
+        Actor_MarkForDeath(&this->actor);
+    }
+
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_3EC, 2, 0x80, 0x40);
+    this->actor.shape.rot.y = this->actor.world.rot.y;
+    if (this->actor.speedXZ < 16.0f) {
+        this->actor.speedXZ += 0.5f;
+    }
+
+    if ((this->unk_3E4 + 1000.0f) < this->actor.world.pos.y) {
+        if (this->actor.velocity.y > 0.0f) {
+            this->actor.velocity.y -= 0.4f;
+        }
+    } else if (this->actor.velocity.y < 4.0f) {
+        this->actor.velocity.y += 0.2f;
+    }
+}
+
+void func_8095C09C(EnOwl* this, GlobalContext* globalCtx) {
+    if (this->skelAnime1.animCurrentFrame > 10.0f) {
+        Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_3EC, 2, 0x400, 0x40);
+        this->actor.shape.rot.y = this->actor.world.rot.y;
+    }
+
+    if (this->skelAnime1.animCurrentFrame > 45.0f) {
+        this->actor.velocity.y = 2.0f;
+        this->actor.gravity = 0.0f;
+        this->actor.speedXZ = 8.0f;
+    } else if (this->skelAnime1.animCurrentFrame > 17.0f) {
+        this->actor.velocity.y = 6.0f;
+        this->actor.gravity = 0.0f;
+        this->actor.speedXZ = 4.0f;
+    }
+
+    if (this->actionFlags & 1) {
+        EnOwl_ChangeMode(this, func_8095BF78, func_8095C328, &this->skelAnime1, &D_06001ADC, 0.0f);
+        this->unk_3EA = 6;
+        this->unk_3EC += 0x2000;
+    }
+
+    func_8095B158(this);
+}
+
+void func_8095C1C8(EnOwl* this, GlobalContext* globalCtx) {
+    if (this->actionFlags & 1) {
+        this->unk_3EA = 3;
+        EnOwl_ChangeMode(this, func_8095C09C, func_8095C484, &this->skelAnime1, &D_06001168, 0.0f);
+        this->unk_3EC = BINANG_ADD(this->actor.world.rot.y, 0x4000);
+        this->unk_3E4 = this->actor.world.pos.y;
+        this->actor.velocity.y = 2.0f;
+    }
+    this->actionFlags |= 8;
+}
+
+void func_8095C258(EnOwl* this) {
+    SkelAnime_FrameUpdateMatrix(this->skelAnime3);
+    if (this->unk_3EA > 0) {
+        this->unk_3EA--;
+        this->actor.shape.rot.z = Math_SinS(this->unk_3EA * 0x333) * 1000.0f;
+    } else {
+        this->unk_414 = func_8095C328;
+        this->unk_3EA = 6;
+        SkelAnime_ChangeAnim(this->skelAnime3, &D_06001ADC, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_06001ADC.common), 2,
+                             5.0f);
+    }
+}
+
+void func_8095C328(EnOwl* this) {
+    if (SkelAnime_FrameUpdateMatrix(this->skelAnime3)) {
+        if (this->unk_3EA > 0) {
+            this->unk_3EA--;
+            SkelAnime_ChangeAnim(this->skelAnime3, this->skelAnime3->animCurrentSeg, 1.0f, 0.0f,
+                                 SkelAnime_GetFrameCount(this->skelAnime3->genericSeg), 2, 0.0f);
+        } else {
+            this->unk_3EA = 160;
+            this->unk_414 = func_8095C258;
+            SkelAnime_ChangeAnim(this->skelAnime3, &D_0600C6D4, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_0600C6D4.common),
+                                 0, 5.0f);
+        }
+    }
+}
+
+void func_8095C408(EnOwl* this) {
+    if (SkelAnime_FrameUpdateMatrix(this->skelAnime3)) {
+        SkelAnime_ChangeAnim(this->skelAnime3, this->skelAnime3->animCurrentSeg, 1.0f, 18.0f, 35.0f, 2, 0.0f);
+        this->actionFlags |= 1;
+    } else {
+        this->actionFlags &= ~1;
+    }
+}
+
+void func_8095C484(EnOwl* this) {
+    if (SkelAnime_FrameUpdateMatrix(this->skelAnime3)) {
+        SkelAnime_ChangeAnim(this->skelAnime3, this->skelAnime3->animCurrentSeg, 1.0f, 0.0f,
+                             SkelAnime_GetFrameCount(this->skelAnime3->genericSeg), 2, 0.0f);
+        this->actionFlags |= 1;
+    } else {
+        this->actionFlags &= ~1;
+    }
+}
+
+s32 func_8095C510(EnOwl* this) {
+    s32 phi_v1;
+
+    if (this->actionFlags & 2) {
+        phi_v1 = 0x20;
+    } else {
+        phi_v1 = 0;
+    }
+
+    if (phi_v1 == (this->unk_3DA & 0x3F)) {
+        return true;
+    }
+
+    if (this->actionFlags & 0x20) {
+        this->unk_3DA += 4;
+    } else {
+        this->unk_3DA -= 4;
+    }
+
+    return false;
+}
+
+void func_8095C568(EnOwl* this) {
+    if (this->actionFlags & 0x40) {
+        if ((this->unk_406 < 0) || (this->unk_400[this->unk_406] < 0)) {
+            this->actionFlags &= ~0x40;
+        } else if (ActorCutscene_GetCurrentIndex() == 0x7C) {
+            ActorCutscene_Stop(0x7C);
+            ActorCutscene_SetIntentToPlay(this->unk_400[this->unk_406]);
+        } else if (ActorCutscene_GetCanPlayNext(this->unk_400[this->unk_406])) {
+            ActorCutscene_StartAndSetUnkLinkFields(this->unk_400[this->unk_406], &this->actor);
+            this->actionFlags &= ~0x40;
+        } else {
+            ActorCutscene_SetIntentToPlay(this->unk_400[this->unk_406]);
+        }
+    }
+}
+
+void EnOwl_Update(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    EnOwl* this = THIS;
+    s16 sp36;
+
+    if (this->actor.draw != NULL) {
+        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    }
+
+    if (this->unk_414 != NULL) {
+        this->unk_414(this);
+    }
+
+    this->actionFunc(this, globalCtx);
+    func_8095C568(this);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, 10.0f, 10.0f, 4);
+    Collider_UpdateCylinder(&this->actor, &this->collider);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    if (this->actor.update != NULL) {
+        if ((this->skelAnime1.animCurrentSeg == &D_06001ADC) && func_801378B8(&this->skelAnime1, 4.0f)) {
+            Audio_PlayActorSound2(&this->actor, NA_SE_EN_OWL_FLUTTER);
+        }
+
+        if (this->actionFlags & 2) {
+            this->eyeTexIndex = 2;
+        } else {
+            if (DECR(this->blinkTimer) == 0) {
+                this->blinkTimer = Rand_S16Offset(60, 60);
+            }
+            this->eyeTexIndex = this->blinkTimer;
+            if (this->eyeTexIndex >= 3) {
+                this->eyeTexIndex = 0;
+            }
+        }
+
+        if (!(this->actionFlags & 8)) {
+            sp36 = 0;
+
+            if (this->actionFlags & 0x10) {
+                switch (this->unk_408) {
+                    case 0:
+                        this->unk_408 = 1;
+                        this->unk_409 = 6;
+                        break;
+
+                    case 1:
+                        this->unk_409--;
+                        if (this->unk_409 != 0) {
+                            sp36 = Math_CosS(this->unk_409 * 0x2000) * 0x1000;
+                        } else {
+                            if (this->actionFlags & 2) {
+                                this->unk_3DA = 0;
+                            } else {
+                                this->unk_3DA = 0x20;
+                            }
+
+                            if (this->actionFlags & 0x20) {
+                                this->unk_3DA -= 4;
+                            } else {
+                                this->unk_3DA += 4;
+                            }
+                            this->unk_408++;
+                        }
+
+                        if (this->actionFlags & 0x20) {
+                            sp36 = -sp36;
+                        }
+                        break;
+
+                    case 2:
+                        if (func_8095C510(this)) {
+                            this->actionFlags &= ~0x10;
+                            this->unk_40A = (s32)Rand_ZeroFloat(20.0f) + 60;
+                            this->unk_408 = 0;
+                            func_8095AB4C(this);
+                        }
+                        break;
+                }
+            } else {
+                if (this->unk_40A > 0) {
+                    this->unk_40A--;
+                } else {
+                    if (this->unk_408 == 0) {
+                        if (Rand_ZeroOne() < 0.3f) {
+                            this->unk_408 = 4;
+                            this->unk_409 = 12;
+                        } else {
+                            this->unk_408 = 1;
+                            this->unk_409 = 4;
+                        }
+                    }
+                    this->unk_409--;
+
+                    switch (this->unk_408) {
+                        case 1:
+                            sp36 = Math_SinS((-this->unk_409 * 0x1000) + 0x4000) * 5000.0f;
+                            if (this->unk_409 <= 0) {
+                                this->unk_409 = (s32)(Rand_ZeroFloat(15.0f) + 5.0f);
+                                this->unk_408 = 2;
+                            }
+                            break;
+
+                        case 2:
+                            sp36 = 0x1388;
+                            if (this->unk_409 <= 0) {
+                                this->unk_408 = 3;
+                                this->unk_409 = 4;
+                            }
+                            break;
+
+                        case 3:
+                            sp36 = Math_SinS(this->unk_409 * 0x1000) * 5000.0f;
+                            if (this->unk_409 <= 0) {
+                                this->unk_40A = (s32)Rand_ZeroFloat(20.0f) + 60;
+                                this->unk_408 = 0;
+                                func_8095AB4C(this);
+                            }
+                            break;
+
+                        case 4:
+                            sp36 = Math_SinS(this->unk_409 * 0x2000) * 5000.0f;
+                            if (this->unk_409 <= 0) {
+                                this->unk_40A = (s32)Rand_ZeroFloat(20.0f) + 60;
+                                this->unk_408 = 0;
+                                func_8095AB4C(this);
+                            }
+                            break;
+                    }
+
+                    if (this->actionFlags & 0x20) {
+                        sp36 = -sp36;
+                    }
+                }
+
+                if (this->unk_40D > 0) {
+                    this->unk_40D--;
+                } else {
+                    this->unk_40C--;
+                    switch (this->unk_40B) {
+                        case 0:
+                            this->unk_3DE = (-this->unk_40C * 0x5DC) + 0x1770;
+                            if (this->unk_40C <= 0) {
+                                this->unk_40B = 1;
+                                this->unk_40C = (s8)(Rand_ZeroFloat(15.0f) + 5.0f);
+                            }
+                            break;
+
+                        case 1:
+                            this->unk_3DE = 0x1770;
+                            if (this->unk_40C <= 0) {
+                                this->unk_40B = 2;
+                                this->unk_40C = 4;
+                            }
+                            break;
+
+                        case 2:
+                            this->unk_3DE = this->unk_40C * 0x5DC;
+                            if (this->unk_40C <= 0) {
+                                this->unk_40B = 0;
+                                this->unk_40C = 4;
+                                this->unk_40D = (s32)Rand_ZeroFloat(40.0f) + 160;
+                            }
+                            break;
+                    }
+                }
+            }
+
+            if (sp36) {}
+            this->unk_3DC = (u16)((this->unk_3DA << 2) << 8) + sp36;
+            this->unk_3D8 = ABS(this->unk_3DC) >> 3;
+        } else {
+            this->unk_3DE = 0;
+            if (this->actionFlags & 2) {
+                this->unk_3DC = -0x8000;
+            } else {
+                this->unk_3DC = 0;
+            }
+
+            this->unk_3D8 = ABS(this->unk_3DC) >> 3;
+        }
+    }
+}
+
+void func_8095CCF4(Actor* thisx, GlobalContext* globalCtx) {
+    EnOwl* this = THIS;
+    Player* player = GET_PLAYER(globalCtx);
+
+    if (player->stateFlags3 & 0x10000000) {
+        Actor_MarkForDeath(&this->actor);
+        return;
+    }
+
+    if (this->actor.world.pos.y < (this->unk_3F0 - 1000.0f)) {
+        Actor_MarkForDeath(&this->actor);
+        return;
+    }
+
+    this->actor.world.pos.y -= 1.0f;
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, 10.0f, 10.0f, 4);
+    if (this->actor.bgCheckFlags & 1) {
+        this->unk_3DA = (this->unk_3DA >> 3) * 7;
+        if (this->unk_3DC > 0) {
+            this->unk_3DC--;
+        } else {
+            Actor_MarkForDeath(&this->actor);
+            return;
+        }
+    }
+
+    this->unk_3D8 += this->unk_3DA;
+    this->unk_3DA -= (s16)(this->unk_3D8 >> 6);
+}
+
+s32 EnOwl_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    EnOwl* this = THIS;
+
+    switch (limbIndex) {
+        case 3:
+            rot->x += this->unk_3DC;
+            rot->z += this->unk_3D8;
+            rot->z -= this->unk_3DE;
+            break;
+
+        case 2:
+            rot->z += this->unk_3DE;
+            break;
+
+        case 4:
+            if (!(this->actionFlags & 8)) {
+                rot->y -= (s16)(this->unk_3D8 * 1.5f);
+            }
+            break;
+
+        case 5:
+            if (!(this->actionFlags & 8)) {
+                rot->y += (s16)(this->unk_3D8 * 1.5f);
+            }
+            break;
+    }
+
+    return false;
+}
+
+void EnOwl_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    EnOwl* this = THIS;
+    Vec3f sp18;
+
+    sp18.z = 0.0f;
+    if (this->actionFlags & 2) {
+        sp18.x = 700.0f;
+        sp18.y = 400.0f;
+    } else {
+        sp18.y = 0.0f;
+        sp18.x = 1400.0f;
+    }
+
+    if (limbIndex == 3) {
+        SysMatrix_MultiplyVector3fByState(&sp18, &this->actor.focus.pos);
+    }
+}
+
+void EnOwl_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    static TexturePtr eyeTextures[] = {
+        &D_06008EB8,
+        &D_060092B8,
+        &D_060096B8,
+    };
+    s32 pad;
+    EnOwl* this = THIS;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    func_8012C5B0(globalCtx->state.gfxCtx);
+
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(eyeTextures[this->eyeTexIndex]));
+
+    SkelAnime_DrawSV(globalCtx, this->skelAnime3->skeleton, this->skelAnime3->limbDrawTbl, this->skelAnime3->dListCount,
+                     EnOwl_OverrideLimbDraw, EnOwl_PostLimbDraw, &this->actor);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+
+void func_8095D074(Actor* thisx, GlobalContext* globalCtx) {
+    EnOwl* this = THIS;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    SysMatrix_InsertTranslation(0.0f, 500.0f, 0.0f, 1);
+    SysMatrix_InsertXRotation_s(this->unk_3D8 - 0x4000, 1);
+    SysMatrix_InsertTranslation(0.0f, 0.0f, -500.0f, 1);
+    if (this->unk_3DC >= 0x20) {
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+        func_8012C28C(globalCtx->state.gfxCtx);
+
+        gDPSetRenderMode(POLY_OPA_DISP++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_TEX_EDGE2);
+        gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
+        gSPDisplayList(POLY_OPA_DISP++, D_06001200);
+    } else {
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+        func_8012C2DC(globalCtx->state.gfxCtx);
+
+        gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_AA_XLU_SURF2);
+        gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, (u8)(this->unk_3DC * 8));
+        gSPDisplayList(POLY_XLU_DISP++, D_06001200);
+    }
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+
+void EnOwl_ChangeMode(EnOwl* this, EnOwlActionFunc actionFunc, EnOwlFunc unkFunc, SkelAnime* skelAnime,
+                      AnimationHeader* animationSeg, f32 transitionRate) {
+    this->skelAnime3 = skelAnime;
+    SkelAnime_ChangeAnim(this->skelAnime3, animationSeg, 1.0f, 0.0f, SkelAnime_GetFrameCount(&animationSeg->common), 2,
+                         transitionRate);
+    this->actionFunc = actionFunc;
+    this->unk_414 = unkFunc;
+}

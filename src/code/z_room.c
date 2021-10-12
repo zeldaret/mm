@@ -114,7 +114,7 @@ s32 Room_HandleLoadCallbacks(GlobalContext* globalCtx, RoomContext* roomCtx) {
             gSegments[3] = PHYSICAL_TO_VIRTUAL(roomCtx->activeRoomVram);
 
             Scene_ProcessHeader(globalCtx, (SceneCmd*)roomCtx->currRoom.segment);
-            func_80123140(globalCtx, PLAYER);
+            func_80123140(globalCtx, GET_PLAYER(globalCtx));
             Actor_SpawnTransitionActors(globalCtx, &globalCtx->actorCtx);
 
             if (((globalCtx->sceneNum != SCENE_IKANA) || (roomCtx->currRoom.num != 1)) &&
