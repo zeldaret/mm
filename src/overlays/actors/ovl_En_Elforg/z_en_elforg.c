@@ -193,7 +193,15 @@ void func_80ACC8D4(EnElforg* this, Vec3f* bodyPartsPos) {
     this->actor.world.pos.y = this->actor.world.pos.y - this->actor.speedXZ;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACC934.s")
+void func_80ACC934(EnElforg* this) {
+    if (this->actor.speedXZ > this->unk_224) {
+        this->actor.speedXZ *= 0.9f;
+    } else if (this->actor.speedXZ < (this->unk_224 - 0.1f)) {
+        this->actor.speedXZ += 0.1f;
+    } else {
+        this->actor.speedXZ = this->unk_224;
+    }
+}
 
 void func_80ACC994(EnElforg* this, Vec3f* pos) {
     s32 pad[2];
