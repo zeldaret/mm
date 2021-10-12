@@ -281,6 +281,18 @@ void EnElforg_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACD878.s")
+s32 func_80ACD878(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
+                  Gfx** gfx) {
+    EnElforg* this = THIS;
+
+    if (this->unk_216 < 0) {
+        if (limbIndex == 9) {
+            *dList = NULL;
+        }
+    } else if (limbIndex == 1) {
+        *dList = NULL;
+    }
+    return 0;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/EnElforg_Draw.s")
