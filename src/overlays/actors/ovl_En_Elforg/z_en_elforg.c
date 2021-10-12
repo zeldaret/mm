@@ -177,7 +177,20 @@ void func_80ACC7E4(EnElforg* this, GlobalContext* globalCtx, s32 life) {
                                     1000, life);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACC8D4.s")
+void func_80ACC8D4(EnElforg* this, Vec3f* bodyPartsPos) {
+    f32 yDifference;
+
+    yDifference = bodyPartsPos->y - this->actor.world.pos.y;
+    if (fabsf(yDifference) < this->actor.speedXZ) {
+        this->actor.world.pos.y = bodyPartsPos->y;
+        return;
+    }
+    if (yDifference > 0.0f) {
+        this->actor.world.pos.y = this->actor.world.pos.y + this->actor.speedXZ;
+        return;
+    }
+    this->actor.world.pos.y = this->actor.world.pos.y - this->actor.speedXZ;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACC934.s")
 
