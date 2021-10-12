@@ -497,7 +497,7 @@ beginseg
     include "build/data/code/code_801BD830.data.o"
     include "build/src/code/z_fireobj.o"
     include "build/data/code/z_fireobj.data.o"
-    include "build/data/code/code_801BD910.data.o"
+    include "build/src/code/z_game_dlftbls.o"
     include "build/src/code/z_horse.o"
     include "build/data/code/z_horse.data.o"
     include "build/src/code/z_jpeg.o"
