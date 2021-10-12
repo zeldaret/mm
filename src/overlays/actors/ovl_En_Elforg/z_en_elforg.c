@@ -276,7 +276,14 @@ void func_80ACCC98(EnElforg* this, GlobalContext* globalCtx) {
     this->unk_214 &= 0xFFFB;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACCE4C.s")
+void func_80ACCE4C(EnElforg* this, GlobalContext* globalCtx) {
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    func_80ACC994(this, &this->actor.home.pos);
+    if (this->unk_220 < 31) {
+        this->actionFunc = func_80ACCC98;
+    }
+    this->unk_220--;
+}
 
 void func_80ACCEB0(EnElforg* this, GlobalContext* globalCtx) {
     s32 pad;
