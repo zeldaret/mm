@@ -15,6 +15,7 @@ void func_80ACCBD0(EnElforg* this, GlobalContext* globalCtx);
 void func_80ACD6A8(EnElforg* this, GlobalContext* globalCtx);
 void func_80ACD6EC(EnElforg* this, GlobalContext* globalCtx);
 void func_80ACD2E4(EnElforg* this, GlobalContext* globalCtx);
+void func_80ACCE4C(EnElforg* this, GlobalContext* globalCtx);
 
 const ActorInit En_Elforg_InitVars = {
     ACTOR_EN_ELFORG,
@@ -235,7 +236,7 @@ void func_80ACCC98(EnElforg* this, GlobalContext* globalCtx) {
     rotationTemp = this->actor.yawTowardsPlayer - sp34;
     this->actor.world.pos.x = player->actor.world.pos.x - (Math_SinS(rotationTemp) * xzDistToPlayer);
     this->actor.world.pos.z = player->actor.world.pos.z - (Math_CosS(rotationTemp) * xzDistToPlayer);
-    func_80ACC7E4(this, globalCtx, 0x10);
+    func_80ACC7E4(this, globalCtx, 16);
     if (this->unk_220 > 0) {
         this->unk_220--;
         return;
@@ -252,7 +253,40 @@ void func_80ACCC98(EnElforg* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACCE4C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACCEB0.s")
+void func_80ACCEB0(EnElforg* this, GlobalContext* globalCtx) {
+    s32 pad;
+
+    if (this->unk_214 & 1) {
+        if (this->unk_224 < 8.0f) {
+            this->unk_224 += 0.1f;
+        }
+        if (this->unk_228 > 0.0f) {
+            this->unk_228 -= 2.0f;
+        }
+    } else if ((this->unk_21C & 0x7F) == 0x7F) {
+        if (Math_Vec3f_DistXZ(&this->actor.world.pos, &this->actor.home.pos) > 150.0f) {
+            this->unk_224 = 5.0f;
+        } else {
+            this->unk_224 = Rand_ZeroFloat(2.0f) + 1.0f;
+        }
+        this->unk_228 = Rand_ZeroFloat(100.0f) + 50.0f;
+    }
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    func_80ACC994(this, &this->actor.home.pos);
+    if (this->unk_214 & 4) {
+        this->actionFunc = func_80ACCE4C;
+    }
+    if (this->unk_214 & 2) {
+        if (this->actor.home.rot.x > 0) {
+            func_80ACC7E4(this, globalCtx, 10);
+            this->actor.home.rot.x += -1;
+        }
+        Actor_SetScale(&this->actor, this->actor.scale.x * 0.9f);
+        if (this->actor.scale.x < 0.001f) {
+            Actor_MarkForDeath(&this->actor);
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACD088.s")
 
