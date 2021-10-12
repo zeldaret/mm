@@ -964,7 +964,7 @@ typedef struct {
     /* 0x12020 */ u8 unk12020;
     /* 0x12021 */ u8 choiceIndex;
     /* 0x12022 */ UNK_TYPE1 unk12022;
-    /* 0x12023 */ s8 unk12023;
+    /* 0x12023 */ u8 unk12023;
     /* 0x12024 */ UNK_TYPE1 unk12024[0x6];
     /* 0x1202A */ u16 unk1202A;
     /* 0x1202C */ UNK_TYPE1 pad1202C[0x2];
@@ -1776,5 +1776,10 @@ typedef struct {
     /* 0x00 */ u16 intPart[4][4];
     /* 0x20 */ u16 fracPart[4][4];
 } MatrixInternal; // size = 0x40
+
+typedef struct {
+    /* 0x00 */ u8* value;
+    /* 0x04 */ const char* name;
+} FlagSetEntry; // size = 0x08
 
 #endif

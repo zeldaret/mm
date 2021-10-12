@@ -626,7 +626,7 @@ void func_809C7620(EnSyatekiMan* this, GlobalContext* globalCtx) {
 
             case 0x3FD:
             case 0x3FF:
-                if (this->unk_26A == 4U) {
+                if (this->unk_26A == 4) {
                     if (this->unk_284 == 0x3FD) {
                         func_801518B0(globalCtx, 0x3FE, &this->actor);
                         this->unk_284 = 0x3FE;

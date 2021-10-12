@@ -448,9 +448,8 @@ beginseg
     include "build/data/code/z_effect_soft_sprite.data.o"
     include "build/src/code/z_effect_soft_sprite_old_init.o"
     include "build/data/code/z_effect_soft_sprite_old_init.data.o"
-    include "build/data/code/flg_set_table.data.o"
     include "build/src/code/flg_set.o"
-    include "build/data/code/flg_set.data.o"
+    include "build/src/code/pad_801DC9C0.o"
     include "build/src/code/z_DLF.o"
     include "build/src/code/z_actor.o"
     include "build/data/code/z_actor.data.o"
@@ -1202,8 +1201,11 @@ beginseg
     name "ovl_En_Sw"
     compress
     include "build/src/overlays/actors/ovl_En_Sw/z_en_sw.o"
-    include "build/data/ovl_En_Sw/ovl_En_Sw.data.o"
-    include "build/data/ovl_En_Sw/ovl_En_Sw.reloc.o"
+    #ifdef NON_MATCHING
+        include "build/src/overlays/actors/ovl_En_Sw/ovl_En_Sw_reloc.o"
+    #else
+        include "build/data/ovl_En_Sw/ovl_En_Sw.reloc.o"
+    #endif
 endseg
 
 beginseg
@@ -1682,8 +1684,7 @@ beginseg
     name "ovl_En_Owl"
     compress
     include "build/src/overlays/actors/ovl_En_Owl/z_en_owl.o"
-    include "build/data/ovl_En_Owl/ovl_En_Owl.data.o"
-    include "build/data/ovl_En_Owl/ovl_En_Owl.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Owl/ovl_En_Owl_reloc.o"
 endseg
 
 beginseg
@@ -1720,8 +1721,7 @@ beginseg
     name "ovl_En_Fu"
     compress
     include "build/src/overlays/actors/ovl_En_Fu/z_en_fu.o"
-    include "build/data/ovl_En_Fu/ovl_En_Fu.data.o"
-    include "build/data/ovl_En_Fu/ovl_En_Fu.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Fu/ovl_En_Fu_reloc.o"
 endseg
 
 beginseg
@@ -3593,8 +3593,7 @@ beginseg
     name "ovl_En_Elfbub"
     compress
     include "build/src/overlays/actors/ovl_En_Elfbub/z_en_elfbub.o"
-    include "build/data/ovl_En_Elfbub/ovl_En_Elfbub.data.o"
-    include "build/data/ovl_En_Elfbub/ovl_En_Elfbub.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Elfbub/ovl_En_Elfbub_reloc.o"
 endseg
 
 beginseg
@@ -4074,8 +4073,7 @@ beginseg
     name "ovl_En_Poh"
     compress
     include "build/src/overlays/actors/ovl_En_Poh/z_en_poh.o"
-    include "build/data/ovl_En_Poh/ovl_En_Poh.data.o"
-    include "build/data/ovl_En_Poh/ovl_En_Poh.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Poh/ovl_En_Poh_reloc.o"
 endseg
 
 beginseg
