@@ -428,6 +428,7 @@ void DemoKankyo_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
 
         default:
+            // ! @ BUG: this causes a crash because the actionfunc is never set
             oID = -1;
             break;
     }
