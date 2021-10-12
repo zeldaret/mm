@@ -225,7 +225,8 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
     s16 itemId2 = ITEM_OCARINA;
 
     for (; slotId < ARRAY_COUNT(gSaveContext.inventory.items); slotId++) {
-        if ((gSaveContext.inventory.items[slotId] >= ITEM_BOTTLE) && (gSaveContext.inventory.items[slotId] <= ITEM_POTION_BLUE)) {
+        if ((gSaveContext.inventory.items[slotId] >= ITEM_BOTTLE) &&
+            (gSaveContext.inventory.items[slotId] <= ITEM_POTION_BLUE)) {
             isItemFound = true;
             itemId2 = gSaveContext.inventory.items[slotId];
             break;
@@ -572,9 +573,9 @@ void func_80C1193C(EnThiefbird* this, GlobalContext* globalCtx) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, rot, 4, 0x1000, 0x100);
     }
 
-    if ((this->unk_18E == 0) || (player->stateFlags1 & 0x800000) ||
-        (Player_GetMask(globalCtx) == PLAYER_MASK_STONE) || (this->collider.base.atFlags & AT_HIT) ||
-        (this->actor.bgCheckFlags & 1) || (this->actor.yDistToWater > -40.0f)) {
+    if ((this->unk_18E == 0) || (player->stateFlags1 & 0x800000) || (Player_GetMask(globalCtx) == PLAYER_MASK_STONE) ||
+        (this->collider.base.atFlags & AT_HIT) || (this->actor.bgCheckFlags & 1) ||
+        (this->actor.yDistToWater > -40.0f)) {
         if (this->collider.base.atFlags & AT_HIT) {
             this->collider.base.atFlags &= ~AT_HIT;
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_THIEFBIRD_VOICE);

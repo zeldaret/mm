@@ -205,8 +205,8 @@ void func_808BD49C(EnDekunuts* this, GlobalContext* globalCtx) {
 
     this->collider.dim.height = (s32)((CLAMP(this->skelAnime.animCurrentFrame, 9.0f, 12.0f) - 9.0f) * 9.0f) + 5;
 
-    if (!phi_v1 && (this->actor.params == ENDEKUNUTS_GET_FF00_0) &&
-        (Player_GetMask(globalCtx) != PLAYER_MASK_STONE) && (this->actor.xzDistToPlayer < 120.0f)) {
+    if (!phi_v1 && (this->actor.params == ENDEKUNUTS_GET_FF00_0) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE) &&
+        (this->actor.xzDistToPlayer < 120.0f)) {
         func_808BDC9C(this);
     } else if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
         if (((this->unk_190 == 0) && (this->actor.xzDistToPlayer > 320.0f)) ||

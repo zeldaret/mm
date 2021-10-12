@@ -532,7 +532,8 @@ u16 func_808F3DD4(GlobalContext* globalCtx, EnIn* this, u32 arg2) {
             case 3:
                 if (gSaveContext.playerForm == PLAYER_FORM_DEKU) {
                     textId = 0x3485;
-                } else if (gSaveContext.playerForm == PLAYER_FORM_ZORA || gSaveContext.playerForm == PLAYER_FORM_GORON) {
+                } else if (gSaveContext.playerForm == PLAYER_FORM_ZORA ||
+                           gSaveContext.playerForm == PLAYER_FORM_GORON) {
                     textId = 0x3484;
                 } else if (!(gSaveContext.weekEventReg[56] & 4)) {
                     textId = 0x346D;
@@ -563,7 +564,8 @@ u16 func_808F3DD4(GlobalContext* globalCtx, EnIn* this, u32 arg2) {
             case 7:
                 if (gSaveContext.playerForm == PLAYER_FORM_DEKU) {
                     textId = 0x34A8;
-                } else if (gSaveContext.playerForm == PLAYER_FORM_ZORA || gSaveContext.playerForm == PLAYER_FORM_GORON) {
+                } else if (gSaveContext.playerForm == PLAYER_FORM_ZORA ||
+                           gSaveContext.playerForm == PLAYER_FORM_GORON) {
                     textId = 0x34A7;
                 } else if (!(gSaveContext.weekEventReg[16] & 4)) {
                     textId = 0x3495;

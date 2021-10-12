@@ -623,8 +623,7 @@ void EnMa4_ChooseNextDialogue(EnMa4* this, GlobalContext* globalCtx) {
                 break;
 
             case 0x3358:
-                if ((gSaveContext.playerForm != PLAYER_FORM_HUMAN) ||
-                    !(CHECK_QUEST_ITEM(QUEST_SONG_EPONA))) {
+                if ((gSaveContext.playerForm != PLAYER_FORM_HUMAN) || !(CHECK_QUEST_ITEM(QUEST_SONG_EPONA))) {
                     func_801518B0(globalCtx, 0x335C, &this->actor);
                     this->textId = 0x335C;
                     func_80151BB4(globalCtx, 5);
@@ -663,8 +662,7 @@ void EnMa4_DialogueHandler(EnMa4* this, GlobalContext* globalCtx) {
 
         case 6: // End conversation
             if (func_80147624(globalCtx) != 0) {
-                if ((globalCtx->msgCtx.unk120B1 == 0) ||
-                    !CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
+                if ((globalCtx->msgCtx.unk120B1 == 0) || !CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
                     EnMa4_SetupWait(this);
                 }
             }
