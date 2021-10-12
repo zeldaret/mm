@@ -184,7 +184,40 @@ void func_80ACCBD0(EnElforg* this, GlobalContext* globalCtx) {
     func_80ACCBB8(this, globalCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACCC98.s")
+void func_80ACCC98(EnElforg* this, GlobalContext* globalCtx) {
+    Player* player = PLAYER;
+    f32 xzDistToPlayer;
+    s16 rotationTemp;
+    s16 sp34;
+    s32 pad;
+
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    this->actor.shape.yOffset *= 0.9f;
+    this->actor.speedXZ = 5.0f;
+    func_80ACC8D4(this, player->bodyPartsPos);
+    xzDistToPlayer = this->actor.xzDistToPlayer;
+    if (xzDistToPlayer < 0.0f) {
+        xzDistToPlayer = 10.0f;
+    }
+    sp34 = 163840.0f / xzDistToPlayer;
+    Math_SmoothStepToF(&xzDistToPlayer, 40.0f, 0.2f, 100.0f, 1.0f);
+    rotationTemp = this->actor.yawTowardsPlayer - sp34;
+    this->actor.world.pos.x = player->actor.world.pos.x - (Math_SinS(rotationTemp) * xzDistToPlayer);
+    this->actor.world.pos.z = player->actor.world.pos.z - (Math_CosS(rotationTemp) * xzDistToPlayer);
+    func_80ACC7E4(this, globalCtx, 0x10);
+    if (this->unk_220 > 0) {
+        this->unk_220--;
+        return;
+    }
+    this->actor.world.rot.y = rotationTemp + 0x4000;
+    this->unk_21C = 0;
+    this->unk_220 = Rand_ZeroFloat(100.0f);
+    this->actor.shape.yOffset = 0.0f;
+    this->unk_224 = 3.0f;
+    this->unk_228 = 50.0f;
+    this->actionFunc = func_80ACCEB0;
+    this->unk_214 &= 0xFFFB;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACCE4C.s")
 
