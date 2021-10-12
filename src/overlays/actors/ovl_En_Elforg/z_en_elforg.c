@@ -195,7 +195,32 @@ void func_80ACC8D4(EnElforg* this, Vec3f* bodyPartsPos) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACC934.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACC994.s")
+void func_80ACC994(EnElforg* this, Vec3f* pos) {
+    s32 pad[2];
+    f32 xzDistance;
+    f32 zDifference;
+    f32 xDifference;
+    s16 phi_v0;
+    s16 targetAngle;
+
+    this->actor.shape.yOffset += 100.0f * Math_SinS(this->unk_21C << 9);
+    func_80ACC8D4(this, pos);
+    xDifference = this->actor.world.pos.x - pos->x;
+    zDifference = this->actor.world.pos.z - pos->z;
+    targetAngle = Math_FAtan2F(-zDifference, -xDifference);
+    xzDistance = sqrtf(SQ(xDifference) + SQ(zDifference));
+    if ((this->unk_228 + 10.0f) < xzDistance) {
+        phi_v0 = 0x1000;
+    } else if ((this->unk_228 - 10.0f) > xzDistance) {
+        phi_v0 = 0x6000;
+    } else {
+        phi_v0 = 0x4000;
+    }
+    targetAngle += phi_v0;
+    Math_SmoothStepToS(&this->actor.world.rot.y, targetAngle, 2, 4000, 1000);
+    func_80ACC934(this);
+    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACCAC0.s")
 
