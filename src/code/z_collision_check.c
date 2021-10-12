@@ -1427,7 +1427,7 @@ void CollisionCheck_BlueBlood(GlobalContext* globalCtx, Collider* collider, Vec3
     D_801EEC00.velocity = 8.0f;
     D_801EEC00.gravity = -1.0f;
 
-    Effect_Add(globalCtx, &effectIndex, EFFECT_SPARK, 0, 1, &D_801EEC00);
+    Effect_Add(globalCtx, &effectIndex, 0, 0, 1, &D_801EEC00);
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_collision_check/CollisionCheck_BlueBlood.s")
@@ -1484,7 +1484,7 @@ void CollisionCheck_GreenBlood(GlobalContext* globalCtx, Collider* collider, Vec
     D_801EF0C8.duration = 16;
     D_801EF0C8.velocity = 8.0f;
     D_801EF0C8.gravity = -1.0f;
-    Effect_Add(globalCtx, &effectIndex, EFFECT_SPARK, 0, 1, &D_801EF0C8);
+    Effect_Add(globalCtx, &effectIndex, 0, 0, 1, &D_801EF0C8);
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_collision_check/CollisionCheck_GreenBlood.s")
@@ -3796,7 +3796,7 @@ void CollisionCheck_SpawnRedBlood(GlobalContext* globalCtx, Vec3f* v) {
     D_801EE200.velocity = 8.0f;
     D_801EE200.gravity = -1.0f;
 
-    Effect_Add(globalCtx, &effectIndex, EFFECT_SPARK, 0, 1, &D_801EE200);
+    Effect_Add(globalCtx, &effectIndex, 0, 0, 1, &D_801EE200);
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_collision_check/CollisionCheck_SpawnRedBlood.s")
@@ -3854,7 +3854,7 @@ void CollisionCheck_SpawnWaterDroplets(GlobalContext* globalCtx, Vec3f* v) {
     D_801EE738.velocity = 8.0f;
     D_801EE738.gravity = -1.0f;
 
-    Effect_Add(globalCtx, &effectIndex, EFFECT_SPARK, 0, 1, &D_801EE738);
+    Effect_Add(globalCtx, &effectIndex, 0, 0, 1, &D_801EE738);
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_collision_check/CollisionCheck_SpawnWaterDroplets.s")
@@ -3889,7 +3889,7 @@ void CollisionCheck_SpawnShieldParticles(GlobalContext* globalCtx, Vec3f* v) {
     shieldParticleInitMetal.lightPoint.y = shieldParticleInitMetal.position.y;
     shieldParticleInitMetal.lightPoint.z = shieldParticleInitMetal.position.z;
 
-    Effect_Add(globalCtx, &effectIndex, EFFECT_SHIELD_PARTICLE, 0, 1, &shieldParticleInitMetal);
+    Effect_Add(globalCtx, &effectIndex, 3, 0, 1, &shieldParticleInitMetal);
 }
 
 /**
@@ -3944,7 +3944,7 @@ void CollisionCheck_SpawnShieldParticlesWood(GlobalContext* globalCtx, Vec3f* v,
     shieldParticleInitWood.lightPoint.y = shieldParticleInitWood.position.y;
     shieldParticleInitWood.lightPoint.z = shieldParticleInitWood.position.z;
 
-    Effect_Add(globalCtx, &effectIndex, EFFECT_SHIELD_PARTICLE, 0, 1, &shieldParticleInitWood);
+    Effect_Add(globalCtx, &effectIndex, 3, 0, 1, &shieldParticleInitWood);
     func_8019F1C0(pos, NA_SE_IT_REFLECTION_WOOD);
 }
 
