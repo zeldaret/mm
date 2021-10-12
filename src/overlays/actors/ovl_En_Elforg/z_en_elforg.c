@@ -295,4 +295,33 @@ s32 func_80ACD878(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return 0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/EnElforg_Draw.s")
+void EnElforg_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    EnElforg* this = THIS;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+    func_8012C2DC(globalCtx->state.gfxCtx);
+    switch (this->unk_218) {
+        case 1:
+            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_0402C908));
+            break;
+        case 2:
+            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_0402C890));
+            break;
+        case 3:
+            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_0402C980));
+            break;
+        case 4:
+            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_0402C9F8));
+            break;
+        default:
+            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_0402C818));
+            break;
+    }
+    SysMatrix_InsertMatrix(&globalCtx->mf_187FC, 1);
+
+    POLY_XLU_DISP = SkelAnime_DrawSV2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
+                                      this->skelAnime.dListCount, func_80ACD878, NULL, &this->actor, POLY_XLU_DISP);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
