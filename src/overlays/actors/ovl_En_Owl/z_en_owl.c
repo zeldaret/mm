@@ -166,7 +166,7 @@ void EnOwl_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
 
         case ENOWL_GET_TYPE_2:
-            if (gSaveContext.inventory.items[14] == 14) {
+            if (gSaveContext.save.inventory.items[14] == 14) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -192,7 +192,7 @@ void EnOwl_Init(Actor* thisx, GlobalContext* globalCtx) {
 
         case ENOWL_GET_TYPE_2:
             this->actionFunc = func_8095BE0C;
-            if (gSaveContext.weekEventReg[9] & 0x20) {
+            if (gSaveContext.save.weekEventReg[9] & 0x20) {
                 this->actor.textId = 0xBF0;
             } else {
                 this->actor.textId = 0xBEA;
@@ -622,10 +622,10 @@ void func_8095BA84(EnOwl* this, GlobalContext* globalCtx) {
                         switch (globalCtx->msgCtx.choiceIndex) {
                             case 0:
                                 func_8019F208();
-                                if (gSaveContext.weekEventReg[9] & 0x40) {
+                                if (gSaveContext.save.weekEventReg[9] & 0x40) {
                                     func_80151938(globalCtx, 0xBF4);
                                 } else {
-                                    gSaveContext.weekEventReg[9] |= 0x40;
+                                    gSaveContext.save.weekEventReg[9] |= 0x40;
                                     func_80151938(globalCtx, 0xBED);
                                 }
                                 break;
@@ -658,7 +658,7 @@ void func_8095BA84(EnOwl* this, GlobalContext* globalCtx) {
             if (func_80147624(globalCtx)) {
                 switch (globalCtx->msgCtx.unk11F04) {
                     case 0xBEA:
-                        gSaveContext.weekEventReg[9] |= 0x20;
+                        gSaveContext.save.weekEventReg[9] |= 0x20;
                         func_80151938(globalCtx, 0xBEB);
                         break;
 
