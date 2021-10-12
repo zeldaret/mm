@@ -292,7 +292,7 @@ void func_80BA59F0(EnRailgibud* this) {
 }
 
 void func_80BA5A34(EnRailgibud* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 rot = this->actor.shape.rot.y + this->unk_3E2 + this->unk_3E8;
     s16 yaw = BINANG_SUB(this->actor.yawTowardsPlayer, rot);
 
@@ -318,7 +318,7 @@ void func_80BA5AF0(EnRailgibud* this) {
 }
 
 void func_80BA5B64(EnRailgibud* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 pad;
 
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xFA);
@@ -370,7 +370,7 @@ void func_80BA5DBC(EnRailgibud* this) {
 }
 
 void func_80BA5E18(EnRailgibud* this, GlobalContext* globalCtx) {
-    Player* player2 = PLAYER;
+    Player* player2 = GET_PLAYER(globalCtx);
     Player* player = player2;
     s32 sp34;
     u16 sp32;
@@ -663,7 +663,7 @@ void func_80BA6B9C(EnRailgibud* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80BA6D10(EnRailgibud* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (Player_GetMask(globalCtx) == PLAYER_MASK_GIBDO_MASK) {
         return false;
@@ -678,7 +678,7 @@ s32 func_80BA6D10(EnRailgibud* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80BA6DAC(EnRailgibud* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (Actor_DistanceToPoint(&player->actor, &this->actor.home.pos) >= 100.0f) {
         return true;
@@ -688,7 +688,7 @@ s32 func_80BA6DAC(EnRailgibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA6DF8(EnRailgibud* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((this->unk_3FA != 1) && (this->collider.base.acFlags & AC_HIT)) {
         if (this->actionFunc == func_80BA57F8) {
@@ -763,7 +763,7 @@ void func_80BA6DF8(EnRailgibud* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80BA7088(EnRailgibud* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Vec3f sp40;
     f32 sp3C;
     f32 sp38 = 0.0f;
@@ -795,7 +795,7 @@ void func_80BA71E4(EnRailgibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA7234(EnRailgibud* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Vec3f sp30;
 
     if ((this->actionFunc == func_80BA5E18) && (this->unk_3F0 != 2)) {
@@ -892,7 +892,7 @@ void func_80BA7578(EnRailgibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA76C4(EnRailgibud* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((this->actionFunc != func_80BA66C8) && ((this->actionFunc != func_80BA5E18) || (this->unk_3F0 == 2))) {
         Collider_UpdateCylinder(&this->actor, &this->collider);

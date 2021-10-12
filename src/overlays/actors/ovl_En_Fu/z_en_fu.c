@@ -307,7 +307,7 @@ void func_80961F00(GlobalContext* globalCtx) {
 }
 
 void func_80961F38(GlobalContext* globalCtx, Vec3f* arg1, s16* arg2, s16 arg3, s16 arg4, s16 arg5) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 sp42;
     s16 sp40;
     Vec3f sp34 = player->actor.focus.pos;
@@ -381,7 +381,7 @@ void func_809622FC(EnFu* this) {
 }
 
 void func_80962340(EnFu* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->unk_54A == 2) {
         this->actor.flags |= 0x10000;
@@ -451,7 +451,7 @@ void func_80962588(EnFu* this, GlobalContext* globalCtx) {
 }
 
 void func_80962660(EnFu* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (func_80147624(globalCtx)) {
         switch (this->unk_552) {
@@ -636,7 +636,7 @@ void func_809629F8(EnFu* this) {
 }
 
 void func_80962A10(EnFu* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     BgFuKaiten* fuKaiten = (BgFuKaiten*)this->actor.child;
 
     this->unk_53C = 0;
@@ -674,7 +674,7 @@ void func_80962BA8(EnFu* this) {
 }
 
 void func_80962BCC(EnFu* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     BgFuKaiten* fuKaiten = (BgFuKaiten*)this->actor.child;
 
     if ((fuKaiten->rotationSpeed < 100) || (fuKaiten->bouceHeight < 30.0f) || (fuKaiten->bounceSpeed < 600)) {
@@ -706,7 +706,7 @@ void func_80962D48(EnFu* this) {
 }
 
 void func_80962D60(EnFu* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     BgFuKaiten* fuKaiten = (BgFuKaiten*)this->actor.child;
 
     if ((fuKaiten->rotationSpeed < 100) || (fuKaiten->bouceHeight < 40.0f) || (fuKaiten->bounceSpeed < 600)) {
@@ -747,7 +747,7 @@ void func_80962F10(EnFu* this) {
 }
 
 void func_80962F4C(EnFu* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     BgFuKaiten* fuKaiten = (BgFuKaiten*)this->actor.child;
 
     switch (this->unk_542) {
@@ -895,7 +895,7 @@ void func_80963610(EnFu* this) {
 }
 
 void func_80963630(EnFu* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (func_800B84D0(&this->actor, globalCtx)) {
         if ((gSaveContext.weekEventReg[22] & 0x10) && (gSaveContext.weekEventReg[22] & 0x20) && (CURRENT_DAY == 3) &&
@@ -943,7 +943,7 @@ void func_80963630(EnFu* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80963810(GlobalContext* globalCtx, Vec3f pos) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     f32 sp28;
     f32 phi_f0;
     s16 sp22;
@@ -1175,7 +1175,7 @@ void func_80963F88(EnFu* this, GlobalContext* globalCtx) {
 }
 
 void func_80963FF8(EnFu* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (player->stateFlags1 & 0x100000) {
         globalCtx->actorCtx.unk268 = 1;
@@ -1424,7 +1424,7 @@ void func_80964694(EnFu* this, EnFuUnkStruct* ptr, Vec3f* arg2, s32 len) {
 
 void func_809647EC(GlobalContext* globalCtx, EnFuUnkStruct* ptr, s32 len) {
     Vec3f sp44 = { 0.0f, 0.0f, 0.0f };
-    s16 activeCam = func_800DFC68(ACTIVE_CAM);
+    s16 activeCam = func_800DFC68(GET_ACTIVE_CAM(globalCtx));
     s32 i;
 
     for (i = 0; i < len; i++, ptr++) {

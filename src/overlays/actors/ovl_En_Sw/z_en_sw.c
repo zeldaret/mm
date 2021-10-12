@@ -748,7 +748,7 @@ s32 func_808DA08C(EnSw* this, GlobalContext* globalCtx) {
 }
 
 void func_808DA350(EnSw* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((player->stateFlags1 & 0x200000) && (this->actor.xyzDistToPlayerSq < 8000.0f)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALWALL_LAUGH);
