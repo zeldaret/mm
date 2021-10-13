@@ -104,10 +104,10 @@ void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (func_8010A074(globalCtx)) {
-        this->unk_218 = gSaveContext.unk_48C8 + 1;
+        this->area = gSaveContext.unk_48C8 + 1;
     } else {
         // Needs to be thisx in order to match
-        this->unk_218 = STRAY_FAIRY_GET_PARAM_1C0(thisx) >> 6;
+        this->area = STRAY_FAIRY_GET_PARAM_1C0(thisx) >> 6;
     }
 
     switch (STRAY_FAIRY_TYPE(&this->actor)) {
@@ -171,7 +171,9 @@ void func_80ACC7E4(EnElforg* this, GlobalContext* globalCtx, s32 life) {
     pos.x = randPlusMinusPoint5Scaled(6.0f) + this->actor.world.pos.x;
     pos.y = (Rand_ZeroOne() * 6.0f) + this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y);
     pos.z = randPlusMinusPoint5Scaled(6.0f) + this->actor.world.pos.z;
-    index = (this->unk_218 < 0 || this->unk_218 >= 5) ? 0 : this->unk_218;
+    index = (this->area < STRAY_FAIRY_AREA_CLOCK_TOWN || this->area >= STRAY_FAIRY_AREA_MAX)
+                ? STRAY_FAIRY_AREA_CLOCK_TOWN
+                : this->area;
     EffectSsKiraKira_SpawnDispersed(globalCtx, &pos, &sVelocity, &sAcceleration, &sPrimColors[index],
                                     &sEnvColors[index], 1000, life);
 }
@@ -563,17 +565,17 @@ void EnElforg_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
-    switch (this->unk_218) {
-        case 1:
+    switch (this->area) {
+        case STRAY_FAIRY_AREA_WOODFALL:
             AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_0402C908));
             break;
-        case 2:
+        case STRAY_FAIRY_AREA_SNOWHEAD:
             AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_0402C890));
             break;
-        case 3:
+        case STRAY_FAIRY_AREA_GREAT_BAY:
             AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_0402C980));
             break;
-        case 4:
+        case STRAY_FAIRY_AREA_STONE_TOWER:
             AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_0402C9F8));
             break;
         default:

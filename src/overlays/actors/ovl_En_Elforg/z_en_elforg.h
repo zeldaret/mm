@@ -19,6 +19,15 @@ typedef enum {
     STRAY_FAIRY_TYPE_TURN_IN_TO_FAIRY_FOUNTAIN // The ones you "turn in" by walking into a Fairy Fountain
 } StrayFairyType;
 
+typedef enum {
+    STRAY_FAIRY_AREA_CLOCK_TOWN,
+    STRAY_FAIRY_AREA_WOODFALL,
+    STRAY_FAIRY_AREA_SNOWHEAD,
+    STRAY_FAIRY_AREA_GREAT_BAY,
+    STRAY_FAIRY_AREA_STONE_TOWER,
+    STRAY_FAIRY_AREA_MAX
+} StrayFairyArea;
+
 struct EnElforg;
 
 typedef void (*EnElforgActionFunc)(struct EnElforg*, GlobalContext*);
@@ -31,7 +40,7 @@ typedef struct EnElforg {
     /* 0x210 */ Actor* enemy;
     /* 0x214 */ u16 unk_214;
     /* 0x216 */ s16 unk_216;
-    /* 0x218 */ s16 unk_218;
+    /* 0x218 */ s16 area;
     /* 0x21C */ s32 unk_21C;
     /* 0x220 */ s32 unk_220;
     /* 0x224 */ f32 unk_224;
