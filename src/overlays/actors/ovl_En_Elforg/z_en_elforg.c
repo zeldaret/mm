@@ -354,7 +354,17 @@ void func_80ACD164(EnElforg* this, GlobalContext* globalCtx) {
     func_800B9010(&this->actor, NA_SE_PL_CHIBI_FAIRY_HEAL - SFX_FLAG);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACD1B0.s")
+void func_80ACD1B0(EnElforg *this, GlobalContext *globalCtx) {
+    Player *player = GET_PLAYER(globalCtx);
+
+    this->actor.world.pos.x = GET_PLAYER(globalCtx)->actor.world.pos.x;
+    this->actor.world.pos.y = player->bodyPartsPos[0].y;
+    this->actor.world.pos.z = player->actor.world.pos.z;
+    this->actionFunc = func_80ACD164;
+    this->unk_21C = 0;
+    this->unk_220 = 0;
+    this->actor.shape.yOffset = 0.0f;
+}
 
 void func_80ACD1F0(EnElforg* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
