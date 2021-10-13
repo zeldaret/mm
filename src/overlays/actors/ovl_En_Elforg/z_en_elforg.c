@@ -59,7 +59,7 @@ void EnElforg_InitializeSpeedAndRotation(EnElforg* this) {
     this->unk_224 = 1.0f;
     this->actor.velocity.y = 0.0f;
     this->actor.world.rot.y = randPlusMinusPoint5Scaled(65536.0f);
-    this->unk_21C = 0;
+    this->timer = 0;
     this->unk_220 = Rand_ZeroFloat(100.0f);
     this->actor.shape.yOffset = 0.0f;
     this->skelAnime.animCurrentFrame = (s32)Rand_ZeroFloat(5.0f);
@@ -71,7 +71,7 @@ void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_SetScale(&this->actor, 0.01f);
     this->unk_214 = 0;
-    this->unk_216 = 0;
+    this->direction = 0;
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0402CA98, &D_0402B494, this->jointTable, this->jointTable, 10);
     this->skelAnime.animPlaybackSpeed = 1.0f;
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
@@ -123,7 +123,7 @@ void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->unk_220 = 0x3C;
             break;
         case STRAY_FAIRY_TYPE_BUBBLE:
-            this->unk_21C = 0;
+            this->timer = 0;
             this->actionFunc = EnElforg_TrappedByBubble;
             break;
         case STRAY_FAIRY_TYPE_ENEMY:
@@ -211,7 +211,7 @@ void func_80ACC994(EnElforg* this, Vec3f* pos) {
     s16 phi_v0;
     s16 targetAngle;
 
-    this->actor.shape.yOffset += 100.0f * Math_SinS(this->unk_21C << 9);
+    this->actor.shape.yOffset += 100.0f * Math_SinS(this->timer << 9);
     func_80ACC8D4(this, pos);
     xDifference = this->actor.world.pos.x - pos->x;
     zDifference = this->actor.world.pos.z - pos->z;
@@ -233,7 +233,7 @@ void func_80ACC994(EnElforg* this, Vec3f* pos) {
 void func_80ACCAC0(EnElforg* this, Vec3f* pos) {
     s16 targetAngle;
 
-    this->actor.shape.yOffset += 100.0f * Math_SinS(this->unk_21C << 9);
+    this->actor.shape.yOffset += 100.0f * Math_SinS(this->timer << 9);
     func_80ACC8D4(this, pos);
     targetAngle = Math_FAtan2F(-(this->actor.world.pos.z - pos->z), -(this->actor.world.pos.x - pos->x));
     if (this->unk_224 > 2.0f) {
@@ -256,7 +256,7 @@ void EnElforg_TrappedByBubble(EnElforg* this, GlobalContext* globalCtx) {
         EnElforg_InitializeSpeedAndRotation(this);
         this->actionFunc = EnElforg_FreeFloating;
     } else {
-        this->actor.shape.yOffset += 10.0f * Math_SinS(this->unk_21C << 9);
+        this->actor.shape.yOffset += 10.0f * Math_SinS(this->timer << 9);
         this->actor.world.pos = this->actor.parent->world.pos;
         this->actor.world.pos.y += 12.0f;
     }
@@ -289,7 +289,7 @@ void func_80ACCC98(EnElforg* this, GlobalContext* globalCtx) {
         return;
     }
     this->actor.world.rot.y = rotationTemp + 0x4000;
-    this->unk_21C = 0;
+    this->timer = 0;
     this->unk_220 = Rand_ZeroFloat(100.0f);
     this->actor.shape.yOffset = 0.0f;
     this->unk_224 = 3.0f;
@@ -317,7 +317,7 @@ void func_80ACCEB0(EnElforg* this, GlobalContext* globalCtx) {
         if (this->unk_228 > 0.0f) {
             this->unk_228 -= 2.0f;
         }
-    } else if ((this->unk_21C & 0x7F) == 0x7F) {
+    } else if ((this->timer & 0x7F) == 0x7F) {
         if (Math_Vec3f_DistXZ(&this->actor.world.pos, &this->actor.home.pos) > 150.0f) {
             this->unk_224 = 5.0f;
         } else {
@@ -353,15 +353,15 @@ void EnElforg_CirclePlayer(EnElforg* this, GlobalContext* globalCtx) {
     } else {
         phi_f2 = 20.0f;
     }
-    this->actor.world.pos.x = (Math_SinS(this->unk_21C << 0xC) * phi_f2) + playerActor->world.pos.x;
-    this->actor.world.pos.z = (Math_CosS(this->unk_21C << 0xC) * phi_f2) + playerActor->world.pos.z;
+    this->actor.world.pos.x = (Math_SinS(this->timer << 0xC) * phi_f2) + playerActor->world.pos.x;
+    this->actor.world.pos.z = (Math_CosS(this->timer << 0xC) * phi_f2) + playerActor->world.pos.z;
     this->actor.world.pos.y = player->bodyPartsPos[0].y;
     EnElforg_SpawnSparkles(this, globalCtx, 16);
 }
 
 void EnElforg_FairyCollected(EnElforg* this, GlobalContext* globalCtx) {
     EnElforg_CirclePlayer(this, globalCtx);
-    if (this->unk_21C >= 0x51) {
+    if (this->timer >= 81) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -376,7 +376,7 @@ void EnElforg_SetupFairyCollected(EnElforg* this, GlobalContext* globalCtx) {
     this->actor.world.pos.y = player->bodyPartsPos[0].y;
     this->actor.world.pos.z = playerActor->world.pos.z;
     this->actionFunc = EnElforg_FairyCollected;
-    this->unk_21C = 0;
+    this->timer = 0;
     this->unk_220 = 0;
     this->actor.shape.yOffset = 0.0f;
 }
@@ -385,7 +385,7 @@ void EnElforg_ClockTownFairyCollected(EnElforg* this, GlobalContext* globalCtx) 
     Player* player = GET_PLAYER(globalCtx);
 
     EnElforg_CirclePlayer(this, globalCtx);
-    player->actor.freezeTimer = 0x64;
+    player->actor.freezeTimer = 100;
     player->stateFlags1 |= 0x20000000;
     if (func_800B867C(&this->actor, globalCtx)) {
         player->actor.freezeTimer = 0;
@@ -436,7 +436,7 @@ void EnElforg_FreeFloating(EnElforg* this, GlobalContext* globalCtx) {
                     break;
             }
             if (STRAY_FAIRY_TYPE(&this->actor) == STRAY_FAIRY_TYPE_CLOCK_TOWN) {
-                player->actor.freezeTimer = 0x64;
+                player->actor.freezeTimer = 100;
                 player->stateFlags1 |= 0x20000000;
                 func_801518B0(globalCtx, 0x579, NULL);
                 this->actionFunc = EnElforg_ClockTownFairyCollected;
@@ -526,21 +526,21 @@ void EnElforg_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
 
-    if (this->unk_21C == 0 && this->unk_220 > 0) {
+    if (this->timer == 0 && this->unk_220 > 0) {
         this->unk_220--;
     } else {
-        this->unk_21C++;
+        this->timer++;
     }
 
-    if (this->unk_216 < 0) {
-        this->unk_216++;
-        if (this->unk_216 == 0) {
-            this->unk_216 = Rand_ZeroFloat(20.0f) + 20.0f;
+    if (this->direction < 0) {
+        this->direction++;
+        if (this->direction == 0) {
+            this->direction = Rand_ZeroFloat(20.0f) + 20.0f;
         }
-    } else if (this->unk_216 > 0) {
-        this->unk_216--;
+    } else if (this->direction > 0) {
+        this->direction--;
     } else {
-        this->unk_216 = -Rand_ZeroFloat(20.0f) - 20.0f;
+        this->direction = -Rand_ZeroFloat(20.0f) - 20.0f;
     }
 }
 
@@ -548,7 +548,7 @@ s32 EnElforg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
                               Actor* thisx, Gfx** gfx) {
     EnElforg* this = THIS;
 
-    if (this->unk_216 < 0) {
+    if (this->direction < 0) {
         if (limbIndex == 9) {
             *dList = NULL;
         }

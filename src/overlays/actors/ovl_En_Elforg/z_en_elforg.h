@@ -39,9 +39,9 @@ typedef struct EnElforg {
     /* 0x1C4 */ ColliderCylinder collider;
     /* 0x210 */ Actor* enemy;
     /* 0x214 */ u16 unk_214;
-    /* 0x216 */ s16 unk_216;
+    /* 0x216 */ s16 direction; // negative when facing left, positive when facing right
     /* 0x218 */ s16 area;
-    /* 0x21C */ s32 unk_21C;
+    /* 0x21C */ s32 timer;
     /* 0x220 */ s32 unk_220;
     /* 0x224 */ f32 unk_224;
     /* 0x228 */ f32 unk_228;
