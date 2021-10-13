@@ -37,13 +37,8 @@ typedef struct EnTrt {
     /* 0x3DC */ EnTrtBlinkFunc blinkFunc;
     /* 0x3E0 */ s16 cutscene;
     /* 0x3E2 */ s16 tmpGetMushroomCutscene;
-    /* 0x3E4 */ f32 cursorX;
-    /* 0x3E8 */ f32 cursorY;
-    /* 0x3EC */ f32 cursorZ;
-    /* 0x3F0 */ s32 cursorColorR;
-    /* 0x3F4 */ s32 cursorColorG;
-    /* 0x3F8 */ s32 cursorColorB;
-    /* 0x3FC */ s32 cursorColorA;
+    /* 0x3E4 */ Vec3f cursorPos;
+    /* 0x3F0 */ Color_RGBAu32 cursorColor;
     /* 0x400 */ u8 drawCursor;
     /* 0x402 */ s16 timer;
     /* 0x404 */ s16 animationIdx;

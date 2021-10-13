@@ -283,8 +283,8 @@ void PreRender_AntiAliasAlgorithm(PreRender* this, s32 x, s32 y) {
     s32 pxR2;
     s32 pxG2;
     s32 pxB2;
-    Color_RGB5A1 pxIn;
-    Color_RGB5A1 pxOut;
+    Color_RGBA16 pxIn;
+    Color_RGBA16 pxOut;
     u32 pxR3;
     u32 pxG3;
     u32 pxB3;

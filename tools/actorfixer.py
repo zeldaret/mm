@@ -16,6 +16,13 @@ animdict ={
     "func_8012404c": "Player_RemoveMask",
     "Actor_SpawnWithParentAndCutscene": "Actor_SpawnAsChildAndCutscene",
     "Actor_SpawnWithParent": "Actor_SpawnAsChild",
+    "func_800BE22C": "Actor_ApplyDamage",
+    "func_800F0568": "Audio_PlaySoundAtPosition",
+    "func_8016970C": "Play_CameraSetAtEye",
+    "func_800BBA88": "Enemy_StartFinishingBlow",
+    "ShrinkWindow_Step": "ShrinkWindow_Update",
+    "ShrinkWindow_Fini": "ShrinkWindow_Destroy",
+    "func_801A89A8": "Audio_QueueSeqCmd",
 }
 
 def replace_anim(file):

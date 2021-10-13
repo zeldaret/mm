@@ -87,8 +87,12 @@ void GameState_Draw(GameState* gameState, GraphicsContext* gfxCtx) {
     Graph_BranchDlist(polyOpa, nextDisplayList);
     POLY_OPA_DISP = nextDisplayList;
 
-lblUnk:; // Label prevents reordering, if(1) around the above block don't seem to help unlike in OoT
-    func_800E9F78(gfxCtx);
+    // Block prevents reordering, if(1) around the above block don't seem to help unlike in OoT
+    {
+        s32 requiredScopeTemp;
+
+        func_800E9F78(gfxCtx);
+    }
 
     if (R_ENABLE_ARENA_DBG != 0) {
         SpeedMeter_DrawTimeEntries(&D_801F7FF0, gfxCtx);
@@ -169,16 +173,16 @@ void GameState_InitArena(GameState* gameState, size_t size) {
 void GameState_Realloc(GameState* gameState, size_t size) {
     GameAlloc* alloc;
     void* gameArena;
-    size_t systemMaxFree;
-    size_t bytesFree;
-    size_t bytesAllocated;
+    u32 systemMaxFree;
+    u32 bytesFree;
+    u32 bytesAllocated;
     void* heapStart;
 
     heapStart = gameState->heap.bufp;
     alloc = &gameState->alloc;
     THA_Dt(&gameState->heap);
     GameAlloc_Free(alloc, heapStart);
-    StartHeap_AnalyzeArena(&systemMaxFree, &bytesFree, &bytesAllocated);
+    SystemArena_AnalyzeArena(&systemMaxFree, &bytesFree, &bytesAllocated);
     size = ((systemMaxFree - (sizeof(ArenaNode))) < size) ? (0) : (size);
     if (size == 0) {
         size = systemMaxFree - (sizeof(ArenaNode));
@@ -205,21 +209,24 @@ void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* g
     gameState->nextGameStateInit = NULL;
     gameState->nextGameStateSize = 0U;
 
-lblUnk:;
-    GameAlloc_Init(&gameState->alloc);
-    GameState_InitArena(gameState, 0x100000);
-    Game_SetFramerateDivisor(gameState, 3);
+    {
+        s32 requiredScopeTemp;
 
-    init(gameState);
+        GameAlloc_Init(&gameState->alloc);
+        GameState_InitArena(gameState, 0x100000);
+        Game_SetFramerateDivisor(gameState, 3);
 
-    func_80140CE0(&D_801F8010);
-    func_801420C0(&D_801F8020);
-    func_801418B0(&sMonoColors);
-    func_80140898(&D_801F8048);
-    func_801773A0(&D_801F7FF0);
-    func_8013ED9C();
+        init(gameState);
 
-    osSendMesg(&gameState->gfxCtx->unk5C, NULL, OS_MESG_BLOCK);
+        func_80140CE0(&D_801F8010);
+        func_801420C0(&D_801F8020);
+        func_801418B0(&sMonoColors);
+        func_80140898(&D_801F8048);
+        func_801773A0(&D_801F7FF0);
+        func_8013ED9C();
+
+        osSendMesg(&gameState->gfxCtx->unk5C, NULL, 1);
+    }
 }
 
 void GameState_Destroy(GameState* gameState) {

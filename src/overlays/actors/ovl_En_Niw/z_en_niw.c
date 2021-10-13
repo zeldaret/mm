@@ -638,7 +638,7 @@ void EnNiw_SetupRunAway(EnNiw* this) {
 }
 
 void EnNiw_RunAway(EnNiw* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Vec3f tempVec3f = D_808934E8;
     s16 temp298;
     f32 dX;
@@ -736,7 +736,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnNiw* this = (EnNiw*)thisx;
     s8 pad0;
     s16 i;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 pad1;
     s16 featherCount;
     Vec3f pos;

@@ -155,6 +155,8 @@ void FaultDrawer_Printf(const char* fmt, ...) {
     va_start(args, fmt);
 
     FaultDrawer_VPrintf(fmt, args);
+
+    va_end(args);
 }
 
 void FaultDrawer_DrawText(s32 x, s32 y, const char* fmt, ...) {
@@ -163,6 +165,8 @@ void FaultDrawer_DrawText(s32 x, s32 y, const char* fmt, ...) {
 
     FaultDrawer_SetCursor(x, y);
     FaultDrawer_VPrintf(fmt, args);
+
+    va_end(args);
 }
 
 void FaultDrawer_SetDrawerFB(void* fb, u16 w, u16 h) {
@@ -171,7 +175,7 @@ void FaultDrawer_SetDrawerFB(void* fb, u16 w, u16 h) {
     sFaultDrawContext->h = h;
 }
 
-void FaultDrawer_SetInputCallback(void (*callback)()) {
+void FaultDrawer_SetInputCallback(void* callback) {
     sFaultDrawContext->inputCallback = callback;
 }
 

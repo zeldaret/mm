@@ -237,7 +237,7 @@ void EnMinifrog_SetCamera(EnMinifrog* this, GlobalContext* globalCtx) {
     Vec3f eye;
     s32 i;
 
-    eye = ACTIVE_CAM->eye;
+    eye = GET_ACTIVE_CAM(globalCtx)->eye;
     yaw = Math_Vec3f_Yaw(&eye, &this->actor.world.pos);
     pitch = -Math_Vec3f_Pitch(&eye, &this->actor.world.pos);
     vec5.x = this->actor.world.pos.x - (5.0f * Math_SinS(yaw) * Math_CosS(pitch));
@@ -288,7 +288,7 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, GlobalContext* globalCtx) {
             default:
                 func_801477B4(globalCtx);
                 EnMinifrog_SetCamera(this, globalCtx);
-                func_800F0568(globalCtx, &this->actor.world.pos, 30, NA_SE_EN_NPC_FADEAWAY);
+                Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 30, NA_SE_EN_NPC_FADEAWAY);
                 if (this->actor.cutscene != -1) {
                     if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
                         ActorCutscene_Stop(this->actor.cutscene);

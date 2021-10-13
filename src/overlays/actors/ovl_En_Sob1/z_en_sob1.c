@@ -195,7 +195,7 @@ s32 EnSob1_TestItemSelected(GlobalContext* globalCtx) {
 }
 
 u16 EnSob1_GetTalkOption(EnSob1* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->shopType == BOMB_SHOP) {
         if (gSaveContext.day == 1 && gSaveContext.time >= CLOCK_TIME(6, 00)) {
@@ -231,7 +231,7 @@ u16 EnSob1_GetTalkOption(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 u16 EnSob1_GetWelcome(EnSob1* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->shopType == BOMB_SHOP) {
         switch (Player_GetMask(globalCtx)) {
@@ -437,13 +437,13 @@ void EnSob1_UpdateCursorPos(GlobalContext* globalCtx, EnSob1* this) {
     f32 yOffset = 17.0f;
 
     func_800B8898(globalCtx, &this->items[this->cursorIdx]->actor, &x, &y);
-    this->cursorX = x + xOffset;
-    this->cursorY = y + yOffset;
-    this->cursorZ = 1.2f;
+    this->cursorPos.x = x + xOffset;
+    this->cursorPos.y = y + yOffset;
+    this->cursorPos.z = 1.2f;
 }
 
 void EnSob1_EndInteraction(GlobalContext* globalCtx, EnSob1* this) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->cutsceneState == ENSOB1_CUTSCENESTATE_PLAYING) {
         ActorCutscene_Stop(this->cutscene);
@@ -522,7 +522,7 @@ void EnSob1_EndingInteraction(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_SetupWalk(EnSob1* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((player->actor.world.pos.x >= 0.0f && player->actor.world.pos.x <= 390.0f) &&
         (player->actor.world.pos.z >= 72.0f && player->actor.world.pos.z <= 365.0f)) {
@@ -531,7 +531,7 @@ void EnSob1_SetupWalk(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_Idle(EnSob1* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     this->headRotTarget = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
     if (func_800B84D0(&this->actor, globalCtx)) {
@@ -782,7 +782,7 @@ void EnSob1_Walk(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_Walking(EnSob1* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->cutsceneState == ENSOB1_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
@@ -816,7 +816,7 @@ void EnSob1_Walking(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_ItemPurchased(EnSob1* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
@@ -938,7 +938,7 @@ void EnSob1_BrowseShelf(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_SetupBuyItemWithFanfare(GlobalContext* globalCtx, EnSob1* this) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     func_800B8A1C(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
     globalCtx->msgCtx.unk11F22 = 0x43;
@@ -1096,7 +1096,7 @@ void EnSob1_SetupItemPurchased(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_ContinueShopping(EnSob1* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     EnGirlA* item;
 
     if ((func_80152498(&globalCtx->msgCtx) == 5) && (func_80147624(globalCtx))) {
@@ -1196,10 +1196,10 @@ void EnSob1_UpdateCursorAnim(EnSob1* this) {
             this->cursorAnimState = 0;
         }
     }
-    this->cursorColorR = COL_CHAN_MIX(0, 0.0f, t);
-    this->cursorColorG = COL_CHAN_MIX(80, 80.0f, t);
-    this->cursorColorB = COL_CHAN_MIX(255, 0.0f, t);
-    this->cursorColorA = COL_CHAN_MIX(255, 0.0f, t);
+    this->cursorColor.r = COL_CHAN_MIX(0, 0.0f, t);
+    this->cursorColor.g = COL_CHAN_MIX(80, 80.0f, t);
+    this->cursorColor.b = COL_CHAN_MIX(255, 0.0f, t);
+    this->cursorColor.a = COL_CHAN_MIX(255, 0.0f, t);
     this->cursorAnimTween = t;
 }
 
@@ -1241,15 +1241,15 @@ void EnSob1_UpdateStickDirectionPromptAnim(EnSob1* this) {
 
     this->stickAnimTween = stickAnimTween;
 
-    this->stickLeftPrompt.arrowColorR = COL_CHAN_MIX(255, 155.0f, arrowAnimTween);
-    this->stickLeftPrompt.arrowColorG = COL_CHAN_MIX(maxColor, 155.0f, arrowAnimTween);
-    this->stickLeftPrompt.arrowColorB = COL_CHAN_MIX(0, -100, arrowAnimTween);
-    this->stickLeftPrompt.arrowColorA = COL_CHAN_MIX(200, 50.0f, arrowAnimTween);
+    this->stickLeftPrompt.arrowColor.r = COL_CHAN_MIX(255, 155.0f, arrowAnimTween);
+    this->stickLeftPrompt.arrowColor.g = COL_CHAN_MIX(maxColor, 155.0f, arrowAnimTween);
+    this->stickLeftPrompt.arrowColor.b = COL_CHAN_MIX(0, -100, arrowAnimTween);
+    this->stickLeftPrompt.arrowColor.a = COL_CHAN_MIX(200, 50.0f, arrowAnimTween);
 
-    this->stickRightPrompt.arrowColorR = (maxColor - ((s32)tmp)) & 0xFF;
-    this->stickRightPrompt.arrowColorG = (255 - ((s32)tmp)) & 0xFF;
-    this->stickRightPrompt.arrowColorB = COL_CHAN_MIX(0, -100.0f, arrowAnimTween);
-    this->stickRightPrompt.arrowColorA = COL_CHAN_MIX(200, 50.0f, arrowAnimTween);
+    this->stickRightPrompt.arrowColor.r = (maxColor - ((s32)tmp)) & 0xFF;
+    this->stickRightPrompt.arrowColor.g = (255 - ((s32)tmp)) & 0xFF;
+    this->stickRightPrompt.arrowColor.b = COL_CHAN_MIX(0, -100.0f, arrowAnimTween);
+    this->stickRightPrompt.arrowColor.a = COL_CHAN_MIX(200, 50.0f, arrowAnimTween);
 
     this->stickRightPrompt.arrowTexX = 290.0f;
     this->stickLeftPrompt.arrowTexX = 33.0f;
@@ -1397,30 +1397,30 @@ void EnSob1_InitShop(EnSob1* this, GlobalContext* globalCtx) {
             EnSob1_SetupAction(this, EnSob1_Idle);
         }
 
-        this->cursorY = (this->cursorX = 100.0f);
+        this->cursorPos.y = (this->cursorPos.x = 100.0f);
         this->stickAccumX = (this->stickAccumY = 0);
         this->cursorIdx = 0;
-        this->cursorZ = 1.2f;
-        this->cursorColorR = 0;
-        this->cursorColorG = 80;
-        this->cursorColorB = maxColor;
-        this->cursorColorA = maxColor;
+        this->cursorPos.z = 1.2f;
+        this->cursorColor.r = 0;
+        this->cursorColor.g = 80;
+        this->cursorColor.b = maxColor;
+        this->cursorColor.a = maxColor;
         this->cursorAnimTween = 0.0f;
         this->cursorAnimState = 0;
         this->drawCursor = 0;
 
         this2 = this;
 
-        this2->stickLeftPrompt.stickColorR = 200;
-        this2->stickLeftPrompt.stickColorG = 200;
-        this2->stickLeftPrompt.stickColorB = 200;
-        this2->stickLeftPrompt.stickColorA = 180;
+        this2->stickLeftPrompt.stickColor.r = 200;
+        this2->stickLeftPrompt.stickColor.g = 200;
+        this2->stickLeftPrompt.stickColor.b = 200;
+        this2->stickLeftPrompt.stickColor.a = 180;
         this2->stickLeftPrompt.stickTexX = 49.0f;
         this2->stickLeftPrompt.stickTexY = 95.0f;
-        this2->stickLeftPrompt.arrowColorR = maxColor;
-        this2->stickLeftPrompt.arrowColorG = maxColor;
-        this2->stickLeftPrompt.arrowColorB = 0;
-        this2->stickLeftPrompt.arrowColorA = 200;
+        this2->stickLeftPrompt.arrowColor.r = maxColor;
+        this2->stickLeftPrompt.arrowColor.g = maxColor;
+        this2->stickLeftPrompt.arrowColor.b = 0;
+        this2->stickLeftPrompt.arrowColor.a = 200;
         this2->stickLeftPrompt.arrowTexX = 33.0f;
         this2->stickLeftPrompt.arrowTexY = 91.0f;
         this2->stickLeftPrompt.texZ = 1.0f;
@@ -1428,16 +1428,16 @@ void EnSob1_InitShop(EnSob1* this, GlobalContext* globalCtx) {
 
         if (1) {}
 
-        this2->stickRightPrompt.stickColorR = 200;
-        this2->stickRightPrompt.stickColorG = 200;
-        this2->stickRightPrompt.stickColorB = 200;
-        this2->stickRightPrompt.stickColorA = 180;
+        this2->stickRightPrompt.stickColor.r = 200;
+        this2->stickRightPrompt.stickColor.g = 200;
+        this2->stickRightPrompt.stickColor.b = 200;
+        this2->stickRightPrompt.stickColor.a = 180;
         this2->stickRightPrompt.stickTexX = 274.0f;
         this2->stickRightPrompt.stickTexY = 95.0f;
-        this2->stickRightPrompt.arrowColorR = maxColor;
-        this2->stickRightPrompt.arrowColorG = 0;
-        this2->stickRightPrompt.arrowColorB = 0;
-        this2->stickRightPrompt.arrowColorA = 200;
+        this2->stickRightPrompt.arrowColor.r = maxColor;
+        this2->stickRightPrompt.arrowColor.g = 0;
+        this2->stickRightPrompt.arrowColor.b = 0;
+        this2->stickRightPrompt.arrowColor.a = 200;
         this2->stickRightPrompt.arrowTexX = 290.0f;
         this2->stickRightPrompt.arrowTexY = 91.0f;
         this2->stickRightPrompt.texZ = 1.0f;
@@ -1493,8 +1493,8 @@ void EnSob1_DrawCursor(GlobalContext* globalCtx, EnSob1* this, f32 x, f32 y, f32
     OPEN_DISPS(globalCtx->state.gfxCtx);
     if (drawCursor != 0) {
         func_8012C654(globalCtx->state.gfxCtx);
-        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, this->cursorColorR, this->cursorColorG, this->cursorColorB,
-                        this->cursorColorA);
+        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, this->cursorColor.r, this->cursorColor.g, this->cursorColor.b,
+                        this->cursorColor.a);
         gDPLoadTextureBlock_4b(OVERLAY_DISP++, &D_0401F740, G_IM_FMT_IA, 16, 16, 0, G_TX_MIRROR | G_TX_WRAP,
                                G_TX_MIRROR | G_TX_WRAP, 4, 4, G_TX_NOLOD, G_TX_NOLOD);
         w = 16.0f * z;
@@ -1557,14 +1557,14 @@ void EnSob1_DrawStickDirectionPrompt(GlobalContext* globalCtx, EnSob1* this) {
                    G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOLOD);
         gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 15 * 4, 23 * 4);
         if (drawStickRightPrompt) {
-            EnSob1_DrawTextRec(globalCtx, this->stickLeftPrompt.arrowColorR, this->stickLeftPrompt.arrowColorG,
-                               this->stickLeftPrompt.arrowColorB, this->stickLeftPrompt.arrowColorA,
+            EnSob1_DrawTextRec(globalCtx, this->stickLeftPrompt.arrowColor.r, this->stickLeftPrompt.arrowColor.g,
+                               this->stickLeftPrompt.arrowColor.b, this->stickLeftPrompt.arrowColor.a,
                                this->stickLeftPrompt.arrowTexX, this->stickLeftPrompt.arrowTexY,
                                this->stickLeftPrompt.texZ, 0, 0, -1.0f, 1.0f);
         }
         if (drawStickLeftPrompt) {
-            EnSob1_DrawTextRec(globalCtx, this->stickRightPrompt.arrowColorR, this->stickRightPrompt.arrowColorG,
-                               this->stickRightPrompt.arrowColorB, this->stickRightPrompt.arrowColorA,
+            EnSob1_DrawTextRec(globalCtx, this->stickRightPrompt.arrowColor.r, this->stickRightPrompt.arrowColor.g,
+                               this->stickRightPrompt.arrowColor.b, this->stickRightPrompt.arrowColor.a,
                                this->stickRightPrompt.arrowTexX, this->stickRightPrompt.arrowTexY,
                                this->stickRightPrompt.texZ, 0, 0, 1.0f, 1.0f);
         }
@@ -1578,14 +1578,14 @@ void EnSob1_DrawStickDirectionPrompt(GlobalContext* globalCtx, EnSob1* this) {
                    G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOLOD);
         gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 15 * 4, 15 * 4);
         if (drawStickRightPrompt) {
-            EnSob1_DrawTextRec(globalCtx, this->stickLeftPrompt.stickColorR, this->stickLeftPrompt.stickColorG,
-                               this->stickLeftPrompt.stickColorB, this->stickLeftPrompt.stickColorA,
+            EnSob1_DrawTextRec(globalCtx, this->stickLeftPrompt.stickColor.r, this->stickLeftPrompt.stickColor.g,
+                               this->stickLeftPrompt.stickColor.b, this->stickLeftPrompt.stickColor.a,
                                this->stickLeftPrompt.stickTexX, this->stickLeftPrompt.stickTexY,
                                this->stickLeftPrompt.texZ, 0, 0, -1.0f, 1.0f);
         }
         if (drawStickLeftPrompt) {
-            EnSob1_DrawTextRec(globalCtx, this->stickRightPrompt.stickColorR, this->stickRightPrompt.stickColorG,
-                               this->stickRightPrompt.stickColorB, this->stickRightPrompt.stickColorA,
+            EnSob1_DrawTextRec(globalCtx, this->stickRightPrompt.stickColor.r, this->stickRightPrompt.stickColor.g,
+                               this->stickRightPrompt.stickColor.b, this->stickRightPrompt.stickColor.a,
                                this->stickRightPrompt.stickTexX, this->stickRightPrompt.stickTexY,
                                this->stickRightPrompt.texZ, 0, 0, 1.0f, 1.0f);
         }
@@ -1649,7 +1649,7 @@ void EnSob1_DrawZoraShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
         this->items[i]->actor.scale.y = 0.2f;
         this->items[i]->actor.scale.z = 0.2f;
     }
-    EnSob1_DrawCursor(globalCtx, this, this->cursorX, this->cursorY, this->cursorZ, this->drawCursor);
+    EnSob1_DrawCursor(globalCtx, this, this->cursorPos.x, this->cursorPos.y, this->cursorPos.z, this->drawCursor);
     EnSob1_DrawStickDirectionPrompt(globalCtx, this);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -1670,7 +1670,7 @@ void EnSob1_DrawGoronShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
         this->items[i]->actor.scale.y = 0.2f;
         this->items[i]->actor.scale.z = 0.2f;
     }
-    EnSob1_DrawCursor(globalCtx, this, this->cursorX, this->cursorY, this->cursorZ, this->drawCursor);
+    EnSob1_DrawCursor(globalCtx, this, this->cursorPos.x, this->cursorPos.y, this->cursorPos.z, this->drawCursor);
     EnSob1_DrawStickDirectionPrompt(globalCtx, this);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -1691,7 +1691,7 @@ void EnSob1_DrawBombShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
         this->items[i]->actor.scale.y = 0.2f;
         this->items[i]->actor.scale.z = 0.2f;
     }
-    EnSob1_DrawCursor(globalCtx, this, this->cursorX, this->cursorY, this->cursorZ, this->drawCursor);
+    EnSob1_DrawCursor(globalCtx, this, this->cursorPos.x, this->cursorPos.y, this->cursorPos.z, this->drawCursor);
     EnSob1_DrawStickDirectionPrompt(globalCtx, this);
     frames = globalCtx->gameplayFrames;
     func_8012C2DC(globalCtx->state.gfxCtx);

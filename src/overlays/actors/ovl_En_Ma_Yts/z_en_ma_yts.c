@@ -143,7 +143,7 @@ void EnMaYts_ChangeAnim(EnMaYts* this, s32 index) {
 }
 
 void func_80B8D12C(EnMaYts* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 flag = this->unk_32C == 2 ? true : false;
 
     if (this->unk_32C == 0 || this->actor.parent == NULL) {

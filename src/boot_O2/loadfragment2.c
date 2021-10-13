@@ -111,7 +111,7 @@ void* Overlay_AllocateAndLoad(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRa
     size_t size;
 
     size = vRamEnd - vRamStart;
-    allocatedVRamAddr = StartHeap_AllocR(size);
+    allocatedVRamAddr = SystemArena_MallocR(size);
     if (allocatedVRamAddr != NULL) {
         Load2_LoadOverlay(vRomStart, vRomEnd, vRamStart, vRamEnd, (u32)allocatedVRamAddr);
     }

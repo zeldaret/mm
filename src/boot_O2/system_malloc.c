@@ -1,21 +1,50 @@
 #include "global.h"
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/system_malloc/SystemArena_Malloc.s")
+Arena gSystemArena;
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/system_malloc/StartHeap_AllocR.s")
+void* SystemArena_Malloc(size_t size) {
+    return __osMalloc(&gSystemArena, size);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/system_malloc/StartHeap_Realloc.s")
+void* SystemArena_MallocR(size_t size) {
+    return __osMallocR(&gSystemArena, size);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/system_malloc/SystemArena_Free.s")
+void* SystemArena_Realloc(void* oldPtr, size_t newSize) {
+    return __osRealloc(&gSystemArena, oldPtr, newSize);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/system_malloc/StartHeap_Calloc.s")
+void SystemArena_Free(void* ptr) {
+    __osFree(&gSystemArena, ptr);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/system_malloc/StartHeap_AnalyzeArena.s")
+void* SystemArena_Calloc(u32 elements, size_t size) {
+    void* ptr;
+    size_t totalSize = elements * size;
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/system_malloc/StartHeap_CheckArena.s")
+    ptr = __osMalloc(&gSystemArena, totalSize);
+    if (ptr != NULL) {
+        bzero(ptr, totalSize);
+    }
+    return ptr;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/system_malloc/StartHeap_InitArena.s")
+void SystemArena_AnalyzeArena(u32* maxFreeBlock, u32* bytesFree, u32* bytesAllocated) {
+    __osAnalyzeArena(&gSystemArena, maxFreeBlock, bytesFree, bytesAllocated);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/system_malloc/StartHeap_Cleanup.s")
+u32 SystemArena_CheckArena(void) {
+    return __osCheckArena(&gSystemArena);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/system_malloc/StartHeap_IsInitialized.s")
+void SystemArena_InitArena(void* start, size_t size) {
+    __osMallocInit(&gSystemArena, start, size);
+}
+
+void SystemArena_Cleanup(void) {
+    __osMallocCleanup(&gSystemArena);
+}
+
+u8 SystemArena_IsInitialized(void) {
+    return __osMallocIsInitalized(&gSystemArena);
+}

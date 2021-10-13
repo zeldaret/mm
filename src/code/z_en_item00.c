@@ -403,7 +403,7 @@ void func_800A6780(EnItem00* this, GlobalContext* globalCtx) {
 }
 
 void func_800A6A40(EnItem00* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->unk14A != 0) {
         if (Actor_HasParent(&this->actor, globalCtx) == 0) {
@@ -439,7 +439,7 @@ void func_800A6A40(EnItem00* this, GlobalContext* globalCtx) {
 void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnItem00* this = THIS;
     s32 pad;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 sp38 = player->stateFlags3 & 0x1000;
     s32 getItemId = GI_NONE;
     s32 pad2;
@@ -871,7 +871,7 @@ EnItem00* Item_DropCollectible(GlobalContext* globalCtx, Vec3f* spawnPos, u32 pa
                 (EnItem00*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f,
                                        spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) << 9) & 0xFE00) | 0x102);
             if (!Actor_GetCollectibleFlag(globalCtx, (param7F00 >> 8) & 0x7F)) {
-                func_800F0568(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
+                Audio_PlaySoundAtPosition(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
             }
         } else {
             // TODO: fix cast, this actor is not an EnItem00
@@ -880,7 +880,7 @@ EnItem00* Item_DropCollectible(GlobalContext* globalCtx, Vec3f* spawnPos, u32 pa
                                                   ((((param7F00 >> 8) & 0x7F) & 0x7F) << 9) | 7);
             if (param20000 == 0) {
                 if (!Actor_GetCollectibleFlag(globalCtx, (param7F00 >> 8) & 0x7F)) {
-                    func_800F0568(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
+                    Audio_PlaySoundAtPosition(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
                 }
             }
         }
@@ -947,7 +947,7 @@ Actor* Item_DropCollectible2(GlobalContext* globalCtx, Vec3f* spawnPos, u32 para
                             spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) & 0x7F) << 9) | 7);
         }
         if (Actor_GetCollectibleFlag(globalCtx, (param7F00 >> 8) & 0x7F) == 0) {
-            func_800F0568(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
+            Audio_PlaySoundAtPosition(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
         }
     } else {
         params = func_800A7650(params);
@@ -1105,7 +1105,7 @@ void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3
             if (gSaveContext.health < 0x11) {
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f,
                             spawnPos->z, 0, 0, 0, 2);
-                func_800F0568(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
+                Audio_PlaySoundAtPosition(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
                 return;
             }
 
