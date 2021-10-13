@@ -2155,7 +2155,7 @@ void func_8011552C(GlobalContext* globalCtx, s16 arg1);
 // void func_801155B4(void);
 // void func_80115764(void);
 void func_80115844(GlobalContext* globalCtx, s16 param_2);
-void func_80115908(GlobalContext* globalCtx, u8 param_2);
+s32 func_80115908(GlobalContext* globalCtx, u8 param_2);
 void func_801159c0(s16 param_1);
 void func_801159EC(s16 arg0);
 void func_80115A14(s32 arg0, s16 arg1);

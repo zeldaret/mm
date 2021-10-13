@@ -16,6 +16,7 @@ void func_80ACD6A8(EnElforg* this, GlobalContext* globalCtx);
 void func_80ACD6EC(EnElforg* this, GlobalContext* globalCtx);
 void func_80ACD2E4(EnElforg* this, GlobalContext* globalCtx);
 void func_80ACCE4C(EnElforg* this, GlobalContext* globalCtx);
+void func_80ACD1F0(EnElforg* this, GlobalContext* globalCtx);
 
 const ActorInit En_Elforg_InitVars = {
     ACTOR_EN_ELFORG,
@@ -350,7 +351,64 @@ void func_80ACCEB0(EnElforg* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACD1F0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACD2E4.s")
+void func_80ACD2E4(EnElforg* this, GlobalContext* globalCtx) {
+    Vec3f pos;
+    f32 temp_f0;
+    Player* player = GET_PLAYER(globalCtx);
+
+    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    if (Player_GetMask(globalCtx) == PLAYER_MASK_GREAT_FAIRYS_MASK) {
+        pos = player->bodyPartsPos[0];
+        this->unk_224 = 5.0f;
+        func_80ACCAC0(this, &pos);
+    } else {
+        this->unk_224 = 1.0f;
+        func_80ACCAC0(this, &this->actor.home.pos);
+    }
+    temp_f0 = this->actor.yDistToPlayer - (this->actor.shape.yOffset * this->actor.scale.y);
+    if (func_801233E4(globalCtx) == 0) {
+        if ((this->actor.xzDistToPlayer < 30.0f) && (temp_f0 < 12.0f) && (temp_f0 > -68.0f)) {
+            func_80ACD1B0(this, globalCtx);
+            func_80115908(globalCtx, 0x30);
+            switch (this->actor.params & 0xF) {
+                case 7:
+                    Actor_SetCollectibleFlag(globalCtx, (this->actor.params & 0xFE00) >> 9);
+                    break;
+                case 6:
+                    Actor_SetChestFlag(globalCtx, (this->actor.params & 0xFE00) >> 9);
+                    break;
+                default:
+                    Actor_SetSwitchFlag(globalCtx, (this->actor.params & 0xFE00) >> 9);
+                    break;
+            }
+            if ((this->actor.params & 0xF) == 3) {
+                player->actor.freezeTimer = 0x64;
+                player->stateFlags1 |= 0x20000000;
+                func_801518B0(globalCtx, 0x579, NULL);
+                this->actionFunc = func_80ACD1F0;
+                ActorCutscene_SetIntentToPlay(0x7C);
+                return;
+            }
+            if (func_8010A074(globalCtx)) {
+                gSaveContext.inventory.strayFairies[gSaveContext.unk_48C8]++;
+                func_801518B0(globalCtx, 0x11, NULL);
+                if (gSaveContext.inventory.strayFairies[(void)0, gSaveContext.unk_48C8] >= 15) {
+                    func_801A3098(0x922);
+                }
+            }
+        }
+        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 20.0f, 7);
+        func_80ACCBB8(this, globalCtx);
+        if (Player_GetMask(globalCtx) == PLAYER_MASK_GREAT_FAIRYS_MASK) {
+            if ((this->unk_214 & 8) == 0) {
+                play_sound(NA_SE_SY_FAIRY_MASK_SUCCESS);
+            }
+            this->unk_214 |= 8;
+        } else {
+            this->unk_214 &= 0xFFF7;
+        }
+    }
+}
 
 Actor* func_80ACD59C(EnElforg* this, GlobalContext* globalCtx) {
     Actor* enemy;
