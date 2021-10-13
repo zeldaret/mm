@@ -51,21 +51,6 @@ static ColliderCylinderInit D_80ACDA30 = {
     { 16, 32, 0, { 0, 0, 0 } },
 };
 
-// static Vec3f sVelocity
-static Vec3f D_80ACDA5C = { 0.0f, -0.05f, 0.0f };
-
-// static Vec3f sAcceleration
-static Vec3f D_80ACDA68 = { 0.0f, -0.025f, 0.0f };
-
-static Color_RGBA8 D_80ACDA74[] = {
-    { 255, 235, 220, 255 }, { 255, 220, 220, 255 }, { 220, 255, 220, 255 },
-    { 220, 220, 255, 255 }, { 255, 255, 200, 255 },
-};
-
-static Color_RGBA8 D_80ACDA88[] = {
-    { 255, 150, 0, 255 }, { 255, 0, 0, 255 }, { 0, 255, 0, 255 }, { 0, 0, 255, 255 }, { 255, 255, 0, 255 },
-};
-
 void func_80ACC470(EnElforg* this) {
     this->actor.speedXZ = 1.0f;
     this->unk_224 = 1.0f;
@@ -167,6 +152,15 @@ void EnElforg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80ACC7E4(EnElforg* this, GlobalContext* globalCtx, s32 life) {
+    static Vec3f sVelocity = { 0.0f, -0.05f, 0.0f };
+    static Vec3f sAcceleration = { 0.0f, -0.025f, 0.0f };
+    static Color_RGBA8 sPrimColors[] = {
+        { 255, 235, 220, 255 }, { 255, 220, 220, 255 }, { 220, 255, 220, 255 },
+        { 220, 220, 255, 255 }, { 255, 255, 200, 255 },
+    };
+    static Color_RGBA8 sEnvColors[] = {
+        { 255, 150, 0, 255 }, { 255, 0, 0, 255 }, { 0, 255, 0, 255 }, { 0, 0, 255, 255 }, { 255, 255, 0, 255 },
+    };
     Vec3f pos;
     s32 pad;
     s32 index;
@@ -175,8 +169,8 @@ void func_80ACC7E4(EnElforg* this, GlobalContext* globalCtx, s32 life) {
     pos.y = (Rand_ZeroOne() * 6.0f) + this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y);
     pos.z = randPlusMinusPoint5Scaled(6.0f) + this->actor.world.pos.z;
     index = (this->unk_218 < 0 || this->unk_218 >= 5) ? 0 : this->unk_218;
-    EffectSsKiraKira_SpawnDispersed(globalCtx, &pos, &D_80ACDA5C, &D_80ACDA68, &D_80ACDA74[index], &D_80ACDA88[index],
-                                    1000, life);
+    EffectSsKiraKira_SpawnDispersed(globalCtx, &pos, &sVelocity, &sAcceleration, &sPrimColors[index],
+                                    &sEnvColors[index], 1000, life);
 }
 
 void func_80ACC8D4(EnElforg* this, Vec3f* bodyPartsPos) {
