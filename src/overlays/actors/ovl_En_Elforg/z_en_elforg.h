@@ -47,7 +47,7 @@ typedef struct EnElforg {
     /* 0x216 */ s16 direction; // negative when facing left, positive when facing right
     /* 0x218 */ s16 area;
     /* 0x21C */ s32 timer;
-    /* 0x220 */ s32 fairyFountainTimer;
+    /* 0x220 */ s32 secondaryTimer;
     /* 0x224 */ f32 targetSpeedXZ;
     /* 0x228 */ f32 targetDistanceFromHome;
     /* 0x22C */ EnElforgActionFunc actionFunc;

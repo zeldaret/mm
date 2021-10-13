@@ -60,7 +60,7 @@ void EnElforg_InitializeSpeedAndRotation(EnElforg* this) {
     this->actor.velocity.y = 0.0f;
     this->actor.world.rot.y = randPlusMinusPoint5Scaled(65536.0f);
     this->timer = 0;
-    this->fairyFountainTimer = Rand_ZeroFloat(100.0f);
+    this->secondaryTimer = Rand_ZeroFloat(100.0f);
     this->actor.shape.yOffset = 0.0f;
     this->skelAnime.animCurrentFrame = (s32)Rand_ZeroFloat(5.0f);
 }
@@ -120,7 +120,7 @@ void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
         case STRAY_FAIRY_TYPE_TURN_IN_TO_FAIRY_FOUNTAIN:
             EnElforg_InitializeSpeedAndRotation(this);
             this->actionFunc = EnElforg_TurnInFairy;
-            this->fairyFountainTimer = 60;
+            this->secondaryTimer = 60;
             break;
         case STRAY_FAIRY_TYPE_BUBBLE:
             this->timer = 0;
@@ -283,12 +283,12 @@ void EnElforg_TurnInFairy(EnElforg* this, GlobalContext* globalCtx) {
     this->actor.world.pos.z = player->actor.world.pos.z - (Math_CosS(rotationTemp) * xzDistToPlayer);
     EnElforg_SpawnSparkles(this, globalCtx, 16);
 
-    if (this->fairyFountainTimer > 0) {
-        this->fairyFountainTimer--;
+    if (this->secondaryTimer > 0) {
+        this->secondaryTimer--;
     } else {
         this->actor.world.rot.y = rotationTemp + 0x4000;
         this->timer = 0;
-        this->fairyFountainTimer = Rand_ZeroFloat(100.0f);
+        this->secondaryTimer = Rand_ZeroFloat(100.0f);
         this->actor.shape.yOffset = 0.0f;
         this->targetSpeedXZ = 3.0f;
         this->targetDistanceFromHome = 50.0f;
@@ -300,10 +300,10 @@ void EnElforg_TurnInFairy(EnElforg* this, GlobalContext* globalCtx) {
 void EnElforg_CirclePlayerFairyFountain(EnElforg* this, GlobalContext* globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     EnElforg_MoveToTargetFairyFountain(this, &this->actor.home.pos);
-    if (this->fairyFountainTimer < 31) {
+    if (this->secondaryTimer < 31) {
         this->actionFunc = EnElforg_TurnInFairy;
     }
-    this->fairyFountainTimer--;
+    this->secondaryTimer--;
 }
 
 void EnElforg_FreeFloatingFairyFountain(EnElforg* this, GlobalContext* globalCtx) {
@@ -376,7 +376,7 @@ void EnElforg_SetupFairyCollected(EnElforg* this, GlobalContext* globalCtx) {
     this->actor.world.pos.z = playerActor->world.pos.z;
     this->actionFunc = EnElforg_FairyCollected;
     this->timer = 0;
-    this->fairyFountainTimer = 0;
+    this->secondaryTimer = 0;
     this->actor.shape.yOffset = 0.0f;
 }
 
@@ -525,8 +525,8 @@ void EnElforg_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
 
-    if (this->timer == 0 && this->fairyFountainTimer > 0) {
-        this->fairyFountainTimer--;
+    if (this->timer == 0 && this->secondaryTimer > 0) {
+        this->secondaryTimer--;
     } else {
         this->timer++;
     }
