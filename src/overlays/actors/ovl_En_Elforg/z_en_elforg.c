@@ -15,14 +15,12 @@ void EnElforg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnElforg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnElforg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80ACCEB0(EnElforg* this, GlobalContext* globalCtx);
-void func_80ACCC98(EnElforg* this, GlobalContext* globalCtx);
 void func_80ACCBD0(EnElforg* this, GlobalContext* globalCtx);
+void func_80ACCC98(EnElforg* this, GlobalContext* globalCtx);
+void func_80ACCEB0(EnElforg* this, GlobalContext* globalCtx);
+void func_80ACD2E4(EnElforg* this, GlobalContext* globalCtx);
 void func_80ACD6A8(EnElforg* this, GlobalContext* globalCtx);
 void func_80ACD6EC(EnElforg* this, GlobalContext* globalCtx);
-void func_80ACD2E4(EnElforg* this, GlobalContext* globalCtx);
-void func_80ACCE4C(EnElforg* this, GlobalContext* globalCtx);
-void func_80ACD1F0(EnElforg* this, GlobalContext* globalCtx);
 
 const ActorInit En_Elforg_InitVars = {
     ACTOR_EN_ELFORG,
