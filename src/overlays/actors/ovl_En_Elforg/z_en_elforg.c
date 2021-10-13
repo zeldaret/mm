@@ -370,11 +370,12 @@ void func_80ACD164(EnElforg* this, GlobalContext* globalCtx) {
 }
 
 void func_80ACD1B0(EnElforg* this, GlobalContext* globalCtx) {
+    Actor* playerActor = &GET_PLAYER(globalCtx)->actor;
     Player* player = GET_PLAYER(globalCtx);
 
-    this->actor.world.pos.x = GET_PLAYER(globalCtx)->actor.world.pos.x;
+    this->actor.world.pos.x = playerActor->world.pos.x;
     this->actor.world.pos.y = player->bodyPartsPos[0].y;
-    this->actor.world.pos.z = player->actor.world.pos.z;
+    this->actor.world.pos.z = playerActor->world.pos.z;
     this->actionFunc = func_80ACD164;
     this->unk_21C = 0;
     this->unk_220 = 0;
