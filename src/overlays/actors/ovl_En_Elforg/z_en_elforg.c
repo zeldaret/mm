@@ -77,14 +77,14 @@ void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     this->actor.shape.shadowAlpha = 0xFF;
 
-    switch (this->actor.params & 0xF) {
-        case 3:
+    switch (STRAY_FAIRY_TYPE(&this->actor)) {
+        case STRAY_FAIRY_TYPE_CLOCK_TOWN:
             if ((gSaveContext.weekEventReg[8] & 0x80) != 0) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
             break;
-        case 7:
+        case STRAY_FAIRY_TYPE_COLLECTIBLE:
             if (Actor_GetCollectibleFlag(globalCtx, STRAY_FAIRY_FLAG(&this->actor))) {
                 Actor_MarkForDeath(&this->actor);
                 return;
@@ -96,10 +96,10 @@ void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
                 return;
             }
             break;
-        case 1:
-        case 2:
-        case 6:
-        case 8:
+        case STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN:
+        case STRAY_FAIRY_TYPE_BUBBLE:
+        case STRAY_FAIRY_TYPE_CHEST:
+        case STRAY_FAIRY_TYPE_TURN_IN_TO_FAIRY_FOUNTAIN:
             break;
     }
 
@@ -110,28 +110,28 @@ void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_218 = (thisx->params & 0x1C0) >> 6;
     }
 
-    switch (this->actor.params & 0xF) {
-        case 1:
+    switch (STRAY_FAIRY_TYPE(&this->actor)) {
+        case STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN:
             func_80ACC470(this);
             this->actionFunc = func_80ACCEB0;
             this->unk_224 = Rand_ZeroFloat(2.0f) + 1.0f;
             this->unk_228 = Rand_ZeroFloat(100.0f) + 50.0f;
             break;
-        case 8:
+        case STRAY_FAIRY_TYPE_TURN_IN_TO_FAIRY_FOUNTAIN:
             func_80ACC470(this);
             this->actionFunc = func_80ACCC98;
             this->unk_220 = 0x3C;
             break;
-        case 2:
+        case STRAY_FAIRY_TYPE_BUBBLE:
             this->unk_21C = 0;
             this->actionFunc = func_80ACCBD0;
             break;
-        case 4:
+        case STRAY_FAIRY_TYPE_ENEMY:
             this->actionFunc = func_80ACD6A8;
             func_80ACD6A8(this, globalCtx);
             this->actor.draw = NULL;
             break;
-        case 5:
+        case STRAY_FAIRY_TYPE_UNKNOWN_5:
             this->actionFunc = func_80ACD6EC;
             this->actor.draw = NULL;
             Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -149,7 +149,7 @@ void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnElforg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnElforg* this = THIS;
 
-    if ((this->actor.params & 0xF) == 5) {
+    if (STRAY_FAIRY_TYPE(&this->actor) == STRAY_FAIRY_TYPE_UNKNOWN_5) {
         Collider_DestroyCylinder(globalCtx, &this->collider);
     }
 }
@@ -422,18 +422,18 @@ void func_80ACD2E4(EnElforg* this, GlobalContext* globalCtx) {
         if ((this->actor.xzDistToPlayer < 30.0f) && (temp_f0 < 12.0f) && (temp_f0 > -68.0f)) {
             func_80ACD1B0(this, globalCtx);
             func_80115908(globalCtx, 0x30);
-            switch (this->actor.params & 0xF) {
-                case 7:
+            switch (STRAY_FAIRY_TYPE(&this->actor)) {
+                case STRAY_FAIRY_TYPE_COLLECTIBLE:
                     Actor_SetCollectibleFlag(globalCtx, STRAY_FAIRY_FLAG(&this->actor));
                     break;
-                case 6:
+                case STRAY_FAIRY_TYPE_CHEST:
                     Actor_SetChestFlag(globalCtx, STRAY_FAIRY_FLAG(&this->actor));
                     break;
                 default:
                     Actor_SetSwitchFlag(globalCtx, STRAY_FAIRY_FLAG(&this->actor));
                     break;
             }
-            if ((this->actor.params & 0xF) == 3) {
+            if (STRAY_FAIRY_TYPE(&this->actor) == STRAY_FAIRY_TYPE_CLOCK_TOWN) {
                 player->actor.freezeTimer = 0x64;
                 player->stateFlags1 |= 0x20000000;
                 func_801518B0(globalCtx, 0x579, NULL);
