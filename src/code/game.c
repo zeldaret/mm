@@ -22,7 +22,7 @@ void Game_SetFramerateDivisor(GameState* gameState, s32 divisor) {
 }
 
 void GameState_SetFBFilter(Gfx** gfx, u32 arg1) {
-    Gfx* gfxP = *gfx;
+    Gfx* dlist = *gfx;
 
     if ((R_FB_FILTER_TYPE > 0) && (R_FB_FILTER_TYPE < 5)) {
         D_801F8010.type = R_FB_FILTER_TYPE;
@@ -30,7 +30,7 @@ void GameState_SetFBFilter(Gfx** gfx, u32 arg1) {
         D_801F8010.color.g = R_FB_FILTER_PRIM_COLOR(1);
         D_801F8010.color.b = R_FB_FILTER_PRIM_COLOR(2);
         D_801F8010.color.a = R_FB_FILTER_A;
-        func_80140D10(&D_801F8010, &gfxP, arg1);
+        func_80140D10(&D_801F8010, &dlist, arg1);
     } else {
         if ((R_FB_FILTER_TYPE == 5) || (R_FB_FILTER_TYPE == 6)) {
             D_801F8020.useRgba = (R_FB_FILTER_TYPE == 6);
@@ -42,7 +42,7 @@ void GameState_SetFBFilter(Gfx** gfx, u32 arg1) {
             D_801F8020.envColor.g = R_FB_FILTER_ENV_COLOR(1);
             D_801F8020.envColor.b = R_FB_FILTER_ENV_COLOR(2);
             D_801F8020.envColor.a = R_FB_FILTER_A;
-            func_80142100(&D_801F8020, &gfxP, arg1);
+            func_80142100(&D_801F8020, &dlist, arg1);
         } else {
             if (R_FB_FILTER_TYPE == 7) {
                 sMonoColors.unk_00 = 0;
@@ -54,12 +54,12 @@ void GameState_SetFBFilter(Gfx** gfx, u32 arg1) {
                 sMonoColors.envColor.g = R_FB_FILTER_ENV_COLOR(1);
                 sMonoColors.envColor.b = R_FB_FILTER_ENV_COLOR(2);
                 sMonoColors.envColor.a = R_FB_FILTER_A;
-                VisMono_Draw(&sMonoColors, &gfxP, arg1);
+                VisMono_Draw(&sMonoColors, &dlist, arg1);
             }
         }
     }
 
-    *gfx = gfxP;
+    *gfx = dlist;
 }
 
 void Game_Nop80173534(GameState* gameState) {
