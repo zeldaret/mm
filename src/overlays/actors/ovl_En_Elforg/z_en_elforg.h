@@ -7,6 +7,11 @@
 #define STRAY_FAIRY_GET_PARAM_1C0(thisx) ((thisx)->params & 0x1C0)
 #define STRAY_FAIRY_FLAG(thisx) (((thisx)->params & 0xFE00) >> 9)
 
+#define STRAY_FAIRY_FLAG_UNKNOWN (1 << 0)
+#define STRAY_FAIRY_FLAG_SPARKLES_AND_SHRINKS (1 << 1)
+#define STRAY_FAIRY_FLAG_CIRCLES_PLAYER_IN_FOUNTAIN (1 << 2)
+#define STRAY_FAIRY_FLAG_GREAT_FAIRYS_MASK_EQUIPPED (1 << 3)
+
 typedef enum {
     STRAY_FAIRY_TYPE_FREE_FLOATING,            // The ones just floating around
     STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN,           // The ones already present when you enter a Fairy Fountain
@@ -38,7 +43,7 @@ typedef struct EnElforg {
     /* 0x188 */ Vec3s jointTable[10];
     /* 0x1C4 */ ColliderCylinder collider;
     /* 0x210 */ Actor* enemy;
-    /* 0x214 */ u16 unk_214;
+    /* 0x214 */ u16 flags;
     /* 0x216 */ s16 direction; // negative when facing left, positive when facing right
     /* 0x218 */ s16 area;
     /* 0x21C */ s32 timer;

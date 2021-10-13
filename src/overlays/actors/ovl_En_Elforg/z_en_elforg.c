@@ -70,7 +70,7 @@ void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnElforg* this = THIS;
 
     Actor_SetScale(&this->actor, 0.01f);
-    this->unk_214 = 0;
+    this->flags = 0;
     this->direction = 0;
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0402CA98, &D_0402B494, this->jointTable, this->jointTable, 10);
     this->skelAnime.animPlaybackSpeed = 1.0f;
@@ -293,7 +293,7 @@ void EnElforg_TurnInFairy(EnElforg* this, GlobalContext* globalCtx) {
         this->targetSpeedXZ = 3.0f;
         this->unk_228 = 50.0f;
         this->actionFunc = EnElforg_FreeFloatingFairyFountain;
-        this->unk_214 &= 0xFFFB;
+        this->flags &= ~STRAY_FAIRY_FLAG_CIRCLES_PLAYER_IN_FOUNTAIN;
     }
 }
 
@@ -309,7 +309,7 @@ void EnElforg_CirclePlayerFairyFountain(EnElforg* this, GlobalContext* globalCtx
 void EnElforg_FreeFloatingFairyFountain(EnElforg* this, GlobalContext* globalCtx) {
     s32 pad;
 
-    if (this->unk_214 & 1) {
+    if (this->flags & STRAY_FAIRY_FLAG_UNKNOWN) {
         if (this->targetSpeedXZ < 8.0f) {
             this->targetSpeedXZ += 0.1f;
         }
@@ -326,10 +326,10 @@ void EnElforg_FreeFloatingFairyFountain(EnElforg* this, GlobalContext* globalCtx
     }
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     EnElforg_MoveToTargetFairyFountain(this, &this->actor.home.pos);
-    if (this->unk_214 & 4) {
+    if (this->flags & STRAY_FAIRY_FLAG_CIRCLES_PLAYER_IN_FOUNTAIN) {
         this->actionFunc = EnElforg_CirclePlayerFairyFountain;
     }
-    if (this->unk_214 & 2) {
+    if (this->flags & STRAY_FAIRY_FLAG_SPARKLES_AND_SHRINKS) {
         if (this->actor.home.rot.x > 0) {
             EnElforg_SpawnSparkles(this, globalCtx, 10);
             this->actor.home.rot.x += -1;
@@ -453,12 +453,12 @@ void EnElforg_FreeFloating(EnElforg* this, GlobalContext* globalCtx) {
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 20.0f, 7);
         func_80ACCBB8(this, globalCtx);
         if (Player_GetMask(globalCtx) == PLAYER_MASK_GREAT_FAIRYS_MASK) {
-            if ((this->unk_214 & 8) == 0) {
+            if (!(this->flags & STRAY_FAIRY_FLAG_GREAT_FAIRYS_MASK_EQUIPPED)) {
                 play_sound(NA_SE_SY_FAIRY_MASK_SUCCESS);
             }
-            this->unk_214 |= 8;
+            this->flags |= STRAY_FAIRY_FLAG_GREAT_FAIRYS_MASK_EQUIPPED;
         } else {
-            this->unk_214 &= 0xFFF7;
+            this->flags &= ~STRAY_FAIRY_FLAG_GREAT_FAIRYS_MASK_EQUIPPED;
         }
     }
 }
