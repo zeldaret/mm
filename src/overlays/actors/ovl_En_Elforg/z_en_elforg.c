@@ -30,8 +30,7 @@ const ActorInit En_Elforg_InitVars = {
     (ActorFunc)EnElforg_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80ACDA30 = {
+static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_NONE,
         AT_NONE,
@@ -131,7 +130,7 @@ void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
         case 5:
             this->actionFunc = func_80ACD6EC;
             this->actor.draw = NULL;
-            Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80ACDA30);
+            Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
             Collider_UpdateCylinder(&this->actor, &this->collider);
             break;
         default:
