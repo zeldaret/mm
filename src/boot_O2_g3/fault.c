@@ -737,10 +737,9 @@ void Fault_ProcessClients(void) {
         if (iter->callback) {
             Fault_FillScreenBlack();
             FaultDrawer_SetCharPad(-2, 0);
-            FaultDrawer_Printf("\x1a"
-                               "8CallBack (%d) %08x %08x %08x\n"
-                               "\x1a"
-                               "7",
+            FaultDrawer_Printf("\x1A\x38"
+                               "CallBack (%d) %08x %08x %08x\n"
+                               "\x1A\x37",
                                idx++, iter, iter->param0, iter->param1);
             FaultDrawer_SetCharPad(0, 0);
             iter->callback(iter->param0, iter->param1);
@@ -876,8 +875,6 @@ void Fault_ThreadEntry(void* arg) {
     }
 }
 
-const char faultThreadName[] = "fault";
-
 void Fault_SetFB(void* fb, u16 w, u16 h) {
     sFaultContext->fb = fb;
     FaultDrawer_SetDrawerFB(fb, w, h);
@@ -897,7 +894,7 @@ void Fault_Start(void) {
     sFaultContext->faultActive = 0;
     gFaultStruct.faultHandlerEnabled = 1;
     osCreateMesgQueue(&sFaultContext->queue, sFaultContext->msg, 1);
-    StackCheck_Init(&sFaultThreadInfo, sFaultStack, sFaultStack + sizeof(sFaultStack), 0, 0x100, faultThreadName);
+    StackCheck_Init(&sFaultThreadInfo, sFaultStack, sFaultStack + sizeof(sFaultStack), 0, 0x100, "fault");
     osCreateThread(&sFaultContext->thread, 2, Fault_ThreadEntry, NULL, sFaultStack + sizeof(sFaultStack), 0x7F);
     osStartThread(&sFaultContext->thread);
 }

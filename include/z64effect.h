@@ -298,7 +298,7 @@ typedef struct {
 typedef enum {
     /* 0x00 */ EFFECT_SS_DUST,
     /* 0x01 */ EFFECT_SS_KIRAKIRA,
-    /* 0x02 */ EFFECT_SS_BOMB, // Deleted
+    /* 0x02 */ EFFECT_SS_UNSET_02, // Deleted
     /* 0x03 */ EFFECT_SS_BOMB2,
     /* 0x04 */ EFFECT_SS_BLAST,
     /* 0x05 */ EFFECT_SS_G_SPK,
@@ -314,8 +314,8 @@ typedef enum {
     /* 0x0F */ EFFECT_SS_HAHEN,
     /* 0x10 */ EFFECT_SS_STICK,
     /* 0x11 */ EFFECT_SS_SIBUKI,
-    /* 0x12 */ EFFECT_SS_SIBUKI2, // Deleted
-    /* 0x13 */ EFFECT_SS_G_MAGMA2, // Deleted
+    /* 0x12 */ EFFECT_SS_UNSET_12, // Deleted
+    /* 0x13 */ EFFECT_SS_UNSET_13, // Deleted
     /* 0x14 */ EFFECT_SS_STONE1,
     /* 0x15 */ EFFECT_SS_HITMARK,
     /* 0x16 */ EFFECT_SS_FHG_FLASH,
@@ -327,13 +327,13 @@ typedef enum {
     /* 0x1C */ EFFECT_SS_FIRE_TAIL,
     /* 0x1D */ EFFECT_SS_EN_FIRE,
     /* 0x1E */ EFFECT_SS_EXTRA,
-    /* 0x1F */ EFFECT_SS_FCIRCLE, // Deleted
+    /* 0x1F */ EFFECT_SS_UNSET_1F, // Deleted
     /* 0x20 */ EFFECT_SS_DEAD_DB,
     /* 0x21 */ EFFECT_SS_DEAD_DD,
     /* 0x22 */ EFFECT_SS_DEAD_DS,
-    /* 0x23 */ EFFECT_SS_DEAD_SOUND, // Deleted
+    /* 0x23 */ EFFECT_SS_UNSET_23, // Deleted
     /* 0x24 */ EFFECT_SS_ICE_SMOKE,
-    /* 0x25 */ EFFECT_SS_ICE_BLOCK,
+    /* 0x25 */ EFFECT_EN_ICE_BLOCK,
     /* 0x26 */ EFFECT_SS_SBN,
     /* 0x27 */ EFFECT_SS_MAX
 } EffectSsType;

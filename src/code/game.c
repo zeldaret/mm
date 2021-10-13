@@ -63,7 +63,6 @@ void GameState_SetFBFilter(Gfx** gfx, u32 arg1) {
 }
 
 void Game_Nop80173534(GameState* gameState) {
-    ;
 }
 
 void GameState_Draw(GameState* gameState, GraphicsContext* gfxCtx) {

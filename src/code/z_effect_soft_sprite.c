@@ -69,18 +69,10 @@ void EffectSS_ResetEntry(EffectSs* particle) {
     u32 i;
 
     particle->type = EFFECT_SS_MAX;
-    particle->accel.z = 0;
-    particle->accel.y = 0;
-    particle->accel.x = 0;
-    particle->velocity.z = 0;
-    particle->velocity.y = 0;
-    particle->velocity.x = 0;
-    particle->vec.z = 0;
-    particle->vec.y = 0;
-    particle->vec.x = 0;
-    particle->pos.z = 0;
-    particle->pos.y = 0;
-    particle->pos.x = 0;
+    particle->accel.x = particle->accel.y = particle->accel.z = 0;
+    particle->velocity.x = particle->velocity.y = particle->velocity.z = 0;
+    particle->vec.x = particle->vec.y = particle->vec.z = 0;
+    particle->pos.x = particle->pos.y = particle->pos.z = 0;
     particle->life = -1;
     particle->flags = 0;
     particle->priority = 128;
