@@ -343,7 +343,22 @@ void func_80ACCEB0(EnElforg* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACD088.s")
+void func_80ACD088(EnElforg* this, GlobalContext* globalCtx) {
+    s32 pad;
+    Actor* playerActor = &GET_PLAYER(globalCtx)->actor;
+    Player* player = GET_PLAYER(globalCtx);
+    f32 phi_f2;
+
+    if (gSaveContext.playerForm == PLAYER_FORM_GORON) {
+        phi_f2 = 40.0f;
+    } else {
+        phi_f2 = 20.0f;
+    }
+    this->actor.world.pos.x = (Math_SinS(this->unk_21C << 0xC) * phi_f2) + playerActor->world.pos.x;
+    this->actor.world.pos.z = (Math_CosS(this->unk_21C << 0xC) * phi_f2) + playerActor->world.pos.z;
+    this->actor.world.pos.y = player->bodyPartsPos[0].y;
+    func_80ACC7E4(this, globalCtx, 16);
+}
 
 void func_80ACD164(EnElforg* this, GlobalContext* globalCtx) {
     func_80ACD088(this, globalCtx);
@@ -354,8 +369,8 @@ void func_80ACD164(EnElforg* this, GlobalContext* globalCtx) {
     func_800B9010(&this->actor, NA_SE_PL_CHIBI_FAIRY_HEAL - SFX_FLAG);
 }
 
-void func_80ACD1B0(EnElforg *this, GlobalContext *globalCtx) {
-    Player *player = GET_PLAYER(globalCtx);
+void func_80ACD1B0(EnElforg* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
 
     this->actor.world.pos.x = GET_PLAYER(globalCtx)->actor.world.pos.x;
     this->actor.world.pos.y = player->bodyPartsPos[0].y;
