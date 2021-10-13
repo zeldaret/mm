@@ -1,3 +1,9 @@
+/*
+ * File: z_en_elforg.c
+ * Overlay: ovl_En_Elforg
+ * Description: Stray Fairy
+ */
+
 #include "z_en_elforg.h"
 
 #define FLAGS 0x00000010
