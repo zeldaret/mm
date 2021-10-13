@@ -80,7 +80,7 @@ void OceffWipe6_Draw(Actor* thisx, GlobalContext* globalCtx) {
         alpha = 0xFF;
     }
 
-    for (i = 1; i < 22; i += 2) {
+    for (i = 1; i < ARRAY_COUNT(gOceff6Vtx); i += 2) {
         gOceff6Vtx[i].v.cn[3] = alpha;
     }
 
