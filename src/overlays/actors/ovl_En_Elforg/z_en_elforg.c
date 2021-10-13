@@ -103,11 +103,11 @@ void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
     }
 
-    if (func_8010A074(globalCtx) != 0) {
+    if (func_8010A074(globalCtx)) {
         this->unk_218 = gSaveContext.unk_48C8 + 1;
     } else {
         // Needs to be thisx in order to match
-        this->unk_218 = (thisx->params & 0x1C0) >> 6;
+        this->unk_218 = STRAY_FAIRY_GET_PARAM_1C0(thisx) >> 6;
     }
 
     switch (STRAY_FAIRY_TYPE(&this->actor)) {

@@ -4,6 +4,7 @@
 #include "global.h"
 
 #define STRAY_FAIRY_TYPE(thisx) ((thisx)->params & 0xF)
+#define STRAY_FAIRY_GET_PARAM_1C0(thisx) ((thisx)->params & 0x1C0)
 #define STRAY_FAIRY_FLAG(thisx) (((thisx)->params & 0xFE00) >> 9)
 
 typedef enum {
