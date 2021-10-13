@@ -184,13 +184,11 @@ void func_80ACC8D4(EnElforg* this, Vec3f* bodyPartsPos) {
     yDifference = bodyPartsPos->y - this->actor.world.pos.y;
     if (fabsf(yDifference) < this->actor.speedXZ) {
         this->actor.world.pos.y = bodyPartsPos->y;
-        return;
-    }
-    if (yDifference > 0.0f) {
+    } else if (yDifference > 0.0f) {
         this->actor.world.pos.y = this->actor.world.pos.y + this->actor.speedXZ;
-        return;
+    } else {
+        this->actor.world.pos.y = this->actor.world.pos.y - this->actor.speedXZ;
     }
-    this->actor.world.pos.y = this->actor.world.pos.y - this->actor.speedXZ;
 }
 
 void func_80ACC934(EnElforg* this) {
@@ -286,16 +284,16 @@ void func_80ACCC98(EnElforg* this, GlobalContext* globalCtx) {
     EnElforg_SpawnSparkles(this, globalCtx, 16);
     if (this->unk_220 > 0) {
         this->unk_220--;
-        return;
+    } else {
+        this->actor.world.rot.y = rotationTemp + 0x4000;
+        this->timer = 0;
+        this->unk_220 = Rand_ZeroFloat(100.0f);
+        this->actor.shape.yOffset = 0.0f;
+        this->unk_224 = 3.0f;
+        this->unk_228 = 50.0f;
+        this->actionFunc = func_80ACCEB0;
+        this->unk_214 &= 0xFFFB;
     }
-    this->actor.world.rot.y = rotationTemp + 0x4000;
-    this->timer = 0;
-    this->unk_220 = Rand_ZeroFloat(100.0f);
-    this->actor.shape.yOffset = 0.0f;
-    this->unk_224 = 3.0f;
-    this->unk_228 = 50.0f;
-    this->actionFunc = func_80ACCEB0;
-    this->unk_214 &= 0xFFFB;
 }
 
 void func_80ACCE4C(EnElforg* this, GlobalContext* globalCtx) {
