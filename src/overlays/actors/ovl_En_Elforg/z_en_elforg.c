@@ -349,7 +349,29 @@ void func_80ACCEB0(EnElforg* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACD1B0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACD1F0.s")
+void func_80ACD1F0(EnElforg* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    func_80ACD088(this, globalCtx);
+    player->actor.freezeTimer = 0x64;
+    player->stateFlags1 |= 0x20000000;
+    if (func_800B867C(&this->actor, globalCtx)) {
+        player->actor.freezeTimer = 0;
+        player->stateFlags1 &= 0xDFFFFFFF;
+        Actor_MarkForDeath(&this->actor);
+        gSaveContext.weekEventReg[8] |= 0x80;
+        ActorCutscene_Stop(0x7C);
+    } else {
+        func_800B9010(&this->actor, NA_SE_PL_CHIBI_FAIRY_HEAL - SFX_FLAG);
+        if (ActorCutscene_GetCurrentIndex() != 0x7C) {
+            if (ActorCutscene_GetCanPlayNext(0x7C)) {
+                ActorCutscene_Start(0x7C, &this->actor);
+            } else {
+                ActorCutscene_SetIntentToPlay(0x7C);
+            }
+        }
+    }
+}
 
 void func_80ACD2E4(EnElforg* this, GlobalContext* globalCtx) {
     Vec3f pos;
