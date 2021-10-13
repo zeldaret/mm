@@ -115,7 +115,7 @@ void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
             EnElforg_InitializeSpeedAndRotation(this);
             this->actionFunc = EnElforg_FreeFloatingFairyFountain;
             this->targetSpeedXZ = Rand_ZeroFloat(2.0f) + 1.0f;
-            this->unk_228 = Rand_ZeroFloat(100.0f) + 50.0f;
+            this->targetDistanceFromHome = Rand_ZeroFloat(100.0f) + 50.0f;
             break;
         case STRAY_FAIRY_TYPE_TURN_IN_TO_FAIRY_FOUNTAIN:
             EnElforg_InitializeSpeedAndRotation(this);
@@ -201,7 +201,7 @@ void EnElforg_SetSpeedXZ(EnElforg* this) {
     }
 }
 
-void EnElforg_MoveToTargetFairyFountain(EnElforg* this, Vec3f* pos) {
+void EnElforg_MoveToTargetFairyFountain(EnElforg* this, Vec3f* homePos) {
     s32 pad[2];
     f32 xzDistance;
     f32 zDifference;
@@ -210,14 +210,14 @@ void EnElforg_MoveToTargetFairyFountain(EnElforg* this, Vec3f* pos) {
     s16 targetAngle;
 
     this->actor.shape.yOffset += 100.0f * Math_SinS(this->timer << 9);
-    EnElforg_AdjustYPositionRelativeToTarget(this, pos);
-    xDifference = this->actor.world.pos.x - pos->x;
-    zDifference = this->actor.world.pos.z - pos->z;
+    EnElforg_AdjustYPositionRelativeToTarget(this, homePos);
+    xDifference = this->actor.world.pos.x - homePos->x;
+    zDifference = this->actor.world.pos.z - homePos->z;
     targetAngle = Math_FAtan2F(-zDifference, -xDifference);
     xzDistance = sqrtf(SQ(xDifference) + SQ(zDifference));
-    if ((this->unk_228 + 10.0f) < xzDistance) {
+    if ((this->targetDistanceFromHome + 10.0f) < xzDistance) {
         phi_v0 = 0x1000;
-    } else if ((this->unk_228 - 10.0f) > xzDistance) {
+    } else if ((this->targetDistanceFromHome - 10.0f) > xzDistance) {
         phi_v0 = 0x6000;
     } else {
         phi_v0 = 0x4000;
@@ -291,7 +291,7 @@ void EnElforg_TurnInFairy(EnElforg* this, GlobalContext* globalCtx) {
         this->fairyFountainTimer = Rand_ZeroFloat(100.0f);
         this->actor.shape.yOffset = 0.0f;
         this->targetSpeedXZ = 3.0f;
-        this->unk_228 = 50.0f;
+        this->targetDistanceFromHome = 50.0f;
         this->actionFunc = EnElforg_FreeFloatingFairyFountain;
         this->flags &= ~STRAY_FAIRY_FLAG_CIRCLES_PLAYER_IN_FOUNTAIN;
     }
@@ -313,8 +313,8 @@ void EnElforg_FreeFloatingFairyFountain(EnElforg* this, GlobalContext* globalCtx
         if (this->targetSpeedXZ < 8.0f) {
             this->targetSpeedXZ += 0.1f;
         }
-        if (this->unk_228 > 0.0f) {
-            this->unk_228 -= 2.0f;
+        if (this->targetDistanceFromHome > 0.0f) {
+            this->targetDistanceFromHome -= 2.0f;
         }
     } else if ((this->timer & 0x7F) == 0x7F) {
         if (Math_Vec3f_DistXZ(&this->actor.world.pos, &this->actor.home.pos) > 150.0f) {
@@ -322,7 +322,7 @@ void EnElforg_FreeFloatingFairyFountain(EnElforg* this, GlobalContext* globalCtx
         } else {
             this->targetSpeedXZ = Rand_ZeroFloat(2.0f) + 1.0f;
         }
-        this->unk_228 = Rand_ZeroFloat(100.0f) + 50.0f;
+        this->targetDistanceFromHome = Rand_ZeroFloat(100.0f) + 50.0f;
     }
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     EnElforg_MoveToTargetFairyFountain(this, &this->actor.home.pos);
