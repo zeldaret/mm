@@ -17,7 +17,7 @@ void EnElforg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void EnElforg_TrappedByBubble(EnElforg* this, GlobalContext* globalCtx);
 void EnElforg_TurnInFairy(EnElforg* this, GlobalContext* globalCtx);
-void func_80ACCEB0(EnElforg* this, GlobalContext* globalCtx);
+void EnElforg_FreeFloatingFairyFountain(EnElforg* this, GlobalContext* globalCtx);
 void EnElforg_FreeFloating(EnElforg* this, GlobalContext* globalCtx);
 void EnElforg_SetupTrappedByEnemy(EnElforg* this, GlobalContext* globalCtx);
 void EnElforg_TrappedByCollider(EnElforg* this, GlobalContext* globalCtx);
@@ -113,7 +113,7 @@ void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
     switch (STRAY_FAIRY_TYPE(&this->actor)) {
         case STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN:
             EnElforg_InitializeSpeedAndRotation(this);
-            this->actionFunc = func_80ACCEB0;
+            this->actionFunc = EnElforg_FreeFloatingFairyFountain;
             this->targetSpeedXZ = Rand_ZeroFloat(2.0f) + 1.0f;
             this->unk_228 = Rand_ZeroFloat(100.0f) + 50.0f;
             break;
@@ -201,7 +201,7 @@ void EnElforg_SetSpeedXZ(EnElforg* this) {
     }
 }
 
-void func_80ACC994(EnElforg* this, Vec3f* pos) {
+void EnElforg_MoveToTargetFairyFountain(EnElforg* this, Vec3f* pos) {
     s32 pad[2];
     f32 xzDistance;
     f32 zDifference;
@@ -292,21 +292,21 @@ void EnElforg_TurnInFairy(EnElforg* this, GlobalContext* globalCtx) {
         this->actor.shape.yOffset = 0.0f;
         this->targetSpeedXZ = 3.0f;
         this->unk_228 = 50.0f;
-        this->actionFunc = func_80ACCEB0;
+        this->actionFunc = EnElforg_FreeFloatingFairyFountain;
         this->unk_214 &= 0xFFFB;
     }
 }
 
-void func_80ACCE4C(EnElforg* this, GlobalContext* globalCtx) {
+void EnElforg_CirclePlayerFairyFountain(EnElforg* this, GlobalContext* globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-    func_80ACC994(this, &this->actor.home.pos);
+    EnElforg_MoveToTargetFairyFountain(this, &this->actor.home.pos);
     if (this->fairyFountainTimer < 31) {
         this->actionFunc = EnElforg_TurnInFairy;
     }
     this->fairyFountainTimer--;
 }
 
-void func_80ACCEB0(EnElforg* this, GlobalContext* globalCtx) {
+void EnElforg_FreeFloatingFairyFountain(EnElforg* this, GlobalContext* globalCtx) {
     s32 pad;
 
     if (this->unk_214 & 1) {
@@ -325,9 +325,9 @@ void func_80ACCEB0(EnElforg* this, GlobalContext* globalCtx) {
         this->unk_228 = Rand_ZeroFloat(100.0f) + 50.0f;
     }
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
-    func_80ACC994(this, &this->actor.home.pos);
+    EnElforg_MoveToTargetFairyFountain(this, &this->actor.home.pos);
     if (this->unk_214 & 4) {
-        this->actionFunc = func_80ACCE4C;
+        this->actionFunc = EnElforg_CirclePlayerFairyFountain;
     }
     if (this->unk_214 & 2) {
         if (this->actor.home.rot.x > 0) {
