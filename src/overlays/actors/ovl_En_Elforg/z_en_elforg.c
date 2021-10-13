@@ -16,7 +16,7 @@ void EnElforg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnElforg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void EnElforg_TrappedByBubble(EnElforg* this, GlobalContext* globalCtx);
-void func_80ACCC98(EnElforg* this, GlobalContext* globalCtx);
+void EnElforg_TurnInFairy(EnElforg* this, GlobalContext* globalCtx);
 void func_80ACCEB0(EnElforg* this, GlobalContext* globalCtx);
 void EnElforg_FreeFloating(EnElforg* this, GlobalContext* globalCtx);
 void EnElforg_SetupTrappedByEnemy(EnElforg* this, GlobalContext* globalCtx);
@@ -56,11 +56,11 @@ static ColliderCylinderInit sCylinderInit = {
 
 void EnElforg_InitializeSpeedAndRotation(EnElforg* this) {
     this->actor.speedXZ = 1.0f;
-    this->unk_224 = 1.0f;
+    this->targetSpeedXZ = 1.0f;
     this->actor.velocity.y = 0.0f;
     this->actor.world.rot.y = randPlusMinusPoint5Scaled(65536.0f);
     this->timer = 0;
-    this->unk_220 = Rand_ZeroFloat(100.0f);
+    this->fairyFountainTimer = Rand_ZeroFloat(100.0f);
     this->actor.shape.yOffset = 0.0f;
     this->skelAnime.animCurrentFrame = (s32)Rand_ZeroFloat(5.0f);
 }
@@ -114,13 +114,13 @@ void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
         case STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN:
             EnElforg_InitializeSpeedAndRotation(this);
             this->actionFunc = func_80ACCEB0;
-            this->unk_224 = Rand_ZeroFloat(2.0f) + 1.0f;
+            this->targetSpeedXZ = Rand_ZeroFloat(2.0f) + 1.0f;
             this->unk_228 = Rand_ZeroFloat(100.0f) + 50.0f;
             break;
         case STRAY_FAIRY_TYPE_TURN_IN_TO_FAIRY_FOUNTAIN:
             EnElforg_InitializeSpeedAndRotation(this);
-            this->actionFunc = func_80ACCC98;
-            this->unk_220 = 0x3C;
+            this->actionFunc = EnElforg_TurnInFairy;
+            this->fairyFountainTimer = 60;
             break;
         case STRAY_FAIRY_TYPE_BUBBLE:
             this->timer = 0;
@@ -178,12 +178,12 @@ void EnElforg_SpawnSparkles(EnElforg* this, GlobalContext* globalCtx, s32 life) 
                                     &sEnvColors[index], 1000, life);
 }
 
-void func_80ACC8D4(EnElforg* this, Vec3f* bodyPartsPos) {
+void EnElforg_AdjustYPositionRelativeToTarget(EnElforg* this, Vec3f* targetPos) {
     f32 yDifference;
 
-    yDifference = bodyPartsPos->y - this->actor.world.pos.y;
+    yDifference = targetPos->y - this->actor.world.pos.y;
     if (fabsf(yDifference) < this->actor.speedXZ) {
-        this->actor.world.pos.y = bodyPartsPos->y;
+        this->actor.world.pos.y = targetPos->y;
     } else if (yDifference > 0.0f) {
         this->actor.world.pos.y = this->actor.world.pos.y + this->actor.speedXZ;
     } else {
@@ -191,13 +191,13 @@ void func_80ACC8D4(EnElforg* this, Vec3f* bodyPartsPos) {
     }
 }
 
-void func_80ACC934(EnElforg* this) {
-    if (this->actor.speedXZ > this->unk_224) {
+void EnElforg_SetSpeedXZ(EnElforg* this) {
+    if (this->actor.speedXZ > this->targetSpeedXZ) {
         this->actor.speedXZ *= 0.9f;
-    } else if (this->actor.speedXZ < (this->unk_224 - 0.1f)) {
+    } else if (this->actor.speedXZ < (this->targetSpeedXZ - 0.1f)) {
         this->actor.speedXZ += 0.1f;
     } else {
-        this->actor.speedXZ = this->unk_224;
+        this->actor.speedXZ = this->targetSpeedXZ;
     }
 }
 
@@ -210,7 +210,7 @@ void func_80ACC994(EnElforg* this, Vec3f* pos) {
     s16 targetAngle;
 
     this->actor.shape.yOffset += 100.0f * Math_SinS(this->timer << 9);
-    func_80ACC8D4(this, pos);
+    EnElforg_AdjustYPositionRelativeToTarget(this, pos);
     xDifference = this->actor.world.pos.x - pos->x;
     zDifference = this->actor.world.pos.z - pos->z;
     targetAngle = Math_FAtan2F(-zDifference, -xDifference);
@@ -224,23 +224,23 @@ void func_80ACC994(EnElforg* this, Vec3f* pos) {
     }
     targetAngle += phi_v0;
     Math_SmoothStepToS(&this->actor.world.rot.y, targetAngle, 2, 4000, 1000);
-    func_80ACC934(this);
+    EnElforg_SetSpeedXZ(this);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
 }
 
-void func_80ACCAC0(EnElforg* this, Vec3f* pos) {
+void EnElforg_MoveToTarget(EnElforg* this, Vec3f* targetPos) {
     s16 targetAngle;
 
     this->actor.shape.yOffset += 100.0f * Math_SinS(this->timer << 9);
-    func_80ACC8D4(this, pos);
-    targetAngle = Math_FAtan2F(-(this->actor.world.pos.z - pos->z), -(this->actor.world.pos.x - pos->x));
-    if (this->unk_224 > 2.0f) {
+    EnElforg_AdjustYPositionRelativeToTarget(this, targetPos);
+    targetAngle = Math_FAtan2F(-(this->actor.world.pos.z - targetPos->z), -(this->actor.world.pos.x - targetPos->x));
+    if (this->targetSpeedXZ > 2.0f) {
         Math_SmoothStepToS(&this->actor.world.rot.y, targetAngle, 2, 0x400, 0x100);
     } else {
         targetAngle += 0x2000;
         Math_SmoothStepToS(&this->actor.world.rot.y, targetAngle, 10, 0x200, 0x80);
     }
-    func_80ACC934(this);
+    EnElforg_SetSpeedXZ(this);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
 }
 
@@ -261,7 +261,7 @@ void EnElforg_TrappedByBubble(EnElforg* this, GlobalContext* globalCtx) {
     func_80ACCBB8(this, globalCtx);
 }
 
-void func_80ACCC98(EnElforg* this, GlobalContext* globalCtx) {
+void EnElforg_TurnInFairy(EnElforg* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     f32 xzDistToPlayer;
     s16 rotationTemp;
@@ -271,7 +271,7 @@ void func_80ACCC98(EnElforg* this, GlobalContext* globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     this->actor.shape.yOffset *= 0.9f;
     this->actor.speedXZ = 5.0f;
-    func_80ACC8D4(this, player->bodyPartsPos);
+    EnElforg_AdjustYPositionRelativeToTarget(this, &player->bodyPartsPos[0]);
     xzDistToPlayer = this->actor.xzDistToPlayer;
     if (xzDistToPlayer < 0.0f) {
         xzDistToPlayer = 10.0f;
@@ -282,14 +282,15 @@ void func_80ACCC98(EnElforg* this, GlobalContext* globalCtx) {
     this->actor.world.pos.x = player->actor.world.pos.x - (Math_SinS(rotationTemp) * xzDistToPlayer);
     this->actor.world.pos.z = player->actor.world.pos.z - (Math_CosS(rotationTemp) * xzDistToPlayer);
     EnElforg_SpawnSparkles(this, globalCtx, 16);
-    if (this->unk_220 > 0) {
-        this->unk_220--;
+
+    if (this->fairyFountainTimer > 0) {
+        this->fairyFountainTimer--;
     } else {
         this->actor.world.rot.y = rotationTemp + 0x4000;
         this->timer = 0;
-        this->unk_220 = Rand_ZeroFloat(100.0f);
+        this->fairyFountainTimer = Rand_ZeroFloat(100.0f);
         this->actor.shape.yOffset = 0.0f;
-        this->unk_224 = 3.0f;
+        this->targetSpeedXZ = 3.0f;
         this->unk_228 = 50.0f;
         this->actionFunc = func_80ACCEB0;
         this->unk_214 &= 0xFFFB;
@@ -299,27 +300,27 @@ void func_80ACCC98(EnElforg* this, GlobalContext* globalCtx) {
 void func_80ACCE4C(EnElforg* this, GlobalContext* globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     func_80ACC994(this, &this->actor.home.pos);
-    if (this->unk_220 < 31) {
-        this->actionFunc = func_80ACCC98;
+    if (this->fairyFountainTimer < 31) {
+        this->actionFunc = EnElforg_TurnInFairy;
     }
-    this->unk_220--;
+    this->fairyFountainTimer--;
 }
 
 void func_80ACCEB0(EnElforg* this, GlobalContext* globalCtx) {
     s32 pad;
 
     if (this->unk_214 & 1) {
-        if (this->unk_224 < 8.0f) {
-            this->unk_224 += 0.1f;
+        if (this->targetSpeedXZ < 8.0f) {
+            this->targetSpeedXZ += 0.1f;
         }
         if (this->unk_228 > 0.0f) {
             this->unk_228 -= 2.0f;
         }
     } else if ((this->timer & 0x7F) == 0x7F) {
         if (Math_Vec3f_DistXZ(&this->actor.world.pos, &this->actor.home.pos) > 150.0f) {
-            this->unk_224 = 5.0f;
+            this->targetSpeedXZ = 5.0f;
         } else {
-            this->unk_224 = Rand_ZeroFloat(2.0f) + 1.0f;
+            this->targetSpeedXZ = Rand_ZeroFloat(2.0f) + 1.0f;
         }
         this->unk_228 = Rand_ZeroFloat(100.0f) + 50.0f;
     }
@@ -375,7 +376,7 @@ void EnElforg_SetupFairyCollected(EnElforg* this, GlobalContext* globalCtx) {
     this->actor.world.pos.z = playerActor->world.pos.z;
     this->actionFunc = EnElforg_FairyCollected;
     this->timer = 0;
-    this->unk_220 = 0;
+    this->fairyFountainTimer = 0;
     this->actor.shape.yOffset = 0.0f;
 }
 
@@ -411,11 +412,11 @@ void EnElforg_FreeFloating(EnElforg* this, GlobalContext* globalCtx) {
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     if (Player_GetMask(globalCtx) == PLAYER_MASK_GREAT_FAIRYS_MASK) {
         pos = player->bodyPartsPos[0];
-        this->unk_224 = 5.0f;
-        func_80ACCAC0(this, &pos);
+        this->targetSpeedXZ = 5.0f;
+        EnElforg_MoveToTarget(this, &pos);
     } else {
-        this->unk_224 = 1.0f;
-        func_80ACCAC0(this, &this->actor.home.pos);
+        this->targetSpeedXZ = 1.0f;
+        EnElforg_MoveToTarget(this, &this->actor.home.pos);
     }
     temp_f0 = this->actor.yDistToPlayer - (this->actor.shape.yOffset * this->actor.scale.y);
     if (func_801233E4(globalCtx) == 0) {
@@ -524,8 +525,8 @@ void EnElforg_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
 
-    if (this->timer == 0 && this->unk_220 > 0) {
-        this->unk_220--;
+    if (this->timer == 0 && this->fairyFountainTimer > 0) {
+        this->fairyFountainTimer--;
     } else {
         this->timer++;
     }
