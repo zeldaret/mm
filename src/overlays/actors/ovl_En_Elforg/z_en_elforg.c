@@ -85,13 +85,13 @@ void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
             }
             break;
         case 7:
-            if (Actor_GetCollectibleFlag(globalCtx, (this->actor.params & 0xFE00) >> 9) != 0) {
+            if (Actor_GetCollectibleFlag(globalCtx, STRAY_FAIRY_FLAG(&this->actor))) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
             break;
         default:
-            if (Flags_GetSwitch(globalCtx, (this->actor.params & 0xFE00) >> 9) != 0) {
+            if (Flags_GetSwitch(globalCtx, STRAY_FAIRY_FLAG(&this->actor))) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -424,13 +424,13 @@ void func_80ACD2E4(EnElforg* this, GlobalContext* globalCtx) {
             func_80115908(globalCtx, 0x30);
             switch (this->actor.params & 0xF) {
                 case 7:
-                    Actor_SetCollectibleFlag(globalCtx, (this->actor.params & 0xFE00) >> 9);
+                    Actor_SetCollectibleFlag(globalCtx, STRAY_FAIRY_FLAG(&this->actor));
                     break;
                 case 6:
-                    Actor_SetChestFlag(globalCtx, (this->actor.params & 0xFE00) >> 9);
+                    Actor_SetChestFlag(globalCtx, STRAY_FAIRY_FLAG(&this->actor));
                     break;
                 default:
-                    Actor_SetSwitchFlag(globalCtx, (this->actor.params & 0xFE00) >> 9);
+                    Actor_SetSwitchFlag(globalCtx, STRAY_FAIRY_FLAG(&this->actor));
                     break;
             }
             if ((this->actor.params & 0xF) == 3) {

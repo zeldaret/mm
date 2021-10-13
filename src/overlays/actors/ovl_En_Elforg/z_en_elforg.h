@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#define STRAY_FAIRY_FLAG(thisx) (((thisx)->params & 0xFE00) >> 9)
+
 struct EnElforg;
 
 typedef void (*EnElforgActionFunc)(struct EnElforg*, GlobalContext*);
