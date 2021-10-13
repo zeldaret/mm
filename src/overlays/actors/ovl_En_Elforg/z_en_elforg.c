@@ -345,7 +345,14 @@ void func_80ACCEB0(EnElforg* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACD088.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACD164.s")
+void func_80ACD164(EnElforg* this, GlobalContext* globalCtx) {
+    func_80ACD088(this, globalCtx);
+    if (this->unk_21C >= 0x51) {
+        Actor_MarkForDeath(&this->actor);
+        return;
+    }
+    func_800B9010(&this->actor, NA_SE_PL_CHIBI_FAIRY_HEAL - SFX_FLAG);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Elforg/func_80ACD1B0.s")
 
