@@ -467,7 +467,28 @@ typedef struct EnRecepgirl {
 } EnRecepgirl; // size = 0x2B4
 ```
 
-It's entirely possible that `unk_2AD` is not real, and is just padding: see [Types, structs, and padding](types_structs_padding.md) for the details. We'll find out once we've finished all the functions.
+It's entirely possible that `unk_2AD` is not real, and is just padding: see [Types, structs, and padding](types_structs_padding.md) for the details. We'll find out once we've finished all the functions. If we look at the diff, we find that one line is different:
+```
+554:    addiu   a2,s0,0x2ae                          199 554:    addiu   a2,s0,0x2ae
+558:    addiu   a3,sp,0x30                        i  199 558:    addiu   a3,sp,0x34
+55c:    sw      t6,0x14(sp)                          199 55c:    sw      t6,0x14(sp)
+```
+So `sp30` is in the wrong place: it's `4` too high on the stack in ours. This is because the main four functions do not actually take `GlobalContext`: they actually take `Gamestate` and recast it with a temp, just like `EnRecepgirl* this = THIS;`. We haven't implemented this in the repo yet, though, so for now, it suffices to put a pad on the stack where it would go instead: experience has shown when it matters, it goes above the actor recast, so we end up with
+```C
+void EnRecepgirl_Update(EnRecepgirl *this, GlobalContext *globalCtx) {
+    s32 pad;
+    EnRecepgirl* this = THIS;
+    Vec3s sp30;
+
+    this->actionFunc(this, globalCtx);
+    func_800E9250(globalCtx, &this->actor, &this->unk_2AE, &sp30, this->actor.focus.pos);
+    func_80C100DC(this);
+}
+```
+and this now matches.
+
+**N.B.** sometimes using an actual `GlobalContext* globalCtx` temp is required for matching: add it to your bag o' matching memes.
+
 
 4 functions to go...
 
