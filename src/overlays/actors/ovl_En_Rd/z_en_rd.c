@@ -561,7 +561,7 @@ void func_808D4FE0(EnRd* this, GlobalContext* globalCtx) {
 }
 
 void func_808D506C(EnRd* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 pad;
     s16 sp36 = ((this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - this->unk_3D8) - this->unk_3DA;
 
@@ -583,7 +583,7 @@ void func_808D506C(EnRd* this, GlobalContext* globalCtx) {
                 if (!(this->unk_3DC & 0x80)) {
                     player->actor.freezeTimer = 40;
                     func_80123E90(globalCtx, &this->actor);
-                    PLAYER->unk_A78 = &this->actor;
+                    GET_PLAYER(globalCtx)->unk_A78 = &this->actor;
                     func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
                 }
                 this->unk_3ED = 60;
@@ -634,7 +634,7 @@ void func_808D53C0(EnRd* this, GlobalContext* globalCtx) {
 }
 
 void func_808D5440(EnRd* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 pad;
     s16 sp36 = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
 
@@ -733,7 +733,7 @@ void func_808D586C(EnRd* this) {
 }
 
 void func_808D58CC(EnRd* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 pad;
 
     if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
@@ -826,7 +826,7 @@ void func_808D5C54(EnRd* this) {
 }
 
 void func_808D5CCC(EnRd* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 temp_v0 = ((this->actor.yawTowardsPlayer - this->actor.shape.rot.y) - this->unk_3D8) - this->unk_3DA;
 
     if (ABS_ALT(temp_v0) < 0x2008) {
@@ -928,7 +928,7 @@ void func_808D616C(EnRd* this) {
 }
 
 void func_808D6200(EnRd* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->actor.speedXZ < 0.0f) {
         this->actor.speedXZ += 0.15f;
@@ -1061,7 +1061,7 @@ void func_808D66A0(EnRd* this, GlobalContext* globalCtx) {
 
 void func_808D6814(EnRd* this, GlobalContext* globalCtx) {
     s32 pad;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((gSaveContext.unk_3F58 != 0) && (this->actor.shape.rot.x == 0) && (this->unk_3E9 == 0) &&
         (this->unk_3EF != 11) && (this->unk_3EF != 12) && (this->unk_3EF != 1)) {
@@ -1145,7 +1145,7 @@ void func_808D6814(EnRd* this, GlobalContext* globalCtx) {
 }
 
 void func_808D6A94(EnRd* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((this->actor.colChkInfo.health > 0) && (this->unk_3EF != 10)) {
         Collider_UpdateCylinder(&this->actor, &this->collider);

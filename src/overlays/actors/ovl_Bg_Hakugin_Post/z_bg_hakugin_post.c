@@ -523,8 +523,8 @@ void func_80A9C058(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
                 sp44.x = this->dyna.actor.home.pos.x + unkStruct1->unk_14.x;
                 sp44.y = this->unk_16C + unkStruct1->unk_14.y;
                 sp44.z = this->dyna.actor.home.pos.z + unkStruct1->unk_14.z;
-                func_8013ECE0(Math3D_DistanceSquared(&sp44, &PLAYER->actor.world.pos), 255, 20, 150);
-                quake = Quake_Add(ACTIVE_CAM, 3);
+                func_8013ECE0(Math3D_DistanceSquared(&sp44, &GET_PLAYER(globalCtx)->actor.world.pos), 255, 20, 150);
+                quake = Quake_Add(GET_ACTIVE_CAM(globalCtx), 3);
                 Quake_SetSpeed(quake, 20000);
                 Quake_SetQuakeValues(quake, 7, 0, 0, 0);
                 Quake_SetCountdown(quake, 12);
@@ -540,8 +540,8 @@ void func_80A9C058(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
 
 void func_80A9C18C(BgHakuginPost* this, GlobalContext* globalCtx) {
     s32 pad;
-    Player* player = PLAYER;
-    Camera* activeCam = ACTIVE_CAM;
+    Player* player = GET_PLAYER(globalCtx);
+    Camera* activeCam = GET_ACTIVE_CAM(globalCtx);
     s16 quake;
 
     func_8013ECE0(Math3D_XZDistanceSquared(player->actor.world.pos.x, player->actor.world.pos.z,
@@ -814,7 +814,7 @@ void func_80A9CE00(BgHakuginPost* this) {
 
 void func_80A9CE1C(BgHakuginPost* this, GlobalContext* globalCtx) {
     s32 pad;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     ColliderCylinder* collider;
     s32 yDiff;
     s32 i;
