@@ -11,7 +11,7 @@ typedef enum {
     /* 0x0 */ UNK_0,
     /* 0x1 */ BOULDER,
     /* 0x2 */ UNK_2,
-    /* 0x3 */ STALAGMITE,
+    /* 0x3 */ STALACTITE,
     /* 0x4 */ FENCE_PILLAR
 } EnHakurockType;
 

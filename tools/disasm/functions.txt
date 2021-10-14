@@ -13254,7 +13254,7 @@
     0x80B22750:("func_80B22750",),
     0x80B2278C:("EnHakurock_Update",),
     0x80B228F4:("func_80B228F4",),
-    0x80B229A4:("func_80B229A4",),
+    0x80B229A4:("EnHakurock_Draw",),
     0x80B22C00:("func_80B22C00",),
     0x80B22C2C:("func_80B22C2C",),
     0x80B22C80:("func_80B22C80",),

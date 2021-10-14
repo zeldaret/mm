@@ -1,7 +1,7 @@
 /*
  * File: z_en_hakurock.c
  * Overlay: En_Hakurock
- * Description: Goht Obsticles
+ * Description: Goht Debris
  */
 
 #include "z_en_hakurock.h"
@@ -28,7 +28,7 @@ void func_80B22500(EnHakurock* this, GlobalContext* globalCtx);
 void func_80B226AC(EnHakurock* this);
 void func_80B22750(EnHakurock* this, GlobalContext* globalCtx);
 void func_80B228F4(Actor* thisx, GlobalContext* globalCtx);
-void func_80B229A4(Actor* thisx, GlobalContext* globalCtx);
+void EnHakurock_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit En_Hakurock_InitVars = {
     ACTOR_EN_HAKUROCK,
@@ -65,6 +65,8 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit sColChkInfoInit = { 0, 60, 60, MASS_IMMOVABLE };
 
 extern Gfx D_06011100[];
+
+// Stalactite
 extern Gfx D_06011178[];
 
 void EnHakurock_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -76,7 +78,7 @@ void EnHakurock_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (this->actor.params == 1) {
         this->actor.gravity = -1.5f;
     } else {
-        this->collider.base.ocFlags1 &= 0xFFFB;
+        this->collider.base.ocFlags1 &= ~4;
         this->actor.minVelocityY = -100.0f;
         this->actor.gravity = -7.0f;
     }
@@ -93,36 +95,36 @@ void func_80B21BE0(BossHakugin* parent, Vec3f* arg1, s32 arg2) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(parent->unk_9F8); i++) {
-        BossHakuginParticle* temp_s0 = &parent->unk_9F8[i];
-        if (temp_s0->unk_18 < 0) {
+        BossHakuginParticle* gohtParticle = &parent->unk_9F8[i];
+        if (gohtParticle->unk_18 < 0) {
             // Stack variables need to be here unfortunately
             s16 sp2E;
             s16 sp2C;
             f32 sp28;
-            Math_Vec3f_Copy(&temp_s0->unk_0, arg1);
+            Math_Vec3f_Copy(&gohtParticle->unk_0, arg1);
             sp2C = Rand_S16Offset(0x1000, 0x3000);
             sp2E = ((u32)Rand_Next() >> 0x10);
             sp28 = Rand_ZeroFloat(5.0f) + 10.0f;
-            temp_s0->unk_C.x = (sp28 * Math_CosS(sp2C)) * Math_SinS(sp2E);
-            temp_s0->unk_C.y = (Math_SinS(sp2C) * sp28);
-            temp_s0->unk_C.z = (sp28 * Math_CosS(sp2C)) * Math_CosS(sp2E);
+            gohtParticle->unk_C.x = (sp28 * Math_CosS(sp2C)) * Math_SinS(sp2E);
+            gohtParticle->unk_C.y = (Math_SinS(sp2C) * sp28);
+            gohtParticle->unk_C.z = (sp28 * Math_CosS(sp2C)) * Math_CosS(sp2E);
             if ((arg2 == 1) || (arg2 == 3)) {
-                temp_s0->unk_24 = ((Rand_ZeroFloat(5.0f) + 25.0f) * 0.0012f);
-                temp_s0->unk_0.x = ((Rand_ZeroFloat(2.0f) + 9.0f) * temp_s0->unk_C.x) + arg1->x;
-                temp_s0->unk_0.y = ((Rand_ZeroFloat(2.0f) + 3.0f) * temp_s0->unk_C.y) + arg1->y;
-                temp_s0->unk_0.z = ((Rand_ZeroFloat(2.0f) + 9.0f) * temp_s0->unk_C.z) + arg1->z;
-                temp_s0->unk_1A = 1;
+                gohtParticle->unk_24 = ((Rand_ZeroFloat(5.0f) + 25.0f) * 0.0012f);
+                gohtParticle->unk_0.x = ((Rand_ZeroFloat(2.0f) + 9.0f) * gohtParticle->unk_C.x) + arg1->x;
+                gohtParticle->unk_0.y = ((Rand_ZeroFloat(2.0f) + 3.0f) * gohtParticle->unk_C.y) + arg1->y;
+                gohtParticle->unk_0.z = ((Rand_ZeroFloat(2.0f) + 9.0f) * gohtParticle->unk_C.z) + arg1->z;
+                gohtParticle->unk_1A = 1;
             } else {
-                temp_s0->unk_24 = ((Rand_ZeroFloat(5.0f) + 18.0f) * 0.0001f);
-                temp_s0->unk_0.x = ((Rand_ZeroFloat(2.0f) + 3.0f) * temp_s0->unk_C.x) + arg1->x;
-                temp_s0->unk_0.y = ((Rand_ZeroFloat(3.0f) + 1.0f) * temp_s0->unk_C.y) + arg1->y;
-                temp_s0->unk_0.z = ((Rand_ZeroFloat(2.0f) + 3.0f) * temp_s0->unk_C.z) + arg1->z;
-                temp_s0->unk_1A = 0;
+                gohtParticle->unk_24 = ((Rand_ZeroFloat(5.0f) + 18.0f) * 0.0001f);
+                gohtParticle->unk_0.x = ((Rand_ZeroFloat(2.0f) + 3.0f) * gohtParticle->unk_C.x) + arg1->x;
+                gohtParticle->unk_0.y = ((Rand_ZeroFloat(3.0f) + 1.0f) * gohtParticle->unk_C.y) + arg1->y;
+                gohtParticle->unk_0.z = ((Rand_ZeroFloat(2.0f) + 3.0f) * gohtParticle->unk_C.z) + arg1->z;
+                gohtParticle->unk_1A = 0;
             }
-            temp_s0->unk_1C.x = (Rand_Next() >> 0x10);
-            temp_s0->unk_1C.y = (Rand_Next() >> 0x10);
-            temp_s0->unk_1C.z = (Rand_Next() >> 0x10);
-            temp_s0->unk_18 = 0x28;
+            gohtParticle->unk_1C.x = (Rand_Next() >> 0x10);
+            gohtParticle->unk_1C.y = (Rand_Next() >> 0x10);
+            gohtParticle->unk_1C.z = (Rand_Next() >> 0x10);
+            gohtParticle->unk_18 = 0x28;
             return;
         }
     }
@@ -221,7 +223,7 @@ void func_80B222AC(EnHakurock* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s16 angle;
 
-    this->actor.draw = func_80B229A4;
+    this->actor.draw = EnHakurock_Draw;
     angle = (Rand_Next() >> 0x13) + player->actor.shape.rot.y;
     this->actor.shape.rot.y = (Rand_Next() >> 0x10);
     this->actor.world.pos.x = (Math_SinS(angle) * 600.0f) + player->actor.world.pos.x;
@@ -265,7 +267,7 @@ void func_80B22500(EnHakurock* this, GlobalContext* globalCtx) {
     if (this->counter > 0) {
         this->counter--;
         if ((this->counter & 1) == 0) {
-            this->actor.world.pos.y = (sin_rad(this->counter * (M_PI/20)) * 4.0f) + this->actor.floorHeight;
+            this->actor.world.pos.y = (sin_rad(this->counter * (M_PI / 20)) * 4.0f) + this->actor.floorHeight;
         } else {
             this->actor.world.pos.y = this->actor.floorHeight;
         }
@@ -294,7 +296,7 @@ void func_80B22500(EnHakurock* this, GlobalContext* globalCtx) {
 void func_80B226AC(EnHakurock* this) {
     f32 shiftFactor;
 
-    this->actor.draw = func_80B229A4;
+    this->actor.draw = EnHakurock_Draw;
     Actor_SetScale(&this->actor, 0.35f);
     this->actor.scale.y = 0.5f;
     this->collider.dim.radius = (this->actor.scale.x * 270.0f);
@@ -346,7 +348,7 @@ void func_80B228F4(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-void func_80B229A4(Actor* thisx, GlobalContext* globalCtx) {
+void EnHakurock_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     SysMatrix_InsertTranslation(-100.0f, 0.0f, 0.0f, 1);
