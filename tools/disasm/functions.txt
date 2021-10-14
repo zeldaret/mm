@@ -1519,7 +1519,7 @@
     0x800E9138:("func_800E9138",),
     0x800E9250:("func_800E9250",),
     0x800E9360:("func_800E9360",),
-    0x800E93E0:("static_context_init",),
+    0x800E93E0:("GameInfo_Init",),
     0x800E9470:("func_800E9470",),
     0x800E9488:("DebugDisplay_AddObject",),
     0x800E9564:("DebugDisplay_DrawObjects",),
