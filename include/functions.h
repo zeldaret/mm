@@ -1922,7 +1922,7 @@ void* ZeldaArena_MallocR(size_t size);
 void* ZeldaArena_Realloc(void* oldPtr, size_t newSize);
 void ZeldaArena_Free(void* param_1);
 void* ZeldaArena_Calloc(u32 num, size_t size);
-void ZeldaArena_GetSizes(u32* maxFreeBlock, u32* bytesFree, u32* bytesAllocated);
+void ZeldaArena_GetSizes(size_t* maxFreeBlock, size_t* bytesFree, size_t* bytesAllocated);
 void ZeldaArena_Check();
 void ZeldaArena_Init(void* start, size_t size);
 void ZeldaArena_Cleanup();

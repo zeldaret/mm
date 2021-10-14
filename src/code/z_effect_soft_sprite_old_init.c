@@ -535,6 +535,11 @@ void EffectSsDtBubble_SpawnCustomColor(GlobalContext* globalCtx, Vec3f* pos, Vec
 /**
  * Spawn a single fragment
  *
+ *  * Notes:
+ *     - if a display list is not provided, an unknown default will be used as default
+ *     - the unused arg does not do anything, any value can be passed here
+ *     - due to how life is implemented it is capped at 200. Any value over 200 is accepted, but the fragment will
+ *       only live for 200 frames
  */
 void EffectSsHahen_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 unused, s16 scale,
                          s16 objId, s16 life, Gfx* dList) {
