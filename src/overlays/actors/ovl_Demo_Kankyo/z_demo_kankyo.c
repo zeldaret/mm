@@ -37,7 +37,6 @@ void DemoKankyo_SetupAction(DemoKankyo* this, DemoKankyoActionFunc actionFunc) {
     this->actionFunc = actionFunc;
 }
 
-// lost woods actionfunc
 void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globalCtx) {
     s32 pad;
     s32 i;
@@ -245,7 +244,6 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globa
     }
 }
 
-// wait for giants object to be available before we draw anything
 void DemoKakyo_GiantObjectCheck(DemoKankyo* this, GlobalContext* globalCtx) {
     if (Object_IsLoaded(&globalCtx->objectCtx, this->objectId)) {
         this->isSafeToDrawGiants = true;
@@ -254,8 +252,6 @@ void DemoKakyo_GiantObjectCheck(DemoKankyo* this, GlobalContext* globalCtx) {
     }
 }
 
-// also used by giants
-// has cases for lostwoods too...
 void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, GlobalContext* globalCtx) {
     s32 i;
     f32 temp_f2; // vec3f ?
@@ -289,7 +285,7 @@ void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, GlobalContext* globalCtx
 
     for (i = 0; i < globalCtx->envCtx.unk_F2[3]; i++) {
         switch (this->particles[i].state) {
-            case DEMO_KANKYO_TYPE_LOSTWOODS: 
+            case 0:
                 // BUG this should never be reached because this actionfunc is moon and giants only
                 this->particles[i].unk_1C.x = globalCtx->view.eye.x + (spDC * static120);
                 this->particles[i].unk_1C.y = globalCtx->view.eye.y + (spD8 * static120);
@@ -308,8 +304,8 @@ void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, GlobalContext* globalCtx
                 this->particles[i].state += 1;
                 break;
 
-            case DEMO_KANKYO_TYPE_GIANTS:
-            case DEMO_KANKYO_TYPE_MOON:
+            case 1:
+            case 2:
                 this->particles[i].unk_3C += 1;
 
                 // what? double check?
@@ -386,7 +382,7 @@ void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, GlobalContext* globalCtx
                 }
                 break;
 
-            case DEMO_KANKYO_TYPE_UNK3:
+            case 3:
                 this->particles[i].state = 0;
                 break;
         }
@@ -453,7 +449,6 @@ void DemoKankyo_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 }
 
-// draw lost woods
 void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, GlobalContext* globalCtx2) {
     DemoKankyo* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
@@ -620,7 +615,7 @@ void DemoKankyo_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     switch (this->actor.params) {
         case DEMO_KANKYO_TYPE_LOSTWOODS:
-            DemoKakyo_DrawLostWoodsSparkle(this, globalCtx);
+            DemoKakyo_DrawLostWoodsSparkle(&this->actor, globalCtx);
             break;
 
         case DEMO_KANKYO_TYPE_GIANTS:

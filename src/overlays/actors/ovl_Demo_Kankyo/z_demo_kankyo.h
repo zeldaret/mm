@@ -42,7 +42,6 @@ typedef enum {
     /* 0 */ DEMO_KANKYO_TYPE_LOSTWOODS,
     /* 1 */ DEMO_KANKYO_TYPE_GIANTS,
     /* 2 */ DEMO_KANKYO_TYPE_MOON,
-    /* 3 */ DEMO_KANKYO_TYPE_UNK3, // unfinished, never used in init only moon actionfunc
 } DemoKankyoType;
 
 extern const ActorInit Demo_Kankyo_InitVars;
