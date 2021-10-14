@@ -251,7 +251,7 @@ typedef struct {
     /* 0x02 */ u8  unk_02; // regCur;?    // selected register within page
     /* 0x03 */ u8  unk_03; // dpadLast;?
     /* 0x04 */ u32 unk_04; // repeat;?
-    /* 0x08 */ char pad_08[0xC];
+    /* 0x08 */ UNK_TYPE1 pad_08[0xC];
     /* 0x14 */ s16 data[REG_GROUPS * REG_PER_GROUP]; // 0xAE0 entries
 } GameInfo; // size = 0x15D4
 
