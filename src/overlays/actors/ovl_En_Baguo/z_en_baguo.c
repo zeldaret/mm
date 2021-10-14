@@ -269,7 +269,7 @@ void EnBaguo_SetupRetreatUnderground(EnBaguo* this) {
 }
 
 void EnBaguo_RetreatUnderground(EnBaguo* this, GlobalContext* globalCtx) {
-    this->actor.world.rot.y += -0x1518;
+    this->actor.world.rot.y -= 0x1518;
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if ((globalCtx->gameplayFrames % 8) == 0) {
         func_800BBDAC(globalCtx, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f, 10, 8.0f,
