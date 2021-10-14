@@ -126,7 +126,7 @@ s32 func_80A68860(EnMushi2* this, GlobalContext* globalCtx) {
     s32 sp40;
     CollisionPoly* sp3C;
     f32 temp_f0 = func_800C411C(&globalCtx->colCtx, &sp3C, &sp40, &this->actor, &this->actor.world.pos);
-    s32 sp34;
+    WaterBox* sp34;
     f32 sp30;
 
     if ((temp_f0 > (BGCHECK_Y_MIN + 1)) && ((this->actor.world.pos.y - 150.0f) < temp_f0)) {
@@ -523,7 +523,7 @@ void func_80A697C4(EnMushi2* this, GlobalContext* globalCtx) {
     s32 sp34 = this->unk_338;
 
     if (!(this->unk_30C & (0x10 | 0x4))) {
-        s32 sp30;
+        WaterBox* sp30;
         f32 sp2C;
 
         this->unk_30C &= ~(0x40 | 0x8 | 0x2);
@@ -572,7 +572,7 @@ void func_80A697C4(EnMushi2* this, GlobalContext* globalCtx) {
 
 s32 func_80A699E4(EnMushi2* this, GlobalContext* globalCtx) {
     s32 pad;
-    s32 sp40;
+    WaterBox* sp40;
     f32 sp3C;
 
     if (this->unk_328.y < 0.0f) {
@@ -676,7 +676,7 @@ void func_80A69D3C(EnMushi2* this) {
 
 s32 func_80A69EE4(EnMushi2* this, GlobalContext* globalCtx) {
     s32 pad;
-    s32 sp30;
+    WaterBox* sp30;
     f32 sp2C;
     s32 sp28;
 
