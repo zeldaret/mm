@@ -154,7 +154,7 @@ void func_80BC6F14(EnGuruguru* this, GlobalContext* globalCtx) {
 
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     if (this->unk270 != 0) {
-        Player* player = PLAYER;
+        Player* player = GET_PLAYER(globalCtx);
 
         this->textIdIndex = 3;
         if (player->transformation == PLAYER_FORM_DEKU) {
@@ -178,7 +178,7 @@ void func_80BC6F14(EnGuruguru* this, GlobalContext* globalCtx) {
 }
 
 void func_80BC701C(EnGuruguru* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((this->unk268 != 0) &&
         (player->transformation == PLAYER_FORM_HUMAN || player->transformation == PLAYER_FORM_DEKU)) {
@@ -191,7 +191,7 @@ void func_80BC701C(EnGuruguru* this, GlobalContext* globalCtx) {
 }
 
 void func_80BC7068(EnGuruguru* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->unk268 != 0) {
         SkelAnime_FrameUpdateMatrix(&this->skelAnime);
@@ -322,7 +322,7 @@ void func_80BC7520(EnGuruguru* this, GlobalContext* globalCtx) {
 void EnGuruguru_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnGuruguru* this = THIS;
     s32 yaw;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 yawTemp;
 
     if (!gSaveContext.isNight) {

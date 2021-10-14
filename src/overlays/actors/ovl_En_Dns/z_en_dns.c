@@ -128,7 +128,7 @@ void func_8092C6FC(EnDns* this, GlobalContext* globalCtx) {
 }
 
 void func_8092C740(EnDns* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 temp = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
     Vec3f sp34;
     Vec3f sp28;
@@ -171,7 +171,7 @@ void func_8092C934(EnDns* this) {
 }
 
 s32* func_8092C9BC(EnDns* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (!(gSaveContext.weekEventReg[23] & 0x20)) {
         if (player->transformation != PLAYER_FORM_DEKU) {
@@ -260,7 +260,7 @@ s32 func_8092CB98(EnDns* this, GlobalContext* globalCtx) {
 }
 
 s32 func_8092CC68(GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 pad[2];
     s32 ret = false;
     s16 bgId;
@@ -276,7 +276,7 @@ s32 func_8092CC68(GlobalContext* globalCtx) {
 }
 
 s32 func_8092CCEC(EnDns* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 pad;
     Vec3f sp3C = player->actor.world.pos;
     Vec3f sp30 = this->actor.world.pos;
@@ -382,7 +382,7 @@ void func_8092D108(EnDns* this, GlobalContext* globalCtx) {
 }
 
 void func_8092D1B8(EnDns* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 sp22 = this->actor.world.rot.y;
 
     if (ENDNS_GET_4000(&this->actor)) {
@@ -431,7 +431,7 @@ void func_8092D330(EnDns* this, GlobalContext* globalCtx) {
     if ((this->unk_2C6 & 0x100) && (DECR(this->unk_2D0) == 0)) {
         this->unk_2C6 &= ~0x100;
         globalCtx->nextEntranceIndex = 0x5010;
-        gSaveContext.unk_3F4A = 0;
+        gSaveContext.nextCutsceneIndex = 0;
         globalCtx->sceneLoadFlag = 0x14;
         globalCtx->unk_1887F = 3;
         gSaveContext.nextTransition = 3;

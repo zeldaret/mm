@@ -307,7 +307,7 @@ void func_808BDA4C(EnDekunuts* this, GlobalContext* globalCtx) {
 
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0xE38);
     if (this->actor.params == ENDEKUNUTS_GET_FF00_2) {
-        player = PLAYER;
+        player = GET_PLAYER(globalCtx);
 
         sp58.x = player->actor.world.pos.x;
         sp58.z = player->actor.world.pos.z;

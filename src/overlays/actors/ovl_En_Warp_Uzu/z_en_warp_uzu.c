@@ -95,7 +95,7 @@ void func_80A66278(EnWarpUzu* this, GlobalContext* globalCtx) {
     s16 phi_v1;
 
     do {
-        player = PLAYER;
+        player = GET_PLAYER(globalCtx);
         if (Actor_IsTalking(&this->actor, globalCtx)) {
             func_80A66384(this, globalCtx);
         } else {

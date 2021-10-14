@@ -195,7 +195,7 @@ s32 EnSob1_TestItemSelected(GlobalContext* globalCtx) {
 }
 
 u16 EnSob1_GetTalkOption(EnSob1* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->shopType == BOMB_SHOP) {
         if (gSaveContext.day == 1 && gSaveContext.time >= CLOCK_TIME(6, 00)) {
@@ -231,7 +231,7 @@ u16 EnSob1_GetTalkOption(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 u16 EnSob1_GetWelcome(EnSob1* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->shopType == BOMB_SHOP) {
         switch (Player_GetMask(globalCtx)) {
@@ -443,7 +443,7 @@ void EnSob1_UpdateCursorPos(GlobalContext* globalCtx, EnSob1* this) {
 }
 
 void EnSob1_EndInteraction(GlobalContext* globalCtx, EnSob1* this) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->cutsceneState == ENSOB1_CUTSCENESTATE_PLAYING) {
         ActorCutscene_Stop(this->cutscene);
@@ -522,7 +522,7 @@ void EnSob1_EndingInteraction(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_SetupWalk(EnSob1* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((player->actor.world.pos.x >= 0.0f && player->actor.world.pos.x <= 390.0f) &&
         (player->actor.world.pos.z >= 72.0f && player->actor.world.pos.z <= 365.0f)) {
@@ -531,7 +531,7 @@ void EnSob1_SetupWalk(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_Idle(EnSob1* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     this->headRotTarget = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
     if (Actor_IsTalking(&this->actor, globalCtx)) {
@@ -782,7 +782,7 @@ void EnSob1_Walk(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_Walking(EnSob1* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->cutsceneState == ENSOB1_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
@@ -816,7 +816,7 @@ void EnSob1_Walking(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_ItemPurchased(EnSob1* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
@@ -938,7 +938,7 @@ void EnSob1_BrowseShelf(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_SetupBuyItemWithFanfare(GlobalContext* globalCtx, EnSob1* this) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     func_800B8A1C(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
     globalCtx->msgCtx.unk11F22 = 0x43;
@@ -1096,7 +1096,7 @@ void EnSob1_SetupItemPurchased(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_ContinueShopping(EnSob1* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     EnGirlA* item;
 
     if ((func_80152498(&globalCtx->msgCtx) == 5) && (func_80147624(globalCtx))) {

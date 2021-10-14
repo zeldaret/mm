@@ -76,7 +76,7 @@ const ActorInit En_Fsn_InitVars = {
     (ActorFunc)EnFsn_Draw,
 };
 
-ActorAnimationEntryS sAnimations[] = {
+static ActorAnimationEntryS sAnimations[] = {
     { &D_06012C34, 1.0f, 0, -1, 0, 0 },  { &D_060131FC, 1.0f, 0, -1, 0, 0 }, { &D_0600C58C, 1.0f, 0, -1, 2, 0 },
     { &D_0600C58C, -1.0f, 0, -1, 2, 0 }, { &D_0600E3EC, 1.0f, 0, -1, 2, 0 }, { &D_0600F00C, 1.0f, 0, -1, 0, 0 },
     { &D_0600CB3C, 1.0f, 0, -1, 2, 0 },  { &D_0600D354, 1.0f, 0, -1, 0, 0 }, { &D_060138B0, 1.0f, 0, -1, 2, 0 },
@@ -708,7 +708,7 @@ void EnFsn_InitShop(EnFsn* this, GlobalContext* globalCtx) {
 }
 
 void EnFsn_Idle(EnFsn* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->animationIdx == 4) {
         s16 curFrame = this->skelAnime.animCurrentFrame;
@@ -807,7 +807,7 @@ void EnFsn_BeginInteraction(EnFsn* this, GlobalContext* globalCtx) {
 
 void EnFsn_StartBuying(EnFsn* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     EnFsn_HandleLookToShopkeeperBuyingCutscene(this);
     if (talkState == 5 && func_80147624(globalCtx)) {
@@ -903,7 +903,7 @@ void EnFsn_SetupDeterminePrice(EnFsn* this, GlobalContext* globalCtx) {
 }
 
 void EnFsn_DeterminePrice(EnFsn* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 itemGiven;
     u8 buttonItem;
 
@@ -941,7 +941,7 @@ void EnFsn_DeterminePrice(EnFsn* this, GlobalContext* globalCtx) {
 
 void EnFsn_MakeOffer(EnFsn* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (talkState == 4 && func_80147624(globalCtx)) {
         switch (globalCtx->msgCtx.choiceIndex) {
@@ -989,7 +989,7 @@ void EnFsn_GiveItem(EnFsn* this, GlobalContext* globalCtx) {
         }
         this->actor.parent = NULL;
         if (ENFSN_IS_SHOP(&this->actor) && !this->isSelling) {
-            func_80123D50(globalCtx, PLAYER, 18, 21);
+            func_80123D50(globalCtx, GET_PLAYER(globalCtx), 18, 21);
         }
         this->actionFunc = EnFsn_SetupResumeInteraction;
     } else if (this->isSelling == true) {

@@ -1119,7 +1119,7 @@ void EnMaYto_PostMilkRunEnd(EnMaYto* this, GlobalContext* globalCtx) {
         // Romani Ranch
         globalCtx->nextEntranceIndex = 0x6480;
     }
-    gSaveContext.unk_3F4A = 0;
+    gSaveContext.nextCutsceneIndex = 0;
     globalCtx->sceneLoadFlag = 0x14;
     globalCtx->unk_1887F = 0x50;
     gSaveContext.nextTransition = 3;
@@ -1299,7 +1299,7 @@ void EnMaYto_ChangeAnim(EnMaYto* this, s32 index) {
 }
 
 void func_80B90C78(EnMaYto* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 flag;
 
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);

@@ -1,8 +1,8 @@
 #include "SetActorCutsceneList.h"
 
-#include "BitConverter.h"
 #include "Globals.h"
-#include "StringHelper.h"
+#include "Utils/BitConverter.h"
+#include "Utils/StringHelper.h"
 #include "ZFile.h"
 #include "ZRoom/ZRoom.h"
 
@@ -56,11 +56,6 @@ std::string SetActorCutsceneList::GetBodySourceCode() const
 	std::string listName = parent->GetDeclarationPtrName(cmdArg2);
 	return StringHelper::Sprintf("SCENE_CMD_ACTOR_CUTSCENE_LIST(%i, %s)", cutscenes.size(),
 	                             listName.c_str());
-}
-
-size_t SetActorCutsceneList::GetRawDataSize() const
-{
-	return ZRoomCommand::GetRawDataSize() + (cutscenes.size() * 16);
 }
 
 std::string SetActorCutsceneList::GetCommandCName() const

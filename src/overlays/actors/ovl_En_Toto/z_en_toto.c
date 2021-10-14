@@ -250,7 +250,7 @@ s32 func_80BA397C(EnToto* this, s16 arg1) {
 }
 
 void func_80BA39C8(EnToto* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     func_80BA383C(this, globalCtx);
     if (Actor_IsTalking(&this->actor, globalCtx) != 0) {
@@ -343,7 +343,7 @@ void func_80BA3DBC(EnToto* this, GlobalContext* globalCtx) {
             return;
         }
     } else {
-        player = PLAYER;
+        player = GET_PLAYER(globalCtx);
         if (player->stateFlags1 & 0x400 && player->unk_AE7 != 0) {
             func_80151BB4(globalCtx, 48);
             func_80151BB4(globalCtx, 9);
@@ -410,7 +410,7 @@ s32 func_80BA402C(EnToto* this, GlobalContext* globalCtx) {
 
 s32 func_80BA407C(EnToto* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->cutscene, &PLAYER->actor);
+        ActorCutscene_StartAndSetUnkLinkFields(this->cutscene, &GET_PLAYER(globalCtx)->actor);
         return 1;
     }
 
@@ -458,7 +458,7 @@ s32 func_80BA4204(EnToto* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80BA42BC(EnToto* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     u32 phi_s0 = 0;
     Vec3s* end = &D_80BA510C[3];
 
@@ -514,7 +514,7 @@ s32 func_80BA44D4(EnTotoUnkStruct2* arg0, Player* player) {
 }
 
 s32 func_80BA4530(EnToto* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     EnTotoUnkStruct2* temp_s0;
     s32 i;
     u16 tmp;
@@ -622,7 +622,7 @@ s32 func_80BA4A00(EnToto* this, GlobalContext* globalCtx) {
 
     if (DECR(this->unk2B1) == 0) {
         if (!func_801A2DE0(0x54)) {
-            actor = (Actor*)PLAYER; // Needed for regalloc, possible FAKE MATCH
+            actor = (Actor*)GET_PLAYER(globalCtx); // Needed for regalloc, possible FAKE MATCH
             actor = actor->next;
             while (actor != NULL) {
                 Actor_MarkForDeath(actor);
@@ -651,7 +651,7 @@ s32 func_80BA4B24(EnToto* this, GlobalContext* globalCtx) {
     Player* player;
 
     if (func_80BA40D4(this, globalCtx)) {
-        player = PLAYER;
+        player = GET_PLAYER(globalCtx);
         SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_060028B8, -4.0f);
         if (player->transformation == PLAYER_FORM_ZORA) {
             if (!Flags_GetSwitch(globalCtx, this->actor.params & 0x7F)) {

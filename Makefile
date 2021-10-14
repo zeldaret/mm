@@ -10,6 +10,8 @@ NON_MATCHING ?= 0
 ORIG_COMPILER ?= 0
 # if WERROR is 1, pass -Werror to CC_CHECK, so warnings would be treated as errors
 WERROR ?= 0
+# Keep .mdebug section in build
+KEEP_MDEBUG ?= 0
 
 ifeq ($(NON_MATCHING),1)
   CFLAGS := -DNON_MATCHING
@@ -70,9 +72,16 @@ LD         := $(MIPS_BINUTILS_PREFIX)ld
 OBJCOPY    := $(MIPS_BINUTILS_PREFIX)objcopy
 OBJDUMP    := $(MIPS_BINUTILS_PREFIX)objdump
 
+IINC       := -Iinclude -Isrc -Iassets -Ibuild -I.
+ifeq ($(KEEP_MDEBUG),0)
+  RM_MDEBUG = $(OBJCOPY) --remove-section .mdebug $@
+else
+  RM_MDEBUG = @:
+endif
+
 # Check code syntax with host compiler
 CHECK_WARNINGS := -Wall -Wextra -Wno-format-security -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-int-conversion -Wno-unused-but-set-variable -Wno-unused-label
-CC_CHECK   := gcc -fno-builtin -fsyntax-only -fsigned-char -std=gnu90 -D _LANGUAGE_C -D NON_MATCHING -Iinclude -Isrc -Iassets -Ibuild -include stdarg.h $(CHECK_WARNINGS)
+CC_CHECK   := gcc -fno-builtin -fsyntax-only -funsigned-char -fdiagnostics-color -std=gnu90 -D _LANGUAGE_C -D NON_MATCHING $(IINC) -include stdarg.h $(CHECK_WARNINGS)
 
 CPP        := cpp
 ELF2ROM    := tools/buildtools/elf2rom
@@ -85,7 +94,7 @@ ASFLAGS := -march=vr4300 -32 -Iinclude
 MIPS_VERSION := -mips2
 
 # we support Microsoft extensions such as anonymous structs, which the compiler does support but warns for their usage. Surpress the warnings with -woff.
-CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm -Iinclude -Isrc -Iassets -Ibuild -I. -Wab,-r4300_mul -woff 624,649,838,712
+CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm $(IINC) -Wab,-r4300_mul -woff 624,649,838,712
 
 ifeq ($(shell getconf LONG_BIT), 32)
   # Work around memory allocation bug in QEMU
@@ -242,6 +251,7 @@ init:
 
 build/assets/%.o: assets/%.c
 	$(CC) -I build/ -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
+	$(RM_MDEBUG)
 
 #### Various Recipes ####
 
@@ -269,23 +279,27 @@ build/src/overlays/%.o: src/overlays/%.c
 # 	the following is moved to a separate rule that is only run once when all the required objects have been compiled. 
 	$(ZAPD) bovl -eh -i $@ -cfg $< --outputpath $(@D)/$(notdir $(@D))_reloc.s
 	(test -f $(@D)/$(notdir $(@D))_reloc.s && $(AS) $(ASFLAGS) $(@D)/$(notdir $(@D))_reloc.s -o $(@D)/$(notdir $(@D))_reloc.o) || true
+	$(RM_MDEBUG)
 
 build/src/%.o: src/%.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	$(CC_CHECK) $<
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
+	$(RM_MDEBUG)
 
 build/src/libultra/libc/ll.o: src/libultra/libc/ll.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	$(CC_CHECK) $<
 	python3 tools/set_o32abi_bit.py $@
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
+	$(RM_MDEBUG)
 
 build/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	$(CC_CHECK) $<
 	python3 tools/set_o32abi_bit.py $@
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
+	$(RM_MDEBUG)
 
 # Build C files from assets
 build/%.inc.c: %.png

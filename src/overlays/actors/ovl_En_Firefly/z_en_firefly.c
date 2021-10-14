@@ -194,7 +194,7 @@ void EnFirefly_Ignite(EnFirefly* this) {
 }
 
 s32 EnFirefly_ReturnToPerch(EnFirefly* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     f32 distFromHome;
 
     if (this->actor.params != KEESE_NORMAL_PERCH) {
@@ -234,7 +234,7 @@ s32 EnFirefly_SeekTorch(EnFirefly* this, GlobalContext* globalCtx) {
     }
 
     while (findTorch != NULL) {
-        if ((findTorch->actor.id == ACTOR_OBJ_SYOKUDAI) && (findTorch->unk_1DC != 0)) {
+        if ((findTorch->actor.id == ACTOR_OBJ_SYOKUDAI) && (findTorch->snuffTimer != OBJ_SYOKUDAI_SNUFF_OUT)) {
             currentDist = Actor_DistanceBetweenActors(&this->actor, &findTorch->actor);
             if (currentDist < currentMinDist) {
                 currentMinDist = currentDist;
@@ -417,7 +417,7 @@ void EnFirefly_SetupDiveAttack(EnFirefly* this) {
 }
 
 void EnFirefly_DiveAttack(EnFirefly* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Vec3f preyPos;
 
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
@@ -607,7 +607,7 @@ void EnFirefly_SetupDisturbDiveAttack(EnFirefly* this) {
 }
 
 void EnFirefly_DisturbDiveAttack(EnFirefly* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Vec3f preyPos;
 
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);

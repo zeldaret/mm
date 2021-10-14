@@ -313,7 +313,7 @@ void func_80B40EE8(EnKgy* this, GlobalContext* globalCtx) {
 }
 
 void func_80B411DC(EnKgy* this, GlobalContext* globalCtx, s32 arg2) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     switch (arg2) {
         case 0:
@@ -508,7 +508,7 @@ void func_80B418C4(EnKgy* this, GlobalContext* globalCtx) {
 
 void func_80B419B0(EnKgy* this, GlobalContext* globalCtx) {
     s32 pad;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     func_80B4163C(this, globalCtx);
     if (Actor_IsTalking(&this->actor, globalCtx) || (&this->actor == player->targetActor)) {
@@ -534,7 +534,7 @@ void func_80B41A48(EnKgy* this, GlobalContext* globalCtx) {
 
 void func_80B41ACC(EnKgy* this, GlobalContext* globalCtx) {
     s32 temp_v0;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     if (func_80152498(&globalCtx->msgCtx) == 0x10) {
@@ -577,7 +577,7 @@ void func_80B41ACC(EnKgy* this, GlobalContext* globalCtx) {
 }
 
 void func_80B41C30(EnKgy* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (&this->actor != player->targetActor) {
         this->actionFunc = func_80B42508;
@@ -620,7 +620,7 @@ void func_80B41D64(EnKgy* this, GlobalContext* globalCtx) {
 void func_80B41E18(EnKgy* this, GlobalContext* globalCtx) {
     u16 temp;
     s32 pad;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) && (this->unk_2D2 == 3)) {
         func_80B40BC0(this, 4);
@@ -758,7 +758,7 @@ void func_80B41E18(EnKgy* this, GlobalContext* globalCtx) {
 
                         case 0xC46:
                         case 0xC55:
-                            func_80123D50(globalCtx, PLAYER, 0x12, 0x15);
+                            func_80123D50(globalCtx, GET_PLAYER(globalCtx), 0x12, 0x15);
                             player->unk_A87 = 0;
                             this->unk_29C &= ~0x8;
                             globalCtx->msgCtx.unk11F10 = 0;
@@ -842,7 +842,7 @@ void func_80B41E18(EnKgy* this, GlobalContext* globalCtx) {
 
 void func_80B42508(EnKgy* this, GlobalContext* globalCtx) {
     s32 pad;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     this->actor.focus.pos = this->unk_2A8;
@@ -881,7 +881,7 @@ void func_80B42660(EnKgy* this, GlobalContext* globalCtx) {
 
 void func_80B42714(EnKgy* this, GlobalContext* globalCtx) {
     s32 pad;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     this->actor.focus.pos = this->unk_2A8;

@@ -20,7 +20,8 @@ typedef enum {
 } UpgradeType;
 
 typedef enum {
-    /* 0x01 */ ITEM_BOW = 0x01,
+    /* 0x00 */ ITEM_OCARINA,
+    /* 0x01 */ ITEM_BOW,
     /* 0x06 */ ITEM_BOMB = 0x06,
     /* 0x07 */ ITEM_BOMBCHU,
     /* 0x08 */ ITEM_STICK,
@@ -89,9 +90,13 @@ typedef enum {
     /* 0x1B */ GI_BOMB_BAG_20,
     /* 0x1C */ GI_BOMB_BAG_30,
     /* 0x1D */ GI_BOMB_BAG_40,
-    /* 0x1E */ GI_ARROWS_SMALL,
-    /* 0x1F */ GI_ARROWS_MEDIUM,
-    /* 0x20 */ GI_ARROWS_LARGE,
+    /* 0x1E */ GI_ARROWS_10,
+    /* 0x1F */ GI_ARROWS_30,
+    /* 0x20 */ GI_ARROWS_40,
+    /* 0x21 */ GI_ARROWS_50,
+    /* 0x22 */ GI_QUIVER_30,
+    /* 0x23 */ GI_QUIVER_40,
+    /* 0x24 */ GI_QUIVER_50,
     /* 0x28 */ GI_NUTS_1 = 0x28,
     /* 0x2A */ GI_NUTS_10 = 0x2A,
     /* 0x32 */ GI_SHIELD_HERO = 0x32,
