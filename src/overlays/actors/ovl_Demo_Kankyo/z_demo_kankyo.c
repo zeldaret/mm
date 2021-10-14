@@ -9,7 +9,7 @@ void DemoKankyo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DemoKankyo_Update(Actor* thisx, GlobalContext* globalCtx);
 void DemoKankyo_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_808CF0CC(DemoKankyo* this, GlobalContext* globalCtx);
+void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, GlobalContext* globalCtx);
 
 extern Gfx D_0407AB58[];
 extern Gfx D_06001000[]; // wait, 06 address? nvm this is the bubble
@@ -38,7 +38,7 @@ void DemoKankyo_SetupAction(DemoKankyo* this, DemoKankyoActionFunc actionFunc) {
 }
 
 // lost woods actionfunc
-void func_808CE45C(DemoKankyo* this, GlobalContext* globalCtx) {
+void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globalCtx) {
     s32 pad;
     s32 i;
     f32 static130;
@@ -246,17 +246,17 @@ void func_808CE45C(DemoKankyo* this, GlobalContext* globalCtx) {
 }
 
 // wait for giants object to be available before we draw anything
-void func_808CF06C(DemoKankyo* this, GlobalContext* globalCtx) {
+void DemoKakyo_GiantObjectCheck(DemoKankyo* this, GlobalContext* globalCtx) {
     if (Object_IsLoaded(&globalCtx->objectCtx, this->objectId)) {
         this->isSafeToDrawGiants = true;
         this->actor.objBankIndex = this->objectId;
-        DemoKankyo_SetupAction(this, func_808CF0CC);
+        DemoKankyo_SetupAction(this, DemoKakyo_MoonSparklesActionFunc);
     }
 }
 
-// moon actionfunc, also called above by giants actionfunc????
+// also used by giants
 // has cases for lostwoods too...
-void func_808CF0CC(DemoKankyo* this, GlobalContext* globalCtx) {
+void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, GlobalContext* globalCtx) {
     s32 i;
     f32 temp_f2; // vec3f ?
     f32 temp_f12;
@@ -411,7 +411,7 @@ void DemoKankyo_Init(Actor* thisx, GlobalContext* globalCtx) {
             oID = 0;
             this->actor.room = -1;
             if (D_808D03C0 == 0) {
-                DemoKankyo_SetupAction(this, func_808CE45C);
+                DemoKankyo_SetupAction(this, DemoKakyo_LostWoodsSparkleActionFunc);
                 D_808D03C0 = 1;
             } else {
                 Actor_MarkForDeath(&this->actor);
@@ -421,13 +421,13 @@ void DemoKankyo_Init(Actor* thisx, GlobalContext* globalCtx) {
         case DEMO_KANKYO_TYPE_GIANTS:
             this->isSafeToDrawGiants = false;
             oID = Object_GetIndex(&globalCtx->objectCtx, D_808D03E8);
-            DemoKankyo_SetupAction(this, func_808CF06C);
+            DemoKankyo_SetupAction(this, DemoKakyo_GiantObjectCheck);
             break;
 
         case DEMO_KANKYO_TYPE_MOON:
             oID = 0;
             this->isSafeToDrawGiants = true;
-            DemoKankyo_SetupAction(this, func_808CF0CC);
+            DemoKankyo_SetupAction(this, DemoKakyo_MoonSparklesActionFunc);
             break;
 
         default:
@@ -454,7 +454,7 @@ void DemoKankyo_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 // draw lost woods
-void func_808CF970(Actor* thisx, GlobalContext* globalCtx2) {
+void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, GlobalContext* globalCtx2) {
     DemoKankyo* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
     s16 i;
@@ -620,7 +620,7 @@ void DemoKankyo_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     switch (this->actor.params) {
         case DEMO_KANKYO_TYPE_LOSTWOODS:
-            func_808CF970(this, globalCtx);
+            DemoKakyo_DrawLostWoodsSparkle(this, globalCtx);
             break;
 
         case DEMO_KANKYO_TYPE_GIANTS:
