@@ -7,6 +7,12 @@ struct EnHakurock;
 
 typedef void (*EnHakurockActionFunc)(struct EnHakurock*, GlobalContext*);
 
+typedef enum {
+    /* 0x1 */ OBSTICAL_ROCK,
+    /* 0x2 */ OBSTICAL_UNK,
+    /* 0x3 */ OBSTICAL_STALAGMITE
+} ObsticalType;
+
 typedef struct EnHakurock {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnHakurockActionFunc actionFunc;

@@ -1,4 +1,5 @@
 #include "z_en_hakurock.h"
+#include "overlays/actors/ovl_Boss_Hakugin/z_boss_hakugin.h"
 
 #define FLAGS 0x00000030
 
@@ -8,7 +9,7 @@ void EnHakurock_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnHakurock_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHakurock_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80B21BE0(Actor* arg0, Vec3f* arg1, s32 arg2);
+void func_80B21BE0(BossHakugin* arg0, Vec3f* arg1, s32 arg2);
 void func_80B21EA4(EnHakurock* this, s32 arg1);
 void func_80B21FFC(EnHakurock* this);
 void func_80B22040(EnHakurock* this, GlobalContext* globalCtx);
@@ -62,7 +63,6 @@ static CollisionCheckInfoInit D_80B22AAC = { 0, 60, 60, MASS_IMMOVABLE };
 extern Gfx D_06011100[];
 extern Gfx D_06011178[];
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/EnHakurock_Init.s")
 void EnHakurock_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnHakurock* this = THIS;
 
@@ -79,62 +79,86 @@ void EnHakurock_Init(Actor* thisx, GlobalContext* globalCtx) {
     func_80B21FFC(this);
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/EnHakurock_Destroy.s")
 void EnHakurock_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnHakurock* this = THIS;
 
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B21BE0.s")
+void func_80B21BE0(BossHakugin* parent, Vec3f* arg1, s32 arg2) {
+    s32 i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B21EA4.s")
-// void func_80B21EA4(EnHakurock* this, s32 arg1) {
-//     Vec3f sp4C;
-//     s32 i;
-//     f32 scaleFactor;
-//     s32 phi_s0_3;
-//     s32 phi_s5;
+    for (i = 0; i < 180; i++) {
+        BossHakuginParticle* temp_s0 = &parent->unk_9F8[i];
+        if (temp_s0->unk_18 < 0) {
+            // Stack variables need to be here unfortunately
+            s16 sp2E;
+            s16 sp2C;
+            f32 sp28;
+            Math_Vec3f_Copy(&temp_s0->unk_0, arg1);
+            sp2C = Rand_S16Offset(0x1000, 0x3000);
+            sp2E = ((u32)Rand_Next() >> 0x10);
+            sp28 = Rand_ZeroFloat(5.0f) + 10.0f;
+            temp_s0->unk_C.x = (sp28 * Math_CosS(sp2C)) * Math_SinS(sp2E);
+            temp_s0->unk_C.y = (Math_SinS(sp2C) * sp28);
+            temp_s0->unk_C.z = (sp28 * Math_CosS(sp2C)) * Math_CosS(sp2E);
+            if ((arg2 == 1) || (arg2 == 3)) {
+                temp_s0->unk_24 = ((Rand_ZeroFloat(5.0f) + 25.0f) * 0.0012f);
+                temp_s0->unk_0.x = ((Rand_ZeroFloat(2.0f) + 9.0f) * temp_s0->unk_C.x) + arg1->x;
+                temp_s0->unk_0.y = ((Rand_ZeroFloat(2.0f) + 3.0f) * temp_s0->unk_C.y) + arg1->y;
+                temp_s0->unk_0.z = ((Rand_ZeroFloat(2.0f) + 9.0f) * temp_s0->unk_C.z) + arg1->z;
+                temp_s0->unk_1A = 1;
+            } else {
+                temp_s0->unk_24 = ((Rand_ZeroFloat(5.0f) + 18.0f) * 0.0001f);
+                temp_s0->unk_0.x = ((Rand_ZeroFloat(2.0f) + 3.0f) * temp_s0->unk_C.x) + arg1->x;
+                temp_s0->unk_0.y = ((Rand_ZeroFloat(3.0f) + 1.0f) * temp_s0->unk_C.y) + arg1->y;
+                temp_s0->unk_0.z = ((Rand_ZeroFloat(2.0f) + 3.0f) * temp_s0->unk_C.z) + arg1->z;
+                temp_s0->unk_1A = 0;
+            }
+            temp_s0->unk_1C.x = (Rand_Next() >> 0x10);
+            temp_s0->unk_1C.y = (Rand_Next() >> 0x10);
+            temp_s0->unk_1C.z = (Rand_Next() >> 0x10);
+            temp_s0->unk_18 = 0x28;
+            return;
+        }
+    }
+}
 
-//     if (arg1 == 0) {
-//         for (i = 0; i < 20; i++) {
-//             func_80B21BE0(this->actor.parent, &this->actor.world.pos, arg1);
-//         }
-//     } else if (arg1 == 2) {
-//         for (i = 0; i < 10; i++) {
-//             func_80B21BE0(this->actor.parent, &this->actor.world.pos, arg1);
-//         }
-//     } else {
+void func_80B21EA4(EnHakurock* this, s32 arg1) {
+    Vec3f sp4C;
+    s32 i;
+    f32 scaleFactor;
+    s32 tmp;
+    s32 phi_s5;
 
-//         Math_Vec3f_Copy(&sp4C, &this->actor.world);
-//         scaleFactor = this->actor.scale.x * 600.0f;
-//         phi_s0_3 = 1;
-//         if (arg1 == 1) {
-//             sp4C.y -= scaleFactor;
-//             phi_s0_3 = 0;
-//         }
-//         if (phi_s0_3 < 3) {
-//             phi_s5 = (phi_s0_3 * 5);
-//             // while (phi_s5 < 20) {
-//             //     for (i = 0; i < phi_s5; i++) {
-//             //         func_80B21BE0(this->actor.parent, &sp4C, arg1);
-//             //     }
-//             //     sp4C.y += scaleFactor;
-//             //     phi_s5 += 5;
-//             // }
-//             for (phi_s5 = (phi_s0_3 * 5); phi_s5 < 20; phi_s5 += 5) {
+    if (arg1 == 0) {
+        for (i = 0; i < 20; i++) {
+            func_80B21BE0(this->actor.parent, &this->actor.world.pos, arg1);
+        }
+    } else if (arg1 == 2) {
+        for (i = 0; i < 10; i++) {
+            func_80B21BE0(this->actor.parent, &this->actor.world.pos, arg1);
+        }
+    } else {
+        Math_Vec3f_Copy(&sp4C, &this->actor.world);
+        scaleFactor = this->actor.scale.x * 600.0f;
+        if (arg1 == 1) {
+            sp4C.y -= scaleFactor;
+            i = 0;
+        } else {
+            i = 1;
+        }
 
-//                 for (i = 0; i < (phi_s5 - 1); i++) {
-//                     func_80B21BE0(this->actor.parent, &sp4C, arg1);
-//                 }
+        for (; i < 3; i++) {
+            tmp = (i * 5) + 5;
+            for (phi_s5 = 0; phi_s5 < tmp; phi_s5++) {
+                func_80B21BE0(this->actor.parent, &sp4C, arg1);
+            }
+            sp4C.y += scaleFactor;
+        }
+    }
+}
 
-//                 sp4C.y += scaleFactor;
-//             }
-//         }
-//     }
-// }
-
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B21FFC.s")
 void func_80B21FFC(EnHakurock* this) {
     this->actor.bgCheckFlags &= 0xFFFE;
     this->collider.base.atFlags &= -3;
@@ -144,7 +168,6 @@ void func_80B21FFC(EnHakurock* this) {
     this->actionFunc = func_80B22040;
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B22040.s")
 void func_80B22040(EnHakurock* this, GlobalContext* globalCtx) {
     if (this->actor.params == 1) {
         func_80B220A8(this);
@@ -155,7 +178,6 @@ void func_80B22040(EnHakurock* this, GlobalContext* globalCtx) {
     }
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B220A8.s")
 void func_80B220A8(EnHakurock* this) {
     this->actor.params = 1;
     this->actor.draw = func_80B228F4;
@@ -174,7 +196,6 @@ void func_80B220A8(EnHakurock* this) {
     this->actionFunc = func_80B221E8;
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B221E8.s")
 void func_80B221E8(EnHakurock* this, GlobalContext* globalCtx) {
 
     if (this->unk_148 > 0) {
@@ -192,7 +213,6 @@ void func_80B221E8(EnHakurock* this, GlobalContext* globalCtx) {
     }
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B222AC.s")
 void func_80B222AC(EnHakurock* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
     s16 angle;
@@ -216,7 +236,6 @@ void func_80B222AC(EnHakurock* this, GlobalContext* globalCtx) {
     this->actionFunc = func_80B2242C;
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B2242C.s")
 void func_80B2242C(EnHakurock* this, GlobalContext* globalCtx) {
     if ((this->collider.base.ocFlags1 & 2) && (this->collider.base.oc == this->actor.parent)) {
         func_80B21EA4(this, 1);
@@ -228,7 +247,6 @@ void func_80B2242C(EnHakurock* this, GlobalContext* globalCtx) {
     }
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B224C0.s")
 void func_80B224C0(EnHakurock* this) {
     this->actor.params = 3;
     this->unk_148 = 0xA;
@@ -237,7 +255,6 @@ void func_80B224C0(EnHakurock* this) {
     this->actionFunc = func_80B22500;
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B22500.s")
 void func_80B22500(EnHakurock* this, GlobalContext* globalCtx) {
     Player* player = PLAYER;
 
@@ -270,7 +287,6 @@ void func_80B22500(EnHakurock* this, GlobalContext* globalCtx) {
     }
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B226AC.s")
 void func_80B226AC(EnHakurock* this) {
     f32 shiftFactor;
 
@@ -286,7 +302,6 @@ void func_80B226AC(EnHakurock* this) {
     this->actionFunc = func_80B22750;
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B22750.s")
 void func_80B22750(EnHakurock* this, GlobalContext* globalCtx) {
     if (this->actor.params == 0) {
         func_80B21EA4(this, 3);
@@ -294,13 +309,12 @@ void func_80B22750(EnHakurock* this, GlobalContext* globalCtx) {
     }
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/EnHakurock_Update.s")
 void EnHakurock_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnHakurock* this = THIS;
     s16 rockParams;
 
     this->actionFunc(this, globalCtx);
-    rockParams = this->actor.params; // Params temp is necessary
+    rockParams = this->actor.params;
     if ((rockParams == 1) || (rockParams == 2)) {
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, this->collider.dim.radius, 0.0f, 0x85U);
@@ -319,7 +333,6 @@ void EnHakurock_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B228F4.s")
 void func_80B228F4(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
@@ -329,7 +342,6 @@ void func_80B228F4(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hakurock/func_80B229A4.s")
 void func_80B229A4(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
