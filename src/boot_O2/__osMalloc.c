@@ -219,7 +219,7 @@ end:
 
 #pragma GLOBAL_ASM("asm/non_matchings/boot/__osMalloc/__osRealloc.s")
 
-void __osAnalyzeArena(Arena* arena, u32* outMaxFree, u32* outFree, u32* outAlloc) {
+void __osAnalyzeArena(Arena* arena, size_t* outMaxFree, size_t* outFree, size_t* outAlloc) {
     ArenaNode* iter;
 
     ArenaImpl_Lock(arena);

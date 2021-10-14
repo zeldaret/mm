@@ -156,8 +156,8 @@ void GfxPrint_Open(GfxPrint* printer, Gfx* dList);
 Gfx* GfxPrint_Close(GfxPrint* printer);
 s32 GfxPrint_VPrintf(GfxPrint* printer, const char* fmt, va_list args);
 s32 GfxPrint_Printf(GfxPrint* printer, const char* fmt, ...);
-// void MtxConv_F2L(void);
-// void MtxConv_L2F(void);
+void MtxConv_F2L(MatrixInternal* m1, MtxF* m2);
+void MtxConv_L2F(MtxF* m1, MatrixInternal* m2);
 void __assert(const char* file, u32 lineNum);
 // void func_800862B4(void);
 void* SystemArena_MallocMin1(u32 size);
@@ -207,7 +207,7 @@ void* SystemArena_MallocR(size_t size);
 void* SystemArena_Realloc(void* oldPtr, size_t newSize);
 void SystemArena_Free(void* ptr);
 void* SystemArena_Calloc(u32 elements, size_t size);
-void SystemArena_AnalyzeArena(u32* maxFreeBlock, u32* bytesFree, u32* bytesAllocated);
+void SystemArena_AnalyzeArena(size_t* maxFreeBlock, size_t* bytesFree, size_t* bytesAllocated);
 u32 SystemArena_CheckArena(void);
 void SystemArena_InitArena(void* start, size_t size);
 void SystemArena_Cleanup(void);
@@ -232,7 +232,7 @@ void* __osMalloc(Arena* heap, size_t size);
 void* __osMallocR(Arena* heap, size_t size);
 void __osFree(Arena* heap, void* ptr);
 void* __osRealloc(Arena* heap, void* oldPtr, size_t newSize);
-void __osAnalyzeArena(Arena* heap, u32* maxFreeBlock, u32* bytesFree, u32* bytesAllocated);
+void __osAnalyzeArena(Arena* heap, size_t* maxFreeBlock, size_t* bytesFree, size_t* bytesAllocated);
 u32 __osCheckArena(Arena* heap);
 void* proutSprintf(void* s, const char* buf, size_t n);
 s32 vsprintf(char* dst, char* fmt, va_list args);
@@ -2821,11 +2821,11 @@ void func_801420C0(void* arg0);
 void func_801420F4(void* arg0);
 void func_80142100(void* arg0, Gfx** gfx, u32 arg2);
 s32 func_80142440(SkyboxContext* skyboxCtx, Vtx* vtx, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7,
-                  s32 arg8);                                                         // func_80142440
-void func_80143148(SkyboxContext* skyboxCtx, s32 arg1);                              // func_80143148
-void func_801431E8(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyType);     // func_801431E8
-void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyType); // func_80143324
-void func_801434E4(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyType);     // func_801434E4
+                  s32 arg8);                                                        
+void func_80143148(SkyboxContext* skyboxCtx, s32 arg1);                             
+void func_801431E8(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyType);    
+void func_80143324(GlobalContext* globalCtx, SkyboxContext* skyboxCtx, s16 skyType);
+void func_801434E4(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyType);    
 // void func_801435A0(void);
 // void func_80143624(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE1 param_6, UNK_TYPE1 param_7);
 // void func_80143668(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
@@ -3173,7 +3173,7 @@ void Game_Update(GameState* gameState);
 void Game_IncrementFrameCount(GameState* gameState);
 void GameState_InitArena(GameState* gameState, size_t size);
 void GameState_Realloc(GameState* gameState, size_t size);
-void GameState_Init(GameState* gameState, GameStateFunc gameStateInit, GraphicsContext* gCtxt);
+void GameState_Init(GameState* gameState, GameStateFunc gameStateInit, GraphicsContext* gfxCtx);
 void GameState_Destroy(GameState* gameState);
 GameStateFunc GameState_GetNextStateInit(GameState* gameState);
 size_t Game_GetNextStateSize(GameState* gameState);

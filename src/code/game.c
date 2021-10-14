@@ -153,12 +153,8 @@ void Game_IncrementFrameCount(GameState* gameState) {
 }
 
 void GameState_InitArena(GameState* gameState, size_t size) {
-    GameAlloc* alloc;
-    void* buf;
-
-    alloc = &gameState->alloc;
-
-    buf = GameAlloc_Malloc(alloc, size);
+    GameAlloc* alloc = &gameState->alloc;
+    void* buf = GameAlloc_Malloc(alloc, size);
 
     if (buf) {
         THA_Ct(&gameState->heap, buf, size);
@@ -172,9 +168,9 @@ void GameState_InitArena(GameState* gameState, size_t size) {
 void GameState_Realloc(GameState* gameState, size_t size) {
     GameAlloc* alloc;
     void* gameArena;
-    u32 systemMaxFree;
-    u32 bytesFree;
-    u32 bytesAllocated;
+    size_t systemMaxFree;
+    size_t bytesFree;
+    size_t bytesAllocated;
     void* heapStart;
 
     heapStart = gameState->heap.bufp;

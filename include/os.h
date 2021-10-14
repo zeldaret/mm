@@ -79,7 +79,7 @@ typedef struct {
     /* 0x10 */ OSMesgQueue* acsQueue;
     /* 0x14 */ s32 (*piDmaCallback)(s32, u32, void*, size_t);
     /* 0x18 */ s32 (*epiDmaCallback)(OSPiHandle*, s32, u32, void*, size_t);
-} OSDevMgr;
+} OSDevMgr; // size = 0x1C
 
 
 typedef u64 OSTime;

@@ -83,7 +83,7 @@ s32 SkelCurve_Update(GlobalContext* globalCtx, SkelAnimeCurve* skelCurve) {
                     if (j == 0) {
                         *transforms = transformValue * 1024.0f;
                     } else if (j == 1) {
-                        *transforms = transformValue * (32768.0f / 180.0f); /* (32768.0f / 180.0f); */
+                        *transforms = transformValue * (32768.0f / 180.0f);
                     } else {
                         *transforms = transformValue * 100.0f;
                     }

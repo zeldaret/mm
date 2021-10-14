@@ -29,7 +29,7 @@ void* SystemArena_Calloc(u32 elements, size_t size) {
     return ptr;
 }
 
-void SystemArena_AnalyzeArena(u32* maxFreeBlock, u32* bytesFree, u32* bytesAllocated) {
+void SystemArena_AnalyzeArena(size_t* maxFreeBlock, size_t* bytesFree, size_t* bytesAllocated) {
     __osAnalyzeArena(&gSystemArena, maxFreeBlock, bytesFree, bytesAllocated);
 }
 
