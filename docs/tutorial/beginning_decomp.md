@@ -156,7 +156,7 @@ The above is a rough ordering for the beginner. As you become more experienced, 
 
 ![Fresh actor data](images/fresh_actor_data.png)
 
-Associated to each actor is a `.data` file, containing data that the actor uses. This ranges from spawn positions, to animation information, to even . Since the structure of the data is very inconsistent between actors, automatic importing has been very limited, so the vast majority must be done manually.
+Associated to each actor is a `.data` file, containing data that the actor uses. This ranges from spawn positions, to animation information, to even assets that we have to extract from the ROM. Since the structure of the data is very inconsistent between actors, automatic importing has been very limited, so the vast majority must be done manually.
 
 There are two ways of transfering the data into an actor: we can either 
 - import it all naively as words (`s32`s), which will still allow it to compile, and sort out the actual types later, or 
@@ -169,7 +169,6 @@ We will concentrate on the second here; the other is covered in [the document ab
 
 (Sometimes it is useful to import the data in the middle of doing functions: you just have to choose an appropriate moment.)
 
-
 Some actors also have a `.bss` file. This is just data that is initialised to 0, and can be imported immediately once you know what type it is, by declaring it without giving it a value. (bss is a significant problem for code files, but not *usually* for actors.)
 
 
@@ -179,9 +178,9 @@ The Init function sets up the various components of the actor when it is first l
 
 ### mips2c
 
-The first stage of decompilation is done by a program called mips2c or mips_to_c, which constructs a C interpretation of the assembly code based on reading it very literally. This means that considerable cleanup will be required to turn it into something that firstly compiles at all, and secondly looks like a human wrote it, let alone a Zelda developer from the late '90s.
+The first stage of decompilation is done by a program called mips_to_c, often referred to as mips2c, which constructs a C interpretation of the assembly code based on reading it very literally. This means that considerable cleanup will be required to turn it into something that firstly compiles at all, and secondly looks like a human wrote it, let alone a Zelda developer from the late '90s.
 
-The web version of mips2c can be found [here](https://simonsoftware.se/other/mips_to_c.py). This was covered in the OoT tutorial. We shall instead use the repository. Clone [the mips_to_c repository](https://github.com/matt-kempster/mips_to_c) into a separate directory (we will assume on the same level as the `mm/` directory). Since it's Python, we don't have to do any compilation or anything in the mips_to_c directory.
+The web version of mips2c can be found [here](https://simonsoftware.se/other/mips_to_c.py). This was [covered in the OoT tutorial](https://github.com/zeldaret/oot/blob/master/docs/tutorial/beginning_decomp.md). We shall instead use the repository. Clone [the mips_to_c repository](https://github.com/matt-kempster/mips_to_c) into a separate directory (we will assume on the same level as the `mm/` directory). Since it's Python, we don't have to do any compilation or anything in the mips_to_c directory.
 
 Since the actor depends on the rest of the codebase, we can't expect to get much intelligible out of mips2c without giving it some context. We make this using a Python script in the `tools` directory called `m2ctx.py`, so run
 ```
@@ -292,9 +291,6 @@ void EnRecepgirl_Init(EnRecepgirl *this, GlobalContext *globalCtx) {
 
 Typically for all buth the simplest functions, there is a lot that needs fixing before we are anywhere near seeing how close we are to the original code. You will notice that mips2c creates a lot of temporary variables. Usually most of these will turn out to not be real, and we need to remove the right ones to get the code to match.
 
-
-
-
 First, change the first argument back to `Actor* thisx` so that the function matches its prototype above. To allow the function to find the variables, we need another correction. Half of this has already been done at the top of the function, where we have
 
 ```C
@@ -347,6 +343,42 @@ void EnRecepgirl_Init(Actor *thisx, GlobalContext *globalCtx) {
 }
 ```
 
+### (Not) dealing with Data
+
+For now, we do not want to consider the data that mips2c has kindly imported for us: it will only get in the way when we want to rebuild the file to check for OK (`diff.py` will not care, but `make` will complain if it notices a symbol defined twice, and if some data is included twice the ROM will not match anyway). Therefore, put it in the `#if`'d out section and add some externs with the types:
+
+```C
+#if 0
+const ActorInit En_Recepgirl_InitVars = {
+    ACTOR_EN_RECEPGIRL,
+    ACTORCAT_NPC,
+    FLAGS,
+    OBJECT_BG,
+    sizeof(EnRecepgirl),
+    (ActorFunc)EnRecepgirl_Init,
+    (ActorFunc)EnRecepgirl_Destroy,
+    (ActorFunc)EnRecepgirl_Update,
+    (ActorFunc)EnRecepgirl_Draw,
+};
+
+static void* D_80C106B0[4] = { (void*)0x600F8F0, (void*)0x600FCF0, (void*)0x60100F0, (void*)0x600FCF0 };
+
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80C106C0[] = {
+    ICHAIN_U8(targetMode, 6, ICHAIN_CONTINUE),
+    ICHAIN_F32(targetArrowOffset, 1000, ICHAIN_STOP),
+};
+
+static s32 D_80C106C8 = 0;
+
+#endif
+
+extern void* D_80C106B0[];
+extern InitChainEntry D_80C106C0[];
+extern s32 D_80C106C8;
+```
+
+
 In the next sections, we shall sort out the various initialisation functions that occur in Init. This actor contains several of the most common ones, but it does not have, for example, a collider. The process is similar to what we discuss below, or you can check the OoT tutorial.
 
 <!-- ### Data and function prototypes
@@ -361,7 +393,7 @@ Almost always, one of the first items in `Init` is a function that looks like
 Actor_ProcessInitChain(&this->actor, D_80C106C0);
 ```
 
-which initialises common properties of actor using an InitChain, which is usually somewhere near the top of the data, in this case in the variable `D_80C106C0`. This is already included in the `#if`'d out data at the top if the file, so we don't have to do anything for now.
+which initialises common properties of actor using an InitChain, which is usually somewhere near the top of the data, in this case in the variable `D_80C106C0`. This is already included in the `#if`'d out data at the top if the file, so we don't have to do anything for now. We can correct the mips2c output for the extern, though: I actually did this when moving the rest of the data in the previous section.
 
 
 ### SkelAnime
@@ -545,7 +577,13 @@ The code in question is
     }
 ```
 
-`D_80C106B0` is the array that mips2c has declared above the function, a set of 8-digit hex numbers starting `0x06`. These are likely to be *segmented pointers*, but this is not a very useful piece of information yet. `D_80C106C0` is the InitChain, though, and it seems pretty unlikely that it would be seriously involved in any sort of loop.
+`D_80C106B0` is the array that mips2c has declared above the function, a set of 8-digit hex numbers starting `0x06`. These are likely to be *segmented pointers*, but this is not a very useful piece of information yet. `D_80C106C0` is the InitChain, though, and it seems pretty unlikely that it would be seriously involved in any sort of loop. Indeed, if you tried to compile this now, you would get an error:
+```
+cfe: Error: src/overlays/actors/ovl_En_Recepgirl/z_en_recepgirl.c, line 61: Unacceptable operand of == or !=
+         } while (temp_s0 != D_80C106C0);
+ -------------------------^
+```
+so this can't possibly be right.
 
 So what on earth is this loop doing? Probably the best thing to do is manually unroll it and see what it's doing each time.
 
