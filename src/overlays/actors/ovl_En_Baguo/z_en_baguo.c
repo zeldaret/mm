@@ -165,7 +165,7 @@ void EnBaguo_UndergroundIdle(EnBaguo* this, GlobalContext* globalCtx) {
 void EnBaguo_EmergeFromUnderground(EnBaguo* this, GlobalContext* globalCtx) {
     this->actor.world.rot.y += 0x1518;
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    if (!(globalCtx->gameplayFrames & 7)) {
+    if ((globalCtx->gameplayFrames % 8) == 0) {
         func_800BBDAC(globalCtx, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f, 10, 8.0f,
                       500, 10, 1);
     }
@@ -194,7 +194,7 @@ void EnBaguo_Sit(EnBaguo* this, GlobalContext* globalCtx) {
         if (this->timer & 8) {
             if (fabsf(this->actor.world.rot.y - this->actor.yawTowardsPlayer) > 200.0f) {
                 Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 30, 300, 1000);
-                if (!(globalCtx->gameplayFrames & 7)) {
+                if ((globalCtx->gameplayFrames % 8) == 0) {
                     func_800BBDAC(globalCtx, &this->actor, &this->actor.world.pos,
                                   this->actor.shape.shadowScale - 20.0f, 10, 8.0f, 500, 10, 1);
                     Audio_PlayActorSound2(&this->actor, NA_SE_EN_BAKUO_VOICE);
@@ -271,7 +271,7 @@ void EnBaguo_SetupRetreatUnderground(EnBaguo* this) {
 void EnBaguo_RetreatUnderground(EnBaguo* this, GlobalContext* globalCtx) {
     this->actor.world.rot.y += -0x1518;
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    if (!(globalCtx->gameplayFrames & 7)) {
+    if ((globalCtx->gameplayFrames % 8) == 0) {
         func_800BBDAC(globalCtx, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale - 20.0f, 10, 8.0f,
                       500, 10, 1);
     }
