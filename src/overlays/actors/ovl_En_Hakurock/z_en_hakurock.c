@@ -1,3 +1,9 @@
+/*
+ * File: z_en_hakurock.c
+ * Overlay: En_Hakurock
+ * Description: Goht Obsticles
+ */
+
 #include "z_en_hakurock.h"
 #include "overlays/actors/ovl_Boss_Hakugin/z_boss_hakugin.h"
 
@@ -9,7 +15,7 @@ void EnHakurock_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnHakurock_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHakurock_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80B21BE0(BossHakugin* arg0, Vec3f* arg1, s32 arg2);
+void func_80B21BE0(BossHakugin* parent, Vec3f* arg1, s32 arg2);
 void func_80B21EA4(EnHakurock* this, s32 arg1);
 void func_80B21FFC(EnHakurock* this);
 void func_80B22040(EnHakurock* this, GlobalContext* globalCtx);
@@ -36,7 +42,6 @@ const ActorInit En_Hakurock_InitVars = {
     (ActorFunc)NULL,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_HARD,
@@ -57,8 +62,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 60, 60, -30, { 0, 0, 0 } },
 };
 
-// sColChkInfoInit
-static CollisionCheckInfoInit D_80B22AAC = { 0, 60, 60, MASS_IMMOVABLE };
+static CollisionCheckInfoInit sColChkInfoInit = { 0, 60, 60, MASS_IMMOVABLE };
 
 extern Gfx D_06011100[];
 extern Gfx D_06011178[];
@@ -68,7 +72,7 @@ void EnHakurock_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 52.0f);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &D_80B22AAC);
+    CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
     if (this->actor.params == 1) {
         this->actor.gravity = -1.5f;
     } else {
@@ -88,7 +92,7 @@ void EnHakurock_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void func_80B21BE0(BossHakugin* parent, Vec3f* arg1, s32 arg2) {
     s32 i;
 
-    for (i = 0; i < 180; i++) {
+    for (i = 0; i < ARRAY_COUNT(parent->unk_9F8); i++) {
         BossHakuginParticle* temp_s0 = &parent->unk_9F8[i];
         if (temp_s0->unk_18 < 0) {
             // Stack variables need to be here unfortunately
@@ -160,7 +164,7 @@ void func_80B21EA4(EnHakurock* this, s32 arg1) {
 }
 
 void func_80B21FFC(EnHakurock* this) {
-    this->actor.bgCheckFlags &= 0xFFFE;
+    this->actor.bgCheckFlags &= ~1;
     this->collider.base.atFlags &= -3;
     this->collider.base.ocFlags1 &= -3;
     this->actor.draw = NULL;
@@ -191,21 +195,21 @@ void func_80B220A8(EnHakurock* this) {
     this->collider.dim.radius = (this->actor.scale.x * 2500.0f);
     this->collider.dim.yShift = -this->collider.dim.radius;
     this->collider.dim.height = this->collider.dim.radius * 2;
-    this->unk_148 = 10;
+    this->counter = 10;
     Math_Vec3f_Copy(&this->actor.prevPos, &this->actor.world.pos);
     this->actionFunc = func_80B221E8;
 }
 
 void func_80B221E8(EnHakurock* this, GlobalContext* globalCtx) {
 
-    if (this->unk_148 > 0) {
-        this->unk_148--;
+    if (this->counter > 0) {
+        this->counter--;
     }
     this->actor.shape.rot.x += 0x700;
     this->actor.shape.rot.y += 0x900;
     this->actor.shape.rot.z += 0xB00;
 
-    if (this->collider.base.atFlags & 2 || !(this->unk_148 || (this->collider.base.ocFlags1 & 2) == 0) ||
+    if (this->collider.base.atFlags & 2 || !(this->counter || (this->collider.base.ocFlags1 & 2) == 0) ||
         (this->actor.bgCheckFlags & 1) && (this->actor.velocity.y < 0.0f)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_ROCK_BROKEN);
         func_80B21EA4(this, 0);
@@ -214,7 +218,7 @@ void func_80B221E8(EnHakurock* this, GlobalContext* globalCtx) {
 }
 
 void func_80B222AC(EnHakurock* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 angle;
 
     this->actor.draw = func_80B229A4;
@@ -249,19 +253,19 @@ void func_80B2242C(EnHakurock* this, GlobalContext* globalCtx) {
 
 void func_80B224C0(EnHakurock* this) {
     this->actor.params = 3;
-    this->unk_148 = 0xA;
+    this->counter = 10;
     this->actor.shape.shadowScale = 0.0f;
     this->actor.world.pos.y += 4.0f;
     this->actionFunc = func_80B22500;
 }
 
 void func_80B22500(EnHakurock* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
-    if (this->unk_148 > 0) {
-        this->unk_148--;
-        if ((this->unk_148 & 1) == 0) {
-            this->actor.world.pos.y = (sin_rad(this->unk_148 * 0.15707964f) * 4.0f) + this->actor.floorHeight;
+    if (this->counter > 0) {
+        this->counter--;
+        if ((this->counter & 1) == 0) {
+            this->actor.world.pos.y = (sin_rad(this->counter * (M_PI/20)) * 4.0f) + this->actor.floorHeight;
         } else {
             this->actor.world.pos.y = this->actor.floorHeight;
         }
@@ -296,7 +300,7 @@ void func_80B226AC(EnHakurock* this) {
     this->collider.dim.radius = (this->actor.scale.x * 270.0f);
     shiftFactor = -750.0f;
     this->collider.dim.yShift = 0.5f * shiftFactor;
-    this->unk_148 = 0;
+    this->counter = 0;
     this->actor.shape.shadowScale = 0.0f;
     this->collider.dim.height = this->collider.dim.yShift * -2;
     this->actionFunc = func_80B22750;
@@ -317,7 +321,7 @@ void EnHakurock_Update(Actor* thisx, GlobalContext* globalCtx) {
     rockParams = this->actor.params;
     if ((rockParams == 1) || (rockParams == 2)) {
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, this->collider.dim.radius, 0.0f, 0x85U);
+        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, this->collider.dim.radius, 0.0f, 0x85);
         if (this->actor.floorHeight == -32000.0f) {
             func_80B21FFC(this);
         } else {
