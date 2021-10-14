@@ -7,9 +7,11 @@ struct DemoKankyo;
 
 typedef void (*DemoKankyoActionFunc)(struct DemoKankyo*, GlobalContext*);
 
+// todo make particle state enum
+
 typedef struct {
   /* 0x000 */ u8 state;
-  /* 0x004 */ Vec3f unk_04;
+  /* 0x004 */ Vec3f unk_04; // pos?
   /* 0x010 */ Vec3f unk_10;
   /* 0x01C */ Vec3f unk_1C;
   /* 0x028 */ Vec3f unk_28;
@@ -22,7 +24,7 @@ typedef struct {
   /* 0x048 */ u16 unk_48;
   /* 0x04A */ u16 unk_4A;
   /* 0x04C */ f32 unk_4C;
-  /* 0x050 */ u16 pad50; // seems unused
+  /* 0x050 */ u16 pad50; // unused, always assigned to 0 nothing else
   /* 0x052 */ UNK_TYPE1 unk52[0x2];
 } DemoKankyoParticle; // size = 0x54
 
@@ -40,7 +42,7 @@ typedef enum {
     /* 0 */ DEMO_KANKYO_TYPE_LOSTWOODS,
     /* 1 */ DEMO_KANKYO_TYPE_GIANTS,
     /* 2 */ DEMO_KANKYO_TYPE_MOON,
-    /* 3 */ DEMO_KANKYO_TYPE_UNK3,
+    /* 3 */ DEMO_KANKYO_TYPE_UNK3, // unfinished, never used in init only moon actionfunc
 } DemoKankyoType;
 
 extern const ActorInit Demo_Kankyo_InitVars;

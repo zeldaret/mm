@@ -12,7 +12,7 @@ void DemoKankyo_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_808CF0CC(DemoKankyo* this, GlobalContext* globalCtx);
 
 extern Gfx D_0407AB58[];
-extern Gfx D_06001000[]; // wait, 06 address?
+extern Gfx D_06001000[]; // wait, 06 address? nvm this is the bubble
 extern Gfx D_04023428[];
 
 static u8 D_808D03C0 = 0;
@@ -61,11 +61,12 @@ void func_808CE45C(DemoKankyo* this, GlobalContext* globalCtx) {
         } else {
             Actor_MarkForDeath(&this->actor);
         }
-    } else if (globalCtx->envCtx.unk_F2[3] < 0x40) {
+    } else if (globalCtx->envCtx.unk_F2[3] < DEMOKANKYO_PARTICLE_COUNT) {
         globalCtx->envCtx.unk_F2[3] += 16;
     }
 
     for (i = 0; i < globalCtx->envCtx.unk_F2[3]; i++) {
+    //for (i = 0; i < 2; i++) {
         static130 = 130.0f;
         diffX = globalCtx->view.at.x - globalCtx->view.eye.x;
         diffY = globalCtx->view.at.y - globalCtx->view.eye.y;
@@ -87,8 +88,7 @@ void func_808CE45C(DemoKankyo* this, GlobalContext* globalCtx) {
                 this->particles[i].unk_04.z = (Rand_ZeroOne() - 0.5f) * 160.0f;
                 this->particles[i].unk_38 = (Rand_ZeroOne() * 1.6f) + 0.5f;
                 this->particles[i].alpha = 0;
-                // random max value of u16?
-                this->particles[i].unk_3C = Rand_ZeroOne() * 65535;
+                this->particles[i].unk_3C = Rand_ZeroOne() * 65535; // random 0 to max of u16
                 this->particles[i].unk_44 = 0.1f;
 
                 // random angle?
@@ -108,7 +108,7 @@ void func_808CE45C(DemoKankyo* this, GlobalContext* globalCtx) {
                 this->particles[i].unk_10.x = this->particles[i].unk_04.x;
                 this->particles[i].unk_10.y = this->particles[i].unk_04.y;
                 this->particles[i].unk_10.z = this->particles[i].unk_04.z;
-                if (this->particles[i].state == 1) { // first frame
+                if (this->particles[i].state == 1) { // first frame ?
                     if (i < 32) {
                         if (Rand_ZeroOne() < 0.5f) {
                             this->particles[i].unk_48 = (s16)(Rand_ZeroOne() * 200.0f) + 200;
@@ -245,7 +245,7 @@ void func_808CE45C(DemoKankyo* this, GlobalContext* globalCtx) {
     }
 }
 
-// giants action func
+// wait for giants object to be available before we draw anything
 void func_808CF06C(DemoKankyo* this, GlobalContext* globalCtx) {
     if (Object_IsLoaded(&globalCtx->objectCtx, this->objectId)) {
         this->isSafeToDrawGiants = true;
@@ -255,29 +255,29 @@ void func_808CF06C(DemoKankyo* this, GlobalContext* globalCtx) {
 }
 
 // moon actionfunc, also called above by giants actionfunc????
+// has cases for lostwoods too...
 void func_808CF0CC(DemoKankyo* this, GlobalContext* globalCtx) {
     s32 i;
-    f32 temp_f2; // vec3f
+    f32 temp_f2; // vec3f ?
     f32 temp_f12;
     f32 temp_f14;
-    f32 spDC;   // vec3f
+    f32 spDC;   // vec3f ?
     f32 spD8;
     f32 spD4;
     f32 temp_f0;
     f32 temp_f0_5;
     f32 temp_f2_3;
-    f32 temp_f18;
-    f32 temp_f20;
-    f32 temp_f24;
-    f32 temp_f26;
+    f32 pad0;
+    Vec3f newEye;
     f32 static120;
-    s32 pad;
+    s32 pad1;
     Vec3f spA4;
 
-    if (globalCtx->envCtx.unk_F2[3] < 0x40) {
+    if (globalCtx->envCtx.unk_F2[3] < DEMOKANKYO_PARTICLE_COUNT) {
         globalCtx->envCtx.unk_F2[3] += 16;
     }
 
+    // pos - vector vector? what is that?
     temp_f2 = globalCtx->view.at.x - globalCtx->view.eye.x;
     temp_f12 = globalCtx->view.at.y - globalCtx->view.eye.y;
     temp_f14 = globalCtx->view.at.z - globalCtx->view.eye.z;
@@ -289,7 +289,8 @@ void func_808CF0CC(DemoKankyo* this, GlobalContext* globalCtx) {
 
     for (i = 0; i < globalCtx->envCtx.unk_F2[3]; i++) {
         switch (this->particles[i].state) {
-            case DEMO_KANKYO_TYPE_LOSTWOODS:
+            case DEMO_KANKYO_TYPE_LOSTWOODS: 
+                // BUG this should never be reached because this actionfunc is moon and giants only
                 this->particles[i].unk_1C.x = globalCtx->view.eye.x + (spDC * static120);
                 this->particles[i].unk_1C.y = globalCtx->view.eye.y + (spD8 * static120);
                 this->particles[i].unk_1C.z = globalCtx->view.eye.z + (spD4 * static120);
@@ -310,13 +311,15 @@ void func_808CF0CC(DemoKankyo* this, GlobalContext* globalCtx) {
             case DEMO_KANKYO_TYPE_GIANTS:
             case DEMO_KANKYO_TYPE_MOON:
                 this->particles[i].unk_3C += 1;
+
                 // what? double check?
                 if (this->actor.params == DEMO_KANKYO_TYPE_MOON) {
                     this->particles[i].unk_1C.y = globalCtx->view.eye.y + (spD8 * static120) + 80.0f;
                 }
-                temp_f20 = globalCtx->view.eye.x + (spDC * static120);
-                temp_f24 = globalCtx->view.eye.y + (spD8 * static120);
-                temp_f26 = globalCtx->view.eye.z + (spD4 * static120);
+
+                newEye.x = globalCtx->view.eye.x + (spDC * static120);
+                newEye.y = globalCtx->view.eye.y + (spD8 * static120);
+                newEye.z = globalCtx->view.eye.z + (spD4 * static120);
                 Math_SmoothStepToF(&this->particles[i].unk_44, 0.2f, 0.1f, 0.001f, 0.00001f);
                 Math_SmoothStepToF(&this->particles[i].unk_34, this->particles[i].unk_38, 0.5f, 0.2f, 0.02f);
 
@@ -351,12 +354,12 @@ void func_808CF0CC(DemoKankyo* this, GlobalContext* globalCtx) {
                         break;
                 }
 
-                if (((this->particles[i].unk_1C.x + this->particles[i].unk_04.x) - temp_f20) > static120) {
-                    this->particles[i].unk_1C.x = temp_f20 - static120;
+                if (((this->particles[i].unk_1C.x + this->particles[i].unk_04.x) - newEye.x) > static120) {
+                    this->particles[i].unk_1C.x = newEye.x - static120;
                 }
 
-                if (((this->particles[i].unk_1C.x + this->particles[i].unk_04.x) - temp_f20) < -static120) {
-                    this->particles[i].unk_1C.x = temp_f20 + static120;
+                if (((this->particles[i].unk_1C.x + this->particles[i].unk_04.x) - newEye.x) < -static120) {
+                    this->particles[i].unk_1C.x = newEye.x + static120;
                 }
 
                 spA4.x = this->particles[i].unk_1C.x + this->particles[i].unk_04.x;
@@ -364,22 +367,22 @@ void func_808CF0CC(DemoKankyo* this, GlobalContext* globalCtx) {
                 spA4.z = this->particles[i].unk_1C.z + this->particles[i].unk_04.z;
                 temp_f2_3 = Math_Vec3f_DistXZ(&spA4, &globalCtx->view.eye) / 200.0f;
                 temp_f2_3 = CLAMP(temp_f2_3, 0.0f, 1.0f);
-                temp_f0_5 = 100.0f + temp_f2_3 + 60.0f;
+                temp_f0_5 = 100.0f + temp_f2_3 + 60.0f; // range 160 to 161...?
 
-                if (temp_f0_5 < ((this->particles[i].unk_1C.y + this->particles[i].unk_04.y) - temp_f24)) {
-                    this->particles[i].unk_1C.y = temp_f24 - temp_f0_5;
+                if (temp_f0_5 < ((this->particles[i].unk_1C.y + this->particles[i].unk_04.y) - newEye.y)) {
+                    this->particles[i].unk_1C.y = newEye.y - temp_f0_5;
                 }
 
-                if (((this->particles[i].unk_1C.y + this->particles[i].unk_04.y) - temp_f24) < -temp_f0_5) {
-                    this->particles[i].unk_1C.y = temp_f24 + temp_f0_5;
+                if (((this->particles[i].unk_1C.y + this->particles[i].unk_04.y) - newEye.y) < -temp_f0_5) {
+                    this->particles[i].unk_1C.y = newEye.y + temp_f0_5;
                 }
 
-                if (((this->particles[i].unk_1C.z + this->particles[i].unk_04.z) - temp_f26) > static120) {
-                    this->particles[i].unk_1C.z = temp_f26 - static120;
+                if (((this->particles[i].unk_1C.z + this->particles[i].unk_04.z) - newEye.z) > static120) {
+                    this->particles[i].unk_1C.z = newEye.z - static120;
                 }
 
-                if (((this->particles[i].unk_1C.z + this->particles[i].unk_04.z) - temp_f26) < -static120) {
-                    this->particles[i].unk_1C.z = temp_f26 + static120;
+                if (((this->particles[i].unk_1C.z + this->particles[i].unk_04.z) - newEye.z) < -static120) {
+                    this->particles[i].unk_1C.z = newEye.z + static120;
                 }
                 break;
 
@@ -471,7 +474,10 @@ void func_808CF970(Actor* thisx, GlobalContext* globalCtx2) {
             spA4.x = this->particles[i].unk_1C.x + this->particles[i].unk_04.x;
             spA4.y = this->particles[i].unk_1C.y + this->particles[i].unk_04.y;
             spA4.z = this->particles[i].unk_1C.z + this->particles[i].unk_04.z;
-            func_80169474(globalCtx, &spA4, &sp98);
+
+            // if we disable this, then no particles are shown, likely has to do with their opacity
+            func_80169474(globalCtx, &spA4, &sp98); // unamed Play_ function
+  
             if ((sp98.x >= 0.0f) && (sp98.x < 320.0f) && (sp98.y >= 0.0f) && (sp98.y < 240.0f)) {
                 SysMatrix_InsertTranslation(spA4.x, spA4.y, spA4.z, MTXMODE_NEW);
                 temp_f0 = this->particles[i].alpha / 50.0f;
@@ -484,7 +490,7 @@ void func_808CF970(Actor* thisx, GlobalContext* globalCtx2) {
                 // what a weird mess
                 if (i < 32) {
                     if (this->particles[i].state != 2) {
-                        if (this->particles[i].alpha > 0) {
+                        if (this->particles[i].alpha > 0) { // NOT DECR
                             this->particles[i].alpha--;
                         }
                     } else if (this->particles[i].alpha < 100) {
@@ -508,14 +514,17 @@ void func_808CF970(Actor* thisx, GlobalContext* globalCtx2) {
 
                 gDPPipeSync(POLY_XLU_DISP++);
 
+                // every other particle is a different color?
+
+                // make them all one to see the difference
                 switch (i & 1) {
                     case 0: // even ?
-                        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 155, this->particles[i].alpha);
+                        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 155, this->particles[i].alpha); // gold particles
                         gDPSetEnvColor(POLY_XLU_DISP++, 250, 180, 0, this->particles[i].alpha);
                         break;
 
                     case 1: // odd ? 
-                        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, this->particles[i].alpha);
+                        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, this->particles[i].alpha); // silver particles
                         gDPSetEnvColor(POLY_XLU_DISP++, 0, 100, 255, this->particles[i].alpha);
                         break;
                 }
@@ -573,7 +582,6 @@ void func_808CFE04(Actor* thisx, GlobalContext* globalCtx2) {
 
                 gDPPipeSync(POLY_XLU_DISP++);
 
-                // todo turn these rgb color values back to hex
                 switch (i & 1) {
                     case 0:
                         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 230, 230, 220, this->particles[i].alpha);
