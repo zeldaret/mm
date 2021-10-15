@@ -92,6 +92,7 @@ public:
 
 	void ParseRawData() override;
 
+	std::string GetSourceTypeName() const override;
 	ZResourceType GetResourceType() const override;
 
 	size_t GetRawDataSize() const override;

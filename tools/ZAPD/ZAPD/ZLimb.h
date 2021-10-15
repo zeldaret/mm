@@ -84,7 +84,7 @@ public:
 	Struct_800A598C(ZFile* parent, const std::vector<uint8_t>& rawData, uint32_t fileOffset,
 	                size_t index);
 
-	void PreGenSourceFiles(const std::string& prefix);
+	void DeclareReferences(const std::string& prefix);
 	[[nodiscard]] std::string GetSourceOutputCode(const std::string& prefix) const;
 
 	static size_t GetRawDataSize();
@@ -111,7 +111,7 @@ public:
 	                size_t index);
 	~Struct_800A5E28();
 
-	void PreGenSourceFiles(const std::string& prefix);
+	void DeclareReferences(const std::string& prefix);
 	[[nodiscard]] std::string GetSourceOutputCode(const std::string& prefix) const;
 
 	static size_t GetRawDataSize();

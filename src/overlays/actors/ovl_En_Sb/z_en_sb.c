@@ -332,7 +332,7 @@ void EnSb_UpdateDamage(EnSb* this, GlobalContext* globalCtx) {
         if (this->actor.colChkInfo.damageEffect == 0xF) {
             hitPlayer = 0;
             if (this->vulnerableTimer != 0) {
-                func_800BE22C(&this->actor);
+                Actor_ApplyDamage(&this->actor);
                 func_800BCB70(&this->actor, 0x4000, 0xFF, 0x2000, 80);
                 hitPlayer = 1;
             }
@@ -343,8 +343,8 @@ void EnSb_UpdateDamage(EnSb* this, GlobalContext* globalCtx) {
                 this->isDrawn = true;
             }
             this->isDead = true;
-            func_800BBA88(globalCtx, &this->actor);
-            func_800F0568(globalCtx, &this->actor.world.pos, 0x28, NA_SE_EN_BEE_FLY);
+            Enemy_StartFinishingBlow(globalCtx, &this->actor);
+            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 0x28, NA_SE_EN_BEE_FLY);
             return;
         }
         hitPoint.x = this->collider.info.bumper.hitPos.x;
@@ -361,7 +361,7 @@ void EnSb_UpdateDamage(EnSb* this, GlobalContext* globalCtx) {
 void EnSb_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnSb* this = THIS;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->isDead) {
         if (this->actor.yDistToWater > 0.0f) {

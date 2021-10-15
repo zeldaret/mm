@@ -1,5 +1,5 @@
 CC := gcc
-CFLAGS := -DNDEBUG -s -Os -flto -Wall -Wextra
+CFLAGS := -DNDEBUG -s -Os -flto -Wall -Wextra -march=native -mtune=native
 
 OBJ_DIR := o
 

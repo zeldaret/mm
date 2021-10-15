@@ -166,8 +166,8 @@ asm/non_matchings/code/z_effect_soft_sprite_old_init/EffectSsDeadDs_Spawn.s,Effe
 asm/non_matchings/code/z_effect_soft_sprite_old_init/func_800B31BC.s,func_800B31BC,0x800B31BC,0x14
 asm/non_matchings/code/z_effect_soft_sprite_old_init/EffectSsIceSmoke_Spawn.s,EffectSsIceSmoke_Spawn,0x800B320C,0x18
 asm/non_matchings/code/z_effect_soft_sprite_old_init/EffectSsIceBlock_Spawn.s,EffectSsIceBlock_Spawn,0x800B326C,0x19
-asm/non_matchings/code/flg_set/func_800B32D0.s,func_800B32D0,0x800B32D0,0xDD
-asm/non_matchings/code/flg_set/func_800B3644.s,func_800B3644,0x800B3644,0x8F
+asm/non_matchings/code/flg_set/FlagSet_Update.s,FlagSet_Update,0x800B32D0,0xDD
+asm/non_matchings/code/flg_set/FlagSet_Draw.s,FlagSet_Draw,0x800B3644,0x8F
 asm/non_matchings/code/z_DLF/DLF_LoadGameState.s,DLF_LoadGameState,0x800B3880,0x49
 asm/non_matchings/code/z_DLF/DLF_FreeGameState.s,DLF_FreeGameState,0x800B39A4,0x4B
 asm/non_matchings/code/z_actor/Actor_PrintLists.s,Actor_PrintLists,0x800B3AD0,0x35
@@ -1033,7 +1033,7 @@ asm/non_matchings/code/code_800E8EA0/func_800E8FA4.s,func_800E8FA4,0x800E8FA4,0x
 asm/non_matchings/code/code_800E8EA0/func_800E9138.s,func_800E9138,0x800E9138,0x46
 asm/non_matchings/code/code_800E8EA0/func_800E9250.s,func_800E9250,0x800E9250,0x44
 asm/non_matchings/code/z_common_data/func_800E9360.s,func_800E9360,0x800E9360,0x20
-asm/non_matchings/code/z_debug/static_context_init.s,static_context_init,0x800E93E0,0x24
+asm/non_matchings/code/z_debug/GameInfo_Init.s,GameInfo_Init,0x800E93E0,0x24
 asm/non_matchings/code/z_debug_display/func_800E9470.s,func_800E9470,0x800E9470,0x6
 asm/non_matchings/code/z_debug_display/DebugDisplay_AddObject.s,DebugDisplay_AddObject,0x800E9488,0x37
 asm/non_matchings/code/z_debug_display/DebugDisplay_DrawObjects.s,DebugDisplay_DrawObjects,0x800E9564,0x24
@@ -2310,7 +2310,7 @@ asm/non_matchings/code/z_sram_NES/Sram_CalcChecksum.s,Sram_CalcChecksum,0x801445
 asm/non_matchings/code/z_sram_NES/func_80144628.s,func_80144628,0x80144628,0x17
 asm/non_matchings/code/z_sram_NES/Sram_GenerateRandomSaveFields.s,Sram_GenerateRandomSaveFields,0x80144684,0x83
 asm/non_matchings/code/z_sram_NES/func_80144890.s,func_80144890,0x80144890,0x36
-asm/non_matchings/code/z_sram_NES/func_80144968.s,func_80144968,0x80144968,0x4B
+asm/non_matchings/code/z_sram_NES/Sram_InitDebugSave.s,Sram_InitDebugSave,0x80144968,0x4B
 asm/non_matchings/code/z_sram_NES/func_80144A94.s,func_80144A94,0x80144A94,0xF9
 asm/non_matchings/code/z_sram_NES/func_80144E78.s,func_80144E78,0x80144E78,0x17D
 asm/non_matchings/code/z_sram_NES/func_8014546C.s,func_8014546C,0x8014546C,0x8B
@@ -3573,7 +3573,7 @@ asm/non_matchings/code/code_801A5BD0/func_801A794C.s,func_801A794C,0x801A794C,0x
 asm/non_matchings/code/code_801A7B10/func_801A7B10.s,func_801A7B10,0x801A7B10,0x7D
 asm/non_matchings/code/code_801A7B10/func_801A7D04.s,func_801A7D04,0x801A7D04,0x20
 asm/non_matchings/code/code_801A7B10/func_801A7D84.s,func_801A7D84,0x801A7D84,0x309
-asm/non_matchings/code/code_801A7B10/func_801A89A8.s,func_801A89A8,0x801A89A8,0xA
+asm/non_matchings/code/code_801A7B10/Audio_QueueSeqCmd.s,Audio_QueueSeqCmd,0x801A89A8,0xA
 asm/non_matchings/code/code_801A7B10/func_801A89D0.s,func_801A89D0,0x801A89D0,0x20
 asm/non_matchings/code/code_801A7B10/func_801A8A50.s,func_801A8A50,0x801A8A50,0x1B
 asm/non_matchings/code/code_801A7B10/func_801A8ABC.s,func_801A8ABC,0x801A8ABC,0x16

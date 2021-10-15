@@ -16,7 +16,6 @@ void EnDai_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDai_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80B3F00C(EnDai* this, GlobalContext* globalCtx);
-void func_80B3EEDC(EnDai* this, GlobalContext* globalCtx);
 void func_80B3EF90(EnDai* this, GlobalContext* globalCtx);
 
 extern AnimationHeader D_060107B0;
@@ -424,7 +423,7 @@ void func_80B3EE8C(EnDai* this, GlobalContext* globalCtx) {
 }
 
 void func_80B3EEDC(EnDai* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((player->transformation == PLAYER_FORM_GORON) && (globalCtx->msgCtx.unk1202A == 3) &&
         (globalCtx->msgCtx.unk1202E == 1)) {
@@ -440,7 +439,7 @@ void func_80B3EEDC(EnDai* this, GlobalContext* globalCtx) {
 }
 
 void func_80B3EF90(EnDai* this, GlobalContext* globalCtx) {
-    if (func_8010BF58(&this->actor, globalCtx, D_80B3FC8C, 0, &this->unk_1D0)) {
+    if (func_8010BF58(&this->actor, globalCtx, D_80B3FC8C, NULL, &this->unk_1D0)) {
         func_8013AED4(&this->unk_1CE, 3, 7);
         this->unk_1D0 = 0;
         this->actionFunc = func_80B3F00C;
@@ -564,7 +563,7 @@ void EnDai_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void EnDai_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnDai* this = THIS;
     s32 pad;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (!func_80B3E7C8(this, globalCtx) && func_80B3E69C(this, globalCtx)) {
         func_80B3F044(this, globalCtx);

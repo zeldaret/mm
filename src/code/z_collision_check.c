@@ -38,10 +38,6 @@ TriNorm D_801EF5C8;
 TriNorm D_801EF600;
 TriNorm D_801EF638;
 
-//! @TODO: These are fake bss symbols likely related to z_message_nes
-UNK_TYPE1 D_801EF66C;
-UNK_TYPE1 D_801EF66D;
-
 /**
  * Gets the damage and effect that should be applied for the collision between
  * `at` and `ac`, referring to the ac actor's damage chart if applicable.
@@ -2917,8 +2913,8 @@ void CollisionCheck_AC(GlobalContext* globalCtx, CollisionCheckContext* colCtxt,
 /**
  * Iterates through all AT colliders, testing them for AC collisions with each AC collider, setting the info regarding
  * the collision for each AC and AT collider that collided. Then spawns hitmarks and plays sound effects for each
- * successful collision. To collide, an AT collider must share a type (PLAYER, ENEMY, or BOMB) with the AC collider and
- * the toucher and bumper elements that overlapped must share a dmgFlag.
+ * successful collision. To collide, an AT collider must share a type (AC_TYPE_PLAYER, AC_TYPE_ENEMY, or AC_TYPE_OTHER)
+ * with the AC collider and the toucher and bumper elements that overlapped must share a dmgFlag.
  */
 void CollisionCheck_AT(GlobalContext* globalCtx, CollisionCheckContext* colCtxt) {
     Collider** col;
