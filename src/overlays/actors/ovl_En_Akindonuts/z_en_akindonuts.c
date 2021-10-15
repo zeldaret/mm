@@ -260,7 +260,7 @@ s32 func_80BED034(EnAkindonuts* this) {
 }
 
 void func_80BED090(GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (player->transformation == PLAYER_FORM_DEKU) {
         gSaveContext.weekEventReg[63] |= 0x8;
@@ -278,7 +278,7 @@ void func_80BED090(GlobalContext* globalCtx) {
 }
 
 s32 func_80BED140(GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (player->transformation == PLAYER_FORM_DEKU) {
         if ((gSaveContext.weekEventReg[63] & 0x8) && !(gSaveContext.weekEventReg[63] & 0x10)) {
@@ -366,7 +366,7 @@ s32 func_80BED35C(EnAkindonuts* this) {
 }
 
 void func_80BED3BC(EnAkindonuts* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     switch (this->unk_33C) {
         case 0:
@@ -536,7 +536,7 @@ void func_80BED680(EnAkindonuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80BED8A4(EnAkindonuts* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     switch (this->unk_33C) {
         case 0:
@@ -642,7 +642,7 @@ void func_80BED8A4(EnAkindonuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80BEDB88(EnAkindonuts* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     switch (this->unk_33C) {
         case 0:
@@ -714,7 +714,7 @@ void func_80BEDB88(EnAkindonuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80BEDDAC(EnAkindonuts* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     switch (this->unk_33C) {
         case 0:
@@ -815,7 +815,7 @@ void func_80BEDDAC(EnAkindonuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80BEE070(EnAkindonuts* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     switch (this->unk_33C) {
         case 0:
@@ -882,7 +882,7 @@ void func_80BEE070(EnAkindonuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80BEE274(EnAkindonuts* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     switch (this->unk_33C) {
         case 0:
@@ -976,7 +976,7 @@ void func_80BEE274(EnAkindonuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80BEE530(EnAkindonuts* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     switch (this->unk_33C) {
         case 0:
@@ -1043,7 +1043,7 @@ void func_80BEE530(EnAkindonuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80BEE73C(EnAkindonuts* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 pad;
     s32 params = ENAKINDONUTS_GET_3(&this->actor);
     s32 itemGiven = func_80123810(globalCtx);
