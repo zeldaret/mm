@@ -934,11 +934,11 @@ void DynaSSNodeList_Initialize(GlobalContext* globalCtx, DynaSSNodeList* list);
 void DynaSSNodeList_Alloc(GlobalContext* globalCtx, DynaSSNodeList* list, u32 numNodes);
 void DynaSSNodeList_ResetCount(DynaSSNodeList* list);
 u16 DynaSSNodeList_GetNextNodeIdx(DynaSSNodeList* list);
-void BgCheck_Vec3sToVec3f(BgVertex* vertex, Vec3f* vector);
-void BgCheck_Vec3fToVec3s(BgVertex* vertex, Vec3f* vector);
+void BgCheck_Vec3sToVec3f(Vec3s* vertex, Vec3f* vector);
+void BgCheck_Vec3fToVec3s(Vec3s* vertex, Vec3f* vector);
 f32 func_800BFD84(CollisionPoly *poly, f32 arg1, f32 arg2);
 s32 func_800BFDEC(CollisionPoly* polyA, CollisionPoly* polyB, u32* outVtxId0, u32* outVtxId1);
-s16 CollisionPoly_GetMinY(CollisionPoly* poly, BgVertex* vertices);
+s16 CollisionPoly_GetMinY(CollisionPoly* poly, Vec3s* vertices);
 void CollisionPoly_GetNormalF(CollisionPoly* poly, f32* nx, f32* ny, f32* nz);
 void func_800C0094(CollisionPoly* poly, f32 tx, f32 ty, f32 tz, MtxF* dest);
 f32 CollisionPoly_GetPointDistanceFromPlane(CollisionPoly* poly, Vec3f* point);
@@ -954,7 +954,7 @@ u32 BgCheck_InitializeStaticLookup(CollisionContext* colCtx, GlobalContext* glob
 s32 BgCheck_IsSpotScene(GlobalContext* globalCtx);
 s32 BgCheck_TryGetCustomMemsize(s32 sceneId, u32* memSize);
 void BgCheck_SetSubdivisionDimension(f32 min, s32 subdivAmount, f32* max, f32* subdivLength, f32* subdivLengthInv);
-s32 BgCheck_GetSpecialSceneMaxObjects(GlobalContext* globalCtx, u32* maxNodes, u32* maxPolygons, u32* maxVertices);
+s32 BgCheck_GetSpecialSceneMaxObjects(GlobalContext* globalCtx, s32* maxNodes, s32* maxPolygons, s32* maxVertices);
 void BgCheck_Allocate(CollisionContext* colCtx, GlobalContext* globalCtx, CollisionHeader* colHeader);
 void func_800C3C00(CollisionContext* colCtx, u32 arg1);
 void func_800C3C14(CollisionContext* colCtx, u32 arg1);
@@ -3236,7 +3236,8 @@ f32 cos_rad(f32 rad);
 f32 Rand_ZeroFloat(f32 scale);
 f32 randPlusMinusPoint5Scaled(f32 scale);
 f32 Math3D_Normalize(Vec3f* vec);
-// UNK_TYPE4 func_80179678(f32 fParm1, f32 fParm2, f32 fParm5, f32 param_4, f32 param_5, f32 param_6, f32 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
+#define Math3D_PlaneVsLineSegClosestPoint func_80179678
+s32 func_80179678(f32 planeAA, f32 planeAB, f32 planeAC, f32 planeADist, f32 planeBA, f32 planeBB, f32 planeBC, f32 planeBDist, Vec3f* linePointA, Vec3f* linePointB, Vec3f* closestPoint);
 // UNK_TYPE4 func_80179798(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4, Vec3f* param_5, Vec3f* param_6);
 // void func_80179A44(void);
 void func_80179B34(float fParm1, f32 fParm2, f32 fParm5, f32 fParm6, f32 param_5, f32 param_6, f32 param_7, float* param_8, float* param_9);
@@ -3250,7 +3251,7 @@ void func_80179F64(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3);
 s32 Math3D_XZBoundCheck(f32 xMin, f32 xMax, f32 zMin, f32 zMax, f32 x, f32 z);
 // void func_8017A09C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 // void func_8017A1D0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-// void func_8017A304(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+s32 func_8017A304(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 z, f32 x, f32 chkDist);
 // UNK_TYPE4 func_8017A438(Vec3f* pfParm1, Vec3f* pfParm2, Vec3f* pfParm3, Vec3f* pfParm4, f32 param_5);
 f32 Math3D_XZLengthSquared(f32 x, f32 z);
 f32 Math3D_XZLength(f32 x, f32 z);
@@ -3258,6 +3259,7 @@ f32 Math3D_XZDistanceSquared(f32 x1, f32 x2, f32 z1, f32 z2);
 f32 Math3D_XZDistance(f32 x1, f32 x2, f32 z1, f32 z2);
 f32 Math3D_LengthSquared(Vec3f* vec);
 f32 Math3D_Vec3fMagnitude(Vec3f* vec);
+#define Math3D_Vec3fDistSq Math3D_DistanceSquared
 f32 Math3D_DistanceSquared(Vec3f* a, Vec3f* b);
 f32 Math3D_Distance(Vec3f* a, Vec3f* b);
 f32 Math3D_DistanceS(Vec3s* s, Vec3f* f);
@@ -3265,39 +3267,57 @@ f32 func_8017A7B8(f32* param_1, f32* param_2, f32 param_3, f32 param_4);
 f32 func_8017A7F8(f32* param_1, f32* param_2, f32 param_3, f32 param_4);
 f32 func_8017A838(f32* param_1, f32* param_2, f32 param_3, f32 param_4);
 void Math3D_CrossProduct(Vec3f* a, Vec3f* b, Vec3f* res);
+#define Math3D_SurfaceNorm Math3D_NormalVector
 void Math3D_NormalVector(Vec3f* a, Vec3f* b, Vec3f* c, Vec3f* res);
+#define Math3D_PointRelativeToCubeFaces func_8017A954
 u32 func_8017A954(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3);
+#define Math3D_PointRelativeToCubeEdges func_8017AA0C
 u32 func_8017AA0C(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3);
+#define Math3D_PointRelativeToCubeVertices func_8017ABBC
 u32 func_8017ABBC(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3);
+#define Math3D_LineVsCube func_8017AD38
 s32 func_8017AD38(Vec3f* min, Vec3f* max, Vec3f* a, Vec3f* b);
 // void func_8017B68C(void);
 void func_8017B7F8(Vec3f* arg0, s16 arg1, f32* arg2, f32* arg3, f32* arg4);
 void Math3D_UnitNormalVector(Vec3f* a, Vec3f* b, Vec3f* c, f32* normX, f32* normY, f32* normZ, f32* param_7);
 f32 Math3D_SignedDistanceFromPlane(f32 normX, f32 normY, f32 normZ, f32 d, Vec3f* position);
 // void func_8017B9D8(void);
+#define Math3D_UDistPlaneToPos Math3D_NormalizedDistanceFromPlane
 f32 Math3D_NormalizedDistanceFromPlane(f32 normX, f32 normY, f32 normZ, f32 d, Vec3f* position);
+#define Math3D_DistPlaneToPos Math3D_NormalizedSignedDistanceFromPlane
 f32 Math3D_NormalizedSignedDistanceFromPlane(f32 normX, f32 normY, f32 normZ, f32 d, Vec3f* position);
-// void func_8017BAD0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8);
+#define Math3D_TriChkPointParaYDist func_8017BAD0
+s32 func_8017BAD0(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 y, f32 z, f32 unk, f32 chkDist, f32 ny);
 // void func_8017BD98(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
 // void func_8017BDE0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
-// void func_8017BE30(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
-// void func_8017BEE0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
+#define Math3D_TriChkPointParaYIntersectDist func_8017BE30
+s32 func_8017BE30(Vec3f* a, Vec3f* b, Vec3f* c, f32 nx, f32 ny, f32 nz, f32 dist, f32 z, f32 x, f32* yIntersect, f32 chkDist);
+#define Math3D_TriChkPointParaYIntersectInsideTri func_8017BEE0
+s32 func_8017BEE0(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32 nz, f32 originDist, f32 z, f32 x, f32* yIntersect, f32 chkDist);
 // void func_8017BF8C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-// void func_8017C008(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11, UNK_TYPE4 param_12);
+#define Math3D_TriChkLineSegParaYIntersect func_8017C008
+s32 func_8017C008(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32 nz, f32 originDist, f32 z, f32 x, f32* yIntersect, f32 y0, f32 y1);
 // void func_8017C17C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
 // void func_8017C1F0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8);
-// void func_8017C494(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
-// void func_8017C540(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8);
+#define Math3D_TriChkPointParaYIntersectInsideTri2 func_8017C494
+s32 func_8017C494(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32 nz, f32 originDist, f32 z, f32 x, f32* yIntersect, f32 chkDist);
+#define Math3D_TriChkPointParaXDist func_8017C540
+s32 func_8017C540(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 y, f32 z, f32 unk, f32 chkDist, f32 nx);
 // void func_8017C808(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-// void func_8017C850(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
+#define Math3D_TriChkPointParaXIntersect func_8017C850
+s32 func_8017C850(Vec3f* a, Vec3f* b, Vec3f* c, f32 nx, f32 ny, f32 nz, f32 dist, f32 y, f32 z, f32* xIntersect);
 // void func_8017C904(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-// void func_8017C980(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11, UNK_TYPE4 param_12);
+#define Math3D_TriChkLineSegParaXIntersect func_8017C980
+s32 func_8017C980(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32 nz, f32 originDist, f32 y, f32 z, f32* xIntersect, f32 x0, f32 x1);
 // void func_8017CB08(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-// void func_8017CB7C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8);
+#define Math3D_TriChkLineSegParaZDist func_8017CB7C
+s32 func_8017CB7C(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 y, f32 z, f32 unk, f32 chkDist, f32 nz);
 // void func_8017CEA8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-// void func_8017CEF0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
+#define Math3D_TriChkPointParaZIntersect func_8017CEF0
+s32 func_8017CEF0(Vec3f* a, Vec3f* b, Vec3f* c, f32 nx, f32 ny, f32 nz, f32 dist, f32 x, f32 y, f32* zIntersect);
 // void func_8017CFA4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-// void func_8017D020(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11, UNK_TYPE4 param_12);
+#define Math3D_TriChkLineSegParaZIntersect func_8017D020
+s32 func_8017D020(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32 nz, f32 originDist, f32 x, f32 y, f32* zIntersect, f32 z0, f32 z1);
 // void func_8017D1AC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
 // void func_8017D220(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_8017D2FC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8);
@@ -3309,6 +3329,7 @@ u32 Math3D_IsPointInSphere(Sphere16* sphere, Vec3f* point);
 // void func_8017D814(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_8017D91C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_8017DA24(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+#define Math3D_LineVsSph Math3D_ColSphereLineSeg
 s32 Math3D_ColSphereLineSeg(Sphere16* sphere, LineSegment* line);
 void func_8017DD34(Sphere16* sphere, TriNorm* tri, Vec3f* pfParm3);
 s32 Math3D_ColSphereTri(Sphere16* sphere, TriNorm* tri, Vec3f* uParm3);
@@ -3316,6 +3337,7 @@ s32 Math3D_ColSphereTri(Sphere16* sphere, TriNorm* tri, Vec3f* uParm3);
 UNK_TYPE func_8017E350(UNK_PTR, Vec3f*, Vec3f*, Vec3f*, Vec3f*);
 s32 Math3D_ColCylinderTri(Cylinder16* cylinder, TriNorm* tri, Vec3f* pzParm3);
 // void func_8017F1A0(void);
+#define Math3D_SphVsSph Math3D_ColSphereSphere
 s32 Math3D_ColSphereSphere(Sphere16* sphere1, Sphere16* sphere2);
 s32 Math3D_ColSphereSphereIntersect(Sphere16* sphere1, Sphere16* sphere2, f32* intersectAmount);
 s32 Math3D_ColSphereSphereIntersectAndDistance(Sphere16* sphere1, Sphere16* sphere2, f32* intersectAmount, f32* dist);
@@ -3324,9 +3346,12 @@ s32 Math3D_ColSphereCylinderDistanceAndAmount(Sphere16* sphere, Cylinder16* cyli
 s32 Math3D_ColCylinderCylinderAmount(Cylinder16* cylinder1, Cylinder16* cylinder2, f32* intersectAmount);
 s32 Math3D_ColCylinderCylinderAmountAndDistance(Cylinder16* cylinder1, Cylinder16* cylinder2, f32* intersectAmount, f32* dist);
 s32 Math3d_ColTriTri(TriNorm* tri1, TriNorm* tri2, Vec3f* uParm3);
-// void func_8017F9C0(void);
-// void func_8017FA34(void);
-// void func_8017FAA8(void);
+#define Math3D_XZInSphere func_8017F9C0
+s32 func_8017F9C0(Sphere16* sphere, f32 x, f32 z);
+#define Math3D_XYInSphere func_8017FA34
+s32 func_8017FA34(Sphere16* sphere, f32 x, f32 y);
+#define Math3D_YZInSphere func_8017FAA8
+s32 func_8017FAA8(Sphere16* sphere, f32 y, f32 z);
 // void func_8017FB1C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
 // void func_8017FD44(void);
 u16 Math_GetAtan2Tbl(f32 opposite, f32 adjacent);
