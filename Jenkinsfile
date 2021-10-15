@@ -4,6 +4,12 @@ pipeline {
     }
 
     stages {
+        stage('Check formatting') {
+            steps {
+                echo 'Checking formatting...'
+                sh 'bash -c "tools/check_format.sh 2>&1 >(tee tools/check_format.txt)"'
+            }
+        }
         stage('Copy ROM') {
             steps {
                 echo 'Setting up ROM...'
@@ -64,6 +70,13 @@ pipeline {
                 sh 'cat reports/progress_mm.us.rev1.csv >> /var/www/html/reports/progress_mm.us.rev1.csv'
                 sh 'cat reports/progress_matching_mm.us.rev1.csv >> /var/www/html/reports/progress_matching_mm.us.rev1.csv'
                 sh 'cat reports/progress_shield_mm.us.rev1.json > /var/www/html/reports/progress_shield_mm.us.rev1.json'
+            }
+        }
+        stage('Summarize problems') {
+            steps {
+                echo 'Summarizing problems...'
+                sh 'cat tools/check_format.txt tools/warnings_count/warnings_setup_new.txt tools/warnings_count/warnings_disasm_new.txt tools/warnings_count/warnings_build_new.txt'
+                echo 'No more problems.'
             }
         }
     }
