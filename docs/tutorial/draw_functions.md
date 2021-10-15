@@ -100,7 +100,7 @@ You repeat this for every block in the function.
 
 If you have worked on OoT, you will be aware of the functions `Graph_OpenDisps` and `Graph_CloseDisps`, and might be surprised to see them missing here. These functions are actually a debug feature: the `OPEN_DISPS` and `CLOSE_DISPS` macros still exist, but they don't expand to functions. Of course this means you have to guess where they go. A sensible guess for `OPEN_DISPS` is where the `gfxCtx` temp assignment first happens; `CLOSE_DISPS` is a bit harder, although it's basically just a `}`, so it *shouldn't* matter as much.
 
-It's sensible to eliminate all the `gfxCtx` temps and reintroduce as needed. Also remember to change the prototype and function definitino back!
+It's sensible to eliminate all the `gfxCtx` temps and reintroduce as needed. Also remember to change the prototype and function definition back!
 ```C
 s32 func_80C10558(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *actor);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Recepgirl/func_80C10558.s")
