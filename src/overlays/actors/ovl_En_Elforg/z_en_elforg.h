@@ -18,7 +18,7 @@ typedef enum {
     STRAY_FAIRY_TYPE_BUBBLE,                   // The ones trapped in bubbles
     STRAY_FAIRY_TYPE_CLOCK_TOWN,               // The free-floating Stray Fairies in Clock Town
     STRAY_FAIRY_TYPE_ENEMY,                    // The ones trapped inside enemies
-    STRAY_FAIRY_TYPE_UNKNOWN_5,                // Unknown, possibly unused?
+    STRAY_FAIRY_TYPE_COLLIDER,                 // Unused in retail. The fairy is hidden until the collider is hit
     STRAY_FAIRY_TYPE_CHEST,                    // The ones in treasure chests
     STRAY_FAIRY_TYPE_COLLECTIBLE,              // The ones in boxes, pots, beehives, etc.
     STRAY_FAIRY_TYPE_TURN_IN_TO_FAIRY_FOUNTAIN // The ones you "turn in" by walking into a Fairy Fountain

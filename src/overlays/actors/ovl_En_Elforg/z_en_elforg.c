@@ -131,7 +131,7 @@ void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
             EnElforg_SetupTrappedByEnemy(this, globalCtx);
             this->actor.draw = NULL;
             break;
-        case STRAY_FAIRY_TYPE_UNKNOWN_5:
+        case STRAY_FAIRY_TYPE_COLLIDER:
             this->actionFunc = EnElforg_TrappedByCollider;
             this->actor.draw = NULL;
             Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -149,7 +149,7 @@ void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnElforg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnElforg* this = THIS;
 
-    if (STRAY_FAIRY_TYPE(&this->actor) == STRAY_FAIRY_TYPE_UNKNOWN_5) {
+    if (STRAY_FAIRY_TYPE(&this->actor) == STRAY_FAIRY_TYPE_COLLIDER) {
         Collider_DestroyCylinder(globalCtx, &this->collider);
     }
 }
