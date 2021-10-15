@@ -128,7 +128,7 @@ void ObjEtcetera_StartSmallFlutterAnimation(ObjEtcetera* this) {
 
 void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx) {
     s16 minOscillationTimer;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((player->stateFlags3 & 0x200) && (this->dyna.actor.xzDistToPlayer < 20.0f)) {
         // Player is launching out of the Deku Flower

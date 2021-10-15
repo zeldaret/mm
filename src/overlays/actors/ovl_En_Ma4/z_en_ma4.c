@@ -160,7 +160,7 @@ void EnMa4_ChangeAnim(EnMa4* this, s32 index) {
 }
 
 void func_80ABDD9C(EnMa4* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 flag;
 
     if (this->unk_1D8.unk_00 == 0 &&
@@ -346,7 +346,7 @@ void EnMa4_SetupWait(EnMa4* this) {
 }
 
 void EnMa4_Wait(EnMa4* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 yaw = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
 
     if ((this->state == MA4_STATE_AFTERHORSEBACKGAME) || (this->state == MA4_STATE_AFTERDESCRIBETHEMCS)) {
@@ -506,7 +506,7 @@ void EnMa4_HandlePlayerChoice(EnMa4* this, GlobalContext* globalCtx) {
 }
 
 void EnMa4_ChooseNextDialogue(EnMa4* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 aux;
 
     if (func_80147624(globalCtx) != 0) {
@@ -708,7 +708,7 @@ void EnMa4_HorsebackGameTalking(EnMa4* this, GlobalContext* globalCtx) {
 }
 
 void EnMa4_InitHorsebackGame(EnMa4* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     globalCtx->interfaceCtx.unk_280 = 1;
     func_8010E9F0(4, 0);
@@ -719,7 +719,7 @@ void EnMa4_InitHorsebackGame(EnMa4* this, GlobalContext* globalCtx) {
 }
 
 void EnMa4_SetupHorsebackGameWait(EnMa4* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (globalCtx->interfaceCtx.unk_280 == 8) {
         this->actionFunc = EnMa4_HorsebackGameWait;
@@ -729,7 +729,7 @@ void EnMa4_SetupHorsebackGameWait(EnMa4* this, GlobalContext* globalCtx) {
 
 void EnMa4_HorsebackGameWait(EnMa4* this, GlobalContext* globalCtx) {
     static s16 D_80AC0258 = 0;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     player->stateFlags3 |= 0x400;
     EnMa4_HorsebackGameCheckPlayerInteractions(this, globalCtx);
@@ -756,7 +756,7 @@ void EnMa4_SetupHorsebackGameEnd(EnMa4* this, GlobalContext* globalCtx) {
 
 void EnMa4_HorsebackGameEnd(EnMa4* this, GlobalContext* globalCtx) {
     static s32 sFrameCounter = 0;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (player->stateFlags1 & 0x100000) {
         globalCtx->actorCtx.unk268 = 1;
@@ -848,7 +848,7 @@ void EnMa4_EponasSongCs(EnMa4* this, GlobalContext* globalCtx) {
             EnMa4_ChangeAnim(this, 7);
         }
     } else {
-        Player* player = PLAYER;
+        Player* player = GET_PLAYER(globalCtx);
 
         player->stateFlags1 |= 0x20;
         func_800B85E0(&this->actor, globalCtx, 200.0f, -1);
@@ -863,7 +863,7 @@ void EnMa4_SetupEndEponasSongCs(EnMa4* this) {
 }
 
 void EnMa4_EndEponasSongCs(EnMa4* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     this->actor.flags |= 0x10000;
     if (func_800B84D0(&this->actor, globalCtx) != 0) {
