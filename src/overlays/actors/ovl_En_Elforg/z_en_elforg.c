@@ -309,7 +309,7 @@ void EnElforg_CirclePlayerFairyFountain(EnElforg* this, GlobalContext* globalCtx
 void EnElforg_FreeFloatingFairyFountain(EnElforg* this, GlobalContext* globalCtx) {
     s32 pad;
 
-    if (this->flags & STRAY_FAIRY_FLAG_UNKNOWN) {
+    if (this->flags & STRAY_FAIRY_FLAG_MOVING_QUICKLY_TO_HOME) {
         if (this->targetSpeedXZ < 8.0f) {
             this->targetSpeedXZ += 0.1f;
         }
