@@ -2533,17 +2533,91 @@ Actor* func_800BE0B8(GlobalContext* globalCtx, Actor* inActor, s16 arg2, u8 arg3
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE2B8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE33C.s")
+void func_800BE33C(Vec3f* arg0, Vec3f* arg1, Vec3s* arg2, s32 arg3) {
+    f32 sp24 = arg1->x - arg0->x;
+    f32 sp20 = arg1->z - arg0->z;
+    f32 sp1C;
 
+    if (arg3) {
+        sp1C = arg1->y - arg0->y;
+    } else {
+        sp1C = arg0->y - arg1->y;
+    }
+    arg2->y = Math_FAtan2F(sp20, sp24);
+    arg2->x = Math_FAtan2F(sqrtf(SQ(sp24) + SQ(sp20)), sp1C);
+}
+
+#ifdef NON_MATCHING
+// stack
+void func_800BE3D0(Actor* actor, s16 arg1, Vec3s* arg2) {
+    f32 sp44;
+    f32 sp40;
+    f32 sp3C;
+    f32 sp38;
+    f32 sp34;
+    f32 sp30;
+    s32 pad[2];
+    f32 sp2C;
+    s32 pad2;
+
+    if (actor->floorPoly != 0) {
+        CollisionPoly* floorPoly = actor->floorPoly;
+
+        sp44 = COLPOLY_GET_NORMAL(floorPoly->normal.x);
+        sp40 = COLPOLY_GET_NORMAL(floorPoly->normal.y);
+        sp3C = COLPOLY_GET_NORMAL(floorPoly->normal.z);
+
+        sp38 = Math_SinS(arg1);
+        sp34 = Math_CosS(arg1);
+        arg2->x = (s16) -Math_Atan2S((-(sp44 * sp38) - (sp3C * sp34)) * sp40, 1.0f);
+
+        sp2C = Math_SinS(arg1 - 0x3FF7);
+        sp30 = Math_CosS(arg1 - 0x3FF7);
+        arg2->z = (s16) -Math_Atan2S((-(sp44 * sp2C) - (sp3C * sp30)) * sp40, 1.0f);
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE3D0.s")
+#endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE504.s")
+void func_800BE504(Actor* actor, ColliderCylinder* collider) {
+    if ((collider->info.acHitInfo->toucher.dmgFlags & 0x13820)) {
+        actor->world.rot.y = collider->base.ac->shape.rot.y;
+    } else {
+        actor->world.rot.y = Actor_YawBetweenActors(collider->base.ac, actor);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE568.s")
+void func_800BE568(Actor* actor, ColliderSphere* collider) {
+    if (collider->info.acHitInfo->toucher.dmgFlags & (0x13820)) {
+        actor->world.rot.y = collider->base.ac->shape.rot.y;
+    } else {
+        actor->world.rot.y = Actor_YawBetweenActors(collider->base.ac, actor);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE5CC.s")
+void func_800BE5CC(Actor* actor, ColliderJntSph* collider, s32 arg2) {
+    if (collider->elements[arg2].info.acHitInfo->toucher.dmgFlags & (0x13820)) {
+        actor->world.rot.y = collider->base.ac->shape.rot.y;
+    } else {
+        actor->world.rot.y = Actor_YawBetweenActors(collider->base.ac, actor);
+    }
+}
 
+#if 0
+// unk_1F1 is way outside of Actor
+s32 func_800BE63C(Actor* actor) {
+    u8 temp_v0;
+
+    temp_v0 = actor->unk_1F1;
+    if ((temp_v0 == 5) || (temp_v0 == 6) || (temp_v0 == 7) || (temp_v0 == 8) || (temp_v0 == 0xC)) {
+        return 1;
+    }
+    return 0;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE63C.s")
+#endif
 
 UNK_TYPE4 D_801AEFA8[] = {
     0x04091DE0,
@@ -2552,6 +2626,7 @@ UNK_TYPE4 D_801AEFA8[] = {
     0x040923E0,
 };
 
+// has lots of gfx macros
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE680.s")
 
 static Color_RGBA8 D_801AEFB8 = { 170, 255, 255, 255 };
