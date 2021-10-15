@@ -39,5 +39,8 @@ graphs/
 !*_custom*
 .extracted-assets.json
 
+# Docs
+!docs/tutorial/**/*.png
+
 # Per-user configuration
 .python-version

@@ -1,21 +1,8 @@
 # The merging process
 
-## Optional: Documentation
+Up: [Contents](contents.md)
+Previous: [Documenting](documenting.md)
 
-It is helpful to document the functions and variables in the actor before you Pull Request it. The aim is to provide code that is sufficiently clear to be self-documenting, but it is worth leaving a comment on anything you find obscure or confusing. (Pull Request reviews will let you know if you are leaving too many comments.) Useful things to do documentation-wise:
-
-- Name all (or most) of the functions.
-- Name all the variables in the actor struct.
-- Create enums for params, and any other numbers that would benefit from that sort of clarity.
-
-You can test things using the practice rom for a retail version (watches and memory view is especially helpful), as well as the generated rom with Project 64 and something like Spectrum. The most important things to know if using a retail version to test are:
-
-- all the addresses will be different
-- actor structs in debug have 10 bytes of padding at the end, so subtract `0x10` from any subsequent offsets.
-
-If you want to use `diff` after renaming anything, particularly functions, remember to copy the `build/` folder into `expected/` so use the correct symbols. *Make sure that `make` gives `OK` before doing this, or you're going to get very confused.*
-
-Finally, *if you are not sure what something does, either ask or leave it unnamed: it will be less confusing later if things are unnamed than if they are wrongly named*
 
 ## Preparing to PR
 
@@ -74,7 +61,7 @@ beginseg
 endseg
 ```
 
-Ideally you should at least be able to get a function to have equivalent behaviour; if not, and you have exhausted all other avenues of getting help, it should be marked in the C file as `NON_EQUIVALENT`, in the same way as a nonmatching.
+Ideally you should at least be able to get a function to have equivalent behaviour; if not, and you have exhausted all other avenues of getting help, it should be marked in the C file as `NON_EQUIVALENT`, in the same way as a nonmatching. We do not change the spec for non-equivalents: they are treated the same as undecompiled code from a building perspective, lest they break things.
 
 ### Format
 
