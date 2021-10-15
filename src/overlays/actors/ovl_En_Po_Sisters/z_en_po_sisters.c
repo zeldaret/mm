@@ -1,3 +1,9 @@
+/*
+ * File: z_en_po_sisters.c
+ * Overlay: ovl_En_Po_Sisters
+ * Description: Poe Sisters
+ */
+
 #include "z_en_po_sisters.h"
 
 #define FLAGS 0x00005015
@@ -59,16 +65,16 @@ extern Gfx D_060046E0[];
 extern SkeletonHeader D_060065C8;
 
 static Color_RGBA8 D_80B1DA30[] = {
-    { 255, 170, 255, 255 }, 
-    { 255, 200, 0, 255 }, 
-    { 0, 170, 255, 255 }, 
+    { 255, 170, 255, 255 },
+    { 255, 200, 0, 255 },
+    { 0, 170, 255, 255 },
     { 170, 255, 0, 255 },
 };
 
 static Color_RGBA8 D_80B1DA40[] = {
-    { 100, 0, 255, 255 }, 
-    { 255, 0, 0, 255 }, 
-    { 0, 0, 255, 255 }, 
+    { 100, 0, 255, 255 },
+    { 255, 0, 0, 255 },
+    { 0, 0, 255, 255 },
     { 0, 150, 0, 255 },
 };
 
@@ -217,7 +223,7 @@ void func_80B1A648(EnPoSisters* this, s32 arg1, Vec3f* pos) {
 }
 
 void func_80B1A768(EnPoSisters* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     f32 sp20;
 
     if ((this->unk_18D == 0) || (this->actionFunc != func_80B1B444)) {
@@ -237,7 +243,7 @@ void func_80B1A768(EnPoSisters* this, GlobalContext* globalCtx) {
 }
 
 void func_80B1A894(EnPoSisters* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     Math_ApproachF(&this->actor.world.pos.y, player->actor.world.pos.y + 5.0f, 0.5f, 3.0f);
 
@@ -356,7 +362,7 @@ void func_80B1AE28(EnPoSisters* this) {
 }
 
 void func_80B1AE3C(EnPoSisters* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 sp22;
 
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
@@ -730,7 +736,7 @@ void func_80B1BE4C(EnPoSisters* this, s32 arg1) {
 }
 
 void func_80B1BF2C(EnPoSisters* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     EnPoSisters* parent = (EnPoSisters*)this->actor.parent;
 
     if (this->unk_18D == 0) {
@@ -1174,7 +1180,7 @@ void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, temp_s7->r, temp_s7->g, temp_s7->b, phi_s5);
 
         SysMatrix_InsertTranslation(this->unk_22C[i].x, this->unk_22C[i].y, this->unk_22C[i].z, MTXMODE_NEW);
-        SysMatrix_InsertRotation(0, BINANG_ROT180(func_800DFCDC(ACTIVE_CAM)), 0, MTXMODE_APPLY);
+        SysMatrix_InsertRotation(0, BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx))), 0, MTXMODE_APPLY);
 
         if (this->actionFunc == func_80B1BA90) {
             f32 phi_f0;
