@@ -2558,4 +2558,30 @@ static Color_RGBA8 D_801AEFB8 = { 170, 255, 255, 255 };
 static Color_RGBA8 D_801AEFBC = { 200, 200, 255, 255 };
 static Vec3f D_801AEFC0 = { 0.0f, -1.0f, 0.0f };
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BF7CC.s")
+void func_800BF7CC(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s32 arg3, s32 arg4, f32 arg5, f32 arg6) {
+    s32 sp94;
+    s32 pad;
+    Vec3f sp84;
+    s16 temp_s0;
+    s16 temp_s2;
+    s32 phi_s1;
+    phi_s1 = arg3;
+
+    Audio_PlaySoundAtPosition(globalCtx, &actor->world.pos, 0x1E, 0x28CB);
+
+    for (sp94 = 0; sp94 < arg3; sp94++) {
+        temp_s2 = Actor_YawToPoint(actor, limbPos);
+
+        for (phi_s1 = 0; phi_s1 < arg4; phi_s1++) {
+            temp_s0 = (Rand_Next() >> 0x13) + temp_s2;
+            sp84.z = Rand_ZeroFloat(5.0f);
+            sp84.x = Math_SinS(temp_s0) * sp84.z;
+            sp84.y = Rand_ZeroFloat(4.0f) + 8.0f;
+            sp84.z *= Math_CosS(temp_s0);
+            EffectSsEnIce_Spawn(globalCtx, limbPos, Rand_ZeroFloat(arg6) + arg5, &sp84, &D_801AEFC0, &D_801AEFB8, &D_801AEFBC, 30);
+        }
+
+        limbPos++;
+    }
+}
+
