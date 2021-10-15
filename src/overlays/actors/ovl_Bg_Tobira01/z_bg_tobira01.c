@@ -25,7 +25,7 @@ extern Gfx D_06000088[];
 extern CollisionHeader D_060011C0;
 
 void BgTobira01_Open(BgTobira01* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 cutsceneId = this->dyna.actor.cutscene;
     s16 prevTimer;
 

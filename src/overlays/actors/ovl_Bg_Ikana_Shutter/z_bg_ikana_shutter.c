@@ -146,7 +146,7 @@ void func_80BD5A18(BgIkanaShutter* this, GlobalContext* globalCtx) {
     this->dyna.actor.velocity.y *= 0.978f;
     this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
     if (this->dyna.actor.world.pos.y <= this->dyna.actor.home.pos.y) {
-        quake = Quake_Add(ACTIVE_CAM, 3);
+        quake = Quake_Add(GET_ACTIVE_CAM(globalCtx), 3);
         Quake_SetSpeed(quake, 0x5420);
         Quake_SetQuakeValues(quake, 4, 0, 0, 0);
         Quake_SetCountdown(quake, 12);

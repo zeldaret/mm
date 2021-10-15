@@ -66,7 +66,7 @@ void ObjTokeiStep_AddQuake(ObjTokeiStep* this, GlobalContext* globalCtx) {
     s32 pad[2];
     s16 quake;
 
-    quake = Quake_Add(ACTIVE_CAM, 3);
+    quake = Quake_Add(GET_ACTIVE_CAM(globalCtx), 3);
     Quake_SetSpeed(quake, 0x4E20);
     Quake_SetQuakeValues(quake, 1, 0, 0, 0);
     Quake_SetCountdown(quake, 7);

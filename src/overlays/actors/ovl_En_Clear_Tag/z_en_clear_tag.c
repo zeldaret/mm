@@ -244,6 +244,8 @@ void EnClearTag_CreateLightRayEffect(EnClearTag* this, Vec3f* position, Vec3f* v
     // Look for an available effect to allocate a light ray effect to.
     for (i = 0; i < ARRAY_COUNT(this->effect) - 1; i++, effect++) {
         if (effect->type == CLEAR_TAG_EFFECT_AVAILABLE) {
+            s32 requiredScopeTemp;
+
             effect->type = CLEAR_TAG_EFFECT_LIGHT_RAYS;
 
             effect->position = *position;
@@ -271,7 +273,6 @@ void EnClearTag_CreateLightRayEffect(EnClearTag* this, Vec3f* position, Vec3f* v
 
             break;
         }
-    dummy:;
     }
 }
 
@@ -508,7 +509,7 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Camera* camera;
     s32 pad;
 

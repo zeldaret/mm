@@ -179,21 +179,9 @@ static u8 D_80B65078[] = {
 
 // used in limbdraw
 static Vec3f D_80B65084[] = {
-    {
-        2000.0f,
-        4000.0f,
-        0.0f,
-    },
-    {
-        -1000.0f,
-        1500.0f,
-        -2000.0f,
-    },
-    {
-        -1000.0f,
-        1500.0f,
-        2000.0f,
-    },
+    { 2000.0f, 4000.0f, 0.0f },
+    { -1000.0f, 1500.0f, -2000.0f },
+    { -1000.0f, 1500.0f, 2000.0f },
 };
 
 void EnBigpo_Init(Actor* thisx, GlobalContext* globalCtx2) {
@@ -525,7 +513,7 @@ void EnBigpo_WarpingOut(EnBigpo* this, GlobalContext* globalCtx) {
 }
 
 void EnBigpo_SetupWarpIn(EnBigpo* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     f32 distance = CLAMP_MIN(this->actor.xzDistToPlayer, 200.0f);
     s16 randomYaw = (Rand_Next() >> 0x14) + this->actor.yawTowardsPlayer;
 
@@ -571,7 +559,7 @@ void EnBigpo_SetupIdleFlying(EnBigpo* this) {
 }
 
 void EnBigpo_IdleFlying(EnBigpo* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     DECR(this->idleTimer);
@@ -623,7 +611,7 @@ void EnBigpo_SetupSpinAttack(EnBigpo* this) {
 }
 
 void EnBigpo_SpinAttack(EnBigpo* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 yawDiff;
 
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
@@ -648,7 +636,7 @@ void EnBigpo_SetupSpinDown(EnBigpo* this) {
 }
 
 void EnBigpo_SpinningDown(EnBigpo* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     Math_SmoothStepToF(&this->actor.world.pos.y, player->actor.world.pos.y + 100.0f, 0.3f, 5.0f, 1.0f);
@@ -711,7 +699,7 @@ void EnBigpo_BurnAwayDeath(EnBigpo* this, GlobalContext* globalCtx) {
 
     this->idleTimer++;
     if (this->idleTimer < 8) {
-        cam = func_800DFCDC(ACTIVE_CAM) + 0x4800;
+        cam = func_800DFCDC(GET_ACTIVE_CAM(globalCtx)) + 0x4800;
         if (this->idleTimer < 5) {
             unkTemp = (this->idleTimer << 0xC) - 0x4000;
             // 1.4.0...1 is NOT 1.4, the rodata demands it
@@ -881,7 +869,7 @@ void EnBigpo_SelectRandomFireLocations(EnBigpo* this, GlobalContext* globalCtx) 
     s32 fireCount = 0;
 
     // count the number of possible fires we can find (4 in vanilla)
-    for (enemyPtr = FIRST_ENEMY; enemyPtr != NULL; enemyPtr = enemyPtr->next) {
+    for (enemyPtr = GET_FIRST_ENEMY(globalCtx); enemyPtr != NULL; enemyPtr = enemyPtr->next) {
         if (enemyPtr->id == ACTOR_EN_BIGPO && enemyPtr->params == ENBIGPO_POSSIBLEFIRE) {
             fireCount++;
         }
@@ -899,7 +887,7 @@ void EnBigpo_SelectRandomFireLocations(EnBigpo* this, GlobalContext* globalCtx) 
 
     // for available possiblefires, pick three to be random fires
     for (fireIndex = 0; fireIndex < ARRAY_COUNT(this->fires); fireIndex++, fireCount--) {
-        enemyPtr = FIRST_ENEMY;
+        enemyPtr = GET_FIRST_ENEMY(globalCtx);
         randomIndex = ((s32)Rand_ZeroFloat(fireCount)) % fireCount;
 
         while (enemyPtr != NULL) {
@@ -932,7 +920,7 @@ void EnBigpo_SelectRandomFireLocations(EnBigpo* this, GlobalContext* globalCtx) 
     }
 
     // remove unused fires
-    for (enemyPtr = FIRST_ENEMY; enemyPtr != NULL; enemyPtr = enemyPtr->next) {
+    for (enemyPtr = GET_FIRST_ENEMY(globalCtx); enemyPtr != NULL; enemyPtr = enemyPtr->next) {
         if (enemyPtr->id == ACTOR_EN_BIGPO && enemyPtr->params == ENBIGPO_POSSIBLEFIRE) {
             randomFirePo = (EnBigpo*)enemyPtr;
             randomFirePo->actionFunc = EnBigpo_Die;
@@ -1239,7 +1227,7 @@ void EnBigpo_Update(Actor* thisx, GlobalContext* globalCtx) {
  */
 void EnBigpo_UpdateFire(Actor* thisx, GlobalContext* globalCtx) {
     EnBigpo* this = (EnBigpo*)thisx;
-    this->actor.shape.rot.y = BINANG_ROT180(func_800DFCDC(ACTIVE_CAM));
+    this->actor.shape.rot.y = BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx)));
     this->actionFunc(this, globalCtx);
 }
 
@@ -1369,7 +1357,7 @@ void EnBigpo_DrawScoopSoul(Actor* thisx, GlobalContext* globalCtx) {
                               this->actor.world.pos.z, this->mainColor.r, this->mainColor.g, this->mainColor.b,
                               this->mainColor.a * 2);
 
-    Matrix_RotateY(BINANG_ROT180(func_800DFCDC(ACTIVE_CAM)), MTXMODE_APPLY);
+    Matrix_RotateY(BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx))), MTXMODE_APPLY);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -1389,7 +1377,7 @@ void EnBigpo_DrawLantern(Actor* thisx, GlobalContext* globalCtx) {
     Gfx* dispHead;
     Vec3f vec1;
     Vec3f vec2;
-    Camera* cam = ACTIVE_CAM;
+    Camera* cam = GET_ACTIVE_CAM(globalCtx);
 
     if (cam != NULL) {
         Math_Vec3f_Diff(&cam->eye, &cam->at, &vec1);
@@ -1449,7 +1437,7 @@ void EnBigpo_DrawCircleFlames(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C2DC(globalCtx->state.gfxCtx);
-    Matrix_RotateY(BINANG_ROT180(func_800DFCDC(ACTIVE_CAM)), MTXMODE_NEW);
+    Matrix_RotateY(BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx))), MTXMODE_NEW);
     if (this->actionFunc == EnBigpo_SpawnCutsceneStage6) {
         Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
         fireRadius = 500;

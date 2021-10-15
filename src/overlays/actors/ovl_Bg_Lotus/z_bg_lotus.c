@@ -168,7 +168,7 @@ void BgLotus_Update(Actor* thisx, GlobalContext* globalCtx) {
     WaterBox* waterBox;
 
     WaterBox_GetSurface1_2(globalCtx, &globalCtx->colCtx, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.z,
-                           &this->height, &waterBox);
+                  &this->height, &waterBox);
     this->actionFunc(this, globalCtx);
 }
 

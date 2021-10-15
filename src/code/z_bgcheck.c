@@ -55,12 +55,14 @@ static BgCheckSceneMemEntry sceneMemList[] = {
     { SCENE_00KEIKOKU, 0xC800 },
 };
 
+#define sceneSubdivisionList D_801B46DC
 static BgCheckSceneSubdivisionEntry sceneSubdivisionList[] = {
     { SCENE_00KEIKOKU, { 36, 1, 36 }, -1 },
     { SCENE_30GYOSON, { 40, 1, 40 }, -1 },
     { SCENE_31MISAKI, { 40, 1, 40 }, -1 },
 };
 
+#define customDynapolyMem D_801B4700
 static BgSpecialSceneMaxObjects customDynapolyMem[] = { { SCENE_21MITURINMAE, 1000, 600, 512 } };
 
 char D_801ED950[80];

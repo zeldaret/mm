@@ -83,7 +83,7 @@ void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnNutsball* this = THIS;
     GlobalContext* globalCtx2 = globalCtx;
 
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Vec3f worldPos;
     Vec3s worldRot;
     Vec3f spawnBurstPos;

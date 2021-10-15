@@ -167,7 +167,7 @@ void func_80989140(SkelAnime* skelAnime, ActorAnimationEntryS arg1[], s32 arg2) 
 }
 
 void func_80989204(EnDg* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     this->collider.dim.pos.x = this->actor.world.pos.x;
     this->collider.dim.pos.y = this->actor.world.pos.y;
@@ -455,7 +455,7 @@ s32 func_80989FC8(GlobalContext* globalCtx) {
 }
 
 void func_8098A064(EnDg* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (player->stateFlags3 & 0x20000000) {
         if (D_8098C2A4.unk_00 == 99) {
@@ -483,7 +483,7 @@ void func_8098A064(EnDg* this, GlobalContext* globalCtx) {
 }
 
 s32 func_8098A1B4(EnDg* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     switch (player->transformation) {
         case PLAYER_FORM_GORON:
@@ -503,7 +503,7 @@ s32 func_8098A1B4(EnDg* this, GlobalContext* globalCtx) {
 }
 
 void func_8098A234(EnDg* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (!(this->actor.bgCheckFlags & 0x20)) {
         switch (player->transformation) {
@@ -562,7 +562,7 @@ void func_8098A234(EnDg* this, GlobalContext* globalCtx) {
 }
 
 void func_8098A468(EnDg* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     this->actor.velocity.y = 0.0f;
     this->actor.gravity = -3.0f;
@@ -586,7 +586,7 @@ void func_8098A468(EnDg* this, GlobalContext* globalCtx) {
 }
 
 void func_8098A55C(EnDg* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (player->transformation == PLAYER_FORM_HUMAN) {
         func_80989E18(this, globalCtx);
@@ -627,7 +627,7 @@ void func_8098A618(EnDg* this, GlobalContext* globalCtx) {
 }
 
 void func_8098A70C(EnDg* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 phi_a1;
 
     if (this->actor.xzDistToPlayer < 250.0f) {
@@ -678,7 +678,7 @@ void func_8098A89C(EnDg* this, GlobalContext* globalCtx) {
 }
 
 void func_8098A938(EnDg* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     this->actor.velocity.y = 0.0f;
     this->actor.gravity = -3.0f;
@@ -726,7 +726,7 @@ void func_8098AAAC(EnDg* this, GlobalContext* globalCtx) {
 }
 
 void func_8098AB48(EnDg* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (!(this->actor.bgCheckFlags & 1)) {
         this->actionFunc = func_8098AF98;
@@ -834,7 +834,7 @@ void func_8098AF98(EnDg* this, GlobalContext* globalCtx) {
 }
 
 void func_8098B004(EnDg* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     this->actor.velocity.y = 0.0f;
     this->actor.gravity = -3.0f;
@@ -1070,7 +1070,7 @@ void func_8098BA64(EnDg* this, GlobalContext* globalCtx) {
 }
 
 void func_8098BB10(EnDg* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->actor.bgCheckFlags & 1) {
         if (this->unk_280 & 0x10) {
@@ -1147,7 +1147,7 @@ void EnDg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnDg_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnDg* this = THIS;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 pad;
     Vec3f sp28 = { 0.0f, 0.0f, 0.0f };
 

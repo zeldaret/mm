@@ -13,12 +13,7 @@ struct RotationIndex
 	// uint16_t transX, transY, transZ;
 	uint16_t x, y, z;
 
-	RotationIndex(uint16_t nX, uint16_t nY, uint16_t nZ)
-	{
-		x = nX;
-		y = nY;
-		z = nZ;
-	};
+	RotationIndex(uint16_t nX, uint16_t nY, uint16_t nZ) : x(nX), y(nY), z(nZ) {}
 };
 
 class ZAnimation : public ZResource
@@ -33,7 +28,6 @@ public:
 
 protected:
 	void ParseRawData() override;
-	void Save(const fs::path& outFolder) override;
 };
 
 class ZNormalAnimation : public ZAnimation
@@ -52,7 +46,7 @@ public:
 	std::string GetSourceTypeName() const override;
 
 protected:
-	virtual void ParseRawData() override;
+	void ParseRawData() override;
 };
 
 class ZLinkAnimation : public ZAnimation
@@ -67,7 +61,7 @@ public:
 	std::string GetSourceTypeName() const override;
 
 protected:
-	virtual void ParseRawData() override;
+	void ParseRawData() override;
 };
 
 class TransformData
