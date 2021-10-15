@@ -7,7 +7,7 @@ COMPILER_OPTS="-fno-builtin -std=gnu90 -Iinclude -Isrc -D_LANGUAGE_C -DNON_MATCH
 
 shopt -s globstar
 
-if [ -z `which clang-format-${FORMAT_VER}` ]
+if [ -z `command -v clang-format-${FORMAT_VER}` ]
 then
     echo "clang-format-${FORMAT_VER} not found. Exiting."
     exit 1
