@@ -68,18 +68,18 @@ void BgIknvObj_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
         case IKNV_OBJ_RAISED_DOOR:
             this->displayListPtr = D_06011880;
-            BcCheck3_BgActorInit(&this->dyna, 0);
+            BgCheck3_BgActorInit(&this->dyna, 0);
             CollisionHeader_GetVirtual(&D_060119D4, &colHeader);
-            this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
+            this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
             this->actionFunc = BgIknvObj_UpdateRaisedDoor;
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 120.0f;
             break;
         case IKNV_OBJ_SAKON_DOOR:
             this->displayListPtr = D_060129C8;
             this->actionFunc = BgIknvObj_UpdateSakonDoor;
-            BcCheck3_BgActorInit(&this->dyna, 0);
+            BgCheck3_BgActorInit(&this->dyna, 0);
             CollisionHeader_GetVirtual(&D_06012CA4, &colHeader);
-            this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
+            this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
             Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
             Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
             this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;

@@ -53,7 +53,7 @@ void BgCtowerRot_Init(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f offset;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    BcCheck3_BgActorInit(&this->dyna, 1);
+    BgCheck3_BgActorInit(&this->dyna, 1);
     if (this->dyna.actor.params == CORRIDOR) {
         BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_060142E8);
         this->actionFunc = BgCtowerRot_CorridorRotate;

@@ -1096,7 +1096,7 @@
     0x800CAC0C:("BgCheck2_UpdateActorYRotation",),
     0x800CACA0:("BgCheck2_AttachToMesh",),
     0x800CAD2C:("BgCheck2_UpdateActorAttachedToMesh",),
-    0x800CAE10:("BcCheck3_BgActorInit",),
+    0x800CAE10:("BgCheck3_BgActorInit",),
     0x800CAE34:("BgCheck3_LoadMesh",),
     0x800CAE7C:("BgCheck3_ResetFlags",),
     0x800CAE88:("func_800CAE88",),

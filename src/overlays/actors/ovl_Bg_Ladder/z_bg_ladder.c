@@ -61,7 +61,7 @@ void BgLadder_Init(Actor* thisx, GlobalContext* globalCtx) {
     // Has to be `thisx` instead of `&this->actor` to match
     this->switchFlag = GET_BGLADDER_SWITCHFLAG(thisx);
     thisx->params = GET_BGLADDER_SIZE(thisx);
-    BcCheck3_BgActorInit(&this->dyna, 0);
+    BgCheck3_BgActorInit(&this->dyna, 0);
     size = thisx->params;
 
     if (size == LADDER_SIZE_12RUNG) {

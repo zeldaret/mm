@@ -149,7 +149,7 @@ void ObjKibako2_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     ObjKibako2Contents contents = KIBAKO2_CONTENTS(&this->dyna.actor);
 
-    BcCheck3_BgActorInit(&this->dyna, 0);
+    BgCheck3_BgActorInit(&this->dyna, 0);
     Collider_InitCylinder(globalCtx, &this->collider);
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000B70);

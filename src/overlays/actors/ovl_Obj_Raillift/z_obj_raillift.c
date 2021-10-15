@@ -70,7 +70,7 @@ void ObjRaillift_Init(Actor* thisx, GlobalContext* globalCtx) {
     thisx->world.rot.x = 0;
     thisx->shape.rot.z = 0;
     thisx->world.rot.z = 0;
-    BcCheck3_BgActorInit(&this->dyna, 1);
+    BgCheck3_BgActorInit(&this->dyna, 1);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, sColHeaders[type]);
     this->speed = OBJRAILLIFT_GET_SPEED(thisx);
     if (this->speed < 0.0f) {

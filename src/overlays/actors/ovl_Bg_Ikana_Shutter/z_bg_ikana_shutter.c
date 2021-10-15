@@ -61,7 +61,7 @@ void BgIkanaShutter_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgIkanaShutter* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    BcCheck3_BgActorInit(&this->dyna, 0);
+    BgCheck3_BgActorInit(&this->dyna, 0);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000F28);
     if (!((this->dyna.actor.params >> 8) & 1)) {
         if (BgIkanaShutter_AllSwitchesPressed(this, globalCtx)) {

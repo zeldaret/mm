@@ -704,7 +704,7 @@ void BgHakuginPost_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->dyna.actor.world.rot.z = 0;
         this->dyna.actor.shape.rot.x = 0;
         this->dyna.actor.shape.rot.z = 0;
-        BcCheck3_BgActorInit(&this->dyna, 1);
+        BgCheck3_BgActorInit(&this->dyna, 1);
         BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_0600D3B0);
         func_80A9B3BC(this, globalCtx);
         func_80A9CA94(this);

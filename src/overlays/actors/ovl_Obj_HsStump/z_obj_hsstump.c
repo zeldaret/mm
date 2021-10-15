@@ -41,7 +41,7 @@ void ObjHsStump_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->isHidden = OBJHSSTUMP_GET_ISHIDDEN(thisx);
     this->switchFlag = OBJHSSTUMP_GET_SWITCHFLAG(thisx); // Must be thisx to match
-    BcCheck3_BgActorInit(&this->dyna, 1);
+    BgCheck3_BgActorInit(&this->dyna, 1);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_060011B0);
     switch (this->isHidden) {
         case true:

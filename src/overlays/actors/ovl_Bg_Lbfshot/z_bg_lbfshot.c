@@ -32,7 +32,7 @@ void BgLbfshot_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->dyna.actor.uncullZoneForward = 4000.0f;
-    BcCheck3_BgActorInit(&this->dyna, 1);
+    BgCheck3_BgActorInit(&this->dyna, 1);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_060014D8);
 }
 void BgLbfshot_Destroy(Actor* thisx, GlobalContext* globalCtx) {

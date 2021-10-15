@@ -30,9 +30,9 @@ void BgFuKaiten_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionHeader* header = 0;
 
     Actor_SetScale(thisx, 1.0);
-    BcCheck3_BgActorInit(&THIS->bg, 3);
+    BgCheck3_BgActorInit(&THIS->dyna, 3);
     CollisionHeader_GetVirtual(&D_06002D30, &header);
-    THIS->bg.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &THIS->bg, header);
+    THIS->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &THIS->dyna.actor, header);
 
     THIS->bouceHeight = 0.0;
     THIS->rotationSpeed = 0;
@@ -41,23 +41,23 @@ void BgFuKaiten_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgFuKaiten_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, THIS->bg.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, THIS->dyna.bgId);
 }
 
 void BgFuKaiten_UpdateRotation(BgFuKaiten* this) {
     f32 f0;
-    this->bg.actor.shape.rot.y += this->rotationSpeed;
+    this->dyna.actor.shape.rot.y += this->rotationSpeed;
     if (this->rotationSpeed > 0) {
         f0 = this->rotationSpeed * .002f;
-        func_8019FAD8(&this->bg.actor.projectedPos, 8310, f0);
+        func_8019FAD8(&this->dyna.actor.projectedPos, 8310, f0);
     }
 }
 
 void BgFuKaiten_UpdateHeight(BgFuKaiten* this) {
     this->bounce += this->bounceSpeed;
-    this->bg.actor.world.pos.y = this->bg.actor.home.pos.y + this->elevation + this->bouceHeight;
+    this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + this->elevation + this->bouceHeight;
 
-    this->bg.actor.world.pos.y -= this->bouceHeight * Math_CosS(this->bounce);
+    this->dyna.actor.world.pos.y -= this->bouceHeight * Math_CosS(this->bounce);
 }
 
 void BgFuKaiten_Update(Actor* thisx, GlobalContext* globalCtx) {

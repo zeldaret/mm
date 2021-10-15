@@ -360,11 +360,11 @@ void func_808D93BC(EnSw* this) {
     this->actor.world.rot.x = -this->actor.world.rot.x;
 }
 
-s32 func_808D9440(GlobalContext* globalCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, CollisionPoly** arg4, u32* arg5) {
+s32 func_808D9440(GlobalContext* globalCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** outPoly, s32* bgId) {
     s32 ret = false;
 
-    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, arg1, arg2, arg3, arg4, 1, 1, 1, 1, arg5) &&
-        !(func_800C9A4C(&globalCtx->colCtx, *arg4, *arg5) & 0x30)) {
+    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, posA, posB, posResult, outPoly, true, true, true, true, bgId) &&
+        !(func_800C9A4C(&globalCtx->colCtx, *outPoly, *bgId) & 0x30)) {
         ret = true;
     }
     return ret;
@@ -379,16 +379,16 @@ void func_808D94D0(EnSw* this, GlobalContext* globalCtx, s32 arg2, s32 arg3, s16
     Vec3f sp84;
     Vec3f sp78;
     Vec3f sp6C;
-    u32 sp68;
-    u32 sp64;
+    s32 sp68;
+    s32 sp64;
     s32 pad2;
     f32 temp_f20;
     s32 i;
 
     spA4 = NULL;
     spA0 = NULL;
-    sp68 = 50;
-    sp64 = 50;
+    sp68 = BGCHECK_SCENE;
+    sp64 = BGCHECK_SCENE;
     func_808D90F0(this, arg3, arg4);
     this->actor.speedXZ = this->unk_44C;
     if (1) {}

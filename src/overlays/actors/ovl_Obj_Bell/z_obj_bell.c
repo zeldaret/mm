@@ -264,7 +264,7 @@ void func_80A35BD4(Actor* thisx, GlobalContext* globalCtx) {
 void ObjBell_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjBell* this = THIS;
 
-    BcCheck3_BgActorInit(&this->dyna, 0);
+    BgCheck3_BgActorInit(&this->dyna, 0);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06001BA8);
     Actor_SetScale(&this->dyna.actor, 0.08f);
     Collider_InitAndSetSphere(globalCtx, &this->collider1, &this->dyna.actor, &sCylinderInit1);

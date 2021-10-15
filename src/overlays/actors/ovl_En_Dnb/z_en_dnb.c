@@ -108,7 +108,7 @@ void EnDnb_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 i;
     s16* alloc;
 
-    BcCheck3_BgActorInit(&this->dyna, 1);
+    BgCheck3_BgActorInit(&this->dyna, 1);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06004D8C);
 
     alloc = (s16*)Lib_SegmentedToVirtual(D_06004710);

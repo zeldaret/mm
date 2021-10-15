@@ -1,6 +1,6 @@
 #include "global.h"
 
-void BcCheck3_BgActorInit(DynaPolyActor* actor, UNK_TYPE4 param_2) {
+void BgCheck3_BgActorInit(DynaPolyActor* actor, s32 param_2) {
     actor->bgId = -1;
     actor->unk148 = 0;
     actor->unk14C = 0;

@@ -1084,7 +1084,7 @@ void BgCheck2_UpdateActorPosition(CollisionContext* colCtx, s32 index, Actor* ac
 void BgCheck2_UpdateActorYRotation(CollisionContext* colCtx, s32 index, Actor* actor);
 void BgCheck2_AttachToMesh(CollisionContext* colCtx, Actor* actor, s32 index);
 u32 BgCheck2_UpdateActorAttachedToMesh(CollisionContext* colCtx, s32 index, Actor* actor);
-void BcCheck3_BgActorInit(DynaPolyActor* actor, UNK_TYPE4 param_2);
+void BgCheck3_BgActorInit(DynaPolyActor* actor, s32 param_2);
 void BgCheck3_LoadMesh(GlobalContext* globalCtx, DynaPolyActor* actor, CollisionHeader* meshHeader);
 void BgCheck3_ResetFlags(DynaPolyActor* actor);
 void func_800CAE88(DynaPolyActor* actor);

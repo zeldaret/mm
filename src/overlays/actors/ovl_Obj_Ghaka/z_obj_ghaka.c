@@ -153,9 +153,9 @@ void ObjGhaka_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, D_80B3C96C);
     Actor_SetScale(&this->dyna.actor, 0.1f);
-    BcCheck3_BgActorInit(&this->dyna, 1);
+    BgCheck3_BgActorInit(&this->dyna, 1);
     CollisionHeader_GetVirtual(&D_06003CD0, &colHeader);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
+    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
     Actor_UpdateBgCheckInfo(globalCtx, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 0x4);
     if (this->dyna.actor.floorPoly == 0) {
         Actor_MarkForDeath(&this->dyna.actor);

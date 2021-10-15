@@ -616,8 +616,8 @@ void EnPametfrog_WallCrawl(EnPametfrog* this, GlobalContext* globalCtx) {
     Vec3f worldPos1;
     Vec3f worldPos2;
     f32 doubleSpeedXZ;
-    u32 bgId1;
-    u32 bgId2;
+    s32 bgId1;
+    s32 bgId2;
     s32 isSuccess = false;
 
     if (this->freezeTimer > 0) {

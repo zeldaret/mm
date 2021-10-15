@@ -195,7 +195,7 @@ void ObjTokeiStep_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjTokeiStep* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    BcCheck3_BgActorInit(&this->dyna, 0);
+    BgCheck3_BgActorInit(&this->dyna, 0);
     if ((globalCtx->sceneNum == 0x6F) && (gSaveContext.sceneSetupIndex == 2) && (globalCtx->csCtx.unk_12 == 0)) {
         BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000968);
         ObjTokeiStep_InitSteps(this);

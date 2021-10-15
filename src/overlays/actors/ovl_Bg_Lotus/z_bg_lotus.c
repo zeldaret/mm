@@ -44,7 +44,7 @@ void BgLotus_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 bgId;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    BcCheck3_BgActorInit(&this->dyna, 1);
+    BgCheck3_BgActorInit(&this->dyna, 1);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000A20);
     this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &thisx->floorPoly, &bgId,
                                                                &this->dyna.actor, &this->dyna.actor.world.pos);
