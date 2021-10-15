@@ -924,7 +924,7 @@ void func_808DA89C(EnSw* this, GlobalContext* globalCtx) {
         Math_ApproachF(&this->actor.shape.yOffset, 400.0f, 0.3f, 1000.0f);
     }
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveForward(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
 }
 
@@ -1264,7 +1264,7 @@ void EnSw_Update(Actor* thisx, GlobalContext* globalCtx) {
         SkelAnime_FrameUpdateMatrix(&this->skelAnime);
     }
 
-    Actor_SetHeight(&this->actor, 0.0f);
+    Actor_SetFocus(&this->actor, 0.0f);
     func_808D8FC4(this, globalCtx);
 }
 

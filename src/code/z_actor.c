@@ -91,7 +91,7 @@ void func_800B4024(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
     ActorShadow_Draw(actor, lights, globalCtx, D_04075A40, NULL);
 }
 
-static Color_RGBA8 D_801AEC80 = { 255, 255, 255, 255 };
+Color_RGBA8 D_801AEC80 = { 255, 255, 255, 255 };
 
 /* ActorShadow_DrawWhiteCircle */
 void func_800B4088(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
@@ -641,7 +641,7 @@ f32 Actor_HeightDiff(Actor* actor1, Actor* actor2) {
 void func_800B6F20(GlobalContext* globalCtx, Input* input, f32 arg2, s16 arg3) {
     s16 sp26;
 
-    sp26 = arg3 - func_800DFC68(ACTIVE_CAM);
+    sp26 = arg3 - func_800DFC68(GET_ACTIVE_CAM(globalCtx));
     input->cur.stick_x = -Math_SinS(sp26) * arg2;
     input->rel.stick_x = input->cur.stick_x;
     input->cur.stick_y = Math_CosS(sp26) * arg2;
@@ -692,7 +692,7 @@ s32 func_800B7128(Player* player) {
 }
 
 s32 func_800B715C(GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     return player->stateFlags2 & 8;
 }
@@ -722,7 +722,7 @@ void func_800B722C(GlobalContext* globalCtx, Player* player) {
 }
 
 s32 func_800B724C(GlobalContext* globalCtx, Actor* actor, u8 csMode) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((player->csMode == 5) || ((csMode == 6) && (player->csMode == 0))) {
         return false;
@@ -735,7 +735,7 @@ s32 func_800B724C(GlobalContext* globalCtx, Actor* actor, u8 csMode) {
 }
 
 u32 func_800B7298(GlobalContext* globalCtx, Actor* actor, u8 arg2) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (func_800B724C(globalCtx, actor, arg2)) {
         player->unk_3BA = 1;
@@ -755,7 +755,7 @@ void func_800B72F8(DynaPolyActor* dyna, f32 a1, s16 a2) {
 }
 
 s32 Actor_IsPlayerFacingActor(Actor* actor, s16 tolerance, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 yawDiff = BINANG_ADD(actor->yawTowardsPlayer, 0x8000) - player->actor.shape.rot.y;
 
     if (ABS_ALT(yawDiff) < tolerance) {
@@ -1155,7 +1155,7 @@ u32 Actor_HasParent(Actor* actor, GlobalContext* globalCtx) {
 
 // Actor_PickUp
 s32 func_800B8A1C(Actor* actor, GlobalContext* globalCtx, s32 getItemId, f32 xzRange, f32 yRange) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (!(player->stateFlags1 & 0x3C7080) && Player_GetExplosiveHeld(player) < 0) {
         if ((actor->xzDistToPlayer <= xzRange) && (fabsf(actor->yDistToPlayer) <= fabsf(yRange))) {
@@ -1224,7 +1224,7 @@ void func_800B8C20(Actor* actorA, Actor* actorB, GlobalContext* globalCtx) {
 }
 
 void func_800B8C50(Actor* actor, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (actor->xyzDistToPlayerSq < player->unk_AA0) {
         player->unk_AA0 = actor->xyzDistToPlayerSq;
@@ -1239,7 +1239,7 @@ s32 Actor_IsMounted(GlobalContext* globalCtx, Actor* horse) {
 }
 
 s32 Actor_SetRideActor(GlobalContext* globalCtx, Actor* horse, s32 mountSide) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (!(player->stateFlags1 & 0x003C7880)) {
         player->rideActor = horse;
@@ -1260,7 +1260,7 @@ s32 Actor_NotMounted(GlobalContext* globalCtx, Actor* horse) {
 }
 
 void func_800B8D10(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 arg3, f32 arg4, u32 arg5, u32 arg6) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     player->unk_B74 = arg6;
     player->unk_B75 = arg5;
@@ -1374,7 +1374,7 @@ s32 func_800B90AC(GlobalContext* globalCtx, Actor* actor, CollisionPoly* polygon
 void func_800B90F4(GlobalContext* globalCtx) {
     if (globalCtx->actorCtx.unk3 != 0) {
         globalCtx->actorCtx.unk3 = 0;
-        func_80115D5C(globalCtx);
+        func_80115D5C(&globalCtx->state);
     }
 }
 
@@ -1495,7 +1495,7 @@ void Actor_UpdateAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
     u8 phi_s3_2;
     Actor* phi_s0_3;
 
-    sp40.player = PLAYER;
+    sp40.player = GET_PLAYER(globalCtx);
     sp40.globalCtx = globalCtx;
 
     if (globalCtx->unk_18844 != 0) {
@@ -1883,7 +1883,7 @@ void Actor_SpawnTransitionActors(GlobalContext* globalCtx, ActorContext* actorCt
 
 Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, GlobalContext* globalCtx) {
     s32 pad;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Actor* newHead;
     ActorOverlay* overlayEntry = actor->overlayEntry;
 
@@ -2440,7 +2440,7 @@ void func_800BDAA0(GlobalContext* globalCtx, SkelAnime* skelAnime, OverrideLimbD
 
 // Unused
 s16 func_800BDB6C(Actor* actor, GlobalContext* globalCtx, s16 arg2, f32 arg3) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     f32 phi_f2;
 
     if ((globalCtx->csCtx.state != 0) || (D_801D0D50 != 0)) {

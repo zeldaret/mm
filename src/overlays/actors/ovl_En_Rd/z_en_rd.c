@@ -599,7 +599,7 @@ void func_808D506C(EnRd* this, GlobalContext* globalCtx) {
     }
 
     if (!this->unk_3EE && (Actor_DistanceBetweenActors(&this->actor, &player->actor) <= 45.0f) &&
-        Actor_IsActorFacingLink(&this->actor, 0x38E3)) {
+        Actor_IsActorFacingPlayer(&this->actor, 0x38E3)) {
         player->actor.freezeTimer = 0;
         if ((player->transformation == PLAYER_FORM_GORON) || (player->transformation == PLAYER_FORM_DEKU)) {
             if (Actor_DistanceToPoint(&this->actor, &this->actor.home.pos) < 150.0f) {
@@ -1186,7 +1186,7 @@ void EnRd_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->actionFunc(this, globalCtx);
 
         if ((this->unk_3EF != 10) && (this->actor.speedXZ != 0.0f)) {
-            Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+            Actor_MoveForward(&this->actor);
         }
 
         if ((this->actor.shape.rot.x == 0) && (this->unk_3EF != 10) && (this->actor.speedXZ != 0.0f)) {

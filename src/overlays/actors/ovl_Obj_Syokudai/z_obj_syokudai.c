@@ -115,7 +115,7 @@ void ObjSyokudai_Init(Actor* thisx, GlobalContext* globalCtx) {
         sNumLitTorchesInGroup = 0;
     }
     this->flameTexScroll = (u32)(Rand_ZeroOne() * OBJ_SYOKUDAI_SNUFF_DEFAULT);
-    Actor_SetHeight(thisx, 60.0f);
+    Actor_SetFocus(thisx, 60.0f);
 }
 
 void ObjSyokudai_Destroy(Actor* thisx, GlobalContext* globalCtx) {

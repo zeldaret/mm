@@ -191,7 +191,7 @@ s32 func_809C6720(GlobalContext* globalCtx, Vec3f arg1) {
     }
 
     globalCtx->actorCtx.unk268 = 1;
-    func_800B6F20(globalCtx, globalCtx->actorCtx.pad26C, phi_f0, sp22);
+    func_800B6F20(globalCtx, &globalCtx->actorCtx.unk_26C, phi_f0, sp22);
 
     if (sp28 < 5.0f) {
         return true;
@@ -211,7 +211,7 @@ void func_809C6810(EnSyatekiMan* this, GlobalContext* globalCtx) {
 void func_809C6848(EnSyatekiMan* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, globalCtx)) {
         u16 sp22;
 
         func_800BDC5C(&this->skelAnime, sAnimations, 2);
@@ -508,7 +508,7 @@ void func_809C6F98(EnSyatekiMan* this, GlobalContext* globalCtx) {
 }
 
 void func_809C72D8(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, globalCtx)) {
         u16 sp26 = Text_GetFaceReaction(globalCtx, 0x30);
 
         if (sp26 != 0) {
@@ -780,7 +780,7 @@ void func_809C7A90(EnSyatekiMan* this, GlobalContext* globalCtx) {
 void func_809C7C14(EnSyatekiMan* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, globalCtx)) {
         if ((CURRENT_DAY == 3) && (gSaveContext.time > CLOCK_TIME(12, 00))) {
             func_801518B0(globalCtx, 0xA36, &this->actor);
             this->unk_284 = 0xA36;
@@ -847,7 +847,7 @@ void func_809C7EB4(EnSyatekiMan* this, GlobalContext* globalCtx) {
             gSaveContext.weekEventReg[63] &= (u8)~2;
             this->actionFunc = func_809C6810;
         }
-    } else if (func_800B84D0(&this->actor, globalCtx)) {
+    } else if (Actor_IsTalking(&this->actor, globalCtx)) {
         func_801518B0(globalCtx, 0x408, &this->actor);
         this->unk_284 = 0x408;
         player->stateFlags1 &= ~0x20;
@@ -1237,7 +1237,7 @@ void EnSyatekiMan_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     func_809C8DE8(this);
     this->actor.focus.pos.y = 70.0f;
-    Actor_SetHeight(&this->actor, 70.0f);
+    Actor_SetFocus(&this->actor, 70.0f);
     if (this->unk_26A != 1) {
         SkelAnime_FrameUpdateMatrix(&this->skelAnime);
         func_800E9250(globalCtx, &this->actor, &this->unk_258, &this->unk_25E, this->actor.focus.pos);

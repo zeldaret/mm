@@ -387,7 +387,7 @@ void func_80962340(EnFu* this, GlobalContext* globalCtx) {
         this->actor.flags |= 0x10000;
     }
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, globalCtx)) {
         if (this->unk_54A == 2) {
             if (this->unk_552 == 0x287D) {
                 if (gSaveContext.playerForm == PLAYER_FORM_DEKU) {
@@ -897,7 +897,7 @@ void func_80963610(EnFu* this) {
 void func_80963630(EnFu* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, globalCtx)) {
         if ((gSaveContext.weekEventReg[22] & 0x10) && (gSaveContext.weekEventReg[22] & 0x20) && (CURRENT_DAY == 3) &&
             (gSaveContext.playerForm == PLAYER_FORM_HUMAN)) {
             if (gSaveContext.weekEventReg[22] & 0x40) {
@@ -960,7 +960,7 @@ s32 func_80963810(GlobalContext* globalCtx, Vec3f pos) {
     }
 
     globalCtx->actorCtx.unk268 = 1;
-    func_800B6F20(globalCtx, globalCtx->actorCtx.pad26C, phi_f0, sp22);
+    func_800B6F20(globalCtx, &globalCtx->actorCtx.unk_26C, phi_f0, sp22);
 
     if (sp28 < 80.0f) {
         return true;
@@ -1179,7 +1179,7 @@ void func_80963FF8(EnFu* this, GlobalContext* globalCtx) {
 
     if (player->stateFlags1 & 0x100000) {
         globalCtx->actorCtx.unk268 = 1;
-        globalCtx->actorCtx.unk278 = 0x8000;
+        globalCtx->actorCtx.unk_26C.press.button = 0x8000;
     } else {
         globalCtx->actorCtx.unk268 = 1;
     }
@@ -1338,7 +1338,7 @@ void EnFu_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 
     func_809642E0(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveForward(&this->actor);
     func_8096209C(this, globalCtx);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);

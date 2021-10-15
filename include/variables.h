@@ -422,8 +422,6 @@ extern EffectSsOverlay particleOverlayTable[39];
 // extern s32 sEntryIndex;
 // extern u32 sCurrentBit;
 // extern s32 sTimer;
-extern Color_RGBA8 D_801AEC80;
-extern s801AEC84 D_801AEC84[13];
 extern f32 actorMovementScale;
 extern TargetRangeParams D_801AECF0[];
 extern s16 D_801AED48[8];

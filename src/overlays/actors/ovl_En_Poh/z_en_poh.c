@@ -312,7 +312,7 @@ void func_80B2CD64(EnPoh* this, GlobalContext* globalCtx) {
     if (this->actor.xzDistToPlayer > 280.0f) {
         func_80B2CB60(this);
     } else if ((this->unk_18E == 0) && (this->actor.xzDistToPlayer < 140.0f) &&
-               !Actor_IsLinkFacingActor(&this->actor, 0x2AAA, globalCtx)) {
+               !Actor_IsPlayerFacingActor(&this->actor, 0x2AAA, globalCtx)) {
         func_80B2CEC8(this);
     }
 
@@ -596,7 +596,7 @@ void func_80B2DD2C(EnPoh* this, GlobalContext* globalCtx) {
         func_80B2E0B0(this);
     }
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveForward(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, 10.0f, 10.0f, 4);
 }
 
@@ -652,7 +652,7 @@ void func_80B2E180(EnPoh* this, GlobalContext* globalCtx) {
 
 void func_80B2E1D8(EnPoh* this) {
     this->actor.home.pos.y = this->actor.world.pos.y;
-    Actor_SetHeight(&this->actor, -10.0f);
+    Actor_SetFocus(&this->actor, -10.0f);
     this->unk_18E = 200;
     this->unk_18D = 32;
     this->actor.flags |= 1;
@@ -682,7 +682,7 @@ void func_80B2E230(EnPoh* this, GlobalContext* globalCtx) {
         this->unk_18D = 32;
     }
 
-    Actor_SetHeight(&this->actor, -10.0f);
+    Actor_SetFocus(&this->actor, -10.0f);
     Lights_PointNoGlowSetInfo(&this->lightInfo, this->actor.world.pos.x, this->actor.world.pos.y,
                               this->actor.world.pos.z, 100, 0, 150, this->unk_197 * (40.0f / 51.0f));
 }
@@ -817,7 +817,7 @@ void EnPoh_Update(Actor* thisx, GlobalContext* globalCtx2) {
     func_80B2E438(this, globalCtx);
     func_80B2E55C(this);
     this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveForward(&this->actor);
     if ((this->actionFunc == func_80B2CF28) && (this->unk_18E < 10)) {
         this->actor.flags |= 0x1000000;
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->colliderSph.base);
@@ -830,7 +830,7 @@ void EnPoh_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->colliderCylinder.base);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->colliderSph.base);
-    Actor_SetHeight(&this->actor, 42.0f);
+    Actor_SetFocus(&this->actor, 42.0f);
 
     if ((this->actionFunc != func_80B2D07C) && (this->actionFunc != func_80B2D628)) {
         if (this->actionFunc == func_80B2DB44) {

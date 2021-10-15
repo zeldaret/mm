@@ -39,6 +39,7 @@ animdict ={
     "ShrinkWindow_Step": "ShrinkWindow_Update",
     "ShrinkWindow_Fini": "ShrinkWindow_Destroy",
     "func_801A89A8": "Audio_QueueSeqCmd",
+    "Actor_SetObjectSegment": "Actor_SetObjectDependency",
 }
 
 def replace_anim(file):

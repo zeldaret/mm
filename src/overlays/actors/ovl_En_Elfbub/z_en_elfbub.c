@@ -142,7 +142,7 @@ void EnElfbub_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnElfbub* this = THIS;
     Collider_UpdateCylinder(&this->actor, &this->collider);
     this->actionFunc(this, globalCtx);
-    Actor_SetHeight(&this->actor, this->actor.shape.yOffset);
+    Actor_SetFocus(&this->actor, this->actor.shape.yOffset);
 }
 
 void EnElfbub_Draw(Actor* thisx, GlobalContext* globalCtx2) {

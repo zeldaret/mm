@@ -255,7 +255,7 @@ void ObjAqua_Update(Actor* thisx, GlobalContext* globalCtx) {
             Math_Vec3f_StepTo(&this->actor.scale, &D_80ACC320, 0.0004f);
         }
         this->actor.velocity.y *= 0.9f;
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveForward(&this->actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 12.0f, 4.0f, 0.0f, 5);
         if (this->actionFunc != func_80ACBDFC) {
             Collider_UpdateCylinder(&this->actor, &this->collider);
