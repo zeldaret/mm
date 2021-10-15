@@ -219,9 +219,19 @@ void func_80C1019C(EnRecepgirl* this, GlobalContext* globalCtx) {
     }
 }
 ```
-which still matches.
+which still matches. Lastly, we have an enum for the output of `Player_GetMask` and other mask-related things: in `z64player.h` we find
+```C
+typedef enum {
+    /* 0x00 */  PLAYER_MASK_NONE,
+    /* 0x01 */  PLAYER_MASK_MASK_OF_TRUTH,
+    /* 0x02 */  PLAYER_MASK_KAFEIS_MASK,
+[...]
+    /* 0x19 */  PLAYER_MASK_MAX
+} PlayerMask;
+```
+and so we can write the last if as `Player_GetMask(globalCtx) == PLAYER_MASK_KAFEIS_MASK`.
 
-Again, we have no choice in what to do next
+Again, we have no choice in what to do next.
 
 
 ## `func_80C10290`

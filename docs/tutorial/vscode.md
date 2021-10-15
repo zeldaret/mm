@@ -33,18 +33,17 @@ Many of VS Code's other shortcuts can be found on [its getting started page](htt
 
 Add the following to the `.vscode/c_cpp_properties.json` file to make VSCode better able to understand the structure of the repository.
 
-```json
+```jsonc
 {
     "configurations": [
         {
             "name": "Linux",
-            "compilerPath": "${default}", // "", maybe?
+            "compilerPath": "${default}", // Needs to not be "" for -m32 to work
             "compilerArgs": [
-                "-m32",
-                "-nostdinc++"
+                "-m32" // Removes integer truncation warnings with gbi macros
             ],
-            "intelliSenseMode": "${default}",
-            "includePath": [
+            "intelliSenseMode": "${default}", // Shouldn't matter
+            "includePath": [ // Matches makefile's includes
                 "${workspaceFolder}/**",
                 "src",
                 "assets",
@@ -52,10 +51,10 @@ Add the following to the `.vscode/c_cpp_properties.json` file to make VSCode bet
                 "include"
             ],
             "defines": [
-                "_LANGUAGE_C"
+                "_LANGUAGE_C" // For gbi.h
             ],
-            "cStandard": "gnu89",
-            "cppStandard": "${default}"
+            "cStandard": "gnu89", // C89 + some GNU extensions from C99 like C++ comments
+            "cppStandard": "${default}" // Only ZAPD uses C++, so doesn't really matter
         }
     ],
     "version": 4
@@ -66,7 +65,7 @@ Add the following to the `.vscode/c_cpp_properties.json` file to make VSCode bet
 
 Add the following to (or create) the `.vscode/settings.json` file for VSCode to search the gitignored asset and assembly files by default:
 
-```json
+```jsonc
 {
     "search.useIgnoreFiles": false,
     "search.exclude": {

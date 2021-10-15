@@ -51,7 +51,7 @@ void func_809529AC(EnMs *this, GlobalContext *globalCtx) {
 }
 ```
 
-which is intended to be as close to the original code as possible. We are doing *matching* decomp: in the right context, and with the right compiler settings, the above C compiles into *precisely* the assembly code above, not just equivalent code.
+which is intended to be as close to the original code as we can get just by looking at the assembly. We are doing *matching* decomp: in the right context, and with the right compiler settings, the above C compiles into *precisely* the assembly code above, not just equivalent code.
 
 N.B. We are using only publicly available code. In particular, we are not looking at any of the recent Nintendo source code leaks.
 
@@ -65,7 +65,7 @@ Basic knowledge of C, particularly arrays and pointers, is extremely useful. Kno
 
 Knowledge of the fundamentals of git and GitHub is required. There are a number of tutorials available online, and a later document in this tutorial describes how you contribute to this project outside the actual decompilation process.
 
-The most useful knowledge to have is a general understanding of how the game works. An afternoon of constructive mucking about in the [Practice Rom]https://kz.zeldacodes.org/) (aka KZ) will be very beneficial if you have not looked at the game's subsurface workings before.
+The most useful knowledge to have is a general understanding of how the game works. An afternoon of constructive mucking about in the [Practice Rom](https://kz.zeldacodes.org/) (aka KZ) will be very beneficial if you have not looked at the game's subsurface workings before.
 
 ## Structure of the code
 
@@ -84,4 +84,4 @@ and then for undecompiled actors, various assembly (.s) files, generally includi
 
 (In this project, all assembly code and asset files are extracted from a user-provided ROM: if you look in the GitHub repository, you will see that only decompiled source code is present.)
 
-The basic process of decomp is to take one or more of the .s files, run it through a decompilation program (mips_to_c) that reads the ASM very literally, and then, through humen ingenuity, reshape it into code that not only compiles in the first place, but completely matches the assembly generation of the original code (well-written or otherwise; it's also very likely that our constructed code differs significantly from the original, even if it still compiles to the same thing).
+The basic process of decomp is to take one or more of the .s files, run it through a decompilation program (mips_to_c) that reads the ASM very literally, and then, through human ingenuity, reshape it into code that not only compiles in the first place, but completely matches the assembly generation of the original code (well-written or otherwise; it's also very likely that our constructed code differs significantly from the original, even if it still compiles to the same thing).

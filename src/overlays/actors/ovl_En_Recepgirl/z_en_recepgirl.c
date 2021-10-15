@@ -105,7 +105,7 @@ void func_80C1019C(EnRecepgirl* this, GlobalContext* globalCtx) {
         func_80C10290(this);
     } else if (Actor_IsActorFacingLink(&this->actor, 0x2000)) {
         func_800B8614(&this->actor, globalCtx, 60.0f);
-        if (Player_GetMask(globalCtx) == 2) {
+        if (Player_GetMask(globalCtx) == PLAYER_MASK_KAFEIS_MASK) {
             this->actor.textId = 0x2367;
         } else if (Flags_GetSwitch(globalCtx, this->actor.params)) {
             this->actor.textId = 0x2ADC;
