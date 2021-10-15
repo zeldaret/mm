@@ -117,7 +117,7 @@ void func_808B8568(DoorWarp1* this, GlobalContext* globalCtx) {
 }
 
 s32 func_808B866C(DoorWarp1* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 ret = false;
 
     if ((fabsf(this->dyna.actor.xzDistToPlayer) < 60.0f) &&
@@ -371,7 +371,7 @@ void func_808B921C(DoorWarp1* this, GlobalContext* globalCtx) {
 
 void func_808B93A0(DoorWarp1* this, GlobalContext* globalCtx) {
     s32 pad;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((func_80152498(&globalCtx->msgCtx) == 4) && func_80147624(globalCtx)) {
         func_801477B4(globalCtx);
@@ -410,7 +410,7 @@ void func_808B9524(DoorWarp1* this, GlobalContext* globalCtx) {
 }
 
 void func_808B958C(DoorWarp1* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     func_808BB8D4(this, globalCtx, 1);
 
@@ -461,7 +461,7 @@ void func_808B96B0(DoorWarp1* this, GlobalContext* globalCtx) {
 void func_808B977C(DoorWarp1* this, GlobalContext* globalCtx) {
     Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_WARP_HOLE - SFX_FLAG);
     if (func_808B866C(this, globalCtx) && !func_801690CC(globalCtx)) {
-        Player* player = PLAYER;
+        Player* player = GET_PLAYER(globalCtx);
 
         func_801A5CFC(NA_SE_EV_LINK_WARP, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
         func_800B7298(globalCtx, &this->dyna.actor, 9);
@@ -482,7 +482,7 @@ void func_808B9840(DoorWarp1* this, GlobalContext* globalCtx) {
 }
 
 void func_808B98A8(DoorWarp1* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->unk_1CA > 100) {
         if (player->actor.velocity.y < 10.0f) {
@@ -618,7 +618,7 @@ void func_808B9ED8(DoorWarp1* this, GlobalContext* globalCtx) {
 void func_808B9F10(DoorWarp1* this, GlobalContext* globalCtx) {
     Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_WARP_HOLE - SFX_FLAG);
     if ((this->unk_203 == 0) && func_808B866C(this, globalCtx) && !func_801690CC(globalCtx) && (this->unk_203 == 0)) {
-        Player* player = PLAYER;
+        Player* player = GET_PLAYER(globalCtx);
 
         Interface_ChangeAlpha(1);
         func_800B7298(globalCtx, &this->dyna.actor, 9);
@@ -630,8 +630,8 @@ void func_808B9F10(DoorWarp1* this, GlobalContext* globalCtx) {
 }
 
 void func_808B9FD0(DoorWarp1* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
-    Player* player2 = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
+    Player* player2 = GET_PLAYER(globalCtx);
 
     if (this->unk_1CA != 0) {
         this->unk_1CA--;
@@ -794,8 +794,8 @@ void func_808BA10C(DoorWarp1* this, GlobalContext* globalCtx) {
 }
 
 void func_808BA550(DoorWarp1* this, GlobalContext* globalCtx) {
-    Player* player2 = PLAYER;
-    Player* player = PLAYER;
+    Player* player2 = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(globalCtx);
     s16 i;
     s32 temp_f16;
     f32 temp_f0;
@@ -898,7 +898,7 @@ void func_808BA550(DoorWarp1* this, GlobalContext* globalCtx) {
 }
 
 void func_808BAAF4(DoorWarp1* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 cutscene;
     f32 phi_f2;
 
