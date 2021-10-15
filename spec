@@ -4000,7 +4000,7 @@ beginseg
     name "ovl_En_Hakurock"
     compress
     include "build/src/overlays/actors/ovl_En_Hakurock/z_en_hakurock.o"
-    include "build/data/ovl_En_Hakurock/ovl_En_Hakurock.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Hakurock/ovl_En_Hakurock_reloc.o"
 endseg
 
 beginseg
