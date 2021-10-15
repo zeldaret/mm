@@ -5297,7 +5297,6 @@ beginseg
     name "ovl_En_Recepgirl"
     compress
     include "build/src/overlays/actors/ovl_En_Recepgirl/z_en_recepgirl.o"
-    //include "build/data/ovl_En_Recepgirl/ovl_En_Recepgirl.data.o"
     include "build/src/overlays/actors/ovl_En_Recepgirl/ovl_En_Recepgirl_reloc.o"
 endseg
 
