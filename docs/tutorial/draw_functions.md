@@ -290,7 +290,7 @@ void ObjTree_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
 ## RGB macros and bitpacking
 
-
+TODO: find some examples for this one.
 
 For even more examples, you can consult [the OoT tutorial](https://github.com/zeldaret/oot/blob/master/docs/tutorial/draw_functions.md)
 
