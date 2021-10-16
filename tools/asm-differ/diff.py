@@ -488,7 +488,12 @@ def get_objdump_executable(objdump_executable: Optional[str]) -> str:
     if objdump_executable is not None:
         return objdump_executable
 
-    for objdump_cand in ["mips-linux-gnu-objdump", "mips64-elf-objdump"]:
+    objdump_candidates = [
+        "mips-linux-gnu-objdump",
+        "mips64-elf-objdump",
+        "mips-elf-objdump",
+    ]
+    for objdump_cand in objdump_candidates:
         try:
             subprocess.check_call(
                 [objdump_cand, "--version"],
@@ -502,7 +507,7 @@ def get_objdump_executable(objdump_executable: Optional[str]) -> str:
             pass
 
     return fail(
-        "Missing binutils; please ensure mips-linux-gnu-objdump or mips64-elf-objdump exist, or configure objdump_executable."
+        f"Missing binutils; please ensure {' or '.join(objdump_candidates)} exists, or configure objdump_executable."
     )
 
 
@@ -1480,7 +1485,6 @@ ARM32_BRANCH_INSTRUCTIONS = {
 }
 
 AARCH64_BRANCH_INSTRUCTIONS = {
-    "bl",
     "b",
     "b.eq",
     "b.ne",
@@ -1578,7 +1582,7 @@ AARCH64_SETTINGS = ArchSettings(
     re_large_imm=re.compile(r"-?[1-9][0-9]{2,}|-?0x[0-9a-f]{3,}"),
     re_imm=re.compile(r"(?<!sp, )#-?(0x[0-9a-fA-F]+|[0-9]+)\b"),
     branch_instructions=AARCH64_BRANCH_INSTRUCTIONS,
-    instructions_with_address_immediates=AARCH64_BRANCH_INSTRUCTIONS.union({"adrp"}),
+    instructions_with_address_immediates=AARCH64_BRANCH_INSTRUCTIONS.union({"bl", "adrp"}),
     difference_normalizer=DifferenceNormalizerAArch64,
 )
 
@@ -1636,6 +1640,11 @@ def parse_relocated_line(line: str) -> Tuple[str, str, str]:
 
 
 def process_mips_reloc(row: str, prev: str, arch: ArchSettings) -> str:
+    if "R_MIPS_NONE" in row:
+        # GNU as emits no-op relocations immediately after real ones when
+        # assembling with -mabi=64. Return without trying to parse 'imm' as an
+        # integer.
+        return prev
     before, imm, after = parse_relocated_line(prev)
     repl = row.split()[-1]
     if imm != "0":
@@ -2375,6 +2384,7 @@ def do_diff(lines1: List[Line], lines2: List[Line], config: Config) -> Diff:
             )
         )
 
+    output = output[config.skip_lines :]
     return Diff(lines=output, score=score)
 
 
@@ -2608,10 +2618,9 @@ class Display:
             self.last_diff_output = diff_output
 
         meta, diff_lines = align_diffs(last_diff_output, diff_output, self.config)
-        diff_lines = diff_lines[self.config.skip_lines :]
         output = self.config.formatter.table(meta, diff_lines)
         refresh_key = (
-            [[col.key2 for col in x[1:]] for x in diff_lines],
+            [line.key2 for line in diff_output.lines],
             diff_output.score,
         )
         return (output, refresh_key)
