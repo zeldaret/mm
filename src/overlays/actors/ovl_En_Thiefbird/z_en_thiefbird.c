@@ -930,7 +930,7 @@ void func_80C12B1C(EnThiefbird* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
         this->collider.base.atFlags &= ~AT_HIT;
-        func_800BE258(&this->actor, this->collider.elements);
+        func_800BE258(&this->actor, &this->collider.elements->info);
         func_80C114C0(this, globalCtx);
         this->unk_194 = 0;
 

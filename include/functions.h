@@ -920,7 +920,7 @@ void Gfx_DrawDListXlu(GlobalContext* globalCtx, Gfx* dlist);
 Actor* func_800BE0B8(GlobalContext* globalCtx, Actor* inActor, s16 arg2, u8 arg3, f32 arg4);
 // void func_800BE184(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6);
 u8 Actor_ApplyDamage(Actor* actor); // returns current health
-void func_800BE258(Actor* actor, UNK_PTR arg1);
+void func_800BE258(Actor* actor, ColliderInfo* colInfo);
 void func_800BE2B8(Actor* actor, ColliderJntSph* jntSphere);
 void func_800BE33C(Vec3f* arg0, Vec3f* arg1, Vec3s* arg2, s32 arg3);
 void func_800BE3D0(Actor* actor, s16 arg1, Vec3s* arg2);

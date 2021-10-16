@@ -2527,11 +2527,63 @@ Actor* func_800BE0B8(GlobalContext* globalCtx, Actor* inActor, s16 arg2, u8 arg3
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE184.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_ApplyDamage.s")
+u8 Actor_ApplyDamage(Actor* actor) {
+    if (actor->colChkInfo.damage >= actor->colChkInfo.health) {
+        actor->colChkInfo.health = 0;
+    } else {
+        actor->colChkInfo.health -= actor->colChkInfo.damage;
+    }
+    return actor->colChkInfo.health;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE258.s")
+void func_800BE258(Actor* actor, ColliderInfo* colInfo) {
+    ColliderInfo* temp_v0 = colInfo->acHitInfo;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE2B8.s")
+    if (temp_v0 == NULL) {
+        actor->dropFlag = 0;
+    } else if ((temp_v0->toucher.dmgFlags & 0x800) != 0) {
+        actor->dropFlag = 1;
+    } else if ((temp_v0->toucher.dmgFlags & 0x1000) != 0) {
+        actor->dropFlag = 2;
+    } else if ((temp_v0->toucher.dmgFlags & 0x2000) != 0) {
+        actor->dropFlag = 0x20;
+    } else {
+        actor->dropFlag = 0;
+    }
+}
+
+void func_800BE2B8(Actor* actor, ColliderJntSph* jntSphere) {
+    s32 temp_v0;
+    s32 temp_v0_2;
+    s32 temp_v1;
+    ColliderJntSphElement *new_var2;
+    s32 phi_v1;
+    s32 phi_v0;
+    ColliderInfo* temp_a2;
+
+    actor->dropFlag = 0;
+
+    for (phi_v1 = jntSphere->count - 1; phi_v1 >= 0; phi_v1--) {
+        new_var2 = &jntSphere->elements[phi_v1];
+        temp_a2 = new_var2->info.acHitInfo;
+
+        if (temp_a2 == NULL) {
+            phi_v0 = 0;
+        } else {
+            temp_v0_2 = temp_a2->toucher.dmgFlags;
+
+            if (temp_v0_2 & 0x800) {
+                phi_v0 = 1;
+            } else if (temp_v0_2 & 0x1000) {
+                phi_v0 = 2;
+            } else {
+                phi_v0 = (temp_v0_2 & 0x2000) ? 0x20 : 0;
+            }
+        }
+
+        actor->dropFlag |= phi_v0;
+    }
+}
 
 void func_800BE33C(Vec3f* arg0, Vec3f* arg1, Vec3s* arg2, s32 arg3) {
     f32 sp24 = arg1->x - arg0->x;
