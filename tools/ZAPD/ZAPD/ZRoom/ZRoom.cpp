@@ -1,9 +1,8 @@
 #include "ZRoom.h"
-
 #include <algorithm>
 #include <cassert>
 #include <chrono>
-
+#include <string_view>
 #include "Commands/EndMarker.h"
 #include "Commands/SetActorCutsceneList.h"
 #include "Commands/SetActorList.h"
@@ -113,7 +112,6 @@ void ZRoom::ParseXML(tinyxml2::XMLElement* reader)
 	std::string nodeName = std::string(reader->Name());
 	if (nodeName == "Scene")
 	{
-		Globals::Instance->lastScene = this;
 		zroomType = ZResourceType::Scene;
 	}
 	else if (nodeName == "Room")
@@ -293,7 +291,7 @@ void ZRoom::DeclareReferencesLate(const std::string& prefix)
 		cmd->DeclareReferencesLate(prefix);
 }
 
-void ZRoom::DeclareVar(const std::string& prefix, const std::string body)
+Declaration* ZRoom::DeclareVar(const std::string& prefix, const std::string& body)
 {
 	std::string auxName = name;
 	if (auxName == "")
@@ -301,13 +299,16 @@ void ZRoom::DeclareVar(const std::string& prefix, const std::string body)
 	if (zroomType == ZResourceType::Scene || zroomType == ZResourceType::Room)
 		auxName = StringHelper::Sprintf("%sCommands", name.c_str());
 
-	parent->AddDeclarationArray(rawDataIndex, DeclarationAlignment::Align4, GetRawDataSize(),
-	                            GetSourceTypeName(), auxName, 0, body);
+	Declaration* decl =
+		parent->AddDeclarationArray(rawDataIndex, GetDeclarationAlignment(), GetRawDataSize(),
+	                                GetSourceTypeName(), auxName, 0, body);
+	decl->staticConf = staticConf;
+	return decl;
 }
 
 std::string ZRoom::GetBodySourceCode() const
 {
-	std::string declaration = "";
+	std::string declaration;
 
 	for (size_t i = 0; i < commands.size(); i++)
 	{
@@ -327,17 +328,17 @@ std::string ZRoom::GetDefaultName(const std::string& prefix) const
 }
 
 /*
- * There is one room in Ocarina of Time that lacks a header. Room 120, "Syotes", dates back to very
- * early in the game's development. Since this room is a special case, declare automatically the
- * data its contains whitout the need of a header.
+ * There is one room in Ocarina of Time that lacks a header. Room 120, "Syotes", dates
+ * back to very early in the game's development. Since this room is a special case,
+ * declare automatically the data its contains whitout the need of a header.
  */
 void ZRoom::SyotesRoomHack()
 {
-	PolygonType2 poly(parent, parent->GetRawData(), 0, this);
+	PolygonType2 poly(parent, 0, this);
 
 	poly.ParseRawData();
 	poly.DeclareReferences(GetName());
-	parent->AddDeclaration(0, DeclarationAlignment::Align4, poly.GetRawDataSize(),
+	parent->AddDeclaration(0, poly.GetDeclarationAlignment(), poly.GetRawDataSize(),
 	                       poly.GetSourceTypeName(), poly.GetDefaultName(GetName()),
 	                       poly.GetBodySourceCode());
 }
@@ -391,32 +392,14 @@ size_t ZRoom::GetCommandSizeFromNeighbor(ZRoomCommand* cmd)
 	return 0;
 }
 
-std::string ZRoom::GetSourceOutputHeader([[maybe_unused]] const std::string& prefix)
-{
-	return "\n" + extDefines + "\n\n";
-}
-
 std::string ZRoom::GetSourceOutputCode([[maybe_unused]] const std::string& prefix)
 {
-	std::string sourceOutput = "";
-
-	if (zroomType == ZResourceType::Scene || zroomType == ZResourceType::Room)
-	{
-		sourceOutput += "#include \"segment_symbols.h\"\n";
-		sourceOutput += "#include \"command_macros_base.h\"\n";
-		sourceOutput += "#include \"z64cutscene_commands.h\"\n";
-		sourceOutput += "#include \"variables.h\"\n";
-
-		if (Globals::Instance->lastScene != nullptr)
-			sourceOutput += Globals::Instance->lastScene->parent->GetHeaderInclude();
-	}
-
 	if (hackMode == "syotes_room")
-		return sourceOutput;
+		return "";
 
 	DeclareVar(prefix, GetBodySourceCode());
 
-	return sourceOutput;
+	return "";
 }
 
 size_t ZRoom::GetRawDataSize() const

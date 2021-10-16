@@ -29,7 +29,7 @@ void SetStartPositionList::DeclareReferences(const std::string& prefix)
 {
 	if (!actors.empty())
 	{
-		std::string declaration = "";
+		std::string declaration;
 
 		size_t index = 0;
 		for (const auto& entry : actors)
@@ -50,7 +50,8 @@ void SetStartPositionList::DeclareReferences(const std::string& prefix)
 
 std::string SetStartPositionList::GetBodySourceCode() const
 {
-	std::string listName = parent->GetDeclarationPtrName(cmdArg2);
+	std::string listName;
+	Globals::Instance->GetSegmentedPtrName(cmdArg2, parent, "ActorEntry", listName);
 	return StringHelper::Sprintf("SCENE_CMD_SPAWN_LIST(%i, %s)", actors.size(), listName.c_str());
 }
 

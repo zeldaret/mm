@@ -5,17 +5,22 @@ ASAN ?= 0
 DEPRECATION_ON ?= 1
 DEBUG ?= 0
 COPYCHECK_ARGS ?=
-# Set LLD=1 to use ld.lld as the linker
 LLD ?= 0
 
-CXX := g++
+# Use clang++ if available, else use g++
+ifeq ($(shell command -v clang++ >/dev/null 2>&1; echo $$?),0)
+  CXX := clang++
+else
+  CXX := g++
+endif
+
 INC := -I ZAPD -I lib/elfio -I lib/libgfxd -I lib/tinyxml2 -I ZAPDUtils
 CXXFLAGS := -fpic -std=c++17 -Wall -Wextra -fno-omit-frame-pointer
 OPTFLAGS :=
 
 ifneq ($(DEBUG),0)
   OPTIMIZATION_ON = 0
-  DEPRECATION_OFF = 1
+  CXXFLAGS += -g3 -DDEVELOPMENT -D_DEBUG
   COPYCHECK_ARGS += --devel
   DEPRECATION_ON = 0
 else
@@ -29,7 +34,7 @@ else
 endif
 
 ifneq ($(ASAN),0)
-  CXXFLAGS += -fsanitize=address
+  CXXFLAGS += -fsanitize=address -fsanitize=pointer-compare -fsanitize=pointer-subtract -fsanitize=undefined
 endif
 ifneq ($(DEPRECATION_ON),0)
   CXXFLAGS += -DDEPRECATION_ON
@@ -37,6 +42,11 @@ endif
 # CXXFLAGS += -DTEXTURE_DEBUG
 
 LDFLAGS := -lm -ldl -lpng
+
+# Use LLD if available. Set LLD=0 to not use it
+ifeq ($(shell command -v ld.lld >/dev/null 2>&1; echo $$?),0)
+  LLD := 1
+endif
 
 ifneq ($(LLD),0)
   LDFLAGS += -fuse-ld=lld
@@ -105,4 +115,4 @@ ZAPDUtils:
 
 # Linking
 ZAPD.out: $(O_FILES) lib/libgfxd/libgfxd.a ExporterTest ZAPDUtils
-	$(CXX) $(O_FILES) lib/libgfxd/libgfxd.a ZAPDUtils/ZAPDUtils.a -Wl,--whole-archive ExporterTest/ExporterTest.a -Wl,--no-whole-archive $(LDFLAGS) $(OUTPUT_OPTION)
+	$(CXX) $(CXXFLAGS) $(O_FILES) lib/libgfxd/libgfxd.a ZAPDUtils/ZAPDUtils.a -Wl,--whole-archive ExporterTest/ExporterTest.a -Wl,--no-whole-archive $(LDFLAGS) $(OUTPUT_OPTION)

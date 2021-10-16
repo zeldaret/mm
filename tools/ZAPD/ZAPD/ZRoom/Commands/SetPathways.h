@@ -17,8 +17,6 @@ public:
 	void ParseRawDataLate() override;
 	void DeclareReferencesLate(const std::string& prefix) override;
 
-	void DeclareVar(const std::string& prefix, const std::string& bodyStr);
-
 	std::string GetBodySourceCode() const override;
 
 	RoomCommand GetRoomCommand() const override;
