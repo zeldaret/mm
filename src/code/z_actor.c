@@ -2525,7 +2525,39 @@ Actor* func_800BE0B8(GlobalContext* globalCtx, Actor* inActor, s16 arg2, u8 arg3
     return NULL;
 }
 
+#if NON_MATCHING
+// regalloc
+s32 func_800BE184(GameState* gameState, Actor* actor, f32 arg2, s16 arg3, s16 arg4, s16 arg5) {
+    GlobalContext* globalCtx = (GlobalContext*)gameState;
+    s16 temp_a2;
+    s16 temp_t0;
+    s16 temp_v1;
+    s16 temp_t8;
+    Player* player;
+    s16 phi_v0;
+
+    player = GET_PLAYER(globalCtx);
+
+    temp_a2 = actor->yawTowardsPlayer;
+    temp_t0 = temp_a2 - arg5;
+
+    temp_t8 = BINANG_ADD(temp_a2, 0x8000);
+    phi_v0 = BINANG_SUB(temp_t8, player->actor.shape.rot.y);
+
+    if ((!temp_t0)) {}
+
+    if ((actor->xzDistToPlayer <= arg2) && (player->swordState != 0)) {
+        if (arg4 >= ABS_ALT(phi_v0) && arg3 >= ABS_ALT(temp_t0)) {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE184.s")
+s32 func_800BE184(GameState* gameState, Actor* actor, f32 arg2, s16 arg3, s16 arg4, s16 arg5);
+#endif
 
 u8 Actor_ApplyDamage(Actor* actor) {
     if (actor->colChkInfo.damage >= actor->colChkInfo.health) {
