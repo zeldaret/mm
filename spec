@@ -1634,8 +1634,7 @@ beginseg
     name "ovl_En_Ms"
     compress
     include "build/src/overlays/actors/ovl_En_Ms/z_en_ms.o"
-//    include "build/data/ovl_En_Ms/ovl_En_Ms.data.o"
-    include "build/data/ovl_En_Ms/ovl_En_Ms.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Ms/ovl_En_Ms_reloc.o"
 endseg
 
 beginseg
@@ -4488,7 +4487,6 @@ beginseg
     name "ovl_Obj_Tree"
     compress
     include "build/src/overlays/actors/ovl_Obj_Tree/z_obj_tree.o"
-//    include "build/data/ovl_Obj_Tree/ovl_Obj_Tree.data.o"
     include "build/src/overlays/actors/ovl_Obj_Tree/ovl_Obj_Tree_reloc.o"
 endseg
 

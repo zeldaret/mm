@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_tree.c
+ * Overlay: ovl_Obj_Tree
+ * Description: Single branching tree (e.g. North Clock Town)
+ */
+
 #include "z_obj_tree.h"
 
 #define FLAGS 0x02000000
@@ -9,9 +15,9 @@ void ObjTree_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjTree_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjTree_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80B9A220(ObjTree* this, GlobalContext* globalCtx);
-void func_80B9A20C(ObjTree* this);
-void func_80B9A27C(ObjTree* this, GlobalContext* globalCtx);
+void ObTree_DoNothing(ObjTree* this, GlobalContext* globalCtx);
+void ObTree_SetupDoNothing(ObjTree* this);
+void ObTree_Sway(ObjTree* this, GlobalContext* globalCtx);
 
 const ActorInit Obj_Tree_InitVars = {
     ACTOR_OBJ_TREE,
@@ -25,15 +31,13 @@ const ActorInit Obj_Tree_InitVars = {
     (ActorFunc)ObjTree_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80B9A570 = {
+static ColliderCylinderInit sCylinderInit = {
     { COLTYPE_TREE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
     { ELEMTYPE_UNK1, { 0x00000000, 0x00, 0x00 }, { 0x0100020A, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
     { 28, 120, 0, { 0, 0, 0 } },
 };
 
-// static DamageTable sDamageTable = {
-static DamageTable D_80B9A59C = {
+static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
     /* Deku Stick     */ DMG_ENTRY(0, 0xF),
     /* Horse trample  */ DMG_ENTRY(0, 0x0),
@@ -68,8 +72,7 @@ static DamageTable D_80B9A59C = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-// sColChkInfoInit
-static CollisionCheckInfoInit2 D_80B9A5BC = { 8, 0, 0, 0, MASS_HEAVY };
+static CollisionCheckInfoInit2 sColchkInfoInit = { 8, 0, 0, 0, MASS_HEAVY };
 
 extern Gfx D_06000680[];
 extern Gfx D_060007C8[];
@@ -91,61 +94,61 @@ void ObjTree_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
     
     Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &D_80B9A570);
-    CollisionCheck_SetInfo2(&this->dyna.actor.colChkInfo, &D_80B9A59C, &D_80B9A5BC);
+    Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
+    CollisionCheck_SetInfo2(&this->dyna.actor.colChkInfo, &sDamageTable, &sColchkInfoInit);
     
     if (this->dyna.actor.params & 0x8000) {
         this->collider.dim.height = 220;
     }
 
-    this->unk_1AC = 0.0f;
-    this->unk_1B0 = 0;
-    this->unk_1B2 = 0;
-    func_80B9A20C(this);
+    this->swayAmplitude = 0.0f;
+    this->swayAngle = 0;
+    this->swayVelocity = 0;
+    ObTree_SetupDoNothing(this);
 }
 
 void ObjTree_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjTree* this = THIS;
-    s32 index;
+    s32 bgId;
 
     if (!(this->dyna.actor.params & 0x8000)) {
-        index = this->dyna.bgId;
-        BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, index);
+        bgId = this->dyna.bgId;
+        BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, bgId);
     }
 
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-void func_80B9A20C(ObjTree* this) {
-    this->actionFunc = func_80B9A220;
+void ObTree_SetupDoNothing(ObjTree* this) {
+    this->actionFunc = ObTree_DoNothing;
 }
 
-void func_80B9A220(ObjTree* this, GlobalContext* globalCtx) {
+void ObTree_DoNothing(ObjTree* this, GlobalContext* globalCtx) {
 }
 
-void func_80B9A230(ObjTree* this) {
-    this->unk_1B4 = 0;
-    this->unk_1AC = 546.0f;
-    this->unk_1B2 = 0x18E3;
+void ObTree_SetupSway(ObjTree* this) {
+    this->timer = 0;
+    this->swayAmplitude = 546.0f;
+    this->swayVelocity = 35 * 0x10000 / 360;
     Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_TREE_SWING);
-    this->actionFunc = func_80B9A27C;
+    this->actionFunc = ObTree_Sway;
 }
 
-void func_80B9A27C(ObjTree* this, GlobalContext* globalCtx) {
-    if (this->unk_1B4 > 0x50) {
-        func_80B9A20C(this);
+void ObTree_Sway(ObjTree* this, GlobalContext* globalCtx) {
+    if (this->timer > 80) {
+        ObTree_SetupDoNothing(this);
         return;
     }
 
-    Math_SmoothStepToF(&this->unk_1AC, 0.0f, 0.1f, 91.0f, 18.0f);
-    this->unk_1B2 += 0xB6;
-    this->unk_1B0 += this->unk_1B2;
-    this->dyna.actor.shape.rot.x = Math_SinS(this->unk_1B0) * this->unk_1AC;
-    this->dyna.actor.shape.rot.z = Math_CosS(this->unk_1B0) * this->unk_1AC;
-    this->unk_1B4 += 1;
+    Math_SmoothStepToF(&this->swayAmplitude, 0.0f, 0.1f, 91.0f, 18.0f);
+    this->swayVelocity += 1 * 0x10000 / 360;
+    this->swayAngle += this->swayVelocity;
+    this->dyna.actor.shape.rot.x = Math_SinS(this->swayAngle) * this->swayAmplitude;
+    this->dyna.actor.shape.rot.z = Math_CosS(this->swayAngle) * this->swayAmplitude;
+    this->timer++;
 }
 
-void func_80B9A348(ObjTree* this, GlobalContext* globalCtx) {
+void ObTree_UpdateCollision(ObjTree* this, GlobalContext* globalCtx) {
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 
@@ -153,7 +156,7 @@ void func_80B9A348(ObjTree* this, GlobalContext* globalCtx) {
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         if (this->dyna.actor.home.rot.y == 1) {
             this->dyna.actor.home.rot.y = 0;
-            func_80B9A230(this);
+            ObTree_SetupSway(this);
         }
     }
 }
@@ -162,12 +165,12 @@ void ObjTree_Update(Actor* thisx, GlobalContext* globalCtx) {
     ObjTree* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    func_80B9A348(this, globalCtx);
+    ObTree_UpdateCollision(this, globalCtx);
 }
 
 void ObjTree_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    s16 sp36 = (f32) thisx->shape.rot.x;
-    s16 sp34 = (f32) thisx->shape.rot.z;
+    s16 xRot = (f32) thisx->shape.rot.x;
+    s16 zRot = (f32) thisx->shape.rot.z;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     
@@ -175,7 +178,7 @@ void ObjTree_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_06000680);
 
-    SysMatrix_InsertRotation(sp36, 0, sp34, MTXMODE_APPLY);
+    SysMatrix_InsertRotation(xRot, 0, zRot, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_060007C8);
 

@@ -1,3 +1,9 @@
+/*
+ * File: z_en_recepgirl.c
+ * Overlay: ovl_En_Recepgirl
+ * Description: Mayor's Receptionist
+ */
+
 #include "z_en_recepgirl.h"
 
 #define FLAGS 0x00000009

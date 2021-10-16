@@ -47,6 +47,7 @@
 
 ## Appendices
 - [Types, Structs and Padding](types_structs_padding.md) (a miscellany of useful stuff)
+- [Advanced control flow](advanced_control_flow.md) (an example of a more complex function which mips2c is not so good at)
 - [Helper scripts] TODO: link when merged
 
 To be written, maybe
