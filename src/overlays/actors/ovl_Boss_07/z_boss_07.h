@@ -5,14 +5,24 @@
 
 struct Boss07;
 
+#define MAJORA_TENT_LENGTH 10
+#define MAJORA_TENT_COUNT 25
+#define MAJORA_TENT_MAX 100
+#define MAJORA_WHIP_MAX 50
+
+#define MAJORA_MASK_LIMB_COUNT 19
+#define MAJORA_INCARNATION_LIMB_COUNT 25
+#define MAJORA_WRATH_LIMB_COUNT 28
+#define MAJORA_LIMB_COUNT MAX(MAJORA_MASK_LIMB_COUNT, MAX(MAJORA_INCARNATION_LIMB_COUNT, MAJORA_WRATH_LIMB_COUNT))
+
 typedef void (*Boss07ActionFunc)(struct Boss07*, GlobalContext*);
 
 typedef struct {
     Vec3f base;
-    Vec3f pos[10];
-    Vec3f rot[10];
-    Vec3f pull[10];
-} Boss07Tentacle; // size = 0x174
+    Vec3f pos[MAJORA_TENT_LENGTH];
+    Vec3f rot[MAJORA_TENT_LENGTH];
+    Vec3f pull[MAJORA_TENT_LENGTH];
+} Boss07Tentacle; // size = 0x174 (0xC + 0x24 * length)
 
 typedef struct {
     Vec3s baseRot;
@@ -21,11 +31,11 @@ typedef struct {
     f32 drag;
     f32 tension;
     Vec3f basePos;
-    Vec3f pos[50];
-    Vec3f rot[50];
-    Vec3f pull[50];
-    f32 unk_72C[50]; // unused, probably a stretch factor
-} Boss07Whip; // size = 0x7F4
+    Vec3f pos[MAJORA_WHIP_MAX];
+    Vec3f rot[MAJORA_WHIP_MAX];
+    Vec3f pull[MAJORA_WHIP_MAX];
+    f32 unk_72C[MAJORA_WHIP_MAX]; // unused, probably a stretch factor
+} Boss07Whip; // size = 0x7F4 (0x24 + 0x28 * max)
 
 typedef struct Boss07 {
     /* 0x0000 */ Actor actor;
@@ -57,8 +67,8 @@ typedef struct Boss07 {
     /* 0x0190 */ SkelAnime skelAnime;
     /* 0x01D4 */ f32 unk_1D4;
     /* 0x01D8 */ s32 unk_1D8;
-    /* 0x01DC */ Vec3s jointTable1[28];
-    /* 0x0284 */ Vec3s morphTable1[28];
+    /* 0x01DC */ Vec3s jointTable1[MAJORA_LIMB_COUNT];
+    /* 0x0284 */ Vec3s morphTable1[MAJORA_LIMB_COUNT];
     /* 0x032C */ f32 unk_32C;
     /* 0x0330 */ f32 unk_330;
     /* 0x0334 */ Vec3f bodyPartsPos[15];
@@ -134,8 +144,8 @@ typedef struct Boss07 {
     /* 0x18ED */ u8 unk_18ED;
     /* 0x18F0 */ ColliderQuad quad1;
     /* 0x1970 */ ColliderQuad quad2;
-    /* 0x19F0 */ Boss07Tentacle tentacles[25];
-    /* 0x3E44 */ char unk3E44[0x6CFC]; // size suggests 100 element tentacle array
+    /* 0x19F0 */ Boss07Tentacle tentacles[MAJORA_TENT_MAX];
+    // /* 0x3E44 */ char unk3E44[0x6CFC]; // size suggests 100 element tentacle array
     /* 0xAB40 */ s16 unk_AB40;
     /* 0xAB44 */ f32 unk_AB44;
     /* 0xAB48 */ u8 unk_AB48;
@@ -157,5 +167,19 @@ typedef struct Boss07 {
 } Boss07; // size = 0xAC20
 
 extern const ActorInit Boss_07_InitVars;
+
+typedef enum {
+    /*   0 */ MAJORA_BOSS,
+    /*  10 */ MAJORA_MASK = 10,
+    /*  11 */ MAJORA_MASK_CS,
+    /*  20 */ MAJORA_INCARNATION = 20,
+    /*  21 */ MAJORA_AFTERIMAGE,
+    /*  30 */ MAJORA_WRATH = 30,
+    /* 100 */ MAJORA_REMAINS_SHOT = 100,
+    /* 101 */ MAJORA_INCARNATION_SHOT,
+    /* 150 */ MAJORA_STATIC = 150,
+    /* 180 */ MAJORA_TOP = 180,
+    /* 200 */ MAJORA_REMAINS = 200,
+} MajoraParams;
 
 #endif // Z_BOSS_07_H
