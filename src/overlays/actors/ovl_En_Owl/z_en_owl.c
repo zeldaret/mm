@@ -1099,7 +1099,7 @@ void func_8095CCF4(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_3DA -= (s16)(this->unk_3D8 >> 6);
 }
 
-s32 EnOwl_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
+s32 EnOwl_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnOwl* this = THIS;
 
     switch (limbIndex) {
@@ -1129,7 +1129,7 @@ s32 EnOwl_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     return false;
 }
 
-void EnOwl_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void EnOwl_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnOwl* this = THIS;
     Vec3f sp18;
 

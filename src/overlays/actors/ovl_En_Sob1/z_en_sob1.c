@@ -1594,7 +1594,7 @@ void EnSob1_DrawStickDirectionPrompt(GlobalContext* globalCtx, EnSob1* this) {
 }
 
 s32 EnSob1_OverrideLimbDrawZoraShopkeeper(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                          void* thisx) {
+                                          Actor* thisx) {
     EnSob1* this = THIS;
 
     if (limbIndex == 15) {
@@ -1604,7 +1604,7 @@ s32 EnSob1_OverrideLimbDrawZoraShopkeeper(GlobalContext* globalCtx, s32 limbInde
 }
 
 s32 EnSob1_OverrideLimbDrawBombShopkeeper(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                          void* thisx) {
+                                          Actor* thisx) {
     EnSob1* this = THIS;
 
     if (limbIndex == 15) {
@@ -1613,7 +1613,7 @@ s32 EnSob1_OverrideLimbDrawBombShopkeeper(GlobalContext* globalCtx, s32 limbInde
     return false;
 }
 
-void EnSob1_PostLimbDrawBombShopkeeper(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void EnSob1_PostLimbDrawBombShopkeeper(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     if (limbIndex == 11) {
         gSPDisplayList(POLY_OPA_DISP++, D_06000970);

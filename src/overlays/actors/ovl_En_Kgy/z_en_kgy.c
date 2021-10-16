@@ -1110,7 +1110,7 @@ void EnKgy_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s32 EnKgy_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
+s32 EnKgy_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnKgy* this = THIS;
 
     if (!(this->unk_29C & 1)) {
@@ -1128,7 +1128,7 @@ s32 EnKgy_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     return false;
 }
 
-void EnKgy_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void EnKgy_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80B432D8 = { 1000.0f, 2000.0f, 0.0f };
     static Vec3f D_80B432E4 = { 3000.0f, 4000.0f, 300.0f };
     EnKgy* this = THIS;

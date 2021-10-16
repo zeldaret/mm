@@ -929,7 +929,7 @@ void func_80BA7878(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnRailgibud_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                 void* thisx, Gfx** gfx) {
+                                 Actor* thisx, Gfx** gfx) {
     EnRailgibud* this = THIS;
 
     if (limbIndex == 12) {
@@ -941,7 +941,7 @@ s32 EnRailgibud_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** 
     return false;
 }
 
-void EnRailgibud_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx,
+void EnRailgibud_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx,
                               Gfx** gfx) {
     EnRailgibud* this = THIS;
 

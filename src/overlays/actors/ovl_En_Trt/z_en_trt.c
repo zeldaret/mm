@@ -1733,7 +1733,7 @@ void EnTrt_UpdateHeadPosAndRot(s16 pitch, s16 yaw, Vec3f* pos, Vec3s* rot, s32 i
     }
 }
 
-s32 EnTrt_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
+s32 EnTrt_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnTrt* this = THIS;
     s32 i;
 
@@ -1749,7 +1749,7 @@ s32 EnTrt_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     return 0;
 }
 
-void EnTrt_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void EnTrt_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnTrt* this = THIS;
     s32 isFullyAwake;
 
@@ -1767,7 +1767,7 @@ void EnTrt_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     }
 }
 
-void EnTrt_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, void* thisx) {
+void EnTrt_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnTrt* this = THIS;
 
     if (limbIndex == 21) {

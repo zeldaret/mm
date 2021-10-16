@@ -671,7 +671,7 @@ void EnDekunuts_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_808BEBD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
+s32 func_808BEBD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnDekunuts* this = THIS;
     f32 arg1, arg2, arg3;
     f32 currentFrame;
@@ -703,7 +703,7 @@ s32 func_808BEBD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return 0;
 }
 
-void func_808BED30(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void func_808BED30(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static s8 D_808BEF98[] = {
         -1, -1, -1, 3, -1, 0, -1, 1, -1, 2, 0, 0,
     };

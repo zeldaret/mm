@@ -68,14 +68,14 @@ void DmSa_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 }
 
-s32 func_80A2EB10(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* arg) {
+s32 func_80A2EB10(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor) {
     return 0;
 }
 
-void func_80A2EB2C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* arg) {
+void func_80A2EB2C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor) {
 }
 
-void func_80A2EB44(GlobalContext* globalCtx, s32 limbIndex, void* arg) {
+void func_80A2EB44(GlobalContext* globalCtx, s32 limbIndex, Actor* actor) {
 }
 
 Gfx* func_80A2EB58(GraphicsContext* gfxCtx, u32 alpha) {

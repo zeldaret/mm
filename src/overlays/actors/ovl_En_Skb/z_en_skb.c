@@ -1064,7 +1064,7 @@ void EnSkb_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80996D68(this, globalCtx);
 }
 
-s32 EnSkb_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
+s32 EnSkb_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnSkb* this = THIS;
     s32 pad;
     s16 sins;
@@ -1093,7 +1093,7 @@ s32 EnSkb_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     return false;
 }
 
-void EnSkb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void EnSkb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80997564 = { 800.0f, 1200.0f, 0.0f };
     EnSkb* this = THIS;
 

@@ -1065,7 +1065,7 @@ void EnSellnuts_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnSellnuts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                void* thisx) {
+                                Actor* thisx) {
     EnSellnuts* this = THIS;
 
     if (((this->unk_34C == 4) && (this->unk_350 == 0)) || ((this->unk_34C == 8) && (this->unk_350 == 0)) ||
@@ -1124,10 +1124,10 @@ s32 EnSellnuts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** d
     return false;
 }
 
-void EnSellnuts_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void EnSellnuts_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
 }
 
-void func_80ADD7CC(GlobalContext* globalCtx, s32 limbIndex, void* thisx) {
+void func_80ADD7CC(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnSellnuts* this = THIS;
 
     if (((this->unk_350 == 1) || (this->unk_350 == 3)) && ((limbIndex == 23) || (limbIndex == 24))) {

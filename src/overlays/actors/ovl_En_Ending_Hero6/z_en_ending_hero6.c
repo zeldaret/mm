@@ -123,7 +123,7 @@ void EnEndingHero6_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
 }
 
-void EnEndingHero6_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void EnEndingHero6_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Gfx* D_80C2426C[] = { D_060070C0, D_06006FB0, D_06006E80, D_06006D70, D_0600A390_dl };
     EnEndingHero6* this = THIS;
     s32 index;

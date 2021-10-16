@@ -196,24 +196,24 @@ typedef struct SkelAnime {
 } SkelAnime; // size = 0x44
 
 typedef s32 (*OverrideLimbDrawOpa)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                void* arg);
+                                   struct Actor* actor);
 
 typedef void (*PostLimbDrawOpa)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot,
-                             void* arg);
+                                struct Actor* actor);
 
 typedef s32 (*OverrideLimbDraw)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                 void* arg, Gfx** gfx);
+                                struct Actor* actor, Gfx** gfx);
 
 typedef void (*PostLimbDraw)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot,
-                              void* arg, Gfx** gfx);
+                             struct Actor* actor, Gfx** gfx);
 
 typedef s32 (*OverrideLimbDrawSV)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                  void* arg);
+                                  struct Actor* actor);
 
 typedef void (*PostLimbDrawSV)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** dList2, Vec3s* rot,
-                               void* arg);
+                               struct Actor* actor);
 
-typedef void (*UnkActorDraw)(struct GlobalContext* globalCtx, s32 limbIndex, void* arg);
+typedef void (*UnkActorDraw)(struct GlobalContext* globalCtx, s32 limbIndex, struct Actor* actor);
 
 typedef void (*AnimationEntryCallback)(struct GlobalContext*, AnimationEntryData*);
 

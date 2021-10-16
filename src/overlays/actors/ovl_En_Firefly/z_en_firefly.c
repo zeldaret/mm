@@ -730,7 +730,7 @@ void EnFirefly_Update(Actor* thisx, GlobalContext* globalCtx2) {
 }
 
 s32 EnFirefly_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                               void* thisx, Gfx** gfx) {
+                               Actor* thisx, Gfx** gfx) {
     EnFirefly* this = THIS;
 
     if (this->isInvisible && (globalCtx->actorCtx.unk4 != 0x64)) {
@@ -741,7 +741,7 @@ s32 EnFirefly_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
     return false;
 }
 
-void EnFirefly_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx, Gfx** gfx) {
+void EnFirefly_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     static Color_RGBA8 fireAuraPrimColor = { 255, 255, 100, 255 };
     static Color_RGBA8 fireAuraEnvColor = { 255, 50, 0, 0 };
     static Color_RGBA8 iceAuraPrimColor = { 100, 200, 255, 255 };

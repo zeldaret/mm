@@ -1472,7 +1472,7 @@ void EnSuttari_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnSuttari_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                               void* thisx) {
+                               Actor* thisx) {
     EnSuttari* this = THIS;
 
     if (limbIndex == 15) {
@@ -1495,7 +1495,7 @@ s32 EnSuttari_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
     return false;
 }
 
-void EnSuttari_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void EnSuttari_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80BAE950 = { 0.0f, 0.0f, 0.0f };
     static Vec3f D_80BAE95C = { 2000.0f, -1000.0f, 0.0f };
     EnSuttari* this = THIS;
@@ -1530,7 +1530,7 @@ void EnSuttari_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     }
 }
 
-void EnSuttari_UnkDraw(GlobalContext* globalCtx, s32 limbIndex, void* thisx) {
+void EnSuttari_UnkDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 }
 
 void EnSuttari_Draw(Actor* thisx, GlobalContext* globalCtx) {

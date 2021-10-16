@@ -35,8 +35,8 @@ void func_80A72CF8(EnDno* this, GlobalContext* globalCtx);
 void func_80A730A0(EnDno* this, GlobalContext* globalCtx);
 void func_80A73244(EnDno* this, GlobalContext* globalCtx);
 void func_80A732C8(EnDno* this, GlobalContext* globalCtx);
-s32 EnDno_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx);
-void EnDno_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx);
+s32 EnDno_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
+void EnDno_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
 extern AnimationHeader D_06000470;
 extern AnimationHeader D_060008F0;
@@ -924,7 +924,7 @@ void EnDno_Draw(Actor* thisx, GlobalContext* globalCtx) {
                           EnDno_OverrideLimbDraw, EnDno_PostLimbDraw, &this->actor);
 }
 
-s32 EnDno_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
+s32 EnDno_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnDno* this = THIS;
 
     *dList = NULL;
@@ -934,7 +934,7 @@ s32 EnDno_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     return false;
 }
 
-void EnDno_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void EnDno_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80A73B40 = { 0.0f, 0.0f, 0.0f };
     Gfx* gfxOpa;
     Gfx* gfxXlu;

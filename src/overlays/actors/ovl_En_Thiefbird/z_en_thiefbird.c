@@ -1048,7 +1048,7 @@ void EnThiefbird_Update(Actor* thisx, GlobalContext* globalCtx2) {
 }
 
 s32 EnThiefbird_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                 void* thisx) {
+                                 Actor* thisx) {
     EnThiefbird* this = THIS;
 
     if ((limbIndex == 10) || (limbIndex == 11)) {
@@ -1063,7 +1063,7 @@ s32 EnThiefbird_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** 
     return false;
 }
 
-void EnThiefbird_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void EnThiefbird_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static s8 D_80C13698[] = {
         -1, 0, -1, 1, 3, -1, 2, 5, -1, -1, 7, 8, 9, -1, -1, 10, -1,
     };

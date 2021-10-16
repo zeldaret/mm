@@ -1347,7 +1347,7 @@ void EnFu_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80964034(this, globalCtx);
 }
 
-s32 EnFu_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
+s32 EnFu_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnFu* this = THIS;
 
     if (limbIndex == 9) {
@@ -1366,7 +1366,7 @@ s32 EnFu_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     return false;
 }
 
-void EnFu_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void EnFu_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80964C28 = { -2500.0f, 0.0f, 0.0f };
     static Vec3f D_80964C34 = { -3500.0f, 0.0f, 0.0f };
     EnFu* this = THIS;

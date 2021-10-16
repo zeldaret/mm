@@ -855,7 +855,7 @@ void EnPoh_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 }
 
-s32 EnPoh_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx,
+s32 EnPoh_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
                            Gfx** gfx) {
     EnPoh* this = THIS;
 
@@ -871,7 +871,7 @@ s32 EnPoh_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     return false;
 }
 
-void EnPoh_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx, Gfx** gfx) {
+void EnPoh_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     static s8 D_80B2F71C[] = {
         -1, -1, -1, -1, 4, 5, -1, -1, -1, 0, 1, -1, -1, -1, -1, -1, 2, -1, -1, 3, -1,
     };

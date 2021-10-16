@@ -1363,7 +1363,7 @@ Gfx* func_80B99580(GraphicsContext* gfxCtx) {
     return dList;
 }
 
-s32 EnZot_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
+s32 EnZot_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnZot* this = THIS;
     s32 pad;
 
@@ -1387,7 +1387,7 @@ s32 EnZot_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     return false;
 }
 
-void EnZot_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void EnZot_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80B99934 = { 400.0f, 0.0f, 0.0f };
     EnZot* this = THIS;
 

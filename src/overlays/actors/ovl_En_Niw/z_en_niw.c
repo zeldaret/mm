@@ -30,7 +30,6 @@ void EnNiw_UpdateFeather(EnNiw* this, GlobalContext* globalCtx);
 void EnNiw_DrawFeathers(EnNiw* this, GlobalContext* globalCtx);
 void EnNiw_CheckRage(EnNiw* this, GlobalContext* globalCtx);
 void func_80891320(EnNiw* this, GlobalContext* globalCtx, s16 arg2);
-s32 EnNiw_LimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* arg);
 void EnNiw_SpawnFeather(EnNiw* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 scale);
 
 extern FlexSkeletonHeader D_06002530;
@@ -907,7 +906,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s32 EnNiw_LimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
+s32 EnNiw_LimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnNiw* this = THIS;
 
     if (limbIndex == 13) {

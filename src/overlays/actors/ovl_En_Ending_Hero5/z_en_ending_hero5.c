@@ -68,8 +68,8 @@ void EnEndingHero5_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 Gfx* D_80C23BF0[] = { D_060070C0, D_06006FB0, D_06006E80, D_06006D70, D_0600A390 };
 
-void func_80C23A30(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* arg) {
-    EnEndingHero5* this = (EnEndingHero5*)arg;
+void func_80C23A30(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    EnEndingHero5* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 

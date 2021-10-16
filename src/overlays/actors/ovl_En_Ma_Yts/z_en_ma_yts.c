@@ -522,7 +522,7 @@ void EnMaYts_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80B8D12C(this, globalCtx);
 }
 
-s32 EnMaYts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* arg) {
+s32 EnMaYts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* arg) {
     EnMaYts* this = (EnMaYts*)arg;
     Vec3s sp4;
 
@@ -541,7 +541,7 @@ s32 EnMaYts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     return 0;
 }
 
-void EnMaYts_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* arg) {
+void EnMaYts_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* arg) {
     EnMaYts* this = (EnMaYts*)arg;
 
     if (limbIndex == MA1_LIMB_HEAD) {

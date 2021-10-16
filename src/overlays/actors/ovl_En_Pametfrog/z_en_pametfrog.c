@@ -1404,7 +1404,7 @@ static s8 limbPosIndex[] = {
     -1, -1, 0, -1, 1, -1, 2, -1, 3, -1, 4, -1, 5, 6, -1, 7, 8, 9, -1, 10, -1, 11, -1, -1,
 };
 
-void EnPametfrog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* arg) {
+void EnPametfrog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* arg) {
     EnPametfrog* this = (EnPametfrog*)arg;
     Vec3f vec;
     Vec3s* center;
