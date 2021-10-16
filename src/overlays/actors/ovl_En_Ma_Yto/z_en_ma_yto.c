@@ -1294,7 +1294,7 @@ void EnMaYto_BarnStartDialogue(EnMaYto* this, GlobalContext* globalCtx) {
 
 void EnMaYto_ChangeAnim(EnMaYto* this, s32 index) {
     Animation_Change(&this->skelAnime, sAnimationInfo[index].animationSeg, 1.0f, 0.0f,
-                     Animation_GetLastFrame(&sAnimationInfo[index].animationSeg->common), sAnimationInfo[index].mode,
+                     Animation_GetLastFrame(sAnimationInfo[index].animationSeg), sAnimationInfo[index].mode,
                      sAnimationInfo[index].transitionRate);
 }
 

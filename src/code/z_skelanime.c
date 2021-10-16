@@ -133,8 +133,8 @@ void SkelAnime_DrawLod(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTa
  * Near or far display list is specified via `lod`
  */
 void SkelAnime_DrawFlexLimbLod(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable,
-                               OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor, s32 lod,
-                               Mtx** mtx) {
+                               OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor,
+                               s32 lod, Mtx** mtx) {
     LodLimb* limb;
     Gfx* newDList;
     Gfx* limbDList;
@@ -194,7 +194,8 @@ void SkelAnime_DrawFlexLimbLod(GlobalContext* globalCtx, s32 limbIndex, void** s
  * An array of matrices is dynamically allocated so each limb can access any transform to ensure its meshes line up.
  */
 void SkelAnime_DrawFlexLod(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount,
-                           OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor, s32 lod) {
+                           OverrideLimbDrawFlex overrideLimbDraw, PostLimbDrawFlex postLimbDraw, Actor* actor,
+                           s32 lod) {
     LodLimb* rootLimb;
     s32 pad;
     Gfx* newDList;

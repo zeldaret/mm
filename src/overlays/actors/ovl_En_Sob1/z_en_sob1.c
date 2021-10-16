@@ -171,7 +171,7 @@ void EnSob1_ChangeAnim(SkelAnime* skelAnime, ActorAnimationEntryS* animations, s
 
     animations += idx;
     if (animations->frameCount < 0) {
-        frameCount = Animation_GetLastFrame(&animations->animationSeg->common);
+        frameCount = Animation_GetLastFrame(animations->animationSeg);
     } else {
         frameCount = animations->frameCount;
     }
@@ -722,7 +722,7 @@ void EnSob1_EndWalk(EnSob1* this, GlobalContext* globalCtx) {
     s32 pad;
     f32 distSq;
     s16 curFrame = this->skelAnime.curFrame / this->skelAnime.playSpeed;
-    s16 animLastFrame = Animation_GetLastFrame(&D_06009120.common) / (s16)this->skelAnime.playSpeed;
+    s16 animLastFrame = Animation_GetLastFrame(&D_06009120) / (s16)this->skelAnime.playSpeed;
 
     Math_SmoothStepToS(
         &this->actor.world.rot.y,
@@ -743,7 +743,7 @@ void EnSob1_EndWalk(EnSob1* this, GlobalContext* globalCtx) {
 void EnSob1_SetupIdle(EnSob1* this, GlobalContext* globalCtx) {
     s16 curFrame = this->skelAnime.curFrame;
 
-    if (Animation_GetLastFrame(&D_06008268.common) == curFrame) {
+    if (Animation_GetLastFrame(&D_06008268) == curFrame) {
         EnSob1_ChangeAnim(&this->skelAnime, sAnimationsBombShopkeeper, 2);
         EnSob1_SetupAction(this, EnSob1_Idle);
     }
@@ -1336,7 +1336,7 @@ s32 EnSob1_AreObjectsLoaded(EnSob1* this, GlobalContext* globalCtx) {
 void EnSob1_InitZoraShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600D208, NULL, this->jointTable, this->morphTable, 20);
     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->objIndices[2]].segment);
-    Animation_Change(&this->skelAnime, &D_0600078C, 1.0f, 0.0f, Animation_GetLastFrame(&D_0600078C.common), 0, 0.0f);
+    Animation_Change(&this->skelAnime, &D_0600078C, 1.0f, 0.0f, Animation_GetLastFrame(&D_0600078C), 0, 0.0f);
     this->actor.draw = EnSob1_DrawZoraShopkeeper;
     this->changeObjectFunc = EnSob1_ChangeObject;
 }
@@ -1344,7 +1344,7 @@ void EnSob1_InitZoraShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
 void EnSob1_InitGoronShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06011AC8, NULL, this->jointTable, this->morphTable, 18);
     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->objIndices[2]].segment);
-    Animation_Change(&this->skelAnime, &D_060000FC, 1.0f, 0.0f, Animation_GetLastFrame(&D_060000FC.common), 0, 0.0f);
+    Animation_Change(&this->skelAnime, &D_060000FC, 1.0f, 0.0f, Animation_GetLastFrame(&D_060000FC), 0, 0.0f);
     this->actor.draw = EnSob1_DrawGoronShopkeeper;
     this->changeObjectFunc = EnSob1_ChangeObject;
 }

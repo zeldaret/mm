@@ -117,7 +117,7 @@ s32 EnFg_UpdateAnimation(SkelAnime* skelAnime, s16 animIndex) {
         ret = true;
         frameCount = sAnimations[animIndex].frameCount;
         if (frameCount < 0) {
-            frameCount = Animation_GetLastFrame(&sAnimations[animIndex].animationSeg->common);
+            frameCount = Animation_GetLastFrame(sAnimations[animIndex].animationSeg);
         }
         Animation_Change(skelAnime, sAnimations[animIndex].animationSeg, sAnimations[animIndex].playbackSpeed,
                          sAnimations[animIndex].frame, frameCount, sAnimations[animIndex].mode,

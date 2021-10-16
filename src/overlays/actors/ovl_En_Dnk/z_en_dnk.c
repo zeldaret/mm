@@ -148,7 +148,7 @@ s32 func_80A514F0(SkelAnime* skelAnime, s16 animIndex) {
             sp30 = true;
             frameCount = sAnimations[animIndex].frameCount;
             if (frameCount < 0) {
-                frameCount = Animation_GetLastFrame(&(sAnimations[animIndex].animationSeg)->common);
+                frameCount = Animation_GetLastFrame(sAnimations[animIndex].animationSeg);
             }
             frame = sAnimations[animIndex].frame;
             if (frame < 0) {

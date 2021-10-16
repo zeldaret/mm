@@ -33,7 +33,7 @@ void func_80A2E960(SkelAnime* arg0, ActorAnimationEntry* animations, u16 index) 
     animations += index;
 
     if (animations->frameCount < 0.0f) {
-        frameCount = Animation_GetLastFrame(&animations->animation->common);
+        frameCount = Animation_GetLastFrame(animations->animation);
     } else {
         frameCount = animations->frameCount;
     }

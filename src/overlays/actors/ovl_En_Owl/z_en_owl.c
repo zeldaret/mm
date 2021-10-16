@@ -468,7 +468,7 @@ void func_8095B2F8(EnOwl* this, GlobalContext* globalCtx) {
     if ((this->actor.shape.rot.y == this->unk_3EC) && (this->actionFlags & 1)) {
         this->actionFunc = func_8095B254;
         Animation_Change(this->skelAnime3, this->skelAnime3->animation, 1.0f, 19.0f,
-                         Animation_GetLastFrame(&D_06001168.common), 2, 0.0f);
+                         Animation_GetLastFrame(&D_06001168), 2, 0.0f);
         this->unk_414 = func_8095C484;
     }
 
@@ -534,7 +534,7 @@ void func_8095B650(EnOwl* this, GlobalContext* globalCtx) {
 
 void func_8095B6C8(EnOwl* this, GlobalContext* globalCtx) {
     if (this->actionFlags & 1) {
-        Animation_Change(this->skelAnime3, &D_0600CB94, -1.0f, Animation_GetLastFrame(&D_0600CB94.common), 0.0f, 2,
+        Animation_Change(this->skelAnime3, &D_0600CB94, -1.0f, Animation_GetLastFrame(&D_0600CB94), 0.0f, 2,
                          0.0f);
         this->unk_414 = func_8095C484;
         this->actionFunc = func_8095B650;
@@ -811,7 +811,7 @@ void func_8095C258(EnOwl* this) {
     } else {
         this->unk_414 = func_8095C328;
         this->unk_3EA = 6;
-        Animation_Change(this->skelAnime3, &D_06001ADC, 1.0f, 0.0f, Animation_GetLastFrame(&D_06001ADC.common), 2,
+        Animation_Change(this->skelAnime3, &D_06001ADC, 1.0f, 0.0f, Animation_GetLastFrame(&D_06001ADC), 2,
                          5.0f);
     }
 }
@@ -825,7 +825,7 @@ void func_8095C328(EnOwl* this) {
         } else {
             this->unk_3EA = 160;
             this->unk_414 = func_8095C258;
-            Animation_Change(this->skelAnime3, &D_0600C6D4, 1.0f, 0.0f, Animation_GetLastFrame(&D_0600C6D4.common), 0,
+            Animation_Change(this->skelAnime3, &D_0600C6D4, 1.0f, 0.0f, Animation_GetLastFrame(&D_0600C6D4), 0,
                              5.0f);
         }
     }
@@ -1202,7 +1202,7 @@ void func_8095D074(Actor* thisx, GlobalContext* globalCtx) {
 void EnOwl_ChangeMode(EnOwl* this, EnOwlActionFunc actionFunc, EnOwlFunc unkFunc, SkelAnime* skelAnime,
                       AnimationHeader* animationSeg, f32 transitionRate) {
     this->skelAnime3 = skelAnime;
-    Animation_Change(this->skelAnime3, animationSeg, 1.0f, 0.0f, Animation_GetLastFrame(&animationSeg->common), 2,
+    Animation_Change(this->skelAnime3, animationSeg, 1.0f, 0.0f, Animation_GetLastFrame(animationSeg), 2,
                      transitionRate);
     this->actionFunc = actionFunc;
     this->unk_414 = unkFunc;

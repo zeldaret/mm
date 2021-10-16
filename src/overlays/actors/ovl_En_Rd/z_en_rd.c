@@ -519,7 +519,7 @@ void func_808D4CA8(EnRd* this, GlobalContext* globalCtx) {
 }
 
 void func_808D4DC4(EnRd* this) {
-    Animation_Change(&this->skelAnime, &D_0600ABE0, 0.0f, 0.0f, Animation_GetLastFrame(&D_0600ABE0.common), 0, -6.0f);
+    Animation_Change(&this->skelAnime, &D_0600ABE0, 0.0f, 0.0f, Animation_GetLastFrame(&D_0600ABE0), 0, -6.0f);
     this->unk_3EF = 13;
     this->unk_3D6 = 6;
     this->actor.shape.rot.x = -0x4000;
@@ -553,7 +553,7 @@ void func_808D4E60(EnRd* this, GlobalContext* globalCtx) {
 }
 
 void func_808D4FE0(EnRd* this, GlobalContext* globalCtx) {
-    f32 frameCount = Animation_GetLastFrame(&D_060113EC.common);
+    f32 frameCount = Animation_GetLastFrame(&D_060113EC);
 
     Animation_Change(&this->skelAnime, &D_060113EC, 1.0f, 4.0f, frameCount, 1, -4.0f);
     this->actor.speedXZ = 0.4f;
@@ -628,7 +628,7 @@ void func_808D506C(EnRd* this, GlobalContext* globalCtx) {
 }
 
 void func_808D53C0(EnRd* this, GlobalContext* globalCtx) {
-    Animation_Change(&this->skelAnime, &D_060113EC, 0.5f, 0.0f, Animation_GetLastFrame(&D_060113EC.common), 1, -4.0f);
+    Animation_Change(&this->skelAnime, &D_060113EC, 0.5f, 0.0f, Animation_GetLastFrame(&D_060113EC), 1, -4.0f);
     this->unk_3EF = 2;
     this->actionFunc = func_808D5440;
 }
@@ -678,7 +678,7 @@ void func_808D5440(EnRd* this, GlobalContext* globalCtx) {
 }
 
 void func_808D5660(EnRd* this) {
-    f32 frameCount = Animation_GetLastFrame(&D_060113EC.common);
+    f32 frameCount = Animation_GetLastFrame(&D_060113EC);
 
     Animation_Change(&this->skelAnime, &D_060113EC, 0.5f, 0.0f, frameCount, 1, -4.0f);
     this->unk_3EF = 3;
@@ -758,7 +758,7 @@ void func_808D58CC(EnRd* this, GlobalContext* globalCtx) {
                     player->stateFlags2 &= ~0x80;
                     player->unk_AE8 = 100;
                 }
-                Animation_Change(&this->skelAnime, &D_06006B08, 0.5f, 0.0f, Animation_GetLastFrame(&D_06006B08.common),
+                Animation_Change(&this->skelAnime, &D_06006B08, 0.5f, 0.0f, Animation_GetLastFrame(&D_06006B08),
                                  3, 0.0f);
                 this->unk_3EB++;
                 this->unk_3EF = 4;
@@ -819,7 +819,7 @@ void func_808D58CC(EnRd* this, GlobalContext* globalCtx) {
 }
 
 void func_808D5C54(EnRd* this) {
-    Animation_Change(&this->skelAnime, &D_060073A4, 0.0f, 0.0f, Animation_GetLastFrame(&D_060073A4.common), 2, 0.0f);
+    Animation_Change(&this->skelAnime, &D_060073A4, 0.0f, 0.0f, Animation_GetLastFrame(&D_060073A4), 2, 0.0f);
     this->unk_3EF = 7;
     this->actionFunc = func_808D5CCC;
 }
@@ -863,7 +863,7 @@ void func_808D5DF4(EnRd* this, GlobalContext* globalCtx) {
 }
 
 void func_808D5E98(EnRd* this) {
-    f32 frameCount = Animation_GetLastFrame(&D_060113EC.common);
+    f32 frameCount = Animation_GetLastFrame(&D_060113EC);
 
     Animation_Change(&this->skelAnime, &D_060113EC, 0.5f, 0.0f, frameCount, 1, -4.0f);
     this->unk_3EF = 9;
@@ -901,7 +901,7 @@ void func_808D6054(EnRd* this, GlobalContext* globalCtx) {
 }
 
 void func_808D60B0(EnRd* this) {
-    Animation_Change(&this->skelAnime, &D_0600A450, -1.0f, Animation_GetLastFrame(&D_0600A450.common), 0.0f, 2, -4.0f);
+    Animation_Change(&this->skelAnime, &D_0600A450, -1.0f, Animation_GetLastFrame(&D_0600A450), 0.0f, 2, -4.0f);
     this->unk_3EF = 6;
     this->actionFunc = func_808D6130;
 }

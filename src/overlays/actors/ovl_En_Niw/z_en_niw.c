@@ -327,7 +327,7 @@ void func_808917F8(EnNiw* this, GlobalContext* globalCtx, s32 arg2) {
 }
 
 void EnNiw_SetupIdle(EnNiw* this) {
-    Animation_Change(&this->skelanime, &D_060000E8, 1.0f, 0.0f, Animation_GetLastFrame(&D_060000E8.common), 0, -10.0f);
+    Animation_Change(&this->skelanime, &D_060000E8, 1.0f, 0.0f, Animation_GetLastFrame(&D_060000E8), 0, -10.0f);
     this->unknownState28E = 0;
     this->actionFunc = EnNiw_Idle;
 }
@@ -629,7 +629,7 @@ void EnNiw_CuccoStorm(EnNiw* this, GlobalContext* globalCtx) {
 }
 
 void EnNiw_SetupRunAway(EnNiw* this) {
-    Animation_Change(&this->skelanime, &D_060000E8, 1.0f, 0.0f, Animation_GetLastFrame(&D_060000E8.common), 0, -10.0f);
+    Animation_Change(&this->skelanime, &D_060000E8, 1.0f, 0.0f, Animation_GetLastFrame(&D_060000E8), 0, -10.0f);
     this->unk29A = Rand_ZeroFloat(1.99f);
     this->unknownState28E = 7;
     this->actionFunc = EnNiw_RunAway;

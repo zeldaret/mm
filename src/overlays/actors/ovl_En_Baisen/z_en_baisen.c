@@ -103,7 +103,7 @@ void EnBaisen_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnBaisen_ChangeAnimation(EnBaisen* this, s32 animIndex) {
     this->animIndex = animIndex;
-    this->frameCount = Animation_GetLastFrame(&D_80BE8E4C[animIndex]->common);
+    this->frameCount = Animation_GetLastFrame(D_80BE8E4C[animIndex]);
     Animation_Change(&this->skelAnime, D_80BE8E4C[this->animIndex], 1.0f, 0.0f, this->frameCount,
                      animModes[this->animIndex], -10.0f);
 }

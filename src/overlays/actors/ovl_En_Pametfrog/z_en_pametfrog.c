@@ -719,7 +719,7 @@ void EnPametfrog_WallPause(EnPametfrog* this, GlobalContext* globalCtx) {
 void EnPametfrog_SetupClimbDownWall(EnPametfrog* this) {
     s16 yaw;
 
-    Animation_Change(&this->skelAnime, &D_060039C4, 0.0f, 0.0f, Animation_GetLastFrame(&D_060039C4.common), 2, 0.0f);
+    Animation_Change(&this->skelAnime, &D_060039C4, 0.0f, 0.0f, Animation_GetLastFrame(&D_060039C4), 2, 0.0f);
     this->actor.shape.rot.y = Actor_YawBetweenActors(&this->actor, this->actor.child);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.shape.rot.x = 0;

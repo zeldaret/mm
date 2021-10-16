@@ -216,7 +216,7 @@ s32 func_80BAA904(EnSuttari* this, GlobalContext* globalCtx) {
 
 void func_80BAA9B4(EnSuttari* this) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(&sAnimations[this->animationIdx].animation->common);
+    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
 
     switch (this->textId) {
         case 0x1454:
@@ -383,7 +383,7 @@ void func_80BAAB78(EnSuttari* this, GlobalContext* globalCtx) {
 
 void func_80BAAF1C(EnSuttari* this) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(&sAnimations[this->animationIdx].animation->common);
+    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
 
     if (this->animationIdx == 5) {
         this->animationIdx = 3;
@@ -817,7 +817,7 @@ s32 func_80BAC220(EnSuttari* this, GlobalContext* globalCtx) {
 void func_80BAC2FC(EnSuttari* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s16 curFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(&sAnimations[this->animationIdx].animation->common);
+    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
 
     switch (this->unk428) {
         case 12:
@@ -1221,7 +1221,7 @@ void func_80BAD5F8(EnSuttari* this, GlobalContext* globalCtx) {
     u32* unk_14 = &gSaveContext.unk_14;
     struct_80133038_arg2 unkStruct;
     s16 curFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(&sAnimations[this->animationIdx].animation->common);
+    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
 
     if ((curFrame == frameCount) && (this->animationIdx == 0) && (this->flags1 & 0x20)) {
         this->animationIdx = 2;
@@ -1257,7 +1257,7 @@ void func_80BAD7F8(EnSuttari* this, GlobalContext* globalCtx) {
     u32* unk_14 = &gSaveContext.unk_14;
     struct_80133038_arg2 unkStruct;
     s16 curFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(&sAnimations[this->animationIdx].animation->common);
+    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
 
     if (this->enFsn == NULL) {
         this->enFsn = (EnFsn*)EnSuttari_GetActorById(globalCtx, ACTOR_EN_FSN);
@@ -1306,7 +1306,7 @@ void func_80BADA08(EnSuttari* this, GlobalContext* globalCtx) {
 void func_80BADA9C(EnSuttari* this, GlobalContext* globalCtx) {
     u8 talkstate = func_80152498(&globalCtx->msgCtx);
     s16 curFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(&sAnimations[this->animationIdx].animation->common);
+    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
 
     if (this->flags1 & 1) {
         this->unk3F2 = this->unk2DE;

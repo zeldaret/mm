@@ -141,7 +141,7 @@ void func_8094373C(EnDaiku* this, s32 arg1) {
         0, 0, 0, 0, 2, 0, 0, 2, 2,
     };
 
-    this->unk_284 = Animation_GetLastFrame(&D_809440A4[arg1]->common);
+    this->unk_284 = Animation_GetLastFrame(D_809440A4[arg1]);
     Animation_Change(&this->skelAnime, D_809440A4[arg1], 1.0f, 0.0f, this->unk_284, D_809440C8[arg1], -4.0f);
 }
 

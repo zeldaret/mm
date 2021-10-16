@@ -132,7 +132,7 @@ void EnKgy_ChangeAnim(EnKgy* this, s16 animIndex, u8 mode, f32 transitionRate) {
     };
 
     Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f,
-                     Animation_GetLastFrame(&sAnimations[animIndex]->common), mode, transitionRate);
+                     Animation_GetLastFrame(sAnimations[animIndex]), mode, transitionRate);
     this->unk_2D2 = animIndex;
 }
 

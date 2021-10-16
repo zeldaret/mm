@@ -144,7 +144,7 @@ void func_80BE6408(EnDaiku2* this, s32 arg1) {
     f32 sp34 = 1.0f;
 
     this->unk_276 = arg1;
-    this->unk_284 = Animation_GetLastFrame(&sAnimations[this->unk_276]->common);
+    this->unk_284 = Animation_GetLastFrame(sAnimations[this->unk_276]);
     if (this->unk_276 == 3) {
         sp34 = 2.0f;
     }
@@ -274,7 +274,7 @@ void func_80BE66E4(EnDaiku2* this, GlobalContext* globalCtx) {
             if ((this->unk_276 == 5) || (this->unk_276 == 9)) {
                 func_80BE6408(this, 10);
             } else if ((this->unk_276 == 10) && (this->unk_284 <= sp9C)) {
-                this->unk_284 = Animation_GetLastFrame(&D_06002134.common);
+                this->unk_284 = Animation_GetLastFrame(&D_06002134);
                 Animation_Change(&this->skelAnime, &D_06002134, -1.0f, this->unk_284, 0.0f, 2, -4.0f);
                 this->unk_276 = 11;
             } else if ((this->unk_276 == 11) && (sp9C <= 0.0f)) {

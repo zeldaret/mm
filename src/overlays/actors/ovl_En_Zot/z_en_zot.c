@@ -258,7 +258,7 @@ void func_80B96BEC(EnZot* this, s16 arg1, u8 arg2) {
             Animation_Change(&this->skelAnime, sAnimations[arg1], 0.0f, arg1 - 8, arg1 - 8, arg2, 0.0f);
         } else {
             Animation_Change(&this->skelAnime, sAnimations[arg1], 1.0f, 0.0f,
-                             Animation_GetLastFrame(&sAnimations[arg1]->common), arg2, -5.0f);
+                             Animation_GetLastFrame(sAnimations[arg1]), arg2, -5.0f);
         }
         this->unk_2F0 = arg1;
     }

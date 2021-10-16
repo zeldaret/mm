@@ -245,7 +245,7 @@ f32 func_80ADB08C(GlobalContext* globalCtx) {
 
 void func_80ADB0D8(EnSellnuts* this, GlobalContext* globalCtx) {
     s16 currentFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(&D_80ADD990[this->unk_34C].animationSeg->common);
+    s16 frameCount = Animation_GetLastFrame(D_80ADD990[this->unk_34C].animationSeg);
 
     if (currentFrame == frameCount) {
         switch (this->unk_340) {
@@ -299,7 +299,7 @@ void func_80ADB0D8(EnSellnuts* this, GlobalContext* globalCtx) {
 
 void func_80ADB254(EnSellnuts* this, GlobalContext* globalCtx) {
     s16 currentFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(&D_80ADD990[this->unk_34C].animationSeg->common);
+    s16 frameCount = Animation_GetLastFrame(D_80ADD990[this->unk_34C].animationSeg);
 
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0xE38);
     if (((this->actor.yDistToPlayer < 50.0f) && (this->actor.yDistToPlayer > -50.0f) ? true : false) &&
@@ -464,7 +464,7 @@ void func_80ADB924(EnSellnuts* this, GlobalContext* globalCtx) {
 void func_80ADBAB8(EnSellnuts* this, GlobalContext* globalCtx) {
     u8 sp27 = func_80152498(&globalCtx->msgCtx);
     s16 currentFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(&D_80ADD990[this->unk_34C].animationSeg->common);
+    s16 frameCount = Animation_GetLastFrame(D_80ADD990[this->unk_34C].animationSeg);
 
     if (this->unk_368 == 0x28) {
         this->unk_34C = 5;
@@ -517,7 +517,7 @@ void func_80ADBCE4(EnSellnuts* this, GlobalContext* globalCtx) {
 void func_80ADBD64(EnSellnuts* this, GlobalContext* globalCtx) {
     u8 sp27 = func_80152498(&globalCtx->msgCtx);
     s16 currentFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(&D_80ADD990[this->unk_34C].animationSeg->common);
+    s16 frameCount = Animation_GetLastFrame(D_80ADD990[this->unk_34C].animationSeg);
 
     if ((currentFrame == frameCount) && (this->unk_34C == 7)) {
         this->unk_34C = 0;
@@ -537,7 +537,7 @@ void func_80ADBD64(EnSellnuts* this, GlobalContext* globalCtx) {
 
 void func_80ADBE80(EnSellnuts* this, GlobalContext* globalCtx) {
     s16 currentFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(&D_80ADD990[this->unk_34C].animationSeg->common);
+    s16 frameCount = Animation_GetLastFrame(D_80ADD990[this->unk_34C].animationSeg);
 
     func_80ADAE64(this);
     if (this->unk_366 == 0) {
@@ -599,7 +599,7 @@ void func_80ADC034(EnSellnuts* this, GlobalContext* globalCtx) {
 void func_80ADC118(EnSellnuts* this, GlobalContext* globalCtx) {
     Vec3f sp34;
     s16 currentFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(&D_80ADD990[this->unk_34C].animationSeg->common);
+    s16 frameCount = Animation_GetLastFrame(D_80ADD990[this->unk_34C].animationSeg);
 
     if (currentFrame == frameCount) {
         Math_SmoothStepToS(&this->unk_364, 0x1C71, 3, 0x100, 0);
@@ -818,7 +818,7 @@ void func_80ADC8C4(EnSellnuts* this, GlobalContext* globalCtx) {
 
 void func_80ADCA64(EnSellnuts* this, GlobalContext* globalCtx) {
     s16 currentFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(&D_80ADD990[this->unk_34C].animationSeg->common);
+    s16 frameCount = Animation_GetLastFrame(D_80ADD990[this->unk_34C].animationSeg);
 
     if (this->unk_34C == 22) {
         Math_SmoothStepToS(&this->unk_364, 0, 3, 0x100, 0);
@@ -853,7 +853,7 @@ void func_80ADCA64(EnSellnuts* this, GlobalContext* globalCtx) {
 
 void func_80ADCC04(EnSellnuts* this, GlobalContext* globalCtx) {
     s16 currentFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(&D_80ADD990[this->unk_34C].animationSeg->common);
+    s16 frameCount = Animation_GetLastFrame(D_80ADD990[this->unk_34C].animationSeg);
 
     if (this->unk_34C == 3) {
         if (currentFrame == frameCount) {

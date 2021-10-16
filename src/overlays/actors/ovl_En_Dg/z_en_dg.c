@@ -157,7 +157,7 @@ void func_80989140(SkelAnime* skelAnime, ActorAnimationEntryS arg1[], s32 arg2) 
 
     arg1 += arg2;
     if (arg1->frameCount < 0) {
-        frameCount = Animation_GetLastFrame(&arg1->animationSeg->common);
+        frameCount = Animation_GetLastFrame(arg1->animationSeg);
     } else {
         frameCount = arg1->frameCount;
     }

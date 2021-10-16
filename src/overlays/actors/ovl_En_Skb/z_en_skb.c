@@ -536,7 +536,7 @@ void func_80995818(EnSkb* this, GlobalContext* globalCtx) {
 }
 
 void func_809958F4(EnSkb* this) {
-    Animation_Change(&this->skelAnime, &D_06003584, -1.0f, Animation_GetLastFrame(&D_06003584.common), 0.0f, 2, -4.0f);
+    Animation_Change(&this->skelAnime, &D_06003584, -1.0f, Animation_GetLastFrame(&D_06003584), 0.0f, 2, -4.0f);
     this->unk_3E4 = 0;
     this->actor.flags &= ~1;
     this->actor.speedXZ = 0.0f;

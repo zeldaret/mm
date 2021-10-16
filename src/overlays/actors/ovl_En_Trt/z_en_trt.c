@@ -112,7 +112,7 @@ void EnTrt_ChangeAnim(SkelAnime* skelAnime, ActorAnimationEntryS* animations, s3
 
     animations += idx;
     if (animations->frameCount < 0) {
-        frameCount = Animation_GetLastFrame(&animations->animationSeg->common);
+        frameCount = Animation_GetLastFrame(animations->animationSeg);
     } else {
         frameCount = animations->frameCount;
     }
@@ -852,7 +852,7 @@ void EnTrt_IdleAwake(EnTrt* this, GlobalContext* globalCtx) {
 
 void EnTrt_BeginInteraction(EnTrt* this, GlobalContext* globalCtx) {
     s16 curFrame = this->skelAnime.curFrame / this->skelAnime.playSpeed;
-    s16 animLastFrame = Animation_GetLastFrame(&D_060030EC.common) / (s16)this->skelAnime.playSpeed;
+    s16 animLastFrame = Animation_GetLastFrame(&D_060030EC) / (s16)this->skelAnime.playSpeed;
 
     if (this->cutsceneState == ENTRT_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {

@@ -219,7 +219,7 @@ void EnDno_Init(Actor* thisx, GlobalContext* globalCtx) {
             Collider_SetCylinder(globalCtx, &this->collider, thisx, &sCylinderInit);
             Actor_UpdateBgCheckInfo(globalCtx, thisx, 0.0f, 0.0f, 0.0f, 4);
             Animation_Change(&this->skelAnime, sAnimations[14].animationSeg, 1.0f, 0.0f,
-                             Animation_GetLastFrame(&(sAnimations[14].animationSeg)->common), sAnimations[14].mode,
+                             Animation_GetLastFrame(sAnimations[14].animationSeg), sAnimations[14].mode,
                              sAnimations[14].transitionRate);
             this->unk_3BE = 0x3E93;
             this->unk_3C0 = 60.0f;

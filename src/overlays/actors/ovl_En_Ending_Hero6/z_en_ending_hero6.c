@@ -87,7 +87,7 @@ void EnEndingHero6_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnEndingHero6_InitSkelAnime(EnEndingHero6* this, s32 npcIndex) {
     this->animIndex = npcIndex;
-    this->frameCount = Animation_GetLastFrame(&sAnimations[npcIndex]->common);
+    this->frameCount = Animation_GetLastFrame(sAnimations[npcIndex]);
     Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.f, this->frameCount, 0, 0.0f);
 }
 

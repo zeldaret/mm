@@ -483,8 +483,8 @@ void func_8089B100(EnDinofos* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Vec3f sp3C;
 
-    Animation_Change(&this->skelAnime, &D_06001CCC, 1.0f, Animation_GetLastFrame(&D_06001CCC.common),
-                     Animation_GetLastFrame(&D_06001CCC.common), 2, 0.0f);
+    Animation_Change(&this->skelAnime, &D_06001CCC, 1.0f, Animation_GetLastFrame(&D_06001CCC),
+                     Animation_GetLastFrame(&D_06001CCC), 2, 0.0f);
     func_800BE33C(&camera->eye, &camera->at, &this->unk_29A, 1);
     Math_Vec3f_Diff(&this->actor.world.pos, &player->actor.world.pos, &sp3C);
     this->unk_2BC.x = player->actor.world.pos.x + (0.4f * sp3C.x);
@@ -894,7 +894,7 @@ void func_8089C398(EnDinofos* this) {
     if (this->actionFunc != func_8089C2A8) {
         Animation_PlayOnce(&this->skelAnime, &D_06000AF0);
     } else {
-        this->skelAnime.endFrame = Animation_GetLastFrame(&D_060025B4.common);
+        this->skelAnime.endFrame = Animation_GetLastFrame(&D_060025B4);
     }
 
     if (this->actor.speedXZ < 0.0f) {
