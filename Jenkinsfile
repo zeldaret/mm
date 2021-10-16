@@ -74,6 +74,9 @@ pipeline {
         }
     }
     post {
+        failure {
+            sh 'cat tools/check_format.txt tools/warnings_count/warnings_setup_new.txt tools/warnings_count/warnings_disasm_new.txt tools/warnings_count/warnings_build_new.txt'
+        }
         always {
             cleanWs()
         }
