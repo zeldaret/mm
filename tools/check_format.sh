@@ -2,7 +2,7 @@
 
 STATUSOLD=`git status --porcelain`
 ./format.sh
-if [ $? ]
+if [ $? -ne 0 ]
 then
    echo "Formatter failed. Exiting."
    exit -1
