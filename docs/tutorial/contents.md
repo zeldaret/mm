@@ -5,7 +5,7 @@
 - Structure of the code
 
 ## Pre-decompilation
-- Building the repo (follow the instructions in the README.md)
+- Building the repo (follow the instructions in the [README.md](../../README.md))
 - Most of us use VSCode. Some useful information is [here](vscode.md).
 - Choosing a first actor (You want something small that has simple interactions with the environment. A simple NPC can also work, and is what we will use as an illustration for most of the tutorial. There is a collection of actors we think are suitable for beginners on the spreadsheet or Trello)
 
@@ -39,8 +39,6 @@
 ## [Object Decompilation](object_decomp.md)
 - Object files
 - How we decompile objects
-- [Example](object_decomp_example.md)
-
 
 ## After Decompilation
 
@@ -49,7 +47,7 @@
 
 ## Appendices
 - [Types, Structs and Padding](types_structs_padding.md) (a miscellany of useful stuff)
-- [Helper scripts](helper_scripts.md)
+- [Helper scripts] TODO: link when merged
 
 To be written, maybe
 
