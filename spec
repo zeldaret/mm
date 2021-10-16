@@ -5007,8 +5007,7 @@ beginseg
     name "ovl_En_Muto"
     compress
     include "build/src/overlays/actors/ovl_En_Muto/z_en_muto.o"
-    include "build/data/ovl_En_Muto/ovl_En_Muto.data.o"
-    include "build/data/ovl_En_Muto/ovl_En_Muto.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Muto/ovl_En_Muto_reloc.o"
 endseg
 
 beginseg
