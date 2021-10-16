@@ -2102,11 +2102,32 @@ void func_800BC8B8(GlobalContext* globalCtx, s32 frame, s32 type) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BCB50.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BCB70.s")
+void func_800BCB70(Actor* actor, u16 arg1, u16 arg2, u16 arg3, u16 arg4) {
+    if ((arg1 == 0x8000) && !(arg2 & 0x8000)) {
+        Audio_PlayActorSound2(actor, 0x3836);
+    }
+    actor->colorFilterParams = arg1 | arg3 | ((arg2 & 0xF8) << 5) | arg4;
+    actor->colorFilterTimer = arg4;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BCBF4.s")
+void func_800BCBF4(Vec3f *arg0, GlobalContext *globalCtx) {
+    Vec3f sp1C;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BCC68.s")
+    sp1C.x = globalCtx->envCtx.unk_28.params.dir.x;
+    sp1C.y = globalCtx->envCtx.unk_28.params.dir.y;
+    sp1C.z = globalCtx->envCtx.unk_28.params.dir.z;
+    func_800B7FE0(arg0, &globalCtx->view.eye, &sp1C, globalCtx->state.gfxCtx);
+}
+
+
+void func_800BCC68(Vec3f *arg0, GlobalContext *globalCtx) {
+    Vec3f sp1C;
+
+    sp1C.x = globalCtx->envCtx.unk_28.params.dir.x;
+    sp1C.y = globalCtx->envCtx.unk_28.params.dir.y;
+    sp1C.z = globalCtx->envCtx.unk_28.params.dir.z;
+    func_800B8018(arg0, &globalCtx->view.eye, &sp1C, globalCtx->state.gfxCtx);
+}
 
 #ifdef NON_MATCHING
 // small regalloc
