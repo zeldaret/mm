@@ -72,13 +72,6 @@ pipeline {
                 sh 'cat reports/progress_shield_mm.us.rev1.json > /var/www/html/reports/progress_shield_mm.us.rev1.json'
             }
         }
-        stage('Summarize problems') {
-            steps {
-                echo 'Summarizing problems...'
-                sh 'cat tools/check_format.txt tools/warnings_count/warnings_setup_new.txt tools/warnings_count/warnings_disasm_new.txt tools/warnings_count/warnings_build_new.txt'
-                echo 'No more problems.'
-            }
-        }
     }
     post {
         always {
