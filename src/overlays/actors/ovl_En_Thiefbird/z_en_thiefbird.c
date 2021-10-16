@@ -1156,7 +1156,7 @@ void EnThiefbird_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                     EnThiefbird_OverrideLimbDraw, EnThiefbird_PostLimbDraw, &this->actor);
+                          EnThiefbird_OverrideLimbDraw, EnThiefbird_PostLimbDraw, &this->actor);
     if (this->actor.colorFilterTimer > 0) {
         func_800AE5A0(globalCtx);
     }

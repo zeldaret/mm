@@ -77,7 +77,7 @@ void EnEndingHero6_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, sSkeletons[this->npcIndex], sAnimations[this->npcIndex],
-                     this->jointTable, this->morphTable, sLimbCounts[this->npcIndex]);
+                       this->jointTable, this->morphTable, sLimbCounts[this->npcIndex]);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
     EnEndingHero6_SetupIdle(this);
 }
@@ -183,7 +183,7 @@ void EnEndingHero6_Draw(Actor* thisx, GlobalContext* globalCtx) {
             }
 
             SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                             this->skelAnime.dListCount, NULL, EnEndingHero6_PostLimbDraw, &this->actor);
+                                  this->skelAnime.dListCount, NULL, EnEndingHero6_PostLimbDraw, &this->actor);
         }
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);

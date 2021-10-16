@@ -92,7 +92,7 @@ void ObjLightswitch_InitCollider(ObjLightswitch* this, GlobalContext* globalCtx)
     Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x,
                                           this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y),
                                           this->actor.world.pos.z, &this->actor.shape.rot);
-    Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY); 
+    Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     Collider_UpdateSpheres(0, &this->collider);
 }
 

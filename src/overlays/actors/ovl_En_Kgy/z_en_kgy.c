@@ -132,7 +132,7 @@ void EnKgy_ChangeAnim(EnKgy* this, s16 animIndex, u8 mode, f32 transitionRate) {
     };
 
     Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f,
-                         Animation_GetLastFrame(&sAnimations[animIndex]->common), mode, transitionRate);
+                     Animation_GetLastFrame(&sAnimations[animIndex]->common), mode, transitionRate);
     this->unk_2D2 = animIndex;
 }
 
@@ -1185,5 +1185,5 @@ void EnKgy_Draw(Actor* thisx, GlobalContext* globalCtx) {
         func_80B43074(this, globalCtx);
     }
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                     EnKgy_OverrideLimbDraw, EnKgy_PostLimbDraw, &this->actor);
+                          EnKgy_OverrideLimbDraw, EnKgy_PostLimbDraw, &this->actor);
 }

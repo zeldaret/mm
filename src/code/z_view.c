@@ -261,7 +261,7 @@ s32 View_StepQuake(View* view, Mtx* matrix) {
     Matrix_RotateStateAroundXAxis(view->currQuakeRot.x);
     Matrix_InsertYRotation_f(view->currQuakeRot.y, 1);
     Matrix_InsertZRotation_f(view->currQuakeRot.z, 1);
-    Matrix_Scale(view->currQuakeScale.x, view->currQuakeScale.y, view->currQuakeScale.z, MTXMODE_APPLY); 
+    Matrix_Scale(view->currQuakeScale.x, view->currQuakeScale.y, view->currQuakeScale.z, MTXMODE_APPLY);
     Matrix_InsertZRotation_f(-view->currQuakeRot.z, 1);
     Matrix_InsertYRotation_f(-view->currQuakeRot.y, 1);
     Matrix_RotateStateAroundXAxis(-view->currQuakeRot.x);

@@ -155,7 +155,7 @@ s32 func_80A514F0(SkelAnime* skelAnime, s16 animIndex) {
                 frame = frameCount;
             }
             Animation_Change(skelAnime, sAnimations[animIndex].animationSeg, sAnimations[animIndex].playbackSpeed,
-                                 frame, frameCount, sAnimations[animIndex].mode, sAnimations[animIndex].transitionRate);
+                             frame, frameCount, sAnimations[animIndex].mode, sAnimations[animIndex].transitionRate);
         }
     }
     return sp30;
@@ -343,7 +343,7 @@ void func_80A51CB8(EnDnk* this, GlobalContext* globalCtx) {
     gDPPipeSync(POLY_OPA_DISP++);
 
     SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, func_80A51A78, func_80A51AA4,
-                   &this->actor);
+                      &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -407,7 +407,7 @@ void func_80A51DA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 void func_80A51FC0(EnDnk* this, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, func_80A51D78, func_80A51DA4,
-                   &this->actor);
+                      &this->actor);
 }
 
 void func_80A52018(Actor* thisx, GlobalContext* globalCtx) {

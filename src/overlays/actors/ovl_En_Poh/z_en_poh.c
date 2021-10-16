@@ -939,7 +939,7 @@ void EnPoh_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPSegment(&gfx[2], 0x08, D_801AEFA0);
 
         gfx = SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnPoh_OverrideLimbDraw,
-                              EnPoh_PostLimbDraw, &this->actor, &gfx[3]);
+                             EnPoh_PostLimbDraw, &this->actor, &gfx[3]);
 
         POLY_OPA_DISP = gfx;
     } else {
@@ -950,7 +950,7 @@ void EnPoh_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPSegment(&gfx[2], 0x08, D_801AEF88);
 
         POLY_XLU_DISP = SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                                        EnPoh_OverrideLimbDraw, EnPoh_PostLimbDraw, &this->actor, &gfx[3]);
+                                       EnPoh_OverrideLimbDraw, EnPoh_PostLimbDraw, &this->actor, &gfx[3]);
 
         gfx = POLY_OPA_DISP;
         gSPDisplayList(gfx++, &sSetupDL[6 * 25]);

@@ -1109,7 +1109,7 @@ void EnDodongo_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnDodongo_OverrideLimbDraw,
-                   EnDodongo_PostLimbDraw, &this->actor);
+                      EnDodongo_PostLimbDraw, &this->actor);
     func_800BE680(globalCtx, &this->actor, this->unk_348, ARRAY_COUNT(this->unk_348), this->unk_340 * this->unk_334,
                   this->unk_344 * this->unk_334, this->unk_33C, this->unk_300);
 }

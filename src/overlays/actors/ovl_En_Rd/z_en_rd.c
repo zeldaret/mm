@@ -163,9 +163,11 @@ void EnRd_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->actor.params >= ENRD_GET_MINUS_1) {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06010B88, &D_0600ABE0, this->jointTable, this->morphTable, 26);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06010B88, &D_0600ABE0, this->jointTable, this->morphTable,
+                           26);
     } else {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060053E8, &D_0600ABE0, this->jointTable, this->morphTable, 26);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060053E8, &D_0600ABE0, this->jointTable, this->morphTable,
+                           26);
     }
 
     Collider_InitCylinder(globalCtx, &this->collider);
@@ -517,8 +519,7 @@ void func_808D4CA8(EnRd* this, GlobalContext* globalCtx) {
 }
 
 void func_808D4DC4(EnRd* this) {
-    Animation_Change(&this->skelAnime, &D_0600ABE0, 0.0f, 0.0f, Animation_GetLastFrame(&D_0600ABE0.common), 0,
-                         -6.0f);
+    Animation_Change(&this->skelAnime, &D_0600ABE0, 0.0f, 0.0f, Animation_GetLastFrame(&D_0600ABE0.common), 0, -6.0f);
     this->unk_3EF = 13;
     this->unk_3D6 = 6;
     this->actor.shape.rot.x = -0x4000;
@@ -627,8 +628,7 @@ void func_808D506C(EnRd* this, GlobalContext* globalCtx) {
 }
 
 void func_808D53C0(EnRd* this, GlobalContext* globalCtx) {
-    Animation_Change(&this->skelAnime, &D_060113EC, 0.5f, 0.0f, Animation_GetLastFrame(&D_060113EC.common), 1,
-                         -4.0f);
+    Animation_Change(&this->skelAnime, &D_060113EC, 0.5f, 0.0f, Animation_GetLastFrame(&D_060113EC.common), 1, -4.0f);
     this->unk_3EF = 2;
     this->actionFunc = func_808D5440;
 }
@@ -758,8 +758,8 @@ void func_808D58CC(EnRd* this, GlobalContext* globalCtx) {
                     player->stateFlags2 &= ~0x80;
                     player->unk_AE8 = 100;
                 }
-                Animation_Change(&this->skelAnime, &D_06006B08, 0.5f, 0.0f,
-                                     Animation_GetLastFrame(&D_06006B08.common), 3, 0.0f);
+                Animation_Change(&this->skelAnime, &D_06006B08, 0.5f, 0.0f, Animation_GetLastFrame(&D_06006B08.common),
+                                 3, 0.0f);
                 this->unk_3EB++;
                 this->unk_3EF = 4;
                 break;
@@ -819,8 +819,7 @@ void func_808D58CC(EnRd* this, GlobalContext* globalCtx) {
 }
 
 void func_808D5C54(EnRd* this) {
-    Animation_Change(&this->skelAnime, &D_060073A4, 0.0f, 0.0f, Animation_GetLastFrame(&D_060073A4.common), 2,
-                         0.0f);
+    Animation_Change(&this->skelAnime, &D_060073A4, 0.0f, 0.0f, Animation_GetLastFrame(&D_060073A4.common), 2, 0.0f);
     this->unk_3EF = 7;
     this->actionFunc = func_808D5CCC;
 }
@@ -902,8 +901,7 @@ void func_808D6054(EnRd* this, GlobalContext* globalCtx) {
 }
 
 void func_808D60B0(EnRd* this) {
-    Animation_Change(&this->skelAnime, &D_0600A450, -1.0f, Animation_GetLastFrame(&D_0600A450.common), 0.0f, 2,
-                         -4.0f);
+    Animation_Change(&this->skelAnime, &D_0600A450, -1.0f, Animation_GetLastFrame(&D_0600A450.common), 0.0f, 2, -4.0f);
     this->unk_3EF = 6;
     this->actionFunc = func_808D6130;
 }
@@ -1246,8 +1244,8 @@ void EnRd_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
 
         POLY_OPA_DISP = SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                                          this->skelAnime.dListCount, EnRd_OverrideLimbDraw, EnRd_PostLimbDraw,
-                                          &this->actor, POLY_OPA_DISP);
+                                           this->skelAnime.dListCount, EnRd_OverrideLimbDraw, EnRd_PostLimbDraw,
+                                           &this->actor, POLY_OPA_DISP);
 
         func_800BC620(&sp54, &D_808D7138, 255, globalCtx);
     } else {
@@ -1258,7 +1256,7 @@ void EnRd_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         POLY_XLU_DISP =
             SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                              this->skelAnime.dListCount, EnRd_OverrideLimbDraw, NULL, &this->actor, POLY_XLU_DISP);
+                               this->skelAnime.dListCount, EnRd_OverrideLimbDraw, NULL, &this->actor, POLY_XLU_DISP);
         func_800BC620(&sp54, &D_808D7138, this->unk_3DE, globalCtx);
     }
 

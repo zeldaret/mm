@@ -967,8 +967,8 @@ void EnRailgibud_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
 
         POLY_OPA_DISP = SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                                          this->skelAnime.dListCount, EnRailgibud_OverrideLimbDraw,
-                                          EnRailgibud_PostLimbDraw, &this->actor, POLY_OPA_DISP);
+                                           this->skelAnime.dListCount, EnRailgibud_OverrideLimbDraw,
+                                           EnRailgibud_PostLimbDraw, &this->actor, POLY_OPA_DISP);
     } else {
         func_8012C2DC(globalCtx->state.gfxCtx);
 
@@ -976,8 +976,8 @@ void EnRailgibud_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
 
         POLY_XLU_DISP = SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                                          this->skelAnime.dListCount, EnRailgibud_OverrideLimbDraw,
-                                          EnRailgibud_PostLimbDraw, &this->actor, POLY_XLU_DISP);
+                                           this->skelAnime.dListCount, EnRailgibud_OverrideLimbDraw,
+                                           EnRailgibud_PostLimbDraw, &this->actor, POLY_XLU_DISP);
     }
 
     if (this->unk_3F6 > 0) {
