@@ -1415,8 +1415,7 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (type == ENIN_HORSE_RIDER_YELLOW_SHIRT || type == ENIN_HORSE_RIDER_BLUE_SHIRT) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
         this->unk488 = 1;
-        Animation_Change(&this->skelAnime, &D_06016A60, 1.0f, 0.0f, Animation_GetLastFrame(&D_06016A60), 2,
-                         0.0f);
+        Animation_Change(&this->skelAnime, &D_06016A60, 1.0f, 0.0f, Animation_GetLastFrame(&D_06016A60), 2, 0.0f);
         Actor_SetScale(&this->actor, 0.01f);
         this->unk23C = 0;
         this->unk23D = 1;

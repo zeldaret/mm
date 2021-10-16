@@ -534,8 +534,7 @@ void func_8095B650(EnOwl* this, GlobalContext* globalCtx) {
 
 void func_8095B6C8(EnOwl* this, GlobalContext* globalCtx) {
     if (this->actionFlags & 1) {
-        Animation_Change(this->skelAnime3, &D_0600CB94, -1.0f, Animation_GetLastFrame(&D_0600CB94), 0.0f, 2,
-                         0.0f);
+        Animation_Change(this->skelAnime3, &D_0600CB94, -1.0f, Animation_GetLastFrame(&D_0600CB94), 0.0f, 2, 0.0f);
         this->unk_414 = func_8095C484;
         this->actionFunc = func_8095B650;
     }
@@ -811,8 +810,7 @@ void func_8095C258(EnOwl* this) {
     } else {
         this->unk_414 = func_8095C328;
         this->unk_3EA = 6;
-        Animation_Change(this->skelAnime3, &D_06001ADC, 1.0f, 0.0f, Animation_GetLastFrame(&D_06001ADC), 2,
-                         5.0f);
+        Animation_Change(this->skelAnime3, &D_06001ADC, 1.0f, 0.0f, Animation_GetLastFrame(&D_06001ADC), 2, 5.0f);
     }
 }
 
@@ -825,8 +823,7 @@ void func_8095C328(EnOwl* this) {
         } else {
             this->unk_3EA = 160;
             this->unk_414 = func_8095C258;
-            Animation_Change(this->skelAnime3, &D_0600C6D4, 1.0f, 0.0f, Animation_GetLastFrame(&D_0600C6D4), 0,
-                             5.0f);
+            Animation_Change(this->skelAnime3, &D_0600C6D4, 1.0f, 0.0f, Animation_GetLastFrame(&D_0600C6D4), 0, 5.0f);
         }
     }
 }

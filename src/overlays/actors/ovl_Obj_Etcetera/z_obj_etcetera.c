@@ -131,8 +131,7 @@ void ObjEtcetera_Idle(ObjEtcetera* this, GlobalContext* globalCtx) {
 
     if ((player->stateFlags3 & 0x200) && (this->dyna.actor.xzDistToPlayer < 20.0f)) {
         // Player is launching out of the Deku Flower
-        Animation_Change(&this->skelAnime, &D_0400EB7C, 1.0f, 0.0f, Animation_GetLastFrame(&D_0400EB7C), 2,
-                         0.0f);
+        Animation_Change(&this->skelAnime, &D_0400EB7C, 1.0f, 0.0f, Animation_GetLastFrame(&D_0400EB7C), 2, 0.0f);
         this->dyna.actor.draw = ObjEtcetera_DrawAnimated;
         this->actionFunc = ObjEtcetera_DoIntenseOscillation;
         Actor_SetScale(&this->dyna.actor, 0.01f);
@@ -271,8 +270,8 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
                 break;
             case DEKU_FLOWER_TYPE_PINK_SPAWNED_FROM_MAD_SCRUB:
             case DEKU_FLOWER_TYPE_GOLD_SPAWNED_FROM_MAD_SCRUB:
-                Animation_Change(&this->skelAnime, &D_0400EB7C, 1.0f, 0.0f, Animation_GetLastFrame(&D_0400EB7C),
-                                 2, 0.0f);
+                Animation_Change(&this->skelAnime, &D_0400EB7C, 1.0f, 0.0f, Animation_GetLastFrame(&D_0400EB7C), 2,
+                                 0.0f);
                 this->dyna.actor.draw = ObjEtcetera_DrawAnimated;
                 this->actionFunc = ObjEtcetera_DoIntenseOscillation;
                 Actor_SetScale(&this->dyna.actor, 0.0f);

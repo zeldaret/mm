@@ -758,8 +758,8 @@ void func_808D58CC(EnRd* this, GlobalContext* globalCtx) {
                     player->stateFlags2 &= ~0x80;
                     player->unk_AE8 = 100;
                 }
-                Animation_Change(&this->skelAnime, &D_06006B08, 0.5f, 0.0f, Animation_GetLastFrame(&D_06006B08),
-                                 3, 0.0f);
+                Animation_Change(&this->skelAnime, &D_06006B08, 0.5f, 0.0f, Animation_GetLastFrame(&D_06006B08), 3,
+                                 0.0f);
                 this->unk_3EB++;
                 this->unk_3EF = 4;
                 break;
