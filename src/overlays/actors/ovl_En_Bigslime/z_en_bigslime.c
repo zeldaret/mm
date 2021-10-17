@@ -1538,7 +1538,7 @@ void EnBigslime_AttackPlayerInBigslime(EnBigslime* this, GlobalContext* globalCt
         ((this->skelAnime.animCurrentSeg == &D_060070C4) &&
          func_801378B8(&this->skelAnime, 9.0f)) || // Hook Punch makes impact on frames 9 of animation
         ((this->skelAnime.animCurrentSeg == &D_06003F28) &&
-            func_801378B8(&this->skelAnime, 2.0f))) { // Kick makes impact on frame 2 of animation
+         func_801378B8(&this->skelAnime, 2.0f))) { // Kick makes impact on frame 2 of animation
         this->scaleFactor = 10;
         player->actor.world.pos.x += 20.0f * Math_SinS(this->gekkoRot.y);
         player->actor.world.pos.z += 20.0f * Math_CosS(this->gekkoRot.y);
