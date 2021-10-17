@@ -805,7 +805,7 @@ void EnBigslime_SetCameraGrabPlayer(EnBigslime* this, GlobalContext* globalCtx) 
     Math_StepToF(&subCamEye.x, (Math_SinS(this->subCamYawGrabPlayer) * 250.0f) + this->actor.world.pos.x, 10.0f);
     Math_StepToF(&subCamEye.y, GBT_ROOM_5_MIN_Y + 187.5f, 10.0f);
     Math_StepToF(&subCamEye.z, (Math_CosS(this->subCamYawGrabPlayer) * 250.0f) + this->actor.world.pos.z, 10.0f);
-    
+
     Math_StepToF(&subCamAt.x, this->actor.world.pos.x, 10.0f);
     Math_StepToF(&subCamAt.y, GBT_ROOM_5_MIN_Y + 87.5f, 10.0f);
     Math_StepToF(&subCamAt.z, this->actor.world.pos.z, 10.0f);
@@ -837,7 +837,8 @@ void EnBigslime_ZoomCamera(EnBigslime* this, GlobalContext* globalCtx, s32 shake
 }
 
 void EnBigslime_MoveCameraFormBigslime(EnBigslime* this, GlobalContext* globalCtx) {
-    Play_CameraSetAtEye(globalCtx, this->subCamId, &this->actor.focus.pos, &Play_GetCamera(globalCtx, this->subCamId)->eye);
+    Play_CameraSetAtEye(globalCtx, this->subCamId, &this->actor.focus.pos,
+                        &Play_GetCamera(globalCtx, this->subCamId)->eye);
 }
 
 void EnBigslime_ReleaseCamera(EnBigslime* this, GlobalContext* globalCtx) {
@@ -2568,7 +2569,8 @@ void EnBigslime_ApplyDamageEffectGekko(EnBigslime* this, GlobalContext* globalCt
                     Enemy_StartFinishingBlow(globalCtx, &this->actor);
                     this->gekkoCollider.base.acFlags &= ~AC_ON;
                     EnBigslime_ChangeGekkoColliderThaw(this, globalCtx);
-                    if ((this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_FIRE) || (this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_LIGHT)) {
+                    if ((this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_FIRE) ||
+                        (this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_LIGHT)) {
                         this->unk_388 = 4.0f;
                         this->unk_38C = 0.75f;
                         if (this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_FIRE) {
@@ -2591,7 +2593,8 @@ void EnBigslime_ApplyDamageEffectGekko(EnBigslime* this, GlobalContext* globalCt
                     this->unk_38C = 0.75f;
                     this->unk_388 = 2.0f;
                     EnBigslime_SetupStunGekko(this);
-                } else if (this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_STUN || this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_DEKU_STUN) {
+                } else if (this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_STUN ||
+                           this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_DEKU_STUN) {
                     this->stunTimer = 40;
                     Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     EnBigslime_SetupStunGekko(this);
@@ -2602,7 +2605,8 @@ void EnBigslime_ApplyDamageEffectGekko(EnBigslime* this, GlobalContext* globalCt
                 } else {
                     EnBigslime_ChangeGekkoColliderThaw(this, globalCtx);
                     // Fire Arrows || Light Arrows
-                    if ((this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_FIRE) || (this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_LIGHT)) {
+                    if ((this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_FIRE) ||
+                        (this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_LIGHT)) {
                         this->unk_388 = 3.0f;
                         this->unk_38C = 0.75f;
                         if (this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_FIRE) {
@@ -2747,7 +2751,6 @@ void EnBigslime_UpdateGekko(Actor* thisx, GlobalContext* globalCtx) {
     EnBigslime* this = THIS;
     Player* player;
     s32 pad;
-    
 
     if (globalCtx->envCtx.unk_C3 == 3) {
         globalCtx->envCtx.unk_C3 = 0xFF;
