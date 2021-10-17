@@ -1,0 +1,6 @@
+glabel EnHs2_Destroy
+/* 000015 0x8098EF9C AFA40000 */ sw	$a0, 0X0($sp)
+/* 000016 0x8098EFA0 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000017 0x8098EFA4 03E00008 */ jr	$ra
+/* 000018 0x8098EFA8 00000000 */ nop
+

@@ -1,0 +1,57 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .rodata
+
+glabel bgFireWallOverlayInfo
+/* 000524 0x809ACCE0 */ .word	0x00000790
+/* 000525 0x809ACCE4 */ .word	0x00000080
+/* 000526 0x809ACCE8 */ .word	0x00000020
+/* 000527 0x809ACCEC */ .word	0x00000000
+/* 000528 0x809ACCF0 */ .word	0x00000025
+glabel bgFireWallOverlayRelocations
+/* 000529 0x809ACCF4 */ .word	0x45000018
+/* 000530 0x809ACCF8 */ .word	0x46000024
+/* 000531 0x809ACCFC */ .word	0x45000038
+/* 000532 0x809ACD00 */ .word	0x46000040
+/* 000533 0x809ACD04 */ .word	0x45000050
+/* 000534 0x809ACD08 */ .word	0x46000054
+/* 000535 0x809ACD0C */ .word	0x45000064
+/* 000536 0x809ACD10 */ .word	0x46000068
+/* 000537 0x809ACD14 */ .word	0x4500006C
+/* 000538 0x809ACD18 */ .word	0x4600007C
+/* 000539 0x809ACD1C */ .word	0x45000080
+/* 000540 0x809ACD20 */ .word	0x4600008C
+/* 000541 0x809ACD24 */ .word	0x450000AC
+/* 000542 0x809ACD28 */ .word	0x460000B4
+/* 000543 0x809ACD2C */ .word	0x4400019C
+/* 000544 0x809ACD30 */ .word	0x450001AC
+/* 000545 0x809ACD34 */ .word	0x460001B4
+/* 000546 0x809ACD38 */ .word	0x450001B0
+/* 000547 0x809ACD3C */ .word	0x460001BC
+/* 000548 0x809ACD40 */ .word	0x450001E4
+/* 000549 0x809ACD44 */ .word	0x460001E8
+/* 000550 0x809ACD48 */ .word	0x4400022C
+/* 000551 0x809ACD4C */ .word	0x4500023C
+/* 000552 0x809ACD50 */ .word	0x46000240
+/* 000553 0x809ACD54 */ .word	0x4500028C
+/* 000554 0x809ACD58 */ .word	0x46000290
+/* 000555 0x809ACD5C */ .word	0x4400057C
+/* 000556 0x809ACD60 */ .word	0x45000588
+/* 000557 0x809ACD64 */ .word	0x4600058C
+/* 000558 0x809ACD68 */ .word	0x440005D4
+/* 000559 0x809ACD6C */ .word	0x45000614
+/* 000560 0x809ACD70 */ .word	0x46000630
+/* 000561 0x809ACD74 */ .word	0x450006C0
+/* 000562 0x809ACD78 */ .word	0x460006D8
+/* 000563 0x809ACD7C */ .word	0x82000010
+/* 000564 0x809ACD80 */ .word	0x82000014
+/* 000565 0x809ACD84 */ .word	0x82000018
+/* 000566 0x809ACD88 */ .word	0x00000000
+glabel bgFireWallOverlayInfoOffset
+/* 000567 0x809ACD8C */ .word	0x000000B0

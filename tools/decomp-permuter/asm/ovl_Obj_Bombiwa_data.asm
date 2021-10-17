@@ -1,0 +1,72 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel Obj_Bombiwa_InitVars
+/* 001372 0x8093A920 */ .word	0x00920600
+/* 001373 0x8093A924 */ .word	0x00000000
+/* 001374 0x8093A928 */ .word	0x012A0000
+/* 001375 0x8093A92C */ .word	0x00000208
+/* 001376 0x8093A930 */ .word	ObjBombiwa_Init
+/* 001377 0x8093A934 */ .word	ObjBombiwa_Destroy
+/* 001378 0x8093A938 */ .word	ObjBombiwa_Update
+/* 001379 0x8093A93C */ .word	0x00000000
+glabel D_8093A940
+/* 001380 0x8093A940 */ .word	0x0C000D39
+/* 001381 0x8093A944 */ .word	0x20010000
+/* 001382 0x8093A948 */ .word	0x00000000
+/* 001383 0x8093A94C */ .word	0x00000000
+/* 001384 0x8093A950 */ .word	0x00000000
+/* 001385 0x8093A954 */ .word	0x81C37FBE
+/* 001386 0x8093A958 */ .word	0x00000000
+/* 001387 0x8093A95C */ .word	0x00010100
+/* 001388 0x8093A960 */ .word	0x00370046
+/* 001389 0x8093A964 */ .word	0x00000000
+/* 001390 0x8093A968 */ .word	0x00000000
+glabel D_8093A96C
+/* 001391 0x8093A96C */ .word	0x0C000D39
+/* 001392 0x8093A970 */ .word	0x20010000
+/* 001393 0x8093A974 */ .word	0x00000000
+/* 001394 0x8093A978 */ .word	0x00000000
+/* 001395 0x8093A97C */ .word	0x00000000
+/* 001396 0x8093A980 */ .word	0x81C37BBE
+/* 001397 0x8093A984 */ .word	0x00000000
+/* 001398 0x8093A988 */ .word	0x00010100
+/* 001399 0x8093A98C */ .word	0x004B0082
+/* 001400 0x8093A990 */ .word	0x00000000
+/* 001401 0x8093A994 */ .word	0x00000000
+glabel D_8093A998
+/* 001402 0x8093A998 */ .word	D_8093A940
+/* 001403 0x8093A99C */ .word	func_800B3FC0
+/* 001404 0x8093A9A0 */ .word	func_8093A418
+/* 001405 0x8093A9A4 */ .word	func_809393B0
+/* 001406 0x8093A9A8 */ .word	D_8093A96C
+/* 001407 0x8093A9AC */ .word	0x00000000
+/* 001408 0x8093A9B0 */ .word	func_8093A608
+/* 001409 0x8093A9B4 */ .word	func_80939470
+glabel D_8093A9B8
+/* 001410 0x8093A9B8 */ .word	0x0000000C
+/* 001411 0x8093A9BC */ .word	0x003CFF00
+glabel D_8093A9C0
+/* 001412 0x8093A9C0 */ .word	0xC8580064
+/* 001413 0x8093A9C4 */ .word	0xB0FC07D0
+/* 001414 0x8093A9C8 */ .word	0xB1000190
+/* 001415 0x8093A9CC */ .word	0x310401F4
+glabel D_8093A9D0
+/* 001416 0x8093A9D0 */ .word	0x0011000E
+/* 001417 0x8093A9D4 */ .word	0x000A0008
+/* 001418 0x8093A9D8 */ .word	0x00070005
+/* 001419 0x8093A9DC */ .word	0x00030002
+glabel D_8093A9E0
+/* 001420 0x8093A9E0 */ .short	0x0010
+glabel D_8093A9E2
+/* 001420 0x8093A9E0 */ .short	0x000C
+/* 001421 0x8093A9E4 */ .word	0x00080006
+/* 001422 0x8093A9E8 */ .word	0x00050004
+/* 001423 0x8093A9EC */ .word	0x00030002

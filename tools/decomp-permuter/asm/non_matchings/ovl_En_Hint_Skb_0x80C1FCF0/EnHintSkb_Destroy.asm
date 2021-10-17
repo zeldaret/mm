@@ -1,0 +1,13 @@
+glabel EnHintSkb_Destroy
+/* 000060 0x80C1FDE0 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000061 0x80C1FDE4 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000062 0x80C1FDE8 00803025 */ move	$a2, $a0
+/* 000063 0x80C1FDEC 00A03825 */ move	$a3, $a1
+/* 000064 0x80C1FDF0 00E02025 */ move	$a0, $a3
+/* 000065 0x80C1FDF4 0C038306 */ jal	Collision_FiniSphereGroup
+/* 000066 0x80C1FDF8 24C50144 */ addiu	$a1, $a2, 0X144
+/* 000067 0x80C1FDFC 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000068 0x80C1FE00 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000069 0x80C1FE04 03E00008 */ jr	$ra
+/* 000070 0x80C1FE08 00000000 */ nop
+

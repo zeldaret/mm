@@ -1,0 +1,15 @@
+glabel func_80BD58F0
+/* 000152 0x80BD58F0 3C0180BD */ lui	$at, %hi(D_80BD5D20)
+/* 000153 0x80BD58F4 C4245D20 */ lwc1	$f4, %lo(D_80BD5D20)($at)
+/* 000154 0x80BD58F8 3C0E80BD */ lui	$t6, %hi(func_80BD5910)
+/* 000155 0x80BD58FC 25CE5910 */ addiu	$t6, $t6, %lo(func_80BD5910)
+/* 000156 0x80BD5900 AC8E015C */ sw	$t6, 0X15C($a0)
+/* 000157 0x80BD5904 E4840068 */ swc1	$f4, 0X68($a0)
+/* 000158 0x80BD5908 03E00008 */ jr	$ra
+/* 000159 0x80BD590C 00000000 */ nop
+
+
+.section .late_rodata
+
+glabel D_80BD5D20
+/* 000420 0x80BD5D20 */ .word	0x3F19999A

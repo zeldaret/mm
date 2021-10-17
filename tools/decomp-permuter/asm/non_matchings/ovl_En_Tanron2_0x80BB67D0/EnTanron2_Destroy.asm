@@ -1,0 +1,6 @@
+glabel EnTanron2_Destroy
+/* 000120 0x80BB69B0 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000121 0x80BB69B4 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000122 0x80BB69B8 03E00008 */ jr	$ra
+/* 000123 0x80BB69BC 00000000 */ nop
+

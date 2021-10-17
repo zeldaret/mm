@@ -1,0 +1,13 @@
+glabel Lib_StepTowards_i
+/* 091346 0x800FEE08 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 091347 0x800FEE0C AFBF0014 */ sw	$ra, 0X14($sp)
+/* 091348 0x800FEE10 AFA40018 */ sw	$a0, 0X18($sp)
+/* 091349 0x800FEE14 8FAE0018 */ lw	$t6, 0X18($sp)
+/* 091350 0x800FEE18 0C03FB71 */ jal	Lib_StepTowardsGet_i
+/* 091351 0x800FEE1C 8DC40000 */ lw	$a0, 0X0($t6)
+/* 091352 0x800FEE20 8FAF0018 */ lw	$t7, 0X18($sp)
+/* 091353 0x800FEE24 ADE20000 */ sw	$v0, 0X0($t7)
+/* 091354 0x800FEE28 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 091355 0x800FEE2C 03E00008 */ jr	$ra
+/* 091356 0x800FEE30 27BD0018 */ addiu	$sp, $sp, 0X18
+

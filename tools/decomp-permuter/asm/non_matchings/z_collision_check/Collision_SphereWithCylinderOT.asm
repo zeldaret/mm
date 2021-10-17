@@ -1,0 +1,13 @@
+glabel Collision_SphereWithCylinderOT
+/* 066983 0x800E715C 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 066984 0x800E7160 AFA70024 */ sw	$a3, 0X24($sp)
+/* 066985 0x800E7164 00C03825 */ move	$a3, $a2
+/* 066986 0x800E7168 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 066987 0x800E716C AFA60020 */ sw	$a2, 0X20($sp)
+/* 066988 0x800E7170 0C039C18 */ jal	Collision_CylinderWithSphereOT
+/* 066989 0x800E7174 8FA60024 */ lw	$a2, 0X24($sp)
+/* 066990 0x800E7178 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 066991 0x800E717C 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 066992 0x800E7180 03E00008 */ jr	$ra
+/* 066993 0x800E7184 00000000 */ nop
+

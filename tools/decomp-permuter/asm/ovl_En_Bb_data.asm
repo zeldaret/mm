@@ -1,0 +1,61 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel En_Bb_InitVars
+/* 001680 0x808C3780 */ .word	0x003E0500
+/* 001681 0x808C3784 */ .word	0x00000205
+/* 001682 0x808C3788 */ .word	0x00510000
+/* 001683 0x808C378C */ .word	0x0000034C
+/* 001684 0x808C3790 */ .word	EnBb_Init
+/* 001685 0x808C3794 */ .word	EnBb_Destroy
+/* 001686 0x808C3798 */ .word	EnBb_Update
+/* 001687 0x808C379C */ .word	EnBb_Draw
+glabel D_808C37A0
+/* 001688 0x808C37A0 */ .word	0x03100939
+/* 001689 0x808C37A4 */ .word	0x10040000
+/* 001690 0x808C37A8 */ .word	0x00000000
+/* 001691 0x808C37AC */ .word	0xF7CFFFFF
+/* 001692 0x808C37B0 */ .word	0x00080000
+/* 001693 0x808C37B4 */ .word	0xF7CFFFFF
+/* 001694 0x808C37B8 */ .word	0x00000000
+/* 001695 0x808C37BC */ .word	0x01050100
+/* 001696 0x808C37C0 */ .word	0x00000000
+/* 001697 0x808C37C4 */ .word	0x00000000
+/* 001698 0x808C37C8 */ .word	0x00140064
+glabel D_808C37CC
+/* 001699 0x808C37CC */ .word	0x10010101
+/* 001700 0x808C37D0 */ .word	0x010100E0
+/* 001701 0x808C37D4 */ .word	0x01010101
+/* 001702 0x808C37D8 */ .word	0x32420101
+/* 001703 0x808C37DC */ .word	0x01021050
+/* 001704 0x808C37E0 */ .word	0x00000101
+/* 001705 0x808C37E4 */ .word	0x01000000
+/* 001706 0x808C37E8 */ .word	0x00000001
+glabel D_808C37EC
+/* 001707 0x808C37EC */ .word	0x02000014
+/* 001708 0x808C37F0 */ .word	0x00283200
+glabel D_808C37F4
+/* 001709 0x808C37F4 */ .word	0x891F001C
+/* 001710 0x808C37F8 */ .word	0x3054000A
+glabel D_808C37FC
+/* 001711 0x808C37FC */ .word	0xFFFFFFFF
+/* 001712 0x808C3800 */ .word	0x00FFFFFF
+/* 001713 0x808C3804 */ .word	0x01FFFFFF
+/* 001714 0x808C3808 */ .short	0xFF02
+glabel D_808C380A
+/* 001714 0x808C3808 */ .byte	0xFF
+glabel D_808C380B
+/* 001714 0x808C3808 */ .byte	0x03
+glabel D_808C380C
+/* 001715 0x808C380C */ .word	0x447A0000
+/* 001716 0x808C3810 */ .word	0xC42F0000
+/* 001717 0x808C3814 */ .word	0x00000000
+/* 001718 0x808C3818 */ .word	0x00000000
+/* 001719 0x808C381C */ .word	0x00000000

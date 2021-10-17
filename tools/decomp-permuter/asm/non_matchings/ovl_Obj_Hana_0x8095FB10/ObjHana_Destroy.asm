@@ -1,0 +1,6 @@
+glabel ObjHana_Destroy
+/* 000010 0x8095FB38 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000011 0x8095FB3C AFA50004 */ sw	$a1, 0X4($sp)
+/* 000012 0x8095FB40 03E00008 */ jr	$ra
+/* 000013 0x8095FB44 00000000 */ nop
+

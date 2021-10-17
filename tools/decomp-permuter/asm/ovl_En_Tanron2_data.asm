@@ -1,0 +1,56 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel En_Tanron2_InitVars
+/* 001632 0x80BB8150 */ .word	0x023E0900
+/* 001633 0x80BB8154 */ .word	0x00000035
+/* 001634 0x80BB8158 */ .word	0x015D0000
+/* 001635 0x80BB815C */ .word	0x000001FC
+/* 001636 0x80BB8160 */ .word	EnTanron2_Init
+/* 001637 0x80BB8164 */ .word	EnTanron2_Destroy
+/* 001638 0x80BB8168 */ .word	EnTanron2_Update
+/* 001639 0x80BB816C */ .word	EnTanron2_Draw
+glabel D_80BB8170
+/* 001640 0x80BB8170 */ .word	0xF1F100F2
+/* 001641 0x80BB8174 */ .word	0xF1F200F0
+/* 001642 0x80BB8178 */ .word	0xF2F2F222
+/* 001643 0x80BB817C */ .word	0x3242F2F1
+/* 001644 0x80BB8180 */ .word	0xF1F1F100
+/* 001645 0x80BB8184 */ .word	0xF0F0F2F2
+/* 001646 0x80BB8188 */ .word	0xF2000022
+/* 001647 0x80BB818C */ .word	0x000000F1
+glabel D_80BB8190
+/* 001648 0x80BB8190 */ .word	0x03110939
+/* 001649 0x80BB8194 */ .word	0x10010000
+/* 001650 0x80BB8198 */ .word	0x03000000
+/* 001651 0x80BB819C */ .word	0xF7CFFFFF
+/* 001652 0x80BB81A0 */ .word	0x00040000
+/* 001653 0x80BB81A4 */ .word	0xFFFFFFFF
+/* 001654 0x80BB81A8 */ .word	0x00000000
+/* 001655 0x80BB81AC */ .word	0x01050100
+/* 001656 0x80BB81B0 */ .word	0x001E0032
+/* 001657 0x80BB81B4 */ .word	0xFFE70000
+/* 001658 0x80BB81B8 */ .word	0x00000000
+glabel D_80BB81BC
+/* 001659 0x80BB81BC */ .word	0x03110939
+/* 001660 0x80BB81C0 */ .word	0x10010000
+/* 001661 0x80BB81C4 */ .word	0x03000000
+/* 001662 0x80BB81C8 */ .word	0xF7CFFFFF
+/* 001663 0x80BB81CC */ .word	0x00040000
+/* 001664 0x80BB81D0 */ .word	0xF7FFFFFF
+/* 001665 0x80BB81D4 */ .word	0x00000000
+/* 001666 0x80BB81D8 */ .word	0x01050100
+/* 001667 0x80BB81DC */ .word	0x0016002A
+/* 001668 0x80BB81E0 */ .word	0xFFEB0000
+/* 001669 0x80BB81E4 */ .word	0x00000000
+glabel D_80BB81E8
+/* 001670 0x80BB81E8 */ .word	0xFFFFFFFF
+glabel D_80BB81EC
+/* 001671 0x80BB81EC */ .word	0xFF6464FF

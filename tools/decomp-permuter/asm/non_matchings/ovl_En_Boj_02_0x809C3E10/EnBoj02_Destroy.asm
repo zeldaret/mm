@@ -1,0 +1,6 @@
+glabel EnBoj02_Destroy
+/* 000004 0x809C3E20 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000005 0x809C3E24 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000006 0x809C3E28 03E00008 */ jr	$ra
+/* 000007 0x809C3E2C 00000000 */ nop
+

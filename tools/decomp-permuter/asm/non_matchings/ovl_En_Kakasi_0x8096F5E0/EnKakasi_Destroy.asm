@@ -1,0 +1,13 @@
+glabel EnKakasi_Destroy
+/* 000000 0x8096F5E0 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000001 0x8096F5E4 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000002 0x8096F5E8 00803025 */ move	$a2, $a0
+/* 000003 0x8096F5EC 00A03825 */ move	$a3, $a1
+/* 000004 0x8096F5F0 00E02025 */ move	$a0, $a3
+/* 000005 0x8096F5F4 0C03847B */ jal	Collision_FiniCylinder
+/* 000006 0x8096F5F8 24C50254 */ addiu	$a1, $a2, 0X254
+/* 000007 0x8096F5FC 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000008 0x8096F600 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000009 0x8096F604 03E00008 */ jr	$ra
+/* 000010 0x8096F608 00000000 */ nop
+

@@ -1,0 +1,6 @@
+glabel DmSa_Destroy
+/* 000083 0x80A2EAAC AFA40000 */ sw	$a0, 0X0($sp)
+/* 000084 0x80A2EAB0 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000085 0x80A2EAB4 03E00008 */ jr	$ra
+/* 000086 0x80A2EAB8 00000000 */ nop
+

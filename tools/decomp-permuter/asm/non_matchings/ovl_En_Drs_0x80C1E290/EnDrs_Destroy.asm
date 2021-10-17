@@ -1,0 +1,13 @@
+glabel EnDrs_Destroy
+/* 000101 0x80C1E424 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000102 0x80C1E428 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000103 0x80C1E42C 00803025 */ move	$a2, $a0
+/* 000104 0x80C1E430 00A03825 */ move	$a3, $a1
+/* 000105 0x80C1E434 00E02025 */ move	$a0, $a3
+/* 000106 0x80C1E438 0C03847B */ jal	Collision_FiniCylinder
+/* 000107 0x80C1E43C 24C5018C */ addiu	$a1, $a2, 0X18C
+/* 000108 0x80C1E440 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000109 0x80C1E444 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000110 0x80C1E448 03E00008 */ jr	$ra
+/* 000111 0x80C1E44C 00000000 */ nop
+

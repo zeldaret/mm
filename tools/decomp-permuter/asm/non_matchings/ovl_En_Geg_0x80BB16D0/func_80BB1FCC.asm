@@ -1,0 +1,23 @@
+glabel func_80BB1FCC
+/* 000575 0x80BB1FCC 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000576 0x80BB1FD0 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000577 0x80BB1FD4 00803025 */ move	$a2, $a0
+/* 000578 0x80BB1FD8 8CCE0248 */ lw	$t6, 0X248($a2)
+/* 000579 0x80BB1FDC 3C190001 */ lui	$t9, 0x0001
+/* 000580 0x80BB1FE0 3C018000 */ lui	$at, 0x8000
+/* 000581 0x80BB1FE4 000E7900 */ sll	$t7, $t6, 4
+/* 000582 0x80BB1FE8 01EE7821 */ addu	$t7, $t7, $t6
+/* 000583 0x80BB1FEC 000F7880 */ sll	$t7, $t7, 2
+/* 000584 0x80BB1FF0 00AFC021 */ addu	$t8, $a1, $t7
+/* 000585 0x80BB1FF4 0338C821 */ addu	$t9, $t9, $t8
+/* 000586 0x80BB1FF8 8F397D98 */ lw	$t9, 0X7D98($t9)
+/* 000587 0x80BB1FFC 24C40144 */ addiu	$a0, $a2, 0X144
+/* 000588 0x80BB2000 03214021 */ addu	$t0, $t9, $at
+/* 000589 0x80BB2004 3C018020 */ lui	$at, %hi(gRspSegmentPhysAddrs + 0x18)
+/* 000590 0x80BB2008 0C04DB34 */ jal	SkelAnime_FrameUpdateMatrix
+/* 000591 0x80BB200C AC288198 */ sw	$t0, %lo(gRspSegmentPhysAddrs + 0x18)($at)
+/* 000592 0x80BB2010 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000593 0x80BB2014 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000594 0x80BB2018 03E00008 */ jr	$ra
+/* 000595 0x80BB201C 00000000 */ nop
+

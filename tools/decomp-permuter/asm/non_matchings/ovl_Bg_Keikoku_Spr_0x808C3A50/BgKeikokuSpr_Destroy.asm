@@ -1,0 +1,6 @@
+glabel BgKeikokuSpr_Destroy
+/* 000010 0x808C3A78 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000011 0x808C3A7C AFA50004 */ sw	$a1, 0X4($sp)
+/* 000012 0x808C3A80 03E00008 */ jr	$ra
+/* 000013 0x808C3A84 00000000 */ nop
+

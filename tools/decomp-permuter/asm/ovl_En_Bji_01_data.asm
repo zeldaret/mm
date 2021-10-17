@@ -1,0 +1,60 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel En_Bji_01_InitVars
+/* 000916 0x809CDC30 */ .word	0x01240400
+/* 000917 0x809CDC34 */ .word	0x00000019
+/* 000918 0x809CDC38 */ .word	0x00DE0000
+/* 000919 0x809CDC3C */ .word	0x000002B4
+/* 000920 0x809CDC40 */ .word	EnBji01_Init
+/* 000921 0x809CDC44 */ .word	EnBji01_Destroy
+/* 000922 0x809CDC48 */ .word	EnBji01_Update
+/* 000923 0x809CDC4C */ .word	EnBji01_Draw
+glabel D_809CDC50
+/* 000924 0x809CDC50 */ .word	0x00000939
+/* 000925 0x809CDC54 */ .word	0x10010000
+/* 000926 0x809CDC58 */ .word	0x01000000
+/* 000927 0x809CDC5C */ .word	0x00000000
+/* 000928 0x809CDC60 */ .word	0x00000000
+/* 000929 0x809CDC64 */ .word	0xF7CFFFFF
+/* 000930 0x809CDC68 */ .word	0x00000000
+/* 000931 0x809CDC6C */ .word	0x00010100
+/* 000932 0x809CDC70 */ .word	0x00120040
+/* 000933 0x809CDC74 */ .word	0x00000000
+/* 000934 0x809CDC78 */ .word	0x00000000
+glabel D_809CDC7C
+/* 000935 0x809CDC7C */ .word	0x06000FDC
+/* 000936 0x809CDC80 */ .word	0x3F800000
+/* 000937 0x809CDC84 */ .word	0x00000000
+/* 000938 0x809CDC88 */ .word	0x00000000
+/* 000939 0x809CDC8C */ .word	0x06005B58
+/* 000940 0x809CDC90 */ .word	0x3F800000
+/* 000941 0x809CDC94 */ .word	0x00000000
+/* 000942 0x809CDC98 */ .word	0x41200000
+/* 000943 0x809CDC9C */ .word	0x06000AB0
+/* 000944 0x809CDCA0 */ .word	0x3F800000
+/* 000945 0x809CDCA4 */ .word	0x00000000
+/* 000946 0x809CDCA8 */ .word	0x00000000
+/* 000947 0x809CDCAC */ .word	0x0600066C
+/* 000948 0x809CDCB0 */ .word	0x3F800000
+/* 000949 0x809CDCB4 */ .word	0x02000000
+/* 000950 0x809CDCB8 */ .word	0xC0A00000
+glabel D_809CDCBC
+/* 000951 0x809CDCBC */ .word	0x00000001
+/* 000952 0x809CDCC0 */ .word	0x00020001
+/* 000953 0x809CDCC4 */ .word	0x00000000
+glabel D_809CDCC8
+/* 000954 0x809CDCC8 */ .word	0x44880000
+/* 000955 0x809CDCCC */ .word	0x44960000
+/* 000956 0x809CDCD0 */ .word	0x00000000
+glabel D_809CDCD4
+/* 000957 0x809CDCD4 */ .word	0x060049F0
+/* 000958 0x809CDCD8 */ .word	0x06004E70
+/* 000959 0x809CDCDC */ .word	0x06005270

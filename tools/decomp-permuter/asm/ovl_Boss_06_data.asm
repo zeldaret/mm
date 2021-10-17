@@ -1,0 +1,50 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel D_809F4080
+/* 002008 0x809F4080 */ .word	0xF0F000F1
+/* 002009 0x809F4084 */ .word	0xF0F000F0
+/* 002010 0x809F4088 */ .word	0xF0F0F021
+/* 002011 0x809F408C */ .word	0x3040F0F0
+/* 002012 0x809F4090 */ .word	0xF0F0F000
+/* 002013 0x809F4094 */ .word	0xF0F0F0F0
+/* 002014 0x809F4098 */ .word	0xF000F000
+/* 002015 0x809F409C */ .word	0x000000F0
+glabel Boss_06_InitVars
+/* 002016 0x809F40A0 */ .word	0x012E0900
+/* 002017 0x809F40A4 */ .word	0x00000035
+/* 002018 0x809F40A8 */ .word	0x01560000
+/* 002019 0x809F40AC */ .word	0x00000A30
+/* 002020 0x809F40B0 */ .word	Boss06_Init
+/* 002021 0x809F40B4 */ .word	Boss06_Destroy
+/* 002022 0x809F40B8 */ .word	Boss06_Update
+/* 002023 0x809F40BC */ .word	Boss06_Draw
+glabel D_809F40C0
+/* 002024 0x809F40C0 */ .word	0x03110939
+/* 002025 0x809F40C4 */ .word	0x10010000
+/* 002026 0x809F40C8 */ .word	0x03000000
+/* 002027 0x809F40CC */ .word	0xF7CFFFFF
+/* 002028 0x809F40D0 */ .word	0x00040000
+/* 002029 0x809F40D4 */ .word	0xF7FFFFFF
+/* 002030 0x809F40D8 */ .word	0x00000000
+/* 002031 0x809F40DC */ .word	0x01050100
+/* 002032 0x809F40E0 */ .word	0x005A008C
+/* 002033 0x809F40E4 */ .word	0x000A0000
+/* 002034 0x809F40E8 */ .word	0x00000000
+glabel D_809F40EC
+/* 002035 0x809F40EC */ .word	0x44872000
+/* 002036 0x809F40F0 */ .word	0x436B0000
+/* 002037 0x809F40F4 */ .word	0x45498000
+/* 002038 0x809F40F8 */ .word	0x44290000
+/* 002039 0x809F40FC */ .word	0x436B0000
+/* 002040 0x809F4100 */ .word	0x45498000
+/* 002041 0x809F4104 */ .word	0x00000000
+/* 002042 0x809F4108 */ .word	0x00000000
+/* 002043 0x809F410C */ .word	0x00000000

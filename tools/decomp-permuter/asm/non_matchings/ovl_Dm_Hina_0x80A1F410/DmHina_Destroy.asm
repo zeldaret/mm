@@ -1,0 +1,6 @@
+glabel DmHina_Destroy
+/* 000020 0x80A1F460 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000021 0x80A1F464 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000022 0x80A1F468 03E00008 */ jr	$ra
+/* 000023 0x80A1F46C 00000000 */ nop
+

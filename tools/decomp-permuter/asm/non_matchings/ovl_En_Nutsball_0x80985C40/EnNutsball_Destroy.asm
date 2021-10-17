@@ -1,0 +1,13 @@
+glabel EnNutsball_Destroy
+/* 000052 0x80985D10 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000053 0x80985D14 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000054 0x80985D18 00803025 */ move	$a2, $a0
+/* 000055 0x80985D1C 00A03825 */ move	$a3, $a1
+/* 000056 0x80985D20 00E02025 */ move	$a0, $a3
+/* 000057 0x80985D24 0C03847B */ jal	Collision_FiniCylinder
+/* 000058 0x80985D28 24C50148 */ addiu	$a1, $a2, 0X148
+/* 000059 0x80985D2C 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000060 0x80985D30 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000061 0x80985D34 03E00008 */ jr	$ra
+/* 000062 0x80985D38 00000000 */ nop
+

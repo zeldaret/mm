@@ -1,0 +1,60 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel En_Fu_Mato_InitVars
+/* 001200 0x80ACF5F0 */ .word	0x01B30100
+/* 001201 0x80ACF5F4 */ .word	0x00000030
+/* 001202 0x80ACF5F8 */ .word	0x01A10000
+/* 001203 0x80ACF5FC */ .word	0x0000030C
+/* 001204 0x80ACF600 */ .word	EnFuMato_Init
+/* 001205 0x80ACF604 */ .word	EnFuMato_Destroy
+/* 001206 0x80ACF608 */ .word	EnFuMato_Update
+/* 001207 0x80ACF60C */ .word	EnFuMato_Draw
+glabel D_80ACF610
+/* 001208 0x80ACF610 */ .word	0x03000939
+/* 001209 0x80ACF614 */ .word	0x10040000
+/* 001210 0x80ACF618 */ .word	0x04000000
+/* 001211 0x80ACF61C */ .word	0xF7CFFFFF
+/* 001212 0x80ACF620 */ .word	0x00000000
+/* 001213 0x80ACF624 */ .word	0xF7CFFFFF
+/* 001214 0x80ACF628 */ .word	0x00000000
+/* 001215 0x80ACF62C */ .word	0x00010100
+/* 001216 0x80ACF630 */ .word	0x00000000
+/* 001217 0x80ACF634 */ .word	0x00000000
+/* 001218 0x80ACF638 */ .word	0x00C80064
+glabel D_80ACF63C
+/* 001219 0x80ACF63C */ .word	0x06001C80
+/* 001220 0x80ACF640 */ .word	0x06001D68
+/* 001221 0x80ACF644 */ .word	0x06001E50
+/* 001222 0x80ACF648 */ .word	0x06001F38
+/* 001223 0x80ACF64C */ .word	0x06002020
+/* 001224 0x80ACF650 */ .word	0x06002108
+glabel D_80ACF654
+/* 001225 0x80ACF654 */ .word	0xBF800000
+/* 001226 0x80ACF658 */ .word	0xBFDD70A4
+/* 001227 0x80ACF65C */ .word	0x3F800000
+/* 001228 0x80ACF660 */ .word	0xBFDD70A4
+/* 001229 0x80ACF664 */ .word	0x40000000
+/* 001230 0x80ACF668 */ .word	0x00000000
+/* 001231 0x80ACF66C */ .word	0x3F800000
+/* 001232 0x80ACF670 */ .word	0x3FDD70A4
+/* 001233 0x80ACF674 */ .word	0xBF800000
+/* 001234 0x80ACF678 */ .word	0x3FDD70A4
+/* 001235 0x80ACF67C */ .word	0xC0000000
+/* 001236 0x80ACF680 */ .word	0x00000000
+glabel D_80ACF684
+/* 001237 0x80ACF684 */ .word	0x00000000
+/* 001238 0x80ACF688 */ .word	0x00000000
+/* 001239 0x80ACF68C */ .word	0x00000000
+glabel D_80ACF690
+/* 001240 0x80ACF690 */ .word	0x00000000
+/* 001241 0x80ACF694 */ .word	0x40000000
+/* 001242 0x80ACF698 */ .word	0x00000000
+/* 001243 0x80ACF69C */ .word	0x00000000

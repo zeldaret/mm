@@ -1,0 +1,6 @@
+glabel EnShn_Destroy
+/* 000711 0x80AE6C4C AFA40000 */ sw	$a0, 0X0($sp)
+/* 000712 0x80AE6C50 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000713 0x80AE6C54 03E00008 */ jr	$ra
+/* 000714 0x80AE6C58 00000000 */ nop
+

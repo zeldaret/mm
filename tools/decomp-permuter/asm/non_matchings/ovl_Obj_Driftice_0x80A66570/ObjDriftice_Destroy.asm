@@ -1,0 +1,15 @@
+glabel ObjDriftice_Destroy
+/* 000769 0x80A67174 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000770 0x80A67178 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000771 0x80A6717C AFA40018 */ sw	$a0, 0X18($sp)
+/* 000772 0x80A67180 00A03825 */ move	$a3, $a1
+/* 000773 0x80A67184 8FAE0018 */ lw	$t6, 0X18($sp)
+/* 000774 0x80A67188 00E02025 */ move	$a0, $a3
+/* 000775 0x80A6718C 24E50880 */ addiu	$a1, $a3, 0X880
+/* 000776 0x80A67190 0C031933 */ jal	BgCheck_RemoveActorMesh
+/* 000777 0x80A67194 8DC60144 */ lw	$a2, 0X144($t6)
+/* 000778 0x80A67198 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000779 0x80A6719C 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000780 0x80A671A0 03E00008 */ jr	$ra
+/* 000781 0x80A671A4 00000000 */ nop
+

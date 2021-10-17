@@ -1,0 +1,18 @@
+glabel EnBombf_Destroy
+/* 000110 0x808AEA78 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000111 0x808AEA7C AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000112 0x808AEA80 AFA40018 */ sw	$a0, 0X18($sp)
+/* 000113 0x808AEA84 AFA5001C */ sw	$a1, 0X1C($sp)
+/* 000114 0x808AEA88 8FA50018 */ lw	$a1, 0X18($sp)
+/* 000115 0x808AEA8C 8FA4001C */ lw	$a0, 0X1C($sp)
+/* 000116 0x808AEA90 0C03847B */ jal	Collision_FiniCylinder
+/* 000117 0x808AEA94 24A50144 */ addiu	$a1, $a1, 0X144
+/* 000118 0x808AEA98 8FA50018 */ lw	$a1, 0X18($sp)
+/* 000119 0x808AEA9C 8FA4001C */ lw	$a0, 0X1C($sp)
+/* 000120 0x808AEAA0 0C038306 */ jal	Collision_FiniSphereGroup
+/* 000121 0x808AEAA4 24A50190 */ addiu	$a1, $a1, 0X190
+/* 000122 0x808AEAA8 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000123 0x808AEAAC 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000124 0x808AEAB0 03E00008 */ jr	$ra
+/* 000125 0x808AEAB4 00000000 */ nop
+

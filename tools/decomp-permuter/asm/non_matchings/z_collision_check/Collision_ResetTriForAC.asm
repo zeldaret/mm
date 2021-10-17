@@ -1,0 +1,11 @@
+glabel Collision_ResetTriForAC
+/* 061170 0x800E1688 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 061171 0x800E168C AFBF0014 */ sw	$ra, 0X14($sp)
+/* 061172 0x800E1690 0C038243 */ jal	Collision_ResetBodyForAC
+/* 061173 0x800E1694 00000000 */ nop
+/* 061174 0x800E1698 24020001 */ li	$v0, 0X1
+/* 061175 0x800E169C 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 061176 0x800E16A0 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 061177 0x800E16A4 03E00008 */ jr	$ra
+/* 061178 0x800E16A8 00000000 */ nop
+

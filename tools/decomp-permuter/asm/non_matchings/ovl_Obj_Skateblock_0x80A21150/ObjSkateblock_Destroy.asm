@@ -1,0 +1,15 @@
+glabel ObjSkateblock_Destroy
+/* 001121 0x80A222D4 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 001122 0x80A222D8 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 001123 0x80A222DC AFA40018 */ sw	$a0, 0X18($sp)
+/* 001124 0x80A222E0 00A03825 */ move	$a3, $a1
+/* 001125 0x80A222E4 8FAE0018 */ lw	$t6, 0X18($sp)
+/* 001126 0x80A222E8 00E02025 */ move	$a0, $a3
+/* 001127 0x80A222EC 24E50880 */ addiu	$a1, $a3, 0X880
+/* 001128 0x80A222F0 0C031933 */ jal	BgCheck_RemoveActorMesh
+/* 001129 0x80A222F4 8DC60144 */ lw	$a2, 0X144($t6)
+/* 001130 0x80A222F8 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 001131 0x80A222FC 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 001132 0x80A22300 03E00008 */ jr	$ra
+/* 001133 0x80A22304 00000000 */ nop
+

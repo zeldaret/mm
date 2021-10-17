@@ -1,0 +1,16 @@
+glabel func_80B32B3C
+/* 001387 0x80B32B3C AFA50004 */ sw	$a1, 0X4($sp)
+/* 001388 0x80B32B40 3C0E801F */ lui	$t6, %hi(gSaveContext + 0x100F)
+/* 001389 0x80B32B44 91CE067F */ lbu	$t6, %lo(gSaveContext + 0x100F)($t6)
+/* 001390 0x80B32B48 3C1880B3 */ lui	$t8, %hi(func_80B32A88)
+/* 001391 0x80B32B4C 27182A88 */ addiu	$t8, $t8, %lo(func_80B32A88)
+/* 001392 0x80B32B50 31CF0008 */ andi	$t7, $t6, 0X8
+/* 001393 0x80B32B54 11E00004 */ beqz	$t7, .L80B32B68
+/* 001394 0x80B32B58 3C1980B3 */ lui	$t9, %hi(EnZoraegg_Draw)
+/* 001395 0x80B32B5C 273938C0 */ addiu	$t9, $t9, %lo(EnZoraegg_Draw)
+/* 001396 0x80B32B60 AC9801F8 */ sw	$t8, 0X1F8($a0)
+/* 001397 0x80B32B64 AC99013C */ sw	$t9, 0X13C($a0)
+.L80B32B68:
+/* 001398 0x80B32B68 03E00008 */ jr	$ra
+/* 001399 0x80B32B6C 00000000 */ nop
+

@@ -1,0 +1,6 @@
+glabel DemoGetitem_Destroy
+/* 000048 0x80A4FB00 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000049 0x80A4FB04 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000050 0x80A4FB08 03E00008 */ jr	$ra
+/* 000051 0x80A4FB0C 00000000 */ nop
+

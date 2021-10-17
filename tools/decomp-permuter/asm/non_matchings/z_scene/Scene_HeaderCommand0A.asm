@@ -1,0 +1,14 @@
+glabel Scene_HeaderCommand0A
+/* 141386 0x8012FBE8 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 141387 0x8012FBEC AFBF0014 */ sw	$ra, 0X14($sp)
+/* 141388 0x8012FBF0 AFA40018 */ sw	$a0, 0X18($sp)
+/* 141389 0x8012FBF4 0C040141 */ jal	Lib_PtrSegToVirt
+/* 141390 0x8012FBF8 8CA40004 */ lw	$a0, 0X4($a1)
+/* 141391 0x8012FBFC 8FAE0018 */ lw	$t6, 0X18($sp)
+/* 141392 0x8012FC00 3C010002 */ lui	$at, 0x0002
+/* 141393 0x8012FC04 002E0821 */ addu	$at, $at, $t6
+/* 141394 0x8012FC08 AC2286E8 */ sw	$v0, -0X7918($at)
+/* 141395 0x8012FC0C 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 141396 0x8012FC10 03E00008 */ jr	$ra
+/* 141397 0x8012FC14 27BD0018 */ addiu	$sp, $sp, 0X18
+

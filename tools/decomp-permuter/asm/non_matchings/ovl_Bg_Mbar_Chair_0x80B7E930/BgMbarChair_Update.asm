@@ -1,0 +1,6 @@
+glabel BgMbarChair_Update
+/* 000033 0x80B7E9B4 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000034 0x80B7E9B8 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000035 0x80B7E9BC 03E00008 */ jr	$ra
+/* 000036 0x80B7E9C0 00000000 */ nop
+

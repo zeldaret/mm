@@ -1,0 +1,49 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .rodata
+
+glabel objSwprizeOverlayInfo
+/* 000300 0x80C25810 */ .word	0x00000470
+/* 000301 0x80C25814 */ .word	0x00000030
+/* 000302 0x80C25818 */ .word	0x00000010
+/* 000303 0x80C2581C */ .word	0x00000000
+/* 000304 0x80C25820 */ .word	0x0000001C
+glabel objSwprizeOverlayRelocations
+/* 000305 0x80C25824 */ .word	0x450000B8
+/* 000306 0x80C25828 */ .word	0x460000BC
+/* 000307 0x80C2582C */ .word	0x440000D8
+/* 000308 0x80C25830 */ .word	0x450000E0
+/* 000309 0x80C25834 */ .word	0x460000E4
+/* 000310 0x80C25838 */ .word	0x45000100
+/* 000311 0x80C2583C */ .word	0x46000104
+/* 000312 0x80C25840 */ .word	0x45000150
+/* 000313 0x80C25844 */ .word	0x46000154
+/* 000314 0x80C25848 */ .word	0x450001D4
+/* 000315 0x80C2584C */ .word	0x460001D8
+/* 000316 0x80C25850 */ .word	0x440002A8
+/* 000317 0x80C25854 */ .word	0x440002B8
+/* 000318 0x80C25858 */ .word	0x450002E0
+/* 000319 0x80C2585C */ .word	0x460002E4
+/* 000320 0x80C25860 */ .word	0x44000320
+/* 000321 0x80C25864 */ .word	0x45000338
+/* 000322 0x80C25868 */ .word	0x4600033C
+/* 000323 0x80C2586C */ .word	0x4400037C
+/* 000324 0x80C25870 */ .word	0x44000384
+/* 000325 0x80C25874 */ .word	0x450003B0
+/* 000326 0x80C25878 */ .word	0x460003B8
+/* 000327 0x80C2587C */ .word	0x44000408
+/* 000328 0x80C25880 */ .word	0x45000420
+/* 000329 0x80C25884 */ .word	0x46000424
+/* 000330 0x80C25888 */ .word	0x82000010
+/* 000331 0x80C2588C */ .word	0x82000014
+/* 000332 0x80C25890 */ .word	0x82000018
+/* 000333 0x80C25894 */ .word	0x00000000
+/* 000334 0x80C25898 */ .word	0x00000000
+glabel objSwprizeOverlayInfoOffset
+/* 000335 0x80C2589C */ .word	0x00000090

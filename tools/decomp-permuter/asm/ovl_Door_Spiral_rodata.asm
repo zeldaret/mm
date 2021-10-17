@@ -1,0 +1,57 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .rodata
+
+glabel doorSpiralOverlayInfo
+/* 000500 0x809A3330 */ .word	0x000006D0
+/* 000501 0x809A3334 */ .word	0x000000F0
+/* 000502 0x809A3338 */ .word	0x00000010
+/* 000503 0x809A333C */ .word	0x00000000
+/* 000504 0x809A3340 */ .word	0x00000024
+glabel doorSpiralOverlayRelocations
+/* 000505 0x809A3344 */ .word	0x4500001C
+/* 000506 0x809A3348 */ .word	0x46000020
+/* 000507 0x809A334C */ .word	0x45000078
+/* 000508 0x809A3350 */ .word	0x46000080
+/* 000509 0x809A3354 */ .word	0x4400007C
+/* 000510 0x809A3358 */ .word	0x450000A4
+/* 000511 0x809A335C */ .word	0x460000A8
+/* 000512 0x809A3360 */ .word	0x45000158
+/* 000513 0x809A3364 */ .word	0x46000178
+/* 000514 0x809A3368 */ .word	0x4400019C
+/* 000515 0x809A336C */ .word	0x450001B8
+/* 000516 0x809A3370 */ .word	0x460001C4
+/* 000517 0x809A3374 */ .word	0x450001F0
+/* 000518 0x809A3378 */ .word	0x460001F4
+/* 000519 0x809A337C */ .word	0x440001F8
+/* 000520 0x809A3380 */ .word	0x44000290
+/* 000521 0x809A3384 */ .word	0x45000304
+/* 000522 0x809A3388 */ .word	0x46000334
+/* 000523 0x809A338C */ .word	0x4500036C
+/* 000524 0x809A3390 */ .word	0x46000370
+/* 000525 0x809A3394 */ .word	0x440003C8
+/* 000526 0x809A3398 */ .word	0x450004B4
+/* 000527 0x809A339C */ .word	0x460004B8
+/* 000528 0x809A33A0 */ .word	0x440004BC
+/* 000529 0x809A33A4 */ .word	0x440004D0
+/* 000530 0x809A33A8 */ .word	0x45000548
+/* 000531 0x809A33AC */ .word	0x46000564
+/* 000532 0x809A33B0 */ .word	0x44000560
+/* 000533 0x809A33B4 */ .word	0x450005A8
+/* 000534 0x809A33B8 */ .word	0x460005AC
+/* 000535 0x809A33BC */ .word	0x450005EC
+/* 000536 0x809A33C0 */ .word	0x46000600
+/* 000537 0x809A33C4 */ .word	0x82000010
+/* 000538 0x809A33C8 */ .word	0x82000014
+/* 000539 0x809A33CC */ .word	0x82000018
+/* 000540 0x809A33D0 */ .word	0x8200001C
+/* 000541 0x809A33D4 */ .word	0x00000000
+/* 000542 0x809A33D8 */ .word	0x00000000
+glabel doorSpiralOverlayInfoOffset
+/* 000543 0x809A33DC */ .word	0x000000B0

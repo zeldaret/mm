@@ -1,0 +1,6 @@
+glabel DmChar06_Destroy
+/* 000024 0x80AAE6E0 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000025 0x80AAE6E4 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000026 0x80AAE6E8 03E00008 */ jr	$ra
+/* 000027 0x80AAE6EC 00000000 */ nop
+

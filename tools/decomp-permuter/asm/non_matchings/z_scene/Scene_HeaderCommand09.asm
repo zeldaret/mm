@@ -1,0 +1,6 @@
+glabel Scene_HeaderCommand09
+/* 141892 0x801303D0 AFA40000 */ sw	$a0, 0X0($sp)
+/* 141893 0x801303D4 AFA50004 */ sw	$a1, 0X4($sp)
+/* 141894 0x801303D8 03E00008 */ jr	$ra
+/* 141895 0x801303DC 00000000 */ nop
+

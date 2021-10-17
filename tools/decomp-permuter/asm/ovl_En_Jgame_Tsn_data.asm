@@ -1,0 +1,54 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel En_Jgame_Tsn_InitVars
+/* 001464 0x80C15010 */ .word	0x02920400
+/* 001465 0x80C15014 */ .word	0x02000019
+/* 001466 0x80C15018 */ .word	0x01A90000
+/* 001467 0x80C1501C */ .word	0x00000304
+/* 001468 0x80C15020 */ .word	EnJgameTsn_Init
+/* 001469 0x80C15024 */ .word	EnJgameTsn_Destroy
+/* 001470 0x80C15028 */ .word	EnJgameTsn_Update
+/* 001471 0x80C1502C */ .word	EnJgameTsn_Draw
+glabel D_80C15030
+/* 001472 0x80C15030 */ .word	0x060092FC
+/* 001473 0x80C15034 */ .word	0x3F800000
+/* 001474 0x80C15038 */ .word	0x00000000
+/* 001475 0x80C1503C */ .word	0x00000000
+/* 001476 0x80C15040 */ .word	0x00000000
+/* 001477 0x80C15044 */ .word	0xC0C00000
+/* 001478 0x80C15048 */ .word	0x06000964
+/* 001479 0x80C1504C */ .word	0x3F800000
+/* 001480 0x80C15050 */ .word	0x00000000
+/* 001481 0x80C15054 */ .word	0x00000000
+/* 001482 0x80C15058 */ .word	0x00000000
+/* 001483 0x80C1505C */ .word	0xC0C00000
+/* 001484 0x80C15060 */ .word	0x06001198
+/* 001485 0x80C15064 */ .word	0x3F800000
+/* 001486 0x80C15068 */ .word	0x00000000
+/* 001487 0x80C1506C */ .word	0x00000000
+/* 001488 0x80C15070 */ .word	0x00000000
+/* 001489 0x80C15074 */ .word	0xC0C00000
+glabel D_80C15078
+/* 001490 0x80C15078 */ .word	0x0A001139
+/* 001491 0x80C1507C */ .word	0x10010000
+/* 001492 0x80C15080 */ .word	0x00000000
+/* 001493 0x80C15084 */ .word	0x00000000
+/* 001494 0x80C15088 */ .word	0x00000000
+/* 001495 0x80C1508C */ .word	0xF7CFFFFF
+/* 001496 0x80C15090 */ .word	0x00000000
+/* 001497 0x80C15094 */ .word	0x00010100
+/* 001498 0x80C15098 */ .word	0x001E0028
+/* 001499 0x80C1509C */ .word	0x00000000
+/* 001500 0x80C150A0 */ .word	0x00000000
+glabel D_80C150A4
+/* 001501 0x80C150A4 */ .word	0x060073B8
+/* 001502 0x80C150A8 */ .word	0x060085B8
+/* 001503 0x80C150AC */ .word	0x00000000

@@ -1,0 +1,6 @@
+glabel EnZoraegg_Destroy
+/* 000258 0x80B31998 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000259 0x80B3199C AFA50004 */ sw	$a1, 0X4($sp)
+/* 000260 0x80B319A0 03E00008 */ jr	$ra
+/* 000261 0x80B319A4 00000000 */ nop
+

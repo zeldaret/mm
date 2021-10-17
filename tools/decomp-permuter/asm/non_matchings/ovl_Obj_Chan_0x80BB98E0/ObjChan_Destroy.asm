@@ -1,0 +1,13 @@
+glabel ObjChan_Destroy
+/* 000068 0x80BB99F0 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000069 0x80BB99F4 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000070 0x80BB99F8 00803025 */ move	$a2, $a0
+/* 000071 0x80BB99FC 00A03825 */ move	$a3, $a1
+/* 000072 0x80BB9A00 00E02025 */ move	$a0, $a3
+/* 000073 0x80BB9A04 0C03847B */ jal	Collision_FiniCylinder
+/* 000074 0x80BB9A08 24C50148 */ addiu	$a1, $a2, 0X148
+/* 000075 0x80BB9A0C 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000076 0x80BB9A10 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000077 0x80BB9A14 03E00008 */ jr	$ra
+/* 000078 0x80BB9A18 00000000 */ nop
+

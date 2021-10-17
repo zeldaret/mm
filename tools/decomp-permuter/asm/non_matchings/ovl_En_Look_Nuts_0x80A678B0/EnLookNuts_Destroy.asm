@@ -1,0 +1,13 @@
+glabel EnLookNuts_Destroy
+/* 000086 0x80A67A08 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000087 0x80A67A0C AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000088 0x80A67A10 00803025 */ move	$a2, $a0
+/* 000089 0x80A67A14 00A03825 */ move	$a3, $a1
+/* 000090 0x80A67A18 00E02025 */ move	$a0, $a3
+/* 000091 0x80A67A1C 0C03847B */ jal	Collision_FiniCylinder
+/* 000092 0x80A67A20 24C50244 */ addiu	$a1, $a2, 0X244
+/* 000093 0x80A67A24 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000094 0x80A67A28 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000095 0x80A67A2C 03E00008 */ jr	$ra
+/* 000096 0x80A67A30 00000000 */ nop
+

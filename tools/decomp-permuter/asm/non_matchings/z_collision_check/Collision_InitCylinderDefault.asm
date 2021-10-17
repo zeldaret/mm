@@ -1,0 +1,22 @@
+glabel Collision_InitCylinderDefault
+/* 060855 0x800E119C 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 060856 0x800E11A0 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 060857 0x800E11A4 AFA40018 */ sw	$a0, 0X18($sp)
+/* 060858 0x800E11A8 AFA5001C */ sw	$a1, 0X1C($sp)
+/* 060859 0x800E11AC 8FA40018 */ lw	$a0, 0X18($sp)
+/* 060860 0x800E11B0 0C03814E */ jal	Collision_InitCommonDefault
+/* 060861 0x800E11B4 8FA5001C */ lw	$a1, 0X1C($sp)
+/* 060862 0x800E11B8 8FA5001C */ lw	$a1, 0X1C($sp)
+/* 060863 0x800E11BC 8FA40018 */ lw	$a0, 0X18($sp)
+/* 060864 0x800E11C0 0C0381E7 */ jal	Collision_InitBodyDefault
+/* 060865 0x800E11C4 24A50018 */ addiu	$a1, $a1, 0X18
+/* 060866 0x800E11C8 8FA5001C */ lw	$a1, 0X1C($sp)
+/* 060867 0x800E11CC 8FA40018 */ lw	$a0, 0X18($sp)
+/* 060868 0x800E11D0 0C038443 */ jal	Collision_InitCylinderParamsDefault
+/* 060869 0x800E11D4 24A50040 */ addiu	$a1, $a1, 0X40
+/* 060870 0x800E11D8 24020001 */ li	$v0, 0X1
+/* 060871 0x800E11DC 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 060872 0x800E11E0 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 060873 0x800E11E4 03E00008 */ jr	$ra
+/* 060874 0x800E11E8 00000000 */ nop
+

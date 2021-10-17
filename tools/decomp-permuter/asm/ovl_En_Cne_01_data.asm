@@ -1,0 +1,61 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel En_Cne_01_InitVars
+/* 000788 0x809CBEE0 */ .word	0x01220400
+/* 000789 0x809CBEE4 */ .word	0x00000019
+/* 000790 0x809CBEE8 */ .word	0x00010000
+/* 000791 0x809CBEEC */ .word	0x0000061C
+/* 000792 0x809CBEF0 */ .word	EnCne01_Init
+/* 000793 0x809CBEF4 */ .word	EnCne01_Destroy
+/* 000794 0x809CBEF8 */ .word	EnCne01_Update
+/* 000795 0x809CBEFC */ .word	EnCne01_Draw
+glabel D_809CBF00
+/* 000796 0x809CBF00 */ .word	0x00000939
+/* 000797 0x809CBF04 */ .word	0x10010000
+/* 000798 0x809CBF08 */ .word	0x01000000
+/* 000799 0x809CBF0C */ .word	0x00000000
+/* 000800 0x809CBF10 */ .word	0x00000000
+/* 000801 0x809CBF14 */ .word	0xF7CFFFFF
+/* 000802 0x809CBF18 */ .word	0x00000000
+/* 000803 0x809CBF1C */ .word	0x00010100
+/* 000804 0x809CBF20 */ .word	0x00120040
+/* 000805 0x809CBF24 */ .word	0x00000000
+/* 000806 0x809CBF28 */ .word	0x00000000
+glabel D_809CBF2C
+/* 000807 0x809CBF2C */ .word	0x00000000
+/* 000808 0x809CBF30 */ .word	0x00000000
+/* 000809 0x809CBF34 */ .word	0xFF000000
+glabel D_809CBF38
+/* 000810 0x809CBF38 */ .word	0x00000000
+/* 000811 0x809CBF3C */ .word	0x00000000
+/* 000812 0x809CBF40 */ .word	0x00000000
+/* 000813 0x809CBF44 */ .word	0x00000000
+/* 000814 0x809CBF48 */ .word	0x00000000
+/* 000815 0x809CBF4C */ .word	0x00000000
+/* 000816 0x809CBF50 */ .word	0x00000000
+/* 000817 0x809CBF54 */ .word	0x00000000
+glabel D_809CBF58
+/* 000818 0x809CBF58 */ .word	0x0FA00004
+/* 000819 0x809CBF5C */ .word	0x00010003
+/* 000820 0x809CBF60 */ .word	0x17700004
+/* 000821 0x809CBF64 */ .word	0x00010006
+/* 000822 0x809CBF68 */ .word	0x0FA00004
+/* 000823 0x809CBF6C */ .word	0x00010003
+/* 000824 0x809CBF70 */ .word	0x17700004
+/* 000825 0x809CBF74 */ .word	0x00010006
+glabel D_809CBF78
+/* 000826 0x809CBF78 */ .word	0x00000000
+/* 000827 0x809CBF7C */ .word	0x00000000
+/* 000828 0x809CBF80 */ .word	0x00000000
+glabel D_809CBF84
+/* 000829 0x809CBF84 */ .word	0x00000000
+/* 000830 0x809CBF88 */ .word	0x00000000
+/* 000831 0x809CBF8C */ .word	0x00000000

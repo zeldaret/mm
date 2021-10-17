@@ -1,0 +1,64 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel D_8097C3D0
+/* 000168 0x8097C3D0 */ .word	0x00000014
+/* 000169 0x8097C3D4 */ .word	func_8097C130
+glabel D_8097C3D8
+/* 000170 0x8097C3D8 */ .word	0x0403BD90
+/* 000171 0x8097C3DC */ .word	0xC80000FF
+/* 000172 0x8097C3E0 */ .word	0x000000FF
+/* 000173 0x8097C3E4 */ .word	0x0403B990
+/* 000174 0x8097C3E8 */ .word	0xFF6400FF
+/* 000175 0x8097C3EC */ .word	0x640000FF
+/* 000176 0x8097C3F0 */ .word	0x0403B590
+/* 000177 0x8097C3F4 */ .word	0xFFC800FF
+/* 000178 0x8097C3F8 */ .word	0xC80000FF
+/* 000179 0x8097C3FC */ .word	0x0403B190
+/* 000180 0x8097C400 */ .word	0xFFFF00FF
+/* 000181 0x8097C404 */ .word	0xFF0000FF
+/* 000182 0x8097C408 */ .word	0x0403AD90
+/* 000183 0x8097C40C */ .word	0xFFFF96FF
+/* 000184 0x8097C410 */ .word	0xFF9600FF
+/* 000185 0x8097C414 */ .word	0x0403A990
+/* 000186 0x8097C418 */ .word	0xFFFFFFFF
+/* 000187 0x8097C41C */ .word	0xFFFF00FF
+/* 000188 0x8097C420 */ .word	0x0403A590
+/* 000189 0x8097C424 */ .word	0xFFFFFFFF
+/* 000190 0x8097C428 */ .word	0x00FF00FF
+/* 000191 0x8097C42C */ .word	0x0403A190
+/* 000192 0x8097C430 */ .word	0xFFFFFFFF
+/* 000193 0x8097C434 */ .word	0x00FFFFFF
+/* 000194 0x8097C438 */ .word	0x00000000
+/* 000195 0x8097C43C */ .word	0x00000000
+glabel D_8097C440
+/* 000196 0x8097C440 */ .word	0x44BB8000
+/* 000197 0x8097C444 */ .word	0x00000000
+/* 000198 0x8097C448 */ .word	0x00000000
+/* 000199 0x8097C44C */ .word	0x00000000
+glabel effectSsStone1OverlayInfo
+/* 000200 0x8097C450 */ .word	0x000002A0
+/* 000201 0x8097C454 */ .word	0x00000070
+/* 000202 0x8097C458 */ .word	0x00000010
+/* 000203 0x8097C45C */ .word	0x00000000
+/* 000204 0x8097C460 */ .word	0x00000009
+glabel effectSsStone1OverlayRelocations
+/* 000205 0x8097C464 */ .word	0x45000018
+/* 000206 0x8097C468 */ .word	0x46000034
+/* 000207 0x8097C46C */ .word	0x45000028
+/* 000208 0x8097C470 */ .word	0x46000038
+/* 000209 0x8097C474 */ .word	0x450000B0
+/* 000210 0x8097C478 */ .word	0x460000B8
+/* 000211 0x8097C47C */ .word	0x450000EC
+/* 000212 0x8097C480 */ .word	0x460000F0
+/* 000213 0x8097C484 */ .word	0x82000004
+/* 000214 0x8097C488 */ .word	0x00000000
+glabel effectSsStone1OverlayInfoOffset
+/* 000215 0x8097C48C */ .word	0x00000040

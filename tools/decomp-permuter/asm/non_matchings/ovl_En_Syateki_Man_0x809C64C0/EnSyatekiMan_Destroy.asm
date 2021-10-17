@@ -1,0 +1,11 @@
+glabel EnSyatekiMan_Destroy
+/* 000143 0x809C66FC 3C02801F */ lui	$v0, %hi(gSaveContext)
+/* 000144 0x809C6700 2442F670 */ addiu	$v0, $v0, %lo(gSaveContext)
+/* 000145 0x809C6704 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000146 0x809C6708 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000147 0x809C670C 904E0F37 */ lbu	$t6, 0XF37($v0)
+/* 000148 0x809C6710 31CF00FE */ andi	$t7, $t6, 0XFE
+/* 000149 0x809C6714 A04F0F37 */ sb	$t7, 0XF37($v0)
+/* 000150 0x809C6718 03E00008 */ jr	$ra
+/* 000151 0x809C671C 00000000 */ nop
+

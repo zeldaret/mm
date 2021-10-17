@@ -1,0 +1,57 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel D_80A771C0
+/* 001280 0x80A771C0 */ .word	0x000000F1
+/* 001281 0x80A771C4 */ .word	0xF1F100F1
+/* 001282 0x80A771C8 */ .word	0x000000F1
+/* 001283 0x80A771CC */ .word	0xF1F20000
+/* 001284 0x80A771D0 */ .word	0xF10000F1
+/* 001285 0x80A771D4 */ .word	0x000000F1
+/* 001286 0x80A771D8 */ .word	0x00000000
+/* 001287 0x80A771DC */ .word	0x000000F1
+glabel D_80A771E0
+/* 001288 0x80A771E0 */ .word	0x42200000
+/* 001289 0x80A771E4 */ .word	0x42200000
+/* 001290 0x80A771E8 */ .word	0x42200000
+/* 001291 0x80A771EC */ .word	0x41F00000
+/* 001292 0x80A771F0 */ .word	0x41F00000
+glabel D_80A771F4
+/* 001293 0x80A771F4 */ .word	0x0A110900
+/* 001294 0x80A771F8 */ .word	0x10010000
+/* 001295 0x80A771FC */ .word	0x04000000
+/* 001296 0x80A77200 */ .word	0x20000000
+/* 001297 0x80A77204 */ .word	0x00040000
+/* 001298 0x80A77208 */ .word	0xF7CFFFFF
+/* 001299 0x80A7720C */ .word	0x00000000
+/* 001300 0x80A77210 */ .word	0x01010000
+/* 001301 0x80A77214 */ .word	0x000A000A
+/* 001302 0x80A77218 */ .word	0x00000000
+/* 001303 0x80A7721C */ .word	0x00000000
+glabel En_Prz_InitVars
+/* 001304 0x80A77220 */ .word	0x01810500
+/* 001305 0x80A77224 */ .word	0x00000015
+/* 001306 0x80A77228 */ .word	0x016B0000
+/* 001307 0x80A7722C */ .word	0x00000270
+/* 001308 0x80A77230 */ .word	EnPrz_Init
+/* 001309 0x80A77234 */ .word	EnPrz_Destroy
+/* 001310 0x80A77238 */ .word	EnPrz_Update
+/* 001311 0x80A7723C */ .word	EnPrz_Draw
+glabel D_80A77240
+/* 001312 0x80A77240 */ .word	0x06004340
+/* 001313 0x80A77244 */ .word	0x06004274
+glabel D_80A77248
+/* 001314 0x80A77248 */ .word	0x00000000
+glabel D_80A7724C
+/* 001315 0x80A7724C */ .word	0x00000000
+/* 001316 0x80A77250 */ .word	0x00000000
+/* 001317 0x80A77254 */ .word	0x00000000
+/* 001318 0x80A77258 */ .word	0x00000000
+/* 001319 0x80A7725C */ .word	0x00000000

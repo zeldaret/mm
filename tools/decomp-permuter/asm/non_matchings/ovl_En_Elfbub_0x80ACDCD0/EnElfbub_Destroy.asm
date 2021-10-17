@@ -1,0 +1,13 @@
+glabel EnElfbub_Destroy
+/* 000089 0x80ACDE34 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000090 0x80ACDE38 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000091 0x80ACDE3C 00803025 */ move	$a2, $a0
+/* 000092 0x80ACDE40 00A03825 */ move	$a3, $a1
+/* 000093 0x80ACDE44 00E02025 */ move	$a0, $a3
+/* 000094 0x80ACDE48 0C03847B */ jal	Collision_FiniCylinder
+/* 000095 0x80ACDE4C 24C50144 */ addiu	$a1, $a2, 0X144
+/* 000096 0x80ACDE50 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000097 0x80ACDE54 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000098 0x80ACDE58 03E00008 */ jr	$ra
+/* 000099 0x80ACDE5C 00000000 */ nop
+

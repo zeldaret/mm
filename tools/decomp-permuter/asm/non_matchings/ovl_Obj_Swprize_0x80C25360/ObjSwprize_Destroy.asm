@@ -1,0 +1,6 @@
+glabel ObjSwprize_Destroy
+/* 000180 0x80C25630 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000181 0x80C25634 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000182 0x80C25638 03E00008 */ jr	$ra
+/* 000183 0x80C2563C 00000000 */ nop
+

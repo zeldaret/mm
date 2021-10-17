@@ -1,0 +1,6 @@
+glabel EnEndingHero5_Destroy
+/* 000044 0x80C23970 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000045 0x80C23974 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000046 0x80C23978 03E00008 */ jr	$ra
+/* 000047 0x80C2397C 00000000 */ nop
+

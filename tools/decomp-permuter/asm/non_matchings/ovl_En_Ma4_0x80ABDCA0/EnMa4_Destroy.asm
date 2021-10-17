@@ -1,0 +1,17 @@
+glabel EnMa4_Destroy
+/* 000314 0x80ABE188 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000315 0x80ABE18C AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000316 0x80ABE190 00803025 */ move	$a2, $a0
+/* 000317 0x80ABE194 00A03825 */ move	$a3, $a1
+/* 000318 0x80ABE198 00E02025 */ move	$a0, $a3
+/* 000319 0x80ABE19C 0C03847B */ jal	Collision_FiniCylinder
+/* 000320 0x80ABE1A0 24C5018C */ addiu	$a1, $a2, 0X18C
+/* 000321 0x80ABE1A4 3C02801F */ lui	$v0, %hi(gSaveContext)
+/* 000322 0x80ABE1A8 2442F670 */ addiu	$v0, $v0, %lo(gSaveContext)
+/* 000323 0x80ABE1AC 904E0F00 */ lbu	$t6, 0XF00($v0)
+/* 000324 0x80ABE1B0 31CF00FE */ andi	$t7, $t6, 0XFE
+/* 000325 0x80ABE1B4 A04F0F00 */ sb	$t7, 0XF00($v0)
+/* 000326 0x80ABE1B8 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000327 0x80ABE1BC 03E00008 */ jr	$ra
+/* 000328 0x80ABE1C0 27BD0018 */ addiu	$sp, $sp, 0X18
+

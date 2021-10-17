@@ -1,0 +1,6 @@
+glabel DmBal_Destroy
+/* 000053 0x80C1EAB4 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000054 0x80C1EAB8 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000055 0x80C1EABC 03E00008 */ jr	$ra
+/* 000056 0x80C1EAC0 00000000 */ nop
+

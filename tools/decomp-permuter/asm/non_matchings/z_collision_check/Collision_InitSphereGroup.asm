@@ -1,0 +1,23 @@
+glabel Collision_InitSphereGroup
+/* 060693 0x800E0F14 27BDFFE0 */ addiu	$sp, $sp, -0X20
+/* 060694 0x800E0F18 AFBF001C */ sw	$ra, 0X1C($sp)
+/* 060695 0x800E0F1C AFA40020 */ sw	$a0, 0X20($sp)
+/* 060696 0x800E0F20 AFA50024 */ sw	$a1, 0X24($sp)
+/* 060697 0x800E0F24 AFA60028 */ sw	$a2, 0X28($sp)
+/* 060698 0x800E0F28 AFA7002C */ sw	$a3, 0X2C($sp)
+/* 060699 0x800E0F2C 8FA40020 */ lw	$a0, 0X20($sp)
+/* 060700 0x800E0F30 0C0382D3 */ jal	Collision_InitSphereGroupDefault
+/* 060701 0x800E0F34 8FA50024 */ lw	$a1, 0X24($sp)
+/* 060702 0x800E0F38 8FAE0030 */ lw	$t6, 0X30($sp)
+/* 060703 0x800E0F3C 8FA40020 */ lw	$a0, 0X20($sp)
+/* 060704 0x800E0F40 8FA50024 */ lw	$a1, 0X24($sp)
+/* 060705 0x800E0F44 8FA60028 */ lw	$a2, 0X28($sp)
+/* 060706 0x800E0F48 8FA7002C */ lw	$a3, 0X2C($sp)
+/* 060707 0x800E0F4C 0C038398 */ jal	Collision_InitSphereGroupWithData
+/* 060708 0x800E0F50 AFAE0010 */ sw	$t6, 0X10($sp)
+/* 060709 0x800E0F54 00001025 */ move	$v0, $zero
+/* 060710 0x800E0F58 8FBF001C */ lw	$ra, 0X1C($sp)
+/* 060711 0x800E0F5C 27BD0020 */ addiu	$sp, $sp, 0X20
+/* 060712 0x800E0F60 03E00008 */ jr	$ra
+/* 060713 0x800E0F64 00000000 */ nop
+

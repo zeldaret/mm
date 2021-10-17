@@ -1,0 +1,15 @@
+glabel SceneProc_DrawOpaqueSceneAnimatedTextures
+/* 143155 0x8013178C 27BDFFE0 */ addiu	$sp, $sp, -0X20
+/* 143156 0x80131790 AFBF001C */ sw	$ra, 0X1C($sp)
+/* 143157 0x80131794 3C070002 */ lui	$a3, 0x0002
+/* 143158 0x80131798 00E43821 */ addu	$a3, $a3, $a0
+/* 143159 0x8013179C 8CE78840 */ lw	$a3, -0X77C0($a3)
+/* 143160 0x801317A0 240E0001 */ li	$t6, 0X1
+/* 143161 0x801317A4 AFAE0010 */ sw	$t6, 0X10($sp)
+/* 143162 0x801317A8 0C04C5A4 */ jal	SceneProc_DrawAnimatedTextures
+/* 143163 0x801317AC 3C063F80 */ lui	$a2, 0x3F80
+/* 143164 0x801317B0 8FBF001C */ lw	$ra, 0X1C($sp)
+/* 143165 0x801317B4 27BD0020 */ addiu	$sp, $sp, 0X20
+/* 143166 0x801317B8 03E00008 */ jr	$ra
+/* 143167 0x801317BC 00000000 */ nop
+

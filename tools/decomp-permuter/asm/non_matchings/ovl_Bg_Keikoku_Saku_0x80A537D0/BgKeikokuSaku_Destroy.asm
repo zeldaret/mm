@@ -1,0 +1,15 @@
+glabel BgKeikokuSaku_Destroy
+/* 000038 0x80A53868 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000039 0x80A5386C AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000040 0x80A53870 AFA40018 */ sw	$a0, 0X18($sp)
+/* 000041 0x80A53874 00A03825 */ move	$a3, $a1
+/* 000042 0x80A53878 8FAE0018 */ lw	$t6, 0X18($sp)
+/* 000043 0x80A5387C 00E02025 */ move	$a0, $a3
+/* 000044 0x80A53880 24E50880 */ addiu	$a1, $a3, 0X880
+/* 000045 0x80A53884 0C031933 */ jal	BgCheck_RemoveActorMesh
+/* 000046 0x80A53888 8DC60144 */ lw	$a2, 0X144($t6)
+/* 000047 0x80A5388C 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000048 0x80A53890 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000049 0x80A53894 03E00008 */ jr	$ra
+/* 000050 0x80A53898 00000000 */ nop
+

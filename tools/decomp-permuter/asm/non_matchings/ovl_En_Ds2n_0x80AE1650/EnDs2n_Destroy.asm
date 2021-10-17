@@ -1,0 +1,11 @@
+glabel EnDs2n_Destroy
+/* 000096 0x80AE17D0 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000097 0x80AE17D4 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000098 0x80AE17D8 00803025 */ move	$a2, $a0
+/* 000099 0x80AE17DC 0C04DE38 */ jal	SkelAnime_Free
+/* 000100 0x80AE17E0 24C40190 */ addiu	$a0, $a2, 0X190
+/* 000101 0x80AE17E4 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000102 0x80AE17E8 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000103 0x80AE17EC 03E00008 */ jr	$ra
+/* 000104 0x80AE17F0 00000000 */ nop
+

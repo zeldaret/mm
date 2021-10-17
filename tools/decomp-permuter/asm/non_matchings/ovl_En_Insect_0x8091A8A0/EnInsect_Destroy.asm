@@ -1,0 +1,13 @@
+glabel EnInsect_Destroy
+/* 000235 0x8091AC4C 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000236 0x8091AC50 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000237 0x8091AC54 00803825 */ move	$a3, $a0
+/* 000238 0x8091AC58 00A03025 */ move	$a2, $a1
+/* 000239 0x8091AC5C 00C02025 */ move	$a0, $a2
+/* 000240 0x8091AC60 0C038306 */ jal	Collision_FiniSphereGroup
+/* 000241 0x8091AC64 24E50144 */ addiu	$a1, $a3, 0X144
+/* 000242 0x8091AC68 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000243 0x8091AC6C 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000244 0x8091AC70 03E00008 */ jr	$ra
+/* 000245 0x8091AC74 00000000 */ nop
+

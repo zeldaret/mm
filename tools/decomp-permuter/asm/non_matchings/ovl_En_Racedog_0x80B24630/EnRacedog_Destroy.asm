@@ -1,0 +1,13 @@
+glabel EnRacedog_Destroy
+/* 000366 0x80B24BE8 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000367 0x80B24BEC AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000368 0x80B24BF0 00803025 */ move	$a2, $a0
+/* 000369 0x80B24BF4 00A03825 */ move	$a3, $a1
+/* 000370 0x80B24BF8 00E02025 */ move	$a0, $a3
+/* 000371 0x80B24BFC 0C03847B */ jal	Collision_FiniCylinder
+/* 000372 0x80B24C00 24C50190 */ addiu	$a1, $a2, 0X190
+/* 000373 0x80B24C04 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000374 0x80B24C08 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000375 0x80B24C0C 03E00008 */ jr	$ra
+/* 000376 0x80B24C10 00000000 */ nop
+

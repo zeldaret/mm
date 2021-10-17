@@ -1,0 +1,6 @@
+glabel EnTimeTag_Destroy
+/* 000073 0x80AC9FC4 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000074 0x80AC9FC8 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000075 0x80AC9FCC 03E00008 */ jr	$ra
+/* 000076 0x80AC9FD0 00000000 */ nop
+

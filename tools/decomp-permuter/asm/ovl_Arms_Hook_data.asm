@@ -1,0 +1,66 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel Arms_Hook_InitVars
+/* 000732 0x808C1BA0 */ .word	0x003D0700
+/* 000733 0x808C1BA4 */ .word	0x00000030
+/* 000734 0x808C1BA8 */ .word	0x00010000
+/* 000735 0x808C1BAC */ .word	0x00000210
+/* 000736 0x808C1BB0 */ .word	ArmsHook_Init
+/* 000737 0x808C1BB4 */ .word	ArmsHook_Destroy
+/* 000738 0x808C1BB8 */ .word	ArmsHook_Update
+/* 000739 0x808C1BBC */ .word	ArmsHook_Draw
+glabel D_808C1BC0
+/* 000740 0x808C1BC0 */ .word	0x0A090000
+/* 000741 0x808C1BC4 */ .word	0x08030000
+/* 000742 0x808C1BC8 */ .word	0x02000000
+/* 000743 0x808C1BCC */ .word	0x00000080
+/* 000744 0x808C1BD0 */ .word	0x00020000
+/* 000745 0x808C1BD4 */ .word	0xF7CFFFFF
+/* 000746 0x808C1BD8 */ .word	0x00000000
+/* 000747 0x808C1BDC */ .word	0x05000000
+/* 000748 0x808C1BE0 */ .word	0x00000000
+/* 000749 0x808C1BE4 */ .word	0x00000000
+/* 000750 0x808C1BE8 */ .word	0x00000000
+/* 000751 0x808C1BEC */ .word	0x00000000
+/* 000752 0x808C1BF0 */ .word	0x00000000
+/* 000753 0x808C1BF4 */ .word	0x00000000
+/* 000754 0x808C1BF8 */ .word	0x00000000
+/* 000755 0x808C1BFC */ .word	0x00000000
+/* 000756 0x808C1C00 */ .word	0x00000000
+/* 000757 0x808C1C04 */ .word	0x00000000
+/* 000758 0x808C1C08 */ .word	0x00000000
+/* 000759 0x808C1C0C */ .word	0x00000000
+glabel D_808C1C10
+/* 000760 0x808C1C10 */ .word	0x00000000
+/* 000761 0x808C1C14 */ .word	0x00000000
+/* 000762 0x808C1C18 */ .word	0x00000000
+glabel D_808C1C1C
+/* 000763 0x808C1C1C */ .word	0x00000000
+/* 000764 0x808C1C20 */ .word	0x00000000
+/* 000765 0x808C1C24 */ .word	0x44610000
+glabel D_808C1C28
+/* 000766 0x808C1C28 */ .word	0x00000000
+/* 000767 0x808C1C2C */ .word	0x43FA0000
+/* 000768 0x808C1C30 */ .word	0xC53B8000
+glabel D_808C1C34
+/* 000769 0x808C1C34 */ .word	0x00000000
+/* 000770 0x808C1C38 */ .word	0xC3FA0000
+/* 000771 0x808C1C3C */ .word	0xC53B8000
+glabel D_808C1C40
+/* 000772 0x808C1C40 */ .word	0x00000000
+/* 000773 0x808C1C44 */ .word	0x43FA0000
+/* 000774 0x808C1C48 */ .word	0x00000000
+glabel D_808C1C4C
+/* 000775 0x808C1C4C */ .word	0x00000000
+/* 000776 0x808C1C50 */ .word	0xC3FA0000
+/* 000777 0x808C1C54 */ .word	0x00000000
+/* 000778 0x808C1C58 */ .word	0x00000000
+/* 000779 0x808C1C5C */ .word	0x00000000

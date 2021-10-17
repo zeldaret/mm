@@ -1,0 +1,17 @@
+glabel BgCheck_WaterboxListAlloc
+/* 033079 0x800C5F9C 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 033080 0x800C5FA0 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 033081 0x800C5FA4 AFA5001C */ sw	$a1, 0X1C($sp)
+/* 033082 0x800C5FA8 AFA60020 */ sw	$a2, 0X20($sp)
+/* 033083 0x800C5FAC 00803825 */ move	$a3, $a0
+/* 033084 0x800C5FB0 8FA50020 */ lw	$a1, 0X20($sp)
+/* 033085 0x800C5FB4 24E40074 */ addiu	$a0, $a3, 0X74
+/* 033086 0x800C5FB8 2406FFFE */ li	$a2, -0X2
+/* 033087 0x800C5FBC 0C05CABA */ jal	GameStateHeap_AllocFromEndAligned
+/* 033088 0x800C5FC0 00052900 */ sll	$a1, $a1, 4
+/* 033089 0x800C5FC4 8FAE001C */ lw	$t6, 0X1C($sp)
+/* 033090 0x800C5FC8 ADC20004 */ sw	$v0, 0X4($t6)
+/* 033091 0x800C5FCC 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 033092 0x800C5FD0 03E00008 */ jr	$ra
+/* 033093 0x800C5FD4 27BD0018 */ addiu	$sp, $sp, 0X18
+

@@ -1,0 +1,6 @@
+glabel BgKeikokuSpr_Update
+/* 000014 0x808C3A88 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000015 0x808C3A8C AFA50004 */ sw	$a1, 0X4($sp)
+/* 000016 0x808C3A90 03E00008 */ jr	$ra
+/* 000017 0x808C3A94 00000000 */ nop
+

@@ -1,0 +1,11 @@
+glabel ObjLupygamelift_Update
+/* 000343 0x80AF06CC 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000344 0x80AF06D0 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000345 0x80AF06D4 8C99015C */ lw	$t9, 0X15C($a0)
+/* 000346 0x80AF06D8 0320F809 */ jalr	$t9
+/* 000347 0x80AF06DC 00000000 */ nop
+/* 000348 0x80AF06E0 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000349 0x80AF06E4 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000350 0x80AF06E8 03E00008 */ jr	$ra
+/* 000351 0x80AF06EC 00000000 */ nop
+

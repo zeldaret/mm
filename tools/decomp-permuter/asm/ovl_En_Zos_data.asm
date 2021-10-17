@@ -1,0 +1,55 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel En_Zos_InitVars
+/* 001676 0x80BBC6D0 */ .word	0x02410400
+/* 001677 0x80BBC6D4 */ .word	0x02000009
+/* 001678 0x80BBC6D8 */ .word	0x02200000
+/* 001679 0x80BBC6DC */ .word	0x000002C4
+/* 001680 0x80BBC6E0 */ .word	EnZos_Init
+/* 001681 0x80BBC6E4 */ .word	EnZos_Destroy
+/* 001682 0x80BBC6E8 */ .word	EnZos_Update
+/* 001683 0x80BBC6EC */ .word	EnZos_Draw
+glabel D_80BBC6F0
+/* 001684 0x80BBC6F0 */ .word	0x0A001139
+/* 001685 0x80BBC6F4 */ .word	0x10010000
+/* 001686 0x80BBC6F8 */ .word	0x00000000
+/* 001687 0x80BBC6FC */ .word	0x00000000
+/* 001688 0x80BBC700 */ .word	0x00000000
+/* 001689 0x80BBC704 */ .word	0xF7CFFFFF
+/* 001690 0x80BBC708 */ .word	0x00000000
+/* 001691 0x80BBC70C */ .word	0x00010100
+/* 001692 0x80BBC710 */ .word	0x003C0028
+/* 001693 0x80BBC714 */ .word	0x00000000
+/* 001694 0x80BBC718 */ .word	0x00000000
+glabel D_80BBC71C
+/* 001695 0x80BBC71C */ .word	0x0600A164
+/* 001696 0x80BBC720 */ .word	0x0601621C
+/* 001697 0x80BBC724 */ .word	0x06016980
+/* 001698 0x80BBC728 */ .word	0x06007C40
+/* 001699 0x80BBC72C */ .word	0x06008630
+/* 001700 0x80BBC730 */ .word	0x060090CC
+/* 001701 0x80BBC734 */ .word	0x06009830
+/* 001702 0x80BBC738 */ .word	0x06005E04
+/* 001703 0x80BBC73C */ .word	0x06007334
+/* 001704 0x80BBC740 */ .word	0x060048D4
+/* 001705 0x80BBC744 */ .word	0x06001CFC
+/* 001706 0x80BBC748 */ .word	0x06005E04
+/* 001707 0x80BBC74C */ .word	0x06007334
+glabel D_80BBC750
+/* 001708 0x80BBC750 */ .word	0x00000000
+/* 001709 0x80BBC754 */ .word	0x00000000
+/* 001710 0x80BBC758 */ .word	0x00000000
+glabel D_80BBC75C
+/* 001711 0x80BBC75C */ .word	0x06010918
+/* 001712 0x80BBC760 */ .word	0x06011118
+/* 001713 0x80BBC764 */ .word	0x06011918
+/* 001714 0x80BBC768 */ .word	0x00000000
+/* 001715 0x80BBC76C */ .word	0x00000000

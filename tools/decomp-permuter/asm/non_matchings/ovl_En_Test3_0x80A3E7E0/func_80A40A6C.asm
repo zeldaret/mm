@@ -1,0 +1,11 @@
+glabel func_80A40A6C
+/* 002211 0x80A40A6C 3C02801F */ lui	$v0, %hi(gSaveContext)
+/* 002212 0x80A40A70 2442F670 */ addiu	$v0, $v0, %lo(gSaveContext)
+/* 002213 0x80A40A74 AFA40000 */ sw	$a0, 0X0($sp)
+/* 002214 0x80A40A78 AFA50004 */ sw	$a1, 0X4($sp)
+/* 002215 0x80A40A7C 904E0F38 */ lbu	$t6, 0XF38($v0)
+/* 002216 0x80A40A80 35CF0020 */ ori	$t7, $t6, 0X20
+/* 002217 0x80A40A84 A04F0F38 */ sb	$t7, 0XF38($v0)
+/* 002218 0x80A40A88 03E00008 */ jr	$ra
+/* 002219 0x80A40A8C 00000000 */ nop
+

@@ -1,0 +1,15 @@
+glabel ObjTokeiTobira_Destroy
+/* 000107 0x80ABD37C 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000108 0x80ABD380 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000109 0x80ABD384 AFA40018 */ sw	$a0, 0X18($sp)
+/* 000110 0x80ABD388 00A03825 */ move	$a3, $a1
+/* 000111 0x80ABD38C 8FAE0018 */ lw	$t6, 0X18($sp)
+/* 000112 0x80ABD390 00E02025 */ move	$a0, $a3
+/* 000113 0x80ABD394 24E50880 */ addiu	$a1, $a3, 0X880
+/* 000114 0x80ABD398 0C031933 */ jal	BgCheck_RemoveActorMesh
+/* 000115 0x80ABD39C 8DC60144 */ lw	$a2, 0X144($t6)
+/* 000116 0x80ABD3A0 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000117 0x80ABD3A4 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000118 0x80ABD3A8 03E00008 */ jr	$ra
+/* 000119 0x80ABD3AC 00000000 */ nop
+

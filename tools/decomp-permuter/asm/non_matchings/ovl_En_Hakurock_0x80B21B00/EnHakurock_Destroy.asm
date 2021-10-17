@@ -1,0 +1,13 @@
+glabel EnHakurock_Destroy
+/* 000045 0x80B21BB4 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000046 0x80B21BB8 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000047 0x80B21BBC 00803025 */ move	$a2, $a0
+/* 000048 0x80B21BC0 00A03825 */ move	$a3, $a1
+/* 000049 0x80B21BC4 00E02025 */ move	$a0, $a3
+/* 000050 0x80B21BC8 0C03847B */ jal	Collision_FiniCylinder
+/* 000051 0x80B21BCC 24C5014C */ addiu	$a1, $a2, 0X14C
+/* 000052 0x80B21BD0 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000053 0x80B21BD4 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000054 0x80B21BD8 03E00008 */ jr	$ra
+/* 000055 0x80B21BDC 00000000 */ nop
+

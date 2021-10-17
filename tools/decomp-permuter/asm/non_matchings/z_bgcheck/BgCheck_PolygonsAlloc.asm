@@ -1,0 +1,17 @@
+glabel BgCheck_PolygonsAlloc
+/* 033039 0x800C5EFC 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 033040 0x800C5F00 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 033041 0x800C5F04 AFA5001C */ sw	$a1, 0X1C($sp)
+/* 033042 0x800C5F08 AFA60020 */ sw	$a2, 0X20($sp)
+/* 033043 0x800C5F0C 00803825 */ move	$a3, $a0
+/* 033044 0x800C5F10 8FA50020 */ lw	$a1, 0X20($sp)
+/* 033045 0x800C5F14 24E40074 */ addiu	$a0, $a3, 0X74
+/* 033046 0x800C5F18 2406FFFE */ li	$a2, -0X2
+/* 033047 0x800C5F1C 0C05CABA */ jal	GameStateHeap_AllocFromEndAligned
+/* 033048 0x800C5F20 00052900 */ sll	$a1, $a1, 4
+/* 033049 0x800C5F24 8FAE001C */ lw	$t6, 0X1C($sp)
+/* 033050 0x800C5F28 ADC20000 */ sw	$v0, 0X0($t6)
+/* 033051 0x800C5F2C 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 033052 0x800C5F30 03E00008 */ jr	$ra
+/* 033053 0x800C5F34 27BD0018 */ addiu	$sp, $sp, 0X18
+

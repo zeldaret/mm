@@ -1,0 +1,57 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .rodata
+
+glabel objTaruOverlayInfo
+/* 000816 0x80B9C3A0 */ .word	0x00000C40
+/* 000817 0x80B9C3A4 */ .word	0x00000060
+/* 000818 0x80B9C3A8 */ .word	0x00000020
+/* 000819 0x80B9C3AC */ .word	0x00000000
+/* 000820 0x80B9C3B0 */ .word	0x00000026
+glabel objTaruOverlayRelocations
+/* 000821 0x80B9C3B4 */ .word	0x45000128
+/* 000822 0x80B9C3B8 */ .word	0x4600012C
+/* 000823 0x80B9C3BC */ .word	0x45000154
+/* 000824 0x80B9C3C0 */ .word	0x46000158
+/* 000825 0x80B9C3C4 */ .word	0x450001A0
+/* 000826 0x80B9C3C8 */ .word	0x460001A4
+/* 000827 0x80B9C3CC */ .word	0x450001A8
+/* 000828 0x80B9C3D0 */ .word	0x460001C4
+/* 000829 0x80B9C3D4 */ .word	0x45000364
+/* 000830 0x80B9C3D8 */ .word	0x46000388
+/* 000831 0x80B9C3DC */ .word	0x440005F4
+/* 000832 0x80B9C3E0 */ .word	0x440006C0
+/* 000833 0x80B9C3E4 */ .word	0x440006D0
+/* 000834 0x80B9C3E8 */ .word	0x45000708
+/* 000835 0x80B9C3EC */ .word	0x4600070C
+/* 000836 0x80B9C3F0 */ .word	0x45000768
+/* 000837 0x80B9C3F4 */ .word	0x46000778
+/* 000838 0x80B9C3F8 */ .word	0x4500079C
+/* 000839 0x80B9C3FC */ .word	0x460007A0
+/* 000840 0x80B9C400 */ .word	0x44000814
+/* 000841 0x80B9C404 */ .word	0x45000828
+/* 000842 0x80B9C408 */ .word	0x4600082C
+/* 000843 0x80B9C40C */ .word	0x45000940
+/* 000844 0x80B9C410 */ .word	0x46000944
+/* 000845 0x80B9C414 */ .word	0x440009B4
+/* 000846 0x80B9C418 */ .word	0x440009DC
+/* 000847 0x80B9C41C */ .word	0x440009EC
+/* 000848 0x80B9C420 */ .word	0x45000A0C
+/* 000849 0x80B9C424 */ .word	0x46000A10
+/* 000850 0x80B9C428 */ .word	0x45000A40
+/* 000851 0x80B9C42C */ .word	0x46000A44
+/* 000852 0x80B9C430 */ .word	0x44000AA0
+/* 000853 0x80B9C434 */ .word	0x45000B90
+/* 000854 0x80B9C438 */ .word	0x46000B94
+/* 000855 0x80B9C43C */ .word	0x82000010
+/* 000856 0x80B9C440 */ .word	0x82000014
+/* 000857 0x80B9C444 */ .word	0x82000018
+/* 000858 0x80B9C448 */ .word	0x8200001C
+glabel objTaruOverlayInfoOffset
+/* 000859 0x80B9C44C */ .word	0x000000B0

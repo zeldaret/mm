@@ -1,0 +1,6 @@
+glabel BgOpenSpot_Destroy
+/* 000016 0x80ACB220 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000017 0x80ACB224 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000018 0x80ACB228 03E00008 */ jr	$ra
+/* 000019 0x80ACB22C 00000000 */ nop
+

@@ -1,0 +1,6 @@
+glabel EnFr_Destroy
+/* 000023 0x808FC5AC AFA40000 */ sw	$a0, 0X0($sp)
+/* 000024 0x808FC5B0 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000025 0x808FC5B4 03E00008 */ jr	$ra
+/* 000026 0x808FC5B8 00000000 */ nop
+

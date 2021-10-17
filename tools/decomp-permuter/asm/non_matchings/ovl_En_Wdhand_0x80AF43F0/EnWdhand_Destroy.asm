@@ -1,0 +1,13 @@
+glabel EnWdhand_Destroy
+/* 000123 0x80AF45DC 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000124 0x80AF45E0 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000125 0x80AF45E4 00803025 */ move	$a2, $a0
+/* 000126 0x80AF45E8 00A03825 */ move	$a3, $a1
+/* 000127 0x80AF45EC 00E02025 */ move	$a0, $a3
+/* 000128 0x80AF45F0 0C038306 */ jal	Collision_FiniSphereGroup
+/* 000129 0x80AF45F4 24C50274 */ addiu	$a1, $a2, 0X274
+/* 000130 0x80AF45F8 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000131 0x80AF45FC 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000132 0x80AF4600 03E00008 */ jr	$ra
+/* 000133 0x80AF4604 00000000 */ nop
+

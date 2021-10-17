@@ -1,0 +1,46 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel Item_Etcetera_InitVars
+/* 000200 0x80920210 */ .word	0x00800600
+/* 000201 0x80920214 */ .word	0x00000010
+/* 000202 0x80920218 */ .word	0x00010000
+/* 000203 0x8092021C */ .word	0x00000158
+/* 000204 0x80920220 */ .word	ItemEtcetera_Init
+/* 000205 0x80920224 */ .word	ItemEtcetera_Destroy
+/* 000206 0x80920228 */ .word	ItemEtcetera_Update
+/* 000207 0x8092022C */ .word	0x00000000
+glabel D_80920230
+/* 000208 0x80920230 */ .word	0x009E009E
+/* 000209 0x80920234 */ .word	0x009E009E
+/* 000210 0x80920238 */ .word	0x009E009E
+/* 000211 0x8092023C */ .word	0x00860121
+/* 000212 0x80920240 */ .word	0x013F013F
+/* 000213 0x80920244 */ .word	0x013F013F
+/* 000214 0x80920248 */ .word	0x00960086
+glabel D_8092024C
+/* 000215 0x8092024C */ .word	0x00000000
+/* 000216 0x80920250 */ .word	0x00000000
+/* 000217 0x80920254 */ .word	0x00000000
+/* 000218 0x80920258 */ .word	0x00010047
+/* 000219 0x8092025C */ .word	0x004F0050
+/* 000220 0x80920260 */ .word	0x00510053
+/* 000221 0x80920264 */ .word	0x00130001
+glabel D_80920268
+/* 000222 0x80920268 */ .word	0x005A005A
+/* 000223 0x8092026C */ .word	0x005A005A
+/* 000224 0x80920270 */ .word	0x005A005A
+/* 000225 0x80920274 */ .word	0x003C0025
+/* 000226 0x80920278 */ .word	0x00000000
+/* 000227 0x8092027C */ .word	0x00000000
+/* 000228 0x80920280 */ .word	0x00000000
+/* 000229 0x80920284 */ .word	0x00000000
+/* 000230 0x80920288 */ .word	0x00000000
+/* 000231 0x8092028C */ .word	0x00000000

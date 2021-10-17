@@ -1,0 +1,13 @@
+glabel EnScopecrow_Destroy
+/* 000675 0x80BCDA8C 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000676 0x80BCDA90 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000677 0x80BCDA94 00803025 */ move	$a2, $a0
+/* 000678 0x80BCDA98 00A03825 */ move	$a3, $a1
+/* 000679 0x80BCDA9C 00E02025 */ move	$a0, $a3
+/* 000680 0x80BCDAA0 0C038306 */ jal	Collision_FiniSphereGroup
+/* 000681 0x80BCDAA4 24C50200 */ addiu	$a1, $a2, 0X200
+/* 000682 0x80BCDAA8 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000683 0x80BCDAAC 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000684 0x80BCDAB0 03E00008 */ jr	$ra
+/* 000685 0x80BCDAB4 00000000 */ nop
+

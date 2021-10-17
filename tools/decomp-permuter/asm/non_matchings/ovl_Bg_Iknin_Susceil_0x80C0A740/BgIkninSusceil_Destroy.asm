@@ -1,0 +1,15 @@
+glabel BgIkninSusceil_Destroy
+/* 000232 0x80C0AAE0 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000233 0x80C0AAE4 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000234 0x80C0AAE8 AFA40018 */ sw	$a0, 0X18($sp)
+/* 000235 0x80C0AAEC 00A03825 */ move	$a3, $a1
+/* 000236 0x80C0AAF0 8FAE0018 */ lw	$t6, 0X18($sp)
+/* 000237 0x80C0AAF4 00E02025 */ move	$a0, $a3
+/* 000238 0x80C0AAF8 24E50880 */ addiu	$a1, $a3, 0X880
+/* 000239 0x80C0AAFC 0C031933 */ jal	BgCheck_RemoveActorMesh
+/* 000240 0x80C0AB00 8DC60144 */ lw	$a2, 0X144($t6)
+/* 000241 0x80C0AB04 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000242 0x80C0AB08 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000243 0x80C0AB0C 03E00008 */ jr	$ra
+/* 000244 0x80C0AB10 00000000 */ nop
+

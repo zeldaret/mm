@@ -1,0 +1,13 @@
+glabel EnWarpUzu_Destroy
+/* 000023 0x80A661DC 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000024 0x80A661E0 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000025 0x80A661E4 00803025 */ move	$a2, $a0
+/* 000026 0x80A661E8 00A03825 */ move	$a3, $a1
+/* 000027 0x80A661EC 00E02025 */ move	$a0, $a3
+/* 000028 0x80A661F0 0C03847B */ jal	Collision_FiniCylinder
+/* 000029 0x80A661F4 24C50148 */ addiu	$a1, $a2, 0X148
+/* 000030 0x80A661F8 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000031 0x80A661FC 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000032 0x80A66200 03E00008 */ jr	$ra
+/* 000033 0x80A66204 00000000 */ nop
+

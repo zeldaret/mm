@@ -1,0 +1,61 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel Obj_Mine_InitVars
+/* 003296 0x80A84550 */ .word	0x01850600
+/* 003297 0x80A84554 */ .word	0x00000000
+/* 003298 0x80A84558 */ .word	0x00BB0000
+/* 003299 0x80A8455C */ .word	0x000013B4
+/* 003300 0x80A84560 */ .word	ObjMine_Init
+/* 003301 0x80A84564 */ .word	ObjMine_Destroy
+/* 003302 0x80A84568 */ .word	ObjMine_Update
+/* 003303 0x80A8456C */ .word	ObjMine_Draw
+glabel D_80A84570
+/* 003304 0x80A84570 */ .word	0x02000000
+/* 003305 0x80A84574 */ .word	0x00000000
+/* 003306 0x80A84578 */ .word	0x00000000
+/* 003307 0x80A8457C */ .word	0x01CBFFBE
+/* 003308 0x80A84580 */ .word	0x00000000
+/* 003309 0x80A84584 */ .word	0x00010100
+/* 003310 0x80A84588 */ .word	0x00000000
+/* 003311 0x80A8458C */ .word	0x00000000
+/* 003312 0x80A84590 */ .word	0x001E0064
+glabel D_80A84594
+/* 003313 0x80A84594 */ .word	0x09000919
+/* 003314 0x80A84598 */ .word	0x10000000
+/* 003315 0x80A8459C */ .word	0x00000001
+/* 003316 0x80A845A0 */ .word	D_80A84570
+glabel D_80A845A4
+/* 003317 0x80A845A4 */ .word	0x3F800000
+/* 003318 0x80A845A8 */ .word	0x40000000
+/* 003319 0x80A845AC */ .word	0x40400000
+/* 003320 0x80A845B0 */ .word	0x40800000
+/* 003321 0x80A845B4 */ .word	0x40A00000
+/* 003322 0x80A845B8 */ .word	0x40C00000
+/* 003323 0x80A845BC */ .word	0x40E00000
+/* 003324 0x80A845C0 */ .word	0x41000000
+glabel D_80A845C4
+/* 003325 0x80A845C4 */ .word	0x3F800000
+/* 003326 0x80A845C8 */ .word	0x00000000
+/* 003327 0x80A845CC */ .word	0x00000000
+glabel D_80A845D0
+/* 003328 0x80A845D0 */ .word	0x00000000
+/* 003329 0x80A845D4 */ .word	0x3F800000
+/* 003330 0x80A845D8 */ .word	0x00000000
+/* 003331 0x80A845DC */ .word	0x00000000
+/* 003332 0x80A845E0 */ .word	0x00000000
+/* 003333 0x80A845E4 */ .word	0x3F800000
+glabel D_80A845E8
+/* 003334 0x80A845E8 */ .word	0xB0FC0514
+/* 003335 0x80A845EC */ .word	0xB1000096
+/* 003336 0x80A845F0 */ .word	0xB1040064
+/* 003337 0x80A845F4 */ .word	0x4858000A
+/* 003338 0x80A845F8 */ .word	0x00000000
+/* 003339 0x80A845FC */ .word	0x00000000

@@ -1,0 +1,6 @@
+glabel DmZl_Destroy
+/* 000087 0x80A382EC AFA40000 */ sw	$a0, 0X0($sp)
+/* 000088 0x80A382F0 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000089 0x80A382F4 03E00008 */ jr	$ra
+/* 000090 0x80A382F8 00000000 */ nop
+

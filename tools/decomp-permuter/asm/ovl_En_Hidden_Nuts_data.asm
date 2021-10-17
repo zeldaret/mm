@@ -1,0 +1,70 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel En_Hidden_Nuts_InitVars
+/* 001052 0x80BDC0B0 */ .word	0x025F0600
+/* 001053 0x80BDC0B4 */ .word	0x02000009
+/* 001054 0x80BDC0B8 */ .word	0x012B0000
+/* 001055 0x80BDC0BC */ .word	0x00000280
+/* 001056 0x80BDC0C0 */ .word	EnHiddenNuts_Init
+/* 001057 0x80BDC0C4 */ .word	EnHiddenNuts_Destroy
+/* 001058 0x80BDC0C8 */ .word	EnHiddenNuts_Update
+/* 001059 0x80BDC0CC */ .word	EnHiddenNuts_Draw
+glabel D_80BDC0D0
+/* 001060 0x80BDC0D0 */ .word	0x0A000009
+/* 001061 0x80BDC0D4 */ .word	0x10010000
+/* 001062 0x80BDC0D8 */ .word	0x00000000
+/* 001063 0x80BDC0DC */ .word	0xF7CFFFFF
+/* 001064 0x80BDC0E0 */ .word	0x00000000
+/* 001065 0x80BDC0E4 */ .word	0xF7CFFFFF
+/* 001066 0x80BDC0E8 */ .word	0x00000000
+/* 001067 0x80BDC0EC */ .word	0x00000100
+/* 001068 0x80BDC0F0 */ .word	0x001E0014
+/* 001069 0x80BDC0F4 */ .word	0x00000000
+/* 001070 0x80BDC0F8 */ .word	0x00000000
+glabel D_80BDC0FC
+/* 001071 0x80BDC0FC */ .word	0x06000168
+/* 001072 0x80BDC100 */ .word	0x060024CC
+/* 001073 0x80BDC104 */ .word	0x060026C4
+/* 001074 0x80BDC108 */ .word	0x06002894
+/* 001075 0x80BDC10C */ .word	0x06002B90
+/* 001076 0x80BDC110 */ .word	0x06002F7C
+/* 001077 0x80BDC114 */ .word	0x06003128
+/* 001078 0x80BDC118 */ .word	0x060029BC
+/* 001079 0x80BDC11C */ .word	0x060024CC
+glabel D_80BDC120
+/* 001080 0x80BDC120 */ .word	0x02020200
+/* 001081 0x80BDC124 */ .word	0x02000002
+/* 001082 0x80BDC128 */ .word	0x02000000
+glabel D_80BDC12C
+/* 001083 0x80BDC12C */ .word	0x00000000
+/* 001084 0x80BDC130 */ .word	0x00000000
+/* 001085 0x80BDC134 */ .word	0x00000000
+glabel D_80BDC138
+/* 001086 0x80BDC138 */ .word	0x00000000
+/* 001087 0x80BDC13C */ .word	0x00000000
+/* 001088 0x80BDC140 */ .word	0x00000000
+glabel D_80BDC144
+/* 001089 0x80BDC144 */ .word	0xFFFFFFFF
+glabel D_80BDC148
+/* 001090 0x80BDC148 */ .word	0x96969600
+glabel D_80BDC14C
+/* 001091 0x80BDC14C */ .word	0x00000000
+/* 001092 0x80BDC150 */ .word	0x00000000
+/* 001093 0x80BDC154 */ .word	0x00000000
+glabel D_80BDC158
+/* 001094 0x80BDC158 */ .word	0x00000000
+/* 001095 0x80BDC15C */ .word	0x00000000
+/* 001096 0x80BDC160 */ .word	0x00000000
+glabel D_80BDC164
+/* 001097 0x80BDC164 */ .word	0xFFFFFFFF
+glabel D_80BDC168
+/* 001098 0x80BDC168 */ .word	0x96969600
+/* 001099 0x80BDC16C */ .word	0x00000000

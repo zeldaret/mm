@@ -1,0 +1,76 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel D_801BF5C0
+/* 288448 0x801BF5C0 */ .word	func_8010A760
+/* 288449 0x801BF5C4 */ .word	func_8010A7CC
+/* 288450 0x801BF5C8 */ .word	func_8010A814
+/* 288451 0x801BF5CC */ .word	func_8010A85C
+/* 288452 0x801BF5D0 */ .word	func_8010A8A4
+/* 288453 0x801BF5D4 */ .word	func_8010A8EC
+/* 288454 0x801BF5D8 */ .word	func_8010A990
+/* 288455 0x801BF5DC */ .word	func_8010AA54
+/* 288456 0x801BF5E0 */ .word	func_8010AB30
+/* 288457 0x801BF5E4 */ .word	func_8010AB94
+/* 288458 0x801BF5E8 */ .word	func_8010AC00
+/* 288459 0x801BF5EC */ .word	func_8010AD24
+/* 288460 0x801BF5F0 */ .word	func_8010ADD4
+/* 288461 0x801BF5F4 */ .word	func_8010AE48
+/* 288462 0x801BF5F8 */ .word	func_8010AECC
+/* 288463 0x801BF5FC */ .word	func_8010AF20
+/* 288464 0x801BF600 */ .word	func_8010AF6C
+/* 288465 0x801BF604 */ .word	func_8010AF94
+/* 288466 0x801BF608 */ .word	func_8010AFE0
+/* 288467 0x801BF60C */ .word	func_8010B010
+/* 288468 0x801BF610 */ .word	func_8010B06C
+/* 288469 0x801BF614 */ .word	func_8010B0B4
+/* 288470 0x801BF618 */ .word	func_8010B0DC
+/* 288471 0x801BF61C */ .word	func_8010B108
+/* 288472 0x801BF620 */ .word	func_8010B140
+/* 288473 0x801BF624 */ .word	func_8010B180
+/* 288474 0x801BF628 */ .word	func_8010B1BC
+/* 288475 0x801BF62C */ .word	func_8010B22C
+/* 288476 0x801BF630 */ .word	func_8010B284
+/* 288477 0x801BF634 */ .word	func_8010B2C0
+/* 288478 0x801BF638 */ .word	func_8010B300
+/* 288479 0x801BF63C */ .word	func_8010B434
+/* 288480 0x801BF640 */ .word	func_8010B4A4
+/* 288481 0x801BF644 */ .word	func_8010B520
+/* 288482 0x801BF648 */ .word	func_8010B664
+/* 288483 0x801BF64C */ .word	func_8010B7A8
+/* 288484 0x801BF650 */ .word	func_8010B828
+/* 288485 0x801BF654 */ .word	func_8010B878
+/* 288486 0x801BF658 */ .word	func_8010B8E4
+/* 288487 0x801BF65C */ .word	func_8010BB0C
+/* 288488 0x801BF660 */ .word	func_8010BB6C
+/* 288489 0x801BF664 */ .word	func_8010BBCC
+/* 288490 0x801BF668 */ .word	func_8010BC28
+/* 288491 0x801BF66C */ .word	func_8010BC7C
+/* 288492 0x801BF670 */ .word	func_8010BD48
+/* 288493 0x801BF674 */ .word	func_8010BD90
+/* 288494 0x801BF678 */ .word	func_8010BDDC
+/* 288495 0x801BF67C */ .word	func_8010BE78
+/* 288496 0x801BF680 */ .word	func_8010BEBC
+/* 288497 0x801BF684 */ .word	func_8010BEF0
+/* 288498 0x801BF688 */ .word	func_8010BF24
+glabel D_801BF68C
+/* 288499 0x801BF68C */ .word	0x05030303
+/* 288500 0x801BF690 */ .word	0x03070503
+/* 288501 0x801BF694 */ .word	0x05030D03
+/* 288502 0x801BF698 */ .word	0x01010303
+/* 288503 0x801BF69C */ .word	0x01030103
+/* 288504 0x801BF6A0 */ .word	0x03010101
+/* 288505 0x801BF6A4 */ .word	0x01030505
+/* 288506 0x801BF6A8 */ .word	0x03030905
+/* 288507 0x801BF6AC */ .word	0x05050505
+/* 288508 0x801BF6B0 */ .word	0x03050705
+/* 288509 0x801BF6B4 */ .word	0x03030307
+/* 288510 0x801BF6B8 */ .word	0x03030103
+/* 288511 0x801BF6BC */ .word	0x01010100

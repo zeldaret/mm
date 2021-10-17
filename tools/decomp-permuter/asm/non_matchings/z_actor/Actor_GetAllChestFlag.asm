@@ -1,0 +1,5 @@
+glabel Actor_GetAllChestFlag
+/* 016510 0x800B5CB8 8C821E68 */ lw	$v0, 0X1E68($a0)
+/* 016511 0x800B5CBC 03E00008 */ jr	$ra
+/* 016512 0x800B5CC0 00000000 */ nop
+

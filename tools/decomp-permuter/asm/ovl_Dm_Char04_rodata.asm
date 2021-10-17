@@ -1,0 +1,49 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .rodata
+
+glabel dmChar04OverlayInfo
+/* 000564 0x80AAC510 */ .word	0x00000800
+/* 000565 0x80AAC514 */ .word	0x000000C0
+/* 000566 0x80AAC518 */ .word	0x00000010
+/* 000567 0x80AAC51C */ .word	0x00000000
+/* 000568 0x80AAC520 */ .word	0x0000001C
+glabel dmChar04OverlayRelocations
+/* 000569 0x80AAC524 */ .word	0x450000B4
+/* 000570 0x80AAC528 */ .word	0x460000B8
+/* 000571 0x80AAC52C */ .word	0x450000CC
+/* 000572 0x80AAC530 */ .word	0x460000D8
+/* 000573 0x80AAC534 */ .word	0x450000EC
+/* 000574 0x80AAC538 */ .word	0x4600013C
+/* 000575 0x80AAC53C */ .word	0x450001A0
+/* 000576 0x80AAC540 */ .word	0x460001A4
+/* 000577 0x80AAC544 */ .word	0x440001AC
+/* 000578 0x80AAC548 */ .word	0x450001C4
+/* 000579 0x80AAC54C */ .word	0x460001C8
+/* 000580 0x80AAC550 */ .word	0x4500025C
+/* 000581 0x80AAC554 */ .word	0x46000260
+/* 000582 0x80AAC558 */ .word	0x440002A8
+/* 000583 0x80AAC55C */ .word	0x45000368
+/* 000584 0x80AAC560 */ .word	0x4600036C
+/* 000585 0x80AAC564 */ .word	0x4500037C
+/* 000586 0x80AAC568 */ .word	0x46000380
+/* 000587 0x80AAC56C */ .word	0x45000388
+/* 000588 0x80AAC570 */ .word	0x46000398
+/* 000589 0x80AAC574 */ .word	0x4500038C
+/* 000590 0x80AAC578 */ .word	0x4600039C
+/* 000591 0x80AAC57C */ .word	0x450004BC
+/* 000592 0x80AAC580 */ .word	0x460004C8
+/* 000593 0x80AAC584 */ .word	0x82000010
+/* 000594 0x80AAC588 */ .word	0x82000014
+/* 000595 0x80AAC58C */ .word	0x82000018
+/* 000596 0x80AAC590 */ .word	0x8200001C
+/* 000597 0x80AAC594 */ .word	0x00000000
+/* 000598 0x80AAC598 */ .word	0x00000000
+glabel dmChar04OverlayInfoOffset
+/* 000599 0x80AAC59C */ .word	0x00000090

@@ -1,0 +1,11 @@
+glabel Actor_YawToPoint
+/* 017563 0x800B6D2C 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 017564 0x800B6D30 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 017565 0x800B6D34 00803025 */ move	$a2, $a0
+/* 017566 0x800B6D38 0C03FE98 */ jal	Math_Vec3f_Yaw
+/* 017567 0x800B6D3C 24C40024 */ addiu	$a0, $a2, 0X24
+/* 017568 0x800B6D40 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 017569 0x800B6D44 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 017570 0x800B6D48 03E00008 */ jr	$ra
+/* 017571 0x800B6D4C 00000000 */ nop
+

@@ -1,0 +1,53 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .rodata
+
+glabel objWarpstoneOverlayInfo
+/* 000472 0x80B93270 */ .word	0x000006F0
+/* 000473 0x80B93274 */ .word	0x00000060
+/* 000474 0x80B93278 */ .word	0x00000010
+/* 000475 0x80B9327C */ .word	0x00000000
+/* 000476 0x80B93280 */ .word	0x0000001F
+glabel objWarpstoneOverlayRelocations
+/* 000477 0x80B93284 */ .word	0x45000020
+/* 000478 0x80B93288 */ .word	0x46000024
+/* 000479 0x80B9328C */ .word	0x45000030
+/* 000480 0x80B93290 */ .word	0x46000034
+/* 000481 0x80B93294 */ .word	0x45000088
+/* 000482 0x80B93298 */ .word	0x4600008C
+/* 000483 0x80B9329C */ .word	0x44000090
+/* 000484 0x80B932A0 */ .word	0x45000078
+/* 000485 0x80B932A4 */ .word	0x460000A4
+/* 000486 0x80B932A8 */ .word	0x440000A0
+/* 000487 0x80B932AC */ .word	0x45000100
+/* 000488 0x80B932B0 */ .word	0x46000118
+/* 000489 0x80B932B4 */ .word	0x44000114
+/* 000490 0x80B932B8 */ .word	0x4500017C
+/* 000491 0x80B932BC */ .word	0x46000180
+/* 000492 0x80B932C0 */ .word	0x44000184
+/* 000493 0x80B932C4 */ .word	0x45000204
+/* 000494 0x80B932C8 */ .word	0x46000208
+/* 000495 0x80B932CC */ .word	0x4400020C
+/* 000496 0x80B932D0 */ .word	0x4500026C
+/* 000497 0x80B932D4 */ .word	0x46000270
+/* 000498 0x80B932D8 */ .word	0x45000448
+/* 000499 0x80B932DC */ .word	0x46000460
+/* 000500 0x80B932E0 */ .word	0x450005AC
+/* 000501 0x80B932E4 */ .word	0x460005B0
+/* 000502 0x80B932E8 */ .word	0x45000670
+/* 000503 0x80B932EC */ .word	0x46000674
+/* 000504 0x80B932F0 */ .word	0x82000010
+/* 000505 0x80B932F4 */ .word	0x82000014
+/* 000506 0x80B932F8 */ .word	0x82000018
+/* 000507 0x80B932FC */ .word	0x8200001C
+/* 000508 0x80B93300 */ .word	0x00000000
+/* 000509 0x80B93304 */ .word	0x00000000
+/* 000510 0x80B93308 */ .word	0x00000000
+glabel objWarpstoneOverlayInfoOffset
+/* 000511 0x80B9330C */ .word	0x000000A0

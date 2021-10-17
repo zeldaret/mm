@@ -1,0 +1,64 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel En_Bigpamet_InitVars
+/* 002160 0x80A296E0 */ .word	0x01440900
+/* 002161 0x80A296E4 */ .word	0x00000435
+/* 002162 0x80A296E8 */ .word	0x01A60000
+/* 002163 0x80A296EC */ .word	0x000005CC
+/* 002164 0x80A296F0 */ .word	EnBigpamet_Init
+/* 002165 0x80A296F4 */ .word	EnBigpamet_Destroy
+/* 002166 0x80A296F8 */ .word	EnBigpamet_Update
+/* 002167 0x80A296FC */ .word	EnBigpamet_Draw
+glabel D_80A29700
+/* 002168 0x80A29700 */ .word	0x0C100D39
+/* 002169 0x80A29704 */ .word	0x10010000
+/* 002170 0x80A29708 */ .word	0x00000000
+/* 002171 0x80A2970C */ .word	0xF7CFFFFF
+/* 002172 0x80A29710 */ .word	0x04040000
+/* 002173 0x80A29714 */ .word	0xF7CF7FFF
+/* 002174 0x80A29718 */ .word	0x00000000
+/* 002175 0x80A2971C */ .word	0x01050100
+/* 002176 0x80A29720 */ .word	0x00350032
+/* 002177 0x80A29724 */ .word	0x00000000
+/* 002178 0x80A29728 */ .word	0x00000000
+glabel D_80A2972C
+/* 002179 0x80A2972C */ .word	0x01000035
+/* 002180 0x80A29730 */ .word	0x003CFA00
+glabel D_80A29734
+/* 002181 0x80A29734 */ .word	0x010100F1
+/* 002182 0x80A29738 */ .word	0x01010001
+/* 002183 0x80A2973C */ .word	0x0101F101
+/* 002184 0x80A29740 */ .word	0x01010101
+/* 002185 0x80A29744 */ .word	0x01F10101
+/* 002186 0x80A29748 */ .word	0x00000101
+/* 002187 0x80A2974C */ .word	0x01010000
+/* 002188 0x80A29750 */ .word	0x000000F1
+glabel D_80A29754
+/* 002189 0x80A29754 */ .word	0x060055A0
+/* 002190 0x80A29758 */ .word	0x060057A0
+/* 002191 0x80A2975C */ .word	0x060059A0
+/* 002192 0x80A29760 */ .word	0x060057A0
+glabel D_80A29764
+/* 002193 0x80A29764 */ .word	0x891F0001
+/* 002194 0x80A29768 */ .word	0xC858000F
+/* 002195 0x80A2976C */ .word	0xB074FFFE
+/* 002196 0x80A29770 */ .word	0xB05410ED
+/* 002197 0x80A29774 */ .word	0x001F0005
+glabel D_80A29778
+/* 002198 0x80A29778 */ .word	0x00000000
+glabel D_80A2977C
+/* 002199 0x80A2977C */ .word	0x00000000
+/* 002200 0x80A29780 */ .word	0x3F800000
+/* 002201 0x80A29784 */ .word	0x00000000
+glabel D_80A29788
+/* 002202 0x80A29788 */ .word	0xFAFAFAFF
+glabel D_80A2978C
+/* 002203 0x80A2978C */ .word	0xB4B4B4FF

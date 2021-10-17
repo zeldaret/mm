@@ -1,0 +1,15 @@
+glabel func_80136A48
+/* 148450 0x80136A48 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 148451 0x80136A4C 44856000 */ mtc1	$a1, $f12
+/* 148452 0x80136A50 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 148453 0x80136A54 3C01801D */ lui	$at, %hi(gFramerateDivisorHalf)
+/* 148454 0x80136A58 C4201508 */ lwc1	$f0, %lo(gFramerateDivisorHalf)($at)
+/* 148455 0x80136A5C 44056000 */ mfc1	$a1, $f12
+/* 148456 0x80136A60 44060000 */ mfc1	$a2, $f0
+/* 148457 0x80136A64 0C04DA64 */ jal	func_80136990
+/* 148458 0x80136A68 00000000 */ nop
+/* 148459 0x80136A6C 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 148460 0x80136A70 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 148461 0x80136A74 03E00008 */ jr	$ra
+/* 148462 0x80136A78 00000000 */ nop
+

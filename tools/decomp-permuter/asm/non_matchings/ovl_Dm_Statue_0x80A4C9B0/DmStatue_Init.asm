@@ -1,0 +1,11 @@
+glabel DmStatue_Init
+/* 000000 0x80A4C9B0 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000001 0x80A4C9B4 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000002 0x80A4C9B8 AFA5001C */ sw	$a1, 0X1C($sp)
+/* 000003 0x80A4C9BC 0C02D9F8 */ jal	Actor_SetScale
+/* 000004 0x80A4C9C0 3C054120 */ lui	$a1, 0x4120
+/* 000005 0x80A4C9C4 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000006 0x80A4C9C8 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000007 0x80A4C9CC 03E00008 */ jr	$ra
+/* 000008 0x80A4C9D0 00000000 */ nop
+

@@ -1,0 +1,6 @@
+glabel EnFireRock_Init
+/* 000000 0x808E1FE0 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000001 0x808E1FE4 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000002 0x808E1FE8 03E00008 */ jr	$ra
+/* 000003 0x808E1FEC 00000000 */ nop
+

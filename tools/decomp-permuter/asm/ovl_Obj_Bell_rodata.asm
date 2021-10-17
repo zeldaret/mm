@@ -1,0 +1,57 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .rodata
+
+glabel objBellOverlayInfo
+/* 000652 0x80A35F40 */ .word	0x00000960
+/* 000653 0x80A35F44 */ .word	0x000000B0
+/* 000654 0x80A35F48 */ .word	0x00000020
+/* 000655 0x80A35F4C */ .word	0x00000000
+/* 000656 0x80A35F50 */ .word	0x00000025
+glabel objBellOverlayRelocations
+/* 000657 0x80A35F54 */ .word	0x45000078
+/* 000658 0x80A35F58 */ .word	0x460000C0
+/* 000659 0x80A35F5C */ .word	0x450000C4
+/* 000660 0x80A35F60 */ .word	0x460000DC
+/* 000661 0x80A35F64 */ .word	0x450000F4
+/* 000662 0x80A35F68 */ .word	0x460000F8
+/* 000663 0x80A35F6C */ .word	0x4500010C
+/* 000664 0x80A35F70 */ .word	0x4600012C
+/* 000665 0x80A35F74 */ .word	0x450002B0
+/* 000666 0x80A35F78 */ .word	0x460002CC
+/* 000667 0x80A35F7C */ .word	0x45000304
+/* 000668 0x80A35F80 */ .word	0x46000310
+/* 000669 0x80A35F84 */ .word	0x4400039C
+/* 000670 0x80A35F88 */ .word	0x440003BC
+/* 000671 0x80A35F8C */ .word	0x440003CC
+/* 000672 0x80A35F90 */ .word	0x450004E4
+/* 000673 0x80A35F94 */ .word	0x460004E8
+/* 000674 0x80A35F98 */ .word	0x4500052C
+/* 000675 0x80A35F9C */ .word	0x46000530
+/* 000676 0x80A35FA0 */ .word	0x450007CC
+/* 000677 0x80A35FA4 */ .word	0x460007D0
+/* 000678 0x80A35FA8 */ .word	0x450007E4
+/* 000679 0x80A35FAC */ .word	0x460007E8
+/* 000680 0x80A35FB0 */ .word	0x450007FC
+/* 000681 0x80A35FB4 */ .word	0x46000808
+/* 000682 0x80A35FB8 */ .word	0x45000800
+/* 000683 0x80A35FBC */ .word	0x46000804
+/* 000684 0x80A35FC0 */ .word	0x440008A0
+/* 000685 0x80A35FC4 */ .word	0x440008A8
+/* 000686 0x80A35FC8 */ .word	0x440008B4
+/* 000687 0x80A35FCC */ .word	0x440008E4
+/* 000688 0x80A35FD0 */ .word	0x440008F0
+/* 000689 0x80A35FD4 */ .word	0x440008FC
+/* 000690 0x80A35FD8 */ .word	0x82000010
+/* 000691 0x80A35FDC */ .word	0x82000014
+/* 000692 0x80A35FE0 */ .word	0x82000018
+/* 000693 0x80A35FE4 */ .word	0x8200001C
+/* 000694 0x80A35FE8 */ .word	0x00000000
+glabel objBellOverlayInfoOffset
+/* 000695 0x80A35FEC */ .word	0x000000B0

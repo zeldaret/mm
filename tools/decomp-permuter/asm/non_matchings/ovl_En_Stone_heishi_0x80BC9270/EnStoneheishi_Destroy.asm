@@ -1,0 +1,13 @@
+glabel EnStoneheishi_Destroy
+/* 000048 0x80BC9330 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000049 0x80BC9334 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000050 0x80BC9338 00803025 */ move	$a2, $a0
+/* 000051 0x80BC933C 00A03825 */ move	$a3, $a1
+/* 000052 0x80BC9340 00E02025 */ move	$a0, $a3
+/* 000053 0x80BC9344 0C03847B */ jal	Collision_FiniCylinder
+/* 000054 0x80BC9348 24C50278 */ addiu	$a1, $a2, 0X278
+/* 000055 0x80BC934C 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000056 0x80BC9350 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000057 0x80BC9354 03E00008 */ jr	$ra
+/* 000058 0x80BC9358 00000000 */ nop
+

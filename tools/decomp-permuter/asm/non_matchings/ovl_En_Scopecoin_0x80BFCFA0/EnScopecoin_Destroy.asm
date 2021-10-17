@@ -1,0 +1,6 @@
+glabel EnScopecoin_Destroy
+/* 000106 0x80BFD148 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000107 0x80BFD14C AFA50004 */ sw	$a1, 0X4($sp)
+/* 000108 0x80BFD150 03E00008 */ jr	$ra
+/* 000109 0x80BFD154 00000000 */ nop
+

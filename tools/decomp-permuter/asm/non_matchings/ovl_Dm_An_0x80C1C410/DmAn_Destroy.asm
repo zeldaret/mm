@@ -1,0 +1,6 @@
+glabel DmAn_Destroy
+/* 000565 0x80C1CCE4 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000566 0x80C1CCE8 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000567 0x80C1CCEC 03E00008 */ jr	$ra
+/* 000568 0x80C1CCF0 00000000 */ nop
+

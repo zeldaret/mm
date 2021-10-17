@@ -1,0 +1,87 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+
+glabel ItemInbox_Init
+/* 000000 0x809454F0 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000001 0x809454F4 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000002 0x809454F8 AFA5001C */ sw	$a1, 0X1C($sp)
+/* 000003 0x809454FC 3C0E8094 */ lui	$t6, %hi(func_80945534)
+/* 000004 0x80945500 25CE5534 */ addiu	$t6, $t6, %lo(func_80945534)
+/* 000005 0x80945504 3C053E4C */ lui	$a1, 0x3E4C
+/* 000006 0x80945508 AC8E0144 */ sw	$t6, 0X144($a0)
+/* 000007 0x8094550C 0C02D9F8 */ jal	Actor_SetScale
+/* 000008 0x80945510 34A5CCCD */ ori	$a1, $a1, 0XCCCD
+/* 000009 0x80945514 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000010 0x80945518 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000011 0x8094551C 03E00008 */ jr	$ra
+/* 000012 0x80945520 00000000 */ nop
+
+glabel ItemInbox_Destroy
+/* 000013 0x80945524 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000014 0x80945528 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000015 0x8094552C 03E00008 */ jr	$ra
+/* 000016 0x80945530 00000000 */ nop
+
+glabel func_80945534
+/* 000017 0x80945534 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000018 0x80945538 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000019 0x8094553C AFA40018 */ sw	$a0, 0X18($sp)
+/* 000020 0x80945540 00A03025 */ move	$a2, $a1
+/* 000021 0x80945544 8FAE0018 */ lw	$t6, 0X18($sp)
+/* 000022 0x80945548 00C02025 */ move	$a0, $a2
+/* 000023 0x8094554C 85C5001C */ lh	$a1, 0X1C($t6)
+/* 000024 0x80945550 00052A03 */ sra	$a1, $a1, 8
+/* 000025 0x80945554 0C02D71E */ jal	Actor_GetChestFlag
+/* 000026 0x80945558 30A5001F */ andi	$a1, $a1, 0X1F
+/* 000027 0x8094555C 50400004 */ beqzl	$v0, .L80945570
+/* 000028 0x80945560 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000029 0x80945564 0C02D9C3 */ jal	Actor_MarkForDeath
+/* 000030 0x80945568 8FA40018 */ lw	$a0, 0X18($sp)
+/* 000031 0x8094556C 8FBF0014 */ lw	$ra, 0X14($sp)
+.L80945570:
+/* 000032 0x80945570 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000033 0x80945574 03E00008 */ jr	$ra
+/* 000034 0x80945578 00000000 */ nop
+
+glabel ItemInbox_Update
+/* 000035 0x8094557C 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000036 0x80945580 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000037 0x80945584 8C990144 */ lw	$t9, 0X144($a0)
+/* 000038 0x80945588 0320F809 */ jalr	$t9
+/* 000039 0x8094558C 00000000 */ nop
+/* 000040 0x80945590 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000041 0x80945594 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000042 0x80945598 03E00008 */ jr	$ra
+/* 000043 0x8094559C 00000000 */ nop
+
+glabel ItemInbox_Draw
+/* 000044 0x809455A0 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000045 0x809455A4 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000046 0x809455A8 AFA40018 */ sw	$a0, 0X18($sp)
+/* 000047 0x809455AC AFA5001C */ sw	$a1, 0X1C($sp)
+/* 000048 0x809455B0 8FA40018 */ lw	$a0, 0X18($sp)
+/* 000049 0x809455B4 8FA5001C */ lw	$a1, 0X1C($sp)
+/* 000050 0x809455B8 0C02E014 */ jal	func_800B8050
+/* 000051 0x809455BC 00003025 */ move	$a2, $zero
+/* 000052 0x809455C0 8FA40018 */ lw	$a0, 0X18($sp)
+/* 000053 0x809455C4 8FA5001C */ lw	$a1, 0X1C($sp)
+/* 000054 0x809455C8 0C02E046 */ jal	func_800B8118
+/* 000055 0x809455CC 00003025 */ move	$a2, $zero
+/* 000056 0x809455D0 8FAE0018 */ lw	$t6, 0X18($sp)
+/* 000057 0x809455D4 8FA4001C */ lw	$a0, 0X1C($sp)
+/* 000058 0x809455D8 85C5001C */ lh	$a1, 0X1C($t6)
+/* 000059 0x809455DC 30A500FF */ andi	$a1, $a1, 0XFF
+/* 000060 0x809455E0 00052C00 */ sll	$a1, $a1, 16
+/* 000061 0x809455E4 0C03B8C8 */ jal	func_800EE320
+/* 000062 0x809455E8 00052C03 */ sra	$a1, $a1, 16
+/* 000063 0x809455EC 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000064 0x809455F0 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000065 0x809455F4 03E00008 */ jr	$ra
+/* 000066 0x809455F8 00000000 */ nop
+/* 000067 0x809455FC 00000000 */ nop

@@ -1,0 +1,11 @@
+glabel BgHakuginBombwall_Update
+/* 000970 0x80ABCEE8 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000971 0x80ABCEEC AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000972 0x80ABCEF0 8C9901A8 */ lw	$t9, 0X1A8($a0)
+/* 000973 0x80ABCEF4 0320F809 */ jalr	$t9
+/* 000974 0x80ABCEF8 00000000 */ nop
+/* 000975 0x80ABCEFC 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000976 0x80ABCF00 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000977 0x80ABCF04 03E00008 */ jr	$ra
+/* 000978 0x80ABCF08 00000000 */ nop
+

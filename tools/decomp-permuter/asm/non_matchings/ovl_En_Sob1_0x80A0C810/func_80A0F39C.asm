@@ -1,0 +1,16 @@
+glabel func_80A0F39C
+/* 002787 0x80A0F39C 808E01EC */ lb	$t6, 0X1EC($a0)
+/* 002788 0x80A0F3A0 3C190001 */ lui	$t9, 0x0001
+/* 002789 0x80A0F3A4 3C018000 */ lui	$at, 0x8000
+/* 002790 0x80A0F3A8 000E7900 */ sll	$t7, $t6, 4
+/* 002791 0x80A0F3AC 01EE7821 */ addu	$t7, $t7, $t6
+/* 002792 0x80A0F3B0 000F7880 */ sll	$t7, $t7, 2
+/* 002793 0x80A0F3B4 00AFC021 */ addu	$t8, $a1, $t7
+/* 002794 0x80A0F3B8 0338C821 */ addu	$t9, $t9, $t8
+/* 002795 0x80A0F3BC 8F397D98 */ lw	$t9, 0X7D98($t9)
+/* 002796 0x80A0F3C0 03214021 */ addu	$t0, $t9, $at
+/* 002797 0x80A0F3C4 3C018020 */ lui	$at, %hi(gRspSegmentPhysAddrs + 0x18)
+/* 002798 0x80A0F3C8 AC288198 */ sw	$t0, %lo(gRspSegmentPhysAddrs + 0x18)($at)
+/* 002799 0x80A0F3CC 03E00008 */ jr	$ra
+/* 002800 0x80A0F3D0 00000000 */ nop
+

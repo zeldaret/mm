@@ -1,0 +1,13 @@
+glabel EnFirefly_Destroy
+/* 000106 0x80879898 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000107 0x8087989C AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000108 0x808798A0 00803025 */ move	$a2, $a0
+/* 000109 0x808798A4 00A03825 */ move	$a3, $a1
+/* 000110 0x808798A8 00E02025 */ move	$a0, $a3
+/* 000111 0x808798AC 0C038869 */ jal	Collision_FiniSphere
+/* 000112 0x808798B0 24C5031C */ addiu	$a1, $a2, 0X31C
+/* 000113 0x808798B4 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000114 0x808798B8 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000115 0x808798BC 03E00008 */ jr	$ra
+/* 000116 0x808798C0 00000000 */ nop
+

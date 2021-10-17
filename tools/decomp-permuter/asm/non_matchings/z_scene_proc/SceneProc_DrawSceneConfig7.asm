@@ -1,0 +1,14 @@
+glabel SceneProc_DrawSceneConfig7
+/* 143668 0x80131F90 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 143669 0x80131F94 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 143670 0x80131F98 3C010001 */ lui	$at, 0x0001
+/* 143671 0x80131F9C 34218000 */ ori	$at, $at, 0X8000
+/* 143672 0x80131FA0 00811021 */ addu	$v0, $a0, $at
+/* 143673 0x80131FA4 8C45086C */ lw	$a1, 0X86C($v0)
+/* 143674 0x80131FA8 0C04C627 */ jal	SceneProc_DrawAllAnimatedTextures
+/* 143675 0x80131FAC 8446075A */ lh	$a2, 0X75A($v0)
+/* 143676 0x80131FB0 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 143677 0x80131FB4 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 143678 0x80131FB8 03E00008 */ jr	$ra
+/* 143679 0x80131FBC 00000000 */ nop
+

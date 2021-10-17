@@ -1,0 +1,8 @@
+glabel Actor_GetRoomClearedTemp
+/* 016534 0x800B5D18 8C8E1E70 */ lw	$t6, 0X1E70($a0)
+/* 016535 0x800B5D1C 240F0001 */ li	$t7, 0X1
+/* 016536 0x800B5D20 00AFC004 */ sllv	$t8, $t7, $a1
+/* 016537 0x800B5D24 01D81024 */ and	$v0, $t6, $t8
+/* 016538 0x800B5D28 03E00008 */ jr	$ra
+/* 016539 0x800B5D2C 00000000 */ nop
+

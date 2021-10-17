@@ -1,0 +1,21 @@
+glabel Collision_InitSphere
+/* 061927 0x800E225C 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 061928 0x800E2260 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 061929 0x800E2264 AFA40018 */ sw	$a0, 0X18($sp)
+/* 061930 0x800E2268 AFA5001C */ sw	$a1, 0X1C($sp)
+/* 061931 0x800E226C AFA60020 */ sw	$a2, 0X20($sp)
+/* 061932 0x800E2270 AFA70024 */ sw	$a3, 0X24($sp)
+/* 061933 0x800E2274 8FA40018 */ lw	$a0, 0X18($sp)
+/* 061934 0x800E2278 0C038855 */ jal	Collision_InitSphereDefault
+/* 061935 0x800E227C 8FA5001C */ lw	$a1, 0X1C($sp)
+/* 061936 0x800E2280 8FA40018 */ lw	$a0, 0X18($sp)
+/* 061937 0x800E2284 8FA5001C */ lw	$a1, 0X1C($sp)
+/* 061938 0x800E2288 8FA60020 */ lw	$a2, 0X20($sp)
+/* 061939 0x800E228C 0C03887D */ jal	Collision_InitSphereWithData
+/* 061940 0x800E2290 8FA70024 */ lw	$a3, 0X24($sp)
+/* 061941 0x800E2294 00001025 */ move	$v0, $zero
+/* 061942 0x800E2298 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 061943 0x800E229C 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 061944 0x800E22A0 03E00008 */ jr	$ra
+/* 061945 0x800E22A4 00000000 */ nop
+

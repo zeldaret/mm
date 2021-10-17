@@ -1,0 +1,6 @@
+glabel EnEndingHero_Destroy
+/* 000042 0x80C1E738 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000043 0x80C1E73C AFA50004 */ sw	$a1, 0X4($sp)
+/* 000044 0x80C1E740 03E00008 */ jr	$ra
+/* 000045 0x80C1E744 00000000 */ nop
+

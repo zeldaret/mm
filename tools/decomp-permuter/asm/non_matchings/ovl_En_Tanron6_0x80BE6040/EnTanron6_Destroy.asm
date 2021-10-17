@@ -1,0 +1,6 @@
+glabel EnTanron6_Destroy
+/* 000027 0x80BE60AC AFA40000 */ sw	$a0, 0X0($sp)
+/* 000028 0x80BE60B0 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000029 0x80BE60B4 03E00008 */ jr	$ra
+/* 000030 0x80BE60B8 00000000 */ nop
+

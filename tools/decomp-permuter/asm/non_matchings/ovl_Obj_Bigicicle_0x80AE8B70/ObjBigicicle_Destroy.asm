@@ -1,0 +1,18 @@
+glabel ObjBigicicle_Destroy
+/* 000141 0x80AE8DA4 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000142 0x80AE8DA8 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000143 0x80AE8DAC AFA40018 */ sw	$a0, 0X18($sp)
+/* 000144 0x80AE8DB0 AFA5001C */ sw	$a1, 0X1C($sp)
+/* 000145 0x80AE8DB4 8FA50018 */ lw	$a1, 0X18($sp)
+/* 000146 0x80AE8DB8 8FA4001C */ lw	$a0, 0X1C($sp)
+/* 000147 0x80AE8DBC 0C03847B */ jal	Collision_FiniCylinder
+/* 000148 0x80AE8DC0 24A5014C */ addiu	$a1, $a1, 0X14C
+/* 000149 0x80AE8DC4 8FA50018 */ lw	$a1, 0X18($sp)
+/* 000150 0x80AE8DC8 8FA4001C */ lw	$a0, 0X1C($sp)
+/* 000151 0x80AE8DCC 0C03847B */ jal	Collision_FiniCylinder
+/* 000152 0x80AE8DD0 24A50198 */ addiu	$a1, $a1, 0X198
+/* 000153 0x80AE8DD4 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000154 0x80AE8DD8 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000155 0x80AE8DDC 03E00008 */ jr	$ra
+/* 000156 0x80AE8DE0 00000000 */ nop
+

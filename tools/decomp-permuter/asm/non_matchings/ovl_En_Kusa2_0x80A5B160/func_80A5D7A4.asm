@@ -1,0 +1,10 @@
+glabel func_80A5D7A4
+/* 002449 0x80A5D7A4 3C0E80A6 */ lui	$t6, %hi(EnKusa2_Draw)
+/* 002450 0x80A5D7A8 3C0F80A6 */ lui	$t7, %hi(func_80A5D7C4)
+/* 002451 0x80A5D7AC 25CEE8C0 */ addiu	$t6, $t6, %lo(EnKusa2_Draw)
+/* 002452 0x80A5D7B0 25EFD7C4 */ addiu	$t7, $t7, %lo(func_80A5D7C4)
+/* 002453 0x80A5D7B4 AC8E013C */ sw	$t6, 0X13C($a0)
+/* 002454 0x80A5D7B8 AC8F0190 */ sw	$t7, 0X190($a0)
+/* 002455 0x80A5D7BC 03E00008 */ jr	$ra
+/* 002456 0x80A5D7C0 00000000 */ nop
+

@@ -1,0 +1,6 @@
+glabel DmRavine_Destroy
+/* 000034 0x80A2E828 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000035 0x80A2E82C AFA50004 */ sw	$a1, 0X4($sp)
+/* 000036 0x80A2E830 03E00008 */ jr	$ra
+/* 000037 0x80A2E834 00000000 */ nop
+

@@ -1,0 +1,12 @@
+glabel func_80B43A74
+/* 000049 0x80B43A74 3C02801F */ lui	$v0, %hi(gSaveContext)
+/* 000050 0x80B43A78 2442F670 */ addiu	$v0, $v0, %lo(gSaveContext)
+/* 000051 0x80B43A7C 8C4E0E98 */ lw	$t6, 0XE98($v0)
+/* 000052 0x80B43A80 2401FF00 */ li	$at, -0X100
+/* 000053 0x80B43A84 309800FF */ andi	$t8, $a0, 0XFF
+/* 000054 0x80B43A88 01C17824 */ and	$t7, $t6, $at
+/* 000055 0x80B43A8C 01F8C825 */ or	$t9, $t7, $t8
+/* 000056 0x80B43A90 AC590E98 */ sw	$t9, 0XE98($v0)
+/* 000057 0x80B43A94 03E00008 */ jr	$ra
+/* 000058 0x80B43A98 00000000 */ nop
+

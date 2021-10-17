@@ -1,0 +1,10 @@
+glabel Actor_UnsetRoomCleared
+/* 016526 0x800B5CF8 8C8E1E6C */ lw	$t6, 0X1E6C($a0)
+/* 016527 0x800B5CFC 240F0001 */ li	$t7, 0X1
+/* 016528 0x800B5D00 00AFC004 */ sllv	$t8, $t7, $a1
+/* 016529 0x800B5D04 0300C827 */ nor	$t9, $t8, $zero
+/* 016530 0x800B5D08 01D94024 */ and	$t0, $t6, $t9
+/* 016531 0x800B5D0C AC881E6C */ sw	$t0, 0X1E6C($a0)
+/* 016532 0x800B5D10 03E00008 */ jr	$ra
+/* 016533 0x800B5D14 00000000 */ nop
+

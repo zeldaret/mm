@@ -1,0 +1,15 @@
+glabel BgDanpeiMovebg_Destroy
+/* 000132 0x80AF6FF0 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000133 0x80AF6FF4 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000134 0x80AF6FF8 AFA40018 */ sw	$a0, 0X18($sp)
+/* 000135 0x80AF6FFC 00A03825 */ move	$a3, $a1
+/* 000136 0x80AF7000 8FAE0018 */ lw	$t6, 0X18($sp)
+/* 000137 0x80AF7004 00E02025 */ move	$a0, $a3
+/* 000138 0x80AF7008 24E50880 */ addiu	$a1, $a3, 0X880
+/* 000139 0x80AF700C 0C031933 */ jal	BgCheck_RemoveActorMesh
+/* 000140 0x80AF7010 8DC60144 */ lw	$a2, 0X144($t6)
+/* 000141 0x80AF7014 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000142 0x80AF7018 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000143 0x80AF701C 03E00008 */ jr	$ra
+/* 000144 0x80AF7020 00000000 */ nop
+

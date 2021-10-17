@@ -1,0 +1,13 @@
+glabel ObjKibako_Destroy
+/* 000204 0x809264E0 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000205 0x809264E4 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000206 0x809264E8 00803825 */ move	$a3, $a0
+/* 000207 0x809264EC 00A03025 */ move	$a2, $a1
+/* 000208 0x809264F0 00C02025 */ move	$a0, $a2
+/* 000209 0x809264F4 0C03847B */ jal	Collision_FiniCylinder
+/* 000210 0x809264F8 24E50148 */ addiu	$a1, $a3, 0X148
+/* 000211 0x809264FC 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000212 0x80926500 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000213 0x80926504 03E00008 */ jr	$ra
+/* 000214 0x80926508 00000000 */ nop
+

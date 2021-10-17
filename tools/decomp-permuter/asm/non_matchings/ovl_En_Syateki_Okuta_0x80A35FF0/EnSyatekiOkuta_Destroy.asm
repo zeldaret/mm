@@ -1,0 +1,13 @@
+glabel EnSyatekiOkuta_Destroy
+/* 000075 0x80A3611C 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000076 0x80A36120 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000077 0x80A36124 00803025 */ move	$a2, $a0
+/* 000078 0x80A36128 00A03825 */ move	$a3, $a1
+/* 000079 0x80A3612C 00E02025 */ move	$a0, $a3
+/* 000080 0x80A36130 0C03847B */ jal	Collision_FiniCylinder
+/* 000081 0x80A36134 24C5018C */ addiu	$a1, $a2, 0X18C
+/* 000082 0x80A36138 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000083 0x80A3613C 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000084 0x80A36140 03E00008 */ jr	$ra
+/* 000085 0x80A36144 00000000 */ nop
+

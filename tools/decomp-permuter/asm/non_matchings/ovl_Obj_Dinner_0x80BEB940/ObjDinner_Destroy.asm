@@ -1,0 +1,6 @@
+glabel ObjDinner_Destroy
+/* 000031 0x80BEB9BC AFA40000 */ sw	$a0, 0X0($sp)
+/* 000032 0x80BEB9C0 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000033 0x80BEB9C4 03E00008 */ jr	$ra
+/* 000034 0x80BEB9C8 00000000 */ nop
+

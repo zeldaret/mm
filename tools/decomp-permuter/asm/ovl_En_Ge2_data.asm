@@ -1,0 +1,54 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel En_Ge2_InitVars
+/* 001748 0x80B8CE20 */ .word	0x021E0400
+/* 001749 0x80B8CE24 */ .word	0x80000009
+/* 001750 0x80B8CE28 */ .word	0x012E0000
+/* 001751 0x80B8CE2C */ .word	0x0000030C
+/* 001752 0x80B8CE30 */ .word	EnGe2_Init
+/* 001753 0x80B8CE34 */ .word	EnGe2_Destroy
+/* 001754 0x80B8CE38 */ .word	EnGe2_Update
+/* 001755 0x80B8CE3C */ .word	EnGe2_Draw
+glabel D_80B8CE40
+/* 001756 0x80B8CE40 */ .word	0x0A000939
+/* 001757 0x80B8CE44 */ .word	0x10010000
+/* 001758 0x80B8CE48 */ .word	0x00000000
+/* 001759 0x80B8CE4C */ .word	0x00000000
+/* 001760 0x80B8CE50 */ .word	0x00000000
+/* 001761 0x80B8CE54 */ .word	0x038BFBB3
+/* 001762 0x80B8CE58 */ .word	0x00000000
+/* 001763 0x80B8CE5C */ .word	0x00010100
+/* 001764 0x80B8CE60 */ .word	0x001E003C
+/* 001765 0x80B8CE64 */ .word	0x00000000
+/* 001766 0x80B8CE68 */ .word	0x00000000
+glabel D_80B8CE6C
+/* 001767 0x80B8CE6C */ .word	0x00000000
+/* 001768 0x80B8CE70 */ .word	0xBD4CCCCD
+/* 001769 0x80B8CE74 */ .word	0x00000000
+glabel D_80B8CE78
+/* 001770 0x80B8CE78 */ .word	0x00000000
+/* 001771 0x80B8CE7C */ .word	0xBCCCCCCD
+/* 001772 0x80B8CE80 */ .word	0x00000000
+glabel D_80B8CE84
+/* 001773 0x80B8CE84 */ .word	0xFFFFFF00
+glabel D_80B8CE88
+/* 001774 0x80B8CE88 */ .word	0xFF960000
+glabel D_80B8CE8C
+/* 001775 0x80B8CE8C */ .word	0x44160000
+/* 001776 0x80B8CE90 */ .word	0x442F0000
+/* 001777 0x80B8CE94 */ .word	0x00000000
+glabel D_80B8CE98
+/* 001778 0x80B8CE98 */ .word	0x060053E8
+/* 001779 0x80B8CE9C */ .word	0x060059E8
+/* 001780 0x80B8CEA0 */ .word	0x06006068
+/* 001781 0x80B8CEA4 */ .word	0x00000000
+/* 001782 0x80B8CEA8 */ .word	0x00000000
+/* 001783 0x80B8CEAC */ .word	0x00000000

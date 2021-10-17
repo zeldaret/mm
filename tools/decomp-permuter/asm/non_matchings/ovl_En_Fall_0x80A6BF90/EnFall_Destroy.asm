@@ -1,0 +1,6 @@
+glabel EnFall_Destroy
+/* 000259 0x80A6C39C AFA40000 */ sw	$a0, 0X0($sp)
+/* 000260 0x80A6C3A0 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000261 0x80A6C3A4 03E00008 */ jr	$ra
+/* 000262 0x80A6C3A8 00000000 */ nop
+

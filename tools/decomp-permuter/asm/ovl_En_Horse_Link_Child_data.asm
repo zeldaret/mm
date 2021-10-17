@@ -1,0 +1,70 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel En_Horse_Link_Child_InitVars
+/* 001592 0x808DFEA0 */ .word	0x00540100
+/* 001593 0x808DFEA4 */ .word	0x02000010
+/* 001594 0x808DFEA8 */ .word	0x007D0000
+/* 001595 0x808DFEAC */ .word	0x0000029C
+/* 001596 0x808DFEB0 */ .word	EnHorseLinkChild_Init
+/* 001597 0x808DFEB4 */ .word	EnHorseLinkChild_Destroy
+/* 001598 0x808DFEB8 */ .word	EnHorseLinkChild_Update
+/* 001599 0x808DFEBC */ .word	EnHorseLinkChild_Draw
+glabel D_808DFEC0
+/* 001600 0x808DFEC0 */ .word	0x06006D44
+/* 001601 0x808DFEC4 */ .word	0x06007468
+glabel D_808DFEC8
+/* 001602 0x808DFEC8 */ .word	0x06007D50
+/* 001603 0x808DFECC */ .word	0x060043AC
+/* 001604 0x808DFED0 */ .word	0x06002F98
+glabel D_808DFED4
+/* 001605 0x808DFED4 */ .word	0x00000000
+/* 001606 0x808DFED8 */ .word	0x00000000
+/* 001607 0x808DFEDC */ .word	0x00000000
+/* 001608 0x808DFEE0 */ .word	0x00000000
+/* 001609 0x808DFEE4 */ .word	0x00000000
+/* 001610 0x808DFEE8 */ .word	0x00000100
+/* 001611 0x808DFEEC */ .word	0x0D000000
+/* 001612 0x808DFEF0 */ .word	0x00000000
+/* 001613 0x808DFEF4 */ .word	0x000A0064
+glabel D_808DFEF8
+/* 001614 0x808DFEF8 */ .word	0x0A000939
+/* 001615 0x808DFEFC */ .word	0x12000000
+/* 001616 0x808DFF00 */ .word	0x00000001
+/* 001617 0x808DFF04 */ .word	D_808DFED4
+glabel D_808DFF08
+/* 001618 0x808DFF08 */ .word	0x0A000023
+/* 001619 0x808DFF0C */ .word	0x0064FE00
+glabel D_808DFF10
+/* 001620 0x808DFF10 */ .word	0x00000001
+/* 001621 0x808DFF14 */ .word	0x00000013
+glabel D_808DFF18
+/* 001622 0x808DFF18 */ .word	0x3F800000
+/* 001623 0x808DFF1C */ .word	0x3F800000
+/* 001624 0x808DFF20 */ .word	0x3FC00000
+/* 001625 0x808DFF24 */ .word	0x3FC00000
+/* 001626 0x808DFF28 */ .word	0x3FC00000
+glabel D_808DFF2C
+/* 001627 0x808DFF2C */ .word	0x310004B0
+glabel D_808DFF30
+/* 001628 0x808DFF30 */ .word	func_808DEA0C
+/* 001629 0x808DFF34 */ .word	func_808DED40
+/* 001630 0x808DFF38 */ .word	func_808DEB14
+/* 001631 0x808DFF3C */ .word	func_808DF194
+/* 001632 0x808DFF40 */ .word	func_808DF838
+/* 001633 0x808DFF44 */ .word	func_808DF620
+glabel D_808DFF48
+/* 001634 0x808DFF48 */ .word	0x06001D28
+/* 001635 0x808DFF4C */ .word	0x06001928
+/* 001636 0x808DFF50 */ .word	0x06001B28
+glabel D_808DFF54
+/* 001637 0x808DFF54 */ .word	0x00010201
+/* 001638 0x808DFF58 */ .word	0x00000000
+/* 001639 0x808DFF5C */ .word	0x00000000

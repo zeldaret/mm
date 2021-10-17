@@ -1,0 +1,15 @@
+glabel BgHakaCurtain_Destroy
+/* 000033 0x80B6DC64 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000034 0x80B6DC68 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000035 0x80B6DC6C AFA40018 */ sw	$a0, 0X18($sp)
+/* 000036 0x80B6DC70 00A03825 */ move	$a3, $a1
+/* 000037 0x80B6DC74 8FAE0018 */ lw	$t6, 0X18($sp)
+/* 000038 0x80B6DC78 00E02025 */ move	$a0, $a3
+/* 000039 0x80B6DC7C 24E50880 */ addiu	$a1, $a3, 0X880
+/* 000040 0x80B6DC80 0C031933 */ jal	BgCheck_RemoveActorMesh
+/* 000041 0x80B6DC84 8DC60144 */ lw	$a2, 0X144($t6)
+/* 000042 0x80B6DC88 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000043 0x80B6DC8C 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000044 0x80B6DC90 03E00008 */ jr	$ra
+/* 000045 0x80B6DC94 00000000 */ nop
+

@@ -1,0 +1,59 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel En_Sb_InitVars
+/* 000960 0x808E4DF0 */ .word	0x00640500
+/* 000961 0x808E4DF4 */ .word	0x00000005
+/* 000962 0x808E4DF8 */ .word	0x008E0000
+/* 000963 0x808E4DFC */ .word	0x00000254
+/* 000964 0x808E4E00 */ .word	EnSb_Init
+/* 000965 0x808E4E04 */ .word	EnSb_Destroy
+/* 000966 0x808E4E08 */ .word	EnSb_Update
+/* 000967 0x808E4E0C */ .word	EnSb_Draw
+glabel D_808E4E10
+/* 000968 0x808E4E10 */ .word	0x0A110939
+/* 000969 0x808E4E14 */ .word	0x01000000
+/* 000970 0x808E4E18 */ .word	0x00000000
+/* 000971 0x808E4E1C */ .word	0xF7CFFFFF
+/* 000972 0x808E4E20 */ .word	0x04080000
+/* 000973 0x808E4E24 */ .word	0xF7CFFFFF
+/* 000974 0x808E4E28 */ .word	0x00000000
+/* 000975 0x808E4E2C */ .word	0x01010100
+/* 000976 0x808E4E30 */ .word	0x001E0028
+/* 000977 0x808E4E34 */ .word	0x00000000
+/* 000978 0x808E4E38 */ .word	0x00000000
+glabel D_808E4E3C
+/* 000979 0x808E4E3C */ .word	0x000000F1
+/* 000980 0x808E4E40 */ .word	0xF1F100F1
+/* 000981 0x808E4E44 */ .word	0x000000F1
+/* 000982 0x808E4E48 */ .word	0xF1F10000
+/* 000983 0x808E4E4C */ .word	0xF10000F1
+/* 000984 0x808E4E50 */ .word	0x000000F1
+/* 000985 0x808E4E54 */ .word	0x00000000
+/* 000986 0x808E4E58 */ .word	0x000000F1
+glabel D_808E4E5C
+/* 000987 0x808E4E5C */ .word	0x891F0027
+/* 000988 0x808E4E60 */ .word	0x801F0002
+/* 000989 0x808E4E64 */ .word	0x3054001E
+glabel D_808E4E68
+/* 000990 0x808E4E68 */ .word	0x40A00000
+/* 000991 0x808E4E6C */ .word	0x00000000
+/* 000992 0x808E4E70 */ .word	0x00000000
+/* 000993 0x808E4E74 */ .word	0xC0A00000
+/* 000994 0x808E4E78 */ .word	0x00000000
+/* 000995 0x808E4E7C */ .word	0x00000000
+/* 000996 0x808E4E80 */ .word	0x00000000
+/* 000997 0x808E4E84 */ .word	0x00000000
+/* 000998 0x808E4E88 */ .word	0x40A00000
+/* 000999 0x808E4E8C */ .word	0x00000000
+/* 001000 0x808E4E90 */ .word	0x00000000
+/* 001001 0x808E4E94 */ .word	0xC0A00000
+/* 001002 0x808E4E98 */ .word	0x00000000
+/* 001003 0x808E4E9C */ .word	0x00000000

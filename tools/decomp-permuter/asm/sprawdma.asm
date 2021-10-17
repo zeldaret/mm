@@ -1,0 +1,49 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+
+glabel __osSpRawStartDma
+/* 011040 0x8008ACE0 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 011041 0x8008ACE4 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 011042 0x8008ACE8 AFA40018 */ sw	$a0, 0X18($sp)
+/* 011043 0x8008ACEC AFA5001C */ sw	$a1, 0X1C($sp)
+/* 011044 0x8008ACF0 AFA60020 */ sw	$a2, 0X20($sp)
+/* 011045 0x8008ACF4 0C023E80 */ jal	__osSpDeviceBusy
+/* 011046 0x8008ACF8 AFA70024 */ sw	$a3, 0X24($sp)
+/* 011047 0x8008ACFC 10400003 */ beqz	$v0, .L8008AD0C
+/* 011048 0x8008AD00 8FAE001C */ lw	$t6, 0X1C($sp)
+/* 011049 0x8008AD04 10000013 */ b	.L8008AD54
+/* 011050 0x8008AD08 2402FFFF */ li	$v0, -0X1
+.L8008AD0C:
+/* 011051 0x8008AD0C 3C0FA404 */ lui	$t7, 0xA404
+/* 011052 0x8008AD10 ADEE0000 */ sw	$t6, 0X0($t7)
+/* 011053 0x8008AD14 0C022950 */ jal	osVirtualToPhysical
+/* 011054 0x8008AD18 8FA40020 */ lw	$a0, 0X20($sp)
+/* 011055 0x8008AD1C 3C18A404 */ lui	$t8, 0xA404
+/* 011056 0x8008AD20 AF020004 */ sw	$v0, 0X4($t8)
+/* 011057 0x8008AD24 8FB90018 */ lw	$t9, 0X18($sp)
+/* 011058 0x8008AD28 8FAB0024 */ lw	$t3, 0X24($sp)
+/* 011059 0x8008AD2C 00001025 */ move	$v0, $zero
+/* 011060 0x8008AD30 17200006 */ bnez	$t9, .L8008AD4C
+/* 011061 0x8008AD34 256CFFFF */ addiu	$t4, $t3, -0X1
+/* 011062 0x8008AD38 8FA80024 */ lw	$t0, 0X24($sp)
+/* 011063 0x8008AD3C 3C0AA404 */ lui	$t2, 0xA404
+/* 011064 0x8008AD40 2509FFFF */ addiu	$t1, $t0, -0X1
+/* 011065 0x8008AD44 10000003 */ b	.L8008AD54
+/* 011066 0x8008AD48 AD49000C */ sw	$t1, 0XC($t2)
+.L8008AD4C:
+/* 011067 0x8008AD4C 3C0DA404 */ lui	$t5, 0xA404
+/* 011068 0x8008AD50 ADAC0008 */ sw	$t4, 0X8($t5)
+.L8008AD54:
+/* 011069 0x8008AD54 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 011070 0x8008AD58 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 011071 0x8008AD5C 03E00008 */ jr	$ra
+/* 011072 0x8008AD60 00000000 */ nop
+/* 011073 0x8008AD64 00000000 */ nop
+/* 011074 0x8008AD68 00000000 */ nop
+/* 011075 0x8008AD6C 00000000 */ nop

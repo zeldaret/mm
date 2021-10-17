@@ -1,0 +1,15 @@
+glabel ObjOcarinalift_Destroy
+/* 000099 0x80AC964C 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000100 0x80AC9650 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000101 0x80AC9654 AFA40018 */ sw	$a0, 0X18($sp)
+/* 000102 0x80AC9658 00A03825 */ move	$a3, $a1
+/* 000103 0x80AC965C 8FAE0018 */ lw	$t6, 0X18($sp)
+/* 000104 0x80AC9660 00E02025 */ move	$a0, $a3
+/* 000105 0x80AC9664 24E50880 */ addiu	$a1, $a3, 0X880
+/* 000106 0x80AC9668 0C031933 */ jal	BgCheck_RemoveActorMesh
+/* 000107 0x80AC966C 8DC60144 */ lw	$a2, 0X144($t6)
+/* 000108 0x80AC9670 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000109 0x80AC9674 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000110 0x80AC9678 03E00008 */ jr	$ra
+/* 000111 0x80AC967C 00000000 */ nop
+

@@ -1,0 +1,85 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+
+glabel EnMFire1_Init
+/* 000000 0x808B5230 27BDFFD8 */ addiu	$sp, $sp, -0X28
+/* 000001 0x808B5234 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000002 0x808B5238 AFA5002C */ sw	$a1, 0X2C($sp)
+/* 000003 0x808B523C 00803025 */ move	$a2, $a0
+/* 000004 0x808B5240 24C50144 */ addiu	$a1, $a2, 0X144
+/* 000005 0x808B5244 AFA5001C */ sw	$a1, 0X1C($sp)
+/* 000006 0x808B5248 8FA4002C */ lw	$a0, 0X2C($sp)
+/* 000007 0x808B524C 0C038467 */ jal	Collision_InitCylinderDefault
+/* 000008 0x808B5250 AFA60028 */ sw	$a2, 0X28($sp)
+/* 000009 0x808B5254 3C07808B */ lui	$a3, %hi(D_808B5360)
+/* 000010 0x808B5258 8FA5001C */ lw	$a1, 0X1C($sp)
+/* 000011 0x808B525C 8FA60028 */ lw	$a2, 0X28($sp)
+/* 000012 0x808B5260 24E75360 */ addiu	$a3, $a3, %lo(D_808B5360)
+/* 000013 0x808B5264 0C0384C3 */ jal	Collision_InitCylinderWithData
+/* 000014 0x808B5268 8FA4002C */ lw	$a0, 0X2C($sp)
+/* 000015 0x808B526C 8FA60028 */ lw	$a2, 0X28($sp)
+/* 000016 0x808B5270 3C0F0004 */ lui	$t7, 0x0004
+/* 000017 0x808B5274 84CE001C */ lh	$t6, 0X1C($a2)
+/* 000018 0x808B5278 51C00003 */ beqzl	$t6, .L808B5288
+/* 000019 0x808B527C 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000020 0x808B5280 ACCF015C */ sw	$t7, 0X15C($a2)
+/* 000021 0x808B5284 8FBF0014 */ lw	$ra, 0X14($sp)
+.L808B5288:
+/* 000022 0x808B5288 27BD0028 */ addiu	$sp, $sp, 0X28
+/* 000023 0x808B528C 03E00008 */ jr	$ra
+/* 000024 0x808B5290 00000000 */ nop
+
+glabel EnMFire1_Destroy
+/* 000025 0x808B5294 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000026 0x808B5298 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000027 0x808B529C 00803025 */ move	$a2, $a0
+/* 000028 0x808B52A0 00A03825 */ move	$a3, $a1
+/* 000029 0x808B52A4 00E02025 */ move	$a0, $a3
+/* 000030 0x808B52A8 0C03847B */ jal	Collision_FiniCylinder
+/* 000031 0x808B52AC 24C50144 */ addiu	$a1, $a2, 0X144
+/* 000032 0x808B52B0 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000033 0x808B52B4 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000034 0x808B52B8 03E00008 */ jr	$ra
+/* 000035 0x808B52BC 00000000 */ nop
+
+glabel EnMFire1_Update
+/* 000036 0x808B52C0 27BDFFD8 */ addiu	$sp, $sp, -0X28
+/* 000037 0x808B52C4 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000038 0x808B52C8 AFA5002C */ sw	$a1, 0X2C($sp)
+/* 000039 0x808B52CC 00803825 */ move	$a3, $a0
+/* 000040 0x808B52D0 3C063E4C */ lui	$a2, 0x3E4C
+/* 000041 0x808B52D4 34C6CCCD */ ori	$a2, $a2, 0XCCCD
+/* 000042 0x808B52D8 24E40190 */ addiu	$a0, $a3, 0X190
+/* 000043 0x808B52DC 3C053F80 */ lui	$a1, 0x3F80
+/* 000044 0x808B52E0 0C03FC0F */ jal	Lib_StepTowardsCheck_f
+/* 000045 0x808B52E4 AFA70028 */ sw	$a3, 0X28($sp)
+/* 000046 0x808B52E8 10400005 */ beqz	$v0, .L808B5300
+/* 000047 0x808B52EC 8FA70028 */ lw	$a3, 0X28($sp)
+/* 000048 0x808B52F0 0C02D9C3 */ jal	Actor_MarkForDeath
+/* 000049 0x808B52F4 00E02025 */ move	$a0, $a3
+/* 000050 0x808B52F8 1000000E */ b	.L808B5334
+/* 000051 0x808B52FC 8FBF0014 */ lw	$ra, 0X14($sp)
+.L808B5300:
+/* 000052 0x808B5300 24E60144 */ addiu	$a2, $a3, 0X144
+/* 000053 0x808B5304 00C02825 */ move	$a1, $a2
+/* 000054 0x808B5308 AFA6001C */ sw	$a2, 0X1C($sp)
+/* 000055 0x808B530C 00E02025 */ move	$a0, $a3
+/* 000056 0x808B5310 0C039F7E */ jal	Collision_CylinderMoveToActor
+/* 000057 0x808B5314 AFA70028 */ sw	$a3, 0X28($sp)
+/* 000058 0x808B5318 8FA4002C */ lw	$a0, 0X2C($sp)
+/* 000059 0x808B531C 3C010001 */ lui	$at, 0x0001
+/* 000060 0x808B5320 34218884 */ ori	$at, $at, 0X8884
+/* 000061 0x808B5324 8FA6001C */ lw	$a2, 0X1C($sp)
+/* 000062 0x808B5328 0C038956 */ jal	Collision_AddAT
+/* 000063 0x808B532C 00812821 */ addu	$a1, $a0, $at
+/* 000064 0x808B5330 8FBF0014 */ lw	$ra, 0X14($sp)
+.L808B5334:
+/* 000065 0x808B5334 27BD0028 */ addiu	$sp, $sp, 0X28
+/* 000066 0x808B5338 03E00008 */ jr	$ra
+/* 000067 0x808B533C 00000000 */ nop

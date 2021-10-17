@@ -1,0 +1,67 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel En_Wallmas_InitVars
+/* 001740 0x80876340 */ .word	0x000A0500
+/* 001741 0x80876344 */ .word	0x00000415
+/* 001742 0x80876348 */ .word	0x00090000
+/* 001743 0x8087634C */ .word	0x000003A4
+/* 001744 0x80876350 */ .word	EnWallmas_Init
+/* 001745 0x80876354 */ .word	EnWallmas_Destroy
+/* 001746 0x80876358 */ .word	EnWallmas_Update
+/* 001747 0x8087635C */ .word	EnWallmas_Draw
+glabel D_80876360
+/* 001748 0x80876360 */ .word	0x00000939
+/* 001749 0x80876364 */ .word	0x10010000
+/* 001750 0x80876368 */ .word	0x00000000
+/* 001751 0x8087636C */ .word	0x00000000
+/* 001752 0x80876370 */ .word	0x00000000
+/* 001753 0x80876374 */ .word	0xF7CFFFFF
+/* 001754 0x80876378 */ .word	0x00000000
+/* 001755 0x8087637C */ .word	0x00050100
+/* 001756 0x80876380 */ .word	0x001E0028
+/* 001757 0x80876384 */ .word	0x00000000
+/* 001758 0x80876388 */ .word	0x00000000
+glabel D_8087638C
+/* 001759 0x8087638C */ .word	0x10010101
+/* 001760 0x80876390 */ .word	0x010101F0
+/* 001761 0x80876394 */ .word	0x01010122
+/* 001762 0x80876398 */ .word	0x31420110
+/* 001763 0x8087639C */ .word	0x01021050
+/* 001764 0x808763A0 */ .word	0x00000101
+/* 001765 0x808763A4 */ .word	0x01000000
+/* 001766 0x808763A8 */ .word	0x00000001
+glabel D_808763AC
+/* 001767 0x808763AC */ .word	0x0300001E
+/* 001768 0x808763B0 */ .word	0x00289600
+glabel D_808763B4
+/* 001769 0x808763B4 */ .word	0x891F0030
+/* 001770 0x808763B8 */ .word	0xB054157C
+/* 001771 0x808763BC */ .word	0x3874FA24
+glabel D_808763C0
+/* 001772 0x808763C0 */ .word	0x42480000
+/* 001773 0x808763C4 */ .word	0x425C0000
+/* 001774 0x808763C8 */ .word	0x42480000
+/* 001775 0x808763CC */ .word	0x41A00000
+/* 001776 0x808763D0 */ .word	0x41F00000
+glabel D_808763D4
+/* 001777 0x808763D4 */ .short	0xFFFF
+glabel D_808763D6
+/* 001777 0x808763D4 */ .short	0xFFFF
+/* 001778 0x808763D8 */ .word	0x00FFFF01
+/* 001779 0x808763DC */ .word	0xFF02FFFF
+/* 001780 0x808763E0 */ .word	0x03FF04FF
+/* 001781 0x808763E4 */ .short	0xFF05
+glabel D_808763E6
+/* 001781 0x808763E4 */ .byte	0xFF
+glabel D_808763E7
+/* 001781 0x808763E4 */ .byte	0xFF
+/* 001782 0x808763E8 */ .word	0xFF0607FF
+/* 001783 0x808763EC */ .word	0x08000000

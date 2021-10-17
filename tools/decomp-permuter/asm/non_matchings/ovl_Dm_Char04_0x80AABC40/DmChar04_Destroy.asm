@@ -1,0 +1,6 @@
+glabel DmChar04_Destroy
+/* 000121 0x80AABE24 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000122 0x80AABE28 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000123 0x80AABE2C 03E00008 */ jr	$ra
+/* 000124 0x80AABE30 00000000 */ nop
+

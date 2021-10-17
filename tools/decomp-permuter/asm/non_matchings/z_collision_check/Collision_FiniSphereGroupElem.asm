@@ -1,0 +1,18 @@
+glabel Collision_FiniSphereGroupElem
+/* 060388 0x800E0A50 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 060389 0x800E0A54 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 060390 0x800E0A58 AFA40018 */ sw	$a0, 0X18($sp)
+/* 060391 0x800E0A5C AFA5001C */ sw	$a1, 0X1C($sp)
+/* 060392 0x800E0A60 8FA40018 */ lw	$a0, 0X18($sp)
+/* 060393 0x800E0A64 0C038207 */ jal	Collision_FiniBody
+/* 060394 0x800E0A68 8FA5001C */ lw	$a1, 0X1C($sp)
+/* 060395 0x800E0A6C 8FA5001C */ lw	$a1, 0X1C($sp)
+/* 060396 0x800E0A70 8FA40018 */ lw	$a0, 0X18($sp)
+/* 060397 0x800E0A74 0C038269 */ jal	Collision_FiniSphereParams
+/* 060398 0x800E0A78 24A50028 */ addiu	$a1, $a1, 0X28
+/* 060399 0x800E0A7C 24020001 */ li	$v0, 0X1
+/* 060400 0x800E0A80 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 060401 0x800E0A84 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 060402 0x800E0A88 03E00008 */ jr	$ra
+/* 060403 0x800E0A8C 00000000 */ nop
+

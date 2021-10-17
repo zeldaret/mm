@@ -1,0 +1,11 @@
+glabel EnZos_Destroy
+/* 000112 0x80BBAE60 3C02801F */ lui	$v0, %hi(gSaveContext)
+/* 000113 0x80BBAE64 2442F670 */ addiu	$v0, $v0, %lo(gSaveContext)
+/* 000114 0x80BBAE68 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000115 0x80BBAE6C AFA50004 */ sw	$a1, 0X4($sp)
+/* 000116 0x80BBAE70 904E0F2C */ lbu	$t6, 0XF2C($v0)
+/* 000117 0x80BBAE74 31CF00EF */ andi	$t7, $t6, 0XEF
+/* 000118 0x80BBAE78 A04F0F2C */ sb	$t7, 0XF2C($v0)
+/* 000119 0x80BBAE7C 03E00008 */ jr	$ra
+/* 000120 0x80BBAE80 00000000 */ nop
+

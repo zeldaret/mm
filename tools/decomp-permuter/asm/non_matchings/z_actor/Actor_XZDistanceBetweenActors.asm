@@ -1,0 +1,13 @@
+glabel Actor_XZDistanceBetweenActors
+/* 017623 0x800B6E1C 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 017624 0x800B6E20 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 017625 0x800B6E24 00803025 */ move	$a2, $a0
+/* 017626 0x800B6E28 00A03825 */ move	$a3, $a1
+/* 017627 0x800B6E2C 24C40024 */ addiu	$a0, $a2, 0X24
+/* 017628 0x800B6E30 0C03FE4B */ jal	Math_Vec3f_DistXZ
+/* 017629 0x800B6E34 24E50024 */ addiu	$a1, $a3, 0X24
+/* 017630 0x800B6E38 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 017631 0x800B6E3C 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 017632 0x800B6E40 03E00008 */ jr	$ra
+/* 017633 0x800B6E44 00000000 */ nop
+

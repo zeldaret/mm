@@ -1,0 +1,6 @@
+glabel ElfMsg2_Destroy
+/* 000128 0x8096EE40 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000129 0x8096EE44 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000130 0x8096EE48 03E00008 */ jr	$ra
+/* 000131 0x8096EE4C 00000000 */ nop
+

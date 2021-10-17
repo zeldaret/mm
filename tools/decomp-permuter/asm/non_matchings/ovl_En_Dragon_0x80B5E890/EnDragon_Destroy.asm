@@ -1,0 +1,13 @@
+glabel EnDragon_Destroy
+/* 000121 0x80B5EA74 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000122 0x80B5EA78 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000123 0x80B5EA7C 00803025 */ move	$a2, $a0
+/* 000124 0x80B5EA80 00A03825 */ move	$a3, $a1
+/* 000125 0x80B5EA84 00E02025 */ move	$a0, $a3
+/* 000126 0x80B5EA88 0C038306 */ jal	Collision_FiniSphereGroup
+/* 000127 0x80B5EA8C 24C502DC */ addiu	$a1, $a2, 0X2DC
+/* 000128 0x80B5EA90 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000129 0x80B5EA94 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000130 0x80B5EA98 03E00008 */ jr	$ra
+/* 000131 0x80B5EA9C 00000000 */ nop
+

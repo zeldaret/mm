@@ -1,0 +1,13 @@
+glabel EnInvisibleRuppe_Destroy
+/* 000135 0x80C25ABC 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000136 0x80C25AC0 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000137 0x80C25AC4 00803025 */ move	$a2, $a0
+/* 000138 0x80C25AC8 00A03825 */ move	$a3, $a1
+/* 000139 0x80C25ACC 00E02025 */ move	$a0, $a3
+/* 000140 0x80C25AD0 0C03847B */ jal	Collision_FiniCylinder
+/* 000141 0x80C25AD4 24C50144 */ addiu	$a1, $a2, 0X144
+/* 000142 0x80C25AD8 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000143 0x80C25ADC 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000144 0x80C25AE0 03E00008 */ jr	$ra
+/* 000145 0x80C25AE4 00000000 */ nop
+

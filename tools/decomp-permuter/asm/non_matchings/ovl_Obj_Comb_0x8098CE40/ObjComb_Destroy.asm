@@ -1,0 +1,13 @@
+glabel ObjComb_Destroy
+/* 000886 0x8098DC18 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000887 0x8098DC1C AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000888 0x8098DC20 00803825 */ move	$a3, $a0
+/* 000889 0x8098DC24 00A03025 */ move	$a2, $a1
+/* 000890 0x8098DC28 00C02025 */ move	$a0, $a2
+/* 000891 0x8098DC2C 0C038306 */ jal	Collision_FiniSphereGroup
+/* 000892 0x8098DC30 24E50148 */ addiu	$a1, $a3, 0X148
+/* 000893 0x8098DC34 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000894 0x8098DC38 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000895 0x8098DC3C 03E00008 */ jr	$ra
+/* 000896 0x8098DC40 00000000 */ nop
+

@@ -1,0 +1,6 @@
+glabel EnSth2_Destroy
+/* 000044 0x80BF7590 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000045 0x80BF7594 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000046 0x80BF7598 03E00008 */ jr	$ra
+/* 000047 0x80BF759C 00000000 */ nop
+

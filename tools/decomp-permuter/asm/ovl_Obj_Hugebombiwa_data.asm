@@ -1,0 +1,65 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel Obj_Hugebombiwa_InitVars
+/* 002112 0x80A55CE0 */ .word	0x016D0600
+/* 002113 0x80A55CE4 */ .word	0x00000010
+/* 002114 0x80A55CE8 */ .word	0x012A0000
+/* 002115 0x80A55CEC */ .word	0x000004B8
+/* 002116 0x80A55CF0 */ .word	ObjHugebombiwa_Init
+/* 002117 0x80A55CF4 */ .word	ObjHugebombiwa_Destroy
+/* 002118 0x80A55CF8 */ .word	ObjHugebombiwa_Update
+/* 002119 0x80A55CFC */ .word	ObjHugebombiwa_Draw
+glabel D_80A55D00
+/* 002120 0x80A55D00 */ .word	0x0C000D39
+/* 002121 0x80A55D04 */ .word	0x20010000
+/* 002122 0x80A55D08 */ .word	0x00000000
+/* 002123 0x80A55D0C */ .word	0x00000000
+/* 002124 0x80A55D10 */ .word	0x00000000
+/* 002125 0x80A55D14 */ .word	0x81C37BB6
+/* 002126 0x80A55D18 */ .word	0x00000000
+/* 002127 0x80A55D1C */ .word	0x00010100
+/* 002128 0x80A55D20 */ .word	0x00B400E2
+/* 002129 0x80A55D24 */ .word	0x00000000
+/* 002130 0x80A55D28 */ .word	0x00000000
+glabel D_80A55D2C
+/* 002131 0x80A55D2C */ .word	0x00000000
+/* 002132 0x80A55D30 */ .word	0x3E99999A
+/* 002133 0x80A55D34 */ .word	0x00000000
+glabel D_80A55D38
+/* 002134 0x80A55D38 */ .word	0xD2D2D2FF
+glabel D_80A55D3C
+/* 002135 0x80A55D3C */ .word	0x8C8C8CFF
+glabel D_80A55D40
+/* 002136 0x80A55D40 */ .word	0x40400000
+/* 002137 0x80A55D44 */ .word	0x40A00000
+/* 002138 0x80A55D48 */ .word	0x41100000
+/* 002139 0x80A55D4C */ .word	0x41900000
+glabel D_80A55D50
+/* 002140 0x80A55D50 */ .word	0x00180011
+/* 002141 0x80A55D54 */ .word	0x000D0007
+/* 002142 0x80A55D58 */ .word	0x00060005
+/* 002143 0x80A55D5C */ .word	0x00030002
+glabel D_80A55D60
+/* 002144 0x80A55D60 */ .word	0x40400000
+/* 002145 0x80A55D64 */ .word	0x40A00000
+/* 002146 0x80A55D68 */ .word	0x41100000
+/* 002147 0x80A55D6C */ .word	0x41900000
+glabel D_80A55D70
+/* 002148 0x80A55D70 */ .word	0x00000000
+glabel D_80A55D74
+/* 002149 0x80A55D74 */ .word	0x47742400
+/* 002150 0x80A55D78 */ .word	0x47D4B200
+glabel D_80A55D7C
+/* 002151 0x80A55D7C */ .word	0xB0FC0E74
+/* 002152 0x80A55D80 */ .word	0xB1000384
+/* 002153 0x80A55D84 */ .word	0x31040384
+/* 002154 0x80A55D88 */ .word	0x00000000
+/* 002155 0x80A55D8C */ .word	0x00000000

@@ -1,0 +1,85 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel effectDustOverlayInfo
+/* 000448 0x80977910 */ .word	0x00000000
+/* 000449 0x80977914 */ .word	EffectDust_Init
+glabel effectDustUpdateFuncs
+/* 000450 0x80977918 */ .word	EffectDust_Update0
+/* 000451 0x8097791C */ .word	EffectDust_Update1
+glabel effectDustTextureAddrs
+/* 000452 0x80977920 */ .word	0x0408DBE0
+/* 000453 0x80977924 */ .word	0x0408DFE0
+/* 000454 0x80977928 */ .word	0x0408E3E0
+/* 000455 0x8097792C */ .word	0x0408E7E0
+/* 000456 0x80977930 */ .word	0x0408EBE0
+/* 000457 0x80977934 */ .word	0x0408EFE0
+/* 000458 0x80977938 */ .word	0x0408F3E0
+/* 000459 0x8097793C */ .word	0x0408F7E0
+glabel D_80977940
+/* 000460 0x80977940 */ .word	0x3B23D70A
+glabel D_80977944
+/* 000461 0x80977944 */ .word	0x3ECCCCCD
+glabel D_80977948
+/* 000462 0x80977948 */ .word	0x3E4CCCCD
+glabel D_8097794C
+/* 000463 0x8097794C */ .word	0x3ECCCCCD
+glabel D_80977950
+/* 000464 0x80977950 */ .word	0x3E4CCCCD
+glabel D_80977954
+/* 000465 0x80977954 */ .word	0x3ECCCCCD
+glabel D_80977958
+/* 000466 0x80977958 */ .word	0x3E4CCCCD
+glabel D_8097795C
+/* 000467 0x8097795C */ .word	0x3ECCCCCD
+glabel D_80977960
+/* 000468 0x80977960 */ .word	0x3E4CCCCD
+/* 000469 0x80977964 */ .word	0x00000000
+/* 000470 0x80977968 */ .word	0x00000000
+/* 000471 0x8097796C */ .word	0x00000000
+glabel effectSsDustOverlayInfo
+/* 000472 0x80977970 */ .word	0x00000700
+/* 000473 0x80977974 */ .word	0x00000030
+/* 000474 0x80977978 */ .word	0x00000030
+/* 000475 0x8097797C */ .word	0x00000000
+/* 000476 0x80977980 */ .word	0x0000001B
+glabel effectSsDustOverlayRelocations
+/* 000477 0x80977984 */ .word	0x45000054
+/* 000478 0x80977988 */ .word	0x46000070
+/* 000479 0x8097798C */ .word	0x45000058
+/* 000480 0x80977990 */ .word	0x46000064
+/* 000481 0x80977994 */ .word	0x450001AC
+/* 000482 0x80977998 */ .word	0x460001B0
+/* 000483 0x8097799C */ .word	0x450002A8
+/* 000484 0x809779A0 */ .word	0x460002BC
+/* 000485 0x809779A4 */ .word	0x450004C4
+/* 000486 0x809779A8 */ .word	0x460004C8
+/* 000487 0x809779AC */ .word	0x450004CC
+/* 000488 0x809779B0 */ .word	0x460004D0
+/* 000489 0x809779B4 */ .word	0x450004E8
+/* 000490 0x809779B8 */ .word	0x460004EC
+/* 000491 0x809779BC */ .word	0x450004F4
+/* 000492 0x809779C0 */ .word	0x460004FC
+/* 000493 0x809779C4 */ .word	0x450005BC
+/* 000494 0x809779C8 */ .word	0x460005C0
+/* 000495 0x809779CC */ .word	0x450005C4
+/* 000496 0x809779D0 */ .word	0x460005C8
+/* 000497 0x809779D4 */ .word	0x450005E0
+/* 000498 0x809779D8 */ .word	0x460005E4
+/* 000499 0x809779DC */ .word	0x450005E8
+/* 000500 0x809779E0 */ .word	0x460005EC
+/* 000501 0x809779E4 */ .word	0x82000004
+/* 000502 0x809779E8 */ .word	0x82000008
+/* 000503 0x809779EC */ .word	0x8200000C
+/* 000504 0x809779F0 */ .word	0x00000000
+/* 000505 0x809779F4 */ .word	0x00000000
+/* 000506 0x809779F8 */ .word	0x00000000
+glabel effectSsDustOverlayInfoOffset
+/* 000507 0x809779FC */ .word	0x00000090

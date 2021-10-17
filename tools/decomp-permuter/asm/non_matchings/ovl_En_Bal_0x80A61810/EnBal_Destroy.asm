@@ -1,0 +1,13 @@
+glabel EnBal_Destroy
+/* 000119 0x80A619EC 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000120 0x80A619F0 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000121 0x80A619F4 00803025 */ move	$a2, $a0
+/* 000122 0x80A619F8 00A03825 */ move	$a3, $a1
+/* 000123 0x80A619FC 00E02025 */ move	$a0, $a3
+/* 000124 0x80A61A00 0C0382D3 */ jal	Collision_InitSphereGroupDefault
+/* 000125 0x80A61A04 24C50190 */ addiu	$a1, $a2, 0X190
+/* 000126 0x80A61A08 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000127 0x80A61A0C 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000128 0x80A61A10 03E00008 */ jr	$ra
+/* 000129 0x80A61A14 00000000 */ nop
+

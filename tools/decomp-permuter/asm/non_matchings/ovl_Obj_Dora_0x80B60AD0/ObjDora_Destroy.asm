@@ -1,0 +1,13 @@
+glabel ObjDora_Destroy
+/* 000104 0x80B60C70 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000105 0x80B60C74 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000106 0x80B60C78 00803025 */ move	$a2, $a0
+/* 000107 0x80B60C7C 00A03825 */ move	$a3, $a1
+/* 000108 0x80B60C80 00E02025 */ move	$a0, $a3
+/* 000109 0x80B60C84 0C0385ED */ jal	Collision_FiniTriGroup
+/* 000110 0x80B60C88 24C50144 */ addiu	$a1, $a2, 0X144
+/* 000111 0x80B60C8C 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000112 0x80B60C90 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000113 0x80B60C94 03E00008 */ jr	$ra
+/* 000114 0x80B60C98 00000000 */ nop
+

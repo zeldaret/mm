@@ -1,0 +1,11 @@
+glabel Collision_ResetSphereGroupElemForOT
+/* 060442 0x800E0B28 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 060443 0x800E0B2C AFBF0014 */ sw	$ra, 0X14($sp)
+/* 060444 0x800E0B30 0C038251 */ jal	Collision_ResetBodyForOT
+/* 060445 0x800E0B34 00000000 */ nop
+/* 060446 0x800E0B38 24020001 */ li	$v0, 0X1
+/* 060447 0x800E0B3C 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 060448 0x800E0B40 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 060449 0x800E0B44 03E00008 */ jr	$ra
+/* 060450 0x800E0B48 00000000 */ nop
+

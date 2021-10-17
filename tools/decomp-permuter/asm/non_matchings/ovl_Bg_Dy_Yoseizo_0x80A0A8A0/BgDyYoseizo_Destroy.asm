@@ -1,0 +1,6 @@
+glabel BgDyYoseizo_Destroy
+/* 000047 0x80A0A95C AFA40000 */ sw	$a0, 0X0($sp)
+/* 000048 0x80A0A960 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000049 0x80A0A964 03E00008 */ jr	$ra
+/* 000050 0x80A0A968 00000000 */ nop
+

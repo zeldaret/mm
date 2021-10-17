@@ -1,0 +1,14 @@
+glabel SkelAnime_LinkAnimetionLoaded
+/* 147551 0x80135C3C 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 147552 0x80135C40 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 147553 0x80135C44 AFA40018 */ sw	$a0, 0X18($sp)
+/* 147554 0x80135C48 00A03825 */ move	$a3, $a1
+/* 147555 0x80135C4C 24E40020 */ addiu	$a0, $a3, 0X20
+/* 147556 0x80135C50 00002825 */ move	$a1, $zero
+/* 147557 0x80135C54 0C021FB4 */ jal	osRecvMesg
+/* 147558 0x80135C58 24060001 */ li	$a2, 0X1
+/* 147559 0x80135C5C 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 147560 0x80135C60 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 147561 0x80135C64 03E00008 */ jr	$ra
+/* 147562 0x80135C68 00000000 */ nop
+

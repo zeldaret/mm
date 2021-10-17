@@ -1,0 +1,13 @@
+glabel EnKame_Destroy
+/* 000078 0x80AD6F08 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000079 0x80AD6F0C AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000080 0x80AD6F10 00803025 */ move	$a2, $a0
+/* 000081 0x80AD6F14 00A03825 */ move	$a3, $a1
+/* 000082 0x80AD6F18 00E02025 */ move	$a0, $a3
+/* 000083 0x80AD6F1C 0C03847B */ jal	Collision_FiniCylinder
+/* 000084 0x80AD6F20 24C50340 */ addiu	$a1, $a2, 0X340
+/* 000085 0x80AD6F24 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000086 0x80AD6F28 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000087 0x80AD6F2C 03E00008 */ jr	$ra
+/* 000088 0x80AD6F30 00000000 */ nop
+

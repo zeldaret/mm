@@ -1,0 +1,13 @@
+glabel ObjMilkBin_Destroy
+/* 000034 0x80C08EC8 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000035 0x80C08ECC AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000036 0x80C08ED0 00803025 */ move	$a2, $a0
+/* 000037 0x80C08ED4 00A03825 */ move	$a3, $a1
+/* 000038 0x80C08ED8 00E02025 */ move	$a0, $a3
+/* 000039 0x80C08EDC 0C03847B */ jal	Collision_FiniCylinder
+/* 000040 0x80C08EE0 24C50148 */ addiu	$a1, $a2, 0X148
+/* 000041 0x80C08EE4 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000042 0x80C08EE8 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000043 0x80C08EEC 03E00008 */ jr	$ra
+/* 000044 0x80C08EF0 00000000 */ nop
+

@@ -1,0 +1,13 @@
+glabel ObjFireshield_Destroy
+/* 000568 0x80A4D370 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000569 0x80A4D374 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000570 0x80A4D378 00803025 */ move	$a2, $a0
+/* 000571 0x80A4D37C 00A03825 */ move	$a3, $a1
+/* 000572 0x80A4D380 00E02025 */ move	$a0, $a3
+/* 000573 0x80A4D384 0C03847B */ jal	Collision_FiniCylinder
+/* 000574 0x80A4D388 24C50144 */ addiu	$a1, $a2, 0X144
+/* 000575 0x80A4D38C 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000576 0x80A4D390 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000577 0x80A4D394 03E00008 */ jr	$ra
+/* 000578 0x80A4D398 00000000 */ nop
+

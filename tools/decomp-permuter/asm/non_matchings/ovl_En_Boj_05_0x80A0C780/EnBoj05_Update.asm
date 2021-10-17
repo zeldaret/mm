@@ -1,0 +1,6 @@
+glabel EnBoj05_Update
+/* 000008 0x80A0C7A0 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000009 0x80A0C7A4 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000010 0x80A0C7A8 03E00008 */ jr	$ra
+/* 000011 0x80A0C7AC 00000000 */ nop
+

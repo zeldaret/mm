@@ -1,0 +1,5 @@
+glabel func_80A24DC4
+/* 001869 0x80A24DC4 A48002A2 */ sh	$zero, 0X2A2($a0)
+/* 001870 0x80A24DC8 03E00008 */ jr	$ra
+/* 001871 0x80A24DCC 00000000 */ nop
+

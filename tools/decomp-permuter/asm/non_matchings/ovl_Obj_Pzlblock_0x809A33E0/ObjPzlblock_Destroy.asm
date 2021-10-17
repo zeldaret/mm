@@ -1,0 +1,15 @@
+glabel ObjPzlblock_Destroy
+/* 000397 0x809A3A14 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000398 0x809A3A18 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000399 0x809A3A1C AFA40018 */ sw	$a0, 0X18($sp)
+/* 000400 0x809A3A20 00A03825 */ move	$a3, $a1
+/* 000401 0x809A3A24 8FAE0018 */ lw	$t6, 0X18($sp)
+/* 000402 0x809A3A28 00E02025 */ move	$a0, $a3
+/* 000403 0x809A3A2C 24E50880 */ addiu	$a1, $a3, 0X880
+/* 000404 0x809A3A30 0C031933 */ jal	BgCheck_RemoveActorMesh
+/* 000405 0x809A3A34 8DC60144 */ lw	$a2, 0X144($t6)
+/* 000406 0x809A3A38 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000407 0x809A3A3C 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000408 0x809A3A40 03E00008 */ jr	$ra
+/* 000409 0x809A3A44 00000000 */ nop
+

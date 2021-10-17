@@ -1,0 +1,7 @@
+glabel Collision_FiniTouch
+/* 060169 0x800E06E4 AFA40000 */ sw	$a0, 0X0($sp)
+/* 060170 0x800E06E8 AFA50004 */ sw	$a1, 0X4($sp)
+/* 060171 0x800E06EC 24020001 */ li	$v0, 0X1
+/* 060172 0x800E06F0 03E00008 */ jr	$ra
+/* 060173 0x800E06F4 00000000 */ nop
+

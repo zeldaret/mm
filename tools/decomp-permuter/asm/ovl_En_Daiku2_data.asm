@@ -1,0 +1,55 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel En_Daiku2_InitVars
+/* 001472 0x80BE78D0 */ .word	0x026A0400
+/* 001473 0x80BE78D4 */ .word	0x00000009
+/* 001474 0x80BE78D8 */ .word	0x00F10000
+/* 001475 0x80BE78DC */ .word	0x00000DC8
+/* 001476 0x80BE78E0 */ .word	EnDaiku2_Init
+/* 001477 0x80BE78E4 */ .word	EnDaiku2_Destroy
+/* 001478 0x80BE78E8 */ .word	EnDaiku2_Update
+/* 001479 0x80BE78EC */ .word	EnDaiku2_Draw
+glabel D_80BE78F0
+/* 001480 0x80BE78F0 */ .word	0x32CB32CC
+/* 001481 0x80BE78F4 */ .word	0x32CD32CE
+/* 001482 0x80BE78F8 */ .word	0x32CF32D0
+/* 001483 0x80BE78FC */ .word	0x32D132D2
+glabel D_80BE7900
+/* 001484 0x80BE7900 */ .word	0x0A000039
+/* 001485 0x80BE7904 */ .word	0x20010000
+/* 001486 0x80BE7908 */ .word	0x00000000
+/* 001487 0x80BE790C */ .word	0x00000000
+/* 001488 0x80BE7910 */ .word	0x00000000
+/* 001489 0x80BE7914 */ .word	0xF7CFFFFF
+/* 001490 0x80BE7918 */ .word	0x00000000
+/* 001491 0x80BE791C */ .word	0x00000100
+/* 001492 0x80BE7920 */ .word	0x0014003C
+/* 001493 0x80BE7924 */ .word	0x00000000
+/* 001494 0x80BE7928 */ .word	0x00000000
+glabel D_80BE792C
+/* 001495 0x80BE792C */ .word	0x06002FA0
+/* 001496 0x80BE7930 */ .word	0x0600ACD0
+/* 001497 0x80BE7934 */ .word	0x0600C92C
+/* 001498 0x80BE7938 */ .word	0x06000C44
+/* 001499 0x80BE793C */ .word	0x0600C234
+/* 001500 0x80BE7940 */ .word	0x06000600
+/* 001501 0x80BE7944 */ .word	0x06001114
+/* 001502 0x80BE7948 */ .word	0x0600B690
+/* 001503 0x80BE794C */ .word	0x06001A24
+/* 001504 0x80BE7950 */ .word	0x06002134
+/* 001505 0x80BE7954 */ .word	0x0600D328
+glabel D_80BE7958
+/* 001506 0x80BE7958 */ .word	0x00000000
+/* 001507 0x80BE795C */ .word	0x02000000
+/* 001508 0x80BE7960 */ .word	0x00020000
+/* 001509 0x80BE7964 */ .word	0x00000000
+/* 001510 0x80BE7968 */ .word	0x00000000
+/* 001511 0x80BE796C */ .word	0x00000000

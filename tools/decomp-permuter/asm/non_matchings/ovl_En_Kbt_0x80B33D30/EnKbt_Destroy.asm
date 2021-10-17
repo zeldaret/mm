@@ -1,0 +1,6 @@
+glabel EnKbt_Destroy
+/* 000073 0x80B33E54 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000074 0x80B33E58 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000075 0x80B33E5C 03E00008 */ jr	$ra
+/* 000076 0x80B33E60 00000000 */ nop
+

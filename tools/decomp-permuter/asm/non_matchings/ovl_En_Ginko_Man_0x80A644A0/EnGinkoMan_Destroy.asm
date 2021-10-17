@@ -1,0 +1,6 @@
+glabel EnGinkoMan_Destroy
+/* 000041 0x80A64544 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000042 0x80A64548 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000043 0x80A6454C 03E00008 */ jr	$ra
+/* 000044 0x80A64550 00000000 */ nop
+

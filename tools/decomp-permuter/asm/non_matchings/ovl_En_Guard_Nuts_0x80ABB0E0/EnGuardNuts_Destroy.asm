@@ -1,0 +1,13 @@
+glabel EnGuardNuts_Destroy
+/* 000065 0x80ABB1E4 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000066 0x80ABB1E8 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000067 0x80ABB1EC 00803025 */ move	$a2, $a0
+/* 000068 0x80ABB1F0 00A03825 */ move	$a3, $a1
+/* 000069 0x80ABB1F4 00E02025 */ move	$a0, $a3
+/* 000070 0x80ABB1F8 0C03847B */ jal	Collision_FiniCylinder
+/* 000071 0x80ABB1FC 24C50244 */ addiu	$a1, $a2, 0X244
+/* 000072 0x80ABB200 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000073 0x80ABB204 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000074 0x80ABB208 03E00008 */ jr	$ra
+/* 000075 0x80ABB20C 00000000 */ nop
+

@@ -1,0 +1,6 @@
+glabel EnEncount3_Destroy
+/* 000066 0x809AD048 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000067 0x809AD04C AFA50004 */ sw	$a1, 0X4($sp)
+/* 000068 0x809AD050 03E00008 */ jr	$ra
+/* 000069 0x809AD054 00000000 */ nop
+

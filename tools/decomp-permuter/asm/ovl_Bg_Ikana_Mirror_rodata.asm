@@ -1,0 +1,59 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .rodata
+
+glabel D_80B80230
+/* 000704 0x80B80230 */ .word	0x3B808081
+/* 000705 0x80B80234 */ .word	0x00000000
+/* 000706 0x80B80238 */ .word	0x00000000
+/* 000707 0x80B8023C */ .word	0x00000000
+glabel bgIkanaMirrorOverlayInfo
+/* 000708 0x80B80240 */ .word	0x00000800
+/* 000709 0x80B80244 */ .word	0x00000300
+glabel D_80B80248
+/* 000710 0x80B80248 */ .word	0x00000010
+/* 000711 0x80B8024C */ .word	0x00000000
+/* 000712 0x80B80250 */ .word	0x00000021
+glabel bgIkanaMirrorOverlayRelocations
+/* 000713 0x80B80254 */ .word	0x4500004C
+/* 000714 0x80B80258 */ .word	0x46000070
+/* 000715 0x80B8025C */ .word	0x45000054
+/* 000716 0x80B80260 */ .word	0x46000068
+/* 000717 0x80B80264 */ .word	0x45000058
+/* 000718 0x80B80268 */ .word	0x46000064
+/* 000719 0x80B8026C */ .word	0x4500005C
+/* 000720 0x80B80270 */ .word	0x46000060
+/* 000721 0x80B80274 */ .word	0x450000C8
+/* 000722 0x80B80278 */ .word	0x460000CC
+/* 000723 0x80B8027C */ .word	0x45000154
+/* 000724 0x80B80280 */ .word	0x46000158
+/* 000725 0x80B80284 */ .word	0x45000194
+/* 000726 0x80B80288 */ .word	0x46000198
+/* 000727 0x80B8028C */ .word	0x45000230
+/* 000728 0x80B80290 */ .word	0x4600023C
+/* 000729 0x80B80294 */ .word	0x45000234
+/* 000730 0x80B80298 */ .word	0x46000238
+/* 000731 0x80B8029C */ .word	0x44000270
+/* 000732 0x80B802A0 */ .word	0x44000298
+/* 000733 0x80B802A4 */ .word	0x45000354
+/* 000734 0x80B802A8 */ .word	0x46000358
+/* 000735 0x80B802AC */ .word	0x44000420
+/* 000736 0x80B802B0 */ .word	0x45000458
+/* 000737 0x80B802B4 */ .word	0x4600045C
+/* 000738 0x80B802B8 */ .word	0x44000560
+/* 000739 0x80B802BC */ .word	0x450006F0
+/* 000740 0x80B802C0 */ .word	0x460006F4
+/* 000741 0x80B802C4 */ .word	0x82000010
+/* 000742 0x80B802C8 */ .word	0x82000014
+/* 000743 0x80B802CC */ .word	0x82000018
+/* 000744 0x80B802D0 */ .word	0x8200001C
+/* 000745 0x80B802D4 */ .word	0x82000248
+/* 000746 0x80B802D8 */ .word	0x00000000
+glabel bgIkanaMirrorOverlayInfoOffset
+/* 000747 0x80B802DC */ .word	0x000000A0

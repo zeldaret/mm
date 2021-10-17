@@ -1,0 +1,13 @@
+glabel BgSpoutFire_Destroy
+/* 000054 0x80A60BF8 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000055 0x80A60BFC AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000056 0x80A60C00 00803025 */ move	$a2, $a0
+/* 000057 0x80A60C04 00A03825 */ move	$a3, $a1
+/* 000058 0x80A60C08 00E02025 */ move	$a0, $a3
+/* 000059 0x80A60C0C 0C03847B */ jal	Collision_FiniCylinder
+/* 000060 0x80A60C10 24C5014C */ addiu	$a1, $a2, 0X14C
+/* 000061 0x80A60C14 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000062 0x80A60C18 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000063 0x80A60C1C 03E00008 */ jr	$ra
+/* 000064 0x80A60C20 00000000 */ nop
+

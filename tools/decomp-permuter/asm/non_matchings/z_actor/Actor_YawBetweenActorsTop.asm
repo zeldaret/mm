@@ -1,0 +1,13 @@
+glabel Actor_YawBetweenActorsTop
+/* 017552 0x800B6D00 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 017553 0x800B6D04 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 017554 0x800B6D08 00803025 */ move	$a2, $a0
+/* 017555 0x800B6D0C 00A03825 */ move	$a3, $a1
+/* 017556 0x800B6D10 24C4003C */ addiu	$a0, $a2, 0X3C
+/* 017557 0x800B6D14 0C03FE98 */ jal	Math_Vec3f_Yaw
+/* 017558 0x800B6D18 24E5003C */ addiu	$a1, $a3, 0X3C
+/* 017559 0x800B6D1C 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 017560 0x800B6D20 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 017561 0x800B6D24 03E00008 */ jr	$ra
+/* 017562 0x800B6D28 00000000 */ nop
+

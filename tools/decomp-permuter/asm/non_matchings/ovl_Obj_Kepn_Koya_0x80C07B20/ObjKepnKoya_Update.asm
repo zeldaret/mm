@@ -1,0 +1,6 @@
+glabel ObjKepnKoya_Update
+/* 000045 0x80C07BD4 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000046 0x80C07BD8 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000047 0x80C07BDC 03E00008 */ jr	$ra
+/* 000048 0x80C07BE0 00000000 */ nop
+

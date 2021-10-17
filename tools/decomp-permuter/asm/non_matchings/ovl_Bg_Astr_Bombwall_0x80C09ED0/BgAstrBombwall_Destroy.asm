@@ -1,0 +1,15 @@
+glabel BgAstrBombwall_Destroy
+/* 000135 0x80C0A0EC 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000136 0x80C0A0F0 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000137 0x80C0A0F4 AFA40018 */ sw	$a0, 0X18($sp)
+/* 000138 0x80C0A0F8 00A03825 */ move	$a3, $a1
+/* 000139 0x80C0A0FC 8FAE0018 */ lw	$t6, 0X18($sp)
+/* 000140 0x80C0A100 00E02025 */ move	$a0, $a3
+/* 000141 0x80C0A104 24E50880 */ addiu	$a1, $a3, 0X880
+/* 000142 0x80C0A108 0C031933 */ jal	BgCheck_RemoveActorMesh
+/* 000143 0x80C0A10C 8DC60144 */ lw	$a2, 0X144($t6)
+/* 000144 0x80C0A110 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000145 0x80C0A114 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000146 0x80C0A118 03E00008 */ jr	$ra
+/* 000147 0x80C0A11C 00000000 */ nop
+

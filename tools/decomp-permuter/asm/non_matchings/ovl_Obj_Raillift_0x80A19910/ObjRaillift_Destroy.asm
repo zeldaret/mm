@@ -1,0 +1,15 @@
+glabel ObjRaillift_Destroy
+/* 000149 0x80A19B64 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000150 0x80A19B68 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000151 0x80A19B6C AFA40018 */ sw	$a0, 0X18($sp)
+/* 000152 0x80A19B70 00A03825 */ move	$a3, $a1
+/* 000153 0x80A19B74 8FAE0018 */ lw	$t6, 0X18($sp)
+/* 000154 0x80A19B78 00E02025 */ move	$a0, $a3
+/* 000155 0x80A19B7C 24E50880 */ addiu	$a1, $a3, 0X880
+/* 000156 0x80A19B80 0C031933 */ jal	BgCheck_RemoveActorMesh
+/* 000157 0x80A19B84 8DC60144 */ lw	$a2, 0X144($t6)
+/* 000158 0x80A19B88 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000159 0x80A19B8C 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000160 0x80A19B90 03E00008 */ jr	$ra
+/* 000161 0x80A19B94 00000000 */ nop
+

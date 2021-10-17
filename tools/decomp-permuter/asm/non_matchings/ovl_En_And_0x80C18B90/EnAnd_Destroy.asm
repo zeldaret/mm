@@ -1,0 +1,6 @@
+glabel EnAnd_Destroy
+/* 000189 0x80C18E84 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000190 0x80C18E88 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000191 0x80C18E8C 03E00008 */ jr	$ra
+/* 000192 0x80C18E90 00000000 */ nop
+

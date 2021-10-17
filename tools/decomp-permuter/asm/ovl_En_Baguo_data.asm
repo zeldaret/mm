@@ -1,0 +1,57 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel En_Baguo_InitVars
+/* 001172 0x80A3C2D0 */ .word	0x01550500
+/* 001173 0x80A3C2D4 */ .word	0x00000005
+/* 001174 0x80A3C2D8 */ .word	0x01710000
+/* 001175 0x80A3C2DC */ .word	0x000008CC
+/* 001176 0x80A3C2E0 */ .word	EnBaguo_Init
+/* 001177 0x80A3C2E4 */ .word	EnBaguo_Destroy
+/* 001178 0x80A3C2E8 */ .word	EnBaguo_Update
+/* 001179 0x80A3C2EC */ .word	0x00000000
+glabel D_80A3C2F0
+/* 001180 0x80A3C2F0 */ .word	0x00000000
+/* 001181 0x80A3C2F4 */ .word	0xF7CFFFFF
+/* 001182 0x80A3C2F8 */ .word	0x04040000
+/* 001183 0x80A3C2FC */ .word	0xF7CFFFFF
+/* 001184 0x80A3C300 */ .word	0x00000000
+/* 001185 0x80A3C304 */ .word	0x01010100
+/* 001186 0x80A3C308 */ .word	0x01000000
+/* 001187 0x80A3C30C */ .word	0x00000000
+/* 001188 0x80A3C310 */ .word	0x00000001
+glabel D_80A3C314
+/* 001189 0x80A3C314 */ .word	0x0C110939
+/* 001190 0x80A3C318 */ .word	0x10000000
+/* 001191 0x80A3C31C */ .word	0x00000001
+/* 001192 0x80A3C320 */ .word	D_80A3C2F0
+glabel D_80A3C324
+/* 001193 0x80A3C324 */ .word	0xF0F000E1
+/* 001194 0x80A3C328 */ .word	0xE3F000E3
+/* 001195 0x80A3C32C */ .word	0xE2E1E1F0
+/* 001196 0x80A3C330 */ .word	0xF0E1E2F0
+/* 001197 0x80A3C334 */ .word	0xF0E1F000
+/* 001198 0x80A3C338 */ .word	0x000000E1
+/* 001199 0x80A3C33C */ .word	0xE1000000
+/* 001200 0x80A3C340 */ .word	0x000000E1
+glabel D_80A3C344
+/* 001201 0x80A3C344 */ .word	0x00000000
+/* 001202 0x80A3C348 */ .word	0x00000000
+/* 001203 0x80A3C34C */ .word	0x00000000
+glabel D_80A3C350
+/* 001204 0x80A3C350 */ .word	0x00000000
+/* 001205 0x80A3C354 */ .word	0x00000000
+/* 001206 0x80A3C358 */ .word	0x00000000
+glabel D_80A3C35C
+/* 001207 0x80A3C35C */ .word	0x060014C8
+/* 001208 0x80A3C360 */ .word	0x060018C8
+/* 001209 0x80A3C364 */ .word	0x06001CC8
+/* 001210 0x80A3C368 */ .word	0x00000000
+/* 001211 0x80A3C36C */ .word	0x00000000

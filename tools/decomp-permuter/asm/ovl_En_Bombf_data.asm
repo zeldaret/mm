@@ -1,0 +1,67 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel En_Bombf_InitVars
+/* 001168 0x808AFB00 */ .word	0x002F0600
+/* 001169 0x808AFB04 */ .word	0x00000011
+/* 001170 0x808AFB08 */ .word	0x002A0000
+/* 001171 0x808AFB0C */ .word	0x00000208
+/* 001172 0x808AFB10 */ .word	EnBombf_Init
+/* 001173 0x808AFB14 */ .word	EnBombf_Destroy
+/* 001174 0x808AFB18 */ .word	EnBombf_Update
+/* 001175 0x808AFB1C */ .word	EnBombf_Draw
+glabel D_808AFB20
+/* 001176 0x808AFB20 */ .word	0x0A002939
+/* 001177 0x808AFB24 */ .word	0x20010000
+/* 001178 0x808AFB28 */ .word	0x02000000
+/* 001179 0x808AFB2C */ .word	0x00000000
+/* 001180 0x808AFB30 */ .word	0x00000000
+/* 001181 0x808AFB34 */ .word	0x00013A28
+/* 001182 0x808AFB38 */ .word	0x00000000
+/* 001183 0x808AFB3C */ .word	0x00010100
+/* 001184 0x808AFB40 */ .word	0x00090012
+/* 001185 0x808AFB44 */ .word	0x000A0000
+/* 001186 0x808AFB48 */ .word	0x00000000
+glabel D_808AFB4C
+/* 001187 0x808AFB4C */ .word	0x00000000
+/* 001188 0x808AFB50 */ .word	0x00000008
+/* 001189 0x808AFB54 */ .word	0x00080000
+/* 001190 0x808AFB58 */ .word	0x00000000
+/* 001191 0x808AFB5C */ .word	0x00000000
+/* 001192 0x808AFB60 */ .word	0x19000000
+/* 001193 0x808AFB64 */ .word	0x00000000
+/* 001194 0x808AFB68 */ .word	0x00000000
+/* 001195 0x808AFB6C */ .word	0x00000064
+glabel D_808AFB70
+/* 001196 0x808AFB70 */ .word	0x0A390000
+/* 001197 0x808AFB74 */ .word	0x00000000
+/* 001198 0x808AFB78 */ .word	0x00000001
+/* 001199 0x808AFB7C */ .word	D_808AFB4C
+glabel D_808AFB80
+/* 001200 0x808AFB80 */ .word	0x00000000
+/* 001201 0x808AFB84 */ .word	0x00000000
+/* 001202 0x808AFB88 */ .word	0x00000000
+glabel D_808AFB8C
+/* 001203 0x808AFB8C */ .word	0x00000000
+/* 001204 0x808AFB90 */ .word	0x3DCCCCCD
+/* 001205 0x808AFB94 */ .word	0x00000000
+glabel D_808AFB98
+/* 001206 0x808AFB98 */ .word	0x00000000
+/* 001207 0x808AFB9C */ .word	0x00000000
+/* 001208 0x808AFBA0 */ .word	0x00000000
+glabel D_808AFBA4
+/* 001209 0x808AFBA4 */ .word	0x00000000
+/* 001210 0x808AFBA8 */ .word	0x3F19999A
+/* 001211 0x808AFBAC */ .word	0x00000000
+glabel D_808AFBB0
+/* 001212 0x808AFBB0 */ .word	0xFFFFFFFF
+/* 001213 0x808AFBB4 */ .word	0x00000000
+/* 001214 0x808AFBB8 */ .word	0x00000000
+/* 001215 0x808AFBBC */ .word	0x00000000

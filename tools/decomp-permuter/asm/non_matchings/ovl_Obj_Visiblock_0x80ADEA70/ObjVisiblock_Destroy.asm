@@ -1,0 +1,15 @@
+glabel ObjVisiblock_Destroy
+/* 000020 0x80ADEAC0 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000021 0x80ADEAC4 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000022 0x80ADEAC8 AFA40018 */ sw	$a0, 0X18($sp)
+/* 000023 0x80ADEACC 00A03825 */ move	$a3, $a1
+/* 000024 0x80ADEAD0 8FAE0018 */ lw	$t6, 0X18($sp)
+/* 000025 0x80ADEAD4 00E02025 */ move	$a0, $a3
+/* 000026 0x80ADEAD8 24E50880 */ addiu	$a1, $a3, 0X880
+/* 000027 0x80ADEADC 0C031933 */ jal	BgCheck_RemoveActorMesh
+/* 000028 0x80ADEAE0 8DC60144 */ lw	$a2, 0X144($t6)
+/* 000029 0x80ADEAE4 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000030 0x80ADEAE8 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000031 0x80ADEAEC 03E00008 */ jr	$ra
+/* 000032 0x80ADEAF0 00000000 */ nop
+

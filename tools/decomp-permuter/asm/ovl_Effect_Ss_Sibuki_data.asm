@@ -1,0 +1,65 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel D_8097C080
+/* 000364 0x8097C080 */ .word	0x00000011
+/* 000365 0x8097C084 */ .word	func_8097BAD0
+/* 000366 0x8097C088 */ .word	0x00000000
+/* 000367 0x8097C08C */ .word	0x00000000
+glabel D_8097C090
+/* 000368 0x8097C090 */ .word	0x3C23D70A
+glabel D_8097C094
+/* 000369 0x8097C094 */ .word	0x3C23D70A
+glabel D_8097C098
+/* 000370 0x8097C098 */ .word	0x3DCCCCCD
+/* 000371 0x8097C09C */ .word	0x3C23D70A
+/* 000372 0x8097C0A0 */ .word	0x3C23D70A
+glabel D_8097C0A4
+/* 000373 0x8097C0A4 */ .word	0x3C23D70A
+glabel D_8097C0A8
+/* 000374 0x8097C0A8 */ .word	0x3DCCCCCD
+glabel D_8097C0AC
+/* 000375 0x8097C0AC */ .word	0x3C23D70A
+glabel D_8097C0B0
+/* 000376 0x8097C0B0 */ .word	0x3DCCCCCD
+/* 000377 0x8097C0B4 */ .word	0x00000000
+/* 000378 0x8097C0B8 */ .word	0x00000000
+/* 000379 0x8097C0BC */ .word	0x00000000
+glabel effectSsSibukiOverlayInfo
+/* 000380 0x8097C0C0 */ .word	0x000005B0
+/* 000381 0x8097C0C4 */ .word	0x00000010
+/* 000382 0x8097C0C8 */ .word	0x00000030
+/* 000383 0x8097C0CC */ .word	0x00000000
+/* 000384 0x8097C0D0 */ .word	0x00000013
+glabel effectSsSibukiOverlayRelocations
+/* 000385 0x8097C0D4 */ .word	0x450000CC
+/* 000386 0x8097C0D8 */ .word	0x460000D0
+/* 000387 0x8097C0DC */ .word	0x450000E8
+/* 000388 0x8097C0E0 */ .word	0x460000F0
+/* 000389 0x8097C0E4 */ .word	0x450000EC
+/* 000390 0x8097C0E8 */ .word	0x460000F4
+/* 000391 0x8097C0EC */ .word	0x45000370
+/* 000392 0x8097C0F0 */ .word	0x46000374
+/* 000393 0x8097C0F4 */ .word	0x4500038C
+/* 000394 0x8097C0F8 */ .word	0x46000394
+/* 000395 0x8097C0FC */ .word	0x4500041C
+/* 000396 0x8097C100 */ .word	0x46000420
+/* 000397 0x8097C104 */ .word	0x45000438
+/* 000398 0x8097C108 */ .word	0x46000440
+/* 000399 0x8097C10C */ .word	0x45000480
+/* 000400 0x8097C110 */ .word	0x46000484
+/* 000401 0x8097C114 */ .word	0x45000490
+/* 000402 0x8097C118 */ .word	0x46000498
+/* 000403 0x8097C11C */ .word	0x82000004
+/* 000404 0x8097C120 */ .word	0x00000000
+/* 000405 0x8097C124 */ .word	0x00000000
+/* 000406 0x8097C128 */ .word	0x00000000
+glabel effectSsSibukiOverlayInfoOffset
+/* 000407 0x8097C12C */ .word	0x00000070

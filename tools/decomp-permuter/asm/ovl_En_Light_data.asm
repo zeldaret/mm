@@ -1,0 +1,56 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel En_Light_InitVars
+/* 000840 0x808666B0 */ .word	0x00040700
+/* 000841 0x808666B4 */ .word	0x00000000
+/* 000842 0x808666B8 */ .word	0x00010000
+/* 000843 0x808666BC */ .word	0x0000015C
+/* 000844 0x808666C0 */ .word	EnLight_Init
+/* 000845 0x808666C4 */ .word	EnLight_Destroy
+/* 000846 0x808666C8 */ .word	EnLight_Update
+/* 000847 0x808666CC */ .word	EnLight_Draw
+glabel D_808666D0
+/* 000848 0x808666D0 */ .word	0xFFC800FF
+/* 000849 0x808666D4 */ .short	0xFF00
+glabel D_808666D6
+/* 000849 0x808666D4 */ .byte	0x00
+glabel D_808666D7
+/* 000849 0x808666D4 */ .byte	0x4B
+/* 000850 0x808666D8 */ .word	0xFFEBAFFF
+/* 000851 0x808666DC */ .word	0xFF00004B
+/* 000852 0x808666E0 */ .word	0x00AAFFFF
+/* 000853 0x808666E4 */ .word	0x0000FF4B
+/* 000854 0x808666E8 */ .word	0xAAFF00FF
+/* 000855 0x808666EC */ .word	0x0096004B
+/* 000856 0x808666F0 */ .word	0xFFC800FF
+/* 000857 0x808666F4 */ .word	0xFF000028
+/* 000858 0x808666F8 */ .word	0xFFC800FF
+/* 000859 0x808666FC */ .word	0xFF00004B
+/* 000860 0x80866700 */ .word	0xAAFF00FF
+/* 000861 0x80866704 */ .word	0x0096004B
+/* 000862 0x80866708 */ .word	0x00AAFFFF
+/* 000863 0x8086670C */ .word	0x0000FF4B
+/* 000864 0x80866710 */ .word	0xFF00AAFF
+/* 000865 0x80866714 */ .word	0xC800004B
+/* 000866 0x80866718 */ .word	0xFFFFAAFF
+/* 000867 0x8086671C */ .word	0xFF32004B
+/* 000868 0x80866720 */ .word	0xFFFFAAFF
+/* 000869 0x80866724 */ .word	0xFFFF004B
+/* 000870 0x80866728 */ .word	0xFFFFAAFF
+/* 000871 0x8086672C */ .word	0x64FF004B
+/* 000872 0x80866730 */ .word	0xFFAAFFFF
+/* 000873 0x80866734 */ .word	0xFF00644B
+/* 000874 0x80866738 */ .word	0xFFAAFFFF
+/* 000875 0x8086673C */ .word	0x6400FF4B
+/* 000876 0x80866740 */ .word	0xAAFFFFFF
+/* 000877 0x80866744 */ .word	0x0000FF4B
+/* 000878 0x80866748 */ .word	0xAAFFFFFF
+/* 000879 0x8086674C */ .word	0x0096FF4B

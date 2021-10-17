@@ -1,0 +1,6 @@
+glabel EnClearTag_Destroy
+/* 000789 0x80948BB4 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000790 0x80948BB8 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000791 0x80948BBC 03E00008 */ jr	$ra
+/* 000792 0x80948BC0 00000000 */ nop
+

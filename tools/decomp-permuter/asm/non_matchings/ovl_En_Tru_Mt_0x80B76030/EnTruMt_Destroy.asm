@@ -1,0 +1,13 @@
+glabel EnTruMt_Destroy
+/* 000891 0x80B76E1C 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000892 0x80B76E20 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000893 0x80B76E24 00803025 */ move	$a2, $a0
+/* 000894 0x80B76E28 00A03825 */ move	$a3, $a1
+/* 000895 0x80B76E2C 00E02025 */ move	$a0, $a3
+/* 000896 0x80B76E30 0C038869 */ jal	Collision_FiniSphere
+/* 000897 0x80B76E34 24C5018C */ addiu	$a1, $a2, 0X18C
+/* 000898 0x80B76E38 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000899 0x80B76E3C 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000900 0x80B76E40 03E00008 */ jr	$ra
+/* 000901 0x80B76E44 00000000 */ nop
+

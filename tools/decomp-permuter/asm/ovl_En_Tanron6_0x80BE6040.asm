@@ -1,0 +1,88 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+
+glabel EnTanron6_Init
+/* 000000 0x80BE6040 27BDFFE0 */ addiu	$sp, $sp, -0X20
+/* 000001 0x80BE6044 AFB00018 */ sw	$s0, 0X18($sp)
+/* 000002 0x80BE6048 00808025 */ move	$s0, $a0
+/* 000003 0x80BE604C AFBF001C */ sw	$ra, 0X1C($sp)
+/* 000004 0x80BE6050 AFA50024 */ sw	$a1, 0X24($sp)
+/* 000005 0x80BE6054 240E000A */ li	$t6, 0XA
+/* 000006 0x80BE6058 3C06800B */ lui	$a2, %hi(func_800B3FC0)
+/* 000007 0x80BE605C A20E00B6 */ sb	$t6, 0XB6($s0)
+/* 000008 0x80BE6060 24C63FC0 */ addiu	$a2, $a2, %lo(func_800B3FC0)
+/* 000009 0x80BE6064 260400BC */ addiu	$a0, $s0, 0XBC
+/* 000010 0x80BE6068 24050000 */ li	$a1, 0X0
+/* 000011 0x80BE606C 0C02CEE9 */ jal	Actor_SetDrawParams
+/* 000012 0x80BE6070 3C074198 */ lui	$a3, 0x4198
+/* 000013 0x80BE6074 3C1880BE */ lui	$t8, %hi(D_80BE6170)
+/* 000014 0x80BE6078 240F0001 */ li	$t7, 0X1
+/* 000015 0x80BE607C 27186170 */ addiu	$t8, $t8, %lo(D_80BE6170)
+/* 000016 0x80BE6080 24190006 */ li	$t9, 0X6
+/* 000017 0x80BE6084 A20F00B7 */ sb	$t7, 0XB7($s0)
+/* 000018 0x80BE6088 AE1800A0 */ sw	$t8, 0XA0($s0)
+/* 000019 0x80BE608C A219001F */ sb	$t9, 0X1F($s0)
+/* 000020 0x80BE6090 0C2F982F */ jal	EnTanron6_DoNothing
+/* 000021 0x80BE6094 02002025 */ move	$a0, $s0
+/* 000022 0x80BE6098 8FBF001C */ lw	$ra, 0X1C($sp)
+/* 000023 0x80BE609C 8FB00018 */ lw	$s0, 0X18($sp)
+/* 000024 0x80BE60A0 27BD0020 */ addiu	$sp, $sp, 0X20
+/* 000025 0x80BE60A4 03E00008 */ jr	$ra
+/* 000026 0x80BE60A8 00000000 */ nop
+
+glabel EnTanron6_Destroy
+/* 000027 0x80BE60AC AFA40000 */ sw	$a0, 0X0($sp)
+/* 000028 0x80BE60B0 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000029 0x80BE60B4 03E00008 */ jr	$ra
+/* 000030 0x80BE60B8 00000000 */ nop
+
+glabel EnTanron6_DoNothing
+/* 000031 0x80BE60BC 3C0E80BE */ lui	$t6, %hi(func_80BE60D0)
+/* 000032 0x80BE60C0 25CE60D0 */ addiu	$t6, $t6, %lo(func_80BE60D0)
+/* 000033 0x80BE60C4 AC8E0200 */ sw	$t6, 0X200($a0)
+/* 000034 0x80BE60C8 03E00008 */ jr	$ra
+/* 000035 0x80BE60CC 00000000 */ nop
+
+glabel func_80BE60D0
+/* 000036 0x80BE60D0 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000037 0x80BE60D4 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000038 0x80BE60D8 03E00008 */ jr	$ra
+/* 000039 0x80BE60DC 00000000 */ nop
+
+glabel EnTanron6_Update
+/* 000040 0x80BE60E0 27BDFFE0 */ addiu	$sp, $sp, -0X20
+/* 000041 0x80BE60E4 AFBF001C */ sw	$ra, 0X1C($sp)
+/* 000042 0x80BE60E8 AFA50024 */ sw	$a1, 0X24($sp)
+/* 000043 0x80BE60EC AFA40020 */ sw	$a0, 0X20($sp)
+/* 000044 0x80BE60F0 8C990200 */ lw	$t9, 0X200($a0)
+/* 000045 0x80BE60F4 8FA50024 */ lw	$a1, 0X24($sp)
+/* 000046 0x80BE60F8 0320F809 */ jalr	$t9
+/* 000047 0x80BE60FC 00000000 */ nop
+/* 000048 0x80BE6100 0C02DAA2 */ jal	Actor_SetVelocityAndMoveYRotationAndGravity
+/* 000049 0x80BE6104 8FA40020 */ lw	$a0, 0X20($sp)
+/* 000050 0x80BE6108 3C014220 */ lui	$at, 0x4220
+/* 000051 0x80BE610C 44810000 */ mtc1	$at, $f0
+/* 000052 0x80BE6110 240E001D */ li	$t6, 0X1D
+/* 000053 0x80BE6114 AFAE0014 */ sw	$t6, 0X14($sp)
+/* 000054 0x80BE6118 44070000 */ mfc1	$a3, $f0
+/* 000055 0x80BE611C 8FA40024 */ lw	$a0, 0X24($sp)
+/* 000056 0x80BE6120 8FA50020 */ lw	$a1, 0X20($sp)
+/* 000057 0x80BE6124 3C064120 */ lui	$a2, 0x4120
+/* 000058 0x80BE6128 0C02DE2E */ jal	func_800B78B8
+/* 000059 0x80BE612C E7A00010 */ swc1	$f0, 0X10($sp)
+/* 000060 0x80BE6130 8FBF001C */ lw	$ra, 0X1C($sp)
+/* 000061 0x80BE6134 27BD0020 */ addiu	$sp, $sp, 0X20
+/* 000062 0x80BE6138 03E00008 */ jr	$ra
+/* 000063 0x80BE613C 00000000 */ nop
+
+glabel EnTanron6_Draw
+/* 000064 0x80BE6140 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000065 0x80BE6144 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000066 0x80BE6148 03E00008 */ jr	$ra
+/* 000067 0x80BE614C 00000000 */ nop

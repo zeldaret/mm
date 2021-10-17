@@ -1,0 +1,22 @@
+glabel FaultDrawer_SetBackColor
+/* 004266 0x80084308 3C0FFFFA */ lui	$t7, 0xFFFA
+/* 004267 0x8008430C 03A0C025 */ move	$t8, $sp
+/* 004268 0x80084310 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 004269 0x80084314 35EF5A5A */ ori	$t7, $t7, 0X5A5A
+.L80084318:
+/* 004270 0x80084318 2718FFF8 */ addiu	$t8, $t8, -0X8
+/* 004271 0x8008431C AF0F0000 */ sw	$t7, 0X0($t8)
+/* 004272 0x80084320 171DFFFD */ bne	$t8, $sp, .L80084318
+/* 004273 0x80084324 AF0F0004 */ sw	$t7, 0X4($t8)
+/* 004274 0x80084328 AFA40018 */ sw	$a0, 0X18($sp)
+/* 004275 0x8008432C 3084FFFF */ andi	$a0, $a0, 0XFFFF
+/* 004276 0x80084330 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 004277 0x80084334 3C0E8009 */ lui	$t6, %hi(sFaultDrawContext)
+/* 004278 0x80084338 8DCE6BE0 */ lw	$t6, %lo(sFaultDrawContext)($t6)
+/* 004279 0x8008433C 0C021084 */ jal	FaultDrawer_UpdatePrintColor
+/* 004280 0x80084340 A5C40012 */ sh	$a0, 0X12($t6)
+/* 004281 0x80084344 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 004282 0x80084348 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 004283 0x8008434C 03E00008 */ jr	$ra
+/* 004284 0x80084350 00000000 */ nop
+

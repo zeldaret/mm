@@ -1,0 +1,6 @@
+glabel EnHs2_DoNothing
+/* 000019 0x8098EFAC AFA40000 */ sw	$a0, 0X0($sp)
+/* 000020 0x8098EFB0 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000021 0x8098EFB4 03E00008 */ jr	$ra
+/* 000022 0x8098EFB8 00000000 */ nop
+

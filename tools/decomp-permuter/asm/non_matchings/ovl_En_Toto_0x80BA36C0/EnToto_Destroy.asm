@@ -1,0 +1,13 @@
+glabel EnToto_Destroy
+/* 000084 0x80BA3810 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000085 0x80BA3814 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000086 0x80BA3818 00803025 */ move	$a2, $a0
+/* 000087 0x80BA381C 00A03825 */ move	$a3, $a1
+/* 000088 0x80BA3820 00E02025 */ move	$a0, $a3
+/* 000089 0x80BA3824 0C03847B */ jal	Collision_FiniCylinder
+/* 000090 0x80BA3828 24C50264 */ addiu	$a1, $a2, 0X264
+/* 000091 0x80BA382C 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000092 0x80BA3830 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000093 0x80BA3834 03E00008 */ jr	$ra
+/* 000094 0x80BA3838 00000000 */ nop
+

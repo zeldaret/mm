@@ -1,0 +1,25 @@
+glabel Fault_AddHungupAndCrashImpl
+/* 003941 0x80083DF4 3C0FFFFA */ lui	$t7, 0xFFFA
+/* 003942 0x80083DF8 03A0C025 */ move	$t8, $sp
+/* 003943 0x80083DFC 27BDFFD0 */ addiu	$sp, $sp, -0X30
+/* 003944 0x80083E00 35EF5A5A */ ori	$t7, $t7, 0X5A5A
+.L80083E04:
+/* 003945 0x80083E04 2718FFF8 */ addiu	$t8, $t8, -0X8
+/* 003946 0x80083E08 AF0F0000 */ sw	$t7, 0X0($t8)
+/* 003947 0x80083E0C 171DFFFD */ bne	$t8, $sp, .L80083E04
+/* 003948 0x80083E10 AF0F0004 */ sw	$t7, 0X4($t8)
+/* 003949 0x80083E14 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 003950 0x80083E18 00803025 */ move	$a2, $a0
+/* 003951 0x80083E1C 00A03825 */ move	$a3, $a1
+/* 003952 0x80083E20 3C058008 */ lui	$a1, %hi(Fault_HangupFaultClient)
+/* 003953 0x80083E24 24A53CF8 */ addiu	$a1, $a1, %lo(Fault_HangupFaultClient)
+/* 003954 0x80083E28 0C02067C */ jal	Fault_AddClient
+/* 003955 0x80083E2C 27A40020 */ addiu	$a0, $sp, 0X20
+/* 003956 0x80083E30 3C0E1111 */ lui	$t6, 0x1111
+/* 003957 0x80083E34 A9C01111 */ swl	$zero, 0X1111($t6)
+/* 003958 0x80083E38 B9C01114 */ swr	$zero, 0X1114($t6)
+/* 003959 0x80083E3C 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 003960 0x80083E40 27BD0030 */ addiu	$sp, $sp, 0X30
+/* 003961 0x80083E44 03E00008 */ jr	$ra
+/* 003962 0x80083E48 00000000 */ nop
+

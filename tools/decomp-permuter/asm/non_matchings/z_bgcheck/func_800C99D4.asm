@@ -1,0 +1,12 @@
+glabel func_800C99D4
+/* 036805 0x800C99D4 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 036806 0x800C99D8 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 036807 0x800C99DC 0C0325A5 */ jal	BgCheck_GetPolygonAttributes
+/* 036808 0x800C99E0 00003825 */ move	$a3, $zero
+/* 036809 0x800C99E4 00021342 */ srl	$v0, $v0, 13
+/* 036810 0x800C99E8 3042001F */ andi	$v0, $v0, 0X1F
+/* 036811 0x800C99EC 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 036812 0x800C99F0 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 036813 0x800C99F4 03E00008 */ jr	$ra
+/* 036814 0x800C99F8 00000000 */ nop
+

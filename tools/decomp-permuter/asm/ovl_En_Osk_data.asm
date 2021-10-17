@@ -1,0 +1,60 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel En_Osk_InitVars
+/* 001240 0x80BF6F80 */ .word	0x02780400
+/* 001241 0x80BF6F84 */ .word	0x00000009
+/* 001242 0x80BF6F88 */ .word	0x02490000
+/* 001243 0x80BF6F8C */ .word	0x00000264
+/* 001244 0x80BF6F90 */ .word	EnOsk_Init
+/* 001245 0x80BF6F94 */ .word	EnOsk_Destroy
+/* 001246 0x80BF6F98 */ .word	EnOsk_Update
+/* 001247 0x80BF6F9C */ .word	EnOsk_Draw
+glabel D_80BF6FA0
+/* 001248 0x80BF6FA0 */ .word	0x06003CAC
+/* 001249 0x80BF6FA4 */ .word	0x06004208
+/* 001250 0x80BF6FA8 */ .word	0x06004514
+/* 001251 0x80BF6FAC */ .word	0x06004A58
+/* 001252 0x80BF6FB0 */ .word	0x060065D8
+glabel D_80BF6FB4
+/* 001253 0x80BF6FB4 */ .word	0x060067B8
+/* 001254 0x80BF6FB8 */ .word	0x060083F4
+/* 001255 0x80BF6FBC */ .word	0x060081A8
+/* 001256 0x80BF6FC0 */ .word	0x06008AF4
+/* 001257 0x80BF6FC4 */ .word	0x06008724
+/* 001258 0x80BF6FC8 */ .word	0x06008F1C
+/* 001259 0x80BF6FCC */ .word	0x06008CEC
+/* 001260 0x80BF6FD0 */ .word	0x06009254
+/* 001261 0x80BF6FD4 */ .word	0x06009044
+/* 001262 0x80BF6FD8 */ .word	0x060098E4
+/* 001263 0x80BF6FDC */ .word	0x06009CC8
+/* 001264 0x80BF6FE0 */ .word	0x06009A44
+glabel D_80BF6FE4
+/* 001265 0x80BF6FE4 */ .word	0x06009EA8
+/* 001266 0x80BF6FE8 */ .word	0x0600B8C0
+/* 001267 0x80BF6FEC */ .word	0x0600B704
+/* 001268 0x80BF6FF0 */ .word	0x0600BDB4
+/* 001269 0x80BF6FF4 */ .word	0x0600B9E4
+/* 001270 0x80BF6FF8 */ .word	0x0600C154
+/* 001271 0x80BF6FFC */ .word	0x0600BF04
+/* 001272 0x80BF7000 */ .word	0x0600CA74
+/* 001273 0x80BF7004 */ .word	0x0600C804
+/* 001274 0x80BF7008 */ .word	0x0600D044
+/* 001275 0x80BF700C */ .word	0x0600CD28
+/* 001276 0x80BF7010 */ .word	0x0600C59C
+/* 001277 0x80BF7014 */ .word	0x0600C2C4
+glabel D_80BF7018
+/* 001278 0x80BF7018 */ .word	0x00000000
+/* 001279 0x80BF701C */ .word	0x3F000000
+/* 001280 0x80BF7020 */ .word	0x00000000
+glabel D_80BF7024
+/* 001281 0x80BF7024 */ .word	0x00000000
+/* 001282 0x80BF7028 */ .word	0x00000000
+/* 001283 0x80BF702C */ .word	0x00000000

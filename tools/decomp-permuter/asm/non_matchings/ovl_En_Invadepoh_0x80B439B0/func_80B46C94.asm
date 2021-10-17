@@ -1,0 +1,13 @@
+glabel func_80B46C94
+/* 003257 0x80B46C94 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 003258 0x80B46C98 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 003259 0x80B46C9C 00803825 */ move	$a3, $a0
+/* 003260 0x80B46CA0 00A03025 */ move	$a2, $a1
+/* 003261 0x80B46CA4 00C02025 */ move	$a0, $a2
+/* 003262 0x80B46CA8 0C03847B */ jal	Collision_FiniCylinder
+/* 003263 0x80B46CAC 24E502A0 */ addiu	$a1, $a3, 0X2A0
+/* 003264 0x80B46CB0 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 003265 0x80B46CB4 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 003266 0x80B46CB8 03E00008 */ jr	$ra
+/* 003267 0x80B46CBC 00000000 */ nop
+

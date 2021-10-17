@@ -1,0 +1,6 @@
+glabel EnKnight_Destroy
+/* 000820 0x809B2DC0 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000821 0x809B2DC4 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000822 0x809B2DC8 03E00008 */ jr	$ra
+/* 000823 0x809B2DCC 00000000 */ nop
+

@@ -1,0 +1,5 @@
+glabel EnBoj01_Draw
+/* 000012 0x809C3DB0 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000013 0x809C3DB4 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000014 0x809C3DB8 03E00008 */ jr	$ra
+/* 000015 0x809C3DBC 00000000 */ nop

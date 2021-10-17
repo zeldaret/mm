@@ -1,0 +1,60 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel En_Bat_InitVars
+/* 001344 0x80A449E0 */ .word	0x015B0500
+/* 001345 0x80A449E4 */ .word	0x00005005
+/* 001346 0x80A449E8 */ .word	0x01720000
+/* 001347 0x80A449EC */ .word	0x000001DC
+/* 001348 0x80A449F0 */ .word	EnBat_Init
+/* 001349 0x80A449F4 */ .word	EnBat_Destroy
+/* 001350 0x80A449F8 */ .word	EnBat_Update
+/* 001351 0x80A449FC */ .word	EnBat_Draw
+glabel D_80A44A00
+/* 001352 0x80A44A00 */ .word	0x03100939
+/* 001353 0x80A44A04 */ .word	0x10040000
+/* 001354 0x80A44A08 */ .word	0x00000000
+/* 001355 0x80A44A0C */ .word	0xF7CFFFFF
+/* 001356 0x80A44A10 */ .word	0x00040000
+/* 001357 0x80A44A14 */ .word	0xF7CFFFFF
+/* 001358 0x80A44A18 */ .word	0x00000000
+/* 001359 0x80A44A1C */ .word	0x09010100
+/* 001360 0x80A44A20 */ .word	0x01000000
+/* 001361 0x80A44A24 */ .word	0x00000000
+/* 001362 0x80A44A28 */ .word	0x000F0064
+glabel D_80A44A2C
+/* 001363 0x80A44A2C */ .word	0x10010101
+/* 001364 0x80A44A30 */ .word	0x01010001
+/* 001365 0x80A44A34 */ .word	0x01010122
+/* 001366 0x80A44A38 */ .word	0x32420101
+/* 001367 0x80A44A3C */ .word	0x01021050
+/* 001368 0x80A44A40 */ .word	0x00000101
+/* 001369 0x80A44A44 */ .word	0x01000000
+/* 001370 0x80A44A48 */ .word	0x00000001
+glabel D_80A44A4C
+/* 001371 0x80A44A4C */ .word	0x0100000F
+/* 001372 0x80A44A50 */ .word	0x001E0A00
+glabel D_80A44A54
+/* 001373 0x80A44A54 */ .word	0x891F0060
+/* 001374 0x80A44A58 */ .word	0xB0FC0BB8
+/* 001375 0x80A44A5C */ .word	0xB874FE0C
+/* 001376 0x80A44A60 */ .word	0x305407D0
+glabel D_80A44A64
+/* 001377 0x80A44A64 */ .word	0x060001B0
+/* 001378 0x80A44A68 */ .word	0x060002A0
+/* 001379 0x80A44A6C */ .word	0x06000390
+/* 001380 0x80A44A70 */ .word	0x06000480
+/* 001381 0x80A44A74 */ .word	0x06000570
+/* 001382 0x80A44A78 */ .word	0x06000660
+/* 001383 0x80A44A7C */ .word	0x06000750
+/* 001384 0x80A44A80 */ .word	0x06000840
+/* 001385 0x80A44A84 */ .word	0x06000930
+/* 001386 0x80A44A88 */ .word	0x00000000
+/* 001387 0x80A44A8C */ .word	0x00000000

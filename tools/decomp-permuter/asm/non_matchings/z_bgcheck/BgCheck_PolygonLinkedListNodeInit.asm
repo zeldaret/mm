@@ -1,0 +1,9 @@
+glabel BgCheck_PolygonLinkedListNodeInit
+/* 026672 0x800BFB80 AFA60008 */ sw	$a2, 0X8($sp)
+/* 026673 0x800BFB84 30C6FFFF */ andi	$a2, $a2, 0XFFFF
+/* 026674 0x800BFB88 84AE0000 */ lh	$t6, 0X0($a1)
+/* 026675 0x800BFB8C A4860002 */ sh	$a2, 0X2($a0)
+/* 026676 0x800BFB90 A48E0000 */ sh	$t6, 0X0($a0)
+/* 026677 0x800BFB94 03E00008 */ jr	$ra
+/* 026678 0x800BFB98 00000000 */ nop
+

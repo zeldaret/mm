@@ -1,0 +1,57 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .rodata
+
+glabel enViewerOverlayInfo
+/* 000384 0x8089F420 */ .word	0x000005C0
+/* 000385 0x8089F424 */ .word	0x00000030
+/* 000386 0x8089F428 */ .word	0x00000010
+/* 000387 0x8089F42C */ .word	0x00000010
+/* 000388 0x8089F430 */ .word	0x00000023
+glabel enViewerOverlayRelocations
+/* 000389 0x8089F434 */ .word	0x45000014
+/* 000390 0x8089F438 */ .word	0x46000018
+/* 000391 0x8089F43C */ .word	0x450000A8
+/* 000392 0x8089F440 */ .word	0x460000AC
+/* 000393 0x8089F444 */ .word	0x440000B0
+/* 000394 0x8089F448 */ .word	0x45000140
+/* 000395 0x8089F44C */ .word	0x46000144
+/* 000396 0x8089F450 */ .word	0x44000148
+/* 000397 0x8089F454 */ .word	0x450001B0
+/* 000398 0x8089F458 */ .word	0x460001B4
+/* 000399 0x8089F45C */ .word	0x440001B8
+/* 000400 0x8089F460 */ .word	0x450001D0
+/* 000401 0x8089F464 */ .word	0x460001D4
+/* 000402 0x8089F468 */ .word	0x45000284
+/* 000403 0x8089F46C */ .word	0x46000288
+/* 000404 0x8089F470 */ .word	0x450002A0
+/* 000405 0x8089F474 */ .word	0x460002AC
+/* 000406 0x8089F478 */ .word	0x440003D0
+/* 000407 0x8089F47C */ .word	0x440003E0
+/* 000408 0x8089F480 */ .word	0x4400047C
+/* 000409 0x8089F484 */ .word	0x4400048C
+/* 000410 0x8089F488 */ .word	0x450004DC
+/* 000411 0x8089F48C */ .word	0x460004F0
+/* 000412 0x8089F490 */ .word	0x44000538
+/* 000413 0x8089F494 */ .word	0x44000548
+/* 000414 0x8089F498 */ .word	0x45000568
+/* 000415 0x8089F49C */ .word	0x4600056C
+/* 000416 0x8089F4A0 */ .word	0x45000574
+/* 000417 0x8089F4A4 */ .word	0x46000580
+/* 000418 0x8089F4A8 */ .word	0x45000584
+/* 000419 0x8089F4AC */ .word	0x46000588
+/* 000420 0x8089F4B0 */ .word	0x82000018
+/* 000421 0x8089F4B4 */ .word	0x8200001C
+/* 000422 0x8089F4B8 */ .word	0x82000020
+/* 000423 0x8089F4BC */ .word	0x82000024
+/* 000424 0x8089F4C0 */ .word	0x00000000
+/* 000425 0x8089F4C4 */ .word	0x00000000
+/* 000426 0x8089F4C8 */ .word	0x00000000
+glabel enViewerOverlayInfoOffset
+/* 000427 0x8089F4CC */ .word	0x000000B0

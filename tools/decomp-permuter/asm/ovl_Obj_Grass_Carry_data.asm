@@ -1,0 +1,63 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .data
+
+glabel Obj_Grass_Carry_InitVars
+/* 000852 0x809ABBB0 */ .word	0x010C0600
+/* 000853 0x809ABBB4 */ .word	0x00800030
+/* 000854 0x809ABBB8 */ .word	0x00020000
+/* 000855 0x809ABBBC */ .word	0x000001A0
+/* 000856 0x809ABBC0 */ .word	ObjGrassCarry_Init
+/* 000857 0x809ABBC4 */ .word	ObjGrassCarry_Destroy
+/* 000858 0x809ABBC8 */ .word	ObjGrassCarry_Update
+/* 000859 0x809ABBCC */ .word	0x00000000
+glabel D_809ABBD0
+/* 000860 0x809ABBD0 */ .word	0x0A090029
+/* 000861 0x809ABBD4 */ .word	0x20010000
+/* 000862 0x809ABBD8 */ .word	0x00000000
+/* 000863 0x809ABBDC */ .word	0x00400000
+/* 000864 0x809ABBE0 */ .word	0x00020000
+/* 000865 0x809ABBE4 */ .word	0x00000000
+/* 000866 0x809ABBE8 */ .word	0x00000000
+/* 000867 0x809ABBEC */ .word	0x19000100
+/* 000868 0x809ABBF0 */ .word	0x000A002C
+/* 000869 0x809ABBF4 */ .word	0x00000000
+/* 000870 0x809ABBF8 */ .word	0x00000000
+glabel D_809ABBFC
+/* 000871 0x809ABBFC */ .word	0x00000000
+glabel D_809ABC00
+/* 000872 0x809ABC00 */ .word	0x00000000
+glabel D_809ABC04
+/* 000873 0x809ABC04 */ .word	0x00000000
+glabel D_809ABC08
+/* 000874 0x809ABC08 */ .word	0x00000000
+glabel D_809ABC0C
+/* 000875 0x809ABC0C */ .word	0x00000000
+/* 000876 0x809ABC10 */ .word	0x3F350481
+/* 000877 0x809ABC14 */ .word	0x3F350481
+/* 000878 0x809ABC18 */ .word	0x3F350481
+/* 000879 0x809ABC1C */ .word	0x3F350481
+/* 000880 0x809ABC20 */ .word	0x00000000
+/* 000881 0x809ABC24 */ .word	0x00000000
+/* 000882 0x809ABC28 */ .word	0x3F350481
+/* 000883 0x809ABC2C */ .word	0xBF350481
+/* 000884 0x809ABC30 */ .word	0xBF350481
+/* 000885 0x809ABC34 */ .word	0x3F350481
+/* 000886 0x809ABC38 */ .word	0x00000000
+glabel D_809ABC3C
+/* 000887 0x809ABC3C */ .word	0x006C0066
+/* 000888 0x809ABC40 */ .word	0x00600054
+/* 000889 0x809ABC44 */ .word	0x00420037
+/* 000890 0x809ABC48 */ .word	0x002A0026
+glabel D_809ABC4C
+/* 000891 0x809ABC4C */ .word	0xB874F380
+/* 000892 0x809ABC50 */ .word	0xB878BD98
+/* 000893 0x809ABC54 */ .word	0x48580190
+/* 000894 0x809ABC58 */ .word	0x00000000
+/* 000895 0x809ABC5C */ .word	0x00000000

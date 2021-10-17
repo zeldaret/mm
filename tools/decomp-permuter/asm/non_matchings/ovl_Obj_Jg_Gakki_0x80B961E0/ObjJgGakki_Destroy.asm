@@ -1,0 +1,13 @@
+glabel ObjJgGakki_Destroy
+/* 000080 0x80B96320 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000081 0x80B96324 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000082 0x80B96328 00803025 */ move	$a2, $a0
+/* 000083 0x80B9632C 00A03825 */ move	$a3, $a1
+/* 000084 0x80B96330 00E02025 */ move	$a0, $a3
+/* 000085 0x80B96334 0C03847B */ jal	Collision_FiniCylinder
+/* 000086 0x80B96338 24C50188 */ addiu	$a1, $a2, 0X188
+/* 000087 0x80B9633C 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000088 0x80B96340 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000089 0x80B96344 03E00008 */ jr	$ra
+/* 000090 0x80B96348 00000000 */ nop
+

@@ -1,0 +1,13 @@
+glabel EnAkindonuts_Destroy
+/* 003274 0x80BEFF08 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 003275 0x80BEFF0C AFBF0014 */ sw	$ra, 0X14($sp)
+/* 003276 0x80BEFF10 00803025 */ move	$a2, $a0
+/* 003277 0x80BEFF14 00A03825 */ move	$a3, $a1
+/* 003278 0x80BEFF18 00E02025 */ move	$a0, $a3
+/* 003279 0x80BEFF1C 0C03847B */ jal	Collision_FiniCylinder
+/* 003280 0x80BEFF20 24C502E0 */ addiu	$a1, $a2, 0X2E0
+/* 003281 0x80BEFF24 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 003282 0x80BEFF28 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 003283 0x80BEFF2C 03E00008 */ jr	$ra
+/* 003284 0x80BEFF30 00000000 */ nop
+

@@ -1,0 +1,22 @@
+glabel BgMbarChair_Init
+/* 000000 0x80B7E930 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000001 0x80B7E934 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000002 0x80B7E938 AFA40018 */ sw	$a0, 0X18($sp)
+/* 000003 0x80B7E93C AFA5001C */ sw	$a1, 0X1C($sp)
+/* 000004 0x80B7E940 3C0580B8 */ lui	$a1, %hi(bgMbarChairInitVars)
+/* 000005 0x80B7E944 24A5EA20 */ addiu	$a1, $a1, %lo(bgMbarChairInitVars)
+/* 000006 0x80B7E948 0C03FEB7 */ jal	Actor_ProcessInitChain
+/* 000007 0x80B7E94C 8FA40018 */ lw	$a0, 0X18($sp)
+/* 000008 0x80B7E950 8FA40018 */ lw	$a0, 0X18($sp)
+/* 000009 0x80B7E954 0C032B84 */ jal	BcCheck3_BgActorInit
+/* 000010 0x80B7E958 00002825 */ move	$a1, $zero
+/* 000011 0x80B7E95C 3C060600 */ lui	$a2, 0x0600
+/* 000012 0x80B7E960 24C619B4 */ addiu	$a2, $a2, 0X19B4
+/* 000013 0x80B7E964 8FA4001C */ lw	$a0, 0X1C($sp)
+/* 000014 0x80B7E968 0C032B8D */ jal	BgCheck3_LoadMesh
+/* 000015 0x80B7E96C 8FA50018 */ lw	$a1, 0X18($sp)
+/* 000016 0x80B7E970 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000017 0x80B7E974 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000018 0x80B7E978 03E00008 */ jr	$ra
+/* 000019 0x80B7E97C 00000000 */ nop
+

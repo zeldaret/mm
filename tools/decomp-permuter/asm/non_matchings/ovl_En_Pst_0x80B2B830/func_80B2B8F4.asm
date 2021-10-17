@@ -1,0 +1,54 @@
+glabel func_80B2B8F4
+/* 000049 0x80B2B8F4 948E001C */ lhu	$t6, 0X1C($a0)
+/* 000050 0x80B2B8F8 00001025 */ move	$v0, $zero
+/* 000051 0x80B2B8FC 2DC10005 */ sltiu	$at, $t6, 0X5
+/* 000052 0x80B2B900 1020001A */ beqz	$at, .L80B2B96C
+/* 000053 0x80B2B904 000E7080 */ sll	$t6, $t6, 2
+/* 000054 0x80B2B908 3C0180B3 */ lui	$at, %hi(jtbl_D_80B2C534)
+/* 000055 0x80B2B90C 002E0821 */ addu	$at, $at, $t6
+/* 000056 0x80B2B910 8C2EC534 */ lw	$t6, %lo(jtbl_D_80B2C534)($at)
+/* 000057 0x80B2B914 01C00008 */ jr	$t6
+/* 000058 0x80B2B918 00000000 */ nop
+glabel L80B2B91C
+.L80B2B91C:
+/* 000059 0x80B2B91C 3C02801F */ lui	$v0, %hi(gSaveContext + 0xF13)
+/* 000060 0x80B2B920 90420583 */ lbu	$v0, %lo(gSaveContext + 0xF13)($v0)
+/* 000061 0x80B2B924 03E00008 */ jr	$ra
+/* 000062 0x80B2B928 30420040 */ andi	$v0, $v0, 0X40
+glabel L80B2B92C
+.L80B2B92C:
+/* 000063 0x80B2B92C 3C02801F */ lui	$v0, %hi(gSaveContext + 0xF13)
+/* 000064 0x80B2B930 90420583 */ lbu	$v0, %lo(gSaveContext + 0xF13)($v0)
+/* 000065 0x80B2B934 03E00008 */ jr	$ra
+/* 000066 0x80B2B938 30420080 */ andi	$v0, $v0, 0X80
+glabel L80B2B93C
+.L80B2B93C:
+/* 000067 0x80B2B93C 3C02801F */ lui	$v0, %hi(gSaveContext + 0xF14)
+/* 000068 0x80B2B940 90420584 */ lbu	$v0, %lo(gSaveContext + 0xF14)($v0)
+/* 000069 0x80B2B944 03E00008 */ jr	$ra
+/* 000070 0x80B2B948 30420001 */ andi	$v0, $v0, 0X1
+glabel L80B2B94C
+.L80B2B94C:
+/* 000071 0x80B2B94C 3C02801F */ lui	$v0, %hi(gSaveContext + 0xF14)
+/* 000072 0x80B2B950 90420584 */ lbu	$v0, %lo(gSaveContext + 0xF14)($v0)
+/* 000073 0x80B2B954 03E00008 */ jr	$ra
+/* 000074 0x80B2B958 30420002 */ andi	$v0, $v0, 0X2
+glabel L80B2B95C
+.L80B2B95C:
+/* 000075 0x80B2B95C 3C02801F */ lui	$v0, %hi(gSaveContext + 0xF14)
+/* 000076 0x80B2B960 90420584 */ lbu	$v0, %lo(gSaveContext + 0xF14)($v0)
+/* 000077 0x80B2B964 03E00008 */ jr	$ra
+/* 000078 0x80B2B968 30420004 */ andi	$v0, $v0, 0X4
+.L80B2B96C:
+/* 000079 0x80B2B96C 03E00008 */ jr	$ra
+/* 000080 0x80B2B970 00000000 */ nop
+
+
+.section .late_rodata
+
+glabel jtbl_D_80B2C534
+/* 000833 0x80B2C534 */ .word	L80B2B91C
+/* 000834 0x80B2C538 */ .word	L80B2B92C
+/* 000835 0x80B2C53C */ .word	L80B2B93C
+/* 000836 0x80B2C540 */ .word	L80B2B94C
+/* 000837 0x80B2C544 */ .word	L80B2B95C

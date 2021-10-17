@@ -1,0 +1,50 @@
+.set noat # allow use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64 # allow use of 64bit registers
+.macro glabel label
+    .global \label
+    \label:
+.endm
+
+.section .rodata
+
+glabel titleUnknownVector3f
+/* 000544 0x80800880 */ .word	0xC59AA92F
+/* 000545 0x80800884 */ .word	0x457A28AB
+/* 000546 0x80800888 */ .word	0x448BE2AE
+/* 000547 0x8080088C */ .word	0x00000000
+glabel titleOverlayBlockInfo
+/* 000548 0x80800890 */ .word	0x00000860
+/* 000549 0x80800894 */ .word	0x00000020
+/* 000550 0x80800898 */ .word	0x00000010
+/* 000551 0x8080089C */ .word	0x00000000
+/* 000552 0x808008A0 */ .word	0x00000017
+glabel titleOverlayRelocations
+/* 000553 0x808008A4 */ .word	0x45000154
+/* 000554 0x808008A8 */ .word	0x46000158
+/* 000555 0x808008AC */ .word	0x4500015C
+/* 000556 0x808008B0 */ .word	0x46000160
+/* 000557 0x808008B4 */ .word	0x45000164
+/* 000558 0x808008B8 */ .word	0x46000168
+/* 000559 0x808008BC */ .word	0x450001D0
+/* 000560 0x808008C0 */ .word	0x460001DC
+/* 000561 0x808008C4 */ .word	0x450001F4
+/* 000562 0x808008C8 */ .word	0x46000200
+/* 000563 0x808008CC */ .word	0x44000220
+/* 000564 0x808008D0 */ .word	0x45000264
+/* 000565 0x808008D4 */ .word	0x46000268
+/* 000566 0x808008D8 */ .word	0x45000648
+/* 000567 0x808008DC */ .word	0x4600064C
+/* 000568 0x808008E0 */ .word	0x45000650
+/* 000569 0x808008E4 */ .word	0x4600065C
+/* 000570 0x808008E8 */ .word	0x440006BC
+/* 000571 0x808008EC */ .word	0x440006C4
+/* 000572 0x808008F0 */ .word	0x450007C0
+/* 000573 0x808008F4 */ .word	0x460007C8
+/* 000574 0x808008F8 */ .word	0x450007C4
+/* 000575 0x808008FC */ .word	0x460007CC
+/* 000576 0x80800900 */ .word	0x00000000
+/* 000577 0x80800904 */ .word	0x00000000
+/* 000578 0x80800908 */ .word	0x00000000
+glabel titleOverlayBlockInfoOffset
+/* 000579 0x8080090C */ .word	0x00000080

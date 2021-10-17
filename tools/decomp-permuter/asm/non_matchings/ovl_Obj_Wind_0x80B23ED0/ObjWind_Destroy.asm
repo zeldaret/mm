@@ -1,0 +1,6 @@
+glabel ObjWind_Destroy
+/* 000032 0x80B23F50 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000033 0x80B23F54 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000034 0x80B23F58 03E00008 */ jr	$ra
+/* 000035 0x80B23F5C 00000000 */ nop
+

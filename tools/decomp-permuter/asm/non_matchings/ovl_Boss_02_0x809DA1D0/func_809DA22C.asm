@@ -1,0 +1,10 @@
+glabel func_809DA22C
+/* 000023 0x809DA22C AFA50004 */ sw	$a1, 0X4($sp)
+/* 000024 0x809DA230 30A500FF */ andi	$a1, $a1, 0XFF
+/* 000025 0x809DA234 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000026 0x809DA238 3C0E801F */ lui	$t6, %hi(gStaticContext)
+/* 000027 0x809DA23C 8DCE3F60 */ lw	$t6, %lo(gStaticContext)($t6)
+/* 000028 0x809DA240 A5C5045C */ sh	$a1, 0X45C($t6)
+/* 000029 0x809DA244 03E00008 */ jr	$ra
+/* 000030 0x809DA248 00000000 */ nop
+

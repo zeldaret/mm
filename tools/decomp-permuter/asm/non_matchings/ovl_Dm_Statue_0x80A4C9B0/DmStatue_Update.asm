@@ -1,0 +1,6 @@
+glabel DmStatue_Update
+/* 000013 0x80A4C9E4 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000014 0x80A4C9E8 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000015 0x80A4C9EC 03E00008 */ jr	$ra
+/* 000016 0x80A4C9F0 00000000 */ nop
+

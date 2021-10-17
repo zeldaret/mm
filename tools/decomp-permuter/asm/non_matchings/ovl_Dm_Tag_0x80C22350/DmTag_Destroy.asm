@@ -1,0 +1,6 @@
+glabel DmTag_Destroy
+/* 000504 0x80C22B30 AFA40000 */ sw	$a0, 0X0($sp)
+/* 000505 0x80C22B34 AFA50004 */ sw	$a1, 0X4($sp)
+/* 000506 0x80C22B38 03E00008 */ jr	$ra
+/* 000507 0x80C22B3C 00000000 */ nop
+

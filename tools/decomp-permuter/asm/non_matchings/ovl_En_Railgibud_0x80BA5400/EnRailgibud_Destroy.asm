@@ -1,0 +1,13 @@
+glabel EnRailgibud_Destroy
+/* 000223 0x80BA577C 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000224 0x80BA5780 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000225 0x80BA5784 00803025 */ move	$a2, $a0
+/* 000226 0x80BA5788 00A03825 */ move	$a3, $a1
+/* 000227 0x80BA578C 00E02025 */ move	$a0, $a3
+/* 000228 0x80BA5790 0C03847B */ jal	Collision_FiniCylinder
+/* 000229 0x80BA5794 24C50144 */ addiu	$a1, $a2, 0X144
+/* 000230 0x80BA5798 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000231 0x80BA579C 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000232 0x80BA57A0 03E00008 */ jr	$ra
+/* 000233 0x80BA57A4 00000000 */ nop
+

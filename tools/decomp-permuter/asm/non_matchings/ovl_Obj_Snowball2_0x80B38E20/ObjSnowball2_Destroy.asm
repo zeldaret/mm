@@ -1,0 +1,13 @@
+glabel ObjSnowball2_Destroy
+/* 000907 0x80B39C4C 27BDFFE8 */ addiu	$sp, $sp, -0X18
+/* 000908 0x80B39C50 AFBF0014 */ sw	$ra, 0X14($sp)
+/* 000909 0x80B39C54 00803025 */ move	$a2, $a0
+/* 000910 0x80B39C58 00A03825 */ move	$a3, $a1
+/* 000911 0x80B39C5C 00E02025 */ move	$a0, $a3
+/* 000912 0x80B39C60 0C038306 */ jal	Collision_FiniSphereGroup
+/* 000913 0x80B39C64 24C50144 */ addiu	$a1, $a2, 0X144
+/* 000914 0x80B39C68 8FBF0014 */ lw	$ra, 0X14($sp)
+/* 000915 0x80B39C6C 27BD0018 */ addiu	$sp, $sp, 0X18
+/* 000916 0x80B39C70 03E00008 */ jr	$ra
+/* 000917 0x80B39C74 00000000 */ nop
+
