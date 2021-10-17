@@ -1671,7 +1671,7 @@ extern PadMgr* padmgrContext;
 // extern UNK_TYPE4 D_801D1538;
 extern UNK_PTR D_801D1540;
 // extern f32 sFactorialTbl[13];
-extern Vec3f D_801D15B0;
+extern Vec3f gZeroVec;
 extern Vec3s D_801D15BC;
 extern RSPMatrix D_801D1DE0;
 extern MtxF D_801D1E20;

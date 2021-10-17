@@ -547,7 +547,7 @@ void func_808BE4D4(EnDekunuts* this, GlobalContext* globalCtx) {
         sp40.x = this->actor.world.pos.x;
         sp40.y = this->actor.world.pos.y + 18.0f;
         sp40.z = this->actor.world.pos.z;
-        EffectSsDeadDb_Spawn(globalCtx, &sp40, &D_801D15B0, &D_801D15B0, &D_808BEF90, &D_808BEF94, 200, 0, 13);
+        EffectSsDeadDb_Spawn(globalCtx, &sp40, &gZeroVec, &gZeroVec, &D_808BEF90, &D_808BEF94, 200, 0, 13);
         Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 11, NA_SE_EN_EXTINCT);
         sp40.y = this->actor.world.pos.y + 10.0f;
         EffectSsHahen_SpawnBurst(globalCtx, &sp40, 3.0f, 0, 12, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);

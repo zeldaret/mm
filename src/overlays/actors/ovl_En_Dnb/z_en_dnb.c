@@ -86,7 +86,7 @@ void func_80A4FFE8(EnDnbParticle* particle, s16 arg1) {
 s32 func_80A500F8(EnDnb* this) {
     static Vec3f D_80A50CB0 = { 0.0f, 0.0f, 1000.0f };
     Actor* actor = &this->dyna.actor;
-    Vec3f spA8 = D_801D15B0;
+    Vec3f spA8 = gZeroVec;
     Vec3f sp9C;
     s32 i;
     f32 temp_f20;

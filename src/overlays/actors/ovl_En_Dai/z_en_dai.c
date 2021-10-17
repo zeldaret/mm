@@ -592,7 +592,7 @@ s32 func_80B3F598(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     }
 
     if (limbIndex == 11) {
-        SysMatrix_MultiplyVector3fByState(&D_801D15B0, &this->unk_1E4);
+        SysMatrix_MultiplyVector3fByState(&gZeroVec, &this->unk_1E4);
     }
 
     if (limbIndex == 10) {

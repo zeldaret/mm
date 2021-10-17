@@ -362,7 +362,7 @@ void func_80A9B554(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
         spA0.x = Math_SinS(val) * temp_f20 + spB8.x;
         spA0.y = (Rand_ZeroOne() * 1.2f - 0.1f) * spE4 + spB8.y;
         spA0.z = Math_CosS(val) * temp_f20 + spB8.z;
-        func_800B0E48(globalCtx, &spA0, &D_801D15B0, &D_80A9D8EC, &D_80A9D8E4, &D_80A9D8E8,
+        func_800B0E48(globalCtx, &spA0, &gZeroVec, &D_80A9D8EC, &D_80A9D8E4, &D_80A9D8E8,
                       (Rand_Next() >> 0x1A) + 0x82, (Rand_Next() >> 0x1A) + 0x6E);
     }
 

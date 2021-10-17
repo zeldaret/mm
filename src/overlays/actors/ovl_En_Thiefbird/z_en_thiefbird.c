@@ -657,7 +657,7 @@ void func_80C11DF0(EnThiefbird* this, GlobalContext* globalCtx) {
 
     if ((this->actor.bgCheckFlags & 1) || (this->actor.floorHeight == BGCHECK_Y_MIN)) {
         for (i = 0; i < ARRAY_COUNT(this->unk_350); i++) {
-            func_800B3030(globalCtx, &this->unk_350[i], &D_801D15B0, &D_801D15B0, 0x8C, 0, 0);
+            func_800B3030(globalCtx, &this->unk_350[i], &gZeroVec, &gZeroVec, 0x8C, 0, 0);
         }
 
         Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 11, NA_SE_EN_EXTINCT);

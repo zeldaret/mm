@@ -1475,7 +1475,7 @@ void func_8089DC84(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
             sp4C.x -= sp48->mf[3][0];
             sp4C.y -= sp48->mf[3][1];
             sp4C.z -= sp48->mf[3][2];
-            EffectSsDFire_Spawn(globalCtx, &this->unk_34C, &sp4C, &D_801D15B0, 30, 22, 255 - (sp58 * 20), 20, 3, 8);
+            EffectSsDFire_Spawn(globalCtx, &this->unk_34C, &sp4C, &gZeroVec, 30, 22, 255 - (sp58 * 20), 20, 3, 8);
             this->unk_292 = this->unk_290;
         }
     }

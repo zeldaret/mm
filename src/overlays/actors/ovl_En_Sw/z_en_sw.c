@@ -174,11 +174,11 @@ void func_808D8940(EnSw* this, GlobalContext* globalCtx) {
         sp94.x = 0.0f;
         sp94.y = (Rand_ZeroOne() * 0.2f) + 0.1f;
         sp94.z = Rand_ZeroOne() + 1.0f;
-        Lib_Vec3f_TranslateAndRotateY(&D_801D15B0, temp_s0, &sp94, &spAC);
+        Lib_Vec3f_TranslateAndRotateY(&gZeroVec, temp_s0, &sp94, &spAC);
         sp94.x = 0.0f;
         sp94.y = 0.7f;
         sp94.z = 2.0f;
-        Lib_Vec3f_TranslateAndRotateY(&D_801D15B0, temp_s0, &sp94, &spB8);
+        Lib_Vec3f_TranslateAndRotateY(&gZeroVec, temp_s0, &sp94, &spB8);
         spA0.x = this->actor.world.pos.x + (2.0f * spB8.x);
         spA0.z = this->actor.world.pos.z + (2.0f * spB8.z);
         func_800B0EB0(globalCtx, &spA0, &spB8, &spAC, &D_808DBAA4, &D_808DBAA8, 60, 30, temp_f4);
@@ -1146,7 +1146,7 @@ void func_808DB2E0(EnSw* this, GlobalContext* globalCtx) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALTURA_BOUND);
         } else {
             func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, 5);
-            Math_Vec3f_Copy(&this->actor.velocity, &D_801D15B0);
+            Math_Vec3f_Copy(&this->actor.velocity, &gZeroVec);
             this->unk_410 &= ~(0x10 | 0x1);
             this->actionFunc = func_808DB100;
         }

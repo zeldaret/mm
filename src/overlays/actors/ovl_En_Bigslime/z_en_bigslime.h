@@ -95,8 +95,8 @@ typedef struct EnBigslime {
                 };
     /* 0x02C2 */ s16 ceilingDropTimer; // Bigslime is still during this timer and shakes before dropping
     /* 0x02C4 */ s16 numGekkoPosGrabPlayer; // The Gekko will melee-attack link at 6 positions while engulfed in bigslime
-    /* 0x02C6 */ s16 camId;
-    /* 0x02C8 */ s16 cameraYawGrabPlayer;
+    /* 0x02C6 */ s16 subCamId;
+    /* 0x02C8 */ s16 subCamYawGrabPlayer;
     /* 0x02CA */ s16 rotation; // is always 0, used in Matrix_RotateY
     /* 0x02CC */ s16 itemDropTimer; // items only drop when zero, Set to 40 then decrements, prevents itemDrop spam
     /* 0x02CE */ Vec3s gekkoRot;
@@ -104,7 +104,7 @@ typedef struct EnBigslime {
     /* 0x02E0 */ Vec3f gekkoProjectedPos;
     /* 0x02EC */ union {
                     Vec3f iceShardRefPos;
-                    Vec3f eyeDistToFrog; // Used to zoom into frogs as Gekko despawns/Frog spawns
+                    Vec3f subCamDistToFrog; // Used to zoom into frogs as Gekko despawns/Frog spawns
                 };
     /* 0x02F8 */ Vec3f limbPos[12];
     /* 0x0388 */ f32 unk_388; // used as arg to func_800BE680

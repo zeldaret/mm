@@ -6675,7 +6675,7 @@
     0x808EC990:("func_808EC990",),
     0x808ECD14:("func_808ECD14",),
     0x808ED07C:("func_808ED07C",),
-    0x808ED138:("EnBigslime_Draw",),
+    0x808ED138:("EnBigslime_DrawGekko",),
     0x808ED3F4:("func_808ED3F4",),
     0x808F1200:("EnKarebaba_Init",),
     0x808F1334:("EnKarebaba_Destroy",),

@@ -284,11 +284,11 @@ s32 func_8092CCEC(EnDns* this, GlobalContext* globalCtx) {
 
     Math_Vec3f_Copy(&sp30, &this->actor.world.pos);
     Math_Vec3f_Copy(&sp3C, &player->actor.world.pos);
-    this->unk_2D6 = Math_Vec3f_Yaw(&D_801D15B0, &sp3C);
-    this->unk_2D4 = Math_Vec3f_Yaw(&D_801D15B0, &sp30);
-    this->unk_2EC = Math_Vec3f_DistXZ(&sp30, &D_801D15B0);
-    sp2E = Math_Vec3f_Yaw(&D_801D15B0, &sp3C);
-    sp2E -= Math_Vec3f_Yaw(&D_801D15B0, &sp30);
+    this->unk_2D6 = Math_Vec3f_Yaw(&gZeroVec, &sp3C);
+    this->unk_2D4 = Math_Vec3f_Yaw(&gZeroVec, &sp30);
+    this->unk_2EC = Math_Vec3f_DistXZ(&sp30, &gZeroVec);
+    sp2E = Math_Vec3f_Yaw(&gZeroVec, &sp3C);
+    sp2E -= Math_Vec3f_Yaw(&gZeroVec, &sp30);
     this->unk_2D8 = (Rand_ZeroOne() * 182.0f) + 182.0f;
     this->unk_2D8 = (sp2E > 0) ? this->unk_2D8 : -this->unk_2D8;
     this->unk_2D0 = 0x28;
@@ -413,7 +413,7 @@ void EnDns_DoNothing(EnDns* this, GlobalContext* globalCtx) {
 
 void func_8092D330(EnDns* this, GlobalContext* globalCtx) {
     s32 pad;
-    Vec3f sp30 = D_801D15B0;
+    Vec3f sp30 = gZeroVec;
     s16 temp = this->unk_2D6 - this->unk_2D4;
 
     if (ABS_ALT(temp) < 0xC16) {
@@ -549,7 +549,7 @@ s32 func_8092D954(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4, s32 ar
     Vec3s sp6C;
     MtxF sp2C;
 
-    SysMatrix_MultiplyVector3fByState(&D_801D15B0, &sp74);
+    SysMatrix_MultiplyVector3fByState(&gZeroVec, &sp74);
     SysMatrix_CopyCurrentState(&sp2C);
     func_8018219C(&sp2C, &sp6C, 0);
     *arg2 = sp74;

@@ -110,7 +110,7 @@ void ObjHsStump_Appear(ObjHsStump* this, GlobalContext* globalCtx) {
                 offsetAngle = i * angleBinary;
                 Lib_Vec3f_TranslateAndRotateY(&this->dyna.actor.world.pos, offsetAngle, &iceSmokePosOffset,
                                               &iceSmokePos);
-                Lib_Vec3f_TranslateAndRotateY(&D_801D15B0, offsetAngle, &iceSmokeVelOffset, &iceSmokeVel);
+                Lib_Vec3f_TranslateAndRotateY(&gZeroVec, offsetAngle, &iceSmokeVelOffset, &iceSmokeVel);
                 EffectSsIceSmoke_Spawn(globalCtx, &iceSmokePos, &iceSmokeVel, &iceSmokeAccel, 100);
             }
         }
