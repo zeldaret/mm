@@ -1,0 +1,8 @@
+# Output files
+!ido_recomp/**
+*.exe
+yaz0
+makeromfs
+elf2rom
+mkldscript
+vtxdis
