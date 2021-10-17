@@ -1,2 +1,0 @@
-cc: Warning: -mips3 should not be used for ucode 32-bit compiles
-cc: Warning: -mips3 should not be used for ucode 32-bit compiles
