@@ -1287,8 +1287,7 @@ beginseg
     name "ovl_En_Bigslime"
     compress
     include "build/src/overlays/actors/ovl_En_Bigslime/z_en_bigslime.o"
-    include "build/data/ovl_En_Bigslime/ovl_En_Bigslime.data.o"
-    include "build/data/ovl_En_Bigslime/ovl_En_Bigslime.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Bigslime/ovl_En_Bigslime_reloc.o"
 endseg
 
 beginseg
