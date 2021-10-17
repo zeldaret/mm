@@ -5,7 +5,7 @@
 
 struct EnDai;
 
-typedef void (*EnDaiActionFunc)(struct EnDai* this, GlobalContext* globalCtx);
+typedef void (*EnDaiActionFunc)(struct EnDai*, GlobalContext*);
 
 typedef struct EnDaiParticle {
     /* 0x00 */ u8 isEnabled;

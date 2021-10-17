@@ -1,8 +1,8 @@
 #include "ZBlob.h"
-#include "BitConverter.h"
-#include "File.h"
-#include "Path.h"
-#include "StringHelper.h"
+#include "Utils/BitConverter.h"
+#include "Utils/File.h"
+#include "Utils/Path.h"
+#include "Utils/StringHelper.h"
 #include "ZFile.h"
 
 using namespace tinyxml2;
@@ -49,9 +49,9 @@ void ZBlob::ParseRawData()
 	                parent->GetRawData().begin() + rawDataIndex + blobSize);
 }
 
-std::string ZBlob::GetSourceOutputCode(const std::string& prefix)
+std::string ZBlob::GetSourceOutputCode([[maybe_unused]] const std::string& prefix)
 {
-	sourceOutput = "";
+	std::string sourceOutput = "";
 
 	for (size_t i = 0; i < blobData.size(); i += 1)
 	{
@@ -72,14 +72,14 @@ std::string ZBlob::GetSourceOutputCode(const std::string& prefix)
 	return sourceOutput;
 }
 
-std::string ZBlob::GetSourceOutputHeader(const std::string& prefix)
+std::string ZBlob::GetSourceOutputHeader([[maybe_unused]] const std::string& prefix)
 {
 	return StringHelper::Sprintf("extern u8 %s[];\n", name.c_str());
 }
 
 void ZBlob::Save(const fs::path& outFolder)
 {
-	File::WriteAllBytes(outFolder / (name + ".bin"), blobData);
+	File::WriteAllBytes((outFolder / (name + ".bin")).string(), blobData);
 }
 
 bool ZBlob::IsExternalResource() const

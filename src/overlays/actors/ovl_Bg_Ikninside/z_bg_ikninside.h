@@ -5,7 +5,7 @@
 
 struct BgIkninside;
 
-typedef void (*BgIkninsideActionFunc)(struct BgIkninside* this, GlobalContext* globalCtx);
+typedef void (*BgIkninsideActionFunc)(struct BgIkninside*, GlobalContext*);
 
 typedef struct BgIkninside {
     /* 0x0000 */ Actor actor;

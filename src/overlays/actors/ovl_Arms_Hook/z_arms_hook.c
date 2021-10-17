@@ -72,7 +72,7 @@ void ArmsHook_Wait(ArmsHook* this, GlobalContext* globalCtx) {
     if (this->actor.parent == NULL) {
         ArmsHook_SetupAction(this, ArmsHook_Shoot);
         func_800B6C04(&this->actor, 20.0f);
-        this->actor.parent = &PLAYER->actor;
+        this->actor.parent = &GET_PLAYER(globalCtx)->actor;
         this->timer = 26;
     }
 }
@@ -120,7 +120,7 @@ void ArmsHook_AttachHookToActor(ArmsHook* this, Actor* actor) {
 }
 
 void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((this->actor.parent == NULL) || (!func_801240C8(player))) {
         ArmsHook_DetachHookFromActor(this);
@@ -287,50 +287,47 @@ static Vec3f D_808C1C4C = { 0.0f, -500.0f, 0.0f };
 
 void ArmsHook_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ArmsHook* this = THIS;
-    s32 pad;
-    Player* player = PLAYER;
-    Vec3f sp68;
-    Vec3f sp5C;
-    Vec3f sp50;
-    f32 sp4C;
-    f32 sp48;
+    f32 f0;
+    Player* player = GET_PLAYER(globalCtx);;
 
     if (player->actor.draw != NULL && player->rightHandType == 0xB) {
-        // OPEN_DISP macro
-        {
-            GraphicsContext* sp44 = globalCtx->state.gfxCtx;
-            f32 f0;
+        Vec3f sp68;
+        Vec3f sp5C;
+        Vec3f sp50;
+        f32 sp4C;
+        f32 sp48;
 
-            if ((ArmsHook_Shoot != this->actionFunc) || (this->timer <= 0)) {
-                SysMatrix_MultiplyVector3fByState(&D_808C1C10, &this->unk1E0);
-                SysMatrix_MultiplyVector3fByState(&D_808C1C28, &sp5C);
-                SysMatrix_MultiplyVector3fByState(&D_808C1C34, &sp50);
-                this->unk1C4 = 0;
-            } else {
-                SysMatrix_MultiplyVector3fByState(&D_808C1C1C, &this->unk1E0);
-                SysMatrix_MultiplyVector3fByState(&D_808C1C40, &sp5C);
-                SysMatrix_MultiplyVector3fByState(&D_808C1C4C, &sp50);
-            }
-            func_80126440(globalCtx, &this->collider.base, &this->unk1C4, &sp5C, &sp50);
-            func_8012C28C(globalCtx->state.gfxCtx);
-            func_80122868(globalCtx, player);
+        OPEN_DISPS(globalCtx->state.gfxCtx);
 
-            gSPMatrix(sp44->polyOpa.p++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(sp44->polyOpa.p++, D_0601D960);
-            SysMatrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                        MTXMODE_NEW);
-            Math_Vec3f_Diff(&player->rightHandWorld.pos, &this->actor.world.pos, &sp68);
-            sp48 = SQ(sp68.x) + SQ(sp68.z);
-            sp4C = sqrtf(sp48);
-            Matrix_RotateY(Math_Atan2S(sp68.x, sp68.z), MTXMODE_APPLY);
-            SysMatrix_InsertXRotation_s(Math_Atan2S(-sp68.y, sp4C), MTXMODE_APPLY);
-            f0 = sqrtf(SQ(sp68.y) + sp48);
-            Matrix_Scale(0.015f, 0.015f, f0 * 0.01f, MTXMODE_APPLY);
-            gSPMatrix(sp44->polyOpa.p++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(sp44->polyOpa.p++, D_040008D0);
-            func_801229A0(globalCtx, player);
+        if ((ArmsHook_Shoot != this->actionFunc) || (this->timer <= 0)) {
+            SysMatrix_MultiplyVector3fByState(&D_808C1C10, &this->unk1E0);
+            SysMatrix_MultiplyVector3fByState(&D_808C1C28, &sp5C);
+            SysMatrix_MultiplyVector3fByState(&D_808C1C34, &sp50);
+            this->unk1C4 = 0;
+        } else {
+            SysMatrix_MultiplyVector3fByState(&D_808C1C1C, &this->unk1E0);
+            SysMatrix_MultiplyVector3fByState(&D_808C1C40, &sp5C);
+            SysMatrix_MultiplyVector3fByState(&D_808C1C4C, &sp50);
         }
+        func_80126440(globalCtx, &this->collider.base, &this->unk1C4, &sp5C, &sp50);
+        func_8012C28C(globalCtx->state.gfxCtx);
+        func_80122868(globalCtx, player);
+
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_OPA_DISP++, D_0601D960);
+        SysMatrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+                                    MTXMODE_NEW);
+        Math_Vec3f_Diff(&player->rightHandWorld.pos, &this->actor.world.pos, &sp68);
+        sp48 = SQXZ(sp68);
+        sp4C = sqrtf(SQXZ(sp68));
+        Matrix_RotateY(Math_Atan2S(sp68.x, sp68.z), MTXMODE_APPLY);
+        SysMatrix_InsertXRotation_s(Math_Atan2S(-sp68.y, sp4C), MTXMODE_APPLY);
+        f0 = sqrtf(SQ(sp68.y) + sp48);
+        Matrix_Scale(0.015f, 0.015f, f0 * 0.01f, MTXMODE_APPLY);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_OPA_DISP++, D_040008D0);
+        func_801229A0(globalCtx, player);
+
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }

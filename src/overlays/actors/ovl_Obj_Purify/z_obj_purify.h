@@ -5,7 +5,7 @@
 
 struct ObjPurify;
 
-typedef void (*ObjPurifyActionFunc)(struct ObjPurify* this, GlobalContext* globalCtx);
+typedef void (*ObjPurifyActionFunc)(struct ObjPurify*, GlobalContext*);
 
 typedef struct ObjPurify {
     /* 0x0000 */ Actor actor;

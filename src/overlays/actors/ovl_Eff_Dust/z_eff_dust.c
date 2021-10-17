@@ -92,7 +92,7 @@ void EffDust_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->scalingFactor = 20.0f;
             break;
         default:
-            StartHeap_Free(this);
+            SystemArena_Free(this);
             break;
     }
     this->life = 10;
@@ -163,7 +163,7 @@ void func_80918FE4(EffDust* this, GlobalContext* globalCtx) {
 
 void func_80919230(EffDust* this, GlobalContext* globalCtx) {
     s16 theta;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Actor* parent = this->actor.parent;
     f32* distanceTraveled = this->distanceTraveled;
     s32 i;
@@ -262,7 +262,7 @@ void func_80919768(Actor* thisx, GlobalContext* globalCtx2) {
     s16 sp92;
     Vec3f activeCamEye;
 
-    activeCamEye = ACTIVE_CAM->eye;
+    activeCamEye = GET_ACTIVE_CAM(globalCtx)->eye;
     sp92 = Math_Vec3f_Yaw(&activeCamEye, &thisx->world.pos);
 
     OPEN_DISPS(gfxCtx);
@@ -313,7 +313,7 @@ void func_809199FC(Actor* thisx, GlobalContext* globalCtx2) {
     Vec3f* initialPositions;
     s32 i;
     f32 aux;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     OPEN_DISPS(gfxCtx);
     func_8012C28C(gfxCtx);

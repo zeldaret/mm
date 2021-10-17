@@ -5,7 +5,7 @@
 
 struct ObjKzsaku;
 
-typedef void (*ObjKzsakuActionFunc)(struct ObjKzsaku* this, GlobalContext* globalCtx);
+typedef void (*ObjKzsakuActionFunc)(struct ObjKzsaku*, GlobalContext*);
 
 typedef struct ObjKzsaku {
     /* 0x0000 */ Actor actor;

@@ -80,7 +80,7 @@ static struct_80B8E1A8 D_809CDC7C[] = {
 };
 
 void func_809CCDE0(EnBji01* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Vec3f sp58;
     s32 pad[2];
 
@@ -304,7 +304,7 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
 
 void func_809CD634(EnBji01* this, GlobalContext* globalCtx) {
     func_801A5BD0(0x6F);
-    func_801A89A8(0xE0000101);
+    Audio_QueueSeqCmd(0xE0000101);
     globalCtx->nextEntranceIndex = 0x54A0; /* Termina Field from telescope */
     gSaveContext.respawn[0].entranceIndex = globalCtx->nextEntranceIndex;
     func_80169EFC(globalCtx); /* Load new entrance? */
@@ -363,7 +363,7 @@ void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx) {
         case 0x4C20: /* Observatory from Termina Field telescope */
             this->actor.flags |= 0x10000;
             func_801A5BD0(0);
-            func_801A89A8(0xE0000100);
+            Audio_QueueSeqCmd(0xE0000100);
             this->actor.params = ENBJI01_PARAMS_LOOKED_THROUGH_TELESCOPE;
             func_809CCE98(this, globalCtx);
             break;
