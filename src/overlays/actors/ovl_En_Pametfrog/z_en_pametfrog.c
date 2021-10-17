@@ -251,7 +251,7 @@ u8 EnPametfrog_Vec3fNormalize(Vec3f* vec) {
     }
 }
 
-void EnPametfrog_ChangeColliderFreeze(EnPametfrog* this) {
+void EnPametfrog_Freeze(EnPametfrog* this) {
     this->drawEffect = GEKKO_DRAW_EFFECT_FROZEN;
     this->collider.base.colType = COLTYPE_HIT3;
     this->collider.elements->info.elemType = ELEMTYPE_UNK0;
@@ -260,7 +260,7 @@ void EnPametfrog_ChangeColliderFreeze(EnPametfrog* this) {
     this->unk_2C4 = 1.0f;
 }
 
-void EnPametfrog_ChangeColliderThaw(EnPametfrog* this, GlobalContext* globalCtx) {
+void EnPametfrog_Thaw(EnPametfrog* this, GlobalContext* globalCtx) {
     this->freezeTimer = 0;
     if (this->drawEffect == GEKKO_DRAW_EFFECT_FROZEN) {
         this->drawEffect = GEKKO_DRAW_EFFECT_NONE;
@@ -419,7 +419,7 @@ void EnPametfrog_ApplyMagicArrowEffects(EnPametfrog* this, GlobalContext* global
                     this->collider.elements[0].info.bumper.hitPos.x, this->collider.elements[0].info.bumper.hitPos.y,
                     this->collider.elements[0].info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
     } else if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_ICE) {
-        EnPametfrog_ChangeColliderFreeze(this);
+        EnPametfrog_Freeze(this);
     }
 }
 
@@ -896,7 +896,7 @@ void EnPametfrog_SetupFallOnGround(EnPametfrog* this, GlobalContext* globalCtx) 
     this->actor.shape.rot.z = 0;
     this->spinYaw = 0;
     this->timer = 5;
-    EnPametfrog_ChangeColliderThaw(this, globalCtx);
+    EnPametfrog_Thaw(this, globalCtx);
     EnPametfrog_JumpWaterEffects(this, globalCtx);
     Audio_PlayActorSound2(&this->actor, NA_SE_EV_WALK_WATER);
     this->actionFunc = EnPametfrog_FallOnGround;
@@ -1177,10 +1177,10 @@ void EnPametfrog_SetupStun(EnPametfrog* this) {
 void EnPametfrog_Stun(EnPametfrog* this, GlobalContext* globalCtx) {
     this->freezeTimer--;
     if (this->freezeTimer == 0) {
-        EnPametfrog_ChangeColliderThaw(this, globalCtx);
+        EnPametfrog_Thaw(this, globalCtx);
         EnPametfrog_SetupJumpToLink(this);
     } else if (this->freezeTimer == 78) {
-        EnPametfrog_ChangeColliderThaw(this, globalCtx);
+        EnPametfrog_Thaw(this, globalCtx);
         this->actor.colorFilterTimer = 0;
         EnPametfrog_SetupCutscene(this);
     }
@@ -1300,12 +1300,12 @@ void EnPametfrog_ApplyDamageEffect(EnPametfrog* this, GlobalContext* globalCtx) 
                     EnPametfrog_ApplyStun(this);
                     EnPametfrog_SetupStun(this);
                 } else if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_ICE) {
-                    EnPametfrog_ChangeColliderFreeze(this);
+                    EnPametfrog_Freeze(this);
                     this->freezeTimer = 80;
                     func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 0x50);
                     EnPametfrog_SetupStun(this);
                 } else {
-                    EnPametfrog_ChangeColliderThaw(this, globalCtx);
+                    EnPametfrog_Thaw(this, globalCtx);
                     if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_FIRE) {
                         this->drawEffect = GEKKO_DRAW_EFFECT_NONE;
                         this->unk_2C8 = 0.75f;
