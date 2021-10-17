@@ -1,6 +1,0 @@
-glabel ItemBHeart_Destroy
-/* 000046 0x808BCEA8 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000047 0x808BCEAC AFA50004 */ sw	$a1, 0X4($sp)
-/* 000048 0x808BCEB0 03E00008 */ jr	$ra
-/* 000049 0x808BCEB4 00000000 */ nop
-

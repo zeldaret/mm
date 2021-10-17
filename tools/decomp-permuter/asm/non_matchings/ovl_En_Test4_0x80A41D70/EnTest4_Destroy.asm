@@ -1,6 +1,0 @@
-glabel EnTest4_Destroy
-/* 000846 0x80A42AA8 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000847 0x80A42AAC AFA50004 */ sw	$a1, 0X4($sp)
-/* 000848 0x80A42AB0 03E00008 */ jr	$ra
-/* 000849 0x80A42AB4 00000000 */ nop
-

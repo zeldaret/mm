@@ -1,6 +1,0 @@
-glabel EffZoraband_Destroy
-/* 000016 0x80C07780 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000017 0x80C07784 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000018 0x80C07788 03E00008 */ jr	$ra
-/* 000019 0x80C0778C 00000000 */ nop
-

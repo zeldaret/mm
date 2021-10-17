@@ -1,6 +1,0 @@
-glabel BgIknvObj_UpdateType1
-/* 000403 0x80BD80FC AFA40000 */ sw	$a0, 0X0($sp)
-/* 000404 0x80BD8100 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000405 0x80BD8104 03E00008 */ jr	$ra
-/* 000406 0x80BD8108 00000000 */ nop
-

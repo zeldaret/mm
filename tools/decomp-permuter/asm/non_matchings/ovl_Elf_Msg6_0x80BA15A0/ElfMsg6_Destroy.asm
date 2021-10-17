@@ -1,6 +1,0 @@
-glabel ElfMsg6_Destroy
-/* 000404 0x80BA1BF0 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000405 0x80BA1BF4 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000406 0x80BA1BF8 03E00008 */ jr	$ra
-/* 000407 0x80BA1BFC 00000000 */ nop
-

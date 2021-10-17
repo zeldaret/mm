@@ -1,6 +1,0 @@
-glabel ObjTokeiTurret_Update
-/* 000061 0x80B91DB4 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000062 0x80B91DB8 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000063 0x80B91DBC 03E00008 */ jr	$ra
-/* 000064 0x80B91DC0 00000000 */ nop
-

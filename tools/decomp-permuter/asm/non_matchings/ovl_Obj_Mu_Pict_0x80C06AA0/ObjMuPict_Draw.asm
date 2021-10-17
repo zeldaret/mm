@@ -1,5 +1,0 @@
-glabel ObjMuPict_Draw
-/* 000332 0x80C06FD0 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000333 0x80C06FD4 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000334 0x80C06FD8 03E00008 */ jr	$ra
-/* 000335 0x80C06FDC 00000000 */ nop

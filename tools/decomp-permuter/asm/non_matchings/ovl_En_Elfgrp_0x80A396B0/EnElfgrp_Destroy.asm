@@ -1,6 +1,0 @@
-glabel EnElfgrp_Destroy
-/* 000324 0x80A39BC0 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000325 0x80A39BC4 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000326 0x80A39BC8 03E00008 */ jr	$ra
-/* 000327 0x80A39BCC 00000000 */ nop
-

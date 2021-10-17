@@ -1,6 +1,0 @@
-glabel Lights_ClearHead
-/* 094910 0x801025B8 AFA40000 */ sw	$a0, 0X0($sp)
-/* 094911 0x801025BC ACA00000 */ sw	$zero, 0X0($a1)
-/* 094912 0x801025C0 03E00008 */ jr	$ra
-/* 094913 0x801025C4 00000000 */ nop
-

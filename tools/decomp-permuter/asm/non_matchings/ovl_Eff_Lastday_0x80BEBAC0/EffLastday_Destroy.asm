@@ -1,6 +1,0 @@
-glabel EffLastday_Destroy
-/* 000143 0x80BEBCFC AFA40000 */ sw	$a0, 0X0($sp)
-/* 000144 0x80BEBD00 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000145 0x80BEBD04 03E00008 */ jr	$ra
-/* 000146 0x80BEBD08 00000000 */ nop
-

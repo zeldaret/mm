@@ -1,6 +1,0 @@
-glabel ObjSmork_Destroy
-/* 000741 0x80A3E214 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000742 0x80A3E218 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000743 0x80A3E21C 03E00008 */ jr	$ra
-/* 000744 0x80A3E220 00000000 */ nop
-

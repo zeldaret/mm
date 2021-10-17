@@ -1,6 +1,0 @@
-glabel DmNb_Destroy
-/* 000138 0x80C1E0F8 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000139 0x80C1E0FC AFA50004 */ sw	$a1, 0X4($sp)
-/* 000140 0x80C1E100 03E00008 */ jr	$ra
-/* 000141 0x80C1E104 00000000 */ nop
-

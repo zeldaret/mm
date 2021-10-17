@@ -1,6 +1,0 @@
-glabel ElfMsg_Destroy
-/* 000140 0x8092E1C0 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000141 0x8092E1C4 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000142 0x8092E1C8 03E00008 */ jr	$ra
-/* 000143 0x8092E1CC 00000000 */ nop
-

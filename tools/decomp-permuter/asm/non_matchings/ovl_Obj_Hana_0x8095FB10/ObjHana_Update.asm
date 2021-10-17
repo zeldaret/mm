@@ -1,6 +1,0 @@
-glabel ObjHana_Update
-/* 000014 0x8095FB48 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000015 0x8095FB4C AFA50004 */ sw	$a1, 0X4($sp)
-/* 000016 0x8095FB50 03E00008 */ jr	$ra
-/* 000017 0x8095FB54 00000000 */ nop
-

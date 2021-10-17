@@ -1,6 +1,0 @@
-glabel EnBh_Destroy
-/* 000039 0x80C22DDC AFA40000 */ sw	$a0, 0X0($sp)
-/* 000040 0x80C22DE0 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000041 0x80C22DE4 03E00008 */ jr	$ra
-/* 000042 0x80C22DE8 00000000 */ nop
-

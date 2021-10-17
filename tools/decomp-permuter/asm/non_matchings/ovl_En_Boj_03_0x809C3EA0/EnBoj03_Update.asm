@@ -1,6 +1,0 @@
-glabel EnBoj03_Update
-/* 000008 0x809C3EC0 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000009 0x809C3EC4 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000010 0x809C3EC8 03E00008 */ jr	$ra
-/* 000011 0x809C3ECC 00000000 */ nop
-

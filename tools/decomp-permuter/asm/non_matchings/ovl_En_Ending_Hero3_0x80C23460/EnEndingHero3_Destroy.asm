@@ -1,6 +1,0 @@
-glabel EnEndingHero3_Destroy
-/* 000042 0x80C23508 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000043 0x80C2350C AFA50004 */ sw	$a1, 0X4($sp)
-/* 000044 0x80C23510 03E00008 */ jr	$ra
-/* 000045 0x80C23514 00000000 */ nop
-

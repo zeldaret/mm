@@ -1,7 +1,0 @@
-glabel Collision_FiniTriParams
-/* 061059 0x800E14CC AFA40000 */ sw	$a0, 0X0($sp)
-/* 061060 0x800E14D0 AFA50004 */ sw	$a1, 0X4($sp)
-/* 061061 0x800E14D4 24020001 */ li	$v0, 0X1
-/* 061062 0x800E14D8 03E00008 */ jr	$ra
-/* 061063 0x800E14DC 00000000 */ nop
-

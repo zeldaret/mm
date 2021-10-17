@@ -1,8 +1,0 @@
-glabel EnBu_Init
-/* 000000 0x809ACD90 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000001 0x809ACD94 3C0E809B */ lui	$t6, %hi(func_809ACDB8)
-/* 000002 0x809ACD98 25CECDB8 */ addiu	$t6, $t6, %lo(func_809ACDB8)
-/* 000003 0x809ACD9C AC8E0144 */ sw	$t6, 0X144($a0)
-/* 000004 0x809ACDA0 03E00008 */ jr	$ra
-/* 000005 0x809ACDA4 00000000 */ nop
-

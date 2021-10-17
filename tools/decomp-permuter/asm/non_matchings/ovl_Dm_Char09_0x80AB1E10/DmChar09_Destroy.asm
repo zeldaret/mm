@@ -1,6 +1,0 @@
-glabel DmChar09_Destroy
-/* 000096 0x80AB1F90 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000097 0x80AB1F94 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000098 0x80AB1F98 03E00008 */ jr	$ra
-/* 000099 0x80AB1F9C 00000000 */ nop
-

@@ -1,6 +1,0 @@
-glabel EnBoj04_Destroy
-/* 000004 0x809CB210 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000005 0x809CB214 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000006 0x809CB218 03E00008 */ jr	$ra
-/* 000007 0x809CB21C 00000000 */ nop
-

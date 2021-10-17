@@ -1,6 +1,0 @@
-glabel EnTalk_Destroy
-/* 000026 0x80BDE048 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000027 0x80BDE04C AFA50004 */ sw	$a1, 0X4($sp)
-/* 000028 0x80BDE050 03E00008 */ jr	$ra
-/* 000029 0x80BDE054 00000000 */ nop
-

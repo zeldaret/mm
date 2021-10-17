@@ -1,6 +1,0 @@
-glabel DmStk_Destroy
-/* 001613 0x80AA16E4 AFA40000 */ sw	$a0, 0X0($sp)
-/* 001614 0x80AA16E8 AFA50004 */ sw	$a1, 0X4($sp)
-/* 001615 0x80AA16EC 03E00008 */ jr	$ra
-/* 001616 0x80AA16F0 00000000 */ nop
-

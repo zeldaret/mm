@@ -1,6 +1,0 @@
-glabel ObjTokeidai_Destroy
-/* 000540 0x80AB3000 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000541 0x80AB3004 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000542 0x80AB3008 03E00008 */ jr	$ra
-/* 000543 0x80AB300C 00000000 */ nop
-

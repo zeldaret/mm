@@ -1,8 +1,0 @@
-glabel Actor_GetRoomCleared
-/* 016513 0x800B5CC4 8C8E1E6C */ lw	$t6, 0X1E6C($a0)
-/* 016514 0x800B5CC8 240F0001 */ li	$t7, 0X1
-/* 016515 0x800B5CCC 00AFC004 */ sllv	$t8, $t7, $a1
-/* 016516 0x800B5CD0 01D81024 */ and	$v0, $t6, $t8
-/* 016517 0x800B5CD4 03E00008 */ jr	$ra
-/* 016518 0x800B5CD8 00000000 */ nop
-

@@ -1,6 +1,0 @@
-glabel EnWaterEffect_Destroy
-/* 000338 0x80A58CE8 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000339 0x80A58CEC AFA50004 */ sw	$a1, 0X4($sp)
-/* 000340 0x80A58CF0 03E00008 */ jr	$ra
-/* 000341 0x80A58CF4 00000000 */ nop
-

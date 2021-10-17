@@ -1,9 +1,0 @@
-glabel Actor_TitleCardContextInit
-/* 016588 0x800B5DF0 AFA40000 */ sw	$a0, 0X0($sp)
-/* 016589 0x800B5DF4 A0A0000A */ sb	$zero, 0XA($a1)
-/* 016590 0x800B5DF8 A0A0000B */ sb	$zero, 0XB($a1)
-/* 016591 0x800B5DFC A4A0000E */ sh	$zero, 0XE($a1)
-/* 016592 0x800B5E00 A4A0000C */ sh	$zero, 0XC($a1)
-/* 016593 0x800B5E04 03E00008 */ jr	$ra
-/* 016594 0x800B5E08 00000000 */ nop
-

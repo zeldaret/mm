@@ -1,6 +1,0 @@
-glabel EnBomBowlMan_Destroy
-/* 000103 0x809C492C AFA40000 */ sw	$a0, 0X0($sp)
-/* 000104 0x809C4930 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000105 0x809C4934 03E00008 */ jr	$ra
-/* 000106 0x809C4938 00000000 */ nop
-

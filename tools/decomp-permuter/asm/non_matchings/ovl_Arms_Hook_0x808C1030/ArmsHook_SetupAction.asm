@@ -1,5 +1,0 @@
-glabel ArmsHook_SetupAction
-/* 000000 0x808C1030 AC85020C */ sw	$a1, 0X20C($a0)
-/* 000001 0x808C1034 03E00008 */ jr	$ra
-/* 000002 0x808C1038 00000000 */ nop
-

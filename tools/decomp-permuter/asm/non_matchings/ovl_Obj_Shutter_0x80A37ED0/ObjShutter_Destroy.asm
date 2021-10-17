@@ -1,6 +1,0 @@
-glabel ObjShutter_Destroy
-/* 000004 0x80A37EE0 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000005 0x80A37EE4 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000006 0x80A37EE8 03E00008 */ jr	$ra
-/* 000007 0x80A37EEC 00000000 */ nop
-

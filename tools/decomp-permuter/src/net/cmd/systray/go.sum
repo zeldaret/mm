@@ -1,0 +1,4 @@
+github.com/simonlindholm/systray v1.1.1-0.20210502122945-b7c77212cd56 h1:UZcM1HdV25CQhhJD340jxRLRGl0V11V0wIoUDKTOZMI=
+github.com/simonlindholm/systray v1.1.1-0.20210502122945-b7c77212cd56/go.mod h1:N5dpnnWiJhCxh+gXuNgDS2p5MjgcVR/TGwWuaDc4gLk=
+golang.org/x/sys v0.0.0-20200515095857-1151b9dac4a9 h1:YTzHMGlqJu67/uEo1lBv0n3wBXhXNeUbB1XfN2vmTm0=
+golang.org/x/sys v0.0.0-20200515095857-1151b9dac4a9/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=

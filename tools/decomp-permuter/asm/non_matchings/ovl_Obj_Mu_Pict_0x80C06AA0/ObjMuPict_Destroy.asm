@@ -1,6 +1,0 @@
-glabel ObjMuPict_Destroy
-/* 000043 0x80C06B4C AFA40000 */ sw	$a0, 0X0($sp)
-/* 000044 0x80C06B50 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000045 0x80C06B54 03E00008 */ jr	$ra
-/* 000046 0x80C06B58 00000000 */ nop
-

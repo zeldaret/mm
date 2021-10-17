@@ -1,6 +1,0 @@
-glabel EnOsk_Destroy
-/* 000116 0x80BF5DF0 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000117 0x80BF5DF4 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000118 0x80BF5DF8 03E00008 */ jr	$ra
-/* 000119 0x80BF5DFC 00000000 */ nop
-

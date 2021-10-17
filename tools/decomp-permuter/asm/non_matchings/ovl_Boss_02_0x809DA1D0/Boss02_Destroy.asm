@@ -1,6 +1,0 @@
-glabel Boss02_Destroy
-/* 000549 0x809DAA64 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000550 0x809DAA68 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000551 0x809DAA6C 03E00008 */ jr	$ra
-/* 000552 0x809DAA70 00000000 */ nop
-

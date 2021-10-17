@@ -1,6 +1,0 @@
-glabel DmStatue_Destroy
-/* 000009 0x80A4C9D4 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000010 0x80A4C9D8 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000011 0x80A4C9DC 03E00008 */ jr	$ra
-/* 000012 0x80A4C9E0 00000000 */ nop
-

@@ -1,6 +1,0 @@
-glabel EnFireRock_Destroy
-/* 000004 0x808E1FF0 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000005 0x808E1FF4 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000006 0x808E1FF8 03E00008 */ jr	$ra
-/* 000007 0x808E1FFC 00000000 */ nop
-

@@ -1,6 +1,0 @@
-glabel Actor_DrawAllSetup
-/* 020703 0x800B9E3C A0801CAF */ sb	$zero, 0X1CAF($a0)
-/* 020704 0x800B9E40 A0801CAB */ sb	$zero, 0X1CAB($a0)
-/* 020705 0x800B9E44 03E00008 */ jr	$ra
-/* 020706 0x800B9E48 00000000 */ nop
-

@@ -1,5 +1,0 @@
-glabel EnZl1_Draw
-/* 000012 0x8089EDC0 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000013 0x8089EDC4 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000014 0x8089EDC8 03E00008 */ jr	$ra
-/* 000015 0x8089EDCC 00000000 */ nop

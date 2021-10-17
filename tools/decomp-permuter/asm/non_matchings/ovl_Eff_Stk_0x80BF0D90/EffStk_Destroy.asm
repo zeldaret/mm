@@ -1,6 +1,0 @@
-glabel EffStk_Destroy
-/* 000016 0x80BF0DD0 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000017 0x80BF0DD4 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000018 0x80BF0DD8 03E00008 */ jr	$ra
-/* 000019 0x80BF0DDC 00000000 */ nop
-

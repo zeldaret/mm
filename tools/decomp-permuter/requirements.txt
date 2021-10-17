@@ -1,6 +1,0 @@
-libyaz0>=0.5
-pyelftools>=0.26
-colorama>=0.4.3
-ansiwrap>=0.8.4
-attrs>=18.2.0
-watchdog>=0.10.2

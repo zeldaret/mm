@@ -1,7 +1,0 @@
-glabel Collision_FiniSphereParams
-/* 060345 0x800E09A4 AFA40000 */ sw	$a0, 0X0($sp)
-/* 060346 0x800E09A8 AFA50004 */ sw	$a1, 0X4($sp)
-/* 060347 0x800E09AC 24020001 */ li	$v0, 0X1
-/* 060348 0x800E09B0 03E00008 */ jr	$ra
-/* 060349 0x800E09B4 00000000 */ nop
-

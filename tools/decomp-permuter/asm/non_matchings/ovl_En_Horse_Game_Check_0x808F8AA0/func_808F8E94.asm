@@ -1,9 +1,0 @@
-glabel func_808F8E94
-/* 000253 0x808F8E94 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000254 0x808F8E98 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000255 0x808F8E9C 3C01801F */ lui	$at, %hi(gSaveContext + 0x3DD4)
-/* 000256 0x808F8EA0 A0203444 */ sb	$zero, %lo(gSaveContext + 0x3DD4)($at)
-/* 000257 0x808F8EA4 24020001 */ li	$v0, 0X1
-/* 000258 0x808F8EA8 03E00008 */ jr	$ra
-/* 000259 0x808F8EAC 00000000 */ nop
-

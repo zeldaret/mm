@@ -1,6 +1,0 @@
-glabel ObjMure_Destroy
-/* 000077 0x808D7A04 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000078 0x808D7A08 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000079 0x808D7A0C 03E00008 */ jr	$ra
-/* 000080 0x808D7A10 00000000 */ nop
-

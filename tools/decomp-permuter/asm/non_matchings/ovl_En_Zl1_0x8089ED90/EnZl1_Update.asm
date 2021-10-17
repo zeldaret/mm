@@ -1,6 +1,0 @@
-glabel EnZl1_Update
-/* 000008 0x8089EDB0 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000009 0x8089EDB4 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000010 0x8089EDB8 03E00008 */ jr	$ra
-/* 000011 0x8089EDBC 00000000 */ nop
-

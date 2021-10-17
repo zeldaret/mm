@@ -1,6 +1,0 @@
-glabel ObjDowsing_Destroy
-/* 000056 0x80B23E30 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000057 0x80B23E34 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000058 0x80B23E38 03E00008 */ jr	$ra
-/* 000059 0x80B23E3C 00000000 */ nop
-

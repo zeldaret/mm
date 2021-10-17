@@ -1,5 +1,0 @@
-glabel EnTanron6_Draw
-/* 000064 0x80BE6140 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000065 0x80BE6144 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000066 0x80BE6148 03E00008 */ jr	$ra
-/* 000067 0x80BE614C 00000000 */ nop

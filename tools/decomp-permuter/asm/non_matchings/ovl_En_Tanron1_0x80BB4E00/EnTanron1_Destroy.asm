@@ -1,6 +1,0 @@
-glabel EnTanron1_Destroy
-/* 000016 0x80BB4E40 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000017 0x80BB4E44 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000018 0x80BB4E48 03E00008 */ jr	$ra
-/* 000019 0x80BB4E4C 00000000 */ nop
-

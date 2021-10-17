@@ -1,6 +1,0 @@
-glabel EnDyExtra_Destroy
-/* 000000 0x80A612B0 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000001 0x80A612B4 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000002 0x80A612B8 03E00008 */ jr	$ra
-/* 000003 0x80A612BC 00000000 */ nop
-

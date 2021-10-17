@@ -1,7 +1,0 @@
-glabel PreNMI_Stop
-/* 135436 0x80129EF0 A080009B */ sb	$zero, 0X9B($a0)
-/* 135437 0x80129EF4 AC80000C */ sw	$zero, 0XC($a0)
-/* 135438 0x80129EF8 AC800010 */ sw	$zero, 0X10($a0)
-/* 135439 0x80129EFC 03E00008 */ jr	$ra
-/* 135440 0x80129F00 00000000 */ nop
-

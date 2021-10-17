@@ -1,6 +1,0 @@
-glabel EnOkarinaTag_Destroy
-/* 000000 0x8093E420 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000001 0x8093E424 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000002 0x8093E428 03E00008 */ jr	$ra
-/* 000003 0x8093E42C 00000000 */ nop
-

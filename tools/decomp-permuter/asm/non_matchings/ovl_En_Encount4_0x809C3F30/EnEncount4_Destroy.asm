@@ -1,6 +1,0 @@
-glabel EnEncount4_Destroy
-/* 000038 0x809C3FC8 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000039 0x809C3FCC AFA50004 */ sw	$a1, 0X4($sp)
-/* 000040 0x809C3FD0 03E00008 */ jr	$ra
-/* 000041 0x809C3FD4 00000000 */ nop
-

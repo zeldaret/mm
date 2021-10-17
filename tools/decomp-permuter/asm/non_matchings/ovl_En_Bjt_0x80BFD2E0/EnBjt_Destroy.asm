@@ -1,6 +1,0 @@
-glabel EnBjt_Destroy
-/* 000680 0x80BFDD80 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000681 0x80BFDD84 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000682 0x80BFDD88 03E00008 */ jr	$ra
-/* 000683 0x80BFDD8C 00000000 */ nop
-

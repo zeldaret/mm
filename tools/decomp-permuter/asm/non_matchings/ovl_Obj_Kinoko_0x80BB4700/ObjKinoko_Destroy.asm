@@ -1,6 +1,0 @@
-glabel ObjKinoko_Destroy
-/* 000008 0x80BB4720 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000009 0x80BB4724 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000010 0x80BB4728 03E00008 */ jr	$ra
-/* 000011 0x80BB472C 00000000 */ nop
-

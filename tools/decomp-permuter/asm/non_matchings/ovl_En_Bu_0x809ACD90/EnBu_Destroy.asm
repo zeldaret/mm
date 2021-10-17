@@ -1,6 +1,0 @@
-glabel EnBu_Destroy
-/* 000006 0x809ACDA8 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000007 0x809ACDAC AFA50004 */ sw	$a1, 0X4($sp)
-/* 000008 0x809ACDB0 03E00008 */ jr	$ra
-/* 000009 0x809ACDB4 00000000 */ nop
-

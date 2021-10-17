@@ -1,6 +1,0 @@
-glabel EnPrz_Destroy
-/* 000082 0x80A75F08 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000083 0x80A75F0C AFA50004 */ sw	$a1, 0X4($sp)
-/* 000084 0x80A75F10 03E00008 */ jr	$ra
-/* 000085 0x80A75F14 00000000 */ nop
-

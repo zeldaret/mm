@@ -1,7 +1,0 @@
-glabel Collision_FiniQuadParams
-/* 061561 0x800E1CA4 AFA40000 */ sw	$a0, 0X0($sp)
-/* 061562 0x800E1CA8 AFA50004 */ sw	$a1, 0X4($sp)
-/* 061563 0x800E1CAC 24020001 */ li	$v0, 0X1
-/* 061564 0x800E1CB0 03E00008 */ jr	$ra
-/* 061565 0x800E1CB4 00000000 */ nop
-

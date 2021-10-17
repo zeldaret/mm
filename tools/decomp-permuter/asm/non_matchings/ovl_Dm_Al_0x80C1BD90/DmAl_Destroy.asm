@@ -1,6 +1,0 @@
-glabel DmAl_Destroy
-/* 000138 0x80C1BFB8 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000139 0x80C1BFBC AFA50004 */ sw	$a1, 0X4($sp)
-/* 000140 0x80C1BFC0 03E00008 */ jr	$ra
-/* 000141 0x80C1BFC4 00000000 */ nop
-

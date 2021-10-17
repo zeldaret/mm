@@ -1,7 +1,0 @@
-glabel EnTanron6_DoNothing
-/* 000031 0x80BE60BC 3C0E80BE */ lui	$t6, %hi(func_80BE60D0)
-/* 000032 0x80BE60C0 25CE60D0 */ addiu	$t6, $t6, %lo(func_80BE60D0)
-/* 000033 0x80BE60C4 AC8E0200 */ sw	$t6, 0X200($a0)
-/* 000034 0x80BE60C8 03E00008 */ jr	$ra
-/* 000035 0x80BE60CC 00000000 */ nop
-

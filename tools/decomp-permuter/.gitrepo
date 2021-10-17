@@ -6,7 +6,7 @@
 [subrepo]
 	remote = https://github.com/simonlindholm/decomp-permuter.git
 	branch = main
-	commit = d1294dfa05a904ce7687d5d63dbd7d231f60964b
-	parent = 8b2810c1a572fc0859961e685eb0a3995355bf93
+	commit = a20bac9422b6d8adbf7c06473c2ae3c3fee16be5
+	parent = 2668eec556c01fa2f4c16a203c93c208dc03e639
 	method = merge
 	cmdver = 0.4.3

@@ -1,6 +1,0 @@
-glabel EnRecepgirl_Destroy
-/* 000063 0x80C100CC AFA40000 */ sw	$a0, 0X0($sp)
-/* 000064 0x80C100D0 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000065 0x80C100D4 03E00008 */ jr	$ra
-/* 000066 0x80C100D8 00000000 */ nop
-

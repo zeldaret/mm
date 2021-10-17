@@ -1,6 +1,0 @@
-glabel ObjDinner_Update
-/* 000035 0x80BEB9CC AFA40000 */ sw	$a0, 0X0($sp)
-/* 000036 0x80BEB9D0 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000037 0x80BEB9D4 03E00008 */ jr	$ra
-/* 000038 0x80BEB9D8 00000000 */ nop
-

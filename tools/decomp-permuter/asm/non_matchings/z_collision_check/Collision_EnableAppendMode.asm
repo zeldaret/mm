@@ -1,8 +1,0 @@
-glabel Collision_EnableAppendMode
-/* 062112 0x800E2540 AFA40000 */ sw	$a0, 0X0($sp)
-/* 062113 0x800E2544 94AE0002 */ lhu	$t6, 0X2($a1)
-/* 062114 0x800E2548 31CFFFFE */ andi	$t7, $t6, 0XFFFE
-/* 062115 0x800E254C A4AF0002 */ sh	$t7, 0X2($a1)
-/* 062116 0x800E2550 03E00008 */ jr	$ra
-/* 062117 0x800E2554 00000000 */ nop
-

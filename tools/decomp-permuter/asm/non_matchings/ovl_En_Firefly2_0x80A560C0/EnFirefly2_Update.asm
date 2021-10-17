@@ -1,6 +1,0 @@
-glabel EnFirefly2_Update
-/* 000008 0x80A560E0 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000009 0x80A560E4 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000010 0x80A560E8 03E00008 */ jr	$ra
-/* 000011 0x80A560EC 00000000 */ nop
-

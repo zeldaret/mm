@@ -1,7 +1,0 @@
-glabel Effect_InitCommon
-/* 010095 0x800AF87C A0800000 */ sb	$zero, 0X0($a0)
-/* 010096 0x800AF880 A0800001 */ sb	$zero, 0X1($a0)
-/* 010097 0x800AF884 A0800002 */ sb	$zero, 0X2($a0)
-/* 010098 0x800AF888 03E00008 */ jr	$ra
-/* 010099 0x800AF88C 00000000 */ nop
-

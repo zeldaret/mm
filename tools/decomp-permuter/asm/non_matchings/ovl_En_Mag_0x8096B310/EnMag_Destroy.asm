@@ -1,6 +1,0 @@
-glabel EnMag_Destroy
-/* 000185 0x8096B5F4 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000186 0x8096B5F8 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000187 0x8096B5FC 03E00008 */ jr	$ra
-/* 000188 0x8096B600 00000000 */ nop
-

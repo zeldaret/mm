@@ -1,6 +1,0 @@
-glabel DmTsg_Destroy
-/* 000054 0x80A3AD38 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000055 0x80A3AD3C AFA50004 */ sw	$a1, 0X4($sp)
-/* 000056 0x80A3AD40 03E00008 */ jr	$ra
-/* 000057 0x80A3AD44 00000000 */ nop
-

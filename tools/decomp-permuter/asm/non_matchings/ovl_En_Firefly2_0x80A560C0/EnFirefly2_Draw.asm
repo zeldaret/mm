@@ -1,5 +1,0 @@
-glabel EnFirefly2_Draw
-/* 000012 0x80A560F0 AFA40000 */ sw	$a0, 0X0($sp)
-/* 000013 0x80A560F4 AFA50004 */ sw	$a1, 0X4($sp)
-/* 000014 0x80A560F8 03E00008 */ jr	$ra
-/* 000015 0x80A560FC 00000000 */ nop

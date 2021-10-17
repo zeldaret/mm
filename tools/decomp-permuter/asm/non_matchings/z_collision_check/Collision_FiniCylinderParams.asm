@@ -1,7 +1,0 @@
-glabel Collision_FiniCylinderParams
-/* 060834 0x800E1148 AFA40000 */ sw	$a0, 0X0($sp)
-/* 060835 0x800E114C AFA50004 */ sw	$a1, 0X4($sp)
-/* 060836 0x800E1150 24020001 */ li	$v0, 0X1
-/* 060837 0x800E1154 03E00008 */ jr	$ra
-/* 060838 0x800E1158 00000000 */ nop
-
