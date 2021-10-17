@@ -215,7 +215,7 @@ void EnMinislime_AddIceSmokeEffect(EnMinislime* this, GlobalContext* globalCtx) 
     vel.x = randPlusMinusPoint5Scaled(1.5f);
     vel.z = randPlusMinusPoint5Scaled(1.5f);
     vel.y = 2.0f;
-    EffectSsIceSmoke_Spawn(globalCtx, &pos, &vel, &gZeroVec, 500);
+    EffectSsIceSmoke_Spawn(globalCtx, &pos, &vel, &gZeroVec3f, 500);
 }
 
 void EnMinislime_SetupDisappear(EnMinislime* this) {

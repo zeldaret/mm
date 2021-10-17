@@ -611,7 +611,7 @@ void func_80BA6800(EnRailgibud* this, GlobalContext* globalCtx, s32 arg2) {
 void func_80BA6974(GlobalContext* globalCtx, Vec3f* vec, f32 arg2, s32 arg3, s16 arg4, s16 arg5) {
     Vec3f sp8C;
     Vec3f sp80 = { 0.0f, 0.3f, 0.0f };
-    Vec3f sp74 = gZeroVec;
+    Vec3f sp74 = gZeroVec3f;
     s32 i;
     s32 pad;
 

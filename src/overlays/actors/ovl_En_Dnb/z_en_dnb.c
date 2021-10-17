@@ -47,7 +47,7 @@ void func_80A4FDD0(EnDnbParticle* particle, EnDnb* this, s16* alloc, s32 idx) {
     particle->unk_00 = sp1C;
     particle->unk_0C = sp1C;
     particle->unk_24 = Math_Vec3f_Yaw(&this->dyna.actor.world.pos, &sp1C);
-    particle->unk_18 = D_801D15BC;
+    particle->unk_18 = gZeroVec3s;
 }
 
 s32 func_80A4FEBC(EnDnbParticle* particle, f32 arg1) {
@@ -76,7 +76,7 @@ void func_80A4FFE8(EnDnbParticle* particle, s16 arg1) {
     particle->unk_1E.x = (Rand_ZeroOne() - 0.5f) * 400.0f;
     particle->unk_1E.y = (Rand_ZeroOne() - 0.5f) * 400.0f;
     particle->unk_1E.z = (Rand_ZeroOne() - 0.5f) * 400.0f;
-    particle->unk_18 = D_801D15BC;
+    particle->unk_18 = gZeroVec3s;
     particle->unk_30 = 40.0f;
     particle->unk_2C = 0.0f;
     particle->unk_26 = arg1;
@@ -86,7 +86,7 @@ void func_80A4FFE8(EnDnbParticle* particle, s16 arg1) {
 s32 func_80A500F8(EnDnb* this) {
     static Vec3f D_80A50CB0 = { 0.0f, 0.0f, 1000.0f };
     Actor* actor = &this->dyna.actor;
-    Vec3f spA8 = gZeroVec;
+    Vec3f spA8 = gZeroVec3f;
     Vec3f sp9C;
     s32 i;
     f32 temp_f20;

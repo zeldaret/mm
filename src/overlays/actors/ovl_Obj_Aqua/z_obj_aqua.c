@@ -115,7 +115,7 @@ void func_80ACB940(ObjAqua* this, GlobalContext* globalCtx) {
     effectPos.x = this->actor.world.pos.x + (effectVel.x * 40.0f);
     effectPos.y = this->actor.world.pos.y;
     effectPos.z = this->actor.world.pos.z + (effectVel.z * 40.0f);
-    EffectSsIceSmoke_Spawn(globalCtx, &effectPos, &effectVel, &gZeroVec, (s32)(Rand_ZeroOne() * 24.0f) + 70);
+    EffectSsIceSmoke_Spawn(globalCtx, &effectPos, &effectVel, &gZeroVec3f, (s32)(Rand_ZeroOne() * 24.0f) + 70);
 }
 
 void func_80ACBA10(ObjAqua* this) {

@@ -1712,11 +1712,11 @@ void EnTrt_UpdateHeadYawAndPitch(EnTrt* this, GlobalContext* globalCtx) {
 
 void EnTrt_UpdateHeadPosAndRot(s16 pitch, s16 yaw, Vec3f* pos, Vec3s* rot, s32 isFullyAwake) {
     Vec3f newPos;
-    Vec3f gZeroVectmp = gZeroVec;
+    Vec3f gZeroVec3ftmp = gZeroVec3f;
     Vec3s newRot;
     MtxF currentState;
 
-    SysMatrix_MultiplyVector3fByState(&gZeroVectmp, &newPos);
+    SysMatrix_MultiplyVector3fByState(&gZeroVec3ftmp, &newPos);
     SysMatrix_CopyCurrentState(&currentState);
     func_8018219C(&currentState, &newRot, MTXMODE_NEW);
     *pos = newPos;

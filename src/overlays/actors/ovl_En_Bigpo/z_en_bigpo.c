@@ -716,13 +716,13 @@ void EnBigpo_BurnAwayDeath(EnBigpo* this, GlobalContext* globalCtx) {
 
         // not sure what we're turning this into, but its based on the timer
         modifiedTimer = ((f32)((this->idleTimer * 10) + 80) * 1.4000001f);
-        func_800B3030(globalCtx, &tempVec, &D_80B6506C, &gZeroVec, modifiedTimer, 0, 2);
+        func_800B3030(globalCtx, &tempVec, &D_80B6506C, &gZeroVec3f, modifiedTimer, 0, 2);
         tempVec.x = (2.0f * this->actor.world.pos.x) - tempVec.x;
         tempVec.z = (2.0f * this->actor.world.pos.z) - tempVec.z;
-        func_800B3030(globalCtx, &tempVec, &D_80B6506C, &gZeroVec, modifiedTimer, 0, 2);
+        func_800B3030(globalCtx, &tempVec, &D_80B6506C, &gZeroVec3f, modifiedTimer, 0, 2);
         tempVec.x = this->actor.world.pos.x;
         tempVec.z = this->actor.world.pos.z;
-        func_800B3030(globalCtx, &tempVec, &D_80B6506C, &gZeroVec, modifiedTimer, 0, 2);
+        func_800B3030(globalCtx, &tempVec, &D_80B6506C, &gZeroVec3f, modifiedTimer, 0, 2);
 
     } else if (this->idleTimer >= 28) {
         EnBigpo_SetupLanternDrop(this, globalCtx);
@@ -1385,7 +1385,7 @@ void EnBigpo_DrawLantern(Actor* thisx, GlobalContext* globalCtx) {
         magnitude2 = (magnitude > 1.0f) ? (20.0f / magnitude) : (20.0f);
         Math_Vec3f_Scale(&vec1, magnitude2);
     } else {
-        Math_Vec3f_Copy(&vec1, &gZeroVec);
+        Math_Vec3f_Copy(&vec1, &gZeroVec3f);
     }
 
     {

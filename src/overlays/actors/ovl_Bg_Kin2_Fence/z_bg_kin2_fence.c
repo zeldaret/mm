@@ -143,7 +143,7 @@ void BgKin2Fence_SpawnEyeSparkles(BgKin2Fence* this, GlobalContext* globalCtx, s
 
     for (i = 0; i < 2; i++) {
         SysMatrix_MultiplyVector3fByState(&eyeSparkleSpawnPositions[mask][i], &sp58);
-        EffectSsKiraKira_SpawnDispersed(globalCtx, &sp58, &gZeroVec, &gZeroVec, &primColor, &envColor, 6000, -10);
+        EffectSsKiraKira_SpawnDispersed(globalCtx, &sp58, &gZeroVec3f, &gZeroVec3f, &primColor, &envColor, 6000, -10);
     }
 }
 

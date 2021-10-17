@@ -203,7 +203,7 @@ void func_80B2C910(Vec3f* vec, GlobalContext* globalCtx) {
         }
         Math_Vec3f_ScaleAndStore(&sp20, temp_f0, vec);
     } else {
-        Math_Vec3f_Copy(vec, &gZeroVec);
+        Math_Vec3f_Copy(vec, &gZeroVec3f);
     }
 }
 
@@ -426,13 +426,13 @@ void func_80B2D300(EnPoh* this, GlobalContext* globalCtx) {
             sp44.z = (Math_CosS(sp38) * 23.0f) + this->actor.world.pos.z;
         }
         sp36 = (this->unk_18E * 10) + 80;
-        func_800B3030(globalCtx, &sp44, &D_80B2F710, &gZeroVec, sp36, 0, 2);
+        func_800B3030(globalCtx, &sp44, &D_80B2F710, &gZeroVec3f, sp36, 0, 2);
         sp44.x = (2.0f * this->actor.world.pos.x) - sp44.x;
         sp44.z = (2.0f * this->actor.world.pos.z) - sp44.z;
-        func_800B3030(globalCtx, &sp44, &D_80B2F710, &gZeroVec, sp36, 0, 2);
+        func_800B3030(globalCtx, &sp44, &D_80B2F710, &gZeroVec3f, sp36, 0, 2);
         sp44.x = this->actor.world.pos.x;
         sp44.z = this->actor.world.pos.z;
-        func_800B3030(globalCtx, &sp44, &D_80B2F710, &gZeroVec, sp36, 0, 2);
+        func_800B3030(globalCtx, &sp44, &D_80B2F710, &gZeroVec3f, sp36, 0, 2);
     } else if (this->unk_18E == 28) {
         func_80B2DC50(this, globalCtx);
     } else if (this->unk_18E > 18) {

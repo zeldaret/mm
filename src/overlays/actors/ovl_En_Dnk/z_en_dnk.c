@@ -283,7 +283,7 @@ s32 func_80A51A78(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 void func_80A51AA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnDnk* this = THIS;
     MtxF sp5C;
-    Vec3f sp50 = gZeroVec;
+    Vec3f sp50 = gZeroVec3f;
     Vec3f sp44;
     Vec3s sp3C;
 
@@ -359,7 +359,7 @@ s32 func_80A51D78(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 void func_80A51DA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnDnk* this = THIS;
     MtxF sp5C;
-    Vec3f sp50 = gZeroVec;
+    Vec3f sp50 = gZeroVec3f;
     Vec3f sp44;
     Vec3s sp3C;
 

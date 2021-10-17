@@ -411,7 +411,7 @@ void func_80BAAFDC(EnSuttari* this, GlobalContext* globalCtx) {
         SysMatrix_MultiplyVector3fByState(&effectVelOffset, &effectVel);
         SysMatrix_StatePop();
         if (this->unk3F0 == 0) {
-            EffectSsSolderSrchBall_Spawn(globalCtx, &effectPos, &effectVel, &gZeroVec, 50, &this->unk3F0, 1);
+            EffectSsSolderSrchBall_Spawn(globalCtx, &effectPos, &effectVel, &gZeroVec3f, 50, &this->unk3F0, 1);
         }
         if (this->unk3F0 == 1) {
             play_sound(NA_SE_SY_FOUND);
@@ -443,7 +443,7 @@ void func_80BAB1A0(EnSuttari* this, GlobalContext* globalCtx) {
         SysMatrix_MultiplyVector3fByState(&effectVelOffset, &effectVel);
         SysMatrix_StatePop();
         if (this->unk3F0 == 0) {
-            EffectSsSolderSrchBall_Spawn(globalCtx, &effectPos, &effectVel, &gZeroVec, 50, &this->unk3F0, 1);
+            EffectSsSolderSrchBall_Spawn(globalCtx, &effectPos, &effectVel, &gZeroVec3f, 50, &this->unk3F0, 1);
         }
         if (this->unk3F0 == 1) {
             play_sound(NA_SE_SY_FOUND);
@@ -760,7 +760,7 @@ s32 func_80BABFD4(EnSuttari* this, GlobalContext* globalCtx) {
     sp50 = 0;
     func_8013AF00(&sp7C, 3, this->unk404->count + 3);
     if (this->unk42C == 0) {
-        sp58 = gZeroVec;
+        sp58 = gZeroVec3f;
         func_8013B6B0(this->unk404, &this->unk414, &this->unk424, this->unk41C, this->unk418, &this->unk420, &sp7C,
                       &sp58, this->unk42A);
         func_8013B878(globalCtx, this->unk404, this->unk420, &sp58);
@@ -776,7 +776,7 @@ s32 func_80BABFD4(EnSuttari* this, GlobalContext* globalCtx) {
         sp50 = this->unk420;
         sp58 = this->actor.world.pos;
     }
-    this->unk408 = gZeroVec;
+    this->unk408 = gZeroVec3f;
     if (func_8013B6B0(this->unk404, &this->unk414, &this->unk424, this->unk41C, this->unk418, &this->unk420, &sp7C,
                       &this->unk408, this->unk42A)) {
         this->unk430 = 1;

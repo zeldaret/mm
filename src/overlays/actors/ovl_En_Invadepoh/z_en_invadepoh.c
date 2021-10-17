@@ -221,7 +221,6 @@ extern Gfx D_06000720[];
 extern Gfx D_06000080[];
 
 extern s32 D_801BDA9C;
-extern Vec3s D_801D15BC;
 
 const ActorInit En_Invadepoh_InitVars = {
     ACTOR_EN_INVADEPOH,
@@ -2570,7 +2569,7 @@ void func_80B48620(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.update = func_80B4873C;
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, &D_06009E58, this->limbDrawTable,
                          this->transitionDrawTable, 23);
-        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 6, D_80B4EB00, 2, &D_801D15BC, 5000, 0.05f, 0.3f, 0.12f);
+        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 6, D_80B4EB00, 2, &gZeroVec3s, 5000, 0.05f, 0.3f, 0.12f);
         SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06009E58);
         func_80B482D4(this);
     }
@@ -2638,7 +2637,7 @@ void func_80B48948(EnInvadepoh* this) {
     this->actionTimer = Rand_S16Offset(150, 150);
     if (rand < 0.5f) {
         this->rand = 0;
-        Math_Vec3s_Copy(&substruct->unk26, &D_801D15BC);
+        Math_Vec3s_Copy(&substruct->unk26, &gZeroVec3s);
         substruct->unk30 = 0.1f;
         substruct->unk2C = 1000;
     } else if (rand < 0.75f) {
@@ -2704,7 +2703,7 @@ void func_80B48AD4(EnInvadepoh* this, GlobalContext* globalCtx) {
             if (temp_v1_3 != this->rand) {
                 this->rand = temp_v1_3;
                 if (this->rand == 0) {
-                    Math_Vec3s_Copy(&substruct->unk26, &D_801D15BC);
+                    Math_Vec3s_Copy(&substruct->unk26, &gZeroVec3s);
                     substruct->unk30 = 0.07f;
                 } else if (this->rand == 1) {
                     substruct->unk26.x = Rand_S16Offset(1000, 1000);
@@ -2774,7 +2773,7 @@ void func_80B48FB0(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.textId = 0x3330;
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, &D_06009E58, this->limbDrawTable,
                          this->transitionDrawTable, 23);
-        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 6, D_80B4EB00, 2, &D_801D15BC, 100, 0.03, 0.3, 0.03);
+        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 6, D_80B4EB00, 2, &gZeroVec3s, 100, 0.03, 0.3, 0.03);
         func_80B444F4(this, globalCtx);
         EnInvadepoh_SetPathPointToWorldPos(this, 0);
         func_800B4AEC(globalCtx, &this->actor, 50.0f);
@@ -3126,7 +3125,7 @@ void func_80B49F88(Actor* thisx, GlobalContext* globalCtx) {
         func_80B44F58();
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, &D_06014088, this->limbDrawTable,
                          this->transitionDrawTable, 23);
-        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 1, &D_801D15BC, 100, 0.03, 0.3, 0.03);
+        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 1, &gZeroVec3s, 100, 0.03, 0.3, 0.03);
         func_80B44540(this, globalCtx);
         func_80B44570(this);
         func_80B44C24(this, globalCtx);
@@ -3357,7 +3356,7 @@ void func_80B4A9C8(Actor* thisx, GlobalContext* globalCtx) {
         func_80B44F58();
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, &D_06014088, this->limbDrawTable,
                          this->transitionDrawTable, 23);
-        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 1, &D_801D15BC, 100, 0.03f, 0.3f, 0.03f);
+        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 1, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
         func_80B44620(this, globalCtx);
         if ((sp38 < CLOCK_TIME(2, 15)) || (sp38 >= CLOCK_TIME(6, 0))) {
             this->pathIndex = 0;
@@ -3534,7 +3533,7 @@ void func_80B4B0C4(Actor* thisx, GlobalContext* globalCtx) {
                          this->transitionDrawTable, 23);
         SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06009E58, 0.0f);
         substruct = &this->behaviorInfo;
-        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 3, &D_801D15BC, 2000, 0.08f, 0.3f, 0.03f);
+        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 3, &gZeroVec3s, 2000, 0.08f, 0.3f, 0.03f);
         substruct->unk30 = 0.08f;
         substruct->unk2C = 0x7D0;
         func_800B4AEC(globalCtx, &this->actor, 50.0f);
@@ -3687,7 +3686,7 @@ void func_80B4B8BC(Actor* thisx, GlobalContext* globalCtx) {
         Actor_SetObjectSegment(globalCtx, &this->actor);
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_060080F0, &D_060021C8, this->limbDrawTable,
                          this->transitionDrawTable, 13);
-        func_80B45C04(&this->behaviorInfo, 0, 0, 0, 0, &D_801D15BC, 3000, 0.1f, 0.0f, 0.0f);
+        func_80B45C04(&this->behaviorInfo, 0, 0, 0, 0, &gZeroVec3s, 3000, 0.1f, 0.0f, 0.0f);
         func_80B44664(this, globalCtx);
         EnInvadepoh_SetPathPointToWorldPos(this, 0);
         func_800B4AEC(globalCtx, &this->actor, 50.0f);
@@ -3921,7 +3920,7 @@ void func_80B4C3A0(Actor* thisx, GlobalContext* globalCtx) {
         func_80B44FEC();
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06015C28, &D_06016720, this->limbDrawTable,
                          this->transitionDrawTable, 22);
-        func_80B45C04(&this->behaviorInfo, D_80B4EBDC, 1, D_80B4EC08, 0, &D_801D15BC, 100, 0.03f, 0.3f, 0.03f);
+        func_80B45C04(&this->behaviorInfo, D_80B4EBDC, 1, D_80B4EC08, 0, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
         this->actor.textId = 0x33CD;
         if (currentTime < 0xD5A0) {
             this->unk304 = -0x8000;
@@ -4142,7 +4141,7 @@ void func_80B4CE54(Actor* thisx, GlobalContext* globalCtx) {
         func_80B44F58();
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, &D_06014088, this->limbDrawTable,
                          this->transitionDrawTable, 23);
-        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 3, &D_801D15BC, 100, 0.03f, 0.3f, 0.03f);
+        func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 3, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
         func_80B446D0(this, globalCtx);
         this->actor.world.rot.y = this->actor.shape.rot.y;
         func_80B44700(this);

@@ -586,7 +586,7 @@ void EnPametfrog_SetupWallCrawl(EnPametfrog* this) {
         this->actor.gravity = 0.0f;
         this->actor.world.pos.y = this->actor.focus.pos.y;
         this->unk_2D0.y = 1.0f;
-        Math_Vec3f_Copy(&this->actor.colChkInfo.displacement, &gZeroVec);
+        Math_Vec3f_Copy(&this->actor.colChkInfo.displacement, &gZeroVec3f);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         this->unk_2DC.x = COLPOLY_GET_NORMAL(this->actor.wallPoly->normal.x);
         this->unk_2DC.y = COLPOLY_GET_NORMAL(this->actor.wallPoly->normal.y);
@@ -983,7 +983,7 @@ void EnPametfrog_SetupSpawnFrog(EnPametfrog* this, GlobalContext* globalCtx) {
     vec1.y = this->actor.world.pos.y + 25.0f;
     vec1.z = (Math_CosS(yaw) * 20.0f) + this->actor.world.pos.z;
     this->collider.base.ocFlags1 &= ~OC1_ON;
-    func_800B0DE0(globalCtx, &vec1, &gZeroVec, &gZeroVec, &primColor, &envColor, 800, 50);
+    func_800B0DE0(globalCtx, &vec1, &gZeroVec3f, &gZeroVec3f, &primColor, &envColor, 800, 50);
     Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_NPC_APPEAR);
     Actor_SetRoomClearedTemp(globalCtx, globalCtx->roomCtx.currRoom.num);
 

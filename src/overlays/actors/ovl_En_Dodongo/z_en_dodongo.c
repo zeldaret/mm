@@ -384,7 +384,7 @@ void func_80876930(EnDodongo* this, GlobalContext* globalCtx, Vec3f* arg2) {
         sp88.z = randPlusMinusPoint5Scaled(temp3) + arg2->z;
         D_8087933C.x = randPlusMinusPoint5Scaled(2.0f);
         D_8087933C.z = randPlusMinusPoint5Scaled(2.0f);
-        func_800B0DE0(globalCtx, &sp88, &gZeroVec, &D_8087933C, sp80, sp7C, temp1, temp2);
+        func_800B0DE0(globalCtx, &sp88, &gZeroVec3f, &D_8087933C, sp80, sp7C, temp1, temp2);
     }
 }
 
@@ -780,13 +780,13 @@ void func_80877E60(EnDodongo* this, GlobalContext* globalCtx) {
             sp5E = this->unk_334 * 50.0f;
             sp5C = this->unk_334 * 5.0f;
             Math_Vec3f_Copy(&sp64, &this->unk_348[0]);
-            func_800B0DE0(globalCtx, &sp64, &gZeroVec, &D_80879360, &D_8087936C, &D_8087936C, sp5E, sp5C);
+            func_800B0DE0(globalCtx, &sp64, &gZeroVec3f, &D_80879360, &D_8087936C, &D_8087936C, sp5E, sp5C);
             sp64.x -= Math_CosS(this->actor.shape.rot.y) * 6.0f * this->unk_334;
             sp64.z += Math_SinS(this->actor.shape.rot.y) * 6.0f * this->unk_334;
-            func_800B0DE0(globalCtx, &sp64, &gZeroVec, &D_80879360, &D_8087936C, &D_8087936C, sp5E, sp5C);
+            func_800B0DE0(globalCtx, &sp64, &gZeroVec3f, &D_80879360, &D_8087936C, &D_8087936C, sp5E, sp5C);
             sp64.x = (2.0f * this->unk_348[0].x) - sp64.x;
             sp64.z = (2.0f * this->unk_348[0].z) - sp64.z;
-            func_800B0DE0(globalCtx, &sp64, &gZeroVec, &D_80879360, &D_8087936C, &D_8087936C, sp5E, sp5C);
+            func_800B0DE0(globalCtx, &sp64, &gZeroVec3f, &D_80879360, &D_8087936C, &D_8087936C, sp5E, sp5C);
         }
     }
 

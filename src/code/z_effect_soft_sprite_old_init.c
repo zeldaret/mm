@@ -590,7 +590,7 @@ extern Vec3f D_801AE3E0;
 void func_800B2364(GlobalContext* globalCtx, Vec3f* pos, Gfx* dList) {
     Vec3f posVec = D_801AE3E0;
 
-    EffectSsHahen_Spawn(globalCtx, pos, &gZeroVec, &posVec, 1, 5, 1, 10, dList);
+    EffectSsHahen_Spawn(globalCtx, pos, &gZeroVec3f, &posVec, 1, 5, 1, 10, dList);
 }
 
 // EffectSsStick Spawn Functions
@@ -1031,7 +1031,7 @@ void EffectSsDeadDs_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity,
 }
 
 void func_800B31BC(GlobalContext* globalCtx, Vec3f* pos, s16 scale, s16 scaleStep, s16 alpha, s32 life) {
-    EffectSsDeadDs_Spawn(globalCtx, pos, &gZeroVec, &gZeroVec, scale, scaleStep, alpha, life);
+    EffectSsDeadDs_Spawn(globalCtx, pos, &gZeroVec3f, &gZeroVec3f, scale, scaleStep, alpha, life);
 }
 
 // EffectSsIceSmoke Spawn Functions

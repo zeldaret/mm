@@ -459,7 +459,7 @@ void EnBigslime_UpdateSurfaceNorm(EnBigslime* this) {
     s32 i;
 
     for (i = 0; i < BIGSLIME_NUM_VTX; i++) {
-        Math_Vec3f_Copy(&vtxNorm[i], &gZeroVec);
+        Math_Vec3f_Copy(&vtxNorm[i], &gZeroVec3f);
     }
 
     for (i = 0; i < BIGSLIME_NUM_FACES; i++) {
@@ -1933,7 +1933,7 @@ void EnBigslime_Melt(EnBigslime* this, GlobalContext* globalCtx) {
         iceSmokePos.x = (dynamicVtx->n.ob[0] * this->actor.scale.x) + this->actor.world.pos.x;
         iceSmokePos.y = (dynamicVtx->n.ob[1] * this->actor.scale.y) + this->actor.world.pos.y;
         iceSmokePos.z = (dynamicVtx->n.ob[2] * this->actor.scale.z) + this->actor.world.pos.z;
-        EffectSsIceSmoke_Spawn(globalCtx, &iceSmokePos, &sIceSmokeVelocity, &gZeroVec, 600);
+        EffectSsIceSmoke_Spawn(globalCtx, &iceSmokePos, &sIceSmokeVelocity, &gZeroVec3f, 600);
     }
 
     func_800B9010(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
@@ -2340,7 +2340,7 @@ void EnBigslime_SetupGekkoDespawn(EnBigslime* this, GlobalContext* globalCtx) {
         magnitude /= 20.0f;
         Math_Vec3f_Scale(&this->subCamDistToFrog, magnitude * invMagnitude);
     } else {
-        Math_Vec3f_Copy(&this->subCamDistToFrog, &gZeroVec);
+        Math_Vec3f_Copy(&this->subCamDistToFrog, &gZeroVec3f);
     }
 
     this->iceShardAlpha = 0;
@@ -2388,7 +2388,7 @@ void EnBigslime_SetupFrogSpawn(EnBigslime* this, GlobalContext* globalCtx) {
     dustPos.z = (Math_CosS(yawReverse) * 20.0f) + this->actor.world.pos.z;
     Audio_PlaySoundAtPosition(globalCtx, worldPos, 40, NA_SE_EN_NPC_APPEAR);
     // dust cloud where frog appears
-    func_800B0DE0(globalCtx, &dustPos, &gZeroVec, &gZeroVec, &sDustPrimColor, &sDustEnvColor, 500, 50);
+    func_800B0DE0(globalCtx, &dustPos, &gZeroVec3f, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 500, 50);
 
     for (i = 0; i < 25; i++) {
         hahenVel.x = randPlusMinusPoint5Scaled(5.0f);

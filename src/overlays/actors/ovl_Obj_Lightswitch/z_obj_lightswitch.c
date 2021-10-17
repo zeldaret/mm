@@ -139,7 +139,7 @@ void ObjLightswitch_SpawnEffects(ObjLightswitch* this, GlobalContext* globalCtx)
         effectPos.y = this->actor.world.pos.y + tempResultDiff + 10.0f;
         effectPos.z = this->actor.world.pos.z + ((rand * cosResult) - (tempResult * sinResult));
 
-        EffectSsDeadDb_Spawn(globalCtx, &effectPos, &gZeroVec, &gZeroVec, &sLightswitchEffectPrimColor,
+        EffectSsDeadDb_Spawn(globalCtx, &effectPos, &gZeroVec3f, &gZeroVec3f, &sLightswitchEffectPrimColor,
                              &sLightswitchEffectEnvColor, 100, 0, 9);
     }
 }
