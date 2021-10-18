@@ -108,9 +108,8 @@ void ObjMure_GetSpawnPos(Vec3f* outPos, Vec3f* inPos, s32 ptn, s32 idx) {
     *outPos = *inPos;
 }
 
-#ifdef NON_MATCHING
-void ObjMure_SpawnActors0(ObjMure* this, GlobalContext* globalCtx) {
-    GlobalContext* globalCtx2 = globalCtx;
+void ObjMure_SpawnActors0(Actor* thisx, GlobalContext* globalCtx) {
+    ObjMure* this = THIS;
     s32 i;
     Vec3f pos;
     s32 pad;
@@ -123,7 +122,7 @@ void ObjMure_SpawnActors0(ObjMure* this, GlobalContext* globalCtx) {
             case OBJMURE_CHILD_STATE_2:
                 ObjMure_GetSpawnPos(&pos, &this->actor.world.pos, this->ptn, i);
                 this->children[i] = Actor_SpawnAsChildAndCutscene(
-                    &globalCtx2->actorCtx, globalCtx, sSpawnActorIds[this->type], pos.x, pos.y, pos.z,
+                    &globalCtx->actorCtx, globalCtx, sSpawnActorIds[this->type], pos.x, pos.y, pos.z,
                     this->actor.world.rot.x, this->actor.world.rot.y, this->actor.world.rot.z, sSpawnParams[this->type],
                     this->actor.cutscene, this->actor.unk20, NULL);
                 if (this->children[i] != NULL) {
@@ -136,7 +135,7 @@ void ObjMure_SpawnActors0(ObjMure* this, GlobalContext* globalCtx) {
             default:
                 ObjMure_GetSpawnPos(&pos, &this->actor.world.pos, this->ptn, i);
                 this->children[i] = Actor_SpawnAsChildAndCutscene(
-                    &globalCtx2->actorCtx, globalCtx, sSpawnActorIds[this->type], pos.x, pos.y, pos.z,
+                    &globalCtx->actorCtx, globalCtx, sSpawnActorIds[this->type], pos.x, pos.y, pos.z,
                     this->actor.world.rot.x, this->actor.world.rot.y, this->actor.world.rot.z, sSpawnParams[this->type],
                     this->actor.cutscene, this->actor.unk20, NULL);
                 if (this->children[i] != NULL) {
@@ -146,14 +145,9 @@ void ObjMure_SpawnActors0(ObjMure* this, GlobalContext* globalCtx) {
         }
     }
 }
-#else
-void ObjMure_SpawnActors0(ObjMure* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure/ObjMure_SpawnActors0.s")
-#endif
 
 void ObjMure_SpawnActors1(ObjMure* this, GlobalContext* globalCtx) {
     GlobalContext* globalCtx2 = globalCtx;
-
     Actor* actor = &this->actor;
     Vec3f spawnPos;
     s32 maxChildren = ObjMure_GetMaxChildSpawns(this);
@@ -177,7 +171,7 @@ void ObjMure_SpawnActors1(ObjMure* this, GlobalContext* globalCtx) {
 void ObjMure_SpawnActors(ObjMure* this, GlobalContext* globalCtx) {
     switch (this->svNum) {
         case 0:
-            ObjMure_SpawnActors0(this, globalCtx);
+            ObjMure_SpawnActors0(&this->actor, globalCtx);
             break;
         case 1:
             ObjMure_SpawnActors1(this, globalCtx);
