@@ -151,7 +151,7 @@ typedef enum {
     /* 0x5 */ ENKAKASI_ANIM_ARMS_CROSSED_STILL,   // arms crossed but still, also some noise sfx
     /* 0x6 */ ENKAKASI_ANIM_WAVE,                 // "wave" short sideways shake, stops early, partial? unused?
     /* 0x7 */ ENKAKASI_ANIM_SLOWROLL,             // partial bounch, ends looking left, OFFER anim takes over
-    /* 0x8 */ ENKAKASI_ANIM_IDLE,               // slow stretching wiggle, ends in regular position
+    /* 0x8 */ ENKAKASI_ANIM_IDLE,                 // slow stretching wiggle, ends in regular position
 } EnKakasi_Animations;
 
 extern AnimationHeader D_06007444;
