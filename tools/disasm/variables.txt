@@ -7160,7 +7160,6 @@
     0x808D784C:("D_808D784C","f32","",0x4),
     0x808D7850:("D_808D7850","f32","",0x4),
     0x808D8760:("Obj_Mure_InitVars","UNK_TYPE1","",0x1),
-    0x808D8780:("D_808D8780","UNK_TYPE1","",0x1),
     0x808DB9C0:("En_Sw_InitVars","UNK_TYPE1","",0x1),
     0x808DB9E0:("D_808DB9E0","UNK_TYPE1","",0x1),
     0x808DBA0C:("D_808DBA0C","UNK_PTR","",0x4),
