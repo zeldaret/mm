@@ -250,7 +250,7 @@ void EnKakasi_8096F88C(GlobalContext* globalCtx, EnKakasi* this) {
     func_8013A530(globalCtx, &this->actor, 0x7, &this->actor.focus.pos, &this->actor.shape.rot, 280.0f, 1800.0f, -1);
 }
 
-void EnKakasi_CheckAnimateSFX(EnKakasi* this) {
+void EnKakasi_CheckAnimationSfx(EnKakasi* this) {
     if (this->animIndex == ENKAKASI_ANIM_SIDEWAYS_SHAKING || this->animIndex == ENKAKASI_ANIM_ARMS_CROSSED_STILL) {
         if (func_801378B8(&this->skelanime, 1.0f) || func_801378B8(&this->skelanime, 8.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_KAKASHI_SWING);
@@ -1154,7 +1154,7 @@ void EnKakasi_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     SkelAnime_FrameUpdateMatrix(&this->skelanime);
     if (this->actor.draw != NULL) {
-        EnKakasi_CheckAnimateSFX(this);
+        EnKakasi_CheckAnimationSfx(this);
     }
 
     this->actor.world.rot.y = this->actor.shape.rot.y;
