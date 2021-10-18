@@ -11,21 +11,20 @@ typedef void (*DemoKankyoActionFunc)(struct DemoKankyo*, GlobalContext*);
 
 typedef struct {
   /* 0x000 */ u8 state;
-  /* 0x004 */ Vec3f unk_04; // pos?
-  /* 0x010 */ Vec3f unk_10;
-  /* 0x01C */ Vec3f unk_1C;
-  /* 0x028 */ Vec3f unk_28;
-  /* 0x034 */ f32 unk_34; // modifier, speed?
+  /* 0x004 */ Vec3f vel;
+  /* 0x010 */ Vec3f velPrevious;
+  /* 0x01C */ Vec3f pos;
+  /* 0x028 */ Vec3f unk_28; // rotation position? 
+  /* 0x034 */ f32 speed;
   /* 0x038 */ f32 unk_38;
-  /* 0x03C */ u16 unk_3C;
+  /* 0x03C */ u16 unk_3C; // random start,
   /* 0x03E */ u16 unk_3E;
   /* 0x040 */ u8 alpha;
-  /* 0x044 */ f32 unk_44;
-  /* 0x048 */ u16 unk_48;
-  /* 0x04A */ u16 unk_4A;
+  /* 0x044 */ f32 unk_44; // part of the visibility system?
+  /* 0x048 */ u16 unk_48; // pos or neg 200-400 
+  /* 0x04A */ u16 unk_4A; // random value between 15-65
   /* 0x04C */ f32 unk_4C;
-  /* 0x050 */ u16 pad50; // unused, always assigned to 0 nothing else
-  /* 0x052 */ UNK_TYPE1 unk52[0x2];
+  /* 0x050 */ u16 pad50; // unused, always assigned to 0, nothing else in this actor uses it
 } DemoKankyoParticle; // size = 0x54
 
 #define DEMOKANKYO_PARTICLE_COUNT 64
