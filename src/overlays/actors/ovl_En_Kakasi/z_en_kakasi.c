@@ -469,7 +469,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
                     EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
                 }
 
-                if (saveContextDay2 == 3 && gSaveContext.isNight != 0) {
+                if (saveContextDay2 == 3 && gSaveContext.isNight) {
                     // text: dangerous outside
                     this->actor.textId = 0x164F;
                 } else if (gSaveContext.isNight) {
@@ -491,7 +491,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
                     ActorCutscene_SetIntentToPlay(this->actorCutscenes[0]);
                     this->actionFunc = EnKakasi_DancingRemark;
                 } else {
-                    if (ActorCutscene_GetCanPlayNext(this->actorCutscenes[0]) == 0) {
+                    if (!ActorCutscene_GetCanPlayNext(this->actorCutscenes[0])) {
                         ActorCutscene_SetIntentToPlay(this->actorCutscenes[0]);
                         this->actionFunc = EnKakasi_DancingRemark;
                     } else {
@@ -513,7 +513,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
                 if (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
                     EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
                 }
-                if (gSaveContext.isNight != 0) {
+                if (gSaveContext.isNight) {
                     this->actor.textId = 0x164E;
                 } else {
                     this->actor.textId = 0x1645;
@@ -664,7 +664,7 @@ void EnKakasi_TeachingSong(EnKakasi* this, GlobalContext* globalCtx) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_YASE_DEAD);
             if (this) {}
             this->unkState196 = 2;
-            this->cutsceneCamId = 0; // SUBCAM_FREE
+            this->cutsceneCamId = MAIN_CAM;
             this->actor.textId = 0x1647;
             this->unkState1A8 = 2;
             this->unkMsgState1AC = 5;
