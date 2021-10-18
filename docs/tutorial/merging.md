@@ -79,7 +79,7 @@ Push commits to your fork of the repository on GitHub, and then open a pull requ
 - `EnRecepgirl OK and documented` (if all the functions match and your documentation is fairly complete)
 - `EnRecepgirl OK` (if all the functions match)
 - `EnRecepgirl (n nonmatching)` (if you couldn't get one or more functions to work, but to the best of your knowledge they are equivalent code)
-- `EnRecepgirl (1 nonequivalent)` (if you couldn't get one or more functions to work, and do not believe the code has the same effect)
+- `EnRecepgirl (n nonequivalent)` (if you couldn't get one or more functions to work, and do not believe the code has the same effect)
 
 and so on, although these four tend to cover most cases. Feel free to add a comment describing anything interesting you had to do or issues in non-matchings.
 

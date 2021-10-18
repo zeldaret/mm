@@ -309,7 +309,7 @@ which in many ways looks worse: you can see why the use of gotos in code is stro
 
 ## Eliminating the gotos
 
-The simplest sort of block label to eliminate is one is only used once, and where the corresponding goto jumps over a simple block of code with no extra internal control flow structure. There are two obvious examples of this here, the first being
+The simplest sort of block label to eliminate is one that is only used once, and where the corresponding goto jumps over a simple block of code with no extra internal control flow structure. There are two obvious examples of this here, the first being
 
 ```C
     if ((s32) gSaveContext.rupees >= 0xA) {

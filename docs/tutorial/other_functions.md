@@ -5,9 +5,7 @@ Previous: [Beginning decompilation: the Init function and the Actor struct](begi
 
 ## Now what?
 
-We have only one option if we want to stick to the main function flow here, namely `func_80C10148`.
-
-Another option is to look at `Destroy`, which for smaller actors can often be done straight after Init, since it usually just removes colliders and deallocates dynapoly.
+At this point we have a choice to make. Either we could follow the main function flow and decompile `func_80C10148`, or take a look at `Destroy`, which for smaller actors can often be done straight after Init, since it usually just removes colliders and deallocates dynapoly.
 
 ## Destroy
 
@@ -478,12 +476,10 @@ typedef struct EnRecepgirl {
 ```
 
 It's entirely possible that `unk_2AD` is not real, and is just padding: see [Types, structs, and padding](types_structs_padding.md) for the details. We'll find out once we've finished all the functions. If we look at the diff, we find that one line is different:
-```
-554:    addiu   a2,s0,0x2ae                          199 554:    addiu   a2,s0,0x2ae
-558:    addiu   a3,sp,0x30                        i  199 558:    addiu   a3,sp,0x34
-55c:    sw      t6,0x14(sp)                          199 55c:    sw      t6,0x14(sp)
-```
-So `sp30` is in the wrong place: it's `4` too high on the stack in ours. This is because the main four functions do not actually take `GlobalContext`: they actually take `Gamestate` and recast it with a temp, just like `EnRecepgirl* this = THIS;`. We haven't implemented this in the repo yet, though, so for now, it suffices to put a pad on the stack where it would go instead: experience has shown when it matters, it goes above the actor recast, so we end up with
+
+![EnRecepgirl_Update's stack difference](images/EnRecepgirl_stack_diff.png)
+
+So `sp30` is in the wrong place: it's `4` too high on the stack in ours. This is because the main four functions do not actually take `GlobalContext`: they really take `Gamestate` and recast it with a temp, just like `EnRecepgirl* this = THIS;`. We haven't implemented this in the repo yet, though, so for now, it suffices to put a pad on the stack where it would go instead: experience has shown when it matters, it goes above the actor recast, so we end up with
 ```C
 void EnRecepgirl_Update(EnRecepgirl *this, GlobalContext *globalCtx) {
     s32 pad;
@@ -573,6 +569,21 @@ void func_80C100DC(EnRecepgirl *this) {
 ![func_80C100DC, matching](images/func_80C100DC_diff3.png)
 
 There we go.
+
+Even though this matches, it is not quite according to our style: remember what was said earlier about early returns. Here, both of them can be removed and replaced by a single else without affecting matching:
+```C
+void func_80C100DC(EnRecepgirl *this) {
+    if (this->unk_2AC != 0) {
+        this->unk_2AC++;
+        if (this->unk_2AC == 4) {
+            this->unk_2AC = 0;
+        }
+    } else if (Rand_ZeroOne() < 0.02f) {
+        this->unk_2AC++;
+    }
+}
+```
+and this is how we prefer it to be written.
 
 With that, the last remaining function is `EnJj_Draw`. Draw functions have an extra layer of macroing that is required, so we shall cover them separately.
 

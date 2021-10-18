@@ -6,7 +6,8 @@
 
 ## Pre-decompilation
 - Building the repo (follow the instructions in the [README.md](../../README.md))
-- Most of us use VSCode. Some useful information is [here](vscode.md).
+- Most of us use VSCode. Some useful information is [here](vscode.md). 
+<!-- Feel free to document Emacs/Vi/Sublime/whatever if you're familiar with them -->
 - Choosing a first actor (You want something small that has simple interactions with the environment. A simple NPC can also work, and is what we will use as an illustration for most of the tutorial. There is a collection of actors we think are suitable for beginners on the spreadsheet or Trello)
 
 ## Decompilation
@@ -18,25 +19,20 @@
 		- Actors and dynapoly actors
 		- Colliders
 		- Skelanime
-	
-	- Matching
-		- Using diff
-		- control flow (branches) -> instruction ordering -> register allocation -> stack
 
 - [The rest of the functions in the actor](other_functions.md)
     - Order of decompilation
     - Action Functions and other functions
 
-	- More on matching: the permuter
-
 - [Draw functions](draw_functions.md)
 
 - [Data, migration and non-migration](data.md)
 	- Importing the data: early and late
+	- Segmented pointers
 	- Fake symbols
 	- Inlining
 
-## [Object Decompilation](object_decomp.md)
+## [Object Decompilation](object_decomp.md) (TODO)
 - Object files
 - How we decompile objects
 
@@ -48,6 +44,8 @@
 ## Appendices
 - [Types, Structs and Padding](types_structs_padding.md) (a miscellany of useful stuff)
 - [Advanced control flow](advanced_control_flow.md) (an example of a more complex function which mips2c is not so good at)
+- [Using the diff script and the permuter](diff_and_permuter.md) (using the diff script and the permuter to match something)
+	- control flow (branches) -> instruction ordering -> register allocation -> stack
 - [Helper scripts] TODO: link when merged
 
 To be written, maybe

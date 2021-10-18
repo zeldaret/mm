@@ -126,13 +126,30 @@ void EnRecepgirl_Draw(Actor *thisx, GlobalContext *globalCtx) {
 
 And this matches.
 
-The last two functions in the actor are used as arguments in `func_801343C0`. This is a `SkelAnime` function, except unlike the OoT ones, it takes three functions instead of two. In this case, only two of them are used, and it is these that are the last functions standing between us and a decompiled actor.
+The last two functions in the actor are used as arguments in `func_801343C0`. This is a `SkelAnime` function, except unlike the OoT ones, it has three function callback arguments instead of two: in `functions.h` or `z_skelanime.c`, we find
+```C
+void func_801343C0(GlobalContext* globalCtx, void** skeleton, Vec3s* limbDrawTable, s32 dListCount,
+                   OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, UnkActorDraw unkDraw, Actor* actor)
+```
+The typedefs of the callbacks it uses are in `z64animation.h`:
+```C
+typedef s32 (*OverrideLimbDraw)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                struct Actor* actor);
 
-## OverrideLimbDraw, PostLimbDraw, UnkLimbDraw
+typedef void (*PostLimbDraw)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot,
+                             struct Actor* actor);
 
-Well, we don't have a PostLimbDraw here, but it's much the same as the OverrideLimbDraw but with slightly different arguments and no return value.
+[...]
 
+typedef void (*UnkActorDraw)(struct GlobalContext* globalCtx, s32 limbIndex, struct Actor* actor);
+```
+which is where mips2c got them from.
 
+In this case, only two of them are used, and it is these that are the last functions standing between us and a decompiled actor.
+
+## OverrideLimbDraw, PostLimbDraw, UnkActorDraw
+
+Well, we don't have a PostLimbDraw here, but as we see from the prototype, it's much the same as the OverrideLimbDraw but without the `pos` argument and no return value.
 ```C
 s32 func_80C10558(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *actor) {
     if (limbIndex == 5) {
@@ -153,7 +170,7 @@ s32 func_80C10558(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *p
 }
 ```
 
-As for the UnkLimbDraw, it has a much simpler prototype. mips2c gives
+As for the UnkActorDraw, it has a much simpler prototype. mips2c gives
 ```C
 void func_80C10590(GlobalContext *globalCtx, s32 limbIndex, Actor *actor) {
     if (limbIndex == 5) {

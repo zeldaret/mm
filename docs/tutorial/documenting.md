@@ -338,7 +338,7 @@ The latest release of Z64Utils can be downloaded from [https://github.com/Random
 
 Having downloaded and unzipped it, open the baserom file. This will populate the main window with a list:
 
-![Z64Utils' main window](z64utils_main.png)
+![Z64Utils' main window](images/z64utils_main.png)
 
 Search for the object file, right-click and select "Open in Object Analyzer". It will ask you to choose a segment: this is the segment that the file is put on, and allows Z64Utils to resolve the segmented addresses it references into symbols. The json already knows it should be segment `6`, so just click okay. This will open this window:
 
@@ -450,7 +450,7 @@ void EnRecepgirl_UnkLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thi
 ```
 It is used to do a rotation of whatever limb `5` is. (The `+=` is because `rot->x` is the base rotation of the limb, and we have to add the same thing to it every frame to keep the angle changed and constant.) We can use Z64Utils to : setting segment `8` to one of what we know now are the eye textures, we can view the model in the skeleton viewer. The limb numbers in the object are one smaller than those in the actor (the root limb is only a concept for the code, not the object), so we find limb 4:
 
-![Z64Utils highlighting a limb](z64utils_skeleton_head.png)
+![Z64Utils highlighting a limb](images/z64utils_skeleton_head.png)
 
 Hence this is changing the head rotation. An obvious name is `headRot`.
 
@@ -555,7 +555,7 @@ $ ./tools/graphovl/graphovl.py En_Recepgirl
 ```
 produces
 
-![EnRecepgirl's function flow graph](En_Recepgirl.gv.png)
+![EnRecepgirl's function flow graph](images/En_Recepgirl.gv.png)
 
 We have now essentially documented this as far as we can without the object, so we'd better do that next.
 
