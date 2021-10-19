@@ -227,7 +227,7 @@ void func_80BA383C(EnToto* this, GlobalContext* globalCtx) {
         }
         SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, D_80BA5078[this->unk2B4]);
     }
-    func_800BBB74(&this->unk260, 0x14, 0x50, 3);
+    func_800BBB74(this->unk260, 0x14, 0x50, 3);
 }
 
 void func_80BA3930(EnToto* this, GlobalContext* globalCtx) {
@@ -327,7 +327,7 @@ void func_80BA3D38(EnToto* this, GlobalContext* globalCtx) {
     this->text = ENTOTO_WEEK_EVENT_FLAGS ? D_80BA50BC : D_80BA5088;
     func_80BA4C0C(this, globalCtx);
     globalCtx->actorCtx.unk5 |= 0x20;
-    this->unk260 = 0;
+    this->unk260[0] = 0;
 }
 
 void func_80BA3DBC(EnToto* this, GlobalContext* globalCtx) {
@@ -741,7 +741,7 @@ void EnToto_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sp4C[this->unk260]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sp4C[this->unk260[0]]));
     Scene_SetRenderModeXlu(globalCtx, 0, 1);
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, NULL,
                      NULL, &this->actor);

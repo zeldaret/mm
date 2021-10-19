@@ -881,7 +881,7 @@ void func_800BB604(GlobalContext* globalCtx, ActorContext* actorCtx, Player* pla
 void func_800BB8EC(GlobalContext* globalCtx, ActorContext* actorCtx, s32*, s32*, Player* player);
 void Enemy_StartFinishingBlow(GlobalContext* globalCtx, Actor* actor);
 // void func_800BBAC0(void);
-void func_800BBB74(s16* arg1, UNK_TYPE1 arg2, UNK_TYPE1 arg3, UNK_TYPE4 arg4);
+s16 func_800BBB74(s16 arg0[2], s16 arg1, s16 arg2, s16 arg3);
 // void func_800BBC20(void);
 void func_800BBCEC(Actor* actor, GlobalContext* globalCtx, s16 arg2, Gfx** dList);
 void func_800BBDAC(GlobalContext* globalCtx, Actor* actor, Vec3f* arg2, f32 arg3, UNK_TYPE4 arg4, f32 arg5, s16 arg6, s16 arg7, u8 arg8);

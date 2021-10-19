@@ -1457,7 +1457,8 @@ struct s800B948C {
 }; // size = 0x1C
 
 struct ActorContext {
-    /* 0x000 */ UNK_TYPE1 pad0[0x2];
+    /* 0x000 */ u8 freezeFlashTimer;
+    /* 0x001 */ UNK_TYPE1 pad1;
     /* 0x002 */ u8 unk2;
     /* 0x003 */ u8 unk3;
     /* 0x004 */ s8 unk4;

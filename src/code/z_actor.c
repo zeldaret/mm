@@ -2037,11 +2037,28 @@ UNK_TYPE1 D_801AED8C[] = {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BB8EC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Enemy_StartFinishingBlow.s")
+void Enemy_StartFinishingBlow(GlobalContext* globalCtx, Actor* actor) {
+    globalCtx->actorCtx.freezeFlashTimer = 5;
+    Audio_PlaySoundAtPosition(globalCtx, &actor->world.pos, 20, NA_SE_EN_LAST_DAMAGE);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BBAC0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BBB74.s")
+s16 func_800BBB74(s16 arg0[2], s16 arg1, s16 arg2, s16 arg3) {
+    if (DECR(arg0[1]) == 0) {
+        arg0[1] = Rand_S16Offset(arg1, arg2);
+    }
+
+    if (arg0[1] - arg3 > 0) {
+        arg0[0] = 0;
+    } else if (arg0[1] - arg3 == 0) {
+        arg0[0] = 1;
+    } else {
+        arg0[0] = 2;
+    }
+
+    return arg0[0];
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BBC20.s")
 
@@ -2116,11 +2133,34 @@ s32 func_800BC188(s32 index) {
     return D_801AEDB0[index];
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BC1B4.s")
+s32 func_800BC1B4(Actor* actor, Actor* arg1, f32 arg2, f32 arg3) {
+    if ((arg3 > 0.0f) && (Actor_DistanceBetweenActors(arg1, actor) < ((arg3 * 2.5f) + arg2))) {
+        s16 temp_v1 = BINANG_SUB(Actor_YawBetweenActors(arg1, actor), arg1->world.rot.y);
+
+        if (ABS_ALT(temp_v1) < 0x1400) {
+            return 1;
+        }
+    }
+
+    return 0;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BC270.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BC444.s")
+Actor* func_800BC444(GlobalContext* globalCtx, Actor* actor, f32 arg2) {
+    Actor* explosive = globalCtx->actorCtx.actorList[ACTORCAT_EXPLOSIVES].first;
+
+    while (explosive != NULL) {
+        if (((explosive->id == ACTOR_EN_BOM) || (explosive->id == ACTOR_EN_BOM_CHU) || (explosive->id == ACTOR_EN_BOMBF))) {
+            if (func_800BC1B4(actor, explosive, arg2, explosive->speedXZ) != 0) {
+                break;
+            }
+        }
+        explosive = explosive->next;
+    }
+
+    return explosive;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BC4EC.s")
 
