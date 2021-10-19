@@ -77,7 +77,7 @@ void OceffWipe6_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (this->counter >= 80) {
         alpha = 12 * (100 - this->counter);
     } else {
-        alpha = 0xFF;
+        alpha = 255;
     }
 
     for (i = 1; i < ARRAY_COUNT(gOceff6Vtx); i += 2) {
