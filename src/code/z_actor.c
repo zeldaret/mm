@@ -2024,39 +2024,74 @@ s32 func_800BC188(s32 index) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BC5B8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BC5EC.s")
+s32 func_800BC5EC(GlobalContext* globalCtx, Actor* actor) {
+    Player* player = GET_PLAYER(globalCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BC620.s")
+    if ((player->stateFlags3 & 0x80000000) && (actor->isTargeted == 0)) {
+        return 1;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BC770.s")
+    return 0;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BC7D8.s")
-/*
-void func_800BC7D8(s32 arg0, s16 arg1, s16 arg2, s16 arg3) {
+void func_800BC620(Vec3f* arg0, Vec3f* arg1, u8 arg2, GlobalContext* globalCtx) {
+    MtxF sp58;
+    f32 sp54;
+    Vec3f sp48;
+    CollisionPoly* sp44;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x2C);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, arg2);
+
+    sp48.x = arg0->x;
+    sp48.y = arg0->y + 1.0f;
+    sp48.z = arg0->z;
+
+    sp54 = func_800C4000(globalCtx, &globalCtx->colCtx, &sp44, &sp48);
+    if (sp44 != NULL) {
+        func_800C0094(sp44, arg0->x, sp54, arg0->z, &sp58);
+        SysMatrix_SetCurrentState(&sp58);
+    } else {
+        SysMatrix_InsertTranslation(arg0->x, arg0->y, arg0->z, 0);
+    }
+    Matrix_Scale(arg1->x, 1.0f, arg1->z, 1);
+
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, D_04076BC0);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+
+void func_800BC770(GameState* gameState, s16 arg1, s16 arg2) {
     s16 sp26;
-    s16 temp_v0;
-    s32 temp_a0;
+    GlobalContext* globalCtx = (GlobalContext*)gameState;
 
-    temp_v0 = Quake_Add(arg0 + 0x220, 3U);
-    temp_a0 = temp_v0 << 0x10;
-    sp26 = temp_v0;
-    Quake_SetSpeed((s16) (temp_a0 >> 0x10), arg3);
-    Quake_SetQuakeValues(sp26, arg1, 0, 0, (s16) 0);
+    sp26 = Quake_Add(&globalCtx->mainCamera, 3);
+    Quake_SetSpeed(sp26, 20000);
+    Quake_SetQuakeValues(sp26, arg1, 0, 0, 0);
     Quake_SetCountdown(sp26, arg2);
 }
-*/
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BC848.s")
-/*
-void func_800BC848(void* arg0, s32 arg1, s16 arg2, s16 arg3) {
-    if ((s32) arg2 >= 5) {
-        func_8013ECE0(arg0->unk_94, 0xFFU, 0x14U, 0x96U);
-    } else {
-        func_8013ECE0(arg0->unk_94, 0xB4U, 0x14U, 0x64U);
-    }
-    func_800BC770(arg1, arg2, arg3);
+void func_800BC7D8(GameState* gameState, s16 arg1, s16 arg2, s16 arg3) {
+    s16 sp26;
+    GlobalContext* globalCtx = (GlobalContext*)gameState;
+
+    sp26 = Quake_Add(&globalCtx->mainCamera, 3);
+    Quake_SetSpeed(sp26, arg3);
+    Quake_SetQuakeValues(sp26, arg1, 0, 0, 0);
+    Quake_SetCountdown(sp26, arg2);
 }
-*/
+
+void func_800BC848(Actor* actor, GameState* gameState, s16 arg2, s16 arg3) {
+    if (arg2 >= 5) {
+        func_8013ECE0(actor->xyzDistToPlayerSq, 0xFF, 0x14, 0x96);
+    } else {
+        func_8013ECE0(actor->xyzDistToPlayerSq, 0xB4, 0x14, 0x64);
+    }
+    func_800BC770(gameState, arg2, arg3);
+}
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
