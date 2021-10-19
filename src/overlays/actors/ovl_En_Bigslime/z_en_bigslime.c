@@ -547,7 +547,7 @@ void EnBigslime_UpdateScale(EnBigslime* this, Vec3f* vtxMax, Vec3f* vtxMin) {
     }
 }
 
-void EnBigslime_CheckBackgroundCollision(EnBigslime* this, Vec3f* vtxMax, Vec3f* vtxMin) {
+void EnBigslime_CheckRoomBoundaries(EnBigslime* this, Vec3f* vtxMax, Vec3f* vtxMin) {
     f32 worldPosX;
     f32 vtxMaxX;
     f32 vtxMinX;
@@ -794,7 +794,11 @@ void EnBigslime_BreakIntoMinislime(EnBigslime* this, GlobalContext* globalCtx) {
     EnBigslime_SetupJumpGekko(this);
 }
 
-void EnBigslime_UpdateSubCamGrabPlayer(EnBigslime* this, GlobalContext* globalCtx) {
+/**
+ * Smoothly moves the camera to a side view and keeps it there 
+ * as bigslime grabs player and the Gekko melee attacks player
+ */
+void EnBigslime_UpdateCameraGrabPlayer(EnBigslime* this, GlobalContext* globalCtx) {
     Camera* subCam = Play_GetCamera(globalCtx, this->subCamId);
     Vec3f subCamEye;
     Vec3f subCamAt;
@@ -813,6 +817,11 @@ void EnBigslime_UpdateSubCamGrabPlayer(EnBigslime* this, GlobalContext* globalCt
     Play_CameraSetAtEye(globalCtx, this->subCamId, &subCamAt, &subCamEye);
 }
 
+/**
+ * Takes the camera eye and instantaneously moves it 10% closer to the focus point "at".
+ * This gives the camera a "jerk" feeling
+ * Used everytime playe is hit inside of bigslime while being grabbed
+ */
 void EnBigslime_JerkCameraPlayerHit(EnBigslime* this, GlobalContext* globalCtx) {
     Camera* subCam = Play_GetCamera(globalCtx, this->subCamId);
     Vec3f subCamEye;
@@ -823,20 +832,29 @@ void EnBigslime_JerkCameraPlayerHit(EnBigslime* this, GlobalContext* globalCtx) 
     Play_CameraSetAtEye(globalCtx, this->subCamId, &subCam->at, &subCamEye);
 }
 
-void EnBigslime_ZoomCamera(EnBigslime* this, GlobalContext* globalCtx, s32 shakeMagY) {
+/**
+ * Performs the camera motion for the intro cutscene as the player enters the room
+ * and the battle starts. Positions the camera slightly offset from player,
+ * then zooms into the Gekko until the Gekko calls the minislimes down from the ceiling
+ */
+void EnBigslime_UpdateCameraIntroCs(EnBigslime* this, GlobalContext* globalCtx, s32 noticeTimer) {
     Camera* subCam = Play_GetCamera(globalCtx, this->subCamId);
     Vec3f subCamEye;
-    f32 shakeMagXZ = (shakeMagY * 19.0f) + 67.0f;
-    s16 shakeSpeed = this->actor.yawTowardsPlayer + (shakeMagY * 0x31);
+    f32 zoom = (noticeTimer * 19.0f) + 67.0f;
+    s16 yawOffset = this->actor.yawTowardsPlayer + (noticeTimer * 0x31);
 
-    subCamEye.x = Math_SinS(shakeSpeed) * shakeMagXZ + subCam->at.x;
-    subCamEye.z = Math_CosS(shakeSpeed) * shakeMagXZ + subCam->at.z;
-    subCamEye.y = subCam->at.y + -4.0f + (shakeMagY * 2.0f);
+    subCamEye.x = Math_SinS(yawOffset) * zoom + subCam->at.x;
+    subCamEye.z = Math_CosS(yawOffset) * zoom + subCam->at.z;
+    subCamEye.y = subCam->at.y + -4.0f + (noticeTimer * 2.0f);
 
     Play_CameraSetAtEye(globalCtx, this->subCamId, &subCam->at, &subCamEye);
 }
 
-void EnBigslime_MoveCameraFormBigslime(EnBigslime* this, GlobalContext* globalCtx) {
+/**
+ * Takes the camera and makes the focus point (at) point at bigslime, who is on the 
+ * center of the roof. This is used when the minislimes merge into bigslime.
+ */
+void EnBigslime_UpdateCameraFormingBigslime(EnBigslime* this, GlobalContext* globalCtx) {
     Play_CameraSetAtEye(globalCtx, this->subCamId, &this->actor.focus.pos,
                         &Play_GetCamera(globalCtx, this->subCamId)->eye);
 }
@@ -939,7 +957,7 @@ void EnBigslime_SetupCutsceneStartBattle(EnBigslime* this, GlobalContext* global
     player->actor.world.pos.x = Math_SinS(this->actor.yawTowardsPlayer) * 347.0f + this->actor.world.pos.x;
     player->actor.world.pos.z = Math_CosS(this->actor.yawTowardsPlayer) * 347.0f + this->actor.world.pos.z;
 
-    EnBigslime_ZoomCamera(this, globalCtx, 25);
+    EnBigslime_UpdateCameraIntroCs(this, globalCtx, 25);
 
     this->gekkoRot.y = this->actor.yawTowardsPlayer + 0x8000;
     this->isInitJump = 0;
@@ -967,7 +985,7 @@ void EnBigslime_CutsceneNoticePlayer(EnBigslime* this, GlobalContext* globalCtx)
         this->noticeTimer--;
     }
 
-    EnBigslime_ZoomCamera(this, globalCtx, this->noticeTimer);
+    EnBigslime_UpdateCameraIntroCs(this, globalCtx, this->noticeTimer);
     if (func_801378B8(&this->skelAnime, 0.0f) || func_801378B8(&this->skelAnime, 4.0f)) {
         EnBigslime_GekkoSfxOutsideBigslime(this, NA_SE_EV_WALK_WATER);
     }
@@ -1000,7 +1018,7 @@ void EnBigslime_CallMinislime(EnBigslime* this, GlobalContext* globalCtx) {
         }
     } else if (this->isAnimUpdate) {
         SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_060069FC);
-        EnBigslime_ZoomCamera(this, globalCtx, 25);
+        EnBigslime_UpdateCameraIntroCs(this, globalCtx, 25);
         func_801A2E54(0x38);
         EnBigslime_InitFallMinislime(this);
         globalCtx->envCtx.unk_C3 = 0xFF;
@@ -1516,7 +1534,7 @@ void EnBigslime_CutsceneGrabPlayer(EnBigslime* this, GlobalContext* globalCtx) {
 
     player->unk_AE8 = 0;
     Math_ScaledStepToS(&this->gekkoRot.x, 0, 0x400);
-    EnBigslime_UpdateSubCamGrabPlayer(this, globalCtx);
+    EnBigslime_UpdateCameraGrabPlayer(this, globalCtx);
     if (this->grabPlayerTimer > 0) {
         invgrabPlayerTimer = 1.0f / this->grabPlayerTimer;
         this->actor.scale.x += (0.15f - this->actor.scale.x) * invgrabPlayerTimer;
@@ -1561,7 +1579,7 @@ void EnBigslime_AttackPlayerInBigslime(EnBigslime* this, GlobalContext* globalCt
 
     player->unk_AE8 = 0;
     Math_ScaledStepToS(&this->gekkoRot.x, 0, 0x400);
-    EnBigslime_UpdateSubCamGrabPlayer(this, globalCtx);
+    EnBigslime_UpdateCameraGrabPlayer(this, globalCtx);
     EnBigslime_UpdateWavySurface(this);
 
     if (this->scaleFactor != 0) {
@@ -1660,7 +1678,7 @@ void EnBigslime_WindupThrowPlayer(EnBigslime* this, GlobalContext* globalCtx) {
     s32 j;
 
     this->windupPunchTimer--;
-    EnBigslime_UpdateSubCamGrabPlayer(this, globalCtx);
+    EnBigslime_UpdateCameraGrabPlayer(this, globalCtx);
     if (this->windupPunchTimer > 0) {
         invWindupPunchTimer = 1.0f / this->windupPunchTimer;
         scale = cos_rad(this->windupPunchTimer * (M_PI / 27)) + 1.0f;
@@ -2187,7 +2205,7 @@ void EnBigslime_SetupCutsceneFormBigslime(EnBigslime* this) {
 }
 
 void EnBigslime_CutsceneFormBigslime(EnBigslime* this, GlobalContext* globalCtx) {
-    EnBigslime_MoveCameraFormBigslime(this, globalCtx);
+    EnBigslime_UpdateCameraFormingBigslime(this, globalCtx);
     Math_ScaledStepToS(&this->gekkoRot.y, this->actor.world.rot.y, 0x800);
     if (func_801378B8(&this->skelAnime, 18.0f)) {
         EnBigslime_SetupFormBigslime(this);
@@ -2229,7 +2247,7 @@ void EnBigslime_FormBigslime(EnBigslime* this, GlobalContext* globalCtx) {
     s32 i;
 
     EnBigslime_UpdateWavySurface(this);
-    EnBigslime_MoveCameraFormBigslime(this, globalCtx);
+    EnBigslime_UpdateCameraFormingBigslime(this, globalCtx);
     if (this->formBigslimeCutsceneTimer < 0) {
         Math_ScaledStepToS(&this->gekkoRot.x, 0, 0x400);
     } else if (this->actor.world.pos.y > (GBT_ROOM_5_MAX_Y - 100.0f)) {
@@ -2274,7 +2292,7 @@ void EnBigslime_SetupCutsceneDefeat(EnBigslime* this, GlobalContext* globalCtx) 
     Vec3f subCamEye;
     Vec3f subCamAt;
     s32 i;
-    s16 yaw;
+    s16 yawOffset;
 
     SkelAnime_ChangeAnim(&this->skelAnime, &D_0600276C, 0.5f, 0.0f, SkelAnime_GetFrameCount(&D_0600276C.common), 3,
                          0.0f);
@@ -2284,19 +2302,22 @@ void EnBigslime_SetupCutsceneDefeat(EnBigslime* this, GlobalContext* globalCtx) 
     this->actor.gravity = -2.0f;
     this->actor.velocity.y = 0.0f;
     EnBigslime_GekkoSfxOutsideBigslime(this, NA_SE_EN_FROG_DEAD);
+
+    // Points the camera at the defeated Gekko
     subCamAt.x = this->actor.world.pos.x;
     subCamAt.y = this->actor.world.pos.y + 40.0f;
     subCamAt.z = this->actor.world.pos.z;
 
     if ((s16)(Actor_YawToPoint(&this->actor, &this->actor.home.pos) - this->actor.world.rot.y) > 0) {
-        yaw = this->actor.world.rot.y + 0x4000;
+        yawOffset = this->actor.world.rot.y + 0x4000;
     } else {
-        yaw = this->actor.world.rot.y - 0x4000;
+        yawOffset = this->actor.world.rot.y - 0x4000;
     }
 
-    subCamEye.x = (Math_SinS(yaw) * 250.0f) + subCamAt.x;
+    // Moves the camera to the side of player and Gekko
+    subCamEye.x = (Math_SinS(yawOffset) * 250.0f) + subCamAt.x;
     subCamEye.y = subCamAt.y + 60.0f;
-    subCamEye.z = (Math_CosS(yaw) * 250.0f) + subCamAt.z;
+    subCamEye.z = (Math_CosS(yawOffset) * 250.0f) + subCamAt.z;
     Play_CameraSetAtEye(globalCtx, this->subCamId, &subCamAt, &subCamEye);
 
     for (i = 0; i < MINISLIME_NUM_SPAWN; i++) {
@@ -2319,6 +2340,7 @@ void EnBigslime_CutsceneDefeat(EnBigslime* this, GlobalContext* globalCtx) {
     if (Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f)) {
         EnBigslime_SetupGekkoDespawn(this, globalCtx);
     } else {
+        // Continue for the camera to follow Gekko as it spins in defeat
         subCam = Play_GetCamera(globalCtx, this->subCamId);
         subCamAt.x = this->actor.world.pos.x;
         subCamAt.y = this->actor.world.pos.y + 40.0f;
@@ -2380,14 +2402,18 @@ void EnBigslime_SetupFrogSpawn(EnBigslime* this, GlobalContext* globalCtx) {
     s32 i;
 
     this->gekkoCollider.base.ocFlags1 &= ~OC1_ON;
+
     Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_MINIFROG, this->actor.world.pos.x, this->actor.world.pos.y,
                 this->actor.world.pos.z, 0, yawReverse, 0, this->actor.params);
+
     dustPos.x = (Math_SinS(yawReverse) * 20.0f) + this->actor.world.pos.x;
     dustPos.y = this->actor.world.pos.y + 20.0f;
     worldPos = &this->actor.world.pos;
     dustPos.z = (Math_CosS(yawReverse) * 20.0f) + this->actor.world.pos.z;
+
     Audio_PlaySoundAtPosition(globalCtx, worldPos, 40, NA_SE_EN_NPC_APPEAR);
-    // dust cloud where frog appears
+
+    // dust cloud where the red frog appears
     func_800B0DE0(globalCtx, &dustPos, &gZeroVec3f, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 500, 50);
 
     for (i = 0; i < 25; i++) {
@@ -2410,6 +2436,7 @@ void EnBigslime_FrogSpawn(EnBigslime* this, GlobalContext* globalCtx) {
 
     this->spawnFrogTimer--;
 
+    // Zoom the camera in and out at the newly spawned red frog
     subCamZoom = sin_rad(this->spawnFrogTimer * (M_PI / 5)) * ((0.04f * (this->spawnFrogTimer * 0.1f)) + 0.02f) + 1.0f;
     subCamEye.x = subCam->at.x + (this->subCamDistToFrog.x * subCamZoom);
     subCamEye.z = subCam->at.z + (this->subCamDistToFrog.z * subCamZoom);
@@ -2740,7 +2767,7 @@ void EnBigslime_UpdateBigslime(Actor* thisx, GlobalContext* globalCtx) {
     if (this->actionFunc != EnBigslime_JumpGekko) {
         EnBigslime_GetMaxMinVertices(this, &vtxMax, &vtxMin);
         EnBigslime_UpdateScale(this, &vtxMax, &vtxMin);
-        EnBigslime_CheckBackgroundCollision(this, &vtxMax, &vtxMin);
+        EnBigslime_CheckRoomBoundaries(this, &vtxMax, &vtxMin);
         EnBigslime_UpdateSurfaceNorm(this);
         EnBigslime_UpdateBigslimeCollider(this, globalCtx);
     }
