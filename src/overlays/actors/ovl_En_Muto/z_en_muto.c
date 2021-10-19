@@ -90,6 +90,7 @@ void EnMuto_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnMuto_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnMuto* this = THIS;
+
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
@@ -105,6 +106,7 @@ void EnMuto_ChangeAnim(EnMuto* this, s32 animIndex) {
 
 void EnMuto_SetHeadRotation(EnMuto* this) {
     s32 yawRotToTarget = ABS_ALT(BINANG_SUB(this->yawTowardsTarget, this->actor.world.rot.y));
+
     this->headRotTarget.y = 0;
     if (this->actor.xzDistToPlayer < 200.0f && yawRotToTarget < 0x4E20) {
         this->headRotTarget.y = BINANG_SUB(this->yawTowardsTarget, this->actor.world.rot.y);
@@ -211,6 +213,7 @@ void EnMuto_InDialogue(EnMuto* this, GlobalContext* globalCtx) {
         }
     } else {
         f32 frameIndex = this->skelAnime.animCurrentFrame;
+
         this->yawTowardsTarget = Math_Vec3f_Yaw(&this->actor.world.pos, &this->targetActor->world.pos);
         if (this->frameIndex <= frameIndex) {
             this->skelAnime.animPlaybackSpeed = 0.0f;
@@ -281,11 +284,12 @@ s32 EnMuto_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
         rot->z += this->headRot.x;
     }
 
-    return 0;
+    return false;
 }
 
 void EnMuto_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnMuto* this = THIS;
+
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
                      EnMuto_OverrideLimbDraw, NULL, &this->actor);
