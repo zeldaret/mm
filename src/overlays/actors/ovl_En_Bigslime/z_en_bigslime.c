@@ -796,7 +796,7 @@ void EnBigslime_BreakIntoMinislime(EnBigslime* this, GlobalContext* globalCtx) {
 
 /**
  * Smoothly moves the camera to a side view and keeps it there 
- * as bigslime grabs player and the Gekko melee attacks player
+ * as bigslime grabs player and the Gekko melee-attacks player
  */
 void EnBigslime_UpdateCameraGrabPlayer(EnBigslime* this, GlobalContext* globalCtx) {
     Camera* subCam = Play_GetCamera(globalCtx, this->subCamId);
@@ -820,7 +820,7 @@ void EnBigslime_UpdateCameraGrabPlayer(EnBigslime* this, GlobalContext* globalCt
 /**
  * Takes the camera eye and instantaneously moves it 10% closer to the focus point "at".
  * This gives the camera a "jerk" feeling
- * Used everytime playe is hit inside of bigslime while being grabbed
+ * Used everytime player is hit inside of bigslime while being grabbed
  */
 void EnBigslime_JerkCameraPlayerHit(EnBigslime* this, GlobalContext* globalCtx) {
     Camera* subCam = Play_GetCamera(globalCtx, this->subCamId);
@@ -852,7 +852,7 @@ void EnBigslime_UpdateCameraIntroCs(EnBigslime* this, GlobalContext* globalCtx, 
 
 /**
  * Takes the camera and makes the focus point (at) point at bigslime, who is on the 
- * center of the roof. This is used when the minislimes merge into bigslime.
+ * center of the roof. This is used when the minislimes merges into bigslime.
  */
 void EnBigslime_UpdateCameraFormingBigslime(EnBigslime* this, GlobalContext* globalCtx) {
     Play_CameraSetAtEye(globalCtx, this->subCamId, &this->actor.focus.pos,
