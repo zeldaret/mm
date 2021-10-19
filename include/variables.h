@@ -4051,6 +4051,8 @@ extern Gfx D_050219E0[];
 extern UNK_TYPE D_05023008;
 extern UNK_TYPE D_0502324C;
 
+extern CollisionHeader D_06000438;
+
 // other segments
 extern GfxMasterList D_0E000000;
 
