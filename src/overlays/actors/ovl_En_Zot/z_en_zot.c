@@ -257,8 +257,8 @@ void func_80B96BEC(EnZot* this, s16 arg1, u8 arg2) {
         if (arg1 >= 8) {
             Animation_Change(&this->skelAnime, sAnimations[arg1], 0.0f, arg1 - 8, arg1 - 8, arg2, 0.0f);
         } else {
-            Animation_Change(&this->skelAnime, sAnimations[arg1], 1.0f, 0.0f,
-                                 Animation_GetLastFrame(&sAnimations[arg1]->common), arg2, -5.0f);
+            Animation_Change(&this->skelAnime, sAnimations[arg1], 1.0f, 0.0f, Animation_GetLastFrame(sAnimations[arg1]),
+                             arg2, -5.0f);
         }
         this->unk_2F0 = arg1;
     }
@@ -1363,7 +1363,7 @@ Gfx* func_80B99580(GraphicsContext* gfxCtx) {
     return dList;
 }
 
-s32 EnZot_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
+s32 EnZot_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnZot* this = THIS;
     s32 pad;
 
@@ -1387,7 +1387,7 @@ s32 EnZot_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     return false;
 }
 
-void EnZot_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void EnZot_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80B99934 = { 400.0f, 0.0f, 0.0f };
     EnZot* this = THIS;
 
@@ -1413,7 +1413,7 @@ void EnZot_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x0C, func_80B99580(globalCtx->state.gfxCtx));
 
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                     EnZot_OverrideLimbDraw, EnZot_PostLimbDraw, &this->actor);
+                          EnZot_OverrideLimbDraw, EnZot_PostLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

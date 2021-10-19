@@ -148,14 +148,14 @@ s32 func_80A514F0(SkelAnime* skelAnime, s16 animIndex) {
             sp30 = true;
             frameCount = sAnimations[animIndex].frameCount;
             if (frameCount < 0) {
-                frameCount = Animation_GetLastFrame(&(sAnimations[animIndex].animationSeg)->common);
+                frameCount = Animation_GetLastFrame(sAnimations[animIndex].animationSeg);
             }
             frame = sAnimations[animIndex].frame;
             if (frame < 0) {
                 frame = frameCount;
             }
             Animation_Change(skelAnime, sAnimations[animIndex].animationSeg, sAnimations[animIndex].playbackSpeed,
-                                 frame, frameCount, sAnimations[animIndex].mode, sAnimations[animIndex].transitionRate);
+                             frame, frameCount, sAnimations[animIndex].mode, sAnimations[animIndex].transitionRate);
         }
     }
     return sp30;
@@ -272,7 +272,7 @@ void EnDnk_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80A52134(this, globalCtx);
 }
 
-s32 func_80A51A78(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
+s32 func_80A51A78(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnDnk* this = THIS;
 
     this->unk_260[limbIndex] = *dList;
@@ -280,7 +280,7 @@ s32 func_80A51A78(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return false;
 }
 
-void func_80A51AA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void func_80A51AA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnDnk* this = THIS;
     MtxF sp5C;
     Vec3f sp50 = D_801D15B0;
@@ -343,12 +343,12 @@ void func_80A51CB8(EnDnk* this, GlobalContext* globalCtx) {
     gDPPipeSync(POLY_OPA_DISP++);
 
     SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, func_80A51A78, func_80A51AA4,
-                   &this->actor);
+                      &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-s32 func_80A51D78(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
+s32 func_80A51D78(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnDnk* this = THIS;
 
     this->unk_260[limbIndex] = *dList;
@@ -356,7 +356,7 @@ s32 func_80A51D78(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return false;
 }
 
-void func_80A51DA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void func_80A51DA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnDnk* this = THIS;
     MtxF sp5C;
     Vec3f sp50 = D_801D15B0;
@@ -407,7 +407,7 @@ void func_80A51DA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 void func_80A51FC0(EnDnk* this, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, func_80A51D78, func_80A51DA4,
-                   &this->actor);
+                      &this->actor);
 }
 
 void func_80A52018(Actor* thisx, GlobalContext* globalCtx) {

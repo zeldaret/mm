@@ -1268,7 +1268,7 @@ void EnSw_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_808D8FC4(this, globalCtx);
 }
 
-s32 EnSw_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
+s32 EnSw_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnSw* this = THIS;
 
     if (ENSW_GET_3(&this->actor)) {
@@ -1329,7 +1329,7 @@ void EnSw_Draw(Actor* thisx, GlobalContext* globalCtx) {
         func_8012C28C(globalCtx->state.gfxCtx);
         Matrix_InsertXRotation_s(-0x3C72, MTXMODE_APPLY);
         SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnSw_OverrideLimbDraw, NULL,
-                       &this->actor);
+                          &this->actor);
     }
 
     for (i = 0, count = 0; i < ARRAY_COUNT(this->unk_464); i++) {

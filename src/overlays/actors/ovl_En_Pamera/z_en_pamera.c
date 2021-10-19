@@ -546,7 +546,7 @@ void EnPamera_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnPamera_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                              void* thisx) {
+                              Actor* thisx) {
     EnPamera* this = THIS;
 
     if (limbIndex == PAMERA_LIMB_HAIR) {
@@ -556,7 +556,7 @@ s32 EnPamera_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
     return 0;
 }
 
-void EnPamera_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void EnPamera_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnPamera* this = THIS;
 
     if (limbIndex == PAMERA_LIMB_HAIR) {

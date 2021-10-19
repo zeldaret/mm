@@ -155,7 +155,7 @@ static struct_80B8E1A8 sAnimationInfo[] = {
 
 void EnMa4_ChangeAnim(EnMa4* this, s32 index) {
     Animation_Change(&this->skelAnime, sAnimationInfo[index].animationSeg, 1.0f, 0.0f,
-                     Animation_GetLastFrame(&sAnimationInfo[index].animationSeg->common), sAnimationInfo[index].mode,
+                     Animation_GetLastFrame(sAnimationInfo[index].animationSeg), sAnimationInfo[index].mode,
                      sAnimationInfo[index].transitionRate);
 }
 
@@ -1047,7 +1047,7 @@ void EnMa4_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80ABDD9C(this, globalCtx);
 }
 
-s32 EnMa4_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
+s32 EnMa4_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnMa4* this = THIS;
     Vec3s sp4;
 
@@ -1065,7 +1065,7 @@ s32 EnMa4_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     return false;
 }
 
-void EnMa4_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void EnMa4_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnMa4* this = THIS;
     Vec3f sp28 = { 800.0f, 0.0f, 0.0f };
 

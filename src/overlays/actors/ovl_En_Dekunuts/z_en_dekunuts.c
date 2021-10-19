@@ -492,7 +492,7 @@ void func_808BE294(EnDekunuts* this, s32 arg1) {
     this->actionFunc = func_808BE358;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_DAMAGE);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_CUTBODY);
-    func_800BCB70(&this->actor, 0x4000, 255, 0, Animation_GetLastFrame(&D_0600259C.common));
+    func_800BCB70(&this->actor, 0x4000, 255, 0, Animation_GetLastFrame(&D_0600259C));
 }
 
 void func_808BE358(EnDekunuts* this, GlobalContext* globalCtx) {
@@ -671,7 +671,7 @@ void EnDekunuts_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_808BEBD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
+s32 func_808BEBD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnDekunuts* this = THIS;
     f32 arg1, arg2, arg3;
     f32 currentFrame;
@@ -703,7 +703,7 @@ s32 func_808BEBD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return 0;
 }
 
-void func_808BED30(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void func_808BED30(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static s8 D_808BEF98[] = {
         -1, -1, -1, 3, -1, 0, -1, 1, -1, 2, 0, 0,
     };

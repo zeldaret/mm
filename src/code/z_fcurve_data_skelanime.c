@@ -99,7 +99,7 @@ s32 SkelCurve_Update(GlobalContext* globalCtx, SkelAnimeCurve* skelCurve) {
 #endif
 
 void SkelCurve_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, SkelAnimeCurve* skelCurve,
-                        OverrideCurveLimbDraw overrideLimbDraw, PostCurveLimbDraw postLimbDraw, s32 lod, void* data) {
+                        OverrideCurveLimbDraw overrideLimbDraw, PostCurveLimbDraw postLimbDraw, s32 lod, Actor* thisx) {
     SkelCurveLimb* limb = (SkelCurveLimb*)Lib_SegmentedToVirtual(skelCurve->limbList[limbIndex]);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -107,7 +107,7 @@ void SkelCurve_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, SkelAnimeCurve*
     Matrix_StatePush();
 
     if (overrideLimbDraw == NULL ||
-        (overrideLimbDraw != NULL && overrideLimbDraw(globalCtx, skelCurve, limbIndex, data))) {
+        (overrideLimbDraw != NULL && overrideLimbDraw(globalCtx, skelCurve, limbIndex, thisx))) {
         Vec3f scale;
         Vec3s rot;
         Vec3f pos;
@@ -157,25 +157,25 @@ void SkelCurve_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, SkelAnimeCurve*
     }
 
     if (postLimbDraw != NULL) {
-        postLimbDraw(globalCtx, skelCurve, limbIndex, data);
+        postLimbDraw(globalCtx, skelCurve, limbIndex, thisx);
     }
 
     if (limb->firstChildIdx != LIMB_DONE) {
-        SkelCurve_DrawLimb(globalCtx, limb->firstChildIdx, skelCurve, overrideLimbDraw, postLimbDraw, lod, data);
+        SkelCurve_DrawLimb(globalCtx, limb->firstChildIdx, skelCurve, overrideLimbDraw, postLimbDraw, lod, thisx);
     }
 
     Matrix_StatePop();
 
     if (limb->nextLimbIdx != LIMB_DONE) {
-        SkelCurve_DrawLimb(globalCtx, limb->nextLimbIdx, skelCurve, overrideLimbDraw, postLimbDraw, lod, data);
+        SkelCurve_DrawLimb(globalCtx, limb->nextLimbIdx, skelCurve, overrideLimbDraw, postLimbDraw, lod, thisx);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
 void SkelCurve_Draw(Actor* actor, GlobalContext* globalCtx, SkelAnimeCurve* skelCurve,
-                    OverrideCurveLimbDraw overrideLimbDraw, PostCurveLimbDraw postLimbDraw, s32 lod, void* data) {
+                    OverrideCurveLimbDraw overrideLimbDraw, PostCurveLimbDraw postLimbDraw, s32 lod, Actor* thisx) {
     if (skelCurve->transforms != NULL) {
-        SkelCurve_DrawLimb(globalCtx, 0, skelCurve, overrideLimbDraw, postLimbDraw, lod, data);
+        SkelCurve_DrawLimb(globalCtx, 0, skelCurve, overrideLimbDraw, postLimbDraw, lod, thisx);
     }
 }

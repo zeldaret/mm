@@ -139,8 +139,10 @@ void EnOwl_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 36.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime1, &D_0600C5F8, &D_06001ADC, this->jointTable1, this->morphTable1, 21);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime2, &D_060105C0, &D_0600CDB0, this->jointTable2, this->morphTable2, 16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime1, &D_0600C5F8, &D_06001ADC, this->jointTable1, this->morphTable1,
+                       21);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime2, &D_060105C0, &D_0600CDB0, this->jointTable2, this->morphTable2,
+                       16);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.minVelocityY = -10.0f;
@@ -466,7 +468,7 @@ void func_8095B2F8(EnOwl* this, GlobalContext* globalCtx) {
     if ((this->actor.shape.rot.y == this->unk_3EC) && (this->actionFlags & 1)) {
         this->actionFunc = func_8095B254;
         Animation_Change(this->skelAnime3, this->skelAnime3->animation, 1.0f, 19.0f,
-                             Animation_GetLastFrame(&D_06001168.common), 2, 0.0f);
+                         Animation_GetLastFrame(&D_06001168), 2, 0.0f);
         this->unk_414 = func_8095C484;
     }
 
@@ -532,8 +534,7 @@ void func_8095B650(EnOwl* this, GlobalContext* globalCtx) {
 
 void func_8095B6C8(EnOwl* this, GlobalContext* globalCtx) {
     if (this->actionFlags & 1) {
-        Animation_Change(this->skelAnime3, &D_0600CB94, -1.0f, Animation_GetLastFrame(&D_0600CB94.common), 0.0f, 2,
-                             0.0f);
+        Animation_Change(this->skelAnime3, &D_0600CB94, -1.0f, Animation_GetLastFrame(&D_0600CB94), 0.0f, 2, 0.0f);
         this->unk_414 = func_8095C484;
         this->actionFunc = func_8095B650;
     }
@@ -557,7 +558,7 @@ void func_8095B76C(EnOwl* this, GlobalContext* globalCtx) {
         do {
             this->actor.world.pos.x = points->x;
             this->actor.world.pos.z = points->z;
-        } while(0);
+        } while (0);
 
         this->unk_3F8++;
         if (this->path->count <= this->unk_3F8) {
@@ -809,8 +810,7 @@ void func_8095C258(EnOwl* this) {
     } else {
         this->unk_414 = func_8095C328;
         this->unk_3EA = 6;
-        Animation_Change(this->skelAnime3, &D_06001ADC, 1.0f, 0.0f, Animation_GetLastFrame(&D_06001ADC.common), 2,
-                             5.0f);
+        Animation_Change(this->skelAnime3, &D_06001ADC, 1.0f, 0.0f, Animation_GetLastFrame(&D_06001ADC), 2, 5.0f);
     }
 }
 
@@ -819,12 +819,11 @@ void func_8095C328(EnOwl* this) {
         if (this->unk_3EA > 0) {
             this->unk_3EA--;
             Animation_Change(this->skelAnime3, this->skelAnime3->animation, 1.0f, 0.0f,
-                                 Animation_GetLastFrame(this->skelAnime3->animation), 2, 0.0f);
+                             Animation_GetLastFrame(this->skelAnime3->animation), 2, 0.0f);
         } else {
             this->unk_3EA = 160;
             this->unk_414 = func_8095C258;
-            Animation_Change(this->skelAnime3, &D_0600C6D4, 1.0f, 0.0f, Animation_GetLastFrame(&D_0600C6D4.common),
-                                 0, 5.0f);
+            Animation_Change(this->skelAnime3, &D_0600C6D4, 1.0f, 0.0f, Animation_GetLastFrame(&D_0600C6D4), 0, 5.0f);
         }
     }
 }
@@ -841,7 +840,7 @@ void func_8095C408(EnOwl* this) {
 void func_8095C484(EnOwl* this) {
     if (SkelAnime_Update(this->skelAnime3)) {
         Animation_Change(this->skelAnime3, this->skelAnime3->animation, 1.0f, 0.0f,
-                             Animation_GetLastFrame(this->skelAnime3->animation), 2, 0.0f);
+                         Animation_GetLastFrame(this->skelAnime3->animation), 2, 0.0f);
         this->actionFlags |= 1;
     } else {
         this->actionFlags &= ~1;
@@ -1099,7 +1098,7 @@ void func_8095CCF4(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_3DA -= (s16)(this->unk_3D8 >> 6);
 }
 
-s32 EnOwl_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
+s32 EnOwl_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnOwl* this = THIS;
 
     switch (limbIndex) {
@@ -1129,7 +1128,7 @@ s32 EnOwl_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     return false;
 }
 
-void EnOwl_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void EnOwl_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnOwl* this = THIS;
     Vec3f sp18;
 
@@ -1162,8 +1161,8 @@ void EnOwl_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(eyeTextures[this->eyeTexIndex]));
 
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime3->skeleton, this->skelAnime3->jointTable, this->skelAnime3->dListCount,
-                     EnOwl_OverrideLimbDraw, EnOwl_PostLimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime3->skeleton, this->skelAnime3->jointTable,
+                          this->skelAnime3->dListCount, EnOwl_OverrideLimbDraw, EnOwl_PostLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -1200,8 +1199,8 @@ void func_8095D074(Actor* thisx, GlobalContext* globalCtx) {
 void EnOwl_ChangeMode(EnOwl* this, EnOwlActionFunc actionFunc, EnOwlFunc unkFunc, SkelAnime* skelAnime,
                       AnimationHeader* animationSeg, f32 transitionRate) {
     this->skelAnime3 = skelAnime;
-    Animation_Change(this->skelAnime3, animationSeg, 1.0f, 0.0f, Animation_GetLastFrame(&animationSeg->common), 2,
-                         transitionRate);
+    Animation_Change(this->skelAnime3, animationSeg, 1.0f, 0.0f, Animation_GetLastFrame(animationSeg), 2,
+                     transitionRate);
     this->actionFunc = actionFunc;
     this->unk_414 = unkFunc;
 }

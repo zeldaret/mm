@@ -30,7 +30,6 @@ void EnNiw_UpdateFeather(EnNiw* this, GlobalContext* globalCtx);
 void EnNiw_DrawFeathers(EnNiw* this, GlobalContext* globalCtx);
 void EnNiw_CheckRage(EnNiw* this, GlobalContext* globalCtx);
 void func_80891320(EnNiw* this, GlobalContext* globalCtx, s16 arg2);
-s32 EnNiw_LimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* arg);
 void EnNiw_SpawnFeather(EnNiw* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 scale);
 
 extern FlexSkeletonHeader D_06002530;
@@ -328,7 +327,7 @@ void func_808917F8(EnNiw* this, GlobalContext* globalCtx, s32 arg2) {
 }
 
 void EnNiw_SetupIdle(EnNiw* this) {
-    Animation_Change(&this->skelanime, &D_060000E8, 1.0f, 0.0f, Animation_GetLastFrame(&D_060000E8.common), 0, -10.0f);
+    Animation_Change(&this->skelanime, &D_060000E8, 1.0f, 0.0f, Animation_GetLastFrame(&D_060000E8), 0, -10.0f);
     this->unknownState28E = 0;
     this->actionFunc = EnNiw_Idle;
 }
@@ -630,7 +629,7 @@ void EnNiw_CuccoStorm(EnNiw* this, GlobalContext* globalCtx) {
 }
 
 void EnNiw_SetupRunAway(EnNiw* this) {
-    Animation_Change(&this->skelanime, &D_060000E8, 1.0f, 0.0f, Animation_GetLastFrame(&D_060000E8.common), 0, -10.0f);
+    Animation_Change(&this->skelanime, &D_060000E8, 1.0f, 0.0f, Animation_GetLastFrame(&D_060000E8), 0, -10.0f);
     this->unk29A = Rand_ZeroFloat(1.99f);
     this->unknownState28E = 7;
     this->actionFunc = EnNiw_RunAway;
@@ -907,7 +906,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s32 EnNiw_LimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
+s32 EnNiw_LimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnNiw* this = THIS;
 
     if (limbIndex == 13) {

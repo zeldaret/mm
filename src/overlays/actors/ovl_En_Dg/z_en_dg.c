@@ -157,7 +157,7 @@ void func_80989140(SkelAnime* skelAnime, ActorAnimationEntryS arg1[], s32 arg2) 
 
     arg1 += arg2;
     if (arg1->frameCount < 0) {
-        frameCount = Animation_GetLastFrame(&arg1->animationSeg->common);
+        frameCount = Animation_GetLastFrame(arg1->animationSeg);
     } else {
         frameCount = arg1->frameCount;
     }
@@ -1174,11 +1174,11 @@ void EnDg_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_8098BFB8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
+s32 func_8098BFB8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     return 0;
 }
 
-void func_8098BFD4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void func_8098BFD4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnDg* this = THIS;
     Vec3f sp20 = { 0.0f, 20.0f, 0.0f };
 

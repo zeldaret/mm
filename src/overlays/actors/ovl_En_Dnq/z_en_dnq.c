@@ -470,6 +470,6 @@ void EnDnq_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnDnq* this = THIS;
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
-                     NULL, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          NULL, NULL, &this->actor);
 }

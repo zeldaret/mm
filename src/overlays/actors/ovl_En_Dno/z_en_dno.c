@@ -35,8 +35,8 @@ void func_80A72CF8(EnDno* this, GlobalContext* globalCtx);
 void func_80A730A0(EnDno* this, GlobalContext* globalCtx);
 void func_80A73244(EnDno* this, GlobalContext* globalCtx);
 void func_80A732C8(EnDno* this, GlobalContext* globalCtx);
-s32 EnDno_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx);
-void EnDno_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx);
+s32 EnDno_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
+void EnDno_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
 extern AnimationHeader D_06000470;
 extern AnimationHeader D_060008F0;
@@ -219,7 +219,7 @@ void EnDno_Init(Actor* thisx, GlobalContext* globalCtx) {
             Collider_SetCylinder(globalCtx, &this->collider, thisx, &sCylinderInit);
             Actor_UpdateBgCheckInfo(globalCtx, thisx, 0.0f, 0.0f, 0.0f, 4);
             Animation_Change(&this->skelAnime, sAnimations[14].animationSeg, 1.0f, 0.0f,
-                             Animation_GetLastFrame(&(sAnimations[14].animationSeg)->common), sAnimations[14].mode,
+                             Animation_GetLastFrame(sAnimations[14].animationSeg), sAnimations[14].mode,
                              sAnimations[14].transitionRate);
             this->unk_3BE = 0x3E93;
             this->unk_3C0 = 60.0f;
@@ -924,7 +924,7 @@ void EnDno_Draw(Actor* thisx, GlobalContext* globalCtx) {
                           EnDno_OverrideLimbDraw, EnDno_PostLimbDraw, &this->actor);
 }
 
-s32 EnDno_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
+s32 EnDno_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnDno* this = THIS;
 
     *dList = NULL;
@@ -934,7 +934,7 @@ s32 EnDno_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     return false;
 }
 
-void EnDno_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void EnDno_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80A73B40 = { 0.0f, 0.0f, 0.0f };
     Gfx* gfxOpa;
     Gfx* gfxXlu;
@@ -984,7 +984,7 @@ void EnDno_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 
         func_8012C28C(globalCtx->state.gfxCtx);
         if (limbIndex == 13) {
-            Matrix_Scale(this->unk_454, this->unk_454, this->unk_454, MTXMODE_APPLY); 
+            Matrix_Scale(this->unk_454, this->unk_454, this->unk_454, MTXMODE_APPLY);
             Matrix_InsertXRotation_s(this->unk_45C, 1);
         }
 
@@ -1006,8 +1006,8 @@ void EnDno_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
         Matrix_MultiplyVector3fByState(&D_80A73B40, &sp84);
         func_80A711D0(this, globalCtx, &sp84);
         Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
-        Matrix_Scale(0.15f, 0.15f, 1.0f, MTXMODE_APPLY); 
-        Matrix_InsertTranslation(0.0f, -3200.0f, 0.0f, MTXMODE_APPLY); 
+        Matrix_Scale(0.15f, 0.15f, 1.0f, MTXMODE_APPLY);
+        Matrix_InsertTranslation(0.0f, -3200.0f, 0.0f, MTXMODE_APPLY);
         gfxXlu = func_8012C2B4(POLY_XLU_DISP);
 
         gSPMatrix(gfxXlu, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

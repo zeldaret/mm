@@ -1062,7 +1062,7 @@ void EnDodongo_Update(Actor* thisx, GlobalContext* globalCtx2) {
 }
 
 s32 EnDodongo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                               void* thisx) {
+                               Actor* thisx) {
     EnDodongo* this = THIS;
 
     if (limbIndex == 1) {
@@ -1074,7 +1074,7 @@ s32 EnDodongo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
     return false;
 }
 
-void EnDodongo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void EnDodongo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80879370 = { 1800.0f, 1200.0f, 0.0f };
     static Vec3f D_8087937C = { 1500.0f, 300.0f, 0.0f };
     static s8 D_80879388[] = {
@@ -1109,7 +1109,7 @@ void EnDodongo_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnDodongo_OverrideLimbDraw,
-                   EnDodongo_PostLimbDraw, &this->actor);
+                      EnDodongo_PostLimbDraw, &this->actor);
     func_800BE680(globalCtx, &this->actor, this->unk_348, ARRAY_COUNT(this->unk_348), this->unk_340 * this->unk_334,
                   this->unk_344 * this->unk_334, this->unk_33C, this->unk_300);
 }

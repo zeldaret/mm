@@ -26,8 +26,8 @@ void func_809CD6C0(EnBji01* this, GlobalContext* globalCtx);
 void func_809CD70C(EnBji01* this, GlobalContext* globalCtx);
 void func_809CD77C(EnBji01* this, GlobalContext* globalCtx);
 
-s32 EnBji01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* arg);
-void EnBji01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* arg);
+s32 EnBji01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* arg);
+void EnBji01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* arg);
 
 extern AnimationHeader D_06000FDC;
 extern AnimationHeader D_06005B58;
@@ -402,7 +402,7 @@ void EnBji01_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnBji01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                             void* thisx) {
+                             Actor* thisx) {
     EnBji01* this = THIS;
 
     if ((limbIndex == BJI_LIMB_NONE) && ((globalCtx->gameplayFrames % 2) != 0)) {
@@ -426,7 +426,7 @@ s32 EnBji01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     return false;
 }
 
-void EnBji01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void EnBji01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_809CDCC8 = { 1088.0f, 1200.0f, 0.0f };
     EnBji01* this = THIS;
     Vec3f sp20;

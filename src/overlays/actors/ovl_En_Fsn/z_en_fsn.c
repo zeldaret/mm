@@ -712,7 +712,7 @@ void EnFsn_Idle(EnFsn* this, GlobalContext* globalCtx) {
 
     if (this->animationIdx == 4) {
         s16 curFrame = this->skelAnime.curFrame;
-        s16 frameCount = Animation_GetLastFrame(&sAnimations[this->animationIdx].animationSeg->common);
+        s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animationSeg);
         if (curFrame == frameCount) {
             this->animationIdx = 5;
             func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
@@ -746,7 +746,7 @@ void EnFsn_Idle(EnFsn* this, GlobalContext* globalCtx) {
 
 void EnFsn_Haggle(EnFsn* this, GlobalContext* globalCtx) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(&sAnimations[this->animationIdx].animationSeg->common);
+    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animationSeg);
 
     if (this->flags & ENFSN_ANGRY) {
         this->flags &= ~ENFSN_ANGRY;
@@ -1552,7 +1552,7 @@ void EnFsn_DrawStickDirectionPrompts(EnFsn* this, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-s32 EnFsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
+s32 EnFsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnFsn* this = THIS;
     s16 tmp;
     s32 limbRotTableIdx;
@@ -1588,7 +1588,7 @@ s32 EnFsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     return 0;
 }
 
-void EnFsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void EnFsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnFsn* this = THIS;
 
     if (limbIndex == 16) {

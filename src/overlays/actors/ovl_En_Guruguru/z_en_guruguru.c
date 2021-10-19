@@ -112,7 +112,7 @@ void EnGuruguru_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnGuruguru_ChangeAnimation(EnGuruguru* this, s32 arg1) {
-    this->frameCount = Animation_GetLastFrame(&D_80BC79CC[arg1]->common);
+    this->frameCount = Animation_GetLastFrame(D_80BC79CC[arg1]);
     Animation_Change(&this->skelAnime, D_80BC79CC[arg1], D_80BC79D8[arg1], 0.0f, this->frameCount, D_80BC79D4[arg1],
                      -4.0f);
 }
@@ -375,7 +375,7 @@ void EnGuruguru_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnGuruguru_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                void* thisx) {
+                                Actor* thisx) {
     EnGuruguru* this = THIS;
 
     if (limbIndex == 14) {

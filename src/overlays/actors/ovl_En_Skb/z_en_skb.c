@@ -536,8 +536,7 @@ void func_80995818(EnSkb* this, GlobalContext* globalCtx) {
 }
 
 void func_809958F4(EnSkb* this) {
-    Animation_Change(&this->skelAnime, &D_06003584, -1.0f, Animation_GetLastFrame(&D_06003584.common), 0.0f, 2,
-                         -4.0f);
+    Animation_Change(&this->skelAnime, &D_06003584, -1.0f, Animation_GetLastFrame(&D_06003584), 0.0f, 2, -4.0f);
     this->unk_3E4 = 0;
     this->actor.flags &= ~1;
     this->actor.speedXZ = 0.0f;
@@ -1064,7 +1063,7 @@ void EnSkb_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80996D68(this, globalCtx);
 }
 
-s32 EnSkb_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
+s32 EnSkb_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnSkb* this = THIS;
     s32 pad;
     s16 sins;
@@ -1093,7 +1092,7 @@ s32 EnSkb_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     return false;
 }
 
-void EnSkb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void EnSkb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80997564 = { 800.0f, 1200.0f, 0.0f };
     EnSkb* this = THIS;
 
@@ -1127,7 +1126,7 @@ void EnSkb_Draw(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_2DC = 0;
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnSkb_OverrideLimbDraw,
-                   EnSkb_PostLimbDraw, &this->actor);
+                      EnSkb_PostLimbDraw, &this->actor);
     if (this->unk_3D2 > 0) {
         func_800BE680(globalCtx, &this->actor, this->unk_234, this->unk_2DC, this->unk_230, 0.5f, this->unk_22C,
                       this->unk_3E6);

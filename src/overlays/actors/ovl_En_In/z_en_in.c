@@ -199,7 +199,7 @@ s32 func_808F30B0(SkelAnime* skelAnime, s16 animIndex) {
         ret = true;
         frameCount = sAnimations[animIndex].frameCount;
         if (frameCount < 0) {
-            frameCount = Animation_GetLastFrame(&sAnimations[animIndex].animationSeg->common);
+            frameCount = Animation_GetLastFrame(sAnimations[animIndex].animationSeg);
         }
         Animation_Change(skelAnime, sAnimations[animIndex].animationSeg, sAnimations[animIndex].playbackSpeed,
                          sAnimations[animIndex].frame, frameCount, sAnimations[animIndex].mode,
@@ -361,7 +361,7 @@ void func_808F374C(EnIn* this, GlobalContext* globalCtx) {
     if (SkelAnime_Update(&this->skelAnime)) {
         this->unk486 = this->unk488 %= 8;
         Animation_Change(&this->skelAnime, animations[this->unk488], 1.0f, 0.0f,
-                         Animation_GetLastFrame(&animations[this->unk488]->common), 2, -10.0f);
+                         Animation_GetLastFrame(animations[this->unk488]), 2, -10.0f);
     }
 }
 
@@ -1415,8 +1415,7 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (type == ENIN_HORSE_RIDER_YELLOW_SHIRT || type == ENIN_HORSE_RIDER_BLUE_SHIRT) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
         this->unk488 = 1;
-        Animation_Change(&this->skelAnime, &D_06016A60, 1.0f, 0.0f, Animation_GetLastFrame(&D_06016A60.common), 2,
-                         0.0f);
+        Animation_Change(&this->skelAnime, &D_06016A60, 1.0f, 0.0f, Animation_GetLastFrame(&D_06016A60), 2, 0.0f);
         Actor_SetScale(&this->actor, 0.01f);
         this->unk23C = 0;
         this->unk23D = 1;
@@ -1535,7 +1534,7 @@ void func_808F6334(EnIn* this, GlobalContext* globalCtx) {
     this->unk4C8 = newUnk4C8;
 }
 
-s32 EnIn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* arg) {
+s32 EnIn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* arg) {
     EnIn* this = (EnIn*)arg;
     s32 pad;
     Gfx* sp50[] = {
@@ -1596,7 +1595,7 @@ s32 EnIn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     return 0;
 }
 
-void EnIn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* arg) {
+void EnIn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* arg) {
     EnIn* this = (EnIn*)arg;
     Vec3f sp50 = { 1600.0f, 0.0f, 0.0f };
     Vec3f sp44 = { 0.0f, 0.0f, 0.0f };

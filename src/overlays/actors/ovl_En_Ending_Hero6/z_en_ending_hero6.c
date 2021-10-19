@@ -77,7 +77,7 @@ void EnEndingHero6_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, sSkeletons[this->npcIndex], sAnimations[this->npcIndex],
-                     this->jointTable, this->morphTable, sLimbCounts[this->npcIndex]);
+                       this->jointTable, this->morphTable, sLimbCounts[this->npcIndex]);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
     EnEndingHero6_SetupIdle(this);
 }
@@ -87,7 +87,7 @@ void EnEndingHero6_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnEndingHero6_InitSkelAnime(EnEndingHero6* this, s32 npcIndex) {
     this->animIndex = npcIndex;
-    this->frameCount = Animation_GetLastFrame(&sAnimations[npcIndex]->common);
+    this->frameCount = Animation_GetLastFrame(sAnimations[npcIndex]);
     Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.f, this->frameCount, 0, 0.0f);
 }
 
@@ -123,7 +123,7 @@ void EnEndingHero6_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
 }
 
-void EnEndingHero6_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void EnEndingHero6_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Gfx* D_80C2426C[] = { D_060070C0, D_06006FB0, D_06006E80, D_06006D70, D_0600A390_dl };
     EnEndingHero6* this = THIS;
     s32 index;
@@ -183,7 +183,7 @@ void EnEndingHero6_Draw(Actor* thisx, GlobalContext* globalCtx) {
             }
 
             SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                             this->skelAnime.dListCount, NULL, EnEndingHero6_PostLimbDraw, &this->actor);
+                                  this->skelAnime.dListCount, NULL, EnEndingHero6_PostLimbDraw, &this->actor);
         }
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);

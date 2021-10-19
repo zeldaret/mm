@@ -144,7 +144,7 @@ void func_80BE6408(EnDaiku2* this, s32 arg1) {
     f32 sp34 = 1.0f;
 
     this->unk_276 = arg1;
-    this->unk_284 = Animation_GetLastFrame(&sAnimations[this->unk_276]->common);
+    this->unk_284 = Animation_GetLastFrame(sAnimations[this->unk_276]);
     if (this->unk_276 == 3) {
         sp34 = 2.0f;
     }
@@ -274,7 +274,7 @@ void func_80BE66E4(EnDaiku2* this, GlobalContext* globalCtx) {
             if ((this->unk_276 == 5) || (this->unk_276 == 9)) {
                 func_80BE6408(this, 10);
             } else if ((this->unk_276 == 10) && (this->unk_284 <= sp9C)) {
-                this->unk_284 = Animation_GetLastFrame(&D_06002134.common);
+                this->unk_284 = Animation_GetLastFrame(&D_06002134);
                 Animation_Change(&this->skelAnime, &D_06002134, -1.0f, this->unk_284, 0.0f, 2, -4.0f);
                 this->unk_276 = 11;
             } else if ((this->unk_276 == 11) && (sp9C <= 0.0f)) {
@@ -469,7 +469,7 @@ void EnDaiku2_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80BE7600(this, globalCtx);
 }
 
-void EnDaiku2_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void EnDaiku2_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnDaiku2* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);

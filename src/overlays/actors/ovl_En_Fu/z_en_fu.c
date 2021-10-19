@@ -200,7 +200,8 @@ void EnFu_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (fuKaiten != NULL) {
         ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 36.0f);
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600B2B0, &D_06001F74, this->jointTable, this->morphTable, 21);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600B2B0, &D_06001F74, this->jointTable, this->morphTable,
+                           21);
         Collider_InitCylinder(globalCtx, &this->collider);
         Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -1347,7 +1348,7 @@ void EnFu_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80964034(this, globalCtx);
 }
 
-s32 EnFu_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
+s32 EnFu_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnFu* this = THIS;
 
     if (limbIndex == 9) {
@@ -1366,7 +1367,7 @@ s32 EnFu_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     return false;
 }
 
-void EnFu_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void EnFu_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80964C28 = { -2500.0f, 0.0f, 0.0f };
     static Vec3f D_80964C34 = { -3500.0f, 0.0f, 0.0f };
     EnFu* this = THIS;
@@ -1394,7 +1395,7 @@ void EnFu_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x08, Gfx_EnvColor(globalCtx->state.gfxCtx, 0, 50, 160, 0));
     gSPSegment(POLY_OPA_DISP++, 0x09, Gfx_EnvColor(globalCtx->state.gfxCtx, 255, 255, 255, 0));
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                     EnFu_OverrideLimbDraw, EnFu_PostLimbDraw, &this->actor);
+                          EnFu_OverrideLimbDraw, EnFu_PostLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

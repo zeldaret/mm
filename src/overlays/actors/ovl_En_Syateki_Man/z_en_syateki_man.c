@@ -141,9 +141,11 @@ void EnSyatekiMan_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetMode = 1;
     Actor_SetScale(&this->actor, 0.01f);
     if (globalCtx->sceneNum == SCENE_SYATEKI_MORI) {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600E7D0, &D_0600DFEC, this->jointTable, this->morphTable, 16);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600E7D0, &D_0600DFEC, this->jointTable, this->morphTable,
+                           16);
     } else {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600E7D0, &D_0600D9D0, this->jointTable, this->morphTable, 16);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600E7D0, &D_0600D9D0, this->jointTable, this->morphTable,
+                           16);
     }
 
     this->actor.colChkInfo.cylRadius = 100;
@@ -1245,7 +1247,7 @@ void EnSyatekiMan_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnSyatekiMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                  void* thisx) {
+                                  Actor* thisx) {
     EnSyatekiMan* this = THIS;
 
     if ((globalCtx->sceneNum == SCENE_SYATEKI_MIZU) && (limbIndex == 15)) {
@@ -1264,7 +1266,7 @@ s32 EnSyatekiMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx**
     return false;
 }
 
-void EnSyatekiMan_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx) {
+void EnSyatekiMan_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnSyatekiMan* this = THIS;
     Vec3f sp18 = { 1600.0f, 0.0f, 0.0f };
 

@@ -559,6 +559,12 @@ void EffectSsHahen_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, 
 
 /**
  * Spawn a burst of fragments, with the amount of fragments specifed by count and burst speed set by <arg2>
+ *
+ * Notes:
+ *     - if a display list is not provided, D_0400C0D0 (wilted deku fragment) will be used as default
+ *     - the unused arg does not do anything, any value can be passed here
+ *     - due to how life is implemented it is capped at 200. Any value over 200 is accepted, but the fragment will
+ *       only live for 200 frames
  */
 void EffectSsHahen_SpawnBurst(GlobalContext* globalCtx, Vec3f* pos, f32 burstScale, s16 unused, s16 scale,
                               s16 randScaleRange, s16 count, s16 objId, s16 life, Gfx* dList) {
@@ -589,6 +595,10 @@ void func_800B2364(GlobalContext* globalCtx, Vec3f* pos, Gfx* dList) {
 
 // EffectSsStick Spawn Functions
 
+/**
+ * As child, spawn a broken stick fragment
+ * As adult, spawn a broken sword fragment
+ */
 void EffectSsStick_Spawn(GlobalContext* globalCtx, Vec3f* pos, s16 yaw) {
     EffectSsStickInitParams initParams;
 
@@ -660,6 +670,14 @@ void EffectSsHitMark_SpawnCustomScale(GlobalContext* globalCtx, s32 type, s16 sc
 
 // EffectSsFhgFlash Spawn Functions
 
+/**
+ * Spawn a shock effect
+ *
+ * param determines where the ligntning should go
+ * 0: dont attach to any actor. spawns at the position specified by pos
+ * 1: spawn at one of Player's body parts, chosen at random
+ * 2: spawn at one of Phantom Ganon's body parts, chosen at random
+ */
 void EffectSsFhgFlash_SpawnShock(GlobalContext* globalCtx, Actor* actor, Vec3f* pos, s16 scale, u8 param) {
     EffectSsFhgFlashInitParams initParams;
 

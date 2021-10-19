@@ -483,8 +483,8 @@ void func_8089B100(EnDinofos* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Vec3f sp3C;
 
-    Animation_Change(&this->skelAnime, &D_06001CCC, 1.0f, Animation_GetLastFrame(&D_06001CCC.common),
-                     Animation_GetLastFrame(&D_06001CCC.common), 2, 0.0f);
+    Animation_Change(&this->skelAnime, &D_06001CCC, 1.0f, Animation_GetLastFrame(&D_06001CCC),
+                     Animation_GetLastFrame(&D_06001CCC), 2, 0.0f);
     func_800BE33C(&camera->eye, &camera->at, &this->unk_29A, 1);
     Math_Vec3f_Diff(&this->actor.world.pos, &player->actor.world.pos, &sp3C);
     this->unk_2BC.x = player->actor.world.pos.x + (0.4f * sp3C.x);
@@ -894,7 +894,7 @@ void func_8089C398(EnDinofos* this) {
     if (this->actionFunc != func_8089C2A8) {
         Animation_PlayOnce(&this->skelAnime, &D_06000AF0);
     } else {
-        this->skelAnime.endFrame = Animation_GetLastFrame(&D_060025B4.common);
+        this->skelAnime.endFrame = Animation_GetLastFrame(&D_060025B4);
     }
 
     if (this->actor.speedXZ < 0.0f) {
@@ -1414,7 +1414,7 @@ void EnDinofos_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 }
 
-s32 func_8089DC4C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx,
+s32 func_8089DC4C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
                   Gfx** gfx) {
     EnDinofos* this = THIS;
 
@@ -1425,7 +1425,7 @@ s32 func_8089DC4C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return 0;
 }
 
-void func_8089DC84(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, void* thisx, Gfx** gfx) {
+void func_8089DC84(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     static Vec3f D_8089E38C = { 400.0f, -3600.0f, 0.0f };
     static Vec3f D_8089E398 = { 300.0f, 500.0f, 0.0f };
     static Vec3f D_8089E3A4 = { 700.0f, 400.0f, 0.0f };

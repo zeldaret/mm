@@ -103,7 +103,7 @@ void EnBaisen_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnBaisen_ChangeAnimation(EnBaisen* this, s32 animIndex) {
     this->animIndex = animIndex;
-    this->frameCount = Animation_GetLastFrame(&D_80BE8E4C[animIndex]->common);
+    this->frameCount = Animation_GetLastFrame(D_80BE8E4C[animIndex]);
     Animation_Change(&this->skelAnime, D_80BE8E4C[this->animIndex], 1.0f, 0.0f, this->frameCount,
                      animModes[this->animIndex], -10.0f);
 }
@@ -268,7 +268,7 @@ void EnBaisen_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnBaisen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                              void* thisx) {
+                              Actor* thisx) {
     EnBaisen* this = THIS;
 
     if (limbIndex == 9) {
