@@ -862,8 +862,8 @@ void func_800BA6FC(GlobalContext* globalCtx, ActorContext* actorCtx);
 void func_800BA798(GlobalContext* globalCtx, ActorContext* actorCtx);
 void func_800BA8B8(GlobalContext* globalCtx, ActorContext* actorCtx);
 // void func_800BA9B4(void);
-void Actor_InsertIntoTypeList(ActorContext* actorCtx, Actor* actor, u8 actorCategory);
-Actor* Actor_RemoveFromTypeList(GlobalContext* globalCtx, ActorContext* actorCtx, Actor* actor);
+void Actor_AddToCategory(ActorContext* actorCtx, Actor* actor, u8 actorCategory);
+Actor* Actor_RemoveFromCategory(GlobalContext* globalCtx, ActorContext* actorCtx, Actor* actor);
 void Actor_FreeOverlay(ActorOverlay* entry);
 Actor* Actor_Spawn(ActorContext* actorCtx, GlobalContext* globalCtx, s16 actorId, f32 posX, f32 posY, f32 posZ,
                    s16 rotX, s16 rotY, s16 rotZ, s32 params);

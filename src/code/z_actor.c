@@ -1658,8 +1658,8 @@ void Actor_UpdateAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
                     } else {
                         phi_s0_2 = phi_s0->next;
                         phi_s0->category = phi_s3_2;
-                        Actor_RemoveFromTypeList(globalCtx, actorCtx, phi_s0);
-                        Actor_InsertIntoTypeList(actorCtx, phi_s0, temp_v0_3);
+                        Actor_RemoveFromCategory(globalCtx, actorCtx, phi_s0);
+                        Actor_AddToCategory(actorCtx, phi_s0, temp_v0_3);
                     }
                     phi_s0 = phi_s0_2;
                 } while (phi_s0_2 != 0);
@@ -1782,7 +1782,125 @@ void Actor_DrawAllSetup(GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BA2FC.s")
 
+#ifdef NON_EQUIVALENT
+// weird DISPS stuff
+void Actor_DrawAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
+    Gfx* sp58;
+    GraphicsContext* sp44;
+    Actor* temp_s0;
+    Actor* temp_s0_2;
+    Gfx* temp_s0_3;
+    Gfx* temp_t9;
+    Gfx* temp_v0_2;
+    Gfx* temp_v0_3;
+    Gfx* temp_v1;
+    s32 temp_s7;
+    ActorListEntry* phi_fp;
+    Actor* phi_s0;
+    s32 phi_s6;
+    s32 i;
+
+    if (globalCtx->unk_18844 != 0) {
+        phi_s6 = 0x200000;
+    } else {
+        phi_s6 = 0x200060;
+    }
+
+    sp44 = globalCtx->state.gfxCtx;
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    Actor_DrawAllSetup(globalCtx);
+
+    //temp_t9 = sp44->polyXlu.p;
+    //sp58 = temp_t9;
+    //sp44->polyXlu.p = temp_t9 + 8;
+    sp58 = POLY_XLU_DISP;
+    POLY_XLU_DISP = &POLY_XLU_DISP[1];
+
+    phi_fp = actorCtx->actorList;
+
+    for (i = 0; i < ARRAY_COUNT(actorCtx->actorList); i++, phi_fp++) {
+        phi_s0 = phi_fp->first;
+        while (phi_s0 != NULL) {
+            SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->projectionMatrix, &phi_s0->world.pos, &phi_s0->projectedPos, &phi_s0->projectedW);
+
+            if ((phi_s0->unk39 & 0x7F) != 0) {
+                func_800B9D1C(phi_s0);
+            }
+
+            if (func_800BA2D8(globalCtx, phi_s0) != 0) {
+                phi_s0->flags |= 0x40;
+            } else {
+                phi_s0->flags &= ~0x40;
+            }
+
+            phi_s0->isDrawn = false;
+            if ((phi_s0->init == NULL) && (phi_s0->draw != NULL)) {
+                if (phi_s0->flags & phi_s6) {
+                    if ((phi_s0->flags & 0x80) && ((globalCtx->roomCtx.currRoom.unk5 == 0) || (globalCtx->actorCtx.unk4 == 0x64) || (globalCtx->roomCtx.currRoom.num != phi_s0->room))) {
+                        if (Actor_RecordUndrawnActor(globalCtx, phi_s0) != 0) {
+
+                        }
+                    } else {
+                        Actor_Draw(globalCtx, phi_s0);
+                    }
+                }
+            }
+
+            phi_s0 = phi_s0->next;
+        }
+    }
+
+    Effect_DrawAll(globalCtx->state.gfxCtx);
+    EffectSS_DrawAllParticles(globalCtx);
+    EffFootmark_Draw(globalCtx);
+
+    temp_s0_3 = POLY_XLU_DISP;
+    //temp_s0_3 = sp44->polyXlu.p;
+    //sp58->words.w0 = 0xDE000000;
+    //temp_v0_2 = temp_s0_3 + 8;
+    //sp58->words.w1 = (u32) temp_v0_2;
+    //sp44->polyXlu.p = temp_v0_2;
+    gSPDisplayList(sp58, POLY_XLU_DISP++);
+
+    if (globalCtx->actorCtx.unk3 != 0) {
+        Math_StepToC(&globalCtx->actorCtx.unk4, 100, 20);
+        if ((GET_PLAYER(globalCtx)->stateFlags2 & 0x8000000)) {
+            func_800B90F4(globalCtx);
+        }
+    } else {
+        Math_StepToC(&globalCtx->actorCtx.unk4, 0, 10);
+    }
+    if (globalCtx->actorCtx.unk4 != 0) {
+        globalCtx->actorCtx.unkB = 1;
+        func_800B9EF4(globalCtx, globalCtx->actorCtx.undrawnActorCount, globalCtx->actorCtx.undrawnActors);
+    }
+
+    //temp_v0_3 = sp44->polyXlu.p;
+    //temp_v0_3->words.w0 = 0xDF000000;
+    //temp_v0_3->words.w1 = 0;
+    //temp_v1 = temp_v0_3 + 8;
+    //temp_s0_3->words.w1 = (u32) temp_v1;
+    //temp_s0_3->words.w0 = 0xDE010000;
+    //sp44->polyXlu.p = temp_v1;
+
+    //gSPEndDisplayList(POLY_XLU_DISP++);
+    //gSPBranchList(POLY_XLU_DISP++, POLY_XLU_DISP);
+    //temp_v0_3 = POLY_XLU_DISP;
+    gSPEndDisplayList(POLY_XLU_DISP++);
+    gSPBranchList(temp_s0_3, POLY_XLU_DISP);
+
+    if (globalCtx->unk_18844 == 0) {
+        Lights_DrawGlow(globalCtx);
+    }
+
+    TitleCard_Draw(globalCtx, &actorCtx->titleCtxt);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_DrawAll.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BA6FC.s")
 
@@ -1792,7 +1910,7 @@ void Actor_DrawAllSetup(GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BA9B4.s")
 
-void Actor_InsertIntoTypeList(ActorContext* actorCtx, Actor* actor, u8 actorCategory) {
+void Actor_AddToCategory(ActorContext* actorCtx, Actor* actor, u8 actorCategory) {
     Actor* phi_v0;
     Actor* phi_v1;
 
@@ -1817,8 +1935,7 @@ void Actor_InsertIntoTypeList(ActorContext* actorCtx, Actor* actor, u8 actorCate
 }
 
 #ifdef NON_MATCHING
-// Actor_RemoveFromCategory
-Actor* Actor_RemoveFromTypeList(GlobalContext* globalCtx, ActorContext* actorCtx, Actor* actorToRemove) {
+Actor* Actor_RemoveFromCategory(GlobalContext* globalCtx, ActorContext* actorCtx, Actor* actorToRemove) {
     Actor* newHead;
 
     actorCtx->totalLoadedActors--;
@@ -1846,7 +1963,7 @@ Actor* Actor_RemoveFromTypeList(GlobalContext* globalCtx, ActorContext* actorCtx
     return newHead;
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_RemoveFromTypeList.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_RemoveFromCategory.s")
 #endif
 
 void Actor_FreeOverlay(ActorOverlay* entry) {
@@ -1961,7 +2078,7 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* glob
         actor->unk20 = 0x3FF;
     }
 
-    Actor_InsertIntoTypeList(actorCtx, actor, sp2C->type);
+    Actor_AddToCategory(actorCtx, actor, sp2C->type);
 
     goto dummy_label_;
 dummy_label_:;
@@ -2046,7 +2163,7 @@ Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, GlobalContext* globalC
     func_801A72CC(&actor->projectedPos);
     Actor_Destroy(actor, globalCtx);
 
-    newHead = Actor_RemoveFromTypeList(globalCtx, actorCtx, actor);
+    newHead = Actor_RemoveFromCategory(globalCtx, actorCtx, actor);
     zelda_free(actor);
 
     if (overlayEntry->vramStart != 0) {
@@ -2119,7 +2236,7 @@ void func_800BBCEC(Actor* actor, GlobalContext* globalCtx, s32 arg2, Gfx** dList
         sp3C = SysMatrix_GetCurrentState();
         temp_v0_2 = Actor_SpawnAsChild(&globalCtx->actorCtx, actor, globalCtx, ACTOR_EN_PART, sp3C->mf[3][0], sp3C->mf[3][1], sp3C->mf[3][2], 0, 0, actor->objBankIndex, arg2);
         if (temp_v0_2 != NULL) {
-            sp40 = temp_v0_2;
+            sp40 = (EnPart*)temp_v0_2;
 
             func_8018219C(sp3C, &sp40->actor.shape.rot, 0);
             sp40->unk_150 = *dList;

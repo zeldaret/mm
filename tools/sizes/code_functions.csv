@@ -344,8 +344,8 @@ asm/non_matchings/code/z_actor/func_800BA6FC.s,func_800BA6FC,0x800BA6FC,0x27
 asm/non_matchings/code/z_actor/func_800BA798.s,func_800BA798,0x800BA798,0x48
 asm/non_matchings/code/z_actor/func_800BA8B8.s,func_800BA8B8,0x800BA8B8,0x3F
 asm/non_matchings/code/z_actor/func_800BA9B4.s,func_800BA9B4,0x800BA9B4,0x40
-asm/non_matchings/code/z_actor/Actor_InsertIntoTypeList.s,Actor_InsertIntoTypeList,0x800BAAB4,0x1C
-asm/non_matchings/code/z_actor/Actor_RemoveFromTypeList.s,Actor_RemoveFromTypeList,0x800BAB24,0x36
+asm/non_matchings/code/z_actor/Actor_AddToCategory.s,Actor_AddToCategory,0x800BAAB4,0x1C
+asm/non_matchings/code/z_actor/Actor_RemoveFromCategory.s,Actor_RemoveFromCategory,0x800BAB24,0x36
 asm/non_matchings/code/z_actor/Actor_FreeOverlay.s,Actor_FreeOverlay,0x800BABFC,0x19
 asm/non_matchings/code/z_actor/Actor_Spawn.s,Actor_Spawn,0x800BAC60,0x1D
 asm/non_matchings/code/z_actor/Actor_LoadOverlay.s,Actor_LoadOverlay,0x800BACD4,0x50
