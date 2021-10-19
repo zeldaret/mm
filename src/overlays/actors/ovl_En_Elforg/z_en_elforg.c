@@ -285,7 +285,7 @@ void EnElforg_TurnInFairy(EnElforg* this, GlobalContext* globalCtx) {
     if (xzDistToPlayer < 0.0f) {
         xzDistToPlayer = 10.0f;
     }
-    newAngle = 163840.0f / xzDistToPlayer;
+    newAngle = 0x28000 / xzDistToPlayer;
     Math_SmoothStepToF(&xzDistToPlayer, 40.0f, 0.2f, 100.0f, 1.0f);
     rotationTemp = this->actor.yawTowardsPlayer - newAngle;
     this->actor.world.pos.x = player->actor.world.pos.x - (Math_SinS(rotationTemp) * xzDistToPlayer);
