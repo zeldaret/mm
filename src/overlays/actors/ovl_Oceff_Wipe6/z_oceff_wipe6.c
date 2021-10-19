@@ -64,8 +64,8 @@ void OceffWipe6_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f vec;
     s32 pad2;
 
-    eye = ACTIVE_CAM->eye;
-    Camera_GetSkyboxOffset(&vec, ACTIVE_CAM);
+    eye = GET_ACTIVE_CAM(globalCtx)->eye;
+    Camera_GetSkyboxOffset(&vec, GET_ACTIVE_CAM(globalCtx));
 
     if (this->counter < 32) {
         counter = this->counter;
