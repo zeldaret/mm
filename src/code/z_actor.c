@@ -1,5 +1,11 @@
+/*
+ * File: z_actor.c
+ * Description: 
+ */
+
 #include "global.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
+#include "overlays/actors/ovl_En_Part/z_en_part.h"
 
 void Actor_PrintLists(ActorContext* actorCtx) {
     ActorListEntry* actorList = &actorCtx->actorList[0];
@@ -1810,8 +1816,38 @@ void Actor_InsertIntoTypeList(ActorContext* actorCtx, Actor* actor, u8 actorCate
     actor->prev = phi_v1;
 }
 
+#ifdef NON_MATCHING
 // Actor_RemoveFromCategory
+Actor* Actor_RemoveFromTypeList(GlobalContext* globalCtx, ActorContext* actorCtx, Actor* actorToRemove) {
+    Actor* newHead;
+
+    actorCtx->totalLoadedActors--;
+    actorCtx->actorList[actorToRemove->category].length--;
+
+    if (actorToRemove->prev != NULL) {
+        actorToRemove->prev->next = actorToRemove->next;
+    } else {
+        actorCtx->actorList[actorToRemove->category].first = actorToRemove->next;
+    }
+
+    if (actorToRemove->next != NULL) {
+        actorToRemove->next->prev = actorToRemove->prev;
+    }
+
+    newHead = actorToRemove->next;
+
+    actorToRemove->next = NULL;
+    actorToRemove->prev = NULL;
+
+    if ((globalCtx->roomCtx.currRoom.num == actorToRemove->room) && (actorToRemove->category == ACTORCAT_ENEMY) && (actorCtx->actorList[ACTORCAT_ENEMY].length == 0)) {
+        Actor_SetRoomClearedTemp(globalCtx, globalCtx->roomCtx.currRoom.num);
+    }
+
+    return newHead;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_RemoveFromTypeList.s")
+#endif
 
 void Actor_FreeOverlay(ActorOverlay* entry) {
     void* ramAddr;
@@ -1981,6 +2017,7 @@ void Actor_SpawnTransitionActors(GlobalContext* globalCtx, ActorContext* actorCt
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_SpawnTransitionActors.s")
 #endif
 
+// spawn function
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BB2D0.s")
 
 Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, GlobalContext* globalCtx) {
@@ -2044,6 +2081,7 @@ void Enemy_StartFinishingBlow(GlobalContext* globalCtx, Actor* actor) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BBAC0.s")
 
+// blinking routine
 s16 func_800BBB74(s16 arg0[2], s16 arg1, s16 arg2, s16 arg3) {
     if (DECR(arg0[1]) == 0) {
         arg0[1] = Rand_S16Offset(arg1, arg2);
@@ -2060,9 +2098,35 @@ s16 func_800BBB74(s16 arg0[2], s16 arg1, s16 arg2, s16 arg3) {
     return arg0[0];
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BBC20.s")
+// unused blinking routine
+s16 func_800BBC20(s16 arg0[2], s16 arg1, s16 arg2, s16 arg3) {
+    if (DECR(arg0[1]) == 0) {
+        arg0[1] = Rand_S16Offset(arg1, arg2);
+        arg0[0]++;
+        if ((arg0[0] % 3) == 0) {
+            arg0[0] = (s32)(Rand_ZeroOne() * arg3) * 3;
+        }
+    }
+    return arg0[0];
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BBCEC.s")
+void func_800BBCEC(Actor* actor, GlobalContext* globalCtx, s32 arg2, Gfx** dList) {
+    EnPart* sp40;
+    Actor* temp_v0_2;
+    MtxF* sp3C;
+
+    if (*dList != NULL) {
+        sp3C = SysMatrix_GetCurrentState();
+        temp_v0_2 = Actor_SpawnAsChild(&globalCtx->actorCtx, actor, globalCtx, ACTOR_EN_PART, sp3C->mf[3][0], sp3C->mf[3][1], sp3C->mf[3][2], 0, 0, actor->objBankIndex, arg2);
+        if (temp_v0_2 != NULL) {
+            sp40 = temp_v0_2;
+
+            func_8018219C(sp3C, &sp40->actor.shape.rot, 0);
+            sp40->unk_150 = *dList;
+            Math_Vec3f_Copy(&sp40->actor.scale, &actor->scale);
+        }
+    }
+}
 
 void func_800BBDAC(GlobalContext* globalCtx, Actor* actor, Vec3f* arg2, f32 arg3, s32 arg4, f32 arg5, s16 arg6,
                    s16 arg7, u8 arg8) {
