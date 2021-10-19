@@ -402,7 +402,7 @@ void EnBaguo_DrawBody(Actor* thisx, GlobalContext* globalCtx) {
     static TexturePtr sEyeTextures[] = { &D_060014C8, &D_060018C8, &D_06001CC8 };
     EnBaguo* this = THIS;
     Gfx* gfx;
-    s32 eyeIndexTemp;
+    s32 eyeIndex;
     void* virtualAddress;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -411,8 +411,8 @@ void EnBaguo_DrawBody(Actor* thisx, GlobalContext* globalCtx) {
 
     gfx = POLY_OPA_DISP;
 
-    eyeIndexTemp = this->eyeIndex;
-    virtualAddress = Lib_SegmentedToVirtual(sEyeTextures[eyeIndexTemp]);
+    eyeIndex = this->eyeIndex;
+    virtualAddress = Lib_SegmentedToVirtual(sEyeTextures[eyeIndex]);
     gSPSegment(&gfx[0], 0x08, virtualAddress);
 
     POLY_OPA_DISP = &gfx[1];
