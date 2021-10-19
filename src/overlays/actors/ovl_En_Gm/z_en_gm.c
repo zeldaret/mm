@@ -52,35 +52,41 @@ static u32 D_80951820[] = {
     0x0E150015, 0x0A180E12, 0x00150006, 0x0E060012, 0x00070A00, 0x6C250215, 0x0A150F19, 0x02150F15, 0x190D0215,
     0x19151E01, 0x050E1519, 0x151E0E0E, 0x150F1519, 0x170E150A, 0x150F0D0A, 0x00152502, 0x151E152D, 0x1902152D,
     0x160A0D02, 0x160A0600, 0x01050E16, 0x0A060005, 0x0E152D16, 0x0A1E0E15, 0x1E152D14, 0x050A0061, 0x19020600,
-    0x12000D02, 0x12000600, 0x01050E00, 0x00000008, 0x0E060012, 0x00070505
+    0x12000D02, 0x12000600, 0x01050E00, 0x00000008, 0x0E060012, 0x00070505,
 };
 
-static s32 D_80951A0C[] = { -1, 1, 4, 1, -1, 1, -1, -1, -1, 0, 2, 3, 5, 6, 8, 1,
-                            0,  8, 3, 6, 0,  1, 4,  7,  0,  1, 2, 4, 5, 7, 1 };
+static s32 D_80951A0C[] = {
+    -1, 1, 4, 1, -1, 1, -1, -1, -1, 0, 2, 3, 5, 6, 8, 1, 0, 8, 3, 6, 0, 1, 4, 7, 0, 1, 2, 4, 5, 7, 1,
+};
 
 static s32 D_80951A88[] = { 0x0E2AB92D, 0x000A0C10 };
 
 static s32 D_80951A90[] = { 0x0E2ABA2D, 0x000A0C10 };
 
-static s32 D_80951A98[] = { 0x00564000, 0x1A090000, 0x0E2AA40C, 0x09000017, 0x0E2AA52D, 0x000A0C09,
-                            0x00001211, 0x56401009, 0x00000E2A, 0xEC0C0900, 0x00170E2A, 0xED0C0900,
-                            0x00180E2A, 0xEE2D000A, 0x0C090000, 0x12100000 };
+static s32 D_80951A98[] = {
+    0x00564000, 0x1A090000, 0x0E2AA40C, 0x09000017, 0x0E2AA52D, 0x000A0C09, 0x00001211, 0x56401009,
+    0x00000E2A, 0xEC0C0900, 0x00170E2A, 0xED0C0900, 0x00180E2A, 0xEE2D000A, 0x0C090000, 0x12100000,
+};
 
-static s32 D_80951AD8[] = { 0x00562000, 0xA1090000, 0x0E2AA60C, 0x09000017, 0x0E2AA70C, 0x09000018, 0x0E2AA80C,
-                            0x09000017, 0x0E2AA90C, 0x09000018, 0x0E2AAA0C, 0x09000017, 0x0E2AAB0C, 0x09000018,
-                            0x0E2AAC0C, 0x09000017, 0x0E2AAD0C, 0x0F2AAE0C, 0x09000017, 0x0E2AAF0C, 0x09000017,
-                            0x0E2AB00C, 0x09000018, 0x0E2AB10C, 0x09000017, 0x0E2AB20C, 0x09000017, 0x0E2AB30C,
-                            0x09000017, 0x0E2AB40C, 0x09000018, 0x0E2AB50C, 0x09000017, 0x0E2AB60C, 0x09000018,
-                            0x0E2AB70C, 0x09000017, 0x0E2AB82D, 0x00082D00, 0x092D000A, 0x0C115620, 0x12100900,
-                            0x000E2AEA, 0x0C090000, 0x170E2AEB, 0x2D00082D, 0x000A0C09, 0x00001210 };
+static s32 D_80951AD8[] = {
+    0x00562000, 0xA1090000, 0x0E2AA60C, 0x09000017, 0x0E2AA70C, 0x09000018, 0x0E2AA80C, 0x09000017,
+    0x0E2AA90C, 0x09000018, 0x0E2AAA0C, 0x09000017, 0x0E2AAB0C, 0x09000018, 0x0E2AAC0C, 0x09000017,
+    0x0E2AAD0C, 0x0F2AAE0C, 0x09000017, 0x0E2AAF0C, 0x09000017, 0x0E2AB00C, 0x09000018, 0x0E2AB10C,
+    0x09000017, 0x0E2AB20C, 0x09000017, 0x0E2AB30C, 0x09000017, 0x0E2AB40C, 0x09000018, 0x0E2AB50C,
+    0x09000017, 0x0E2AB60C, 0x09000018, 0x0E2AB70C, 0x09000017, 0x0E2AB82D, 0x00082D00, 0x092D000A,
+    0x0C115620, 0x12100900, 0x000E2AEA, 0x0C090000, 0x170E2AEB, 0x2D00082D, 0x000A0C09, 0x00001210,
+};
 
-static s32 D_80951B98[] = { 0x004B0100, 0x42090000, 0x0900000E, 0x2B010C09, 0x0000170E, 0x2B020C09, 0x0000180E,
-                            0x2B030C09, 0x0000170E, 0x2B040C0F, 0x2B050C09, 0x0000180E, 0x2B060C09, 0x0000170E,
-                            0x2B072D00, 0x0A0C114B, 0x01150900, 0x0012100E, 0x2B082D00, 0x0A0C1210 };
+static s32 D_80951B98[] = {
+    0x004B0100, 0x42090000, 0x0900000E, 0x2B010C09, 0x0000170E, 0x2B020C09, 0x0000180E,
+    0x2B030C09, 0x0000170E, 0x2B040C0F, 0x2B050C09, 0x0000180E, 0x2B060C09, 0x0000170E,
+    0x2B072D00, 0x0A0C114B, 0x01150900, 0x0012100E, 0x2B082D00, 0x0A0C1210,
+};
 
-static s32 D_80951BE8[] = { 0x09000000, 0x32010031, 0x00338000, 0x2C004B02, 0x000D0E2B, 0x132D000A,
-                            0x0C114B02, 0x1900150E, 0x2B140C0F, 0x2B150C0F, 0x2B160C0F, 0x2B170C0F,
-                            0x2B180C15, 0x09000012, 0x100E2B12, 0x2D000A0C, 0x10000000 };
+static s32 D_80951BE8[] = {
+    0x09000000, 0x32010031, 0x00338000, 0x2C004B02, 0x000D0E2B, 0x132D000A, 0x0C114B02, 0x1900150E, 0x2B140C0F,
+    0x2B150C0F, 0x2B160C0F, 0x2B170C0F, 0x2B180C15, 0x09000012, 0x100E2B12, 0x2D000A0C, 0x10000000,
+};
 
 static s32 D_80951C2C[] = { 0x0E295A2D, 0x000A0C10 };
 
@@ -140,13 +146,13 @@ static ColliderSphereInit sSphereInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static ActorAnimationEntryS D_80951CC0[13] = { { &D_06009CDC, 1.0f, 0, -1, 0, 0 },  { &D_06009CDC, 1.0f, 0, -1, 0, -4 },
-                                               { &D_0600A5E0, 1.0f, 0, -1, 0, 0 },  { &D_0600A70C, 1.0f, 0, 1, 0, 0 },
-                                               { &D_06008090, 1.0f, 0, -1, 0, 0 },  { &D_0600898C, 1.0f, 0, -1, 2, -4 },
-                                               { &D_06009450, 1.0f, 0, -1, 2, -4 }, { &D_0600AD18, 1.0f, 0, -1, 0, 0 },
-                                               { &D_0600AD18, 1.0f, 0, -1, 0, -4 }, { &D_0600B8B0, 1.0f, 0, -1, 2, 0 },
-                                               { &D_0600BA80, 1.0f, 0, -1, 0, -4 }, { &D_0600C03C, 1.0f, 0, -1, 0, -4 },
-                                               { &D_0600B990, 1.0f, 0, -1, 0, -4 }, };
+static ActorAnimationEntryS D_80951CC0[13] = {
+    { &D_06009CDC, 1.0f, 0, -1, 0, 0 },  { &D_06009CDC, 1.0f, 0, -1, 0, -4 }, { &D_0600A5E0, 1.0f, 0, -1, 0, 0 },
+    { &D_0600A70C, 1.0f, 0, 1, 0, 0 },   { &D_06008090, 1.0f, 0, -1, 0, 0 },  { &D_0600898C, 1.0f, 0, -1, 2, -4 },
+    { &D_06009450, 1.0f, 0, -1, 2, -4 }, { &D_0600AD18, 1.0f, 0, -1, 0, 0 },  { &D_0600AD18, 1.0f, 0, -1, 0, -4 },
+    { &D_0600B8B0, 1.0f, 0, -1, 2, 0 },  { &D_0600BA80, 1.0f, 0, -1, 0, -4 }, { &D_0600C03C, 1.0f, 0, -1, 0, -4 },
+    { &D_0600B990, 1.0f, 0, -1, 0, -4 },
+};
 
 Actor* func_8094DEE0(EnGm* this, GlobalContext* globalCtx, u8 arg2, s16 arg3) {
     Actor* foundActor = NULL;
@@ -1265,7 +1271,9 @@ s32 func_809503F8(EnGm* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80950490(EnGm* this, GlobalContext* globalCtx) {
-    static s32 D_80951DE4[] = { 1, 5, 5, 1, 6, 5, 1, 5, 6, 1, 5, 6 };
+    static s32 D_80951DE4[] = {
+        1, 5, 5, 1, 6, 5, 1, 5, 6, 1, 5, 6,
+    };
     s32 pad;
 
     if ((gSaveContext.weekEventReg[50] & 1) || (gSaveContext.weekEventReg[51] & 0x80)) {
@@ -1401,8 +1409,8 @@ s32 func_8095097C(EnGm* this, GlobalContext* globalCtx) {
 
     if (!(this->unk_3A4 & 8)) {
         sp58 = D_801D15B0;
-        func_8013B6B0(this->unk_234, &this->unk_244, &this->unk_254, this->unk_24C, this->unk_248, &this->unk_250,
-                      sp7C, &sp58, this->unk_3C4);
+        func_8013B6B0(this->unk_234, &this->unk_244, &this->unk_254, this->unk_24C, this->unk_248, &this->unk_250, sp7C,
+                      &sp58, this->unk_3C4);
         func_8013B878(globalCtx, this->unk_234, this->unk_250, &sp58);
         this->actor.world.pos.y = sp58.y;
         this->unk_3A4 |= 8;
@@ -1421,8 +1429,8 @@ s32 func_8095097C(EnGm* this, GlobalContext* globalCtx) {
 
     this->unk_238 = D_801D15B0;
 
-    if (func_8013B6B0(this->unk_234, &this->unk_244, &this->unk_254, this->unk_24C, this->unk_248, &this->unk_250,
-                      sp7C, &this->unk_238, this->unk_3C4)) {
+    if (func_8013B6B0(this->unk_234, &this->unk_244, &this->unk_254, this->unk_24C, this->unk_248, &this->unk_250, sp7C,
+                      &this->unk_238, this->unk_3C4)) {
         this->unk_3A4 |= 0x10;
     } else {
         sp70 = this->actor.world.pos;
