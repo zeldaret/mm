@@ -7,20 +7,6 @@ struct EnBaguo;
 
 typedef void (*EnBaguoActionFunc)(struct EnBaguo*, GlobalContext*);
 
-/**
- * When a Nejiron explodes, rock particles fly out from where it exploded.
- * This struct governs how these rock particles behave.
- */
-typedef struct NejironParticle {
-    /* 0x00 */ u8 isVisible;
-    /* 0x04 */ Vec3f position;
-    /* 0x10 */ Vec3f velocity;
-    /* 0x1C */ Vec3f acceleration;
-    /* 0x28 */ Vec3s rotation;
-    /* 0x30 */ f32 scale;
-    /* 0x34 */ s16 timer;
-} NejironParticle; // size = 0x38
-
 typedef enum {
     /* 0x0 */ NEJIRON_ACTION_INACTIVE,   // The Nejiron is either underground or emerging from underground
     /* 0x1 */ NEJIRON_ACTION_ACTIVE,     // The Nejiron is above ground and actively chasing the player
@@ -35,6 +21,20 @@ typedef enum {
     /* 0x0 */ NEJIRON_DIRECTION_RIGHT,
     /* 0x1 */ NEJIRON_DIRECTION_LEFT
 } NejironRollDirection;
+
+/**
+ * When a Nejiron explodes, rock particles fly out from where it exploded.
+ * This struct governs how these rock particles behave.
+ */
+typedef struct NejironParticle {
+    /* 0x00 */ u8 isVisible;
+    /* 0x04 */ Vec3f position;
+    /* 0x10 */ Vec3f velocity;
+    /* 0x1C */ Vec3f acceleration;
+    /* 0x28 */ Vec3s rotation;
+    /* 0x30 */ f32 scale;
+    /* 0x34 */ s16 timer;
+} NejironParticle; // size = 0x38
 
 typedef struct EnBaguo {
     /* 0x000 */ Actor actor;
