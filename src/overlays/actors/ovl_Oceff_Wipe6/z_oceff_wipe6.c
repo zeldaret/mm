@@ -45,7 +45,7 @@ void OceffWipe6_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void OceffWipe6_Update(Actor* thisx, GlobalContext* globalCtx) {
     OceffWipe6* this = THIS;
 
-    this->actor.world.pos = ACTIVE_CAM->eye;
+    this->actor.world.pos = GET_ACTIVE_CAM(globalCtx)->eye;
     if (this->counter < 100) {
         this->counter++;
     } else {
