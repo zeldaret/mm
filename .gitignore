@@ -38,6 +38,7 @@ graphs/
 *.jpg
 !*_custom*
 .extracted-assets.json
+ctx.c.m2c
 
 # Per-user configuration
 .python-version

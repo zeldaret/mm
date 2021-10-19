@@ -1056,7 +1056,35 @@ PosRot* Actor_GetWorldPosShapeRot(PosRot* dest, Actor* actor) {
     return dest;
 }
 
+#ifdef NON_MATCHING
+// wrong float register
+f32 func_800B82EC(Actor* actor, Player* player, s16 arg2) {
+    f32 temp_f12;
+    s16 temp_v0;
+    s16 temp_v1;
+    s32 phi_v1;
+
+    temp_v0 = BINANG_SUB(BINANG_SUB(actor->yawTowardsPlayer, 0x8000), arg2);
+    temp_v1 = ABS_ALT(temp_v0);
+
+    if (player->unk_730 != NULL) {
+        if ((temp_v1 > 0x4000) || ((actor->flags & 0x8000000))) {
+            //return FLT_MAX;
+            return 3.4028235e38f;
+        }
+
+        return actor->xyzDistToPlayerSq - (actor->xyzDistToPlayerSq * 0.8f * ((0x4000 - temp_v1) * 0.000030517578f));
+    }
+
+    if (temp_v1 >= 0x2AAB) {
+        //return FLT_MAX;
+        return 3.4028235e38f;
+    }
+    return actor->xyzDistToPlayerSq;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B82EC.s")
+#endif
 
 TargetRangeParams D_801AECF0[] = {
     TARGET_RANGE(70, 140),   TARGET_RANGE(170, 255),    TARGET_RANGE(280, 5600),      TARGET_RANGE(350, 525),
@@ -1103,13 +1131,34 @@ s32 Actor_IsTalking(Actor* actor, GlobalContext* globalCtx) {
     return false;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8500.s")
+s32 func_800B8500(Actor* actor, GlobalContext* globalCtx, f32 fParm3, f32 fParm4, s32 param_5) {
+    Player* player = GET_PLAYER(globalCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B85E0.s")
+    if (((player->actor.flags & 0x100) != 0) || ((param_5 > 0) && (func_801233E4(globalCtx) != 0)) || ((actor->isTargeted == 0) && ((fabsf(actor->yDistToPlayer) > fabsf(fParm4)) || ((actor->xzDistToPlayer > player->targetActorDistance)) || (fParm3 < actor->xzDistToPlayer)))) {
+        return 0;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8614.s")
+    player->targetActor = actor;
+    player->targetActorDistance = actor->xzDistToPlayer;
+    player->unk_A87 = param_5;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B863C.s")
+    ActorCutscene_SetIntentToPlay(0x7C);
+    return 1;
+}
+
+s32 func_800B85E0(Actor* actor, GlobalContext* globalCtx, f32 arg2, s32 arg3) {
+    return func_800B8500(actor, globalCtx, arg2, arg2, arg3);
+}
+
+s32 func_800B8614(Actor* actor, GlobalContext* globalCtx, f32 arg2) {
+    return func_800B85E0(actor, globalCtx, arg2, 0);
+}
+
+s32 func_800B863C(Actor* actor, GlobalContext* globalCtx) {
+    f32 cylRadius = actor->colChkInfo.cylRadius + 50.0f;
+
+    return func_800B8614(actor, globalCtx, cylRadius);
+}
 
 u32 func_800B867C(Actor* actor, GlobalContext* globalCtx) {
     if (func_80152498(&globalCtx->msgCtx) == 2) {

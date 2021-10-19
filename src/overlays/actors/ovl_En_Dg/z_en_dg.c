@@ -950,7 +950,7 @@ void func_8098B560(EnDg* this, GlobalContext* globalCtx) {
     s16 sp46 = 0;
     WaterBox* sp40;
     f32 sp3C;
-    s32 sp38;
+    CollisionPoly* sp38;
     f32 sp34;
 
     sp54.x = this->actor.world.pos.x;
