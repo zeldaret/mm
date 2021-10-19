@@ -381,7 +381,7 @@ void func_808D94D0(EnSw* this, GlobalContext* globalCtx, s32 arg2, s32 arg3, s16
     Vec3f sp6C;
     u32 sp68;
     u32 sp64;
-    Actor* actor = &this->actor;
+    Actor* thisx = &this->actor;
     f32 temp_f20;
     s32 i;
 
@@ -391,7 +391,7 @@ void func_808D94D0(EnSw* this, GlobalContext* globalCtx, s32 arg2, s32 arg3, s16
     sp64 = 50;
     func_808D90F0(this, arg3, arg4);
     this->actor.speedXZ = this->unk_44C;
-    temp_f20 = actor->speedXZ + actor->speedXZ;
+    temp_f20 = thisx->speedXZ + thisx->speedXZ;
 
     sp90.x = this->actor.world.pos.x + (this->unk_368.x * 2.0f);
     sp90.y = this->actor.world.pos.y + (this->unk_368.y * 2.0f);
