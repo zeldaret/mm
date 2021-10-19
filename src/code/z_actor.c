@@ -1093,6 +1093,7 @@ s16 D_801AED48[] = {
     0x0101, 0x0141, 0x0111, 0x0151, 0x0105, 0x0145, 0x0115, 0x0155,
 };
 
+// Actor_RequestTalk?
 s32 Actor_IsTalking(Actor* actor, GlobalContext* globalCtx) {
     if (actor->flags & 0x100) {
         actor->flags &= ~0x100;
@@ -1110,21 +1111,73 @@ s32 Actor_IsTalking(Actor* actor, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B863C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B867C.s")
+u32 func_800B867C(Actor* actor, GlobalContext* globalCtx) {
+    if (func_80152498(&globalCtx->msgCtx) == 2) {
+        actor->flags &= ~0x100;
+        return 1;
+    }
+    return 0;
+}
 
+#ifdef NON_EQUIVALENT
+// likely memes
+s32 func_800B86C8(Actor* actor1, GlobalContext* globalCtx, Actor* actor2) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    if ((player->actor.flags & 0x100) && (player->targetActor != NULL)) {
+        player->targetActor = actor2;
+        player->unk_730 = actor2;
+        return 1;
+    }
+
+    return 0;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B86C8.s")
+#endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8708.s")
+s32 func_800B8708(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8718.s")
+    return player->unk_A87;
+}
 
+s32 func_800B8718(Actor* actor, GlobalContext* globalCtx) {
+    if (actor->flags & 0x20000000) {
+        actor->flags &= ~0x20000000;
+        return 1;
+    }
+    return 0;
+}
+
+#ifdef NON_MATCHING
+void func_800B874C(Actor* actor, GlobalContext* globalCtx, f32 arg2, f32 arg3) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    if ((player->actor.flags & 0x20000000)  || ((func_801233E4(globalCtx) != 0)) || (arg3 < fabsf(actor->yDistToPlayer)) || ((player->unk_A94 < actor->xzDistToPlayer)) || (arg2 < actor->xzDistToPlayer)) {
+        return;
+    }
+
+    player->unk_A90 = actor;
+    player->unk_A94 = actor->xzDistToPlayer;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B874C.s")
+#endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8804.s")
+
+void func_800B8804(Actor* actor, GameState* gameState, f32 arg2) {
+    func_800B874C(actor, gameState, arg2, 20.0f);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B882C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B886C.s")
+s32 func_800B886C(Actor* actor, GameState* gameState) {
+    if (!(GET_PLAYER(gameState)->actor.flags & 0x20000000)) {
+        return 1;
+    }
+    return 0;
+}
 
 void func_800B8898(GlobalContext* globalCtx, Actor* actor, s16* arg2, s16* arg3) {
     Vec3f sp1C;
