@@ -59,7 +59,7 @@ void OceffWipe6_Draw(Actor* thisx, GlobalContext* globalCtx) {
     u8 alpha;
     s32 i;
     s32 counter;
-    Vec3f eye;
+    Vec3f activeCamEye;
     s32 pad;
     Vec3f vec;
     s32 pad2;
