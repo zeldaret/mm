@@ -34,7 +34,7 @@ void OceffWipe6_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_SetScale(&this->actor, 1.0f);
     this->counter = 0;
-    this->actor.world.pos = ACTIVE_CAM->eye;
+    this->actor.world.pos = GET_ACTIVE_CAM(globalCtx)->eye;
 }
 
 void OceffWipe6_Destroy(Actor* thisx, GlobalContext* globalCtx) {
