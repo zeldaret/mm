@@ -79,7 +79,7 @@ void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     switch (STRAY_FAIRY_TYPE(&this->actor)) {
         case STRAY_FAIRY_TYPE_CLOCK_TOWN:
-            if ((gSaveContext.weekEventReg[8] & 0x80) != 0) {
+            if (gSaveContext.weekEventReg[8] & 0x80) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
