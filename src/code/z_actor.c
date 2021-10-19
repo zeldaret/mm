@@ -1772,7 +1772,15 @@ void Actor_DrawAllSetup(GlobalContext* globalCtx) {
     globalCtx->actorCtx.unkB = 0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_RecordUndrawnActor.s")
+s32 Actor_RecordUndrawnActor(GlobalContext* globalCtx, Actor* actor) {
+    if (globalCtx->actorCtx.undrawnActorCount >= 32) {
+        return 0;
+    }
+
+    globalCtx->actorCtx.undrawnActors[globalCtx->actorCtx.undrawnActorCount] = actor;
+    globalCtx->actorCtx.undrawnActorCount++;
+    return 1;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B9E84.s")
 
