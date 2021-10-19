@@ -5,6 +5,7 @@
 #include "z64math.h"
 #include "z64animation.h"
 #include "z64collision_check.h"
+#include "z64scene.h"
 #include "unk.h"
 
 #define MASS_IMMOVABLE 0xFF // Cannot be pushed by OC collisions
@@ -78,28 +79,38 @@ typedef struct {
 
 struct EnDno_ActorUnkStruct;
 typedef s32 (*EnDno_ActorUnkFunc)(struct GlobalContext*, struct EnDno_ActorUnkStruct*);
+struct EnAz;
 
 typedef struct EnDno_ActorUnkStruct {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ UNK_TYPE1 unk_0C[0x4];
-    /* 0x10 */ s16 unk_10;
-    /* 0x12 */ UNK_TYPE1 unk_12[0xA];
+    /* 0x00 */ Path* unk_00;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ Vec3s* unk_08;
+    /* 0x0C */ s32 unk_0C;
+    /* 0x10 */ s32 unk_10;
+    /* 0x14 */ s32 unk_14;
+    /* 0x18 */ s32 unk_18;
     /* 0x1C */ u8 unk_1C;
     /* 0x1D */ u8 unk_1D;
     /* 0x20 */ Vec3f unk_20;
     /* 0x2C */ Vec3f unk_2C;
-    /* 0x38 */ UNK_TYPE1 unk_38[0x10];
-    /* 0x48 */ struct Actor* unk_48;
+    /* 0x38 */ Vec3f unk_38;
+    /* 0x44 */ Vec3f* unk_44;
+    /* 0x48 */ struct EnAz* unk_48;
     /* 0x4C */ f32 unk_4C;
     /* 0x50 */ f32 unk_50;
     /* 0x54 */ s16 unk_54;
     /* 0x56 */ s16 unk_56;
-    /* 0x58 */ s32 unk_58;
+    /* 0x58 */ s16 unk_58;
     /* 0x5C */ EnDno_ActorUnkFunc unk_5C;
     /* 0x60 */ EnDno_ActorUnkFunc unk_60;
     /* 0x64 */ EnDno_ActorUnkFunc unk_64;
     /* 0x68 */ EnDno_ActorUnkFunc unk_68;
 } EnDno_ActorUnkStruct; // size >= 0x6C
+
+typedef struct {
+    s16 unk_0;
+    Vec3s unk_2;
+} struct_80124618;
 
 typedef struct {
     /* 0x00 */ s16 id;

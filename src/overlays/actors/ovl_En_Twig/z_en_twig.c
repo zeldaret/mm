@@ -4,12 +4,24 @@
 
 #define THIS ((EnTwig*)thisx)
 
+#define GET_PARAM1(ring) ((ring)->dyna.actor.params & 0xF)
+#define GET_PARAM2(ring) (((ring)->dyna.actor.params >> 4) & 0x1F)
+#define GET_PARAM3(ring) (((ring)->dyna.actor.params >> 9) & 0x7F)
+
 void EnTwig_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTwig_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnTwig_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnTwig_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnTwig_Update(Actor* this, GlobalContext* globalCtx);
+void EnTwig_Draw(EnTwig* this, GlobalContext* globalCtx);
 
-#if 0
+void func_80AC0A54(EnTwig* this, GlobalContext* globalCtx);
+void func_80AC0A6C(EnTwig* this, GlobalContext* globalCtx);
+
+void func_80AC0A7C(EnTwig* this, GlobalContext* globalCtx);
+void func_80AC0AC8(EnTwig* this, GlobalContext* globalCtx);
+
+void func_80AC0CC4(EnTwig* this, GlobalContext* globalCtx);
+void func_80AC0D2C(EnTwig* this, GlobalContext* globalCtx);
+
 const ActorInit En_Twig_InitVars = {
     ACTOR_EN_TWIG,
     ACTORCAT_MISC,
@@ -22,7 +34,17 @@ const ActorInit En_Twig_InitVars = {
     (ActorFunc)EnTwig_Draw,
 };
 
-// static InitChainEntry sInitChain[] = {
+static s32 D_80AC1230;
+static s16 D_80AC1234;
+static s16 D_80AC1238[25];
+
+extern Gfx D_060014C8[];
+extern Gfx D_06001C38[];
+
+static CollisionHeader* D_80AC10B0[] = {NULL, 0x060020A0, 0x060016C0};
+
+static s16 D_80AC10BC = 0;
+
 static InitChainEntry D_80AC10C0[] = {
     ICHAIN_F32(uncullZoneScale, 40, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 40, ICHAIN_CONTINUE),
@@ -30,28 +52,186 @@ static InitChainEntry D_80AC10C0[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
-#endif
+void EnTwig_Init(Actor* thisx, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
+    EnTwig* this = THIS;
+    s32 i;
 
-extern InitChainEntry D_80AC10C0[];
+    Actor_ProcessInitChain(&this->dyna.actor, D_80AC10C0);
+    this->unk_160 = GET_PARAM1(this);
+    BcCheck3_BgActorInit(&this->dyna, 1);
+    if (D_80AC10B0[this->unk_160] != NULL) {
+        BgCheck3_LoadMesh(globalCtx, &this->dyna, D_80AC10B0[this->unk_160]);
+    }
+    this->dyna.actor.bgCheckFlags |= 0x400;
+    switch (this->unk_160) {
+        case 0:
+            Actor_MarkForDeath(&this->dyna.actor);
+            break;
+        case 1:
+            if (D_80AC10BC == 0) {
+                D_80AC1234 = (gSaveContext.weekEventReg[24] & 4) ? 25 : 20;
+                for (i = 0; i < D_80AC1234; i++) {
+                    D_80AC1238[i] = 0;
+                }
+                D_80AC10BC = 1;
+            }
+            if (GET_PARAM2(this) != 0) {
+                if (!(gSaveContext.weekEventReg[24] & 4)) {
+                    Actor_MarkForDeath(&this->dyna.actor);
+                    return;
+                }
+            } else if (gSaveContext.weekEventReg[24] & 4) {
+                Actor_MarkForDeath(&this->dyna.actor);
+                return;
+            }
+            Actor_SetScale(&this->dyna.actor, 4.2f);
+            this->dyna.actor.uncullZoneScale = this->dyna.actor.uncullZoneDownward = this->dyna.actor.scale.x * 60.0f;
+            func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+            func_80AC0A7C(this, globalCtx);
+            break;
+        case 2:
+            Actor_SetScale(&this->dyna.actor, 1.0f);
+            this->dyna.actor.uncullZoneScale = this->dyna.actor.uncullZoneDownward = this->dyna.actor.scale.x * 880.0f;
+            func_80AC0A54(this, globalCtx);
+            break;
+    }
+}
 
-extern UNK_TYPE D_06001C38;
+void EnTwig_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
+    EnTwig* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Twig/EnTwig_Init.s")
+    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Twig/EnTwig_Destroy.s")
+void func_80AC0A54(EnTwig* this, GlobalContext* globalCtx) {
+    this->actionFunc = func_80AC0A6C;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Twig/func_80AC0A54.s")
+void func_80AC0A6C(EnTwig* this, GlobalContext* globalCtx) {
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Twig/func_80AC0A6C.s")
+void func_80AC0A7C(EnTwig* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Twig/func_80AC0A7C.s")
+    Math_Vec3f_Copy(&this->unk_180, &player->bodyPartsPos[0]);
+    this->unk_178 = 0;
+    this->unk_17A = 0;
+    this->actionFunc = func_80AC0AC8;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Twig/func_80AC0AC8.s")
+void func_80AC0AC8(EnTwig* this, GlobalContext* globalCtx) {
+    static Vec3f D_80AC10D0 = {0.0f, 0.0f, 1.0f};
+    Player* player = GET_PLAYER(globalCtx);
+    Plane sp4C;
+    Vec3f sp40;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Twig/func_80AC0CC4.s")
+    if (D_80AC1230 == GET_PARAM3(this)) {
+        if (this->unk_17A == 3) {
+            this->unk_17A = 0;
+            this->dyna.actor.shape.rot.z += 0x2000;
+        } else {
+            this->unk_17A++;
+        }
+    }
+    func_8013E4B0(&this->dyna.actor.world.pos, &D_80AC10D0, &this->dyna.actor.shape.rot, &sp4C);
+    if ((D_80AC1230 == GET_PARAM3(this)) &&
+        func_8017D2FC(sp4C.normal.x, sp4C.normal.y, sp4C.normal.z, sp4C.originDist, &this->unk_180, &player->bodyPartsPos[0], &sp40, 0)) {
+        if (Math3D_DistanceSquared(&this->dyna.actor.world.pos, &sp40) <=
+            SQ(this->dyna.actor.scale.x * 0.345f * 40.0f)) {
+            func_80AC0CC4(this, globalCtx);
+            return;
+        }
+    } else {
+        if (this->dyna.actor.xyzDistToPlayerSq <= SQ((this->dyna.actor.scale.x * 40.0f) + 40)) {
+            func_800C6314(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        } else {
+            func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        }
+        if (this->dyna.actor.xyzDistToPlayerSq >= (this->dyna.actor.scale.x * 10.0f * 40.0f * 40.0f)) {
+            this->dyna.actor.shape.rot.y = this->dyna.actor.yawTowardsPlayer;
+            this->dyna.actor.world.rot.y = this->dyna.actor.yawTowardsPlayer;
+        }
+    }
+    Math_Vec3f_Copy(&this->unk_180, &player->bodyPartsPos[0]);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Twig/func_80AC0D2C.s")
+void func_80AC0CC4(EnTwig* this, GlobalContext* globalCtx) {
+    this->unk_170 = 3458.0f;
+    this->unk_174 = 0.2f;
+    this->unk_16C |= 1;
+    func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    this->actionFunc = func_80AC0D2C;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Twig/EnTwig_Update.s")
+void func_80AC0D2C(EnTwig* this, GlobalContext* globalCtx) {
+    static Vec3f D_80AC10DC = {0.0f, -0.05f, 0.0f};
+    static Vec3f D_80AC10E8 = {0.0f, -0.025f, 0.0f};
+    static Color_RGBA8 D_80AC10F4 = {255, 255, 255, 130};
+    static Color_RGBA8 D_80AC10F8 = {255, 255, 0, 0};
+    Player* player = GET_PLAYER(globalCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Twig/EnTwig_Draw.s")
+    Math_SmoothStepToF(&this->dyna.actor.world.pos.x, player->bodyPartsPos[0].x, 0.5f, 100.0f, 0.01f);
+    Math_SmoothStepToF(&this->dyna.actor.world.pos.y, player->bodyPartsPos[0].y, 0.5f, 100.0f, 0.01f);
+    Math_SmoothStepToF(&this->dyna.actor.world.pos.z, player->bodyPartsPos[0].z, 0.5f, 100.0f, 0.01f);
+    this->dyna.actor.shape.rot.z += (s16)this->unk_170;
+    this->dyna.actor.scale.x -= this->unk_174;
+    if (this->dyna.actor.scale.x < 0.0f) {
+        Actor_SetScale(&this->dyna.actor, 0.0f);
+    } else {
+        Actor_SetScale(&this->dyna.actor, this->dyna.actor.scale.x);
+    }
+    if (this->dyna.actor.scale.x <= 0.0f) {
+        s32 phi_s0;
+        Vec3f sp6C;
+
+        for (phi_s0 = 0; phi_s0 < 7; phi_s0++) {
+            sp6C.x = (Rand_Centered() * 10.0f) + this->dyna.actor.world.pos.x;
+            sp6C.y = (Rand_Centered() * 10.0f) + this->dyna.actor.world.pos.y;
+            sp6C.z = (Rand_Centered() * 10.0f) + this->dyna.actor.world.pos.z;
+            EffectSsKiraKira_SpawnDispersed(globalCtx, &sp6C, &D_80AC10DC, &D_80AC10E8, &D_80AC10F4, &D_80AC10F8, 1000,
+                                            (s32)(Rand_ZeroOne() * 10.0f) + 20);
+        }
+        play_sound(0x4824);
+        globalCtx->interfaceCtx.unk_25C += -1;
+        D_80AC1238[GET_PARAM3(this)] = 1;
+        if (D_80AC1230 == GET_PARAM3(this)) {
+            s32 phi_v1;
+
+            for (phi_v1 = 0; phi_v1 < D_80AC1234; phi_v1++) {
+                if (D_80AC1238[phi_v1] == 0) {
+                    D_80AC1230 = phi_v1;
+                    break;
+                }
+            }
+            if (phi_v1 == D_80AC1234) {
+                D_80AC1230 = -1;
+            }
+        }
+        Actor_MarkForDeath(&this->dyna.actor);
+        return;
+    }
+    this->unk_170 += 0.002746582f;
+    this->unk_174 += 0.15f;
+}
+
+void EnTwig_Update(Actor* thisx, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
+    EnTwig* this = THIS;
+
+    this->actionFunc(this, globalCtx);
+}
+
+void EnTwig_Draw(EnTwig* thisx, GlobalContext* globalCtx) {
+    EnTwig* this = THIS;
+
+    switch (this->unk_160) {
+        case 1:
+            func_800BDFC0(globalCtx, D_06001C38);
+            break;
+        case 2:
+            func_800BDFC0(globalCtx, D_060014C8);
+            break;
+    }
+}
