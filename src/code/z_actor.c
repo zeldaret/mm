@@ -2031,8 +2031,32 @@ s32 func_800BC188(s32 index) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BC770.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BC7D8.s")
+/*
+void func_800BC7D8(s32 arg0, s16 arg1, s16 arg2, s16 arg3) {
+    s16 sp26;
+    s16 temp_v0;
+    s32 temp_a0;
+
+    temp_v0 = Quake_Add(arg0 + 0x220, 3U);
+    temp_a0 = temp_v0 << 0x10;
+    sp26 = temp_v0;
+    Quake_SetSpeed((s16) (temp_a0 >> 0x10), arg3);
+    Quake_SetQuakeValues(sp26, arg1, 0, 0, (s16) 0);
+    Quake_SetCountdown(sp26, arg2);
+}
+*/
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BC848.s")
+/*
+void func_800BC848(void* arg0, s32 arg1, s16 arg2, s16 arg3) {
+    if ((s32) arg2 >= 5) {
+        func_8013ECE0(arg0->unk_94, 0xFFU, 0x14U, 0x96U);
+    } else {
+        func_8013ECE0(arg0->unk_94, 0xB4U, 0x14U, 0x64U);
+    }
+    func_800BC770(arg1, arg2, arg3);
+}
+*/
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -2100,7 +2124,9 @@ void func_800BC8B8(GlobalContext* globalCtx, s32 frame, s32 type) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BCB50.s")
+void func_800BCB50(GlobalContext* arg0, Vec3f* arg1) {
+    CollisionCheck_SpawnShieldParticlesMetal(arg0, arg1);
+}
 
 void func_800BCB70(Actor* actor, u16 arg1, u16 arg2, u16 arg3, u16 arg4) {
     if ((arg1 == 0x8000) && !(arg2 & 0x8000)) {
@@ -2509,23 +2535,7 @@ void func_800BDCF4(GlobalContext* globalCtx, s16* arg1, s16* arg2, s32 size) {
 void Actor_Noop(Actor* actor, GlobalContext* globalCtx) {
 }
 
-void Gfx_DrawDListOpa(GlobalContext* globalCtx, Gfx* dlist) {
-    Gfx* dl;
-
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-
-    dl = POLY_OPA_DISP;
-
-    gSPDisplayList(&dl[0], &sSetupDL[6 * 0x19]);
-    gSPMatrix(&dl[1], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(&dl[2], dlist);
-
-    POLY_OPA_DISP = &dl[3];
-
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
-}
-
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Gfx_DrawDListXlu.s")
+#include "z_cheap_proc.c"
 
 Actor* func_800BE0B8(GlobalContext* globalCtx, Actor* inActor, s16 arg2, u8 arg3, f32 arg4) {
     Actor* actor = globalCtx->actorCtx.actorList[arg3].first;
