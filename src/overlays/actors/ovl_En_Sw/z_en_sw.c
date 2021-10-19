@@ -374,16 +374,16 @@ s32 func_808D9440(GlobalContext* globalCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* arg
 void func_808D94D0(EnSw* this, GlobalContext* globalCtx, s32 arg2, s32 arg3, s16 arg4) {
     CollisionPoly* spA4;
     CollisionPoly* spA0;
-    s32 pad;
+    s32 pad2;
     Vec3f sp90;
     Vec3f sp84;
     Vec3f sp78;
     Vec3f sp6C;
     u32 sp68;
     u32 sp64;
-    s32 pad2;
     f32 temp_f20;
     s32 i;
+    Actor* actor = &this->actor;
 
     spA4 = NULL;
     spA0 = NULL;
@@ -391,8 +391,8 @@ void func_808D94D0(EnSw* this, GlobalContext* globalCtx, s32 arg2, s32 arg3, s16
     sp64 = 50;
     func_808D90F0(this, arg3, arg4);
     this->actor.speedXZ = this->unk_44C;
-    if (1) {}
-    temp_f20 = this->actor.speedXZ + this->actor.speedXZ;
+    // pad2 = 0;
+    temp_f20 = actor->speedXZ + actor->speedXZ;
 
     sp90.x = this->actor.world.pos.x + (this->unk_368.x * 2.0f);
     sp90.y = this->actor.world.pos.y + (this->unk_368.y * 2.0f);
@@ -419,12 +419,13 @@ void func_808D94D0(EnSw* this, GlobalContext* globalCtx, s32 arg2, s32 arg3, s16
             this->actor.floorBgId = sp68;
         }
     } else {
-        temp_f20 *= 3.0f;
         this->actor.speedXZ = 0.0f;
+        temp_f20 *= 3.0f;
         Math_Vec3f_Copy(&sp90, &sp84);
 
         for (i = 0; i < 3; i++) {
             if (i == 0) {
+                if (this && this && this) {}
                 sp84.x = sp90.x - (this->unk_350.x * temp_f20);
                 sp84.y = sp90.y - (this->unk_350.y * temp_f20);
                 sp84.z = sp90.z - (this->unk_350.z * temp_f20);
@@ -434,6 +435,7 @@ void func_808D94D0(EnSw* this, GlobalContext* globalCtx, s32 arg2, s32 arg3, s16
                 sp84.z = sp90.z + (this->unk_35C.z * temp_f20);
             } else {
                 sp84.x = sp90.x - (this->unk_35C.x * temp_f20);
+                // if (1) {}
                 sp84.y = sp90.y - (this->unk_35C.y * temp_f20);
                 sp84.z = sp90.z - (this->unk_35C.z * temp_f20);
             }
@@ -560,10 +562,10 @@ s32 func_808D9A70(EnSw* this, GlobalContext* globalCtx) {
     return false;
 }
 
-#ifdef NON_MATCHING
 s32 func_808D9C18(EnSw* this) {
     Vec3f sp3C;
     Vec3f sp30;
+    f32 new_var;
 
     if ((this->unk_498 == 0xF9) || (this->unk_498 == 0x82) || (this->unk_498 == 0xE4) || (this->unk_498 == 0xE5)) {
         this->actor.velocity.x = this->actor.speedXZ;
@@ -571,9 +573,11 @@ s32 func_808D9C18(EnSw* this) {
         this->actor.velocity.x *= Math_SinS(this->actor.world.rot.y);
         this->actor.velocity.z *= Math_CosS(this->actor.world.rot.y);
     } else {
-        this->actor.velocity.x = (this->actor.speedXZ * this->unk_350.x) + (this->actor.speedXZ * this->unk_368.x);
+        new_var = this->actor.speedXZ * this->unk_350.x;  
+        this->actor.velocity.x = new_var + (this->actor.speedXZ * this->unk_368.x);
+        new_var = this->actor.speedXZ * this->unk_350.z;
+        this->actor.velocity.z = new_var + this->actor.speedXZ * this->unk_368.z;
         this->actor.velocity.y = 14.0f;
-        this->actor.velocity.z = (this->actor.speedXZ * this->unk_350.z) + (this->actor.speedXZ * this->unk_368.z);
         Math_Vec3f_Copy(&sp3C, &this->actor.world.pos);
         Math_Vec3f_Copy(&sp30, &this->actor.world.pos);
         sp30.x += this->actor.velocity.x;
@@ -598,9 +602,6 @@ s32 func_808D9C18(EnSw* this) {
     this->actor.parent = NULL;
     return false;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sw/func_808D9C18.s")
-#endif
 
 void func_808D9DA0(EnSw* this) {
     static Vec3f D_808DBAAC = { 0.0f, 1.0f, 0.0f };
@@ -1028,7 +1029,6 @@ void func_808DACF4(EnSw* this, GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sw/func_808DACF4.s")
 #endif
 
-#ifdef NON_MATCHING
 void func_808DAEB4(EnSw* this, GlobalContext* globalCtx) {
     Vec3f sp5C;
     s32 i;
@@ -1037,8 +1037,11 @@ void func_808DAEB4(EnSw* this, GlobalContext* globalCtx) {
 
     if (this->unk_410 & 2) {
         if (!ENSW_GET_3(&this->actor)) {
-            if ((this->unk_410 & 4) && (DECR(this->unk_45C) == 0)) {
-                this->unk_410 &= ~4;
+            if (this->unk_410 & 4) {
+                phi_a0 = DECR(this->unk_45C);
+                if (phi_a0 == 0) {
+                    this->unk_410 &= ~4;
+                }
             }
 
             for (i = 0, count = 0; i < ARRAY_COUNT(this->unk_464); i++) {
@@ -1073,19 +1076,20 @@ void func_808DAEB4(EnSw* this, GlobalContext* globalCtx) {
             }
             func_808D94D0(this, globalCtx, 0, 0, 0x1554);
         }
-    } else if (DECR(this->unk_45C) == 0) {
-        this->unk_410 |= 2;
-        if (!ENSW_GET_3(&this->actor) && (this->unk_412 == 1)) {
-            func_808D8B58(this);
-            this->unk_45C = 10;
-        } else {
-            this->unk_45C = 20;
+    } else {
+        phi_a0 = DECR(this->unk_45C);
+        if (phi_a0 == 0) {
+            this->unk_410 |= 2;
+            if (!ENSW_GET_3(&this->actor) && (this->unk_412 == 1)) {
+                func_808D8B58(this);
+                this->unk_45C = 10;
+            } else {
+                this->unk_45C = 20;
+            }
+
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sw/func_808DAEB4.s")
-#endif
 
 void func_808DB100(EnSw* this, GlobalContext* globalCtx) {
     if (this->actor.parent != NULL) {
