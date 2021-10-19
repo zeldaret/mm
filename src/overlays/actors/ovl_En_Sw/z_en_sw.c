@@ -374,16 +374,16 @@ s32 func_808D9440(GlobalContext* globalCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* arg
 void func_808D94D0(EnSw* this, GlobalContext* globalCtx, s32 arg2, s32 arg3, s16 arg4) {
     CollisionPoly* spA4;
     CollisionPoly* spA0;
-    s32 pad2;
+    s32 pad;
     Vec3f sp90;
     Vec3f sp84;
     Vec3f sp78;
     Vec3f sp6C;
     u32 sp68;
     u32 sp64;
+    Actor* actor = &this->actor;
     f32 temp_f20;
     s32 i;
-    Actor* actor = &this->actor;
 
     spA4 = NULL;
     spA0 = NULL;
@@ -435,7 +435,6 @@ void func_808D94D0(EnSw* this, GlobalContext* globalCtx, s32 arg2, s32 arg3, s16
                 sp84.z = sp90.z + (this->unk_35C.z * temp_f20);
             } else {
                 sp84.x = sp90.x - (this->unk_35C.x * temp_f20);
-                // if (1) {}
                 sp84.y = sp90.y - (this->unk_35C.y * temp_f20);
                 sp84.z = sp90.z - (this->unk_35C.z * temp_f20);
             }
