@@ -431,8 +431,8 @@ void EnBaguo_InitializeParticle(EnBaguo* this, Vec3f* position, Vec3f* velocity,
     NejironParticle* particle = this->particles;
 
     for (i = 0; i < ARRAY_COUNT(this->particles); i++, particle++) {
-        if (!particle->visible) {
-            particle->visible = true;
+        if (!particle->isVisible) {
+            particle->isVisible = true;
             particle->position = *position;
             particle->velocity = *velocity;
             particle->acceleration = *acceleration;
@@ -451,7 +451,7 @@ void EnBaguo_UpdateParticles(EnBaguo* this, GlobalContext* globalCtx) {
     NejironParticle* particle = this->particles;
 
     for (i = 0; i < ARRAY_COUNT(this->particles); i++, particle++) {
-        if (particle->visible) {
+        if (particle->isVisible) {
             particle->position.x += particle->velocity.x;
             particle->position.y += particle->velocity.y;
             particle->position.z += particle->velocity.z;
@@ -470,7 +470,7 @@ void EnBaguo_UpdateParticles(EnBaguo* this, GlobalContext* globalCtx) {
             if (particle->timer != 0) {
                 particle->timer--;
             } else {
-                particle->visible = false;
+                particle->isVisible = false;
             }
         }
     }
@@ -484,7 +484,7 @@ void EnBaguo_DrawRockParticles(EnBaguo* this, GlobalContext* globalCtx) {
     OPEN_DISPS(gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     for (i = 0; i < ARRAY_COUNT(this->particles); i++, particle++) {
-        if (particle->visible) {
+        if (particle->isVisible) {
             SysMatrix_InsertTranslation(particle->position.x, particle->position.y, particle->position.z, MTXMODE_NEW);
             SysMatrix_InsertXRotation_s(particle->rotation.x, MTXMODE_APPLY);
             Matrix_RotateY(particle->rotation.y, MTXMODE_APPLY);

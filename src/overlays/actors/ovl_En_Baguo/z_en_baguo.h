@@ -12,7 +12,7 @@ typedef void (*EnBaguoActionFunc)(struct EnBaguo*, GlobalContext*);
  * This struct governs how these rock particles behave.
  */
 typedef struct NejironParticle {
-    /* 0x00 */ u8 visible;
+    /* 0x00 */ u8 isVisible;
     /* 0x04 */ Vec3f position;
     /* 0x10 */ Vec3f velocity;
     /* 0x1C */ Vec3f acceleration;
