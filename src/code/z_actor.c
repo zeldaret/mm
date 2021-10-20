@@ -140,6 +140,218 @@ void func_800B40E0(GlobalContext* globalCtx, Light* light, MtxF* arg2, s32 arg3,
 
 // ActorShadow_DrawFeet
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B42F8.s")
+/*
+void func_800B42F8(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
+    ? sp13C;
+    ? spFC;
+    s32 spF8;
+    s32 spF4;
+    f32 spEC;
+    s32 spD0;
+    f32* spBC;
+    s32 spB8;
+    Light* sp9C;
+    GameInfo* temp_v0;
+    GraphicsContext* temp_s0;
+    Light* temp_s0_2;
+    Vec3f* temp_fp;
+    f32 temp_f0;
+    f32 temp_f0_2;
+    f32 temp_f10;
+    f32 temp_f16;
+    f32 temp_f20;
+    f32 temp_f20_2;
+    f32 temp_f22;
+    f32 temp_f24;
+    f32 temp_f26;
+    f32 temp_f26_2;
+    f32 temp_f2;
+    f32 temp_f2_2;
+    f32 temp_f4;
+    s32 temp_a3;
+    s32 temp_lo;
+    s32 temp_s1;
+    s32 temp_s1_2;
+    s32 temp_s5;
+    s32 temp_t9_2;
+    s8 temp_v0_2;
+    s8 temp_v0_3;
+    u8 temp_t2;
+    u8 temp_t4;
+    u8 temp_t9;
+    f32 phi_f0;
+    f32 phi_f16;
+    f32 phi_f0_2;
+    f32 phi_f10;
+    Vec3f* phi_fp;
+    Light* phi_s0;
+    s8 phi_v1;
+    f32 phi_f4;
+    f32 phi_f26;
+    s32 phi_s1;
+    Light* phi_s0_2;
+    s32 phi_v1_2;
+    s32 phi_s2;
+    s32 phi_s1_2;
+    s32 phi_s2_2;
+    s32 phi_s2_3;
+
+    temp_f26 = actor->world.pos.y - actor->floorHeight;
+    if (temp_f26 > 0.0f) {
+        temp_f0 = actor->shape.shadowScale;
+        if ((actor->id == 0) && ((actor->unk_A74 & 0x8000) != 0)) {
+            temp_f20 = actor->scale.z;
+            actor->scale.z += 0.03f * fabsf(Math_CosS(actor->unk_AAA));
+            temp_f2 = temp_f26 * 0.03f;
+            actor->shape.shadowScale *= 0.2f;
+            if (temp_f2 > 1.0f) {
+                phi_f0 = 1.0f;
+            } else {
+                phi_f0 = temp_f2;
+            }
+            temp_t9 = actor->shape.shadowAlpha;
+            temp_f16 = (f32) temp_t9;
+            phi_f16 = temp_f16;
+            if ((s32) temp_t9 < 0) {
+                phi_f16 = temp_f16 + 4294967296.0f;
+            }
+            actor->shape.shadowAlpha = (u8) (u32) (phi_f0 * phi_f16);
+            ActorShadow_Draw(actor, mapper, globalCtx, D_04076BC0, NULL);
+            actor->scale.z = temp_f20;
+        } else {
+            actor->shape.shadowScale = temp_f0 * 0.3f;
+            temp_f2_2 = (temp_f26 - 20.0f) * 0.02f;
+            if (temp_f2_2 > 1.0f) {
+                phi_f0_2 = 1.0f;
+            } else {
+                phi_f0_2 = temp_f2_2;
+            }
+            temp_t2 = actor->shape.shadowAlpha;
+            temp_f10 = (f32) temp_t2;
+            phi_f10 = temp_f10;
+            if ((s32) temp_t2 < 0) {
+                phi_f10 = temp_f10 + 4294967296.0f;
+            }
+            actor->shape.shadowAlpha = (u8) (u32) (phi_f0_2 * phi_f10);
+            func_800B3FC0(actor, mapper, globalCtx);
+        }
+        actor->shape.shadowScale = temp_f0;
+        actor->shape.shadowAlpha = actor->shape.shadowAlpha;
+    }
+    temp_fp = actor->shape.feetPos;
+    phi_fp = temp_fp;
+    if (temp_f26 < 200.0f) {
+        spBC = &spEC;
+        temp_s5 = mapper->numLights - 2;
+        temp_s0 = globalCtx->state.gfxCtx;
+        temp_s0->polyOpa.p = Gfx_CallSetupDL(temp_s0->polyOpa.p, 0x2CU);
+        actor->shape.feetFloorFlags = 0;
+        spB8 = 2;
+        spD0 = 0;
+        do {
+            phi_fp->y += 50.0f;
+            *spBC = func_80169100(globalCtx, &sp13C, &spF8, &spF4, phi_fp);
+            phi_fp->y -= 50.0f;
+            temp_f26_2 = phi_fp->y - *spBC;
+            phi_f26 = temp_f26_2;
+            if ((temp_f26_2 >= -1.0f) && (temp_f26_2 < 500.0f)) {
+                sp9C = mapper->l.l;
+                phi_s2 = 0;
+                phi_s2_3 = 0;
+                if (temp_f26_2 <= 10.0f) {
+                    actor->shape.feetFloorFlags |= spB8;
+                    if ((actor->yDistToWater < 0.0f) && (spF4 == 0x32) && ((actor->unk_D3 & spB8) != 0)) {
+                        if (func_800C9C24(&globalCtx->colCtx, spF8, spF4, 1) != 0) {
+                            SkinMatrix_MtxFCopy((MtxF* ) &sp13C, (MtxF* ) &spFC);
+                            SkinMatrix_MulYRotation((MtxF* ) &spFC, actor->shape.rot.y);
+                            temp_v0 = gGameInfo;
+                            EffFootmark_Add(globalCtx, (MtxF* ) &spFC, actor, spD3, phi_fp, (u16) (u32) (actor->shape.shadowScale * 0.3f), (u8) (temp_v0->data[952] + 0x50), (u8) (temp_v0->data[953] + 0x3C), (u8) (temp_v0->data[954] + 0x28), (u16) 0x7530, (u16) 0xC8, (u16) 0x3C);
+                        }
+                        actor->unk_D3 = (u8) (actor->unk_D3 & ~spB8);
+                    }
+                }
+                if (temp_f26_2 > 30.0f) {
+                    phi_f26 = 30.0f;
+                }
+                temp_t4 = actor->shape.shadowAlpha;
+                temp_f4 = (f32) temp_t4;
+                phi_f4 = temp_f4;
+                if ((s32) temp_t4 < 0) {
+                    phi_f4 = temp_f4 + 4294967296.0f;
+                }
+                temp_f22 = phi_f4 * (1.0f - (phi_f26 * 0.033333335f));
+                temp_f20_2 = 1.0f - (phi_f26 * 0.014285714f);
+                temp_f24 = actor->shape.shadowScale * temp_f20_2 * actor->scale.x;
+                phi_s0 = sp9C;
+                phi_s1 = 0;
+                phi_s0_2 = sp9C;
+                phi_s1_2 = 0;
+                if (temp_s5 > 0) {
+                    do {
+                        temp_v0_2 = phi_s0->l.dir[1];
+                        phi_s2_2 = phi_s2_3;
+                        if ((s32) temp_v0_2 > 0) {
+                            phi_v1 = temp_v0_2;
+                            if ((s32) temp_v0_2 < 0) {
+                                phi_v1 = (s8) -(s32) temp_v0_2;
+                            }
+                            temp_lo = phi_v1 * (phi_s0->l.col[0] + phi_s0->l.col[1] + phi_s0->l.col[2]);
+                            if (temp_lo > 0) {
+                                func_800B40E0(globalCtx, phi_s0, (MtxF* ) &sp13C, temp_lo, temp_f22, temp_f24, temp_f20_2);
+                                phi_s2_2 = phi_s2_3 + temp_lo;
+                            }
+                        }
+                        temp_s1 = phi_s1 + 1;
+                        temp_s0_2 = phi_s0 + 0x10;
+                        phi_s0 = temp_s0_2;
+                        phi_s1 = temp_s1;
+                        phi_s0_2 = temp_s0_2;
+                        phi_s2 = phi_s2_2;
+                        phi_s2_3 = phi_s2_2;
+                    } while (temp_s1 != temp_s5);
+                }
+                do {
+                    temp_v0_3 = phi_s0_2->l.dir[1];
+                    if ((s32) temp_v0_3 > 0) {
+                        if ((s32) temp_v0_3 < 0) {
+                            phi_v1_2 = -(s32) temp_v0_3;
+                        } else {
+                            phi_v1_2 = (s32) temp_v0_3;
+                        }
+                        temp_a3 = (phi_v1_2 * (phi_s0_2->l.col[0] + phi_s0_2->l.col[1] + phi_s0_2->l.col[2])) - (phi_s2 * 8);
+                        if (temp_a3 > 0) {
+                            func_800B40E0(globalCtx, phi_s0_2, (MtxF* ) &sp13C, temp_a3, temp_f22, temp_f24, temp_f20_2);
+                        }
+                    }
+                    temp_s1_2 = phi_s1_2 + 1;
+                    phi_s0_2 += 0x10;
+                    phi_s1_2 = temp_s1_2;
+                } while (temp_s1_2 != 2);
+            }
+            temp_t9_2 = spD0 + 1;
+            spB8 = spB8 >> 1;
+            spD0 = temp_t9_2;
+            spBC += 4;
+            phi_fp += 0xC;
+        } while (temp_t9_2 != 2);
+        if ((actor->bgCheckFlags & 1) == 0) {
+            actor->shape.feetFloorFlags = 0;
+            return;
+        }
+        if (actor->shape.feetFloorFlags == 3) {
+            temp_f0_2 = actor->shape.feetPos[0].y - actor->shape.feetPos[1].y;
+            if ((spEC + temp_f0_2) < (spF0 - temp_f0_2)) {
+                actor->shape.feetFloorFlags = 2;
+                return;
+            }
+            actor->shape.feetFloorFlags = 1;
+            // Duplicate return node #53. Try simplifying control flow for better match
+            return;
+        }
+        // Duplicate return node #53. Try simplifying control flow for better match
+    }
+}
+*/
 
 // Actor_SetFeetPos
 void func_800B4A98(Actor* actor, s32 limbIndex, s32 leftFootIndex, Vec3f* leftFootPos, s32 rightFootIndex,
@@ -162,7 +374,97 @@ void func_800B4AEC(GlobalContext* globalCtx, Actor* actor, f32 param_3) {
     actor->world.pos.y = yPos;
 }
 
+#ifdef NON_MATCHING
+// regalloc
+void func_800B4B50(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
+    f32 spEC;
+    f32 temp_f12;
+    f32 temp_f20;
+    f32 shadowScaleZ;
+    f32 temp_f22;
+    f32 temp_f24;
+    f32 temp_f8;
+    MtxF sp94;
+    s32 lightNum;
+    s32 numLights;
+    s8 phi_v1;
+    u8 temp_v0;
+    f32 phi_f0;
+    //f32 phi_f8;
+    Light* phi_s0;
+    s32 lightNumMax;
+
+    if (actor->bgCheckFlags & 0x400) {
+        func_800B4AEC(globalCtx, actor, 50.0f);
+    }
+
+    if (actor->floorPoly != NULL) {
+        s32 j;
+
+        spEC = actor->world.pos.y - actor->floorHeight;
+        if (spEC > 20.0f) {
+            temp_f20 = actor->shape.shadowScale;
+            temp_v0 = actor->shape.shadowAlpha;
+            //actor->shape.shadowScale = temp_f20 * 0.3f;
+            actor->shape.shadowScale *= 0.3f;
+            temp_f12 = (spEC - 20.0f) * 0.02f;
+            //if (temp_f12 > 1.0f) {
+            //    phi_f0 = 1.0f;
+            //} else {
+            //    phi_f0 = temp_f12;
+            //}
+            phi_f0 = CLAMP_MIN(temp_f12, 1.0f);
+            /*temp_f8 = (f32) temp_v0;
+            phi_f8 = temp_f8;
+            if ((s32) temp_v0 < 0) {
+                phi_f8 = temp_f8 + 4294967296.0f;
+            }
+            actor->shape.shadowAlpha = (u8) (u32) (phi_f0 * phi_f8);*/
+            //actor->shape.shadowAlpha = (phi_f0 *  temp_v0);
+            actor->shape.shadowAlpha *= phi_f0;
+            func_800B3FC0(actor, mapper, globalCtx);
+            actor->shape.shadowScale = temp_f20;
+            actor->shape.shadowAlpha = temp_v0;
+dummy_label_111649: ;
+        } else if (spEC >= -1.0f) {
+            numLights = mapper->numLights - 2;
+
+            OPEN_DISPS(globalCtx->state.gfxCtx);
+
+            POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x2C);
+
+            func_800C0094(actor->floorPoly, actor->world.pos.x, actor->floorHeight, actor->world.pos.z, &sp94);
+            temp_f22 = (f32) actor->shape.shadowAlpha * (1.0f - (spEC * (1.0f / 30.0f)));
+            phi_s0 = mapper->l.l;
+            shadowScaleZ = 1.0f - (spEC * 0.014285714f);
+            temp_f24 = actor->shape.shadowScale * shadowScaleZ * actor->scale.x;
+
+            lightNumMax = 0;
+            for (j = 0; j < numLights; j++, phi_s0++) {
+                if (phi_s0->l.dir[1] > 0) {
+                    lightNum = (phi_s0->l.col[0] + phi_s0->l.col[1] + phi_s0->l.col[2]) * ABS_ALT(phi_s0->l.dir[1]);
+                    if (lightNum > 0) {
+                        lightNumMax += lightNum;
+                        func_800B40E0(globalCtx, phi_s0, &sp94, lightNum, temp_f22, temp_f24, shadowScaleZ);
+                    }
+                }
+            }
+
+            for (j = 0; j < 2; j++, phi_s0++) {
+                if (phi_s0->l.dir[1] > 0) {
+                    lightNum = (ABS_ALT(phi_s0->l.dir[1]) * (phi_s0->l.col[0] + phi_s0->l.col[1] + phi_s0->l.col[2])) - (lightNumMax * (0,8));
+                    if (lightNum > 0) {
+                        func_800B40E0(globalCtx, phi_s0,  &sp94, lightNum, temp_f22, temp_f24, shadowScaleZ);
+                    }
+                }
+            }
+            CLOSE_DISPS(globalCtx->state.gfxCtx);
+        }
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B4B50.s")
+#endif
 
 void func_800B4EDC(GlobalContext* globalCtx, Vec3f* pzParm2, Vec3f* pzParm3, f32* pfParm4) {
     SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->projectionMatrix, pzParm2, pzParm3, pfParm4);
