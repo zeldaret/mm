@@ -276,7 +276,7 @@ typedef enum {
     /* 0x3 */ BIGSLIME_DMGEFF_ICE,
     /* 0x4 */ BIGSLIME_DMGEFF_LIGHT,
     /* 0x5 */ BIGSLIME_DMGEFF_ELECTRIC_STUN,
-    /* 0x5 */ BIGSLIME_DMGEFF_DEKU_STUN = 0xD,
+    /* 0xD */ BIGSLIME_DMGEFF_DEKU_STUN = 0xD,
     /* 0xE */ BIGSLIME_DMGEFF_HOOKSHOT,
     /* 0xF */ BIGSLIME_DMGEFF_BREAK_ICE,
 } BigslimeDamageEffect;
@@ -795,7 +795,7 @@ void EnBigslime_BreakIntoMinislime(EnBigslime* this, GlobalContext* globalCtx) {
 }
 
 /**
- * Smoothly moves the camera to a side view and keeps it there 
+ * Smoothly moves the camera to a side view and keeps it there
  * as bigslime grabs player and the Gekko melee-attacks player
  */
 void EnBigslime_UpdateCameraGrabPlayer(EnBigslime* this, GlobalContext* globalCtx) {
@@ -851,7 +851,7 @@ void EnBigslime_UpdateCameraIntroCs(EnBigslime* this, GlobalContext* globalCtx, 
 }
 
 /**
- * Takes the camera and makes the focus point (at) point at bigslime, who is on the 
+ * Takes the camera and makes the focus point (at) point at bigslime, who is on the
  * center of the roof. This is used when the minislimes merges into bigslime.
  */
 void EnBigslime_UpdateCameraFormingBigslime(EnBigslime* this, GlobalContext* globalCtx) {
