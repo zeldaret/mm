@@ -700,7 +700,7 @@ void func_800B4B50(Actor* actor, Lights* mapper, GlobalContext* globalCtx);
 void func_800B4EDC(GlobalContext* globalCtx, Vec3f* pzParm2, Vec3f* pzParm3, f32* pfParm4);
 void func_800B4F40(TargetContext* targetCtx, s32 index, f32 x, f32 y, f32 z);
 void func_800B4F78(TargetContext* targetCtx, s32 type, GlobalContext* globalCtx);
-void func_800B5040(TargetContext* targetCtx, Actor* actor, u8 type, GlobalContext* globalCtx);
+void func_800B5040(TargetContext* targetCtx, Actor* actor, s32 type, GlobalContext* globalCtx);
 void Actor_TargetContextInit(TargetContext* targetCtx, Actor* actor, GlobalContext* globalCtx);
 void func_800B5208(TargetContext* targetCtx, GlobalContext* globalCtx);
 void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GlobalContext* globalCtx);

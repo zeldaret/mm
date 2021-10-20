@@ -450,7 +450,20 @@ void func_800B4F78(TargetContext* targetCtx, s32 type, GlobalContext* globalCtx)
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B5040.s")
+void func_800B5040(TargetContext* targetCtx, Actor* actor, s32 type, GlobalContext* globalCtx) {
+    targetCtx->unk0.x = actor->focus.pos.x;
+    targetCtx->unk0.y = actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y);
+    targetCtx->unk0.z = actor->focus.pos.z;
+
+    targetCtx->unk18 = D_801AEC84[type].unk0;
+    targetCtx->unk1C = D_801AEC84[type].unk1;
+    targetCtx->unk20 = D_801AEC84[type].unk2;
+    targetCtx->unk24 = D_801AEC84[type].unk3;
+    targetCtx->unk28 = D_801AEC84[type].unk4;
+    targetCtx->unk2C = D_801AEC84[type].unk5;
+    targetCtx->unk30 = D_801AEC84[type].unk6;
+    targetCtx->unk34 = D_801AEC84[type].unk7;
+}
 
 void Actor_TargetContextInit(TargetContext* targetCtx, Actor* actor, GlobalContext* globalCtx) {
     targetCtx->unk90 = NULL;
