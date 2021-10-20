@@ -346,7 +346,7 @@ void EnTrt_GetMushroom(EnTrt* this, GlobalContext* globalCtx) {
                 this->textId = 0x884;
                 func_801518B0(globalCtx, this->textId, &this->actor);
                 gSaveContext.weekEventReg[0x35] |= 8;
-                func_80123D50(globalCtx, GET_PLAYER(globalCtx), 18, 21);
+                func_80123D50(globalCtx, GET_PLAYER(globalCtx), ITEM_BOTTLE, PLAYER_AP_BOTTLE);
                 break;
             case 0x888:
                 this->textId = 0x889;
@@ -372,7 +372,7 @@ void EnTrt_GetMushroom(EnTrt* this, GlobalContext* globalCtx) {
 void EnTrt_PayForMushroom(EnTrt* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
-        func_80123D50(globalCtx, GET_PLAYER(globalCtx), 18, 21);
+        func_80123D50(globalCtx, GET_PLAYER(globalCtx), ITEM_BOTTLE, PLAYER_AP_BOTTLE);
         this->actionFunc = EnTrt_SetupItemGiven;
     } else {
         func_800B8A1C(&this->actor, globalCtx, GI_RUPEE_RED, 300.0f, 300.0f);

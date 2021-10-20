@@ -990,7 +990,7 @@ void EnFsn_GiveItem(EnFsn* this, GlobalContext* globalCtx) {
         }
         this->actor.parent = NULL;
         if (ENFSN_IS_SHOP(&this->actor) && !this->isSelling) {
-            func_80123D50(globalCtx, GET_PLAYER(globalCtx), 18, 21);
+            func_80123D50(globalCtx, GET_PLAYER(globalCtx), ITEM_BOTTLE, PLAYER_AP_BOTTLE);
         }
         this->actionFunc = EnFsn_SetupResumeInteraction;
     } else if (this->isSelling == true) {

@@ -758,7 +758,7 @@ void func_80B41E18(EnKgy* this, GlobalContext* globalCtx) {
 
                         case 0xC46:
                         case 0xC55:
-                            func_80123D50(globalCtx, GET_PLAYER(globalCtx), 0x12, 0x15);
+                            func_80123D50(globalCtx, GET_PLAYER(globalCtx), ITEM_BOTTLE, PLAYER_AP_BOTTLE);
                             player->unk_A87 = PLAYER_AP_NONE;
                             this->unk_29C &= ~0x8;
                             globalCtx->msgCtx.unk11F10 = 0;

@@ -683,7 +683,7 @@ typedef struct {
     /* 0x258 */ s16 unk_258;
     /* 0x25A */ s16 unk_25A;
     /* 0x25C */ u16 unk_25C;
-    /* 0x25E */ u16 unk_25E[5];
+    /* 0x25E */ u16 unk_25E[5]; // ItemId
     /* 0x268 */ u16 unk_268[5];
     /* 0x272 */ u16 equipTargetItem;
     /* 0x274 */ u16 equipTargetSlot;
