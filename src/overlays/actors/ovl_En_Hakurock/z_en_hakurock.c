@@ -101,6 +101,7 @@ void func_80B21BE0(BossHakugin* parent, Vec3f* arg1, s32 arg2) {
             s16 sp2E;
             s16 sp2C;
             f32 sp28;
+
             Math_Vec3f_Copy(&gohtParticle->unk_0, arg1);
             sp2C = Rand_S16Offset(0x1000, 0x3000);
             sp2E = ((u32)Rand_Next() >> 0x10);
@@ -139,14 +140,14 @@ void func_80B21EA4(EnHakurock* this, s32 arg1) {
 
     if (arg1 == 0) {
         for (i = 0; i < 20; i++) {
-            func_80B21BE0(this->actor.parent, &this->actor.world.pos, arg1);
+            func_80B21BE0((BossHakugin*)this->actor.parent, &this->actor.world.pos, arg1);
         }
     } else if (arg1 == 2) {
         for (i = 0; i < 10; i++) {
-            func_80B21BE0(this->actor.parent, &this->actor.world.pos, arg1);
+            func_80B21BE0((BossHakugin*)this->actor.parent, &this->actor.world.pos, arg1);
         }
     } else {
-        Math_Vec3f_Copy(&sp4C, &this->actor.world);
+        Math_Vec3f_Copy(&sp4C, &this->actor.world.pos);
         scaleFactor = this->actor.scale.x * 600.0f;
         if (arg1 == 1) {
             sp4C.y -= scaleFactor;
@@ -158,7 +159,7 @@ void func_80B21EA4(EnHakurock* this, s32 arg1) {
         for (; i < 3; i++) {
             tmp = (i * 5) + 5;
             for (phi_s5 = 0; phi_s5 < tmp; phi_s5++) {
-                func_80B21BE0(this->actor.parent, &sp4C, arg1);
+                func_80B21BE0((BossHakugin*)this->actor.parent, &sp4C, arg1);
             }
             sp4C.y += scaleFactor;
         }
@@ -167,8 +168,8 @@ void func_80B21EA4(EnHakurock* this, s32 arg1) {
 
 void func_80B21FFC(EnHakurock* this) {
     this->actor.bgCheckFlags &= ~1;
-    this->collider.base.atFlags &= -3;
-    this->collider.base.ocFlags1 &= -3;
+    this->collider.base.atFlags &= ~2;
+    this->collider.base.ocFlags1 &= ~2;
     this->actor.draw = NULL;
     this->actor.params = 0;
     this->actionFunc = func_80B22040;
@@ -189,7 +190,7 @@ void func_80B220A8(EnHakurock* this) {
     this->actor.draw = func_80B228F4;
     this->actor.speedXZ = Rand_ZeroFloat(3.5f) + 2.5f;
     this->actor.velocity.y = Rand_ZeroFloat(4.5f) + 18.0f;
-    Actor_SetScale(this, (Rand_ZeroFloat(5.0f) + 15.0f) * 0.001f);
+    Actor_SetScale(&this->actor, (Rand_ZeroFloat(5.0f) + 15.0f) * 0.001f);
     this->actor.world.rot.y = (Rand_Next() >> 0x12) + this->actor.parent->shape.rot.y + 0x8000;
     this->actor.shape.rot.x = (Rand_Next() >> 0x10);
     this->actor.shape.rot.y = (Rand_Next() >> 0x10);
@@ -212,7 +213,7 @@ void func_80B221E8(EnHakurock* this, GlobalContext* globalCtx) {
     this->actor.shape.rot.z += 0xB00;
 
     if (this->collider.base.atFlags & 2 || !(this->counter || (this->collider.base.ocFlags1 & 2) == 0) ||
-        (this->actor.bgCheckFlags & 1) && (this->actor.velocity.y < 0.0f)) {
+        ((this->actor.bgCheckFlags & 1) && (this->actor.velocity.y < 0.0f))) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_ROCK_BROKEN);
         func_80B21EA4(this, 0);
         func_80B21FFC(this);
@@ -328,14 +329,14 @@ void EnHakurock_Update(Actor* thisx, GlobalContext* globalCtx) {
             func_80B21FFC(this);
         } else {
             Collider_UpdateCylinder(&this->actor, &this->collider);
-            CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider);
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider);
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider);
+            CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         }
     } else if ((rockParams == 3) || (rockParams == 4)) {
         Collider_UpdateCylinder(&this->actor, &this->collider);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 }
 
