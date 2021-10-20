@@ -1456,7 +1456,7 @@ struct s800B948C {
 
 typedef struct ActorContext_unk_20C {
     /* 0x0 */ s16 unk_0;
-    /* 0x2 */ u8 unk_2;
+    /* 0x2 */ s8 unk_2;
     /* 0x4 */ void* unk_4;
 } ActorContext_unk_20C; // size = 0x8
 

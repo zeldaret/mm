@@ -776,6 +776,7 @@ f32 func_800B64FC(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2, u32* arg3) {
     return globalCtx->actorCtx.unk1F8 - temp_f8;
 }
 
+
 void* func_800B6584(GlobalContext* globalCtx, s16 arg1, void* arg2, size_t arg3) {
     ActorContext_unk_20C* sp1C = globalCtx->actorCtx.unk_20C;
     s32 i;
@@ -800,7 +801,24 @@ void* func_800B6584(GlobalContext* globalCtx, s16 arg1, void* arg2, size_t arg3)
     return NULL;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B6608.s")
+void* func_800B6608(GlobalContext* globalCtx, s16 arg1) {
+    ActorContext_unk_20C* sp1C = globalCtx->actorCtx.unk_20C;
+    s32 i;
+
+    for (i = 0; i < ARRAY_COUNT(globalCtx->actorCtx.unk_20C); i++) {
+        if (arg1 == sp1C->unk_0) {
+            sp1C->unk_0 = 0;
+            if (sp1C->unk_2 != 0) {
+                zelda_free(sp1C->unk_4);
+                sp1C->unk_2 = 0;
+            }
+            return sp1C->unk_4;
+        }
+        sp1C++;
+    }
+
+    return NULL;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B6680.s")
 
