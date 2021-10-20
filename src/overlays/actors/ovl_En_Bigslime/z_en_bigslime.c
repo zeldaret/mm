@@ -1236,7 +1236,6 @@ void EnBigslime_SetupSquishFlat(EnBigslime* this) {
  *     - The vtx shape of Fused Jelly starts from a wide cone shape
  *     - The squishing occurs throught the large changes in &this->actor.scale
  */
-
 void EnBigslime_SquishFlat(EnBigslime* this, GlobalContext* globalCtx) {
     Player* player;
     Vtx* dynamicVtx;
