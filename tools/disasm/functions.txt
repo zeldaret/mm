@@ -5419,7 +5419,7 @@
     0x8088FE64:("func_8088FE64",),
     0x8089010C:("func_8089010C",),
     0x80890438:("EnElf_Update",),
-    0x80890494:("func_80890494",),
+    0x80890494:("EnElf_OverrideLimbDraw",),
     0x808905B8:("EnElf_Draw",),
     0x808908D0:("func_808908D0",),
     0x80891060:("EnNiw_Init",),
