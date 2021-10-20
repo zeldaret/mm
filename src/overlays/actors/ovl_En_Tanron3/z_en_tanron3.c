@@ -16,6 +16,9 @@ void EnTanron3_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron3_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron3_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80BB897C(EnTanron3* this, GlobalContext* globalCtx);
+void func_80BB8A48(EnTanron3* this, GlobalContext* globalCtx);
+
 static s32 D_80BB9720[] = { 0x00000000, 0x00000000, 0x00000000 };
 
 static Boss03* D_80BB972C = NULL;
@@ -104,7 +107,20 @@ void EnTanron3_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron3/func_80BB87D4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron3/func_80BB897C.s")
+void func_80BB897C(EnTanron3* this, GlobalContext* globalCtx) {
+    this->actionFunc = func_80BB8A48;
+    SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_0600DAAC, -10.0f);
+    this->unk_234 = 0;
+    this->unk_238 = 5;
+    this->unk_204 = 0x32;
+    this->actor.speedXZ = 5.0f;
+    this->unk_240 = 0.5f;
+    this->unk_228 = randPlusMinusPoint5Scaled(500.0f);
+    this->unk_22C = randPlusMinusPoint5Scaled(100.0f);
+    this->unk_230 = randPlusMinusPoint5Scaled(500.0f);
+    Math_Vec3f_Copy(&this->unk_21C, &this->actor.world.pos);
+    this->unk_200 = Rand_ZeroFloat(100.0f);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron3/func_80BB8A48.s")
 
