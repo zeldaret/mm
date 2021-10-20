@@ -5,6 +5,7 @@
  */
 
 #include "z_en_tanron3.h"
+#include "overlays/actors/ovl_Boss_03/z_boss_03.h"
 
 #define FLAGS 0x00000035
 
@@ -17,7 +18,7 @@ void EnTanron3_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 static s32 D_80BB9720[] = { 0x00000000, 0x00000000, 0x00000000 };
 
-static Actor* D_80BB972C = NULL;
+static Boss03* D_80BB972C = NULL;
 
 const ActorInit En_Tanron3_InitVars = {
     ACTOR_EN_TANRON3,
@@ -94,10 +95,12 @@ void EnTanron3_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.flags &= ~1;
     this->unk_250 = (s32)Rand_ZeroFloat(500000.0f);
     this->unk_244 = 430.0f;
-    D_80BB972C = this->actor.parent;
+    D_80BB972C = (Boss03*)this->actor.parent;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron3/EnTanron3_Destroy.s")
+void EnTanron3_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    D_80BB972C->unk_252--;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron3/func_80BB87D4.s")
 
