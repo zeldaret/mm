@@ -432,7 +432,7 @@ void func_80BD909C(EnPamera* this, GlobalContext* globalCtx) {
 }
 
 void func_80BD90AC(EnPamera* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (Player_GetMask(globalCtx) != PLAYER_MASK_STONE && (this->actionFunc != func_80BD8758) &&
         (this->actionFunc != func_80BD8964) && (this->actionFunc != func_80BD8A7C) &&

@@ -173,7 +173,7 @@ void FaultDrawer_SetDrawerFB(void* fb, u16 w, u16 h) {
     sFaultDrawContext->h = h;
 }
 
-void FaultDrawer_SetInputCallback(void (*callback)()) {
+void FaultDrawer_SetInputCallback(void* callback) {
     sFaultDrawContext->inputCallback = callback;
 }
 

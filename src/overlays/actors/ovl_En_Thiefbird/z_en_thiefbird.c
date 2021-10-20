@@ -312,7 +312,7 @@ void func_80C10DE8(s32 items[], s32 count, s32 item) {
 }
 
 s32 func_80C10E98(GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 phi_s0_2;
     s32 phi_s2;
     s32 spB0;
@@ -420,7 +420,7 @@ s32 func_80C10E98(GlobalContext* globalCtx) {
 }
 
 void func_80C11338(EnThiefbird* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     EnItem00* item = NULL;
     f32 phi_f20 = 5000.0f;
     s32 i;
@@ -479,7 +479,7 @@ void func_80C11538(EnThiefbird* this) {
 }
 
 void func_80C11590(EnThiefbird* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 sp38;
 
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
@@ -543,7 +543,7 @@ void func_80C118E4(EnThiefbird* this) {
 }
 
 void func_80C1193C(EnThiefbird* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 pitch;
 
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
@@ -859,7 +859,7 @@ void func_80C12744(EnThiefbird* this) {
 }
 
 void func_80C127F4(EnThiefbird* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 temp_v0;
     f32 temp_f0;
 

@@ -233,7 +233,7 @@ Actor* func_80ADB040(GlobalContext* globalCtx) {
 
 f32 func_80ADB08C(GlobalContext* globalCtx) {
     s32 pad;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Actor* sp18 = func_80ADB040(globalCtx);
 
     if (sp18 != NULL) {
@@ -346,7 +346,7 @@ void func_80ADB4F4(EnSellnuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80ADB544(EnSellnuts* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0x7D0, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -425,7 +425,7 @@ void func_80ADB544(EnSellnuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80ADB924(EnSellnuts* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     u8 temp_v0 = func_80152498(&globalCtx->msgCtx);
     s32 itemActionParam;
 
@@ -704,7 +704,7 @@ void func_80ADC580(EnSellnuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80ADC5A4(EnSellnuts* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (func_800B84D0(&this->actor, globalCtx)) {
         player->linearVelocity = 0.0f;
@@ -727,7 +727,7 @@ void func_80ADC5A4(EnSellnuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80ADC6D0(EnSellnuts* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         globalCtx->msgCtx.unk11F22 = 0x43;
@@ -954,7 +954,7 @@ f32 func_80ADCFE8(Path* path, s32 arg1, Vec3f* pos, Vec3s* arg3) {
 void EnSellnuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnSellnuts* this = THIS;
     s32 pad;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 pad2;
 
     if ((gSaveContext.weekEventReg[17] & 0x80) || (gSaveContext.weekEventReg[61] & 0x10)) {
@@ -1040,7 +1040,7 @@ void EnSellnuts_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnSellnuts_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnSellnuts* this = THIS;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     this->unk_328++;
     if (player->transformation == PLAYER_FORM_DEKU) {

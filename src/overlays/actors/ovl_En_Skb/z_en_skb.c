@@ -870,7 +870,7 @@ s32 func_80996594(EnSkb* this, GlobalContext* globalCtx) {
 
 void func_8099672C(EnSkb* this, GlobalContext* globalCtx) {
     s32 pad;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((this->unk_3DE != 6) && (this->unk_3DE != 7)) {
         if ((this->actor.bgCheckFlags & 0x60) && (this->actor.yDistToWater >= 40.0f)) {

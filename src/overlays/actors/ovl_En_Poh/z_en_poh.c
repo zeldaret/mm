@@ -189,7 +189,7 @@ void EnPoh_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80B2C910(Vec3f* vec, GlobalContext* globalCtx) {
-    Camera* activeCam = ACTIVE_CAM;
+    Camera* activeCam = GET_ACTIVE_CAM(globalCtx);
     Vec3f sp20;
     f32 temp_f0;
 
@@ -208,7 +208,7 @@ void func_80B2C910(Vec3f* vec, GlobalContext* globalCtx) {
 }
 
 void func_80B2C9B8(EnPoh* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     Math_StepToF(&this->actor.world.pos.y, player->actor.world.pos.y, 1.0f);
     this->actor.world.pos.y += 2.5f * Math_SinS(this->unk_18D * 0x800);
@@ -290,7 +290,7 @@ void func_80B2CD14(EnPoh* this) {
 }
 
 void func_80B2CD64(EnPoh* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 yawDiff;
 
     SkelAnime_FrameUpdateMatrix(&this->skelAnime);
@@ -413,7 +413,7 @@ void func_80B2D300(EnPoh* this, GlobalContext* globalCtx) {
 
     this->unk_18E++;
     if (this->unk_18E < 8) {
-        sp38 = func_800DFCDC(ACTIVE_CAM) + 0x4800;
+        sp38 = func_800DFCDC(GET_ACTIVE_CAM(globalCtx)) + 0x4800;
         if (this->unk_18E < 5) {
             sp3A = (this->unk_18E * 0x1000) - 0x4000;
             sp44.y = (Math_SinS(sp3A) * 23.0f) + (this->actor.world.pos.y + 40.0f);
@@ -1013,7 +1013,7 @@ void func_80B2F37C(Actor* thisx, GlobalContext* globalCtx) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 170, 255, this->unk_197);
         gDPSetEnvColor(POLY_XLU_DISP++, this->unk_194, this->unk_195, this->unk_196, 255);
 
-        SysMatrix_InsertYRotation_f((func_800DFCDC(ACTIVE_CAM) + 0x8000) * (M_PI / 32768), MTXMODE_APPLY);
+        SysMatrix_InsertYRotation_f((func_800DFCDC(GET_ACTIVE_CAM(globalCtx)) + 0x8000) * (M_PI / 32768), MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, D_06003850);

@@ -207,7 +207,7 @@ u16 EnTrt_GetItemChoiceTextId(EnTrt* this) {
 }
 
 void EnTrt_EndInteraction(GlobalContext* globalCtx, EnTrt* this) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
         ActorCutscene_Stop(this->cutscene);
@@ -332,7 +332,7 @@ void EnTrt_Hello(EnTrt* this, GlobalContext* globalCtx) {
 
 void EnTrt_GetMushroom(EnTrt* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     this->tmpGetMushroomCutscene = this->getMushroomCutscene;
     if (this->cutsceneState != ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
@@ -346,7 +346,7 @@ void EnTrt_GetMushroom(EnTrt* this, GlobalContext* globalCtx) {
                 this->textId = 0x884;
                 func_801518B0(globalCtx, this->textId, &this->actor);
                 gSaveContext.weekEventReg[0x35] |= 8;
-                func_80123D50(globalCtx, PLAYER, 18, 21);
+                func_80123D50(globalCtx, GET_PLAYER(globalCtx), 18, 21);
                 break;
             case 0x888:
                 this->textId = 0x889;
@@ -372,7 +372,7 @@ void EnTrt_GetMushroom(EnTrt* this, GlobalContext* globalCtx) {
 void EnTrt_PayForMushroom(EnTrt* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
-        func_80123D50(globalCtx, PLAYER, 18, 21);
+        func_80123D50(globalCtx, GET_PLAYER(globalCtx), 18, 21);
         this->actionFunc = EnTrt_SetupItemGiven;
     } else {
         func_800B8A1C(&this->actor, globalCtx, GI_RUPEE_RED, 300.0f, 300.0f);
@@ -439,7 +439,7 @@ void EnTrt_SetupTryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_GiveRedPotionForKoume(EnTrt* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
@@ -644,7 +644,7 @@ void EnTrt_BrowseShelf(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_SetupBuyItemWithFanfare(GlobalContext* globalCtx, EnTrt* this) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     func_800B8A1C(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
     globalCtx->msgCtx.unk11F22 = 0x43;
@@ -749,7 +749,7 @@ void EnTrt_SelectItem(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_IdleSleeping(EnTrt* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((gSaveContext.weekEventReg[0x55] & 8) && !(gSaveContext.weekEventReg[0x54] & 0x40)) {
         this->textId = 0x88F;
@@ -806,7 +806,7 @@ void EnTrt_IdleSleeping(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_IdleAwake(EnTrt* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     this->flags &= ~ENTRT_FULLY_AWAKE;
     if (player->transformation == PLAYER_FORM_HUMAN || player->transformation == PLAYER_FORM_FIERCE_DEITY) {
@@ -983,7 +983,7 @@ void EnTrt_TryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_ItemGiven(EnTrt* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->cutsceneState == ENTRT_CUTSCENESTATE_STOPPED) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
@@ -1032,7 +1032,7 @@ void EnTrt_SetupEndInteraction(EnTrt* this, GlobalContext* globalCtx) {
 
 void EnTrt_ShopkeeperGone(EnTrt* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (func_800B84D0(&this->actor, globalCtx)) {
         func_801518B0(globalCtx, this->textId, &this->actor);
@@ -1099,7 +1099,7 @@ void EnTrt_SetupItemGiven(EnTrt* this, GlobalContext* globalCtx) {
 
 void EnTrt_ContinueShopping(EnTrt* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     EnGirlA* item;
 
     if (talkState == 4) {
@@ -1369,7 +1369,7 @@ void EnTrt_OpenEyesThenSetToBlink(EnTrt* this) {
 
 void EnTrt_TalkToShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
     u8 talkState = talkState = func_80152498(&globalCtx->msgCtx);
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 itemActionParam;
 
     if (talkState == 5) {
@@ -1696,7 +1696,7 @@ void EnTrt_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnTrt_UpdateHeadYawAndPitch(EnTrt* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Vec3f playerPos;
     Vec3f pos;
 
