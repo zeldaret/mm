@@ -878,7 +878,7 @@ void func_800BB2D0(ActorContext* actorCtx, u16* param_2, GlobalContext* globalCt
 Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, GlobalContext* globalCtx);
 // void func_800BB59C(void);
 void func_800BB604(GlobalContext* globalCtx, ActorContext* actorCtx, Player* player, UNK_TYPE);
-void func_800BB8EC(GlobalContext* globalCtx, ActorContext* actorCtx, s32*, s32*, Player* player);
+void func_800BB8EC(GlobalContext* globalCtx, ActorContext* actorCtx, Actor*, s32*, Player* player);
 void Enemy_StartFinishingBlow(GlobalContext* globalCtx, Actor* actor);
 // void func_800BBAC0(void);
 s16 func_800BBB74(s16 arg0[2], s16 arg1, s16 arg2, s16 arg3);

@@ -9,6 +9,8 @@
 
 // bss
 extern FaultClient D_801ED8A0;
+//
+extern s32 D_801ED920;
 
 void Actor_PrintLists(ActorContext* actorCtx) {
     ActorListEntry* actorList = &actorCtx->actorList[0];
@@ -479,7 +481,99 @@ void Actor_TargetContextInit(TargetContext* targetCtx, Actor* actor, GlobalConte
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B5208.s")
 
+#ifdef NON_EQUIVALENT
+void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GlobalContext* globalCtx) {
+    Actor* sp68;
+    s32 sp64;
+    Vec3f sp58;
+    f32 sp54;
+    f32 sp44;
+    f32 temp_f0;
+    f32 temp_f0_2;
+    f32 temp_f14;
+    Actor* phi_s1;
+
+    sp68 = 0;
+    phi_s1 = actor;
+    if ((player->unk_730 != 0) && (player->unk_AE3[player->unk_ADE] == 2)) {
+        targetCtx->unk_94 = NULL;
+    } else {
+        func_800BB8EC(globalCtx, &globalCtx->actorCtx, &sp68, &D_801ED920, player);
+        targetCtx->unk_94 = sp68;
+    }
+
+    if (targetCtx->unk8C != 0) {
+        sp68 = targetCtx->unk8C;
+        targetCtx->unk8C = NULL;
+    } else if (actor != 0) {
+        sp68 = actor;
+    }
+
+    if (sp68 != 0) {
+        sp64 = sp68->category;
+    } else {
+        sp64 = player->actor.category;
+    }
+
+    if ((sp68 != targetCtx->unk38) || (sp64 != targetCtx->unk4A)) {
+        targetCtx->unk38 = sp68;
+        targetCtx->unk4A = sp64;
+        targetCtx->unk40 = 1.0f;
+    }
+
+    if (sp68 == NULL) {
+        sp68 = player;
+    }
+
+    if (Math_StepToF(&targetCtx->unk40, 0.0f, 0.25f) == 0) {
+        temp_f0 = 0.25f / targetCtx->unk40;
+        targetCtx->unk0.x += ((sp68->focus.pos.x - targetCtx->unk0.x) * temp_f0);
+        targetCtx->unk0.y += (((sp68->focus.pos.y + (sp68->targetArrowOffset * sp68->scale.z)) - targetCtx->unk0.y) * temp_f0);
+        targetCtx->unk0.z += (sp68->focus.pos.z - targetCtx->unk0.z) * temp_f0;
+    } else {
+        func_800B5040(targetCtx, sp68, sp64, globalCtx);
+    }
+
+    if (actor != NULL && targetCtx->unk4B == 0) {
+        func_800B4EDC(globalCtx, &actor->focus.pos, &sp58, &sp54);
+        if ((sp58.z <= 0.0f) || (fabsf(sp58.x * sp54) >= 1.0f) || (fabsf(sp58.y * sp54) >= 1.0f)) {
+            phi_s1 = NULL;
+        }
+    }
+
+    if (phi_s1 != NULL) {
+        if (phi_s1 != targetCtx->unk3C) {
+            func_800B4F78(targetCtx, phi_s1->category, globalCtx);
+            targetCtx->unk3C = phi_s1;
+
+            if (phi_s1->id == ACTOR_EN_BOOM) {
+                targetCtx->unk48 = 0;
+            }
+
+            play_sound((phi_s1->flags & 5) == 5 ? 0x4830 : 0x4810);
+        }
+
+        targetCtx->unkC.x = phi_s1->world.pos.x;
+        targetCtx->unkC.y = phi_s1->world.pos.y - (phi_s1->shape.yOffset * phi_s1->scale.y);
+        targetCtx->unkC.z = phi_s1->world.pos.z;
+        if (targetCtx->unk4B == 0) {
+            temp_f0_2 = (500.0f - targetCtx->unk44) * 3.0f;
+
+            if (Math_StepToF(&targetCtx->unk44, 80.0f, CLAMP(temp_f0_2, 30.0f, 100.0f)) != 0) {
+                targetCtx->unk4B += 1;
+            }
+        } else {
+            targetCtx->unk4B = (targetCtx->unk4B + 3) | 0x80;
+            targetCtx->unk44 = 120.0f;
+        }
+    } else {
+        targetCtx->unk3C = NULL;
+        Math_StepToF(&targetCtx->unk44, 500.0f, 80.0f);
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B5814.s")
+#endif
 
 u32 Flags_GetSwitch(GlobalContext* globalCtx, s32 flag) {
     if (flag >= 0 && flag < 0x80) {
