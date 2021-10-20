@@ -776,7 +776,29 @@ f32 func_800B64FC(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2, u32* arg3) {
     return globalCtx->actorCtx.unk1F8 - temp_f8;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B6584.s")
+void* func_800B6584(GlobalContext* globalCtx, s16 arg1, void* arg2, size_t arg3) {
+    ActorContext_unk_20C* sp1C = globalCtx->actorCtx.unk_20C;
+    s32 i;
+
+    for (i = 0; i < ARRAY_COUNT(globalCtx->actorCtx.unk_20C); i++) {
+        if (sp1C->unk_0 == 0) {
+            if (arg2 == NULL) {
+                arg2 = zelda_malloc(arg3);
+                if (arg2 == NULL) {
+                    return NULL;
+                }
+                sp1C->unk_2 = 1;
+            }
+
+            sp1C->unk_0 = arg1;
+            sp1C->unk_4 = arg2;
+            return arg2;
+        }
+        sp1C++;
+    }
+
+    return NULL;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B6608.s")
 

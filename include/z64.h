@@ -1454,6 +1454,12 @@ struct s800B948C {
     /* 0x18 */ u32 runMainIfSet; // Bitmask of actor flags. The actor will only have main called if it has at least 1 flag set that matches this bitmask
 }; // size = 0x1C
 
+typedef struct ActorContext_unk_20C {
+    /* 0x0 */ s16 unk_0;
+    /* 0x2 */ u8 unk_2;
+    /* 0x4 */ void* unk_4;
+} ActorContext_unk_20C; // size = 0x8
+
 struct ActorContext {
     /* 0x000 */ u8 freezeFlashTimer;
     /* 0x001 */ UNK_TYPE1 pad1;
@@ -1480,7 +1486,9 @@ struct ActorContext {
     /* 0x1F6 */ UNK_TYPE1 pad1F6[0x2];
     /* 0x1F8 */ f32 unk1F8;
     /* 0x1FC */ Vec3f unk1FC;
-    /* 0x208 */ UNK_TYPE1 pad208[0x48];
+    /* 0x208 */ UNK_TYPE1 unk_208[0x4];
+    /* 0x20C */ ActorContext_unk_20C unk_20C[8];
+    /* 0x24C */ UNK_TYPE1 unk_24C[0x4];
     /* 0x250 */ void* unk250; // allocation of 0x20f0 bytes?
     /* 0x254 */ u32 unk254[5];
     /* 0x268 */ u8 unk268;
