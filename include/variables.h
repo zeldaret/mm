@@ -3929,7 +3929,7 @@ extern UNK_TYPE D_04025850;
 extern UNK_TYPE D_04025DD0;
 extern UNK_TYPE D_040281DC;
 extern UNK_TYPE D_04028FEC;
-extern UNK_TYPE D_04029140;
+extern AnimationHeader D_04029140;
 extern Gfx D_04029CB0[];
 extern Gfx D_04029CF0[];
 extern UNK_TYPE D_04029D20;
