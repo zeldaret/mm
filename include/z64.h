@@ -1008,14 +1008,12 @@ struct FaultAddrConvClient {
     /* 0x8 */ void* param;
 }; // size = 0xC
 
-typedef struct FaultClient FaultClient;
-
-struct FaultClient {
-    /* 0x0 */ FaultClient* next;
+typedef struct FaultClient {
+    /* 0x0 */ struct FaultClient* next;
     /* 0x4 */ fault_client_func callback;
     /* 0x8 */ void* param0;
     /* 0xC */ void* param1;
-}; // size = 0x10
+} FaultClient; // size = 0x10
 
 typedef struct {
     /* 0x000 */ OSThread thread;

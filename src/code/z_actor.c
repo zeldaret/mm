@@ -7,6 +7,9 @@
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
 
+// bss
+extern FaultClient D_801ED8A0;
+
 void Actor_PrintLists(ActorContext* actorCtx) {
     ActorListEntry* actorList = &actorCtx->actorList[0];
     Actor* actor;
@@ -1225,7 +1228,11 @@ void func_800B8804(Actor* actor, GameState* gameState, f32 arg2) {
     func_800B874C(actor, gameState, arg2, 20.0f);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B882C.s")
+void func_800B882C(Actor* actor, GameState* gameState) {
+    f32 cylRadius = actor->colChkInfo.cylRadius + 50.0f;
+
+    func_800B8804(actor, gameState, cylRadius);
+}
 
 s32 func_800B886C(Actor* actor, GameState* gameState) {
     if (!(GET_PLAYER(gameState)->actor.flags & 0x20000000)) {
@@ -1765,7 +1772,34 @@ void Actor_Draw(GlobalContext* globalCtx, Actor* actor) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
+#ifdef NON_MATCHING
+void func_801A0810(s32*, u16, u8);
+void func_800B9D1C(Actor* actor) {
+    if (actor->sfx != 0) {
+        if ((actor->unk39 & 2) != 0) {
+            func_801A5CFC(actor->sfx & 0xFFFF, &actor->projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
+        } else if ((actor->unk39 & 4) != 0) {
+            play_sound(actor->sfx & 0xFFFF);
+        } else if ((actor->unk39 & 8) != 0) {
+            func_8019F128(actor->sfx & 0xFFFF);
+        } else if ((actor->unk39 & 0x10) != 0) {
+            func_801A0810(&D_801DB4A4, 0x2021, (actor->sfx - 1));
+        } else if ((actor->unk39 & 1) != 0) {
+            func_8019F1C0(&actor->projectedPos, actor->sfx & 0xFFFF);
+        }
+    }
+
+    if (actor->unk39 & 0x40) {
+        func_801A1FB4(3, &actor->projectedPos, 0x27, 0x44BB8000);
+    }
+
+    if (actor->unk39 & 0x20) {
+        func_801A1FB4(0, &actor->projectedPos, 0x71, 0x44610000);
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B9D1C.s")
+#endif
 
 void Actor_DrawAllSetup(GlobalContext* globalCtx) {
     globalCtx->actorCtx.undrawnActorCount = 0;
@@ -1782,13 +1816,53 @@ s32 Actor_RecordUndrawnActor(GlobalContext* globalCtx, Actor* actor) {
     return 1;
 }
 
+void func_800B9E84(Gfx** arg0, s32 arg1);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B9E84.s")
+/*
+void func_800B9E84(Gfx** arg0, s32 arg1) {
+    func_80164C14(arg0, &D_801DE890, 4, 0, 6, 6, ((f32) (0x64 - arg1) * 0.003f) + 1.0f);
+}
+*/
 
+// big function
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B9EF4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BA2D8.s")
+s32 func_800BA2D8(GlobalContext* globalCtx, Actor* actor) {
+    return func_800BA2FC(globalCtx, actor, &actor->projectedPos, actor->projectedW);
+}
 
+
+#ifdef NON_MATCHING
+s32 func_800BA2FC(GlobalContext* globalCtx, Actor* actor, Vec3f* param_3, f32 param_4) {
+    f32 temp_f14;
+    f32 phi_f12;
+    f32 phi_f2;
+    f32 phi_f14;
+    f32 phi_f16;
+
+    if ((-actor->uncullZoneScale < param_3->z) && (param_3->z < (actor->uncullZoneForward + actor->uncullZoneScale))) {
+        phi_f2 = CLAMP_MIN(param_4, 1.0f);
+
+        if (globalCtx->view.fovy != 60.0f) {
+            temp_f14 = globalCtx->unk_187F0.y * 0.57735026f;
+            phi_f12 = actor->uncullZoneScale * globalCtx->unk_187F0.x * 0.76980036f;
+            phi_f14 = temp_f14 * actor->uncullZoneDownward;
+            phi_f16 = actor->uncullZoneScale * temp_f14;
+        } else {
+            phi_f12 = actor->uncullZoneScale;
+            phi_f14 = actor->uncullZoneDownward;
+            phi_f16 = actor->uncullZoneScale;
+        }
+
+        if (((fabsf(param_3->x) - phi_f12) < phi_f2) && ((-phi_f2 < (param_3->y + phi_f14))) && ((param_3->y - phi_f16) < phi_f2)) {
+            return 1;
+        }
+    }
+    return 0;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BA2FC.s")
+#endif
 
 #ifdef NON_EQUIVALENT
 // weird DISPS stuff
@@ -1916,7 +1990,35 @@ void Actor_DrawAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BA8B8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BA9B4.s")
+void func_800BA9B4(ActorContext* arg0, GlobalContext* arg1) {
+    s32 i;
+
+    Fault_RemoveClient(&D_801ED8A0);
+
+    for (i = 0; i < ARRAY_COUNT(arg0->actorList); i++) {
+        if (i != ACTORCAT_PLAYER) {
+            Actor* phi_s0 = arg0->actorList[i].first;
+
+            while (phi_s0 != NULL) {
+                Actor_Delete(arg0, phi_s0, arg1);
+                phi_s0 = arg0->actorList[i].first;
+            }
+        }
+    }
+
+    while (arg0->actorList[ACTORCAT_PLAYER].first != NULL) {
+        Actor_Delete(arg0, arg0->actorList[ACTORCAT_PLAYER].first, arg1);
+    }
+
+    if (arg0->unk250 != NULL) {
+        zelda_free(arg0->unk250);
+        arg0->unk250 = NULL;
+    }
+
+    func_80169D40(arg1);
+    ActorOverlayTable_Cleanup();
+}
+
 
 void Actor_AddToCategory(ActorContext* actorCtx, Actor* actor, u8 actorCategory) {
     Actor* phi_v0;
