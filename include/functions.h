@@ -992,7 +992,7 @@ f32 func_800C3D50(s32 arg0, CollisionContext* colCtx, s32 arg2, CollisionPoly** 
 // void func_800C3FA0(void);
 f32 func_800C4000(GlobalContext* globalCtx, CollisionContext* colCtx, CollisionPoly** arg2, Vec3f* arg3);
 // void func_800C4058(void);
-// void func_800C40B4(void);
+f32 func_800C40B4(CollisionContext* colCtx, CollisionPoly** outPoly, s32* bgId, Vec3f* pos);
 f32 func_800C411C(CollisionContext* colCtx, CollisionPoly** arg1, s32* arg2, Actor* actor, Vec3f* pos);
 f32 func_800C4188(GlobalContext* globalCtx, CollisionContext* colCtx, CollisionPoly** outPoly, s32* bgId,
                   Actor* actor, Vec3f* pos); 
@@ -1110,7 +1110,7 @@ u32 func_800C9B68(CollisionContext* colCtx, CollisionPoly* polygon, s32 index);
 u32 func_800C9B90(CollisionContext* colCtx, CollisionPoly* polygon, s32 index);
 u32 func_800C9BB8(CollisionContext* colCtx, CollisionPoly* polygon, s32 index);
 u32 func_800C9BDC(CollisionContext* colCtx, CollisionPoly* polygon, s32 index);
-// u32 func_800C9C24(CollisionContext* colCtx, CollisionPoly* polygon, s32 index, UNK_TYPE4 param_4);
+s32 func_800C9C24(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId, s32 arg3);
 u32 func_800C9C74(CollisionContext* colCtx, CollisionPoly* polygon, s32 index);
 u32 func_800C9C9C(CollisionContext* colCtx, CollisionPoly* polygon, s32 index);
 u32 func_800C9CC4(CollisionContext* colCtx, CollisionPoly* polygon, s32 index);
@@ -3037,7 +3037,7 @@ void func_80168090(GlobalContext* globalCtx);
 void func_80168DAC(GlobalContext* globalCtx);
 void Play_Update(GlobalContext* globalCtx);
 s32 func_801690CC(GlobalContext* globalCtx);
-// void func_80169100(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+f32 func_80169100(GlobalContext* globalCtx, MtxF*, CollisionPoly **, s32*, Vec3f*);
 // void func_801691F0(void);
 void* Play_LoadScene(GlobalContext* globalCtx, RomFile* entry);
 void func_8016927C(GlobalContext* globalCtx, s16 sParm2);
