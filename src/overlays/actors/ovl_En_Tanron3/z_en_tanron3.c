@@ -15,7 +15,10 @@ void EnTanron3_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron3_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron3_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
+static s32 D_80BB9720[] = { 0x00000000, 0x00000000, 0x00000000 };
+
+static s32 D_80BB972C = 0x00000000;
+
 const ActorInit En_Tanron3_InitVars = {
     ACTOR_EN_TANRON3,
     ACTORCAT_BOSS,
@@ -35,9 +38,16 @@ static ColliderCylinderInit D_80BB9750 = {
     { 7, 10, -5, { 0, 0, 0 } },
 };
 
-#endif
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_80BB977C = {
+    { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x02 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    { 20, 20, -10, { 0, 0, 0 } },
+};
 
-extern ColliderCylinderInit D_80BB9750;
+static s32 D_80BB97A8 = 0x643737FF;
+
+static s32 D_80BB97AC = 0x320A0AFF;
 
 extern UNK_TYPE D_0600DAAC;
 
