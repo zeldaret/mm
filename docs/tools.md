@@ -1,4 +1,38 @@
 # Table of Contnets
+- [Table of Contnets](#table-of-contnets)
+  - [Introduction](#introduction)
+  - [In the repository](#in-the-repository)
+    - [`diff.py`](#diffpy)
+    - [`tools/m2ctx.py`](#toolsm2ctxpy)
+    - [`tools/overlayhelpers/actor_symbols.py`](#toolsoverlayhelpersactor_symbolspy)
+    - [`first_diff.py`](#first_diffpy)
+    - [`sym_info.py`](#sym_infopy)
+    - [`tools/assist.py`](#toolsassistpy)
+    - [`tools/get_actor_sizes.py`](#toolsget_actor_sizespy)
+    - [`tools/progress.py`](#toolsprogresspy)
+    - [`tools/regconvert.py`](#toolsregconvertpy)
+    - [`tools/rename_global_asm.py`](#toolsrename_global_asmpy)
+    - [`tools/rename_sym.sh`](#toolsrename_symsh)
+    - [`tools/actorfixer.py`](#toolsactorfixerpy)
+    - [`tools/timeconv.py`](#toolstimeconvpy)
+    - [`tools/sfx_convert.py`](#toolssfx_convertpy)
+    - [`tools/vt_fmt.py`](#toolsvt_fmtpy)
+    - [`tools/warnings_count/check_new_warnings.sh`](#toolswarnings_countcheck_new_warningssh)
+    - [`tools/warnings_count/update_current_warnings.sh`](#toolswarnings_countupdate_current_warningssh)
+    - [`fixle.sh`](#fixlesh)
+    - [`format.sh`](#formatsh)
+  - [External tools](#external-tools)
+    - [mips_to_c](#mips_to_c)
+    - [Permuter](#permuter)
+  - [vbindiff](#vbindiff)
+    - [Texture64](#texture64)
+    - [Z64Utils](#z64utils)
+  - [Retired tools](#retired-tools)
+    - [`tools/overlayhelpers/ichaindis.py`](#toolsoverlayhelpersichaindispy)
+    - [`tools/overlayhelpers/colliderinit.py`](#toolsoverlayhelperscolliderinitpy)
+    - [`tools/overlayhelpers/colchkinfoinit.py`](#toolsoverlayhelperscolchkinfoinitpy)
+    - [`tools/overlayhelpers/damage_table.py`](#toolsoverlayhelpersdamage_tablepy)
+    - [`tools/vtxdis`](#toolsvtxdis)
 
 ## Introduction
 
@@ -126,6 +160,10 @@ Replaces VT symbols by their corresponding macros. Not many files in MM need thi
 
 Runs a make from clean and checks if new warnings have been produced: we use Jenkins to check this as well, but you should run this before opening a PR.
 
+You can specify how many threads you would like this to run with by adding the `-jN` flag. Where N is the number of threads. By default this will run using 1 thread (-j1).
+
+Run `check_new_warnings.sh -h` for more information.
+
 ### `tools/warnings_count/update_current_warnings.sh`
 
 If you have to add new warnings, **and have permission from the leads**, run this to update the file used for warnings comparison.
@@ -137,7 +175,6 @@ Fixes line endings in the repo to Linux style (LF), which is required for the bu
 ### `format.sh`
 
 Formats all C files in the repo using `clang-format-11` (instructions on how to install this version are pinned in Discord if you can't get it from your package manager in the usual way). This will touch all files in the repo, so the next `make` will take longer.
-
 
 ## External tools
 
