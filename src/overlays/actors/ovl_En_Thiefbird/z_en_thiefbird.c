@@ -235,7 +235,7 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
 
     if (gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
         phi_a3 = CUR_EQUIP_VALUE_VOID(EQUIP_SWORD);
-        if (gSaveContext.inventory.items[SLOT(ITEM_SWORD_GREAT_FAIRY)] == ITEM_SWORD_GREAT_FAIRY) {
+        if (INV_CONTENT(ITEM_SWORD_GREAT_FAIRY) == ITEM_SWORD_GREAT_FAIRY) {
             phi_a3 += 4;
         }
     }
