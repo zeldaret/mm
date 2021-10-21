@@ -1403,7 +1403,25 @@ void Actor_UpdateBgCheckInfo(GlobalContext* globalCtx, Actor* actor, f32 wallChe
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B7E04.s")
+Gfx* func_800B7E04(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContext* gfxCtx, Gfx* dl, Hilite** hilite) {
+    LookAt* lookAt;
+    f32 correctedEyeX;
+
+    lookAt = GRAPH_ALLOC(gfxCtx, sizeof(LookAt));
+
+    correctedEyeX = (eye->x == object->x) && (eye->z == object->z) ? eye->x + 0.001f : eye->x;
+
+    *hilite = GRAPH_ALLOC(gfxCtx, sizeof(Hilite));
+
+    guLookAtHilite(&D_801ED8E0, lookAt, *hilite, correctedEyeX, eye->y, eye->z, object->x, object->y, object->z, 
+                    0.0f, 1.0f, 0.0f, lightDir->x, lightDir->y, lightDir->z, 
+                    lightDir->x, lightDir->y, lightDir->z, 0x10, 0x10);
+
+    gSPLookAt(dl++, lookAt);
+    gDPSetHilite1Tile(dl++, 1, *hilite, 0x10, 0x10);
+
+    return dl;
+}
 
 Hilite* func_800B7FE0(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContext* gfxCtx) {
     Hilite* sp2C;

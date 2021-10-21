@@ -790,7 +790,7 @@ void func_800B75A0(CollisionPoly* param_1, Vec3f* param_2, s16* param_3);
 s32 func_800B761C(Actor *actor, f32, s32);
 s32 func_800B7678(GlobalContext *globalCtx, Actor *actor, Vec3f *arg2, s32 arg3);
 void Actor_UpdateBgCheckInfo(GlobalContext* globalCtx, Actor* actor, f32 wallCheckHeight, f32 wallCheckRadius, f32 ceilingCheckHeight, u32 flags);
-Gfx* func_800B7E04(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContext* gfxCtx, Gfx* dl, Hilite** arg5);
+Gfx* func_800B7E04(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContext* gfxCtx, Gfx* dl, Hilite** hilite);
 Hilite* func_800B7FE0(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContext* gfxCtx);
 Hilite* func_800B8018(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContext* gfxCtx);
 void func_800B8050(Actor* actor, GlobalContext* globalCtx, s32 iParm3);
