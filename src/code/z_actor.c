@@ -3094,7 +3094,27 @@ void Enemy_StartFinishingBlow(GlobalContext* globalCtx, Actor* actor) {
     Audio_PlaySoundAtPosition(globalCtx, &actor->world.pos, 20, NA_SE_EN_LAST_DAMAGE);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BBAC0.s")
+// blinking routine
+s16 func_800BBAC0(s16 arg0[2], s16 arg1, s16 arg2, s16 arg3) {
+    s16 temp_v1;
+    s32 temp_v0;
+    s16 phi_v0;
+    s32 phi_v1;
+
+    if (DECR(arg0[1]) == 0) {
+        arg0[1] = Rand_S16Offset(arg1, arg2);
+    }
+
+    if (arg0[1] - arg3 > 0) {
+        arg0[0] = 0;
+    } else if ((arg0[1] - arg3 >= -1) || (arg0[1] < 2)) {
+        arg0[0] = 1;
+    } else {
+        arg0[0] = 2;
+    }
+
+    return arg0[0];
+}
 
 // blinking routine
 s16 func_800BBB74(s16 arg0[2], s16 arg1, s16 arg2, s16 arg3) {
