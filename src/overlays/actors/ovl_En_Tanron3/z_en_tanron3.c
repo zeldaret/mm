@@ -157,9 +157,20 @@ void func_80BB9288(EnTanron3* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron3/EnTanron3_Update.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron3/func_80BB95FC.s")
+s32 func_80BB95FC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor) {
+    EnTanron3* this = (EnTanron3*)actor;
 
-s32 func_80BB95FC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor);
+    if (limbIndex == 1) {
+        rot->y += this->unk_25C;
+    }
+    if (limbIndex == 3) {
+        rot->y += this->unk_258;
+    }
+    if (limbIndex == 4) {
+        rot->y += this->unk_25A;
+    }
+    return 0;
+}
 
 void EnTanron3_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnTanron3* this = THIS;

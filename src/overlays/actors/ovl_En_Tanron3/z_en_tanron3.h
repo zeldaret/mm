@@ -30,7 +30,10 @@ typedef struct EnTanron3 {
     /* 0x244 */ f32 unk_244;
     /* 0x248 */ char unk_248[0x8];
     /* 0x250 */ s32 unk_250;
-    /* 0x254 */ char unk_254[0xC];
+    /* 0x254 */ char unk_254[0x4];
+    /* 0x258 */ s16 unk_258;
+    /* 0x25A */ s16 unk_25A;
+    /* 0x25C */ s16 unk_25C;
     /* 0x260 */ ColliderCylinder collider1;
     /* 0x2AC */ ColliderCylinder collider2;
     /* 0x2F8 */ EnTanron3ActionFunc actionFunc;
