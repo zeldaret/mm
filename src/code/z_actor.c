@@ -1979,7 +1979,7 @@ void func_800b9170(GlobalContext* globalCtx, ActorContext* actorCtx, ActorEntry*
 
     TitleCard_ContextInit(globalCtx, &actorCtx->titleCtxt);
     func_800B6468(globalCtx);
-    actorCtx->unk250 = 0;
+    actorCtx->absoluteSpace = 0;
     func_800BB2D0(actorCtx, actorEntry, globalCtx);
     Actor_TargetContextInit(&actorCtx->targetContext, actorCtx->actorList[2].first, globalCtx);
     func_800B9120(actorCtx);
@@ -2591,9 +2591,9 @@ void func_800BA9B4(ActorContext* arg0, GlobalContext* arg1) {
         Actor_Delete(arg0, arg0->actorList[ACTORCAT_PLAYER].first, arg1);
     }
 
-    if (arg0->unk250 != NULL) {
-        zelda_free(arg0->unk250);
-        arg0->unk250 = NULL;
+    if (arg0->absoluteSpace != NULL) {
+        zelda_free(arg0->absoluteSpace);
+        arg0->absoluteSpace = NULL;
     }
 
     func_80169D40(arg1);
@@ -2684,30 +2684,30 @@ Actor* Actor_Spawn(ActorContext* actorCtx, GlobalContext* globalCtx, s16 actorId
 }
 
 ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
-    size_t temp_a2;
+    size_t overlaySize;
     ActorOverlay* overlayEntry = &gActorOverlayTable[index];
     ActorInit* actorInit;
 
-    temp_a2 = (uintptr_t)overlayEntry->vramEnd - (uintptr_t)overlayEntry->vramStart;
+    overlaySize = (uintptr_t)overlayEntry->vramEnd - (uintptr_t)overlayEntry->vramStart;
 
-    if (overlayEntry->vramStart == 0) {
+    if (overlayEntry->vramStart == NULL) {
         actorInit = overlayEntry->initInfo;
     } else {
         if (overlayEntry->loadedRamAddr == 0) {
-            if ((overlayEntry->allocType & 1) != 0) {
-                if (actorCtx->unk250 == 0) {
-                    actorCtx->unk250 = zelda_mallocR(SEGMENT_SIZE(ovl_Arrow_Fire));
+            if (overlayEntry->allocType & ALLOCTYPE_ABSOLUTE) {
+                if (actorCtx->absoluteSpace == NULL) {
+                    actorCtx->absoluteSpace = zelda_mallocR(AM_FIELD_SIZE);
                 }
-                gActorOverlayTable[index].loadedRamAddr = actorCtx->unk250;
+                gActorOverlayTable[index].loadedRamAddr = actorCtx->absoluteSpace;
             } else {
-                if ((overlayEntry->allocType & 2) != 0) {
-                    gActorOverlayTable[index].loadedRamAddr = zelda_mallocR(temp_a2);
+                if (overlayEntry->allocType & ALLOCTYPE_PERMANENT) {
+                    gActorOverlayTable[index].loadedRamAddr = zelda_mallocR(overlaySize);
                 } else {
-                    gActorOverlayTable[index].loadedRamAddr = zelda_malloc(temp_a2);
+                    gActorOverlayTable[index].loadedRamAddr = zelda_malloc(overlaySize);
                 }
             }
 
-            if (overlayEntry->loadedRamAddr == 0) {
+            if (overlayEntry->loadedRamAddr == NULL) {
                 return NULL;
             }
 
@@ -2864,7 +2864,7 @@ void Actor_SpawnTransitionActors(GlobalContext* globalCtx, ActorContext* actorCt
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_SpawnTransitionActors.s")
 #endif
 
-// spawn function
+// yet another spawn function
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BB2D0.s")
 
 Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, GlobalContext* globalCtx) {

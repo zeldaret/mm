@@ -1,5 +1,5 @@
-#ifndef _Z64ACTOR_H_
-#define _Z64ACTOR_H_
+#ifndef Z64ACTOR_H
+#define Z64ACTOR_H
 
 #include "PR/ultratypes.h"
 #include "z64math.h"
@@ -7,6 +7,9 @@
 #include "z64collision_check.h"
 #include "unk.h"
 
+// #define ACTOR_NUMBER_MAX 200
+// #define INVISIBLE_ACTOR_MAX 20
+#define AM_FIELD_SIZE SEGMENT_SIZE(ovl_Arrow_Fire)
 #define MASS_IMMOVABLE 0xFF // Cannot be pushed by OC collisions
 #define MASS_HEAVY 0xFE     // Can only be pushed by OC collisions with IMMOVABLE and HEAVY objects.
 
