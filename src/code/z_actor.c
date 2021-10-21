@@ -3244,7 +3244,46 @@ s32 func_800BC1B4(Actor* actor, Actor* arg1, f32 arg2, f32 arg3) {
     return 0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BC270.s")
+Actor* func_800BC270(GlobalContext* globalCtx, Actor* actor, f32 arg2, s32 arg3) {
+    Actor* phi_s0;
+
+    phi_s0 = globalCtx->actorCtx.actorList[ACTORCAT_ITEMACTION].first;
+    while (phi_s0 != NULL) {
+        if (((phi_s0->id == ACTOR_ARMS_HOOK) && (arg3 & 0x80))
+            || ((phi_s0->id == ACTOR_EN_BOOM) && (arg3 & 0x10))
+            || ((phi_s0->id == ACTOR_EN_ARROW) && ((func_800BC188(phi_s0->params) & arg3) != 0))) {
+            f32 phi_f0;
+
+            if ((phi_s0->speedXZ <= 0.0f) && (GET_PLAYER(globalCtx)->unk_D57 != 0)) {
+                if (phi_s0->id == ACTOR_ARMS_HOOK) {
+                    phi_f0 = 20.0f;
+                } else if (phi_s0->id == ACTOR_EN_BOOM) {
+                    phi_f0 = 12.0f;
+                } else {
+                    s32 temp_v0_3 = func_800BC188(phi_s0->params);
+
+                    if (temp_v0_3 == 1) {
+                        phi_f0 = 80.0f;
+                    } else if (temp_v0_3 == 0x10000) {
+                        phi_f0 = 60.0f;
+                    } else {
+                        phi_f0 = 150.0f;
+                    }
+                }
+            } else {
+                phi_f0 = phi_s0->speedXZ;
+            }
+
+            if (func_800BC1B4(actor, phi_s0, arg2, phi_f0) != 0) {
+                break;
+            }
+        }
+
+        phi_s0 = phi_s0->next;
+    }
+
+    return phi_s0;
+}
 
 Actor* func_800BC444(GlobalContext* globalCtx, Actor* actor, f32 arg2) {
     Actor* explosive = globalCtx->actorCtx.actorList[ACTORCAT_EXPLOSIVES].first;
