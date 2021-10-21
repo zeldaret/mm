@@ -892,7 +892,7 @@ s32 func_800BC188(s32 index);
 Actor* func_800BC270(GlobalContext* globalCtx, Actor* actor, f32 arg2, UNK_TYPE4 arg3);
 Actor* func_800BC444(GlobalContext* globalCtx, Actor* actor, f32 arg2);
 // void func_800BC4EC(void);
-// void func_800BC5B8(void);
+s32 func_800BC5B8(GameState* gameState, Actor* actor);
 s32 func_800BC5EC(GlobalContext* globalCtx, Actor* actor);
 void func_800BC620(Vec3f* arg0, Vec3f* arg1, u8 arg2, GlobalContext* globalCtx);
 // void func_800BC770(void);

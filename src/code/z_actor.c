@@ -2967,9 +2967,35 @@ Actor* func_800BC444(GlobalContext* globalCtx, Actor* actor, f32 arg2) {
     return explosive;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BC4EC.s")
+s16 func_800BC4EC(Actor* arg0, GlobalContext* arg1, f32 arg2, s16 arg3) {
+    s16 temp_v1;
+    u16 sp44;
+    f32 sp40;
+    f32 temp_f0;
+    Vec3f sp30;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BC5B8.s")
+    Math_Vec3f_Copy(&sp30, &arg0->world.pos);
+    sp44 = arg0->bgCheckFlags;
+    sp40 = Math_SinS(arg3) * arg2;
+    temp_f0 = Math_CosS(arg3);
+    arg0->world.pos.x += sp40;
+    arg0->world.pos.z += temp_f0 * arg2;
+    Actor_UpdateBgCheckInfo(arg1, arg0, 0.0f, 0.0f, 0.0f, 4);
+    Math_Vec3f_Copy(&arg0->world.pos, &sp30);
+    temp_v1 = (arg0->bgCheckFlags & 1);
+    arg0->bgCheckFlags = sp44;
+
+    return temp_v1;
+}
+
+s32 func_800BC5B8(GameState* gameState, Actor* actor) {
+    Player* player = GET_PLAYER(gameState);
+
+    if ((player->stateFlags3 & 0x80000000) && (actor->isTargeted != 0)) {
+        return 1;
+    }
+    return 0;
+}
 
 s32 func_800BC5EC(GlobalContext* globalCtx, Actor* actor) {
     Player* player = GET_PLAYER(globalCtx);
