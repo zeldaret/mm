@@ -1447,9 +1447,43 @@ Hilite* func_800B8018(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContex
     return sp2C;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8050.s")
+void func_800B8050(Actor* actor, GlobalContext* globalCtx, s32 flag) {
+    Hilite* hilite = func_800BCBF4(&actor->world.pos, globalCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8118.s")
+    if (flag != 0) {
+        Gfx* displayListHead;
+        Gfx* displayList = GRAPH_ALLOC(globalCtx->state.gfxCtx, 2 * sizeof(Gfx));
+
+        displayListHead = displayList;
+
+        OPEN_DISPS(globalCtx->state.gfxCtx);
+
+        gDPSetHilite1Tile(displayListHead++, 1, hilite, 0x10, 0x10);
+        gSPEndDisplayList(displayListHead);
+        gSPSegment(POLY_OPA_DISP++, 0x07, displayList);
+
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
+    }
+}
+
+void func_800B8118(Actor* actor, GlobalContext* globalCtx, s32 flag) {
+    Hilite* hilite = func_800BCC68(&actor->world.pos, globalCtx);
+
+    if (flag != 0) {
+        Gfx* displayListHead;
+        Gfx* displayList = GRAPH_ALLOC(globalCtx->state.gfxCtx, 2 * sizeof(Gfx));
+
+        displayListHead = displayList;
+
+        OPEN_DISPS(globalCtx->state.gfxCtx);
+
+        gDPSetHilite1Tile(displayListHead++, 1, hilite, 0x10, 0x10);
+        gSPEndDisplayList(displayListHead);
+        gSPSegment(POLY_XLU_DISP++, 0x07, displayList);
+
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
+    }
+}
 
 PosRot* Actor_GetFocus(PosRot* dest, Actor* actor) {
     *dest = actor->focus;
@@ -3017,23 +3051,24 @@ void func_800BCB70(Actor* actor, u16 arg1, u16 arg2, u16 arg3, u16 arg4) {
     actor->colorFilterTimer = arg4;
 }
 
-void func_800BCBF4(Vec3f *arg0, GlobalContext *globalCtx) {
-    Vec3f sp1C;
+Hilite* func_800BCBF4(Vec3f *arg0, GlobalContext *globalCtx) {
+    Vec3f lightDir;
 
-    sp1C.x = globalCtx->envCtx.unk_28.params.dir.x;
-    sp1C.y = globalCtx->envCtx.unk_28.params.dir.y;
-    sp1C.z = globalCtx->envCtx.unk_28.params.dir.z;
-    func_800B7FE0(arg0, &globalCtx->view.eye, &sp1C, globalCtx->state.gfxCtx);
+    // lightDir.x = globalCtx->envCtx.dirLight1.params.dir.x;
+    lightDir.x = globalCtx->envCtx.unk_28.params.dir.x;
+    lightDir.y = globalCtx->envCtx.unk_28.params.dir.y;
+    lightDir.z = globalCtx->envCtx.unk_28.params.dir.z;
+
+    return func_800B7FE0(arg0, &globalCtx->view.eye, &lightDir, globalCtx->state.gfxCtx);
 }
 
-
-void func_800BCC68(Vec3f *arg0, GlobalContext *globalCtx) {
+Hilite* func_800BCC68(Vec3f *arg0, GlobalContext *globalCtx) {
     Vec3f sp1C;
 
     sp1C.x = globalCtx->envCtx.unk_28.params.dir.x;
     sp1C.y = globalCtx->envCtx.unk_28.params.dir.y;
     sp1C.z = globalCtx->envCtx.unk_28.params.dir.z;
-    func_800B8018(arg0, &globalCtx->view.eye, &sp1C, globalCtx->state.gfxCtx);
+    return func_800B8018(arg0, &globalCtx->view.eye, &sp1C, globalCtx->state.gfxCtx);
 }
 
 #ifdef NON_MATCHING
