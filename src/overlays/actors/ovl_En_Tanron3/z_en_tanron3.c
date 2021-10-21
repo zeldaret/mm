@@ -153,7 +153,26 @@ void func_80BB9288(EnTanron3* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron3/func_80BB9308.s")
+void func_80BB9308(EnTanron3* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    if (player->actor.world.pos.y > 350.0f) {
+        if (this->collider1.base.atFlags & AT_HIT) {
+            this->collider1.base.atFlags &= ~AT_HIT;
+            func_800B8D50(globalCtx, NULL, 3.0f, Math_FAtan2F(-player->actor.world.pos.z, -player->actor.world.pos.x),
+                          5.0f, 0);
+        }
+    }
+    if (this->collider2.base.acFlags & AC_HIT) {
+        this->collider2.base.acFlags &= ~AC_HIT;
+        if (this->unk_20A == 0) {
+            this->unk_20A = 15;
+            this->unk_20C = 15;
+            func_80BB91D4(this, globalCtx);
+            D_80BB972C->unk_324 = 20;
+        }
+    }
+}
 
 void EnTanron3_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
