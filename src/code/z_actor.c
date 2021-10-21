@@ -2498,7 +2498,22 @@ void Actor_DrawAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_DrawAll.s")
 #endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BA6FC.s")
+void func_800BA6FC(GlobalContext* globalCtx, ActorContext* actorCtx) {
+    Actor* actor;
+    s32 i;
+
+    for (i = 0;i != ARRAY_COUNT(actorCtx->actorList); i++) {
+        actor = actorCtx->actorList[i].first;
+
+        while (actor != NULL) {
+            if (!Object_IsLoaded(&globalCtx->objectCtx, actor->objBankIndex)) {
+                Actor_MarkForDeath(actor);
+            }
+
+            actor = actor->next;
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BA798.s")
 
@@ -2967,23 +2982,23 @@ Actor* func_800BC444(GlobalContext* globalCtx, Actor* actor, f32 arg2) {
     return explosive;
 }
 
-s16 func_800BC4EC(Actor* arg0, GlobalContext* arg1, f32 arg2, s16 arg3) {
+s16 func_800BC4EC(Actor* actor, GlobalContext* globalCtx, f32 arg2, s16 arg3) {
     s16 temp_v1;
     u16 sp44;
     f32 sp40;
     f32 temp_f0;
     Vec3f sp30;
 
-    Math_Vec3f_Copy(&sp30, &arg0->world.pos);
-    sp44 = arg0->bgCheckFlags;
+    Math_Vec3f_Copy(&sp30, &actor->world.pos);
+    sp44 = actor->bgCheckFlags;
     sp40 = Math_SinS(arg3) * arg2;
     temp_f0 = Math_CosS(arg3);
-    arg0->world.pos.x += sp40;
-    arg0->world.pos.z += temp_f0 * arg2;
-    Actor_UpdateBgCheckInfo(arg1, arg0, 0.0f, 0.0f, 0.0f, 4);
-    Math_Vec3f_Copy(&arg0->world.pos, &sp30);
-    temp_v1 = (arg0->bgCheckFlags & 1);
-    arg0->bgCheckFlags = sp44;
+    actor->world.pos.x += sp40;
+    actor->world.pos.z += temp_f0 * arg2;
+    Actor_UpdateBgCheckInfo(globalCtx, actor, 0.0f, 0.0f, 0.0f, 4);
+    Math_Vec3f_Copy(&actor->world.pos, &sp30);
+    temp_v1 = (actor->bgCheckFlags & 1);
+    actor->bgCheckFlags = sp44;
 
     return temp_v1;
 }
