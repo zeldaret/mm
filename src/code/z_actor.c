@@ -820,7 +820,20 @@ void* func_800B6608(GlobalContext* globalCtx, s16 arg1) {
     return NULL;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B6680.s")
+void* func_800B6680(GlobalContext* globalCtx, s16 arg1) {
+    ActorContext_unk_20C* phi_v1 = globalCtx->actorCtx.unk_20C;
+    s32 i;
+
+    for (i = 0; i < ARRAY_COUNT(globalCtx->actorCtx.unk_20C); i++) {
+        if (arg1 == phi_v1->unk_0) {
+            return phi_v1->unk_4;
+        }
+
+        phi_v1++;
+    }
+
+    return NULL;
+}
 
 void Actor_MarkForDeath(Actor* actor) {
     actor->draw = NULL;

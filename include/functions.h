@@ -734,7 +734,7 @@ s32 func_800B648C(GlobalContext* globalCtx, s32 arg1, s32 arg2, f32 arg3, Vec3f*
 f32 func_800B64FC(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2, u32* arg3);
 void* func_800B6584(GlobalContext* globalCtx, s16 arg1, void* arg2, size_t arg3);
 void* func_800B6608(GlobalContext* globalCtx, s16 arg1);
-// void func_800B6680(void);
+void* func_800B6680(GlobalContext* globalCtx, s16 arg1);
 void Actor_MarkForDeath(Actor* actor);
 void Actor_SetWorldToHome(Actor* actor);
 void Actor_SetFocus(Actor* actor, f32 height);
