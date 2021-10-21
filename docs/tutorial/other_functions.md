@@ -411,7 +411,7 @@ And now we've run out of functions. Time for `Update`.
 
 ## Update
 
-Update runs every frame and usually is responsible for . A lot of subsidiary functions are carried out by one of the action functions we have already decomped; `Update` almost always runs the `actionFunc`.
+Update runs every frame and usually is responsible for the actor's common logic updates: for example, updating timers, blinking, updating collision, running the `actionFunc`, and so on, either directly or through other functions it calls. A lot of subsidiary functions that are not common to every state (e.g. updating position, or the text when talking, etc.)  are carried out by one of the action functions we have already decomped.
 
 Change the prototype to `EnRecepgirl* this`, remake the context and run mips2c:
 ```C

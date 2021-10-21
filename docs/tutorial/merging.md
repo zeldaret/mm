@@ -33,7 +33,7 @@ endseg
 
 ### Non-matchings
 
-If you can't match a function even with everyone'shelp in the `mm-decomp-help` discord channel, don't worry overlong about it. Hopefully you can get it to do the same thing as the original (non-matching), and then you set it up to use the original asm for the matching build, and your code for the non-matching. This looks like
+If you can't match a function even with everyone's help in the `mm-decomp-help` discord channel, don't worry overlong about it. Hopefully you can get it to do the same thing as the original (non-matching), and then you set it up to use the original asm for the matching build, and your code for the non-matching. This looks like
 
 ```c
 #ifdef NON_MATCHING
