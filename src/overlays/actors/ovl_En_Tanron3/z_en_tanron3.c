@@ -113,7 +113,7 @@ void func_80BB897C(EnTanron3* this, GlobalContext* globalCtx) {
     SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_0600DAAC, -10.0f);
     this->unk_234 = 0;
     this->unk_238 = 5;
-    this->unk_204 = 0x32;
+    this->unk_204[0] = 50;
     this->actor.speedXZ = 5.0f;
     this->unk_240 = 0.5f;
     this->unk_228 = randPlusMinusPoint5Scaled(500.0f);
@@ -137,14 +137,14 @@ void func_80BB91D4(EnTanron3* this, GlobalContext* globalCtx) {
     zDistance = this->actor.world.pos.z - player->actor.world.pos.z;
     this->actor.world.rot.x = Math_FAtan2F(sqrtf(SQ(xDistance) + SQ(zDistance)), -yDistance);
     this->actor.world.rot.y = Math_FAtan2F(zDistance, xDistance);
-    this->unk_204 = 6;
+    this->unk_204[0] = 6;
     this->actor.speedXZ = 10.0f;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_KONB_MINI_DEAD);
 }
 
 void func_80BB9288(EnTanron3* this, GlobalContext* globalCtx) {
     Actor_SetVelocityAndMoveXYRotationReverse(&this->actor);
-    if (this->unk_204 == 0) {
+    if (this->unk_204[0] == 0) {
         func_80BB87D4(this, globalCtx);
         Actor_MarkForDeath(&this->actor);
         if (Rand_ZeroOne() < 0.3f) {
@@ -155,7 +155,46 @@ void func_80BB9288(EnTanron3* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron3/func_80BB9308.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron3/EnTanron3_Update.s")
+void EnTanron3_Update(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    EnTanron3* this = THIS;
+    s16 i;
+    Vec3f sp38;
+
+    if (KREG(63) == 0) {
+        this->unk_200 += 1;
+        for (i = 0; i < 3; i++) {
+            if (this->unk_204[i] != 0) {
+                this->unk_204[i]--;
+            }
+        }
+        if (this->unk_20A != 0) {
+            this->unk_20A--;
+        }
+        if (this->unk_20C != 0) {
+            this->unk_20C--;
+        }
+        this->actionFunc(this, globalCtx);
+        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, 10.0f, 20.0f, 5);
+        if (((this->actor.prevPos.y < this->unk_244) && (this->unk_244 <= this->actor.world.pos.y)) ||
+            ((this->actor.prevPos.y > this->unk_244) && (this->unk_244 >= this->actor.world.pos.y))) {
+            sp38.x = this->actor.world.pos.x;
+            sp38.y = this->unk_244 + 10.0f;
+            sp38.z = this->actor.world.pos.z;
+            EffectSsGSplash_Spawn(globalCtx, &sp38, NULL, NULL, 1, 500);
+            Audio_PlayActorSound2(&this->actor, NA_SE_EV_OUT_OF_WATER);
+        }
+    }
+    func_80BB9308(this, globalCtx);
+    Collider_UpdateCylinder(&this->actor, &this->collider1);
+    Collider_UpdateCylinder(&this->actor, &this->collider2);
+    CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
+    if (((s8)D_80BB972C->actor.colChkInfo.health <= 0) && (this->actionFunc != func_80BB9288)) {
+        func_80BB91D4(this, globalCtx);
+        this->unk_204[0] = 0;
+    }
+}
 
 s32 func_80BB95FC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor) {
     EnTanron3* this = (EnTanron3*)actor;
