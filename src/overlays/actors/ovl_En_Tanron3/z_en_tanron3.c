@@ -142,7 +142,16 @@ void func_80BB91D4(EnTanron3* this, GlobalContext* globalCtx) {
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_KONB_MINI_DEAD);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron3/func_80BB9288.s")
+void func_80BB9288(EnTanron3* this, GlobalContext* globalCtx) {
+    Actor_SetVelocityAndMoveXYRotationReverse(&this->actor);
+    if (this->unk_204 == 0) {
+        func_80BB87D4(this, globalCtx);
+        Actor_MarkForDeath(&this->actor);
+        if (Rand_ZeroOne() < 0.3f) {
+            Item_DropCollectibleRandom(globalCtx, NULL, &this->actor.world.pos, 0x60);
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron3/func_80BB9308.s")
 
