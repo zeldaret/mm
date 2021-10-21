@@ -2865,7 +2865,34 @@ void Actor_SpawnTransitionActors(GlobalContext* globalCtx, ActorContext* actorCt
 #endif
 
 // yet another spawn function
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BB2D0.s")
+Actor* func_800BB2D0(ActorContext* actorCtx, ActorEntry* actorEntry, GameState* gameState) {
+    s16 rotX = (actorEntry->rot.x >> 7) & 0x1FF;
+    s16 rotY = (actorEntry->rot.y >> 7) & 0x1FF;
+    s16 rotZ = (actorEntry->rot.z >> 7) & 0x1FF;
+
+    if (!(actorEntry->id & 0x8000)) {
+        rotY *= 0x10000 / 360.0f;
+    } else if (rotY > 180) {
+        rotY -= 360;
+    }
+
+    if (!(actorEntry->id & 0x4000)) {
+        rotX *= 0x10000 / 360.0f;
+    } else if (rotX > 180) {
+        rotX -= 360;
+    }
+
+    if (!(actorEntry->id & 0x2000)) {
+        rotZ *= 0x10000 / 360.0f;
+    } else if (rotZ > 180) {
+        rotZ -= 360;
+    }
+
+    return Actor_SpawnAsChildAndCutscene(actorCtx, (GlobalContext* ) gameState, actorEntry->id & 0x1FFF,
+                                         actorEntry->pos.x, actorEntry->pos.y, actorEntry->pos.z,
+                                         rotX, rotY, rotZ, actorEntry->params & 0xFFFF, actorEntry->rot.y & 0x7F,
+                                         ((actorEntry->rot.x & 7) << 7) | (actorEntry->rot.z & 0x7F), NULL);
+}
 
 Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, GlobalContext* globalCtx) {
     s32 pad;
