@@ -78,9 +78,9 @@ static ColliderCylinderInit D_80BB977C = {
     { 20, 20, -10, { 0, 0, 0 } },
 };
 
-static s32 D_80BB97A8 = 0x643737FF;
+static Color_RGBA8 D_80BB97A8 = { 100, 55, 55, 255 };
 
-static s32 D_80BB97AC = 0x320A0AFF;
+static Color_RGBA8 D_80BB97AC = { 50, 10, 10, 255 };
 
 extern FlexSkeletonHeader D_0600DA20;
 extern AnimationHeader D_0600DAAC;
@@ -106,7 +106,22 @@ void EnTanron3_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     D_80BB972C->unk_252--;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron3/func_80BB87D4.s")
+void func_80BB87D4(EnTanron3* this, GlobalContext* globalCtx) {
+    s32 i;
+    Vec3f sp98;
+    Vec3f sp8C;
+
+    for (i = 0; i < 20; i++) {
+        SysMatrix_InsertYRotation_f(Rand_ZeroFloat(6.2831855f), 0);
+        SysMatrix_RotateStateAroundXAxis(Rand_ZeroFloat(6.2831855f));
+        SysMatrix_GetStateTranslationAndScaledZ(Rand_ZeroFloat(3.0f) + 2.0f, &sp98);
+        sp8C.x = sp98.x * -0.05f;
+        sp8C.y = sp98.y * -0.05f;
+        sp8C.z = sp98.z * -0.05f;
+        EffectSsDtBubble_SpawnCustomColor(globalCtx, &this->actor.world.pos, &sp98, &sp8C, &D_80BB97A8, &D_80BB97AC,
+                                          Rand_ZeroFloat(30.0f) + 70.0f, Rand_ZeroFloat(5.0f) + 15.0f, 0);
+    }
+}
 
 void func_80BB897C(EnTanron3* this, GlobalContext* globalCtx) {
     this->actionFunc = func_80BB8A48;
