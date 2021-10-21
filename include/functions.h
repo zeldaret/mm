@@ -878,7 +878,7 @@ Actor* func_800BB2D0(ActorContext* actorCtx, ActorEntry* actorEntry, GameState* 
 Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, GlobalContext* globalCtx);
 // void func_800BB59C(void);
 void func_800BB604(GlobalContext* globalCtx, ActorContext* actorCtx, Player* player, UNK_TYPE);
-void func_800BB8EC(GlobalContext* globalCtx, ActorContext* actorCtx, Actor*, s32*, Player* player);
+//void func_800BB8EC(GlobalContext* globalCtx, ActorContext* actorCtx, Actor*, s32*, Player* player);
 void Enemy_StartFinishingBlow(GlobalContext* globalCtx, Actor* actor);
 // void func_800BBAC0(void);
 s16 func_800BBB74(s16 arg0[2], s16 arg1, s16 arg2, s16 arg3);
@@ -1018,7 +1018,7 @@ s32 func_800C4F84(CollisionContext* colCtx, f32* outY, Vec3f* pos, f32 checkHeig
                   CollisionPoly** outPoly, s32* outBgId, Actor* actor);
 // void func_800C4FD4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
 // void func_800C5464(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
-// void func_800C54AC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
+s32 func_800C54AC(CollisionContext* colCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** outPoly, s32 chkWall, s32 chkFloor, s32 chkCeil, s32 chkOneFace, s32* bgId);
 // void func_800C5538(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
 s32 func_800C55C4(CollisionContext* colCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, CollisionPoly** arg4, u32 arg5,
                   u32 arg6, u32 arg7, u32 arg8, u32* arg9);
@@ -1116,7 +1116,7 @@ u32 func_800C9C9C(CollisionContext* colCtx, CollisionPoly* polygon, s32 index);
 u32 func_800C9CC4(CollisionContext* colCtx, CollisionPoly* polygon, s32 index);
 u32 func_800C9CEC(CollisionContext* colCtx, CollisionPoly* polygon, s32 index);
 // void func_800C9D14(void);
-// void func_800C9D50(void);
+s32 func_800C9D50(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 u32 func_800C9D8C(CollisionContext* param_1, CollisionPoly* param_2, s32 param_3);
 // void func_800C9DDC(void);
 u32 func_800C9E18(CollisionContext* colCtx, CollisionPoly* polygon, s32 index);

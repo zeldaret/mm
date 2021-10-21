@@ -3,14 +3,27 @@
  * Description: 
  */
 
+//#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
 
 // bss
-extern FaultClient D_801ED8A0;
-//
-extern s32 D_801ED920;
+extern FaultClient D_801ED8A0; // 2 funcs
+extern CollisionPoly* D_801ED8B0; // 1 func
+extern s32 D_801ED8B4; // 2 funcs
+extern Actor* D_801ED8B8; // 2 funcs
+extern Actor* D_801ED8BC; // 2 funcs
+extern Actor* D_801ED8C0; // 2 funcs
+extern Actor* D_801ED8C4; // 2 funcs
+extern f32 D_801ED8C8; // 2 funcs
+extern f32 D_801ED8CC; // 2 funcs
+extern f32 D_801ED8D0; // 2 funcs
+extern s32 D_801ED8D4; // 2 funcs
+extern s32 D_801ED8D8; // 2 funcs
+extern s16 D_801ED8DC; // 2 funcs
+extern Mtx D_801ED8E0; // 1 func
+extern s32 D_801ED920; // 2 funcs. 1 out of z_actor
 
 void Actor_PrintLists(ActorContext* actorCtx) {
     ActorListEntry* actorList = &actorCtx->actorList[0];
@@ -2940,13 +2953,141 @@ s32 func_800BB59C(GlobalContext* globalCtx, Actor* actor) {
     return (sp1E > -20) && (sp1E < gScreenWidth + 20) && (sp1C > -160) && (sp1C < gScreenHeight + 160);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BB604.s")
+#ifdef NON_EQUIVALENT
+void func_800BB604(GlobalContext* globalCtx, ActorContext* actorCtx, Player* player, s32 actorCategory) {
+    Actor* sp8C;
+    CollisionPoly* sp80;
+    s32 sp7C;
+    Vec3f sp70;
+    f32 temp_f0_2;
+    Actor* phi_s0;
+    s32 phi_s2;
+    s32 phi_s2_2;
 
-UNK_TYPE1 D_801AED8C[] = {
-    0x09, 0x05, 0x01, 0x03, 0x04, 0x07, 0x0B, 0x00, 0x06, 0x08, 0x0A, 0x00,
+    phi_s0 = actorCtx->actorList[actorCategory].first;
+    sp8C = player->unk_730;
+    while (phi_s0 != 0) {
+        if ((phi_s0->update != 0) && (phi_s0 != &player->actor)) {
+            if ((phi_s0->flags & 0x40000001) != 0) {
+                if ((actorCategory == ACTORCAT_ENEMY) && ((phi_s0->flags & 5) == 5)) {
+                    if ((phi_s0->xyzDistToPlayerSq < SQ(500.0f)) && (phi_s0->xyzDistToPlayerSq < D_801ED8CC)) {
+                        actorCtx->targetContext.unk90 = phi_s0;
+                        D_801ED8CC = phi_s0->xyzDistToPlayerSq;
+                    }
+                }
+
+                if ((phi_s0 != sp8C) || (phi_s0->flags & 0x80000)) {
+                    temp_f0_2 = func_800B82EC(phi_s0, player, D_801ED8DC);
+                    phi_s2 = (phi_s0->flags & 1) != 0;
+                    if (phi_s2 != 0) {
+                        //phi_s2 = 0;
+                        //if (temp_f0_2 < D_801ED8C8) {
+                        //    phi_s2 = 1;
+                        //}
+                        phi_s2 = temp_f0_2 < D_801ED8C8 ? 1 : 0;
+                    }
+                    phi_s2_2 = (phi_s0->flags & 0x40000000) != 0;
+                    if (phi_s2_2) {
+                        //phi_s2_2 = 0;
+                        //if (temp_f0_2 < D_801ED8D0) {
+                        //    phi_s2_2 = 1;
+                        //}
+                        phi_s2_2 = temp_f0_2 < D_801ED8D0;
+                    }
+
+                    if (((phi_s2 != 0) || (phi_s2_2 != 0)) && (func_800B83BC(phi_s0, temp_f0_2) != 0)) {
+                        if (func_800BB59C(globalCtx, phi_s0)) {
+                            if (((func_800C54AC(&globalCtx->colCtx, &player->actor.focus.pos, &phi_s0->focus.pos, &sp70, &sp80, 1, 1, 1, 1, &sp7C) == 0) || (func_800C9D50(&globalCtx->colCtx, sp80, sp7C) != 0))) {
+                                if (phi_s0->targetPriority != 0) {
+                                    if ((phi_s2 != 0) && (phi_s0->targetPriority < D_801ED8D4)) {
+                                        D_801ED8BC = phi_s0;
+                                        D_801ED8D4 = phi_s0->targetPriority;
+                                    }
+                                    if ((phi_s2_2 != 0) && (phi_s0->targetPriority < D_801ED8D8)) {
+                                        D_801ED8C4 = phi_s0;
+                                        D_801ED8D8 = phi_s0->targetPriority;
+                                    }
+                                } else {
+                                    if (phi_s2 != 0) {
+                                        D_801ED8B8 = phi_s0;
+                                        D_801ED8C8 = temp_f0_2;
+                                    }
+                                    if (phi_s2_2 != 0) {
+                                        D_801ED8C0 = phi_s0;
+                                        D_801ED8D0 = temp_f0_2;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        phi_s0 = phi_s0->next;
+    }
+}
+#else
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BB604.s")
+#endif
+
+u8 D_801AED8C[] = {
+    ACTORCAT_BOSS,  ACTORCAT_ENEMY,  ACTORCAT_BG,   ACTORCAT_EXPLOSIVES, ACTORCAT_NPC,  ACTORCAT_ITEMACTION,
+    ACTORCAT_CHEST, ACTORCAT_SWITCH, ACTORCAT_PROP, ACTORCAT_MISC,       ACTORCAT_DOOR, ACTORCAT_SWITCH,
 };
 
+#if 0
+void func_800BB8EC(GlobalContext* globalCtx, ActorContext* actorCtx, Actor** arg2, Actor** arg3, Player* player) {
+    Actor* temp_v0;
+    Actor* temp_v0_2;
+    u8* phi_s1;
+    s32 phi_s0;
+    s8* phi_s1_2;
+    s32 phi_s0_2;
+
+    D_801ED8C4 = NULL;
+    D_801ED8C0 = NULL;
+    D_801ED8BC = NULL;
+    D_801ED8B8 = NULL;
+
+    D_801ED8C8 = D_801ED8D0 = D_801ED8CC = FLT_MAX;
+    D_801ED8D8 = 0x7FFFFFFF;
+    D_801ED8D4 = 0x7FFFFFFF;
+
+    actorCtx->targetContext.unk90 = NULL;
+    D_801ED8DC = player->actor.shape.rot.y;
+
+    phi_s1 = D_801AED8C;
+    phi_s0 = 0;
+
+    while (phi_s0 < 3) {
+        func_800BB604(globalCtx, actorCtx, player, *phi_s1);
+        phi_s0 = phi_s0 + 1;
+        phi_s1 = phi_s1 + 1;
+    }
+
+    if ((D_801ED8B8 == 0)) {
+        while (phi_s0 < 0xC) {
+            func_800BB604(globalCtx, actorCtx, player, *phi_s1);
+            phi_s0 = phi_s0 + 1;
+            phi_s1 += 1;
+        }
+    }
+
+    if (D_801ED8B8 == 0) {
+        *arg2 = (Actor* ) D_801ED8BC;
+    } else {
+        *arg2 = D_801ED8B8;
+    }
+
+    if (D_801ED8C0 == 0) {
+        *arg3 = (s32) D_801ED8C4;
+        return;
+    }
+    *arg3 = (s32) D_801ED8C0;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BB8EC.s")
+#endif
 
 void Enemy_StartFinishingBlow(GlobalContext* globalCtx, Actor* actor) {
     globalCtx->actorCtx.freezeFlashTimer = 5;
