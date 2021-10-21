@@ -1,18 +1,22 @@
 # VSCode
 
-A lot of people on this project use VSCode as their coding environment, and there are a number of useful plugins available to make work more efficient:
+A lot of people on this project use VSCode as their coding environment. 
 
-- c/c++ intellisense
-- clang-format
-- hexinspector (hover on numbers for float and other info)
-- numbermonger (hex to decimal and vice versa)
+## Extensions
+
+There are a number of useful extensions available to make work more efficient:
+
+- C/C++ IntelliSense
+- Clang-Format
+- HexInspector (hover on numbers for float and other info)
+- NumberMonger (convert hex to decimal and vice versa)
 - ~~bracket pair colorizer 2~~ (now obsolete due to VSCode's built-in bracket colouring)
-- better mips support
+- Better MIPS Support
 
 
 
 
-Useful stuff to know:
+## Useful stuff to know:
 
 - Ctrl + Alt + Up/Down (on Windows, on Linux it's Ctrl + Shift + Up/Down or Shift + Alt + Up/Down) gives multicursors across consecutive lines. If you want several cursors in a more diverse arrangement, middle clicking works, at least on Windows.
 - Alt + Up/Down moves lines up/down.
@@ -32,7 +36,7 @@ Many of VS Code's other shortcuts can be found on [its getting started page](htt
 
 ## C/C++ configuration
 
-Add the following to the `.vscode/c_cpp_properties.json` file to make VSCode better able to understand the structure of the repository.
+You can create a `.vscode/c_cpp_properties.json` file with `C/C++: Edit Configurations (JSON)` in the command box to customise how IntelliSense reads the repository (stuff like where to look for includes, flags, compiler defines, etc.) to make VSCode's IntelliSense plugin better able to understand the structure of the repository. This is a good default one to use for this project's repository:
 
 ```jsonc
 {
