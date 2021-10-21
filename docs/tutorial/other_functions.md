@@ -388,7 +388,7 @@ The yellow shows registers that don't match, the different colours on the regist
 ```
 3f0:    andi    t0,v0,0xff                        r  153 3f0:    andi    t1,v0,0xff
 ```
-somehow we skipped over `t0`. Where is this in the code? We have the line numbers down the middle, we havoe `--source` if you want to see the code explicitly, or you can do it the old-fashioned way, and work it out from nearby function calls. In this case, `func_80C10148` is run straight after, and the only place that is called is
+somehow we skipped over `t0`. Where is this in the code? The `153` in the middle is the line number in the C file (the `3f0`s are the offsets into the assembly file), we have `--source` if you want to see the code explicitly, or you can do it the old-fashioned way, and work it out from nearby function calls. In this case, `func_80C10148` is run straight after, and the only place that is called is
 ```C
     temp_v0_2 = func_80152498(&globalCtx->msgCtx);
     if (temp_v0_2 == 2) {
@@ -410,6 +410,8 @@ And now we've run out of functions. Time for `Update`.
 
 
 ## Update
+
+Update runs every frame and usually is responsible for . A lot of subsidiary functions are carried out by one of the action functions we have already decomped; `Update` almost always runs the `actionFunc`.
 
 Change the prototype to `EnRecepgirl* this`, remake the context and run mips2c:
 ```C
@@ -495,8 +497,20 @@ and this now matches.
 
 **N.B.** sometimes using an actual `GlobalContext* globalCtx` temp is required for matching: add it to your bag o' matching memes.
 
+### *Some remarks about the function stack
 
-4 functions to go...
+(Feel free to skip this if you'd rather finish the actor first.)
+
+The (function) stack is used to store variables. It has rather more space and is somewhat less volatile than registers (it still can't be used outside a function, except by a called function accessing its arguments). The stack a function sets up for itself to use is called its *stack frame* or *function frame* (or just *function stack* or *the stack*, although strictly speaking the frame itself is not a stack, since not just the top variable is accessed), and the function frames themselves form an (genuine) stack called the *call stack*. In MIPS this stack grows downwards, and its size is always a multiple of 0x8 (in case you want to put a 64-bit value on it, although almost no N64 game functions do this). The compiler uses the stack in a single function frame in the following way:
+
+| user-defined variables    |
+| compiler-defined varibles |
+| saved registers           |
+| argument registers/stack  |
+
+where sp is at the very bottom of this table, and the function that called the current function would have its frame above this one. We have seen a couple of aspects of this stack behaviour already: saving the function arguments onto it in [`EnRecepgirl_Destroy`](#destroy), and here, requiring an extre user stack variable to be the correct size.
+
+Anyway, back to EnRecepgirl. 4 functions to go...
 
 ## `func_80C100DC`
 

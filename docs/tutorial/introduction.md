@@ -55,7 +55,7 @@ which is intended to be as close to the original code as we can get just by look
 
 N.B. We are using only publicly available code. In particular, we are not looking at any of the recent Nintendo source code leaks.
 
-Progress of the project can be found at [https://zelda64.dev]. The long-term goal of this project is to obtain a complete compilable version of the code for every publicly released version of Majora's Mask (in the same way as the Ocarina of Time project and many other Zelda games). *We are not working on a PC Port, and this project will not be making one*, although the resulting code will be very useful if someone does intend to make such a port.
+Progress of the project can be found at [https://zelda64.dev]. The long-term goal of this project is to obtain a complete compilable version of the code for every publicly released version of Majora's Mask (in the same way as the Ocarina of Time project and many other Zelda games). *We are not working on a PC Port, and neithre this project nor the ZeldaRET organisation will not be making one*, although the resulting code will be very useful if someone does intend to make such a port.
 
 Most of the discussion on the project takes place on the Zelda Decompilation Discord (linked in the [README.md](../../README.md)). We are very welcoming to newcomers and are happy to help you with any problems you might have with the decompilation process.
 

@@ -488,7 +488,7 @@ Now let's start thinking about switches. A good indicator of a switch in goto-on
 because
 - there are multiple ifs that are simple numeric comparisons of the same argument
 - the goto blocks are in the same order as the ifs
-- there is one last goto at the end that triggers if none of the ifs does: this sounds an awwful lot like a `default`!
+- there is one last goto at the end that triggers if none of the ifs does: this sounds an awful lot like a `default`!
 
 So let us rewrite the entire second half as a switch:
 
