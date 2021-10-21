@@ -2545,7 +2545,31 @@ void func_800BA798(GlobalContext* globalCtx, ActorContext* actorCtx) {
 }
 
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BA8B8.s")
+void func_800BA8B8(GlobalContext* globalCtx, ActorContext* actorCtx) {
+    s32 i;
+
+    for (i = 0; i < ARRAY_COUNT(actorCtx->actorList); i++) {
+        Actor* actor = actorCtx->actorList[i].first;
+
+        while (actor != NULL) {
+            if ((actor->unk20 & actorCtx->unkC) == 0) {
+                func_80123590(globalCtx, actor);
+                if (!actor->isDrawn) {
+                    actor = Actor_Delete(actorCtx, actor, globalCtx);
+                } else {
+                    Actor_MarkForDeath(actor);
+                    Actor_Destroy(actor, globalCtx);
+                    actor = actor->next;
+                }
+            } else {
+                actor = actor->next;
+            }
+        }
+    }
+
+    CollisionCheck_ClearContext(globalCtx, &globalCtx->colChkCtx);
+    globalCtx->msgCtx.unk_12030 = 0;
+}
 
 void func_800BA9B4(ActorContext* arg0, GlobalContext* arg1) {
     s32 i;
