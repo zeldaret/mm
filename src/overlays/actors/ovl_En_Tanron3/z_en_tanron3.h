@@ -15,7 +15,9 @@ typedef struct EnTanron3 {
     /* 0x200 */ s16 unk_200;
     /* 0x202 */ char unk_202[0x2];
     /* 0x204 */ s16 unk_204;
-    /* 0x206 */ char unk_206[0x16];
+    /* 0x206 */ char unk_206[0x6];
+    /* 0x20C */ s16 unk_20C;
+    /* 0x20E */ char unk_20E[0xE];
     /* 0x21C */ Vec3f unk_21C;
     /* 0x228 */ f32 unk_228;
     /* 0x22C */ f32 unk_22C;

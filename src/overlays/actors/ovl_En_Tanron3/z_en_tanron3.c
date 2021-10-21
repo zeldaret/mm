@@ -159,4 +159,18 @@ void func_80BB9288(EnTanron3* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron3/func_80BB95FC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron3/EnTanron3_Draw.s")
+s32 func_80BB95FC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor);
+
+void EnTanron3_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    EnTanron3* this = THIS;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+    func_8012C28C(globalCtx->state.gfxCtx);
+    if ((this->unk_20C & 1) != 0) {
+        POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
+    }
+    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
+                     func_80BB95FC, NULL, &this->actor);
+    POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
