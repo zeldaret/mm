@@ -1987,7 +1987,39 @@ void func_800b9170(GlobalContext* globalCtx, ActorContext* actorCtx, ActorEntry*
     func_800B722C(globalCtx, (Player* ) actorCtx->actorList[2].first);
 }
 
+#ifdef NON_EQUIVALENT
+void func_800B9334(GlobalContext* globalCtx, ActorContext* actorCtx) {
+    ActorEntry* temp_s0;
+    s16 temp_fp;
+    s16 temp_v1;
+    s32 temp_s1;
+    s32 temp_v0;
+    ActorEntry* phi_s0;
+    s32 phi_v0;
+    s32 phi_s1;
+
+    if (globalCtx->numSetupActors > 0) {
+        phi_s0 = globalCtx->setupActorList;
+        temp_fp = actorCtx->unkC;
+        func_800B9120(actorCtx);
+        func_800BA8B8(globalCtx, &globalCtx->actorCtx);
+
+        for (phi_s1 = 0; phi_s1 < globalCtx->numSetupActors; phi_s1++) {
+            phi_v0 = ((phi_s0->rot.x & 7) << 7) | (phi_s0->rot.z & 0x7F);
+            if (phi_v0 == 0) {
+                phi_v0 = 0x3FF;
+            }
+            if (((phi_v0 & temp_fp) == 0) && ((actorCtx->unkC & phi_v0) != 0) && (((gSaveContext.eventInf[1] & 0x80) == 0) || ((phi_v0 & ((actorCtx->unkC * 2) & 0x2FF)) == 0) || ((phi_s0->id & 0x800) == 0))) {
+                func_800BB2D0(&globalCtx->actorCtx, phi_s0, globalCtx);
+            }
+            phi_s0++;
+        }
+        globalCtx->numSetupActors = -globalCtx->numSetupActors;
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B9334.s")
+#endif
 
 #ifdef NON_EQUIVALENT
 Actor* Actor_UpdateActor(s800B948C* params) {
