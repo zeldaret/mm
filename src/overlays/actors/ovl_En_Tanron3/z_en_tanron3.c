@@ -18,6 +18,7 @@ void EnTanron3_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80BB897C(EnTanron3* this, GlobalContext* globalCtx);
 void func_80BB8A48(EnTanron3* this, GlobalContext* globalCtx);
+void func_80BB9288(EnTanron3* this, GlobalContext* globalCtx);
 
 static s32 D_80BB9720[] = { 0x00000000, 0x00000000, 0x00000000 };
 
@@ -124,7 +125,22 @@ void func_80BB897C(EnTanron3* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron3/func_80BB8A48.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron3/func_80BB91D4.s")
+void func_80BB91D4(EnTanron3* this, GlobalContext* globalCtx) {
+    f32 xDistance;
+    f32 yDistance;
+    f32 zDistance;
+    Player* player = GET_PLAYER(globalCtx);
+
+    this->actionFunc = func_80BB9288;
+    xDistance = this->actor.world.pos.x - player->actor.world.pos.x;
+    yDistance = this->actor.world.pos.y - player->actor.world.pos.y + 30.0f;
+    zDistance = this->actor.world.pos.z - player->actor.world.pos.z;
+    this->actor.world.rot.x = Math_FAtan2F(sqrtf(SQ(xDistance) + SQ(zDistance)), -yDistance);
+    this->actor.world.rot.y = Math_FAtan2F(zDistance, xDistance);
+    this->unk_204 = 6;
+    this->actor.speedXZ = 10.0f;
+    Audio_PlayActorSound2(&this->actor, NA_SE_EN_KONB_MINI_DEAD);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron3/func_80BB9288.s")
 
