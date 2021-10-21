@@ -2515,7 +2515,35 @@ void func_800BA6FC(GlobalContext* globalCtx, ActorContext* actorCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BA798.s")
+void func_800BA798(GlobalContext* globalCtx, ActorContext* actorCtx) {
+    Actor* actor;
+    s32 i;
+
+    for (i = 0; i < ARRAY_COUNT(actorCtx->actorList); i++) {
+        actor = actorCtx->actorList[i].first;
+
+        while (actor != NULL) {
+            if ((actor->room >= 0) && (actor->room != globalCtx->roomCtx.currRoom.num) && (actor->room != globalCtx->roomCtx.prevRoom.num)) {
+                if (!actor->isDrawn) {
+                    actor = Actor_Delete(actorCtx, actor, globalCtx);
+                } else {
+                    Actor_MarkForDeath(actor);
+                    Actor_Destroy(actor, globalCtx);
+                    actor = actor->next;
+                }
+            } else {
+                actor = actor->next;
+            }
+        }
+    }
+
+    CollisionCheck_ClearContext(globalCtx, &globalCtx->colChkCtx);
+    actorCtx->clearedRoomsTemp = 0;
+    actorCtx->switchFlags[3] = 0;
+    actorCtx->collectibleFlags[3] = 0;
+    globalCtx->msgCtx.unk_12030 = 0;
+}
+
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BA8B8.s")
 

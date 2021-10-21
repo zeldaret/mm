@@ -967,7 +967,9 @@ typedef struct {
     /* 0x1202A */ u16 unk1202A;
     /* 0x1202C */ UNK_TYPE1 pad1202C[0x2];
     /* 0x1202E */ u16 unk1202E;
-    /* 0x12030 */ UNK_TYPE1 pad12030[0x14];
+    /* 0x12030 */ s16 unk_12030;
+    /* 0x12032 */ UNK_TYPE1 unk_12032[0x2];
+    /* 0x12034 */ UNK_TYPE1 pad12034[0x10];
     /* 0x12044 */ s16 unk12044;
     /* 0x12046 */ UNK_TYPE1 pad12046[0x24];
     /* 0x1206A */ s16 unk1206A;
