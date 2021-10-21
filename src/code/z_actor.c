@@ -2683,7 +2683,46 @@ Actor* Actor_Spawn(ActorContext* actorCtx, GlobalContext* globalCtx, s16 actorId
                                          0x3FF, NULL);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_LoadOverlay.s")
+ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
+    size_t temp_a2;
+    ActorOverlay* overlayEntry = &gActorOverlayTable[index];
+    ActorInit* actorInit;
+
+    temp_a2 = (uintptr_t)overlayEntry->vramEnd - (uintptr_t)overlayEntry->vramStart;
+
+    if (overlayEntry->vramStart == 0) {
+        actorInit = overlayEntry->initInfo;
+    } else {
+        if (overlayEntry->loadedRamAddr == 0) {
+            if ((overlayEntry->allocType & 1) != 0) {
+                if (actorCtx->unk250 == 0) {
+                    actorCtx->unk250 = zelda_mallocR(SEGMENT_SIZE(ovl_Arrow_Fire));
+                }
+                gActorOverlayTable[index].loadedRamAddr = actorCtx->unk250;
+            } else {
+                if ((overlayEntry->allocType & 2) != 0) {
+                    gActorOverlayTable[index].loadedRamAddr = zelda_mallocR(temp_a2);
+                } else {
+                    gActorOverlayTable[index].loadedRamAddr = zelda_malloc(temp_a2);
+                }
+            }
+
+            if (overlayEntry->loadedRamAddr == 0) {
+                return NULL;
+            }
+
+            Load2_LoadOverlay(overlayEntry->vromStart, overlayEntry->vromEnd, overlayEntry->vramStart, overlayEntry->vramEnd, overlayEntry->loadedRamAddr);
+            overlayEntry->numLoaded = 0;
+        }
+
+        actorInit = (void*)(u32)((overlayEntry->initInfo != NULL)
+                                     ? (void*)((u32)overlayEntry->initInfo -
+                                               (s32)((u32)overlayEntry->vramStart - (u32)overlayEntry->loadedRamAddr))
+                                     : NULL);
+    }
+
+    return actorInit;
+}
 
 #ifdef NON_MATCHING
 Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* globalCtx, s16 index, f32 x, f32 y, f32 z,
