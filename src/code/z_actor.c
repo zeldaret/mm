@@ -1670,7 +1670,6 @@ void func_800B874C(Actor* actor, GlobalContext* globalCtx, f32 arg2, f32 arg3) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B874C.s")
 #endif
 
-
 void func_800B8804(Actor* actor, GameState* gameState, f32 arg2) {
     func_800B874C(actor, gameState, arg2, 20.0f);
 }
@@ -1950,7 +1949,43 @@ void func_800B9120(ActorContext* actorCtx) {
 }
 
 // Actor_InitContext // OoT's func_800304DC
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800b9170.s")
+void func_800b9170(GlobalContext* globalCtx, ActorContext* actorCtx, ActorEntry* actorEntry) {
+    ActorOverlay* overlayEntry;
+    u32* temp_a2_2;
+    s32 i;
+
+    gSaveContext.weekEventReg[92] |= 0x80;
+    temp_a2_2 = gSaveContext.cycleSceneFlags[convert_scene_number_among_shared_scenes(globalCtx->sceneNum)];
+    bzero(actorCtx, sizeof(ActorContext));
+    ActorOverlayTable_Init();
+    Matrix_MtxFCopy(&globalCtx->mf_187FC, &D_801D1E20);
+    Matrix_MtxFCopy(&globalCtx->projectionMatrix, &D_801D1E20);
+
+    overlayEntry = gActorOverlayTable;
+    for (i = 0; i < ARRAY_COUNT(gActorOverlayTable); i++) {
+        overlayEntry->loadedRamAddr = NULL;
+        overlayEntry->numLoaded = 0;
+        overlayEntry++;
+    }
+
+    actorCtx->chestFlags = temp_a2_2[0];
+    actorCtx->switchFlags[0] = temp_a2_2[1];
+    actorCtx->switchFlags[1] = temp_a2_2[2];
+    if (globalCtx->sceneNum == 0x18) {
+        temp_a2_2 = gSaveContext.cycleSceneFlags[globalCtx->sceneNum];
+    }
+    actorCtx->collectibleFlags[0] = temp_a2_2[4];
+    actorCtx->clearedRooms = temp_a2_2[3];
+
+    TitleCard_ContextInit(globalCtx, &actorCtx->titleCtxt);
+    func_800B6468(globalCtx);
+    actorCtx->unk250 = 0;
+    func_800BB2D0(actorCtx, actorEntry, globalCtx);
+    Actor_TargetContextInit(&actorCtx->targetContext, actorCtx->actorList[2].first, globalCtx);
+    func_800B9120(actorCtx);
+    Fault_AddClient(&D_801ED8A0, (void (*)(void*, void*)) Actor_PrintLists, actorCtx, NULL);
+    func_800B722C(globalCtx, (Player* ) actorCtx->actorList[2].first);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B9334.s")
 

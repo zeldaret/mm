@@ -3060,7 +3060,7 @@ void func_801699D4(GlobalContext* globalCtx, s16 arg1, s16 arg2);
 void func_80169AFC(GlobalContext* globalCtx, s16 camId, s16 arg2);
 // void func_80169C64(void);
 // void func_80169C84(void);
-// void convert_scene_number_among_shared_scenes(void);
+s16 convert_scene_number_among_shared_scenes(s16);
 void func_80169D40(GlobalContext* globalCtx);
 void func_80169DCC(GlobalContext* globalCtx, s32 arg1, u16 arg2, s32 arg3, s32 arg4, Vec3f* arg5, s16 arg6);
 void func_80169E6C(GlobalContext* globalCtx, s32 param_1, s32 param_2);
