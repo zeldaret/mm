@@ -231,27 +231,27 @@ void func_8095A920(EnOwl* this, GlobalContext* globalCtx) {
 }
 
 s32 func_8095A978(EnOwl* this, GlobalContext* globalCtx, u16 textId, f32 targetDist, f32 arg4) {
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         return true;
     }
 
     this->actor.textId = textId;
     if (this->actor.xzDistToPlayer < targetDist) {
         this->actor.flags |= 0x10000;
-        func_800B8500(&this->actor, globalCtx, targetDist, arg4, 0);
+        func_800B8500(&this->actor, &globalCtx->state, targetDist, arg4, 0);
     }
 
     return false;
 }
 
 s32 func_8095A9FC(EnOwl* this, GlobalContext* globalCtx, u16 textId) {
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         return true;
     }
 
     this->actor.textId = textId;
     if (this->actor.xzDistToPlayer < 120.0f) {
-        func_800B8500(&this->actor, globalCtx, 350.0f, 1000.0f, 0);
+        func_800B8500(&this->actor, &globalCtx->state, 350.0f, 1000.0f, 0);
     }
 
     return false;
@@ -300,7 +300,7 @@ void func_8095ABA8(EnOwl* this) {
 }
 
 void func_8095ABF0(EnOwl* this, GlobalContext* globalCtx) {
-    if (func_800B867C(&this->actor, globalCtx)) {
+    if (func_800B867C(&this->actor, &globalCtx->state)) {
         Audio_QueueSeqCmd(0x110000FF);
         func_8095AAD0(this, globalCtx);
         this->actor.flags &= ~0x10000;
@@ -309,7 +309,7 @@ void func_8095ABF0(EnOwl* this, GlobalContext* globalCtx) {
 
 // Unused?
 void func_8095AC50(EnOwl* this, GlobalContext* globalCtx) {
-    if (func_800B867C(&this->actor, globalCtx)) {
+    if (func_800B867C(&this->actor, &globalCtx->state)) {
         Audio_QueueSeqCmd(0x110000FF);
         if ((this->unk_3DA % 64) == 0) {
             func_8095AAD0(this, globalCtx);
@@ -507,14 +507,14 @@ void func_8095B480(EnOwl* this, GlobalContext* globalCtx) {
 
 void func_8095B574(EnOwl* this, GlobalContext* globalCtx) {
     func_8095A920(this, globalCtx);
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_8095BA84;
         func_801A3098(0x45);
         this->actionFlags |= 0x40;
         this->unk_406 = 2;
     } else if (this->actor.xzDistToPlayer < 200.0f) {
         this->actor.flags |= 0x10000;
-        func_800B8500(&this->actor, globalCtx, 200.0f, 400.0f, 0);
+        func_800B8500(&this->actor, &globalCtx->state, 200.0f, 400.0f, 0);
     } else {
         this->actor.flags &= ~0x10000;
     }
@@ -718,18 +718,18 @@ void func_8095BA84(EnOwl* this, GlobalContext* globalCtx) {
 
 void func_8095BE0C(EnOwl* this, GlobalContext* globalCtx) {
     func_8095A920(this, globalCtx);
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_8095BA84;
         func_801A3098(0x45);
         this->unk_406 = 1;
         this->actionFlags |= 0x40;
     } else if (this->actor.textId == 0xBF0) {
         if (this->actor.isTargeted) {
-            func_800B8500(&this->actor, globalCtx, 200.0f, 200.0f, 0);
+            func_800B8500(&this->actor, &globalCtx->state, 200.0f, 200.0f, 0);
         }
     } else if (this->actor.xzDistToPlayer < 200.0f) {
         this->actor.flags |= 0x10000;
-        func_800B8500(&this->actor, globalCtx, 200.0f, 200.0f, 0);
+        func_800B8500(&this->actor, &globalCtx->state, 200.0f, 200.0f, 0);
     } else {
         this->actor.flags &= ~0x10000;
     }

@@ -253,7 +253,7 @@ void func_80BA39C8(EnToto* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     func_80BA383C(this, globalCtx);
-    if (Actor_IsTalking(&this->actor, globalCtx) != 0) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state) != 0) {
         func_80BA36C0(this, globalCtx, 1);
         if (globalCtx->sceneNum != 0x12) {
             Flags_SetSwitch(globalCtx, this->actor.params & 0x7F);
@@ -269,10 +269,10 @@ void func_80BA39C8(EnToto* this, GlobalContext* globalCtx) {
         if (this->unk2B6 != 0) {
             this->text = D_80BA5044;
             this->actor.flags |= 0x10000;
-            func_800B8500(&this->actor, globalCtx, 9999.9f, 9999.9f, 0);
+            func_800B8500(&this->actor, &globalCtx->state, 9999.9f, 9999.9f, 0);
         } else {
             this->actor.flags &= ~0x10000;
-            func_800B8614(&this->actor, globalCtx, 50.0f);
+            func_800B8614(&this->actor, &globalCtx->state, 50.0f);
             if (globalCtx->sceneNum == 0x12) {
                 if (player->transformation == PLAYER_FORM_DEKU) {
                     if (!Flags_GetSwitch(globalCtx, this->actor.home.rot.x)) {
@@ -315,7 +315,7 @@ void func_80BA3C88(EnToto* this) {
 void func_80BA3CC4(EnToto* this, GlobalContext* globalCtx) {
     func_80BA383C(this, globalCtx);
     func_80BA3C88(this);
-    if (func_800B867C(&this->actor, globalCtx)) {
+    if (func_800B867C(&this->actor, &globalCtx->state)) {
         func_80BA36C0(this, globalCtx, this->text->unk1);
     } else {
         func_80BA4C44(this, globalCtx);

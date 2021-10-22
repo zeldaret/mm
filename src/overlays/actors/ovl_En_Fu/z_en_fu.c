@@ -387,7 +387,7 @@ void func_80962340(EnFu* this, GlobalContext* globalCtx) {
         this->actor.flags |= 0x10000;
     }
 
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         if (this->unk_54A == 2) {
             if (this->unk_552 == 0x287D) {
                 if (gSaveContext.playerForm == PLAYER_FORM_DEKU) {
@@ -422,9 +422,9 @@ void func_80962340(EnFu* this, GlobalContext* globalCtx) {
         }
         func_809628BC(this);
     } else if (this->unk_54A == 2) {
-        func_800B8614(&this->actor, globalCtx, 500.0f);
+        func_800B8614(&this->actor, &globalCtx->state, 500.0f);
     } else {
-        func_800B8614(&this->actor, globalCtx, 100.0f);
+        func_800B8614(&this->actor, &globalCtx->state, 100.0f);
     }
     Math_SmoothStepToS(&this->actor.shape.rot.y, BINANG_SUB(this->actor.child->shape.rot.y, 0x4000), 10, 3000, 100);
 }
@@ -897,7 +897,7 @@ void func_80963610(EnFu* this) {
 void func_80963630(EnFu* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         if ((gSaveContext.weekEventReg[22] & 0x10) && (gSaveContext.weekEventReg[22] & 0x20) && (CURRENT_DAY == 3) &&
             (gSaveContext.playerForm == PLAYER_FORM_HUMAN)) {
             if (gSaveContext.weekEventReg[22] & 0x40) {
@@ -938,7 +938,7 @@ void func_80963630(EnFu* this, GlobalContext* globalCtx) {
         player->stateFlags1 &= ~0x20;
     } else {
         this->actor.child->freezeTimer = 10;
-        func_800B85E0(&this->actor, globalCtx, 500.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 500.0f, -1);
     }
 }
 

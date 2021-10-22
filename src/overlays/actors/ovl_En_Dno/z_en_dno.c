@@ -339,12 +339,12 @@ void func_80A71C3C(EnDno* this, GlobalContext* globalCtx) {
         Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 0x222);
     }
 
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         globalCtx->msgCtx.unk11F22 = 0;
         globalCtx->msgCtx.unk11F10 = 0;
         func_80A71E54(this, globalCtx);
     } else if (this->actor.xzDistToPlayer < 60.0f) {
-        func_800B8614(&this->actor, globalCtx, 60.0f);
+        func_800B8614(&this->actor, &globalCtx->state, 60.0f);
     }
 }
 
@@ -529,19 +529,19 @@ void func_80A724B8(EnDno* this, GlobalContext* globalCtx) {
         func_80A71424(&this->unk_466, 0, this->actor.yawTowardsPlayer, this->actor.home.rot.y, 0x2000, 0x2D8);
     }
 
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         func_80A725E0(this, globalCtx);
     } else if (this->actor.xzDistToPlayer < 60.0f) {
-        func_800B8614(&this->actor, globalCtx, 60.0f);
+        func_800B8614(&this->actor, &globalCtx->state, 60.0f);
     }
 }
 
 void func_80A7256C(EnDno* this, GlobalContext* globalCtx) {
-    func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.yDistToPlayer, -1);
+    func_800B8500(&this->actor, &globalCtx->state, this->actor.xzDistToPlayer, this->actor.yDistToPlayer, -1);
 }
 
 void func_80A72598(EnDno* this, GlobalContext* globalCtx) {
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         func_80A725E0(this, globalCtx);
     } else {
         func_80A7256C(this, globalCtx);

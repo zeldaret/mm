@@ -381,12 +381,12 @@ void func_808F395C(EnIn* this, GlobalContext* globalCtx) {
     if (this->unk4B0 == 0) {
         this->actionFunc = func_808F5A94;
     }
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
         this->actionFunc = func_808F5A34;
         this->unk48C = 1;
     } else {
-        func_800B8614(&this->actor, globalCtx, 200.0f);
+        func_800B8614(&this->actor, &globalCtx->state, 200.0f);
     }
 }
 
@@ -425,12 +425,12 @@ void func_808F39DC(EnIn* this, GlobalContext* globalCtx) {
 }
 
 void func_808F3AD4(EnIn* this, GlobalContext* globalCtx) {
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
-        func_800B85E0(&this->actor, globalCtx, 200.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 200.0f, -1);
     }
 }
 
@@ -449,12 +449,12 @@ void func_808F3B40(EnIn* this, GlobalContext* globalCtx) {
 }
 
 void func_808F3BD4(EnIn* this, GlobalContext* globalCtx) {
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
-        func_800B85E0(&this->actor, globalCtx, 200.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 200.0f, -1);
     }
 }
 
@@ -473,12 +473,12 @@ void func_808F3C40(EnIn* this, GlobalContext* globalCtx) {
 }
 
 void func_808F3CD4(EnIn* this, GlobalContext* globalCtx) {
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
-        func_800B85E0(&this->actor, globalCtx, 200.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 200.0f, -1);
     }
 }
 
@@ -604,7 +604,7 @@ void func_808F4054(GlobalContext* globalCtx, EnIn* this, s32 arg2, u16 textId) {
 }
 
 void func_808F4108(EnIn* this, GlobalContext* globalCtx, u16 textId) {
-    func_800B86C8(&this->actor, globalCtx, &this->unk4A4->actor);
+    func_800B86C8(&this->actor, &globalCtx->state, &this->unk4A4->actor);
     this->actor.textId = 0;
     this->unk4A4->actor.textId = textId;
     this->unk4A4->unk48C = 2;
@@ -1255,7 +1255,7 @@ s32 func_808F5728(GlobalContext* globalCtx, EnIn* this, s32 arg2, s32* arg3) {
         *arg3 = 1;
         return 0;
     }
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         *arg3 = 1;
         return 1;
     }
@@ -1281,7 +1281,7 @@ s32 func_808F5728(GlobalContext* globalCtx, EnIn* this, s32 arg2, s32* arg3) {
         }
         return 0;
     }
-    if (!func_800B8934(globalCtx, &this->actor)) {
+    if (!func_800B8934(&globalCtx->state, &this->actor)) {
         return 0;
     }
     yawDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
@@ -1293,10 +1293,10 @@ s32 func_808F5728(GlobalContext* globalCtx, EnIn* this, s32 arg2, s32* arg3) {
         return 0;
     }
     if (this->actor.xyzDistToPlayerSq <= SQ(80.0f)) {
-        if (func_800B8614(&this->actor, globalCtx, 80.0f)) {
+        if (func_800B8614(&this->actor, &globalCtx->state, 80.0f)) {
             this->actor.textId = func_808F3DD4(globalCtx, this, arg2);
         }
-    } else if (func_800B863C(&this->actor, globalCtx)) {
+    } else if (func_800B863C(&this->actor, &globalCtx->state)) {
         this->actor.textId = func_808F3DD4(globalCtx, this, arg2);
     }
     return 0;

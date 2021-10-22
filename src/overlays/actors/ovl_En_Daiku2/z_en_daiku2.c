@@ -233,7 +233,7 @@ void func_80BE66E4(EnDaiku2* this, GlobalContext* globalCtx) {
 
     this->actor.textId = sTextIds[this->unk_28A];
 
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         func_80BE6B40(this, globalCtx);
         return;
     }
@@ -243,7 +243,7 @@ void func_80BE66E4(EnDaiku2* this, GlobalContext* globalCtx) {
         return;
     }
 
-    func_800B8614(&this->actor, globalCtx, 80.0f);
+    func_800B8614(&this->actor, &globalCtx->state, 80.0f);
     if ((this->unk_276 == 8) && func_801378B8(&this->skelAnime, 6.0f)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_ROCK_BROKEN);
 
@@ -342,7 +342,7 @@ void func_80BE6D40(EnDaiku2* this, GlobalContext* globalCtx) {
     s32 pad[3];
     s16 sp3A = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_268);
 
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80BE6BC0;
         return;
     }
@@ -360,7 +360,7 @@ void func_80BE6D40(EnDaiku2* this, GlobalContext* globalCtx) {
         }
         func_80BE61D0(this);
     }
-    func_800B8614(&this->actor, globalCtx, 80.0f);
+    func_800B8614(&this->actor, &globalCtx->state, 80.0f);
 }
 
 void func_80BE6EB0(EnDaiku2* this) {
@@ -376,7 +376,7 @@ void func_80BE6EF0(EnDaiku2* this, GlobalContext* globalCtx) {
     Vec3f sp40;
     s16 var;
 
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80BE6BC0;
         return;
     }
@@ -431,7 +431,7 @@ void func_80BE6EF0(EnDaiku2* this, GlobalContext* globalCtx) {
             Math_Vec3f_Copy(&this->unk_268, &sp40);
         }
     }
-    func_800B8614(&this->actor, globalCtx, 80.0f);
+    func_800B8614(&this->actor, &globalCtx->state, 80.0f);
 }
 
 void func_80BE71A0(EnDaiku2* this) {

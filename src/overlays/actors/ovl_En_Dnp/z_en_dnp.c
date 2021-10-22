@@ -212,7 +212,7 @@ s32 func_80B3CEC0(EnDnp* this, GlobalContext* globalCtx) {
 s32 func_80B3CF60(EnDnp* this, GlobalContext* globalCtx) {
     s32 ret = false;
 
-    if ((this->unk_322 & 7) && Actor_IsTalking(&this->actor, globalCtx)) {
+    if ((this->unk_322 & 7) && Actor_IsTalking(&this->actor, &globalCtx->state)) {
         func_8013AED4(&this->unk_322, 0, 7);
         this->unk_322 |= 8;
         this->actionFunc = func_80B3D3F8;
@@ -310,12 +310,12 @@ void func_80B3D338(EnDnp* this, GlobalContext* globalCtx) {
     if ((this->unk_32E != 0) && (func_80152498(&globalCtx->msgCtx) == 2)) {
         Actor_MarkForDeath(&this->actor);
     } else if (this->unk_32E == 0) {
-        if (Actor_IsTalking(&this->actor, globalCtx)) {
+        if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
             this->unk_32E = 1;
         } else {
             this->actor.textId = 0x971;
             player->actor.textId = this->actor.textId;
-            func_800B8500(&this->actor, globalCtx, 9999.9f, 9999.9f, -1);
+            func_800B8500(&this->actor, &globalCtx->state, 9999.9f, 9999.9f, -1);
         }
     }
 }

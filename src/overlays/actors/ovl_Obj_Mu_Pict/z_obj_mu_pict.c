@@ -57,7 +57,7 @@ void func_80C06B5C(ObjMuPict* this) {
 void func_80C06B70(ObjMuPict* this, GlobalContext* globalCtx) {
     s16 yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
 
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         if (this->actor.cutscene < 0) {
             func_80C06DC8(this, globalCtx);
             func_80C06CC4(this);
@@ -70,7 +70,7 @@ void func_80C06B70(ObjMuPict* this, GlobalContext* globalCtx) {
             func_80C06C54(this);
         }
     } else if (ABS_ALT(yawDiff) < 0x2AAA) {
-        func_800B8614(&this->actor, globalCtx, 80.0f);
+        func_800B8614(&this->actor, &globalCtx->state, 80.0f);
     }
 }
 

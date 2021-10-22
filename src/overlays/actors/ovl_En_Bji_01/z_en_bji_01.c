@@ -106,7 +106,7 @@ void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx) {
             this->actor.flags &= ~0x10000;
         }
     }
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         globalCtx->msgCtx.unk11F22 = 0;
         globalCtx->msgCtx.unk11F10 = 0;
         func_809CD028(this, globalCtx);
@@ -120,7 +120,7 @@ void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx) {
             this->moonsTear =
                 (ObjMoonStone*)func_ActorCategoryIterateById(globalCtx, NULL, ACTORCAT_PROP, ACTOR_OBJ_MOON_STONE);
         }
-        func_800B8500(&this->actor, globalCtx, 60.0f, 10.0f, 0);
+        func_800B8500(&this->actor, &globalCtx->state, 60.0f, 10.0f, 0);
     }
 }
 
@@ -173,7 +173,7 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
                     } else {
                         this->textId = 0x5F1;
                     }
-                    func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.yDistToPlayer, 0);
+                    func_800B8500(&this->actor, &globalCtx->state, this->actor.xzDistToPlayer, this->actor.yDistToPlayer, 0);
                     break;
                 case PLAYER_FORM_HUMAN:
                     this->textId = 0x5F7;
@@ -324,7 +324,7 @@ void func_809CD70C(EnBji01* this, GlobalContext* globalCtx) {
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x444);
     func_809CCDE0(this, globalCtx);
     if (this->actor.shape.rot.y == this->actor.yawTowardsPlayer) {
-        func_800B86C8(&this->moonsTear->actor, globalCtx, &this->actor); /* Z-Target the Moon's Tear? */
+        func_800B86C8(&this->moonsTear->actor, &globalCtx->state, &this->actor); /* Z-Target the Moon's Tear? */
         this->actionFunc = func_809CD77C;
     }
 }

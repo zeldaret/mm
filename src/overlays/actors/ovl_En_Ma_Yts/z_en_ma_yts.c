@@ -317,7 +317,7 @@ void EnMaYts_SetupStartDialogue(EnMaYts* this) {
 void EnMaYts_StartDialogue(EnMaYts* this, GlobalContext* globalCtx) {
     s16 sp26 = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
 
-    if (Actor_IsTalking(&this->actor, globalCtx)) { // if (Actor_IsTalking)
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) { // if (Actor_IsTalking)
         if (!(gSaveContext.playerForm == PLAYER_FORM_HUMAN)) {
             if (!(gSaveContext.weekEventReg[0x41] & 0x80)) {
                 // Saying to non-human Link: "Cremia went to town."
@@ -365,7 +365,7 @@ void EnMaYts_StartDialogue(EnMaYts* this, GlobalContext* globalCtx) {
         }
         EnMaYts_SetupDialogueHandler(this);
     } else if (ABS_ALT(sp26) < 0x4000) {
-        func_800B8614(&this->actor, globalCtx, 120.0f);
+        func_800B8614(&this->actor, &globalCtx->state, 120.0f);
     }
 }
 

@@ -212,7 +212,7 @@ void EnRailgibud_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_402 = gSaveContext.time;
     this->unk_404 = 0;
     this->unk_3F8 = 0;
-    this->unk_400 = 0;
+    this->textId = 0;
     this->unk_3FA = 0;
     if (this->actor.parent == NULL) {
         this->unk_3EC = 1;
@@ -854,28 +854,28 @@ void func_80BA7434(EnRailgibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA7578(EnRailgibud* this, GlobalContext* globalCtx) {
-    if ((this->unk_400 == 0) && (this->unk_3F8 == 0)) {
-        if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if ((this->textId == 0) && (this->unk_3F8 == 0)) {
+        if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
             this->unk_3FA = 1;
             func_801518B0(globalCtx, 0x13B2, &this->actor);
-            this->unk_400 = 0x13B2;
+            this->textId = 0x13B2;
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_AIM);
             this->actor.speedXZ = 0.0f;
         } else if (((this->actor.flags & 9) == 9) && !(this->collider.base.acFlags & AC_HIT)) {
-            func_800B8614(&this->actor, globalCtx, 100.0f);
+            func_800B8614(&this->actor, &globalCtx->state, 100.0f);
         }
     } else {
         switch (func_80152498(&globalCtx->msgCtx)) {
             case 5:
                 if (func_80147624(globalCtx)) {
                     func_801518B0(globalCtx, 0x13B3, &this->actor);
-                    this->unk_400 = 0x13B3;
+                    this->textId = 0x13B3;
                 }
                 break;
 
             case 6:
                 if (func_80147624(globalCtx)) {
-                    this->unk_400 = 0;
+                    this->textId = 0;
                     this->unk_3FA = 0;
                     this->actor.speedXZ = 0.6f;
                 }

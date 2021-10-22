@@ -425,11 +425,11 @@ void EnMaYto_DefaultWait(EnMaYto* this, GlobalContext* globalCtx) {
         EnMaYto_ChangeAnim(this, 11);
     }
 
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         EnMaYto_DefaultStartDialogue(this, globalCtx);
         EnMaYto_SetupDefaultDialogueHandler(this);
     } else if (ABS_ALT(direction) < 0x1555) {
-        func_800B8614(&this->actor, globalCtx, 100.0f);
+        func_800B8614(&this->actor, &globalCtx->state, 100.0f);
     }
 }
 
@@ -535,25 +535,25 @@ void EnMaYto_SetupDinnerWait(EnMaYto* this) {
 void EnMaYto_DinnerWait(EnMaYto* this, GlobalContext* globalCtx) {
     s16 direction = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
 
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         EnMaYto_DinnerStartDialogue(this, globalCtx);
         EnMaYto_SetupDinnerDialogueHandler(this);
     } else {
         Actor* child = this->actor.child;
 
-        if (child != NULL && Actor_IsTalking(child, globalCtx)) {
-            func_800B86C8(&this->actor, globalCtx, &this->actor);
+        if (child != NULL && Actor_IsTalking(child, &globalCtx->state)) {
+            func_800B86C8(&this->actor, &globalCtx->state, &this->actor);
             EnMaYto_DinnerStartDialogue(this, globalCtx);
             EnMaYto_SetupDinnerDialogueHandler(this);
         } else if (ABS_ALT(direction) < 0x4000) {
-            func_800B8614(&this->actor, globalCtx, 120.0f);
+            func_800B8614(&this->actor, &globalCtx->state, 120.0f);
 
             child = this->actor.child;
             if (child != NULL && CURRENT_DAY != 2) {
                 s16 childDirection = child->shape.rot.y - child->yawTowardsPlayer;
 
                 if (ABS_ALT(childDirection) < 0x4000) {
-                    func_800B8614(child, globalCtx, 120.0f);
+                    func_800B8614(child, &globalCtx->state, 120.0f);
                 }
             }
         }
@@ -635,7 +635,7 @@ void EnMaYto_DinnerChooseNextDialogue(EnMaYto* this, GlobalContext* globalCtx) {
                 break;
 
             case 0x339B:
-                func_800B86C8(&this->actor, globalCtx, this->actor.child);
+                func_800B86C8(&this->actor, &globalCtx->state, this->actor.child);
                 func_80B90E50(this, 0);
                 EnMaYto_SetRomaniFaceExpression(this, 3, 3);
                 func_801518B0(globalCtx, 0x339C, &this->actor);
@@ -644,7 +644,7 @@ void EnMaYto_DinnerChooseNextDialogue(EnMaYto* this, GlobalContext* globalCtx) {
 
             case 0x339C:
                 this->unk31E = 1;
-                func_800B86C8(&this->actor, globalCtx, &this->actor);
+                func_800B86C8(&this->actor, &globalCtx->state, &this->actor);
                 EnMaYto_SetFaceExpression(this, 0, 2);
                 func_801518B0(globalCtx, 0x339D, &this->actor);
                 this->textId = 0x339D;
@@ -652,7 +652,7 @@ void EnMaYto_DinnerChooseNextDialogue(EnMaYto* this, GlobalContext* globalCtx) {
 
             case 0x339D:
                 func_80B90E50(this, 1);
-                func_800B86C8(&this->actor, globalCtx, this->actor.child);
+                func_800B86C8(&this->actor, &globalCtx->state, this->actor.child);
                 EnMaYto_SetRomaniFaceExpression(this, 0, 1);
                 func_801518B0(globalCtx, 0x339E, &this->actor);
                 this->textId = 0x339E;
@@ -673,7 +673,7 @@ void EnMaYto_DinnerChooseNextDialogue(EnMaYto* this, GlobalContext* globalCtx) {
 
             case 0x33A1:
                 func_80B90E50(this, 1);
-                func_800B86C8(&this->actor, globalCtx, this->actor.child);
+                func_800B86C8(&this->actor, &globalCtx->state, this->actor.child);
                 EnMaYto_SetRomaniFaceExpression(this, 0, 2);
                 func_801518B0(globalCtx, 0x33A2, &this->actor);
                 this->textId = 0x33A2;
@@ -681,7 +681,7 @@ void EnMaYto_DinnerChooseNextDialogue(EnMaYto* this, GlobalContext* globalCtx) {
 
             case 0x33A2:
                 this->unk31E = 1;
-                func_800B86C8(&this->actor, globalCtx, &this->actor);
+                func_800B86C8(&this->actor, &globalCtx->state, &this->actor);
                 EnMaYto_SetFaceExpression(this, 4, 3);
                 func_801518B0(globalCtx, 0x33A3, &this->actor);
                 this->textId = 0x33A3;
@@ -730,22 +730,22 @@ void EnMaYto_BarnWait(EnMaYto* this, GlobalContext* globalCtx) {
     s16 direction = this->actor.shape.rot.y + 0x471C;
 
     direction -= this->actor.yawTowardsPlayer;
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         EnMaYto_BarnStartDialogue(this, globalCtx);
         EnMaYto_SetupBarnDialogueHandler(this);
     } else {
         Actor* child = this->actor.child;
 
-        if (child != NULL && Actor_IsTalking(child, globalCtx)) {
-            func_800B86C8(&this->actor, globalCtx, &this->actor);
+        if (child != NULL && Actor_IsTalking(child, &globalCtx->state)) {
+            func_800B86C8(&this->actor, &globalCtx->state, &this->actor);
             EnMaYto_BarnStartDialogue(this, globalCtx);
             EnMaYto_SetupBarnDialogueHandler(this);
         } else if (!(gSaveContext.weekEventReg[0x16] & 1) || ABS_ALT(direction) < 0x2000) {
-            func_800B8614(&this->actor, globalCtx, 100.0f);
+            func_800B8614(&this->actor, &globalCtx->state, 100.0f);
 
             child = this->actor.child;
             if (child != NULL) {
-                func_800B8614(child, globalCtx, 100.0f);
+                func_800B8614(child, &globalCtx->state, 100.0f);
             }
         }
     }
@@ -788,14 +788,14 @@ void EnMaYto_BarnChooseNextDialogue(EnMaYto* this, GlobalContext* globalCtx) {
         switch (this->textId) {
             case 0x33A9:
                 func_80B90E50(this, 0);
-                func_800B86C8(&this->actor, globalCtx, this->actor.child);
+                func_800B86C8(&this->actor, &globalCtx->state, this->actor.child);
                 EnMaYto_SetRomaniFaceExpression(this, 0, 3);
                 func_801518B0(globalCtx, 0x33AA, &this->actor);
                 this->textId = 0x33AA;
                 break;
 
             case 0x33AA:
-                func_800B86C8(&this->actor, globalCtx, &this->actor);
+                func_800B86C8(&this->actor, &globalCtx->state, &this->actor);
                 this->unk31E = 1;
                 func_801518B0(globalCtx, 0x33AB, &this->actor);
                 this->textId = 0x33AB;
@@ -803,7 +803,7 @@ void EnMaYto_BarnChooseNextDialogue(EnMaYto* this, GlobalContext* globalCtx) {
 
             case 0x33AB:
                 func_80B90E50(this, 1);
-                func_800B86C8(&this->actor, globalCtx, this->actor.child);
+                func_800B86C8(&this->actor, &globalCtx->state, this->actor.child);
                 EnMaYto_SetRomaniFaceExpression(this, 0, 1);
                 func_801518B0(globalCtx, 0x33AC, &this->actor);
                 this->textId = 0x33AC;
@@ -811,7 +811,7 @@ void EnMaYto_BarnChooseNextDialogue(EnMaYto* this, GlobalContext* globalCtx) {
 
             case 0x33AC:
                 this->unk31E = 0;
-                func_800B86C8(&this->actor, globalCtx, &this->actor);
+                func_800B86C8(&this->actor, &globalCtx->state, &this->actor);
                 func_801518B0(globalCtx, 0x33AD, &this->actor);
                 this->textId = 0x33AD;
                 func_80151BB4(globalCtx, 6);
@@ -820,7 +820,7 @@ void EnMaYto_BarnChooseNextDialogue(EnMaYto* this, GlobalContext* globalCtx) {
 
             case 0x33AE:
                 func_80B90E50(this, 1);
-                func_800B86C8(&this->actor, globalCtx, this->actor.child);
+                func_800B86C8(&this->actor, &globalCtx->state, this->actor.child);
                 EnMaYto_SetRomaniFaceExpression(this, 4, 2);
                 func_801518B0(globalCtx, 0x33AF, &this->actor);
                 this->textId = 0x33AF;
@@ -828,7 +828,7 @@ void EnMaYto_BarnChooseNextDialogue(EnMaYto* this, GlobalContext* globalCtx) {
 
             case 0x33AF:
                 this->unk31E = 1;
-                func_800B86C8(&this->actor, globalCtx, &this->actor);
+                func_800B86C8(&this->actor, &globalCtx->state, &this->actor);
                 EnMaYto_SetFaceExpression(this, 4, 2);
                 func_801518B0(globalCtx, 0x33B0, &this->actor);
                 this->textId = 0x33B0;
@@ -846,7 +846,7 @@ void EnMaYto_BarnChooseNextDialogue(EnMaYto* this, GlobalContext* globalCtx) {
                 break;
 
             case 0x33C6:
-                func_800B86C8(&this->actor, globalCtx, this->actor.child);
+                func_800B86C8(&this->actor, &globalCtx->state, this->actor.child);
                 this->unk31E = 0;
                 EnMaYto_SetFaceExpression(this, 0, 1);
                 func_801518B0(globalCtx, 0x33C7, &this->actor);
@@ -854,7 +854,7 @@ void EnMaYto_BarnChooseNextDialogue(EnMaYto* this, GlobalContext* globalCtx) {
                 break;
 
             case 0x33C7:
-                func_800B86C8(&this->actor, globalCtx, &this->actor);
+                func_800B86C8(&this->actor, &globalCtx->state, &this->actor);
                 this->unk31E = 1;
                 EnMaYto_SetFaceExpression(this, 0, 1);
                 func_801518B0(globalCtx, 0x33C8, &this->actor);
@@ -862,7 +862,7 @@ void EnMaYto_BarnChooseNextDialogue(EnMaYto* this, GlobalContext* globalCtx) {
                 break;
 
             case 0x33C8:
-                func_800B86C8(&this->actor, globalCtx, this->actor.child);
+                func_800B86C8(&this->actor, &globalCtx->state, this->actor.child);
                 func_80B90E50(this, 1);
                 EnMaYto_SetRomaniFaceExpression(this, 0, 2);
                 func_801518B0(globalCtx, 0x33C9, &this->actor);
@@ -870,7 +870,7 @@ void EnMaYto_BarnChooseNextDialogue(EnMaYto* this, GlobalContext* globalCtx) {
                 break;
 
             case 0x33C9:
-                func_800B86C8(&this->actor, globalCtx, &this->actor);
+                func_800B86C8(&this->actor, &globalCtx->state, &this->actor);
                 this->unk31E = 1;
                 EnMaYto_SetFaceExpression(this, 3, 1);
                 func_801518B0(globalCtx, 0x33CA, &this->actor);
@@ -884,7 +884,7 @@ void EnMaYto_BarnChooseNextDialogue(EnMaYto* this, GlobalContext* globalCtx) {
                 break;
 
             case 0x33CB:
-                func_800B86C8(&this->actor, globalCtx, this->actor.child);
+                func_800B86C8(&this->actor, &globalCtx->state, this->actor.child);
                 func_80B90E50(this, 1);
                 EnMaYto_SetRomaniFaceExpression(this, 3, 3);
                 func_801518B0(globalCtx, 0x33CC, &this->actor);
@@ -912,7 +912,7 @@ void EnMaYto_SetupAfterMilkRunInit(EnMaYto* this) {
 void EnMaYto_AfterMilkRunInit(EnMaYto* this, GlobalContext* globalCtx) {
     this->actor.flags |= 0x10000;
 
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
 
         if (gSaveContext.weekEventReg[0x34] & 1) { // if (ProtectedCremia)
@@ -933,7 +933,7 @@ void EnMaYto_AfterMilkRunInit(EnMaYto* this, GlobalContext* globalCtx) {
 
         EnMaYto_SetupAfterMilkRunDialogueHandler(this);
     } else {
-        func_800B8614(&this->actor, globalCtx, 200.0f);
+        func_800B8614(&this->actor, &globalCtx->state, 200.0f);
     }
 }
 
@@ -999,7 +999,7 @@ void EnMaYto_SetupPostMilkRunExplainReward(EnMaYto* this) {
 }
 
 void EnMaYto_PostMilkRunExplainReward(EnMaYto* this, GlobalContext* globalCtx) {
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         if (this->unk310 == 1) {
             // Romani's mask explanation
             EnMaYto_SetFaceExpression(this, 0, 1);
@@ -1024,7 +1024,7 @@ void EnMaYto_PostMilkRunExplainReward(EnMaYto* this, GlobalContext* globalCtx) {
             EnMaYto_SetupPostMilkRunWaitDialogueEnd(this);
         }
     } else {
-        func_800B85E0(&this->actor, globalCtx, 200.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 200.0f, -1);
     }
 }
 

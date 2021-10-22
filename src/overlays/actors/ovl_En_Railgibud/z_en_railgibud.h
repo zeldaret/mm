@@ -41,7 +41,7 @@ typedef struct EnRailgibud {
     /* 0x03FA */ s16 unk_3FA;
     /* 0x03FC */ u16 unk_3FC;
     /* 0x03FE */ u16 unk_3FE;
-    /* 0x0400 */ u16 unk_400;
+    /* 0x0400 */ u16 textId;
     /* 0x0402 */ s16 unk_402;
     /* 0x0404 */ u8 unk_404;
     /* 0x0405 */ s8 unk_405;

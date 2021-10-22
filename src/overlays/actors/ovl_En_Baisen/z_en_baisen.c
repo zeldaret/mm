@@ -151,7 +151,7 @@ void func_80BE87FC(EnBaisen* this) {
 }
 
 void func_80BE887C(EnBaisen* this, GlobalContext* globalCtx) {
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         func_80BE895C(this, globalCtx);
     } else {
         if (this->paramCopy != 0) {
@@ -168,7 +168,7 @@ void func_80BE887C(EnBaisen* this, GlobalContext* globalCtx) {
             }
         }
         this->actor.textId = sTextIds[this->textIdIndex];
-        func_800B8614(&this->actor, globalCtx, 70.0f);
+        func_800B8614(&this->actor, &globalCtx->state, 70.0f);
     }
 }
 
@@ -176,7 +176,7 @@ void func_80BE895C(EnBaisen* this, GlobalContext* globalCtx) {
     if (this->unk2A4 != NULL) {
         this->unk290 = true;
         this->unk2AC = 1;
-        func_800B86C8(this->unk2A4, globalCtx, this->unk2A4);
+        func_800B86C8(this->unk2A4, &globalCtx->state, this->unk2A4);
     }
     this->unk29C = 1;
     if (this->paramCopy == 0) {
@@ -233,7 +233,7 @@ void func_80BE8AAC(EnBaisen* this, GlobalContext* globalCtx) {
             } else {
                 this->unk2A4 = &this->actor;
             }
-            func_800B86C8(this->unk2A4, globalCtx, this->unk2A4);
+            func_800B86C8(this->unk2A4, &globalCtx->state, this->unk2A4);
         } else {
             func_80BE87FC(this);
         }

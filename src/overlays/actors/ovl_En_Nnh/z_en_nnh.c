@@ -71,12 +71,12 @@ void func_80C08828(EnNnh* this) {
 }
 
 void func_80C0883C(EnNnh* this, GlobalContext* globalCtx) {
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         func_801518B0(globalCtx, 0x228U, &this->actor);
         func_80C088A4(this);
         return;
     }
-    func_800B8614(&this->actor, globalCtx, 100.0f);
+    func_800B8614(&this->actor, &globalCtx->state, 100.0f);
 }
 
 void func_80C088A4(EnNnh* this) {
@@ -84,7 +84,7 @@ void func_80C088A4(EnNnh* this) {
 }
 
 void func_80C088B8(EnNnh* this, GlobalContext* globalCtx) {
-    if (func_800B867C(&this->actor, globalCtx)) {
+    if (func_800B867C(&this->actor, &globalCtx->state)) {
         func_80C08828(this);
     }
 }

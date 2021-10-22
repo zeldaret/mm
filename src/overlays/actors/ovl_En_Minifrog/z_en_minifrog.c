@@ -330,14 +330,14 @@ void EnMinifrog_Idle(EnMinifrog* this, GlobalContext* globalCtx) {
     EnMinifrog_TurnToPlayer(this);
     EnMinifrog_Jump(this);
     EnMinifrog_JumpTimer(this);
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         this->actionFunc = EnMinifrog_ReturnFrogCutscene;
         if (this->actor.cutscene != -1) {
             this->flags |= 1;
         }
     } else if ((this->actor.xzDistToPlayer < 100.0f) && Actor_IsPlayerFacingActor(&this->actor, 0x3000, globalCtx) &&
                (Player_GetMask(globalCtx) == PLAYER_MASK_DON_GEROS_MASK)) {
-        func_800B8614(&this->actor, globalCtx, 110.0f);
+        func_800B8614(&this->actor, &globalCtx->state, 110.0f);
     }
 }
 
@@ -474,11 +474,11 @@ void EnMinifrog_BeginChoirCutscene(EnMinifrog* this, GlobalContext* globalCtx) {
 void EnMinifrog_EndChoir(EnMinifrog* this, GlobalContext* globalCtx) {
     EnMinifrog_TurnToPlayer(this);
     EnMinifrog_Jump(this);
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         func_801518B0(globalCtx, 0xD7E, &this->actor); // "Let us do it again sometime."
         this->actionFunc = EnMinifrog_YellowFrogDialog;
     } else {
-        func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, &globalCtx->state, 1000.0f, 1000.0f, -1);
     }
 }
 
@@ -489,7 +489,7 @@ void EnMinifrog_GetFrogHP(EnMinifrog* this, GlobalContext* globalCtx) {
         this->actor.parent = NULL;
         this->actionFunc = EnMinifrog_EndChoir;
         this->actor.flags |= 0x10000;
-        func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, 0);
+        func_800B8500(&this->actor, &globalCtx->state, 1000.0f, 1000.0f, 0);
     } else {
         func_800B8A1C(&this->actor, globalCtx, GI_HEART_PIECE, 10000.0f, 50.0f);
     }
@@ -566,7 +566,7 @@ void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, GlobalContext* globalCtx
     EnMinifrog_TurnToPlayer(this);
     EnMinifrog_Jump(this);
     EnMinifrog_JumpTimer(this);
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         this->actionFunc = EnMinifrog_YellowFrogDialog;
         if (!(gSaveContext.weekEventReg[34] & 1)) { // Not spoken with MINIFROG_YELLOW
             func_801518B0(globalCtx, 0xD76,
@@ -579,7 +579,7 @@ void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, GlobalContext* globalCtx
                (Actor_IsPlayerFacingActor(&this->actor, 0x3000, globalCtx) ||
                 ((this->actor.flags & 0x10000) == 0x10000)) &&
                Player_GetMask(globalCtx) == PLAYER_MASK_DON_GEROS_MASK) {
-        func_800B8614(&this->actor, globalCtx, 160.0f);
+        func_800B8614(&this->actor, &globalCtx->state, 160.0f);
     }
 }
 

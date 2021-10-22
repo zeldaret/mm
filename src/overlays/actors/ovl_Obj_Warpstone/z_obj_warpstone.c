@@ -138,7 +138,7 @@ void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     if (this->isTalking) {
-        if (func_800B867C(&this->dyna.actor, globalCtx) != 0) {
+        if (func_800B867C(&this->dyna.actor, &globalCtx->state) != 0) {
             this->isTalking = false;
         } else if ((func_80152498(&globalCtx->msgCtx) == 4) && (func_80147624(globalCtx))) {
             if (globalCtx->msgCtx.choiceIndex != 0) {
@@ -151,11 +151,12 @@ void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx) {
                 func_801477B4(globalCtx);
             }
         }
-    } else if (Actor_IsTalking(&this->dyna.actor, globalCtx)) {
+    } else if (Actor_IsTalking(&this->dyna.actor, &globalCtx->state)) {
         this->isTalking = true;
     } else if (!this->actionFunc(this, globalCtx)) {
-        func_800B863C(&this->dyna.actor, globalCtx);
+        func_800B863C(&this->dyna.actor, &globalCtx->state);
     }
+
     Collider_ResetCylinderAC(globalCtx, &this->collider.base);
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);

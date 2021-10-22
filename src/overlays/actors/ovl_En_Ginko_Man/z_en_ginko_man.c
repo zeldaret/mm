@@ -81,7 +81,7 @@ void EnGinkoMan_Idle(EnGinkoMan* this, GlobalContext* globalCtx) {
     s32 yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
     EnGinkoMan_SwitchAnimation(this, globalCtx);
-    if (Actor_IsTalking(&this->actor, globalCtx)) { // Listen for dialogue start?
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) { // Listen for dialogue start?
         if ((gSaveContext.roomInf[127][0] & 0xFFFF) == 0) {
             func_800BDC5C(&this->skelAnime, animations, GINKO_FLOORSMACKING);
             func_801518B0(globalCtx, 0x44C, &this->actor);
@@ -98,7 +98,7 @@ void EnGinkoMan_Idle(EnGinkoMan* this, GlobalContext* globalCtx) {
         }
         EnGinkoMan_SetupDialogue(this);
     } else if (ABS_ALT(yaw) < 0x1555) {
-        func_800B8614(&this->actor, globalCtx, 100.0f);
+        func_800B8614(&this->actor, &globalCtx->state, 100.0f);
     }
 }
 
@@ -533,7 +533,7 @@ void EnGinkoMan_SetupBankAward2(EnGinkoMan* this) {
 
 // separate function to handle bank rewards... if the bank has a parent actor? might be unused
 void EnGinkoMan_BankAward2(EnGinkoMan* this, GlobalContext* globalCtx) {
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         if (!(gSaveContext.weekEventReg[10] & 8) && (this->curTextId == 0x45B)) {
             // "What's this? You've already saved up 200 Rupees!?!  Well, little guy, here's your special gift. Take
             // it!"
@@ -555,7 +555,7 @@ void EnGinkoMan_BankAward2(EnGinkoMan* this, GlobalContext* globalCtx) {
             EnGinkoMan_SetupIdle(this);
         }
     } else {
-        func_800B85E0(&this->actor, globalCtx, 500.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 500.0f, -1);
     }
 }
 

@@ -96,7 +96,7 @@ void func_80A66278(EnWarpUzu* this, GlobalContext* globalCtx) {
 
     do {
         player = GET_PLAYER(globalCtx);
-        if (Actor_IsTalking(&this->actor, globalCtx)) {
+        if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
             func_80A66384(this, globalCtx);
         } else {
             phi_a0 = ABS((s16)(Actor_YawBetweenActors(&this->actor, &player->actor) - this->actor.shape.rot.y));
@@ -104,7 +104,7 @@ void func_80A66278(EnWarpUzu* this, GlobalContext* globalCtx) {
             phi_v1 = ABS(temp_v0);
             if (phi_a0 >= 0x2AAB) {
                 if (phi_v1 < 0x238E) {
-                    func_800B8614(&this->actor, globalCtx, 70.0f);
+                    func_800B8614(&this->actor, &globalCtx->state, 70.0f);
                 }
             }
         }

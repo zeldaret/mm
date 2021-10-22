@@ -363,12 +363,12 @@ void EnMa4_Wait(EnMa4* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (Actor_IsTalking(&this->actor, globalCtx) != 0) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state) != 0) {
         EnMa4_StartDialogue(this, globalCtx);
         EnMa4_SetupDialogueHandler(this);
     } else if (this->type != MA4_TYPE_ALIENS_WON || ABS_ALT(yaw) < 0x4000) {
         if (!(player->stateFlags1 & 0x800000)) {
-            func_800B8614(&this->actor, globalCtx, 100.0f);
+            func_800B8614(&this->actor, &globalCtx->state, 100.0f);
         }
     }
 }
@@ -692,17 +692,17 @@ void EnMa4_BeginHorsebackGame(EnMa4* this, GlobalContext* globalCtx) {
 }
 
 void EnMa4_HorsebackGameCheckPlayerInteractions(EnMa4* this, GlobalContext* globalCtx) {
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         // "You're feeling confident"
         func_801518B0(globalCtx, 0x336E, &this->actor);
         this->actionFunc = EnMa4_HorsebackGameTalking;
     } else if ((gSaveContext.unk_3DE0[4] < 115 * 100)) { // timer < 115 seconds
-        func_800B8614(&this->actor, globalCtx, 100.0f);
+        func_800B8614(&this->actor, &globalCtx->state, 100.0f);
     }
 }
 
 void EnMa4_HorsebackGameTalking(EnMa4* this, GlobalContext* globalCtx) {
-    if (func_800B867C(&this->actor, globalCtx)) {
+    if (func_800B867C(&this->actor, &globalCtx->state)) {
         this->actionFunc = EnMa4_HorsebackGameWait;
     }
 }
@@ -851,7 +851,7 @@ void EnMa4_EponasSongCs(EnMa4* this, GlobalContext* globalCtx) {
         Player* player = GET_PLAYER(globalCtx);
 
         player->stateFlags1 |= 0x20;
-        func_800B85E0(&this->actor, globalCtx, 200.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 200.0f, -1);
         D_80AC0260 = 99;
         this->hasBow = true;
         EnMa4_SetupEndEponasSongCs(this);
@@ -866,14 +866,14 @@ void EnMa4_EndEponasSongCs(EnMa4* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     this->actor.flags |= 0x10000;
-    if (Actor_IsTalking(&this->actor, globalCtx) != 0) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state) != 0) {
         player->stateFlags1 &= ~0x20;
         func_801518B0(globalCtx, 0x334C, &this->actor);
         this->textId = 0x334C;
         this->actor.flags &= ~0x10000;
         EnMa4_SetupDialogueHandler(this);
     } else {
-        func_800B85E0(&this->actor, globalCtx, 200.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 200.0f, -1);
     }
 }
 

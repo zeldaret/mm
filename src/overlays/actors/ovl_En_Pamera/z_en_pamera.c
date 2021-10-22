@@ -607,7 +607,7 @@ void func_80BD9938(EnPamera* this) {
 }
 
 void func_80BD994C(EnPamera* this, GlobalContext* globalCtx) {
-    if (Actor_IsTalking(&this->actor, globalCtx) != 0) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state) != 0) {
         if (Player_GetMask(globalCtx) == PLAYER_MASK_GIBDO_MASK) {
             if (1) {}
             func_80BD93CC(this, 0, 1);
@@ -631,7 +631,7 @@ void func_80BD994C(EnPamera* this, GlobalContext* globalCtx) {
         }
         func_80BD9A9C(this);
     } else {
-        func_800B8614(&this->actor, globalCtx, 100.0f);
+        func_800B8614(&this->actor, &globalCtx->state, 100.0f);
     }
 }
 

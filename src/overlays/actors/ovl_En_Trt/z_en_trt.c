@@ -213,7 +213,7 @@ void EnTrt_EndInteraction(GlobalContext* globalCtx, EnTrt* this) {
         ActorCutscene_Stop(this->cutscene);
         this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
     }
-    Actor_IsTalking(&this->actor, globalCtx);
+    Actor_IsTalking(&this->actor, &globalCtx->state);
     globalCtx->msgCtx.unk11F22 = 0x43;
     globalCtx->msgCtx.unk12023 = 4;
     Interface_ChangeAlpha(50);
@@ -476,7 +476,7 @@ void EnTrt_GivenRedPotionForKoume(EnTrt* this, GlobalContext* globalCtx) {
                 ActorCutscene_SetIntentToPlay(this->cutscene);
             }
         }
-        func_800B85E0(&this->actor, globalCtx, 400.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, -1);
         this->actionFunc = EnTrt_ItemGiven;
     }
 }
@@ -774,7 +774,7 @@ void EnTrt_IdleSleeping(EnTrt* this, GlobalContext* globalCtx) {
     if (Player_GetMask(globalCtx) == PLAYER_MASK_MASK_OF_SCENTS) {
         this->textId = 0x890;
     }
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         if (player->transformation == PLAYER_FORM_HUMAN) {
             this->flags |= ENTRT_MET;
         }
@@ -791,7 +791,7 @@ void EnTrt_IdleSleeping(EnTrt* this, GlobalContext* globalCtx) {
         this->actionFunc = EnTrt_BeginInteraction;
     } else if ((player->actor.world.pos.x >= -50.0f && player->actor.world.pos.x <= -25.0f) &&
                (player->actor.world.pos.z >= -19.0f && player->actor.world.pos.z <= 30.0f)) {
-        func_800B8614(&this->actor, globalCtx, 200.0f);
+        func_800B8614(&this->actor, &globalCtx->state, 200.0f);
     }
     if (DECR(this->timer) == 0) {
         this->timer = 40;
@@ -818,7 +818,7 @@ void EnTrt_IdleAwake(EnTrt* this, GlobalContext* globalCtx) {
     } else {
         this->textId = 0x850;
     }
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         if (this->cutsceneState == ENTRT_CUTSCENESTATE_STOPPED) {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
@@ -837,7 +837,7 @@ void EnTrt_IdleAwake(EnTrt* this, GlobalContext* globalCtx) {
         this->actionFunc = EnTrt_BeginInteraction;
     } else if ((player->actor.world.pos.x >= -50.0f && player->actor.world.pos.x <= -25.0f) &&
                (player->actor.world.pos.z >= -19.0f && player->actor.world.pos.z <= 30.0f)) {
-        func_800B8614(&this->actor, globalCtx, 200.0f);
+        func_800B8614(&this->actor, &globalCtx->state, 200.0f);
     }
     if (DECR(this->timer) == 0) {
         this->timer = Rand_S16Offset(150, 100);
@@ -999,7 +999,7 @@ void EnTrt_ItemGiven(EnTrt* this, GlobalContext* globalCtx) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     }
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         switch (this->textId) {
             case 0x889:
                 this->textId = 0x88A;
@@ -1020,7 +1020,7 @@ void EnTrt_ItemGiven(EnTrt* this, GlobalContext* globalCtx) {
         }
         func_80151938(globalCtx, this->textId);
     } else {
-        func_800B85E0(&this->actor, globalCtx, 400.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, -1);
     }
 }
 
@@ -1034,12 +1034,12 @@ void EnTrt_ShopkeeperGone(EnTrt* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
     Player* player = GET_PLAYER(globalCtx);
 
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         func_801518B0(globalCtx, this->textId, &this->actor);
     } else {
         if ((player->actor.world.pos.x >= -50.0f && player->actor.world.pos.x <= 50.0f) &&
             (player->actor.world.pos.z >= -19.0f && player->actor.world.pos.z <= 30.0f)) {
-            func_800B8614(&this->actor, globalCtx, 200.0f);
+            func_800B8614(&this->actor, &globalCtx->state, 200.0f);
         }
     }
     if (talkState == 6 && func_80147624(globalCtx)) {
@@ -1093,7 +1093,7 @@ void EnTrt_SetupItemGiven(EnTrt* this, GlobalContext* globalCtx) {
             this->cutscene = this->lookToShopkeeperCutscene;
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
-        func_800B85E0(&this->actor, globalCtx, 400.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, -1);
     }
 }
 
@@ -1116,7 +1116,7 @@ void EnTrt_ContinueShopping(EnTrt* this, GlobalContext* globalCtx) {
                         player->stateFlags2 |= 0x20000000;
                         func_801518B0(globalCtx, this->textId, &this->actor);
                         EnTrt_SetupStartShopping(globalCtx, this, true);
-                        func_800B85E0(&this->actor, globalCtx, 400.0f, -1);
+                        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, -1);
                         break;
                     case 1:
                     default:

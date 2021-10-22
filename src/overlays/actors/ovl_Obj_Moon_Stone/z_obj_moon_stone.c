@@ -78,14 +78,14 @@ void func_80C06640(ObjMoonStone* this, GlobalContext* globalCtx) {
     s16 sp1A = this->actor.yawTowardsPlayer - 0x8000;
 
     sp1A -= player->actor.shape.rot.y;
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         this->actor.colChkInfo.health = 1;
         func_801518B0(globalCtx, 0x5E3U, &this->actor);
         func_80C066F8(this);
     } else {
         s32 phi_v0 = ABS_ALT(sp1A);
         if (phi_v0 < 0x1555) {
-            func_800B8614(&this->actor, globalCtx, 80.0f);
+            func_800B8614(&this->actor, &globalCtx->state, 80.0f);
         }
     }
 }
@@ -95,7 +95,7 @@ void func_80C066F8(ObjMoonStone* this) {
 }
 
 void func_80C0670C(ObjMoonStone* this, GlobalContext* globalCtx) {
-    if (func_800B867C(&this->actor, globalCtx) != 0) {
+    if (func_800B867C(&this->actor, &globalCtx->state) != 0) {
         this->actor.colChkInfo.health = 0;
         func_80C0662C(this);
     }

@@ -2757,7 +2757,7 @@ void func_80B48E4C(EnInvadepoh* this, GlobalContext* globalCtx) {
     diff = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
     temp_v1 = diff * 0.7f;
     substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
-    if (func_800B867C(&this->actor, globalCtx)) {
+    if (func_800B867C(&this->actor, &globalCtx->state)) {
         func_80B48948(this);
     }
 }
@@ -2787,7 +2787,7 @@ void func_80B490F0(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnInvadepoh* this = THIS;
     s32 sp2C = (this->actor.flags & 0x40) == 0x40;
-    s32 isTalking = Actor_IsTalking(&this->actor, globalCtx);
+    s32 isTalking = Actor_IsTalking(&this->actor, &globalCtx->state);
 
     if (isTalking) {
         func_80151BB4(globalCtx, 5);
@@ -2798,7 +2798,7 @@ void func_80B490F0(Actor* thisx, GlobalContext* globalCtx) {
         SkelAnime_FrameUpdateMatrix(&this->skelAnime);
         func_80B45CE0(&this->behaviorInfo);
         if ((this->actionFunc != func_80B48E4C) && !isTalking && this->actor.isTargeted) {
-            func_800B8614(&this->actor, globalCtx, 100.0f);
+            func_800B8614(&this->actor, &globalCtx->state, 100.0f);
         }
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
@@ -3105,7 +3105,7 @@ void func_80B49DFC(EnInvadepoh* this, GlobalContext* globalCtx) {
     temp_v1 = diff;
     temp_v1 *= 0.7f;
     substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
-    if (func_800B867C(&this->actor, globalCtx)) {
+    if (func_800B867C(&this->actor, &globalCtx->state)) {
         if (this->actor.textId == 0x332D) {
             gSaveContext.weekEventReg[54] |= 0x10;
             this->actor.textId = 0x332E;
@@ -3170,7 +3170,7 @@ void func_80B4A1B8(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnInvadepoh* this = THIS;
     s32 sp2C = (this->actor.flags & 0x40) == 0x40;
-    s32 isTalking = Actor_IsTalking(&this->actor, globalCtx);
+    s32 isTalking = Actor_IsTalking(&this->actor, &globalCtx->state);
 
     if (isTalking) {
         func_80151BB4(globalCtx, 5);
@@ -3181,7 +3181,7 @@ void func_80B4A1B8(Actor* thisx, GlobalContext* globalCtx) {
         SkelAnime_FrameUpdateMatrix(&this->skelAnime);
         func_80B45CE0(&this->behaviorInfo);
         if ((this->actionFunc != func_80B49DFC) && !isTalking && this->actor.isTargeted) {
-            func_800B8614(&this->actor, globalCtx, 350.0f);
+            func_800B8614(&this->actor, &globalCtx->state, 350.0f);
         }
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
@@ -3332,7 +3332,7 @@ void func_80B4A81C(EnInvadepoh* this, GlobalContext* globalCtx) {
     temp_v1 *= 0.7f;
     substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
 
-    if (func_800B867C(&this->actor, globalCtx)) {
+    if (func_800B867C(&this->actor, &globalCtx->state)) {
         if (this->actor.textId == 0x332D) {
             gSaveContext.weekEventReg[54] |= 0x10;
             this->actor.textId = 0x332E;
@@ -3399,7 +3399,7 @@ void func_80B4ABDC(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnInvadepoh* this = THIS;
     s32 sp2C = (this->actor.flags & 0x40) == 0x40;
-    s32 isTalking = Actor_IsTalking(&this->actor, globalCtx);
+    s32 isTalking = Actor_IsTalking(&this->actor, &globalCtx->state);
 
     if (isTalking) {
         func_80151BB4(globalCtx, 5);
@@ -3410,7 +3410,7 @@ void func_80B4ABDC(Actor* thisx, GlobalContext* globalCtx) {
         this->animPlayFlag = SkelAnime_FrameUpdateMatrix(&this->skelAnime);
         func_80B45CE0(&this->behaviorInfo);
         if ((this->actionFunc != func_80B4A81C) && !isTalking && this->actor.isTargeted) {
-            func_800B8614(&this->actor, globalCtx, 100.0f);
+            func_800B8614(&this->actor, &globalCtx->state, 100.0f);
         }
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
@@ -3435,11 +3435,11 @@ void func_80B4AD3C(EnInvadepoh* this) {
 }
 
 void func_80B4AD60(EnInvadepoh* this, GlobalContext* globalCtx) {
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         EnInvadepoh_SetTextID(this, globalCtx, 0x3331);
         func_80B4ADB8(this);
     } else {
-        func_800B8614(&this->actor, globalCtx, 2000.0f);
+        func_800B8614(&this->actor, &globalCtx->state, 2000.0f);
     }
 }
 
@@ -3494,14 +3494,14 @@ void func_80B4AF80(EnInvadepoh* this) {
 }
 
 void func_80B4AF94(EnInvadepoh* this, GlobalContext* globalCtx) {
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         EnInvadepoh_SetTextID(this, globalCtx, 0x3334);
         func_80151BB4(globalCtx, 0x1E);
         func_80151BB4(globalCtx, 0x1D);
         func_80151BB4(globalCtx, 5);
         func_80B4ADB8(this);
     } else {
-        func_800B85E0(&this->actor, globalCtx, 2000.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 2000.0f, -1);
     }
 }
 
@@ -3871,7 +3871,7 @@ void func_80B4C058(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
 
-    if (func_800B867C(&this->actor, globalCtx)) {
+    if (func_800B867C(&this->actor, &globalCtx->state)) {
         func_80B4BBE0(this);
     }
 }
@@ -3961,7 +3961,7 @@ void func_80B4C5C0(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnInvadepoh* this = THIS;
     s32 sp2C = (this->actor.flags & 0x40) == 0x40;
-    s32 isTalking = Actor_IsTalking(&this->actor, globalCtx);
+    s32 isTalking = Actor_IsTalking(&this->actor, &globalCtx->state);
 
     if (isTalking) {
         func_80151BB4(globalCtx, 6);
@@ -3972,7 +3972,7 @@ void func_80B4C5C0(Actor* thisx, GlobalContext* globalCtx) {
         SkelAnime_FrameUpdateMatrix(&this->skelAnime);
         func_80B45CE0(&this->behaviorInfo);
         if ((this->actionFunc != func_80B4C058) && !isTalking && this->actor.isTargeted) {
-            func_800B8614(&this->actor, globalCtx, 350.0f);
+            func_800B8614(&this->actor, &globalCtx->state, 350.0f);
         }
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
@@ -4093,7 +4093,7 @@ void func_80B4CB0C(EnInvadepoh* this, GlobalContext* globalCtx) {
     temp_v1 = diff;
     temp_v1 *= 0.7f;
     substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
-    if (func_800B867C(&this->actor, globalCtx)) {
+    if (func_800B867C(&this->actor, &globalCtx->state)) {
         func_80B4C6C8(this);
     }
 }
@@ -4177,7 +4177,7 @@ void func_80B4D054(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnInvadepoh* this = THIS;
     s32 sp2C = (this->actor.flags & 0x40) == 0x40;
-    s32 isTalking = Actor_IsTalking(&this->actor, globalCtx);
+    s32 isTalking = Actor_IsTalking(&this->actor, &globalCtx->state);
 
     if (isTalking) {
         func_80151BB4(globalCtx, 5);
@@ -4188,7 +4188,7 @@ void func_80B4D054(Actor* thisx, GlobalContext* globalCtx) {
         SkelAnime_FrameUpdateMatrix(&this->skelAnime);
         func_80B45CE0(&this->behaviorInfo);
         if ((this->actionFunc != func_80B4CB0C) && !isTalking && this->actor.isTargeted) {
-            func_800B8614(thisx, globalCtx, 350.0f);
+            func_800B8614(thisx, &globalCtx->state, 350.0f);
         }
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);

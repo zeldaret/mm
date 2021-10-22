@@ -993,12 +993,12 @@ void func_80BACA14(EnSuttari* this, GlobalContext* globalCtx) {
             this->actionFunc = func_80BACBB0;
         }
     } else if ((player->transformation == PLAYER_FORM_HUMAN) && CUR_EQUIP_VALUE_VOID(EQUIP_SWORD) != 0) {
-        if (Actor_IsTalking(&this->actor, globalCtx)) {
+        if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
             this->unk3F2 = this->unk2DE;
             func_80BAAB78(this, globalCtx);
             this->actionFunc = func_80BADA9C;
         } else if (this->actor.xzDistToPlayer < 200.0f) {
-            func_800B8614(&this->actor, globalCtx, 200.0f);
+            func_800B8614(&this->actor, &globalCtx->state, 200.0f);
         }
     }
     Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.2f, 0.1f);
@@ -1109,11 +1109,11 @@ void func_80BAD004(EnSuttari* this, GlobalContext* globalCtx) {
     }
     this->unk428 = unkStruct.unk0;
     func_80BAC2FC(this, globalCtx);
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         func_801518B0(globalCtx, 0x2A3A, &this->actor);
         this->actionFunc = func_80BAD130;
     } else if ((this->actor.xzDistToPlayer < 200.0f) || this->actor.isTargeted) {
-        func_800B863C(&this->actor, globalCtx);
+        func_800B863C(&this->actor, &globalCtx->state);
     }
     Actor_MoveForward(&this->actor);
 }
@@ -1243,11 +1243,11 @@ void func_80BAD5F8(EnSuttari* this, GlobalContext* globalCtx) {
     }
     func_80BAB434(this);
     if ((this->flags1 & 0x20) && (this->unk430 == 0) && (unkStruct.unk0 != 7)) {
-        if (Actor_IsTalking(&this->actor, globalCtx)) {
+        if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
             func_801518B0(globalCtx, 0x2A02, &this->actor);
             this->actionFunc = func_80BAD130;
         } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) {
-            func_800B863C(&this->actor, globalCtx);
+            func_800B863C(&this->actor, &globalCtx->state);
         }
     }
     Actor_MoveForward(&this->actor);
@@ -1281,11 +1281,11 @@ void func_80BAD7F8(EnSuttari* this, GlobalContext* globalCtx) {
             return;
         }
         if ((this->flags1 & 0x20) && (unkStruct.unk0 != 9)) {
-            if (Actor_IsTalking(&this->actor, globalCtx)) {
+            if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
                 func_801518B0(globalCtx, 0x2A02, &this->actor);
                 this->actionFunc = func_80BAD130;
             } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) {
-                func_800B863C(&this->actor, globalCtx);
+                func_800B863C(&this->actor, &globalCtx->state);
             }
         }
         Actor_MoveForward(&this->actor);
@@ -1293,13 +1293,13 @@ void func_80BAD7F8(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BADA08(EnSuttari* this, GlobalContext* globalCtx) {
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
         func_80BAAB78(this, globalCtx);
         gSaveContext.weekEventReg[0x51] |= 4;
     } else if (this->actor.xzDistToPlayer < 500.0f) {
         this->actor.flags |= 0x10000;
-        func_800B8614(&this->actor, globalCtx, 500.0f);
+        func_800B8614(&this->actor, &globalCtx->state, 500.0f);
     }
 }
 
@@ -1394,13 +1394,13 @@ void func_80BADE14(EnSuttari* this, GlobalContext* globalCtx) {
 void func_80BADE8C(EnSuttari* this, GlobalContext* globalCtx) {
     this->unk3F2 = this->unk2DE;
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
         func_801518B0(globalCtx, 0x2A3A, &this->actor);
         this->actionFunc = func_80BAD130;
     } else {
         this->actor.flags |= 0x10000;
-        func_800B8614(&this->actor, globalCtx, 500.0f);
+        func_800B8614(&this->actor, &globalCtx->state, 500.0f);
     }
 }
 

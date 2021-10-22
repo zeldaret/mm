@@ -350,8 +350,8 @@ void func_80ADB544(EnSellnuts* this, GlobalContext* globalCtx) {
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0x7D0, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
-        if (func_800B8708(globalCtx) == 0x2A) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+        if (func_800B8708(&globalCtx->state) == 0x2A) {
             player->actor.textId = D_80ADD928[this->unk_33A];
             this->unk_340 = player->actor.textId;
             this->actionFunc = func_80ADBAB8;
@@ -392,7 +392,7 @@ void func_80ADB544(EnSellnuts* this, GlobalContext* globalCtx) {
     } else if (((this->actor.xzDistToPlayer < 80.0f) &&
                 (((this->actor.yDistToPlayer < 50.0f) && (this->actor.yDistToPlayer > -50.0f)) ? true : false)) ||
                this->actor.isTargeted) {
-        func_800B85E0(&this->actor, globalCtx, 80.0f, 0x2A);
+        func_800B85E0(&this->actor, &globalCtx->state, 80.0f, 0x2A);
         if (player->transformation == PLAYER_FORM_DEKU) {
             if (gSaveContext.day == 3) {
                 this->unk_33A = 2;
@@ -497,18 +497,18 @@ void func_80ADBBEC(EnSellnuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80ADBC60(EnSellnuts* this, GlobalContext* globalCtx) {
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         func_801518B0(globalCtx, this->unk_340, &this->actor);
         this->actionFunc = func_80ADB0D8;
     } else {
-        func_800B85E0(&this->actor, globalCtx, 400.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, -1);
         this->unk_340 = D_80ADD930[this->unk_33A];
     }
 }
 
 void func_80ADBCE4(EnSellnuts* this, GlobalContext* globalCtx) {
     if ((func_80152498(&globalCtx->msgCtx) == 6) && func_80147624(globalCtx)) {
-        func_800B85E0(&this->actor, globalCtx, 400.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, -1);
         this->unk_340 = D_80ADD930[this->unk_33A];
         this->actionFunc = func_80ADBC60;
     }
@@ -706,7 +706,7 @@ void func_80ADC580(EnSellnuts* this, GlobalContext* globalCtx) {
 void func_80ADC5A4(EnSellnuts* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (Actor_IsTalking(&this->actor, globalCtx)) {
+    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
         player->linearVelocity = 0.0f;
         this->actor.flags &= ~0x10000;
         func_801518B0(globalCtx, this->unk_340, &this->actor);
@@ -722,7 +722,7 @@ void func_80ADC5A4(EnSellnuts* this, GlobalContext* globalCtx) {
         }
     } else if (func_80ADB08C(globalCtx) < 80.0f) {
         this->actor.flags |= 0x10000;
-        func_800B8614(&this->actor, globalCtx, this->actor.xzDistToPlayer);
+        func_800B8614(&this->actor, &globalCtx->state, this->actor.xzDistToPlayer);
     }
 }
 
@@ -869,7 +869,7 @@ void func_80ADCC04(EnSellnuts* this, GlobalContext* globalCtx) {
         if (currentFrame == 0) {
             if (func_80ADB08C(globalCtx) < 9999.0f) {
                 this->actor.flags |= 0x10000;
-                func_800B8614(&this->actor, globalCtx, 9999.0f);
+                func_800B8614(&this->actor, &globalCtx->state, 9999.0f);
             }
             this->unk_340 = 0x626;
             this->unk_34C = 0;
