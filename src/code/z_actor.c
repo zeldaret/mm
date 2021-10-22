@@ -1884,7 +1884,7 @@ s32 func_800B8934(GameState* gameState, Actor* actor) {
     return (sp2C.x * sp28 >= -1.0f) && (sp2C.x * sp28 <= 1.0f) && (sp2C.y * sp28 >= -1.0f) && (sp2C.y * sp28 <= 1.0f);
 }
 
-u32 Actor_HasParent(Actor* actor, GlobalContext* globalCtx) {
+s32 Actor_HasParent(Actor* actor, GlobalContext* globalCtx) {
     if (actor->parent != NULL) {
         return true;
     } else {
@@ -1892,8 +1892,14 @@ u32 Actor_HasParent(Actor* actor, GlobalContext* globalCtx) {
     }
 }
 
-// Actor_PickUp
-s32 func_800B8A1C(Actor* actor, GlobalContext* globalCtx, s32 getItemId, f32 xzRange, f32 yRange) {
+/**
+ * Allows to pick up an item (GetItem), lift an actor or catch various actors in bottles
+ * within the specified range.
+ * 
+ * GI_NONE is usually used as a special case to lift an actor
+ * GI_MAX is usually used to catch an actor in a bottle
+*/
+s32 Actor_PickUp(Actor* actor, GlobalContext* globalCtx, s32 getItemId, f32 xzRange, f32 yRange) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (!(player->stateFlags1 & 0x3C7080) && Player_GetExplosiveHeld(player) < 0) {
@@ -1924,19 +1930,16 @@ s32 func_800B8A1C(Actor* actor, GlobalContext* globalCtx, s32 getItemId, f32 xzR
     return false;
 }
 
-// Actor_PickUpNearby
-s32 func_800B8B84(Actor* actor, GlobalContext* globalCtx, s32 getItemId) {
-    return func_800B8A1C(actor, globalCtx, getItemId, 50.0f, 10.0f);
+s32 Actor_PickUpNearby(Actor* actor, GlobalContext* globalCtx, s32 getItemId) {
+    return Actor_PickUp(actor, globalCtx, getItemId, 50.0f, 10.0f);
 }
 
-// Actor_HoldActor?
-s32 func_800B8BB0(Actor* actor, GlobalContext* globalCtx) {
-    return func_800B8B84(actor, globalCtx, GI_NONE);
+s32 Actor_LiftActor(Actor* actor, GlobalContext* globalCtx) {
+    return Actor_PickUpNearby(actor, globalCtx, GI_NONE);
 }
 
-// Actor_PickUpFar?
-s32 func_800B8BD0(Actor* actor, GlobalContext* globalCtx, s32 getItemId) {
-    return func_800B8A1C(actor, globalCtx, getItemId, 9999.9f, 9999.9f);
+s32 Actor_PickUpFar(Actor* actor, GlobalContext* globalCtx, s32 getItemId) {
+    return Actor_PickUp(actor, globalCtx, getItemId, 9999.9f, 9999.9f);
 }
 
 s32 Actor_HasNoParent(Actor* actor, GlobalContext* globalCtx) {

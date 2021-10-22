@@ -422,7 +422,7 @@ void func_80989E18(EnDg* this, GlobalContext* globalCtx) {
             this->actionFunc = func_8098BA64;
         }
     } else {
-        func_800B8BB0(&this->actor, globalCtx);
+        Actor_LiftActor(&this->actor, globalCtx);
     }
 }
 

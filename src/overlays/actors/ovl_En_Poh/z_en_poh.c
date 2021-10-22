@@ -672,7 +672,7 @@ void func_80B2E230(EnPoh* this, GlobalContext* globalCtx) {
         return;
     }
 
-    func_800B8A1C(&this->actor, globalCtx, 0xBA, 35.0f, 60.0f);
+    Actor_PickUp(&this->actor, globalCtx, 0xBA, 35.0f, 60.0f);
     this->actor.world.pos.y = (Math_SinS(this->unk_18D * 0x800) * 5.0f) + this->actor.home.pos.y;
     if (this->unk_18D) {
         this->unk_18D--;

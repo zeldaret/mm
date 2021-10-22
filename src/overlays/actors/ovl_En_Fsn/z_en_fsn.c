@@ -993,9 +993,9 @@ void EnFsn_GiveItem(EnFsn* this, GlobalContext* globalCtx) {
         }
         this->actionFunc = EnFsn_SetupResumeInteraction;
     } else if (this->isSelling == true) {
-        func_800B8A1C(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
+        Actor_PickUp(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
     } else {
-        func_800B8A1C(&this->actor, globalCtx, this->getItemId, 300.0f, 300.0f);
+        Actor_PickUp(&this->actor, globalCtx, this->getItemId, 300.0f, 300.0f);
     }
 }
 
@@ -1146,7 +1146,7 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, GlobalContext* globalCtx) {
             func_8019F208();
             item = this->items[this->cursorIdx];
             item->buyFanfareFunc(globalCtx, item);
-            func_800B8A1C(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
+            Actor_PickUp(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
             globalCtx->msgCtx.unk11F22 = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             Interface_ChangeAlpha(50);

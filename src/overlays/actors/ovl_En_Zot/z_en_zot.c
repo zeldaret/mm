@@ -955,7 +955,7 @@ void func_80B9854C(EnZot* this, GlobalContext* globalCtx) {
         this->actor.flags |= 0x10000;
         func_800B8500(&this->actor, &globalCtx->state, 1000.0f, 1000.0f, -1);
     } else {
-        func_800B8A1C(&this->actor, globalCtx, this->unk_2D4, 10000.0f, 50.0f);
+        Actor_PickUp(&this->actor, globalCtx, this->unk_2D4, 10000.0f, 50.0f);
     }
 }
 
@@ -1215,7 +1215,7 @@ void func_80B98F30(EnZot* this, GlobalContext* globalCtx) {
         this->actor.parent = NULL;
         this->actionFunc = func_80B990A4;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, 2, 10000.0f, 50.0f);
+        Actor_PickUp(&this->actor, globalCtx, 2, 10000.0f, 50.0f);
     }
 }
 

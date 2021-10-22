@@ -882,9 +882,9 @@ void func_80963560(EnFu* this, GlobalContext* globalCtx) {
         this->actor.parent = NULL;
         func_80963610(this);
     } else if ((this->unk_552 == 0x2880) && !(gSaveContext.weekEventReg[22] & 0x80)) {
-        func_800B8A1C(&this->actor, globalCtx, GI_HEART_PIECE, 500.0f, 100.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_HEART_PIECE, 500.0f, 100.0f);
     } else {
-        func_800B8A1C(&this->actor, globalCtx, GI_RUPEE_PURPLE, 500.0f, 100.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_RUPEE_PURPLE, 500.0f, 100.0f);
     }
     this->actor.child->freezeTimer = 10;
 }

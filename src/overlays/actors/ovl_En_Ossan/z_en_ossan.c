@@ -946,7 +946,7 @@ void EnOssan_LookToShopkeeperFromShelf(EnOssan* this, GlobalContext* globalCtx) 
 void EnOssan_SetupBuyItemWithFanfare(GlobalContext* globalCtx, EnOssan* this) {
     Player* player = GET_PLAYER(globalCtx);
 
-    func_800B8A1C(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
+    Actor_PickUp(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
     globalCtx->msgCtx.unk11F22 = 0x43;
     globalCtx->msgCtx.unk12023 = 4;
     player->stateFlags2 &= ~0x20000000;
@@ -1058,7 +1058,7 @@ void EnOssan_BuyItemWithFanfare(EnOssan* this, GlobalContext* globalCtx) {
         this->actor.parent = NULL;
         EnOssan_SetupAction(this, EnOssan_SetupItemPurchased);
     } else {
-        func_800B8A1C(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
+        Actor_PickUp(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
     }
 }
 

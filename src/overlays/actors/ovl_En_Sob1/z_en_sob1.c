@@ -940,7 +940,7 @@ void EnSob1_BrowseShelf(EnSob1* this, GlobalContext* globalCtx) {
 void EnSob1_SetupBuyItemWithFanfare(GlobalContext* globalCtx, EnSob1* this) {
     Player* player = GET_PLAYER(globalCtx);
 
-    func_800B8A1C(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
+    Actor_PickUp(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
     globalCtx->msgCtx.unk11F22 = 0x43;
     globalCtx->msgCtx.unk12023 = 4;
     player->stateFlags2 &= ~0x20000000;
@@ -1075,7 +1075,7 @@ void EnSob1_BuyItemWithFanfare(EnSob1* this, GlobalContext* globalCtx) {
         this->actor.parent = NULL;
         EnSob1_SetupAction(this, EnSob1_SetupItemPurchased);
     } else {
-        func_800B8A1C(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
+        Actor_PickUp(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
     }
 }
 

@@ -351,7 +351,7 @@ void EnNiw_Idle(EnNiw* this, GlobalContext* globalCtx) {
             this->actionFunc = EnNiw_Held;
             return;
         } else {
-            func_800B8BB0(&this->actor, globalCtx);
+            Actor_LiftActor(&this->actor, globalCtx);
         }
     } else {
         this->unkTimer252 = 10;
@@ -503,7 +503,7 @@ void EnNiw_Thrown(EnNiw* this, GlobalContext* globalCtx) {
         this->actor.speedXZ = 0.0f;
     } else {
         if (this->unkTimer252 > 5) {
-            func_800B8BB0(&this->actor, globalCtx);
+            Actor_LiftActor(&this->actor, globalCtx);
         }
         func_80891320(this, globalCtx, 2);
     }

@@ -635,7 +635,7 @@ void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
                         } else {
                             this->unk_458 = 142;
                         }
-                        func_800B8A1C(&this->actor, globalCtx, this->unk_458, 60.0f, 60.0f);
+                        Actor_PickUp(&this->actor, globalCtx, this->unk_458, 60.0f, 60.0f);
                         func_801477B4(globalCtx);
                         func_80A72B84(this, globalCtx);
                     }
@@ -700,7 +700,7 @@ void func_80A72BA4(EnDno* this, GlobalContext* globalCtx) {
         this->actor.parent = NULL;
         this->actionFunc = func_80A72598;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, this->unk_458, 60.0f, 60.0f);
+        Actor_PickUp(&this->actor, globalCtx, this->unk_458, 60.0f, 60.0f);
     }
 }
 

@@ -72,7 +72,7 @@ void ItemBHeart_Update(Actor* thisx, GlobalContext* globalCtx) {
             Flags_SetCollectible(globalCtx, 0x1F);
             Actor_MarkForDeath(&this->actor);
         } else {
-            func_800B8A1C(&this->actor, globalCtx, 0xD, 30.0f, 80.0f);
+            Actor_PickUp(&this->actor, globalCtx, 0xD, 30.0f, 80.0f);
         }
     }
 }

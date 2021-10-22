@@ -61,6 +61,10 @@ animdict ={
     "Actor_UnsetRoomClearedTemp": "Flags_UnsetTempClear",
     "Actor_GetCollectibleFlag": "Flags_GetCollectible",
     "Actor_SetCollectibleFlag": "Flags_SetCollectible",
+    "func_800B8A1C": "Actor_PickUp",
+    "func_800B8B84": "Actor_PickUpNearby",
+    "func_800B8BB0": "Actor_LiftActor",
+    "func_800B8BD0": "Actor_PickUpFar",
 }
 
 def replace_anim(file):

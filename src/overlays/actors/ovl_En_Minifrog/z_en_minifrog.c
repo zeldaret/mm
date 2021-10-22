@@ -491,7 +491,7 @@ void EnMinifrog_GetFrogHP(EnMinifrog* this, GlobalContext* globalCtx) {
         this->actor.flags |= 0x10000;
         func_800B8500(&this->actor, &globalCtx->state, 1000.0f, 1000.0f, 0);
     } else {
-        func_800B8A1C(&this->actor, globalCtx, GI_HEART_PIECE, 10000.0f, 50.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_HEART_PIECE, 10000.0f, 50.0f);
     }
 }
 

@@ -986,10 +986,10 @@ void EnMaYto_PostMilkRunGiveReward(EnMaYto* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         EnMaYto_SetupPostMilkRunExplainReward(this);
     } else if (INV_CONTENT(ITEM_MASK_ROMANIS) == ITEM_MASK_ROMANIS) {
-        func_800B8A1C(&this->actor, globalCtx, GI_RUPEE_GOLD, 500.0f, 100.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_RUPEE_GOLD, 500.0f, 100.0f);
         this->unk310 = 2;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, GI_MASK_ROMANIS, 500.0f, 100.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_MASK_ROMANIS, 500.0f, 100.0f);
         this->unk310 = 1;
     }
 }

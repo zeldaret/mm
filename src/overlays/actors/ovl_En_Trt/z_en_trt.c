@@ -375,7 +375,7 @@ void EnTrt_PayForMushroom(EnTrt* this, GlobalContext* globalCtx) {
         func_80123D50(globalCtx, GET_PLAYER(globalCtx), 18, 21);
         this->actionFunc = EnTrt_SetupItemGiven;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, GI_RUPEE_RED, 300.0f, 300.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_RUPEE_RED, 300.0f, 300.0f);
     }
 }
 
@@ -450,9 +450,9 @@ void EnTrt_GiveRedPotionForKoume(EnTrt* this, GlobalContext* globalCtx) {
         player->stateFlags2 &= ~0x20000000;
         this->actionFunc = EnTrt_GivenRedPotionForKoume;
     } else if (gSaveContext.weekEventReg[0xC] & 0x10) {
-        func_800B8A1C(&this->actor, globalCtx, GI_POTION_RED, 300.0f, 300.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_POTION_RED, 300.0f, 300.0f);
     } else {
-        func_800B8A1C(&this->actor, globalCtx, GI_BOTTLE_POTION_RED, 300.0f, 300.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_BOTTLE_POTION_RED, 300.0f, 300.0f);
     }
 }
 
@@ -646,7 +646,7 @@ void EnTrt_BrowseShelf(EnTrt* this, GlobalContext* globalCtx) {
 void EnTrt_SetupBuyItemWithFanfare(GlobalContext* globalCtx, EnTrt* this) {
     Player* player = GET_PLAYER(globalCtx);
 
-    func_800B8A1C(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
+    Actor_PickUp(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
     globalCtx->msgCtx.unk11F22 = 0x43;
     globalCtx->msgCtx.unk12023 = 4;
     player->stateFlags2 &= ~0x20000000;
@@ -1079,7 +1079,7 @@ void EnTrt_BuyItemWithFanfare(EnTrt* this, GlobalContext* globalCtx) {
         this->actor.parent = NULL;
         this->actionFunc = EnTrt_SetupItemGiven;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
+        Actor_PickUp(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
     }
 }
 

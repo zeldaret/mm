@@ -444,7 +444,7 @@ void func_808F3B40(EnIn* this, GlobalContext* globalCtx) {
         textId = gSaveContext.day != 3 ? 0x3481 : 0x34A4;
         this->actor.textId = textId;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
+        Actor_PickUp(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
     }
 }
 
@@ -468,7 +468,7 @@ void func_808F3C40(EnIn* this, GlobalContext* globalCtx) {
         textId = gSaveContext.day != 3 ? 0x346A : 0x3492;
         this->actor.textId = textId;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
+        Actor_PickUp(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
     }
 }
 
@@ -492,7 +492,7 @@ void func_808F3D40(EnIn* this, GlobalContext* globalCtx) {
         this->actor.textId = textId;
         this->actor.flags |= 0x10000;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, 0x81, 500.0f, 100.0f);
+        Actor_PickUp(&this->actor, globalCtx, 0x81, 500.0f, 100.0f);
     }
 }
 
@@ -790,7 +790,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                         if (gSaveContext.rupees >= globalCtx->msgCtx.unk1206C) {
                             if (func_80114E90()) {
                                 this->actionFunc = func_808F3C40;
-                                func_800B8A1C(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
+                                Actor_PickUp(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
                                 func_801159EC(-globalCtx->msgCtx.unk1206C);
                                 ret = true;
                             } else {
@@ -936,7 +936,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     func_808F35D8(this, globalCtx);
                     if (func_80114E90()) {
                         this->actionFunc = func_808F3B40;
-                        func_800B8A1C(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
+                        Actor_PickUp(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
                         ret = true;
                     } else {
                         func_800E8EA0(globalCtx, &this->actor, 0x347F);
@@ -960,7 +960,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     break;
                 case 0x347C:
                     this->actionFunc = func_808F3D40;
-                    func_800B8A1C(&this->actor, globalCtx, 0x81, 500.0f, 100.0f);
+                    Actor_PickUp(&this->actor, globalCtx, 0x81, 500.0f, 100.0f);
                     func_808F35D8(this, globalCtx);
                     ret = true;
                     break;
@@ -1042,7 +1042,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                         if (gSaveContext.rupees >= globalCtx->msgCtx.unk1206C) {
                             if (func_80114E90()) {
                                 this->actionFunc = func_808F3C40;
-                                func_800B8A1C(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
+                                Actor_PickUp(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
                                 func_801159EC(-globalCtx->msgCtx.unk1206C);
                                 ret = true;
                             } else {
@@ -1125,7 +1125,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     break;
                 case 0x349F:
                     this->actionFunc = func_808F3D40;
-                    func_800B8A1C(&this->actor, globalCtx, 0x81, 500.0f, 100.0f);
+                    Actor_PickUp(&this->actor, globalCtx, 0x81, 500.0f, 100.0f);
                     func_808F35D8(this, globalCtx);
                     ret = true;
                     break;
@@ -1140,7 +1140,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     func_808F35D8(this, globalCtx);
                     if (func_80114E90()) {
                         this->actionFunc = func_808F3B40;
-                        func_800B8A1C(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
+                        Actor_PickUp(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
                         ret = true;
                     } else {
                         func_800E8EA0(globalCtx, &this->actor, 0x34A2);

@@ -251,7 +251,7 @@ void EnItem00_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if ((getItemId != GI_NONE) && (Actor_HasParent(&this->actor, globalCtx) == 0)) {
-        func_800B8A1C(&this->actor, globalCtx, getItemId, 50.0f, 20.0f);
+        Actor_PickUp(&this->actor, globalCtx, getItemId, 50.0f, 20.0f);
     }
 
     this->actionFunc = func_800A6A40;
@@ -407,7 +407,7 @@ void func_800A6A40(EnItem00* this, GlobalContext* globalCtx) {
 
     if (this->unk14A != 0) {
         if (Actor_HasParent(&this->actor, globalCtx) == 0) {
-            func_800B8A1C(&this->actor, globalCtx, this->unk14A, 50.0f, 80.0f);
+            Actor_PickUp(&this->actor, globalCtx, this->unk14A, 50.0f, 80.0f);
             this->unk152++;
         } else {
             this->unk14A = 0;
@@ -576,7 +576,7 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (getItemId != GI_NONE) {
         if (!Actor_HasParent(&this->actor, globalCtx)) {
-            func_800B8A1C(&this->actor, globalCtx, getItemId, 50.0f, 20.0f);
+            Actor_PickUp(&this->actor, globalCtx, getItemId, 50.0f, 20.0f);
         }
     }
 

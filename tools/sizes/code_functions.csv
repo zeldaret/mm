@@ -299,10 +299,10 @@ asm/non_matchings/code/z_actor/func_800B886C.s,func_800B886C,0x800B886C,0xB
 asm/non_matchings/code/z_actor/func_800B8898.s,func_800B8898,0x800B8898,0x27
 asm/non_matchings/code/z_actor/func_800B8934.s,func_800B8934,0x800B8934,0x31
 asm/non_matchings/code/z_actor/Actor_HasParent.s,Actor_HasParent,0x800B89F8,0x9
-asm/non_matchings/code/z_actor/func_800B8A1C.s,func_800B8A1C,0x800B8A1C,0x5A
-asm/non_matchings/code/z_actor/func_800B8B84.s,func_800B8B84,0x800B8B84,0xB
-asm/non_matchings/code/z_actor/func_800B8BB0.s,func_800B8BB0,0x800B8BB0,0x8
-asm/non_matchings/code/z_actor/func_800B8BD0.s,func_800B8BD0,0x800B8BD0,0xB
+asm/non_matchings/code/z_actor/Actor_PickUp.s,Actor_PickUp,0x800B8A1C,0x5A
+asm/non_matchings/code/z_actor/Actor_PickUpNearby.s,Actor_PickUpNearby,0x800B8B84,0xB
+asm/non_matchings/code/z_actor/Actor_LiftActor.s,Actor_LiftActor,0x800B8BB0,0x8
+asm/non_matchings/code/z_actor/Actor_PickUpFar.s,Actor_PickUpFar,0x800B8BD0,0xB
 asm/non_matchings/code/z_actor/Actor_HasNoParent.s,Actor_HasNoParent,0x800B8BFC,0x9
 asm/non_matchings/code/z_actor/func_800B8C20.s,func_800B8C20,0x800B8C20,0xC
 asm/non_matchings/code/z_actor/func_800B8C50.s,func_800B8C50,0x800B8C50,0xA

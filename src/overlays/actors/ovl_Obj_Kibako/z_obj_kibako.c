@@ -122,7 +122,7 @@ void func_80926318(ObjKibako* this, GlobalContext* globalCtx) {
     if (this->actor.xzDistToPlayer < 100.0f) {
         angle = this->actor.yawTowardsPlayer - GET_PLAYER(globalCtx)->actor.world.rot.y;
         if (ABS_ALT(angle) >= 0x5556) {
-            func_800B8A1C(&this->actor, globalCtx, 0, 36.0f, 30.0f);
+            Actor_PickUp(&this->actor, globalCtx, 0, 36.0f, 30.0f);
         }
     }
 }

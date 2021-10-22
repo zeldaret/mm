@@ -306,7 +306,7 @@ void func_80BC7440(EnGuruguru* this, GlobalContext* globalCtx) {
         gSaveContext.weekEventReg[38] |= 0x40;
         this->actionFunc = func_80BC7520;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, GI_MASK_BREMEN, 300.0f, 300.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_MASK_BREMEN, 300.0f, 300.0f);
     }
 }
 

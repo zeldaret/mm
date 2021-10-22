@@ -612,7 +612,7 @@ void func_80B41D64(EnKgy* this, GlobalContext* globalCtx) {
         this->actor.flags |= 0x10000;
         func_800B8500(&this->actor, &globalCtx->state, 1000.0f, 1000.0f, -1);
     } else {
-        func_800B8A1C(&this->actor, globalCtx, this->unk_2EA, 2000.0f, 1000.0f);
+        Actor_PickUp(&this->actor, globalCtx, this->unk_2EA, 2000.0f, 1000.0f);
     }
     func_80B40EE8(this, globalCtx);
 }
@@ -813,7 +813,7 @@ void func_80B41E18(EnKgy* this, GlobalContext* globalCtx) {
                             func_801477B4(globalCtx);
                             this->actionFunc = func_80B41D64;
                             func_80B413C8(this);
-                            func_800B8A1C(&this->actor, globalCtx, this->unk_2EA, 2000.0f, 1000.0f);
+                            Actor_PickUp(&this->actor, globalCtx, this->unk_2EA, 2000.0f, 1000.0f);
                             break;
 
                         case 0xC51:
