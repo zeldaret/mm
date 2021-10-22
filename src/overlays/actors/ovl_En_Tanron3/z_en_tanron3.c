@@ -11,6 +11,17 @@
 
 #define THIS ((EnTanron3*)thisx)
 
+typedef struct {
+    /* 0x00 */ u8 unk_00;
+    /* 0x02 */ s16 unk_02;
+    /* 0x04 */ Vec3f unk_04;
+    /* 0x10 */ Vec3f unk_10;
+    /* 0x1C */ Vec3f unk_1C;
+    /* 0x28 */ char unk_28[0xC];
+    /* 0x34 */ Vec3f unk_34;
+    /* 0x40 */ char unk_40[0x4];
+} UnkTanron3Effect;
+
 void EnTanron3_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron3_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron3_Update(Actor* thisx, GlobalContext* globalCtx);
@@ -20,7 +31,7 @@ void func_80BB897C(EnTanron3* this, GlobalContext* globalCtx);
 void func_80BB8A48(EnTanron3* this, GlobalContext* globalCtx);
 void func_80BB9288(EnTanron3* this, GlobalContext* globalCtx);
 
-static s32 D_80BB9720[] = { 0x00000000, 0x00000000, 0x00000000 };
+static Vec3f D_80BB9720[] = { 0.0f, 0.0f, 0.0f };
 
 static Boss03* D_80BB972C = NULL;
 
@@ -85,7 +96,28 @@ static Color_RGBA8 D_80BB97AC = { 50, 10, 10, 255 };
 extern FlexSkeletonHeader D_0600DA20;
 extern AnimationHeader D_0600DAAC;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron3/func_80BB85A0.s")
+void func_80BB85A0(GlobalContext* globalCtx, Vec3f* pos) {
+    UnkTanron3Effect* effectPtr;
+    s16 i;
+
+    effectPtr = (UnkTanron3Effect*)globalCtx->specialEffects;
+    for (i = 0; i < 150; i++, effectPtr++) {
+        if ((effectPtr->unk_00 == 0) || (effectPtr->unk_00 == 1)) {
+            effectPtr->unk_00 = 2;
+            effectPtr->unk_04 = *pos;
+            effectPtr->unk_10 = *D_80BB9720;
+            effectPtr->unk_1C = *D_80BB9720;
+            effectPtr->unk_1C.y = -2.0f;
+            effectPtr->unk_34.x = 0.1f;
+            effectPtr->unk_34.y = 0.0f;
+            effectPtr->unk_34.z = Rand_ZeroFloat(M_PI * 2);
+            effectPtr->unk_02 = Rand_ZeroFloat(100.0f);
+            effectPtr->unk_10.x = randPlusMinusPoint5Scaled(25.0f);
+            effectPtr->unk_10.z = randPlusMinusPoint5Scaled(25.0f);
+            return;
+        }
+    }
+}
 
 void EnTanron3_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnTanron3* this = THIS;
