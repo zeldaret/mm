@@ -1,7 +1,7 @@
 /*
  * File: z_en_muto.c
  * Overlay: ovl_En_Muto
- * Description: Mutoh
+ * Description: Mutoh, leader of the carpenters
  */
 
 #include "z_en_muto.h"
@@ -142,7 +142,7 @@ void EnMuto_Idle(EnMuto* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (0) {} // Needed to match
+    if (1) {} // Needed to match
 
     if (!this->isInMayorsRoom && Player_GetMask(globalCtx) == PLAYER_MASK_KAFEIS_MASK) {
         this->actor.textId = 0x2363;
@@ -155,6 +155,7 @@ void EnMuto_Idle(EnMuto* this, GlobalContext* globalCtx) {
 
     if (!this->isInMayorsRoom) {
         s16 yawRotToPlayer = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.world.rot.y));
+
         this->yawTowardsTarget = this->actor.yawTowardsPlayer;
         if (yawRotToPlayer > 0x2890) {
             return;
