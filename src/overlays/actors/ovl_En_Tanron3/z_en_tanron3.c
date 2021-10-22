@@ -163,14 +163,149 @@ void func_80BB897C(EnTanron3* this, GlobalContext* globalCtx) {
     this->unk_204[0] = 50;
     this->actor.speedXZ = 5.0f;
     this->unk_240 = 0.5f;
-    this->unk_228 = randPlusMinusPoint5Scaled(500.0f);
-    this->unk_22C = randPlusMinusPoint5Scaled(100.0f);
-    this->unk_230 = randPlusMinusPoint5Scaled(500.0f);
+    this->unk_228.x = randPlusMinusPoint5Scaled(500.0f);
+    this->unk_228.y = randPlusMinusPoint5Scaled(100.0f);
+    this->unk_228.z = randPlusMinusPoint5Scaled(500.0f);
     Math_Vec3f_Copy(&this->unk_21C, &this->actor.world.pos);
     this->unk_200 = Rand_ZeroFloat(100.0f);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron3/func_80BB8A48.s")
+void func_80BB8A48(EnTanron3* this, GlobalContext* globalCtx) {
+    s32 atan_temp;
+    f32 temp_f18;
+    f32 sp54;
+    f32 sp50;
+    f32 dist;
+    f32 sp48;
+    Player* player;
+
+    sp48 = 0.0f;
+    player = GET_PLAYER(globalCtx);
+    this->skelAnime.animCurrentFrame = 4.0f;
+    if (((player->actor.bgCheckFlags & 1) != 0) && (player->actor.shape.feetPos[0].y >= 438.0f)) {
+        this->unk_202 = 1;
+    } else if (this->unk_202 != 0 && this->unk_204[2] == 0 && ((this->unk_200 & 0x1F) == 0)) {
+        temp_f18 = this->unk_21C.x - player->actor.world.pos.x;
+        sp50 = this->unk_21C.z - player->actor.world.pos.z;
+        if (sqrtf(SQ(temp_f18) + SQ(sp50)) < 500.0f) {
+            this->unk_202 = 0;
+            this->unk_204[2] = 150;
+        }
+    }
+    if (this->actor.world.pos.y < this->unk_244) {
+        this->unk_203 = 0;
+        switch (this->unk_202) {
+            case 0:
+                this->unk_23C = 5.0f;
+                this->unk_236 = 0x1000;
+                this->unk_254 = 0x3A98;
+                Math_Vec3f_Copy(&this->unk_21C, &player->actor.world.pos);
+                if ((this->unk_200 & 0xF) == 0) {
+                    if ((Rand_ZeroOne() < 0.5f) && (this->actor.xzDistToPlayer <= 200.0f)) {
+                        Audio_PlayActorSound2(&this->actor, NA_SE_EN_PIRANHA_ATTACK);
+                    }
+                }
+                if ((this->unk_204[2] == 0) || ((player->stateFlags2 & 0x80) != 0)) {
+                    this->unk_204[2] = 0x96;
+                    this->unk_202 = 1;
+                }
+                break;
+            case 1:
+                if ((D_80BB972C->unk_324 != 0) && ((this->unk_200 & 7) == 0)) {
+                    this->unk_254 = 0x4E20;
+                    this->actor.speedXZ = 6.0f;
+                } else {
+                    this->unk_254 = 0x1F40;
+                }
+                this->unk_236 = 0x200;
+                this->unk_23C = 2.0f;
+                atan_temp = Math_FAtan2F(this->unk_21C.z, this->unk_21C.x);
+                Matrix_RotateY(atan_temp, 0);
+                SysMatrix_GetStateTranslationAndScaledZ(700.0f, &this->unk_21C);
+                this->unk_21C.y = 250.0f;
+                sp48 = 150.0f;
+                break;
+        }
+        if (this->unk_204[1] == 0) {
+            if ((this->unk_204[0] == 0) && (this->actor.speedXZ > 1.0f)) {
+                this->unk_204[0] = Rand_ZeroFloat(20.0f);
+                this->unk_228.x = randPlusMinusPoint5Scaled(100.0f);
+                this->unk_228.y = randPlusMinusPoint5Scaled(50.0f + sp48);
+                this->unk_228.z = randPlusMinusPoint5Scaled(100.0f);
+            }
+            this->unk_210.y = this->unk_21C.y + this->unk_228.y + 50.0f;
+        }
+        this->unk_210.x = this->unk_21C.x + this->unk_228.x;
+        this->unk_210.z = this->unk_21C.z + this->unk_228.z;
+        temp_f18 = this->unk_210.x - this->actor.world.pos.x;
+        sp54 = this->unk_210.y - this->actor.world.pos.y;
+        sp50 = this->unk_210.z - this->actor.world.pos.z;
+        dist = sqrtf(SQ(temp_f18) + SQ(sp50));
+        atan_temp = Math_FAtan2F(dist, -sp54);
+        Math_ApproachS(&this->actor.world.rot.x, atan_temp, this->unk_238, this->unk_234);
+        atan_temp = Math_FAtan2F(sp50, temp_f18);
+        Math_SmoothStepToS(&this->actor.world.rot.y, atan_temp, this->unk_238, this->unk_234, 0);
+        Math_ApproachS(&this->unk_234, this->unk_236, 1, 0x100);
+        Math_ApproachF(&this->actor.speedXZ, this->unk_23C, 1.0f, this->unk_240);
+        Actor_SetVelocityAndMoveXYRotationReverse(&this->actor);
+    } else {
+        switch (this->unk_203) {
+            case 0:
+                this->actor.gravity = -1.0f;
+                this->unk_210.y = (this->unk_244 - 50.0f);
+                this->unk_204[1] = 0x19;
+                Math_ApproachS(&this->actor.world.rot.x, 0x3000, 5, 0xBD0);
+                if ((this->actor.bgCheckFlags & 8) != 0) {
+                    this->actor.speedXZ = 0.0f;
+                    if (this->actor.velocity.y > 0.0f) {
+                        this->actor.velocity.y = -1.0f;
+                    }
+                }
+                if ((this->actor.bgCheckFlags & 1) != 0) {
+                    this->unk_203 = 1;
+                }
+                break;
+            case 1:
+                this->unk_254 = 0x3A98;
+                this->actor.gravity = -1.5f;
+                if ((this->actor.bgCheckFlags & 1) != 0) {
+                    this->actor.velocity.y = Rand_ZeroFloat(5.0f) + 5.0f;
+                    this->actor.speedXZ = Rand_ZeroFloat(2.0f) + 2.0f;
+                    if (Rand_ZeroOne() < 0.5f) {
+                        this->unk_248.x = ((s16)randPlusMinusPoint5Scaled(500.0f) + this->unk_248.x + 0x8000);
+                    }
+                    if (Rand_ZeroOne() < 0.5f) {
+                        this->unk_248.z = ((s16)randPlusMinusPoint5Scaled(500.0f) + this->unk_248.z + 0x8000);
+                    }
+                    if (Rand_ZeroOne() < 0.5f) {
+                        this->unk_248.y = (s16)Rand_ZeroFloat(65536.0f);
+                    }
+                    this->actor.world.rot.y = Math_FAtan2F(this->actor.world.pos.z, this->actor.world.pos.x) +
+                                              (s16)randPlusMinusPoint5Scaled(52768.0f);
+                }
+                Math_ApproachS(&this->actor.shape.rot.y, this->unk_248.y, 3, 0x500);
+                Math_ApproachS(&this->actor.shape.rot.x, this->unk_248.x, 3, 0xC00);
+                Math_ApproachS(&this->actor.shape.rot.z, this->unk_248.z, 3, 0xC00);
+                if ((Rand_ZeroOne() < 0.5f & !(this->unk_200 & 3)) != 0) {
+                    Vec3f sp38;
+
+                    sp38.x = randPlusMinusPoint5Scaled(30.0f) + this->actor.world.pos.x;
+                    sp38.y = this->actor.world.pos.y;
+                    sp38.z = randPlusMinusPoint5Scaled(30.0f) + this->actor.world.pos.z;
+                    func_80BB85A0(globalCtx, &sp38);
+                }
+                break;
+        }
+        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    }
+    this->unk_250 += this->unk_254;
+    this->unk_25A = (s16)(s32)(Math_SinS((s16)(this->unk_250)) * 5000.0f);
+    this->unk_25C = (s16)(s32)(Math_SinS((s16)(this->unk_250 + 0x6978)) * 5000.0f);
+    this->unk_258 = (s16)(s32)(Math_SinS((s16)(this->unk_250)) * 5000.0f);
+    if (this->unk_203 == 0) {
+        this->actor.shape.rot = this->actor.world.rot;
+    }
+}
 
 void func_80BB91D4(EnTanron3* this, GlobalContext* globalCtx) {
     f32 xDistance;
