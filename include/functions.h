@@ -874,7 +874,7 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* glob
 Actor* Actor_SpawnAsChild(ActorContext* actorCtx, Actor* parent, GlobalContext* globalCtx, s16 actorId, f32 posX, f32 posY,
                           f32 posZ, s16 rotX, s16 rotY, s16 rotZ, s32 params);
 void Actor_SpawnTransitionActors(GlobalContext* globalCtx, ActorContext* actorCtx);
-Actor* func_800BB2D0(ActorContext* actorCtx, ActorEntry* actorEntry, GameState* gameState);
+Actor* Actor_SpawnEntry(ActorContext* actorCtx, ActorEntry* actorEntry, GameState* gameState);
 Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, GlobalContext* globalCtx);
 // void func_800BB59C(void);
 void func_800BB604(GlobalContext* globalCtx, ActorContext* actorCtx, Player* player, UNK_TYPE);

@@ -352,7 +352,7 @@ asm/non_matchings/code/z_actor/Actor_LoadOverlay.s,Actor_LoadOverlay,0x800BACD4,
 asm/non_matchings/code/z_actor/Actor_SpawnAsChildAndCutscene.s,Actor_SpawnAsChildAndCutscene,0x800BAE14,0xAB
 asm/non_matchings/code/z_actor/Actor_SpawnAsChild.s,Actor_SpawnAsChild,0x800BB0C0,0x20
 asm/non_matchings/code/z_actor/Actor_SpawnTransitionActors.s,Actor_SpawnTransitionActors,0x800BB140,0x64
-asm/non_matchings/code/z_actor/func_800BB2D0.s,func_800BB2D0,0x800BB2D0,0x72
+asm/non_matchings/code/z_actor/Actor_SpawnEntry.s,Actor_SpawnEntry,0x800BB2D0,0x72
 asm/non_matchings/code/z_actor/Actor_Delete.s,Actor_Delete,0x800BB498,0x41
 asm/non_matchings/code/z_actor/func_800BB59C.s,func_800BB59C,0x800BB59C,0x1A
 asm/non_matchings/code/z_actor/func_800BB604.s,func_800BB604,0x800BB604,0xBA

@@ -276,7 +276,9 @@ void ObjKibako_Idle(ObjKibako* this, GlobalContext* globalCtx) {
         if (func_800A817C(KIBAKO_COLLECTIBLE_ID(&this->actor))) {
             ObjKibako_SpawnCollectible(this, globalCtx);
         }
-        //! @bug: called function ends up reading garbage data from the collider
+
+        //! @bug: This function should only pass Player*: it uses *(this + 0x153), which is meant to be player->currentMask,
+        // but in this case is garbage in the collider
         func_800B8E58((Player*)this, NA_SE_PL_PULL_UP_WOODBOX);
     } else if ((this->actor.bgCheckFlags & 0x20) && (this->actor.yDistToWater > 19.0f)) {
         ObjKibako_WaterBreak(this, globalCtx);

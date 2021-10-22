@@ -2134,6 +2134,7 @@ void func_800b9170(GameState* gameState, ActorContext* actorCtx, ActorEntry* act
 
     gSaveContext.weekEventReg[92] |= 0x80;
     temp_a2_2 = gSaveContext.cycleSceneFlags[convert_scene_number_among_shared_scenes(globalCtx->sceneNum)];
+
     bzero(actorCtx, sizeof(ActorContext));
     ActorOverlayTable_Init();
     Matrix_MtxFCopy(&globalCtx->mf_187FC, &D_801D1E20);
@@ -2157,8 +2158,10 @@ void func_800b9170(GameState* gameState, ActorContext* actorCtx, ActorEntry* act
 
     TitleCard_ContextInit(gameState, &actorCtx->titleCtxt);
     func_800B6468(globalCtx);
+
     actorCtx->absoluteSpace = NULL;
-    func_800BB2D0(actorCtx, actorEntry, gameState);
+
+    Actor_SpawnEntry(actorCtx, actorEntry, gameState);
     Actor_TargetContextInit(&actorCtx->targetContext, actorCtx->actorList[ACTORCAT_PLAYER].first, globalCtx);
     func_800B9120(actorCtx);
     Fault_AddClient(&D_801ED8A0, (void*)Actor_PrintLists, actorCtx, NULL);
@@ -2190,7 +2193,7 @@ void func_800B9334(GlobalContext* globalCtx, ActorContext* actorCtx) {
             if (((phi_v0 & temp_fp) == 0) && ((actorCtx->unkC & phi_v0) != 0) &&
                 (((gSaveContext.eventInf[1] & 0x80) == 0) || ((phi_v0 & ((actorCtx->unkC * 2) & 0x2FF)) == 0) ||
                  ((phi_s0->id & 0x800) == 0))) {
-                func_800BB2D0(&globalCtx->actorCtx, phi_s0, globalCtx);
+                Actor_SpawnEntry(&globalCtx->actorCtx, phi_s0, globalCtx);
             }
             phi_s0++;
         }
@@ -2450,6 +2453,7 @@ void Actor_Draw(GlobalContext* globalCtx, Actor* actor) {
     }
 
     actor->draw(actor, globalCtx);
+
     if (actor->colorFilterTimer != 0) {
         if (actor->colorFilterParams & 0x2000) {
             func_800AE8EC(globalCtx);
@@ -2477,7 +2481,7 @@ void func_800B9D1C(Actor* actor) {
         } else if ((actor->unk39 & 8) != 0) {
             func_8019F128(actor->sfx & 0xFFFF);
         } else if ((actor->unk39 & 0x10) != 0) {
-            func_801A0810(&D_801DB4A4, 0x2021, (actor->sfx - 1));
+            func_801A0810(&D_801DB4A4, NA_SE_SY_TIMER - SFX_FLAG, (actor->sfx - 1));
         } else if ((actor->unk39 & 1) != 0) {
             func_8019F1C0(&actor->projectedPos, actor->sfx & 0xFFFF);
         }
@@ -2679,6 +2683,9 @@ void Actor_DrawAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_DrawAll.s")
 #endif
 
+/**
+ * Kills every actor which its object is not loaded
+ */
 void func_800BA6FC(GlobalContext* globalCtx, ActorContext* actorCtx) {
     Actor* actor;
     s32 i;
@@ -2696,6 +2703,9 @@ void func_800BA6FC(GlobalContext* globalCtx, ActorContext* actorCtx) {
     }
 }
 
+/**
+ * Kill actors on room change
+ */
 void func_800BA798(GlobalContext* globalCtx, ActorContext* actorCtx) {
     Actor* actor;
     s32 i;
@@ -2733,7 +2743,7 @@ void func_800BA8B8(GlobalContext* globalCtx, ActorContext* actorCtx) {
         Actor* actor = actorCtx->actorList[i].first;
 
         while (actor != NULL) {
-            if ((actor->unk20 & actorCtx->unkC) == 0) {
+            if (!(actor->unk20 & actorCtx->unkC)) {
                 func_80123590(globalCtx, actor);
                 if (!actor->isDrawn) {
                     actor = Actor_Delete(actorCtx, actor, globalCtx);
@@ -2752,6 +2762,7 @@ void func_800BA8B8(GlobalContext* globalCtx, ActorContext* actorCtx) {
     globalCtx->msgCtx.unk_12030 = 0;
 }
 
+// Actor_CleanupContext
 void func_800BA9B4(ActorContext* arg0, GlobalContext* arg1) {
     s32 i;
 
@@ -2781,6 +2792,10 @@ void func_800BA9B4(ActorContext* arg0, GlobalContext* arg1) {
     ActorOverlayTable_Cleanup();
 }
 
+/**
+ * Adds a given actor instance at the front of the actor list of the specified category.
+ * Also sets the actor instance as being of that category.
+ */
 void Actor_AddToCategory(ActorContext* actorCtx, Actor* actor, u8 actorCategory) {
     Actor* phi_v0;
     Actor* phi_v1;
@@ -2790,6 +2805,7 @@ void Actor_AddToCategory(ActorContext* actorCtx, Actor* actor, u8 actorCategory)
     actorCtx->totalLoadedActors++;
     actorCtx->actorList[actorCategory].length++;
     phi_v1 = actorCtx->actorList[actorCategory].first;
+
     if (phi_v1 == NULL) {
         actorCtx->actorList[actorCategory].first = actor;
         return;
@@ -2805,7 +2821,10 @@ void Actor_AddToCategory(ActorContext* actorCtx, Actor* actor, u8 actorCategory)
     actor->prev = phi_v1;
 }
 
-#ifdef NON_MATCHING
+/**
+ * Removes a given actor instance from its actor list.
+ * Also sets the temp clear flag of the current room if the actor removed was the last enemy loaded.
+ */
 Actor* Actor_RemoveFromCategory(GlobalContext* globalCtx, ActorContext* actorCtx, Actor* actorToRemove) {
     Actor* newHead;
 
@@ -2818,25 +2837,22 @@ Actor* Actor_RemoveFromCategory(GlobalContext* globalCtx, ActorContext* actorCtx
         actorCtx->actorList[actorToRemove->category].first = actorToRemove->next;
     }
 
-    if (actorToRemove->next != NULL) {
-        actorToRemove->next->prev = actorToRemove->prev;
-    }
-
     newHead = actorToRemove->next;
+
+    if (newHead != NULL) {
+        newHead->prev = actorToRemove->prev;
+    }
 
     actorToRemove->next = NULL;
     actorToRemove->prev = NULL;
 
-    if ((globalCtx->roomCtx.currRoom.num == actorToRemove->room) && (actorToRemove->category == ACTORCAT_ENEMY) &&
+    if ((actorToRemove->room == globalCtx->roomCtx.currRoom.num) && (actorToRemove->category == ACTORCAT_ENEMY) &&
         (actorCtx->actorList[ACTORCAT_ENEMY].length == 0)) {
         Flags_SetClearTemp(globalCtx, globalCtx->roomCtx.currRoom.num);
     }
 
     return newHead;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_RemoveFromCategory.s")
-#endif
 
 void Actor_FreeOverlay(ActorOverlay* entry) {
     void* ramAddr;
@@ -3047,7 +3063,7 @@ void Actor_SpawnTransitionActors(GlobalContext* globalCtx, ActorContext* actorCt
 #endif
 
 // yet another spawn function
-Actor* func_800BB2D0(ActorContext* actorCtx, ActorEntry* actorEntry, GameState* gameState) {
+Actor* Actor_SpawnEntry(ActorContext* actorCtx, ActorEntry* actorEntry, GameState* gameState) {
     s16 rotX = (actorEntry->rot.x >> 7) & 0x1FF;
     s16 rotY = (actorEntry->rot.y >> 7) & 0x1FF;
     s16 rotZ = (actorEntry->rot.z >> 7) & 0x1FF;

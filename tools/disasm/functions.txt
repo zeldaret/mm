@@ -838,7 +838,7 @@
     0x800BAE14:("Actor_SpawnAsChildAndCutscene",),
     0x800BB0C0:("Actor_SpawnAsChild",),
     0x800BB140:("Actor_SpawnTransitionActors",),
-    0x800BB2D0:("func_800BB2D0",),
+    0x800BB2D0:("Actor_SpawnEntry",),
     0x800BB498:("Actor_Delete",),
     0x800BB59C:("func_800BB59C",),
     0x800BB604:("func_800BB604",),
