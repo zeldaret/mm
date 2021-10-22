@@ -832,7 +832,7 @@ void func_800B8D50(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 yaw, f3
 void func_800B8D98(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 arg3, f32 arg4);
 void func_800B8DD4(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 arg3, f32 arg4, u32 arg5);
 void func_800B8E1C(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 arg3, f32 arg4);
-void func_800B8E58(Actor* actor, u16 sfxId);
+void func_800B8E58(Player* player, u16 sfxId);
 void Audio_PlayActorSound2(Actor* actor, u16 sfxId);
 void func_800B8FC0(Actor* actor, u16 sfxId);
 void func_800B8EF4(GlobalContext* globalCtx, Actor* actor);
@@ -4007,7 +4007,7 @@ UNK_TYPE func_801A51F0(UNK_TYPE arg0);
 void func_801A5BD0(s32 param_1);
 // void func_801A5C28(void);
 // void func_801A5C8C(void);
-void func_801A5CFC(u16 sfxId, Vec3f* param_2, u8 param_3, f32* param_4, f32* param_5, s8* param_6);
+void Audio_PlaySoundGeneral(u16 sfxId, Vec3f* param_2, u8 param_3, f32* param_4, f32* param_5, s8* param_6);
 // void func_801A5DDC(void);
 // void func_801A5F7C(void);
 // void func_801A6430(void);

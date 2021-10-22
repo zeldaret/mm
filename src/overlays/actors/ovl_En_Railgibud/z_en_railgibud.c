@@ -395,7 +395,7 @@ void func_80BA5E18(EnRailgibud* this, GlobalContext* globalCtx) {
 
                 sp32 = player->ageProperties->unk_92 + 0x6805;
                 globalCtx->damagePlayer(globalCtx, -8);
-                func_800B8E58(&player->actor, sp32);
+                func_800B8E58(player, sp32);
                 func_8013ECE0(this->actor.xzDistToPlayer, 240, 1, 12);
                 this->unk_3F2 = 0;
             } else {

@@ -252,7 +252,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                                 OBJ_SYOKUDAI_SNUFF_TIMER_INITIAL(groupSize) + OBJ_SYOKUDAI_SNUFF_TIMER_JUST_LIT_BONUS;
                         }
                     }
-                    func_801A5CFC(NA_SE_EV_FLAME_IGNITION, &thisx->projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
+                    Audio_PlaySoundGeneral(NA_SE_EV_FLAME_IGNITION, &thisx->projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
                                   &D_801DB4B8);
                 }
             }

@@ -795,7 +795,7 @@ void func_808D58CC(EnRd* this, GlobalContext* globalCtx) {
                 globalCtx->damagePlayer(globalCtx, -8);
                 func_8013ECE0(this->actor.xzDistToPlayer, 240, 1, 12);
                 this->unk_3EA = 20;
-                func_800B8E58(&player->actor, player->ageProperties->unk_92 + 0x6805);
+                func_800B8E58(player, player->ageProperties->unk_92 + 0x6805);
             }
             break;
 

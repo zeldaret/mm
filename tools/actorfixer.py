@@ -65,6 +65,7 @@ animdict ={
     "func_800B8B84": "Actor_PickUpNearby",
     "func_800B8BB0": "Actor_LiftActor",
     "func_800B8BD0": "Actor_PickUpFar",
+    "func_801A5CFC": "Audio_PlaySoundGeneral",
 }
 
 def replace_anim(file):

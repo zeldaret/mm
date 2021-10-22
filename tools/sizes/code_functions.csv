@@ -3551,7 +3551,7 @@ asm/non_matchings/code/code_801A51F0/func_801A5A1C.s,func_801A5A1C,0x801A5A1C,0x
 asm/non_matchings/code/code_801A5BD0/func_801A5BD0.s,func_801A5BD0,0x801A5BD0,0x16
 asm/non_matchings/code/code_801A5BD0/func_801A5C28.s,func_801A5C28,0x801A5C28,0x19
 asm/non_matchings/code/code_801A5BD0/func_801A5C8C.s,func_801A5C8C,0x801A5C8C,0x1C
-asm/non_matchings/code/code_801A5BD0/func_801A5CFC.s,func_801A5CFC,0x801A5CFC,0x38
+asm/non_matchings/code/code_801A5BD0/Audio_PlaySoundGeneral.s,Audio_PlaySoundGeneral,0x801A5CFC,0x38
 asm/non_matchings/code/code_801A5BD0/func_801A5DDC.s,func_801A5DDC,0x801A5DDC,0x68
 asm/non_matchings/code/code_801A5BD0/func_801A5F7C.s,func_801A5F7C,0x801A5F7C,0x12D
 asm/non_matchings/code/code_801A5BD0/func_801A6430.s,func_801A6430,0x801A6430,0x66

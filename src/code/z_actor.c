@@ -1977,6 +1977,7 @@ s32 Actor_IsMounted(GlobalContext* globalCtx, Actor* horse) {
     if (horse->child != NULL) {
         return true;
     }
+
     return false;
 }
 
@@ -2027,18 +2028,13 @@ void func_800B8E1C(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 arg3, f
     func_800B8DD4(globalCtx, actor, arg2, arg3, arg4, 0);
 }
 
-#if 0
-// The OoT version of this function (func_8002F7DC) takes Actor*, but there's a high chance it takes Player* here
-void func_800B8E58(Actor* actor, u16 sfxId) {
-    if (actor->unk_153 == 0x14) {
-        func_8019F170(&actor->projectedPos, sfxId);
-        return;
+void func_800B8E58(Player* player, u16 sfxId) {
+    if (player->currentMask == PLAYER_MASK_GIANTS_MASK) {
+        func_8019F170(&player->actor.projectedPos, sfxId);
+    } else {
+        Audio_PlaySoundGeneral(sfxId, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
     }
-    func_801A5CFC(sfxId, &actor->projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8E58.s")
-#endif
 
 void Audio_PlayActorSound2(Actor* actor, u16 sfxId) {
     func_8019F1C0(&actor->projectedPos, sfxId);
@@ -2475,7 +2471,7 @@ void func_801A0810(s32*, u16, u8);
 void func_800B9D1C(Actor* actor) {
     if (actor->sfx != 0) {
         if ((actor->unk39 & 2) != 0) {
-            func_801A5CFC(actor->sfx & 0xFFFF, &actor->projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
+            Audio_PlaySoundGeneral(actor->sfx & 0xFFFF, &actor->projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
         } else if ((actor->unk39 & 4) != 0) {
             play_sound(actor->sfx & 0xFFFF);
         } else if ((actor->unk39 & 8) != 0) {

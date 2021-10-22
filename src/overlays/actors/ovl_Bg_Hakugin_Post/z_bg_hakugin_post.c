@@ -840,7 +840,7 @@ void func_80A9CE1C(BgHakuginPost* this, GlobalContext* globalCtx) {
                 temp = (s16)(this->dyna.actor.yawTowardsPlayer + 0x58F0);
                 D_80A9E028.unk_0000[i].unk_28 = ((s16)(player->actor.shape.rot.y - temp) / 3) + temp;
                 D_80A9E028.unk_0000[i].unk_34 = 2;
-                func_800B8E58(&player->actor, NA_SE_IT_HAMMER_HIT);
+                func_800B8E58(player, NA_SE_IT_HAMMER_HIT);
                 func_8019F128(NA_SE_EV_SLIDE_DOOR_OPEN);
                 Flags_SetSwitch(globalCtx, D_80A9E028.unk_0000[i].unk_2E);
                 this->unk_178 = 20;

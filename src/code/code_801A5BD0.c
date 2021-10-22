@@ -6,7 +6,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_801A5BD0/func_801A5C8C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A5BD0/func_801A5CFC.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A5BD0/Audio_PlaySoundGeneral.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_801A5BD0/func_801A5DDC.s")
 

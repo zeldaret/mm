@@ -4037,7 +4037,7 @@
     0x801A5BD0:("func_801A5BD0",),
     0x801A5C28:("func_801A5C28",),
     0x801A5C8C:("func_801A5C8C",),
-    0x801A5CFC:("func_801A5CFC",),
+    0x801A5CFC:("Audio_PlaySoundGeneral",),
     0x801A5DDC:("func_801A5DDC",),
     0x801A5F7C:("func_801A5F7C",),
     0x801A6430:("func_801A6430",),
