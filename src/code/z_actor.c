@@ -400,7 +400,7 @@ dummy_label_111649: ;
 
             for (j = 0; j < 2; j++, phi_s0++) {
                 if (phi_s0->l.dir[1] > 0) {
-                    lightNum = (ABS_ALT(phi_s0->l.dir[1]) * (phi_s0->l.col[0] + phi_s0->l.col[1] + phi_s0->l.col[2])) - (lightNumMax * (0,8));
+                    lightNum = (ABS_ALT(phi_s0->l.dir[1]) * (phi_s0->l.col[0] + phi_s0->l.col[1] + phi_s0->l.col[2])) - (lightNumMax * ((void)0,8));
                     if (lightNum > 0) {
                         func_800B40E0(globalCtx, phi_s0,  &sp94, lightNum, temp_f22, temp_f24, shadowScaleZ);
                     }
@@ -492,11 +492,8 @@ void Actor_TargetContextInit(TargetContext* targetCtx, Actor* actor, GlobalConte
     func_800B4F78(targetCtx, actor->category, globalCtx);
 }
 
-extern Gfx D_0407AE00[]; // gZTargetLockOnTriangleDL
-extern Gfx D_0401F0F0[]; // gZTargetArrowDL
-
-// gfx macros
 #ifdef NON_MATCHING
+// stack is too big
 void func_800B5208(TargetContext* targetCtx, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
@@ -790,14 +787,14 @@ void Actor_SetCollectibleFlag(GlobalContext* globalCtx, s32 index) {
     }
 }
 
-void TitleCard_ContextInit(GlobalContext* globalCtx, TitleCardContext* titleCtx) {
+void TitleCard_ContextInit(GameState* gameState, TitleCardContext* titleCtx) {
     titleCtx->durationTimer = 0;
     titleCtx->delayTimer = 0;
     titleCtx->intensity = 0;
     titleCtx->alpha = 0;
 }
 
-void TitleCard_InitBossName(GlobalContext* globalCtx, TitleCardContext* titleCtx, u32 texture, s16 param_4, s16 param_5,
+void TitleCard_InitBossName(GameState* gameState, TitleCardContext* titleCtx, u32 texture, s16 param_4, s16 param_5,
                             u8 param_6, u8 param_7) {
     titleCtx->texture = texture;
     titleCtx->x = param_4;
@@ -808,11 +805,11 @@ void TitleCard_InitBossName(GlobalContext* globalCtx, TitleCardContext* titleCtx
     titleCtx->delayTimer = 0;
 }
 
-void TitleCard_InitPlaceName(GlobalContext* globalCtx, TitleCardContext* titleCtx, void* texture, s32 x, s32 y,
+void TitleCard_InitPlaceName(GameState* gameState, TitleCardContext* titleCtx, void* texture, s32 x, s32 y,
                              s32 width, s32 height, s32 delay) {
 }
 
-void TitleCard_Update(GlobalContext* globalCtx, TitleCardContext* titleCtx) {
+void TitleCard_Update(GameState* gameState, TitleCardContext* titleCtx) {
     if (DECR(titleCtx->delayTimer) == 0) {
         if (DECR(titleCtx->durationTimer) == 0) {
             Math_StepToS(&titleCtx->alpha, 0, 30);
@@ -824,7 +821,7 @@ void TitleCard_Update(GlobalContext* globalCtx, TitleCardContext* titleCtx) {
     }
 }
 
-void TitleCard_Draw(GlobalContext* globalCtx, TitleCardContext* titleCtx) {
+void TitleCard_Draw(GameState* gameState, TitleCardContext* titleCtx) {
     s32 spCC;
     s32 spC8;
     s32 unk1;
@@ -842,7 +839,7 @@ void TitleCard_Draw(GlobalContext* globalCtx, TitleCardContext* titleCtx) {
         spB8 = (titleCtx->y * 4) - (spC8 * 2);
         sp38 = spCC * 2;
 
-        OPEN_DISPS(globalCtx->state.gfxCtx);
+        OPEN_DISPS(gameState->gfxCtx);
 
         spC8 = (spCC * spC8 > 0x1000) ? 0x1000 / spCC : spC8;
         spB4 = spB8 + (spC8 * 4);
@@ -872,7 +869,7 @@ void TitleCard_Draw(GlobalContext* globalCtx, TitleCardContext* titleCtx) {
                                 G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
         }
 
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        CLOSE_DISPS(gameState->gfxCtx);
     }
 }
 
@@ -1264,8 +1261,8 @@ s32 func_800B7200(Player* player) {
     return (player->stateFlags1 & 0x20000080) || (player->csMode != 0);
 }
 
-void func_800B722C(GlobalContext* globalCtx, Player* player) {
-    func_800F40A0(globalCtx, player);
+void func_800B722C(GameState* gameState, Player* player) {
+    func_800F40A0(gameState, player);
 }
 
 s32 func_800B724C(GlobalContext* globalCtx, Actor* actor, u8 csMode) {
@@ -1721,7 +1718,7 @@ s16 D_801AED48[] = {
 };
 
 // Actor_RequestTalk?
-s32 Actor_IsTalking(Actor* actor, GlobalContext* globalCtx) {
+s32 Actor_IsTalking(Actor* actor, GameState* gameState) {
     if (actor->flags & 0x100) {
         actor->flags &= ~0x100;
         return true;
@@ -1730,47 +1727,50 @@ s32 Actor_IsTalking(Actor* actor, GlobalContext* globalCtx) {
     return false;
 }
 
-s32 func_800B8500(Actor* actor, GlobalContext* globalCtx, f32 fParm3, f32 fParm4, s32 param_5) {
-    Player* player = GET_PLAYER(globalCtx);
+s32 func_800B8500(Actor* actor, GameState* gameState, f32 arg2, f32 arg3, s32 arg4) {
+    Player* player = GET_PLAYER(gameState);
 
-    if (((player->actor.flags & 0x100) != 0) || ((param_5 > 0) && (func_801233E4(globalCtx) != 0)) || ((actor->isTargeted == 0) && ((fabsf(actor->yDistToPlayer) > fabsf(fParm4)) || ((actor->xzDistToPlayer > player->targetActorDistance)) || (fParm3 < actor->xzDistToPlayer)))) {
+    if (((player->actor.flags & 0x100) != 0) || ((arg4 > 0) && (func_801233E4(gameState) != 0)) || ((actor->isTargeted == 0) && ((fabsf(actor->yDistToPlayer) > fabsf(arg3)) || ((actor->xzDistToPlayer > player->targetActorDistance)) || (arg2 < actor->xzDistToPlayer)))) {
         return 0;
     }
 
     player->targetActor = actor;
     player->targetActorDistance = actor->xzDistToPlayer;
-    player->unk_A87 = param_5;
+    player->unk_A87 = arg4;
 
     ActorCutscene_SetIntentToPlay(0x7C);
     return 1;
 }
 
-s32 func_800B85E0(Actor* actor, GlobalContext* globalCtx, f32 arg2, s32 arg3) {
-    return func_800B8500(actor, globalCtx, arg2, arg2, arg3);
+s32 func_800B85E0(Actor* actor, GameState* gameState, f32 arg2, s32 arg3) {
+    return func_800B8500(actor, gameState, arg2, arg2, arg3);
 }
 
-s32 func_800B8614(Actor* actor, GlobalContext* globalCtx, f32 arg2) {
-    return func_800B85E0(actor, globalCtx, arg2, 0);
+s32 func_800B8614(Actor* actor, GameState* gameState, f32 arg2) {
+    return func_800B85E0(actor, gameState, arg2, 0);
 }
 
-s32 func_800B863C(Actor* actor, GlobalContext* globalCtx) {
+s32 func_800B863C(Actor* actor, GameState* gameState) {
     f32 cylRadius = actor->colChkInfo.cylRadius + 50.0f;
 
-    return func_800B8614(actor, globalCtx, cylRadius);
+    return func_800B8614(actor, gameState, cylRadius);
 }
 
-u32 func_800B867C(Actor* actor, GlobalContext* globalCtx) {
+s32 func_800B867C(Actor* actor, GameState* gameState) {
+    GlobalContext* globalCtx = (GlobalContext*)gameState;
+
     if (func_80152498(&globalCtx->msgCtx) == 2) {
         actor->flags &= ~0x100;
         return 1;
     }
+
     return 0;
 }
 
 #ifdef NON_EQUIVALENT
 // likely memes
-s32 func_800B86C8(Actor* actor1, GlobalContext* globalCtx, Actor* actor2) {
-    Player* player = GET_PLAYER(globalCtx);
+s32 func_800B86C8(Actor* actor1, GameState* gameState, Actor* actor2) {
+    Player* player = GET_PLAYER(gameState);
 
     if ((player->actor.flags & 0x100) && (player->targetActor != NULL)) {
         player->targetActor = actor2;
@@ -1784,13 +1784,13 @@ s32 func_800B86C8(Actor* actor1, GlobalContext* globalCtx, Actor* actor2) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B86C8.s")
 #endif
 
-s32 func_800B8708(GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+s32 func_800B8708(GameState* gameState) {
+    Player* player = GET_PLAYER(gameState);
 
     return player->unk_A87;
 }
 
-s32 func_800B8718(Actor* actor, GlobalContext* globalCtx) {
+s32 func_800B8718(Actor* actor, GameState* gameState) {
     if (actor->flags & 0x20000000) {
         actor->flags &= ~0x20000000;
         return 1;
@@ -1799,10 +1799,10 @@ s32 func_800B8718(Actor* actor, GlobalContext* globalCtx) {
 }
 
 #ifdef NON_MATCHING
-void func_800B874C(Actor* actor, GlobalContext* globalCtx, f32 arg2, f32 arg3) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_800B874C(Actor* actor, GameState* gameState, f32 arg2, f32 arg3) {
+    Player* player = GET_PLAYER(gameState);
 
-    if ((player->actor.flags & 0x20000000)  || ((func_801233E4(globalCtx) != 0)) || (arg3 < fabsf(actor->yDistToPlayer)) || ((player->unk_A94 < actor->xzDistToPlayer)) || (arg2 < actor->xzDistToPlayer)) {
+    if ((player->actor.flags & 0x20000000)  || ((func_801233E4(gameState) != 0)) || (arg3 < fabsf(actor->yDistToPlayer)) || ((player->unk_A94 < actor->xzDistToPlayer)) || (arg2 < actor->xzDistToPlayer)) {
         return;
     }
 
@@ -1839,10 +1839,11 @@ void func_800B8898(GlobalContext* globalCtx, Actor* actor, s16* arg2, s16* arg3)
     *arg3 = (sp1C.y * sp18 * -120.0f) + 120.0f;
 }
 
-s32 func_800B8934(GlobalContext* globalCtx, Actor* actor) {
+s32 func_800B8934(GameState* gameState, Actor* actor) {
     Vec3f sp2C;
     f32 sp28;
-    s32 pad[2];
+    GlobalContext* globalCtx = (GlobalContext*)gameState;
+    s32 pad;
 
     func_800B4EDC(globalCtx, &actor->focus.pos, &sp2C, &sp28);
 
@@ -2092,10 +2093,11 @@ void func_800B9120(ActorContext* actorCtx) {
 }
 
 // Actor_InitContext // OoT's func_800304DC
-void func_800b9170(GlobalContext* globalCtx, ActorContext* actorCtx, ActorEntry* actorEntry) {
+void func_800b9170(GameState* gameState, ActorContext* actorCtx, ActorEntry* actorEntry) {
     ActorOverlay* overlayEntry;
     u32* temp_a2_2;
     s32 i;
+    GlobalContext* globalCtx = (GlobalContext*)gameState;
 
     gSaveContext.weekEventReg[92] |= 0x80;
     temp_a2_2 = gSaveContext.cycleSceneFlags[convert_scene_number_among_shared_scenes(globalCtx->sceneNum)];
@@ -2120,14 +2122,14 @@ void func_800b9170(GlobalContext* globalCtx, ActorContext* actorCtx, ActorEntry*
     actorCtx->collectibleFlags[0] = temp_a2_2[4];
     actorCtx->clearedRooms = temp_a2_2[3];
 
-    TitleCard_ContextInit(globalCtx, &actorCtx->titleCtxt);
+    TitleCard_ContextInit(gameState, &actorCtx->titleCtxt);
     func_800B6468(globalCtx);
-    actorCtx->absoluteSpace = 0;
-    func_800BB2D0(actorCtx, actorEntry, globalCtx);
-    Actor_TargetContextInit(&actorCtx->targetContext, actorCtx->actorList[2].first, globalCtx);
+    actorCtx->absoluteSpace = NULL;
+    func_800BB2D0(actorCtx, actorEntry, gameState);
+    Actor_TargetContextInit(&actorCtx->targetContext, actorCtx->actorList[ACTORCAT_PLAYER].first, globalCtx);
     func_800B9120(actorCtx);
-    Fault_AddClient(&D_801ED8A0, (void (*)(void*, void*)) Actor_PrintLists, actorCtx, NULL);
-    func_800B722C(globalCtx, (Player* ) actorCtx->actorList[2].first);
+    Fault_AddClient(&D_801ED8A0, (void*) Actor_PrintLists, actorCtx, NULL);
+    func_800B722C(gameState, (Player*)actorCtx->actorList[ACTORCAT_PLAYER].first);
 }
 
 #ifdef NON_EQUIVALENT
@@ -2430,6 +2432,7 @@ void Actor_Draw(GlobalContext* globalCtx, Actor* actor) {
 }
 
 #ifdef NON_MATCHING
+// TODO: try again
 void func_801A0810(s32*, u16, u8);
 void func_800B9D1C(Actor* actor) {
     if (actor->sfx != 0) {
@@ -3736,20 +3739,20 @@ s32 D_801AEE30[] = { 0, 0 };
 #endif
 
 // unused
-s32 func_800BD2B4(GlobalContext* globalCtx, Actor* actor, s16* arg2, f32 arg3, u16 (*arg4)(GlobalContext*, Actor*),
-                  s16 (*arg5)(GlobalContext*, Actor*)) {
-    if (Actor_IsTalking(actor, globalCtx)) {
+s32 func_800BD2B4(GameState* gameState, Actor* actor, s16* arg2, f32 arg3, u16 (*arg4)(GameState*, Actor*),
+                  s16 (*arg5)(GameState*, Actor*)) {
+    if (Actor_IsTalking(actor, gameState)) {
         *arg2 = 1;
         return 1;
     } else if (*arg2 != 0) {
-        *arg2 = arg5(globalCtx, actor);
+        *arg2 = arg5(gameState, actor);
         return 0;
-    } else if (func_800B8934(globalCtx, actor) == 0) {
+    } else if (func_800B8934(gameState, actor) == 0) {
         return 0;
-    } else if (func_800B8614(actor, globalCtx, arg3) == 0) {
+    } else if (func_800B8614(actor, gameState, arg3) == 0) {
         return 0;
     } else {
-        actor->textId = arg4(globalCtx, actor);
+        actor->textId = arg4(gameState, actor);
         return 0;
     }
 }
@@ -4246,4 +4249,3 @@ void func_800BF7CC(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s32 a
         limbPos++;
     }
 }
-

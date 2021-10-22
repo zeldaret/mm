@@ -3967,6 +3967,7 @@ extern UNK_TYPE D_0401A4D0;
 extern UNK_TYPE D_0401A538;
 extern UNK_TYPE D_0401A620;
 extern Gfx D_0401C430[];
+extern Gfx D_0401F0F0[]; // gZTargetArrowDL
 extern UNK_TYPE D_0401F740;
 extern UNK_TYPE D_0401F7C0;
 extern UNK_TYPE D_0401F8C0;
@@ -4066,6 +4067,7 @@ extern Gfx D_04077480[];
 extern UNK_TYPE D_04079B10;
 extern Gfx D_0407AB10[];
 extern Gfx D_0407AB58[];
+extern Gfx D_0407AE00[]; // gZTargetLockOnTriangleDL
 extern UNK_TYPE D_0407AFB0;
 extern Gfx D_0407D590[];
 extern UNK_TYPE D_0407D650;
