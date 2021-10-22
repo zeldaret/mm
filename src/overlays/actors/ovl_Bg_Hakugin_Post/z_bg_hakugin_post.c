@@ -187,7 +187,7 @@ void func_80A9B160(BgHakuginPostUnkStruct* unkStruct, GlobalContext* globalCtx) 
         unkStruct->unk_0000[i].unk_24 = 0.0f;
         unkStruct->unk_0000[i].unk_34 = 1;
         if (D_80A9D880[unkStruct->unk_0000[i].unk_00].unk_04 != 0) {
-            Actor_UnsetSwitchFlag(globalCtx, unkStruct->unk_0000[i].unk_2E);
+            Flags_UnsetSwitch(globalCtx, unkStruct->unk_0000[i].unk_2E);
         }
     }
 }
@@ -261,7 +261,7 @@ void func_80A9B3BC(BgHakuginPost* this, GlobalContext* globalCtx) {
     }
 
     if (!(sp20 | sp1C)) {
-        Actor_SetSwitchFlag(globalCtx, sp28);
+        Flags_SetSwitch(globalCtx, sp28);
         this->unk_170 = true;
     } else {
         this->unk_170 = sp20;
@@ -290,9 +290,9 @@ void func_80A9B46C(BgHakuginPost* this, GlobalContext* globalCtx) {
     }
 
     if (!this->unk_170 && (sp28 == 1)) {
-        Actor_UnsetSwitchFlag(globalCtx, sp2C);
+        Flags_UnsetSwitch(globalCtx, sp2C);
     } else if (!this->unk_174 && (sp24 == 1)) {
-        Actor_UnsetSwitchFlag(globalCtx, sp30);
+        Flags_UnsetSwitch(globalCtx, sp30);
     }
 
     this->unk_170 = sp28;
@@ -682,9 +682,9 @@ void func_80A9C854(BgHakuginPost* this, GlobalContext* globalCtx) {
     }
 
     if (sp38) {
-        Actor_SetSwitchFlag(globalCtx, this->dyna.actor.home.rot.x & 0x7F);
+        Flags_SetSwitch(globalCtx, this->dyna.actor.home.rot.x & 0x7F);
     } else {
-        Actor_UnsetSwitchFlag(globalCtx, this->dyna.actor.home.rot.x & 0x7F);
+        Flags_UnsetSwitch(globalCtx, this->dyna.actor.home.rot.x & 0x7F);
     }
 }
 
@@ -842,7 +842,7 @@ void func_80A9CE1C(BgHakuginPost* this, GlobalContext* globalCtx) {
                 D_80A9E028.unk_0000[i].unk_34 = 2;
                 func_800B8E58(&player->actor, NA_SE_IT_HAMMER_HIT);
                 func_8019F128(NA_SE_EV_SLIDE_DOOR_OPEN);
-                Actor_SetSwitchFlag(globalCtx, D_80A9E028.unk_0000[i].unk_2E);
+                Flags_SetSwitch(globalCtx, D_80A9E028.unk_0000[i].unk_2E);
                 this->unk_178 = 20;
                 func_80A9D2C4(this, func_80A9CE00, D_80A9E028.unk_0000[i].unk_14.y + 50.0f,
                               D_80A9E028.unk_0000[i].unk_2A, D_80A9E028.unk_0000[i].unk_2C);

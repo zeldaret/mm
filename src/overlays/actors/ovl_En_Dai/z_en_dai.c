@@ -192,7 +192,7 @@ s32 func_80B3E69C(EnDai* this, GlobalContext* globalCtx) {
     if ((globalCtx->csCtx.state != 0) && (globalCtx->sceneNum == SCENE_12HAKUGINMAE) &&
         (globalCtx->csCtx.unk_12 == 0) && !(gSaveContext.weekEventReg[30] & 1)) {
         if (!(this->unk_1CE & 0x10)) {
-            Actor_SetSwitchFlag(globalCtx, 20);
+            Flags_SetSwitch(globalCtx, 20);
             this->unk_1CE |= (0x80 | 0x10);
             this->unk_1CE &= ~(0x100 | 0x20);
             this->unk_1CC = 0xFF;

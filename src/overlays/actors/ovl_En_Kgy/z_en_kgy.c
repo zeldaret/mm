@@ -74,9 +74,9 @@ void EnKgy_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_2E2 = -1;
     this->zubora = EnKgy_FindZubora(globalCtx);
     this->iceBlock = EnKgy_FindIceBlock(globalCtx);
-    Actor_UnsetSwitchFlag(globalCtx, ENKGY_GET_FE00(&this->actor) + 1);
+    Flags_UnsetSwitch(globalCtx, ENKGY_GET_FE00(&this->actor) + 1);
     if (Flags_GetSwitch(globalCtx, ENKGY_GET_FE00(&this->actor)) || (gSaveContext.weekEventReg[33] & 0x80)) {
-        Actor_SetSwitchFlag(globalCtx, ENKGY_GET_FE00(&this->actor) + 1);
+        Flags_SetSwitch(globalCtx, ENKGY_GET_FE00(&this->actor) + 1);
         globalCtx->envCtx.unk_C3 = 1;
         gSaveContext.weekEventReg[21] |= 1;
         if (!func_80B40D64(globalCtx)) {

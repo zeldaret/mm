@@ -100,9 +100,9 @@ void ObjLightswitch_UpdateSwitchFlags(ObjLightswitch* this, GlobalContext* globa
     if (this) {}
 
     if (set) {
-        Actor_SetSwitchFlag(globalCtx, GET_LIGHTSWITCH_SWITCHFLAG(this));
+        Flags_SetSwitch(globalCtx, GET_LIGHTSWITCH_SWITCHFLAG(this));
     } else {
-        Actor_UnsetSwitchFlag(globalCtx, GET_LIGHTSWITCH_SWITCHFLAG(this));
+        Flags_UnsetSwitch(globalCtx, GET_LIGHTSWITCH_SWITCHFLAG(this));
     }
 }
 

@@ -425,7 +425,7 @@ void func_809C6E30(EnSyatekiMan* this, GlobalContext* globalCtx) {
 void func_809C6F98(EnSyatekiMan* this, GlobalContext* globalCtx) {
     switch (gSaveContext.playerForm) {
         case PLAYER_FORM_HUMAN:
-            Actor_SetAllChestFlag(globalCtx, Actor_GetAllChestFlag(globalCtx) + 1);
+            Flags_SetAllTreasure(globalCtx, Flags_GetAllTreasure(globalCtx) + 1);
             if (CURRENT_DAY != 3) {
                 if (!(this->unk_282 & 1)) {
                     this->unk_282 |= 1;
@@ -1169,7 +1169,7 @@ void func_809C8BF0(EnSyatekiMan* this, GlobalContext* globalCtx) {
     if (this->unk_26A == 1) {
         this->unk_190 = 0;
         if ((this->unk_270 <= 0) && (globalCtx->interfaceCtx.unk_286 == 0)) {
-            Actor_SetAllChestFlag(globalCtx, this->unk_280);
+            Flags_SetAllTreasure(globalCtx, this->unk_280);
             this->unk_270 = 15;
             if (((s32)(gSaveContext.roomInf[127][6] & 0xFFFF) < this->unk_280) || (this->unk_280 == 50)) {
                 if ((s32)(gSaveContext.roomInf[127][6] & 0xFFFF) < this->unk_280) {

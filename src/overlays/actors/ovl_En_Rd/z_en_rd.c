@@ -972,7 +972,7 @@ void func_808D6388(EnRd* this, GlobalContext* globalCtx) {
     if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
         if (this->unk_3D6 == 0) {
             if (!Flags_GetSwitch(globalCtx, this->unk_3DC & 0x7F)) {
-                Actor_SetSwitchFlag(globalCtx, this->unk_3DC & 0x7F);
+                Flags_SetSwitch(globalCtx, this->unk_3DC & 0x7F);
             }
 
             if (this->unk_3DE != 0) {

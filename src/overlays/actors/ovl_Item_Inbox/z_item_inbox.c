@@ -34,7 +34,7 @@ void ItemInbox_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ItemInbox_Idle(ItemInbox* this, GlobalContext* globalCtx) {
-    if (Actor_GetChestFlag(globalCtx, (this->actor.params >> 8) & 0x1F)) {
+    if (Flags_GetTreasure(globalCtx, (this->actor.params >> 8) & 0x1F)) {
         Actor_MarkForDeath(&this->actor);
     }
 }

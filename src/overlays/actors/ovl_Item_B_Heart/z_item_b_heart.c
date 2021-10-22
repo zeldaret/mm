@@ -42,7 +42,7 @@ extern Gfx D_06001470[];
 void ItemBHeart_Init(Actor* thisx, GlobalContext* globalCtx) {
     ItemBHeart* this = THIS;
 
-    if (Actor_GetCollectibleFlag(globalCtx, 0x1F)) {
+    if (Flags_GetCollectible(globalCtx, 0x1F)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -69,7 +69,7 @@ void ItemBHeart_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (!(this->unk_168 < 0.5f)) {
         if (Actor_HasParent(&this->actor, globalCtx)) {
-            Actor_SetCollectibleFlag(globalCtx, 0x1F);
+            Flags_SetCollectible(globalCtx, 0x1F);
             Actor_MarkForDeath(&this->actor);
         } else {
             func_800B8A1C(&this->actor, globalCtx, 0xD, 30.0f, 80.0f);

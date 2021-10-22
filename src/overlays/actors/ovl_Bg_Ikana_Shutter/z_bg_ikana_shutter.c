@@ -71,7 +71,7 @@ void BgIkanaShutter_Init(Actor* thisx, GlobalContext* globalCtx) {
         func_80BD5828(this);
         return;
     }
-    if (Actor_GetRoomCleared(globalCtx, this->dyna.actor.room)) {
+    if (Flags_GetClear(globalCtx, this->dyna.actor.room)) {
         BgIkanaShutter_SetupDoNothing(this);
         return;
     }
@@ -160,7 +160,7 @@ void func_80BD5AE8(BgIkanaShutter* this) {
 }
 
 void func_80BD5B04(BgIkanaShutter* this, GlobalContext* globalCtx) {
-    if (Actor_GetRoomClearedTemp(globalCtx, this->dyna.actor.room)) {
+    if (Flags_GetClearTemp(globalCtx, this->dyna.actor.room)) {
         func_80BD5B44(this);
     }
 }
@@ -173,7 +173,7 @@ void func_80BD5B44(BgIkanaShutter* this) {
 void func_80BD5B60(BgIkanaShutter* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        Actor_SetRoomCleared(globalCtx, this->dyna.actor.room);
+        Flags_SetClear(globalCtx, this->dyna.actor.room);
         func_80BD5BC4(this);
         return;
     }

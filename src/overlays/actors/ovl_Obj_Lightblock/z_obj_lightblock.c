@@ -148,7 +148,7 @@ void func_80AF3B8C(ObjLightblock* this) {
 void func_80AF3BA0(ObjLightblock* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        Actor_SetSwitchFlag(globalCtx, LIGHTBLOCK_DESTROYED(&this->dyna.actor));
+        Flags_SetSwitch(globalCtx, LIGHTBLOCK_DESTROYED(&this->dyna.actor));
         func_80AF3910(this, globalCtx);
         func_80AF3C18(this);
     } else {

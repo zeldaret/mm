@@ -145,7 +145,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
             if (ActorCutscene_GetCanPlayNext(thisx->cutscene) != 0) {
                 ActorCutscene_StartAndSetUnkLinkFields(thisx->cutscene, thisx);
                 if (this->pendingAction >= OBJ_SYOKUDAI_PENDING_ACTION_CUTSCENE_AND_SWITCH) {
-                    Actor_SetSwitchFlag(globalCtx, switchFlag);
+                    Flags_SetSwitch(globalCtx, switchFlag);
                 }
             } else {
                 ActorCutscene_SetIntentToPlay(thisx->cutscene);
@@ -161,7 +161,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
             this->snuffTimer = OBJ_SYOKUDAI_SNUFF_OUT;
             if (type == OBJ_SYOKUDAI_TYPE_FLAME_CAUSES_SWITCH) {
-                Actor_UnsetSwitchFlag(globalCtx, switchFlag);
+                Flags_UnsetSwitch(globalCtx, switchFlag);
                 if (groupSize != 0) {
                     this->snuffTimer = OBJ_SYOKUDAI_SNUFF_GROUP_BY_WATER;
                 }
@@ -241,7 +241,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                         } else if (thisx->cutscene >= 0) {
                             this->pendingAction = OBJ_SYOKUDAI_PENDING_ACTION_CUTSCENE_AND_SWITCH;
                         } else {
-                            Actor_SetSwitchFlag(globalCtx, switchFlag);
+                            Flags_SetSwitch(globalCtx, switchFlag);
                             this->snuffTimer = OBJ_SYOKUDAI_SNUFF_NEVER;
                         }
                     } else {

@@ -1419,8 +1419,8 @@ struct TargetContext {
     /* 0x0C */ Vec3f targetCenterPos;
     /* 0x18 */ Color_RGBAf fairyInner;
     /* 0x28 */ Color_RGBAf fairyOuter;
-    /* 0x38 */ Actor* unk38;
-    /* 0x3C */ Actor* unk3C;
+    /* 0x38 */ Actor* arrowPointedActor;
+    /* 0x3C */ Actor* targetedActor;
     /* 0x40 */ f32 unk40;
     /* 0x44 */ f32 unk44;
     /* 0x48 */ s16 unk48;
@@ -1450,6 +1450,14 @@ typedef struct ActorContext_unk_20C {
     /* 0x4 */ void* unk_4;
 } ActorContext_unk_20C; // size = 0x8
 
+typedef struct ActorContextFlags {
+    /* 0x00 */ u32 swch[4]; // First 0x40 are permanent, second 0x40 are temporary
+    /* 0x10 */ u32 chest;
+    /* 0x14 */ u32 clearedRoom;
+    /* 0x18 */ u32 clearedRoomTemp;
+    /* 0x1C */ u32 collectible[4]; // bitfield of 128 bits
+} ActorContextFlags; // size = 0x2C
+
 struct ActorContext {
     /* 0x000 */ u8 freezeFlashTimer;
     /* 0x001 */ UNK_TYPE1 pad1;
@@ -1465,11 +1473,7 @@ struct ActorContext {
     /* 0x010 */ ActorListEntry actorList[12];
     /* 0x0A0 */ Actor* undrawnActors[32]; // Records the first 32 actors drawn each frame
     /* 0x120 */ TargetContext targetContext;
-    /* 0x1B8 */ u32 switchFlags[4]; // First 0x40 are permanent, second 0x40 are temporary
-    /* 0x1C8 */ u32 chestFlags;
-    /* 0x1CC */ u32 clearedRooms;
-    /* 0x1D0 */ u32 clearedRoomsTemp;
-    /* 0x1D4 */ u32 collectibleFlags[4]; // bitfield of 128 bits
+    /* 0x1B8 */ ActorContextFlags flags;
     /* 0x1E4 */ TitleCardContext titleCtxt;
     /* 0x1F4 */ u8 unk1F4;
     /* 0x1F5 */ u8 unk1F5;

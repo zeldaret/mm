@@ -137,7 +137,7 @@ void func_80A714B4(EnDno* this, GlobalContext* globalCtx) {
         actor = func_ActorCategoryIterateById(globalCtx, actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
         if (actor != NULL) {
             if (ENDNO_GET_F(actor) == ENDNO_GET_F_1) {
-                Actor_SetSwitchFlag(globalCtx, ENDNO_GET_7F0(actor));
+                Flags_SetSwitch(globalCtx, ENDNO_GET_7F0(actor));
             }
             actor = actor->next;
         }
@@ -189,7 +189,7 @@ void func_80A71788(EnDno* this, GlobalContext* globalCtx) {
     do {
         actor = func_ActorCategoryIterateById(globalCtx, actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
         if (actor != NULL) {
-            Actor_UnsetSwitchFlag(globalCtx, ENDNO_GET_7F0(actor));
+            Flags_UnsetSwitch(globalCtx, ENDNO_GET_7F0(actor));
             actor = actor->next;
         }
     } while (actor != NULL);
@@ -714,7 +714,7 @@ void func_80A72C04(EnDno* this, GlobalContext* globalCtx) {
     func_8013DF3C(globalCtx, &this->unk_340);
     this->actor.world.rot.y = this->unk_340.unk_56;
     this->actor.world.rot.x = this->unk_340.unk_54;
-    Actor_SetSwitchFlag(globalCtx, ENDNO_GET_3F80(&this->actor));
+    Flags_SetSwitch(globalCtx, ENDNO_GET_3F80(&this->actor));
     this->actionFunc = func_80A730A0;
 }
 
@@ -834,7 +834,7 @@ void func_80A73244(EnDno* this, GlobalContext* globalCtx) {
     this->actor.flags |= (8 | 1);
     this->unk_328 = 2;
     this->actor.speedXZ = 0.0f;
-    Actor_UnsetSwitchFlag(globalCtx, ENDNO_GET_3F80(&this->actor));
+    Flags_UnsetSwitch(globalCtx, ENDNO_GET_3F80(&this->actor));
     gSaveContext.unk_3DD0[1] = 5;
     this->unk_44E = 0;
     this->actionFunc = func_80A732C8;

@@ -149,7 +149,7 @@ void func_80C0ABA8(BgIkninSusceil* this, GlobalContext* globalCtx) {
     this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
     if (this->dyna.actor.world.pos.y <= this->dyna.actor.home.pos.y) {
         func_80C0A86C(this, globalCtx, 4, 14, 1);
-        Actor_UnsetSwitchFlag(globalCtx, GET_SUSCEIL_SWITCHFLAG(this));
+        Flags_UnsetSwitch(globalCtx, GET_SUSCEIL_SWITCHFLAG(this));
         Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_BIGWALL_BOUND);
         func_80C0AC74(this);
     } else {

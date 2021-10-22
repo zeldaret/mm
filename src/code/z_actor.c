@@ -477,11 +477,11 @@ void func_800B5040(TargetContext* targetCtx, Actor* actor, s32 type, GlobalConte
 void Actor_TargetContextInit(TargetContext* targetCtx, Actor* actor, GlobalContext* globalCtx) {
     targetCtx->unk90 = NULL;
     targetCtx->unk8C = NULL;
-    targetCtx->unk3C = NULL;
-    targetCtx->unk38 = NULL;
+    targetCtx->targetedActor = NULL;
+    targetCtx->arrowPointedActor = NULL;
     targetCtx->unk4B = 0;
     targetCtx->unk4C = 0;
-    targetCtx->unk40 = 0;
+    targetCtx->unk40 = 0.0f;
     func_800B5040(targetCtx, actor, actor->category, globalCtx);
     func_800B4F78(targetCtx, actor->category, globalCtx);
 }
@@ -492,8 +492,7 @@ void func_800B5208(TargetContext* targetCtx, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if ((player->stateFlags1 & 0x300006C2) == 0){
-        //Actor* actor = targetCtx->targetedActor;
-        Actor* actor = targetCtx->unk3C;
+        Actor* actor = targetCtx->targetedActor;
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
         if (targetCtx->unk48 != 0) {
@@ -614,6 +613,7 @@ void func_800B5208(TargetContext* targetCtx, GlobalContext* globalCtx) {
 #endif
 
 #ifdef NON_EQUIVALENT
+// OoT: func_8002C7BC
 void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GlobalContext* globalCtx) {
     Actor* sp68;
     s32 sp64;
@@ -625,7 +625,7 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, Globa
     f32 temp_f14;
     Actor* phi_s1;
 
-    sp68 = 0;
+    sp68 = NULL;
     phi_s1 = actor;
     if ((player->unk_730 != 0) && (player->unk_AE3[player->unk_ADE] == 2)) {
         targetCtx->unk_94 = NULL;
@@ -647,8 +647,8 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, Globa
         sp64 = player->actor.category;
     }
 
-    if ((sp68 != targetCtx->unk38) || (sp64 != targetCtx->unk4A)) {
-        targetCtx->unk38 = sp68;
+    if ((sp68 != targetCtx->arrowPointedActor) || (sp64 != targetCtx->unk4A)) {
+        targetCtx->arrowPointedActor = sp68;
         targetCtx->unk4A = sp64;
         targetCtx->unk40 = 1.0f;
     }
@@ -674,9 +674,9 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, Globa
     }
 
     if (phi_s1 != NULL) {
-        if (phi_s1 != targetCtx->unk3C) {
+        if (phi_s1 != targetCtx->targetedActor) {
             func_800B4F78(targetCtx, phi_s1->category, globalCtx);
-            targetCtx->unk3C = phi_s1;
+            targetCtx->targetedActor = phi_s1;
 
             if (phi_s1->id == ACTOR_EN_BOOM) {
                 targetCtx->unk48 = 0;
@@ -699,7 +699,7 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, Globa
             targetCtx->unk44 = 120.0f;
         }
     } else {
-        targetCtx->unk3C = NULL;
+        targetCtx->targetedActor = NULL;
         Math_StepToF(&targetCtx->unk44, 500.0f, 80.0f);
     }
 }
@@ -707,75 +707,114 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, Globa
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B5814.s")
 #endif
 
-u32 Flags_GetSwitch(GlobalContext* globalCtx, s32 flag) {
+/**
+ * Tests if current scene switch flag is set.
+ */
+s32 Flags_GetSwitch(GlobalContext* globalCtx, s32 flag) {
     if (flag >= 0 && flag < 0x80) {
-        return globalCtx->actorCtx.switchFlags[(flag & -0x20) >> 5] & (1 << (flag & 0x1F));
+        return globalCtx->actorCtx.flags.swch[(flag & ~0x1F) >> 5] & (1 << (flag & 0x1F));
     }
     return 0;
 }
 
-void Actor_SetSwitchFlag(GlobalContext* globalCtx, s32 flag) {
+/**
+ * Sets current scene switch flag.
+ */
+void Flags_SetSwitch(GlobalContext* globalCtx, s32 flag) {
     if (flag >= 0 && flag < 0x80) {
-        globalCtx->actorCtx.switchFlags[(flag & -0x20) >> 5] |= 1 << (flag & 0x1F);
+        globalCtx->actorCtx.flags.swch[(flag & ~0x1F) >> 5] |= 1 << (flag & 0x1F);
     }
 }
 
-void Actor_UnsetSwitchFlag(GlobalContext* globalCtx, s32 flag) {
+/**
+ * Unsets current scene switch flag.
+ */
+void Flags_UnsetSwitch(GlobalContext* globalCtx, s32 flag) {
     if (flag >= 0 && flag < 0x80) {
-        globalCtx->actorCtx.switchFlags[(flag & -0x20) >> 5] &= ~(1 << (flag & 0x1F));
+        globalCtx->actorCtx.flags.swch[(flag & ~0x1F) >> 5] &= ~(1 << (flag & 0x1F));
     }
 }
 
-u32 Actor_GetChestFlag(GlobalContext* globalCtx, u32 flag) {
-    return globalCtx->actorCtx.chestFlags & (1 << flag);
+/**
+ * Tests if current scene chest flag is set.
+ */
+s32 Flags_GetTreasure(GlobalContext* globalCtx, s32 flag) {
+    return globalCtx->actorCtx.flags.chest & (1 << flag);
 }
 
-void Actor_SetChestFlag(GlobalContext* globalCtx, u32 flag) {
-    globalCtx->actorCtx.chestFlags |= (1 << flag);
+/**
+ * Sets current scene chest flag.
+ */
+void Flags_SetTreasure(GlobalContext* globalCtx, s32 flag) {
+    globalCtx->actorCtx.flags.chest |= (1 << flag);
 }
 
-void Actor_SetAllChestFlag(GlobalContext* globalCtx, u32 flag) {
-    globalCtx->actorCtx.chestFlags = flag;
+void Flags_SetAllTreasure(GlobalContext* globalCtx, s32 flag) {
+    globalCtx->actorCtx.flags.chest = flag;
 }
 
-u32 Actor_GetAllChestFlag(GlobalContext* globalCtx) {
-    return globalCtx->actorCtx.chestFlags;
+s32 Flags_GetAllTreasure(GlobalContext* globalCtx) {
+    return globalCtx->actorCtx.flags.chest;
 }
 
-u32 Actor_GetRoomCleared(GlobalContext* globalCtx, u32 roomNumber) {
-    return globalCtx->actorCtx.clearedRooms & (1 << roomNumber);
+/**
+ * Tests if current scene clear flag is set.
+ */
+s32 Flags_GetClear(GlobalContext* globalCtx, s32 roomNumber) {
+    return globalCtx->actorCtx.flags.clearedRoom & (1 << roomNumber);
 }
 
-void Actor_SetRoomCleared(GlobalContext* globalCtx, u32 roomNumber) {
-    globalCtx->actorCtx.clearedRooms |= (1 << roomNumber);
+/**
+ * Sets current scene clear flag.
+ */
+void Flags_SetClear(GlobalContext* globalCtx, s32 roomNumber) {
+    globalCtx->actorCtx.flags.clearedRoom |= (1 << roomNumber);
 }
 
-void Actor_UnsetRoomCleared(GlobalContext* globalCtx, u32 roomNumber) {
-    globalCtx->actorCtx.clearedRooms &= ~(1 << roomNumber);
+/**
+ * Unsets current scene clear flag.
+ */
+void Flags_UnsetClear(GlobalContext* globalCtx, s32 roomNumber) {
+    globalCtx->actorCtx.flags.clearedRoom &= ~(1 << roomNumber);
 }
 
-u32 Actor_GetRoomClearedTemp(GlobalContext* globalCtx, u32 roomNumber) {
-    return globalCtx->actorCtx.clearedRoomsTemp & (1 << roomNumber);
+/**
+ * Tests if current scene temp clear flag is set.
+ */
+s32 Flags_GetClearTemp(GlobalContext* globalCtx, s32 roomNumber) {
+    return globalCtx->actorCtx.flags.clearedRoomTemp & (1 << roomNumber);
 }
 
-void Actor_SetRoomClearedTemp(GlobalContext* globalCtx, u32 roomNumber) {
-    globalCtx->actorCtx.clearedRoomsTemp |= (1 << roomNumber);
+/**
+ * Sets current scene temp clear flag.
+ */
+void Flags_SetClearTemp(GlobalContext* globalCtx, s32 roomNumber) {
+    globalCtx->actorCtx.flags.clearedRoomTemp |= (1 << roomNumber);
 }
 
-void Actor_UnsetRoomClearedTemp(GlobalContext* globalCtx, u32 roomNumber) {
-    globalCtx->actorCtx.clearedRoomsTemp &= ~(1 << roomNumber);
+/**
+ * Unsets current scene temp clear flag.
+ */
+void Flags_UnsetClearTemp(GlobalContext* globalCtx, s32 roomNumber) {
+    globalCtx->actorCtx.flags.clearedRoomTemp &= ~(1 << roomNumber);
 }
 
-u32 Actor_GetCollectibleFlag(GlobalContext* globalCtx, s32 index) {
-    if (index > 0 && index < 0x80) {
-        return globalCtx->actorCtx.collectibleFlags[(index & -0x20) >> 5] & (1 << (index & 0x1F));
+/**
+ * Tests if current scene collectible flag is set.
+ */
+s32 Flags_GetCollectible(GlobalContext* globalCtx, s32 flag) {
+    if (flag > 0 && flag < 0x80) {
+        return globalCtx->actorCtx.flags.collectible[(flag & ~0x1F) >> 5] & (1 << (flag & 0x1F));
     }
     return 0;
 }
 
-void Actor_SetCollectibleFlag(GlobalContext* globalCtx, s32 index) {
-    if (index > 0 && index < 0x80) {
-        globalCtx->actorCtx.collectibleFlags[(index & -0x20) >> 5] |= 1 << (index & 0x1F);
+/**
+ * Sets current scene collectible flag.
+ */
+void Flags_SetCollectible(GlobalContext* globalCtx, s32 flag) {
+    if (flag > 0 && flag < 0x80) {
+        globalCtx->actorCtx.flags.collectible[(flag & ~0x1F) >> 5] |= 1 << (flag & 0x1F);
     }
 }
 
@@ -2105,14 +2144,14 @@ void func_800b9170(GameState* gameState, ActorContext* actorCtx, ActorEntry* act
         overlayEntry++;
     }
 
-    actorCtx->chestFlags = temp_a2_2[0];
-    actorCtx->switchFlags[0] = temp_a2_2[1];
-    actorCtx->switchFlags[1] = temp_a2_2[2];
+    actorCtx->flags.chest = temp_a2_2[0];
+    actorCtx->flags.swch[0] = temp_a2_2[1];
+    actorCtx->flags.swch[1] = temp_a2_2[2];
     if (globalCtx->sceneNum == 0x18) {
         temp_a2_2 = gSaveContext.cycleSceneFlags[globalCtx->sceneNum];
     }
-    actorCtx->collectibleFlags[0] = temp_a2_2[4];
-    actorCtx->clearedRooms = temp_a2_2[3];
+    actorCtx->flags.collectible[0] = temp_a2_2[4];
+    actorCtx->flags.clearedRoom = temp_a2_2[3];
 
     TitleCard_ContextInit(gameState, &actorCtx->titleCtxt);
     func_800B6468(globalCtx);
@@ -2674,9 +2713,9 @@ void func_800BA798(GlobalContext* globalCtx, ActorContext* actorCtx) {
     }
 
     CollisionCheck_ClearContext(globalCtx, &globalCtx->colChkCtx);
-    actorCtx->clearedRoomsTemp = 0;
-    actorCtx->switchFlags[3] = 0;
-    actorCtx->collectibleFlags[3] = 0;
+    actorCtx->flags.clearedRoomTemp = 0;
+    actorCtx->flags.swch[3] = 0;
+    actorCtx->flags.collectible[3] = 0;
     globalCtx->msgCtx.unk_12030 = 0;
 }
 
@@ -2784,7 +2823,7 @@ Actor* Actor_RemoveFromCategory(GlobalContext* globalCtx, ActorContext* actorCtx
     actorToRemove->prev = NULL;
 
     if ((globalCtx->roomCtx.currRoom.num == actorToRemove->room) && (actorToRemove->category == ACTORCAT_ENEMY) && (actorCtx->actorList[ACTORCAT_ENEMY].length == 0)) {
-        Actor_SetRoomClearedTemp(globalCtx, globalCtx->roomCtx.currRoom.num);
+        Flags_SetClearTemp(globalCtx, globalCtx->roomCtx.currRoom.num);
     }
 
     return newHead;
@@ -2883,7 +2922,7 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* glob
 
     sp28 = Object_GetIndex(&globalCtx->objectCtx, sp2C->objectId);
     if ((sp28 < 0) ||
-        ((sp2C->type == ACTORCAT_ENEMY) && ((Actor_GetRoomCleared(globalCtx, globalCtx->roomCtx.currRoom.num) != 0)) &&
+        ((sp2C->type == ACTORCAT_ENEMY) && ((Flags_GetClear(globalCtx, globalCtx->roomCtx.currRoom.num) != 0)) &&
          (sp2C->id != ACTOR_BOSS_05))) {
         Actor_FreeOverlay(&gActorOverlayTable[index]);
         return NULL;
@@ -3041,8 +3080,8 @@ Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, GlobalContext* globalC
         Camera_ChangeMode(Play_GetCamera(globalCtx, Play_GetActiveCameraIndex(globalCtx)), 0);
     }
 
-    if (actor == actorCtx->targetContext.unk38) {
-        actorCtx->targetContext.unk38 = NULL;
+    if (actor == actorCtx->targetContext.arrowPointedActor) {
+        actorCtx->targetContext.arrowPointedActor = NULL;
     }
 
     if (actor == actorCtx->targetContext.unk8C) {
@@ -3059,7 +3098,7 @@ Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, GlobalContext* globalC
     newHead = Actor_RemoveFromCategory(globalCtx, actorCtx, actor);
     zelda_free(actor);
 
-    if (overlayEntry->vramStart != 0) {
+    if (overlayEntry->vramStart != NULL) {
         overlayEntry->numLoaded--;
         Actor_FreeOverlay(overlayEntry);
     }

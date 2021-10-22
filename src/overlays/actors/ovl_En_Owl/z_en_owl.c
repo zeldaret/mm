@@ -267,7 +267,7 @@ void func_8095AAD0(EnOwl* this, GlobalContext* globalCtx) {
     s32 switchFlag = ENOWL_GET_SWITCHFLAG(&this->actor);
 
     if (switchFlag < 0x7F) {
-        Actor_SetSwitchFlag(globalCtx, switchFlag);
+        Flags_SetSwitch(globalCtx, switchFlag);
     }
 
     func_8095AA70(this);

@@ -763,7 +763,7 @@ void EnBigpo_SetupLanternDrop(EnBigpo* this, GlobalContext* globalCtx) {
 void EnBigpo_LanternFalling(EnBigpo* this, GlobalContext* globalCtx) {
     if (this->actor.bgCheckFlags & 1 || this->actor.floorHeight == BGCHECK_Y_MIN) {
         if (this->switchFlags != 0xFF) {
-            Actor_SetSwitchFlag(globalCtx, this->switchFlags);
+            Flags_SetSwitch(globalCtx, this->switchFlags);
         }
 
         EffectSsHahen_SpawnBurst(globalCtx, &this->actor.world.pos, 6.0f, 0, 1, 1, 15, OBJECT_BIGPO, 10, &D_060041A0);
@@ -1056,7 +1056,7 @@ void EnBigpo_FlameCircleCutscene(EnBigpo* this, GlobalContext* globalCtx) {
     this->idleTimer--;
     if (this->idleTimer == 0) {
         EnBigpo* parentPoh = (EnBigpo*)this->actor.parent;
-        Actor_SetSwitchFlag(globalCtx, this->switchFlags);
+        Flags_SetSwitch(globalCtx, this->switchFlags);
         Math_Vec3f_Copy(&parentPoh->fires[this->unk20C].pos, &this->actor.world.pos);
         Actor_MarkForDeath(&this->actor);
         if (this->unk20C == 0) {

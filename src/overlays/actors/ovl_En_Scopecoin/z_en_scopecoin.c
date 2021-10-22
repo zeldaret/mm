@@ -29,7 +29,7 @@ void func_80BFCFA0(EnScopecoin* this, GlobalContext* globalCtx) {
 }
 
 void func_80BFCFB8(EnScopecoin* this, GlobalContext* globalCtx) {
-    if (Actor_GetCollectibleFlag(globalCtx, (this->actor.params & 0x7F0) >> 4)) {
+    if (Flags_GetCollectible(globalCtx, (this->actor.params & 0x7F0) >> 4)) {
         Item_DropCollectible(globalCtx, &this->actor.world.pos, 2);
         Actor_MarkForDeath(&this->actor);
     }
@@ -47,7 +47,7 @@ void EnScopecoin_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (globalCtx->actorCtx.unk5 & 2) {
         if (this->unk148 == 2 || this->unk148 == 6) {
-            if (Actor_GetCollectibleFlag(globalCtx, (this->actor.params & 0x7F0) >> 4)) {
+            if (Flags_GetCollectible(globalCtx, (this->actor.params & 0x7F0) >> 4)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -57,7 +57,7 @@ void EnScopecoin_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
     if (this->unk148 == 2 || this->unk148 == 6) {
-        if (Actor_GetCollectibleFlag(globalCtx, (this->actor.params & 0x7F0) >> 4)) {
+        if (Flags_GetCollectible(globalCtx, (this->actor.params & 0x7F0) >> 4)) {
             Actor_MarkForDeath(&this->actor);
         } else {
             this->actor.draw = NULL;

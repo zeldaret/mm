@@ -40,6 +40,27 @@ animdict ={
     "ShrinkWindow_Fini": "ShrinkWindow_Destroy",
     "func_801A89A8": "Audio_QueueSeqCmd",
     "Actor_SetObjectSegment": "Actor_SetObjectDependency",
+    "func_800B3FC0": "ActorShadow_DrawCircle",
+    "func_800B4024": "ActorShadow_DrawSquare",
+    "func_800B4088": "ActorShadow_DrawWhiteCircle",
+    "func_800B40B8": "ActorShadow_DrawHorse",
+    "func_800B40E0": "ActorShadow_DrawFoot",
+    "func_800B42F8": "ActorShadow_DrawFeet",
+    "func_800B4A98": "Actor_SetFeetPos",
+    "Actor_SetSwitchFlag": "Flags_SetSwitch",
+    "Actor_UnsetSwitchFlag": "Flags_UnsetSwitch",
+    "Actor_GetChestFlag": "Flags_GetTreasure",
+    "Actor_SetChestFlag": "Flags_SetTreasure",
+    "Actor_SetAllChestFlag": "Flags_SetAllTreasure",
+    "Actor_GetAllChestFlag": "Flags_GetAllTreasure",
+    "Actor_GetRoomCleared": "Flags_GetClear",
+    "Actor_SetRoomCleared": "Flags_SetClear",
+    "Actor_UnsetRoomCleared": "Flags_UnsetClear",
+    "Actor_GetRoomClearedTemp": "Flags_GetTempClear",
+    "Actor_SetRoomClearedTemp": "Flags_SetTempClear",
+    "Actor_UnsetRoomClearedTemp": "Flags_UnsetTempClear",
+    "Actor_GetCollectibleFlag": "Flags_GetCollectible",
+    "Actor_SetCollectibleFlag": "Flags_SetCollectible",
 }
 
 def replace_anim(file):
@@ -70,7 +91,7 @@ def replace_anim_all(repo):
             if(filename.endswith('.c')):
                 file = subdir + os.sep + filename
                 replace_anim(file)
-    for subdir, dirs, files in os.walk(repo + os.sep + 'asm' + os.sep + 'non_matchings'):
+    for subdir, dirs, files in os.walk(repo + os.sep + 'asm'):
         for filename in files:
             if(filename.endswith('.s')):
                 file = subdir + os.sep + filename

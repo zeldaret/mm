@@ -63,7 +63,7 @@ void EnItem00_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     thisx->params &= 0xFF; // Has to be thisx to match
 
-    if (Actor_GetCollectibleFlag(globalCtx, this->collectibleFlag)) {
+    if (Flags_GetCollectible(globalCtx, this->collectibleFlag)) {
         if (this->actor.params == ITEM00_HEART_PIECE) {
             sp30 = 0;
             this->collectibleFlag = 0;
@@ -588,7 +588,7 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
         case ITEM00_MAP:
         case ITEM00_COMPASS:
             if (Actor_HasParent(&this->actor, globalCtx)) {
-                Actor_SetCollectibleFlag(globalCtx, this->collectibleFlag);
+                Flags_SetCollectible(globalCtx, this->collectibleFlag);
                 Actor_MarkForDeath(&this->actor);
             }
             return;
@@ -600,7 +600,7 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
         play_sound(NA_SE_SY_GET_RUPY);
     } else if (getItemId != GI_NONE) {
         if (Actor_HasParent(&this->actor, globalCtx)) {
-            Actor_SetCollectibleFlag(globalCtx, this->collectibleFlag);
+            Flags_SetCollectible(globalCtx, this->collectibleFlag);
             Actor_MarkForDeath(&this->actor);
         }
         return;
@@ -608,7 +608,7 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
         play_sound(NA_SE_SY_GET_ITEM);
     }
 
-    Actor_SetCollectibleFlag(globalCtx, this->collectibleFlag);
+    Flags_SetCollectible(globalCtx, this->collectibleFlag);
 
     this->unk152 = 15;
     this->unk14C = 35;
@@ -860,7 +860,7 @@ EnItem00* Item_DropCollectible(GlobalContext* globalCtx, Vec3f* spawnPos, u32 pa
         }
     } else if (paramFF == ITEM00_MUSHROOM_CLOUD) {
         param7F00 >>= 8;
-        if (!Actor_GetCollectibleFlag(globalCtx, param7F00)) {
+        if (!Flags_GetCollectible(globalCtx, param7F00)) {
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_OBJ_KINOKO, spawnPos->x, spawnPos->y, spawnPos->z, 0, 0,
                         0, param7F00);
         }
@@ -870,7 +870,7 @@ EnItem00* Item_DropCollectible(GlobalContext* globalCtx, Vec3f* spawnPos, u32 pa
             spawnedActor =
                 (EnItem00*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f,
                                        spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) << 9) & 0xFE00) | 0x102);
-            if (!Actor_GetCollectibleFlag(globalCtx, (param7F00 >> 8) & 0x7F)) {
+            if (!Flags_GetCollectible(globalCtx, (param7F00 >> 8) & 0x7F)) {
                 Audio_PlaySoundAtPosition(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
             }
         } else {
@@ -879,7 +879,7 @@ EnItem00* Item_DropCollectible(GlobalContext* globalCtx, Vec3f* spawnPos, u32 pa
                                                   spawnPos->y + 40.0f, spawnPos->z, 0, 0, 0,
                                                   ((((param7F00 >> 8) & 0x7F) & 0x7F) << 9) | 7);
             if (param20000 == 0) {
-                if (!Actor_GetCollectibleFlag(globalCtx, (param7F00 >> 8) & 0x7F)) {
+                if (!Flags_GetCollectible(globalCtx, (param7F00 >> 8) & 0x7F)) {
                     Audio_PlaySoundAtPosition(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
                 }
             }
@@ -946,7 +946,7 @@ Actor* Item_DropCollectible2(GlobalContext* globalCtx, Vec3f* spawnPos, u32 para
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELFORG, spawnPos->x, spawnPos->y + 40.0f,
                             spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) & 0x7F) << 9) | 7);
         }
-        if (Actor_GetCollectibleFlag(globalCtx, (param7F00 >> 8) & 0x7F) == 0) {
+        if (Flags_GetCollectible(globalCtx, (param7F00 >> 8) & 0x7F) == 0) {
             Audio_PlaySoundAtPosition(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
         }
     } else {
@@ -1206,5 +1206,5 @@ s32 func_800A817C(s32 index) {
 }
 
 s32 func_800A81A4(GlobalContext* globalCtx, s32 a1, s32 a2) {
-    return (func_800A8150(a1) == ITEM00_BIG_FAIRY) && (!Actor_GetCollectibleFlag(globalCtx, a2));
+    return (func_800A8150(a1) == ITEM00_BIG_FAIRY) && (!Flags_GetCollectible(globalCtx, a2));
 }
