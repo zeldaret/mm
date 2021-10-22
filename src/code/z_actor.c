@@ -492,7 +492,137 @@ void Actor_TargetContextInit(TargetContext* targetCtx, Actor* actor, GlobalConte
     func_800B4F78(targetCtx, actor->category, globalCtx);
 }
 
+extern Gfx D_0407AE00[]; // gZTargetLockOnTriangleDL
+extern Gfx D_0401F0F0[]; // gZTargetArrowDL
+
+// gfx macros
+#ifdef NON_MATCHING
+void func_800B5208(TargetContext* targetCtx, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    if ((player->stateFlags1 & 0x300006C2) == 0){
+        //Actor* actor = targetCtx->targetedActor;
+        Actor* actor = targetCtx->unk3C;
+
+        OPEN_DISPS(globalCtx->state.gfxCtx);
+        if (targetCtx->unk48 != 0) {
+            TargetContextEntry* entry;
+            s16 spCE;
+            f32 temp1;
+            Vec3f spBC;
+            s32 spB8;
+            f32 spB4;
+            s32 spB0;
+            s32 spAC;
+            f32 var1;
+            f32 var2;
+            s32 i;
+
+            spCE = 0xFF;
+            var1 = 1.0f;
+
+            if (targetCtx->unk4B != 0) {
+                spB8 = 1;
+            } else {
+                spB8 = 3;
+            }
+
+            if (actor != NULL) {
+                //Math_Vec3f_Copy(&targetCtx->targetCenterPos, &actor->focus.pos);
+                Math_Vec3f_Copy(&targetCtx->unkC, &actor->focus.pos);
+                var1 = (500.0f - targetCtx->unk44) / 420.0f;
+            } else {
+                targetCtx->unk48 -= 120;
+                if (targetCtx->unk48 < 0) {
+                    targetCtx->unk48 = 0;
+                }
+                spCE = targetCtx->unk48;
+            }
+
+            //func_8002BE04(globalCtx, &targetCtx->targetCenterPos, &spBC, &spB4);
+            func_800B4EDC(globalCtx, &targetCtx->unkC, &spBC, &spB4);
+
+            spBC.x = (160 * (spBC.x * spB4)) * var1;
+            spBC.x = CLAMP(spBC.x, -320.0f, 320.0f);
+
+            spBC.y = (120 * (spBC.y * spB4)) * var1;
+            spBC.y = CLAMP(spBC.y, -240.0f, 240.0f);
+
+            spBC.z = spBC.z * var1;
+
+            targetCtx->unk4C--;
+            if (targetCtx->unk4C < 0) {
+                targetCtx->unk4C = 2;
+            }
+
+            func_800B4F40(targetCtx, targetCtx->unk4C, spBC.x, spBC.y, spBC.z);
+
+            if ((!(player->stateFlags1 & 0x40)) || (actor != player->unk_730)) {
+                OVERLAY_DISP = Gfx_CallSetupDL(OVERLAY_DISP, 0x39);
+
+                for (spB0 = 0, spAC = targetCtx->unk4C; spB0 < spB8; spB0++, spAC = (spAC + 1) % 3) {
+                    entry = &targetCtx->unk50[spAC];
+
+                    if (entry->unkC < 500.0f) {
+                        if (entry->unkC <= 120.0f) {
+                            var2 = 0.15f;
+                        } else {
+                            var2 = ((entry->unkC - 120.0f) * 0.001f) + 0.15f;
+                        }
+
+                        SysMatrix_InsertTranslation(entry->pos.x, entry->pos.y, 0.0f, MTXMODE_NEW);
+                        Matrix_Scale(var2, 0.15f, 1.0f, MTXMODE_APPLY);
+
+                        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, entry->color.r, entry->color.g, entry->color.b, (u8)spCE);
+
+                        //SysMatrix_InsertZRotation_s((targetCtx->unk4B & 0x7F) * (M_PI / 64), MTXMODE_APPLY);
+                        SysMatrix_InsertZRotation_s((targetCtx->unk4B * 512), MTXMODE_APPLY);
+
+                        for (i = 0; i < 4; i++) {
+                            SysMatrix_InsertZRotation_s(M_PI / 2, MTXMODE_APPLY);
+                            SysMatrix_StatePush();
+                            SysMatrix_InsertTranslation(entry->unkC, entry->unkC, 0.0f, MTXMODE_APPLY);
+                            gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                                    G_MTX_MODELVIEW | G_MTX_LOAD);
+                            //gSPDisplayList(OVERLAY_DISP++, gZTargetLockOnTriangleDL);
+                            gSPDisplayList(OVERLAY_DISP++, D_0407AE00);
+                            SysMatrix_StatePop();
+                        }
+                    }
+
+                    spCE -= 0xFF / 3;
+                    if (spCE < 0) {
+                        spCE = 0;
+                    }
+                }
+            }
+        }
+
+        actor = targetCtx->unk_94;
+        if ((actor != NULL) && !(actor->flags & 0x8000000)) {
+            //NaviColor* naviColor = &sNaviColorList[actor->category];
+            s801AEC84* color = &D_801AEC84[actor->category];
+
+            POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0x07);
+
+            SysMatrix_InsertTranslation(actor->focus.pos.x, actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y) + 17.0f,
+                            actor->focus.pos.z, MTXMODE_NEW);
+            //Matrix_RotateY((f32)((u16)(globalCtx->gameplayFrames * 3000)) * (M_PI / 0x8000), MTXMODE_APPLY);
+            Matrix_RotateY((globalCtx->gameplayFrames * 3000), MTXMODE_APPLY);
+            Matrix_Scale((iREG(27) + 35) / 1000.0f, (iREG(28) + 60) / 1000.0f, (iREG(29) + 50) / 1000.0f, MTXMODE_APPLY);
+
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, color->unk0, color->unk1, color->unk2, 255);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                    G_MTX_MODELVIEW | G_MTX_LOAD);
+            gSPDisplayList(POLY_XLU_DISP++, D_0401F0F0);
+        }
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B5208.s")
+#endif
 
 #ifdef NON_EQUIVALENT
 void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GlobalContext* globalCtx) {
@@ -2358,7 +2488,6 @@ s32 func_800BA2D8(GlobalContext* globalCtx, Actor* actor) {
     return func_800BA2FC(globalCtx, actor, &actor->projectedPos, actor->projectedW);
 }
 
-
 #ifdef NON_MATCHING
 s32 func_800BA2FC(GlobalContext* globalCtx, Actor* actor, Vec3f* param_3, f32 param_4) {
     f32 temp_f14;
@@ -3036,6 +3165,7 @@ u8 D_801AED8C[] = {
 };
 
 #if 0
+// static bss?
 void func_800BB8EC(GlobalContext* globalCtx, ActorContext* actorCtx, Actor** arg2, Actor** arg3, Player* player) {
     Actor* temp_v0;
     Actor* temp_v0_2;
@@ -3898,7 +4028,7 @@ Actor* func_800BE0B8(GlobalContext* globalCtx, Actor* inActor, s16 arg2, u8 arg3
     return NULL;
 }
 
-#if NON_MATCHING
+#ifdef NON_MATCHING
 // regalloc
 s32 func_800BE184(GameState* gameState, Actor* actor, f32 arg2, s16 arg3, s16 arg4, s16 arg5) {
     GlobalContext* globalCtx = (GlobalContext*)gameState;
