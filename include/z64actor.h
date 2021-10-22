@@ -198,7 +198,7 @@ typedef struct Actor {
     /* 0x11C */ u8 colorFilterTimer; // A non-zero value enables the color filter. Decrements automatically
     /* 0x11D */ u8 isDrawn; // Set to true if the actor is currently being drawn. Always stays false for lens actors
     /* 0x11E */ u8 dropFlag; // Configures what item is dropped by the actor from `Item_DropCollectibleRandom`
-    /* 0x11F */ u8 hintId; // Sets what 0600 dialog to display when talking to navi. Default 0xFF
+    /* 0x11F */ u8 hintId; // Sets what 0600 dialog to display when talking to Tatl. Default 0xFF
     /* 0x120 */ struct Actor* parent; // Usage is actor specific. Set if actor is spawned via `Actor_SpawnAsChild`
     /* 0x124 */ struct Actor* child; // Usage is actor specific. Set if actor is spawned via `Actor_SpawnAsChild`
     /* 0x128 */ struct Actor* prev; // Previous actor of this category

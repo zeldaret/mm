@@ -320,7 +320,7 @@ void EnFg_Knockback(EnFg* this, GlobalContext* globalCtx) {
 void EnFg_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnFg* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 10.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 10.0f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600B538, NULL, this->limbDrawTbl, this->transitionDrawTbl, 24);
     EnFg_UpdateAnimation(&this->skelAnime, 0);
     Collider_InitCylinder(globalCtx, &this->collider);

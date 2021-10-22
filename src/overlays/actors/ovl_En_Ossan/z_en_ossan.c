@@ -1433,7 +1433,7 @@ void EnOssan_InitShop(EnOssan* this, GlobalContext* globalCtx) {
         this->actor.objBankIndex = this->objIndex;
         Actor_SetObjectDependency(globalCtx, &this->actor);
         shopItems = sShops[this->actor.params];
-        ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
+        ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
         sInitFuncs[this->actor.params](this, globalCtx);
         this->textId = sWelcomeHumanTextIds[this->actor.params];
         EnOssan_GetCutscenes(this, globalCtx);

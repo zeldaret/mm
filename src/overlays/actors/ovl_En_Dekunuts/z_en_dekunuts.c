@@ -131,7 +131,7 @@ void EnDekunuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnDekunuts* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 35.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &D_06002468, &D_0600326C, this->jointTable, this->morphTable, 10);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);

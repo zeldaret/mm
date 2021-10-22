@@ -1397,7 +1397,7 @@ void EnFsn_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnFsn* this = THIS;
     s32 pad;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013320, &D_06012C34, this->limbDrawTable,
                      this->transitionDrawTable, 19);
     if (ENFSN_IS_SHOP(&this->actor)) {

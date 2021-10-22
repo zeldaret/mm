@@ -1398,7 +1398,7 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
     s16 type;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 30.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06014EA8, NULL, this->limbDrawTbl, this->transitionDrawTbl, 20);
     func_808F30B0(&this->skelAnime, 0);
     Collider_InitCylinder(globalCtx, &this->colliderCylinder);

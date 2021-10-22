@@ -39,7 +39,7 @@ void EnScopecoin_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnScopecoin* this = THIS;
 
     Actor_SetScale(&this->actor, 0.01f);
-    ActorShape_Init(&this->actor.shape, 0, func_800B3FC0, 10.0f);
+    ActorShape_Init(&this->actor.shape, 0, ActorShadow_DrawCircle, 10.0f);
     this->unk148 = (this->actor.params & 0xF);
     if (this->unk148 < 0 || this->unk148 >= 8) {
         this->unk148 = 0;

@@ -338,7 +338,7 @@ void func_809CD77C(EnBji01* this, GlobalContext* globalCtx) {
 void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBji01* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 30.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600578C, &D_06000FDC, this->jointTable, this->morphTable,
                      BJI_LIMB_MAX);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);

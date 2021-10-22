@@ -526,7 +526,7 @@ void func_80B3F044(EnDai* this, GlobalContext* globalCtx) {
 void EnDai_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnDai* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 0.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 0.0f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_060130D0, NULL, this->jointTable, this->morphTable, 19);
     this->unk_A70 = -1;
     func_80B3E5DC(this, 0);

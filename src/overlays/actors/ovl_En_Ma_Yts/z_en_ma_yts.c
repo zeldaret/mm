@@ -245,7 +245,7 @@ void EnMaYts_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (!EnMaYts_CheckValidSpawn(this, globalCtx)) {
         Actor_MarkForDeath(&this->actor);
     }
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 18.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, NULL, this->limbDrawTbl, this->transitionDrawTbl,
                      MA1_LIMB_MAX);
     EnMaYts_InitAnimation(this, globalCtx);

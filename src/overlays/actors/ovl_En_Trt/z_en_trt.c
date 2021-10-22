@@ -1466,7 +1466,7 @@ void EnTrt_InitShop(EnTrt* this, GlobalContext* globalCtx) {
 
     EnTrt_GetCutscenes(this, globalCtx);
     this->cutscene = this->lookForwardCutscene;
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     EnTrt_InitShopkeeper(this, globalCtx);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.colChkInfo.cylRadius = 50;

@@ -128,7 +128,7 @@ void EnJcMato_Idle(EnJcMato* this, GlobalContext* globalCtx) {
 void EnJcMato_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnJcMato* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     Collider_InitSphere(globalCtx, &this->collider);
     Collider_SetSphere(globalCtx, &this->collider, &this->actor, &sSphereInit);
     this->collider.dim.worldSphere.radius = 0xF;

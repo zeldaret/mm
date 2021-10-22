@@ -61,7 +61,7 @@ void EnElfbub_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
 
-    ActorShape_Init(&this->actor.shape, 16.0f, func_800B3FC0, 0.2f);
+    ActorShape_Init(&this->actor.shape, 16.0f, ActorShadow_DrawCircle, 0.2f);
     this->actor.hintId = 0x16;
     Actor_SetScale(&this->actor, 1.25f);
 

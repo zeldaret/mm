@@ -138,7 +138,7 @@ void EnOwl_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 36.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime1, &D_0600C5F8, &D_06001ADC, this->jointTable1, this->morphTable1, 21);
     SkelAnime_InitSV(globalCtx, &this->skelAnime2, &D_060105C0, &D_0600CDB0, this->jointTable2, this->morphTable2, 16);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);

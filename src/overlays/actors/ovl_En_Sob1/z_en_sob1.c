@@ -1386,7 +1386,7 @@ void EnSob1_InitShop(EnSob1* this, GlobalContext* globalCtx) {
         this->cutsceneState = ENSOB1_CUTSCENESTATE_STOPPED;
         EnSob1_GetCutscenes(this);
         this->cutscene = this->lookFowardCutscene;
-        ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
+        ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
         sInitFuncs[this->shopType](this, globalCtx);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         this->actor.colChkInfo.cylRadius = 50;

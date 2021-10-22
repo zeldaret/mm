@@ -151,7 +151,7 @@ void ObjAqua_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.scale.z = 0.0009f;
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 60.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 60.0f);
     if (1) {};
     this->actor.shape.shadowAlpha = 140;
     this->alpha = 255;

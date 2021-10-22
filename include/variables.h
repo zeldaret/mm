@@ -4061,8 +4061,8 @@ extern UNK_TYPE D_0406F380;
 extern UNK_TYPE D_04073F00;
 extern UNK_TYPE D_04075400;
 extern Gfx D_04075A40[];
-extern Gfx D_04075B30[];
-extern Gfx D_04076BC0[];
+extern Gfx D_04075B30[]; // gFootShadowDL
+extern Gfx D_04076BC0[]; // gCircleShadowDL
 extern Gfx D_04077480[];
 extern UNK_TYPE D_04079B10;
 extern Gfx D_0407AB10[];

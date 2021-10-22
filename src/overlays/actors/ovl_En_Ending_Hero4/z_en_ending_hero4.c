@@ -36,7 +36,7 @@ void EnEndingHero4_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.gravity = -3.0f;
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600D640, &D_06002A84, this->limbDrawTable,
                      this->transitionDrawTable, 17);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     func_80C23748(this);
 }
 

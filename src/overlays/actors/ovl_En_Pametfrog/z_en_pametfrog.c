@@ -205,7 +205,7 @@ void EnPametfrog_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 55.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 55.0f);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInit);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600DF98, &D_0600F990, this->limbDrawTable,
                      this->transitionDrawTable, 24);

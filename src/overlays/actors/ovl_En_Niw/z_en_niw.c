@@ -123,7 +123,7 @@ void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actor.flags |= 0x1; // targetable ON
 
-    ActorShape_Init(&thisx->shape, 0.0f, func_800B3FC0, 25.0f);
+    ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
 
     SkelAnime_InitSV(globalCtx, &this->skelanime, &D_06002530, &D_060000E8, this->limbDrawTbl,
                      this->transitionDrawtable, ENNIW_LIMBCOUNT);

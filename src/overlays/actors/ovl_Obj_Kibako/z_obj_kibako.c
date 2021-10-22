@@ -97,7 +97,7 @@ void ObjKibako_SpawnCollectible(ObjKibako* this, GlobalContext* globalCtx) {
 
 void ObjKibako_SetShadow(ObjKibako* this) {
     if ((this->actor.projectedPos.z < 370.0f) && (this->actor.projectedPos.z > -10.0f)) {
-        this->actor.shape.shadowDraw = func_800B4024;
+        this->actor.shape.shadowDraw = ActorShadow_DrawSquare;
         this->actor.shape.shadowScale = 1.4f;
         this->actor.shape.shadowAlpha =
             (this->actor.projectedPos.z < 200.0f) ? 100 : (400 - ((s32)this->actor.projectedPos.z)) >> 1;

@@ -5,7 +5,7 @@ void EnAObj_Init(ActorEnAObj* this, GlobalContext* globalCtx) {
     s0->base.textId = ((s0->base.params >> 8) & 0xFF) | 0x300;
     s0->base.params = (s0->base.params & 0xFF) - 9;
     Actor_ProcessInitChain((Actor*)s0, &enAObjInitVar);
-    ActorShape_Init(&s0->base.shape, 0, (ActorShadowFunc)func_800B3FC0, 12);
+    ActorShape_Init(&s0->base.shape, 0, (ActorShadowFunc)ActorShadow_DrawCircle, 12);
     Collider_InitAndSetCylinder(globalCtx, &s0->collision, (Actor*)s0, &enAObjCylinderInit);
     Collider_UpdateCylinder((Actor*)s0, &s0->collision);
     s0->base.colChkInfo.mass = 255;

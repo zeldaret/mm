@@ -303,7 +303,7 @@ void EnDodongo_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_330.g = 10;
     this->unk_330.a = 200;
     Math_Vec3f_Copy(&this->unk_314, &D_801C5DB0);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 48.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 48.0f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &D_06008318, &D_06004C20, this->jointTable, this->morphTable, 31);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     Collider_InitAndSetJntSph(globalCtx, &this->collider2, &this->actor, &sJntSphInit2, this->collider2Elements);

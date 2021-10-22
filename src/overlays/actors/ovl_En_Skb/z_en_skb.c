@@ -215,7 +215,7 @@ void EnSkb_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->actor.colChkInfo.damageTable = &sDamageTable;
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 0.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 0.0f);
     this->unk_3E0 = 0;
     this->unk_3E2 = 0;
     Actor_SetScale(&this->actor, 0.01f);

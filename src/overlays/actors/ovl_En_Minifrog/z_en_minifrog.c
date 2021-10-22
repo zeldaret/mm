@@ -91,7 +91,7 @@ void EnMinifrog_Init(Actor* thisx, GlobalContext* globalCtx) {
     int i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 15.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 15.0f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600B538, &D_06001534, this->limbDrawTable,
                      this->transitionDrawTable, 24);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);

@@ -203,7 +203,7 @@ void EnToto_Init(Actor* thisx, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 30.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
     this->actor.bgCheckFlags |= 0x400;
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600A978, globalCtx->sceneNum == 0x12 ? &D_06003AA8 : &D_0600C880,
                      this->limbDrawTbl, this->transitionDrawTbl, 18);

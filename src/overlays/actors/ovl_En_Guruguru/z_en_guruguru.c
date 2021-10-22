@@ -79,7 +79,7 @@ void EnGuruguru_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnGuruguru* this = THIS;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 19.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06006C90, &D_06000B04, this->jointTable, this->morphTable, 16);
     this->actor.targetMode = 0;
     if (this->actor.params != 2) {

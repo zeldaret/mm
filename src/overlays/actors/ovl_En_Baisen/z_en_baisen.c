@@ -68,7 +68,7 @@ static u8 animModes[] = { 0, 0 };
 void EnBaisen_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBaisen* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06007908, &D_060011C0, this->jointTable, this->morphTable, 20);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->paramCopy = this->actor.params;

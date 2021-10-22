@@ -188,7 +188,7 @@ void EnMaYto_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 18.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06015C28, NULL, this->limbDrawTbl, this->transitionDrawTbl,
                      MA2_LIMB_MAX);
     EnMaYto_InitAnimation(this, globalCtx);

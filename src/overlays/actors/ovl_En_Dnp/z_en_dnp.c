@@ -357,7 +357,7 @@ void func_80B3D558(EnDnp* this, GlobalContext* globalCtx) {
 void EnDnp_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnDnp* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 16.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 16.0f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06010D60, NULL, this->jointTable, this->morphTable, 26);
     this->unk_340 = -1;
     func_80B3CC38(this, 15);

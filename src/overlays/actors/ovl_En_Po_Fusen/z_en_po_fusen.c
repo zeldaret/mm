@@ -112,7 +112,7 @@ void EnPoFusen_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (0) {}
     this->collider.dim.worldSphere.radius = 40;
     SkelAnime_InitSV(globalCtx, &this->anime, &D_060024F0, &D_06000040, this->limbDrawTbl, this->transitionDrawTbl, 10);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 0x4);
 
     if (EnPoFusen_CheckParent(this, globalCtx) == 0) {

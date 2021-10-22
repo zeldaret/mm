@@ -219,7 +219,7 @@ void EnRailgibud_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_3EE = 1;
     }
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 28.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 28.0f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_060053E8, &D_0600ABE0, this->jointTable, this->morphTable, 26);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -995,7 +995,7 @@ void func_80BA7B6C(EnRailgibud* this, GlobalContext* globalCtx) {
     this->unk_3FE = 99;
     this->actor.flags |= 0x100000;
     this->actor.flags |= 0x10;
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 28.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 28.0f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_060053E8, &D_0600ABE0, this->jointTable, this->morphTable, 26);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);

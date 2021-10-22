@@ -169,7 +169,7 @@ void EnItem00_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->unk14E = 0;
-    ActorShape_Init(&this->actor.shape, shadowOffset, func_800B3FC0, shadowScale);
+    ActorShape_Init(&this->actor.shape, shadowOffset, ActorShadow_DrawCircle, shadowScale);
     this->actor.shape.shadowAlpha = 180;
     this->actor.focus.pos = this->actor.world.pos;
     this->unk14A = 0;

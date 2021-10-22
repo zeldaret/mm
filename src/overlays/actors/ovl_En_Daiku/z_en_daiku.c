@@ -76,7 +76,7 @@ void EnDaiku_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnDaiku* this = THIS;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 40.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 40.0f);
     this->actor.targetMode = 0;
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->unk_278 = ENDAIKU_GET_FF(&this->actor);

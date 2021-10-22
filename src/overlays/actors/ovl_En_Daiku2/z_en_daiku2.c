@@ -95,7 +95,7 @@ void EnDaiku2_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 day = gSaveContext.day;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 40.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 40.0f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600A850, &D_06002FA0, this->jointTable, this->morphTable, 17);
     this->actor.targetMode = 0;
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);

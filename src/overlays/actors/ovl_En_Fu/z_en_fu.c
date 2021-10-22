@@ -199,7 +199,7 @@ void EnFu_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (fuKaiten != NULL) {
-        ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 36.0f);
+        ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
         SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600B2B0, &D_06001F74, this->jointTable, this->morphTable, 21);
         Collider_InitCylinder(globalCtx, &this->collider);
         Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);

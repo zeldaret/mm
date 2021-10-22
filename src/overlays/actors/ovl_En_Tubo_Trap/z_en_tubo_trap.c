@@ -57,7 +57,7 @@ void EnTuboTrap_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->actor.shape.rot.z = 0;
     this->actor.world.rot.z = 0;
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 1.8f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 1.8f);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->actionFunc = EnTuboTrap_Idle;
@@ -288,10 +288,10 @@ void EnTuboTrap_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (this->actor.projectedPos.z < 811.0f) {
         if (this->actor.projectedPos.z > 300.0f) {
             this->actor.shape.shadowAlpha = (u8)((811 - (s32)this->actor.projectedPos.z) >> 1);
-            this->actor.shape.shadowDraw = func_800B3FC0;
+            this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         } else if (this->actor.projectedPos.z > -10.0f) {
             this->actor.shape.shadowAlpha = 255;
-            this->actor.shape.shadowDraw = func_800B3FC0;
+            this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         } else {
             this->actor.shape.shadowDraw = NULL;
         }

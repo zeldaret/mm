@@ -965,7 +965,7 @@ void EnSellnuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600AC70, &D_06005488, this->jointTable, this->morphTable, 28);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinderType1(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 35.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
     this->path = func_8013D648(globalCtx, ENSELLNUTS_GET_FC00(&this->actor), 0x3F);
     this->cutscene = this->actor.cutscene;
     Actor_SetScale(&this->actor, 0.01f);

@@ -212,7 +212,7 @@ void EnDno_Init(Actor* thisx, GlobalContext* globalCtx) {
 
         if (actor == NULL) {
             Actor_ProcessInitChain(thisx, sInitChain);
-            ActorShape_Init(&thisx->shape, 0.0f, func_800B3FC0, 21.0f);
+            ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 21.0f);
             SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600E1F8, &D_06007CA4, this->jointTable, this->morphTable,
                              28);
             Collider_InitCylinder(globalCtx, &this->collider);

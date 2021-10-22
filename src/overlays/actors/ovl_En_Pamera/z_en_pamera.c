@@ -151,7 +151,7 @@ void EnPamera_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnPamera* this = THIS;
     Vec3f sp44;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 15.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 15.0f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06008448, &D_060005BC, this->limbDrawTbl, this->transitionDrawTbl,
                      PAMERA_LIMB_MAX);
     Collider_InitCylinder(globalCtx, &this->collider);

@@ -97,8 +97,7 @@ void ActorShadow_Draw(Actor* actor, Lights* lights, GlobalContext* globalCtx, Gf
     }
 }
 
-/* ActorShadow_DrawCircle */
-void func_800B3FC0(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
+void ActorShadow_DrawCircle(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
     if (actor->bgCheckFlags & 0x400) {
         func_800B4AEC(globalCtx, actor, 50.0f);
     }
@@ -106,8 +105,7 @@ void func_800B3FC0(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
     ActorShadow_Draw(actor, lights, globalCtx, D_04076BC0, NULL);
 }
 
-/* ActorShadow_DrawSquare */
-void func_800B4024(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
+void ActorShadow_DrawSquare(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
     if (actor->bgCheckFlags & 0x400) {
         func_800B4AEC(globalCtx, actor, 50.0f);
     }
@@ -117,18 +115,15 @@ void func_800B4024(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
 
 Color_RGBA8 D_801AEC80 = { 255, 255, 255, 255 };
 
-/* ActorShadow_DrawWhiteCircle */
-void func_800B4088(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
+void ActorShadow_DrawWhiteCircle(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
     ActorShadow_Draw(actor, lights, globalCtx, D_04076BC0, &D_801AEC80);
 }
 
-/* ActorShadow_DrawHorse */
-void func_800B40B8(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
+void ActorShadow_DrawHorse(Actor* actor, Lights* lights, GlobalContext* globalCtx) {
     ActorShadow_Draw(actor, lights, globalCtx, D_04077480, NULL);
 }
 
-/* ActorShadow_DrawFoot */
-void func_800B40E0(GlobalContext* globalCtx, Light* light, MtxF* arg2, s32 arg3, f32 arg4, f32 arg5, f32 arg6) {
+void ActorShadow_DrawFoot(GlobalContext* globalCtx, Light* light, MtxF* arg2, s32 arg3, f32 arg4, f32 arg5, f32 arg6) {
     s32 pad;
     s16 sp58;
     f32 dir2;
@@ -153,10 +148,9 @@ void func_800B40E0(GlobalContext* globalCtx, Light* light, MtxF* arg2, s32 arg3,
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-// ActorShadow_DrawFeet
 #ifdef NON_MATCHING
 // stack and regalloc
-void func_800B42F8(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
+void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
 
     f32 temp_f20_2;
     f32 temp_f22;
@@ -203,7 +197,7 @@ void func_800B42F8(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
             actor->shape.shadowScale *= 0.3f;
             alphaRatio = (distToFloor - 20.0f) * 0.02f;
             actor->shape.shadowAlpha = actor->shape.shadowAlpha * CLAMP_MIN(alphaRatio, 1.0f);
-            func_800B3FC0(actor, mapper, globalCtx);
+            ActorShadow_DrawCircle(actor, mapper, globalCtx);
         }
 
         actor->shape.shadowScale = shadowScale;
@@ -261,7 +255,7 @@ void func_800B42F8(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
                         temp_lo = (sp9C->l.col[0] + sp9C->l.col[1] + sp9C->l.col[2]) * ABS_ALT(sp9C->l.dir[1]);
                         if (temp_lo > 0) {
                             phi_s2 += temp_lo;
-                            func_800B40E0(globalCtx, sp9C, &sp13C, temp_lo, temp_f22, temp_f24, temp_f20_2);
+                            ActorShadow_DrawFoot(globalCtx, sp9C, &sp13C, temp_lo, temp_f22, temp_f24, temp_f20_2);
                         }
                     }
                     j++;
@@ -272,7 +266,7 @@ void func_800B42F8(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
                     if (sp9C->l.dir[1] > 0) {
                         temp_a3 = ((sp9C->l.col[0] + sp9C->l.col[1] + sp9C->l.col[2]) * ABS_ALT(sp9C->l.dir[1])) - (phi_s2 * 8);
                         if (temp_a3 > 0) {
-                            func_800B40E0(globalCtx, sp9C, &sp13C, temp_a3, temp_f22, temp_f24, temp_f20_2);
+                            ActorShadow_DrawFoot(globalCtx, sp9C, &sp13C, temp_a3, temp_f22, temp_f24, temp_f20_2);
                         }
                     }
                     sp9C++;
@@ -298,11 +292,10 @@ void func_800B42F8(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
     }
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B42F8.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/ActorShadow_DrawFeet.s")
 #endif
 
-// Actor_SetFeetPos
-void func_800B4A98(Actor* actor, s32 limbIndex, s32 leftFootIndex, Vec3f* leftFootPos, s32 rightFootIndex,
+void Actor_SetFeetPos(Actor* actor, s32 limbIndex, s32 leftFootIndex, Vec3f* leftFootPos, s32 rightFootIndex,
                    Vec3f* rightFootPos) {
     if (limbIndex == leftFootIndex) {
         SysMatrix_MultiplyVector3fByState(leftFootPos, &actor->shape.feetPos[FOOT_LEFT]);
@@ -370,7 +363,7 @@ void func_800B4B50(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
             actor->shape.shadowAlpha = (u8) (u32) (phi_f0 * phi_f8);*/
             //actor->shape.shadowAlpha = (phi_f0 *  temp_v0);
             actor->shape.shadowAlpha *= phi_f0;
-            func_800B3FC0(actor, mapper, globalCtx);
+            ActorShadow_DrawCircle(actor, mapper, globalCtx);
             actor->shape.shadowScale = temp_f20;
             actor->shape.shadowAlpha = temp_v0;
 dummy_label_111649: ;
@@ -393,7 +386,7 @@ dummy_label_111649: ;
                     lightNum = (phi_s0->l.col[0] + phi_s0->l.col[1] + phi_s0->l.col[2]) * ABS_ALT(phi_s0->l.dir[1]);
                     if (lightNum > 0) {
                         lightNumMax += lightNum;
-                        func_800B40E0(globalCtx, phi_s0, &sp94, lightNum, temp_f22, temp_f24, shadowScaleZ);
+                        ActorShadow_DrawFoot(globalCtx, phi_s0, &sp94, lightNum, temp_f22, temp_f24, shadowScaleZ);
                     }
                 }
             }
@@ -402,7 +395,7 @@ dummy_label_111649: ;
                 if (phi_s0->l.dir[1] > 0) {
                     lightNum = (ABS_ALT(phi_s0->l.dir[1]) * (phi_s0->l.col[0] + phi_s0->l.col[1] + phi_s0->l.col[2])) - (lightNumMax * ((void)0,8));
                     if (lightNum > 0) {
-                        func_800B40E0(globalCtx, phi_s0,  &sp94, lightNum, temp_f22, temp_f24, shadowScaleZ);
+                        ActorShadow_DrawFoot(globalCtx, phi_s0,  &sp94, lightNum, temp_f22, temp_f24, shadowScaleZ);
                     }
                 }
             }
@@ -465,6 +458,7 @@ void func_800B4F78(TargetContext* targetCtx, s32 type, GlobalContext* globalCtx)
     }
 }
 
+// OoT's func_8002BF60
 void func_800B5040(TargetContext* targetCtx, Actor* actor, s32 type, GlobalContext* globalCtx) {
     targetCtx->unk0.x = actor->focus.pos.x;
     targetCtx->unk0.y = actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y);

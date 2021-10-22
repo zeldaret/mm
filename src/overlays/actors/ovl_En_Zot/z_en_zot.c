@@ -97,7 +97,7 @@ void EnZot_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     s32 i;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = func_80B97100;
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600D208, &D_06004248, this->jointTable, this->morphTable, 20);

@@ -200,7 +200,7 @@ void EnMa4_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnMa4* this = THIS;
     s32 pad;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 18.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, NULL, this->limbDrawTable, this->transitionDrawTable,
                      MA1_LIMB_MAX);
 

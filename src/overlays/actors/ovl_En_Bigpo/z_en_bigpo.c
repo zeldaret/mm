@@ -218,7 +218,7 @@ void EnBigpo_Init(Actor* thisx, GlobalContext* globalCtx2) {
                                   255, 0);
     }
 
-    ActorShape_Init(&thisx->shape, 0.0f, func_800B3FC0, 45.0f);
+    ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 45.0f);
     thisx->bgCheckFlags |= 0x400;
     this->savedHeight = thisx->home.pos.y + 100.0f;
     this->mainColor.r = 255;

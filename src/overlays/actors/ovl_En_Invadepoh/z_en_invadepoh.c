@@ -1721,7 +1721,7 @@ void EnInvadepoh_InitAlien(EnInvadepoh* this, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, D_80B4EC24);
     Collider_InitCylinder(globalCtx, &this->collider);
-    ActorShape_Init(&this->actor.shape, 6800.0f, func_800B4088, 150.0f);
+    ActorShape_Init(&this->actor.shape, 6800.0f, ActorShadow_DrawWhiteCircle, 150.0f);
     this->actor.shape.shadowAlpha = 140;
     this->actor.flags = 0x80001010;
     if (INVADEPOH_TYPE(this) == TYPE_ALIEN1) {
@@ -1769,7 +1769,7 @@ void EnInvadepoh_InitRomani(EnInvadepoh* this, GlobalContext* globalCtx) {
     func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, ACTORCAT_NPC);
     Collider_InitCylinder(globalCtx, &this->collider);
     if (temp != 4) {
-        ActorShape_Init(&this->actor.shape, 0, func_800B3FC0, 18.0f);
+        ActorShape_Init(&this->actor.shape, 0, ActorShadow_DrawCircle, 18.0f);
         Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInitRomaniAndCremia);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     }
@@ -1843,7 +1843,7 @@ void EnInvadepoh_InitDog(EnInvadepoh* this, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInitDog);
     this->actor.colChkInfo.mass = 0x50;
-    ActorShape_Init(&this->actor.shape, 0, func_800B3FC0, 24.0f);
+    ActorShape_Init(&this->actor.shape, 0, ActorShadow_DrawCircle, 24.0f);
     this->bankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_DOG);
     if (this->bankIndex < 0) {
         Actor_MarkForDeath(&this->actor);
@@ -1859,7 +1859,7 @@ void EnInvadepoh_InitCremia(EnInvadepoh* this, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInitRomaniAndCremia);
     this->actor.colChkInfo.mass = MASS_HEAVY;
-    ActorShape_Init(&this->actor.shape, 0, func_800B3FC0, 18.0f);
+    ActorShape_Init(&this->actor.shape, 0, ActorShadow_DrawCircle, 18.0f);
     this->bankIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_MA2);
     if (this->bankIndex < 0) {
         Actor_MarkForDeath(&this->actor);

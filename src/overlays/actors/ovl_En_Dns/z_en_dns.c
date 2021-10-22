@@ -292,7 +292,7 @@ s32 func_8092CCEC(EnDns* this, GlobalContext* globalCtx) {
     this->unk_2D8 = (Rand_ZeroOne() * 182.0f) + 182.0f;
     this->unk_2D8 = (sp2E > 0) ? this->unk_2D8 : -this->unk_2D8;
     this->unk_2D0 = 0x28;
-    this->actor.shape.shadowDraw = func_800B3FC0;
+    this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
     return 1;
 }
 

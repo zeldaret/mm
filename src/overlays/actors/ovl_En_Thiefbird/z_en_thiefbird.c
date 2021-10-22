@@ -174,7 +174,7 @@ void EnThiefbird_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    ActorShape_Init(&this->actor.shape, 1500.0f, func_800B3FC0, 35.0f);
+    ActorShape_Init(&this->actor.shape, 1500.0f, ActorShadow_DrawCircle, 35.0f);
     if (this->actor.params == 1) {
         D_80C1392C = 1;
         Math_Vec3f_Copy(&D_80C13920, &this->actor.world.pos);

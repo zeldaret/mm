@@ -287,7 +287,7 @@ void EnDinofos_Init(Actor* thisx, GlobalContext* globalCtx) {
     ColliderJntSphElementDim* dim;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B42F8, 90.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawFeet, 90.0f);
     Effect_Add(globalCtx, &this->unk_2A0, 2, 0, 0, &D_8089E368);
     Collider_InitAndSetJntSph(globalCtx, &this->colliderJntSph, &this->actor, &sJntSphInit,
                               this->colliderJntSphElement);

@@ -162,7 +162,7 @@ void EnPoh_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 30.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
     Collider_InitAndSetJntSph(globalCtx, &this->colliderSph, &this->actor, &sJntSphInit, this->colliderSphElements);
     this->colliderSph.elements[0].dim.worldSphere.radius = 0;
     this->colliderSph.elements[0].dim.worldSphere.center.x = this->actor.world.pos.x;
