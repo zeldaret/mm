@@ -2432,7 +2432,6 @@ void Actor_Draw(GlobalContext* globalCtx, Actor* actor) {
 }
 
 #ifdef NON_MATCHING
-// TODO: try again
 void func_801A0810(s32*, u16, u8);
 void func_800B9D1C(Actor* actor) {
     if (actor->sfx != 0) {
@@ -2450,11 +2449,11 @@ void func_800B9D1C(Actor* actor) {
     }
 
     if (actor->unk39 & 0x40) {
-        func_801A1FB4(3, &actor->projectedPos, 0x27, 0x44BB8000);
+        func_801A1FB4(3, &actor->projectedPos, 0x27, 1500.0f);
     }
 
     if (actor->unk39 & 0x20) {
-        func_801A1FB4(0, &actor->projectedPos, 0x71, 0x44610000);
+        func_801A1FB4(0, &actor->projectedPos, 0x71, 900.0f);
     }
 }
 #else
