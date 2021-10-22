@@ -1,6 +1,6 @@
 /*
  * File: z_actor.c
- * Description: 
+ * Description:
  */
 
 //#include "prevent_bss_reordering.h"
@@ -9,21 +9,21 @@
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
 
 // bss
-extern FaultClient D_801ED8A0; // 2 funcs
+extern FaultClient D_801ED8A0;    // 2 funcs
 extern CollisionPoly* D_801ED8B0; // 1 func
-extern s32 D_801ED8B4; // 2 funcs
-extern Actor* D_801ED8B8; // 2 funcs
-extern Actor* D_801ED8BC; // 2 funcs
-extern Actor* D_801ED8C0; // 2 funcs
-extern Actor* D_801ED8C4; // 2 funcs
-extern f32 D_801ED8C8; // 2 funcs
-extern f32 D_801ED8CC; // 2 funcs
-extern f32 D_801ED8D0; // 2 funcs
-extern s32 D_801ED8D4; // 2 funcs
-extern s32 D_801ED8D8; // 2 funcs
-extern s16 D_801ED8DC; // 2 funcs
-extern Mtx D_801ED8E0; // 1 func
-extern s32 D_801ED920; // 2 funcs. 1 out of z_actor
+extern s32 D_801ED8B4;            // 2 funcs
+extern Actor* D_801ED8B8;         // 2 funcs
+extern Actor* D_801ED8BC;         // 2 funcs
+extern Actor* D_801ED8C0;         // 2 funcs
+extern Actor* D_801ED8C4;         // 2 funcs
+extern f32 D_801ED8C8;            // 2 funcs
+extern f32 D_801ED8CC;            // 2 funcs
+extern f32 D_801ED8D0;            // 2 funcs
+extern s32 D_801ED8D4;            // 2 funcs
+extern s32 D_801ED8D8;            // 2 funcs
+extern s16 D_801ED8DC;            // 2 funcs
+extern Mtx D_801ED8E0;            // 1 func
+extern s32 D_801ED920;            // 2 funcs. 1 out of z_actor
 
 void Actor_PrintLists(ActorContext* actorCtx) {
     ActorListEntry* actorList = &actorCtx->actorList[0];
@@ -167,7 +167,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
     f32 floorHeight[2]; // spEC
 
     s32 temp_a3;
-    Light *sp9C;
+    Light* sp9C;
 
     f32 temp_f24;
 
@@ -190,7 +190,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
             actor->scale.z += 0.03f * fabsf(Math_CosS(((Player*)actor)->unk_AAA));
             actor->shape.shadowScale *= 0.2f;
             alphaRatio = distToFloor * 0.03f;
-            actor->shape.shadowAlpha = actor->shape.shadowAlpha  * CLAMP_MIN(alphaRatio, 1.0f);
+            actor->shape.shadowAlpha = actor->shape.shadowAlpha * CLAMP_MIN(alphaRatio, 1.0f);
             ActorShadow_Draw(actor, mapper, globalCtx, D_04076BC0, NULL);
             actor->scale.z = temp_f20;
         } else {
@@ -209,7 +209,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
         spBC = floorHeight;
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
-        phi_fp = actor->shape.feetPos; 
+        phi_fp = actor->shape.feetPos;
         POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x2C);
         actor->shape.feetFloorFlags = 0;
         spB8 = 2;
@@ -232,7 +232,8 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
                         if (func_800C9C24(&globalCtx->colCtx, spF8, spF4, 1) != 0) {
                             SkinMatrix_MtxFCopy(&sp13C, &spFC);
                             SkinMatrix_MulYRotation(&spFC, actor->shape.rot.y);
-                            EffFootmark_Add(globalCtx, &spFC, actor, spD3, phi_fp, (actor->shape.shadowScale * 0.3f), IREG(88) + 0x50, IREG(89) + 0x3C, IREG(90) + 0x28, 0x7530, 0xC8, 0x3C);
+                            EffFootmark_Add(globalCtx, &spFC, actor, spD3, phi_fp, (actor->shape.shadowScale * 0.3f),
+                                            IREG(88) + 0x50, IREG(89) + 0x3C, IREG(90) + 0x28, 0x7530, 0xC8, 0x3C);
                         }
                         actor->shape.unk_17 &= ~spB8;
                     }
@@ -264,7 +265,8 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
 
                 for (j = 0; j < 2; j++) {
                     if (sp9C->l.dir[1] > 0) {
-                        temp_a3 = ((sp9C->l.col[0] + sp9C->l.col[1] + sp9C->l.col[2]) * ABS_ALT(sp9C->l.dir[1])) - (phi_s2 * 8);
+                        temp_a3 = ((sp9C->l.col[0] + sp9C->l.col[1] + sp9C->l.col[2]) * ABS_ALT(sp9C->l.dir[1])) -
+                                  (phi_s2 * 8);
                         if (temp_a3 > 0) {
                             ActorShadow_DrawFoot(globalCtx, sp9C, &sp13C, temp_a3, temp_f22, temp_f24, temp_f20_2);
                         }
@@ -296,7 +298,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
 #endif
 
 void Actor_SetFeetPos(Actor* actor, s32 limbIndex, s32 leftFootIndex, Vec3f* leftFootPos, s32 rightFootIndex,
-                   Vec3f* rightFootPos) {
+                      Vec3f* rightFootPos) {
     if (limbIndex == leftFootIndex) {
         SysMatrix_MultiplyVector3fByState(leftFootPos, &actor->shape.feetPos[FOOT_LEFT]);
     } else if (limbIndex == rightFootIndex) {
@@ -331,7 +333,7 @@ void func_800B4B50(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
     s8 phi_v1;
     u8 temp_v0;
     f32 phi_f0;
-    //f32 phi_f8;
+    // f32 phi_f8;
     Light* phi_s0;
     s32 lightNumMax;
 
@@ -346,10 +348,10 @@ void func_800B4B50(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
         if (spEC > 20.0f) {
             temp_f20 = actor->shape.shadowScale;
             temp_v0 = actor->shape.shadowAlpha;
-            //actor->shape.shadowScale = temp_f20 * 0.3f;
+            // actor->shape.shadowScale = temp_f20 * 0.3f;
             actor->shape.shadowScale *= 0.3f;
             temp_f12 = (spEC - 20.0f) * 0.02f;
-            //if (temp_f12 > 1.0f) {
+            // if (temp_f12 > 1.0f) {
             //    phi_f0 = 1.0f;
             //} else {
             //    phi_f0 = temp_f12;
@@ -361,12 +363,12 @@ void func_800B4B50(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
                 phi_f8 = temp_f8 + 4294967296.0f;
             }
             actor->shape.shadowAlpha = (u8) (u32) (phi_f0 * phi_f8);*/
-            //actor->shape.shadowAlpha = (phi_f0 *  temp_v0);
+            // actor->shape.shadowAlpha = (phi_f0 *  temp_v0);
             actor->shape.shadowAlpha *= phi_f0;
             ActorShadow_DrawCircle(actor, mapper, globalCtx);
             actor->shape.shadowScale = temp_f20;
             actor->shape.shadowAlpha = temp_v0;
-dummy_label_111649: ;
+        dummy_label_111649:;
         } else if (spEC >= -1.0f) {
             numLights = mapper->numLights - 2;
 
@@ -375,7 +377,7 @@ dummy_label_111649: ;
             POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x2C);
 
             func_800C0094(actor->floorPoly, actor->world.pos.x, actor->floorHeight, actor->world.pos.z, &sp94);
-            temp_f22 = (f32) actor->shape.shadowAlpha * (1.0f - (spEC * (1.0f / 30.0f)));
+            temp_f22 = (f32)actor->shape.shadowAlpha * (1.0f - (spEC * (1.0f / 30.0f)));
             phi_s0 = mapper->l.l;
             shadowScaleZ = 1.0f - (spEC * 0.014285714f);
             temp_f24 = actor->shape.shadowScale * shadowScaleZ * actor->scale.x;
@@ -393,9 +395,10 @@ dummy_label_111649: ;
 
             for (j = 0; j < 2; j++, phi_s0++) {
                 if (phi_s0->l.dir[1] > 0) {
-                    lightNum = (ABS_ALT(phi_s0->l.dir[1]) * (phi_s0->l.col[0] + phi_s0->l.col[1] + phi_s0->l.col[2])) - (lightNumMax * ((void)0,8));
+                    lightNum = (ABS_ALT(phi_s0->l.dir[1]) * (phi_s0->l.col[0] + phi_s0->l.col[1] + phi_s0->l.col[2])) -
+                               (lightNumMax * ((void)0, 8));
                     if (lightNum > 0) {
-                        ActorShadow_DrawFoot(globalCtx, phi_s0,  &sp94, lightNum, temp_f22, temp_f24, shadowScaleZ);
+                        ActorShadow_DrawFoot(globalCtx, phi_s0, &sp94, lightNum, temp_f22, temp_f24, shadowScaleZ);
                     }
                 }
             }
@@ -424,19 +427,13 @@ void func_800B4F40(TargetContext* targetCtx, s32 index, f32 x, f32 y, f32 z) {
 }
 
 s801AEC84 D_801AEC84[] = {
-    { {0, 255, 0, 255}, {0, 255, 0, 0} },
-    { {0, 255, 0, 255}, {0, 255, 0, 0} },
-    { {255, 255, 230, 255}, {220, 160, 80, 0} },
-    { {0, 255, 0, 255}, {0, 255, 0, 0} },
-    { {150, 150, 255, 255}, {150, 150, 255, 0} },
-    { {255, 255, 0, 255}, {200, 155, 0, 0} },
-    { {0, 255, 0, 255}, {0, 255, 0, 0} },
-    { {0, 255, 0, 255}, {0, 255, 0, 0} },
-    { {0, 255, 0, 255}, {0, 255, 0, 0} },
-    { {255, 255, 0, 255}, {200, 155, 0, 0} },
-    { {0, 255, 0, 255}, {0, 255, 0, 0} },
-    { {0, 255, 0, 255}, {0, 255, 0, 0} },
-    { {0, 255, 0, 255}, {0, 255, 0, 0} },
+    { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },         { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },
+    { { 255, 255, 230, 255 }, { 220, 160, 80, 0 } },  { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },
+    { { 150, 150, 255, 255 }, { 150, 150, 255, 0 } }, { { 255, 255, 0, 255 }, { 200, 155, 0, 0 } },
+    { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },         { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },
+    { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },         { { 255, 255, 0, 255 }, { 200, 155, 0, 0 } },
+    { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },         { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },
+    { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } }
 };
 
 void func_800B4F78(TargetContext* targetCtx, s32 type, GlobalContext* globalCtx) {
@@ -491,7 +488,7 @@ void Actor_TargetContextInit(TargetContext* targetCtx, Actor* actor, GlobalConte
 void func_800B5208(TargetContext* targetCtx, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((player->stateFlags1 & 0x300006C2) == 0){
+    if ((player->stateFlags1 & 0x300006C2) == 0) {
         Actor* actor = targetCtx->targetedActor;
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -563,7 +560,7 @@ void func_800B5208(TargetContext* targetCtx, GlobalContext* globalCtx) {
 
                         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, entry->color.r, entry->color.g, entry->color.b, (u8)spCE);
 
-                        //SysMatrix_InsertZRotation_s((targetCtx->unk4B & 0x7F) * (M_PI / 64), MTXMODE_APPLY);
+                        // SysMatrix_InsertZRotation_s((targetCtx->unk4B & 0x7F) * (M_PI / 64), MTXMODE_APPLY);
                         SysMatrix_InsertZRotation_s((targetCtx->unk4B * 512), MTXMODE_APPLY);
 
                         for (i = 0; i < 4; i++) {
@@ -571,8 +568,8 @@ void func_800B5208(TargetContext* targetCtx, GlobalContext* globalCtx) {
                             SysMatrix_StatePush();
                             SysMatrix_InsertTranslation(entry->unkC, entry->unkC, 0.0f, MTXMODE_APPLY);
                             gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                                    G_MTX_MODELVIEW | G_MTX_LOAD);
-                            //gSPDisplayList(OVERLAY_DISP++, gZTargetLockOnTriangleDL);
+                                      G_MTX_MODELVIEW | G_MTX_LOAD);
+                            // gSPDisplayList(OVERLAY_DISP++, gZTargetLockOnTriangleDL);
                             gSPDisplayList(OVERLAY_DISP++, D_0407AE00);
                             SysMatrix_StatePop();
                         }
@@ -588,24 +585,25 @@ void func_800B5208(TargetContext* targetCtx, GlobalContext* globalCtx) {
 
         actor = targetCtx->unk_94;
         if ((actor != NULL) && !(actor->flags & 0x8000000)) {
-            //NaviColor* naviColor = &sNaviColorList[actor->category];
+            // NaviColor* naviColor = &sNaviColorList[actor->category];
             s801AEC84* color = &D_801AEC84[actor->category];
 
             POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0x07);
 
-            SysMatrix_InsertTranslation(actor->focus.pos.x, actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y) + 17.0f,
-                            actor->focus.pos.z, MTXMODE_NEW);
-            //Matrix_RotateY((f32)((u16)(globalCtx->gameplayFrames * 3000)) * (M_PI / 0x8000), MTXMODE_APPLY);
+            SysMatrix_InsertTranslation(actor->focus.pos.x,
+                                        actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y) + 17.0f,
+                                        actor->focus.pos.z, MTXMODE_NEW);
+            // Matrix_RotateY((f32)((u16)(globalCtx->gameplayFrames * 3000)) * (M_PI / 0x8000), MTXMODE_APPLY);
             Matrix_RotateY((globalCtx->gameplayFrames * 3000), MTXMODE_APPLY);
-            Matrix_Scale((iREG(27) + 35) / 1000.0f, (iREG(28) + 60) / 1000.0f, (iREG(29) + 50) / 1000.0f, MTXMODE_APPLY);
+            Matrix_Scale((iREG(27) + 35) / 1000.0f, (iREG(28) + 60) / 1000.0f, (iREG(29) + 50) / 1000.0f,
+                         MTXMODE_APPLY);
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, color->inner.r, color->inner.g, color->inner.b, 255);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                    G_MTX_MODELVIEW | G_MTX_LOAD);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
             gSPDisplayList(POLY_XLU_DISP++, D_0401F0F0);
         }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }
 #else
@@ -660,7 +658,8 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, Globa
     if (Math_StepToF(&targetCtx->unk40, 0.0f, 0.25f) == 0) {
         temp_f0 = 0.25f / targetCtx->unk40;
         targetCtx->unk0.x += ((sp68->focus.pos.x - targetCtx->unk0.x) * temp_f0);
-        targetCtx->unk0.y += (((sp68->focus.pos.y + (sp68->targetArrowOffset * sp68->scale.z)) - targetCtx->unk0.y) * temp_f0);
+        targetCtx->unk0.y +=
+            (((sp68->focus.pos.y + (sp68->targetArrowOffset * sp68->scale.z)) - targetCtx->unk0.y) * temp_f0);
         targetCtx->unk0.z += (sp68->focus.pos.z - targetCtx->unk0.z) * temp_f0;
     } else {
         func_800B5040(targetCtx, sp68, sp64, globalCtx);
@@ -836,8 +835,8 @@ void TitleCard_InitBossName(GameState* gameState, TitleCardContext* titleCtx, u3
     titleCtx->delayTimer = 0;
 }
 
-void TitleCard_InitPlaceName(GameState* gameState, TitleCardContext* titleCtx, void* texture, s32 x, s32 y,
-                             s32 width, s32 height, s32 delay) {
+void TitleCard_InitPlaceName(GameState* gameState, TitleCardContext* titleCtx, void* texture, s32 x, s32 y, s32 width,
+                             s32 height, s32 delay) {
 }
 
 void TitleCard_Update(GameState* gameState, TitleCardContext* titleCtx) {
@@ -946,7 +945,6 @@ f32 func_800B64FC(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2, u32* arg3) {
     *arg3 = globalCtx->actorCtx.unk1F4;
     return globalCtx->actorCtx.unk1F8 - temp_f8;
 }
-
 
 void* func_800B6584(GlobalContext* globalCtx, s16 arg1, void* arg2, size_t arg3) {
     ActorContext_unk_20C* sp1C = globalCtx->actorCtx.unk_20C;
@@ -1584,9 +1582,9 @@ Gfx* func_800B7E04(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContext* 
 
     *hilite = GRAPH_ALLOC(gfxCtx, sizeof(Hilite));
 
-    guLookAtHilite(&D_801ED8E0, lookAt, *hilite, correctedEyeX, eye->y, eye->z, object->x, object->y, object->z, 
-                    0.0f, 1.0f, 0.0f, lightDir->x, lightDir->y, lightDir->z, 
-                    lightDir->x, lightDir->y, lightDir->z, 0x10, 0x10);
+    guLookAtHilite(&D_801ED8E0, lookAt, *hilite, correctedEyeX, eye->y, eye->z, object->x, object->y, object->z, 0.0f,
+                   1.0f, 0.0f, lightDir->x, lightDir->y, lightDir->z, lightDir->x, lightDir->y, lightDir->z, 0x10,
+                   0x10);
 
     gSPLookAt(dl++, lookAt);
     gDPSetHilite1Tile(dl++, 1, *hilite, 0x10, 0x10);
@@ -1696,7 +1694,7 @@ f32 func_800B82EC(Actor* actor, Player* player, s16 arg2) {
 
     if (player->unk_730 != NULL) {
         if ((temp_v1 > 0x4000) || ((actor->flags & 0x8000000))) {
-            //return FLT_MAX;
+            // return FLT_MAX;
             return 3.4028235e38f;
         }
 
@@ -1704,7 +1702,7 @@ f32 func_800B82EC(Actor* actor, Player* player, s16 arg2) {
     }
 
     if (temp_v1 >= 0x2AAB) {
-        //return FLT_MAX;
+        // return FLT_MAX;
         return 3.4028235e38f;
     }
     return actor->xyzDistToPlayerSq;
@@ -1761,7 +1759,10 @@ s32 Actor_IsTalking(Actor* actor, GameState* gameState) {
 s32 func_800B8500(Actor* actor, GameState* gameState, f32 arg2, f32 arg3, s32 arg4) {
     Player* player = GET_PLAYER(gameState);
 
-    if (((player->actor.flags & 0x100) != 0) || ((arg4 > 0) && (func_801233E4(gameState) != 0)) || ((actor->isTargeted == 0) && ((fabsf(actor->yDistToPlayer) > fabsf(arg3)) || ((actor->xzDistToPlayer > player->targetActorDistance)) || (arg2 < actor->xzDistToPlayer)))) {
+    if (((player->actor.flags & 0x100) != 0) || ((arg4 > 0) && (func_801233E4(gameState) != 0)) ||
+        ((actor->isTargeted == 0) &&
+         ((fabsf(actor->yDistToPlayer) > fabsf(arg3)) || ((actor->xzDistToPlayer > player->targetActorDistance)) ||
+          (arg2 < actor->xzDistToPlayer)))) {
         return 0;
     }
 
@@ -1833,7 +1834,9 @@ s32 func_800B8718(Actor* actor, GameState* gameState) {
 void func_800B874C(Actor* actor, GameState* gameState, f32 arg2, f32 arg3) {
     Player* player = GET_PLAYER(gameState);
 
-    if ((player->actor.flags & 0x20000000)  || ((func_801233E4(gameState) != 0)) || (arg3 < fabsf(actor->yDistToPlayer)) || ((player->unk_A94 < actor->xzDistToPlayer)) || (arg2 < actor->xzDistToPlayer)) {
+    if ((player->actor.flags & 0x20000000) || ((func_801233E4(gameState) != 0)) ||
+        (arg3 < fabsf(actor->yDistToPlayer)) || ((player->unk_A94 < actor->xzDistToPlayer)) ||
+        (arg2 < actor->xzDistToPlayer)) {
         return;
     }
 
@@ -2159,7 +2162,7 @@ void func_800b9170(GameState* gameState, ActorContext* actorCtx, ActorEntry* act
     func_800BB2D0(actorCtx, actorEntry, gameState);
     Actor_TargetContextInit(&actorCtx->targetContext, actorCtx->actorList[ACTORCAT_PLAYER].first, globalCtx);
     func_800B9120(actorCtx);
-    Fault_AddClient(&D_801ED8A0, (void*) Actor_PrintLists, actorCtx, NULL);
+    Fault_AddClient(&D_801ED8A0, (void*)Actor_PrintLists, actorCtx, NULL);
     func_800B722C(gameState, (Player*)actorCtx->actorList[ACTORCAT_PLAYER].first);
 }
 
@@ -2185,7 +2188,9 @@ void func_800B9334(GlobalContext* globalCtx, ActorContext* actorCtx) {
             if (phi_v0 == 0) {
                 phi_v0 = 0x3FF;
             }
-            if (((phi_v0 & temp_fp) == 0) && ((actorCtx->unkC & phi_v0) != 0) && (((gSaveContext.eventInf[1] & 0x80) == 0) || ((phi_v0 & ((actorCtx->unkC * 2) & 0x2FF)) == 0) || ((phi_s0->id & 0x800) == 0))) {
+            if (((phi_v0 & temp_fp) == 0) && ((actorCtx->unkC & phi_v0) != 0) &&
+                (((gSaveContext.eventInf[1] & 0x80) == 0) || ((phi_v0 & ((actorCtx->unkC * 2) & 0x2FF)) == 0) ||
+                 ((phi_s0->id & 0x800) == 0))) {
                 func_800BB2D0(&globalCtx->actorCtx, phi_s0, globalCtx);
             }
             phi_s0++;
@@ -2543,7 +2548,8 @@ s32 func_800BA2FC(GlobalContext* globalCtx, Actor* actor, Vec3f* param_3, f32 pa
             phi_f16 = actor->uncullZoneScale;
         }
 
-        if (((fabsf(param_3->x) - phi_f12) < phi_f2) && ((-phi_f2 < (param_3->y + phi_f14))) && ((param_3->y - phi_f16) < phi_f2)) {
+        if (((fabsf(param_3->x) - phi_f12) < phi_f2) && ((-phi_f2 < (param_3->y + phi_f14))) &&
+            ((param_3->y - phi_f16) < phi_f2)) {
             return 1;
         }
     }
@@ -2582,9 +2588,9 @@ void Actor_DrawAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
 
     Actor_DrawAllSetup(globalCtx);
 
-    //temp_t9 = sp44->polyXlu.p;
-    //sp58 = temp_t9;
-    //sp44->polyXlu.p = temp_t9 + 8;
+    // temp_t9 = sp44->polyXlu.p;
+    // sp58 = temp_t9;
+    // sp44->polyXlu.p = temp_t9 + 8;
     sp58 = POLY_XLU_DISP;
     POLY_XLU_DISP = &POLY_XLU_DISP[1];
 
@@ -2593,7 +2599,8 @@ void Actor_DrawAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
     for (i = 0; i < ARRAY_COUNT(actorCtx->actorList); i++, phi_fp++) {
         phi_s0 = phi_fp->first;
         while (phi_s0 != NULL) {
-            SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->projectionMatrix, &phi_s0->world.pos, &phi_s0->projectedPos, &phi_s0->projectedW);
+            SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->projectionMatrix, &phi_s0->world.pos, &phi_s0->projectedPos,
+                                         &phi_s0->projectedW);
 
             if ((phi_s0->unk39 & 0x7F) != 0) {
                 func_800B9D1C(phi_s0);
@@ -2608,10 +2615,10 @@ void Actor_DrawAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
             phi_s0->isDrawn = false;
             if ((phi_s0->init == NULL) && (phi_s0->draw != NULL)) {
                 if (phi_s0->flags & phi_s6) {
-                    if ((phi_s0->flags & 0x80) && ((globalCtx->roomCtx.currRoom.unk5 == 0) || (globalCtx->actorCtx.unk4 == 0x64) || (globalCtx->roomCtx.currRoom.num != phi_s0->room))) {
-                        if (Actor_RecordUndrawnActor(globalCtx, phi_s0) != 0) {
-
-                        }
+                    if ((phi_s0->flags & 0x80) &&
+                        ((globalCtx->roomCtx.currRoom.unk5 == 0) || (globalCtx->actorCtx.unk4 == 0x64) ||
+                         (globalCtx->roomCtx.currRoom.num != phi_s0->room))) {
+                        if (Actor_RecordUndrawnActor(globalCtx, phi_s0) != 0) {}
                     } else {
                         Actor_Draw(globalCtx, phi_s0);
                     }
@@ -2627,11 +2634,11 @@ void Actor_DrawAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
     EffFootmark_Draw(globalCtx);
 
     temp_s0_3 = POLY_XLU_DISP;
-    //temp_s0_3 = sp44->polyXlu.p;
-    //sp58->words.w0 = 0xDE000000;
-    //temp_v0_2 = temp_s0_3 + 8;
-    //sp58->words.w1 = (u32) temp_v0_2;
-    //sp44->polyXlu.p = temp_v0_2;
+    // temp_s0_3 = sp44->polyXlu.p;
+    // sp58->words.w0 = 0xDE000000;
+    // temp_v0_2 = temp_s0_3 + 8;
+    // sp58->words.w1 = (u32) temp_v0_2;
+    // sp44->polyXlu.p = temp_v0_2;
     gSPDisplayList(sp58, POLY_XLU_DISP++);
 
     if (globalCtx->actorCtx.unk3 != 0) {
@@ -2647,17 +2654,17 @@ void Actor_DrawAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
         func_800B9EF4(globalCtx, globalCtx->actorCtx.undrawnActorCount, globalCtx->actorCtx.undrawnActors);
     }
 
-    //temp_v0_3 = sp44->polyXlu.p;
-    //temp_v0_3->words.w0 = 0xDF000000;
-    //temp_v0_3->words.w1 = 0;
-    //temp_v1 = temp_v0_3 + 8;
-    //temp_s0_3->words.w1 = (u32) temp_v1;
-    //temp_s0_3->words.w0 = 0xDE010000;
-    //sp44->polyXlu.p = temp_v1;
+    // temp_v0_3 = sp44->polyXlu.p;
+    // temp_v0_3->words.w0 = 0xDF000000;
+    // temp_v0_3->words.w1 = 0;
+    // temp_v1 = temp_v0_3 + 8;
+    // temp_s0_3->words.w1 = (u32) temp_v1;
+    // temp_s0_3->words.w0 = 0xDE010000;
+    // sp44->polyXlu.p = temp_v1;
 
-    //gSPEndDisplayList(POLY_XLU_DISP++);
-    //gSPBranchList(POLY_XLU_DISP++, POLY_XLU_DISP);
-    //temp_v0_3 = POLY_XLU_DISP;
+    // gSPEndDisplayList(POLY_XLU_DISP++);
+    // gSPBranchList(POLY_XLU_DISP++, POLY_XLU_DISP);
+    // temp_v0_3 = POLY_XLU_DISP;
     gSPEndDisplayList(POLY_XLU_DISP++);
     gSPBranchList(temp_s0_3, POLY_XLU_DISP);
 
@@ -2677,7 +2684,7 @@ void func_800BA6FC(GlobalContext* globalCtx, ActorContext* actorCtx) {
     Actor* actor;
     s32 i;
 
-    for (i = 0;i != ARRAY_COUNT(actorCtx->actorList); i++) {
+    for (i = 0; i != ARRAY_COUNT(actorCtx->actorList); i++) {
         actor = actorCtx->actorList[i].first;
 
         while (actor != NULL) {
@@ -2698,7 +2705,8 @@ void func_800BA798(GlobalContext* globalCtx, ActorContext* actorCtx) {
         actor = actorCtx->actorList[i].first;
 
         while (actor != NULL) {
-            if ((actor->room >= 0) && (actor->room != globalCtx->roomCtx.currRoom.num) && (actor->room != globalCtx->roomCtx.prevRoom.num)) {
+            if ((actor->room >= 0) && (actor->room != globalCtx->roomCtx.currRoom.num) &&
+                (actor->room != globalCtx->roomCtx.prevRoom.num)) {
                 if (!actor->isDrawn) {
                     actor = Actor_Delete(actorCtx, actor, globalCtx);
                 } else {
@@ -2718,7 +2726,6 @@ void func_800BA798(GlobalContext* globalCtx, ActorContext* actorCtx) {
     actorCtx->flags.collectible[3] = 0;
     globalCtx->msgCtx.unk_12030 = 0;
 }
-
 
 void func_800BA8B8(GlobalContext* globalCtx, ActorContext* actorCtx) {
     s32 i;
@@ -2775,7 +2782,6 @@ void func_800BA9B4(ActorContext* arg0, GlobalContext* arg1) {
     ActorOverlayTable_Cleanup();
 }
 
-
 void Actor_AddToCategory(ActorContext* actorCtx, Actor* actor, u8 actorCategory) {
     Actor* phi_v0;
     Actor* phi_v1;
@@ -2822,7 +2828,8 @@ Actor* Actor_RemoveFromCategory(GlobalContext* globalCtx, ActorContext* actorCtx
     actorToRemove->next = NULL;
     actorToRemove->prev = NULL;
 
-    if ((globalCtx->roomCtx.currRoom.num == actorToRemove->room) && (actorToRemove->category == ACTORCAT_ENEMY) && (actorCtx->actorList[ACTORCAT_ENEMY].length == 0)) {
+    if ((globalCtx->roomCtx.currRoom.num == actorToRemove->room) && (actorToRemove->category == ACTORCAT_ENEMY) &&
+        (actorCtx->actorList[ACTORCAT_ENEMY].length == 0)) {
         Flags_SetClearTemp(globalCtx, globalCtx->roomCtx.currRoom.num);
     }
 
@@ -2886,7 +2893,8 @@ ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
                 return NULL;
             }
 
-            Load2_LoadOverlay(overlayEntry->vromStart, overlayEntry->vromEnd, overlayEntry->vramStart, overlayEntry->vramEnd, overlayEntry->loadedRamAddr);
+            Load2_LoadOverlay(overlayEntry->vromStart, overlayEntry->vromEnd, overlayEntry->vramStart,
+                              overlayEntry->vramEnd, overlayEntry->loadedRamAddr);
             overlayEntry->numLoaded = 0;
         }
 
@@ -3063,9 +3071,9 @@ Actor* func_800BB2D0(ActorContext* actorCtx, ActorEntry* actorEntry, GameState* 
         rotZ -= 360;
     }
 
-    return Actor_SpawnAsChildAndCutscene(actorCtx, (GlobalContext* ) gameState, actorEntry->id & 0x1FFF,
-                                         actorEntry->pos.x, actorEntry->pos.y, actorEntry->pos.z,
-                                         rotX, rotY, rotZ, actorEntry->params & 0xFFFF, actorEntry->rot.y & 0x7F,
+    return Actor_SpawnAsChildAndCutscene(actorCtx, (GlobalContext*)gameState, actorEntry->id & 0x1FFF,
+                                         actorEntry->pos.x, actorEntry->pos.y, actorEntry->pos.z, rotX, rotY, rotZ,
+                                         actorEntry->params & 0xFFFF, actorEntry->rot.y & 0x7F,
                                          ((actorEntry->rot.x & 7) << 7) | (actorEntry->rot.z & 0x7F), NULL);
 }
 
@@ -3142,16 +3150,16 @@ void func_800BB604(GlobalContext* globalCtx, ActorContext* actorCtx, Player* pla
                     temp_f0_2 = func_800B82EC(phi_s0, player, D_801ED8DC);
                     phi_s2 = (phi_s0->flags & 1) != 0;
                     if (phi_s2 != 0) {
-                        //phi_s2 = 0;
-                        //if (temp_f0_2 < D_801ED8C8) {
+                        // phi_s2 = 0;
+                        // if (temp_f0_2 < D_801ED8C8) {
                         //    phi_s2 = 1;
                         //}
                         phi_s2 = temp_f0_2 < D_801ED8C8 ? 1 : 0;
                     }
                     phi_s2_2 = (phi_s0->flags & 0x40000000) != 0;
                     if (phi_s2_2) {
-                        //phi_s2_2 = 0;
-                        //if (temp_f0_2 < D_801ED8D0) {
+                        // phi_s2_2 = 0;
+                        // if (temp_f0_2 < D_801ED8D0) {
                         //    phi_s2_2 = 1;
                         //}
                         phi_s2_2 = temp_f0_2 < D_801ED8D0;
@@ -3159,7 +3167,9 @@ void func_800BB604(GlobalContext* globalCtx, ActorContext* actorCtx, Player* pla
 
                     if (((phi_s2 != 0) || (phi_s2_2 != 0)) && (func_800B83BC(phi_s0, temp_f0_2) != 0)) {
                         if (func_800BB59C(globalCtx, phi_s0)) {
-                            if (((func_800C54AC(&globalCtx->colCtx, &player->actor.focus.pos, &phi_s0->focus.pos, &sp70, &sp80, 1, 1, 1, 1, &sp7C) == 0) || (func_800C9D50(&globalCtx->colCtx, sp80, sp7C) != 0))) {
+                            if (((func_800C54AC(&globalCtx->colCtx, &player->actor.focus.pos, &phi_s0->focus.pos, &sp70,
+                                                &sp80, 1, 1, 1, 1, &sp7C) == 0) ||
+                                 (func_800C9D50(&globalCtx->colCtx, sp80, sp7C) != 0))) {
                                 if (phi_s0->targetPriority != 0) {
                                     if ((phi_s2 != 0) && (phi_s0->targetPriority < D_801ED8D4)) {
                                         D_801ED8BC = phi_s0;
@@ -3315,7 +3325,8 @@ void func_800BBCEC(Actor* actor, GlobalContext* globalCtx, s32 arg2, Gfx** dList
 
     if (*dList != NULL) {
         sp3C = SysMatrix_GetCurrentState();
-        temp_v0_2 = Actor_SpawnAsChild(&globalCtx->actorCtx, actor, globalCtx, ACTOR_EN_PART, sp3C->mf[3][0], sp3C->mf[3][1], sp3C->mf[3][2], 0, 0, actor->objBankIndex, arg2);
+        temp_v0_2 = Actor_SpawnAsChild(&globalCtx->actorCtx, actor, globalCtx, ACTOR_EN_PART, sp3C->mf[3][0],
+                                       sp3C->mf[3][1], sp3C->mf[3][2], 0, 0, actor->objBankIndex, arg2);
         if (temp_v0_2 != NULL) {
             sp40 = (EnPart*)temp_v0_2;
 
@@ -3412,9 +3423,8 @@ Actor* func_800BC270(GlobalContext* globalCtx, Actor* actor, f32 arg2, s32 arg3)
 
     phi_s0 = globalCtx->actorCtx.actorList[ACTORCAT_ITEMACTION].first;
     while (phi_s0 != NULL) {
-        if (((phi_s0->id == ACTOR_ARMS_HOOK) && (arg3 & 0x80))
-            || ((phi_s0->id == ACTOR_EN_BOOM) && (arg3 & 0x10))
-            || ((phi_s0->id == ACTOR_EN_ARROW) && ((func_800BC188(phi_s0->params) & arg3) != 0))) {
+        if (((phi_s0->id == ACTOR_ARMS_HOOK) && (arg3 & 0x80)) || ((phi_s0->id == ACTOR_EN_BOOM) && (arg3 & 0x10)) ||
+            ((phi_s0->id == ACTOR_EN_ARROW) && ((func_800BC188(phi_s0->params) & arg3) != 0))) {
             f32 phi_f0;
 
             if ((phi_s0->speedXZ <= 0.0f) && (GET_PLAYER(globalCtx)->unk_D57 != 0)) {
@@ -3452,7 +3462,8 @@ Actor* func_800BC444(GlobalContext* globalCtx, Actor* actor, f32 arg2) {
     Actor* explosive = globalCtx->actorCtx.actorList[ACTORCAT_EXPLOSIVES].first;
 
     while (explosive != NULL) {
-        if (((explosive->id == ACTOR_EN_BOM) || (explosive->id == ACTOR_EN_BOM_CHU) || (explosive->id == ACTOR_EN_BOMBF))) {
+        if (((explosive->id == ACTOR_EN_BOM) || (explosive->id == ACTOR_EN_BOM_CHU) ||
+             (explosive->id == ACTOR_EN_BOMBF))) {
             if (func_800BC1B4(actor, explosive, arg2, explosive->speedXZ) != 0) {
                 break;
             }
@@ -3640,7 +3651,7 @@ void func_800BCB70(Actor* actor, u16 arg1, u16 arg2, u16 arg3, u16 arg4) {
     actor->colorFilterTimer = arg4;
 }
 
-Hilite* func_800BCBF4(Vec3f *arg0, GlobalContext *globalCtx) {
+Hilite* func_800BCBF4(Vec3f* arg0, GlobalContext* globalCtx) {
     Vec3f lightDir;
 
     // lightDir.x = globalCtx->envCtx.dirLight1.params.dir.x;
@@ -3651,7 +3662,7 @@ Hilite* func_800BCBF4(Vec3f *arg0, GlobalContext *globalCtx) {
     return func_800B7FE0(arg0, &globalCtx->view.eye, &lightDir, globalCtx->state.gfxCtx);
 }
 
-Hilite* func_800BCC68(Vec3f *arg0, GlobalContext *globalCtx) {
+Hilite* func_800BCC68(Vec3f* arg0, GlobalContext* globalCtx) {
     Vec3f sp1C;
 
     sp1C.x = globalCtx->envCtx.unk_28.params.dir.x;
@@ -4124,7 +4135,7 @@ void func_800BE2B8(Actor* actor, ColliderJntSph* jntSphere) {
     s32 temp_v0;
     s32 temp_v0_2;
     s32 temp_v1;
-    ColliderJntSphElement *new_var2;
+    ColliderJntSphElement* new_var2;
     s32 phi_v1;
     s32 phi_v0;
     ColliderInfo* temp_a2;
@@ -4189,11 +4200,11 @@ void func_800BE3D0(Actor* actor, s16 arg1, Vec3s* arg2) {
 
         sp38 = Math_SinS(arg1);
         sp34 = Math_CosS(arg1);
-        arg2->x = (s16) -Math_Atan2S((-(sp44 * sp38) - (sp3C * sp34)) * sp40, 1.0f);
+        arg2->x = (s16)-Math_Atan2S((-(sp44 * sp38) - (sp3C * sp34)) * sp40, 1.0f);
 
         sp2C = Math_SinS(arg1 - 0x3FF7);
         sp30 = Math_CosS(arg1 - 0x3FF7);
-        arg2->z = (s16) -Math_Atan2S((-(sp44 * sp2C) - (sp3C * sp30)) * sp40, 1.0f);
+        arg2->z = (s16)-Math_Atan2S((-(sp44 * sp2C) - (sp3C * sp30)) * sp40, 1.0f);
     }
 }
 #else
@@ -4273,7 +4284,8 @@ void func_800BF7CC(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s32 a
             sp84.x = Math_SinS(temp_s0) * sp84.z;
             sp84.y = Rand_ZeroFloat(4.0f) + 8.0f;
             sp84.z *= Math_CosS(temp_s0);
-            EffectSsEnIce_Spawn(globalCtx, limbPos, Rand_ZeroFloat(arg6) + arg5, &sp84, &D_801AEFC0, &D_801AEFB8, &D_801AEFBC, 30);
+            EffectSsEnIce_Spawn(globalCtx, limbPos, Rand_ZeroFloat(arg6) + arg5, &sp84, &D_801AEFC0, &D_801AEFB8,
+                                &D_801AEFBC, 30);
         }
 
         limbPos++;

@@ -288,7 +288,8 @@ static Vec3f D_808C1C4C = { 0.0f, -500.0f, 0.0f };
 void ArmsHook_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ArmsHook* this = THIS;
     f32 f0;
-    Player* player = GET_PLAYER(globalCtx);;
+    Player* player = GET_PLAYER(globalCtx);
+    ;
 
     if (player->actor.draw != NULL && player->rightHandType == 0xB) {
         Vec3f sp68;
