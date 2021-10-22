@@ -424,19 +424,19 @@ void func_800B4F40(TargetContext* targetCtx, s32 index, f32 x, f32 y, f32 z) {
 }
 
 s801AEC84 D_801AEC84[] = {
-    { 0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0 },
-    { 0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0 },
-    { 0xFF, 0xFF, 0xE6, 0xFF, 0xDC, 0xA0, 0x50, 0 },
-    { 0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0 },
-    { 0x96, 0x96, 0xFF, 0xFF, 0x96, 0x96, 0xFF, 0 },
-    { 0xFF, 0xFF, 0, 0xFF, 0xC8, 0x9B, 0, 0 },
-    { 0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0 },
-    { 0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0 },
-    { 0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0 },
-    { 0xFF, 0xFF, 0, 0xFF, 0xC8, 0x9B, 0, 0 },
-    { 0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0 },
-    { 0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0 },
-    { 0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0 },
+    { {0, 255, 0, 255}, {0, 255, 0, 0} },
+    { {0, 255, 0, 255}, {0, 255, 0, 0} },
+    { {255, 255, 230, 255}, {220, 160, 80, 0} },
+    { {0, 255, 0, 255}, {0, 255, 0, 0} },
+    { {150, 150, 255, 255}, {150, 150, 255, 0} },
+    { {255, 255, 0, 255}, {200, 155, 0, 0} },
+    { {0, 255, 0, 255}, {0, 255, 0, 0} },
+    { {0, 255, 0, 255}, {0, 255, 0, 0} },
+    { {0, 255, 0, 255}, {0, 255, 0, 0} },
+    { {255, 255, 0, 255}, {200, 155, 0, 0} },
+    { {0, 255, 0, 255}, {0, 255, 0, 0} },
+    { {0, 255, 0, 255}, {0, 255, 0, 0} },
+    { {0, 255, 0, 255}, {0, 255, 0, 0} },
 };
 
 void func_800B4F78(TargetContext* targetCtx, s32 type, GlobalContext* globalCtx) {
@@ -444,7 +444,7 @@ void func_800B4F78(TargetContext* targetCtx, s32 type, GlobalContext* globalCtx)
     s32 phi_s1;
     TargetContextEntry* phi_s0;
 
-    Math_Vec3f_Copy(&targetCtx->unkC, &globalCtx->view.eye);
+    Math_Vec3f_Copy(&targetCtx->targetCenterPos, &globalCtx->view.eye);
     targetCtx->unk48 = 0x100;
     temp_s2 = &D_801AEC84[type];
     targetCtx->unk44 = 500.0f;
@@ -452,9 +452,9 @@ void func_800B4F78(TargetContext* targetCtx, s32 type, GlobalContext* globalCtx)
     phi_s0 = targetCtx->unk50;
     for (phi_s1 = 0; phi_s1 < ARRAY_COUNT(targetCtx->unk50); phi_s1++, phi_s0++) {
         func_800B4F40(targetCtx, phi_s1, 0.0f, 0.0f, 0.0f);
-        phi_s0->color.r = temp_s2->unk0;
-        phi_s0->color.g = temp_s2->unk1;
-        phi_s0->color.b = temp_s2->unk2;
+        phi_s0->color.r = temp_s2->inner.r;
+        phi_s0->color.g = temp_s2->inner.g;
+        phi_s0->color.b = temp_s2->inner.b;
     }
 }
 
@@ -464,14 +464,14 @@ void func_800B5040(TargetContext* targetCtx, Actor* actor, s32 type, GlobalConte
     targetCtx->unk0.y = actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y);
     targetCtx->unk0.z = actor->focus.pos.z;
 
-    targetCtx->unk18 = D_801AEC84[type].unk0;
-    targetCtx->unk1C = D_801AEC84[type].unk1;
-    targetCtx->unk20 = D_801AEC84[type].unk2;
-    targetCtx->unk24 = D_801AEC84[type].unk3;
-    targetCtx->unk28 = D_801AEC84[type].unk4;
-    targetCtx->unk2C = D_801AEC84[type].unk5;
-    targetCtx->unk30 = D_801AEC84[type].unk6;
-    targetCtx->unk34 = D_801AEC84[type].unk7;
+    targetCtx->fairyInner.r = D_801AEC84[type].inner.r;
+    targetCtx->fairyInner.g = D_801AEC84[type].inner.g;
+    targetCtx->fairyInner.b = D_801AEC84[type].inner.b;
+    targetCtx->fairyInner.a = D_801AEC84[type].inner.a;
+    targetCtx->fairyOuter.r = D_801AEC84[type].outer.r;
+    targetCtx->fairyOuter.g = D_801AEC84[type].outer.g;
+    targetCtx->fairyOuter.b = D_801AEC84[type].outer.b;
+    targetCtx->fairyOuter.a = D_801AEC84[type].outer.a;
 }
 
 void Actor_TargetContextInit(TargetContext* targetCtx, Actor* actor, GlobalContext* globalCtx) {
@@ -519,8 +519,7 @@ void func_800B5208(TargetContext* targetCtx, GlobalContext* globalCtx) {
             }
 
             if (actor != NULL) {
-                //Math_Vec3f_Copy(&targetCtx->targetCenterPos, &actor->focus.pos);
-                Math_Vec3f_Copy(&targetCtx->unkC, &actor->focus.pos);
+                Math_Vec3f_Copy(&targetCtx->targetCenterPos, &actor->focus.pos);
                 var1 = (500.0f - targetCtx->unk44) / 420.0f;
             } else {
                 targetCtx->unk48 -= 120;
@@ -530,8 +529,7 @@ void func_800B5208(TargetContext* targetCtx, GlobalContext* globalCtx) {
                 spCE = targetCtx->unk48;
             }
 
-            //func_8002BE04(globalCtx, &targetCtx->targetCenterPos, &spBC, &spB4);
-            func_800B4EDC(globalCtx, &targetCtx->unkC, &spBC, &spB4);
+            func_800B4EDC(globalCtx, &targetCtx->targetCenterPos, &spBC, &spB4);
 
             spBC.x = (160 * (spBC.x * spB4)) * var1;
             spBC.x = CLAMP(spBC.x, -320.0f, 320.0f);
@@ -602,7 +600,7 @@ void func_800B5208(TargetContext* targetCtx, GlobalContext* globalCtx) {
             Matrix_RotateY((globalCtx->gameplayFrames * 3000), MTXMODE_APPLY);
             Matrix_Scale((iREG(27) + 35) / 1000.0f, (iREG(28) + 60) / 1000.0f, (iREG(29) + 50) / 1000.0f, MTXMODE_APPLY);
 
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, color->unk0, color->unk1, color->unk2, 255);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, color->inner.r, color->inner.g, color->inner.b, 255);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                     G_MTX_MODELVIEW | G_MTX_LOAD);
             gSPDisplayList(POLY_XLU_DISP++, D_0401F0F0);
@@ -687,9 +685,9 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, Globa
             play_sound((phi_s1->flags & 5) == 5 ? 0x4830 : 0x4810);
         }
 
-        targetCtx->unkC.x = phi_s1->world.pos.x;
-        targetCtx->unkC.y = phi_s1->world.pos.y - (phi_s1->shape.yOffset * phi_s1->scale.y);
-        targetCtx->unkC.z = phi_s1->world.pos.z;
+        targetCtx->targetCenterPos.x = phi_s1->world.pos.x;
+        targetCtx->targetCenterPos.y = phi_s1->world.pos.y - (phi_s1->shape.yOffset * phi_s1->scale.y);
+        targetCtx->targetCenterPos.z = phi_s1->world.pos.z;
         if (targetCtx->unk4B == 0) {
             temp_f0_2 = (500.0f - targetCtx->unk44) * 3.0f;
 

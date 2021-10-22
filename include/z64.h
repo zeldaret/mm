@@ -465,14 +465,8 @@ typedef struct {
 } s8018CFAC; // size = 0x38
 
 typedef struct {
-    /* 0x0 */ u8 unk0;
-    /* 0x1 */ u8 unk1;
-    /* 0x2 */ u8 unk2;
-    /* 0x3 */ u8 unk3;
-    /* 0x4 */ u8 unk4;
-    /* 0x5 */ u8 unk5;
-    /* 0x6 */ u8 unk6;
-    /* 0x7 */ u8 unk7;
+    /* 0x0 */ Color_RGBA8 inner;
+    /* 0x4 */ Color_RGBA8 outer;
 } s801AEC84; // size = 0x8
 
 typedef struct {
@@ -1422,15 +1416,9 @@ struct FireObj {
 
 struct TargetContext {
     /* 0x00 */ Vec3f unk0;
-    /* 0x0C */ Vec3f unkC;
-    /* 0x18 */ f32 unk18;
-    /* 0x1C */ f32 unk1C;
-    /* 0x20 */ f32 unk20;
-    /* 0x24 */ f32 unk24;
-    /* 0x28 */ f32 unk28;
-    /* 0x2C */ f32 unk2C;
-    /* 0x30 */ f32 unk30;
-    /* 0x34 */ f32 unk34;
+    /* 0x0C */ Vec3f targetCenterPos;
+    /* 0x18 */ Color_RGBAf fairyInner;
+    /* 0x28 */ Color_RGBAf fairyOuter;
     /* 0x38 */ Actor* unk38;
     /* 0x3C */ Actor* unk3C;
     /* 0x40 */ f32 unk40;
