@@ -1390,7 +1390,7 @@ void EnTrt_TalkToShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
                     player->actor.textId = 0x883;
                 }
                 this->textId = player->actor.textId;
-                player->unk_A87 = itemGiven;
+                player->exchangeItemId = itemGiven;
                 this->actionFunc = EnTrt_GetMushroom;
             } else {
                 if (this->flags & ENTRT_GIVEN_MUSHROOM) {

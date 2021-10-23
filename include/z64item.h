@@ -154,4 +154,8 @@ typedef enum {
     /* 0x68 */ GID_SWORD_GREAT_FAIRY
 } GetItemDrawID;
 
+typedef enum {
+    /* 0x00 */ EXCH_ITEM_NONE,
+} ExchangeItemID;
+
 #endif

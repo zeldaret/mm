@@ -38,7 +38,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123358.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801233E4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/Player_InCsMode.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123420.s")
 

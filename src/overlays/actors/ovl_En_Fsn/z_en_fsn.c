@@ -827,7 +827,7 @@ void EnFsn_StartBuying(EnFsn* this, GlobalContext* globalCtx) {
                 this->actionFunc = EnFsn_DeterminePrice;
                 break;
             case 0x29CF:
-                player->unk_A87 = 0;
+                player->exchangeItemId = 0;
                 this->actionFunc = EnFsn_SetupDeterminePrice;
                 break;
         }
@@ -918,7 +918,7 @@ void EnFsn_DeterminePrice(EnFsn* this, GlobalContext* globalCtx) {
             this->price = (buttonItem < 40) ? gItemPrices[buttonItem] : 0;
             if (this->price > 0) {
                 player->actor.textId = 0x29EF;
-                player->unk_A87 = buttonItem;
+                player->exchangeItemId = buttonItem;
                 this->actionFunc = EnFsn_MakeOffer;
             } else {
                 player->actor.textId = 0x29CF;
@@ -974,7 +974,7 @@ void EnFsn_MakeOffer(EnFsn* this, GlobalContext* globalCtx) {
                 break;
             case 1:
                 func_8019F230();
-                player->unk_A87 = 0;
+                player->exchangeItemId = 0;
                 this->actionFunc = EnFsn_SetupDeterminePrice;
                 break;
         }

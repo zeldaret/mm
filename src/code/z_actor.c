@@ -1755,30 +1755,30 @@ s32 Actor_RequestTalk(Actor* actor, GameState* gameState) {
     return false;
 }
 
-s32 func_800B8500(Actor* actor, GameState* gameState, f32 arg2, f32 arg3, s32 arg4) {
+s32 func_800B8500(Actor* actor, GameState* gameState, f32 xzRange, f32 yRange, s32 exchangeItemId) {
     Player* player = GET_PLAYER(gameState);
 
-    if (((player->actor.flags & 0x100) != 0) || ((arg4 > 0) && (func_801233E4(gameState) != 0)) ||
-        ((actor->isTargeted == 0) &&
-         ((fabsf(actor->yDistToPlayer) > fabsf(arg3)) || ((actor->xzDistToPlayer > player->targetActorDistance)) ||
-          (arg2 < actor->xzDistToPlayer)))) {
-        return 0;
+    if ((player->actor.flags & 0x100) || ((exchangeItemId > EXCH_ITEM_NONE) && Player_InCsMode(gameState)) ||
+        (!actor->isTargeted &&
+         ((fabsf(actor->yDistToPlayer) > fabsf(yRange)) || ((actor->xzDistToPlayer > player->targetActorDistance)) ||
+          (xzRange < actor->xzDistToPlayer)))) {
+        return false;
     }
 
     player->targetActor = actor;
     player->targetActorDistance = actor->xzDistToPlayer;
-    player->unk_A87 = arg4;
+    player->exchangeItemId = exchangeItemId;
 
     ActorCutscene_SetIntentToPlay(0x7C);
-    return 1;
+    return true;
 }
 
-s32 func_800B85E0(Actor* actor, GameState* gameState, f32 arg2, s32 arg3) {
-    return func_800B8500(actor, gameState, arg2, arg2, arg3);
+s32 func_800B85E0(Actor* actor, GameState* gameState, f32 radius, s32 exchangeItemId) {
+    return func_800B8500(actor, gameState, radius, radius, exchangeItemId);
 }
 
-s32 func_800B8614(Actor* actor, GameState* gameState, f32 arg2) {
-    return func_800B85E0(actor, gameState, arg2, 0);
+s32 func_800B8614(Actor* actor, GameState* gameState, f32 radius) {
+    return func_800B85E0(actor, gameState, radius, EXCH_ITEM_NONE);
 }
 
 s32 func_800B863C(Actor* actor, GameState* gameState) {
@@ -1817,27 +1817,28 @@ s32 func_800B86C8(Actor* actor1, GameState* gameState, Actor* actor2) {
     return false;
 }
 
-s32 func_800B8708(GameState* gameState) {
+s32 Actor_GetExchangeItemId(GameState* gameState) {
     Player* player = GET_PLAYER(gameState);
 
-    return player->unk_A87;
+    return player->exchangeItemId;
 }
 
 s32 func_800B8718(Actor* actor, GameState* gameState) {
     if (actor->flags & 0x20000000) {
         actor->flags &= ~0x20000000;
-        return 1;
+        return true;
     }
-    return 0;
+
+    return false;
 }
 
 #ifdef NON_MATCHING
-void func_800B874C(Actor* actor, GameState* gameState, f32 arg2, f32 arg3) {
+void func_800B874C(Actor* actor, GameState* gameState, f32 xzRange, f32 yRange) {
     Player* player = GET_PLAYER(gameState);
 
-    if ((player->actor.flags & 0x20000000) || ((func_801233E4(gameState) != 0)) ||
-        (arg3 < fabsf(actor->yDistToPlayer)) || ((player->unk_A94 < actor->xzDistToPlayer)) ||
-        (arg2 < actor->xzDistToPlayer)) {
+    if ((player->actor.flags & 0x20000000) || ((Player_InCsMode(gameState) != 0)) ||
+        (yRange < fabsf(actor->yDistToPlayer)) || ((player->unk_A94 < actor->xzDistToPlayer)) ||
+        (xzRange < actor->xzDistToPlayer)) {
         return;
     }
 
@@ -1848,8 +1849,8 @@ void func_800B874C(Actor* actor, GameState* gameState, f32 arg2, f32 arg3) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B874C.s")
 #endif
 
-void func_800B8804(Actor* actor, GameState* gameState, f32 arg2) {
-    func_800B874C(actor, gameState, arg2, 20.0f);
+void func_800B8804(Actor* actor, GameState* gameState, f32 xzRange) {
+    func_800B874C(actor, gameState, xzRange, 20.0f);
 }
 
 void func_800B882C(Actor* actor, GameState* gameState) {
@@ -3802,7 +3803,7 @@ s32 func_800BD2B4(GameState* gameState, Actor* actor, s16* arg2, f32 arg3, u16 (
         return 0;
     } else if (func_800B8934(gameState, actor) == 0) {
         return 0;
-    } else if (func_800B8614(actor, gameState, arg3) == 0) {
+    } else if (!func_800B8614(actor, gameState, arg3)) {
         return 0;
     } else {
         actor->textId = arg4(gameState, actor);

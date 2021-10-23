@@ -351,7 +351,7 @@ void func_80ADB544(EnSellnuts* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0x7D0, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
-        if (func_800B8708(&globalCtx->state) == 0x2A) {
+        if (Actor_GetExchangeItemId(&globalCtx->state) == 0x2A) {
             player->actor.textId = D_80ADD928[this->unk_33A];
             this->unk_340 = player->actor.textId;
             this->actionFunc = func_80ADBAB8;
@@ -435,7 +435,7 @@ void func_80ADB924(EnSellnuts* this, GlobalContext* globalCtx) {
             if (temp_v0_2 == 0x2A) {
                 player->actor.textId = D_80ADD928[this->unk_33A];
                 this->unk_340 = player->actor.textId;
-                player->unk_A87 = temp_v0_2;
+                player->exchangeItemId = temp_v0_2;
                 this->actionFunc = func_80ADBAB8;
             } else {
                 player->actor.textId = D_80ADD920[this->unk_33A];
