@@ -2514,16 +2514,187 @@ s32 Actor_RecordUndrawnActor(GlobalContext* globalCtx, Actor* actor) {
     return 1;
 }
 
-void func_800B9E84(Gfx** arg0, s32 arg1);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B9E84.s")
-/*
 void func_800B9E84(Gfx** arg0, s32 arg1) {
-    func_80164C14(arg0, &D_801DE890, 4, 0, 6, 6, ((f32) (0x64 - arg1) * 0.003f) + 1.0f);
+    func_80164C14(arg0, D_801DE890, 4, 0, 6, 6, ((100 - arg1) * 0.003f) + 1.0f);
 }
-*/
 
-// big function
+#ifdef NON_EQUIVALENT
+void func_800B9EF4(GlobalContext* globalCtx, s32 numActors, Actor** actors) {
+    s32 spB4;
+    Gfx* spAC;
+    void* spA8; //pad
+    s32 spA4;
+    //void* sp34;
+    //Gfx* temp_s1_11;
+    //Gfx** temp_a0_2;
+    //Gfx** temp_a1;
+    //GraphicsContext* temp_s2;
+    //void* temp_s1_10;
+    //void* temp_s1_7;
+    //void* temp_s1_8;
+    //void* temp_s1_9;
+    //Gfx* phi_s1;
+    Gfx* phi_s1_2;
+    //void* phi_s1_4;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+    //temp_s2 = globalCtx->state.gfxCtx;
+
+    if (numActors > 0) {
+        spAC = POLY_XLU_DISP;
+        //sp34 = globalCtx + 0x18000;
+        spA4 = globalCtx->unk_18E68;
+
+        PreRender_SetValues(&globalCtx->pauseBgPreRender, D_801FBBCC, D_801FBBCE, __gfxCtx->framebuffer, __gfxCtx->zbuffer);
+
+        func_80170200(&globalCtx->pauseBgPreRender, &spAC, __gfxCtx->zbuffer, (void* ) spA4);
+
+        //spAC->words.w0 = 0xE7000000;
+        //spAC->words.w1 = 0;
+        //temp_s1_2 = spAC + 8;
+        gDPPipeSync(spAC++);
+
+        //temp_s1_2->words.w0 = 0xEE000000;
+        //temp_s1_2->words.w1 = 0;
+        //temp_s1_3 = temp_s1_2 + 8;
+        gDPSetPrimDepth(spAC++, 0, 0);
+
+        //temp_s1_3->words.w0 = 0xEF002C30;
+        //temp_s1_3->words.w1 = 0xAF504365;
+        //temp_s1_4 = temp_s1_3 + 8;
+        gDPSetOtherMode(spAC++, G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE | G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE, G_AC_THRESHOLD | G_ZS_PRIM | Z_UPD | IM_RD | CVG_DST_SAVE | ZMODE_OPA | FORCE_BL | GBL_c1(G_BL_CLR_BL, G_BL_0, G_BL_CLR_MEM, G_BL_1MA) | GBL_c2(G_BL_CLR_BL, G_BL_0, G_BL_CLR_MEM, G_BL_1MA));
+
+        //temp_s1_4->words.w1 = 0xFF;
+        //temp_s1_4->words.w0 = 0xFA000000;
+        //temp_s1_5 = temp_s1_4 + 8;
+        gDPSetPrimColor(spAC++, 0, 0, 0, 0, 0, 255);
+        //temp_s1_5 = spAC;
+
+        if (globalCtx->roomCtx.currRoom.unk5 == 0) {
+            //temp_s1_5->words.w0 = 0xFC61E6C3;
+            //temp_s1_5->words.w1 = 0x11CF9FCF;
+            //phi_s1 = temp_s1_5 + 8;
+            gDPSetCombineLERP(spAC++, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0);
+        } else {
+            //temp_s1_5->words.w0 = 0xFC119623;
+            //temp_s1_5->words.w1 = 0xFF2FFFFF;
+            //phi_s1 = temp_s1_5 + 8;
+            gDPSetCombineMode(spAC++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+        }
+
+        //spAC = phi_s1;
+        func_800B9E84(&spAC, globalCtx->actorCtx.unk4);
+        phi_s1_2 = func_801660B8(globalCtx, spAC);
+
+        for (spB4 = 0; spB4 < numActors; spB4++, actors++) {
+            Actor_Draw(globalCtx, *actors);
+        }
+
+        //temp_s0_2 = &globalCtx->pauseBgPreRender;
+
+        //phi_s1_2->words.w0 = 0xE7000000;
+        //phi_s1_2->words.w1 = 0;
+        //temp_s1_7 = phi_s1_2 + 8;
+        gDPPipeSync(phi_s1_2++);
+
+        //temp_s1_7->unk_0 = 0xEF002CF0;
+        //temp_s1_7->unk_4 = 0xF5A714D;
+        //temp_s1_8 = temp_s1_7 + 8;
+        gDPSetOtherMode(phi_s1_2++, G_AD_DISABLE | G_CD_DISABLE | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE | G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE, G_AC_THRESHOLD | G_ZS_PRIM | AA_EN | IM_RD | CVG_DST_WRAP | ZMODE_OPA | CVG_X_ALPHA | ALPHA_CVG_SEL | FORCE_BL | GBL_c1(G_BL_CLR_IN, G_BL_0, G_BL_CLR_MEM, G_BL_1) | GBL_c2(G_BL_CLR_IN, G_BL_0, G_BL_CLR_MEM, G_BL_1));
+
+        //temp_s1_8->unk_4 = -0x100;
+        //temp_s1_8->unk_0 = 0xF9000000;
+        //temp_s1_9 = temp_s1_8 + 8;
+        gDPSetBlendColor(phi_s1_2++, 255, 255, 255, 0);
+
+        //temp_s1_9->unk_4 = 0x20;
+        //temp_s1_9->unk_0 = 0xFA0000FF;
+        //temp_s1_10 = temp_s1_9 + 8;
+        gDPSetPrimColor(phi_s1_2++, 0, 0xFF, 0, 0, 0, 32);
+
+        //temp_a0_2 = &spAC;
+        //if (sp34->unk_6E5 == 0) {
+        if (globalCtx->roomCtx.currRoom.unk5 == 0) {
+        //    temp_s1_10->unk_0 = 0xFC119623;
+        //    temp_s1_10->unk_4 = 0xFF2FFFFF;
+        //    phi_s1_4 = temp_s1_10 + 8;
+            gDPSetCombineMode(phi_s1_2++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+        //} else {
+        } else {
+        //    temp_s1_10->unk_4 = 0x11CF9FCF;
+        //    temp_s1_10->unk_0 = 0xFC61E6C3;
+        //    phi_s1_4 = temp_s1_10 + 8;
+            gDPSetCombineLERP(phi_s1_2++, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0);
+
+        //}
+        }
+        //phi_s1_4->unk_0 = (s32) (((sp34->unk_B4C - 1) & 0xFFF) | 0xFF100000);
+        //temp_s1_11 = phi_s1_4 + 8;
+        //phi_s1_4->unk_4 = spA4;
+        gDPSetColorImage(phi_s1_2++, G_IM_FMT_RGBA, G_IM_SIZ_16b, ((globalCtx->pauseBgPreRender.width - 1) & 0xFFF), spA4);
+        //temp_s1_11 = phi_s1_2;
+
+        spAC = phi_s1_2;
+
+        //spAC = temp_s1_11;
+        func_800B9E84(&spAC, (s32) globalCtx->actorCtx.unk4);
+        //temp_s1_11->words.w0 = 0xE7000000;
+        //temp_s1_11->words.w1 = 0;
+        //temp_s1_12 = temp_s1_11 + 8;
+        gDPPipeSync(spAC++);
+
+        //temp_s1_12->words.w1 = -0xF8;
+        //temp_s1_12->words.w0 = 0xF9000000;
+        //temp_s1_13 = temp_s1_12 + 8;
+        gDPSetBlendColor(spAC++, 255, 255, 255, 8);
+
+        //temp_s1_14 = temp_s1_13 + 8;
+        //temp_s1_13->words.w0 = ((sp34->unk_B4C - 1) & 0xFFF) | 0xFF100000;
+        //temp_s1_13->words.w1 = sp34->unk_B5C;
+        gDPSetColorImage(spAC++, G_IM_FMT_RGBA, G_IM_SIZ_16b, ((globalCtx->pauseBgPreRender.width - 1) & 0xFFF), globalCtx->pauseBgPreRender.fbuf);
+
+        //temp_a1 = &spAC;
+        //spAC = temp_s1_14;
+        //func_8016FDB8(&globalCtx->pauseBgPreRender, temp_a1, (void* ) spA4, spA8, 1U);
+        func_8016FDB8(&globalCtx->pauseBgPreRender, &spAC, (void* ) spA4, __gfxCtx->zbuffer, 1U);
+//
+        //POLY_OPA_DISP = temp_s1_14;
+        POLY_OPA_DISP = spAC;
+    }
+
+    //temp_s1_15 = OVERLAY_DISP;
+    //temp_s1_15->words.w0 = 0xE7000000;
+    //temp_s1_15->words.w1 = 0;
+    //temp_s1_16 = temp_s1_15 + 8;
+    spAC = OVERLAY_DISP;
+    gDPPipeSync(spAC++);
+
+    //temp_s1_16->words.w0 = 0xEF002C30;
+    //temp_s1_16->words.w1 = 0x00504345;
+    //temp_s1_17 = temp_s1_16 + 8;
+    gDPSetOtherMode(spAC++, G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE | G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE, G_AC_THRESHOLD | G_ZS_PRIM | G_RM_CLD_SURF | G_RM_CLD_SURF2);
+
+
+    //temp_s1_17->words.w0 = 0xFC61E6C3;
+    //temp_s1_17->words.w1 = 0x11CF9FCF;
+    //temp_s1_18 = temp_s1_17 + 8;
+    gDPSetCombineLERP(spAC++, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0);
+
+
+    //temp_s1_18->words.w0 = 0xFA000000;
+    //temp_s1_18->words.w1 = 0x4A00004A;
+    //spAC = temp_s1_18 + 8;
+    gDPSetPrimColor(spAC++, 0, 0, 74, 0, 0, 74);
+
+    func_800B9E84(&spAC, (s32) globalCtx->actorCtx.unk4);
+
+    OVERLAY_DISP = spAC;
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B9EF4.s")
+#endif
 
 s32 func_800BA2D8(GlobalContext* globalCtx, Actor* actor) {
     return func_800BA2FC(globalCtx, actor, &actor->projectedPos, actor->projectedW);
