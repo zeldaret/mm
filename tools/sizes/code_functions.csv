@@ -250,7 +250,7 @@ asm/non_matchings/code/z_actor/Actor_CalcOffsetOrientedToDrawRotation.s,Actor_Ca
 asm/non_matchings/code/z_actor/Actor_HeightDiff.s,Actor_HeightDiff,0x800B6F0C,0x5
 asm/non_matchings/code/z_actor/func_800B6F20.s,func_800B6F20,0x800B6F20,0x2A
 asm/non_matchings/code/z_actor/Player_GetHeight.s,Player_GetHeight,0x800B6FC8,0x32
-asm/non_matchings/code/z_actor/func_800B7090.s,func_800B7090,0x800B7090,0x22
+asm/non_matchings/code/z_actor/Player_GetRunSpeedLimit.s,Player_GetRunSpeedLimit,0x800B7090,0x22
 asm/non_matchings/code/z_actor/func_800B7118.s,func_800B7118,0x800B7118,0x4
 asm/non_matchings/code/z_actor/func_800B7128.s,func_800B7128,0x800B7128,0xD
 asm/non_matchings/code/z_actor/func_800B715C.s,func_800B715C,0x800B715C,0x5
@@ -290,7 +290,7 @@ asm/non_matchings/code/z_actor/func_800B8614.s,func_800B8614,0x800B8614,0xA
 asm/non_matchings/code/z_actor/func_800B863C.s,func_800B863C,0x800B863C,0x10
 asm/non_matchings/code/z_actor/func_800B867C.s,func_800B867C,0x800B867C,0x13
 asm/non_matchings/code/z_actor/func_800B86C8.s,func_800B86C8,0x800B86C8,0x10
-asm/non_matchings/code/z_actor/Actor_GetExchangeItemId.s,Actor_GetExchangeItemId,0x800B8708,0x4
+asm/non_matchings/code/z_actor/Player_GetExchangeItemId.s,Player_GetExchangeItemId,0x800B8708,0x4
 asm/non_matchings/code/z_actor/func_800B8718.s,func_800B8718,0x800B8718,0xD
 asm/non_matchings/code/z_actor/func_800B874C.s,func_800B874C,0x800B874C,0x2E
 asm/non_matchings/code/z_actor/func_800B8804.s,func_800B8804,0x800B8804,0xA

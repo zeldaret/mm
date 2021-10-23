@@ -768,7 +768,7 @@ void Actor_CalcOffsetOrientedToDrawRotation(Actor* actor, Vec3f* offset, Vec3f* 
 f32 Actor_HeightDiff(Actor* actor1, Actor* actor2);
 void func_800B6F20(GlobalContext* globalCtx, Input* input, f32 arg2, s16 arg3);
 float Player_GetHeight(Player* player);
-f32 func_800B7090(Player* player);
+f32 Player_GetRunSpeedLimit(Player* player);
 s32 func_800B7118(Player* player);
 s32 func_800B7128(Player* player);
 s32 func_800B715C(GlobalContext* globalCtx);
@@ -808,7 +808,7 @@ s32 func_800B8614(Actor* actor, GameState* gameState, f32 radius);
 s32 func_800B863C(Actor* actor, GameState* gameState);
 s32 func_800B867C(Actor* actor, GameState* gameState);
 s32 func_800B86C8(Actor* actor1, GameState* gameState, Actor* actor2);
-s32 Actor_GetExchangeItemId(GameState* gameState);
+s32 Player_GetExchangeItemId(GameState* gameState);
 s32 func_800B8718(Actor* actor, GameState* gameState);
 void func_800B874C(Actor* actor, GameState* gameState, f32 xzRange, f32 yRange);
 void func_800B8804(Actor* actor, GameState* gameState, f32 xzRange);

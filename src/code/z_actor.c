@@ -1212,9 +1212,8 @@ f32 Actor_HeightDiff(Actor* actor1, Actor* actor2) {
 }
 
 void func_800B6F20(GlobalContext* globalCtx, Input* input, f32 arg2, s16 arg3) {
-    s16 sp26;
+    s16 sp26 = arg3 - func_800DFC68(GET_ACTIVE_CAM(globalCtx));
 
-    sp26 = arg3 - func_800DFC68(GET_ACTIVE_CAM(globalCtx));
     input->cur.stick_x = -Math_SinS(sp26) * arg2;
     input->rel.stick_x = input->cur.stick_x;
     input->cur.stick_y = Math_CosS(sp26) * arg2;
@@ -1245,8 +1244,7 @@ f32 Player_GetHeight(Player* player) {
     }
 }
 
-// Player_GetRunSpeedLimit?
-f32 func_800B7090(Player* player) {
+f32 Player_GetRunSpeedLimit(Player* player) {
     if (player->stateFlags1 & 0x800000) {
         return 15.0f;
     } else if (player->stateFlags1 & 0x8000000) {
@@ -1817,7 +1815,7 @@ s32 func_800B86C8(Actor* actor1, GameState* gameState, Actor* actor2) {
     return false;
 }
 
-s32 Actor_GetExchangeItemId(GameState* gameState) {
+s32 Player_GetExchangeItemId(GameState* gameState) {
     Player* player = GET_PLAYER(gameState);
 
     return player->exchangeItemId;
@@ -2043,20 +2041,20 @@ void Audio_PlayActorSound2(Actor* actor, u16 sfxId) {
 }
 
 void func_800B8EF4(GlobalContext* globalCtx, Actor* actor) {
-    u32 sp1C;
+    u32 sfxId;
 
     if (actor->bgCheckFlags & 0x20) {
         if (actor->yDistToWater < 20.0f) {
-            sp1C = NA_SE_PL_WALK_WATER0 - SFX_FLAG;
+            sfxId = NA_SE_PL_WALK_WATER0 - SFX_FLAG;
         } else {
-            sp1C = NA_SE_PL_WALK_WATER1 - SFX_FLAG;
+            sfxId = NA_SE_PL_WALK_WATER1 - SFX_FLAG;
         }
     } else {
-        sp1C = func_800C9BDC(&globalCtx->colCtx, actor->floorPoly, actor->floorBgId);
+        sfxId = func_800C9BDC(&globalCtx->colCtx, actor->floorPoly, actor->floorBgId);
     }
 
     func_8019F1C0(&actor->projectedPos, NA_SE_EV_BOMB_BOUND);
-    func_8019F1C0(&actor->projectedPos, sp1C + SFX_FLAG);
+    func_8019F1C0(&actor->projectedPos, sfxId + SFX_FLAG);
 }
 
 void func_800B8F98(Actor* actor, u16 sfxId) {

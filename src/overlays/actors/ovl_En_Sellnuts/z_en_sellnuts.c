@@ -351,7 +351,7 @@ void func_80ADB544(EnSellnuts* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0x7D0, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
-        if (Actor_GetExchangeItemId(&globalCtx->state) == 0x2A) {
+        if (Player_GetExchangeItemId(&globalCtx->state) == 0x2A) {
             player->actor.textId = D_80ADD928[this->unk_33A];
             this->unk_340 = player->actor.textId;
             this->actionFunc = func_80ADBAB8;
