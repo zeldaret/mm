@@ -33,8 +33,8 @@ typedef struct EnTanron3 {
     /* 0x258 */ s16 unk_258;
     /* 0x25A */ s16 unk_25A;
     /* 0x25C */ s16 unk_25C;
-    /* 0x260 */ ColliderCylinder collider1;
-    /* 0x2AC */ ColliderCylinder collider2;
+    /* 0x260 */ ColliderCylinder atCollider;
+    /* 0x2AC */ ColliderCylinder acCollider;
     /* 0x2F8 */ EnTanron3ActionFunc actionFunc;
 } EnTanron3; // size = 0x2FC
 
