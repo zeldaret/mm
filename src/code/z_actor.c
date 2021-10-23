@@ -1798,22 +1798,24 @@ s32 func_800B867C(Actor* actor, GameState* gameState) {
     return 0;
 }
 
-#ifdef NON_EQUIVALENT
-// likely memes
+/**
+ * Changes the actor the Player is focussing on
+ * Fails if Player is not already focussing on an actor
+ */
 s32 func_800B86C8(Actor* actor1, GameState* gameState, Actor* actor2) {
+    Actor* targetActor;
     Player* player = GET_PLAYER(gameState);
 
-    if ((player->actor.flags & 0x100) && (player->targetActor != NULL)) {
+    targetActor = player->targetActor;
+
+    if ((player->actor.flags & 0x100) && (targetActor != NULL)) {
         player->targetActor = actor2;
         player->unk_730 = actor2;
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B86C8.s")
-#endif
 
 s32 func_800B8708(GameState* gameState) {
     Player* player = GET_PLAYER(gameState);
