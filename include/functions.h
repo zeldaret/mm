@@ -801,7 +801,7 @@ PosRot* Actor_GetWorldPosShapeRot(PosRot* dest, Actor* actor);
 f32 func_800B82EC(Actor* actor, Player* player, s16);
 s32 func_800B83BC(Actor* actor, f32 arg1);
 s32 func_800B83F8(Actor* actor, Player* player, s32 flag);
-s32 Actor_IsTalking(Actor* actor, GameState* gameState);
+s32 Actor_RequestTalk(Actor* actor, GameState* gameState);
 s32 func_800B8500(Actor* actor, GameState* gameState, f32 arg2, f32 arg3, s32 arg4);
 s32 func_800B85E0(Actor* actor, GameState* gameState, f32 uParm3, s32 uParm4);
 s32 func_800B8614(Actor* actor, GameState* gameState, f32 uParm3);
@@ -884,7 +884,8 @@ void Enemy_StartFinishingBlow(GlobalContext* globalCtx, Actor* actor);
 s16 func_800BBB74(s16 arg0[2], s16 arg1, s16 arg2, s16 arg3);
 // void func_800BBC20(void);
 void func_800BBCEC(Actor* actor, GlobalContext* globalCtx, s32 arg2, Gfx** dList);
-void func_800BBDAC(GlobalContext* globalCtx, Actor* actor, Vec3f* arg2, f32 arg3, UNK_TYPE4 arg4, f32 arg5, s16 arg6, s16 arg7, u8 arg8);
+void Actor_SpawnFloorDustRing(GlobalContext* globalCtx, Actor* actor, Vec3f* posXZ, f32 radius, s32 amountMinusOne,
+                              f32 randAccelWeight, s16 scale, s16 scaleStep, u8 useLighting);
 void func_800BBFB0(GlobalContext* globalCtx, Vec3f* position, f32 param3, s32 param_4, s16 param_5, s16 param_6, u8 param_7);
 void func_800BC154(GlobalContext* globalCtx, ActorContext* actorCtx, Actor* actor, u8 actorCategory);
 s32 func_800BC188(s32 index);

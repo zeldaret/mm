@@ -2787,7 +2787,7 @@ void func_80B490F0(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnInvadepoh* this = THIS;
     s32 sp2C = (this->actor.flags & 0x40) == 0x40;
-    s32 isTalking = Actor_IsTalking(&this->actor, &globalCtx->state);
+    s32 isTalking = Actor_RequestTalk(&this->actor, &globalCtx->state);
 
     if (isTalking) {
         func_80151BB4(globalCtx, 5);
@@ -3170,7 +3170,7 @@ void func_80B4A1B8(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnInvadepoh* this = THIS;
     s32 sp2C = (this->actor.flags & 0x40) == 0x40;
-    s32 isTalking = Actor_IsTalking(&this->actor, &globalCtx->state);
+    s32 isTalking = Actor_RequestTalk(&this->actor, &globalCtx->state);
 
     if (isTalking) {
         func_80151BB4(globalCtx, 5);
@@ -3399,7 +3399,7 @@ void func_80B4ABDC(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnInvadepoh* this = THIS;
     s32 sp2C = (this->actor.flags & 0x40) == 0x40;
-    s32 isTalking = Actor_IsTalking(&this->actor, &globalCtx->state);
+    s32 isTalking = Actor_RequestTalk(&this->actor, &globalCtx->state);
 
     if (isTalking) {
         func_80151BB4(globalCtx, 5);
@@ -3435,7 +3435,7 @@ void func_80B4AD3C(EnInvadepoh* this) {
 }
 
 void func_80B4AD60(EnInvadepoh* this, GlobalContext* globalCtx) {
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         EnInvadepoh_SetTextID(this, globalCtx, 0x3331);
         func_80B4ADB8(this);
     } else {
@@ -3494,7 +3494,7 @@ void func_80B4AF80(EnInvadepoh* this) {
 }
 
 void func_80B4AF94(EnInvadepoh* this, GlobalContext* globalCtx) {
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         EnInvadepoh_SetTextID(this, globalCtx, 0x3334);
         func_80151BB4(globalCtx, 0x1E);
         func_80151BB4(globalCtx, 0x1D);
@@ -3961,7 +3961,7 @@ void func_80B4C5C0(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnInvadepoh* this = THIS;
     s32 sp2C = (this->actor.flags & 0x40) == 0x40;
-    s32 isTalking = Actor_IsTalking(&this->actor, &globalCtx->state);
+    s32 isTalking = Actor_RequestTalk(&this->actor, &globalCtx->state);
 
     if (isTalking) {
         func_80151BB4(globalCtx, 6);
@@ -4177,7 +4177,7 @@ void func_80B4D054(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnInvadepoh* this = THIS;
     s32 sp2C = (this->actor.flags & 0x40) == 0x40;
-    s32 isTalking = Actor_IsTalking(&this->actor, &globalCtx->state);
+    s32 isTalking = Actor_RequestTalk(&this->actor, &globalCtx->state);
 
     if (isTalking) {
         func_80151BB4(globalCtx, 5);

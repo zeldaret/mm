@@ -71,7 +71,7 @@ void func_80C08828(EnNnh* this) {
 }
 
 void func_80C0883C(EnNnh* this, GlobalContext* globalCtx) {
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         func_801518B0(globalCtx, 0x228U, &this->actor);
         func_80C088A4(this);
         return;

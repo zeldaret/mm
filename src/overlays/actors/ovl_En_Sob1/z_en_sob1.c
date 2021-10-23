@@ -449,7 +449,7 @@ void EnSob1_EndInteraction(GlobalContext* globalCtx, EnSob1* this) {
         ActorCutscene_Stop(this->cutscene);
         this->cutsceneState = ENSOB1_CUTSCENESTATE_STOPPED;
     }
-    Actor_IsTalking(&this->actor, &globalCtx->state);
+    Actor_RequestTalk(&this->actor, &globalCtx->state);
     globalCtx->msgCtx.unk11F22 = 0x43;
     globalCtx->msgCtx.unk12023 = 4;
     Interface_ChangeAlpha(50);
@@ -534,7 +534,7 @@ void EnSob1_Idle(EnSob1* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     this->headRotTarget = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
@@ -792,7 +792,7 @@ void EnSob1_Walking(EnSob1* this, GlobalContext* globalCtx) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     }
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
@@ -832,7 +832,7 @@ void EnSob1_ItemPurchased(EnSob1* this, GlobalContext* globalCtx) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     }
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         func_80151938(globalCtx, 0x647);
     } else {
         func_800B85E0(&this->actor, &globalCtx->state, 400.0f, -1);

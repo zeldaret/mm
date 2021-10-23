@@ -21,7 +21,7 @@ void EnAObj_Update1(ActorEnAObj* this, GlobalContext* globalCtx) {
     s16 v0;
     s32 v1;
 
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         this->update = (ActorFunc)EnAObj_Update2;
     } else {
         v0 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;

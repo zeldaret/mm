@@ -106,7 +106,7 @@ void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx) {
             this->actor.flags &= ~0x10000;
         }
     }
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         globalCtx->msgCtx.unk11F22 = 0;
         globalCtx->msgCtx.unk11F10 = 0;
         func_809CD028(this, globalCtx);

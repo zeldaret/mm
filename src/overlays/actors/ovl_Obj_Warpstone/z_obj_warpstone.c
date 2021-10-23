@@ -151,7 +151,7 @@ void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx) {
                 func_801477B4(globalCtx);
             }
         }
-    } else if (Actor_IsTalking(&this->dyna.actor, &globalCtx->state)) {
+    } else if (Actor_RequestTalk(&this->dyna.actor, &globalCtx->state)) {
         this->isTalking = true;
     } else if (!this->actionFunc(this, globalCtx)) {
         func_800B863C(&this->dyna.actor, &globalCtx->state);

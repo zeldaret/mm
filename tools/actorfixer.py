@@ -19,7 +19,7 @@ animdict ={
     "Actor_IsLinkFacingActor": "Actor_IsPlayerFacingActor",
     "Actor_IsActorFacingLink": "Actor_IsActorFacingPlayer",
     "Actor_IsActorFacingLinkAndWithinRange": "Actor_IsActorFacingPlayerAndWithinRange",
-    "func_800B84D0": "Actor_IsTalking",
+    "func_800B84D0": "Actor_RequestTalk",
     "func_8017D668": "Math3D_PointDistToLine2D",
     "func_800BDFC0": "Gfx_DrawDListOpa",
     "func_800BE03C": "Gfx_DrawDListXlu",
@@ -66,6 +66,7 @@ animdict ={
     "func_800B8BB0": "Actor_LiftActor",
     "func_800B8BD0": "Actor_PickUpFar",
     "func_801A5CFC": "Audio_PlaySoundGeneral",
+    "func_800BBDAC": "Actor_SpawnFloorDustRing",
 }
 
 def replace_anim(file):

@@ -78,7 +78,7 @@ void func_80C06640(ObjMoonStone* this, GlobalContext* globalCtx) {
     s16 sp1A = this->actor.yawTowardsPlayer - 0x8000;
 
     sp1A -= player->actor.shape.rot.y;
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         this->actor.colChkInfo.health = 1;
         func_801518B0(globalCtx, 0x5E3U, &this->actor);
         func_80C066F8(this);

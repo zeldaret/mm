@@ -220,7 +220,7 @@ s32 func_8092CAD0(EnDns* this, GlobalContext* globalCtx) {
     s32 ret = false;
 
     if (this->unk_2C6 & 7) {
-        if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+        if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
             func_8013AED4(&this->unk_2C6, 0, 7);
             this->unk_2C6 &= ~0x10;
             if (ENDNS_GET_4000(&this->actor)) {

@@ -350,7 +350,7 @@ void func_80ADB544(EnSellnuts* this, GlobalContext* globalCtx) {
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0x7D0, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         if (func_800B8708(&globalCtx->state) == 0x2A) {
             player->actor.textId = D_80ADD928[this->unk_33A];
             this->unk_340 = player->actor.textId;
@@ -497,7 +497,7 @@ void func_80ADBBEC(EnSellnuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80ADBC60(EnSellnuts* this, GlobalContext* globalCtx) {
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         func_801518B0(globalCtx, this->unk_340, &this->actor);
         this->actionFunc = func_80ADB0D8;
     } else {
@@ -706,7 +706,7 @@ void func_80ADC580(EnSellnuts* this, GlobalContext* globalCtx) {
 void func_80ADC5A4(EnSellnuts* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         player->linearVelocity = 0.0f;
         this->actor.flags &= ~0x10000;
         func_801518B0(globalCtx, this->unk_340, &this->actor);

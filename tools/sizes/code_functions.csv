@@ -283,7 +283,7 @@ asm/non_matchings/code/z_actor/Actor_GetWorldPosShapeRot.s,Actor_GetWorldPosShap
 asm/non_matchings/code/z_actor/func_800B82EC.s,func_800B82EC,0x800B82EC,0x34
 asm/non_matchings/code/z_actor/func_800B83BC.s,func_800B83BC,0x800B83BC,0xF
 asm/non_matchings/code/z_actor/func_800B83F8.s,func_800B83F8,0x800B83F8,0x36
-asm/non_matchings/code/z_actor/Actor_IsTalking.s,Actor_IsTalking,0x800B84D0,0xC
+asm/non_matchings/code/z_actor/Actor_RequestTalk.s,Actor_RequestTalk,0x800B84D0,0xC
 asm/non_matchings/code/z_actor/func_800B8500.s,func_800B8500,0x800B8500,0x38
 asm/non_matchings/code/z_actor/func_800B85E0.s,func_800B85E0,0x800B85E0,0xD
 asm/non_matchings/code/z_actor/func_800B8614.s,func_800B8614,0x800B8614,0xA
@@ -362,7 +362,7 @@ asm/non_matchings/code/z_actor/func_800BBAC0.s,func_800BBAC0,0x800BBAC0,0x2D
 asm/non_matchings/code/z_actor/func_800BBB74.s,func_800BBB74,0x800BBB74,0x2B
 asm/non_matchings/code/z_actor/func_800BBC20.s,func_800BBC20,0x800BBC20,0x33
 asm/non_matchings/code/z_actor/func_800BBCEC.s,func_800BBCEC,0x800BBCEC,0x30
-asm/non_matchings/code/z_actor/func_800BBDAC.s,func_800BBDAC,0x800BBDAC,0x81
+asm/non_matchings/code/z_actor/Actor_SpawnFloorDustRing.s,Actor_SpawnFloorDustRing,0x800BBDAC,0x81
 asm/non_matchings/code/z_actor/func_800BBFB0.s,func_800BBFB0,0x800BBFB0,0x69
 asm/non_matchings/code/z_actor/func_800BC154.s,func_800BC154,0x800BC154,0xD
 asm/non_matchings/code/z_actor/func_800BC188.s,func_800BC188,0x800BC188,0xB

@@ -1746,8 +1746,7 @@ s16 D_801AED48[] = {
     0x0101, 0x0141, 0x0111, 0x0151, 0x0105, 0x0145, 0x0115, 0x0155,
 };
 
-// Actor_RequestTalk?
-s32 Actor_IsTalking(Actor* actor, GameState* gameState) {
+s32 Actor_RequestTalk(Actor* actor, GameState* gameState) {
     if (actor->flags & 0x100) {
         actor->flags &= ~0x100;
         return true;
@@ -1895,10 +1894,10 @@ s32 Actor_HasParent(Actor* actor, GlobalContext* globalCtx) {
 /**
  * Allows to pick up an item (GetItem), lift an actor or catch various actors in bottles
  * within the specified range.
- * 
+ *
  * GI_NONE is usually used as a special case to lift an actor
  * GI_MAX is usually used to catch an actor in a bottle
-*/
+ */
 s32 Actor_PickUp(Actor* actor, GlobalContext* globalCtx, s32 getItemId, f32 xzRange, f32 yRange) {
     Player* player = GET_PLAYER(globalCtx);
 
@@ -2855,15 +2854,12 @@ Actor* Actor_RemoveFromCategory(GlobalContext* globalCtx, ActorContext* actorCtx
 }
 
 void Actor_FreeOverlay(ActorOverlay* entry) {
-    void* ramAddr;
-
     if (entry->numLoaded == 0) {
-        ramAddr = entry->loadedRamAddr;
+        void* ramAddr = entry->loadedRamAddr;
+
         if (ramAddr != NULL) {
-            // Bit 1 - always loaded
-            if ((entry->allocType & 2) == 0) {
-                // Bit 0 - don't alloc memory
-                if ((entry->allocType & 1) != 0) {
+            if (!(entry->allocType & ALLOCTYPE_PERMANENT)) {
+                if (entry->allocType & ALLOCTYPE_ABSOLUTE) {
                     entry->loadedRamAddr = NULL;
                 } else {
                     zelda_free(ramAddr);
@@ -3062,7 +3058,6 @@ void Actor_SpawnTransitionActors(GlobalContext* globalCtx, ActorContext* actorCt
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_SpawnTransitionActors.s")
 #endif
 
-// yet another spawn function
 Actor* Actor_SpawnEntry(ActorContext* actorCtx, ActorEntry* actorEntry, GameState* gameState) {
     s16 rotX = (actorEntry->rot.x >> 7) & 0x1FF;
     s16 rotY = (actorEntry->rot.y >> 7) & 0x1FF;
@@ -3352,55 +3347,55 @@ void func_800BBCEC(Actor* actor, GlobalContext* globalCtx, s32 arg2, Gfx** dList
     }
 }
 
-void func_800BBDAC(GlobalContext* globalCtx, Actor* actor, Vec3f* arg2, f32 arg3, s32 arg4, f32 arg5, s16 arg6,
-                   s16 arg7, u8 arg8) {
-    Vec3f sp94;
-    Vec3f D_801AED98 = { 0.0f, 0.3f, 0.0f };
+void Actor_SpawnFloorDustRing(GlobalContext* globalCtx, Actor* actor, Vec3f* posXZ, f32 radius, s32 amountMinusOne,
+                              f32 randAccelWeight, s16 scale, s16 scaleStep, u8 useLighting) {
+    Vec3f pos;
+    Vec3f accel = { 0.0f, 0.3f, 0.0f };
     s32 pad[2];
-    f32 phi_f20;
-    s32 phi_s3;
+    f32 angle;
+    s32 i;
 
-    phi_f20 = (Rand_ZeroOne() - 0.5f) * 6.28f;
-    sp94.y = actor->floorHeight;
-    D_801AED98.y += (Rand_ZeroOne() - 0.5f) * 0.2f;
+    angle = (Rand_ZeroOne() - 0.5f) * (2.0f * 3.14f);
+    pos.y = actor->floorHeight;
+    accel.y += (Rand_ZeroOne() - 0.5f) * 0.2f;
 
-    for (phi_s3 = arg4; phi_s3 >= 0; phi_s3--) {
-        sp94.x = (sin_rad(phi_f20) * arg3) + arg2->x;
-        sp94.z = (cos_rad(phi_f20) * arg3) + arg2->z;
-        D_801AED98.x = (Rand_ZeroOne() - 0.5f) * arg5;
-        D_801AED98.z = (Rand_ZeroOne() - 0.5f) * arg5;
+    for (i = amountMinusOne; i >= 0; i--) {
+        pos.x = (sin_rad(angle) * radius) + posXZ->x;
+        pos.z = (cos_rad(angle) * radius) + posXZ->z;
+        accel.x = (Rand_ZeroOne() - 0.5f) * randAccelWeight;
+        accel.z = (Rand_ZeroOne() - 0.5f) * randAccelWeight;
 
-        if (arg6 == 0) {
-            func_800B10C0(globalCtx, &sp94, &D_801D15B0, &D_801AED98);
-        } else if (arg8 != 0) {
-            func_800B1210(globalCtx, &sp94, &D_801D15B0, &D_801AED98, arg6, arg7);
+        if (scale == 0) {
+            func_800B10C0(globalCtx, &pos, &D_801D15B0, &accel);
+        } else if (useLighting) {
+            func_800B1210(globalCtx, &pos, &D_801D15B0, &accel, scale, scaleStep);
         } else {
-            func_800B11A0(globalCtx, &sp94, &D_801D15B0, &D_801AED98, arg6, arg7);
+            func_800B11A0(globalCtx, &pos, &D_801D15B0, &accel, scale, scaleStep);
         }
-        phi_f20 += 6.28f / (arg4 + 1.0f);
+        angle += (2.0f * 3.14f) / (amountMinusOne + 1.0f);
     }
 }
 
-void func_800BBFB0(GlobalContext* globalCtx, Vec3f* position, f32 param3, s32 param_4, s16 param_5, s16 param_6,
+void func_800BBFB0(GlobalContext* globalCtx, Vec3f* position, f32 param3, s32 param_4, s16 param_5, s16 scaleStep,
                    u8 param_7) {
-    Vec3f sp84;
-    Vec3f D_801AEDA4 = { 0.0f, 0.3f, 0.0f };
-    s32 phi_s0;
+    Vec3f pos;
+    Vec3f accel = { 0.0f, 0.3f, 0.0f };
+    s32 i;
 
-    for (phi_s0 = param_4; phi_s0 >= 0; phi_s0--) {
-        s16 temp_v0;
+    for (i = param_4; i >= 0; i--) {
+        s16 scale;
 
-        sp84.x = ((Rand_ZeroOne() - 0.5f) * param3) + position->x;
-        sp84.y = ((Rand_ZeroOne() - 0.5f) * param3) + position->y;
-        sp84.z = ((Rand_ZeroOne() - 0.5f) * param3) + position->z;
+        pos.x = ((Rand_ZeroOne() - 0.5f) * param3) + position->x;
+        pos.y = ((Rand_ZeroOne() - 0.5f) * param3) + position->y;
+        pos.z = ((Rand_ZeroOne() - 0.5f) * param3) + position->z;
 
-        temp_v0 = (s32)(Rand_ZeroOne() * param_5 * 0.2f);
-        temp_v0 += param_5;
+        scale = (s32)(Rand_ZeroOne() * param_5 * 0.2f);
+        scale += param_5;
 
         if (param_7) {
-            func_800B1210(globalCtx, &sp84, &D_801D15B0, &D_801AEDA4, temp_v0, param_6);
+            func_800B1210(globalCtx, &pos, &D_801D15B0, &accel, scale, scaleStep);
         } else {
-            func_800B11A0(globalCtx, &sp84, &D_801D15B0, &D_801AEDA4, temp_v0, param_6);
+            func_800B11A0(globalCtx, &pos, &D_801D15B0, &accel, scale, scaleStep);
         }
     }
 }
@@ -3797,7 +3792,7 @@ s32 D_801AEE30[] = { 0, 0 };
 // unused
 s32 func_800BD2B4(GameState* gameState, Actor* actor, s16* arg2, f32 arg3, u16 (*arg4)(GameState*, Actor*),
                   s16 (*arg5)(GameState*, Actor*)) {
-    if (Actor_IsTalking(actor, gameState)) {
+    if (Actor_RequestTalk(actor, gameState)) {
         *arg2 = 1;
         return 1;
     } else if (*arg2 != 0) {

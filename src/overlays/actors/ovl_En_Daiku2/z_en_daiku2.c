@@ -233,7 +233,7 @@ void func_80BE66E4(EnDaiku2* this, GlobalContext* globalCtx) {
 
     this->actor.textId = sTextIds[this->unk_28A];
 
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         func_80BE6B40(this, globalCtx);
         return;
     }
@@ -342,7 +342,7 @@ void func_80BE6D40(EnDaiku2* this, GlobalContext* globalCtx) {
     s32 pad[3];
     s16 sp3A = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_268);
 
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80BE6BC0;
         return;
     }
@@ -376,7 +376,7 @@ void func_80BE6EF0(EnDaiku2* this, GlobalContext* globalCtx) {
     Vec3f sp40;
     s16 var;
 
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80BE6BC0;
         return;
     }

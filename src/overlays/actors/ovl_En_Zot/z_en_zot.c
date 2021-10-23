@@ -410,7 +410,7 @@ void func_80B97194(EnZot* this, GlobalContext* globalCtx) {
 }
 
 void func_80B97240(EnZot* this, GlobalContext* globalCtx) {
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80B97194;
         func_80B97110(this, globalCtx);
     } else if ((this->actor.xzDistToPlayer < 100.0f) && Actor_IsPlayerFacingActor(&this->actor, 0x3000, globalCtx) &&
@@ -525,7 +525,7 @@ void func_80B973BC(EnZot* this, GlobalContext* globalCtx) {
 
 void func_80B975F8(EnZot* this, GlobalContext* globalCtx) {
     func_80B96D4C(this);
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80B973BC;
     } else {
         func_800B8500(&this->actor, &globalCtx->state, 10000.0f, 1000.0f, 0);
@@ -558,7 +558,7 @@ void func_80B97708(EnZot* this, GlobalContext* globalCtx) {
     func_80B96D4C(this);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 2, 0x400, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80B9765C;
         func_80B972E8(this, globalCtx);
         return;
@@ -708,7 +708,7 @@ void func_80B97A44(EnZot* this, GlobalContext* globalCtx) {
 void func_80B97B5C(EnZot* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 2, 0x400, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80B97A44;
         func_80B9787C(this, globalCtx);
     } else if (func_80B96DF0(this, globalCtx)) {
@@ -737,7 +737,7 @@ void func_80B97C40(EnZot* this, GlobalContext* globalCtx) {
 }
 
 void func_80B97CC8(EnZot* this, GlobalContext* globalCtx) {
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80B97C40;
         func_801518B0(globalCtx, 0x128B, &this->actor);
     } else if (Actor_IsPlayerFacingActor(&this->actor, 0x3000, globalCtx) && (this->actor.xzDistToPlayer < 100.0f)) {
@@ -812,7 +812,7 @@ void func_80B97E4C(EnZot* this, GlobalContext* globalCtx) {
 void func_80B97FD0(EnZot* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 2, 0x800, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80B97E4C;
         func_80B97BF8(this, globalCtx);
     } else if (gSaveContext.weekEventReg[38] & 8) {
@@ -935,7 +935,7 @@ void func_80B98348(EnZot* this, GlobalContext* globalCtx) {
 
 void func_80B9849C(EnZot* this, GlobalContext* globalCtx) {
     func_80B98348(this, globalCtx);
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         if (this->unk_2D4 == 2) {
             func_801518B0(globalCtx, 0x12AD, &this->actor);
         } else {
@@ -1074,7 +1074,7 @@ void func_80B98728(EnZot* this, GlobalContext* globalCtx) {
 
 void func_80B98998(EnZot* this, GlobalContext* globalCtx) {
     this->unk_2F2 &= ~8;
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80B98728;
         func_80B98178(this, globalCtx);
     } else if ((this->actor.xzDistToPlayer < 100.0f) && Actor_IsPlayerFacingActor(&this->actor, 0x3000, globalCtx) &&
@@ -1135,7 +1135,7 @@ void func_80B98AD0(EnZot* this, GlobalContext* globalCtx) {
 }
 
 void func_80B98BF4(EnZot* this, GlobalContext* globalCtx) {
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
         if (gSaveContext.weekEventReg[41] & 0x20) {
             func_801518B0(globalCtx, 0x12B7, &this->actor);
@@ -1156,7 +1156,7 @@ void func_80B98CA8(EnZot* this, GlobalContext* globalCtx) {
         this->actionFunc = func_80B98BF4;
         this->actor.flags |= 0x10000;
         func_800B8614(&this->actor, &globalCtx->state, 120.0f);
-    } else if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    } else if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80B98AD0;
         func_80B98A4C(this, globalCtx);
     } else {
@@ -1253,7 +1253,7 @@ void func_80B98F94(EnZot* this, GlobalContext* globalCtx) {
 void func_80B990A4(EnZot* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 2, 0x400, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80B98F94;
         func_80B98E10(this, globalCtx);
     } else if (Actor_IsPlayerFacingActor(&this->actor, 0x3000, globalCtx) && (this->actor.xzDistToPlayer < 100.0f)) {
@@ -1302,7 +1302,7 @@ void func_80B991E4(EnZot* this, GlobalContext* globalCtx) {
 }
 
 void func_80B992C0(EnZot* this, GlobalContext* globalCtx) {
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80B991E4;
         func_80B99160(this, globalCtx);
         this->actor.speedXZ = 0.0f;

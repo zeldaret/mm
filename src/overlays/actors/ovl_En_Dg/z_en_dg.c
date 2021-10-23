@@ -302,7 +302,7 @@ void func_80989864(EnDg* this, GlobalContext* globalCtx) {
         sp38.x = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.x;
         sp38.y = this->actor.world.pos.y;
         sp38.z = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.z;
-        func_800BBDAC(globalCtx, &this->actor, &sp38, 10.0f, 0, 2.0f, 300, 0, 1);
+        Actor_SpawnFloorDustRing(globalCtx, &this->actor, &sp38, 10.0f, 0, 2.0f, 300, 0, 1);
     }
 }
 
@@ -1095,7 +1095,7 @@ void func_8098BB10(EnDg* this, GlobalContext* globalCtx) {
 }
 
 void func_8098BBEC(EnDg* this, GlobalContext* globalCtx) {
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
         func_80989D38(this, globalCtx);
         this->actionFunc = func_8098BC54;

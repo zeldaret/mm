@@ -264,7 +264,7 @@ void EnOssan_UpdateCursorPos(GlobalContext* globalCtx, EnOssan* this) {
 void EnOssan_EndInteraction(GlobalContext* globalCtx, EnOssan* this) {
     Player* player = GET_PLAYER(globalCtx);
 
-    Actor_IsTalking(&this->actor, &globalCtx->state);
+    Actor_RequestTalk(&this->actor, &globalCtx->state);
     globalCtx->msgCtx.unk11F22 = 0x43;
     globalCtx->msgCtx.unk12023 = 4;
     Interface_ChangeAlpha(50);
@@ -330,7 +330,7 @@ void EnOssan_Idle(EnOssan* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     func_8013D9C8(globalCtx, this->limbRotTableY, this->limbRotTableZ, 19);
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         player->stateFlags2 |= 0x20000000;
         EnOssan_SetupAction(this, EnOssan_BeginInteraction);
         if (this->cutsceneState == ENOSSAN_CUTSCENESTATE_STOPPED) {
@@ -1136,7 +1136,7 @@ void EnOssan_ItemPurchased(EnOssan* this, GlobalContext* globalCtx) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     }
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         func_80151938(globalCtx, 0x642);
     } else {
         func_800B85E0(&this->actor, &globalCtx->state, 400.0f, -1);

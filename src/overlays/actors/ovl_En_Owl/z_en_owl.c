@@ -231,7 +231,7 @@ void func_8095A920(EnOwl* this, GlobalContext* globalCtx) {
 }
 
 s32 func_8095A978(EnOwl* this, GlobalContext* globalCtx, u16 textId, f32 targetDist, f32 arg4) {
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         return true;
     }
 
@@ -245,7 +245,7 @@ s32 func_8095A978(EnOwl* this, GlobalContext* globalCtx, u16 textId, f32 targetD
 }
 
 s32 func_8095A9FC(EnOwl* this, GlobalContext* globalCtx, u16 textId) {
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         return true;
     }
 
@@ -507,7 +507,7 @@ void func_8095B480(EnOwl* this, GlobalContext* globalCtx) {
 
 void func_8095B574(EnOwl* this, GlobalContext* globalCtx) {
     func_8095A920(this, globalCtx);
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_8095BA84;
         func_801A3098(0x45);
         this->actionFlags |= 0x40;
@@ -718,7 +718,7 @@ void func_8095BA84(EnOwl* this, GlobalContext* globalCtx) {
 
 void func_8095BE0C(EnOwl* this, GlobalContext* globalCtx) {
     func_8095A920(this, globalCtx);
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_8095BA84;
         func_801A3098(0x45);
         this->unk_406 = 1;

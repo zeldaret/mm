@@ -425,7 +425,7 @@ void EnMaYto_DefaultWait(EnMaYto* this, GlobalContext* globalCtx) {
         EnMaYto_ChangeAnim(this, 11);
     }
 
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         EnMaYto_DefaultStartDialogue(this, globalCtx);
         EnMaYto_SetupDefaultDialogueHandler(this);
     } else if (ABS_ALT(direction) < 0x1555) {
@@ -535,13 +535,13 @@ void EnMaYto_SetupDinnerWait(EnMaYto* this) {
 void EnMaYto_DinnerWait(EnMaYto* this, GlobalContext* globalCtx) {
     s16 direction = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
 
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         EnMaYto_DinnerStartDialogue(this, globalCtx);
         EnMaYto_SetupDinnerDialogueHandler(this);
     } else {
         Actor* child = this->actor.child;
 
-        if (child != NULL && Actor_IsTalking(child, &globalCtx->state)) {
+        if (child != NULL && Actor_RequestTalk(child, &globalCtx->state)) {
             func_800B86C8(&this->actor, &globalCtx->state, &this->actor);
             EnMaYto_DinnerStartDialogue(this, globalCtx);
             EnMaYto_SetupDinnerDialogueHandler(this);
@@ -730,13 +730,13 @@ void EnMaYto_BarnWait(EnMaYto* this, GlobalContext* globalCtx) {
     s16 direction = this->actor.shape.rot.y + 0x471C;
 
     direction -= this->actor.yawTowardsPlayer;
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         EnMaYto_BarnStartDialogue(this, globalCtx);
         EnMaYto_SetupBarnDialogueHandler(this);
     } else {
         Actor* child = this->actor.child;
 
-        if (child != NULL && Actor_IsTalking(child, &globalCtx->state)) {
+        if (child != NULL && Actor_RequestTalk(child, &globalCtx->state)) {
             func_800B86C8(&this->actor, &globalCtx->state, &this->actor);
             EnMaYto_BarnStartDialogue(this, globalCtx);
             EnMaYto_SetupBarnDialogueHandler(this);
@@ -912,7 +912,7 @@ void EnMaYto_SetupAfterMilkRunInit(EnMaYto* this) {
 void EnMaYto_AfterMilkRunInit(EnMaYto* this, GlobalContext* globalCtx) {
     this->actor.flags |= 0x10000;
 
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
 
         if (gSaveContext.weekEventReg[0x34] & 1) { // if (ProtectedCremia)
@@ -999,7 +999,7 @@ void EnMaYto_SetupPostMilkRunExplainReward(EnMaYto* this) {
 }
 
 void EnMaYto_PostMilkRunExplainReward(EnMaYto* this, GlobalContext* globalCtx) {
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         if (this->unk310 == 1) {
             // Romani's mask explanation
             EnMaYto_SetFaceExpression(this, 0, 1);

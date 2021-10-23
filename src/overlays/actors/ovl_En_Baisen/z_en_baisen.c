@@ -151,7 +151,7 @@ void func_80BE87FC(EnBaisen* this) {
 }
 
 void func_80BE887C(EnBaisen* this, GlobalContext* globalCtx) {
-    if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         func_80BE895C(this, globalCtx);
     } else {
         if (this->paramCopy != 0) {

@@ -855,7 +855,7 @@ void func_80BA7434(EnRailgibud* this, GlobalContext* globalCtx) {
 
 void func_80BA7578(EnRailgibud* this, GlobalContext* globalCtx) {
     if ((this->textId == 0) && (this->unk_3F8 == 0)) {
-        if (Actor_IsTalking(&this->actor, &globalCtx->state)) {
+        if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
             this->unk_3FA = 1;
             func_801518B0(globalCtx, 0x13B2, &this->actor);
             this->textId = 0x13B2;
