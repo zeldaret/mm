@@ -12,12 +12,12 @@ typedef struct EnTanron3 {
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ Vec3s jointTable[10];
     /* 0x1C4 */ Vec3s morphTable[10];
-    /* 0x200 */ s16 unk_200;
+    /* 0x200 */ s16 timer;
     /* 0x202 */ u8 unk_202;
     /* 0x203 */ u8 unk_203;
     /* 0x204 */ s16 unk_204[3];
-    /* 0x20A */ s16 unk_20A;
-    /* 0x20C */ s16 unk_20C;
+    /* 0x20A */ s16 deathTimer;
+    /* 0x20C */ s16 fogTimer;
     /* 0x210 */ Vec3f unk_210;
     /* 0x21C */ Vec3f unk_21C;
     /* 0x228 */ Vec3f unk_228;
@@ -26,7 +26,7 @@ typedef struct EnTanron3 {
     /* 0x238 */ s16 unk_238;
     /* 0x23C */ f32 unk_23C;
     /* 0x240 */ f32 unk_240;
-    /* 0x244 */ f32 unk_244;
+    /* 0x244 */ f32 waterSurfaceYPos;
     /* 0x248 */ Vec3s unk_248;
     /* 0x250 */ s32 unk_250;
     /* 0x254 */ s32 unk_254;

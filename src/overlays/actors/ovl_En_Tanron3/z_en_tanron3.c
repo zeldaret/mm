@@ -126,7 +126,7 @@ void EnTanron3_Init(Actor* thisx, GlobalContext* globalCtx) {
     func_80BB897C(this, globalCtx);
     this->actor.flags &= ~1;
     this->unk_250 = (s32)Rand_ZeroFloat(500000.0f);
-    this->unk_244 = 430.0f;
+    this->waterSurfaceYPos = 430.0f;
     boss03Parent = (Boss03*)this->actor.parent;
 }
 
@@ -138,18 +138,18 @@ void EnTanron3_SpawnBubbles(EnTanron3* this, GlobalContext* globalCtx) {
     static Color_RGBA8 sPrimColor = { 100, 55, 55, 255 };
     static Color_RGBA8 sEnvColor = { 50, 10, 10, 255 };
     s32 i;
-    Vec3f sp98;
-    Vec3f sp8C;
+    Vec3f velocity;
+    Vec3f acceleration;
 
     for (i = 0; i < 20; i++) {
         SysMatrix_InsertYRotation_f(Rand_ZeroFloat(6.2831855f), 0);
         SysMatrix_RotateStateAroundXAxis(Rand_ZeroFloat(6.2831855f));
-        SysMatrix_GetStateTranslationAndScaledZ(Rand_ZeroFloat(3.0f) + 2.0f, &sp98);
-        sp8C.x = sp98.x * -0.05f;
-        sp8C.y = sp98.y * -0.05f;
-        sp8C.z = sp98.z * -0.05f;
-        EffectSsDtBubble_SpawnCustomColor(globalCtx, &this->actor.world.pos, &sp98, &sp8C, &sPrimColor, &sEnvColor,
-                                          Rand_ZeroFloat(30.0f) + 70.0f, Rand_ZeroFloat(5.0f) + 15.0f, 0);
+        SysMatrix_GetStateTranslationAndScaledZ(Rand_ZeroFloat(3.0f) + 2.0f, &velocity);
+        acceleration.x = velocity.x * -0.05f;
+        acceleration.y = velocity.y * -0.05f;
+        acceleration.z = velocity.z * -0.05f;
+        EffectSsDtBubble_SpawnCustomColor(globalCtx, &this->actor.world.pos, &velocity, &acceleration, &sPrimColor,
+                                          &sEnvColor, Rand_ZeroFloat(30.0f) + 70.0f, Rand_ZeroFloat(5.0f) + 15.0f, 0);
     }
 }
 
@@ -165,7 +165,7 @@ void func_80BB897C(EnTanron3* this, GlobalContext* globalCtx) {
     this->unk_228.y = randPlusMinusPoint5Scaled(100.0f);
     this->unk_228.z = randPlusMinusPoint5Scaled(500.0f);
     Math_Vec3f_Copy(&this->unk_21C, &this->actor.world.pos);
-    this->unk_200 = Rand_ZeroFloat(100.0f);
+    this->timer = Rand_ZeroFloat(100.0f);
 }
 
 void func_80BB8A48(EnTanron3* this, GlobalContext* globalCtx) {
@@ -182,7 +182,7 @@ void func_80BB8A48(EnTanron3* this, GlobalContext* globalCtx) {
     this->skelAnime.animCurrentFrame = 4.0f;
     if (((player->actor.bgCheckFlags & 1) != 0) && (player->actor.shape.feetPos[0].y >= 438.0f)) {
         this->unk_202 = 1;
-    } else if (this->unk_202 != 0 && this->unk_204[2] == 0 && ((this->unk_200 & 0x1F) == 0)) {
+    } else if (this->unk_202 != 0 && this->unk_204[2] == 0 && ((this->timer & 0x1F) == 0)) {
         temp_f18 = this->unk_21C.x - player->actor.world.pos.x;
         sp50 = this->unk_21C.z - player->actor.world.pos.z;
         if (sqrtf(SQ(temp_f18) + SQ(sp50)) < 500.0f) {
@@ -190,7 +190,7 @@ void func_80BB8A48(EnTanron3* this, GlobalContext* globalCtx) {
             this->unk_204[2] = 150;
         }
     }
-    if (this->actor.world.pos.y < this->unk_244) {
+    if (this->actor.world.pos.y < this->waterSurfaceYPos) {
         this->unk_203 = 0;
         switch (this->unk_202) {
             case 0:
@@ -198,7 +198,7 @@ void func_80BB8A48(EnTanron3* this, GlobalContext* globalCtx) {
                 this->unk_236 = 0x1000;
                 this->unk_254 = 0x3A98;
                 Math_Vec3f_Copy(&this->unk_21C, &player->actor.world.pos);
-                if ((this->unk_200 & 0xF) == 0) {
+                if ((this->timer & 0xF) == 0) {
                     if ((Rand_ZeroOne() < 0.5f) && (this->actor.xzDistToPlayer <= 200.0f)) {
                         Audio_PlayActorSound2(&this->actor, NA_SE_EN_PIRANHA_ATTACK);
                     }
@@ -209,7 +209,7 @@ void func_80BB8A48(EnTanron3* this, GlobalContext* globalCtx) {
                 }
                 break;
             case 1:
-                if ((boss03Parent->unk_324 != 0) && ((this->unk_200 & 7) == 0)) {
+                if ((boss03Parent->unk_324 != 0) && ((this->timer & 7) == 0)) {
                     this->unk_254 = 0x4E20;
                     this->actor.speedXZ = 6.0f;
                 } else {
@@ -250,7 +250,7 @@ void func_80BB8A48(EnTanron3* this, GlobalContext* globalCtx) {
         switch (this->unk_203) {
             case 0:
                 this->actor.gravity = -1.0f;
-                this->unk_210.y = (this->unk_244 - 50.0f);
+                this->unk_210.y = (this->waterSurfaceYPos - 50.0f);
                 this->unk_204[1] = 25;
                 Math_ApproachS(&this->actor.world.rot.x, 0x3000, 5, 0xBD0);
                 if ((this->actor.bgCheckFlags & 8) != 0) {
@@ -284,7 +284,7 @@ void func_80BB8A48(EnTanron3* this, GlobalContext* globalCtx) {
                 Math_ApproachS(&this->actor.shape.rot.y, this->unk_248.y, 3, 0x500);
                 Math_ApproachS(&this->actor.shape.rot.x, this->unk_248.x, 3, 0xC00);
                 Math_ApproachS(&this->actor.shape.rot.z, this->unk_248.z, 3, 0xC00);
-                if (((Rand_ZeroOne() < 0.5f) & !(this->unk_200 & 3)) != 0) {
+                if (((Rand_ZeroOne() < 0.5f) & !(this->timer & 3)) != 0) {
                     Vec3f sp38;
 
                     sp38.x = randPlusMinusPoint5Scaled(30.0f) + this->actor.world.pos.x;
@@ -345,9 +345,9 @@ void EnTanron3_CheckCollisions(EnTanron3* this, GlobalContext* globalCtx) {
     }
     if (this->acCollider.base.acFlags & AC_HIT) {
         this->acCollider.base.acFlags &= ~AC_HIT;
-        if (this->unk_20A == 0) {
-            this->unk_20A = 15;
-            this->unk_20C = 15;
+        if (this->deathTimer == 0) {
+            this->deathTimer = 15;
+            this->fogTimer = 15;
             EnTanron3_SetupKill(this, globalCtx);
             boss03Parent->unk_324 = 20;
         }
@@ -361,24 +361,24 @@ void EnTanron3_Update(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f splashPos;
 
     if (KREG(63) == 0) {
-        this->unk_200 += 1;
+        this->timer += 1;
         for (i = 0; i < 3; i++) {
             if (this->unk_204[i] != 0) {
                 this->unk_204[i]--;
             }
         }
-        if (this->unk_20A != 0) {
-            this->unk_20A--;
+        if (this->deathTimer != 0) {
+            this->deathTimer--;
         }
-        if (this->unk_20C != 0) {
-            this->unk_20C--;
+        if (this->fogTimer != 0) {
+            this->fogTimer--;
         }
         this->actionFunc(this, globalCtx);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, 10.0f, 20.0f, 5);
-        if (((this->actor.prevPos.y < this->unk_244) && (this->unk_244 <= this->actor.world.pos.y)) ||
-            ((this->actor.prevPos.y > this->unk_244) && (this->unk_244 >= this->actor.world.pos.y))) {
+        if (((this->actor.prevPos.y < this->waterSurfaceYPos) && (this->waterSurfaceYPos <= this->actor.world.pos.y)) ||
+            ((this->actor.prevPos.y > this->waterSurfaceYPos) && (this->waterSurfaceYPos >= this->actor.world.pos.y))) {
             splashPos.x = this->actor.world.pos.x;
-            splashPos.y = this->unk_244 + 10.0f;
+            splashPos.y = this->waterSurfaceYPos + 10.0f;
             splashPos.z = this->actor.world.pos.z;
             EffectSsGSplash_Spawn(globalCtx, &splashPos, NULL, NULL, 1, 500);
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_OUT_OF_WATER);
@@ -416,7 +416,7 @@ void EnTanron3_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
-    if ((this->unk_20C & 1) != 0) {
+    if ((this->fogTimer & 1) != 0) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
     }
     SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
