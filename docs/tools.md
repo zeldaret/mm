@@ -1,4 +1,5 @@
 # Table of Contnets
+
 - [Table of Contnets](#table-of-contnets)
   - [Introduction](#introduction)
   - [In the repository](#in-the-repository)
@@ -24,7 +25,7 @@
   - [External tools](#external-tools)
     - [mips_to_c](#mips_to_c)
     - [Permuter](#permuter)
-  - [vbindiff](#vbindiff)
+    - [vbindiff](#vbindiff)
     - [Texture64](#texture64)
     - [Z64Utils](#z64utils)
   - [Retired tools](#retired-tools)
@@ -44,9 +45,10 @@ There are a variety of tools that are used to assist in the decompilation proces
 
 Your best friend for most of the decompilation work. Compares the original assembly extracted from the ROM instruction-for-instruction with what the code you have written compiles to.
 
-To use `diff.py`, you need a copy of a matching build folder to diff against. In MM, this can be made with `make diff-init`, which will rebuild both ROMs, check for OK, and copy the build folder and the roms. 
+To use `diff.py`, you need a copy of a matching build folder to diff against. In MM, this can be made with `make diff-init`, which will rebuild both ROMs, check for OK, and copy the build folder and the roms.
 
 `diff.py` takes the function symbol name as the main argument:
+
 ```bash
 ./diff.py <flags> ObjTree_Init
 ```
@@ -59,12 +61,13 @@ The recommended flags used are `-mwo`, `-mwo3`, or `-mwob`:
 - `-w` ("watch") will watch the C file containing the function (and only the C file!) and automatically recompile when it changes.
 - `-o` ("object file") uses only the `.o` file. This is faster than without, and means you can see symbol names, but obscures the data behind relative addresses: if you have differences in the .text section that are invisible with `-o`, or you suspect the data is shifted in some way, try without
 - `-3` creates a three-way diff: TARGET/CURRENT/PREVIOUS, which is particularly useful for seeing changes.
-- `-3` creates a three-way diff: TARGET/CURRENT/BASE, where BASE is the version from when the program was started.
+- `-b` creates a three-way diff: TARGET/CURRENT/BASE, where BASE is the version from when the program was started.
 - `-s` ("stop") stops diffing at the next `jr $ra`, commonly the end of the function. Beware that some functions with conditionals may have multiple `jr $ra`s, so this feature can chop the bottom off the diff.
 
 There are numerous other options that are not used as often (changing the diffing algorithm, viewing the source code in the diff, ...), and the various flags have dependencies among themselves, so check its documentation with `-h` to get fuller information.
 
 Colour explanations (sadly GitHub markdown does not allow for fancy colouring here):
+
 - white/grey is matching instructions
 - red is missing instructions
 - green is extra instructions
@@ -72,28 +75,28 @@ Colour explanations (sadly GitHub markdown does not allow for fancy colouring he
 - yellow means the instruction itself is correct, but the registers used are not (*regalloc*, register allocation)
 - Each register gets its own colour when the regalloc is wrong, which makes it much easier to follow their usage.
 - a branch is indicated by coloured `~>`s on the right of the instruction, and their targets by the same colour `~>` on the left of the instruction (remember delay slots!). The colours matching is a good indication that the branches are correct, although not infallible, since there are only so many colours it will use.
-- ~~A word of caution: different function symbols will *not* be coloured: you have to look at them yourself.~~ now fixed
 - occasionally instructions will be coloured a <span style="color:#767676; font-weight: bold; background-color:#0C0C0C; padding: .2rem">dark grey</span>. You should consider this the same as blue.
 
+Example Diff:
+
+![Diff](images/diff.png)
 
 ### `tools/m2ctx.py`
 
-Pass it the path to a C file to generate the context for that C file, to help (mips_to_c)[#mips_to_c]. Writes to a file called `ctx.c` in the root directory of the repo.
-
+Pass it the path to a C file to generate the context for that C file, to help [mips_to_c](#mips_to_c). Writes to a file called `ctx.c` in the root directory of the repo.
 
 ### `tools/overlayhelpers/actor_symbols.py`
 
 Takes a VRAM or VROM address to get overlay file and offset for an Actor.
 
-
 ### `first_diff.py`
 
 Gives you the addresses of first difference in the ROM, the difference, and a count of how many bytes differ, or if the whole ROM is shifted.
 
-
 ### `sym_info.py`
 
 Can be given a symbol (function or variable name, for example), and will find its ROM, VRAM, and file using the map file. E.g.
+
 ```bash
 $ ./sym_info.py ObjTree_Init
 Symbol ObjTree_Init (RAM: 0x80B9A0B0, ROM: 0xFFF210, build/src/overlays/actors/ovl_Obj_Tree/z_obj_tree.o)
@@ -105,7 +108,6 @@ Searches for similar functions to the one you are passing, and it tells you whic
 
 (Still a little broken)
 
-
 ### `tools/get_actor_sizes.py`
 
 Generates a list of actors with various statistics about their function sizes. Run with `-h` for information on flags.
@@ -116,7 +118,7 @@ Generates a list of actors with various statistics about their function sizes. R
 
 Gives the progress output that the website uses. Run for that warm glow.
 
-### `tools/regconvert.py` 
+### `tools/regconvert.py`
 
 Convert `mips2c`'s `gGameInfo->data[n]` output (or a raw offset) into the appropriate variable in the REG pages. Can also be run on a file to mass-convert them: run with `-h` for details.
 
@@ -135,12 +137,15 @@ Provided it is kept up-to-date with function renames, you can run this to automa
 ### `tools/timeconv.py`
 
 Changes a raw `u16` value into a macro for clock time in-game:
+
 ```bash
 $ ./tools/timeconv.py 0x4800
 6,45 -> 0x4800
 CLOCK_TIME(6, 45)
 ```
+
 Either dec or hex input will work. It will warn if the macro output will not match:
+
 ```bash
 $ ./tools/timeconv.py 44102
 16,09 -> 0xAC44
@@ -160,7 +165,7 @@ Replaces VT symbols by their corresponding macros. Not many files in MM need thi
 
 Runs a make from clean and checks if new warnings have been produced: we use Jenkins to check this as well, but you should run this before opening a PR.
 
-You can specify how many threads you would like this to run with by adding the `-jN` flag. Where N is the number of threads. By default this will run using 1 thread (-j1).
+You can specify how many threads you would like this to run with by adding the `-jN` flag. Where N is the number of threads. By default this will run using 1 thread (i.e. `-j1`).
 
 Run `check_new_warnings.sh -h` for more information.
 
@@ -189,7 +194,6 @@ There are different ways you can run mpips2c:
 
 mips_to_c's accuracy can be improved when some context to what the existing C source code is like. See more on how to generate this in [m2ctx](#m2ctx.py)
 
-
 ### Permuter
 
 (Exists in a subrepo.)
@@ -201,13 +205,17 @@ To set up the permuter, clone the repository <https://github.com/simonlindholm/d
 ```bash
 ./import.py <path/to/file.c> <path/to/func.s>
 ```
+
 on the files to import the code on which to run the permuter to `nonmatchings/func`, and then
+
 ```bash
 ./permuter.py <nonmatchings/func>
 ```
+
 will run the permuter
 
-Flags: 
+Flags:
+
 - `-jN` for multithreading
 - `-J` for using permuter@home (ask in Discord for someone to vouch for you to use this). (Can be combined with `-jN`.)
 - `--better-only` only report improvements on base score (and not ties)
@@ -216,21 +224,17 @@ Flags:
 
 More information on these can be found in the permuter's own documentation. There are macros that can be added to the C to get the permuter to run particular types of transformation; these are also detailed in its manual.
 
-
-## vbindiff
+### vbindiff
 
 Your fallback for anything that you need to correct that is not visible in `diff.py`. Typically you use it to open the nonmatching uncompressed ROM and the uncompressed baserom and look at the differences highlighted in red. `first_diff.py` will usually tell you where to look. Controls are detailed in the program itself.
-
 
 ### Texture64
 
 Probably the best of the Nintendo 64 texture viewing programs. It is quite simple, but very good for the one thing that it does.
 
-
 ### Z64Utils
 
 Basically essential for convenient analysis of object files. Can analyse and display DisplayLists, some textures, skeletons, animations, and a few other resources. Download from <https://github.com/Random06457/Z64Utils>.
-
 
 ## Retired tools
 
