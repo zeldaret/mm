@@ -38,8 +38,10 @@ void func_8092AB14(EnIk* this, GlobalContext* globalCtx);
 void func_8092AB50(EnIk* this);
 void func_8092ABD8(EnIk* this, GlobalContext* globalCtx);
 void func_8092AC4C(EnIk* this, s32 arg1);
-
+void func_8092ACFC(EnIk* this, GlobalContext* globalCtx);
 void func_8092ADB4(EnIk* this);
+void func_8092AE14(EnIk* this, GlobalContext* globalCtx);
+void func_8092AFD4(EnIk* this, GlobalContext* globalCtx);
 
 void func_8092B03C(EnIk* this);
 void func_8092B098(EnIk* this, GlobalContext* globalCtx);
@@ -258,6 +260,7 @@ extern AnimationHeader D_06000CE8;
 extern AnimationHeader D_060015F8;
 extern AnimationHeader D_06001ABC;
 extern AnimationHeader D_06002484;
+extern AnimationHeader D_0600367C;
 extern UNK_TYPE D_0600391C;
 extern UNK_TYPE D_06004A04;
 extern UNK_TYPE D_06005254;
@@ -336,21 +339,15 @@ s32 func_80929D04(EnIk* this) {
     return 0;
 }
 
-// this is a weird one...
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ik/func_80929E2C.s")
-// void func_80929E2C(EnIk* this)
-// {
-
-//     if ((func_80929C80 == 0) && ((func_80929D04(this) == 0)))
-//     {
-//         if (this->unk_2F4 != 0)
-//         {
-//             func_8092A124(this);
-//             return;
-//         }
-//         func_80929FC8(this);
-//     }
-// }
+void func_80929E2C(EnIk* this, GlobalContext* globalCtx) {
+    if (!func_80929C80(this, globalCtx) && !func_80929D04(this)) {
+        if (this->unk_2F4 != 0) {
+            func_8092A124(this);
+        } else {
+            func_80929FC8(this);
+        }
+    }
+}
 
 void func_80929E88(EnIk* this) {
     f32 temp_f0;
@@ -581,36 +578,86 @@ void func_8092A994(EnIk* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ik/func_8092AA6C.s")
-// void func_8092AA6C(EnIk* this) {
-//     f32 sp28;
-//     f32 phi_f0;
+void func_8092AA6C(EnIk* this) {
+    SkelAnime_ChangeAnim(&this->skelAnime, &D_06002E7C, (this->unk_2F4 != 0) ? 2.0f : 1.0f, 0.0f,
+                         SkelAnime_GetFrameCount(&D_06002484), 3, -4.0f);
+    this->actionFunc = func_8092AB14;
+}
 
-//     if (this->unk_2F4 != 0) {
-//         phi_f0 = 2.0f;
-//     } else {
-//         phi_f0 = 1.0f;
-//     }
-//     sp28 = phi_f0;
-//     SkelAnime_ChangeAnim(&this->skelAnime, &D_06002E7C, phi_f0, 0.0f, SkelAnime_GetFrameCount(&D_06002484), 3, -4.0f);
-//     this->actionFunc = func_8092AB14;
-// }
+void func_8092AB14(EnIk* this, GlobalContext* globalCtx) {
+    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) != 0) {
+        func_80929E2C(this, globalCtx);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ik/func_8092AB14.s")
+void func_8092AB50(EnIk* this) {
+    this->actor.speedXZ = 0.0f;
+    SkelAnime_ChangeAnim(&this->skelAnime, &D_0600391C, 2.0f, 0.0f, SkelAnime_GetFrameCount(&D_0600391C), 2, -2.0f);
+    this->unk_2F6 = 0x14;
+    this->actionFunc = func_8092ABD8;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ik/func_8092AB50.s")
+void func_8092ABD8(EnIk* this, GlobalContext* globalCtx) {
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->colliderTris);
+    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
+        this->unk_2F6 -= 1;
+        if (this->unk_2F6 == 0) {
+            func_80929E2C(this, globalCtx);
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ik/func_8092ABD8.s")
+void func_8092AC4C(EnIk* this, s32 arg1) {
+    s16 temp_v0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ik/func_8092AC4C.s")
+    if (arg1 != 0) {
+        func_800BE504(this, &this->colliderCylinder);
+    }
+    this->actor.speedXZ = 6.0f;
+    temp_v0 = (this->actor.world.rot.y - this->actor.shape.rot.y) + 0x8000;
+    if (ABS_ALT(temp_v0) < 0x4001) {
+        SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06005254, -4.0f);
+    } else {
+        SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_0600367C, -4.0f);
+    }
+    this->actionFunc = func_8092ACFC;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ik/func_8092ACFC.s")
+void func_8092ACFC(EnIk* this, GlobalContext* globalCtx) {
+    Math_StepToF(&this->actor.speedXZ, 0.0f, 1.0f);
+    if (this->unk_2FA != 0) {
+        Play_CameraSetAtEye(globalCtx, this->unk_2FA, &this->actor.focus,
+                            &Play_GetCamera(globalCtx, this->unk_2FA)->eye);
+    }
+    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) != 0) {
+        if (this->unk_2FA != 0) {
+            ActorCutscene_Stop(this->actor.cutscene);
+            this->unk_2FA = 0;
+            func_80929E88(this);
+        } else {
+            func_80929E2C(this, globalCtx);
+        }
+    } else {
+        this->actor.colorFilterTimer = 0xC;
+        this->unk_2FC = 0xC;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ik/func_8092ADB4.s")
+void func_8092ADB4(EnIk* this) {
+    this->actor.speedXZ = 0.0f;
+    SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06004A04, -4.0f);
+    this->unk_2F6 = 0x18;
+    Audio_PlayActorSound2(&this->actor, NA_SE_EN_IRONNACK_DEAD);
+    this->actionFunc = func_8092AE14;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ik/func_8092AE14.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ik/func_8092AFB4.s")
+void func_8092AFB4(EnIk* this) {
+    this->unk_2FC = 0;
+    this->actionFunc = func_8092AFD4;
+    this->actor.speedXZ = 0.0f;
+}
 
 void func_8092AFD4(EnIk* this, GlobalContext* globalCtx) {
     if (this->unk_2F6) {
