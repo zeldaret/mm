@@ -928,7 +928,7 @@ void func_800BE3D0(Actor* actor, s16 arg1, Vec3s* arg2);
 void func_800BE504(Actor* actor, ColliderCylinder* collider);
 void func_800BE568(Actor* actor, ColliderSphere* collider);
 void func_800BE5CC(Actor* actor, ColliderJntSph* collider, s32 arg2);
-// void func_800BE63C(void);
+s32 func_800BE63C(struct EnBox* box);
 void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 arg3, f32 arg4, f32 arg5, f32 arg6, u8 mode);
 void func_800BF7CC(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s32 arg3, s32 arg4, f32 arg5, f32 arg6);
 void ActorOverlayTable_FaultPrint(void* arg0, void* arg1);

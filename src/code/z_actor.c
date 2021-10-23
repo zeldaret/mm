@@ -7,6 +7,7 @@
 #include "global.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
+#include "overlays/actors/ovl_En_Box/z_en_box.h"
 
 // bss
 extern FaultClient D_801ED8A0;    // 2 funcs
@@ -4417,20 +4418,12 @@ void func_800BE5CC(Actor* actor, ColliderJntSph* collider, s32 arg2) {
     }
 }
 
-#if 0
-// unk_1F1 is way outside of Actor
-s32 func_800BE63C(Actor* actor) {
-    u8 temp_v0;
-
-    temp_v0 = actor->unk_1F1;
-    if ((temp_v0 == 5) || (temp_v0 == 6) || (temp_v0 == 7) || (temp_v0 == 8) || (temp_v0 == 0xC)) {
-        return 1;
+s32 func_800BE63C(EnBox* box) {
+    if ((box->unk_1F1 == 5) || (box->unk_1F1 == 6) || (box->unk_1F1 == 7) || (box->unk_1F1 == 8) || (box->unk_1F1 == 0xC)) {
+        return true;
     }
-    return 0;
+    return false;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE63C.s")
-#endif
 
 UNK_TYPE4 D_801AEFA8[] = {
     0x04091DE0,
