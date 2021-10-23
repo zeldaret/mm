@@ -3390,60 +3390,43 @@ u8 D_801AED8C[] = {
     ACTORCAT_CHEST, ACTORCAT_SWITCH, ACTORCAT_PROP, ACTORCAT_MISC,       ACTORCAT_DOOR, ACTORCAT_SWITCH,
 };
 
-#if 0
-// static bss?
 void func_800BB8EC(GlobalContext* globalCtx, ActorContext* actorCtx, Actor** arg2, Actor** arg3, Player* player) {
-    Actor* temp_v0;
-    Actor* temp_v0_2;
-    u8* phi_s1;
-    s32 phi_s0;
-    s8* phi_s1_2;
-    s32 phi_s0_2;
+    u8* actorCategories;
+    s32 i;
 
-    D_801ED8C4 = NULL;
-    D_801ED8C0 = NULL;
-    D_801ED8BC = NULL;
-    D_801ED8B8 = NULL;
-
+    D_801ED8B8 = D_801ED8BC = D_801ED8C0 = D_801ED8C4 = NULL;
     D_801ED8C8 = D_801ED8D0 = D_801ED8CC = FLT_MAX;
-    D_801ED8D8 = 0x7FFFFFFF;
-    D_801ED8D4 = 0x7FFFFFFF;
+    D_801ED8D4 = D_801ED8D8 = 0x7FFFFFFF; // INT_MAX?
 
     actorCtx->targetContext.unk90 = NULL;
     D_801ED8DC = player->actor.shape.rot.y;
 
-    phi_s1 = D_801AED8C;
-    phi_s0 = 0;
+    actorCategories = D_801AED8C;
 
-    while (phi_s0 < 3) {
-        func_800BB604(globalCtx, actorCtx, player, *phi_s1);
-        phi_s0 = phi_s0 + 1;
-        phi_s1 = phi_s1 + 1;
+    for (i = 0; i < 3; i++) {
+        func_800BB604(globalCtx, actorCtx, player, *actorCategories);
+        actorCategories++;
     }
 
-    if ((D_801ED8B8 == 0)) {
-        while (phi_s0 < 0xC) {
-            func_800BB604(globalCtx, actorCtx, player, *phi_s1);
-            phi_s0 = phi_s0 + 1;
-            phi_s1 += 1;
+    if (D_801ED8B8 == NULL) {
+        for (; i < ARRAY_COUNT(D_801AED8C); i++) {
+            func_800BB604(globalCtx, actorCtx, player, *actorCategories);
+            actorCategories++;
         }
     }
 
-    if (D_801ED8B8 == 0) {
-        *arg2 = (Actor* ) D_801ED8BC;
+    if (D_801ED8B8 == NULL) {
+        *arg2 = D_801ED8BC;
     } else {
         *arg2 = D_801ED8B8;
     }
 
-    if (D_801ED8C0 == 0) {
-        *arg3 = (s32) D_801ED8C4;
-        return;
+    if (D_801ED8C0 == NULL) {
+        *arg3 = D_801ED8C4;
+    } else {
+        *arg3 = D_801ED8C0;
     }
-    *arg3 = (s32) D_801ED8C0;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BB8EC.s")
-#endif
 
 void Enemy_StartFinishingBlow(GlobalContext* globalCtx, Actor* actor) {
     globalCtx->actorCtx.freezeFlashTimer = 5;
@@ -4425,14 +4408,14 @@ s32 func_800BE63C(EnBox* box) {
     return false;
 }
 
-UNK_TYPE4 D_801AEFA8[] = {
+TexturePtr* D_801AEFA8[] = {
     0x04091DE0,
     0x04091FE0,
     0x040921E0,
     0x040923E0,
 };
 
-// has lots of gfx macros
+// has lots of gfx macros and a switch
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE680.s")
 
 static Color_RGBA8 D_801AEFB8 = { 170, 255, 255, 255 };
