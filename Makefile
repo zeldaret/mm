@@ -231,7 +231,7 @@ disasm:
 	$(RM) -rf asm data
 	python3 tools/disasm/disasm.py
 
-diff-init: all
+diff-init: uncompressed
 	$(RM) -rf expected/
 	mkdir -p expected/
 	cp -r build expected/build
