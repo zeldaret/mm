@@ -85,57 +85,27 @@ static Vec3f D_80971DCC[] = {
     { 50.0f, 40.0f, -30.0f }, { -50.0f, 40.0f, -30.0f }, { 0.0f, 50.0f, 60.0f },
 };
 Vec3f D_80971E38[] = {
-    { 0.0f, 55.0f, 60.0f },
-    { 0.0f, 55.0f, 60.0f },
-    { -80.0f, 35.0f, 15.0f },
-    { 80.0f, 45.0f, 15.0f },
-    { -10.0f, 35.0f, 65.0f },
-    { 0.0f, 110.0f, 180.0f },
-    { 0.0f, 60.0f, 70.0f },
-    { 0.0f, 60.0f, 70.0f },
-    { -80.0f, 50.0f, 40.0f },
-    { 0.0f, -10.0f, 50.0f },
-    { 80.0f, 50.0f, 40.0f },
-    { 0.0f, 120.0f, 40.0f },
-    { 0.0f, 28.0f, -50.0f },
-    { 0.0f, 60.0f, 50.0f },
-    { 0.0f, 80.0f, 160.0f },
+    { 0.0f, 55.0f, 60.0f },   { 0.0f, 55.0f, 60.0f },   { -80.0f, 35.0f, 15.0f }, { 80.0f, 45.0f, 15.0f },
+    { -10.0f, 35.0f, 65.0f }, { 0.0f, 110.0f, 180.0f }, { 0.0f, 60.0f, 70.0f },   { 0.0f, 60.0f, 70.0f },
+    { -80.0f, 50.0f, 40.0f }, { 0.0f, -10.0f, 50.0f },  { 80.0f, 50.0f, 40.0f },  { 0.0f, 120.0f, 40.0f },
+    { 0.0f, 28.0f, -50.0f },  { 0.0f, 60.0f, 50.0f },   { 0.0f, 80.0f, 160.0f },
 };
 
 Vec3f D_80971EEC[] = {
-    { 12.0f, 1.0f, 2.0f },
-    { 12.0f, 1.0f, 2.0f },
-    { 2.0f, -6.0f, 0.0f },
-    { 12.0f, -6.0f, -10.0f },
-    { -88.0f, 14.0, -10.0f },
-    { 0.0f, 0.0f, 0.0f },
-    { 0.0f, 0.0f, 0.0f },
-    { 0.0f, 0.0f, 0.0f },
-    { 0.0f, -10.0f, 0.0f },
-    { 0.0f, -10.0f, 0.0f },
-    { 0.0f, -10.0f, 0.0f },
-    { 0.0f, -10.0f, 0.0f },
-    { 0.0f, -10.0f, 0.0f },
-    { 0.0f, 0.0f, 0.0f },
-    { 0.0f, 0.0f, 0.0f },
+    { 12.0f, 1.0f, 2.0f },    { 12.0f, 1.0f, 2.0f },  { 2.0f, -6.0f, 0.0f },  { 12.0f, -6.0f, -10.0f },
+    { -88.0f, 14.0, -10.0f }, { 0.0f, 0.0f, 0.0f },   { 0.0f, 0.0f, 0.0f },   { 0.0f, 0.0f, 0.0f },
+    { 0.0f, -10.0f, 0.0f },   { 0.0f, -10.0f, 0.0f }, { 0.0f, -10.0f, 0.0f }, { 0.0f, -10.0f, 0.0f },
+    { 0.0f, -10.0f, 0.0f },   { 0.0f, 0.0f, 0.0f },   { 0.0f, 0.0f, 0.0f },
 };
 
 Vec3f D_80971FA0[] = {
-    { -50.0f, 160.0f, -40.0f },
-    { -50.0f, 160.0f, -40.0f },
-    { -20.0f, 80.0f, 60.0f },
-    { 57.0f, 60.0f, 120.0f },
-    { 27.0f, 80.0f, 60.0f },
-    { -3.0f, 50.0f, 70.0f },
+    { -50.0f, 160.0f, -40.0f }, { -50.0f, 160.0f, -40.0f }, { -20.0f, 80.0f, 60.0f },
+    { 57.0f, 60.0f, 120.0f },   { 27.0f, 80.0f, 60.0f },    { -3.0f, 50.0f, 70.0f },
 };
 
 Vec3f D_80971FE8[] = {
-    { 0.0f, 0.0f, 0.0f },
-    { 0.0f, 0.0f, 0.0f },
-    { -10.0f, -5.0f, 0.0f },
-    { 10.0f, -10.0f, 7.0f },
-    { 20.0f, 5.0f, 2.0f },
-    { 10.0f, 5.0f, 2.0f },
+    { 0.0f, 0.0f, 0.0f },    { 0.0f, 0.0f, 0.0f },  { -10.0f, -5.0f, 0.0f },
+    { 10.0f, -10.0f, 7.0f }, { 20.0f, 5.0f, 2.0f }, { 10.0f, 5.0f, 2.0f },
 };
 
 // both use in digging away function
@@ -145,13 +115,13 @@ Vec3f D_8097203C = { 10.0f, -15.0f, 2.0f };
 typedef enum {
     /* 0x0 */ ENKAKASI_ANIM_ARMS_CROSSED_ROCKING, // arms crossed and rocking back and forth
     /* 0x1 */ ENKAKASI_ANIM_SIDEWAYS_SHAKING,
-    /* 0x2 */ ENKAKASI_ANIM_HOPPING_REGULAR,      // bounce bounce bounce (repeat)
-    /* 0x3 */ ENKAKASI_ANIM_SPIN_REACH_OFFER,     // spin and then reaching toward player
-    /* 0x4 */ ENKAKASI_ANIM_TWIRL,                // slower cinimatic twirl
-    /* 0x5 */ ENKAKASI_ANIM_ARMS_CROSSED_STILL,   // arms crossed but still, also some noise sfx
-    /* 0x6 */ ENKAKASI_ANIM_WAVE,                 // "wave" short sideways shake, stops early, partial? unused?
-    /* 0x7 */ ENKAKASI_ANIM_SLOWROLL,             // partial bounch, ends looking left, OFFER anim takes over
-    /* 0x8 */ ENKAKASI_ANIM_IDLE,                 // slow stretching wiggle, ends in regular position
+    /* 0x2 */ ENKAKASI_ANIM_HOPPING_REGULAR,    // bounce bounce bounce (repeat)
+    /* 0x3 */ ENKAKASI_ANIM_SPIN_REACH_OFFER,   // spin and then reaching toward player
+    /* 0x4 */ ENKAKASI_ANIM_TWIRL,              // slower cinimatic twirl
+    /* 0x5 */ ENKAKASI_ANIM_ARMS_CROSSED_STILL, // arms crossed but still, also some noise sfx
+    /* 0x6 */ ENKAKASI_ANIM_WAVE,               // "wave" short sideways shake, stops early, partial? unused?
+    /* 0x7 */ ENKAKASI_ANIM_SLOWROLL,           // partial bounch, ends looking left, OFFER anim takes over
+    /* 0x8 */ ENKAKASI_ANIM_IDLE,               // slow stretching wiggle, ends in regular position
 } EnKakasi_Animations;
 
 extern AnimationHeader D_06007444;
@@ -175,7 +145,7 @@ u8 D_8097206C[] = {
 
 void EnKakasi_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnKakasi* this = THIS;
-    
+
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
@@ -240,7 +210,7 @@ void EnKakasi_SetAnimation(EnKakasi* this, s32 index) {
     this->animeFrameCount = Animation_GetLastFrame(&kakasiAnimations[this->animIndex]->common);
     // 1: regular playback speed, 0: starting frame
     Animation_Change(&this->skelanime, kakasiAnimations[this->animIndex], 1.0f, 0.0f, this->animeFrameCount,
-                         D_8097206C[this->animIndex], -4.0f);
+                     D_8097206C[this->animIndex], -4.0f);
 }
 
 /*
@@ -343,15 +313,18 @@ void EnKakasi_TimeSkipDialogue(EnKakasi* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (gSaveContext.respawnFlag != -4 && gSaveContext.respawnFlag != -8) {
-        if (gSaveContext.time != CLOCK_TIME(6, 0) && gSaveContext.time != CLOCK_TIME(18, 0) && !(gSaveContext.eventInf[1] & 0x80)) {
+        if (gSaveContext.time != CLOCK_TIME(6, 0) && gSaveContext.time != CLOCK_TIME(18, 0) &&
+            !(gSaveContext.eventInf[1] & 0x80)) {
+
             if (this->actor.textId == 0) {
                 // dialogue after skipped time 'did you feel that? went by in an instant'
                 this->actor.textId = 0x1653;
-                gSaveContext.weekEventReg[0x53] &= (u8) ~1;
+                gSaveContext.weekEventReg[0x53] &= (u8)~1;
                 this->unkMsgState1AC = 5;
                 player->stateFlags1 |= 0x20;
                 this->actor.flags |= 0x10000;
             }
+
             if (func_800B84D0(&this->actor, globalCtx) != 0) {
                 player->stateFlags1 &= ~0x20;
                 this->unkState196 = 2;
@@ -518,7 +491,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
                 } else {
                     this->actor.textId = 0x1645;
                 }
-  
+
             } else if (this->actor.textId == 0x164F) {
                 if (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
                     EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
@@ -552,7 +525,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
             this->unkMsgState1AC = 5;
 
             if (globalCtx->msgCtx.choiceIndex == 1) {
-                func_8019F208(); // play 0x4808 sfx (decide) and calls func_801A75E8
+                func_8019F208();
                 if (this->actor.textId == 0x1656) {
                     this->actor.textId = 0x1658;
                 } else if (this->actor.textId == 0x165C) {
@@ -564,7 +537,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
                 }
                 EnKakasi_SetAnimation(this, ENKAKASI_ANIM_HOPPING_REGULAR);
             } else {
-                func_8019F230(); // play 0x480A sfx (cancel) and calls func_801A75E8
+                func_8019F230();
                 if (this->actor.textId == 0x1656) { // would you like to learn a song? yes/no
                     this->actor.textId = 0x1657;
                 } else if (this->actor.textId == 0x165C) { // would you like to learn a song? yes/no
@@ -656,8 +629,7 @@ void EnKakasi_TeachingSong(EnKakasi* this, GlobalContext* globalCtx) {
         func_8096FAAC(this, globalCtx);
         func_8096FBB8(this, globalCtx);
 
-        // song failed
-        if (globalCtx->msgCtx.unk1202A == 4) {
+        if (globalCtx->msgCtx.unk1202A == 4) { // song failed
             this->unk190 = 0;
             this->unkCounter1A4 = 0;
             ActorCutscene_Stop(this->actorCutscenes[0]);
@@ -671,8 +643,7 @@ void EnKakasi_TeachingSong(EnKakasi* this, GlobalContext* globalCtx) {
             EnKakasi_SetAnimation(this, ENKAKASI_ANIM_ARMS_CROSSED_ROCKING);
             this->actionFunc = EnKakasi_RegularDialogue;
 
-        // song success
-        } else if (globalCtx->msgCtx.unk1202A == 3) {
+        } else if (globalCtx->msgCtx.unk1202A == 3) { // song success
             this->postTeachTimer = 30;
             this->skelanime.playSpeed = 2.0f;
             EnKakasi_SetAnimation(this, ENKAKASI_ANIM_HOPPING_REGULAR);
@@ -728,8 +699,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, GlobalContext* globalCtx) {
         this->animeFrameCount <= tempAnimFrame) {
         this->unkCounter1A4++;
         if (this->unkCounter1A4 >= 2) {
-            EnKakasi_SetAnimation(
-                this, ENKAKASI_ANIM_ARMS_CROSSED_ROCKING);
+            EnKakasi_SetAnimation(this, ENKAKASI_ANIM_ARMS_CROSSED_ROCKING);
         }
     }
 
@@ -889,7 +859,7 @@ void EnKakasi_DancingNightAway(EnKakasi* this, GlobalContext* globalCtx) {
     }
 
     func_8096FAAC(this, globalCtx);
-    
+
     // switching through manual cutscene states
     switch (this->unk190) {
         case 0:
@@ -971,7 +941,7 @@ void EnKakasi_DancingNightAway(EnKakasi* this, GlobalContext* globalCtx) {
             Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 1000, 0);
             if (this->unk204 == 0) {
                 player = GET_PLAYER(globalCtx);
-                
+
                 func_80169DCC(globalCtx, 0, Entrance_CreateIndexFromSpawn(0), player->unk_3CE, 0xBFF, &player->unk_3C0,
                               player->unk_3CC);
                 func_80169EFC(globalCtx);
@@ -1187,7 +1157,7 @@ void EnKakasi_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnKakasi_LimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor) {
     EnKakasi* this = (EnKakasi*)actor;
-    
+
     if (limbIndex == 4) {
         // what is D_801D15B0 ? we didn't have to define it, we store the output though
         Matrix_MultiplyVector3fByState(&D_801D15B0, &this->unk1BC);
@@ -1197,6 +1167,6 @@ void EnKakasi_LimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 void EnKakasi_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnKakasi* this = THIS;
     func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelanime.skeleton, this->skelanime.jointTable, this->skelanime.dListCount, NULL,
-                     EnKakasi_LimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelanime.skeleton, this->skelanime.jointTable, this->skelanime.dListCount,
+                          NULL, EnKakasi_LimbDraw, &this->actor);
 }

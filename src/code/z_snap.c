@@ -107,8 +107,8 @@ s16 func_8013A504(s16 val) {
     return (val >= 0) ? val : -val;
 }
 
-//s32 func_8013A530(Actor* actor, GlobalContext* globalCtx, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin, f32 distanceMax, s16 angleError) {
-s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin, f32 distanceMax, s16 angleError) {
+s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin,
+                  f32 distanceMax, s16 angleError) {
     Vec3f screenSpace;
     s16 x;
     s16 y;
