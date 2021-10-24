@@ -75,7 +75,7 @@ void EnHakurock_Init(Actor* thisx, GlobalContext* globalCtx) {
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 52.0f);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
-    if (this->actor.params == 1) {
+    if (this->actor.params == EN_HAKUROCK_TYPE_BOULDER) {
         this->actor.gravity = -1.5f;
     } else {
         this->collider.base.ocFlags1 &= ~OC1_NO_PUSH;
@@ -170,22 +170,22 @@ void func_80B21FFC(EnHakurock* this) {
     this->collider.base.atFlags &= ~AT_HIT;
     this->collider.base.ocFlags1 &= ~OC1_HIT;
     this->actor.draw = NULL;
-    this->actor.params = 0;
+    this->actor.params = EN_HAKUROCK_TYPE_UNK_0;
     this->actionFunc = func_80B22040;
 }
 
 void func_80B22040(EnHakurock* this, GlobalContext* globalCtx) {
-    if (this->actor.params == 1) {
+    if (this->actor.params == EN_HAKUROCK_TYPE_BOULDER) {
         func_80B220A8(this);
-    } else if (this->actor.params == 2) {
+    } else if (this->actor.params == EN_HAKUROCK_TYPE_UNK_2) {
         func_80B222AC(this, globalCtx);
-    } else if (this->actor.params == 4) {
+    } else if (this->actor.params == EN_HAKUROCK_TYPE_FENCE_PILLAR) {
         func_80B226AC(this);
     }
 }
 
 void func_80B220A8(EnHakurock* this) {
-    this->actor.params = 1;
+    this->actor.params = EN_HAKUROCK_TYPE_BOULDER;
     this->actor.draw = func_80B228F4;
     this->actor.speedXZ = Rand_ZeroFloat(3.5f) + 2.5f;
     this->actor.velocity.y = Rand_ZeroFloat(4.5f) + 18.0f;
@@ -237,7 +237,7 @@ void func_80B222AC(EnHakurock* this, GlobalContext* globalCtx) {
     this->collider.dim.yShift = (this->actor.scale.y * -750.0f);
     this->collider.dim.height = this->collider.dim.yShift * -2;
     Math_Vec3f_Copy(&this->actor.prevPos, &this->actor.world.pos);
-    this->actor.params = 2;
+    this->actor.params = EN_HAKUROCK_TYPE_UNK_2;
     this->actionFunc = func_80B2242C;
 }
 
@@ -253,7 +253,7 @@ void func_80B2242C(EnHakurock* this, GlobalContext* globalCtx) {
 }
 
 void func_80B224C0(EnHakurock* this) {
-    this->actor.params = 3;
+    this->actor.params = EN_HAKUROCK_TYPE_STALACTITE;
     this->counter = 10;
     this->actor.shape.shadowScale = 0.0f;
     this->actor.world.pos.y += 4.0f;
@@ -273,7 +273,7 @@ void func_80B22500(EnHakurock* this, GlobalContext* globalCtx) {
     }
     if (this->collider.base.ocFlags1 & OC1_HIT) {
         if ((this->collider.base.oc == this->actor.parent) ||
-            ((this->collider.base.oc->id == ACTOR_EN_HAKUROCK) && (this->collider.base.oc->params == 2))) {
+            ((this->collider.base.oc->id == ACTOR_EN_HAKUROCK) && (this->collider.base.oc->params == EN_HAKUROCK_TYPE_UNK_2))) {
             func_80B21EA4(this, 3);
             func_80B21FFC(this);
         } else if ((&player->actor == this->collider.base.oc) && ((player->stateFlags3 & 0x81000) != 0) &&
@@ -308,7 +308,7 @@ void func_80B226AC(EnHakurock* this) {
 }
 
 void func_80B22750(EnHakurock* this, GlobalContext* globalCtx) {
-    if (this->actor.params == 0) {
+    if (this->actor.params == EN_HAKUROCK_TYPE_UNK_0) {
         func_80B21EA4(this, 3);
         func_80B21FFC(this);
     }
@@ -320,7 +320,7 @@ void EnHakurock_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
     rockParams = this->actor.params;
-    if ((rockParams == 1) || (rockParams == 2)) {
+    if ((rockParams == EN_HAKUROCK_TYPE_BOULDER) || (rockParams == EN_HAKUROCK_TYPE_UNK_2)) {
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, this->collider.dim.radius, 0.0f, 0x85);
         if (this->actor.floorHeight == BGCHECK_Y_MIN) {
@@ -331,7 +331,7 @@ void EnHakurock_Update(Actor* thisx, GlobalContext* globalCtx) {
             CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
             CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         }
-    } else if ((rockParams == 3) || (rockParams == 4)) {
+    } else if ((rockParams == EN_HAKUROCK_TYPE_STALACTITE) || (rockParams == EN_HAKUROCK_TYPE_FENCE_PILLAR)) {
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
