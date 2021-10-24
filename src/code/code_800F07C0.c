@@ -18,7 +18,7 @@ extern AnimationHeader D_0600FC1C;
 extern AnimationHeader D_0600FEE4;
 extern AnimationHeader D_06010330;
 
-ActorAnimationEntryS D_801BC2A0[] = {
+static ActorAnimationEntryS animations[] = {
     { &D_0600007C, 1.0f, 0, -1, 0, 0 },  { &D_06001494, 1.0f, 0, -1, 0, 0 },  { &D_06001494, 1.0f, 0, -1, 0, -8 },
     { &D_06001908, 1.0f, 0, -1, 0, 0 },  { &D_06001908, 1.0f, 0, -1, 0, -8 }, { &D_060008C0, 1.0f, 0, -1, 0, 0 },
     { &D_06005DC4, 1.0f, 0, -1, 0, 0 },  { &D_06000FDC, 1.0f, 0, -1, 0, 0 },  { &D_06000AB0, 1.0f, 0, -1, 0, -8 },
@@ -34,26 +34,25 @@ UNK_TYPE D_801BC400[] = { 0x00000000, 0x03040006, 0x0700090A, 0x000C0D00 };
 
 UNK_TYPE D_801BC410[] = { 0x00000000, 0x00000000, 0x00000000, 0x00000000 };
 
-// ChangeAnim
-s32 func_800F07C0(SkelAnime* skelAnime, s16 animIndex) {
+s32 UnusedNPC_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
     s16 frameCount;
     s32 ret = false;
 
     if (animIndex >= 0 && animIndex <= 20) {
         ret = true;
-        frameCount = D_801BC2A0[animIndex].frameCount;
+        frameCount = animations[animIndex].frameCount;
         if (frameCount < 0) {
-            frameCount = Animation_GetLastFrame(&D_801BC2A0[animIndex].animationSeg->common);
+            frameCount = Animation_GetLastFrame(&animations[animIndex].animationSeg->common);
         }
-        Animation_Change(skelAnime, D_801BC2A0[animIndex].animationSeg, D_801BC2A0[animIndex].playbackSpeed,
-                             D_801BC2A0[animIndex].frame, frameCount, D_801BC2A0[animIndex].mode,
-                             D_801BC2A0[animIndex].transitionRate);
+        Animation_Change(skelAnime, animations[animIndex].animationSeg, animations[animIndex].playbackSpeed,
+                         animations[animIndex].frame, frameCount, animations[animIndex].mode,
+                         animations[animIndex].transitionRate);
     }
     return ret;
 }
 
-// FindNearestDoor
-Actor* func_800F0888(Actor* actor, GlobalContext* globalCtx) {
+//! @TODO: Return Door instance when c and h files are split
+Actor* UnusedNPC_FindNearestDoor(Actor* actor, GlobalContext* globalCtx) {
     Actor* doorIter;
     Actor* door;
     f32 dist;
@@ -83,196 +82,192 @@ Actor* func_800F0888(Actor* actor, GlobalContext* globalCtx) {
     return nearestDoor;
 }
 
-// ChangeOjbectAndAnime
-void func_800F0944(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, s16 animIndex) {
-    gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[arg0->unk193].segment);
-    func_800F07C0(&arg0->skelAnime, animIndex);
+void UnusedNPC_ChangeObjectAndAnim(UnusedNPC* unusedNPC, GlobalContext* globalCtx, s16 animIndex) {
+    gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[unusedNPC->animObjIndex].segment);
+    UnusedNPC_ChangeAnim(&unusedNPC->skelAnime, animIndex);
 }
 
-// UpdateFrame
-s32 func_800F09B4(struct_800F0944_arg0* arg0, GlobalContext* globalCtx) {
+s32 UnusedNPC_UpdateSkelAnime(UnusedNPC* unusedNPC, GlobalContext* globalCtx) {
     s32 ret = false;
 
-    if (arg0->actor.draw != NULL) {
-        gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[arg0->unk193].segment);
-        SkelAnime_Update(&arg0->skelAnime);
+    if (unusedNPC->actor.draw != NULL) {
+        gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[unusedNPC->animObjIndex].segment);
+        SkelAnime_Update(&unusedNPC->skelAnime);
         ret = true;
     }
     return ret;
 }
 
-// Blink?
-void func_800F0A20(struct_800F0944_arg0* arg0, s32 arg1) {
-    if (DECR(arg0->unk3E8) == 0) {
-        arg0->unk3E6 += 1;
-        if (arg0->unk3E6 >= arg1) {
-            arg0->unk3E6 = 0;
-            arg0->unk3E8 = Rand_S16Offset(30, 30);
+void UnusedNPC_Blink(UnusedNPC* unusedNPC, s32 eyeTexMaxIndex) {
+    if (DECR(unusedNPC->blinkTimer) == 0) {
+        unusedNPC->eyeTexIndex += 1;
+        if (unusedNPC->eyeTexIndex >= eyeTexMaxIndex) {
+            unusedNPC->eyeTexIndex = 0;
+            unusedNPC->blinkTimer = Rand_S16Offset(30, 30);
         }
     }
 }
 
-// Init
-s32 func_800F0A94(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, FlexSkeletonHeader* skeletonHeaderSeg,
-                  s16 animIndex) {
+s32 UnusedNPC_Init(UnusedNPC* unusedNPC, GlobalContext* globalCtx, FlexSkeletonHeader* skeletonHeaderSeg,
+                   s16 animIndex) {
     s32 ret = false;
 
-    if ((func_8013D8DC(arg0->unk193, globalCtx) == 1) && (func_8013D8DC(arg0->unk190, globalCtx) == 1) &&
-        (func_8013D8DC(arg0->unk191, globalCtx) == 1) && (func_8013D8DC(arg0->unk192, globalCtx) == 1)) {
-        arg0->actor.objBankIndex = arg0->unk192;
+    if ((func_8013D8DC(unusedNPC->animObjIndex, globalCtx) == 1) &&
+        (func_8013D8DC(unusedNPC->unk190, globalCtx) == 1) && (func_8013D8DC(unusedNPC->unk191, globalCtx) == 1) &&
+        (func_8013D8DC(unusedNPC->unk192, globalCtx) == 1)) {
+        unusedNPC->actor.objBankIndex = unusedNPC->unk192;
         ret = true;
-        ActorShape_Init(&arg0->actor.shape, 0.0f, NULL, 0.0f);
-        gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[arg0->actor.objBankIndex].segment);
-        SkelAnime_InitFlex(globalCtx, &arg0->skelAnime, skeletonHeaderSeg, NULL, arg0->jointTable, arg0->morphTable, 16);
-        func_800F0944(arg0, globalCtx, animIndex);
+        ActorShape_Init(&unusedNPC->actor.shape, 0.0f, NULL, 0.0f);
+        gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[unusedNPC->actor.objBankIndex].segment);
+        SkelAnime_InitFlex(globalCtx, &unusedNPC->skelAnime, skeletonHeaderSeg, NULL, unusedNPC->jointTable,
+                           unusedNPC->morphTable, 16);
+        UnusedNPC_ChangeObjectAndAnim(unusedNPC, globalCtx, animIndex);
     }
     return ret;
 }
 
 //! @TODO: Should just take EnDoor instead of actor when c and h are split
-void func_800F0BB4(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, Actor* door, s16 arg3, s16 arg4) {
+void func_800F0BB4(UnusedNPC* unusedNPC, GlobalContext* globalCtx, Actor* door, s16 arg3, s16 arg4) {
     s32 pad;
     s8 sp3B;
     Vec3f offset;
     f32 phi_f0;
 
-    Actor_CalcOffsetOrientedToDrawRotation(door, &offset, &arg0->actor.world.pos);
+    Actor_CalcOffsetOrientedToDrawRotation(door, &offset, &unusedNPC->actor.world.pos);
     phi_f0 = (offset.z >= 0.0f) ? 1.0f : -1.0f;
     sp3B = ((s8)phi_f0 < 0) ? 0 : 2;
-    func_800F0944(arg0, globalCtx, (sp3B == 0) ? arg3 : arg4);
-    arg0->skelAnime.baseTransl = *arg0->skelAnime.jointTable;
-    arg0->skelAnime.prevTransl = *arg0->skelAnime.jointTable;
-    arg0->skelAnime.moveFlags |= 3;
-    AnimationContext_SetMoveActor(globalCtx, &arg0->actor, &arg0->skelAnime, 1.0f);
+    UnusedNPC_ChangeObjectAndAnim(unusedNPC, globalCtx, (sp3B == 0) ? arg3 : arg4);
+    unusedNPC->skelAnime.baseTransl = *unusedNPC->skelAnime.jointTable;
+    unusedNPC->skelAnime.prevTransl = *unusedNPC->skelAnime.jointTable;
+    unusedNPC->skelAnime.moveFlags |= 3;
+    AnimationContext_SetMoveActor(globalCtx, &unusedNPC->actor, &unusedNPC->skelAnime, 1.0f);
     ((EnDoor*)door)->unk1A1 = 1;
     ((EnDoor*)door)->unk1A0 = sp3B;
 }
 
-s32 func_800F0CE4(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, ActorFunc draw, s16 arg3, s16 arg4, f32 arg5) {
+s32 func_800F0CE4(UnusedNPC* unusedNPC, GlobalContext* globalCtx, ActorFunc draw, s16 arg3, s16 arg4, f32 arg5) {
     s32 ret;
     s16 yaw;
     Actor* door;
     s32 pad;
 
     ret = false;
-    if (func_8013D68C(arg0->path, arg0->unk1E8, &arg0->actor.world.pos)) {
-        door = func_800F0888(&arg0->actor, globalCtx);
+    if (func_8013D68C(unusedNPC->path, unusedNPC->curPoint, &unusedNPC->actor.world.pos)) {
+        door = UnusedNPC_FindNearestDoor(&unusedNPC->actor, globalCtx);
         if (door != NULL) {
             ret = true;
-            func_800F0BB4(arg0, globalCtx, door, arg3, arg4);
-            yaw = Math_Vec3f_Yaw(&arg0->actor.world.pos, &door->world.pos);
-            arg0->actor.world.pos.x += arg5 * Math_SinS(yaw);
-            arg0->actor.world.pos.z += arg5 * Math_CosS(yaw);
-            arg0->actor.world.rot.y = -yaw;
-            arg0->actor.shape.rot.y = -yaw;
-            arg0->actor.draw = draw;
+            func_800F0BB4(unusedNPC, globalCtx, door, arg3, arg4);
+            yaw = Math_Vec3f_Yaw(&unusedNPC->actor.world.pos, &door->world.pos);
+            unusedNPC->actor.world.pos.x += arg5 * Math_SinS(yaw);
+            unusedNPC->actor.world.pos.z += arg5 * Math_CosS(yaw);
+            unusedNPC->actor.world.rot.y = -yaw;
+            unusedNPC->actor.shape.rot.y = -yaw;
+            unusedNPC->actor.draw = draw;
         }
     }
     return ret;
 }
 
-s32 func_800F0DD4(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, s16 arg2, s16 arg3) {
+s32 func_800F0DD4(UnusedNPC* unusedNPC, GlobalContext* globalCtx, s16 arg2, s16 arg3) {
     s32 ret = 0;
     s32 pad;
     Actor* door;
 
-    arg0->unk1E8 = 0;
-    if (func_8013D68C(arg0->path, arg0->unk1E8, &arg0->actor.world.pos)) {
-        door = func_800F0888(&arg0->actor, globalCtx);
+    unusedNPC->curPoint = 0;
+    if (func_8013D68C(unusedNPC->path, unusedNPC->curPoint, &unusedNPC->actor.world.pos)) {
+        door = UnusedNPC_FindNearestDoor(&unusedNPC->actor, globalCtx);
         if (door != NULL) {
             ret = 1;
-            func_800F0BB4(arg0, globalCtx, door, arg2, arg3);
-            arg0->actor.shape.rot.y = Math_Vec3f_Yaw(&arg0->actor.world.pos, &door->world.pos);
-            arg0->actor.world.rot.y = arg0->actor.shape.rot.y;
-            arg0->actor.gravity = 0.0f;
-            arg0->actor.flags &= ~1;
+            func_800F0BB4(unusedNPC, globalCtx, door, arg2, arg3);
+            unusedNPC->actor.shape.rot.y = Math_Vec3f_Yaw(&unusedNPC->actor.world.pos, &door->world.pos);
+            unusedNPC->actor.world.rot.y = unusedNPC->actor.shape.rot.y;
+            unusedNPC->actor.gravity = 0.0f;
+            unusedNPC->actor.flags &= ~1;
         }
     }
     return ret;
 }
 
-s32 func_800F0E94(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, f32 gravity, s16 animIndex) {
-    arg0->actor.gravity = gravity;
-    arg0->actor.flags |= 1;
-    func_800F0944(arg0, globalCtx, animIndex);
-    arg0->unk1E8++;
+s32 func_800F0E94(UnusedNPC* unusedNPC, GlobalContext* globalCtx, f32 gravity, s16 animIndex) {
+    unusedNPC->actor.gravity = gravity;
+    unusedNPC->actor.flags |= 1;
+    UnusedNPC_ChangeObjectAndAnim(unusedNPC, globalCtx, animIndex);
+    unusedNPC->curPoint++;
     return 0;
 }
 
-s32 func_800F0EEC(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, s16 animIndex) {
-    func_800F0944(arg0, globalCtx, animIndex);
-    arg0->unk1E8--;
+s32 func_800F0EEC(UnusedNPC* unusedNPC, GlobalContext* globalCtx, s16 animIndex) {
+    UnusedNPC_ChangeObjectAndAnim(unusedNPC, globalCtx, animIndex);
+    unusedNPC->curPoint--;
     return 0;
 }
 
-// MoveForwards
-s32 func_800F0F28(struct_800F0944_arg0* arg0, f32 arg1) {
-    s16 sp3E;
-    s32 ret;
-    Vec3f sp2C;
+s32 UnusedNPC_MoveForwards(UnusedNPC* unusedNPC, f32 speedTarget) {
+    s16 rotStep;
+    s32 reachedEnd;
+    Vec3f curPointPos;
 
-    ret = 0;
-    Math_SmoothStepToF(&arg0->actor.speedXZ, arg1, 0.4f, 1000.0f, 0.0f);
-    sp3E = arg0->actor.speedXZ * 400.0f;
-    if (func_8013D68C(arg0->path, arg0->unk1E8, &sp2C) && func_8013D768(&arg0->actor, &sp2C, sp3E)) {
-        arg0->unk1E8++;
-        if (arg0->unk1E8 >= arg0->path->count) {
-            ret = 1;
+    reachedEnd = false;
+    Math_SmoothStepToF(&unusedNPC->actor.speedXZ, speedTarget, 0.4f, 1000.0f, 0.0f);
+    rotStep = unusedNPC->actor.speedXZ * 400.0f;
+    if (func_8013D68C(unusedNPC->path, unusedNPC->curPoint, &curPointPos) && func_8013D768(&unusedNPC->actor, &curPointPos, rotStep)) {
+        unusedNPC->curPoint++;
+        if (unusedNPC->curPoint >= unusedNPC->path->count) {
+            reachedEnd = true;
         }
     }
-    return ret;
+    return reachedEnd;
 }
 
-// MoveBackwards
-s32 func_800F0FF0(struct_800F0944_arg0* arg0, f32 arg1) {
-    s16 sp3E;
-    s32 ret;
-    Vec3f sp2C;
+s32 UnusedNPC_MoveBackwards(UnusedNPC* unusedNPC, f32 speedTarget) {
+    s16 rotStep;
+    s32 reachedEnd;
+    Vec3f curPointPos;
 
-    ret = 0;
-    Math_SmoothStepToF(&arg0->actor.speedXZ, arg1, 0.4f, 1000.0f, 0.0f);
-    sp3E = arg0->actor.speedXZ * 400.0f;
-    if (func_8013D68C(arg0->path, arg0->unk1E8, &sp2C) && func_8013D768(&arg0->actor, &sp2C, sp3E)) {
-        arg0->unk1E8--;
-        if (arg0->unk1E8 < 0) {
-            ret = 1;
+    reachedEnd = false;
+    Math_SmoothStepToF(&unusedNPC->actor.speedXZ, speedTarget, 0.4f, 1000.0f, 0.0f);
+    rotStep = unusedNPC->actor.speedXZ * 400.0f;
+    if (func_8013D68C(unusedNPC->path, unusedNPC->curPoint, &curPointPos) && func_8013D768(&unusedNPC->actor, &curPointPos, rotStep)) {
+        unusedNPC->curPoint--;
+        if (unusedNPC->curPoint < 0) {
+            reachedEnd = true;
         }
     }
-    return ret;
+    return reachedEnd;
 }
 
-// UpdateCollider
-void func_800F10AC(struct_800F0944_arg0* arg0, GlobalContext* globalCtx) {
-    arg0->collider.dim.pos.x = arg0->actor.world.pos.x;
-    arg0->collider.dim.pos.y = arg0->actor.world.pos.y;
-    arg0->collider.dim.pos.z = arg0->actor.world.pos.z;
+void UnusedNPC_UpdateCollider(UnusedNPC* unusedNPC, GlobalContext* globalCtx) {
+    unusedNPC->collider.dim.pos.x = unusedNPC->actor.world.pos.x;
+    unusedNPC->collider.dim.pos.y = unusedNPC->actor.world.pos.y;
+    unusedNPC->collider.dim.pos.z = unusedNPC->actor.world.pos.z;
 
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &arg0->collider.base);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &arg0->collider.base);
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &unusedNPC->collider.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &unusedNPC->collider.base);
 }
 
-// PlaySound
-s32 func_800F112C(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, f32 arg2) {
-    u8 prevUnk204 = arg0->unk204;
-    u8 prevUnk205 = arg0->unk205;
+s32 UnusedNPC_PlayWalkingSound(UnusedNPC* unusedNPC, GlobalContext* globalCtx, f32 distAboveThreshold) {
+    u8 wasLeftFootOnGround = unusedNPC->isLeftFootOnGround;
+    u8 wasRightFootOnGround = unusedNPC->isRightFootOnGround;
     s32 pad;
     u16 sound;
-    u8 tmp;
+    u8 isFootOnGround;
 
-    if (arg0->actor.bgCheckFlags & 0x20) {
-        sound = ((arg0->actor.yDistToWater < 20.0f) ? (NA_SE_PL_WALK_WATER0 - SFX_FLAG)
-                                                    : (NA_SE_PL_WALK_WATER1 - SFX_FLAG)) +
+    if (unusedNPC->actor.bgCheckFlags & 0x20) {
+        sound = ((unusedNPC->actor.yDistToWater < 20.0f) ? (NA_SE_PL_WALK_WATER0 - SFX_FLAG)
+                                                         : (NA_SE_PL_WALK_WATER1 - SFX_FLAG)) +
                 SFX_FLAG;
     } else {
-        sound = func_800C9BDC(&globalCtx->colCtx, arg0->actor.floorPoly, arg0->actor.floorBgId) + SFX_FLAG;
+        sound = func_800C9BDC(&globalCtx->colCtx, unusedNPC->actor.floorPoly, unusedNPC->actor.floorBgId) + SFX_FLAG;
     }
-    arg0->unk204 = tmp = func_8013DB90(globalCtx, &arg0->unk1EC, arg2);
-    if (arg0->unk204 != 0 && prevUnk204 == 0 && tmp != 0) {
-        Audio_PlayActorSound2(&arg0->actor, sound);
+    unusedNPC->isLeftFootOnGround = isFootOnGround =
+        func_8013DB90(globalCtx, &unusedNPC->leftFootPos, distAboveThreshold);
+    if (unusedNPC->isLeftFootOnGround && !wasLeftFootOnGround && isFootOnGround) {
+        Audio_PlayActorSound2(&unusedNPC->actor, sound);
     }
-    arg0->unk205 = tmp = func_8013DB90(globalCtx, &arg0->unk1F8, arg2);
-    if (arg0->unk205 != 0 && prevUnk205 == 0 && tmp != 0) {
-        Audio_PlayActorSound2(&arg0->actor, sound);
+    unusedNPC->isRightFootOnGround = isFootOnGround =
+        func_8013DB90(globalCtx, &unusedNPC->rightFootPos, distAboveThreshold);
+    if (unusedNPC->isRightFootOnGround && !wasRightFootOnGround && isFootOnGround) {
+        Audio_PlayActorSound2(&unusedNPC->actor, sound);
     }
     return 0;
 }

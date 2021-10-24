@@ -1620,29 +1620,29 @@ typedef struct {
     /* 0x24 */ s16 unk_24;
 } struct_800BD888_arg1; // size = 0x28
 
-typedef struct struct_800F0944_arg0 {
+typedef struct UnusedNPC {
     /* 0x000 */ Actor actor;
     /* 0x144 */ char unk_144[0x8];
     /* 0x14C */ SkelAnime skelAnime;
     /* 0x190 */ s8 unk190;
     /* 0x190 */ s8 unk191;
     /* 0x190 */ s8 unk192;
-    /* 0x193 */ s8 unk193;
+    /* 0x193 */ s8 animObjIndex;
     /* 0x194 */ ColliderCylinder collider;
     /* 0x1E0 */ char unk_1E0[0x4];
     /* 0x1E4 */ Path* path;
-    /* 0x1E8 */ s16 unk1E8; //curPoint
+    /* 0x1E8 */ s16 curPoint; //curPoint
     /* 0x1EA */ char unk_1EA[0x2];
-    /* 0x1EC */ Vec3f unk1EC;
-    /* 0x1F8 */ Vec3f unk1F8;
-    /* 0x204 */ u8 unk204;
-    /* 0x205 */ u8 unk205;
+    /* 0x1EC */ Vec3f leftFootPos;
+    /* 0x1F8 */ Vec3f rightFootPos;
+    /* 0x204 */ u8 isLeftFootOnGround;
+    /* 0x205 */ u8 isRightFootOnGround;
     /* 0x206 */ Vec3s jointTable[16];
     /* 0x266 */ Vec3s morphTable[16];
     /* 0x2C6 */ char unk_2C6[0x120];
-    /* 0x3E6 */ s16 unk3E6;
-    /* 0x3E8 */ s16 unk3E8;
-} struct_800F0944_arg0;
+    /* 0x3E6 */ s16 eyeTexIndex;
+    /* 0x3E8 */ s16 blinkTimer;
+} UnusedNPC;
 
 typedef struct {
     /* 0x0 */ u8 unk0;
