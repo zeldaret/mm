@@ -833,7 +833,7 @@ typedef struct {
     /* 0x22 */ u16 unk_22;
     /* 0x24 */ u16 unk_24;
     /* 0x26 */ u8 unk_26;
-    /* 0x28 */ LightInfo unk_28; // sun 1
+    /* 0x28 */ LightInfo dirLight1; // sun 1
     /* 0x36 */ LightInfo unk_36; // sun 2
     /* 0x44 */ s8 unk_44;
     /* 0x48 */ DmaRequest unk_48;

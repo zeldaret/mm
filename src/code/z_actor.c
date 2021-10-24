@@ -152,7 +152,6 @@ void ActorShadow_DrawFoot(GlobalContext* globalCtx, Light* light, MtxF* arg2, s3
 #ifdef NON_MATCHING
 // stack and regalloc
 void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
-
     f32 temp_f20_2;
     f32 temp_f22;
     f32 temp_f0_2;
@@ -2200,7 +2199,7 @@ void func_800B9334(GlobalContext* globalCtx, ActorContext* actorCtx) {
 
             if ((!(phi_v0 & temp_fp) && (phi_v0 & actorCtx->unkC)) && ((!(gSaveContext.eventInf[1] & 0x80) || !(phi_v0 & temp_s1)) || !(actorEntry->id & 0x800)))
             {
-                Actor_SpawnEntry(&globalCtx->actorCtx, actorEntry, globalCtx);
+                Actor_SpawnEntry(&globalCtx->actorCtx, actorEntry, &globalCtx->state);
             }
             actorEntry++;
         }
@@ -3580,51 +3579,50 @@ s32 func_800BC1B4(Actor* actor, Actor* arg1, f32 arg2, f32 arg3) {
         s16 temp_v1 = BINANG_SUB(Actor_YawBetweenActors(arg1, actor), arg1->world.rot.y);
 
         if (ABS_ALT(temp_v1) < 0x1400) {
-            return 1;
+            return true;
         }
     }
 
-    return 0;
+    return false;
 }
 
 Actor* func_800BC270(GlobalContext* globalCtx, Actor* actor, f32 arg2, s32 arg3) {
-    Actor* phi_s0;
+    Actor* itemAction = globalCtx->actorCtx.actorList[ACTORCAT_ITEMACTION].first;
 
-    phi_s0 = globalCtx->actorCtx.actorList[ACTORCAT_ITEMACTION].first;
-    while (phi_s0 != NULL) {
-        if (((phi_s0->id == ACTOR_ARMS_HOOK) && (arg3 & 0x80)) || ((phi_s0->id == ACTOR_EN_BOOM) && (arg3 & 0x10)) ||
-            ((phi_s0->id == ACTOR_EN_ARROW) && ((func_800BC188(phi_s0->params) & arg3) != 0))) {
-            f32 phi_f0;
+    while (itemAction != NULL) {
+        if (((itemAction->id == ACTOR_ARMS_HOOK) && (arg3 & 0x80)) || ((itemAction->id == ACTOR_EN_BOOM) && (arg3 & 0x10)) ||
+            ((itemAction->id == ACTOR_EN_ARROW) && (func_800BC188(itemAction->params) & arg3))) {
+            f32 speedXZ;
 
-            if ((phi_s0->speedXZ <= 0.0f) && (GET_PLAYER(globalCtx)->unk_D57 != 0)) {
-                if (phi_s0->id == ACTOR_ARMS_HOOK) {
-                    phi_f0 = 20.0f;
-                } else if (phi_s0->id == ACTOR_EN_BOOM) {
-                    phi_f0 = 12.0f;
+            if ((itemAction->speedXZ <= 0.0f) && (GET_PLAYER(globalCtx)->unk_D57 != 0)) {
+                if (itemAction->id == ACTOR_ARMS_HOOK) {
+                    speedXZ = 20.0f;
+                } else if (itemAction->id == ACTOR_EN_BOOM) {
+                    speedXZ = 12.0f;
                 } else {
-                    s32 temp_v0_3 = func_800BC188(phi_s0->params);
+                    s32 temp_v0_3 = func_800BC188(itemAction->params);
 
                     if (temp_v0_3 == 1) {
-                        phi_f0 = 80.0f;
+                        speedXZ = 80.0f;
                     } else if (temp_v0_3 == 0x10000) {
-                        phi_f0 = 60.0f;
+                        speedXZ = 60.0f;
                     } else {
-                        phi_f0 = 150.0f;
+                        speedXZ = 150.0f;
                     }
                 }
             } else {
-                phi_f0 = phi_s0->speedXZ;
+                speedXZ = itemAction->speedXZ;
             }
 
-            if (func_800BC1B4(actor, phi_s0, arg2, phi_f0) != 0) {
+            if (func_800BC1B4(actor, itemAction, arg2, speedXZ)) {
                 break;
             }
         }
 
-        phi_s0 = phi_s0->next;
+        itemAction = itemAction->next;
     }
 
-    return phi_s0;
+    return itemAction;
 }
 
 Actor* func_800BC444(GlobalContext* globalCtx, Actor* actor, f32 arg2) {
@@ -3643,23 +3641,29 @@ Actor* func_800BC444(GlobalContext* globalCtx, Actor* actor, f32 arg2) {
     return explosive;
 }
 
-s16 func_800BC4EC(Actor* actor, GlobalContext* globalCtx, f32 arg2, s16 arg3) {
+s16 func_800BC4EC(Actor* actor, GlobalContext* globalCtx, f32 arg2, s16 angle) {
     s16 temp_v1;
-    u16 sp44;
-    f32 sp40;
-    f32 temp_f0;
-    Vec3f sp30;
+    u16 bgCheckFlags;
+    f32 sin;
+    f32 cos;
+    Vec3f actorPos;
 
-    Math_Vec3f_Copy(&sp30, &actor->world.pos);
-    sp44 = actor->bgCheckFlags;
-    sp40 = Math_SinS(arg3) * arg2;
-    temp_f0 = Math_CosS(arg3);
-    actor->world.pos.x += sp40;
-    actor->world.pos.z += temp_f0 * arg2;
+    Math_Vec3f_Copy(&actorPos, &actor->world.pos);
+
+    bgCheckFlags = actor->bgCheckFlags;
+
+    sin = Math_SinS(angle) * arg2;
+    cos = Math_CosS(angle) * arg2;
+
+    actor->world.pos.x += sin;
+    actor->world.pos.z += cos;
+
     Actor_UpdateBgCheckInfo(globalCtx, actor, 0.0f, 0.0f, 0.0f, 4);
-    Math_Vec3f_Copy(&actor->world.pos, &sp30);
+    Math_Vec3f_Copy(&actor->world.pos, &actorPos);
+
     temp_v1 = (actor->bgCheckFlags & 1);
-    actor->bgCheckFlags = sp44;
+
+    actor->bgCheckFlags = bgCheckFlags;
 
     return temp_v1;
 }
@@ -3667,20 +3671,21 @@ s16 func_800BC4EC(Actor* actor, GlobalContext* globalCtx, f32 arg2, s16 arg3) {
 s32 func_800BC5B8(GameState* gameState, Actor* actor) {
     Player* player = GET_PLAYER(gameState);
 
-    if ((player->stateFlags3 & 0x80000000) && (actor->isTargeted != 0)) {
-        return 1;
+    if ((player->stateFlags3 & 0x80000000) && actor->isTargeted) {
+        return true;
     }
-    return 0;
+
+    return false;
 }
 
 s32 func_800BC5EC(GlobalContext* globalCtx, Actor* actor) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((player->stateFlags3 & 0x80000000) && (actor->isTargeted == 0)) {
-        return 1;
+    if ((player->stateFlags3 & 0x80000000) && !actor->isTargeted) {
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
 void func_800BC620(Vec3f* arg0, Vec3f* arg1, u8 arg2, GlobalContext* globalCtx) {
@@ -3705,7 +3710,7 @@ void func_800BC620(Vec3f* arg0, Vec3f* arg1, u8 arg2, GlobalContext* globalCtx) 
     } else {
         SysMatrix_InsertTranslation(arg0->x, arg0->y, arg0->z, 0);
     }
-    Matrix_Scale(arg1->x, 1.0f, arg1->z, 1);
+    Matrix_Scale(arg1->x, 1.0f, arg1->z, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_04076BC0);
@@ -3714,23 +3719,23 @@ void func_800BC620(Vec3f* arg0, Vec3f* arg1, u8 arg2, GlobalContext* globalCtx) 
 }
 
 void func_800BC770(GameState* gameState, s16 arg1, s16 arg2) {
-    s16 sp26;
+    s16 idx;
     GlobalContext* globalCtx = (GlobalContext*)gameState;
 
-    sp26 = Quake_Add(&globalCtx->mainCamera, 3);
-    Quake_SetSpeed(sp26, 20000);
-    Quake_SetQuakeValues(sp26, arg1, 0, 0, 0);
-    Quake_SetCountdown(sp26, arg2);
+    idx = Quake_Add(&globalCtx->mainCamera, 3);
+    Quake_SetSpeed(idx, 20000);
+    Quake_SetQuakeValues(idx, arg1, 0, 0, 0);
+    Quake_SetCountdown(idx, arg2);
 }
 
-void func_800BC7D8(GameState* gameState, s16 arg1, s16 arg2, s16 arg3) {
-    s16 sp26;
+void func_800BC7D8(GameState* gameState, s16 arg1, s16 arg2, s16 speed) {
+    s16 idx;
     GlobalContext* globalCtx = (GlobalContext*)gameState;
 
-    sp26 = Quake_Add(&globalCtx->mainCamera, 3);
-    Quake_SetSpeed(sp26, arg3);
-    Quake_SetQuakeValues(sp26, arg1, 0, 0, 0);
-    Quake_SetCountdown(sp26, arg2);
+    idx = Quake_Add(&globalCtx->mainCamera, 3);
+    Quake_SetSpeed(idx, speed);
+    Quake_SetQuakeValues(idx, arg1, 0, 0, 0);
+    Quake_SetCountdown(idx, arg2);
 }
 
 void func_800BC848(Actor* actor, GameState* gameState, s16 arg2, s16 arg3) {
@@ -3762,7 +3767,7 @@ struct_801AEDD4 D_801AEDD4[] = {
 void func_800BC8B8(GlobalContext* globalCtx, s32 frame, s32 type) {
     s32 pad[2];
     MtxF spA8;
-    s32 phi_s1;
+    s32 i;
     f32 temp_f22;
     f32 temp_f24;
     struct_801AEDD4* temp_s2;
@@ -3780,9 +3785,9 @@ void func_800BC8B8(GlobalContext* globalCtx, s32 frame, s32 type) {
     temp_f22 = __sinf(temp_s2->unk_00 - phi_f20) * -(10 - frame) * 0.1f * temp_s2->unk_04;
     temp_f24 = __cosf(temp_s2->unk_00 - phi_f20) * (10 - frame) * 0.1f * temp_s2->unk_04;
 
-    for (phi_s1 = 0; phi_s1 < 4; phi_s1++) {
+    for (i = 0; i < 4; i++) {
         SysMatrix_SetCurrentState(&spA8);
-        SysMatrix_InsertZRotation_f(phi_f20, 1);
+        SysMatrix_InsertZRotation_f(phi_f20, MTXMODE_APPLY);
         SysMatrix_InsertTranslation(temp_f22, temp_f24, 0.0f, 1);
         if (temp_s2->unk_0C != 1.0f) {
             Matrix_Scale(temp_s2->unk_0C, temp_s2->unk_0C, temp_s2->unk_0C, 1);
@@ -3791,7 +3796,7 @@ void func_800BC8B8(GlobalContext* globalCtx, s32 frame, s32 type) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, temp_s2->unk_14);
 
-        if ((phi_s1 % 2) != 0) {
+        if ((i % 2) != 0) {
             phi_f2 = 2.0f * temp_s2->unk_00;
         } else {
             phi_f2 = M_PI - (2.0f * temp_s2->unk_00);
@@ -3808,8 +3813,8 @@ void func_800BC8B8(GlobalContext* globalCtx, s32 frame, s32 type) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-void func_800BCB50(GlobalContext* arg0, Vec3f* arg1) {
-    CollisionCheck_SpawnShieldParticlesMetal(arg0, arg1);
+void func_800BCB50(GlobalContext* globalCtx, Vec3f* arg1) {
+    CollisionCheck_SpawnShieldParticlesMetal(globalCtx, arg1);
 }
 
 void func_800BCB70(Actor* actor, u16 arg1, u16 arg2, u16 arg3, u16 arg4) {
@@ -3824,20 +3829,21 @@ Hilite* func_800BCBF4(Vec3f* arg0, GlobalContext* globalCtx) {
     Vec3f lightDir;
 
     // lightDir.x = globalCtx->envCtx.dirLight1.params.dir.x;
-    lightDir.x = globalCtx->envCtx.unk_28.params.dir.x;
-    lightDir.y = globalCtx->envCtx.unk_28.params.dir.y;
-    lightDir.z = globalCtx->envCtx.unk_28.params.dir.z;
+    lightDir.x = globalCtx->envCtx.dirLight1.params.dir.x;
+    lightDir.y = globalCtx->envCtx.dirLight1.params.dir.y;
+    lightDir.z = globalCtx->envCtx.dirLight1.params.dir.z;
 
     return func_800B7FE0(arg0, &globalCtx->view.eye, &lightDir, globalCtx->state.gfxCtx);
 }
 
 Hilite* func_800BCC68(Vec3f* arg0, GlobalContext* globalCtx) {
-    Vec3f sp1C;
+    Vec3f lightDir;
 
-    sp1C.x = globalCtx->envCtx.unk_28.params.dir.x;
-    sp1C.y = globalCtx->envCtx.unk_28.params.dir.y;
-    sp1C.z = globalCtx->envCtx.unk_28.params.dir.z;
-    return func_800B8018(arg0, &globalCtx->view.eye, &sp1C, globalCtx->state.gfxCtx);
+    lightDir.x = globalCtx->envCtx.dirLight1.params.dir.x;
+    lightDir.y = globalCtx->envCtx.dirLight1.params.dir.y;
+    lightDir.z = globalCtx->envCtx.dirLight1.params.dir.z;
+
+    return func_800B8018(arg0, &globalCtx->view.eye, &lightDir, globalCtx->state.gfxCtx);
 }
 
 #ifdef NON_MATCHING
@@ -3902,7 +3908,7 @@ void func_800BCCDC(Vec3s* points, s32 pathcount, Vec3f* pos1, Vec3f* pos2, s32 p
         spA0[1] = ((sp70.z - pos1->z) * (sp94.x - pos1->x)) < ((sp94.z - pos1->z) * (sp70.x - pos1->x));
 
         for (phi_s0_2 = 0; phi_s0_2 < ARRAY_COUNT(sp54); phi_s0_2++) {
-            if ((spA8)[phi_s0_2] != 0) {
+            if (spA8[phi_s0_2] != 0) {
                 sp54[phi_s0_2] = Math3D_XZDistanceSquared(pos1->x, pos1->z, sp7C[phi_s0_2].x, sp7C[phi_s0_2].z);
             } else {
                 sp54[phi_s0_2] = 1.6e9f;
@@ -4222,16 +4228,16 @@ void Actor_Noop(Actor* actor, GlobalContext* globalCtx) {
 
 #include "z_cheap_proc.c"
 
-Actor* func_800BE0B8(GlobalContext* globalCtx, Actor* inActor, s16 arg2, u8 arg3, f32 arg4) {
-    Actor* actor = globalCtx->actorCtx.actorList[arg3].first;
+Actor* func_800BE0B8(GlobalContext* globalCtx, Actor* inActor, s16 actorId, u8 actorCategory, f32 distance) {
+    Actor* actor = globalCtx->actorCtx.actorList[actorCategory].first;
 
     while (actor != NULL) {
-        if (actor == inActor || ((arg2 != -1) && (arg2 != actor->id))) {
+        if (actor == inActor || ((actorId != -1) && (actorId != actor->id))) {
             actor = actor->next;
             continue;
         }
 
-        if (Actor_DistanceBetweenActors(inActor, actor) <= arg4) {
+        if (Actor_DistanceBetweenActors(inActor, actor) <= distance) {
             return actor;
         }
 
@@ -4243,11 +4249,10 @@ Actor* func_800BE0B8(GlobalContext* globalCtx, Actor* inActor, s16 arg2, u8 arg3
 
 #ifdef NON_MATCHING
 // regalloc
-s32 func_800BE184(GameState* gameState, Actor* actor, f32 arg2, s16 arg3, s16 arg4, s16 arg5) {
+s32 func_800BE184(GameState* gameState, Actor* actor, f32 xzDist, s16 arg3, s16 arg4, s16 arg5) {
     GlobalContext* globalCtx = (GlobalContext*)gameState;
     s16 temp_a2;
     s16 temp_t0;
-    s16 temp_v1;
     s16 temp_t8;
     Player* player;
     s16 phi_v0;
@@ -4262,7 +4267,7 @@ s32 func_800BE184(GameState* gameState, Actor* actor, f32 arg2, s16 arg3, s16 ar
 
     if ((!temp_t0)) {}
 
-    if ((actor->xzDistToPlayer <= arg2) && (player->swordState != 0)) {
+    if ((actor->xzDistToPlayer <= xzDist) && (player->swordState != 0)) {
         if (arg4 >= ABS_ALT(phi_v0) && arg3 >= ABS_ALT(temp_t0)) {
             return 1;
         }
@@ -4289,11 +4294,11 @@ void func_800BE258(Actor* actor, ColliderInfo* colInfo) {
 
     if (temp_v0 == NULL) {
         actor->dropFlag = 0;
-    } else if ((temp_v0->toucher.dmgFlags & 0x800) != 0) {
+    } else if (temp_v0->toucher.dmgFlags & 0x800) {
         actor->dropFlag = 1;
-    } else if ((temp_v0->toucher.dmgFlags & 0x1000) != 0) {
+    } else if (temp_v0->toucher.dmgFlags & 0x1000) {
         actor->dropFlag = 2;
-    } else if ((temp_v0->toucher.dmgFlags & 0x2000) != 0) {
+    } else if (temp_v0->toucher.dmgFlags & 0x2000) {
         actor->dropFlag = 0x20;
     } else {
         actor->dropFlag = 0;
@@ -4301,55 +4306,53 @@ void func_800BE258(Actor* actor, ColliderInfo* colInfo) {
 }
 
 void func_800BE2B8(Actor* actor, ColliderJntSph* jntSphere) {
-    s32 temp_v0;
-    s32 temp_v0_2;
-    s32 temp_v1;
-    ColliderJntSphElement* new_var2;
-    s32 phi_v1;
-    s32 phi_v0;
-    ColliderInfo* temp_a2;
+    s32 i;
+    ColliderJntSphElement* jntElement;
+    ColliderInfo* acHitInfo;
+    s32 flag;
 
     actor->dropFlag = 0;
 
-    for (phi_v1 = jntSphere->count - 1; phi_v1 >= 0; phi_v1--) {
-        new_var2 = &jntSphere->elements[phi_v1];
-        temp_a2 = new_var2->info.acHitInfo;
+    for (i = jntSphere->count - 1; i >= 0; i--) {
+        jntElement = &jntSphere->elements[i];
+        acHitInfo = jntElement->info.acHitInfo;
 
-        if (temp_a2 == NULL) {
-            phi_v0 = 0;
+        if (acHitInfo == NULL) {
+            flag = 0;
         } else {
-            temp_v0_2 = temp_a2->toucher.dmgFlags;
+            s32 dmgFlags = acHitInfo->toucher.dmgFlags;
 
-            if (temp_v0_2 & 0x800) {
-                phi_v0 = 1;
-            } else if (temp_v0_2 & 0x1000) {
-                phi_v0 = 2;
+            if (dmgFlags & 0x800) {
+                flag = 1;
+            } else if (dmgFlags & 0x1000) {
+                flag = 2;
             } else {
-                phi_v0 = (temp_v0_2 & 0x2000) ? 0x20 : 0;
+                flag = (dmgFlags & 0x2000) ? 0x20 : 0;
             }
         }
 
-        actor->dropFlag |= phi_v0;
+        actor->dropFlag |= flag;
     }
 }
 
 void func_800BE33C(Vec3f* arg0, Vec3f* arg1, Vec3s* arg2, s32 arg3) {
-    f32 sp24 = arg1->x - arg0->x;
-    f32 sp20 = arg1->z - arg0->z;
-    f32 sp1C;
+    f32 xDiff = arg1->x - arg0->x;
+    f32 zDiff = arg1->z - arg0->z;
+    f32 yDiff;
 
     if (arg3) {
-        sp1C = arg1->y - arg0->y;
+        yDiff = arg1->y - arg0->y;
     } else {
-        sp1C = arg0->y - arg1->y;
+        yDiff = arg0->y - arg1->y;
     }
-    arg2->y = Math_FAtan2F(sp20, sp24);
-    arg2->x = Math_FAtan2F(sqrtf(SQ(sp24) + SQ(sp20)), sp1C);
+
+    arg2->y = Math_FAtan2F(zDiff, xDiff);
+    arg2->x = Math_FAtan2F(sqrtf(SQ(xDiff) + SQ(zDiff)), yDiff);
 }
 
 #ifdef NON_MATCHING
 // stack
-void func_800BE3D0(Actor* actor, s16 arg1, Vec3s* arg2) {
+void func_800BE3D0(Actor* actor, s16 angle, Vec3s* arg2) {
     f32 sp44;
     f32 sp40;
     f32 sp3C;
@@ -4360,19 +4363,19 @@ void func_800BE3D0(Actor* actor, s16 arg1, Vec3s* arg2) {
     f32 sp2C;
     s32 pad2;
 
-    if (actor->floorPoly != 0) {
+    if (actor->floorPoly != NULL) {
         CollisionPoly* floorPoly = actor->floorPoly;
 
         sp44 = COLPOLY_GET_NORMAL(floorPoly->normal.x);
         sp40 = COLPOLY_GET_NORMAL(floorPoly->normal.y);
         sp3C = COLPOLY_GET_NORMAL(floorPoly->normal.z);
 
-        sp38 = Math_SinS(arg1);
-        sp34 = Math_CosS(arg1);
+        sp38 = Math_SinS(angle);
+        sp34 = Math_CosS(angle);
         arg2->x = (s16)-Math_Atan2S((-(sp44 * sp38) - (sp3C * sp34)) * sp40, 1.0f);
 
-        sp2C = Math_SinS(arg1 - 0x3FF7);
-        sp30 = Math_CosS(arg1 - 0x3FF7);
+        sp2C = Math_SinS(angle - 0x3FF7);
+        sp30 = Math_CosS(angle - 0x3FF7);
         arg2->z = (s16)-Math_Atan2S((-(sp44 * sp2C) - (sp3C * sp30)) * sp40, 1.0f);
     }
 }
@@ -4389,7 +4392,7 @@ void func_800BE504(Actor* actor, ColliderCylinder* collider) {
 }
 
 void func_800BE568(Actor* actor, ColliderSphere* collider) {
-    if (collider->info.acHitInfo->toucher.dmgFlags & (0x13820)) {
+    if (collider->info.acHitInfo->toucher.dmgFlags & 0x13820) {
         actor->world.rot.y = collider->base.ac->shape.rot.y;
     } else {
         actor->world.rot.y = Actor_YawBetweenActors(collider->base.ac, actor);
@@ -4397,7 +4400,7 @@ void func_800BE568(Actor* actor, ColliderSphere* collider) {
 }
 
 void func_800BE5CC(Actor* actor, ColliderJntSph* collider, s32 arg2) {
-    if (collider->elements[arg2].info.acHitInfo->toucher.dmgFlags & (0x13820)) {
+    if (collider->elements[arg2].info.acHitInfo->toucher.dmgFlags & 0x13820) {
         actor->world.rot.y = collider->base.ac->shape.rot.y;
     } else {
         actor->world.rot.y = Actor_YawBetweenActors(collider->base.ac, actor);
@@ -4426,20 +4429,19 @@ static Color_RGBA8 D_801AEFBC = { 200, 200, 255, 255 };
 static Vec3f D_801AEFC0 = { 0.0f, -1.0f, 0.0f };
 
 void func_800BF7CC(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s32 arg3, s32 arg4, f32 arg5, f32 arg6) {
-    s32 sp94;
+    s32 i;
     s32 pad;
     Vec3f sp84;
     s16 temp_s0;
     s16 temp_s2;
-    s32 phi_s1;
-    phi_s1 = arg3;
+    s32 j;
 
-    Audio_PlaySoundAtPosition(globalCtx, &actor->world.pos, 0x1E, 0x28CB);
+    Audio_PlaySoundAtPosition(globalCtx, &actor->world.pos, 0x1E, NA_SE_EV_ICE_BROKEN);
 
-    for (sp94 = 0; sp94 < arg3; sp94++) {
+    for (i = 0; i < arg3; i++) {
         temp_s2 = Actor_YawToPoint(actor, limbPos);
 
-        for (phi_s1 = 0; phi_s1 < arg4; phi_s1++) {
+        for (j = 0; j < arg4; j++) {
             temp_s0 = (Rand_Next() >> 0x13) + temp_s2;
             sp84.z = Rand_ZeroFloat(5.0f);
             sp84.x = Math_SinS(temp_s0) * sp84.z;
