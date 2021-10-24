@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ZResource.h"
 #include "ZCollision.h"
+#include "ZResource.h"
 
 class ExporterExample_Collision : public ZResourceExporter
 {

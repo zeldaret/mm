@@ -87,8 +87,7 @@ CutsceneCommandSceneTransFX::~CutsceneCommandSceneTransFX()
 
 std::string ZCutscene::GetBodySourceCode() const
 {
-	std::string output = "";
-	size_t size = 0;
+	std::string output;
 	uint32_t curPtr = 0;
 
 	output += StringHelper::Sprintf("    CS_BEGIN_CUTSCENE(%i, %i),\n", commands.size(), endFrame);
@@ -98,38 +97,11 @@ std::string ZCutscene::GetBodySourceCode() const
 		CutsceneCommand* cmd = commands[i];
 		output += "    " + cmd->GenerateSourceCode(curPtr);
 		curPtr += cmd->GetCommandSize();
-		size += cmd->GetCommandSize();
 	}
 
 	output += StringHelper::Sprintf("    CS_END(),\n", commands.size(), endFrame);
 
 	return output;
-}
-
-std::string ZCutscene::GetSourceOutputCode(const std::string& prefix)
-{
-	std::string bodyStr = GetBodySourceCode();
-
-	Declaration* decl = parent->GetDeclaration(rawDataIndex);
-
-	if (decl == nullptr)
-		DeclareVar(prefix, bodyStr);
-	else
-		decl->text = bodyStr;
-
-	return "";
-}
-
-void ZCutscene::DeclareVar(const std::string& prefix, const std::string& bodyStr) const
-{
-	std::string auxName = name;
-
-	if (auxName == "")
-		auxName = StringHelper::Sprintf("%sCutsceneData0x%06X", prefix.c_str(), rawDataIndex);
-
-	parent->AddDeclarationArray(getSegmentOffset(), DeclarationAlignment::Align4,
-	                            DeclarationPadding::Pad16, GetRawDataSize(), GetSourceTypeName(),
-	                            auxName, 0, bodyStr);
 }
 
 size_t ZCutscene::GetRawDataSize() const
@@ -150,12 +122,6 @@ size_t ZCutscene::GetRawDataSize() const
 	size += 8;
 
 	return size;
-}
-
-void ZCutscene::ExtractFromXML(tinyxml2::XMLElement* reader, uint32_t nRawDataIndex)
-{
-	ZResource::ExtractFromXML(reader, nRawDataIndex);
-	DeclareVar(parent->GetName(), "");
 }
 
 void ZCutscene::ParseRawData()
@@ -526,10 +492,10 @@ std::string CutsceneCommandSetCameraPos::GetCName()
 
 std::string CutsceneCommandSetCameraPos::GenerateSourceCode([[maybe_unused]] uint32_t baseAddress)
 {
-	std::string result = "";
+	std::string result;
 
-	std::string listStr = "";
-	std::string posStr = "";
+	std::string listStr;
+	std::string posStr;
 
 	if (commandID == (int32_t)CutsceneCommands::SetCameraFocus)
 	{
@@ -617,7 +583,7 @@ std::string CutsceneCommandFadeBGM::GetCName()
 
 std::string CutsceneCommandFadeBGM::GenerateSourceCode([[maybe_unused]] uint32_t baseAddress)
 {
-	std::string result = "";
+	std::string result;
 
 	result += StringHelper::Sprintf("CS_FADE_BGM_LIST(%i),\n", entries.size());
 
@@ -670,7 +636,7 @@ CutsceneCommandPlayBGM::CutsceneCommandPlayBGM(const std::vector<uint8_t>& rawDa
 
 std::string CutsceneCommandPlayBGM::GenerateSourceCode([[maybe_unused]] uint32_t baseAddress)
 {
-	std::string result = "";
+	std::string result;
 
 	result += StringHelper::Sprintf("CS_PLAY_BGM_LIST(%i),\n", entries.size());
 
@@ -713,7 +679,7 @@ CutsceneCommandStopBGM::CutsceneCommandStopBGM(const std::vector<uint8_t>& rawDa
 
 std::string CutsceneCommandStopBGM::GenerateSourceCode([[maybe_unused]] uint32_t baseAddress)
 {
-	std::string result = "";
+	std::string result;
 
 	result += StringHelper::Sprintf("CS_STOP_BGM_LIST(%i),\n", entries.size());
 
@@ -771,7 +737,7 @@ CutsceneCommandEnvLighting::CutsceneCommandEnvLighting(const std::vector<uint8_t
 
 std::string CutsceneCommandEnvLighting::GenerateSourceCode([[maybe_unused]] uint32_t baseAddress)
 {
-	std::string result = "";
+	std::string result;
 
 	result += StringHelper::Sprintf("CS_LIGHTING_LIST(%i),\n", entries.size());
 
@@ -827,7 +793,7 @@ CutsceneCommandUnknown9::CutsceneCommandUnknown9(const std::vector<uint8_t>& raw
 
 std::string CutsceneCommandUnknown9::GenerateSourceCode([[maybe_unused]] uint32_t baseAddress)
 {
-	std::string result = "";
+	std::string result;
 
 	result += StringHelper::Sprintf("CS_CMD_09_LIST(%i),\n", entries.size());
 
@@ -885,7 +851,7 @@ CutsceneCommandUnknown::CutsceneCommandUnknown(const std::vector<uint8_t>& rawDa
 
 std::string CutsceneCommandUnknown::GenerateSourceCode([[maybe_unused]] uint32_t baseAddress)
 {
-	std::string result = "";
+	std::string result;
 
 	result += StringHelper::Sprintf("CS_UNK_DATA_LIST(0x%02X, %i),\n", commandID, entries.size());
 
@@ -943,7 +909,7 @@ std::string CutsceneCommandDayTime::GetCName()
 
 std::string CutsceneCommandDayTime::GenerateSourceCode([[maybe_unused]] uint32_t baseAddress)
 {
-	std::string result = "";
+	std::string result;
 
 	result += StringHelper::Sprintf("CS_TIME_LIST(%i),\n", entries.size());
 
@@ -994,7 +960,7 @@ std::string CutsceneCommandTextbox::GetCName()
 
 std::string CutsceneCommandTextbox::GenerateSourceCode([[maybe_unused]] uint32_t baseAddress)
 {
-	std::string result = "";
+	std::string result;
 
 	result += StringHelper::Sprintf("CS_TEXT_LIST(%i),\n", entries.size());
 
@@ -1060,8 +1026,8 @@ CutsceneCommandActorAction::CutsceneCommandActorAction(const std::vector<uint8_t
 
 std::string CutsceneCommandActorAction::GenerateSourceCode([[maybe_unused]] uint32_t baseAddress)
 {
-	std::string result = "";
-	std::string subCommand = "";
+	std::string result;
+	std::string subCommand;
 
 	if (commandID == 10)
 	{
@@ -1078,7 +1044,7 @@ std::string CutsceneCommandActorAction::GenerateSourceCode([[maybe_unused]] uint
 	{
 		result += StringHelper::Sprintf(
 			"\t\t%s(0x%04X, %i, %i, 0x%04X, 0x%04X, 0x%04X, %i, %i, %i, %i, %i, %i, %.11ef, "
-		    "%.11ef, %.11ef),\n",
+			"%.11ef, %.11ef),\n",
 			subCommand.c_str(), entries[i]->action, entries[i]->startFrame, entries[i]->endFrame,
 			entries[i]->rotX, entries[i]->rotY, entries[i]->rotZ, entries[i]->startPosX,
 			entries[i]->startPosY, entries[i]->startPosZ, entries[i]->endPosX, entries[i]->endPosY,
@@ -1117,7 +1083,7 @@ std::string CutsceneCommandTerminator::GetCName()
 
 std::string CutsceneCommandTerminator::GenerateSourceCode([[maybe_unused]] uint32_t baseAddress)
 {
-	std::string result = "";
+	std::string result;
 
 	result += StringHelper::Sprintf("CS_TERMINATOR(0x%04X, %i, %i),\n", base, startFrame, endFrame);
 
@@ -1139,7 +1105,7 @@ CutsceneCommandEnd::CutsceneCommandEnd(const std::vector<uint8_t>& rawData, uint
 
 std::string CutsceneCommandEnd::GenerateSourceCode([[maybe_unused]] uint32_t baseAddress)
 {
-	std::string result = "";
+	std::string result;
 
 	result += StringHelper::Sprintf("CS_END(),\n");
 
@@ -1193,7 +1159,7 @@ CutsceneCommandSpecialAction::CutsceneCommandSpecialAction(const std::vector<uin
 
 std::string CutsceneCommandSpecialAction::GenerateSourceCode([[maybe_unused]] uint32_t baseAddress)
 {
-	std::string result = "";
+	std::string result;
 
 	result += StringHelper::Sprintf("CS_MISC_LIST(%i),\n", entries.size());
 
@@ -1267,6 +1233,20 @@ size_t CutsceneCommandSceneTransFX::GetCommandSize()
 
 ZCutsceneBase::ZCutsceneBase(ZFile* nParent) : ZResource(nParent)
 {
+}
+
+Declaration* ZCutsceneBase::DeclareVar(const std::string& prefix, const std::string& bodyStr)
+{
+	std::string auxName = name;
+
+	if (auxName == "")
+		auxName = GetDefaultName(prefix);
+
+	Declaration* decl =
+		parent->AddDeclarationArray(rawDataIndex, GetDeclarationAlignment(), GetRawDataSize(),
+	                                GetSourceTypeName(), auxName, 0, bodyStr);
+	decl->staticConf = staticConf;
+	return decl;
 }
 
 std::string ZCutsceneBase::GetSourceTypeName() const

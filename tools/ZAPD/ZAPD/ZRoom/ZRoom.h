@@ -14,9 +14,7 @@ public:
 	std::vector<ZRoomCommand*> commands;
 	int32_t roomCount;  // Only valid for scenes
 
-	std::string extDefines;
-
-	std::string hackMode = "";
+	std::string hackMode;
 
 	ZResourceType zroomType = ZResourceType::Error;
 	ZResourceType parentZroomType = ZResourceType::Error;
@@ -33,21 +31,20 @@ public:
 	void ParseRawDataLate() override;
 	void DeclareReferencesLate(const std::string& prefix) override;
 
-	void DeclareVar(const std::string& prefix, const std::string body);
+	Declaration* DeclareVar(const std::string& prefix, const std::string& body) override;
 	std::string GetBodySourceCode() const override;
 
-	std::string GetDefaultName(const std::string& prefix) const;
+	std::string GetSourceOutputCode(const std::string& prefix) override;
+
+	std::string GetDefaultName(const std::string& prefix) const override;
 	size_t GetDeclarationSizeFromNeighbor(uint32_t declarationAddress);
 	size_t GetCommandSizeFromNeighbor(ZRoomCommand* cmd);
 	ZRoomCommand* FindCommandOfType(RoomCommand cmdType);
 
-	std::string GetSourceTypeName() const override;
-
 	size_t GetRawDataSize() const override;
+	std::string GetSourceTypeName() const override;
 	ZResourceType GetResourceType() const override;
 
 protected:
-	std::string GetSourceOutputHeader(const std::string& prefix) override;
-	std::string GetSourceOutputCode(const std::string& prefix) override;
 	void SyotesRoomHack();
 };

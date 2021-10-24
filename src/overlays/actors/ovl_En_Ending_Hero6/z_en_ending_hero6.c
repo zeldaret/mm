@@ -76,8 +76,8 @@ void EnEndingHero6_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, sSkeletons[this->npcIndex], sAnimations[this->npcIndex],
-                     this->jointTable, this->morphTable, sLimbCounts[this->npcIndex]);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, sSkeletons[this->npcIndex], sAnimations[this->npcIndex],
+                       this->jointTable, this->morphTable, sLimbCounts[this->npcIndex]);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
     EnEndingHero6_SetupIdle(this);
 }
@@ -87,8 +87,8 @@ void EnEndingHero6_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnEndingHero6_InitSkelAnime(EnEndingHero6* this, s32 npcIndex) {
     this->animIndex = npcIndex;
-    this->frameCount = SkelAnime_GetFrameCount(&sAnimations[npcIndex]->common);
-    SkelAnime_ChangeAnim(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.f, this->frameCount, 0, 0.0f);
+    this->frameCount = Animation_GetLastFrame(sAnimations[npcIndex]);
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.f, this->frameCount, 0, 0.0f);
 }
 
 void EnEndingHero6_SetupIdle(EnEndingHero6* this) {
@@ -98,7 +98,7 @@ void EnEndingHero6_SetupIdle(EnEndingHero6* this) {
 }
 
 void EnEndingHero6_Idle(EnEndingHero6* this, GlobalContext* globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
 }
 
 void EnEndingHero6_Update(Actor* thisx, GlobalContext* globalCtx) {
@@ -182,7 +182,7 @@ void EnEndingHero6_Draw(Actor* thisx, GlobalContext* globalCtx) {
                 gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80C24294[index]));
             }
 
-            SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
+            SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                              this->skelAnime.dListCount, NULL, EnEndingHero6_PostLimbDraw, &this->actor);
         }
 
