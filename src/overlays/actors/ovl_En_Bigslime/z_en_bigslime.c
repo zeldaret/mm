@@ -351,7 +351,7 @@ void EnBigslime_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600DF98, &D_060066B4, this->jointTable, this->morphTable,
-                     GEKKO_LIMB_MAX);
+                       GEKKO_LIMB_MAX);
 
     for (i = 0; i < BIGSLIME_NUM_RING_FACES; i++) {
         Collider_InitAndSetCylinder(globalCtx, &this->bigslimeCollider[i], &this->actor, &sCylinderInit);
@@ -2022,8 +2022,7 @@ void EnBigslime_JumpGekko(EnBigslime* this, GlobalContext* globalCtx) {
         EnBigslime_GekkoSfxOutsideBigslime(this, NA_SE_EV_WALK_WATER);
     }
 
-    if (!(this->actor.bgCheckFlags & 1) ||
-        ((this->skelAnime.curFrame > 1.0f) && (this->skelAnime.curFrame < 12.0f))) {
+    if (!(this->actor.bgCheckFlags & 1) || ((this->skelAnime.curFrame > 1.0f) && (this->skelAnime.curFrame < 12.0f))) {
         this->actor.speedXZ = 8.0f;
     } else {
         this->actor.speedXZ = 0.0f;
@@ -2082,8 +2081,7 @@ void EnBigslime_IdleLookAround(EnBigslime* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((this->skelAnime.animation == &D_060069FC) &&
-        Math_ScaledStepToS(&this->gekkoRot.y, this->gekkoYaw, 0x400)) {
+    if ((this->skelAnime.animation == &D_060069FC) && Math_ScaledStepToS(&this->gekkoRot.y, this->gekkoYaw, 0x400)) {
         if ((s16)(Actor_YawToPoint(&this->actor, &this->actor.home.pos) - this->gekkoRot.y) > 0) {
             this->gekkoYaw = this->gekkoRot.y + ((u32)Rand_Next() >> 20) + 0x2000;
         } else {
@@ -2293,8 +2291,7 @@ void EnBigslime_SetupCutsceneDefeat(EnBigslime* this, GlobalContext* globalCtx) 
     s32 i;
     s16 yawOffset;
 
-    Animation_Change(&this->skelAnime, &D_0600276C, 0.5f, 0.0f, Animation_GetLastFrame(&D_0600276C.common), 3,
-                         0.0f);
+    Animation_Change(&this->skelAnime, &D_0600276C, 0.5f, 0.0f, Animation_GetLastFrame(&D_0600276C.common), 3, 0.0f);
     this->gekkoCollider.base.acFlags &= ~AC_ON;
     this->defeatTimer = 60;
     this->actor.speedXZ = 10.0f;
@@ -2902,7 +2899,7 @@ void EnBigslime_DrawMinislime(EnBigslime* this, GlobalContext* globalCtx) {
         func_8012C2DC(globalCtx->state.gfxCtx);
         func_800B8118(&minislime->actor, globalCtx, 0);
         Matrix_SetStateRotationAndTranslation(minislime->actor.world.pos.x, minislime->actor.world.pos.y,
-                                                 minislime->actor.world.pos.z, &minislime->actor.shape.rot);
+                                              minislime->actor.world.pos.z, &minislime->actor.shape.rot);
         Matrix_Scale(minislime->actor.scale.x, minislime->actor.scale.y, minislime->actor.scale.z, MTXMODE_APPLY);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, minislime->actor.shape.shadowAlpha);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -3049,8 +3046,8 @@ void EnBigslime_DrawGekko(Actor* thisx, GlobalContext* globalCtx) {
     Matrix_Scale(this->gekkoScale, this->gekkoScale, this->gekkoScale, MTXMODE_APPLY);
     SkinMatrix_Vec3fMtxFMultXYZ(&globalCtx->projectionMatrix, &gekkoPos, &this->gekkoProjectedPos);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
-                     EnBigslime_PostLimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          NULL, EnBigslime_PostLimbDraw, &this->actor);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
     if ((this->actionFunc == EnBigslime_DamageGekko) || (this->actionFunc == EnBigslime_CutsceneDefeat) ||
@@ -3081,8 +3078,7 @@ void EnBigslime_DrawIceShardEffect(EnBigslime* this, GlobalContext* globalCtx) {
                    Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, globalCtx->gameplayFrames % 128,
                                     (u8)(globalCtx->gameplayFrames * 8), 32, 64, 1,
                                     (-globalCtx->gameplayFrames * 2) % 64, 0, 16, 16));
-        Matrix_InsertTranslation(this->iceShardRefPos.x, this->iceShardRefPos.y, this->iceShardRefPos.z,
-                                    MTXMODE_NEW);
+        Matrix_InsertTranslation(this->iceShardRefPos.x, this->iceShardRefPos.y, this->iceShardRefPos.z, MTXMODE_NEW);
         Matrix_Scale(this->iceShardScale, this->iceShardScale, this->iceShardScale, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, &D_0600FB40);
@@ -3094,8 +3090,8 @@ void EnBigslime_DrawIceShardEffect(EnBigslime* this, GlobalContext* globalCtx) {
     for (i = 0; i < BIGSLIME_NUM_ICE_SHARD; i++) {
         iceShardEffect = &this->iceShardEffect[i];
         if (iceShardEffect->isActive > false) {
-            Matrix_SetStateRotationAndTranslation(iceShardEffect->pos.x, iceShardEffect->pos.y,
-                                                     iceShardEffect->pos.z, &iceShardEffect->rotation);
+            Matrix_SetStateRotationAndTranslation(iceShardEffect->pos.x, iceShardEffect->pos.y, iceShardEffect->pos.z,
+                                                  &iceShardEffect->rotation);
             Matrix_Scale(iceShardEffect->scale, iceShardEffect->scale, iceShardEffect->scale, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
