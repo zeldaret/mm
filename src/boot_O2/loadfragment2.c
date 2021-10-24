@@ -71,7 +71,7 @@ void Load2_Relocate(u32 allocatedVRamAddr, OverlayRelocationSection* overlayInfo
 s32 Load2_LoadOverlay(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd, u32 allocatedVRamAddr) {
     int nbytes;
     u32 pad;
-    u32 size;
+    size_t size;
     void* end;
     OverlayRelocationSection* overlayInfo;
 
@@ -106,9 +106,9 @@ s32 Load2_LoadOverlay(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd, u3
 #pragma GLOBAL_ASM("asm/non_matchings/boot/loadfragment2/Load2_LoadOverlay.s")
 #endif
 
-void* Load2_AllocateAndLoad(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd) {
+void* Overlay_AllocateAndLoad(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd) {
     void* allocatedVRamAddr;
-    u32 size;
+    size_t size;
 
     size = vRamEnd - vRamStart;
     allocatedVRamAddr = SystemArena_MallocR(size);

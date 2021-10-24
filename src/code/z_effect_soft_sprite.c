@@ -41,7 +41,7 @@ void EffectSS_Clear(GlobalContext* globalCtx) {
     for (i = 0; i < EFFECT_SS_MAX; i++) {
         addr = overlay->loadedRamAddr;
         if (addr != NULL) {
-            zelda_free(addr);
+            ZeldaArena_Free(addr);
         }
 
         overlay->loadedRamAddr = 0;
@@ -175,7 +175,7 @@ void EffectSs_Spawn(GlobalContext* globalCtx, s32 type, s32 priority, void* init
         initInfo = entry->initInfo;
     } else {
         if (entry->loadedRamAddr == NULL) {
-            entry->loadedRamAddr = zelda_mallocR(overlaySize);
+            entry->loadedRamAddr = ZeldaArena_MallocR(overlaySize);
 
             if (entry->loadedRamAddr == NULL) {
                 return;

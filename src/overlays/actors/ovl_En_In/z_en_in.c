@@ -199,11 +199,11 @@ s32 func_808F30B0(SkelAnime* skelAnime, s16 animIndex) {
         ret = true;
         frameCount = sAnimations[animIndex].frameCount;
         if (frameCount < 0) {
-            frameCount = SkelAnime_GetFrameCount(&sAnimations[animIndex].animationSeg->common);
+            frameCount = Animation_GetLastFrame(sAnimations[animIndex].animationSeg);
         }
-        SkelAnime_ChangeAnim(skelAnime, sAnimations[animIndex].animationSeg, sAnimations[animIndex].playbackSpeed,
-                             sAnimations[animIndex].frame, frameCount, sAnimations[animIndex].mode,
-                             sAnimations[animIndex].transitionRate);
+        Animation_Change(skelAnime, sAnimations[animIndex].animationSeg, sAnimations[animIndex].playbackSpeed,
+                         sAnimations[animIndex].frame, frameCount, sAnimations[animIndex].mode,
+                         sAnimations[animIndex].transitionRate);
     }
     return ret;
 }
@@ -251,7 +251,7 @@ s32 func_808F3310(EnIn* this, GlobalContext* globalCtx) {
 }
 
 s32 func_808F3334(EnIn* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->colliderJntSph.base.atFlags & AT_HIT) {
         this->colliderJntSph.base.atFlags &= ~AT_HIT;
@@ -275,11 +275,11 @@ s32 func_808F33B8(void) {
 }
 
 void func_808F3414(EnIn* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Vec3f sp30;
 
     if (this->unk23D == 0) {
-        this->unk494 = SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+        this->unk494 = SkelAnime_Update(&this->skelAnime);
     }
     if (func_8013D5E8(this->actor.shape.rot.y, 0x2710, this->actor.yawTowardsPlayer)) {
         sp30.x = player->actor.world.pos.x;
@@ -346,8 +346,8 @@ void func_808F374C(EnIn* this, GlobalContext* globalCtx) {
     AnimationHeader* animations[] = { &D_06015E38, &D_06016A60, &D_060177AC, &D_06016484,
                                       &D_060170DC, &D_06018240, &D_060187C8, &D_060198A8 };
 
-    if (this->skelAnime.animCurrentSeg == &D_06016484 || this->skelAnime.animCurrentSeg == &D_060170DC) {
-        if (func_801378B8(&this->skelAnime, 8.0f)) {
+    if (this->skelAnime.animation == &D_06016484 || this->skelAnime.animation == &D_060170DC) {
+        if (Animation_OnFrame(&this->skelAnime, 8.0f)) {
             func_8019F88C(&this->actor.projectedPos, NA_SE_VO_IN_LASH_0, 2);
             if (Rand_ZeroOne() < 0.3f) {
                 Audio_PlaySfxByPos(&this->actor.projectedPos, NA_SE_IT_INGO_HORSE_NEIGH);
@@ -355,13 +355,13 @@ void func_808F374C(EnIn* this, GlobalContext* globalCtx) {
             Audio_PlaySfxByPos(&this->actor.projectedPos, NA_SE_IT_LASH);
         }
     }
-    if (this->skelAnime.animCurrentSeg == &D_060198A8 && func_801378B8(&this->skelAnime, 20.0f)) {
+    if (this->skelAnime.animation == &D_060198A8 && Animation_OnFrame(&this->skelAnime, 20.0f)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_VO_IN_CRY_0);
     }
-    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
+    if (SkelAnime_Update(&this->skelAnime)) {
         this->unk486 = this->unk488 %= 8;
-        SkelAnime_ChangeAnim(&this->skelAnime, animations[this->unk488], 1.0f, 0.0f,
-                             SkelAnime_GetFrameCount(&animations[this->unk488]->common), 2, -10.0f);
+        Animation_Change(&this->skelAnime, animations[this->unk488], 1.0f, 0.0f,
+                         Animation_GetLastFrame(animations[this->unk488]), 2, -10.0f);
     }
 }
 
@@ -1262,7 +1262,7 @@ s32 func_808F5728(GlobalContext* globalCtx, EnIn* this, s32 arg2, s32* arg3) {
     if (*arg3 == 1) {
         s32 requiredScopeTemp;
 
-        player = PLAYER;
+        player = GET_PLAYER(globalCtx);
         func_808F5994(this, globalCtx, &player->actor.world.pos, 0xC80);
     } else {
         rotDiff = this->actor.home.rot.y - this->actor.world.rot.y;
@@ -1399,7 +1399,7 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 30.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06014EA8, NULL, this->limbDrawTbl, this->transitionDrawTbl, 20);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06014EA8, NULL, this->jointTable, this->morphTable, 20);
     func_808F30B0(&this->skelAnime, 0);
     Collider_InitCylinder(globalCtx, &this->colliderCylinder);
     Collider_SetCylinder(globalCtx, &this->colliderCylinder, &this->actor, &sCylinderInit);
@@ -1415,8 +1415,7 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (type == ENIN_HORSE_RIDER_YELLOW_SHIRT || type == ENIN_HORSE_RIDER_BLUE_SHIRT) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
         this->unk488 = 1;
-        SkelAnime_ChangeAnim(&this->skelAnime, &D_06016A60, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_06016A60.common), 2,
-                             0.0f);
+        Animation_Change(&this->skelAnime, &D_06016A60, 1.0f, 0.0f, Animation_GetLastFrame(&D_06016A60), 2, 0.0f);
         Actor_SetScale(&this->actor, 0.01f);
         this->unk23C = 0;
         this->unk23D = 1;
@@ -1443,8 +1442,7 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
                     func_808F30B0(&this->skelAnime, 4);
                 }
                 if ((gSaveContext.weekEventReg[92] & (1 | 2 | 4)) == 2) {
-                    this->skelAnime.animCurrentFrame =
-                        ((Rand_ZeroOne() * 0.6f) + 0.2f) * this->skelAnime.animFrameCount;
+                    this->skelAnime.curFrame = ((Rand_ZeroOne() * 0.6f) + 0.2f) * this->skelAnime.endFrame;
                 }
                 if (this->unk4AC & 8) {
                     this->actionFunc = func_808F39DC;
@@ -1516,14 +1514,14 @@ void EnIn_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_808F6334(EnIn* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 newUnk4C8;
 
     newUnk4C8 = func_80152498(&globalCtx->msgCtx);
     this->unk4C4 += this->unk4C0 != 0.0f ? 40.0f : -40.0f;
     this->unk4C4 = CLAMP(this->unk4C4, 0.0f, 80.0f);
 
-    SysMatrix_InsertTranslation(this->unk4C4, 0.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_InsertTranslation(this->unk4C4, 0.0f, 0.0f, MTXMODE_APPLY);
     if (this == (EnIn*)player->targetActor &&
         !(globalCtx->msgCtx.unk11F04 >= 0xFF && globalCtx->msgCtx.unk11F04 <= 0x200) && newUnk4C8 == 3 &&
         this->unk4C8 == 3) {
@@ -1536,8 +1534,8 @@ void func_808F6334(EnIn* this, GlobalContext* globalCtx) {
     this->unk4C8 = newUnk4C8;
 }
 
-s32 EnIn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnIn* this = THIS;
+s32 EnIn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* arg) {
+    EnIn* this = (EnIn*)arg;
     s32 pad;
     Gfx* sp50[] = {
         NULL,       NULL,       D_060149A8, D_06014AE0, D_06014C30, D_060145D8, D_06014710,
@@ -1565,15 +1563,15 @@ s32 EnIn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
     if (limbIndex == 16) {
-        SysMatrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        SysMatrix_InsertXRotation_s(this->unk35A, MTXMODE_APPLY);
-        SysMatrix_InsertZRotation_s(-this->unk358, MTXMODE_APPLY);
-        SysMatrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(this->unk35A, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(-this->unk358, MTXMODE_APPLY);
+        Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         func_808F6334(this, globalCtx);
     }
     if (limbIndex == 9) {
         Matrix_RotateY(this->unk360, MTXMODE_APPLY);
-        SysMatrix_InsertXRotation_s(this->unk35E, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(this->unk35E, MTXMODE_APPLY);
     }
     if (limbIndex == 9 || limbIndex == 10 || limbIndex == 13) {
         rot->y += (s16)(Math_SinS(this->unk376[limbIndex]) * 200.0f);
@@ -1597,22 +1595,22 @@ s32 EnIn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     return 0;
 }
 
-void EnIn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnIn* this = THIS;
+void EnIn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* arg) {
+    EnIn* this = (EnIn*)arg;
     Vec3f sp50 = { 1600.0f, 0.0f, 0.0f };
     Vec3f sp44 = { 0.0f, 0.0f, 0.0f };
 
     if (limbIndex == 16) {
-        SysMatrix_MultiplyVector3fByState(&sp50, &this->unk4B4);
+        Matrix_MultiplyVector3fByState(&sp50, &this->unk4B4);
         Math_Vec3f_Copy(&this->actor.focus.pos, &this->unk4B4);
     }
     if (this->unk23D == 0) {
         Collider_UpdateSpheres(limbIndex, &this->colliderJntSph);
         if (limbIndex == 4) {
-            SysMatrix_MultiplyVector3fByState(&sp44, &this->unk248);
+            Matrix_MultiplyVector3fByState(&sp44, &this->unk248);
         }
         if (limbIndex == 7) {
-            SysMatrix_MultiplyVector3fByState(&sp44, &this->unk254);
+            Matrix_MultiplyVector3fByState(&sp44, &this->unk254);
         }
         if (this->unk23C == 0) {
             if (!(this->unk4AC & 8)) {
@@ -1642,7 +1640,7 @@ void EnIn_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     gDPPipeSync(POLY_OPA_DISP++);
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                     EnIn_OverrideLimbDraw, EnIn_PostLimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnIn_OverrideLimbDraw, EnIn_PostLimbDraw, &this->actor);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
