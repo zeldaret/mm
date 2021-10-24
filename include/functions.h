@@ -703,7 +703,6 @@ void func_800B4F78(TargetContext* targetCtx, s32 type, GlobalContext* globalCtx)
 void func_800B5040(TargetContext* targetCtx, Actor* actor, s32 type, GlobalContext* globalCtx);
 void Actor_TargetContextInit(TargetContext* targetCtx, Actor* actor, GlobalContext* globalCtx);
 void func_800B5208(TargetContext* targetCtx, GlobalContext* globalCtx);
-void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GlobalContext* globalCtx);
 s32 Flags_GetSwitch(GlobalContext* globalCtx, s32 flag);
 void Flags_SetSwitch(GlobalContext* globalCtx, s32 flag);
 void Flags_UnsetSwitch(GlobalContext* globalCtx, s32 flag);

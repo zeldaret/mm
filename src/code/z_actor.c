@@ -24,7 +24,7 @@ extern s32 D_801ED8D4;            // 2 funcs
 extern s32 D_801ED8D8;            // 2 funcs
 extern s16 D_801ED8DC;            // 2 funcs
 extern Mtx D_801ED8E0;            // 1 func
-extern s32 D_801ED920;            // 2 funcs. 1 out of z_actor
+extern Actor* D_801ED920;            // 2 funcs. 1 out of z_actor
 
 void Actor_PrintLists(ActorContext* actorCtx) {
     ActorListEntry* actorList = &actorCtx->actorList[0];
@@ -611,21 +611,15 @@ void func_800B5208(TargetContext* targetCtx, GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B5208.s")
 #endif
 
-#ifdef NON_EQUIVALENT
 // OoT: func_8002C7BC
 void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GlobalContext* globalCtx) {
+    s32 pad;
     Actor* sp68;
     s32 sp64;
     Vec3f sp58;
     f32 sp54;
-    f32 sp44;
-    f32 temp_f0;
-    f32 temp_f0_2;
-    f32 temp_f14;
-    Actor* phi_s1;
 
     sp68 = NULL;
-    phi_s1 = actor;
     if ((player->unk_730 != 0) && (player->unk_AE3[player->unk_ADE] == 2)) {
         targetCtx->unk_94 = NULL;
     } else {
@@ -640,7 +634,7 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, Globa
         sp68 = actor;
     }
 
-    if (sp68 != 0) {
+    if (sp68 != NULL) {
         sp64 = sp68->category;
     } else {
         sp64 = player->actor.category;
@@ -653,45 +647,64 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, Globa
     }
 
     if (sp68 == NULL) {
-        sp68 = player;
+        sp68 = &player->actor;
     }
 
     if (Math_StepToF(&targetCtx->unk40, 0.0f, 0.25f) == 0) {
+        f32 temp_f0;
+        f32 x;
+        f32 y;
+        f32 z;
+
         temp_f0 = 0.25f / targetCtx->unk40;
-        targetCtx->unk0.x += ((sp68->focus.pos.x - targetCtx->unk0.x) * temp_f0);
-        targetCtx->unk0.y +=
-            (((sp68->focus.pos.y + (sp68->targetArrowOffset * sp68->scale.z)) - targetCtx->unk0.y) * temp_f0);
-        targetCtx->unk0.z += (sp68->focus.pos.z - targetCtx->unk0.z) * temp_f0;
+
+        x = sp68->focus.pos.x - targetCtx->unk0.x;
+        y = (sp68->focus.pos.y + (sp68->targetArrowOffset * sp68->scale.y)) - targetCtx->unk0.y;
+        z = sp68->focus.pos.z - targetCtx->unk0.z;
+
+        targetCtx->unk0.x += x * temp_f0;
+        targetCtx->unk0.y += y * temp_f0;
+        targetCtx->unk0.z += z * temp_f0;
     } else {
         func_800B5040(targetCtx, sp68, sp64, globalCtx);
     }
 
     if (actor != NULL && targetCtx->unk4B == 0) {
+
         func_800B4EDC(globalCtx, &actor->focus.pos, &sp58, &sp54);
         if ((sp58.z <= 0.0f) || (fabsf(sp58.x * sp54) >= 1.0f) || (fabsf(sp58.y * sp54) >= 1.0f)) {
-            phi_s1 = NULL;
+            actor = NULL;
         }
     }
 
-    if (phi_s1 != NULL) {
-        if (phi_s1 != targetCtx->targetedActor) {
-            func_800B4F78(targetCtx, phi_s1->category, globalCtx);
-            targetCtx->targetedActor = phi_s1;
+    if (actor != NULL) {
+        if (actor != targetCtx->targetedActor) {
+            s32 sfxId;
 
-            if (phi_s1->id == ACTOR_EN_BOOM) {
+            func_800B4F78(targetCtx, actor->category, globalCtx);
+
+            targetCtx->targetedActor = actor;
+
+            if (actor->id == ACTOR_EN_BOOM) {
                 targetCtx->unk48 = 0;
             }
 
-            play_sound((phi_s1->flags & 5) == 5 ? 0x4830 : 0x4810);
+            sfxId = (actor->flags & 5) == 5 ? 0x4830 : 0x4810;
+            play_sound(sfxId);
         }
 
-        targetCtx->targetCenterPos.x = phi_s1->world.pos.x;
-        targetCtx->targetCenterPos.y = phi_s1->world.pos.y - (phi_s1->shape.yOffset * phi_s1->scale.y);
-        targetCtx->targetCenterPos.z = phi_s1->world.pos.z;
-        if (targetCtx->unk4B == 0) {
-            temp_f0_2 = (500.0f - targetCtx->unk44) * 3.0f;
+        targetCtx->targetCenterPos.x = actor->world.pos.x;
+        targetCtx->targetCenterPos.y = actor->world.pos.y - (actor->shape.yOffset * actor->scale.y);
+        targetCtx->targetCenterPos.z = actor->world.pos.z;
 
-            if (Math_StepToF(&targetCtx->unk44, 80.0f, CLAMP(temp_f0_2, 30.0f, 100.0f)) != 0) {
+        if (targetCtx->unk4B == 0) {
+            f32 temp_f0_2;
+            f32 clampedFloat;
+
+            temp_f0_2 = (500.0f - targetCtx->unk44) * 3.0f;
+            clampedFloat = CLAMP(temp_f0_2, 30.0f, 100.0f);
+
+            if (Math_StepToF(&targetCtx->unk44, 80.0f, clampedFloat) != 0) {
                 targetCtx->unk4B += 1;
             }
         } else {
@@ -703,9 +716,6 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, Globa
         Math_StepToF(&targetCtx->unk44, 500.0f, 80.0f);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B5814.s")
-#endif
 
 /**
  * Tests if current scene switch flag is set.
