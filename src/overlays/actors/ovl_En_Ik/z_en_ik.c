@@ -257,6 +257,7 @@ extern CollisionCheckInfoInit D_8092C160;
 extern InitChainEntry D_8092C168[];
 
 extern AnimationHeader D_06000CE8;
+extern AnimationHeader D_060136A0;
 extern AnimationHeader D_060015F8;
 extern AnimationHeader D_06001ABC;
 extern AnimationHeader D_06002484;
@@ -269,6 +270,38 @@ extern AnimationHeader D_06006294;
 extern AnimationHeader D_06002E7C;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ik/EnIk_Init.s")
+// void EnIk_Init(Actor *thisx, GlobalContext *globalCtx)
+// {
+//     s32 *temp_s0;
+//     s32 *phi_s0;
+//     Vec3s path;
+//     EnIk *this = THIS;
+
+//     Actor_ProcessInitChain(&this->actor, D_8092C168);
+//     SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_060136A0, &D_06006294, this->jointTable, this->morphTable, 0x1E);
+//     Collider_InitAndSetCylinder(globalCtx,  &this->colliderCylinder, &this->actor, &D_8092C01C);
+//     Collider_UpdateCylinder(&this->actor,  &this->colliderCylinder);
+//     Collider_InitAndSetTris(globalCtx, &this->colliderTris, &this->actor, &D_8092C0C0, (ColliderTrisElement *) this->unk_498);
+//     Collider_InitAndSetQuad(globalCtx, &this->colliderQuad, &this->actor, &D_8092C0D0);
+//     CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_8092C120, &D_8092C160);
+//     this->actor.params &= 0xFF;
+//     this->actor.params += -1;
+//     Effect_Add(globalCtx, &this->unk_300, 2, 0U, (u8) 0, (void *) D_8092C174);
+//     phi_s0 = D_8092BFD8;
+//     if (*D_8092C198 == 0)
+//     {
+//         do
+//         {
+//             phi_s0->unk0 = Lib_SegmentedToVirtual(phi_s0->unk0);
+//             phi_s0->unk4 = Lib_SegmentedToVirtual(phi_s0->unk4);
+//             temp_s0 = phi_s0 + 0xC;
+//             temp_s0->unk-4 = Lib_SegmentedToVirtual(phi_s0->unk8);
+//             phi_s0 = temp_s0;
+//         } while (temp_s0 != &En_Ik_InitVars);
+//         *D_8092C198 = 1;
+//     }
+//     func_80929E88(this);
+// }
 
 void EnIk_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnIk* this = THIS;
@@ -651,7 +684,42 @@ void func_8092ADB4(EnIk* this) {
     this->actionFunc = func_8092AE14;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ik/func_8092AE14.s")
+void func_8092AE14(EnIk* this, GlobalContext* globalCtx) {
+    s32 temp_s0_2;
+    Vec3f sp60;
+    s32 phi_s0;
+
+    this->unk_2FC = 0xC;
+    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) != 0) {
+        if (this->unk_2F6 == 0x18) {
+            func_800F0590(globalCtx, &this->actor.world, 0x23, 0x321F);
+            if (1) {}
+        }
+        if (this->unk_2F6 != 0) {
+            this->unk_2F6 -= 1;
+            temp_s0_2 = 6 - (this->unk_2F6 >> 2);
+            phi_s0 = temp_s0_2;
+            if (temp_s0_2 >= 0) {
+                do {
+                    sp60.x = randPlusMinusPoint5Scaled(80.0f) + this->actor.world.pos.x;
+                    sp60.z = randPlusMinusPoint5Scaled(80.0f) + this->actor.world.pos.z;
+                    sp60.y = randPlusMinusPoint5Scaled(50.0f) + (this->actor.world.pos.y + 20.0f);
+                    func_800B3030(globalCtx, &sp60, &D_8092C19C, &D_8092C19C, 0x64, 0, 2);
+                    phi_s0--;
+                } while (phi_s0 >= 0);
+            }
+            if (this->unk_2F6 == 0) {
+                Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0xB0);
+                ActorCutscene_Stop(this->actor.cutscene);
+                Actor_MarkForDeath(&this->actor);
+            }
+        }
+        return;
+    }
+    if (func_801378B8(&this->skelAnime, 23.0f) != 0) {
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_IRONNACK_WALK);
+    }
+}
 
 void func_8092AFB4(EnIk* this) {
     this->unk_2FC = 0;
@@ -711,7 +779,18 @@ void func_8092B098(EnIk* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ik/EnIk_Update.s")
 
+// EnIk_OverrideLimbDraw
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ik/func_8092B900.s")
+// s32 func_8092B900(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {
+//     EnIk* this = THIS;
+
+//     if (this->unk_2F4 != 0){
+//         if (*(D_8092C1A8 + limbIndex) > 0) {
+//                 *dList = NULL;
+//             }
+//     }
+//     return 0;
+// }
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ik/func_8092B93C.s")
 
