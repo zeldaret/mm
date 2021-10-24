@@ -2179,41 +2179,34 @@ void func_800b9170(GameState* gameState, ActorContext* actorCtx, ActorEntry* act
     func_800B722C(gameState, (Player*)actorCtx->actorList[ACTORCAT_PLAYER].first);
 }
 
-#ifdef NON_EQUIVALENT
 void func_800B9334(GlobalContext* globalCtx, ActorContext* actorCtx) {
-    ActorEntry* temp_s0;
-    s16 temp_fp;
-    s16 temp_v1;
-    s32 temp_s1;
-    s32 temp_v0;
-    ActorEntry* phi_s0;
-    s32 phi_v0;
-    s32 phi_s1;
-
     if (globalCtx->numSetupActors > 0) {
-        phi_s0 = globalCtx->setupActorList;
-        temp_fp = actorCtx->unkC;
+        ActorEntry* actorEntry = globalCtx->setupActorList;
+        s32 temp_fp = actorCtx->unkC;
+        s32 temp_s1;
+        s32 phi_v0;
+        s32 i;
+
         func_800B9120(actorCtx);
         func_800BA8B8(globalCtx, &globalCtx->actorCtx);
 
-        for (phi_s1 = 0; phi_s1 < globalCtx->numSetupActors; phi_s1++) {
-            phi_v0 = ((phi_s0->rot.x & 7) << 7) | (phi_s0->rot.z & 0x7F);
+        temp_s1 = (actorCtx->unkC * 2) & 0x2FF;
+
+        for (i = 0; i < globalCtx->numSetupActors; i++) {
+            phi_v0 = ((actorEntry->rot.x & 7) << 7) | (actorEntry->rot.z & 0x7F);
             if (phi_v0 == 0) {
                 phi_v0 = 0x3FF;
             }
-            if (((phi_v0 & temp_fp) == 0) && ((actorCtx->unkC & phi_v0) != 0) &&
-                (((gSaveContext.eventInf[1] & 0x80) == 0) || ((phi_v0 & ((actorCtx->unkC * 2) & 0x2FF)) == 0) ||
-                 ((phi_s0->id & 0x800) == 0))) {
-                Actor_SpawnEntry(&globalCtx->actorCtx, phi_s0, globalCtx);
+
+            if ((!(phi_v0 & temp_fp) && (phi_v0 & actorCtx->unkC)) && ((!(gSaveContext.eventInf[1] & 0x80) || !(phi_v0 & temp_s1)) || !(actorEntry->id & 0x800)))
+            {
+                Actor_SpawnEntry(&globalCtx->actorCtx, actorEntry, globalCtx);
             }
-            phi_s0++;
+            actorEntry++;
         }
         globalCtx->numSetupActors = -globalCtx->numSetupActors;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B9334.s")
-#endif
 
 #ifdef NON_EQUIVALENT
 Actor* Actor_UpdateActor(s800B948C* params) {
@@ -4420,7 +4413,7 @@ s32 func_800BE63C(EnBox* box) {
 
 TexturePtr* D_801AEFA8[] = {
     0x04091DE0,
-    0x04091FE0,
+    0x04091FE0, 
     0x040921E0,
     0x040923E0,
 };
