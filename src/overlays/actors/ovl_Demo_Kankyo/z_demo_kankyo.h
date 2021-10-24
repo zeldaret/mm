@@ -7,7 +7,6 @@ struct DemoKankyo;
 
 typedef void (*DemoKankyoActionFunc)(struct DemoKankyo*, GlobalContext*);
 
-// todo make particle state enum
 
 typedef struct {
   /* 0x000 */ u8 state;
@@ -17,7 +16,7 @@ typedef struct {
   /* 0x028 */ Vec3f unk_28; // rotation position? 
   /* 0x034 */ f32 speed;
   /* 0x038 */ f32 unk_38;
-  /* 0x03C */ u16 unk_3C; // random start,
+  /* 0x03C */ u16 alphaClock;
   /* 0x03E */ u16 unk_3E;
   /* 0x040 */ u8 alpha;
   /* 0x044 */ f32 unk_44; // part of the visibility system?
@@ -42,6 +41,13 @@ typedef enum {
     /* 1 */ DEMO_KANKYO_TYPE_GIANTS,
     /* 2 */ DEMO_KANKYO_TYPE_MOON,
 } DemoKankyoType;
+
+typedef enum {
+    /* 0 */ DEMO_KANKYO_STATE_VOID,
+    /* 1 */ DEMO_KANKYO_STATE_SINGLE,
+    /* 2 */ DEMO_KANKYO_STATE_SKYFISH,
+    /* 3 */ DEMO_KANKYO_STATE_DISABLED,
+} DemoKankyoStateType;
 
 extern const ActorInit Demo_Kankyo_InitVars;
 

@@ -12,7 +12,7 @@ void DemoKankyo_Draw(Actor* thisx, GlobalContext* globalCtx);
 void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, GlobalContext* globalCtx);
 
 extern Gfx D_0407AB58[];
-extern Gfx D_06001000[]; // wait, 06 address? nvm this is the bubble
+extern Gfx D_06001000[]; // the giants type uses the bubble display list used by shabom
 extern Gfx D_04023428[];
 
 static u8 sLostWoodsSparklesMutex = 0; // make sure only one can exist at once
@@ -65,7 +65,6 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globa
     }
 
     for (i = 0; i < globalCtx->envCtx.unk_F2[3]; i++) {
-    //for (i = 0; i < 2; i++) { // testing
         static130 = 130.0f;
         
         diffX = globalCtx->view.at.x - globalCtx->view.eye.x;
@@ -77,7 +76,7 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globa
         distATanZ = diffZ / distance;
 
         switch (this->particles[i].state) {
-            case 0: // init, changes to state 1 at the end
+            case DEMO_KANKYO_STATE_VOID:
                 this->particles[i].pos.x = globalCtx->view.eye.x + (distATanX * 80.0f);
                 this->particles[i].pos.y = globalCtx->view.eye.y + (distATanY * 80.0f);
                 this->particles[i].pos.z = globalCtx->view.eye.z + (distATanZ * 80.0f);
@@ -87,7 +86,7 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globa
                 this->particles[i].vel.z = (Rand_ZeroOne() - 0.5f) * 160.0f;
                 this->particles[i].unk_38 = (Rand_ZeroOne() * 1.6f) + 0.5f;
                 this->particles[i].alpha = 0;
-                this->particles[i].unk_3C = Rand_ZeroOne() * 65535; // random 0 to max of u16
+                this->particles[i].alphaClock = Rand_ZeroOne() * 65535; // random 0 to max of u16
                 this->particles[i].unk_44 = 0.1f;
 
                 // random angle?
@@ -95,19 +94,20 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globa
                 this->particles[i].unk_28.y = Rand_ZeroOne() * 360.0f;
                 this->particles[i].unk_28.z = Rand_ZeroOne() * 360.0f;
                 this->particles[i].pad50 = 0;
-                this->particles[i].state += 1; // set to 1
+                this->particles[i].state += DEMO_KANKYO_STATE_SINGLE;
                 break;
 
-            case 1:
-            case 2: // think case 2 is the particles that gather together as a snake
-                this->particles[i].unk_3C += 1;
+            case DEMO_KANKYO_STATE_SINGLE:
+            case DEMO_KANKYO_STATE_SKYFISH:
+                this->particles[i].alphaClock += 1;
                 spBC = globalCtx->view.eye.x + (distATanX * 80.0f);
                 spB8 = globalCtx->view.eye.y + (distATanY * 80.0f);
                 spB4 = globalCtx->view.eye.z + (distATanZ * 80.0f);
                 this->particles[i].velPrevious.x = this->particles[i].vel.x;
                 this->particles[i].velPrevious.y = this->particles[i].vel.y;
                 this->particles[i].velPrevious.z = this->particles[i].vel.z;
-                if (this->particles[i].state == 1) {
+
+                if (this->particles[i].state == DEMO_KANKYO_STATE_SINGLE) {
                     if (i < 32) {
                         if (Rand_ZeroOne() < 0.5f) {
                             this->particles[i].unk_48 = (s16)(Rand_ZeroOne() * 200.0f) + 200;
@@ -129,7 +129,7 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globa
                         if ((D_808D03C4 & i) == 0) {
                             this->particles[i].vel.y = 0.0f;
                         }
-                        this->particles[i].state = 2;
+                        this->particles[i].state = DEMO_KANKYO_STATE_SKYFISH;
                         this->particles[i].unk_38 = 0.0f;
                     }
 
@@ -164,7 +164,8 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globa
                             this->particles[i].unk_28.z += (0.05f * Rand_ZeroOne());
                             break;
                     }
-                } else if (this->particles[i].state == 2) {
+
+                } else if (this->particles[i].state == DEMO_KANKYO_STATE_SKYFISH) {
                     if ((D_808D03C4 & i) == 0) {
                         Math_SmoothStepToF(&this->particles[i].unk_44, 0.25f, 0.1f, 0.001f, 0.00001f);
 
@@ -196,7 +197,7 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globa
                     }
                 }
 
-                if ((this->particles[i].state != 2) &&
+                if ((this->particles[i].state != DEMO_KANKYO_STATE_SKYFISH) &&
                     ((((this->particles[i].pos.x + this->particles[i].vel.x) - spBC) > static130) ||
                      (((this->particles[i].pos.x + this->particles[i].vel.x) - spBC) < -static130) ||
                      (((this->particles[i].pos.y + this->particles[i].vel.y) - spB8) > static130) ||
@@ -235,8 +236,8 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globa
                 }
                 break;
 
-            case 3: // reset? ready for again?
-                this->particles[i].state = 0;
+            case DEMO_KANKYO_STATE_DISABLED:
+                this->particles[i].state = DEMO_KANKYO_STATE_VOID;
                 break;
         }
     }
@@ -258,7 +259,7 @@ void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, GlobalContext* globalCtx
     f32 distATanY;
     f32 distATanZ;
     f32 distance;
-    f32 value160161;
+    f32 halfScreenWidth;
     f32 temp_f2_3;
     f32 pad0;
     Vec3f newEye;
@@ -278,39 +279,44 @@ void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, GlobalContext* globalCtx
     distATanY = viewDiff.y / distance;
     distATanZ = viewDiff.z / distance;
 
-    halfScreenHeight = 120.0f; // not sure why this is static here
+    halfScreenHeight = 120.0f;
 
     for (i = 0; i < globalCtx->envCtx.unk_F2[3]; i++) {
         switch (this->particles[i].state) {
-            case 0: // init, changes to state 1 at the end
+            case DEMO_KANKYO_STATE_VOID: // init, changes to state 1 at the end
                 this->particles[i].pos.x = globalCtx->view.eye.x + (distATanX * halfScreenHeight);
                 this->particles[i].pos.y = globalCtx->view.eye.y + (distATanY * halfScreenHeight);
                 this->particles[i].pos.z = globalCtx->view.eye.z + (distATanZ * halfScreenHeight);
+
                 this->particles[i].vel.x = (Rand_ZeroOne() - 0.5f) * (halfScreenHeight + halfScreenHeight);
                 this->particles[i].vel.y = (Rand_ZeroOne() - 0.5f) * (halfScreenHeight + halfScreenHeight);
                 this->particles[i].vel.z = (Rand_ZeroOne() - 0.5f) * (halfScreenHeight + halfScreenHeight);
+
                 this->particles[i].unk_38 = (Rand_ZeroOne() * 1.6f) + 0.5f;
                 this->particles[i].alpha = 0;
-                this->particles[i].unk_3C = (Rand_ZeroOne() * 65535);
+                this->particles[i].alphaClock = (Rand_ZeroOne() * 65535);
                 this->particles[i].unk_44 = 0.2f;
+
                 this->particles[i].unk_28.x = Rand_ZeroOne() * 360.0f;
                 this->particles[i].unk_28.y = Rand_ZeroOne() * 360.0f;
                 this->particles[i].unk_28.z = Rand_ZeroOne() * 360.0f;
+
                 this->particles[i].pad50 = 0;
-                this->particles[i].state += 1;
+                this->particles[i].state += DEMO_KANKYO_STATE_SINGLE;
                 break;
 
-            case 1:
-            case 2:
-                this->particles[i].unk_3C += 1;
+            case DEMO_KANKYO_STATE_SINGLE:
+            case DEMO_KANKYO_STATE_SKYFISH:
+                this->particles[i].alphaClock += 1;
 
-                if (this->actor.params == DEMO_KANKYO_TYPE_MOON) { // not giants
+                if (this->actor.params == DEMO_KANKYO_TYPE_MOON) { // this function gets reused for giants too
                     this->particles[i].pos.y = globalCtx->view.eye.y + (distATanY * halfScreenHeight) + 80.0f;
                 }
 
                 newEye.x = globalCtx->view.eye.x + (distATanX * halfScreenHeight);
                 newEye.y = globalCtx->view.eye.y + (distATanY * halfScreenHeight);
                 newEye.z = globalCtx->view.eye.z + (distATanZ * halfScreenHeight);
+
                 Math_SmoothStepToF(&this->particles[i].unk_44, 0.2f, 0.1f, 0.001f, 0.00001f);
                 Math_SmoothStepToF(&this->particles[i].speed, this->particles[i].unk_38, 0.5f, 0.2f, 0.02f);
 
@@ -355,16 +361,19 @@ void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, GlobalContext* globalCtx
                 newPos.x = this->particles[i].pos.x + this->particles[i].vel.x;
                 newPos.y = this->particles[i].pos.y + this->particles[i].vel.y;
                 newPos.z = this->particles[i].pos.z + this->particles[i].vel.z;
+
                 temp_f2_3 = Math_Vec3f_DistXZ(&newPos, &globalCtx->view.eye) / 200.0f;
                 temp_f2_3 = CLAMP(temp_f2_3, 0.0f, 1.0f);
-                value160161 = 100.0f + temp_f2_3 + 60.0f; // range 160 to 161...?
+                halfScreenWidth = 100.0f + temp_f2_3 + 60.0f; // range 160 to 161...? thats about half screen width
 
-                if (value160161 < ((this->particles[i].pos.y + this->particles[i].vel.y) - newEye.y)) {
-                    this->particles[i].pos.y = newEye.y - value160161;
+
+                // I think this code is shifting the particles 1 frame -> half screen at a time to keep it in-view
+                if (halfScreenWidth < ((this->particles[i].pos.y + this->particles[i].vel.y) - newEye.y)) {
+                    this->particles[i].pos.y = newEye.y - halfScreenWidth;
                 }
 
-                if (((this->particles[i].pos.y + this->particles[i].vel.y) - newEye.y) < -value160161) {
-                    this->particles[i].pos.y = newEye.y + value160161;
+                if (((this->particles[i].pos.y + this->particles[i].vel.y) - newEye.y) < -halfScreenWidth) {
+                    this->particles[i].pos.y = newEye.y + halfScreenWidth;
                 }
 
                 if (((this->particles[i].pos.z + this->particles[i].vel.z) - newEye.z) > halfScreenHeight) {
@@ -377,8 +386,8 @@ void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, GlobalContext* globalCtx
 
                 break;
 
-            case 3:
-                this->particles[i].state = 0;
+            case DEMO_KANKYO_STATE_DISABLED:
+                this->particles[i].state = DEMO_KANKYO_STATE_VOID;
                 break;
         }
     }
@@ -477,7 +486,8 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, GlobalContext* globalCtx2) {
 
                 Matrix_Scale(this->particles[i].unk_44 * scaleAlpha, this->particles[i].unk_44 * scaleAlpha,
                              this->particles[i].unk_44 * scaleAlpha, MTXMODE_APPLY);
-                // what a weird mess
+
+                // adjust transparency of this particle
                 if (i < 32) {
                     if (this->particles[i].state != 2) {
                         if (this->particles[i].alpha > 0) { // NOT DECR
@@ -487,15 +497,15 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, GlobalContext* globalCtx2) {
                         this->particles[i].alpha++;
                     }
                 } else if (this->particles[i].state != 2) {
-                    if ((this->particles[i].unk_3C & 0x1F) < 16) {
-                        if (this->particles[i].alpha < 0xEB) {
+                    if ((this->particles[i].alphaClock & 31) < 16) {
+                        if (this->particles[i].alpha < 235) {
                             this->particles[i].alpha += 20;
                         }
                     } else if (this->particles[i].alpha > 20) {
                         this->particles[i].alpha -= 20;
                     }
-                } else if ((this->particles[i].unk_3C & 0xF) < 8) {
-                    if (this->particles[i].alpha < 0xFF) {
+                } else if ((this->particles[i].alphaClock & 15) < 8) {
+                    if (this->particles[i].alpha < 255) {
                         this->particles[i].alpha += 100;
                     }
                 } else if (this->particles[i].alpha > 10) {
