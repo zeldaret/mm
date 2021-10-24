@@ -15,6 +15,7 @@ Reminder that in
     <e/>
 </a>
 ```
+
 `<b1>`, `<b2>`, `<e/>` are *children* of `<a>`, but `<c/>` is not. `<c/>` is a *descendent* of `<a>` and a child of `<b>`.
 
 - Every XML's outermost element start/end tag is a single `<Root>`.
