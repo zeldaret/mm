@@ -11,7 +11,7 @@ void EnAObj_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.textId = ((this->actor.params >> 8) & 0xFF) | 0x300;
     this->actor.params = (this->actor.params & 0xFF) - 9;
     Actor_ProcessInitChain(&this->actor, &enAObjInitVar);
-    ActorShape_Init(&this->actor.shape, 0, func_800B3FC0, 12);
+    ActorShape_Init(&this->actor.shape, 0, ActorShadow_DrawCircle, 12);
     Collider_InitAndSetCylinder(globalCtx, &this->collision, &this->actor, &enAObjCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->collision);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
