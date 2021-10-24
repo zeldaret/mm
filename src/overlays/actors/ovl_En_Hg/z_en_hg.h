@@ -38,8 +38,8 @@ typedef struct EnHg {
     /* 0x1D8 */ MtxF unk1D8;
     /* 0x218 */ s32 unk218;
     /* 0x21C */ s32 currentAnimation;
-    /* 0x220 */ Vec3s limbDrawTbl[HG_LIMB_MAX];
-    /* 0x292 */ Vec3s transitionDrawTbl[HG_LIMB_MAX];
+    /* 0x220 */ Vec3s jointTable[HG_LIMB_MAX];
+    /* 0x292 */ Vec3s morphTable[HG_LIMB_MAX];
     /* 0x304 */ UNK_TYPE1 pad304[0xC];
     /* 0x310 */ u16 cutscenes[4];
 } EnHg; // size = 0x318

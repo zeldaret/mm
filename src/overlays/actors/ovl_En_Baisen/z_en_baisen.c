@@ -69,7 +69,7 @@ void EnBaisen_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBaisen* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06007908, &D_060011C0, this->jointTable, this->morphTable, 20);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06007908, &D_060011C0, this->jointTable, this->morphTable, 20);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->paramCopy = this->actor.params;
     if (this->actor.params == 0) {
@@ -103,9 +103,9 @@ void EnBaisen_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnBaisen_ChangeAnimation(EnBaisen* this, s32 animIndex) {
     this->animIndex = animIndex;
-    this->frameCount = SkelAnime_GetFrameCount(&D_80BE8E4C[animIndex]->common);
-    SkelAnime_ChangeAnim(&this->skelAnime, D_80BE8E4C[this->animIndex], 1.0f, 0.0f, this->frameCount,
-                         animModes[this->animIndex], -10.0f);
+    this->frameCount = Animation_GetLastFrame(D_80BE8E4C[animIndex]);
+    Animation_Change(&this->skelAnime, D_80BE8E4C[this->animIndex], 1.0f, 0.0f, this->frameCount,
+                     animModes[this->animIndex], -10.0f);
 }
 
 void func_80BE871C(EnBaisen* this) {
@@ -201,7 +201,7 @@ void func_80BE89D8(EnBaisen* this, GlobalContext* globalCtx) {
     }
     if ((globalCtx->msgCtx.unk11F04 == 0x2AC6) || (globalCtx->msgCtx.unk11F04 == 0x2AC7) ||
         (globalCtx->msgCtx.unk11F04 == 0x2AC8)) {
-        this->skelAnime.animPlaybackSpeed = 0.0f;
+        this->skelAnime.playSpeed = 0.0f;
         this->unk29E = this->actor.yawTowardsPlayer;
     }
     if (this->unk2AC == 2) { // Note: This variable is only ever set to 1.
@@ -244,7 +244,7 @@ void EnBaisen_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnBaisen* this = THIS;
 
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     if (this->unusedCounter != 0) {
         this->unusedCounter--;
     }
@@ -284,6 +284,6 @@ void EnBaisen_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnBaisen* this = THIS;
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                     EnBaisen_OverrideLimbDraw, NULL, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnBaisen_OverrideLimbDraw, NULL, &this->actor);
 }
