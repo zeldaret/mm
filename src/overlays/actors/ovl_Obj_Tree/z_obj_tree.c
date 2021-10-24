@@ -32,8 +32,22 @@ const ActorInit Obj_Tree_InitVars = {
 };
 
 static ColliderCylinderInit sCylinderInit = {
-    { COLTYPE_TREE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK1, { 0x00000000, 0x00, 0x00 }, { 0x0100020A, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    {
+        COLTYPE_TREE,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK1,
+        { 0x00000000, 0x00, 0x00 },
+        { 0x0100020A, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 28, 120, 0, { 0, 0, 0 } },
 };
 
@@ -92,11 +106,11 @@ void ObjTree_Init(Actor* thisx, GlobalContext* globalCtx) {
         BgCheck_RelocateMeshHeader(&D_06001B2C, &colHeader);
         this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
     }
-    
+
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->dyna.actor.colChkInfo, &sDamageTable, &sColchkInfoInit);
-    
+
     if (this->dyna.actor.params & 0x8000) {
         this->collider.dim.height = 220;
     }
@@ -169,11 +183,11 @@ void ObjTree_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjTree_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    s16 xRot = (f32) thisx->shape.rot.x;
-    s16 zRot = (f32) thisx->shape.rot.z;
+    s16 xRot = (f32)thisx->shape.rot.x;
+    s16 zRot = (f32)thisx->shape.rot.z;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
-    
+
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_06000680);

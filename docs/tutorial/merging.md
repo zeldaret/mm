@@ -67,6 +67,8 @@ Ideally you should at least be able to get a function to have equivalent behavio
 
 Run the formatting script `format.sh`, to format the C files in the standard way we use. If you have some arrays or struct definitions in your file, check that they have not been obnoxiously padded out: you can usually get a better format without a final comma for short things.
 
+**N.B.** this is now essential: the CI will fail immediately if it detects files that change when formatted.
+
 ### Merge master
 
 To make sure the PR builds correctly with the current master, you need to merge `upstream/master` before you make the PR. This tends to break things, that you have to fix to get it to compile correctly again.
