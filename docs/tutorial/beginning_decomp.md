@@ -231,7 +231,7 @@ void EnRecepgirl_Init(EnRecepgirl *this, GlobalContext *globalCtx) {
 
     Actor_ProcessInitChain((Actor *) this, D_80C106C0);
     ActorShape_Init(&this->actor.shape, -60.0f, NULL, 0.0f);
-    SkelAnime_InitSV(globalCtx, (SkelAnime *) this->unk_144, &D_06011B60, (AnimationHeader *) &D_06009890, this + 0x188, this + 0x218, 0x18);
+    SkelAnime_InitFlex(globalCtx, (SkelAnime *) this->unk_144, &D_06011B60, (AnimationHeader *) &D_06009890, this + 0x188, this + 0x218, 0x18);
     phi_s0 = D_80C106B0;
     if (D_80C106C8 == 0) {
         do {
@@ -267,7 +267,7 @@ void EnRecepgirl_Init(EnRecepgirl *this, GlobalContext *globalCtx) {
 
     Actor_ProcessInitChain((Actor *) this, D_80C106C0);
     ActorShape_Init(&this->actor.shape, -60.0f, NULL, 0.0f);
-    SkelAnime_InitSV(globalCtx, (SkelAnime *) this->unk_144, &D_06011B60, (AnimationHeader *) &D_06009890, this + 0x188, this + 0x218, 0x18);
+    SkelAnime_InitFlex(globalCtx, (SkelAnime *) this->unk_144, &D_06011B60, (AnimationHeader *) &D_06009890, this + 0x188, this + 0x218, 0x18);
     phi_s0 = D_80C106B0;
     if (D_80C106C8 == 0) {
         do {
@@ -323,7 +323,7 @@ void EnRecepgirl_Init(Actor *thisx, GlobalContext *globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, D_80C106C0);
     ActorShape_Init(&this->actor.shape, -60.0f, NULL, 0.0f);
-    SkelAnime_InitSV(globalCtx, (SkelAnime *) this->unk_144, &D_06011B60, (AnimationHeader *) &D_06009890, this + 0x188, this + 0x218, 0x18);
+    SkelAnime_InitFlex(globalCtx, (SkelAnime *) this->unk_144, &D_06011B60, (AnimationHeader *) &D_06009890, this + 0x188, this + 0x218, 0x18);
     phi_s0 = D_80C106B0;
     if (D_80C106C8 == 0) {
         do {
@@ -404,15 +404,15 @@ This is the combined system that handles actors' skeletons and their animations.
 ```C
     Actor_ProcessInitChain(&this->actor, D_80C106C0);
     ActorShape_Init(&this->actor.shape, -60.0f, NULL, 0.0f);
-    SkelAnime_InitSV(globalCtx, (SkelAnime *) this->unk_144, &D_06011B60, (AnimationHeader *) &D_06009890, this + 0x188, this + 0x218, 0x18);
+    SkelAnime_InitFlex(globalCtx, (SkelAnime *) this->unk_144, &D_06011B60, (AnimationHeader *) &D_06009890, this + 0x188, this + 0x218, 0x18);
     phi_s0 = D_80C106B0;
 ```
 
 An actor with SkelAnime has three structs in the Actor struct that handle it: one called SkelAnime, and two arrays of `Vec3s`, called `jointTable` and `morphTable`. Usually, although not always, they are next to one another.
 
-There are two different sorts of SkelAnime, although for decompilation purposes there is not much difference between them. Looking at the prototype of `SkelAnime_InitSV` from `functions.h` (or even the definition in `z_skelanime.c`), 
+There are two different sorts of SkelAnime, although for decompilation purposes there is not much difference between them. Looking at the prototype of `SkelAnime_InitFlex` from `functions.h` (or even the definition in `z_skelanime.c`), 
 ```C
-void SkelAnime_InitSV(GlobalContext* globalCtx, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg,
+void SkelAnime_InitFlex(GlobalContext* globalCtx, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg,
                       AnimationHeader* animationSeg, Vec3s* jointTable, Vec3s* morphTable, s32 limbCount);
 ```
 we can read off the types of the various arguments:
@@ -448,7 +448,7 @@ As with the data, these externed symbols should be kept in increasing address or
 
 They are both passed to the function as pointers, so need `&` to pass the address instead of the actual data. Hence we end up with
 ```C
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06011B60, &D_06009890, this->jointTable, this->morphTable, 24);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06011B60, &D_06009890, this->jointTable, this->morphTable, 24);
 ```
 note that `this->jointTable` and `this->morphTable` are arrays, so are already effectively pointers and don't need a `&`.
 
@@ -510,7 +510,7 @@ void EnRecepgirl_Init(Actor *thisx, GlobalContext *globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, D_80C106C0);
     ActorShape_Init(&this->actor.shape, -60.0f, NULL, 0.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06011B60, &D_06009890, this->jointTable, this->morphTable, 24);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06011B60, &D_06009890, this->jointTable, this->morphTable, 24);
 
     phi_s0 = D_80C106B0;
     if (D_80C106C8 == 0) {
@@ -646,7 +646,7 @@ void EnRecepgirl_Init(Actor *thisx, GlobalContext *globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, D_80C106C0);
     ActorShape_Init(&this->actor.shape, -60.0f, NULL, 0.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06011B60, &D_06009890, this->jointTable, this->morphTable, 24);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06011B60, &D_06009890, this->jointTable, this->morphTable, 24);
 
     if (D_80C106C8 == 0) {
         for (i = 0; i < 4; i++) {

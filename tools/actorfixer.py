@@ -55,20 +55,21 @@ animdict ={
     "ShrinkWindow_Fini": "ShrinkWindow_Destroy",
     "func_801A89A8": "Audio_QueueSeqCmd",
     "SkelAnime_LodDrawLimb": "SkelAnime_DrawLimbLod",
-    "SkelAnime_LodDraw": "SkelAnime_DrawLod",
+    "SkelAnime_LodDraw(": "SkelAnime_DrawLod(",
     "SkelAnime_LodDrawLimbSV": "SkelAnime_DrawFlexLimbLod",
     "SkelAnime_LodDrawSV": "SkelAnime_DrawFlexLod",
     "SkelAnime_DrawLimb": "SkelAnime_DrawLimbOpa",
-    "SkelAnime_Draw": "SkelAnime_DrawOpa",
+    "SkelAnime_Draw(": "SkelAnime_DrawOpa(",
     "SkelAnime_DrawLimbSV": "SkelAnime_DrawFlexLimbOpa",
     "SkelAnime_DrawSV": "SkelAnime_DrawFlexOpa",
-    "SkelAnime_AnimateFrame": "SkelAnime_GetFrameData",
+    "SkelAnime_AnimateFrame(": "SkelAnime_GetFrameData(",
     "SkelAnime_GetTotalFrames": "Animation_GetLength",
-    "SkelAnime_GetFrameCount": "Animation_GetLastFrame",
+    "SkelAnime_GetFrameCount(": "Animation_GetLastFrame(",
     "SkelAnime_Draw2Limb": "SkelAnime_DrawLimb",
-    "SkelAnime_Draw2": "SkelAnime_Draw",
+    "SkelAnime_Draw2(": "SkelAnime_Draw(",
     "SkelAnime_DrawLimbSV2": "SkelAnime_DrawFlexLimb",
     "SkelAnime_DrawSV2": "SkelAnime_DrawFlex",
+    "SkelAnime_DrawOpaSV(": "SkelAnime_DrawFlexOpa(",
     "func_80134FFC": "SkelAnime_GetFrameData2",
     "func_801353D4": "Animation_GetLimbCount2",
     "SkelAnime_GetTotalFrames2": "Animation_GetLength2",
@@ -124,7 +125,7 @@ animdict ={
     "func_801370B0": "SkelAnime_LoopPartial",
     "func_8013713C": "SkelAnime_Once",
     "SkelAnime_ChangeAnimImpl": "Animation_ChangeImpl",
-    "SkelAnime_ChangeAnim": "Animation_Change",
+    "SkelAnime_ChangeAnim(": "Animation_Change(",
     "SkelAnime_ChangeAnimDefaultStop": "Animation_PlayOnce",
     "SkelAnime_ChangeAnimTransitionStop": "Animation_MorphToPlayOnce",
     "SkelAnime_ChangeAnimPlaybackStop": "Animation_PlayOnceSetSpeed",
@@ -138,6 +139,8 @@ animdict ={
     "func_80137748": "SkelAnime_UpdateTranslation",
     "func_801378B8": "Animation_OnFrame",
     "SkelAnime_CopyVec3s": "SkelAnime_CopyFrameTable",
+    "animCurrentSeg": "animation",
+    "limbDrawTbl": "jointTable",
 }
 
 def replace_anim(file):
@@ -171,6 +174,11 @@ def replace_anim_all(repo):
     for subdir, dirs, files in os.walk(repo + os.sep + 'asm' + os.sep + 'non_matchings'):
         for filename in files:
             if(filename.endswith('.s')):
+                file = subdir + os.sep + filename
+                replace_anim(file)
+    for subdir, dirs, files in os.walk(repo + os.sep + 'docs'):
+        for filename in files:
+            if(filename.endswith('.md')):
                 file = subdir + os.sep + filename
                 replace_anim(file)
     return 1

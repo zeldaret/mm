@@ -44,9 +44,9 @@ void func_80C10148(EnRecepgirl *this) {
     SkelAnime *temp_a0;
 
     temp_a0 = &this->skelAnime;
-    if (&D_06001384 == this->skelAnime.animCurrentSeg) {
+    if (&D_06001384 == this->skelAnime.animation) {
         this = this;
-        SkelAnime_ChangeAnimTransitionStop(temp_a0, &D_0600AD98, 5.0f);
+        Animation_MorphToPlayOnce(temp_a0, &D_0600AD98, 5.0f);
     }
     this->actionFunc = &func_80C1019C;
 }
@@ -65,8 +65,8 @@ at the top (were it above the function we're currently working on, the prototype
 There are several rather odd things going on here: 
 - `temp_a0` is only used once. As such it's probably fake. 
 - There's a weird `this = this` that does nothing
-- `if (&D_06001384 == this->skelAnime.animCurrentSeg)` is a bit of a funny way to write the condition: it seems more likely it would be the other way round. 
-- Also, if we look up `animCurrentSeg`, we find it is an `AnimationHeader*`, so `D_06001384` can be externed as `AnimationHeader`.
+- `if (&D_06001384 == this->skelAnime.animation)` is a bit of a funny way to write the condition: it seems more likely it would be the other way round. 
+- Also, if we look up `animation`, we find it is an `AnimationHeader*`, so `D_06001384` can be externed as `AnimationHeader`.
 - `func_80C1019C` is already a pointer, so the `&` is ineffectual. Our style is to not use `&` on function pointers.
 
 If we tackle these, we end up with
@@ -86,8 +86,8 @@ extern FlexSkeletonHeader D_06011B60;
 [...]
 
 void func_80C10148(EnRecepgirl *this) {
-    if (this->skelAnime.animCurrentSeg == &D_06001384) {
-        SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_0600AD98, 5.0f);
+    if (this->skelAnime.animation == &D_06001384) {
+        Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 5.0f);
     }
     this->actionFunc = func_80C1019C;
 }
@@ -109,11 +109,11 @@ void func_80C1019C(EnRecepgirl *this, GlobalContext *globalCtx) {
 
     temp_a0 = &this->skelAnime;
     sp24 = temp_a0;
-    if (SkelAnime_FrameUpdateMatrix(temp_a0) != 0) {
-        if (&D_0600A280 == this->skelAnime.animCurrentSeg) {
-            SkelAnime_ChangeAnimTransitionStop(temp_a0, &D_0600AD98, 5.0f);
+    if (SkelAnime_Update(temp_a0) != 0) {
+        if (&D_0600A280 == this->skelAnime.animation) {
+            Animation_MorphToPlayOnce(temp_a0, &D_0600AD98, 5.0f);
         } else {
-            SkelAnime_ChangeAnimTransitionRepeat(temp_a0, &D_06009890, -4.0f);
+            Animation_ChangeTransitionRepeat(temp_a0, &D_06009890, -4.0f);
         }
     }
     if (func_800B84D0((Actor *) this, globalCtx) != 0) {
@@ -138,7 +138,7 @@ void func_80C1019C(EnRecepgirl *this, GlobalContext *globalCtx) {
 This is a bit juicier! We can do some preliminary cleanup, then worry about the control flow.
 - `sp24` does nothing, so is almost certainly fake.
 - `temp_a0` is used in 3 different places, but they're all right next to one another and are unlikely to be required since there's no nontrivial calculation or anything happening. Let's remove it too and see what happens.
-- We've got another reversed comparison, `&D_0600A280 == this->skelAnime.animCurrentSeg`.
+- We've got another reversed comparison, `&D_0600A280 == this->skelAnime.animation`.
 - `D_0600A280` is an `AnimationHeader`.
 - `(Actor *) this` should be replaced by `&this->actor`.
 - `Flags_GetSwitch is a boolean and we don't need to cast the argument, as we have discussed before. (We don't know about the other functions in the conditions, so leave them for now.)
@@ -161,11 +161,11 @@ extern FlexSkeletonHeader D_06011B60;
 [...]
 
 void func_80C1019C(EnRecepgirl *this, GlobalContext *globalCtx) {
-    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) != 0) {
-        if (&D_0600A280 == this->skelAnime.animCurrentSeg) {
-            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_0600AD98, 5.0f);
+    if (SkelAnime_Update(&this->skelAnime) != 0) {
+        if (&D_0600A280 == this->skelAnime.animation) {
+            Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 5.0f);
         } else {
-            SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06009890, -4.0f);
+            Animation_ChangeTransitionRepeat(&this->skelAnime, &D_06009890, -4.0f);
         }
     }
     if (func_800B84D0(&this->actor, globalCtx) != 0) {
@@ -195,11 +195,11 @@ If we look with diff.py, we find this matches. But we can replace some of the `r
 Here, it's debatable whether to keep the first, since `func_80C10290` is likely a setup function. The latter two should be changed to elses, though. For now, let's replace all of them. This leaves us with
 ```C
 void func_80C1019C(EnRecepgirl* this, GlobalContext* globalCtx) {
-    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) != 0) {
-        if (this->skelAnime.animCurrentSeg == &D_0600A280) {
-            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_0600AD98, 5.0f);
+    if (SkelAnime_Update(&this->skelAnime) != 0) {
+        if (this->skelAnime.animation == &D_0600A280) {
+            Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 5.0f);
         } else {
-            SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06009890, -4.0f);
+            Animation_ChangeTransitionRepeat(&this->skelAnime, &D_06009890, -4.0f);
         }
     }
 
@@ -239,7 +239,7 @@ Remaking the context and running mips2c gives
 void func_80C102D4(EnRecepgirl *, GlobalContext *); // extern
 
 void func_80C10290(EnRecepgirl *this) {
-    SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_0600A280, -4.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &D_0600A280, -4.0f);
     this->actionFunc = func_80C102D4;
 }
 ```
@@ -266,20 +266,20 @@ void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
 
     temp_a0 = &this->skelAnime;
     sp20 = temp_a0;
-    if (SkelAnime_FrameUpdateMatrix(temp_a0) != 0) {
-        temp_v0 = this->skelAnime.animCurrentSeg;
+    if (SkelAnime_Update(temp_a0) != 0) {
+        temp_v0 = this->skelAnime.animation;
         if (&D_0600A280 == temp_v0) {
-            SkelAnime_ChangeAnimDefaultRepeat(sp20, &D_06001384);
+            Animation_ChangeDefaultRepeat(sp20, &D_06001384);
         } else if (&D_0600AD98 == temp_v0) {
             if (this->actor.textId == 0x2ADA) {
-                SkelAnime_ChangeAnimTransitionStop(sp20, &D_06000968, 10.0f);
+                Animation_MorphToPlayOnce(sp20, &D_06000968, 10.0f);
             } else {
-                SkelAnime_ChangeAnimTransitionRepeat(sp20, &D_06009890, 10.0f);
+                Animation_ChangeTransitionRepeat(sp20, &D_06009890, 10.0f);
             }
         } else if (this->actor.textId == 0x2ADA) {
-            SkelAnime_ChangeAnimTransitionRepeat(sp20, &D_06009890, 10.0f);
+            Animation_ChangeTransitionRepeat(sp20, &D_06009890, 10.0f);
         } else {
-            SkelAnime_ChangeAnimTransitionStop(sp20, &D_0600A280, -4.0f);
+            Animation_MorphToPlayOnce(sp20, &D_0600A280, -4.0f);
         }
     }
     temp_v0_2 = func_80152498(&globalCtx->msgCtx);
@@ -292,17 +292,17 @@ void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
         temp_v0_3 = this->actor.textId;
         if (temp_v0_3 == 0x2AD9) {
             Actor_SetSwitchFlag(globalCtx, (s32) this->actor.params);
-            SkelAnime_ChangeAnimTransitionStop(sp20, &D_0600AD98, 10.0f);
+            Animation_MorphToPlayOnce(sp20, &D_0600AD98, 10.0f);
             if ((*(&gSaveContext + 0xF37) & 0x80) != 0) {
                 this->actor.textId = 0x2ADF;
             } else {
                 this->actor.textId = 0x2ADA;
             }
         } else if (temp_v0_3 == 0x2ADC) {
-            SkelAnime_ChangeAnimTransitionStop(sp20, &D_0600AD98, 10.0f);
+            Animation_MorphToPlayOnce(sp20, &D_0600AD98, 10.0f);
             this->actor.textId = 0x2ADD;
         } else {
-            SkelAnime_ChangeAnimTransitionStop(sp20, &D_06000968, 10.0f);
+            Animation_MorphToPlayOnce(sp20, &D_06000968, 10.0f);
             temp_v0_4 = this->actor.textId;
             if (temp_v0_4 == 0x2ADD) {
                 this->actor.textId = 0x2ADE;
@@ -319,24 +319,24 @@ void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
 
 </details>
 
-Well, this is a big one! We get one more extern, for `D_06000968`. A lot of the temps used in the conditionals look fake, with the exception of `temp_v0_2`: because the function is only called once but the temp is used twice, the temp must be real. Removing the others and switching the `animCurrentSeg` conditionals,
+Well, this is a big one! We get one more extern, for `D_06000968`. A lot of the temps used in the conditionals look fake, with the exception of `temp_v0_2`: because the function is only called once but the temp is used twice, the temp must be real. Removing the others and switching the `animation` conditionals,
 ```C
 void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
     u8 temp_v0_2;
 
-    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) != 0) {
-        if (this->skelAnime.animCurrentSeg == &D_0600A280) {
-            SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06001384);
-        } else if (this->skelAnime.animCurrentSeg == &D_0600AD98) {
+    if (SkelAnime_Update(&this->skelAnime) != 0) {
+        if (this->skelAnime.animation == &D_0600A280) {
+            Animation_ChangeDefaultRepeat(&this->skelAnime, &D_06001384);
+        } else if (this->skelAnime.animation == &D_0600AD98) {
             if (this->actor.textId == 0x2ADA) {
-                SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06000968, 10.0f);
+                Animation_MorphToPlayOnce(&this->skelAnime, &D_06000968, 10.0f);
             } else {
-                SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06009890, 10.0f);
+                Animation_ChangeTransitionRepeat(&this->skelAnime, &D_06009890, 10.0f);
             }
         } else if (this->actor.textId == 0x2ADA) {
-            SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06009890, 10.0f);
+            Animation_ChangeTransitionRepeat(&this->skelAnime, &D_06009890, 10.0f);
         } else {
-            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_0600A280, -4.0f);
+            Animation_MorphToPlayOnce(&this->skelAnime, &D_0600A280, -4.0f);
         }
     }
 
@@ -350,17 +350,17 @@ void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
     if (((temp_v0_2 & 0xFF) == 5) && (func_80147624(globalCtx) != 0)) {
         if (this->actor.textId == 0x2AD9) {
             Actor_SetSwitchFlag(globalCtx, this->actor.params);
-            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_0600AD98, 10.0f);
+            Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 10.0f);
             if ((*(&gSaveContext + 0xF37) & 0x80) != 0) {
                 this->actor.textId = 0x2ADF;
             } else {
                 this->actor.textId = 0x2ADA;
             }
         } else if (this->actor.textId == 0x2ADC) {
-            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_0600AD98, 10.0f);
+            Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 10.0f);
             this->actor.textId = 0x2ADD;
         } else {
-            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06000968, 10.0f);
+            Animation_MorphToPlayOnce(&this->skelAnime, &D_06000968, 10.0f);
             if (this->actor.textId == 0x2ADD) {
                 this->actor.textId = 0x2ADE;
             } else if (this->actor.textId == 0x2ADA) {

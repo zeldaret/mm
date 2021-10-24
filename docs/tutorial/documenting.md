@@ -91,7 +91,7 @@ void EnRecepgirl_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, D_80C106C0);
     ActorShape_Init(&this->actor.shape, -60.0f, NULL, 0.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06011B60, &D_06009890, this->jointTable, this->morphTable, 24);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06011B60, &D_06009890, this->jointTable, this->morphTable, 24);
 
     if (D_80C106C8 == 0) {
     for (i = 0; i < 4; i++) {
@@ -133,19 +133,19 @@ void func_80C100DC(EnRecepgirl *this) {
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Recepgirl/func_80C10148.s")
 void func_80C10148(EnRecepgirl *this) {
-    if (this->skelAnime.animCurrentSeg == &D_06001384) {
-        SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_0600AD98, 5.0f);
+    if (this->skelAnime.animation == &D_06001384) {
+        Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 5.0f);
     }
     this->actionFunc = func_80C1019C;
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Recepgirl/func_80C1019C.s")
 void func_80C1019C(EnRecepgirl* this, GlobalContext* globalCtx) {
-    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) != 0) {
-        if (this->skelAnime.animCurrentSeg == &D_0600A280) {
-            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_0600AD98, 5.0f);
+    if (SkelAnime_Update(&this->skelAnime) != 0) {
+        if (this->skelAnime.animation == &D_0600A280) {
+            Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 5.0f);
         } else {
-            SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06009890, -4.0f);
+            Animation_ChangeTransitionRepeat(&this->skelAnime, &D_06009890, -4.0f);
         }
     }
 
@@ -165,7 +165,7 @@ void func_80C1019C(EnRecepgirl* this, GlobalContext* globalCtx) {
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Recepgirl/func_80C10290.s")
 void func_80C10290(EnRecepgirl *this) {
-    SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_0600A280, -4.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &D_0600A280, -4.0f);
     this->actionFunc = func_80C102D4;
 }
 
@@ -173,19 +173,19 @@ void func_80C10290(EnRecepgirl *this) {
 void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
     u8 temp_v0_2;
 
-    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) != 0) {
-        if (this->skelAnime.animCurrentSeg == &D_0600A280) {
-            SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06001384);
-        } else if (this->skelAnime.animCurrentSeg == &D_0600AD98) {
+    if (SkelAnime_Update(&this->skelAnime) != 0) {
+        if (this->skelAnime.animation == &D_0600A280) {
+            Animation_ChangeDefaultRepeat(&this->skelAnime, &D_06001384);
+        } else if (this->skelAnime.animation == &D_0600AD98) {
             if (this->actor.textId == 0x2ADA) {
-                SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06000968, 10.0f);
+                Animation_MorphToPlayOnce(&this->skelAnime, &D_06000968, 10.0f);
             } else {
-                SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06009890, 10.0f);
+                Animation_ChangeTransitionRepeat(&this->skelAnime, &D_06009890, 10.0f);
             }
         } else if (this->actor.textId == 0x2ADA) {
-            SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06009890, 10.0f);
+            Animation_ChangeTransitionRepeat(&this->skelAnime, &D_06009890, 10.0f);
         } else {
-            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_0600A280, -4.0f);
+            Animation_MorphToPlayOnce(&this->skelAnime, &D_0600A280, -4.0f);
         }
     }
 
@@ -199,17 +199,17 @@ void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
     if ((temp_v0_2 == 5) && (func_80147624(globalCtx) != 0)) {
         if (this->actor.textId == 0x2AD9) {
             Actor_SetSwitchFlag(globalCtx, this->actor.params);
-            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_0600AD98, 10.0f);
+            Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 10.0f);
             if ((gSaveContext.weekEventReg[63] & 0x80)) {
                 this->actor.textId = 0x2ADF;
             } else {
                 this->actor.textId = 0x2ADA;
             }
         } else if (this->actor.textId == 0x2ADC) {
-            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_0600AD98, 10.0f);
+            Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 10.0f);
             this->actor.textId = 0x2ADD;
         } else {
-            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06000968, 10.0f);
+            Animation_MorphToPlayOnce(&this->skelAnime, &D_06000968, 10.0f);
             if (this->actor.textId == 0x2ADD) {
                 this->actor.textId = 0x2ADE;
             } else if (this->actor.textId == 0x2ADA) {
@@ -249,7 +249,7 @@ void func_80C10590(GlobalContext *globalCtx, s32 limbIndex, Actor *thisx) {
 
     if (limbIndex == 5) {
         Matrix_RotateY(0x400 - this->unk_2AE.x, MTXMODE_APPLY);
-        SysMatrix_GetStateTranslationAndScaledX(500.0f, &this->actor.focus.pos);
+        Matrix_GetStateTranslationAndScaledX(500.0f, &this->actor.focus.pos);
     }
 }
 
@@ -263,7 +263,7 @@ void EnRecepgirl_Draw(Actor *thisx, GlobalContext *globalCtx) {
 
     gSPSegment(POLY_OPA_DISP++, 0x08, D_80C106B0[this->unk_2AC]);
 
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, func_80C10558, NULL, func_80C10590, &this->actor);
+    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, func_80C10558, NULL, func_80C10590, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -444,7 +444,7 @@ void EnRecepgirl_UnkLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thi
 
     if (limbIndex == 5) {
         Matrix_RotateY(0x400 - this->unk_2AE.x, MTXMODE_APPLY);
-        SysMatrix_GetStateTranslationAndScaledX(500.0f, &this->actor.focus.pos);
+        Matrix_GetStateTranslationAndScaledX(500.0f, &this->actor.focus.pos);
     }
 }
 ```
@@ -460,18 +460,18 @@ Finally, we have to name the rest of the functions. Setup functions are usually 
 
 ```C
 void func_80C10148(EnRecepgirl* this) {
-    if (this->skelAnime.animCurrentSeg == &D_06001384) {
-        SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_0600AD98, 5.0f);
+    if (this->skelAnime.animation == &D_06001384) {
+        Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 5.0f);
     }
     this->actionFunc = func_80C1019C;
 }
 
 void func_80C1019C(EnRecepgirl* this, GlobalContext* globalCtx) {
-    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) != 0) {
-        if (this->skelAnime.animCurrentSeg == &D_0600A280) {
-            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_0600AD98, 5.0f);
+    if (SkelAnime_Update(&this->skelAnime) != 0) {
+        if (this->skelAnime.animation == &D_0600A280) {
+            Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 5.0f);
         } else {
-            SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06009890, -4.0f);
+            Animation_ChangeTransitionRepeat(&this->skelAnime, &D_06009890, -4.0f);
         }
     }
 
@@ -490,27 +490,27 @@ void func_80C1019C(EnRecepgirl* this, GlobalContext* globalCtx) {
 }
 
 void func_80C10290(EnRecepgirl* this) {
-    SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_0600A280, -4.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &D_0600A280, -4.0f);
     this->actionFunc = func_80C102D4;
 }
 
 void func_80C102D4(EnRecepgirl* this, GlobalContext* globalCtx) {
     u8 temp_v0_2;
 
-    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
-        if (this->skelAnime.animCurrentSeg == &D_0600A280) {
-            SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06001384);
-        } else if (this->skelAnime.animCurrentSeg == &D_0600AD98) {
+    if (SkelAnime_Update(&this->skelAnime)) {
+        if (this->skelAnime.animation == &D_0600A280) {
+            Animation_ChangeDefaultRepeat(&this->skelAnime, &D_06001384);
+        } else if (this->skelAnime.animation == &D_0600AD98) {
             if (this->actor.textId == 0x2ADA) { // "The room on your left is The Mayor's office [...]" (meeting ongoing)
-                SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06000968, 10.0f);
+                Animation_MorphToPlayOnce(&this->skelAnime, &D_06000968, 10.0f);
             } else {
-                SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06009890, 10.0f);
+                Animation_ChangeTransitionRepeat(&this->skelAnime, &D_06009890, 10.0f);
             }
         } else if (this->actor.textId ==
                    0x2ADA) { // "The room on your left is The Mayor's office [...]" (meeting ongoing)
-            SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_06009890, 10.0f);
+            Animation_ChangeTransitionRepeat(&this->skelAnime, &D_06009890, 10.0f);
         } else {
-            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_0600A280, -4.0f);
+            Animation_MorphToPlayOnce(&this->skelAnime, &D_0600A280, -4.0f);
         }
     }
 
@@ -522,17 +522,17 @@ void func_80C102D4(EnRecepgirl* this, GlobalContext* globalCtx) {
 
         if (this->actor.textId == 0x2AD9) { // "Welcome..."
             Actor_SetSwitchFlag(globalCtx, this->actor.params);
-            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_0600AD98, 10.0f);
+            Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 10.0f);
             if (gSaveContext.weekEventReg[63] & 0x80) { // meeting ended
                 this->actor.textId = 0x2ADF; // "The room on your left is The Mayor's office [...]" (meeting ended)
             } else {
                 this->actor.textId = 0x2ADA; // "The room on your left is The Mayor's office [...]" (meeting ongoing)
             }
         } else if (this->actor.textId == 0x2ADC) { // hear directions again?
-            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_0600AD98, 10.0f);
+            Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 10.0f);
             this->actor.textId = 0x2ADD; // "So..."
         } else {
-            SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06000968, 10.0f);
+            Animation_MorphToPlayOnce(&this->skelAnime, &D_06000968, 10.0f);
 
             if (this->actor.textId == 0x2ADD) { // "So..."
                 this->actor.textId = 0x2ADE;    // Mayor's office on is the left, drawing room on the right

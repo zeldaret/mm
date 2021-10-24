@@ -45,7 +45,7 @@ void EnRecepgirl_Draw(EnRecepgirl *this, GlobalContext *globalCtx) {
     sp30->polyOpa.p = temp_v1 + 8;
     temp_v1->words.w0 = 0xDB060020;
     temp_v1->words.w1 = (u32) D_80C106B0[this->unk_2AC];
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, (s32) this->skelAnime.dListCount, func_80C10558, NULL, func_80C10590, (Actor *) this);
+    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, (s32) this->skelAnime.dListCount, func_80C10558, NULL, func_80C10590, (Actor *) this);
 }
 ```
 
@@ -118,7 +118,7 @@ void EnRecepgirl_Draw(Actor *thisx, GlobalContext *globalCtx) {
 
     gSPSegment(POLY_OPA_DISP++, 0x08, D_80C106B0[this->unk_2AC]);
 
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, func_80C10558, NULL, func_80C10590, &this->actor);
+    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, func_80C10558, NULL, func_80C10590, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -175,7 +175,7 @@ As for the UnkActorDraw, it has a much simpler prototype. mips2c gives
 void func_80C10590(GlobalContext *globalCtx, s32 limbIndex, Actor *actor) {
     if (limbIndex == 5) {
         Matrix_RotateY((s16) (0x400 - actor->unk2AE), 1);
-        SysMatrix_GetStateTranslationAndScaledX(500.0f, (Vec3f *) &actor->focus);
+        Matrix_GetStateTranslationAndScaledX(500.0f, (Vec3f *) &actor->focus);
     }
 }
 ```
@@ -189,7 +189,7 @@ void func_80C10590(GlobalContext *globalCtx, s32 limbIndex, Actor *thisx) {
 
     if (limbIndex == 5) {
         Matrix_RotateY(0x400 - this->unk_2AE.x, MTXMODE_APPLY);
-        SysMatrix_GetStateTranslationAndScaledX(500.0f, &this->actor.focus.pos);
+        Matrix_GetStateTranslationAndScaledX(500.0f, &this->actor.focus.pos);
     }
 }
 ```
@@ -224,7 +224,7 @@ void ObjTree_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_s0->polyOpa.p = temp_v0_2 + 8;
     temp_v0_2->words.w1 = (u32) &D_06000680;
     temp_v0_2->words.w0 = 0xDE000000;
-    SysMatrix_InsertRotation(sp36, 0, sp34, 1);
+    Matrix_InsertRotation(sp36, 0, sp34, 1);
     temp_v0_3 = temp_s0->polyOpa.p;
     temp_s0->polyOpa.p = temp_v0_3 + 8;
     temp_v0_3->words.w0 = 0xDA380003;
@@ -297,7 +297,7 @@ void ObjTree_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_06000680);
 
-    SysMatrix_InsertRotation(sp36, 0, sp34, MTXMODE_APPLY);
+    Matrix_InsertRotation(sp36, 0, sp34, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_060007C8);
 

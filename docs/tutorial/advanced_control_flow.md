@@ -60,7 +60,7 @@ void EnMs_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnMs* this = THIS;
 
     Actor_ProcessInitChain(thisx, D_80952BCC);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06003DC0, &D_060005EC, this->jointTable, this->morphTable, 9);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06003DC0, &D_060005EC, this->jointTable, this->morphTable, 9);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinderType1(globalCtx, &this->collider, &this->actor, &D_80952BA0);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 35.0f);
@@ -127,7 +127,7 @@ void EnMs_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetHeight(&this->actor, 20.0f);
     this->actor.targetArrowOffset = 500.0f;
     Actor_SetScale(&this->actor, 0.015f);
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     this->actionFunc(this, globalCtx);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
@@ -137,7 +137,7 @@ void EnMs_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnMs* this = THIS;
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, NULL,
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                      NULL, &this->actor);
 }
 

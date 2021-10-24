@@ -178,7 +178,7 @@ void ObjTree_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_06000680);
 
-    SysMatrix_InsertRotation(xRot, 0, zRot, MTXMODE_APPLY);
+    Matrix_InsertRotation(xRot, 0, zRot, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_060007C8);
 
