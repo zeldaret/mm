@@ -215,8 +215,8 @@ s32 func_80BAA904(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BAA9B4(EnSuttari* this) {
-    s16 curFrame = this->skelAnime.animCurrentFrame;
-    s16 frameCount = SkelAnime_GetFrameCount(&sAnimations[this->animationIdx].animation->common);
+    s16 curFrame = this->skelAnime.curFrame;
+    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
 
     switch (this->textId) {
         case 0x1454:
@@ -382,8 +382,8 @@ void func_80BAAB78(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BAAF1C(EnSuttari* this) {
-    s16 curFrame = this->skelAnime.animCurrentFrame;
-    s16 frameCount = SkelAnime_GetFrameCount(&sAnimations[this->animationIdx].animation->common);
+    s16 curFrame = this->skelAnime.curFrame;
+    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
 
     if (this->animationIdx == 5) {
         this->animationIdx = 3;
@@ -405,11 +405,11 @@ void func_80BAAFDC(EnSuttari* this, GlobalContext* globalCtx) {
         effectPos.x += Math_SinS(this->actor.world.rot.y + this->unk3F4) * 10.0f;
         effectPos.y += 60.0f;
         effectPos.z += Math_CosS(this->actor.world.rot.y + this->unk3F4) * 10.0f;
-        SysMatrix_StatePush();
+        Matrix_StatePush();
         Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
         effectVelOffset.z = 20.0f;
-        SysMatrix_MultiplyVector3fByState(&effectVelOffset, &effectVel);
-        SysMatrix_StatePop();
+        Matrix_MultiplyVector3fByState(&effectVelOffset, &effectVel);
+        Matrix_StatePop();
         if (this->unk3F0 == 0) {
             EffectSsSolderSrchBall_Spawn(globalCtx, &effectPos, &effectVel, &gZeroVec3f, 50, &this->unk3F0, 1);
         }
@@ -437,11 +437,11 @@ void func_80BAB1A0(EnSuttari* this, GlobalContext* globalCtx) {
         effectPos.x += Math_SinS(this->actor.world.rot.y + this->unk3F4) * 350.0f;
         effectPos.y += 60.0f;
         effectPos.z += Math_CosS(this->actor.world.rot.y + this->unk3F4) * 350.0f;
-        SysMatrix_StatePush();
+        Matrix_StatePush();
         Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
         effectVelOffset.z = 20.0f;
-        SysMatrix_MultiplyVector3fByState(&effectVelOffset, &effectVel);
-        SysMatrix_StatePop();
+        Matrix_MultiplyVector3fByState(&effectVelOffset, &effectVel);
+        Matrix_StatePop();
         if (this->unk3F0 == 0) {
             EffectSsSolderSrchBall_Spawn(globalCtx, &effectPos, &effectVel, &gZeroVec3f, 50, &this->unk3F0, 1);
         }
@@ -462,7 +462,7 @@ void func_80BAB1A0(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BAB374(EnSuttari* this, GlobalContext* globalCtx) {
-    s16 curFrame = this->skelAnime.animCurrentFrame;
+    s16 curFrame = this->skelAnime.curFrame;
     Vec3f sp38;
 
     if ((curFrame % 3) == 0) {
@@ -490,7 +490,7 @@ void func_80BAB4F0(EnSuttari* this, GlobalContext* globalCtx) {
     if (this->flags1 & 0x80) {
         EnSuttari_UpdateCollider(this, globalCtx);
     }
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     if (!(this->flags1 & 4) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK)) {
         if (func_8013D5E8(this->actor.shape.rot.y, 0x36B0, this->actor.yawTowardsPlayer) != 0) {
             sp30.x = player->actor.world.pos.x;
@@ -816,8 +816,8 @@ s32 func_80BAC220(EnSuttari* this, GlobalContext* globalCtx) {
 
 void func_80BAC2FC(EnSuttari* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    s16 curFrame = this->skelAnime.animCurrentFrame;
-    s16 frameCount = SkelAnime_GetFrameCount(&sAnimations[this->animationIdx].animation->common);
+    s16 curFrame = this->skelAnime.curFrame;
+    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
 
     switch (this->unk428) {
         case 12:
@@ -913,7 +913,7 @@ void func_80BAC2FC(EnSuttari* this, GlobalContext* globalCtx) {
 
 void func_80BAC6E8(EnSuttari* this, GlobalContext* globalCtx) {
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600C240, &D_0600071C, this->jointTable, this->morphTable, 16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600C240, &D_0600071C, this->jointTable, this->morphTable, 16);
     this->actor.draw = EnSuttari_Draw;
     this->actor.flags |= 1;
     if (globalCtx->sceneNum == SCENE_IKANA) {
@@ -1220,8 +1220,8 @@ void func_80BAD380(EnSuttari* this, GlobalContext* globalCtx) {
 void func_80BAD5F8(EnSuttari* this, GlobalContext* globalCtx) {
     u32* unk_14 = &gSaveContext.unk_14;
     struct_80133038_arg2 unkStruct;
-    s16 curFrame = this->skelAnime.animCurrentFrame;
-    s16 frameCount = SkelAnime_GetFrameCount(&sAnimations[this->animationIdx].animation->common);
+    s16 curFrame = this->skelAnime.curFrame;
+    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
 
     if ((curFrame == frameCount) && (this->animationIdx == 0) && (this->flags1 & 0x20)) {
         this->animationIdx = 2;
@@ -1256,8 +1256,8 @@ void func_80BAD5F8(EnSuttari* this, GlobalContext* globalCtx) {
 void func_80BAD7F8(EnSuttari* this, GlobalContext* globalCtx) {
     u32* unk_14 = &gSaveContext.unk_14;
     struct_80133038_arg2 unkStruct;
-    s16 curFrame = this->skelAnime.animCurrentFrame;
-    s16 frameCount = SkelAnime_GetFrameCount(&sAnimations[this->animationIdx].animation->common);
+    s16 curFrame = this->skelAnime.curFrame;
+    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
 
     if (this->enFsn == NULL) {
         this->enFsn = (EnFsn*)EnSuttari_GetActorById(globalCtx, ACTOR_EN_FSN);
@@ -1305,8 +1305,8 @@ void func_80BADA08(EnSuttari* this, GlobalContext* globalCtx) {
 
 void func_80BADA9C(EnSuttari* this, GlobalContext* globalCtx) {
     u8 talkstate = func_80152498(&globalCtx->msgCtx);
-    s16 curFrame = this->skelAnime.animCurrentFrame;
-    s16 frameCount = SkelAnime_GetFrameCount(&sAnimations[this->animationIdx].animation->common);
+    s16 curFrame = this->skelAnime.curFrame;
+    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
 
     if (this->flags1 & 1) {
         this->unk3F2 = this->unk2DE;
@@ -1460,11 +1460,11 @@ void EnSuttari_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
     if (this->unk428 != 0) {
         if (this->animationIdx == 2 || this->animationIdx == 6) {
-            if (func_801378B8(&this->skelAnime, 8.0f) || func_801378B8(&this->skelAnime, 16.0f)) {
+            if (Animation_OnFrame(&this->skelAnime, 8.0f) || Animation_OnFrame(&this->skelAnime, 16.0f)) {
                 Audio_PlayActorSound2(&this->actor, NA_SE_EV_PAMERA_WALK);
             }
         } else if (this->animationIdx == 0 || this->animationIdx == 5) {
-            if (func_801378B8(&this->skelAnime, 8.0f) || func_801378B8(&this->skelAnime, 17.0f)) {
+            if (Animation_OnFrame(&this->skelAnime, 8.0f) || Animation_OnFrame(&this->skelAnime, 17.0f)) {
                 Audio_PlayActorSound2(&this->actor, NA_SE_EV_PAMERA_WALK);
             }
         }
@@ -1478,15 +1478,15 @@ s32 EnSuttari_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
     if (limbIndex == 15) {
         *dList = D_0600AF90;
         if (!(this->flags1 & 4)) {
-            SysMatrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-            SysMatrix_InsertXRotation_s(this->unk3F2, MTXMODE_APPLY);
-            SysMatrix_InsertZRotation_s(-this->unk2DC, MTXMODE_APPLY);
-            SysMatrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_InsertXRotation_s(this->unk3F2, MTXMODE_APPLY);
+            Matrix_InsertZRotation_s(-this->unk2DC, MTXMODE_APPLY);
+            Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         }
     }
     if (limbIndex == 8) {
-        SysMatrix_InsertXRotation_s(-this->unk2E4, MTXMODE_APPLY);
-        SysMatrix_InsertZRotation_s(-this->unk2E2, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(-this->unk2E4, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(-this->unk2E2, MTXMODE_APPLY);
     }
     if (limbIndex == 8 || limbIndex == 9 || limbIndex == 0xC) {
         rot->y += (s16)(Math_SinS(this->unk2FA[limbIndex]) * 200.0f);
@@ -1506,8 +1506,8 @@ void EnSuttari_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     if (((this->flags1 & 8) && (this->flags1 & 0x10)) || ((this->flags1 & 2) && !(this->flags1 & 0x20)) ||
         ((this->flags1 & 4) && !(this->flags1 & 0x20))) {
         if (limbIndex == 8) {
-            curState = SysMatrix_GetCurrentState();
-            SysMatrix_MultiplyVector3fByState(&D_80BAE95C, &this->unk3F8);
+            curState = Matrix_GetCurrentState();
+            Matrix_MultiplyVector3fByState(&D_80BAE95C, &this->unk3F8);
             if (this->actor.child == NULL) {
                 if (this->flags1 & 0x100) {
                     bombBag =
@@ -1526,7 +1526,7 @@ void EnSuttari_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
         }
     }
     if (limbIndex == 15) {
-        SysMatrix_MultiplyVector3fByState(&D_80BAE950, &this->actor.focus.pos);
+        Matrix_MultiplyVector3fByState(&D_80BAE950, &this->actor.focus.pos);
     }
 }
 
@@ -1545,7 +1545,7 @@ void EnSuttari_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPSegment(POLY_OPA_DISP++, 0x08, Gfx_EnvColor(globalCtx->state.gfxCtx, 255, 255, 255, 0));
         gSPSegment(POLY_OPA_DISP++, 0x09, Gfx_EnvColor(globalCtx->state.gfxCtx, 55, 55, 255, 0));
         gDPPipeSync(POLY_OPA_DISP++);
-        func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
+        func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                       EnSuttari_OverrideLimbDraw, EnSuttari_PostLimbDraw, EnSuttari_UnkDraw, &this->actor);
         if (this->flags1 & 0x80) {
             func_8012C2DC(globalCtx->state.gfxCtx);

@@ -1538,7 +1538,7 @@ MIPS_SETTINGS = ArchSettings(
     re_int=re.compile(r"[0-9]+"),
     re_comment=re.compile(r"<.*?>"),
     re_reg=re.compile(
-        r"\$?\b(a[0-3]|t[0-9]|s[0-8]|at|v[01]|f[12]?[0-9]|f3[01]|k[01]|fp|ra|zero)\b"
+        r"\$?\b(a[0-7]|t[0-9]|s[0-8]|at|v[01]|f[12]?[0-9]|f3[01]|kt?[01]|fp|ra|zero)\b"
     ),
     re_sprel=re.compile(r"(?<=,)([0-9]+|0x[0-9a-f]+)\(sp\)"),
     re_large_imm=re.compile(r"-?[1-9][0-9]{2,}|-?0x[0-9a-f]{3,}"),

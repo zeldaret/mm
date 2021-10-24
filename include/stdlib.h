@@ -18,7 +18,7 @@ typedef struct {
     /* 0x8 */ long long rem;
 } lldiv_t;
 
-typedef unsigned int size_t;
+typedef unsigned long size_t;
 
 typedef int ssize_t;
 

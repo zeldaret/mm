@@ -112,12 +112,12 @@ void EnTrt_ChangeAnim(SkelAnime* skelAnime, ActorAnimationEntryS* animations, s3
 
     animations += idx;
     if (animations->frameCount < 0) {
-        frameCount = SkelAnime_GetFrameCount(&animations->animationSeg->common);
+        frameCount = Animation_GetLastFrame(animations->animationSeg);
     } else {
         frameCount = animations->frameCount;
     }
-    SkelAnime_ChangeAnim(skelAnime, animations->animationSeg, animations->playbackSpeed, animations->frame, frameCount,
-                         animations->mode, animations->transitionRate);
+    Animation_Change(skelAnime, animations->animationSeg, animations->playbackSpeed, animations->frame, frameCount,
+                     animations->mode, animations->transitionRate);
 }
 
 s32 EnTrt_TestItemSelected(GlobalContext* globalCtx) {
@@ -851,8 +851,8 @@ void EnTrt_IdleAwake(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_BeginInteraction(EnTrt* this, GlobalContext* globalCtx) {
-    s16 animCurrentFrame = this->skelAnime.animCurrentFrame / this->skelAnime.animPlaybackSpeed;
-    s16 animLastFrame = SkelAnime_GetFrameCount(&D_060030EC.common) / (s16)this->skelAnime.animPlaybackSpeed;
+    s16 curFrame = this->skelAnime.curFrame / this->skelAnime.playSpeed;
+    s16 animLastFrame = Animation_GetLastFrame(&D_060030EC) / (s16)this->skelAnime.playSpeed;
 
     if (this->cutsceneState == ENTRT_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
@@ -863,7 +863,7 @@ void EnTrt_BeginInteraction(EnTrt* this, GlobalContext* globalCtx) {
         }
     } else if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
         if (this->animationIdx != 5) {
-            if (animCurrentFrame == animLastFrame) {
+            if (curFrame == animLastFrame) {
                 EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 3);
                 this->animationIdx = 3;
                 this->blinkFunc = EnTrt_OpenEyesThenSetToBlink;
@@ -1341,11 +1341,11 @@ void EnTrt_NodOff(EnTrt* this) {
 }
 
 void EnTrt_OpenThenCloseEyes(EnTrt* this) {
-    if (this->skelAnime.animCurrentFrame >= 40.0f) {
+    if (this->skelAnime.curFrame >= 40.0f) {
         EnTrt_CloseEyes(this);
-    } else if (this->skelAnime.animCurrentFrame >= 35.0f) {
+    } else if (this->skelAnime.curFrame >= 35.0f) {
         this->eyeTextureIdx = 1;
-    } else if (this->skelAnime.animCurrentFrame >= 10.0f) {
+    } else if (this->skelAnime.curFrame >= 10.0f) {
         EnTrt_OpenEyes(this);
     }
 }
@@ -1359,7 +1359,7 @@ void EnTrt_OpenEyes2(EnTrt* this) {
 }
 
 void EnTrt_OpenEyesThenSetToBlink(EnTrt* this) {
-    if (this->skelAnime.animCurrentFrame >= 7.0f) {
+    if (this->skelAnime.curFrame >= 7.0f) {
         EnTrt_OpenEyes(this);
         if (this->eyeTextureIdx == 0) {
             this->blinkFunc = EnTrt_Blink;
@@ -1452,7 +1452,7 @@ void EnTrt_LookToShopkeeperFromShelf(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_InitShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600FEF0, &D_0600FD34, NULL, NULL, 0);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600FEF0, &D_0600FD34, NULL, NULL, 0);
     if (!(gSaveContext.weekEventReg[0xC] & 8) && !(gSaveContext.weekEventReg[0x54] & 0x40) && gSaveContext.day >= 2) {
         this->actor.draw = NULL;
     } else {
@@ -1691,7 +1691,7 @@ void EnTrt_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnTrt_UpdateHeadYawAndPitch(this, globalCtx);
     this->actionFunc(this, globalCtx);
     Actor_SetHeight(&this->actor, 90.0f);
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     EnTrt_UpdateCollider(this, globalCtx);
 }
 
@@ -1716,8 +1716,8 @@ void EnTrt_UpdateHeadPosAndRot(s16 pitch, s16 yaw, Vec3f* pos, Vec3s* rot, s32 i
     Vec3s newRot;
     MtxF currentState;
 
-    SysMatrix_MultiplyVector3fByState(&zeroVec, &newPos);
-    SysMatrix_CopyCurrentState(&currentState);
+    Matrix_MultiplyVector3fByState(&zeroVec, &newPos);
+    Matrix_CopyCurrentState(&currentState);
     func_8018219C(&currentState, &newRot, MTXMODE_NEW);
     *pos = newPos;
     if (isFullyAwake) {
@@ -1759,11 +1759,11 @@ void EnTrt_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     }
     if (limbIndex == 21) {
         EnTrt_UpdateHeadPosAndRot(this->headPitch, this->headYaw, &this->headPos, &this->headRot, isFullyAwake);
-        SysMatrix_InsertTranslation(this->headPos.x, this->headPos.y, this->headPos.z, MTXMODE_NEW);
+        Matrix_InsertTranslation(this->headPos.x, this->headPos.y, this->headPos.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateY(this->headRot.y, MTXMODE_APPLY);
-        SysMatrix_InsertXRotation_s(this->headRot.x, MTXMODE_APPLY);
-        SysMatrix_InsertZRotation_s(this->headRot.z, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(this->headRot.x, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(this->headRot.z, MTXMODE_APPLY);
     }
 }
 
@@ -1771,11 +1771,11 @@ void EnTrt_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnTrt* this = THIS;
 
     if (limbIndex == 21) {
-        SysMatrix_InsertTranslation(this->headPos.x, this->headPos.y, this->headPos.z, MTXMODE_NEW);
+        Matrix_InsertTranslation(this->headPos.x, this->headPos.y, this->headPos.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateY(this->headRot.y, MTXMODE_APPLY);
-        SysMatrix_InsertXRotation_s(this->headRot.x, MTXMODE_APPLY);
-        SysMatrix_InsertZRotation_s(this->headRot.z, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(this->headRot.x, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(this->headRot.z, MTXMODE_APPLY);
     }
 }
 
@@ -1789,7 +1789,7 @@ void EnTrt_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTextureIdx]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTextureIdx]));
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
+    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                   EnTrt_OverrideLimbDraw, EnTrt_PostLimbDraw, EnTrt_UnkActorDraw, &this->actor);
     EnTrt_DrawCursor(globalCtx, this, this->cursorPos.x, this->cursorPos.y, this->cursorPos.z, this->drawCursor);
     EnTrt_DrawStickDirectionPrompt(globalCtx, this);

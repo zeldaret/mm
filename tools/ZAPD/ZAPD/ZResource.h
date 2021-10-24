@@ -38,6 +38,7 @@ enum class ZResourceType
 	LimbTable,
 	Mtx,
 	Path,
+	PlayerAnimationData,
 	Room,
 	RoomCommand,
 	Scalar,
@@ -163,6 +164,7 @@ public:
 	 * `false` otherwise (for example, a Vtx extracted indirectly by a DList)
 	 */
 	[[nodiscard]] bool WasDeclaredInXml() const;
+	[[nodiscard]] StaticConfig GetStaticConf() const;
 
 protected:
 	std::string name;
@@ -207,6 +209,7 @@ class ZResourceExporter
 {
 public:
 	ZResourceExporter() = default;
+	virtual ~ZResourceExporter() = default;
 
 	virtual void Save(ZResource* res, fs::path outPath, BinaryWriter* writer) = 0;
 };
@@ -237,4 +240,4 @@ typedef ZResource*(ZResourceFactoryFunc)(ZFile* nParent);
 	public:                                                                                        \
 		ZResExp_##expFunc() { expFunc(); }                                                         \
 	};                                                                                             \
-	static ZResExp_##expFunc inst_ZResExp_##expFunc;
+	static ZResExp_##expFunc inst_ZResExp_##expFunc

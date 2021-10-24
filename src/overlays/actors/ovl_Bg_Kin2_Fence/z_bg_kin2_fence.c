@@ -138,11 +138,11 @@ void BgKin2Fence_SpawnEyeSparkles(BgKin2Fence* this, GlobalContext* globalCtx, s
     Vec3f sp58;
     s32 pad[2];
 
-    SysMatrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                             this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
     for (i = 0; i < 2; i++) {
-        SysMatrix_MultiplyVector3fByState(&eyeSparkleSpawnPositions[mask][i], &sp58);
+        Matrix_MultiplyVector3fByState(&eyeSparkleSpawnPositions[mask][i], &sp58);
         EffectSsKiraKira_SpawnDispersed(globalCtx, &sp58, &gZeroVec3f, &gZeroVec3f, &primColor, &envColor, 6000, -10);
     }
 }
@@ -156,9 +156,9 @@ void BgKin2Fence_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000908);
     Collider_InitJntSph(globalCtx, &this->collider);
     Collider_SetJntSph(globalCtx, &this->collider, &this->dyna.actor, &sJntSphInit, this->colliderElements);
-    SysMatrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                             this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
-    Matrix_Scale(this->dyna.actor.scale.x, this->dyna.actor.scale.y, this->dyna.actor.scale.z, 1);
+    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+    Matrix_Scale(this->dyna.actor.scale.x, this->dyna.actor.scale.y, this->dyna.actor.scale.z, MTXMODE_APPLY);
 
     for (i = 0; i < 4; i++) {
         Collider_UpdateSpheres(i, &this->collider);
