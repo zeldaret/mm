@@ -572,11 +572,11 @@ void func_8093FAA4(EnGoroiwa* this, GlobalContext* globalCtx) {
         sp64 = this->unk_1B4;
     }
 
-    SysMatrix_InsertRotationAroundUnitVector_f(sp7C, &sp64, MTXMODE_NEW);
+    Matrix_InsertRotationAroundUnitVector_f(sp7C, &sp64, MTXMODE_NEW);
     Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
-    SysMatrix_InsertXRotation_s(this->actor.shape.rot.x, MTXMODE_APPLY);
-    SysMatrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
-    SysMatrix_CopyCurrentState(&sp24);
+    Matrix_InsertXRotation_s(this->actor.shape.rot.x, MTXMODE_APPLY);
+    Matrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
+    Matrix_CopyCurrentState(&sp24);
     func_8018219C(&sp24, &this->actor.shape.rot, MTXMODE_NEW);
 }
 #else
@@ -1370,8 +1370,8 @@ void func_8094220C(EnGoroiwa* this, GlobalContext* globalCtx) {
             ptr->unk_18 = func_800C411C(&globalCtx->colCtx, &ptr->unk_28, &spD0, &this->actor, &spC4);
 
             if (ptr->unk_10 <= 0.0f) {
-                SysMatrix_InsertRotation(ptr->unk_1C, ptr->unk_1E, ptr->unk_20, 0);
-                SysMatrix_MultiplyVector3fByState(&D_80942E6C, &spB8);
+                Matrix_InsertRotation(ptr->unk_1C, ptr->unk_1E, ptr->unk_20, 0);
+                Matrix_MultiplyVector3fByState(&D_80942E6C, &spB8);
                 temp_f20 = this->unk_1DC * 0.9f;
 
                 if (spB8.y > 0.0f) {
@@ -1589,7 +1589,7 @@ void func_80942B1C(EnGoroiwa* this, GlobalContext* globalCtx) {
             sp80.y = ptr->unk_1E;
             sp80.z = ptr->unk_20;
 
-            SysMatrix_SetStateRotationAndTranslation(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, &sp80);
+            Matrix_SetStateRotationAndTranslation(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, &sp80);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, 1);
             func_800BDFC0(globalCtx, phi_fp);
 
@@ -1603,7 +1603,7 @@ void func_80942B1C(EnGoroiwa* this, GlobalContext* globalCtx) {
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, ptr->unk_2C);
 
                 func_800C0094(ptr->unk_28, ptr->unk_00.x, ptr->unk_18, ptr->unk_00.z, &sp88);
-                SysMatrix_SetCurrentState(&sp88);
+                Matrix_SetCurrentState(&sp88);
                 Matrix_Scale(this->actor.scale.x * 7.5f, 1.0f, this->actor.scale.z * 7.5f, 1);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
