@@ -871,7 +871,7 @@ Gfx* SkelAnime_DrawFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jointT
  */
 #ifdef NON_MATCHING
 // equivalent, minor reordering
-s16 SkelAnime_GetFrameData2(LegacyAnimationHeader* animation, s32 frame, Vec3s* frameTable) {
+s16 SkelAnime_GetFrameDataLegacy(LegacyAnimationHeader* animation, s32 frame, Vec3s* frameTable) {
     LegacyAnimationHeader* animHeader = Lib_SegmentedToVirtual(animation);
     s16 limbCount = animHeader->limbCount;
     JointKey* key = Lib_SegmentedToVirtual(animHeader->jointKey);
