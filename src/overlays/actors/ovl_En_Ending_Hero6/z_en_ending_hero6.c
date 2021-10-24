@@ -183,7 +183,7 @@ void EnEndingHero6_Draw(Actor* thisx, GlobalContext* globalCtx) {
             }
 
             SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                             this->skelAnime.dListCount, NULL, EnEndingHero6_PostLimbDraw, &this->actor);
+                                  this->skelAnime.dListCount, NULL, EnEndingHero6_PostLimbDraw, &this->actor);
         }
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
