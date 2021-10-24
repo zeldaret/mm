@@ -57,7 +57,7 @@ public:
 	uint32_t cmdIndex;
 	uint32_t commandSet;
 	RoomCommand cmdID;
-	uint32_t segmentOffset;
+	offset_t segmentOffset;
 
 	ZRoomCommand(ZFile* nParent);
 	virtual ~ZRoomCommand() = default;

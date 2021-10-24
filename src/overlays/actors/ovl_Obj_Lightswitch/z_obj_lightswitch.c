@@ -89,10 +89,10 @@ void ObjLightswitch_InitCollider(ObjLightswitch* this, GlobalContext* globalCtx)
     Collider_InitJntSph(globalCtx, &this->collider);
     Collider_SetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, &this->elements);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    SysMatrix_SetStateRotationAndTranslation(
-        this->actor.world.pos.x, this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y),
-        this->actor.world.pos.z, &this->actor.shape.rot);
-    Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, 1);
+    Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x,
+                                          this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y),
+                                          this->actor.world.pos.z, &this->actor.shape.rot);
+    Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     Collider_UpdateSpheres(0, &this->collider);
 }
 
@@ -384,13 +384,13 @@ void ObjLightSwitch_DrawOpa(ObjLightswitch* this, GlobalContext* globalCtx) {
     tempRot.x = this->actor.shape.rot.x;
     tempRot.y = this->actor.shape.rot.y;
     tempRot.z = this->actor.shape.rot.z + this->edgeRot;
-    SysMatrix_SetStateRotationAndTranslation(tempPos.x, tempPos.y, tempPos.z, &tempRot);
+    Matrix_SetStateRotationAndTranslation(tempPos.x, tempPos.y, tempPos.z, &tempRot);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_06000398);
 
     tempRot.z = this->actor.shape.rot.z - this->edgeRot;
-    SysMatrix_SetStateRotationAndTranslation(tempPos.x, tempPos.y, tempPos.z, &tempRot);
+    Matrix_SetStateRotationAndTranslation(tempPos.x, tempPos.y, tempPos.z, &tempRot);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_06000408);
@@ -420,13 +420,13 @@ void ObjLightSwitch_DrawXlu(ObjLightswitch* this, GlobalContext* globalCtx) {
     tempRot.x = this->actor.shape.rot.x;
     tempRot.y = this->actor.shape.rot.y;
     tempRot.z = this->actor.shape.rot.z + this->edgeRot;
-    SysMatrix_SetStateRotationAndTranslation(tempPos.x, tempPos.y, tempPos.z, &tempRot);
+    Matrix_SetStateRotationAndTranslation(tempPos.x, tempPos.y, tempPos.z, &tempRot);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, D_06000398);
 
     tempRot.z = this->actor.shape.rot.z - this->edgeRot;
-    SysMatrix_SetStateRotationAndTranslation(tempPos.x, tempPos.y, tempPos.z, &tempRot);
+    Matrix_SetStateRotationAndTranslation(tempPos.x, tempPos.y, tempPos.z, &tempRot);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, D_06000408);
