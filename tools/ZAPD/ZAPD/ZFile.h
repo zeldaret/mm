@@ -88,7 +88,7 @@ public:
 	std::string GetHeaderInclude() const;
 	std::string GetZRoomHeaderInclude() const;
 	std::string GetExternalFileHeaderInclude() const;
-	
+
 	void GeneratePlaceholderDeclarations();
 
 	void AddTextureResource(uint32_t offset, ZTexture* tex);
