@@ -557,7 +557,7 @@ void func_8095B76C(EnOwl* this, GlobalContext* globalCtx) {
         do {
             this->actor.world.pos.x = points->x;
             this->actor.world.pos.z = points->z;
-        } while(0);
+        } while (0);
 
         this->unk_3F8++;
         if (this->path->count <= this->unk_3F8) {
