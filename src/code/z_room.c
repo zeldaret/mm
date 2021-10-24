@@ -77,7 +77,7 @@ void Room_Init(GlobalContext* globalCtx, RoomContext* roomCtx) {
 
 #ifdef NON_MATCHING
 s32 Room_StartRoomTransition(GlobalContext* globalCtx, RoomContext* roomCtx, s32 index) {
-    u32 size;
+    size_t size;
 
     // XXX: this should use a branch-likely
     if (roomCtx->unk31 == 0) {

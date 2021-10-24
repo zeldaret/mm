@@ -24,40 +24,40 @@ void Main(void* arg) {
     startHeapSize = fb - sysHeap;
     SystemArena_Init(sysHeap, startHeapSize);
 
-    static_context_init();
+    GameInfo_Init();
 
     R_ENABLE_ARENA_DBG = 0;
 
-    osCreateMesgQueue(&siEventCallbackQueue, siEventCallbackBuffer, ARRAY_COUNT(siEventCallbackBuffer));
-    osSetEventMesg(OS_EVENT_SI, &siEventCallbackQueue, NULL);
+    osCreateMesgQueue(&sSiIntMsgQ, sSiIntMsgBuf, ARRAY_COUNT(sSiIntMsgBuf));
+    osSetEventMesg(OS_EVENT_SI, &sSiIntMsgQ, NULL);
 
-    osCreateMesgQueue(&mainIrqmgrCallbackQueue, mainIrqCallbackBuffer, ARRAY_COUNT(mainIrqCallbackBuffer));
+    osCreateMesgQueue(&irqMgrMsgQ, irqMgrMsgBuf, ARRAY_COUNT(irqMgrMsgBuf));
 
     StackCheck_Init(&schedStackEntry, schedStack, schedStack + sizeof(schedStack), 0, 0x100, "sched");
     Sched_Init(&gSchedContext, schedStack + sizeof(schedStack), Z_PRIORITY_SCHED, D_8009B290, 1, &gIrqMgr);
 
     CIC6105_AddRomInfoFaultPage();
 
-    IrqMgr_AddClient(&gIrqMgr, &mainIrqmgrCallbackNode, &mainIrqmgrCallbackQueue);
+    IrqMgr_AddClient(&gIrqMgr, &irqClient, &irqMgrMsgQ);
 
     StackCheck_Init(&audioStackEntry, audioStack, audioStack + sizeof(audioStack), 0, 0x100, "audio");
     AudioMgr_Init(&audioContext, audioStack + sizeof(audioStack), Z_PRIORITY_AUDIOMGR, 0xA, &gSchedContext, &gIrqMgr);
 
     StackCheck_Init(&padmgrStackEntry, padmgrStack, padmgrStack + sizeof(padmgrStack), 0, 0x100, "padmgr");
-    Padmgr_Start(&siEventCallbackQueue, &gIrqMgr, 7, Z_PRIORITY_PADMGR, padmgrStack + sizeof(padmgrStack));
+    PadMgr_Init(&sSiIntMsgQ, &gIrqMgr, 7, Z_PRIORITY_PADMGR, padmgrStack + sizeof(padmgrStack));
 
     AudioMgr_Unlock(&audioContext);
 
-    StackCheck_Init(&graphStackEntry, graphStack, graphStack + sizeof(graphStack), 0, 0x100, "graph");
-    osCreateThread(&graphOSThread, Z_THREAD_ID_GRAPH, Graph_ThreadEntry, arg, graphStack + sizeof(graphStack),
+    StackCheck_Init(&sGraphStackInfo, sGraphStack, sGraphStack + sizeof(sGraphStack), 0, 0x100, "graph");
+    osCreateThread(&sGraphThread, Z_THREAD_ID_GRAPH, Graph_ThreadEntry, arg, sGraphStack + sizeof(sGraphStack),
                    Z_PRIORITY_GRAPH);
-    osStartThread(&graphOSThread);
+    osStartThread(&sGraphThread);
 
     exit = false;
 
     while (!exit) {
         msg = NULL;
-        osRecvMesg(&mainIrqmgrCallbackQueue, (OSMesg)&msg, OS_MESG_BLOCK);
+        osRecvMesg(&irqMgrMsgQ, (OSMesg)&msg, OS_MESG_BLOCK);
         if (msg == NULL) {
             break;
         }
@@ -72,6 +72,6 @@ void Main(void* arg) {
         }
     }
 
-    IrqMgr_RemoveClient(&gIrqMgr, &mainIrqmgrCallbackNode);
-    osDestroyThread(&graphOSThread);
+    IrqMgr_RemoveClient(&gIrqMgr, &irqClient);
+    osDestroyThread(&sGraphThread);
 }

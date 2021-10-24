@@ -22,7 +22,7 @@ public:
 	void ParseXML(tinyxml2::XMLElement* reader) override;
 	void ParseRawData() override;
 
-	void DeclareVar(const std::string& prefix, const std::string body);
+	Declaration* DeclareVar(const std::string& prefix, const std::string& body) override;
 	std::string GetBodySourceCode() const override;
 	std::string GetSourceOutputCode(const std::string& prefix) override;
 
@@ -38,7 +38,6 @@ public:
 class SetRoomList : public ZRoomCommand
 {
 public:
-	std::vector<RoomEntry> rooms;
 	// Borrowed reference. Don't delete.
 	RomFile* romfile = nullptr;
 
