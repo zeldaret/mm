@@ -1651,8 +1651,8 @@ s32 func_800F0CE4(UnusedNPC* unusedNPC, GlobalContext* globalCtx, ActorFunc draw
 s32 func_800F0DD4(UnusedNPC* unusedNPC, GlobalContext* globalCtx, s16 arg2, s16 arg3);
 s32 func_800F0E94(UnusedNPC* unusedNPC, GlobalContext* globalCtx, f32 gravity, s16 animIndex);
 s32 func_800F0EEC(UnusedNPC* unusedNPC, GlobalContext* globalCtx, s16 animIndex);
-s32 func_800F0F28(UnusedNPC* unusedNPC, f32 arg1);
-s32 func_800F0FF0(UnusedNPC* unusedNPC, f32 arg1);
+s32 UnusedNPC_MoveForwards(UnusedNPC* unusedNPC, f32 arg1);
+s32 UnusedNPC_MoveBackwards(UnusedNPC* unusedNPC, f32 arg1);
 void UnusedNPC_UpdateCollider(UnusedNPC* unusedNPC, GlobalContext* globalCtx);
 s32 UnusedNPC_PlayWalkingSound(UnusedNPC* unusedNPC, GlobalContext* globalCtx, f32 arg2);
 u16 Text_GetFaceReaction(GlobalContext* globalCtx, u32 reactionSet);
