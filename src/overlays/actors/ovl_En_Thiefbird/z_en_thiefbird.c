@@ -1,3 +1,9 @@
+/*
+ * File: z_en_thiefbird.c
+ * Overlay: ovl_En_Thiefbird
+ * Description: Takkuri
+ */
+
 #include "z_en_thiefbird.h"
 
 #define FLAGS 0x80001205
@@ -9,17 +15,36 @@ void EnThiefbird_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnThiefbird_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnThiefbird_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80C11538(EnThiefbird* this);
 void func_80C11590(EnThiefbird* this, GlobalContext* globalCtx);
+void func_80C118E4(EnThiefbird* this);
 void func_80C1193C(EnThiefbird* this, GlobalContext* globalCtx);
 void func_80C11D14(EnThiefbird* this, GlobalContext* globalCtx);
+void func_80C11DC0(EnThiefbird* this);
 void func_80C11DF0(EnThiefbird* this, GlobalContext* globalCtx);
 void func_80C1215C(EnThiefbird* this, GlobalContext* globalCtx);
+void func_80C12308(EnThiefbird* this);
 void func_80C12378(EnThiefbird* this, GlobalContext* globalCtx);
+void func_80C1242C(EnThiefbird* this);
 void func_80C124B0(EnThiefbird* this, GlobalContext* globalCtx);
+void func_80C126A8(EnThiefbird* this);
 void func_80C126D8(EnThiefbird* this, GlobalContext* globalCtx);
+void func_80C12744(EnThiefbird* this);
 void func_80C127F4(EnThiefbird* this, GlobalContext* globalCtx);
 
-#if 0
+extern AnimationHeader D_06000088;
+extern AnimationHeader D_06000278;
+extern AnimationHeader D_06000604;
+extern Gfx D_06003060[];
+extern Gfx D_060030D8[];
+extern Gfx D_060033B0[];
+extern Gfx D_06003D58[];
+extern Gfx D_06004348[];
+extern Gfx D_06004B88[];
+extern Gfx D_060055E0[];
+extern FlexSkeletonHeader D_060061A0;
+extern AnimationHeader D_060063C4;
+
 const ActorInit En_Thiefbird_InitVars = {
     ACTOR_EN_THIEFBIRD,
     ACTORCAT_ENEMY,
@@ -32,33 +57,58 @@ const ActorInit En_Thiefbird_InitVars = {
     (ActorFunc)EnThiefbird_Draw,
 };
 
-// static ColliderJntSphElementInit sJntSphElementsInit[3] = {
-static ColliderJntSphElementInit D_80C135C0[3] = {
+static ColliderJntSphElementInit sJntSphElementsInit[3] = {
     {
-        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK0,
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 1, { { 0, 0, 0 }, 24 }, 100 },
     },
     {
-        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK0,
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 9, { { 900, -600, 0 }, 20 }, 100 },
     },
     {
-        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x04 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_HARD, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK0,
+            { 0xF7CFFFFF, 0x00, 0x04 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_HARD,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 12, { { 1200, 0, 0 }, 9 }, 100 },
     },
 };
 
-// static ColliderJntSphInit sJntSphInit = {
-static ColliderJntSphInit D_80C1362C = {
-    { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    3, D_80C135C0, // sJntSphElementsInit,
+static ColliderJntSphInit sJntSphInit = {
+    {
+        COLTYPE_HIT3,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_JNTSPH,
+    },
+    3,
+    sJntSphElementsInit,
 };
 
-// sColChkInfoInit
-static CollisionCheckInfoInit D_80C1363C = { 24, 15, 30, 30 };
+static CollisionCheckInfoInit sColChkInfoInit = { 24, 15, 30, 30 };
 
-// static DamageTable sDamageTable = {
-static DamageTable D_80C13644 = {
+static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x1),
     /* Deku Stick     */ DMG_ENTRY(1, 0x0),
     /* Horse trample  */ DMG_ENTRY(1, 0x0),
@@ -93,93 +143,1025 @@ static DamageTable D_80C13644 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80C13670[] = {
+static s16 D_80C13664[] = { ITEM00_ARROWS_10,  ITEM00_BOMBS_B,   ITEM00_RUPEE_GREEN,
+                            ITEM00_RUPEE_BLUE, ITEM00_RUPEE_RED, ITEM00_RUPEE_PURPLE };
+
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 3000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 1000, ICHAIN_CONTINUE),
     ICHAIN_S8(hintId, 35, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
 
-#endif
+static Vec3f D_80C13920;
+static s32 D_80C1392C;
 
-extern ColliderJntSphElementInit D_80C135C0[3];
-extern ColliderJntSphInit D_80C1362C;
-extern CollisionCheckInfoInit D_80C1363C;
-extern DamageTable D_80C13644;
-extern InitChainEntry D_80C13670[];
+void EnThiefbird_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnThiefbird* this = THIS;
+    s32 i;
+    ColliderJntSphElementDim* dim;
 
-extern UNK_TYPE D_06000088;
-extern UNK_TYPE D_06000278;
-extern UNK_TYPE D_06000604;
-extern UNK_TYPE D_06003060;
-extern UNK_TYPE D_060033B0;
-extern UNK_TYPE D_060063C4;
+    Actor_ProcessInitChain(&this->actor, sInitChain);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060061A0, &D_06000604, this->jointTable, this->morphTable, 17);
+    Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/EnThiefbird_Init.s")
+    for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
+        dim = &this->collider.elements[i].dim;
+        dim->worldSphere.radius = dim->modelSphere.radius;
+        dim->worldSphere.center.x = this->actor.world.pos.x;
+        dim->worldSphere.center.y = this->actor.world.pos.y;
+        dim->worldSphere.center.z = this->actor.world.pos.z;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/EnThiefbird_Destroy.s")
+    CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
+    ActorShape_Init(&this->actor.shape, 1500.0f, func_800B3FC0, 35.0f);
+    if (this->actor.params == 1) {
+        D_80C1392C = 1;
+        Math_Vec3f_Copy(&D_80C13920, &this->actor.world.pos);
+        Actor_MarkForDeath(&this->actor);
+    } else if ((gSaveContext.roomInf[126][5] & 0xFF000000) >> 0x18) {
+        Actor_MarkForDeath(&this->actor);
+    } else {
+        func_80C11538(this);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C10984.s")
+void EnThiefbird_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnThiefbird* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C10B0C.s")
+    Collider_DestroyJntSph(globalCtx, &this->collider);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C10DE8.s")
+void func_80C10984(EnThiefbird* this, s32 arg1) {
+    s32 i;
+    EnThiefbirdUnkStruct* ptr = &this->unk_3F0[0];
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C10E98.s")
+    for (i = 0; i < ARRAY_COUNT(this->unk_3F0); i++, ptr++) {
+        if (ptr->unk_22 == 0) {
+            ptr->unk_22 = (s32)Rand_ZeroFloat(20.0f) + 40;
+            ptr->unk_00.x = randPlusMinusPoint5Scaled(30.0f) + this->actor.focus.pos.x;
+            ptr->unk_00.y = randPlusMinusPoint5Scaled(30.0f) + this->actor.focus.pos.y;
+            ptr->unk_00.z = randPlusMinusPoint5Scaled(30.0f) + this->actor.focus.pos.z;
+            ptr->unk_0C.x = randPlusMinusPoint5Scaled(5.0f);
+            ptr->unk_0C.y = Rand_ZeroOne() + 2.0f;
+            ptr->unk_0C.z = randPlusMinusPoint5Scaled(5.0f);
+            ptr->unk_1C = Rand_ZeroFloat(1000.0f);
+            ptr->unk_18 = (Rand_ZeroFloat(20.0f) + 40.0f) * 0.0001f;
+            ptr->unk_1E = Rand_Next() >> 0x10;
+            arg1--;
+            if (arg1 == 0) {
+                break;
+            }
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C11338.s")
+s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
+    static Gfx* D_80C13680[] = { D_06004348, D_06004B88, D_060055E0 };
+    s32 isItemFound = false;
+    s32 phi_a3 = 0;
+    s32 i = 18;
+    s32 phi_t0_3;
+    s16 sp1E = 0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C11454.s")
+    for (; i < ARRAY_COUNT(gSaveContext.inventory.items); i++) {
+        if ((gSaveContext.inventory.items[i] >= ITEM_BOTTLE) && (gSaveContext.inventory.items[i] <= ITEM_POTION_BLUE)) {
+            isItemFound = true;
+            sp1E = gSaveContext.inventory.items[i];
+            break;
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C114C0.s")
+    if (gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
+        phi_a3 = CUR_EQUIP_VALUE_VOID(EQUIP_SWORD);
+        if (gSaveContext.inventory.items[gItemSlots[16]] == ITEM_SWORD_GREAT_FAIRY) {
+            phi_a3 += 4;
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C11538.s")
+    if (isItemFound && (phi_a3 != 0)) {
+        if (Rand_ZeroOne() < 0.6f) {
+            isItemFound = false;
+        } else {
+            phi_a3 = 0;
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C11590.s")
+    if (isItemFound) {
+        func_801149A0(sp1E, i);
+        this->unk_3E8 = D_060033B0;
+        if (!func_80152498(&globalCtx->msgCtx)) {
+            func_801518B0(globalCtx, 0xF4, NULL);
+        }
+        phi_t0_3 = 0x12;
+    } else if (phi_a3 != 0) {
+        if (phi_a3 >= 5) {
+            if (Rand_ZeroOne() < 0.5f) {
+                phi_a3 -= 4;
+            } else {
+                phi_a3 = 4;
+            }
+        }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C118E4.s")
+        phi_t0_3 = phi_a3 + 0x4C;
+        if (phi_a3 == 4) {
+            func_801149A0(16, 16);
+            this->unk_3E8 = D_06003D58;
+            phi_t0_3 = 0x10;
+        } else {
+            CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_NONE;
+            TAKE_EQUIPPED_ITEM(EQUIP_SWORD);
+            this->unk_3E8 = D_80C13680[phi_a3 - 1];
+        }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C1193C.s")
+        if (!func_80152498(&globalCtx->msgCtx)) {
+            func_801518B0(globalCtx, 0xF5, NULL);
+        }
+    } else {
+        return false;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C11C60.s")
+    if (!((gSaveContext.roomInf[126][5] & 0xFF000000) >> 0x18)) {
+        gSaveContext.roomInf[126][5] = (gSaveContext.roomInf[126][5] & 0xFFFFFF) | ((phi_t0_3 & 0xFF) << 0x18);
+    } else {
+        gSaveContext.roomInf[126][5] = (gSaveContext.roomInf[126][5] & 0xFF00FFFF) | ((phi_t0_3 & 0xFF) << 0x10);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C11D14.s")
+    return true;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C11DC0.s")
+void func_80C10DE8(s32 items[], s32 count, s32 item) {
+    s32 i;
+    s32 idx = 0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C11DF0.s")
+    for (i = 0; i < count; i++) {
+        s32 j = 0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C11F6C.s")
+        while (items[idx] != -1) {
+            idx = (idx + 5) % 8;
+            if (j == 8) {
+                break;
+            }
+            j++;
+        }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C1215C.s")
+        items[idx] = item;
+        idx = (idx + 5) % 8;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C12308.s")
+s32 func_80C10E98(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    s32 phi_s0_2;
+    s32 phi_s2;
+    s32 spB0;
+    s32 spAC;
+    s32 spA8;
+    s16 phi_s3 = 0;
+    s32 spA0;
+    s32 pad2;
+    s32 sp98;
+    s32 i;
+    s32 sp74[8];
+    s32 sp5C;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C12378.s")
+    for (i = 0; i < ARRAY_COUNT(sp74); i++) {
+        sp74[i] = ITEM00_NO_DROP;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C1242C.s")
+    if (AMMO(ITEM_BOMB) >= 5) {
+        spB0 = 1;
+        sp74[1] = ITEM00_BOMBS_B;
+        if (1) {}
+    } else {
+        spB0 = 0;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C124B0.s")
+    if (AMMO(ITEM_BOW) >= 10) {
+        spAC = 1;
+        sp74[5] = ITEM00_ARROWS_10;
+    } else {
+        spAC = 0;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C126A8.s")
+    sp98 = (gSaveContext.rupees / 4) * 3;
+    phi_s0_2 = sp98 / 50;
+    sp5C = (-spB0 - spAC);
+    sp5C += 8;
+    if (sp5C < phi_s0_2) {
+        phi_s0_2 = sp5C;
+    }
+    phi_s2 = phi_s0_2;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C126D8.s")
+    for (i = 0; i < phi_s2; i++) {
+        if (Rand_ZeroOne() < 0.5f) {
+            phi_s0_2--;
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C12744.s")
+    i = sp5C - phi_s0_2;
+    if (i) {}
+    sp5C = phi_s0_2 * 50;
+    sp98 -= sp5C;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C127F4.s")
+    func_80C10DE8(sp74, phi_s0_2, ITEM00_RUPEE_PURPLE);
+    spA0 = sp98 / 20;
+    if (i < spA0) {
+        spA0 = i;
+    }
+    i -= spA0;
+    sp98 -= spA0 * 20;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C12B1C.s")
+    func_80C10DE8(sp74, spA0, ITEM00_RUPEE_RED);
+    phi_s2 = sp98 / 5;
+    if (i < phi_s2) {
+        phi_s2 = i;
+    }
+    i -= phi_s2;
+    sp98 -= phi_s2 * 5;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C12D00.s")
+    func_80C10DE8(sp74, phi_s2, ITEM00_RUPEE_BLUE);
+    if (i < sp98) {
+        spA8 = i;
+    } else {
+        spA8 = sp98;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/EnThiefbird_Update.s")
+    func_80C10DE8(sp74, spA8, ITEM00_RUPEE_GREEN);
+    if ((spB0 + spAC + phi_s0_2 + spA0 + phi_s2 + spA8) == 0) {
+        return false;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C130EC.s")
+    {
+        Vec3f sp64;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C1315C.s")
+        for (i = 0; i < ARRAY_COUNT(sp74); i++) {
+            sp64.x = (Math_SinS(phi_s3) * 40.0f) + player->actor.world.pos.x;
+            sp64.y = player->actor.world.pos.y + 20.0f;
+            sp64.z = (Math_CosS(phi_s3) * 40.0f) + player->actor.world.pos.z;
+            if (sp74[i] != ITEM00_NO_DROP) {
+                EnItem00* temp_s1_5 = Item_DropCollectible(globalCtx, &sp64, sp74[i]);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/func_80C13354.s")
+                if (temp_s1_5 != NULL) {
+                    temp_s1_5->actor.velocity.y = Rand_ZeroFloat(3.0f) + 6.0f;
+                    temp_s1_5->actor.speedXZ = Rand_ZeroFloat(3.0f) + 3.0f;
+                    temp_s1_5->actor.world.rot.y = phi_s3;
+                }
+                phi_s3 += (s16)(0x10000 / (spB0 + spAC + phi_s0_2 + spA0 + phi_s2 + spA8));
+            }
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Thiefbird/EnThiefbird_Draw.s")
+    AMMO(ITEM_BOMB) -= spB0 * 5;
+    AMMO(ITEM_BOW) -= spAC * 10;
+    func_801159EC(-((phi_s0_2 * 50) + (spA0 * 20) + (phi_s2 * 5) + spA8));
+    return true;
+}
+
+void func_80C11338(EnThiefbird* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    EnItem00* item = NULL;
+    f32 phi_f20 = 5000.0f;
+    s32 i;
+    f32 temp_f0;
+
+    this->unk_3EC = NULL;
+
+    do {
+        item = (EnItem00*)func_ActorCategoryIterateById(globalCtx, &item->actor, ACTORCAT_MISC, ACTOR_EN_ITEM00);
+        if (item != NULL) {
+            if (item->unk152 > 0) {
+                if (Actor_XZDistanceBetweenActors(&player->actor, &item->actor) > 10.0f) {
+                    for (i = 0; i < ARRAY_COUNT(D_80C13664); i++) {
+                        if (item->actor.params == D_80C13664[i]) {
+                            break;
+                        }
+                    }
+
+                    if (i != ARRAY_COUNT(D_80C13664)) {
+                        temp_f0 = Actor_DistanceBetweenActors(&this->actor, &item->actor);
+                        if (temp_f0 < phi_f20) {
+                            this->unk_3EC = item;
+                            phi_f20 = temp_f0;
+                        }
+                    }
+                }
+            }
+            item = (EnItem00*)item->actor.next;
+        }
+    } while (item != NULL);
+}
+
+void func_80C11454(EnThiefbird* this) {
+    this->unk_18C = 10;
+    this->unk_3D8 = 0.5f;
+    this->unk_3DC = 0.75f;
+    this->unk_3D4 = 1.0f;
+    this->actor.flags &= ~0x200;
+    func_800BCB70(&this->actor, 0x4000, 255, 0, 80);
+}
+
+void func_80C114C0(EnThiefbird* this, GlobalContext* globalCtx) {
+    if (this->unk_18C == 10) {
+        this->unk_18C = 0;
+        this->unk_3D4 = 0.0f;
+        func_800BF7CC(globalCtx, &this->actor, this->unk_350, 11, 2, 0.2f, 0.2f);
+        this->actor.flags |= 0x200;
+    }
+}
+
+void func_80C11538(EnThiefbird* this) {
+    Animation_MorphToLoop(&this->skelAnime, &D_06000604, -4.0f);
+    this->unk_18E = 60;
+    this->collider.base.acFlags |= AC_ON;
+    this->actionFunc = func_80C11590;
+}
+
+void func_80C11590(EnThiefbird* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    s32 sp38;
+
+    SkelAnime_Update(&this->skelAnime);
+    sp38 = Animation_OnFrame(&this->skelAnime, 0.0f);
+    this->actor.speedXZ = (Rand_ZeroOne() * 1.5f) + 3.0f;
+
+    if (this->actor.bgCheckFlags & 8) {
+        this->unk_192 = this->actor.wallYaw;
+    } else {
+        if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 300.0f) {
+            this->unk_192 = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+        }
+    }
+
+    if (!Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_192, 5, 0x300, 0x10) && (sp38 != 0) &&
+        (Rand_ZeroOne() < 0.1f)) {
+        s16 yaw = Actor_YawToPoint(&this->actor, &this->actor.home.pos) - this->actor.shape.rot.y;
+
+        if (yaw > 0) {
+            this->unk_192 += Rand_S16Offset(4096, 4096);
+        } else {
+            this->unk_192 -= Rand_S16Offset(4096, 4096);
+        }
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_THIEFBIRD_VOICE);
+    }
+
+    if ((this->actor.yDistToWater > -40.0f) || (this->actor.bgCheckFlags & 1)) {
+        this->unk_190 = -4096;
+    } else if (this->actor.world.pos.y < (this->actor.home.pos.y - 75.0f)) {
+        this->unk_190 = -Rand_S16Offset(2048, 2048);
+    } else if ((this->actor.home.pos.y + 75.0f) < this->actor.world.pos.y) {
+        this->unk_190 = Rand_S16Offset(2048, 2048);
+    }
+
+    if (!Math_SmoothStepToS(&this->actor.shape.rot.x, this->unk_190, 10, 0x100, 8) && (sp38 != 0) &&
+        (Rand_ZeroOne() < 0.1f)) {
+        if (this->actor.home.pos.y < this->actor.world.pos.y) {
+            this->unk_190 -= Rand_S16Offset(0x400, 0x400);
+        } else {
+            this->unk_190 += Rand_S16Offset(0x400, 0x400);
+        }
+
+        this->unk_190 = CLAMP(this->unk_190, -4096, 4096);
+    }
+
+    if (this->unk_18E != 0) {
+        this->unk_18E--;
+    }
+
+    if ((this->unk_18E == 0) && (this->actor.xzDistToPlayer < 300.0f) && !(player->stateFlags1 & 0x800000) &&
+        (Player_GetMask(globalCtx) != PLAYER_MASK_STONE_MASK) && (this->actor.yDistToWater < -40.0f)) {
+        func_80C118E4(this);
+    }
+}
+
+void func_80C118E4(EnThiefbird* this) {
+    Animation_MorphToLoop(&this->skelAnime, &D_060063C4, -10.0f);
+    this->unk_18E = 300;
+    this->actionFunc = func_80C1193C;
+    this->actor.speedXZ = 5.0f;
+}
+
+void func_80C1193C(EnThiefbird* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    s16 pitch;
+
+    SkelAnime_Update(&this->skelAnime);
+    if (Animation_OnFrame(&this->skelAnime, 1.0f)) {
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_KAICHO_FLUTTER);
+    }
+
+    if (this->unk_18E != 0) {
+        this->unk_18E--;
+    }
+
+    pitch = Actor_PitchBetweenActors(&this->actor, &player->actor);
+    pitch = CLAMP(pitch, -0x2800, 0x2800);
+    Math_SmoothStepToS(&this->actor.shape.rot.x, pitch, 4, 0x800, 0x80);
+    if (this->actor.bgCheckFlags & 8) {
+        Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.wallYaw, 6, 0x1000, 0x100);
+    } else if (Actor_IsActorFacingLink(&this->actor, 0x3C00) || (this->actor.xzDistToPlayer > 120.0f)) {
+        s16 rot = BINANG_ROT180(this->actor.yawTowardsPlayer - player->actor.shape.rot.y);
+
+        if (rot > 0x4000) {
+            rot = this->actor.yawTowardsPlayer + 0x3000;
+        } else if (rot < -0x4000) {
+            rot = this->actor.yawTowardsPlayer - 0x3000;
+        } else {
+            rot = this->actor.yawTowardsPlayer;
+        }
+        Math_SmoothStepToS(&this->actor.shape.rot.y, rot, 4, 0x1000, 0x100);
+    }
+
+    if ((this->unk_18E == 0) || (player->stateFlags1 & 0x800000) ||
+        (Player_GetMask(globalCtx) == PLAYER_MASK_STONE_MASK) || (this->collider.base.atFlags & AT_HIT) ||
+        (this->actor.bgCheckFlags & 1) || (this->actor.yDistToWater > -40.0f)) {
+        if (this->collider.base.atFlags & AT_HIT) {
+            this->collider.base.atFlags &= ~AT_HIT;
+            Audio_PlayActorSound2(&this->actor, NA_SE_EN_THIEFBIRD_VOICE);
+            if (!(this->collider.base.atFlags & AT_BOUNCED)) {
+                if ((D_80C1392C != 0) && CUR_UPG_VALUE(UPG_QUIVER) &&
+                    (!((gSaveContext.roomInf[126][5] & 0xFF000000) >> 0x18) ||
+                     !((gSaveContext.roomInf[126][5] & 0xFF0000) >> 0x10)) &&
+                    (Rand_ZeroOne() < 0.5f) && func_80C10B0C(this, globalCtx)) {
+                    func_80C1242C(this);
+                } else if (func_80C10E98(globalCtx)) {
+                    func_80C11338(this, globalCtx);
+                    func_80C12744(this);
+                } else {
+                    func_80C11538(this);
+                }
+            } else {
+                func_80C12308(this);
+            }
+        } else {
+            func_80C11538(this);
+        }
+    }
+}
+
+void func_80C11C60(EnThiefbird* this) {
+    this->actor.speedXZ = 0.0f;
+    this->actor.velocity.y = 0.0f;
+    Animation_PlayOnce(&this->skelAnime, &D_06000088);
+    this->actor.bgCheckFlags &= ~1;
+    this->actor.shape.rot.x = 0;
+    this->unk_18E = 40;
+    this->actor.velocity.y = 0.0f;
+    Audio_PlayActorSound2(&this->actor, NA_SE_EN_THIEFBIRD_DEAD);
+    func_800BCB70(&this->actor, 0x4000, 255, 0, 40);
+    this->collider.base.acFlags &= ~AC_ON;
+    this->actor.flags |= 0x10;
+    this->unk_192 = 0x1C00;
+    this->actionFunc = func_80C11D14;
+}
+
+void func_80C11D14(EnThiefbird* this, GlobalContext* globalCtx) {
+    this->actor.colorFilterTimer = 40;
+    if (this->unk_18E != 0) {
+        this->unk_18E--;
+    }
+
+    if (this->unk_18C == 10) {
+        if (this->unk_18E < 38) {
+            func_80C114C0(this, globalCtx);
+            this->actor.speedXZ = 4.0f;
+        } else {
+            return;
+        }
+    }
+
+    if (this->unk_18E < 20) {
+        Math_ScaledStepToS(&this->unk_192, 0, 0x200);
+    }
+
+    this->actor.shape.rot.y += this->unk_192;
+    if (this->unk_18E == 0) {
+        func_80C11DC0(this);
+    }
+}
+
+void func_80C11DC0(EnThiefbird* this) {
+    this->actor.flags &= ~1;
+    this->actionFunc = func_80C11DF0;
+    this->actor.gravity = -0.5f;
+}
+
+void func_80C11DF0(EnThiefbird* this, GlobalContext* globalCtx) {
+    s32 i;
+    s32 j;
+
+    if (Math_ScaledStepToS(&this->actor.shape.rot.x, -0x8000, 0x800)) {
+        Math_ScaledStepToS(&this->unk_192, 0x1C00, 0x200);
+        this->actor.shape.rot.y += this->unk_192;
+    }
+
+    if ((this->actor.bgCheckFlags & 1) || (this->actor.floorHeight == BGCHECK_Y_MIN)) {
+        for (i = 0; i < ARRAY_COUNT(this->unk_350); i++) {
+            func_800B3030(globalCtx, &this->unk_350[i], &D_801D15B0, &D_801D15B0, 0x8C, 0, 0);
+        }
+
+        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 11, NA_SE_EN_EXTINCT);
+        Item_DropCollectible(globalCtx, &this->actor.world.pos, ITEM00_RUPEE_ORANGE);
+
+        for (i = 0; i < ARRAY_COUNT(D_80C13664); i++) {
+            for (j = 0; j < this->unk_196[i]; j++) {
+                Item_DropCollectible(globalCtx, &this->actor.world.pos, D_80C13664[i]);
+            }
+        }
+
+        Actor_MarkForDeath(&this->actor);
+    }
+}
+
+void func_80C11F6C(EnThiefbird* this, GlobalContext* globalCtx) {
+    Animation_MorphToLoop(&this->skelAnime, &D_06000278, -4.0f);
+    func_80C10984(this, 15);
+    if (this->actor.colChkInfo.damageEffect != 3) {
+        this->actor.speedXZ = 4.0f;
+    } else {
+        this->actor.speedXZ = 0.0f;
+    }
+
+    if (this->actor.colChkInfo.damageEffect == 5) {
+        func_800BCB70(&this->actor, 0, 255, 0, 40);
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
+    } else if (this->actor.colChkInfo.damageEffect == 1) {
+        func_800BCB70(&this->actor, 0, 255, 0, 40);
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
+    } else {
+        func_800BCB70(&this->actor, 0x4000, 255, 0, 40);
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_THIEFBIRD_DAMAGE);
+    }
+
+    this->collider.base.acFlags &= ~AC_ON;
+    if (this->unk_3E8 == 0) {
+        this->unk_190 = -0x1000;
+        this->unk_192 = BINANG_ROT180(this->actor.yawTowardsPlayer);
+    } else {
+        this->unk_190 = Actor_PitchToPoint(&this->actor, &D_80C13920);
+    }
+
+    this->unk_18E = 40;
+    if (Rand_ZeroOne() < 0.9f) {
+        Item_DropCollectible(globalCtx, &this->actor.focus.pos, ITEM00_RUPEE_GREEN);
+    }
+
+    if (Rand_ZeroOne() < 0.6f) {
+        Item_DropCollectible(globalCtx, &this->actor.focus.pos, ITEM00_RUPEE_GREEN);
+    }
+
+    if (Rand_ZeroOne() < 0.3f) {
+        Item_DropCollectible(globalCtx, &this->actor.focus.pos, ITEM00_RUPEE_GREEN);
+    }
+    this->actionFunc = func_80C1215C;
+}
+
+void func_80C1215C(EnThiefbird* this, GlobalContext* globalCtx) {
+    f32 sp2C;
+
+    if (this->unk_18E != 0) {
+        this->unk_18E--;
+    }
+
+    if (this->unk_18C == 10) {
+        if (this->unk_18E < 38) {
+            func_80C114C0(this, globalCtx);
+            this->actor.speedXZ = 4.0f;
+        } else {
+            return;
+        }
+    }
+
+    SkelAnime_Update(&this->skelAnime);
+    if (this->actor.bgCheckFlags & 8) {
+        this->unk_192 = this->actor.wallYaw;
+    } else if (this->unk_3E8 == 0) {
+        this->unk_192 = BINANG_ROT180(this->actor.yawTowardsPlayer);
+    } else {
+        this->unk_192 = Actor_YawToPoint(&this->actor, &D_80C13920);
+        this->unk_190 = Actor_PitchToPoint(&this->actor, &D_80C13920);
+    }
+
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_192, 6, 0x1000, 0x100);
+    Math_SmoothStepToS(&this->actor.shape.rot.x, this->unk_190, 5, 0x100, 0x10);
+    sp2C = (this->unk_18E * 153.6f) + 0x800;
+    this->actor.shape.rot.z = Math_SinS(this->unk_18E * 0x1999) * sp2C;
+    if (this->unk_18E == 0) {
+        if (this->unk_3E8 != 0) {
+            func_80C1242C(this);
+        } else if (this->unk_3EC != 0) {
+            func_80C12744(this);
+        } else {
+            func_80C11538(this);
+        }
+    }
+}
+
+void func_80C12308(EnThiefbird* this) {
+    Animation_MorphToLoop(&this->skelAnime, &D_06000278, -4.0f);
+    func_80C10984(this, 15);
+    this->unk_190 = -0x1000;
+    this->unk_192 = BINANG_ROT180(this->actor.yawTowardsPlayer);
+    this->unk_18E = 40;
+    this->actionFunc = func_80C12378;
+}
+
+void func_80C12378(EnThiefbird* this, GlobalContext* globalCtx) {
+    if (this->unk_18E != 0) {
+        this->unk_18E--;
+    }
+
+    SkelAnime_Update(&this->skelAnime);
+    if (this->actor.bgCheckFlags & 8) {
+        this->unk_192 = this->actor.wallYaw;
+    } else {
+        this->unk_192 = BINANG_ROT180(this->actor.yawTowardsPlayer);
+    }
+
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_192, 6, 0x1000, 0x100);
+    Math_SmoothStepToS(&this->actor.shape.rot.x, this->unk_190, 5, 0x100, 0x10);
+
+    if (this->unk_18E == 0) {
+        func_80C11538(this);
+    }
+}
+
+void func_80C1242C(EnThiefbird* this) {
+    Animation_Change(&this->skelAnime, &D_06000278, 2.0f, 0.0f, 0.0f, 0, -4.0f);
+    this->actor.flags |= 0x10;
+    this->collider.base.acFlags |= AC_ON;
+    this->actionFunc = func_80C124B0;
+    this->actor.speedXZ = 12.0f;
+}
+
+void func_80C124B0(EnThiefbird* this, GlobalContext* globalCtx) {
+    Actor* temp_v0;
+    s16 temp_v1;
+
+    SkelAnime_Update(&this->skelAnime);
+    if (this->actor.bgCheckFlags & 8) {
+        this->unk_192 = this->actor.wallYaw;
+    } else {
+        this->unk_192 = Actor_YawToPoint(&this->actor, &D_80C13920);
+    }
+
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_192, 6, 0x1000, 0x100);
+    Math_SmoothStepToS(&this->actor.shape.rot.x, Actor_PitchToPoint(&this->actor, &D_80C13920), 6, 0x1000, 0x100);
+    temp_v0 = func_800BC270(globalCtx, &this->actor, 80.0f, 0x138B0);
+    if (temp_v0 != NULL) {
+        temp_v1 = temp_v0->world.rot.x - Actor_PitchToPoint(temp_v0, &this->actor.focus.pos);
+        if (ABS_ALT(temp_v1) < 0x1800) {
+            if (temp_v1 > 0) {
+                this->unk_3E0 = 25.0f;
+            } else {
+                this->unk_3E0 = -25.0f;
+            }
+        }
+    }
+
+    if (!Math_StepToF(&this->unk_3E0, 0.0f, 5.0f)) {
+        this->actor.world.pos.x +=
+            this->unk_3E0 * Math_SinS(this->actor.shape.rot.x) * Math_SinS(this->actor.shape.rot.y);
+        this->actor.world.pos.y += this->unk_3E0 * Math_CosS(this->actor.shape.rot.x);
+        this->actor.world.pos.x +=
+            this->unk_3E0 * Math_SinS(this->actor.shape.rot.x) * Math_CosS(this->actor.shape.rot.y);
+    }
+
+    if (Actor_DistanceToPoint(&this->actor, &D_80C13920) < 1000.0f) {
+        func_80C126A8(this);
+    }
+}
+
+void func_80C126A8(EnThiefbird* this) {
+    this->actor.flags &= ~1;
+    this->collider.base.acFlags &= ~AC_ON;
+    this->actionFunc = func_80C126D8;
+}
+
+void func_80C126D8(EnThiefbird* this, GlobalContext* globalCtx) {
+    SkelAnime_Update(&this->skelAnime);
+    Math_ApproachS(&this->actor.shape.rot.x, 0x3000, 6, 0x1000);
+    if (this->actor.yDistToPlayer > 100.0f) {
+        Actor_MarkForDeath(&this->actor);
+    }
+}
+
+void func_80C12744(EnThiefbird* this) {
+    Animation_MorphToLoop(&this->skelAnime, &D_06000604, -4.0f);
+    Animation_Change(&this->skelAnime, &D_06000604, 1.0f, 0.0f, 0.0f, 1, -4.0f);
+    this->unk_190 = 0;
+    this->collider.base.acFlags |= AC_ON;
+    this->actor.flags |= 0x10;
+    this->actionFunc = func_80C127F4;
+    this->actor.speedXZ = 4.0f;
+    this->skelAnime.playSpeed = 3.0f;
+}
+
+void func_80C127F4(EnThiefbird* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    s16 temp_v0;
+    f32 temp_f0;
+
+    SkelAnime_Update(&this->skelAnime);
+    if ((this->unk_3EC != NULL) && ((this->unk_3EC->actor.update == NULL) || (this->unk_3EC->unk152 == 0) ||
+                                    (Actor_XZDistanceBetweenActors(&player->actor, &this->unk_3EC->actor) <= 10.0f))) {
+        this->unk_3EC = NULL;
+    }
+
+    if (this->unk_190 == -0x3800) {
+        if (Math_ScaledStepToS(&this->unk_194, this->unk_190, 0xE00)) {
+            this->unk_190 = 0;
+        }
+    } else {
+        Math_ScaledStepToS(&this->unk_194, 0, 0x200);
+    }
+
+    if (this->unk_3EC == NULL) {
+        func_80C11338(this, globalCtx);
+    }
+
+    if (this->unk_3EC != NULL) {
+        if (this->actor.bgCheckFlags & 8) {
+            Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.wallYaw, 3, 0x2000, 0x100);
+        } else {
+            Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_YawBetweenActors(&this->actor, &this->unk_3EC->actor), 3,
+                               0x2000, 0x100);
+        }
+        temp_v0 = Math_Vec3f_Pitch(&this->unk_350[9], &this->unk_3EC->actor.world.pos);
+        temp_v0 = CLAMP(temp_v0, -0x3000, 0x3000);
+        Math_SmoothStepToS(&this->actor.shape.rot.x, temp_v0, 4, 0x800, 0x80);
+        temp_f0 = Actor_DistanceToPoint(&this->unk_3EC->actor, &this->unk_350[9]);
+        this->actor.speedXZ = (0.02f * temp_f0) + 2.0f;
+        this->actor.speedXZ = CLAMP_MAX(this->actor.speedXZ, 4.0f);
+        if ((this->unk_3EC->actor.speedXZ <= 0.0f) && (temp_f0 < 40.0f)) {
+            s32 i;
+
+            this->unk_3EC->unk152 = 0;
+            for (i = 0; i < ARRAY_COUNT(D_80C13664); i++) {
+                if (this->unk_3EC->actor.params == D_80C13664[i]) {
+                    this->unk_196[i]++;
+                    break;
+                }
+            }
+            this->unk_3EC = NULL;
+            this->unk_194 = 0x100;
+            this->unk_190 = -0x3800;
+        }
+    } else {
+        this->actor.speedXZ = 4.0f;
+        if (this->actor.bgCheckFlags & 8) {
+            Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.wallYaw, 6, 0x1000, 0x100);
+        } else {
+            Math_SmoothStepToS(&this->actor.shape.rot.y, BINANG_ROT180(this->actor.yawTowardsPlayer), 6, 0x1000, 0x100);
+        }
+
+        Math_SmoothStepToS(&this->actor.shape.rot.x, -0x800, 4, 0x800, 0x80);
+        if (this->unk_194 == 0) {
+            this->actor.flags &= ~0x10;
+            func_80C11538(this);
+        }
+    }
+}
+
+void func_80C12B1C(EnThiefbird* this, GlobalContext* globalCtx) {
+    ColliderJntSphElement* sph;
+    s32 i;
+
+    if (this->collider.base.acFlags & AC_HIT) {
+        this->collider.base.acFlags &= ~AC_HIT;
+        this->collider.base.atFlags &= ~AT_HIT;
+        func_800BE258(&this->actor, this->collider.elements);
+        func_80C114C0(this, globalCtx);
+        this->unk_194 = 0;
+
+        for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
+            if (this->collider.elements[i].info.bumperFlags & 2) {
+                break;
+            }
+        }
+
+        if (this->actor.colChkInfo.damageEffect == 3) {
+            func_80C11454(this);
+        } else if (this->actor.colChkInfo.damageEffect == 4) {
+            this->unk_18C = 20;
+            this->unk_3D8 = 0.5f;
+            this->unk_3D4 = 4.0f;
+            if (i != ARRAY_COUNT(this->colliderElements)) {
+                sph = &this->collider.elements[i];
+                Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, sph->info.bumper.hitPos.x,
+                            sph->info.bumper.hitPos.y, sph->info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+            }
+        } else if (this->actor.colChkInfo.damageEffect == 2) {
+            this->unk_18C = 0;
+            this->unk_3D8 = 0.5f;
+            this->unk_3D4 = 4.0f;
+        } else if (this->actor.colChkInfo.damageEffect == 5) {
+            this->unk_18C = 0x1E;
+            this->unk_3D8 = 0.5f;
+            this->unk_3D4 = 2.0f;
+        }
+
+        if (this->unk_3E8 != 0) {
+            this->actor.colChkInfo.damage = 0;
+        }
+
+        if (!Actor_ApplyDamage(&this->actor)) {
+            this->actor.colChkInfo.health = 0;
+            Enemy_StartFinishingBlow(globalCtx, &this->actor);
+            func_80C10984(this, 40);
+            func_80C11C60(this);
+        } else {
+            func_80C11F6C(this, globalCtx);
+        }
+    }
+}
+
+void func_80C12D00(EnThiefbird* this) {
+    static Vec3f D_80C1368C = { 0.0f, -0.15f, 0.0f };
+    s32 i;
+    f32 phi_f20;
+    EnThiefbirdUnkStruct* ptr = &this->unk_3F0[0];
+
+    for (i = 0; i < ARRAY_COUNT(this->unk_3F0); i++, ptr++) {
+        if (ptr->unk_22) {
+            ptr->unk_22--;
+            Math_Vec3f_Sum(&ptr->unk_00, &ptr->unk_0C, &ptr->unk_00);
+            Math_Vec3f_Sum(&ptr->unk_0C, &D_80C1368C, &ptr->unk_0C);
+            ptr->unk_1C++;
+            Math_StepToF(&ptr->unk_0C.x, 0.0f, 0.05f);
+            Math_StepToF(&ptr->unk_0C.z, 0.0f, 0.05f);
+            if (ptr->unk_0C.y < -0.5f) {
+                ptr->unk_0C.y = -0.5f;
+            }
+
+            if ((i % 2) != 0) {
+                phi_f20 = -1.0f;
+            } else {
+                phi_f20 = 1.0f;
+            }
+
+            ptr->unk_20 = Math_SinS(ptr->unk_1C * 0x7D0) * 0x2000;
+            ptr->unk_1E += (s16)(0x666 * fabsf(Math_SinS(ptr->unk_1C * 0xBB8)) * phi_f20);
+        }
+    }
+}
+
+void EnThiefbird_Update(Actor* thisx, GlobalContext* globalCtx2) {
+    EnThiefbird* this = THIS;
+    GlobalContext* globalCtx = globalCtx2;
+
+    func_80C12B1C(this, globalCtx);
+    this->actionFunc(this, globalCtx);
+    this->actor.world.rot.y = this->actor.shape.rot.y;
+    this->actor.world.rot.x = -this->actor.shape.rot.x;
+    if (this->actor.colChkInfo.health != 0) {
+        Actor_SetVelocityAndMoveXYRotation(&this->actor);
+    } else {
+        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    }
+
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 25.0f, 25.0f, 50.0f, 7);
+    if (this->actionFunc == func_80C1193C) {
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    }
+
+    if (this->collider.base.acFlags & AC_ON) {
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    }
+
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    if (this->unk_3D4 > 0.0f) {
+        if (this->unk_18C != 10) {
+            Math_StepToF(&this->unk_3D4, 0.0f, 0.05f);
+            this->unk_3D8 = (this->unk_3D4 + 1.0f) * 0.25f;
+            this->unk_3D8 = CLAMP_MAX(this->unk_3D8, 0.5f);
+        } else if (!Math_StepToF(&this->unk_3DC, 0.5f, 0.0125f)) {
+            func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+        }
+    }
+
+    func_80C12D00(this);
+    if (((this->skelAnime.animation == &D_06000604) && Animation_OnFrame(&this->skelAnime, 13.0f)) ||
+        ((this->skelAnime.animation == &D_06000278) && Animation_OnFrame(&this->skelAnime, 1.0f))) {
+        Audio_PlayActorSound2(&this->actor, NA_SE_EN_KAICHO_FLUTTER);
+    }
+}
+
+s32 EnThiefbird_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                 Actor* thisx) {
+    EnThiefbird* this = THIS;
+
+    if ((limbIndex == 10) || (limbIndex == 11)) {
+        this->unk_3E4 = *dList;
+        *dList = NULL;
+    } else if (limbIndex == 16) {
+        *dList = NULL;
+    } else if (limbIndex == 8) {
+        rot->z += this->unk_194;
+    }
+
+    return false;
+}
+
+void EnThiefbird_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    static s8 D_80C13698[] = {
+        -1, 0, -1, 1, 3, -1, 2, 5, -1, -1, 7, 8, 9, -1, -1, 10, -1,
+    };
+    EnThiefbird* this = THIS;
+    s32 pad;
+    Gfx* gfx;
+    s8 idx;
+
+    Collider_UpdateSpheres(limbIndex, &this->collider);
+    if ((limbIndex == 10) || (limbIndex == 11)) {
+        OPEN_DISPS(globalCtx->state.gfxCtx);
+
+        gfx = POLY_OPA_DISP;
+        Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+        gSPMatrix(&gfx[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(&gfx[1], this->unk_3E4);
+        POLY_OPA_DISP = &gfx[2];
+
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
+    } else if (limbIndex == 16) {
+        if (this->unk_3E8 != NULL) {
+            OPEN_DISPS(globalCtx->state.gfxCtx);
+
+            if (this->unk_3E8 == D_060033B0) {
+                gfx = POLY_XLU_DISP;
+            } else {
+                gfx = POLY_OPA_DISP;
+            }
+
+            gSPMatrix(&gfx[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(&gfx[1], this->unk_3E8);
+
+            if (this->unk_3E8 == D_060033B0) {
+                POLY_XLU_DISP = &gfx[2];
+            } else {
+                POLY_OPA_DISP = &gfx[2];
+            }
+
+            CLOSE_DISPS(globalCtx->state.gfxCtx);
+        }
+    }
+
+    idx = D_80C13698[limbIndex];
+    if (idx != -1) {
+        if (idx == 9) {
+            Matrix_GetStateTranslationAndScaledX(1000.0f, &this->unk_350[idx]);
+        } else {
+            Matrix_GetStateTranslation(&this->unk_350[idx]);
+            if ((idx == 3) || (idx == 5)) {
+                Matrix_GetStateTranslationAndScaledX(2000.0f, &this->unk_350[idx + 1]);
+            }
+        }
+    }
+}
+
+void func_80C13354(EnThiefbird* this, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
+    s32 i;
+    Gfx* gfx;
+    EnThiefbirdUnkStruct* ptr = &this->unk_3F0[0];
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    gfx = POLY_OPA_DISP;
+    gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+    gSPDisplayList(&gfx[1], D_06003060);
+    gfx = &gfx[2];
+
+    for (i = 0; i < ARRAY_COUNT(this->unk_3F0); i++, ptr++) {
+        if (ptr->unk_22 != 0) {
+            Matrix_InsertTranslation(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_NEW);
+            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_RotateY(ptr->unk_1E, MTXMODE_APPLY);
+            Matrix_InsertZRotation_s(ptr->unk_20, MTXMODE_APPLY);
+            Matrix_InsertTranslation(0.0f, -10.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_Scale(ptr->unk_18, ptr->unk_18, 1.0f, MTXMODE_APPLY);
+
+            gSPMatrix(&gfx[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(&gfx[1], D_060030D8);
+            gfx = &gfx[2];
+        }
+    }
+    POLY_OPA_DISP = gfx;
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+
+void EnThiefbird_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    EnThiefbird* this = THIS;
+
+    func_8012C28C(globalCtx->state.gfxCtx);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnThiefbird_OverrideLimbDraw, EnThiefbird_PostLimbDraw, &this->actor);
+    if (this->actor.colorFilterTimer > 0) {
+        func_800AE5A0(globalCtx);
+    }
+    func_80C13354(this, globalCtx);
+    func_800BE680(globalCtx, &this->actor, this->unk_350, 11, this->unk_3D8, this->unk_3DC, this->unk_3D4,
+                  this->unk_18C);
+    Math_Vec3s_ToVec3f(&this->actor.focus.pos, &this->collider.elements[1].dim.worldSphere.center);
+}
