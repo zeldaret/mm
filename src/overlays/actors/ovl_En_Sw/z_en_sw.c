@@ -571,7 +571,7 @@ s32 func_808D9C18(EnSw* this) {
         this->actor.velocity.x *= Math_SinS(this->actor.world.rot.y);
         this->actor.velocity.z *= Math_CosS(this->actor.world.rot.y);
     } else {
-        new_var = this->actor.speedXZ * this->unk_350.x;  
+        new_var = this->actor.speedXZ * this->unk_350.x;
         this->actor.velocity.x = new_var + (this->actor.speedXZ * this->unk_368.x);
         new_var = this->actor.speedXZ * this->unk_350.z;
         this->actor.velocity.z = new_var + this->actor.speedXZ * this->unk_368.z;
@@ -1084,7 +1084,6 @@ void func_808DAEB4(EnSw* this, GlobalContext* globalCtx) {
             } else {
                 this->unk_45C = 20;
             }
-
         }
     }
 }
