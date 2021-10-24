@@ -3,7 +3,7 @@
 import argparse, os
 
 # "old": "new"
-animdict ={
+animdict = {
     "Actor_GetSwitchFlag": "Flags_GetSwitch",
     "atan_flip": "Math_Acot2F",
     "atans": "Math_Atan2S",
@@ -74,7 +74,7 @@ animdict ={
     "SkelAnime_LodDraw(": "SkelAnime_DrawLod(",
     "SkelAnime_LodDrawLimbSV(": "SkelAnime_DrawFlexLimbLod(",
     "SkelAnime_LodDrawSV(": "SkelAnime_DrawFlexLod(",
-    "SkelAnime_DrawLimb(": "SkelAnime_DrawLimbOpa(",
+    #"SkelAnime_DrawLimb(": "SkelAnime_DrawLimbOpa(",
     #"SkelAnime_Draw(": "SkelAnime_DrawOpa(",
     "SkelAnime_DrawLimbSV(": "SkelAnime_DrawFlexLimbOpa(",
     "SkelAnime_DrawSV(": "SkelAnime_DrawFlexOpa(",
@@ -223,11 +223,24 @@ def replace_anim_all(repo):
                 replace_anim(file)
     return 1
 
-parser = argparse.ArgumentParser(description='Update to the new animation names')
-parser.add_argument('file', help="source file to be processed. use . to process the whole repo", default = None)
+def dictSanityCheck():
+    keys = animdict.keys()
+    values = animdict.values()
+    for k in keys:
+        if k in values:
+            print(f"Key '{k}' found in values")
+            print(f"This would produce unintended renames")
+            print(f"Fix this by removing said key from the dictionary")
+            exit(-1)
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Update to the new animation names')
+    parser.add_argument('file', help="source file to be processed. use . to process the whole repo", default = None)
+
     args = parser.parse_args()
+
+    dictSanityCheck()
+
     if(args.file == '.'):
         replace_anim_all(os.curdir)
     else:
