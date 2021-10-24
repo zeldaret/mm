@@ -113,7 +113,6 @@ void EnRecepgirl_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Recepgirl/EnRecepgirl_Destroy.s")
 void EnRecepgirl_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Recepgirl/func_80C100DC.s")
@@ -427,6 +426,8 @@ What is this doing? We need to understand that to name this variable.
 
 The N64's processors cannot use segmented addresses: they need actual RAM addresses. Therefore the segmented addresses have to be converted before being placed on a segment: this is what `Lib_SegmentedToVirtual` does. So (somewhat unusually) this loop is modifying the addresses in the actor's actual data in RAM. Having converted the addresses once, it wouldn't make any sense to convert them again, but `Init` would run every time an instantiation of the actor is created. Therefore `D_80C106C8` is present to ensure that the addresses only get converted once: it is really a boolean that indicates if the addresses have been converted. So let's call it `texturesDesegmented`, and replace its values by `true` and `false`.
 
+Finally, clearly `4` is linked to the data over which we're iterating: namely it's the size of the array. We have a macro for this, `ARRAY_COUNT(sEyeTextures)`.
+
 We've got one struct variable left. To find out what it does, we can look at a function that uses it, for example
 ```C
 s32 EnRecepgirl_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
@@ -519,7 +520,6 @@ void func_80C102D4(EnRecepgirl* this, GlobalContext* globalCtx) {
         this->actor.textId = 0x2ADC; // hear directions again?
         func_80C10148(this);
     } else if ((temp_v0_2 == 5) && (func_80147624(globalCtx) != 0)) {
-
         if (this->actor.textId == 0x2AD9) { // "Welcome..."
             Actor_SetSwitchFlag(globalCtx, this->actor.params);
             Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 10.0f);

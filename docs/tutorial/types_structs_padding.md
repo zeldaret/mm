@@ -1,7 +1,7 @@
 # Types, structs, and padding
 
 Reminders:
-- In N64 MIPS, 1 word is 4 bytes (yes, the N64 is meant to be 64-bit, but it mostly isn't used like it in OoT)
+- In N64 MIPS, 1 word is 4 bytes (yes, the N64 is meant to be 64-bit, but it mostly isn't used like it in MM or OoT)
 - A byte is 8 bits, or 2 hex digits
 
 
@@ -40,8 +40,6 @@ where you replace `ActorName` by the actual actor name as used elsewhere in the 
 
 ## Some Common Structs
 
-
-
 Here are the usual names and the sizes of some of the most common structs used in actors and their structs:
 | Type                    | Usual name            | Size            |
 | ----------------------- | --------------------- | --------------- |
@@ -60,6 +58,7 @@ Here are the usual names and the sizes of some of the most common structs used i
 | `ColliderTrisElement`   | `colliderElements[n]` | 0x5C * n        |
 
 Note that `Actor` and `DynaPolyActor` have changed size from OoT.
+
 
 ## Padding
 

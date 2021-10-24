@@ -41,6 +41,7 @@ graphs/
 
 # Docs
 !docs/tutorial/**/*.png
+!.vscode/extensions.json
 
 # Per-user configuration
 .python-version

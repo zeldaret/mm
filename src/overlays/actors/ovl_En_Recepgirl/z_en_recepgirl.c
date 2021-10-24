@@ -61,7 +61,7 @@ void EnRecepgirl_Init(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06011B60, &D_06009890, this->jointTable, this->morphTable, 24);
 
     if (!texturesDesegmented) {
-        for (i = 0; i < 4; i++) {
+        for (i = 0; i < ARRAY_COUNT(sEyeTextures); i++) {
             sEyeTextures[i] = Lib_SegmentedToVirtual(sEyeTextures[i]);
         }
         texturesDesegmented = true;
@@ -152,7 +152,6 @@ void EnRecepgirl_Talk(EnRecepgirl* this, GlobalContext* globalCtx) {
         this->actor.textId = 0x2ADC; // hear directions again?
         EnRecepgirl_SetupWait(this);
     } else if ((temp_v0_2 == 5) && (func_80147624(globalCtx) != 0)) {
-
         if (this->actor.textId == 0x2AD9) { // "Welcome..."
             Actor_SetSwitchFlag(globalCtx, this->actor.params);
             Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 10.0f);
