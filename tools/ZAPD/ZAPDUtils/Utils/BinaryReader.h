@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Stream.h"
+#include <array>
+#include <memory>
+#include <string>
+#include <vector>
+#include "../Color3b.h"
 #include "../Vec2f.h"
 #include "../Vec3f.h"
 #include "../Vec3s.h"
-#include "../Color3b.h"
-#include <memory>
-#include <array>
-#include <vector>
-#include <string>
+#include "Stream.h"
 
 class BinaryReader
 {
@@ -16,7 +16,7 @@ public:
 	BinaryReader(Stream* nStream);
 
 	void Close();
-		
+
 	void Seek(uint32_t offset, SeekOffsetType seekType);
 	uint32_t GetBaseAddress();
 
@@ -37,7 +37,7 @@ public:
 	Vec2f ReadVec2f();
 	Color3b ReadColor3b();
 	std::string ReadString();
-	
+
 protected:
 	std::shared_ptr<Stream> stream;
 };
