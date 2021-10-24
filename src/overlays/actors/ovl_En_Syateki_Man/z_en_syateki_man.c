@@ -141,9 +141,11 @@ void EnSyatekiMan_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetMode = 1;
     Actor_SetScale(&this->actor, 0.01f);
     if (globalCtx->sceneNum == SCENE_SYATEKI_MORI) {
-        SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600E7D0, &D_0600DFEC, this->jointTable, this->morphTable, 16);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600E7D0, &D_0600DFEC, this->jointTable, this->morphTable,
+                           16);
     } else {
-        SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600E7D0, &D_0600D9D0, this->jointTable, this->morphTable, 16);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600E7D0, &D_0600D9D0, this->jointTable, this->morphTable,
+                           16);
     }
 
     this->actor.colChkInfo.cylRadius = 100;
@@ -415,8 +417,8 @@ void func_809C6E30(EnSyatekiMan* this, GlobalContext* globalCtx) {
             break;
     }
 
-    if (this->skelAnime.animCurrentSeg == &D_0600D2F8) {
-        if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+    if (this->skelAnime.animation == &D_0600D2F8) {
+        if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             func_800BDC5C(&this->skelAnime, sAnimations, 0);
         }
     }
@@ -1239,7 +1241,7 @@ void EnSyatekiMan_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.focus.pos.y = 70.0f;
     Actor_SetHeight(&this->actor, 70.0f);
     if (this->unk_26A != 1) {
-        SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+        SkelAnime_Update(&this->skelAnime);
         func_800E9250(globalCtx, &this->actor, &this->unk_258, &this->unk_25E, this->actor.focus.pos);
     }
 }
@@ -1253,12 +1255,12 @@ s32 EnSyatekiMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx**
     }
 
     if (limbIndex == 15) {
-        SysMatrix_InsertTranslation(3000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        SysMatrix_InsertZRotation_s(this->unk_258.x, MTXMODE_APPLY);
-        SysMatrix_InsertXRotation_s(this->unk_258.y, MTXMODE_APPLY);
-        SysMatrix_InsertTranslation(-3000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_InsertTranslation(3000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(this->unk_258.x, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(this->unk_258.y, MTXMODE_APPLY);
+        Matrix_InsertTranslation(-3000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     } else if (limbIndex == 8) {
-        SysMatrix_InsertXRotation_s(-this->unk_25E.y, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(-this->unk_25E.y, MTXMODE_APPLY);
     }
 
     return false;
@@ -1269,7 +1271,7 @@ void EnSyatekiMan_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
     Vec3f sp18 = { 1600.0f, 0.0f, 0.0f };
 
     if (limbIndex == 15) {
-        SysMatrix_MultiplyVector3fByState(&sp18, &this->actor.focus.pos);
+        Matrix_MultiplyVector3fByState(&sp18, &this->actor.focus.pos);
     }
 }
 
@@ -1299,7 +1301,7 @@ void EnSyatekiMan_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_809C94B8[this->unk_264]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_809C94B8[this->unk_264]));
 
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                      EnSyatekiMan_OverrideLimbDraw, EnSyatekiMan_PostLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);

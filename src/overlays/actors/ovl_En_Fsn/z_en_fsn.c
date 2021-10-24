@@ -711,8 +711,8 @@ void EnFsn_Idle(EnFsn* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (this->animationIdx == 4) {
-        s16 curFrame = this->skelAnime.animCurrentFrame;
-        s16 frameCount = SkelAnime_GetFrameCount(&sAnimations[this->animationIdx].animationSeg->common);
+        s16 curFrame = this->skelAnime.curFrame;
+        s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animationSeg);
         if (curFrame == frameCount) {
             this->animationIdx = 5;
             func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
@@ -745,15 +745,15 @@ void EnFsn_Idle(EnFsn* this, GlobalContext* globalCtx) {
 }
 
 void EnFsn_Haggle(EnFsn* this, GlobalContext* globalCtx) {
-    s16 curFrame = this->skelAnime.animCurrentFrame;
-    s16 frameCount = SkelAnime_GetFrameCount(&sAnimations[this->animationIdx].animationSeg->common);
+    s16 curFrame = this->skelAnime.curFrame;
+    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animationSeg);
 
     if (this->flags & ENFSN_ANGRY) {
         this->flags &= ~ENFSN_ANGRY;
         this->animationIdx = 11;
         func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
     } else {
-        if (this->animationIdx == 11 && func_801378B8(&this->skelAnime, 18.0f)) {
+        if (this->animationIdx == 11 && Animation_OnFrame(&this->skelAnime, 18.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_HANKO);
         }
         if (this->flags & ENFSN_CALM_DOWN) {
@@ -770,7 +770,7 @@ void EnFsn_Haggle(EnFsn* this, GlobalContext* globalCtx) {
                     this->animationIdx = 5;
                     func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
                 } else {
-                    if (func_801378B8(&this->skelAnime, 28.0f)) {
+                    if (Animation_OnFrame(&this->skelAnime, 28.0f)) {
                         Audio_PlayActorSound2(&this->actor, NA_SE_EV_HANKO);
                     }
                     return;
@@ -1399,8 +1399,7 @@ void EnFsn_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013320, &D_06012C34, this->limbDrawTable,
-                     this->transitionDrawTable, 19);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013320, &D_06012C34, this->jointTable, this->morphTable, 19);
     if (ENFSN_IS_SHOP(&this->actor)) {
         this->actor.shape.rot.y = BINANG_ROT180(this->actor.shape.rot.y);
         this->actor.flags &= ~1;
@@ -1443,7 +1442,7 @@ void EnFsn_Update(Actor* thisx, GlobalContext* globalCtx) {
         EnFsn_UpdateStickDirectionPromptAnim(this);
         EnFsn_UpdateCursorAnim(this);
     }
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     if (ENFSN_IS_BACKROOM(&this->actor)) {
         EnFsn_UpdateCollider(this, globalCtx);
     }
@@ -1560,7 +1559,7 @@ s32 EnFsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     s32 limbRotTableIdx;
 
     if (limbIndex == 16) {
-        SysMatrix_InsertXRotation_s(this->headRot.y, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(this->headRot.y, MTXMODE_APPLY);
     }
     if (ENFSN_IS_BACKROOM(&this->actor)) {
         switch (limbIndex) {
@@ -1615,8 +1614,8 @@ void EnFsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C5B0(globalCtx->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTextureIdx]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTextureIdx]));
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                     EnFsn_OverrideLimbDraw, EnFsn_PostLimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnFsn_OverrideLimbDraw, EnFsn_PostLimbDraw, &this->actor);
 
     for (i = 0; i < this->totalSellingItems; i++) {
         this->items[i]->actor.scale.x = 0.2f;

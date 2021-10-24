@@ -4,8 +4,8 @@
 #include <memory>
 #include <string>
 #include <vector>
+
 #include "ZResource.h"
-#include "tinyxml2.h"
 
 enum class TextureAnimationParamsType
 {
@@ -26,10 +26,7 @@ public:
 	void ExtractFromBinary(uint32_t nRawDataIndex);
 	virtual void ExtractFromBinary(uint32_t nRawDataIndex, int count);
 
-	std::string GetSourceOutputCode(const std::string& prefix);
-
 	virtual std::string GetDefaultName(const std::string& prefix) const;
-	virtual void DeclareVar(const std::string& prefix, const std::string& bodyStr) const;
 	ZResourceType GetResourceType() const;
 
 	TextureAnimationParamsType type;
@@ -55,7 +52,7 @@ public:
 	std::string GetDefaultName(const std::string& prefix) const override;
 	size_t GetRawDataSize() const override;
 
-	void DeclareVar(const std::string& prefix, const std::string& bodyStr) const override;
+	Declaration* DeclareVar(const std::string& prefix, const std::string& bodyStr) override;
 	std::string GetBodySourceCode() const override;
 
 	int count;                            // 1 for Single, 2 for Dual
@@ -138,19 +135,16 @@ class ZTextureAnimation : public ZResource
 public:
 	ZTextureAnimation(ZFile* nParent);
 
-	void ExtractFromXML(tinyxml2::XMLElement* reader, uint32_t nRawDataIndex) override;
 	void ParseRawData() override;
-
 	void DeclareReferences(const std::string& prefix) override;
 
 	std::string GetSourceTypeName() const override;
 	ZResourceType GetResourceType() const override;
 	size_t GetRawDataSize() const override;
-	std::string GetDefaultName(const std::string& prefix) const;
+	std::string GetDefaultName(const std::string& prefix) const override;
 
-	void DeclareVar(const std::string& prefix, const std::string& bodyStr) const;
+	Declaration* DeclareVar(const std::string& prefix, const std::string& bodyStr) override;
 	std::string GetBodySourceCode() const override;
-	std::string GetSourceOutputCode(const std::string& prefix) override;
 
 private:
 	std::vector<TextureAnimationEntry> entries;

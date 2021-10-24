@@ -100,8 +100,8 @@ void EnZot_Init(Actor* thisx, GlobalContext* globalCtx2) {
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = func_80B97100;
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600D208, &D_06004248, this->jointTable, this->morphTable, 20);
-    SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_0600DE20);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600D208, &D_06004248, this->jointTable, this->morphTable, 20);
+    Animation_PlayLoop(&this->skelAnime, &D_0600DE20);
     this->unk_2F0 = 0;
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
 
@@ -255,10 +255,10 @@ void func_80B96BEC(EnZot* this, s16 arg1, u8 arg2) {
 
     if ((arg1 >= 0) && (arg1 < 10)) {
         if (arg1 >= 8) {
-            SkelAnime_ChangeAnim(&this->skelAnime, sAnimations[arg1], 0.0f, arg1 - 8, arg1 - 8, arg2, 0.0f);
+            Animation_Change(&this->skelAnime, sAnimations[arg1], 0.0f, arg1 - 8, arg1 - 8, arg2, 0.0f);
         } else {
-            SkelAnime_ChangeAnim(&this->skelAnime, sAnimations[arg1], 1.0f, 0.0f,
-                                 SkelAnime_GetFrameCount(&sAnimations[arg1]->common), arg2, -5.0f);
+            Animation_Change(&this->skelAnime, sAnimations[arg1], 1.0f, 0.0f, Animation_GetLastFrame(sAnimations[arg1]),
+                             arg2, -5.0f);
         }
         this->unk_2F0 = arg1;
     }
@@ -754,7 +754,7 @@ void func_80B97D6C(EnZot* this, GlobalContext* globalCtx) {
         this->actor.speedXZ = 8.0f;
     }
 
-    if (func_801378B8(&this->skelAnime, 0.0f) || func_801378B8(&this->skelAnime, 5.0f)) {
+    if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 5.0f)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_ZORA_WALK);
     }
 }
@@ -1329,7 +1329,7 @@ void EnZot_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 15.0f, 30.0f, 5);
 
     this->unk_2F2 &= ~0x40;
-    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) && (this->unk_2F0 != 0)) {
+    if (SkelAnime_Update(&this->skelAnime) && (this->unk_2F0 != 0)) {
         this->unk_2F2 |= 0x40;
     }
 
@@ -1368,15 +1368,15 @@ s32 EnZot_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     s32 pad;
 
     if (limbIndex == 15) {
-        SysMatrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        SysMatrix_InsertXRotation_s(this->unk_2C4.y, MTXMODE_APPLY);
-        SysMatrix_InsertZRotation_s(this->unk_2C4.x, MTXMODE_APPLY);
-        SysMatrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(this->unk_2C4.y, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(this->unk_2C4.x, MTXMODE_APPLY);
+        Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
     if (limbIndex == 8) {
-        SysMatrix_InsertXRotation_s(this->unk_2CA.y * -1, MTXMODE_APPLY);
-        SysMatrix_InsertZRotation_s(this->unk_2CA.x * -1, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(this->unk_2CA.y * -1, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(this->unk_2CA.x * -1, MTXMODE_APPLY);
     }
 
     if (((this->unk_2F0 == 8) || (this->unk_2F0 == 9)) &&
@@ -1392,7 +1392,7 @@ void EnZot_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     EnZot* this = THIS;
 
     if (limbIndex == 15) {
-        SysMatrix_MultiplyVector3fByState(&D_80B99934, &this->actor.focus.pos);
+        Matrix_MultiplyVector3fByState(&D_80B99934, &this->actor.focus.pos);
     }
 }
 
@@ -1412,8 +1412,8 @@ void EnZot_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sp4C[this->unk_2EC]));
     gSPSegment(POLY_OPA_DISP++, 0x0C, func_80B99580(globalCtx->state.gfxCtx));
 
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                     EnZot_OverrideLimbDraw, EnZot_PostLimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnZot_OverrideLimbDraw, EnZot_PostLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

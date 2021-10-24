@@ -179,7 +179,7 @@ typedef enum {
     /* 0x4D */ ITEM_SWORD_KOKIRI,
     /* 0x4E */ ITEM_SWORD_RAZOR,
     /* 0x4F */ ITEM_SWORD_GILDED,
-    /* 0x50 */ ITEM_SWORD_FIERCE_DEITY,
+    /* 0x50 */ ITEM_SWORD_DEITY,
     /* 0x51 */ ITEM_SHIELD_HERO,
     /* 0x52 */ ITEM_SHIELD_MIRROR,
     /* 0x53 */ ITEM_QUIVER_30,
