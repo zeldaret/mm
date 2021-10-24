@@ -134,7 +134,9 @@ void ActorShadow_DrawFoot(GlobalContext* globalCtx, Light* light, MtxF* arg2, s3
 
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, (u8)(CLAMP_MAX(arg3 * 1.3e-05f, 1.0f) * arg4));
 
-    sp58 = Math_FAtan2F(light->l.dir[0], light->l.dir[2]);
+    dir0 = light->l.dir[0];
+    dir2 = light->l.dir[2];
+    sp58 = Math_FAtan2F(dir2, dir0);
     arg6 *= (4.5f - (light->l.dir[1] * 0.035f));
     arg6 = CLAMP_MIN(arg6, 1.0f);
     Matrix_SetCurrentState(arg2);
@@ -298,9 +300,9 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
 void Actor_SetFeetPos(Actor* actor, s32 limbIndex, s32 leftFootIndex, Vec3f* leftFootPos, s32 rightFootIndex,
                       Vec3f* rightFootPos) {
     if (limbIndex == leftFootIndex) {
-        SysMatrix_MultiplyVector3fByState(leftFootPos, &actor->shape.feetPos[FOOT_LEFT]);
+        Matrix_MultiplyVector3fByState(leftFootPos, &actor->shape.feetPos[FOOT_LEFT]);
     } else if (limbIndex == rightFootIndex) {
-        SysMatrix_MultiplyVector3fByState(rightFootPos, &actor->shape.feetPos[FOOT_RIGHT]);
+        Matrix_MultiplyVector3fByState(rightFootPos, &actor->shape.feetPos[FOOT_RIGHT]);
     }
 }
 
@@ -553,23 +555,23 @@ void func_800B5208(TargetContext* targetCtx, GlobalContext* globalCtx) {
                             var2 = ((entry->unkC - 120.0f) * 0.001f) + 0.15f;
                         }
 
-                        SysMatrix_InsertTranslation(entry->pos.x, entry->pos.y, 0.0f, MTXMODE_NEW);
+                        Matrix_InsertTranslation(entry->pos.x, entry->pos.y, 0.0f, MTXMODE_NEW);
                         Matrix_Scale(var2, 0.15f, 1.0f, MTXMODE_APPLY);
 
                         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, entry->color.r, entry->color.g, entry->color.b, (u8)spCE);
 
-                        // SysMatrix_InsertZRotation_s((targetCtx->unk4B & 0x7F) * (M_PI / 64), MTXMODE_APPLY);
-                        SysMatrix_InsertZRotation_s((targetCtx->unk4B * 512), MTXMODE_APPLY);
+                        // Matrix_InsertZRotation_s((targetCtx->unk4B & 0x7F) * (M_PI / 64), MTXMODE_APPLY);
+                        Matrix_InsertZRotation_s((targetCtx->unk4B * 512), MTXMODE_APPLY);
 
                         for (i = 0; i < 4; i++) {
-                            SysMatrix_InsertZRotation_s(M_PI / 2, MTXMODE_APPLY);
-                            SysMatrix_StatePush();
-                            SysMatrix_InsertTranslation(entry->unkC, entry->unkC, 0.0f, MTXMODE_APPLY);
+                            Matrix_InsertZRotation_s(M_PI / 2, MTXMODE_APPLY);
+                            Matrix_StatePush();
+                            Matrix_InsertTranslation(entry->unkC, entry->unkC, 0.0f, MTXMODE_APPLY);
                             gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                                       G_MTX_MODELVIEW | G_MTX_LOAD);
                             // gSPDisplayList(OVERLAY_DISP++, gZTargetLockOnTriangleDL);
                             gSPDisplayList(OVERLAY_DISP++, D_0407AE00);
-                            SysMatrix_StatePop();
+                            Matrix_StatePop();
                         }
                     }
 
@@ -588,7 +590,7 @@ void func_800B5208(TargetContext* targetCtx, GlobalContext* globalCtx) {
 
             POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0x07);
 
-            SysMatrix_InsertTranslation(actor->focus.pos.x,
+            Matrix_InsertTranslation(actor->focus.pos.x,
                                         actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y) + 17.0f,
                                         actor->focus.pos.z, MTXMODE_NEW);
             // Matrix_RotateY((f32)((u16)(globalCtx->gameplayFrames * 3000)) * (M_PI / 0x8000), MTXMODE_APPLY);
@@ -961,7 +963,7 @@ void* func_800B6584(GlobalContext* globalCtx, s16 arg1, void* arg2, size_t arg3)
     for (i = 0; i < ARRAY_COUNT(globalCtx->actorCtx.unk_20C); i++) {
         if (sp1C->unk_0 == 0) {
             if (arg2 == NULL) {
-                arg2 = zelda_malloc(arg3);
+                arg2 = ZeldaArena_Malloc(arg3);
                 if (arg2 == NULL) {
                     return NULL;
                 }
@@ -986,7 +988,7 @@ void* func_800B6608(GlobalContext* globalCtx, s16 arg1) {
         if (arg1 == sp1C->unk_0) {
             sp1C->unk_0 = 0;
             if (sp1C->unk_2 != 0) {
-                zelda_free(sp1C->unk_4);
+                ZeldaArena_Free(sp1C->unk_4);
                 sp1C->unk_2 = 0;
             }
             return sp1C->unk_4;
@@ -1148,7 +1150,7 @@ void func_800B6C04(Actor* actor, f32 speed) {
 void func_800B6C58(Actor* actor, SkelAnime* skelAnime) {
     Vec3f pos;
 
-    func_80137748(skelAnime, &pos, actor->shape.rot.y);
+    SkelAnime_UpdateTranslation(skelAnime, &pos, actor->shape.rot.y);
     actor->world.pos.x += pos.x * actor->scale.x;
     actor->world.pos.y += pos.y * actor->scale.y;
     actor->world.pos.z += pos.z * actor->scale.z;
@@ -2415,12 +2417,12 @@ void Actor_Draw(GlobalContext* globalCtx, Actor* actor) {
     Lights_Draw(sp44, globalCtx->state.gfxCtx);
 
     if (actor->flags & 0x1000) {
-        SysMatrix_SetStateRotationAndTranslation(
+        Matrix_SetStateRotationAndTranslation(
             actor->world.pos.x + globalCtx->mainCamera.skyboxOffset.x,
             actor->world.pos.y + ((actor->shape.yOffset * actor->scale.y) + globalCtx->mainCamera.skyboxOffset.y),
             actor->world.pos.z + globalCtx->mainCamera.skyboxOffset.z, &actor->shape.rot);
     } else {
-        SysMatrix_SetStateRotationAndTranslation(actor->world.pos.x,
+        Matrix_SetStateRotationAndTranslation(actor->world.pos.x,
                                                  actor->world.pos.y + (actor->shape.yOffset * actor->scale.y),
                                                  actor->world.pos.z, &actor->shape.rot);
     }
@@ -2956,7 +2958,7 @@ void func_800BA9B4(ActorContext* arg0, GlobalContext* arg1) {
     }
 
     if (arg0->absoluteSpace != NULL) {
-        zelda_free(arg0->absoluteSpace);
+        ZeldaArena_Free(arg0->absoluteSpace);
         arg0->absoluteSpace = NULL;
     }
 
@@ -3035,7 +3037,7 @@ void Actor_FreeOverlay(ActorOverlay* entry) {
                 if (entry->allocType & ALLOCTYPE_ABSOLUTE) {
                     entry->loadedRamAddr = NULL;
                 } else {
-                    zelda_free(ramAddr);
+                    ZeldaArena_Free(ramAddr);
                     entry->loadedRamAddr = NULL;
                 }
             }
@@ -3062,14 +3064,14 @@ ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
         if (overlayEntry->loadedRamAddr == 0) {
             if (overlayEntry->allocType & ALLOCTYPE_ABSOLUTE) {
                 if (actorCtx->absoluteSpace == NULL) {
-                    actorCtx->absoluteSpace = zelda_mallocR(AM_FIELD_SIZE);
+                    actorCtx->absoluteSpace = ZeldaArena_MallocR(AM_FIELD_SIZE);
                 }
                 gActorOverlayTable[index].loadedRamAddr = actorCtx->absoluteSpace;
             } else {
                 if (overlayEntry->allocType & ALLOCTYPE_PERMANENT) {
-                    gActorOverlayTable[index].loadedRamAddr = zelda_mallocR(overlaySize);
+                    gActorOverlayTable[index].loadedRamAddr = ZeldaArena_MallocR(overlaySize);
                 } else {
-                    gActorOverlayTable[index].loadedRamAddr = zelda_malloc(overlaySize);
+                    gActorOverlayTable[index].loadedRamAddr = ZeldaArena_Malloc(overlaySize);
                 }
             }
 
@@ -3120,7 +3122,7 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* glob
         return NULL;
     }
 
-    actor = zelda_malloc(sp2C->instanceSize);
+    actor = ZeldaArena_Malloc(sp2C->instanceSize);
     if (actor == NULL) {
         Actor_FreeOverlay(&gActorOverlayTable[index]);
         return NULL;
@@ -3287,7 +3289,7 @@ Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, GlobalContext* globalC
     Actor_Destroy(actor, globalCtx);
 
     newHead = Actor_RemoveFromCategory(globalCtx, actorCtx, actor);
-    zelda_free(actor);
+    ZeldaArena_Free(actor);
 
     if (overlayEntry->vramStart != NULL) {
         overlayEntry->numLoaded--;
@@ -3490,7 +3492,7 @@ void func_800BBCEC(Actor* actor, GlobalContext* globalCtx, s32 arg2, Gfx** dList
     MtxF* sp3C;
 
     if (*dList != NULL) {
-        sp3C = SysMatrix_GetCurrentState();
+        sp3C = Matrix_GetCurrentState();
         temp_v0_2 = Actor_SpawnAsChild(&globalCtx->actorCtx, actor, globalCtx, ACTOR_EN_PART, sp3C->mf[3][0],
                                        sp3C->mf[3][1], sp3C->mf[3][2], 0, 0, actor->objBankIndex, arg2);
         if (temp_v0_2 != NULL) {
@@ -3704,9 +3706,9 @@ void func_800BC620(Vec3f* arg0, Vec3f* arg1, u8 arg2, GlobalContext* globalCtx) 
     sp54 = func_800C4000(globalCtx, &globalCtx->colCtx, &sp44, &sp48);
     if (sp44 != NULL) {
         func_800C0094(sp44, arg0->x, sp54, arg0->z, &sp58);
-        SysMatrix_SetCurrentState(&sp58);
+        Matrix_SetCurrentState(&sp58);
     } else {
-        SysMatrix_InsertTranslation(arg0->x, arg0->y, arg0->z, 0);
+        Matrix_InsertTranslation(arg0->x, arg0->y, arg0->z, 0);
     }
     Matrix_Scale(arg1->x, 1.0f, arg1->z, MTXMODE_APPLY);
 
@@ -3777,16 +3779,16 @@ void func_800BC8B8(GlobalContext* globalCtx, s32 frame, s32 type) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    SysMatrix_InsertTranslation(0.0f, temp_s2->unk_08, 500.0f, MTXMODE_APPLY);
-    SysMatrix_CopyCurrentState(&spA8);
+    Matrix_InsertTranslation(0.0f, temp_s2->unk_08, 500.0f, MTXMODE_APPLY);
+    Matrix_CopyCurrentState(&spA8);
 
     temp_f22 = __sinf(temp_s2->unk_00 - phi_f20) * -(10 - frame) * 0.1f * temp_s2->unk_04;
     temp_f24 = __cosf(temp_s2->unk_00 - phi_f20) * (10 - frame) * 0.1f * temp_s2->unk_04;
 
     for (i = 0; i < 4; i++) {
-        SysMatrix_SetCurrentState(&spA8);
-        SysMatrix_InsertZRotation_f(phi_f20, MTXMODE_APPLY);
-        SysMatrix_InsertTranslation(temp_f22, temp_f24, 0.0f, 1);
+        Matrix_SetCurrentState(&spA8);
+        Matrix_InsertZRotation_f(phi_f20, MTXMODE_APPLY);
+        Matrix_InsertTranslation(temp_f22, temp_f24, 0.0f, 1);
         if (temp_s2->unk_0C != 1.0f) {
             Matrix_Scale(temp_s2->unk_0C, temp_s2->unk_0C, temp_s2->unk_0C, 1);
         }
@@ -3802,7 +3804,7 @@ void func_800BC8B8(GlobalContext* globalCtx, s32 frame, s32 type) {
         phi_f20 += phi_f2;
     }
 
-    SysMatrix_SetCurrentState(&spA8);
+    Matrix_SetCurrentState(&spA8);
     Matrix_Scale(frame * 0.1f, frame * 0.1f, frame * 0.1f, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

@@ -27,7 +27,7 @@ void EnAObj_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void EnAObj_Update1(EnAObj* this, GlobalContext* globalCtx) {
     s32 yawDiff;
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_RequestTalk(&this->actor, globalCtx)) {
         this->actionFunc = EnAObj_Update2;
     } else {
         yawDiff = ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y));
@@ -48,10 +48,10 @@ void EnAObj_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnAObj* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    Actor_SetHeight(&this->actor, 45.0f);
+    Actor_SetFocus(&this->actor, 45.0f);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collision.base);
 }
 
 void EnAObj_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, enAObjDisplayLists[thisx->params]);
+    Gfx_DrawDListOpa(globalCtx, enAObjDisplayLists[thisx->params]);
 }
