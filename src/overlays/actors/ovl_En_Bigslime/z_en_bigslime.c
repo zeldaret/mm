@@ -350,7 +350,7 @@ void EnBigslime_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600DF98, &D_060066B4, this->jointTable, this->morphTable,
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600DF98, &D_060066B4, this->jointTable, this->morphTable,
                      GEKKO_LIMB_MAX);
 
     for (i = 0; i < BIGSLIME_NUM_RING_FACES; i++) {
@@ -889,7 +889,7 @@ void EnBigslime_SetIceShardParams(EnBigslime* this, GlobalContext* globalCtx) {
 void EnBigslime_SetTargetVtxFromPreFrozen(EnBigslime* this) {
     this->bigslimeCollider[0].base.acFlags |= AC_ON;
     this->actionFunc = this->actionFuncStored;
-    this->skelAnime.animPlaybackSpeed = 1.0f;
+    this->skelAnime.playSpeed = 1.0f;
     if (this->actionFunc == EnBigslime_SquishFlat) {
         this->bigslimeCollider[0].base.atFlags |= AT_ON;
         EnBigslime_SetTargetVtxToWideCone(this);
@@ -945,7 +945,7 @@ void EnBigslime_SetupCutsceneStartBattle(EnBigslime* this, GlobalContext* global
     Camera* subCam = Play_GetCamera(globalCtx, this->subCamId);
 
     globalCtx->envCtx.unk_C3 = 4;
-    SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_060066B4);
+    Animation_PlayLoop(&this->skelAnime, &D_060066B4);
 
     this->bigslimeCollider[0].base.atFlags &= ~AT_ON;
     this->bigslimeCollider[0].base.acFlags &= ~AC_ON;
@@ -968,14 +968,14 @@ void EnBigslime_CutsceneStartBattle(EnBigslime* this, GlobalContext* globalCtx) 
     if (this->isAnimUpdate) {
         EnBigslime_SetupCutsceneNoticePlayer(this);
     } else if ((this->isInitJump == 0) && Math_ScaledStepToS(&this->gekkoRot.y, this->actor.yawTowardsPlayer, 0x200)) {
-        SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, &D_060010F4);
+        Animation_PlayOnce(&this->skelAnime, &D_060010F4);
         EnBigslime_GekkoSfxOutsideBigslime(this, NA_SE_EN_FROG_JUMP);
         this->isInitJump = 1;
     }
 }
 
 void EnBigslime_SetupCutsceneNoticePlayer(EnBigslime* this) {
-    SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_060069FC);
+    Animation_PlayLoop(&this->skelAnime, &D_060069FC);
     this->noticeTimer = 25;
     this->actionFunc = EnBigslime_CutsceneNoticePlayer;
 }
@@ -986,7 +986,7 @@ void EnBigslime_CutsceneNoticePlayer(EnBigslime* this, GlobalContext* globalCtx)
     }
 
     EnBigslime_UpdateCameraIntroCs(this, globalCtx, this->noticeTimer);
-    if (func_801378B8(&this->skelAnime, 0.0f) || func_801378B8(&this->skelAnime, 4.0f)) {
+    if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 4.0f)) {
         EnBigslime_GekkoSfxOutsideBigslime(this, NA_SE_EV_WALK_WATER);
     }
 
@@ -996,7 +996,7 @@ void EnBigslime_CutsceneNoticePlayer(EnBigslime* this, GlobalContext* globalCtx)
 }
 
 void EnBigslime_SetupCallMinislime(EnBigslime* this, GlobalContext* globalCtx) {
-    SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_06001B08, 5.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &D_06001B08, 5.0f);
     EnBigslime_GekkoSfxOutsideBigslime(this, NA_SE_EN_FROG_GREET);
     this->callTimer = 0;
     func_800B7298(globalCtx, &this->actor, 7);
@@ -1006,7 +1006,7 @@ void EnBigslime_SetupCallMinislime(EnBigslime* this, GlobalContext* globalCtx) {
 void EnBigslime_CallMinislime(EnBigslime* this, GlobalContext* globalCtx) {
     if (this->callTimer > 0) {
         this->callTimer--;
-        if (func_801378B8(&this->skelAnime, 0.0f) || func_801378B8(&this->skelAnime, 4.0f)) {
+        if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 4.0f)) {
             EnBigslime_GekkoSfxOutsideBigslime(this, NA_SE_EV_WALK_WATER);
         }
 
@@ -1017,7 +1017,7 @@ void EnBigslime_CallMinislime(EnBigslime* this, GlobalContext* globalCtx) {
             EnBigslime_SetupIdleNoticePlayer(this);
         }
     } else if (this->isAnimUpdate) {
-        SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_060069FC);
+        Animation_PlayLoop(&this->skelAnime, &D_060069FC);
         EnBigslime_UpdateCameraIntroCs(this, globalCtx, 25);
         func_801A2E54(0x38);
         EnBigslime_InitFallMinislime(this);
@@ -1028,7 +1028,7 @@ void EnBigslime_CallMinislime(EnBigslime* this, GlobalContext* globalCtx) {
 }
 
 void EnBigslime_SetupMoveOnCeiling(EnBigslime* this) {
-    SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06007790);
+    Animation_PlayLoop(&this->skelAnime, &D_06007790);
     this->actor.gravity = 0.0f;
     this->actor.velocity.y = 20.0f;
 
@@ -1413,7 +1413,7 @@ void EnBigslime_SetTargetVtxToStaticVtx(EnBigslime* this) {
 }
 
 void EnBigslime_SetupRise(EnBigslime* this) {
-    SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06007790);
+    Animation_PlayLoop(&this->skelAnime, &D_06007790);
     EnBigslime_GekkoSfxOutsideBigslime(this, NA_SE_EN_FROG_JUMP_ABOVE);
     EnBigslime_GekkoSfxOutsideBigslime(this, NA_SE_EN_UTSUBO_APPEAR_TRG);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_B_SLIME_JUMP1);
@@ -1518,7 +1518,7 @@ void EnBigslime_SetupCutsceneGrabPlayer(EnBigslime* this, GlobalContext* globalC
     }
 
     this->subCamYawGrabPlayer += this->actor.world.rot.y;
-    SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_0600F990);
+    Animation_PlayLoop(&this->skelAnime, &D_0600F990);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_B_SLIME_EAT);
     this->actionFunc = EnBigslime_CutsceneGrabPlayer;
 }
@@ -1566,7 +1566,7 @@ void EnBigslime_CutsceneGrabPlayer(EnBigslime* this, GlobalContext* globalCtx) {
 }
 
 void EnBigslime_SetupAttackPlayerInBigslime(EnBigslime* this) {
-    SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, sGekkoAttackAnimations[(s32)Rand_ZeroFloat(3.0f) % 3]);
+    Animation_PlayOnce(&this->skelAnime, sGekkoAttackAnimations[(s32)Rand_ZeroFloat(3.0f) % 3]);
     this->numGekkoMeleeAttacks = (s32)Rand_ZeroFloat(3.0f) + 1;
     this->numGekkoPosGrabPlayer = 6;
     this->actionFunc = EnBigslime_AttackPlayerInBigslime;
@@ -1586,17 +1586,17 @@ void EnBigslime_AttackPlayerInBigslime(EnBigslime* this, GlobalContext* globalCt
     }
 
     // Checks to see if it's the frame of impact
-    if (((this->skelAnime.animCurrentSeg == &D_0600347C) &&
-         func_801378B8(&this->skelAnime, 2.0f)) || // Jab punch makes impact on frame 2 of animation
-        ((this->skelAnime.animCurrentSeg == &D_060070C4) &&
-         func_801378B8(&this->skelAnime, 9.0f)) || // Hook Punch makes impact on frames 9 of animation
-        ((this->skelAnime.animCurrentSeg == &D_06003F28) &&
-         func_801378B8(&this->skelAnime, 2.0f))) { // Kick makes impact on frame 2 of animation
+    if (((this->skelAnime.animation == &D_0600347C) &&
+         Animation_OnFrame(&this->skelAnime, 2.0f)) || // Jab punch makes impact on frame 2 of animation
+        ((this->skelAnime.animation == &D_060070C4) &&
+         Animation_OnFrame(&this->skelAnime, 9.0f)) || // Hook Punch makes impact on frames 9 of animation
+        ((this->skelAnime.animation == &D_06003F28) &&
+         Animation_OnFrame(&this->skelAnime, 2.0f))) { // Kick makes impact on frame 2 of animation
         this->scaleFactor = 10;
         player->actor.world.pos.x += 20.0f * Math_SinS(this->gekkoRot.y);
         player->actor.world.pos.z += 20.0f * Math_CosS(this->gekkoRot.y);
         EnBigslime_JerkCameraPlayerHit(this, globalCtx);
-        if (this->skelAnime.animCurrentSeg == &D_06003F28) {
+        if (this->skelAnime.animation == &D_06003F28) {
             EnBigslime_GekkoSfxInsideBigslime(this, NA_SE_EN_FROG_KICK);
         } else {
             EnBigslime_GekkoSfxInsideBigslime(this, NA_SE_EN_FROG_PUNCH1);
@@ -1630,7 +1630,7 @@ void EnBigslime_AttackPlayerInBigslime(EnBigslime* this, GlobalContext* globalCt
             this->gekkoPosOffset.z = Math_CosS(this->gekkoRot.y) * -50.0f;
             this->numGekkoMeleeAttacks = (s32)Rand_ZeroFloat(3.0f) + 1;
         }
-        SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, sGekkoAttackAnimations[((s32)Rand_ZeroFloat(3.0f) % 3)]);
+        Animation_PlayOnce(&this->skelAnime, sGekkoAttackAnimations[((s32)Rand_ZeroFloat(3.0f) % 3)]);
     }
 
     func_800B9010(&this->actor, NA_SE_EN_B_SLIME_PUNCH_MOVE - SFX_FLAG);
@@ -1662,7 +1662,7 @@ void EnBigslime_SetupWindupThrowPlayer(EnBigslime* this) {
     }
 
     this->windupPunchTimer = 27;
-    SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, &D_0600F048);
+    Animation_PlayOnce(&this->skelAnime, &D_0600F048);
     EnBigslime_GekkoSfxInsideBigslime(this, NA_SE_EN_FROG_PUNCH2);
     this->actionFunc = EnBigslime_WindupThrowPlayer;
 }
@@ -1845,7 +1845,7 @@ void EnBigslime_Freeze(EnBigslime* this, GlobalContext* globalCtx) {
         this->freezeTimer--;
     }
 
-    this->skelAnime.animPlaybackSpeed = this->freezeTimer / 40.0f;
+    this->skelAnime.playSpeed = this->freezeTimer / 40.0f;
     vtxIceSeed = this->freezeTimer * 4;
     for (vtxIceUpdate = 0; vtxIceUpdate < 4; vtxIceUpdate++, vtxIceSeed++) {
         if (vtxIceSeed < BIGSLIME_NUM_VTX) {
@@ -1998,7 +1998,7 @@ void EnBigslime_FrozenFall(EnBigslime* this, GlobalContext* globalCtx) {
 }
 
 void EnBigslime_SetupJumpGekko(EnBigslime* this) {
-    SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_060039C4);
+    Animation_PlayLoop(&this->skelAnime, &D_060039C4);
     this->actor.speedXZ = 8.0f;
     this->jumpTimer = 100;
     this->actor.world.rot.y = this->gekkoRot.y;
@@ -2016,14 +2016,14 @@ void EnBigslime_JumpGekko(EnBigslime* this, GlobalContext* globalCtx) {
     }
 
     this->jumpTimer--;
-    if (func_801378B8(&this->skelAnime, 1.0f)) {
+    if (Animation_OnFrame(&this->skelAnime, 1.0f)) {
         EnBigslime_GekkoSfxOutsideBigslime(this, NA_SE_EN_FROG_JUMP);
-    } else if (func_801378B8(&this->skelAnime, 11.0f)) {
+    } else if (Animation_OnFrame(&this->skelAnime, 11.0f)) {
         EnBigslime_GekkoSfxOutsideBigslime(this, NA_SE_EV_WALK_WATER);
     }
 
     if (!(this->actor.bgCheckFlags & 1) ||
-        ((this->skelAnime.animCurrentFrame > 1.0f) && (this->skelAnime.animCurrentFrame < 12.0f))) {
+        ((this->skelAnime.curFrame > 1.0f) && (this->skelAnime.curFrame < 12.0f))) {
         this->actor.speedXZ = 8.0f;
     } else {
         this->actor.speedXZ = 0.0f;
@@ -2059,7 +2059,7 @@ void EnBigslime_JumpGekko(EnBigslime* this, GlobalContext* globalCtx) {
 }
 
 void EnBigslime_SetupIdleLookAround(EnBigslime* this) {
-    SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, &D_060069FC);
+    Animation_PlayOnce(&this->skelAnime, &D_060069FC);
     this->idleTimer = 60;
     this->actor.speedXZ = 0.0f;
     if ((s16)(Actor_YawToPoint(&this->actor, &this->actor.home.pos) - this->gekkoRot.y) > 0) {
@@ -2076,13 +2076,13 @@ void EnBigslime_IdleLookAround(EnBigslime* this, GlobalContext* globalCtx) {
     this->idleTimer--;
     if (this->isAnimUpdate) {
         if (Rand_ZeroOne() < 0.25f) {
-            SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, &D_060066B4);
+            Animation_PlayOnce(&this->skelAnime, &D_060066B4);
         } else {
-            SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, &D_060069FC);
+            Animation_PlayOnce(&this->skelAnime, &D_060069FC);
         }
     }
 
-    if ((this->skelAnime.animCurrentSeg == &D_060069FC) &&
+    if ((this->skelAnime.animation == &D_060069FC) &&
         Math_ScaledStepToS(&this->gekkoRot.y, this->gekkoYaw, 0x400)) {
         if ((s16)(Actor_YawToPoint(&this->actor, &this->actor.home.pos) - this->gekkoRot.y) > 0) {
             this->gekkoYaw = this->gekkoRot.y + ((u32)Rand_Next() >> 20) + 0x2000;
@@ -2098,7 +2098,7 @@ void EnBigslime_IdleLookAround(EnBigslime* this, GlobalContext* globalCtx) {
 }
 
 void EnBigslime_SetupIdleNoticePlayer(EnBigslime* this) {
-    SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, &D_060010F4);
+    Animation_PlayOnce(&this->skelAnime, &D_060010F4);
     this->gekkoYaw = this->gekkoRot.y + 0x8000;
     EnBigslime_GekkoSfxOutsideBigslime(this, NA_SE_EN_FROG_JUMP_MID);
     this->actionFunc = EnBigslime_IdleNoticePlayer;
@@ -2107,7 +2107,7 @@ void EnBigslime_SetupIdleNoticePlayer(EnBigslime* this) {
 void EnBigslime_IdleNoticePlayer(EnBigslime* this, GlobalContext* globalCtx) {
     s16* yaw = &this->gekkoRot.y;
 
-    if (this->skelAnime.animCurrentFrame > 10.0f) {
+    if (this->skelAnime.curFrame > 10.0f) {
         Math_ScaledStepToS(yaw, this->gekkoYaw, 0x800);
     }
     if (this->isAnimUpdate) {
@@ -2116,7 +2116,7 @@ void EnBigslime_IdleNoticePlayer(EnBigslime* this, GlobalContext* globalCtx) {
 }
 
 void EnBigslime_SetupThrowMinislime(EnBigslime* this) {
-    SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, &D_0600F048);
+    Animation_PlayOnce(&this->skelAnime, &D_0600F048);
     EnBigslime_GekkoSfxOutsideBigslime(this, NA_SE_EN_FROG_HOLD_SLIME);
     this->actor.speedXZ = 0.0f;
     this->actionFunc = EnBigslime_ThrowMinislime;
@@ -2126,7 +2126,7 @@ void EnBigslime_ThrowMinislime(EnBigslime* this, GlobalContext* globalCtx) {
     s16 jumpTimerStored;
 
     Math_ScaledStepToS(&this->gekkoRot.y, this->actor.yawTowardsPlayer, 0x300);
-    if (func_801378B8(&this->skelAnime, 27.0f) &&
+    if (Animation_OnFrame(&this->skelAnime, 27.0f) &&
         (this->minislimeToThrow->actor.params == MINISLIME_SETUP_GEKKO_THROW)) {
         EnBigslime_GekkoSfxOutsideBigslime(this, NA_SE_EN_FROG_THROW_SLIME);
         this->minislimeToThrow->actor.params = MINISLIME_GEKKO_THROW;
@@ -2139,7 +2139,7 @@ void EnBigslime_ThrowMinislime(EnBigslime* this, GlobalContext* globalCtx) {
 }
 
 void EnBigslime_SetupDamageGekko(EnBigslime* this, s32 isNotFrozen) {
-    SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, &D_0600276C, -3.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &D_0600276C, -3.0f);
     this->gekkoCollider.base.acFlags &= ~AC_ON;
     this->damageSpinTimer = 20;
     this->actor.speedXZ = 10.0f;
@@ -2173,11 +2173,11 @@ void EnBigslime_DamageGekko(EnBigslime* this, GlobalContext* globalCtx) {
 }
 
 void EnBigslime_SetupStunGekko(EnBigslime* this) {
-    if ((this->skelAnime.animCurrentSeg == &D_060039C4) || (this->skelAnime.animCurrentSeg == &D_060010F4)) {
-        this->skelAnime.animCurrentFrame = 1.0f;
+    if ((this->skelAnime.animation == &D_060039C4) || (this->skelAnime.animation == &D_060010F4)) {
+        this->skelAnime.curFrame = 1.0f;
     }
     this->actionFunc = EnBigslime_StunGekko;
-    this->skelAnime.animPlaybackSpeed = 0.0f;
+    this->skelAnime.playSpeed = 0.0f;
     this->actor.speedXZ = 0.0f;
 }
 
@@ -2195,7 +2195,7 @@ void EnBigslime_StunGekko(EnBigslime* this, GlobalContext* globalCtx) {
 }
 
 void EnBigslime_SetupCutsceneFormBigslime(EnBigslime* this) {
-    SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, &D_06002E0C);
+    Animation_PlayOnce(&this->skelAnime, &D_06002E0C);
     this->gekkoCollider.base.acFlags &= ~AC_ON;
     this->actor.world.rot.x = -Actor_PitchToPoint(&this->actor, &this->actor.home.pos);
     this->actor.world.rot.y = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
@@ -2206,7 +2206,7 @@ void EnBigslime_SetupCutsceneFormBigslime(EnBigslime* this) {
 void EnBigslime_CutsceneFormBigslime(EnBigslime* this, GlobalContext* globalCtx) {
     EnBigslime_UpdateCameraFormingBigslime(this, globalCtx);
     Math_ScaledStepToS(&this->gekkoRot.y, this->actor.world.rot.y, 0x800);
-    if (func_801378B8(&this->skelAnime, 18.0f)) {
+    if (Animation_OnFrame(&this->skelAnime, 18.0f)) {
         EnBigslime_SetupFormBigslime(this);
     }
 }
@@ -2255,13 +2255,13 @@ void EnBigslime_FormBigslime(EnBigslime* this, GlobalContext* globalCtx) {
         this->actor.gravity = 0.0f;
         this->actor.velocity.y = 0.0f;
         this->actor.speedXZ = 0.0f;
-        SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06007790);
+        Animation_PlayLoop(&this->skelAnime, &D_06007790);
         this->formBigslimeCutsceneTimer--;
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_B_SLIME_COMBINE);
     } else if (this->isAnimUpdate) {
         this->formBigslimeCutsceneTimer--;
         if (this->formBigslimeCutsceneTimer == 0) {
-            SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_0600F3F0);
+            Animation_PlayLoop(&this->skelAnime, &D_0600F3F0);
         }
     }
 
@@ -2293,7 +2293,7 @@ void EnBigslime_SetupCutsceneDefeat(EnBigslime* this, GlobalContext* globalCtx) 
     s32 i;
     s16 yawOffset;
 
-    SkelAnime_ChangeAnim(&this->skelAnime, &D_0600276C, 0.5f, 0.0f, SkelAnime_GetFrameCount(&D_0600276C.common), 3,
+    Animation_Change(&this->skelAnime, &D_0600276C, 0.5f, 0.0f, Animation_GetLastFrame(&D_0600276C.common), 3,
                          0.0f);
     this->gekkoCollider.base.acFlags &= ~AC_ON;
     this->defeatTimer = 60;
@@ -2747,7 +2747,7 @@ void EnBigslime_UpdateBigslime(Actor* thisx, GlobalContext* globalCtx) {
     func_8019F540(1);
     this->dynamicVtxState ^= 1;
     EnBigslime_DynamicVtxCopyState(this);
-    this->isAnimUpdate = SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    this->isAnimUpdate = SkelAnime_Update(&this->skelAnime);
     if (this->actionFunc != EnBigslime_PlayCutscene) {
         EnBigslime_ApplyDamageEffectBigslime(this, globalCtx);
     } else {
@@ -2788,7 +2788,7 @@ void EnBigslime_UpdateGekko(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     func_8019F540(0);
-    this->isAnimUpdate = SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    this->isAnimUpdate = SkelAnime_Update(&this->skelAnime);
     if (this->actionFunc != EnBigslime_PlayCutscene) {
         EnBigslime_ApplyDamageEffectGekko(this, globalCtx);
     } else {
@@ -2835,7 +2835,7 @@ void EnBigslime_SetSysMatrix(Vec3f* pos, GlobalContext* globalCtx, Gfx* dList, f
                              s16 rotation, f32 alpha) {
     f32 yDistMinY;
     f32 xz;
-    MtxF* sysMatrix = SysMatrix_GetCurrentState();
+    MtxF* sysMatrix = Matrix_GetCurrentState();
 
     yDistMinY = pos->y - scaleY - GBT_ROOM_5_MIN_Y;
     yDistMinY = CLAMP((yDistMinY), 0.0f, (GBT_ROOM_5_CENTER_Y - GBT_ROOM_5_MIN_Y) / 2);
@@ -2901,14 +2901,14 @@ void EnBigslime_DrawMinislime(EnBigslime* this, GlobalContext* globalCtx) {
         Lights_Draw(lights, globalCtx->state.gfxCtx);
         func_8012C2DC(globalCtx->state.gfxCtx);
         func_800B8118(&minislime->actor, globalCtx, 0);
-        SysMatrix_SetStateRotationAndTranslation(minislime->actor.world.pos.x, minislime->actor.world.pos.y,
+        Matrix_SetStateRotationAndTranslation(minislime->actor.world.pos.x, minislime->actor.world.pos.y,
                                                  minislime->actor.world.pos.z, &minislime->actor.shape.rot);
         Matrix_Scale(minislime->actor.scale.x, minislime->actor.scale.y, minislime->actor.scale.z, MTXMODE_APPLY);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, minislime->actor.shape.shadowAlpha);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, &D_060113B0);
         if (minislime->frozenAlpha > 0) {
-            SysMatrix_InsertTranslation(0.0f, (0.1f - minislime->frozenScale) * -4000.0f, 0.0f, 1);
+            Matrix_InsertTranslation(0.0f, (0.1f - minislime->frozenScale) * -4000.0f, 0.0f, 1);
             Matrix_Scale(0.1f, minislime->frozenScale, 0.1f, MTXMODE_APPLY);
             AnimatedMat_Draw(globalCtx, this->minislimeFrozenTex);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, minislime->frozenAlpha);
@@ -2958,9 +2958,9 @@ void EnBigslime_DrawBigslime(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->actor.scale.x > 0.0f) {
-        SysMatrix_SetCurrentState(&globalCtx->mf_187FC);
+        Matrix_SetCurrentState(&globalCtx->mf_187FC);
         Matrix_Scale(0.0050000003f, 0.0050000003f, 0.0050000003f, MTXMODE_APPLY);
-        sysMatrix = SysMatrix_GetCurrentState();
+        sysMatrix = Matrix_GetCurrentState();
 
         for (i = 0; i < 28; i++) {
             bubbles = &sBubbles[i];
@@ -3006,16 +3006,16 @@ void EnBigslime_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     Vec3f rightFootOffset;
 
     if (limbIndex == GEKKO_LIMB_HEAD) {
-        SysMatrix_GetStateTranslation(&this->actor.focus.pos);
+        Matrix_GetStateTranslation(&this->actor.focus.pos);
         this->actor.focus.rot.y = this->gekkoRot.y;
     }
 
     if (limbPosIndex[limbIndex] != -1) {
-        SysMatrix_GetStateTranslation(&this->limbPos[limbPosIndex[limbIndex]]);
+        Matrix_GetStateTranslation(&this->limbPos[limbPosIndex[limbIndex]]);
     }
 
     if ((u32)&limbPosIndex[GEKKO_LIMB_R_ANKLE] == (u32)&limbPosIndex[limbIndex]) {
-        SysMatrix_MultiplyVector3fByState(&sRightFootOffset, &rightFootOffset);
+        Matrix_MultiplyVector3fByState(&sRightFootOffset, &rightFootOffset);
         this->gekkoCollider.dim.pos.y = rightFootOffset.y;
     }
 }
@@ -3045,11 +3045,11 @@ void EnBigslime_DrawGekko(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     Math_Vec3f_Sum(&this->actor.world.pos, &this->gekkoPosOffset, &gekkoPos);
-    SysMatrix_SetStateRotationAndTranslation(gekkoPos.x, gekkoPos.y, gekkoPos.z, &this->gekkoRot);
+    Matrix_SetStateRotationAndTranslation(gekkoPos.x, gekkoPos.y, gekkoPos.z, &this->gekkoRot);
     Matrix_Scale(this->gekkoScale, this->gekkoScale, this->gekkoScale, MTXMODE_APPLY);
     SkinMatrix_Vec3fMtxFMultXYZ(&globalCtx->projectionMatrix, &gekkoPos, &this->gekkoProjectedPos);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, NULL,
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                      EnBigslime_PostLimbDraw, &this->actor);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
@@ -3081,7 +3081,7 @@ void EnBigslime_DrawIceShardEffect(EnBigslime* this, GlobalContext* globalCtx) {
                    Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, globalCtx->gameplayFrames % 128,
                                     (u8)(globalCtx->gameplayFrames * 8), 32, 64, 1,
                                     (-globalCtx->gameplayFrames * 2) % 64, 0, 16, 16));
-        SysMatrix_InsertTranslation(this->iceShardRefPos.x, this->iceShardRefPos.y, this->iceShardRefPos.z,
+        Matrix_InsertTranslation(this->iceShardRefPos.x, this->iceShardRefPos.y, this->iceShardRefPos.z,
                                     MTXMODE_NEW);
         Matrix_Scale(this->iceShardScale, this->iceShardScale, this->iceShardScale, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -3094,7 +3094,7 @@ void EnBigslime_DrawIceShardEffect(EnBigslime* this, GlobalContext* globalCtx) {
     for (i = 0; i < BIGSLIME_NUM_ICE_SHARD; i++) {
         iceShardEffect = &this->iceShardEffect[i];
         if (iceShardEffect->isActive > false) {
-            SysMatrix_SetStateRotationAndTranslation(iceShardEffect->pos.x, iceShardEffect->pos.y,
+            Matrix_SetStateRotationAndTranslation(iceShardEffect->pos.x, iceShardEffect->pos.y,
                                                      iceShardEffect->pos.z, &iceShardEffect->rotation);
             Matrix_Scale(iceShardEffect->scale, iceShardEffect->scale, iceShardEffect->scale, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
