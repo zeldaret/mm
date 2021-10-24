@@ -43,9 +43,9 @@ s32 func_800F07C0(SkelAnime* skelAnime, s16 animIndex) {
         ret = true;
         frameCount = D_801BC2A0[animIndex].frameCount;
         if (frameCount < 0) {
-            frameCount = SkelAnime_GetFrameCount(&D_801BC2A0[animIndex].animationSeg->common);
+            frameCount = Animation_GetLastFrame(&D_801BC2A0[animIndex].animationSeg->common);
         }
-        SkelAnime_ChangeAnim(skelAnime, D_801BC2A0[animIndex].animationSeg, D_801BC2A0[animIndex].playbackSpeed,
+        Animation_Change(skelAnime, D_801BC2A0[animIndex].animationSeg, D_801BC2A0[animIndex].playbackSpeed,
                              D_801BC2A0[animIndex].frame, frameCount, D_801BC2A0[animIndex].mode,
                              D_801BC2A0[animIndex].transitionRate);
     }
@@ -95,7 +95,7 @@ s32 func_800F09B4(struct_800F0944_arg0* arg0, GlobalContext* globalCtx) {
 
     if (arg0->actor.draw != NULL) {
         gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[arg0->unk193].segment);
-        SkelAnime_FrameUpdateMatrix(&arg0->skelAnime);
+        SkelAnime_Update(&arg0->skelAnime);
         ret = true;
     }
     return ret;
@@ -123,28 +123,29 @@ s32 func_800F0A94(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, FlexSkel
         ret = true;
         ActorShape_Init(&arg0->actor.shape, 0.0f, NULL, 0.0f);
         gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[arg0->actor.objBankIndex].segment);
-        SkelAnime_InitSV(globalCtx, &arg0->skelAnime, skeletonHeaderSeg, NULL, arg0->jointTable, arg0->morphTable, 16);
+        SkelAnime_InitFlex(globalCtx, &arg0->skelAnime, skeletonHeaderSeg, NULL, arg0->jointTable, arg0->morphTable, 16);
         func_800F0944(arg0, globalCtx, animIndex);
     }
     return ret;
 }
 
-void func_800F0BB4(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, Actor* arg2, s16 arg3, s16 arg4) {
+//! @TODO: Should just take EnDoor instead of actor when c and h are split
+void func_800F0BB4(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, Actor* door, s16 arg3, s16 arg4) {
     s32 pad;
     s8 sp3B;
-    Vec3f sp2C;
+    Vec3f offset;
     f32 phi_f0;
 
-    Actor_CalcOffsetOrientedToDrawRotation(arg2, &sp2C, &arg0->actor.world.pos);
-    phi_f0 = (sp2C.z >= 0.0f) ? 1.0f : -1.0f;
+    Actor_CalcOffsetOrientedToDrawRotation(door, &offset, &arg0->actor.world.pos);
+    phi_f0 = (offset.z >= 0.0f) ? 1.0f : -1.0f;
     sp3B = ((s8)phi_f0 < 0) ? 0 : 2;
     func_800F0944(arg0, globalCtx, (sp3B == 0) ? arg3 : arg4);
-    arg0->skelAnime.unk3E = *arg0->skelAnime.limbDrawTbl;
-    arg0->skelAnime.prevFramePos = *arg0->skelAnime.limbDrawTbl;
-    arg0->skelAnime.flags |= 3;
-    SkelAnime_LoadAnimationType5(globalCtx, &arg0->actor, &arg0->skelAnime, 1.0f);
-    ((EnDoor*)arg2)->unk1A1 = 1;
-    ((EnDoor*)arg2)->unk1A0 = sp3B;
+    arg0->skelAnime.baseTransl = *arg0->skelAnime.jointTable;
+    arg0->skelAnime.prevTransl = *arg0->skelAnime.jointTable;
+    arg0->skelAnime.moveFlags |= 3;
+    AnimationContext_SetMoveActor(globalCtx, &arg0->actor, &arg0->skelAnime, 1.0f);
+    ((EnDoor*)door)->unk1A1 = 1;
+    ((EnDoor*)door)->unk1A0 = sp3B;
 }
 
 s32 func_800F0CE4(struct_800F0944_arg0* arg0, GlobalContext* globalCtx, ActorFunc draw, s16 arg3, s16 arg4, f32 arg5) {
