@@ -32,8 +32,8 @@ typedef struct EnSob1 {
     /* 0x1EA */ s8 objIndices[3];
     /* 0x1EE */ s16 headRot;
     /* 0x1F0 */ s16 headRotTarget;
-    /* 0x1F2 */ Vec3s limbDrawTable[20];
-    /* 0x26A */ Vec3s transitionDrawTable[20];
+    /* 0x1F2 */ Vec3s jointTable[20];
+    /* 0x26A */ Vec3s morphTable[20];
     /* 0x2E2 */ s16 eyeTexIndex;
     /* 0x2E4 */ s16 blinkTimer;
     /* 0x2E8 */ EnSob1BlinkFunc blinkFunc;

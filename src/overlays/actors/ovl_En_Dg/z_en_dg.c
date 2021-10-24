@@ -157,13 +157,13 @@ void func_80989140(SkelAnime* skelAnime, ActorAnimationEntryS arg1[], s32 arg2) 
 
     arg1 += arg2;
     if (arg1->frameCount < 0) {
-        frameCount = SkelAnime_GetFrameCount(&arg1->animationSeg->common);
+        frameCount = Animation_GetLastFrame(arg1->animationSeg);
     } else {
         frameCount = arg1->frameCount;
     }
 
-    SkelAnime_ChangeAnim(skelAnime, arg1->animationSeg, arg1->playbackSpeed + (BREG(88) * 0.1f), arg1->frame,
-                         frameCount, arg1->mode, arg1->transitionRate);
+    Animation_Change(skelAnime, arg1->animationSeg, arg1->playbackSpeed + (BREG(88) * 0.1f), arg1->frame, frameCount,
+                     arg1->mode, arg1->transitionRate);
 }
 
 void func_80989204(EnDg* this, GlobalContext* globalCtx) {
@@ -294,7 +294,7 @@ void func_80989674(EnDg* this, GlobalContext* globalCtx) {
 }
 
 void func_80989864(EnDg* this, GlobalContext* globalCtx) {
-    s16 frame = this->skelAnime.animCurrentFrame;
+    s16 frame = this->skelAnime.curFrame;
     s16 mod = (this->actor.speedXZ > 6.0f) ? 2 : 3;
     Vec3f sp38;
 
@@ -307,31 +307,31 @@ void func_80989864(EnDg* this, GlobalContext* globalCtx) {
 }
 
 void func_80989974(EnDg* this) {
-    if (func_801378B8(&this->skelAnime, 1.0f) || func_801378B8(&this->skelAnime, 7.0f)) {
+    if (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 7.0f)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_MONKEY_WALK);
     }
 }
 
 void func_809899C8(EnDg* this, f32 arg1) {
-    if (func_801378B8(&this->skelAnime, arg1)) {
+    if (Animation_OnFrame(&this->skelAnime, arg1)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_BARK);
     }
 }
 
 void func_80989A08(EnDg* this, f32 arg1) {
-    if (func_801378B8(&this->skelAnime, arg1)) {
+    if (Animation_OnFrame(&this->skelAnime, arg1)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_ANG_BARK);
     }
 }
 
 void func_80989A48(EnDg* this) {
-    if (func_801378B8(&this->skelAnime, 23.0f) || func_801378B8(&this->skelAnime, 28.0f)) {
+    if (Animation_OnFrame(&this->skelAnime, 23.0f) || Animation_OnFrame(&this->skelAnime, 28.0f)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_WHINE);
     }
 }
 
 void func_80989A9C(EnDg* this, f32 arg1) {
-    if (func_801378B8(&this->skelAnime, arg1)) {
+    if (Animation_OnFrame(&this->skelAnime, arg1)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_GROAN);
     }
 }
@@ -657,9 +657,9 @@ void func_8098A70C(EnDg* this, GlobalContext* globalCtx) {
 
     Actor_MoveForward(&this->actor);
     func_80989974(this);
-    if (func_801378B8(&this->skelAnime, 3.0f)) {
+    if (Animation_OnFrame(&this->skelAnime, 3.0f)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_CRY);
-    } else if (func_801378B8(&this->skelAnime, 6.0f)) {
+    } else if (Animation_OnFrame(&this->skelAnime, 6.0f)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_MONKEY_WALK);
     }
 }
@@ -689,7 +689,7 @@ void func_8098A938(EnDg* this, GlobalContext* globalCtx) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (this->actor.xzDistToPlayer < 70.0f) {
         Math_ApproachZeroF(&this->actor.speedXZ, 0.2f, 1.0f);
-        if (func_801378B8(&this->skelAnime, 7.0f)) {
+        if (Animation_OnFrame(&this->skelAnime, 7.0f)) {
             s16 y = ABS_ALT(player->actor.shape.rot.y - this->actor.shape.rot.y);
 
             this->unk_28E = 20;
@@ -751,7 +751,7 @@ void func_8098AB48(EnDg* this, GlobalContext* globalCtx) {
 }
 
 void func_8098AC34(EnDg* this, GlobalContext* globalCtx) {
-    s16 sp26 = this->skelAnime.animCurrentFrame;
+    s16 sp26 = this->skelAnime.curFrame;
 
     if ((this->actor.xyzDistToPlayerSq < 800.0f) && (this->collider.base.atFlags & AT_BOUNCED)) {
         this->unk_28E = 60;
@@ -772,13 +772,13 @@ void func_8098AC34(EnDg* this, GlobalContext* globalCtx) {
     }
 
     if (sp26 < 9) {
-        if (func_801378B8(&this->skelAnime, 0.0f)) {
+        if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
             sAnimations[14].playbackSpeed = randPlusMinusPoint5Scaled(1.0f) + 3.0f;
         }
         func_80989864(this, globalCtx);
     } else {
         this->unk_280 |= 2;
-        if (func_801378B8(&this->skelAnime, 9.0f)) {
+        if (Animation_OnFrame(&this->skelAnime, 9.0f)) {
             f32 rand = randPlusMinusPoint5Scaled(1.5f);
 
             sAnimations[14].playbackSpeed = 1.2f;
@@ -1116,7 +1116,7 @@ void EnDg_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_060080F0, NULL, this->jointTable, this->morphTable, 13);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060080F0, NULL, this->jointTable, this->morphTable, 13);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -1170,7 +1170,7 @@ void EnDg_Update(Actor* thisx, GlobalContext* globalCtx) {
         func_8098933C(this, &sp28);
         Math_ApproachF(&this->unk_294.x, sp28.x, 0.2f, 0.1f);
         Math_ApproachF(&this->unk_294.z, sp28.z, 0.2f, 0.1f);
-        SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+        SkelAnime_Update(&this->skelAnime);
     }
 }
 
@@ -1185,9 +1185,9 @@ void func_8098BFD4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     if (limbIndex == 5) {
         if (this->actionFunc == func_8098BBEC) {
             sp20.x = 5000.0f;
-            SysMatrix_MultiplyVector3fByState(&sp20, &this->actor.focus.pos);
+            Matrix_MultiplyVector3fByState(&sp20, &this->actor.focus.pos);
         } else if (this->actionFunc != func_8098BC54) {
-            SysMatrix_MultiplyVector3fByState(&sp20, &this->actor.focus.pos);
+            Matrix_MultiplyVector3fByState(&sp20, &this->actor.focus.pos);
         }
     }
 }
@@ -1225,13 +1225,13 @@ void EnDg_Draw(Actor* thisx, GlobalContext* globalCtx) {
             break;
     }
 
-    SysMatrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
-    SysMatrix_RotateStateAroundXAxis(this->unk_294.x);
-    SysMatrix_InsertZRotation_f(this->unk_294.z, MTXMODE_APPLY);
+    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+    Matrix_RotateStateAroundXAxis(this->unk_294.x);
+    Matrix_InsertZRotation_f(this->unk_294.z, MTXMODE_APPLY);
     Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                     func_8098BFB8, func_8098BFD4, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          func_8098BFB8, func_8098BFD4, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

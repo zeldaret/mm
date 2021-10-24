@@ -125,12 +125,6 @@ static struct_80B8E1A8 sAnimationInfo[] = {
     { &D_060180DC, 1.0f, 2, 0.0f }, { &D_060180DC, 1.0f, 2, -6.0f }, // Turns around anim
 };
 
-void EnMaYts_ChangeAnim(EnMaYts* this, s32 index) {
-    SkelAnime_ChangeAnim(&this->skelAnime, sAnimationInfo[index].animationSeg, 1.0f, 0.0f,
-                         SkelAnime_GetFrameCount(&sAnimationInfo[index].animationSeg->common),
-                         sAnimationInfo[index].mode, sAnimationInfo[index].transitionRate);
-}
-
 static void* sMouthTextures[] = {
     D_060127C8,
     D_06012BC8,
@@ -141,6 +135,12 @@ static void* sMouthTextures[] = {
 static void* sEyeTextures[] = {
     D_0600FFC8, D_060107C8, D_06010FC8, D_060117C8, D_06011FC8,
 };
+
+void EnMaYts_ChangeAnim(EnMaYts* this, s32 index) {
+    Animation_Change(&this->skelAnime, sAnimationInfo[index].animationSeg, 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimationInfo[index].animationSeg), sAnimationInfo[index].mode,
+                     sAnimationInfo[index].transitionRate);
+}
 
 void func_80B8D12C(EnMaYts* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
@@ -245,8 +245,9 @@ void EnMaYts_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (!EnMaYts_CheckValidSpawn(this, globalCtx)) {
         Actor_MarkForDeath(&this->actor);
     }
+
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, NULL, this->limbDrawTbl, this->transitionDrawTbl,
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013928, NULL, this->jointTable, this->morphTable,
                      MA1_LIMB_MAX);
     EnMaYts_InitAnimation(this, globalCtx);
 
@@ -435,7 +436,7 @@ void EnMaYts_EndCreditsHandler(EnMaYts* this, GlobalContext* globalCtx) {
 
         func_800EDF24(&this->actor, globalCtx, actionIndex);
         if ((D_80B8E32C == 2) && (this->endCreditsFlag == 0) &&
-            (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) != 0)) {
+            (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) != 0)) {
             this->endCreditsFlag++;
             EnMaYts_ChangeAnim(this, 5);
         }
@@ -517,20 +518,19 @@ void EnMaYts_Update(Actor* thisx, GlobalContext* globalCtx) {
     collider = &this->collider;
     Collider_UpdateCylinder(&this->actor, collider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &collider->base);
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     EnMaYts_UpdateEyes(this);
     func_80B8D12C(this, globalCtx);
 }
 
-s32 EnMaYts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                             Actor* thisx) {
-    EnMaYts* this = THIS;
+s32 EnMaYts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* arg) {
+    EnMaYts* this = (EnMaYts*)arg;
     Vec3s sp4;
 
     if (limbIndex == MA1_LIMB_HEAD) {
         sp4 = this->unk_1D8.unk_08;
         rot->x += sp4.y;
-        if ((this->skelAnime.animCurrentSeg == &D_06009E58) || (this->skelAnime.animCurrentSeg == &D_06007D98)) {
+        if ((this->skelAnime.animation == &D_06009E58) || (this->skelAnime.animation == &D_06007D98)) {
             rot->z += sp4.x;
         }
     } else if (limbIndex == MA1_LIMB_TORSO) {
@@ -542,11 +542,11 @@ s32 EnMaYts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     return 0;
 }
 
-void EnMaYts_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnMaYts* this = THIS;
+void EnMaYts_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* arg) {
+    EnMaYts* this = (EnMaYts*)arg;
 
     if (limbIndex == MA1_LIMB_HEAD) {
-        SysMatrix_GetStateTranslation(&this->actor.focus.pos);
+        Matrix_GetStateTranslation(&this->actor.focus.pos);
     } else if (limbIndex == MA1_LIMB_HAND_LEFT) {
         if (this->hasBow == true) {
             OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -565,8 +565,8 @@ void EnMaYts_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(sMouthTextures[this->mouthTexIndex]));
     gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEyeTextures[this->eyeTexIndex]));
 
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                     EnMaYts_OverrideLimbDraw, EnMaYts_PostLimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnMaYts_OverrideLimbDraw, EnMaYts_PostLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

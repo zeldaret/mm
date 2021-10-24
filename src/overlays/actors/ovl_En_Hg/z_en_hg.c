@@ -27,8 +27,8 @@ void func_80BCF6D0(EnHg* this, GlobalContext* globalCtx);
 void func_80BCF8A0(EnHg* this, GlobalContext* globalCtx);
 void func_80BCF93C(EnHg* this);
 void func_80BCF95C(EnHg* this, GlobalContext* globalCtx);
-s32 EnHg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-void EnHg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
+s32 EnHg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* arg);
+void EnHg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* arg);
 
 extern AnimationHeader D_06000370;
 extern AnimationHeader D_06001138;
@@ -127,8 +127,8 @@ void EnHg_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 i;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 36.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06008580, &D_0600260C, this->limbDrawTbl, this->transitionDrawTbl,
-                     HG_LIMB_MAX);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06008580, &D_0600260C, this->jointTable, this->morphTable,
+                       HG_LIMB_MAX);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
@@ -183,8 +183,8 @@ void func_80BCF4AC(EnHg* this, GlobalContext* globalCtx) {
 
     this->actor.speedXZ = 1.6f;
     if (!(player->stateFlags2 & 0x08000000) && !func_80152498(&globalCtx->msgCtx)) {
-        if (((this->skelAnime.animCurrentFrame > 9.0f) && (this->skelAnime.animCurrentFrame < 16.0f)) ||
-            ((this->skelAnime.animCurrentFrame > 44.0f) && (this->skelAnime.animCurrentFrame < 51.0f))) {
+        if (((this->skelAnime.curFrame > 9.0f) && (this->skelAnime.curFrame < 16.0f)) ||
+            ((this->skelAnime.curFrame > 44.0f) && (this->skelAnime.curFrame < 51.0f))) {
             Actor_MoveForward(&this->actor);
             Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x3E8, 0x14);
             this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -215,7 +215,7 @@ void func_80BCF68C(EnHg* this) {
 }
 
 void func_80BCF6D0(EnHg* this, GlobalContext* globalCtx) {
-    if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         func_80BCF5F0(this);
     }
 }
@@ -283,7 +283,7 @@ void func_80BCF95C(EnHg* this, GlobalContext* globalCtx) {
             this->cutscenes[3] = globalCtx->csCtx.npcActions[actionIndex]->unk0;
             switch (globalCtx->csCtx.npcActions[actionIndex]->unk0) {
                 case 1:
-                    this->currentAnimation = NULL;
+                    this->currentAnimation = 0;
                     func_800BDC5C(&this->skelAnime, sAnimations, 0);
                     break;
                 case 2:
@@ -314,7 +314,7 @@ void func_80BCF95C(EnHg* this, GlobalContext* globalCtx) {
                     break;
             }
         } else {
-            if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+            if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                 switch (this->currentAnimation) {
                     case 3:
                         this->currentAnimation = 4;
@@ -393,7 +393,7 @@ void EnHg_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnHg* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     func_80BCF7D8(this, globalCtx);
     func_80BCFC0C(this, globalCtx);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 25.0f, 0.0f, 5);
@@ -407,9 +407,9 @@ s32 EnHg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 void EnHg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnHg* this = THIS;
     if (limbIndex == HG_LIMB_HEAD) {
-        SysMatrix_CopyCurrentState(&this->unk1D8);
+        Matrix_CopyCurrentState(&this->unk1D8);
     } else if (limbIndex == HG_LIMB_PELVIS) {
-        SysMatrix_GetStateTranslation(&this->actor.focus.pos);
+        Matrix_GetStateTranslation(&this->actor.focus.pos);
     }
 }
 
@@ -418,9 +418,9 @@ void EnHg_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                     EnHg_OverrideLimbDraw, EnHg_PostLimbDraw, &this->actor);
-    SysMatrix_SetCurrentState(&this->unk1D8);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnHg_OverrideLimbDraw, EnHg_PostLimbDraw, &this->actor);
+    Matrix_SetCurrentState(&this->unk1D8);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_06005E28);
     CLOSE_DISPS(globalCtx->state.gfxCtx);

@@ -24,8 +24,8 @@ typedef struct EnTotoUnkStruct2 {
 typedef struct EnToto {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s limbDrawTbl[18];
-    /* 0x1F4 */ Vec3s transitionDrawTbl[18];
+    /* 0x188 */ Vec3s jointTable[18];
+    /* 0x1F4 */ Vec3s morphTable[18];
     /* 0x260 */ s16 unk260[2];
     /* 0x264 */ ColliderCylinder collider;
     /* 0x2B0 */ u8 actionFuncIndex;

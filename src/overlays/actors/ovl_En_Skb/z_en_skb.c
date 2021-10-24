@@ -297,7 +297,7 @@ void func_80994E2C(EnSkb* this) {
 }
 
 void func_80994E94(EnSkb* this, GlobalContext* globalCtx) {
-    if (this->skelAnime.animCurrentFrame < 4.0f) {
+    if (this->skelAnime.curFrame < 4.0f) {
         this->actor.world.rot.y = this->actor.yawTowardsPlayer;
         this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
     } else {
@@ -310,7 +310,7 @@ void func_80994E94(EnSkb* this, GlobalContext* globalCtx) {
         func_809947B0(globalCtx, this, &this->actor.world.pos);
     }
 
-    if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) && (this->actor.shape.yOffset == 0.0f)) {
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) && (this->actor.shape.yOffset == 0.0f)) {
         func_80995A30(this);
     }
     this->unk_3D0++;
@@ -471,13 +471,13 @@ void func_809954F8(EnSkb* this) {
 void func_8099556C(EnSkb* this, GlobalContext* globalCtx) {
     s16 sp26;
 
-    if (this->skelAnime.animCurrentFrame < 15.0f) {
-        sp26 = this->skelAnime.animCurrentFrame - 7.5f;
+    if (this->skelAnime.curFrame < 15.0f) {
+        sp26 = this->skelAnime.curFrame - 7.5f;
     } else {
-        sp26 = 22.5f - this->skelAnime.animCurrentFrame;
+        sp26 = 22.5f - this->skelAnime.curFrame;
     }
 
-    if (func_801378B8(&this->skelAnime, 22.5f)) {
+    if (Animation_OnFrame(&this->skelAnime, 22.5f)) {
         this->unk_3D4 = (u32)Rand_Next() % 0x7D0;
     }
 
@@ -487,7 +487,7 @@ void func_8099556C(EnSkb* this, GlobalContext* globalCtx) {
         this->actor.flags |= (0x8 | 0x1);
         func_80994F7C(this, globalCtx);
     } else if (Actor_IsActorFacingPlayer(&this->actor, 0x2AAA) && (this->actor.xzDistToPlayer < 200.0f) &&
-               (this->skelAnime.animCurrentFrame > 24.0f) && (this->skelAnime.animCurrentFrame < 28.0f)) {
+               (this->skelAnime.curFrame > 24.0f) && (this->skelAnime.curFrame < 28.0f)) {
         this->actor.hintId = 0x55;
         this->actor.colChkInfo.mass = MASS_HEAVY;
         this->actor.targetArrowOffset = 2000.0f;
@@ -521,7 +521,7 @@ void func_80995818(EnSkb* this, GlobalContext* globalCtx) {
 
     Math_ApproachF(&this->actor.shape.shadowScale, 25.0f, 1.0f, 2.5f);
     Math_SmoothStepToS(&this->actor.shape.rot.x, 0, 0x10, 0x7D0, 0x64);
-    if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         this->actor.shape.rot.x = 0;
         this->actor.gravity = -2.0f;
         func_80995A30(this);
@@ -536,8 +536,7 @@ void func_80995818(EnSkb* this, GlobalContext* globalCtx) {
 }
 
 void func_809958F4(EnSkb* this) {
-    SkelAnime_ChangeAnim(&this->skelAnime, &D_06003584, -1.0f, SkelAnime_GetFrameCount(&D_06003584.common), 0.0f, 2,
-                         -4.0f);
+    Animation_Change(&this->skelAnime, &D_06003584, -1.0f, Animation_GetLastFrame(&D_06003584), 0.0f, 2, -4.0f);
     this->unk_3E4 = 0;
     this->actor.flags &= ~1;
     this->actor.speedXZ = 0.0f;
@@ -555,7 +554,7 @@ void func_8099599C(EnSkb* this, GlobalContext* globalCtx) {
 
     Math_ApproachF(&this->actor.shape.shadowScale, 0.0f, 1.0f, 2.5f);
 
-    if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -585,7 +584,7 @@ void func_80995A8C(EnSkb* this, GlobalContext* globalCtx) {
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer + this->unk_3DA, 1, 0x2EE, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if (func_801378B8(&this->skelAnime, 8.0f) || func_801378B8(&this->skelAnime, 15.0f)) {
+    if (Animation_OnFrame(&this->skelAnime, 8.0f) || Animation_OnFrame(&this->skelAnime, 15.0f)) {
         Audio_PlayActorSound2(&this->actor, 0x3830);
     }
 
@@ -605,23 +604,23 @@ void func_80995C24(EnSkb* this) {
 }
 
 void func_80995C84(EnSkb* this, GlobalContext* globalCtx) {
-    if (func_801378B8(&this->skelAnime, 3.0f) && (this->unk_3E4 == 0)) {
+    if (Animation_OnFrame(&this->skelAnime, 3.0f) && (this->unk_3E4 == 0)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKID_ATTACK);
         this->unk_3E4 = 1;
-    } else if (func_801378B8(&this->skelAnime, 6.0f)) {
+    } else if (Animation_OnFrame(&this->skelAnime, 6.0f)) {
         this->unk_3E4 = 0;
     }
 
     if (this->collider.base.atFlags & AT_BOUNCED) {
         this->collider.base.atFlags &= ~(AT_BOUNCED | AT_HIT);
         func_80995D3C(this);
-    } else if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+    } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         func_80994DA8(this, globalCtx);
     }
 }
 
 void func_80995D3C(EnSkb* this) {
-    SkelAnime_ChangeAnim(&this->skelAnime, &D_06002190, -0.4f, this->skelAnime.animCurrentFrame - 1.0f, 0.0f, 3, 0.0f);
+    Animation_Change(&this->skelAnime, &D_06002190, -0.4f, this->skelAnime.curFrame - 1.0f, 0.0f, 3, 0.0f);
     this->collider.base.atFlags &= ~AT_BOUNCED;
     this->unk_3DE = 4;
     this->unk_3E4 = 0;
@@ -629,7 +628,7 @@ void func_80995D3C(EnSkb* this) {
 }
 
 void func_80995DC4(EnSkb* this, GlobalContext* globalCtx) {
-    if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         func_80994DA8(this, globalCtx);
     }
 }
@@ -720,7 +719,7 @@ void func_809960AC(EnSkb* this, GlobalContext* globalCtx) {
     }
 
     Math_SmoothStepToS(&this->actor.shape.rot.x, 0, 0x10, 0x7D0, 0x64);
-    if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) && (this->actor.bgCheckFlags & 1)) {
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) && (this->actor.bgCheckFlags & 1)) {
         this->actor.shape.rot.x = 0;
         this->actor.world.rot = this->actor.shape.rot;
         func_80994DA8(this, globalCtx);
@@ -1049,7 +1048,7 @@ void EnSkb_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     if ((this->actionFunc != func_80995E64) && (this->actionFunc != func_80996284) &&
         (this->actionFunc != func_8099630C) && (this->actionFunc != func_809963D8)) {
-        SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+        SkelAnime_Update(&this->skelAnime);
     }
 
     func_8099672C(this, globalCtx);
@@ -1087,7 +1086,7 @@ s32 EnSkb_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     }
 
     if (limbIndex == 10) {
-        SysMatrix_GetStateTranslation(&this->actor.focus.pos);
+        Matrix_GetStateTranslation(&this->actor.focus.pos);
     }
 
     return false;
@@ -1112,10 +1111,10 @@ void EnSkb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
         if ((limbIndex == 2) || (limbIndex == 4) || (limbIndex == 5) || (limbIndex == 6) || (limbIndex == 7) ||
             (limbIndex == 8) || (limbIndex == 9) || (limbIndex == 13) || (limbIndex == 14) || (limbIndex == 15) ||
             (limbIndex == 16) || (limbIndex == 17) || (limbIndex == 18)) {
-            SysMatrix_GetStateTranslation(&this->unk_234[this->unk_2DC]);
+            Matrix_GetStateTranslation(&this->unk_234[this->unk_2DC]);
             this->unk_2DC++;
         } else if ((limbIndex == 11) && !(this->unk_3D8 & 2)) {
-            SysMatrix_MultiplyVector3fByState(&D_80997564, &this->unk_234[this->unk_2DC]);
+            Matrix_MultiplyVector3fByState(&D_80997564, &this->unk_234[this->unk_2DC]);
             this->unk_2DC++;
         }
     }
@@ -1126,8 +1125,8 @@ void EnSkb_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     this->unk_2DC = 0;
     func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, EnSkb_OverrideLimbDraw,
-                   EnSkb_PostLimbDraw, &this->actor);
+    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnSkb_OverrideLimbDraw,
+                      EnSkb_PostLimbDraw, &this->actor);
     if (this->unk_3D2 > 0) {
         func_800BE680(globalCtx, &this->actor, this->unk_234, this->unk_2DC, this->unk_230, 0.5f, this->unk_22C,
                       this->unk_3E6);

@@ -171,12 +171,12 @@ void EnSob1_ChangeAnim(SkelAnime* skelAnime, ActorAnimationEntryS* animations, s
 
     animations += idx;
     if (animations->frameCount < 0) {
-        frameCount = SkelAnime_GetFrameCount(&animations->animationSeg->common);
+        frameCount = Animation_GetLastFrame(animations->animationSeg);
     } else {
         frameCount = animations->frameCount;
     }
-    SkelAnime_ChangeAnim(skelAnime, animations->animationSeg, animations->playbackSpeed, animations->frame, frameCount,
-                         animations->mode, animations->transitionRate);
+    Animation_Change(skelAnime, animations->animationSeg, animations->playbackSpeed, animations->frame, frameCount,
+                     animations->mode, animations->transitionRate);
 }
 
 void EnSob1_SetupAction(EnSob1* this, EnSob1ActionFunc action) {
@@ -721,8 +721,8 @@ void EnSob1_LookToShopkeeperFromShelf(EnSob1* this, GlobalContext* globalCtx) {
 void EnSob1_EndWalk(EnSob1* this, GlobalContext* globalCtx) {
     s32 pad;
     f32 distSq;
-    s16 animCurrentFrame = this->skelAnime.animCurrentFrame / this->skelAnime.animPlaybackSpeed;
-    s16 animLastFrame = SkelAnime_GetFrameCount(&D_06009120.common) / (s16)this->skelAnime.animPlaybackSpeed;
+    s16 curFrame = this->skelAnime.curFrame / this->skelAnime.playSpeed;
+    s16 animLastFrame = Animation_GetLastFrame(&D_06009120) / (s16)this->skelAnime.playSpeed;
 
     Math_SmoothStepToS(
         &this->actor.world.rot.y,
@@ -732,7 +732,7 @@ void EnSob1_EndWalk(EnSob1* this, GlobalContext* globalCtx) {
     Math_ApproachF(&this->actor.speedXZ, 0.5f, 0.2f, 1.0f);
     if (distSq < 12.0f) {
         this->actor.speedXZ = 0.0f;
-        if (animLastFrame == animCurrentFrame) {
+        if (animLastFrame == curFrame) {
             EnSob1_ChangeAnim(&this->skelAnime, sAnimationsBombShopkeeper, 1);
             EnSob1_SetupAction(this, EnSob1_SetupIdle);
         }
@@ -741,9 +741,9 @@ void EnSob1_EndWalk(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_SetupIdle(EnSob1* this, GlobalContext* globalCtx) {
-    s16 animCurrentFrame = this->skelAnime.animCurrentFrame;
+    s16 curFrame = this->skelAnime.curFrame;
 
-    if (SkelAnime_GetFrameCount(&D_06008268.common) == animCurrentFrame) {
+    if (Animation_GetLastFrame(&D_06008268) == curFrame) {
         EnSob1_ChangeAnim(&this->skelAnime, sAnimationsBombShopkeeper, 2);
         EnSob1_SetupAction(this, EnSob1_Idle);
     }
@@ -1334,31 +1334,26 @@ s32 EnSob1_AreObjectsLoaded(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_InitZoraShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600D208, NULL, this->limbDrawTable, this->transitionDrawTable,
-                     20);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600D208, NULL, this->jointTable, this->morphTable, 20);
     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->objIndices[2]].segment);
-    SkelAnime_ChangeAnim(&this->skelAnime, &D_0600078C, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_0600078C.common), 0,
-                         0.0f);
+    Animation_Change(&this->skelAnime, &D_0600078C, 1.0f, 0.0f, Animation_GetLastFrame(&D_0600078C), 0, 0.0f);
     this->actor.draw = EnSob1_DrawZoraShopkeeper;
     this->changeObjectFunc = EnSob1_ChangeObject;
 }
 
 void EnSob1_InitGoronShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06011AC8, NULL, this->limbDrawTable, this->transitionDrawTable,
-                     18);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06011AC8, NULL, this->jointTable, this->morphTable, 18);
     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->objIndices[2]].segment);
-    SkelAnime_ChangeAnim(&this->skelAnime, &D_060000FC, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_060000FC.common), 0,
-                         0.0f);
+    Animation_Change(&this->skelAnime, &D_060000FC, 1.0f, 0.0f, Animation_GetLastFrame(&D_060000FC), 0, 0.0f);
     this->actor.draw = EnSob1_DrawGoronShopkeeper;
     this->changeObjectFunc = EnSob1_ChangeObject;
 }
 
 void EnSob1_InitBombShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06009220, &D_06009120, this->limbDrawTable,
-                     this->transitionDrawTable, 16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06009220, &D_06009120, this->jointTable, this->morphTable, 16);
     this->actor.draw = EnSob1_DrawBombShopkeeper;
     this->changeObjectFunc = NULL;
-    this->skelAnime.animPlaybackSpeed = 2.0f;
+    this->skelAnime.playSpeed = 2.0f;
 }
 
 void EnSob1_InitShop(EnSob1* this, GlobalContext* globalCtx) {
@@ -1483,7 +1478,7 @@ void EnSob1_Update(Actor* thisx, GlobalContext* globalCtx) {
         if (changeObjectFunc != NULL) {
             changeObjectFunc(this, globalCtx);
         }
-        SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+        SkelAnime_Update(&this->skelAnime);
     } else {
         this->actionFunc(this, globalCtx);
     }
@@ -1613,7 +1608,7 @@ s32 EnSob1_OverrideLimbDrawBombShopkeeper(GlobalContext* globalCtx, s32 limbInde
     EnSob1* this = THIS;
 
     if (limbIndex == 15) {
-        SysMatrix_InsertXRotation_s(this->headRot, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(this->headRot, MTXMODE_APPLY);
     }
     return false;
 }
@@ -1647,8 +1642,8 @@ void EnSob1_DrawZoraShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
     gSPSegment(POLY_OPA_DISP++, 0x0C, EnSob1_EndDList(globalCtx->state.gfxCtx));
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sZoraShopkeeperEyeTextures[this->eyeTexIndex]));
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                     EnSob1_OverrideLimbDrawZoraShopkeeper, NULL, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnSob1_OverrideLimbDrawZoraShopkeeper, NULL, &this->actor);
     for (i = 0; i < ARRAY_COUNT(this->items); i++) {
         this->items[i]->actor.scale.x = 0.2f;
         this->items[i]->actor.scale.y = 0.2f;
@@ -1668,8 +1663,8 @@ void EnSob1_DrawGoronShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sGoronShopkeeperEyeTextures[this->eyeTexIndex]));
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, NULL,
-                     NULL, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          NULL, NULL, &this->actor);
     for (i = 0; i < ARRAY_COUNT(this->items); i++) {
         this->items[i]->actor.scale.x = 0.2f;
         this->items[i]->actor.scale.y = 0.2f;
@@ -1689,8 +1684,8 @@ void EnSob1_DrawBombShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&D_06005458));
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                     EnSob1_OverrideLimbDrawBombShopkeeper, EnSob1_PostLimbDrawBombShopkeeper, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnSob1_OverrideLimbDrawBombShopkeeper, EnSob1_PostLimbDrawBombShopkeeper, &this->actor);
     for (i = 0; i < ARRAY_COUNT(this->items); i++) {
         this->items[i]->actor.scale.x = 0.2f;
         this->items[i]->actor.scale.y = 0.2f;
@@ -1700,7 +1695,7 @@ void EnSob1_DrawBombShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
     EnSob1_DrawStickDirectionPrompt(globalCtx, this);
     frames = globalCtx->gameplayFrames;
     func_8012C2DC(globalCtx->state.gfxCtx);
-    SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
+    Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPSegment(POLY_XLU_DISP++, 0x08,

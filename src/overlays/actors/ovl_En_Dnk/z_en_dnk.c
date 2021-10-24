@@ -148,14 +148,14 @@ s32 func_80A514F0(SkelAnime* skelAnime, s16 animIndex) {
             sp30 = true;
             frameCount = sAnimations[animIndex].frameCount;
             if (frameCount < 0) {
-                frameCount = SkelAnime_GetFrameCount(&(sAnimations[animIndex].animationSeg)->common);
+                frameCount = Animation_GetLastFrame(sAnimations[animIndex].animationSeg);
             }
             frame = sAnimations[animIndex].frame;
             if (frame < 0) {
                 frame = frameCount;
             }
-            SkelAnime_ChangeAnim(skelAnime, sAnimations[animIndex].animationSeg, sAnimations[animIndex].playbackSpeed,
-                                 frame, frameCount, sAnimations[animIndex].mode, sAnimations[animIndex].transitionRate);
+            Animation_Change(skelAnime, sAnimations[animIndex].animationSeg, sAnimations[animIndex].playbackSpeed,
+                             frame, frameCount, sAnimations[animIndex].mode, sAnimations[animIndex].transitionRate);
         }
     }
     return sp30;
@@ -263,7 +263,7 @@ void EnDnk_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     this->actionFunc(this, globalCtx);
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     func_80A515C4(this);
     Actor_SetFocus(&this->actor, 34.0f);
     Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -288,10 +288,10 @@ void func_80A51AA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     Vec3s sp3C;
 
     if (limbIndex == 2) {
-        SysMatrix_MultiplyVector3fByState(&sp50, &sp44);
-        SysMatrix_CopyCurrentState(&sp5C);
+        Matrix_MultiplyVector3fByState(&sp50, &sp44);
+        Matrix_CopyCurrentState(&sp5C);
         func_8018219C(&sp5C, &sp3C, 0);
-        SysMatrix_InsertTranslation(sp44.x, sp44.y, sp44.z, MTXMODE_NEW);
+        Matrix_InsertTranslation(sp44.x, sp44.y, sp44.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         if (this->unk_28C & 0x10) {
             if (this->unk_28C & 0x20) {
@@ -315,8 +315,8 @@ void func_80A51AA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         }
 
         Matrix_RotateY(this->unk_292, MTXMODE_APPLY);
-        SysMatrix_InsertXRotation_s(this->unk_290, MTXMODE_APPLY);
-        SysMatrix_InsertZRotation_s(this->unk_294, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(this->unk_290, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(this->unk_294, MTXMODE_APPLY);
     }
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -342,8 +342,8 @@ void func_80A51CB8(EnDnk* this, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A5245C[this->unk_2A0]));
     gDPPipeSync(POLY_OPA_DISP++);
 
-    SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, func_80A51A78, func_80A51AA4,
-                   &this->actor);
+    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, func_80A51A78, func_80A51AA4,
+                      &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -364,10 +364,10 @@ void func_80A51DA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     Vec3s sp3C;
 
     if (limbIndex == 2) {
-        SysMatrix_MultiplyVector3fByState(&sp50, &sp44);
-        SysMatrix_CopyCurrentState(&sp5C);
+        Matrix_MultiplyVector3fByState(&sp50, &sp44);
+        Matrix_CopyCurrentState(&sp5C);
         func_8018219C(&sp5C, &sp3C, 0);
-        SysMatrix_InsertTranslation(sp44.x, sp44.y, sp44.z, MTXMODE_NEW);
+        Matrix_InsertTranslation(sp44.x, sp44.y, sp44.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
 
         if (this->unk_28C & 0x10) {
@@ -392,8 +392,8 @@ void func_80A51DA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         }
 
         Matrix_RotateY(this->unk_292, MTXMODE_APPLY);
-        SysMatrix_InsertXRotation_s(this->unk_290, MTXMODE_APPLY);
-        SysMatrix_InsertZRotation_s(this->unk_294, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(this->unk_290, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(this->unk_294, MTXMODE_APPLY);
     }
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -406,8 +406,8 @@ void func_80A51DA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 
 void func_80A51FC0(EnDnk* this, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, func_80A51D78, func_80A51DA4,
-                   &this->actor);
+    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, func_80A51D78, func_80A51DA4,
+                      &this->actor);
 }
 
 void func_80A52018(Actor* thisx, GlobalContext* globalCtx) {

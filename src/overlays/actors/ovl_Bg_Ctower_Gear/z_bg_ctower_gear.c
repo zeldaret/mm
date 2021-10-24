@@ -90,14 +90,14 @@ void BgCtowerGear_Splash(BgCtowerGear* this, GlobalContext* globalCtx) {
     rotZ = this->dyna.actor.shape.rot.z & 0x1FFF;
     if ((flags != 0) && (rotZ < 0x1B58) && (rotZ >= 0x1388)) {
         Matrix_RotateY(this->dyna.actor.home.rot.y, 0);
-        SysMatrix_InsertXRotation_s(this->dyna.actor.home.rot.x, 1);
-        SysMatrix_InsertZRotation_s(this->dyna.actor.home.rot.z, 1);
+        Matrix_InsertXRotation_s(this->dyna.actor.home.rot.x, 1);
+        Matrix_InsertZRotation_s(this->dyna.actor.home.rot.z, 1);
         for (i = 0; i < 4; i++) {
             if ((u32)Rand_Next() >= 0x40000000) {
                 splashOffset.x = D_80AD3270[i].x - (Rand_ZeroOne() * 30.0f);
                 splashOffset.y = D_80AD3270[i].y;
                 splashOffset.z = D_80AD3270[i].z;
-                SysMatrix_MultiplyVector3fByState(&splashOffset, &splashSpawnPos);
+                Matrix_MultiplyVector3fByState(&splashOffset, &splashSpawnPos);
                 splashSpawnPos.x += this->dyna.actor.world.pos.x + ((Rand_ZeroOne() * 20.0f) - 10.0f);
                 splashSpawnPos.y += this->dyna.actor.world.pos.y;
                 splashSpawnPos.z += this->dyna.actor.world.pos.z + ((Rand_ZeroOne() * 20.0f) - 10.0f);
@@ -108,14 +108,14 @@ void BgCtowerGear_Splash(BgCtowerGear* this, GlobalContext* globalCtx) {
     if ((rotZ < 0x1F4) && (rotZ >= 0)) {
         if (flags != 0) {
             Matrix_RotateY(this->dyna.actor.home.rot.y, 0);
-            SysMatrix_InsertXRotation_s(this->dyna.actor.home.rot.x, 1);
-            SysMatrix_InsertZRotation_s(this->dyna.actor.home.rot.z, 1);
+            Matrix_InsertXRotation_s(this->dyna.actor.home.rot.x, 1);
+            Matrix_InsertZRotation_s(this->dyna.actor.home.rot.z, 1);
             for (i = 0; i < 3; i++) {
                 for (j = 0; j < 2; j++) {
                     splashOffset.x = D_80AD32A0[i].x + (Rand_ZeroOne() * 10.0f);
                     splashOffset.y = D_80AD32A0[i].y;
                     splashOffset.z = D_80AD32A0[i].z;
-                    SysMatrix_MultiplyVector3fByState(&splashOffset, &splashSpawnPos);
+                    Matrix_MultiplyVector3fByState(&splashOffset, &splashSpawnPos);
                     splashSpawnPos.x += this->dyna.actor.world.pos.x + ((Rand_ZeroOne() * 20.0f) - 10.0f);
                     splashSpawnPos.y += this->dyna.actor.world.pos.y;
                     splashSpawnPos.z += this->dyna.actor.world.pos.z + ((Rand_ZeroOne() * 20.0f) - 10.0f);

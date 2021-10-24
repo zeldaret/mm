@@ -115,9 +115,9 @@ void BgHakaTomb_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
     Matrix_RotateY(this->dyna.actor.world.rot.y, MTXMODE_NEW);
-    SysMatrix_InsertXRotation_s(this->dyna.actor.world.rot.x, MTXMODE_APPLY);
-    SysMatrix_InsertZRotation_s(this->dyna.actor.world.rot.z, MTXMODE_APPLY);
-    SysMatrix_MultiplyVector3fByState(&D_80BD68A4, &vec);
+    Matrix_InsertXRotation_s(this->dyna.actor.world.rot.x, MTXMODE_APPLY);
+    Matrix_InsertZRotation_s(this->dyna.actor.world.rot.z, MTXMODE_APPLY);
+    Matrix_MultiplyVector3fByState(&D_80BD68A4, &vec);
     Math_Vec3f_Sum(&this->dyna.actor.world.pos, &vec, &this->dyna.actor.focus.pos);
 }
 

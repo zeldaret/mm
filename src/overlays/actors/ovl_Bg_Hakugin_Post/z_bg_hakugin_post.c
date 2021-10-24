@@ -234,7 +234,7 @@ BgHakuginPostUnkStruct1* func_80A9B32C(BgHakuginPostUnkStruct* unkStruct, BgHaku
 }
 
 void func_80A9B384(Vec3f* arg0) {
-    MtxF* matrix = SysMatrix_GetCurrentState();
+    MtxF* matrix = Matrix_GetCurrentState();
 
     matrix->mf[3][0] = arg0->x;
     matrix->mf[3][1] = arg0->y;
@@ -1013,8 +1013,8 @@ void func_80A9D61C(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    SysMatrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                             this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
     Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
 
     for (i = 0; i < D_80A9E028.count; i++) {
@@ -1035,8 +1035,8 @@ void func_80A9D61C(Actor* thisx, GlobalContext* globalCtx) {
         for (i = 0; i < ARRAY_COUNT(D_80A9E028.unk_02A4); i++) {
             unkStruct2 = &D_80A9E028.unk_02A4[i];
             if (unkStruct2->unk_2C > 0) {
-                SysMatrix_SetStateRotationAndTranslation(unkStruct2->unk_04.x, unkStruct2->unk_04.y,
-                                                         unkStruct2->unk_04.z, &unkStruct2->unk_20);
+                Matrix_SetStateRotationAndTranslation(unkStruct2->unk_04.x, unkStruct2->unk_04.y, unkStruct2->unk_04.z,
+                                                      &unkStruct2->unk_20);
                 Matrix_Scale(unkStruct2->unk_00, unkStruct2->unk_00, unkStruct2->unk_00, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),

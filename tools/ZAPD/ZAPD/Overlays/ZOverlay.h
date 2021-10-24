@@ -56,7 +56,7 @@ class ZOverlay
 public:
 	std::string name;
 
-	ZOverlay(std::string nName);
+	ZOverlay(const std::string& nName);
 	~ZOverlay();
 	static ZOverlay* FromBuild(fs::path buildPath, fs::path cfgFolderPath);
 	std::string GetSourceOutputCode(const std::string& prefix);
@@ -67,7 +67,7 @@ private:
 
 	ZOverlay();
 
-	static SectionType GetSectionTypeFromStr(std::string sectionName);
+	static SectionType GetSectionTypeFromStr(const std::string& sectionName);
 	// static std::string GetOverlayNameFromElf(ELFIO::elfio& reader);
 
 	ELFIO::Elf_Half FindSymbolInSection(const std::string& curSymName, ELFIO::section* sectionData,

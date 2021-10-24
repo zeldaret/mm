@@ -81,7 +81,7 @@ void ActorShadow_Draw(Actor* actor, Lights* lights, GlobalContext* globalCtx, Gf
             }
 
             func_800C0094(actor->floorPoly, actor->world.pos.x, actor->floorHeight, actor->world.pos.z, &mtx);
-            SysMatrix_SetCurrentState(&mtx);
+            Matrix_SetCurrentState(&mtx);
 
             if ((dlist != D_04076BC0) || (actor->scale.x != actor->scale.z)) {
                 Matrix_RotateY(actor->shape.rot.y, MTXMODE_APPLY);
@@ -134,12 +134,10 @@ void ActorShadow_DrawFoot(GlobalContext* globalCtx, Light* light, MtxF* arg2, s3
 
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, (u8)(CLAMP_MAX(arg3 * 1.3e-05f, 1.0f) * arg4));
 
-    dir0 = light->l.dir[0];
-    dir2 = light->l.dir[2];
-    sp58 = Math_FAtan2F(dir2, dir0);
-    arg6 *= 4.5f - light->l.dir[1] * 0.035f;
+    sp58 = Math_FAtan2F(light->l.dir[0], light->l.dir[2]);
+    arg6 *= (4.5f - (light->l.dir[1] * 0.035f));
     arg6 = CLAMP_MIN(arg6, 1.0f);
-    SysMatrix_SetCurrentState(arg2);
+    Matrix_SetCurrentState(arg2);
     Matrix_RotateY(sp58, MTXMODE_APPLY);
     Matrix_Scale(arg5, 1.0f, arg5 * arg6, MTXMODE_APPLY);
 

@@ -330,7 +330,7 @@ void EnHoll_Draw(Actor* thisx, GlobalContext* globalCtx) {
         }
         dl = Gfx_CallSetupDL(dl, dlIndex);
         if (this->playerSide == EN_HOLL_BEHIND) {
-            SysMatrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
+            Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
         }
         gSPMatrix(dl++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(dl++, 0, 0, 0, 0, 0, this->alpha);

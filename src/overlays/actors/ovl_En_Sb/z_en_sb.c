@@ -117,8 +117,7 @@ void EnSb_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.colChkInfo.damageTable = &sDamageTable;
     this->actor.colChkInfo.mass = 0xA;
     this->actor.colChkInfo.health = 2;
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06002BF0, &D_06000194, this->limbDrawTable,
-                     this->transitionDrawTable, 9);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06002BF0, &D_06000194, this->jointTable, this->morphTable, 9);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinderType1(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->isDead = false;
@@ -150,45 +149,45 @@ void EnSb_SpawnBubbles(GlobalContext* globalCtx, EnSb* this) {
 }
 
 void EnSb_SetupWaitClosed(EnSb* this) {
-    SkelAnime_ChangeAnim(&this->skelAnime, &D_0600004C, 1.0f, 0, SkelAnime_GetFrameCount(&D_0600004C.common), 2, 0.0f);
+    Animation_Change(&this->skelAnime, &D_0600004C, 1.0f, 0, Animation_GetLastFrame(&D_0600004C), 2, 0.0f);
     this->state = SHELLBLADE_WAIT_CLOSED;
     this->actionFunc = EnSb_Idle;
 }
 
 void EnSb_SetupOpen(EnSb* this) {
-    SkelAnime_ChangeAnim(&this->skelAnime, &D_06000194, 1.0f, 0, SkelAnime_GetFrameCount(&D_06000194.common), 2, 0.0f);
+    Animation_Change(&this->skelAnime, &D_06000194, 1.0f, 0, Animation_GetLastFrame(&D_06000194), 2, 0.0f);
     this->state = SHELLBLADE_OPEN;
     this->actionFunc = EnSb_Open;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
 }
 
 void EnSb_SetupWaitOpen(EnSb* this) {
-    SkelAnime_ChangeAnim(&this->skelAnime, &D_06002C8C, 1.0f, 0, SkelAnime_GetFrameCount(&D_06002C8C.common), 0, 0.0f);
+    Animation_Change(&this->skelAnime, &D_06002C8C, 1.0f, 0, Animation_GetLastFrame(&D_06002C8C), 0, 0.0f);
     this->state = SHELLBLADE_WAIT_OPEN;
     this->actionFunc = EnSb_WaitOpen;
 }
 
 void EnSb_SetupLunge(EnSb* this) {
-    f32 frameCount = SkelAnime_GetFrameCount(&D_06000124.common);
+    f32 frameCount = Animation_GetLastFrame(&D_06000124);
     f32 playbackSpeed = this->actor.yDistToWater > 0.0f ? 1.0f : 0.0f;
 
-    SkelAnime_ChangeAnim(&this->skelAnime, &D_06000124, playbackSpeed, 0.0f, frameCount, 2, 0);
+    Animation_Change(&this->skelAnime, &D_06000124, playbackSpeed, 0.0f, frameCount, 2, 0);
     this->state = SHELLBLADE_LUNGE;
     this->actionFunc = EnSb_Lunge;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
 }
 
 void EnSb_SetupBounce(EnSb* this) {
-    SkelAnime_ChangeAnim(&this->skelAnime, &D_060000B4, 1.0f, 0, SkelAnime_GetFrameCount(&D_060000B4.common), 2, 0.0f);
+    Animation_Change(&this->skelAnime, &D_060000B4, 1.0f, 0, Animation_GetLastFrame(&D_060000B4), 2, 0.0f);
     this->state = SHELLBLADE_BOUNCE;
     this->actionFunc = EnSb_Bounce;
 }
 
 void EnSb_SetupIdle(EnSb* this, s32 changeSpeed) {
-    f32 frameCount = SkelAnime_GetFrameCount(&D_0600004C.common);
+    f32 frameCount = Animation_GetLastFrame(&D_0600004C);
 
     if (this->state != SHELLBLADE_WAIT_CLOSED) {
-        SkelAnime_ChangeAnim(&this->skelAnime, &D_0600004C, 1.0f, 0, frameCount, 2, 0.0f);
+        Animation_Change(&this->skelAnime, &D_0600004C, 1.0f, 0, frameCount, 2, 0.0f);
     }
     this->state = SHELLBLADE_WAIT_CLOSED;
     if (changeSpeed) {
@@ -216,9 +215,9 @@ void EnSb_Idle(EnSb* this, GlobalContext* globalCtx) {
 }
 
 void EnSb_Open(EnSb* this, GlobalContext* globalCtx) {
-    f32 currentFrame = this->skelAnime.animCurrentFrame;
+    f32 currentFrame = this->skelAnime.curFrame;
 
-    if (SkelAnime_GetFrameCount(&D_06000194.common) <= currentFrame) {
+    if (Animation_GetLastFrame(&D_06000194) <= currentFrame) {
         this->vulnerableTimer = 20;
         EnSb_SetupWaitOpen(this);
     } else {
@@ -281,8 +280,8 @@ void EnSb_Lunge(EnSb* this, GlobalContext* globalCtx) {
 
 void EnSb_Bounce(EnSb* this, GlobalContext* globalCtx) {
     s32 pad;
-    f32 currentFrame = currentFrame = this->skelAnime.animCurrentFrame;
-    f32 frameCount = frameCount = SkelAnime_GetFrameCount(&D_060000B4.common);
+    f32 currentFrame = currentFrame = this->skelAnime.curFrame;
+    f32 frameCount = frameCount = Animation_GetLastFrame(&D_060000B4);
 
     Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f);
     if (currentFrame == frameCount) {
@@ -384,7 +383,7 @@ void EnSb_Update(Actor* thisx, GlobalContext* globalCtx) {
             }
             CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         }
-        SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+        SkelAnime_Update(&this->skelAnime);
     }
 }
 
@@ -411,8 +410,8 @@ void EnSb_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s16 fireDecr;
 
     func_800B8050(&this->actor, globalCtx, 1);
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, NULL,
-                     EnSb_PostLimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          NULL, EnSb_PostLimbDraw, &this->actor);
     if (this->fireCount != 0) {
         this->actor.colorFilterTimer++;
         fireDecr = this->fireCount - 1;

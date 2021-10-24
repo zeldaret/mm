@@ -152,7 +152,7 @@ void EnPamera_Init(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f sp44;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 15.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06008448, &D_060005BC, this->limbDrawTbl, this->transitionDrawTbl,
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06008448, &D_060005BC, this->jointTable, this->morphTable,
                      PAMERA_LIMB_MAX);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -406,7 +406,7 @@ void EnPamera_LookDownWell(EnPamera* this) {
 
 void func_80BD8F60(EnPamera* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x3000, 0x1000);
-    if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         func_800BDC5C(&this->skelAnime, sAnimations, 2);
         this->actor.speedXZ = 3.0f;
         func_80BD93CC(this, 0, 0);
@@ -510,12 +510,12 @@ void func_80BD93CC(EnPamera* this, s16 arg1, s16 arg2) {
 void func_80BD93F4(EnPamera* this, GlobalContext* globalCtx) {
     if ((this->actionFunc == func_80BD8B70) || (this->actionFunc == func_80BD8DB0) ||
         (this->actionFunc == func_80BD8964) || (this->actionFunc == func_80BD8A7C)) {
-        if (this->skelAnime.animCurrentSeg == &D_06008AE0) {
-            if (func_801378B8(&this->skelAnime, 9.0f) || func_801378B8(&this->skelAnime, 18.0f)) {
+        if (this->skelAnime.animation == &D_06008AE0) {
+            if (Animation_OnFrame(&this->skelAnime, 9.0f) || Animation_OnFrame(&this->skelAnime, 18.0f)) {
                 Audio_PlayActorSound2(&this->actor, NA_SE_EV_PAMERA_WALK);
             }
-        } else if ((this->skelAnime.animCurrentSeg == &D_06008E38) &&
-                   (func_801378B8(&this->skelAnime, 2.0f) || func_801378B8(&this->skelAnime, 6.0f))) {
+        } else if ((this->skelAnime.animation == &D_06008E38) &&
+                   (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f))) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_PAMERA_WALK);
         }
     }
@@ -536,7 +536,7 @@ void EnPamera_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnPamera* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     func_80BD90AC(this, globalCtx);
     func_80BD9384(this, globalCtx);
     func_80BD94E0(this, globalCtx);
@@ -557,8 +557,10 @@ s32 EnPamera_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
 }
 
 void EnPamera_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    EnPamera* this = THIS;
+
     if (limbIndex == PAMERA_LIMB_HAIR) {
-        SysMatrix_MultiplyVector3fByState(&D_80BDA5F0, &thisx->focus.pos);
+        Matrix_MultiplyVector3fByState(&D_80BDA5F0, &this->actor.focus.pos);
     }
 }
 
@@ -570,8 +572,8 @@ void EnPamera_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(D_80BDA604[this->unk_312]));
     gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(D_80BDA610[this->unk_314]));
     gSPSegment(POLY_OPA_DISP++, 0x0A, SEGMENTED_TO_VIRTUAL(D_80BDA5FC[this->unk_310]));
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                     EnPamera_OverrideLimbDraw, EnPamera_PostLimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnPamera_OverrideLimbDraw, EnPamera_PostLimbDraw, &this->actor);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
@@ -775,13 +777,13 @@ void func_80BD9EE0(EnPamera* this) {
 
 void func_80BD9F3C(EnPamera* this, GlobalContext* globalCtx) {
     if (this->unk_31E == 1) {
-        if (func_801378B8(&this->skelAnime, 2.0f) || func_801378B8(&this->skelAnime, 6.0f) ||
-            func_801378B8(&this->skelAnime, 10.0f) || func_801378B8(&this->skelAnime, 14.0f) ||
-            func_801378B8(&this->skelAnime, 18.0f) || func_801378B8(&this->skelAnime, 22.0f) ||
-            func_801378B8(&this->skelAnime, 25.0f)) {
+        if (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f) ||
+            Animation_OnFrame(&this->skelAnime, 10.0f) || Animation_OnFrame(&this->skelAnime, 14.0f) ||
+            Animation_OnFrame(&this->skelAnime, 18.0f) || Animation_OnFrame(&this->skelAnime, 22.0f) ||
+            Animation_OnFrame(&this->skelAnime, 25.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_PAMERA_WALK);
         }
-        if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+        if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->unk_31E = 0;
             func_80BD93CC(this, 0, 0);
             func_800BDC5C(&this->skelAnime, sAnimations, 6);
@@ -808,7 +810,7 @@ void func_80BDA0A0(EnPamera* this) {
 
 void func_80BDA0FC(EnPamera* this, GlobalContext* globalCtx) {
     if (this->unk_31E == 1) {
-        if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+        if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->unk_31E = 0;
             func_80BD93CC(this, 0, 0);
             func_800BDC5C(&this->skelAnime, sAnimations, 6);
@@ -825,11 +827,11 @@ void func_80BDA170(EnPamera* this) {
 
 void func_80BDA1C8(EnPamera* this, GlobalContext* globalCtx) {
     if (this->unk_31E == 1) {
-        if (func_801378B8(&this->skelAnime, 2.0f) || func_801378B8(&this->skelAnime, 6.0f) ||
-            func_801378B8(&this->skelAnime, 10.0f) || func_801378B8(&this->skelAnime, 14.0f)) {
+        if (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f) ||
+            Animation_OnFrame(&this->skelAnime, 10.0f) || Animation_OnFrame(&this->skelAnime, 14.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_PAMERA_WALK);
         }
-        if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+        if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->unk_31E = 0;
             func_80BD93CC(this, 0, 0);
             func_800BDC5C(&this->skelAnime, sAnimations, 10);
@@ -846,7 +848,7 @@ void func_80BDA288(EnPamera* this) {
 
 void func_80BDA2E0(EnPamera* this, GlobalContext* globalCtx) {
     if (this->unk_31E == 1) {
-        if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+        if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->unk_31E = 0;
             func_800BDC5C(&this->skelAnime, sAnimations, 12);
         }
@@ -858,7 +860,7 @@ void func_80BDA344(Actor* thisx, GlobalContext* globalCtx) {
     EnPamera* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     func_80BD9384(this, globalCtx);
     if (func_80BD9CB8(this, globalCtx)) {
         // Pamela is outside

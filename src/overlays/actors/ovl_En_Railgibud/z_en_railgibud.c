@@ -220,7 +220,7 @@ void EnRailgibud_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 28.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_060053E8, &D_0600ABE0, this->jointTable, this->morphTable, 26);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060053E8, &D_0600ABE0, this->jointTable, this->morphTable, 26);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -354,7 +354,7 @@ void func_80BA5B64(EnRailgibud* this, GlobalContext* globalCtx) {
         this->unk_3F4--;
     }
 
-    if (func_801378B8(&this->skelAnime, 10.0f) || func_801378B8(&this->skelAnime, 22.0f)) {
+    if (Animation_OnFrame(&this->skelAnime, 10.0f) || Animation_OnFrame(&this->skelAnime, 22.0f)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_RIZA_WALK);
     } else if ((globalCtx->gameplayFrames & 95) == 0) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_CRY);
@@ -378,7 +378,7 @@ void func_80BA5E18(EnRailgibud* this, GlobalContext* globalCtx) {
     switch (this->unk_3F0) {
         case 0:
             sp34 = func_80BA7088(this, globalCtx);
-            if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) && (sp34 == 1)) {
+            if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) && (sp34 == 1)) {
                 this->unk_3F0 = 1;
                 func_800BDC5C(&this->skelAnime, sAnimations, 0);
             } else if (!(player->stateFlags2 & 0x80)) {
@@ -402,7 +402,7 @@ void func_80BA5E18(EnRailgibud* this, GlobalContext* globalCtx) {
                 this->unk_3F2++;
             }
 
-            if (func_801378B8(&this->skelAnime, 0.0f)) {
+            if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
                 Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_ATTACK);
             }
 
@@ -419,7 +419,7 @@ void func_80BA5E18(EnRailgibud* this, GlobalContext* globalCtx) {
             break;
 
         case 2:
-            if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+            if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                 this->unk_3F4 = 40;
                 this->actor.shape.yOffset = 0.0f;
                 func_80BA5AF0(this);
@@ -445,7 +445,7 @@ void func_80BA60B0(EnRailgibud* this, GlobalContext* globalCtx) {
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     Math_SmoothStepToS(&this->unk_3E2, 0, 1, 0x12C, 0);
     Math_SmoothStepToS(&this->unk_3E8, 0, 1, 0x12C, 0);
-    if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
         func_80BA6158(this);
     }
@@ -516,12 +516,12 @@ void func_80BA64AC(EnRailgibud* this, GlobalContext* globalCtx) {
         this->actor.speedXZ += 0.15f;
     }
 
-    if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         this->unk_405 = -1;
         this->actor.world.rot.y = this->actor.shape.rot.y;
         if ((this->unk_3F6 > 0) && (this->unk_404 == 0) && (this->unk_3F8 == 0)) {
             this->actor.hintId = 0x2A;
-            SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06010B88, NULL, this->jointTable, this->morphTable, 26);
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06010B88, NULL, this->jointTable, this->morphTable, 26);
             this->unk_3F8 = 1;
         }
         func_80BA6284(this);
@@ -584,7 +584,7 @@ void func_80BA66C8(EnRailgibud* this, GlobalContext* globalCtx) {
     }
 
     if ((this->unk_3F2 == 20) && (this->unk_3F6 > 0) && (this->unk_404 == 0) && (this->unk_3F8 == 0)) {
-        SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06010B88, NULL, this->jointTable, this->morphTable, 26);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06010B88, NULL, this->jointTable, this->morphTable, 26);
         this->unk_3F8 = 1;
     }
 }
@@ -912,7 +912,7 @@ void EnRailgibud_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80BA6DF8(this, globalCtx);
     this->actionFunc(this, globalCtx);
     if (this->actionFunc != func_80BA6604) {
-        SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+        SkelAnime_Update(&this->skelAnime);
     }
     func_80BA71E4(this, globalCtx);
     func_80BA76C4(this, globalCtx);
@@ -949,7 +949,7 @@ void EnRailgibud_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
         ((limbIndex == 3) || (limbIndex == 4) || (limbIndex == 6) || (limbIndex == 8) || (limbIndex == 9) ||
          (limbIndex == 11) || (limbIndex == 14) || (limbIndex == 16) || (limbIndex == 17) || (limbIndex == 18) ||
          (limbIndex == 20) || (limbIndex == 21) || (limbIndex == 22) || (limbIndex == 24) || (limbIndex == 25))) {
-        SysMatrix_GetStateTranslation(&this->unk_1D8[this->unk_28C]);
+        Matrix_GetStateTranslation(&this->unk_1D8[this->unk_28C]);
         this->unk_28C++;
     }
 }
@@ -966,18 +966,18 @@ void EnRailgibud_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, this->actor.shape.shadowAlpha);
         gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
 
-        POLY_OPA_DISP = SkelAnime_DrawSV2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
-                                          this->skelAnime.dListCount, EnRailgibud_OverrideLimbDraw,
-                                          EnRailgibud_PostLimbDraw, &this->actor, POLY_OPA_DISP);
+        POLY_OPA_DISP = SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                           this->skelAnime.dListCount, EnRailgibud_OverrideLimbDraw,
+                                           EnRailgibud_PostLimbDraw, &this->actor, POLY_OPA_DISP);
     } else {
         func_8012C2DC(globalCtx->state.gfxCtx);
 
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->actor.shape.shadowAlpha);
         gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
 
-        POLY_XLU_DISP = SkelAnime_DrawSV2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
-                                          this->skelAnime.dListCount, EnRailgibud_OverrideLimbDraw,
-                                          EnRailgibud_PostLimbDraw, &this->actor, POLY_XLU_DISP);
+        POLY_XLU_DISP = SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                           this->skelAnime.dListCount, EnRailgibud_OverrideLimbDraw,
+                                           EnRailgibud_PostLimbDraw, &this->actor, POLY_XLU_DISP);
     }
 
     if (this->unk_3F6 > 0) {
@@ -996,7 +996,7 @@ void func_80BA7B6C(EnRailgibud* this, GlobalContext* globalCtx) {
     this->actor.flags |= 0x100000;
     this->actor.flags |= 0x10;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 28.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_060053E8, &D_0600ABE0, this->jointTable, this->morphTable, 26);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060053E8, &D_0600ABE0, this->jointTable, this->morphTable, 26);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -1091,7 +1091,7 @@ s32 func_80BA7DC8(EnRailgibud* this, GlobalContext* globalCtx) {
                     func_800BDC5C(&this->skelAnime, sAnimations, 10);
                     break;
             }
-        } else if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+        } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             if (this->unk_3F0 == 15) {
                 this->unk_3F0 = 16;
                 func_800BDC5C(&this->skelAnime, sAnimations, 16);
@@ -1113,7 +1113,7 @@ s32 func_80BA7DC8(EnRailgibud* this, GlobalContext* globalCtx) {
                 break;
 
             case 5:
-                if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+                if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                     if (globalCtx->csCtx.frames < 280) {
                         Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_CRY);
                     } else {
@@ -1136,5 +1136,5 @@ void func_80BA8050(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
     func_80BA7DC8(this, globalCtx);
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
 }
