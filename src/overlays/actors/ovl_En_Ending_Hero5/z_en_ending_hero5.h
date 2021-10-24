@@ -10,8 +10,8 @@ typedef void (*EnEndingHero5ActionFunc)(struct EnEndingHero5*, GlobalContext*);
 typedef struct EnEndingHero5 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s limbDrawTable[17];
-    /* 0x1EE */ Vec3s transitionDrawTable[17];
+    /* 0x188 */ Vec3s jointTable[17];
+    /* 0x1EE */ Vec3s morphTable[17];
     /* 0x254 */ EnEndingHero5ActionFunc actionFunc;
     /* 0x258 */ u16 unk258;
     /* 0x25C */ s32 unk25C;
