@@ -210,7 +210,8 @@ s32 UnusedNPC_MoveForwards(UnusedNPC* unusedNPC, f32 speedTarget) {
     reachedEnd = false;
     Math_SmoothStepToF(&unusedNPC->actor.speedXZ, speedTarget, 0.4f, 1000.0f, 0.0f);
     rotStep = unusedNPC->actor.speedXZ * 400.0f;
-    if (func_8013D68C(unusedNPC->path, unusedNPC->curPoint, &curPointPos) && func_8013D768(&unusedNPC->actor, &curPointPos, rotStep)) {
+    if (func_8013D68C(unusedNPC->path, unusedNPC->curPoint, &curPointPos) &&
+        func_8013D768(&unusedNPC->actor, &curPointPos, rotStep)) {
         unusedNPC->curPoint++;
         if (unusedNPC->curPoint >= unusedNPC->path->count) {
             reachedEnd = true;
@@ -227,7 +228,8 @@ s32 UnusedNPC_MoveBackwards(UnusedNPC* unusedNPC, f32 speedTarget) {
     reachedEnd = false;
     Math_SmoothStepToF(&unusedNPC->actor.speedXZ, speedTarget, 0.4f, 1000.0f, 0.0f);
     rotStep = unusedNPC->actor.speedXZ * 400.0f;
-    if (func_8013D68C(unusedNPC->path, unusedNPC->curPoint, &curPointPos) && func_8013D768(&unusedNPC->actor, &curPointPos, rotStep)) {
+    if (func_8013D68C(unusedNPC->path, unusedNPC->curPoint, &curPointPos) &&
+        func_8013D768(&unusedNPC->actor, &curPointPos, rotStep)) {
         unusedNPC->curPoint--;
         if (unusedNPC->curPoint < 0) {
             reachedEnd = true;
