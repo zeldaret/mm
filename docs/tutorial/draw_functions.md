@@ -128,7 +128,7 @@ And this matches.
 
 The last two functions in the actor are used as arguments in `func_801343C0`. This is a `SkelAnime` function, except unlike the OoT ones, it has three function callback arguments instead of two: in `functions.h` or `z_skelanime.c`, we find
 ```C
-void func_801343C0(GlobalContext* globalCtx, void** skeleton, Vec3s* limbDrawTable, s32 dListCount,
+void func_801343C0(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount,
                    OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, UnkActorDraw unkDraw, Actor* actor)
 ```
 The typedefs of the callbacks it uses are in `z64animation.h`:
