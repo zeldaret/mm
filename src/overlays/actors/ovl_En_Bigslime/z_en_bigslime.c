@@ -1572,7 +1572,7 @@ void EnBigslime_CutsceneGrabPlayer(EnBigslime* this, GlobalContext* globalCtx) {
 
             // loop over x, y, z
             for (j = 0; j < 3; j++) {
-                // Linearly interpolate dynamicVtx to staticVtx
+                // Linearly interpolate dynamicVtx --> staticVtx
                 dynamicVtx->n.ob[j] +=
                     (s16)((sBigslimeStaticVtx[i].n.ob[j] - dynamicVtx->n.ob[j]) * invgrabPlayerTimer);
             }
@@ -1720,7 +1720,7 @@ void EnBigslime_WindupThrowPlayer(EnBigslime* this, GlobalContext* globalCtx) {
         scale = cos_rad(this->windupPunchTimer * (M_PI / 27)) + 1.0f;
         player->actor.world.pos.y = this->actor.world.pos.y + (this->actor.scale.y * -500.0f);
 
-        // Linearly interpolate gekkoRot.y to this->actor.world.rot.y
+        // Linearly interpolate gekkoRot.y --> this->actor.world.rot.y
         this->gekkoRot.y += (s16)((s16)(this->actor.world.rot.y - this->gekkoRot.y) * invWindupPunchTimer);
         this->gekkoPosOffset.x = Math_SinS(this->gekkoRot.y) * -50.0f;
         this->gekkoPosOffset.z = Math_CosS(this->gekkoRot.y) * -50.0f;
@@ -1764,7 +1764,7 @@ void EnBigslime_WindupThrowPlayer(EnBigslime* this, GlobalContext* globalCtx) {
             if (this->windupPunchTimer > 0) {
                 // loop over x, y, z
                 for (j = 0; j < 3; j++) {
-                    // Linearly interpolate dynamicVtx to [staticVtx * (1 - scale * vtxSurfacePerturbation)]
+                    // Linearly interpolate dynamicVtx --> staticVtx * (1 - scale * vtxSurfacePerturbation)
                     dynamicVtx->n.ob[j] += (s16)(((s32)(staticVtx->n.ob[j] - (s32)((scale * staticVtx->n.ob[j]) *
                                                                                    this->vtxSurfacePerturbation[i])) -
                                                   dynamicVtx->n.ob[j]) *
@@ -1781,7 +1781,7 @@ void EnBigslime_WindupThrowPlayer(EnBigslime* this, GlobalContext* globalCtx) {
         } else if (this->windupPunchTimer > 0) {
             // loop over x, y, z
             for (j = 0; j < 3; j++) {
-                // Linearly interpolate dynamicVtx to staticVtx
+                // Linearly interpolate dynamicVtx --> staticVtx
                 dynamicVtx->n.ob[j] += (s16)((staticVtx->n.ob[j] - dynamicVtx->n.ob[j]) * invWindupPunchTimer);
             }
         }
@@ -1815,7 +1815,7 @@ void EnBigslime_SetDynamicVtxThrowPlayer(EnBigslime* this, GlobalContext* global
 
             // loop over x, y, z
             for (j = 0; j < 3; j++) {
-                // Linearly interpolate dynamicVtx to targetVtx
+                // Linearly interpolate dynamicVtx --> targetVtx
                 dynamicVtx->n.ob[j] += (s16)((targetVtx->n.ob[j] - dynamicVtx->n.ob[j]) * invThrowPlayerTimer);
             }
         }
