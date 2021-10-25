@@ -4428,30 +4428,25 @@ extern Gfx D_040506E0[];
 
 // has lots of gfx macros and a switch
 #ifdef NON_EQUIVALENT
+// Maybe equivalent (?)
 void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s16 arg3, f32 arg4, f32 arg5, f32 arg6, u8 mode) {
-    f32 sp124;
-    f32 sp120;
-    f32 sp11C;
-    f32 sp118;
-    f32 sp74;
-    u32 sp110;
-    MtxF* temp_s3;
-    f32 temp_f0;
-    f32 temp_f0_2;
-    f32 temp_f2;
-    f32 temp_f2_2;
-    s32 temp_v1_3;
-    f32 phi_f2;
-    f32 phi_f2_2;
-    f32 phi_f2_3;
-    f32 phi_f2_4;
-    f32 phi_f2_5;
-    f32 phi_f2_6;
-    s16 i;
-
     if (arg6 > 0.001f) {
+        f32 temp_f0;
+        s32 temp_v1_3;
+        f32 phi_f2;
+        f32 temp_f2;
+        f32 sp124;
+        f32 sp120;
+        f32 sp11C;
+        f32 sp118;
+        MtxF* temp_s3;
+        u32 sp110;
+        s16 i;
+        f32 sp74;
+
         sp110 = globalCtx->gameplayFrames;
         temp_s3 = Matrix_GetCurrentState();
+
         if ((actor != NULL) && (arg6 > 0.05f) && (globalCtx->gameOverCtx.state == 0)) {
             if (mode == 0) {
                 Audio_PlayActorSound2(actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
@@ -4497,25 +4492,27 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s16 a
 
             sp74 = arg6 * 255.0f;
             for (i = 0; i < arg3; i++) {
-                temp_f0 = 30.0f * (f32) (i & 3);
+                //temp_f0 = 30.0f * (f32) (i & 3);
+                temp_f0 = (f32) (i & 3);
+                temp_f0 = 30.0f * temp_f0;
+
                 phi_f2 = sp74 - temp_f0;
                 if (sp74 < temp_f0) {
                     phi_f2 = 0.0f;
                 }
-                phi_f2_2 = phi_f2;
                 if (phi_f2 > 255.0f) {
-                    phi_f2_2 = 255.0f;
+                    phi_f2 = 255.0f;
                 }
 
                 #if 0
                 temp_v1 = temp_s0->polyXlu.p;
                 temp_s0->polyXlu.p = temp_v1 + 8;
                 temp_v1->words.w0 = 0xFB000000;
-                temp_f18 = (s32) phi_f2_2;
+                temp_f18 = (s32) phi_f2;
                 #if 0
                 if ((MIPS2C_ERROR(cfc1) & 0x78) != 0) {
                     if ((MIPS2C_ERROR(cfc1) & 0x78) == 0) {
-                        phi_t3 = (s32) (phi_f2_2 - 2.1474836e9f) | 0x80000000;
+                        phi_t3 = (s32) (phi_f2 - 2.1474836e9f) | 0x80000000;
                     } else {
                         goto block_24;
                     }
@@ -4529,7 +4526,7 @@ block_24:
                 #endif
                 temp_v1->words.w1 = (((gGameInfo->data[1270] + 0xFF) & 0xFF) << 8) | ((gGameInfo->data[1268] + 0xC8) << 0x18) | (((gGameInfo->data[1269] + 0xC8) & 0xFF) << 0x10) | (phi_t3 & 0xFF);
                 #endif
-                gDPSetEnvColor(POLY_XLU_DISP++, (gGameInfo->data[1268] + 0xC8), (gGameInfo->data[1269] + 0xC8), (gGameInfo->data[1270] + 0xFF), (u8)phi_f2_2);
+                gDPSetEnvColor(POLY_XLU_DISP++, (gGameInfo->data[1268] + 0xC8), (gGameInfo->data[1269] + 0xC8), (gGameInfo->data[1270] + 0xFF), (u8)phi_f2);
 
                 Matrix_InsertTranslation(limbPos->x, limbPos->y, limbPos->z, 0);
                 Matrix_Scale(sp124, sp124, sp124, 1);
@@ -4575,17 +4572,17 @@ block_24:
             gSPDisplayList(POLY_XLU_DISP++, D_04051180);
 
             temp_f2 = arg6 * 100.0f;
-            phi_f2_3 = temp_f2;
+            phi_f2 = temp_f2;
             if (temp_f2 > 100.0f) {
-                phi_f2_3 = 100.0f;
+                phi_f2 = 100.0f;
             }
-            //phi_f2_3 = CLAMP_MIN(temp_f2, 100.0f);
+            //phi_f2 = CLAMP_MIN(temp_f2, 100.0f);
 
             //temp_v1_2 = temp_s0->polyXlu.p;
             //temp_s0->polyXlu.p = temp_v1_2 + 8;
             //temp_v1_2->words.w0 = 0xFA000000;
-            //temp_v1_2->words.w1 = ((u32) phi_f2_3 & 0xFF) | 0xC3E1EB00;
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 195, 225, 235, (u8) phi_f2_3);
+            //temp_v1_2->words.w1 = ((u32) phi_f2 & 0xFF) | 0xC3E1EB00;
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 195, 225, 235, (u8) phi_f2);
 
             temp_s3 = &globalCtx->mf_187FC;
 
@@ -4652,25 +4649,28 @@ block_24:
             sp74 = arg6 * 255.0f;
 
             for (i = 0; i < arg3; i++) {
-                temp_f0_2 = 30.0f * (i & 3);
-                phi_f2_4 = sp74 - temp_f0_2;
-                if (sp74 < temp_f0_2) {
-                    phi_f2_4 = 0.0f;
+                //temp_f0 = 30.0f * (i & 3);
+                temp_f0 = (i & 3);
+                temp_f0 = 30.0f * temp_f0;
+
+                phi_f2 = sp74 - temp_f0;
+                if (sp74 < temp_f0) {
+                    phi_f2 = 0.0f;
                 }
-                phi_f2_5 = phi_f2_4;
-                if (phi_f2_4 > 255.0f) {
-                    phi_f2_5 = 255.0f;
+                phi_f2 = phi_f2;
+                if (phi_f2 > 255.0f) {
+                    phi_f2 = 255.0f;
                 }
 
                 #if 0
                 temp_v1_4 = temp_s0->polyXlu.p;
-                temp_f18_2 = (s32) phi_f2_5;
+                temp_f18_2 = (s32) phi_f2;
                 temp_s0->polyXlu.p = temp_v1_4 + 8;
                 temp_v1_4->words.w0 = 0xFA008080;
                 #if 0
                 if ((MIPS2C_ERROR(cfc1) & 0x78) != 0) {
                     if ((MIPS2C_ERROR(cfc1) & 0x78) == 0) {
-                        phi_t4 = (s32) (phi_f2_5 - 2.1474836e9f) | 0x80000000;
+                        phi_t4 = (s32) (phi_f2 - 2.1474836e9f) | 0x80000000;
                     } else {
                         goto block_50;
                     }
@@ -4684,7 +4684,7 @@ block_50:
                 #endif
                 temp_v1_4->words.w1 = ((phi_s7 & 0xFF) << 8) | 0xFFFF0000 | (phi_t4 & 0xFF);
                 #endif
-                gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, (mode), (u8)phi_f2_5);
+                gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, (mode), (u8)phi_f2);
 
 
                 //temp_v0_14 = temp_s0->polyXlu.p;
@@ -4725,18 +4725,17 @@ block_50:
             //temp_v0_17->words.w0 = 0xDE000000;
             gSPDisplayList(POLY_XLU_DISP++, D_04023348);
 
-            temp_f2_2 = arg6 * 255.0f;
-            phi_f2_6 = temp_f2_2;
-            if (temp_f2_2 > 255.0f) {
-                phi_f2_6 = 255.0f;
+            phi_f2 = arg6 * 255.0f;
+            if (phi_f2 > 255.0f) {
+                phi_f2 = 255.0f;
             }
 
             if (mode == 0x15) {
                 //temp_v1_5 = temp_s0->polyXlu.p;
                 //temp_s0->polyXlu.p = temp_v1_5 + 8;
                 //temp_v1_5->words.w0 = 0xFA000000;
-                //temp_v1_5->words.w1 = (((gGameInfo->data[1554] + 0xFF) & 0xFF) << 8) | ((gGameInfo->data[1552] + 0xFF) << 0x18) | (((gGameInfo->data[1553] + 0xFF) & 0xFF) << 0x10) | ((u32) phi_f2_6 & 0xFF);
-                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)(gGameInfo->data[1552] + 0xFF), (u8)(gGameInfo->data[1553] + 0xFF), (u8)(gGameInfo->data[1554] + 0xFF), (u8)phi_f2_6);
+                //temp_v1_5->words.w1 = (((gGameInfo->data[1554] + 0xFF) & 0xFF) << 8) | ((gGameInfo->data[1552] + 0xFF) << 0x18) | (((gGameInfo->data[1553] + 0xFF) & 0xFF) << 0x10) | ((u32) phi_f2 & 0xFF);
+                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)(gGameInfo->data[1552] + 0xFF), (u8)(gGameInfo->data[1553] + 0xFF), (u8)(gGameInfo->data[1554] + 0xFF), (u8)phi_f2);
 
                 //temp_v0_18 = temp_s0->polyXlu.p;
                 //temp_s0->polyXlu.p = temp_v0_18 + 8;
@@ -4748,13 +4747,13 @@ block_50:
 
             } else {
                 //temp_v1_6 = temp_s0->polyXlu.p;
-                //temp_f8 = (s32) phi_f2_6;
+                //temp_f8 = (s32) phi_f2;
                 //temp_s0->polyXlu.p = temp_v1_6 + 8;
                 //temp_v1_6->words.w0 = 0xFA000000;
                 //#if 0
                 //if ((MIPS2C_ERROR(cfc1) & 0x78) != 0) {
                 //    if ((MIPS2C_ERROR(cfc1) & 0x78) == 0) {
-                //        phi_t4_2 = (s32) (phi_f2_6 - 2.1474836e9f) | 0x80000000;
+                //        phi_t4_2 = (s32) (phi_f2 - 2.1474836e9f) | 0x80000000;
                 //    } else {
                 //        goto block_61;
                 //    }
@@ -4767,7 +4766,7 @@ block_50:
                 //}
                 //#endif
                 //temp_v1_6->words.w1 = (phi_t4_2 & 0xFF) | ~0x37FF;
-                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0xFF, 0xFF, 0xC8, (u8)phi_f2_6);
+                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0xFF, 0xFF, 0xC8, (u8)phi_f2);
 
                 if (1) {}
 
@@ -4859,8 +4858,8 @@ block_50:
                     temp_s3->mf[3][0] = randPlusMinusPoint5Scaled((f32) gGameInfo->data[1560] + 30.0f) + limbPos->x;
                     temp_s3->mf[3][1] = randPlusMinusPoint5Scaled((f32) gGameInfo->data[1560] + 30.0f) + limbPos->y;
                     //temp_s3->mf[3][2] = randPlusMinusPoint5Scaled((f32) gGameInfo->data[1560] + 30.0f) + limbPos->z;
-                    phi_f2_2 = randPlusMinusPoint5Scaled(((f32) gGameInfo->data[1560]) + 30.0f) + limbPos->z;
-                    temp_s3->mf[3][2] = phi_f2_2;
+                    phi_f2 = randPlusMinusPoint5Scaled(((f32) gGameInfo->data[1560]) + 30.0f) + limbPos->z;
+                    temp_s3->mf[3][2] = phi_f2;
 
                     //temp_v0_26 = temp_s0->polyXlu.p;
                     //temp_s0->polyXlu.p = temp_v0_26 + 8;
