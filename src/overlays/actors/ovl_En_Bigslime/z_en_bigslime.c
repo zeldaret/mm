@@ -1773,7 +1773,7 @@ void EnBigslime_WindupThrowPlayer(EnBigslime* this, GlobalContext* globalCtx) {
             } else {
                 // loop over x, y, z
                 for (j = 0; j < 3; j++) {
-                    // Directly set dynamicVtx to [staticVtx * (1 - scale * vtxSurfacePerturbation)]
+                    // Directly set dynamicVtx --> staticVtx * (1 - scale * vtxSurfacePerturbation)
                     dynamicVtx->n.ob[j] =
                         staticVtx->n.ob[j] - (s32)((scale * staticVtx->n.ob[j]) * this->vtxSurfacePerturbation[i]);
                 }
