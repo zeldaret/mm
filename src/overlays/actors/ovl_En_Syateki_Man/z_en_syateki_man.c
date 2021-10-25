@@ -141,9 +141,11 @@ void EnSyatekiMan_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetMode = 1;
     Actor_SetScale(&this->actor, 0.01f);
     if (globalCtx->sceneNum == SCENE_SYATEKI_MORI) {
-        SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600E7D0, &D_0600DFEC, this->jointTable, this->morphTable, 16);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600E7D0, &D_0600DFEC, this->jointTable, this->morphTable,
+                           16);
     } else {
-        SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600E7D0, &D_0600D9D0, this->jointTable, this->morphTable, 16);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600E7D0, &D_0600D9D0, this->jointTable, this->morphTable,
+                           16);
     }
 
     this->actor.colChkInfo.cylRadius = 100;
@@ -175,7 +177,7 @@ void EnSyatekiMan_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 func_809C6720(GlobalContext* globalCtx, Vec3f arg1) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     f32 sp28;
     f32 phi_f0;
     s16 sp22 = Math_Vec3f_Yaw(&player->actor.world.pos, &arg1);
@@ -209,7 +211,7 @@ void func_809C6810(EnSyatekiMan* this, GlobalContext* globalCtx) {
 }
 
 void func_809C6848(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (func_800B84D0(&this->actor, globalCtx)) {
         u16 sp22;
@@ -257,7 +259,7 @@ void func_809C6848(EnSyatekiMan* this, GlobalContext* globalCtx) {
 }
 
 void func_809C6A04(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (func_80147624(globalCtx)) {
         if (globalCtx->msgCtx.choiceIndex == 0) {
@@ -314,7 +316,7 @@ void func_809C6A04(EnSyatekiMan* this, GlobalContext* globalCtx) {
 }
 
 void func_809C6C2C(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (func_80147624(globalCtx)) {
         switch (this->unk_284) {
@@ -373,7 +375,7 @@ void func_809C6C2C(EnSyatekiMan* this, GlobalContext* globalCtx) {
 }
 
 void func_809C6E30(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (player->stateFlags1 & 0x20) {
         player->stateFlags1 |= 0x20;
@@ -415,8 +417,8 @@ void func_809C6E30(EnSyatekiMan* this, GlobalContext* globalCtx) {
             break;
     }
 
-    if (this->skelAnime.animCurrentSeg == &D_0600D2F8) {
-        if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+    if (this->skelAnime.animation == &D_0600D2F8) {
+        if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             func_800BDC5C(&this->skelAnime, sAnimations, 0);
         }
     }
@@ -524,7 +526,7 @@ void func_809C72D8(EnSyatekiMan* this, GlobalContext* globalCtx) {
 }
 
 void func_809C7380(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (func_80147624(globalCtx)) {
         if (globalCtx->msgCtx.choiceIndex == 0) {
@@ -587,7 +589,7 @@ void func_809C7380(EnSyatekiMan* this, GlobalContext* globalCtx) {
 }
 
 void func_809C7620(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (func_80147624(globalCtx)) {
         switch (this->unk_284) {
@@ -707,7 +709,7 @@ void func_809C7620(EnSyatekiMan* this, GlobalContext* globalCtx) {
 }
 
 void func_809C7990(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (player->stateFlags1 & 0x20) {
         player->stateFlags1 |= 0x20;
@@ -749,7 +751,7 @@ void func_809C7990(EnSyatekiMan* this, GlobalContext* globalCtx) {
 }
 
 void func_809C7A90(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (Actor_HasParent(&this->actor, globalCtx)) {
         if (!(gSaveContext.weekEventReg[59] & 0x10)) {
@@ -778,7 +780,7 @@ void func_809C7A90(EnSyatekiMan* this, GlobalContext* globalCtx) {
 }
 
 void func_809C7C14(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (func_800B84D0(&this->actor, globalCtx)) {
         if ((CURRENT_DAY == 3) && (gSaveContext.time > CLOCK_TIME(12, 00))) {
@@ -799,7 +801,7 @@ void func_809C7C14(EnSyatekiMan* this, GlobalContext* globalCtx) {
 }
 
 void func_809C7D14(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (Actor_HasParent(&this->actor, globalCtx)) {
         if (this->unk_284 == 0x407) {
@@ -836,7 +838,7 @@ void func_809C7D14(EnSyatekiMan* this, GlobalContext* globalCtx) {
 }
 
 void func_809C7EB4(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (CURRENT_DAY != 3) {
         if ((func_80152498(&globalCtx->msgCtx) == 6) && func_80147624(globalCtx)) {
@@ -861,7 +863,7 @@ void func_809C7EB4(EnSyatekiMan* this, GlobalContext* globalCtx) {
 }
 
 void func_809C7FFC(EnSyatekiMan* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (func_809C6720(globalCtx, D_809C9474)) {
         player->stateFlags1 |= 0x20;
@@ -880,7 +882,7 @@ void func_809C7FFC(EnSyatekiMan* this, GlobalContext* globalCtx) {
 
 void func_809C80C0(EnSyatekiMan* this, GlobalContext* globalCtx) {
     static s16 D_809C9498 = 30;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (D_809C9498 > 0) {
         player->actor.world.pos = D_809C9474;
@@ -910,7 +912,7 @@ void func_809C80C0(EnSyatekiMan* this, GlobalContext* globalCtx) {
 
 void func_809C81D0(EnSyatekiMan* this, GlobalContext* globalCtx) {
     static s16 D_809C949C = 0;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (((this->unk_272 == 0) || (this->unk_26C > 140)) && (D_809C949C == 0) && (this->unk_27C < 4)) {
         D_809C949C = 1;
@@ -1020,7 +1022,7 @@ void func_809C8488(EnSyatekiMan* this, GlobalContext* globalCtx) {
 
 void func_809C8610(EnSyatekiMan* this, GlobalContext* globalCtx) {
     static s32 D_809C94A0 = 0;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     player->stateFlags1 |= 0x20;
     if (globalCtx->interfaceCtx.unk_286 == 0) {
@@ -1067,7 +1069,7 @@ void func_809C8710(EnSyatekiMan* this, GlobalContext* globalCtx) {
 
 void func_809C8808(EnSyatekiMan* this, GlobalContext* globalCtx) {
     static s16 D_809C94A4 = 30;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (D_809C94A4 == 30) {
         if (player->transformation == PLAYER_FORM_FIERCE_DEITY) {
@@ -1104,7 +1106,7 @@ void func_809C898C(EnSyatekiMan* this, GlobalContext* globalCtx) {
         0x00026984, 0x00012852, 0x00011999, 0x00022895, 0x0000056A, 0x0002A451, 0x00004115,
     };
     static s32 D_809C94A8 = 0;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 sp30;
     s32 pad;
     u64 sp20;
@@ -1239,7 +1241,7 @@ void EnSyatekiMan_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.focus.pos.y = 70.0f;
     Actor_SetHeight(&this->actor, 70.0f);
     if (this->unk_26A != 1) {
-        SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+        SkelAnime_Update(&this->skelAnime);
         func_800E9250(globalCtx, &this->actor, &this->unk_258, &this->unk_25E, this->actor.focus.pos);
     }
 }
@@ -1253,12 +1255,12 @@ s32 EnSyatekiMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx**
     }
 
     if (limbIndex == 15) {
-        SysMatrix_InsertTranslation(3000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        SysMatrix_InsertZRotation_s(this->unk_258.x, MTXMODE_APPLY);
-        SysMatrix_InsertXRotation_s(this->unk_258.y, MTXMODE_APPLY);
-        SysMatrix_InsertTranslation(-3000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_InsertTranslation(3000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(this->unk_258.x, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(this->unk_258.y, MTXMODE_APPLY);
+        Matrix_InsertTranslation(-3000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     } else if (limbIndex == 8) {
-        SysMatrix_InsertXRotation_s(-this->unk_25E.y, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(-this->unk_25E.y, MTXMODE_APPLY);
     }
 
     return false;
@@ -1269,7 +1271,7 @@ void EnSyatekiMan_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
     Vec3f sp18 = { 1600.0f, 0.0f, 0.0f };
 
     if (limbIndex == 15) {
-        SysMatrix_MultiplyVector3fByState(&sp18, &this->actor.focus.pos);
+        Matrix_MultiplyVector3fByState(&sp18, &this->actor.focus.pos);
     }
 }
 
@@ -1299,7 +1301,7 @@ void EnSyatekiMan_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_809C94B8[this->unk_264]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_809C94B8[this->unk_264]));
 
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                      EnSyatekiMan_OverrideLimbDraw, EnSyatekiMan_PostLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);

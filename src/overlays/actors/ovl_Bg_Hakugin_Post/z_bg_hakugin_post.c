@@ -234,7 +234,7 @@ BgHakuginPostUnkStruct1* func_80A9B32C(BgHakuginPostUnkStruct* unkStruct, BgHaku
 }
 
 void func_80A9B384(Vec3f* arg0) {
-    MtxF* matrix = SysMatrix_GetCurrentState();
+    MtxF* matrix = Matrix_GetCurrentState();
 
     matrix->mf[3][0] = arg0->x;
     matrix->mf[3][1] = arg0->y;
@@ -523,8 +523,8 @@ void func_80A9C058(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
                 sp44.x = this->dyna.actor.home.pos.x + unkStruct1->unk_14.x;
                 sp44.y = this->unk_16C + unkStruct1->unk_14.y;
                 sp44.z = this->dyna.actor.home.pos.z + unkStruct1->unk_14.z;
-                func_8013ECE0(Math3D_DistanceSquared(&sp44, &PLAYER->actor.world.pos), 255, 20, 150);
-                quake = Quake_Add(ACTIVE_CAM, 3);
+                func_8013ECE0(Math3D_DistanceSquared(&sp44, &GET_PLAYER(globalCtx)->actor.world.pos), 255, 20, 150);
+                quake = Quake_Add(GET_ACTIVE_CAM(globalCtx), 3);
                 Quake_SetSpeed(quake, 20000);
                 Quake_SetQuakeValues(quake, 7, 0, 0, 0);
                 Quake_SetCountdown(quake, 12);
@@ -540,8 +540,8 @@ void func_80A9C058(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
 
 void func_80A9C18C(BgHakuginPost* this, GlobalContext* globalCtx) {
     s32 pad;
-    Player* player = PLAYER;
-    Camera* activeCam = ACTIVE_CAM;
+    Player* player = GET_PLAYER(globalCtx);
+    Camera* activeCam = GET_ACTIVE_CAM(globalCtx);
     s16 quake;
 
     func_8013ECE0(Math3D_XZDistanceSquared(player->actor.world.pos.x, player->actor.world.pos.z,
@@ -814,7 +814,7 @@ void func_80A9CE00(BgHakuginPost* this) {
 
 void func_80A9CE1C(BgHakuginPost* this, GlobalContext* globalCtx) {
     s32 pad;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     ColliderCylinder* collider;
     s32 yDiff;
     s32 i;
@@ -1013,8 +1013,8 @@ void func_80A9D61C(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    SysMatrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                             this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
     Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
 
     for (i = 0; i < D_80A9E028.count; i++) {
@@ -1035,8 +1035,8 @@ void func_80A9D61C(Actor* thisx, GlobalContext* globalCtx) {
         for (i = 0; i < ARRAY_COUNT(D_80A9E028.unk_02A4); i++) {
             unkStruct2 = &D_80A9E028.unk_02A4[i];
             if (unkStruct2->unk_2C > 0) {
-                SysMatrix_SetStateRotationAndTranslation(unkStruct2->unk_04.x, unkStruct2->unk_04.y,
-                                                         unkStruct2->unk_04.z, &unkStruct2->unk_20);
+                Matrix_SetStateRotationAndTranslation(unkStruct2->unk_04.x, unkStruct2->unk_04.y, unkStruct2->unk_04.z,
+                                                      &unkStruct2->unk_20);
                 Matrix_Scale(unkStruct2->unk_00, unkStruct2->unk_00, unkStruct2->unk_00, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),

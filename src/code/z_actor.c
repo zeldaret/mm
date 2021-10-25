@@ -53,7 +53,7 @@ void ActorShadow_Draw(Actor* actor, Lights* lights, GlobalContext* globalCtx, Gf
             }
 
             func_800C0094(actor->floorPoly, actor->world.pos.x, actor->floorHeight, actor->world.pos.z, &mtx);
-            SysMatrix_SetCurrentState(&mtx);
+            Matrix_SetCurrentState(&mtx);
 
             if (dlist != D_04076BC0) {
                 Matrix_RotateY((f32)actor->shape.rot.y * (M_PI / 32768), MTXMODE_APPLY);
@@ -117,7 +117,7 @@ void func_800B40E0(GlobalContext* globalCtx, Light* light, MtxF* arg2, s32 arg3,
     sp58 = Math_FAtan2F(light->l.dir[0], light->l.dir[2]);
     arg6 *= (4.5f - (light->l.dir[1] * 0.035f));
     arg6 = (arg6 < 1.0f) ? 1.0f : arg6;
-    SysMatrix_SetCurrentState(arg2);
+    Matrix_SetCurrentState(arg2);
     Matrix_RotateY(sp58, MTXMODE_APPLY);
     Matrix_Scale(arg5, 1.0f, arg5 * arg6, MTXMODE_APPLY);
 
@@ -744,7 +744,7 @@ void Actor_FreeOverlay(ActorOverlay* entry) {
                 if ((entry->allocType & 1) != 0) {
                     entry->loadedRamAddr = NULL;
                 } else {
-                    zelda_free(ramAddr);
+                    ZeldaArena_Free(ramAddr);
                     entry->loadedRamAddr = NULL;
                 }
             }

@@ -6657,7 +6657,7 @@ s32 Camera_Special9(Camera *camera) {
 /*===============================================================*/
 
 Camera* Camera_Create(View *view, CollisionContext *colCtx, GlobalContext *globalCtx) {
-    Camera* newCamera = zelda_malloc(sizeof(*newCamera));
+    Camera* newCamera = ZeldaArena_Malloc(sizeof(*newCamera));
 
     if (newCamera != NULL) {
         Camera_Init(newCamera, view, colCtx, globalCtx);
@@ -6667,7 +6667,7 @@ Camera* Camera_Create(View *view, CollisionContext *colCtx, GlobalContext *globa
 
 void Camera_Destroy(Camera* camera) {
     if (camera != NULL) {
-        zelda_free(camera);
+        ZeldaArena_Free(camera);
     }
 }
 

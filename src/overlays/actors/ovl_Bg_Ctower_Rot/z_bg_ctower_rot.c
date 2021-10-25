@@ -59,7 +59,7 @@ void BgCtowerRot_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actionFunc = BgCtowerRot_CorridorRotate;
         return;
     }
-    player = PLAYER;
+    player = GET_PLAYER(globalCtx);
     if (this->dyna.actor.params == MAIN_DOOR) {
         BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06017410);
         this->dyna.actor.world.rot.y = this->dyna.actor.shape.rot.y + 0x4000;
@@ -85,7 +85,7 @@ void BgCtowerRot_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgCtowerRot_CorridorRotate(BgCtowerRot* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Vec3f offset;
     f32 rotZ;
     f32 offsetDiffZ;
@@ -128,7 +128,7 @@ void BgCtowerRot_DoorClose(BgCtowerRot* this, GlobalContext* globalCtx) {
 }
 
 void BgCtowerRot_DoorIdle(BgCtowerRot* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Vec3f offset;
 
     Actor_CalcOffsetOrientedToDrawRotation(&this->dyna.actor, &offset, &player->actor.world.pos);

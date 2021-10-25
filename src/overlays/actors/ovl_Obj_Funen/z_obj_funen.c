@@ -30,7 +30,7 @@ void ObjFunen_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C2DC(globalCtx->state.gfxCtx);
-    Matrix_RotateY((s16)(Camera_GetCamDirYaw(ACTIVE_CAM) - 0x8000), 1);
+    Matrix_RotateY((s16)(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) - 0x8000), 1);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
 
