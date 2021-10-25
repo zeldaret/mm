@@ -65,7 +65,7 @@ void EnMuto_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 40.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06007150, &D_06000E50, this->jointTable, this->morphTable, 17);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06007150, &D_06000E50, this->jointTable, this->morphTable, 17);
 
     this->isInMayorsRoom = this->actor.params;
     if (!this->isInMayorsRoom) {
@@ -105,9 +105,9 @@ void EnMuto_ChangeAnim(EnMuto* this, s32 animIndex) {
     static u8 sAnimationModes[] = { 0, 2 };
 
     this->animIndex = animIndex;
-    this->frameIndex = SkelAnime_GetFrameCount(&sAnimations[animIndex]->common);
-    SkelAnime_ChangeAnim(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->frameIndex,
-                         sAnimationModes[this->animIndex], -4.0f);
+    this->frameIndex = Animation_GetLastFrame(&sAnimations[animIndex]->common);
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->frameIndex,
+                     sAnimationModes[this->animIndex], -4.0f);
 }
 
 void EnMuto_SetHeadRotation(EnMuto* this) {
@@ -215,26 +215,26 @@ void EnMuto_InDialogue(EnMuto* this, GlobalContext* globalCtx) {
 
     if (this->targetActor == &this->actor) {
         this->yawTowardsTarget = this->actor.world.rot.y;
-        if (this->skelAnime.animPlaybackSpeed == 0.0f) {
-            this->skelAnime.animPlaybackSpeed = 1.0f;
+        if (this->skelAnime.playSpeed == 0.0f) {
+            this->skelAnime.playSpeed = 1.0f;
         }
     } else {
-        f32 frameIndex = this->skelAnime.animCurrentFrame;
+        f32 frameIndex = this->skelAnime.curFrame;
 
         this->yawTowardsTarget = Math_Vec3f_Yaw(&this->actor.world.pos, &this->targetActor->world.pos);
         if (this->frameIndex <= frameIndex) {
-            this->skelAnime.animPlaybackSpeed = 0.0f;
+            this->skelAnime.playSpeed = 0.0f;
         }
     }
 
     if (globalCtx->msgCtx.unk11F04 == 0x2AC6 || globalCtx->msgCtx.unk11F04 == 0x2AC7 ||
         globalCtx->msgCtx.unk11F04 == 0x2AC8) {
-        this->skelAnime.animPlaybackSpeed = 0.0f;
+        this->skelAnime.playSpeed = 0.0f;
         this->yawTowardsTarget = this->actor.yawTowardsPlayer;
-        this->skelAnime.animCurrentFrame = 30.0f;
+        this->skelAnime.curFrame = 30.0f;
     }
     if (globalCtx->msgCtx.unk11F04 == 0x2ACF) {
-        this->skelAnime.animPlaybackSpeed = 0.0f;
+        this->skelAnime.playSpeed = 0.0f;
     }
 
     if (this->cutsceneState == 2) {
@@ -246,7 +246,7 @@ void EnMuto_Update(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     EnMuto* this = THIS;
 
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
 
     if (this->shouldSetHeadRotation) {
         EnMuto_SetHeadRotation(this);
@@ -298,6 +298,6 @@ void EnMuto_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnMuto* this = THIS;
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                     EnMuto_OverrideLimbDraw, NULL, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnMuto_OverrideLimbDraw, NULL, &this->actor);
 }
