@@ -216,8 +216,8 @@ typedef struct {
 } SCmdMinimapChests;
 
 typedef struct {
-    /* 0x0 */ u32 opaqueDl;
-    /* 0x4 */ u32 translucentDl;
+    /* 0x0 */ Gfx* opaqueDl;
+    /* 0x4 */ Gfx* translucentDl;
 } RoomMeshType0Params; // size = 0x8
 
 // Fields TODO

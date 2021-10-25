@@ -23,16 +23,13 @@ void SetObjectList::ParseRawData()
 		objects.push_back(objectIndex);
 		currentPtr += 2;
 	}
-
-	if (segmentOffset != 0)
-		parent->AddDeclarationPlaceholder(segmentOffset);
 }
 
 void SetObjectList::DeclareReferences(const std::string& prefix)
 {
 	if (!objects.empty())
 	{
-		std::string declaration = "";
+		std::string declaration;
 
 		for (size_t i = 0; i < objects.size(); i++)
 		{
@@ -45,7 +42,7 @@ void SetObjectList::DeclareReferences(const std::string& prefix)
 		}
 
 		parent->AddDeclarationArray(
-			segmentOffset, DeclarationAlignment::None, objects.size() * 2, "s16",
+			segmentOffset, DeclarationAlignment::Align4, objects.size() * 2, "s16",
 			StringHelper::Sprintf("%sObjectList_%06X", prefix.c_str(), segmentOffset),
 			objects.size(), declaration);
 	}
@@ -53,7 +50,8 @@ void SetObjectList::DeclareReferences(const std::string& prefix)
 
 std::string SetObjectList::GetBodySourceCode() const
 {
-	std::string listName = parent->GetDeclarationPtrName(cmdArg2);
+	std::string listName;
+	Globals::Instance->GetSegmentedPtrName(cmdArg2, parent, "s16", listName);
 	return StringHelper::Sprintf("SCENE_CMD_OBJECT_LIST(%i, %s)", objects.size(), listName.c_str());
 }
 

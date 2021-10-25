@@ -153,7 +153,7 @@ typedef struct {
     /* 0x10 */ f32 shadowScale; // Changes the size of the shadow
     /* 0x14 */ u8 shadowAlpha; // Default is 255
     /* 0x15 */ u8 feetFloorFlags; // Set if the actor's foot is clipped under the floor. & 1 is right foot, & 2 is left
-    /* 0x18 */ Vec3f feetPos[2]; // Update by using `Actor_SetFeetPos` in PostLimbDraw
+    /* 0x18 */ Vec3f feetPos[2]; // Update by using `Actor_SetFeetPos` in PostLimbDrawOpa
 } ActorShape; // size = 0x30
 
 typedef struct Actor {
@@ -301,12 +301,16 @@ typedef struct EnItem00 {
     /* 0x1A4 */ s8 unk1A4;
 } EnItem00; // size = 0x1A8
 
-typedef struct {
-    /* 0x000 */ Actor base;
-    /* 0x144 */ ActorFunc update;
+struct EnAObj;
+
+typedef void (*EnAObjActionFunc)(struct EnAObj*, struct GlobalContext*);
+
+typedef struct EnAObj {
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ EnAObjActionFunc actionFunc;
     /* 0x148 */ ColliderCylinder collision;
     /* 0x194 */ UNK_TYPE1 pad194[0x14];
-} ActorEnAObj; // size = 0x1A8
+} EnAObj; // size = 0x1A8
 
 typedef enum {
     /* 0x00 */ ACTORCAT_SWITCH,

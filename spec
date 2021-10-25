@@ -25,7 +25,6 @@ beginseg
     include "build/src/boot_O2_g3/CIC6105.o"
     include "build/src/boot_O2_g3/syncprintf.o"
     include "build/src/boot_O2_g3/fault.o"
-    include "build/data/boot/fault.data.o"
     include "build/data/boot/fault.bss.o"
     include "build/src/boot_O2_g3/fault_drawer.o"
     include "build/data/boot/fault_drawer.bss.o"
@@ -491,7 +490,7 @@ beginseg
     include "build/src/code/code_800F12D0.o"
     include "build/src/code/z_eventmgr.o"
     include "build/data/code/z_eventmgr.bss.o"
-    include "build/src/code/code_800F23E0.o"
+    include "build/src/code/z_fcurve_data.o"
     include "build/src/code/z_fcurve_data_skelanime.o"
     include "build/data/code/code_801BD830.data.o"
     include "build/src/code/z_fireobj.o"
@@ -528,7 +527,7 @@ beginseg
     include "build/data/code/z_parameter.data.o"
     include "build/data/code/z_parameter.bss.o"
     include "build/src/code/z_path.o"
-    include "build/src/code/code_80122660.o"
+    include "build/src/code/z_pause.o"
     include "build/src/code/z_player_lib.o"
     include "build/data/code/z_player_lib.data.o"
     include "build/data/code/z_player_lib.bss.o"
@@ -676,7 +675,7 @@ beginseg
     include "build/data/code/code_801A7B10.bss.o"
     include "build/src/code/code_801AA020.o"
     include "build/data/code/code_801AA020.bss.o"
-    include "build/src/code/z_game_over.o"
+    include_readonly "build/src/code/z_game_over.o"
     include "build/src/code/z_construct.o"
     include "build/data/code/code_801D9090.data.o"
     include "build/data/code/code_801E1180.rodata.o"
@@ -3886,8 +3885,7 @@ beginseg
     name "ovl_En_Giant"
     compress
     include "build/src/overlays/actors/ovl_En_Giant/z_en_giant.o"
-    include "build/data/ovl_En_Giant/ovl_En_Giant.data.o"
-    include "build/data/ovl_En_Giant/ovl_En_Giant.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Giant/ovl_En_Giant_reloc.o"
 endseg
 
 beginseg
@@ -5002,8 +5000,7 @@ beginseg
     name "ovl_En_Muto"
     compress
     include "build/src/overlays/actors/ovl_En_Muto/z_en_muto.o"
-    include "build/data/ovl_En_Muto/ovl_En_Muto.data.o"
-    include "build/data/ovl_En_Muto/ovl_En_Muto.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Muto/ovl_En_Muto_reloc.o"
 endseg
 
 beginseg

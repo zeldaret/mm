@@ -55,15 +55,16 @@ public:
 
 	bool isPalette = false;
 
-	void ExtractFromXML(tinyxml2::XMLElement* reader, uint32_t nRawDataIndex) override;
-	void FromBinary(uint32_t nRawDataIndex, int32_t nWidth, int32_t nHeight, TextureType nType,
-	                bool nIsPalette);
+	void ExtractFromBinary(uint32_t nRawDataIndex, int32_t nWidth, int32_t nHeight,
+	                       TextureType nType, bool nIsPalette);
 	void FromPNG(const fs::path& pngFilePath, TextureType texType);
-	static TextureType GetTextureTypeFromString(std::string str);
+	static TextureType GetTextureTypeFromString(const std::string& str);
 
 	void ParseXML(tinyxml2::XMLElement* reader) override;
 	void ParseRawData() override;
 	void DeclareReferences(const std::string& prefix) override;
+
+	Declaration* DeclareVar(const std::string& prefix, const std::string& bodyStr) override;
 	std::string GetBodySourceCode() const override;
 	void CalcHash() override;
 	void Save(const fs::path& outFolder) override;
@@ -76,7 +77,7 @@ public:
 	size_t GetRawDataSize() const override;
 	std::string GetIMFmtFromType();
 	std::string GetIMSizFromType();
-	std::string GetDefaultName(const std::string& prefix);
+	std::string GetDefaultName(const std::string& prefix) const override;
 	uint32_t GetWidth() const;
 	uint32_t GetHeight() const;
 	void SetDimensions(uint32_t nWidth, uint32_t nHeight);
