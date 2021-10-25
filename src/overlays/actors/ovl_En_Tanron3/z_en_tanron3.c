@@ -22,6 +22,13 @@ typedef struct {
     /* 0x40 */ char unk_40[0x4];
 } UnkTanron3Effect;
 
+typedef enum {
+    /* 0 */ TIMER_PICK_DIRECTION_OR_DIE,
+    /* 1 */ TIMER_OUT_OF_WATER,
+    /* 2 */ TIMER_ATTACK_OR_WAIT,
+    /* 3 */ TIMER_MAX
+} TimerWork;
+
 void EnTanron3_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron3_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron3_Update(Actor* thisx, GlobalContext* globalCtx);
@@ -92,7 +99,7 @@ static ColliderCylinderInit sUnusedCylinderInit = {
 extern FlexSkeletonHeader D_0600DA20;
 extern AnimationHeader D_0600DAAC;
 
-void EnTanron3_CreateEffect(GlobalContext* globalCtx, Vec3f* pos) {
+void EnTanron3_CreateEffect(GlobalContext* globalCtx, Vec3f* effectPos) {
     UnkTanron3Effect* effectPtr;
     s16 i;
 
@@ -100,7 +107,7 @@ void EnTanron3_CreateEffect(GlobalContext* globalCtx, Vec3f* pos) {
     for (i = 0; i < 150; i++, effectPtr++) {
         if ((effectPtr->unk_00 == 0) || (effectPtr->unk_00 == 1)) {
             effectPtr->unk_00 = 2;
-            effectPtr->unk_04 = *pos;
+            effectPtr->unk_04 = *effectPos;
             effectPtr->unk_10 = *D_80BB9720;
             effectPtr->unk_1C = *D_80BB9720;
             effectPtr->unk_1C.y = -2.0f;
@@ -125,7 +132,7 @@ void EnTanron3_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.02f);
     func_80BB897C(this, globalCtx);
     this->actor.flags &= ~1;
-    this->unk_250 = (s32)Rand_ZeroFloat(500000.0f);
+    this->currentRotationAngle = Rand_ZeroFloat(500000.0f);
     this->waterSurfaceYPos = 430.0f;
     boss03Parent = (Boss03*)this->actor.parent;
 }
@@ -156,102 +163,102 @@ void EnTanron3_SpawnBubbles(EnTanron3* this, GlobalContext* globalCtx) {
 void func_80BB897C(EnTanron3* this, GlobalContext* globalCtx) {
     this->actionFunc = func_80BB8A48;
     Animation_MorphToLoop(&this->skelAnime, &D_0600DAAC, -10.0f);
-    this->unk_234 = 0;
-    this->unk_238 = 5;
-    this->unk_204[0] = 50;
+    this->rotationStep = 0;
+    this->rotationScale = 5;
+    this->workTimer[TIMER_PICK_DIRECTION_OR_DIE] = 50;
     this->actor.speedXZ = 5.0f;
-    this->unk_240 = 0.5f;
-    this->unk_228.x = randPlusMinusPoint5Scaled(500.0f);
-    this->unk_228.y = randPlusMinusPoint5Scaled(100.0f);
-    this->unk_228.z = randPlusMinusPoint5Scaled(500.0f);
-    Math_Vec3f_Copy(&this->unk_21C, &this->actor.world.pos);
+    this->speedMaxStep = 0.5f;
+    this->deviationFromCurrentPos.x = randPlusMinusPoint5Scaled(500.0f);
+    this->deviationFromCurrentPos.y = randPlusMinusPoint5Scaled(100.0f);
+    this->deviationFromCurrentPos.z = randPlusMinusPoint5Scaled(500.0f);
+    Math_Vec3f_Copy(&this->currentPos, &this->actor.world.pos);
     this->timer = Rand_ZeroFloat(100.0f);
 }
 
 void func_80BB8A48(EnTanron3* this, GlobalContext* globalCtx) {
-    s32 atan_temp;
-    f32 temp_f18;
-    f32 sp54;
-    f32 sp50;
-    f32 dist;
-    f32 sp48;
+    s32 atanTemp;
+    f32 xDistance;
+    f32 yDistance;
+    f32 zDistance;
+    f32 xzDistance;
+    f32 extraScaleY;
     Player* player;
 
-    sp48 = 0.0f;
+    extraScaleY = 0.0f;
     player = GET_PLAYER(globalCtx);
     this->skelAnime.curFrame = 4.0f;
     if (((player->actor.bgCheckFlags & 1) != 0) && (player->actor.shape.feetPos[0].y >= 438.0f)) {
-        this->unk_202 = 1;
-    } else if (this->unk_202 != 0 && this->unk_204[2] == 0 && ((this->timer & 0x1F) == 0)) {
-        temp_f18 = this->unk_21C.x - player->actor.world.pos.x;
-        sp50 = this->unk_21C.z - player->actor.world.pos.z;
-        if (sqrtf(SQ(temp_f18) + SQ(sp50)) < 500.0f) {
-            this->unk_202 = 0;
-            this->unk_204[2] = 150;
+        this->isPassive = true;
+    } else if (this->isPassive && this->workTimer[TIMER_ATTACK_OR_WAIT] == 0 && ((this->timer & 0x1F) == 0)) {
+        xDistance = this->currentPos.x - player->actor.world.pos.x;
+        zDistance = this->currentPos.z - player->actor.world.pos.z;
+        if (sqrtf(SQ(xDistance) + SQ(zDistance)) < 500.0f) {
+            this->isPassive = false;
+            this->workTimer[TIMER_ATTACK_OR_WAIT] = 150;
         }
     }
     if (this->actor.world.pos.y < this->waterSurfaceYPos) {
-        this->unk_203 = 0;
-        switch (this->unk_202) {
-            case 0:
-                this->unk_23C = 5.0f;
-                this->unk_236 = 0x1000;
-                this->unk_254 = 0x3A98;
-                Math_Vec3f_Copy(&this->unk_21C, &player->actor.world.pos);
+        this->isBeached = false;
+        switch (this->isPassive) {
+            case false:
+                this->targetSpeedXZ = 5.0f;
+                this->targetRotationStep = 0x1000;
+                this->nextRotationAngle = 0x3A98;
+                Math_Vec3f_Copy(&this->currentPos, &player->actor.world.pos);
                 if ((this->timer & 0xF) == 0) {
                     if ((Rand_ZeroOne() < 0.5f) && (this->actor.xzDistToPlayer <= 200.0f)) {
                         Audio_PlayActorSound2(&this->actor, NA_SE_EN_PIRANHA_ATTACK);
                     }
                 }
-                if ((this->unk_204[2] == 0) || ((player->stateFlags2 & 0x80) != 0)) {
-                    this->unk_204[2] = 150;
-                    this->unk_202 = 1;
+                if ((this->workTimer[TIMER_ATTACK_OR_WAIT] == 0) || (player->stateFlags2 & 0x80)) {
+                    this->workTimer[TIMER_ATTACK_OR_WAIT] = 150;
+                    this->isPassive = true;
                 }
                 break;
-            case 1:
+            case true:
                 if ((boss03Parent->unk_324 != 0) && ((this->timer & 7) == 0)) {
-                    this->unk_254 = 0x4E20;
+                    this->nextRotationAngle = 0x4E20;
                     this->actor.speedXZ = 6.0f;
                 } else {
-                    this->unk_254 = 0x1F40;
+                    this->nextRotationAngle = 0x1F40;
                 }
-                this->unk_236 = 0x200;
-                this->unk_23C = 2.0f;
-                atan_temp = Math_FAtan2F(this->unk_21C.z, this->unk_21C.x);
-                Matrix_RotateY(atan_temp, 0);
-                Matrix_GetStateTranslationAndScaledZ(700.0f, &this->unk_21C);
-                this->unk_21C.y = 250.0f;
-                sp48 = 150.0f;
+                this->targetRotationStep = 0x200;
+                this->targetSpeedXZ = 2.0f;
+                atanTemp = Math_FAtan2F(this->currentPos.z, this->currentPos.x);
+                Matrix_RotateY(atanTemp, 0);
+                Matrix_GetStateTranslationAndScaledZ(700.0f, &this->currentPos);
+                this->currentPos.y = 250.0f;
+                extraScaleY = 150.0f;
                 break;
         }
-        if (this->unk_204[1] == 0) {
-            if ((this->unk_204[0] == 0) && (this->actor.speedXZ > 1.0f)) {
-                this->unk_204[0] = Rand_ZeroFloat(20.0f);
-                this->unk_228.x = randPlusMinusPoint5Scaled(100.0f);
-                this->unk_228.y = randPlusMinusPoint5Scaled(50.0f + sp48);
-                this->unk_228.z = randPlusMinusPoint5Scaled(100.0f);
+        if (this->workTimer[TIMER_OUT_OF_WATER] == 0) {
+            if ((this->workTimer[TIMER_PICK_DIRECTION_OR_DIE] == 0) && (this->actor.speedXZ > 1.0f)) {
+                this->workTimer[TIMER_PICK_DIRECTION_OR_DIE] = Rand_ZeroFloat(20.0f);
+                this->deviationFromCurrentPos.x = randPlusMinusPoint5Scaled(100.0f);
+                this->deviationFromCurrentPos.y = randPlusMinusPoint5Scaled(50.0f + extraScaleY);
+                this->deviationFromCurrentPos.z = randPlusMinusPoint5Scaled(100.0f);
             }
-            this->unk_210.y = this->unk_21C.y + this->unk_228.y + 50.0f;
+            this->targetPos.y = this->currentPos.y + this->deviationFromCurrentPos.y + 50.0f;
         }
-        this->unk_210.x = this->unk_21C.x + this->unk_228.x;
-        this->unk_210.z = this->unk_21C.z + this->unk_228.z;
-        temp_f18 = this->unk_210.x - this->actor.world.pos.x;
-        sp54 = this->unk_210.y - this->actor.world.pos.y;
-        sp50 = this->unk_210.z - this->actor.world.pos.z;
-        dist = sqrtf(SQ(temp_f18) + SQ(sp50));
-        atan_temp = Math_FAtan2F(dist, -sp54);
-        Math_ApproachS(&this->actor.world.rot.x, atan_temp, this->unk_238, this->unk_234);
-        atan_temp = Math_FAtan2F(sp50, temp_f18);
-        Math_SmoothStepToS(&this->actor.world.rot.y, atan_temp, this->unk_238, this->unk_234, 0);
-        Math_ApproachS(&this->unk_234, this->unk_236, 1, 0x100);
-        Math_ApproachF(&this->actor.speedXZ, this->unk_23C, 1.0f, this->unk_240);
+        this->targetPos.x = this->currentPos.x + this->deviationFromCurrentPos.x;
+        this->targetPos.z = this->currentPos.z + this->deviationFromCurrentPos.z;
+        xDistance = this->targetPos.x - this->actor.world.pos.x;
+        yDistance = this->targetPos.y - this->actor.world.pos.y;
+        zDistance = this->targetPos.z - this->actor.world.pos.z;
+        xzDistance = sqrtf(SQ(xDistance) + SQ(zDistance));
+        atanTemp = Math_FAtan2F(xzDistance, -yDistance);
+        Math_ApproachS(&this->actor.world.rot.x, atanTemp, this->rotationScale, this->rotationStep);
+        atanTemp = Math_FAtan2F(zDistance, xDistance);
+        Math_SmoothStepToS(&this->actor.world.rot.y, atanTemp, this->rotationScale, this->rotationStep, 0);
+        Math_ApproachS(&this->rotationStep, this->targetRotationStep, 1, 0x100);
+        Math_ApproachF(&this->actor.speedXZ, this->targetSpeedXZ, 1.0f, this->speedMaxStep);
         Actor_SetVelocityAndMoveXYRotationReverse(&this->actor);
     } else {
-        switch (this->unk_203) {
-            case 0:
+        switch (this->isBeached) {
+            case false:
                 this->actor.gravity = -1.0f;
-                this->unk_210.y = (this->waterSurfaceYPos - 50.0f);
-                this->unk_204[1] = 25;
+                this->targetPos.y = (this->waterSurfaceYPos - 50.0f);
+                this->workTimer[TIMER_OUT_OF_WATER] = 25;
                 Math_ApproachS(&this->actor.world.rot.x, 0x3000, 5, 0xBD0);
                 if ((this->actor.bgCheckFlags & 8) != 0) {
                     this->actor.speedXZ = 0.0f;
@@ -259,48 +266,50 @@ void func_80BB8A48(EnTanron3* this, GlobalContext* globalCtx) {
                         this->actor.velocity.y = -1.0f;
                     }
                 }
-                if ((this->actor.bgCheckFlags & 1) != 0) {
-                    this->unk_203 = 1;
+                if (this->actor.bgCheckFlags & 1) {
+                    this->isBeached = true;
                 }
                 break;
-            case 1:
-                this->unk_254 = 0x3A98;
+            case true:
+                this->nextRotationAngle = 0x3A98;
                 this->actor.gravity = -1.5f;
                 if ((this->actor.bgCheckFlags & 1) != 0) {
                     this->actor.velocity.y = Rand_ZeroFloat(5.0f) + 5.0f;
                     this->actor.speedXZ = Rand_ZeroFloat(2.0f) + 2.0f;
                     if (Rand_ZeroOne() < 0.5f) {
-                        this->unk_248.x = ((s16)randPlusMinusPoint5Scaled(500.0f) + this->unk_248.x + 0x8000);
+                        this->targetShapeRotation.x =
+                            (s16)randPlusMinusPoint5Scaled(500.0f) + this->targetShapeRotation.x + 0x8000;
                     }
                     if (Rand_ZeroOne() < 0.5f) {
-                        this->unk_248.z = ((s16)randPlusMinusPoint5Scaled(500.0f) + this->unk_248.z + 0x8000);
+                        this->targetShapeRotation.z =
+                            (s16)randPlusMinusPoint5Scaled(500.0f) + this->targetShapeRotation.z + 0x8000;
                     }
                     if (Rand_ZeroOne() < 0.5f) {
-                        this->unk_248.y = (s16)Rand_ZeroFloat(65536.0f);
+                        this->targetShapeRotation.y = (s16)Rand_ZeroFloat(65536.0f);
                     }
                     this->actor.world.rot.y = Math_FAtan2F(this->actor.world.pos.z, this->actor.world.pos.x) +
                                               (s16)randPlusMinusPoint5Scaled(52768.0f);
                 }
-                Math_ApproachS(&this->actor.shape.rot.y, this->unk_248.y, 3, 0x500);
-                Math_ApproachS(&this->actor.shape.rot.x, this->unk_248.x, 3, 0xC00);
-                Math_ApproachS(&this->actor.shape.rot.z, this->unk_248.z, 3, 0xC00);
+                Math_ApproachS(&this->actor.shape.rot.y, this->targetShapeRotation.y, 3, 0x500);
+                Math_ApproachS(&this->actor.shape.rot.x, this->targetShapeRotation.x, 3, 0xC00);
+                Math_ApproachS(&this->actor.shape.rot.z, this->targetShapeRotation.z, 3, 0xC00);
                 if (((Rand_ZeroOne() < 0.5f) & !(this->timer & 3)) != 0) {
-                    Vec3f sp38;
+                    Vec3f effectPos;
 
-                    sp38.x = randPlusMinusPoint5Scaled(30.0f) + this->actor.world.pos.x;
-                    sp38.y = this->actor.world.pos.y;
-                    sp38.z = randPlusMinusPoint5Scaled(30.0f) + this->actor.world.pos.z;
-                    EnTanron3_CreateEffect(globalCtx, &sp38);
+                    effectPos.x = randPlusMinusPoint5Scaled(30.0f) + this->actor.world.pos.x;
+                    effectPos.y = this->actor.world.pos.y;
+                    effectPos.z = randPlusMinusPoint5Scaled(30.0f) + this->actor.world.pos.z;
+                    EnTanron3_CreateEffect(globalCtx, &effectPos);
                 }
                 break;
         }
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     }
-    this->unk_250 += this->unk_254;
-    this->unk_25A = (s16)(s32)(Math_SinS((s16)(this->unk_250)) * 5000.0f);
-    this->unk_25C = (s16)(s32)(Math_SinS((s16)(this->unk_250 + 0x6978)) * 5000.0f);
-    this->unk_258 = (s16)(s32)(Math_SinS((s16)(this->unk_250)) * 5000.0f);
-    if (this->unk_203 == 0) {
+    this->currentRotationAngle += this->nextRotationAngle;
+    this->trunkRotation = Math_SinS(this->currentRotationAngle) * 5000.0f;
+    this->bodyRotation = Math_SinS(this->currentRotationAngle + 0x6978) * 5000.0f;
+    this->tailRotation = Math_SinS(this->currentRotationAngle) * 5000.0f;
+    if (!this->isBeached) {
         this->actor.shape.rot = this->actor.world.rot;
     }
 }
@@ -317,14 +326,14 @@ void EnTanron3_SetupKill(EnTanron3* this, GlobalContext* globalCtx) {
     zDistance = this->actor.world.pos.z - player->actor.world.pos.z;
     this->actor.world.rot.x = Math_FAtan2F(sqrtf(SQ(xDistance) + SQ(zDistance)), -yDistance);
     this->actor.world.rot.y = Math_FAtan2F(zDistance, xDistance);
-    this->unk_204[0] = 6;
+    this->workTimer[TIMER_PICK_DIRECTION_OR_DIE] = 6;
     this->actor.speedXZ = 10.0f;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_KONB_MINI_DEAD);
 }
 
 void EnTanron3_Kill(EnTanron3* this, GlobalContext* globalCtx) {
     Actor_SetVelocityAndMoveXYRotationReverse(&this->actor);
-    if (this->unk_204[0] == 0) {
+    if (this->workTimer[TIMER_PICK_DIRECTION_OR_DIE] == 0) {
         EnTanron3_SpawnBubbles(this, globalCtx);
         Actor_MarkForDeath(&this->actor);
         if (Rand_ZeroOne() < 0.3f) {
@@ -362,9 +371,9 @@ void EnTanron3_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (KREG(63) == 0) {
         this->timer += 1;
-        for (i = 0; i < 3; i++) {
-            if (this->unk_204[i] != 0) {
-                this->unk_204[i]--;
+        for (i = 0; i < TIMER_MAX; i++) {
+            if (this->workTimer[i] != 0) {
+                this->workTimer[i]--;
             }
         }
         if (this->deathTimer != 0) {
@@ -391,7 +400,7 @@ void EnTanron3_Update(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->acCollider.base);
     if (((s8)boss03Parent->actor.colChkInfo.health <= 0) && (this->actionFunc != EnTanron3_Kill)) {
         EnTanron3_SetupKill(this, globalCtx);
-        this->unk_204[0] = 0;
+        this->workTimer[TIMER_PICK_DIRECTION_OR_DIE] = 0;
     }
 }
 
@@ -400,13 +409,13 @@ s32 EnTanron3_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
     EnTanron3* this = (EnTanron3*)actor;
 
     if (limbIndex == 1) {
-        rot->y += this->unk_25C;
+        rot->y += this->bodyRotation;
     }
     if (limbIndex == 3) {
-        rot->y += this->unk_258;
+        rot->y += this->tailRotation;
     }
     if (limbIndex == 4) {
-        rot->y += this->unk_25A;
+        rot->y += this->trunkRotation;
     }
     return 0;
 }
