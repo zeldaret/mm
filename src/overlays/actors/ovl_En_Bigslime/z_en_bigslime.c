@@ -1778,11 +1778,13 @@ void EnBigslime_WindupThrowPlayer(EnBigslime* this, GlobalContext* globalCtx) {
                         staticVtx->n.ob[j] - (s32)((scale * staticVtx->n.ob[j]) * this->vtxSurfacePerturbation[i]);
                 }
             }
-        } else if (this->windupPunchTimer > 0) {
-            // loop over x, y, z
-            for (j = 0; j < 3; j++) {
-                // Linearly interpolate dynamicVtx --> staticVtx
-                dynamicVtx->n.ob[j] += (s16)((staticVtx->n.ob[j] - dynamicVtx->n.ob[j]) * invWindupPunchTimer);
+        } else {
+            if (this->windupPunchTimer > 0) {
+                // loop over x, y, z
+                for (j = 0; j < 3; j++) {
+                    // Linearly interpolate dynamicVtx --> staticVtx
+                    dynamicVtx->n.ob[j] += (s16)((staticVtx->n.ob[j] - dynamicVtx->n.ob[j]) * invWindupPunchTimer);
+                }
             }
         }
     }
