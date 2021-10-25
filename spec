@@ -3266,9 +3266,7 @@ beginseg
     name "ovl_En_Az"
     compress
     include "build/src/overlays/actors/ovl_En_Az/z_en_az.o"
-    include "build/data/ovl_En_Az/ovl_En_Az.data.o"
-    include "build/data/ovl_En_Az/ovl_En_Az.bss.o"
-    include "build/data/ovl_En_Az/ovl_En_Az.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Az/ovl_En_Az_reloc.o"
 endseg
 
 beginseg
@@ -3449,8 +3447,6 @@ beginseg
     name "ovl_En_Twig"
     compress
     include "build/src/overlays/actors/ovl_En_Twig/z_en_twig.o"
-    // include "build/data/ovl_En_Twig/ovl_En_Twig.data.o"
-    // include "build/data/ovl_En_Twig/ovl_En_Twig.bss.o"
     include "build/src/overlays/actors/ovl_En_Twig/ovl_En_Twig_reloc.o"
 endseg
 

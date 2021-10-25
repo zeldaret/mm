@@ -34,18 +34,18 @@ const ActorInit En_Twig_InitVars = {
     (ActorFunc)EnTwig_Draw,
 };
 
-static s32 D_80AC1230;
-static s16 D_80AC1234;
-static s16 D_80AC1238[25];
+static s32 sCurrentRing;
+static s16 sRingCount;
+static s16 sRingNotCollected[25];
 
 extern Gfx D_060014C8[];
 extern Gfx D_06001C38[];
 
-static CollisionHeader* D_80AC10B0[] = {NULL, 0x060020A0, 0x060016C0};
+static CollisionHeader* sColHeaders[] = { NULL, 0x060020A0, 0x060016C0 };
 
-static s16 D_80AC10BC = 0;
+static s16 sRingsHaveSpawned = 0;
 
-static InitChainEntry D_80AC10C0[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneScale, 40, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 40, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_CONTINUE),
@@ -57,11 +57,11 @@ void EnTwig_Init(Actor* thisx, GlobalContext* globalCtx2) {
     EnTwig* this = THIS;
     s32 i;
 
-    Actor_ProcessInitChain(&this->dyna.actor, D_80AC10C0);
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->unk_160 = GET_PARAM1(this);
     BcCheck3_BgActorInit(&this->dyna, 1);
-    if (D_80AC10B0[this->unk_160] != NULL) {
-        BgCheck3_LoadMesh(globalCtx, &this->dyna, D_80AC10B0[this->unk_160]);
+    if (sColHeaders[this->unk_160] != NULL) {
+        BgCheck3_LoadMesh(globalCtx, &this->dyna, sColHeaders[this->unk_160]);
     }
     this->dyna.actor.bgCheckFlags |= 0x400;
     switch (this->unk_160) {
@@ -69,12 +69,12 @@ void EnTwig_Init(Actor* thisx, GlobalContext* globalCtx2) {
             Actor_MarkForDeath(&this->dyna.actor);
             break;
         case 1:
-            if (D_80AC10BC == 0) {
-                D_80AC1234 = (gSaveContext.weekEventReg[24] & 4) ? 25 : 20;
-                for (i = 0; i < D_80AC1234; i++) {
-                    D_80AC1238[i] = 0;
+            if (!sRingsHaveSpawned) {
+                sRingCount = (gSaveContext.weekEventReg[24] & 4) ? 25 : 20;
+                for (i = 0; i < sRingCount; i++) {
+                    sRingNotCollected[i] = false;
                 }
-                D_80AC10BC = 1;
+                sRingsHaveSpawned = true;
             }
             if (GET_PARAM2(this) != 0) {
                 if (!(gSaveContext.weekEventReg[24] & 4)) {
@@ -122,12 +122,12 @@ void func_80AC0A7C(EnTwig* this, GlobalContext* globalCtx) {
 }
 
 void func_80AC0AC8(EnTwig* this, GlobalContext* globalCtx) {
-    static Vec3f D_80AC10D0 = {0.0f, 0.0f, 1.0f};
+    static Vec3f D_80AC10D0 = { 0.0f, 0.0f, 1.0f };
     Player* player = GET_PLAYER(globalCtx);
     Plane sp4C;
     Vec3f sp40;
 
-    if (D_80AC1230 == GET_PARAM3(this)) {
+    if (sCurrentRing == GET_PARAM3(this)) {
         if (this->unk_17A == 3) {
             this->unk_17A = 0;
             this->dyna.actor.shape.rot.z += 0x2000;
@@ -136,8 +136,8 @@ void func_80AC0AC8(EnTwig* this, GlobalContext* globalCtx) {
         }
     }
     func_8013E4B0(&this->dyna.actor.world.pos, &D_80AC10D0, &this->dyna.actor.shape.rot, &sp4C);
-    if ((D_80AC1230 == GET_PARAM3(this)) &&
-        func_8017D2FC(sp4C.normal.x, sp4C.normal.y, sp4C.normal.z, sp4C.originDist, &this->unk_180, &player->bodyPartsPos[0], &sp40, 0)) {
+    if ((sCurrentRing == GET_PARAM3(this)) && func_8017D2FC(sp4C.normal.x, sp4C.normal.y, sp4C.normal.z, sp4C.originDist,
+                                                          &this->unk_180, &player->bodyPartsPos[0], &sp40, 0)) {
         if (Math3D_DistanceSquared(&this->dyna.actor.world.pos, &sp40) <=
             SQ(this->dyna.actor.scale.x * 0.345f * 40.0f)) {
             func_80AC0CC4(this, globalCtx);
@@ -166,10 +166,10 @@ void func_80AC0CC4(EnTwig* this, GlobalContext* globalCtx) {
 }
 
 void func_80AC0D2C(EnTwig* this, GlobalContext* globalCtx) {
-    static Vec3f D_80AC10DC = {0.0f, -0.05f, 0.0f};
-    static Vec3f D_80AC10E8 = {0.0f, -0.025f, 0.0f};
-    static Color_RGBA8 D_80AC10F4 = {255, 255, 255, 130};
-    static Color_RGBA8 D_80AC10F8 = {255, 255, 0, 0};
+    static Vec3f sKiraVel = { 0.0f, -0.05f, 0.0f };
+    static Vec3f sKiraAccel = { 0.0f, -0.025f, 0.0f };
+    static Color_RGBA8 sColorWhite = { 255, 255, 255, 130 };
+    static Color_RGBA8 sColorYellow = { 255, 255, 0, 0 };
     Player* player = GET_PLAYER(globalCtx);
 
     Math_SmoothStepToF(&this->dyna.actor.world.pos.x, player->bodyPartsPos[0].x, 0.5f, 100.0f, 0.01f);
@@ -190,23 +190,23 @@ void func_80AC0D2C(EnTwig* this, GlobalContext* globalCtx) {
             sp6C.x = (Rand_Centered() * 10.0f) + this->dyna.actor.world.pos.x;
             sp6C.y = (Rand_Centered() * 10.0f) + this->dyna.actor.world.pos.y;
             sp6C.z = (Rand_Centered() * 10.0f) + this->dyna.actor.world.pos.z;
-            EffectSsKiraKira_SpawnDispersed(globalCtx, &sp6C, &D_80AC10DC, &D_80AC10E8, &D_80AC10F4, &D_80AC10F8, 1000,
+            EffectSsKiraKira_SpawnDispersed(globalCtx, &sp6C, &sKiraVel, &sKiraAccel, &sColorWhite, &sColorYellow, 1000,
                                             (s32)(Rand_ZeroOne() * 10.0f) + 20);
         }
-        play_sound(0x4824);
+        play_sound(NA_SE_SY_GET_ITEM);
         globalCtx->interfaceCtx.unk_25C += -1;
-        D_80AC1238[GET_PARAM3(this)] = 1;
-        if (D_80AC1230 == GET_PARAM3(this)) {
-            s32 phi_v1;
+        sRingNotCollected[GET_PARAM3(this)] = true;
+        if (sCurrentRing == GET_PARAM3(this)) {
+            s32 i;
 
-            for (phi_v1 = 0; phi_v1 < D_80AC1234; phi_v1++) {
-                if (D_80AC1238[phi_v1] == 0) {
-                    D_80AC1230 = phi_v1;
+            for (i = 0; i < sRingCount; i++) {
+                if (!sRingNotCollected[i]) {
+                    sCurrentRing = i;
                     break;
                 }
             }
-            if (phi_v1 == D_80AC1234) {
-                D_80AC1230 = -1;
+            if (i == sRingCount) {
+                sCurrentRing = -1;
             }
         }
         Actor_MarkForDeath(&this->dyna.actor);

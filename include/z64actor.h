@@ -78,7 +78,8 @@ typedef struct {
 } ActorEnTest20C; // size = 0x3C
 
 struct EnDno_ActorUnkStruct;
-typedef s32 (*EnDno_ActorUnkFunc)(struct GlobalContext*, struct EnDno_ActorUnkStruct*);
+typedef void (*EnDno_ActorUnkFunc)(struct GlobalContext*, struct EnDno_ActorUnkStruct*);
+typedef s32 (*EnDno_ActorUnkFunc2)(struct GlobalContext*, struct EnDno_ActorUnkStruct*);
 struct EnAz;
 
 typedef struct EnDno_ActorUnkStruct {
@@ -102,9 +103,9 @@ typedef struct EnDno_ActorUnkStruct {
     /* 0x56 */ s16 unk_56;
     /* 0x58 */ s16 unk_58;
     /* 0x5C */ EnDno_ActorUnkFunc unk_5C;
-    /* 0x60 */ EnDno_ActorUnkFunc unk_60;
-    /* 0x64 */ EnDno_ActorUnkFunc unk_64;
-    /* 0x68 */ EnDno_ActorUnkFunc unk_68;
+    /* 0x60 */ EnDno_ActorUnkFunc2 unk_60;
+    /* 0x64 */ EnDno_ActorUnkFunc2 unk_64;
+    /* 0x68 */ EnDno_ActorUnkFunc2 unk_68;
 } EnDno_ActorUnkStruct; // size >= 0x6C
 
 typedef struct {
