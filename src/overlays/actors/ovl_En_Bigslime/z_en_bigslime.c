@@ -1676,7 +1676,7 @@ void EnBigslime_AttackPlayerInBigslime(EnBigslime* this, GlobalContext* globalCt
  * the model coordinates of each individual vertex. The surface perturbation is then
  * set to be linearly proportional to this dot product
  *
- * This leads to the bending shape observed during windup as player is being thrown out of bigslime
+ * This leads to the bending shape observed during windup as player is about being thrown out of bigslime
  */
 void EnBigslime_SetupWindupThrowPlayer(EnBigslime* this) {
     Vtx* dynamicVtx;
@@ -1688,9 +1688,7 @@ void EnBigslime_SetupWindupThrowPlayer(EnBigslime* this) {
     for (i = 0; i < BIGSLIME_NUM_VTX; i++) {
         dynamicVtx = &sBigslimeDynamicVtx[this->dynamicVtxState][i];
 
-        /**
-         *
-         */
+        // vector dot product between each dynamicVtx and the unit normal vector describing player's thrown direction
         dotXYZ = (dynamicVtx->n.ob[0] * unitVecX + dynamicVtx->n.ob[1] * M_SQRT1_2 + dynamicVtx->n.ob[2] * unitVecZ) *
                  0.001f;
         if (dotXYZ < 0.01f) {
