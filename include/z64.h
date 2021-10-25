@@ -1441,7 +1441,7 @@ struct TargetContext {
 struct s800B948C {
     /* 0x00 */ GlobalContext* globalCtx;
     /* 0x04 */ Actor* actor;
-    /* 0x08 */ s32 updateActorIfSet;
+    /* 0x08 */ u32 updateActorIfSet;
     /* 0x0C */ u32 unkC;
     /* 0x10 */ Actor* unk10;
     /* 0x14 */ Player* player;

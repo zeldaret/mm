@@ -2207,90 +2207,79 @@ void func_800B9334(GlobalContext* globalCtx, ActorContext* actorCtx) {
     }
 }
 
-#ifdef NON_EQUIVALENT
+#ifdef NON_MATCHING
 Actor* Actor_UpdateActor(s800B948C* params) {
-    GlobalContext* sp24;
-    Actor* temp_s0;
-    u32 temp_v1;
-    Actor* phi_v1;
+    GlobalContext* globalCtx = params->globalCtx;
+    Actor* actor = params->actor;
 
-    temp_s0 = params->actor;
-    sp24 = params->globalCtx;
-    if (temp_s0->world.pos.y < -25000.0f) {
-        temp_s0->world.pos.y = -25000.0f;
+    if (actor->world.pos.y < -25000.0f) {
+        actor->world.pos.y = -25000.0f;
     }
-    temp_s0->sfx = 0;
-    temp_s0->unk39 &= 0xFF80;
-    if (temp_s0->init != 0) {
-        if (Object_IsLoaded(&sp24->objectCtx, (s32)temp_s0->objBankIndex) != 0) {
-            Actor_SetObjectDependency(sp24, temp_s0);
-            temp_s0->init(temp_s0, sp24);
-            temp_s0->init = NULL;
+
+    actor->sfx = 0;
+    actor->unk39 &= ~0x7F;
+
+    if (actor->init != NULL) {
+        if (Object_IsLoaded(&globalCtx->objectCtx, actor->objBankIndex)) {
+            Actor_SetObjectDependency(globalCtx, actor);
+            actor->init(actor, globalCtx);
+            actor->init = NULL;
         }
-        // goto block_38;
-        return temp_s0->next;
-    } else if (temp_s0->update == 0) {
-        if (temp_s0->isDrawn == 0) {
-            phi_v1 = Actor_Delete(&sp24->actorCtx, temp_s0, sp24);
+        actor = actor->next;
+    } else if (actor->update == NULL) {
+        if (!actor->isDrawn) {
+            actor = Actor_Delete(&globalCtx->actorCtx, actor, globalCtx);
         } else {
-            Actor_Destroy(temp_s0, sp24);
-            // goto block_38;
-            return temp_s0->next;
+            Actor_Destroy(actor, globalCtx);
+            actor = actor->next;
         }
     } else {
-        if (Object_IsLoaded(&sp24->objectCtx, (s32)temp_s0->objBankIndex) == 0) {
-            Actor_MarkForDeath(temp_s0);
-            return temp_s0->next;
+        if (!Object_IsLoaded(&globalCtx->objectCtx, actor->objBankIndex)) {
+            Actor_MarkForDeath(actor);
         } else {
-            if (((params->updateActorIfSet != 0) && ((temp_s0->flags & params->updateActorIfSet) == 0)) ||
-                ((params->updateActorIfSet != 0) &&
-                 (!(temp_s0->flags & 0x100000) ||
-                  ((temp_s0->category == 3) && ((params->player->stateFlags1 & 0x200) != 0))) &&
-                 (params->unkC != 0) && (temp_s0 != params->unk10) && ((temp_s0 != params->player->heldActor)) &&
-                 (&params->player->actor != temp_s0->parent))) {
-                CollisionCheck_ResetDamage(&temp_s0->colChkInfo);
+            if (((params->updateActorIfSet) && !(actor->flags & params->updateActorIfSet)) ||
+                ((params->updateActorIfSet) &&
+                 (!(actor->flags & 0x100000) ||
+                  ((actor->category == 3) && (params->player->stateFlags1 & 0x200))) &&
+                 (params->unkC != 0) && (actor != params->unk10) && ((actor != params->player->heldActor)) &&
+                 (actor->parent != &params->player->actor))) {
+                CollisionCheck_ResetDamage(&actor->colChkInfo);
             } else {
-                s32 phi_v0;
+                Math_Vec3f_Copy(&actor->prevPos, &actor->world.pos);
+                actor->xzDistToPlayer = Actor_XZDistanceBetweenActors(actor, &params->player->actor);
+                actor->yDistToPlayer = Actor_HeightDiff(actor, &params->player->actor);
+                actor->xyzDistToPlayerSq = SQ(actor->xzDistToPlayer) + SQ(actor->yDistToPlayer);
 
-                Math_Vec3f_Copy(&temp_s0->prevPos, (Vec3f*)&temp_s0->world);
-                temp_s0->xzDistToPlayer = Actor_XZDistanceBetweenActors(temp_s0, (Actor*)params->player);
-                temp_s0->yDistToPlayer = Actor_HeightDiff(temp_s0, (Actor*)params->player);
-                temp_s0->xyzDistToPlayerSq = SQ(temp_s0->xzDistToPlayer) + SQ(temp_s0->yDistToPlayer);
+                actor->yawTowardsPlayer = Actor_YawBetweenActors(actor, &params->player->actor);
+                actor->flags &= ~0x1000000;
 
-                temp_s0->yawTowardsPlayer = Actor_YawBetweenActors(temp_s0, (Actor*)params->player);
-                temp_s0->flags &= 0xFEFFFFFF;
-
-                if (temp_s0->freezeTimer == 0) {
-                    phi_v0 = 0;
-                } else {
-                    temp_s0->freezeTimer--;
-                    phi_v0 = temp_s0->freezeTimer & 0xFFFF;
-                }
-
-                if ((phi_v0 == 0) && ((temp_s0->flags & params->runMainIfSet) != 0)) {
-                    if (temp_s0 == params->player->unk_730) {
-                        temp_s0->isTargeted = 1;
+                if ((DECR(actor->freezeTimer) == 0) && (actor->flags & params->runMainIfSet)) {
+                    if (actor == params->player->unk_730) {
+                        actor->isTargeted = true;
                     } else {
-                        temp_s0->isTargeted = 0;
+                        actor->isTargeted = false;
                     }
-                    if ((temp_s0->targetPriority != 0) && (params->player->unk_730 == 0)) {
-                        temp_s0->targetPriority = 0;
-                    }
-                    Actor_SetObjectDependency(sp24, temp_s0);
 
-                    if (temp_s0->colorFilterTimer != 0) {
-                        temp_s0->colorFilterTimer--;
+                    if ((actor->targetPriority != 0) && (params->player->unk_730 == 0)) {
+                        actor->targetPriority = 0;
                     }
-                    temp_s0->update(temp_s0, sp24);
-                    BgCheck_ResetFlagsIfLoadedActor(sp24, &sp24->colCtx.dyna, temp_s0);
+
+                    Actor_SetObjectDependency(globalCtx, actor);
+
+                    if (actor->colorFilterTimer != 0) {
+                        actor->colorFilterTimer--;
+                    }
+
+                    actor->update(actor, globalCtx);
+                    BgCheck_ResetFlagsIfLoadedActor(globalCtx, &globalCtx->colCtx.dyna, actor);
                 }
-                CollisionCheck_ResetDamage(&temp_s0->colChkInfo);
+
+                CollisionCheck_ResetDamage(&actor->colChkInfo);
             }
         }
-        // block_38:
-        phi_v1 = temp_s0->next;
+        actor = actor->next;
     }
-    return phi_v1;
+    return actor;
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_UpdateActor.s")
@@ -4421,9 +4410,8 @@ TexturePtr* D_801AEFA8[] = {
     D_040923E0,
 };
 
-// has lots of gfx macros and a switch
 #ifdef NON_MATCHING
-// Maybe equivalent (?)
+// stack is one variable too big
 void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f* limbPos, s16 arg3, f32 arg4, f32 arg5, f32 arg6, u8 mode) {
     if (arg6 > 0.001f) {
         s32 temp_v1_3;
