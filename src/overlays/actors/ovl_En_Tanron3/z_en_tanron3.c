@@ -34,8 +34,8 @@ void EnTanron3_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron3_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron3_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80BB897C(EnTanron3* this, GlobalContext* globalCtx);
-void func_80BB8A48(EnTanron3* this, GlobalContext* globalCtx);
+void EnTanron3_SetupAct(EnTanron3* this, GlobalContext* globalCtx);
+void EnTanron3_Act(EnTanron3* this, GlobalContext* globalCtx);
 void EnTanron3_Kill(EnTanron3* this, GlobalContext* globalCtx);
 
 static Vec3f D_80BB9720[] = { 0.0f, 0.0f, 0.0f };
@@ -130,7 +130,7 @@ void EnTanron3_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitAndSetCylinder(globalCtx, &this->acCollider, &this->actor, &sCylinderInit);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600DA20, &D_0600DAAC, this->jointTable, this->morphTable, 10);
     Actor_SetScale(&this->actor, 0.02f);
-    func_80BB897C(this, globalCtx);
+    EnTanron3_SetupAct(this, globalCtx);
     this->actor.flags &= ~1;
     this->currentRotationAngle = Rand_ZeroFloat(500000.0f);
     this->waterSurfaceYPos = 430.0f;
@@ -160,8 +160,8 @@ void EnTanron3_SpawnBubbles(EnTanron3* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80BB897C(EnTanron3* this, GlobalContext* globalCtx) {
-    this->actionFunc = func_80BB8A48;
+void EnTanron3_SetupAct(EnTanron3* this, GlobalContext* globalCtx) {
+    this->actionFunc = EnTanron3_Act;
     Animation_MorphToLoop(&this->skelAnime, &D_0600DAAC, -10.0f);
     this->rotationStep = 0;
     this->rotationScale = 5;
@@ -175,21 +175,20 @@ void func_80BB897C(EnTanron3* this, GlobalContext* globalCtx) {
     this->timer = Rand_ZeroFloat(100.0f);
 }
 
-void func_80BB8A48(EnTanron3* this, GlobalContext* globalCtx) {
+void EnTanron3_Act(EnTanron3* this, GlobalContext* globalCtx) {
     s32 atanTemp;
     f32 xDistance;
     f32 yDistance;
     f32 zDistance;
     f32 xzDistance;
-    f32 extraScaleY;
-    Player* player;
+    f32 extraScaleY = 0.0f;
+    Player* player = GET_PLAYER(globalCtx);
 
-    extraScaleY = 0.0f;
-    player = GET_PLAYER(globalCtx);
     this->skelAnime.curFrame = 4.0f;
-    if (((player->actor.bgCheckFlags & 1) != 0) && (player->actor.shape.feetPos[0].y >= 438.0f)) {
+    if ((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[0].y >= 438.0f)) {
+        // Player is standing on the central platform
         this->isPassive = true;
-    } else if (this->isPassive && this->workTimer[TIMER_ATTACK_OR_WAIT] == 0 && ((this->timer & 0x1F) == 0)) {
+    } else if (this->isPassive && this->workTimer[TIMER_ATTACK_OR_WAIT] == 0 && !(this->timer & 0x1F)) {
         xDistance = this->currentPos.x - player->actor.world.pos.x;
         zDistance = this->currentPos.z - player->actor.world.pos.z;
         if (sqrtf(SQ(xDistance) + SQ(zDistance)) < 500.0f) {
@@ -205,7 +204,7 @@ void func_80BB8A48(EnTanron3* this, GlobalContext* globalCtx) {
                 this->targetRotationStep = 0x1000;
                 this->nextRotationAngle = 0x3A98;
                 Math_Vec3f_Copy(&this->currentPos, &player->actor.world.pos);
-                if ((this->timer & 0xF) == 0) {
+                if (!(this->timer & 0xF)) {
                     if ((Rand_ZeroOne() < 0.5f) && (this->actor.xzDistToPlayer <= 200.0f)) {
                         Audio_PlayActorSound2(&this->actor, NA_SE_EN_PIRANHA_ATTACK);
                     }
@@ -216,7 +215,7 @@ void func_80BB8A48(EnTanron3* this, GlobalContext* globalCtx) {
                 }
                 break;
             case true:
-                if ((boss03Parent->unk_324 != 0) && ((this->timer & 7) == 0)) {
+                if ((boss03Parent->unk_324 != 0) && (!(this->timer & 7))) {
                     this->nextRotationAngle = 0x4E20;
                     this->actor.speedXZ = 6.0f;
                 } else {
@@ -260,7 +259,7 @@ void func_80BB8A48(EnTanron3* this, GlobalContext* globalCtx) {
                 this->targetPos.y = (this->waterSurfaceYPos - 50.0f);
                 this->workTimer[TIMER_OUT_OF_WATER] = 25;
                 Math_ApproachS(&this->actor.world.rot.x, 0x3000, 5, 0xBD0);
-                if ((this->actor.bgCheckFlags & 8) != 0) {
+                if (this->actor.bgCheckFlags & 8) {
                     this->actor.speedXZ = 0.0f;
                     if (this->actor.velocity.y > 0.0f) {
                         this->actor.velocity.y = -1.0f;
@@ -273,7 +272,7 @@ void func_80BB8A48(EnTanron3* this, GlobalContext* globalCtx) {
             case true:
                 this->nextRotationAngle = 0x3A98;
                 this->actor.gravity = -1.5f;
-                if ((this->actor.bgCheckFlags & 1) != 0) {
+                if (this->actor.bgCheckFlags & 1) {
                     this->actor.velocity.y = Rand_ZeroFloat(5.0f) + 5.0f;
                     this->actor.speedXZ = Rand_ZeroFloat(2.0f) + 2.0f;
                     if (Rand_ZeroOne() < 0.5f) {
@@ -293,7 +292,7 @@ void func_80BB8A48(EnTanron3* this, GlobalContext* globalCtx) {
                 Math_ApproachS(&this->actor.shape.rot.y, this->targetShapeRotation.y, 3, 0x500);
                 Math_ApproachS(&this->actor.shape.rot.x, this->targetShapeRotation.x, 3, 0xC00);
                 Math_ApproachS(&this->actor.shape.rot.z, this->targetShapeRotation.z, 3, 0xC00);
-                if (((Rand_ZeroOne() < 0.5f) & !(this->timer & 3)) != 0) {
+                if ((Rand_ZeroOne() < 0.5f) & !(this->timer & 3)) {
                     Vec3f effectPos;
 
                     effectPos.x = randPlusMinusPoint5Scaled(30.0f) + this->actor.world.pos.x;
@@ -398,7 +397,7 @@ void EnTanron3_Update(Actor* thisx, GlobalContext* globalCtx) {
     Collider_UpdateCylinder(&this->actor, &this->acCollider);
     CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->atCollider.base);
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->acCollider.base);
-    if (((s8)boss03Parent->actor.colChkInfo.health <= 0) && (this->actionFunc != EnTanron3_Kill)) {
+    if ((s8)boss03Parent->actor.colChkInfo.health <= 0 && this->actionFunc != EnTanron3_Kill) {
         EnTanron3_SetupKill(this, globalCtx);
         this->workTimer[TIMER_PICK_DIRECTION_OR_DIE] = 0;
     }
