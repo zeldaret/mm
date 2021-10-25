@@ -417,8 +417,8 @@ void EnBaguo_DrawBody(Actor* thisx, GlobalContext* globalCtx) {
 
     POLY_OPA_DISP = &gfx[1];
 
-    SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, NULL, EnBaguo_PostLimbDraw,
-                   &this->actor);
+    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, EnBaguo_PostLimbDraw,
+                      &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
@@ -485,10 +485,10 @@ void EnBaguo_DrawRockParticles(EnBaguo* this, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     for (i = 0; i < ARRAY_COUNT(this->particles); i++, particle++) {
         if (particle->isVisible) {
-            SysMatrix_InsertTranslation(particle->position.x, particle->position.y, particle->position.z, MTXMODE_NEW);
-            SysMatrix_InsertXRotation_s(particle->rotation.x, MTXMODE_APPLY);
+            Matrix_InsertTranslation(particle->position.x, particle->position.y, particle->position.z, MTXMODE_NEW);
+            Matrix_InsertXRotation_s(particle->rotation.x, MTXMODE_APPLY);
             Matrix_RotateY(particle->rotation.y, MTXMODE_APPLY);
-            SysMatrix_InsertZRotation_s(particle->rotation.z, MTXMODE_APPLY);
+            Matrix_InsertZRotation_s(particle->rotation.z, MTXMODE_APPLY);
             Matrix_Scale(particle->scale, particle->scale, particle->scale, MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 1, 255, 255, 255, 255);
