@@ -1133,7 +1133,7 @@ void EnBigslime_Drop(EnBigslime* this, GlobalContext* globalCtx) {
 /**
  * Checks each individual vertex to see if it is outside the walls of the room.
  * If it is, updates the vertex to be back inside the boundary of the room.
- * Also raises the vertex in the y-direction 100 units in model-sapce for a single wall
+ * Also raises the vertex in the y-direction 100 units in model-space for a single wall
  * and 200 unites in the y-direction for two walls i.e a corner.
  *
  * Differs from EnBigslime_CheckRoomBoundaries by checking and updating
