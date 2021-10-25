@@ -549,11 +549,11 @@ void EnBigslime_UpdateScale(EnBigslime* this, Vec3f* vtxMax, Vec3f* vtxMin) {
 
 /**
  * Checks the world position against all walls, the floor, and the ceiling to ensure
- * bigslime is not outside this range. Accounts only for the world position, and the 
- * maximum and minimum verticies. If any boundaries are crossed, the world position 
+ * bigslime is not outside this range. Accounts only for the world position, and the
+ * maximum and minimum verticies. If any boundaries are crossed, the world position
  * and bgCheckFlags are updated accordingly.
- * 
- * Differs from EnBigslime_CheckVtxWallBoundaries by checking and updating 
+ *
+ * Differs from EnBigslime_CheckVtxWallBoundaries by checking and updating
  * a single world position instead of checking and updating individual vertices
  */
 void EnBigslime_CheckRoomBoundaries(EnBigslime* this, Vec3f* vtxMax, Vec3f* vtxMin) {
@@ -1133,10 +1133,10 @@ void EnBigslime_Drop(EnBigslime* this, GlobalContext* globalCtx) {
 /**
  * Checks each individual vertex to see if it is outside the walls of the room.
  * If it is, updates the vertex to be back inside the boundary of the room.
- * Also raises the vertex in the y-direction 100 units in model-sapce for a single wall 
+ * Also raises the vertex in the y-direction 100 units in model-sapce for a single wall
  * and 200 unites in the y-direction for two walls i.e a corner.
- * 
- * Differs from EnBigslime_CheckRoomBoundaries by checking and updating 
+ *
+ * Differs from EnBigslime_CheckRoomBoundaries by checking and updating
  * individual vertices instead of checking and updating a single world position
  */
 void EnBigslime_CheckVtxWallBoundaries(EnBigslime* this) {
@@ -1557,14 +1557,15 @@ void EnBigslime_CutsceneGrabPlayer(EnBigslime* this, GlobalContext* globalCtx) {
     EnBigslime_UpdateCameraGrabPlayer(this, globalCtx);
     if (this->grabPlayerTimer > 0) {
         invgrabPlayerTimer = 1.0f / this->grabPlayerTimer;
-        
+
         this->actor.scale.x = F32_LERPIMP(this->actor.scale.x, 0.15f, invgrabPlayerTimer);
         this->actor.scale.y = F32_LERPIMP(this->actor.scale.y, 0.075f, invgrabPlayerTimer);
         this->actor.scale.z = this->actor.scale.x;
 
         player->actor.world.pos.x = F32_LERPIMP(player->actor.world.pos.x, this->actor.world.pos.x, invgrabPlayerTimer);
         player->actor.world.pos.z = F32_LERPIMP(player->actor.world.pos.z, this->actor.world.pos.z, invgrabPlayerTimer);
-        player->actor.world.pos.y = F32_LERPIMP(player->actor.world.pos.y, this->actor.world.pos.y + this->actor.scale.y * -500.0f, invgrabPlayerTimer);
+        player->actor.world.pos.y = F32_LERPIMP(
+            player->actor.world.pos.y, this->actor.world.pos.y + this->actor.scale.y * -500.0f, invgrabPlayerTimer);
 
         for (i = 0; i < BIGSLIME_NUM_VTX; i++) {
             dynamicVtx = &sBigslimeDynamicVtx[this->dynamicVtxState][i];
@@ -1664,17 +1665,17 @@ void EnBigslime_AttackPlayerInBigslime(EnBigslime* this, GlobalContext* globalCt
  * Calculats the surface perturbation (multiplicative offset from the static vertices)
  * used to update dynamic vertices when bigslime is about to throw/eject player from inside
  * at the end of the grab-player cutscene
- * 
+ *
  * A unit normal vector (unitVec) is used to represent the direction player will be thrown.
  * This unit vector has the following spherical coordinates:
  *     - radius = 1
  *     - yaw (azimuthal angle) = this->actor.world.rot.y
  *     - pitch (polar/zenith angle) = M_PI / 4
- * 
+ *
  * This unit normal vector is converted into x-y-z coordinates and dot-producted with
  * the model coordinates of each individual vertex. The surface perturbation is then
  * set to be linearly proportional to this dot product
- * 
+ *
  * This leads to the bending shape observed during windup as player is being thrown out of bigslime
  */
 void EnBigslime_SetupWindupThrowPlayer(EnBigslime* this) {
@@ -1688,7 +1689,7 @@ void EnBigslime_SetupWindupThrowPlayer(EnBigslime* this) {
         dynamicVtx = &sBigslimeDynamicVtx[this->dynamicVtxState][i];
 
         /**
-         * 
+         *
          */
         dotXYZ = (dynamicVtx->n.ob[0] * unitVecX + dynamicVtx->n.ob[1] * M_SQRT1_2 + dynamicVtx->n.ob[2] * unitVecZ) *
                  0.001f;
