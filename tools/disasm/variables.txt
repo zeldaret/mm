@@ -2255,7 +2255,7 @@
     0x801D1540:("D_801D1540","UNK_PTR","",0x4),
     0x801D1570:("D_801D1570","f32","[13]",0x34),
     0x801D15B0:("gZeroVec3f","Vec3f","",0xC),
-    0x801D15BC:("gZeroVec3s","UNK_TYPE4","",0x4),
+    0x801D15BC:("gZeroVec3s","Vec3s","",0x6),
     0x801D15D0:("sATan2Tbl","s16","[1025]",0x802),
     0x801D1DE0:("gIdentityMtx","Mtx","",0x40),
     0x801D1E20:("gIdentityMtxF","MtxF","",0x40),
