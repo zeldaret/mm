@@ -379,7 +379,7 @@ void EnBigslime_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.scale.y = 0.075f;
         this->vtxScaleX = this->vtxScaleZ = 0.015000001f;
         this->actor.home.pos.x = GBT_ROOM_5_CENTER_X;
-        this->actor.home.pos.y = GBT_ROOM_5_CENTER_Y + 225.0f;
+        this->actor.home.pos.y = GBT_ROOM_5_MAX_Y - 75.0f;
         this->actor.home.pos.z = GBT_ROOM_5_CENTER_Z;
         for (i = 0; i < MINISLIME_NUM_SPAWN; i++) {
             this->minislime[i] = (EnMinislime*)Actor_SpawnAsChild(&globalCtx2->actorCtx, &this->actor, globalCtx,
@@ -1765,10 +1765,10 @@ void EnBigslime_WindupThrowPlayer(EnBigslime* this, GlobalContext* globalCtx) {
                 // loop over x, y, z
                 for (j = 0; j < 3; j++) {
                     // Linearly interpolate dynamicVtx --> staticVtx * (1 - scale * vtxSurfacePerturbation)
-                    dynamicVtx->n.ob[j] += (s16)(((s32)(staticVtx->n.ob[j] - (s32)((scale * staticVtx->n.ob[j]) *
-                                                                                   this->vtxSurfacePerturbation[i])) -
-                                                  dynamicVtx->n.ob[j]) *
-                                                 invWindupPunchTimer);
+                    dynamicVtx->n.ob[j] += (s16)(
+                        ((staticVtx->n.ob[j] - (s32)(scale * staticVtx->n.ob[j] * this->vtxSurfacePerturbation[i])) -
+                         dynamicVtx->n.ob[j]) *
+                        invWindupPunchTimer);
                 }
             } else {
                 // loop over x, y, z
