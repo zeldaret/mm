@@ -1,5 +1,4 @@
 #include "global.h"
-#include "prevent_bss_reordering.h"
 
 u8 D_80096B20 = 1;
 vu8 gViConfigUseDefault = 1;
