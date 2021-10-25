@@ -3968,7 +3968,7 @@ extern UNK_TYPE D_04023100;
 extern UNK_TYPE D_04023130;
 extern Gfx D_04023210[];
 extern UNK_TYPE D_04023288;
-extern UNK_TYPE D_04023348;
+extern Gfx D_04023348[];
 extern UNK_TYPE D_04025850;
 extern UNK_TYPE D_04025DD0;
 extern UNK_TYPE D_040281DC;
@@ -4003,8 +4003,8 @@ extern UNK_TYPE D_0403F230;
 extern UNK_TYPE D_04044300;
 extern Gfx D_04048DF0[];
 extern UNK_TYPE D_04050D10;
-extern UNK_TYPE D_04051180;
-extern UNK_TYPE D_04051238;
+extern Gfx D_04051180[];
+extern Gfx D_04051238[];
 extern UNK_TYPE D_0405140C;
 extern UNK_TYPE D_040527F0;
 extern UNK_TYPE D_040528B0;
@@ -4022,7 +4022,7 @@ extern TexturePtr D_0408EFE0[]; // gDust6Tex
 extern TexturePtr D_0408F3E0[]; // gDust7Tex
 extern TexturePtr D_0408F7E0[]; // gDust8Tex
 extern UNK_TYPE D_04050550;
-extern UNK_TYPE D_04050648;
+extern Gfx D_04050648[];
 extern UNK_TYPE D_040510B0;
 extern UNK_TYPE D_04054940;
 extern Gfx D_0405AAB0[];
