@@ -27,19 +27,19 @@ void EnAObj_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void EnAObj_Update1(EnAObj* this, GlobalContext* globalCtx) {
     s32 yawDiff;
 
-    if (Actor_RequestTalk(&this->actor, globalCtx)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         this->actionFunc = EnAObj_Update2;
     } else {
         yawDiff = ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y));
 
         if ((yawDiff < 0x2800) || ((this->actor.params == 1) && (yawDiff > 0x5800))) {
-            func_800B863C(&this->actor, globalCtx);
+            func_800B863C(&this->actor, &globalCtx->state);
         }
     }
 }
 
 void EnAObj_Update2(EnAObj* this, GlobalContext* globalCtx) {
-    if (func_800B867C(&this->actor, globalCtx)) {
+    if (func_800B867C(&this->actor, &globalCtx->state)) {
         this->actionFunc = EnAObj_Update1;
     }
 }

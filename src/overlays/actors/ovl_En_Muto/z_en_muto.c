@@ -64,7 +64,7 @@ void EnMuto_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnMuto* this = THIS;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 40.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 40.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06007150, &D_06000E50, this->jointTable, this->morphTable, 17);
 
     this->isInMayorsRoom = this->actor.params;
@@ -148,7 +148,7 @@ void EnMuto_Idle(EnMuto* this, GlobalContext* globalCtx) {
         this->actor.textId = 0x2363;
     }
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         EnMuto_SetupDialogue(this, globalCtx);
         return;
     }
@@ -175,7 +175,7 @@ void EnMuto_Idle(EnMuto* this, GlobalContext* globalCtx) {
         }
     }
 
-    func_800B8614(&this->actor, globalCtx, 80.0f);
+    func_800B8614(&this->actor, &globalCtx->state, 80.0f);
 }
 
 void EnMuto_SetupDialogue(EnMuto* this, GlobalContext* globalCtx) {
@@ -186,7 +186,7 @@ void EnMuto_SetupDialogue(EnMuto* this, GlobalContext* globalCtx) {
     if (this->targetActor != NULL) {
         this->shouldSetHeadRotation = true;
         this->cutsceneState = 1;
-        func_800B86C8(this->targetActor, globalCtx, this->targetActor);
+        func_800B86C8(this->targetActor, &globalCtx->state, this->targetActor);
     }
 
     this->isInDialogue = true;
@@ -263,8 +263,8 @@ void EnMuto_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    Actor_SetHeight(&this->actor, 60.0f);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_SetFocus(&this->actor, 60.0f);
+    Actor_MoveForward(&this->actor);
 
     Math_SmoothStepToS(&this->headRot.y, this->headRotTarget.y, 1, 0xBB8, 0);
     Math_SmoothStepToS(&this->headRot.x, this->headRotTarget.x, 1, 0x3E8, 0);
