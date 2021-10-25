@@ -62,10 +62,10 @@ void EnGiant_ChangeAnimation(EnGiant* this, s16 newAnimationId) {
     if (newAnimationId >= GIANT_ANIMATION_LOOK_UP_START && newAnimationId < GIANT_ANIMATION_MAX) {
         if ((this->animationId == GIANT_ANIMATION_WALKING_LOOP && newAnimationId != GIANT_ANIMATION_WALKING_LOOP) ||
             (newAnimationId == GIANT_ANIMATION_WALKING_LOOP && this->animationId != GIANT_ANIMATION_WALKING_LOOP)) {
-            SkelAnime_ChangeAnim(&this->skelAnime, sAnimationTable[newAnimationId], 1.0f, 0.0f,
-                                 SkelAnime_GetFrameCount(&sAnimationTable[newAnimationId]->common), 2, 10.0f);
+            Animation_Change(&this->skelAnime, sAnimationTable[newAnimationId], 1.0f, 0.0f,
+                             Animation_GetLastFrame(&sAnimationTable[newAnimationId]->common), 2, 10.0f);
         } else {
-            SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, sAnimationTable[newAnimationId]);
+            Animation_PlayOnce(&this->skelAnime, sAnimationTable[newAnimationId]);
         }
         this->animationId = newAnimationId;
     }
@@ -118,7 +118,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.uncullZoneScale = 2000.0f;
     this->actor.uncullZoneDownward = 2400.0f;
     Actor_SetScale(&this->actor, 0.32f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_060079B0, &D_06002168, this->jointTable, this->morphTable, 16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060079B0, &D_06002168, this->jointTable, this->morphTable, 16);
     EnGiant_ChangeAnimation(this, GIANT_ANIMATION_IDLE_LOOP);
     this->csAction = GIANT_CS_ACTION_NONE;
     this->actionFunc = EnGiant_PerformCutsceneActions;
@@ -156,8 +156,8 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_24A = 0x1C5;
         Actor_SetScale(&this->actor, 0.32f);
         this->actionFunc = EnGiant_PerformClockTowerSuccessActions;
-        SkelAnime_ChangeAnim(&this->skelAnime, &D_060116E4, 0.0f, SkelAnime_GetFrameCount(&D_060116E4.common) - 1.0f,
-                             SkelAnime_GetFrameCount(&D_060116E4.common), 2, 0.0f);
+        Animation_Change(&this->skelAnime, &D_060116E4, 0.0f, Animation_GetLastFrame(&D_060116E4) - 1.0f,
+                         Animation_GetLastFrame(&D_060116E4), 2, 0.0f);
         this->actor.draw = EnGiant_Draw;
         this->actor.velocity.y = 0.0f;
         this->actor.minVelocityY = 0.0f;
@@ -167,8 +167,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (GIANT_TYPE_IS_CLOCK_TOWER_FAILURE(type)) {
         Actor_SetScale(&this->actor, 0.32f);
         this->actionFunc = EnGiant_PlayClockTowerFailureAnimation;
-        SkelAnime_ChangeAnim(&this->skelAnime, &D_06013FE8, 1.0f, 0.0f, SkelAnime_GetFrameCount(&D_06013004.common), 0,
-                             0.0f);
+        Animation_Change(&this->skelAnime, &D_06013FE8, 1.0f, 0.0f, Animation_GetLastFrame(&D_06013004), 0, 0.0f);
         this->actor.draw = EnGiant_Draw;
         this->actor.velocity.y = 0.0f;
         this->actor.minVelocityY = 0.0f;
@@ -267,9 +266,8 @@ void EnGiant_ChangeAnimationBasedOnCsAction(EnGiant* this) {
             }
             break;
         case GIANT_CS_ACTION_HOLDING_UP_MOON_IN_CLOCK_TOWER:
-            SkelAnime_ChangeAnim(&this->skelAnime, &D_060116E4, 0.0f,
-                                 SkelAnime_GetFrameCount(&D_060116E4.common) - 1.0f,
-                                 SkelAnime_GetFrameCount(&D_060116E4.common), 2, 0.0f);
+            Animation_Change(&this->skelAnime, &D_060116E4, 0.0f, Animation_GetLastFrame(&D_060116E4) - 1.0f,
+                             Animation_GetLastFrame(&D_060116E4), 2, 0.0f);
             break;
     }
 }
@@ -277,7 +275,7 @@ void EnGiant_ChangeAnimationBasedOnCsAction(EnGiant* this) {
 void EnGiant_UpdateAlpha(EnGiant* this) {
     switch (this->csAction) {
         case GIANT_CS_ACTION_FALLING_OVER:
-            if (this->skelAnime.animCurrentFrame >= 90.0f && this->alpha > 0) {
+            if (this->skelAnime.curFrame >= 90.0f && this->alpha > 0) {
                 this->alpha -= 12;
             }
             break;
@@ -299,7 +297,7 @@ void EnGiant_UpdateAlpha(EnGiant* this) {
  * a given cutscene action, depending on what animation has already been played.
  */
 void EnGiant_PlayAndUpdateAnimation(EnGiant* this) {
-    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) &&
+    if (SkelAnime_Update(&this->skelAnime) &&
         (this->animationId != GIANT_ANIMATION_FALLING_OVER || this->csAction != GIANT_CS_ACTION_FALLING_OVER)) {
         EnGiant_ChangeAnimation(this, this->animationId);
         switch (this->csAction) {
@@ -327,25 +325,25 @@ void EnGiant_PlayAndUpdateAnimation(EnGiant* this) {
                 EnGiant_ChangeAnimation(this, GIANT_ANIMATION_SMALL_CALL_LOOP);
                 break;
         }
-        SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+        SkelAnime_Update(&this->skelAnime);
     }
 }
 
 void EnGiant_PlaySound(EnGiant* this) {
     if (this->actor.draw != NULL && this->alpha > 0) {
         if (this->animationId == GIANT_ANIMATION_WALKING_LOOP &&
-            (func_801378B8(&this->skelAnime, 40.0f) || func_801378B8(&this->skelAnime, 100.0f))) {
+            (Animation_OnFrame(&this->skelAnime, 40.0f) || Animation_OnFrame(&this->skelAnime, 100.0f))) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_KYOJIN_WALK);
         }
-        if (this->animationId == GIANT_ANIMATION_FALLING_OVER && func_801378B8(&this->skelAnime, 40.0f)) {
+        if (this->animationId == GIANT_ANIMATION_FALLING_OVER && Animation_OnFrame(&this->skelAnime, 40.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_KYOJIN_VOICE_FAIL);
         }
         if (this->sfxId != 0xFFFF &&
-            ((this->animationId == GIANT_ANIMATION_BIG_CALL_START && this->skelAnime.animCurrentFrame >= 18.0f) ||
+            ((this->animationId == GIANT_ANIMATION_BIG_CALL_START && this->skelAnime.curFrame >= 18.0f) ||
              this->animationId == GIANT_ANIMATION_BIG_CALL_LOOP)) {
             func_800B9010(&this->actor, this->sfxId);
         }
-        if ((this->animationId == GIANT_ANIMATION_SMALL_CALL_START && this->skelAnime.animCurrentFrame >= 18.0f) ||
+        if ((this->animationId == GIANT_ANIMATION_SMALL_CALL_START && this->skelAnime.curFrame >= 18.0f) ||
             this->animationId == GIANT_ANIMATION_SMALL_CALL_LOOP) {
             func_800B9010(&this->actor, NA_SE_EV_KYOJIN_SIGN - SFX_FLAG);
         }
@@ -381,7 +379,7 @@ void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, GlobalContext* globa
 }
 
 void EnGiant_PlayClockTowerFailureAnimation(EnGiant* this, GlobalContext* globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
 }
 
 void EnGiant_PerformCutsceneActions(EnGiant* this, GlobalContext* globalCtx) {
@@ -443,7 +441,7 @@ void EnGiant_PostLimbDrawXlu(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     EnGiant* this = THIS;
 
     if (limbIndex == 1) {
-        SysMatrix_CopyCurrentState(&this->unk_254);
+        Matrix_CopyCurrentState(&this->unk_254);
     }
 }
 
@@ -466,8 +464,8 @@ void EnGiant_Draw(Actor* thisx, GlobalContext* globalCtx) {
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sFaceTextures[this->faceIndex]));
             gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
             Scene_SetRenderModeXlu(globalCtx, 0, 1);
-            SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
-                             this->skelAnime.dListCount, NULL, EnGiant_PostLimbDrawOpa, thisx);
+            SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                  this->skelAnime.dListCount, NULL, EnGiant_PostLimbDrawOpa, thisx);
         } else if (this->alpha > 0) {
             if (this->alpha >= 129) {
                 func_8012C2B4(POLY_XLU_DISP++);
@@ -479,9 +477,9 @@ void EnGiant_Draw(Actor* thisx, GlobalContext* globalCtx) {
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sFaceTextures[this->faceIndex]));
             gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alpha);
             POLY_XLU_DISP =
-                SkelAnime_DrawSV2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl,
-                                  this->skelAnime.dListCount, NULL, EnGiant_PostLimbDrawXlu, thisx, POLY_XLU_DISP);
-            SysMatrix_InsertMatrix(&this->unk_254, MTXMODE_NEW);
+                SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                   this->skelAnime.dListCount, NULL, EnGiant_PostLimbDrawXlu, thisx, POLY_XLU_DISP);
+            Matrix_InsertMatrix(&this->unk_254, MTXMODE_NEW);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, D_06007610);
