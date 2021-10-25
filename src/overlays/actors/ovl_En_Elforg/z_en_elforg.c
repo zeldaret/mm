@@ -62,7 +62,7 @@ void EnElforg_InitializeSpeedAndRotation(EnElforg* this) {
     this->timer = 0;
     this->secondaryTimer = Rand_ZeroFloat(100.0f);
     this->actor.shape.yOffset = 0.0f;
-    this->skelAnime.animCurrentFrame = (s32)Rand_ZeroFloat(5.0f);
+    this->skelAnime.curFrame = (s32)Rand_ZeroFloat(5.0f);
 }
 
 void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -72,8 +72,8 @@ void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
     this->flags = 0;
     this->direction = 0;
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0402CA98, &D_0402B494, this->jointTable, this->jointTable, 10);
-    this->skelAnime.animPlaybackSpeed = 1.0f;
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0402CA98, &D_0402B494, this->jointTable, this->jointTable, 10);
+    this->skelAnime.playSpeed = 1.0f;
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     this->actor.shape.shadowAlpha = 0xFF;
 
@@ -256,7 +256,7 @@ void func_80ACCBB8(EnElforg* this, GlobalContext* globalCtx) {
 }
 
 void EnElforg_TrappedByBubble(EnElforg* this, GlobalContext* globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     if ((this->actor.parent == NULL) || (this->actor.parent->update == NULL)) {
         EnElforg_InitializeSpeedAndRotation(this);
         this->actionFunc = EnElforg_FreeFloating;
@@ -277,7 +277,7 @@ void EnElforg_TurnInFairy(EnElforg* this, GlobalContext* globalCtx) {
 
     // This code makes the fairy briefly circle the player before
     // flying towards the fountain's center.
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     this->actor.shape.yOffset *= 0.9f;
     this->actor.speedXZ = 5.0f;
     EnElforg_ApproachTargetYPosition(this, &player->bodyPartsPos[0]);
@@ -307,7 +307,7 @@ void EnElforg_TurnInFairy(EnElforg* this, GlobalContext* globalCtx) {
 }
 
 void EnElforg_QuicklyCircleFairyFountain(EnElforg* this, GlobalContext* globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     EnElforg_MoveToTargetFairyFountain(this, &this->actor.home.pos);
     if (this->secondaryTimer < 31) {
         this->actionFunc = EnElforg_TurnInFairy;
@@ -336,7 +336,7 @@ void EnElforg_FreeFloatingFairyFountain(EnElforg* this, GlobalContext* globalCtx
         }
         this->targetDistanceFromHome = Rand_ZeroFloat(100.0f) + 50.0f;
     }
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     EnElforg_MoveToTargetFairyFountain(this, &this->actor.home.pos);
     if (this->flags & STRAY_FAIRY_FLAG_CIRCLES_QUICKLY_IN_FOUNTAIN) {
         // A small number of fairies will do this when the player walks into
@@ -425,7 +425,7 @@ void EnElforg_FreeFloating(EnElforg* this, GlobalContext* globalCtx) {
     f32 scaledYDistance;
     Player* player = GET_PLAYER(globalCtx);
 
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     if (Player_GetMask(globalCtx) == PLAYER_MASK_GREAT_FAIRYS_MASK) {
         pos = player->bodyPartsPos[0];
         this->targetSpeedXZ = 5.0f;
@@ -608,11 +608,11 @@ void EnElforg_Draw(Actor* thisx, GlobalContext* globalCtx) {
             AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_0402C818));
             break;
     }
-    SysMatrix_InsertMatrix(&globalCtx->mf_187FC, 1);
+    Matrix_InsertMatrix(&globalCtx->mf_187FC, 1);
 
     POLY_XLU_DISP =
-        SkelAnime_DrawSV2(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                          EnElforg_OverrideLimbDraw, NULL, &this->actor, POLY_XLU_DISP);
+        SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                           EnElforg_OverrideLimbDraw, NULL, &this->actor, POLY_XLU_DISP);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
