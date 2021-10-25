@@ -1,6 +1,7 @@
 #ifndef _OS_H_
 #define _OS_H_
 
+#include "stdlib.h"
 #include "ultra64/thread.h"
 #include "ultra64/message.h"
 
@@ -65,7 +66,7 @@ typedef struct {
     /* 0x00 */ OSIoMesgHdr hdr;
     /* 0x08 */ void* dramAddr;
     /* 0x0C */ u32 devAddr;
-    /* 0x10 */ u32 size;
+    /* 0x10 */ size_t size;
     /* 0x14 */ OSPiHandle* piHandle;
 } OSIoMesg; // size = 0x88
 
@@ -76,8 +77,8 @@ typedef struct {
     /* 0x08 */ OSMesgQueue* cmdQueue;
     /* 0x0C */ OSMesgQueue* evtQueue;
     /* 0x10 */ OSMesgQueue* acsQueue;
-    /* 0x14 */ s32 (*piDmaCallback)(s32, u32, void*, u32);
-    /* 0x18 */ s32 (*epiDmaCallback)(OSPiHandle*, s32, u32, void*, u32);
+    /* 0x14 */ s32 (*piDmaCallback)(s32, u32, void*, size_t);
+    /* 0x18 */ s32 (*epiDmaCallback)(OSPiHandle*, s32, u32, void*, size_t);
 } OSDevMgr; // size = 0x1C
 
 
