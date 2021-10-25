@@ -1662,7 +1662,7 @@ void EnBigslime_AttackPlayerInBigslime(EnBigslime* this, GlobalContext* globalCt
 }
 
 /**
- * Calculats the surface perturbation (multiplicative offset from the static vertices)
+ * Calculates the surface perturbation (multiplicative offset from the static vertices)
  * used to update dynamic vertices when bigslime is about to throw/eject player from inside
  * at the end of the grab-player cutscene
  *
