@@ -547,6 +547,15 @@ void EnBigslime_UpdateScale(EnBigslime* this, Vec3f* vtxMax, Vec3f* vtxMin) {
     }
 }
 
+/**
+ * Checks the world position against all walls, the floor, and the ceiling to ensure
+ * bigslime is not outside this range. Accounts only for the world position, and the 
+ * maximum and minimum verticies. If any boundaries are crossed, the world position 
+ * and bgCheckFlags are updated accordingly.
+ * 
+ * Differs from EnBigslime_CheckVtxWallBoundaries by checking and updating 
+ * a single world position instead of checking and updating individual vertices
+ */
 void EnBigslime_CheckRoomBoundaries(EnBigslime* this, Vec3f* vtxMax, Vec3f* vtxMin) {
     f32 worldPosX;
     f32 vtxMaxX;
@@ -886,6 +895,9 @@ void EnBigslime_SetIceShardParams(EnBigslime* this, GlobalContext* globalCtx) {
     this->iceShardScale = 0.025f;
 }
 
+/**
+ * Restores bigslime behaviour to the state before it was frozen
+ */
 void EnBigslime_SetTargetVtxFromPreFrozen(EnBigslime* this) {
     this->bigslimeCollider[0].base.acFlags |= AC_ON;
     this->actionFunc = this->actionFuncStored;
@@ -1118,7 +1130,16 @@ void EnBigslime_Drop(EnBigslime* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnBigslime_CheckVtxBackgroundCollision(EnBigslime* this) {
+/**
+ * Checks each individual vertex to see if it is outside the walls of the room.
+ * If it is, updates the vertex to be back inside the boundary of the room.
+ * Also raises the vertex in the y-direction 100 units in model-sapce for a single wall 
+ * and 200 unites in the y-direction for two walls i.e a corner.
+ * 
+ * Differs from EnBigslime_CheckRoomBoundaries by checking and updating 
+ * individual vertices instead of checking and updating a single world position
+ */
+void EnBigslime_CheckVtxWallBoundaries(EnBigslime* this) {
     Vtx* dynamicVtx;
     f32 vtxX;
     f32 vtxZ;
@@ -1224,7 +1245,7 @@ void EnBigslime_SetupSquishFlat(EnBigslime* this) {
     this->actor.scale.y = 0.05f;
     this->actor.world.pos.y = GBT_ROOM_5_MIN_Y + 50.0f;
     EnBigslime_SetTargetVtxToWideCone(this);
-    EnBigslime_CheckVtxBackgroundCollision(this);
+    EnBigslime_CheckVtxWallBoundaries(this);
     this->bigslimeCollider[0].base.atFlags |= AT_ON;
     this->actionFunc = EnBigslime_SquishFlat;
 }
@@ -1256,7 +1277,7 @@ void EnBigslime_SquishFlat(EnBigslime* this, GlobalContext* globalCtx) {
         Math_SmoothStepToS(&dynamicVtx->n.ob[1], targetVtx->n.ob[1], 2, 600, 3);
     }
 
-    EnBigslime_CheckVtxBackgroundCollision(this);
+    EnBigslime_CheckVtxWallBoundaries(this);
 
     // Checks if any collider is interacting with player. If so, player is grabbed
     for (i = 0; i < BIGSLIME_NUM_RING_FACES; i++) {
@@ -1449,7 +1470,7 @@ void EnBigslime_Rise(EnBigslime* this, GlobalContext* globalCtx) {
     }
 
     this->actor.scale.z = this->actor.scale.x;
-    EnBigslime_CheckVtxBackgroundCollision(this);
+    EnBigslime_CheckVtxWallBoundaries(this);
     if (this->riseCounter == 0) {
         if (Math_SmoothStepToF(&this->actor.scale.y, 0.3f, 0.5f, 0.015000001f, 0.00075f) < 0.01f) {
             this->riseCounter = 1;
@@ -1492,7 +1513,7 @@ void EnBigslime_Rise(EnBigslime* this, GlobalContext* globalCtx) {
         }
     }
 
-    EnBigslime_CheckVtxBackgroundCollision(this);
+    EnBigslime_CheckVtxWallBoundaries(this);
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 10, 0x800, 0x80);
 }
 
@@ -1536,18 +1557,21 @@ void EnBigslime_CutsceneGrabPlayer(EnBigslime* this, GlobalContext* globalCtx) {
     EnBigslime_UpdateCameraGrabPlayer(this, globalCtx);
     if (this->grabPlayerTimer > 0) {
         invgrabPlayerTimer = 1.0f / this->grabPlayerTimer;
-        this->actor.scale.x += (0.15f - this->actor.scale.x) * invgrabPlayerTimer;
-        this->actor.scale.y += (0.075f - this->actor.scale.y) * invgrabPlayerTimer;
+        
+        this->actor.scale.x = F32_LERPIMP(this->actor.scale.x, 0.15f, invgrabPlayerTimer);
+        this->actor.scale.y = F32_LERPIMP(this->actor.scale.y, 0.075f, invgrabPlayerTimer);
         this->actor.scale.z = this->actor.scale.x;
-        player->actor.world.pos.x += (this->actor.world.pos.x - player->actor.world.pos.x) * invgrabPlayerTimer;
-        player->actor.world.pos.z += (this->actor.world.pos.z - player->actor.world.pos.z) * invgrabPlayerTimer;
-        player->actor.world.pos.y +=
-            ((this->actor.world.pos.y + (this->actor.scale.y * -500.0f)) - player->actor.world.pos.y) *
-            invgrabPlayerTimer;
+
+        player->actor.world.pos.x = F32_LERPIMP(player->actor.world.pos.x, this->actor.world.pos.x, invgrabPlayerTimer);
+        player->actor.world.pos.z = F32_LERPIMP(player->actor.world.pos.z, this->actor.world.pos.z, invgrabPlayerTimer);
+        player->actor.world.pos.y = F32_LERPIMP(player->actor.world.pos.y, this->actor.world.pos.y + this->actor.scale.y * -500.0f, invgrabPlayerTimer);
 
         for (i = 0; i < BIGSLIME_NUM_VTX; i++) {
             dynamicVtx = &sBigslimeDynamicVtx[this->dynamicVtxState][i];
+
+            // loop over x, y, z
             for (j = 0; j < 3; j++) {
+                // Linearly interpolate dynamicVtx to staticVtx
                 dynamicVtx->n.ob[j] +=
                     (s16)((sBigslimeStaticVtx[i].n.ob[j] - dynamicVtx->n.ob[j]) * invgrabPlayerTimer);
             }
@@ -1636,6 +1660,23 @@ void EnBigslime_AttackPlayerInBigslime(EnBigslime* this, GlobalContext* globalCt
     func_800B9010(&this->actor, NA_SE_EN_B_SLIME_PUNCH_MOVE - SFX_FLAG);
 }
 
+/**
+ * Calculats the surface perturbation (multiplicative offset from the static vertices)
+ * used to update dynamic vertices when bigslime is about to throw/eject player from inside
+ * at the end of the grab-player cutscene
+ * 
+ * A unit normal vector (unitVec) is used to represent the direction player will be thrown.
+ * This unit vector has the following spherical coordinates:
+ *     - radius = 1
+ *     - yaw (azimuthal angle) = this->actor.world.rot.y
+ *     - pitch (polar/zenith angle) = M_PI / 4
+ * 
+ * This unit normal vector is converted into x-y-z coordinates and dot-producted with
+ * the model coordinates of each individual vertex. The surface perturbation is then
+ * set to be linearly proportional to this dot product
+ * 
+ * This leads to the bending shape observed during windup as player is being thrown out of bigslime
+ */
 void EnBigslime_SetupWindupThrowPlayer(EnBigslime* this) {
     Vtx* dynamicVtx;
     f32 dotXYZ;
@@ -1646,11 +1687,8 @@ void EnBigslime_SetupWindupThrowPlayer(EnBigslime* this) {
     for (i = 0; i < BIGSLIME_NUM_VTX; i++) {
         dynamicVtx = &sBigslimeDynamicVtx[this->dynamicVtxState][i];
 
-        /* Projection of vertices towards where player will be thrown
-         * via dot product between dynamicVtx->n.ob and unit norm:
-         *     radius (unit norm) -> 1.0
-         *     yaw (azimuthal angle) -> this->actor.world.rot.y
-         *     pitch (polar/zenith angle) -> M_PI / 4
+        /**
+         * 
          */
         dotXYZ = (dynamicVtx->n.ob[0] * unitVecX + dynamicVtx->n.ob[1] * M_SQRT1_2 + dynamicVtx->n.ob[2] * unitVecZ) *
                  0.001f;
@@ -1682,6 +1720,8 @@ void EnBigslime_WindupThrowPlayer(EnBigslime* this, GlobalContext* globalCtx) {
         invWindupPunchTimer = 1.0f / this->windupPunchTimer;
         scale = cos_rad(this->windupPunchTimer * (M_PI / 27)) + 1.0f;
         player->actor.world.pos.y = this->actor.world.pos.y + (this->actor.scale.y * -500.0f);
+
+        // Linearly interpolate gekkoRot.y to this->actor.world.rot.y
         this->gekkoRot.y += (s16)((s16)(this->actor.world.rot.y - this->gekkoRot.y) * invWindupPunchTimer);
         this->gekkoPosOffset.x = Math_SinS(this->gekkoRot.y) * -50.0f;
         this->gekkoPosOffset.z = Math_CosS(this->gekkoRot.y) * -50.0f;
@@ -1717,26 +1757,32 @@ void EnBigslime_WindupThrowPlayer(EnBigslime* this, GlobalContext* globalCtx) {
         scale = 2.0f - (3.0f * scale);
     }
 
-    // Deforming Bigslime during the final windup punch while grabbing player
+    // Deforming Bigslime during the final windup punch while grabbing player using vtxSurfacePerturbation
     for (i = 0; i < BIGSLIME_NUM_VTX; i++) {
         dynamicVtx = &sBigslimeDynamicVtx[this->dynamicVtxState][i];
         staticVtx = &sBigslimeStaticVtx[i];
         if (this->vtxSurfacePerturbation[i] != 0.0f) {
             if (this->windupPunchTimer > 0) {
+                // loop over x, y, z
                 for (j = 0; j < 3; j++) {
+                    // Linearly interpolate dynamicVtx to [staticVtx * (1 - scale * vtxSurfacePerturbation)]
                     dynamicVtx->n.ob[j] += (s16)(((s32)(staticVtx->n.ob[j] - (s32)((scale * staticVtx->n.ob[j]) *
                                                                                    this->vtxSurfacePerturbation[i])) -
                                                   dynamicVtx->n.ob[j]) *
                                                  invWindupPunchTimer);
                 }
             } else {
+                // loop over x, y, z
                 for (j = 0; j < 3; j++) {
+                    // Directly set dynamicVtx to [staticVtx * (1 - scale * vtxSurfacePerturbation)]
                     dynamicVtx->n.ob[j] =
                         staticVtx->n.ob[j] - (s32)((scale * staticVtx->n.ob[j]) * this->vtxSurfacePerturbation[i]);
                 }
             }
         } else if (this->windupPunchTimer > 0) {
+            // loop over x, y, z
             for (j = 0; j < 3; j++) {
+                // Linearly interpolate dynamicVtx to staticVtx
                 dynamicVtx->n.ob[j] += (s16)((staticVtx->n.ob[j] - dynamicVtx->n.ob[j]) * invWindupPunchTimer);
             }
         }
@@ -1746,11 +1792,14 @@ void EnBigslime_WindupThrowPlayer(EnBigslime* this, GlobalContext* globalCtx) {
 void EnBigslime_SetupSetDynamicVtxThrowPlayer(EnBigslime* this, GlobalContext* globalCtx) {
     this->grabPlayerTimer = 10;
     EnBigslime_SetTargetVtxToWideCone(this);
-    EnBigslime_CheckVtxBackgroundCollision(this);
+    EnBigslime_CheckVtxWallBoundaries(this);
     EnBigslime_EndCutscene(this, globalCtx);
     this->actionFunc = EnBigslime_SetDynamicVtxThrowPlayer;
 }
 
+/**
+ * Restores bigslime to wide cone after player is thrown
+ */
 void EnBigslime_SetDynamicVtxThrowPlayer(EnBigslime* this, GlobalContext* globalCtx) {
     f32 invThrowPlayerTimer;
     Vtx* targetVtx;
@@ -1764,15 +1813,18 @@ void EnBigslime_SetDynamicVtxThrowPlayer(EnBigslime* this, GlobalContext* global
         for (i = 0; i < BIGSLIME_NUM_VTX; i++) {
             targetVtx = &sBigslimeTargetVtx[i];
             dynamicVtx = &sBigslimeDynamicVtx[this->dynamicVtxState][i];
+
+            // loop over x, y, z
             for (j = 0; j < 3; j++) {
+                // Linearly interpolate dynamicVtx to targetVtx
                 dynamicVtx->n.ob[j] += (s16)((targetVtx->n.ob[j] - dynamicVtx->n.ob[j]) * invThrowPlayerTimer);
             }
         }
 
-        this->actor.scale.x += (0.2f - this->actor.scale.x) * invThrowPlayerTimer;
-        this->actor.scale.y += (0.05f - this->actor.scale.y) * invThrowPlayerTimer;
+        this->actor.scale.x = F32_LERPIMP(this->actor.scale.x, 0.2f, invThrowPlayerTimer);
+        this->actor.scale.y = F32_LERPIMP(this->actor.scale.y, 0.05f, invThrowPlayerTimer);
         this->actor.scale.z = this->actor.scale.x;
-        EnBigslime_CheckVtxBackgroundCollision(this);
+        EnBigslime_CheckVtxWallBoundaries(this);
     }
 
     if (this->throwPlayerTimer == 0) {
@@ -1923,11 +1975,11 @@ void EnBigslime_SetupMelt(EnBigslime* this) {
     s32 i;
 
     this->bigslimeCollider[0].base.acFlags &= ~AC_ON;
-    for (i = 0; i < 2; i += 1) {
+    for (i = 0; i < 2; i++) {
         sBigslimeTargetVtx[i].n.a = 0;
     }
 
-    for (i = 0; i < 20; i += 1) {
+    for (i = 0; i < 20; i++) {
         sBigslimeTargetVtx[i + 2].n.a = 10 * i;
     }
 
