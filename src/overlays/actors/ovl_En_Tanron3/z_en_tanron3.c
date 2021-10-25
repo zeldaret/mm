@@ -121,7 +121,7 @@ void EnTanron3_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.gravity = -1.0f;
     Collider_InitAndSetCylinder(globalCtx, &this->atCollider, &this->actor, &sCylinderInit);
     Collider_InitAndSetCylinder(globalCtx, &this->acCollider, &this->actor, &sCylinderInit);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600DA20, &D_0600DAAC, this->jointTable, this->morphTable, 10);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600DA20, &D_0600DAAC, this->jointTable, this->morphTable, 10);
     Actor_SetScale(&this->actor, 0.02f);
     func_80BB897C(this, globalCtx);
     this->actor.flags &= ~1;
@@ -142,9 +142,9 @@ void EnTanron3_SpawnBubbles(EnTanron3* this, GlobalContext* globalCtx) {
     Vec3f acceleration;
 
     for (i = 0; i < 20; i++) {
-        SysMatrix_InsertYRotation_f(Rand_ZeroFloat(6.2831855f), 0);
-        SysMatrix_RotateStateAroundXAxis(Rand_ZeroFloat(6.2831855f));
-        SysMatrix_GetStateTranslationAndScaledZ(Rand_ZeroFloat(3.0f) + 2.0f, &velocity);
+        Matrix_InsertYRotation_f(Rand_ZeroFloat(6.2831855f), 0);
+        Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(6.2831855f));
+        Matrix_GetStateTranslationAndScaledZ(Rand_ZeroFloat(3.0f) + 2.0f, &velocity);
         acceleration.x = velocity.x * -0.05f;
         acceleration.y = velocity.y * -0.05f;
         acceleration.z = velocity.z * -0.05f;
@@ -155,7 +155,7 @@ void EnTanron3_SpawnBubbles(EnTanron3* this, GlobalContext* globalCtx) {
 
 void func_80BB897C(EnTanron3* this, GlobalContext* globalCtx) {
     this->actionFunc = func_80BB8A48;
-    SkelAnime_ChangeAnimTransitionRepeat(&this->skelAnime, &D_0600DAAC, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &D_0600DAAC, -10.0f);
     this->unk_234 = 0;
     this->unk_238 = 5;
     this->unk_204[0] = 50;
@@ -179,7 +179,7 @@ void func_80BB8A48(EnTanron3* this, GlobalContext* globalCtx) {
 
     sp48 = 0.0f;
     player = GET_PLAYER(globalCtx);
-    this->skelAnime.animCurrentFrame = 4.0f;
+    this->skelAnime.curFrame = 4.0f;
     if (((player->actor.bgCheckFlags & 1) != 0) && (player->actor.shape.feetPos[0].y >= 438.0f)) {
         this->unk_202 = 1;
     } else if (this->unk_202 != 0 && this->unk_204[2] == 0 && ((this->timer & 0x1F) == 0)) {
@@ -219,7 +219,7 @@ void func_80BB8A48(EnTanron3* this, GlobalContext* globalCtx) {
                 this->unk_23C = 2.0f;
                 atan_temp = Math_FAtan2F(this->unk_21C.z, this->unk_21C.x);
                 Matrix_RotateY(atan_temp, 0);
-                SysMatrix_GetStateTranslationAndScaledZ(700.0f, &this->unk_21C);
+                Matrix_GetStateTranslationAndScaledZ(700.0f, &this->unk_21C);
                 this->unk_21C.y = 250.0f;
                 sp48 = 150.0f;
                 break;
@@ -419,8 +419,8 @@ void EnTanron3_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if ((this->fogTimer & 1) != 0) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
     }
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                     EnTanron3_OverrideLimbDraw, NULL, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnTanron3_OverrideLimbDraw, NULL, &this->actor);
     POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
