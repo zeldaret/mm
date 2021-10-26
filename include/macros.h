@@ -8,18 +8,6 @@
 #define ARRAY_COUNT(arr) (s32)(sizeof(arr) / sizeof(arr[0]))
 #define ARRAY_COUNTU(arr) (u32)(sizeof(arr) / sizeof(arr[0]))
 
-// Segment Wrapper
-// Uncached RDRAM
-#define KSEG1 0xA0000000 // 0xA0000000 - 0xBFFFFFFF  Physical memory, uncached, unmapped
-#define RDRAM_UNCACHED KSEG1
-
-// Cached RDRAM
-#define KSEG0 0x80000000 // 0x80000000 - 0x9FFFFFFF  Physical memory, cached, unmapped
-#define RDRAM_CACHED KSEG0
-
-// Volatile access wrapper, enforcing uncached memory
-#define HW_REG(reg, type) *(volatile type*)((reg) | KSEG1)
-
 // TODO: After uintptr_t cast change should have an AVOID_UB target that just toggles the KSEG0 bit in the address rather than add/sub 0x80000000
 #define PHYSICAL_TO_VIRTUAL(addr) ((uintptr_t)(addr) + RDRAM_CACHED)
 #define PHYSICAL_TO_VIRTUAL2(addr) ((uintptr_t)(addr) - RDRAM_CACHED)
