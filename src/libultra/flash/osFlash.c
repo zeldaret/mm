@@ -222,6 +222,7 @@ void osFlashSectorEraseThrough(u32 pageNum) {
 
 s32 osFlashWriteBuffer(OSIoMesg* mb, s32 priority, void* dramAddr, OSMesgQueue* mq) {
     s32 ret;
+
     // select load page mode
     osEPiWriteIo(&__osFlashHandler, __osFlashHandler.baseAddress | FRAM_COMMAND_REGISTER, FRAM_COMMAND_SET_MODE_WRITE);
 
