@@ -43,4 +43,3 @@ void Path_CopyLastPoint(Path* path, Vec3f* dest) {
         dest->z = pointPos->z;
     }
 }
-
