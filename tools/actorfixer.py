@@ -151,8 +151,22 @@ animdict = {
     "MainHeap_Cleanup": "ZeldaArena_Cleanup",
     "MainHeap_IsInitialized": "ZeldaArena_IsInitialized",
 
-    "animCurrentSeg": "animation",
-    "limbDrawTbl": "jointTable",
+    "skelanime.unk03": "skelanime.taper",
+    "skelanime.animCurrentSeg": "skelanime.animation",
+    "skelanime.initialFrame": "skelanime.startFrame",
+    "skelanime.animFrameCount": "skelanime.endFrame",
+    "skelanime.totalFrames": "skelanime.animLength",
+    "skelanime.animCurrentFrame": "skelanime.curFrame",
+    "skelanime.animPlaybackSpeed": "skelanime.playSpeed",
+    "skelanime.limbDrawTbl": "skelanime.jointTable",
+    "skelanime.transitionDrawTbl": "skelanime.morphTable",
+    "skelanime.transCurrentFrame": "skelanime.morphWeight",
+    "skelanime.transitionStep": "skelanime.morphRate",
+    "skelanime.animUpdate": "skelanime.update",
+    "skelanime.flags": "skelanime.moveFlags",
+    "skelanime.prevFrameRot": "skelanime.prevRot",
+    "skelanime.prevFramePos": "skelanime.prevTransl",
+    "skelanime.unk3E": "skelanime.baseTransl",
 }
 
 def replace_anim(file):
