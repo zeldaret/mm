@@ -140,6 +140,16 @@ animdict = {
     "SkelAnime_CopyVec3s": "SkelAnime_CopyFrameTable",
     "SysMatrix_StatePop": "Matrix_StatePop",
     "SysMatrix_GetCurrentState": "Matrix_GetCurrentState",
+    "zelda_malloc(": "ZeldaArena_Malloc(",
+    "zelda_mallocR(": "ZeldaArena_MallocR(",
+    "zelda_realloc": "ZeldaArena_Realloc",
+    "zelda_free": "ZeldaArena_Free",
+    "zelda_calloc": "ZeldaArena_Calloc",
+    "MainHeap_AnalyzeArena": "ZeldaArena_GetSizes",
+    "MainHeap_Check": "ZeldaArena_Check",
+    "MainHeap_Init": "ZeldaArena_Init",
+    "MainHeap_Cleanup": "ZeldaArena_Cleanup",
+    "MainHeap_IsInitialized": "ZeldaArena_IsInitialized",
 
     "animCurrentSeg": "animation",
     "limbDrawTbl": "jointTable",
@@ -176,6 +186,11 @@ def replace_anim_all(repo):
     for subdir, dirs, files in os.walk(repo + os.sep + 'asm'):
         for filename in files:
             if(filename.endswith('.s')):
+                file = subdir + os.sep + filename
+                replace_anim(file)
+    for subdir, dirs, files in os.walk(repo + os.sep + 'tools' + os.sep + 'sizes'):
+        for filename in files:
+            if(filename.endswith('.csv')):
                 file = subdir + os.sep + filename
                 replace_anim(file)
     return 1
