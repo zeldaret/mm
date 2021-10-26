@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/simonlindholm/decomp-permuter.git
+	branch = main
+	commit = a20bac9422b6d8adbf7c06473c2ae3c3fee16be5
+	parent = 2668eec556c01fa2f4c16a203c93c208dc03e639
+	method = merge
+	cmdver = 0.4.3

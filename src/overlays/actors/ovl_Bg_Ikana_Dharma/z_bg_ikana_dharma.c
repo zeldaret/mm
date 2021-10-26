@@ -9,7 +9,7 @@ void BgIkanaDharma_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaDharma_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIkanaDharma_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Bg_Ikana_Dharma_InitVars = {
     ACTOR_BG_IKANA_DHARMA,
     ACTORCAT_BG,
@@ -19,28 +19,50 @@ const ActorInit Bg_Ikana_Dharma_InitVars = {
     (ActorFunc)BgIkanaDharma_Init,
     (ActorFunc)BgIkanaDharma_Destroy,
     (ActorFunc)BgIkanaDharma_Update,
-    (ActorFunc)BgIkanaDharma_Draw
+    (ActorFunc)BgIkanaDharma_Draw,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Dharma_0x80BEC240/func_80BEC240.asm")
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_80BECAD0 = {
+    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00000100, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+    { 98, 10, 25, { 0, 0, 0 } },
+};
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Dharma_0x80BEC240/BgIkanaDharma_Init.asm")
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80BECAFC[] = {
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 320, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 320, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(gravity, -1100, ICHAIN_STOP),
+};
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Dharma_0x80BEC240/BgIkanaDharma_Destroy.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Dharma_0x80BEC240/func_80BEC5C4.asm")
+extern ColliderCylinderInit D_80BECAD0;
+extern InitChainEntry D_80BECAFC[];
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Dharma_0x80BEC240/func_80BEC5E0.asm")
+extern UNK_TYPE D_060008C8;
+extern UNK_TYPE D_06000C50;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Dharma_0x80BEC240/func_80BEC758.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Dharma/func_80BEC240.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Dharma_0x80BEC240/func_80BEC790.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Dharma/BgIkanaDharma_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Dharma_0x80BEC240/func_80BEC7EC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Dharma/BgIkanaDharma_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Dharma_0x80BEC240/func_80BEC808.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Dharma/func_80BEC5C4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Dharma_0x80BEC240/BgIkanaDharma_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Dharma/func_80BEC5E0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Bg_Ikana_Dharma_0x80BEC240/BgIkanaDharma_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Dharma/func_80BEC758.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Dharma/func_80BEC790.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Dharma/func_80BEC7EC.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Dharma/func_80BEC808.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Dharma/BgIkanaDharma_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Dharma/BgIkanaDharma_Draw.s")

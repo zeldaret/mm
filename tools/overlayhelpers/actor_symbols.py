@@ -124,7 +124,7 @@ actor_names = [
     "",
     "",
     "",
-    "",
+    "ovl_En_Fishing",
     "ovl_Obj_Oshihiki",
     "ovl_Eff_Dust",
     "ovl_Bg_Umajump",
@@ -710,7 +710,7 @@ def null_or_ptr(w):
 # (name, vrom_st, vrom_end, vram_st, vram_end)
 def read_actor_ovl_tbl():
     actortbl = []
-    with open(repo + "decomp/code","rb") as codefile:
+    with open(repo + "baserom/code","rb") as codefile:
         codefile.seek(0x109510) # actor overlay table offset into code
         entry = as_word_list(codefile.read(0x20))
         i = 0
@@ -719,6 +719,7 @@ def read_actor_ovl_tbl():
             actortbl.append((actor_names[i], entry[0], entry[1], entry[2], entry[3]))
             entry = as_word_list(codefile.read(0x20))
             i += 1
+        actortbl[0] = ['ovl_Player_Actor', 0xCA7F00, 0xCDCF60, 0x8082DA90, 0x80862B70 ]
     return actortbl
 
 actor_tbl = read_actor_ovl_tbl()
@@ -730,12 +731,12 @@ def resolve_symbol(address):
     for entry in actor_tbl:
         if address >= 0x80000000:
             if entry[3] <= address < entry[4]:
-                return repo + "decomp" + os.sep + entry[0], address - entry[3]
+                return repo + "baserom" + os.sep + entry[0], address - entry[3]
         else:
             if entry[1] <= address < entry[2]:
-                return repo + "decomp" + os.sep + entry[0], address - entry[1]
+                return repo + "baserom" + os.sep + entry[0], address - entry[1]
     else:
-        return None, None
+        raise RuntimeError('Symbol not found in actor overlay table file ranges. Are you sure the file is an actor overlay?')
 
 def HexParse(s):
     return int(s, 16)

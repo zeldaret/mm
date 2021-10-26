@@ -1,7 +1,7 @@
 #ifndef Z_EN_PO_FUSEN_H
 #define Z_EN_PO_FUSEN_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnPoFusen;
 
@@ -12,8 +12,8 @@ typedef struct EnPoFusen {
     /* 0x144 */ SkelAnime anime;
     /* 0x188 */ EnPoFusenActionFunc actionFunc;
     /* 0x18C */ ColliderSphere collider;
-    /* 0x1E4 */ Vec3s limbDrawTbl[0xA];
-    /* 0x220 */ Vec3s transitionDrawTbl[0xA];
+    /* 0x1E4 */ Vec3s jointTable[0xA];
+    /* 0x220 */ Vec3s morphTable[0xA];
     /* 0x25C */ s16 randScaleChange;
     /* 0x25E */ s16 randXZRotChange;
     /* 0x260 */ s16 randYRotChange;
@@ -26,9 +26,6 @@ typedef struct EnPoFusen {
     /* 0x26E */ s16 randBaseRotChange;
     /* 0x270 */ s16 fuse;
 } EnPoFusen; // size = 0x274
-
-extern SkeletonHeader D_06000040;
-extern AnimationHeader D_060024F0;
 
 extern const ActorInit En_Po_Fusen_InitVars;
 

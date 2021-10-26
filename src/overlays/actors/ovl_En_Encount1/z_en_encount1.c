@@ -7,7 +7,9 @@
 void EnEncount1_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnEncount1_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+void func_808E0954(EnEncount1* this, GlobalContext* globalCtx);
+
+#if 0
 const ActorInit En_Encount1_InitVars = {
     ACTOR_EN_ENCOUNT1,
     ACTORCAT_PROP,
@@ -17,12 +19,13 @@ const ActorInit En_Encount1_InitVars = {
     (ActorFunc)EnEncount1_Init,
     (ActorFunc)NULL,
     (ActorFunc)EnEncount1_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Encount1_0x808E0830/EnEncount1_Init.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Encount1_0x808E0830/func_808E0954.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Encount1/EnEncount1_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Encount1_0x808E0830/EnEncount1_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Encount1/func_808E0954.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Encount1/EnEncount1_Update.s")

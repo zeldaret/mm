@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 #define FILL_ALLOCBLOCK (1 << 0)
 #define FILL_FREEBLOCK (1 << 1)
@@ -16,6 +15,8 @@
 
 extern OSMesg sArenaLockMsg[1];
 
+#pragma GLOBAL_ASM("asm/non_matchings/boot/__osMalloc/D_80099110.s")
+
 void ArenaImpl_LockInit(Arena* arena) {
     osCreateMesgQueue(&arena->lock, sArenaLockMsg, ARRAY_COUNT(sArenaLockMsg));
 }
@@ -28,7 +29,7 @@ void ArenaImpl_Unlock(Arena* arena) {
     osRecvMesg(&arena->lock, NULL, OS_MESG_BLOCK);
 }
 
-ArenaNode* heap_get_tail(Arena* arena) {
+ArenaNode* ArenaImpl_GetLastBlock(Arena* arena) {
     ArenaNode* last;
     ArenaNode* iter;
 
@@ -44,7 +45,7 @@ ArenaNode* heap_get_tail(Arena* arena) {
     return last;
 }
 
-void __osMallocInit(Arena* arena, void* start, u32 size) {
+void __osMallocInit(Arena* arena, void* start, size_t size) {
     bzero(arena, sizeof(*arena));
     ArenaImpl_LockInit(arena);
     __osMallocAddBlock(arena, start, size);
@@ -69,7 +70,7 @@ void __osMallocAddBlock(Arena* arena, void* start, s32 size) {
             firstNode->isFree = 1;
             firstNode->magic = NODE_MAGIC;
             ArenaImpl_Lock(arena);
-            lastNode = heap_get_tail(arena);
+            lastNode = ArenaImpl_GetLastBlock(arena);
             if (lastNode == NULL) {
                 arena->head = firstNode;
                 arena->start = start;
@@ -82,7 +83,6 @@ void __osMallocAddBlock(Arena* arena, void* start, s32 size) {
     }
 }
 
-
 void __osMallocCleanup(Arena* arena) {
     bzero(arena, sizeof(*arena));
 }
@@ -91,17 +91,17 @@ u8 __osMallocIsInitalized(Arena* arena) {
     return arena->isInit;
 }
 
-void* __osMalloc(Arena* arena, u32 size) {
+void* __osMalloc(Arena* arena, size_t size) {
     ArenaNode* iter;
     ArenaNode* newNode;
     void* alloc;
     u32 blockSize;
     alloc = NULL;
-    
+
     size = ALIGN16(size);
     ArenaImpl_Lock(arena);
     iter = arena->head;
-    
+
     while (iter != NULL) {
         if (iter->isFree && iter->size >= size) {
             ArenaNode* next;
@@ -134,8 +134,7 @@ void* __osMalloc(Arena* arena, u32 size) {
     return alloc;
 }
 
-
-void* __osMallocR(Arena* arena, u32 size) {
+void* __osMallocR(Arena* arena, size_t size) {
     ArenaNode* iter;
     ArenaNode* newNode;
     u32 blockSize;
@@ -143,7 +142,7 @@ void* __osMallocR(Arena* arena, u32 size) {
 
     size = ALIGN16(size);
     ArenaImpl_Lock(arena);
-    iter = heap_get_tail(arena);
+    iter = ArenaImpl_GetLastBlock(arena);
 
     while (iter != NULL) {
         if (iter->isFree && iter->size >= size) {
@@ -218,9 +217,9 @@ end:
     ArenaImpl_Unlock(arena);
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/__osMalloc/__osRealloc.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/boot/__osMalloc/__osRealloc.s")
 
-void __osAnalyzeArena(Arena* arena, u32* outMaxFree, u32* outFree, u32* outAlloc) {
+void __osAnalyzeArena(Arena* arena, size_t* outMaxFree, size_t* outFree, size_t* outAlloc) {
     ArenaNode* iter;
 
     ArenaImpl_Lock(arena);
@@ -246,4 +245,4 @@ void __osAnalyzeArena(Arena* arena, u32* outMaxFree, u32* outFree, u32* outAlloc
     ArenaImpl_Unlock(arena);
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/boot/__osMalloc/__osCheckArena.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/boot/__osMalloc/__osCheckArena.s")

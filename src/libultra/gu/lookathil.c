@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 #define FTOFRAC8(x) ((s32)MIN(((x) * (128.0f)), 127.0f) & 0xff)
 
@@ -58,7 +57,7 @@ void guLookAtHiliteF(f32 mf[4][4], LookAt* l, Hilite* h, f32 xEye, f32 yEye, f32
 
     length = sqrtf(SQ(xHilite) + SQ(yHilite) + SQ(zHilite));
 
-    if (length > D_800992F0) {
+    if (length > 0.1) {
         length = 1.0 / length;
         xHilite *= length;
         yHilite *= length;
@@ -81,7 +80,7 @@ void guLookAtHiliteF(f32 mf[4][4], LookAt* l, Hilite* h, f32 xEye, f32 yEye, f32
     yHilite = yl2 + yLook;
     zHilite = zl2 + zLook;
     length = sqrtf(SQ(xHilite) + SQ(yHilite) + SQ(zHilite));
-    if (length > D_800992F8) {
+    if (length > 0.1) {
         length = 1.0 / length;
         xHilite *= length;
         yHilite *= length;
@@ -154,5 +153,5 @@ void guLookAtHilite(Mtx* m, LookAt* l, Hilite* h, f32 xEye, f32 yEye, f32 zEye, 
     guLookAtHiliteF(mf, l, h, xEye, yEye, zEye, xAt, yAt, zAt, xUp, yUp, zUp, xl1, yl1, zl1, xl2, yl2, zl2, hiliteWidth,
                     hiliteHeight);
 
-    guMtxF2L((MtxF*)mf, m);
+    guMtxF2L(mf, m);
 }

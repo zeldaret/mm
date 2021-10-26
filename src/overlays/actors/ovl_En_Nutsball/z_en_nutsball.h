@@ -1,13 +1,15 @@
 #ifndef Z_EN_NUTSBALL_H
 #define Z_EN_NUTSBALL_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnNutsball;
 
 typedef struct EnNutsball {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x50];
+    /* 0x144 */ s16 timer;
+    /* 0x146 */ s16 timerThreshold;
+    /* 0x148 */ ColliderCylinder collider;
 } EnNutsball; // size = 0x194
 
 extern const ActorInit En_Nutsball_InitVars;

@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 s32 osContStartReadData(OSMesgQueue* mq) {
     s32 ret;
@@ -58,7 +57,7 @@ void __osPackReadData() {
     readformat.stick_y = -1;
     for (i = 0; i < __osMaxControllers; i++) {
         *(__OSContReadFormat*)ptr = readformat;
-        ptr+=sizeof(__OSContReadFormat);
+        ptr += sizeof(__OSContReadFormat);
     }
     *ptr = 254;
 }

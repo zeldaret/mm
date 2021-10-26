@@ -1,13 +1,13 @@
 #ifndef Z_BG_LBFSHOT_H
 #define Z_BG_LBFSHOT_H
 
-#include <global.h>
+#include "global.h"
 
 struct BgLbfshot;
 
 typedef struct BgLbfshot {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x1C];
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ UNK_TYPE1 pad15C[0x4];
 } BgLbfshot; // size = 0x160
 
 extern const ActorInit Bg_Lbfshot_InitVars;

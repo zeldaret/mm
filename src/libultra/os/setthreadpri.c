@@ -1,14 +1,14 @@
-#include <osint.h>
+#include "global.h"
 
 void osSetThreadPri(OSThread* t, OSPri p) {
     register u32 saveMask;
-	
+
     saveMask = __osDisableInt();
-	
+
     if (t == NULL) {
         t = __osRunningThread;
     }
-	
+
     if (t->priority != p) {
         t->priority = p;
 
@@ -22,6 +22,6 @@ void osSetThreadPri(OSThread* t, OSPri p) {
             __osEnqueueAndYield(&__osRunQueue);
         }
     }
-	
+
     __osRestoreInt(saveMask);
 }

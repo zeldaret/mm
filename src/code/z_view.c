@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 void View_ViewportToVp(Vp* dest, Viewport* src) {
     s32 width = src->rightX - src->leftX;
@@ -28,16 +27,18 @@ void View_Init(View* view, GraphicsContext* gfxCtx) {
     view->unk164 = 0;
     view->flags = 1 | 2 | 4;
 
-    if (1);
+    if (1) {
+        ;
+    }
 
     view->scale = 1.0f;
-    view->upDir.y = 1.0f;
+    view->up.y = 1.0f;
     view->fovy = 60.0f;
     view->eye.x = 0.0f;
     view->eye.y = 0.0f;
-    view->focalPoint.x = 0.0f;
-    view->upDir.x = 0.0f;
-    view->upDir.z = 0.0f;
+    view->at.x = 0.0f;
+    view->up.x = 0.0f;
+    view->up.z = 0.0f;
     view->zNear = 10.0f;
     view->zFar = 12800.0f;
     view->eye.z = -1.0f;
@@ -45,24 +46,24 @@ void View_Init(View* view, GraphicsContext* gfxCtx) {
     View_InitCameraQuake(view);
 }
 
-void View_SetViewOrientation(View* view, Vec3f* eye, Vec3f* focalPoint, Vec3f* upDir) {
-    if (eye->x == focalPoint->x && eye->z == focalPoint->z) {
+void View_SetViewOrientation(View* view, Vec3f* eye, Vec3f* at, Vec3f* up) {
+    if (eye->x == at->x && eye->z == at->z) {
         eye->z += 0.1f;
-        upDir->z = 0.0f;
-        upDir->x = 0.0f;
-        upDir->y = 1.0f;
+        up->z = 0.0f;
+        up->x = 0.0f;
+        up->y = 1.0f;
     }
 
     view->eye = *eye;
-    view->focalPoint = *focalPoint;
-    view->upDir = *upDir;
+    view->at = *at;
+    view->up = *up;
     view->flags |= 1;
 }
 
-void func_8013F050(View* view, Vec3f* eye, Vec3f* focalPoint, Vec3f* upDir) {
+void func_8013F050(View* view, Vec3f* eye, Vec3f* at, Vec3f* up) {
     view->eye = *eye;
-    view->focalPoint = *focalPoint;
-    view->upDir = *upDir;
+    view->at = *at;
+    view->up = *up;
 }
 
 void View_SetScale(View* view, f32 scale) {
@@ -139,10 +140,8 @@ void View_SetScissorForLetterbox(View* view) {
     s32 uly;
     s32 lrx;
     s32 lry;
-    s32 pad2;
-    GraphicsContext* gfxCtx;
 
-    gfxCtx = view->gfxCtx;
+    OPEN_DISPS(view->gfxCtx);
 
     letterboxY = ShrinkWindow_GetLetterboxMagnitude();
     letterboxX = -1; // The following is optimized to varX = 0 but affects codegen
@@ -165,25 +164,27 @@ void View_SetScissorForLetterbox(View* view) {
     lrx = view->viewport.rightX - letterboxX;
     lry = view->viewport.bottomY - letterboxY;
 
-    gDPPipeSync(gfxCtx->polyOpa.p++);
+    gDPPipeSync(POLY_OPA_DISP++);
     {
         s32 pad3;
         Gfx* polyOpa;
 
-        polyOpa = gfxCtx->polyOpa.p;
+        polyOpa = POLY_OPA_DISP;
         View_WriteScissor(&polyOpa, ulx, uly, lrx, lry);
-        gfxCtx->polyOpa.p = polyOpa;
+        POLY_OPA_DISP = polyOpa;
     }
 
-    gDPPipeSync(gfxCtx->polyXlu.p++);
+    gDPPipeSync(POLY_XLU_DISP++);
     {
         Gfx* polyXlu;
         s32 pad4;
 
-        polyXlu = gfxCtx->polyXlu.p;
+        polyXlu = POLY_XLU_DISP;
         View_WriteScissor(&polyXlu, ulx, uly, lrx, lry);
-        gfxCtx->polyXlu.p = polyXlu;
+        POLY_XLU_DISP = polyXlu;
     }
+
+    CLOSE_DISPS(view->gfxCtx);
 }
 
 s32 View_SetQuakeRotation(View* view, f32 x, f32 y, f32 z) {
@@ -236,7 +237,7 @@ s32 View_SetQuake(View* view, Vec3f rot, Vec3f scale, f32 speed) {
     return 1;
 }
 
-s32 View_StepQuake(View* view, RSPMatrix* matrix) {
+s32 View_StepQuake(View* view, Mtx* matrix) {
     MtxF mf;
 
     if (view->quakeSpeed == 0.0f) {
@@ -255,16 +256,16 @@ s32 View_StepQuake(View* view, RSPMatrix* matrix) {
         view->currQuakeScale.z += ((view->quakeScale.z - view->currQuakeScale.z) * view->quakeSpeed);
     }
 
-    SysMatrix_FromRSPMatrix(matrix, &mf);
-    Matrix_Put(&mf);
-    SysMatrix_RotateStateAroundXAxis(view->currQuakeRot.x);
-    SysMatrix_InsertYRotation_f(view->currQuakeRot.y, 1);
-    SysMatrix_InsertZRotation_f(view->currQuakeRot.z, 1);
-    Matrix_Scale(view->currQuakeScale.x, view->currQuakeScale.y, view->currQuakeScale.z, 1);
-    SysMatrix_InsertZRotation_f(-view->currQuakeRot.z, 1);
-    SysMatrix_InsertYRotation_f(-view->currQuakeRot.y, 1);
-    SysMatrix_RotateStateAroundXAxis(-view->currQuakeRot.x);
-    SysMatrix_GetStateAsRSPMatrix(matrix);
+    Matrix_FromRSPMatrix(matrix, &mf);
+    Matrix_SetCurrentState(&mf);
+    Matrix_RotateStateAroundXAxis(view->currQuakeRot.x);
+    Matrix_InsertYRotation_f(view->currQuakeRot.y, 1);
+    Matrix_InsertZRotation_f(view->currQuakeRot.z, 1);
+    Matrix_Scale(view->currQuakeScale.x, view->currQuakeScale.y, view->currQuakeScale.z, MTXMODE_APPLY);
+    Matrix_InsertZRotation_f(-view->currQuakeRot.z, 1);
+    Matrix_InsertYRotation_f(-view->currQuakeRot.y, 1);
+    Matrix_RotateStateAroundXAxis(-view->currQuakeRot.x);
+    Matrix_ToMtx(matrix);
 
     return 1;
 }
@@ -279,8 +280,6 @@ void View_RenderView(View* view, s32 uParm2) {
     }
 }
 
-#ifdef NON_MATCHING
-// saved register usage is wrong, stack, regalloc
 s32 View_RenderToPerspectiveMatrix(View* view) {
     f32 aspect;
     s32 width;
@@ -288,28 +287,20 @@ s32 View_RenderToPerspectiveMatrix(View* view) {
     Vp* vp;
     Mtx* projection;
     Mtx* viewing;
-    GraphicsContext* gfxCtx;
+    GraphicsContext* gfxCtx = view->gfxCtx;
 
-    gfxCtx = view->gfxCtx;
+    OPEN_DISPS(gfxCtx);
 
-    {
-        Vp* _vp = (Vp*)gfxCtx->polyOpa.d - 1;
-        vp = _vp;
-        gfxCtx->polyOpa.d = (Gfx*)_vp;
-    }
+    vp = GRAPH_ALLOC(gfxCtx, sizeof(*vp));
     View_ViewportToVp(vp, &view->viewport);
     view->vp = *vp;
 
     View_SetScissorForLetterbox(view);
 
-    gSPViewport(gfxCtx->polyOpa.p++, vp);
-    gSPViewport(gfxCtx->polyXlu.p++, vp);
+    gSPViewport(POLY_OPA_DISP++, vp);
+    gSPViewport(POLY_XLU_DISP++, vp);
 
-    {
-        Mtx* _m = (Mtx*)gfxCtx->polyOpa.d - 1;
-        projection = _m;
-        gfxCtx->polyOpa.d = (Gfx*)_m;
-    }
+    projection = GRAPH_ALLOC(gfxCtx, sizeof(*projection));
     view->projectionPtr = projection;
 
     width = view->viewport.rightX - view->viewport.leftX;
@@ -317,93 +308,171 @@ s32 View_RenderToPerspectiveMatrix(View* view) {
     aspect = (f32)width / (f32)height;
 
     guPerspective(projection, &view->normal, view->fovy, aspect, view->zNear, view->zFar, view->scale);
-
     view->projection = *projection;
+    //! @bug: This cast of `projection` is invalid
+    View_StepQuake(view, (Mtx*)projection);
 
-    View_StepQuake(view, projection);
+    gSPPerspNormalize(POLY_OPA_DISP++, view->normal);
+    gSPMatrix(POLY_OPA_DISP++, projection, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+    gSPPerspNormalize(POLY_XLU_DISP++, view->normal);
+    gSPMatrix(POLY_XLU_DISP++, projection, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
 
-    gSPPerspNormalize(gfxCtx->polyOpa.p++, view->normal);
-    gSPMatrix(gfxCtx->polyOpa.p++, projection, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-    gSPPerspNormalize(gfxCtx->polyXlu.p++, view->normal);
-    gSPMatrix(gfxCtx->polyXlu.p++, projection, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-
-    {
-        Mtx* _m = (Mtx*)gfxCtx->polyOpa.d - 1;
-        viewing = _m;
-        gfxCtx->polyOpa.d = (Gfx*)_m;
-    }
+    viewing = GRAPH_ALLOC(gfxCtx, sizeof(*viewing));
     view->viewingPtr = viewing;
 
-    if (view->eye.x == view->focalPoint.x && view->eye.y == view->focalPoint.y && view->eye.z == view->focalPoint.z) {
+    if (view->eye.x == view->at.x && view->eye.y == view->at.y && view->eye.z == view->at.z) {
         view->eye.z += 2.0f;
     }
 
-    guLookAt(viewing, view->eye.x, view->eye.y, view->eye.z, view->focalPoint.x, view->focalPoint.y, view->focalPoint.z,
-                  view->upDir.x, view->upDir.y, view->upDir.z);
+    guLookAt(viewing, view->eye.x, view->eye.y, view->eye.z, view->at.x, view->at.y, view->at.z, view->up.x, view->up.y,
+             view->up.z);
 
     view->viewing = *viewing;
 
-    gSPMatrix(gfxCtx->polyOpa.p++, viewing, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
-    gSPMatrix(gfxCtx->polyXlu.p++, viewing, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
+    gSPMatrix(POLY_OPA_DISP++, viewing, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
+    gSPMatrix(POLY_XLU_DISP++, viewing, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
+
+    CLOSE_DISPS(gfxCtx);
 
     return 1;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_view/View_RenderToPerspectiveMatrix.asm")
-#endif
 
-#ifdef NON_MATCHING
-// this needs a momumental amount of work
 s32 View_RenderToOrthographicMatrix(View* view) {
+    Vp* vp;
+    Mtx* projection;
+    GraphicsContext* gfxCtx = view->gfxCtx;
+
+    OPEN_DISPS(gfxCtx);
+
+    vp = GRAPH_ALLOC(gfxCtx, sizeof(*vp));
+    View_ViewportToVp(vp, &view->viewport);
+    view->vp = *vp;
+
+    View_SetScissorForLetterbox(view);
+
+    gSPViewport(POLY_OPA_DISP++, vp);
+    gSPViewport(POLY_XLU_DISP++, vp);
+    gSPViewport(OVERLAY_DISP++, vp);
+
+    projection = GRAPH_ALLOC(gfxCtx, sizeof(*projection));
+    view->projectionPtr = projection;
+
+    guOrtho(projection, gScreenWidth * -0.5f, gScreenWidth * 0.5f, gScreenHeight * -0.5f, gScreenHeight * 0.5f,
+            view->zNear, view->zFar, view->scale);
+
+    view->projection = *projection;
+
+    gSPMatrix(POLY_OPA_DISP++, projection, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+    gSPMatrix(POLY_XLU_DISP++, projection, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+
+    CLOSE_DISPS(gfxCtx);
+
+    return 1;
+}
+
+s32 func_8013FBC8(View* view) {
     Vp* vp;
     Mtx* projection;
     GraphicsContext* gfxCtx;
 
     gfxCtx = view->gfxCtx;
 
-    {
-        Vp* _vp = (Vp*)gfxCtx->polyOpa.d - 1;
-        vp = _vp;
-        gfxCtx->polyOpa.d = (Gfx*)_vp;
-    }
+    OPEN_DISPS(gfxCtx);
+
+    vp = GRAPH_ALLOC(gfxCtx, sizeof(*vp));
     View_ViewportToVp(vp, &view->viewport);
     view->vp = *vp;
 
-    View_SetScissorForLetterbox(view);
-
-    gSPViewport(gfxCtx->polyOpa.p++, vp);
-    gSPViewport(gfxCtx->polyXlu.p++, vp);
-    gSPViewport(gfxCtx->overlay.p++, vp);
-
+    gDPPipeSync(OVERLAY_DISP++);
     {
-        Mtx* _m = (Mtx*)gfxCtx->polyOpa.d - 1;
-        projection = _m;
-        gfxCtx->polyOpa.d = (Gfx*)_m;
+        Gfx* overlay;
+        s32 pad;
+
+        overlay = OVERLAY_DISP;
+        View_WriteScissor(&overlay, view->viewport.leftX, view->viewport.topY, view->viewport.rightX,
+                          view->viewport.bottomY);
+        OVERLAY_DISP = overlay;
     }
+
+    gSPViewport(OVERLAY_DISP++, vp);
+    projection = GRAPH_ALLOC(gfxCtx, sizeof(*projection));
     view->projectionPtr = projection;
 
-    guOrtho(projection, -0.5f ,0.5f, screenWidth * -0.5f, screenWidth * 0.5f,
-            screenHeight * -0.5f, screenHeight * 0.5f, view->zNear);
-
+    guOrtho(projection, gScreenWidth * -0.5f, gScreenWidth * 0.5f, gScreenHeight * -0.5f, gScreenHeight * 0.5f,
+            view->zNear, view->zFar, view->scale);
     view->projection = *projection;
 
-    gSPMatrix(gfxCtx->polyOpa.p++, projection, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
-    gSPMatrix(gfxCtx->polyXlu.p++, projection, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+    gSPMatrix(OVERLAY_DISP++, projection, G_MTX_LOAD | G_MTX_PROJECTION);
+
+    CLOSE_DISPS(gfxCtx);
+    return 1;
+}
+
+s32 func_8013FD74(View* view) {
+    f32 aspect;
+    s32 width;
+    s32 height;
+    Vp* vp;
+    Mtx* projection;
+    Mtx* viewing;
+    GraphicsContext* gfxCtx;
+    s32 pad;
+
+    gfxCtx = view->gfxCtx;
+
+    OPEN_DISPS(gfxCtx);
+
+    vp = GRAPH_ALLOC(gfxCtx, sizeof(*vp));
+    View_ViewportToVp(vp, &view->viewport);
+    view->vp = *vp;
+
+    gDPPipeSync(OVERLAY_DISP++);
+    {
+        s32 pad;
+        Gfx* overlay;
+
+        overlay = OVERLAY_DISP;
+        View_WriteScissor(&overlay, view->viewport.leftX, view->viewport.topY, view->viewport.rightX,
+                          view->viewport.bottomY);
+        OVERLAY_DISP = overlay;
+    }
+
+    gSPViewport(OVERLAY_DISP++, vp);
+    projection = GRAPH_ALLOC(gfxCtx, sizeof(*projection));
+    view->projectionPtr = projection;
+
+    width = view->viewport.rightX - view->viewport.leftX;
+    height = view->viewport.bottomY - view->viewport.topY;
+    aspect = (f32)width / (f32)height;
+
+    guPerspective(projection, &view->normal, view->fovy, aspect, view->zNear, view->zFar, view->scale);
+    view->projection = *projection;
+
+    gSPPerspNormalize(OVERLAY_DISP++, view->normal);
+    gSPMatrix(OVERLAY_DISP++, projection, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+
+    viewing = GRAPH_ALLOC(gfxCtx, sizeof(*viewing));
+    view->viewingPtr = viewing;
+
+    if (view->eye.x == view->at.x && view->eye.y == view->at.y && view->eye.z == view->at.z) {
+        view->eye.z += 2.0f;
+    }
+
+    guLookAt(viewing, view->eye.x, view->eye.y, view->eye.z, view->at.x, view->at.y, view->at.z, view->up.x, view->up.y,
+             view->up.z);
+
+    view->viewing = *viewing;
+
+    gSPMatrix(OVERLAY_DISP++, viewing, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
+
+    CLOSE_DISPS(gfxCtx);
 
     return 1;
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_view/View_RenderToOrthographicMatrix.asm")
-#endif
-
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_view/func_8013FBC8.asm")
-
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_view/func_8013FD74.asm")
 
 s32 func_80140024(View* view) {
-    guLookAt(view->viewingPtr, view->eye.x, view->eye.y, view->eye.z,
-             view->focalPoint.x, view->focalPoint.y, view->focalPoint.z,
-             view->upDir.x, view->upDir.y, view->upDir.z);
+    guLookAt(view->viewingPtr, view->eye.x, view->eye.y, view->eye.z, view->at.x, view->at.y, view->at.z, view->up.x,
+             view->up.y, view->up.z);
 
     view->unkE0 = *view->viewingPtr;
     view->viewingPtr = &view->unkE0;
@@ -411,5 +480,31 @@ s32 func_80140024(View* view) {
     return 1;
 }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_view/func_801400CC.asm")
+s32 func_801400CC(View* view, Gfx** gfxp) {
+    Gfx* gfx = *gfxp;
+    GraphicsContext* gfxCtx = view->gfxCtx;
+    Viewport* viewport = &view->viewport;
+    Mtx* projection;
+    Vp* vp;
 
+    vp = GRAPH_ALLOC(gfxCtx, sizeof(*vp));
+    View_ViewportToVp(vp, viewport);
+    view->vp = *vp;
+
+    View_SyncAndWriteScissor(view, &gfx);
+
+    gSPViewport(gfx++, vp);
+
+    projection = GRAPH_ALLOC(gfxCtx, sizeof(*projection));
+    view->projectionPtr = projection;
+
+    guOrtho(projection, gScreenWidth * -0.5f, gScreenWidth * 0.5f, gScreenHeight * -0.5f, gScreenHeight * 0.5f,
+            view->zNear, view->zFar, view->scale);
+
+    view->projection = *projection;
+
+    gSPMatrix(gfx++, projection, G_MTX_LOAD | G_MTX_PROJECTION);
+    *gfxp = gfx;
+
+    return 1;
+}

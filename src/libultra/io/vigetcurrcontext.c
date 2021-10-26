@@ -1,6 +1,4 @@
-#include <osint.h>
-#include <viint.h>
-#include <assert.h>
+#include "global.h"
 
 __OSViContext* __osViGetCurrentContext(void) {
     return __osViCurr;

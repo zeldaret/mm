@@ -1,4 +1,4 @@
-#include <osint.h>
+#include "global.h"
 
 OSId osGetThreadId(OSThread* t) {
     if (t == NULL) {

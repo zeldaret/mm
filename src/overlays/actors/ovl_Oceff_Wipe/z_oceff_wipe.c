@@ -9,7 +9,7 @@ void OceffWipe_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void OceffWipe_Update(Actor* thisx, GlobalContext* globalCtx);
 void OceffWipe_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Oceff_Wipe_InitVars = {
     ACTOR_OCEFF_WIPE,
     ACTORCAT_ITEMACTION,
@@ -19,14 +19,15 @@ const ActorInit Oceff_Wipe_InitVars = {
     (ActorFunc)OceffWipe_Init,
     (ActorFunc)OceffWipe_Destroy,
     (ActorFunc)OceffWipe_Update,
-    (ActorFunc)OceffWipe_Draw
+    (ActorFunc)OceffWipe_Draw,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Wipe_0x809764B0/OceffWipe_Init.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Wipe_0x809764B0/OceffWipe_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe/OceffWipe_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Wipe_0x809764B0/OceffWipe_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe/OceffWipe_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Oceff_Wipe_0x809764B0/OceffWipe_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe/OceffWipe_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe/OceffWipe_Draw.s")

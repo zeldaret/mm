@@ -1,14 +1,39 @@
 #ifndef _Z64CUTSCENE_H_
 #define _Z64CUTSCENE_H_
 
-#include <ultra64.h>
-#include <unk.h>
+#include "ultra64.h"
+#include "unk.h"
 
 typedef struct {
-    /* 0x00 */ u16 unk0;
+    /* 0x00 */ s8    continueFlag;
+    /* 0x01 */ s8    cameraRoll;
+    /* 0x02 */ u16   nextPointFrame;
+    /* 0x04 */ f32   viewAngle; // in degrees
+    /* 0x08 */ Vec3s pos;
+} CutsceneCameraPoint; // size = 0x10
+
+typedef struct {
+    /* 0x00 */ Vec3f at;
+    /* 0x0C */ Vec3f eye;
+    /* 0x18 */ s16 roll;
+    /* 0x1A */ s16 fov;
+} CutsceneCameraAngle; // size = 0x1C
+
+typedef struct {
+    /* 0x0 */ CutsceneCameraPoint* atPoints;
+    /* 0x4 */ CutsceneCameraPoint* eyePoints;
+    /* 0x8 */ s16 relativeToPlayer;
+} CutsceneCameraMove; // size = 0xC
+
+typedef struct {
+    /* 0x00 */ u16 unk0; // action; // "dousa"
     /* 0x02 */ u16 startFrame;
     /* 0x04 */ u16 endFrame;
-    /* 0x06 */ UNK_TYPE1 pad6[0x2A];
+    /* 0x06 */ UNK_TYPE1 pad6[0xA];
+    /* 0x10 */ s32 unk10;
+    /* 0x14 */ UNK_TYPE1 pad14[0x8];
+    /* 0x1C */ s32 unk1C;
+    /* 0x20 */ UNK_TYPE1 pad20[0x10];
 } CsCmdActorAction; // size = 0x30
 
 typedef struct {
@@ -76,5 +101,12 @@ typedef struct {
     /* 0x8 */ u8 unk8;
     /* 0x9 */ UNK_TYPE1 pad9[0x3];
 } CsCmdUnk9B; // size = 0xC
+
+typedef union CutsceneData {
+    s32 i;
+    f32 f;
+    s16 s[2];
+    s8  b[4];
+} CutsceneData;
 
 #endif

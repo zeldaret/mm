@@ -8,7 +8,7 @@ void ObjPurify_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjPurify_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjPurify_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Obj_Purify_InitVars = {
     ACTOR_OBJ_PURIFY,
     ACTORCAT_BG,
@@ -18,44 +18,45 @@ const ActorInit Obj_Purify_InitVars = {
     (ActorFunc)ObjPurify_Init,
     (ActorFunc)ObjPurify_Destroy,
     (ActorFunc)ObjPurify_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Purify_0x80A84CD0/func_80A84CD0.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Purify_0x80A84CD0/func_80A84CF8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Purify/func_80A84CD0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Purify_0x80A84CD0/ObjPurify_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Purify/func_80A84CF8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Purify_0x80A84CD0/ObjPurify_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Purify/ObjPurify_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Purify_0x80A84CD0/func_80A84EAC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Purify/ObjPurify_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Purify_0x80A84CD0/func_80A84EC0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Purify/func_80A84EAC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Purify_0x80A84CD0/func_80A84FA0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Purify/func_80A84EC0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Purify_0x80A84CD0/func_80A84FB4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Purify/func_80A84FA0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Purify_0x80A84CD0/func_80A84FEC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Purify/func_80A84FB4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Purify_0x80A84CD0/func_80A85010.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Purify/func_80A84FEC.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Purify_0x80A84CD0/func_80A85048.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Purify/func_80A85010.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Purify_0x80A84CD0/func_80A85074.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Purify/func_80A85048.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Purify_0x80A84CD0/func_80A850B0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Purify/func_80A85074.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Purify_0x80A84CD0/func_80A850E8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Purify/func_80A850B0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Purify_0x80A84CD0/func_80A8515C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Purify/func_80A850E8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Purify_0x80A84CD0/func_80A85194.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Purify/func_80A8515C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Purify_0x80A84CD0/ObjPurify_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Purify/func_80A85194.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Purify_0x80A84CD0/func_80A851C8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Purify/ObjPurify_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Purify_0x80A84CD0/func_80A85304.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Purify/func_80A851C8.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Purify/func_80A85304.s")

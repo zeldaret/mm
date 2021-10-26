@@ -18,17 +18,20 @@ const ActorInit Bg_Fu_Kaiten_InitVars = {
     (ActorFunc)BgFuKaiten_Init,
     (ActorFunc)BgFuKaiten_Destroy,
     (ActorFunc)BgFuKaiten_Update,
-    (ActorFunc)BgFuKaiten_Draw
+    (ActorFunc)BgFuKaiten_Draw,
 };
+
+extern Gfx D_060005D0[];
+extern CollisionHeader D_06002D30;
 
 void BgFuKaiten_Init(Actor* thisx, GlobalContext* globalCtx) {
     UNK_TYPE pad0;
     UNK_TYPE pad1;
-    BgMeshHeader* header = 0;
+    CollisionHeader* header = 0;
 
     Actor_SetScale(thisx, 1.0);
     BcCheck3_BgActorInit(&THIS->bg, 3);
-    BgCheck_RelocateMeshHeader(&object_fu_kaiten_002D30, &header);
+    BgCheck_RelocateMeshHeader(&D_06002D30, &header);
     THIS->bg.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &THIS->bg, header);
 
     THIS->bouceHeight = 0.0;
@@ -44,8 +47,7 @@ void BgFuKaiten_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void BgFuKaiten_UpdateRotation(BgFuKaiten* this) {
     f32 f0;
     this->bg.actor.shape.rot.y += this->rotationSpeed;
-    if (this->rotationSpeed > 0)
-    {
+    if (this->rotationSpeed > 0) {
         f0 = this->rotationSpeed * .002f;
         func_8019FAD8(&this->bg.actor.projectedPos, 8310, f0);
     }
@@ -70,5 +72,5 @@ void BgFuKaiten_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(gfxCtx);
 
     gSPMatrix(gfxCtx->polyOpa.p++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(gfxCtx->polyOpa.p++, object_fu_kaiten_0005D0);
+    gSPDisplayList(gfxCtx->polyOpa.p++, D_060005D0);
 }

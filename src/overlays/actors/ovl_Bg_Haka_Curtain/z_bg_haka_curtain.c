@@ -28,23 +28,23 @@ const ActorInit Bg_Haka_Curtain_InitVars = {
     (ActorFunc)BgHakaCurtain_Init,
     (ActorFunc)BgHakaCurtain_Destroy,
     (ActorFunc)BgHakaCurtain_Update,
-    (ActorFunc)BgHakaCurtain_Draw
+    (ActorFunc)BgHakaCurtain_Draw,
 };
 
-static InitChainEntry D_80B6DFA0[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 700, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 600, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-extern BgMeshHeader D_06001588;
-extern UNK_TYPE D_06001410;
+extern CollisionHeader D_06001588;
+extern Gfx D_06001410[];
 
 void BgHakaCurtain_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgHakaCurtain* this = THIS;
 
-    Actor_ProcessInitChain(&this->dyna.actor, D_80B6DFA0);
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     BcCheck3_BgActorInit(&this->dyna, 1);
     BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06001588);
     if (Actor_GetRoomCleared(globalCtx, this->dyna.actor.room)) {
@@ -106,7 +106,7 @@ void func_80B6DD9C(BgHakaCurtain* this, GlobalContext* globalCtx) {
         func_80B6DE80(this);
         return;
     }
-    func_800B9010(&this->dyna.actor, 0x218D);
+    func_800B9010(&this->dyna.actor, NA_SE_EV_CURTAIN_DOWN - SFX_FLAG);
 }
 
 void func_80B6DE80(BgHakaCurtain* this) {
@@ -122,7 +122,7 @@ void BgHakaCurtain_Update(Actor* thisx, GlobalContext* globalCtx) {
     CsCmdActorAction* actorAction;
 
     if (func_800EE29C(globalCtx, 0x1D5)) {
-        actorAction = globalCtx->csCtx.actorActions[func_800EE200(globalCtx, 0x1D5)];
+        actorAction = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x1D5)];
         if (actorAction->startFrame == globalCtx->csCtx.frames && actorAction->unk0 == 2) {
             func_80B6DD80(this);
         }
@@ -131,5 +131,5 @@ void BgHakaCurtain_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgHakaCurtain_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, &D_06001410);
+    func_800BDFC0(globalCtx, D_06001410);
 }

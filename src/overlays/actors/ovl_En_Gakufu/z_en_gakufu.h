@@ -1,13 +1,16 @@
 #ifndef Z_EN_GAKUFU_H
 #define Z_EN_GAKUFU_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnGakufu;
 
+typedef void (*EnGakufuActionFunc)(struct EnGakufu*, GlobalContext*);
+
 typedef struct EnGakufu {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x10];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ char unk_144[0xC];
+    /* 0x0150 */ EnGakufuActionFunc actionFunc;
 } EnGakufu; // size = 0x154
 
 extern const ActorInit En_Gakufu_InitVars;

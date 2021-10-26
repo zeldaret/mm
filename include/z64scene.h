@@ -1,14 +1,16 @@
 #ifndef _Z64SCENE_H_
 #define _Z64SCENE_H_
 
-#include <ultra64.h>
-#include <z64dma.h>
-#include <unk.h>
+#include "ultra64.h"
+#include "z64dma.h"
+#include "unk.h"
+
+#define SPAWN_ROT_FLAGS(rotation, flags) (((rotation) << 7) | (flags))
 
 typedef struct {
-/* 0x0 */ u32 vromStart;
-/* 0x4 */ u32 vromEnd;
-} RoomFileLocation; // size = 0x8
+    /* 0x00 */ u32 vromStart;
+    /* 0x04 */ u32 vromEnd;
+} RomFile; // size = 0x8
 
 typedef struct {
     /* 0x00 */ u8  code;
@@ -65,7 +67,7 @@ typedef struct {
 typedef struct {
     /* 0x00 */ u8  code;
     /* 0x01 */ u8  cUpElfMsgNum;
-    /* 0x04 */ u32 keepObjectId;
+    /* 0x04 */ u32 subKeepIndex;
 } SCmdSpecialFiles;
 
 typedef struct {
@@ -172,6 +174,12 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ u8  code;
+    /* 0x01 */ u8  cameraMovement;
+    /* 0x04 */ u32 area;
+} SCmdMiscSettings;
+
+typedef struct {
+    /* 0x00 */ u8  code;
     /* 0x01 */ u8  data1;
     /* 0x04 */ void* segment;
 } SCmdAltHeaders;
@@ -207,8 +215,8 @@ typedef struct {
 } SCmdMinimapChests;
 
 typedef struct {
-    /* 0x0 */ u32 opaqueDl;
-    /* 0x4 */ u32 translucentDl;
+    /* 0x0 */ Gfx* opaqueDl;
+    /* 0x4 */ Gfx* translucentDl;
 } RoomMeshType0Params; // size = 0x8
 
 // Fields TODO
@@ -280,6 +288,22 @@ typedef struct {
 } RoomContext; // size = 0x80
 
 typedef struct {
+    struct {
+        s8 room;    // Room to switch to
+        s8 effects; // How the camera reacts during the transition
+    } /* 0x00 */ sides[2]; // 0 = front, 1 = back
+    /* 0x04 */ s16   id;
+    /* 0x06 */ Vec3s pos;
+    /* 0x0C */ s16   rotY;
+    /* 0x0E */ s16   params;
+} TransitionActorEntry; // size = 0x10
+
+typedef struct {
+    /* 0x00 */ u8 numTransitionActors;
+    /* 0x04 */ TransitionActorEntry* transitionActorList;
+} DoorContext;
+
+typedef struct {
     /* 0x0 */ s16 id;
     /* 0x2 */ Vec3s pos;
     /* 0x8 */ Vec3s rot;
@@ -299,20 +323,16 @@ typedef struct {
 } EntranceEntry; // size = 0x2
 
 typedef struct {
-    /* 0x0 */ s8 scene; // TODO what does it means for this to be neagtive?
-    /* 0x1 */ s8 unk1;
-    /* 0x2 */ u16 unk2;
-} EntranceRecord; // size = 0x4
+    /* 0x0 */ s8 sceneNum;
+    /* 0x1 */ s8 spawnNum;
+    /* 0x2 */ u16 flags;
+} EntranceTableEntry; // size = 0x4
 
 typedef struct {
-    /* 0x0 */ u32 entranceCount;
-    /* 0x4 */ EntranceRecord** entrances;
-    /* 0x8 */ char* name;
-} SceneEntranceTableEnty; // size = 0xC
-
-typedef struct {
-    /* 0x00 */ u16 scenes[27];
-} SceneIdList; // size = 0x36
+    /* 0x0 */ u32 tableCount : 8; // unused
+    /* 0x4 */ EntranceTableEntry** table;
+    /* 0x8 */ char* name; // unused
+} SceneEntranceTableEntry; // size = 0xC
 
 typedef struct {
     /* 0x00 */ s16 id; // Negative ids mean that the object is unloaded
@@ -324,32 +344,162 @@ typedef struct {
 } ObjectStatus; // size = 0x44
 
 typedef struct {
-    /* 0x0 */ u32 romStart;
-    /* 0x4 */ u32 romEnd;
-    /* 0x8 */ u16 unk8;
-    /* 0xA */ UNK_TYPE1 padA[0x1];
-    /* 0xB */ u8 sceneConfig; // TODO: This at least controls the behavior of animated textures. Does it do more?
-    /* 0xC */ UNK_TYPE1 padC[0x1];
-    /* 0xD */ u8 unkD;
-    /* 0xE */ UNK_TYPE1 padE[0x2];
-} SceneTableEntry; // size = 0x10
+    /* 0x0 */ RomFile segment;
+    /* 0x8 */ u16 titleTextId;
+    /* 0xA */ u8 unk_A;
+    /* 0xB */ u8 drawConfig;
+    /* 0xC */ u8 unk_C;
+} SceneTableEntry; // size = 0x10;
+
+typedef struct {
+    /* 0x0 */ u8 r;
+    /* 0x1 */ u8 g;
+    /* 0x2 */ u8 b;
+    /* 0x3 */ u8 a;
+    /* 0x4 */ u8 lodFrac;
+} F3DPrimColor; // size = 0x5
+
+typedef struct {
+    /* 0x0 */ u8 r;
+    /* 0x1 */ u8 g;
+    /* 0x2 */ u8 b;
+    /* 0x3 */ u8 a;
+} F3DEnvColor; // size = 0x4
+
+typedef struct {
+    /* 0x0 */ u16 keyFrameLength;
+    /* 0x2 */ u16 keyFrameCount;
+    /* 0x4 */ F3DPrimColor* primColors;
+    /* 0x8 */ F3DEnvColor* envColors;
+    /* 0xC */ u16* keyFrames;
+} AnimatedMatColorParams; // size = 0x10
 
 typedef struct {
     /* 0x0 */ s8 xStep;
     /* 0x1 */ s8 yStep;
     /* 0x2 */ u8 width;
     /* 0x3 */ u8 height;
-} ScrollingTextureParams; // size = 0x4
+} AnimatedMatTexScrollParams; // size = 0x4
 
 typedef struct {
-    /* 0x000 */ void* objectVramStart;
-    /* 0x004 */ void* objectVramEnd;
-    /* 0x008 */ u8 objectCount;
+    /* 0x0 */ u16 keyFrameLength;
+    /* 0x4 */ void* textureList;
+    /* 0x8 */ u8* textureIndexList;
+} AnimatedMatTexCycleParams; // size = 0xC
+
+typedef struct {
+    /* 0x000 */ void* spaceStart;
+    /* 0x004 */ void* spaceEnd;
+    /* 0x008 */ u8 num;
     /* 0x009 */ u8 spawnedObjectCount;
     /* 0x00A */ u8 mainKeepIndex;
-    /* 0x00B */ u8 keepObjectId;
-    /* 0x00C */ ObjectStatus objects[35]; // TODO: OBJECT_EXCHANGE_BANK_MAX array size
-} SceneContext; // size = 0x958
+    /* 0x00B */ u8 subKeepIndex;
+    /* 0x00C */ ObjectStatus status[OBJECT_EXCHANGE_BANK_MAX];
+} ObjectContext; // size = 0x958
+
+typedef struct {
+    u8 headerType;
+} MeshHeaderBase;
+
+typedef struct {
+    MeshHeaderBase base;
+
+    u8 numEntries;
+    u32 dListStart;
+    u32 dListEnd;
+} MeshHeader0;
+
+typedef struct {
+    u32 opaqueDList;
+    u32 translucentDList;
+} MeshEntry0;
+
+typedef struct {
+    MeshHeaderBase base;
+    u8 format;
+    u32 entryRecord;
+} MeshHeader1Base;
+
+typedef struct {
+    MeshHeader1Base base;
+    u32 imagePtr; // 0x08
+    u32 unknown; // 0x0C
+    u32 unknown2; // 0x10
+    u16 bgWidth; // 0x14
+    u16 bgHeight; // 0x16
+    u8 imageFormat; // 0x18
+    u8 imageSize; // 0x19
+    u16 imagePal; // 0x1A
+    u16 imageFlip; // 0x1C
+} MeshHeader1Single;
+
+typedef struct {
+    MeshHeader1Base base;
+    u8 bgCnt;
+    u32 bgRecordPtr;
+} MeshHeader1Multi;
+
+typedef struct {
+    u16 unknown; // 0x00
+    s8 bgID; // 0x02
+    u32 imagePtr; // 0x04
+    u32 unknown2; // 0x08
+    u32 unknown3; // 0x0C
+    u16 bgWidth; // 0x10
+    u16 bgHeight; // 0x12
+    u8 imageFmt; // 0x14
+    u8 imageSize; // 0x15
+    u16 imagePal; // 0x16
+    u16 imageFlip; // 0x18
+} BackgroundRecord;
+
+typedef struct {
+    s16 playerXMax, playerZMax;
+    s16 playerXMin, playerZMin;
+    u32 opaqueDList;
+    u32 translucentDList;
+} MeshEntry2;
+
+typedef struct {
+    MeshHeaderBase base;
+    u8 numEntries;
+    u32 dListStart;
+    u32 dListEnd;
+} MeshHeader2;
+
+typedef struct {
+    /* 0x00 */ u8 count; // number of points in the path
+    /* 0x01 */ u8 unk1;
+    /* 0x02 */ s16 unk2;
+    /* 0x04 */ Vec3s* points; // Segment Address to the array of points
+} Path; // size = 0x8
+
+typedef struct {
+    /* 0x00 */ UNK_TYPE2 unk0;
+    /* 0x02 */ UNK_TYPE2 unk2;
+    /* 0x04 */ UNK_TYPE2 unk4;
+    /* 0x06 */ UNK_TYPE2 unk6;
+    /* 0x08 */ UNK_TYPE2 unk8;
+} MinimapEntry; // size = 0xA
+
+typedef struct {
+    /* 0x00 */ MinimapEntry* entry;
+    /* 0x04 */ UNK_TYPE unk4;
+} MinimapList; // size  = 0x8
+
+typedef struct {
+    /* 0x00 */ UNK_TYPE2 unk0;
+    /* 0x02 */ UNK_TYPE2 unk2;
+    /* 0x04 */ UNK_TYPE2 unk4;
+    /* 0x06 */ UNK_TYPE2 unk6;
+    /* 0x08 */ UNK_TYPE2 unk8;
+} MinimapChest; // size = 0xA
+
+typedef struct {
+    /* 0x00 */ s16 type;
+    /* 0x00 */ s16 numPoints;
+    /* 0x00 */ Vec3s* points;
+} CsCameraEntry;
 
 typedef union {
     /* Command: N/A  */ SCmdBase              base;
@@ -376,7 +526,7 @@ typedef union {
     /* Command: 0x14 */ SCmdEndMarker         endMarker;
     /* Command: 0x15 */ SCmdSoundSettings     soundSettings;
     /* Command: 0x16 */ SCmdEchoSettings      echoSettings;
-    /* Command: 0x17 */ SCmdCutsceneData      cutsceneData;
+    /* Command: 0x17 */ SCmdMiscSettings      miscSettings;
     /* Command: 0x18 */ SCmdAltHeaders        altHeaders;
     /* Command: 0x19 */ SCmdWorldMapVisited   worldMapVisited;
     /* Command: 0x1A */ SCmdTextureAnimations textureAnimations;
@@ -501,5 +651,148 @@ typedef enum {
     /* 0x6F */ SCENE_CLOCKTOWER,
     /* 0x70 */ SCENE_ALLEY
 } SceneID;
+
+// SceneTableEntry draw configs
+typedef enum {
+    /* 0 */ SCENE_DRAW_CFG_DEFAULT,
+    /* 1 */ SCENE_DRAW_CFG_MAT_ANIM,
+    /* 2 */ SCENE_DRAW_CFG_NOTHING,
+    /* 3 */ SCENE_DRAW_CFG_UNUSED_3,
+    /* 4 */ SCENE_DRAW_CFG_UNUSED_4,
+    /* 5 */ SCENE_DRAW_CFG_UNUSED_5,
+    /* 6 */ SCENE_DRAW_CFG_GREAT_BAY_TEMPLE,
+    /* 7 */ SCENE_DRAW_CFG_MAT_ANIM_MANUAL_STEP
+} SceneDrawConfigIds;
+
+// SceneTableEntry commands
+typedef enum {
+    /* 0x00 */ SCENE_CMD_ID_SPAWN_LIST,
+    /* 0x01 */ SCENE_CMD_ID_ACTOR_LIST,
+    /* 0x02 */ SCENE_CMD_ID_ACTOR_CUTSCENE_CAM_LIST,
+    /* 0x03 */ SCENE_CMD_ID_COL_HEADER,
+    /* 0x04 */ SCENE_CMD_ID_ROOM_LIST,
+    /* 0x05 */ SCENE_CMD_ID_WIND_SETTINGS,
+    /* 0x06 */ SCENE_CMD_ID_ENTRANCE_LIST,
+    /* 0x07 */ SCENE_CMD_ID_SPECIAL_FILES,
+    /* 0x08 */ SCENE_CMD_ID_ROOM_BEHAVIOR,
+    /* 0x09 */ SCENE_CMD_ID_UNK_09,
+    /* 0x0A */ SCENE_CMD_ID_MESH,
+    /* 0x0B */ SCENE_CMD_ID_OBJECT_LIST,
+    /* 0x0C */ SCENE_CMD_ID_LIGHT_LIST,
+    /* 0x0D */ SCENE_CMD_ID_PATH_LIST,
+    /* 0x0E */ SCENE_CMD_ID_TRANSI_ACTOR_LIST,
+    /* 0x0F */ SCENE_CMD_ID_ENV_LIGHT_SETTINGS,
+    /* 0x10 */ SCENE_CMD_ID_TIME_SETTINGS,
+    /* 0x11 */ SCENE_CMD_ID_SKYBOX_SETTINGS,
+    /* 0x12 */ SCENE_CMD_ID_SKYBOX_DISABLES,
+    /* 0x13 */ SCENE_CMD_ID_EXIT_LIST,
+    /* 0x14 */ SCENE_CMD_ID_END,
+    /* 0x15 */ SCENE_CMD_ID_SOUND_SETTINGS,
+    /* 0x16 */ SCENE_CMD_ID_ECHO_SETTINGS,
+    /* 0x17 */ SCENE_CMD_ID_CUTSCENE_LIST,
+    /* 0x18 */ SCENE_CMD_ID_ALTERNATE_HEADER_LIST,
+    /* 0x19 */ SCENE_CMD_ID_MISC_SETTINGS,
+    /* 0x1A */ SCENE_CMD_ID_ANIMATED_MATERIAL_LIST,
+    /* 0x1B */ SCENE_CMD_ID_ACTOR_CUTSCENE_LIST,
+    /* 0x1C */ SCENE_CMD_ID_MINIMAP_INFO,
+    /* 0x1D */ SCENE_CMD_ID_UNUSED_1D,
+    /* 0x1E */ SCENE_CMD_ID_MINIMAP_COMPASS_ICON_INFO,
+    /* 0x1F */ SCENE_CMD_MAX
+} SceneCommandTypeID;
+
+#define SCENE_CMD_SPAWN_LIST(numSpawns, spawnList) \
+    { SCENE_CMD_ID_SPAWN_LIST, numSpawns, CMD_PTR(spawnList) }
+
+#define SCENE_CMD_ACTOR_LIST(numActors, actorList) \
+    { SCENE_CMD_ID_ACTOR_LIST, numActors, CMD_PTR(actorList) }
+
+#define SCENE_CMD_ACTOR_CUTSCENE_CAM_LIST(numCams, camList) \
+    { SCENE_CMD_ID_ACTOR_CUTSCENE_CAM_LIST, numCams, CMD_PTR(camList) }
+
+#define SCENE_CMD_COL_HEADER(colHeader) \
+    { SCENE_CMD_ID_COL_HEADER, 0, CMD_PTR(colHeader) }
+
+#define SCENE_CMD_ROOM_LIST(numRooms, roomList) \
+    { SCENE_CMD_ID_ROOM_LIST, numRooms, CMD_PTR(roomList) }
+
+#define SCENE_CMD_WIND_SETTINGS(xDir, yDir, zDir, strength) \
+    { SCENE_CMD_ID_WIND_SETTINGS, 0, CMD_BBBB(xDir, yDir, zDir, strength) }
+
+#define SCENE_CMD_ENTRANCE_LIST(entranceList) \
+    { SCENE_CMD_ID_ENTRANCE_LIST, 0, CMD_PTR(entranceList) }
+
+#define SCENE_CMD_SPECIAL_FILES(elfMessageFile, keepObjectId) \
+    { SCENE_CMD_ID_SPECIAL_FILES, elfMessageFile, CMD_W(keepObjectId) }
+
+#define SCENE_CMD_ROOM_BEHAVIOR(currRoomUnk3, currRoomUnk2, currRoomUnk5, msgCtxunk12044, enablePosLights,  \
+                                kankyoContextUnkE2)                                                         \
+    {                                                                                                       \
+        SCENE_CMD_ID_ROOM_BEHAVIOR, currRoomUnk3,                                                           \
+            currRoomUnk2 | _SHIFTL(currRoomUnk5, 8, 1) | _SHIFTL(msgCtxunk12044, 10, 1) | \
+                _SHIFTL(enablePosLights, 11, 1) | _SHIFTL(kankyoContextUnkE2, 12, 1)                        \
+    }
+
+#define SCENE_CMD_UNK_09() \
+    { SCENE_CMD_ID_UNK_09, 0, CMD_W(0) }
+
+#define SCENE_CMD_MESH(meshHeader) \
+    { SCENE_CMD_ID_MESH, 0, CMD_PTR(meshHeader) }
+
+#define SCENE_CMD_OBJECT_LIST(numObjects, objectList) \
+    { SCENE_CMD_ID_OBJECT_LIST, numObjects, CMD_PTR(objectList) }
+
+#define SCENE_CMD_LIGHT_LIST(numLights, lightList) \
+    { SCENE_CMD_ID_LIGHT_LIST, numLights, CMD_PTR(lightList) } 
+
+#define SCENE_CMD_PATH_LIST(pathList) \
+    { SCENE_CMD_ID_PATH_LIST, 0, CMD_PTR(pathList) }
+
+#define SCENE_CMD_TRANSITION_ACTOR_LIST(numTransitionActors, actorList) \
+    { SCENE_CMD_ID_TRANSI_ACTOR_LIST, numTransitionActors, CMD_PTR(actorList) } 
+
+#define SCENE_CMD_ENV_LIGHT_SETTINGS(numLightSettings, lightSettingsList) \
+    { SCENE_CMD_ID_ENV_LIGHT_SETTINGS, numLightSettings, CMD_PTR(lightSettingsList) }
+
+#define SCENE_CMD_TIME_SETTINGS(hour, min, speed) \
+    { SCENE_CMD_ID_TIME_SETTINGS, 0, CMD_BBBB(hour, min, speed, 0) }
+
+#define SCENE_CMD_SKYBOX_SETTINGS(externalTextureFileId, skyboxId, weather, lightMode) \
+    { SCENE_CMD_ID_SKYBOX_SETTINGS, externalTextureFileId, CMD_BBBB(skyboxId, weather, lightMode, 0) }
+
+#define SCENE_CMD_SKYBOX_DISABLES(disableSky, disableSunMoon) \
+    { SCENE_CMD_ID_SKYBOX_DISABLES, 0, CMD_BBBB(disableSky, disableSunMoon, 0, 0) }
+
+#define SCENE_CMD_EXIT_LIST(exitList) \
+    { SCENE_CMD_ID_EXIT_LIST, 0, CMD_PTR(exitList) }
+
+#define SCENE_CMD_END() \
+    { SCENE_CMD_ID_END, 0, CMD_W(0) }
+
+#define SCENE_CMD_SOUND_SETTINGS(audioSessionId, nighttimeSfx, bgmId) \
+    { SCENE_CMD_ID_SOUND_SETTINGS, audioSessionId, CMD_BBBB(0, 0, nighttimeSfx, bgmId) }
+
+#define SCENE_CMD_ECHO_SETTINGS(echo) \
+    { SCENE_CMD_ID_ECHO_SETTINGS, 0, CMD_BBBB(0, 0, 0, echo) }
+
+#define SCENE_CMD_CUTSCENE_LIST(numCutscene, cutsceneList) \
+    { SCENE_CMD_ID_CUTSCENE_LIST, numCutscene, CMD_PTR(cutsceneList) }
+
+#define SCENE_CMD_ALTERNATE_HEADER_LIST(alternateHeaderList) \
+    { SCENE_CMD_ID_ALTERNATE_HEADER_LIST, 0, CMD_PTR(alternateHeaderList) }
+
+#define SCENE_CMD_MISC_SETTINGS() \
+    { SCENE_CMD_ID_MISC_SETTINGS, 0, CMD_W(0) }
+
+#define SCENE_CMD_ANIMATED_MATERIAL_LIST(matAnimList) \
+    { SCENE_CMD_ID_ANIMATED_MATERIAL_LIST, 0, CMD_PTR(matAnimList) }
+
+#define SCENE_CMD_ACTOR_CUTSCENE_LIST(actorCutsceneCount, actorCutsceneList) \
+    { SCENE_CMD_ID_ACTOR_CUTSCENE_LIST, actorCutsceneCount, CMD_PTR(actorCutsceneList) }
+
+#define SCENE_CMD_MINIMAP_INFO(minimapInfo) \
+    { SCENE_CMD_ID_MINIMAP_INFO, 0, CMD_PTR(minimapInfo) }
+
+#define SCENE_CMD_MINIMAP_COMPASS_ICON_INFO(compassIconCount, compassIconInfo) \
+    { SCENE_CMD_ID_MINIMAP_COMPASS_ICON_INFO, compassIconCount, CMD_PTR(compassIconInfo) }
 
 #endif

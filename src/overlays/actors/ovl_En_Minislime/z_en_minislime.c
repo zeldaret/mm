@@ -1,4 +1,11 @@
+/*
+ * File: z_en_minislime.c
+ * Overlay: En_Minislime
+ * Description: Mad Jelly & Gekko Miniboss: Mini Jelly Droplets
+ */
+
 #include "z_en_minislime.h"
+#include "overlays/actors/ovl_En_Bigslime/z_en_bigslime.h"
 
 #define FLAGS 0x00000235
 
@@ -8,7 +15,32 @@ void EnMinislime_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnMinislime_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMinislime_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+void EnMinislime_SetupDisappear(EnMinislime* this);
+void EnMinislime_Disappear(EnMinislime* this, GlobalContext* globalCtx);
+void EnMinislime_SetupFall(EnMinislime* this, GlobalContext* globalCtx);
+void EnMinislime_Fall(EnMinislime* this, GlobalContext* globalCtx);
+void EnMinislime_SetupBreakFromBigslime(EnMinislime* this);
+void EnMinislime_BreakFromBigslime(EnMinislime* this, GlobalContext* globalCtx);
+void EnMinislime_IceArrowDamage(EnMinislime* this, GlobalContext* globalCtx);
+void EnMinislime_FireArrowDamage(EnMinislime* this, GlobalContext* globalCtx);
+void EnMinislime_SetupGrowAndShrink(EnMinislime* this);
+void EnMinislime_GrowAndShrink(EnMinislime* this, GlobalContext* globalCtx);
+void EnMinislime_SetupIdle(EnMinislime* this);
+void EnMinislime_SetupBounce(EnMinislime* this);
+void EnMinislime_Idle(EnMinislime* this, GlobalContext* globalCtx);
+void EnMinislime_Bounce(EnMinislime* this, GlobalContext* globalCtx);
+void EnMinislime_SetupDespawn(EnMinislime* this);
+void EnMinislime_Despawn(EnMinislime* this, GlobalContext* globalCtx);
+void EnMinislime_MoveToBigslime(EnMinislime* this, GlobalContext* globalCtx);
+void EnMinislime_Knockback(EnMinislime* this, GlobalContext* globalCtx);
+void EnMinislime_DefeatIdle(EnMinislime* this, GlobalContext* globalCtx);
+void EnMinislime_SetupDefeatMelt(EnMinislime* this, GlobalContext* globalCtx);
+void EnMinislime_DefeatMelt(EnMinislime* this, GlobalContext* globalCtx);
+void EnMinislime_SetupMoveToGekko(EnMinislime* this);
+void EnMinislime_MoveToGekko(EnMinislime* this, GlobalContext* globalCtx);
+void EnMinislime_SetupGekkoThrow(EnMinislime* this);
+void EnMinislime_GekkoThrow(EnMinislime* this, GlobalContext* globalCtx);
+
 const ActorInit En_Minislime_InitVars = {
     ACTOR_EN_MINISLIME,
     ACTORCAT_BOSS,
@@ -18,80 +50,723 @@ const ActorInit En_Minislime_InitVars = {
     (ActorFunc)EnMinislime_Init,
     (ActorFunc)EnMinislime_Destroy,
     (ActorFunc)EnMinislime_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/EnMinislime_Init.asm")
+static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_NONE,
+        AT_NONE | AT_TYPE_ENEMY,
+        AC_NONE | AC_TYPE_PLAYER,
+        OC1_NONE | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0xF7CFFFFF, 0x00, 0x04 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_HARD,
+        BUMP_ON | BUMP_HOOKABLE,
+        OCELEM_ON,
+    },
+    { 54, 60, -30, { 0, 0, 0 } },
+};
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/EnMinislime_Destroy.asm")
+static CollisionCheckInfoInit sColChkInfoInit = { 4, 40, 40, 30 };
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_8098399C.asm")
+typedef enum {
+    /* 0x0 */ MINISLIME_DMGEFF_NONE,
+    /* 0x2 */ MINISLIME_DMGEFF_FIRE = 0x2,
+    /* 0x3 */ MINISLIME_DMGEFF_ICE,
+    /* 0xE */ MINISLIME_DMGEFF_HOOKSHOT = 0xE,
+    /* 0xF */ MINISLIME_DMGEFF_BREAK_ICE,
+} MinislimeDamageEffect;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_80983B38.asm")
+static DamageTable sDamageTable = {
+    /* Deku Nut       */ DMG_ENTRY(0, MINISLIME_DMGEFF_NONE),
+    /* Deku Stick     */ DMG_ENTRY(1, MINISLIME_DMGEFF_NONE),
+    /* Horse trample  */ DMG_ENTRY(1, MINISLIME_DMGEFF_NONE),
+    /* Explosives     */ DMG_ENTRY(1, MINISLIME_DMGEFF_BREAK_ICE),
+    /* Zora boomerang */ DMG_ENTRY(1, MINISLIME_DMGEFF_NONE),
+    /* Normal arrow   */ DMG_ENTRY(1, MINISLIME_DMGEFF_NONE),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(1, MINISLIME_DMGEFF_NONE),
+    /* Hookshot       */ DMG_ENTRY(0, MINISLIME_DMGEFF_HOOKSHOT),
+    /* Goron punch    */ DMG_ENTRY(1, MINISLIME_DMGEFF_BREAK_ICE),
+    /* Sword          */ DMG_ENTRY(1, MINISLIME_DMGEFF_NONE),
+    /* Goron pound    */ DMG_ENTRY(1, MINISLIME_DMGEFF_BREAK_ICE),
+    /* Fire arrow     */ DMG_ENTRY(1, MINISLIME_DMGEFF_FIRE),
+    /* Ice arrow      */ DMG_ENTRY(1, MINISLIME_DMGEFF_ICE),
+    /* Light arrow    */ DMG_ENTRY(1, MINISLIME_DMGEFF_NONE),
+    /* Goron spikes   */ DMG_ENTRY(1, MINISLIME_DMGEFF_BREAK_ICE),
+    /* Deku spin      */ DMG_ENTRY(1, MINISLIME_DMGEFF_NONE),
+    /* Deku bubble    */ DMG_ENTRY(1, MINISLIME_DMGEFF_NONE),
+    /* Deku launch    */ DMG_ENTRY(1, MINISLIME_DMGEFF_NONE),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, MINISLIME_DMGEFF_NONE),
+    /* Zora barrier   */ DMG_ENTRY(1, MINISLIME_DMGEFF_NONE),
+    /* Normal shield  */ DMG_ENTRY(0, MINISLIME_DMGEFF_NONE),
+    /* Light ray      */ DMG_ENTRY(0, MINISLIME_DMGEFF_NONE),
+    /* Thrown object  */ DMG_ENTRY(1, MINISLIME_DMGEFF_NONE),
+    /* Zora punch     */ DMG_ENTRY(1, MINISLIME_DMGEFF_NONE),
+    /* Spin attack    */ DMG_ENTRY(1, MINISLIME_DMGEFF_NONE),
+    /* Sword beam     */ DMG_ENTRY(0, MINISLIME_DMGEFF_NONE),
+    /* Normal Roll    */ DMG_ENTRY(0, MINISLIME_DMGEFF_NONE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, MINISLIME_DMGEFF_NONE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, MINISLIME_DMGEFF_NONE),
+    /* Unblockable    */ DMG_ENTRY(0, MINISLIME_DMGEFF_NONE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, MINISLIME_DMGEFF_NONE),
+    /* Powder Keg     */ DMG_ENTRY(1, MINISLIME_DMGEFF_BREAK_ICE),
+};
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_80983DBC.asm")
+void EnMinislime_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnMinislime* this = THIS;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_80983E9C.asm")
+    this->actor.flags &= ~1;
+    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
+    this->id = this->actor.params;
+    this->actor.shape.shadowAlpha = 255;
+    EnMinislime_SetupDisappear(this);
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_80983EB4.asm")
+void EnMinislime_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnMinislime* this = THIS;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_80983F1C.asm")
+    Collider_DestroyCylinder(globalCtx, &this->collider);
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_80984030.asm")
+void EnMinislime_CheckBackgroundCollision(EnMinislime* this) {
+    f32 scaleX = this->actor.scale.x * 400.0f;
+    f32 scaleY = this->actor.scale.y * 400.0f;
+    f32 scaleZ = this->actor.scale.z * 400.0f;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_809840A8.asm")
+    this->actor.bgCheckFlags &= ~(0x10 | 0x8 | 0x2);
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_8098419C.asm")
+    if ((this->actor.world.pos.y + scaleY) > GBT_ROOM_5_MAX_Y) {
+        this->actor.bgCheckFlags |= 0x10;
+        this->actor.bgCheckFlags &= ~1;
+        this->actor.world.pos.y = GBT_ROOM_5_MAX_Y - scaleY;
+    } else if ((this->actor.world.pos.y - scaleY) < GBT_ROOM_5_MIN_Y) {
+        this->actor.world.pos.y = GBT_ROOM_5_MIN_Y + scaleY;
+        if (!(this->actor.bgCheckFlags & 1)) {
+            this->actor.bgCheckFlags |= 2;
+        }
+        this->actor.bgCheckFlags |= 1;
+    } else {
+        this->actor.bgCheckFlags &= ~1;
+    }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_8098420C.asm")
+    if ((this->actor.world.pos.x + scaleX) > GBT_ROOM_5_MAX_X) {
+        this->actor.bgCheckFlags |= 8;
+        this->actor.world.pos.x = GBT_ROOM_5_MAX_X - scaleX;
+    } else if ((this->actor.world.pos.x - scaleX) < GBT_ROOM_5_MIN_X) {
+        this->actor.world.pos.x = GBT_ROOM_5_MIN_X + scaleX;
+        this->actor.bgCheckFlags |= 8;
+    }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_80984248.asm")
+    if ((this->actor.world.pos.z + scaleZ) > GBT_ROOM_5_MAX_Z) {
+        this->actor.bgCheckFlags |= 8;
+        this->actor.world.pos.z = GBT_ROOM_5_MAX_Z - scaleZ;
+    } else if ((this->actor.world.pos.z - scaleZ) < GBT_ROOM_5_MIN_Z) {
+        this->actor.world.pos.z = GBT_ROOM_5_MIN_Z + scaleZ;
+        this->actor.bgCheckFlags |= 8;
+    }
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_80984410.asm")
+void EnMinislime_AddIceShardEffect(EnMinislime* this) {
+    EnBigslime* bigslime = (EnBigslime*)this->actor.parent;
+    EnBigslimeIceShardEffect* iceShardEffect;
+    s32 i = 10 * this->id + BIGSLIME_NUM_VTX;
+    s32 i_end = i + 10;
+    VecSph vecSph;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_80984450.asm")
+    vecSph.yaw = 0;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_809844FC.asm")
+    for (; i < i_end; i++) {
+        iceShardEffect = &bigslime->iceShardEffect[i];
+        vecSph.pitch = Rand_S16Offset(0x1000, 0x3000);
+        iceShardEffect->vel.x = Math_CosS(vecSph.pitch) * Math_SinS(vecSph.yaw);
+        iceShardEffect->vel.y = Math_SinS(vecSph.pitch);
+        iceShardEffect->vel.z = Math_CosS(vecSph.pitch) * Math_CosS(vecSph.yaw);
+        iceShardEffect->pos.x = this->actor.world.pos.x + (400.0f * this->actor.scale.x) * iceShardEffect->vel.x;
+        iceShardEffect->pos.y =
+            this->actor.world.pos.y + (((iceShardEffect->vel.y * 2.0f) - 1.0f) * 400.0f * this->actor.scale.y);
+        iceShardEffect->pos.z = this->actor.world.pos.z + (400.0f * this->actor.scale.z) * iceShardEffect->vel.z;
+        iceShardEffect->rotation.x = Rand_Next() >> 0x10;
+        iceShardEffect->rotation.y = Rand_Next() >> 0x10;
+        iceShardEffect->rotation.z = Rand_Next() >> 0x10;
+        iceShardEffect->isActive = true;
+        Math_Vec3f_ScaleAndStore(&iceShardEffect->vel, Rand_ZeroFloat(3.0f) + 7.0f, &iceShardEffect->vel);
+        iceShardEffect->scale = (Rand_ZeroFloat(6.0f) + 2.0f) * 0.001f;
+        vecSph.yaw += 0x1999;
+    }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_809845A4.asm")
+    this->frozenAlpha = 0;
+    Audio_PlayActorSound2(&this->actor, NA_SE_EV_ICE_BROKEN);
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_8098470C.asm")
+void EnMinislime_AddIceSmokeEffect(EnMinislime* this, GlobalContext* globalCtx) {
+    Vec3f pos;
+    Vec3f vel;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_80984748.asm")
+    pos.x = (randPlusMinusPoint5Scaled(200.0f) * this->actor.scale.x) + this->actor.world.pos.x;
+    pos.y = CLAMP_MIN(this->actor.world.pos.y, GBT_ROOM_5_MIN_Y + 30.0f);
+    pos.z = (randPlusMinusPoint5Scaled(200.0f) * this->actor.scale.z) + this->actor.world.pos.z;
+    vel.x = randPlusMinusPoint5Scaled(1.5f);
+    vel.z = randPlusMinusPoint5Scaled(1.5f);
+    vel.y = 2.0f;
+    EffectSsIceSmoke_Spawn(globalCtx, &pos, &vel, &D_801D15B0, 500);
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_80984964.asm")
+void EnMinislime_SetupDisappear(EnMinislime* this) {
+    this->actor.params = MINISLIME_DISAPPEAR;
+    this->actionFunc = EnMinislime_Disappear;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_809849C4.asm")
+void EnMinislime_Disappear(EnMinislime* this, GlobalContext* globalCtx) {
+    if (this->actor.params == MINISLIME_BREAK_BIGSLIME) {
+        EnMinislime_SetupBreakFromBigslime(this);
+    } else if (this->actor.params == MINISLIME_INIT_FALL) {
+        EnMinislime_SetupFall(this, globalCtx);
+    } else if (this->actor.params == MINISLIME_DESPAWN) {
+        EnMinislime_SetupDespawn(this);
+    }
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_80984B34.asm")
+void EnMinislime_SetupFall(EnMinislime* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    s16 yaw;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_80984C28.asm")
+    this->collider.base.atFlags |= AT_ON;
+    this->collider.base.acFlags |= AC_ON;
+    this->collider.base.ocFlags1 |= OC1_ON;
+    this->actor.speedXZ = 0.0f;
+    this->actor.gravity = -2.0f;
+    if (this->actionFunc != EnMinislime_GekkoThrow) {
+        this->actor.scale.x = 0.095f;
+        this->actor.scale.z = 0.095f;
+        this->actor.scale.y = 0.10700001f;
+        if (Actor_XZDistanceBetweenActors(&this->actor, &player->actor) < 225.0f) {
+            yaw = Actor_YawBetweenActors(&player->actor, &this->actor);
+            this->actor.world.pos.x = Math_SinS(yaw) * 225.0f + player->actor.world.pos.x;
+            this->actor.world.pos.z = Math_CosS(yaw) * 225.0f + player->actor.world.pos.z;
+        }
+    }
+    this->actionFunc = EnMinislime_Fall;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_80984CA8.asm")
+void EnMinislime_Fall(EnMinislime* this, GlobalContext* globalCtx) {
+    Math_StepToF(&this->actor.scale.x, 0.17999999f, 0.003f);
+    Math_StepToF(&this->actor.scale.y, 0.05f, 0.003f);
+    this->actor.scale.z = this->actor.scale.x;
+    if (this->actor.bgCheckFlags & 1) {
+        EnMinislime_SetupGrowAndShrink(this);
+    }
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_80984D08.asm")
+void EnMinislime_SetupBreakFromBigslime(EnMinislime* this) {
+    f32 velY;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_80984E38.asm")
+    this->actor.world.rot.y = Actor_YawBetweenActors(this->actor.parent, &this->actor);
+    this->actor.shape.rot.y = this->actor.world.rot.y;
+    this->actor.speedXZ = Math_CosS(this->actor.world.rot.x) * 15.0f;
+    velY = Math_SinS(this->actor.world.rot.x) * 15.0f;
+    this->actor.bgCheckFlags &= ~1;
+    this->actor.velocity.y = velY + 2.0f;
+    this->actor.gravity = -1.0f;
+    this->frozenScale = 0.1f;
+    this->actor.world.rot.x = Rand_S16Offset(0x800, 0x800);
+    this->actor.shape.rot.x = (s16)(Rand_Next() >> 0x10);
+    this->actor.shape.rot.z = (s16)(Rand_Next() >> 0x10);
+    this->actor.scale.x = 0.15f;
+    this->actor.scale.y = 0.075f;
+    this->actor.scale.z = 0.15f;
+    this->frozenAlpha = 200;
+    this->actionFunc = EnMinislime_BreakFromBigslime;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_80984ECC.asm")
+void EnMinislime_BreakFromBigslime(EnMinislime* this, GlobalContext* globalCtx) {
+    this->actor.shape.rot.x += this->actor.world.rot.x;
+    if (this->actor.velocity.y < 0.0f) {
+        this->collider.base.ocFlags1 |= OC1_ON;
+        if (this->actor.bgCheckFlags & 1) {
+            EnMinislime_AddIceShardEffect(this);
+            this->attackTimer = 40;
+            EnMinislime_SetupGrowAndShrink(this);
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_80985018.asm")
+void EnMinislime_SetupIceArrowDamage(EnMinislime* this) {
+    this->collider.base.atFlags &= ~AT_ON;
+    this->frozenTimer = 80;
+    this->actor.speedXZ = 0.0f;
+    this->frozenScale = 0.1f;
+    this->actionFunc = EnMinislime_IceArrowDamage;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_80985088.asm")
+void EnMinislime_IceArrowDamage(EnMinislime* this, GlobalContext* globalCtx) {
+    f32 invFrozenTimer;
+    s32 pad;
+    f32 randFloat;
+    s32 randSign;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_80985154.asm")
+    if (this->frozenTimer == 80) {
+        this->frozenAlpha += 10;
+        func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+        if (this->frozenAlpha >= 200) {
+            this->frozenAlpha = 200;
+            this->frozenTimer--;
+        }
+    } else if (this->frozenTimer > 0) {
+        this->frozenTimer--;
+        if (this->frozenTimer == 40) {
+            Math_Vec3f_Copy(&this->shakeRefPos, &this->actor.world.pos);
+        } else if (this->frozenTimer > 0) {
+            if ((this->frozenTimer < 20) || ((this->frozenTimer < 40) && ((this->frozenTimer % 2) != 0))) {
+                s32 requiredScopeTemp;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_80985168.asm")
+                invFrozenTimer = 1.0f / this->frozenTimer;
+                randFloat = Rand_ZeroFloat(invFrozenTimer);
+                randSign = Rand_ZeroOne() < 0.5f ? -1 : 1;
+                this->actor.world.pos.x = randSign * (invFrozenTimer + randFloat) + this->shakeRefPos.x;
+                randFloat = Rand_ZeroFloat(invFrozenTimer);
+                randSign = Rand_ZeroOne() < 0.5f ? -1 : 1;
+                this->actor.world.pos.z = randSign * (invFrozenTimer + randFloat) + this->shakeRefPos.z;
+            }
+        }
+    } else {
+        EnMinislime_AddIceShardEffect(this);
+        EnMinislime_SetupIdle(this);
+        return;
+    }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_8098518C.asm")
+    if (this->actor.bgCheckFlags & 2) {
+        EnMinislime_AddIceShardEffect(this);
+        EnMinislime_SetupGrowAndShrink(this);
+    }
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_809851E8.asm")
+void EnMinislime_SetupFireArrowDamage(EnMinislime* this) {
+    this->meltTimer = 40;
+    this->actor.shape.rot.x = 0;
+    this->actor.shape.rot.y = 0;
+    this->actor.shape.rot.z = 0;
+    this->actor.world.rot.x = 0;
+    this->collider.base.acFlags &= ~AC_ON;
+    this->actor.speedXZ = 0.0f;
+    this->actionFunc = EnMinislime_FireArrowDamage;
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_809852DC.asm")
+void EnMinislime_FireArrowDamage(EnMinislime* this, GlobalContext* globalCtx) {
+    this->meltTimer--;
+    if ((this->meltTimer % 25) == 0) {
+        EnMinislime_AddIceSmokeEffect(this, globalCtx);
+    }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_8098537C.asm")
+    this->frozenScale = this->meltTimer * 0.0025f;
+    if ((10 * this->meltTimer) > 200) {
+        this->frozenAlpha = 200;
+    } else {
+        this->frozenAlpha = 10 * this->meltTimer;
+    }
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/func_80985480.asm")
+    func_800B9010(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
+    if (this->meltTimer == 0) {
+        EnMinislime_SetupIdle(this);
+    }
+}
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Minislime_0x809838F0/EnMinislime_Update.asm")
+void EnMinislime_SetupGrowAndShrink(EnMinislime* this) {
+    this->collider.base.ocFlags1 |= OC1_ON;
+    this->collider.base.acFlags |= AC_ON;
+    this->collider.base.atFlags |= AT_ON;
+    this->actor.shape.rot.x = 0;
+    this->actor.shape.rot.y = 0;
+    this->actor.shape.rot.z = 0;
+    this->actor.world.rot.x = 0;
+    this->actor.speedXZ = 0.0f;
+    Math_Vec3f_Copy(&this->actor.home.pos, &this->actor.world.pos);
+    this->growShrinkTimer = 42;
+    this->actor.scale.x = 0.19f;
+    this->actor.scale.y = 0.044999998f;
+    this->actor.scale.z = 0.19f;
+    Audio_PlayActorSound2(&this->actor, NA_SE_EN_SLIME_JUMP2);
+    this->actionFunc = EnMinislime_GrowAndShrink;
+}
+
+void EnMinislime_GrowAndShrink(EnMinislime* this, GlobalContext* globalCtx) {
+    f32 scaleFactor;
+
+    this->growShrinkTimer--;
+    scaleFactor = (this->growShrinkTimer / 6) + 1.0f;
+    this->actor.scale.z = this->actor.scale.x =
+        ((cos_rad(this->growShrinkTimer * (M_PI / 3)) * (scaleFactor * (2.0f / 30.0f))) + 1.5f) * 0.1f;
+    this->actor.scale.y = ((sin_rad(this->growShrinkTimer * (M_PI / 3)) * (scaleFactor * 0.05f)) + 0.75f) * 0.1f;
+    if (this->actor.params == MINISLIME_SETUP_GEKKO_THROW) {
+        EnMinislime_SetupMoveToGekko(this);
+    } else if ((this->actor.xzDistToPlayer < 150.0f) && (this->growShrinkTimer < 38)) {
+        EnMinislime_SetupBounce(this);
+    } else if (this->growShrinkTimer == 0) {
+        EnMinislime_SetupIdle(this);
+    }
+}
+
+void EnMinislime_SetupIdle(EnMinislime* this) {
+    this->idleTimer = 20;
+    this->collider.base.atFlags |= AT_ON;
+    this->collider.base.acFlags |= AC_ON;
+    this->actor.params = MINISLIME_IDLE;
+    this->actionFunc = EnMinislime_Idle;
+}
+
+void EnMinislime_Idle(EnMinislime* this, GlobalContext* globalCtx) {
+    f32 speedXZ;
+
+    this->idleTimer--;
+    speedXZ = sin_rad(this->idleTimer * (M_PI / 10));
+    this->actor.speedXZ = speedXZ * 1.5f;
+    this->actor.speedXZ = CLAMP_MIN(this->actor.speedXZ, 0.0f);
+    Math_StepToF(&this->actor.scale.x, ((0.14f * speedXZ) + 1.5f) * 0.1f, 0.010000001f);
+    Math_StepToF(&this->actor.scale.y, ((cos_rad(this->idleTimer * (M_PI / 10)) * 0.07f) + 0.75f) * 0.1f, 0.010000001f);
+    Math_StepToF(&this->actor.scale.z, 0.3f - this->actor.scale.x, 0.010000001f);
+    if (this->idleTimer == 0) {
+        if (this->actor.xzDistToPlayer < 300.0f) {
+            this->actor.world.rot.y = this->actor.yawTowardsPlayer;
+        } else {
+            if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) < 200.0f) {
+                this->actor.world.rot.y = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+            } else {
+                this->actor.world.rot.y += (s16)(Rand_Next() >> 19);
+            }
+        }
+        this->idleTimer = 20;
+    }
+
+    if (this->actor.params == MINISLIME_SETUP_GEKKO_THROW) {
+        EnMinislime_SetupMoveToGekko(this);
+    } else if (this->actor.xzDistToPlayer < 150.0f) {
+        EnMinislime_SetupBounce(this);
+    }
+}
+
+void EnMinislime_SetupBounce(EnMinislime* this) {
+    this->actor.speedXZ = 0.0f;
+    this->bounceTimer = (this->actionFunc == EnMinislime_GrowAndShrink) ? 1 : 4;
+    Audio_PlayActorSound2(&this->actor, NA_SE_EN_SLIME_JUMP1);
+    this->actionFunc = EnMinislime_Bounce;
+}
+
+void EnMinislime_Bounce(EnMinislime* this, GlobalContext* globalCtx) {
+    if (this->actor.params == MINISLIME_SETUP_GEKKO_THROW) {
+        EnMinislime_SetupMoveToGekko(this);
+    } else {
+        if (this->bounceTimer > 0) {
+            this->bounceTimer--;
+            if (this->bounceTimer == 0) {
+                this->actor.gravity = -2.0f;
+                this->actor.world.rot.y = this->actor.yawTowardsPlayer;
+                this->actor.speedXZ = 1.0f;
+                this->actor.velocity.y = 12.0f;
+                this->actor.shape.rot.y = this->actor.world.rot.y;
+            }
+            Math_StepToF(&this->actor.scale.x, 0.17999999f, 0.010000001f);
+            Math_StepToF(&this->actor.scale.y, 0.05f, 0.010000001f);
+        } else if (this->actor.velocity.y > 0.0f) {
+            Math_StepToF(&this->actor.scale.x, 0.095f, 0.020000001f);
+            Math_StepToF(&this->actor.scale.y, 0.10700001f, 0.020000001f);
+        } else {
+            Math_StepToF(&this->actor.scale.x, 0.17999999f, 0.003f);
+            Math_StepToF(&this->actor.scale.y, 0.05f, 0.003f);
+            if (this->actor.bgCheckFlags & 1) {
+                EnMinislime_SetupGrowAndShrink(this);
+                return;
+            }
+        }
+
+        this->actor.scale.z = this->actor.scale.x;
+    }
+}
+
+void EnMinislime_SetupMoveToBigslime(EnMinislime* this) {
+    this->actor.gravity = 0.0f;
+    this->actor.speedXZ = 15.0f;
+    this->actor.shape.rot.x = Actor_PitchToPoint(&this->actor, &this->actor.parent->home.pos);
+    this->actor.shape.rot.y = Actor_YawToPoint(&this->actor, &this->actor.parent->home.pos);
+    this->actor.world.rot.x = -this->actor.shape.rot.x;
+    this->actor.world.rot.y = this->actor.shape.rot.y;
+    this->collider.base.atFlags &= ~AT_ON;
+    this->collider.base.acFlags &= ~AC_ON;
+    this->collider.base.ocFlags1 &= ~OC1_ON;
+    this->actor.scale.x = 0.095f;
+    this->actor.scale.y = 0.095f;
+    this->actor.scale.z = 0.15f;
+    if (this->frozenAlpha > 20) {
+        EnMinislime_AddIceShardEffect(this);
+    }
+    this->frozenAlpha = 0;
+
+    if ((this->actor.flags & 0x2000) == 0x2000) {
+        this->actor.flags &= ~0x2000;
+    }
+    this->actionFunc = EnMinislime_MoveToBigslime;
+}
+
+void EnMinislime_MoveToBigslime(EnMinislime* this, GlobalContext* globalCtx) {
+    if (this->actor.params == MINISLIME_DISAPPEAR) {
+        EnMinislime_SetupDisappear(this);
+    } else if ((this->actor.scale.x > 0.0f) && (this->actor.world.pos.y > (GBT_ROOM_5_MAX_Y - 100.0f))) {
+        this->actor.params = MINISLIME_SETUP_DISAPPEAR;
+        this->actor.speedXZ = 0.0f;
+        Actor_SetScale(&this->actor, 0.0f);
+    }
+}
+
+void EnMinislime_SetupKnockback(EnMinislime* this) {
+    this->collider.base.acFlags &= ~AC_ON;
+    this->collider.base.ocFlags1 |= OC1_ON;
+    this->knockbackTimer = 30;
+    this->actor.speedXZ = 20.0f;
+    func_800BE504(&this->actor, &this->collider);
+    this->actionFunc = EnMinislime_Knockback;
+}
+
+void EnMinislime_Knockback(EnMinislime* this, GlobalContext* globalCtx) {
+    f32 sqrtFrozenTimer;
+
+    this->knockbackTimer--;
+    Math_StepToF(&this->actor.speedXZ, 0.0f, 1.0f);
+    sqrtFrozenTimer = sqrtf(this->knockbackTimer);
+    this->actor.scale.x = ((cos_rad(this->knockbackTimer * (M_PI / 3)) * (0.05f * sqrtFrozenTimer)) + 1.0f) * 0.15f;
+    this->actor.scale.z = this->actor.scale.x;
+    if (this->knockbackTimer == 15) {
+        this->collider.base.acFlags |= AC_ON;
+    }
+
+    this->actor.scale.y = ((sin_rad(this->knockbackTimer * (M_PI / 3)) * (0.05f * sqrtFrozenTimer)) + 1.0f) * 0.075f;
+    if (this->actor.params == MINISLIME_SETUP_GEKKO_THROW) {
+        EnMinislime_SetupMoveToGekko(this);
+    } else if (this->knockbackTimer == 0) {
+        EnMinislime_SetupIdle(this);
+    }
+}
+
+void EnMinislime_SetupDefeatIdle(EnMinislime* this) {
+    this->actor.params = MINISLIME_DISAPPEAR;
+    this->idleTimer = 20;
+    this->collider.base.atFlags &= ~(AT_ON | AT_HIT);
+    this->collider.base.acFlags &= ~(AC_ON | AC_HIT);
+    this->actor.speedXZ = 0.0f;
+    if (this->frozenAlpha > 20) {
+        EnMinislime_AddIceShardEffect(this);
+    }
+
+    this->frozenAlpha = 0;
+    if ((this->actor.flags & 0x2000) == 0x2000) {
+        this->actor.flags &= ~0x2000;
+    }
+
+    this->actor.shape.rot.x = 0;
+    this->actor.shape.rot.z = 0;
+    this->actionFunc = EnMinislime_DefeatIdle;
+}
+
+void EnMinislime_DefeatIdle(EnMinislime* this, GlobalContext* globalCtx) {
+    f32 xzScale;
+
+    this->idleTimer--;
+    xzScale = sin_rad(this->idleTimer * (M_PI / 10));
+    Math_StepToF(&this->actor.scale.x, ((0.14f * xzScale) + 1.5f) * 0.1f, 0.010000001f);
+    Math_StepToF(&this->actor.scale.y, ((0.07f * cos_rad(this->idleTimer * (M_PI / 10))) + 0.75f) * 0.1f, 0.010000001f);
+    Math_StepToF(&this->actor.scale.z, 0.3f - this->actor.scale.x, 0.010000001f);
+    if (this->idleTimer == 0) {
+        this->idleTimer = 20;
+    }
+
+    if (this->actor.params == MINISLIME_DEFEAT_MELT) {
+        EnMinislime_SetupDefeatMelt(this, globalCtx);
+    }
+}
+
+void EnMinislime_SetupDefeatMelt(EnMinislime* this, GlobalContext* globalCtx) {
+    this->actor.gravity = 0.0f;
+    this->actor.velocity.y = -50.0f;
+    this->meltTimer = Rand_ZeroFloat(25.0f);
+    EnMinislime_AddIceSmokeEffect(this, globalCtx);
+    this->actor.params = MINISLIME_DISAPPEAR;
+    this->actionFunc = EnMinislime_DefeatMelt;
+}
+
+void EnMinislime_DefeatMelt(EnMinislime* this, GlobalContext* globalCtx) {
+    this->meltTimer++;
+    if (((this->meltTimer % 25) == 0) && (this->actor.shape.shadowAlpha > 25)) {
+        EnMinislime_AddIceSmokeEffect(this, globalCtx);
+    }
+
+    func_800B9010(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
+    if (Math_StepToF(&this->actor.scale.y, 0.001f, 0.00075f)) {
+        if ((this->actor.shape.shadowAlpha - 4) <= 0) {
+            this->actor.shape.shadowAlpha = 0;
+            EnMinislime_SetupDisappear(this);
+        } else {
+            this->actor.shape.shadowAlpha -= 4;
+        }
+    }
+    Math_StepToF(&this->actor.scale.x, 0.25f, 0.001f);
+    this->actor.scale.z = this->actor.scale.x;
+}
+
+void EnMinislime_SetupDespawn(EnMinislime* this) {
+    this->actionFunc = EnMinislime_Despawn;
+}
+
+void EnMinislime_Despawn(EnMinislime* this, GlobalContext* globalCtx) {
+    Actor_MarkForDeath(&this->actor);
+}
+
+void EnMinislime_SetupMoveToGekko(EnMinislime* this) {
+    this->actor.speedXZ = 0.0f;
+    this->actor.gravity = 0.0f;
+    this->actor.velocity.y = 0.0f;
+    this->collider.base.acFlags &= ~AC_ON;
+    this->collider.base.ocFlags1 &= ~OC1_ON;
+    if ((this->actor.flags & 0x2000) == 0x2000) {
+        this->actor.flags &= ~0x2000;
+    }
+
+    this->actionFunc = EnMinislime_MoveToGekko;
+}
+
+void EnMinislime_MoveToGekko(EnMinislime* this, GlobalContext* globalCtx) {
+    Math_StepToF(&this->actor.world.pos.x, this->actor.parent->world.pos.x, 10.0f);
+    Math_StepToF(&this->actor.world.pos.z, this->actor.parent->world.pos.z, 10.0f);
+    Math_StepToF(&this->actor.world.pos.y, this->actor.parent->world.pos.y + 80.0f, 10.0f);
+    Math_StepToF(&this->actor.scale.x, 0.15f, 0.0075000003f);
+    Math_StepToF(&this->actor.scale.y, 0.075f, 0.0037500001f);
+    Math_StepToF(&this->actor.scale.z, 0.15f, 0.0075000003f);
+    if (this->actor.params == MINISLIME_GEKKO_THROW) {
+        EnMinislime_SetupGekkoThrow(this);
+    } else if (this->actor.params == MINISLIME_IDLE) {
+        EnMinislime_SetupFall(this, globalCtx);
+    }
+}
+
+void EnMinislime_SetupGekkoThrow(EnMinislime* this) {
+    f32 xzDistToPlayer;
+
+    this->collider.base.acFlags |= AC_ON;
+    this->collider.base.ocFlags1 |= OC1_ON;
+    xzDistToPlayer = CLAMP_MIN(this->actor.xzDistToPlayer, 200.0f);
+    this->actor.speedXZ = 17.5f;
+    this->actor.world.rot.y = this->actor.yawTowardsPlayer;
+    this->actor.gravity = -1.0f;
+    this->actor.velocity.y = ((xzDistToPlayer - 200.0f) * 0.01f) + 3.0f;
+    this->actor.bgCheckFlags &= ~1;
+    this->throwTimer = 10;
+    this->actionFunc = EnMinislime_GekkoThrow;
+}
+
+void EnMinislime_GekkoThrow(EnMinislime* this, GlobalContext* globalCtx) {
+    f32 xzScale;
+
+    this->throwTimer--;
+    xzScale = sin_rad(this->throwTimer * (M_PI / 5));
+    this->actor.scale.x = ((0.3f * xzScale) + 1.5f) * 0.1f;
+    this->actor.scale.y = ((cos_rad(this->throwTimer * (M_PI / 5)) * 0.2f) + 0.75f) * 0.1f;
+    this->actor.scale.z = 0.3f - this->actor.scale.x;
+    if (this->throwTimer == 0) {
+        this->throwTimer = 10;
+    }
+
+    if (this->actor.bgCheckFlags & 1) {
+        EnMinislime_SetupGrowAndShrink(this);
+    }
+}
+
+void EnMinislime_ApplyDamage(EnMinislime* this) {
+    if (this->collider.base.acFlags & AC_HIT) {
+        this->collider.base.acFlags &= ~AC_HIT;
+        if (this->actionFunc == EnMinislime_IceArrowDamage) {
+            if (this->actor.colChkInfo.damageEffect != MINISLIME_DMGEFF_HOOKSHOT) {
+                if (this->actor.colChkInfo.damageEffect == MINISLIME_DMGEFF_BREAK_ICE) {
+                    EnMinislime_AddIceShardEffect(this);
+                    EnMinislime_SetupIdle(this);
+                } else if (this->actor.colChkInfo.damageEffect == MINISLIME_DMGEFF_FIRE) {
+                    EnMinislime_SetupFireArrowDamage(this);
+                }
+            }
+        } else {
+            if (this->actor.colChkInfo.damageEffect != MINISLIME_DMGEFF_HOOKSHOT) {
+                if (this->actor.colChkInfo.damageEffect == MINISLIME_DMGEFF_ICE) {
+                    EnMinislime_SetupIceArrowDamage(this);
+                } else {
+                    EnMinislime_SetupKnockback(this);
+                }
+            }
+        }
+    }
+}
+
+void EnMinislime_Update(Actor* thisx, GlobalContext* globalCtx) {
+    EnMinislime* this = THIS;
+    Player* player;
+    s32 pad;
+    Vec3f vec1;
+
+    if ((this->actor.params == MINISLIME_DEFEAT_IDLE) && (this->actor.bgCheckFlags & 1)) {
+        EnMinislime_SetupDefeatIdle(this);
+    } else if (this->actor.params == MINISLIME_DEFEAT_MELT) {
+        EnMinislime_SetupDefeatMelt(this, globalCtx);
+    } else if ((this->actor.params == MINISLIME_FORM_BIGSLIME) && (this->actionFunc != EnMinislime_MoveToBigslime)) {
+        EnMinislime_SetupMoveToBigslime(this);
+    } else {
+        if ((this->actor.flags & 0x2000) == 0x2000) {
+            this->collider.base.acFlags &= ~AC_HIT;
+            return;
+        }
+        EnMinislime_ApplyDamage(this);
+    }
+
+    if (this->collider.base.atFlags & AT_HIT) {
+        this->attackTimer = 10;
+        this->collider.base.atFlags &= ~AT_HIT;
+    }
+
+    this->actionFunc(this, globalCtx);
+
+    if ((this->actionFunc != EnMinislime_Disappear) && (this->actionFunc != EnMinislime_Despawn)) {
+        if (this->actionFunc == EnMinislime_MoveToBigslime) {
+            Actor_SetVelocityAndMoveXYRotation(&this->actor);
+        } else {
+            Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        }
+
+        EnMinislime_CheckBackgroundCollision(this);
+        Collider_UpdateCylinder(&this->actor, &this->collider);
+        this->collider.dim.radius = this->actor.scale.x * 360.0f;
+        this->collider.dim.height = this->actor.scale.y * 800.0f;
+        this->collider.dim.yShift = ((EnMinislime*)thisx)->actor.scale.y * -400.0f;
+
+        if ((this->attackTimer == 0) && (this->collider.base.atFlags & AT_ON)) {
+            CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        }
+        if (this->collider.base.acFlags & AC_ON) {
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        }
+        if (this->collider.base.ocFlags1 & OC1_ON) {
+            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        }
+
+        if (this->attackTimer != 0) {
+            this->attackTimer--;
+        }
+
+        if (this->actor.bgCheckFlags & 2) {
+            player = GET_PLAYER(globalCtx);
+            vec1.x = this->actor.world.pos.x;
+            vec1.z = this->actor.world.pos.z;
+            vec1.y = player->actor.world.pos.y + player->actor.yDistToWater;
+            EffectSsGRipple_Spawn(globalCtx, &vec1, 500, 720, 0);
+        }
+    }
+}

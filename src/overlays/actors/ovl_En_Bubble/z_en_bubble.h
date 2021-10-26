@@ -1,13 +1,16 @@
 #ifndef Z_EN_BUBBLE_H
 #define Z_EN_BUBBLE_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnBubble;
 
+typedef void (*EnBubbleActionFunc)(struct EnBubble*, GlobalContext*);
+
 typedef struct EnBubble {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x114];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ EnBubbleActionFunc actionFunc;
+    /* 0x0148 */ char unk_144[0x110];
 } EnBubble; // size = 0x258
 
 extern const ActorInit En_Bubble_InitVars;

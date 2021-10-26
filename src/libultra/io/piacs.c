@@ -1,7 +1,9 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 UNK_TYPE4 __osPiAccessQueueEnabled = 0;
+
+OSMesg D_8009E3F0[1];
+OSMesgQueue __osPiAccessQueue;
 
 void __osPiCreateAccessQueue(void) {
     __osPiAccessQueueEnabled = 1;
@@ -14,9 +16,9 @@ void __osPiGetAccess(void) {
     if (!__osPiAccessQueueEnabled) {
         __osPiCreateAccessQueue();
     }
-    osRecvMesg(&__osPiAccessQueue, &dummyMesg, 1);
+    osRecvMesg(&__osPiAccessQueue, &dummyMesg, OS_MESG_BLOCK);
 }
 
 void __osPiRelAccess(void) {
-    osSendMesg(&__osPiAccessQueue, NULL, 0);
+    osSendMesg(&__osPiAccessQueue, NULL, OS_MESG_NOBLOCK);
 }

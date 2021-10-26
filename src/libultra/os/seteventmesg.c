@@ -1,6 +1,8 @@
-#include <osint.h>
+#include "global.h"
 
 UNK_TYPE4 D_80097F10 = 0;
+
+__OSEventState __osEventStateTab[16];
 
 void osSetEventMesg(OSEvent e, OSMesgQueue* mq, OSMesg m) {
     register u32 saveMask;

@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 void PreNMI_Stop(PreNMIContext* prenmiCtx) {
     prenmiCtx->state.running = 0;
@@ -17,21 +16,20 @@ void PreNMI_Update(PreNMIContext* prenmiCtx) {
     prenmiCtx->timer--;
 }
 
-#ifdef NON_MATCHING
-// Minor reordering around call to func_8012C470
 void PreNMI_Draw(PreNMIContext* prenmiCtx) {
     GraphicsContext* gfxCtx = prenmiCtx->state.gfxCtx;
 
     func_8012CF0C(gfxCtx, 1, 1, 0, 0, 0);
+
+    OPEN_DISPS(gfxCtx);
+
     func_8012C470(gfxCtx);
 
-    gDPSetFillColor(gfxCtx->polyOpa.p++,
-                    (GPACK_RGBA5551(0xFF, 0xFF, 0xFF, 1) << 16) | GPACK_RGBA5551(0xFF, 0xFF, 0xFF, 1));
-    gDPFillRectangle(gfxCtx->polyOpa.p++, 0, prenmiCtx->timer + 100, 320 /*SCREEN_WIDTH*/ - 1, prenmiCtx->timer + 100);
+    gDPSetFillColor(POLY_OPA_DISP++, (GPACK_RGBA5551(255, 255, 255, 1) << 16) | GPACK_RGBA5551(255, 255, 255, 1));
+    gDPFillRectangle(POLY_OPA_DISP++, 0, prenmiCtx->timer + 100, SCREEN_WIDTH - 1, prenmiCtx->timer + 100);
+
+    CLOSE_DISPS(gfxCtx);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_prenmi/PreNMI_Draw.asm")
-#endif
 
 void PreNMI_Main(PreNMIContext* prenmiCtx) {
     PreNMI_Update(prenmiCtx);
@@ -40,7 +38,8 @@ void PreNMI_Main(PreNMIContext* prenmiCtx) {
     prenmiCtx->state.unkA3 = 1;
 }
 
-void PreNMI_Destroy(PreNMIContext* prenmiCtx) {}
+void PreNMI_Destroy(PreNMIContext* prenmiCtx) {
+}
 
 void PreNMI_Init(PreNMIContext* prenmiCtx) {
     prenmiCtx->state.main = (GameStateFunc)PreNMI_Main;

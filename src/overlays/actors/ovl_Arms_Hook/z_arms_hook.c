@@ -21,10 +21,10 @@ const ActorInit Arms_Hook_InitVars = {
     (ActorFunc)ArmsHook_Init,
     (ActorFunc)ArmsHook_Destroy,
     (ActorFunc)ArmsHook_Update,
-    (ActorFunc)ArmsHook_Draw
+    (ActorFunc)ArmsHook_Draw,
 };
 
-ColliderQuadInit D_808C1BC0 = {
+static ColliderQuadInit D_808C1BC0 = {
     {
         COLTYPE_NONE,
         AT_ON | AT_TYPE_PLAYER,
@@ -43,13 +43,6 @@ ColliderQuadInit D_808C1BC0 = {
     },
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
-
-Vec3f D_808C1C10 = { 0.0f, 0.0f, 0.0f };
-Vec3f D_808C1C1C = { 0.0f, 0.0f, 900.0f };
-Vec3f D_808C1C28 = { 0.0f, 500.0f, -3000.0f };
-Vec3f D_808C1C34 = { 0.0f, -500.0f, -3000.0f };
-Vec3f D_808C1C40 = { 0.0f, 500.0f, 0.0f };
-Vec3f D_808C1C4C = { 0.0f, -500.0f, 0.0f };
 
 extern Gfx D_0601D960[];
 
@@ -79,7 +72,7 @@ void ArmsHook_Wait(ArmsHook* this, GlobalContext* globalCtx) {
     if (this->actor.parent == NULL) {
         ArmsHook_SetupAction(this, ArmsHook_Shoot);
         func_800B6C04(&this->actor, 20.0f);
-        this->actor.parent = &PLAYER->base;
+        this->actor.parent = &GET_PLAYER(globalCtx)->actor;
         this->timer = 26;
     }
 }
@@ -89,11 +82,11 @@ void func_808C1154(ArmsHook* this) {
     this->actor.parent->parent = &this->actor;
 }
 
-s32 ArmsHook_AttachToPlayer(ArmsHook* this, ActorPlayer* player) {
-    player->base.child = &this->actor;
-    player->heldActor = &this->actor;
+s32 ArmsHook_AttachToPlayer(ArmsHook* this, Player* player) {
+    player->actor.child = &this->actor;
+    player->leftHandActor = &this->actor;
     if (this->actor.child != NULL) {
-        player->base.parent = this->actor.child = NULL;
+        player->actor.parent = this->actor.child = NULL;
         return 1;
     }
     return 0;
@@ -107,13 +100,13 @@ void ArmsHook_DetachHookFromActor(ArmsHook* this) {
 }
 
 s32 ArmsHook_CheckForCancel(ArmsHook* this) {
-    ActorPlayer* player = (ActorPlayer*)this->actor.parent;
+    Player* player = (Player*)this->actor.parent;
     if (func_801240C8(player)) {
-        if ((player->heldItemActionParam != player->itemActionParam) || ((player->base.flags & 0x100)) ||
+        if ((player->heldItemActionParam != player->itemActionParam) || ((player->actor.flags & 0x100)) ||
             ((player->stateFlags1 & 0x4000080))) {
             this->timer = 0;
             ArmsHook_DetachHookFromActor(this);
-            Math_Vec3f_Copy(&this->actor.world.pos, &player->unk368);
+            Math_Vec3f_Copy(&this->actor.world.pos, &player->rightHandWorld.pos);
             return 1;
         }
     }
@@ -127,7 +120,7 @@ void ArmsHook_AttachHookToActor(ArmsHook* this, Actor* actor) {
 }
 
 void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((this->actor.parent == NULL) || (!func_801240C8(player))) {
         ArmsHook_DetachHookFromActor(this);
@@ -135,7 +128,7 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
         return;
     }
 
-    func_800B8F98(&player->base, 0x100B);
+    func_800B8F98(&player->actor, NA_SE_IT_HOOKSHOT_CHAIN - SFX_FLAG);
     ArmsHook_CheckForCancel(this);
 
     if (this->timer != 0 && (this->collider.base.atFlags & AT_HIT) &&
@@ -150,7 +143,7 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
             }
         }
         this->timer = 0;
-        func_8019F1C0(&this->actor.projectedPos, 0x1814);
+        func_8019F1C0(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_STICK_CRE);
 
         return;
     }
@@ -170,7 +163,7 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
                 this->grabbed = NULL;
             } else {
                 if (this->actor.child != NULL) {
-                    f32 sp94 = Actor_DistanceBetweenActors(this, grabbed);
+                    f32 sp94 = Actor_DistanceBetweenActors(&this->actor, grabbed);
                     f32 sp90 = sqrtf(SQ(this->unk1FC.x) + SQ(this->unk1FC.y) + SQ(this->unk1FC.z));
                     Math_Vec3f_Diff(&grabbed->world.pos, &this->unk1FC, &this->actor.world.pos);
                     if (50.0f < (sp94 - sp90)) {
@@ -184,7 +177,8 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
         {
             f32 velocity;
 
-            bodyDistDiff = Math_Vec3f_DistXYZAndStoreDiff(&player->unk368, &this->actor.world.pos, &bodyDistDiffVec);
+            bodyDistDiff =
+                Math_Vec3f_DistXYZAndStoreDiff(&player->rightHandWorld.pos, &this->actor.world.pos, &bodyDistDiffVec);
             if (bodyDistDiff < 30.0f) {
                 velocity = 0.0f;
                 phi_f16 = 0.0f;
@@ -211,13 +205,13 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
         }
 
         if (this->actor.child == NULL) {
-            Math_Vec3f_Sum(&player->unk368, &newPos, &this->actor.world.pos);
+            Math_Vec3f_Sum(&player->rightHandWorld.pos, &newPos, &this->actor.world.pos);
             if (grabbed != NULL) {
                 Math_Vec3f_Sum(&this->actor.world.pos, &this->unk1FC, &grabbed->world.pos);
             }
         } else {
-            Math_Vec3f_Diff(&bodyDistDiffVec, &newPos, &player->base.velocity);
-            player->base.world.rot.x =
+            Math_Vec3f_Diff(&bodyDistDiffVec, &newPos, &player->actor.velocity);
+            player->actor.world.rot.x =
                 Math_FAtan2F(sqrtf(SQ(bodyDistDiffVec.x) + SQ(bodyDistDiffVec.z)), -bodyDistDiffVec.y);
         }
         if (phi_f16 < 50.0f) {
@@ -225,8 +219,8 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
             if (phi_f16 == 0.0f) {
                 ArmsHook_SetupAction(this, ArmsHook_Wait);
                 if (ArmsHook_AttachToPlayer(this, player)) {
-                    Math_Vec3f_Diff(&this->actor.world.pos, &player->base.world.pos, &player->base.velocity);
-                    player->base.velocity.y -= 20.0f;
+                    Math_Vec3f_Diff(&this->actor.world.pos, &player->actor.world.pos, &player->actor.velocity);
+                    player->actor.velocity.y -= 20.0f;
                 }
             }
         }
@@ -262,13 +256,13 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
                     }
                 }
                 func_808C1154(this);
-                func_8019F1C0(&this->actor.projectedPos, 0x1829);
+                func_8019F1C0(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_STICK_OBJ);
             } else {
                 CollisionCheck_SpawnShieldParticlesMetal(globalCtx, &this->actor.world.pos);
-                func_8019F1C0(&this->actor.projectedPos, 0x1813);
+                func_8019F1C0(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_REFLECT);
             }
         } else {
-            if (CHECK_BTN_ANY(globalCtx->state.input[0].press.button,
+            if (CHECK_BTN_ANY(CONTROLLER1(globalCtx)->press.button,
                               BTN_A | BTN_B | BTN_R | BTN_CUP | BTN_CLEFT | BTN_CRIGHT | BTN_CDOWN)) {
                 s32 pad;
                 this->timer = 1;
@@ -284,52 +278,56 @@ void ArmsHook_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->unk1EC = this->unk1E0;
 }
 
+static Vec3f D_808C1C10 = { 0.0f, 0.0f, 0.0f };
+static Vec3f D_808C1C1C = { 0.0f, 0.0f, 900.0f };
+static Vec3f D_808C1C28 = { 0.0f, 500.0f, -3000.0f };
+static Vec3f D_808C1C34 = { 0.0f, -500.0f, -3000.0f };
+static Vec3f D_808C1C40 = { 0.0f, 500.0f, 0.0f };
+static Vec3f D_808C1C4C = { 0.0f, -500.0f, 0.0f };
+
 void ArmsHook_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ArmsHook* this = THIS;
-    s32 pad;
-    ActorPlayer* player = PLAYER;
-    Vec3f sp68;
-    Vec3f sp5C;
-    Vec3f sp50;
-    f32 sp4C;
-    f32 sp48;
+    f32 f0;
+    Player* player = GET_PLAYER(globalCtx);
 
-    if (player->base.draw != NULL && player->unk151 == 0xB) {
-        // OPEN_DISP macro
-        {
-            GraphicsContext* sp44 = globalCtx->state.gfxCtx;
-            f32 f0;
+    if (player->actor.draw != NULL && player->rightHandType == 0xB) {
+        Vec3f sp68;
+        Vec3f sp5C;
+        Vec3f sp50;
+        f32 sp4C;
+        f32 sp48;
 
-            if ((ArmsHook_Shoot != this->actionFunc) || (this->timer <= 0)) {
-                SysMatrix_MultiplyVector3fByState(&D_808C1C10, &this->unk1E0);
-                SysMatrix_MultiplyVector3fByState(&D_808C1C28, &sp5C);
-                SysMatrix_MultiplyVector3fByState(&D_808C1C34, &sp50);
-                this->unk1C4 = 0;
-            } else {
-                SysMatrix_MultiplyVector3fByState(&D_808C1C1C, &this->unk1E0);
-                SysMatrix_MultiplyVector3fByState(&D_808C1C40, &sp5C);
-                SysMatrix_MultiplyVector3fByState(&D_808C1C4C, &sp50);
-            }
-            func_80126440(globalCtx, &this->collider.base, &this->unk1C4, &sp5C, &sp50);
-            func_8012C28C(globalCtx->state.gfxCtx);
-            func_80122868(globalCtx, player);
+        OPEN_DISPS(globalCtx->state.gfxCtx);
 
-            gSPMatrix(sp44->polyOpa.p++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(sp44->polyOpa.p++, D_0601D960);
-            SysMatrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                        MTXMODE_NEW);
-            Math_Vec3f_Diff(&player->unk368, &this->actor.world.pos, &sp68);
-            sp48 = SQ(sp68.x) + SQ(sp68.z);
-            sp4C = sqrtf(sp48);
-            Matrix_RotateY(atans(sp68.x, sp68.z), MTXMODE_APPLY);
-            SysMatrix_InsertXRotation_s(atans(-sp68.y, sp4C), MTXMODE_APPLY);
-            f0 = sqrtf(SQ(sp68.y) + sp48);
-            Matrix_Scale(0.015f, 0.015f, f0 * 0.01f, MTXMODE_APPLY);
-            gSPMatrix(sp44->polyOpa.p++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(sp44->polyOpa.p++, D_040008D0);
-            func_801229A0(globalCtx, player);
+        if ((ArmsHook_Shoot != this->actionFunc) || (this->timer <= 0)) {
+            Matrix_MultiplyVector3fByState(&D_808C1C10, &this->unk1E0);
+            Matrix_MultiplyVector3fByState(&D_808C1C28, &sp5C);
+            Matrix_MultiplyVector3fByState(&D_808C1C34, &sp50);
+            this->unk1C4 = 0;
+        } else {
+            Matrix_MultiplyVector3fByState(&D_808C1C1C, &this->unk1E0);
+            Matrix_MultiplyVector3fByState(&D_808C1C40, &sp5C);
+            Matrix_MultiplyVector3fByState(&D_808C1C4C, &sp50);
         }
+        func_80126440(globalCtx, &this->collider.base, &this->unk1C4, &sp5C, &sp50);
+        func_8012C28C(globalCtx->state.gfxCtx);
+        func_80122868(globalCtx, player);
+
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_OPA_DISP++, D_0601D960);
+        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+                                 MTXMODE_NEW);
+        Math_Vec3f_Diff(&player->rightHandWorld.pos, &this->actor.world.pos, &sp68);
+        sp48 = SQXZ(sp68);
+        sp4C = sqrtf(SQXZ(sp68));
+        Matrix_RotateY(Math_Atan2S(sp68.x, sp68.z), MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(Math_Atan2S(-sp68.y, sp4C), MTXMODE_APPLY);
+        f0 = sqrtf(SQ(sp68.y) + sp48);
+        Matrix_Scale(0.015f, 0.015f, f0 * 0.01f, MTXMODE_APPLY);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_OPA_DISP++, D_040008D0);
+        func_801229A0(globalCtx, player);
+
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }

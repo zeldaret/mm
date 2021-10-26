@@ -1,83 +1,71 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
-/*
-TODO:
-There are a few issues left with this file, but many rely on larger structural project changes.
-I am avoiding these in the mean time in order to not break the Ghidra project structures.
-We need a header file for just z_scene. Including relevant structs, scene, and object enums.
-Needs definition for OBJECT_EXCHANGE_BANK_MAX
-The .data, .bss, and .rodata sections are not migrated to this file yet.
-*/
+s32 Object_Spawn(ObjectContext* objectCtx, s16 id) {
+    size_t size;
 
-s32 Scene_LoadObject(SceneContext* sceneCtxt, s16 id) {
-    u32 size;
-
-    sceneCtxt->objects[sceneCtxt->objectCount].id = id;
+    objectCtx->status[objectCtx->num].id = id;
     size = objectFileTable[id].vromEnd - objectFileTable[id].vromStart;
 
-    if (sceneCtxt) {}
+    if (1) {}
 
-    if (size) {
-        DmaMgr_SendRequest0(sceneCtxt->objects[sceneCtxt->objectCount].segment, objectFileTable[id].vromStart, size);
+    if (size != 0) {
+        DmaMgr_SendRequest0(objectCtx->status[objectCtx->num].segment, objectFileTable[id].vromStart, size);
     }
 
-    // TODO: This 0x22 is OBJECT_EXCHANGE_BANK_MAX - 1 in OOT
-    if (sceneCtxt->objectCount < 0x22) {
-        sceneCtxt->objects[sceneCtxt->objectCount + 1].segment =
-            // UB to cast pointer to u32
-            (void*)ALIGN16((u32)sceneCtxt->objects[sceneCtxt->objectCount].segment + size);
+    if (objectCtx->num < OBJECT_EXCHANGE_BANK_MAX - 1) {
+        objectCtx->status[objectCtx->num + 1].segment =
+            (void*)ALIGN16((u32)objectCtx->status[objectCtx->num].segment + size);
     }
 
-    sceneCtxt->objectCount++;
-    sceneCtxt->spawnedObjectCount = sceneCtxt->objectCount;
+    objectCtx->num++;
+    objectCtx->spawnedObjectCount = objectCtx->num;
 
-    return sceneCtxt->objectCount - 1;
+    return objectCtx->num - 1;
 }
 
-void Scene_Init(GlobalContext* ctxt, SceneContext* sceneCtxt) {
-    GlobalContext* global = ctxt; // Needs to be a new variable to match (possibly a sub struct?)
-    u32 unused;
+void Object_InitBank(GameState* gameState, ObjectContext* objectCtx) {
+    GlobalContext* globalCtx = (GlobalContext*)gameState;
+    s32 pad;
     u32 spaceSize;
     s32 i;
 
-    if (global->sceneNum == SCENE_CLOCKTOWER || global->sceneNum == SCENE_TOWN || global->sceneNum == SCENE_BACKTOWN || global->sceneNum == SCENE_ICHIBA) {
-        spaceSize = 1566720;
-    } else if (global->sceneNum == SCENE_MILK_BAR) {
-        spaceSize = 1617920;
-    } else if (global->sceneNum == SCENE_00KEIKOKU) {
-        spaceSize = 1505280;
+    if (globalCtx->sceneNum == SCENE_CLOCKTOWER || globalCtx->sceneNum == SCENE_TOWN ||
+        globalCtx->sceneNum == SCENE_BACKTOWN || globalCtx->sceneNum == SCENE_ICHIBA) {
+        spaceSize = OBJECT_SPACE_SIZE_CLOCK_TOWN;
+    } else if (globalCtx->sceneNum == SCENE_MILK_BAR) {
+        spaceSize = OBJECT_SPACE_SIZE_MILK_BAR;
+    } else if (globalCtx->sceneNum == SCENE_00KEIKOKU) {
+        spaceSize = OBJECT_SPACE_SIZE_TERMINA_FIELD;
     } else {
-        spaceSize = 1413120;
+        spaceSize = OBJECT_SPACE_SIZE_DEFAULT;
     }
 
-    sceneCtxt->objectCount = 0;
-    sceneCtxt->spawnedObjectCount = 0;
-    sceneCtxt->mainKeepIndex = 0;
-    sceneCtxt->keepObjectId = 0;
+    objectCtx->num = 0;
+    objectCtx->spawnedObjectCount = 0;
+    objectCtx->mainKeepIndex = 0;
+    objectCtx->subKeepIndex = 0;
 
-    // TODO: 0x23 is OBJECT_EXCHANGE_BANK_MAX in OOT
-    for (i = 0; i < 0x23; i++) sceneCtxt->objects[i].id = 0;
+    // clang-format off
+    for (i = 0; i < OBJECT_EXCHANGE_BANK_MAX; i++) { objectCtx->status[i].id = 0; }
+    // clang-format on
 
-    sceneCtxt->objectVramStart = sceneCtxt->objects[0].segment = THA_AllocEndAlign16(&ctxt->state.heap, spaceSize);
-    // UB to cast sceneCtxt->objectVramStart to s32
-    sceneCtxt->objectVramEnd = (void*)((u32)sceneCtxt->objectVramStart + spaceSize);
-    // TODO: Second argument here is an object enum
-    sceneCtxt->mainKeepIndex = Scene_LoadObject(sceneCtxt, 1);
-    // TODO: Segment number enum?
-    gSegments[4] = PHYSICAL_TO_VIRTUAL(sceneCtxt->objects[sceneCtxt->mainKeepIndex].segment);
+    objectCtx->spaceStart = objectCtx->status[0].segment = THA_AllocEndAlign16(&gameState->heap, spaceSize);
+    objectCtx->spaceEnd = (void*)((u32)objectCtx->spaceStart + spaceSize);
+    objectCtx->mainKeepIndex = Object_Spawn(objectCtx, GAMEPLAY_KEEP);
+
+    gSegments[4] = PHYSICAL_TO_VIRTUAL(objectCtx->status[objectCtx->mainKeepIndex].segment);
 }
 
-void Scene_ReloadUnloadedObjects(SceneContext* sceneCtxt) {
+void Object_UpdateBank(ObjectContext* objectCtx) {
     s32 i;
-    ObjectStatus* status;
-    ObjectFileTableEntry* objectFile;
-    u32 size;
+    ObjectStatus* status = &objectCtx->status[0];
+    RomFile* objectFile;
+    size_t size;
 
-    status = &sceneCtxt->objects[0];
-    for (i = 0; i < sceneCtxt->objectCount; i++) {
+    for (i = 0; i < objectCtx->num; i++) {
         if (status->id < 0) {
             s32 id = -status->id;
+
             if (status->dmaReq.vromAddr == 0) {
                 objectFile = &objectFileTable[id];
                 size = objectFile->vromEnd - objectFile->vromStart;
@@ -86,175 +74,185 @@ void Scene_ReloadUnloadedObjects(SceneContext* sceneCtxt) {
                     status->id = 0;
                 } else {
                     osCreateMesgQueue(&status->loadQueue, &status->loadMsg, 1);
-                    DmaMgr_SendRequestImpl(&status->dmaReq, status->segment, objectFile->vromStart,
-                                            size, 0, &status->loadQueue, NULL);
+                    DmaMgr_SendRequestImpl(&status->dmaReq, status->segment, objectFile->vromStart, size, 0,
+                                           &status->loadQueue, NULL);
                 }
             } else if (!osRecvMesg(&status->loadQueue, NULL, OS_MESG_NOBLOCK)) {
                 status->id = id;
             }
         }
+
         status++;
     }
 }
 
-s32 Scene_FindSceneObjectIndex(SceneContext* sceneCtxt, s16 objectId) {
+s32 Object_GetIndex(ObjectContext* objectCtx, s16 objectId) {
     s32 i;
-    for(i = 0; i < sceneCtxt->objectCount; i++) {
-        if((sceneCtxt->objects[i].id < 0 ? -sceneCtxt->objects[i].id : sceneCtxt->objects[i].id) == objectId) {
+
+    for (i = 0; i < objectCtx->num; i++) {
+        if ((objectCtx->status[i].id < 0 ? -objectCtx->status[i].id : objectCtx->status[i].id) == objectId) {
             return i;
         }
     }
+
     return -1;
 }
 
-s32 Scene_IsObjectLoaded(SceneContext* actorShape, s32 index) {
-    if (actorShape->objects[index].id > 0) {
-        return 1;
+s32 Object_IsLoaded(ObjectContext* objectCtx, s32 index) {
+    if (objectCtx->status[index].id > 0) {
+        return true;
     } else {
-        return 0;
+        return false;
     }
 }
 
-void Scene_DmaAllObjects(SceneContext* sceneCtxt) {
+void Object_LoadAll(ObjectContext* objectCtx) {
     s32 i;
     s32 id;
     u32 vromSize;
 
-    for (i = 0; i < sceneCtxt->objectCount; i++) {
-        id = sceneCtxt->objects[i].id;
+    for (i = 0; i < objectCtx->num; i++) {
+        id = objectCtx->status[i].id;
         vromSize = objectFileTable[id].vromEnd - objectFileTable[id].vromStart;
 
         if (vromSize == 0) {
             continue;
         }
 
-        DmaMgr_SendRequest0(sceneCtxt->objects[i].segment, objectFileTable[id].vromStart, vromSize);
+        DmaMgr_SendRequest0(objectCtx->status[i].segment, objectFileTable[id].vromStart, vromSize);
     }
 }
 
-void* func_8012F73C(SceneContext* sceneCtxt, s32 iParm2, s16 id) {
+void* func_8012F73C(ObjectContext* objectCtx, s32 iParm2, s16 id) {
     u32 addr;
     u32 vromSize;
-    ObjectFileTableEntry* fileTableEntry;
+    RomFile* fileTableEntry;
 
-    sceneCtxt->objects[iParm2].id = -id;
-    sceneCtxt->objects[iParm2].dmaReq.vromAddr = 0;
+    objectCtx->status[iParm2].id = -id;
+    objectCtx->status[iParm2].dmaReq.vromAddr = 0;
 
     fileTableEntry = &objectFileTable[id];
     vromSize = fileTableEntry->vromEnd - fileTableEntry->vromStart;
+
     // TODO: UB to cast void to u32
-    addr = ((u32)sceneCtxt->objects[iParm2].segment) + vromSize;
+    addr = ((u32)objectCtx->status[iParm2].segment) + vromSize;
     addr = ALIGN16(addr);
-    // UB to cast u32 to pointer
+
     return (void*)addr;
 }
 
-// Scene Command 0x00: Link Spawn List
-void Scene_HeaderCommand00(GlobalContext* ctxt, SceneCmd* entry) {
-    GlobalContext* global = ctxt; // Needs to be a new variable to match (possibly a sub struct?)
+// SceneTableEntry Header Command 0x00: Spawn List
+void Scene_HeaderCmdSpawnList(GlobalContext* globalCtx, SceneCmd* cmd) {
+    GlobalContext* globalCtx2 = globalCtx;
     s32 loadedCount;
-    void* objectVramAddr;
-    s16 temp16;
-    u8 unk20;
+    void* nextObject;
+    s16 playerObjectId;
+    u8 playerForm;
 
-    ctxt->linkActorEntry = (ActorEntry*)Lib_SegmentedToVirtual(entry->spawnList.segment) +
-                    ctxt->setupEntranceList[ctxt->curSpawn].spawn;
-    if ( (ctxt->linkActorEntry->params & 0x0F00) >> 8 == 0x0C ||
-         (gSaveContext.extra.unk10 == 0x02 && gSaveContext.extra.unk42 == 0x0CFF)
-    ) {
-        Scene_LoadObject(&ctxt->sceneContext, OBJECT_STK);
+    globalCtx->linkActorEntry = (ActorEntry*)Lib_SegmentedToVirtual(cmd->spawnList.segment) +
+                                globalCtx->setupEntranceList[globalCtx->curSpawn].spawn;
+    if ((globalCtx->linkActorEntry->params & 0x0F00) >> 8 == 0x0C ||
+        (gSaveContext.respawnFlag == 0x02 && gSaveContext.respawn[1].playerParams == 0x0CFF)) {
+        // Skull Kid Object
+        Object_Spawn(&globalCtx->objectCtx, OBJECT_STK);
         return;
     }
 
-    loadedCount = Scene_LoadObject(&ctxt->sceneContext, OBJECT_LINK_CHILD);
-    objectVramAddr = global->sceneContext.objects[global->sceneContext.objectCount].segment;
-    ctxt->sceneContext.objectCount = loadedCount;
-    ctxt->sceneContext.spawnedObjectCount = loadedCount;
-    unk20 = gSaveContext.perm.unk20;
-    temp16 = D_801C2730[unk20];
-    gActorOverlayTable[0].initInfo->objectId = temp16;
-    Scene_LoadObject(&ctxt->sceneContext, temp16);
+    loadedCount = Object_Spawn(&globalCtx->objectCtx, OBJECT_LINK_CHILD);
+    nextObject = globalCtx2->objectCtx.status[globalCtx2->objectCtx.num].segment;
+    globalCtx->objectCtx.num = loadedCount;
+    globalCtx->objectCtx.spawnedObjectCount = loadedCount;
+    playerForm = gSaveContext.playerForm;
+    playerObjectId = gLinkFormObjectIndexes[playerForm];
+    gActorOverlayTable[0].initInfo->objectId = playerObjectId;
+    Object_Spawn(&globalCtx->objectCtx, playerObjectId);
 
-    ctxt->sceneContext.objects[ctxt->sceneContext.objectCount].segment = objectVramAddr;
+    globalCtx->objectCtx.status[globalCtx->objectCtx.num].segment = nextObject;
 }
 
-// Scene Command 0x01: Actor List
-void Scene_HeaderCommand01(GlobalContext* ctxt, SceneCmd* entry) {
-    ctxt->sceneNumActorsToLoad = (u16)entry->actorList.num;
-    ctxt->setupActorList = (ActorEntry*)Lib_SegmentedToVirtual(entry->actorList.segment);
-    ctxt->actorCtx.unkC = (u16)0;
+// SceneTableEntry Header Command 0x01: Actor List
+void Scene_HeaderCmdActorList(GlobalContext* globalCtx, SceneCmd* cmd) {
+    globalCtx->numSetupActors = (u16)cmd->actorList.num;
+    globalCtx->setupActorList = (ActorEntry*)Lib_SegmentedToVirtual(cmd->actorList.segment);
+    globalCtx->actorCtx.unkC = (u16)0;
 }
 
-// Scene Command 0x02: Cutscene Camera List
-void Scene_HeaderCommand02(GlobalContext* ctxt, SceneCmd* entry) {
-    ctxt->unk18858 = (UNK_PTR)Lib_SegmentedToVirtual(entry->csCameraList.segment);
+// SceneTableEntry Header Command 0x02: List of cameras for actor cutscenes
+void Scene_HeaderCmdActorCutsceneCamList(GlobalContext* globalCtx, SceneCmd* cmd) {
+    globalCtx->unk_18858 = (UNK_PTR)Lib_SegmentedToVirtual(cmd->csCameraList.segment);
 }
 
-// Scene Command 0x03: Collision Header
-void Scene_HeaderCommand03(GlobalContext* ctxt, SceneCmd* entry) {
-    BgMeshHeader* temp_ret;
-    BgMeshHeader* temp_s0;
+// SceneTableEntry Header Command 0x03: Collision Header
+void Scene_HeaderCmdColHeader(GlobalContext* globalCtx, SceneCmd* cmd) {
+    CollisionHeader* colHeaderTemp;
+    CollisionHeader* colHeader;
 
-    temp_ret = (BgMeshHeader*)Lib_SegmentedToVirtual(entry->colHeader.segment);
-    temp_s0 = temp_ret;
-    temp_s0->vertices = (BgVertex*)Lib_SegmentedToVirtual(temp_ret->vertices);
-    temp_s0->polygons = (CollisionPoly*)Lib_SegmentedToVirtual(temp_s0->polygons);
-    if (temp_s0->attributes != 0) {
-        temp_s0->attributes = (BgPolygonAttributes*)Lib_SegmentedToVirtual(temp_s0->attributes);
-    }
-    if (temp_s0->cameraData != 0) {
-        temp_s0->cameraData = (void*)Lib_SegmentedToVirtual(temp_s0->cameraData);
-    }
-    if (temp_s0->waterboxes != 0) {
-        temp_s0->waterboxes = (BgWaterBox*)Lib_SegmentedToVirtual(temp_s0->waterboxes);
+    colHeaderTemp = (CollisionHeader*)Lib_SegmentedToVirtual(cmd->colHeader.segment);
+    colHeader = colHeaderTemp;
+    colHeader->vtxList = (Vec3s*)Lib_SegmentedToVirtual(colHeaderTemp->vtxList);
+    colHeader->polyList = (CollisionPoly*)Lib_SegmentedToVirtual(colHeader->polyList);
+
+    if (colHeader->surfaceTypeList != NULL) {
+        colHeader->surfaceTypeList = (SurfaceType*)Lib_SegmentedToVirtual(colHeader->surfaceTypeList);
     }
 
-    BgCheck_Init(&ctxt->colCtx, ctxt, temp_s0);
+    if (colHeader->cameraDataList != NULL) {
+        colHeader->cameraDataList = (void*)Lib_SegmentedToVirtual(colHeader->cameraDataList);
+    }
+
+    if (colHeader->waterBoxes != NULL) {
+        colHeader->waterBoxes = (WaterBox*)Lib_SegmentedToVirtual(colHeader->waterBoxes);
+    }
+
+    BgCheck_Init(&globalCtx->colCtx, globalCtx, colHeader);
 }
 
-// Scene Command 0x04: Room List
-void Scene_HeaderCommand04(GlobalContext* ctxt, SceneCmd* entry) {
-    ctxt->numRooms = entry->roomList.num;
-    ctxt->roomList = (RoomFileLocation*)Lib_SegmentedToVirtual(entry->roomList.segment);
+// SceneTableEntry Header Command 0x04: Room List
+void Scene_HeaderCmdRoomList(GlobalContext* globalCtx, SceneCmd* cmd) {
+    globalCtx->numRooms = cmd->roomList.num;
+    globalCtx->roomList = (RomFile*)Lib_SegmentedToVirtual(cmd->roomList.segment);
 }
 
-// Scene Command 0x06: Entrance List
-void Scene_HeaderCommand06(GlobalContext* ctxt, SceneCmd* entry) {
-    ctxt->setupEntranceList = (EntranceEntry*)Lib_SegmentedToVirtual(entry->entranceList.segment);
+// SceneTableEntry Header Command 0x06: Entrance List
+void Scene_HeaderCmdEntranceList(GlobalContext* globalCtx, SceneCmd* cmd) {
+    globalCtx->setupEntranceList = (EntranceEntry*)Lib_SegmentedToVirtual(cmd->entranceList.segment);
 }
 
-// Scene Command 0x07: Special Files
-void Scene_HeaderCommand07(GlobalContext* ctxt, SceneCmd* entry) {
-    if (entry->specialFiles.keepObjectId != 0) {
-        ctxt->sceneContext.keepObjectId = Scene_LoadObject(&ctxt->sceneContext,
-                                                           entry->specialFiles.keepObjectId);
+// SceneTableEntry Header Command 0x07: Special Files
+void Scene_HeaderCmdSpecialFiles(GlobalContext* globalCtx, SceneCmd* cmd) {
+    static RomFile tatlMessageFiles[2] = {
+        { SEGMENT_ROM_START(elf_message_field), SEGMENT_ROM_END(elf_message_field) },
+        { SEGMENT_ROM_START(elf_message_ydan), SEGMENT_ROM_END(elf_message_ydan) },
+    };
+
+    if (cmd->specialFiles.subKeepIndex != 0) {
+        globalCtx->objectCtx.subKeepIndex = Object_Spawn(&globalCtx->objectCtx, cmd->specialFiles.subKeepIndex);
         // TODO: Segment number enum?
-        gSegments[5] =
-            PHYSICAL_TO_VIRTUAL(ctxt->sceneContext.objects[ctxt->sceneContext.keepObjectId].segment);
+        gSegments[5] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[globalCtx->objectCtx.subKeepIndex].segment);
     }
 
-    if (entry->specialFiles.cUpElfMsgNum != 0) {
-        ctxt->unk18868 = Play_LoadScene(ctxt, &D_801C2650[entry->specialFiles.cUpElfMsgNum - 1]);
+    if (cmd->specialFiles.cUpElfMsgNum != 0) {
+        globalCtx->unk_18868 = Play_LoadScene(globalCtx, &tatlMessageFiles[cmd->specialFiles.cUpElfMsgNum - 1]);
     }
 }
 
-// Scene Command 0x08: Room Behavior
-void Scene_HeaderCommand08(GlobalContext* ctxt, SceneCmd* entry) {
-    ctxt->roomContext.currRoom.unk3 = entry->roomBehavior.gpFlag1;
-    ctxt->roomContext.currRoom.unk2 = entry->roomBehavior.gpFlag2 & 0xFF;
-    ctxt->roomContext.currRoom.unk5 = (entry->roomBehavior.gpFlag2 >> 8) & 1;
-    ctxt->msgCtx.unk12044 = (entry->roomBehavior.gpFlag2 >> 0xa) & 1;
-    ctxt->roomContext.currRoom.enablePosLights = (entry->roomBehavior.gpFlag2 >> 0xb) & 1;
-    ctxt->kankyoContext.unkE2 = (entry->roomBehavior.gpFlag2 >> 0xc) & 1;
+// SceneTableEntry Header Command 0x08: Room Behavior
+void Scene_HeaderCmdRoomBehavior(GlobalContext* globalCtx, SceneCmd* cmd) {
+    globalCtx->roomCtx.currRoom.unk3 = cmd->roomBehavior.gpFlag1;
+    globalCtx->roomCtx.currRoom.unk2 = cmd->roomBehavior.gpFlag2 & 0xFF;
+    globalCtx->roomCtx.currRoom.unk5 = (cmd->roomBehavior.gpFlag2 >> 8) & 1;
+    globalCtx->msgCtx.unk12044 = (cmd->roomBehavior.gpFlag2 >> 0xa) & 1;
+    globalCtx->roomCtx.currRoom.enablePosLights = (cmd->roomBehavior.gpFlag2 >> 0xb) & 1;
+    globalCtx->envCtx.unk_E2 = (cmd->roomBehavior.gpFlag2 >> 0xc) & 1;
 }
 
-// Scene Command 0x0A: Mesh Header
-void Scene_HeaderCommand0A(GlobalContext* ctxt, SceneCmd* entry) {
-    ctxt->roomContext.currRoom.mesh = (RoomMesh*)Lib_SegmentedToVirtual(entry->mesh.segment);
+// SceneTableEntry Header Command 0x0A: Mesh Header
+void Scene_HeaderCmdMesh(GlobalContext* globalCtx, SceneCmd* cmd) {
+    globalCtx->roomCtx.currRoom.mesh = (RoomMesh*)Lib_SegmentedToVirtual(cmd->mesh.segment);
 }
 
-// Scene Command 0x0B: Object List
-void Scene_HeaderCommand0B(GlobalContext *ctxt, SceneCmd *entry) {
+// SceneTableEntry Header Command 0x0B:  Object List
+void Scene_HeaderCmdObjectList(GlobalContext* globalCtx, SceneCmd* cmd) {
     s32 i, j, k;
     ObjectStatus* firstObject;
     ObjectStatus* status;
@@ -262,21 +260,23 @@ void Scene_HeaderCommand0B(GlobalContext *ctxt, SceneCmd *entry) {
     s16* objectEntry;
     void* nextPtr;
 
-    objectEntry = (s16*)Lib_SegmentedToVirtual(entry->objectList.segment);
+    objectEntry = (s16*)Lib_SegmentedToVirtual(cmd->objectList.segment);
     k = 0;
-    i = ctxt->sceneContext.spawnedObjectCount;
-    status = &ctxt->sceneContext.objects[i];
-    firstObject = ctxt->sceneContext.objects;
+    i = globalCtx->objectCtx.spawnedObjectCount;
+    status = &globalCtx->objectCtx.status[i];
+    firstObject = globalCtx->objectCtx.status;
 
-    while (i < ctxt->sceneContext.objectCount) {
+    while (i < globalCtx->objectCtx.num) {
         if (status->id != *objectEntry) {
-            status2 = &ctxt->sceneContext.objects[i];
-            for (j = i; j < ctxt->sceneContext.objectCount; j++) {
+            status2 = &globalCtx->objectCtx.status[i];
+
+            for (j = i; j < globalCtx->objectCtx.num; j++) {
                 status2->id = 0;
                 status2++;
             }
-            ctxt->sceneContext.objectCount = i;
-            func_800BA6FC(ctxt, &ctxt->actorCtx);
+
+            globalCtx->objectCtx.num = i;
+            func_800BA6FC(globalCtx, &globalCtx->actorCtx);
 
             continue;
         }
@@ -287,259 +287,308 @@ void Scene_HeaderCommand0B(GlobalContext *ctxt, SceneCmd *entry) {
         status++;
     }
 
-    while (k < entry->objectList.num) {
-        nextPtr = func_8012F73C(&ctxt->sceneContext, i, *objectEntry);
+    while (k < cmd->objectList.num) {
+        nextPtr = func_8012F73C(&globalCtx->objectCtx, i, *objectEntry);
 
-        // TODO: This 0x22 is OBJECT_EXCHANGE_BANK_MAX - 1 in OOT
-        if (i < 0x22) {
+        if (i < OBJECT_EXCHANGE_BANK_MAX - 1) {
             firstObject[i + 1].segment = nextPtr;
         }
+
         i++;
         k++;
         objectEntry++;
     }
 
-    ctxt->sceneContext.objectCount = i;
+    globalCtx->objectCtx.num = i;
 }
 
-// Scene Command 0x0C: Light List
-void Scene_HeaderCommand0C(GlobalContext* ctxt, SceneCmd* entry) {
+// SceneTableEntry Header Command 0x0C: Light List
+void Scene_HeaderCmdLightList(GlobalContext* globalCtx, SceneCmd* cmd) {
     s32 i;
-    LightInfo* lightInfo;
+    LightInfo* lightInfo = (LightInfo*)Lib_SegmentedToVirtual(cmd->lightList.segment);
 
-    lightInfo = (LightInfo*)Lib_SegmentedToVirtual(entry->lightList.segment);
-    for (i = 0; i < entry->lightList.num; i++)
-    {
-        LightContext_InsertLight(ctxt, &ctxt->lightCtx, lightInfo);
+    for (i = 0; i < cmd->lightList.num; i++) {
+        LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, lightInfo);
         lightInfo++;
     }
 }
 
-// Scene Command 0x0D: Path List
-void Scene_HeaderCommand0D(GlobalContext* ctxt, SceneCmd* entry) {
-    ctxt->setupPathList = (void*)Lib_SegmentedToVirtual(entry->pathList.segment);
+// SceneTableEntry Header Command 0x0D: Path List
+void Scene_HeaderCmdPathList(GlobalContext* globalCtx, SceneCmd* cmd) {
+    globalCtx->setupPathList = (Path*)Lib_SegmentedToVirtual(cmd->pathList.segment);
 }
 
-// Scene Command 0x0E: Transition Actor List
-void Scene_HeaderCommand0E(GlobalContext* ctxt, SceneCmd* entry) {
-    ctxt->transitionActorCount = entry->transiActorList.num;
-    ctxt->transitionActorList = (TransitionActorEntry*)Lib_SegmentedToVirtual((void*)entry->transiActorList.segment);
-    func_80105818(ctxt, ctxt->transitionActorCount, ctxt->transitionActorList);
+// SceneTableEntry Header Command 0x0E: Transition Actor List
+void Scene_HeaderCmdTransiActorList(GlobalContext* globalCtx, SceneCmd* cmd) {
+    globalCtx->doorCtx.numTransitionActors = cmd->transiActorList.num;
+    globalCtx->doorCtx.transitionActorList =
+        (TransitionActorEntry*)Lib_SegmentedToVirtual((void*)cmd->transiActorList.segment);
+    func_80105818(globalCtx, globalCtx->doorCtx.numTransitionActors, globalCtx->doorCtx.transitionActorList);
 }
 
-void func_8012FEBC(GlobalContext* ctxt, u8* nbTransitionActors) {
-    *nbTransitionActors = 0;
+// Init function for the transition system.
+void Door_InitContext(GameState* state, DoorContext* doorCtx) {
+    doorCtx->numTransitionActors = 0;
 }
 
-// Scene Command 0x0F: Light Setting List
-void Scene_HeaderCommand0F(GlobalContext* ctxt, SceneCmd* entry) {
-    ctxt->kankyoContext.environmentSettingsCount = entry->lightSettingList.num;
-    ctxt->kankyoContext.environmentSettingsList = (void*)Lib_SegmentedToVirtual(entry->lightSettingList.segment);
+// SceneTableEntry Header Command 0x0F: Environment Light Settings List
+void Scene_HeaderCmdEnvLightSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
+    globalCtx->envCtx.numLightSettings = cmd->lightSettingList.num;
+    globalCtx->envCtx.lightSettingsList = (void*)Lib_SegmentedToVirtual(cmd->lightSettingList.segment);
 }
 
-s32 func_8012FF10(GlobalContext* ctxt, s32 fileIndex) {
-    u32 vromStart = D_801C2660[fileIndex].vromStart;
-    u32 fileSize = D_801C2660[fileIndex].vromEnd - vromStart;
+/**
+ * Loads different texture files for each region of the world.
+ * These later are stored in segment 0x06, and used in maps.
+ */
+s32 Scene_LoadAreaTextures(GlobalContext* globalCtx, s32 fileIndex) {
+    static RomFile sceneTextureFiles[9] = {
+        { 0, 0 }, // Default
+        { SEGMENT_ROM_START(scene_texture_01), SEGMENT_ROM_END(scene_texture_01) },
+        { SEGMENT_ROM_START(scene_texture_02), SEGMENT_ROM_END(scene_texture_02) },
+        { SEGMENT_ROM_START(scene_texture_03), SEGMENT_ROM_END(scene_texture_03) },
+        { SEGMENT_ROM_START(scene_texture_04), SEGMENT_ROM_END(scene_texture_04) },
+        { SEGMENT_ROM_START(scene_texture_05), SEGMENT_ROM_END(scene_texture_05) },
+        { SEGMENT_ROM_START(scene_texture_06), SEGMENT_ROM_END(scene_texture_06) },
+        { SEGMENT_ROM_START(scene_texture_07), SEGMENT_ROM_END(scene_texture_07) },
+        { SEGMENT_ROM_START(scene_texture_08), SEGMENT_ROM_END(scene_texture_08) },
+    };
+    u32 vromStart = sceneTextureFiles[fileIndex].vromStart;
+    size_t size = sceneTextureFiles[fileIndex].vromEnd - vromStart;
 
-    if (fileSize) {
-        ctxt->roomContext.unk74 = THA_AllocEndAlign16(&ctxt->state.heap, fileSize);
-        return DmaMgr_SendRequest0(ctxt->roomContext.unk74, vromStart, fileSize);
+    if (size != 0) {
+        globalCtx->roomCtx.unk74 = THA_AllocEndAlign16(&globalCtx->state.heap, size);
+        return DmaMgr_SendRequest0(globalCtx->roomCtx.unk74, vromStart, size);
     }
 
     // UB: Undefined behaviour to not have a return statement here, but it breaks matching to add one.
 }
 
-// Scene Command 0x11: Skybox Settings
-void Scene_HeaderCommand11(GlobalContext* ctxt, SceneCmd* entry) {
-    ctxt->unk18874 = entry->skyboxSettings.skyboxId & 3;
-    ctxt->kankyoContext.unk17 = ctxt->kankyoContext.unk18 = entry->skyboxSettings.unk5;
-    ctxt->kankyoContext.unk1E = entry->skyboxSettings.unk6;
-    func_8012FF10(ctxt, entry->skyboxSettings.data1);
+// SceneTableEntry Header Command 0x11: Skybox Settings
+void Scene_HeaderCmdSkyboxSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
+    globalCtx->skyboxId = cmd->skyboxSettings.skyboxId & 3;
+    globalCtx->envCtx.unk_17 = globalCtx->envCtx.unk_18 = cmd->skyboxSettings.unk5;
+    globalCtx->envCtx.unk_1E = cmd->skyboxSettings.unk6;
+    Scene_LoadAreaTextures(globalCtx, cmd->skyboxSettings.data1);
 }
 
-// Scene Command 0x12: Skybox Disables
-void Scene_HeaderCommand12(GlobalContext* ctxt, SceneCmd* entry) {
-    ctxt->kankyoContext.unk15 = entry->skyboxDisables.unk4;
-    ctxt->kankyoContext.unk16 = entry->skyboxDisables.unk5;
+// SceneTableEntry Header Command 0x12: Skybox Disables
+void Scene_HeaderCmdSkyboxDisables(GlobalContext* globalCtx, SceneCmd* cmd) {
+    globalCtx->envCtx.unk_15 = cmd->skyboxDisables.unk4;
+    globalCtx->envCtx.unk_16 = cmd->skyboxDisables.unk5;
 }
 
-// Scene Command 0x10: Time Settings
-void Scene_HeaderCommand10(GlobalContext *ctxt, SceneCmd *entry) {
+// SceneTableEntry Header Command 0x10: Time Settings
+void Scene_HeaderCmdTimeSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     u32 dayTime;
 
-    if (entry->timeSettings.hour != 0xFF && entry->timeSettings.min != 0xFF) {
-        gSaveContext.extra.environmentTime = gSaveContext.perm.time =
-            (u16)(((entry->timeSettings.hour + (entry->timeSettings.min / 60.0f)) * 60.0f) / 0.021972656f);
+    if (cmd->timeSettings.hour != 0xFF && cmd->timeSettings.min != 0xFF) {
+        gSaveContext.environmentTime = gSaveContext.time =
+            (u16)(((cmd->timeSettings.hour + (cmd->timeSettings.min / 60.0f)) * 60.0f) / 0.021972656f);
     }
 
-    if (entry->timeSettings.unk6 != 0xFF) {
-        ctxt->kankyoContext.unk2 = entry->timeSettings.unk6;
+    if (cmd->timeSettings.unk6 != 0xFF) {
+        globalCtx->envCtx.unk_2 = cmd->timeSettings.unk6;
     } else {
-        ctxt->kankyoContext.unk2 = 0;
+        globalCtx->envCtx.unk_2 = 0;
     }
 
-    if (gSaveContext.perm.inv.items[0] == 0xFF) {
-        if (ctxt->kankyoContext.unk2 != 0) {
-            ctxt->kankyoContext.unk2 = 5;
-        }
+    if ((gSaveContext.inventory.items[0] == 0xFF) && (globalCtx->envCtx.unk_2 != 0)) {
+        globalCtx->envCtx.unk_2 = 5;
     }
 
-    if (gSaveContext.extra.unk2b8 == 0) {
-        // TODO: Needs REG macro
-        gGameInfo->data[0x0F] = ctxt->kankyoContext.unk2;
+    if (gSaveContext.unk_3F58 == 0) {
+        REG(15) = globalCtx->envCtx.unk_2;
     }
 
-    dayTime = gSaveContext.perm.time;
-    ctxt->kankyoContext.unk4 = -(Math_SinS(dayTime - 0x8000) * 120.0f) * 25.0f;
-    dayTime = gSaveContext.perm.time;
-    ctxt->kankyoContext.unk8 = (Math_CosS(dayTime - 0x8000) * 120.0f) * 25.0f;
-    dayTime = gSaveContext.perm.time;
-    ctxt->kankyoContext.unkC = (Math_CosS(dayTime - 0x8000) * 20.0f) * 25.0f;
+    dayTime = gSaveContext.time;
+    globalCtx->envCtx.unk_4 = -(Math_SinS(dayTime - 0x8000) * 120.0f) * 25.0f;
+    dayTime = gSaveContext.time;
+    globalCtx->envCtx.unk_8 = (Math_CosS(dayTime - 0x8000) * 120.0f) * 25.0f;
+    dayTime = gSaveContext.time;
+    globalCtx->envCtx.unk_C = (Math_CosS(dayTime - 0x8000) * 20.0f) * 25.0f;
 
-    if (ctxt->kankyoContext.unk2 == 0 && gSaveContext.perm.cutscene < 0xFFF0) {
-        gSaveContext.extra.environmentTime = gSaveContext.perm.time;
+    if (globalCtx->envCtx.unk_2 == 0 && gSaveContext.cutscene < 0xFFF0) {
+        gSaveContext.environmentTime = gSaveContext.time;
 
-        if (gSaveContext.extra.environmentTime >= 0x2AAA && gSaveContext.extra.environmentTime < 0x4555) {
-            gSaveContext.extra.environmentTime = 0x3555;
-        } else if (gSaveContext.extra.environmentTime >= 0x4555 && gSaveContext.extra.environmentTime < 0x5555) {
-            gSaveContext.extra.environmentTime = 0x5555;
-        } else if (gSaveContext.extra.environmentTime >= 0xAAAA && gSaveContext.extra.environmentTime < 0xB555) {
-            gSaveContext.extra.environmentTime = 0xB555;
-        } else if (gSaveContext.extra.environmentTime >= 0xC000 && gSaveContext.extra.environmentTime < 0xCAAA) {
-            gSaveContext.extra.environmentTime = 0xCAAA;
+        if (gSaveContext.environmentTime >= 0x2AAA && gSaveContext.environmentTime < 0x4555) {
+            gSaveContext.environmentTime = 0x3555;
+        } else if (gSaveContext.environmentTime >= 0x4555 && gSaveContext.environmentTime < 0x5555) {
+            gSaveContext.environmentTime = 0x5555;
+        } else if (gSaveContext.environmentTime >= 0xAAAA && gSaveContext.environmentTime < 0xB555) {
+            gSaveContext.environmentTime = 0xB555;
+        } else if (gSaveContext.environmentTime >= 0xC000 && gSaveContext.environmentTime < 0xCAAA) {
+            gSaveContext.environmentTime = 0xCAAA;
         }
     }
 }
 
-// Scene Command 0x05: Wind Settings
-void Scene_HeaderCommand05(GlobalContext* ctxt, SceneCmd* entry) {
-    s8 temp1 = entry->windSettings.west;
-    s8 temp2 = entry->windSettings.vertical;
-    s8 temp3 = entry->windSettings.south;
-    ctxt->kankyoContext.windWest = temp1;
-    ctxt->kankyoContext.windVertical = temp2;
-    ctxt->kankyoContext.windSouth = temp3;
-    ctxt->kankyoContext.windClothIntensity = entry->windSettings.clothIntensity;
+// SceneTableEntry Header Command 0x05: Wind Settings
+void Scene_HeaderCmdWindSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
+    s8 temp1 = cmd->windSettings.west;
+    s8 temp2 = cmd->windSettings.vertical;
+    s8 temp3 = cmd->windSettings.south;
+
+    globalCtx->envCtx.windDir.x = temp1;
+    globalCtx->envCtx.windDir.y = temp2;
+    globalCtx->envCtx.windDir.z = temp3;
+    globalCtx->envCtx.windSpeed = cmd->windSettings.clothIntensity;
 }
 
-void Scene_HeaderCommand13(GlobalContext* ctxt, SceneCmd* entry) {
-    ctxt->setupExitList = (void*)Lib_SegmentedToVirtual(entry->exitList.segment);
+// SceneTableEntry Header Command 0x13: Exit List
+void Scene_HeaderCmdExitList(GlobalContext* globalCtx, SceneCmd* cmd) {
+    globalCtx->setupExitList = (u16*)Lib_SegmentedToVirtual(cmd->exitList.segment);
 }
 
-// Scene Command 0x09: Undefined
-void Scene_HeaderCommand09(GlobalContext* ctxt, SceneCmd* entry) {
-
+// SceneTableEntry Header Command 0x09: Undefined
+void Scene_HeaderCmd09(GlobalContext* globalCtx, SceneCmd* cmd) {
 }
 
-// Scene Command 0x15: Sound Settings
-void Scene_HeaderCommand15(GlobalContext* ctxt, SceneCmd* entry) {
-    ctxt->unk814 = entry->soundSettings.musicSeq;
-    ctxt->unk815 = entry->soundSettings.nighttimeSFX;
-    if (gSaveContext.extra.unk276 == 0xFF || func_801A8A50(0) == 0x57) {
-        audio_setBGM(entry->soundSettings.bgmId);
+// SceneTableEntry Header Command 0x15: Sound Settings=
+void Scene_HeaderCmdSoundSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
+    globalCtx->soundCtx.seqIndex = cmd->soundSettings.musicSeq;
+    globalCtx->soundCtx.nightSeqIndex = cmd->soundSettings.nighttimeSFX;
+
+    if (gSaveContext.seqIndex == 0xFF || func_801A8A50(0) == 0x57) {
+        audio_setBGM(cmd->soundSettings.bgmId);
     }
 }
 
-// Scene Command 0x16: Echo Setting
-void Scene_HeaderCommand16(GlobalContext* ctxt, SceneCmd* entry) {
-    ctxt->roomContext.currRoom.echo = entry->echoSettings.echo;
+// SceneTableEntry Header Command 0x16: Echo Setting
+void Scene_HeaderCmdEchoSetting(GlobalContext* globalCtx, SceneCmd* cmd) {
+    globalCtx->roomCtx.currRoom.echo = cmd->echoSettings.echo;
 }
 
-// Scene Command 0x18: Alternate Headers
-void Scene_HeaderCommand18(GlobalContext* ctxt, SceneCmd* entry) {
+// SceneTableEntry Header Command 0x18: Alternate Header List=
+void Scene_HeaderCmdAltHeaderList(GlobalContext* globalCtx, SceneCmd* cmd) {
     SceneCmd** altHeaderList;
     SceneCmd* altHeader;
-    if (gSaveContext.extra.sceneSetupIndex) {
-        altHeaderList = (SceneCmd**)Lib_SegmentedToVirtual(entry->altHeaders.segment);
-        altHeader = altHeaderList[gSaveContext.extra.sceneSetupIndex - 1];
+
+    if (gSaveContext.sceneSetupIndex) {
+        altHeaderList = (SceneCmd**)Lib_SegmentedToVirtual(cmd->altHeaders.segment);
+        altHeader = altHeaderList[gSaveContext.sceneSetupIndex - 1];
+
         if (altHeader != NULL) {
-           Scene_ProcessHeader(ctxt, (SceneCmd*)Lib_SegmentedToVirtual(altHeader));
-           (entry + 1)->base.code = 0x14;
+            Scene_ProcessHeader(globalCtx, (SceneCmd*)Lib_SegmentedToVirtual(altHeader));
+            (cmd + 1)->base.code = 0x14;
         }
     }
 }
 
-// Scene Command 0x17: Cutscene Data
-void Scene_HeaderCommand17(GlobalContext* ctxt, SceneCmd* entry) {
-    ctxt->csCtx.cutsceneCount = (u8)entry->base.data1;
-    ctxt->cutsceneList = (CutsceneEntry*)Lib_SegmentedToVirtual((void*)entry->base.data2);
+// SceneTableEntry Header Command 0x17: Cutscene List
+void Scene_HeaderCmdCutsceneList(GlobalContext* globalCtx, SceneCmd* cmd) {
+    globalCtx->csCtx.sceneCsCount = (u8)cmd->base.data1;
+    globalCtx->csCtx.sceneCsList = (CutsceneEntry*)Lib_SegmentedToVirtual((void*)cmd->base.data2);
 }
 
-// Scene Command 0x1B: Cutscene Actor List
-void Scene_HeaderCommand1B(GlobalContext* ctxt, SceneCmd* entry) {
-    ActorCutscene_Init(ctxt, (ActorCutscene*)Lib_SegmentedToVirtual(entry->cutsceneActorList.segment),
-                                                              entry->cutsceneActorList.num);
+// SceneTableEntry Header Command 0x1B: Actor Cutscene List
+void Scene_HeaderCmdActorCutsceneList(GlobalContext* globalCtx, SceneCmd* cmd) {
+    ActorCutscene_Init(globalCtx, (ActorCutscene*)Lib_SegmentedToVirtual(cmd->cutsceneActorList.segment),
+                       cmd->cutsceneActorList.num);
 }
 
-// Scene Command 0x1C: Mini Maps
-void Scene_HeaderCommand1C(GlobalContext* ctxt, SceneCmd* entry) {
-    func_80104CF4(ctxt);
-    func_8010549C(ctxt, entry->minimapSettings.segment);
+// SceneTableEntry Header Command 0x1C: Mini Maps
+void Scene_HeaderCmdMiniMap(GlobalContext* globalCtx, SceneCmd* cmd) {
+    func_80104CF4(globalCtx);
+    func_8010549C(globalCtx, cmd->minimapSettings.segment);
 }
 
-// Scene Command 0x1D: Undefined
-void Scene_HeaderCommand1D(GlobalContext* ctxt, SceneCmd* entry) {
-
+// SceneTableEntry Header Command 0x1D: Undefined
+void Scene_HeaderCmd1D(GlobalContext* globalCtx, SceneCmd* cmd) {
 }
 
-// Scene Command 0x1E: Minimap Chests
-void Scene_HeaderCommand1E(GlobalContext* ctxt, SceneCmd* entry) {
-    func_8010565C(ctxt, entry->minimapChests.num, entry->minimapChests.segment);
+// SceneTableEntry Header Command 0x1E: Minimap Compass Icon Info
+void Scene_HeaderCmdMiniMapCompassInfo(GlobalContext* globalCtx, SceneCmd* cmd) {
+    func_8010565C(globalCtx, cmd->minimapChests.num, cmd->minimapChests.segment);
 }
 
-// Scene Command 0x19: Misc. Settings (Camera & World Map Area)
-void Scene_HeaderCommand19(GlobalContext *ctxt, SceneCmd *entry) {
-    s16 j;
-    s16 i;
+// SceneTableEntry Header Command 0x1A: Sets Area Visited Flag
+void Scene_HeaderCmdSetAreaVisitedFlag(GlobalContext* globalCtx, SceneCmd* cmd) {
+    s16 j = 0;
+    s16 i = 0;
 
-    j = 0;
-    i = 0;
-    while (1) {
-        if (scenesPerMapArea[i].scenes[j] == 0xFFFF) {
+    while (true) {
+        if (gScenesPerRegion[i][j] == 0xFFFF) {
             i++;
-            j=0;
+            j = 0;
 
-            // 0x0B is sizeof(scenesPerMapArea) / sizeof(SceneIdList) ... but does not match calculated
-            if (i == 0x0B) {
+            if (i == ARRAY_COUNT(gScenesPerRegion)) {
                 break;
             }
         }
 
-        if (ctxt->sceneNum == scenesPerMapArea[i].scenes[j]) {
+        if (globalCtx->sceneNum == gScenesPerRegion[i][j]) {
             break;
         }
 
         j++;
     }
 
-    // 0x0B is sizeof(scenesPerMapArea) / sizeof(SceneIdList) ... but does not match calculated
-    if (i < 0x0B) {
-        // This bitwise OR could be a macro, but all sane looking versions break matching.
-        gSaveContext.perm.mapsVisited = (gBitFlags[i] | gSaveContext.perm.mapsVisited) | gSaveContext.perm.mapsVisited;
+    if (i < ARRAY_COUNT(gScenesPerRegion)) {
+        gSaveContext.mapsVisited = (gBitFlags[i] | gSaveContext.mapsVisited) | gSaveContext.mapsVisited;
     }
 }
 
-// Scene Command 0x1A: Texture Animations
-void Scene_HeaderCommand1A(GlobalContext* ctxt, SceneCmd* entry) {
-    ctxt->sceneTextureAnimations = (AnimatedTexture*)Lib_SegmentedToVirtual(entry->textureAnimations.segment);
+// SceneTableEntry Header Command 0x1A: Material Animations
+void Scene_HeaderCmdAnimatedMaterials(GlobalContext* globalCtx, SceneCmd* cmd) {
+    globalCtx->sceneMaterialAnims = (AnimatedMaterial*)Lib_SegmentedToVirtual(cmd->textureAnimations.segment);
 }
 
-void func_801306A4(GlobalContext *ctxt) {
-    ctxt->unk1887F = func_801323A0(ctxt->nextEntranceIndex) & 0x7F;
+/**
+ * Sets the exit fade from the next entrance index.
+ */
+void Scene_SetExitFade(GlobalContext* globalCtx) {
+    globalCtx->unk_1887F = Entrance_GetTransitionFlags(globalCtx->nextEntranceIndex) & 0x7F;
 }
 
-s32 Scene_ProcessHeader(GlobalContext* ctxt, SceneCmd* header) {
-    u32 cmdCode;
+/**
+ * Executes all of the commands in a scene or room header.
+ */
+s32 Scene_ProcessHeader(GlobalContext* globalCtx, SceneCmd* header) {
+    static void (*sceneCmdHandlers[])(GlobalContext*, SceneCmd*) = {
+        Scene_HeaderCmdSpawnList,
+        Scene_HeaderCmdActorList,
+        Scene_HeaderCmdActorCutsceneCamList,
+        Scene_HeaderCmdColHeader,
+        Scene_HeaderCmdRoomList,
+        Scene_HeaderCmdWindSettings,
+        Scene_HeaderCmdEntranceList,
+        Scene_HeaderCmdSpecialFiles,
+        Scene_HeaderCmdRoomBehavior,
+        Scene_HeaderCmd09,
+        Scene_HeaderCmdMesh,
+        Scene_HeaderCmdObjectList,
+        Scene_HeaderCmdLightList,
+        Scene_HeaderCmdPathList,
+        Scene_HeaderCmdTransiActorList,
+        Scene_HeaderCmdEnvLightSettings,
+        Scene_HeaderCmdTimeSettings,
+        Scene_HeaderCmdSkyboxSettings,
+        Scene_HeaderCmdSkyboxDisables,
+        Scene_HeaderCmdExitList,
+        NULL,
+        Scene_HeaderCmdSoundSettings,
+        Scene_HeaderCmdEchoSetting,
+        Scene_HeaderCmdCutsceneList,
+        Scene_HeaderCmdAltHeaderList,
+        Scene_HeaderCmdSetAreaVisitedFlag,
+        Scene_HeaderCmdAnimatedMaterials,
+        Scene_HeaderCmdActorCutsceneList,
+        Scene_HeaderCmdMiniMap,
+        Scene_HeaderCmd1D,
+        Scene_HeaderCmdMiniMapCompassInfo,
+    };
+    u32 cmdId;
 
-    while (1) {
-        cmdCode = header->base.code;
+    while (true) {
+        cmdId = header->base.code;
 
-        if (cmdCode == 0x14) {
+        if (cmdId == SCENE_CMD_ID_END) {
             break;
         }
 
-        if (cmdCode < 0x1F) {
-            sceneHeaderFuncTable[cmdCode](ctxt, header);
+        if (cmdId < SCENE_CMD_MAX) {
+            sceneCmdHandlers[cmdId](globalCtx, header);
         }
 
         header++;
@@ -548,10 +597,16 @@ s32 Scene_ProcessHeader(GlobalContext* ctxt, SceneCmd* header) {
     return 0;
 }
 
-u32 Scene_CreateEntrance(u32 sceneIndex, u32 spawnIndex, u32 offset) {
-    return (((sceneIndex << 9) | (spawnIndex << 4)) | offset) & 0xFFFF;
+/**
+ * Creates an entrance index from the scene index, spawn index, and scene setup.
+ */
+u16 Entrance_CreateIndex(s32 sceneIndex, s32 spawnIndex, s32 sceneSetup) {
+    return (((sceneIndex << 9) | (spawnIndex << 4)) | sceneSetup) & 0xFFFF;
 }
 
-void func_80130784(u32 spawnIndex) {
-    Scene_CreateEntrance(gSaveContext.perm.entranceIndex >> 9, spawnIndex, 0);
+/**
+ * Creates an entrance index from the current entrance index with the given spawn index.
+ */
+u16 Entrance_CreateIndexFromSpawn(s32 spawnIndex) {
+    return Entrance_CreateIndex(gSaveContext.entranceIndex >> 9, spawnIndex, 0);
 }

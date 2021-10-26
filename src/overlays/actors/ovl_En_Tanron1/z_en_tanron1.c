@@ -9,7 +9,7 @@ void EnTanron1_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron1_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron1_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Tanron1_InitVars = {
     ACTOR_EN_TANRON1,
     ACTORCAT_ENEMY,
@@ -19,20 +19,21 @@ const ActorInit En_Tanron1_InitVars = {
     (ActorFunc)EnTanron1_Init,
     (ActorFunc)EnTanron1_Destroy,
     (ActorFunc)EnTanron1_Update,
-    (ActorFunc)EnTanron1_Draw
+    (ActorFunc)EnTanron1_Draw,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron1_0x80BB4E00/EnTanron1_Init.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron1_0x80BB4E00/EnTanron1_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron1/EnTanron1_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron1_0x80BB4E00/func_80BB4E50.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron1/EnTanron1_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron1_0x80BB4E00/EnTanron1_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron1/func_80BB4E50.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron1_0x80BB4E00/EnTanron1_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron1/EnTanron1_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron1_0x80BB4E00/func_80BB5318.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron1/EnTanron1_Draw.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Tanron1_0x80BB4E00/func_80BB5AAC.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron1/func_80BB5318.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron1/func_80BB5AAC.s")

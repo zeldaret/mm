@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 // clang-format off
 MtxF sMtxFClear = {
@@ -254,7 +253,7 @@ s32 SkinMatrix_Invert(MtxF* src, MtxF* dest) {
         if (thisCol != thisRow) { // responsible for swapping columns if zero on diagonal
             for (i = 0; i < 4; i++) {
                 SWAP(f32, mfCopy.mf[i][thisCol], mfCopy.mf[i][thisRow]);
-                SWAP(f32, dest->mf[i][thisCol],  dest->mf[i][thisRow]);
+                SWAP(f32, dest->mf[i][thisCol], dest->mf[i][thisRow]);
             }
         }
 
@@ -795,7 +794,6 @@ void SkinMatrix_SetZRotation(MtxF* mf, s16 a) {
     mf->wx = 0.0f;
     mf->wy = 0.0f;
     mf->wz = 0.0f;
-
 
     mf->zz = 1.0f;
     mf->ww = 1.0f;

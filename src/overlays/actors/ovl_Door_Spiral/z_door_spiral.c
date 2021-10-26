@@ -84,7 +84,7 @@ extern Gfx D_06013EA8[];
 
 // Parameters for each staircase, indexed with SpiralType
 static SpiralInfo sSpiralInfo[] = {
-    { { NULL, NULL }, 0, 130, 12, 50, 15 }, // SPIRAL_OVERWORLD
+    { { NULL, NULL }, 0, 130, 12, 50, 15 },             // SPIRAL_OVERWORLD
     { { D_050219E0, D_0501D980 }, 0, 130, 12, 50, 15 }, // SPIRAL_DUNGEON
     { { D_06004448, D_060007A8 }, 0, 130, 12, 50, 15 }, // SPIRAL_WOODFALL_TEMPLE
     { { D_060051B8, D_060014C8 }, 0, 130, 12, 50, 15 }, // SPIRAL_WOODFALL_TEMPLE_ALT
@@ -96,13 +96,10 @@ static SpiralInfo sSpiralInfo[] = {
 
 // Defines which object bank a staircase should use, and its index to `sSpiralInfo`
 static SpiralObjectInfo sSpiralObjectInfo[] = {
-    { GAMEPLAY_KEEP,         SPIRAL_OVERWORLD },
-    { GAMEPLAY_DANGEON_KEEP, SPIRAL_DUNGEON },
-    { OBJECT_NUMA_OBJ,       SPIRAL_WOODFALL_TEMPLE },
-    { OBJECT_HAKUGIN_OBJ,    SPIRAL_SNOWHEAD_TEMPLE },
-    { OBJECT_IKANA_OBJ,      SPIRAL_STONE_TOWER },
-    { OBJECT_DANPEI_OBJECT,  SPIRAL_DAMPES_HOUSE },
-    { OBJECT_IKNINSIDE_OBJ,  SPIRAL_IKANA_CASTLE },
+    { GAMEPLAY_KEEP, SPIRAL_OVERWORLD },           { GAMEPLAY_DANGEON_KEEP, SPIRAL_DUNGEON },
+    { OBJECT_NUMA_OBJ, SPIRAL_WOODFALL_TEMPLE },   { OBJECT_HAKUGIN_OBJ, SPIRAL_SNOWHEAD_TEMPLE },
+    { OBJECT_IKANA_OBJ, SPIRAL_STONE_TOWER },      { OBJECT_DANPEI_OBJECT, SPIRAL_DAMPES_HOUSE },
+    { OBJECT_IKNINSIDE_OBJ, SPIRAL_IKANA_CASTLE },
 };
 
 /**
@@ -122,7 +119,7 @@ s32 DoorSpiral_SetSpiralType(DoorSpiral* this, GlobalContext* globalCtx) {
     this->spiralType = doorObjectInfo->spiralType;
 
     if ((this->spiralType == SPIRAL_DAMPES_HOUSE) ||
-        ((this->spiralType == SPIRAL_WOODFALL_TEMPLE) && globalCtx->roomContext.currRoom.enablePosLights)) {
+        ((this->spiralType == SPIRAL_WOODFALL_TEMPLE) && globalCtx->roomCtx.currRoom.enablePosLights)) {
         if (this->spiralType == SPIRAL_WOODFALL_TEMPLE) {
             this->spiralType = SPIRAL_WOODFALL_TEMPLE_ALT;
         }
@@ -137,18 +134,16 @@ s32 DoorSpiral_SetSpiralType(DoorSpiral* this, GlobalContext* globalCtx) {
 
 /**
  * Gets the object type to be used as an index to `sSpiralObjectInfo`.
- * It first checks `sSpiralSceneInfo`, but if the current scene is not found it will fall back to the default spiral (overworld or dungeon).
+ * It first checks `sSpiralSceneInfo`, but if the current scene is not found it will fall back to the default spiral
+ * (overworld or dungeon).
  */
 s32 DoorSpiral_GetObjectType(GlobalContext* globalCtx) {
     // Defines which object type should be used for specific scenes
     static SpiralSceneInfo spiralSceneInfo[] = {
-        { SCENE_MITURIN,     SPIRAL_OBJECT_WOODFALL },
-        { SCENE_HAKUGIN,     SPIRAL_OBJECT_SNOWHEAD },
-        { SCENE_INISIE_N,    SPIRAL_OBJECT_STONE_TOWER },
-        { SCENE_INISIE_R,    SPIRAL_OBJECT_STONE_TOWER },
-        { SCENE_DANPEI2TEST, SPIRAL_OBJECT_DAMPES_HOUSE },
-        { SCENE_IKNINSIDE,   SPIRAL_OBJECT_IKANA_CASTLE },
-        { SCENE_CASTLE,      SPIRAL_OBJECT_IKANA_CASTLE },
+        { SCENE_MITURIN, SPIRAL_OBJECT_WOODFALL },         { SCENE_HAKUGIN, SPIRAL_OBJECT_SNOWHEAD },
+        { SCENE_INISIE_N, SPIRAL_OBJECT_STONE_TOWER },     { SCENE_INISIE_R, SPIRAL_OBJECT_STONE_TOWER },
+        { SCENE_DANPEI2TEST, SPIRAL_OBJECT_DAMPES_HOUSE }, { SCENE_IKNINSIDE, SPIRAL_OBJECT_IKANA_CASTLE },
+        { SCENE_CASTLE, SPIRAL_OBJECT_IKANA_CASTLE },
     };
     SpiralSceneInfo* sceneInfo = spiralSceneInfo;
     s32 i;
@@ -166,7 +161,8 @@ s32 DoorSpiral_GetObjectType(GlobalContext* globalCtx) {
         type = sceneInfo->objectType;
     } else {
         // Set the type based on if link is in a dungeon scene, or the overworld
-        type = (Scene_FindSceneObjectIndex(&globalCtx->sceneContext, GAMEPLAY_DANGEON_KEEP) >= 0) ? SPIRAL_OBJECT_DUNGEON : SPIRAL_OBJECT_OVERWORLD;
+        type = (Object_GetIndex(&globalCtx->objectCtx, GAMEPLAY_DANGEON_KEEP) >= 0) ? SPIRAL_OBJECT_DUNGEON
+                                                                                    : SPIRAL_OBJECT_OVERWORLD;
     }
 
     return type;
@@ -185,7 +181,7 @@ void DoorSpiral_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 transition = GET_TRANSITION_ID_PARAM(thisx);
     s8 objBankId;
 
-    if (this->actor.room != globalCtx->transitionActorList[transition].sides[0].room) {
+    if (this->actor.room != globalCtx->doorCtx.transitionActorList[transition].sides[0].room) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -194,7 +190,7 @@ void DoorSpiral_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk145 = GET_UNK145_PARAM(thisx); // set but never used
     this->orientation = GET_ORIENTATION_PARAM(thisx);
     this->objectType = DoorSpiral_GetObjectType(globalCtx);
-    objBankId = Scene_FindSceneObjectIndex(&globalCtx->sceneContext, sSpiralObjectInfo[this->objectType].objectBankId);
+    objBankId = Object_GetIndex(&globalCtx->objectCtx, sSpiralObjectInfo[this->objectType].objectBankId);
     this->bankIndex = objBankId;
 
     if (objBankId < 0) {
@@ -209,14 +205,14 @@ void DoorSpiral_Init(Actor* thisx, GlobalContext* globalCtx) {
 void DoorSpiral_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     s32 transition = GET_TRANSITION_ID_PARAM(thisx);
 
-    globalCtx->transitionActorList[transition].id *= -1;
+    globalCtx->doorCtx.transitionActorList[transition].id *= -1;
 }
 
 /**
  * Waits for the required object to be loaded.
  */
 void DoorSpiral_WaitForObject(DoorSpiral* this, GlobalContext* globalCtx) {
-    if (Scene_IsObjectLoaded(&globalCtx->sceneContext, this->bankIndex)) {
+    if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         this->actor.objBankIndex = this->bankIndex;
         DoorSpiral_SetSpiralType(this, globalCtx);
     }
@@ -227,18 +223,18 @@ void DoorSpiral_WaitForObject(DoorSpiral* this, GlobalContext* globalCtx) {
  */
 f32 DoorSpiral_GetDistFromPlayer(GlobalContext* globalCtx, DoorSpiral* this, f32 yOffset, f32 spiralWidth,
                                  f32 spiralHeight) {
-    ActorPlayer* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Vec3f target;
     Vec3f offset;
 
-    target.x = player->base.world.pos.x;
-    target.y = player->base.world.pos.y + yOffset;
-    target.z = player->base.world.pos.z;
+    target.x = player->actor.world.pos.x;
+    target.y = player->actor.world.pos.y + yOffset;
+    target.z = player->actor.world.pos.z;
 
     Actor_CalcOffsetOrientedToDrawRotation(&this->actor, &offset, &target);
 
     if ((spiralWidth < fabsf(offset.x)) || (spiralHeight < fabsf(offset.y))) {
-        return 3.4028235e38f; // TODO FLT_MAX
+        return FLT_MAX;
     }
 
     return offset.z;
@@ -248,7 +244,7 @@ f32 DoorSpiral_GetDistFromPlayer(GlobalContext* globalCtx, DoorSpiral* this, f32
  * Checks if the player should climb the stairs.
  */
 s32 DoorSpiral_PlayerShouldClimb(DoorSpiral* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (!(func_801233E4(globalCtx))) {
         SpiralInfo* spiralInfo = &sSpiralInfo[this->spiralType];
@@ -256,7 +252,7 @@ s32 DoorSpiral_PlayerShouldClimb(DoorSpiral* this, GlobalContext* globalCtx) {
             DoorSpiral_GetDistFromPlayer(globalCtx, this, 0.0f, spiralInfo->spiralWidth, spiralInfo->spiralHeight);
 
         if (fabsf(dist) < 64.0f) {
-            s16 angle = player->base.shape.rot.y - this->actor.shape.rot.y;
+            s16 angle = player->actor.shape.rot.y - this->actor.shape.rot.y;
 
             if (dist > 0.0f) {
                 angle = 0x8000 - angle;
@@ -275,19 +271,19 @@ s32 DoorSpiral_PlayerShouldClimb(DoorSpiral* this, GlobalContext* globalCtx) {
  * Wait for the player to interact with the stairs.
  */
 void DoorSpiral_Wait(DoorSpiral* this, GlobalContext* globalCtx) {
-    ActorPlayer* player;
+    Player* player;
     s32 transition;
 
     if (this->shouldClimb) {
         DoorSpiral_SetupAction(this, DoorSpiral_PlayerClimb);
     } else if (DoorSpiral_PlayerShouldClimb(this, globalCtx)) {
-        player = PLAYER;
+        player = GET_PLAYER(globalCtx);
 
         player->doorType = 4;
         player->doorDirection = this->orientation;
         player->doorActor = &this->actor;
         transition = GET_TRANSITION_ID_PARAM(this);
-        player->unk37F = ((u16)globalCtx->transitionActorList[transition].params) >> 10;
+        player->doorNext = ((u16)globalCtx->doorCtx.transitionActorList[transition].params) >> 10;
 
         func_80122F28(player, globalCtx, &this->actor);
     }
@@ -297,7 +293,7 @@ void DoorSpiral_Wait(DoorSpiral* this, GlobalContext* globalCtx) {
  * Player is climbing the stairs.
  */
 void DoorSpiral_PlayerClimb(DoorSpiral* this, GlobalContext* globalCtx) {
-    ActorPlayer* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (!(player->stateFlags1 & 0x20000000)) {
         DoorSpiral_SetupAction(this, DoorSpiral_WaitForObject);
@@ -308,7 +304,7 @@ void DoorSpiral_PlayerClimb(DoorSpiral* this, GlobalContext* globalCtx) {
 void DoorSpiral_Update(Actor* thisx, GlobalContext* globalCtx) {
     DoorSpiral* this = (DoorSpiral*)thisx;
     s32 pad;
-    ActorPlayer* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((!(player->stateFlags1 & 0x100004C0)) || (this->actionFunc == DoorSpiral_WaitForObject)) {
         this->actionFunc(this, globalCtx);

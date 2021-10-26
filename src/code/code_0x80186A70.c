@@ -1,5 +1,5 @@
-#include <ultra64.h>
-#include <global.h>
+#include "ultra64.h"
+#include "global.h"
 
 extern s32 D_801FD040[];
 extern OSIoMesg D_801FD050;
@@ -70,20 +70,20 @@ void osFlashReadStatus(u8* flash_status) {
     u32 sp1C;
 
     // select status mode
-    func_80093BB0(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0xD2000000);
+    osEPiWriteIo(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0xD2000000);
     // read status using IO
-    func_800920B0(&D_801FD080, D_801FD080.baseAddress, &sp1C);
+    osEPiReadIo(&D_801FD080, D_801FD080.baseAddress, &sp1C);
 
     // why twice ?
-    func_80093BB0(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0xD2000000);
-    func_800920B0(&D_801FD080, D_801FD080.baseAddress, &sp1C);
+    osEPiWriteIo(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0xD2000000);
+    osEPiReadIo(&D_801FD080, D_801FD080.baseAddress, &sp1C);
 
     *flash_status = sp1C & 0xFF;
 
     return;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x80186A70/osFlashReadStatus.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/osFlash/osFlashReadStatus.s")
 #endif
 
 #ifdef NON_MATCHING
@@ -94,7 +94,7 @@ void osFlashReadId(u32 *flash_type, u32 *flash_maker) {
     osFlashReadStatus(&flash_status);
 
     // select silicon id read mode
-    func_80093BB0(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0xE1000000);
+    osEPiWriteIo(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0xE1000000);
 
     // read silicon id using DMA
     D_801FD050.hdr.pri = 0;
@@ -113,20 +113,20 @@ void osFlashReadId(u32 *flash_type, u32 *flash_maker) {
     return;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x80186A70/osFlashReadId.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/osFlash/osFlashReadId.s")
 #endif
 
 #ifdef NON_MATCHING
 void osFlashClearStatus(void) {
     // select status mode
-    func_80093BB0(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0xD2000000);
+    osEPiWriteIo(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0xD2000000);
     // clear status
-    func_80093BB0(&D_801FD080, D_801FD080.baseAddress, 0x00000000);
+    osEPiWriteIo(&D_801FD080, D_801FD080.baseAddress, 0x00000000);
 
     return;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x80186A70/osFlashClearStatus.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/osFlash/osFlashClearStatus.s")
 #endif
 
 #ifdef NON_MATCHING
@@ -137,8 +137,8 @@ s32 osFlashAllErase(void) {
     OSMesg msg; // sp2C
     
     // start chip erase operation
-    func_80093BB0(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0x3C000000);
-    func_80093BB0(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0x78000000);
+    osEPiWriteIo(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0x3C000000);
+    osEPiWriteIo(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0x78000000);
 
     // wait for completion by polling erase-busy flag
     osCreateMesgQueue(&mq, &msg, 1);
@@ -146,11 +146,11 @@ s32 osFlashAllErase(void) {
     {
         osSetTimer(&timer, 0xABA95ULL, 0ULL, &mq, &msg);
         osRecvMesg(&mq, &msg, 1);
-        func_800920B0(&D_801FD080, D_801FD080.baseAddress, &status);
+        osEPiReadIo(&D_801FD080, D_801FD080.baseAddress, &status);
     } while((status & 0x2) == 0x2);
 
     // check erase operation status, clear status
-    func_800920B0(&D_801FD080, D_801FD080.baseAddress, &status);
+    osEPiReadIo(&D_801FD080, D_801FD080.baseAddress, &status);
     osFlashClearStatus();
 
     if (((status & 0xFF) == 0x08) || ((status & 0xFF) == 0x48) || ((status & 0x08) == 0x08)) {
@@ -160,17 +160,17 @@ s32 osFlashAllErase(void) {
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x80186A70/osFlashAllErase.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/osFlash/osFlashAllErase.s")
 #endif
 
 #ifdef NON_MATCHING
 void osFlashAllEraseThrough(void) {
     // start chip erase operation
-    func_80093BB0(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0x3C000000);
-    func_80093BB0(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0x78000000);
+    osEPiWriteIo(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0x3C000000);
+    osEPiWriteIo(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0x78000000);
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x80186A70/osFlashAllEraseThrough.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/osFlash/osFlashAllEraseThrough.s")
 #endif
 
 s32 osFlashCheckEraseEnd(void) {
@@ -201,19 +201,19 @@ s32 osFlashSectorErase(u32 page_num) {
     OSMesg msg; // sp2C    
 
     // start sector erase operation
-    func_80093BB0(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0x4B000000 | page_num);
-    func_80093BB0(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0x78000000);
+    osEPiWriteIo(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0x4B000000 | page_num);
+    osEPiWriteIo(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0x78000000);
 
     // wait for completion by polling erase-busy flag
     osCreateMesgQueue(&mq, &msg, 1);
     do {
         osSetTimer(&timer, 0x8F0D1ULL, 0ULL, &mq, &msg);
         osRecvMesg(&mq, &msg, 1);
-        func_800920B0(&D_801FD080, D_801FD080.baseAddress, &status);
+        osEPiReadIo(&D_801FD080, D_801FD080.baseAddress, &status);
     } while((status & 0x2) == 0x02);
 
     // check erase operation status, clear status
-    func_800920B0(&D_801FD080, D_801FD080.baseAddress, &status);
+    osEPiReadIo(&D_801FD080, D_801FD080.baseAddress, &status);
     osFlashClearStatus();
 
     if (((status & 0xFF) == 0x08) || ((status & 0xFF) == 0x48) || ((status & 0x08) == 0x08)) {
@@ -223,24 +223,24 @@ s32 osFlashSectorErase(u32 page_num) {
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x80186A70/osFlashSectorErase.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/osFlash/osFlashSectorErase.s")
 #endif
 
 #ifdef NON_MATCHING
 void osFlashSectorEraseThrough(u32 page_num) {
     // start sector erase operation
-    func_80093BB0(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0x4B000000 | page_num);
-    func_80093BB0(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0x78000000);
+    osEPiWriteIo(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0x4B000000 | page_num);
+    osEPiWriteIo(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0x78000000);
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x80186A70/osFlashSectorEraseThrough.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/osFlash/osFlashSectorEraseThrough.s")
 #endif
 
 #ifdef NON_MATCHING
 s32 osFlashWriteBuffer(OSIoMesg *mb, s32 priority, void *dramAddr, OSMesgQueue *mq) {
     s32 ret;
     // select load page mode
-    func_80093BB0(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0xB4000000);
+    osEPiWriteIo(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0xB4000000);
 
     // DMA 128-byte page
     mb->hdr.pri = priority;
@@ -254,7 +254,7 @@ s32 osFlashWriteBuffer(OSIoMesg *mb, s32 priority, void *dramAddr, OSMesgQueue *
     return ret;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x80186A70/osFlashWriteBuffer.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/osFlash/osFlashWriteBuffer.s")
 #endif
 
 #ifdef NON_MATCHING
@@ -266,22 +266,22 @@ s32 osFlashWriteArray(u32 page_num) {
 
     // only needed for new flash ?
     if (D_801FD0F8 == 1) {
-        func_80093BB0(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0xB4000000);
+        osEPiWriteIo(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0xB4000000);
     }
 
     // start program page operation
-    func_80093BB0(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0xA5000000 | page_num);
+    osEPiWriteIo(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0xA5000000 | page_num);
 
     // wait for completion by polling write-busy flag
     osCreateMesgQueue(&mq, &msg, 1);
     do {
         osSetTimer(&timer, 0x249FULL, 0ULL, &mq, &msg);
         osRecvMesg(&mq, &msg, 1);
-        func_800920B0(&D_801FD080, D_801FD080.baseAddress, &status);
+        osEPiReadIo(&D_801FD080, D_801FD080.baseAddress, &status);
     } while((status & 0x01) == 0x01);
 
     // check program operation status, clear status
-    func_800920B0(&D_801FD080, D_801FD080.baseAddress, &status);
+    osEPiReadIo(&D_801FD080, D_801FD080.baseAddress, &status);
     osFlashClearStatus();
 
     if (((status & 0xFF) == 0x04) || ((status & 0xFF) == 0x44) || ((status & 0x04) == 0x04)) {
@@ -291,7 +291,7 @@ s32 osFlashWriteArray(u32 page_num) {
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x80186A70/osFlashWriteArray.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/osFlash/osFlashWriteArray.s")
 #endif
 
 #ifdef NON_MATCHING
@@ -302,10 +302,10 @@ s32 osFlashReadArray(OSIoMesg *mb, s32 priority, u32 page_num, void *dramAddr, u
     u32 pages; // sp18
 
     // select read array mode
-    func_80093BB0(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0xF0000000);
+    osEPiWriteIo(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0xF0000000);
 
     // dummy read to initiate "fast-page" reads ?
-    func_800920B0(&D_801FD080, D_801FD080.baseAddress, &dummy);
+    osEPiReadIo(&D_801FD080, D_801FD080.baseAddress, &dummy);
 
     // DMA requested pages
     mb->hdr.pri = priority;
@@ -323,7 +323,7 @@ s32 osFlashReadArray(OSIoMesg *mb, s32 priority, u32 page_num, void *dramAddr, u
         osEPiStartDma(&D_801FD080, mb, 0);
         osRecvMesg(mq, 0, 1);
         page_num = (page_num + 256) & 0xF00;
-        (char*)mb->dramAddr += mb->size;
+        mb->dramAddr = (char*)mb->dramAddr + mb->size;
     }
 
     while (n_pages > 256) {
@@ -334,7 +334,7 @@ s32 osFlashReadArray(OSIoMesg *mb, s32 priority, u32 page_num, void *dramAddr, u
         osEPiStartDma(&D_801FD080, mb, 0);
         osRecvMesg(mq, 0, 1);
         page_num += 256;
-        (char*)mb->dramAddr += mb->size;
+        mb->dramAddr = (char*)mb->dramAddr + mb->size;
     }
 
     mb->size = n_pages << 7;
@@ -344,5 +344,5 @@ s32 osFlashReadArray(OSIoMesg *mb, s32 priority, u32 page_num, void *dramAddr, u
     return ret;
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/code_0x80186A70/osFlashReadArray.asm")
+#pragma GLOBAL_ASM("./asm/non_matchings/code/osFlash/osFlashReadArray.s")
 #endif

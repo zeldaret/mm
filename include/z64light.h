@@ -1,9 +1,29 @@
 #ifndef _Z64LIGHT_H_
 #define _Z64LIGHT_H_
 
-#include <ultra64.h>
-#include <PR/gbi.h>
-#include <color.h>
+#include "ultra64.h"
+#include "PR/gbi.h"
+#include "color.h"
+
+typedef struct {
+    /* 0x00 */ u8 ambientColor[3];
+    /* 0x03 */ s8 diffuseDir1[3];
+    /* 0x06 */ u8 diffuseColor1[3];
+    /* 0x09 */ s8 diffusePos2[3];
+    /* 0x0C */ u8 diffuseColor[3];
+    /* 0x0F */ u8 fogColor[3];
+    /* 0x12 */ u16 fogNear;
+    /* 0x14 */ u16 fogFar;
+} LightSettings; // size = 0x16
+
+typedef struct {
+    /* 0x00 */ s16 ambientColor[3];
+    /* 0x06 */ s16 diffuseColor1[3];
+    /* 0x0C */ s16 diffuseColor2[3];
+    /* 0x12 */ s16 fogColor[3];
+    /* 0x18 */ s16 fogNear;
+    /* 0x1A */ s16 fogFar;
+} LightSettings2;  // size = 0x1C
 
 typedef struct {
     /* 0x0 */ s16 x;
@@ -21,23 +41,23 @@ typedef struct {
     /* 0x3 */ u8 color[3];
 } LightDirectional; // size = 0x6
 
-typedef union {
+typedef union LightParams {
     LightPoint point;
     LightDirectional dir;
 } LightParams; // size = 0xC
 
-typedef struct {
+typedef struct LightInfo {
     /* 0x0 */ u8 type;
     /* 0x2 */ LightParams params;
 } LightInfo; // size = 0xE
 
-typedef struct {
+typedef struct Lights {
     /* 0x00 */ u8 enablePosLights;
     /* 0x01 */ u8 numLights;
     /* 0x08 */ Lightsn l;
 } Lights; // size = 0x80
 
-typedef struct {
+typedef struct LightInfoPositional {
     /* 0x0 */ u8 type;
     /* 0x2 */ LightPoint params;
 } LightInfoPositional; // size = 0xE
@@ -51,13 +71,13 @@ typedef struct LightNode {
 // TODO move LightsBuffer to .c file once .bss has been split
 #define LIGHTS_BUFFER_SIZE 32
 
-typedef struct {
+typedef struct LightsBuffer {
     /* 0x000 */ s32 numOccupied;
     /* 0x004 */ s32 searchIndex;
     /* 0x008 */ LightNode lights[LIGHTS_BUFFER_SIZE];
 } LightsBuffer; // size = 0x188
 
-typedef struct {
+typedef struct LightContext {
     /* 0x0 */ LightNode* listHead;
     /* 0x4 */ Color_RGB8 ambient;
     /* 0x7 */ u8 unk7;
@@ -67,15 +87,13 @@ typedef struct {
     /* 0xC */ s16 unkC;
 } LightContext; // size = 0x10
 
-typedef enum {
+typedef enum LightType {
     /* 0x00 */ LIGHT_POINT_NOGLOW,
     /* 0x01 */ LIGHT_DIRECTIONAL,
     /* 0x02 */ LIGHT_POINT_GLOW
 } LightType;
 
-typedef struct GlobalContext GlobalContext;
-
 typedef void (*LightsBindFunc)(Lights* lights, LightParams* params, Vec3f* vec);
-typedef void (*LightsPosBindFunc)(Lights* lights, LightParams* params, GlobalContext* globalCtx);
+typedef void (*LightsPosBindFunc)(Lights* lights, LightParams* params, struct GlobalContext* globalCtx);
 
 #endif

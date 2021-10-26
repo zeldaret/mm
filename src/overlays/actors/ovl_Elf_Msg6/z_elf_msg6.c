@@ -8,7 +8,15 @@ void ElfMsg6_Init(Actor* thisx, GlobalContext* globalCtx);
 void ElfMsg6_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ElfMsg6_Update(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+void func_80BA1CF8(ElfMsg6* this, GlobalContext* globalCtx);
+void func_80BA1E30(ElfMsg6* this, GlobalContext* globalCtx);
+void func_80BA1F80(ElfMsg6* this, GlobalContext* globalCtx);
+void func_80BA2038(ElfMsg6* this, GlobalContext* globalCtx);
+void func_80BA2048(ElfMsg6* this, GlobalContext* globalCtx);
+void func_80BA215C(ElfMsg6* this, GlobalContext* globalCtx);
+void func_80BA21C4(ElfMsg6* this, GlobalContext* globalCtx);
+
+#if 0
 const ActorInit Elf_Msg6_InitVars = {
     ACTOR_ELF_MSG6,
     ACTORCAT_ITEMACTION,
@@ -18,36 +26,37 @@ const ActorInit Elf_Msg6_InitVars = {
     (ActorFunc)ElfMsg6_Init,
     (ActorFunc)ElfMsg6_Destroy,
     (ActorFunc)ElfMsg6_Update,
-    (ActorFunc)NULL
+    (ActorFunc)NULL,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Elf_Msg6_0x80BA15A0/func_80BA15A0.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Elf_Msg6_0x80BA15A0/func_80BA165C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg6/func_80BA15A0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Elf_Msg6_0x80BA15A0/func_80BA16F4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg6/func_80BA165C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Elf_Msg6_0x80BA15A0/ElfMsg6_Init.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg6/func_80BA16F4.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Elf_Msg6_0x80BA15A0/ElfMsg6_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg6/ElfMsg6_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Elf_Msg6_0x80BA15A0/func_80BA1C00.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg6/ElfMsg6_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Elf_Msg6_0x80BA15A0/func_80BA1C88.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg6/func_80BA1C00.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Elf_Msg6_0x80BA15A0/func_80BA1CF8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg6/func_80BA1C88.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Elf_Msg6_0x80BA15A0/func_80BA1E30.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg6/func_80BA1CF8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Elf_Msg6_0x80BA15A0/func_80BA1F80.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg6/func_80BA1E30.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Elf_Msg6_0x80BA15A0/func_80BA2038.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg6/func_80BA1F80.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Elf_Msg6_0x80BA15A0/func_80BA2048.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg6/func_80BA2038.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Elf_Msg6_0x80BA15A0/func_80BA215C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg6/func_80BA2048.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Elf_Msg6_0x80BA15A0/func_80BA21C4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg6/func_80BA215C.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Elf_Msg6_0x80BA15A0/ElfMsg6_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg6/func_80BA21C4.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Elf_Msg6/ElfMsg6_Update.s")

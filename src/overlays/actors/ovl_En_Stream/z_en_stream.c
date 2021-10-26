@@ -9,7 +9,9 @@ void EnStream_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnStream_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnStream_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+void EnStream_SetupAction(EnStream* this, EnStreamActionFunc actionFunc);
+
+#if 0
 const ActorInit En_Stream_InitVars = {
     ACTOR_EN_STREAM,
     ACTORCAT_BG,
@@ -19,22 +21,32 @@ const ActorInit En_Stream_InitVars = {
     (ActorFunc)EnStream_Init,
     (ActorFunc)EnStream_Destroy,
     (ActorFunc)EnStream_Update,
-    (ActorFunc)EnStream_Draw
+    (ActorFunc)EnStream_Draw,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stream_0x80965650/func_80965650.asm")
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80965B20[] = {
+    ICHAIN_VEC3F_DIV1000(scale, 20, ICHAIN_STOP),
+};
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stream_0x80965650/EnStream_Init.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stream_0x80965650/EnStream_Destroy.asm")
+extern InitChainEntry D_80965B20[];
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stream_0x80965650/func_809656D4.asm")
+extern UNK_TYPE D_06000950;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stream_0x80965650/func_809657F4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stream/EnStream_SetupAction.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stream_0x80965650/func_8096597C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stream/EnStream_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stream_0x80965650/EnStream_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stream/EnStream_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Stream_0x80965650/EnStream_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stream/func_809656D4.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stream/func_809657F4.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stream/func_8096597C.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stream/EnStream_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Stream/EnStream_Draw.s")

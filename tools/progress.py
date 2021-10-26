@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import os, argparse, json, re, csv, git
+import argparse, csv, git, json, os, re
 
 parser = argparse.ArgumentParser()
 
@@ -9,8 +9,11 @@ parser.add_argument("-m", "--matching", dest='matching', action='store_true',
                     help="Output matching progress instead of decompilation progress")
 args = parser.parse_args()
 
-NON_MATCHING_PATTERN = r"#ifdef\s+NON_MATCHING.*?#pragma\s+GLOBAL_ASM\s*\(\s*\"(.*?)\"\s*\).*?#endif"
-NOT_ATTEMPTED_PATTERN = r"#pragma\s+GLOBAL_ASM\s*\(\s*\"(.*?)\"\s*\)"
+NON_MATCHING_PATTERN = r'#ifdef\s+NON_MATCHING.*?#pragma\s+GLOBAL_ASM\s*\(\s*"(.*?)"\s*\).*?#endif'
+NOT_ATTEMPTED_PATTERN = r'#pragma\s+GLOBAL_ASM\s*\(\s*"(.*?)"\s*\)'
+
+# TODO: consider making this a parameter of this script
+GAME_VERSION = "mm.us.rev1"
 
 def GetFunctionsByPattern(pattern, files):
     functions = []
@@ -30,7 +33,7 @@ def ReadAllLines(fileName):
 
 def GetFiles(path, ext):
     files = []
-    
+
     for r, d, f in os.walk(path):
         for file in f:
             if file.endswith(ext):
@@ -38,24 +41,36 @@ def GetFiles(path, ext):
 
     return files
 
-def GetRemovableSize(functions_to_count, path):
+def GetCsvFilelist(version, filelist):
+    path = os.path.join("tools", "filelists", version, filelist)
+    with open(path, newline='') as f:
+        return list(csv.reader(f, delimiter=','))
+
+def GetRemovableSize(functions_to_count):
     size = 0
 
-    asm_files = GetFiles(path, ".asm")
-
-    for asm_file_path in asm_files:
+    for asm_file_path in functions_to_count:
+        if "//" in asm_file_path:
+            raise RuntimeError(f"Invalid file path: {asm_file_path}")
         file_size = 0
-        if asm_file_path in functions_to_count:
-            asm_lines = ReadAllLines(asm_file_path)
+        asm_lines = ReadAllLines(asm_file_path)
+        shouldCount = True
 
-            for asm_line in asm_lines:
-                if (asm_line[0:2] == "/*" and asm_line[30:32] == "*/"):
+        for asm_line in asm_lines:
+            if asm_line[0] == ".":
+                if asm_line.startswith(".text") or asm_line.startswith(".section .text"):
+                    shouldCount = True
+                elif ".rdata" in asm_line or ".late_rodata" in asm_line:
+                    shouldCount = False
+
+            if shouldCount:
+                if (asm_line[0:2] == "/*" and asm_line[28:30] == "*/"):
                     file_size += 4
-                    
+
         size += file_size
 
     return size
-    
+
 map_file = ReadAllLines('build/mm.map')
 
 # Get list of Non-Matchings
@@ -70,7 +85,14 @@ not_attempted_functions = list(set(not_attempted_functions).difference(non_match
 # We want to do this after not attempted functions list generation so we can remove all non matchings.
 if not args.matching:
     non_matching_functions = []
-    
+
+# Get asset files
+audio_files = GetCsvFilelist(GAME_VERSION, "audio.csv")
+misc_files = GetCsvFilelist(GAME_VERSION, "misc.csv")
+object_files = GetCsvFilelist(GAME_VERSION, "object.csv")
+scene_files = GetCsvFilelist(GAME_VERSION, "scene.csv")
+texture_files = GetCsvFilelist(GAME_VERSION, "texture.csv")
+
 # Initialize all the code values
 src = 0
 src_code = 0
@@ -82,6 +104,11 @@ asm_code = 0
 asm_boot = 0
 asm_ovl = 0
 asm_libultra = 0
+audio = 0
+misc = 0
+object_ = 0
+scene = 0
+texture = 0
 
 for line in map_file:
     line_split =  list(filter(None, line.split(" ")))
@@ -93,37 +120,57 @@ for line in map_file:
 
         if (section == ".text"):
             if (obj_file.startswith("build/src")):
-                if (obj_file.startswith("build/src/code")):  
+                if (obj_file.startswith("build/src/code")):
                     src_code += file_size
                 elif (obj_file.startswith("build/src/libultra")):
                     src_libultra += file_size
-                elif (obj_file.startswith("build/src/boot")):     
+                elif (obj_file.startswith("build/src/boot")):
                     src_boot += file_size
                 elif (obj_file.startswith("build/src/overlays")):
                     src_ovl += file_size
             elif (obj_file.startswith("build/asm")):
-                if (obj_file.startswith("build/asm/code")):  
+                if (obj_file.startswith("build/asm/code")):
                     asm_code += file_size
                 elif (obj_file.startswith("build/asm/libultra")):
                     asm_libultra += file_size
-                elif (obj_file.startswith("build/asm/boot")):     
+                elif (obj_file.startswith("build/asm/boot")):
                     asm_boot += file_size
                 elif (obj_file.startswith("build/asm/overlays")):
                     asm_ovl += file_size
 
-# Add libultra to boot.        
+        if (section == ".data"):
+            if (obj_file.startswith("build/assets/audio")):
+                audio += file_size
+            elif (obj_file.startswith("build/assets/misc")):
+                misc += file_size
+            elif (obj_file.startswith("build/assets/objects")):
+                object_ += file_size
+            elif (obj_file.startswith("build/assets/scenes")):
+                scene += file_size
+            elif (obj_file.startswith("build/assets/textures")):
+                texture += file_size
+
+# Add libultra to boot.
 src_boot += src_libultra
 asm_boot += asm_libultra
 
 # Calculate Non-Matching
-non_matching_asm_ovl = GetRemovableSize(non_matching_functions, "./asm/non_matchings/overlays")
-non_matching_asm_code = GetRemovableSize(non_matching_functions, "./asm/non_matchings/code")
-non_matching_asm_boot = GetRemovableSize(non_matching_functions, "./asm/non_matchings/boot")
+non_matching_functions_ovl = list(filter(lambda x: "/overlays/" in x, non_matching_functions))
+non_matching_functions_code = list(filter(lambda x: "/code/" in x, non_matching_functions))
+non_matching_functions_boot = list(filter(lambda x: "/boot/" in x, non_matching_functions))
+
+non_matching_asm_ovl = GetRemovableSize(non_matching_functions_ovl)
+non_matching_asm_code = GetRemovableSize(non_matching_functions_code)
+non_matching_asm_boot = GetRemovableSize(non_matching_functions_boot)
 
 # Calculate Not Attempted
-not_attempted_asm_ovl = GetRemovableSize(not_attempted_functions, "./asm/non_matchings/overlays")
-not_attempted_asm_code = GetRemovableSize(not_attempted_functions, "./asm/non_matchings/code")
-not_attempted_asm_boot = GetRemovableSize(not_attempted_functions, "./asm/non_matchings/boot")
+not_attempted_functions_ovl = list(filter(lambda x: "/overlays/" in x, not_attempted_functions))
+not_attempted_functions_code = list(filter(lambda x: "/code/" in x, not_attempted_functions))
+not_attempted_functions_boot = list(filter(lambda x: "/boot/" in x, not_attempted_functions))
+
+not_attempted_asm_ovl = GetRemovableSize(not_attempted_functions_ovl)
+not_attempted_asm_code = GetRemovableSize(not_attempted_functions_code)
+not_attempted_asm_boot = GetRemovableSize(not_attempted_functions_boot)
 
 # All the non matching asm is the sum of non-matching code
 non_matching_asm = non_matching_asm_ovl + non_matching_asm_code + non_matching_asm_boot
@@ -142,6 +189,23 @@ boot_size = src_boot + asm_boot
 ovl_size = src_ovl + asm_ovl
 handwritten = 0 # Currently unsure of any handwritten asm in MM
 
+# Calculate size of all assets
+audio_size = 0
+misc_size = 0
+object_size = 0
+scene_size = 0
+texture_size = 0
+for index, f in audio_files:
+    audio_size += os.stat(os.path.join("baserom", f)).st_size
+for index, f in misc_files:
+    misc_size += os.stat(os.path.join("baserom", f)).st_size
+for index, f in object_files:
+    object_size += os.stat(os.path.join("baserom", f)).st_size
+for index, f in scene_files:
+    scene_size += os.stat(os.path.join("baserom", f)).st_size
+for index, f in texture_files:
+    texture_size += os.stat(os.path.join("baserom", f)).st_size
+
 # Calculate asm and src totals
 src = src_code + src_boot + src_ovl
 asm = asm_code + asm_boot + asm_ovl
@@ -153,12 +217,22 @@ asm += non_matching_asm + not_attempted_asm
 # Calculate the total amount of decompilable code
 total = src + asm
 
+# Calculate assets totals
+assets = audio + misc + object_ + scene + texture
+assets_total = audio_size + misc_size + object_size + scene_size + texture_size
+
 # Convert vaules to percentages
 src_percent = 100 * src / total
 asm_percent = 100 * asm / total
 code_percent = 100 * code / code_size
 boot_percent = 100 * boot / boot_size
 ovl_percent = 100 * ovl / ovl_size
+assets_percent = 100 * assets / assets_total
+audio_percent = 100 * audio / audio_size
+misc_percent = 100 * misc / misc_size
+object_percent = 100 * object_ / object_size
+scene_percent = 100 * scene / scene_size
+texture_percent = 100 * texture / texture_size
 
 # convert bytes to masks and rupees
 num_masks = 24
@@ -203,9 +277,11 @@ if args.format == 'csv':
     git_object = git.Repo().head.object
     timestamp = str(git_object.committed_date)
     git_hash = git_object.hexsha
-    csv_list = [str(version), timestamp, git_hash, str(code), str(code_size), str(boot), str(boot_size), 
-                str(ovl), str(ovl_size), str(src), str(asm), str(len(non_matching_functions))]
-    
+    csv_list = [str(version), timestamp, git_hash, str(code), str(code_size), str(boot), str(boot_size),
+                str(ovl), str(ovl_size), str(src), str(asm), str(len(non_matching_functions)),
+                str(audio), str(audio_size), str(misc), str(misc_size), str(object_), str(object_size),
+                str(scene), str(scene_size), str(texture), str(texture_size)]
+
     print(",".join(csv_list))
 elif args.format == 'shield-json':
     # https://shields.io/endpoint
@@ -218,11 +294,18 @@ elif args.format == 'shield-json':
 elif args.format == 'text':
     adjective = "decompiled" if not args.matching else "matched"
 
-    print(str(total) + " total bytes of decompilable code\n")
-    print(str(src) + " bytes " + adjective + " in src " + str(src_percent) + "%\n")
-    print(str(boot) + "/" + str(boot_size) + " bytes " + adjective + " in boot " + str(boot_percent) + "%\n")
-    print(str(code) + "/" + str(code_size) + " bytes " + adjective + " in code " + str(code_percent) + "%\n")
-    print(str(ovl) + "/" + str(ovl_size) + " bytes " + adjective + " in overlays " + str(ovl_percent) + "%\n")
+    print("src:  {:>9} / {:>8} total bytes {:<13} {:>9.4f}%".format(src, total, adjective, round(src_percent, 4)))
+    print("    boot:     {:>9} / {:>8} bytes {:<13} {:>9.4f}%".format(boot, boot_size, adjective, round(boot_percent, 4)))
+    print("    code:     {:>9} / {:>8} bytes {:<13} {:>9.4f}%".format(code, code_size, adjective, round(code_percent, 4)))
+    print("    overlays: {:>9} / {:>8} bytes {:<13} {:>9.4f}%".format(ovl, ovl_size, adjective, round(ovl_percent, 4)))
+    print()
+    print("assets:     {:>9} / {:>8} bytes reconstructed {:>9.4f}%".format(assets, assets_total, round(assets_percent, 4)))
+    print("    audio:    {:>9} / {:>8} bytes reconstructed {:>9.4f}%".format(audio, audio_size, round(audio_percent, 4)))
+    print("    misc:     {:>9} / {:>8} bytes reconstructed {:>9.4f}%".format(misc, misc_size, round(misc_percent, 4)))
+    print("    objects:  {:>9} / {:>8} bytes reconstructed {:>9.4f}%".format(object_, object_size, round(object_percent, 4)))
+    print("    scenes:   {:>9} / {:>8} bytes reconstructed {:>9.4f}%".format(scene, scene_size, round(scene_percent, 4)))
+    print("    textures: {:>9} / {:>8} bytes reconstructed {:>9.4f}%".format(texture, texture_size, round(texture_percent, 4)))
+    print()
     print("------------------------------------\n")
 
     if (rupees > 0):

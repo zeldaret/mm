@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 u8 sYaz0DataBuffer[0x400];
 u8* sYaz0CurDataEnd;
@@ -50,7 +49,7 @@ void* Yaz0_NextDMA(void* curSrcPos) {
     } else {
         oldPri = osGetThreadPri(NULL);
         osSetThreadPri(NULL, 0x7F);
-        Fault_Log("圧縮展開異常\n");
+        osSyncPrintf("圧縮展開異常\n");
         osSetThreadPri(NULL, oldPri);
     }
 
@@ -60,9 +59,9 @@ void* Yaz0_NextDMA(void* curSrcPos) {
 typedef struct {
     /* 0x00 */ u32 magic; // Yaz0
     /* 0x04 */ u32 decSize;
-    /* 0x08 */ u32 compInfoOffset; // only used in mio0
+    /* 0x08 */ u32 compInfoOffset;   // only used in mio0
     /* 0x0C */ u32 uncompDataOffset; // only used in mio0
-} Yaz0Header; // size = 0x10
+} Yaz0Header;                        // size = 0x10
 
 #define YAZ0_MAGIC 0x59617A30 // "Yaz0"
 
@@ -105,9 +104,9 @@ s32 Yaz0_DecompressImpl(u8* src, u8* dst) {
             backPtr = dst - off;
             src += 2;
 
-            chunkSize = (nibble == 0)       // N = chunkSize; B = back offset
-                            ? *src++ + 0x12 // 3 bytes 0B BB NN
-                            : nibble + 2;   // 2 bytes NB BB
+            chunkSize = (nibble == 0)              // N = chunkSize; B = back offset
+                            ? (u32)(*src++ + 0x12) // 3 bytes 0B BB NN
+                            : nibble + 2;          // 2 bytes NB BB
 
             do {
                 *dst++ = *(backPtr++ - 1);
@@ -123,15 +122,15 @@ s32 Yaz0_DecompressImpl(u8* src, u8* dst) {
     return 0;
 }
 
-void Yaz0_Decompress(u32 romStart, void* dst, u32 size) {
+void Yaz0_Decompress(u32 romStart, void* dst, size_t size) {
     s32 status;
     u32 pad;
-    u8 sp80[0x50];
-    u8 sp30[0x50];
+    char sp80[0x50];
+    char sp30[0x50];
 
     if (sYaz0CurDataEnd != NULL) {
         while (sYaz0CurDataEnd != NULL) {
-            func_80087A1C(10);
+            Sleep_Usec(10);
         }
     }
 

@@ -9,7 +9,7 @@ void EffStk_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EffStk_Update(Actor* thisx, GlobalContext* globalCtx);
 void EffStk_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Eff_Stk_InitVars = {
     ACTOR_EFF_STK,
     ACTORCAT_ITEMACTION,
@@ -19,16 +19,19 @@ const ActorInit Eff_Stk_InitVars = {
     (ActorFunc)EffStk_Init,
     (ActorFunc)EffStk_Destroy,
     (ActorFunc)EffStk_Update,
-    (ActorFunc)EffStk_Draw
+    (ActorFunc)EffStk_Draw,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Stk_0x80BF0D90/EffStk_Init.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Stk_0x80BF0D90/EffStk_Destroy.asm")
+extern UNK_TYPE D_06009F60;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Stk_0x80BF0D90/func_80BF0DE0.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Stk/EffStk_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Stk_0x80BF0D90/EffStk_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Stk/EffStk_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Eff_Stk_0x80BF0D90/EffStk_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Stk/func_80BF0DE0.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Stk/EffStk_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Eff_Stk/EffStk_Draw.s")

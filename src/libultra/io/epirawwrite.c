@@ -1,6 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
-#include "PR/hardware.h"
+#include "global.h"
 
 s32 __osEPiRawWriteIo(OSPiHandle* handle, u32 devAddr, u32 data) {
     s32 status;

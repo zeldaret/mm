@@ -1,5 +1,36 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
+#include "overlays/effects/ovl_Effect_En_Ice_Block/z_eff_en_ice_block.h"
+#include "overlays/effects/ovl_Effect_Ss_Blast/z_eff_ss_blast.h"
+#include "overlays/effects/ovl_Effect_Ss_Bomb2/z_eff_ss_bomb2.h"
+#include "overlays/effects/ovl_Effect_Ss_Bubble/z_eff_ss_bubble.h"
+#include "overlays/effects/ovl_Effect_Ss_Dead_Db/z_eff_ss_dead_db.h"
+#include "overlays/effects/ovl_Effect_Ss_Dead_Dd/z_eff_ss_dead_dd.h"
+#include "overlays/effects/ovl_Effect_Ss_Dead_Ds/z_eff_ss_dead_ds.h"
+#include "overlays/effects/ovl_Effect_Ss_Dt_Bubble/z_eff_ss_dt_bubble.h"
+#include "overlays/effects/ovl_Effect_Ss_Dust/z_eff_ss_dust.h"
+#include "overlays/effects/ovl_Effect_Ss_D_Fire/z_eff_ss_d_fire.h"
+#include "overlays/effects/ovl_Effect_Ss_En_Fire/z_eff_ss_en_fire.h"
+#include "overlays/effects/ovl_Effect_Ss_En_Ice/z_eff_ss_en_ice.h"
+#include "overlays/effects/ovl_Effect_Ss_Extra/z_eff_ss_extra.h"
+#include "overlays/effects/ovl_Effect_Ss_Fhg_Flash/z_eff_ss_fhg_flash.h"
+#include "overlays/effects/ovl_Effect_Ss_Fire_Tail/z_eff_ss_fire_tail.h"
+#include "overlays/effects/ovl_Effect_Ss_G_Fire/z_eff_ss_g_fire.h"
+#include "overlays/effects/ovl_Effect_Ss_G_Ripple/z_eff_ss_g_ripple.h"
+#include "overlays/effects/ovl_Effect_Ss_G_Spk/z_eff_ss_g_spk.h"
+#include "overlays/effects/ovl_Effect_Ss_G_Splash/z_eff_ss_g_splash.h"
+#include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
+#include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
+#include "overlays/effects/ovl_Effect_Ss_Ice_Piece/z_eff_ss_ice_piece.h"
+#include "overlays/effects/ovl_Effect_Ss_Ice_Smoke/z_eff_ss_ice_smoke.h"
+#include "overlays/effects/ovl_Effect_Ss_Kakera/z_eff_ss_kakera.h"
+#include "overlays/effects/ovl_Effect_Ss_Kirakira/z_eff_ss_kirakira.h"
+#include "overlays/effects/ovl_Effect_Ss_K_Fire/z_eff_ss_k_fire.h"
+#include "overlays/effects/ovl_Effect_Ss_Lightning/z_eff_ss_lightning.h"
+#include "overlays/effects/ovl_Effect_Ss_Sbn/z_eff_ss_sbn.h"
+#include "overlays/effects/ovl_Effect_Ss_Sibuki/z_eff_ss_sibuki.h"
+#include "overlays/effects/ovl_Effect_Ss_Solder_Srch_Ball/z_eff_ss_solder_srch_ball.h"
+#include "overlays/effects/ovl_Effect_Ss_Stick/z_eff_ss_stick.h"
+#include "overlays/effects/ovl_Effect_Ss_Stone1/z_eff_ss_stone1.h"
 
 void EffectSs_DrawGEffect(GlobalContext* globalCtx, EffectSs* this, void* texture) {
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
@@ -10,14 +41,14 @@ void EffectSs_DrawGEffect(GlobalContext* globalCtx, EffectSs* this, void* textur
     MtxF mfTrans11DA0;
     s32 pad1;
     Mtx* mtx;
-    void* object = globalCtx->sceneContext.objects[this->rgObjBankIdx].segment;
+    void* object = globalCtx->objectCtx.status[this->rgObjBankIdx].segment;
 
     OPEN_DISPS(gfxCtx);
 
-    scale = this->rgScale * D_801DC100;
+    scale = this->rgScale * 0.0025f;
     SkinMatrix_SetTranslate(&mfTrans, this->pos.x, this->pos.y, this->pos.z);
     SkinMatrix_SetScale(&mfScale, scale, scale, scale);
-    SkinMatrix_MtxFMtxFMult(&mfTrans, &globalCtx->unk187FC, &mfTrans11DA0);
+    SkinMatrix_MtxFMtxFMult(&mfTrans, &globalCtx->mf_187FC, &mfTrans11DA0);
     SkinMatrix_MtxFMtxFMult(&mfTrans11DA0, &mfScale, &mfResult);
     gSegments[6] = PHYSICAL_TO_VIRTUAL(object);
     gSPSegment(POLY_XLU_DISP++, 0x06, object);
@@ -343,7 +374,6 @@ void EffectSsGSpk_SpawnFuse(GlobalContext* globalCtx, Actor* actor, Vec3f* pos, 
     EffectSsGSpk_SpawnSmall(globalCtx, actor, pos, velocity, accel, &primColor, &envColor);
 }
 
-
 extern Color_RGBA8 D_801AE3D8;
 extern Color_RGBA8 D_801AE3DC;
 
@@ -372,9 +402,8 @@ void EffectSsGSpk_SpawnSmall(GlobalContext* globalCtx, Actor* actor, Vec3f* pos,
 }
 
 // EffectSsDFire Spawn Functions
-#ifdef NON_MATCHING
 void EffectSsDFire_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep,
-                         s16 alpha, s16 fadeDelay, s16 life) {
+                         s16 alpha, s16 fadeDelay, s16 arg8, s32 life) {
     EffectSsDFireInitParams initParams;
 
     Math_Vec3f_Copy(&initParams.pos, pos);
@@ -382,15 +411,13 @@ void EffectSsDFire_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, 
     Math_Vec3f_Copy(&initParams.accel, accel);
     initParams.scale = scale;
     initParams.scaleStep = scaleStep;
-    initParams.a = alpha;
+    initParams.alpha = alpha;
     initParams.fadeDelay = fadeDelay;
+    initParams.unk_2C = arg8;
     initParams.life = life;
 
     EffectSs_Spawn(globalCtx, EFFECT_SS_D_FIRE, 128, &initParams);
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_effect_soft_sprite_old_init/EffectSsDFire_Spawn.asm")
-#endif
 
 // EffectSsBubble Spawn Functions
 
@@ -508,8 +535,8 @@ void EffectSsDtBubble_SpawnCustomColor(GlobalContext* globalCtx, Vec3f* pos, Vec
 /**
  * Spawn a single fragment
  *
- * Notes:
- *     - if a display list is not provided, D_0400C0D0 (wilted deku fragment) will be used as default
+ *  * Notes:
+ *     - if a display list is not provided, an unknown default will be used as default
  *     - the unused arg does not do anything, any value can be passed here
  *     - due to how life is implemented it is capped at 200. Any value over 200 is accepted, but the fragment will
  *       only live for 200 frames
@@ -539,14 +566,13 @@ void EffectSsHahen_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, 
  *     - due to how life is implemented it is capped at 200. Any value over 200 is accepted, but the fragment will
  *       only live for 200 frames
  */
-#ifdef NON_MATCHING
 void EffectSsHahen_SpawnBurst(GlobalContext* globalCtx, Vec3f* pos, f32 burstScale, s16 unused, s16 scale,
                               s16 randScaleRange, s16 count, s16 objId, s16 life, Gfx* dList) {
     s32 i;
     Vec3f velocity;
     Vec3f accel;
 
-    accel.y = D_801DC104 * burstScale;
+    accel.y = -0.07f * burstScale;
     accel.x = accel.z = 0.0f;
 
     for (i = 0; i < count; i++) {
@@ -558,9 +584,6 @@ void EffectSsHahen_SpawnBurst(GlobalContext* globalCtx, Vec3f* pos, f32 burstSca
                             life, dList);
     }
 }
-#else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_effect_soft_sprite_old_init/EffectSsHahen_SpawnBurst.asm")
-#endif
 
 extern Vec3f D_801AE3E0;
 
@@ -607,7 +630,7 @@ extern Vec3f D_801AE3F8;
 void EffectSsSibuki_SpawnBurst(GlobalContext* globalCtx, Vec3f* pos) {
     s16 i;
     Vec3f zeroVec = D_801AE3EC;
-    s16 randDirection = Rand_ZeroOne() * D_801DC108;
+    s16 randDirection = Rand_ZeroOne() * 1.99f;
 
     for (i = 0; i < KREG(19) + 30; i++) {
         EffectSsSibuki_Spawn(globalCtx, pos, &zeroVec, &zeroVec, i / (KREG(27) + 6), randDirection, KREG(18) + 40);
@@ -777,12 +800,13 @@ void EffectSsIcePiece_SpawnBurst(GlobalContext* globalCtx, Vec3f* refPos, f32 sc
     }
 }
 #else
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_effect_soft_sprite_old_init/EffectSsIcePiece_SpawnBurst.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_effect_soft_sprite_old_init/EffectSsIcePiece_SpawnBurst.s")
 #endif
 
 // EffectSsEnIce Spawn Functions
 
-void EffectSsEnIce_SpawnFlyingVec3f(GlobalContext* globalCtx, Actor* actor, Vec3f * pos, Color_RGBA8 * prim, Color_RGBA8 * env, f32 scale) {
+void EffectSsEnIce_SpawnFlyingVec3f(GlobalContext* globalCtx, Actor* actor, Vec3f* pos, Color_RGBA8* prim,
+                                    Color_RGBA8* env, f32 scale) {
 
     EffectSsEnIceInitParams initParams;
 
@@ -794,7 +818,7 @@ void EffectSsEnIce_SpawnFlyingVec3f(GlobalContext* globalCtx, Actor* actor, Vec3
     initParams.scale = scale;
 
     if (actor != NULL) {
-        Audio_PlayActorSound2(actor, 0x874);
+        Audio_PlayActorSound2(actor, NA_SE_PL_FREEZE_S);
     }
 
     EffectSs_Spawn(globalCtx, EFFECT_SS_EN_ICE, 80, &initParams);
@@ -871,13 +895,13 @@ void EffectSsFireTail_SpawnFlame(GlobalContext* globalCtx, Actor* actor, Vec3f* 
 #else
 void EffectSsFireTail_SpawnFlame(GlobalContext* globalCtx, Actor* actor, Vec3f* pos, f32 arg3, s16 bodyPart,
                                  f32 colorIntensity);
-#pragma GLOBAL_ASM("./asm/non_matchings/code/z_effect_soft_sprite_old_init/EffectSsFireTail_SpawnFlame.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_effect_soft_sprite_old_init/EffectSsFireTail_SpawnFlame.s")
 #endif
 
 void EffectSsFireTail_SpawnFlameOnPlayer(GlobalContext* globalCtx, f32 scale, s16 bodyPart, f32 colorIntensity) {
-    ActorPlayer* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
-    EffectSsFireTail_SpawnFlame(globalCtx, &player->base, &player->bodyPartsPos[bodyPart], scale, bodyPart,
+    EffectSsFireTail_SpawnFlame(globalCtx, &player->actor, &player->bodyPartsPos[bodyPart], scale, bodyPart,
                                 colorIntensity);
 }
 
@@ -895,7 +919,7 @@ void EffectSsEnFire_SpawnVec3f(GlobalContext* globalCtx, Actor* actor, Vec3f* po
     initParams.bodyPart = bodyPart;
 
     if (actor != NULL) {
-        Audio_PlayActorSound2(actor, 0x2822);
+        Audio_PlayActorSound2(actor, NA_SE_EV_FLAME_IGNITION);
     }
 
     EffectSs_Spawn(globalCtx, EFFECT_SS_EN_FIRE, 128, &initParams);
@@ -915,7 +939,7 @@ void EffectSsEnFire_SpawnVec3s(GlobalContext* globalCtx, Actor* actor, Vec3s* po
     initParams.bodyPart = bodyPart;
 
     if (actor != NULL) {
-        Audio_PlayActorSound2(actor, 0x2822);
+        Audio_PlayActorSound2(actor, NA_SE_EV_FLAME_IGNITION);
     }
 
     EffectSs_Spawn(globalCtx, EFFECT_SS_EN_FIRE, 128, &initParams);
@@ -936,8 +960,9 @@ void EffectSsExtra_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, 
 }
 
 // EffectSsDeadDb Spawn Functions
-void EffectSsDeadDb_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* prim, Color_RGBA8* env,
-                          s16 scale, s16 scaleStep, s32 unk) {
+
+void EffectSsDeadDb_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* prim,
+                          Color_RGBA8* env, s16 scale, s16 scaleStep, s32 unk) {
     EffectSsDeadDbInitParams initParams;
 
     Math_Vec3f_Copy(&initParams.pos, pos);
@@ -960,13 +985,15 @@ void EffectSsDeadDb_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity,
 extern Color_RGBA8 D_801AE48C;
 extern Color_RGBA8 D_801AE490[4];
 
-void func_800B3030(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep, s32 colorIndex) {
+void func_800B3030(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep,
+                   s32 colorIndex) {
     EffectSsDeadDb_Spawn(globalCtx, pos, velocity, accel, &D_801AE48C, &D_801AE490[colorIndex], scale, scaleStep, 9);
 }
 
 // EffectSsDeadDd Spawn Functions
 
-void EffectSsDeadDd_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* prim, Color_RGBA8* env, s16 scale, s16 scaleStep, s16 alphaStep, s32 life)  {
+void EffectSsDeadDd_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* prim,
+                          Color_RGBA8* env, s16 scale, s16 scaleStep, s16 alphaStep, s32 life) {
     EffectSsDeadDdInitParams initParams;
 
     Math_Vec3f_Copy(&initParams.pos, pos);
@@ -1024,12 +1051,12 @@ void EffectSsIceSmoke_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocit
 // EffectSsIceBlock Spawn Functions
 
 void EffectSsIceBlock_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale) {
-    EffectSsIceBlockInitParams initParams;
+    EffectEnIceBlockInitParams initParams;
 
     Math_Vec3f_Copy(&initParams.pos, pos);
     Math_Vec3f_Copy(&initParams.velocity, velocity);
     Math_Vec3f_Copy(&initParams.accel, accel);
     initParams.scale = scale;
 
-    EffectSs_Spawn(globalCtx, EFFECT_SS_ICE_BLOCK, 128, &initParams);
+    EffectSs_Spawn(globalCtx, EFFECT_EN_ICE_BLOCK, 128, &initParams);
 }

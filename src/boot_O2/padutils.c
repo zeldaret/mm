@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 void PadUtils_Init(Input* input) {
     bzero(input, sizeof(Input));
@@ -92,4 +91,3 @@ void PadUtils_UpdateRelXY(Input* input) {
 
     PadUtils_SetRelXY(input, relX, relY);
 }
-

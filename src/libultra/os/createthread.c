@@ -1,5 +1,4 @@
-#include <PR/ultratypes.h>
-#include <osint.h>
+#include "global.h"
 
 void osCreateThread(OSThread* t, OSId id, void* entry, void* arg, void* sp, OSPri p) {
     register u32 saveMask;
@@ -10,9 +9,9 @@ void osCreateThread(OSThread* t, OSId id, void* entry, void* arg, void* sp, OSPr
     t->next = NULL;
     t->queue = NULL;
     t->context.pc = (u32)entry;
-    t->context.a0 = (u64)arg;
-    t->context.sp = (u64)sp - 16;
-    t->context.ra = (u64)__osCleanupThread;
+    t->context.a0 = arg;
+    t->context.sp = (u64)(s32)sp - 16;
+    t->context.ra = __osCleanupThread;
 
     mask = 0x3FFF01;
     t->context.sr = 0xFF03;

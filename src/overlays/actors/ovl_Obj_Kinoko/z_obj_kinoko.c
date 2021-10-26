@@ -9,7 +9,7 @@ void ObjKinoko_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjKinoko_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjKinoko_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit Obj_Kinoko_InitVars = {
     ACTOR_OBJ_KINOKO,
     ACTORCAT_ITEMACTION,
@@ -19,14 +19,15 @@ const ActorInit Obj_Kinoko_InitVars = {
     (ActorFunc)ObjKinoko_Init,
     (ActorFunc)ObjKinoko_Destroy,
     (ActorFunc)ObjKinoko_Update,
-    (ActorFunc)ObjKinoko_Draw
+    (ActorFunc)ObjKinoko_Draw,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kinoko_0x80BB4700/ObjKinoko_Init.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kinoko_0x80BB4700/ObjKinoko_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kinoko/ObjKinoko_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kinoko_0x80BB4700/ObjKinoko_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kinoko/ObjKinoko_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_Obj_Kinoko_0x80BB4700/ObjKinoko_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kinoko/ObjKinoko_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kinoko/ObjKinoko_Draw.s")

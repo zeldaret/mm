@@ -1,13 +1,16 @@
 #ifndef Z_EN_ENCOUNT3_H
 #define Z_EN_ENCOUNT3_H
 
-#include <global.h>
+#include "global.h"
 
 struct EnEncount3;
 
+typedef void (*EnEncount3ActionFunc)(struct EnEncount3*, GlobalContext*);
+
 typedef struct EnEncount3 {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x88];
+    /* 0x0000 */ Actor actor;
+    /* 0x0144 */ EnEncount3ActionFunc actionFunc;
+    /* 0x0148 */ char unk_144[0x84];
 } EnEncount3; // size = 0x1CC
 
 extern const ActorInit En_Encount3_InitVars;

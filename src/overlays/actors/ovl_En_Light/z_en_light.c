@@ -9,7 +9,7 @@ void EnLight_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnLight_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnLight_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+#if 0
 const ActorInit En_Light_InitVars = {
     ACTOR_EN_LIGHT,
     ACTORCAT_ITEMACTION,
@@ -19,18 +19,19 @@ const ActorInit En_Light_InitVars = {
     (ActorFunc)EnLight_Init,
     (ActorFunc)EnLight_Destroy,
     (ActorFunc)EnLight_Update,
-    (ActorFunc)EnLight_Draw
+    (ActorFunc)EnLight_Draw,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Light_0x80865990/EnLight_Init.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Light_0x80865990/EnLight_Destroy.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Light/EnLight_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Light_0x80865990/func_80865BF8.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Light/EnLight_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Light_0x80865990/EnLight_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Light/func_80865BF8.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Light_0x80865990/func_80865F38.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Light/EnLight_Update.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Light_0x80865990/EnLight_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Light/func_80865F38.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Light/EnLight_Draw.s")

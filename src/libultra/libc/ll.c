@@ -1,5 +1,4 @@
-#include <ultra64.h>
-#include <global.h>
+#include "global.h"
 
 long long __ull_rshift(unsigned long long left, unsigned long long right) {
     return left >> right;
@@ -29,7 +28,8 @@ long long __ll_mul(long long left, long long right) {
     return left * right;
 }
 
-void __ull_divremi(unsigned long long *quotient, unsigned long long *remainder, unsigned long long dividend, unsigned short divisor) {
+void __ull_divremi(unsigned long long* quotient, unsigned long long* remainder, unsigned long long dividend,
+                   unsigned short divisor) {
     *quotient = dividend / divisor;
     *remainder = dividend % divisor;
 }

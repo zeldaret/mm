@@ -9,7 +9,11 @@ void EnAttackNiw_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnAttackNiw_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnAttackNiw_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-/*
+void func_80958634(EnAttackNiw* this, GlobalContext* globalCtx);
+void func_80958974(EnAttackNiw* this, GlobalContext* globalCtx);
+void func_80958BE4(EnAttackNiw* this, GlobalContext* globalCtx);
+
+#if 0
 const ActorInit En_Attack_Niw_InitVars = {
     ACTOR_EN_ATTACK_NIW,
     ACTORCAT_ENEMY,
@@ -19,26 +23,38 @@ const ActorInit En_Attack_Niw_InitVars = {
     (ActorFunc)EnAttackNiw_Init,
     (ActorFunc)EnAttackNiw_Destroy,
     (ActorFunc)EnAttackNiw_Update,
-    (ActorFunc)EnAttackNiw_Draw
+    (ActorFunc)EnAttackNiw_Draw,
 };
-*/
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Attack_Niw_0x809580C0/EnAttackNiw_Init.asm")
+// static InitChainEntry sInitChain[] = {
+static InitChainEntry D_80959120[] = {
+    ICHAIN_U8(targetMode, 1, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
+    ICHAIN_F32(targetArrowOffset, 0, ICHAIN_STOP),
+};
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Attack_Niw_0x809580C0/EnAttackNiw_Destroy.asm")
+#endif
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Attack_Niw_0x809580C0/func_80958228.asm")
+extern InitChainEntry D_80959120[];
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Attack_Niw_0x809580C0/func_809585B0.asm")
+extern UNK_TYPE D_060000E8;
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Attack_Niw_0x809580C0/func_80958634.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Attack_Niw/EnAttackNiw_Init.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Attack_Niw_0x809580C0/func_80958974.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Attack_Niw/EnAttackNiw_Destroy.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Attack_Niw_0x809580C0/func_80958BE4.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Attack_Niw/func_80958228.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Attack_Niw_0x809580C0/EnAttackNiw_Update.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Attack_Niw/func_809585B0.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Attack_Niw_0x809580C0/func_80958F6C.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Attack_Niw/func_80958634.s")
 
-#pragma GLOBAL_ASM("./asm/non_matchings/overlays/ovl_En_Attack_Niw_0x809580C0/EnAttackNiw_Draw.asm")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Attack_Niw/func_80958974.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Attack_Niw/func_80958BE4.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Attack_Niw/EnAttackNiw_Update.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Attack_Niw/func_80958F6C.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Attack_Niw/EnAttackNiw_Draw.s")
