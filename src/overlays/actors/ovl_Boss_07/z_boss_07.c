@@ -1153,7 +1153,7 @@ void Boss07_Init(Actor* thisx, GlobalContext* globalCtx2) {
         this->actor.targetMode = 5;
         this->actor.colChkInfo.mass = MASS_HEAVY;
         this->actor.gravity = -2.5f;
-        if (1) {}
+
         if (this->actor.params >= MAJORA_REMAINS) {
             this->actor.update = Boss07_Remains_Update;
             this->actor.draw = Boss07_Remains_Draw;
@@ -1185,6 +1185,7 @@ void Boss07_Init(Actor* thisx, GlobalContext* globalCtx2) {
         } else if ((this->actor.params == MAJORA_REMAINS_SHOT) || (this->actor.params == MAJORA_INCARNATION_SHOT)) {
             this->actor.update = Boss07_Projectile_Update;
             this->actor.draw = Boss07_Projectile_Draw;
+            
             this->actor.flags &= ~1;
             Collider_InitAndSetCylinder(globalCtx, &this->cyl2, &this->actor, &sShotCylInit);
             func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, ACTORCAT_ENEMY);
@@ -1468,9 +1469,9 @@ void func_809F65F4(Boss07* this, GlobalContext* globalCtx) {
     f32 spA4;
     f32 spA0;
     Camera* camera;
-    spA4 = 0.0f;
     spA0 = 0.1f;
-
+    spA4 = 0.0f;
+    
     camera = Play_GetCamera(globalCtx, 0);
     this->unk_15C = 1000;
     func_809F4CBC(this, 1.0f);
@@ -3346,7 +3347,6 @@ void func_809FCC70(Boss07* this, GlobalContext* globalCtx) {
 void func_809FCCCC(Boss07* this, GlobalContext* globalCtx) {
     s32 i;
     f32 sp58;
-    Camera* sp54;
 
     SkelAnime_Update(&this->skelAnime);
     this->unk_ABC8++;
@@ -3371,9 +3371,9 @@ void func_809FCCCC(Boss07* this, GlobalContext* globalCtx) {
             if (this->unk_ABC8 >= 20) {
                 if (this->unk_ABC8 == 20) {
                     this->unk_17C8[3] = 1.0f;
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST1_TRANSFORM);
+                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST1_TRANSFORM);                    
                 }
-                Math_ApproachF(&this->unk_17B8[3], (this->unk_17C8[3] * sp58) + 1.0f, 1.0f, 0.5f);
+                Math_ApproachF(&this->unk_17B8[3], 1.0f + (this->unk_17C8[3] * sp58), 1.0f, 0.5f);
             }
             if (this->unk_ABC8 > 40) {
                 this->csState = 3;
@@ -3392,7 +3392,7 @@ void func_809FCCCC(Boss07* this, GlobalContext* globalCtx) {
                     this->unk_17C8[2] = 1.0f;
                     Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST1_TRANSFORM);
                 }
-                Math_ApproachF(&this->unk_17B8[2], (this->unk_17C8[2] * sp58) + 1.0f, 1.0f, 0.5f);
+                Math_ApproachF(&this->unk_17B8[2], 1.0f + (this->unk_17C8[2] * sp58), 1.0f, 0.5f);
             }
             if (this->unk_ABC8 >= 50) {
                 if (this->unk_ABC8 == 50) {
@@ -3411,7 +3411,10 @@ void func_809FCCCC(Boss07* this, GlobalContext* globalCtx) {
             if (this->unk_ABC8 == 80) {
                 this->csState = 4;
                 this->unk_ABC8 = 0;
-                this->unk_17B8[0] = this->unk_17B8[1] = this->unk_17B8[2] = this->unk_17B8[3] = 1.0f;
+                this->unk_17B8[3] = 1.0f;
+                this->unk_17B8[2] = 1.0f;
+                this->unk_17B8[1] = 1.0f;
+                this->unk_17B8[0] = 1.0f;
             }
             break;
         case 4:
@@ -3467,7 +3470,7 @@ void func_809FCCCC(Boss07* this, GlobalContext* globalCtx) {
             Math_ApproachF(&this->csCamNextAt.y, 110.0f, 0.05f, this->csCamSpeedMod * 80.0f);
             Math_ApproachF(&this->csCamSpeedMod, 0.1f, 1.0f, 0.005f);
             if (Animation_OnFrame(&this->skelAnime, this->unk_1D4)) {
-                sp54 = Play_GetCamera(globalCtx, 0);
+                Camera* sp54 = Play_GetCamera(globalCtx, 0);
 
                 this->csState = 0;
                 func_809FD5F8(this, globalCtx);
