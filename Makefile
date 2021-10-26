@@ -153,14 +153,12 @@ build/src/libultra/io/%.o: OPTFLAGS := -O2
 build/src/libultra/libc/%.o: OPTFLAGS := -O2
 build/src/libultra/gu/%.o: OPTFLAGS := -O2
 build/src/libultra/rmon/%.o: OPTFLAGS := -O2
+build/src/libultra/flash/%.o: OPTFLAGS := -g
+build/src/libultra/flash/%.o: MIPS_VERSION := -mips1
 
 # file flags
 build/src/boot_O2_g3/fault.o: CFLAGS += -trapuv
 build/src/boot_O2_g3/fault_drawer.o: CFLAGS += -trapuv
-
-build/src/code/osFlash.o: OPTFLAGS := -g
-build/src/code/osFlash.o: MIPS_VERSION := -mips1
-build/src/code/osFlash.o: CC := python3 tools/asm-processor/build.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
 
 build/src/libultra/libc/ll.o: OPTFLAGS := -O1
 build/src/libultra/libc/ll.o: MIPS_VERSION := -mips3 -32

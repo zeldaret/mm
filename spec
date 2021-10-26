@@ -642,8 +642,7 @@ beginseg
     include "build/src/code/sys_flashrom.o"
     include "build/data/code/sys_flashrom.bss.o"
     include "build/asm/code/code_80185F90.text.o" // handwritten
-    include "build/src/code/osFlash.o"
-    include "build/data/code/osFlash.bss.o"
+    include "build/src/libultra/flash/osFlash.o"
     pad_text
     pad_text
     pad_text

@@ -3505,21 +3505,21 @@ void SysFlashrom_ThreadEntry(s80185D40* param_1);
 // void func_80185F04(void);
 // void func_80185F64(void);
 s32 func_80185F90(u32 param_1);
-u32 osFlashGetAddr(u32 page_num); // func_80186A70
-OSPiHandle* osFlashReInit(u8 latency, u8 pulse, u8 page_size, u8 rel_duration, u32 start); // func_80186AB8
-void osFlashChange(u32 flash_num); // func_80186B38
+u32 osFlashGetAddr(u32 pageNum); // func_80186A70
+OSPiHandle* osFlashReInit(u8 latency, u8 pulse, u8 pageSize, u8 relDuration, u32 start); // func_80186AB8
+void osFlashChange(u32 flashNum); // func_80186B38
 OSPiHandle* osFlashInit(void); // func_80186B78
-void osFlashReadStatus(u8* flash_status); // func_80186CAC
-void osFlashReadId(u32 *flash_type, u32 *flash_vendor); // func_80186D60
+void osFlashReadStatus(u8* flashStatus); // func_80186CAC
+void osFlashReadId(u32 *flashType, u32 *flashVendor); // func_80186D60
 void osFlashClearStatus(void); // func_80186E64
 s32 osFlashAllErase(void); // func_80186EC8
 void osFlashAllEraseThrough(void); // func_80187018
 s32 osFlashCheckEraseEnd(void); // func_80187080
-s32 osFlashSectorErase(u32 page_num); // func_80187124
-void osFlashSectorEraseThrough(u32 page_num); // func_80187284
+s32 osFlashSectorErase(u32 pageNum); // func_80187124
+void osFlashSectorEraseThrough(u32 pageNum); // func_80187284
 s32 osFlashWriteBuffer(OSIoMesg *mb, s32 priority, void *dramAddr, OSMesgQueue *mq); // func_801872FC
-s32 osFlashWriteArray(u32 page_num); // func_801873BC
-s32 osFlashReadArray(OSIoMesg *mb, s32 priority, u32 page_num, void *dramAddr, u32 n_pages, OSMesgQueue *mq); // func_8018752C
+s32 osFlashWriteArray(u32 pageNum); // func_801873BC
+s32 osFlashReadArray(OSIoMesg *mb, s32 priority, u32 pageNum, void *dramAddr, u32 pageCount, OSMesgQueue *mq); // func_8018752C
 // void func_801877D0(void);
 // void func_80187B64(void);
 // void func_80187BEC(void);
