@@ -1,7 +1,7 @@
 /*
  * File: z_obj_yasi.c
  * Overlay: ovl_Obj_Yasi
- * Description: Palm Tree 
+ * Description: Palm Tree
  */
 
 #include "z_obj_yasi.h"
