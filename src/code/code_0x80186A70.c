@@ -177,7 +177,7 @@ s32 osFlashSectorErase(u32 page_num) {
 
     // start sector erase operation
     osEPiWriteIo(&D_801FD080, D_801FD080.baseAddress | FRAM_COMMAND_REGISTER,
-                  FRAM_COMMAND_SET_ERASE_SECTOR_OFFSET | page_num);
+                 FRAM_COMMAND_SET_ERASE_SECTOR_OFFSET | page_num);
     osEPiWriteIo(&D_801FD080, D_801FD080.baseAddress | FRAM_COMMAND_REGISTER, FRAM_COMMAND_SET_MODE_ERASE_AND_STATUS);
 
     // wait for completion by polling erase-busy flag
@@ -202,7 +202,7 @@ s32 osFlashSectorErase(u32 page_num) {
 void osFlashSectorEraseThrough(u32 page_num) {
     // start sector erase operation
     osEPiWriteIo(&D_801FD080, D_801FD080.baseAddress | FRAM_COMMAND_REGISTER,
-                  FRAM_COMMAND_SET_ERASE_SECTOR_OFFSET | page_num);
+                 FRAM_COMMAND_SET_ERASE_SECTOR_OFFSET | page_num);
     osEPiWriteIo(&D_801FD080, D_801FD080.baseAddress | FRAM_COMMAND_REGISTER, FRAM_COMMAND_SET_MODE_ERASE_AND_STATUS);
 }
 
@@ -236,7 +236,7 @@ s32 osFlashWriteArray(u32 page_num) {
 
     // start program page operation
     osEPiWriteIo(&D_801FD080, D_801FD080.baseAddress | FRAM_COMMAND_REGISTER,
-                  FRAM_COMMAND_SET_ERASE_SECTOR_OFFSET_AND_STATUS | page_num);
+                 FRAM_COMMAND_SET_ERASE_SECTOR_OFFSET_AND_STATUS | page_num);
 
     // wait for completion by polling write-busy flag
     osCreateMesgQueue(&mq, &msg, 1);

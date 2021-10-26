@@ -177,7 +177,7 @@ s32 osFlashSectorErase(u32 page_num) {
 
     // start sector erase operation
     osEPiWriteIo(&D_801FD080, D_801FD080.baseAddress | FRAM_COMMAND_REGISTER,
-                  FRAM_COMMAND_SET_ERASE_SECTOR_OFFSET | page_num);
+                 FRAM_COMMAND_SET_ERASE_SECTOR_OFFSET | page_num);
     osEPiWriteIo(&D_801FD080, D_801FD080.baseAddress | FRAM_COMMAND_REGISTER, FRAM_COMMAND_SET_MODE_ERASE_AND_STATUS);
 
     // wait for completion by polling erase-busy flag
@@ -202,7 +202,7 @@ s32 osFlashSectorErase(u32 page_num) {
 void osFlashSectorEraseThrough(u32 page_num) {
     // start sector erase operation
     osEPiWriteIo(&D_801FD080, D_801FD080.baseAddress | FRAM_COMMAND_REGISTER,
-                  FRAM_COMMAND_SET_ERASE_SECTOR_OFFSET | page_num);
+                 FRAM_COMMAND_SET_ERASE_SECTOR_OFFSET | page_num);
     osEPiWriteIo(&D_801FD080, D_801FD080.baseAddress | FRAM_COMMAND_REGISTER, FRAM_COMMAND_SET_MODE_ERASE_AND_STATUS);
 }
 
@@ -236,7 +236,7 @@ s32 osFlashWriteArray(u32 page_num) {
 
     // start program page operation
     osEPiWriteIo(&D_801FD080, D_801FD080.baseAddress | FRAM_COMMAND_REGISTER,
-                  FRAM_COMMAND_SET_ERASE_SECTOR_OFFSET_AND_STATUS | page_num);
+                 FRAM_COMMAND_SET_ERASE_SECTOR_OFFSET_AND_STATUS | page_num);
 
     // wait for completion by polling write-busy flag
     osCreateMesgQueue(&mq, &msg, 1);
@@ -306,7 +306,6 @@ s32 osFlashReadArray(OSIoMesg* mb, s32 priority, u32 page_num, void* dramAddr, u
     return ret;
 }
 
-
 // #include "ultra64.h"
 // #include "global.h"
 
@@ -322,7 +321,7 @@ s32 osFlashReadArray(OSIoMesg* mb, s32 priority, u32 page_num, void* dramAddr, u
 //     return temp;
 // }
 
-// OSPiHandle* osFlashReInit(u8 latency, u8 pulse, u8 page_size, u8 rel_duration, u32 start) { 
+// OSPiHandle* osFlashReInit(u8 latency, u8 pulse, u8 page_size, u8 rel_duration, u32 start) {
 //     D_801FD080.baseAddress = 0xA0000000 | start;
 //     D_801FD080.type++;
 //     D_801FD080.latency = latency;
@@ -444,7 +443,7 @@ s32 osFlashReadArray(OSIoMesg* mb, s32 priority, u32 page_num, void* dramAddr, u
 //     OSTimer timer; // sp48
 //     OSMesgQueue mq; // sp30
 //     OSMesg msg; // sp2C
-    
+
 //     // start chip erase operation
 //     osEPiWriteIo(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0x3C000000);
 //     osEPiWriteIo(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0x78000000);
@@ -507,7 +506,7 @@ s32 osFlashReadArray(OSIoMesg* mb, s32 priority, u32 page_num, void* dramAddr, u
 //     u32 status; // sp6C
 //     OSTimer timer; // sp48
 //     OSMesgQueue mq; // sp30
-//     OSMesg msg; // sp2C    
+//     OSMesg msg; // sp2C
 
 //     // start sector erase operation
 //     osEPiWriteIo(&D_801FD080, D_801FD080.baseAddress | 0x10000, 0x4B000000 | page_num);
