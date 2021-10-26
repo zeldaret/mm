@@ -139,9 +139,8 @@ static AnimationHeader* kakasiAnimations[] = {
 };
 
 // animation mode per-anim, passed to Animation_Change
-u8 D_8097206C[] = {
-    0x00, 0x00, 0x00, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02,
-};
+static u8 sAnimModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE,
+                           ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE };
 
 void EnKakasi_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnKakasi* this = THIS;
@@ -210,7 +209,7 @@ void EnKakasi_SetAnimation(EnKakasi* this, s32 index) {
     this->animeFrameCount = Animation_GetLastFrame(&kakasiAnimations[this->animIndex]->common);
     // 1: regular playback speed, 0: starting frame
     Animation_Change(&this->skelanime, kakasiAnimations[this->animIndex], 1.0f, 0.0f, this->animeFrameCount,
-                     D_8097206C[this->animIndex], -4.0f);
+                     sAnimModes[this->animIndex], -4.0f);
 }
 
 /*
@@ -227,19 +226,19 @@ void EnKakasi_CheckAnimationSfx(EnKakasi* this) {
         }
     }
     if (this->animIndex == ENKAKASI_ANIM_HOPPING_REGULAR || this->animIndex == ENKAKASI_ANIM_SLOWROLL) {
-        if (Animation_OnFrame(&this->skelanime, 4.0f) != 0 || Animation_OnFrame(&this->skelanime, 8.0f) != 0) {
+        if (Animation_OnFrame(&this->skelanime, 4.0f) || Animation_OnFrame(&this->skelanime, 8.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_KAKASHI_SWING);
         }
-        if (Animation_OnFrame(&this->skelanime, 1.0f) != 0 || Animation_OnFrame(&this->skelanime, 9.0f) != 0 ||
-            Animation_OnFrame(&this->skelanime, 16.0f) != 0) {
+        if (Animation_OnFrame(&this->skelanime, 1.0f) || Animation_OnFrame(&this->skelanime, 9.0f) ||
+            Animation_OnFrame(&this->skelanime, 16.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_IT_KAKASHI_JUMP);
         }
-        if (Animation_OnFrame(&this->skelanime, 18.0f) != 0) {
+        if (Animation_OnFrame(&this->skelanime, 18.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_KAKASHI_ROLL);
         }
     }
     if (this->animIndex == ENKAKASI_ANIM_SPIN_REACH_OFFER || this->animIndex == ENKAKASI_ANIM_TWIRL) {
-        if (Animation_OnFrame(&this->skelanime, 1.0f) != 0) {
+        if (Animation_OnFrame(&this->skelanime, 1.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_KAKASH_LONGI_ROLL);
         }
     }
