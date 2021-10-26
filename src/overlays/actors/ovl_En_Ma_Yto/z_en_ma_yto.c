@@ -1024,7 +1024,7 @@ void EnMaYto_PostMilkRunExplainReward(EnMaYto* this, GlobalContext* globalCtx) {
             EnMaYto_SetupPostMilkRunWaitDialogueEnd(this);
         }
     } else {
-        func_800B85E0(&this->actor, &globalCtx->state, 200.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 200.0f, EXCH_ITEM_MINUS1);
     }
 }
 

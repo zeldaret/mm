@@ -1763,6 +1763,7 @@ s32 Actor_RequestTalk(Actor* actor, GameState* gameState) {
     return false;
 }
 
+// Actor_PickUpExchange? Seems to be called with exchangeItemId -1 if the same actor used Actor_PickUp
 s32 func_800B8500(Actor* actor, GameState* gameState, f32 xzRange, f32 yRange, s32 exchangeItemId) {
     Player* player = GET_PLAYER(gameState);
 
@@ -1903,7 +1904,7 @@ s32 Actor_HasParent(Actor* actor, GlobalContext* globalCtx) {
 }
 
 /**
- * Allows to pick up an item (GetItem), lift an actor or catch various actors in bottles
+ * Allows to pick up an item (GetItem or GI), lift an actor or catch various actors in bottles
  * within the specified range.
  *
  * GI_NONE is usually used as a special case to lift an actor

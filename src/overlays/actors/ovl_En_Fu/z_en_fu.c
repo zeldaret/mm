@@ -938,7 +938,7 @@ void func_80963630(EnFu* this, GlobalContext* globalCtx) {
         player->stateFlags1 &= ~0x20;
     } else {
         this->actor.child->freezeTimer = 10;
-        func_800B85E0(&this->actor, &globalCtx->state, 500.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 500.0f, EXCH_ITEM_MINUS1);
     }
 }
 

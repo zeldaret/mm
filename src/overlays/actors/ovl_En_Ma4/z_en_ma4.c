@@ -850,7 +850,7 @@ void EnMa4_EponasSongCs(EnMa4* this, GlobalContext* globalCtx) {
         Player* player = GET_PLAYER(globalCtx);
 
         player->stateFlags1 |= 0x20;
-        func_800B85E0(&this->actor, &globalCtx->state, 200.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 200.0f, EXCH_ITEM_MINUS1);
         D_80AC0260 = 99;
         this->hasBow = true;
         EnMa4_SetupEndEponasSongCs(this);
@@ -872,7 +872,7 @@ void EnMa4_EndEponasSongCs(EnMa4* this, GlobalContext* globalCtx) {
         this->actor.flags &= ~0x10000;
         EnMa4_SetupDialogueHandler(this);
     } else {
-        func_800B85E0(&this->actor, &globalCtx->state, 200.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 200.0f, EXCH_ITEM_MINUS1);
     }
 }
 

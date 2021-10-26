@@ -301,7 +301,7 @@ void func_80BC7440(EnGuruguru* this, GlobalContext* globalCtx) {
         this->textIdIndex++;
         this->actor.textId = textIDs[this->textIdIndex];
         func_801A3B48(1);
-        func_800B8500(&this->actor, &globalCtx->state, 400.0f, 400.0f, -1);
+        func_800B8500(&this->actor, &globalCtx->state, 400.0f, 400.0f, EXCH_ITEM_MINUS1);
         this->unk268 = 0;
         gSaveContext.weekEventReg[38] |= 0x40;
         this->actionFunc = func_80BC7520;
@@ -315,7 +315,7 @@ void func_80BC7520(EnGuruguru* this, GlobalContext* globalCtx) {
     if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80BC7068;
     } else {
-        func_800B8500(&this->actor, &globalCtx->state, 400.0f, 400.0f, -1);
+        func_800B8500(&this->actor, &globalCtx->state, 400.0f, 400.0f, EXCH_ITEM_MINUS1);
     }
 }
 

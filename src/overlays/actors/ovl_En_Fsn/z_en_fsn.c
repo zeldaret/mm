@@ -198,7 +198,7 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, GlobalContext* globalCtx) {
 void EnFsn_HandleSetupResumeInteraction(EnFsn* this, GlobalContext* globalCtx) {
     if (func_80152498(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx) && this->cutsceneState == 0) {
         Actor_RequestTalk(&this->actor, &globalCtx->state);
-        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, EXCH_ITEM_MINUS1);
         if (ENFSN_IS_SHOP(&this->actor)) {
             this->actor.textId = 0;
         }
@@ -1030,7 +1030,7 @@ void EnFsn_ResumeInteraction(EnFsn* this, GlobalContext* globalCtx) {
             this->actionFunc = EnFsn_ConverseBackroom;
         }
     } else {
-        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, EXCH_ITEM_MINUS1);
     }
 }
 

@@ -476,7 +476,7 @@ void EnTrt_GivenRedPotionForKoume(EnTrt* this, GlobalContext* globalCtx) {
                 ActorCutscene_SetIntentToPlay(this->cutscene);
             }
         }
-        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, EXCH_ITEM_MINUS1);
         this->actionFunc = EnTrt_ItemGiven;
     }
 }
@@ -1020,7 +1020,7 @@ void EnTrt_ItemGiven(EnTrt* this, GlobalContext* globalCtx) {
         }
         func_80151938(globalCtx, this->textId);
     } else {
-        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -1093,7 +1093,7 @@ void EnTrt_SetupItemGiven(EnTrt* this, GlobalContext* globalCtx) {
             this->cutscene = this->lookToShopkeeperCutscene;
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
-        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -1116,7 +1116,7 @@ void EnTrt_ContinueShopping(EnTrt* this, GlobalContext* globalCtx) {
                         player->stateFlags2 |= 0x20000000;
                         func_801518B0(globalCtx, this->textId, &this->actor);
                         EnTrt_SetupStartShopping(globalCtx, this, true);
-                        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, -1);
+                        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, EXCH_ITEM_MINUS1);
                         break;
                     case 1:
                     default:

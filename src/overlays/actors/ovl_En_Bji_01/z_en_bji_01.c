@@ -119,7 +119,7 @@ void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx) {
             this->moonsTear =
                 (ObjMoonStone*)func_ActorCategoryIterateById(globalCtx, NULL, ACTORCAT_PROP, ACTOR_OBJ_MOON_STONE);
         }
-        func_800B8500(&this->actor, &globalCtx->state, 60.0f, 10.0f, 0);
+        func_800B8500(&this->actor, &globalCtx->state, 60.0f, 10.0f, EXCH_ITEM_NONE);
     }
 }
 
@@ -173,7 +173,7 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
                         this->textId = 0x5F1;
                     }
                     func_800B8500(&this->actor, &globalCtx->state, this->actor.xzDistToPlayer,
-                                  this->actor.yDistToPlayer, 0);
+                                  this->actor.yDistToPlayer, EXCH_ITEM_NONE);
                     break;
                 case PLAYER_FORM_HUMAN:
                     this->textId = 0x5F7;

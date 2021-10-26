@@ -430,7 +430,7 @@ void func_808F3AD4(EnIn* this, GlobalContext* globalCtx) {
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
-        func_800B85E0(&this->actor, &globalCtx->state, 200.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 200.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -454,7 +454,7 @@ void func_808F3BD4(EnIn* this, GlobalContext* globalCtx) {
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
-        func_800B85E0(&this->actor, &globalCtx->state, 200.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 200.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -478,7 +478,7 @@ void func_808F3CD4(EnIn* this, GlobalContext* globalCtx) {
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
-        func_800B85E0(&this->actor, &globalCtx->state, 200.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 200.0f, EXCH_ITEM_MINUS1);
     }
 }
 

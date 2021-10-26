@@ -601,7 +601,7 @@ void func_80B41CBC(EnKgy* this, GlobalContext* globalCtx) {
         this->actionFunc = func_80B41E18;
         func_80B411DC(this, globalCtx, 4);
     } else {
-        func_800B8500(&this->actor, &globalCtx->state, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, &globalCtx->state, 1000.0f, 1000.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -610,7 +610,7 @@ void func_80B41D64(EnKgy* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actionFunc = func_80B41CBC;
         this->actor.flags |= 0x10000;
-        func_800B8500(&this->actor, &globalCtx->state, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, &globalCtx->state, 1000.0f, 1000.0f, EXCH_ITEM_MINUS1);
     } else {
         Actor_PickUp(&this->actor, globalCtx, this->unk_2EA, 2000.0f, 1000.0f);
     }
@@ -963,7 +963,7 @@ void func_80B4296C(EnKgy* this, GlobalContext* globalCtx) {
         this->actor.flags &= ~0x10000;
     } else {
         this->actor.flags |= 0x10000;
-        func_800B8500(&this->actor, &globalCtx->state, 1000.0f, 1000.0f, 0);
+        func_800B8500(&this->actor, &globalCtx->state, 1000.0f, 1000.0f, EXCH_ITEM_NONE);
     }
 }
 

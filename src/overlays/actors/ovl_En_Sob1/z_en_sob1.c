@@ -835,7 +835,7 @@ void EnSob1_ItemPurchased(EnSob1* this, GlobalContext* globalCtx) {
     if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         func_80151938(globalCtx, 0x647);
     } else {
-        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -1091,7 +1091,7 @@ void EnSob1_SetupItemPurchased(EnSob1* this, GlobalContext* globalCtx) {
             this->cutscene = this->lookToShopkeeperCutscene;
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
-        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -1107,7 +1107,7 @@ void EnSob1_ContinueShopping(EnSob1* this, GlobalContext* globalCtx) {
         player->stateFlags2 |= 0x20000000;
         func_801518B0(globalCtx, this->welcomeTextId, &this->actor);
         EnSob1_SetupStartShopping(globalCtx, this, true);
-        func_800B85E0(&this->actor, &globalCtx->state, 200.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 200.0f, EXCH_ITEM_MINUS1);
     }
 }
 

@@ -3499,7 +3499,7 @@ void func_80B4AF94(EnInvadepoh* this, GlobalContext* globalCtx) {
         func_80151BB4(globalCtx, 5);
         func_80B4ADB8(this);
     } else {
-        func_800B85E0(&this->actor, &globalCtx->state, 2000.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 2000.0f, EXCH_ITEM_MINUS1);
     }
 }
 

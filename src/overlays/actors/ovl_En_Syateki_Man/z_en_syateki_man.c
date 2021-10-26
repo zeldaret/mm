@@ -796,7 +796,7 @@ void func_809C7C14(EnSyatekiMan* this, GlobalContext* globalCtx) {
         this->unk_26A = 0;
         this->actionFunc = func_809C6E30;
     } else {
-        func_800B85E0(&this->actor, &globalCtx->state, 500.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 500.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -858,7 +858,7 @@ void func_809C7EB4(EnSyatekiMan* this, GlobalContext* globalCtx) {
         this->unk_26A = 0;
         this->actionFunc = func_809C7990;
     } else {
-        func_800B85E0(&this->actor, &globalCtx->state, 500.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 500.0f, EXCH_ITEM_MINUS1);
     }
 }
 

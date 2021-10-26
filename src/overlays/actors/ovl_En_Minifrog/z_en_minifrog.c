@@ -478,7 +478,7 @@ void EnMinifrog_EndChoir(EnMinifrog* this, GlobalContext* globalCtx) {
         func_801518B0(globalCtx, 0xD7E, &this->actor); // "Let us do it again sometime."
         this->actionFunc = EnMinifrog_YellowFrogDialog;
     } else {
-        func_800B8500(&this->actor, &globalCtx->state, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, &globalCtx->state, 1000.0f, 1000.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -489,7 +489,7 @@ void EnMinifrog_GetFrogHP(EnMinifrog* this, GlobalContext* globalCtx) {
         this->actor.parent = NULL;
         this->actionFunc = EnMinifrog_EndChoir;
         this->actor.flags |= 0x10000;
-        func_800B8500(&this->actor, &globalCtx->state, 1000.0f, 1000.0f, 0);
+        func_800B8500(&this->actor, &globalCtx->state, 1000.0f, 1000.0f, EXCH_ITEM_NONE);
     } else {
         Actor_PickUp(&this->actor, globalCtx, GI_HEART_PIECE, 10000.0f, 50.0f);
     }

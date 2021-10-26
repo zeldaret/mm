@@ -1074,7 +1074,7 @@ void EnOssan_SetupItemPurchased(EnOssan* this, GlobalContext* globalCtx) {
             this->cutscene = this->lookToShopkeeperCutscene;
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
-        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -1097,7 +1097,7 @@ void EnOssan_ContinueShopping(EnOssan* this, GlobalContext* globalCtx) {
                         player->stateFlags2 |= 0x20000000;
                         func_801518B0(globalCtx, this->textId, &this->actor);
                         EnOssan_SetupStartShopping(globalCtx, this, true);
-                        func_800B85E0(&this->actor, &globalCtx->state, 100.0f, -1);
+                        func_800B85E0(&this->actor, &globalCtx->state, 100.0f, EXCH_ITEM_MINUS1);
                         break;
                     case 1:
                     default:
@@ -1115,7 +1115,7 @@ void EnOssan_ContinueShopping(EnOssan* this, GlobalContext* globalCtx) {
         player->stateFlags2 |= 0x20000000;
         func_801518B0(globalCtx, this->textId, &this->actor);
         EnOssan_SetupStartShopping(globalCtx, this, true);
-        func_800B85E0(&this->actor, &globalCtx->state, 100.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 100.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -1139,7 +1139,7 @@ void EnOssan_ItemPurchased(EnOssan* this, GlobalContext* globalCtx) {
     if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         func_80151938(globalCtx, 0x642);
     } else {
-        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, -1);
+        func_800B85E0(&this->actor, &globalCtx->state, 400.0f, EXCH_ITEM_MINUS1);
     }
 }
 
