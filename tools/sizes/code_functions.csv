@@ -187,7 +187,7 @@ asm/non_matchings/code/z_actor/func_800B4F40.s,func_800B4F40,0x800B4F40,0xE
 asm/non_matchings/code/z_actor/func_800B4F78.s,func_800B4F78,0x800B4F78,0x32
 asm/non_matchings/code/z_actor/func_800B5040.s,func_800B5040,0x800B5040,0x59
 asm/non_matchings/code/z_actor/Actor_TargetContextInit.s,Actor_TargetContextInit,0x800B51A4,0x19
-asm/non_matchings/code/z_actor/func_800B5208.s,func_800B5208,0x800B5208,0x183
+asm/non_matchings/code/z_actor/Actor_DrawZTarget.s,Actor_DrawZTarget,0x800B5208,0x183
 asm/non_matchings/code/z_actor/func_800B5814.s,func_800B5814,0x800B5814,0xE7
 asm/non_matchings/code/z_actor/Flags_GetSwitch.s,Flags_GetSwitch,0x800B5BB0,0x11
 asm/non_matchings/code/z_actor/Flags_SetSwitch.s,Flags_SetSwitch,0x800B5BF4,0x10
@@ -376,7 +376,7 @@ asm/non_matchings/code/z_actor/func_800BC620.s,func_800BC620,0x800BC620,0x54
 asm/non_matchings/code/z_actor/func_800BC770.s,func_800BC770,0x800BC770,0x1A
 asm/non_matchings/code/z_actor/func_800BC7D8.s,func_800BC7D8,0x800BC7D8,0x1C
 asm/non_matchings/code/z_actor/func_800BC848.s,func_800BC848,0x800BC848,0x1C
-asm/non_matchings/code/z_actor/func_800BC8B8.s,func_800BC8B8,0x800BC8B8,0xA6
+asm/non_matchings/code/z_actor/Actor_DrawDoorLock.s,Actor_DrawDoorLock,0x800BC8B8,0xA6
 asm/non_matchings/code/z_actor/func_800BCB50.s,func_800BCB50,0x800BCB50,0x8
 asm/non_matchings/code/z_actor/func_800BCB70.s,func_800BCB70,0x800BCB70,0x21
 asm/non_matchings/code/z_actor/func_800BCBF4.s,func_800BCBF4,0x800BCBF4,0x1D

@@ -483,9 +483,10 @@ void Actor_TargetContextInit(TargetContext* targetCtx, Actor* actor, GlobalConte
     func_800B4F78(targetCtx, actor->category, globalCtx);
 }
 
+// Actor_DrawZTarget
 #ifdef NON_MATCHING
 // stack is too big
-void func_800B5208(TargetContext* targetCtx, GlobalContext* globalCtx) {
+void Actor_DrawZTarget(TargetContext* targetCtx, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if ((player->stateFlags1 & 0x300006C2) == 0) {
@@ -569,7 +570,6 @@ void func_800B5208(TargetContext* targetCtx, GlobalContext* globalCtx) {
                             Matrix_InsertTranslation(entry->unkC, entry->unkC, 0.0f, MTXMODE_APPLY);
                             gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                                       G_MTX_MODELVIEW | G_MTX_LOAD);
-                            // gSPDisplayList(OVERLAY_DISP++, gZTargetLockOnTriangleDL);
                             gSPDisplayList(OVERLAY_DISP++, D_0407AE00);
                             Matrix_StatePop();
                         }
@@ -585,7 +585,6 @@ void func_800B5208(TargetContext* targetCtx, GlobalContext* globalCtx) {
 
         actor = targetCtx->unk_94;
         if ((actor != NULL) && !(actor->flags & 0x8000000)) {
-            // NaviColor* naviColor = &sNaviColorList[actor->category];
             s801AEC84* color = &D_801AEC84[actor->category];
 
             POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0x07);
@@ -607,7 +606,7 @@ void func_800B5208(TargetContext* targetCtx, GlobalContext* globalCtx) {
     }
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B5208.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_DrawZTarget.s")
 #endif
 
 // OoT: func_8002C7BC
@@ -3754,6 +3753,11 @@ void func_800BC848(Actor* actor, GameState* gameState, s16 arg2, s16 arg3) {
     func_800BC770(gameState, arg2, arg3);
 }
 
+extern Gfx D_05000140[];
+extern Gfx D_05000230[];
+extern Gfx D_06000530[];
+extern Gfx D_06000400[];
+
 typedef struct {
     /* 0x00 */ f32 unk_00;
     /* 0x04 */ f32 unk_04;
@@ -3765,48 +3769,46 @@ typedef struct {
 } struct_801AEDD4; // size = 0x1C
 
 struct_801AEDD4 D_801AEDD4[] = {
-    { 0.540000021458f, 6000.0f, 5000.0, 1.0f, 0.0f, 0x05000230, 0x05000140 },
-    { 0.643999993801f, 12000.0f, 8000.0f, 1.0f, 0.0f, 0x06000530, 0x06000400 },
-    { 0.6400000453f, 8500.0f, 8000.0f, 1.75f, 0.10000000149f, 0x05000230, 0x05000140 },
+    { 0.540000021458f, 6000.0f, 5000.0, 1.0f, 0.0f,   D_05000230, D_05000140 },
+    { 0.643999993801f, 12000.0f, 8000.0f, 1.0f, 0.0f, D_06000530, D_06000400 },
+    { 0.6400000453f, 8500.0f, 8000.0f, 1.75f, 0.1f,   D_05000230, D_05000140 },
 };
 
-// Actor_DrawDoorLock
-void func_800BC8B8(GlobalContext* globalCtx, s32 frame, s32 type) {
+void Actor_DrawDoorLock(GlobalContext* globalCtx, s32 frame, s32 type) {
     s32 pad[2];
     MtxF spA8;
     s32 i;
-    f32 temp_f22;
-    f32 temp_f24;
-    struct_801AEDD4* temp_s2;
+    f32 sin;
+    f32 cos;
+    struct_801AEDD4* entry = &D_801AEDD4[type];
     f32 phi_f20;
     f32 phi_f2;
 
-    temp_s2 = &D_801AEDD4[type];
-    phi_f20 = temp_s2->unk_10;
+    phi_f20 = entry->unk_10;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_InsertTranslation(0.0f, temp_s2->unk_08, 500.0f, MTXMODE_APPLY);
+    Matrix_InsertTranslation(0.0f, entry->unk_08, 500.0f, MTXMODE_APPLY);
     Matrix_CopyCurrentState(&spA8);
 
-    temp_f22 = __sinf(temp_s2->unk_00 - phi_f20) * -(10 - frame) * 0.1f * temp_s2->unk_04;
-    temp_f24 = __cosf(temp_s2->unk_00 - phi_f20) * (10 - frame) * 0.1f * temp_s2->unk_04;
+    sin = __sinf(entry->unk_00 - phi_f20) * -(10 - frame) * 0.1f * entry->unk_04;
+    cos = __cosf(entry->unk_00 - phi_f20) * (10 - frame) * 0.1f * entry->unk_04;
 
     for (i = 0; i < 4; i++) {
         Matrix_SetCurrentState(&spA8);
         Matrix_InsertZRotation_f(phi_f20, MTXMODE_APPLY);
-        Matrix_InsertTranslation(temp_f22, temp_f24, 0.0f, 1);
-        if (temp_s2->unk_0C != 1.0f) {
-            Matrix_Scale(temp_s2->unk_0C, temp_s2->unk_0C, temp_s2->unk_0C, 1);
+        Matrix_InsertTranslation(sin, cos, 0.0f, MTXMODE_APPLY);
+        if (entry->unk_0C != 1.0f) {
+            Matrix_Scale(entry->unk_0C, entry->unk_0C, entry->unk_0C, MTXMODE_APPLY);
         }
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, temp_s2->unk_14);
+        gSPDisplayList(POLY_OPA_DISP++, entry->unk_14);
 
         if ((i % 2) != 0) {
-            phi_f2 = 2.0f * temp_s2->unk_00;
+            phi_f2 = 2.0f * entry->unk_00;
         } else {
-            phi_f2 = M_PI - (2.0f * temp_s2->unk_00);
+            phi_f2 = M_PI - (2.0f * entry->unk_00);
         }
         phi_f20 += phi_f2;
     }
@@ -3815,7 +3817,7 @@ void func_800BC8B8(GlobalContext* globalCtx, s32 frame, s32 type) {
     Matrix_Scale(frame * 0.1f, frame * 0.1f, frame * 0.1f, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, temp_s2->unk_18);
+    gSPDisplayList(POLY_OPA_DISP++, entry->unk_18);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -3826,7 +3828,7 @@ void func_800BCB50(GlobalContext* globalCtx, Vec3f* arg1) {
 
 void func_800BCB70(Actor* actor, u16 arg1, u16 arg2, u16 arg3, u16 arg4) {
     if ((arg1 == 0x8000) && !(arg2 & 0x8000)) {
-        Audio_PlayActorSound2(actor, 0x3836);
+        Audio_PlayActorSound2(actor, NA_SE_EN_LIGHT_ARROW_HIT);
     }
     actor->colorFilterParams = arg1 | arg3 | ((arg2 & 0xF8) << 5) | arg4;
     actor->colorFilterTimer = arg4;
@@ -3835,7 +3837,6 @@ void func_800BCB70(Actor* actor, u16 arg1, u16 arg2, u16 arg3, u16 arg4) {
 Hilite* func_800BCBF4(Vec3f* arg0, GlobalContext* globalCtx) {
     Vec3f lightDir;
 
-    // lightDir.x = globalCtx->envCtx.dirLight1.params.dir.x;
     lightDir.x = globalCtx->envCtx.dirLight1.params.dir.x;
     lightDir.y = globalCtx->envCtx.dirLight1.params.dir.y;
     lightDir.z = globalCtx->envCtx.dirLight1.params.dir.z;
