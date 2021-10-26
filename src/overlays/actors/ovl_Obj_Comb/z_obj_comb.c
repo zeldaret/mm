@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_comb.c
+ * Overlay: ovl_Obj_Comb
+ * Description: Honeycomb
+ */
+
 #include "z_obj_comb.h"
 
 #define FLAGS 0x00000000

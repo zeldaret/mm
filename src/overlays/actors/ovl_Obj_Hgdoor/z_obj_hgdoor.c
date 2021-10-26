@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_hgdoor.c
+ * Overlay: ovl_Obj_Hgdoor
+ * Description: Music Box House - Closet Door
+ */
+
 #include "z_obj_hgdoor.h"
 
 #define FLAGS 0x00100000

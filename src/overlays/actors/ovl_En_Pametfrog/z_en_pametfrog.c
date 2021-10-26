@@ -1,6 +1,6 @@
 /*
  * File: z_en_pametfrog.c
- * Overlay: En_Pametfrog
+ * Overlay: ovl_En_Pametfrog
  * Description: Gekko & Snapper Miniboss: Gekko
  */
 

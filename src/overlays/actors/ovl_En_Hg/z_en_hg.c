@@ -1,6 +1,6 @@
 /*
  * File: z_en_hg.c
- * Overlay: En_Hg
+ * Overlay: ovl_En_Hg
  * Description: Pamela's Father (Human)
  */
 

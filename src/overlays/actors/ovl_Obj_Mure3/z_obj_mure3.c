@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_mure3.c
+ * Overlay: ovl_Obj_Mure3
+ * Description: Group Rupee spawner
+ */
+
 #include "z_obj_mure3.h"
 
 #define FLAGS 0x00000000

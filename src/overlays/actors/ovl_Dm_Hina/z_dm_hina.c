@@ -1,3 +1,9 @@
+/*
+ * File: z_dm_hina.c
+ * Overlay: ovl_Dm_Hina
+ * Description: Boss mask cutscene objects
+ */
+
 #include "z_dm_hina.h"
 
 #define FLAGS 0x00000030

@@ -1,3 +1,9 @@
+/*
+ * File: z_en_zob.c
+ * Overlay: ovl_En_Zob
+ * Description: Zora Bassist Japas
+ */
+
 #include "z_en_zob.h"
 
 #define FLAGS 0x00000009

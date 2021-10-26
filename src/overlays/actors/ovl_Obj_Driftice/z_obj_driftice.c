@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_driftice.c
+ * Overlay: ovl_Obj_Driftice
+ * Description: Floating Ice Platforms in Mountain Village
+ */
+
 #include "z_obj_driftice.h"
 
 #define FLAGS 0x00000000

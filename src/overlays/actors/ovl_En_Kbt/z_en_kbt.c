@@ -1,3 +1,9 @@
+/*
+ * File: z_en_kbt.c
+ * Overlay: ovl_En_Kbt
+ * Description: Zubora
+ */
+
 #include "z_en_kbt.h"
 
 #define FLAGS 0x00000009
