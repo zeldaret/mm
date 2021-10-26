@@ -1677,4 +1677,43 @@ typedef struct {
     /* 0x04 */ const char* name;
 } FlagSetEntry; // size = 0x08
 
+// TODO: Dedicated Header?
+#define FRAM_BASE_ADDRESS 0x08000000           // FRAM Base Address in Cart Memory
+#define FRAM_STATUS_REGISTER FRAM_BASE_ADDRESS // FRAM Base Address in Cart Memory
+#define FRAM_COMMAND_REGISTER 0x10000          // Located at 0x08010000 on the Cart
+
+enum fram_command {
+    /* Does nothing for FRAM_COMMAND_SET_MODE_READ_AND_STATUS, FRAM_MODE_NOP, FRAM_COMMAND_SET_MODE_STATUS_AND_STATUS
+       Initializes fram to 0xFF in FRAM_MODE_ERASE
+       Writes Contents in FLASHRAM_MODE_WRITE
+       After execution, sets FRAM_MODE to FRAM_MODE_NOP */
+    FRAM_COMMAND_EXECUTE = 0xD2000000,
+    /* flashram->erase_offset = (command & 0xffff) * 128; */
+    FRAM_COMMAND_SET_ERASE_SECTOR_OFFSET = 0x4B000000,
+    /* flashram->mode = FLASHRAM_MODE_ERASE;
+       flashram->status = 0x1111800800c20000LL; */
+    FRAM_COMMAND_SET_MODE_ERASE_AND_STATUS = 0x78000000,
+    /* flashram->erase_offset = (command & 0xffff) * 128;
+       flashram->status = 0x1111800400c20000LL; */
+    FRAM_COMMAND_SET_ERASE_SECTOR_OFFSET_AND_STATUS = 0xA5000000,
+    /* flashram->mode = FLASHRAM_MODE_WRITE; */
+    FRAM_COMMAND_SET_MODE_WRITE = 0xB4000000,
+    /* flashram->mode = FLASHRAM_MODE_STATUS;
+       flashram->status = 0x1111800100c20000LL; */
+    FRAM_COMMAND_SET_MODE_STATUS_AND_STATUS = 0xE1000000,
+    /* flashram->mode = FLASHRAM_MODE_READ;
+       flashram->status = 0x11118004f0000000LL; */
+    FRAM_COMMAND_SET_MODE_READ_AND_STATUS = 0xF0000000,
+    /* unk */
+    FRAM_COMMAND_UNK_ERASE_OPERATION = 0x3C000000
+};
+
+enum fram_mode {
+    FRAM_MODE_NOP = 0,
+    FRAM_MODE_ERASE,
+    FRAM_MODE_WRITE,
+    FRAM_MODE_READ,
+    FRAM_MODE_STATUS
+};
+
 #endif
