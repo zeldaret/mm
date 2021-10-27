@@ -179,9 +179,8 @@ void EnElforg_SpawnSparkles(EnElforg* this, GlobalContext* globalCtx, s32 life) 
 }
 
 void EnElforg_ApproachTargetYPosition(EnElforg* this, Vec3f* targetPos) {
-    f32 yDifference;
-
-    yDifference = targetPos->y - this->actor.world.pos.y;
+    f32 yDifference = targetPos->y - this->actor.world.pos.y;
+    
     if (fabsf(yDifference) < this->actor.speedXZ) {
         this->actor.world.pos.y = targetPos->y;
     } else if (yDifference > 0.0f) {
