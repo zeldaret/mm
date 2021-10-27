@@ -347,7 +347,7 @@ void EnElforg_FreeFloatingFairyFountain(EnElforg* this, GlobalContext* globalCtx
         // Stray Fairies are saved.
         if (this->actor.home.rot.x > 0) {
             EnElforg_SpawnSparkles(this, globalCtx, 10);
-            this->actor.home.rot.x += -1;
+            this->actor.home.rot.x--;
         }
         Actor_SetScale(&this->actor, this->actor.scale.x * 0.9f);
         if (this->actor.scale.x < 0.001f) {
