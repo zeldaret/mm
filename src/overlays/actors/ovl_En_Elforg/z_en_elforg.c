@@ -403,7 +403,7 @@ void EnElforg_ClockTownFairyCollected(EnElforg* this, GlobalContext* globalCtx) 
     player->stateFlags1 |= 0x20000000;
     if (func_800B867C(&this->actor, globalCtx)) {
         player->actor.freezeTimer = 0;
-        player->stateFlags1 &= 0xDFFFFFFF;
+        player->stateFlags1 &= ~0x20000000;
         Actor_MarkForDeath(&this->actor);
         gSaveContext.weekEventReg[8] |= 0x80;
         ActorCutscene_Stop(0x7C);
