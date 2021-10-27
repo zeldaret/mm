@@ -19,15 +19,15 @@ typedef enum {
 } RemainsIndex;
 
 typedef struct {
-    /* 0x00 */ u8 unk_0;
-    /* 0x02 */ s16 unk_2;
-    /* 0x04 */ Vec3f unk_4;
-    /* 0x10 */ Vec3f unk_10;
-    /* 0x1C */ Vec3f unk_1C;
+    /* 0x00 */ u8 type;
+    /* 0x02 */ s16 scroll;
+    /* 0x04 */ Vec3f pos;
+    /* 0x10 */ Vec3f vel;
+    /* 0x1C */ Vec3f accel;
     /* 0x28 */ char unk28[4];
-    /* 0x2C */ s16 unk_2C;
+    /* 0x2C */ s16 alpha;
     /* 0x2E */ char unk2E[2];
-    /* 0x30 */ s16 unk_30;
+    /* 0x30 */ s16 isFading;
     /* 0x32 */ char unk32[2];
     /* 0x34 */ f32 unk_34;
     /* 0x38 */ char unk38[0x10];
@@ -62,77 +62,70 @@ void func_809FE4B0(Boss07* this, GlobalContext* globalCtx);
 void func_80A05C88(Boss07* this, GlobalContext* globalCtx);
 void func_80A055E0(Boss07* this, GlobalContext* globalCtx);
 void func_80A04768(Boss07* this, GlobalContext* globalCtx);
-void Boss07_UpdateSpheres(s32 arg0, ColliderJntSph* arg1, Vec3f* arg2);
-s32 func_809FF678(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-void func_809FF6B0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
-void func_809FF810(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx);
+
+void Boss07_Static_UpdateEffects(GlobalContext* globalCtx);
 void Boss07_Static_DrawEffects(GlobalContext* globalCtx);
-void Boss07_Static_DrawLight(Boss07* this, GlobalContext* globalCtx);
-void Boss07_Mask_UpdateTentacles(Boss07* this, GlobalContext* globalCtx, Vec3f* base, Vec3f* pos, Vec3f* rot,
-                                 Vec3f* pull, Vec3f* arg6, f32 arg7, u8 arg8, f32 arg9);
-void Boss07_Mask_DrawTentacles(Boss07* this, GlobalContext* globalCtx, Vec3f* base, Vec3f* rot, f32 arg4, f32 arg5);
-void Boss07_Mask_DrawBeam(Boss07* this, GlobalContext* globalCtx);
-void Boss07_Mask_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
-void Boss07_Wrath_UpdateWhips(Boss07* this, GlobalContext* globalCtx, Vec3f* base, Vec3f* pos, Vec3f* rot, Vec3f* pull,
-                              f32 arg6, f32 arg7, f32 arg8, f32 arg9, Vec3s* argA, s16 argB, f32 scale, s32 whipHand);
-void Boss07_Wrath_DrawWhips(Boss07* this, GlobalContext* globalCtx, Vec3f* base, Vec3f* rot, f32 arg4, s32 whipHand);
-s32 Boss07_Wrath_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                  Actor* thisx);
-void Boss07_Wrath_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
-void Boss07_Wrath_UnkLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx);
-void Boss07_Wrath_DrawShocks(Boss07* this, GlobalContext* globalCtx);
-void Boss07_Wrath_DrawDeathLights(Boss07* this, GlobalContext* globalCtx, Vec3f* arg2);
-void Boss07_Wrath_MakeShadowTex(u8* arg0, Boss07* this, GlobalContext* globalCtx);
-void Boss07_Wrath_DrawShadowTex(u8* arg0, Boss07* this, GlobalContext* globalCtx);
-void Boss07_Wrath_MakeShadowCircles(Boss07* this, u8* arg1, f32 arg2);
+
+void Boss07_Wrath_MakeShadowTex(u8* shadowTex, Boss07* this, GlobalContext* globalCtx);
+void Boss07_Wrath_DrawShadowTex(u8* shadowTex, Boss07* this, GlobalContext* globalCtx);
+void Boss07_Wrath_MakeShadowCircles(Boss07* this, u8* shadowTex, f32 weight);
+
+
+
+void Boss07_Mask_SetupIdle(Boss07* this, GlobalContext* globalCtx);
+void Boss07_Mask_Idle(Boss07* this, GlobalContext* globalCtx);
+void Boss07_Mask_SetupSpin(Boss07* this, GlobalContext* globalCtx);
+void Boss07_Mask_Spin(Boss07* this, GlobalContext* globalCtx);
+void Boss07_Mask_SetupBeam(Boss07* this, GlobalContext* globalCtx);
+void Boss07_Mask_Beam(Boss07* this, GlobalContext* globalCtx);
+void Boss07_Mask_SetupStunned(Boss07* this, GlobalContext* globalCtx);
+void Boss07_Mask_Stunned(Boss07* this, GlobalContext* globalCtx);
+void Boss07_Mask_SetupDamaged(Boss07* this, GlobalContext* globalCtx, u8 arg2, Actor* hitActor);
+void Boss07_Mask_Damaged(Boss07* this, GlobalContext* globalCtx);
+void Boss07_Mask_SetupIntro(Boss07* this, GlobalContext* globalCtx);
+void Boss07_Mask_Intro(Boss07* this, GlobalContext* globalCtx);
+void Boss07_Mask_SetupDeath(Boss07* this, GlobalContext* globalCtx);
+void Boss07_Mask_Death(Boss07* this, GlobalContext* globalCtx);
+
+
+
 void func_809F7688(Boss07* this, GlobalContext* globalCtx);
 void func_809F783C(Boss07* this, GlobalContext* globalCtx);
-void Boss07_Mask_SetupSpin(Boss07* this, GlobalContext* globalCtx);
-void Boss07_Mask_SetupBeam(Boss07* this, GlobalContext* globalCtx);
-void Boss07_Mask_SetupDeath(Boss07* this, GlobalContext* globalCtx);
+
 void func_809FEE70(Boss07* this, GlobalContext* globalCtx);
 void func_809F51E8(Boss07* this, GlobalContext* globalCtx, u8 arg2);
-void func_809F52CC(Boss07* this, GlobalContext* globalCtx);
-void Boss07_Wrath_BombWhips(Boss07* this, GlobalContext* globalCtx);
+void Boss07_Wrath_CheckExplosives(Boss07* this, GlobalContext* globalCtx);
+
 void func_809F64F4(Boss07* this, GlobalContext* globalCtx);
 void func_809F7AB4(Boss07* this, GlobalContext* globalCtx);
-void func_809F99C4(Boss07* this, GlobalContext* globalCtx);
 
 void func_809F8AB0(Boss07* this, GlobalContext* globalCtx);
 void func_809F8E68(Boss07* this, GlobalContext* globalCtx);
 void func_809F8658(Boss07* this, GlobalContext* globalCtx);
 void func_809F7D2C(Boss07* this, GlobalContext* globalCtx);
 void func_809F4D10(Vec3f* arg0, f32 arg1);
-void func_809F4FAC(GlobalContext* globalCtx);
-void Boss07_SpawnEffect(GlobalContext* globalCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4);
-void Boss07_Mask_CollisionCheck(Boss07* this, GlobalContext* globalCtx);
-void Boss07_Wrath_BlastWhip(Vec3f* arg0, Vec3f* arg1, Vec3f* arg2);
-void func_809F94AC(Vec3f* arg0, f32 arg1, Boss07* this, GlobalContext* globalCtx);
-void func_809F4FF8(GlobalContext* globalCtx, Vec3f* arg1, u8 arg2);
-s32 Boss07_IsFacingPlayer(Boss07* this, GlobalContext* globalCtx);
-void func_809F4CBC(Boss07* this, f32 arg1);
-void func_809F4D54(Boss07* this, GlobalContext* globalCtx, u8 arg2, u8 arg3);
+void Boss07_MovePlayer(GlobalContext* globalCtx);
+
+void Boss07_SpawnDustAtPos(GlobalContext* globalCtx, Vec3f* pos, u8 count);
+
+void Boss07_SpawnDust(Boss07* this, GlobalContext* globalCtx, u8 arg2, u8 arg3);
 void func_809FCBC8(Boss07* this);
-void Boss07_Static_UpdateEffects(GlobalContext* globalCtx);
-void func_809F9CEC(Boss07* this, GlobalContext* globalCtx);
+
 void func_80A06500(Boss07* this, GlobalContext* globalCtx);
 void func_80A06990(Boss07* this, GlobalContext* globalCtx);
 void func_809F9E94(Boss07* this, GlobalContext* globalCtx);
 void func_809F8DEC(Boss07* this, GlobalContext* globalCtx);
-void func_809F9280(Boss07* this, GlobalContext* globalCtx, u8 arg2, u8 arg3);
 
 void func_809FD984(Boss07* this, GlobalContext* globalCtx, u8 arg2, u8 arg3);
 void func_809FD818(Boss07* this, GlobalContext* globalCtx, s16 arg2);
 void func_809FE6B0(Boss07* this, GlobalContext* globalCtx);
-void Boss07_Mask_SetupDamaged(Boss07* this, GlobalContext* globalCtx, u8 arg2, Actor* arg3);
-void Boss07_Mask_SetupStunned(Boss07* this, GlobalContext* globalCtx);
+
 void func_809FDB2C(Boss07* this, GlobalContext* globalCtx);
 void func_809F5E14(Boss07* this, GlobalContext* globalCtx);
 void func_809F7400(Boss07* this, GlobalContext* globalCtx, s16 arg2);
 void func_809FCC70(Boss07* this, GlobalContext* globalCtx);
 void func_809FD5F8(Boss07* this, GlobalContext* globalCtx);
-void Boss07_SetupIdle(Boss07* this, GlobalContext* globalCtx);
-void Boss07_Mask_SetupIntro(Boss07* this, GlobalContext* globalCtx);
+
 void func_80A04878(Boss07* this, GlobalContext* globalCtx);
 void func_80A04DE0(Boss07* this, GlobalContext* globalCtx);
 void func_80A05AF8(Boss07* this, GlobalContext* globalCtx);
@@ -152,7 +145,7 @@ void func_809F8B1C(Boss07* this, GlobalContext* globalCtx);
 void func_809F8D04(Boss07* this, GlobalContext* globalCtx);
 void func_809F8EC8(Boss07* this, GlobalContext* globalCtx);
 void func_809F91D4(Boss07* this, GlobalContext* globalCtx);
-void func_809F93DC(Boss07* this, GlobalContext* globalCtx);
+void Boss07_Wrath_Damaged(Boss07* this, GlobalContext* globalCtx);
 void func_809FCCCC(Boss07* this, GlobalContext* globalCtx);
 void func_809FD710(Boss07* this, GlobalContext* globalCtx);
 void func_809FD89C(Boss07* this, GlobalContext* globalCtx);
@@ -163,13 +156,7 @@ void func_809FE0E4(Boss07* this, GlobalContext* globalCtx);
 void func_809FE348(Boss07* this, GlobalContext* globalCtx);
 void func_809FE524(Boss07* this, GlobalContext* globalCtx);
 void func_809FE734(Boss07* this, GlobalContext* globalCtx);
-void Boss07_Idle(Boss07* this, GlobalContext* globalCtx);
-void Boss07_Mask_Spin(Boss07* this, GlobalContext* globalCtx);
-void Boss07_Mask_Stunned(Boss07* this, GlobalContext* globalCtx);
-void Boss07_Mask_Damaged(Boss07* this, GlobalContext* globalCtx);
-void Boss07_Mask_Beam(Boss07* this, GlobalContext* globalCtx);
-void Boss07_Mask_Intro(Boss07* this, GlobalContext* globalCtx);
-void Boss07_Mask_Death(Boss07* this, GlobalContext* globalCtx);
+
 void func_80A04890(Boss07* this, GlobalContext* globalCtx);
 void func_80A04E5C(Boss07* this, GlobalContext* globalCtx);
 void func_80A05608(Boss07* this, GlobalContext* globalCtx);
@@ -249,18 +236,18 @@ extern UNK_TYPE D_06043330[];
 extern UNK_TYPE D_06045B30[];
 #endif
 
-static s16 D_80A07950[4][3] = {
-    { 255, 255, 100 },
-    { 255, 100, 100 },
-    { 100, 255, 100 },
-    { 100, 100, 255 },
+static s16 sColorsYRGB[4][3] = {
+    { 255, 255, 100 }, // light yellow
+    { 255, 100, 100 }, // light red
+    { 100, 255, 100 }, // light green
+    { 100, 100, 255 }, // light blue
 };
 
-static s16 D_80A07968[4][3] = {
-    { 255, 255, 255 },
-    { 255, 255, 255 },
-    { 255, 255, 255 },
-    { 255, 255, 255 },
+static s16 sColorsWhite[4][3] = {
+    { 255, 255, 255 }, // white
+    { 255, 255, 255 }, // white
+    { 255, 255, 255 }, // white
+    { 255, 255, 255 }, // white
 };
 
 #if 1 // collision data
@@ -881,7 +868,7 @@ static Boss07* sMajorasWrath;
 static Boss07* sMajoraStatic;
 static Boss07* sMajorasMask;
 static Boss07* sBossRemains[REMAINS_COUNT];
-static u8 D_80A09A70;
+static u8 sKillProjectiles;
 static u8 sMusicStartTimer;
 static Boss07Effect sEffects[EFFECT_COUNT];
 static s32 sSeed0;
@@ -892,13 +879,13 @@ void Boss07_Remains_DamageSfx(Boss07* this) {
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_FOLLOWERS_DAMAGE);
 }
 
-void Boss07_Wrath_InitRand(s32 seedInit0, s32 seedInit1, s32 seedInit2) {
+void Boss07_InitRand(s32 seedInit0, s32 seedInit1, s32 seedInit2) {
     sSeed0 = seedInit0;
     sSeed1 = seedInit1;
     sSeed2 = seedInit2;
 }
 
-f32 Boss07_Wrath_RandZeroOne(void) {
+f32 Boss07_RandZeroOne(void) {
     // Wichmann-Hill algorithm
     f32 randFloat;
 
@@ -918,15 +905,15 @@ void Boss07_SpawnEffect(GlobalContext* globalCtx, Vec3f* arg1, Vec3f* arg2, Vec3
     Boss07Effect* effect = (Boss07Effect*)globalCtx->specialEffects;
 
     for (i = 0; i < ARRAY_COUNT(sEffects); i++, effect++) {
-        if (effect->unk_0 == 0) {
-            effect->unk_0 = 1;
-            effect->unk_4 = *arg1;
-            effect->unk_10 = *arg2;
-            effect->unk_1C = *arg3;
+        if (effect->type == 0) {
+            effect->type = 1;
+            effect->pos = *arg1;
+            effect->vel = *arg2;
+            effect->accel = *arg3;
             effect->unk_34 = arg4 / 1000.0f;
-            effect->unk_30 = 0;
-            effect->unk_2C = 0;
-            effect->unk_2 = Rand_ZeroFloat(1000.0f);
+            effect->isFading = 0;
+            effect->alpha = 0;
+            effect->scroll = Rand_ZeroFloat(1000.0f);
             break;
         }
     }
@@ -950,48 +937,49 @@ s32 Boss07_IsFacingPlayer(Boss07* this, GlobalContext* globalCtx) {
     return false;
 }
 
-void func_809F4CBC(Boss07* this, f32 arg1) {
-    Math_ApproachZeroF(&this->actor.speedXZ, 1.0f, arg1);
+void Boss07_SmoothStop(Boss07* this, f32 maxStep) {
+    Math_ApproachZeroF(&this->actor.speedXZ, 1.0f, maxStep);
     if (this->actor.bgCheckFlags & 0x18) {
         this->actor.speedXZ = 0.0f;
     }
 }
 
-void func_809F4D10(Vec3f* arg0, f32 arg1) {
+void func_809F4D10(Vec3f* dst, f32 scale) {
     Matrix_InsertYRotation_f(Rand_ZeroFloat(2 * M_PI), 0);
-    Matrix_GetStateTranslationAndScaledZ(arg1, arg0);
+    Matrix_GetStateTranslationAndScaledZ(scale, dst);
 }
 
-void func_809F4D54(Boss07* this, GlobalContext* globalCtx, u8 arg2, u8 arg3) {
-    static Color_RGBA8 sDarkOrange1 = { 60, 50, 20, 255 };
-    static Color_RGBA8 sDarkRed1 = { 40, 30, 30, 255 };
-    u8 phi_s1;
-    Vec3f spB0;
-    Vec3f spA4;
-    Vec3f sp98;
+void Boss07_SpawnDust(Boss07* this, GlobalContext* globalCtx, u8 spawnInterval, u8 mode) {
+    static Color_RGBA8 sDarkOrange = { 60, 50, 20, 255 };
+    static Color_RGBA8 sDarkRed = { 40, 30, 30, 255 };
+    u8 i;
 
-    if (!(this->unk_14C & arg2) && ((arg2 == 0) || (this->actor.speedXZ > 1.0f))) {
-        for (phi_s1 = 0; phi_s1 < 2; phi_s1++) {
-            spA4.x = randPlusMinusPoint5Scaled(5.0f);
-            spA4.y = Rand_ZeroFloat(2.0f) + 1.0f;
-            spA4.z = randPlusMinusPoint5Scaled(5.0f);
-            sp98.x = sp98.z = 0.0f;
-            sp98.y = -0.1f;
-            spB0.y = Rand_ZeroFloat(10.0f) + 3.0f;
-            if (arg3) {
-                spB0.x = randPlusMinusPoint5Scaled(150.0f) + this->actor.focus.pos.x;
-                spB0.z = randPlusMinusPoint5Scaled(150.0f) + this->actor.focus.pos.z;
+    if (!(this->unk_14C & spawnInterval) && ((spawnInterval == 0) || (this->actor.speedXZ > 1.0f))) {
+        for (i = 0; i < 2; i++) {
+            Vec3f pos;
+            Vec3f vel;
+            Vec3f accel;
+
+            vel.x = randPlusMinusPoint5Scaled(5.0f);
+            vel.y = Rand_ZeroFloat(2.0f) + 1.0f;
+            vel.z = randPlusMinusPoint5Scaled(5.0f);
+            accel.x = accel.z = 0.0f;
+            accel.y = -0.1f;
+            pos.y = Rand_ZeroFloat(10.0f) + 3.0f;
+            if (mode) {
+                pos.x = this->actor.focus.pos.x + randPlusMinusPoint5Scaled(150.0f);
+                pos.z = this->actor.focus.pos.z + randPlusMinusPoint5Scaled(150.0f);
             } else {
-                spB0.z = this->unk_1788[phi_s1].z + randPlusMinusPoint5Scaled(20.0f);
-                spB0.x = this->unk_1788[phi_s1].x + randPlusMinusPoint5Scaled(20.0f);
+                pos.z = this->unk_1788[i].z + randPlusMinusPoint5Scaled(20.0f);
+                pos.x = this->unk_1788[i].x + randPlusMinusPoint5Scaled(20.0f);
             }
-            func_800B0EB0(globalCtx, &spB0, &spA4, &sp98, &sDarkOrange1, &sDarkRed1, Rand_ZeroFloat(150.0f) + 350.0f,
+            func_800B0EB0(globalCtx, &pos, &vel, &accel, &sDarkOrange, &sDarkRed, Rand_ZeroFloat(150.0f) + 350.0f,
                           10, Rand_ZeroFloat(5.0f) + 14.0f);
         }
     }
 }
 
-void func_809F4FAC(GlobalContext* globalCtx) {
+void Boss07_MovePlayer(GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (SQXZ(player->actor.world.pos) < SQ(80.0f)) {
@@ -999,24 +987,25 @@ void func_809F4FAC(GlobalContext* globalCtx) {
     }
 }
 
-void func_809F4FF8(GlobalContext* globalCtx, Vec3f* arg1, u8 arg2) {
-    static Color_RGBA8 sDarkOrange2 = { 60, 50, 20, 255 };
-    static Color_RGBA8 sDarkRed2 = { 40, 30, 30, 255 };
+void Boss07_SpawnDustAtPos(GlobalContext* globalCtx, Vec3f* spawnPos, u8 count) {
+    static Color_RGBA8 sDarkOrange = { 60, 50, 20, 255 };
+    static Color_RGBA8 sDarkRed = { 40, 30, 30, 255 };
     u8 i;
-    Vec3f spB0;
-    Vec3f spA4;
-    Vec3f sp98;
 
-    for (i = 0; i < arg2; i++) {
-        spA4.x = randPlusMinusPoint5Scaled(3.0f);
-        spA4.y = Rand_ZeroFloat(2.0f) + 1.0f;
-        spA4.z = randPlusMinusPoint5Scaled(3.0f);
-        sp98.x = sp98.z = 0.0f;
-        sp98.y = -0.1f;
-        spB0.x = randPlusMinusPoint5Scaled(30.0f) + arg1->x;
-        spB0.y = randPlusMinusPoint5Scaled(30.0f) + (arg1->y + 15.0f);
-        spB0.z = randPlusMinusPoint5Scaled(30.0f) + arg1->z;
-        func_800B0EB0(globalCtx, &spB0, &spA4, &sp98, &sDarkOrange2, &sDarkRed2, Rand_ZeroFloat(50.0f) + 100.0f, 10,
+    for (i = 0; i < count; i++) {
+        Vec3f pos;
+        Vec3f vel;
+        Vec3f accel;
+
+        vel.x = randPlusMinusPoint5Scaled(3.0f);
+        vel.y = Rand_ZeroFloat(2.0f) + 1.0f;
+        vel.z = randPlusMinusPoint5Scaled(3.0f);
+        accel.x = accel.z = 0.0f;
+        accel.y = -0.1f;
+        pos.x = spawnPos->x + randPlusMinusPoint5Scaled(30.0f);
+        pos.y = spawnPos->y + 15.0f + randPlusMinusPoint5Scaled(30.0f);
+        pos.z = spawnPos->z + randPlusMinusPoint5Scaled(30.0f);
+        func_800B0EB0(globalCtx, &pos, &vel, &accel, &sDarkOrange, &sDarkRed, Rand_ZeroFloat(50.0f) + 100.0f, 10,
                       Rand_ZeroFloat(5.0f) + 14.0f);
     }
 }
@@ -1042,7 +1031,7 @@ void func_809F51E8(Boss07* this, GlobalContext* globalCtx, u8 arg2) {
     }
 }
 
-void func_809F52CC(Boss07* this, GlobalContext* globalCtx) {
+void Boss07_Wrath_CheckExplosives(Boss07* this, GlobalContext* globalCtx) {
     Actor* explosive = globalCtx->actorCtx.actorList[ACTORCAT_EXPLOSIVES].first;
 
     while (explosive != NULL) {
@@ -1132,7 +1121,7 @@ void Boss07_Init(Actor* thisx, GlobalContext* globalCtx2) {
         this->actor.draw = Boss07_Static_Draw;
         this->actor.flags &= ~1;
         sMajoraStatic = this;
-        D_80A09A70 = 0;
+        sKillProjectiles = false;
         globalCtx->envCtx.unk_C3 = 0;
         globalCtx->envCtx.unk_E0 = 2;
     } else {
@@ -1143,7 +1132,7 @@ void Boss07_Init(Actor* thisx, GlobalContext* globalCtx2) {
             globalCtx->specialEffects = (void*)sEffects;
 
             for (i = 0; i < ARRAY_COUNT(sEffects); i++) {
-                sEffects[i].unk_0 = 0;
+                sEffects[i].type = 0;
             }
             for (i = 0; i < ARRAY_COUNT(sBossRemains); i++) {
                 sBossRemains[i] = NULL;
@@ -1185,7 +1174,6 @@ void Boss07_Init(Actor* thisx, GlobalContext* globalCtx2) {
         } else if ((this->actor.params == MAJORA_REMAINS_SHOT) || (this->actor.params == MAJORA_INCARNATION_SHOT)) {
             this->actor.update = Boss07_Projectile_Update;
             this->actor.draw = Boss07_Projectile_Draw;
-            
             this->actor.flags &= ~1;
             Collider_InitAndSetCylinder(globalCtx, &this->cyl2, &this->actor, &sShotCylInit);
             func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, ACTORCAT_ENEMY);
@@ -1204,7 +1192,7 @@ void Boss07_Init(Actor* thisx, GlobalContext* globalCtx2) {
                     this->actor.world.pos.x = 0.0f;
                     this->actor.world.pos.y = sREG(17) + 277.0f;
                     this->actor.world.pos.z = -922.5f;
-                    Boss07_SetupIdle(this, globalCtx);
+                    Boss07_Mask_SetupIdle(this, globalCtx);
                     this->unk_164.x = 0.0f;
                     this->unk_164.y = 200.0f;
                     this->unk_164.z = 0.0f;
@@ -1320,7 +1308,7 @@ void func_809F5E14(Boss07* this, GlobalContext* globalCtx) {
 }
 
 void func_809F5E88(Boss07* this, GlobalContext* globalCtx) {
-    static f32 D_80A07F6C[5][3] = {
+    static f32 sCamPoints[5][3] = {
         { 40.0f, 400.0f, 110.0f }, { 80.0f, 450.0f, 110.0f }, { 100.0f, 400.0f, 110.0f },
         { 60.0f, 390.0f, 110.0f }, { 30.0f, 430.0f, 110.0f },
     };
@@ -1369,9 +1357,9 @@ void func_809F5E88(Boss07* this, GlobalContext* globalCtx) {
                     dataIndex = 4;
                 }
 
-                Math_ApproachF(&this->csCamNextEye.y, D_80A07F6C[dataIndex][0], 0.075f, this->csCamSpeedMod * 7.0f);
-                Math_ApproachF(&this->csCamNextEye.z, D_80A07F6C[dataIndex][1], 0.075f, this->csCamSpeedMod * 17.0f);
-                Math_ApproachF(&this->csCamNextAt.y, D_80A07F6C[dataIndex][2], 0.075f, this->csCamSpeedMod * 7.0f);
+                Math_ApproachF(&this->csCamNextEye.y, sCamPoints[dataIndex][0], 0.075f, this->csCamSpeedMod * 7.0f);
+                Math_ApproachF(&this->csCamNextEye.z, sCamPoints[dataIndex][1], 0.075f, this->csCamSpeedMod * 17.0f);
+                Math_ApproachF(&this->csCamNextAt.y, sCamPoints[dataIndex][2], 0.075f, this->csCamSpeedMod * 7.0f);
                 Math_ApproachF(&this->csCamSpeedMod, 1.0f, 1.0f, 0.01f);
                 if (this->unk_ABC8 == 70) {
                     Animation_MorphToPlayOnce(&this->skelAnime, &D_06025018, -15.0f);
@@ -1437,7 +1425,7 @@ void func_809F64F4(Boss07* this, GlobalContext* globalCtx) {
     s32 i;
 
     Audio_QueueSeqCmd(0x100100FF);
-    func_809F4FAC(globalCtx);
+    Boss07_MovePlayer(globalCtx);
     this->actionFunc = func_809F65F4;
     this->rightWhip.stiffness = 0.7f;
     this->leftWhip.stiffness = 0.7f;
@@ -1459,22 +1447,16 @@ void func_809F64F4(Boss07* this, GlobalContext* globalCtx) {
     this->unk_15C = 1000;
 }
 
-#ifdef NON_MATCHING
-// spA4 and spA0 loaded in wrong order
 void func_809F65F4(Boss07* this, GlobalContext* globalCtx) {
     s32 i;
     s32 spC0 = 0;
     Vec3f spB4;
     Vec3f spA8 = { 0.0f, 0.0f, 0.0f };
-    f32 spA4;
-    f32 spA0;
-    Camera* camera;
-    spA0 = 0.1f;
-    spA4 = 0.0f;
-    
-    camera = Play_GetCamera(globalCtx, 0);
+    f32 spA4 = 0.0f, spA0 = 0.1f;
+    Camera* camera = Play_GetCamera(globalCtx, 0);
+     
     this->unk_15C = 1000;
-    func_809F4CBC(this, 1.0f);
+    Boss07_SmoothStop(this, 1.0f);
     switch (this->csState) {
         case 0:
             if (ActorCutscene_GetCurrentIndex() != -1) {
@@ -1497,9 +1479,9 @@ void func_809F65F4(Boss07* this, GlobalContext* globalCtx) {
             this->csCamAt.z = camera->at.z;
             this->csCamRotY = this->actor.shape.rot.y * M_PI / 0x8000;
             this->csCamRotVel = this->csCamSpeedMod = sMajoraStatic->unk_180C = 0.0f;
-            Boss07_Wrath_InitRand(1, 0x71AC, 0x263A);
+            Boss07_InitRand(1, 0x71AC, 0x263A);
             for (i = 0; i < ARRAY_COUNT(this->unk_AB50); i++) {
-                this->unk_AB50[i] = Boss07_Wrath_RandZeroOne() - 1.0f;
+                this->unk_AB50[i] = Boss07_RandZeroOne() - 1.0f;
             }
             func_8016566C(150);
         case 2:
@@ -1693,12 +1675,6 @@ void func_809F65F4(Boss07* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     this->unk_ABC8++;
 }
-#else
-static Vec3f D_80A07FA8 = { 0.0f, 0.0f, 0.0f };
-static Vec3f D_80A07FB4 = { 0.0f, 10.0f, 0.0f };
-static Vec3f D_80A07FC0 = { 0.0f, -0.5f, 0.0f };
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_07/func_809F65F4.s")
-#endif
 
 void func_809F7400(Boss07* this, GlobalContext* globalCtx, s16 arg2) {
     this->actionFunc = func_809F748C;
@@ -1715,7 +1691,7 @@ void func_809F748C(Boss07* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     SkelAnime_Update(&this->skelAnime);
-    func_809F4CBC(this, 2.0f);
+    Boss07_SmoothStop(this, 2.0f);
     this->rightWhip.stiffness = 0.7f;
     this->leftWhip.stiffness = 0.7f;
     this->rightWhip.gravity = -15.0f;
@@ -1956,7 +1932,7 @@ void func_809F7D2C(Boss07* this, GlobalContext* globalCtx) {
 
 void func_809F805C(Boss07* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
-    func_809F4CBC(this, 2.0f);
+    Boss07_SmoothStop(this, 2.0f);
     this->rightWhip.stiffness = 0.79999995f;
     this->leftWhip.stiffness = 0.79999995f;
     this->rightWhip.gravity = -5.0f;
@@ -2110,7 +2086,7 @@ void func_809F8658(Boss07* this, GlobalContext* globalCtx) {
 void func_809F86B8(Boss07* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer - 0x800, 3, 0x2000);
-    func_809F4CBC(this, 2.0f);
+    Boss07_SmoothStop(this, 2.0f);
     this->rightWhip.stiffness = 0.79999995f;
     this->leftWhip.stiffness = 0.79999995f;
     this->rightWhip.drag = 1.0f;
@@ -2133,7 +2109,7 @@ void func_809F87C8(Boss07* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     SkelAnime_Update(&this->skelAnime);
-    func_809F4CBC(this, 2.0f);
+    Boss07_SmoothStop(this, 2.0f);
     player->actor.world.pos = this->unk_F80;
     this->actor.flags &= ~1;
     this->unk_15A = 20;
@@ -2214,7 +2190,7 @@ void func_809F8B1C(Boss07* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     SkelAnime_Update(&this->skelAnime);
-    func_809F4CBC(this, 2.0f);
+    Boss07_SmoothStop(this, 2.0f);
     player->actor.world.pos = this->unk_F80;
     this->actor.flags &= ~1;
     this->unk_15A = 20;
@@ -2317,7 +2293,7 @@ void func_809F8EC8(Boss07* this, GlobalContext* globalCtx) {
         }
     }
     Math_ApproachS(&this->actor.shape.rot.y, KREG(8) * 0x100 + this->actor.yawTowardsPlayer + 0xF00, 3, 0x2000);
-    func_809F4CBC(this, 2.0f);
+    Boss07_SmoothStop(this, 2.0f);
     this->leftWhip.stiffness = this->rightWhip.stiffness = 0.79999995f;
     this->leftWhip.drag = this->rightWhip.drag = 1.0f;
     this->leftWhip.tension = this->rightWhip.tension = 0.0f;
@@ -2335,7 +2311,7 @@ void func_809F8EC8(Boss07* this, GlobalContext* globalCtx) {
 void func_809F91D4(Boss07* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     func_8019F1C0(&sSfxPoint, NA_SE_EN_COMMON_WEAKENED - SFX_FLAG);
-    func_809F4CBC(this, 2.0f);
+    Boss07_SmoothStop(this, 2.0f);
     this->leftWhip.stiffness = this->rightWhip.stiffness = 0.7f;
     this->leftWhip.gravity = this->rightWhip.gravity = -15.0f;
     this->leftWhip.tension = this->rightWhip.tension = 0.0f;
@@ -2345,7 +2321,7 @@ void func_809F91D4(Boss07* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_809F9280(Boss07* this, GlobalContext* globalCtx, u8 arg2, u8 arg3) {
+void Boss07_Wrath_SetupDamaged(Boss07* this, GlobalContext* globalCtx, u8 arg2, u8 arg3) {
     if ((s8)this->actor.colChkInfo.health >= 0) {
         this->actor.colChkInfo.health -= arg2;
     }
@@ -2359,9 +2335,9 @@ void func_809F9280(Boss07* this, GlobalContext* globalCtx, u8 arg2, u8 arg3) {
         Enemy_StartFinishingBlow(globalCtx, &this->actor);
     } else {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST3_VOICE_DAMAGE2_OLD);
-        if (this->actionFunc != func_809F93DC) {
+        if (this->actionFunc != Boss07_Wrath_Damaged) {
             Animation_MorphToPlayOnce(&this->skelAnime, &D_0601DEB4, -10.0f);
-            this->actionFunc = func_809F93DC;
+            this->actionFunc = Boss07_Wrath_Damaged;
             this->unk_1D4 = Animation_GetLastFrame(&D_0601DEB4);
             this->unk_ABCC = 0;
         } else if (arg3 == 14) {
@@ -2374,13 +2350,13 @@ void func_809F9280(Boss07* this, GlobalContext* globalCtx, u8 arg2, u8 arg3) {
     }
 }
 
-void func_809F93DC(Boss07* this, GlobalContext* globalCtx) {
+void Boss07_Wrath_Damaged(Boss07* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     this->unk_ABCC++;
     if ((this->unk_ABCC % 16) == 0) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_WALK2_OLD);
     }
-    func_809F4CBC(this, 2.0f);
+    Boss07_SmoothStop(this, 2.0f);
     this->rightWhip.stiffness = 0.7f;
     this->leftWhip.stiffness = 0.7f;
     this->rightWhip.gravity = -15.0f;
@@ -2394,7 +2370,7 @@ void func_809F93DC(Boss07* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_809F94AC(Vec3f* arg0, f32 arg1, Boss07* this, GlobalContext* globalCtx) {
+void Boss07_Wrath_WhipCollisionCheck(Vec3f* arg0, f32 arg1, Boss07* this, GlobalContext* globalCtx) {
     s32 i;
     s32 sp98 = -1;
     Player* player = GET_PLAYER(globalCtx);
@@ -2415,7 +2391,7 @@ void func_809F94AC(Vec3f* arg0, f32 arg1, Boss07* this, GlobalContext* globalCtx
 
                     if (sqrtf(SQ(dx) + SQ(dy) + SQ(dz)) < (KREG(38) + 60.0f)) {
                         ((ObjTsubo*)prop)->unk19B = 1;
-                        func_809F4FF8(globalCtx, &prop->world.pos, 10);
+                        Boss07_SpawnDustAtPos(globalCtx, &prop->world.pos, 10);
                     }
                 }
             }
@@ -2473,14 +2449,14 @@ void func_809F94AC(Vec3f* arg0, f32 arg1, Boss07* this, GlobalContext* globalCtx
                 sp7C.y += randPlusMinusPoint5Scaled(30.0f) + 20.0f;
                 sp7C.z += randPlusMinusPoint5Scaled(30.0f);
                 EffectSsHitMark_SpawnFixedScale(globalCtx, 0, &sp7C);
-                func_809F4FF8(globalCtx, &player->actor.world.pos, 7);
+                Boss07_SpawnDustAtPos(globalCtx, &player->actor.world.pos, 7);
                 break;
             }
         }
     }
 }
 
-void func_809F99C4(Boss07* this, GlobalContext* globalCtx) {
+void Boss07_Wrath_CollisionCheck(Boss07* this, GlobalContext* globalCtx) {
     s32 i;
     s32 j;
     u8 pad;
@@ -2491,7 +2467,7 @@ void func_809F99C4(Boss07* this, GlobalContext* globalCtx) {
             this->sph2.elements[0].info.toucherFlags &= ~2;
             player->unk_B84 = this->actor.yawTowardsPlayer;
             player->unk_B80 = 20.0f;
-            func_809F4FF8(globalCtx, &player->actor.world.pos, 12);
+            Boss07_SpawnDustAtPos(globalCtx, &player->actor.world.pos, 12);
             play_sound(NA_SE_IT_HOOKSHOT_STICK_OBJ);
         }
         for (i = 0; i < ARRAY_COUNT(this->sphElems1); i++) {
@@ -2525,7 +2501,7 @@ void func_809F99C4(Boss07* this, GlobalContext* globalCtx) {
                         break;
                 }
                 pad = this->actor.colChkInfo.damage;
-                if ((this->actionFunc == func_809F91D4) || (this->actionFunc == func_809F93DC)) {
+                if ((this->actionFunc == func_809F91D4) || (this->actionFunc == Boss07_Wrath_Damaged)) {
                     if ((this->actionFunc == func_809F91D4) && (this->actor.colChkInfo.damageEffect != 0xE) &&
                         (this->actor.colChkInfo.damageEffect != 0xD) && (this->actor.colChkInfo.damageEffect != 9) &&
                         (this->actor.colChkInfo.damageEffect != 0xC)) {
@@ -2534,7 +2510,7 @@ void func_809F99C4(Boss07* this, GlobalContext* globalCtx) {
                     } else {
                         this->unk_15E = 15;
                         this->unk_15C = (this->actor.colChkInfo.damageEffect == 0xC) ? 15 : 5;
-                        func_809F9280(this, globalCtx, pad, this->actor.colChkInfo.damageEffect);
+                        Boss07_Wrath_SetupDamaged(this, globalCtx, pad, this->actor.colChkInfo.damageEffect);
                     }
                 } else {
                     this->unk_15C = 15;
@@ -2552,24 +2528,24 @@ void func_809F99C4(Boss07* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_809F9CEC(Boss07* this, GlobalContext* globalCtx) {
+void Boss07_Wrath_BreakIce(Boss07* this, GlobalContext* globalCtx) {
     static Color_RGBA8 sLightCyan = { 170, 255, 255, 255 };
     static Color_RGBA8 sLightBlue = { 200, 200, 255, 255 };
-    static Vec3f sIceVel = { 0.0f, -1.0f, 0.0f };
-    Vec3f sp8C;
-    Vec3f sp80;
+    static Vec3f sIceAccel = { 0.0f, -1.0f, 0.0f };
+    Vec3f pos;
+    Vec3f vel;
     s32 i;
 
     Audio_PlaySoundAtPosition(globalCtx, this->bodyPartsPos, 30, NA_SE_EV_ICE_BROKEN);
     for (i = 0; i < 30; i++) {
-        sp80.x = randPlusMinusPoint5Scaled(7.0f);
-        sp80.z = randPlusMinusPoint5Scaled(7.0f);
-        sp80.y = Rand_ZeroFloat(6.0f) + 4.0f;
+        vel.x = randPlusMinusPoint5Scaled(7.0f);
+        vel.z = randPlusMinusPoint5Scaled(7.0f);
+        vel.y = Rand_ZeroFloat(6.0f) + 4.0f;
 
-        sp8C.x = this->bodyPartsPos[i / 2].x + sp80.x;
-        sp8C.y = this->bodyPartsPos[i / 2].y + sp80.y;
-        sp8C.z = this->bodyPartsPos[i / 2].z + sp80.z;
-        EffectSsEnIce_Spawn(globalCtx, &sp8C, Rand_ZeroFloat(1.0f) + 1.5f, &sp80, &sIceVel, &sLightCyan, &sLightBlue,
+        pos.x = this->bodyPartsPos[i / 2].x + vel.x;
+        pos.y = this->bodyPartsPos[i / 2].y + vel.y;
+        pos.z = this->bodyPartsPos[i / 2].z + vel.z;
+        EffectSsEnIce_Spawn(globalCtx, &pos, Rand_ZeroFloat(1.0f) + 1.5f, &vel, &sIceAccel, &sLightCyan, &sLightBlue,
                             30);
     }
 }
@@ -2609,7 +2585,7 @@ void func_809F9E94(Boss07* this, GlobalContext* globalCtx) {
             this->unk_1805++;
         case 11:
             if (this->unk_1806 == 0) {
-                func_809F9CEC(this, globalCtx);
+                Boss07_Wrath_BreakIce(this, globalCtx);
                 this->unk_1805 = 0;
             } else {
                 if (this->unk_1806 == 50) {
@@ -2674,7 +2650,7 @@ void Boss07_Wrath_Update(Actor* thisx, GlobalContext* globalCtx2) {
     Math_Vec3f_Copy(&sSfxPoint, &this->actor.projectedPos);
     if (KREG(63) == 0) {
         this->unk_174 = 0;
-        this->unk_14C += 1;
+        this->unk_14C++;
         Actor_SetScale(&this->actor, 0.015f);
         Math_ApproachZeroF(&this->unk_184, 1.0f, 0.02f);
         Math_ApproachZeroF(&this->unk_188, 1.0f, 0.02f);
@@ -2701,14 +2677,14 @@ void Boss07_Wrath_Update(Actor* thisx, GlobalContext* globalCtx2) {
     } else {
         sWhipSegCount = 45;
     }
-    func_809F94AC(this->rightWhip.pos, this->rightWhip.tension, this, globalCtx);
-    func_809F94AC(this->leftWhip.pos, this->leftWhip.tension, this, globalCtx);
+    Boss07_Wrath_WhipCollisionCheck(this->rightWhip.pos, this->rightWhip.tension, this, globalCtx);
+    Boss07_Wrath_WhipCollisionCheck(this->leftWhip.pos, this->leftWhip.tension, this, globalCtx);
     if (this->unk_158 != 0) {
         for (i = 0; i < ARRAY_COUNT(this->sphElems1); i++) {
             this->sph1.elements[i].info.bumperFlags &= ~2;
         }
     }
-    func_809F99C4(this, globalCtx);
+    Boss07_Wrath_CollisionCheck(this, globalCtx);
     if (this->unk_15C != 0) {
         this->unk_778 = 0;
     }
@@ -2729,7 +2705,7 @@ void Boss07_Wrath_Update(Actor* thisx, GlobalContext* globalCtx2) {
                 func_809F51E8(this, globalCtx, false);
             }
         }
-        if ((this->actionFunc != func_809F91D4) && (this->actionFunc != func_809F93DC)) {
+        if ((this->actionFunc != func_809F91D4) && (this->actionFunc != Boss07_Wrath_Damaged)) {
             if ((player->stateFlags3 & 0x00001000) && !(player->stateFlags3 & 0x00080000) &&
                 (this->actor.xzDistToPlayer <= 250.0f)) {
                 func_809F51E8(this, globalCtx, false);
@@ -2737,7 +2713,7 @@ void Boss07_Wrath_Update(Actor* thisx, GlobalContext* globalCtx2) {
         }
     }
     if (this->unk_174 != 0) {
-        func_809F52CC(this, globalCtx);
+        Boss07_Wrath_CheckExplosives(this, globalCtx);
     }
     Boss07_Wrath_BombWhips(this, globalCtx);
     if ((KREG(88) != 0) || (this->unk_148 != 0)) {
@@ -2966,20 +2942,20 @@ s32 Boss07_Wrath_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx**
     return false;
 }
 
-static s8 sWrathColliders[32] = {
-    -1, -1, 2, -1, 7, -1, 8, -1, -1, 9, -1, 10, -1, -1, 1, -1, 5, -1, 6, -1, -1, 3, -1, 4, -1, -1, 0, -1, -1, -1, 0, 0,
-};
-static Vec3f sWrathColliderOffsets[11] = {
-    { 1000.0f, 0.0f, 500.0f }, { 2000.0f, 0.0f, 0.0f }, { 1000.0f, 0.0f, 500.0f }, { 2000.0f, 0.0f, 0.0f },
-    { 2000.0f, 0.0f, 0.0f },   { 2000.0f, 0.0f, 0.0f }, { 2000.0f, 0.0f, 0.0f },   { 2000.0f, 0.0f, 0.0f },
-    { 2000.0f, 0.0f, 0.0f },   { 2000.0f, 0.0f, 0.0f }, { 2000.0f, 0.0f, 0.0f },
-};
-static s8 sWrathBodyParts[32] = {
-    -1, -1, 2, -1, 12, -1, 13, 14, -1, 9, -1, 10, 11, -1, 1, -1, 6, 7, 8, -1, -1, 3, 4, 5, -1, -1, 0, -1, -1, -1, 0, 0,
-};
-static Vec3f sWhipOffset = { 1000.0f, 100.0f, 0.0f };
 
 void Boss07_Wrath_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    static s8 sLimbColliderIndex[30] = {
+    -1, -1, 2, -1, 7, -1, 8, -1, -1, 9, -1, 10, -1, -1, 1, -1, 5, -1, 6, -1, -1, 3, -1, 4, -1, -1, 0, -1, -1, -1,
+    };
+    static Vec3f sWrathColliderOffsets[11] = {
+        { 1000.0f, 0.0f, 500.0f }, { 2000.0f, 0.0f, 0.0f }, { 1000.0f, 0.0f, 500.0f }, { 2000.0f, 0.0f, 0.0f },
+        { 2000.0f, 0.0f, 0.0f },   { 2000.0f, 0.0f, 0.0f }, { 2000.0f, 0.0f, 0.0f },   { 2000.0f, 0.0f, 0.0f },
+        { 2000.0f, 0.0f, 0.0f },   { 2000.0f, 0.0f, 0.0f }, { 2000.0f, 0.0f, 0.0f },
+    };
+    static s8 sWrathBodyParts[30] = {
+        -1, -1, 2, -1, 12, -1, 13, 14, -1, 9, -1, 10, 11, -1, 1, -1, 6, 7, 8, -1, -1, 3, 4, 5, -1, -1, 0, -1, -1, -1,
+    };
+    static Vec3f sWhipOffset = { 1000.0f, 100.0f, 0.0f };
     Boss07* this = THIS;
     s8 sp6B;
     Vec3f sp5C;
@@ -2989,7 +2965,7 @@ void Boss07_Wrath_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
     if (sp6B >= 0) {
         Matrix_GetStateTranslation(&this->bodyPartsPos[sp6B]);
     }
-    sp6B = sWrathColliders[limbIndex];
+    sp6B = sLimbColliderIndex[limbIndex];
     if (sp6B >= 0) {
         if (this->unk_158 != 0) {
             Matrix_GetStateTranslationAndScaledZ(100000.0f, &sp5C);
@@ -3088,20 +3064,20 @@ void Boss07_Wrath_DrawDeathLights(Boss07* this, GlobalContext* globalCtx, Vec3f*
     OPEN_DISPS(gfxCtx = globalCtx->state.gfxCtx);
 
     if (this->unk_AB4C > 0.0f) {
-        Boss07_Wrath_InitRand(1, 0x71B8, 0x263A);
+        Boss07_InitRand(1, 0x71B8, 0x263A);
         POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);
         gDPSetCombineMode(POLY_XLU_DISP++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
         for (i = 0; i < ARRAY_COUNT(this->unk_AB50); i++) {
-            temp = D_80A07950[0];
+            temp = sColorsYRGB[0];
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, temp[0], temp[1], temp[2], 40);
-            temp_f20 = (Boss07_Wrath_RandZeroOne() * 40.0f) - 30.0f;
+            temp_f20 = (Boss07_RandZeroOne() * 40.0f) - 30.0f;
             Matrix_InsertTranslation(this->bodyPartsPos[2].x,
                                      this->bodyPartsPos[2].y - 30.0f + 50.0f + temp_f20 + 25.0f,
                                      this->bodyPartsPos[2].z, 0);
             Matrix_InsertTranslation(arg2->x, arg2->y + temp_f20, arg2->z, 0);
-            Matrix_InsertYRotation_f(Boss07_Wrath_RandZeroOne() * M_PI * 2.0f, 1);
+            Matrix_InsertYRotation_f(Boss07_RandZeroOne() * M_PI * 2.0f, 1);
             Matrix_RotateStateAroundXAxis(-0.024999999f * temp_f20);
-            Matrix_InsertZRotation_f(Boss07_Wrath_RandZeroOne() * M_PI * 2.0f, 1);
+            Matrix_InsertZRotation_f(Boss07_RandZeroOne() * M_PI * 2.0f, 1);
             if (this->unk_AB50[i] > 0.0f) {
                 Matrix_Scale(this->unk_AB50[i], 1.0f, 12.0f, 1);
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), 2);
@@ -3301,7 +3277,7 @@ void Boss07_Wrath_MakeShadowTex(u8* shadowTex, Boss07* this, GlobalContext* glob
     }
 }
 
-void Boss07_Wrath_DrawShadowTex(u8* arg0, Boss07* this, GlobalContext* globalCtx) {
+void Boss07_Wrath_DrawShadowTex(u8* shadowTex, Boss07* this, GlobalContext* globalCtx) {
     s32 pad[2];
     f32 phi_f0;
     GraphicsContext* pad3 = globalCtx->state.gfxCtx;
@@ -3318,7 +3294,7 @@ void Boss07_Wrath_DrawShadowTex(u8* arg0, Boss07* this, GlobalContext* globalCtx
     Matrix_Scale(1.75f, 1.0f, 1.75f, 1);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), 2);
     gSPDisplayList(POLY_OPA_DISP++, D_0602EF68);
-    gDPLoadTextureBlock(POLY_OPA_DISP++, arg0, G_IM_FMT_I, G_IM_SIZ_8b, 0x40, 0x40, 0, G_TX_NOMIRROR | G_TX_CLAMP,
+    gDPLoadTextureBlock(POLY_OPA_DISP++, shadowTex, G_IM_FMT_I, G_IM_SIZ_8b, 0x40, 0x40, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, 6, 6, G_TX_NOLOD, G_TX_NOLOD);
     gSPDisplayList(POLY_OPA_DISP++, D_0602EF88);
     CLOSE_DISPS(pad3);
@@ -3518,13 +3494,13 @@ void func_809FD710(Boss07* this, GlobalContext* globalCtx) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_JUMP_OLD);
     }
     SkelAnime_Update(&this->skelAnime);
-    func_809F4CBC(this, 2.0f);
+    Boss07_SmoothStop(this, 2.0f);
     Math_ApproachS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 5, 0x2000);
     if ((this->timers[0] == 0) || (player->unk_D57 == 4) || (this->actor.xzDistToPlayer <= 300.0f)) {
         func_809FDB2C(this, globalCtx);
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_VOICE_SURPRISED_OLD);
     }
-    func_809F4D54(this, globalCtx, 1, false);
+    Boss07_SpawnDust(this, globalCtx, 1, false);
 }
 
 void func_809FD818(Boss07* this, GlobalContext* globalCtx, s16 arg2) {
@@ -3541,7 +3517,7 @@ void func_809FD818(Boss07* this, GlobalContext* globalCtx, s16 arg2) {
 void func_809FD89C(Boss07* this, GlobalContext* globalCtx) {
     this->actor.shape.shadowAlpha = 0;
     SkelAnime_Update(&this->skelAnime);
-    func_809F4CBC(this, 1.0f);
+    Boss07_SmoothStop(this, 1.0f);
     if (this->timers[1] == 1) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_HIPLOOP_LAND);
     }
@@ -3555,7 +3531,7 @@ void func_809FD89C(Boss07* this, GlobalContext* globalCtx) {
     if (this->timers[0] == 0) {
         func_809FD5F8(this, globalCtx);
     }
-    func_809F4D54(this, globalCtx, 1, true);
+    Boss07_SpawnDust(this, globalCtx, 1, true);
 }
 
 void func_809FD984(Boss07* this, GlobalContext* globalCtx, u8 arg2, u8 arg3) {
@@ -3589,11 +3565,11 @@ void func_809FD984(Boss07* this, GlobalContext* globalCtx, u8 arg2, u8 arg3) {
 void func_809FDAB0(Boss07* this, GlobalContext* globalCtx) {
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_BIRD2_OLD - SFX_FLAG);
     SkelAnime_Update(&this->skelAnime);
-    func_809F4CBC(this, 2.0f);
+    Boss07_SmoothStop(this, 2.0f);
     if (Animation_OnFrame(&this->skelAnime, this->unk_1D4)) {
         func_809FDB2C(this, globalCtx);
     }
-    func_809F4D54(this, globalCtx, 1, false);
+    Boss07_SpawnDust(this, globalCtx, 1, false);
 }
 
 void func_809FDB2C(Boss07* this, GlobalContext* globalCtx) {
@@ -3621,7 +3597,7 @@ void func_809FDBA0(Boss07* this, GlobalContext* globalCtx) {
     } else {
         sp34 = this->unk_164.x - this->actor.world.pos.x;
         sp30 = this->unk_164.z - this->actor.world.pos.z;
-        if ((this->timers[1] == 0) || (SQ(sp34) + SQ(sp30) < 30000.0f)) {
+        if ((this->timers[1] == 0) || (SQ(sp34) + SQ(sp30) < SQ(173.20508f))) { // 100 * sqrt(3)
             if (Rand_ZeroOne() < 0.3f) {
                 f32 temp_f0 = Rand_ZeroOne();
 
@@ -3653,7 +3629,7 @@ void func_809FDBA0(Boss07* this, GlobalContext* globalCtx) {
             this->timers[0] = 50;
             this->timers[2] = 50;
         }
-        func_809F4D54(this, globalCtx, 3, false);
+        Boss07_SpawnDust(this, globalCtx, 3, false);
         this->unk_18D6 = 5;
     }
 }
@@ -3667,7 +3643,7 @@ void func_809FDEDC(Boss07* this, GlobalContext* globalCtx) {
 
 void func_809FDF54(Boss07* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
-    func_809F4CBC(this, 3.0f);
+    Boss07_SmoothStop(this, 3.0f);
     Math_ApproachS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 3, 0x3000);
     if (Animation_OnFrame(&this->skelAnime, 4.0f)) {
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BOSS_07, this->unk_17A0.x, this->unk_17A0.y,
@@ -3680,7 +3656,7 @@ void func_809FDF54(Boss07* this, GlobalContext* globalCtx) {
     if (this->timers[0] == 0) {
         func_809FDB2C(this, globalCtx);
     }
-    func_809F4D54(this, globalCtx, 1, false);
+    Boss07_SpawnDust(this, globalCtx, 1, false);
 }
 
 void func_809FE068(Boss07* this, GlobalContext* globalCtx) {
@@ -3723,7 +3699,7 @@ void func_809FE0E4(Boss07* this, GlobalContext* globalCtx) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST2_VOICE_SURPRISED_OLD);
         }
     }
-    func_809F4D54(this, globalCtx, 7, false);
+    Boss07_SpawnDust(this, globalCtx, 7, false);
 }
 
 void func_809FE2D4(Boss07* this, GlobalContext* globalCtx) {
@@ -3754,7 +3730,7 @@ void func_809FE348(Boss07* this, GlobalContext* globalCtx) {
     if (this->timers[0] == 0) {
         func_809FDB2C(this, globalCtx);
     }
-    func_809F4D54(this, globalCtx, 7, false);
+    Boss07_SpawnDust(this, globalCtx, 7, false);
 }
 
 void func_809FE4B0(Boss07* this, GlobalContext* globalCtx) {
@@ -3793,7 +3769,7 @@ void func_809FE524(Boss07* this, GlobalContext* globalCtx) {
 
 void func_809FE6B0(Boss07* this, GlobalContext* globalCtx) {
     this->actionFunc = func_809FE734;
-    func_809F4FAC(globalCtx);
+    Boss07_MovePlayer(globalCtx);
     Animation_MorphToPlayOnce(&this->skelAnime, &D_06000D0C, -2.0f);
     this->unk_1D4 = Animation_GetLastFrame(&D_06000D0C);
     this->csState = 0;
@@ -3809,7 +3785,7 @@ void func_809FE734(Boss07* this, GlobalContext* globalCtx) {
     this->unk_15C = 20;
     this->unk_ABC8++;
     SkelAnime_Update(&this->skelAnime);
-    func_809F4CBC(this, 3.0f);
+    Boss07_SmoothStop(this, 3.0f);
     switch (this->csState) {
         case 0:
             if (ActorCutscene_GetCurrentIndex() != -1) {
@@ -4079,7 +4055,7 @@ void Boss07_Afterimage_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-s32 func_809FF678(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 Boss07_Incarnation_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     Boss07* this = THIS;
 
     if (limbIndex == 24) {
@@ -4088,36 +4064,36 @@ s32 func_809FF678(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return false;
 }
 
-static s8 sIncarnationColliders[32] = {
-    -1, -1, -1, 1, -1, 9, -1, 10, -1, -1, 5, -1, 6, -1, 1, 3, -1, 4, -1, -1, 7, -1, 8, -1, 0, -1, -1, -1, -1, -1, 0, 0,
-};
-static s8 D_80A081C8[32] = {
-    -1, -1, -1, -1, 2,  -1, -1, -1, -1, 0,  -1, -1, -1, -1, 1, -1,
-    -1, -1, -1, 3,  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0,
-};
-static Vec3f sIncarnationColliderOffsets[11] = {
-    { 2000.0f, 0.0f, 0.0f }, { 3500.0f, -1000.0f, 0.0f }, { 100000.0f, 100000.0f, 100000.0f },
-    { 4000.0f, 0.0f, 0.0f }, { 4000.0f, 0.0f, 0.0f },     { 4000.0f, 0.0f, 0.0f },
-    { 4000.0f, 0.0f, 0.0f }, { 4000.0f, 0.0f, 0.0f },     { 4000.0f, 0.0f, 0.0f },
-    { 4000.0f, 0.0f, 0.0f }, { 4000.0f, 0.0f, 0.0f },
-};
-static s8 sIncarnationBodyParts[32] = {
-    -1, -1, -1, 1, 2, 9, -1, 10, 11, -1, 6, -1, 7, 8, 1, 3, -1, 4, 5, -1, 12, -1, 13, 14, 0, -1, -1, -1, -1, -1, 0, 0,
-};
+void Boss07_Incarnation_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    static s8 sLimbColliderIndex[30] = {
+        -1, -1, -1, 1, -1, 9, -1, 10, -1, -1, 5, -1, 6, -1, 1, 3, -1, 4, -1, -1, 7, -1, 8, -1, 0, -1, -1, -1, -1, -1,
+    };
+    static s8 sLimbPumpIndex[30] = {
+        -1, -1, -1, -1, 2,  -1, -1, -1, -1, 0,  -1, -1, -1, -1, 1, -1,
+        -1, -1, -1, 3,  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    };
+    static Vec3f sIncarnationColliderOffsets[11] = {
+        { 2000.0f, 0.0f, 0.0f }, { 3500.0f, -1000.0f, 0.0f }, { 100000.0f, 100000.0f, 100000.0f },
+        { 4000.0f, 0.0f, 0.0f }, { 4000.0f, 0.0f, 0.0f },     { 4000.0f, 0.0f, 0.0f },
+        { 4000.0f, 0.0f, 0.0f }, { 4000.0f, 0.0f, 0.0f },     { 4000.0f, 0.0f, 0.0f },
+        { 4000.0f, 0.0f, 0.0f }, { 4000.0f, 0.0f, 0.0f },
+    };
+    static s8 sLimbBodyPartIndex[32] = {
+        -1, -1, -1, 1, 2, 9, -1, 10, 11, -1, 6, -1, 7, 8, 1, 3, -1, 4, 5, -1, 12, -1, 13, 14, 0, -1, -1, -1, -1, -1, 0, 0,
+    };
 
-void func_809FF6B0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     Boss07* this = THIS;
     Vec3f sp28;
     s8 i;
 
-    if (limbIndex == 0x18) {
+    if (limbIndex == 24) {
         Matrix_GetStateTranslation(&this->actor.focus.pos);
     }
-    i = sIncarnationBodyParts[limbIndex];
+    i = sLimbBodyPartIndex[limbIndex];
     if (i >= 0) {
         Matrix_GetStateTranslation(&this->bodyPartsPos[i]);
     }
-    i = sIncarnationColliders[limbIndex];
+    i = sLimbColliderIndex[limbIndex];
     if (i >= 0) {
         if (this->unk_158 != 0) {
             Matrix_GetStateTranslationAndScaledZ(100000.0f, &sp28);
@@ -4129,22 +4105,22 @@ void func_809FF6B0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     if (limbIndex == 8) {
         Matrix_GetStateTranslation(&this->unk_1788[0]);
     }
-    if (limbIndex == 0x17) {
+    if (limbIndex == 23) {
         Matrix_GetStateTranslation(&this->unk_1788[1]);
     }
-    if (limbIndex == 0xD) {
+    if (limbIndex == 13) {
         Matrix_GetStateTranslation(&this->unk_17AC);
     }
-    if (limbIndex == 0x12) {
+    if (limbIndex == 18) {
         Matrix_GetStateTranslation(&this->unk_17A0);
     }
-    i = D_80A081C8[limbIndex];
+    i = sLimbPumpIndex[limbIndex];
     if (i >= 0) {
         Matrix_Scale(this->unk_17B8[i], this->unk_17B8[i], this->unk_17B8[i], 1);
     }
 }
 
-void func_809FF810(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void Boss07_Incarnation_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     Boss07* this = THIS;
 
     if (limbIndex == 3) {
@@ -4171,21 +4147,21 @@ void Boss07_Incarnation_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
     }
     func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                  func_809FF678, func_809FF6B0, func_809FF810, &this->actor);
+                  Boss07_Incarnation_OverrideLimbDraw, Boss07_Incarnation_PostLimbDraw, Boss07_Incarnation_UnkActorDraw, &this->actor);
     POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
     func_800BE680(globalCtx, &this->actor, this->bodyPartsPos, 0xF, this->unk_17F8, this->unk_17FC, this->unk_1800,
                   this->unk_1804);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-void Boss07_SetupIdle(Boss07* this, GlobalContext* globalCtx) {
-    this->actionFunc = Boss07_Idle;
+void Boss07_Mask_SetupIdle(Boss07* this, GlobalContext* globalCtx) {
+    this->actionFunc = Boss07_Mask_Idle;
     Animation_MorphToLoop(&this->skelAnime, &D_06019E48, -20.0f);
     this->timers[2] = Rand_ZeroFloat(150.0f) + 60.0f;
     this->unk_1870 = 1.0f;
 }
 
-void Boss07_Idle(Boss07* this, GlobalContext* globalCtx) {
+void Boss07_Mask_Idle(Boss07* this, GlobalContext* globalCtx) {
     s16 sp36;
     s16 sp34;
     f32 sp30;
@@ -4266,7 +4242,7 @@ void Boss07_Mask_Spin(Boss07* this, GlobalContext* globalCtx) {
     switch (this->unk_14E) {
         case 0:
             Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
-            func_809F4CBC(this, 1.0f);
+            Boss07_SmoothStop(this, 1.0f);
             Math_ApproachS(&this->actor.shape.rot.x, -0x4000, 0xA, 0x100);
             Math_ApproachS(&this->unk_18D4, 0x2000, 1, 0x100);
             if (this->timers[0] == 0) {
@@ -4321,9 +4297,9 @@ void Boss07_Mask_Spin(Boss07* this, GlobalContext* globalCtx) {
         case 2:
             Math_ApproachS(&this->unk_18D4, 0, 1, 0x100);
             Math_ApproachS(&this->actor.world.rot.x, 0x2000, 0xA, 0x7D0);
-            func_809F4CBC(this, 0.5f);
+            Boss07_SmoothStop(this, 0.5f);
             if (this->timers[0] == 0) {
-                Boss07_SetupIdle(this, globalCtx);
+                Boss07_Mask_SetupIdle(this, globalCtx);
             }
     }
 }
@@ -4338,7 +4314,7 @@ void Boss07_Mask_SetupStunned(Boss07* this, GlobalContext* globalCtx) {
 void Boss07_Mask_Stunned(Boss07* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     func_8019F1C0(&sSfxPoint, NA_SE_EN_COMMON_WEAKENED - SFX_FLAG);
-    func_809F4CBC(this, 0.5f);
+    Boss07_SmoothStop(this, 0.5f);
     Math_ApproachS(&this->actor.shape.rot.x, -0x1000 + 0x4B0 * Math_SinS(this->unk_14C * 0xBB8), 5, 0x800);
     Math_ApproachS(&this->actor.shape.rot.z, -0x1000 + 0x3E8 * Math_SinS(this->unk_14C * 0x9C4), 5, 0x800);
     if (this->actor.world.pos.y > 51.0f) {
@@ -4351,17 +4327,17 @@ void Boss07_Mask_Stunned(Boss07* this, GlobalContext* globalCtx) {
         this->unk_1884 = 1;
     }
     if (this->timers[0] == 0) {
-        Boss07_SetupIdle(this, globalCtx);
+        Boss07_Mask_SetupIdle(this, globalCtx);
         this->timers[2] = 100;
     }
 }
 
-void Boss07_Mask_SetupDamaged(Boss07* this, GlobalContext* globalCtx, u8 arg2, Actor* arg3) {
+void Boss07_Mask_SetupDamaged(Boss07* this, GlobalContext* globalCtx, u8 damage, Actor* arg3) {
     Player* player = GET_PLAYER(globalCtx);
 
     this->actionFunc = Boss07_Mask_Damaged;
     this->timers[0] = 40;
-    if (arg2) {
+    if (damage) {
         this->actor.speedXZ = 30.0f;
         this->actor.world.rot.y = this->actor.yawTowardsPlayer + 0x8000;
         this->unk_18D4 = 0x1500;
@@ -4378,7 +4354,7 @@ void Boss07_Mask_SetupDamaged(Boss07* this, GlobalContext* globalCtx, u8 arg2, A
         }
         this->unk_18D4 = 0x1000;
     }
-    this->actor.colChkInfo.health -= arg2;
+    this->actor.colChkInfo.health -= damage;
     if ((s8)this->actor.colChkInfo.health <= 0) {
         this->timers[0] = 30;
     }
@@ -4389,7 +4365,7 @@ void Boss07_Mask_Damaged(Boss07* this, GlobalContext* globalCtx) {
     this->unk_15C = 20;
     SkelAnime_Update(&this->skelAnime);
     if (this->actor.bgCheckFlags & 1) {
-        func_809F4CBC(this, 1.0f);
+        Boss07_SmoothStop(this, 1.0f);
         Math_ApproachS(&this->actor.shape.rot.x, -0x4000, 1, 0x1000);
         Math_ApproachS(&this->unk_18D4, 0, 1, 0x100);
     } else {
@@ -4403,7 +4379,7 @@ void Boss07_Mask_Damaged(Boss07* this, GlobalContext* globalCtx) {
         this->unk_774 = 1;
     }
     if (this->timers[0] == 0) {
-        Boss07_SetupIdle(this, globalCtx);
+        Boss07_Mask_SetupIdle(this, globalCtx);
         if ((s8)this->actor.colChkInfo.health <= 0) {
             this->unk_148 = 1;
             Enemy_StartFinishingBlow(globalCtx, &this->actor);
@@ -4454,7 +4430,7 @@ void Boss07_Mask_Beam(Boss07* this, GlobalContext* globalCtx) {
     u32 sp144;
 
     this->unk_15C = 20;
-    func_809F4CBC(this, 0.5f);
+    Boss07_SmoothStop(this, 0.5f);
     Math_ApproachF(&this->actor.world.pos.y, 300.0f, 0.05f, 1.0f);
     Math_ApproachS(&this->actor.shape.rot.z, 0, 0xA, 0x400);
     if ((player->unk_730 != NULL) && (player->stateFlags1 & 0x400000)) {
@@ -4717,7 +4693,7 @@ void Boss07_Mask_Beam(Boss07* this, GlobalContext* globalCtx) {
             } else {
                 Math_ApproachZeroF(&this->unk_1898, 1.0f, 0.05f);
                 if (this->timers[0] == 0) {
-                    Boss07_SetupIdle(this, globalCtx);
+                    Boss07_Mask_SetupIdle(this, globalCtx);
                     this->timers[2] = 100;
                     func_80A006D0(this);
                 }
@@ -4735,13 +4711,13 @@ void Boss07_Mask_SetupIntro(Boss07* this, GlobalContext* globalCtx) {
     func_8016566C(this->unk_160);
 }
 
-static Vec3s sCameraEyes[4] = {
+static Vec3s sIntroCamEyes[4] = {
     { 616, 402, -46 },
     { -622, 380, -86 },
     { 400, 300, 463 },
     { -400, 470, 496 },
 };
-static Vec3s sCameraAts[4] = {
+static Vec3s sIntroCamAts[4] = {
     { 646, 394, -150 },
     { -648, 380, -190 },
     { 502, 321, 438 },
@@ -4837,12 +4813,12 @@ void Boss07_Mask_Intro(Boss07* this, GlobalContext* globalCtx) {
                     this->unk_ABCC++;
                     sBossRemains[this->unk_ABCC]->unk_14E = 3;
                 }
-                this->csCamEye.x = sCameraEyes[this->unk_ABCC].x;
-                this->csCamEye.y = sCameraEyes[this->unk_ABCC].y;
-                this->csCamEye.z = sCameraEyes[this->unk_ABCC].z;
-                this->csCamAt.x = sCameraAts[this->unk_ABCC].x;
-                this->csCamAt.y = sCameraAts[this->unk_ABCC].y;
-                this->csCamAt.z = sCameraAts[this->unk_ABCC].z;
+                this->csCamEye.x = sIntroCamEyes[this->unk_ABCC].x;
+                this->csCamEye.y = sIntroCamEyes[this->unk_ABCC].y;
+                this->csCamEye.z = sIntroCamEyes[this->unk_ABCC].z;
+                this->csCamAt.x = sIntroCamAts[this->unk_ABCC].x;
+                this->csCamAt.y = sIntroCamAts[this->unk_ABCC].y;
+                this->csCamAt.z = sIntroCamAts[this->unk_ABCC].z;
                 if (this->unk_ABC8 == 250) {
                     this->csState = 3;
                     this->unk_ABC8 = 0;
@@ -4939,7 +4915,7 @@ void Boss07_Mask_Intro(Boss07* this, GlobalContext* globalCtx) {
                     Camera* sp5C = Play_GetCamera(globalCtx, 0);
 
                     this->csState = 0;
-                    Boss07_SetupIdle(this, globalCtx);
+                    Boss07_Mask_SetupIdle(this, globalCtx);
                     this->timers[0] = 50;
                     this->timers[2] = 200;
                     this->unk_1888 = 50;
@@ -4999,7 +4975,7 @@ void Boss07_Mask_Death(Boss07* this, GlobalContext* globalCtx) {
     this->unk_15C = 20;
     this->unk_1884 = 1;
     SkelAnime_Update(&this->skelAnime);
-    func_809F4CBC(this, 0.5f);
+    Boss07_SmoothStop(this, 0.5f);
     Math_ApproachF(&this->actor.world.pos.x, 0.0f, 0.05f, 5.0f);
     Math_ApproachF(&this->actor.world.pos.z, 0.0f, 0.05f, 5.0f);
     Math_ApproachF(&this->actor.world.pos.y, 130.0f, 0.05f, 3.0f);
@@ -5073,8 +5049,8 @@ void Boss07_Mask_Death(Boss07* this, GlobalContext* globalCtx) {
 void Boss07_Mask_CollisionCheck(Boss07* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     ColliderInfo* hitbox;
-    u8 sp27;
-    Actor* hit;
+    u8 damage;
+    Actor* hitActor;
 
     if (this->unk_15C == 0) {
         if (this->quad1.base.acFlags & AC_HIT) {
@@ -5085,14 +5061,14 @@ void Boss07_Mask_CollisionCheck(Boss07* this, GlobalContext* globalCtx) {
             this->quad2.base.acFlags &= ~AC_HIT;
             this->unk_186C = 15;
             if ((this->actionFunc == Boss07_Mask_Stunned) || (player->stateFlags3 & 0x200)) {
-                hit = this->quad2.base.ac;
+                hitActor = this->quad2.base.ac;
                 hitbox = this->quad2.info.acHitInfo;
-                sp27 = (hitbox->toucher.dmgFlags & 0xF7CFFFFF) ? this->actor.colChkInfo.damage : 0;
+                damage = (hitbox->toucher.dmgFlags & 0xF7CFFFFF) ? this->actor.colChkInfo.damage : 0;
                 this->unk_15C = 50;
                 this->unk_15E = 15;
                 func_801A72CC(&this->actor.projectedPos);
                 Audio_PlayActorSound2(&this->actor, NA_SE_EN_LAST1_DAMAGE2_OLD);
-                Boss07_Mask_SetupDamaged(this, globalCtx, sp27, hit);
+                Boss07_Mask_SetupDamaged(this, globalCtx, damage, hitActor);
             } else {
                 this->unk_15C = 15;
                 func_801A72CC(&this->actor.projectedPos);
@@ -5466,7 +5442,7 @@ void Boss07_Mask_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     gSPDisplayList(POLY_OPA_DISP++, D_0600AFB0);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 155, 155, 80, 255);
 
-    phi_s6 = ((this->actionFunc == Boss07_Idle) &&
+    phi_s6 = ((this->actionFunc == Boss07_Mask_Idle) &&
               (ABS_ALT((s16)(this->actor.world.rot.y - this->actor.shape.rot.y)) > 0x4000))
                  ? 1
                  : 0;
@@ -5544,7 +5520,7 @@ void Boss07_Projectile_Update(Actor* thisx, GlobalContext* globalCtx2) {
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 50.0f, 31.0f, 100.0f, 7);
         this->actor.shape.rot.z += 0x1200;
         if ((this->actor.bgCheckFlags & 0x19) || (this->cyl2.base.atFlags & 2) || (this->cyl2.base.atFlags & 2) ||
-            (D_80A09A70 != 0)) {
+            sKillProjectiles) {
             Actor_MarkForDeath(&this->actor);
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
                         this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, this->unk_181C,
@@ -5563,10 +5539,10 @@ void Boss07_Projectile_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
     gDPPipeSync(POLY_XLU_DISP++);
-    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, D_80A07968[this->unk_181C][0], D_80A07968[this->unk_181C][1],
-                    D_80A07968[this->unk_181C][2], 255);
-    gDPSetEnvColor(POLY_XLU_DISP++, D_80A07950[this->unk_181C][0], D_80A07950[this->unk_181C][1],
-                   D_80A07950[this->unk_181C][2], 128);
+    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, sColorsWhite[this->unk_181C][0], sColorsWhite[this->unk_181C][1],
+                    sColorsWhite[this->unk_181C][2], 255);
+    gDPSetEnvColor(POLY_XLU_DISP++, sColorsYRGB[this->unk_181C][0], sColorsYRGB[this->unk_181C][1],
+                   sColorsYRGB[this->unk_181C][2], 128);
     Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, 0.0f, 1);
     Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
@@ -5763,7 +5739,7 @@ void func_80A04E5C(Boss07* this, GlobalContext* globalCtx) {
             sp74 = this->unk_164.y - this->actor.world.pos.y;
             sp70 = this->unk_164.z - this->actor.world.pos.z;
             sp7C = Math_Atan2S(sp78, sp70);
-            sp7E = Math_Atan2S(sp74, sqrtf((sp78 * sp78) + (sp70 * sp70)));
+            sp7E = Math_Atan2S(sp74, sqrtf(SQ(sp78) + SQ(sp70)));
             sp7E += (s16)(Math_SinS(this->unk_14C * 0x1388) * 4000.0f);
             Math_ApproachS(&this->actor.world.rot.y, sp7C, 0xA, this->unk_170);
             Math_ApproachS(&this->actor.world.rot.x, sp7E, 5, this->unk_170);
@@ -5797,7 +5773,7 @@ void func_80A04E5C(Boss07* this, GlobalContext* globalCtx) {
                     this->actor.draw = NULL;
                     this->actor.flags &= ~1;
                 }
-                func_809F4CBC(this, 2.0f);
+                Boss07_SmoothStop(this, 2.0f);
             } else {
                 this->actor.shape.rot.z += 0x200;
             }
@@ -6381,28 +6357,28 @@ void Boss07_Static_UpdateEffects(GlobalContext* globalCtx) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(sEffects); i++, effect++) {
-        if (effect->unk_0 != 0) {
-            effect->unk_2++;
+        if (effect->type != 0) {
+            effect->scroll++;
 
-            effect->unk_4.x += effect->unk_10.x;
-            effect->unk_4.y += effect->unk_10.y;
-            effect->unk_4.z += effect->unk_10.z;
+            effect->pos.x += effect->vel.x;
+            effect->pos.y += effect->vel.y;
+            effect->pos.z += effect->vel.z;
 
-            effect->unk_10.x += effect->unk_1C.x;
-            effect->unk_10.y += effect->unk_1C.y;
-            effect->unk_10.z += effect->unk_1C.z;
-            if (effect->unk_0 == 1) {
-                if (effect->unk_30 != 0) {
-                    effect->unk_2C -= (i & 7) + 13;
-                    if (effect->unk_2C <= 0) {
-                        effect->unk_2C = 0;
-                        effect->unk_0 = 0;
+            effect->vel.x += effect->accel.x;
+            effect->vel.y += effect->accel.y;
+            effect->vel.z += effect->accel.z;
+            if (effect->type == 1) {
+                if (effect->isFading) {
+                    effect->alpha -= (i & 7) + 13;
+                    if (effect->alpha <= 0) {
+                        effect->alpha = 0;
+                        effect->type = 0;
                     }
                 } else {
-                    effect->unk_2C += 300;
-                    if (effect->unk_2C >= 255) {
-                        effect->unk_2C = 255;
-                        effect->unk_30++;
+                    effect->alpha += 300;
+                    if (effect->alpha >= 255) {
+                        effect->alpha = 255;
+                        effect->isFading++;
                     }
                 }
             }
@@ -6418,14 +6394,14 @@ void Boss07_Static_DrawEffects(GlobalContext* globalCtx) {
     OPEN_DISPS(gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
     for (i = 0; i < ARRAY_COUNT(sEffects); i++, effect++) {
-        if (effect->unk_0 > 0) {
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 200, 20, 0, effect->unk_2C);
+        if (effect->type > 0) {
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 200, 20, 0, effect->alpha);
             gDPPipeSync(POLY_XLU_DISP++);
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 215, 255, 128);
             gSPSegment(POLY_XLU_DISP++, 8,
-                       Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, (3 * effect->unk_2) & 0x7F,
-                                        (15 * -effect->unk_2) & 0xFF, 0x20, 0x40, 1, 0, 0, 0x20, 0x20));
-            Matrix_InsertTranslation(effect->unk_4.x, effect->unk_4.y, effect->unk_4.z, 0);
+                       Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, (3 * effect->scroll) & 0x7F,
+                                        (15 * -effect->scroll) & 0xFF, 0x20, 0x40, 1, 0, 0, 0x20, 0x20));
+            Matrix_InsertTranslation(effect->pos.x, effect->pos.y, effect->pos.z, 0);
             Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
             Matrix_Scale(effect->unk_34, effect->unk_34, 1.0f, 1);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), 2);
