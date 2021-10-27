@@ -1712,34 +1712,27 @@ PosRot* Actor_GetWorldPosShapeRot(PosRot* dest, Actor* actor) {
     return dest;
 }
 
-#ifdef NON_MATCHING
-// wrong float register
 f32 func_800B82EC(Actor* actor, Player* player, s16 arg2) {
     f32 temp_f12;
     s16 temp_v0 = BINANG_SUB(BINANG_SUB(actor->yawTowardsPlayer, 0x8000), arg2);
-    s16 temp_v1;
-    s32 phi_v1;
+    s16 yaw;
 
-    temp_v1 = ABS_ALT(temp_v0);
+    yaw = ABS_ALT(temp_v0);
 
     if (player->unk_730 != NULL) {
-        if ((temp_v1 > 0x4000) || ((actor->flags & 0x8000000))) {
-            // return FLT_MAX;
-            return 3.4028235e38f;
+        if ((yaw > 0x4000) || ((actor->flags & 0x8000000))) {
+            return FLT_MAX;
         }
 
-        return actor->xyzDistToPlayerSq - (actor->xyzDistToPlayerSq * 0.8f * ((0x4000 - temp_v1) * 0.000030517578f));
+        temp_f12 = actor->xyzDistToPlayerSq - ((actor->xyzDistToPlayerSq * 0.8f) * ((0x4000 - yaw) * 0.000030517578f));
+        return temp_f12;
     }
 
-    if (temp_v1 >= 0x2AAB) {
-        // return FLT_MAX;
-        return 3.4028235e38f;
+    if (yaw >= 0x2AAB) {
+        return FLT_MAX;
     }
     return actor->xyzDistToPlayerSq;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B82EC.s")
-#endif
 
 TargetRangeParams D_801AECF0[] = {
     TARGET_RANGE(70, 140),   TARGET_RANGE(170, 255),    TARGET_RANGE(280, 5600),      TARGET_RANGE(350, 525),
