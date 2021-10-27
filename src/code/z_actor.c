@@ -1335,7 +1335,11 @@ void func_800B72F8(DynaPolyActor* dyna, f32 a1, s16 a2) {
     dyna->unk148 += a1;
 }
 
-s32 Actor_IsPlayerFacingActor(Actor* actor, s16 tolerance, GlobalContext* globalCtx) {
+/**
+ * Chcek if the player is facing the specified actor.
+ * The maximum angle difference that qualifies as "facing" is specified by `tolerance`.
+ */
+s32 Player_IsFacingActor(Actor* actor, s16 tolerance, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s16 yawDiff = BINANG_ADD(actor->yawTowardsPlayer, 0x8000) - player->actor.shape.rot.y;
 
@@ -1345,18 +1349,28 @@ s32 Actor_IsPlayerFacingActor(Actor* actor, s16 tolerance, GlobalContext* global
     return false;
 }
 
-s32 Actor_IsActorFacedByActor(Actor* actor, Actor* other, s16 tolerance) {
-    s16 angle = BINANG_ROT180(Actor_YawBetweenActors(actor, other));
+/**
+ * Chcek if `actorB` is facing `actorA`.
+ * The maximum angle difference that qualifies as "facing" is specified by `maxAngle`.
+ *
+ * This function is unused in the original game.
+ */
+s32 Actor_ActorBIsFacingActorA(Actor* actorA, Actor* actorB, s16 tolerance) {
+    s16 angle = BINANG_ROT180(Actor_YawBetweenActors(actorA, actorB));
     s16 dist;
 
-    dist = angle - other->shape.rot.y;
+    dist = angle - actorB->shape.rot.y;
     if (ABS_ALT(dist) < tolerance) {
         return true;
     }
     return false;
 }
 
-s32 Actor_IsActorFacingPlayer(Actor* actor, s16 angle) {
+/**
+ * Chcek if the specified actor is facing the player.
+ * The maximum angle difference that qualifies as "facing" is specified by `tolerance`.
+ */
+s32 Actor_IsFacingPlayer(Actor* actor, s16 angle) {
     s16 dist = actor->yawTowardsPlayer - actor->shape.rot.y;
 
     if (ABS_ALT(dist) < angle) {
@@ -1365,37 +1379,51 @@ s32 Actor_IsActorFacingPlayer(Actor* actor, s16 angle) {
     return false;
 }
 
-s32 Actor_IsActorFacingActor(Actor* actor, Actor* other, s16 tolerance) {
-    s16 dist = Actor_YawBetweenActors(actor, other) - actor->shape.rot.y;
+/**
+ * Chcek if `actorA` is facing `actorB`.
+ * The maximum angle difference that qualifies as "facing" is specified by `tolerance`.
+ */
+s32 Actor_ActorAIsFacingActorB(Actor* actorA, Actor* actorB, s16 tolerance) {
+    s16 dist = Actor_YawBetweenActors(actorA, actorB) - actorA->shape.rot.y;
 
     if (ABS_ALT(dist) < tolerance) {
-        return 1;
+        return true;
     }
-    return 0;
+    return false;
 }
 
-s32 Actor_IsActorFacingPlayerAndWithinRange(Actor* actor, f32 range, s16 tolerance) {
+/**
+ * Chcek if the specified actor is facing the player and is nearby.
+ * The maximum angle difference that qualifies as "facing" is specified by `tolerance`.
+ * The minimum distance that qualifies as "nearby" is specified by `range`.
+ */
+s32 Actor_IsFacingAndNearPlayer(Actor* actor, f32 range, s16 tolerance) {
     s16 yaw = actor->yawTowardsPlayer - actor->shape.rot.y;
 
     if (ABS_ALT(yaw) < tolerance) {
     label:;
         if (sqrtf(SQ(actor->xzDistToPlayer) + SQ(actor->yDistToPlayer)) < range) {
-            return 1;
+            return true;
         }
     }
-    return 0;
+
+    return false;
 }
 
-s32 Actor_IsActorFacingActorAndWithinRange(Actor* actor, Actor* other, f32 range, s16 tolerance) {
-    s16 dist;
+/**
+ * Chcek if `actorA` is facing `actorB` and is nearby.
+ * The maximum angle difference that qualifies as "facing" is specified by `tolerance`.
+ * The minimum distance that qualifies as "nearby" is specified by `range`.
+ */
+s32 Actor_ActorAIsFacingAndNearActorB(Actor* actorA, Actor* actorB, f32 range, s16 tolerance) {
+    if (Actor_DistanceBetweenActors(actorA, actorB) < range) {
+        s16 dist = Actor_YawBetweenActors(actorA, actorB) - actorA->shape.rot.y;
 
-    if (Actor_DistanceBetweenActors(actor, other) < range) {
-        dist = Actor_YawBetweenActors(actor, other) - actor->shape.rot.y;
         if (ABS_ALT(dist) < tolerance) {
-            return 1;
+            return true;
         }
     }
-    return 0;
+    return false;
 }
 
 void func_800B75A0(CollisionPoly* param_1, Vec3f* param_2, s16* param_3) {
@@ -1467,11 +1495,10 @@ s32 func_800B7678(GlobalContext* globalCtx, Actor* actor, Vec3f* arg2, s32 arg3)
 
 void Actor_UpdateBgCheckInfo(GlobalContext* globalCtx, Actor* actor, f32 wallCheckHeight, f32 wallCheckRadius,
                              f32 ceilingCheckHeight, u32 flags) {
-    f32 sp94;
+    f32 sp94 = actor->world.pos.y - actor->prevPos.y;
     s32 pad;
     Vec3f sp84;
 
-    sp94 = actor->world.pos.y - actor->prevPos.y;
     if ((actor->floorBgId != 0x32) && (actor->bgCheckFlags & 1)) {
         BgCheck2_UpdateActorAttachedToMesh(&globalCtx->colCtx, actor->floorBgId, actor);
     }
@@ -1581,12 +1608,8 @@ void Actor_UpdateBgCheckInfo(GlobalContext* globalCtx, Actor* actor, f32 wallChe
 }
 
 Gfx* func_800B7E04(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContext* gfxCtx, Gfx* dl, Hilite** hilite) {
-    LookAt* lookAt;
-    f32 correctedEyeX;
-
-    lookAt = GRAPH_ALLOC(gfxCtx, sizeof(LookAt));
-
-    correctedEyeX = (eye->x == object->x) && (eye->z == object->z) ? eye->x + 0.001f : eye->x;
+    LookAt* lookAt = GRAPH_ALLOC(gfxCtx, sizeof(LookAt));
+    f32 correctedEyeX = (eye->x == object->x) && (eye->z == object->z) ? eye->x + 0.001f : eye->x;
 
     *hilite = GRAPH_ALLOC(gfxCtx, sizeof(Hilite));
 
@@ -1601,27 +1624,27 @@ Gfx* func_800B7E04(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContext* 
 }
 
 Hilite* func_800B7FE0(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContext* gfxCtx) {
-    Hilite* sp2C;
+    Hilite* hilite;
 
     OPEN_DISPS(gfxCtx);
 
-    POLY_OPA_DISP = func_800B7E04(object, eye, lightDir, gfxCtx, POLY_OPA_DISP, &sp2C);
+    POLY_OPA_DISP = func_800B7E04(object, eye, lightDir, gfxCtx, POLY_OPA_DISP, &hilite);
 
     CLOSE_DISPS(gfxCtx);
 
-    return sp2C;
+    return hilite;
 }
 
 Hilite* func_800B8018(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContext* gfxCtx) {
-    Hilite* sp2C;
+    Hilite* hilite;
 
     OPEN_DISPS(gfxCtx);
 
-    POLY_XLU_DISP = func_800B7E04(object, eye, lightDir, gfxCtx, POLY_XLU_DISP, &sp2C);
+    POLY_XLU_DISP = func_800B7E04(object, eye, lightDir, gfxCtx, POLY_XLU_DISP, &hilite);
 
     CLOSE_DISPS(gfxCtx);
 
-    return sp2C;
+    return hilite;
 }
 
 void func_800B8050(Actor* actor, GlobalContext* globalCtx, s32 flag) {
@@ -1693,11 +1716,10 @@ PosRot* Actor_GetWorldPosShapeRot(PosRot* dest, Actor* actor) {
 // wrong float register
 f32 func_800B82EC(Actor* actor, Player* player, s16 arg2) {
     f32 temp_f12;
-    s16 temp_v0;
+    s16 temp_v0 = BINANG_SUB(BINANG_SUB(actor->yawTowardsPlayer, 0x8000), arg2);
     s16 temp_v1;
     s32 phi_v1;
 
-    temp_v0 = BINANG_SUB(BINANG_SUB(actor->yawTowardsPlayer, 0x8000), arg2);
     temp_v1 = ABS_ALT(temp_v0);
 
     if (player->unk_730 != NULL) {
@@ -4197,7 +4219,7 @@ s16 func_800BDB6C(Actor* actor, GlobalContext* globalCtx, s16 arg2, f32 arg3) {
     }
 
     if (arg3 < phi_f2) {
-        actor->flags &= -2;
+        actor->flags &= ~1;
         Math_SmoothStepToS(&arg2, 0, 6, 0x14, 1);
     } else {
         actor->flags |= 1;

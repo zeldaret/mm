@@ -457,7 +457,7 @@ s32 func_8089AE00(EnDinofos* this, GlobalContext* globalCtx) {
     }
 
     if ((this->actor.xzDistToPlayer < 100.0f) && (player->swordState != 0) && this->actor.isTargeted &&
-        (Rand_ZeroOne() < 0.5f) && func_8089A968(this) && Actor_IsPlayerFacingActor(&this->actor, 0x2000, globalCtx)) {
+        (Rand_ZeroOne() < 0.5f) && func_8089A968(this) && Player_IsFacingActor(&this->actor, 0x2000, globalCtx)) {
         if (Rand_ZeroOne() < 0.5f) {
             func_8089C024(this, 2);
         } else {

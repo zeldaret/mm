@@ -600,7 +600,7 @@ void func_808D506C(EnRd* this, GlobalContext* globalCtx) {
     }
 
     if (!this->unk_3EE && (Actor_DistanceBetweenActors(&this->actor, &player->actor) <= 45.0f) &&
-        Actor_IsActorFacingPlayer(&this->actor, 0x38E3)) {
+        Actor_IsFacingPlayer(&this->actor, 0x38E3)) {
         player->actor.freezeTimer = 0;
         if ((player->transformation == PLAYER_FORM_GORON) || (player->transformation == PLAYER_FORM_DEKU)) {
             if (Actor_DistanceToPoint(&this->actor, &this->actor.home.pos) < 150.0f) {

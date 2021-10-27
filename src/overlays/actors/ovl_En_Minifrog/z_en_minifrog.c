@@ -335,7 +335,7 @@ void EnMinifrog_Idle(EnMinifrog* this, GlobalContext* globalCtx) {
         if (this->actor.cutscene != -1) {
             this->flags |= 1;
         }
-    } else if ((this->actor.xzDistToPlayer < 100.0f) && Actor_IsPlayerFacingActor(&this->actor, 0x3000, globalCtx) &&
+    } else if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, globalCtx) &&
                (Player_GetMask(globalCtx) == PLAYER_MASK_DON_GEROS_MASK)) {
         func_800B8614(&this->actor, &globalCtx->state, 110.0f);
     }
@@ -576,7 +576,7 @@ void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, GlobalContext* globalCtx
             func_801518B0(globalCtx, 0xD7F, &this->actor); // "Well, if it isn't the great Don Gero."
         }
     } else if ((this->actor.xzDistToPlayer < 150.0f) &&
-               (Actor_IsPlayerFacingActor(&this->actor, 0x3000, globalCtx) ||
+               (Player_IsFacingActor(&this->actor, 0x3000, globalCtx) ||
                 ((this->actor.flags & 0x10000) == 0x10000)) &&
                Player_GetMask(globalCtx) == PLAYER_MASK_DON_GEROS_MASK) {
         func_800B8614(&this->actor, &globalCtx->state, 160.0f);

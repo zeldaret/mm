@@ -312,7 +312,7 @@ void func_80B2CD64(EnPoh* this, GlobalContext* globalCtx) {
     if (this->actor.xzDistToPlayer > 280.0f) {
         func_80B2CB60(this);
     } else if ((this->unk_18E == 0) && (this->actor.xzDistToPlayer < 140.0f) &&
-               !Actor_IsPlayerFacingActor(&this->actor, 0x2AAA, globalCtx)) {
+               !Player_IsFacingActor(&this->actor, 0x2AAA, globalCtx)) {
         func_80B2CEC8(this);
     }
 

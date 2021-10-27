@@ -559,7 +559,7 @@ void func_80C1193C(EnThiefbird* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.x, pitch, 4, 0x800, 0x80);
     if (this->actor.bgCheckFlags & 8) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.wallYaw, 6, 0x1000, 0x100);
-    } else if (Actor_IsActorFacingPlayer(&this->actor, 0x3C00) || (this->actor.xzDistToPlayer > 120.0f)) {
+    } else if (Actor_IsFacingPlayer(&this->actor, 0x3C00) || (this->actor.xzDistToPlayer > 120.0f)) {
         s16 rot = BINANG_ROT180(this->actor.yawTowardsPlayer - player->actor.shape.rot.y);
 
         if (rot > 0x4000) {

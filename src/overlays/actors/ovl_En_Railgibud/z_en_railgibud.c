@@ -325,7 +325,7 @@ void func_80BA5B64(EnRailgibud* this, GlobalContext* globalCtx) {
     this->actor.world.rot = this->actor.shape.rot;
     Math_SmoothStepToS(&this->unk_3E2, 0, 1, 0x64, 0);
     Math_SmoothStepToS(&this->unk_3E8, 0, 1, 0x64, 0);
-    if (func_80BA6D10(this, globalCtx) && Actor_IsActorFacingPlayer(&this->actor, 0x38E3)) {
+    if (func_80BA6D10(this, globalCtx) && Actor_IsFacingPlayer(&this->actor, 0x38E3)) {
         if ((this->unk_3F4 == 0) && (this->actor.xzDistToPlayer <= 45.0f)) {
             player->actor.freezeTimer = 0;
             if ((gSaveContext.playerForm == PLAYER_FORM_GORON) || (gSaveContext.playerForm == PLAYER_FORM_DEKU)) {
@@ -495,7 +495,7 @@ void func_80BA62D4(EnRailgibud* this, GlobalContext* globalCtx) {
     }
     if (func_80BA6D10(this, globalCtx)) {
         if ((gSaveContext.playerForm != PLAYER_FORM_GORON) && (gSaveContext.playerForm != PLAYER_FORM_DEKU) &&
-            Actor_IsActorFacingPlayer(&this->actor, 0x38E3)) {
+            Actor_IsFacingPlayer(&this->actor, 0x38E3)) {
             func_80BA5AF0(this);
         }
     }
