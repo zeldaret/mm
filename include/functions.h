@@ -10,6 +10,11 @@ float sqrtf(float f);
 double sqrt(double d);
 #pragma intrinsic(sqrt)
 
+typedef void (*arg3_8008633C)(void*);
+typedef void (*arg3_800863AC)(void*, u32);
+typedef void (*arg3_8008641C)(void*, u32, u32, u32, u32, u32, u32, u32, u32);
+typedef void (*arg3_800864EC)(void*, u32);
+
 void bootproc(void);
 void Idle_ThreadEntry(void* arg);
 void ViConfig_UpdateVi(u32 arg0);
@@ -162,12 +167,12 @@ void __assert(const char* file, u32 lineNum);
 // void func_800862B4(void);
 void* SystemArena_MallocMin1(u32 size);
 void SystemArena_FreeNull(void* pvParm1);
-void func_8008633C(u32 param_1, s32 param_2, s32 param_3, UNK_PTR param_4);
-void func_800863AC(u32 param_1, s32 param_2, s32 param_3, UNK_PTR param_4);
-// void func_8008641C(void);
-// void func_800864EC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
-// void func_80086588(void);
-void SystemArena_Init(u32 base, u32 size);
+void func_8008633C(void* blk, u32 nBlk, u32 blkSize, arg3_8008633C arg3);
+void func_800863AC(void* blk, u32 nBlk, s32 blkSize, arg3_800863AC arg3);
+void* func_8008641C(void* blk, u32 nBlk, u32 blkSize, arg3_8008641C arg3);
+void func_800864EC(void* blk, u32 nBlk, u32 blkSize, arg3_800864EC arg3, s32 arg4);
+void func_80086588(void);
+void SystemArena_Init(void* start, u32 size);
 s32 func_80086620(OSMesgQueue* param_1, PadMgr* param_2, OSContStatus* param_3);
 // void func_80086760(void);
 // void func_80086794(void);
