@@ -63,6 +63,9 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globa
         globalCtx->envCtx.unk_F2[3] += 16;
     }
 
+    // @ ! Bug: DemoKankyo can crash if placed in an area that snows (ObjectKankyo)
+    // because they both use unk_F2 as a particle counter,
+    // causing DemoKankyo to write beyond its particle array boundry
     for (i = 0; i < globalCtx->envCtx.unk_F2[3]; i++) {
         static130 = 130.0f;
 

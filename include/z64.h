@@ -874,7 +874,7 @@ typedef struct {
     /* 0xEC */ u8 unk_EC;
     /* 0xED */ u8 unk_ED;
     /* 0xEE */ u8 unk_EE[4];
-    /* 0xF2 */ u8 unk_F2[8];
+    /* 0xF2 */ u8 unk_F2[8]; // [3] is used by both DemoKankyo and ObjectKankyo particle count
     /* 0xFA */ u8 unk_FA[4];
 } EnvironmentContext; // size = 0x100
 
