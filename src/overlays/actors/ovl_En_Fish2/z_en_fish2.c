@@ -114,18 +114,18 @@ void func_80B28370(EnFish2* this, s32 arg0) {
     f32 sp34;
 
     this->unk_2AC = arg0;
-    this->unk_2CC = SkelAnime_GetFrameCount(&D_80B2B388[arg0]->common);
+    this->unk_2CC = Animation_GetLastFrame(&D_80B2B388[arg0]->common);
     sp34 = 0.0f;
     if (this->unk_2AC == 3) {
-        sp34 = SkelAnime_GetFrameCount(&D_80B2B388[this->unk_2AC]->common) - 21.0f;
+        sp34 = Animation_GetLastFrame(&D_80B2B388[this->unk_2AC]->common) - 21.0f;
     }
 
     if (this->unk_2AC == 2) {
-        this->unk_2CC = SkelAnime_GetFrameCount(&D_80B2B388[this->unk_2AC]->common) - 21.0f;
+        this->unk_2CC = Animation_GetLastFrame(&D_80B2B388[this->unk_2AC]->common) - 21.0f;
     }
 
-    SkelAnime_ChangeAnim(&this->skelAnime, D_80B2B388[this->unk_2AC], 1.0f, sp34, this->unk_2CC,
-                         D_80B2B3A0[this->unk_2AC], -10.0f);
+    Animation_Change(&this->skelAnime, D_80B2B388[this->unk_2AC], 1.0f, sp34, this->unk_2CC, D_80B2B3A0[this->unk_2AC],
+                     -10.0f);
 }
 
 s32 func_80B28478(EnFish2* this) {
@@ -160,7 +160,8 @@ void EnFish2_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->actor.params == 0) {
         ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
-        SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06006190, &D_060013AC, this->jointTable, this->morphTable, 24);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06006190, &D_060013AC, this->jointTable, this->morphTable,
+                           24);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         if (this->unk_344 == 0) {
             if (gSaveContext.weekEventReg[81] & 0x10) {
@@ -488,7 +489,7 @@ void func_80B2938C(EnFish2* this) {
 }
 
 void func_80B293C4(EnFish2* this, GlobalContext* globalCtx) {
-    f32 currentFrame = this->skelAnime.animCurrentFrame;
+    f32 currentFrame = this->skelAnime.curFrame;
 
     if (func_80B28478(this) == 0) {
         func_80B287F4(this, 1);
@@ -536,11 +537,11 @@ void func_80B2951C(EnFish2* this) {
 
 void func_80B295A4(EnFish2* this, GlobalContext* globalCtx) {
     s32 i;
-    f32 currentFrame = this->skelAnime.animCurrentFrame;
+    f32 currentFrame = this->skelAnime.curFrame;
     s32 pad;
     Vec3f sp60;
 
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &globalCtx->view.eye), 1,
                        0x1388, 0);
     Math_ApproachZeroF(&this->actor.speedXZ, 0.3f, 0.3f);
@@ -878,10 +879,10 @@ void func_80B2A448(EnFish2* this) {
 }
 
 void func_80B2A498(EnFish2* this, GlobalContext* globalCtx) {
-    f32 currentFrame = this->skelAnime.animCurrentFrame;
+    f32 currentFrame = this->skelAnime.curFrame;
     Vec3f sp80;
 
-    if ((this->unk_2AC == 4) && func_801378B8(&this->skelAnime, 13.0f)) {
+    if ((this->unk_2AC == 4) && Animation_OnFrame(&this->skelAnime, 13.0f)) {
         Actor* temp_v0;
 
         Math_Vec3f_Copy(&sp80, &this->unk_318);
@@ -900,7 +901,8 @@ void func_80B2A498(EnFish2* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((this->unk_2AC == 4) && (func_801378B8(&this->skelAnime, 13.0f) || func_801378B8(&this->skelAnime, 31.0f))) {
+    if ((this->unk_2AC == 4) &&
+        (Animation_OnFrame(&this->skelAnime, 13.0f) || Animation_OnFrame(&this->skelAnime, 31.0f))) {
         WaterBox* sp78;
 
         if (func_800CA1AC(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
@@ -937,7 +939,7 @@ void EnFish2_Update(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
 
     if ((this->actionFunc != func_80B295A4) && (this->actor.params != 1)) {
-        SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+        SkelAnime_Update(&this->skelAnime);
     }
 
     if (this->unk_2B8 != 0) {
@@ -1053,23 +1055,23 @@ void EnFish2_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     if ((limbIndex == 20) || (limbIndex == 21)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        SysMatrix_StatePush();
-        SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
+        Matrix_StatePush();
+        Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, *dList);
 
-        SysMatrix_StatePop();
+        Matrix_StatePop();
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 
     if (limbIndex == 14) {
-        SysMatrix_MultiplyVector3fByState(&D_801D15B0, &this->unk_318);
+        Matrix_MultiplyVector3fByState(&D_801D15B0, &this->unk_318);
     }
 
     if (limbIndex == 17) {
-        SysMatrix_MultiplyVector3fByState(&D_801D15B0, &this->unk_300);
+        Matrix_MultiplyVector3fByState(&D_801D15B0, &this->unk_300);
     }
 
     Collider_UpdateSpheres(limbIndex, &this->collider);
@@ -1080,8 +1082,8 @@ void EnFish2_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                     EnFish2_OverrideLimbDraw, EnFish2_PostLimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnFish2_OverrideLimbDraw, EnFish2_PostLimbDraw, &this->actor);
     func_80B2B180(this, globalCtx);
 }
 
@@ -1161,7 +1163,7 @@ void func_80B2B180(EnFish2* this, GlobalContext* globalCtx) {
 
     for (i = 0; i < ARRAY_COUNT(this->unk_3F8); i++, ptr++) {
         if (ptr->unk_00) {
-            SysMatrix_InsertTranslation(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
+            Matrix_InsertTranslation(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
             Matrix_Scale(ptr->unk_14, ptr->unk_14, ptr->unk_14, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
