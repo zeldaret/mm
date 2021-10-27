@@ -5,6 +5,7 @@
  */
 
 #include "z_en_ot.h"
+#include "prevent_bss_reordering.h"
 
 #define FLAGS 0x00000019
 
@@ -155,12 +156,12 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 30.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06004800, &D_060008D8, this->jointTable, this->morphTable, 19);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06004800, &D_060008D8, this->jointTable, this->morphTable, 19);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    SkelAnime_ChangeAnim(&this->skelAnime, sAnimations[0].animationSeg, 1.0f,
-                         SkelAnime_GetFrameCount(&sAnimations[0].animationSeg->common) * Rand_ZeroOne(),
-                         SkelAnime_GetFrameCount(&sAnimations[0].animationSeg->common), sAnimations[0].mode,
-                         sAnimations[0].transitionRate);
+    Animation_Change(&this->skelAnime, sAnimations[0].animationSeg, 1.0f,
+                     Animation_GetLastFrame(&sAnimations[0].animationSeg->common) * Rand_ZeroOne(),
+                     Animation_GetLastFrame(&sAnimations[0].animationSeg->common), sAnimations[0].mode,
+                     sAnimations[0].transitionRate);
     this->unk_346 = ENOT_GET_7F(&this->actor);
     this->unk_344 = this->actor.world.rot.z;
     this->actor.world.rot.z = 0;
@@ -169,7 +170,7 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.gravity = 0.0f;
     func_8013E3B8(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
     func_8013E1C8(&this->skelAnime, sAnimations, 0, &this->animIdx);
-    this->skelAnime.animCurrentFrame = Rand_ZeroOne() * this->skelAnime.animFrameCount;
+    this->skelAnime.curFrame = Rand_ZeroOne() * this->skelAnime.endFrame;
     this->lightNode = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->lightInfo);
     this->unk_744.r = 255;
     this->unk_744.g = 200;
@@ -187,7 +188,7 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
                         50.0f;
                     if (gSaveContext.weekEventReg[84] & 0x10) {
                         Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
-                        SysMatrix_GetStateTranslationAndScaledZ(52.519997f, &sp64);
+                        Matrix_GetStateTranslationAndScaledZ(52.519997f, &sp64);
                         Math_Vec3f_Sum(&this->actor.world.pos, &sp64, &sp64);
                         this->unk_360 = (EnOt*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_OT, sp64.x, sp64.y,
                                                            sp64.z, 0, BINANG_ROT180(this->actor.shape.rot.y), 1,
@@ -212,7 +213,7 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
                         this->unk_360 = D_80B5E888;
                         this->unk_360->unk_360 = this;
                         Matrix_RotateY(this->actor.world.rot.y, MTXMODE_NEW);
-                        SysMatrix_GetStateTranslationAndScaledZ(800.0f, &sp58);
+                        Matrix_GetStateTranslationAndScaledZ(800.0f, &sp58);
                         Math_Vec3f_Sum(&this->actor.world.pos, &sp58, &sp58);
                         Math_Vec3f_Copy(&this->unk_360->actor.world.pos, &sp58);
                         Math_Vec3f_Copy(&this->unk_360->actor.prevPos, &sp58);
@@ -359,7 +360,7 @@ void func_80B5BFB8(EnOt* this, GlobalContext* globalCtx) {
     if (Actor_DistanceBetweenActors(&this->actor, &this->unk_360->actor) <= 52.519997f) {
         this->unk_73C = 50;
         Matrix_RotateY(this->actor.world.rot.y, MTXMODE_NEW);
-        SysMatrix_GetStateTranslationAndScaledZ(52.519997f, &sp34);
+        Matrix_GetStateTranslationAndScaledZ(52.519997f, &sp34);
         this->unk_360->actor.world.pos.x = this->actor.world.pos.x + sp34.x;
         this->unk_360->actor.world.pos.y = this->actor.world.pos.y + sp34.y;
         this->unk_360->actor.world.pos.z = this->actor.world.pos.z + sp34.z;
@@ -442,8 +443,8 @@ void func_80B5C3D8(EnOt* this, GlobalContext* globalCtx) {
 
     this->unk_3A0 += 0x2D8;
     Matrix_RotateY(this->unk_3A0, 0);
-    SysMatrix_GetStateTranslationAndScaledZ(26.259998f, &sp5C);
-    SysMatrix_GetStateTranslationAndScaledZ(-26.259998f, &sp50);
+    Matrix_GetStateTranslationAndScaledZ(26.259998f, &sp5C);
+    Matrix_GetStateTranslationAndScaledZ(-26.259998f, &sp50);
     this->unk_348.x = this->unk_394.x + sp5C.x;
     this->unk_348.y = this->unk_394.y;
     this->unk_348.z = this->unk_394.z + sp5C.z;
@@ -464,18 +465,18 @@ void func_80B5C3D8(EnOt* this, GlobalContext* globalCtx) {
         Math_StepToF(&this->unk_740, 1.0f, 0.05f);
     }
 
-    if (func_801378B8(&this->skelAnime, 12.0f)) {
+    if (Animation_OnFrame(&this->skelAnime, 12.0f)) {
         Matrix_RotateY(func_800DFCDC(GET_ACTIVE_CAM(globalCtx)), 0);
         sp38.x = 1.0f;
         sp38.y = 8.1f;
         sp38.z = 0.0f;
-        SysMatrix_MultiplyVector3fByState(&sp38, &sp44);
+        Matrix_MultiplyVector3fByState(&sp38, &sp44);
         Math_Vec3f_Sum(&this->unk_74C, &sp44, &sp44);
         func_80B5DF58(this->unk_3A4, 1, &sp44, &this->actor.shape.rot, 10);
         sp38.x = -1.0f;
         sp38.y = 8.1f;
         sp38.z = 0.0f;
-        SysMatrix_MultiplyVector3fByState(&sp38, &sp44);
+        Matrix_MultiplyVector3fByState(&sp38, &sp44);
         Math_Vec3f_Sum(&this->unk_74C, &sp44, &sp44);
         func_80B5DF58(this->unk_3A4, 2, &sp44, &this->actor.shape.rot, 10);
     }
@@ -506,7 +507,7 @@ void func_80B5C6DC(EnOt* this, GlobalContext* globalCtx) {
     sp3E = Actor_YawToPoint(&player->actor, &this->unk_394);
     Matrix_RotateY(BINANG_ADD(sp3E, 0x4000), 0);
     if (this->unk_33C == 2) {
-        SysMatrix_GetStateTranslationAndScaledZ(26.259998f, &sp30);
+        Matrix_GetStateTranslationAndScaledZ(26.259998f, &sp30);
     } else {
         if (this->unk_73C == 0) {
             gSaveContext.weekEventReg[84] |= 0x10;
@@ -523,7 +524,7 @@ void func_80B5C6DC(EnOt* this, GlobalContext* globalCtx) {
         } else {
             this->unk_73C--;
         }
-        SysMatrix_GetStateTranslationAndScaledZ(-26.259998f, &sp30);
+        Matrix_GetStateTranslationAndScaledZ(-26.259998f, &sp30);
     }
     this->unk_348.x = this->unk_394.x + sp30.x;
     this->unk_348.y = this->unk_394.y;
@@ -716,7 +717,7 @@ void func_80B5CEC8(EnOt* this, GlobalContext* globalCtx) {
             this->unk_360 = D_80B5E888;
             this->unk_360->unk_360 = this;
             Matrix_RotateY(this->actor.home.rot.y, MTXMODE_NEW);
-            SysMatrix_GetStateTranslationAndScaledZ(800.0f, &sp2C);
+            Matrix_GetStateTranslationAndScaledZ(800.0f, &sp2C);
             Math_Vec3f_Sum(&this->actor.world.pos, &sp2C, &this->unk_360->actor.world.pos);
             Math_Vec3f_Copy(&this->unk_360->actor.prevPos, &this->unk_360->actor.world.pos);
             this->unk_32C &= ~0x800;
@@ -936,7 +937,7 @@ void EnOt_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnOt* this = THIS;
 
-    if ((this->animIdx == 1) && func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+    if ((this->animIdx == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_SEAHORSE_SWIM);
     }
 
@@ -962,7 +963,7 @@ void EnOt_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     Actor_SetHeight(&this->actor, 12.0f);
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     func_80B5BB38(&this->unk_747, &this->unk_744, 0.7f);
@@ -980,7 +981,7 @@ void func_80B5DAEC(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
     Actor_SetHeight(&this->actor, 12.0f);
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     func_80B5BB38(&this->unk_747, &this->unk_744, 0.7f);
     if (this->unk_32C & 0x400) {
         func_80B5BAAC(&this->lightInfo, &this->unk_378, &this->unk_747, 210);
@@ -1031,9 +1032,9 @@ void EnOt_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnOt* this = THIS;
     Gfx* gfx;
 
-    SysMatrix_StatePush();
+    Matrix_StatePush();
     func_80B5E1D8(globalCtx, this->unk_3A4, 10);
-    SysMatrix_StatePop();
+    Matrix_StatePop();
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -1043,9 +1044,9 @@ void EnOt_Draw(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
     AnimatedMat_Draw(globalCtx, (AnimatedMaterial*)Lib_SegmentedToVirtual(&D_060005F8));
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, NULL,
-                     EnOt_PostLimbDraw, &this->actor);
-    SysMatrix_InsertTranslation(this->unk_378.x, this->unk_378.y, this->unk_378.z, MTXMODE_NEW);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          NULL, EnOt_PostLimbDraw, &this->actor);
+    Matrix_InsertTranslation(this->unk_378.x, this->unk_378.y, this->unk_378.z, MTXMODE_NEW);
     Matrix_Scale(0.0882f, 0.0882f, 0.0882f, MTXMODE_APPLY);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -1075,11 +1076,11 @@ void EnOt_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 
         gSPDisplayList(&gfx[0], D_060004A0);
         POLY_OPA_DISP = &gfx[1];
-        SysMatrix_MultiplyVector3fByState(&D_80B5E410, &this->unk_74C);
+        Matrix_MultiplyVector3fByState(&D_80B5E410, &this->unk_74C);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     } else if (limbIndex == 1) {
-        SysMatrix_GetStateTranslation(&this->unk_378);
+        Matrix_GetStateTranslation(&this->unk_378);
         this->unk_32C |= 0x400;
     }
 }
@@ -1131,7 +1132,7 @@ void func_80B5E078(GlobalContext* globalCtx, EnOtUnkStruct* arg1, s32 arg2) {
             sp54.y = arg1->unk_34;
             sp54.z = 0.0f;
             Matrix_RotateY(temp, 0);
-            SysMatrix_MultiplyVector3fByState(&sp54, &arg1->unk_0C);
+            Matrix_MultiplyVector3fByState(&sp54, &arg1->unk_0C);
             Math_Vec3f_Sum(&arg1->unk_0C, &arg1->unk_50, &arg1->unk_0C);
             arg1->unk_4C--;
         }
@@ -1155,7 +1156,7 @@ void func_80B5E1D8(GlobalContext* globalCtx, EnOtUnkStruct* arg1, s32 arg2) {
                 if (globalCtx) {}
             }
 
-            SysMatrix_InsertTranslation(arg1->unk_0C.x, arg1->unk_0C.y, arg1->unk_0C.z, MTXMODE_NEW);
+            Matrix_InsertTranslation(arg1->unk_0C.x, arg1->unk_0C.y, arg1->unk_0C.z, MTXMODE_NEW);
             Matrix_RotateY(BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx))), MTXMODE_APPLY);
             Matrix_Scale(arg1->unk_04, arg1->unk_04, arg1->unk_04, MTXMODE_APPLY);
 
