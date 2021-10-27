@@ -75,7 +75,7 @@ void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0402CA98, &D_0402B494, this->jointTable, this->jointTable, 10);
     this->skelAnime.playSpeed = 1.0f;
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    this->actor.shape.shadowAlpha = 0xFF;
+    this->actor.shape.shadowAlpha = 255;
 
     switch (STRAY_FAIRY_TYPE(&this->actor)) {
         case STRAY_FAIRY_TYPE_CLOCK_TOWN:
