@@ -116,7 +116,7 @@ void func_80A687A0(EnMushi2* this) {
 
 void func_80A68808(EnMushi2* this) {
     Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                             &this->actor.shape.rot);
+                                          &this->actor.shape.rot);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     Collider_UpdateSpheres(0, &this->collider);
 }
