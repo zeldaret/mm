@@ -121,8 +121,6 @@ beginseg
     include "build/src/libultra/io/devmgr.o"
     include "build/src/libultra/io/pirawdma.o"
     include "build/src/libultra/io/contpfs.o"
-    include "build/data/boot/contpfs.data.o"
-    include "build/data/boot/contpfs.bss.o"
     include "build/asm/boot/getcount.text.o"
     pad_text
     include "build/asm/boot/guMtxL2F.text.o"

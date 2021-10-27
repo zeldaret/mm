@@ -16,7 +16,7 @@ s32 osSetRumble(OSPfs* pfs, u32 vibrate) {
     }
 
     __osSiGetAccess();
-    osPifBuffers[pfs->channel].pifstatus = 1;
+    osPifBuffers[pfs->channel].status = 1;
     buf += pfs->channel;
     for (i = 0; i < BLOCKSIZE; i++) {
         ((__OSContRamReadFormat*)buf)->data[i] = vibrate;

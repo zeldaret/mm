@@ -78,7 +78,7 @@ void __osPackRequestData(u8 cmd) {
         __osContPifRam.ramarray[i] = 0;
     }
 
-    __osContPifRam.pifstatus = 1;
+    __osContPifRam.status = 1;
     ptr = (u8*)__osContPifRam.ramarray;
     requestformat.dummy = 255;
     requestformat.txsize = 1;
