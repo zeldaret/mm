@@ -2,6 +2,9 @@
 
 import argparse, os
 
+# There are a few commented out entries that would produce unexpected renames.
+# They are left as a comment so people can just grab them.
+
 # "old": "new"
 animdict = {
     "Actor_GetSwitchFlag": "Flags_GetSwitch",
