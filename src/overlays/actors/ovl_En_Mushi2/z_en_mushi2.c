@@ -107,7 +107,7 @@ static InitChainEntry sInitChain[] = {
 static f32 D_80A6BA14[] = { 0.06f, 0.1f, 0.13f };
 
 void func_80A687A0(EnMushi2* this) {
-    MtxF* matrix = SysMatrix_GetCurrentState();
+    MtxF* matrix = Matrix_GetCurrentState();
 
     matrix->mf[3][0] += this->unk_348 * this->unk_31C.x;
     matrix->mf[3][1] += this->unk_348 * this->unk_31C.y;
@@ -115,7 +115,7 @@ void func_80A687A0(EnMushi2* this) {
 }
 
 void func_80A68808(EnMushi2* this) {
-    SysMatrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+    Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                              &this->actor.shape.rot);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     Collider_UpdateSpheres(0, &this->collider);
@@ -207,7 +207,7 @@ void func_80A68BC8(EnMushi2* this) {
     } else {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_MUSI_WALK);
 
-        this->unk_36C = 3.0f / CLAMP_MIN(this->skelAnime.animPlaybackSpeed, 0.12f);
+        this->unk_36C = 3.0f / CLAMP_MIN(this->skelAnime.playSpeed, 0.12f);
         if (this->unk_36C < 2) {
             this->unk_36C = 2;
         }
@@ -284,11 +284,11 @@ void func_80A68ED8(EnMushi2* this) {
 
 void func_80A68F24(EnMushi2* this) {
     Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
-    SysMatrix_InsertXRotation_s(this->actor.shape.rot.x, MTXMODE_APPLY);
-    SysMatrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
-    SysMatrix_MultiplyVector3fByState(&D_80A6B9A0, &this->unk_310);
-    SysMatrix_MultiplyVector3fByState(&D_80A6B9AC, &this->unk_31C);
-    SysMatrix_MultiplyVector3fByState(&D_80A6B9B8, &this->unk_328);
+    Matrix_InsertXRotation_s(this->actor.shape.rot.x, MTXMODE_APPLY);
+    Matrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
+    Matrix_MultiplyVector3fByState(&D_80A6B9A0, &this->unk_310);
+    Matrix_MultiplyVector3fByState(&D_80A6B9AC, &this->unk_31C);
+    Matrix_MultiplyVector3fByState(&D_80A6B9B8, &this->unk_328);
 }
 
 s32 func_80A68F9C(EnMushi2* this, s16 arg1) {
@@ -298,7 +298,7 @@ s32 func_80A68F9C(EnMushi2* this, s16 arg1) {
         return false;
     }
 
-    matrix = SysMatrix_GetCurrentState();
+    matrix = Matrix_GetCurrentState();
 
     matrix->mf[0][0] = this->unk_310.x;
     matrix->mf[0][1] = this->unk_310.y;
@@ -345,7 +345,7 @@ s32 func_80A690C4(EnMushi2* this, s16 arg1) {
         return false;
     }
 
-    matrix = SysMatrix_GetCurrentState();
+    matrix = Matrix_GetCurrentState();
 
     matrix->mf[0][0] = this->unk_310.x;
     matrix->mf[0][1] = this->unk_310.y;
@@ -367,7 +367,7 @@ s32 func_80A690C4(EnMushi2* this, s16 arg1) {
     matrix->mf[3][2] = 0.0f;
     matrix->mf[3][3] = 0.0f;
 
-    SysMatrix_InsertXRotation_s(arg1, 1);
+    Matrix_InsertXRotation_s(arg1, 1);
 
     this->unk_310.x = matrix->mf[0][0];
     this->unk_310.y = matrix->mf[0][1];
@@ -749,7 +749,7 @@ void EnMushi2_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     func_80A68F24(this);
     SkelAnime_Init(globalCtx, &this->skelAnime, &D_040527A0, &D_0405140C, this->jointTable, this->morphTable, 24);
-    SkelAnime_ChangeAnim(&this->skelAnime, &D_0405140C, 1.0f, 0.0f, 0.0f, 1, 0.0f);
+    Animation_Change(&this->skelAnime, &D_0405140C, 1.0f, 0.0f, 0.0f, 1, 0.0f);
     Collider_InitJntSph(globalCtx, &this->collider);
     Collider_SetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
     func_80A68808(this);
@@ -788,7 +788,7 @@ void func_80A6A300(EnMushi2* this) {
     this->actor.gravity = -0.25f;
     this->actor.minVelocityY = -3.5f;
     this->unk_370 = Rand_S16Offset(-1000, 2000);
-    this->skelAnime.animPlaybackSpeed = 1.5f;
+    this->skelAnime.playSpeed = 1.5f;
     this->actionFunc = func_80A6A36C;
 }
 
@@ -862,8 +862,8 @@ void func_80A6A5C0(EnMushi2* this, GlobalContext* globalCtx) {
         func_80A69388(this);
     }
 
-    this->skelAnime.animPlaybackSpeed = this->actor.speedXZ * 1.6f;
-    this2->skelAnime.animPlaybackSpeed = CLAMP(this2->skelAnime.animPlaybackSpeed, 0.1f, 1.9f);
+    this->skelAnime.playSpeed = this->actor.speedXZ * 1.6f;
+    this2->skelAnime.playSpeed = CLAMP(this2->skelAnime.playSpeed, 0.1f, 1.9f);
 
     if ((this->unk_36A <= 0) || func_80A68BA0(this)) {
         func_80A6B078(this);
@@ -900,8 +900,8 @@ void func_80A6A824(EnMushi2* this, GlobalContext* globalCtx) {
         func_80A69388(this);
     }
 
-    this->skelAnime.animPlaybackSpeed = (Rand_ZeroOne() * 0.8f) + (this->actor.speedXZ * 1.2f);
-    this2->skelAnime.animPlaybackSpeed = CLAMP(this2->skelAnime.animPlaybackSpeed, 0.0f, 1.9f);
+    this->skelAnime.playSpeed = (Rand_ZeroOne() * 0.8f) + (this->actor.speedXZ * 1.2f);
+    this2->skelAnime.playSpeed = CLAMP(this2->skelAnime.playSpeed, 0.0f, 1.9f);
 
     if ((this->unk_36A <= 0) || func_80A68BA0(this)) {
         func_80A6B078(this);
@@ -920,7 +920,7 @@ void func_80A6A984(EnMushi2* this) {
     } else {
         this->unk_370 = -0x800;
     }
-    this->skelAnime.animPlaybackSpeed = 1.2f;
+    this->skelAnime.playSpeed = 1.2f;
     this->unk_368 = 17;
     this->actionFunc = func_80A6A9E4;
 }
@@ -967,18 +967,18 @@ void func_80A6AB08(EnMushi2* this, GlobalContext* globalCtx) {
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     func_80A69424(this, globalCtx);
     Math_StepToF(&this->actor.world.pos.y, this->actor.world.pos.y + this->actor.yDistToWater, 2.8f);
-    this->skelAnime.animPlaybackSpeed = this->unk_368 * 0.018f;
-    this->skelAnime.animPlaybackSpeed = CLAMP(this->skelAnime.animPlaybackSpeed, 0.1f, 1.9f);
+    this->skelAnime.playSpeed = this->unk_368 * 0.018f;
+    this->skelAnime.playSpeed = CLAMP(this->skelAnime.playSpeed, 0.1f, 1.9f);
 
     if (this->unk_368 > 80) {
         this->unk_36E += Rand_S16Offset(-50, 100);
         this->unk_370 += Rand_S16Offset(-300, 600);
     }
 
-    temp = this->skelAnime.animPlaybackSpeed * 200.0f;
+    temp = this->skelAnime.playSpeed * 200.0f;
     this->unk_36E = CLAMP(this->unk_36E, -temp, temp);
 
-    temp = this->skelAnime.animPlaybackSpeed * 1000.0f;
+    temp = this->skelAnime.playSpeed * 1000.0f;
     this->unk_370 = CLAMP(this->unk_370, -temp, temp);
 
     this->actor.world.rot.y += this->unk_36E;
@@ -1044,7 +1044,7 @@ void func_80A6AE7C(EnMushi2* this, GlobalContext* globalCtx) {
 void func_80A6B078(EnMushi2* this) {
     this->unk_30C &= ~1;
     this->unk_368 = 50;
-    this->skelAnime.animPlaybackSpeed = 1.9f;
+    this->skelAnime.playSpeed = 1.9f;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALTURA_BOUND);
     func_80A68B6C(this);
     this->actionFunc = func_80A6B0D8;
@@ -1191,7 +1191,7 @@ void EnMushi2_Update(Actor* thisx, GlobalContext* globalCtx) {
             Math_StepToF(&this->unk_348, sp4C, 0.7f);
         }
 
-        SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+        SkelAnime_Update(&this->skelAnime);
 
         if (this->actor.flags & 0x40) {
             if ((this->actionFunc != func_80A6AE7C) && (this->actionFunc != func_80A6B0D8) &&
@@ -1232,5 +1232,5 @@ void EnMushi2_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_80A687A0(this);
     func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, NULL, NULL, NULL);
+    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, NULL);
 }
