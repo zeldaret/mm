@@ -375,7 +375,7 @@ void EnElforg_CirclePlayer(EnElforg* this, GlobalContext* globalCtx) {
 
 void EnElforg_FairyCollected(EnElforg* this, GlobalContext* globalCtx) {
     EnElforg_CirclePlayer(this, globalCtx);
-    if (this->timer >= 81) {
+    if (this->timer > 80) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
