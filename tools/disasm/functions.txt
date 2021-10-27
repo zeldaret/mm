@@ -12075,7 +12075,7 @@
     0x80ACBDFC:("func_80ACBDFC",),
     0x80ACBEE0:("ObjAqua_Update",),
     0x80ACC048:("ObjAqua_Draw",),
-    0x80ACC470:("EnElforg_InitializeSpeedAndRotation",),
+    0x80ACC470:("EnElforg_InitializeParams",),
     0x80ACC50C:("EnElforg_Init",),
     0x80ACC7A4:("EnElforg_Destroy",),
     0x80ACC7E4:("EnElforg_SpawnSparkles",),

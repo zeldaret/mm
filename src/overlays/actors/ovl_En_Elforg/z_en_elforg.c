@@ -54,7 +54,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 16, 32, 0, { 0, 0, 0 } },
 };
 
-void EnElforg_InitializeSpeedAndRotation(EnElforg* this) {
+void EnElforg_InitializeParams(EnElforg* this) {
     this->actor.speedXZ = 1.0f;
     this->targetSpeedXZ = 1.0f;
     this->actor.velocity.y = 0.0f;
@@ -112,13 +112,13 @@ void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     switch (STRAY_FAIRY_TYPE(&this->actor)) {
         case STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN:
-            EnElforg_InitializeSpeedAndRotation(this);
+            EnElforg_InitializeParams(this);
             this->actionFunc = EnElforg_FreeFloatingFairyFountain;
             this->targetSpeedXZ = Rand_ZeroFloat(2.0f) + 1.0f;
             this->targetDistanceFromHome = Rand_ZeroFloat(100.0f) + 50.0f;
             break;
         case STRAY_FAIRY_TYPE_TURN_IN_TO_FAIRY_FOUNTAIN:
-            EnElforg_InitializeSpeedAndRotation(this);
+            EnElforg_InitializeParams(this);
             this->actionFunc = EnElforg_TurnInFairy;
             this->secondaryTimer = 60;
             break;
@@ -138,7 +138,7 @@ void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
             Collider_UpdateCylinder(&this->actor, &this->collider);
             break;
         default:
-            EnElforg_InitializeSpeedAndRotation(this);
+            EnElforg_InitializeParams(this);
             this->actionFunc = EnElforg_FreeFloating;
             break;
     }
@@ -257,7 +257,7 @@ void func_80ACCBB8(EnElforg* this, GlobalContext* globalCtx) {
 void EnElforg_TrappedByBubble(EnElforg* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     if ((this->actor.parent == NULL) || (this->actor.parent->update == NULL)) {
-        EnElforg_InitializeSpeedAndRotation(this);
+        EnElforg_InitializeParams(this);
         this->actionFunc = EnElforg_FreeFloating;
     } else {
         this->actor.shape.yOffset += 10.0f * Math_SinS(this->timer << 9);
@@ -504,7 +504,7 @@ void EnElforg_TrappedByEnemy(EnElforg* this, GlobalContext* globalCtx) {
     f32 posTemp;
 
     if (this->enemy->update == NULL) {
-        EnElforg_InitializeSpeedAndRotation(this);
+        EnElforg_InitializeParams(this);
         this->actionFunc = EnElforg_FreeFloating;
         this->actor.draw = EnElforg_Draw;
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHIBI_FAIRY_SAVED);
@@ -535,7 +535,7 @@ void EnElforg_SetupTrappedByEnemy(EnElforg* this, GlobalContext* globalCtx) {
 
 void EnElforg_HiddenByCollider(EnElforg* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & AC_HIT) {
-        EnElforg_InitializeSpeedAndRotation(this);
+        EnElforg_InitializeParams(this);
         this->actionFunc = EnElforg_FreeFloating;
         this->actor.draw = EnElforg_Draw;
         this->actor.world.pos.y += 40.0f;
