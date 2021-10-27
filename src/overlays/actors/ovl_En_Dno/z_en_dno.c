@@ -213,8 +213,8 @@ void EnDno_Init(Actor* thisx, GlobalContext* globalCtx) {
         if (actor == NULL) {
             Actor_ProcessInitChain(thisx, sInitChain);
             ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 21.0f);
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600E1F8, &D_06007CA4, this->jointTable, this->morphTable,
-                             28);
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600E1F8, &D_06007CA4, this->jointTable,
+                               this->morphTable, 28);
             Collider_InitCylinder(globalCtx, &this->collider);
             Collider_SetCylinder(globalCtx, &this->collider, thisx, &sCylinderInit);
             Actor_UpdateBgCheckInfo(globalCtx, thisx, 0.0f, 0.0f, 0.0f, 4);
@@ -536,7 +536,8 @@ void func_80A724B8(EnDno* this, GlobalContext* globalCtx) {
 }
 
 void func_80A7256C(EnDno* this, GlobalContext* globalCtx) {
-    func_800B8500(&this->actor, &globalCtx->state, this->actor.xzDistToPlayer, this->actor.yDistToPlayer, EXCH_ITEM_MINUS1);
+    func_800B8500(&this->actor, &globalCtx->state, this->actor.xzDistToPlayer, this->actor.yDistToPlayer,
+                  EXCH_ITEM_MINUS1);
 }
 
 void func_80A72598(EnDno* this, GlobalContext* globalCtx) {

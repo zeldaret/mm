@@ -830,8 +830,8 @@ void TitleCard_ContextInit(GameState* gameState, TitleCardContext* titleCtx) {
     titleCtx->alpha = 0;
 }
 
-void TitleCard_InitBossName(GameState* gameState, TitleCardContext* titleCtx, TexturePtr texture, s16 param_4, s16 param_5,
-                            u8 param_6, u8 param_7) {
+void TitleCard_InitBossName(GameState* gameState, TitleCardContext* titleCtx, TexturePtr texture, s16 param_4,
+                            s16 param_5, u8 param_6, u8 param_7) {
     titleCtx->texture = texture;
     titleCtx->x = param_4;
     titleCtx->y = param_5;
@@ -841,8 +841,8 @@ void TitleCard_InitBossName(GameState* gameState, TitleCardContext* titleCtx, Te
     titleCtx->delayTimer = 0;
 }
 
-void TitleCard_InitPlaceName(GameState* gameState, TitleCardContext* titleCtx, TexturePtr texture, s32 x, s32 y, s32 width,
-                             s32 height, s32 delay) {
+void TitleCard_InitPlaceName(GameState* gameState, TitleCardContext* titleCtx, TexturePtr texture, s32 x, s32 y,
+                             s32 width, s32 height, s32 delay) {
 }
 
 void TitleCard_Update(GameState* gameState, TitleCardContext* titleCtx) {
@@ -889,15 +889,15 @@ void TitleCard_Draw(GameState* gameState, TitleCardContext* titleCtx) {
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                             G_TX_NOLOD);
 
-        gSPTextureRectangle(OVERLAY_DISP++, spC0, spB8, ((sp38 * 2) + spC0) - 4, spB8 + (height * 4) - 1, G_TX_RENDERTILE,
-                            0, 0, 1 << 10, 1 << 10);
+        gSPTextureRectangle(OVERLAY_DISP++, spC0, spB8, ((sp38 * 2) + spC0) - 4, spB8 + (height * 4) - 1,
+                            G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
 
         height = titleCtx->height - height;
 
         if (height > 0) {
-            gDPLoadTextureBlock(OVERLAY_DISP++, (s32)titleCtx->texture + 0x1000, G_IM_FMT_IA, G_IM_SIZ_8b, width, height,
-                                0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
-                                G_TX_NOLOD, G_TX_NOLOD);
+            gDPLoadTextureBlock(OVERLAY_DISP++, (s32)titleCtx->texture + 0x1000, G_IM_FMT_IA, G_IM_SIZ_8b, width,
+                                height, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
+                                G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
             gSPTextureRectangle(OVERLAY_DISP++, spC0, spB4, ((sp38 * 2) + spC0) - 4, spB4 + (height * 4) - 1,
                                 G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
@@ -1860,9 +1860,8 @@ s32 func_800B8718(Actor* actor, GameState* gameState) {
 s32 func_800B874C(Actor* actor, GameState* gameState, f32 xzRange, f32 yRange) {
     Player* player = GET_PLAYER(gameState);
 
-    if ((player->actor.flags & 0x20000000) || Player_InCsMode(gameState) ||
-        (yRange < fabsf(actor->yDistToPlayer)) || ((player->unk_A94 < actor->xzDistToPlayer)) ||
-        (xzRange < actor->xzDistToPlayer)) {
+    if ((player->actor.flags & 0x20000000) || Player_InCsMode(gameState) || (yRange < fabsf(actor->yDistToPlayer)) ||
+        ((player->unk_A94 < actor->xzDistToPlayer)) || (xzRange < actor->xzDistToPlayer)) {
         return false;
     }
 
@@ -1894,8 +1893,8 @@ void func_800B8898(GlobalContext* globalCtx, Actor* actor, s16* x, s16* y) {
     f32 sp18;
 
     func_800B4EDC(globalCtx, &actor->focus.pos, &sp1C, &sp18);
-    *x = (sp1C.x * sp18 * (SCREEN_WIDTH/2)) + (SCREEN_WIDTH/2);
-    *y = (sp1C.y * sp18 * -(SCREEN_HEIGHT/2)) + (SCREEN_HEIGHT/2);
+    *x = (sp1C.x * sp18 * (SCREEN_WIDTH / 2)) + (SCREEN_WIDTH / 2);
+    *y = (sp1C.y * sp18 * -(SCREEN_HEIGHT / 2)) + (SCREEN_HEIGHT / 2);
 }
 
 s32 func_800B8934(GameState* gameState, Actor* actor) {
@@ -3799,9 +3798,9 @@ typedef struct {
 } struct_801AEDD4; // size = 0x1C
 
 struct_801AEDD4 D_801AEDD4[] = {
-    { 0.540000021458f, 6000.0f, 5000.0, 1.0f, 0.0f,   D_05000230, D_05000140 },
+    { 0.540000021458f, 6000.0f, 5000.0, 1.0f, 0.0f, D_05000230, D_05000140 },
     { 0.643999993801f, 12000.0f, 8000.0f, 1.0f, 0.0f, D_06000530, D_06000400 },
-    { 0.6400000453f, 8500.0f, 8000.0f, 1.75f, 0.1f,   D_05000230, D_05000140 },
+    { 0.6400000453f, 8500.0f, 8000.0f, 1.75f, 0.1f, D_05000230, D_05000140 },
 };
 
 void Actor_DrawDoorLock(GlobalContext* globalCtx, s32 frame, s32 type) {

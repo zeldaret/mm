@@ -253,7 +253,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                         }
                     }
                     Audio_PlaySoundGeneral(NA_SE_EV_FLAME_IGNITION, &thisx->projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
-                                  &D_801DB4B8);
+                                           &D_801DB4B8);
                 }
             }
         }

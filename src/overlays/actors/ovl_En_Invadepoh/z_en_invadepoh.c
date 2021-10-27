@@ -3683,8 +3683,8 @@ void func_80B4B8BC(Actor* thisx, GlobalContext* globalCtx) {
     if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectDependency(globalCtx, &this->actor);
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060080F0, &D_060021C8, this->jointTable,
-                         this->morphTable, 13);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060080F0, &D_060021C8, this->jointTable, this->morphTable,
+                           13);
         func_80B45C04(&this->behaviorInfo, 0, 0, 0, 0, &D_801D15BC, 3000, 0.1f, 0.0f, 0.0f);
         func_80B44664(this, globalCtx);
         EnInvadepoh_SetPathPointToWorldPos(this, 0);

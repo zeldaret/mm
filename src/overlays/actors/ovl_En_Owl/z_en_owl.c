@@ -139,8 +139,10 @@ void EnOwl_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime1, &D_0600C5F8, &D_06001ADC, this->jointTable1, this->morphTable1, 21);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime2, &D_060105C0, &D_0600CDB0, this->jointTable2, this->morphTable2, 16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime1, &D_0600C5F8, &D_06001ADC, this->jointTable1, this->morphTable1,
+                       21);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime2, &D_060105C0, &D_0600CDB0, this->jointTable2, this->morphTable2,
+                       16);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.minVelocityY = -10.0f;

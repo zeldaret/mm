@@ -77,7 +77,7 @@ void EnEndingHero6_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, sSkeletons[this->npcIndex], sAnimations[this->npcIndex],
-                     this->jointTable, this->morphTable, sLimbCounts[this->npcIndex]);
+                       this->jointTable, this->morphTable, sLimbCounts[this->npcIndex]);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     EnEndingHero6_SetupIdle(this);
 }

@@ -190,7 +190,7 @@ void EnMaYto_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06015C28, NULL, this->jointTable, this->morphTable,
-                     MA2_LIMB_MAX);
+                       MA2_LIMB_MAX);
     EnMaYto_InitAnimation(this, globalCtx);
 
     Collider_InitCylinder(globalCtx, &this->collider);
