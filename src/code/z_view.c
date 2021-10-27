@@ -237,7 +237,7 @@ s32 View_SetQuake(View* view, Vec3f rot, Vec3f scale, f32 speed) {
     return 1;
 }
 
-s32 View_StepQuake(View* view, RSPMatrix* matrix) {
+s32 View_StepQuake(View* view, Mtx* matrix) {
     MtxF mf;
 
     if (view->quakeSpeed == 0.0f) {
@@ -256,16 +256,16 @@ s32 View_StepQuake(View* view, RSPMatrix* matrix) {
         view->currQuakeScale.z += ((view->quakeScale.z - view->currQuakeScale.z) * view->quakeSpeed);
     }
 
-    SysMatrix_FromRSPMatrix(matrix, &mf);
-    SysMatrix_SetCurrentState(&mf);
-    SysMatrix_RotateStateAroundXAxis(view->currQuakeRot.x);
-    SysMatrix_InsertYRotation_f(view->currQuakeRot.y, 1);
-    SysMatrix_InsertZRotation_f(view->currQuakeRot.z, 1);
-    Matrix_Scale(view->currQuakeScale.x, view->currQuakeScale.y, view->currQuakeScale.z, 1);
-    SysMatrix_InsertZRotation_f(-view->currQuakeRot.z, 1);
-    SysMatrix_InsertYRotation_f(-view->currQuakeRot.y, 1);
-    SysMatrix_RotateStateAroundXAxis(-view->currQuakeRot.x);
-    SysMatrix_GetStateAsRSPMatrix(matrix);
+    Matrix_FromRSPMatrix(matrix, &mf);
+    Matrix_SetCurrentState(&mf);
+    Matrix_RotateStateAroundXAxis(view->currQuakeRot.x);
+    Matrix_InsertYRotation_f(view->currQuakeRot.y, 1);
+    Matrix_InsertZRotation_f(view->currQuakeRot.z, 1);
+    Matrix_Scale(view->currQuakeScale.x, view->currQuakeScale.y, view->currQuakeScale.z, MTXMODE_APPLY);
+    Matrix_InsertZRotation_f(-view->currQuakeRot.z, 1);
+    Matrix_InsertYRotation_f(-view->currQuakeRot.y, 1);
+    Matrix_RotateStateAroundXAxis(-view->currQuakeRot.x);
+    Matrix_ToMtx(matrix);
 
     return 1;
 }
@@ -310,7 +310,7 @@ s32 View_RenderToPerspectiveMatrix(View* view) {
     guPerspective(projection, &view->normal, view->fovy, aspect, view->zNear, view->zFar, view->scale);
     view->projection = *projection;
     //! @bug: This cast of `projection` is invalid
-    View_StepQuake(view, (RSPMatrix*)projection);
+    View_StepQuake(view, (Mtx*)projection);
 
     gSPPerspNormalize(POLY_OPA_DISP++, view->normal);
     gSPMatrix(POLY_OPA_DISP++, projection, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);

@@ -54,4 +54,4 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/padmgr/Padmgr_ThreadEntry.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/padmgr/Padmgr_Start.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/padmgr/PadMgr_Init.s")

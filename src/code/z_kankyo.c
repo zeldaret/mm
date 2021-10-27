@@ -74,11 +74,11 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FBCBC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FBDEC.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Kankyo_InitGameOverLights.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FBF3C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Kankyo_FadeInGameOverLights.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FC158.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Kankyo_FadeOutGameOverLights.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FC3DC.s")
 

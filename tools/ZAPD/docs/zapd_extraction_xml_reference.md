@@ -32,6 +32,7 @@ This document aims to be a small reference of how to create a compatible xml fil
     - [Cutscene](#cutscene)
     - [Array](#array)
     - [Path](#path)
+    - [PlayerAnimationData](#playeranimationdata)
 
 ## Basic XML
 
@@ -69,6 +70,20 @@ For most resources inside a `<File>` tag **you should also set an `Offset` attri
 
 It's worth noting that every tag expects a `Name="gNameOfTheAsset"`. This is will be the name of the extracted variable in the output C code. Every asset must be prefixed with `g` and the suffix should represent the type of the variable.
 
+Every tag can accept a `Static` attribute to specify if the asset should be marked as `static` or not.
+There are 3 valid values (defaults to `Global`):
+
+- `Global`: Mark static if the flag `--static` was used.
+- `On`: Override the global config and **always mark** as `static`.
+- `Off`: Override the global config and **don't mark** as `static`.
+
+This table summarizes if the asset will be marked `static` (✅) or not (❌)
+| `Static=""` attribute in XML | Without `--static` flag | With `--static` flag |
+| ---------------------------- | ----------------------- | -------------------- |
+| `On`                         | ✅                       | ✅                    |
+| `Global` (default)           | ❌                       | ✅                    |
+| `Off`                        | ❌                       | ❌                    |
+
 -------------------------
 
 ### File
@@ -83,11 +98,32 @@ It's worth noting that every tag expects a `Name="gNameOfTheAsset"`. This is wil
 
   - `Name`: Required. The name of the file in `baserom/` which will be extracted.
   - `OutName`: Optional. The output name of the generated C source file. Defaults to the value passed to `Name`.
-  - `Segment`: Required. This is the segment number of the current file. Expects a decimal number, usually 6 if it is an object, or 128 for overlays (It's kinda a whacky hack to get around of the `0x80` addresses).
+  - `Segment`: Optional. This is the segment number of the current file. Expects a decimal number between 0 and 15 inclusive, usually 6 if it is an object. If not specified, the file will use VRAM instead of segmented addresses.
   - `BaseAddress`: Optional. RAM address of the file. Expects a hex number (with `0x` prefix). Default value: `0`.
   - `RangeStart`: Optional. File offset where the extraction will begin. Hex. Default value: `0x000000000`.
   - `RangeEnd`: Optional. File offset where the extraction will end. Hex. Default value: `0xFFFFFFFF`.
   - `Game`: Optional. Valid values: `OOT`, `MM`, `SW97` and `OOTSW97`. Default value: `OOT`.
+
+-------------------------
+
+### ExternalFile
+
+Allows ZAPD to map segmented addresses to variables declared in other files by using its XML.
+
+It is useful for objects that use variables from `gameplay_keep`, `gameplay_dangeon_keep`, `gameplay_field_keep`, etc.
+
+This tag can be used in the global `config.xml` file.
+
+- Example of this tag:
+
+```xml
+<ExternalFile XmlPath="objects/gameplay_keep.xml" OutPath="objects/gameplay_keep/"/>
+```
+
+- Attributes:
+
+  - `XmlPath`: Required. The path of the XML, relative to the value set by `ExternalXMLFolder` in the configuration file.
+  - `OutPath`: Required. The path were the header for the corresponding external file is. It is used to `#include` it in the generated `.c` file.
 
 -------------------------
 
@@ -201,7 +237,6 @@ A.k.a. Display list, or Gfx.
 ### TextureAnimation
 
 A data type exclusive to Majora's Mask, that has scrolling, color changing, and texture changing capabilities. Declaring the main array will generate everything else; textures for the TextureCycle type must be declared manually in the XML to use symbols. (If it does reference any undeclared textures, ZAPD will warn and give the their offsets.)
-
 
 ```xml
 <TextureAnimation Name="gRosaSistersTexAnim" Offset="0xD768"/>
@@ -402,6 +437,7 @@ extern u8 gJsjutanShadowTex[2048];
   - `Type`: The type of the declared variable. If missing, it will default to `void*`.
   - `TypeSize`: The size in bytes of the type. If missing, it will default to `4` (the size of a word and a pointer). Integer or hex value.
   - `Count`: Optional. If it is present, the variable will be declared as an array instead of a plain variable. The value of this attribute specifies the length of the array. If `Count` is present but it has no value (`Count=""`), then the length of the array will not be specified either in the declared variable. Integer or hex value.
+  - `Static`: This attribute can't be enabled on a Symbol node. A warning will be showed in this case.
 
 -------------------------
 
@@ -570,8 +606,6 @@ Currently, only [`Scalar`](#scalar), [`Vector`](#vector) and [`Vtx`](#vtx) suppo
 
 -------------------------
 
--------------------------
-
 ### Path
 
 - Example:
@@ -584,5 +618,22 @@ Currently, only [`Scalar`](#scalar), [`Vector`](#vector) and [`Vtx`](#vtx) suppo
 
   - `Name`: Required. Suxffixed by `Path`.
   - `NumPaths`: Optional. The amount of paths contained in the array. It must be a positive integer.
+
+-------------------------
+
+### PlayerAnimationData
+
+Allows the extraction of the specific data of the player animations which are found in the `link_animetion` file.
+
+- Example:
+
+```xml
+<PlayerAnimationData Name="gPlayerAnimData_000000" FrameCount="20" Offset="0x0"/>
+```
+
+- Attributes:
+
+  - `Name`: Required. Suxffixed by `AnimData`.
+  - `FrameCount`: Required. The length of the animation in frames. It must be a positive integer.
 
 -------------------------
