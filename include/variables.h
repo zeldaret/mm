@@ -4007,7 +4007,7 @@ extern Gfx D_04048DF0[];
 extern UNK_TYPE D_04050D10;
 extern UNK_TYPE D_04051180;
 extern UNK_TYPE D_04051238;
-extern UNK_TYPE D_0405140C;
+extern AnimationHeader D_0405140C;
 extern UNK_TYPE D_040527F0;
 extern UNK_TYPE D_040528B0;
 extern Gfx D_04054A90[];
