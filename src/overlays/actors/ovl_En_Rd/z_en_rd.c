@@ -1075,7 +1075,7 @@ void func_808D6814(EnRd* this, GlobalContext* globalCtx) {
             return;
         }
 
-        func_800BE258(&this->actor, &this->collider.info);
+        Actor_SetDropFlag(&this->actor, &this->collider.info);
 
         if (player->unk_ADC != 0) {
             this->unk_3F1 = player->unk_ADD;

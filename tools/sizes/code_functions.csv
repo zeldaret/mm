@@ -399,8 +399,8 @@ asm/non_matchings/code/z_actor/Gfx_DrawDListXlu.s,Gfx_DrawDListXlu,0x800BE03C,0x
 asm/non_matchings/code/z_actor/Actor_FindNearby.s,Actor_FindNearby,0x800BE0B8,0x33
 asm/non_matchings/code/z_actor/func_800BE184.s,func_800BE184,0x800BE184,0x2A
 asm/non_matchings/code/z_actor/Actor_ApplyDamage.s,Actor_ApplyDamage,0x800BE22C,0xB
-asm/non_matchings/code/z_actor/func_800BE258.s,func_800BE258,0x800BE258,0x18
-asm/non_matchings/code/z_actor/func_800BE2B8.s,func_800BE2B8,0x800BE2B8,0x21
+asm/non_matchings/code/z_actor/Actor_SetDropFlag.s,Actor_SetDropFlag,0x800BE258,0x18
+asm/non_matchings/code/z_actor/Actor_SetDropFlagJntSph.s,Actor_SetDropFlagJntSph,0x800BE2B8,0x21
 asm/non_matchings/code/z_actor/func_800BE33C.s,func_800BE33C,0x800BE33C,0x25
 asm/non_matchings/code/z_actor/func_800BE3D0.s,func_800BE3D0,0x800BE3D0,0x4D
 asm/non_matchings/code/z_actor/func_800BE504.s,func_800BE504,0x800BE504,0x19

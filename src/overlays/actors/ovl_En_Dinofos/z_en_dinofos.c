@@ -1263,7 +1263,7 @@ s32 func_8089D60C(EnDinofos* this, GlobalContext* globalCtx) {
 
     if (this->colliderJntSph.base.acFlags & AC_HIT) {
         this->colliderJntSph.base.acFlags &= ~AC_HIT;
-        func_800BE2B8(&this->actor, &this->colliderJntSph);
+        Actor_SetDropFlagJntSph(&this->actor, &this->colliderJntSph);
 
         for (i = 0; i < ARRAY_COUNT(this->colliderJntSphElement); i++) {
             if (this->colliderJntSph.elements[i].info.bumperFlags & BUMP_HIT) {

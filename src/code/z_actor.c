@@ -4317,23 +4317,23 @@ u8 Actor_ApplyDamage(Actor* actor) {
     return actor->colChkInfo.health;
 }
 
-void func_800BE258(Actor* actor, ColliderInfo* colInfo) {
-    ColliderInfo* temp_v0 = colInfo->acHitInfo;
+void Actor_SetDropFlag(Actor* actor, ColliderInfo* colInfo) {
+    ColliderInfo* acHitInfo = colInfo->acHitInfo;
 
-    if (temp_v0 == NULL) {
+    if (acHitInfo == NULL) {
         actor->dropFlag = 0;
-    } else if (temp_v0->toucher.dmgFlags & 0x800) {
+    } else if (acHitInfo->toucher.dmgFlags & 0x800) {
         actor->dropFlag = 1;
-    } else if (temp_v0->toucher.dmgFlags & 0x1000) {
+    } else if (acHitInfo->toucher.dmgFlags & 0x1000) {
         actor->dropFlag = 2;
-    } else if (temp_v0->toucher.dmgFlags & 0x2000) {
+    } else if (acHitInfo->toucher.dmgFlags & 0x2000) {
         actor->dropFlag = 0x20;
     } else {
         actor->dropFlag = 0;
     }
 }
 
-void func_800BE2B8(Actor* actor, ColliderJntSph* jntSphere) {
+void Actor_SetDropFlagJntSph(Actor* actor, ColliderJntSph* jntSphere) {
     s32 i;
     ColliderJntSphElement* jntElement;
     ColliderInfo* acHitInfo;

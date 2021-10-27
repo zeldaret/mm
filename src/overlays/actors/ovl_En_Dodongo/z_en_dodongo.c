@@ -974,7 +974,7 @@ void EnDodongo_UpdateDamage(EnDodongo* this, GlobalContext* globalCtx) {
     } else if (this->collider1.base.acFlags & AC_HIT) {
         this->collider2.base.acFlags &= ~AC_HIT;
         this->collider1.base.acFlags &= ~AC_HIT;
-        func_800BE2B8(&this->actor, &this->collider1);
+        Actor_SetDropFlagJntSph(&this->actor, &this->collider1);
 
         for (i = 0; i < ARRAY_COUNT(this->collider1Elements); i++) {
             if (this->collider1.elements[i].info.bumperFlags & BUMP_HIT) {

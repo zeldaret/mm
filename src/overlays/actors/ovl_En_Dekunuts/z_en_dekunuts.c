@@ -578,7 +578,7 @@ void func_808BE6C4(EnDekunuts* this, GlobalContext* globalCtx) {
 void func_808BE73C(EnDekunuts* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
-        func_800BE258(&this->actor, &this->collider.info);
+        Actor_SetDropFlag(&this->actor, &this->collider.info);
         if ((this->unk_18E != 10) || !(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
             func_808BD3B4(this, globalCtx);
             if ((this->actor.colChkInfo.mass == 50) || (this->actor.params != ENDEKUNUTS_GET_FF00_0)) {

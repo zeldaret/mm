@@ -633,7 +633,7 @@ void EnFirefly_DisturbDiveAttack(EnFirefly* this, GlobalContext* globalCtx) {
 void EnFirefly_UpdateDamage(EnFirefly* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
-        func_800BE258(&this->actor, &this->collider.info);
+        Actor_SetDropFlag(&this->actor, &this->collider.info);
 
         if (this->actor.colChkInfo.damageEffect == 1) {
             this->timer = 40;

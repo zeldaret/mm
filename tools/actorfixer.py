@@ -194,6 +194,8 @@ animdict = {
     "func_800BC5EC": "Actor_OtherIsTargeted",
     "func_800BCB70": "Actor_SetColorFilter",
     "func_800BE0B8": "Actor_FindNearby",
+    "func_800BE258": "Actor_SetDropFlag",
+    "func_800BE2B8": "Actor_SetDropFlagJntSph",
 }
 
 def replace_anim(file):

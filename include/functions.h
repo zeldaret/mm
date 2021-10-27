@@ -916,8 +916,8 @@ void Gfx_DrawDListXlu(GlobalContext* globalCtx, Gfx* dlist);
 Actor* Actor_FindNearby(GlobalContext* globalCtx, Actor* inActor, s16 arg2, u8 arg3, f32 arg4);
 s32 func_800BE184(GameState* gameState, Actor* actor, f32 arg2, s16 arg3, s16 arg4, s16 arg5);
 u8 Actor_ApplyDamage(Actor* actor); // returns current health
-void func_800BE258(Actor* actor, ColliderInfo* colInfo);
-void func_800BE2B8(Actor* actor, ColliderJntSph* jntSphere);
+void Actor_SetDropFlag(Actor* actor, ColliderInfo* colInfo);
+void Actor_SetDropFlagJntSph(Actor* actor, ColliderJntSph* jntSphere);
 void func_800BE33C(Vec3f* arg0, Vec3f* arg1, Vec3s* arg2, s32 arg3);
 void func_800BE3D0(Actor* actor, s16 arg1, Vec3s* arg2);
 void func_800BE504(Actor* actor, ColliderCylinder* collider);
