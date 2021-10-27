@@ -1746,7 +1746,7 @@ s32 func_800B83BC(Actor* actor, f32 arg1) {
 
 s32 func_800B83F8(Actor* actor, Player* player, s32 flag) {
     if ((actor->update == NULL) || !(actor->flags & 1) || (actor->flags & 0x8000000)) {
-        return 1;
+        return true;
     }
 
     if (!flag) {
@@ -1762,7 +1762,8 @@ s32 func_800B83F8(Actor* actor, Player* player, s32 flag) {
 
         return !func_800B83BC(actor, D_801AECF0[actor->targetMode].leashScale * dist);
     }
-    return 0;
+
+    return false;
 }
 
 s16 D_801AED48[] = {
@@ -1816,10 +1817,10 @@ s32 func_800B867C(Actor* actor, GameState* gameState) {
 
     if (func_80152498(&globalCtx->msgCtx) == 2) {
         actor->flags &= ~0x100;
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
 /**
@@ -1856,38 +1857,36 @@ s32 func_800B8718(Actor* actor, GameState* gameState) {
     return false;
 }
 
-#ifdef NON_MATCHING
-void func_800B874C(Actor* actor, GameState* gameState, f32 xzRange, f32 yRange) {
+s32 func_800B874C(Actor* actor, GameState* gameState, f32 xzRange, f32 yRange) {
     Player* player = GET_PLAYER(gameState);
 
-    if ((player->actor.flags & 0x20000000) || ((Player_InCsMode(gameState) != 0)) ||
+    if ((player->actor.flags & 0x20000000) || Player_InCsMode(gameState) ||
         (yRange < fabsf(actor->yDistToPlayer)) || ((player->unk_A94 < actor->xzDistToPlayer)) ||
         (xzRange < actor->xzDistToPlayer)) {
-        return;
+        return false;
     }
 
     player->unk_A90 = actor;
     player->unk_A94 = actor->xzDistToPlayer;
-}
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B874C.s")
-#endif
-
-void func_800B8804(Actor* actor, GameState* gameState, f32 xzRange) {
-    func_800B874C(actor, gameState, xzRange, 20.0f);
+    return true;
 }
 
-void func_800B882C(Actor* actor, GameState* gameState) {
+s32 func_800B8804(Actor* actor, GameState* gameState, f32 xzRange) {
+    return func_800B874C(actor, gameState, xzRange, 20.0f);
+}
+
+s32 func_800B882C(Actor* actor, GameState* gameState) {
     f32 cylRadius = actor->colChkInfo.cylRadius + 50.0f;
 
-    func_800B8804(actor, gameState, cylRadius);
+    return func_800B8804(actor, gameState, cylRadius);
 }
 
 s32 func_800B886C(Actor* actor, GameState* gameState) {
     if (!(GET_PLAYER(gameState)->actor.flags & 0x20000000)) {
-        return 1;
+        return true;
     }
-    return 0;
+
+    return false;
 }
 
 void func_800B8898(GlobalContext* globalCtx, Actor* actor, s16* x, s16* y) {
@@ -2107,16 +2106,16 @@ void func_800B9010(Actor* actor, u16 sfxId) {
     actor->unk39 |= 0x01;
 }
 
-void func_800B9038(Actor* actor, s32 arg1) {
+void func_800B9038(Actor* actor, s32 timer) {
     actor->unk39 &= ~(0x10 | 0x08 | 0x04 | 0x02 | 0x01);
     actor->unk39 |= 0x10;
 
-    if (arg1 < 40) {
-        actor->sfx = 3;
-    } else if (arg1 < 100) {
-        actor->sfx = 2;
+    if (timer < 40) {
+        actor->sfx = NA_SE_PL_WALK_DIRT - SFX_FLAG;
+    } else if (timer < 100) {
+        actor->sfx = NA_SE_PL_WALK_CONCRETE - SFX_FLAG;
     } else {
-        actor->sfx = 1;
+        actor->sfx = NA_SE_PL_WALK_SAND - SFX_FLAG;
     }
 }
 
@@ -2300,7 +2299,7 @@ Actor* Actor_UpdateActor(s800B948C* params) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_UpdateActor.s")
 #endif
 
-s32 D_801AED58[] = {
+u32 D_801AED58[] = {
     0x100002C2, 0x100002C2, 0x00000200, 0x100006C2, 0x00000282, 0x300002C2,
     0x10000282, 0x00000002, 0x300002C2, 0x100006C2, 0x00000002, 0x100002C2,
 };
@@ -2335,7 +2334,7 @@ void Actor_UpdateAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
         sp40.updateActorIfSet = 0;
     }
 
-    if (((player->stateFlags1 & 0x40) != 0) && ((player->actor.textId & 0xFF00) != 0x1900)) {
+    if ((player->stateFlags1 & 0x40) && ((player->actor.textId & 0xFF00) != 0x1900)) {
         sp40.unk10 = player->targetActor;
     } else {
         sp40.unk10 = NULL;
@@ -2477,22 +2476,24 @@ void Actor_Draw(GlobalContext* globalCtx, Actor* actor) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-#ifdef NON_MATCHING
-void func_801A0810(s32*, u16, u8);
 void func_800B9D1C(Actor* actor) {
-    if (actor->sfx != 0) {
-        if ((actor->unk39 & 2) != 0) {
-            Audio_PlaySoundGeneral(actor->sfx & 0xFFFF, &actor->projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
-        } else if ((actor->unk39 & 4) != 0) {
-            play_sound(actor->sfx & 0xFFFF);
-        } else if ((actor->unk39 & 8) != 0) {
-            func_8019F128(actor->sfx & 0xFFFF);
-        } else if ((actor->unk39 & 0x10) != 0) {
-            func_801A0810(&D_801DB4A4, NA_SE_SY_TIMER - SFX_FLAG, (actor->sfx - 1));
-        } else if ((actor->unk39 & 1) != 0) {
-            func_8019F1C0(&actor->projectedPos, actor->sfx & 0xFFFF);
+    s32 sfx = actor->sfx;
+
+    if (sfx != 0) {
+        if (actor->unk39 & 2) {
+            Audio_PlaySoundGeneral(sfx, &actor->projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
+        } else if (actor->unk39 & 4) {
+            play_sound(sfx);
+        } else if (actor->unk39 & 8) {
+            func_8019F128(sfx);
+        } else if (actor->unk39 & 0x10) {
+            func_801A0810(&D_801DB4A4, NA_SE_SY_TIMER - SFX_FLAG, (sfx - 1));
+        } else if (actor->unk39 & 1) {
+            func_8019F1C0(&actor->projectedPos, sfx);
         }
     }
+
+    if (sfx) {}
 
     if (actor->unk39 & 0x40) {
         func_801A1FB4(3, &actor->projectedPos, 0x27, 1500.0f);
@@ -2502,9 +2503,6 @@ void func_800B9D1C(Actor* actor) {
         func_801A1FB4(0, &actor->projectedPos, 0x71, 900.0f);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B9D1C.s")
-#endif
 
 void Actor_DrawAllSetup(GlobalContext* globalCtx) {
     globalCtx->actorCtx.undrawnActorCount = 0;
