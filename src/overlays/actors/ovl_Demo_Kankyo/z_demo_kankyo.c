@@ -122,7 +122,7 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globa
                         } else if (randResult < 0.4f) {
                             D_808D03C4 = 7;
                         } else {
-                            D_808D03C4 = 0xF;
+                            D_808D03C4 = 15;
                         }
                         if ((D_808D03C4 & i) == 0) {
                             this->particles[i].vel.y = 0.0f;
@@ -483,8 +483,8 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, GlobalContext* globalCtx2) {
             func_80169474(globalCtx, &newPos, &newScreenPos); // unamed Play_ function
 
             // considering these appear to be max screen coords, checking if particle is on screen?
-            if ((newScreenPos.x >= 0.0f) && (newScreenPos.x < 320.0f) && (newScreenPos.y >= 0.0f) &&
-                (newScreenPos.y < 240.0f)) {
+            if (newScreenPos.x >= 0.0f && newScreenPos.x < 320.0f && newScreenPos.y >= 0.0f &&
+                newScreenPos.y < 240.0f) {
                 Matrix_InsertTranslation(newPos.x, newPos.y, newPos.z, MTXMODE_NEW);
                 scaleAlpha = this->particles[i].alpha / 50.0f;
                 if (scaleAlpha > 1.0f) {
@@ -570,8 +570,8 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
             func_80169474(globalCtx, &newPos, &newScreenPos);
 
             // considering these appear to be max screen coords, checking if particle is on screen?
-            if ((newScreenPos.x >= 0.0f) && (newScreenPos.x < 320.0f) && (newScreenPos.y >= 0.0f) &&
-                (newScreenPos.y < 240.0f)) {
+            if (newScreenPos.x >= 0.0f && newScreenPos.x < 320.0f && newScreenPos.y >= 0.0f &&
+                newScreenPos.y < 240.0f) {
                 Matrix_InsertTranslation(newPos.x, newPos.y, newPos.z, MTXMODE_NEW);
                 alphaScale = this->particles[i].alpha / 50.0f;
                 if (alphaScale > 1.0f) {
