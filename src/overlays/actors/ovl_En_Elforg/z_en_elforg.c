@@ -308,7 +308,7 @@ void EnElforg_TurnInFairy(EnElforg* this, GlobalContext* globalCtx) {
 void EnElforg_QuicklyCircleFairyFountain(EnElforg* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     EnElforg_MoveToTargetFairyFountain(this, &this->actor.home.pos);
-    if (this->secondaryTimer < 31) {
+    if (this->secondaryTimer <= 30) {
         this->actionFunc = EnElforg_TurnInFairy;
     }
     this->secondaryTimer--;
