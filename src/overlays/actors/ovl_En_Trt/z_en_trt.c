@@ -112,12 +112,12 @@ void EnTrt_ChangeAnim(SkelAnime* skelAnime, ActorAnimationEntryS* animations, s3
 
     animations += idx;
     if (animations->frameCount < 0) {
-        frameCount = SkelAnime_GetFrameCount(&animations->animationSeg->common);
+        frameCount = Animation_GetLastFrame(animations->animationSeg);
     } else {
         frameCount = animations->frameCount;
     }
-    SkelAnime_ChangeAnim(skelAnime, animations->animationSeg, animations->playbackSpeed, animations->frame, frameCount,
-                         animations->mode, animations->transitionRate);
+    Animation_Change(skelAnime, animations->animationSeg, animations->playbackSpeed, animations->frame, frameCount,
+                     animations->mode, animations->transitionRate);
 }
 
 s32 EnTrt_TestItemSelected(GlobalContext* globalCtx) {
@@ -160,9 +160,9 @@ void EnTrt_UpdateCursorPos(GlobalContext* globalCtx, EnTrt* this) {
     f32 yOffset = 17.0f;
 
     func_800B8898(globalCtx, &this->items[this->cursorIdx]->actor, &x, &y);
-    this->cursorX = x + xOffset;
-    this->cursorY = y + yOffset;
-    this->cursorZ = 1.2f;
+    this->cursorPos.x = x + xOffset;
+    this->cursorPos.y = y + yOffset;
+    this->cursorPos.z = 1.2f;
 }
 
 void EnTrt_SetupGetMushroomCutscene(EnTrt* this) {
@@ -207,7 +207,7 @@ u16 EnTrt_GetItemChoiceTextId(EnTrt* this) {
 }
 
 void EnTrt_EndInteraction(GlobalContext* globalCtx, EnTrt* this) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
         ActorCutscene_Stop(this->cutscene);
@@ -332,7 +332,7 @@ void EnTrt_Hello(EnTrt* this, GlobalContext* globalCtx) {
 
 void EnTrt_GetMushroom(EnTrt* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     this->tmpGetMushroomCutscene = this->getMushroomCutscene;
     if (this->cutsceneState != ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
@@ -346,7 +346,7 @@ void EnTrt_GetMushroom(EnTrt* this, GlobalContext* globalCtx) {
                 this->textId = 0x884;
                 func_801518B0(globalCtx, this->textId, &this->actor);
                 gSaveContext.weekEventReg[0x35] |= 8;
-                func_80123D50(globalCtx, PLAYER, 18, 21);
+                func_80123D50(globalCtx, GET_PLAYER(globalCtx), 18, 21);
                 break;
             case 0x888:
                 this->textId = 0x889;
@@ -372,7 +372,7 @@ void EnTrt_GetMushroom(EnTrt* this, GlobalContext* globalCtx) {
 void EnTrt_PayForMushroom(EnTrt* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
-        func_80123D50(globalCtx, PLAYER, 18, 21);
+        func_80123D50(globalCtx, GET_PLAYER(globalCtx), 18, 21);
         this->actionFunc = EnTrt_SetupItemGiven;
     } else {
         func_800B8A1C(&this->actor, globalCtx, GI_RUPEE_RED, 300.0f, 300.0f);
@@ -439,7 +439,7 @@ void EnTrt_SetupTryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_GiveRedPotionForKoume(EnTrt* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
@@ -644,7 +644,7 @@ void EnTrt_BrowseShelf(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_SetupBuyItemWithFanfare(GlobalContext* globalCtx, EnTrt* this) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     func_800B8A1C(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
     globalCtx->msgCtx.unk11F22 = 0x43;
@@ -749,7 +749,7 @@ void EnTrt_SelectItem(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_IdleSleeping(EnTrt* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((gSaveContext.weekEventReg[0x55] & 8) && !(gSaveContext.weekEventReg[0x54] & 0x40)) {
         this->textId = 0x88F;
@@ -806,7 +806,7 @@ void EnTrt_IdleSleeping(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_IdleAwake(EnTrt* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     this->flags &= ~ENTRT_FULLY_AWAKE;
     if (player->transformation == PLAYER_FORM_HUMAN || player->transformation == PLAYER_FORM_FIERCE_DEITY) {
@@ -851,8 +851,8 @@ void EnTrt_IdleAwake(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_BeginInteraction(EnTrt* this, GlobalContext* globalCtx) {
-    s16 animCurrentFrame = this->skelAnime.animCurrentFrame / this->skelAnime.animPlaybackSpeed;
-    s16 animLastFrame = SkelAnime_GetFrameCount(&D_060030EC.common) / (s16)this->skelAnime.animPlaybackSpeed;
+    s16 curFrame = this->skelAnime.curFrame / this->skelAnime.playSpeed;
+    s16 animLastFrame = Animation_GetLastFrame(&D_060030EC) / (s16)this->skelAnime.playSpeed;
 
     if (this->cutsceneState == ENTRT_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
@@ -863,7 +863,7 @@ void EnTrt_BeginInteraction(EnTrt* this, GlobalContext* globalCtx) {
         }
     } else if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
         if (this->animationIdx != 5) {
-            if (animCurrentFrame == animLastFrame) {
+            if (curFrame == animLastFrame) {
                 EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 3);
                 this->animationIdx = 3;
                 this->blinkFunc = EnTrt_OpenEyesThenSetToBlink;
@@ -983,7 +983,7 @@ void EnTrt_TryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_ItemGiven(EnTrt* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->cutsceneState == ENTRT_CUTSCENESTATE_STOPPED) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
@@ -1032,7 +1032,7 @@ void EnTrt_SetupEndInteraction(EnTrt* this, GlobalContext* globalCtx) {
 
 void EnTrt_ShopkeeperGone(EnTrt* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (func_800B84D0(&this->actor, globalCtx)) {
         func_801518B0(globalCtx, this->textId, &this->actor);
@@ -1099,7 +1099,7 @@ void EnTrt_SetupItemGiven(EnTrt* this, GlobalContext* globalCtx) {
 
 void EnTrt_ContinueShopping(EnTrt* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     EnGirlA* item;
 
     if (talkState == 4) {
@@ -1221,10 +1221,10 @@ void EnTrt_UpdateCursorAnim(EnTrt* this) {
             this->cursorAnimState = 0;
         }
     }
-    this->cursorColorR = COL_CHAN_MIX(0, 0.0f, t);
-    this->cursorColorG = COL_CHAN_MIX(80, 80.0f, t);
-    this->cursorColorB = COL_CHAN_MIX(255, 0.0f, t);
-    this->cursorColorA = COL_CHAN_MIX(255, 0.0f, t);
+    this->cursorColor.r = COL_CHAN_MIX(0, 0.0f, t);
+    this->cursorColor.g = COL_CHAN_MIX(80, 80.0f, t);
+    this->cursorColor.b = COL_CHAN_MIX(255, 0.0f, t);
+    this->cursorColor.a = COL_CHAN_MIX(255, 0.0f, t);
     this->cursorAnimTween = t;
 }
 
@@ -1266,15 +1266,15 @@ void EnTrt_UpdateStickDirectionPromptAnim(EnTrt* this) {
 
     this->stickAnimTween = stickAnimTween;
 
-    this->stickLeftPrompt.arrowColorR = COL_CHAN_MIX(255, 155.0f, arrowAnimTween);
-    this->stickLeftPrompt.arrowColorG = COL_CHAN_MIX(maxColor, 155.0f, arrowAnimTween);
-    this->stickLeftPrompt.arrowColorB = COL_CHAN_MIX(0, -100, arrowAnimTween);
-    this->stickLeftPrompt.arrowColorA = COL_CHAN_MIX(200, 50.0f, arrowAnimTween);
+    this->stickLeftPrompt.arrowColor.r = COL_CHAN_MIX(255, 155.0f, arrowAnimTween);
+    this->stickLeftPrompt.arrowColor.g = COL_CHAN_MIX(maxColor, 155.0f, arrowAnimTween);
+    this->stickLeftPrompt.arrowColor.b = COL_CHAN_MIX(0, -100, arrowAnimTween);
+    this->stickLeftPrompt.arrowColor.a = COL_CHAN_MIX(200, 50.0f, arrowAnimTween);
 
-    this->stickRightPrompt.arrowColorR = (maxColor - ((s32)tmp)) & 0xFF;
-    this->stickRightPrompt.arrowColorG = (255 - ((s32)tmp)) & 0xFF;
-    this->stickRightPrompt.arrowColorB = COL_CHAN_MIX(0, -100.0f, arrowAnimTween);
-    this->stickRightPrompt.arrowColorA = COL_CHAN_MIX(200, 50.0f, arrowAnimTween);
+    this->stickRightPrompt.arrowColor.r = (maxColor - ((s32)tmp)) & 0xFF;
+    this->stickRightPrompt.arrowColor.g = (255 - ((s32)tmp)) & 0xFF;
+    this->stickRightPrompt.arrowColor.b = COL_CHAN_MIX(0, -100.0f, arrowAnimTween);
+    this->stickRightPrompt.arrowColor.a = COL_CHAN_MIX(200, 50.0f, arrowAnimTween);
 
     this->stickRightPrompt.arrowTexX = 290.0f;
     this->stickLeftPrompt.arrowTexX = 33.0f;
@@ -1341,11 +1341,11 @@ void EnTrt_NodOff(EnTrt* this) {
 }
 
 void EnTrt_OpenThenCloseEyes(EnTrt* this) {
-    if (this->skelAnime.animCurrentFrame >= 40.0f) {
+    if (this->skelAnime.curFrame >= 40.0f) {
         EnTrt_CloseEyes(this);
-    } else if (this->skelAnime.animCurrentFrame >= 35.0f) {
+    } else if (this->skelAnime.curFrame >= 35.0f) {
         this->eyeTextureIdx = 1;
-    } else if (this->skelAnime.animCurrentFrame >= 10.0f) {
+    } else if (this->skelAnime.curFrame >= 10.0f) {
         EnTrt_OpenEyes(this);
     }
 }
@@ -1359,7 +1359,7 @@ void EnTrt_OpenEyes2(EnTrt* this) {
 }
 
 void EnTrt_OpenEyesThenSetToBlink(EnTrt* this) {
-    if (this->skelAnime.animCurrentFrame >= 7.0f) {
+    if (this->skelAnime.curFrame >= 7.0f) {
         EnTrt_OpenEyes(this);
         if (this->eyeTextureIdx == 0) {
             this->blinkFunc = EnTrt_Blink;
@@ -1369,7 +1369,7 @@ void EnTrt_OpenEyesThenSetToBlink(EnTrt* this) {
 
 void EnTrt_TalkToShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
     u8 talkState = talkState = func_80152498(&globalCtx->msgCtx);
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 itemGiven;
 
     if (talkState == 5) {
@@ -1452,7 +1452,7 @@ void EnTrt_LookToShopkeeperFromShelf(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_InitShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600FEF0, &D_0600FD34, NULL, NULL, 0);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600FEF0, &D_0600FD34, NULL, NULL, 0);
     if (!(gSaveContext.weekEventReg[0xC] & 8) && !(gSaveContext.weekEventReg[0x54] & 0x40) && gSaveContext.day >= 2) {
         this->actor.draw = NULL;
     } else {
@@ -1483,28 +1483,28 @@ void EnTrt_InitShop(EnTrt* this, GlobalContext* globalCtx) {
     this->stickAccumY = 0;
     this->stickAccumX = 0;
     this->cursorIdx = 0;
-    this->cursorY = this->cursorX = 100.0f;
-    this->cursorZ = 1.2f;
-    this->cursorColorR = 0;
-    this->cursorColorG = 80;
-    this->cursorColorB = maxcolor;
-    this->cursorColorA = maxcolor;
+    this->cursorPos.y = this->cursorPos.x = 100.0f;
+    this->cursorPos.z = 1.2f;
+    this->cursorColor.r = 0;
+    this->cursorColor.g = 80;
+    this->cursorColor.b = maxcolor;
+    this->cursorColor.a = maxcolor;
     this->cursorAnimTween = 0.0f;
     this->cursorAnimState = 0;
     this->drawCursor = 0;
 
     this2 = this;
 
-    this->stickLeftPrompt.stickColorR = 200;
-    this2->stickLeftPrompt.stickColorG = 200;
-    this2->stickLeftPrompt.stickColorB = 200;
-    this2->stickLeftPrompt.stickColorA = 180;
+    this->stickLeftPrompt.stickColor.r = 200;
+    this2->stickLeftPrompt.stickColor.g = 200;
+    this2->stickLeftPrompt.stickColor.b = 200;
+    this2->stickLeftPrompt.stickColor.a = 180;
     this2->stickLeftPrompt.stickTexX = 49.0f;
     this2->stickLeftPrompt.stickTexY = 95.0f;
-    this2->stickLeftPrompt.arrowColorR = maxcolor;
-    this2->stickLeftPrompt.arrowColorG = maxcolor;
-    this2->stickLeftPrompt.arrowColorB = 0;
-    this2->stickLeftPrompt.arrowColorA = 200;
+    this2->stickLeftPrompt.arrowColor.r = maxcolor;
+    this2->stickLeftPrompt.arrowColor.g = maxcolor;
+    this2->stickLeftPrompt.arrowColor.b = 0;
+    this2->stickLeftPrompt.arrowColor.a = 200;
     this2->stickLeftPrompt.arrowTexX = 33.0f;
     this2->stickLeftPrompt.arrowTexY = 91.0f;
     this2->stickLeftPrompt.texZ = 1.0f;
@@ -1512,16 +1512,16 @@ void EnTrt_InitShop(EnTrt* this, GlobalContext* globalCtx) {
 
     if (1) {}
 
-    this2->stickRightPrompt.stickColorR = 200;
-    this2->stickRightPrompt.stickColorG = 200;
-    this2->stickRightPrompt.stickColorB = 200;
-    this2->stickRightPrompt.stickColorA = 180;
+    this2->stickRightPrompt.stickColor.r = 200;
+    this2->stickRightPrompt.stickColor.g = 200;
+    this2->stickRightPrompt.stickColor.b = 200;
+    this2->stickRightPrompt.stickColor.a = 180;
     this2->stickRightPrompt.stickTexX = 274.0f;
     this2->stickRightPrompt.stickTexY = 95.0f;
-    this2->stickRightPrompt.arrowColorR = maxcolor;
-    this2->stickRightPrompt.arrowColorG = 0;
-    this2->stickRightPrompt.arrowColorB = 0;
-    this2->stickRightPrompt.arrowColorA = 200;
+    this2->stickRightPrompt.arrowColor.r = maxcolor;
+    this2->stickRightPrompt.arrowColor.g = 0;
+    this2->stickRightPrompt.arrowColor.b = 0;
+    this2->stickRightPrompt.arrowColor.a = 200;
     this2->stickRightPrompt.arrowTexX = 290.0f;
     this2->stickRightPrompt.arrowTexY = 91.0f;
     this2->stickRightPrompt.texZ = 1.0f;
@@ -1562,8 +1562,8 @@ void EnTrt_DrawCursor(GlobalContext* globalCtx, EnTrt* this, f32 x, f32 y, f32 z
     OPEN_DISPS(globalCtx->state.gfxCtx);
     if (drawCursor != 0) {
         func_8012C654(globalCtx->state.gfxCtx);
-        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, this->cursorColorR, this->cursorColorG, this->cursorColorB,
-                        this->cursorColorA);
+        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, this->cursorColor.r, this->cursorColor.g, this->cursorColor.b,
+                        this->cursorColor.a);
         gDPLoadTextureBlock_4b(OVERLAY_DISP++, &D_0401F740, G_IM_FMT_IA, 16, 16, 0, G_TX_MIRROR | G_TX_WRAP,
                                G_TX_MIRROR | G_TX_WRAP, 4, 4, G_TX_NOLOD, G_TX_NOLOD);
         w = 16.0f * z;
@@ -1626,14 +1626,14 @@ void EnTrt_DrawStickDirectionPrompt(GlobalContext* globalCtx, EnTrt* this) {
                    G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOLOD);
         gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 15 * 4, 23 * 4);
         if (drawStickRightPrompt) {
-            EnTrt_DrawTextRec(globalCtx, this->stickLeftPrompt.arrowColorR, this->stickLeftPrompt.arrowColorG,
-                              this->stickLeftPrompt.arrowColorB, this->stickLeftPrompt.arrowColorA,
+            EnTrt_DrawTextRec(globalCtx, this->stickLeftPrompt.arrowColor.r, this->stickLeftPrompt.arrowColor.g,
+                              this->stickLeftPrompt.arrowColor.b, this->stickLeftPrompt.arrowColor.a,
                               this->stickLeftPrompt.arrowTexX, this->stickLeftPrompt.arrowTexY,
                               this->stickLeftPrompt.texZ, 0, 0, -1.0f, 1.0f);
         }
         if (drawStickLeftPrompt) {
-            EnTrt_DrawTextRec(globalCtx, this->stickRightPrompt.arrowColorR, this->stickRightPrompt.arrowColorG,
-                              this->stickRightPrompt.arrowColorB, this->stickRightPrompt.arrowColorA,
+            EnTrt_DrawTextRec(globalCtx, this->stickRightPrompt.arrowColor.r, this->stickRightPrompt.arrowColor.g,
+                              this->stickRightPrompt.arrowColor.b, this->stickRightPrompt.arrowColor.a,
                               this->stickRightPrompt.arrowTexX, this->stickRightPrompt.arrowTexY,
                               this->stickRightPrompt.texZ, 0, 0, 1.0f, 1.0f);
         }
@@ -1647,14 +1647,14 @@ void EnTrt_DrawStickDirectionPrompt(GlobalContext* globalCtx, EnTrt* this) {
                    G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOLOD);
         gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 15 * 4, 15 * 4);
         if (drawStickRightPrompt) {
-            EnTrt_DrawTextRec(globalCtx, this->stickLeftPrompt.stickColorR, this->stickLeftPrompt.stickColorG,
-                              this->stickLeftPrompt.stickColorB, this->stickLeftPrompt.stickColorA,
+            EnTrt_DrawTextRec(globalCtx, this->stickLeftPrompt.stickColor.r, this->stickLeftPrompt.stickColor.g,
+                              this->stickLeftPrompt.stickColor.b, this->stickLeftPrompt.stickColor.a,
                               this->stickLeftPrompt.stickTexX, this->stickLeftPrompt.stickTexY,
                               this->stickLeftPrompt.texZ, 0, 0, -1.0f, 1.0f);
         }
         if (drawStickLeftPrompt) {
-            EnTrt_DrawTextRec(globalCtx, this->stickRightPrompt.stickColorR, this->stickRightPrompt.stickColorG,
-                              this->stickRightPrompt.stickColorB, this->stickRightPrompt.stickColorA,
+            EnTrt_DrawTextRec(globalCtx, this->stickRightPrompt.stickColor.r, this->stickRightPrompt.stickColor.g,
+                              this->stickRightPrompt.stickColor.b, this->stickRightPrompt.stickColor.a,
                               this->stickRightPrompt.stickTexX, this->stickRightPrompt.stickTexY,
                               this->stickRightPrompt.texZ, 0, 0, 1.0f, 1.0f);
         }
@@ -1691,12 +1691,12 @@ void EnTrt_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnTrt_UpdateHeadYawAndPitch(this, globalCtx);
     this->actionFunc(this, globalCtx);
     Actor_SetHeight(&this->actor, 90.0f);
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     EnTrt_UpdateCollider(this, globalCtx);
 }
 
 void EnTrt_UpdateHeadYawAndPitch(EnTrt* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Vec3f playerPos;
     Vec3f pos;
 
@@ -1716,8 +1716,8 @@ void EnTrt_UpdateHeadPosAndRot(s16 pitch, s16 yaw, Vec3f* pos, Vec3s* rot, s32 i
     Vec3s newRot;
     MtxF currentState;
 
-    SysMatrix_MultiplyVector3fByState(&D_801D15B0tmp, &newPos);
-    SysMatrix_CopyCurrentState(&currentState);
+    Matrix_MultiplyVector3fByState(&D_801D15B0tmp, &newPos);
+    Matrix_CopyCurrentState(&currentState);
     func_8018219C(&currentState, &newRot, MTXMODE_NEW);
     *pos = newPos;
     if (isFullyAwake) {
@@ -1759,11 +1759,11 @@ void EnTrt_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     }
     if (limbIndex == 21) {
         EnTrt_UpdateHeadPosAndRot(this->headPitch, this->headYaw, &this->headPos, &this->headRot, isFullyAwake);
-        SysMatrix_InsertTranslation(this->headPos.x, this->headPos.y, this->headPos.z, MTXMODE_NEW);
+        Matrix_InsertTranslation(this->headPos.x, this->headPos.y, this->headPos.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateY(this->headRot.y, MTXMODE_APPLY);
-        SysMatrix_InsertXRotation_s(this->headRot.x, MTXMODE_APPLY);
-        SysMatrix_InsertZRotation_s(this->headRot.z, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(this->headRot.x, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(this->headRot.z, MTXMODE_APPLY);
     }
 }
 
@@ -1771,11 +1771,11 @@ void EnTrt_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnTrt* this = THIS;
 
     if (limbIndex == 21) {
-        SysMatrix_InsertTranslation(this->headPos.x, this->headPos.y, this->headPos.z, MTXMODE_NEW);
+        Matrix_InsertTranslation(this->headPos.x, this->headPos.y, this->headPos.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateY(this->headRot.y, MTXMODE_APPLY);
-        SysMatrix_InsertXRotation_s(this->headRot.x, MTXMODE_APPLY);
-        SysMatrix_InsertZRotation_s(this->headRot.z, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(this->headRot.x, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(this->headRot.z, MTXMODE_APPLY);
     }
 }
 
@@ -1789,9 +1789,9 @@ void EnTrt_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTextureIdx]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTextureIdx]));
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
+    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                   EnTrt_OverrideLimbDraw, EnTrt_PostLimbDraw, EnTrt_UnkActorDraw, &this->actor);
-    EnTrt_DrawCursor(globalCtx, this, this->cursorX, this->cursorY, this->cursorZ, this->drawCursor);
+    EnTrt_DrawCursor(globalCtx, this, this->cursorPos.x, this->cursorPos.y, this->cursorPos.z, this->drawCursor);
     EnTrt_DrawStickDirectionPrompt(globalCtx, this);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);

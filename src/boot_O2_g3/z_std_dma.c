@@ -2,7 +2,14 @@
 
 u32 sDmaMgrDmaBuffSize = 0x2000;
 
-s32 DmaMgr_DMARomToRam(u32 rom, void* ram, u32 size) {
+StackEntry sDmaMgrStackInfo;
+u16 numDmaEntries;
+OSMesgQueue sDmaMgrMsgQueue;
+OSMesg sDmaMgrMsgs[32];
+OSThread sDmaMgrThread;
+u8 sDmaMgrStack[0x500];
+
+s32 DmaMgr_DMARomToRam(u32 rom, void* ram, size_t size) {
     OSIoMesg ioMsg;
     OSMesgQueue queue;
     OSMesg msg[1];
@@ -104,7 +111,7 @@ const char* func_800809F4(u32 a0) {
 void DmaMgr_ProcessMsg(DmaRequest* req) {
     u32 vrom;
     void* ram;
-    u32 size;
+    size_t size;
     u32 romStart;
     u32 romSize;
     DmaEntry* dmaEntry;
@@ -165,7 +172,7 @@ void DmaMgr_ThreadEntry(void* a0) {
     }
 }
 
-s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, u32 vromStart, u32 size, UNK_TYPE4 unused,
+s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, u32 vromStart, size_t size, UNK_TYPE4 unused,
                            OSMesgQueue* queue, OSMesg msg) {
     if (gIrqMgrResetStatus >= 2) {
         return -2;
@@ -183,7 +190,7 @@ s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, u32 vromStart, 
     return 0;
 }
 
-s32 DmaMgr_SendRequest0(void* vramStart, u32 vromStart, u32 size) {
+s32 DmaMgr_SendRequest0(void* vramStart, u32 vromStart, size_t size) {
     DmaRequest req;
     OSMesgQueue queue;
     OSMesg msg[1];
@@ -202,30 +209,33 @@ s32 DmaMgr_SendRequest0(void* vramStart, u32 vromStart, u32 size) {
     return 0;
 }
 
-#ifdef NON_MATCHING
-// TODO missing a useless move initializing v0, and some reorderings
-void DmaMgr_Start() {
+void DmaMgr_Start(void) {
     DmaEntry* iter;
     u32 idx;
 
-    DmaMgr_DMARomToRam((u32)_dmadataSegmentRomStart, dmadata, (u32)(_dmadataSegmentRomEnd - _dmadataSegmentRomStart));
+    DmaMgr_DMARomToRam(SEGMENT_ROM_START(dmadata), dmadata, SEGMENT_ROM_SIZE(dmadata));
 
-    for (iter = dmadata, idx = 0; iter->vromEnd != 0; iter++, idx++) {
-        ;
+dummy_label:;
+
+    iter = dmadata;
+    idx = 0;
+    while (iter->vromEnd != 0) {
+        iter++;
+        idx++;
     }
 
     numDmaEntries = idx;
 
+dummy_label_2:;
+
     osCreateMesgQueue(&sDmaMgrMsgQueue, sDmaMgrMsgs, ARRAY_COUNT(sDmaMgrMsgs));
-    StackCheck_Init(&sDmaMgrStackInfo, sDmaMgrStack, sDmaMgrStack + sizeof(sDmaMgrStack), 0, 256, dmamgrThreadName);
+    StackCheck_Init(&sDmaMgrStackInfo, sDmaMgrStack, sDmaMgrStack + sizeof(sDmaMgrStack), 0, 0x100, "dmamgr");
     osCreateThread(&sDmaMgrThread, Z_THREAD_ID_DMAMGR, DmaMgr_ThreadEntry, NULL, sDmaMgrStack + sizeof(sDmaMgrStack),
                    Z_PRIORITY_DMAMGR);
+
     osStartThread(&sDmaMgrThread);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/boot/z_std_dma/DmaMgr_Start.s")
-#endif
 
-void DmaMgr_Stop() {
+void DmaMgr_Stop(void) {
     osSendMesg(&sDmaMgrMsgQueue, NULL, OS_MESG_BLOCK);
 }

@@ -402,9 +402,8 @@ void EffectSsGSpk_SpawnSmall(GlobalContext* globalCtx, Actor* actor, Vec3f* pos,
 }
 
 // EffectSsDFire Spawn Functions
-#ifdef NON_MATCHING
 void EffectSsDFire_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep,
-                         s16 alpha, s16 fadeDelay, s16 life) {
+                         s16 alpha, s16 fadeDelay, s16 arg8, s32 life) {
     EffectSsDFireInitParams initParams;
 
     Math_Vec3f_Copy(&initParams.pos, pos);
@@ -414,13 +413,11 @@ void EffectSsDFire_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, 
     initParams.scaleStep = scaleStep;
     initParams.alpha = alpha;
     initParams.fadeDelay = fadeDelay;
+    initParams.unk_2C = arg8;
     initParams.life = life;
 
     EffectSs_Spawn(globalCtx, EFFECT_SS_D_FIRE, 128, &initParams);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_effect_soft_sprite_old_init/EffectSsDFire_Spawn.s")
-#endif
 
 // EffectSsBubble Spawn Functions
 
@@ -538,8 +535,8 @@ void EffectSsDtBubble_SpawnCustomColor(GlobalContext* globalCtx, Vec3f* pos, Vec
 /**
  * Spawn a single fragment
  *
- * Notes:
- *     - if a display list is not provided, D_0400C0D0 (wilted deku fragment) will be used as default
+ *  * Notes:
+ *     - if a display list is not provided, an unknown default will be used as default
  *     - the unused arg does not do anything, any value can be passed here
  *     - due to how life is implemented it is capped at 200. Any value over 200 is accepted, but the fragment will
  *       only live for 200 frames
@@ -569,7 +566,6 @@ void EffectSsHahen_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, 
  *     - due to how life is implemented it is capped at 200. Any value over 200 is accepted, but the fragment will
  *       only live for 200 frames
  */
-#ifdef NON_MATCHING
 void EffectSsHahen_SpawnBurst(GlobalContext* globalCtx, Vec3f* pos, f32 burstScale, s16 unused, s16 scale,
                               s16 randScaleRange, s16 count, s16 objId, s16 life, Gfx* dList) {
     s32 i;
@@ -588,9 +584,6 @@ void EffectSsHahen_SpawnBurst(GlobalContext* globalCtx, Vec3f* pos, f32 burstSca
                             life, dList);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_effect_soft_sprite_old_init/EffectSsHahen_SpawnBurst.s")
-#endif
 
 extern Vec3f D_801AE3E0;
 
@@ -906,7 +899,7 @@ void EffectSsFireTail_SpawnFlame(GlobalContext* globalCtx, Actor* actor, Vec3f* 
 #endif
 
 void EffectSsFireTail_SpawnFlameOnPlayer(GlobalContext* globalCtx, f32 scale, s16 bodyPart, f32 colorIntensity) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     EffectSsFireTail_SpawnFlame(globalCtx, &player->actor, &player->bodyPartsPos[bodyPart], scale, bodyPart,
                                 colorIntensity);
@@ -967,6 +960,7 @@ void EffectSsExtra_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, 
 }
 
 // EffectSsDeadDb Spawn Functions
+
 void EffectSsDeadDb_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* prim,
                           Color_RGBA8* env, s16 scale, s16 scaleStep, s32 unk) {
     EffectSsDeadDbInitParams initParams;

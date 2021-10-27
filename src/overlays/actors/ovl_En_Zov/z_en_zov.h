@@ -5,7 +5,7 @@
 
 struct EnZov;
 
-typedef void (*EnZovActionFunc)(struct EnZov* this, GlobalContext* globalCtx);
+typedef void (*EnZovActionFunc)(struct EnZov*, GlobalContext*);
 
 typedef struct EnZov {
     /* 0x0000 */ Actor actor;

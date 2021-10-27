@@ -42,40 +42,40 @@ typedef struct {
 } RespawnData; // size = 0x20
 
 typedef struct {
-    /* 0x0000 */ u32 entranceIndex; // "scene_no"
-    /* 0x0004 */ u8 equippedMask;   // "player_mask"
-    /* 0x0005 */ u8 unk_05;         // "opening_flag"
+    /* 0x0000 */ u32 entranceIndex;          // "scene_no"
+    /* 0x0004 */ u8 equippedMask;            // "player_mask"
+    /* 0x0005 */ u8 unk_05;                  // "opening_flag"
     /* 0x0006 */ u8 unk_06;
-    /* 0x0007 */ u8 linkAge;   // "link_age"
-    /* 0x0008 */ s32 cutscene; // "day_time"
-    /* 0x000C */ u16 time;     // "zelda_time"
+    /* 0x0007 */ u8 linkAge;                 // "link_age"
+    /* 0x0008 */ s32 cutscene;               // "day_time"
+    /* 0x000C */ u16 time;                   // "zelda_time"
     /* 0x000E */ u16 owlSaveLocation;
-    /* 0x0010 */ s32 isNight;        // "asahiru_fg"
-    /* 0x0014 */ u32 unk_14;         // "change_zelda_time"
-    /* 0x0018 */ s32 day;            // "totalday"
-    /* 0x001C */ u32 daysElapsed;    // "eventday"
-    /* 0x0020 */ u8 playerForm;      // "player_character"
-    /* 0x0021 */ u8 snowheadCleared; // "spring_flag"
-    /* 0x0022 */ u8 hasTatl;         // "bell_flag"
+    /* 0x0010 */ s32 isNight;                // "asahiru_fg"
+    /* 0x0014 */ u32 unk_14;                 // "change_zelda_time"
+    /* 0x0018 */ s32 day;                    // "totalday"
+    /* 0x001C */ u32 daysElapsed;            // "eventday"
+    /* 0x0020 */ u8 playerForm;              // "player_character"
+    /* 0x0021 */ u8 snowheadCleared;         // "spring_flag"
+    /* 0x0022 */ u8 hasTatl;                 // "bell_flag"
     /* 0x0023 */ u8 isOwlSave;
-    /* 0x0024 */ char newf[6];       // Will always be "ZELDA3" for a valid save
-    /* 0x002B */ u16 deaths;         // "savect"
-    /* 0x002C */ char playerName[8]; // "player_name"
-    /* 0x0034 */ s16 healthCapacity; // "max_life"
-    /* 0x0036 */ s16 health;         // "now_life"
-    /* 0x0038 */ s8 magicLevel;      // "magic_max"
-    /* 0x0039 */ s8 magic;           // "magic_now"
-    /* 0x003A */ s16 rupees;         // "lupy_count"
-    /* 0x003C */ u16 swordHealth;    // "long_sword_hp"
-    /* 0x003E */ u16 naviTimer;      // "navi_timer"
-    /* 0x0040 */ u8 magicAcquired;   // "magic_mode"
-    /* 0x0041 */ u8 doubleMagic;     // "magic_ability"
-    /* 0x0042 */ u8 doubleDefense;   // "life_ability"
-    /* 0x0043 */ u8 unk_43;          // "ocarina_round"
-    /* 0x0044 */ u8 unk_44;          // "first_memory"
-    /* 0x0046 */ u16 unk_46;         // "memory_warp_point"
-    /* 0x0048 */ u8 unk_48;          // "last_warp_pt"
-    /* 0x004A */ s16 savedSceneNum;  // "scene_data_ID"
+    /* 0x0024 */ char newf[6];               // Will always be "ZELDA3" for a valid save
+    /* 0x002B */ u16 deaths;                 // "savect"
+    /* 0x002C */ char playerName[8];         // "player_name"
+    /* 0x0034 */ s16 healthCapacity;         // "max_life"
+    /* 0x0036 */ s16 health;                 // "now_life"
+    /* 0x0038 */ s8 magicLevel;              // "magic_max"
+    /* 0x0039 */ s8 magic;                   // "magic_now"
+    /* 0x003A */ s16 rupees;                 // "lupy_count"
+    /* 0x003C */ u16 swordHealth;            // "long_sword_hp"
+    /* 0x003E */ u16 naviTimer;              // "navi_timer"
+    /* 0x0040 */ u8 magicAcquired;           // "magic_mode"
+    /* 0x0041 */ u8 doubleMagic;             // "magic_ability"
+    /* 0x0042 */ u8 doubleDefense;           // "life_ability"
+    /* 0x0043 */ u8 unk_43;                  // "ocarina_round"
+    /* 0x0044 */ u8 unk_44;                  // "first_memory"
+    /* 0x0046 */ u16 owlActivationFlags;     // "memory_warp_point"
+    /* 0x0048 */ u8 unk_48;                  // "last_warp_pt"
+    /* 0x004A */ s16 savedSceneNum;          // "scene_data_ID"
     /* 0x004C */ ItemEquips equips;
     /* 0x0070 */ Inventory inventory;
     /* 0x00F8 */ u32 roomInf[128][7];
@@ -159,7 +159,7 @@ typedef struct {
     /* 0x3F45 */ u8 zTargetSetting;      // 0: Switch; 1: Hold
     /* 0x3F46 */ u16 unk_3F46;           // "NottoriBgm"
     /* 0x3F48 */ u8 unk_3F48;            // "fade_go"
-    /* 0x3F4A */ u16 unk_3F4A;           // "next_daytime"
+    /* 0x3F4A */ u16 nextCutsceneIndex;  // "next_daytime"
     /* 0x3F4C */ u8 cutsceneTrigger;     // "doukidemo"
     /* 0x3F4D */ u8 unk_3F4D;            // "Kenjya_no"
     /* 0x3F4E */ u16 nextDayTime;        // "next_zelda_time"
@@ -175,8 +175,9 @@ typedef struct {
     /* 0x3F60 */ u8 unk_3F60;            // "framescale_flag"
     /* 0x3F64 */ f32 unk_3F64;           // "framescale_scale"
     /* 0x3F68 */ u32 unk_3F68[5][120];
-    /* 0x48C8 */ u16 unk_48C8; // "scene_id_mix"
-    /* 0x48CA */ u8 unk_48CA[27];
+    /* 0x48C8 */ u16 unk_48C8;           // "scene_id_mix"
+    /* 0x48CA */ u8 maskMaskBit[3];      // masks given away on the Moon
+    /* 0x48CD */ char unk_48CD[24];
 } SaveContext; // size = 0x48C8
 
 typedef enum {

@@ -27,8 +27,8 @@ typedef struct EnFsn {
     /* 0x24E */ s16 limbRotZTable[19];
     /* 0x274 */ Vec3s headRot;
     /* 0x27A */ Vec3s unk27A; // Set but never used
-    /* 0x280 */ Vec3s limbDrawTable[19];
-    /* 0x2F2 */ Vec3s transitionDrawTable[19];
+    /* 0x280 */ Vec3s jointTable[19];
+    /* 0x2F2 */ Vec3s morphTable[19];
     /* 0x364 */ s16 eyeTextureIdx;
     /* 0x366 */ s16 blinkTimer;
     /* 0x368 */ s16 cutsceneState;
@@ -51,13 +51,8 @@ typedef struct EnFsn {
     /* 0x39C */ s16 delayTimer;
     /* 0x3A0 */ s32 stickAccumX;
     /* 0x3A4 */ s32 stickAccumY;
-    /* 0x3A8 */ f32 cursorX;
-    /* 0x3AC */ f32 cursorY;
-    /* 0x3B0 */ f32 cursorZ;
-    /* 0x3B4 */ s32 cursorColorR;
-    /* 0x3B8 */ s32 cursorColorG;
-    /* 0x3BC */ s32 cursorColorB;
-    /* 0x3C0 */ s32 cursorColorA;
+    /* 0x3A8 */ Vec3f cursorPos;
+    /* 0x3B4 */ Color_RGBAu32 cursorColor;
     /* 0x3C4 */ f32 cursorAnimTween;
     /* 0x3C8 */ u8 cursorAnimState;
     /* 0x3C9 */ u8 drawCursor;

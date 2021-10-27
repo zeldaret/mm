@@ -26,13 +26,8 @@ typedef struct EnOssan {
     /* 0x20C */ s32 stickAccumY;
     /* 0x210 */ u8 moveHorizontal;
     /* 0x211 */ u8 moveVertical;
-    /* 0x214 */ f32 cursorX;
-    /* 0x218 */ f32 cursorY;
-    /* 0x21C */ f32 cursorZ;
-    /* 0x220 */ u32 cursorColorR;
-    /* 0x224 */ u32 cursorColorG;
-    /* 0x228 */ u32 cursorColorB;
-    /* 0x22C */ u32 cursorColorA;
+    /* 0x214 */ Vec3f cursorPos;
+    /* 0x220 */ Color_RGBAu32 cursorColor;
     /* 0x230 */ f32 cursorAnimTween;
     /* 0x234 */ u8 cursorAnimState;
     /* 0x235 */ u8 drawCursor;
@@ -55,8 +50,8 @@ typedef struct EnOssan {
     /* 0x2CC */ Vec3s unk2CC; // Set but never used
     /* 0x2D2 */ s16 limbRotTableY[19];
     /* 0x2F8 */ s16 limbRotTableZ[19];
-    /* 0x31E */ Vec3s limbDrawTbl[19];
-    /* 0x390 */ Vec3s transitionDrawTbl[19];
+    /* 0x31E */ Vec3s jointTable[19];
+    /* 0x390 */ Vec3s morphTable[19];
     /* 0x402 */ s16 animationIdx;
     /* 0x404 */ Vec3s headRotPartTimeWorker;
     /* 0x40A */ u16 flags;

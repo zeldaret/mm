@@ -51,7 +51,7 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globa
     f32 diffY;
     f32 diffZ;
     f32 randResult;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (globalCtx->roomCtx.unk7A[1] != 0) {
         if (globalCtx->envCtx.unk_F2[3] != 0) {
@@ -485,7 +485,7 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, GlobalContext* globalCtx2) {
             // considering these appear to be max screen coords, checking if particle is on screen?
             if ((newScreenPos.x >= 0.0f) && (newScreenPos.x < 320.0f) && (newScreenPos.y >= 0.0f) &&
                 (newScreenPos.y < 240.0f)) {
-                SysMatrix_InsertTranslation(newPos.x, newPos.y, newPos.z, MTXMODE_NEW);
+                Matrix_InsertTranslation(newPos.x, newPos.y, newPos.z, MTXMODE_NEW);
                 scaleAlpha = this->particles[i].alpha / 50.0f;
                 if (scaleAlpha > 1.0f) {
                     scaleAlpha = 1.0f;
@@ -533,8 +533,8 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, GlobalContext* globalCtx2) {
                         break;
                 }
 
-                SysMatrix_InsertMatrix(&globalCtx->mf_187FC, MTXMODE_APPLY);
-                SysMatrix_InsertZRotation_f(globalCtx->state.frames * 20.0f * 0.017453292f, MTXMODE_APPLY);
+                Matrix_InsertMatrix(&globalCtx->mf_187FC, MTXMODE_APPLY);
+                Matrix_InsertZRotation_f(globalCtx->state.frames * 20.0f * 0.017453292f, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -572,7 +572,7 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
             // considering these appear to be max screen coords, checking if particle is on screen?
             if ((newScreenPos.x >= 0.0f) && (newScreenPos.x < 320.0f) && (newScreenPos.y >= 0.0f) &&
                 (newScreenPos.y < 240.0f)) {
-                SysMatrix_InsertTranslation(newPos.x, newPos.y, newPos.z, MTXMODE_NEW);
+                Matrix_InsertTranslation(newPos.x, newPos.y, newPos.z, MTXMODE_NEW);
                 alphaScale = this->particles[i].alpha / 50.0f;
                 if (alphaScale > 1.0f) {
                     alphaScale = 1.0f;
@@ -604,10 +604,10 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
 
                 gSPDisplayList(POLY_XLU_DISP++, &D_04023348);
 
-                SysMatrix_InsertMatrix(&globalCtx->mf_187FC, MTXMODE_APPLY);
+                Matrix_InsertMatrix(&globalCtx->mf_187FC, MTXMODE_APPLY);
 
                 // macro?
-                SysMatrix_InsertZRotation_f(globalCtx->state.frames * 20.0f * 0.017453292f, MTXMODE_APPLY);
+                Matrix_InsertZRotation_f(globalCtx->state.frames * 20.0f * 0.017453292f, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

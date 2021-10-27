@@ -109,8 +109,8 @@ typedef struct AlienBehaviorInfo {
 typedef struct EnInvadepoh {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s limbDrawTable[23];
-    /* 0x212 */ Vec3s transitionDrawTable[23];
+    /* 0x188 */ Vec3s jointTable[23];
+    /* 0x212 */ Vec3s morphTable[23];
     /* 0x29C */ s8 animPlayFlag;
     /* 0x2A0 */ ColliderCylinder collider;
     /* 0x2EC */ EnInvadepohActionFunc actionFunc;

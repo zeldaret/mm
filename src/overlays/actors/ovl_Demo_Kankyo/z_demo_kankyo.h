@@ -7,7 +7,6 @@ struct DemoKankyo;
 
 typedef void (*DemoKankyoActionFunc)(struct DemoKankyo*, GlobalContext*);
 
-
 typedef struct {
   /* 0x000 */ u8 state;
   /* 0x004 */ Vec3f vel;

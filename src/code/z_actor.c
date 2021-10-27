@@ -53,7 +53,7 @@ void ActorShadow_Draw(Actor* actor, Lights* lights, GlobalContext* globalCtx, Gf
             }
 
             func_800C0094(actor->floorPoly, actor->world.pos.x, actor->floorHeight, actor->world.pos.z, &mtx);
-            SysMatrix_SetCurrentState(&mtx);
+            Matrix_SetCurrentState(&mtx);
 
             if (dlist != D_04076BC0) {
                 Matrix_RotateY((f32)actor->shape.rot.y * (M_PI / 32768), MTXMODE_APPLY);
@@ -117,7 +117,7 @@ void func_800B40E0(GlobalContext* globalCtx, Light* light, MtxF* arg2, s32 arg3,
     sp58 = Math_FAtan2F(light->l.dir[0], light->l.dir[2]);
     arg6 *= (4.5f - (light->l.dir[1] * 0.035f));
     arg6 = (arg6 < 1.0f) ? 1.0f : arg6;
-    SysMatrix_SetCurrentState(arg2);
+    Matrix_SetCurrentState(arg2);
     Matrix_RotateY(sp58, MTXMODE_APPLY);
     Matrix_Scale(arg5, 1.0f, arg5 * arg6, MTXMODE_APPLY);
 
@@ -457,6 +457,12 @@ f32 Actor_XZDistanceToPoint(Actor* actor, Vec3f* point) {
     return Math_Vec3f_DistXZ(&actor->world.pos, point);
 }
 
+/** Performs the affine (linear) transformation from world coordinates to actor coordinates
+ *
+ * @param[in]  actor  The actor whose coordinate system to transform to.
+ * @param[out] offset The transformed coordinates.
+ * @param[in]  point  The point to transform to actor coordinates.
+ */
 void Actor_CalcOffsetOrientedToDrawRotation(Actor* actor, Vec3f* offset, Vec3f* point) {
     f32 cos_rot_y;
     f32 sin_rot_y;
@@ -738,7 +744,7 @@ void Actor_FreeOverlay(ActorOverlay* entry) {
                 if ((entry->allocType & 1) != 0) {
                     entry->loadedRamAddr = NULL;
                 } else {
-                    zelda_free(ramAddr);
+                    ZeldaArena_Free(ramAddr);
                     entry->loadedRamAddr = NULL;
                 }
             }
@@ -766,7 +772,7 @@ void Actor_FreeOverlay(ActorOverlay* entry) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BB8EC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BBA88.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Enemy_StartFinishingBlow.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BBAC0.s")
 
@@ -845,11 +851,28 @@ void Actor_FreeOverlay(ActorOverlay* entry) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE03C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE0B8.s")
+Actor* func_800BE0B8(GlobalContext* globalCtx, Actor* inActor, s16 arg2, u8 arg3, f32 arg4) {
+    Actor* actor = globalCtx->actorCtx.actorList[arg3].first;
+
+    while (actor != NULL) {
+        if (actor == inActor || ((arg2 != -1) && (arg2 != actor->id))) {
+            actor = actor->next;
+            continue;
+        }
+
+        if (Actor_DistanceBetweenActors(inActor, actor) <= arg4) {
+            return actor;
+        }
+
+        actor = actor->next;
+    }
+
+    return NULL;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE184.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE22C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_ApplyDamage.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE258.s")
 

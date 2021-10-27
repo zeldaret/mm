@@ -1,3 +1,9 @@
+/*
+ * File: z_en_bji_01.c
+ * Overlay: ovl_En_Bji_01
+ * Description: Professor Shikashi (Astral Observatory Proprietor)
+ */
+
 #include "z_en_bji_01.h"
 
 #define FLAGS 0x00000019
@@ -20,9 +26,8 @@ void func_809CD6C0(EnBji01* this, GlobalContext* globalCtx);
 void func_809CD70C(EnBji01* this, GlobalContext* globalCtx);
 void func_809CD77C(EnBji01* this, GlobalContext* globalCtx);
 
-s32 EnBji01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                             Actor* actor);
-void EnBji01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor);
+s32 EnBji01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* arg);
+void EnBji01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* arg);
 
 extern AnimationHeader D_06000FDC;
 extern AnimationHeader D_06005B58;
@@ -74,7 +79,7 @@ static struct_80B8E1A8 D_809CDC7C[] = {
 };
 
 void func_809CCDE0(EnBji01* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Vec3f sp58;
     s32 pad[2];
 
@@ -291,14 +296,14 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
             func_809CCE98(this, globalCtx);
             break;
     }
-    if ((this->animationIndex == 3) && (this->skelAnime.animCurrentFrame == this->skelAnime.animFrameCount)) {
+    if ((this->animationIndex == 3) && (this->skelAnime.curFrame == this->skelAnime.endFrame)) {
         func_8013E1C8(&this->skelAnime, D_809CDC7C, 2, &this->animationIndex);
     }
 }
 
 void func_809CD634(EnBji01* this, GlobalContext* globalCtx) {
     func_801A5BD0(0x6F);
-    func_801A89A8(0xE0000101);
+    Audio_QueueSeqCmd(0xE0000101);
     globalCtx->nextEntranceIndex = 0x54A0; /* Termina Field from telescope */
     gSaveContext.respawn[0].entranceIndex = globalCtx->nextEntranceIndex;
     func_80169EFC(globalCtx); /* Load new entrance? */
@@ -333,8 +338,8 @@ void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBji01* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 30.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600578C, &D_06000FDC, this->jointTable, this->morphTable,
-                     BJI_LIMB_MAX);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600578C, &D_06000FDC, this->jointTable, this->morphTable,
+                       BJI_LIMB_MAX);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -357,7 +362,7 @@ void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx) {
         case 0x4C20: /* Observatory from Termina Field telescope */
             this->actor.flags |= 0x10000;
             func_801A5BD0(0);
-            func_801A89A8(0xE0000100);
+            Audio_QueueSeqCmd(0xE0000100);
             this->actor.params = ENBJI01_PARAMS_LOOKED_THROUGH_TELESCOPE;
             func_809CCE98(this, globalCtx);
             break;
@@ -380,7 +385,7 @@ void EnBji01_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
     Actor_UpdateBgCheckInfo(globalCtx, (Actor*)this, 0.0f, 0.0f, 0.0f, 4U);
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
 
     if (this->blinkTimer-- <= 0) {
         if (--this->blinkSeqIndex < 0) {
@@ -432,7 +437,7 @@ void EnBji01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
         sp20.x += temp_f4 * 0.1f;
         sp20.y += temp_f4 * 0.1f;
         sp20.z += temp_f4 * 0.1f;
-        SysMatrix_MultiplyVector3fByState(&sp20, &this->actor.focus.pos);
+        Matrix_MultiplyVector3fByState(&sp20, &this->actor.focus.pos);
     }
 }
 
@@ -443,7 +448,7 @@ void EnBji01_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                     EnBji01_OverrideLimbDraw, EnBji01_PostLimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnBji01_OverrideLimbDraw, EnBji01_PostLimbDraw, &this->actor);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
