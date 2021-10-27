@@ -715,9 +715,9 @@ void Flags_UnsetClearTemp(GlobalContext* globalCtx, s32 roomNumber);
 s32 Flags_GetCollectible(GlobalContext* globalCtx, s32 index);
 void Flags_SetCollectible(GlobalContext* globalCtx, s32 index);
 void TitleCard_ContextInit(GameState* gameState, TitleCardContext* titleCtx);
-void TitleCard_InitBossName(GameState* gameState, TitleCardContext* titleCtx, u32 texture, s16 param_4,
+void TitleCard_InitBossName(GameState* gameState, TitleCardContext* titleCtx, TexturePtr texture, s16 param_4,
                            s16 param_5, u8 param_6, u8 param_7);
-void TitleCard_InitPlaceName(GameState* gameState, TitleCardContext* titleCtx, void* texture, s32 x, s32 y,
+void TitleCard_InitPlaceName(GameState* gameState, TitleCardContext* titleCtx, TexturePtr texture, s32 x, s32 y,
                              s32 width, s32 height, s32 delay);
 void TitleCard_Update(GameState* gameState, TitleCardContext* titleCtx);
 void TitleCard_Draw(GameState* gameState, TitleCardContext* titleCtx);
@@ -809,7 +809,7 @@ void func_800B874C(Actor* actor, GameState* gameState, f32 xzRange, f32 yRange);
 void func_800B8804(Actor* actor, GameState* gameState, f32 xzRange);
 void func_800B882C(Actor* actor, GameState* gameState);
 s32 func_800B886C(Actor* actor, GameState* gameState);
-void func_800B8898(GlobalContext* globalCtx, Actor* actor, s16* arg2, s16* arg3);
+void func_800B8898(GlobalContext* globalCtx, Actor* actor, s16* x, s16* y);
 s32 func_800B8934(GameState* gameState, Actor* actor);
 s32 Actor_HasParent(Actor* actor, GlobalContext* globalCtx);
 s32 Actor_PickUp(Actor* actor, GlobalContext* globalCtx, s32 getItemId, f32 xzRange, f32 yRange);

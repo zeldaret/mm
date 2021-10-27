@@ -282,7 +282,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
         if (!(actor->bgCheckFlags & 1)) {
             actor->shape.feetFloorFlags = 0;
         } else if (actor->shape.feetFloorFlags == 3) {
-            temp_f0_2 = actor->shape.feetPos[0].y - actor->shape.feetPos[1].y;
+            temp_f0_2 = actor->shape.feetPos[FOOT_LEFT].y - actor->shape.feetPos[FOOT_RIGHT].y;
             if ((floorHeight[0] + temp_f0_2) < (floorHeight[1] - temp_f0_2)) {
                 actor->shape.feetFloorFlags = 2;
             } else {
@@ -483,7 +483,6 @@ void Actor_TargetContextInit(TargetContext* targetCtx, Actor* actor, GlobalConte
     func_800B4F78(targetCtx, actor->category, globalCtx);
 }
 
-// Actor_DrawZTarget
 #ifdef NON_MATCHING
 // stack is too big
 void Actor_DrawZTarget(TargetContext* targetCtx, GlobalContext* globalCtx) {
@@ -612,12 +611,11 @@ void Actor_DrawZTarget(TargetContext* targetCtx, GlobalContext* globalCtx) {
 // OoT: func_8002C7BC
 void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GlobalContext* globalCtx) {
     s32 pad;
-    Actor* sp68;
+    Actor* sp68 = NULL;
     s32 sp64;
     Vec3f sp58;
     f32 sp54;
 
-    sp68 = NULL;
     if ((player->unk_730 != 0) && (player->unk_AE3[player->unk_ADE] == 2)) {
         targetCtx->unk_94 = NULL;
     } else {
@@ -668,7 +666,6 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, Globa
     }
 
     if (actor != NULL && targetCtx->unk4B == 0) {
-
         func_800B4EDC(globalCtx, &actor->focus.pos, &sp58, &sp54);
         if ((sp58.z <= 0.0f) || (fabsf(sp58.x * sp54) >= 1.0f) || (fabsf(sp58.y * sp54) >= 1.0f)) {
             actor = NULL;
@@ -687,7 +684,7 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, Globa
                 targetCtx->unk48 = 0;
             }
 
-            sfxId = (actor->flags & 5) == 5 ? 0x4830 : 0x4810;
+            sfxId = (actor->flags & 5) == 5 ? NA_SE_SY_LOCK_ON : NA_SE_SY_LOCK_ON_HUMAN;
             play_sound(sfxId);
         }
 
@@ -833,7 +830,7 @@ void TitleCard_ContextInit(GameState* gameState, TitleCardContext* titleCtx) {
     titleCtx->alpha = 0;
 }
 
-void TitleCard_InitBossName(GameState* gameState, TitleCardContext* titleCtx, u32 texture, s16 param_4, s16 param_5,
+void TitleCard_InitBossName(GameState* gameState, TitleCardContext* titleCtx, TexturePtr texture, s16 param_4, s16 param_5,
                             u8 param_6, u8 param_7) {
     titleCtx->texture = texture;
     titleCtx->x = param_4;
@@ -844,7 +841,7 @@ void TitleCard_InitBossName(GameState* gameState, TitleCardContext* titleCtx, u3
     titleCtx->delayTimer = 0;
 }
 
-void TitleCard_InitPlaceName(GameState* gameState, TitleCardContext* titleCtx, void* texture, s32 x, s32 y, s32 width,
+void TitleCard_InitPlaceName(GameState* gameState, TitleCardContext* titleCtx, TexturePtr texture, s32 x, s32 y, s32 width,
                              s32 height, s32 delay) {
 }
 
@@ -861,27 +858,25 @@ void TitleCard_Update(GameState* gameState, TitleCardContext* titleCtx) {
 }
 
 void TitleCard_Draw(GameState* gameState, TitleCardContext* titleCtx) {
-    s32 spCC;
-    s32 spC8;
-    s32 unk1;
-    s32 spC0;
-    s32 sp38;
-    s32 spB8;
-    s32 spB4;
-    s32 temp;
-
     if (titleCtx->alpha != 0) {
-        spCC = titleCtx->width;
-        spC8 = titleCtx->height;
-        temp = spCC * 2;
+        s32 width = titleCtx->width;
+        s32 height = titleCtx->height;
+        s32 unk1;
+        s32 spC0;
+        s32 sp38;
+        s32 spB8;
+        s32 spB4;
+        s32 temp;
+
+        temp = width * 2;
         spC0 = (titleCtx->x * 4) - temp;
-        spB8 = (titleCtx->y * 4) - (spC8 * 2);
-        sp38 = spCC * 2;
+        spB8 = (titleCtx->y * 4) - (height * 2);
+        sp38 = width * 2;
 
         OPEN_DISPS(gameState->gfxCtx);
 
-        spC8 = (spCC * spC8 > 0x1000) ? 0x1000 / spCC : spC8;
-        spB4 = spB8 + (spC8 * 4);
+        height = (width * height > 0x1000) ? 0x1000 / width : height;
+        spB4 = spB8 + (height * 4);
 
         if (1) {}
 
@@ -890,21 +885,21 @@ void TitleCard_Draw(GameState* gameState, TitleCardContext* titleCtx) {
         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, (u8)titleCtx->intensity, (u8)titleCtx->intensity, (u8)titleCtx->intensity,
                         (u8)titleCtx->alpha);
 
-        gDPLoadTextureBlock(OVERLAY_DISP++, (s32*)titleCtx->texture, G_IM_FMT_IA, G_IM_SIZ_8b, spCC, spC8, 0,
+        gDPLoadTextureBlock(OVERLAY_DISP++, (s32*)titleCtx->texture, G_IM_FMT_IA, G_IM_SIZ_8b, width, height, 0,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                             G_TX_NOLOD);
 
-        gSPTextureRectangle(OVERLAY_DISP++, spC0, spB8, ((sp38 * 2) + spC0) - 4, spB8 + (spC8 * 4) - 1, G_TX_RENDERTILE,
+        gSPTextureRectangle(OVERLAY_DISP++, spC0, spB8, ((sp38 * 2) + spC0) - 4, spB8 + (height * 4) - 1, G_TX_RENDERTILE,
                             0, 0, 1 << 10, 1 << 10);
 
-        spC8 = titleCtx->height - spC8;
+        height = titleCtx->height - height;
 
-        if (spC8 > 0) {
-            gDPLoadTextureBlock(OVERLAY_DISP++, (s32)titleCtx->texture + 0x1000, G_IM_FMT_IA, G_IM_SIZ_8b, spCC, spC8,
+        if (height > 0) {
+            gDPLoadTextureBlock(OVERLAY_DISP++, (s32)titleCtx->texture + 0x1000, G_IM_FMT_IA, G_IM_SIZ_8b, width, height,
                                 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
 
-            gSPTextureRectangle(OVERLAY_DISP++, spC0, spB4, ((sp38 * 2) + spC0) - 4, spB4 + (spC8 * 4) - 1,
+            gSPTextureRectangle(OVERLAY_DISP++, spC0, spB4, ((sp38 * 2) + spC0) - 4, spB4 + (height * 4) - 1,
                                 G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
         }
 
@@ -955,59 +950,64 @@ f32 func_800B64FC(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2, u32* arg3) {
     return globalCtx->actorCtx.unk1F8 - temp_f8;
 }
 
-void* func_800B6584(GlobalContext* globalCtx, s16 arg1, void* arg2, size_t arg3) {
-    ActorContext_unk_20C* sp1C = globalCtx->actorCtx.unk_20C;
+// inits
+void* func_800B6584(GlobalContext* globalCtx, s16 id, void* arg2, size_t arg3) {
+    ActorContext_unk_20C* entry = globalCtx->actorCtx.unk_20C;
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(globalCtx->actorCtx.unk_20C); i++) {
-        if (sp1C->unk_0 == 0) {
+        if (entry->id == 0) {
             if (arg2 == NULL) {
                 arg2 = ZeldaArena_Malloc(arg3);
                 if (arg2 == NULL) {
                     return NULL;
                 }
-                sp1C->unk_2 = 1;
+                entry->isInitialised = true;
             }
 
-            sp1C->unk_0 = arg1;
-            sp1C->unk_4 = arg2;
+            entry->id = id;
+            entry->unk_4 = arg2;
             return arg2;
         }
-        sp1C++;
+
+        entry++;
     }
 
     return NULL;
 }
 
-void* func_800B6608(GlobalContext* globalCtx, s16 arg1) {
-    ActorContext_unk_20C* sp1C = globalCtx->actorCtx.unk_20C;
+// frees
+void* func_800B6608(GlobalContext* globalCtx, s16 id) {
+    ActorContext_unk_20C* entry = globalCtx->actorCtx.unk_20C;
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(globalCtx->actorCtx.unk_20C); i++) {
-        if (arg1 == sp1C->unk_0) {
-            sp1C->unk_0 = 0;
-            if (sp1C->unk_2 != 0) {
-                ZeldaArena_Free(sp1C->unk_4);
-                sp1C->unk_2 = 0;
+        if (id == entry->id) {
+            entry->id = 0;
+            if (entry->isInitialised) {
+                ZeldaArena_Free(entry->unk_4);
+                entry->isInitialised = false;
             }
-            return sp1C->unk_4;
+            return entry->unk_4;
         }
-        sp1C++;
+
+        entry++;
     }
 
     return NULL;
 }
 
-void* func_800B6680(GlobalContext* globalCtx, s16 arg1) {
-    ActorContext_unk_20C* phi_v1 = globalCtx->actorCtx.unk_20C;
+// find/search
+void* func_800B6680(GlobalContext* globalCtx, s16 id) {
+    ActorContext_unk_20C* entry = globalCtx->actorCtx.unk_20C;
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(globalCtx->actorCtx.unk_20C); i++) {
-        if (arg1 == phi_v1->unk_0) {
-            return phi_v1->unk_4;
+        if (id == entry->id) {
+            return entry->unk_4;
         }
 
-        phi_v1++;
+        entry++;
     }
 
     return NULL;
@@ -1211,6 +1211,7 @@ void Actor_CalcOffsetOrientedToDrawRotation(Actor* actor, Vec3f* offset, Vec3f* 
     sin_rot_y = Math_SinS(actor->shape.rot.y);
     imm_x = point->x - actor->world.pos.x;
     imm_z = point->z - actor->world.pos.z;
+
     offset->x = ((imm_x * cos_rot_y) - (imm_z * sin_rot_y));
     offset->z = ((imm_z * cos_rot_y) + (imm_x * sin_rot_y));
     offset->y = point->y - actor->world.pos.y;
@@ -1264,7 +1265,7 @@ f32 Player_GetRunSpeedLimit(Player* player) {
 }
 
 s32 func_800B7118(Player* player) {
-    return player->stateFlags1 & 8;
+    return player->stateFlags1 & 0x8;
 }
 
 s32 func_800B7128(Player* player) {
@@ -1874,13 +1875,13 @@ s32 func_800B886C(Actor* actor, GameState* gameState) {
     return 0;
 }
 
-void func_800B8898(GlobalContext* globalCtx, Actor* actor, s16* arg2, s16* arg3) {
+void func_800B8898(GlobalContext* globalCtx, Actor* actor, s16* x, s16* y) {
     Vec3f sp1C;
     f32 sp18;
 
     func_800B4EDC(globalCtx, &actor->focus.pos, &sp1C, &sp18);
-    *arg2 = (sp1C.x * sp18 * 160.0f) + 160.0f;
-    *arg3 = (sp1C.y * sp18 * -120.0f) + 120.0f;
+    *x = (sp1C.x * sp18 * (SCREEN_WIDTH/2)) + (SCREEN_WIDTH/2);
+    *y = (sp1C.y * sp18 * -(SCREEN_HEIGHT/2)) + (SCREEN_HEIGHT/2);
 }
 
 s32 func_800B8934(GameState* gameState, Actor* actor) {
@@ -2160,7 +2161,7 @@ void func_800b9170(GameState* gameState, ActorContext* actorCtx, ActorEntry* act
     actorCtx->flags.chest = temp_a2_2[0];
     actorCtx->flags.swch[0] = temp_a2_2[1];
     actorCtx->flags.swch[1] = temp_a2_2[2];
-    if (globalCtx->sceneNum == 0x18) {
+    if (globalCtx->sceneNum == SCENE_INISIE_R) {
         temp_a2_2 = gSaveContext.cycleSceneFlags[globalCtx->sceneNum];
     }
     actorCtx->flags.collectible[0] = temp_a2_2[4];
@@ -3305,12 +3306,12 @@ Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, GlobalContext* globalC
 }
 
 s32 func_800BB59C(GlobalContext* globalCtx, Actor* actor) {
-    s16 sp1E;
-    s16 sp1C;
+    s16 x;
+    s16 y;
 
-    func_800B8898(globalCtx, actor, &sp1E, &sp1C);
+    func_800B8898(globalCtx, actor, &x, &y);
 
-    return (sp1E > -20) && (sp1E < gScreenWidth + 20) && (sp1C > -160) && (sp1C < gScreenHeight + 160);
+    return (x > -20) && (x < gScreenWidth + 20) && (y > -160) && (y < gScreenHeight + 160);
 }
 
 #ifdef NON_EQUIVALENT
