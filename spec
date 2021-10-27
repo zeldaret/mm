@@ -880,8 +880,7 @@ beginseg
     name "ovl_En_Tite"
     compress
     include "build/src/overlays/actors/ovl_En_Tite/z_en_tite.o"
-    include "build/data/ovl_En_Tite/ovl_En_Tite.data.o"
-    include "build/data/ovl_En_Tite/ovl_En_Tite.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Tite/ovl_En_Tite_reloc.o"
 endseg
 
 beginseg
@@ -2907,11 +2906,7 @@ beginseg
     name "ovl_En_Test4"
     compress
     include "build/src/overlays/actors/ovl_En_Test4/z_en_test4.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_En_Test4/ovl_En_Test4_reloc.o"
-#else
-    include "build/data/ovl_En_Test4/ovl_En_Test4.reloc.o"
-#endif
 endseg
 
 beginseg
@@ -3135,8 +3130,7 @@ beginseg
     name "ovl_En_Mushi2"
     compress
     include "build/src/overlays/actors/ovl_En_Mushi2/z_en_mushi2.o"
-    include "build/data/ovl_En_Mushi2/ovl_En_Mushi2.data.o"
-    include "build/data/ovl_En_Mushi2/ovl_En_Mushi2.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Mushi2/ovl_En_Mushi2_reloc.o"
 endseg
 
 beginseg
@@ -3888,8 +3882,7 @@ beginseg
     name "ovl_En_Giant"
     compress
     include "build/src/overlays/actors/ovl_En_Giant/z_en_giant.o"
-    include "build/data/ovl_En_Giant/ovl_En_Giant.data.o"
-    include "build/data/ovl_En_Giant/ovl_En_Giant.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Giant/ovl_En_Giant_reloc.o"
 endseg
 
 beginseg
@@ -4054,8 +4047,7 @@ beginseg
     name "ovl_En_Fish2"
     compress
     include "build/src/overlays/actors/ovl_En_Fish2/z_en_fish2.o"
-    include "build/data/ovl_En_Fish2/ovl_En_Fish2.data.o"
-    include "build/data/ovl_En_Fish2/ovl_En_Fish2.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Fish2/ovl_En_Fish2_reloc.o"
 endseg
 
 beginseg
@@ -4200,9 +4192,7 @@ beginseg
     name "ovl_En_Ot"
     compress
     include "build/src/overlays/actors/ovl_En_Ot/z_en_ot.o"
-    include "build/data/ovl_En_Ot/ovl_En_Ot.data.o"
-    include "build/data/ovl_En_Ot/ovl_En_Ot.bss.o"
-    include "build/data/ovl_En_Ot/ovl_En_Ot.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Ot/ovl_En_Ot_reloc.o"
 endseg
 
 beginseg
@@ -5004,8 +4994,7 @@ beginseg
     name "ovl_En_Muto"
     compress
     include "build/src/overlays/actors/ovl_En_Muto/z_en_muto.o"
-    include "build/data/ovl_En_Muto/ovl_En_Muto.data.o"
-    include "build/data/ovl_En_Muto/ovl_En_Muto.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Muto/ovl_En_Muto_reloc.o"
 endseg
 
 beginseg
