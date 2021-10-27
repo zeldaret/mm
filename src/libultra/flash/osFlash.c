@@ -89,7 +89,7 @@ void osFlashReadStatus(u8* flashStatus) {
 void osFlashReadId(u32* flashType, u32* flashVendor) {
     u8 flashStatus;
 
-    // why read status ?
+    // why read status?
     osFlashReadStatus(&flashStatus);
 
     // select silicon id read mode
