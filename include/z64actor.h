@@ -7,8 +7,6 @@
 #include "z64collision_check.h"
 #include "unk.h"
 
-// #define ACTOR_NUMBER_MAX 200
-// #define INVISIBLE_ACTOR_MAX 20
 #define AM_FIELD_SIZE SEGMENT_SIZE(ovl_Arrow_Fire)
 #define MASS_IMMOVABLE 0xFF // Cannot be pushed by OC collisions
 #define MASS_HEAVY 0xFE     // Can only be pushed by OC collisions with IMMOVABLE and HEAVY objects.
@@ -163,7 +161,7 @@ typedef struct Actor {
     /* 0x020 */ s16 unk20;
     /* 0x024 */ PosRot world; // Position/rotation in the world
     /* 0x038 */ s8 cutscene;
-    /* 0x039 */ u8 unk39;
+    /* 0x039 */ u8 unk39; // Another set of flags? Seems related to sfx
     /* 0x03C */ PosRot focus; // Target reticle focuses on this position. For player this represents head pos and rot
     /* 0x050 */ u16 sfx; // SFX ID to play. Sound plays when value is set, then is cleared the following update cycle
     /* 0x054 */ f32 targetArrowOffset; // Height offset of the target arrow relative to `focus` position
@@ -1033,6 +1031,70 @@ typedef enum {
     /* 0x2B1 */ ACTOR_EN_RSN,
     /* 0x2B2 */ ACTOR_ID_MAX // originally "ACTOR_DLF_MAX"
 } ActorID;
+
+// Targetability
+#define ACTOR_FLAG_1         0x1
+// 
+#define ACTOR_FLAG_2         0x2
+// 
+#define ACTOR_FLAG_4         0x4
+// 
+#define ACTOR_FLAG_8         0x8
+// 
+#define ACTOR_FLAG_10        0x10
+// 
+#define ACTOR_FLAG_20        0x20
+// 
+#define ACTOR_FLAG_40        0x40
+// 
+#define ACTOR_FLAG_80        0x80
+// Related to talk
+#define ACTOR_FLAG_100       0x100
+// 
+#define ACTOR_FLAG_200       0x200
+// 
+#define ACTOR_FLAG_400       0x400
+// 
+#define ACTOR_FLAG_800       0x800
+// 
+#define ACTOR_FLAG_1000      0x1000
+// 
+#define ACTOR_FLAG_2000      0x2000
+// 
+#define ACTOR_FLAG_4000      0x4000
+// 
+#define ACTOR_FLAG_8000      0x8000
+// 
+#define ACTOR_FLAG_10000     0x10000
+// 
+#define ACTOR_FLAG_20000     0x20000
+// 
+#define ACTOR_FLAG_40000     0x40000
+// 
+#define ACTOR_FLAG_80000     0x80000
+// 
+#define ACTOR_FLAG_100000    0x100000
+// 
+#define ACTOR_FLAG_200000    0x200000
+// 
+#define ACTOR_FLAG_400000    0x400000
+// 
+#define ACTOR_FLAG_800000    0x800000
+// 
+#define ACTOR_FLAG_1000000   0x1000000
+// 
+#define ACTOR_FLAG_2000000   0x2000000
+// 
+#define ACTOR_FLAG_4000000   0x4000000
+// 
+#define ACTOR_FLAG_8000000   0x8000000
+// 
+#define ACTOR_FLAG_10000000  0x10000000
+// 
+#define ACTOR_FLAG_20000000  0x20000000
+// 
+#define ACTOR_FLAG_40000000  0x40000000
+//#define ACTOR_FLAG_80000000 0x80000000
 
 typedef enum {
     /* 0x00 */ CLEAR_TAG_SMALL_EXPLOSION,
