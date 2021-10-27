@@ -880,8 +880,7 @@ beginseg
     name "ovl_En_Tite"
     compress
     include "build/src/overlays/actors/ovl_En_Tite/z_en_tite.o"
-    include "build/data/ovl_En_Tite/ovl_En_Tite.data.o"
-    include "build/data/ovl_En_Tite/ovl_En_Tite.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Tite/ovl_En_Tite_reloc.o"
 endseg
 
 beginseg

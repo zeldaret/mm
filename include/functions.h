@@ -912,9 +912,9 @@ u8 Actor_ApplyDamage(Actor* actor); // returns current health
 void func_800BE258(Actor* actor, UNK_PTR arg1);
 void func_800BE2B8(Actor* actor, ColliderJntSph* jntSphere);
 void func_800BE33C(Vec3f* arg0, Vec3f* arg1, Vec3s* arg2, s32 arg3);
-// void func_800BE3D0(void);
+void func_800BE3D0(Actor* actor, s16 arg1, s16* arg2);
 void func_800BE504(Actor* actor, ColliderCylinder* collider);
-// void func_800BE568(void);
+void func_800BE568(Actor* actor, ColliderSphere* collider);
 void func_800BE5CC(Actor* actor, ColliderJntSph* collider, s32 arg2);
 // void func_800BE63C(void);
 void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 arg3, f32 arg4, f32 arg5, f32 arg6, u8 mode);
