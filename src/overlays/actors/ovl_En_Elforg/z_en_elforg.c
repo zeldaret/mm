@@ -58,7 +58,7 @@ void EnElforg_InitializeSpeedAndRotation(EnElforg* this) {
     this->actor.speedXZ = 1.0f;
     this->targetSpeedXZ = 1.0f;
     this->actor.velocity.y = 0.0f;
-    this->actor.world.rot.y = randPlusMinusPoint5Scaled(65536.0f);
+    this->actor.world.rot.y = randPlusMinusPoint5Scaled(0x10000);
     this->timer = 0;
     this->secondaryTimer = Rand_ZeroFloat(100.0f);
     this->actor.shape.yOffset = 0.0f;
