@@ -336,9 +336,9 @@ void EnFirefly_SetupFall(EnFirefly* this, GlobalContext* globalCtx) {
     this->actor.flags |= 0x10;
 
     if (this->isInvisible) {
-        func_800BCB70(&this->actor, 0x4000, 255, 0x2000, 40);
+        Actor_SetColorFilter(&this->actor, 0x4000, 255, 0x2000, 40);
     } else {
-        func_800BCB70(&this->actor, 0x4000, 255, 0, 40);
+        Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
     }
 
     if (this->actor.colChkInfo.damageEffect == 3) {
@@ -534,9 +534,9 @@ void EnFirefly_FlyAway(EnFirefly* this, GlobalContext* globalCtx) {
 
 void EnFirefly_SetupStunned(EnFirefly* this) {
     if (this->isInvisible) {
-        func_800BCB70(&this->actor, 0, 255, 0x2000, this->timer);
+        Actor_SetColorFilter(&this->actor, 0, 255, 0x2000, this->timer);
     } else {
-        func_800BCB70(&this->actor, 0, 255, 0, this->timer);
+        Actor_SetColorFilter(&this->actor, 0, 255, 0, this->timer);
     }
 
     if (this->actionFunc != EnFirefly_Stunned) {

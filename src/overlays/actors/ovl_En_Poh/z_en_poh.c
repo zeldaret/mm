@@ -355,7 +355,7 @@ void func_80B2CFF8(EnPoh* this) {
     func_800BE504(&this->actor, &this->colliderCylinder);
     this->colliderCylinder.base.acFlags &= ~AC_ON;
     this->actor.speedXZ = 5.0f;
-    func_800BCB70(&this->actor, 0x4000, 255, 0, 16);
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 16);
     this->actionFunc = func_80B2D07C;
 }
 

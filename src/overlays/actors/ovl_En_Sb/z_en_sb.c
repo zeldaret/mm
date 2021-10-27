@@ -332,7 +332,7 @@ void EnSb_UpdateDamage(EnSb* this, GlobalContext* globalCtx) {
             hitPlayer = 0;
             if (this->vulnerableTimer != 0) {
                 Actor_ApplyDamage(&this->actor);
-                func_800BCB70(&this->actor, 0x4000, 0xFF, 0x2000, 80);
+                Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0x2000, 80);
                 hitPlayer = 1;
             }
         }

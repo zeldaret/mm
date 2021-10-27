@@ -728,19 +728,19 @@ s32 func_808DA08C(EnSw* this, GlobalContext* globalCtx) {
             }
             this->unk_458 = 20;
             this->unk_45A = 0;
-            func_800BCB70(&this->actor, 0x4000, 200, 0, this->unk_458);
+            Actor_SetColorFilter(&this->actor, 0x4000, 200, 0, this->unk_458);
             ret = true;
         } else if (this->actor.colChkInfo.damageEffect == 1) {
             if (this->unk_45A == 0) {
                 Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 this->unk_45A = 40;
-                func_800BCB70(&this->actor, 0, 200, 0, this->unk_45A);
+                Actor_SetColorFilter(&this->actor, 0, 200, 0, this->unk_45A);
             }
         } else {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALTU_DAMAGE);
             this->unk_458 = 20;
             this->unk_45A = 0;
-            func_800BCB70(&this->actor, 0x4000, 200, 0, this->unk_458);
+            Actor_SetColorFilter(&this->actor, 0x4000, 200, 0, this->unk_458);
         }
     }
     return ret;

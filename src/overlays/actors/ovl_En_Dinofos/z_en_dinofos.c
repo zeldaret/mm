@@ -353,7 +353,7 @@ s32 func_8089A968(EnDinofos* this) {
 void func_8089A9B0(EnDinofos* this, GlobalContext* globalCtx) {
     if (func_8089A968(this)) {
         if (this->actor.xzDistToPlayer < 100.0f) {
-            if (!func_800BC5EC(globalCtx, &this->actor) &&
+            if (!Actor_OtherIsTargeted(&globalCtx->state, &this->actor) &&
                 (((this->actionFunc != func_8089C56C) && (Rand_ZeroOne() > 0.35f)) ||
                  ((this->actionFunc == func_8089C56C) && (Rand_ZeroOne() > 0.8f)))) {
                 func_8089C4F8(this);
@@ -400,7 +400,7 @@ void func_8089AC70(EnDinofos* this) {
     this->unk_2B0 = 1.0f;
     this->unk_290 = 80;
     this->actor.flags &= ~0x400;
-    func_800BCB70(&this->actor, 0x4000, 255, 0, 80);
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
 }
 
 void func_8089ACEC(EnDinofos* this, GlobalContext* globalCtx) {
@@ -636,7 +636,7 @@ void func_8089B8B0(EnDinofos* this, GlobalContext* globalCtx) {
 
     if (this->actionFunc != func_8089B98C) {
         Animation_MorphToLoop(&this->skelAnime, &D_06000580, -4.0f);
-        if (func_800BC5EC(globalCtx, &this->actor)) {
+        if (Actor_OtherIsTargeted(&globalCtx->state, &this->actor)) {
             phi_f0 = 170.0f;
         } else {
             phi_f0 = 70.0f;
@@ -658,7 +658,7 @@ void func_8089B98C(EnDinofos* this, GlobalContext* globalCtx) {
 
     SkelAnime_Update(&this->skelAnime);
     if (!func_8089AE00(this, globalCtx)) {
-        if (func_800BC5EC(globalCtx, &this->actor)) {
+        if (Actor_OtherIsTargeted(&globalCtx->state, &this->actor)) {
             phi_f0 = 170.0f;
         } else {
             phi_f0 = 70.0f;
@@ -782,7 +782,7 @@ void func_8089BD28(EnDinofos* this, GlobalContext* globalCtx) {
         }
 
         this->actor.world.rot.y = BINANG_ADD(this->actor.shape.rot.y, 0x4000);
-        if (func_800BC5EC(globalCtx, &this->actor)) {
+        if (Actor_OtherIsTargeted(&globalCtx->state, &this->actor)) {
             sp2C = 100.0f;
         }
 
@@ -1012,7 +1012,7 @@ void func_8089C87C(EnDinofos* this, s32 arg1) {
     this->unk_28E = 0;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_RIZA_DAMAGE);
     this->colliderJntSph.base.acFlags &= ~AC_ON;
-    func_800BCB70(&this->actor, 0x4000, 255, 0, 18);
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 18);
     this->actionFunc = func_8089C938;
 }
 
@@ -1317,7 +1317,7 @@ s32 func_8089D60C(EnDinofos* this, GlobalContext* globalCtx) {
 
         if (this->actor.colChkInfo.damageEffect == 1) {
             this->unk_290 = 40;
-            func_800BCB70(&this->actor, 0, 255, 0, 40);
+            Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
             func_8089C784(this);
             return true;
@@ -1325,7 +1325,7 @@ s32 func_8089D60C(EnDinofos* this, GlobalContext* globalCtx) {
 
         if (this->actor.colChkInfo.damageEffect == 5) {
             this->unk_290 = 40;
-            func_800BCB70(&this->actor, 0, 255, 0, 40);
+            Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
             this->unk_2B4 = 0.55f;
             this->unk_2B0 = 2.0f;
             this->unk_28A = 31;

@@ -758,7 +758,7 @@ void func_8099630C(EnSkb* this, GlobalContext* globalCtx) {
         this->unk_230 = 0.0f;
         this->unk_22C = 0.0f;
         if (this->actor.colChkInfo.health != 0) {
-            func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 8);
+            Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
             func_800BDC5C(&this->skelAnime, sAnimations, 3);
             this->unk_3D8 |= 1;
             func_80995F98(this);
@@ -780,7 +780,7 @@ void func_809963D8(EnSkb* this, GlobalContext* globalCtx) {
         this->unk_230 = 0.0f;
         this->unk_22C = 0.0f;
         if (this->actor.colChkInfo.health != 0) {
-            func_800BCB70(&this->actor, 0x4000, 255, 0, 8);
+            Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
             func_800BDC5C(&this->skelAnime, sAnimations, 3);
             this->unk_3D8 |= 1;
             func_80995F98(this);
@@ -912,12 +912,12 @@ void func_8099672C(EnSkb* this, GlobalContext* globalCtx) {
                     this->unk_3D2 = 40;
                     this->unk_22C = 1.0f;
                     this->unk_230 = 0.0f;
-                    func_800BCB70(&this->actor, 0, 0x78, 0, 40);
+                    Actor_SetColorFilter(&this->actor, 0, 0x78, 0, 40);
                     func_80995E08(this);
                     break;
 
                 case 1:
-                    func_800BCB70(&this->actor, 0, 0x78, 0, 40);
+                    Actor_SetColorFilter(&this->actor, 0, 0x78, 0, 40);
                     func_80995E08(this);
                     break;
 
@@ -926,7 +926,7 @@ void func_8099672C(EnSkb* this, GlobalContext* globalCtx) {
                     this->unk_3E6 = 0;
                     this->unk_22C = 1.0f;
                     this->unk_230 = 0.0f;
-                    func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 8);
+                    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
                     this->unk_3D8 |= 1;
                     func_80995F98(this);
                     break;
@@ -941,7 +941,7 @@ void func_8099672C(EnSkb* this, GlobalContext* globalCtx) {
                     this->unk_3E6 = 0xB;
                     this->unk_22C = 1.0f;
                     this->unk_230 = 0.5f;
-                    func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 8);
+                    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
                     func_809962D4(this);
                     break;
 
@@ -950,7 +950,7 @@ void func_8099672C(EnSkb* this, GlobalContext* globalCtx) {
                     this->unk_3E6 = 0x14;
                     this->unk_22C = 1.0f;
                     this->unk_230 = 0.5f;
-                    func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 8);
+                    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
                     Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKID_DAMAGE);
                     func_800BDC5C(&this->skelAnime, sAnimations, 3);
                     func_809963C4(this);
@@ -967,7 +967,7 @@ void func_8099672C(EnSkb* this, GlobalContext* globalCtx) {
                     }
 
                 case 13:
-                    func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 8);
+                    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
                     func_800BDC5C(&this->skelAnime, sAnimations, 3);
                     func_80995F98(this);
                     break;

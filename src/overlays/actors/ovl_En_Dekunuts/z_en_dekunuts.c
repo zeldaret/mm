@@ -165,7 +165,7 @@ void func_808BD348(EnDekunuts* this) {
     this->unk_210 = 1.0f;
     this->collider.base.colType = COLTYPE_HIT3;
     this->unk_190 = 80;
-    func_800BCB70(&this->actor, 0x4000, 255, 0, 80);
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
 }
 
 void func_808BD3B4(EnDekunuts* this, GlobalContext* globalCtx) {
@@ -492,7 +492,7 @@ void func_808BE294(EnDekunuts* this, s32 arg1) {
     this->actionFunc = func_808BE358;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_DAMAGE);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_CUTBODY);
-    func_800BCB70(&this->actor, 0x4000, 255, 0, Animation_GetLastFrame(&D_0600259C));
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, Animation_GetLastFrame(&D_0600259C));
 }
 
 void func_808BE358(EnDekunuts* this, GlobalContext* globalCtx) {
@@ -603,7 +603,7 @@ void func_808BE73C(EnDekunuts* this, GlobalContext* globalCtx) {
 
                 if (this->actor.colChkInfo.damageEffect == 1) {
                     this->unk_190 = 40;
-                    func_800BCB70(&this->actor, 0, 255, 0, 40);
+                    Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
                     Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     func_808BE3A8(this);
                     return;

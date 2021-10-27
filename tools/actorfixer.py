@@ -189,6 +189,11 @@ animdict = {
     "func_800BBDAC": "Actor_SpawnFloorDustRing",
     "func_800B8708": "Player_GetExchangeItemId",
     "func_801233E4": "Player_InCsMode",
+    "func_800BC4EC": "Actor_TestFloorInDirection",
+    "func_800BC5B8": "Actor_IsTargeted",
+    "func_800BC5EC": "Actor_OtherIsTargeted",
+    "func_800BCB70": "Actor_SetColorFilter",
+    "func_800BE0B8": "Actor_FindNearby",
 }
 
 def replace_anim(file):

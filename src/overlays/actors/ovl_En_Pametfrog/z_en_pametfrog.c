@@ -425,7 +425,7 @@ void EnPametfrog_ApplyMagicArrowEffects(EnPametfrog* this, GlobalContext* global
 void EnPametfrog_ApplyElectricStun(EnPametfrog* this) {
     this->freezeTimer = 40;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
-    func_800BCB70(&this->actor, 0, 255, 0, 40);
+    Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
     this->drawEffect = GEKKO_DRAW_EFFECT_ELECTRIC_STUN;
     this->unk_2C8 = 0.75f;
     this->unk_2C4 = 2.0f;
@@ -434,7 +434,7 @@ void EnPametfrog_ApplyElectricStun(EnPametfrog* this) {
 void EnPametfrog_ApplyStun(EnPametfrog* this) {
     this->freezeTimer = 40;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
-    func_800BCB70(&this->actor, 0, 255, 0, 40);
+    Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
 }
 
 void EnPametfrog_SetupRearOnSnapper(EnPametfrog* this) {
@@ -841,7 +841,7 @@ void EnPametfrog_SetupFallInAir(EnPametfrog* this, GlobalContext* globalCtx) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_FROG_DAMAGE);
     }
 
-    func_800BCB70(&this->actor, 0x4000, 255, 0, 16);
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 16);
     yaw = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
     this->actor.world.pos.x += 30.0f * Math_SinS(yaw);
     this->actor.world.pos.z += 30.0f * Math_CosS(yaw);
@@ -1135,7 +1135,7 @@ void EnPametfrog_SetupDamage(EnPametfrog* this) {
     this->collider.base.acFlags &= ~AC_ON;
     this->actor.speedXZ = 10.0f;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_FROG_DAMAGE);
-    func_800BCB70(&this->actor, 0x4000, 255, 0, 20);
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
     func_800BE5CC(&this->actor, &this->collider, 0);
     this->actor.shape.rot.y = BINANG_ROT180(this->actor.world.rot.y);
     this->actionFunc = EnPametfrog_Damage;
@@ -1298,7 +1298,7 @@ void EnPametfrog_ApplyDamageEffect(EnPametfrog* this, GlobalContext* globalCtx) 
                 } else if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_ICE) {
                     EnPametfrog_ChangeColliderFreeze(this);
                     this->freezeTimer = 80;
-                    func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 0x50);
+                    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 0x50);
                     EnPametfrog_SetupStun(this);
                 } else {
                     EnPametfrog_ChangeColliderThaw(this, globalCtx);

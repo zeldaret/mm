@@ -3449,6 +3449,10 @@ void func_800BB8EC(GlobalContext* globalCtx, ActorContext* actorCtx, Actor** arg
     }
 }
 
+/**
+ * Play the death sound effect and flash the screen white for 4 frames.
+ * While the screen flashes, the game freezes.
+ */
 void Enemy_StartFinishingBlow(GlobalContext* globalCtx, Actor* actor) {
     globalCtx->actorCtx.freezeFlashTimer = 5;
     Audio_PlaySoundAtPosition(globalCtx, &actor->world.pos, 20, NA_SE_EN_LAST_DAMAGE);
@@ -3661,34 +3665,43 @@ Actor* func_800BC444(GlobalContext* globalCtx, Actor* actor, f32 arg2) {
     return explosive;
 }
 
-s16 func_800BC4EC(Actor* actor, GlobalContext* globalCtx, f32 arg2, s16 angle) {
-    s16 temp_v1;
+/**
+ * Checks if a given actor will be standing on the ground after being translated
+ * by the provided distance and angle.
+ *
+ * Returns true if the actor will be standing on ground.
+ */
+s16 Actor_TestFloorInDirection(Actor* actor, GlobalContext* globalCtx, f32 distance, s16 angle) {
+    s16 ret;
     u16 bgCheckFlags;
-    f32 sin;
-    f32 cos;
+    f32 dx;
+    f32 dz;
     Vec3f actorPos;
 
     Math_Vec3f_Copy(&actorPos, &actor->world.pos);
 
     bgCheckFlags = actor->bgCheckFlags;
 
-    sin = Math_SinS(angle) * arg2;
-    cos = Math_CosS(angle) * arg2;
+    dx = Math_SinS(angle) * distance;
+    dz = Math_CosS(angle) * distance;
 
-    actor->world.pos.x += sin;
-    actor->world.pos.z += cos;
+    actor->world.pos.x += dx;
+    actor->world.pos.z += dz;
 
     Actor_UpdateBgCheckInfo(globalCtx, actor, 0.0f, 0.0f, 0.0f, 4);
     Math_Vec3f_Copy(&actor->world.pos, &actorPos);
 
-    temp_v1 = (actor->bgCheckFlags & 1);
+    ret = actor->bgCheckFlags & 1;
 
     actor->bgCheckFlags = bgCheckFlags;
 
-    return temp_v1;
+    return ret;
 }
 
-s32 func_800BC5B8(GameState* gameState, Actor* actor) {
+/**
+ * Returns true if the player is targeting the provided actor
+ */
+s32 Actor_IsTargeted(GameState* gameState, Actor* actor) {
     Player* player = GET_PLAYER(gameState);
 
     if ((player->stateFlags3 & 0x80000000) && actor->isTargeted) {
@@ -3698,8 +3711,11 @@ s32 func_800BC5B8(GameState* gameState, Actor* actor) {
     return false;
 }
 
-s32 func_800BC5EC(GlobalContext* globalCtx, Actor* actor) {
-    Player* player = GET_PLAYER(globalCtx);
+/**
+ * Returns true if the player is targeting an actor other than the provided actor
+ */
+s32 Actor_OtherIsTargeted(GameState* gameState, Actor* actor) {
+    Player* player = GET_PLAYER(gameState);
 
     if ((player->stateFlags3 & 0x80000000) && !actor->isTargeted) {
         return true;
@@ -3840,12 +3856,13 @@ void func_800BCB50(GlobalContext* globalCtx, Vec3f* arg1) {
     CollisionCheck_SpawnShieldParticlesMetal(globalCtx, arg1);
 }
 
-void func_800BCB70(Actor* actor, u16 arg1, u16 arg2, u16 arg3, u16 arg4) {
-    if ((arg1 == 0x8000) && !(arg2 & 0x8000)) {
+void Actor_SetColorFilter(Actor* actor, u16 colorFlag, u16 colorIntensityMax, u16 xluFlag, u16 duration) {
+    if ((colorFlag == 0x8000) && !(colorIntensityMax & 0x8000)) {
         Audio_PlayActorSound2(actor, NA_SE_EN_LIGHT_ARROW_HIT);
     }
-    actor->colorFilterParams = arg1 | arg3 | ((arg2 & 0xF8) << 5) | arg4;
-    actor->colorFilterTimer = arg4;
+
+    actor->colorFilterParams = colorFlag | xluFlag | ((colorIntensityMax & 0xF8) << 5) | duration;
+    actor->colorFilterTimer = duration;
 }
 
 Hilite* func_800BCBF4(Vec3f* arg0, GlobalContext* globalCtx) {
@@ -4012,20 +4029,20 @@ typedef struct {
 } struct_801AEE38; // size = 0x18
 
 struct_801AEE38 D_801AEE38[] = {
-    { { 0x1C20, 0xE390, 0x1C70, 0x1554, 0, 0, 0 }, 170.0f, 0x3FFC },
-    { { 0x2AA8, 0xEAAC, 0x1554, 0x1554, 0xF8E4, 0xE38, 1 }, 170.0f, 0x3FFC },
-    { { 0x31C4, 0xE390, 0xE38, 0xE38, 0xF1C8, 0x71C, 1 }, 170.0f, 0x3FFC },
-    { { 0x1554, 0xF1C8, 0, 0x71C, 0xF8E4, 0, 1 }, 170.0f, 0x3FFC },
-    { { 0x2AA8, 0xF8E4, 0x71C, 0xE38, 0xD558, 0x2AA8, 1 }, 170.0f, 0x3FFC },
-    { { 0, 0xE390, 0x2AA8, 0x3FFC, 0xF1C8, 0xE38, 1 }, 170.0f, 0x3FFC },
-    { { 0x2AA8, 0xF1C8, 0xE38, 0xE38, 0, 0, 1 }, 0.0f, 0 },
-    { { 0x2AA8, 0xF1C8, 0, 0xE38, 0, 0x1C70, 1 }, 0.0f, 0 },
-    { { 0x2AA8, 0xF1C8, 0xF1C8, 0, 0, 0, 1 }, 0.0f, 0 },
-    { { 0x71C, 0xF1C8, 0xE38, 0x1C70, 0, 0, 1 }, 0.0f, 0 },
-    { { 0xE38, 0xF1C8, 0, 0x1C70, 0, 0xE38, 1 }, 0.0f, 0 },
-    { { 0x2AA8, 0xE390, 0x1C70, 0xE38, 0xF1C8, 0xE38, 1 }, 0.0f, 0 },
-    { { 0x18E2, 0xF1C8, 0xE38, 0xE38, 0, 0, 1 }, 0.0f, 0 },
-    { { 0x2A6C, 0xE390, 0x1C70, 0x1554, 0, 0, 0 }, 170.0f, 0x3FFC },
+    { { 0x1C20, 0xE390, 0x1C70, 0x1554, 0x0000, 0x0000, 0x0000 }, 170.0f, 0x3FFC },
+    { { 0x2AA8, 0xEAAC, 0x1554, 0x1554, 0xF8E4, 0x0E38, 0x0001 }, 170.0f, 0x3FFC },
+    { { 0x31C4, 0xE390, 0x0E38, 0x0E38, 0xF1C8, 0x071C, 0x0001 }, 170.0f, 0x3FFC },
+    { { 0x1554, 0xF1C8, 0x0000, 0x071C, 0xF8E4, 0x0000, 0x0001 }, 170.0f, 0x3FFC },
+    { { 0x2AA8, 0xF8E4, 0x071C, 0x0E38, 0xD558, 0x2AA8, 0x0001 }, 170.0f, 0x3FFC },
+    { { 0x0000, 0xE390, 0x2AA8, 0x3FFC, 0xF1C8, 0x0E38, 0x0001 }, 170.0f, 0x3FFC },
+    { { 0x2AA8, 0xF1C8, 0x0E38, 0x0E38, 0x0000, 0x0000, 0x0001 }, 0.0f, 0x0000 },
+    { { 0x2AA8, 0xF1C8, 0x0000, 0x0E38, 0x0000, 0x1C70, 0x0001 }, 0.0f, 0x0000 },
+    { { 0x2AA8, 0xF1C8, 0xF1C8, 0x0000, 0x0000, 0x0000, 0x0001 }, 0.0f, 0x0000 },
+    { { 0x071C, 0xF1C8, 0x0E38, 0x1C70, 0x0000, 0x0000, 0x0001 }, 0.0f, 0x0000 },
+    { { 0x0E38, 0xF1C8, 0x0000, 0x1C70, 0x0000, 0x0E38, 0x0001 }, 0.0f, 0x0000 },
+    { { 0x2AA8, 0xE390, 0x1C70, 0x0E38, 0xF1C8, 0x0E38, 0x0001 }, 0.0f, 0x0000 },
+    { { 0x18E2, 0xF1C8, 0x0E38, 0x0E38, 0x0000, 0x0000, 0x0001 }, 0.0f, 0x0000 },
+    { { 0x2A6C, 0xE390, 0x1C70, 0x1554, 0x0000, 0x0000, 0x0000 }, 170.0f, 0x3FFC },
 };
 
 void func_800BD384(Actor* actor, struct_800BD888_arg1* arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7,
@@ -4250,7 +4267,12 @@ void Actor_Noop(Actor* actor, GlobalContext* globalCtx) {
 
 #include "z_cheap_proc.c"
 
-Actor* func_800BE0B8(GlobalContext* globalCtx, Actor* inActor, s16 actorId, u8 actorCategory, f32 distance) {
+/**
+ * Finds the first actor instance of a specified ID and category within a given range from
+ * an actor if there is one. If the ID provided is -1, this will look for any actor of the
+ * specified category rather than a specific ID.
+ */
+Actor* Actor_FindNearby(GlobalContext* globalCtx, Actor* inActor, s16 actorId, u8 actorCategory, f32 distance) {
     Actor* actor = globalCtx->actorCtx.actorList[actorCategory].first;
 
     while (actor != NULL) {
@@ -4269,38 +4291,22 @@ Actor* func_800BE0B8(GlobalContext* globalCtx, Actor* inActor, s16 actorId, u8 a
     return NULL;
 }
 
-#ifdef NON_MATCHING
-// regalloc
 s32 func_800BE184(GameState* gameState, Actor* actor, f32 xzDist, s16 arg3, s16 arg4, s16 arg5) {
-    GlobalContext* globalCtx = (GlobalContext*)gameState;
-    s16 temp_a2;
-    s16 temp_t0;
-    s16 temp_t8;
-    Player* player;
+    Player* player = GET_PLAYER(gameState);
     s16 phi_v0;
+    s16 temp_t0;
 
-    player = GET_PLAYER(globalCtx);
-
-    temp_a2 = actor->yawTowardsPlayer;
-    temp_t0 = temp_a2 - arg5;
-
-    temp_t8 = BINANG_ADD(temp_a2, 0x8000);
-    phi_v0 = BINANG_SUB(temp_t8, player->actor.shape.rot.y);
-
-    if ((!temp_t0)) {}
+    phi_v0 = BINANG_SUB(BINANG_ROT180(actor->yawTowardsPlayer), player->actor.shape.rot.y);
+    temp_t0 = actor->yawTowardsPlayer - arg5;
 
     if ((actor->xzDistToPlayer <= xzDist) && (player->swordState != 0)) {
-        if (arg4 >= ABS_ALT(phi_v0) && arg3 >= ABS_ALT(temp_t0)) {
-            return 1;
+        if ((arg4 >= ABS_ALT(phi_v0)) && (arg3 >= ABS_ALT(temp_t0))) {
+            return true;
         }
     }
 
-    return 0;
+    return false;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE184.s")
-s32 func_800BE184(GameState* gameState, Actor* actor, f32 arg2, s16 arg3, s16 arg4, s16 arg5);
-#endif
 
 u8 Actor_ApplyDamage(Actor* actor) {
     if (actor->colChkInfo.damage >= actor->colChkInfo.health) {

@@ -158,7 +158,7 @@ s32 func_80BE64C0(EnDaiku2* this, GlobalContext* globalCtx) {
 
     Math_Vec3f_Copy(&sp30, &this->actor.world.pos);
     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
-    bomb = (EnBom*)func_800BE0B8(globalCtx, &this->actor, -1, ACTORCAT_EXPLOSIVES, BREG(7) + 240.0f);
+    bomb = (EnBom*)Actor_FindNearby(globalCtx, &this->actor, -1, ACTORCAT_EXPLOSIVES, BREG(7) + 240.0f);
     Math_Vec3f_Copy(&this->actor.world.pos, &sp30);
     if ((this->unk_278 >= ENDAIKU2_GET_7F_0) && !Flags_GetSwitch(globalCtx, this->unk_278) && (bomb != NULL) &&
         (bomb->actor.id == ACTOR_EN_BOM)) {

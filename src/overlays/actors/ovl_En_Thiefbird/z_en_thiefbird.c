@@ -458,7 +458,7 @@ void func_80C11454(EnThiefbird* this) {
     this->unk_3DC = 0.75f;
     this->unk_3D4 = 1.0f;
     this->actor.flags &= ~0x200;
-    func_800BCB70(&this->actor, 0x4000, 255, 0, 80);
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
 }
 
 void func_80C114C0(EnThiefbird* this, GlobalContext* globalCtx) {
@@ -608,7 +608,7 @@ void func_80C11C60(EnThiefbird* this) {
     this->unk_18E = 40;
     this->actor.velocity.y = 0.0f;
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_THIEFBIRD_DEAD);
-    func_800BCB70(&this->actor, 0x4000, 255, 0, 40);
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
     this->collider.base.acFlags &= ~AC_ON;
     this->actor.flags |= 0x10;
     this->unk_192 = 0x1C00;
@@ -683,13 +683,13 @@ void func_80C11F6C(EnThiefbird* this, GlobalContext* globalCtx) {
     }
 
     if (this->actor.colChkInfo.damageEffect == 5) {
-        func_800BCB70(&this->actor, 0, 255, 0, 40);
+        Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
     } else if (this->actor.colChkInfo.damageEffect == 1) {
-        func_800BCB70(&this->actor, 0, 255, 0, 40);
+        Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
     } else {
-        func_800BCB70(&this->actor, 0x4000, 255, 0, 40);
+        Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_THIEFBIRD_DAMAGE);
     }
 

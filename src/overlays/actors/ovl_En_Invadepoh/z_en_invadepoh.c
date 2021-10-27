@@ -2232,7 +2232,7 @@ void func_80B47830(EnInvadepoh* this) {
     this->collider.base.acFlags &= ~1;
     this->collider.base.ocFlags1 |= 1;
     Animation_PlayLoop(&this->skelAnime, &D_060006C8);
-    func_800BCB70(&this->actor, 0x4000, 255, 0, 16);
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 16);
     this->alienAlpha = 255;
     this->actor.draw = func_80B4DB14;
     this->drawAlien = true;

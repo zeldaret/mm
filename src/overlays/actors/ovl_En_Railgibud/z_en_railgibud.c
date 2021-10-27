@@ -532,9 +532,9 @@ void func_80BA6584(EnRailgibud* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->unk_3F2 = 10;
     if (this->unk_3F6 != 0) {
-        func_800BCB70(&this->actor, 0, 0xC8, 0, 0x28);
+        Actor_SetColorFilter(&this->actor, 0, 0xC8, 0, 0x28);
     } else {
-        func_800BCB70(&this->actor, 0, 0xC8, 0, 0x28);
+        Actor_SetColorFilter(&this->actor, 0, 0xC8, 0, 0x28);
     }
     this->actionFunc = func_80BA6604;
 }
@@ -699,7 +699,7 @@ void func_80BA6DF8(EnRailgibud* this, GlobalContext* globalCtx) {
 
         switch (this->actor.colChkInfo.damageEffect) {
             case 15:
-                func_800BCB70(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
                 if (player->unk_ADC != 0) {
                     this->unk_405 = player->unk_ADD;
                 }
@@ -720,7 +720,7 @@ void func_80BA6DF8(EnRailgibud* this, GlobalContext* globalCtx) {
                 break;
 
             case 2:
-                func_800BCB70(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
                 if (this->actor.colChkInfo.health == 0) {
                     func_80BA6664(this);
                 } else {
@@ -732,7 +732,7 @@ void func_80BA6DF8(EnRailgibud* this, GlobalContext* globalCtx) {
                 break;
 
             case 4:
-                func_800BCB70(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
                 if (this->actor.colChkInfo.health == 0) {
                     func_80BA6664(this);
                 } else {

@@ -429,7 +429,7 @@ void func_80876CAC(EnDodongo* this) {
     this->unk_33C = 1.0f;
     this->timer = 80;
     this->actor.flags &= ~0x400;
-    func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 80);
+    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 80);
 }
 
 void func_80876D28(EnDodongo* this, GlobalContext* globalCtx) {
@@ -766,7 +766,7 @@ void func_80877E60(EnDodongo* this, GlobalContext* globalCtx) {
             } else {
                 this->actor.colChkInfo.health -= 4;
             }
-            func_800BCB70(&this->actor, 0x4000, 0x78, 0, 8);
+            Actor_SetColorFilter(&this->actor, 0x4000, 0x78, 0, 8);
         }
     } else if (Animation_OnFrame(&this->skelAnime, 24.0f)) {
         this->timer--;
@@ -883,7 +883,7 @@ void func_8087864C(EnDodongo* this) {
     this->timer = 0;
     this->unk_304 = 0;
     this->actor.speedXZ = 0.0f;
-    func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 8);
+    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
     this->actionFunc = func_808786C8;
 }
 
@@ -904,7 +904,7 @@ void func_80878724(EnDodongo* this) {
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_DODO_J_DEAD);
     this->actor.flags &= ~1;
     this->actor.speedXZ = 0.0f;
-    func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 8);
+    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
     this->actionFunc = func_808787B0;
 }
 
@@ -916,7 +916,7 @@ void func_808787B0(EnDodongo* this, GlobalContext* globalCtx) {
             func_80876DC4(this, globalCtx);
         }
     } else if (this->actor.colorFilterTimer == 0) {
-        func_800BCB70(&this->actor, 0x4000, 0x78, 0, 4);
+        Actor_SetColorFilter(&this->actor, 0x4000, 0x78, 0, 4);
     }
 
     if (SkelAnime_Update(&this->skelAnime)) {
@@ -1000,12 +1000,12 @@ void EnDodongo_UpdateDamage(EnDodongo* this, GlobalContext* globalCtx) {
                     }
                 } else if (this->actor.colChkInfo.damageEffect == 1) {
                     this->timer = 40;
-                    func_800BCB70(&this->actor, 0, 0xFF, 0, 40);
+                    Actor_SetColorFilter(&this->actor, 0, 0xFF, 0, 40);
                     Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     func_80878594(this);
                 } else if (this->actor.colChkInfo.damageEffect == 5) {
                     this->timer = 40;
-                    func_800BCB70(&this->actor, 0, 0xFF, 0, 40);
+                    Actor_SetColorFilter(&this->actor, 0, 0xFF, 0, 40);
                     Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     this->unk_300 = 30;
                     this->unk_340 = 0.75f;

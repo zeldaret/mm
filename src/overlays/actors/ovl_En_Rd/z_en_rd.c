@@ -999,11 +999,11 @@ void func_808D64D0(EnRd* this) {
         this->unk_3E9 = 1;
         this->unk_3E0 = 600;
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_LIGHT_ARROW_HIT);
-        func_800BCB70(&this->actor, 0x8000, 0x80C8, 0, 255);
+        Actor_SetColorFilter(&this->actor, 0x8000, 0x80C8, 0, 255);
     } else if (this->unk_3F0 == 1) {
-        func_800BCB70(&this->actor, 0, 0xC8, 0, 40);
+        Actor_SetColorFilter(&this->actor, 0, 0xC8, 0, 40);
     } else if (this->unk_3F0 == 12) {
-        func_800BCB70(&this->actor, 0, 0xC8, 0, 40);
+        Actor_SetColorFilter(&this->actor, 0, 0xC8, 0, 40);
     }
     this->actionFunc = func_808D65BC;
 }
@@ -1017,7 +1017,7 @@ void func_808D65BC(EnRd* this, GlobalContext* globalCtx) {
         if (this->unk_3E0 != 0) {
             this->unk_3E0--;
             if (this->unk_3E0 >= 255) {
-                func_800BCB70(&this->actor, 0x8000, 0x80C8, 0, 255);
+                Actor_SetColorFilter(&this->actor, 0x8000, 0x80C8, 0, 255);
             }
 
             if (this->unk_3E0 == 0) {
@@ -1097,7 +1097,7 @@ void func_808D6814(EnRd* this, GlobalContext* globalCtx) {
                 return;
 
             case 2:
-                func_800BCB70(&this->actor, 0x4000, 255, 0, 40);
+                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
                 this->unk_3E6 = 180;
                 this->unk_3E8 = 0;
                 this->unk_3E9 = 0;
@@ -1106,7 +1106,7 @@ void func_808D6814(EnRd* this, GlobalContext* globalCtx) {
                 break;
 
             case 4:
-                func_800BCB70(&this->actor, 0x4000, 255, 0, 40);
+                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
                 this->unk_3E6 = 60;
                 this->unk_3E8 = 20;
                 this->unk_3E9 = 0;
@@ -1115,13 +1115,13 @@ void func_808D6814(EnRd* this, GlobalContext* globalCtx) {
                 break;
 
             case 15:
-                func_800BCB70(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
                 this->unk_3E9 = 0;
                 this->unk_3E0 = 0;
                 break;
 
             case 14:
-                func_800BCB70(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
                 this->unk_3E9 = 0;
                 this->unk_3E0 = 0;
                 this->actor.colChkInfo.health = 0;
