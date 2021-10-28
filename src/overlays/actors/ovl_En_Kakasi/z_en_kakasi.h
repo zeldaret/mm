@@ -30,7 +30,6 @@ typedef struct EnKakasi {
     /* 0x204 */ s16 unk204; // set to A, F, 0x14, 0x28 frequently
     /* 0x206 */ UNK_TYPE1 pad206[2];
     /* 0x208 */ s16 cutsceneCamId;
-    /* 0x20A */ UNK_TYPE1 pad20A[2];
     /* 0x20C */ f32 unk20C; // passed to unknown function
     /* 0x210 */ f32 unk210; // used as a target for 20C to approach
     /* 0x214 */ Vec3f unk214; // copied from unk238 regularly
