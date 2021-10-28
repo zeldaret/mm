@@ -218,7 +218,7 @@ s32 func_80A68C5C(Vec3f* arg0, Vec3f* arg1) {
     f32 temp_f0 = Math3D_Vec3fMagnitude(arg0);
 
     if (temp_f0 < 0.005f) {
-        Math_Vec3f_Copy(arg0, &D_801D15B0);
+        Math_Vec3f_Copy(arg0, &gZeroVec3f);
         return false;
     } else {
         arg1->x = arg0->x * (1.0f / temp_f0);
@@ -1092,7 +1092,7 @@ void func_80A6B0D8(EnMushi2* this, GlobalContext* globalCtx) {
         sp48.x = (this->unk_328.x * -0.6f) + (this->unk_31C.x * 0.1f);
         sp48.y = (this->unk_328.y * -0.6f) + (this->unk_31C.y * 0.1f);
         sp48.z = (this->unk_328.z * -0.6f) + (this->unk_31C.z * 0.1f);
-        func_800B0E48(globalCtx, &this->actor.world.pos, &sp48, &D_801D15B0, &D_80A6B984[sp44], &D_80A6B98C[sp44],
+        func_800B0E48(globalCtx, &this->actor.world.pos, &sp48, &gZeroVec3f, &D_80A6B984[sp44], &D_80A6B98C[sp44],
                       (Rand_ZeroOne() * 5.0f) + 8.0f, (Rand_ZeroOne() * 5.0f) + 8.0f);
     }
 

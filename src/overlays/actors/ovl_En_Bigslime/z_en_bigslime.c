@@ -2587,8 +2587,6 @@ void EnBigslime_PlayCutscene(EnBigslime* this, GlobalContext* globalCtx) {
 }
 
 void EnBigslime_ApplyDamageEffectBigslime(EnBigslime* this, GlobalContext* globalCtx) {
-    EnMinislime* minislime;
-    f32 randFloat;
     s32 i;
 
     for (i = 0; i < BIGSLIME_NUM_RING_FACES; i++) {
@@ -2598,17 +2596,15 @@ void EnBigslime_ApplyDamageEffectBigslime(EnBigslime* this, GlobalContext* globa
                 if (this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_BREAK_ICE) {
                     EnBigslime_BreakIntoMinislime(this, globalCtx);
                     break;
-                } else {
-                dummy:;
-                    if (1) {}
-                    if (this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_FIRE) {
-                        EnBigslime_SetPlayerParams(this, globalCtx);
-                        EnBigslime_SetupMelt(this);
-                        break;
-                    }
+                } else if (this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_FIRE) {
+                    EnBigslime_SetPlayerParams(this, globalCtx);
+                    EnBigslime_SetupMelt(this);
+                    break;
                 }
             } else {
                 if (this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_ICE) {
+                    EnMinislime* minislime;
+
                     globalCtx->envCtx.unk_C3 = 2;
                     EnBigslime_SetPlayerParams(this, globalCtx);
                     this->rotation = 0;
@@ -2622,7 +2618,8 @@ void EnBigslime_ApplyDamageEffectBigslime(EnBigslime* this, GlobalContext* globa
                 }
 
                 if ((this->actor.colChkInfo.damageEffect != BIGSLIME_DMGEFF_STUN) && (this->itemDropTimer == 0)) {
-                    randFloat = Rand_ZeroOne();
+                    f32 randFloat = Rand_ZeroOne();
+
                     if (randFloat < 0.15f) {
                         Item_DropCollectible(globalCtx, &this->actor.world.pos, ITEM00_ARROWS_10);
                     } else if (randFloat < 0.3f) {

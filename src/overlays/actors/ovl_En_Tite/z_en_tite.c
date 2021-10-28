@@ -266,7 +266,7 @@ void func_80893BCC(EnTite* this, GlobalContext* globalCtx) {
                     sp7C.x = ptr->x + randPlusMinusPoint5Scaled(1.0f);
                     sp7C.y = ptr->y + randPlusMinusPoint5Scaled(1.0f);
                     sp7C.z = ptr->z + randPlusMinusPoint5Scaled(1.0f);
-                    func_800B0DE0(globalCtx, &sp7C, &D_801D15B0, &D_80896B64, &D_80896B3C, &D_80896B40,
+                    func_800B0DE0(globalCtx, &sp7C, &gZeroVec3f, &D_80896B64, &D_80896B3C, &D_80896B40,
                                   (s32)Rand_ZeroFloat(16.0f) + 80, 15);
                 }
             }
@@ -677,7 +677,7 @@ void func_808951B8(EnTite* this, GlobalContext* globalCtx) {
 
     if (this->unk_2BC == 0) {
         for (i = 0; i < ARRAY_COUNT(this->unk_2D0); i++) {
-            func_800B3030(globalCtx, &this->unk_2D0[i], &D_801D15B0, &D_801D15B0, 40, 7, 1);
+            func_800B3030(globalCtx, &this->unk_2D0[i], &gZeroVec3f, &gZeroVec3f, 40, 7, 1);
             Audio_PlaySoundAtPosition(globalCtx, &this->unk_2D0[i], 11, NA_SE_EN_EXTINCT);
         }
         Actor_MarkForDeath(&this->actor);
@@ -816,7 +816,7 @@ void func_8089595C(EnTite* this, GlobalContext* globalCtx) {
     sp2C.x = randPlusMinusPoint5Scaled(20.0f) + this->actor.world.pos.x;
     sp2C.y = this->actor.world.pos.y + 15.0f;
     sp2C.z = randPlusMinusPoint5Scaled(20.0f) + this->actor.world.pos.z;
-    func_800B0DE0(globalCtx, &sp2C, &D_801D15B0, &D_80896B44, &D_80896B3C, &D_80896B40, 500, 50);
+    func_800B0DE0(globalCtx, &sp2C, &gZeroVec3f, &D_80896B44, &D_80896B3C, &D_80896B40, 500, 50);
 }
 
 void func_80895A10(EnTite* this) {
