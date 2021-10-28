@@ -28,7 +28,7 @@ typedef struct EnKakasi {
     /* 0x1BC */ Vec3f unk1BC; // set by post limbdraw func for one limb
     /* 0x1C8 */ UNK_TYPE1 pad1C8[0x3C];
     /* 0x204 */ s16 unk204; // set to A, F, 0x14, 0x28 frequently
-    /* 0x208 */ UNK_TYPE1 pad206[2];
+    /* 0x206 */ UNK_TYPE1 pad206[2];
     /* 0x208 */ s16 cutsceneCamId;
     /* 0x20A */ UNK_TYPE1 pad20A[2];
     /* 0x20C */ f32 unk20C; // passed to unknown function
