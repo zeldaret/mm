@@ -15,8 +15,8 @@ extern Gfx D_0407AB58[];
 extern Gfx D_06001000[]; // the bubble display list used by shabom in giants type
 extern Gfx D_04023428[];
 
-static u8 sLostWoodsSparklesMutex = 0; // make sure only one can exist at once
-static s16 D_808D03C4 = 0;
+static u8 sLostWoodsSparklesMutex = false; // make sure only one can exist at once
+static s16 sLostWoodsSkyFishParticleNum = 0;
 
 const ActorInit Demo_Kankyo_InitVars = {
     ACTOR_DEMO_KANKYO,
@@ -30,7 +30,7 @@ const ActorInit Demo_Kankyo_InitVars = {
     (ActorFunc)DemoKankyo_Draw,
 };
 
-static s32 sObjectBubbleIndex = 0x1000E;
+static s32 sObjectBubbleIndex = OBJECT_BUBBLE | 0x10000;
 
 void DemoKankyo_SetupAction(DemoKankyo* this, DemoKankyoActionFunc actionFunc) {
     this->actionFunc = actionFunc;
@@ -39,18 +39,18 @@ void DemoKankyo_SetupAction(DemoKankyo* this, DemoKankyoActionFunc actionFunc) {
 void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globalCtx) {
     s32 pad;
     s32 i;
-    f32 static130;
-    f32 diffX;
-    f32 distATanX;
-    f32 distATanY;
-    f32 distATanZ;
-    f32 distance;
-    f32 newXCalc;
-    f32 newYCalc;
-    f32 newZCalc;
-    f32 diffY;
-    f32 diffZ;
-    f32 randResult;
+    f32 randSkyfishParticleNum;
+    f32 repositionLimit; // Distance from posCenter when particles are relocated. Always set to 130.0f
+    f32 eyeToAtNormX;
+    f32 eyeToAtNormY;
+    f32 eyeToAtNormZ;
+    f32 eyeToAtMag;
+    f32 posCenterX;
+    f32 posCenterY;
+    f32 posCenterZ;
+    f32 eyeToAtX;
+    f32 eyeToAtY;
+    f32 eyeToAtZ;
     Player* player = GET_PLAYER(globalCtx);
 
     if (globalCtx->roomCtx.unk7A[1] != 0) {
@@ -63,188 +63,228 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globa
         globalCtx->envCtx.unk_F2[3] += 16;
     }
 
-    // @ ! Bug: DemoKankyo can crash if placed in an area that snows (ObjectKankyo)
+    //! @bug: DemoKankyo can crash if placed in an area that snows (ObjectKankyo)
     // because they both use unk_F2 as a particle counter,
     // causing DemoKankyo to write beyond its particle array boundry
     for (i = 0; i < globalCtx->envCtx.unk_F2[3]; i++) {
-        static130 = 130.0f;
+        repositionLimit = 130.0f;
 
-        diffX = globalCtx->view.at.x - globalCtx->view.eye.x;
-        diffY = globalCtx->view.at.y - globalCtx->view.eye.y;
-        diffZ = globalCtx->view.at.z - globalCtx->view.eye.z;
-        distance = sqrtf(SQ(diffX) + SQ(diffY) + SQ(diffZ));
-        distATanX = diffX / distance;
-        distATanY = diffY / distance;
-        distATanZ = diffZ / distance;
+        eyeToAtX = globalCtx->view.at.x - globalCtx->view.eye.x;
+        eyeToAtY = globalCtx->view.at.y - globalCtx->view.eye.y;
+        eyeToAtZ = globalCtx->view.at.z - globalCtx->view.eye.z;
+        eyeToAtMag = sqrtf(SQ(eyeToAtX) + SQ(eyeToAtY) + SQ(eyeToAtZ));
+        eyeToAtNormX = eyeToAtX / eyeToAtMag;
+        eyeToAtNormY = eyeToAtY / eyeToAtMag;
+        eyeToAtNormZ = eyeToAtZ / eyeToAtMag;
 
         switch (this->particles[i].state) {
-            case DEMO_KANKYO_STATE_VOID:
-                this->particles[i].pos.x = globalCtx->view.eye.x + (distATanX * 80.0f);
-                this->particles[i].pos.y = globalCtx->view.eye.y + (distATanY * 80.0f);
-                this->particles[i].pos.z = globalCtx->view.eye.z + (distATanZ * 80.0f);
+            case DEMO_KANKYO_STATE_INIT:
+                this->particles[i].posBase.x = globalCtx->view.eye.x + (eyeToAtNormX * 80.0f);
+                this->particles[i].posBase.y = globalCtx->view.eye.y + (eyeToAtNormY * 80.0f);
+                this->particles[i].posBase.z = globalCtx->view.eye.z + (eyeToAtNormZ * 80.0f);
 
-                this->particles[i].vel.x = (Rand_ZeroOne() - 0.5f) * 160.0f;
-                this->particles[i].vel.y = 30.0f; // starts random direction pointed upwards, velocity?
-                this->particles[i].vel.z = (Rand_ZeroOne() - 0.5f) * 160.0f;
-                this->particles[i].unk_38 = (Rand_ZeroOne() * 1.6f) + 0.5f;
+                this->particles[i].posOffset.x = (Rand_ZeroOne() - 0.5f) * 160.0f;
+                this->particles[i].posOffset.y = 30.0f;
+                this->particles[i].posOffset.z = (Rand_ZeroOne() - 0.5f) * 160.0f;
+
+                this->particles[i].speedTarget = (Rand_ZeroOne() * 1.6f) + 0.5f;
                 this->particles[i].alpha = 0;
                 this->particles[i].alphaClock = Rand_ZeroOne() * 65535; // random 0 to max of u16
-                this->particles[i].unk_44 = 0.1f;
+                this->particles[i].scale = 0.1f;
 
-                this->particles[i].unk_28.x = Rand_ZeroOne() * 360.0f;
-                this->particles[i].unk_28.y = Rand_ZeroOne() * 360.0f;
-                this->particles[i].unk_28.z = Rand_ZeroOne() * 360.0f;
+                // speedClock is angles in radians,
+                // should have used Rand_ZeroOne() * 2 * M_PI
+                // however, due to properties of sine waves, this is effectively still random
+                this->particles[i].speedClock.x = Rand_ZeroOne() * 360.0f;
+                this->particles[i].speedClock.y = Rand_ZeroOne() * 360.0f;
+                this->particles[i].speedClock.z = Rand_ZeroOne() * 360.0f;
                 this->particles[i].pad50 = 0;
                 this->particles[i].state += DEMO_KANKYO_STATE_SINGLE;
                 break;
 
             case DEMO_KANKYO_STATE_SINGLE:
             case DEMO_KANKYO_STATE_SKYFISH:
-                this->particles[i].alphaClock += 1;
-                newXCalc = globalCtx->view.eye.x + (distATanX * 80.0f);
-                newYCalc = globalCtx->view.eye.y + (distATanY * 80.0f);
-                newZCalc = globalCtx->view.eye.z + (distATanZ * 80.0f);
-                this->particles[i].velPrevious.x = this->particles[i].vel.x;
-                this->particles[i].velPrevious.y = this->particles[i].vel.y;
-                this->particles[i].velPrevious.z = this->particles[i].vel.z;
+                this->particles[i].alphaClock++;
+                posCenterX = globalCtx->view.eye.x + (eyeToAtNormX * 80.0f);
+                posCenterY = globalCtx->view.eye.y + (eyeToAtNormY * 80.0f);
+                posCenterZ = globalCtx->view.eye.z + (eyeToAtNormZ * 80.0f);
+                this->particles[i].posOffsetPrev.x = this->particles[i].posOffset.x;
+                this->particles[i].posOffsetPrev.y = this->particles[i].posOffset.y;
+                this->particles[i].posOffsetPrev.z = this->particles[i].posOffset.z;
 
                 if (this->particles[i].state == DEMO_KANKYO_STATE_SINGLE) {
+
+                    // The first 32 particles will become skyfish particles
+                    // This block is also init code and only runs once
                     if (i < 32) {
                         if (Rand_ZeroOne() < 0.5f) {
-                            this->particles[i].unk_48 = (s16)(Rand_ZeroOne() * 200.0f) + 200;
+                            this->particles[i].LostWoodsSkyFishSpeedXZ = (s16)(Rand_ZeroOne() * 200.0f) + 200;
                         } else {
-                            this->particles[i].unk_48 = -200 - (s16)(Rand_ZeroOne() * 200.0f);
+                            this->particles[i].LostWoodsSkyFishSpeedXZ = -200 - (s16)(Rand_ZeroOne() * 200.0f);
                         }
-                        this->particles[i].unk_4A = (s16)(Rand_ZeroOne() * 50.0f) + 15;
-                        this->particles[i].unk_4C = ((Rand_ZeroOne() * 10.0f) + 10.0f) * 0.01f;
-                        randResult = Rand_ZeroOne();
-                        if (randResult < 0.2f) {
-                            D_808D03C4 = 1;
-                        } else if (randResult < 0.2f) {
-                            D_808D03C4 = 3;
-                        } else if (randResult < 0.4f) {
-                            D_808D03C4 = 7;
+                        this->particles[i].LostWoodsSkyFishPosOffsetMax = (s16)(Rand_ZeroOne() * 50.0f) + 15;
+                        this->particles[i].LostWoodsSkyFishSpeedY = ((Rand_ZeroOne() * 10.0f) + 10.0f) * 0.01f;
+
+                        // Only the 31st particle matters as sLostWoodsSkyFishParticleNum will be overwritten
+                        // every particle until the last skyfish particle is initialized
+                        randSkyfishParticleNum = Rand_ZeroOne();
+                        if (randSkyfishParticleNum < 0.2f) {
+                            sLostWoodsSkyFishParticleNum = 1;
+                        } else if (randSkyfishParticleNum < 0.2f) {
+                            // This case is never taken as the else-if conditional is identical to the previous one
+                            sLostWoodsSkyFishParticleNum = 3;
+                        } else if (randSkyfishParticleNum < 0.4f) {
+                            sLostWoodsSkyFishParticleNum = 7;
                         } else {
-                            D_808D03C4 = 15;
+                            sLostWoodsSkyFishParticleNum = 15;
                         }
-                        if ((D_808D03C4 & i) == 0) {
-                            this->particles[i].vel.y = 0.0f;
+
+                        if ((i & sLostWoodsSkyFishParticleNum) == 0) {
+                            // Head particle
+                            this->particles[i].posOffset.y = 0.0f;
                         }
                         this->particles[i].state = DEMO_KANKYO_STATE_SKYFISH;
-                        this->particles[i].unk_38 = 0.0f;
+                        this->particles[i].speedTarget = 0.0f;
                     }
 
-                    Math_SmoothStepToF(&this->particles[i].unk_44, 0.1, 0.1f, 0.001f, 0.00001f);
-                    Math_SmoothStepToF(&this->particles[i].speed, this->particles[i].unk_38, 0.5f, 0.2f, 0.02f);
-                    this->particles[i].vel.x += __sinf(this->particles[i].unk_28.x) * this->particles[i].speed;
-                    this->particles[i].vel.y += __sinf(this->particles[i].unk_28.y) * this->particles[i].speed;
-                    this->particles[i].vel.z += __sinf(this->particles[i].unk_28.z) * this->particles[i].speed;
+                    Math_SmoothStepToF(&this->particles[i].scale, 0.1, 0.1f, 0.001f, 0.00001f);
+                    Math_SmoothStepToF(&this->particles[i].speed, this->particles[i].speedTarget, 0.5f, 0.2f, 0.02f);
+                    this->particles[i].posOffset.x +=
+                        __sinf(this->particles[i].speedClock.x) * this->particles[i].speed;
+                    this->particles[i].posOffset.y +=
+                        __sinf(this->particles[i].speedClock.y) * this->particles[i].speed;
+                    this->particles[i].posOffset.z +=
+                        __sinf(this->particles[i].speedClock.z) * this->particles[i].speed;
 
                     switch ((i >> 1) & 3) {
                         case 0:
-                            this->particles[i].unk_28.x += 0.008f;
-                            this->particles[i].unk_28.y += 0.05f * Rand_ZeroOne();
-                            this->particles[i].unk_28.z += 0.015f;
+                            this->particles[i].speedClock.x += 0.008f;
+                            this->particles[i].speedClock.y += 0.05f * Rand_ZeroOne();
+                            this->particles[i].speedClock.z += 0.015f;
                             break;
 
                         case 1:
-                            this->particles[i].unk_28.x += 0.01f * Rand_ZeroOne();
-                            this->particles[i].unk_28.y += 0.05f * Rand_ZeroOne();
-                            this->particles[i].unk_28.z += (0.005f * Rand_ZeroOne());
+                            this->particles[i].speedClock.x += 0.01f * Rand_ZeroOne();
+                            this->particles[i].speedClock.y += 0.05f * Rand_ZeroOne();
+                            this->particles[i].speedClock.z += 0.005f * Rand_ZeroOne();
                             break;
 
                         case 2:
-                            this->particles[i].unk_28.x += 0.01f * Rand_ZeroOne();
-                            this->particles[i].unk_28.y += 0.4f * Rand_ZeroOne();
-                            this->particles[i].unk_28.z += (0.004f * Rand_ZeroOne());
+                            this->particles[i].speedClock.x += 0.01f * Rand_ZeroOne();
+                            this->particles[i].speedClock.y += 0.4f * Rand_ZeroOne();
+                            this->particles[i].speedClock.z += 0.004f * Rand_ZeroOne();
                             break;
 
                         case 3:
-                            this->particles[i].unk_28.x += 0.01f * Rand_ZeroOne();
-                            this->particles[i].unk_28.y += 0.08f * Rand_ZeroOne();
-                            this->particles[i].unk_28.z += (0.05f * Rand_ZeroOne());
+                            this->particles[i].speedClock.x += 0.01f * Rand_ZeroOne();
+                            this->particles[i].speedClock.y += 0.08f * Rand_ZeroOne();
+                            this->particles[i].speedClock.z += 0.05f * Rand_ZeroOne();
                             break;
                     }
 
                 } else if (this->particles[i].state == DEMO_KANKYO_STATE_SKYFISH) {
-                    if ((D_808D03C4 & i) == 0) {
-                        Math_SmoothStepToF(&this->particles[i].unk_44, 0.25f, 0.1f, 0.001f, 0.00001f);
+                    if ((i & sLostWoodsSkyFishParticleNum) == 0) {
+                        // Head particle
+                        Math_SmoothStepToF(&this->particles[i].scale, 0.25f, 0.1f, 0.001f, 0.00001f);
 
-                        Math_SmoothStepToF(&this->particles[i].pos.x, player->actor.world.pos.x, 0.5f, 1.0f, 0.2f);
-                        Math_SmoothStepToF(&this->particles[i].pos.y, player->actor.world.pos.y + 50.0f, 0.5f, 1.0f,
+                        Math_SmoothStepToF(&this->particles[i].posBase.x, player->actor.world.pos.x, 0.5f, 1.0f, 0.2f);
+                        Math_SmoothStepToF(&this->particles[i].posBase.y, player->actor.world.pos.y + 50.0f, 0.5f, 1.0f,
                                            0.2f);
-                        Math_SmoothStepToF(&this->particles[i].pos.z, player->actor.world.pos.z, 0.5f, 1.0f, 0.2f);
+                        Math_SmoothStepToF(&this->particles[i].posBase.z, player->actor.world.pos.z, 0.5f, 1.0f, 0.2f);
 
-                        Math_SmoothStepToF(&this->particles[i].vel.x,
-                                           Math_SinS(this->particles[i].unk_3E - 0x8000) * this->particles[i].unk_4A,
+                        Math_SmoothStepToF(&this->particles[i].posOffset.x,
+                                           Math_SinS(this->particles[i].LostWoodsSkyFishSpeedXZClock - 0x8000) *
+                                               this->particles[i].LostWoodsSkyFishPosOffsetMax,
                                            0.5f, 2.0f, 0.2f);
-                        Math_SmoothStepToF(&this->particles[i].vel.z,
-                                           Math_CosS(this->particles[i].unk_3E - 0x8000) * this->particles[i].unk_4A,
+                        Math_SmoothStepToF(&this->particles[i].posOffset.z,
+                                           Math_CosS(this->particles[i].LostWoodsSkyFishSpeedXZClock - 0x8000) *
+                                               this->particles[i].LostWoodsSkyFishPosOffsetMax,
                                            0.5f, 2.0f, 0.2f);
-                        this->particles[i].unk_3E += this->particles[i].unk_48;
-                        this->particles[i].vel.y += __sinf(this->particles[i].unk_28.y);
-                        this->particles[i].unk_28.x += 0.2f * Rand_ZeroOne();
-                        this->particles[i].unk_28.y += this->particles[i].unk_4C;
-                        this->particles[i].unk_28.z += 0.1f * Rand_ZeroOne();
+                        this->particles[i].LostWoodsSkyFishSpeedXZClock += this->particles[i].LostWoodsSkyFishSpeedXZ;
+                        this->particles[i].posOffset.y += __sinf(this->particles[i].speedClock.y);
+                        this->particles[i].speedClock.x += 0.2f * Rand_ZeroOne(); // unused calculation
+                        this->particles[i].speedClock.y += this->particles[i].LostWoodsSkyFishSpeedY;
+                        this->particles[i].speedClock.z += 0.1f * Rand_ZeroOne(); // unused calculation
 
-                        this->particles[i].vel.x =
-                            Math_SinS(this->particles[i].unk_3E - 0x8000) * this->particles[i].unk_4A;
-                        this->particles[i].vel.z =
-                            Math_CosS(this->particles[i].unk_3E - 0x8000) * this->particles[i].unk_4A;
+                        this->particles[i].posOffset.x =
+                            Math_SinS(this->particles[i].LostWoodsSkyFishSpeedXZClock - 0x8000) *
+                            this->particles[i].LostWoodsSkyFishPosOffsetMax;
+                        this->particles[i].posOffset.z =
+                            Math_CosS(this->particles[i].LostWoodsSkyFishSpeedXZClock - 0x8000) *
+                            this->particles[i].LostWoodsSkyFishPosOffsetMax;
                     } else {
-                        Math_SmoothStepToF(&this->particles[i].unk_44, 0.1, 0.1f, 0.001f, 0.00001f);
+                        // Tail Particles
+                        Math_SmoothStepToF(&this->particles[i].scale, 0.1, 0.1f, 0.001f, 0.00001f);
+
+                        // Unused calculation, speed only used in posOffset calculations,
+                        // but posOffset gets overwritten for tail particles immediately below
                         Math_SmoothStepToF(&this->particles[i].speed, 1.5f, 0.5f, 0.1f, 0.0002f);
 
-                        this->particles[i].vel.x = this->particles[i - 1].velPrevious.x +
-                                                   (this->particles[i - 1].pos.x - this->particles[i].pos.x);
-                        this->particles[i].vel.y = this->particles[i - 1].velPrevious.y +
-                                                   (this->particles[i - 1].pos.y - this->particles[i].pos.y);
-                        this->particles[i].vel.z = this->particles[i - 1].velPrevious.z +
-                                                   (this->particles[i - 1].pos.z - this->particles[i].pos.z);
+                        // particles in the skyfish's tail are moved to the previous position of the particle directly
+                        // in front
+                        this->particles[i].posOffset.x =
+                            this->particles[i - 1].posOffsetPrev.x +
+                            (this->particles[i - 1].posBase.x - this->particles[i].posBase.x);
+                        this->particles[i].posOffset.y =
+                            this->particles[i - 1].posOffsetPrev.y +
+                            (this->particles[i - 1].posBase.y - this->particles[i].posBase.y);
+                        this->particles[i].posOffset.z =
+                            this->particles[i - 1].posOffsetPrev.z +
+                            (this->particles[i - 1].posBase.z - this->particles[i].posBase.z);
                     }
                 }
 
                 if ((this->particles[i].state != DEMO_KANKYO_STATE_SKYFISH) &&
-                    ((((this->particles[i].pos.x + this->particles[i].vel.x) - newXCalc) > static130) ||
-                     (((this->particles[i].pos.x + this->particles[i].vel.x) - newXCalc) < -static130) ||
-                     (((this->particles[i].pos.y + this->particles[i].vel.y) - newYCalc) > static130) ||
-                     (((this->particles[i].pos.y + this->particles[i].vel.y) - newYCalc) < -static130) ||
-                     (((this->particles[i].pos.z + this->particles[i].vel.z) - newZCalc) > static130) ||
-                     (((this->particles[i].pos.z + this->particles[i].vel.z) - newZCalc) < -static130))) {
-                    if (((this->particles[i].vel.x + this->particles[i].pos.x) - newXCalc) > static130) {
-                        this->particles[i].vel.x = 0.0f;
-                        this->particles[i].pos.x = newXCalc - static130;
+                    ((((this->particles[i].posBase.x + this->particles[i].posOffset.x) - posCenterX) >
+                      repositionLimit) ||
+                     (((this->particles[i].posBase.x + this->particles[i].posOffset.x) - posCenterX) <
+                      -repositionLimit) ||
+                     (((this->particles[i].posBase.y + this->particles[i].posOffset.y) - posCenterY) >
+                      repositionLimit) ||
+                     (((this->particles[i].posBase.y + this->particles[i].posOffset.y) - posCenterY) <
+                      -repositionLimit) ||
+                     (((this->particles[i].posBase.z + this->particles[i].posOffset.z) - posCenterZ) >
+                      repositionLimit) ||
+                     (((this->particles[i].posBase.z + this->particles[i].posOffset.z) - posCenterZ) <
+                      -repositionLimit))) {
+                    if (((this->particles[i].posOffset.x + this->particles[i].posBase.x) - posCenterX) >
+                        repositionLimit) {
+                        this->particles[i].posOffset.x = 0.0f;
+                        this->particles[i].posBase.x = posCenterX - repositionLimit;
                     }
 
-                    if (((this->particles[i].pos.x + this->particles[i].vel.x) - newXCalc) < -static130) {
-                        this->particles[i].vel.x = 0.0f;
-                        this->particles[i].pos.x = newXCalc + static130;
+                    if (((this->particles[i].posBase.x + this->particles[i].posOffset.x) - posCenterX) <
+                        -repositionLimit) {
+                        this->particles[i].posOffset.x = 0.0f;
+                        this->particles[i].posBase.x = posCenterX + repositionLimit;
                     }
 
-                    if (((this->particles[i].pos.y + this->particles[i].vel.y) - newYCalc) > 50.0f) {
-                        this->particles[i].vel.y = 0.0f;
-                        this->particles[i].pos.y = newYCalc - 50.0f;
+                    if (((this->particles[i].posBase.y + this->particles[i].posOffset.y) - posCenterY) > 50.0f) {
+                        this->particles[i].posOffset.y = 0.0f;
+                        this->particles[i].posBase.y = posCenterY - 50.0f;
                     }
 
-                    if (((this->particles[i].pos.y + this->particles[i].vel.y) - newYCalc) < -50.0f) {
-                        this->particles[i].vel.y = 0.0f;
-                        this->particles[i].pos.y = newYCalc + 50.0f;
+                    if (((this->particles[i].posBase.y + this->particles[i].posOffset.y) - posCenterY) < -50.0f) {
+                        this->particles[i].posOffset.y = 0.0f;
+                        this->particles[i].posBase.y = posCenterY + 50.0f;
                     }
 
-                    if (((this->particles[i].pos.z + this->particles[i].vel.z) - newZCalc) > static130) {
-                        this->particles[i].vel.z = 0.0f;
-                        this->particles[i].pos.z = newZCalc - static130;
+                    if (((this->particles[i].posBase.z + this->particles[i].posOffset.z) - posCenterZ) >
+                        repositionLimit) {
+                        this->particles[i].posOffset.z = 0.0f;
+                        this->particles[i].posBase.z = posCenterZ - repositionLimit;
                     }
 
-                    if (((this->particles[i].pos.z + this->particles[i].vel.z) - newZCalc) < -static130) {
-                        this->particles[i].vel.z = 0.0f;
-                        this->particles[i].pos.z = newZCalc + static130;
+                    if (((this->particles[i].posBase.z + this->particles[i].posOffset.z) - posCenterZ) <
+                        -repositionLimit) {
+                        this->particles[i].posOffset.z = 0.0f;
+                        this->particles[i].posBase.z = posCenterZ + repositionLimit;
                     }
                 }
                 break;
 
             case DEMO_KANKYO_STATE_DISABLED:
-                this->particles[i].state = DEMO_KANKYO_STATE_VOID;
+                this->particles[i].state = DEMO_KANKYO_STATE_INIT;
                 break;
         }
     }
@@ -263,52 +303,55 @@ void DemoKakyo_GiantObjectCheck(DemoKankyo* this, GlobalContext* globalCtx) {
  */
 void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, GlobalContext* globalCtx) {
     s32 i;
-    Vec3f viewDiff;
-    f32 distATanX;
-    f32 distATanY;
-    f32 distATanZ;
-    f32 distance;
+    Vec3f eyeToAt;
+    f32 eyeToAtNormX;
+    f32 eyeToAtNormY;
+    f32 eyeToAtNormZ;
+    f32 eyeToAtMag;
     f32 halfScreenWidth;
     f32 temp_f2_3;
     f32 pad0;
     Vec3f newEye;
     f32 halfScreenHeight;
     s32 pad1;
-    Vec3f newPos;
+    Vec3f worldPos;
 
     if (globalCtx->envCtx.unk_F2[3] < DEMOKANKYO_PARTICLE_COUNT) {
         globalCtx->envCtx.unk_F2[3] += 16;
     }
 
-    viewDiff.x = globalCtx->view.at.x - globalCtx->view.eye.x;
-    viewDiff.y = globalCtx->view.at.y - globalCtx->view.eye.y;
-    viewDiff.z = globalCtx->view.at.z - globalCtx->view.eye.z;
-    distance = sqrtf(SQ(viewDiff.x) + SQ(viewDiff.y) + SQ(viewDiff.z));
-    distATanX = viewDiff.x / distance;
-    distATanY = viewDiff.y / distance;
-    distATanZ = viewDiff.z / distance;
+    eyeToAt.x = globalCtx->view.at.x - globalCtx->view.eye.x;
+    eyeToAt.y = globalCtx->view.at.y - globalCtx->view.eye.y;
+    eyeToAt.z = globalCtx->view.at.z - globalCtx->view.eye.z;
+    eyeToAtMag = sqrtf(SQ(eyeToAt.x) + SQ(eyeToAt.y) + SQ(eyeToAt.z));
+    eyeToAtNormX = eyeToAt.x / eyeToAtMag;
+    eyeToAtNormY = eyeToAt.y / eyeToAtMag;
+    eyeToAtNormZ = eyeToAt.z / eyeToAtMag;
 
-    halfScreenHeight = 120.0f;
+    halfScreenHeight = SCREEN_HEIGHT / 2;
 
     for (i = 0; i < globalCtx->envCtx.unk_F2[3]; i++) {
         switch (this->particles[i].state) {
-            case DEMO_KANKYO_STATE_VOID: // init, changes to state 1 at the end
-                this->particles[i].pos.x = globalCtx->view.eye.x + (distATanX * halfScreenHeight);
-                this->particles[i].pos.y = globalCtx->view.eye.y + (distATanY * halfScreenHeight);
-                this->particles[i].pos.z = globalCtx->view.eye.z + (distATanZ * halfScreenHeight);
+            case DEMO_KANKYO_STATE_INIT:
+                this->particles[i].posBase.x = globalCtx->view.eye.x + (eyeToAtNormX * halfScreenHeight);
+                this->particles[i].posBase.y = globalCtx->view.eye.y + (eyeToAtNormY * halfScreenHeight);
+                this->particles[i].posBase.z = globalCtx->view.eye.z + (eyeToAtNormZ * halfScreenHeight);
 
-                this->particles[i].vel.x = (Rand_ZeroOne() - 0.5f) * (halfScreenHeight + halfScreenHeight);
-                this->particles[i].vel.y = (Rand_ZeroOne() - 0.5f) * (halfScreenHeight + halfScreenHeight);
-                this->particles[i].vel.z = (Rand_ZeroOne() - 0.5f) * (halfScreenHeight + halfScreenHeight);
+                this->particles[i].posOffset.x = (Rand_ZeroOne() - 0.5f) * (2.0f * halfScreenHeight);
+                this->particles[i].posOffset.y = (Rand_ZeroOne() - 0.5f) * (2.0f * halfScreenHeight);
+                this->particles[i].posOffset.z = (Rand_ZeroOne() - 0.5f) * (2.0f * halfScreenHeight);
 
-                this->particles[i].unk_38 = (Rand_ZeroOne() * 1.6f) + 0.5f;
+                this->particles[i].speedTarget = (Rand_ZeroOne() * 1.6f) + 0.5f;
                 this->particles[i].alpha = 0;
                 this->particles[i].alphaClock = (Rand_ZeroOne() * 65535);
-                this->particles[i].unk_44 = 0.2f;
+                this->particles[i].scale = 0.2f;
 
-                this->particles[i].unk_28.x = Rand_ZeroOne() * 360.0f;
-                this->particles[i].unk_28.y = Rand_ZeroOne() * 360.0f;
-                this->particles[i].unk_28.z = Rand_ZeroOne() * 360.0f;
+                // speedClock is angles in radians,
+                // should have used Rand_ZeroOne() * 2 * M_PI
+                // however, due to properties of sine waves, this is effectively still random
+                this->particles[i].speedClock.x = Rand_ZeroOne() * 360.0f;
+                this->particles[i].speedClock.y = Rand_ZeroOne() * 360.0f;
+                this->particles[i].speedClock.z = Rand_ZeroOne() * 360.0f;
 
                 this->particles[i].pad50 = 0;
                 this->particles[i].state += DEMO_KANKYO_STATE_SINGLE;
@@ -316,86 +359,86 @@ void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, GlobalContext* globalCtx
 
             case DEMO_KANKYO_STATE_SINGLE:
             case DEMO_KANKYO_STATE_SKYFISH:
-                this->particles[i].alphaClock += 1;
+                this->particles[i].alphaClock++;
 
                 if (this->actor.params == DEMO_KANKYO_TYPE_MOON) { // this function gets reused for giants too
-                    this->particles[i].pos.y = globalCtx->view.eye.y + (distATanY * halfScreenHeight) + 80.0f;
+                    this->particles[i].posBase.y = globalCtx->view.eye.y + (eyeToAtNormY * halfScreenHeight) + (SCREEN_HEIGHT / 3);
                 }
 
-                newEye.x = globalCtx->view.eye.x + (distATanX * halfScreenHeight);
-                newEye.y = globalCtx->view.eye.y + (distATanY * halfScreenHeight);
-                newEye.z = globalCtx->view.eye.z + (distATanZ * halfScreenHeight);
+                newEye.x = globalCtx->view.eye.x + (eyeToAtNormX * halfScreenHeight);
+                newEye.y = globalCtx->view.eye.y + (eyeToAtNormY * halfScreenHeight);
+                newEye.z = globalCtx->view.eye.z + (eyeToAtNormZ * halfScreenHeight);
 
-                Math_SmoothStepToF(&this->particles[i].unk_44, 0.2f, 0.1f, 0.001f, 0.00001f);
-                Math_SmoothStepToF(&this->particles[i].speed, this->particles[i].unk_38, 0.5f, 0.2f, 0.02f);
+                Math_SmoothStepToF(&this->particles[i].scale, 0.2f, 0.1f, 0.001f, 0.00001f);
+                Math_SmoothStepToF(&this->particles[i].speed, this->particles[i].speedTarget, 0.5f, 0.2f, 0.02f);
 
-                this->particles[i].vel.x += __sinf(this->particles[i].unk_28.x) * this->particles[i].speed;
-                this->particles[i].vel.y += __sinf(this->particles[i].unk_28.y) * this->particles[i].speed;
-                this->particles[i].vel.z += __sinf(this->particles[i].unk_28.z) * this->particles[i].speed;
+                this->particles[i].posOffset.x += __sinf(this->particles[i].speedClock.x) * this->particles[i].speed;
+                this->particles[i].posOffset.y += __sinf(this->particles[i].speedClock.y) * this->particles[i].speed;
+                this->particles[i].posOffset.z += __sinf(this->particles[i].speedClock.z) * this->particles[i].speed;
 
                 switch ((i >> 1) & 3) {
                     case 0:
-                        this->particles[i].unk_28.x += 0.008f;
-                        this->particles[i].unk_28.y += 0.05f * Rand_ZeroOne();
-                        this->particles[i].unk_28.z += 0.015f;
+                        this->particles[i].speedClock.x += 0.008f;
+                        this->particles[i].speedClock.y += 0.05f * Rand_ZeroOne();
+                        this->particles[i].speedClock.z += 0.015f;
                         break;
 
                     case 1:
-                        this->particles[i].unk_28.x += 0.01f * Rand_ZeroOne();
-                        this->particles[i].unk_28.y += 0.05f * Rand_ZeroOne();
-                        this->particles[i].unk_28.z += 0.005f * Rand_ZeroOne();
+                        this->particles[i].speedClock.x += 0.01f * Rand_ZeroOne();
+                        this->particles[i].speedClock.y += 0.05f * Rand_ZeroOne();
+                        this->particles[i].speedClock.z += 0.005f * Rand_ZeroOne();
                         break;
 
                     case 2:
-                        this->particles[i].unk_28.x += 0.01f * Rand_ZeroOne();
-                        this->particles[i].unk_28.y += 0.4f * Rand_ZeroOne();
-                        this->particles[i].unk_28.z += 0.004f * Rand_ZeroOne();
+                        this->particles[i].speedClock.x += 0.01f * Rand_ZeroOne();
+                        this->particles[i].speedClock.y += 0.4f * Rand_ZeroOne();
+                        this->particles[i].speedClock.z += 0.004f * Rand_ZeroOne();
                         break;
 
                     case 3:
-                        this->particles[i].unk_28.x += 0.01f * Rand_ZeroOne();
-                        this->particles[i].unk_28.y += 0.08f * Rand_ZeroOne();
-                        this->particles[i].unk_28.z += 0.05f * Rand_ZeroOne();
+                        this->particles[i].speedClock.x += 0.01f * Rand_ZeroOne();
+                        this->particles[i].speedClock.y += 0.08f * Rand_ZeroOne();
+                        this->particles[i].speedClock.z += 0.05f * Rand_ZeroOne();
                         break;
                 }
 
-                if (((this->particles[i].pos.x + this->particles[i].vel.x) - newEye.x) > halfScreenHeight) {
-                    this->particles[i].pos.x = newEye.x - halfScreenHeight;
+                if (((this->particles[i].posBase.x + this->particles[i].posOffset.x) - newEye.x) > halfScreenHeight) {
+                    this->particles[i].posBase.x = newEye.x - halfScreenHeight;
                 }
 
-                if (((this->particles[i].pos.x + this->particles[i].vel.x) - newEye.x) < -halfScreenHeight) {
-                    this->particles[i].pos.x = newEye.x + halfScreenHeight;
+                if (((this->particles[i].posBase.x + this->particles[i].posOffset.x) - newEye.x) < -halfScreenHeight) {
+                    this->particles[i].posBase.x = newEye.x + halfScreenHeight;
                 }
 
-                newPos.x = this->particles[i].pos.x + this->particles[i].vel.x;
-                newPos.y = this->particles[i].pos.y + this->particles[i].vel.y;
-                newPos.z = this->particles[i].pos.z + this->particles[i].vel.z;
+                worldPos.x = this->particles[i].posBase.x + this->particles[i].posOffset.x;
+                worldPos.y = this->particles[i].posBase.y + this->particles[i].posOffset.y;
+                worldPos.z = this->particles[i].posBase.z + this->particles[i].posOffset.z;
 
-                temp_f2_3 = Math_Vec3f_DistXZ(&newPos, &globalCtx->view.eye) / 200.0f;
+                temp_f2_3 = Math_Vec3f_DistXZ(&worldPos, &globalCtx->view.eye) / 200.0f;
                 temp_f2_3 = CLAMP(temp_f2_3, 0.0f, 1.0f);
                 halfScreenWidth = 100.0f + temp_f2_3 + 60.0f; // range 160 to 161...? thats about half screen width
 
                 // I think this code is shifting the particles 1 frame -> half screen at a time to keep it in-view
-                if (halfScreenWidth < ((this->particles[i].pos.y + this->particles[i].vel.y) - newEye.y)) {
-                    this->particles[i].pos.y = newEye.y - halfScreenWidth;
+                if (halfScreenWidth < ((this->particles[i].posBase.y + this->particles[i].posOffset.y) - newEye.y)) {
+                    this->particles[i].posBase.y = newEye.y - halfScreenWidth;
                 }
 
-                if (((this->particles[i].pos.y + this->particles[i].vel.y) - newEye.y) < -halfScreenWidth) {
-                    this->particles[i].pos.y = newEye.y + halfScreenWidth;
+                if (((this->particles[i].posBase.y + this->particles[i].posOffset.y) - newEye.y) < -halfScreenWidth) {
+                    this->particles[i].posBase.y = newEye.y + halfScreenWidth;
                 }
 
-                if (((this->particles[i].pos.z + this->particles[i].vel.z) - newEye.z) > halfScreenHeight) {
-                    this->particles[i].pos.z = newEye.z - halfScreenHeight;
+                if (((this->particles[i].posBase.z + this->particles[i].posOffset.z) - newEye.z) > halfScreenHeight) {
+                    this->particles[i].posBase.z = newEye.z - halfScreenHeight;
                 }
 
-                if (((this->particles[i].pos.z + this->particles[i].vel.z) - newEye.z) < -halfScreenHeight) {
-                    this->particles[i].pos.z = newEye.z + halfScreenHeight;
+                if (((this->particles[i].posBase.z + this->particles[i].posOffset.z) - newEye.z) < -halfScreenHeight) {
+                    this->particles[i].posBase.z = newEye.z + halfScreenHeight;
                 }
 
                 break;
 
             case DEMO_KANKYO_STATE_DISABLED:
-                this->particles[i].state = DEMO_KANKYO_STATE_VOID;
+                this->particles[i].state = DEMO_KANKYO_STATE_INIT;
                 break;
         }
     }
@@ -409,10 +452,10 @@ void DemoKankyo_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     // This must be a single line to match, possibly a macro?
     // clang-format off
-    for (i = 0; i < ARRAY_COUNT(this->particles); i++) { this->particles[i].state = 0; }
+    for (i = 0; i < ARRAY_COUNT(this->particles); i++) { this->particles[i].state = DEMO_KANKYO_STATE_INIT; }
     // clang-format on
 
-    if (0) {};
+    if (1) {};
 
     switch (this->actor.params) {
         case DEMO_KANKYO_TYPE_LOSTWOODS:
@@ -439,12 +482,12 @@ void DemoKankyo_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
 
         default:
-            // ! @ BUG: this causes a crash because the actionfunc is never set
+            //! @bug: this causes a crash because the actionfunc is never set
             objId = -1;
             break;
     }
 
-    if (objId >= 0) {
+    if (objId > -1) {
         this->objectId = objId;
     }
 }
@@ -466,8 +509,8 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     s16 i;
     f32 scaleAlpha;
-    Vec3f newPos;
-    Vec3f newScreenPos; // guessing based on what happens to it
+    Vec3f worldPos;
+    Vec3f screenPos;
 
     if (!(globalCtx->cameraPtrs[0]->flags2 & 0x100)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -478,35 +521,37 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, GlobalContext* globalCtx2) {
         gSPDisplayList(POLY_XLU_DISP++, D_0407AB10);
 
         for (i = 0; i < globalCtx->envCtx.unk_F2[3]; i++) {
-            newPos.x = this->particles[i].pos.x + this->particles[i].vel.x;
-            newPos.y = this->particles[i].pos.y + this->particles[i].vel.y;
-            newPos.z = this->particles[i].pos.z + this->particles[i].vel.z;
+            worldPos.x = this->particles[i].posBase.x + this->particles[i].posOffset.x;
+            worldPos.y = this->particles[i].posBase.y + this->particles[i].posOffset.y;
+            worldPos.z = this->particles[i].posBase.z + this->particles[i].posOffset.z;
 
             // if we disable this, then no particles are shown
-            func_80169474(globalCtx, &newPos, &newScreenPos); // unamed Play_ function
+            func_80169474(globalCtx, &worldPos, &screenPos); // unnamed Play_ function, func_800C016C from OoT
 
-            // considering these appear to be max screen coords, checking if particle is on screen?
-            if (newScreenPos.x >= 0.0f && newScreenPos.x < 320.0f && newScreenPos.y >= 0.0f &&
-                newScreenPos.y < 240.0f) {
-                Matrix_InsertTranslation(newPos.x, newPos.y, newPos.z, MTXMODE_NEW);
+            // checking if particle is on screen
+            if (screenPos.x >= 0.0f && screenPos.x < SCREEN_WIDTH && screenPos.y >= 0.0f &&
+                screenPos.y < SCREEN_HEIGHT) {
+                Matrix_InsertTranslation(worldPos.x, worldPos.y, worldPos.z, MTXMODE_NEW);
                 scaleAlpha = this->particles[i].alpha / 50.0f;
                 if (scaleAlpha > 1.0f) {
                     scaleAlpha = 1.0f;
                 }
 
-                Matrix_Scale(this->particles[i].unk_44 * scaleAlpha, this->particles[i].unk_44 * scaleAlpha,
-                             this->particles[i].unk_44 * scaleAlpha, MTXMODE_APPLY);
+                Matrix_Scale(this->particles[i].scale * scaleAlpha, this->particles[i].scale * scaleAlpha,
+                             this->particles[i].scale * scaleAlpha, MTXMODE_APPLY);
 
                 // adjust transparency of this particle
                 if (i < 32) {
-                    if (this->particles[i].state != 2) {
+                    // Skyfish particles
+                    if (this->particles[i].state != DEMO_KANKYO_STATE_SKYFISH) {
+                        // still initializing
                         if (this->particles[i].alpha > 0) { // NOT DECR
                             this->particles[i].alpha--;
                         }
                     } else if (this->particles[i].alpha < 100) {
                         this->particles[i].alpha++;
                     }
-                } else if (this->particles[i].state != 2) {
+                } else if (this->particles[i].state != DEMO_KANKYO_STATE_SKYFISH) {
                     if ((this->particles[i].alphaClock & 31) < 16) {
                         if (this->particles[i].alpha < 235) {
                             this->particles[i].alpha += 20;
@@ -537,7 +582,7 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, GlobalContext* globalCtx2) {
                 }
 
                 Matrix_InsertMatrix(&globalCtx->mf_187FC, MTXMODE_APPLY);
-                Matrix_InsertZRotation_f(globalCtx->state.frames * 20.0f * 0.017453292f, MTXMODE_APPLY);
+                Matrix_InsertZRotation_f(DEGF_TO_RADF(globalCtx->state.frames * 20.0f), MTXMODE_APPLY);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -557,8 +602,8 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
     f32 alphaScale;
 
     if (this->isSafeToDrawGiants != false) {
-        Vec3f newPos;
-        Vec3f newScreenPos; // guessing based on what happens to it
+        Vec3f worldPos;
+        Vec3f screenPos;
         s32 pad;
         GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
 
@@ -566,23 +611,23 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
         func_8012C2DC(gfxCtx);
 
         for (i = 0; i < globalCtx->envCtx.unk_F2[3]; i++) {
-            newPos.x = this->particles[i].pos.x + this->particles[i].vel.x;
-            newPos.y = this->particles[i].pos.y + this->particles[i].vel.y;
-            newPos.z = this->particles[i].pos.z + this->particles[i].vel.z;
+            worldPos.x = this->particles[i].posBase.x + this->particles[i].posOffset.x;
+            worldPos.y = this->particles[i].posBase.y + this->particles[i].posOffset.y;
+            worldPos.z = this->particles[i].posBase.z + this->particles[i].posOffset.z;
 
-            func_80169474(globalCtx, &newPos, &newScreenPos);
+            func_80169474(globalCtx, &worldPos, &screenPos);
 
             // considering these appear to be max screen coords, checking if particle is on screen?
-            if (newScreenPos.x >= 0.0f && newScreenPos.x < 320.0f && newScreenPos.y >= 0.0f &&
-                newScreenPos.y < 240.0f) {
-                Matrix_InsertTranslation(newPos.x, newPos.y, newPos.z, MTXMODE_NEW);
+            if (screenPos.x >= 0.0f && screenPos.x < SCREEN_WIDTH && screenPos.y >= 0.0f &&
+                screenPos.y < SCREEN_HEIGHT) {
+                Matrix_InsertTranslation(worldPos.x, worldPos.y, worldPos.z, MTXMODE_NEW);
                 alphaScale = this->particles[i].alpha / 50.0f;
                 if (alphaScale > 1.0f) {
                     alphaScale = 1.0f;
                 }
-                Matrix_Scale(this->particles[i].unk_44 * alphaScale, this->particles[i].unk_44 * alphaScale,
-                             this->particles[i].unk_44 * alphaScale, MTXMODE_APPLY);
-                alphaScale = Math_Vec3f_DistXYZ(&newPos, &globalCtx->view.eye) / 300.0f;
+                Matrix_Scale(this->particles[i].scale * alphaScale, this->particles[i].scale * alphaScale,
+                             this->particles[i].scale * alphaScale, MTXMODE_APPLY);
+                alphaScale = Math_Vec3f_DistXYZ(&worldPos, &globalCtx->view.eye) / 300.0f;
                 alphaScale = (alphaScale > 1.0f) ? 0.0f : (1.0f - alphaScale) > 1.0f ? 1.0f : 1.0f - alphaScale;
 
                 if (this->actor.params == DEMO_KANKYO_TYPE_GIANTS) {
@@ -609,8 +654,7 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
 
                 Matrix_InsertMatrix(&globalCtx->mf_187FC, MTXMODE_APPLY);
 
-                // macro?
-                Matrix_InsertZRotation_f(globalCtx->state.frames * 20.0f * 0.017453292f, MTXMODE_APPLY);
+                Matrix_InsertZRotation_f(DEGF_TO_RADF(globalCtx->state.frames * 20.0f), MTXMODE_APPLY);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
