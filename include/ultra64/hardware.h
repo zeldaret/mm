@@ -70,7 +70,7 @@
 
 #define PI_STATUS_BUSY    (1 << 0)
 #define PI_STATUS_IOBUSY  (1 << 1)
-#define PI_STATUS_ERROR   (PI_STATUS_BUSY | PI_STATUS_IOBUSY)
+#define PI_STATUS_ERROR   (1 << 2)
 
 #define PI_STATUS_RESET_CONTROLLER  (1 << 0)
 #define PI_STATUS_CLEAR_INTR        (1 << 1)
