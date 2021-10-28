@@ -609,8 +609,8 @@ void Actor_DrawZTarget(TargetContext* targetCtx, GlobalContext* globalCtx) {
 #endif
 
 // OoT: func_8002C7BC
-void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GlobalContext* globalCtx) {
-    s32 pad;
+void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameState* gameState) {
+    GlobalContext* globalCtx = (GlobalContext*)gameState;
     Actor* sp68 = NULL;
     s32 sp64;
     Vec3f sp58;
@@ -619,7 +619,7 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, Globa
     if ((player->unk_730 != 0) && (player->unk_AE3[player->unk_ADE] == 2)) {
         targetCtx->unk_94 = NULL;
     } else {
-        func_800BB8EC(globalCtx, &globalCtx->actorCtx, &sp68, &D_801ED920, player);
+        func_800BB8EC(gameState, &globalCtx->actorCtx, &sp68, &D_801ED920, player);
         targetCtx->unk_94 = sp68;
     }
 
@@ -2051,8 +2051,8 @@ s32 Actor_NotMounted(GlobalContext* globalCtx, Actor* horse) {
     return false;
 }
 
-void func_800B8D10(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 arg3, f32 arg4, u32 arg5, u32 arg6) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_800B8D10(GameState* gameState, Actor* actor, f32 arg2, s16 arg3, f32 arg4, u32 arg5, u32 arg6) {
+    Player* player = GET_PLAYER(gameState);
 
     player->unk_B74 = arg6;
     player->unk_B75 = arg5;
@@ -2061,20 +2061,20 @@ void func_800B8D10(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 arg3, f
     player->unk_B7C = arg4;
 }
 
-void func_800B8D50(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 yaw, f32 arg4, u32 arg5) {
-    func_800B8D10(globalCtx, actor, arg2, yaw, arg4, 3, arg5);
+void func_800B8D50(GameState* gameState, Actor* actor, f32 arg2, s16 yaw, f32 arg4, u32 arg5) {
+    func_800B8D10(gameState, actor, arg2, yaw, arg4, 3, arg5);
 }
 
-void func_800B8D98(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 arg3, f32 arg4) {
-    func_800B8D50(globalCtx, actor, arg2, arg3, arg4, 0);
+void func_800B8D98(GameState* gameState, Actor* actor, f32 arg2, s16 arg3, f32 arg4) {
+    func_800B8D50(gameState, actor, arg2, arg3, arg4, 0);
 }
 
-void func_800B8DD4(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 arg3, f32 arg4, u32 arg5) {
-    func_800B8D10(globalCtx, actor, arg2, arg3, arg4, 2, arg5);
+void func_800B8DD4(GameState* gameState, Actor* actor, f32 arg2, s16 arg3, f32 arg4, u32 arg5) {
+    func_800B8D10(gameState, actor, arg2, arg3, arg4, 2, arg5);
 }
 
-void func_800B8E1C(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 arg3, f32 arg4) {
-    func_800B8DD4(globalCtx, actor, arg2, arg3, arg4, 0);
+void func_800B8E1C(GameState* gameState, Actor* actor, f32 arg2, s16 arg3, f32 arg4) {
+    func_800B8DD4(gameState, actor, arg2, arg3, arg4, 0);
 }
 
 void func_800B8E58(Player* player, u16 sfxId) {
@@ -2177,12 +2177,12 @@ void func_800B9120(ActorContext* actorCtx) {
 // Actor_InitContext // OoT's func_800304DC
 void func_800b9170(GameState* gameState, ActorContext* actorCtx, ActorEntry* actorEntry) {
     ActorOverlay* overlayEntry;
-    u32* temp_a2_2;
+    u32* cycleFlags;
     s32 i;
     GlobalContext* globalCtx = (GlobalContext*)gameState;
 
     gSaveContext.weekEventReg[92] |= 0x80;
-    temp_a2_2 = gSaveContext.cycleSceneFlags[convert_scene_number_among_shared_scenes(globalCtx->sceneNum)];
+    cycleFlags = gSaveContext.cycleSceneFlags[convert_scene_number_among_shared_scenes(globalCtx->sceneNum)];
 
     bzero(actorCtx, sizeof(ActorContext));
     ActorOverlayTable_Init();
@@ -2196,14 +2196,14 @@ void func_800b9170(GameState* gameState, ActorContext* actorCtx, ActorEntry* act
         overlayEntry++;
     }
 
-    actorCtx->flags.chest = temp_a2_2[0];
-    actorCtx->flags.swch[0] = temp_a2_2[1];
-    actorCtx->flags.swch[1] = temp_a2_2[2];
+    actorCtx->flags.chest = cycleFlags[0];
+    actorCtx->flags.swch[0] = cycleFlags[1];
+    actorCtx->flags.swch[1] = cycleFlags[2];
     if (globalCtx->sceneNum == SCENE_INISIE_R) {
-        temp_a2_2 = gSaveContext.cycleSceneFlags[globalCtx->sceneNum];
+        cycleFlags = gSaveContext.cycleSceneFlags[globalCtx->sceneNum];
     }
-    actorCtx->flags.collectible[0] = temp_a2_2[4];
-    actorCtx->flags.clearedRoom = temp_a2_2[3];
+    actorCtx->flags.collectible[0] = cycleFlags[4];
+    actorCtx->flags.clearedRoom = cycleFlags[3];
 
     TitleCard_ContextInit(gameState, &actorCtx->titleCtxt);
     func_800B6468(globalCtx);
@@ -2246,8 +2246,18 @@ void func_800B9334(GlobalContext* globalCtx, ActorContext* actorCtx) {
     }
 }
 
+typedef struct {
+    /* 0x00 */ GlobalContext* globalCtx;
+    /* 0x04 */ Actor* actor;
+    /* 0x08 */ u32 updateActorIfSet;
+    /* 0x0C */ u32 unkC;
+    /* 0x10 */ Actor* unk10;
+    /* 0x14 */ Player* player;
+    /* 0x18 */ u32 runMainIfSet; // Bitmask of actor flags. The actor will only have main called if it has at least 1 flag set that matches this bitmask
+} UpdateActorParams; // size = 0x1C
+
 #ifdef NON_MATCHING
-Actor* Actor_UpdateActor(s800B948C* params) {
+Actor* Actor_UpdateActor(UpdateActorParams* params) {
     GlobalContext* globalCtx = params->globalCtx;
     Actor* actor = params->actor;
 
@@ -2330,20 +2340,20 @@ u32 D_801AED58[] = {
 
 #ifdef NON_EQUIVALENT
 void Actor_UpdateAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
-    s800B948C sp40;
+    UpdateActorParams params;
     ActorListEntry* sp3C;
     DynaCollisionContext* sp38;
     s32 i;
     Actor* phi_s0_3;
     Player* player = GET_PLAYER(globalCtx);
 
-    sp40.player = player;
-    sp40.globalCtx = globalCtx;
+    params.player = player;
+    params.globalCtx = globalCtx;
 
     if (globalCtx->unk_18844 != 0) {
-        sp40.runMainIfSet = 0x200000;
+        params.runMainIfSet = 0x200000;
     } else {
-        sp40.runMainIfSet = 0x200050;
+        params.runMainIfSet = 0x200050;
     }
 
     func_800B9334(globalCtx, actorCtx);
@@ -2353,23 +2363,23 @@ void Actor_UpdateAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
     }
 
     if (player->stateFlags2 & 0x8000000) {
-        sp40.updateActorIfSet = 0x2000000;
+        params.updateActorIfSet = 0x2000000;
     } else {
-        sp40.updateActorIfSet = 0;
+        params.updateActorIfSet = 0;
     }
 
     if ((player->stateFlags1 & 0x40) && ((player->actor.textId & 0xFF00) != 0x1900)) {
-        sp40.unk10 = player->targetActor;
+        params.unk10 = player->targetActor;
     } else {
-        sp40.unk10 = NULL;
+        params.unk10 = NULL;
     }
 
     sp38 = &globalCtx->colCtx.dyna;
     for (i = 0; i < ARRAY_COUNT(actorCtx->actorList); i++) {
-        sp40.unkC = D_801AED58[i] & player->stateFlags1;
-        sp40.actor = actorCtx->actorList[i].first;
-        while (sp40.actor != NULL) {
-            sp40.actor = Actor_UpdateActor(&sp40);
+        params.unkC = D_801AED58[i] & player->stateFlags1;
+        params.actor = actorCtx->actorList[i].first;
+        while (params.actor != NULL) {
+            params.actor = Actor_UpdateActor(&params);
         }
         if (i == 1) {
             BgCheck_Update(globalCtx, sp38);
@@ -2403,7 +2413,7 @@ void Actor_UpdateAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
     }
 
     phi_s0_3 = player->unk_730;
-    if (!(&sp40)) {}
+    if (!(&params)) {}
     if ((phi_s0_3 != 0) && (phi_s0_3->update == 0)) {
         func_80123DA4(player);
         phi_s0_3 = NULL;
@@ -3351,7 +3361,8 @@ s32 func_800BB59C(GlobalContext* globalCtx, Actor* actor) {
 }
 
 #ifdef NON_EQUIVALENT
-void func_800BB604(GlobalContext* globalCtx, ActorContext* actorCtx, Player* player, s32 actorCategory) {
+void func_800BB604(GameState* gameState, ActorContext* actorCtx, Player* player, s32 actorCategory) {
+    GlobalContext* globalCtx = gameState;
     Actor* sp8C;
     CollisionPoly* sp80;
     s32 sp7C;
@@ -3434,7 +3445,7 @@ u8 D_801AED8C[] = {
     ACTORCAT_CHEST, ACTORCAT_SWITCH, ACTORCAT_PROP, ACTORCAT_MISC,       ACTORCAT_DOOR, ACTORCAT_SWITCH,
 };
 
-void func_800BB8EC(GlobalContext* globalCtx, ActorContext* actorCtx, Actor** arg2, Actor** arg3, Player* player) {
+void func_800BB8EC(GameState* gameState, ActorContext* actorCtx, Actor** arg2, Actor** arg3, Player* player) {
     u8* actorCategories;
     s32 i;
 
@@ -3448,13 +3459,13 @@ void func_800BB8EC(GlobalContext* globalCtx, ActorContext* actorCtx, Actor** arg
     actorCategories = D_801AED8C;
 
     for (i = 0; i < 3; i++) {
-        func_800BB604(globalCtx, actorCtx, player, *actorCategories);
+        func_800BB604(gameState, actorCtx, player, *actorCategories);
         actorCategories++;
     }
 
     if (D_801ED8B8 == NULL) {
         for (; i < ARRAY_COUNT(D_801AED8C); i++) {
-            func_800BB604(globalCtx, actorCtx, player, *actorCategories);
+            func_800BB604(gameState, actorCtx, player, *actorCategories);
             actorCategories++;
         }
     }

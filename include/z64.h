@@ -1342,8 +1342,6 @@ typedef struct TargetContext TargetContext;
 
 typedef struct ActorContext ActorContext;
 
-typedef struct s800B948C s800B948C;
-
 struct FireObjLight {
     /* 0x00 */ LightNode* light;
     /* 0x04 */ LightInfoPositional lightInfo;
@@ -1437,16 +1435,6 @@ struct TargetContext {
     /* 0x90 */ Actor* unk90;
     /* 0x94 */ Actor* unk_94;
 }; // size = 0x98
-
-struct s800B948C {
-    /* 0x00 */ GlobalContext* globalCtx;
-    /* 0x04 */ Actor* actor;
-    /* 0x08 */ u32 updateActorIfSet;
-    /* 0x0C */ u32 unkC;
-    /* 0x10 */ Actor* unk10;
-    /* 0x14 */ Player* player;
-    /* 0x18 */ u32 runMainIfSet; // Bitmask of actor flags. The actor will only have main called if it has at least 1 flag set that matches this bitmask
-}; // size = 0x1C
 
 typedef struct ActorContext_unk_20C {
     /* 0x0 */ s16 id;
