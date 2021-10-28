@@ -372,7 +372,7 @@ void __osTimerInterrupt(void);
 void __osSetTimerIntr(OSTime tim);
 OSTime __osInsertTimer(OSTimer* t);
 // void __osVoiceContRead36(void);
-u32 __osSpDeviceBusy(void);
+s32 __osSpDeviceBusy(void);
 s32 __osSiDeviceBusy(void);
 // void guMtxIdent(void);
 s32 osJamMesg(OSMesgQueue* mq, OSMesg msg, s32 flag);
