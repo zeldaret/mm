@@ -3,7 +3,7 @@
  * Description:
  */
 
-//#include "prevent_bss_reordering.h"
+// #include "prevent_bss_reordering.h"
 #include "global.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
@@ -25,6 +25,13 @@ extern s32 D_801ED8D8;            // 2 funcs
 extern s16 D_801ED8DC;            // 2 funcs
 extern Mtx D_801ED8E0;            // 1 func
 extern Actor* D_801ED920;         // 2 funcs. 1 out of z_actor
+
+// Internal forward declarations
+void func_800BA8B8(GlobalContext* globalCtx, ActorContext* actorCtx);
+Actor* Actor_SpawnEntry(ActorContext* actorCtx, ActorEntry* actorEntry, GameState* gameState);
+Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, GlobalContext* globalCtx);
+void func_800BB8EC(GameState* gameState, ActorContext* actorCtx, Actor** arg2, Actor** arg3, Player* player);
+s32 func_800BA2FC(GlobalContext* globalCtx, Actor* actor, Vec3f* arg2, f32 arg3);
 
 void Actor_PrintLists(ActorContext* actorCtx) {
     ActorListEntry* actorList = &actorCtx->actorList[0];
@@ -957,7 +964,7 @@ f32 func_800B64FC(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2, u32* arg3) {
  *
  * In success returns the allocated pointer if `arg2` was NULL or the `arg2` pointer otherwise
  * In failure (There's no space left in `globalCtx->actorCtx.unk_20C` or an allocation error happened) returns NULL
- * 
+ *
  * Note there are no duplicated id checks
  */
 void* func_800B6584(GlobalContext* globalCtx, s16 id, void* arg2, size_t size) {
@@ -987,7 +994,7 @@ void* func_800B6584(GlobalContext* globalCtx, s16 id, void* arg2, size_t size) {
 
 /**
  * Frees the first element of `globalCtx->actorCtx.unk_20C` with id `id`
- * 
+ *
  * In success, the free'd pointer is returned.
  * In failure, NULL is returned
  */
@@ -1443,11 +1450,11 @@ s32 Actor_ActorAIsFacingAndNearActorB(Actor* actorA, Actor* actorB, f32 range, s
     return false;
 }
 
-void func_800B75A0(CollisionPoly* param_1, Vec3f* param_2, s16* param_3) {
-    param_2->x = param_1->normal.x * (1.0f / 0x7FFF);
-    param_2->y = param_1->normal.y * (1.0f / 0x7FFF);
-    param_2->z = param_1->normal.z * (1.0f / 0x7FFF);
-    *param_3 = Math_FAtan2F(param_2->z, param_2->x);
+void func_800B75A0(CollisionPoly* poly, Vec3f* normal, s16* azimuth) {
+    normal->x = COLPOLY_GET_NORMAL(poly->normal.x);
+    normal->y = COLPOLY_GET_NORMAL(poly->normal.y);
+    normal->z = COLPOLY_GET_NORMAL(poly->normal.z);
+    *azimuth = Math_FAtan2F(normal->z, normal->x);
 }
 
 s32 func_800B761C(Actor* actor, f32 arg1, s32 arg2) {
@@ -1477,8 +1484,8 @@ s32 func_800B7678(GlobalContext* globalCtx, Actor* actor, Vec3f* arg2, s32 arg3)
 
     distToFloor = actor->floorHeight - actor->world.pos.y;
     actor->floorBgId = bgId;
-    if ((distToFloor >= 0.0f) || (((actor->bgCheckFlags & 1)) && !(actor->bgCheckFlags & 0x800) && (distToFloor >= -11.0f) &&
-                              (actor->velocity.y < 0.0f))) {
+    if ((distToFloor >= 0.0f) || (((actor->bgCheckFlags & 1)) && !(actor->bgCheckFlags & 0x800) &&
+                                  (distToFloor >= -11.0f) && (actor->velocity.y < 0.0f))) {
         actor->bgCheckFlags |= 0x80;
 
         if (actor->bgCheckFlags & 0x10) {
@@ -1557,8 +1564,8 @@ void Actor_UpdateBgCheckInfo(GlobalContext* globalCtx, Actor* actor, f32 wallChe
         f32 y;
 
         pos.y = actor->prevPos.y + 4.0f;
-        if (func_800C4F84(&globalCtx->colCtx, &y, &pos, (ceilingCheckHeight + sp94) - 4.0f, &D_801ED8B0,
-                          &D_801ED8B4, actor) != 0) {
+        if (func_800C4F84(&globalCtx->colCtx, &y, &pos, (ceilingCheckHeight + sp94) - 4.0f, &D_801ED8B0, &D_801ED8B4,
+                          actor) != 0) {
             actor->bgCheckFlags |= 0x10;
             actor->world.pos.y = (y + sp94) - 4.0f;
         } else {
@@ -2253,8 +2260,9 @@ typedef struct {
     /* 0x0C */ u32 unkC;
     /* 0x10 */ Actor* unk10;
     /* 0x14 */ Player* player;
-    /* 0x18 */ u32 runMainIfSet; // Bitmask of actor flags. The actor will only have main called if it has at least 1 flag set that matches this bitmask
-} UpdateActorParams; // size = 0x1C
+    /* 0x18 */ u32 runMainIfSet; // Bitmask of actor flags. The actor will only have main called if it has at least 1
+                                 // flag set that matches this bitmask
+} UpdateActorParams;             // size = 0x1C
 
 #ifdef NON_MATCHING
 Actor* Actor_UpdateActor(UpdateActorParams* params) {
@@ -2757,15 +2765,15 @@ s32 func_800BA2D8(GlobalContext* globalCtx, Actor* actor) {
 }
 
 #ifdef NON_MATCHING
-s32 func_800BA2FC(GlobalContext* globalCtx, Actor* actor, Vec3f* param_3, f32 param_4) {
+s32 func_800BA2FC(GlobalContext* globalCtx, Actor* actor, Vec3f* arg2, f32 arg3) {
     f32 temp_f14;
     f32 phi_f12;
     f32 phi_f2;
     f32 phi_f14;
     f32 phi_f16;
 
-    if ((-actor->uncullZoneScale < param_3->z) && (param_3->z < (actor->uncullZoneForward + actor->uncullZoneScale))) {
-        phi_f2 = CLAMP_MIN(param_4, 1.0f);
+    if ((-actor->uncullZoneScale < arg2->z) && (arg2->z < (actor->uncullZoneForward + actor->uncullZoneScale))) {
+        phi_f2 = CLAMP_MIN(arg3, 1.0f);
 
         if (globalCtx->view.fovy != 60.0f) {
             temp_f14 = globalCtx->unk_187F0.y * 0.57735026f;
@@ -2778,8 +2786,8 @@ s32 func_800BA2FC(GlobalContext* globalCtx, Actor* actor, Vec3f* param_3, f32 pa
             phi_f16 = actor->uncullZoneScale;
         }
 
-        if (((fabsf(param_3->x) - phi_f12) < phi_f2) && ((-phi_f2 < (param_3->y + phi_f14))) &&
-            ((param_3->y - phi_f16) < phi_f2)) {
+        if (((fabsf(arg2->x) - phi_f12) < phi_f2) && ((-phi_f2 < (arg2->y + phi_f14))) &&
+            ((arg2->y - phi_f16) < phi_f2)) {
             return 1;
         }
     }
@@ -3148,7 +3156,7 @@ ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
 
 #ifdef NON_MATCHING
 Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* globalCtx, s16 index, f32 x, f32 y, f32 z,
-                                     s16 rotX, s16 rotY, s16 rotZ, s32 params, u32 cutscene, s32 param_12,
+                                     s16 rotX, s16 rotY, s16 rotZ, s32 params, u32 cutscene, s32 arg11,
                                      Actor* parent) {
     s32 pad;
     Actor* actor;
@@ -3223,8 +3231,8 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* glob
         actor->cutscene = -1;
     }
 
-    if (param_12 != 0) {
-        actor->unk20 = param_12;
+    if (arg11 != 0) {
+        actor->unk20 = arg11;
     } else {
         actor->unk20 = 0x3FF;
     }
@@ -3437,6 +3445,7 @@ void func_800BB604(GameState* gameState, ActorContext* actorCtx, Player* player,
     }
 }
 #else
+void func_800BB604(GameState* gameState, ActorContext* actorCtx, Player* player, s32 actorCategory);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BB604.s")
 #endif
 
@@ -3591,23 +3600,23 @@ void Actor_SpawnFloorDustRing(GlobalContext* globalCtx, Actor* actor, Vec3f* pos
     }
 }
 
-void func_800BBFB0(GlobalContext* globalCtx, Vec3f* position, f32 param3, s32 param_4, s16 param_5, s16 scaleStep,
-                   u8 param_7) {
+void func_800BBFB0(GlobalContext* globalCtx, Vec3f* position, f32 arg2, s32 arg3, s16 arg4, s16 scaleStep,
+                   u8 arg6) {
     Vec3f pos;
     Vec3f accel = { 0.0f, 0.3f, 0.0f };
     s32 i;
 
-    for (i = param_4; i >= 0; i--) {
+    for (i = arg3; i >= 0; i--) {
         s16 scale;
 
-        pos.x = ((Rand_ZeroOne() - 0.5f) * param3) + position->x;
-        pos.y = ((Rand_ZeroOne() - 0.5f) * param3) + position->y;
-        pos.z = ((Rand_ZeroOne() - 0.5f) * param3) + position->z;
+        pos.x = ((Rand_ZeroOne() - 0.5f) * arg2) + position->x;
+        pos.y = ((Rand_ZeroOne() - 0.5f) * arg2) + position->y;
+        pos.z = ((Rand_ZeroOne() - 0.5f) * arg2) + position->z;
 
-        scale = (s32)(Rand_ZeroOne() * param_5 * 0.2f);
-        scale += param_5;
+        scale = (s32)(Rand_ZeroOne() * arg4 * 0.2f);
+        scale += arg4;
 
-        if (param_7) {
+        if (arg6) {
             func_800B1210(globalCtx, &pos, &D_801D15B0, &accel, scale, scaleStep);
         } else {
             func_800B11A0(globalCtx, &pos, &D_801D15B0, &accel, scale, scaleStep);
@@ -4469,9 +4478,9 @@ void func_800BE5CC(Actor* actor, ColliderJntSph* collider, s32 arg2) {
     }
 }
 
-s32 func_800BE63C(EnBox* box) {
-    if ((box->unk_1F1 == 5) || (box->unk_1F1 == 6) || (box->unk_1F1 == 7) || (box->unk_1F1 == 8) ||
-        (box->unk_1F1 == 0xC)) {
+s32 func_800BE63C(struct EnBox* chest) {
+    if ((chest->unk_1F1 == 5) || (chest->unk_1F1 == 6) || (chest->unk_1F1 == 7) || (chest->unk_1F1 == 8) ||
+        (chest->unk_1F1 == 0xC)) {
         return true;
     }
     return false;
