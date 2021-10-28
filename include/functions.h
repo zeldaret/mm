@@ -657,7 +657,6 @@ void Overlay_LoadGameState(GameStateOverlay* gameState);
 void Overlay_FreeGameState(GameStateOverlay* gameState);
 
 void ActorShape_Init(ActorShape* actorShape, f32 yOffset, ActorShadowFunc shadowDraw, f32 shadowScale);
-
 void ActorShadow_DrawCircle(Actor* actor, Lights* lights, GlobalContext* globalCtx);
 void ActorShadow_DrawSquare(Actor* actor, Lights* lights, GlobalContext* globalCtx);
 void ActorShadow_DrawWhiteCircle(Actor* actor, Lights* lights, GlobalContext* globalCtx);
@@ -668,9 +667,6 @@ void Actor_SetFeetPos(Actor* actor, s32 limbIndex, s32 leftFootIndex, Vec3f* lef
 void func_800B4AEC(GlobalContext* globalCtx, Actor* actor, f32 y);
 void func_800B4B50(Actor* actor, Lights* mapper, GlobalContext* globalCtx);
 void func_800B4EDC(GlobalContext* globalCtx, Vec3f* arg1, Vec3f* arg2, f32* arg3);
-
-
-
 
 void Actor_DrawZTarget(TargetContext* targetCtx, GlobalContext* globalCtx);
 
@@ -692,11 +688,6 @@ void Flags_SetCollectible(GlobalContext* globalCtx, s32 flag);
 
 void TitleCard_InitBossName(GameState* gameState, TitleCardContext* titleCtx, TexturePtr texture, s16 x, s16 y, u8 width, u8 height);
 
-
-
-
-
-
 s32 func_800B648C(GlobalContext* globalCtx, s32 arg1, s32 arg2, f32 arg3, Vec3f* arg4);
 f32 func_800B64FC(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2, u32* arg3);
 void* func_800B6584(GlobalContext* globalCtx, s16 id, void* arg2, size_t size);
@@ -709,8 +700,6 @@ void Actor_SetWorldRotToShape(Actor* actor);
 void Actor_SetShapeRotToWorld(Actor* actor);
 void Actor_SetScale(Actor* actor, f32 scale);
 void Actor_SetObjectDependency(GlobalContext* globalCtx, Actor* actor);
-
-
 void Actor_SetMovementScale(s32 scale);
 void Actor_ApplyMovement(Actor* actor);
 void Actor_SetVelocityYRotationAndGravity(Actor* actor);
@@ -720,7 +709,6 @@ void Actor_SetVelocityAndMoveXYRotation(Actor* actor);
 void Actor_SetVelocityXYRotationReverse(Actor* actor);
 void Actor_SetVelocityAndMoveXYRotationReverse(Actor* actor);
 void func_800B6C04(Actor* actor, f32 speed);
-
 s16 Actor_YawBetweenActors(Actor* from, Actor* to);
 s16 Actor_YawBetweenActorsTop(Actor* from, Actor* to);
 s16 Actor_YawToPoint(Actor* actor, Vec3f* point);
@@ -741,31 +729,25 @@ s32 func_800B7128(Player* player);
 s32 func_800B715C(GlobalContext* globalCtx);
 void func_800B7170(GlobalContext* globalCtx, Player* player);
 void Actor_MountHorse(GlobalContext* globalCtx, Player* player, Actor* horse);
-
-
 s32 func_800B724C(GlobalContext* globalCtx, Actor* actor, u8 csMode);
 u32 func_800B7298(GlobalContext* globalCtx, Actor* actor, u8 arg2);
-
 void func_800B72F8(DynaPolyActor* dyna, f32 a1, s16 a2);
+
 s32 Player_IsFacingActor(Actor* actor, s16 tolerance, GlobalContext* globalCtx);
 s32 Actor_ActorBIsFacingActorA(Actor* actorA, Actor* actorB, s16 tolerance);
 s32 Actor_IsFacingPlayer(Actor* actor, s16 angle);
 s32 Actor_ActorAIsFacingActorB(Actor* actorA, Actor* actorB, s16 tolerance);
 s32 Actor_IsFacingAndNearPlayer(Actor* actor, f32 range, s16 tolerance);
 s32 Actor_ActorAIsFacingAndNearActorB(Actor* actorA, Actor* actorB, f32 range, s16 tolerance);
+
 void func_800B75A0(CollisionPoly* poly, Vec3f* normal, s16* azimuth);
-
-
 void Actor_UpdateBgCheckInfo(GlobalContext* globalCtx, Actor* actor, f32 wallCheckHeight, f32 wallCheckRadius, f32 ceilingCheckHeight, u32 flags);
-
 Hilite* func_800B7FE0(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContext* gfxCtx);
-
 void func_800B8050(Actor* actor, GlobalContext* globalCtx, s32 flag);
 void func_800B8118(Actor* actor, GlobalContext* globalCtx, s32 flag);
 PosRot* Actor_GetFocus(PosRot* dest, Actor* actor);
 PosRot* Actor_GetWorld(PosRot* dest, Actor* actor);
 PosRot* Actor_GetWorldPosShapeRot(PosRot* dest, Actor* actor);
-
 
 s32 func_800B83F8(Actor* actor, Player* player, s32 flag);
 s32 Actor_RequestTalk(Actor* actor, GameState* gameState);
@@ -779,7 +761,6 @@ s32 Player_GetExchangeItemId(GameState* gameState);
 s32 func_800B8718(Actor* actor, GameState* gameState);
 s32 func_800B874C(Actor* actor, GameState* gameState, f32 xzRange, f32 yRange);
 s32 func_800B8804(Actor* actor, GameState* gameState, f32 xzRange);
-
 s32 func_800B886C(Actor* actor, GameState* gameState);
 void func_800B8898(GlobalContext* globalCtx, Actor* actor, s16* x, s16* y);
 s32 func_800B8934(GameState* gameState, Actor* actor);
@@ -813,45 +794,24 @@ s32 func_800B90AC(GlobalContext* globalCtx, Actor* actor, CollisionPoly* polygon
 void func_800B90F4(GlobalContext* globalCtx);
 void func_800B9120(ActorContext* actorCtx);
 void func_800b9170(GameState* gameState, ActorContext* actorCtx, ActorEntry* actorEntry);
-
-
 void Actor_UpdateAll(GlobalContext* globalCtx, ActorContext* actorCtx);
-
-
-
 s32 Actor_RecordUndrawnActor(GlobalContext* globalCtx, Actor* actor);
-
-
-
-
 void Actor_DrawAll(GlobalContext* globalCtx, ActorContext* actorCtx);
 void func_800BA6FC(GlobalContext* globalCtx, ActorContext* actorCtx);
 void func_800BA798(GlobalContext* globalCtx, ActorContext* actorCtx);
-
 void func_800BA9B4(ActorContext* actorCtx, GlobalContext* globalCtx);
-
-
-
 Actor* Actor_Spawn(ActorContext* actorCtx, GlobalContext* globalCtx, s16 actorId, f32 posX, f32 posY, f32 posZ, s16 rotX, s16 rotY, s16 rotZ, s32 params);
-
 Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* globalCtx, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s32 params, u32 cutscene, s32 arg11, Actor* parent);
 Actor* Actor_SpawnAsChild(ActorContext* actorCtx, Actor* parent, GlobalContext* globalCtx, s16 actorId, f32 posX, f32 posY, f32 posZ, s16 rotX, s16 rotY, s16 rotZ, s32 params);
 void Actor_SpawnTransitionActors(GlobalContext* globalCtx, ActorContext* actorCtx);
-
-
-
-
-
 void Enemy_StartFinishingBlow(GlobalContext* globalCtx, Actor* actor);
 s16 func_800BBAC0(s16 arg0[2], s16 arg1, s16 arg2, s16 arg3);
 s16 func_800BBB74(s16 arg0[2], s16 arg1, s16 arg2, s16 arg3);
-
 void func_800BBCEC(Actor* actor, GlobalContext* globalCtx, s32 arg2, Gfx** dList);
 void Actor_SpawnFloorDustRing(GlobalContext* globalCtx, Actor* actor, Vec3f* posXZ, f32 radius, s32 amountMinusOne, f32 randAccelWeight, s16 scale, s16 scaleStep, u8 useLighting);
 void func_800BBFB0(GlobalContext* globalCtx, Vec3f* position, f32 arg2, s32 arg3, s16 arg4, s16 scaleStep, u8 arg6);
 void func_800BC154(GlobalContext* globalCtx, ActorContext* actorCtx, Actor* actor, u8 actorCategory);
 s32 func_800BC188(s32 index);
-
 Actor* func_800BC270(GlobalContext* globalCtx, Actor* actor, f32 arg2, s32 arg3);
 Actor* func_800BC444(GlobalContext* globalCtx, Actor* actor, f32 arg2);
 s16 Actor_TestFloorInDirection(Actor* actor, GlobalContext* globalCtx, f32 distance, s16 angle);
@@ -859,25 +819,16 @@ s32 Actor_IsTargeted(GameState* gameState, Actor* actor);
 s32 Actor_OtherIsTargeted(GameState* gameState, Actor* actor);
 void func_800BC620(Vec3f* arg0, Vec3f* arg1, u8 arg2, GlobalContext* globalCtx);
 void func_800BC770(GameState* gameState, s16 arg1, s16 arg2);
-
 void func_800BC848(Actor* actor, GameState* gameState, s16 arg2, s16 arg3);
 void Actor_DrawDoorLock(GlobalContext* globalCtx, s32 frame, s32 type);
-
 void Actor_SetColorFilter(Actor* actor, u16 colorFlag, u16 colorIntensityMax, u16 xluFlag, u16 duration);
 Hilite* func_800BCBF4(Vec3f* arg0, GlobalContext* globalCtx);
 Hilite* func_800BCC68(Vec3f* arg0, GlobalContext* globalCtx);
 void func_800BCCDC(Vec3s* points, s32 pathcount, Vec3f* pos1, Vec3f* pos2, s32 parm5);
-
-
-
-
 void func_800BD888(Actor* actor, struct_800BD888_arg1* arg1, s16 arg2, s16 arg3);
-
 void func_800BD9E0(GlobalContext* globalCtx, SkelAnime* skelAnime, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, s16 alpha);
 void func_800BDAA0(GlobalContext* globalCtx, SkelAnime* skelAnime, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, s16 alpha);
-
 void func_800BDC5C(SkelAnime* skelAnime, ActorAnimationEntry* animation, s32 index);
-
 void Actor_Noop(Actor* actor, GlobalContext* globalCtx);
 void Gfx_DrawDListOpa(GlobalContext* globalCtx, Gfx* dlist);
 void Gfx_DrawDListXlu(GlobalContext* globalCtx, Gfx* dlist);
