@@ -798,7 +798,7 @@ void func_80A6A36C(EnMushi2* this, GlobalContext* globalCtx) {
 
     Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f);
     this->actor.velocity.y -= this->actor.velocity.y * D_80A6BA14[ENMUSHI2_GET_3(&this->actor)];
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveForward(&this->actor);
     func_80A69424(this, globalCtx);
     this->actor.shape.rot.y += this->unk_370;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -964,7 +964,7 @@ void func_80A6AB08(EnMushi2* this, GlobalContext* globalCtx) {
         Math_StepToF(&this->actor.speedXZ, 0.0f, 0.02f);
     }
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveForward(&this->actor);
     func_80A69424(this, globalCtx);
     Math_StepToF(&this->actor.world.pos.y, this->actor.world.pos.y + this->actor.yDistToWater, 2.8f);
     this->skelAnime.playSpeed = this->unk_368 * 0.018f;
@@ -1026,7 +1026,7 @@ void func_80A6AE7C(EnMushi2* this, GlobalContext* globalCtx) {
     this->actor.world.rot.y += (s16)((Rand_ZeroOne() - 0.5f) * 2000.0f);
     this->actor.gravity = -0.04f - (Rand_ZeroOne() * 0.02f);
     this->actor.velocity.y *= 0.95f;
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveForward(&this->actor);
     func_80A69424(this, globalCtx);
     temp_f2 = this->actor.scale.x - (1.0f / 20000.0f);
     Actor_SetScale(&this->actor, CLAMP_MIN(temp_f2, 0.001f));
@@ -1222,7 +1222,7 @@ void EnMushi2_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         if ((this->unk_30C & 1) && func_80A68DD4(this, globalCtx)) {
-            func_800B8A1C(&this->actor, globalCtx, 0xBA, 60.0f, 30.0f);
+            Actor_PickUp(&this->actor, globalCtx, 0xBA, 60.0f, 30.0f);
         }
     }
 }

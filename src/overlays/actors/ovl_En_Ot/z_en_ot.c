@@ -155,7 +155,7 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 30.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06004800, &D_060008D8, this->jointTable, this->morphTable, 19);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     Animation_Change(&this->skelAnime, sAnimations[0].animationSeg, 1.0f,
@@ -387,7 +387,7 @@ void func_80B5C154(EnOt* this, GlobalContext* globalCtx) {
         this->unk_38C = 12;
         gSaveContext.weekEventReg[32] |= 1;
     }
-    func_800B8A1C(&this->actor, globalCtx, this->unk_38C, this->actor.xzDistToPlayer, this->actor.yDistToPlayer);
+    Actor_PickUp(&this->actor, globalCtx, this->unk_38C, this->actor.xzDistToPlayer, this->actor.yDistToPlayer);
     this->actionFunc = func_80B5C1CC;
 }
 
@@ -397,7 +397,7 @@ void func_80B5C1CC(EnOt* this, GlobalContext* globalCtx) {
         func_80B5C244(this, globalCtx);
         func_80B5C244(this->unk_360, globalCtx);
     } else {
-        func_800B8A1C(&this->actor, globalCtx, this->unk_38C, this->actor.xzDistToPlayer, this->actor.yDistToPlayer);
+        Actor_PickUp(&this->actor, globalCtx, this->unk_38C, this->actor.xzDistToPlayer, this->actor.yDistToPlayer);
     }
 }
 
@@ -535,14 +535,14 @@ void func_80B5C6DC(EnOt* this, GlobalContext* globalCtx) {
     if ((gSaveContext.weekEventReg[84] & 0x10) && (this->unk_33C == 1)) {
         this->actor.textId = 0;
         this->unk_384 = 1;
-        if (func_800B84D0(&this->actor, globalCtx)) {
+        if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
             this->unk_3A0 = BINANG_ADD(sp3E, 0x4000);
             this->unk_360->unk_3A0 = this->unk_3A0;
             func_80B5C9A8(this, globalCtx);
             func_80B5D114(this, globalCtx);
         } else if ((player->actor.bgCheckFlags & 1) && !func_801242B4(player) &&
                    (this->actor.xzDistToPlayer < 130.0f)) {
-            func_800B8614(&this->actor, globalCtx, 130.0f);
+            func_800B8614(&this->actor, &globalCtx->state, 130.0f);
         }
     }
 }
@@ -611,18 +611,18 @@ void func_80B5CB0C(EnOt* this, GlobalContext* globalCtx) {
 
 void func_80B5CBA0(EnOt* this, GlobalContext* globalCtx) {
     this->actor.flags |= 0x10000;
-    func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.yDistToPlayer, 0);
+    func_800B8500(&this->actor, &globalCtx->state, this->actor.xzDistToPlayer, this->actor.yDistToPlayer, 0);
     this->actionFunc = func_80B5CBEC;
 }
 
 void func_80B5CBEC(EnOt* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~0x10000;
         func_80B5CC88(this, globalCtx);
     } else {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0xE38, 0x38E);
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.yDistToPlayer, 0);
+        func_800B8500(&this->actor, &globalCtx->state, this->actor.xzDistToPlayer, this->actor.yDistToPlayer, 0);
     }
 }
 
@@ -690,7 +690,7 @@ void func_80B5CEC8(EnOt* this, GlobalContext* globalCtx) {
     s32 pad;
 
     this->actor.textId = 0;
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         func_80B5D114(this, globalCtx);
         return;
     }
@@ -698,11 +698,11 @@ void func_80B5CEC8(EnOt* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0xE38, 0x38E);
     if (this->unk_32C & 0x800) {
         this->actor.flags |= 0x10000;
-        func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.yDistToPlayer, 0);
+        func_800B8500(&this->actor, &globalCtx->state, this->actor.xzDistToPlayer, this->actor.yDistToPlayer, 0);
     } else {
         this->actor.flags &= ~0x10000;
         if ((player->actor.bgCheckFlags & 1) && !func_801242B4(player) && (this->actor.xzDistToPlayer < 130.0f)) {
-            func_800B8614(&this->actor, globalCtx, 130.0f);
+            func_800B8614(&this->actor, &globalCtx->state, 130.0f);
         }
     }
 
@@ -899,7 +899,7 @@ void func_80B5D648(EnOt* this, GlobalContext* globalCtx) {
     func_8013E1C8(&this->skelAnime, sAnimations, 1, &this->animIdx);
     this->actor.flags |= 0x8000000;
     this->actor.flags &= ~(0x8 | 0x1);
-    Actor_SetSwitchFlag(globalCtx, ENOT_GET_3F80(&this->actor));
+    Flags_SetSwitch(globalCtx, ENOT_GET_3F80(&this->actor));
     this->actionFunc = func_80B5D750;
 }
 
@@ -962,7 +962,7 @@ void EnOt_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.prevPos.y = this->actor.floorHeight + 50.0f;
     }
 
-    Actor_SetHeight(&this->actor, 12.0f);
+    Actor_SetFocus(&this->actor, 12.0f);
     SkelAnime_Update(&this->skelAnime);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
@@ -980,7 +980,7 @@ void func_80B5DAEC(Actor* thisx, GlobalContext* globalCtx) {
     EnOt* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    Actor_SetHeight(&this->actor, 12.0f);
+    Actor_SetFocus(&this->actor, 12.0f);
     SkelAnime_Update(&this->skelAnime);
     func_80B5BB38(&this->unk_747, &this->unk_744, 0.7f);
     if (this->unk_32C & 0x400) {

@@ -160,7 +160,7 @@ void EnFish2_Init(Actor* thisx, GlobalContext* globalCtx) {
     D_80B2B2F0++;
 
     if (this->actor.params == 0) {
-        ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
+        ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06006190, &D_060013AC, this->jointTable, this->morphTable,
                            24);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -331,7 +331,7 @@ void func_80B28C14(EnFish2* this, GlobalContext* globalCtx) {
     Actor* itemAction = globalCtx->actorCtx.actorList[ACTORCAT_ITEMACTION].first;
     WaterBox* waterbox;
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_RequestTalk(&this->actor, &globalCtx->state)) {
         func_80B29128(this);
         return;
     }
@@ -428,7 +428,7 @@ void func_80B28C14(EnFish2* this, GlobalContext* globalCtx) {
             itemAction = itemAction->next;
         }
 
-        func_800B8614(&this->actor, globalCtx, 100.0f);
+        func_800B8614(&this->actor, &globalCtx->state, 100.0f);
     }
 }
 
@@ -957,7 +957,7 @@ void EnFish2_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     this->actionFunc(this, globalCtx);
-    Actor_SetHeight(&this->actor, 0);
+    Actor_SetFocus(&this->actor, 0);
 
     if (this->actor.params != 1) {
         WaterBox* sp6C;
@@ -989,7 +989,7 @@ void EnFish2_Update(Actor* thisx, GlobalContext* globalCtx2) {
         this->unk_2F4.z += (Math_CosS(this->actor.world.rot.y) * 25.0f) - this->unk_330;
         this->unk_33C = 25.0f - ((this->unk_330 - 0.01f) * 1000.0f);
         Actor_SetScale(&this->actor, this->unk_330);
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveForward(&this->actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0, 15.0f, 10.0f, 7);
 
         if (this->actor.params != 2) {
