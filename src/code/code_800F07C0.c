@@ -36,10 +36,10 @@ UNK_TYPE D_801BC410[] = { 0x00000000, 0x00000000, 0x00000000, 0x00000000 };
 
 s32 EnHy_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
     s16 frameCount;
-    s32 ret = false;
+    s32 changed = false;
 
     if (animIndex >= 0 && animIndex <= 20) {
-        ret = true;
+        changed = true;
         frameCount = animations[animIndex].frameCount;
         if (frameCount < 0) {
             frameCount = Animation_GetLastFrame(&animations[animIndex].animationSeg->common);
@@ -48,7 +48,7 @@ s32 EnHy_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
                          animations[animIndex].frame, frameCount, animations[animIndex].mode,
                          animations[animIndex].transitionRate);
     }
-    return ret;
+    return changed;
 }
 
 //! @TODO: Return Door instance when c and h files are split
@@ -88,14 +88,14 @@ void EnHy_ChangeObjectAndAnim(EnHy* enHy, GlobalContext* globalCtx, s16 animInde
 }
 
 s32 EnHy_UpdateSkelAnime(EnHy* enHy, GlobalContext* globalCtx) {
-    s32 ret = false;
+    s32 updated = false;
 
     if (enHy->actor.draw != NULL) {
         gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[enHy->animObjIndex].segment);
         SkelAnime_Update(&enHy->skelAnime);
-        ret = true;
+        updated = true;
     }
-    return ret;
+    return updated;
 }
 
 void EnHy_Blink(EnHy* enHy, s32 eyeTexMaxIndex) {
@@ -108,22 +108,20 @@ void EnHy_Blink(EnHy* enHy, s32 eyeTexMaxIndex) {
     }
 }
 
-s32 EnHy_Init(EnHy* enHy, GlobalContext* globalCtx, FlexSkeletonHeader* skeletonHeaderSeg,
-                   s16 animIndex) {
-    s32 ret = false;
+s32 EnHy_Init(EnHy* enHy, GlobalContext* globalCtx, FlexSkeletonHeader* skeletonHeaderSeg, s16 animIndex) {
+    s32 initialized = false;
 
-    if ((func_8013D8DC(enHy->animObjIndex, globalCtx) == 1) &&
-        (func_8013D8DC(enHy->unk190, globalCtx) == 1) && (func_8013D8DC(enHy->unk191, globalCtx) == 1) &&
-        (func_8013D8DC(enHy->unk192, globalCtx) == 1)) {
+    if ((func_8013D8DC(enHy->animObjIndex, globalCtx) == 1) && (func_8013D8DC(enHy->unk190, globalCtx) == 1) &&
+        (func_8013D8DC(enHy->unk191, globalCtx) == 1) && (func_8013D8DC(enHy->unk192, globalCtx) == 1)) {
         enHy->actor.objBankIndex = enHy->unk192;
-        ret = true;
+        initialized = true;
         ActorShape_Init(&enHy->actor.shape, 0.0f, NULL, 0.0f);
         gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[enHy->actor.objBankIndex].segment);
-        SkelAnime_InitFlex(globalCtx, &enHy->skelAnime, skeletonHeaderSeg, NULL, enHy->jointTable,
-                           enHy->morphTable, 16);
+        SkelAnime_InitFlex(globalCtx, &enHy->skelAnime, skeletonHeaderSeg, NULL, enHy->jointTable, enHy->morphTable,
+                           16);
         EnHy_ChangeObjectAndAnim(enHy, globalCtx, animIndex);
     }
-    return ret;
+    return initialized;
 }
 
 //! @TODO: Should just take EnDoor instead of actor when c and h are split
@@ -210,8 +208,7 @@ s32 EnHy_MoveForwards(EnHy* enHy, f32 speedTarget) {
     reachedEnd = false;
     Math_SmoothStepToF(&enHy->actor.speedXZ, speedTarget, 0.4f, 1000.0f, 0.0f);
     rotStep = enHy->actor.speedXZ * 400.0f;
-    if (func_8013D68C(enHy->path, enHy->curPoint, &curPointPos) &&
-        func_8013D768(&enHy->actor, &curPointPos, rotStep)) {
+    if (func_8013D68C(enHy->path, enHy->curPoint, &curPointPos) && func_8013D768(&enHy->actor, &curPointPos, rotStep)) {
         enHy->curPoint++;
         if (enHy->curPoint >= enHy->path->count) {
             reachedEnd = true;
@@ -228,8 +225,7 @@ s32 EnHy_MoveBackwards(EnHy* enHy, f32 speedTarget) {
     reachedEnd = false;
     Math_SmoothStepToF(&enHy->actor.speedXZ, speedTarget, 0.4f, 1000.0f, 0.0f);
     rotStep = enHy->actor.speedXZ * 400.0f;
-    if (func_8013D68C(enHy->path, enHy->curPoint, &curPointPos) &&
-        func_8013D768(&enHy->actor, &curPointPos, rotStep)) {
+    if (func_8013D68C(enHy->path, enHy->curPoint, &curPointPos) && func_8013D768(&enHy->actor, &curPointPos, rotStep)) {
         enHy->curPoint--;
         if (enHy->curPoint < 0) {
             reachedEnd = true;
@@ -256,18 +252,16 @@ s32 EnHy_PlayWalkingSound(EnHy* enHy, GlobalContext* globalCtx, f32 distAboveThr
 
     if (enHy->actor.bgCheckFlags & 0x20) {
         sound = ((enHy->actor.yDistToWater < 20.0f) ? (NA_SE_PL_WALK_WATER0 - SFX_FLAG)
-                                                         : (NA_SE_PL_WALK_WATER1 - SFX_FLAG)) +
+                                                    : (NA_SE_PL_WALK_WATER1 - SFX_FLAG)) +
                 SFX_FLAG;
     } else {
         sound = func_800C9BDC(&globalCtx->colCtx, enHy->actor.floorPoly, enHy->actor.floorBgId) + SFX_FLAG;
     }
-    enHy->isLeftFootOnGround = isFootOnGround =
-        func_8013DB90(globalCtx, &enHy->leftFootPos, distAboveThreshold);
+    enHy->isLeftFootOnGround = isFootOnGround = func_8013DB90(globalCtx, &enHy->leftFootPos, distAboveThreshold);
     if (enHy->isLeftFootOnGround && !wasLeftFootOnGround && isFootOnGround) {
         Audio_PlayActorSound2(&enHy->actor, sound);
     }
-    enHy->isRightFootOnGround = isFootOnGround =
-        func_8013DB90(globalCtx, &enHy->rightFootPos, distAboveThreshold);
+    enHy->isRightFootOnGround = isFootOnGround = func_8013DB90(globalCtx, &enHy->rightFootPos, distAboveThreshold);
     if (enHy->isRightFootOnGround && !wasRightFootOnGround && isFootOnGround) {
         Audio_PlayActorSound2(&enHy->actor, sound);
     }
