@@ -289,8 +289,8 @@ void func_808D90F0(EnSw* this, s32 arg1, s16 arg2) {
         temp = arg2;
     }
 
-    SysMatrix_InsertRotationAroundUnitVector_f(BINANG_TO_RAD(temp), &this->unk_368, 0);
-    SysMatrix_MultiplyVector3fByState(&this->unk_350, &sp2C);
+    Matrix_InsertRotationAroundUnitVector_f(BINANG_TO_RAD(temp), &this->unk_368, 0);
+    Matrix_MultiplyVector3fByState(&this->unk_350, &sp2C);
     Math_Vec3f_Copy(&this->unk_350, &sp2C);
     Math3D_CrossProduct(&this->unk_368, &this->unk_350, &this->unk_35C);
 }
@@ -328,8 +328,8 @@ s32 func_808D91C4(EnSw* this, CollisionPoly* arg1) {
     }
 
     Math_Vec3f_Scale(&sp2C, 1.0f / temp_f0);
-    SysMatrix_InsertRotationAroundUnitVector_f(sp4C, &sp2C, MTXMODE_NEW);
-    SysMatrix_MultiplyVector3fByState(&this->unk_35C, &sp2C);
+    Matrix_InsertRotationAroundUnitVector_f(sp4C, &sp2C, MTXMODE_NEW);
+    Matrix_MultiplyVector3fByState(&this->unk_35C, &sp2C);
     Math_Vec3f_Copy(&this->unk_35C, &sp2C);
     Math3D_CrossProduct(&this->unk_35C, &sp38, &this->unk_350);
 
@@ -381,7 +381,7 @@ void func_808D94D0(EnSw* this, GlobalContext* globalCtx, s32 arg2, s32 arg3, s16
     Vec3f sp6C;
     u32 sp68;
     u32 sp64;
-    s32 pad2;
+    Actor* thisx = &this->actor;
     f32 temp_f20;
     s32 i;
 
@@ -391,8 +391,7 @@ void func_808D94D0(EnSw* this, GlobalContext* globalCtx, s32 arg2, s32 arg3, s16
     sp64 = 50;
     func_808D90F0(this, arg3, arg4);
     this->actor.speedXZ = this->unk_44C;
-    if (1) {}
-    temp_f20 = this->actor.speedXZ + this->actor.speedXZ;
+    temp_f20 = thisx->speedXZ * 2.0f;
 
     sp90.x = this->actor.world.pos.x + (this->unk_368.x * 2.0f);
     sp90.y = this->actor.world.pos.y + (this->unk_368.y * 2.0f);
@@ -419,12 +418,13 @@ void func_808D94D0(EnSw* this, GlobalContext* globalCtx, s32 arg2, s32 arg3, s16
             this->actor.floorBgId = sp68;
         }
     } else {
-        temp_f20 *= 3.0f;
         this->actor.speedXZ = 0.0f;
+        temp_f20 *= 3.0f;
         Math_Vec3f_Copy(&sp90, &sp84);
 
         for (i = 0; i < 3; i++) {
             if (i == 0) {
+                if (this && this && this) {}
                 sp84.x = sp90.x - (this->unk_350.x * temp_f20);
                 sp84.y = sp90.y - (this->unk_350.y * temp_f20);
                 sp84.z = sp90.z - (this->unk_350.z * temp_f20);
@@ -488,11 +488,11 @@ void func_808D9894(EnSw* this, Vec3f* vec) {
     sp1C.zw = 0.0f;
     sp1C.ww = 0.0f;
 
-    SysMatrix_SetCurrentState(&sp1C);
+    Matrix_SetCurrentState(&sp1C);
     sp5C.x = vec->x - this->actor.world.pos.x;
     sp5C.y = vec->y - this->actor.world.pos.y;
     sp5C.z = vec->z - this->actor.world.pos.z;
-    SysMatrix_MultiplyVector3fByState(&sp5C, vec);
+    Matrix_MultiplyVector3fByState(&sp5C, vec);
 }
 
 s32 func_808D9968(EnSw* this, GlobalContext* globalCtx) {
@@ -529,8 +529,8 @@ s32 func_808D9A70(EnSw* this, GlobalContext* globalCtx) {
     f32 frame;
 
     if (DECR(this->unk_454) == 0) {
-        if (!func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
-            frame = this->skelAnime.animFrameCount - this->skelAnime.animCurrentFrame;
+        if (!Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+            frame = this->skelAnime.endFrame - this->skelAnime.curFrame;
             sp2E = (80.0f * frame) * this->unk_450;
         } else {
             if (this->unk_456 != 0) {
@@ -540,7 +540,7 @@ s32 func_808D9A70(EnSw* this, GlobalContext* globalCtx) {
                     Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALGOLD_ROLL);
                 }
                 this->unk_456--;
-                this->skelAnime.animCurrentFrame = 0.0f;
+                this->skelAnime.curFrame = 0.0f;
             } else {
                 this->unk_454 = Rand_S16Offset(20, 20);
                 this->unk_456 = (Rand_ZeroOne() * 10.0f) + 3.0f;
@@ -560,10 +560,10 @@ s32 func_808D9A70(EnSw* this, GlobalContext* globalCtx) {
     return false;
 }
 
-#ifdef NON_MATCHING
 s32 func_808D9C18(EnSw* this) {
     Vec3f sp3C;
     Vec3f sp30;
+    f32 new_var;
 
     if ((this->unk_498 == 0xF9) || (this->unk_498 == 0x82) || (this->unk_498 == 0xE4) || (this->unk_498 == 0xE5)) {
         this->actor.velocity.x = this->actor.speedXZ;
@@ -571,9 +571,11 @@ s32 func_808D9C18(EnSw* this) {
         this->actor.velocity.x *= Math_SinS(this->actor.world.rot.y);
         this->actor.velocity.z *= Math_CosS(this->actor.world.rot.y);
     } else {
-        this->actor.velocity.x = (this->actor.speedXZ * this->unk_350.x) + (this->actor.speedXZ * this->unk_368.x);
+        new_var = this->actor.speedXZ * this->unk_350.x;
+        this->actor.velocity.x = new_var + (this->actor.speedXZ * this->unk_368.x);
+        new_var = this->actor.speedXZ * this->unk_350.z;
+        this->actor.velocity.z = new_var + this->actor.speedXZ * this->unk_368.z;
         this->actor.velocity.y = 14.0f;
-        this->actor.velocity.z = (this->actor.speedXZ * this->unk_350.z) + (this->actor.speedXZ * this->unk_368.z);
         Math_Vec3f_Copy(&sp3C, &this->actor.world.pos);
         Math_Vec3f_Copy(&sp30, &this->actor.world.pos);
         sp30.x += this->actor.velocity.x;
@@ -598,9 +600,6 @@ s32 func_808D9C18(EnSw* this) {
     this->actor.parent = NULL;
     return false;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sw/func_808D9C18.s")
-#endif
 
 void func_808D9DA0(EnSw* this) {
     static Vec3f D_808DBAAC = { 0.0f, 1.0f, 0.0f };
@@ -748,7 +747,7 @@ s32 func_808DA08C(EnSw* this, GlobalContext* globalCtx) {
 }
 
 void func_808DA350(EnSw* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((player->stateFlags1 & 0x200000) && (this->actor.xyzDistToPlayerSq < 8000.0f)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALWALL_LAUGH);
@@ -767,15 +766,15 @@ void func_808DA3F4(EnSw* this, GlobalContext* globalCtx) {
     Vec3f sp38;
     f32 temp_f16;
 
-    if (!func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
-        temp_f16 = this->skelAnime.animFrameCount - this->skelAnime.animCurrentFrame;
+    if (!Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        temp_f16 = this->skelAnime.endFrame - this->skelAnime.curFrame;
         temp_s1 = (s16)(80.0f * temp_f16);
         Math_Vec3f_Copy(&sp38, &this->unk_374);
         func_808D9894(this, &sp38);
 
         temp_v0 = Math_FAtan2F(sp38.z, sp38.x);
         if (ABS_ALT(temp_v0) < temp_s1) {
-            this->skelAnime.animCurrentFrame = 0.0f;
+            this->skelAnime.curFrame = 0.0f;
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALWALL_DASH);
             this->unk_414 = 0.0f;
             if (this->unk_410 & 0x20) {
@@ -788,7 +787,7 @@ void func_808DA3F4(EnSw* this, GlobalContext* globalCtx) {
         temp_s1 *= (temp_v0 < 0) ? -1 : 1;
     } else {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALWALL_ROLL);
-        this->skelAnime.animCurrentFrame = 0.0f;
+        this->skelAnime.curFrame = 0.0f;
     }
     func_808D94D0(this, globalCtx, 0, 0, temp_s1);
 }
@@ -800,8 +799,8 @@ void func_808DA578(EnSw* this, GlobalContext* globalCtx) {
     s32 test2;
     Vec3f sp30;
 
-    if (!func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
-        temp_f0 = this->skelAnime.animFrameCount - this->skelAnime.animCurrentFrame;
+    if (!Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        temp_f0 = this->skelAnime.endFrame - this->skelAnime.curFrame;
         this->unk_44C = 0.3f * temp_f0;
         func_808D94D0(this, globalCtx, 1, 0, 0);
         if ((this->actor.speedXZ == 0.0f) && (this->unk_44C != 0.0f)) {
@@ -814,7 +813,7 @@ void func_808DA578(EnSw* this, GlobalContext* globalCtx) {
         this->actionFunc = func_808DA3F4;
     } else {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALWALL_DASH);
-        this->skelAnime.animCurrentFrame = 0.0f;
+        this->skelAnime.curFrame = 0.0f;
     }
 
     temp_f0 = Math_Vec3f_DistXYZ(&this->actor.world.pos, &this->unk_374);
@@ -839,8 +838,8 @@ void func_808DA6FC(EnSw* this, GlobalContext* globalCtx) {
     Vec3f sp38;
     f32 temp_f0;
 
-    if (!func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
-        temp_f0 = this->skelAnime.animFrameCount - this->skelAnime.animCurrentFrame;
+    if (!Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        temp_f0 = this->skelAnime.endFrame - this->skelAnime.curFrame;
         this->unk_44C = 0.14f * temp_f0;
         func_808D94D0(this, globalCtx, 1, 0, 0);
         if ((this->actor.speedXZ == 0.0f) && (this->unk_44C != 0.0f)) {
@@ -850,7 +849,7 @@ void func_808DA6FC(EnSw* this, GlobalContext* globalCtx) {
         }
     } else {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALWALL_DASH);
-        this->skelAnime.animCurrentFrame = 0.0f;
+        this->skelAnime.curFrame = 0.0f;
     }
 
     sp4C = Math_Vec3f_DistXYZ(&this->actor.world.pos, &this->unk_374);
@@ -861,7 +860,7 @@ void func_808DA6FC(EnSw* this, GlobalContext* globalCtx) {
         this->unk_454 = Rand_S16Offset(20, 20);
         this->unk_456 = (Rand_ZeroOne() * 10.0f) + 3.0f;
         this->actionFunc = func_808DA350;
-        this->skelAnime.animCurrentFrame = 0.0f;
+        this->skelAnime.curFrame = 0.0f;
     }
     this->unk_414 = sp4C;
 }
@@ -939,15 +938,15 @@ void func_808DAA60(EnSw* this, GlobalContext* globalCtx) {
     sp40 = 0;
 
     if (DECR(this->unk_454) == 0) {
-        if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) == 0) {
-            temp_f16 = this->skelAnime.animFrameCount - this->skelAnime.animCurrentFrame;
+        if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) == 0) {
+            temp_f16 = this->skelAnime.endFrame - this->skelAnime.curFrame;
             sp40 = 80.0f * temp_f16;
             if (this->unk_45E == 0) {
                 Math_Vec3s_ToVec3f(&sp34, &sp44[this->unk_4A0]);
                 func_808D9894(this, &sp34);
                 temp_v0 = Math_FAtan2F(sp34.z, sp34.x);
                 if (ABS_ALT(temp_v0) < sp40) {
-                    this->skelAnime.animCurrentFrame = 0.0f;
+                    this->skelAnime.curFrame = 0.0f;
                     Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALWALL_DASH);
                     Math_Vec3s_ToVec3f(&this->unk_374, &sp44[this->unk_4A0]);
                     this->actionFunc = func_808DACF4;
@@ -960,7 +959,7 @@ void func_808DAA60(EnSw* this, GlobalContext* globalCtx) {
             if (this->unk_456 != 0) {
                 Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALGOLD_ROLL);
                 this->unk_456--;
-                this->skelAnime.animCurrentFrame = 0.0f;
+                this->skelAnime.curFrame = 0.0f;
             } else {
                 this->unk_454 = Rand_S16Offset(20, 20);
                 this->unk_456 = (Rand_ZeroOne() * 10.0f) + 3.0f;
@@ -987,11 +986,11 @@ void func_808DACF4(EnSw* this, GlobalContext* globalCtx) {
     f32 temp_f0;
     s32 temp_f6;
 
-    if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount) == 0) {
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) == 0) {
         Vec3f sp38;
         f32 temp;
 
-        temp = this->skelAnime.animFrameCount - this->skelAnime.animCurrentFrame;
+        temp = this->skelAnime.endFrame - this->skelAnime.curFrame;
         this->unk_44C = 0.1f * temp;
         func_808D94D0(this, globalCtx, 1, 0, 0);
         if ((this->actor.speedXZ == 0.0f) && (this->unk_44C != 0.0f)) {
@@ -1002,7 +1001,7 @@ void func_808DACF4(EnSw* this, GlobalContext* globalCtx) {
         }
     } else {
         Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALWALL_DASH);
-        this->skelAnime.animCurrentFrame = 0.0f;
+        this->skelAnime.curFrame = 0.0f;
     }
 
     sp4C = Math_Vec3f_DistXYZ(&this->actor.world.pos, &this->unk_374);
@@ -1028,7 +1027,6 @@ void func_808DACF4(EnSw* this, GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sw/func_808DACF4.s")
 #endif
 
-#ifdef NON_MATCHING
 void func_808DAEB4(EnSw* this, GlobalContext* globalCtx) {
     Vec3f sp5C;
     s32 i;
@@ -1037,8 +1035,11 @@ void func_808DAEB4(EnSw* this, GlobalContext* globalCtx) {
 
     if (this->unk_410 & 2) {
         if (!ENSW_GET_3(&this->actor)) {
-            if ((this->unk_410 & 4) && (DECR(this->unk_45C) == 0)) {
-                this->unk_410 &= ~4;
+            if (this->unk_410 & 4) {
+                phi_a0 = DECR(this->unk_45C);
+                if (phi_a0 == 0) {
+                    this->unk_410 &= ~4;
+                }
             }
 
             for (i = 0, count = 0; i < ARRAY_COUNT(this->unk_464); i++) {
@@ -1073,26 +1074,26 @@ void func_808DAEB4(EnSw* this, GlobalContext* globalCtx) {
             }
             func_808D94D0(this, globalCtx, 0, 0, 0x1554);
         }
-    } else if (DECR(this->unk_45C) == 0) {
-        this->unk_410 |= 2;
-        if (!ENSW_GET_3(&this->actor) && (this->unk_412 == 1)) {
-            func_808D8B58(this);
-            this->unk_45C = 10;
-        } else {
-            this->unk_45C = 20;
+    } else {
+        phi_a0 = DECR(this->unk_45C);
+        if (phi_a0 == 0) {
+            this->unk_410 |= 2;
+            if (!ENSW_GET_3(&this->actor) && (this->unk_412 == 1)) {
+                func_808D8B58(this);
+                this->unk_45C = 10;
+            } else {
+                this->unk_45C = 20;
+            }
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sw/func_808DAEB4.s")
-#endif
 
 void func_808DB100(EnSw* this, GlobalContext* globalCtx) {
     if (this->actor.parent != NULL) {
         this->unk_498 = this->actor.parent->id;
         this->unk_456 = 0;
         this->unk_454 = 0;
-        this->skelAnime.animCurrentFrame = 0.0f;
+        this->skelAnime.curFrame = 0.0f;
         func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, 4);
         this->actionFunc = func_808DB25C;
         return;
@@ -1103,7 +1104,7 @@ void func_808DB100(EnSw* this, GlobalContext* globalCtx) {
         return;
     }
 
-    if ((DECR(this->unk_454) == 0) && func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+    if ((DECR(this->unk_454) == 0) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         if (this->unk_456 != 0) {
             if (!ENSW_GET_3(&this->actor)) {
                 Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALWALL_ROLL);
@@ -1111,7 +1112,7 @@ void func_808DB100(EnSw* this, GlobalContext* globalCtx) {
                 Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALGOLD_ROLL);
             }
             this->unk_456--;
-            this->skelAnime.animCurrentFrame = 0.0f;
+            this->skelAnime.curFrame = 0.0f;
         } else {
             this->unk_454 = Rand_S16Offset(20, 20);
             this->unk_456 = (Rand_ZeroOne() * 10.0f) + 3.0f;
@@ -1171,7 +1172,7 @@ void EnSw_Init(Actor* thisx, GlobalContext* globalCtx) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
         SkelAnime_Init(globalCtx, &this->skelAnime, &D_06005298, NULL, this->jointTable, this->morphTable, 30);
         func_8013BC6C(&this->skelAnime, sAnimations, 0);
-        this->skelAnime.animPlaybackSpeed = 4.0f;
+        this->skelAnime.playSpeed = 4.0f;
 
         Collider_InitAndSetSphere(globalCtx, &this->collider, &this->actor, &sSphereInit);
         if (!ENSW_GET_3(&this->actor)) {
@@ -1261,7 +1262,7 @@ void EnSw_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if ((this->unk_412 != 10) || (this->unk_45A != 0)) {
-        SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+        SkelAnime_Update(&this->skelAnime);
     }
 
     Actor_SetHeight(&this->actor, 0.0f);
@@ -1327,9 +1328,9 @@ void EnSw_Draw(Actor* thisx, GlobalContext* globalCtx) {
             func_800B8050(&this->actor, globalCtx, MTXMODE_NEW);
         }
         func_8012C28C(globalCtx->state.gfxCtx);
-        SysMatrix_InsertXRotation_s(-0x3C72, MTXMODE_APPLY);
-        SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, EnSw_OverrideLimbDraw, NULL,
-                       &this->actor);
+        Matrix_InsertXRotation_s(-0x3C72, MTXMODE_APPLY);
+        SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnSw_OverrideLimbDraw, NULL,
+                          &this->actor);
     }
 
     for (i = 0, count = 0; i < ARRAY_COUNT(this->unk_464); i++) {

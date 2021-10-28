@@ -1,7 +1,32 @@
+#include "ultra64.h"
 #include "global.h"
 #include "vt.h"
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/fault/D_800982B0.s")
+// data
+const char* sCpuExceptions[] = {
+    "Interrupt",
+    "TLB modification",
+    "TLB exception on load",
+    "TLB exception on store",
+    "Address error on load",
+    "Address error on store",
+    "Bus error on inst.",
+    "Bus error on data",
+    "System call exception",
+    "Breakpoint exception",
+    "Reserved instruction",
+    "Coprocessor unusable",
+    "Arithmetic overflow",
+    "Trap exception",
+    "Virtual coherency on inst.",
+    "Floating point exception",
+    "Watchpoint exception",
+    "Virtual coherency on data",
+};
+
+const char* sFpuExceptions[] = {
+    "Unimplemented operation", "Invalid operation", "Division by zero", "Overflow", "Underflow", "Inexact operation",
+};
 
 void Fault_SleepImpl(u32 duration) {
     u64 value = (duration * OS_CPU_COUNTER) / 1000ull;
@@ -269,9 +294,9 @@ void Fault_PrintFPCR(u32 value) {
     u32 flag = 0x20000;
 
     FaultDrawer_Printf("FPCSR:%08xH ", value);
-    for (i = 0; i < ARRAY_COUNT(sExceptionNames); i++) {
+    for (i = 0; i < ARRAY_COUNT(sFpuExceptions); i++) {
         if (value & flag) {
-            FaultDrawer_Printf("(%s)", sExceptionNames[i]);
+            FaultDrawer_Printf("(%s)", sFpuExceptions[i]);
             break;
         }
         flag >>= 1;
@@ -284,9 +309,9 @@ void osSyncPrintfFPCR(u32 value) {
     u32 flag = 0x20000;
 
     osSyncPrintf("FPCSR:%08xH  ", value);
-    for (i = 0; i < ARRAY_COUNT(sExceptionNames); i++) {
+    for (i = 0; i < ARRAY_COUNT(sFpuExceptions); i++) {
         if (value & flag) {
-            osSyncPrintf("(%s)\n", sExceptionNames[i]);
+            osSyncPrintf("(%s)\n", sFpuExceptions[i]);
             break;
         }
         flag >>= 1;
@@ -308,7 +333,7 @@ void Fault_PrintThreadContext(OSThread* t) {
     FaultDrawer_SetCursor(0x16, 0x14);
 
     ctx = &t->context;
-    FaultDrawer_Printf("THREAD:%d (%d:%s)\n", t->id, causeStrIdx, D_80096B80[causeStrIdx]);
+    FaultDrawer_Printf("THREAD:%d (%d:%s)\n", t->id, causeStrIdx, sCpuExceptions[causeStrIdx]);
     FaultDrawer_SetCharPad(-1, 0);
 
     FaultDrawer_Printf("PC:%08xH SR:%08xH VA:%08xH\n", (u32)ctx->pc, (u32)ctx->sr, (u32)ctx->badvaddr);
@@ -368,7 +393,7 @@ void osSyncPrintfThreadContext(OSThread* t) {
 
     ctx = &t->context;
     osSyncPrintf("\n");
-    osSyncPrintf("THREAD ID:%d (%d:%s)\n", t->id, causeStrIdx, D_80096B80[causeStrIdx]);
+    osSyncPrintf("THREAD ID:%d (%d:%s)\n", t->id, causeStrIdx, sCpuExceptions[causeStrIdx]);
 
     osSyncPrintf("PC:%08xH   SR:%08xH   VA:%08xH\n", (u32)ctx->pc, (u32)ctx->sr, (u32)ctx->badvaddr);
     osSyncPrintf("AT:%08xH   V0:%08xH   V1:%08xH\n", (u32)ctx->at, (u32)ctx->v0, (u32)ctx->v1);
@@ -444,7 +469,7 @@ void Fault_WaitForButtonCombo(void) {
     } while (!CHECK_BTN_ALL(input->cur.button, BTN_DLEFT | BTN_L | BTN_R | BTN_CRIGHT));
 }
 
-void Fault_DrawMemDumpPage(char* title, u32* addr, u32 param_3) {
+void Fault_DrawMemDumpPage(const char* title, u32* addr, u32 param_3) {
     u32* alignedAddr;
     u32* writeAddr;
     s32 y;
@@ -741,9 +766,9 @@ void Fault_SetOptionsFromController3(void) {
     }
 
     if (faultCustomOptions) {
-        graphPC = graphOSThread.context.pc;
-        graphRA = graphOSThread.context.ra;
-        graphSP = graphOSThread.context.sp;
+        graphPC = sGraphThread.context.pc;
+        graphRA = sGraphThread.context.ra;
+        graphSP = sGraphThread.context.sp;
         if (CHECK_BTN_ALL(input3->press.button, BTN_R)) {
             faultCopyToLog = !faultCopyToLog;
             FaultDrawer_SetOsSyncPrintfEnabled(faultCopyToLog);

@@ -62,7 +62,7 @@ void Graph_SetNextGfxPool(GraphicsContext* gfxCtx) {
 }
 
 GameStateOverlay* Graph_GetNextGameState(GameState* gameState) {
-    GameStateFunc gameStateInit = Game_GetNextStateInit(gameState);
+    GameStateFunc gameStateInit = GameState_GetNextStateInit(gameState);
 
     if (gameStateInit == (GameStateFunc)TitleSetup_Init) {
         return &gGameStateOverlayTable[0];
@@ -360,7 +360,7 @@ void Graph_ThreadEntry(void* arg) {
     while (nextOvl) {
         ovl = nextOvl;
 
-        DLF_LoadGameState(ovl);
+        Overlay_LoadGameState(ovl);
 
         size = ovl->instanceSize;
 
@@ -369,9 +369,9 @@ void Graph_ThreadEntry(void* arg) {
         gameState = SystemArena_Malloc(size);
 
         bzero(gameState, size);
-        Game_StateInit(gameState, ovl->init, &gfxCtx);
+        GameState_Init(gameState, ovl->init, &gfxCtx);
 
-        while (Game_GetShouldContinue(gameState)) {
+        while (GameState_IsRunning(gameState)) {
             Graph_Update(&gfxCtx, gameState);
         }
 
@@ -379,10 +379,10 @@ void Graph_ThreadEntry(void* arg) {
 
         if (size) {}
 
-        Game_StateFini(gameState);
+        GameState_Destroy(gameState);
         SystemArena_Free(gameState);
 
-        DLF_FreeGameState(ovl);
+        Overlay_FreeGameState(ovl);
     }
     Graph_Destroy(&gfxCtx);
 }

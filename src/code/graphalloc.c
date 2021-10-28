@@ -15,7 +15,7 @@ Gfx* Graph_BranchDlist(Gfx* gfx, Gfx* dst) {
  * Since the alloc may not itself be display list commands, a BranchList
  * command is used to step over this region.
  */
-void* Graph_DlistAlloc(Gfx** gfx, u32 size) {
+void* Graph_DlistAlloc(Gfx** gfx, size_t size) {
     u8* start;
     Gfx* end;
 
