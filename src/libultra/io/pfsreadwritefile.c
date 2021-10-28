@@ -51,7 +51,7 @@ s32 osPfsReadWriteFile(OSPfs* pfs, s32 fileNo, u8 flag, s32 offset, s32 size, u8
     if (__osCheckId(pfs) == PFS_ERR_NEW_PACK) {
         return PFS_ERR_NEW_PACK;
     }
-    if (pfs->activebank != 0 && (ret = __osPfsSelectBank(pfs, 0)) != 0) {
+    if (pfs->activebank != PFS_ID_BANK_256K && (ret = __osPfsSelectBank(pfs, PFS_ID_BANK_256K)) != 0) {
         return ret;
     }
     if ((ret = __osContRamRead(pfs->queue, pfs->channel, pfs->dir_table + fileNo, (u8*)&dir)) != 0) {
@@ -112,7 +112,7 @@ s32 osPfsReadWriteFile(OSPfs* pfs, s32 fileNo, u8 flag, s32 offset, s32 size, u8
 
     if (flag == PFS_WRITE && !(dir.status & PFS_WRITTEN)) {
         dir.status |= PFS_WRITTEN;
-        if (pfs->activebank != 0 && (ret = __osPfsSelectBank(pfs, 0)) != 0) {
+        if (pfs->activebank != PFS_ID_BANK_256K && (ret = __osPfsSelectBank(pfs, PFS_ID_BANK_256K)) != 0) {
             return ret;
         }
         if ((ret = __osContRamWrite(pfs->queue, pfs->channel, pfs->dir_table + fileNo, (u8*)&dir, 0)) != 0) {
