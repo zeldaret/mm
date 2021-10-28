@@ -362,7 +362,8 @@ void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, GlobalContext* globalCtx
                 this->particles[i].alphaClock++;
 
                 if (this->actor.params == DEMO_KANKYO_TYPE_MOON) { // this function gets reused for giants too
-                    this->particles[i].posBase.y = globalCtx->view.eye.y + (eyeToAtNormY * halfScreenHeight) + (SCREEN_HEIGHT / 3);
+                    this->particles[i].posBase.y =
+                        globalCtx->view.eye.y + (eyeToAtNormY * halfScreenHeight) + (SCREEN_HEIGHT / 3);
                 }
 
                 newEye.x = globalCtx->view.eye.x + (eyeToAtNormX * halfScreenHeight);
@@ -615,9 +616,10 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
             worldPos.y = this->particles[i].posBase.y + this->particles[i].posOffset.y;
             worldPos.z = this->particles[i].posBase.z + this->particles[i].posOffset.z;
 
-            func_80169474(globalCtx, &worldPos, &screenPos);
+            // if we disable this, then no particles are shown
+            func_80169474(globalCtx, &worldPos, &screenPos); // unnamed Play_ function, func_800C016C from OoT
 
-            // considering these appear to be max screen coords, checking if particle is on screen?
+            // checking if particle is on screen
             if (screenPos.x >= 0.0f && screenPos.x < SCREEN_WIDTH && screenPos.y >= 0.0f &&
                 screenPos.y < SCREEN_HEIGHT) {
                 Matrix_InsertTranslation(worldPos.x, worldPos.y, worldPos.z, MTXMODE_NEW);
