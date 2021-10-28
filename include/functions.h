@@ -168,7 +168,7 @@ void func_800863AC(u32 param_1, s32 param_2, s32 param_3, UNK_PTR param_4);
 // void func_800864EC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_80086588(void);
 void SystemArena_Init(u32 base, u32 size);
-s32 PadSetup_Init(OSMesgQueue* messageQueue, u8* padMgr, OSContStatus* status);
+s32 PadSetup_Init(OSMesgQueue* mq, u8* padMgr, OSContStatus* status);
 // void func_80086760(void);
 // void func_80086794(void);
 // void func_800867B4(void);
