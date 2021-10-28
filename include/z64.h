@@ -1620,7 +1620,7 @@ typedef struct {
     /* 0x24 */ s16 unk_24;
 } struct_800BD888_arg1; // size = 0x28
 
-typedef struct UnusedNPC {
+typedef struct EnHy {
     /* 0x000 */ Actor actor;
     /* 0x144 */ char unk_144[0x8];
     /* 0x14C */ SkelAnime skelAnime;
@@ -1642,7 +1642,7 @@ typedef struct UnusedNPC {
     /* 0x2C6 */ char unk_2C6[0x120];
     /* 0x3E6 */ s16 eyeTexIndex;
     /* 0x3E8 */ s16 blinkTimer;
-} UnusedNPC;
+} EnHy;
 
 typedef struct {
     /* 0x0 */ u8 unk0;
