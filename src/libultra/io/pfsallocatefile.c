@@ -40,7 +40,7 @@ s32 osPfsAllocateFile(OSPfs* pfs, u16 companyCode, u32 gameCode, u8* gameName, u
         return (PFS_ERR_INVALID);
     }
 
-    if (((ret = osPfsFindFile(pfs, 0, 0, 0, 0, fileNo)) != 0) && (ret != PFS_ERR_INVALID)) {
+    if (((ret = osPfsFindFile(pfs, 0, 0, NULL, NULL, fileNo)) != 0) && (ret != PFS_ERR_INVALID)) {
         return ret;
     }
     if (*fileNo == -1) {
@@ -119,8 +119,8 @@ s32 __osPfsDeclearPage(OSPfs* pfs, __OSInode* inode, s32 fileSizeInPages, s32* s
     j++;
     while ((fileSizeInPages > *decleared) && (j < PFS_INODE_SIZE_PER_PAGE)) {
         if (inode->inodePage[j].ipage == PFS_PAGE_NOT_USED) {
-            inode->inodePage[prevPage].inode_t.bank = (u8)bank;
-            inode->inodePage[prevPage].inode_t.page = (u8)j;
+            inode->inodePage[prevPage].inode_t.bank = bank;
+            inode->inodePage[prevPage].inode_t.page = j;
             prevPage = j;
             (*decleared)++;
         }
