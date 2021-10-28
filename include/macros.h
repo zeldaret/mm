@@ -143,4 +143,6 @@ extern GraphicsContext* __gfxCtx;
 #define TARGET_RANGE(range, leash) \
     { SQ(range), (f32)range / leash }
 
+#define OVERLAY_RELOCATION_OFFSET(overlayEntry) (intptr_t)((uintptr_t)((overlayEntry)->vramStart) - (uintptr_t)((overlayEntry)->loadedRamAddr))
+
 #endif // _MACROS_H_

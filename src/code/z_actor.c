@@ -488,25 +488,22 @@ void Actor_TargetContextInit(TargetContext* targetCtx, Actor* actor, GlobalConte
 void Actor_DrawZTarget(TargetContext* targetCtx, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((player->stateFlags1 & 0x300006C2) == 0) {
+    if (!(player->stateFlags1 & 0x300006C2)) {
         Actor* actor = targetCtx->targetedActor;
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
         if (targetCtx->unk48 != 0) {
             TargetContextEntry* entry;
-            s16 spCE;
+            s16 spCE = 0xFF;
             f32 temp1;
             Vec3f spBC;
             s32 spB8;
             f32 spB4;
             s32 spB0;
             s32 spAC;
-            f32 var1;
+            f32 var1 = 1.0f;
             f32 var2;
             s32 i;
-
-            spCE = 0xFF;
-            var1 = 1.0f;
 
             if (targetCtx->unk4B != 0) {
                 spB8 = 1;
@@ -560,7 +557,6 @@ void Actor_DrawZTarget(TargetContext* targetCtx, GlobalContext* globalCtx) {
 
                         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, entry->color.r, entry->color.g, entry->color.b, (u8)spCE);
 
-                        // Matrix_InsertZRotation_s((targetCtx->unk4B & 0x7F) * (M_PI / 64), MTXMODE_APPLY);
                         Matrix_InsertZRotation_s((targetCtx->unk4B * 512), MTXMODE_APPLY);
 
                         for (i = 0; i < 4; i++) {
@@ -591,7 +587,6 @@ void Actor_DrawZTarget(TargetContext* targetCtx, GlobalContext* globalCtx) {
             Matrix_InsertTranslation(actor->focus.pos.x,
                                      actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y) + 17.0f,
                                      actor->focus.pos.z, MTXMODE_NEW);
-            // Matrix_RotateY((f32)((u16)(globalCtx->gameplayFrames * 3000)) * (M_PI / 0x8000), MTXMODE_APPLY);
             Matrix_RotateY((globalCtx->gameplayFrames * 3000), MTXMODE_APPLY);
             Matrix_Scale((iREG(27) + 35) / 1000.0f, (iREG(28) + 60) / 1000.0f, (iREG(29) + 50) / 1000.0f,
                          MTXMODE_APPLY);
@@ -957,7 +952,7 @@ f32 func_800B64FC(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2, u32* arg3) {
  *
  * In success returns the allocated pointer if `arg2` was NULL or the `arg2` pointer otherwise
  * In failure (There's no space left in `globalCtx->actorCtx.unk_20C` or an allocation error happened) returns NULL
- * 
+ *
  * Note there are no duplicated id checks
  */
 void* func_800B6584(GlobalContext* globalCtx, s16 id, void* arg2, size_t size) {
@@ -987,7 +982,7 @@ void* func_800B6584(GlobalContext* globalCtx, s16 id, void* arg2, size_t size) {
 
 /**
  * Frees the first element of `globalCtx->actorCtx.unk_20C` with id `id`
- * 
+ *
  * In success, the free'd pointer is returned.
  * In failure, NULL is returned
  */
@@ -1477,8 +1472,8 @@ s32 func_800B7678(GlobalContext* globalCtx, Actor* actor, Vec3f* arg2, s32 arg3)
 
     distToFloor = actor->floorHeight - actor->world.pos.y;
     actor->floorBgId = bgId;
-    if ((distToFloor >= 0.0f) || (((actor->bgCheckFlags & 1)) && !(actor->bgCheckFlags & 0x800) && (distToFloor >= -11.0f) &&
-                              (actor->velocity.y < 0.0f))) {
+    if ((distToFloor >= 0.0f) || (((actor->bgCheckFlags & 1)) && !(actor->bgCheckFlags & 0x800) &&
+                                  (distToFloor >= -11.0f) && (actor->velocity.y < 0.0f))) {
         actor->bgCheckFlags |= 0x80;
 
         if (actor->bgCheckFlags & 0x10) {
@@ -1557,8 +1552,8 @@ void Actor_UpdateBgCheckInfo(GlobalContext* globalCtx, Actor* actor, f32 wallChe
         f32 y;
 
         pos.y = actor->prevPos.y + 4.0f;
-        if (func_800C4F84(&globalCtx->colCtx, &y, &pos, (ceilingCheckHeight + sp94) - 4.0f, &D_801ED8B0,
-                          &D_801ED8B4, actor) != 0) {
+        if (func_800C4F84(&globalCtx->colCtx, &y, &pos, (ceilingCheckHeight + sp94) - 4.0f, &D_801ED8B0, &D_801ED8B4,
+                          actor) != 0) {
             actor->bgCheckFlags |= 0x10;
             actor->world.pos.y = (y + sp94) - 4.0f;
         } else {
@@ -2236,8 +2231,8 @@ void func_800B9334(GlobalContext* globalCtx, ActorContext* actorCtx) {
                 phi_v0 = 0x3FF;
             }
 
-            if ((!(phi_v0 & temp_fp) && (phi_v0 & actorCtx->unkC)) &&
-                ((!(gSaveContext.eventInf[1] & 0x80) || !(phi_v0 & temp_s1)) || !(actorEntry->id & 0x800))) {
+            if (!(phi_v0 & temp_fp) && (phi_v0 & actorCtx->unkC) &&
+                (!(gSaveContext.eventInf[1] & 0x80) || !(phi_v0 & temp_s1) || !(actorEntry->id & 0x800))) {
                 Actor_SpawnEntry(&globalCtx->actorCtx, actorEntry, &globalCtx->state);
             }
             actorEntry++;
@@ -2253,11 +2248,12 @@ typedef struct {
     /* 0x0C */ u32 unkC;
     /* 0x10 */ Actor* unk10;
     /* 0x14 */ Player* player;
-    /* 0x18 */ u32 runMainIfSet; // Bitmask of actor flags. The actor will only have main called if it has at least 1 flag set that matches this bitmask
-} UpdateActorParams; // size = 0x1C
+    /* 0x18 */ u32 runMainIfSet; // Bitmask of actor flags. The actor will only have main called if it has at least 1
+                                 // flag set that matches this bitmask
+} UpdateActor_Params;            // size = 0x1C
 
 #ifdef NON_MATCHING
-Actor* Actor_UpdateActor(UpdateActorParams* params) {
+Actor* Actor_UpdateActor(UpdateActor_Params* params) {
     GlobalContext* globalCtx = params->globalCtx;
     Actor* actor = params->actor;
 
@@ -2340,7 +2336,7 @@ u32 D_801AED58[] = {
 
 #ifdef NON_EQUIVALENT
 void Actor_UpdateAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
-    UpdateActorParams params;
+    UpdateActor_Params params;
     ActorListEntry* sp3C;
     DynaCollisionContext* sp38;
     s32 i;
@@ -2440,18 +2436,18 @@ void Actor_UpdateAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
 #endif
 
 void Actor_Draw(GlobalContext* globalCtx, Actor* actor) {
-    Lights* sp44;
+    Lights* light;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    sp44 = LightContext_NewLights(&globalCtx->lightCtx, globalCtx->state.gfxCtx);
+    light = LightContext_NewLights(&globalCtx->lightCtx, globalCtx->state.gfxCtx);
     if ((actor->flags & 0x10000000) && (globalCtx->roomCtx.currRoom.enablePosLights || (MREG(93) != 0))) {
-        sp44->enablePosLights = true;
+        light->enablePosLights = true;
     }
 
-    Lights_BindAll(sp44, globalCtx->lightCtx.listHead, (actor->flags & 0x10400000) ? NULL : &actor->world.pos,
+    Lights_BindAll(light, globalCtx->lightCtx.listHead, (actor->flags & 0x10400000) ? NULL : &actor->world.pos,
                    globalCtx);
-    Lights_Draw(sp44, globalCtx->state.gfxCtx);
+    Lights_Draw(light, globalCtx->state.gfxCtx);
 
     if (actor->flags & 0x1000) {
         Matrix_SetStateRotationAndTranslation(
@@ -2503,7 +2499,7 @@ void Actor_Draw(GlobalContext* globalCtx, Actor* actor) {
     }
 
     if (actor->shape.shadowDraw != NULL) {
-        actor->shape.shadowDraw(actor, sp44, globalCtx);
+        actor->shape.shadowDraw(actor, light, globalCtx);
     }
     actor->isDrawn = true;
 
@@ -2545,12 +2541,12 @@ void Actor_DrawAllSetup(GlobalContext* globalCtx) {
 
 s32 Actor_RecordUndrawnActor(GlobalContext* globalCtx, Actor* actor) {
     if (globalCtx->actorCtx.undrawnActorCount >= 32) {
-        return 0;
+        return false;
     }
 
     globalCtx->actorCtx.undrawnActors[globalCtx->actorCtx.undrawnActorCount] = actor;
     globalCtx->actorCtx.undrawnActorCount++;
-    return 1;
+    return true;
 }
 
 void func_800B9E84(Gfx** arg0, s32 arg1) {
@@ -2780,10 +2776,11 @@ s32 func_800BA2FC(GlobalContext* globalCtx, Actor* actor, Vec3f* param_3, f32 pa
 
         if (((fabsf(param_3->x) - phi_f12) < phi_f2) && ((-phi_f2 < (param_3->y + phi_f14))) &&
             ((param_3->y - phi_f16) < phi_f2)) {
-            return 1;
+            return true;
         }
     }
-    return 0;
+
+    return false;
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BA2FC.s")
@@ -2836,7 +2833,7 @@ void Actor_DrawAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
                 func_800B9D1C(phi_s0);
             }
 
-            if (func_800BA2D8(globalCtx, phi_s0) != 0) {
+            if (func_800BA2D8(globalCtx, phi_s0)) {
                 phi_s0->flags |= 0x40;
             } else {
                 phi_s0->flags &= ~0x40;
@@ -2931,7 +2928,7 @@ void func_800BA6FC(GlobalContext* globalCtx, ActorContext* actorCtx) {
 }
 
 /**
- * Kill actors on room change
+ * Kill actors on room change and update flags accordingly
  */
 void func_800BA798(GlobalContext* globalCtx, ActorContext* actorCtx) {
     Actor* actor;
@@ -2990,32 +2987,32 @@ void func_800BA8B8(GlobalContext* globalCtx, ActorContext* actorCtx) {
 }
 
 // Actor_CleanupContext
-void func_800BA9B4(ActorContext* arg0, GlobalContext* arg1) {
+void func_800BA9B4(ActorContext* actorCtx, GlobalContext* globalCtx) {
     s32 i;
 
     Fault_RemoveClient(&D_801ED8A0);
 
-    for (i = 0; i < ARRAY_COUNT(arg0->actorList); i++) {
+    for (i = 0; i < ARRAY_COUNT(actorCtx->actorList); i++) {
         if (i != ACTORCAT_PLAYER) {
-            Actor* phi_s0 = arg0->actorList[i].first;
+            Actor* actor = actorCtx->actorList[i].first;
 
-            while (phi_s0 != NULL) {
-                Actor_Delete(arg0, phi_s0, arg1);
-                phi_s0 = arg0->actorList[i].first;
+            while (actor != NULL) {
+                Actor_Delete(actorCtx, actor, globalCtx);
+                actor = actorCtx->actorList[i].first;
             }
         }
     }
 
-    while (arg0->actorList[ACTORCAT_PLAYER].first != NULL) {
-        Actor_Delete(arg0, arg0->actorList[ACTORCAT_PLAYER].first, arg1);
+    while (actorCtx->actorList[ACTORCAT_PLAYER].first != NULL) {
+        Actor_Delete(actorCtx, actorCtx->actorList[ACTORCAT_PLAYER].first, globalCtx);
     }
 
-    if (arg0->absoluteSpace != NULL) {
-        ZeldaArena_Free(arg0->absoluteSpace);
-        arg0->absoluteSpace = NULL;
+    if (actorCtx->absoluteSpace != NULL) {
+        ZeldaArena_Free(actorCtx->absoluteSpace);
+        actorCtx->absoluteSpace = NULL;
     }
 
-    func_80169D40(arg1);
+    func_80169D40(globalCtx);
     ActorOverlayTable_Cleanup();
 }
 
@@ -3024,28 +3021,28 @@ void func_800BA9B4(ActorContext* arg0, GlobalContext* arg1) {
  * Also sets the actor instance as being of that category.
  */
 void Actor_AddToCategory(ActorContext* actorCtx, Actor* actor, u8 actorCategory) {
-    Actor* phi_v0;
-    Actor* phi_v1;
+    Actor* actorAux;
+    Actor* lastActor;
 
     actor->category = actorCategory;
 
     actorCtx->totalLoadedActors++;
     actorCtx->actorList[actorCategory].length++;
-    phi_v1 = actorCtx->actorList[actorCategory].first;
+    lastActor = actorCtx->actorList[actorCategory].first;
 
-    if (phi_v1 == NULL) {
+    if (lastActor == NULL) {
         actorCtx->actorList[actorCategory].first = actor;
         return;
     }
 
-    phi_v0 = phi_v1->next;
-    while (phi_v0 != NULL) {
-        phi_v1 = phi_v0;
-        phi_v0 = phi_v0->next;
+    actorAux = lastActor->next;
+    while (actorAux != NULL) {
+        lastActor = actorAux;
+        actorAux = actorAux->next;
     }
 
-    phi_v1->next = actor;
-    actor->prev = phi_v1;
+    lastActor->next = actor;
+    actor->prev = lastActor;
 }
 
 /**
@@ -3137,10 +3134,10 @@ ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
             overlayEntry->numLoaded = 0;
         }
 
-        actorInit = (void*)(u32)((overlayEntry->initInfo != NULL)
-                                     ? (void*)((u32)overlayEntry->initInfo -
-                                               (s32)((u32)overlayEntry->vramStart - (u32)overlayEntry->loadedRamAddr))
-                                     : NULL);
+        actorInit = (void*)(uintptr_t)(
+            (overlayEntry->initInfo != NULL)
+                ? (void*)((uintptr_t)overlayEntry->initInfo - OVERLAY_RELOCATION_OFFSET(overlayEntry))
+                : NULL);
     }
 
     return actorInit;

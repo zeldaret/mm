@@ -857,7 +857,7 @@ void Actor_DrawAll(GlobalContext* globalCtx, ActorContext* actorCtx);
 void func_800BA6FC(GlobalContext* globalCtx, ActorContext* actorCtx);
 void func_800BA798(GlobalContext* globalCtx, ActorContext* actorCtx);
 void func_800BA8B8(GlobalContext* globalCtx, ActorContext* actorCtx);
-// void func_800BA9B4(void);
+void func_800BA9B4(ActorContext* actorCtx, GlobalContext* globalCtx);
 void Actor_AddToCategory(ActorContext* actorCtx, Actor* actor, u8 actorCategory);
 Actor* Actor_RemoveFromCategory(GlobalContext* globalCtx, ActorContext* actorCtx, Actor* actor);
 void Actor_FreeOverlay(ActorOverlay* entry);
