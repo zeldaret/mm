@@ -682,23 +682,23 @@ void FlagSet_Draw(GameState* gameState);
 void Overlay_LoadGameState(GameStateOverlay* gameState);
 void Overlay_FreeGameState(GameStateOverlay* gameState);
 void Actor_PrintLists(ActorContext* actorCtx);
-void ActorShape_Init(ActorShape* actorShape, f32 yOffset, ActorShadowFunc func, f32 scale);
-void ActorShadow_Draw(Actor* actor, Lights* mapper, GlobalContext* globalCtx, Gfx* displayList, Color_RGBA8* color);
+void ActorShape_Init(ActorShape* actorShape, f32 yOffset, ActorShadowFunc shadowDraw, f32 shadowScale);
+void ActorShadow_Draw(Actor* actor, Lights* lights, GlobalContext* globalCtx, Gfx* dlist, Color_RGBA8* color);
 void ActorShadow_DrawCircle(Actor* actor, Lights* mapper, GlobalContext* globalCtx);
 void ActorShadow_DrawSquare(Actor* actor, Lights* mapper, GlobalContext* globalCtx);
 void ActorShadow_DrawWhiteCircle(Actor* actor, Lights* mapper, GlobalContext* globalCtx);
 void ActorShadow_DrawHorse(Actor* actor, Lights* mapper, GlobalContext* globalCtx);
-void ActorShadow_DrawFoot(GlobalContext* globalCtx, Light* light, MtxF* arg2, s32 arg3, f32 arg4, f32 arg5, f32 arg6);
 void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx);
 void Actor_SetFeetPos(Actor* actor, s32 limbIndex, s32 leftFootIndex, Vec3f* leftFootPos, s32 rightFootIndex, Vec3f* rightFootPos);
-void func_800B4AEC(GlobalContext* globalCtx, Actor* actor, f32 param_3);
+void func_800B4AEC(GlobalContext* globalCtx, Actor* actor, f32 paraym_3);
 void func_800B4B50(Actor* actor, Lights* mapper, GlobalContext* globalCtx);
-void func_800B4EDC(GlobalContext* globalCtx, Vec3f* pzParm2, Vec3f* pzParm3, f32* pfParm4);
+void func_800B4EDC(GlobalContext* globalCtx, Vec3f* arg1, Vec3f* arg2, f32* arg3);
 void func_800B4F40(TargetContext* targetCtx, s32 index, f32 x, f32 y, f32 z);
 void func_800B4F78(TargetContext* targetCtx, s32 type, GlobalContext* globalCtx);
 void func_800B5040(TargetContext* targetCtx, Actor* actor, s32 type, GlobalContext* globalCtx);
 void Actor_TargetContextInit(TargetContext* targetCtx, Actor* actor, GlobalContext* globalCtx);
 void Actor_DrawZTarget(TargetContext* targetCtx, GlobalContext* globalCtx);
+
 s32 Flags_GetSwitch(GlobalContext* globalCtx, s32 flag);
 void Flags_SetSwitch(GlobalContext* globalCtx, s32 flag);
 void Flags_UnsetSwitch(GlobalContext* globalCtx, s32 flag);
@@ -712,24 +712,26 @@ void Flags_UnsetClear(GlobalContext* globalCtx, s32 roomNumber);
 s32 Flags_GetClearTemp(GlobalContext* globalCtx, s32 roomNumber);
 void Flags_SetClearTemp(GlobalContext* globalCtx, s32 roomNumber);
 void Flags_UnsetClearTemp(GlobalContext* globalCtx, s32 roomNumber);
-s32 Flags_GetCollectible(GlobalContext* globalCtx, s32 index);
-void Flags_SetCollectible(GlobalContext* globalCtx, s32 index);
+s32 Flags_GetCollectible(GlobalContext* globalCtx, s32 flag);
+void Flags_SetCollectible(GlobalContext* globalCtx, s32 flag);
+
 void TitleCard_ContextInit(GameState* gameState, TitleCardContext* titleCtx);
-void TitleCard_InitBossName(GameState* gameState, TitleCardContext* titleCtx, TexturePtr texture, s16 param_4,
-                           s16 param_5, u8 param_6, u8 param_7);
+void TitleCard_InitBossName(GameState* gameState, TitleCardContext* titleCtx, TexturePtr texture, s16 x, s16 y,
+                            u8 width, u8 height);
 void TitleCard_InitPlaceName(GameState* gameState, TitleCardContext* titleCtx, TexturePtr texture, s32 x, s32 y,
                              s32 width, s32 height, s32 delay);
 void TitleCard_Update(GameState* gameState, TitleCardContext* titleCtx);
 void TitleCard_Draw(GameState* gameState, TitleCardContext* titleCtx);
+
 s32 func_800B6434(GlobalContext* globalCtx, TitleCardContext* titleCtx);
-// UNK_TYPE4 func_800B645C(void);
-void func_800B6468(GlobalContext* globalCtx);
 void func_800B6474(GlobalContext* globalCtx);
 s32 func_800B648C(GlobalContext* globalCtx, s32 arg1, s32 arg2, f32 arg3, Vec3f* arg4);
 f32 func_800B64FC(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2, u32* arg3);
-void* func_800B6584(GlobalContext* globalCtx, s16 arg1, void* arg2, size_t arg3);
-void* func_800B6608(GlobalContext* globalCtx, s16 arg1);
-void* func_800B6680(GlobalContext* globalCtx, s16 arg1);
+
+void* func_800B6584(GlobalContext* globalCtx, s16 id, void* arg2, size_t size);
+void* func_800B6608(GlobalContext* globalCtx, s16 id);
+void* func_800B6680(GlobalContext* globalCtx, s16 id);
+
 void Actor_MarkForDeath(Actor* actor);
 void Actor_SetWorldToHome(Actor* actor);
 void Actor_SetFocus(Actor* actor, f32 height);
@@ -749,6 +751,7 @@ void Actor_SetVelocityXYRotationReverse(Actor* actor);
 void Actor_SetVelocityAndMoveXYRotationReverse(Actor* actor);
 void func_800B6C04(Actor* actor, f32 speed);
 void func_800B6C58(Actor* actor, SkelAnime* skelAnime);
+
 s16 Actor_YawBetweenActors(Actor* from, Actor* to);
 s16 Actor_YawBetweenActorsTop(Actor* from, Actor* to);
 s16 Actor_YawToPoint(Actor* actor, Vec3f* point);
@@ -775,14 +778,15 @@ s32 func_800B724C(GlobalContext* globalCtx, Actor* actor, u8 csMode);
 u32 func_800B7298(GlobalContext* globalCtx, Actor* actor, u8 arg2);
 void func_800B72E0(DynaPolyActor* dyna);
 void func_800B72F8(DynaPolyActor* dyna, f32 a1, s16 a2);
+
 s32 Player_IsFacingActor(Actor* actor, s16 tolerance, GlobalContext* globalCtx);
 s32 Actor_ActorBIsFacingActorA(Actor* actor, Actor* other, s16 tolerance);
 s32 Actor_IsFacingPlayer(Actor* actor, s16 angle);
 s32 Actor_ActorAIsFacingActorB(Actor* actor, Actor* other, s16 tolerance);
 s32 Actor_IsFacingAndNearPlayer(Actor* actor, f32 range, s16 tolerance);
 s32 Actor_ActorAIsFacingAndNearActorB(Actor* actor, Actor* other, f32 range, s16 tolerance);
+
 void func_800B75A0(CollisionPoly* param_1, Vec3f* param_2, s16* param_3);
-s32 func_800B761C(Actor *actor, f32, s32);
 s32 func_800B7678(GlobalContext *globalCtx, Actor *actor, Vec3f *arg2, s32 arg3);
 void Actor_UpdateBgCheckInfo(GlobalContext* globalCtx, Actor* actor, f32 wallCheckHeight, f32 wallCheckRadius, f32 ceilingCheckHeight, u32 flags);
 Gfx* func_800B7E04(Vec3f* object, Vec3f* eye, Vec3f* lightDir, GraphicsContext* gfxCtx, Gfx* dl, Hilite** hilite);
@@ -793,7 +797,7 @@ void func_800B8118(Actor* actor, GlobalContext* globalCtx, s32 iParm3);
 PosRot* Actor_GetFocus(PosRot* dest, Actor* actor);
 PosRot* Actor_GetWorld(PosRot* dest, Actor* actor);
 PosRot* Actor_GetWorldPosShapeRot(PosRot* dest, Actor* actor);
-f32 func_800B82EC(Actor* actor, Player* player, s16);
+f32 func_800B82EC(Actor* actor, Player* player, s16 angle);
 s32 func_800B83BC(Actor* actor, f32 arg1);
 s32 func_800B83F8(Actor* actor, Player* player, s32 flag);
 s32 Actor_RequestTalk(Actor* actor, GameState* gameState);

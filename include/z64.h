@@ -1450,8 +1450,8 @@ struct s800B948C {
 
 typedef struct ActorContext_unk_20C {
     /* 0x0 */ s16 id;
-    /* 0x2 */ s8 isInitialised;
-    /* 0x4 */ void* unk_4;
+    /* 0x2 */ s8 isDynamicallyInitialised;
+    /* 0x4 */ void* ptr;
 } ActorContext_unk_20C; // size = 0x8
 
 typedef struct ActorContextFlags {
