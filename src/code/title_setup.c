@@ -62,6 +62,6 @@ void TitleSetup_Destroy(GameState* gameState) {
 }
 
 void TitleSetup_Init(GameState* gameState) {
-    gameState->destroy = &TitleSetup_Destroy;
+    gameState->destroy = TitleSetup_Destroy;
     TitleSetup_InitImpl(gameState);
 }
