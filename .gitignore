@@ -32,6 +32,7 @@ tools/qemu-mips
 tools/ido_recomp/* binary
 ctx.c
 graphs/
+*.c.m2c
 
 # Assets
 *.png

@@ -2,6 +2,9 @@
 
 import argparse, os
 
+# There are a few commented out entries that would produce unexpected renames.
+# They are left as a comment so people can just grab them.
+
 # "old": "new"
 animdict = {
     "Actor_GetSwitchFlag": "Flags_GetSwitch",
@@ -173,12 +176,12 @@ animdict = {
     "Actor_SetChestFlag": "Flags_SetTreasure",
     "Actor_SetAllChestFlag": "Flags_SetAllTreasure",
     "Actor_GetAllChestFlag": "Flags_GetAllTreasure",
-    "Actor_GetRoomCleared": "Flags_GetClear",
-    "Actor_SetRoomCleared": "Flags_SetClear",
-    "Actor_UnsetRoomCleared": "Flags_UnsetClear",
-    "Actor_GetRoomClearedTemp": "Flags_GetTempClear",
-    "Actor_SetRoomClearedTemp": "Flags_SetTempClear",
-    "Actor_UnsetRoomClearedTemp": "Flags_UnsetTempClear",
+    "Actor_GetRoomCleared(": "Flags_GetClear(",
+    "Actor_SetRoomCleared(": "Flags_SetClear(",
+    "Actor_UnsetRoomCleared(": "Flags_UnsetClear(",
+    "Actor_GetRoomClearedTemp(": "Flags_GetTempClear(",
+    "Actor_SetRoomClearedTemp(": "Flags_SetTempClear(",
+    "Actor_UnsetRoomClearedTemp(": "Flags_UnsetTempClear(",
     "Actor_GetCollectibleFlag": "Flags_GetCollectible",
     "Actor_SetCollectibleFlag": "Flags_SetCollectible",
     "func_800B8A1C": "Actor_PickUp",
@@ -196,6 +199,33 @@ animdict = {
     "func_800BE0B8": "Actor_FindNearby",
     "func_800BE258": "Actor_SetDropFlag",
     "func_800BE2B8": "Actor_SetDropFlagJntSph",
+    "zelda_malloc(": "ZeldaArena_Malloc(",
+    "zelda_mallocR(": "ZeldaArena_MallocR(",
+    "zelda_realloc": "ZeldaArena_Realloc",
+    "zelda_free": "ZeldaArena_Free",
+    "zelda_calloc": "ZeldaArena_Calloc",
+    "MainHeap_AnalyzeArena": "ZeldaArena_GetSizes",
+    "MainHeap_Check": "ZeldaArena_Check",
+    "MainHeap_Init": "ZeldaArena_Init",
+    "MainHeap_Cleanup": "ZeldaArena_Cleanup",
+    "MainHeap_IsInitialized": "ZeldaArena_IsInitialized",
+
+    "skelanime.unk03": "skelanime.taper",
+    "skelanime.animCurrentSeg": "skelanime.animation",
+    "skelanime.initialFrame": "skelanime.startFrame",
+    "skelanime.animFrameCount": "skelanime.endFrame",
+    "skelanime.totalFrames": "skelanime.animLength",
+    "skelanime.animCurrentFrame": "skelanime.curFrame",
+    "skelanime.animPlaybackSpeed": "skelanime.playSpeed",
+    "skelanime.limbDrawTbl": "skelanime.jointTable",
+    "skelanime.transitionDrawTbl": "skelanime.morphTable",
+    "skelanime.transCurrentFrame": "skelanime.morphWeight",
+    "skelanime.transitionStep": "skelanime.morphRate",
+    "skelanime.animUpdate": "skelanime.update",
+    "skelanime.flags": "skelanime.moveFlags",
+    "skelanime.prevFrameRot": "skelanime.prevRot",
+    "skelanime.prevFramePos": "skelanime.prevTransl",
+    "skelanime.unk3E": "skelanime.baseTransl",
 }
 
 def replace_anim(file):
@@ -229,6 +259,11 @@ def replace_anim_all(repo):
     for subdir, dirs, files in os.walk(repo + os.sep + 'asm'):
         for filename in files:
             if(filename.endswith('.s')):
+                file = subdir + os.sep + filename
+                replace_anim(file)
+    for subdir, dirs, files in os.walk(repo + os.sep + 'tools' + os.sep + 'sizes'):
+        for filename in files:
+            if(filename.endswith('.csv')):
                 file = subdir + os.sep + filename
                 replace_anim(file)
     return 1
