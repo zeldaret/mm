@@ -252,9 +252,6 @@ void Fado_Relocs(FILE* outputFile, int inputFilesCount, FILE** inputFiles, const
     }
 
     {
-        /* 0,1,2 to make the section a whole qword */
-        uint8_t padCount;
-
         /* Write header */
         fprintf(outputFile, ".section .ovl\n");
         fprintf(outputFile, "# %sOverlayInfo\n", ovlName);
@@ -264,7 +261,6 @@ void Fado_Relocs(FILE* outputFile, int inputFilesCount, FILE** inputFiles, const
         fprintf(outputFile, ".word _%sSegmentBssSize\n", ovlName);
 
         fprintf(outputFile, "\n.word %d # relocCount\n", relocCount);
-        padCount = -(relocCount + 2) & 3;
 
         /* Write reloc table */
         for (section = FAIRY_SECTION_TEXT; section < FAIRY_SECTION_OTHER; section++) {

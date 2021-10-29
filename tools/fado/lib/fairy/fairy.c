@@ -8,6 +8,7 @@
 
 #include <assert.h>
 #include <endian.h>
+#include <stdarg.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -104,7 +105,7 @@ bool Fairy_StartsWith(const char* string, const char* initial) {
 
 FairyFileHeader* Fairy_ReadFileHeader(FairyFileHeader* header, FILE* file) {
     fseek(file, 0, SEEK_SET);
-    fread(header, 0x34, 1, file);
+    assert(fread(header, 0x34, 1, file) != 0);
 
     if (!Fairy_VerifyMagic(header->e_ident)) {
         fprintf(stderr, "Not a valid ELF file\n");
@@ -139,7 +140,7 @@ FairySecHeader* Fairy_ReadSectionTable(FairySecHeader* sectionTable, FILE* file,
     size_t tableSize = number * entrySize;
 
     fseek(file, tableOffset, SEEK_SET);
-    fread(sectionTable, tableSize, 1, file);
+    assert(fread(sectionTable, tableSize, 1, file) != 0);
 
     /* Since the section table happens to only have entries of width 4, we can byteswap it by pretending it is a raw
      * uint32_t array */
@@ -158,7 +159,7 @@ FairySym* Fairy_ReadSymbolTable(FairySym* symbolTable, FILE* file, size_t tableO
     size_t number = tableSize / sizeof(FairySym);
 
     fseek(file, tableOffset, SEEK_SET);
-    fread(symbolTable, tableSize, 1, file);
+    assert(fread(symbolTable, tableSize, 1, file) != 0);
 
     /* Reend the variables that are larger than bytes */
     {
@@ -177,14 +178,14 @@ FairySym* Fairy_ReadSymbolTable(FairySym* symbolTable, FILE* file, size_t tableO
 /* Can be used for both the section header string table and the strtab */
 char* Fairy_ReadStringTable(char* stringTable, FILE* file, size_t tableOffset, size_t tableSize) {
     fseek(file, tableOffset, SEEK_SET);
-    fread(stringTable, tableSize, 1, file);
+    assert(fread(stringTable, tableSize, 1, file) != 0);
     return stringTable;
 }
 
 /* offset and number are attained from the section table */
 FairyRel* Fairy_ReadRelocs(FairyRel* relocTable, FILE* file, size_t offset, size_t size) {
     fseek(file, offset, SEEK_SET);
-    fread(relocTable, size, 1, file);
+    assert(fread(relocTable, size, 1, file) != 0);
 
     /* Reend the variables that are larger than bytes */
     {
@@ -229,7 +230,7 @@ void Fairy_InitFile(FairyFileInfo* fileInfo, FILE* file) {
 
     shstrtab = malloc(sectionTable[fileHeader.e_shstrndx].sh_size * sizeof(char));
     fseek(file, sectionTable[fileHeader.e_shstrndx].sh_offset, SEEK_SET);
-    fread(shstrtab, sectionTable[fileHeader.e_shstrndx].sh_size, 1, file);
+    assert(fread(shstrtab, sectionTable[fileHeader.e_shstrndx].sh_size, 1, file) != 0);
 
     /* Search for the sections we need */
     {

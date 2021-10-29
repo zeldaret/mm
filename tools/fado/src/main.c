@@ -123,7 +123,7 @@ int main(int argc, char** argv) {
                 break;
 
             case 'v':
-                if (sscanf(optarg, "%d", &gVerbosity) == 0) {
+                if (sscanf(optarg, "%u", &gVerbosity) == 0) {
                     fprintf(stderr, "warning: verbosity argument '%s' should be a nonnegative decimal integer", optarg);
                 }
                 break;
