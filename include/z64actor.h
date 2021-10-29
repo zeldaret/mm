@@ -88,7 +88,8 @@ typedef struct EnDno_ActorUnkStruct {
     /* 0x1D */ u8 unk_1D;
     /* 0x20 */ Vec3f unk_20;
     /* 0x2C */ Vec3f unk_2C;
-    /* 0x38 */ UNK_TYPE1 unk_38[0x10];
+    /* 0x38 */ Vec3f unk_38;
+    /* 0x44 */ UNK_TYPE1 unk_44[0x4];
     /* 0x48 */ struct Actor* unk_48;
     /* 0x4C */ f32 unk_4C;
     /* 0x50 */ f32 unk_50;

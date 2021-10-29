@@ -912,9 +912,9 @@ u8 Actor_ApplyDamage(Actor* actor); // returns current health
 void func_800BE258(Actor* actor, UNK_PTR arg1);
 void func_800BE2B8(Actor* actor, ColliderJntSph* jntSphere);
 void func_800BE33C(Vec3f* arg0, Vec3f* arg1, Vec3s* arg2, s32 arg3);
-// void func_800BE3D0(void);
+void func_800BE3D0(Actor* actor, s16 arg1, s16* arg2);
 void func_800BE504(Actor* actor, ColliderCylinder* collider);
-// void func_800BE568(void);
+void func_800BE568(Actor* actor, ColliderSphere* collider);
 void func_800BE5CC(Actor* actor, ColliderJntSph* collider, s32 arg2);
 // void func_800BE63C(void);
 void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 arg3, f32 arg4, f32 arg5, f32 arg6, u8 mode);
@@ -981,7 +981,7 @@ f32 func_800C3D50(s32 arg0, CollisionContext* colCtx, s32 arg2, CollisionPoly** 
 // void func_800C3FA0(void);
 f32 func_800C4000(GlobalContext* globalCtx, CollisionContext* colCtx, s32* arg2, Vec3f* arg3);
 // void func_800C4058(void);
-// void func_800C40B4(void);
+f32 func_800C40B4(CollisionContext* colCtx, CollisionPoly** arg1, s32* arg2, Vec3f* pos);
 f32 func_800C411C(CollisionContext* colCtx, CollisionPoly** arg1, s32* arg2, Actor* actor, Vec3f* pos);
 // void func_800C4188(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 // void func_800C41E4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
@@ -1013,7 +1013,7 @@ s32 func_800C576C(CollisionContext* colCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* arg
 // void func_800C58C8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
 // void func_800C5954(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE2 param_8);
 s32 func_800C5A20(CollisionContext* colCtx, Vec3f* arg1, f32 arg2);
-// void func_800C5A64(void);
+s32 func_800C5A64(CollisionContext* colCtx, Vec3f* arg1, f32 arg2, Actor* actor);
 void BgCheck_ScenePolygonListsInit(SSNodeList* arg0);
 void BgCheck_ScenePolygonListsAlloc(GlobalContext* globalCtx, SSNodeList* lists, s32 numNodes, u32 numPolygons);
 s32 func_800C5B80(u16* arg0);
@@ -2255,7 +2255,7 @@ s32 func_801240C8(Player* player);
 // void func_8012422C(void);
 // void func_80124258(void);
 // void func_80124278(void);
-// void func_801242B4(void);
+s32 func_801242B4(Player* player);
 // void func_801242DC(void);
 // void func_80124420(void);
 // void func_80124618(void);
@@ -3304,7 +3304,7 @@ void func_80179B34(float fParm1, f32 fParm2, f32 fParm5, f32 fParm6, f32 param_5
 // void func_80179D74(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
 void Math3D_ScaleAndAdd(Vec3f* a, Vec3f* b, f32 scale, Vec3f* dst);
 void Math3D_Lerp(Vec3f* a, Vec3f* b, f32 t, Vec3f* dst);
-s32 Math3D_Parallel(Vec3f* a, Vec3f* b);
+f32 Math3D_Parallel(Vec3f* a, Vec3f* b);
 s32 Math3D_AngleBetweenVectors(Vec3f* a, Vec3f* b, f32* angle);
 void func_80179F64(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3);
 s32 Math3D_XZBoundCheck(f32 xMin, f32 xMax, f32 zMin, f32 zMax, f32 x, f32 z);
