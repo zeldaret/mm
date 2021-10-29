@@ -133,7 +133,7 @@ void func_80ADADD0(EnSellnuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80ADAE64(EnSellnuts* this) {
-    s16 currentFrame = this->skelAnime.animCurrentFrame;
+    s16 currentFrame = this->skelAnime.curFrame;
 
     switch (currentFrame) {
         case 10:
@@ -194,7 +194,7 @@ void func_80ADAE64(EnSellnuts* this) {
 }
 
 void func_80ADAFC0(EnSellnuts* this) {
-    s16 currentFrame = this->skelAnime.animCurrentFrame;
+    s16 currentFrame = this->skelAnime.curFrame;
 
     switch (currentFrame) {
         case 10:
@@ -244,8 +244,8 @@ f32 func_80ADB08C(GlobalContext* globalCtx) {
 }
 
 void func_80ADB0D8(EnSellnuts* this, GlobalContext* globalCtx) {
-    s16 currentFrame = this->skelAnime.animCurrentFrame;
-    s16 frameCount = SkelAnime_GetFrameCount(&D_80ADD990[this->unk_34C].animationSeg->common);
+    s16 currentFrame = this->skelAnime.curFrame;
+    s16 frameCount = Animation_GetLastFrame(D_80ADD990[this->unk_34C].animationSeg);
 
     if (currentFrame == frameCount) {
         switch (this->unk_340) {
@@ -298,8 +298,8 @@ void func_80ADB0D8(EnSellnuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80ADB254(EnSellnuts* this, GlobalContext* globalCtx) {
-    s16 currentFrame = this->skelAnime.animCurrentFrame;
-    s16 frameCount = SkelAnime_GetFrameCount(&D_80ADD990[this->unk_34C].animationSeg->common);
+    s16 currentFrame = this->skelAnime.curFrame;
+    s16 frameCount = Animation_GetLastFrame(D_80ADD990[this->unk_34C].animationSeg);
 
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0xE38);
     if (((this->actor.yDistToPlayer < 50.0f) && (this->actor.yDistToPlayer > -50.0f) ? true : false) &&
@@ -339,7 +339,7 @@ void func_80ADB254(EnSellnuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80ADB4F4(EnSellnuts* this, GlobalContext* globalCtx) {
-    if (this->skelAnime.animCurrentFrame == this->skelAnime.animFrameCount) {
+    if (this->skelAnime.curFrame == this->skelAnime.endFrame) {
         this->actionFunc = func_80ADB544;
         func_8013BC6C(&this->skelAnime, D_80ADD990, 0);
     }
@@ -463,8 +463,8 @@ void func_80ADB924(EnSellnuts* this, GlobalContext* globalCtx) {
 
 void func_80ADBAB8(EnSellnuts* this, GlobalContext* globalCtx) {
     u8 sp27 = func_80152498(&globalCtx->msgCtx);
-    s16 currentFrame = this->skelAnime.animCurrentFrame;
-    s16 frameCount = SkelAnime_GetFrameCount(&D_80ADD990[this->unk_34C].animationSeg->common);
+    s16 currentFrame = this->skelAnime.curFrame;
+    s16 frameCount = Animation_GetLastFrame(D_80ADD990[this->unk_34C].animationSeg);
 
     if (this->unk_368 == 0x28) {
         this->unk_34C = 5;
@@ -516,8 +516,8 @@ void func_80ADBCE4(EnSellnuts* this, GlobalContext* globalCtx) {
 
 void func_80ADBD64(EnSellnuts* this, GlobalContext* globalCtx) {
     u8 sp27 = func_80152498(&globalCtx->msgCtx);
-    s16 currentFrame = this->skelAnime.animCurrentFrame;
-    s16 frameCount = SkelAnime_GetFrameCount(&D_80ADD990[this->unk_34C].animationSeg->common);
+    s16 currentFrame = this->skelAnime.curFrame;
+    s16 frameCount = Animation_GetLastFrame(D_80ADD990[this->unk_34C].animationSeg);
 
     if ((currentFrame == frameCount) && (this->unk_34C == 7)) {
         this->unk_34C = 0;
@@ -536,8 +536,8 @@ void func_80ADBD64(EnSellnuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80ADBE80(EnSellnuts* this, GlobalContext* globalCtx) {
-    s16 currentFrame = this->skelAnime.animCurrentFrame;
-    s16 frameCount = SkelAnime_GetFrameCount(&D_80ADD990[this->unk_34C].animationSeg->common);
+    s16 currentFrame = this->skelAnime.curFrame;
+    s16 frameCount = Animation_GetLastFrame(D_80ADD990[this->unk_34C].animationSeg);
 
     func_80ADAE64(this);
     if (this->unk_366 == 0) {
@@ -598,8 +598,8 @@ void func_80ADC034(EnSellnuts* this, GlobalContext* globalCtx) {
 
 void func_80ADC118(EnSellnuts* this, GlobalContext* globalCtx) {
     Vec3f sp34;
-    s16 currentFrame = this->skelAnime.animCurrentFrame;
-    s16 frameCount = SkelAnime_GetFrameCount(&D_80ADD990[this->unk_34C].animationSeg->common);
+    s16 currentFrame = this->skelAnime.curFrame;
+    s16 frameCount = Animation_GetLastFrame(D_80ADD990[this->unk_34C].animationSeg);
 
     if (currentFrame == frameCount) {
         Math_SmoothStepToS(&this->unk_364, 0x1C71, 3, 0x100, 0);
@@ -817,8 +817,8 @@ void func_80ADC8C4(EnSellnuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80ADCA64(EnSellnuts* this, GlobalContext* globalCtx) {
-    s16 currentFrame = this->skelAnime.animCurrentFrame;
-    s16 frameCount = SkelAnime_GetFrameCount(&D_80ADD990[this->unk_34C].animationSeg->common);
+    s16 currentFrame = this->skelAnime.curFrame;
+    s16 frameCount = Animation_GetLastFrame(D_80ADD990[this->unk_34C].animationSeg);
 
     if (this->unk_34C == 22) {
         Math_SmoothStepToS(&this->unk_364, 0, 3, 0x100, 0);
@@ -852,8 +852,8 @@ void func_80ADCA64(EnSellnuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80ADCC04(EnSellnuts* this, GlobalContext* globalCtx) {
-    s16 currentFrame = this->skelAnime.animCurrentFrame;
-    s16 frameCount = SkelAnime_GetFrameCount(&D_80ADD990[this->unk_34C].animationSeg->common);
+    s16 currentFrame = this->skelAnime.curFrame;
+    s16 frameCount = Animation_GetLastFrame(D_80ADD990[this->unk_34C].animationSeg);
 
     if (this->unk_34C == 3) {
         if (currentFrame == frameCount) {
@@ -962,7 +962,7 @@ void EnSellnuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600AC70, &D_06005488, this->jointTable, this->morphTable, 28);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600AC70, &D_06005488, this->jointTable, this->morphTable, 28);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinderType1(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 35.0f);
@@ -1055,7 +1055,7 @@ void EnSellnuts_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_SetHeight(&this->actor, 60.0f);
     Actor_SetScale(&this->actor, 0.01f);
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
     this->actionFunc(this, globalCtx);
     if (this->unk_338 & 8) {
@@ -1110,7 +1110,7 @@ s32 EnSellnuts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** d
     }
 
     if (limbIndex == 24) {
-        SysMatrix_InsertXRotation_s(this->unk_342, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(this->unk_342, MTXMODE_APPLY);
     }
 
     if (limbIndex == 26) {
@@ -1148,6 +1148,6 @@ void EnSellnuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnSellnuts* this = THIS;
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
+    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                   EnSellnuts_OverrideLimbDraw, EnSellnuts_PostLimbDraw, func_80ADD7CC, &this->actor);
 }
