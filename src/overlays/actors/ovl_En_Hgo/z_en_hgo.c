@@ -294,8 +294,7 @@ s32 func_80BD0898(EnHgo* this, GlobalContext* globalCtx) {
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                 switch (this->unk_218) {
                     case 1:
-                        if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) &&
-                                (this->unk_312 == 0)) {
+                        if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) && (this->unk_312 == 0)) {
                             this->unk_312 = 1;
                             if ((gSaveContext.sceneSetupIndex == 0) &&
                                 ((globalCtx->csCtx.unk_12 == 2) || (globalCtx->csCtx.unk_12 == 4))) {
@@ -310,7 +309,6 @@ s32 func_80BD0898(EnHgo* this, GlobalContext* globalCtx) {
                     case 5:
                         this->unk_218 = 6;
                         func_800BDC5C(&this->skelAnime, sAnimations, 6);
-
                 }
             }
         }
