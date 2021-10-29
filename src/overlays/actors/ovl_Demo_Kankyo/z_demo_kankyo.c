@@ -527,7 +527,6 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, GlobalContext* globalCtx2) {
             worldPos.y = this->particles[i].posBase.y + this->particles[i].posOffset.y;
             worldPos.z = this->particles[i].posBase.z + this->particles[i].posOffset.z;
 
-            // if we disable this, then no particles are shown
             func_80169474(globalCtx, &worldPos, &screenPos); // unnamed Play_ function, func_800C016C from OoT
 
             // checking if particle is on screen
@@ -617,7 +616,6 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
             worldPos.y = this->particles[i].posBase.y + this->particles[i].posOffset.y;
             worldPos.z = this->particles[i].posBase.z + this->particles[i].posOffset.z;
 
-            // if we disable this, then no particles are shown
             func_80169474(globalCtx, &worldPos, &screenPos); // unnamed Play_ function, func_800C016C from OoT
 
             // checking if particle is on screen
