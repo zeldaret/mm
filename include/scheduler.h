@@ -21,25 +21,25 @@ typedef struct {
 } CfbInfo; // size = 0x1C
 
 typedef struct {
-    /* 0x0000 */ OSMesgQueue interruptQ;
-    /* 0x0018 */ OSMesg      intBuf[64];
-    /* 0x0118 */ OSMesgQueue cmdQ;
-    /* 0x0130 */ OSMesg      cmdMsgBuf[8];
-    /* 0x0150 */ OSThread    thread;
-    /* 0x0300 */ OSScTask*   audioListHead;
-    /* 0x0304 */ OSScTask*   gfxListHead;
-    /* 0x0308 */ OSScTask*   audioListTail;
-    /* 0x030C */ OSScTask*   gfxListTail;
-    /* 0x0310 */ OSScTask*   curRSPTask;
-    /* 0x0314 */ OSScTask*   curRDPTask;
-    /* 0x0318 */ s32         retraceCount;
-    /* 0x0318 */ s32         doAudio;
-    /* 0x0320 */ CfbInfo*    curBuf;
-    /* 0x0324 */ CfbInfo*    pendingSwapBuf1;
-    /* 0x0328 */ CfbInfo*    pendingSwapBuf2;
-    /* 0x032C */ char unk_32C[0x3];
-    /* 0x032F */ u8 shouldUpdateVi;
-    /* 0x0330 */ IrqMgrClient irqClient;
+    /* 0x000 */ OSMesgQueue interruptQ;
+    /* 0x018 */ OSMesg      intBuf[64];
+    /* 0x118 */ OSMesgQueue cmdQ;
+    /* 0x130 */ OSMesg      cmdMsgBuf[8];
+    /* 0x150 */ OSThread    thread;
+    /* 0x300 */ OSScTask*   audioListHead;
+    /* 0x304 */ OSScTask*   gfxListHead;
+    /* 0x308 */ OSScTask*   audioListTail;
+    /* 0x30C */ OSScTask*   gfxListTail;
+    /* 0x310 */ OSScTask*   curRSPTask;
+    /* 0x314 */ OSScTask*   curRDPTask;
+    /* 0x318 */ s32         retraceCount;
+    /* 0x318 */ s32         doAudio;
+    /* 0x320 */ CfbInfo*    curBuf;
+    /* 0x324 */ CfbInfo*    pendingSwapBuf1;
+    /* 0x328 */ CfbInfo*    pendingSwapBuf2;
+    /* 0x32C */ char unk_32C[0x3];
+    /* 0x32F */ u8 shouldUpdateVi;
+    /* 0x330 */ IrqMgrClient irqClient;
 } SchedContext; // size = 0x338
 
 #endif
