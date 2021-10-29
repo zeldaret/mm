@@ -3179,7 +3179,7 @@ GameStateFunc GameState_GetNextStateInit(GameState* gameState);
 size_t GameState_GetNextStateSize(GameState* gameState);
 u32 GameState_IsRunning(GameState* gameState);
 s32 GameState_GetArenaSize(GameState* gameState);
-s32 func_80173B48(GameState* gamestate);
+s32 func_80173B48(GameState* gameState);
 void GameAlloc_Log(GameAlloc* this);
 void* GameAlloc_Malloc(GameAlloc* this, size_t size);
 void GameAlloc_Free(GameAlloc* this, void* data);
