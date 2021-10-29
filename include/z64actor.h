@@ -1033,69 +1033,68 @@ typedef enum {
     /* 0x2B2 */ ACTOR_ID_MAX // originally "ACTOR_DLF_MAX"
 } ActorID;
 
-// Targetability
-#define ACTOR_FLAG_1         0x1
+// Targetability / ACTOR_FLAG_TARGETABLE?
+#define ACTOR_FLAG_1             (1 << 0)
 // 
-#define ACTOR_FLAG_2         0x2
+#define ACTOR_FLAG_2             (1 << 1)
 // 
-#define ACTOR_FLAG_4         0x4
+#define ACTOR_FLAG_4             (1 << 2)
 // 
-#define ACTOR_FLAG_8         0x8
+#define ACTOR_FLAG_8             (1 << 3)
 // 
-#define ACTOR_FLAG_10        0x10
+#define ACTOR_FLAG_10            (1 << 4)
 // 
-#define ACTOR_FLAG_20        0x20
+#define ACTOR_FLAG_20            (1 << 5)
 // 
-#define ACTOR_FLAG_40        0x40
+#define ACTOR_FLAG_40            (1 << 6)
 // 
-#define ACTOR_FLAG_80        0x80
+#define ACTOR_FLAG_80            (1 << 7)
 // Related to talk
-#define ACTOR_FLAG_100       0x100
+#define ACTOR_FLAG_100           (1 << 8)
 // 
-#define ACTOR_FLAG_200       0x200
+#define ACTOR_FLAG_200           (1 << 9)
 // 
-#define ACTOR_FLAG_400       0x400
+#define ACTOR_FLAG_400           (1 << 10)
 // 
-#define ACTOR_FLAG_800       0x800
+#define ACTOR_FLAG_800           (1 << 11)
 // 
-#define ACTOR_FLAG_1000      0x1000
+#define ACTOR_FLAG_1000          (1 << 12)
 // 
-#define ACTOR_FLAG_2000      0x2000
+#define ACTOR_FLAG_2000          (1 << 13)
 // 
-#define ACTOR_FLAG_4000      0x4000
+#define ACTOR_FLAG_4000          (1 << 14)
 // 
-#define ACTOR_FLAG_8000      0x8000
+#define ACTOR_FLAG_8000          (1 << 15)
 // 
-#define ACTOR_FLAG_10000     0x10000
+#define ACTOR_FLAG_10000         (1 << 16)
 // 
-#define ACTOR_FLAG_20000     0x20000
+#define ACTOR_FLAG_20000         (1 << 17)
 // 
-#define ACTOR_FLAG_40000     0x40000
+#define ACTOR_FLAG_40000         (1 << 18)
 // 
-#define ACTOR_FLAG_80000     0x80000
+#define ACTOR_FLAG_80000         (1 << 19)
 // 
-#define ACTOR_FLAG_100000    0x100000
+#define ACTOR_FLAG_100000        (1 << 20)
 // 
-#define ACTOR_FLAG_200000    0x200000
+#define ACTOR_FLAG_200000        (1 << 21)
 // 
-#define ACTOR_FLAG_400000    0x400000
+#define ACTOR_FLAG_400000        (1 << 22)
 // 
-#define ACTOR_FLAG_800000    0x800000
+#define ACTOR_FLAG_800000        (1 << 23)
 // 
-#define ACTOR_FLAG_1000000   0x1000000
+#define ACTOR_FLAG_1000000       (1 << 24)
 // 
-#define ACTOR_FLAG_2000000   0x2000000
+#define ACTOR_FLAG_2000000       (1 << 25)
 // 
-#define ACTOR_FLAG_4000000   0x4000000
+#define ACTOR_FLAG_4000000       (1 << 26)
 // 
-#define ACTOR_FLAG_8000000   0x8000000
+#define ACTOR_FLAG_8000000       (1 << 27)
 // 
-#define ACTOR_FLAG_10000000  0x10000000
+#define ACTOR_FLAG_10000000      (1 << 28)
 // 
-#define ACTOR_FLAG_20000000  0x20000000
+#define ACTOR_FLAG_20000000      (1 << 29)
 // 
-#define ACTOR_FLAG_40000000  0x40000000
-//#define ACTOR_FLAG_80000000 0x80000000
+#define ACTOR_FLAG_40000000      (1 << 30)
 
 typedef enum {
     /* 0x00 */ CLEAR_TAG_SMALL_EXPLOSION,

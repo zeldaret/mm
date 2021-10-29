@@ -586,7 +586,7 @@ void Actor_DrawZTarget(TargetContext* targetCtx, GlobalContext* globalCtx) {
         }
 
         actor = targetCtx->unk_94;
-        if ((actor != NULL) && !(actor->flags & 0x8000000)) {
+        if ((actor != NULL) && !(actor->flags & ACTOR_FLAG_8000000)) {
             s801AEC84* color = &D_801AEC84[actor->category];
 
             POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0x07);
@@ -686,7 +686,7 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
                 targetCtx->unk48 = 0;
             }
 
-            sfxId = (actor->flags & 5) == 5 ? NA_SE_SY_LOCK_ON : NA_SE_SY_LOCK_ON_HUMAN;
+            sfxId = (actor->flags & (ACTOR_FLAG_4 | ACTOR_FLAG_1)) == (ACTOR_FLAG_4 | ACTOR_FLAG_1) ? NA_SE_SY_LOCK_ON : NA_SE_SY_LOCK_ON_HUMAN;
             play_sound(sfxId);
         }
 
@@ -1035,7 +1035,7 @@ void* func_800B6680(GlobalContext* globalCtx, s16 id) {
 void Actor_MarkForDeath(Actor* actor) {
     actor->draw = NULL;
     actor->update = NULL;
-    actor->flags &= ~0x1;
+    actor->flags &= ~ACTOR_FLAG_1;
 }
 
 void Actor_SetWorldToHome(Actor* actor) {
@@ -1746,7 +1746,7 @@ f32 func_800B82EC(Actor* actor, Player* player, s16 angle) {
     yaw = ABS_ALT(temp_v0);
 
     if (player->unk_730 != NULL) {
-        if ((yaw > 0x4000) || ((actor->flags & 0x8000000))) {
+        if ((yaw > 0x4000) || ((actor->flags & ACTOR_FLAG_8000000))) {
             return FLT_MAX;
         }
 
@@ -1771,7 +1771,7 @@ s32 func_800B83BC(Actor* actor, f32 arg1) {
 }
 
 s32 func_800B83F8(Actor* actor, Player* player, s32 flag) {
-    if ((actor->update == NULL) || !(actor->flags & 1) || (actor->flags & 0x8000000)) {
+    if ((actor->update == NULL) || !(actor->flags & ACTOR_FLAG_1) || (actor->flags & ACTOR_FLAG_8000000)) {
         return true;
     }
 
@@ -1797,8 +1797,8 @@ s16 D_801AED48[] = {
 };
 
 s32 Actor_RequestTalk(Actor* actor, GameState* gameState) {
-    if (actor->flags & 0x100) {
-        actor->flags &= ~0x100;
+    if (actor->flags & ACTOR_FLAG_100) {
+        actor->flags &= ~ACTOR_FLAG_100;
         return true;
     }
 
@@ -1809,7 +1809,7 @@ s32 Actor_RequestTalk(Actor* actor, GameState* gameState) {
 s32 func_800B8500(Actor* actor, GameState* gameState, f32 xzRange, f32 yRange, s32 exchangeItemId) {
     Player* player = GET_PLAYER(gameState);
 
-    if ((player->actor.flags & 0x100) || ((exchangeItemId > EXCH_ITEM_NONE) && Player_InCsMode(gameState)) ||
+    if ((player->actor.flags & ACTOR_FLAG_100) || ((exchangeItemId > EXCH_ITEM_NONE) && Player_InCsMode(gameState)) ||
         (!actor->isTargeted &&
          ((fabsf(actor->yDistToPlayer) > fabsf(yRange)) || ((actor->xzDistToPlayer > player->targetActorDistance)) ||
           (xzRange < actor->xzDistToPlayer)))) {
@@ -1842,7 +1842,7 @@ s32 func_800B867C(Actor* actor, GameState* gameState) {
     GlobalContext* globalCtx = (GlobalContext*)gameState;
 
     if (func_80152498(&globalCtx->msgCtx) == 2) {
-        actor->flags &= ~0x100;
+        actor->flags &= ~ACTOR_FLAG_100;
         return true;
     }
 
@@ -1875,8 +1875,8 @@ s32 Player_GetExchangeItemId(GameState* gameState) {
 }
 
 s32 func_800B8718(Actor* actor, GameState* gameState) {
-    if (actor->flags & 0x20000000) {
-        actor->flags &= ~0x20000000;
+    if (actor->flags & ACTOR_FLAG_20000000) {
+        actor->flags &= ~ACTOR_FLAG_20000000;
         return true;
     }
 
@@ -1887,7 +1887,7 @@ s32 func_800B8718(Actor* actor, GameState* gameState) {
 s32 func_800B874C(Actor* actor, GameState* gameState, f32 xzRange, f32 yRange) {
     Player* player = GET_PLAYER(gameState);
 
-    if ((player->actor.flags & 0x20000000) || Player_InCsMode(gameState) || (yRange < fabsf(actor->yDistToPlayer)) ||
+    if ((player->actor.flags & ACTOR_FLAG_20000000) || Player_InCsMode(gameState) || (yRange < fabsf(actor->yDistToPlayer)) ||
         ((player->unk_A94 < actor->xzDistToPlayer)) || (xzRange < actor->xzDistToPlayer)) {
         return false;
     }
@@ -2291,7 +2291,7 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
         } else {
             if (((params->updateActorIfSet) && !(actor->flags & params->updateActorIfSet)) ||
                 ((params->updateActorIfSet) &&
-                 (!(actor->flags & 0x100000) || ((actor->category == 3) && (params->player->stateFlags1 & 0x200))) &&
+                 (!(actor->flags & ACTOR_FLAG_100000) || ((actor->category == ACTORCAT_EXPLOSIVES) && (params->player->stateFlags1 & 0x200))) &&
                  (params->unkC != 0) && (actor != params->unk10) && ((actor != params->player->heldActor)) &&
                  (actor->parent != &params->player->actor))) {
                 CollisionCheck_ResetDamage(&actor->colChkInfo);
@@ -2302,7 +2302,7 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
                 actor->xyzDistToPlayerSq = SQ(actor->xzDistToPlayer) + SQ(actor->yDistToPlayer);
 
                 actor->yawTowardsPlayer = Actor_YawBetweenActors(actor, &params->player->actor);
-                actor->flags &= ~0x1000000;
+                actor->flags &= ~ACTOR_FLAG_1000000;
 
                 if ((DECR(actor->freezeTimer) == 0) && (actor->flags & params->runMainIfSet)) {
                     if (actor == params->player->unk_730) {
@@ -2354,9 +2354,9 @@ void Actor_UpdateAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
     params.globalCtx = globalCtx;
 
     if (globalCtx->unk_18844 != 0) {
-        params.runMainIfSet = 0x200000;
+        params.runMainIfSet = ACTOR_FLAG_200000;
     } else {
-        params.runMainIfSet = 0x200050;
+        params.runMainIfSet = ACTOR_FLAG_200000 | ACTOR_FLAG_40 | ACTOR_FLAG_10;
     }
 
     func_800B9334(globalCtx, actorCtx);
@@ -2448,15 +2448,15 @@ void Actor_Draw(GlobalContext* globalCtx, Actor* actor) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     light = LightContext_NewLights(&globalCtx->lightCtx, globalCtx->state.gfxCtx);
-    if ((actor->flags & 0x10000000) && (globalCtx->roomCtx.currRoom.enablePosLights || (MREG(93) != 0))) {
+    if ((actor->flags & ACTOR_FLAG_10000000) && (globalCtx->roomCtx.currRoom.enablePosLights || (MREG(93) != 0))) {
         light->enablePosLights = true;
     }
 
-    Lights_BindAll(light, globalCtx->lightCtx.listHead, (actor->flags & 0x10400000) ? NULL : &actor->world.pos,
+    Lights_BindAll(light, globalCtx->lightCtx.listHead, (actor->flags & (ACTOR_FLAG_10000000 | ACTOR_FLAG_400000)) ? NULL : &actor->world.pos,
                    globalCtx);
     Lights_Draw(light, globalCtx->state.gfxCtx);
 
-    if (actor->flags & 0x1000) {
+    if (actor->flags & ACTOR_FLAG_1000) {
         Matrix_SetStateRotationAndTranslation(
             actor->world.pos.x + globalCtx->mainCamera.skyboxOffset.x,
             actor->world.pos.y + ((actor->shape.yOffset * actor->scale.y) + globalCtx->mainCamera.skyboxOffset.y),
@@ -2812,9 +2812,9 @@ void Actor_DrawAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
     s32 i;
 
     if (globalCtx->unk_18844 != 0) {
-        phi_s6 = 0x200000;
+        phi_s6 = ACTOR_FLAG_200000;
     } else {
-        phi_s6 = 0x200060;
+        phi_s6 = ACTOR_FLAG_200000 | ACTOR_FLAG_40 | ACTOR_FLAG_20;
     }
 
     sp44 = globalCtx->state.gfxCtx;
@@ -2841,15 +2841,15 @@ void Actor_DrawAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
             }
 
             if (func_800BA2D8(globalCtx, phi_s0)) {
-                phi_s0->flags |= 0x40;
+                phi_s0->flags |= ACTOR_FLAG_40;
             } else {
-                phi_s0->flags &= ~0x40;
+                phi_s0->flags &= ~ACTOR_FLAG_40;
             }
 
             phi_s0->isDrawn = false;
             if ((phi_s0->init == NULL) && (phi_s0->draw != NULL)) {
                 if (phi_s0->flags & phi_s6) {
-                    if ((phi_s0->flags & 0x80) &&
+                    if ((phi_s0->flags & ACTOR_FLAG_80) &&
                         ((globalCtx->roomCtx.currRoom.unk5 == 0) || (globalCtx->actorCtx.unk4 == 0x64) ||
                          (globalCtx->roomCtx.currRoom.num != phi_s0->room))) {
                         if (Actor_RecordUndrawnActor(globalCtx, phi_s0) != 0) {}
@@ -3380,15 +3380,15 @@ void func_800BB604(GameState* gameState, ActorContext* actorCtx, Player* player,
     sp8C = player->unk_730;
     while (phi_s0 != 0) {
         if ((phi_s0->update != 0) && (phi_s0 != &player->actor)) {
-            if ((phi_s0->flags & 0x40000001) != 0) {
-                if ((actorCategory == ACTORCAT_ENEMY) && ((phi_s0->flags & 5) == 5)) {
+            if ((phi_s0->flags & (ACTOR_FLAG_40000000 & ACTOR_FLAG_1)) != 0) {
+                if ((actorCategory == ACTORCAT_ENEMY) && ((phi_s0->flags & (ACTOR_FLAG_4 | ACTOR_FLAG_1)) == (ACTOR_FLAG_4 | ACTOR_FLAG_1))) {
                     if ((phi_s0->xyzDistToPlayerSq < SQ(500.0f)) && (phi_s0->xyzDistToPlayerSq < D_801ED8CC)) {
                         actorCtx->targetContext.unk90 = phi_s0;
                         D_801ED8CC = phi_s0->xyzDistToPlayerSq;
                     }
                 }
 
-                if ((phi_s0 != sp8C) || (phi_s0->flags & 0x80000)) {
+                if ((phi_s0 != sp8C) || (phi_s0->flags & ACTOR_FLAG_80000)) {
                     temp_f0_2 = func_800B82EC(phi_s0, player, D_801ED8DC);
                     phi_s2 = (phi_s0->flags & 1) != 0;
                     if (phi_s2 != 0) {
@@ -3398,7 +3398,7 @@ void func_800BB604(GameState* gameState, ActorContext* actorCtx, Player* player,
                         //}
                         phi_s2 = temp_f0_2 < D_801ED8C8 ? 1 : 0;
                     }
-                    phi_s2_2 = (phi_s0->flags & 0x40000000) != 0;
+                    phi_s2_2 = (phi_s0->flags & ACTOR_FLAG_40000000) != 0;
                     if (phi_s2_2) {
                         // phi_s2_2 = 0;
                         // if (temp_f0_2 < D_801ED8D0) {
@@ -4266,10 +4266,10 @@ s16 func_800BDB6C(Actor* actor, GlobalContext* globalCtx, s16 arg2, f32 arg3) {
     }
 
     if (arg3 < phi_f2) {
-        actor->flags &= ~1;
+        actor->flags &= ~ACTOR_FLAG_1;
         Math_SmoothStepToS(&arg2, 0, 6, 0x14, 1);
     } else {
-        actor->flags |= 1;
+        actor->flags |= ACTOR_FLAG_1;
         Math_SmoothStepToS(&arg2, 0xFF, 6, 0x14, 1);
     }
 
