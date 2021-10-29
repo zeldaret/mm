@@ -8,7 +8,7 @@ struct Boss07;
 #define MAJORA_TENT_LENGTH 10
 #define MAJORA_TENT_COUNT 25
 #define MAJORA_TENT_MAX 100
-#define MAJORA_WHIP_MAX 50
+#define MAJORA_WHIP_MAX_LENGTH 50
 
 #define MAJORA_MASK_LIMB_COUNT 19
 #define MAJORA_INCARNATION_LIMB_COUNT 25
@@ -31,10 +31,10 @@ typedef struct {
     f32 drag;
     f32 tension;
     Vec3f basePos;
-    Vec3f pos[MAJORA_WHIP_MAX];
-    Vec3f rot[MAJORA_WHIP_MAX];
-    Vec3f pull[MAJORA_WHIP_MAX];
-    f32 unk_72C[MAJORA_WHIP_MAX]; // unused, probably a stretch factor
+    Vec3f pos[MAJORA_WHIP_MAX_LENGTH];
+    Vec3f rot[MAJORA_WHIP_MAX_LENGTH];
+    Vec3f pull[MAJORA_WHIP_MAX_LENGTH];
+    f32 unk_72C[MAJORA_WHIP_MAX_LENGTH]; // unused, probably a stretch factor
 } Boss07Whip; // size = 0x7F4 (0x24 + 0x28 * max)
 
 typedef struct Boss07 {
@@ -44,8 +44,8 @@ typedef struct Boss07 {
     /* 0x0149 */ u8 unk_149;
     /* 0x014A */ u8 unk_14A;
     /* 0x014B */ u8 unk_14B;
-    /* 0x014C */ s16 unk_14C;
-    /* 0x014E */ u8 unk_14E;
+    /* 0x014C */ s16 actionTimer;
+    /* 0x014E */ u8 actionState;
     /* 0x014F */ u8 unk_14F;
     /* 0x0150 */ s16 timers[3];
     /* 0x0156 */ s16 unk_156;
@@ -67,8 +67,8 @@ typedef struct Boss07 {
     /* 0x0190 */ SkelAnime skelAnime;
     /* 0x01D4 */ f32 unk_1D4;
     /* 0x01D8 */ s32 unk_1D8;
-    /* 0x01DC */ Vec3s jointTable1[MAJORA_LIMB_COUNT];
-    /* 0x0284 */ Vec3s morphTable1[MAJORA_LIMB_COUNT];
+    /* 0x01DC */ Vec3s jointTable[MAJORA_LIMB_COUNT];
+    /* 0x0284 */ Vec3s morphTable[MAJORA_LIMB_COUNT];
     /* 0x032C */ f32 unk_32C;
     /* 0x0330 */ f32 unk_330;
     /* 0x0334 */ Vec3f bodyPartsPos[15];
@@ -145,12 +145,11 @@ typedef struct Boss07 {
     /* 0x18F0 */ ColliderQuad quad1;
     /* 0x1970 */ ColliderQuad quad2;
     /* 0x19F0 */ Boss07Tentacle tentacles[MAJORA_TENT_MAX];
-    // /* 0x3E44 */ char unk3E44[0x6CFC]; // size suggests 100 element tentacle array
     /* 0xAB40 */ s16 unk_AB40;
     /* 0xAB44 */ f32 unk_AB44;
     /* 0xAB48 */ u8 unk_AB48;
     /* 0xAB4C */ f32 unk_AB4C;
-    /* 0xAB50 */ f32 unk_AB50[30];
+    /* 0xAB50 */ f32 deathLightScale[30];
     /* 0xABC8 */ u32 unk_ABC8;
     /* 0xABCC */ s32 unk_ABCC;
     /* 0xABD0 */ s16 csState;
