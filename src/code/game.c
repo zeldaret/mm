@@ -5,9 +5,6 @@ f32 gFramerateDivisorF = 1.0f;
 f32 gFramerateDivisorHalf = 1.0f / 2.0f;
 f32 gFramerateDivisorThird = 1.0f / 3.0f;
 
-u32 D_801D1510 = 0x0000000A;
-u32 D_801D1514[3] = { 0 };
-
 void Game_UpdateFramerateVariables(s32 divisor) {
     gFramerateDivisor = divisor;
     gFramerateDivisorF = (f32)divisor;
@@ -104,12 +101,12 @@ void GameState_Draw(GameState* gameState, GraphicsContext* gfxCtx) {
 void GameState_SetFrameBuffer(GraphicsContext* gfxCtx) {
     OPEN_DISPS(gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0, NULL);
-    gSPSegment(POLY_OPA_DISP++, 0xF, gfxCtx->framebuffer);
-    gSPSegment(POLY_XLU_DISP++, 0, NULL);
-    gSPSegment(POLY_XLU_DISP++, 0xF, gfxCtx->framebuffer);
-    gSPSegment(OVERLAY_DISP++, 0, NULL);
-    gSPSegment(OVERLAY_DISP++, 0xF, gfxCtx->framebuffer);
+    gSPSegment(POLY_OPA_DISP++, 0x00, NULL);
+    gSPSegment(POLY_OPA_DISP++, 0x0F, gfxCtx->curFrameBuffer);
+    gSPSegment(POLY_XLU_DISP++, 0x00, NULL);
+    gSPSegment(POLY_XLU_DISP++, 0x0F, gfxCtx->curFrameBuffer);
+    gSPSegment(OVERLAY_DISP++, 0x00, NULL);
+    gSPSegment(OVERLAY_DISP++, 0x0F, gfxCtx->curFrameBuffer);
 
     CLOSE_DISPS(gfxCtx);
 }
@@ -199,8 +196,8 @@ void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* g
     gameState->running = 1;
     gfxCtx->viMode = D_801FBB88;
     gfxCtx->viConfigFeatures = gViConfigFeatures;
-    gfxCtx->viConfigXScale = gViConfigXScale;
-    gfxCtx->viConfigYScale = gViConfigYScale;
+    gfxCtx->xScale = gViConfigXScale;
+    gfxCtx->yScale = gViConfigYScale;
     gameState->nextGameStateInit = NULL;
     gameState->nextGameStateSize = 0U;
 
@@ -220,14 +217,14 @@ void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* g
         func_801773A0(&D_801F7FF0);
         func_8013ED9C();
 
-        osSendMesg(&gameState->gfxCtx->unk5C, NULL, 1);
+        osSendMesg(&gameState->gfxCtx->queue, NULL, OS_MESG_BLOCK);
     }
 }
 
 void GameState_Destroy(GameState* gameState) {
     func_80172BC0();
     func_8019E014();
-    osRecvMesg(&gameState->gfxCtx->unk5C, NULL, OS_MESG_BLOCK);
+    osRecvMesg(&gameState->gfxCtx->queue, NULL, OS_MESG_BLOCK);
 
     if (gameState->destroy != NULL) {
         gameState->destroy(gameState);
@@ -247,7 +244,7 @@ GameStateFunc GameState_GetNextStateInit(GameState* gameState) {
     return gameState->nextGameStateInit;
 }
 
-size_t Game_GetNextStateSize(GameState* gameState) {
+size_t GameState_GetNextStateSize(GameState* gameState) {
     return gameState->nextGameStateSize;
 }
 
