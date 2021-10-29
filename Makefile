@@ -194,8 +194,6 @@ DEP_FILES := $(O_FILES:.o=.asmproc.d) $(OVL_RELOC_FILES:.o=.d)
 # create build directories
 $(shell mkdir -p build/baserom $(foreach dir,$(SRC_DIRS) $(ASM_DIRS) $(ASSET_BIN_DIRS),build/$(dir)))
 
-RELOC_DEPS    := build/reloc_deps.d
-$(shell awk -F\" '/name "ovl/ { flag=1; out=null; dep=null } /include/ && flag && !/reloc.o/ { dep=dep " " $$2 } /_reloc.o/ { out=$$2 } /endseg/ && out && flag { flag=0; printf "%s:%s\n\n", out, dep }' spec > $(RELOC_DEPS))
 
 # directory flags
 build/src/boot_O2/%.o: OPTFLAGS := -O2
