@@ -249,11 +249,6 @@ typedef struct {
 } GameInfo; // size = 0x15D4
 
 typedef struct {
-    /* 0x0 */ s16 type;
-    /* 0x2 */ u8 misc[30];
-} OSScMsg;
-
-typedef struct {
     /* 0x0000 */ u32    size;
     /* 0x0004 */ void*  bufp;
     /* 0x0008 */ void*  head;
