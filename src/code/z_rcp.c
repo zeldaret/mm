@@ -1229,9 +1229,9 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
     void* zbuffer;
     s32 i;
 
-    gSegments[0] = 0;
-    gSegments[0xF] = gfxCtx->curFrameBuffer;
-    gSegments[0xE] = gGfxMasterDL;
+    gSegments[0x00] = 0;
+    gSegments[0x0F] = gfxCtx->curFrameBuffer;
+    gSegments[0x0E] = gGfxMasterDL;
 
     zbuffer = gfxCtx->zbuffer;
 
@@ -1304,7 +1304,7 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
     masterGfx = gGfxMasterDL->syncSegments;
 
     for (i = 0; i < ARRAY_COUNT(gSegments); i++) {
-        if (i == 0xE) {
+        if (i == 0x0E) {
             gSPNoOp(&masterGfx[i]);
         } else {
             gSPSegment(&masterGfx[i], i, gSegments[i]);

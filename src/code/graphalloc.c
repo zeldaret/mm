@@ -1,7 +1,7 @@
 #include "global.h"
 
 Gfx* Graph_GfxPlusOne(Gfx* gfx) {
-    return gfx + 1;
+    return &gfx[1];
 }
 
 Gfx* Graph_BranchDlist(Gfx* gfx, Gfx* dst) {
@@ -20,9 +20,7 @@ void* Graph_DlistAlloc(Gfx** gfx, size_t size) {
     Gfx* end;
 
     size = ALIGN8(size);
-
-    start = (u8*)(*gfx + 1);
-
+    start = (u8*)&(*gfx)[1];
     end = (Gfx*)(start + size);
     gSPBranchList(*gfx, end);
 

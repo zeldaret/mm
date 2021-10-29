@@ -14,7 +14,7 @@ typedef struct {
     /* 0x14 */ f32 unk_14;
     /* 0x18 */ f32 unk_18;
     /* 0x1C */ s16 unk_1C;
-    /* 0x20 */ s32 unk_20;
+    /* 0x20 */ void* unk_20;
 } EnFish2UnkStruct; // size = 0x24
 
 typedef struct EnFish2 {
