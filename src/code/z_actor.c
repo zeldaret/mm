@@ -1334,10 +1334,10 @@ s32 func_800B724C(GlobalContext* globalCtx, Actor* actor, u8 csMode) {
     return true;
 }
 
-u32 func_800B7298(GlobalContext* globalCtx, Actor* actor, u8 arg2) {
+u32 func_800B7298(GlobalContext* globalCtx, Actor* actor, u8 csMode) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (func_800B724C(globalCtx, actor, arg2)) {
+    if (func_800B724C(globalCtx, actor, csMode)) {
         player->unk_3BA = 1;
         return true;
     }

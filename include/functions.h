@@ -730,7 +730,7 @@ s32 func_800B715C(GlobalContext* globalCtx);
 void func_800B7170(GlobalContext* globalCtx, Player* player);
 void Actor_MountHorse(GlobalContext* globalCtx, Player* player, Actor* horse);
 s32 func_800B724C(GlobalContext* globalCtx, Actor* actor, u8 csMode);
-u32 func_800B7298(GlobalContext* globalCtx, Actor* actor, u8 arg2);
+u32 func_800B7298(GlobalContext* globalCtx, Actor* actor, u8 csMode);
 void func_800B72F8(DynaPolyActor* dyna, f32 a1, s16 a2);
 
 s32 Player_IsFacingActor(Actor* actor, s16 tolerance, GlobalContext* globalCtx);
