@@ -248,29 +248,10 @@ typedef struct {
     /* 0x14 */ s16 data[REG_GROUPS * REG_PER_GROUP]; // 0xAE0 entries
 } GameInfo; // size = 0x15D4
 
-typedef struct IrqMgrClient {
-    /* 0x0 */ struct IrqMgrClient* next;
-    /* 0x4 */ OSMesgQueue* queue;
-} IrqMgrClient; // size = 0x8
-
 typedef struct {
     /* 0x0 */ s16 type;
     /* 0x2 */ u8 misc[30];
 } OSScMsg;
-
-typedef struct {
-    /* 0x000 */ OSScMsg verticalRetraceMesg;
-    /* 0x020 */ OSScMsg prenmiMsg;
-    /* 0x040 */ OSScMsg nmiMsg;
-    /* 0x060 */ OSMesgQueue irqQueue;
-    /* 0x078 */ OSMesg irqBuffer[8];
-    /* 0x098 */ OSThread thread;
-    /* 0x248 */ IrqMgrClient* callbacks;
-    /* 0x24C */ u8 prenmiStage;
-    /* 0x250 */ OSTime lastPrenmiTime;
-    /* 0x258 */ OSTimer prenmiTimer;
-    /* 0x278 */ OSTime lastFrameTime;
-} IrqMgr; // size = 0x280
 
 typedef struct {
     /* 0x0000 */ u32    size;
