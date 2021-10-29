@@ -48,9 +48,7 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globa
     f32 posCenterX;
     f32 posCenterY;
     f32 posCenterZ;
-    f32 eyeToAtX;
-    f32 eyeToAtY;
-    f32 eyeToAtZ;
+    Vec3f eyeToAt;
     Player* player = GET_PLAYER(globalCtx);
 
     if (globalCtx->roomCtx.unk7A[1] != 0) {
@@ -63,19 +61,21 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globa
         globalCtx->envCtx.unk_F2[3] += 16;
     }
 
-    //! @bug: DemoKankyo can crash if placed in an area that snows (ObjectKankyo)
+    // note: DemoKankyo can crash if placed in an area that snows (ObjectKankyo)
     // because they both use unk_F2 as a particle counter,
     // causing DemoKankyo to write beyond its particle array boundry
+    // this crash can occur if the two actors are in different scenes connected by an exit
+    // e.g. if you add DemoKankyo to GoronShrine, you will crash entering/leaving through door
     for (i = 0; i < globalCtx->envCtx.unk_F2[3]; i++) {
         repositionLimit = 130.0f;
 
-        eyeToAtX = globalCtx->view.at.x - globalCtx->view.eye.x;
-        eyeToAtY = globalCtx->view.at.y - globalCtx->view.eye.y;
-        eyeToAtZ = globalCtx->view.at.z - globalCtx->view.eye.z;
-        eyeToAtMag = sqrtf(SQ(eyeToAtX) + SQ(eyeToAtY) + SQ(eyeToAtZ));
-        eyeToAtNormX = eyeToAtX / eyeToAtMag;
-        eyeToAtNormY = eyeToAtY / eyeToAtMag;
-        eyeToAtNormZ = eyeToAtZ / eyeToAtMag;
+        eyeToAt.x = globalCtx->view.at.x - globalCtx->view.eye.x;
+        eyeToAt.y = globalCtx->view.at.y - globalCtx->view.eye.y;
+        eyeToAt.z = globalCtx->view.at.z - globalCtx->view.eye.z;
+        eyeToAtMag = sqrtf(SQXYZ(eyeToAt));
+        eyeToAtNormX = eyeToAt.x / eyeToAtMag;
+        eyeToAtNormY = eyeToAt.y / eyeToAtMag;
+        eyeToAtNormZ = eyeToAt.z / eyeToAtMag;
 
         switch (this->particles[i].state) {
             case DEMO_KANKYO_STATE_INIT:
@@ -309,7 +309,7 @@ void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, GlobalContext* globalCtx
     f32 eyeToAtNormZ;
     f32 eyeToAtMag;
     f32 halfScreenWidth;
-    f32 temp_f2_3;
+    f32 randZeroOne;
     f32 pad0;
     Vec3f newEye;
     f32 halfScreenHeight;
@@ -323,7 +323,7 @@ void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, GlobalContext* globalCtx
     eyeToAt.x = globalCtx->view.at.x - globalCtx->view.eye.x;
     eyeToAt.y = globalCtx->view.at.y - globalCtx->view.eye.y;
     eyeToAt.z = globalCtx->view.at.z - globalCtx->view.eye.z;
-    eyeToAtMag = sqrtf(SQ(eyeToAt.x) + SQ(eyeToAt.y) + SQ(eyeToAt.z));
+    eyeToAtMag = sqrtf(SQXYZ(eyeToAt));
     eyeToAtNormX = eyeToAt.x / eyeToAtMag;
     eyeToAtNormY = eyeToAt.y / eyeToAtMag;
     eyeToAtNormZ = eyeToAt.z / eyeToAtMag;
@@ -415,9 +415,9 @@ void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, GlobalContext* globalCtx
                 worldPos.y = this->particles[i].posBase.y + this->particles[i].posOffset.y;
                 worldPos.z = this->particles[i].posBase.z + this->particles[i].posOffset.z;
 
-                temp_f2_3 = Math_Vec3f_DistXZ(&worldPos, &globalCtx->view.eye) / 200.0f;
-                temp_f2_3 = CLAMP(temp_f2_3, 0.0f, 1.0f);
-                halfScreenWidth = 100.0f + temp_f2_3 + 60.0f; // range 160 to 161...? thats about half screen width
+                randZeroOne = Math_Vec3f_DistXZ(&worldPos, &globalCtx->view.eye) / 200.0f;
+                randZeroOne = CLAMP(randZeroOne, 0.0f, 1.0f);
+                halfScreenWidth = 100.0f + randZeroOne + 60.0f; // range 160 to 161...? thats about half screen width
 
                 // I think this code is shifting the particles 1 frame -> half screen at a time to keep it in-view
                 if (halfScreenWidth < ((this->particles[i].posBase.y + this->particles[i].posOffset.y) - newEye.y)) {
@@ -513,7 +513,8 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, GlobalContext* globalCtx2) {
     Vec3f worldPos;
     Vec3f screenPos;
 
-    if (!(globalCtx->cameraPtrs[0]->flags2 & 0x100)) {
+    // if not underwater
+    if (!(globalCtx->cameraPtrs[MAIN_CAM]->flags2 & 0x100)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);
