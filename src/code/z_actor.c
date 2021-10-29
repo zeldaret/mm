@@ -3380,7 +3380,7 @@ void func_800BB604(GameState* gameState, ActorContext* actorCtx, Player* player,
     sp8C = player->unk_730;
     while (phi_s0 != 0) {
         if ((phi_s0->update != 0) && (phi_s0 != &player->actor)) {
-            if ((phi_s0->flags & (ACTOR_FLAG_40000000 & ACTOR_FLAG_1)) != 0) {
+            if ((phi_s0->flags & (ACTOR_FLAG_40000000 | ACTOR_FLAG_1)) != 0) {
                 if ((actorCategory == ACTORCAT_ENEMY) && ((phi_s0->flags & (ACTOR_FLAG_4 | ACTOR_FLAG_1)) == (ACTOR_FLAG_4 | ACTOR_FLAG_1))) {
                     if ((phi_s0->xyzDistToPlayerSq < SQ(500.0f)) && (phi_s0->xyzDistToPlayerSq < D_801ED8CC)) {
                         actorCtx->targetContext.unk90 = phi_s0;
@@ -4417,8 +4417,6 @@ void func_800BE33C(Vec3f* arg0, Vec3f* arg1, Vec3s* arg2, s32 arg3) {
     arg2->x = Math_FAtan2F(sqrtf(SQ(xDiff) + SQ(zDiff)), yDiff);
 }
 
-#ifdef NON_MATCHING
-// stack
 void func_800BE3D0(Actor* actor, s16 angle, Vec3s* arg2) {
     f32 sp44;
     f32 sp40;
@@ -4426,9 +4424,8 @@ void func_800BE3D0(Actor* actor, s16 angle, Vec3s* arg2) {
     f32 sp38;
     f32 sp34;
     f32 sp30;
-    s32 pad[2];
     f32 sp2C;
-    s32 pad2;
+    s32 pad[3];
 
     if (actor->floorPoly != NULL) {
         CollisionPoly* floorPoly = actor->floorPoly;
@@ -4446,9 +4443,6 @@ void func_800BE3D0(Actor* actor, s16 angle, Vec3s* arg2) {
         arg2->z = (s16)-Math_Atan2S((-(sp44 * sp2C) - (sp3C * sp30)) * sp40, 1.0f);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800BE3D0.s")
-#endif
 
 void func_800BE504(Actor* actor, ColliderCylinder* collider) {
     if ((collider->info.acHitInfo->toucher.dmgFlags & 0x13820)) {
