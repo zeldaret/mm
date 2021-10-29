@@ -8,16 +8,16 @@
 #include "irqmgr.h"
 
 typedef struct {
-    /* 0x00 */ u16*     fb1;
-    /* 0x04 */ u16*     swapBuffer;
+    /* 0x00 */ u16*      fb1;
+    /* 0x04 */ u16*      swapBuffer;
     /* 0x08 */ OSViMode* viMode;
-    /* 0x0C */ u32      features;
-    /* 0x10 */ u8       unk_10;
-    /* 0x11 */ s8       updateRate;
-    /* 0x12 */ s8       updateRate2;
-    /* 0x13 */ u8       unk_13;
-    /* 0x14 */ f32      xScale;
-    /* 0x18 */ f32      yScale;
+    /* 0x0C */ u32       features;
+    /* 0x10 */ u8        unk_10;
+    /* 0x11 */ s8        updateRate;
+    /* 0x12 */ s8        updateRate2;
+    /* 0x13 */ u8        unk_13;
+    /* 0x14 */ f32       xScale;
+    /* 0x18 */ f32       yScale;
 } CfbInfo; // size = 0x1C
 
 typedef struct {

@@ -40,8 +40,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_STOP),
 };
 
-extern Gfx D_0E0002E0[];
-
 void ArrowIce_SetupAction(ArrowIce* this, ArrowIceActionFunc actionFunc) {
     this->actionFunc = actionFunc;
 }
@@ -214,7 +212,7 @@ void ArrowIce_Draw(Actor* thisx, GlobalContext* globalCtx) {
                             (s32)(150.0f * this->blueingEffectMagnitude) & 0xFF);
             gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_DISABLE);
             gDPSetColorDither(POLY_XLU_DISP++, G_CD_DISABLE);
-            gSPDisplayList(POLY_XLU_DISP++, D_0E0002E0);
+            gSPDisplayList(POLY_XLU_DISP++, D_0E000000.fillRect);
         }
 
         // Draw ice on the arrow
