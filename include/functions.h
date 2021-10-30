@@ -221,13 +221,13 @@ u32 Rand_Next_Variable(u32* param_1);
 f32 Rand_ZeroOne_Variable(u32* param_1);
 f32 Rand_Centered_Variable(u32* param_1);
 
-void __osMallocInit(Arena* arena, void* heapBase, size_t heapSize);
+void __osMallocInit(Arena* arena, void* start, size_t size);
 void __osMallocCleanup(Arena* arena);
 u8 __osMallocIsInitalized(Arena* arena);
 void* __osMalloc(Arena* arena, size_t size);
 void* __osMallocR(Arena* arena, size_t size);
 void __osFree(Arena* arena, void* ptr);
-void* __osRealloc(Arena* arena, void* oldPtr, size_t newSize);
+void* __osRealloc(Arena* arena, void* ptr, size_t newSize);
 void __osAnalyzeArena(Arena* arena, size_t* maxFreeBlock, size_t* bytesFree, size_t* bytesAllocated);
 u32 __osCheckArena(Arena* arena);
 

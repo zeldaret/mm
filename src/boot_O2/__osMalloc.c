@@ -243,12 +243,13 @@ void* __osRealloc(Arena* arena, void* ptr, size_t newSize) {
             ArenaNode* next = node->next;
 
             diff = newSize - node->size;
-            if (((uintptr_t)next == ((uintptr_t)node + node->size + sizeof(ArenaNode))) && (next->isFree) && (next->size >= diff)) {
+            if (((uintptr_t)next == ((uintptr_t)node + node->size + sizeof(ArenaNode))) && (next->isFree) &&
+                (next->size >= diff)) {
                 ArenaNode* next2 = next->next;
 
                 next->size = (next->size - diff);
                 if (next2 != NULL) {
-                    next2->prev = (void* ) ((uintptr_t)next + diff);
+                    next2->prev = (void*)((uintptr_t)next + diff);
                 }
 
                 next2 = (uintptr_t)next + diff;
