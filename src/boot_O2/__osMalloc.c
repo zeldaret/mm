@@ -220,37 +220,38 @@ end:
 void* __osRealloc(Arena* heap, void* oldPtr, size_t newSize) {
     u32 temp_t0;
     void* sp30;
-    ArenaNode* sp20;
+    ArenaNode* node;
     ArenaNode* temp_a0;
-    ArenaNode* temp_a1;
+    ArenaNode* next;
 
     ArenaImpl_Lock(heap);
+
     if (oldPtr == 0) {
         oldPtr = __osMalloc(heap, newSize);
     } else if (newSize == 0) {
         __osFree(heap, oldPtr);
         oldPtr = NULL;
     } else {
-        sp20 = (uintptr_t)oldPtr - 0x10;
+        node = (uintptr_t)oldPtr - sizeof(ArenaNode);
         newSize = ALIGN16(newSize);
-        if ((newSize != sp20->size) && (sp20->size < newSize)) {
-            temp_a1 = sp20->next;
-            temp_t0 = newSize - sp20->size;
-            if (((uintptr_t)temp_a1 == ((uintptr_t)sp20 + sp20->size + 0x10)) && (temp_a1->isFree != 0) && (((temp_a1->size >= temp_t0)))) {
-                temp_a0 = temp_a1->next;
-                temp_a1->size = (u32) (temp_a1->size - temp_t0);
+        if ((newSize != node->size) && (node->size < newSize)) {
+            next = node->next;
+            temp_t0 = newSize - node->size;
+            if (((uintptr_t)next == ((uintptr_t)node + node->size + sizeof(ArenaNode))) && (next->isFree) && (((next->size >= temp_t0)))) {
+                temp_a0 = next->next;
+                next->size = (next->size - temp_t0);
                 if (temp_a0 != 0) {
-                    temp_a0->prev = (void* ) ((uintptr_t)temp_a1 + temp_t0);
+                    temp_a0->prev = (void* ) ((uintptr_t)next + temp_t0);
                 }
 
-                temp_a0 = (uintptr_t)temp_a1 + temp_t0;
-                sp20->next = temp_a0;
-                sp20->size = newSize;
-                __osMemcpy(temp_a0, temp_a1, 0x10U);
+                temp_a0 = (uintptr_t)next + temp_t0;
+                node->next = temp_a0;
+                node->size = newSize;
+                __osMemcpy(temp_a0, next, sizeof(ArenaNode));
             } else {
                 sp30 = __osMalloc(heap, newSize);
                 if (sp30 != 0) {
-                    bcopy(sp30, oldPtr, sp20->size);
+                    bcopy(sp30, oldPtr, node->size);
                     __osFree(heap, oldPtr);
                 }
                 oldPtr = sp30;
@@ -291,24 +292,19 @@ void __osAnalyzeArena(Arena* arena, size_t* outMaxFree, size_t* outFree, size_t*
 }
 
 u32 __osCheckArena(Arena* heap) {
-    ArenaNode* phi_v0;
-    u32 sp18;
+    ArenaNode* iter;
+    u32 err = 0;
 
-    sp18 = 0;
     ArenaImpl_Lock(heap);
-    phi_v0 = heap->head;
-    phi_v0 = phi_v0;
-    if (phi_v0 != 0) {
-loop_1:
-        if (phi_v0->magic != 0x7373) {
-            sp18 = 1;
-        } else {
-            phi_v0 = phi_v0->next;
-            if (phi_v0 != 0) {
-                goto loop_1;
-            }
+
+    for (iter = heap->head; iter != NULL; iter = iter->next) {
+        if (iter->magic != NODE_MAGIC) {
+            err = 1;
+            break;
         }
     }
+
     ArenaImpl_Unlock(heap);
-    return sp18;
+
+    return err;
 }
