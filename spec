@@ -468,7 +468,6 @@ beginseg
     include "build/src/code/z_collision_check.o"
     include "build/src/code/code_800E8EA0.o"
     include "build/src/code/z_common_data.o"
-    include "build/data/code/z_common_data.bss.o"
     include "build/src/code/z_debug.o"
     include "build/src/code/z_debug_display.o"
     include "build/data/code/z_debug_display.data.o"
