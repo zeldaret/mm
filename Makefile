@@ -70,7 +70,7 @@ LD         := $(MIPS_BINUTILS_PREFIX)ld
 OBJCOPY    := $(MIPS_BINUTILS_PREFIX)objcopy
 OBJDUMP    := $(MIPS_BINUTILS_PREFIX)objdump
 
-IINC       := -Iinclude -Isrc -Iassets -Ibuild -I.
+IINC       := -Iinclude -Iinclude/libc -Isrc -Iassets -Ibuild -I.
 ifeq ($(KEEP_MDEBUG),0)
   RM_MDEBUG = $(OBJCOPY) --remove-section .mdebug $@
 else
