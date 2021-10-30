@@ -90,7 +90,7 @@ void osFlashReadStatus(u8* flashStatus) {
 void osFlashReadId(u32* flashType, u32* flashVendor) {
     u8 flashStatus;
 
-    // why read status ?
+    // why read status?
     osFlashReadStatus(&flashStatus);
 
     // select silicon id read mode
@@ -223,6 +223,7 @@ void osFlashSectorEraseThrough(u32 pageNum) {
 
 s32 osFlashWriteBuffer(OSIoMesg* mb, s32 priority, void* dramAddr, OSMesgQueue* mq) {
     s32 ret;
+
     // select load page mode
     osEPiWriteIo(&__osFlashHandler, __osFlashHandler.baseAddress | FRAM_COMMAND_REGISTER, FRAM_COMMAND_SET_MODE_WRITE);
 
