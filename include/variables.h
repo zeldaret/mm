@@ -325,7 +325,7 @@ extern FaultDrawer sFaultDrawerStruct;
 extern u32 sRandFloat;
 // extern UNK_TYPE4 sArenaLockMsg;
 extern OSTask tmp_task;
-extern OSPifRam osPifBuffers[4];
+
 extern OSMesg siAccessBuf[1];
 extern OSMesgQueue __osSiAccessQueue;
 extern OSPifRam __osContPifRam;

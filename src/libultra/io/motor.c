@@ -4,6 +4,8 @@
 #define BANK_ADDR 0x400
 #define MOTOR_ID 0x80
 
+OSPifRam osPifBuffers[MAXCONTROLLERS];
+
 s32 __osPfsSelectBank(OSPfs* pfs, u8 bank);
 
 s32 osSetRumble(OSPfs* pfs, u32 vibrate) {
