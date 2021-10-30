@@ -35,7 +35,7 @@ OSPiHandle* osFlashReInit(u8 latency, u8 pulse, u8 pageSize, u8 relDuration, u32
 void osFlashChange(u32 flash_num) {
     __osFlashHandler.baseAddress = RDRAM_UNCACHED | (FRAM_STATUS_REGISTER + (flash_num << 17));
     __osFlashHandler.type = 8 + flash_num;
-    
+
     return;
 }
 
