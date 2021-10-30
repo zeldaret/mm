@@ -15,7 +15,7 @@ void SaveContext_Init(void) {
     gSaveContext.environmentTime = 0;
     gSaveContext.dogIsLost = true;
     gSaveContext.nextTransition = 0xFF;
-    gSaveContext.unk_3F26 = 0x32;
+    gSaveContext.unk_3F26 = 50;
     gSaveContext.language = 1;
     gSaveContext.audioSetting = 0;
     gSaveContext.zTargetSetting = 0;
