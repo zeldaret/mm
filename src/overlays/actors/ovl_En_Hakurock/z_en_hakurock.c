@@ -273,7 +273,8 @@ void func_80B22500(EnHakurock* this, GlobalContext* globalCtx) {
     }
     if (this->collider.base.ocFlags1 & OC1_HIT) {
         if ((this->collider.base.oc == this->actor.parent) ||
-            ((this->collider.base.oc->id == ACTOR_EN_HAKUROCK) && (this->collider.base.oc->params == EN_HAKUROCK_TYPE_UNK_2))) {
+            ((this->collider.base.oc->id == ACTOR_EN_HAKUROCK) &&
+             (this->collider.base.oc->params == EN_HAKUROCK_TYPE_UNK_2))) {
             func_80B21EA4(this, 3);
             func_80B21FFC(this);
         } else if ((&player->actor == this->collider.base.oc) && ((player->stateFlags3 & 0x81000) != 0) &&
