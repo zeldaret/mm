@@ -290,4 +290,25 @@ void __osAnalyzeArena(Arena* arena, size_t* outMaxFree, size_t* outFree, size_t*
     ArenaImpl_Unlock(arena);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/__osMalloc/__osCheckArena.s")
+u32 __osCheckArena(Arena* heap) {
+    ArenaNode* phi_v0;
+    u32 sp18;
+
+    sp18 = 0;
+    ArenaImpl_Lock(heap);
+    phi_v0 = heap->head;
+    phi_v0 = phi_v0;
+    if (phi_v0 != 0) {
+loop_1:
+        if (phi_v0->magic != 0x7373) {
+            sp18 = 1;
+        } else {
+            phi_v0 = phi_v0->next;
+            if (phi_v0 != 0) {
+                goto loop_1;
+            }
+        }
+    }
+    ArenaImpl_Unlock(heap);
+    return sp18;
+}
