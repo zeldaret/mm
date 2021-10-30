@@ -94,7 +94,7 @@ void EnHgo_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     ActorShape_Init(&thisx->shape, 0.0f, func_800B3FC0, 36.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06012A58, &D_0600B644, this->limbDrawTbl,
-                       this->transitionDrawTbl, 19);
+                       this->transitionDrawTbl, HGO_LIMB_MAX);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&thisx->colChkInfo, NULL, &sColChkInfoInit);
@@ -104,7 +104,7 @@ void EnHgo_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_314 = 0;
     this->unk_310 = 0;
     this->unk_312 = 0;
-    if (gSaveContext.weekEventReg[75] & 0x20 || gSaveContext.weekEventReg[52] & 0x20) {
+    if ((gSaveContext.weekEventReg[75] & 0x20) || (gSaveContext.weekEventReg[52] & 0x20)) {
         func_80BD049C(this);
     } else {
         thisx->draw = NULL;
@@ -119,7 +119,7 @@ void EnHgo_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80BD03EC(EnHgo* this) {
-    this->actor.flags &= -2;
+    this->actor.flags &= ~1;
     this->actionFunc = &func_80BD0410;
 }
 
@@ -143,7 +143,7 @@ void func_80BD049C(EnHgo* this) {
 }
 
 void func_80BD04E0(EnHgo* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx) != 0) {
+    if (func_800B84D0(&this->actor, globalCtx)) {
         if (Player_GetMask(globalCtx) == PLAYER_MASK_GIBDO_MASK) {
             if (!(this->unk_310 & 4)) {
                 this->unk_310 |= 4;
@@ -154,7 +154,7 @@ void func_80BD04E0(EnHgo* this, GlobalContext* globalCtx) {
                 func_801518B0(globalCtx, 0x15A7, &this->actor);
                 this->unk_314 = 0x15A7;
             }
-        } else if (gSaveContext.playerForm == 4) {
+        } else if (gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
             if (!(this->unk_310 & 1)) {
                 this->unk_310 |= 1;
                 func_801518B0(globalCtx, 0x158F, &this->actor);
@@ -212,7 +212,7 @@ void func_80BD06FC(EnHgo* this, GlobalContext* globalCtx) {
                 this->unk_314 = 0x1590;
                 break;
             case 5520:
-                if ((gSaveContext.weekEventReg[14]) & 4) {
+                if (gSaveContext.weekEventReg[14] & 4) {
                     func_801518B0(globalCtx, 0x1591, &this->actor);
                     this->unk_314 = 0x1591;
                     break;
@@ -290,32 +290,31 @@ s32 func_80BD0898(EnHgo* this, GlobalContext* globalCtx) {
                     func_800BDC5C(&this->skelAnime, sAnimations, 5);
                     break;
             }
-        } else {
-            if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                switch (this->unk_218) {
-                    case 1:
-                        if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) && (this->unk_312 == 0)) {
-                            this->unk_312 = 1;
-                            if ((gSaveContext.sceneSetupIndex == 0) &&
-                                ((globalCtx->csCtx.unk_12 == 2) || (globalCtx->csCtx.unk_12 == 4))) {
-                                Audio_PlayActorSound2(&this->actor, NA_SE_VO_GBVO02);
-                            }
+        } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+            switch (this->unk_218) {
+                case 1:
+                    if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) && (this->unk_312 == 0)) {
+                        this->unk_312 = 1;
+                        if ((gSaveContext.sceneSetupIndex == 0) &&
+                            ((globalCtx->csCtx.unk_12 == 2) || (globalCtx->csCtx.unk_12 == 4))) {
+                            Audio_PlayActorSound2(&this->actor, NA_SE_VO_GBVO02);
                         }
-                        break;
-                    case 2:
-                        this->unk_218 = 3;
-                        func_800BDC5C(&this->skelAnime, sAnimations, 3);
-                        break;
-                    case 5:
-                        this->unk_218 = 6;
-                        func_800BDC5C(&this->skelAnime, sAnimations, 6);
-                }
+                    }
+                    break;
+                case 2:
+                    this->unk_218 = 3;
+                    func_800BDC5C(&this->skelAnime, sAnimations, 3);
+                    break;
+                case 5:
+                    this->unk_218 = 6;
+                    func_800BDC5C(&this->skelAnime, sAnimations, 6);
             }
         }
+
         func_800EDF24(&this->actor, globalCtx, actionIndex);
         return 1;
     }
-    if ((globalCtx->csCtx.state == 0) && (((gSaveContext.weekEventReg[75]) & 0x20) != 0) &&
+    if ((globalCtx->csCtx.state == 0) && (((gSaveContext.weekEventReg[75]) & 0x20)) &&
         (this->actionFunc == func_80BD0410)) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0xC6, this->actor.focus.pos.x, this->actor.focus.pos.y,
@@ -364,7 +363,7 @@ void EnHgo_Update(Actor* thisx, GlobalContext* globalCtx) {
 s32 EnHgo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnHgo* this = THIS;
 
-    if (limbIndex == 11) {
+    if (limbIndex == HGO_LIMB_PELVIS) {
         rot->x += this->unk_300.y;
         rot->z += this->unk_300.x;
     }
