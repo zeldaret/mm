@@ -109,18 +109,18 @@ void EnDaiku_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->unk_27E = this->unk_278 * 4 + 4;
 
         case ENDAIKU_PARAMS_FF_1:
-            SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600A850, &D_06002FA0, this->jointTable, this->morphTable,
-                             17);
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600A850, &D_06002FA0, this->jointTable,
+                               this->morphTable, 17);
             break;
 
         case ENDAIKU_PARAMS_FF_2:
-            SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600A850, &D_0600B690, this->jointTable, this->morphTable,
-                             17);
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600A850, &D_0600B690, this->jointTable,
+                               this->morphTable, 17);
             break;
 
         case ENDAIKU_PARAMS_FF_3:
-            SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600A850, &D_06001114, this->jointTable, this->morphTable,
-                             17);
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600A850, &D_06001114, this->jointTable,
+                               this->morphTable, 17);
             break;
     }
 
@@ -142,8 +142,8 @@ void func_8094373C(EnDaiku* this, s32 arg1) {
         0, 0, 0, 0, 2, 0, 0, 2, 2,
     };
 
-    this->unk_284 = SkelAnime_GetFrameCount(&D_809440A4[arg1]->common);
-    SkelAnime_ChangeAnim(&this->skelAnime, D_809440A4[arg1], 1.0f, 0.0f, this->unk_284, D_809440C8[arg1], -4.0f);
+    this->unk_284 = Animation_GetLastFrame(D_809440A4[arg1]);
+    Animation_Change(&this->skelAnime, D_809440A4[arg1], 1.0f, 0.0f, this->unk_284, D_809440C8[arg1], -4.0f);
 }
 
 void func_809437C8(EnDaiku* this) {
@@ -180,7 +180,7 @@ void func_80943820(EnDaiku* this) {
 }
 
 void func_809438F8(EnDaiku* this, GlobalContext* globalCtx) {
-    f32 currentFrame = this->skelAnime.animCurrentFrame;
+    f32 currentFrame = this->skelAnime.curFrame;
     s32 pad;
     s32 day = gSaveContext.save.day - 1;
     s32 pad2;
@@ -246,7 +246,7 @@ void func_80943BC0(EnDaiku* this) {
 }
 
 void func_80943BDC(EnDaiku* this, GlobalContext* globalCtx) {
-    f32 currentFrame = this->skelAnime.animCurrentFrame;
+    f32 currentFrame = this->skelAnime.curFrame;
 
     if ((this->unk_278 == ENDAIKU_PARAMS_FF_2) && (this->unk_284 <= currentFrame)) {
         if (Rand_ZeroOne() < 0.5f) {
@@ -267,7 +267,7 @@ void EnDaiku_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     if (this->unk_27E == 0) {
-        SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+        SkelAnime_Update(&this->skelAnime);
     }
 
     if ((this->unk_278 == ENDAIKU_PARAMS_FF_0) && (gSaveContext.save.day == 3) && (gSaveContext.save.isNight)) {
@@ -354,8 +354,8 @@ void EnDaiku_Draw(Actor* thisx, GlobalContext* globalCtx) {
             break;
     }
 
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                     func_80943E18, func_80943E60, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          func_80943E18, func_80943E60, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

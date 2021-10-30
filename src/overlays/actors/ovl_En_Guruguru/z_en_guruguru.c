@@ -80,7 +80,7 @@ void EnGuruguru_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 19.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06006C90, &D_06000B04, this->jointTable, this->morphTable, 16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06006C90, &D_06000B04, this->jointTable, this->morphTable, 16);
     this->actor.targetMode = 0;
     if (this->actor.params != 2) {
         Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -112,9 +112,9 @@ void EnGuruguru_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnGuruguru_ChangeAnimation(EnGuruguru* this, s32 arg1) {
-    this->frameCount = SkelAnime_GetFrameCount(&D_80BC79CC[arg1]->common);
-    SkelAnime_ChangeAnim(&this->skelAnime, D_80BC79CC[arg1], D_80BC79D8[arg1], 0.0f, this->frameCount, D_80BC79D4[arg1],
-                         -4.0f);
+    this->frameCount = Animation_GetLastFrame(D_80BC79CC[arg1]);
+    Animation_Change(&this->skelAnime, D_80BC79CC[arg1], D_80BC79D8[arg1], 0.0f, this->frameCount, D_80BC79D4[arg1],
+                     -4.0f);
 }
 
 void EnGuruguru_DoNothing(EnGuruguru* this, GlobalContext* globalCtx) {
@@ -152,9 +152,9 @@ void func_80BC6F14(EnGuruguru* this, GlobalContext* globalCtx) {
     s16 yaw;
     s16 yawTemp;
 
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     if (this->unk270 != 0) {
-        Player* player = PLAYER;
+        Player* player = GET_PLAYER(globalCtx);
 
         this->textIdIndex = 3;
         if (player->transformation == PLAYER_FORM_DEKU) {
@@ -178,7 +178,7 @@ void func_80BC6F14(EnGuruguru* this, GlobalContext* globalCtx) {
 }
 
 void func_80BC701C(EnGuruguru* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((this->unk268 != 0) &&
         (player->transformation == PLAYER_FORM_HUMAN || player->transformation == PLAYER_FORM_DEKU)) {
@@ -191,10 +191,10 @@ void func_80BC701C(EnGuruguru* this, GlobalContext* globalCtx) {
 }
 
 void func_80BC7068(EnGuruguru* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->unk268 != 0) {
-        SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+        SkelAnime_Update(&this->skelAnime);
     } else if (this->unusedTimer == 0) {
         this->unusedTimer = 6;
         if (func_80152498(&globalCtx->msgCtx) != 5) {
@@ -262,11 +262,11 @@ void func_80BC7068(EnGuruguru* this, GlobalContext* globalCtx) {
                 this->texIndex = 1;
             }
             if ((this->unk268 != 0) && (this->textIdIndex >= 7)) {
-                this->skelAnime.animPlaybackSpeed = 2.0f;
+                this->skelAnime.playSpeed = 2.0f;
                 func_801A29D4(3, 1.18921f, 2);
                 func_801A3B48(0);
             } else {
-                if (this->skelAnime.animPlaybackSpeed == 2.0f) {
+                if (this->skelAnime.playSpeed == 2.0f) {
                     func_801A29D4(3, 1.0f, 2);
                 }
                 if (this->unk268 == 0) {
@@ -274,7 +274,7 @@ void func_80BC7068(EnGuruguru* this, GlobalContext* globalCtx) {
                 } else {
                     func_801A3B48(0);
                 }
-                this->skelAnime.animPlaybackSpeed = 1.0f;
+                this->skelAnime.playSpeed = 1.0f;
             }
             this->unk266 = 1;
             func_80151938(globalCtx, textIDs[this->textIdIndex]);
@@ -295,7 +295,7 @@ void func_80BC73F4(EnGuruguru* this) {
 }
 
 void func_80BC7440(EnGuruguru* this, GlobalContext* globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
         this->textIdIndex++;
@@ -311,7 +311,7 @@ void func_80BC7440(EnGuruguru* this, GlobalContext* globalCtx) {
 }
 
 void func_80BC7520(EnGuruguru* this, GlobalContext* globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     if (func_800B84D0(&this->actor, globalCtx)) {
         this->actionFunc = func_80BC7068;
     } else {
@@ -322,7 +322,7 @@ void func_80BC7520(EnGuruguru* this, GlobalContext* globalCtx) {
 void EnGuruguru_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnGuruguru* this = THIS;
     s32 yaw;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 yawTemp;
 
     if (!gSaveContext.save.isNight) {
@@ -394,7 +394,7 @@ void EnGuruguru_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C2DC(globalCtx->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEyeTextures[this->texIndex]));
     gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(sMouthTextures[this->texIndex]));
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                     EnGuruguru_OverrideLimbDraw, NULL, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnGuruguru_OverrideLimbDraw, NULL, &this->actor);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

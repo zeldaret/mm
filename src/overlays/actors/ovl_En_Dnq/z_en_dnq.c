@@ -148,7 +148,7 @@ s32 func_80A526F8(EnDnq* this) {
         this->unk_38C = ((s32)(Rand_ZeroOne() * 100.0f) % 4) + 3;
         this->unk_388 = 0;
         this->unk_386 = 1;
-    } else if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+    } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         switch (this->unk_398) {
             case 8:
                 if (DECR(this->unk_38C) == 0) {
@@ -186,7 +186,7 @@ s32 func_80A526F8(EnDnq* this) {
         }
 
         if (this->unk_386 != 0) {
-            this->skelAnime.animCurrentFrame = 0.0f;
+            this->skelAnime.curFrame = 0.0f;
         }
     }
 
@@ -204,7 +204,7 @@ s32 func_80A52944(EnDnq* this) {
         this->unk_386 = 1;
         phi_v1 = this->unk_38C * 0x2000;
         this->actor.shape.rot.y += phi_v1;
-    } else if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+    } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         this->unk_386++;
         if (this->unk_386 >= 6) {
             func_80A5257C(this, 12);
@@ -212,11 +212,11 @@ s32 func_80A52944(EnDnq* this) {
             phi_v1 = this->unk_38C * 0x2000;
         } else if (this->unk_386 <= 3) {
             this->unk_38C = -this->unk_38C;
-            this->skelAnime.animCurrentFrame = 0.0f;
+            this->skelAnime.curFrame = 0.0f;
             phi_v1 = this->unk_38C * 0x2000;
         } else {
             func_80A5257C(this, 13);
-            this->skelAnime.animCurrentFrame = 0.0f;
+            this->skelAnime.curFrame = 0.0f;
         }
         this->actor.shape.rot.y = this->actor.world.rot.y;
         this->actor.shape.rot.y += phi_v1;
@@ -242,14 +242,14 @@ s32 func_80A52A78(EnDnq* this, GlobalContext* globalCtx) {
         this->unk_38C--;
     }
 
-    if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         if (this->unk_38C == 0) {
             this->unk_38C = Rand_S16Offset(20, 20);
             this->unk_388 += 3;
             this->unk_388 %= 5;
         }
         func_80A5257C(this, D_80A535DC[this->unk_388]);
-        this->skelAnime.animCurrentFrame = 0.0f;
+        this->skelAnime.curFrame = 0.0f;
     }
 
     this->unk_386 = 0;
@@ -257,7 +257,7 @@ s32 func_80A52A78(EnDnq* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80A52B68(EnDnq* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     u16 temp = globalCtx->msgCtx.unk11F04;
 
     if ((player->stateFlags1 & 0x40) && (player->targetActor == &this->actor)) {
@@ -297,7 +297,7 @@ s32 func_80A52B68(EnDnq* this, GlobalContext* globalCtx) {
 }
 
 void func_80A52C6C(EnDnq* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 pad;
     Vec3f sp34 = { 0.0f, 0.0f, 110.0f };
     Vec3f sp28;
@@ -335,7 +335,7 @@ s32 func_80A52D44(EnDnq* this, GlobalContext* globalCtx) {
 }
 
 void func_80A52DC8(EnDnq* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 yaw = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
 
     if (yaw <= 0x3800) {
@@ -403,12 +403,12 @@ void func_80A53038(EnDnq* this, GlobalContext* globalCtx) {
             this->unk_1DC = temp_v1;
         }
 
-        if ((this->unk_398 == 4) && func_801378B8(&this->skelAnime, 2.0f)) {
+        if ((this->unk_398 == 4) && Animation_OnFrame(&this->skelAnime, 2.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_KINGNUTS_DAMAGE);
         }
 
         if (((this->unk_398 == 3) || (this->unk_398 == 6)) &&
-            func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+            Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             func_80A5257C(this, this->unk_398 + 1);
         }
 
@@ -420,7 +420,7 @@ void EnDnq_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnDnq* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 14.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600EB48, NULL, this->jointTable, this->morphTable, 33);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600EB48, NULL, this->jointTable, this->morphTable, 33);
     this->unk_398 = -1;
     func_80A5257C(this, 0);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -450,11 +450,11 @@ void EnDnq_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (!func_80A52D44(this, globalCtx) && func_80A52648(this, globalCtx)) {
         func_80A53038(this, globalCtx);
-        SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+        SkelAnime_Update(&this->skelAnime);
     } else {
         this->actionFunc(this, globalCtx);
         func_80A52B68(this, globalCtx);
-        SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+        SkelAnime_Update(&this->skelAnime);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
         this->unk_394 = this->actor.xzDistToPlayer;
         func_80A52C6C(this, globalCtx);
@@ -470,6 +470,6 @@ void EnDnq_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnDnq* this = THIS;
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, NULL,
-                     NULL, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          NULL, NULL, &this->actor);
 }

@@ -26,7 +26,7 @@ void EnPoFusen_Pop(EnPoFusen* this, GlobalContext* globalCtx);
 void EnPoFusen_Idle(EnPoFusen* this, GlobalContext* globalCtx);
 void EnPoFusen_IdleFuse(EnPoFusen* this, GlobalContext* globalCtx);
 s32 EnPoFusen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                               struct Actor* actor);
+                               Actor* arg);
 
 extern AnimationHeader D_06000040;
 extern FlexSkeletonHeader D_060024F0;
@@ -111,7 +111,7 @@ void EnPoFusen_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (0) {}
     this->collider.dim.worldSphere.radius = 40;
-    SkelAnime_InitSV(globalCtx, &this->anime, &D_060024F0, &D_06000040, this->limbDrawTbl, this->transitionDrawTbl, 10);
+    SkelAnime_InitFlex(globalCtx, &this->anime, &D_060024F0, &D_06000040, this->jointTable, this->morphTable, 10);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 0x4);
 
@@ -271,8 +271,8 @@ void EnPoFusen_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnPoFusen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                               struct Actor* actor) {
-    EnPoFusen* this = (EnPoFusen*)actor;
+                               Actor* arg) {
+    EnPoFusen* this = (EnPoFusen*)arg;
     f32 zScale;
     f32 yScale;
     f32 xScale;
@@ -289,10 +289,10 @@ s32 EnPoFusen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
         yScale = yScale * yScale;
         xRot = ((Math_SinS(this->randXZRotChange) * 2730.0f));
         zRot = ((Math_CosS(this->randXZRotChange) * 2730.0f));
-        SysMatrix_InsertRotation(xRot, 0, zRot, 1);
-        Matrix_Scale(xScale, yScale, zScale, 1);
-        SysMatrix_InsertZRotation_s(-zRot, 1);
-        SysMatrix_InsertXRotation_s(-xRot, 1);
+        Matrix_InsertRotation(xRot, 0, zRot, MTXMODE_APPLY);
+        Matrix_Scale(xScale, yScale, zScale, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(-zRot, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(-xRot, MTXMODE_APPLY);
     } else if (limbIndex == 3) {
         rot->y += this->limb3Rot;
     } else if (limbIndex == 6) {
@@ -310,15 +310,15 @@ s32 EnPoFusen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
     return 0;
 }
 
-void EnPoFusen_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor) {
+void EnPoFusen_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* arg) {
 }
 
-void EnPoFusen_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* actor) {
+void EnPoFusen_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 }
 
 void EnPoFusen_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnPoFusen* this = THIS;
     func_8012C28C(globalCtx->state.gfxCtx);
-    func_801343C0(globalCtx, this->anime.skeleton, this->anime.limbDrawTbl, this->anime.dListCount,
+    func_801343C0(globalCtx, this->anime.skeleton, this->anime.jointTable, this->anime.dListCount,
                   EnPoFusen_OverrideLimbDraw, EnPoFusen_PostLimbDraw, EnPoFusen_UnkActorDraw, &this->actor);
 }

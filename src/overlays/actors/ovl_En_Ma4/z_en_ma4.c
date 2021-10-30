@@ -154,18 +154,18 @@ static struct_80B8E1A8 sAnimationInfo[] = {
 };
 
 void EnMa4_ChangeAnim(EnMa4* this, s32 index) {
-    SkelAnime_ChangeAnim(&this->skelAnime, sAnimationInfo[index].animationSeg, 1.0f, 0.0f,
-                         SkelAnime_GetFrameCount(&sAnimationInfo[index].animationSeg->common),
-                         sAnimationInfo[index].mode, sAnimationInfo[index].transitionRate);
+    Animation_Change(&this->skelAnime, sAnimationInfo[index].animationSeg, 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimationInfo[index].animationSeg), sAnimationInfo[index].mode,
+                     sAnimationInfo[index].transitionRate);
 }
 
 void func_80ABDD9C(EnMa4* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 flag;
 
     if (this->unk_1D8.unk_00 == 0 &&
-        ((this->skelAnime.animCurrentSeg == &D_06007328) || (this->skelAnime.animCurrentSeg == &D_06002A8C) ||
-         (this->skelAnime.animCurrentSeg == &D_06015B7C))) {
+        ((this->skelAnime.animation == &D_06007328) || (this->skelAnime.animation == &D_06002A8C) ||
+         (this->skelAnime.animation == &D_06015B7C))) {
         flag = 1;
     } else {
         flag = (this->type == MA4_TYPE_ALIENS_WON && this->actionFunc != EnMa4_DialogueHandler) ? 1 : 0;
@@ -201,8 +201,8 @@ void EnMa4_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 18.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06013928, NULL, this->limbDrawTable, this->transitionDrawTable,
-                     MA1_LIMB_MAX);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013928, NULL, this->jointTable, this->morphTable,
+                       MA1_LIMB_MAX);
 
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -270,7 +270,7 @@ void EnMa4_RunInCircles(EnMa4* this, GlobalContext* globalCtx) {
     s32 pad;
     s16 sp2E;
 
-    if (sCurrentAnim != 9 && func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+    if (sCurrentAnim != 9 && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         if (sCurrentAnim == 3) {
             if (D_80AC0250 < 3) {
                 D_80AC0250++;
@@ -286,7 +286,7 @@ void EnMa4_RunInCircles(EnMa4* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (sCurrentAnim == 13 && func_801378B8(&this->skelAnime, 37.0f)) {
+    if (sCurrentAnim == 13 && Animation_OnFrame(&this->skelAnime, 37.0f)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_ROMANI_BOW_FLICK);
     }
 
@@ -318,8 +318,8 @@ void EnMa4_RunInCircles(EnMa4* this, GlobalContext* globalCtx) {
 
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
-    if (this->skelAnime.animCurrentSeg == &D_06007328) { // Walking animation
-        if (func_801378B8(&this->skelAnime, 0.0f) || func_801378B8(&this->skelAnime, 4.0f)) {
+    if (this->skelAnime.animation == &D_06007328) { // Walking animation
+        if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 4.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
         }
     }
@@ -346,14 +346,14 @@ void EnMa4_SetupWait(EnMa4* this) {
 }
 
 void EnMa4_Wait(EnMa4* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 yaw = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
 
     if ((this->state == MA4_STATE_AFTERHORSEBACKGAME) || (this->state == MA4_STATE_AFTERDESCRIBETHEMCS)) {
         this->actor.flags |= 0x10000;
     } else if (this->type != MA4_TYPE_ALIENS_WON) {
         EnMa4_RunInCircles(this, globalCtx);
-    } else if (func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+    } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         this->animTimer++;
         if (this->animTimer == 5) {
             EnMa4_ChangeAnim(this, 17); // Traumatized anim
@@ -506,7 +506,7 @@ void EnMa4_HandlePlayerChoice(EnMa4* this, GlobalContext* globalCtx) {
 }
 
 void EnMa4_ChooseNextDialogue(EnMa4* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 aux;
 
     if (func_80147624(globalCtx) != 0) {
@@ -708,7 +708,7 @@ void EnMa4_HorsebackGameTalking(EnMa4* this, GlobalContext* globalCtx) {
 }
 
 void EnMa4_InitHorsebackGame(EnMa4* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     globalCtx->interfaceCtx.unk_280 = 1;
     func_8010E9F0(4, 0);
@@ -719,7 +719,7 @@ void EnMa4_InitHorsebackGame(EnMa4* this, GlobalContext* globalCtx) {
 }
 
 void EnMa4_SetupHorsebackGameWait(EnMa4* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (globalCtx->interfaceCtx.unk_280 == 8) {
         this->actionFunc = EnMa4_HorsebackGameWait;
@@ -729,7 +729,7 @@ void EnMa4_SetupHorsebackGameWait(EnMa4* this, GlobalContext* globalCtx) {
 
 void EnMa4_HorsebackGameWait(EnMa4* this, GlobalContext* globalCtx) {
     static s16 D_80AC0258 = 0;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     player->stateFlags3 |= 0x400;
     EnMa4_HorsebackGameCheckPlayerInteractions(this, globalCtx);
@@ -756,7 +756,7 @@ void EnMa4_SetupHorsebackGameEnd(EnMa4* this, GlobalContext* globalCtx) {
 
 void EnMa4_HorsebackGameEnd(EnMa4* this, GlobalContext* globalCtx) {
     static s32 sFrameCounter = 0;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (player->stateFlags1 & 0x100000) {
         globalCtx->actorCtx.unk268 = 1;
@@ -843,12 +843,11 @@ void EnMa4_EponasSongCs(EnMa4* this, GlobalContext* globalCtx) {
         }
 
         func_800EDF24(&this->actor, globalCtx, actionIndex);
-        if (D_80AC0260 == 2 && this->animTimer == 0 &&
-            func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+        if (D_80AC0260 == 2 && this->animTimer == 0 && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             EnMa4_ChangeAnim(this, 7);
         }
     } else {
-        Player* player = PLAYER;
+        Player* player = GET_PLAYER(globalCtx);
 
         player->stateFlags1 |= 0x20;
         func_800B85E0(&this->actor, globalCtx, 200.0f, -1);
@@ -863,7 +862,7 @@ void EnMa4_SetupEndEponasSongCs(EnMa4* this) {
 }
 
 void EnMa4_EndEponasSongCs(EnMa4* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     this->actor.flags |= 0x10000;
     if (func_800B84D0(&this->actor, globalCtx) != 0) {
@@ -1042,7 +1041,7 @@ void EnMa4_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     EnMa4_UpdateEyes(this);
     this->actionFunc(this, globalCtx);
     func_80ABDD9C(this, globalCtx);
@@ -1071,7 +1070,7 @@ void EnMa4_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     Vec3f sp28 = { 800.0f, 0.0f, 0.0f };
 
     if (limbIndex == MA1_LIMB_HEAD) {
-        SysMatrix_MultiplyVector3fByState(&sp28, &this->actor.focus.pos);
+        Matrix_MultiplyVector3fByState(&sp28, &this->actor.focus.pos);
     } else if (limbIndex == MA1_LIMB_HAND_LEFT) {
         if (this->hasBow == true) {
             OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -1095,8 +1094,8 @@ void EnMa4_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEyeTextures[this->eyeTexIndex]));
     gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(sMouthTextures[this->mouthTexIndex]));
 
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                     EnMa4_OverrideLimbDraw, EnMa4_PostLimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnMa4_OverrideLimbDraw, EnMa4_PostLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

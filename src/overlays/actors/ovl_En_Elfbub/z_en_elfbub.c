@@ -153,12 +153,12 @@ void EnElfbub_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
     func_8012C2DC(globalCtx->state.gfxCtx);
 
-    SysMatrix_InsertTranslation(0.0f, 0.0f, 1.0f, 1);
-    SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
+    Matrix_InsertTranslation(0.0f, 0.0f, 1.0f, 1);
+    Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
     Matrix_Scale(this->xyScale + 1.0f, this->xyScale + 1.0f, 1.0f, 1);
-    SysMatrix_InsertZRotation_s(this->zRot, 1);
+    Matrix_InsertZRotation_s(this->zRot, 1);
     Matrix_Scale(this->xScale + 1.0f, 1.0f, 1.0f, 1);
-    SysMatrix_InsertZRotation_s(this->zRot * -1, 1);
+    Matrix_InsertZRotation_s(this->zRot * -1, 1);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, D_06001000);

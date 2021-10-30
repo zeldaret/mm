@@ -16,9 +16,8 @@ void SetRoomList::ParseRawData()
 	int numRooms = cmdArg1;
 
 	romfile = new RomFile(parent);
-	romfile->SetRawDataIndex(segmentOffset);
 	romfile->numRooms = numRooms;
-	romfile->ParseRawData();
+	romfile->ExtractFromFile(segmentOffset);
 
 	parent->resources.push_back(romfile);
 
@@ -34,8 +33,9 @@ void SetRoomList::DeclareReferences(const std::string& prefix)
 
 std::string SetRoomList::GetBodySourceCode() const
 {
-	std::string listName = parent->GetDeclarationPtrName(cmdArg2);
-	return StringHelper::Sprintf("SCENE_CMD_ROOM_LIST(%i, %s)", romfile->numRooms,
+	std::string listName;
+	Globals::Instance->GetSegmentedPtrName(cmdArg2, parent, "RomFile", listName);
+	return StringHelper::Sprintf("SCENE_CMD_ROOM_LIST(%i, %s)", romfile->rooms.size(),
 	                             listName.c_str());
 }
 
@@ -78,20 +78,20 @@ void RomFile::ParseRawData()
 	}
 }
 
-void RomFile::DeclareVar(const std::string& prefix, const std::string body)
+Declaration* RomFile::DeclareVar(const std::string& prefix, const std::string& body)
 {
 	std::string auxName = name;
 	if (name == "")
 		auxName = StringHelper::Sprintf("%sRoomList0x%06X", prefix.c_str(), rawDataIndex);
 
-	parent->AddDeclarationArray(rawDataIndex, DeclarationAlignment::Align4,
-	                            rooms.size() * rooms.at(0).GetRawDataSize(), GetSourceTypeName(),
-	                            auxName, 0, body);
+	return parent->AddDeclarationArray(rawDataIndex, DeclarationAlignment::Align4,
+	                                   rooms.size() * rooms.at(0).GetRawDataSize(),
+	                                   GetSourceTypeName(), auxName, rooms.size(), body);
 }
 
 std::string RomFile::GetBodySourceCode() const
 {
-	std::string declaration = "";
+	std::string declaration;
 	bool isFirst = true;
 
 	for (ZFile* file : Globals::Instance->files)

@@ -287,12 +287,10 @@ void func_80A425E4(EnTest4* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
-// 1 instruction in the wrong place
 void EnTest4_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 dayTemp;
     EnTest4* this = THIS;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s8 temp_v0 = this->actor.cutscene;
 
     sCutscenes[0] = temp_v0;
@@ -317,11 +315,12 @@ void EnTest4_Init(Actor* thisx, GlobalContext* globalCtx) {
             if (gSaveContext.save.time < CLOCK_TIME(6, 1)) {
                 gSaveContext.save.time = CLOCK_TIME(6, 0);
                 gSaveContext.gameMode = 0;
-                do {
+                {
                     GameState* state = &globalCtx->state;
                     state->running = false;
-                } while (0);
+                }
                 SET_NEXT_GAMESTATE(&globalCtx->state, Daytelop_Init, DaytelopContext);
+                if (this && this && this) {}
                 this->unk_144 = 1;
                 gSaveContext.save.time = CLOCK_TIME(6, 0);
                 Actor_MarkForDeath(&this->actor);
@@ -363,15 +362,12 @@ void EnTest4_Init(Actor* thisx, GlobalContext* globalCtx) {
         gSaveContext.screenScale = 1000.0f;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test4/EnTest4_Init.s")
-#endif
 
 void EnTest4_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((globalCtx->unk_18B4A == 0) && (func_801690CC(globalCtx) == 0) && (globalCtx->numSetupActors <= 0) &&
         (globalCtx->roomCtx.unk31 == 0) && (func_8016A168() == 0)) {
@@ -496,7 +492,7 @@ void func_80A42F20(EnTest4* this, GlobalContext* globalCtx) {
             }
         }
         if (this->transitionCsTimer == 60) {
-            Player* player = PLAYER;
+            Player* player = GET_PLAYER(globalCtx);
 
             gSaveContext.save.time += CLOCK_TIME_MINUTE;
             this->unk_146 = gSaveContext.save.time;
@@ -568,7 +564,7 @@ void func_80A4323C(EnTest4* this, GlobalContext* globalCtx) {
 
 void EnTest4_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnTest4* this = THIS;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (!(player->stateFlags1 & 2)) {
         this->actionFunc(this, globalCtx);

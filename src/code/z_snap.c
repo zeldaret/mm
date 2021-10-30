@@ -119,7 +119,7 @@ s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, 
     s32 ret = 0;
     u32 unk2;
 
-    camera = ACTIVE_CAM;
+    camera = GET_ACTIVE_CAM(globalCtx);
 
     distance = OLib_Vec3fDist(pos, &camera->eye);
     if ((distance < distanceMin) || (distanceMax < distance)) {
@@ -148,7 +148,7 @@ s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, 
     }
 
     actors[0] = actor;
-    actors[1] = &PLAYER->actor;
+    actors[1] = &GET_PLAYER(globalCtx)->actor;
     if (CollisionCheck_LineOCCheck(globalCtx, &globalCtx->colChkCtx, pos, &camera->eye, actors, 2) != 0) {
         func_8013A41C(0x3b);
         ret |= 0x3b;

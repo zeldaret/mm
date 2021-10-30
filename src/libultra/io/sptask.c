@@ -13,12 +13,12 @@ OSTask* _VirtualToPhysicalTask(OSTask* intp) {
     bcopy(intp, tp, sizeof(OSTask));
 
     _osVirtualToPhysical(tp->t.ucode);
-    _osVirtualToPhysical(tp->t.ucode_data);
-    _osVirtualToPhysical(tp->t.dram_stack);
-    _osVirtualToPhysical(tp->t.output_buff);
-    _osVirtualToPhysical(tp->t.output_buff_size);
-    _osVirtualToPhysical(tp->t.data_ptr);
-    _osVirtualToPhysical(tp->t.yield_data_ptr);
+    _osVirtualToPhysical(tp->t.ucodeData);
+    _osVirtualToPhysical(tp->t.dramStack);
+    _osVirtualToPhysical(tp->t.outputBuff);
+    _osVirtualToPhysical(tp->t.outputBuffSize);
+    _osVirtualToPhysical(tp->t.dataPtr);
+    _osVirtualToPhysical(tp->t.yieldDataPtr);
 
     return tp;
 }
@@ -27,12 +27,12 @@ void osSpTaskLoad(OSTask* intp) {
     OSTask* tp = _VirtualToPhysicalTask(intp);
 
     if (tp->t.flags & OS_TASK_YIELDED) {
-        tp->t.ucode_data = tp->t.yield_data_ptr;
-        tp->t.ucode_data_size = tp->t.yield_data_size;
+        tp->t.ucodeData = tp->t.yieldDataPtr;
+        tp->t.ucodeDataSize = tp->t.yieldDataSize;
         intp->t.flags &= ~OS_TASK_YIELDED;
 
         if (tp->t.flags & OS_TASK_LOADABLE) {
-            tp->t.ucode = HW_REG((u32)intp->t.yield_data_ptr + OS_YIELD_DATA_SIZE - 4, u32);
+            tp->t.ucode = HW_REG((u32)intp->t.yieldDataPtr + OS_YIELD_DATA_SIZE - 4, u32);
         }
     }
     osWritebackDCache(tp, sizeof(OSTask));
@@ -47,7 +47,7 @@ void osSpTaskLoad(OSTask* intp) {
     while (__osSpDeviceBusy()) {
         ;
     }
-    while (__osSpRawStartDma(1, (void*)SP_IMEM_START, tp->t.ucode_boot, tp->t.ucode_boot_size) == -1) {
+    while (__osSpRawStartDma(1, (void*)SP_IMEM_START, tp->t.ucodeBoot, tp->t.ucodeBootSize) == -1) {
         ;
     }
 }

@@ -72,7 +72,7 @@ void func_80B3C2C4(ObjGhaka* this, GlobalContext* globalCtx) {
 }
 
 void func_80B3C39C(ObjGhaka* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 distDiff = this->dyna.actor.yawTowardsPlayer - this->dyna.actor.shape.rot.y;
 
     if (func_800B84D0(&this->dyna.actor, globalCtx)) {
@@ -129,7 +129,7 @@ void func_80B3C4E0(ObjGhaka* this, GlobalContext* globalCtx) {
 }
 
 void func_80B3C624(ObjGhaka* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     u8 stepTemp = Math_StepToS(&this->unk_168, 0x64, 1);
 
     this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + this->unk_168;

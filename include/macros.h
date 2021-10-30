@@ -17,8 +17,7 @@
 #define VIRTUAL_TO_PHYSICAL(addr) (uintptr_t)((u8*)(addr)-0x80000000)
 #define SEGMENTED_TO_VIRTUAL(addr) (void*)(PHYSICAL_TO_VIRTUAL(gSegments[SEGMENT_NUMBER(addr)]) + SEGMENT_OFFSET(addr))
 
-// Currently most often called ctxt in MM, TODO: Refactor names when its used
-#define ACTIVE_CAM globalCtx->cameraPtrs[globalCtx->activeCamera]
+#define GET_ACTIVE_CAM(globalCtx) ((globalCtx)->cameraPtrs[(globalCtx)->activeCamera])
 #define MAIN_CAM 0
 #define SUBCAM_FREE 0
 
@@ -37,9 +36,9 @@
     }                                      \
     (void)0
 
-#define PLAYER ((Player*)globalCtx->actorCtx.actorList[ACTORCAT_PLAYER].first)
+#define GET_PLAYER(globalCtx) ((Player*)(globalCtx)->actorCtx.actorList[ACTORCAT_PLAYER].first)
 
-#define FIRST_ENEMY ((Actor*)globalCtx->actorCtx.actorList[ACTORCAT_ENEMY].first)
+#define GET_FIRST_ENEMY(globalCtx) ((Actor*)(globalCtx)->actorCtx.actorList[ACTORCAT_ENEMY].first)
 
 // linkAge still exists in MM, but is always set to 0 (always adult)
 // There are remnants of these macros from OOT, but they are essentially useless
@@ -62,11 +61,13 @@
 #define CUR_UPG_VALUE_VOID(upg) \
     ((((void)0, gSaveContext.save.inventory.upgrades) & gUpgradeMasks[upg]) >> gUpgradeShifts[upg])
 
+#define CUR_FORM ((gSaveContext.playerForm == PLAYER_FORM_HUMAN) ? 0 : gSaveContext.playerForm)
+
 #define ALL_EQUIP_VALUE(equip) ((gSaveContext.save.inventory.equipment & gEquipMasks[equip]) >> gEquipShifts[equip])
 #define CUR_EQUIP_VALUE(equip) ((gSaveContext.save.equips.equipment & gEquipMasks[equip]) >> gEquipShifts[equip])
 #define CUR_UPG_VALUE(upg) ((gSaveContext.save.inventory.upgrades & gUpgradeMasks[upg]) >> gUpgradeShifts[upg])
 #define TAKE_EQUIPPED_ITEM(equip) (gSaveContext.save.equips.equipment = ((((void)0, gSaveContext.save.equips.equipment) & (gEquipNegMasks[equip])) | (u16)(0 << gEquipShifts[equip])))
-#define CUR_FORM_EQUIP(button) (gSaveContext.save.equips.buttonItems[gSaveContext.save.playerForm == PLAYER_FORM_HUMAN ? 0 : gSaveContext.save.playerForm][button])
+#define CUR_FORM_EQUIP(button) (gSaveContext.save.equips.buttonItems[CUR_FORM][button])
 #define CHECK_QUEST_ITEM(item) (((void)0, gSaveContext.save.inventory.questItems) & gBitFlags[item])
 #define REMOVE_QUEST_ITEM(item) (gSaveContext.save.inventory.questItems = (((void)0, gSaveContext.save.inventory.questItems) & (-1 - gBitFlags[item])))
 
@@ -87,6 +88,7 @@ extern GraphicsContext* __gfxCtx;
 #define POLY_OPA_DISP __gfxCtx->polyOpa.p
 #define POLY_XLU_DISP __gfxCtx->polyXlu.p
 #define OVERLAY_DISP __gfxCtx->overlay.p
+#define DEBUG_DISP __gfxCtx->debug.p
 
 // __gfxCtx shouldn't be used directly.
 // Use the DISP macros defined above when writing to display buffers.
@@ -120,6 +122,7 @@ extern GraphicsContext* __gfxCtx;
 
 #define ALIGN8(val) (((val) + 7) & ~7)
 #define ALIGN16(val) (((val) + 0xF) & ~0xF)
+#define ALIGN64(val) (((val) + 0x3F) & ~0x3F)
 
 #define SQ(x) ((x) * (x))
 #define ABS(x) ((x) >= 0 ? (x) : -(x))

@@ -403,7 +403,7 @@ void func_800A6780(EnItem00* this, GlobalContext* globalCtx) {
 }
 
 void func_800A6A40(EnItem00* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->unk14A != 0) {
         if (Actor_HasParent(&this->actor, globalCtx) == 0) {
@@ -439,7 +439,7 @@ void func_800A6A40(EnItem00* this, GlobalContext* globalCtx) {
 void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnItem00* this = THIS;
     s32 pad;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 sp38 = player->stateFlags3 & 0x1000;
     s32 getItemId = GI_NONE;
     s32 pad2;
@@ -660,7 +660,7 @@ void EnItem00_Draw(Actor* thisx, GlobalContext* globalCtx) {
                             this->unk152 = -2;
                         }
                     } else {
-                        Matrix_Scale(16.0f, 16.0f, 16.0f, 1);
+                        Matrix_Scale(16.0f, 16.0f, 16.0f, MTXMODE_APPLY);
                         GetItem_Draw(globalCtx, 8);
                     }
                     break;
@@ -785,7 +785,7 @@ void EnItem00_DrawHeartContainer(EnItem00* actor, GlobalContext* globalCtx) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         func_8012C2DC(globalCtx->state.gfxCtx);
-        Matrix_Scale(20.0f, 20.0f, 20.0f, 1);
+        Matrix_Scale(20.0f, 20.0f, 20.0f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
 

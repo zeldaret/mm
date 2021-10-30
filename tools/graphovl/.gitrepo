@@ -6,7 +6,7 @@
 [subrepo]
 	remote = https://github.com/AngheloAlf/graphovl.git
 	branch = master
-	commit = eb25be944156ec859853f0aa28aea66c98b1ca99
-	parent = ad3db144b2cdd212f61fac695e05dc06b9569699
+	commit = f5fe93d75bb75ea4bea65f62c43f41f6a1e70679
+	parent = 6c5a50ef95f351acc7c4c0455a347a94443adbe1
 	method = merge
 	cmdver = 0.4.3

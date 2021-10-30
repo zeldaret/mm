@@ -112,12 +112,12 @@ void EnTrt_ChangeAnim(SkelAnime* skelAnime, ActorAnimationEntryS* animations, s3
 
     animations += idx;
     if (animations->frameCount < 0) {
-        frameCount = SkelAnime_GetFrameCount(&animations->animationSeg->common);
+        frameCount = Animation_GetLastFrame(animations->animationSeg);
     } else {
         frameCount = animations->frameCount;
     }
-    SkelAnime_ChangeAnim(skelAnime, animations->animationSeg, animations->playbackSpeed, animations->frame, frameCount,
-                         animations->mode, animations->transitionRate);
+    Animation_Change(skelAnime, animations->animationSeg, animations->playbackSpeed, animations->frame, frameCount,
+                     animations->mode, animations->transitionRate);
 }
 
 s32 EnTrt_TestItemSelected(GlobalContext* globalCtx) {
@@ -207,7 +207,7 @@ u16 EnTrt_GetItemChoiceTextId(EnTrt* this) {
 }
 
 void EnTrt_EndInteraction(GlobalContext* globalCtx, EnTrt* this) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
         ActorCutscene_Stop(this->cutscene);
@@ -332,7 +332,7 @@ void EnTrt_Hello(EnTrt* this, GlobalContext* globalCtx) {
 
 void EnTrt_GetMushroom(EnTrt* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     this->tmpGetMushroomCutscene = this->getMushroomCutscene;
     if (this->cutsceneState != ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
@@ -346,7 +346,7 @@ void EnTrt_GetMushroom(EnTrt* this, GlobalContext* globalCtx) {
                 this->textId = 0x884;
                 func_801518B0(globalCtx, this->textId, &this->actor);
                 gSaveContext.save.weekEventReg[0x35] |= 8;
-                func_80123D50(globalCtx, PLAYER, 18, 21);
+                func_80123D50(globalCtx, GET_PLAYER(globalCtx), 18, 21);
                 break;
             case 0x888:
                 this->textId = 0x889;
@@ -372,7 +372,7 @@ void EnTrt_GetMushroom(EnTrt* this, GlobalContext* globalCtx) {
 void EnTrt_PayForMushroom(EnTrt* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
-        func_80123D50(globalCtx, PLAYER, 18, 21);
+        func_80123D50(globalCtx, GET_PLAYER(globalCtx), 18, 21);
         this->actionFunc = EnTrt_SetupItemGiven;
     } else {
         func_800B8A1C(&this->actor, globalCtx, GI_RUPEE_RED, 300.0f, 300.0f);
@@ -439,7 +439,7 @@ void EnTrt_SetupTryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_GiveRedPotionForKoume(EnTrt* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
@@ -644,7 +644,7 @@ void EnTrt_BrowseShelf(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_SetupBuyItemWithFanfare(GlobalContext* globalCtx, EnTrt* this) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     func_800B8A1C(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
     globalCtx->msgCtx.unk11F22 = 0x43;
@@ -749,7 +749,7 @@ void EnTrt_SelectItem(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_IdleSleeping(EnTrt* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((gSaveContext.save.weekEventReg[0x55] & 8) && !(gSaveContext.save.weekEventReg[0x54] & 0x40)) {
         this->textId = 0x88F;
@@ -806,7 +806,7 @@ void EnTrt_IdleSleeping(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_IdleAwake(EnTrt* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     this->flags &= ~ENTRT_FULLY_AWAKE;
     if (player->transformation == PLAYER_FORM_HUMAN || player->transformation == PLAYER_FORM_FIERCE_DEITY) {
@@ -851,8 +851,8 @@ void EnTrt_IdleAwake(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_BeginInteraction(EnTrt* this, GlobalContext* globalCtx) {
-    s16 animCurrentFrame = this->skelAnime.animCurrentFrame / this->skelAnime.animPlaybackSpeed;
-    s16 animLastFrame = SkelAnime_GetFrameCount(&D_060030EC.common) / (s16)this->skelAnime.animPlaybackSpeed;
+    s16 curFrame = this->skelAnime.curFrame / this->skelAnime.playSpeed;
+    s16 animLastFrame = Animation_GetLastFrame(&D_060030EC) / (s16)this->skelAnime.playSpeed;
 
     if (this->cutsceneState == ENTRT_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
@@ -863,7 +863,7 @@ void EnTrt_BeginInteraction(EnTrt* this, GlobalContext* globalCtx) {
         }
     } else if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
         if (this->animationIdx != 5) {
-            if (animCurrentFrame == animLastFrame) {
+            if (curFrame == animLastFrame) {
                 EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 3);
                 this->animationIdx = 3;
                 this->blinkFunc = EnTrt_OpenEyesThenSetToBlink;
@@ -983,7 +983,7 @@ void EnTrt_TryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_ItemGiven(EnTrt* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->cutsceneState == ENTRT_CUTSCENESTATE_STOPPED) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
@@ -1032,7 +1032,7 @@ void EnTrt_SetupEndInteraction(EnTrt* this, GlobalContext* globalCtx) {
 
 void EnTrt_ShopkeeperGone(EnTrt* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (func_800B84D0(&this->actor, globalCtx)) {
         func_801518B0(globalCtx, this->textId, &this->actor);
@@ -1099,7 +1099,7 @@ void EnTrt_SetupItemGiven(EnTrt* this, GlobalContext* globalCtx) {
 
 void EnTrt_ContinueShopping(EnTrt* this, GlobalContext* globalCtx) {
     u8 talkState = func_80152498(&globalCtx->msgCtx);
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     EnGirlA* item;
 
     if (talkState == 4) {
@@ -1341,11 +1341,11 @@ void EnTrt_NodOff(EnTrt* this) {
 }
 
 void EnTrt_OpenThenCloseEyes(EnTrt* this) {
-    if (this->skelAnime.animCurrentFrame >= 40.0f) {
+    if (this->skelAnime.curFrame >= 40.0f) {
         EnTrt_CloseEyes(this);
-    } else if (this->skelAnime.animCurrentFrame >= 35.0f) {
+    } else if (this->skelAnime.curFrame >= 35.0f) {
         this->eyeTextureIdx = 1;
-    } else if (this->skelAnime.animCurrentFrame >= 10.0f) {
+    } else if (this->skelAnime.curFrame >= 10.0f) {
         EnTrt_OpenEyes(this);
     }
 }
@@ -1359,7 +1359,7 @@ void EnTrt_OpenEyes2(EnTrt* this) {
 }
 
 void EnTrt_OpenEyesThenSetToBlink(EnTrt* this) {
-    if (this->skelAnime.animCurrentFrame >= 7.0f) {
+    if (this->skelAnime.curFrame >= 7.0f) {
         EnTrt_OpenEyes(this);
         if (this->eyeTextureIdx == 0) {
             this->blinkFunc = EnTrt_Blink;
@@ -1369,7 +1369,7 @@ void EnTrt_OpenEyesThenSetToBlink(EnTrt* this) {
 
 void EnTrt_TalkToShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
     u8 talkState = talkState = func_80152498(&globalCtx->msgCtx);
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 itemGiven;
 
     if (talkState == 5) {
@@ -1452,7 +1452,7 @@ void EnTrt_LookToShopkeeperFromShelf(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_InitShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600FEF0, &D_0600FD34, NULL, NULL, 0);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600FEF0, &D_0600FD34, NULL, NULL, 0);
     if (!(gSaveContext.save.weekEventReg[0xC] & 8) && !(gSaveContext.save.weekEventReg[0x54] & 0x40) &&
         gSaveContext.save.day >= 2) {
         this->actor.draw = NULL;
@@ -1693,12 +1693,12 @@ void EnTrt_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnTrt_UpdateHeadYawAndPitch(this, globalCtx);
     this->actionFunc(this, globalCtx);
     Actor_SetHeight(&this->actor, 90.0f);
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     EnTrt_UpdateCollider(this, globalCtx);
 }
 
 void EnTrt_UpdateHeadYawAndPitch(EnTrt* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     Vec3f playerPos;
     Vec3f pos;
 
@@ -1718,8 +1718,8 @@ void EnTrt_UpdateHeadPosAndRot(s16 pitch, s16 yaw, Vec3f* pos, Vec3s* rot, s32 i
     Vec3s newRot;
     MtxF currentState;
 
-    SysMatrix_MultiplyVector3fByState(&D_801D15B0tmp, &newPos);
-    SysMatrix_CopyCurrentState(&currentState);
+    Matrix_MultiplyVector3fByState(&D_801D15B0tmp, &newPos);
+    Matrix_CopyCurrentState(&currentState);
     func_8018219C(&currentState, &newRot, MTXMODE_NEW);
     *pos = newPos;
     if (isFullyAwake) {
@@ -1761,11 +1761,11 @@ void EnTrt_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     }
     if (limbIndex == 21) {
         EnTrt_UpdateHeadPosAndRot(this->headPitch, this->headYaw, &this->headPos, &this->headRot, isFullyAwake);
-        SysMatrix_InsertTranslation(this->headPos.x, this->headPos.y, this->headPos.z, MTXMODE_NEW);
+        Matrix_InsertTranslation(this->headPos.x, this->headPos.y, this->headPos.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateY(this->headRot.y, MTXMODE_APPLY);
-        SysMatrix_InsertXRotation_s(this->headRot.x, MTXMODE_APPLY);
-        SysMatrix_InsertZRotation_s(this->headRot.z, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(this->headRot.x, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(this->headRot.z, MTXMODE_APPLY);
     }
 }
 
@@ -1773,11 +1773,11 @@ void EnTrt_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnTrt* this = THIS;
 
     if (limbIndex == 21) {
-        SysMatrix_InsertTranslation(this->headPos.x, this->headPos.y, this->headPos.z, MTXMODE_NEW);
+        Matrix_InsertTranslation(this->headPos.x, this->headPos.y, this->headPos.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateY(this->headRot.y, MTXMODE_APPLY);
-        SysMatrix_InsertXRotation_s(this->headRot.x, MTXMODE_APPLY);
-        SysMatrix_InsertZRotation_s(this->headRot.z, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(this->headRot.x, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(this->headRot.z, MTXMODE_APPLY);
     }
 }
 
@@ -1791,7 +1791,7 @@ void EnTrt_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTextureIdx]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTextureIdx]));
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
+    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                   EnTrt_OverrideLimbDraw, EnTrt_PostLimbDraw, EnTrt_UnkActorDraw, &this->actor);
     EnTrt_DrawCursor(globalCtx, this, this->cursorPos.x, this->cursorPos.y, this->cursorPos.z, this->drawCursor);
     EnTrt_DrawStickDirectionPrompt(globalCtx, this);
