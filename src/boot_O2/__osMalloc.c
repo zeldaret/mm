@@ -217,7 +217,52 @@ end:
     ArenaImpl_Unlock(arena);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/__osMalloc/__osRealloc.s")
+void* __osRealloc(Arena* heap, void* oldPtr, size_t newSize) {
+    u32 temp_t0;
+    void* sp30;
+    ArenaNode* sp20;
+    ArenaNode* temp_a0;
+    ArenaNode* temp_a1;
+
+    ArenaImpl_Lock(heap);
+    if (oldPtr == 0) {
+        oldPtr = __osMalloc(heap, newSize);
+    } else if (newSize == 0) {
+        __osFree(heap, oldPtr);
+        oldPtr = NULL;
+    } else {
+        sp20 = (uintptr_t)oldPtr - 0x10;
+        newSize = ALIGN16(newSize);
+        if ((newSize != sp20->size) && (sp20->size < newSize)) {
+            temp_a1 = sp20->next;
+            temp_t0 = newSize - sp20->size;
+            if (((uintptr_t)temp_a1 == ((uintptr_t)sp20 + sp20->size + 0x10)) && (temp_a1->isFree != 0) && (((temp_a1->size >= temp_t0)))) {
+                temp_a0 = temp_a1->next;
+                temp_a1->size = (u32) (temp_a1->size - temp_t0);
+                if (temp_a0 != 0) {
+                    temp_a0->prev = (void* ) ((uintptr_t)temp_a1 + temp_t0);
+                }
+
+                temp_a0 = (uintptr_t)temp_a1 + temp_t0;
+                sp20->next = temp_a0;
+                sp20->size = newSize;
+                __osMemcpy(temp_a0, temp_a1, 0x10U);
+            } else {
+                sp30 = __osMalloc(heap, newSize);
+                if (sp30 != 0) {
+                    bcopy(sp30, oldPtr, sp20->size);
+                    __osFree(heap, oldPtr);
+                }
+                oldPtr = sp30;
+            }
+        }
+    }
+
+    ArenaImpl_Unlock(heap);
+
+    return oldPtr;
+}
+
 
 void __osAnalyzeArena(Arena* arena, size_t* outMaxFree, size_t* outFree, size_t* outAlloc) {
     ArenaNode* iter;
