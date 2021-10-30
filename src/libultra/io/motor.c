@@ -1,5 +1,7 @@
 #include "ultra64/motor.h"
 
+#include "io/controller.h"
+
 #include "ultra64.h"
 #include "global.h"
 
