@@ -3,13 +3,6 @@
 
 #include "z64.h"
 
-float fabsf(float f);
-#pragma intrinsic(fabsf)
-float sqrtf(float f);
-#pragma intrinsic(sqrtf)
-double sqrt(double d);
-#pragma intrinsic(sqrt)
-
 void bootproc(void);
 void Idle_ThreadEntry(void* arg);
 void ViConfig_UpdateVi(u32 arg0);
