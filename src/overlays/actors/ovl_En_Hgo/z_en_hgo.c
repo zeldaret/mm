@@ -25,7 +25,7 @@ void func_80BD0660(EnHgo* this, GlobalContext* globalCtx);
 void func_80BD06FC(EnHgo* this, GlobalContext* globalCtx);
 s32 func_80BD0898(EnHgo* this, GlobalContext* globalCtx);
 s32 EnHgo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-void EnHgo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Actor* thisx);
+void EnHgo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* pos, Actor* thisx);
 
 extern FlexSkeletonHeader D_06012A58;
 extern AnimationHeader D_0600B644;
@@ -371,10 +371,10 @@ s32 EnHgo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     return false;
 }
 
-void EnHgo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Actor* thisx) {
+void EnHgo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* pos, Actor* thisx) {
     EnHgo* this = THIS;
 
-    if (limbIndex == 11) {
+    if (limbIndex == HGO_LIMB_PELVIS) {
         Matrix_CopyCurrentState(&this->unk_1D8);
         Matrix_GetStateTranslation(&this->actor.focus.pos);
     }
@@ -386,8 +386,8 @@ void EnHgo_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80BD0F80[this->unk_30C]));
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          EnHgo_OverrideLimbDraw, EnHgo_PostLimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                          this->skelAnime.dListCount, EnHgo_OverrideLimbDraw, &EnHgo_PostLimbDraw, &this->actor);
     Matrix_SetCurrentState(&this->unk_1D8);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_0600F248);
