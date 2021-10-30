@@ -47,7 +47,6 @@ beginseg
     include "build/src/boot_O2/system_malloc.o"
     include "build/src/boot_O2/rand.o"
     include "build/src/boot_O2/__osMalloc.o"
-    include "build/data/boot/__osMalloc.bss.o"
     include "build/src/libultra/rmon/sprintf.o"
     include "build/src/boot_O2/printutils.o"
     include "build/src/boot_O2/sleep.o"
