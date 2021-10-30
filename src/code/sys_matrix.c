@@ -87,11 +87,3 @@ void Matrix_StatePop(void) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/Matrix_InsertRotationAroundUnitVector_f.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/Matrix_InsertRotationAroundUnitVector_s.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/func_80182C90.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/func_80182CA0.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/func_80182CBC.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/func_80182CCC.s")

@@ -2,8 +2,11 @@
 
 import argparse, os
 
+# There are a few commented out entries that would produce unexpected renames.
+# They are left as a comment so people can just grab them.
+
 # "old": "new"
-animdict ={
+animdict = {
     "Actor_GetSwitchFlag": "Flags_GetSwitch",
     "atan_flip": "Math_Acot2F",
     "atans": "Math_Atan2S",
@@ -54,25 +57,25 @@ animdict ={
     "ShrinkWindow_Step": "ShrinkWindow_Update",
     "ShrinkWindow_Fini": "ShrinkWindow_Destroy",
     "func_801A89A8": "Audio_QueueSeqCmd",
-    "SkelAnime_LodDrawLimb": "SkelAnime_DrawLimbLod",
-    "SkelAnime_LodDraw": "SkelAnime_DrawLod",
-    "SkelAnime_LodDrawLimbSV": "SkelAnime_DrawFlexLimbLod",
-    "SkelAnime_LodDrawSV": "SkelAnime_DrawFlexLod",
-    "SkelAnime_DrawLimb": "SkelAnime_DrawLimbOpa",
-    "SkelAnime_Draw": "SkelAnime_DrawOpa",
-    "SkelAnime_DrawLimbSV": "SkelAnime_DrawFlexLimbOpa",
-    "SkelAnime_DrawSV": "SkelAnime_DrawFlexOpa",
-    "SkelAnime_AnimateFrame": "SkelAnime_GetFrameData",
-    "SkelAnime_GetTotalFrames": "Animation_GetLength",
-    "SkelAnime_GetFrameCount": "Animation_GetLastFrame",
-    "SkelAnime_Draw2Limb": "SkelAnime_DrawLimb",
-    "SkelAnime_Draw2": "SkelAnime_Draw",
-    "SkelAnime_DrawLimbSV2": "SkelAnime_DrawFlexLimb",
-    "SkelAnime_DrawSV2": "SkelAnime_DrawFlex",
+    "SkelAnime_LodDrawLimb(": "SkelAnime_DrawLimbLod(",
+    "SkelAnime_LodDraw(": "SkelAnime_DrawLod(",
+    "SkelAnime_LodDrawLimbSV(": "SkelAnime_DrawFlexLimbLod(",
+    "SkelAnime_LodDrawSV(": "SkelAnime_DrawFlexLod(",
+    #"SkelAnime_DrawLimb(": "SkelAnime_DrawLimbOpa(",
+    #"SkelAnime_Draw(": "SkelAnime_DrawOpa(",
+    "SkelAnime_DrawLimbSV(": "SkelAnime_DrawFlexLimbOpa(",
+    "SkelAnime_DrawSV(": "SkelAnime_DrawFlexOpa(",
+    #"SkelAnime_AnimateFrame(": "SkelAnime_GetFrameData(",
+    "SkelAnime_GetTotalFrames(": "Animation_GetLength(",
+    "SkelAnime_GetFrameCount(": "Animation_GetLastFrame(",
+    "SkelAnime_Draw2Limb(": "SkelAnime_DrawLimb(",
+    "SkelAnime_Draw2(": "SkelAnime_Draw(",
+    "SkelAnime_DrawLimbSV2(": "SkelAnime_DrawFlexLimb(",
+    "SkelAnime_DrawSV2(": "SkelAnime_DrawFlex(",
     "func_80134FFC": "SkelAnime_GetFrameData2",
     "func_801353D4": "Animation_GetLimbCount2",
-    "SkelAnime_GetTotalFrames2": "Animation_GetLength2",
-    "SkelAnime_GetFrameCount2": "Animation_GetLastFrame2",
+    "SkelAnime_GetTotalFrames2(": "Animation_GetLength2(",
+    "SkelAnime_GetFrameCount2(": "Animation_GetLastFrame2(",
     "SkelAnime_InterpolateVec3s": "SkelAnime_InterpFrameTable",
     "SkelAnime_AnimationCtxReset": "AnimationContext_Reset",
     "func_801358D4": "AnimationContext_SetNextQueue",
@@ -91,7 +94,7 @@ animdict ={
     "SkelAnime_AnimationType4Loaded": "AnimationContext_CopyFalse",
     "SkelAnime_AnimationType5Loaded": "AnimationContext_MoveActor",
     "func_80135EE8": "AnimationContext_Update",
-    "SkelAnime_InitLinkAnimetion": "SkelAnime_InitLink",
+    "SkelAnime_InitLinkAnimetion(": "SkelAnime_InitLink(",
     "func_801360A8": "LinkAnimation_SetUpdateFunction",
     "func_801360E0": "LinkAnimation_Update",
     "func_80136104": "LinkAnimation_Morph",
@@ -124,7 +127,7 @@ animdict ={
     "func_801370B0": "SkelAnime_LoopPartial",
     "func_8013713C": "SkelAnime_Once",
     "SkelAnime_ChangeAnimImpl": "Animation_ChangeImpl",
-    "SkelAnime_ChangeAnim": "Animation_Change",
+    "SkelAnime_ChangeAnim(": "Animation_Change(",
     "SkelAnime_ChangeAnimDefaultStop": "Animation_PlayOnce",
     "SkelAnime_ChangeAnimTransitionStop": "Animation_MorphToPlayOnce",
     "SkelAnime_ChangeAnimPlaybackStop": "Animation_PlayOnceSetSpeed",
@@ -138,10 +141,39 @@ animdict ={
     "func_80137748": "SkelAnime_UpdateTranslation",
     "func_801378B8": "Animation_OnFrame",
     "SkelAnime_CopyVec3s": "SkelAnime_CopyFrameTable",
+    "SysMatrix_StatePop": "Matrix_StatePop",
+    "SysMatrix_GetCurrentState": "Matrix_GetCurrentState",
+    "zelda_malloc(": "ZeldaArena_Malloc(",
+    "zelda_mallocR(": "ZeldaArena_MallocR(",
+    "zelda_realloc": "ZeldaArena_Realloc",
+    "zelda_free": "ZeldaArena_Free",
+    "zelda_calloc": "ZeldaArena_Calloc",
+    "MainHeap_AnalyzeArena": "ZeldaArena_GetSizes",
+    "MainHeap_Check": "ZeldaArena_Check",
+    "MainHeap_Init": "ZeldaArena_Init",
+    "MainHeap_Cleanup": "ZeldaArena_Cleanup",
+    "MainHeap_IsInitialized": "ZeldaArena_IsInitialized",
+
+    "skelanime.unk03": "skelanime.taper",
+    "skelanime.animCurrentSeg": "skelanime.animation",
+    "skelanime.initialFrame": "skelanime.startFrame",
+    "skelanime.animFrameCount": "skelanime.endFrame",
+    "skelanime.totalFrames": "skelanime.animLength",
+    "skelanime.animCurrentFrame": "skelanime.curFrame",
+    "skelanime.animPlaybackSpeed": "skelanime.playSpeed",
+    "skelanime.limbDrawTbl": "skelanime.jointTable",
+    "skelanime.transitionDrawTbl": "skelanime.morphTable",
+    "skelanime.transCurrentFrame": "skelanime.morphWeight",
+    "skelanime.transitionStep": "skelanime.morphRate",
+    "skelanime.animUpdate": "skelanime.update",
+    "skelanime.flags": "skelanime.moveFlags",
+    "skelanime.prevFrameRot": "skelanime.prevRot",
+    "skelanime.prevFramePos": "skelanime.prevTransl",
+    "skelanime.unk3E": "skelanime.baseTransl",
 }
 
 def replace_anim(file):
-    with open(file,'r',encoding = 'utf-8') as infile:
+    with open(file, 'r', encoding='utf-8') as infile:
         srcdata = infile.read()
 
     funcs = list(animdict.keys())
@@ -168,18 +200,36 @@ def replace_anim_all(repo):
             if(filename.endswith('.c')):
                 file = subdir + os.sep + filename
                 replace_anim(file)
-    for subdir, dirs, files in os.walk(repo + os.sep + 'asm' + os.sep + 'non_matchings'):
+    for subdir, dirs, files in os.walk(repo + os.sep + 'asm'):
         for filename in files:
             if(filename.endswith('.s')):
                 file = subdir + os.sep + filename
                 replace_anim(file)
+    for subdir, dirs, files in os.walk(repo + os.sep + 'tools' + os.sep + 'sizes'):
+        for filename in files:
+            if(filename.endswith('.csv')):
+                file = subdir + os.sep + filename
+                replace_anim(file)
     return 1
 
-parser = argparse.ArgumentParser(description='Update to the new animation names')
-parser.add_argument('file', help="source file to be processed. use . to process the whole repo", default = None)
+def dictSanityCheck():
+    keys = animdict.keys()
+    values = animdict.values()
+    for k in keys:
+        if k in values:
+            print(f"Key '{k}' found in values")
+            print(f"This would produce unintended renames")
+            print(f"Fix this by removing said key from the dictionary")
+            exit(-1)
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Update to the new animation names')
+    parser.add_argument('file', help="source file to be processed. use . to process the whole repo", default = None)
+
     args = parser.parse_args()
+
+    dictSanityCheck()
+
     if(args.file == '.'):
         replace_anim_all(os.curdir)
     else:
