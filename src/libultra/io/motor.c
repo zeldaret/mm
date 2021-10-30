@@ -45,10 +45,11 @@ s32 osSetRumble(OSPfs* pfs, u32 vibrate) {
 
     return ret;
 }
-void osSetUpMempakWrite(u32 channel, OSPifRam* buf) {
+
+void osSetUpMempakWrite(s32 channel, OSPifRam* buf) {
     u8* bufptr = (u8*)buf;
     __OSContRamReadFormat mempakwr;
-    u32 i;
+    s32 i;
 
     mempakwr.dummy = 0xFF;
     mempakwr.txsize = 0x23;
@@ -68,7 +69,7 @@ void osSetUpMempakWrite(u32 channel, OSPifRam* buf) {
     *bufptr = 0xFE;
 }
 
-s32 osProbeRumblePak(OSMesgQueue* ctrlrqueue, OSPfs* pfs, u32 channel) {
+s32 osProbeRumblePak(OSMesgQueue* ctrlrqueue, OSPfs* pfs, s32 channel) {
     s32 ret;
     u8 sp24[BLOCKSIZE];
 
