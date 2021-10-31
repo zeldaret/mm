@@ -7,6 +7,24 @@ struct EnTanron3;
 
 typedef void (*EnTanron3ActionFunc)(struct EnTanron3*, GlobalContext*);
 
+typedef enum {
+    /* 0 */ TIMER_PICK_DIRECTION_OR_DIE,
+    /* 1 */ TIMER_OUT_OF_WATER,
+    /* 2 */ TIMER_ATTACK_OR_WAIT,
+    /* 3 */ TIMER_MAX
+} TimerWork;
+
+typedef struct {
+    /* 0x00 */ u8 unk_00;
+    /* 0x02 */ s16 unk_02;
+    /* 0x04 */ Vec3f unk_04;
+    /* 0x10 */ Vec3f unk_10;
+    /* 0x1C */ Vec3f unk_1C;
+    /* 0x28 */ char unk_28[0xC];
+    /* 0x34 */ Vec3f unk_34;
+    /* 0x40 */ char unk_40[0x4];
+} UnkTanron3Effect;
+
 typedef struct EnTanron3 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
