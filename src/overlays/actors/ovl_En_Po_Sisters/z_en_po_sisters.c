@@ -513,8 +513,7 @@ void func_80B1B444(EnPoSisters* this, GlobalContext* globalCtx) {
     if (this->unk_18D != 0) {
         Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.parent->shape.rot.y,
                            (this->unk_18D == 2) ? 0x800 : 0x400);
-        temp_f18 = ((this->skelAnime.endFrame - this->skelAnime.curFrame) * 255.0f) /
-                   this->skelAnime.endFrame;
+        temp_f18 = ((this->skelAnime.endFrame - this->skelAnime.curFrame) * 255.0f) / this->skelAnime.endFrame;
         this->unk_229 = CLAMP(temp_f18, 0, 255);
         this->actor.world.pos.y = this->actor.parent->world.pos.y;
         func_80B1A768(this, globalCtx);
@@ -552,8 +551,7 @@ void func_80B1B628(EnPoSisters* this, GlobalContext* globalCtx) {
 }
 
 void func_80B1B70C(EnPoSisters* this) {
-    Animation_Change(&this->skelAnime, &D_0600119C, 1.5f, 0.0f, Animation_GetLastFrame(&D_0600119C.common), 2,
-                         -3.0f);
+    Animation_Change(&this->skelAnime, &D_0600119C, 1.5f, 0.0f, Animation_GetLastFrame(&D_0600119C.common), 2, -3.0f);
     this->unk_194 = 100;
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -571,15 +569,13 @@ void func_80B1B7BC(EnPoSisters* this, GlobalContext* globalCtx) {
         this->collider.info.bumper.dmgFlags = (0x40000 | 0x1);
         func_80B1AC40(this);
     } else {
-        temp_f18 = ((this->skelAnime.endFrame - this->skelAnime.curFrame) * 255.0f) /
-                   this->skelAnime.endFrame;
+        temp_f18 = ((this->skelAnime.endFrame - this->skelAnime.curFrame) * 255.0f) / this->skelAnime.endFrame;
         this->unk_229 = CLAMP(temp_f18, 0, 255);
     }
 }
 
 void func_80B1B860(EnPoSisters* this, GlobalContext* globalCtx) {
-    Animation_Change(&this->skelAnime, &D_0600119C, 1.5f, 0.0f, Animation_GetLastFrame(&D_0600119C.common), 2,
-                         -3.0f);
+    Animation_Change(&this->skelAnime, &D_0600119C, 1.5f, 0.0f, Animation_GetLastFrame(&D_0600119C.common), 2, -3.0f);
     if (this->unk_18C == 0) {
         this->unk_2EC = 110.0f;
         func_80B1A768(this, globalCtx);
@@ -1142,13 +1138,13 @@ void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPSegment(POLY_OPA_DISP++, 0x09, D_801AEFA0);
         POLY_OPA_DISP =
             SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                            EnPoSisters_OverrideLimbDraw, EnPoSisters_PostLimbDraw, &this->actor, POLY_OPA_DISP);
+                           EnPoSisters_OverrideLimbDraw, EnPoSisters_PostLimbDraw, &this->actor, POLY_OPA_DISP);
     } else {
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, this->unk_229);
         gSPSegment(POLY_XLU_DISP++, 0x09, D_801AEF88);
         POLY_XLU_DISP =
             SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                            EnPoSisters_OverrideLimbDraw, EnPoSisters_PostLimbDraw, &this->actor, POLY_XLU_DISP);
+                           EnPoSisters_OverrideLimbDraw, EnPoSisters_PostLimbDraw, &this->actor, POLY_XLU_DISP);
     }
 
     if (!(this->unk_191 & 0x80)) {
