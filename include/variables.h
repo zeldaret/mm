@@ -3250,7 +3250,6 @@ extern SaveContext gSaveContext;
 // extern UNK_TYPE1 D_801F3F4A;
 // extern UNK_TYPE1 D_801F3F5A;
 extern GameInfo* gGameInfo;
-// extern UNK_TYPE1 sDebugObjectListHead;
 // extern UNK_TYPE1 D_801F3F80;
 // extern UNK_TYPE1 D_801F3F83;
 // extern UNK_TYPE1 D_801F48C8;
