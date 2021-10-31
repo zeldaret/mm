@@ -144,7 +144,7 @@ void func_800E992C(GlobalContext* globalCtx, s32 arg1) {
     gSPMatrix(POLY_XLU_DISP++, &D_801D1DE0, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, func_800E99B0(globalCtx->state.gfxCtx, arg1));
 
-    CLOSE_DISPS();
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_debug_display/func_800E99B0.s")
