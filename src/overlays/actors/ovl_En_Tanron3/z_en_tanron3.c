@@ -22,7 +22,7 @@ void EnTanron3_Kill(EnTanron3* this, GlobalContext* globalCtx);
 
 static Vec3f D_80BB9720[] = { 0.0f, 0.0f, 0.0f };
 
-static Boss03* boss03Parent = NULL;
+static Boss03* sGyorg = NULL;
 
 const ActorInit En_Tanron3_InitVars = {
     ACTOR_EN_TANRON3,
@@ -116,11 +116,11 @@ void EnTanron3_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.flags &= ~1;
     this->currentRotationAngle = Rand_ZeroFloat(500000.0f);
     this->waterSurfaceYPos = 430.0f;
-    boss03Parent = (Boss03*)this->actor.parent;
+    sGyorg = (Boss03*)this->actor.parent;
 }
 
 void EnTanron3_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    boss03Parent->unk_252--;
+    sGyorg->unk_252--;
 }
 
 void EnTanron3_SpawnBubbles(EnTanron3* this, GlobalContext* globalCtx) {
@@ -197,7 +197,7 @@ void EnTanron3_Act(EnTanron3* this, GlobalContext* globalCtx) {
                 }
                 break;
             case true:
-                if ((boss03Parent->unk_324 != 0) && (!(this->timer & 7))) {
+                if ((sGyorg->unk_324 != 0) && (!(this->timer & 7))) {
                     this->nextRotationAngle = 0x4E20;
                     this->actor.speedXZ = 6.0f;
                 } else {
@@ -339,7 +339,7 @@ void EnTanron3_CheckCollisions(EnTanron3* this, GlobalContext* globalCtx) {
             this->deathTimer = 15;
             this->fogTimer = 15;
             EnTanron3_SetupKill(this, globalCtx);
-            boss03Parent->unk_324 = 20;
+            sGyorg->unk_324 = 20;
         }
     }
 }
@@ -379,7 +379,7 @@ void EnTanron3_Update(Actor* thisx, GlobalContext* globalCtx) {
     Collider_UpdateCylinder(&this->actor, &this->acCollider);
     CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->atCollider.base);
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->acCollider.base);
-    if ((s8)boss03Parent->actor.colChkInfo.health <= 0 && this->actionFunc != EnTanron3_Kill) {
+    if ((s8)sGyorg->actor.colChkInfo.health <= 0 && this->actionFunc != EnTanron3_Kill) {
         EnTanron3_SetupKill(this, globalCtx);
         this->workTimer[TIMER_PICK_DIRECTION_OR_DIE] = 0;
     }
