@@ -899,8 +899,8 @@ void func_80963630(EnFu* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (func_800B84D0(&this->actor, globalCtx)) {
-        if ((gSaveContext.save.weekEventReg[22] & 0x10) && (gSaveContext.save.weekEventReg[22] & 0x20) && (CURRENT_DAY == 3) &&
-            (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
+        if ((gSaveContext.save.weekEventReg[22] & 0x10) && (gSaveContext.save.weekEventReg[22] & 0x20) &&
+            (CURRENT_DAY == 3) && (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
             if (gSaveContext.save.weekEventReg[22] & 0x40) {
                 func_801518B0(globalCtx, 0x2884, &this->actor);
                 this->unk_552 = 0x2884;
