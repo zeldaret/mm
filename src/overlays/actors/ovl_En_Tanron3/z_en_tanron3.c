@@ -1,7 +1,7 @@
 /*
  * File: z_en_tanron3.c
  * Overlay: ovl_En_Tanron3
- * Description: Small Fish summoned by Gyorg
+ * Description: Small fish summoned by Gyorg
  */
 
 #include "z_en_tanron3.h"
