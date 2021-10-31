@@ -265,7 +265,7 @@ void EnTanron3_Act(EnTanron3* this, GlobalContext* globalCtx) {
                             (s16)randPlusMinusPoint5Scaled(500.0f) + this->targetShapeRotation.z + 0x8000;
                     }
                     if (Rand_ZeroOne() < 0.5f) {
-                        this->targetShapeRotation.y = (s16)Rand_ZeroFloat(65536.0f);
+                        this->targetShapeRotation.y = (s16)Rand_ZeroFloat(0x10000);
                     }
                     this->actor.world.rot.y = Math_FAtan2F(this->actor.world.pos.z, this->actor.world.pos.x) +
                                               (s16)randPlusMinusPoint5Scaled(52768.0f);
