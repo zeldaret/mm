@@ -133,7 +133,7 @@ void FireObj_UpdateStateTransitions(GlobalContext* globalCtx, FireObj* fire) {
 void FireObj_Draw(GlobalContext* globalCtx, FireObj* fire) {
     s32 pad;
     FireObjLightParams* temp_v1 = &sFireObjLightParams[fire->unk27];
-    
+
     if (fire->state != 3) {
         Vec3s vec;
         OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -165,8 +165,8 @@ void FireObj_InitLight(GlobalContext* globalCtx, FireObjLight* light, u8* param_
 
     objectParams = &sFireObjLightParams[*param_3];
 
-    Lights_PointGlowSetInfo(&light->lightInfo, pos->x, pos->y, pos->z, objectParams->r, objectParams->g, objectParams->b,
-                            objectParams->radius);
+    Lights_PointGlowSetInfo(&light->lightInfo, pos->x, pos->y, pos->z, objectParams->r, objectParams->g,
+                            objectParams->b, objectParams->radius);
     light->light = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, (LightInfo*)&light->lightInfo);
     light->unk12 = *param_3;
 }
