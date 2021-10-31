@@ -205,7 +205,7 @@ void EnTanron3_Act(EnTanron3* this, GlobalContext* globalCtx) {
                 this->targetRotationStep = 0x200;
                 this->targetSpeedXZ = 2.0f;
                 atanTemp = Math_FAtan2F(this->currentPos.z, this->currentPos.x);
-                Matrix_RotateY(atanTemp, 0);
+                Matrix_RotateY(atanTemp, MTXMODE_NEW);
                 Matrix_GetStateTranslationAndScaledZ(700.0f, &this->currentPos);
                 this->currentPos.y = 250.0f;
                 extraScaleY = 150.0f;
