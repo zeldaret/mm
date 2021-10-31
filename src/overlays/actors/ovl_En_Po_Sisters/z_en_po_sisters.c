@@ -868,7 +868,7 @@ void func_80B1C408(EnPoSisters* this, GlobalContext* globalCtx) {
                 sp3C.x = this->actor.world.pos.x;
                 sp3C.y = this->actor.world.pos.y;
                 sp3C.z = this->actor.world.pos.z;
-                Item_DropCollectible(globalCtx, &sp3C, 5);
+                Item_DropCollectible(globalCtx, &sp3C, ITEM00_ARROWS_10);
             }
         } else if (this->collider.base.colType != 9) {
             if (this->actor.colChkInfo.damageEffect == 0xF) {
@@ -940,7 +940,7 @@ void EnPoSisters_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->unk_2F0 > 0.0f) {
         Math_StepToF(&this->unk_2F0, 0.0f, 0.05f);
-        if (this->unk_229 != 0xFF) {
+        if (this->unk_229 != 255) {
             temp_f2 = this->unk_229 * (1.0f / 255);
             if (temp_f2 < this->unk_229) {
                 this->unk_2F0 = temp_f2;
@@ -1137,7 +1137,7 @@ void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
 
-    if ((this->unk_229 == 0xFF) || (this->unk_229 == 0)) {
+    if ((this->unk_229 == 255) || (this->unk_229 == 0)) {
         gDPSetEnvColor(POLY_OPA_DISP++, this->unk_226, this->unk_227, this->unk_228, this->unk_229);
         gSPSegment(POLY_OPA_DISP++, 0x09, D_801AEFA0);
         POLY_OPA_DISP =
