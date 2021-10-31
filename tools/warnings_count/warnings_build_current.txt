@@ -1,2 +1,6 @@
 cc: Warning: -mips3 should not be used for ucode 32-bit compiles
 cc: Warning: -mips3 should not be used for ucode 32-bit compiles
+[01m[Ksrc/code/z_fireobj.c:[m[K In function ‘[01m[KFireObj_UpdateStateTransitions[m[K’:
+[01m[Ksrc/code/z_fireobj.c:110:28:[m[K [01;35m[Kwarning: [m[Kleft-hand operand of comma expression has no effect [[01;35m[K-Wunused-value[m[K]
+  110 |         ((fire->yScale * (0[01;35m[K,[m[K 6500.0f)) < (sp44 - fire->position.y))) { // Fake but IDK what else
+      |                            [01;35m[K^[m[K
