@@ -237,7 +237,7 @@ void EnTanron3_Act(EnTanron3* this, GlobalContext* globalCtx) {
         switch (this->isBeached) {
             case false:
                 this->actor.gravity = -1.0f;
-                this->targetPos.y = (this->waterSurfaceYPos - 50.0f);
+                this->targetPos.y = this->waterSurfaceYPos - 50.0f;
                 this->workTimer[TIMER_OUT_OF_WATER] = 25;
                 Math_ApproachS(&this->actor.world.rot.x, 0x3000, 5, 0xBD0);
                 if (this->actor.bgCheckFlags & 8) {
