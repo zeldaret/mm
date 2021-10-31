@@ -20,7 +20,7 @@ void EnTanron3_SetupAct(EnTanron3* this, GlobalContext* globalCtx);
 void EnTanron3_Act(EnTanron3* this, GlobalContext* globalCtx);
 void EnTanron3_Kill(EnTanron3* this, GlobalContext* globalCtx);
 
-static Vec3f D_80BB9720[] = { 0.0f, 0.0f, 0.0f };
+static Vec3f sZeroVec[] = { 0.0f, 0.0f, 0.0f };
 
 static Boss03* sGyorg = NULL;
 
@@ -90,8 +90,8 @@ void EnTanron3_CreateEffect(GlobalContext* globalCtx, Vec3f* effectPos) {
         if ((effectPtr->unk_00 == 0) || (effectPtr->unk_00 == 1)) {
             effectPtr->unk_00 = 2;
             effectPtr->unk_04 = *effectPos;
-            effectPtr->unk_10 = *D_80BB9720;
-            effectPtr->unk_1C = *D_80BB9720;
+            effectPtr->unk_10 = *sZeroVec;
+            effectPtr->unk_1C = *sZeroVec;
             effectPtr->unk_1C.y = -2.0f;
             effectPtr->unk_34.x = 0.1f;
             effectPtr->unk_34.y = 0.0f;
