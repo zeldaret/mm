@@ -169,7 +169,7 @@ void EnTanron3_Act(EnTanron3* this, GlobalContext* globalCtx) {
     if ((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[0].y >= 438.0f)) {
         // Player is standing on the central platform
         this->isPassive = true;
-    } else if (this->isPassive && this->workTimer[TIMER_ATTACK_OR_WAIT] == 0 && !(this->timer & 0x1F)) {
+    } else if (this->isPassive && this->workTimer[TIMER_ATTACK_OR_WAIT] == 0 && !(this->timer & 31)) {
         xDistance = this->currentPos.x - player->actor.world.pos.x;
         zDistance = this->currentPos.z - player->actor.world.pos.z;
         if (sqrtf(SQ(xDistance) + SQ(zDistance)) < 500.0f) {
@@ -185,7 +185,7 @@ void EnTanron3_Act(EnTanron3* this, GlobalContext* globalCtx) {
                 this->targetRotationStep = 0x1000;
                 this->nextRotationAngle = 0x3A98;
                 Math_Vec3f_Copy(&this->currentPos, &player->actor.world.pos);
-                if (!(this->timer & 0xF)) {
+                if (!(this->timer & 15)) {
                     if ((Rand_ZeroOne() < 0.5f) && (this->actor.xzDistToPlayer <= 200.0f)) {
                         Audio_PlayActorSound2(&this->actor, NA_SE_EN_PIRANHA_ATTACK);
                     }
@@ -273,7 +273,7 @@ void EnTanron3_Act(EnTanron3* this, GlobalContext* globalCtx) {
                 Math_ApproachS(&this->actor.shape.rot.y, this->targetShapeRotation.y, 3, 0x500);
                 Math_ApproachS(&this->actor.shape.rot.x, this->targetShapeRotation.x, 3, 0xC00);
                 Math_ApproachS(&this->actor.shape.rot.z, this->targetShapeRotation.z, 3, 0xC00);
-                if ((Rand_ZeroOne() < 0.5f) & !(this->timer & 3)) {
+                if ((Rand_ZeroOne() < 0.5f) & !(this->timer % 4)) {
                     Vec3f effectPos;
 
                     effectPos.x = randPlusMinusPoint5Scaled(30.0f) + this->actor.world.pos.x;
