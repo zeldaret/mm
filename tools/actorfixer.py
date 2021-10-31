@@ -170,6 +170,14 @@ animdict = {
     "skelanime.prevFrameRot": "skelanime.prevRot",
     "skelanime.prevFramePos": "skelanime.prevTransl",
     "skelanime.unk3E": "skelanime.baseTransl",
+    "gSaveContext.weekEventReg": "gSaveContext.save.weekEventReg",
+    "gSaveContext.playerForm": "gSaveContext.save.playerForm",
+    "gSaveContext.day": "gSaveContext.save.day",
+    "gSaveContext.isNight": "gSaveContext.save.isNight",
+    "gSaveContext.naviTimer": "gSaveContext.save.playerData.tatlTimer",
+    "gSaveContext.health": "gSaveContext.save.playerData.health",
+    "gSaveContext.inventory": "gSaveContext.save.inventory",
+    "gSaveContext.equippedMask": "gSaveContext.save.equippedMask",
 }
 
 def replace_anim(file):

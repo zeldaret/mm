@@ -165,27 +165,27 @@ void EnFish2_Init(Actor* thisx, GlobalContext* globalCtx) {
                            24);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         if (this->unk_344 == 0) {
-            if (gSaveContext.weekEventReg[81] & 0x10) {
+            if (gSaveContext.save.weekEventReg[81] & 0x10) {
                 this->unk_2C0 = 1;
             }
 
-            if (gSaveContext.weekEventReg[81] & 0x20) {
+            if (gSaveContext.save.weekEventReg[81] & 0x20) {
                 this->unk_2C0 = 2;
             }
 
-            if (gSaveContext.weekEventReg[81] & 0x40) {
+            if (gSaveContext.save.weekEventReg[81] & 0x40) {
                 this->unk_2C0 = 3;
             }
         } else {
-            if (gSaveContext.weekEventReg[81] & 0x80) {
+            if (gSaveContext.save.weekEventReg[81] & 0x80) {
                 this->unk_2C0 = 1;
             }
 
-            if (gSaveContext.weekEventReg[82] & 1) {
+            if (gSaveContext.save.weekEventReg[82] & 1) {
                 this->unk_2C0 = 2;
             }
 
-            if (gSaveContext.weekEventReg[82] & 2) {
+            if (gSaveContext.save.weekEventReg[82] & 2) {
                 this->unk_2C0 = 3;
             }
         }
@@ -622,18 +622,18 @@ void func_80B297FC(EnFish2* this, GlobalContext* globalCtx) {
                 this->unk_2C0++;
                 if (this->unk_344 == 0) {
                     if (this->unk_2C0 == 1) {
-                        gSaveContext.weekEventReg[81] |= 0x10;
+                        gSaveContext.save.weekEventReg[81] |= 0x10;
                     } else if (this->unk_2C0 == 2) {
-                        gSaveContext.weekEventReg[81] |= 0x20;
+                        gSaveContext.save.weekEventReg[81] |= 0x20;
                     } else if (this->unk_2C0 == 3) {
-                        gSaveContext.weekEventReg[81] |= 0x40;
+                        gSaveContext.save.weekEventReg[81] |= 0x40;
                     }
                 } else if (this->unk_2C0 == 1) {
-                    gSaveContext.weekEventReg[81] |= 0x80;
+                    gSaveContext.save.weekEventReg[81] |= 0x80;
                 } else if (this->unk_2C0 == 2) {
-                    gSaveContext.weekEventReg[82] |= 1;
+                    gSaveContext.save.weekEventReg[82] |= 1;
                 } else if (this->unk_2C0 == 3) {
-                    gSaveContext.weekEventReg[82] |= 2;
+                    gSaveContext.save.weekEventReg[82] |= 2;
                 }
 
                 if (this->unk_2B0 != 0) {
@@ -893,12 +893,12 @@ void func_80B2A498(EnFish2* this, GlobalContext* globalCtx) {
             temp_v0->speedXZ = 4.0f;
             temp_v0->velocity.y = 15.0f;
             Audio_PlayActorSound2(&this->actor, NA_SE_SY_PIECE_OF_HEART);
-            gSaveContext.weekEventReg[81] &= (u8)~0x10;
-            gSaveContext.weekEventReg[81] &= (u8)~0x20;
-            gSaveContext.weekEventReg[81] &= (u8)~0x40;
-            gSaveContext.weekEventReg[81] &= (u8)~0x80;
-            gSaveContext.weekEventReg[82] &= (u8)~0x1;
-            gSaveContext.weekEventReg[82] &= (u8)~0x2;
+            gSaveContext.save.weekEventReg[81] &= (u8)~0x10;
+            gSaveContext.save.weekEventReg[81] &= (u8)~0x20;
+            gSaveContext.save.weekEventReg[81] &= (u8)~0x40;
+            gSaveContext.save.weekEventReg[81] &= (u8)~0x80;
+            gSaveContext.save.weekEventReg[82] &= (u8)~0x1;
+            gSaveContext.save.weekEventReg[82] &= (u8)~0x2;
         }
     }
 

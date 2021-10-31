@@ -149,10 +149,11 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (GIANT_TYPE_IS_CLOCK_TOWER_SUCCESS(type)) {
-        if (!(gSaveContext.weekEventReg[0x19] & 2)) {
+        if (!(gSaveContext.save.weekEventReg[0x19] & 2)) {
             Actor_MarkForDeath(&this->actor);
             return;
         }
+
         this->unk_24A = 0x1C5;
         Actor_SetScale(&this->actor, 0.32f);
         this->actionFunc = EnGiant_PerformClockTowerSuccessActions;

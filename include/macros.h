@@ -61,7 +61,7 @@
 #define CUR_UPG_VALUE_VOID(upg) \
     ((((void)0, gSaveContext.save.inventory.upgrades) & gUpgradeMasks[upg]) >> gUpgradeShifts[upg])
 
-#define CUR_FORM ((gSaveContext.playerForm == PLAYER_FORM_HUMAN) ? 0 : gSaveContext.playerForm)
+#define CUR_FORM ((gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) ? 0 : gSaveContext.save.playerForm)
 
 #define ALL_EQUIP_VALUE(equip) ((gSaveContext.save.inventory.equipment & gEquipMasks[equip]) >> gEquipShifts[equip])
 #define CUR_EQUIP_VALUE(equip) ((gSaveContext.save.equips.equipment & gEquipMasks[equip]) >> gEquipShifts[equip])
