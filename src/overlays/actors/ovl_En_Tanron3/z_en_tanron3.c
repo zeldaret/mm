@@ -82,10 +82,9 @@ extern FlexSkeletonHeader D_0600DA20;
 extern AnimationHeader D_0600DAAC;
 
 void EnTanron3_CreateEffect(GlobalContext* globalCtx, Vec3f* effectPos) {
-    UnkTanron3Effect* effectPtr;
+    UnkTanron3Effect* effectPtr = (UnkTanron3Effect*)globalCtx->specialEffects;
     s16 i;
 
-    effectPtr = (UnkTanron3Effect*)globalCtx->specialEffects;
     for (i = 0; i < 150; i++, effectPtr++) {
         if ((effectPtr->unk_00 == 0) || (effectPtr->unk_00 == 1)) {
             effectPtr->unk_00 = 2;
