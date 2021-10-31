@@ -1,5 +1,5 @@
 <Root>
-    <File Name="code" BaseAddress="0x800A5AC0" RangeStart="0x114A90" RangeEnd="0x115550" >
+    <File Name="code" BaseAddress="0x800A5AC0" RangeStart="0x114A90" RangeEnd="0x115550" OutName="debug_display">
         <Array Name="sDebugDisplay1Vtx" Count="36" Offset="0x114A90">
             <Vtx/>
         </Array>

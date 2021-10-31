@@ -41,7 +41,7 @@ DebugDispObject* DebugDisplay_AddObject(f32 posX, f32 posY, f32 posZ, s16 rotX, 
     return sDebugObjectListHead;
 }
 
-#include "code/debug_display/code.c"
+#include "code/debug_display/debug_display.c"
 
 DebugDispObject_DrawFunc sDebugObjectDrawFuncTable[] = { DebugDisplay_DrawSpriteI8, DebugDisplay_DrawPolygon };
 
@@ -63,7 +63,6 @@ void DebugDisplay_DrawObjects(GlobalContext* globalCtx) {
 }
 
 void DebugDisplay_DrawSpriteI8(DebugDispObject* dispObj, void* texture, GlobalContext* globalCtx) {
-
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C6FC(globalCtx->state.gfxCtx);
@@ -73,19 +72,9 @@ void DebugDisplay_DrawSpriteI8(DebugDispObject* dispObj, void* texture, GlobalCo
     Matrix_Scale(dispObj->scale.x, dispObj->scale.y, dispObj->scale.z, 1);
     Matrix_InsertMatrix(&globalCtx->mf_187FC, 1);
     Matrix_InsertRotation(dispObj->rot.x, dispObj->rot.y, dispObj->rot.z, 1);
-    gDPSetTextureImage(POLY_XLU_DISP++, G_IM_FMT_I, G_IM_SIZ_16b, 1, texture);
-    gDPSetTile(POLY_XLU_DISP++, G_IM_FMT_I, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
-               G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
-    gDPLoadSync(POLY_XLU_DISP++);
 
-    gDPLoadBlock(POLY_XLU_DISP++, G_TX_LOADTILE, 0, 0, 127, 1024);
-
-    gDPPipeSync(POLY_XLU_DISP++);
-
-    gDPSetTile(POLY_XLU_DISP++, G_IM_FMT_I, G_IM_SIZ_8b, 2, 0x0000, G_TX_RENDERTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
-               G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
-
-    gDPSetTileSize(POLY_XLU_DISP++, G_TX_RENDERTILE, 0, 0, 0x003C, 0x003C);
+    gDPLoadTextureBlock(POLY_XLU_DISP++, texture, G_IM_FMT_I, G_IM_SIZ_8b, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -107,7 +96,6 @@ s32 sDebugDisplayLight2[] = {
 };
 
 void DebugDisplay_DrawPolygon(DebugDispObject* dispObj, void* arg1, GlobalContext* globalCtx) {
-
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C588(globalCtx->state.gfxCtx);
