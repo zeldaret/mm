@@ -1,5 +1,5 @@
-#ifndef _Z64SAVE_H_
-#define _Z64SAVE_H_
+#ifndef Z64SAVE_H
+#define Z64SAVE_H
 
 #include "ultra64.h"
 #include "z64math.h"
@@ -50,6 +50,14 @@ typedef struct {
 } CycleSceneFlags; // size = 0x14
 
 typedef struct {
+    /* 0x00 */ u16 optionId;                     // original name: option_id
+    /* 0x02 */ u8 language;                      // original name: j_n
+    /* 0x03 */ s8 audioSetting;                  // original name: s_sound
+    /* 0x04 */ u8 languageSetting;               // original name: language
+    /* 0x05 */ u8 zTargetSetting;                // 0: Switch; 1: Hold
+} SaveOptions; // size = 0x06
+
+typedef struct {
     /* 0x0000 */ char newf[6];                   // original name: newf"               Will always be "ZELDA3 for a valid save
     /* 0x0006 */ u16 deaths;                     // original name: savect
     /* 0x0008 */ char playerName[8];             // original name: player_name
@@ -73,7 +81,7 @@ typedef struct {
 typedef struct {
     /* 0x0000 */ u32 entranceIndex;              // original name: scene_no
     /* 0x0004 */ u8 equippedMask;                // original name: player_mask
-    /* 0x0005 */ u8 firstCycleFlag;              // original name: opening_flag
+    /* 0x0005 */ u8 isFirstCycle;                // original name: opening_flag
     /* 0x0006 */ u8 unk_06;
     /* 0x0007 */ u8 linkAge;                     // original name: link_age
     /* 0x0008 */ s32 cutscene;                   // original name: day_time
@@ -168,11 +176,7 @@ typedef struct {
     /* 0x3F3C */ u16 unk_3F3C;                   // original name: yabusame_out_ct
     /* 0x3F3E */ u8 unk_3F3E;                    // original name: no_save
     /* 0x3F3F */ u8 unk_3F3F;                    // original name: flash_flag
-    /* 0x3F40 */ u16 optionId;                   // original name: option_id
-    /* 0x3F42 */ u8 language;                    // original name: j_n
-    /* 0x3F43 */ s8 audioSetting;                // original name: s_sound
-    /* 0x3F44 */ u8 languageSetting;             // original name: language
-    /* 0x3F45 */ u8 zTargetSetting;              // 0: Switch; 1: Hold
+    /* 0x3F40 */ SaveOptions options;
     /* 0x3F46 */ u16 unk_3F46;                   // original name: NottoriBgm
     /* 0x3F48 */ u8 unk_3F48;                    // original name: fade_go
     /* 0x3F4A */ u16 nextCutsceneIndex;          // original name: next_daytime

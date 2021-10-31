@@ -121,7 +121,7 @@ u32 D_801C5FC0[][4] = {
     { 0, 0, 1, 0 },
 };
 
-// gDefaultWeekEventReg
+// gDefaultWeekEventReg?
 u16 D_801C66D0[100] = {
     0xFFFC, 0xFFFF, 0xFFFF, 0xFFFF, 0,      0,      0,      0xC000, 0xC00,  0,      0xC0,   0,      0x300,
     0x3000, 0xC000, 0xC00,  0,      0,      0,      0,      0,      0,      0xC00C, 0xC00C, 0xC008, 3,
@@ -133,6 +133,7 @@ u16 D_801C66D0[100] = {
     0,      0xC000, 0xF0,   0,      0,      0,      0,      0,      0,
 };
 
+// used in other files
 s32 D_801C6798[] = {
     0x00000020, 0x00001470, 0x000028C0, 0x00003D10, 0x00005160, 0x000065B0,
 };
@@ -146,10 +147,7 @@ u8 D_801C67B0[24] = {
 
 s32 D_801C67C8[] = { 0, 0x40, 0x80, 0xC0, 0x100, 0x180, 0x200, 0x280 };
 
-s32 D_801C67E8[] = {
-    0x00000300,
-    0x00000380,
-};
+s32 D_801C67E8[] = { 0x300, 0x380 };
 
 s32 D_801C67F0[8] = { 0x40, 0x40, 0x40, 0x40, 0x80, 0x80, 0x80, 0x80 };
 
@@ -157,16 +155,13 @@ s32 D_801C6810[] = { 1, 1 };
 
 s32 D_801C6818[8] = { 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80 };
 
-s32 D_801C6838[] = {
-    0x00000001,
-    0x00000001,
-};
+s32 D_801C6838[] = { 1, 1 };
 
 s32 D_801C6840[4] = { 0x100, 0x180, 0x200, 0x280 };
 
 s32 D_801C6850[8] = { 0x80, 0x80, 0x80, 0x80, 0x300, 0x380, 1, 1 };
 
-s32 D_801C6870[8] = { 0x100C, 0x100C, 0x100C, 0x100C, 0x3CA0, 0x3CA0, 0x3CA0, 0x3CA0 };
+s32 D_801C6870[8] = { sizeof(Save), sizeof(Save), sizeof(Save), sizeof(Save), 0x3CA0, 0x3CA0, 0x3CA0, 0x3CA0 };
 
 u8 D_801C6890[8] = { 1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80 };
 
@@ -323,19 +318,23 @@ Inventory D_801C69BC = {
         { 0x3E, 0x3E, 0x3E },
     },
 };
+
 u16 D_801C6A44 = 0;
+
 u8 D_801C6A48[] = {
     0x35, 0x33, 0x34, 0x32, 0x35,
 };
+
 u8 D_801C6A50[] = {
     0x2F, 0x23, 0x29, 0x1D, 0x2F,
 };
+
 u16 D_801C6A58[] = { 0x68B0, 0x6A60, 0xB230, 0x9A80, 0xD890, 0x3E40, 0x8640, 0x84A0, 0x2040, 0xAA30 };
 
 u16 D_801F6AF0;
 u8 D_801F6AF2;
 
-void func_80143A10(u8 owlId) {
+void Sram_ActivateOwl(u8 owlId) {
     gSaveContext.save.playerData.owlActivationFlags =
         ((void)0, gSaveContext.save.playerData.owlActivationFlags) | (u16)gBitFlags[owlId];
     if (gSaveContext.save.playerData.unk_20 == 0xFF) {
@@ -355,11 +354,16 @@ void func_80143A54(void) {
 }
 
 void func_80143AC4(void) {
-    gSaveContext.save.weekEventReg[55] &= 0xFD;
-    gSaveContext.save.weekEventReg[90] &= 0xFE;
-    gSaveContext.save.weekEventReg[89] &= 0xBF;
-    gSaveContext.save.weekEventReg[89] &= 0xF7;
-    gSaveContext.save.weekEventReg[85] &= 0x7F;
+    // Unconfirmed: "Link the Goron Claims His Reservation: 4:30 PM"
+    gSaveContext.save.weekEventReg[55] &= (u8)~0x02;
+    // Unconfirmed: "Postman fleeing town"
+    gSaveContext.save.weekEventReg[90] &= (u8)~0x01;
+    // Unconfirmed: "Postman is about to flee"
+    gSaveContext.save.weekEventReg[89] &= (u8)~0x40;
+    // Unconfirmed: "Postman has delivered priority mail"
+    gSaveContext.save.weekEventReg[89] &= (u8)~0x08;
+    // Unconfirmed: "Postman showing priority mail to Madame"
+    gSaveContext.save.weekEventReg[85] &= (u8)~0x80;
 }
 
 extern s32 fake_D_801C5FD0[][5];
@@ -804,11 +808,12 @@ loop_13:
     func_800F3B2C(globalCtx);
 }
 #else
+void func_80143B0C(GameState* gameState);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80143B0C.s")
 #endif
 
 void Sram_IncrementDay(void) {
-    if (CURRENT_DAY < 4) {
+    if (CURRENT_DAY <= 3) {
         gSaveContext.save.day++;
         gSaveContext.save.daysElapsed++;
     }
@@ -819,7 +824,9 @@ void Sram_IncrementDay(void) {
     gSaveContext.save.bombersCaughtOrder[2] = 0;
     gSaveContext.save.bombersCaughtOrder[3] = 0;
     gSaveContext.save.bombersCaughtOrder[4] = 0;
+    // Unconfirmed: "Bombers Hide & Seek started on Day 1???"
     gSaveContext.save.weekEventReg[0x49] &= (u8)~0x10;
+    // Unconfirmed: "Bombers Hide & Seek in Progress"
     gSaveContext.save.weekEventReg[0x55] &= (u8)~0x02;
 }
 
@@ -834,10 +841,11 @@ u16 Sram_CalcChecksum(void* data, size_t count) {
     return chkSum;
 }
 
+// Resets `Save` substruct
 void func_80144628(void) {
     gSaveContext.save.entranceIndex = 0x1C00;
     gSaveContext.save.equippedMask = 0;
-    gSaveContext.save.firstCycleFlag = 0;
+    gSaveContext.save.isFirstCycle = false;
     gSaveContext.save.unk_06 = 0;
     gSaveContext.save.linkAge = 0;
     gSaveContext.save.isNight = false;
@@ -872,6 +880,7 @@ void Sram_GenerateRandomSaveFields(void) {
     gSaveContext.save.lotteryCodes[2][1] = Rand_S16Offset(0, 10);
     gSaveContext.save.lotteryCodes[2][2] = Rand_S16Offset(0, 10);
 
+    // Needed to match...
     for (i = 0; i < 3; i++) {
         for (j = 0; j < 3; j++) {}
     }
@@ -962,10 +971,13 @@ void Sram_InitDebugSave(void) {
     gSaveContext.save.horseData.angle = -0x7554;
 
     gSaveContext.save.entranceIndex = 0x1C00;
-    gSaveContext.save.firstCycleFlag = 1;
+    gSaveContext.save.isFirstCycle = true;
 
+    //
     gSaveContext.save.weekEventReg[0x0F] |= 0x20;
+    // Unconfirmed: "Entered South Clock Town"
     gSaveContext.save.weekEventReg[0x3B] |= 0x04;
+    // Unconfirmed: "Tatl's Second Cycle Text?"
     gSaveContext.save.weekEventReg[0x1F] |= 0x04;
 
     gSaveContext.cycleSceneFlags[99].swch0 = 1;
@@ -1080,7 +1092,7 @@ void func_80144E78(GameState* gameState, SramContext* sramCtx) {
             gSaveContext.unk_3EC0[i] = 0;
         }
 
-        if (gSaveContext.save.firstCycleFlag != 0) {
+        if (gSaveContext.save.isFirstCycle) {
             gSaveContext.save.entranceIndex = 0xD800;
             gSaveContext.save.day = 0;
             gSaveContext.save.time = 0x3FFF;
@@ -1092,9 +1104,11 @@ void func_80144E78(GameState* gameState, SramContext* sramCtx) {
     } else {
         gSaveContext.save.entranceIndex = D_801C6A58[gSaveContext.save.owlSaveLocation];
         if (D_801C6A58[gSaveContext.save.owlSaveLocation] == 0x84A0 && (gSaveContext.save.weekEventReg[20] & 0x02)) {
+            // Unconfirmed weekEventReg: "Woodfall Temple Prison Entrance raised / Water cleansed"
             gSaveContext.save.entranceIndex = 0xCA0;
         } else if (D_801C6A58[gSaveContext.save.owlSaveLocation] == 0x9A80 &&
                    (gSaveContext.save.weekEventReg[33] & 0x80)) {
+            // Unconfirmed weekEventReg: "Mountain Village Unfrozen"
             gSaveContext.save.entranceIndex = 0xAE80;
         }
 
@@ -1145,11 +1159,11 @@ void func_8014546C(SramContext* sramCtx) {
         }
 
         gSaveContext.save.checksum = 0;
-        gSaveContext.save.checksum = Sram_CalcChecksum(&gSaveContext, sizeof(Save));
+        gSaveContext.save.checksum = Sram_CalcChecksum(&gSaveContext.save, sizeof(Save));
 
         if (gSaveContext.unk_3F3F) {
             Lib_MemCpy(*sramCtx->saveBuf, &gSaveContext, sizeof(Save));
-            Lib_MemCpy(&(*sramCtx->saveBuf)[0x2000], &gSaveContext, sizeof(Save));
+            Lib_MemCpy(&(*sramCtx->saveBuf)[0x2000], &gSaveContext.save, sizeof(Save));
         }
     }
 }
@@ -1169,10 +1183,10 @@ void func_80145698(SramContext* sramCtx) {
     }
 
     gSaveContext.save.checksum = 0;
-    gSaveContext.save.checksum = Sram_CalcChecksum(&gSaveContext, sizeof(Save));
+    gSaveContext.save.checksum = Sram_CalcChecksum(&gSaveContext.save, sizeof(Save));
     if (gSaveContext.unk_3F3F != 0) {
         Lib_MemCpy(*sramCtx->saveBuf, &gSaveContext, sizeof(Save));
-        Lib_MemCpy(&(*sramCtx->saveBuf)[0x2000], &gSaveContext, sizeof(Save));
+        Lib_MemCpy(&(*sramCtx->saveBuf)[0x2000], &gSaveContext.save, sizeof(Save));
     }
 }
 
@@ -1305,7 +1319,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                 new_var = sp6E;
                 if (new_var == 1)
                 {
-                    Lib_MemCpy(&(*sramCtx->saveBuf)[0x2000], &gSaveContext, 0x100C);
+                    Lib_MemCpy(&(*sramCtx->saveBuf)[0x2000], &gSaveContext.save, sizeof(Save));
                     func_80146EBC(sramCtx, D_801C67C8[sp64], D_801C6818[sp64]);
                 } 
                 else 
@@ -1318,16 +1332,16 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                     if (func_80185968(*sramCtx->saveBuf, D_801C67C8[sp58 + 1], D_801C67F0[sp58 + 1]) != 0) {
                         phi_s2_3 = 1;
                     } else {
-                        Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, 0x100C);
+                        Lib_MemCpy(&gSaveContext.save, *sramCtx->saveBuf, sizeof(Save));
                         phi_s2_3 = gSaveContext.save.checksum;
                         gSaveContext.save.checksum = 0;
-                        sp7A = Sram_CalcChecksum(&gSaveContext, 0x100C);
+                        sp7A = Sram_CalcChecksum(&gSaveContext.save, sizeof(Save));
                     }
 
                     if (CHECK_NEWF(gSaveContext.save.playerData.newf) || (phi_s2_3 != sp7A) || (phi_s2_3 != temp_s7_2)) {
                         func_80185968(*sramCtx->saveBuf, D_801C67C8[sp64], D_801C67F0[sp64]);
-                        Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, 0x100C);
-                        Lib_MemCpy(&(*sramCtx->saveBuf)[0x2000], &gSaveContext, 0x100CU);
+                        Lib_MemCpy(&gSaveContext.save, *sramCtx->saveBuf, sizeof(Save));
+                        Lib_MemCpy(&(*sramCtx->saveBuf)[0x2000], &gSaveContext.save, sizeof(Save));
                         func_80146EBC(sramCtx, D_801C67C8[sp64], D_801C6818[sp64]);
                     }
                 }
@@ -1464,22 +1478,22 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                 }
             } else {
                 if (phi_s2 != 0) {
-                    gSaveContext.optionId = 0xA51D;
-                    gSaveContext.language = 1;
-                    gSaveContext.audioSetting = 0;
-                    gSaveContext.languageSetting = 0;
-                    gSaveContext.zTargetSetting = 0;
+                    gSaveContext.options.optionId = 0xA51D;
+                    gSaveContext.options.language = 1;
+                    gSaveContext.options.audioSetting = 0;
+                    gSaveContext.options.languageSetting = 0;
+                    gSaveContext.options.zTargetSetting = 0;
                 } else {
-                    Lib_MemCpy(&gSaveContext.optionId, *sramCtx->saveBuf, 6U);
-                    if (gSaveContext.optionId != 0xA51D) {
-                        gSaveContext.optionId = 0xA51D;
-                        gSaveContext.language = 1;
-                        gSaveContext.audioSetting = 0;
-                        gSaveContext.languageSetting = 0;
-                        gSaveContext.zTargetSetting = 0;
+                    Lib_MemCpy(&gSaveContext.options, *sramCtx->saveBuf, sizeof(SaveOptions));
+                    if (gSaveContext.options.optionId != 0xA51D) {
+                        gSaveContext.options.optionId = 0xA51D;
+                        gSaveContext.options.language = 1;
+                        gSaveContext.options.audioSetting = 0;
+                        gSaveContext.options.languageSetting = 0;
+                        gSaveContext.options.zTargetSetting = 0;
                     }
                 }
-                func_801A3D98(gSaveContext.audioSetting);
+                func_801A3D98(gSaveContext.options.audioSetting);
             }
 
             sp76++;
@@ -1493,7 +1507,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
         gSaveContext.unk_3F3F = D_801F6AF2;
     }
 
-    gSaveContext.language = 1;
+    gSaveContext.options.language = 1;
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_801457CC.s")
@@ -1604,7 +1618,7 @@ void func_80146628(GameState* gameState, SramContext* sramCtx) {
 
 void func_80146AA0(GameState* gameState, SramContext* sramCtx) {
     s32 phi_v0;
-    u16 phi_v1;
+    u16 i;
     FileChooseContext* fileChooseCtx = (FileChooseContext*)gameState;
     s16 phi_a0;
 
@@ -1626,20 +1640,20 @@ void func_80146AA0(GameState* gameState, SramContext* sramCtx) {
         gSaveContext.save.playerData.newf[4] = 'A';
         gSaveContext.save.playerData.newf[5] = '3';
 
-        gSaveContext.save.checksum = Sram_CalcChecksum(&gSaveContext, sizeof(Save));
+        gSaveContext.save.checksum = Sram_CalcChecksum(&gSaveContext.save, sizeof(Save));
 
-        Lib_MemCpy(*sramCtx->saveBuf, &gSaveContext, sizeof(Save));
-        Lib_MemCpy(&(*sramCtx->saveBuf)[0x2000], &gSaveContext, sizeof(Save));
+        Lib_MemCpy(*sramCtx->saveBuf, &gSaveContext.save, sizeof(Save));
+        Lib_MemCpy(&(*sramCtx->saveBuf)[0x2000], &gSaveContext.save, sizeof(Save));
 
-        for (phi_v1 = 0; phi_v1 < ARRAY_COUNT(gSaveContext.save.playerData.newf); phi_v1++) {
-            fileChooseCtx->newf[fileChooseCtx->unk_24480][phi_v1] = gSaveContext.save.playerData.newf[phi_v1];
+        for (i = 0; i < ARRAY_COUNT(gSaveContext.save.playerData.newf); i++) {
+            fileChooseCtx->newf[fileChooseCtx->unk_24480][i] = gSaveContext.save.playerData.newf[i];
         }
 
         fileChooseCtx->unk_2440C[fileChooseCtx->unk_24480] = gSaveContext.save.playerData.deaths;
 
-        for (phi_v1 = 0; phi_v1 < ARRAY_COUNT(gSaveContext.save.playerData.playerName); phi_v1++) {
-            fileChooseCtx->unk_24414[fileChooseCtx->unk_24480][phi_v1] =
-                gSaveContext.save.playerData.playerName[phi_v1];
+        for (i = 0; i < ARRAY_COUNT(gSaveContext.save.playerData.playerName); i++) {
+            fileChooseCtx->unk_24414[fileChooseCtx->unk_24480][i] =
+                gSaveContext.save.playerData.playerName[i];
         }
 
         fileChooseCtx->healthCapacity[fileChooseCtx->unk_24480] = gSaveContext.save.playerData.healthCapacity;
@@ -1653,8 +1667,8 @@ void func_80146AA0(GameState* gameState, SramContext* sramCtx) {
         fileChooseCtx->unk_24474[fileChooseCtx->unk_24480] =
             (gSaveContext.save.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4];
 
-        for (phi_v1 = 0, phi_a0 = 0; phi_v1 < 24; phi_v1++) {
-            if (gSaveContext.save.inventory.masks[(s32)phi_v1] != 0xFF) {
+        for (i = 0, phi_a0 = 0; i < ARRAY_COUNT(gSaveContext.save.inventory.masks); i++) {
+            if (gSaveContext.save.inventory.masks[(s32)i] != 0xFF) {
                 phi_a0++;
             }
         }
@@ -1669,18 +1683,17 @@ void func_80146AA0(GameState* gameState, SramContext* sramCtx) {
 
 void func_80146DF8(SramContext* sramCtx) {
     if (gSaveContext.unk_3F3F) {
-        gSaveContext.language = 1;
-        Lib_MemCpy(*sramCtx->saveBuf, &gSaveContext.optionId, 6);
+        gSaveContext.options.language = 1;
+        Lib_MemCpy(*sramCtx->saveBuf, &gSaveContext.options, sizeof(SaveOptions));
     }
 }
 
 void func_80146E40(GameState* gameState, SramContext* sramCtx) {
     if (&gSaveContext.save) {}
 
-    func_801A3D98(gSaveContext.audioSetting);
+    func_801A3D98(gSaveContext.options.audioSetting);
 }
 
-// Sram_Init
 void Sram_Alloc(GameState* gamestate, SramContext* sramCtx) {
     if (gSaveContext.unk_3F3F != 0) {
         sramCtx->saveBuf = THA_AllocEndAlign16(&gamestate->heap, 0x4000);
@@ -1702,7 +1715,7 @@ void func_80146EE8(GameState* gameState) {
     GlobalContext* globalCtx = (GlobalContext*)gameState;
     SramContext* sramCtx = &globalCtx->sramCtx;
 
-    gSaveContext.save.firstCycleFlag = 1;
+    gSaveContext.save.isFirstCycle = true;
     gSaveContext.save.isOwlSave = false;
     func_80145698(sramCtx);
     func_80185F64(*sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2], D_801C6818[gSaveContext.fileNum * 2]);
@@ -1720,7 +1733,8 @@ void func_80146F5C(GameState* gameState) {
     cutscene = gSaveContext.save.cutscene;
     time = gSaveContext.save.time;
     day = gSaveContext.save.day;
-    gSaveContext.save.weekEventReg[0x54] &= (u8)0xDF;
+    // Unconfirmed: "Obtained Fierce Deity Mask?"
+    gSaveContext.save.weekEventReg[0x54] &= (u8)~0x20;
 
     func_80143B0C(gameState);
     func_8014546C(&globalCtx->sramCtx);
@@ -1801,7 +1815,7 @@ void func_80147198(SramContext* sramCtx) {
         gSaveContext.save.checksum = 0;
         // flash read to buffer then copy to save context
         func_80185968(*sramCtx->saveBuf, sramCtx->curPage, sramCtx->numPages);
-        Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, OFFSETOF(SaveContext, fileNum));
+        Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, 0x3CA0);
     }
 }
 

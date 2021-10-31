@@ -2301,7 +2301,7 @@ asm/non_matchings/code/z_vr_box_draw/func_801435A0.s,func_801435A0,0x801435A0,0x
 asm/non_matchings/code/z_vr_box_draw/func_80143624.s,func_80143624,0x80143624,0x11
 asm/non_matchings/code/z_vr_box_draw/func_80143668.s,func_80143668,0x80143668,0xE7
 asm/non_matchings/code/z_vr_box_draw/func_80143A04.s,func_80143A04,0x80143A04,0x3
-asm/non_matchings/code/z_sram_NES/func_80143A10.s,func_80143A10,0x80143A10,0x11
+asm/non_matchings/code/z_sram_NES/Sram_ActivateOwl.s,Sram_ActivateOwl,0x80143A10,0x11
 asm/non_matchings/code/z_sram_NES/func_80143A54.s,func_80143A54,0x80143A54,0x1C
 asm/non_matchings/code/z_sram_NES/func_80143AC4.s,func_80143AC4,0x80143AC4,0x12
 asm/non_matchings/code/z_sram_NES/func_80143B0C.s,func_80143B0C,0x80143B0C,0x29A
