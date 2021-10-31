@@ -577,11 +577,8 @@ void SkinMatrix_MtxFToMtx(MtxF* src, Mtx* dest) {
 }
 
 Mtx* SkinMatrix_MtxFToNewMtx(GraphicsContext* gfxCtx, MtxF* src) {
-    s32 pad;
-    Mtx* mtx;
+    Mtx* mtx = GRAPH_ALLOC(gfxCtx, sizeof(Mtx));
 
-    // TODO allocation should be a macro
-    mtx = (Mtx*)((int)gfxCtx->polyOpa.d - sizeof(Mtx));
     gfxCtx->polyOpa.d = (void*)mtx;
 
     if (mtx == NULL) {

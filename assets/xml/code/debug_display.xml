@@ -15,10 +15,10 @@
         </Array>
         <DList Name="sDebugDisplay3DL" Offset="0x115080"/>
 
-        <Texture Name="D_801BABB8" Format="i8" Width="16" Height="16" Offset="0x1150F8"/>
-        <Texture Name="D_801BACB8" Format="i8" Width="16" Height="16" Offset="0x1151F8"/>
-        <Texture Name="D_801BADB8" Format="i8" Width="16" Height="16" Offset="0x1152F8"/>
-        <Texture Name="D_801BAEB8" Format="i8" Width="16" Height="16" Offset="0x1153F8"/>
+        <Texture Name="sDebugDisplayCircleTex" OutName="debug_circle" Format="i8" Width="16" Height="16" Offset="0x1150F8"/>
+        <Texture Name="sDebugDisplayBallTex" OutName="debug_ball" Format="i8" Width="16" Height="16" Offset="0x1151F8"/>
+        <Texture Name="sDebugDisplayCursorTex" OutName="debug_cursor" Format="i8" Width="16" Height="16" Offset="0x1152F8"/>
+        <Texture Name="sDebugDisplayCrossTex" OutName="debug_cross" Format="i8" Width="16" Height="16" Offset="0x1153F8"/>
 
         <Array Name="sDebugDisplaySpriteVtx" Count="4" Offset="0x1154F8">
             <Vtx/>

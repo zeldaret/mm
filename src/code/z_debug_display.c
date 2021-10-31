@@ -9,10 +9,8 @@ typedef struct {
 
 typedef void (*DebugDispObject_DrawFunc)(DebugDispObject*, void*, GlobalContext*);
 
-#include "code/debug_display/code.c"
-
-void func_800E95F4(DebugDispObject*, void*, GlobalContext*);
-void func_800E97D8(DebugDispObject*, void*, GlobalContext*);
+void DebugDisplay_DrawSpriteI8(DebugDispObject*, void*, GlobalContext*);
+void DebugDisplay_DrawPolygon(DebugDispObject*, void*, GlobalContext*);
 
 DebugDispObject* DebugDisplay_Init(void) {
     sDebugObjectListHead = NULL;
@@ -43,11 +41,14 @@ DebugDispObject* DebugDisplay_AddObject(f32 posX, f32 posY, f32 posZ, s16 rotX, 
     return sDebugObjectListHead;
 }
 
-DebugDispObject_DrawFunc sDebugObjectDrawFuncTable[] = { func_800E95F4, func_800E97D8 };
+#include "code/debug_display/code.c"
+
+DebugDispObject_DrawFunc sDebugObjectDrawFuncTable[] = { DebugDisplay_DrawSpriteI8, DebugDisplay_DrawPolygon };
 
 DebugDispObjectInfo sDebugObjectInfoTable[] = {
-    { 0, D_801BABB8 },        { 0, D_801BAEB8 },        { 0, D_801BACB8 },        { 0, D_801BADB8 },
-    { 1, &sDebugDisplay1DL }, { 1, &sDebugDisplay3DL }, { 1, &sDebugDisplay2DL },
+    { 0, sDebugDisplayCircleTex }, { 0, sDebugDisplayCrossTex }, { 0, sDebugDisplayBallTex },
+    { 0, sDebugDisplayCursorTex }, { 1, &sDebugDisplay1DL },     { 1, &sDebugDisplay3DL },
+    { 1, &sDebugDisplay2DL },
 };
 
 void DebugDisplay_DrawObjects(GlobalContext* globalCtx) {
@@ -61,7 +62,7 @@ void DebugDisplay_DrawObjects(GlobalContext* globalCtx) {
     }
 }
 
-void func_800E95F4(DebugDispObject* dispObj, void* texture, GlobalContext* globalCtx) {
+void DebugDisplay_DrawSpriteI8(DebugDispObject* dispObj, void* texture, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -105,8 +106,7 @@ s32 sDebugDisplayLight2[] = {
     0x00000000,
 };
 
-
-void func_800E97D8(DebugDispObject* dispObj, void* arg1, GlobalContext* globalCtx) {
+void DebugDisplay_DrawPolygon(DebugDispObject* dispObj, void* arg1, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -133,6 +133,18 @@ s32 D_801BB068[] = {
 
 s32 D_801BB08C = 0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_debug_display/func_800E992C.s")
+Gfx* func_800E99B0(GraphicsContext* gfxCtx, s32 arg1);
+
+void func_800E992C(GlobalContext* globalCtx, s32 arg1) {
+    s32 pad;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    func_8012C560(globalCtx->state.gfxCtx);
+    gSPMatrix(POLY_XLU_DISP++, &D_801D1DE0, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_XLU_DISP++, func_800E99B0(globalCtx->state.gfxCtx, arg1));
+
+    CLOSE_DISPS();
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_debug_display/func_800E99B0.s")
