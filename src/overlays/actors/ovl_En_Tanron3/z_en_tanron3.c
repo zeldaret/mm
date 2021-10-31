@@ -350,7 +350,7 @@ void EnTanron3_Update(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f splashPos;
 
     if (KREG(63) == 0) {
-        this->timer += 1;
+        this->timer++;
         for (i = 0; i < TIMER_MAX; i++) {
             if (this->workTimer[i] != 0) {
                 this->workTimer[i]--;
