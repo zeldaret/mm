@@ -315,9 +315,10 @@ void EnWf_Init(Actor* thisx, GlobalContext* globalCtx) {
                                         temp_s0 | 0xFF00);
         if (this->actor.child != NULL) {
             Player* player = GET_PLAYER(globalCtx);
+
             this->actor.child->xzDistToPlayer = Actor_XZDistanceBetweenActors(&this->actor, &player->actor);
             this->unk_2A4 = (temp_s0 * 0.5f) + 45.0f;
-            this->unk_29C = 204800.0f / this->unk_2A4;
+            this->unk_29C = 0x32000 / this->unk_2A4;
             this->actor.shape.rot.y = Actor_YawBetweenActors(&this->actor, &player->actor);
             this->actor.world.pos.x -= this->unk_2A4 * Math_SinS(this->actor.shape.rot.y);
             this->actor.world.pos.z -= this->unk_2A4 * Math_CosS(this->actor.shape.rot.y);
@@ -425,7 +426,7 @@ s32 func_80990948(GlobalContext* globalCtx, EnWf* this, s16 arg2) {
     }
 
     if (func_800BE184(globalCtx, &this->actor, 100.0f, 10000, 12000, this->actor.shape.rot.y) &&
-        ((player->swordAnimation == 0x11) || (globalCtx->gameplayFrames & 1))) {
+        ((player->swordAnimation == 0x11) || ((globalCtx->gameplayFrames % 2) == 0))) {
         func_8099282C(this);
         return true;
     }
@@ -450,6 +451,7 @@ s32 func_80990948(GlobalContext* globalCtx, EnWf* this, s16 arg2) {
     actor = func_800BC444(globalCtx, &this->actor, 80.0f);
     if ((actor != NULL) && (actor->id == ACTOR_EN_BOM_CHU)) {
         EnBomChu* bomchu = (EnBomChu*)actor;
+
         this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
         this->actor.world.rot.y = this->actor.yawTowardsPlayer;
         if (BINANG_ROT180(this->actor.shape.rot.y - bomchu->actor.world.rot.y) < 16000) {
@@ -856,7 +858,7 @@ void func_80991C80(EnWf* this, GlobalContext* globalCtx) {
          (!Actor_IsActorFacingLink(&this->actor, 0x2000) || (this->actor.xzDistToPlayer >= 100.0f))) ||
         SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
         if ((sp2C == 0) && (this->unk_2A0 != 0)) {
-            this->actor.shape.rot.y += (s16)(3276.0f * (1.5f + ((this->unk_2A0 - 4) * 0.4f)));
+            this->actor.shape.rot.y += (s16)(0xCCC * (1.5f + ((this->unk_2A0 - 4) * 0.4f)));
             func_80990C6C(this, globalCtx, 1);
             this->unk_2A0--;
         } else if (!Actor_IsActorFacingLink(&this->actor, 0x1554) && (sp2C == 0)) {
@@ -887,9 +889,8 @@ void func_80991C80(EnWf* this, GlobalContext* globalCtx) {
 }
 
 void func_80991FD8(EnWf* this) {
-    f32 phi_f0;
+    f32 phi_f0 = 1.0f;
 
-    phi_f0 = 1.0f;
     if (this->skelAnime.animCurrentFrame > 15.0f) {
         phi_f0 = 15.0f;
     }
@@ -1599,11 +1600,10 @@ void EnWf_Draw(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 func_8099408C(GlobalContext* globalCtx, EnWf* this) {
-    Actor* temp_v0;
+    Actor* temp_v0 = func_800BC270(globalCtx, &this->actor, 80.0f, 0x138B0);
     s16 temp_v1;
 
-    temp_v0 = func_800BC270(globalCtx, &this->actor, 80.0f, 0x138B0);
-    if (temp_v0 != 0) {
+    if (temp_v0 != NULL) {
         temp_v1 = (Actor_YawBetweenActors(&this->actor, temp_v0) - this->actor.shape.rot.y) - this->unk_29E;
         if (ABS_ALT(temp_v1) < 0x3000) {
             if (Rand_ZeroOne() < 0.5f) {
