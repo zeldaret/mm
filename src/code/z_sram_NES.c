@@ -139,8 +139,9 @@ s32 D_801C6798[] = {
 
 // items?
 u8 D_801C67B0[24] = {
-    0xFF, 1,   0xFF, 0xFF, 0xFF, 0xFF, 6,    7,    8,    9,    0xA,  0xFF,
-    0xC,  0xD, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    ITEM_NONE,  ITEM_BOW,  ITEM_NONE, ITEM_NONE, ITEM_NONE,       ITEM_NONE,      ITEM_BOMB, ITEM_BOMBCHU,
+    ITEM_STICK, ITEM_NUT,  ITEM_BEAN, ITEM_NONE, ITEM_POWDER_KEG, ITEM_PICTO_BOX, ITEM_NONE, ITEM_NONE,
+    ITEM_NONE,  ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,       ITEM_NONE,      ITEM_NONE, ITEM_NONE,
 };
 
 s32 D_801C67C8[] = { 0, 0x40, 0x80, 0xC0, 0x100, 0x180, 0x200, 0x280 };
@@ -160,30 +161,19 @@ s32 D_801C6838[] = {
     0x00000001,
     0x00000001,
 };
+
 s32 D_801C6840[4] = { 0x100, 0x180, 0x200, 0x280 };
+
 s32 D_801C6850[8] = { 0x80, 0x80, 0x80, 0x80, 0x300, 0x380, 1, 1 };
+
 s32 D_801C6870[8] = { 0x100C, 0x100C, 0x100C, 0x100C, 0x3CA0, 0x3CA0, 0x3CA0, 0x3CA0 };
+
 u8 D_801C6890[8] = { 1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80 };
+
 SavePlayerData D_801C6898 = {
-    {
-        '\0',
-        '\0',
-        '\0',
-        '\0',
-        '\0',
-        '\0',
-    },
+    { '\0', '\0', '\0', '\0', '\0', '\0' },
     0,
-    {
-        0x3E,
-        0x3E,
-        0x3E,
-        0x3E,
-        0x3E,
-        0x3E,
-        0x3E,
-        0x3E,
-    },
+    { 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E },
     0x0030,
     0x0030,
     0x00,
@@ -209,7 +199,7 @@ ItemEquips D_801C68C0 = {
         { 0xFD, 0xFF, 0xFF, 0xFF },
     },
     {
-        { 0, 0xFF, 0xFF, 0xFF },
+        { 0x00, 0xFF, 0xFF, 0xFF },
         { 0xFF, 0xFF, 0xFF, 0xFF },
         { 0xFF, 0xFF, 0xFF, 0xFF },
         { 0xFF, 0xFF, 0xFF, 0xFF },
@@ -285,7 +275,30 @@ ItemEquips D_801C6998 = {
 
 Inventory D_801C69BC = {
     {
-        0, 1, 2, 3, 4, 0x28, 6, 7, 8, 9, 0xA, 0x2D, 0xC, 0xD, 0xE, 0xF, 0x10, 0x2F, 0x12, 0x13, 0x14, 0x15, 0xFF, 0xFF,
+        ITEM_OCARINA,
+        ITEM_BOW,
+        ITEM_ARROW_FIRE,
+        ITEM_ARROW_ICE,
+        ITEM_ARROW_LIGHT,
+        ITEM_MOON_TEAR,
+        ITEM_BOMB,
+        ITEM_BOMBCHU,
+        ITEM_STICK,
+        ITEM_NUT,
+        ITEM_BEAN,
+        ITEM_ROOM_KEY,
+        ITEM_POWDER_KEG,
+        ITEM_PICTO_BOX,
+        ITEM_LENS,
+        ITEM_HOOKSHOT,
+        ITEM_SWORD_GREAT_FAIRY,
+        ITEM_LETTER_KAFEI,
+        ITEM_BOTTLE,
+        ITEM_POTION_RED,
+        ITEM_POTION_GREEN,
+        ITEM_POTION_BLUE,
+        ITEM_NONE,
+        ITEM_NONE,
     },
     {
         0x3E, 0x38, 0x47, 0x45, 0x40, 0x32, 0x3A, 0x46, 0x39, 0x42, 0x48, 0x33,
