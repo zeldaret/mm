@@ -159,18 +159,18 @@ void EnPoSisters_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 50.0f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &D_060065C8, &D_060014CC, this->jointTable, this->morphTable, 12);
-    this->unk_226 = 255;
-    this->unk_227 = 255;
-    this->unk_228 = 210;
-    this->unk_229 = 255;
+    this->color226.r = 255;
+    this->color226.g = 255;
+    this->color226.b = 210;
+    this->color226.a = 255;
     this->lightNode = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->lightInfo);
     Lights_PointGlowSetInfo(&this->lightInfo, this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z, 0,
                             0, 0, 0);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    this->unk_18C = ENPOSISTERS_GET_300(thisx);
-    this->actor.hintId = this->unk_18C + 80;
-    this->unk_18D = ENPOSISTERS_GET_C00(thisx);
+    this->sisterType = ENPOSISTERS_GET_TYPE(thisx);
+    this->actor.hintId = this->sisterType + 80;
+    this->megCloneNum = ENPOSISTERS_GET_MEG_CLONE(thisx);
     this->unk_18E = 32;
     this->unk_18F = 20;
     this->unk_190 = 1;
@@ -180,8 +180,8 @@ void EnPoSisters_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (ENPOSISTERS_GET_1000(&this->actor)) {
         func_80B1AA88(this);
-    } else if (this->unk_18C == 0) {
-        if (this->unk_18D == 0) {
+    } else if (this->sisterType == 0) {
+        if (this->megCloneNum == 0) {
             this->actor.colChkInfo.health = 8;
             this->collider.info.toucher.damage = 16;
             this->collider.base.ocFlags1 = (OC1_TYPE_PLAYER | OC1_ON);
@@ -226,7 +226,7 @@ void func_80B1A768(EnPoSisters* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     f32 sp20;
 
-    if ((this->unk_18D == 0) || (this->actionFunc != func_80B1B444)) {
+    if ((this->megCloneNum == 0) || (this->actionFunc != func_80B1B444)) {
         if (((player->swordState == 0) || (player->swordAnimation >= 30)) &&
             ((player->actor.world.pos.y - player->actor.floorHeight) < 1.0f)) {
             Math_StepToF(&this->unk_2EC, 110.0f, 3.0f);
@@ -234,7 +234,7 @@ void func_80B1A768(EnPoSisters* this, GlobalContext* globalCtx) {
             Math_StepToF(&this->unk_2EC, 170.0f, 10.0f);
         }
         sp20 = this->unk_2EC;
-    } else if (this->unk_18D != 0) {
+    } else if (this->megCloneNum != 0) {
         sp20 = this->actor.parent->xzDistToPlayer;
     }
 
@@ -257,7 +257,7 @@ void func_80B1A894(EnPoSisters* this, GlobalContext* globalCtx) {
     }
 
     this->actor.world.pos.y += (2.0f + (0.5f * Rand_ZeroOne())) * Math_SinS(this->unk_18E * 0x800);
-    if ((this->unk_229 == 255) && (this->actionFunc != func_80B1B168) && (this->actionFunc != func_80B1B020)) {
+    if ((this->color226.a == 255) && (this->actionFunc != func_80B1B168) && (this->actionFunc != func_80B1B020)) {
         if (this->actionFunc == func_80B1B628) {
             func_800B9010(&this->actor, NA_SE_EN_PO_AWAY - SFX_FLAG);
         } else {
@@ -267,7 +267,7 @@ void func_80B1A894(EnPoSisters* this, GlobalContext* globalCtx) {
 }
 
 void func_80B1A9B0(EnPoSisters* this, GlobalContext* globalCtx) {
-    if (this->actor.isTargeted && (this->unk_229 == 255)) {
+    if (this->actor.isTargeted && (this->color226.a == 255)) {
         if (this->unk_18F != 0) {
             this->unk_18F--;
         }
@@ -275,7 +275,7 @@ void func_80B1A9B0(EnPoSisters* this, GlobalContext* globalCtx) {
         this->unk_18F = 20;
     }
 
-    if (this->unk_229 == 0) {
+    if (this->color226.a == 0) {
         if (this->unk_194 != 0) {
             this->unk_194--;
         }
@@ -285,7 +285,7 @@ void func_80B1A9B0(EnPoSisters* this, GlobalContext* globalCtx) {
         (this->actionFunc != func_80B1B444)) {
         if (this->unk_18F == 0) {
             func_80B1B70C(this);
-        } else if ((this->unk_194 == 0) && (this->unk_229 == 0)) {
+        } else if ((this->unk_194 == 0) && (this->color226.a == 0)) {
             func_80B1B860(this, globalCtx);
         }
     }
@@ -385,7 +385,7 @@ void func_80B1AE3C(EnPoSisters* this, GlobalContext* globalCtx) {
 }
 
 void func_80B1AF8C(EnPoSisters* this) {
-    if (this->unk_229 != 0) {
+    if (this->color226.a != 0) {
         this->collider.base.colType = COLTYPE_METAL;
         this->collider.base.acFlags |= AC_HARD;
     }
@@ -414,7 +414,7 @@ void func_80B1B020(EnPoSisters* this, GlobalContext* globalCtx) {
 
 void func_80B1B0E0(EnPoSisters* this) {
     this->actor.speedXZ = 5.0f;
-    if (this->unk_18C == 0) {
+    if (this->sisterType == 0) {
         this->collider.base.colType = COLTYPE_METAL;
         this->collider.base.acFlags |= AC_HARD;
         Animation_MorphToLoop(&this->skelAnime, &D_06000114, -5.0f);
@@ -439,7 +439,7 @@ void func_80B1B168(EnPoSisters* this, GlobalContext* globalCtx) {
         s16 rotY = this->actor.shape.rot.y - this->actor.world.rot.y;
 
         if (ABS_ALT(rotY) < 0x1000) {
-            if (this->unk_18C != 0) {
+            if (this->sisterType != 0) {
                 this->collider.base.colType = COLTYPE_HIT3;
                 this->collider.base.acFlags &= ~AC_HARD;
                 func_80B1AC40(this);
@@ -457,7 +457,7 @@ void func_80B1B168(EnPoSisters* this, GlobalContext* globalCtx) {
 void func_80B1B280(EnPoSisters* this) {
     Animation_MorphToLoop(&this->skelAnime, &D_06000D40, -3.0f);
     this->actor.world.rot.y = BINANG_ROT180(this->actor.yawTowardsPlayer);
-    if (this->unk_18C != 0) {
+    if (this->sisterType != 0) {
         this->collider.base.colType = COLTYPE_HIT3;
         this->collider.base.acFlags &= ~AC_HARD;
     }
@@ -469,7 +469,7 @@ void func_80B1B2F0(EnPoSisters* this, GlobalContext* globalCtx) {
     this->actor.shape.rot.y -= (s16)(this->actor.speedXZ * 10.0f * 128.0f);
     if (Math_StepToF(&this->actor.speedXZ, 0.0f, 0.1f)) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        if (this->unk_18C != 0) {
+        if (this->sisterType != 0) {
             func_80B1AC40(this);
         } else {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_LAUGH2);
@@ -484,7 +484,7 @@ void func_80B1B3A8(EnPoSisters* this) {
         func_800BE504(&this->actor, &this->collider);
     }
 
-    if (this->unk_18C != 0) {
+    if (this->sisterType != 0) {
         this->actor.speedXZ = 10.0f;
     }
 
@@ -498,9 +498,9 @@ void func_80B1B444(EnPoSisters* this, GlobalContext* globalCtx) {
 
     if (SkelAnime_Update(&this->skelAnime) && !(this->actor.flags & 0x8000)) {
         if (this->actor.colChkInfo.health != 0) {
-            if (this->unk_18C != 0) {
+            if (this->sisterType != 0) {
                 func_80B1B5B4(this);
-            } else if (this->unk_18D != 0) {
+            } else if (this->megCloneNum != 0) {
                 func_80B1BE4C(this, 0);
             } else {
                 func_80B1BE4C(this, globalCtx);
@@ -510,14 +510,14 @@ void func_80B1B444(EnPoSisters* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (this->unk_18D != 0) {
+    if (this->megCloneNum != 0) {
         Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.parent->shape.rot.y,
-                           (this->unk_18D == 2) ? 0x800 : 0x400);
+                           (this->megCloneNum == 2) ? 0x800 : 0x400);
         temp_f18 = ((this->skelAnime.endFrame - this->skelAnime.curFrame) * 255.0f) / this->skelAnime.endFrame;
-        this->unk_229 = CLAMP(temp_f18, 0, 255);
+        this->color226.a = CLAMP(temp_f18, 0, 255);
         this->actor.world.pos.y = this->actor.parent->world.pos.y;
         func_80B1A768(this, globalCtx);
-    } else if (this->unk_18C != 0) {
+    } else if (this->sisterType != 0) {
         Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
     }
 }
@@ -565,21 +565,21 @@ void func_80B1B7BC(EnPoSisters* this, GlobalContext* globalCtx) {
     s32 temp_f18;
 
     if (SkelAnime_Update(&this->skelAnime)) {
-        this->unk_229 = 0;
+        this->color226.a = 0;
         this->collider.info.bumper.dmgFlags = (0x40000 | 0x1);
         func_80B1AC40(this);
     } else {
         temp_f18 = ((this->skelAnime.endFrame - this->skelAnime.curFrame) * 255.0f) / this->skelAnime.endFrame;
-        this->unk_229 = CLAMP(temp_f18, 0, 255);
+        this->color226.a = CLAMP(temp_f18, 0, 255);
     }
 }
 
 void func_80B1B860(EnPoSisters* this, GlobalContext* globalCtx) {
     Animation_Change(&this->skelAnime, &D_0600119C, 1.5f, 0.0f, Animation_GetLastFrame(&D_0600119C.common), 2, -3.0f);
-    if (this->unk_18C == 0) {
+    if (this->sisterType == 0) {
         this->unk_2EC = 110.0f;
         func_80B1A768(this, globalCtx);
-        this->unk_229 = 0;
+        this->color226.a = 0;
         this->actor.draw = EnPoSisters_Draw;
     } else {
         this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -594,8 +594,8 @@ void func_80B1B860(EnPoSisters* this, GlobalContext* globalCtx) {
 
 void func_80B1B940(EnPoSisters* this, GlobalContext* globalCtx) {
     if (SkelAnime_Update(&this->skelAnime) != 0) {
-        this->unk_229 = 255;
-        if (this->unk_18C != 0) {
+        this->color226.a = 255;
+        if (this->sisterType != 0) {
             this->unk_191 |= 1;
             this->collider.info.bumper.dmgFlags = ~(0x8000000 | 0x200000 | 0x100000 | 0x40000 | 0x1);
             if (this->unk_192 != 0) {
@@ -612,8 +612,8 @@ void func_80B1B940(EnPoSisters* this, GlobalContext* globalCtx) {
     } else {
         s32 temp_f18 = (this->skelAnime.curFrame * 255.0f) / this->skelAnime.endFrame;
 
-        this->unk_229 = CLAMP(temp_f18, 0, 255);
-        if (this->unk_18C == 0) {
+        this->color226.a = CLAMP(temp_f18, 0, 255);
+        if (this->sisterType == 0) {
             func_80B1A768(this, globalCtx);
         }
     }
@@ -735,7 +735,7 @@ void func_80B1BF2C(EnPoSisters* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     EnPoSisters* parent = (EnPoSisters*)this->actor.parent;
 
-    if (this->unk_18D == 0) {
+    if (this->megCloneNum == 0) {
         if (this->unk_194 != 0) {
             this->unk_194--;
         }
@@ -748,7 +748,7 @@ void func_80B1BF2C(EnPoSisters* this, GlobalContext* globalCtx) {
             func_80B1B860(this, globalCtx);
         }
     } else if (parent->actionFunc == func_80B1B940) {
-        this->actor.shape.rot.y = this->actor.parent->shape.rot.y + (this->unk_18D * 0x4000);
+        this->actor.shape.rot.y = this->actor.parent->shape.rot.y + (this->megCloneNum * 0x4000);
         this->actor.world.pos.y = player->actor.world.pos.y + 5.0f;
         func_80B1B860(this, globalCtx);
     } else if (parent->actionFunc == func_80B1BA90) {
@@ -758,7 +758,7 @@ void func_80B1BF2C(EnPoSisters* this, GlobalContext* globalCtx) {
 
 void func_80B1C030(EnPoSisters* this) {
     Animation_MorphToLoop(&this->skelAnime, &D_06000D40, -3.0f);
-    this->unk_229 = 255;
+    this->color226.a = 255;
     this->unk_192 = 300;
     this->unk_194 = 3;
     this->unk_191 |= (0x8 | 0x1);
@@ -776,7 +776,7 @@ void func_80B1C0A4(EnPoSisters* this, GlobalContext* globalCtx) {
     if (this->unk_194 > 0) {
         if (this->unk_192 >= 16) {
             SkelAnime_Update(&this->skelAnime);
-            if (this->unk_18D == 0) {
+            if (this->megCloneNum == 0) {
                 if (ABS_ALT(16 - this->unk_18E) < 14) {
                     this->actor.shape.rot.y +=
                         (s16)((0x580 - (this->unk_194 * 0x180)) * fabsf(Math_SinS(this->unk_18E * 0x800)));
@@ -788,12 +788,12 @@ void func_80B1C0A4(EnPoSisters* this, GlobalContext* globalCtx) {
                     this->unk_191 &= ~0x40;
                 }
             } else {
-                this->actor.shape.rot.y = this->actor.parent->shape.rot.y + (this->unk_18D * 0x4000);
+                this->actor.shape.rot.y = this->actor.parent->shape.rot.y + (this->megCloneNum * 0x4000);
             }
         }
     }
 
-    if (this->unk_18D == 0) {
+    if (this->megCloneNum == 0) {
         if ((this->unk_192 >= 284) || ((this->unk_192 < 31) && (this->unk_192 >= 16))) {
             this->unk_191 |= 0x40;
         } else {
@@ -802,12 +802,12 @@ void func_80B1C0A4(EnPoSisters* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_192 == 0) {
-        if (this->unk_18D == 0) {
+        if (this->megCloneNum == 0) {
             func_80B1B0E0(this);
         } else {
             func_80B1BE4C(this, globalCtx);
         }
-    } else if (this->unk_18D != 0) {
+    } else if (this->megCloneNum != 0) {
         parent = (EnPoSisters*)this->actor.parent;
         if (parent->actionFunc == func_80B1B444) {
             func_80B1B3A8(this);
@@ -826,17 +826,17 @@ void func_80B1C0A4(EnPoSisters* this, GlobalContext* globalCtx) {
 void func_80B1C2E8(EnPoSisters* this) {
     Animation_PlayOnce(&this->skelAnime, &D_0600119C);
     Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
-    this->unk_229 = 0;
+    this->color226.a = 0;
     this->unk_191 = 0x20;
     this->actionFunc = func_80B1C340;
 }
 
 void func_80B1C340(EnPoSisters* this, GlobalContext* globalCtx) {
     if (SkelAnime_Update(&this->skelAnime)) {
-        this->unk_229 = 255;
+        this->color226.a = 255;
         this->actor.flags |= 1;
         this->unk_191 |= (0x10 | 0x8);
-        if (this->unk_18C == 0) {
+        if (this->sisterType == 0) {
             func_80B1BE4C(this, globalCtx);
         } else {
             func_80B1AC40(this);
@@ -845,10 +845,11 @@ void func_80B1C340(EnPoSisters* this, GlobalContext* globalCtx) {
         f32 temp = this->skelAnime.curFrame / this->skelAnime.endFrame;
         s32 temp_f16 = 255.0f * temp;
 
-        this->unk_229 = CLAMP(temp_f16, 0, 255);
+        this->color226.a = CLAMP(temp_f16, 0, 255);
     }
 }
 
+// combat collider? laughs and drops arrows for meg clone
 void func_80B1C408(EnPoSisters* this, GlobalContext* globalCtx) {
     Vec3f sp3C;
 
@@ -856,7 +857,7 @@ void func_80B1C408(EnPoSisters* this, GlobalContext* globalCtx) {
         this->collider.base.acFlags &= ~AC_HIT;
         func_800BE258(&this->actor, &this->collider.info);
 
-        if (this->unk_18D != 0) {
+        if (this->megCloneNum != 0) {
             ((EnPoSisters*)this->actor.parent)->unk_194--;
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_PO_LAUGH2);
             func_80B1BE4C(this, globalCtx);
@@ -871,7 +872,7 @@ void func_80B1C408(EnPoSisters* this, GlobalContext* globalCtx) {
                 this->actor.world.rot.y = this->actor.shape.rot.y;
                 this->unk_191 |= 2;
                 func_80B1B860(this, globalCtx);
-            } else if ((this->unk_18C == 0) && (this->actor.colChkInfo.damageEffect == 0xE) &&
+            } else if ((this->sisterType == 0) && (this->actor.colChkInfo.damageEffect == 0xE) &&
                        (this->actionFunc == func_80B1C0A4)) {
                 if (this->unk_194 == 0) {
                     this->unk_194 = -45;
@@ -931,14 +932,14 @@ void EnPoSisters_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.floorHeight = func_800C411C(&globalCtx->colCtx, &this->actor.floorPoly, &sp3C, &this->actor, &sp40);
     }
 
-    this->actor.shape.shadowAlpha = this->unk_229;
+    this->actor.shape.shadowAlpha = this->color226.a;
     Actor_SetHeight(&this->actor, 40.0f);
 
     if (this->unk_2F0 > 0.0f) {
         Math_StepToF(&this->unk_2F0, 0.0f, 0.05f);
-        if (this->unk_229 != 255) {
-            temp_f2 = this->unk_229 * (1.0f / 255);
-            if (temp_f2 < this->unk_229) {
+        if (this->color226.a != 255) {
+            temp_f2 = this->color226.a * (1.0f / 255);
+            if (temp_f2 < this->color226.a) {
                 this->unk_2F0 = temp_f2;
             }
         }
@@ -979,32 +980,32 @@ void EnPoSisters_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80B1C974(EnPoSisters* this) {
     if (this->skelAnime.animation == &D_06000114) {
-        this->unk_226 = CLAMP_MAX(this->unk_226 + 5, 255);
-        this->unk_227 = CLAMP_MIN(this->unk_227 - 5, 50);
-        this->unk_228 = CLAMP_MIN(this->unk_228 - 5, 0);
+        this->color226.r = CLAMP_MAX(this->color226.r + 5, 255);
+        this->color226.g = CLAMP_MIN(this->color226.g - 5, 50);
+        this->color226.b = CLAMP_MIN(this->color226.b - 5, 0);
     } else if (this->skelAnime.animation == &D_06000A54) {
-        this->unk_226 = CLAMP_MAX(this->unk_226 + 5, 80);
-        this->unk_227 = CLAMP_MAX(this->unk_227 + 5, 255);
-        this->unk_228 = CLAMP_MAX(this->unk_228 + 5, 225);
+        this->color226.r = CLAMP_MAX(this->color226.r + 5, 80);
+        this->color226.g = CLAMP_MAX(this->color226.g + 5, 255);
+        this->color226.b = CLAMP_MAX(this->color226.b + 5, 225);
     } else if (this->skelAnime.animation == &D_060008C0) {
         if (this->actor.colorFilterTimer & 0x2) {
-            this->unk_226 = 0;
-            this->unk_227 = 0;
-            this->unk_228 = 0;
+            this->color226.r = 0;
+            this->color226.g = 0;
+            this->color226.b = 0;
         } else {
-            this->unk_226 = 80;
-            this->unk_227 = 255;
-            this->unk_228 = 225;
+            this->color226.r = 80;
+            this->color226.g = 255;
+            this->color226.b = 225;
         }
     } else {
-        this->unk_226 = CLAMP_MAX(this->unk_226 + 5, 255);
-        this->unk_227 = CLAMP_MAX(this->unk_227 + 5, 255);
+        this->color226.r = CLAMP_MAX(this->color226.r + 5, 255);
+        this->color226.g = CLAMP_MAX(this->color226.g + 5, 255);
 
-        if (this->unk_228 > 210) {
-            if (this->unk_228 && this->unk_228 && this->unk_228) {}
-            this->unk_228 = CLAMP_MIN(this->unk_228 - 5, 210);
+        if (this->color226.b > 210) {
+            if (this->color226.b && this->color226.b && this->color226.b) {}
+            this->color226.b = CLAMP_MIN(this->color226.b - 5, 210);
         } else {
-            this->unk_228 = CLAMP_MAX(this->unk_228 + 5, 210);
+            this->color226.b = CLAMP_MAX(this->color226.b + 5, 210);
         }
     }
 }
@@ -1039,20 +1040,20 @@ s32 EnPoSisters_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** 
         }
     }
 
-    if ((this->unk_229 == 0) || (limbIndex == 8) || ((this->actionFunc == func_80B1BA90) && (this->unk_192 >= 8))) {
+    if ((this->color226.a == 0) || (limbIndex == 8) || ((this->actionFunc == func_80B1BA90) && (this->unk_192 >= 8))) {
         *dList = NULL;
     } else if (limbIndex == 9) {
-        *dList = D_80B1DACC[this->unk_18C];
+        *dList = D_80B1DACC[this->sisterType];
     } else if (limbIndex == 10) {
-        *dList = D_80B1DADC[this->unk_18C];
+        *dList = D_80B1DADC[this->sisterType];
 
         gDPPipeSync((*gfx)++);
-        gDPSetEnvColor((*gfx)++, this->unk_226, this->unk_227, this->unk_228, this->unk_229);
+        gDPSetEnvColor((*gfx)++, this->color226.r, this->color226.g, this->color226.b, this->color226.a);
     } else if (limbIndex == 11) {
-        Color_RGBA8* colour = &D_80B1DAEC[this->unk_18C];
+        Color_RGBA8* colour = &D_80B1DAEC[this->sisterType];
 
         gDPPipeSync((*gfx)++);
-        gDPSetEnvColor((*gfx)++, colour->r, colour->g, colour->b, this->unk_229);
+        gDPSetEnvColor((*gfx)++, colour->r, colour->g, colour->b, this->color226.a);
     }
 
     return false;
@@ -1094,7 +1095,7 @@ void EnPoSisters_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
         }
 
         if (this->unk_190 > 0) {
-            Color_RGBA8* sp38 = &D_80B1DA30[this->unk_18C];
+            Color_RGBA8* sp38 = &D_80B1DA30[this->sisterType];
 
             temp_f2 = Rand_ZeroFloat(0.3f) + 0.7f;
 
@@ -1112,15 +1113,15 @@ void EnPoSisters_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
         }
 
         if (!(this->unk_191 & 0x80)) {
-            Matrix_CopyCurrentState(&this->unk_358);
+            Matrix_CopyCurrentState(&this->mtxf);
         }
     }
 }
 
 void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnPoSisters* this = THIS;
-    Color_RGBA8* temp_s1 = &D_80B1DA40[this->unk_18C];
-    Color_RGBA8* temp_s7 = &D_80B1DA30[this->unk_18C];
+    Color_RGBA8* temp_s1 = &D_80B1DA40[this->sisterType];
+    Color_RGBA8* temp_s7 = &D_80B1DA30[this->sisterType];
     s32 pad;
     s32 i;
     s32 phi_s5;
@@ -1133,14 +1134,14 @@ void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
 
-    if ((this->unk_229 == 255) || (this->unk_229 == 0)) {
-        gDPSetEnvColor(POLY_OPA_DISP++, this->unk_226, this->unk_227, this->unk_228, this->unk_229);
+    if ((this->color226.a == 255) || (this->color226.a == 0)) {
+        gDPSetEnvColor(POLY_OPA_DISP++, this->color226.r, this->color226.g, this->color226.b, this->color226.a);
         gSPSegment(POLY_OPA_DISP++, 0x09, D_801AEFA0);
         POLY_OPA_DISP =
             SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                            EnPoSisters_OverrideLimbDraw, EnPoSisters_PostLimbDraw, &this->actor, POLY_OPA_DISP);
     } else {
-        gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, this->unk_229);
+        gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, this->color226.a);
         gSPSegment(POLY_XLU_DISP++, 0x09, D_801AEF88);
         POLY_XLU_DISP =
             SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
@@ -1148,7 +1149,7 @@ void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (!(this->unk_191 & 0x80)) {
-        Matrix_SetCurrentState(&this->unk_358);
+        Matrix_SetCurrentState(&this->mtxf);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, D_060027B0);
