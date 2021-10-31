@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 
 #define ANIM_INTERP 1

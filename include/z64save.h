@@ -30,9 +30,9 @@ typedef struct {
 } HorseData; // size = 0x0A
 
 typedef struct {
-    /* 0x0 */ Vec3f pos;
-    /* 0xC */ s16 yaw;
-    /* 0xE */ s16 playerParams;
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ s16 yaw;
+    /* 0x0E */ s16 playerParams;
     /* 0x10 */ u16 entranceIndex;
     /* 0x12 */ u8 roomIndex;
     /* 0x13 */ s8 data;
@@ -40,6 +40,14 @@ typedef struct {
     /* 0x18 */ u32 unk_18;
     /* 0x1C */ u32 tempCollectFlags;
 } RespawnData; // size = 0x20
+
+typedef struct {
+    /* 0x00 */ u32 chest;
+    /* 0x04 */ u32 swch0;
+    /* 0x08 */ u32 swch1;
+    /* 0x0C */ u32 clearedRoom;
+    /* 0x10 */ u32 collectible;
+} CycleSceneFlags; // size = 0x14
 
 typedef struct {
     /* 0x0000 */ char newf[6];                   // original name: newf"               Will always be "ZELDA3 for a valid save
@@ -182,7 +190,7 @@ typedef struct {
     /* 0x3F5C */ s32 unk_3F5C;                   // original name: bet_rupees
     /* 0x3F60 */ u8 screenScaleFlag;             // original name: framescale_flag
     /* 0x3F64 */ f32 screenScale;                // original name: framescale_scale
-    /* 0x3F68 */ u32 cycleSceneFlags[120][5];
+    /* 0x3F68 */ CycleSceneFlags cycleSceneFlags[120];
     /* 0x48C8 */ u16 unk_48C8;                   // original name: scene_id_mix
     /* 0x48CA */ u8 maskMaskBit[3];              // original name: mask_mask_bit
     /* 0x48CD */ u8 unk_48CD[24];
