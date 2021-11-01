@@ -49,6 +49,14 @@ typedef struct {
     /* 0x08 */ Gfx* dLists[2]; // Near and far
 } LodLimb; // size = 0x10
 
+typedef struct {
+    /* 0x00 */ Vec3s jointPos; // Root is position in model space, children are relative to parent
+    /* 0x06 */ u8 child;
+    /* 0x07 */ u8 sibling;
+    /* 0x08 */ s32 unk_8; // Type of data contained in segment
+    /* 0x0C */ void* segment; // Segment address of data. Currently unclear what.
+} SkinLimb; // size = 0x10
+
 // Model has limbs with only rigid meshes
 typedef struct {
     /* 0x00 */ void** segment;
@@ -275,5 +283,52 @@ typedef struct struct_80B8E1A8 {
     /* 0x08 */ u8 mode;
     /* 0x0C */ f32 transitionRate;
 } struct_80B8E1A8; // size = 0x10
+
+
+typedef struct {
+    /* 0x000 */ u16 unk_0;
+    /* 0x002 */ s16 unk_2;
+    /* 0x004 */ s16 unk_4;
+    /* 0x006 */ s8 unk_6;
+    /* 0x007 */ s8 unk_7;
+    /* 0x008 */ s8 unk_8;
+    /* 0x009 */ u8 unk_9;
+} Struct_800A57C0; // size = 0xA
+
+typedef struct {
+    /* 0x000 */ u8  unk_0;
+    /* 0x002 */ s16 x;
+    /* 0x004 */ s16 y;
+    /* 0x006 */ s16 z;
+    /* 0x008 */ u8  unk_8;
+} Struct_800A598C_2; // size = 0xA
+
+typedef struct {
+    /* 0x000 */ u16 unk_0;
+    /* 0x002 */ u16 unk_2;
+    /* 0x004 */ u16 unk_4;
+    /* 0x008 */ Struct_800A57C0* unk_8;
+    /* 0x00C */ Struct_800A598C_2* unk_C;
+} Struct_800A598C; // size = 0x10
+
+typedef struct {
+    /* 0x000 */ u16 unk_0;
+    /* 0x002 */ u16 unk_2;
+    /* 0x004 */ Struct_800A598C* unk_4;
+    /* 0x008 */ Gfx* unk_8;
+} Struct_800A5E28; // size = 0xC
+
+typedef struct {
+    /* 0x000 */ u8 unk_0;
+    /* 0x004 */ Vtx* buf[2];
+} SkinAvb; // size = 0xC
+
+typedef struct {
+    /* 0x000 */ SkeletonHeader* skeletonHeader;
+    /* 0x004 */ MtxF mtx;
+    /* 0x044 */ s32 avbCount;
+    /* 0x048 */ SkinAvb* avbTbl;
+    /* 0x04C */ SkelAnime skelAnime;
+} PSkinAwb; // size = 0x90
 
 #endif
