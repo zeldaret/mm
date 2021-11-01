@@ -1323,7 +1323,7 @@ void EnZot_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnZot* this = THIS;
 
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 15.0f, 30.0f, 5);

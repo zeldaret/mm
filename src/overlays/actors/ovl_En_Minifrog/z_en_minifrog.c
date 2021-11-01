@@ -586,7 +586,7 @@ void EnMinifrog_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     this->actionFunc(this, globalCtx);
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 25.0f, 12.0f, 0.0f, 0x1D);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);

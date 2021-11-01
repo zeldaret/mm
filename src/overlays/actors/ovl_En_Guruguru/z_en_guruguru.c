@@ -366,7 +366,7 @@ void EnGuruguru_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
     Actor_SetScale(&this->actor, 0.01f);
     Actor_SetFocus(&this->actor, 50.0f);
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Math_SmoothStepToS(&this->headXRot, this->headXRotTarget, 1, 3000, 0);
     Math_SmoothStepToS(&this->headZRot, this->headZRotTarget, 1, 1000, 0);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);

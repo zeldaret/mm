@@ -78,7 +78,7 @@ void EnDyExtra_Update(Actor* thisx, GlobalContext* globalCtx) {
     DECR(this->unk14C);
     Audio_PlayActorSound2(&this->actor, NA_SE_PL_SPIRAL_HEAL_BEAM - SFX_FLAG);
     this->actionFunc(this, globalCtx);
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void EnDyExtra_Draw(Actor* thisx, GlobalContext* globalCtx) {

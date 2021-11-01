@@ -891,7 +891,7 @@ void EnOwl_Update(Actor* thisx, GlobalContext* globalCtx) {
     s16 sp36;
 
     if (this->actor.draw != NULL) {
-        Actor_MoveForward(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
 
     if (this->unk_414 != NULL) {

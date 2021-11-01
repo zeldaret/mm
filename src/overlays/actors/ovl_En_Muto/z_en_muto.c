@@ -264,7 +264,7 @@ void EnMuto_Update(Actor* thisx, GlobalContext* globalCtx2) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     Actor_SetFocus(&this->actor, 60.0f);
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 
     Math_SmoothStepToS(&this->headRot.y, this->headRotTarget.y, 1, 0xBB8, 0);
     Math_SmoothStepToS(&this->headRot.x, this->headRotTarget.x, 1, 0x3E8, 0);

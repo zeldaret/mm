@@ -1054,7 +1054,7 @@ void EnSkb_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_8099672C(this, globalCtx);
     if ((this->actionFunc != func_8099630C) && (this->actionFunc != func_809963D8) &&
         (this->actionFunc != func_80995E64)) {
-        Actor_MoveForward(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
 
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 15.0f, 30.0f, 60.0f, 0x1D);

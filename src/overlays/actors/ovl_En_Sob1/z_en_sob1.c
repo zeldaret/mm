@@ -737,7 +737,7 @@ void EnSob1_EndWalk(EnSob1* this, GlobalContext* globalCtx) {
             EnSob1_SetupAction(this, EnSob1_SetupIdle);
         }
     }
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void EnSob1_SetupIdle(EnSob1* this, GlobalContext* globalCtx) {
@@ -777,7 +777,7 @@ void EnSob1_Walk(EnSob1* this, GlobalContext* globalCtx) {
             }
         }
     }
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     EnSob1_Walking(this, globalCtx);
 }
 

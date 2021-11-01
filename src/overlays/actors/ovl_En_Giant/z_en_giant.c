@@ -407,7 +407,7 @@ void EnGiant_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 blinkTimerTemp;
 
     this->actionFunc(this, globalCtx);
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
 
     if (this->blinkTimer == 0) {

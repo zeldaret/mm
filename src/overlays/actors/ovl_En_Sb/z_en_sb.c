@@ -372,7 +372,7 @@ void EnSb_Update(Actor* thisx, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->actor);
     } else {
         Actor_SetFocus(&this->actor, 20.0f);
-        Actor_MoveForward(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
         this->actionFunc(this, globalCtx);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 25.0f, 20.0f, 5);
         EnSb_UpdateDamage(this, globalCtx);

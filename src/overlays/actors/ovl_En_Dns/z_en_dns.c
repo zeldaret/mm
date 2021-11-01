@@ -426,7 +426,7 @@ void func_8092D330(EnDns* this, GlobalContext* globalCtx) {
         sp30.x = Math_SinS(this->unk_2D4) * this->unk_2EC;
         sp30.z = Math_CosS(this->unk_2D4) * this->unk_2EC;
         Math_ApproachS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp30), 3, 0x2AA8);
-        Actor_MoveForward(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
     if ((this->unk_2C6 & 0x100) && (DECR(this->unk_2D0) == 0)) {
         this->unk_2C6 &= ~0x100;

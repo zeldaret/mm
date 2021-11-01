@@ -38,7 +38,7 @@ void EnBu_DoNothing(EnBu* this, GlobalContext* globalCtx) {
 void EnBu_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnBu* this = THIS;
 
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     this->actionFunc(this, globalCtx);
 }
 

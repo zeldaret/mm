@@ -67,7 +67,7 @@ void BgCtowerRot_Init(Actor* thisx, GlobalContext* globalCtx) {
         BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06017650);
         this->dyna.actor.world.rot.y = this->dyna.actor.shape.rot.y - 0x4000;
     }
-    Actor_CalcOffsetOrientedToDrawRotation(&this->dyna.actor, &offset, &player->actor.world.pos);
+    Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
     if (offset.z < 0.0f) {
         this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x + (Math_SinS(this->dyna.actor.world.rot.y) * 80.0f);
         this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + (Math_CosS(this->dyna.actor.world.rot.y) * 80.0f);
@@ -91,7 +91,7 @@ void BgCtowerRot_CorridorRotate(BgCtowerRot* this, GlobalContext* globalCtx) {
     f32 offsetDiffZ;
     f32 rotZtmp;
 
-    Actor_CalcOffsetOrientedToDrawRotation(&this->dyna.actor, &offset, &player->actor.world.pos);
+    Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
     if (offset.z > 1100.0f) {
         rotZ = 0.0f;
     } else {
@@ -131,7 +131,7 @@ void BgCtowerRot_DoorIdle(BgCtowerRot* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Vec3f offset;
 
-    Actor_CalcOffsetOrientedToDrawRotation(&this->dyna.actor, &offset, &player->actor.world.pos);
+    Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
     if (offset.z > 30.0f) {
         this->unk160 = 0.0f;
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);

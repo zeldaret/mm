@@ -1339,7 +1339,7 @@ void EnFu_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 
     func_809642E0(this, globalCtx);
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     func_8096209C(this, globalCtx);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     SkelAnime_Update(&this->skelAnime);

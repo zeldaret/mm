@@ -567,7 +567,7 @@ void func_8098A468(EnDg* this, GlobalContext* globalCtx) {
     this->actor.velocity.y = 0.0f;
     this->actor.gravity = -3.0f;
     func_80989674(this, globalCtx);
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     if (player->transformation == PLAYER_FORM_HUMAN) {
         func_80989E18(this, globalCtx);
     }
@@ -619,7 +619,7 @@ void func_8098A618(EnDg* this, GlobalContext* globalCtx) {
         }
         this->actor.world.rot.y = this->actor.shape.rot.y;
         Math_ApproachF(&this->actor.speedXZ, -1.5f, 0.2f, 1.0f);
-        Actor_MoveForward(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
 
     func_80989974(this);
@@ -655,7 +655,7 @@ void func_8098A70C(EnDg* this, GlobalContext* globalCtx) {
         this->actor.speedXZ = 7.0f;
     }
 
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     func_80989974(this);
     if (Animation_OnFrame(&this->skelAnime, 3.0f)) {
         Audio_PlayActorSound2(&this->actor, NA_SE_EV_SMALL_DOG_CRY);
@@ -707,7 +707,7 @@ void func_8098A938(EnDg* this, GlobalContext* globalCtx) {
         Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.2f, 1.0f);
     }
 
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     func_80989974(this);
     func_80989A08(this, 5.0f);
 }
@@ -715,7 +715,7 @@ void func_8098A938(EnDg* this, GlobalContext* globalCtx) {
 void func_8098AAAC(EnDg* this, GlobalContext* globalCtx) {
     this->unk_280 &= ~8;
     Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.1f, 0.5f);
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     if (DECR(this->unk_28E) == 0) {
         this->unk_28E = 20;
         this->actionFunc = func_8098A938;
@@ -790,7 +790,7 @@ void func_8098AC34(EnDg* this, GlobalContext* globalCtx) {
         if (sp26 >= 0x18) {
             func_80989864(this, globalCtx);
         }
-        Actor_MoveForward(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
 
     func_80989A9C(this, 10.0f);
@@ -808,7 +808,7 @@ void func_8098AE58(EnDg* this, GlobalContext* globalCtx) {
         Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xC00);
         this->actor.world.rot.y = this->actor.shape.rot.y;
         Math_ApproachF(&this->actor.speedXZ, 2.0f, 0.2f, 1.0f);
-        Actor_MoveForward(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
 
     func_80989974(this);
@@ -829,7 +829,7 @@ void func_8098AF98(EnDg* this, GlobalContext* globalCtx) {
         this->actionFunc = func_8098A468;
     }
 
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     func_809899C8(this, 3.0f);
 }
 
@@ -859,7 +859,7 @@ void func_8098B004(EnDg* this, GlobalContext* globalCtx) {
     }
 
     func_8098A064(this, globalCtx);
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     func_80989974(this);
     if (!(this->unk_280 & 0x20)) {
         func_809899C8(this, 3.0f);
@@ -881,7 +881,7 @@ void func_8098B198(EnDg* this, GlobalContext* globalCtx) {
 
     this->actor.world.rot.y = this->actor.shape.rot.y;
     Math_ApproachF(&this->actor.speedXZ, -1.0f, 0.2f, 1.0f);
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     func_80989974(this);
     func_80989A9C(this, 4.0f);
 }
@@ -901,7 +901,7 @@ void func_8098B28C(EnDg* this, GlobalContext* globalCtx) {
 
         this->actor.world.rot.y = this->actor.shape.rot.y;
         Math_ApproachF(&this->actor.speedXZ, -2.0f, 0.2f, 1.0f);
-        Actor_MoveForward(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
 
     func_80989974(this);
@@ -941,7 +941,7 @@ void func_8098B464(EnDg* this, GlobalContext* globalCtx) {
     }
 
     Math_ApproachF(&this->actor.speedXZ, 1.0f, 0.2f, 1.0f);
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void func_8098B560(EnDg* this, GlobalContext* globalCtx) {
@@ -1008,7 +1008,7 @@ void func_8098B560(EnDg* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.world.rot.y, sp46, 4, 0x3E8, 1);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     Math_ApproachF(&this->actor.speedXZ, 0.5f, 0.2f, 1.0f);
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void func_8098B88C(EnDg* this, GlobalContext* globalCtx) {
@@ -1048,7 +1048,7 @@ void func_8098B88C(EnDg* this, GlobalContext* globalCtx) {
         Math_ApproachF(&this->actor.speedXZ, 0.5f, 0.2f, 1.0f);
     }
 
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void func_8098BA64(EnDg* this, GlobalContext* globalCtx) {
@@ -1063,7 +1063,7 @@ void func_8098BA64(EnDg* this, GlobalContext* globalCtx) {
         this->unk_288 = -1;
         D_8098C2FC.unk_02 = this->unk_288;
         this->unk_28A = 100;
-        Actor_MoveForward(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
         this->unk_280 |= 0x10;
         this->actionFunc = func_8098BB10;
     }
@@ -1091,7 +1091,7 @@ void func_8098BB10(EnDg* this, GlobalContext* globalCtx) {
         this->actionFunc = func_8098A468;
     }
 
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void func_8098BBEC(EnDg* this, GlobalContext* globalCtx) {

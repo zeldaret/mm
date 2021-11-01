@@ -413,7 +413,7 @@ void EnDnp_Update(Actor* thisx, GlobalContext* globalCtx) {
         SkelAnime_Update(&this->skelAnime);
         func_80B3CD1C(this);
         func_80B3CEC0(this, globalCtx);
-        Actor_MoveForward(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
         sp2C = this->collider.dim.radius + 50;
         sp28 = this->collider.dim.height + 30;

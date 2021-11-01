@@ -190,7 +190,7 @@ void EnEncount2_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetFocus(&this->dyna.actor, 30.0f);
     Actor_SetScale(&this->dyna.actor, this->scale);
     this->actionFunc(this, globalCtx);
-    Actor_MoveForward(&this->dyna.actor);
+    Actor_MoveWithGravity(&this->dyna.actor);
     EnEncount2_UpdateParticles(this, globalCtx);
 
     if (!this->isPopped) {
