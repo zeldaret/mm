@@ -37,7 +37,6 @@ void func_80AB4040(ObjTokeidai* this, GlobalContext* globalCtx);
 void func_80AB4080(ObjTokeidai* this, GlobalContext* globalCtx);
 void func_80AB4160(ObjTokeidai* this, GlobalContext* globalCtx);
 
-#if 0
 const ActorInit Obj_Tokeidai_InitVars = {
     ACTOR_OBJ_TOKEIDAI,
     ACTORCAT_PROP,
@@ -50,7 +49,7 @@ const ActorInit Obj_Tokeidai_InitVars = {
     (ActorFunc)ObjTokeidai_Draw,
 };
 
-#endif
+static s32 D_80AB49E0[] = { 0xC8580064, 0xB0FC0FA0, 0xB1000CE4, 0x30FC044C };
 
 extern UNK_TYPE D_0600B208;
 extern UNK_TYPE D_0600BA78;
