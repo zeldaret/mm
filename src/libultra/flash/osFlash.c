@@ -197,7 +197,7 @@ s32 osFlashSectorErase(u32 pageNum) {
     // wait for completion by polling erase-busy flag
     osCreateMesgQueue(&mq, &msg, 1);
     do {
-        osSetTimer(&timer, 0x8F0D1ULL, 0ULL, &mq, &msg);
+        osSetTimer(&timer, OS_USEC_TO_CYCLES(12500), 0, &mq, &msg);
         osRecvMesg(&mq, &msg, OS_MESG_BLOCK);
         osEPiReadIo(&__osFlashHandler, __osFlashHandler.baseAddress, &status);
     } while ((status & 2) == 2);
