@@ -15,8 +15,28 @@ void func_800A598C(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 a
 void func_80137EBC(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 arg3, s32 arg4);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_skin/func_80137EBC.s")
 
-void func_80137F58(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, Gfx* arg3, s32 arg4);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_skin/func_80137F58.s")
+void func_80137F58(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, Gfx* arg3, s32 arg4) {
+    Gfx* gfx = arg3;
+    SkinLimb** skeleton;
+
+    OPEN_DISPS(gfxCtx);
+
+    skeleton = Lib_SegmentedToVirtual(skin->skeletonHeader->segment);
+    if (arg3 == NULL) {
+        gfx = ((SkinLimb*)Lib_SegmentedToVirtual(skeleton[limbIndex]))->segment;
+    }
+    if (gfx != NULL) {
+        Mtx* mtx = SkinMatrix_MtxFToNewMtx(gfxCtx, &D_801F5AC0[limbIndex]);
+        if (mtx != NULL) {
+            gSPMatrix(POLY_OPA_DISP++, mtx, G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+            gSPDisplayList(POLY_OPA_DISP++, gfx);
+            gSPPopMatrix(POLY_OPA_DISP++, G_MTX_MODELVIEW);
+            gDPPipeSync(POLY_OPA_DISP++);
+        }
+    }
+
+    CLOSE_DISPS(gfxCtx);
+}
 
 #ifdef NON_MATCHING
 void func_80138050(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinCallback callback, SkinCallback2 arg4,
