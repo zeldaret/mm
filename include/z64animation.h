@@ -331,4 +331,7 @@ typedef struct {
     /* 0x04C */ SkelAnime skelAnime;
 } PSkinAwb; // size = 0x90
 
+typedef void (*SkinCallback)(struct Actor*, struct GlobalContext*, PSkinAwb*);
+typedef s32 (*SkinCallback2)(struct Actor*, struct GlobalContext*, s32, PSkinAwb*);
+
 #endif
