@@ -14,7 +14,7 @@ Useful Links
 ------------
 
 - [Discord](https://discord.zelda64.dev/) - Primary discussion platform.
-- [Trello board](https://trello.com/b/ruxw9n6m/majoras-mask-decompilation) - We use this to track decompilation progress, not GitHub Issues.
+- [Reservation board](https://docs.google.com/spreadsheets/d/1X83YCPRa532v-Zo0WgUsJ2kB1X9RxBta5_p9aWA8uro) - We use this to track decompilation progress, not GitHub Issues.
 
 - [Installation guide](https://github.com/zeldaret/mm/blob/master/README.md#installation) - Instructions for getting this repository set up and built on your machine.
 - [Code Review Guidelines](REVIEWING.md) - These are the guidelines that reviewers will be using when reviewing your code. Good to be familiar with these before submitting your code.
@@ -50,12 +50,12 @@ An *actor* is any thing in the game that moves or performs actions or interactio
 
 You should [join the Discord](https://discord.zelda64.dev/) to say hello and get suggestions on where to start on the `#mm-decomp` channel.
 
-We track who is working on what on the [Trello board](https://trello.com/b/ruxw9n6m/majoras-mask-decompilation).
-After joining the Discord, ask to be added to the Trello board so you can claim your code file and avoid duplicate work. You may need to add a card if a card for your file does not currently exist.
+We track who is working on what on the [Reservation board](https://docs.google.com/spreadsheets/d/1X83YCPRa532v-Zo0WgUsJ2kB1X9RxBta5_p9aWA8uro).
+After joining the Discord, ask to be added to the Google Sheets reservation board so you can claim your code file and avoid duplicate work. You may need to add a card if a card for your file does not currently exist.
 
 The work flow is: Reserve a file, decompile it, submit a PR, and then repeat while addressing review comments. The expectation is that one reservation goes to one file which ends up in a one file PR.
 
-Please note that unless it is communicated beforehand you will be expected to fully complete the file if you reserve it on Trello. Exceptions are always easy to approve if it's communicated to the team. Real life circumstances can prevent someone from finishing. In these cases they should link their repo/branch in the trello and unreserve immediately. Communicate any issues with your reservations as early as possible.
+Please note that unless it is communicated beforehand you will be expected to fully complete the file if you reserve it on Google Sheets reservation board. Exceptions are always easy to approve if it's communicated to the team. Real life circumstances can prevent someone from finishing. In these cases they should link their repo/branch in the trello and unreserve immediately. Communicate any issues with your reservations as early as possible.
 
 Style Guide & Conventions
 -------------------------
