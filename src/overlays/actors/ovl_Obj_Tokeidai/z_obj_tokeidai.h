@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#define OBJ_TOKEIDAI_TYPE(thisx) (((thisx)->params & 0xF000) >> 12)
+
 struct ObjTokeidai;
 
 typedef void (*ObjTokeidaiActionFunc)(struct ObjTokeidai*, GlobalContext*);
@@ -15,7 +17,8 @@ typedef struct ObjTokeidai {
     /* 0x015E */ s16 unk_15E;
     /* 0x0160 */ s16 unk_160;
     /* 0x0162 */ s16 unk_162;
-    /* 0x0164 */ char unk_164[0xC];
+    /* 0x0164 */ char unk_164[0x8];
+    /* 0x016C */ s32 unk_16C;
     /* 0x0170 */ u16 unk_170;
     /* 0x0174 */ ObjTokeidaiActionFunc actionFunc;
 } ObjTokeidai; // size = 0x178
