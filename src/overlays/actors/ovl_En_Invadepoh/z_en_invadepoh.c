@@ -1132,7 +1132,7 @@ void func_80B44A90(EnInvadepoh* this, GlobalContext* globalCtx) {
         this->actor.velocity.y *= 0.8f;
         this->actor.speedXZ *= 0.8f;
     }
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 40.0f, 0.0f, 5);
 }
 
@@ -1208,7 +1208,7 @@ s32 func_80B44C80(EnInvadepoh* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.world.rot.y,
                        Math_FAtan2F(((sp60.z + temp_f0_2) * 0.9f) + sp6C.z, ((sp60.x + temp_f0_3) * 0.9f) + sp6C.x), 4,
                        0xFA0, 0x64);
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     if (func_80B440B8(this, 50.0f, 15.0f)) {
         phi_v0 = 4;
     } else {
@@ -1221,7 +1221,7 @@ s32 func_80B44C80(EnInvadepoh* this, GlobalContext* globalCtx) {
 }
 
 void func_80B44E90(EnInvadepoh* this, GlobalContext* globalCtx) {
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 15.0f, 0.0f, 5);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x1F40, 0x64);
 }
@@ -2816,7 +2816,7 @@ void func_80B49228(EnInvadepoh* this, GlobalContext* globalCtx) {
     s32 pad;
     f32 temp_f0;
 
-    Actor_SetVelocityYRotationAndGravity(&this->actor);
+    Actor_UpdateVelocityWithGravity(&this->actor);
     this->actor.velocity.y *= 0.97f;
     temp_f0 = Math_SmoothStepToF(&this->actor.world.pos.y, this->actor.home.pos.y + D_80B4E934.y + 300.0f, 0.7f,
                                  fabsf(this->actor.velocity.y), 1.0f);
@@ -2845,7 +2845,7 @@ void func_80B4934C(EnInvadepoh* this, GlobalContext* globalCtx) {
         this->actor.gravity = -2.0f;
     }
     this->actor.velocity.y *= 0.96f;
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     func_800B9010(&this->actor, NA_SE_EV_UFO_APPEAR - SFX_FLAG);
     this->actionTimer--;
     if (this->actionTimer <= 0) {
@@ -2932,7 +2932,7 @@ void func_80B49670(EnInvadepoh* this, GlobalContext* globalCtx) {
         this->actor.gravity = 2.0f;
     }
     this->actor.velocity.y *= 0.97f;
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     if (D_80B4E940 == 3) {
         func_80B499BC(this);
     }
@@ -2962,7 +2962,7 @@ void func_80B497EC(EnInvadepoh* this, GlobalContext* globalCtx) {
         this->actor.gravity = 2.0f;
     }
     this->actor.velocity.y *= 0.97f;
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     if (this->actionTimer > 0) {
         this->actionTimer--;
     } else {
@@ -2982,7 +2982,7 @@ void func_80B49904(EnInvadepoh* this) {
 void func_80B4994C(EnInvadepoh* this, GlobalContext* globalCtx) {
     Math_StepToF(&this->actor.speedXZ, 150.0f, 4.0f);
     this->actor.velocity.y *= 0.95f;
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     if (this->actionTimer > 0) {
         this->actionTimer--;
     } else {
@@ -3014,7 +3014,7 @@ void func_80B49A00(EnInvadepoh* this, GlobalContext* globalCtx) {
     } else {
         this->actor.gravity = 2.0f;
     }
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     if (this->actionTimer > 0) {
         this->actionTimer--;

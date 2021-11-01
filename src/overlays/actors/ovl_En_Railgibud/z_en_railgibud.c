@@ -283,7 +283,7 @@ void func_80BA57F8(EnRailgibud* this, GlobalContext* globalCtx) {
     } else {
         this->unk_298 = 0;
     }
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void func_80BA59F0(EnRailgibud* this) {
@@ -790,7 +790,7 @@ s32 func_80BA7088(EnRailgibud* this, GlobalContext* globalCtx) {
 void func_80BA71E4(EnRailgibud* this, GlobalContext* globalCtx) {
     if ((this->actionFunc == func_80BA5B64) || (this->actionFunc == func_80BA62D4) ||
         (this->actionFunc == func_80BA64AC)) {
-        Actor_MoveForward(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
 }
 

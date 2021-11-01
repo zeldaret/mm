@@ -231,7 +231,7 @@ f32 DoorSpiral_GetDistFromPlayer(GlobalContext* globalCtx, DoorSpiral* this, f32
     target.y = player->actor.world.pos.y + yOffset;
     target.z = player->actor.world.pos.z;
 
-    Actor_CalcOffsetOrientedToDrawRotation(&this->actor, &offset, &target);
+    Actor_OffsetOfPointInActorCoords(&this->actor, &offset, &target);
 
     if ((spiralWidth < fabsf(offset.x)) || (spiralHeight < fabsf(offset.y))) {
         return FLT_MAX;

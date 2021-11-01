@@ -337,7 +337,7 @@ void func_80B5BED4(EnOt* this, GlobalContext* globalCtx) {
                        0x38E);
     this->actor.speedXZ = 3.5f;
     this->actor.world.pos.y = this->unk_360->actor.world.pos.y;
-    Actor_SetVelocityAndMoveXYRotationReverse(&this->actor);
+    Actor_MoveWithoutGravityReverse(&this->actor);
 }
 
 void func_80B5BF60(EnOt* this, GlobalContext* globalCtx) {
@@ -376,7 +376,7 @@ void func_80B5BFB8(EnOt* this, GlobalContext* globalCtx) {
         func_80B5C684(this->unk_360, globalCtx);
         func_80B5C684(this, globalCtx);
     } else {
-        Actor_SetVelocityAndMoveXYRotationReverse(&this->actor);
+        Actor_MoveWithoutGravityReverse(&this->actor);
     }
 }
 

@@ -55,7 +55,7 @@ void EnEndingHero3_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnEndingHero3* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
 }
 

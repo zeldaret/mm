@@ -1112,7 +1112,7 @@ void Actor_SetMovementScale(s32 scale) {
     actorMovementScale = scale * 0.5f;
 }
 
-void Actor_ApplyMovement(Actor* actor) {
+void Actor_UpdatePos(Actor* actor) {
     f32 speedRate = actorMovementScale;
 
     actor->world.pos.x += ((actor->velocity.x * speedRate) + actor->colChkInfo.displacement.x);
@@ -1120,7 +1120,7 @@ void Actor_ApplyMovement(Actor* actor) {
     actor->world.pos.z += ((actor->velocity.z * speedRate) + actor->colChkInfo.displacement.z);
 }
 
-void Actor_SetVelocityYRotationAndGravity(Actor* actor) {
+void Actor_UpdateVelocityWithGravity(Actor* actor) {
     actor->velocity.x = actor->speedXZ * Math_SinS(actor->world.rot.y);
     actor->velocity.z = actor->speedXZ * Math_CosS(actor->world.rot.y);
 
@@ -1130,12 +1130,12 @@ void Actor_SetVelocityYRotationAndGravity(Actor* actor) {
     }
 }
 
-void Actor_MoveForward(Actor* actor) {
-    Actor_SetVelocityYRotationAndGravity(actor);
-    Actor_ApplyMovement(actor);
+void Actor_MoveWithGravity(Actor* actor) {
+    Actor_UpdateVelocityWithGravity(actor);
+    Actor_UpdatePos(actor);
 }
 
-void Actor_SetVelocityXYRotation(Actor* actor) {
+void Actor_UpdateVelocityWithoutGravity(Actor* actor) {
     f32 velX = Math_CosS(actor->world.rot.x) * actor->speedXZ;
 
     actor->velocity.x = Math_SinS(actor->world.rot.y) * velX;
@@ -1143,28 +1143,30 @@ void Actor_SetVelocityXYRotation(Actor* actor) {
     actor->velocity.z = Math_CosS(actor->world.rot.y) * velX;
 }
 
-void Actor_SetVelocityAndMoveXYRotation(Actor* actor) {
-    Actor_SetVelocityXYRotation(actor);
-    Actor_ApplyMovement(actor);
+void Actor_MoveWithoutGravity(Actor* actor) {
+    Actor_UpdateVelocityWithoutGravity(actor);
+    Actor_UpdatePos(actor);
 }
 
-void Actor_SetVelocityXYRotationReverse(Actor* actor) {
+void Actor_UpdateVelocityWithoutGravityReverse(Actor* actor) {
     f32 velX = Math_CosS(-actor->world.rot.x) * actor->speedXZ;
+
     actor->velocity.x = Math_SinS(actor->world.rot.y) * velX;
     actor->velocity.y = Math_SinS(-actor->world.rot.x) * actor->speedXZ;
     actor->velocity.z = Math_CosS(actor->world.rot.y) * velX;
 }
 
-void Actor_SetVelocityAndMoveXYRotationReverse(Actor* actor) {
-    Actor_SetVelocityXYRotationReverse(actor);
-    Actor_ApplyMovement(actor);
+void Actor_MoveWithoutGravityReverse(Actor* actor) {
+    Actor_UpdateVelocityWithoutGravityReverse(actor);
+    Actor_UpdatePos(actor);
 }
 
-void func_800B6C04(Actor* actor, f32 speed) {
+void Actor_UpdateSpeeds(Actor* actor, f32 speed) {
     actor->speedXZ = Math_CosS(actor->world.rot.x) * speed;
     actor->velocity.y = -Math_SinS(actor->world.rot.x) * speed;
 }
 
+// unused
 void func_800B6C58(Actor* actor, SkelAnime* skelAnime) {
     Vec3f pos;
 
@@ -1220,7 +1222,7 @@ f32 Actor_XZDistanceToPoint(Actor* actor, Vec3f* point) {
  * @param[out] offset The transformed coordinates.
  * @param[in]  point  The point to transform to actor coordinates.
  */
-void Actor_CalcOffsetOrientedToDrawRotation(Actor* actor, Vec3f* offset, Vec3f* point) {
+void Actor_OffsetOfPointInActorCoords(Actor* actor, Vec3f* offset, Vec3f* point) {
     f32 cos_rot_y;
     f32 sin_rot_y;
     f32 imm_x;

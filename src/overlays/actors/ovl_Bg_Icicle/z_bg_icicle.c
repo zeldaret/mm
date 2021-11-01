@@ -184,7 +184,7 @@ void BgIcicle_Fall(BgIcicle* this, GlobalContext* globalCtx) {
             return;
         }
     } else {
-        Actor_MoveForward(&this->dyna.actor);
+        Actor_MoveWithGravity(&this->dyna.actor);
         this->dyna.actor.world.pos.y += 40.0f;
         Actor_UpdateBgCheckInfo(globalCtx, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
         this->dyna.actor.world.pos.y -= 40.0f;

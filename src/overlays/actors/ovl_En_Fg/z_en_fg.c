@@ -233,7 +233,7 @@ void EnFg_Idle(EnFg* this, GlobalContext* globalCtx) {
                 this->actionFunc = EnFg_Jump;
             }
     }
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void EnFg_Jump(EnFg* this, GlobalContext* globalCtx) {
@@ -286,7 +286,7 @@ void EnFg_Jump(EnFg* this, GlobalContext* globalCtx) {
                 this->actionFunc = EnFg_Idle;
                 this->actor.velocity.y = 0.0f;
             } else {
-                Actor_MoveForward(&this->actor);
+                Actor_MoveWithGravity(&this->actor);
             }
     }
 }
@@ -313,7 +313,7 @@ void EnFg_Knockback(EnFg* this, GlobalContext* globalCtx) {
             EnFg_AddDust(&this->dustEffect[0], &this->actor.world.pos);
         }
         this->actor.shape.rot.x += 0x1000;
-        Actor_MoveForward(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
 }
 

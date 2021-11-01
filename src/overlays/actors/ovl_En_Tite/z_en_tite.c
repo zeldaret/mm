@@ -1067,7 +1067,7 @@ void EnTite_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 
     if (this->actionFunc != func_808951B8) {
-        Actor_MoveForward(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 25.0f, 40.0f, 20.0f, this->unk_2C0);
         func_808963B4(this, globalCtx);
         if (this->actor.bgCheckFlags & 1) {

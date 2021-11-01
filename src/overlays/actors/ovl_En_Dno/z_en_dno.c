@@ -864,7 +864,7 @@ void func_80A732C8(EnDno* this, GlobalContext* globalCtx) {
             }
         }
     }
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void func_80A73408(EnDno* this, GlobalContext* globalCtx) {

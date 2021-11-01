@@ -1369,7 +1369,7 @@ void EnDinofos_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     this->actionFunc(this, globalCtx);
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 25.0f, 30.0f, 60.0f, 0x5D);
     if (this->actionFunc != func_8089C7B8) {
         if ((this->actor.yDistToWater > 0.0f) && (this->actor.yDistToWater < 10.0f)) {

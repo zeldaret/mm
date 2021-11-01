@@ -596,7 +596,7 @@ void func_80B2DD2C(EnPoh* this, GlobalContext* globalCtx) {
         func_80B2E0B0(this);
     }
 
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, 10.0f, 10.0f, 4);
 }
 
@@ -817,7 +817,7 @@ void EnPoh_Update(Actor* thisx, GlobalContext* globalCtx2) {
     func_80B2E438(this, globalCtx);
     func_80B2E55C(this);
     this->actionFunc(this, globalCtx);
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     if ((this->actionFunc == func_80B2CF28) && (this->unk_18E < 10)) {
         this->actor.flags |= 0x1000000;
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->colliderSph.base);

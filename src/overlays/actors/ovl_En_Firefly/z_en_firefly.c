@@ -682,13 +682,13 @@ void EnFirefly_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
     if (!(this->actor.flags & 0x8000)) {
         if ((this->actor.colChkInfo.health == 0) || (this->actionFunc == EnFirefly_Stunned)) {
-            Actor_MoveForward(&this->actor);
+            Actor_MoveWithGravity(&this->actor);
         } else {
             if (this->actionFunc != EnFirefly_Rebound) {
                 this->actor.world.rot.x = 0x1554 - this->actor.shape.rot.x;
             }
 
-            Actor_SetVelocityAndMoveXYRotation(&this->actor);
+            Actor_MoveWithoutGravity(&this->actor);
         }
     }
 

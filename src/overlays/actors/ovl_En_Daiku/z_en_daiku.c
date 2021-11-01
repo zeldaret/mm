@@ -287,7 +287,7 @@ void EnDaiku_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     Actor_SetFocus(&this->actor, 65.0f);
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Math_SmoothStepToS(&this->unk_260, this->unk_266, 1, 0xBB8, 0);
     Math_SmoothStepToS(&this->unk_25E, this->unk_264, 1, 0xBB8, 0);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);

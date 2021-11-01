@@ -806,7 +806,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.shape.shadowScale = 15.0f;
     this->actionFunc(this, globalCtx);
     Actor_SetFocus(&this->actor, this->unk308);
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 60.0f, 0x1F);
 

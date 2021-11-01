@@ -1184,7 +1184,7 @@ void EnRd_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->actionFunc(this, globalCtx);
 
         if ((this->unk_3EF != 10) && (this->actor.speedXZ != 0.0f)) {
-            Actor_MoveForward(&this->actor);
+            Actor_MoveWithGravity(&this->actor);
         }
 
         if ((this->actor.shape.rot.x == 0) && (this->unk_3EF != 10) && (this->actor.speedXZ != 0.0f)) {

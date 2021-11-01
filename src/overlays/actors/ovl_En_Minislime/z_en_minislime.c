@@ -736,9 +736,9 @@ void EnMinislime_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if ((this->actionFunc != EnMinislime_Disappear) && (this->actionFunc != EnMinislime_Despawn)) {
         if (this->actionFunc == EnMinislime_MoveToBigslime) {
-            Actor_SetVelocityAndMoveXYRotation(&this->actor);
+            Actor_MoveWithoutGravity(&this->actor);
         } else {
-            Actor_MoveForward(&this->actor);
+            Actor_MoveWithGravity(&this->actor);
         }
 
         EnMinislime_CheckBackgroundCollision(this);

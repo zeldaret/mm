@@ -1431,7 +1431,7 @@ void EnFsn_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnFsn* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     func_800E9250(globalCtx, &this->actor, &this->headRot, &this->unk27A, this->actor.focus.pos);
     func_8013D9C8(globalCtx, this->limbRotYTable, this->limbRotZTable, 19);
     EnFsn_Blink(this);

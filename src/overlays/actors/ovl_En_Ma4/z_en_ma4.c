@@ -317,7 +317,7 @@ void EnMa4_RunInCircles(EnMa4* this, GlobalContext* globalCtx) {
     }
 
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
-    Actor_MoveForward(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     if (this->skelAnime.animation == &D_06007328) { // Walking animation
         if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 4.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_ROMANI_WALK);
