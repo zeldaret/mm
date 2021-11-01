@@ -101,6 +101,8 @@ void func_80138700(GameState* gameState, PSkinAwb* skin) {
     }
 }
 
+s32 func_801387D4(PSkinAwb* skin, SkinLimb** skeleton, MtxF* mf, u8 parentIndex, u8 limbIndex);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_skin_awb/func_801387D4.s")
 
+s32 func_801388E4(PSkinAwb* skin, MtxF* arg1, Actor* actor, s32 arg3);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_skin_awb/func_801388E4.s")
