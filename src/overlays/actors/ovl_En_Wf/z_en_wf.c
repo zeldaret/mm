@@ -807,8 +807,8 @@ void func_809919F4(EnWf* this, GlobalContext* globalCtx) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_WOLFOS_CRY);
         }
 
-        if ((Math_CosS(sp26 - this->actor.shape.rot.y) < -0.85f) && !Actor_OtherIsTargeted(&globalCtx->state, &this->actor) &&
-            (this->actor.xzDistToPlayer <= 80.0f)) {
+        if ((Math_CosS(sp26 - this->actor.shape.rot.y) < -0.85f) &&
+            !Actor_OtherIsTargeted(&globalCtx->state, &this->actor) && (this->actor.xzDistToPlayer <= 80.0f)) {
             func_80991C04(this);
         } else {
             this->unk_2A0--;
