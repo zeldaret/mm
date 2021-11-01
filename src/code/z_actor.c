@@ -686,7 +686,9 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
                 targetCtx->unk48 = 0;
             }
 
-            sfxId = (actor->flags & (ACTOR_FLAG_4 | ACTOR_FLAG_1)) == (ACTOR_FLAG_4 | ACTOR_FLAG_1) ? NA_SE_SY_LOCK_ON : NA_SE_SY_LOCK_ON_HUMAN;
+            sfxId = (actor->flags & (ACTOR_FLAG_4 | ACTOR_FLAG_1)) == (ACTOR_FLAG_4 | ACTOR_FLAG_1)
+                        ? NA_SE_SY_LOCK_ON
+                        : NA_SE_SY_LOCK_ON_HUMAN;
             play_sound(sfxId);
         }
 
@@ -1214,25 +1216,32 @@ f32 Actor_XZDistanceToPoint(Actor* actor, Vec3f* point) {
     return Math_Vec3f_DistXZ(&actor->world.pos, point);
 }
 
-/** Performs the affine (linear) transformation from world coordinates to actor coordinates
+/**
+ * Find the offset of a point from an actor in that actor's own coordinates (origin at the actor's
+ * world.pos, z-axis is facing angle, i.e. shape.rot.y)
  *
  * @param[in]  actor  The actor whose coordinate system to transform to.
  * @param[out] offset The transformed coordinates.
  * @param[in]  point  The point to transform to actor coordinates.
  */
 void Actor_CalcOffsetOrientedToDrawRotation(Actor* actor, Vec3f* offset, Vec3f* point) {
-    f32 cos_rot_y;
-    f32 sin_rot_y;
-    f32 imm_x;
-    f32 imm_z;
+    f32 cos;
+    f32 sin;
+    f32 diffX;
+    f32 diffZ;
 
-    cos_rot_y = Math_CosS(actor->shape.rot.y);
-    sin_rot_y = Math_SinS(actor->shape.rot.y);
-    imm_x = point->x - actor->world.pos.x;
-    imm_z = point->z - actor->world.pos.z;
+    cos = Math_CosS(actor->shape.rot.y);
+    sin = Math_SinS(actor->shape.rot.y);
 
-    offset->x = ((imm_x * cos_rot_y) - (imm_z * sin_rot_y));
-    offset->z = ((imm_z * cos_rot_y) + (imm_x * sin_rot_y));
+    // Shift X,Z to actor coordinates origin
+    diffX = point->x - actor->world.pos.x;
+    diffZ = point->z - actor->world.pos.z;
+
+    // Rotate X and Z offsets to align Z to actor's shape.rot.y
+    offset->x = ((diffX * cos) - (diffZ * sin));
+    offset->z = ((diffZ * cos) + (diffX * sin));
+
+    // Shift Y to origin
     offset->y = point->y - actor->world.pos.y;
 }
 
@@ -1887,8 +1896,9 @@ s32 func_800B8718(Actor* actor, GameState* gameState) {
 s32 func_800B874C(Actor* actor, GameState* gameState, f32 xzRange, f32 yRange) {
     Player* player = GET_PLAYER(gameState);
 
-    if ((player->actor.flags & ACTOR_FLAG_20000000) || Player_InCsMode(gameState) || (yRange < fabsf(actor->yDistToPlayer)) ||
-        ((player->unk_A94 < actor->xzDistToPlayer)) || (xzRange < actor->xzDistToPlayer)) {
+    if ((player->actor.flags & ACTOR_FLAG_20000000) || Player_InCsMode(gameState) ||
+        (yRange < fabsf(actor->yDistToPlayer)) || ((player->unk_A94 < actor->xzDistToPlayer)) ||
+        (xzRange < actor->xzDistToPlayer)) {
         return false;
     }
 
@@ -2291,7 +2301,8 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
         } else {
             if (((params->updateActorIfSet) && !(actor->flags & params->updateActorIfSet)) ||
                 ((params->updateActorIfSet) &&
-                 (!(actor->flags & ACTOR_FLAG_100000) || ((actor->category == ACTORCAT_EXPLOSIVES) && (params->player->stateFlags1 & 0x200))) &&
+                 (!(actor->flags & ACTOR_FLAG_100000) ||
+                  ((actor->category == ACTORCAT_EXPLOSIVES) && (params->player->stateFlags1 & 0x200))) &&
                  (params->unkC != 0) && (actor != params->unk10) && ((actor != params->player->heldActor)) &&
                  (actor->parent != &params->player->actor))) {
                 CollisionCheck_ResetDamage(&actor->colChkInfo);
@@ -2452,8 +2463,8 @@ void Actor_Draw(GlobalContext* globalCtx, Actor* actor) {
         light->enablePosLights = true;
     }
 
-    Lights_BindAll(light, globalCtx->lightCtx.listHead, (actor->flags & (ACTOR_FLAG_10000000 | ACTOR_FLAG_400000)) ? NULL : &actor->world.pos,
-                   globalCtx);
+    Lights_BindAll(light, globalCtx->lightCtx.listHead,
+                   (actor->flags & (ACTOR_FLAG_10000000 | ACTOR_FLAG_400000)) ? NULL : &actor->world.pos, globalCtx);
     Lights_Draw(light, globalCtx->state.gfxCtx);
 
     if (actor->flags & ACTOR_FLAG_1000) {
@@ -3152,8 +3163,7 @@ ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
 
 #ifdef NON_MATCHING
 Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, GlobalContext* globalCtx, s16 index, f32 x, f32 y, f32 z,
-                                     s16 rotX, s16 rotY, s16 rotZ, s32 params, u32 cutscene, s32 arg11,
-                                     Actor* parent) {
+                                     s16 rotX, s16 rotY, s16 rotZ, s32 params, u32 cutscene, s32 arg11, Actor* parent) {
     s32 pad;
     Actor* actor;
     ActorInit* sp2C; // actorInit
@@ -3381,7 +3391,8 @@ void func_800BB604(GameState* gameState, ActorContext* actorCtx, Player* player,
     while (phi_s0 != 0) {
         if ((phi_s0->update != 0) && (phi_s0 != &player->actor)) {
             if ((phi_s0->flags & (ACTOR_FLAG_40000000 | ACTOR_FLAG_1)) != 0) {
-                if ((actorCategory == ACTORCAT_ENEMY) && ((phi_s0->flags & (ACTOR_FLAG_4 | ACTOR_FLAG_1)) == (ACTOR_FLAG_4 | ACTOR_FLAG_1))) {
+                if ((actorCategory == ACTORCAT_ENEMY) &&
+                    ((phi_s0->flags & (ACTOR_FLAG_4 | ACTOR_FLAG_1)) == (ACTOR_FLAG_4 | ACTOR_FLAG_1))) {
                     if ((phi_s0->xyzDistToPlayerSq < SQ(500.0f)) && (phi_s0->xyzDistToPlayerSq < D_801ED8CC)) {
                         actorCtx->targetContext.unk90 = phi_s0;
                         D_801ED8CC = phi_s0->xyzDistToPlayerSq;
@@ -3596,8 +3607,7 @@ void Actor_SpawnFloorDustRing(GlobalContext* globalCtx, Actor* actor, Vec3f* pos
     }
 }
 
-void func_800BBFB0(GlobalContext* globalCtx, Vec3f* position, f32 arg2, s32 arg3, s16 arg4, s16 scaleStep,
-                   u8 arg6) {
+void func_800BBFB0(GlobalContext* globalCtx, Vec3f* position, f32 arg2, s32 arg3, s16 arg4, s16 scaleStep, u8 arg6) {
     Vec3f pos;
     Vec3f accel = { 0.0f, 0.3f, 0.0f };
     s32 i;
