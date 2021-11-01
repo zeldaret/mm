@@ -36,6 +36,7 @@ void func_80AB3ED0(ObjTokeidai* this, GlobalContext* globalCtx);
 void func_80AB4040(ObjTokeidai* this, GlobalContext* globalCtx);
 void func_80AB4080(ObjTokeidai* this, GlobalContext* globalCtx);
 void func_80AB4160(ObjTokeidai* this, GlobalContext* globalCtx);
+void func_80AB4394(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit Obj_Tokeidai_InitVars = {
     ACTOR_OBJ_TOKEIDAI,
@@ -49,12 +50,21 @@ const ActorInit Obj_Tokeidai_InitVars = {
     (ActorFunc)ObjTokeidai_Draw,
 };
 
-static s32 D_80AB49E0[] = { 0xC8580064, 0xB0FC0FA0, 0xB1000CE4, 0x30FC044C };
+// static InitChainEntry sInitChain
+static InitChainEntry D_80AB49E0[] = {
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 3300, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 1100, ICHAIN_STOP),
+};
 
+extern UNK_TYPE D_06009A08;
 extern UNK_TYPE D_0600B208;
 extern UNK_TYPE D_0600BA78;
 extern UNK_TYPE D_0600CF28;
 extern UNK_TYPE D_0600D388;
+extern UNK_TYPE D_0600D8E0;
+extern UNK_TYPE D_0600D8E8;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB2790.s")
 
@@ -68,7 +78,67 @@ extern UNK_TYPE D_0600D388;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB2BBC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/ObjTokeidai_Init.s")
+void ObjTokeidai_Init(Actor* thisx, GlobalContext* globalCtx) {
+    ObjTokeidai* this = THIS;
+
+    Actor_ProcessInitChain(&this->actor, D_80AB49E0);
+    this->actionFunc = func_80AB3BD8;
+    this->unk_144 = NULL;
+    this->unk_148 = NULL;
+    this->unk_160 = 0;
+    this->unk_15E = 0;
+    this->unk_162 = 0;
+    this->unk_170 = gSaveContext.time;
+    this->actor.home.rot.x = 0;
+    switch ((this->actor.params & 0xF000) >> 0xC) {
+        case 4:
+            Actor_SetScale(&this->actor, 0.15f);
+            func_80AB28C8(this, globalCtx);
+            break;
+        case 0:
+            func_80AB28C8(this, globalCtx);
+            break;
+        case 1:
+            this->unk_144 = &D_0600D388;
+            break;
+        case 8:
+            Actor_SetScale(&this->actor, 1.0f);
+            this->unk_144 = &D_06009A08;
+            this->actionFunc = func_80AB365C;
+            break;
+        case 5:
+            Actor_SetScale(&this->actor, 0.15f);
+            func_80AB29F8(this, globalCtx);
+            break;
+        case 2:
+            func_80AB29F8(this, globalCtx);
+            break;
+        case 9:
+            Actor_SetScale(&this->actor, 0.02f);
+            this->actor.draw = func_80AB4394;
+            func_80AB2834(this);
+            this->actionFunc = func_80AB4040;
+            break;
+        case 10:
+            Actor_SetScale(&this->actor, 0.01f);
+            this->actor.draw = func_80AB4394;
+            func_80AB2834(this);
+            this->actionFunc = func_80AB4040;
+            break;
+        case 6:
+            Actor_SetScale(&this->actor, 0.15f);
+            func_80AB2BBC(this, globalCtx);
+            break;
+        case 3:
+            func_80AB2BBC(this, globalCtx);
+            break;
+        case 11:
+            this->unk_144 = &D_0600D8E8;
+            this->unk_148 = &D_0600D8E0;
+            this->actionFunc = func_80AB3BE8;
+            break;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/ObjTokeidai_Destroy.s")
 
