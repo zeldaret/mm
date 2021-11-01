@@ -720,7 +720,7 @@
     0x800B6B24:("Actor_MoveWithoutGravity",),
     0x800B6B50:("Actor_UpdateVelocityWithoutGravityReverse",),
     0x800B6BD8:("Actor_MoveWithoutGravityReverse",),
-    0x800B6C04:("Actor_UpdateSpeeds",),
+    0x800B6C04:("Actor_SetSpeeds",),
     0x800B6C58:("func_800B6C58",),
     0x800B6CD4:("Actor_YawBetweenActors",),
     0x800B6D00:("Actor_YawBetweenActorsTop",),

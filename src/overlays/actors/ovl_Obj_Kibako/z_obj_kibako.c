@@ -77,7 +77,7 @@ static Gfx* sDisplayLists[] = { D_05007890, D_06001180 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -1500, ICHAIN_CONTINUE),
-    ICHAIN_F32_DIV1000(minVelocityY, -18000, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(terminalVelocity, -18000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 60, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 60, ICHAIN_STOP),
 };

@@ -786,7 +786,7 @@ void EnMushi2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void func_80A6A300(EnMushi2* this) {
     this->unk_368 = 100;
     this->actor.gravity = -0.25f;
-    this->actor.minVelocityY = -3.5f;
+    this->actor.terminalVelocity = -3.5f;
     this->unk_370 = Rand_S16Offset(-1000, 2000);
     this->skelAnime.playSpeed = 1.5f;
     this->actionFunc = func_80A6A36C;
@@ -946,7 +946,7 @@ void func_80A6A9E4(EnMushi2* this, GlobalContext* globalCtx) {
 
 void func_80A6AAA4(EnMushi2* this) {
     this->actor.velocity.y = -1.2f;
-    this->actor.minVelocityY = -1.2f;
+    this->actor.terminalVelocity = -1.2f;
     this->actor.gravity = -0.5f;
     this->unk_368 = Rand_S16Offset(120, 50);
     this->unk_36E = 0;
@@ -1010,7 +1010,7 @@ void func_80A6AE14(EnMushi2* this) {
     this->unk_30C &= ~1;
     this->unk_368 = 100;
     this->actor.velocity.y = 0.0f;
-    this->actor.minVelocityY = -0.8f;
+    this->actor.terminalVelocity = -0.8f;
     this->actor.gravity = -0.04f;
     func_80A68B6C(this);
     this->actionFunc = func_80A6AE7C;

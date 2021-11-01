@@ -140,7 +140,7 @@ static Vec3f D_80896B44 = { 0.0f, 0.45f, 0.0f };
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, 70, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_CONTINUE),
-    ICHAIN_F32(minVelocityY, -40, ICHAIN_CONTINUE),
+    ICHAIN_F32(terminalVelocity, -40, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_STOP),
 };
 

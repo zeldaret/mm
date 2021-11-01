@@ -562,7 +562,7 @@ static InitChainEntry sInitChainRomani[] = {
 static InitChainEntry D_80B4EC68[] = {
     ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 1000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 1000, ICHAIN_CONTINUE), ICHAIN_VEC3S(shape.rot, 0, ICHAIN_CONTINUE),
-    ICHAIN_F32(minVelocityY, -100, ICHAIN_CONTINUE),       ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
+    ICHAIN_F32(terminalVelocity, -100, ICHAIN_CONTINUE),       ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
 
 static InitChainEntry sInitChainDog[] = {

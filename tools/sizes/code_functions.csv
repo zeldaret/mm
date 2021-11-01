@@ -234,7 +234,7 @@ asm/non_matchings/code/z_actor/Actor_UpdateVelocityWithoutGravity.s,Actor_Update
 asm/non_matchings/code/z_actor/Actor_MoveWithoutGravity.s,Actor_MoveWithoutGravity,0x800B6B24,0xB
 asm/non_matchings/code/z_actor/Actor_UpdateVelocityWithoutGravityReverse.s,Actor_UpdateVelocityWithoutGravityReverse,0x800B6B50,0x22
 asm/non_matchings/code/z_actor/Actor_MoveWithoutGravityReverse.s,Actor_MoveWithoutGravityReverse,0x800B6BD8,0xB
-asm/non_matchings/code/z_actor/Actor_UpdateSpeeds.s,Actor_UpdateSpeeds,0x800B6C04,0x15
+asm/non_matchings/code/z_actor/Actor_SetSpeeds.s,Actor_SetSpeeds,0x800B6C04,0x15
 asm/non_matchings/code/z_actor/func_800B6C58.s,func_800B6C58,0x800B6C58,0x1F
 asm/non_matchings/code/z_actor/Actor_YawBetweenActors.s,Actor_YawBetweenActors,0x800B6CD4,0xB
 asm/non_matchings/code/z_actor/Actor_YawBetweenActorsTop.s,Actor_YawBetweenActorsTop,0x800B6D00,0xB

@@ -57,7 +57,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3S(shape.rot, 0, ICHAIN_CONTINUE),          ICHAIN_VEC3S(world.rot, 0, ICHAIN_CONTINUE),
-    ICHAIN_F32_DIV1000(gravity, -900, ICHAIN_CONTINUE),   ICHAIN_F32_DIV1000(minVelocityY, -4000, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(gravity, -900, ICHAIN_CONTINUE),   ICHAIN_F32_DIV1000(terminalVelocity, -4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 300, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_STOP),
 };

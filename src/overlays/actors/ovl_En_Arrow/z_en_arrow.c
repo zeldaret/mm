@@ -36,7 +36,7 @@ static ColliderQuadInit D_8088C1E0 = {
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_8088C230[] = {
-    ICHAIN_F32(minVelocityY, -150, ICHAIN_STOP),
+    ICHAIN_F32(terminalVelocity, -150, ICHAIN_STOP),
 };
 
 #endif

@@ -125,7 +125,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.draw = NULL;
     this->alpha = 0;
     this->actor.velocity.y = -10.0f;
-    this->actor.minVelocityY = -10.0f;
+    this->actor.terminalVelocity = -10.0f;
     this->actor.gravity = -5.0f;
     switch (type) {
         case GIANT_TYPE_CANYON_TERMINA_FIELD:
@@ -160,7 +160,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
                          Animation_GetLastFrame(&D_060116E4), 2, 0.0f);
         this->actor.draw = EnGiant_Draw;
         this->actor.velocity.y = 0.0f;
-        this->actor.minVelocityY = 0.0f;
+        this->actor.terminalVelocity = 0.0f;
         this->actor.gravity = 0.0f;
     }
 
@@ -170,7 +170,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
         Animation_Change(&this->skelAnime, &D_06013FE8, 1.0f, 0.0f, Animation_GetLastFrame(&D_06013004), 0, 0.0f);
         this->actor.draw = EnGiant_Draw;
         this->actor.velocity.y = 0.0f;
-        this->actor.minVelocityY = 0.0f;
+        this->actor.terminalVelocity = 0.0f;
         this->actor.gravity = 0.0f;
         if (EnGiant_IsImprisoned(this)) {
             Actor_MarkForDeath(&this->actor);

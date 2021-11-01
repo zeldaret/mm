@@ -31,7 +31,7 @@ static ColliderCylinderInit D_809ABBD0 = {
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_809ABC4C[] = {
     ICHAIN_F32_DIV1000(gravity, -3200, ICHAIN_CONTINUE),
-    ICHAIN_F32_DIV1000(minVelocityY, -17000, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(terminalVelocity, -17000, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 400, ICHAIN_STOP),
 };
 

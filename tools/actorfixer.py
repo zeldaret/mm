@@ -73,7 +73,7 @@ animdict = {
     "Actor_SetVelocityAndMoveXYRotation": "Actor_MoveWithoutGravity",
     "Actor_SetVelocityXYRotationReverse": "Actor_UpdateVelocityWithoutGravityReverse",
     "Actor_SetVelocityAndMoveXYRotationReverse": "Actor_MoveWithoutGravityReverse",
-    "func_800B6C04": "Actor_UpdateSpeeds",
+    "func_800B6C04": "Actor_SetSpeeds",
     "func_800B81E0": "Actor_GetFocus",
     "func_800B8214": "Actor_GetWorld",
     "func_800B8248": "Actor_GetWorldPosShapeRot",
@@ -218,6 +218,7 @@ animdict = {
     "MainHeap_Cleanup": "ZeldaArena_Cleanup",
     "MainHeap_IsInitialized": "ZeldaArena_IsInitialized",
 
+    # structs members
     "skelanime.unk03": "skelanime.taper",
     "skelanime.animCurrentSeg": "skelanime.animation",
     "skelanime.initialFrame": "skelanime.startFrame",
@@ -234,6 +235,7 @@ animdict = {
     "skelanime.prevFrameRot": "skelanime.prevRot",
     "skelanime.prevFramePos": "skelanime.prevTransl",
     "skelanime.unk3E": "skelanime.baseTransl",
+    "actor.minVelocityY": "actor.terminalVelocity",
 }
 
 def replace_anim(file):

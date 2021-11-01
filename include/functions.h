@@ -708,7 +708,7 @@ void Actor_UpdateVelocityWithoutGravity(Actor* actor);
 void Actor_MoveWithoutGravity(Actor* actor);
 void Actor_UpdateVelocityWithoutGravityReverse(Actor* actor);
 void Actor_MoveWithoutGravityReverse(Actor* actor);
-void Actor_UpdateSpeeds(Actor* actor, f32 speed);
+void Actor_SetSpeeds(Actor* actor, f32 speed);
 s16 Actor_YawBetweenActors(Actor* from, Actor* to);
 s16 Actor_YawBetweenActorsTop(Actor* from, Actor* to);
 s16 Actor_YawToPoint(Actor* actor, Vec3f* point);

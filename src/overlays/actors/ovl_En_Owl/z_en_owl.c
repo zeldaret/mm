@@ -145,7 +145,7 @@ void EnOwl_Init(Actor* thisx, GlobalContext* globalCtx) {
                        16);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.minVelocityY = -10.0f;
+    this->actor.terminalVelocity = -10.0f;
     this->actor.targetArrowOffset = 500.0f;
     EnOwl_ChangeMode(this, func_8095BF58, func_8095C484, &this->skelAnime2, &D_0600CDB0, 0.0f);
 

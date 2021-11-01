@@ -71,7 +71,7 @@ void ArmsHook_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void ArmsHook_Wait(ArmsHook* this, GlobalContext* globalCtx) {
     if (this->actor.parent == NULL) {
         ArmsHook_SetupAction(this, ArmsHook_Shoot);
-        Actor_UpdateSpeeds(&this->actor, 20.0f);
+        Actor_SetSpeeds(&this->actor, 20.0f);
         this->actor.parent = &GET_PLAYER(globalCtx)->actor;
         this->timer = 26;
     }

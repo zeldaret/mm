@@ -1077,7 +1077,7 @@ void Actor_Init(Actor* actor, GlobalContext* globalCtx) {
     Math_Vec3f_Copy(&actor->prevPos, &actor->world.pos);
     Actor_SetScale(actor, 0.01f);
     actor->targetMode = 3;
-    actor->minVelocityY = -20.0f;
+    actor->terminalVelocity = -20.0f;
 
     actor->xyzDistToPlayerSq = FLT_MAX;
     actor->uncullZoneForward = 1000.0f;
@@ -1112,29 +1112,48 @@ void Actor_SetMovementScale(s32 scale) {
     actorMovementScale = scale * 0.5f;
 }
 
+/**
+ * Update actor position using velocity and any push from z_collision_check.
+ */
 void Actor_UpdatePos(Actor* actor) {
     f32 speedRate = actorMovementScale;
 
-    actor->world.pos.x += ((actor->velocity.x * speedRate) + actor->colChkInfo.displacement.x);
-    actor->world.pos.y += ((actor->velocity.y * speedRate) + actor->colChkInfo.displacement.y);
-    actor->world.pos.z += ((actor->velocity.z * speedRate) + actor->colChkInfo.displacement.z);
+    actor->world.pos.x += (actor->velocity.x * speedRate) + actor->colChkInfo.displacement.x;
+    actor->world.pos.y += (actor->velocity.y * speedRate) + actor->colChkInfo.displacement.y;
+    actor->world.pos.z += (actor->velocity.z * speedRate) + actor->colChkInfo.displacement.z;
 }
 
+/**
+ * Updates actor's velocity accounting for gravity (without exceeding terminal velocity)
+ * The operation is performed in cylindrical coordinates
+ * 
+ * It is recommended to not call this function directly and use `Actor_MoveWithGravity` instead
+ */
 void Actor_UpdateVelocityWithGravity(Actor* actor) {
     actor->velocity.x = actor->speedXZ * Math_SinS(actor->world.rot.y);
     actor->velocity.z = actor->speedXZ * Math_CosS(actor->world.rot.y);
 
     actor->velocity.y += actor->gravity;
-    if (actor->velocity.y < actor->minVelocityY) {
-        actor->velocity.y = actor->minVelocityY;
+    if (actor->velocity.y < actor->terminalVelocity) {
+        actor->velocity.y = actor->terminalVelocity;
     }
 }
 
+/**
+ * Moves actor accounting for its current velocity and applying gravity
+ * The operation is performed in cylindrical coordinates
+ */
 void Actor_MoveWithGravity(Actor* actor) {
     Actor_UpdateVelocityWithGravity(actor);
     Actor_UpdatePos(actor);
 }
 
+/**
+ * Updates actor's velocity, ignoring gravity
+ * The operation is performed in spherical coordinates
+ * 
+ * It is recommended to not call this function directly and use `Actor_MoveWithoutGravity` instead
+ */
 void Actor_UpdateVelocityWithoutGravity(Actor* actor) {
     f32 velX = Math_CosS(actor->world.rot.x) * actor->speedXZ;
 
@@ -1143,11 +1162,22 @@ void Actor_UpdateVelocityWithoutGravity(Actor* actor) {
     actor->velocity.z = Math_CosS(actor->world.rot.y) * velX;
 }
 
+/**
+ * Moves actor accounting for its current velocity, without applying gravity
+ * The operation is performed in spherical coordinates
+ * 
+ * Useful for flying or swimming actors
+ */
 void Actor_MoveWithoutGravity(Actor* actor) {
     Actor_UpdateVelocityWithoutGravity(actor);
     Actor_UpdatePos(actor);
 }
 
+/**
+ * Like `Actor_UpdateVelocityWithoutGravity`, but the actor is moved backwards instead of forwards
+ * 
+ * It is recommended to not call this function directly and use `Actor_MoveWithoutGravityReverse` instead
+ */
 void Actor_UpdateVelocityWithoutGravityReverse(Actor* actor) {
     f32 velX = Math_CosS(-actor->world.rot.x) * actor->speedXZ;
 
@@ -1156,12 +1186,18 @@ void Actor_UpdateVelocityWithoutGravityReverse(Actor* actor) {
     actor->velocity.z = Math_CosS(actor->world.rot.y) * velX;
 }
 
+/**
+ * Like `Actor_MoveWithoutGravity`, but the actor is moved backwards instead of forwards
+ */
 void Actor_MoveWithoutGravityReverse(Actor* actor) {
     Actor_UpdateVelocityWithoutGravityReverse(actor);
     Actor_UpdatePos(actor);
 }
 
-void Actor_UpdateSpeeds(Actor* actor, f32 speed) {
+/**
+ * Sets horizontal speed and Y velocity using the `speed` argument and current pitch
+ */
+void Actor_SetSpeeds(Actor* actor, f32 speed) {
     actor->speedXZ = Math_CosS(actor->world.rot.x) * speed;
     actor->velocity.y = -Math_SinS(actor->world.rot.x) * speed;
 }
@@ -1216,25 +1252,29 @@ f32 Actor_XZDistanceToPoint(Actor* actor, Vec3f* point) {
     return Math_Vec3f_DistXZ(&actor->world.pos, point);
 }
 
-/** Performs the affine (linear) transformation from world coordinates to actor coordinates
+/**
+ * Find the offset of a point from an actor in that actor's own coordinates (origin at the actor's
+ * world.pos, z-axis is facing angle, i.e. shape.rot.y)
  *
  * @param[in]  actor  The actor whose coordinate system to transform to.
  * @param[out] offset The transformed coordinates.
  * @param[in]  point  The point to transform to actor coordinates.
  */
 void Actor_OffsetOfPointInActorCoords(Actor* actor, Vec3f* offset, Vec3f* point) {
-    f32 cos_rot_y;
-    f32 sin_rot_y;
-    f32 imm_x;
-    f32 imm_z;
+    f32 cos = Math_CosS(actor->shape.rot.y);
+    f32 sin = Math_SinS(actor->shape.rot.y);
+    f32 diffX;
+    f32 diffZ;
 
-    cos_rot_y = Math_CosS(actor->shape.rot.y);
-    sin_rot_y = Math_SinS(actor->shape.rot.y);
-    imm_x = point->x - actor->world.pos.x;
-    imm_z = point->z - actor->world.pos.z;
+    // Shift X,Z to actor coordinates origin
+    diffX = point->x - actor->world.pos.x;
+    diffZ = point->z - actor->world.pos.z;
 
-    offset->x = ((imm_x * cos_rot_y) - (imm_z * sin_rot_y));
-    offset->z = ((imm_z * cos_rot_y) + (imm_x * sin_rot_y));
+    // Rotate X and Z offsets to align Z to actor's shape.rot.y
+    offset->x = ((diffX * cos) - (diffZ * sin));
+    offset->z = ((diffZ * cos) + (diffX * sin));
+
+    // Shift Y to origin
     offset->y = point->y - actor->world.pos.y;
 }
 

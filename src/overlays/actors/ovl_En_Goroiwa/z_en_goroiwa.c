@@ -42,7 +42,7 @@ static CollisionCheckInfoInit D_80942DF4 = { 0, 12, 60, MASS_HEAVY };
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80942E78[] = {
     ICHAIN_F32_DIV1000(gravity, -900, ICHAIN_CONTINUE),
-    ICHAIN_F32_DIV1000(minVelocityY, -26000, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(terminalVelocity, -26000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 160, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 350, ICHAIN_STOP),

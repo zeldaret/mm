@@ -43,7 +43,7 @@ static ColliderJntSphInit D_80A1D3E8 = {
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80A1D414[] = {
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
-    ICHAIN_F32_DIV1000(minVelocityY, -20000, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(terminalVelocity, -20000, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 1600, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),

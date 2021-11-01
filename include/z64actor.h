@@ -170,7 +170,7 @@ typedef struct Actor {
     /* 0x064 */ Vec3f velocity; // Velocity of the actor in each axis
     /* 0x070 */ f32 speedXZ; // How fast the actor is traveling along the XZ plane
     /* 0x074 */ f32 gravity; // Acceleration due to gravity. Value is added to Y velocity every frame
-    /* 0x078 */ f32 minVelocityY; // Sets the lower bounds cap on velocity along the Y axis
+    /* 0x078 */ f32 terminalVelocity; // Sets the lower bounds cap on velocity along the Y axis
     /* 0x07C */ struct CollisionPoly* wallPoly; // Wall polygon the actor is touching
     /* 0x080 */ struct CollisionPoly* floorPoly; // Floor polygon directly below the actor
     /* 0x084 */ u8 wallBgId; // Bg ID of the wall polygon the actor is touching
