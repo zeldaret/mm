@@ -210,7 +210,7 @@ void SkelAnime_DrawFlexLod(GlobalContext* globalCtx, void** skeleton, Vec3s* joi
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0xD, mtx);
+    gSPSegment(POLY_OPA_DISP++, 0x0D, mtx);
     Matrix_StatePush();
 
     rootLimb = (LodLimb*)Lib_SegmentedToVirtual(skeleton[0]);
@@ -428,7 +428,7 @@ void SkelAnime_DrawFlexOpa(GlobalContext* globalCtx, void** skeleton, Vec3s* joi
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0xD, mtx);
+    gSPSegment(POLY_OPA_DISP++, 0x0D, mtx);
 
     Matrix_StatePush();
 
@@ -555,7 +555,7 @@ void func_801343C0(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable,
 
     mtx = (Mtx*)GRAPH_ALLOC(globalCtx->state.gfxCtx, ALIGN16(sizeof(Mtx) * dListCount));
 
-    gSPSegment(POLY_OPA_DISP++, 0xD, mtx);
+    gSPSegment(POLY_OPA_DISP++, 0x0D, mtx);
 
     Matrix_StatePush();
 
@@ -822,7 +822,7 @@ Gfx* SkelAnime_DrawFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jointT
 
     mtx = (Mtx*)GRAPH_ALLOC(globalCtx->state.gfxCtx, ALIGN16(sizeof(Mtx) * dListCount));
 
-    gSPSegment(gfx++, 0xD, mtx);
+    gSPSegment(gfx++, 0x0D, mtx);
 
     Matrix_StatePush();
 

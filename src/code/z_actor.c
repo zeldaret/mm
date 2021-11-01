@@ -1069,7 +1069,7 @@ void Actor_SetScale(Actor* actor, f32 scale) {
 }
 
 void Actor_SetObjectDependency(GlobalContext* globalCtx, Actor* actor) {
-    gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[actor->objBankIndex].segment);
+    gSegments[0x06] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[actor->objBankIndex].segment);
 }
 
 void Actor_Init(Actor* actor, GlobalContext* globalCtx) {
@@ -2633,7 +2633,7 @@ void func_800B9EF4(GlobalContext* globalCtx, s32 numActors, Actor** actors) {
         // sp34 = globalCtx + 0x18000;
         spA4 = globalCtx->unk_18E68;
 
-        PreRender_SetValues(&globalCtx->pauseBgPreRender, D_801FBBCC, D_801FBBCE, __gfxCtx->framebuffer,
+        PreRender_SetValues(&globalCtx->pauseBgPreRender, D_801FBBCC, D_801FBBCE, __gfxCtx->curFrameBuffer,
                             __gfxCtx->zbuffer);
 
         func_80170200(&globalCtx->pauseBgPreRender, &spAC, __gfxCtx->zbuffer, (void*)spA4);

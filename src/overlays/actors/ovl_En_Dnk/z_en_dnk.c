@@ -177,7 +177,7 @@ s32 func_80A515C4(EnDnk* this) {
 
 void func_80A51648(EnDnk* this, GlobalContext* globalCtx) {
     if (func_8013D8DC(this->unk_28E, globalCtx) == 1) {
-        gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->unk_28E].segment);
+        gSegments[0x06] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->unk_28E].segment);
         this->actor.draw = func_80A52018;
         this->actor.objBankIndex = this->unk_28E;
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 18.0f);

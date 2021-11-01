@@ -1102,7 +1102,7 @@ void func_80B2ADB0(EnFish2* this, Vec3f* vec, s16 arg2) {
                 phi_v0 = &D_04091BE0;
             }
 
-            ptr->unk_20 = gSegments[(phi_v0 * 0x10) >> 0x1C] + (phi_v0 & 0xFFFFFF);
+            ptr->unk_20 = VIRTUAL_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(phi_v0));
             ptr->unk_00 = true;
             ptr->unk_04 = *vec;
             ptr->unk_04.x += randPlusMinusPoint5Scaled(ptr->unk_00 + (this->unk_330 * 4000.0f));

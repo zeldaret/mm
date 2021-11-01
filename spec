@@ -609,11 +609,10 @@ beginseg
     include "build/data/code/game.bss.o"
     include "build/src/code/gamealloc.o"
     include "build/src/code/graph.o"
-    include "build/data/code/graph.data.o"
-    include "build/data/code/graph.bss.o"
-    include "build/src/code/code_80174A40.o"
+    include "build/src/code/graphalloc.o"
     include "build/src/code/listalloc.o"
     include "build/src/code/main.o"
+    include "build/data/code/main.data.o"
     include "build/data/code/main.bss.o"
     include "build/src/code/padmgr.o"
     include "build/data/code/padmgr.data.o"
@@ -634,6 +633,7 @@ beginseg
     include "build/data/code/sys_matrix.data.o"
     include "build/data/code/sys_matrix.bss.o"
     include "build/src/code/sys_ucode.o"
+    include "build/src/code/code_80182CE0.o"
     include "build/data/code/code_801D1E70.data.o"
     include "build/src/code/code_80183070.o"
     include "build/src/code/c_keyframe.o"
@@ -2191,8 +2191,7 @@ beginseg
     name "ovl_En_Wf"
     compress
     include "build/src/overlays/actors/ovl_En_Wf/z_en_wf.o"
-    include "build/data/ovl_En_Wf/ovl_En_Wf.data.o"
-    include "build/data/ovl_En_Wf/ovl_En_Wf.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Wf/ovl_En_Wf_reloc.o"
 endseg
 
 beginseg
@@ -3576,8 +3575,7 @@ beginseg
     name "ovl_En_Elforg"
     compress
     include "build/src/overlays/actors/ovl_En_Elforg/z_en_elforg.o"
-    include "build/data/ovl_En_Elforg/ovl_En_Elforg.data.o"
-    include "build/data/ovl_En_Elforg/ovl_En_Elforg.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Elforg/ovl_En_Elforg_reloc.o"
 endseg
 
 beginseg
@@ -3975,8 +3973,7 @@ beginseg
     name "ovl_En_Po_Sisters"
     compress
     include "build/src/overlays/actors/ovl_En_Po_Sisters/z_en_po_sisters.o"
-    include "build/data/ovl_En_Po_Sisters/ovl_En_Po_Sisters.data.o"
-    include "build/data/ovl_En_Po_Sisters/ovl_En_Po_Sisters.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Po_Sisters/ovl_En_Po_Sisters_reloc.o"
 endseg
 
 beginseg
