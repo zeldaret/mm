@@ -101,8 +101,91 @@ void func_80138700(GameState* gameState, PSkinAwb* skin) {
     }
 }
 
-s32 func_801387D4(PSkinAwb* skin, SkinLimb** skeleton, MtxF* mf, u8 parentIndex, u8 limbIndex);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_skin_awb/func_801387D4.s")
+s32 func_801387D4(PSkinAwb* skin, SkinLimb** skeleton, MtxF* mf, u8 parentIndex, u8 limbIndex) {
+    s32 pad;
+    SkinLimb* limb = Lib_SegmentedToVirtual(skeleton[limbIndex]);
+    MtxF* mtx;
+    s32 temp_ret;
+    MtxF sp28;
 
-s32 func_801388E4(PSkinAwb* skin, MtxF* arg1, Actor* actor, s32 arg3);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_skin_awb/func_801388E4.s")
+    if (parentIndex == 0xFF) {
+        SkinMatrix_GetClear(&mtx);
+    } else {
+        mtx = &mf[(s32)parentIndex];
+    }
+
+    SkinMatrix_MtxFMtxFMult(mtx, &mf[limbIndex], &sp28);
+    SkinMatrix_MtxFCopy(&sp28, &mf[limbIndex]);
+
+    if (limb->child != 0xFF) {
+        temp_ret = func_801387D4(skin, skeleton, mf, limbIndex, limb->child);
+        if (temp_ret) { // func_801387D4 only returns false
+            return temp_ret;
+        }
+    }
+
+    if (limb->sibling != 0xFF) {
+        temp_ret = func_801387D4(skin, skeleton, mf, parentIndex, limb->sibling);
+        if (temp_ret) { // func_801387D4 only returns false
+            return temp_ret;
+        }
+    }
+
+    return false;
+}
+
+s32 func_801388E4(PSkinAwb* skin, MtxF* arg1, Actor* actor, s32 arg3) {
+    s32 i;
+    s32 pad;
+    f32 yRot;
+    f32 xRot;
+    f32 zRot;
+    s32 temp_ret;
+    f32 yTransl;
+    f32 xTransl;
+    f32 zTransl;
+    SkinLimb** skeleton = Lib_SegmentedToVirtual(skin->skeletonHeader->segment);
+    Vec3s* jointRot = &skin->skelAnime.jointTable[0];
+
+    jointRot++;
+    xRot = jointRot[0].x;
+    yRot = jointRot[0].y;
+    zRot = jointRot[0].z;
+
+    if (arg3 != 0) {
+        jointRot--;
+        xTransl = jointRot[0].x;
+        yTransl = jointRot[0].y;
+        zTransl = jointRot[0].z;
+        jointRot++;
+
+        SkinMatrix_SetRotateRPYTranslate(arg1, xRot, yRot, zRot, xTransl, yTransl, zTransl);
+    } else {
+        SkinMatrix_SetRotateRPYTranslate(arg1, xRot, yRot, zRot, 0.0f, 0.0f, 0.0f);
+    }
+    jointRot++;
+
+    for (i = 1; i < skin->skeletonHeader->limbCount; i++) {
+        SkinLimb* limb = Lib_SegmentedToVirtual(skeleton[i]);
+
+        xTransl = limb->jointPos.x;
+        yTransl = limb->jointPos.y;
+        zTransl = limb->jointPos.z;
+        xRot = jointRot->x;
+        yRot = jointRot->y;
+        zRot = jointRot->z;
+        jointRot++;
+        SkinMatrix_SetRotateRPYTranslate(&arg1[i], xRot, yRot, zRot, xTransl, yTransl, zTransl);
+    }
+
+    SkinMatrix_SetScaleRotateYRPTranslate(
+        &skin->mtx, actor->scale.x, actor->scale.y, actor->scale.z, actor->shape.rot.x, actor->shape.rot.y,
+        actor->shape.rot.z, actor->world.pos.x, actor->world.pos.y + (actor->shape.yOffset * actor->scale.y),
+        actor->world.pos.z);
+
+    temp_ret = func_801387D4(skin, Lib_SegmentedToVirtual(skin->skeletonHeader->segment), arg1, 0xFF, 0);
+    if (!temp_ret) { // func_801387D4 only returns false
+        return temp_ret;
+    }
+    return false;
+}
