@@ -138,7 +138,7 @@ s32 osFlashAllErase(void) {
     // wait for completion by polling erase-busy flag
     osCreateMesgQueue(&mq, &msg, 1);
     do {
-        osSetTimer(&timer, 0xABA95ULL, 0ULL, &mq, &msg);
+        osSetTimer(&timer, OS_USEC_TO_CYCLES(15000), 0, &mq, &msg);
         osRecvMesg(&mq, &msg, OS_MESG_BLOCK);
         osEPiReadIo(&__osFlashHandler, __osFlashHandler.baseAddress, &status);
     } while ((status & 2) == 2);
