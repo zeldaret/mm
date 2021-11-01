@@ -226,7 +226,7 @@ s32 Sched_TaskCheckFramebuffers(SchedContext* sched, OSScTask* task) {
     void* curFB = osViGetCurrentFramebuffer();
 
     if (task == NULL || sched->pendingSwapBuf1 != NULL ||
-        (curFB == ((CfbInfo*)task->framebuffer)->fb1 && curFB != nextFB)) {
+        (curFB == TASK_FRAMEBUFFER(task)->fb1 && curFB != nextFB)) {
         return 0;
     }
     return 1;
@@ -258,7 +258,7 @@ s32 Sched_Schedule(SchedContext* sched, OSScTask** spTask, OSScTask** dpTask, s3
                 }
             }
         } else if (ret == (OS_SC_SP | OS_SC_DP)) {
-            if (gfxTask->framebuffer == NULL || Sched_TaskCheckFramebuffers(sched, gfxTask)) {
+            if (TASK_FRAMEBUFFER(gfxTask) == NULL || Sched_TaskCheckFramebuffers(sched, gfxTask)) {
                 *spTask = *dpTask = gfxTask;
                 ret &= ~(OS_SC_SP | OS_SC_DP);
                 sched->gfxListHead = sched->gfxListHead->next;
@@ -272,7 +272,7 @@ s32 Sched_Schedule(SchedContext* sched, OSScTask** spTask, OSScTask** dpTask, s3
 }
 
 void Sched_TaskUpdateFramebuffer(SchedContext* sched, OSScTask* task) {
-    sched->pendingSwapBuf1 = task->framebuffer;
+    sched->pendingSwapBuf1 = TASK_FRAMEBUFFER(task);
 
     if (sched->curBuf != NULL && sched->curBuf->updateRate2 > 0) {
         return;

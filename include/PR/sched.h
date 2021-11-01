@@ -22,12 +22,12 @@
 
 typedef struct OSScTask {
     /* 0x00 */ struct OSScTask* next;
-    /* 0x04 */ u32      state;
-    /* 0x08 */ u32      flags;
-    /* 0x0C */ void*    framebuffer; // CfbInfo*
-    /* 0x10 */ OSTask   list;
-    /* 0x50 */ OSMesgQueue* msgQ;
-    /* 0x54 */ OSMesg   msg;
+    /* 0x04 */ u32              state;
+    /* 0x08 */ u32              flags;
+    /* 0x0C */ void*            framebuffer;
+    /* 0x10 */ OSTask           list;
+    /* 0x50 */ OSMesgQueue*     msgQ;
+    /* 0x54 */ OSMesg           msg;
 } OSScTask; // size = 0x58
 
 typedef struct {
