@@ -1128,7 +1128,7 @@ void Actor_UpdatePos(Actor* actor) {
 /**
  * Updates actor's velocity accounting for gravity (without exceeding terminal velocity)
  * The operation is performed in cylindrical coordinates
- * 
+ *
  * It is recommended to not call this function directly and use `Actor_MoveWithGravity` instead
  */
 void Actor_UpdateVelocityWithGravity(Actor* actor) {
@@ -1153,7 +1153,7 @@ void Actor_MoveWithGravity(Actor* actor) {
 /**
  * Updates actor's velocity, ignoring gravity
  * The operation is performed in spherical coordinates
- * 
+ *
  * It is recommended to not call this function directly and use `Actor_MoveWithoutGravity` instead
  */
 void Actor_UpdateVelocityWithoutGravity(Actor* actor) {
@@ -1167,7 +1167,7 @@ void Actor_UpdateVelocityWithoutGravity(Actor* actor) {
 /**
  * Moves actor accounting for its current velocity, without applying gravity
  * The operation is performed in spherical coordinates
- * 
+ *
  * Useful for flying or swimming actors
  */
 void Actor_MoveWithoutGravity(Actor* actor) {
@@ -1177,7 +1177,7 @@ void Actor_MoveWithoutGravity(Actor* actor) {
 
 /**
  * Like `Actor_UpdateVelocityWithoutGravity`, but the actor is moved backwards instead of forwards
- * 
+ *
  * It is recommended to not call this function directly and use `Actor_MoveWithoutGravityReverse` instead
  */
 void Actor_UpdateVelocityWithoutGravityReverse(Actor* actor) {

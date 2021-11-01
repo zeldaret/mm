@@ -224,7 +224,7 @@ void EnHoll_TransparentIdle(EnHoll* this, GlobalContext* globalCtx) {
     f32 playerDistFromCentralPlane;
 
     Actor_OffsetOfPointInActorCoords(&this->actor, &transformedPlayerPos,
-                                           useViewEye ? &globalCtx->view.eye : &player->actor.world.pos);
+                                     useViewEye ? &globalCtx->view.eye : &player->actor.world.pos);
     enHollTop = (globalCtx->sceneNum == SCENE_PIRATE) ? EN_HOLL_TOP_PIRATE : EN_HOLL_TOP_DEFAULT;
 
     if ((transformedPlayerPos.y > EN_HOLL_BOTTOM_DEFAULT) && (transformedPlayerPos.y < enHollTop) &&
