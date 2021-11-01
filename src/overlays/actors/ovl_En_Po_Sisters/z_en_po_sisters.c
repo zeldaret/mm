@@ -157,7 +157,7 @@ void EnPoSisters_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnPoSisters* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 50.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 50.0f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &D_060065C8, &D_060014CC, this->jointTable, this->morphTable, 12);
     this->unk_226 = 255;
     this->unk_227 = 255;
@@ -489,7 +489,7 @@ void func_80B1B3A8(EnPoSisters* this) {
     }
 
     this->unk_191 &= ~(0x8 | 0x2 | 0x1);
-    func_800BCB70(&this->actor, 0x4000, 255, 0, 16);
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 16);
     this->actionFunc = func_80B1B444;
 }
 
@@ -854,7 +854,7 @@ void func_80B1C408(EnPoSisters* this, GlobalContext* globalCtx) {
 
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
-        func_800BE258(&this->actor, &this->collider.info);
+        Actor_SetDropFlag(&this->actor, &this->collider.info);
 
         if (this->unk_18D != 0) {
             ((EnPoSisters*)this->actor.parent)->unk_194--;
@@ -920,7 +920,7 @@ void EnPoSisters_Update(Actor* thisx, GlobalContext* globalCtx) {
         func_80B1A894(this, globalCtx);
     }
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 
     if (this->unk_191 & 0x10) {
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 0.0f, 5);
@@ -932,7 +932,7 @@ void EnPoSisters_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->actor.shape.shadowAlpha = this->unk_229;
-    Actor_SetHeight(&this->actor, 40.0f);
+    Actor_SetFocus(&this->actor, 40.0f);
 
     if (this->unk_2F0 > 0.0f) {
         Math_StepToF(&this->unk_2F0, 0.0f, 0.05f);

@@ -872,7 +872,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     } else {
         if (this->isStormActive && (this->actor.xyzDistToPlayerSq < (SQ(dist))) && (player->invincibilityTimer == 0)) {
-            func_800B8D50(globalCtx, &this->actor, 2.0f, this->actor.world.rot.y, 0.0f, 0x10);
+            func_800B8D50(&globalCtx->state, &this->actor, 2.0f, this->actor.world.rot.y, 0.0f, 0x10);
         }
 
         EnNiw_CheckRage(this, globalCtx);

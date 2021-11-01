@@ -259,7 +259,7 @@ s32 func_808F3334(EnIn* this, GlobalContext* globalCtx) {
             return 0;
         }
         Audio_PlayActorSound2(&player->actor, 0x83E);
-        func_800B8D98(globalCtx, &this->actor, 3.0f, this->actor.yawTowardsPlayer, 6.0f);
+        func_800B8D98(&globalCtx->state, &this->actor, 3.0f, this->actor.yawTowardsPlayer, 6.0f);
     }
     return 1;
 }

@@ -85,7 +85,7 @@ void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
             }
             break;
         case STRAY_FAIRY_TYPE_COLLECTIBLE:
-            if (Actor_GetCollectibleFlag(globalCtx, STRAY_FAIRY_FLAG(&this->actor))) {
+            if (Flags_GetCollectible(globalCtx, STRAY_FAIRY_FLAG(&this->actor))) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -224,7 +224,7 @@ void EnElforg_MoveToTargetFairyFountain(EnElforg* this, Vec3f* homePos) {
     targetAngle += angleAdjustment;
     Math_SmoothStepToS(&this->actor.world.rot.y, targetAngle, 2, 4000, 1000);
     EnElforg_ApproachTargetSpeedXZ(this);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 /**
@@ -247,7 +247,7 @@ void EnElforg_MoveToTarget(EnElforg* this, Vec3f* targetPos) {
         Math_SmoothStepToS(&this->actor.world.rot.y, targetAngle, 10, 0x200, 0x80);
     }
     EnElforg_ApproachTargetSpeedXZ(this);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void func_80ACCBB8(EnElforg* this, GlobalContext* globalCtx) {
@@ -401,7 +401,7 @@ void EnElforg_ClockTownFairyCollected(EnElforg* this, GlobalContext* globalCtx) 
     EnElforg_CirclePlayer(this, globalCtx);
     player->actor.freezeTimer = 100;
     player->stateFlags1 |= 0x20000000;
-    if (func_800B867C(&this->actor, globalCtx)) {
+    if (func_800B867C(&this->actor, &globalCtx->state)) {
         player->actor.freezeTimer = 0;
         player->stateFlags1 &= ~0x20000000;
         Actor_MarkForDeath(&this->actor);
@@ -435,19 +435,19 @@ void EnElforg_FreeFloating(EnElforg* this, GlobalContext* globalCtx) {
     }
 
     scaledYDistance = this->actor.yDistToPlayer - (this->actor.shape.yOffset * this->actor.scale.y);
-    if (!func_801233E4(globalCtx)) {
+    if (!Player_InCsMode(&globalCtx->state)) {
         if ((this->actor.xzDistToPlayer < 30.0f) && (scaledYDistance < 12.0f) && (scaledYDistance > -68.0f)) {
             EnElforg_SetupFairyCollected(this, globalCtx);
             func_80115908(globalCtx, 48);
             switch (STRAY_FAIRY_TYPE(&this->actor)) {
                 case STRAY_FAIRY_TYPE_COLLECTIBLE:
-                    Actor_SetCollectibleFlag(globalCtx, STRAY_FAIRY_FLAG(&this->actor));
+                    Flags_SetCollectible(globalCtx, STRAY_FAIRY_FLAG(&this->actor));
                     break;
                 case STRAY_FAIRY_TYPE_CHEST:
-                    Actor_SetChestFlag(globalCtx, STRAY_FAIRY_FLAG(&this->actor));
+                    Flags_SetTreasure(globalCtx, STRAY_FAIRY_FLAG(&this->actor));
                     break;
                 default:
-                    Actor_SetSwitchFlag(globalCtx, STRAY_FAIRY_FLAG(&this->actor));
+                    Flags_SetSwitch(globalCtx, STRAY_FAIRY_FLAG(&this->actor));
                     break;
             }
 
