@@ -12,8 +12,20 @@ void func_80137970(MtxF* mtx, Struct_800A57C0* arg1, Struct_800A598C* arg2, Vtx*
 void func_800A598C(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 arg3);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_skin/func_80137B34.s")
 
-void func_80137EBC(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 arg3, s32 arg4);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_skin/func_80137EBC.s")
+void func_80137EBC(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 arg3, s32 arg4) {
+    SkinLimb** skeleton;
+    s32 pad[3];
+    Struct_800A5E28* temp_t9;
+
+    OPEN_DISPS(gfxCtx);
+    skeleton = Lib_SegmentedToVirtual(skin->skeletonHeader->segment);
+    temp_t9 = Lib_SegmentedToVirtual(((SkinLimb*)Lib_SegmentedToVirtual(skeleton[limbIndex]))->segment);
+    if (!(arg4 & 1)) {
+        func_80137B34(gfxCtx, skin, limbIndex, arg3);
+    }
+    gSPDisplayList(POLY_OPA_DISP++, temp_t9->unk_8);
+    CLOSE_DISPS(gfxCtx);
+}
 
 void func_80137F58(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, Gfx* arg3, s32 arg4) {
     Gfx* gfx = arg3;
