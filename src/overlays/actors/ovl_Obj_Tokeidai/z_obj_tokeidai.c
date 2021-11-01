@@ -36,6 +36,7 @@ void func_80AB3ED0(ObjTokeidai* this, GlobalContext* globalCtx);
 void func_80AB4040(ObjTokeidai* this, GlobalContext* globalCtx);
 void func_80AB4080(ObjTokeidai* this, GlobalContext* globalCtx);
 void func_80AB4160(ObjTokeidai* this, GlobalContext* globalCtx);
+void func_80AB3BB0(ObjTokeidai* this);
 void func_80AB4394(Actor* thisx, GlobalContext* globalCtx);
 void func_80AB4664(Actor* thisx, GlobalContext* globalCtx);
 
@@ -109,7 +110,7 @@ void func_80AB2BBC(ObjTokeidai* this, GlobalContext* globalCtx) {
                 this->actor.child->home.rot.x = 0x12C;
             }
         }
-    } else if ((gSaveContext.day % 5 == 3 && gSaveContext.time < 0x4000) || gSaveContext.day % 5 >= 4) {
+    } else if ((gSaveContext.day % 5 == 3 && gSaveContext.time < CLOCK_TIME(6, 0)) || gSaveContext.day % 5 >= 4) {
         this->unk_16C = 0;
         this->actor.world.pos.y += this->actor.scale.y * -2160.0f;
         this->actor.world.pos.x += Math_SinS(this->actor.world.rot.y) * this->actor.scale.z * 5400.0f;
@@ -220,7 +221,14 @@ void ObjTokeidai_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB3B34.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB3BB0.s")
+void func_80AB3BB0(ObjTokeidai* this) {
+    this->actionFunc = func_80AB3B34;
+    this->unk_154 = 0;
+    this->unk_156 = 0;
+    this->unk_15E = 0;
+    this->unk_160 = 0;
+    this->unk_162 = 0;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB3BD8.s")
 

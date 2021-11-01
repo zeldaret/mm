@@ -13,7 +13,10 @@ typedef struct ObjTokeidai {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ void* unk_144;
     /* 0x0148 */ void* unk_148;
-    /* 0x014C */ char unk_14C[0x12];
+    /* 0x014C */ char unk_14C[0x8];
+    /* 0x0154 */ s16 unk_154;
+    /* 0x0156 */ s16 unk_156;
+    /* 0x0158 */ char unk_158[0x6];
     /* 0x015E */ s16 unk_15E;
     /* 0x0160 */ s16 unk_160;
     /* 0x0162 */ s16 unk_162;
