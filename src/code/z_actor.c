@@ -1114,6 +1114,9 @@ void Actor_SetMovementScale(s32 scale) {
     actorMovementScale = scale * 0.5f;
 }
 
+/**
+ * Update actor position using velocity and any push from z_collision_check.
+ */
 void Actor_UpdatePos(Actor* actor) {
     f32 speedRate = actorMovementScale;
 
@@ -1122,6 +1125,12 @@ void Actor_UpdatePos(Actor* actor) {
     actor->world.pos.z += ((actor->velocity.z * speedRate) + actor->colChkInfo.displacement.z);
 }
 
+/**
+ * Updates actor's velocity accounting for gravity, with terminal velocity minVelocityY
+ * The operation is performed in cylindrical coordinates
+ * 
+ * It is recommended to not call this function directly and use `Actor_MoveWithGravity` instead
+ */
 void Actor_UpdateVelocityWithGravity(Actor* actor) {
     actor->velocity.x = actor->speedXZ * Math_SinS(actor->world.rot.y);
     actor->velocity.z = actor->speedXZ * Math_CosS(actor->world.rot.y);
@@ -1138,11 +1147,11 @@ void Actor_MoveWithGravity(Actor* actor) {
 }
 
 void Actor_UpdateVelocityWithoutGravity(Actor* actor) {
-    f32 velX = Math_CosS(actor->world.rot.x) * actor->speedXZ;
+    f32 horizontalSpeed = Math_CosS(actor->world.rot.x) * actor->speedXZ;
 
-    actor->velocity.x = Math_SinS(actor->world.rot.y) * velX;
+    actor->velocity.x = Math_SinS(actor->world.rot.y) * horizontalSpeed;
     actor->velocity.y = Math_SinS(actor->world.rot.x) * actor->speedXZ;
-    actor->velocity.z = Math_CosS(actor->world.rot.y) * velX;
+    actor->velocity.z = Math_CosS(actor->world.rot.y) * horizontalSpeed;
 }
 
 void Actor_MoveWithoutGravity(Actor* actor) {
@@ -1151,11 +1160,11 @@ void Actor_MoveWithoutGravity(Actor* actor) {
 }
 
 void Actor_UpdateVelocityWithoutGravityReverse(Actor* actor) {
-    f32 velX = Math_CosS(-actor->world.rot.x) * actor->speedXZ;
+    f32 horizontalSpeed = Math_CosS(-actor->world.rot.x) * actor->speedXZ;
 
-    actor->velocity.x = Math_SinS(actor->world.rot.y) * velX;
+    actor->velocity.x = Math_SinS(actor->world.rot.y) * horizontalSpeed;
     actor->velocity.y = Math_SinS(-actor->world.rot.x) * actor->speedXZ;
-    actor->velocity.z = Math_CosS(actor->world.rot.y) * velX;
+    actor->velocity.z = Math_CosS(actor->world.rot.y) * horizontalSpeed;
 }
 
 void Actor_MoveWithoutGravityReverse(Actor* actor) {
