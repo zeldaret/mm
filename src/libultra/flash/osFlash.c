@@ -258,7 +258,7 @@ s32 osFlashWriteArray(u32 pageNum) {
     // wait for completion by polling write-busy flag
     osCreateMesgQueue(&mq, &msg, 1);
     do {
-        osSetTimer(&timer, 0x249FULL, 0ULL, &mq, &msg);
+        osSetTimer(&timer, OS_USEC_TO_CYCLES(200), 0, &mq, &msg);
         osRecvMesg(&mq, &msg, OS_MESG_BLOCK);
         osEPiReadIo(&__osFlashHandler, __osFlashHandler.baseAddress, &status);
     } while ((status & 0x01) == 0x01);
