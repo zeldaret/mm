@@ -533,7 +533,7 @@ void func_800AE5E4(GlobalContext* globalCtx, Color_RGBA8* arg1, s16 arg2, s16 ar
 void func_800AE778(GlobalContext* globalCtx, Color_RGBA8* color, s16 param_3, s16 param_4);
 void func_800AE8EC(GlobalContext* globalCtx);
 void func_800AE930(CollisionContext* colCtx, s32 param_2, Vec3f* param_3, f32 param_4, s16 param_5, CollisionPoly* param_6, s32 param_7);
-void func_800AEF44(s32 arg0);                     
+void func_800AEF44(void* effectParams);                      
 void EffectTireMark_InitParticle(EffTireMarkParticle* particle);
 void EffectTireMark_Init(EffTireMarkParams* params, EffTireMarkInit* init);
 void EffectTireMark_Destroy(EffTireMarkParams* params);
@@ -607,7 +607,7 @@ void EffectSsKiraKira_SpawnDispersed(GlobalContext* globalCtx, Vec3f* pos, Vec3f
 // void EffectSsBlast_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, Color_RGBA8* param_5, Color_RGBA8* param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9, UNK_TYPE2 param_10);
 // void EffectSsBlast_SpawnWhiteCustomScale(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7);
 // void EffectSsBlast_SpawnShockwave(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE2 param_7);
-// void EffectSsBlast_SpawnWhiteShockwave(void);
+void EffectSsBlast_SpawnWhiteShockwave(GlobalContext* globalCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3);
 // void EffectSsGSpk_SpawnAccel(UNK_TYPE4 uParm1, UNK_TYPE4 uParm2, Vec3f* pzParm3, Vec3f* pzParm4, Vec3f* param_5, Color_RGBA8* param_6, Color_RGBA8* param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9);
 // void EffectSsGSpk_SpawnNoAccel(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE2 param_8, UNK_TYPE2 param_9);
 // void EffectSsGSpk_SpawnFuse(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
@@ -1587,8 +1587,8 @@ void func_800EDF24(Actor* actor, GlobalContext* globalCtx, u32 arg2);
 void func_800EDF78(Actor* actor, GlobalContext* globalCtx, s32 iParm3);
 void func_800EE0CC(Actor* actor, GlobalContext* globalCtx, s32 iParm3);
 s32 func_800EE1D8(GlobalContext* globalCtx);
-u32 func_800EE200(GlobalContext* globalCtx, u32 uParm2);
-u32 func_800EE29C(GlobalContext* globalCtx, u32 uParm2);
+u32 func_800EE200(GlobalContext* globalCtx, u16 uParm2);
+u32 func_800EE29C(GlobalContext* globalCtx, u16 uParm2);
 u32 func_800EE2F4(GlobalContext* globalCtx);
 void GetItem_Draw(GlobalContext* globalCtx, s16 index);
 void func_800EE364(GlobalContext* globalCtx, s16 index);
