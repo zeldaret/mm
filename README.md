@@ -62,7 +62,18 @@ Under Debian / Ubuntu (which we recommend using), you can install them with the 
 
 ```bash
 sudo apt update
-sudo apt install make git build-essential binutils-mips-linux-gnu python3 python3-pip libpng-dev
+sudo apt install make git build-essential binutils-mips-linux-gnu python3 python3-pip libpng-dev dos2unix
+```
+
+Our tools have the following package requirements:
+
+* dos2unix
+
+Under Debian / Ubuntu (which we recommend using), you can install them with the following commands:
+
+```bash
+sudo apt update
+sudo apt install dos2unix
 ```
 
 To install the Python dependencies simply run in a terminal:
