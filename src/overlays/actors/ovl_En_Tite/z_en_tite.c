@@ -1071,7 +1071,7 @@ void EnTite_Update(Actor* thisx, GlobalContext* globalCtx) {
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 25.0f, 40.0f, 20.0f, this->unk_2C0);
         func_808963B4(this, globalCtx);
         if (this->actor.bgCheckFlags & 1) {
-            func_800BE3D0(&this->actor, this->actor.shape.rot.y, &this->actor.shape.rot.x);
+            func_800BE3D0(&this->actor, this->actor.shape.rot.y, &this->actor.shape.rot);
             if (this->unk_2B9 != 0) {
                 this->actor.shape.rot.z = BINANG_ROT180(this->actor.shape.rot.z);
             }
