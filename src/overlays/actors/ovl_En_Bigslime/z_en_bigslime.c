@@ -1,3 +1,9 @@
+/*
+ * File z_en_bigslime.c
+ * Overlay: ovl_En_Bigslime
+ * Description: Mad Jelly (miniboss)
+ */
+
 #include "z_en_bigslime.h"
 
 #define FLAGS 0x00000235

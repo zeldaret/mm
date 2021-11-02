@@ -1,3 +1,9 @@
+/*
+ * File: z_en_rail_skb.c
+ * Overlay: ovl_En_Rail_Skb
+ * Description: Ikana Graveyard - Circle of Stalchildren
+ */
+
 #include "z_en_rail_skb.h"
 
 #define FLAGS 0x00000015

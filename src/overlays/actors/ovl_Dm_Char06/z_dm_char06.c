@@ -1,3 +1,9 @@
+/*
+ * File: z_dm_char06.c
+ * Overlay: ovl_Dm_Char06
+ * Description: Some unseen Mountain Village cutscene actor?
+ */
+
 #include "z_dm_char06.h"
 
 #define FLAGS 0x00000030

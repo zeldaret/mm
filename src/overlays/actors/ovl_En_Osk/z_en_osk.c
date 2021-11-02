@@ -1,3 +1,9 @@
+/*
+ * File: z_en_osk.c
+ * Overlay: ovl_En_Osk
+ * Description: Igos du Ikana's and his lackey's floating heads
+ */
+
 #include "z_en_osk.h"
 
 #define FLAGS 0x00000009

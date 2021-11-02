@@ -1,3 +1,9 @@
+/*
+ * File: z_en_knight.c
+ * Overlay: ovl_En_Knight
+ * Description: Igos du Ikana and his lackeys
+ */
+
 #include "z_en_knight.h"
 
 #define FLAGS 0x00000035

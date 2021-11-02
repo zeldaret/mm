@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_rotlift.c
+ * Overlay: ovl_Obj_Rotlift
+ * Description: Deku Moon Dungeon - Spiked Rotating Platforms
+ */
+
 #include "z_obj_rotlift.h"
 
 #define FLAGS 0x00000000

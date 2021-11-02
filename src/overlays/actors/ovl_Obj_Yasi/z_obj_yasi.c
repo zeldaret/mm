@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_yasi.c
+ * Overlay: ovl_Obj_Yasi
+ * Description: Palm Tree
+ */
+
 #include "z_obj_yasi.h"
 
 #define FLAGS 0x00000000
