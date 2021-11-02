@@ -318,7 +318,29 @@ void func_80AB363C(ObjTokeidai* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB365C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB36C4.s")
+void func_80AB36C4(ObjTokeidai* this, GlobalContext* globalCtx) {
+    if (func_800EE29C(globalCtx, 0x84) != 0 && globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x84)]->unk0 == 5) {
+        gSaveContext.weekEventReg[8] |= 0x40;
+        if ((globalCtx->sceneNum == SCENE_CLOCKTOWER && gSaveContext.sceneSetupIndex == 2 &&
+             globalCtx->csCtx.unk_12 == 0) ||
+            (globalCtx->sceneNum == SCENE_00KEIKOKU && gSaveContext.sceneSetupIndex == 2 &&
+             globalCtx->csCtx.unk_12 == 0)) {
+            func_801A3F54(0);
+            gSaveContext.cutscene = 0;
+            gSaveContext.nextCutsceneIndex = 0;
+            gSaveContext.respawnFlag = 2;
+            globalCtx->sceneLoadFlag = 0x14;
+            globalCtx->nextEntranceIndex = gSaveContext.respawn[1].entranceIndex;
+            globalCtx->unk_1887F = 2;
+            if (gSaveContext.respawn[1].playerParams == 0xCFF) {
+                gSaveContext.nextTransition = 0x15;
+            } else {
+                gSaveContext.nextTransition = 2;
+            }
+        }
+        this->actionFunc = func_80AB3BD8;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB3808.s")
 

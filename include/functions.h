@@ -3940,7 +3940,7 @@ void func_801A3CD8(s8 param_1);
 // void func_801A3D98(void);
 // void func_801A3E38(void);
 // void func_801A3EC0(void);
-// void func_801A3F54(void);
+void func_801A3F54(s32 arg1);
 // void func_801A3F6C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 // void func_801A3FB4(void);
 // void func_801A3FFC(UNK_TYPE1 param_1);
