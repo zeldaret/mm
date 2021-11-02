@@ -67,7 +67,7 @@ void EnKgy_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 i;
 
     Actor_SetScale(&this->actor, 0.01f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_0600F910, &D_06004B98, this->jointTable, this->morphTable, 23);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600F910, &D_06004B98, this->jointTable, this->morphTable, 23);
     this->unk_2D2 = -1;
     this->unk_29C = 0;
     this->unk_2E4 = 0;
@@ -131,8 +131,8 @@ void EnKgy_ChangeAnim(EnKgy* this, s16 animIndex, u8 mode, f32 transitionRate) {
         &D_06001764, &D_06003334, &D_06010B84, &D_06001EA4, &D_06003D88,
     };
 
-    SkelAnime_ChangeAnim(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f,
-                         SkelAnime_GetFrameCount(&sAnimations[animIndex]->common), mode, transitionRate);
+    Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimations[animIndex]), mode, transitionRate);
     this->unk_2D2 = animIndex;
 }
 
@@ -313,7 +313,7 @@ void func_80B40EE8(EnKgy* this, GlobalContext* globalCtx) {
 }
 
 void func_80B411DC(EnKgy* this, GlobalContext* globalCtx, s32 arg2) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     switch (arg2) {
         case 0:
@@ -432,7 +432,7 @@ void func_80B415A8(GlobalContext* globalCtx, Vec3f* arg1) {
 void func_80B4163C(EnKgy* this, GlobalContext* globalCtx) {
     this->actor.focus.pos = this->unk_2A8;
 
-    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
+    if (SkelAnime_Update(&this->skelAnime)) {
         if (this->unk_2D2 == 6) {
             if (this->unk_2EA > 0) {
                 EnKgy_ChangeAnim(this, 6, 2, 0.0f);
@@ -444,10 +444,10 @@ void func_80B4163C(EnKgy* this, GlobalContext* globalCtx) {
         } else {
             EnKgy_ChangeAnim(this, 6, 2, -5.0f);
         }
-        SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+        SkelAnime_Update(&this->skelAnime);
     }
 
-    switch ((s32)this->skelAnime.animCurrentFrame) {
+    switch ((s32)this->skelAnime.curFrame) {
         case 1:
         case 7:
         case 13:
@@ -508,7 +508,7 @@ void func_80B418C4(EnKgy* this, GlobalContext* globalCtx) {
 
 void func_80B419B0(EnKgy* this, GlobalContext* globalCtx) {
     s32 pad;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     func_80B4163C(this, globalCtx);
     if (func_800B84D0(&this->actor, globalCtx) || (&this->actor == player->targetActor)) {
@@ -523,7 +523,7 @@ void func_80B419B0(EnKgy* this, GlobalContext* globalCtx) {
 }
 
 void func_80B41A48(EnKgy* this, GlobalContext* globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     if (this->unk_2E4 > 0) {
         this->unk_2E4--;
     } else {
@@ -534,9 +534,9 @@ void func_80B41A48(EnKgy* this, GlobalContext* globalCtx) {
 
 void func_80B41ACC(EnKgy* this, GlobalContext* globalCtx) {
     s32 temp_v0;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     if (func_80152498(&globalCtx->msgCtx) == 0x10) {
         temp_v0 = func_80123810(globalCtx);
         if (temp_v0 != 0) {
@@ -577,7 +577,7 @@ void func_80B41ACC(EnKgy* this, GlobalContext* globalCtx) {
 }
 
 void func_80B41C30(EnKgy* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (&this->actor != player->targetActor) {
         this->actionFunc = func_80B42508;
@@ -585,7 +585,7 @@ void func_80B41C30(EnKgy* this, GlobalContext* globalCtx) {
 }
 
 void func_80B41C54(EnKgy* this, GlobalContext* globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     if (func_800B867C(&this->actor, globalCtx)) {
         this->actionFunc = func_80B41C30;
         this->actor.flags &= ~0x100;
@@ -594,7 +594,7 @@ void func_80B41C54(EnKgy* this, GlobalContext* globalCtx) {
 }
 
 void func_80B41CBC(EnKgy* this, GlobalContext* globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     if (func_800B84D0(&this->actor, globalCtx)) {
         this->actor.flags &= ~0x10000;
         func_80B40E18(this, this->actor.textId);
@@ -606,7 +606,7 @@ void func_80B41CBC(EnKgy* this, GlobalContext* globalCtx) {
 }
 
 void func_80B41D64(EnKgy* this, GlobalContext* globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actionFunc = func_80B41CBC;
         this->actor.flags |= 0x10000;
@@ -620,9 +620,9 @@ void func_80B41D64(EnKgy* this, GlobalContext* globalCtx) {
 void func_80B41E18(EnKgy* this, GlobalContext* globalCtx) {
     u16 temp;
     s32 pad;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
-    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) && (this->unk_2D2 == 3)) {
+    if (SkelAnime_Update(&this->skelAnime) && (this->unk_2D2 == 3)) {
         func_80B40BC0(this, 4);
     }
 
@@ -758,7 +758,7 @@ void func_80B41E18(EnKgy* this, GlobalContext* globalCtx) {
 
                         case 0xC46:
                         case 0xC55:
-                            func_80123D50(globalCtx, PLAYER, 0x12, 0x15);
+                            func_80123D50(globalCtx, GET_PLAYER(globalCtx), 0x12, 0x15);
                             player->unk_A87 = 0;
                             this->unk_29C &= ~0x8;
                             globalCtx->msgCtx.unk11F10 = 0;
@@ -842,9 +842,9 @@ void func_80B41E18(EnKgy* this, GlobalContext* globalCtx) {
 
 void func_80B42508(EnKgy* this, GlobalContext* globalCtx) {
     s32 pad;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     this->actor.focus.pos = this->unk_2A8;
     if (func_800B84D0(&this->actor, globalCtx) || (&this->actor == player->targetActor)) {
         this->actionFunc = func_80B41E18;
@@ -854,7 +854,7 @@ void func_80B42508(EnKgy* this, GlobalContext* globalCtx) {
 }
 
 void func_80B425A0(EnKgy* this, GlobalContext* globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     this->actor.focus.pos = this->unk_2A8;
     if (func_800B84D0(&this->actor, globalCtx)) {
         this->actionFunc = func_80B41E18;
@@ -867,7 +867,7 @@ void func_80B425A0(EnKgy* this, GlobalContext* globalCtx) {
 }
 
 void func_80B42660(EnKgy* this, GlobalContext* globalCtx) {
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     this->actor.focus.pos = this->unk_2A8;
     if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         func_801477B4(globalCtx);
@@ -881,9 +881,9 @@ void func_80B42660(EnKgy* this, GlobalContext* globalCtx) {
 
 void func_80B42714(EnKgy* this, GlobalContext* globalCtx) {
     s32 pad;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     this->actor.focus.pos = this->unk_2A8;
     if (func_800B84D0(&this->actor, globalCtx) || (&this->actor == player->targetActor)) {
         func_80B411DC(this, globalCtx, 4);
@@ -900,7 +900,7 @@ void func_80B427C8(EnKgy* this, GlobalContext* globalCtx) {
     s32 pad;
     u16 temp_a2;
 
-    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
+    if (SkelAnime_Update(&this->skelAnime)) {
         if (this->unk_2D2 == 5) {
             func_80B40BC0(this, 7);
         }
@@ -946,7 +946,7 @@ void func_80B427C8(EnKgy* this, GlobalContext* globalCtx) {
 }
 
 void func_80B4296C(EnKgy* this, GlobalContext* globalCtx) {
-    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) && (this->unk_2D2 == 8)) {
+    if (SkelAnime_Update(&this->skelAnime) && (this->unk_2D2 == 8)) {
         func_80B40BC0(this, 2);
     }
 
@@ -971,7 +971,7 @@ void func_80B42A8C(EnKgy* this, GlobalContext* globalCtx) {
     u16 temp_a2;
     s32 pad;
 
-    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime)) {
+    if (SkelAnime_Update(&this->skelAnime)) {
         if (this->unk_2D2 == 5) {
             func_80B40BC0(this, 1);
         }
@@ -1058,7 +1058,7 @@ void func_80B42A8C(EnKgy* this, GlobalContext* globalCtx) {
 }
 
 void func_80B42D28(EnKgy* this, GlobalContext* globalCtx) {
-    if (SkelAnime_FrameUpdateMatrix(&this->skelAnime) && (this->unk_2D2 == 8)) {
+    if (SkelAnime_Update(&this->skelAnime) && (this->unk_2D2 == 8)) {
         func_80B40BC0(this, 2);
     }
 
@@ -1134,11 +1134,11 @@ void EnKgy_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     EnKgy* this = THIS;
 
     if (limbIndex == 11) {
-        SysMatrix_MultiplyVector3fByState(&D_80B432D8, &this->unk_2A8);
+        Matrix_MultiplyVector3fByState(&D_80B432D8, &this->unk_2A8);
     }
 
     if (limbIndex == 16) {
-        SysMatrix_MultiplyVector3fByState(&D_80B432E4, &this->unk_2C0);
+        Matrix_MultiplyVector3fByState(&D_80B432E4, &this->unk_2C0);
     }
 }
 
@@ -1150,9 +1150,9 @@ void func_80B43074(EnKgy* this, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     func_800B8050(&this->actor, globalCtx, MTXMODE_NEW);
-    SysMatrix_StatePush();
-    SysMatrix_InsertTranslation(-800.0f, 3100.0f, 8400.0f, MTXMODE_APPLY);
-    SysMatrix_InsertXRotation_s(0x4000, MTXMODE_APPLY);
+    Matrix_StatePush();
+    Matrix_InsertTranslation(-800.0f, 3100.0f, 8400.0f, MTXMODE_APPLY);
+    Matrix_InsertXRotation_s(0x4000, MTXMODE_APPLY);
 
     if (func_80B40D8C(globalCtx)) {
         AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(D_0600F6A0));
@@ -1174,7 +1174,7 @@ void func_80B43074(EnKgy* this, GlobalContext* globalCtx) {
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-    SysMatrix_StatePop();
+    Matrix_StatePop();
 }
 
 void EnKgy_Draw(Actor* thisx, GlobalContext* globalCtx) {
@@ -1184,6 +1184,6 @@ void EnKgy_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (this->unk_29C & 1) {
         func_80B43074(this, globalCtx);
     }
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                     EnKgy_OverrideLimbDraw, EnKgy_PostLimbDraw, &this->actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          EnKgy_OverrideLimbDraw, EnKgy_PostLimbDraw, &this->actor);
 }

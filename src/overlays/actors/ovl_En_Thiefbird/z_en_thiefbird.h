@@ -37,7 +37,7 @@ typedef struct EnThiefbird {
     /* 0x03DC */ f32 unk_3DC;
     /* 0x03E0 */ f32 unk_3E0;
     /* 0x03E4 */ Gfx* unk_3E4;
-    /* 0x03E8 */ UNK_PTR unk_3E8;
+    /* 0x03E8 */ Gfx* unk_3E8;
     /* 0x03EC */ EnItem00* unk_3EC;
     /* 0x03F0 */ EnThiefbirdUnkStruct unk_3F0[40];
 } EnThiefbird; // size = 0x990
