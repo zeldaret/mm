@@ -24,7 +24,8 @@ typedef struct ObjTokeidai {
     /* 0x015E */ s16 unk_15E;
     /* 0x0160 */ s16 unk_160;
     /* 0x0162 */ s16 unk_162;
-    /* 0x0164 */ char unk_164[0x4];
+    /* 0x0164 */ s16 unk_164;
+    /* 0x0166 */ char unk_166[0x2];
     /* 0x0168 */ s32 unk_168;
     /* 0x016C */ s32 unk_16C;
     /* 0x0170 */ u16 unk_170;
