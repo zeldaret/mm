@@ -306,7 +306,14 @@ void func_80AB3240(ObjTokeidai* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB34CC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB3544.s")
+void func_80AB3544(ObjTokeidai* this, GlobalContext* globalCtx) {
+    if (this->actor.world.pos.y < 0.0f) {
+        this->actionFunc = func_80AB3BD8;
+        return;
+    }
+    this->unk_160 += 0x64;
+    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+}
 
 void func_80AB3598(ObjTokeidai* this, GlobalContext* globalCtx) {
     if (func_800EE29C(globalCtx, 0x84) != 0) {
