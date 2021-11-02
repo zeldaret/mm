@@ -387,8 +387,6 @@ s32 func_80AB3C50(ObjTokeidai* this, GlobalContext* globalCtx) {
 
 void func_80AB3CCC(ObjTokeidai* this, GlobalContext* globalCtx) {
     s32 temp;
-    s32 temp_t1;
-    s32 temp_t8;
 
     temp = (s32)(this->unk_170 * 0.00036621094f);
     if (temp != this->unk_16C) {
@@ -431,7 +429,33 @@ void func_80AB3CCC(ObjTokeidai* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB3ED0.s")
+void func_80AB3ED0(ObjTokeidai* this, GlobalContext* globalCtx) {
+    if (gSaveContext.day % 5 == 3 && this->unk_16C < 6 && gSaveContext.time < CLOCK_TIME(6, 0)) {
+        this->actor.draw = func_80AB4394;
+        func_80AB3BB0(this);
+        gSaveContext.weekEventReg[8] |= 0x40;
+        return;
+    }
+    if (globalCtx->csCtx.state != 0) {
+        this->actor.home.rot.x = 1;
+        this->unk_170 += 3;
+        this->actor.draw = func_80AB4394;
+    } else {
+        if ((globalCtx->actorCtx.unk5 & 2) == 0 && OBJ_TOKEIDAI_TYPE(&this->actor) == 5 &&
+            ActorCutscene_GetCurrentIndex() == -1) {
+            this->actor.draw = NULL;
+        }
+        this->unk_170 = gSaveContext.time;
+        if (this->actor.home.rot.x != 0) {
+            func_80AB2834(this);
+            this->actor.home.rot.x = 0;
+        }
+    }
+    if (gSaveContext.day % 5 != 3 || gSaveContext.time >= CLOCK_TIME(6, 0)) {
+        func_80AB3010(this, 1);
+    }
+    func_80AB3CCC(this, globalCtx);
+}
 
 void func_80AB4040(ObjTokeidai* this, GlobalContext* globalCtx) {
     this->unk_170 = gSaveContext.time;
