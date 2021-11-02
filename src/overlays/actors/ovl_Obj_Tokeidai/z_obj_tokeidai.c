@@ -318,7 +318,14 @@ void func_80AB3240(ObjTokeidai* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB3808.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB3880.s")
+void func_80AB3880(ObjTokeidai* this, GlobalContext* globalCtx) {
+    if (this->unk_154 > 0) {
+        this->unk_154--;
+    } else {
+        this->actionFunc = func_80AB3808;
+        this->unk_154 = 0;
+    }
+}
 
 void func_80AB38B0(ObjTokeidai* this, GlobalContext* globalCtx) {
     this->unk_160 += this->unk_154;
