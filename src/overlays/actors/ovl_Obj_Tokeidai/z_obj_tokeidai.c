@@ -337,7 +337,8 @@ void func_80AB3BB0(ObjTokeidai* this) {
     this->unk_162 = 0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB3BD8.s")
+void func_80AB3BD8(ObjTokeidai* this, GlobalContext* globalCtx) {
+}
 
 void func_80AB3BE8(ObjTokeidai* this, GlobalContext* globalCtx) {
     if ((gSaveContext.day % 5 == 3 && gSaveContext.time < CLOCK_TIME(6, 0)) || (gSaveContext.day % 5 >= 4) ||
