@@ -324,7 +324,26 @@ void func_80AB3240(ObjTokeidai* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB39BC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB3A7C.s")
+void func_80AB3A7C(ObjTokeidai* this, GlobalContext* globalCtx) {
+    s32 type;
+
+    if (this->unk_15E < 0xD48) {
+        type = OBJ_TOKEIDAI_TYPE(&this->actor);
+        this->unk_15E += 0x19;
+        if ((type == 2) || (type == 5)) {
+            func_800B9010(&this->actor, NA_SE_EV_CLOCK_TOWER_UP - SFX_FLAG);
+        }
+    } else {
+        type = OBJ_TOKEIDAI_TYPE(&this->actor);
+        if ((type == 2) || (type == 5)) {
+            Audio_PlayActorSound2(&this->actor, NA_SE_EV_CLOCK_TOWER_STOP);
+        }
+        this->unk_15E = 0xD48;
+        this->actionFunc = func_80AB39BC;
+        this->unk_154 = 0xA;
+        this->unk_156 = 0x14;
+    }
+}
 
 void func_80AB3B34(ObjTokeidai* this, GlobalContext* globalCtx) {
     if ((func_800EE29C(globalCtx, 0x84) != 0 &&
