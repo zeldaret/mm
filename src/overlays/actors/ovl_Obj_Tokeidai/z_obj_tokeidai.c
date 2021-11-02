@@ -277,7 +277,16 @@ void func_80AB3010(ObjTokeidai* this, s32 arg1) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB319C.s")
+void func_80AB319C(ObjTokeidai* this, GlobalContext* globalCtx) {
+    if ((this->actor.bgCheckFlags & 1) != 0 || this->actor.world.pos.y < 0.0f) {
+        this->actionFunc = func_80AB3BD8;
+        return;
+    }
+    this->actor.shape.rot.x += 0x50;
+    this->actor.shape.rot.z += 0x50;
+    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+}
 
 void func_80AB3240(ObjTokeidai* this, GlobalContext* globalCtx) {
     if (func_800EE29C(globalCtx, 0x84) != 0) {
