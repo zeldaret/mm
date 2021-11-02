@@ -342,7 +342,23 @@ void func_80AB36C4(ObjTokeidai* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB3808.s")
+void func_80AB3808(ObjTokeidai* this, GlobalContext* globalCtx) {
+    s32 type;
+
+    if (this->unk_162 >= -0x13F) {
+        this->unk_162 -= 0xA;
+    } else {
+        type = OBJ_TOKEIDAI_TYPE(&this->actor);
+        if ((type == 2) || (type == 5)) {
+            func_80AB36C4(this, globalCtx);
+        } else {
+            this->actionFunc = func_80AB3BD8;
+            if (this->actor.child != NULL) {
+                this->actor.child->home.rot.x = 0;
+            }
+        }
+    }
+}
 
 void func_80AB3880(ObjTokeidai* this, GlobalContext* globalCtx) {
     if (this->unk_154 > 0) {
