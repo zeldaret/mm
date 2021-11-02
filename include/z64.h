@@ -35,29 +35,29 @@
 #include "z64transition.h"
 #include "regs.h"
 
-#define SCREEN_WIDTH 320
+#define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
 
-#define SCREEN_WIDTH_HIGH_RES 576
+#define SCREEN_WIDTH_HIGH_RES  576
 #define SCREEN_HEIGHT_HIGH_RES 454
 
-#define Z_THREAD_ID_IDLE 1
-#define Z_THREAD_ID_SLOWLY 2
-#define Z_THREAD_ID_MAIN 3
-#define Z_THREAD_ID_GRAPH 4
-#define Z_THREAD_ID_SCHED 5
-#define Z_THREAD_ID_DMAMGR 18
-#define Z_THREAD_ID_IRQMGR 19
+#define Z_THREAD_ID_IDLE     1
+#define Z_THREAD_ID_SLOWLY   2
+#define Z_THREAD_ID_MAIN     3
+#define Z_THREAD_ID_GRAPH    4
+#define Z_THREAD_ID_SCHED    5
+#define Z_THREAD_ID_DMAMGR  18
+#define Z_THREAD_ID_IRQMGR  19
 
-#define Z_PRIORITY_SLOWLY 5
-#define Z_PRIORITY_GRAPH 9
+#define Z_PRIORITY_SLOWLY    5
+#define Z_PRIORITY_GRAPH     9
 #define Z_PRIORITY_AUDIOMGR 11
-#define Z_PRIORITY_IDLE 12
-#define Z_PRIORITY_MAIN 12
-#define Z_PRIORITY_PADMGR 15
-#define Z_PRIORITY_SCHED 16
-#define Z_PRIORITY_DMAMGR 17
-#define Z_PRIORITY_IRQMGR 18
+#define Z_PRIORITY_IDLE     12
+#define Z_PRIORITY_MAIN     12
+#define Z_PRIORITY_PADMGR   15
+#define Z_PRIORITY_SCHED    16
+#define Z_PRIORITY_DMAMGR   17
+#define Z_PRIORITY_IRQMGR   18
 
 #define EQUIP_SLOT_B 0
 #define EQUIP_SLOT_C_LEFT 1
@@ -92,14 +92,14 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ Vec3s pos;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ Gfx* opa;
-    /* 0x0C */ Gfx* xlu;
+    /* 0x06 */ s16   unk_06;
+    /* 0x08 */ Gfx*  opa;
+    /* 0x0C */ Gfx*  xlu;
 } PolygonDlist2; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8 type;
-    /* 0x01 */ u8 num; // number of dlist entries
+    /* 0x00 */ u8    type;
+    /* 0x01 */ u8    num; // number of dlist entries
     /* 0x04 */ void* start;
     /* 0x08 */ void* end;
 } PolygonType2; // size = 0xC
@@ -159,16 +159,16 @@ typedef struct {
 } CameraStateParams; // size = 0xC
 
 typedef struct {
-    /* 0x00 */ u8 sceneCsCount;
+    /* 0x00 */ u8    sceneCsCount;
     /* 0x04 */ void* segment;
-    /* 0x08 */ u8 state;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ u16 frames;
-    /* 0x12 */ u16 unk_12;
-    /* 0x14 */ s32 unk_14;
-    /* 0x18 */ u16 unk_18;
-    /* 0x1A */ u8 unk_1A;
-    /* 0x1B */ u8 unk_1B;
+    /* 0x08 */ u8    state;
+    /* 0x0C */ f32   unk_0C;
+    /* 0x10 */ u16   frames;
+    /* 0x12 */ u16   unk_12;
+    /* 0x14 */ s32   unk_14;
+    /* 0x18 */ u16   unk_18;
+    /* 0x1A */ u8    unk_1A;
+    /* 0x1B */ u8    unk_1B;
     /* 0x1C */ CutsceneCameraPoint* cameraFocus;
     /* 0x20 */ CutsceneCameraPoint* cameraPosition;
     /* 0x24 */ CsCmdActorAction* linkAction;
@@ -238,14 +238,14 @@ typedef struct {
 // Game Info aka. Static Context
 // Data normally accessed through REG macros (see regs.h)
 typedef struct {
-    /* 0x00 */ u8 unk_00;  // regPage;?   // 1 is first page
-    /* 0x01 */ u8 unk_01;  // regGroup;?  // "register" group (R, RS, RO, RP etc.)
-    /* 0x02 */ u8 unk_02;  // regCur;?    // selected register within page
-    /* 0x03 */ u8 unk_03;  // dpadLast;?
+    /* 0x00 */ u8  unk_00; // regPage;?   // 1 is first page
+    /* 0x01 */ u8  unk_01; // regGroup;?  // "register" group (R, RS, RO, RP etc.)
+    /* 0x02 */ u8  unk_02; // regCur;?    // selected register within page
+    /* 0x03 */ u8  unk_03; // dpadLast;?
     /* 0x04 */ u32 unk_04; // repeat;?
     /* 0x08 */ UNK_TYPE1 pad_08[0xC];
     /* 0x14 */ s16 data[REG_GROUPS * REG_PER_GROUP]; // 0xAE0 entries
-} GameInfo;                                          // size = 0x15D4
+} GameInfo; // size = 0x15D4
 
 typedef struct IrqMgrClient {
     /* 0x0 */ struct IrqMgrClient* next;
@@ -272,31 +272,31 @@ typedef struct {
 } IrqMgr; // size = 0x280
 
 typedef struct {
-    /* 0x0000 */ u32 size;
-    /* 0x0004 */ void* bufp;
-    /* 0x0008 */ void* head;
-    /* 0x000C */ void* tail;
+    /* 0x0000 */ u32    size;
+    /* 0x0004 */ void*  bufp;
+    /* 0x0008 */ void*  head;
+    /* 0x000C */ void*  tail;
 } TwoHeadArena; // size = 0x10
 
 typedef struct {
-    /* 0x0000 */ u32 size;
-    /* 0x0004 */ Gfx* bufp;
-    /* 0x0008 */ Gfx* p;
-    /* 0x000C */ Gfx* d;
+    /* 0x0000 */ u32    size;
+    /* 0x0004 */ Gfx*   bufp;
+    /* 0x0008 */ Gfx*   p;
+    /* 0x000C */ Gfx*   d;
 } TwoHeadGfxArena; // size = 0x10
 
 typedef struct {
     /* 0x000 */ Gfx taskStart[9];
-    /* 0x048 */ Gfx clearZBuffer[8];     // original name: clear_zb_dl
-    /* 0x088 */ Gfx clearFrameBuffer[5]; // original name: clear_fb_dl
-    /* 0x0B0 */ Gfx setupBuffers[6];     // setup framebuffer and zbuffer
-    /* 0x0E0 */ Gfx unk_E0[12];          // unused
+    /* 0x048 */ Gfx clearZBuffer[8];       // original name: clear_zb_dl
+    /* 0x088 */ Gfx clearFrameBuffer[5];   // original name: clear_fb_dl
+    /* 0x0B0 */ Gfx setupBuffers[6];       // setup framebuffer and zbuffer
+    /* 0x0E0 */ Gfx unk_E0[12];            // unused
     /* 0x140 */ Gfx syncSegments[17];
     /* 0x1C8 */ Gfx setScissor[2];
-    /* 0x1D8 */ Gfx unk_1D8[25]; // unused
+    /* 0x1D8 */ Gfx unk_1D8[25];           // unused
     /* 0x2A0 */ Gfx disps[5];
-    /* 0x2C8 */ Gfx clearFillRect[3]; // fillrect for clearing buffers
-    /* 0x2E0 */ Gfx fillRect[3];      // fillrect for general purpose
+    /* 0x2C8 */ Gfx clearFillRect[3];      // fillrect for clearing buffers
+    /* 0x2E0 */ Gfx fillRect[3];           // fillrect for general purpose
     /* 0x2F8 */ Gfx debugDisp[1];
 } GfxMasterList; // size = 0x300
 
@@ -312,101 +312,101 @@ typedef struct {
     /* 0x06508 */ Gfx debugBuffer[64];
     /* 0x06708 */ Gfx polyOpaBuffer[13184];
     /* 0x20308 */ u16 tailMagic; // 5678
-} GfxPool;                       // size = 0x20310
+} GfxPool; // size = 0x20310
 
 typedef struct {
-    /* 0x00 */ u16* fb1;
-    /* 0x04 */ u16* swapBuffer;
+    /* 0x00 */ u16*     fb1;
+    /* 0x04 */ u16*     swapBuffer;
     /* 0x08 */ OSViMode* viMode;
-    /* 0x0C */ u32 features;
-    /* 0x10 */ u8 unk_10;
-    /* 0x11 */ s8 updateRate;
-    /* 0x12 */ s8 updateRate2;
-    /* 0x13 */ u8 unk_13;
-    /* 0x14 */ f32 xScale;
-    /* 0x18 */ f32 yScale;
+    /* 0x0C */ u32      features;
+    /* 0x10 */ u8       unk_10;
+    /* 0x11 */ s8       updateRate;
+    /* 0x12 */ s8       updateRate2;
+    /* 0x13 */ u8       unk_13;
+    /* 0x14 */ f32      xScale;
+    /* 0x18 */ f32      yScale;
 } CfbInfo; // size = 0x1C
 
-#define OS_SC_NEEDS_RDP 0x0001
-#define OS_SC_NEEDS_RSP 0x0002
-#define OS_SC_DRAM_DLIST 0x0004
-#define OS_SC_PARALLEL_TASK 0x0010
-#define OS_SC_LAST_TASK 0x0020
-#define OS_SC_SWAPBUFFER 0x0040
+#define OS_SC_NEEDS_RDP         0x0001
+#define OS_SC_NEEDS_RSP         0x0002
+#define OS_SC_DRAM_DLIST        0x0004
+#define OS_SC_PARALLEL_TASK     0x0010
+#define OS_SC_LAST_TASK         0x0020
+#define OS_SC_SWAPBUFFER        0x0040
 
-#define OS_SC_RCP_MASK 0x0003
-#define OS_SC_TYPE_MASK 0x0007
+#define OS_SC_RCP_MASK          0x0003
+#define OS_SC_TYPE_MASK         0x0007
 
-#define OS_SC_DP 0x0001
-#define OS_SC_SP 0x0002
-#define OS_SC_YIELD 0x0010
-#define OS_SC_YIELDED 0x0020
+#define OS_SC_DP                0x0001
+#define OS_SC_SP                0x0002
+#define OS_SC_YIELD             0x0010
+#define OS_SC_YIELDED           0x0020
 
 typedef struct OSScTask {
     /* 0x00 */ struct OSScTask* next;
-    /* 0x04 */ u32 state;
-    /* 0x08 */ u32 flags;
+    /* 0x04 */ u32      state;
+    /* 0x08 */ u32      flags;
     /* 0x0C */ CfbInfo* framebuffer;
-    /* 0x10 */ OSTask list;
+    /* 0x10 */ OSTask   list;
     /* 0x50 */ OSMesgQueue* msgQ;
-    /* 0x54 */ OSMesg msg;
+    /* 0x54 */ OSMesg   msg;
 } OSScTask; // size = 0x58
 
 typedef struct GraphicsContext {
-    /* 0x000 */ Gfx* polyOpaBuffer; // Pointer to "Zelda 0"
-    /* 0x004 */ Gfx* polyXluBuffer; // Pointer to "Zelda 1"
-    /* 0x008 */ char unk_8[0x8];    // Unused, could this be pointers to "Zelda 2" / "Zelda 3"
-    /* 0x010 */ Gfx* overlayBuffer; // Pointer to "Zelda 4"
-    /* 0x014 */ u32 unk_14;
-    /* 0x018 */ char unk_18[0x20];
-    /* 0x038 */ OSMesg msgBuff[8];
+    /* 0x000 */ Gfx*        polyOpaBuffer;  // Pointer to "Zelda 0"
+    /* 0x004 */ Gfx*        polyXluBuffer;  // Pointer to "Zelda 1"
+    /* 0x008 */ char        unk_8[0x8];     // Unused, could this be pointers to "Zelda 2" / "Zelda 3"
+    /* 0x010 */ Gfx*        overlayBuffer;  // Pointer to "Zelda 4"
+    /* 0x014 */ u32         unk_14;
+    /* 0x018 */ char        unk_18[0x20];
+    /* 0x038 */ OSMesg      msgBuff[8];
     /* 0x058 */ OSMesgQueue* schedMsgQ;
     /* 0x05C */ OSMesgQueue queue;
-    /* 0x074 */ char unk_74[0x04];
-    /* 0x078 */ OSScTask task;
-    /* 0x0E0 */ char unk_E0[0xD0];
-    /* 0x1B0 */ Gfx* workBuffer;
+    /* 0x074 */ char        unk_74[0x04];
+    /* 0x078 */ OSScTask    task;
+    /* 0x0E0 */ char        unk_E0[0xD0];
+    /* 0x1B0 */ Gfx*        workBuffer;
     /* 0x1B4 */ TwoHeadGfxArena work;
-    /* 0x1C4 */ Gfx* debugBuffer;
+    /* 0x1C4 */ Gfx*        debugBuffer;
     /* 0x1C8 */ TwoHeadGfxArena debug;
-    /* 0x1D8 */ char unk_1D8[0xAC];
-    /* 0x284 */ OSViMode* viMode;
-    /* 0x288 */ void* zbuffer;
-    /* 0x28C */ char unk_28C[0x1C];
-    /* 0x2A8 */ TwoHeadGfxArena overlay; // "Zelda 4"
-    /* 0x2B8 */ TwoHeadGfxArena polyOpa; // "Zelda 0"
-    /* 0x2C8 */ TwoHeadGfxArena polyXlu; // "Zelda 1"
-    /* 0x2D8 */ u32 gfxPoolIdx;
-    /* 0x2DC */ u16* curFrameBuffer;
-    /* 0x2E0 */ char unk_2E0[0x4];
-    /* 0x2E4 */ u32 viConfigFeatures;
-    /* 0x2E8 */ char unk_2E8[0x2];
-    /* 0x2EA */ u8 updateViMode;
-    /* 0x2EB */ u8 framebufferIdx;
-    /* 0x2EC */ void (*callback)(struct GraphicsContext*, u32);
-    /* 0x2F0 */ u32 callbackParam;
-    /* 0x2F4 */ f32 xScale;
-    /* 0x2F8 */ f32 yScale;
+    /* 0x1D8 */ char        unk_1D8[0xAC];
+    /* 0x284 */ OSViMode*   viMode;
+    /* 0x288 */ void*       zbuffer;
+    /* 0x28C */ char        unk_28C[0x1C];
+    /* 0x2A8 */ TwoHeadGfxArena overlay;    // "Zelda 4"
+    /* 0x2B8 */ TwoHeadGfxArena polyOpa;    // "Zelda 0"
+    /* 0x2C8 */ TwoHeadGfxArena polyXlu;    // "Zelda 1"
+    /* 0x2D8 */ u32         gfxPoolIdx;
+    /* 0x2DC */ u16*        curFrameBuffer;
+    /* 0x2E0 */ char        unk_2E0[0x4];
+    /* 0x2E4 */ u32         viConfigFeatures;
+    /* 0x2E8 */ char        unk_2E8[0x2];
+    /* 0x2EA */ u8          updateViMode;
+    /* 0x2EB */ u8          framebufferIdx;
+    /* 0x2EC */ void        (*callback)(struct GraphicsContext*, u32);
+    /* 0x2F0 */ u32         callbackParam;
+    /* 0x2F4 */ f32         xScale;
+    /* 0x2F8 */ f32         yScale;
     /* 0x2FC */ GfxMasterList* masterList;
 } GraphicsContext; // size = 0x300
 
 typedef struct {
     /* 0x000 */ OSMesgQueue interruptQ;
-    /* 0x018 */ OSMesg intBuf[64];
+    /* 0x018 */ OSMesg      intBuf[64];
     /* 0x118 */ OSMesgQueue cmdQ;
-    /* 0x130 */ OSMesg cmdMsgBuf[8];
-    /* 0x150 */ OSThread thread;
-    /* 0x300 */ OSScTask* audioListHead;
-    /* 0x304 */ OSScTask* gfxListHead;
-    /* 0x308 */ OSScTask* audioListTail;
-    /* 0x30C */ OSScTask* gfxListTail;
-    /* 0x310 */ OSScTask* curRSPTask;
-    /* 0x314 */ OSScTask* curRDPTask;
-    /* 0x318 */ s32 retraceCount;
-    /* 0x318 */ s32 doAudio;
-    /* 0x320 */ CfbInfo* curBuf;
-    /* 0x324 */ CfbInfo* pendingSwapBuf1;
-    /* 0x328 */ CfbInfo* pendingSwapBuf2;
+    /* 0x130 */ OSMesg      cmdMsgBuf[8];
+    /* 0x150 */ OSThread    thread;
+    /* 0x300 */ OSScTask*   audioListHead;
+    /* 0x304 */ OSScTask*   gfxListHead;
+    /* 0x308 */ OSScTask*   audioListTail;
+    /* 0x30C */ OSScTask*   gfxListTail;
+    /* 0x310 */ OSScTask*   curRSPTask;
+    /* 0x314 */ OSScTask*   curRDPTask;
+    /* 0x318 */ s32         retraceCount;
+    /* 0x318 */ s32         doAudio;
+    /* 0x320 */ CfbInfo*    curBuf;
+    /* 0x324 */ CfbInfo*    pendingSwapBuf1;
+    /* 0x328 */ CfbInfo*    pendingSwapBuf2;
     /* 0x32C */ char unk_32C[0x3];
     /* 0x32F */ u8 shouldUpdateVi;
     /* 0x330 */ IrqMgrClient irqClient;
@@ -496,11 +496,15 @@ typedef struct {
     /* 0xC */ s32 rightX;
 } Viewport; // size = 0x10
 
-typedef void (*osCreateThread_func)(void*);
+typedef void(*osCreateThread_func)(void*);
 
 typedef void* (*PrintCallback)(void*, const char*, size_t);
 
-typedef enum { SLOWLY_CALLBACK_NO_ARGS, SLOWLY_CALLBACK_ONE_ARG, SLOWLY_CALLBACK_TWO_ARGS } SlowlyCallbackArgCount;
+typedef enum {
+    SLOWLY_CALLBACK_NO_ARGS,
+    SLOWLY_CALLBACK_ONE_ARG,
+    SLOWLY_CALLBACK_TWO_ARGS
+} SlowlyCallbackArgCount;
 
 typedef struct {
     /* 0x000 */ OSThread thread;
@@ -621,7 +625,7 @@ typedef struct {
 } FaultDrawer; // size = 0x3C
 
 typedef struct GfxPrint {
-    /* 0x00 */ struct GfxPrint* (*callback)(struct GfxPrint*, const char*, size_t);
+    /* 0x00 */ struct GfxPrint *(*callback)(struct GfxPrint*, const char*, size_t);
     /* 0x04 */ Gfx* dlist;
     /* 0x08 */ u16 posX;
     /* 0x0A */ u16 posY;
@@ -630,7 +634,7 @@ typedef struct GfxPrint {
     /* 0x0F */ u8 flag;
     /* 0x10 */ Color_RGBA8_u32 color;
     /* 0x14 */ char unk_14[0x1C]; // unused
-} GfxPrint;                       // size = 0x30
+} GfxPrint; // size = 0x30
 
 typedef enum {
     GFXPRINT_FLAG1 = 1,
@@ -651,8 +655,8 @@ typedef struct {
     /* 0x00 */ OSContPad cur;
     /* 0x06 */ OSContPad prev;
     /* 0x0C */ OSContPad press; // X/Y store delta from last frame
-    /* 0x12 */ OSContPad rel;   // X/Y store adjusted
-} Input;                        // size = 0x18
+    /* 0x12 */ OSContPad rel; // X/Y store adjusted
+} Input; // size = 0x18
 
 typedef struct {
     /* 0x000 */ u32 magic;
@@ -683,7 +687,7 @@ typedef struct {
     /* 0x164 */ UNK_TYPE4 unk164;
 } View; // size = 0x168
 
-typedef void (*fault_update_input_func)(Input* input);
+typedef void(*fault_update_input_func)(Input* input);
 
 typedef struct {
     /* 0x00 */ u8 noteIdx;
@@ -863,8 +867,8 @@ typedef struct {
         /* 0x316 */ u8 songOfStorms;
         /* 0x317 */ u8 unk_317;
         /* 0x318 */ u8 pictographBox;
-        /* 0x319 */ u8 all; // "another"; enables all item restrictions
-    } restrictions;         // size = 0xC
+        /* 0x319 */ u8 all;     // "another"; enables all item restrictions
+    } restrictions; // size = 0xC
     /* 0x31A */ u8 unk_31A;
     /* 0x31B */ u8 unk_31B;
     /* 0x31C */ u8 unk_31C;
@@ -1038,7 +1042,7 @@ typedef struct {
     /* 0x1206C */ s32 unk1206C;
     /* 0x12070 */ UNK_TYPE1 pad12070[0x8];
     /* 0x12078 */ s32 bankRupeesSelected;
-    /* 0x1207C */ s32 bankRupees;
+    /* 0x1207C */ s32 bankRupees; 
     /* 0x12080 */ UNK_TYPE1 pad12080[0x31];
     /* 0x120B1 */ u8 unk120B1;
     /* 0x120B2 */ UNK_TYPE1 pad120B2[0x22];
@@ -1079,8 +1083,7 @@ typedef struct FaultClient {
 
 typedef struct {
     /* 0x000 */ OSThread thread;
-    /* 0x1B0 */ u8 stack[1536]; // Seems leftover from an earlier version. The thread actually uses a stack of this size
-                                // at 0x8009BE60
+    /* 0x1B0 */ u8 stack[1536]; // Seems leftover from an earlier version. The thread actually uses a stack of this size at 0x8009BE60
     /* 0x7B0 */ OSMesgQueue queue;
     /* 0x7C8 */ OSMesg msg[1];
     /* 0x7CC */ u8 exitDebugger;
@@ -1105,18 +1108,18 @@ struct GameState;
 typedef void (*GameStateFunc)(struct GameState* gameState);
 
 typedef struct {
-    /* 0x00 */ void* loadedRamAddr;
-    /* 0x04 */ uintptr_t vromStart; // if applicable
-    /* 0x08 */ uintptr_t vromEnd;   // if applicable
-    /* 0x0C */ void* vramStart;     // if applicable
-    /* 0x10 */ void* vramEnd;       // if applicable
-    /* 0x14 */ UNK_PTR unk_14;
+    /* 0x00 */ void*         loadedRamAddr;
+    /* 0x04 */ uintptr_t     vromStart; // if applicable
+    /* 0x08 */ uintptr_t     vromEnd;   // if applicable
+    /* 0x0C */ void*         vramStart; // if applicable
+    /* 0x10 */ void*         vramEnd;   // if applicable
+    /* 0x14 */ UNK_PTR       unk_14;
     /* 0x18 */ GameStateFunc init;    // initializes and executes the given context
     /* 0x1C */ GameStateFunc destroy; // deconstructs the context, and sets the next context to load
-    /* 0x20 */ UNK_PTR unk_20;
-    /* 0x24 */ UNK_PTR unk_24;
-    /* 0x28 */ UNK_TYPE unk_28;
-    /* 0x2C */ size_t instanceSize;
+    /* 0x20 */ UNK_PTR       unk_20;
+    /* 0x24 */ UNK_PTR       unk_24;
+    /* 0x28 */ UNK_TYPE      unk_28;
+    /* 0x2C */ size_t        instanceSize;
 } GameStateOverlay; // size = 0x30
 
 typedef struct GameAllocEntry {
@@ -1169,11 +1172,11 @@ typedef void (*ColChkApplyFunc)(GlobalContext*, CollisionCheckContext*, Collider
 typedef void (*ColChkVsFunc)(GlobalContext*, CollisionCheckContext*, Collider*, Collider*);
 typedef s32 (*ColChkLineFunc)(GlobalContext*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
 
-typedef void (*cutscene_update_func)(GlobalContext* globalCtx, CutsceneContext* cCtxt);
+typedef void(*cutscene_update_func)(GlobalContext* globalCtx, CutsceneContext* cCtxt);
 
-typedef void (*draw_func)(GlobalContext* globalCtx, s16 index);
+typedef void(*draw_func)(GlobalContext* globalCtx, s16 index);
 
-typedef void (*room_draw_func)(GlobalContext* globalCtx, Room* room, u32 flags);
+typedef void(*room_draw_func)(GlobalContext* globalCtx, Room* room, u32 flags);
 
 typedef struct {
     /* 0x00 */ draw_func unk0;
@@ -1252,7 +1255,7 @@ typedef struct Camera {
     /* 0x16C */ Vec3f meshActorPos;
 } Camera; // size = 0x178
 
-typedef s32 (*camera_update_func)(Camera* camera);
+typedef s32(*camera_update_func)(Camera* camera);
 
 typedef struct {
     /* 0x00 */ Vec3f atOffset;
@@ -1283,7 +1286,7 @@ typedef struct {
     /* 0x18 */ s16 rollOffset;
     /* 0x1A */ s16 zoom;
     /* 0x1C */ f32 max; // Set to scaled max data of struct (mag for Vec3f), never used
-} QuakeCamCalc;         // size = 0x20
+} QuakeCamCalc; // size = 0x20
 
 typedef s16 (*QuakeCallbackFunc)(QuakeRequest*, ShakeInfo*);
 
@@ -1344,7 +1347,11 @@ typedef struct StackEntry {
     /* 0x18 */ const char* name;
 } StackEntry; // size = 0x1C
 
-typedef enum { STACK_STATUS_OK = 0, STACK_STATUS_WARNING = 1, STACK_STATUS_OVERFLOW = 2 } StackStatus;
+typedef enum {
+    STACK_STATUS_OK = 0,
+    STACK_STATUS_WARNING = 1,
+    STACK_STATUS_OVERFLOW = 2
+} StackStatus;
 
 typedef struct TargetContext TargetContext;
 
@@ -1359,15 +1366,15 @@ struct FireObjLight {
 }; // size = 0x13
 
 typedef struct ActorListEntry {
-    /* 0x0 */ s32 length;   // number of actors loaded of this type
+    /* 0x0 */ s32 length; // number of actors loaded of this type
     /* 0x4 */ Actor* first; // pointer to first actor of this type
     /* 0x8 */ UNK_TYPE1 pad8[0x4];
 } ActorListEntry; // size = 0xC
 
-#define OS_SC_RETRACE_MSG 1
-#define OS_SC_DONE_MSG 2
-#define OS_SC_NMI_MSG 3 // name is made up, 3 is OS_SC_RDP_DONE_MSG in the original sched.c
-#define OS_SC_PRE_NMI_MSG 4
+#define OS_SC_RETRACE_MSG       1
+#define OS_SC_DONE_MSG          2
+#define OS_SC_NMI_MSG           3 // name is made up, 3 is OS_SC_RDP_DONE_MSG in the original sched.c
+#define OS_SC_PRE_NMI_MSG       4
 
 typedef struct {
     /* 0x0000 */ OSTask task;
@@ -1389,7 +1396,7 @@ typedef struct {
     /* 0x12C */ UNK_TYPE1 pad_12C[0x4];
     /* 0x130 */ OSThread thread;
 } AudioMgr; // size = 0x2E0
-
+ 
 typedef struct {
     /* 0x00 */ MtxF displayMatrix;
     /* 0x40 */ Actor* actor;
@@ -1459,9 +1466,8 @@ struct s800B948C {
     /* 0x0C */ u32 unkC;
     /* 0x10 */ Actor* unk10;
     /* 0x14 */ Player* player;
-    /* 0x18 */ u32 runMainIfSet; // Bitmask of actor flags. The actor will only have main called if it has at least 1
-                                 // flag set that matches this bitmask
-};                               // size = 0x1C
+    /* 0x18 */ u32 runMainIfSet; // Bitmask of actor flags. The actor will only have main called if it has at least 1 flag set that matches this bitmask
+}; // size = 0x1C
 
 struct ActorContext {
     /* 0x000 */ UNK_TYPE1 pad0[0x2];
@@ -1500,9 +1506,9 @@ struct ActorContext {
 }; // size = 0x284
 
 typedef struct {
-    /* 0x00 */ u8 seqIndex;
-    /* 0x01 */ u8 nightSeqIndex;
-    /* 0x02 */ u8 unk_02;
+    /* 0x00 */ u8   seqIndex;
+    /* 0x01 */ u8   nightSeqIndex;
+    /* 0x02 */ u8   unk_02;
 } SoundContext; // size = 0x3
 
 typedef struct {
@@ -1513,14 +1519,14 @@ typedef struct {
 typedef enum {
     /* 00 */ GAMEOVER_INACTIVE,
     /* 01 */ GAMEOVER_DEATH_START,
-    /* 02 */ GAMEOVER_DEATH_WAIT_GROUND, // wait for player to fall and hit the ground
-    /* 03 */ GAMEOVER_DEATH_FADE_OUT,    // wait before fading out
+    /* 02 */ GAMEOVER_DEATH_WAIT_GROUND,    // wait for player to fall and hit the ground
+    /* 03 */ GAMEOVER_DEATH_FADE_OUT,       // wait before fading out
 
     /* 20 */ GAMEOVER_REVIVE_START = 20,
     /* 21 */ GAMEOVER_REVIVE_RUMBLE,
-    /* 22 */ GAMEOVER_REVIVE_WAIT_GROUND, // wait for player to fall and hit the ground
-    /* 23 */ GAMEOVER_REVIVE_WAIT_FAIRY,  // wait for the fairy to rise all the way up out of player's body
-    /* 24 */ GAMEOVER_REVIVE_FADE_OUT     // fade out the game over lights as player is revived and gets back up
+    /* 22 */ GAMEOVER_REVIVE_WAIT_GROUND,   // wait for player to fall and hit the ground
+    /* 23 */ GAMEOVER_REVIVE_WAIT_FAIRY,    // wait for the fairy to rise all the way up out of player's body
+    /* 24 */ GAMEOVER_REVIVE_FADE_OUT       // fade out the game over lights as player is revived and gets back up
 } GameOverState;
 
 typedef struct {
