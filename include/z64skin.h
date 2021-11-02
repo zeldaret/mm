@@ -3,43 +3,41 @@
 
 #include "z64animation.h"
 
-
+typedef struct {
+    /* 0x00 */ u16 vtxIndex;
+    /* 0x02 */ s16 u; // u and v are texture coordinates
+    /* 0x04 */ s16 v;
+    /* 0x06 */ s8 x;
+    /* 0x07 */ s8 y;
+    /* 0x08 */ s8 z;
+    /* 0x09 */ u8 alpha;
+} SkinVtx; // size = 0xA
 
 typedef struct {
-    /* 0x000 */ u16 unk_0;
-    /* 0x002 */ s16 unk_2;
-    /* 0x004 */ s16 unk_4;
-    /* 0x006 */ s8 unk_6;
-    /* 0x007 */ s8 unk_7;
-    /* 0x008 */ s8 unk_8;
-    /* 0x009 */ u8 unk_9;
-} Struct_800A57C0; // size = 0xA
-
-typedef struct {
-    /* 0x000 */ u8  unk_0;
-    /* 0x002 */ s16 x;
-    /* 0x004 */ s16 y;
-    /* 0x006 */ s16 z;
-    /* 0x008 */ u8  scale;
+    /* 0x00 */ u8  unk_0; // index of D_801F5AC0? limb index?
+    /* 0x02 */ s16 x;
+    /* 0x04 */ s16 y;
+    /* 0x06 */ s16 z;
+    /* 0x08 */ u8  scale;
 } Struct_800A598C_2; // size = 0xA
 
 typedef struct {
-    /* 0x000 */ u16 unk_0; // count of unk_8
-    /* 0x002 */ u16 unk_2; // count of unk_C
-    /* 0x004 */ u16 unk_4;
-    /* 0x008 */ Struct_800A57C0* unk_8;
-    /* 0x00C */ Struct_800A598C_2* unk_C;
+    /* 0x00 */ u16 unk_0; // count of unk_8
+    /* 0x02 */ u16 unk_2; // count of unk_C
+    /* 0x04 */ u16 unk_4; // index of unk_C?
+    /* 0x08 */ SkinVtx* unk_8;
+    /* 0x0C */ Struct_800A598C_2* unk_C;
 } Struct_800A598C; // size = 0x10
 
 typedef struct {
-    /* 0x000 */ u16 vtxCount;
-    /* 0x002 */ u16 unk_2; // count of unk_4
-    /* 0x004 */ Struct_800A598C* unk_4; 
-    /* 0x008 */ Gfx* dlist;
+    /* 0x00 */ u16 vtxCount;
+    /* 0x02 */ u16 unk_2; // count of unk_4
+    /* 0x04 */ Struct_800A598C* unk_4;
+    /* 0x08 */ Gfx* dlist;
 } SkinAnimatedLimbData; // size = 0xC
 
-
 // ZAPD compatibility typedefs
+typedef SkinVtx Struct_800A57C0;
 typedef SkinAnimatedLimbData Struct_800A5E28;
 
 typedef enum {
@@ -76,7 +74,7 @@ typedef struct {
 typedef void (*SkinPostLimbDraw)(struct Actor*, struct GlobalContext*, PSkinAwb*);
 typedef s32 (*SkinOverrideLimbDraw)(struct Actor*, struct GlobalContext*, s32, PSkinAwb*);
 
-void func_80137970(MtxF* mtx, Struct_800A57C0* arg1, Struct_800A598C* arg2, Vtx* arg3, Vec3f* arg4);
+void func_80137970(MtxF* mtx, SkinVtx* arg1, Struct_800A598C* arg2, Vtx* verticesDst, Vec3f* arg4);
 void func_80137B34(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 arg3);
 void Skin_DrawAnimatedLimb(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 arg3, s32 arg4);
 void Skin_DrawLimb(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, Gfx* arg3, s32 arg4);

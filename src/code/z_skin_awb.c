@@ -10,26 +10,26 @@ void func_80138410(PSkinAwb* skin) {
 void Skin_InitAnimatedLimb(GameState* gameState, PSkinAwb* skin, s32 limbIndex) {
     s32 i;
     SkinLimb** skeleton = Lib_SegmentedToVirtual(skin->skeletonHeader->segment);
-    SkinAnimatedLimbData* temp_v1 = Lib_SegmentedToVirtual(((SkinLimb*)Lib_SegmentedToVirtual(skeleton[limbIndex]))->limbData);
-    Struct_800A598C* temp_v0 = Lib_SegmentedToVirtual(temp_v1->unk_4);
+    SkinAnimatedLimbData* animatedLimbData = Lib_SegmentedToVirtual(((SkinLimb*)Lib_SegmentedToVirtual(skeleton[limbIndex]))->limbData);
+    Struct_800A598C* temp_v0 = Lib_SegmentedToVirtual(animatedLimbData->unk_4);
 
     for (i = 0; i < ARRAY_COUNT(skin->avbTbl->buf); i++) {
-        Vtx* temp2 = skin->avbTbl[limbIndex].buf[i];
+        Vtx* vertices = skin->avbTbl[limbIndex].buf[i];
         Struct_800A598C* phi_s0;
-        Struct_800A57C0* temp_s1;
 
-        for (phi_s0 = temp_v0; phi_s0 < temp_v0 + temp_v1->unk_2; phi_s0++) {
-            Struct_800A57C0* phi_s1 = Lib_SegmentedToVirtual(phi_s0->unk_8);
+        for (phi_s0 = temp_v0; phi_s0 < temp_v0 + animatedLimbData->unk_2; phi_s0++) {
+            SkinVtx* skinVertices = Lib_SegmentedToVirtual(phi_s0->unk_8);
+            SkinVtx* skinVtxEntry;
 
-            for (temp_s1 = phi_s1; temp_s1 < phi_s1 + phi_s0->unk_0; ) {
-                Vtx* temp_t5_3 = &temp2[temp_s1->unk_0];
+            for (skinVtxEntry = skinVertices; skinVtxEntry < skinVertices + phi_s0->unk_0; ) {
+                Vtx* vtx = &vertices[skinVtxEntry->vtxIndex];
 
-                temp_s1++;
+                skinVtxEntry++;
 
-                temp_t5_3->v.flag = 0;
-                temp_t5_3->v.tc[0] = temp_s1[-1].unk_2;
-                temp_t5_3->v.tc[1] = temp_s1[-1].unk_4;
-                temp_t5_3->v.cn[3] = temp_s1[-1].unk_9;
+                vtx->n.flag = 0;
+                vtx->n.tc[0] = skinVtxEntry[-1].u;
+                vtx->n.tc[1] = skinVtxEntry[-1].v;
+                vtx->n.a = skinVtxEntry[-1].alpha;
             }
         }
     }
