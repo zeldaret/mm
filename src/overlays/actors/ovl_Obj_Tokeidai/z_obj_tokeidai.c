@@ -39,6 +39,7 @@ void func_80AB4160(ObjTokeidai* this, GlobalContext* globalCtx);
 void func_80AB3BB0(ObjTokeidai* this);
 void func_80AB4394(Actor* thisx, GlobalContext* globalCtx);
 void func_80AB4664(Actor* thisx, GlobalContext* globalCtx);
+void func_80AB4894(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit Obj_Tokeidai_InitVars = {
     ACTOR_OBJ_TOKEIDAI,
@@ -99,7 +100,23 @@ void func_80AB2834(ObjTokeidai* this) {
     this->unk_158 = func_80AB2790();
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB28C8.s")
+void func_80AB28C8(ObjTokeidai* this, GlobalContext* globalCtx) {
+    this->actor.draw = func_80AB4894;
+    this->unk_144 = &D_0600BA78;
+    func_80AB27B4(this);
+    if ((globalCtx->sceneNum == SCENE_CLOCKTOWER && gSaveContext.sceneSetupIndex == 2 &&
+         globalCtx->csCtx.unk_12 == 0) ||
+        (globalCtx->sceneNum == SCENE_00KEIKOKU && gSaveContext.sceneSetupIndex == 2 && globalCtx->csCtx.unk_12 == 0)) {
+        func_80AB3BB0(this);
+    } else if ((gSaveContext.day % 5 == 3 && gSaveContext.time < CLOCK_TIME(6, 0)) || gSaveContext.day % 5 >= 4) {
+        this->actionFunc = func_80AB3240;
+        this->actor.world.pos.y += this->actor.scale.y * 1900.0f;
+        this->actor.shape.yOffset = 1500.0f;
+        gSaveContext.weekEventReg[8] |= 0x40;
+    } else {
+        this->actionFunc = func_80AB4080;
+    }
+}
 
 void func_80AB29F8(ObjTokeidai* this, GlobalContext* globalCtx) {
     this->actor.draw = func_80AB4394;
