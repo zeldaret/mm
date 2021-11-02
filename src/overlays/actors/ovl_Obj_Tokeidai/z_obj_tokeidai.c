@@ -310,7 +310,11 @@ void func_80AB3240(ObjTokeidai* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB3598.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB363C.s")
+void func_80AB363C(ObjTokeidai* this, GlobalContext* globalCtx) {
+    if (this->actor.shape.rot.x < 0x4000) {
+        this->actor.shape.rot.x += +0x28;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB365C.s")
 
