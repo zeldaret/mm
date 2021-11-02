@@ -1608,7 +1608,7 @@ void SkelAnime_InitFlex(GlobalContext* globalCtx, SkelAnime* skelAnime, FlexSkel
 /**
  * Initializes a skeleton with SkinLimbs to a looping animation, dynamically allocating the frame tables.
  */
-void SkelAnime_InitSkin(GlobalContext* globalCtx, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg,
+void SkelAnime_InitSkin(GameState* gameState, SkelAnime* skelAnime, SkeletonHeader* skeletonHeaderSeg,
                         AnimationHeader* animation) {
     SkeletonHeader* skeletonHeader;
 

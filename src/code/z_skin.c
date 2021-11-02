@@ -1,8 +1,7 @@
 #include "global.h"
-
+#include "z64skin.h"
 
 extern MtxF D_801F5AC0[60];
-//MtxF D_801F5AC0[60];
 //char D_80160FC0[0x10];
 
 void func_80137970(MtxF* mtx, Struct_800A57C0* arg1, Struct_800A598C* arg2, Vtx* arg3, Vec3f* arg4) {

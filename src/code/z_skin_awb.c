@@ -1,7 +1,11 @@
 #include "global.h"
+#include "z64skin.h"
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_skin_awb/func_80138410.s")
-
+void func_80138410(PSkinAwb* skin) {
+    skin->skeletonHeader = NULL;
+    skin->avbCount = 0;
+    skin->avbTbl = NULL;
+}
 
 void func_80138424(GameState* gameState, PSkinAwb* skin, s32 limbIndex) {
     s32 i;
@@ -31,9 +35,8 @@ void func_80138424(GameState* gameState, PSkinAwb* skin, s32 limbIndex) {
     }
 }
 
-
 #ifdef NON_MATCHING
-void func_8013859C(GlobalContext* globalCtx, PSkinAwb* skin, SkeletonHeader* skeletonHeader,
+void func_8013859C(GameState* gameState, PSkinAwb* skin, SkeletonHeader* skeletonHeader,
                    AnimationHeader* animationHeader) {
     s32 limbCount;
     s32 i;
@@ -67,14 +70,13 @@ void func_8013859C(GlobalContext* globalCtx, PSkinAwb* skin, SkeletonHeader* ske
             avbEntry->buf[1] = ZeldaArena_Malloc(temp_s1->unk_0 * sizeof(Vtx));
             if (1) { }
 
-            func_80138424(globalCtx, skin, i);
+            func_80138424(gameState, skin, i);
         }
     }
-    SkelAnime_InitSkin(globalCtx, &skin->skelAnime, skeletonHeader, animationHeader);
+    SkelAnime_InitSkin(gameState, &skin->skelAnime, skeletonHeader, animationHeader);
 }
 #else
-
-void func_8013859C(GlobalContext* globalCtx, PSkinAwb* skin, SkeletonHeader* skeletonHeader, AnimationHeader* animationHeader);
+void func_8013859C(GameState* gameState, PSkinAwb* skin, SkeletonHeader* skeletonHeader, AnimationHeader* animationHeader);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_skin_awb/func_8013859C.s")
 #endif
 
@@ -97,7 +99,7 @@ void func_80138700(GameState* gameState, PSkinAwb* skin) {
             ZeldaArena_Free(skin->avbTbl);
         }
 
-        SkelAnime_Free(&skin->skelAnime, gameState);
+        SkelAnime_Free(&skin->skelAnime, (GlobalContext*)gameState);
     }
 }
 
