@@ -304,7 +304,13 @@ void func_80AB3240(ObjTokeidai* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB3370.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB34CC.s")
+void func_80AB34CC(ObjTokeidai* this, GlobalContext* globalCtx) {
+    if (func_800EE29C(globalCtx, 0x84) != 0 && globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x84)]->unk0 == 1) {
+        this->actionFunc = func_80AB3370;
+        this->unk_154 = 0;
+        this->unk_156 = -0xD;
+    }
+}
 
 void func_80AB3544(ObjTokeidai* this, GlobalContext* globalCtx) {
     if (this->actor.world.pos.y < 0.0f) {
