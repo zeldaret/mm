@@ -92,9 +92,9 @@ void DebugDisplay_DrawPolygon(DebugDispObject* dispObj, void* arg1, GlobalContex
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, dispObj->color.r, dispObj->color.g, dispObj->color.b, dispObj->color.a);
 
-    gSPSetLights1(POLY_XLU_DISP++, sDebugDisplayLight1)
+    gSPSetLights1(POLY_XLU_DISP++, sDebugDisplayLight1);
 
-        Matrix_SetStateRotationAndTranslation(dispObj->pos.x, dispObj->pos.y, dispObj->pos.z, &dispObj->rot);
+    Matrix_SetStateRotationAndTranslation(dispObj->pos.x, dispObj->pos.y, dispObj->pos.z, &dispObj->rot);
     Matrix_Scale(dispObj->scale.x, dispObj->scale.y, dispObj->scale.z, 1);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
