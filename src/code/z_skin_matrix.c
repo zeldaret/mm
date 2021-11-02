@@ -579,8 +579,6 @@ void SkinMatrix_MtxFToMtx(MtxF* src, Mtx* dest) {
 Mtx* SkinMatrix_MtxFToNewMtx(GraphicsContext* gfxCtx, MtxF* src) {
     Mtx* mtx = GRAPH_ALLOC(gfxCtx, sizeof(Mtx));
 
-    gfxCtx->polyOpa.d = (void*)mtx;
-
     if (mtx == NULL) {
         return NULL;
     }
