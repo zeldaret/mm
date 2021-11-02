@@ -24,7 +24,6 @@ typedef struct EnWizFire {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ EnWizFireActionFunc actionFunc;
     /* 0x0148 */ u8 unk_148;
-    /* 0x0149 */ char pad149[0x3];
     /* 0x014C */ f32 unk_14C;
     /* 0x0150 */ f32 unk_150;
     /* 0x0154 */ f32 unk_154;
@@ -33,7 +32,6 @@ typedef struct EnWizFire {
     /* 0x0160 */ s16 unk_160;
     /* 0x0162 */ s16 unk_162;
     /* 0x0164 */ u8 unk_164;
-    /* 0x0165 */ char pad165[0x1];
     /* 0x0166 */ s16 unk_166;
     /* 0x0168 */ s16 unk_168;
     /* 0x016A */ s16 unk_16A;
@@ -42,7 +40,6 @@ typedef struct EnWizFire {
     /* 0x0170 */ s16 unk_170;
     /* 0x0172 */ s16 unk_172;
     /* 0x0174 */ s8 unk_174;
-    /* 0x0175 */ char pad175[0x3];
     /* 0x0178 */ Vec3f unk_178[10];
     /* 0x01F0 */ f32 unk_1F0;
     /* 0x01F4 */ f32 unk_1F4;
