@@ -77,7 +77,27 @@ extern UNK_TYPE D_0600D8E8;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB28C8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB29F8.s")
+void func_80AB29F8(ObjTokeidai* this, GlobalContext* globalCtx) {
+    this->actor.draw = func_80AB4394;
+    func_80AB2834(this);
+    if ((globalCtx->sceneNum == SCENE_CLOCKTOWER && gSaveContext.sceneSetupIndex == 2 &&
+         globalCtx->csCtx.unk_12 == 0) ||
+        (globalCtx->sceneNum == SCENE_00KEIKOKU && gSaveContext.sceneSetupIndex == 2 && globalCtx->csCtx.unk_12 == 0)) {
+        func_80AB3BB0(this);
+    } else if ((gSaveContext.day % 5 == 3 && gSaveContext.time < CLOCK_TIME(6, 0)) || gSaveContext.day % 5 >= 4) {
+        this->actor.world.pos.y += (this->actor.scale.y * 5191.0f) - 50.0f;
+        this->actor.world.pos.x += Math_SinS(this->actor.world.rot.y) * this->actor.scale.z * 1791.0f;
+        this->actor.world.pos.z += -Math_CosS(this->actor.world.rot.y) * this->actor.scale.z * 1791.0f;
+        this->unk_162 = -0x140;
+        this->actor.shape.rot.x = -0x4000;
+        this->actor.home.pos = this->actor.world.pos;
+        this->actor.home.pos.y -= 1178.0f;
+        this->actor.home.pos.z += 13.0f;
+        this->actionFunc = func_80AB34CC;
+    } else {
+        this->actionFunc = func_80AB3ED0;
+    }
+}
 
 void func_80AB2BBC(ObjTokeidai* this, GlobalContext* globalCtx) {
     s32 type;
