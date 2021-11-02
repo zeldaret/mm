@@ -71,7 +71,15 @@ extern UNK_TYPE D_0600D8E8;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB2790.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB27B4.s")
+void func_80AB27B4(ObjTokeidai* this) {
+    s32 temp;
+
+    temp = (s32)(this->unk_170 * 0.010986328f) % 0x1E;
+    this->unk_168 = temp;
+    this->unk_14C = temp * 2184.5334f;
+    this->unk_14E = 0x3C;
+    this->unk_150 = 0;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB2834.s")
 
