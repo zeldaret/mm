@@ -301,7 +301,11 @@ void func_80AB3BB0(ObjTokeidai* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB3ED0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB4040.s")
+void func_80AB4040(ObjTokeidai* this, GlobalContext* globalCtx) {
+    this->unk_170 = gSaveContext.time;
+    func_80AB3010(this, 1);
+    func_80AB3CCC(this, globalCtx);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB4080.s")
 
