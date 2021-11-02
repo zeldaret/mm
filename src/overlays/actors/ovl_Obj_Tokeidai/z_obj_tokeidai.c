@@ -397,7 +397,28 @@ void func_80AB4040(ObjTokeidai* this, GlobalContext* globalCtx) {
     func_80AB3CCC(this, globalCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB4080.s")
+void func_80AB4080(ObjTokeidai* this, GlobalContext* globalCtx) {
+    if (func_80AB3C50(this, globalCtx)) {
+        this->actor.draw = func_80AB4894;
+    } else {
+        if (globalCtx->csCtx.state != 0) {
+            this->actor.home.rot.x = 1;
+            this->unk_170 += 3;
+            this->actor.draw = func_80AB4894;
+        } else {
+            if ((globalCtx->actorCtx.unk5 & 2) == 0 && OBJ_TOKEIDAI_TYPE(&this->actor) == 4 &&
+                ActorCutscene_GetCurrentIndex() == -1) {
+                this->actor.draw = NULL;
+            }
+            this->unk_170 = gSaveContext.time;
+            if (this->actor.home.rot.x != 0) {
+                func_80AB27B4(this);
+                this->actor.home.rot.x = 0;
+            }
+        }
+        func_80AB3010(this, 0);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB4160.s")
 
