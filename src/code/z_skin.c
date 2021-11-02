@@ -244,4 +244,13 @@ void func_80138300(PSkinAwb* skin, s32 joint, Vec3f* arg2, Vec3f* arg3) {
     SkinMatrix_Vec3fMtxFMultXYZ(&sp18, arg2, arg3);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_skin/func_8013835C.s")
+void func_8013835C(PSkinAwb* arg0, s32 arg1, s32 arg2, Vec3f* arg3) {
+    Vec3f sp24;
+    Vtx* temp_v0;
+
+    temp_v0 = &arg0->avbTbl[arg1].buf[arg0->avbTbl->unk_0][arg2];
+    sp24.x = temp_v0->v.ob[0];
+    sp24.y = temp_v0->v.ob[1];
+    sp24.z = temp_v0->v.ob[2];
+    SkinMatrix_Vec3fMtxFMultXYZ(&arg0->mtx, &sp24, arg3);
+}
