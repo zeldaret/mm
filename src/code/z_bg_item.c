@@ -105,7 +105,8 @@ s32 DynaPoly_IsInHeavySwitchPressedState(DynaPolyActor* dynaActor) {
     }
 }
 
-s32 DynaPoly_ValidateMove(GlobalContext* globalCtx, DynaPolyActor* dynaActor, s16 startRadius, s16 endRadius, s16 startHeight) {
+s32 DynaPoly_ValidateMove(GlobalContext* globalCtx, DynaPolyActor* dynaActor, s16 startRadius, s16 endRadius,
+                          s16 startHeight) {
     Vec3f startPos;
     Vec3f endPos;
     Vec3f intersectionPos;
@@ -128,7 +129,7 @@ s32 DynaPoly_ValidateMove(GlobalContext* globalCtx, DynaPolyActor* dynaActor, s1
     endPos.z = sign * adjustedEndRadius * cos + startPos.z;
 
     if (func_800C56E0(&globalCtx->colCtx, &startPos, &endPos, &intersectionPos, &poly, true, false, false, true, &bgId,
-                                &dynaActor->actor, 0.0f)) {
+                      &dynaActor->actor, 0.0f)) {
         return false;
     }
     startPos.x = (dynaActor->actor.world.pos.x * 2.0f) - startPos.x;
@@ -136,7 +137,7 @@ s32 DynaPoly_ValidateMove(GlobalContext* globalCtx, DynaPolyActor* dynaActor, s1
     endPos.x = sign * adjustedEndRadius * sin + startPos.x;
     endPos.z = sign * adjustedEndRadius * cos + startPos.z;
     if (func_800C56E0(&globalCtx->colCtx, &startPos, &endPos, &intersectionPos, &poly, true, false, false, true, &bgId,
-                                &dynaActor->actor, 0.0f)) {
+                      &dynaActor->actor, 0.0f)) {
         return false;
     }
     return true;
