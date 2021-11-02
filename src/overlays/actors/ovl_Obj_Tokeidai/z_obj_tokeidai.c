@@ -339,7 +339,14 @@ void func_80AB3BB0(ObjTokeidai* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB3BD8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB3BE8.s")
+void func_80AB3BE8(ObjTokeidai* this, GlobalContext* globalCtx) {
+    if ((gSaveContext.day % 5 == 3 && gSaveContext.time < CLOCK_TIME(6, 0)) || (gSaveContext.day % 5 >= 4) ||
+        ((gSaveContext.weekEventReg[8] & 0x40) != 0)) {
+        this->actor.draw = ObjTokeidai_Draw;
+    } else {
+        this->actor.draw = NULL;
+    }
+}
 
 s32 func_80AB3C50(ObjTokeidai* this, GlobalContext* globalCtx) {
     if (gSaveContext.inventory.items[0] == 0xFF) {
