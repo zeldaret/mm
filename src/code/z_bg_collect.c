@@ -61,13 +61,13 @@ void BgCheck2_AttachToMesh(CollisionContext* colCtx, Actor* actor, s32 index) {
 
     meshActor = BgCheck_GetActorOfMesh(colCtx, index);
     if (meshActor != NULL) {
-        func_800CAE88(meshActor);
+        DynaPoly_SetRidingFallingState(meshActor);
 
         if ((actor->flags & 0x4000000) == 0x4000000) {
-            func_800CAF24(meshActor);
+            DynaPoly_SetSwitchPressedState(meshActor);
         }
         if ((actor->flags & 0x20000) == 0x20000) {
-            func_800CAF38(meshActor);
+            DynaPoly_SetHeavySwitchPressedState(meshActor);
         }
     }
 }
@@ -90,12 +90,12 @@ u32 BgCheck2_UpdateActorAttachedToMesh(CollisionContext* colCtx, s32 index, Acto
         return 0;
     }
 
-    if ((meshActor->unk154 & 1) != 0) {
+    if ((meshActor->flags & 1) != 0) {
         BgCheck2_UpdateActorPosition(colCtx, index, actor);
         wasUpdated = 1;
     }
 
-    if ((meshActor->unk154 & 2) != 0) {
+    if ((meshActor->flags & 2) != 0) {
         BgCheck2_UpdateActorYRotation(colCtx, index, actor);
         wasUpdated = 1;
     }

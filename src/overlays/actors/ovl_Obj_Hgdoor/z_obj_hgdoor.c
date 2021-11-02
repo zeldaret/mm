@@ -72,7 +72,7 @@ void ObjHgdoor_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionHeader* header = NULL;
 
     Actor_SetScale(&this->dyna.actor, 0.1f);
-    BcCheck3_BgActorInit(&this->dyna, 1);
+    DynaPoly_Init(&this->dyna, 1);
     if (OBJHGDOOR_IS_RIGHT_DOOR(&this->dyna.actor)) {
         BgCheck_RelocateMeshHeader(&D_06001D10, &header);
     } else {

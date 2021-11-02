@@ -1,99 +1,143 @@
 #include "global.h"
 
-void BcCheck3_BgActorInit(DynaPolyActor* actor, UNK_TYPE4 param_2) {
-    actor->bgId = -1;
-    actor->unk148 = 0;
-    actor->unk14C = 0;
-    actor->unk154 = param_2;
-    actor->unk_158 = 0;
+#define DYNAPOLY_STATE_NONE 0
+#define DYNAPOLY_STATE_RIDING_FALLING 1 << 0
+#define DYNAPOLY_STATE_RIDING_MOVING 1 << 1
+#define DYNAPOLY_STATE_RIDING_ROTATING 1 << 2
+#define DYNAPOLY_STATE_SWITCH_PRESSED 1 << 3
+#define DYNAPOLY_STATE_HEAVY_SWITCH_PRESSED 1 << 4
+
+void DynaPoly_Init(DynaPolyActor* dynaActor, s32 flags) {
+    dynaActor->bgId = -1;
+    dynaActor->pushForce = 0.0f;
+    dynaActor->unk14C = 0.0f;
+    dynaActor->flags = flags;
+    dynaActor->stateFlags = DYNAPOLY_STATE_NONE;
 }
 
-void BgCheck3_LoadMesh(GlobalContext* globalCtx, DynaPolyActor* actor, CollisionHeader* meshHeader) {
-    CollisionHeader* header;
+void DynaPoly_LoadMesh(GlobalContext* globalCtx, DynaPolyActor* dynaActor, CollisionHeader* meshHeader) {
+    CollisionHeader* header = NULL;
 
     header = NULL;
     BgCheck_RelocateMeshHeader(meshHeader, &header);
-    actor->bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, actor, header);
+    dynaActor->bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, dynaActor, header);
 }
 
-void BgCheck3_ResetFlags(DynaPolyActor* actor) {
-    actor->unk_158 = 0;
+void DynaPoly_ResetState(DynaPolyActor* dynaActor) {
+    dynaActor->stateFlags = DYNAPOLY_STATE_NONE;
 }
 
-void func_800CAE88(DynaPolyActor* actor) {
-    actor->unk_158 |= 1;
+void DynaPoly_SetRidingFallingState(DynaPolyActor* dynaActor) {
+    dynaActor->stateFlags |= 1;
 }
 
-void func_800CAE9C(DynaPolyActor* actor) {
-    actor->unk_158 |= 2;
+void DynaPoly_SetRidingMovingState(DynaPolyActor* dynaActor) {
+    dynaActor->stateFlags |= 2;
 }
 
-void func_800CAEB0(CollisionContext* colCtx, s32 index) {
-    DynaPolyActor* actor;
+void DynaPoly_SetRidingMovingStateByIndex(CollisionContext* colCtx, s32 index) {
+    DynaPolyActor* dynaActor;
 
-    actor = BgCheck_GetActorOfMesh(colCtx, index);
-    if (actor != (DynaPolyActor*)0x0) {
-        func_800CAE9C(actor);
+    dynaActor = BgCheck_GetActorOfMesh(colCtx, index);
+    if (dynaActor != (DynaPolyActor*)0x0) {
+        DynaPoly_SetRidingMovingState(dynaActor);
     }
 }
 
-void func_800CAEE0(DynaPolyActor* actor) {
-    actor->unk_158 |= 4;
+void DynaPoly_SetRidingRotatingState(DynaPolyActor* dynaActor) {
+    dynaActor->stateFlags |= 4;
 }
 
-void func_800CAEF4(CollisionContext* colCtx, s32 index) {
-    DynaPolyActor* actor;
+void DynaPoly_SetRidingRotatingStateByIndex(CollisionContext* colCtx, s32 index) {
+    DynaPolyActor* dynaActor;
 
-    actor = BgCheck_GetActorOfMesh(colCtx, index);
-    if (actor != (DynaPolyActor*)0x0) {
-        func_800CAEE0(actor);
+    dynaActor = BgCheck_GetActorOfMesh(colCtx, index);
+    if (dynaActor != (DynaPolyActor*)0x0) {
+        DynaPoly_SetRidingRotatingState(dynaActor);
     }
 }
 
-void func_800CAF24(DynaPolyActor* actor) {
-    actor->unk_158 |= 8;
+void DynaPoly_SetSwitchPressedState(DynaPolyActor* dynaActor) {
+    dynaActor->stateFlags |= 8;
 }
 
-void func_800CAF38(DynaPolyActor* actor) {
-    actor->unk_158 |= 0x10;
+void DynaPoly_SetHeavySwitchPressedState(DynaPolyActor* dynaActor) {
+    dynaActor->stateFlags |= 0x10;
 }
 
-s32 func_800CAF4C(DynaPolyActor* actor) {
-    if (actor->unk_158 & 1) {
+s32 DynaPoly_IsInRidingFallingState(DynaPolyActor* dynaActor) {
+    if (dynaActor->stateFlags & 1) {
         return 1;
     } else {
         return 0;
     }
 }
 
-s32 func_800CAF70(DynaPolyActor* actor) {
-    if (actor->unk_158 & 2) {
+s32 DynaPoly_IsInRidingMovingState(DynaPolyActor* dynaActor) {
+    if (dynaActor->stateFlags & 2) {
         return 1;
     } else {
         return 0;
     }
 }
 
-s32 func_800CAF94(DynaPolyActor* actor) {
-    if (actor->unk_158 & 4) {
+s32 DynaPoly_IsInRidingRotatingState(DynaPolyActor* dynaActor) {
+    if (dynaActor->stateFlags & 4) {
         return 1;
     } else {
         return 0;
     }
 }
 
-s32 func_800CAFB8(DynaPolyActor* actor) {
-    if (actor->unk_158 & 8) {
+s32 DynaPoly_IsInSwitchPressedState(DynaPolyActor* dynaActor) {
+    if (dynaActor->stateFlags & 8) {
         return 1;
     } else {
         return 0;
     }
 }
 
-s32 func_800CAFDC(DynaPolyActor* actor) {
-    if (actor->unk_158 & 0x10) {
+s32 DynaPoly_IsInHeavySwitchPressedState(DynaPolyActor* dynaActor) {
+    if (dynaActor->stateFlags & 0x10) {
         return 1;
     } else {
         return 0;
     }
+}
+
+s32 DynaPoly_ValidateMove(GlobalContext* globalCtx, DynaPolyActor* dynaActor, s16 startRadius, s16 endRadius, s16 startHeight) {
+    Vec3f startPos;
+    Vec3f endPos;
+    Vec3f intersectionPos;
+    f32 sin = Math_SinS(dynaActor->yRotation);
+    f32 cos = Math_CosS(dynaActor->yRotation);
+    s32 bgId;
+    CollisionPoly* poly;
+    f32 adjustedStartRadius;
+    f32 adjustedEndRadius;
+    f32 sign = (0.0f <= dynaActor->pushForce) ? 1.0f : -1.0f;
+
+    adjustedStartRadius = (f32)startRadius - 0.1f;
+    startPos.x = dynaActor->actor.world.pos.x + (adjustedStartRadius * cos);
+    startPos.y = dynaActor->actor.world.pos.y + startHeight;
+    startPos.z = dynaActor->actor.world.pos.z - (adjustedStartRadius * sin);
+
+    adjustedEndRadius = (f32)endRadius - 0.1f;
+    endPos.x = sign * adjustedEndRadius * sin + startPos.x;
+    endPos.y = startPos.y;
+    endPos.z = sign * adjustedEndRadius * cos + startPos.z;
+
+    if (func_800C56E0(&globalCtx->colCtx, &startPos, &endPos, &intersectionPos, &poly, true, false, false, true, &bgId,
+                                &dynaActor->actor, 0.0f)) {
+        return false;
+    }
+    startPos.x = (dynaActor->actor.world.pos.x * 2.0f) - startPos.x;
+    startPos.z = (dynaActor->actor.world.pos.z * 2.0f) - startPos.z;
+    endPos.x = sign * adjustedEndRadius * sin + startPos.x;
+    endPos.z = sign * adjustedEndRadius * cos + startPos.z;
+    if (func_800C56E0(&globalCtx->colCtx, &startPos, &endPos, &intersectionPos, &poly, true, false, false, true, &bgId,
+                                &dynaActor->actor, 0.0f)) {
+        return false;
+    }
+    return true;
 }

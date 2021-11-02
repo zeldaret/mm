@@ -61,17 +61,17 @@ void BgLadder_Init(Actor* thisx, GlobalContext* globalCtx) {
     // Has to be `thisx` instead of `&this->actor` to match
     this->switchFlag = GET_BGLADDER_SWITCHFLAG(thisx);
     thisx->params = GET_BGLADDER_SIZE(thisx);
-    BcCheck3_BgActorInit(&this->dyna, 0);
+    DynaPoly_Init(&this->dyna, 0);
     size = thisx->params;
 
     if (size == LADDER_SIZE_12RUNG) {
-        BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_060001D8);
+        DynaPoly_LoadMesh(globalCtx, &this->dyna, &D_060001D8);
     } else if (size == LADDER_SIZE_16RUNG) {
-        BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000408);
+        DynaPoly_LoadMesh(globalCtx, &this->dyna, &D_06000408);
     } else if (size == LADDER_SIZE_20RUNG) {
-        BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000638);
+        DynaPoly_LoadMesh(globalCtx, &this->dyna, &D_06000638);
     } else if (size == LADDER_SIZE_24RUNG) {
-        BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000868);
+        DynaPoly_LoadMesh(globalCtx, &this->dyna, &D_06000868);
     } else {
         Actor_MarkForDeath(&this->dyna.actor);
         return;

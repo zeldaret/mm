@@ -152,8 +152,8 @@ void BgKin2Fence_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 i = 0;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    BcCheck3_BgActorInit(&this->dyna, 0);
-    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06000908);
+    DynaPoly_Init(&this->dyna, 0);
+    DynaPoly_LoadMesh(globalCtx, &this->dyna, &D_06000908);
     Collider_InitJntSph(globalCtx, &this->collider);
     Collider_SetJntSph(globalCtx, &this->collider, &this->dyna.actor, &sJntSphInit, this->colliderElements);
     Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,

@@ -143,11 +143,11 @@ void BgCtowerGear_Init(Actor* thisx, GlobalContext* globalCtx) {
         Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     }
     if (type == WATER_WHEEL) {
-        BcCheck3_BgActorInit(&this->dyna, 3);
-        BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06018588);
+        DynaPoly_Init(&this->dyna, 3);
+        DynaPoly_LoadMesh(globalCtx, &this->dyna, &D_06018588);
     } else if (type == ORGAN) {
-        BcCheck3_BgActorInit(&this->dyna, 0);
-        BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06016E70);
+        DynaPoly_Init(&this->dyna, 0);
+        DynaPoly_LoadMesh(globalCtx, &this->dyna, &D_06016E70);
         func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     }
 }

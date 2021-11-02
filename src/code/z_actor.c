@@ -509,8 +509,8 @@ f32 Actor_YDistance(Actor* actor1, Actor* actor2) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B72E0.s")
 
 void func_800B72F8(DynaPolyActor* dpactor, f32 a1, s16 a2) {
-    dpactor->unk150 = a2;
-    dpactor->unk148 += a1;
+    dpactor->yRotation = a2;
+    dpactor->pushForce += a1;
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_IsLinkFacingActor.s")

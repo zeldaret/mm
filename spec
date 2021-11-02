@@ -459,7 +459,6 @@ beginseg
     include "build/data/code/z_bgcheck.bss.o"
     include "build/src/code/z_bg_collect.o"
     include "build/src/code/z_bg_item.o"
-    include "build/src/code/code_800CB000.o"
     include "build/src/code/z_camera.o"
     include "build/data/code/z_camera.data.o"
     include "build/data/code/z_camera.bss.o"
