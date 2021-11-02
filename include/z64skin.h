@@ -4,14 +4,6 @@
 #include "z64animation.h"
 
 
-typedef struct {
-    /* 0x00 */ Vec3s jointPos; // Root is position in model space, children are relative to parent
-    /* 0x06 */ u8 child;
-    /* 0x07 */ u8 sibling;
-    /* 0x08 */ s32 unk_8; // Type of data contained in segment
-    /* 0x0C */ void* segment; // Segment address of data. Currently unclear what.
-} SkinLimb; // size = 0x10
-
 
 typedef struct {
     /* 0x000 */ u16 unk_0;
@@ -28,7 +20,7 @@ typedef struct {
     /* 0x002 */ s16 x;
     /* 0x004 */ s16 y;
     /* 0x006 */ s16 z;
-    /* 0x008 */ u8  unk_8;
+    /* 0x008 */ u8  scale;
 } Struct_800A598C_2; // size = 0xA
 
 typedef struct {
@@ -45,6 +37,20 @@ typedef struct {
     /* 0x004 */ Struct_800A598C* unk_4;
     /* 0x008 */ Gfx* dlist;
 } Struct_800A5E28; // size = 0xC
+
+
+typedef struct {
+    /* 0x00 */ Vec3s jointPos; // Root is position in model space, children are relative to parent
+    /* 0x06 */ u8 child;
+    /* 0x07 */ u8 sibling;
+    /* 0x08 */ s32 segmentType; // Type of data contained in segment
+    /* 0x0C */ union {
+        void* segment;
+        Gfx* dlist;
+        Struct_800A5E28* limbData;
+    };
+} SkinLimb; // size = 0x10
+
 
 typedef struct {
     /* 0x000 */ u8 index;

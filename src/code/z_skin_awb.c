@@ -10,7 +10,7 @@ void func_80138410(PSkinAwb* skin) {
 void func_80138424(GameState* gameState, PSkinAwb* skin, s32 limbIndex) {
     s32 i;
     SkinLimb** skeleton = Lib_SegmentedToVirtual(skin->skeletonHeader->segment);
-    Struct_800A5E28* temp_v1 = Lib_SegmentedToVirtual(((SkinLimb*)Lib_SegmentedToVirtual(skeleton[limbIndex]))->segment);
+    Struct_800A5E28* temp_v1 = Lib_SegmentedToVirtual(((SkinLimb*)Lib_SegmentedToVirtual(skeleton[limbIndex]))->limbData);
     Struct_800A598C* temp_v0 = Lib_SegmentedToVirtual(temp_v1->unk_4);
 
     for (i = 0; i < 2; i++) {
@@ -52,13 +52,13 @@ void Skin_Init(GameState* gameState, PSkinAwb* skin, SkeletonHeader* skeletonHea
     for (i = 0; i < limbCount; i++) {
         SkinAvb* avbEntry = &skin->avbTbl[i];
 
-        if ((((SkinLimb*)Lib_SegmentedToVirtual(skeleton[i]))->unk_8 != 4) || (((SkinLimb*)Lib_SegmentedToVirtual(skeleton[i]))->segment == NULL)) {
+        if ((((SkinLimb*)Lib_SegmentedToVirtual(skeleton[i]))->segmentType != 4) || (((SkinLimb*)Lib_SegmentedToVirtual(skeleton[i]))->segment == NULL)) {
             avbEntry->index = 0;
 
             avbEntry->buf[0] = NULL;
             avbEntry->buf[1] = NULL;
         } else {
-            Struct_800A5E28* temp_s1 = Lib_SegmentedToVirtual((((SkinLimb*)Lib_SegmentedToVirtual(skeleton[i]))->segment));
+            Struct_800A5E28* temp_s1 = Lib_SegmentedToVirtual((((SkinLimb*)Lib_SegmentedToVirtual(skeleton[i]))->limbData));
 
             {
                 s32 tmp;
@@ -70,6 +70,7 @@ void Skin_Init(GameState* gameState, PSkinAwb* skin, SkeletonHeader* skeletonHea
             func_80138424(gameState, skin, i);
         }
     }
+
     SkelAnime_InitSkin(gameState, &skin->skelAnime, skeletonHeader, animationHeader);
 }
 

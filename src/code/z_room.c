@@ -18,14 +18,14 @@ void Room_DrawType0Mesh(GlobalContext* globalCtx, Room* room, u32 flags) {
         func_800BCBF4(&D_801C1D10, globalCtx);
         gSPSegment(gfxCtx->polyOpa.p++, 0x03, room->segment);
         func_8012C268(globalCtx);
-        gSPMatrix(gfxCtx->polyOpa.p++, &D_801D1DE0, G_MTX_MODELVIEW | G_MTX_LOAD);
+        gSPMatrix(gfxCtx->polyOpa.p++, &gMtxClear, G_MTX_MODELVIEW | G_MTX_LOAD);
     }
 
     if (flags & 2) {
         func_800BCC68(&D_801C1D10, globalCtx);
         gSPSegment(gfxCtx->polyXlu.p++, 0x03, room->segment);
         func_8012C2DC(globalCtx->state.gfxCtx);
-        gSPMatrix(gfxCtx->polyXlu.p++, &D_801D1DE0, G_MTX_MODELVIEW | G_MTX_LOAD);
+        gSPMatrix(gfxCtx->polyXlu.p++, &gMtxClear, G_MTX_MODELVIEW | G_MTX_LOAD);
     }
 
     mesh = &room->mesh->type0;
