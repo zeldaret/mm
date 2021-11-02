@@ -16,10 +16,11 @@ typedef struct ObjTokeidai {
     /* 0x014C */ s16 unk_14C;
     /* 0x014E */ s16 unk_14E;
     /* 0x0150 */ s16 unk_150;
-    /* 0x0152 */ char unk_152[0x2];
+    /* 0x0152 */ s16 unk_152;
     /* 0x0154 */ s16 unk_154;
     /* 0x0156 */ s16 unk_156;
-    /* 0x0158 */ char unk_158[0x6];
+    /* 0x0158 */ s32 unk_158;
+    /* 0x015C */ s16 unk_15C;
     /* 0x015E */ s16 unk_15E;
     /* 0x0160 */ s16 unk_160;
     /* 0x0162 */ s16 unk_162;

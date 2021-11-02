@@ -81,7 +81,18 @@ void func_80AB27B4(ObjTokeidai* this) {
     this->unk_150 = 0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB2834.s")
+void func_80AB2834(ObjTokeidai* this) {
+    s32 temp;
+
+    func_80AB27B4(this);
+    temp = (s32)(this->unk_170 * 0.00036621094f);
+    this->unk_16C = temp;
+    this->unk_152 = temp * 2730.6667f;
+    this->unk_154 = 0;
+    this->unk_156 = 0;
+    this->unk_15C = 0;
+    this->unk_158 = func_80AB2790(this);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB28C8.s")
 
