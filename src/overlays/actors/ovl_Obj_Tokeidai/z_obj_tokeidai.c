@@ -264,7 +264,7 @@ void func_80AB3010(ObjTokeidai* this, s32 arg1) {
                 this->unk_14C += 0x5A;
             }
             if ((this->unk_150 & 3) == 1) {
-                this->unk_14C += -0x5A;
+                this->unk_14C -= 0x5A;
             }
         }
         this->unk_150++;
@@ -324,7 +324,51 @@ void func_80AB3BB0(ObjTokeidai* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB3C50.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB3CCC.s")
+void func_80AB3CCC(ObjTokeidai* this, GlobalContext* globalCtx) {
+    s32 temp;
+    s32 temp_t1;
+    s32 temp_t8;
+
+    temp = (s32)(this->unk_170 * 0.00036621094f);
+    if (temp != this->unk_16C) {
+        if (this->unk_156 >= 0xD) {
+            this->unk_154 += 0xA;
+            this->unk_152 += this->unk_154;
+        } else {
+            if ((this->unk_156 & 3) == 0) {
+                this->unk_152 += 0x3C;
+            }
+            if ((this->unk_156 & 3) == 1) {
+                this->unk_152 -= 0x3C;
+            }
+        }
+        this->unk_156++;
+        if ((temp == 0xC && this->unk_152 < 0) || (temp != 0xC && this->unk_152 > (s16)(temp * 2730.6667f))) {
+            this->unk_152 = temp * 2730.6667f;
+            this->unk_16C = temp;
+            this->unk_154 = 0;
+            this->unk_156 = 0;
+        }
+    }
+    if (this->unk_158 != func_80AB2790()) {
+        if (this->unk_16C == 6) {
+            this->unk_15C += 0x222;
+            this->unk_158 += this->unk_15C;
+            if (this->unk_158 >= 0x10001) {
+                this->unk_158 = func_80AB2790();
+                this->unk_15C = 0;
+            }
+        }
+        if (this->unk_16C == 0x12) {
+            this->unk_15C += 0x222;
+            this->unk_158 += this->unk_15C;
+            if (this->unk_158 >= 0x8001) {
+                this->unk_158 = func_80AB2790();
+                this->unk_15C = 0;
+            }
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB3ED0.s")
 
