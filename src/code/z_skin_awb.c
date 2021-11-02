@@ -65,9 +65,9 @@ void Skin_Init(GameState* gameState, PSkinAwb* skin, SkeletonHeader* skeletonHea
             if (1) { } if (1) { } if (1) { } if (1) { } if (1) { } 
 
             avbEntry->unk_0 = 0;
-            avbEntry->buf[0] = ZeldaArena_Malloc(temp_s1->unk_0 * sizeof(Vtx));
+            avbEntry->buf[0] = ZeldaArena_Malloc(temp_s1->vtxCount * sizeof(Vtx));
             if (1) { }
-            avbEntry->buf[1] = ZeldaArena_Malloc(temp_s1->unk_0 * sizeof(Vtx));
+            avbEntry->buf[1] = ZeldaArena_Malloc(temp_s1->vtxCount * sizeof(Vtx));
             if (1) { }
 
             func_80138424(gameState, skin, i);

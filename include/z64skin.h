@@ -32,18 +32,18 @@ typedef struct {
 } Struct_800A598C_2; // size = 0xA
 
 typedef struct {
-    /* 0x000 */ u16 unk_0;
-    /* 0x002 */ u16 unk_2;
+    /* 0x000 */ u16 unk_0; // count of unk_8
+    /* 0x002 */ u16 unk_2; // count of unk_C
     /* 0x004 */ u16 unk_4;
     /* 0x008 */ Struct_800A57C0* unk_8;
     /* 0x00C */ Struct_800A598C_2* unk_C;
 } Struct_800A598C; // size = 0x10
 
 typedef struct {
-    /* 0x000 */ u16 unk_0;
+    /* 0x000 */ u16 vtxCount;
     /* 0x002 */ u16 unk_2;
     /* 0x004 */ Struct_800A598C* unk_4;
-    /* 0x008 */ Gfx* unk_8;
+    /* 0x008 */ Gfx* dlist;
 } Struct_800A5E28; // size = 0xC
 
 typedef struct {
