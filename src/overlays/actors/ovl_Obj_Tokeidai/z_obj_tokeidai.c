@@ -69,7 +69,12 @@ extern UNK_TYPE D_0600D388;
 extern UNK_TYPE D_0600D8E0;
 extern UNK_TYPE D_0600D8E8;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB2790.s")
+s32 func_80AB2790() {
+    if (gSaveContext.isNight) {
+        return 0x8000;
+    }
+    return 0;
+}
 
 void func_80AB27B4(ObjTokeidai* this) {
     s32 temp;
@@ -91,7 +96,7 @@ void func_80AB2834(ObjTokeidai* this) {
     this->unk_154 = 0;
     this->unk_156 = 0;
     this->unk_15C = 0;
-    this->unk_158 = func_80AB2790(this);
+    this->unk_158 = func_80AB2790();
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB28C8.s")
@@ -124,7 +129,7 @@ void func_80AB2BBC(ObjTokeidai* this, GlobalContext* globalCtx) {
     this->actor.draw = func_80AB4664;
     this->unk_144 = &D_0600B208;
     this->unk_148 = &D_0600B0C0;
-    if (gSaveContext.isNight != 0) {
+    if (gSaveContext.isNight) {
         this->unk_16C = 100;
     } else {
         this->unk_16C = 0;
