@@ -248,7 +248,34 @@ void ObjTokeidai_Init(Actor* thisx, GlobalContext* globalCtx) {
 void ObjTokeidai_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB3010.s")
+void func_80AB3010(ObjTokeidai* this, s32 arg1) {
+    s32 temp;
+
+    temp = (s32)(this->unk_170 * 0.010986328f) % 0x1E;
+    if (temp != this->unk_168) {
+        if ((this->unk_150 == 8) && (arg1 != 0)) {
+            Audio_PlayActorSound2(&this->actor, NA_SE_EV_CLOCK_TOWER_SECOND_HAND);
+        }
+        if (this->unk_150 >= 9) {
+            this->unk_14E += 0x3C;
+            this->unk_14C += this->unk_14E;
+        } else {
+            if ((this->unk_150 & 3) == 0) {
+                this->unk_14C += 0x5A;
+            }
+            if ((this->unk_150 & 3) == 1) {
+                this->unk_14C += -0x5A;
+            }
+        }
+        this->unk_150++;
+        if ((temp == 0xF && this->unk_14C < 0) || (temp != 0xF && this->unk_14C > (s16)(temp * 2184.5334f))) {
+            this->unk_14C = temp * 2184.5334f;
+            this->unk_168 = temp;
+            this->unk_14E = 0x5A;
+            this->unk_150 = 0;
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB319C.s")
 
