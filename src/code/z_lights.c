@@ -330,7 +330,6 @@ Lights* Lights_NewAndDraw(GraphicsContext* gfxCtx, u8 ambientR, u8 ambientG, u8 
     s32 i;
 
     lights = GRAPH_ALLOC(gfxCtx, sizeof(Lights));
-    gfxCtx->polyOpa.d = (void*)lights;
 
     lights->l.a.l.col[0] = lights->l.a.l.colc[0] = ambientR;
     lights->l.a.l.col[1] = lights->l.a.l.colc[1] = ambientG;
@@ -356,7 +355,6 @@ Lights* Lights_New(GraphicsContext* gfxCtx, u8 ambientR, u8 ambientG, u8 ambient
     Lights* lights;
 
     lights = GRAPH_ALLOC(gfxCtx, sizeof(Lights));
-    gfxCtx->polyOpa.d = (void*)lights;
 
     lights->l.a.l.col[0] = ambientR;
     lights->l.a.l.colc[0] = ambientR;
