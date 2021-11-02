@@ -73,7 +73,7 @@ void func_80137B34(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 a
 
     avb = &skin->avbTbl[limbIndex];
 
-    spEC = avb->buf[avb->unk_0];
+    spEC = avb->buf[avb->index];
     temp_1 = data->unk_2;
 
     for (phi_s6 = temp_2; phi_s6 < temp_2 + temp_1; phi_s6++) {
@@ -114,12 +114,13 @@ void func_80137B34(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 a
                 spDC.z += spD0.z * temp_f20;
             }
         }
+
         func_80137970(&D_801F5AC0[temp_s3[phi_s6->unk_4].unk_0], temp_v0, phi_s6, spEC, &spDC);
     }
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, avb->buf[avb->unk_0]);
+    gSPSegment(POLY_OPA_DISP++, 0x08, avb->buf[avb->index]);
 
-    avb->unk_0 = (avb->unk_0 == 0);
+    avb->index = (avb->index == 0);
 
     CLOSE_DISPS(gfxCtx);
 }
@@ -163,7 +164,6 @@ void func_80137F58(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, Gfx* 
     CLOSE_DISPS(gfxCtx);
 }
 
-#ifdef NON_MATCHING
 void Skin_DrawImpl(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinPostLimbDraw postLimbDraw, SkinOverrideLimbDraw overrideLimbDraw,
                    s32 arg5, s32 arg6, s32 arg7) {
     s32 i;
@@ -171,52 +171,47 @@ void Skin_DrawImpl(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinP
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
-    if ((arg7 & 1) == 0) {
+
+    if (!(arg7 & 1)) {
         func_801388E4(skin, &D_801F5AC0[0], actor, arg5);
     }
 
     skeleton = Lib_SegmentedToVirtual(skin->skeletonHeader->segment);
-    if ((arg7 & 2) == 0) {
+
+    if (!(arg7 & 2)) {
         Mtx* mtx;
 
         gSPMatrix(POLY_OPA_DISP++, &D_801D1DE0, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         mtx = SkinMatrix_MtxFToNewMtx(gfxCtx, &skin->mtx);
-        if (mtx != NULL) {
+        if (mtx == NULL) {
+            goto close_disps;
+        }
         gSPMatrix(POLY_OPA_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            //goto close_disps;
-            goto block_5;
+    }
+
+    for (i = 0; i < skin->skeletonHeader->limbCount; i++) {
+        s32 shouldDraw = true;
+        s32 dataType;
+
+        if (overrideLimbDraw != NULL) {
+            shouldDraw = overrideLimbDraw(actor, globalCtx, i, skin);
         }
-    } else {
-block_5:
 
-        for (i = 0; i < skin->skeletonHeader->limbCount; i++) {
-            s32 phi_a0 = 1;
-            s32 dataType;
-
-            if (overrideLimbDraw != NULL) {
-                phi_a0 = overrideLimbDraw(actor, globalCtx, i, skin);
-            }
-
-            dataType = ((SkinLimb*)Lib_SegmentedToVirtual(skeleton[i]))->unk_8;
-            if (dataType == 4 && phi_a0 == 1) {
-                func_80137EBC(gfxCtx, skin, i, arg6, arg7);
-            } else if (dataType == 0xB && phi_a0 == 1) {
-                func_80137F58(gfxCtx, skin, i, NULL, arg7);
-            }
-        }
-        if (postLimbDraw != NULL) {
-            postLimbDraw(actor, globalCtx, skin);
+        dataType = ((SkinLimb*)Lib_SegmentedToVirtual(skeleton[i]))->unk_8;
+        if (dataType == 4 && shouldDraw) {
+            func_80137EBC(gfxCtx, skin, i, arg6, arg7);
+        } else if (dataType == 0xB && shouldDraw) {
+            func_80137F58(gfxCtx, skin, i, NULL, arg7);
         }
     }
 
-//close_disps:;
+    if (postLimbDraw != NULL) {
+        postLimbDraw(actor, globalCtx, skin);
+    }
+
+close_disps:;
     CLOSE_DISPS(gfxCtx);
 }
-#else
-void Skin_DrawImpl(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinPostLimbDraw postLimbDraw, SkinOverrideLimbDraw overrideLimbDraw,
-                   s32 arg5, s32 arg6, s32 arg7);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_skin/Skin_DrawImpl.s")
-#endif
 
 void func_80138228(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinPostLimbDraw postLimbDraw, s32 arg4) {
     Skin_DrawImpl(actor, globalCtx, skin, postLimbDraw, NULL, arg4, false, 0);
@@ -249,7 +244,7 @@ void func_8013835C(PSkinAwb* arg0, s32 arg1, s32 arg2, Vec3f* arg3) {
     Vec3f sp24;
     Vtx* temp_v0;
 
-    temp_v0 = &arg0->avbTbl[arg1].buf[arg0->avbTbl->unk_0][arg2];
+    temp_v0 = &arg0->avbTbl[arg1].buf[arg0->avbTbl->index][arg2];
     sp24.x = temp_v0->v.ob[0];
     sp24.y = temp_v0->v.ob[1];
     sp24.z = temp_v0->v.ob[2];

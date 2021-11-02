@@ -54,7 +54,7 @@ void Skin_Init(GameState* gameState, PSkinAwb* skin, SkeletonHeader* skeletonHea
         SkinAvb* avbEntry = &skin->avbTbl[i];
 
         if ((((SkinLimb*)Lib_SegmentedToVirtual(skeleton[i]))->unk_8 != 4) || (((SkinLimb*)Lib_SegmentedToVirtual(skeleton[i]))->segment == NULL)) {
-            avbEntry->unk_0 = 0;
+            avbEntry->index = 0;
 
             avbEntry->buf[0] = NULL;
             avbEntry->buf[1] = NULL;
@@ -64,7 +64,7 @@ void Skin_Init(GameState* gameState, PSkinAwb* skin, SkeletonHeader* skeletonHea
             dummy_label_17759: ;
             if (1) { } if (1) { } if (1) { } if (1) { } if (1) { } 
 
-            avbEntry->unk_0 = 0;
+            avbEntry->index = 0;
             avbEntry->buf[0] = ZeldaArena_Malloc(temp_s1->vtxCount * sizeof(Vtx));
             if (1) { }
             avbEntry->buf[1] = ZeldaArena_Malloc(temp_s1->vtxCount * sizeof(Vtx));

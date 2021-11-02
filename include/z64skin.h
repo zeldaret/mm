@@ -47,7 +47,7 @@ typedef struct {
 } Struct_800A5E28; // size = 0xC
 
 typedef struct {
-    /* 0x000 */ u8 unk_0;
+    /* 0x000 */ u8 index;
     /* 0x004 */ Vtx* buf[2];
 } SkinAvb; // size = 0xC
 
