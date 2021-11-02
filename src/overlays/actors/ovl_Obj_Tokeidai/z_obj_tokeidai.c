@@ -307,7 +307,10 @@ void func_80AB3BB0(ObjTokeidai* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB4160.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/ObjTokeidai_Update.s")
+void ObjTokeidai_Update(Actor* thisx, GlobalContext* globalCtx) {
+    ObjTokeidai* this = THIS;
+    this->actionFunc(this, globalCtx);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/ObjTokeidai_Draw.s")
 
