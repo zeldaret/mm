@@ -83,17 +83,7 @@ void DebugDisplay_DrawSpriteI8(DebugDispObject* dispObj, void* texture, GlobalCo
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-s32 sDebugDisplayLight1[] = {
-    0x80808000,
-    0x80808000,
-};
-
-s32 sDebugDisplayLight2[] = {
-    0xFFFFFF00,
-    0xFFFFFF00,
-    0x49494900,
-    0x00000000,
-};
+Lights1 sDebugDisplayLight1 = gdSPDefLights1(128, 128, 128, 255, 255, 255, 73, 73, 73); 
 
 void DebugDisplay_DrawPolygon(DebugDispObject* dispObj, void* arg1, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -102,10 +92,7 @@ void DebugDisplay_DrawPolygon(DebugDispObject* dispObj, void* arg1, GlobalContex
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, dispObj->color.r, dispObj->color.g, dispObj->color.b, dispObj->color.a);
 
-    gSPNumLights(POLY_XLU_DISP++, 1);
-
-    gSPLight(POLY_XLU_DISP++, sDebugDisplayLight2, 1);
-    gSPLight(POLY_XLU_DISP++, sDebugDisplayLight1, 2);
+    gSPSetLights1(POLY_XLU_DISP++, sDebugDisplayLight1) 
 
     Matrix_SetStateRotationAndTranslation(dispObj->pos.x, dispObj->pos.y, dispObj->pos.z, &dispObj->rot);
     Matrix_Scale(dispObj->scale.x, dispObj->scale.y, dispObj->scale.z, 1);
