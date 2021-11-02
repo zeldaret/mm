@@ -332,7 +332,16 @@ void func_80AB3BB0(ObjTokeidai* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB3BE8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB3C50.s")
+s32 func_80AB3C50(ObjTokeidai* this, GlobalContext* globalCtx) {
+    if (gSaveContext.inventory.items[0] == 0xFF) {
+        return 0;
+    }
+    if (gSaveContext.day % 5 == 3 && gSaveContext.time < CLOCK_TIME(6, 0)) {
+        func_80AB3BB0(this);
+        return 1;
+    }
+    return 0;
+}
 
 void func_80AB3CCC(ObjTokeidai* this, GlobalContext* globalCtx) {
     s32 temp;
