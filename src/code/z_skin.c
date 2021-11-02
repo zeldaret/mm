@@ -113,6 +113,7 @@ void func_80137B34(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 a
         }
         func_80137970(&D_801F5AC0[temp_s3[phi_s6->unk_4].unk_0], temp_v0, phi_s6, spEC, &spDC);
     }
+
     gSPSegment(POLY_OPA_DISP++, 0x08, avb->buf[avb->unk_0]);
 
     avb->unk_0 = (avb->unk_0 == 0);
@@ -124,6 +125,7 @@ void func_80137B34(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 a
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_skin/func_80137B34.s")
 #endif
 
+// Skin_DrawLimb
 void func_80137EBC(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 arg3, s32 arg4) {
     SkinLimb** skeleton;
     s32 pad[3];
@@ -163,7 +165,7 @@ void func_80137F58(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, Gfx* 
 }
 
 #ifdef NON_MATCHING
-void func_80138050(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinCallback callback, SkinCallback2 arg4,
+void Skin_DrawImpl(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinPostLimbDraw postLimbDraw, SkinOverrideLimbDraw overrideLimbDraw,
                    s32 arg5, s32 arg6, s32 arg7) {
     s32 i;
     SkinLimb** skeleton;
@@ -192,8 +194,8 @@ block_5:
             s32 phi_a0 = 1;
             s32 dataType;
 
-            if (arg4 != NULL) {
-                phi_a0 = arg4(actor, globalCtx, i, skin);
+            if (overrideLimbDraw != NULL) {
+                phi_a0 = overrideLimbDraw(actor, globalCtx, i, skin);
             }
 
             dataType = ((SkinLimb*)Lib_SegmentedToVirtual(skeleton[i]))->unk_8;
@@ -203,8 +205,8 @@ block_5:
                 func_80137F58(gfxCtx, skin, i, NULL, arg7);
             }
         }
-        if (callback != NULL) {
-            callback(actor, globalCtx, skin);
+        if (postLimbDraw != NULL) {
+            postLimbDraw(actor, globalCtx, skin);
         }
     }
 
@@ -212,28 +214,28 @@ block_5:
     CLOSE_DISPS(gfxCtx);
 }
 #else
-void func_80138050(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinCallback callback, SkinCallback2 arg4,
+void Skin_DrawImpl(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinPostLimbDraw postLimbDraw, SkinOverrideLimbDraw overrideLimbDraw,
                    s32 arg5, s32 arg6, s32 arg7);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_skin/func_80138050.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_skin/Skin_DrawImpl.s")
 #endif
 
-void func_80138228(Actor* this, GlobalContext* globalCtx, PSkinAwb* skin, SkinCallback callback, s32 arg4) {
-    func_80138050(this, globalCtx, skin, callback, NULL, arg4, 0, 0);
+void func_80138228(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinPostLimbDraw postLimbDraw, s32 arg4) {
+    Skin_DrawImpl(actor, globalCtx, skin, postLimbDraw, NULL, arg4, 0, 0);
 }
 
-void func_80138258(Actor* this, GlobalContext* globalCtx, PSkinAwb* skin, SkinCallback callback, SkinCallback2 arg4,
+void func_80138258(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinPostLimbDraw postLimbDraw, SkinOverrideLimbDraw overrideLimbDraw,
                    s32 arg5) {
-    func_80138050(this, globalCtx, skin, callback, arg4, arg5, 0, 0);
+    Skin_DrawImpl(actor, globalCtx, skin, postLimbDraw, overrideLimbDraw, arg5, 0, 0);
 }
 
-void func_8013828C(Actor* this, GlobalContext* globalCtx, PSkinAwb* skin, SkinCallback callback, SkinCallback2 arg4,
+void func_8013828C(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinPostLimbDraw postLimbDraw, SkinOverrideLimbDraw overrideLimbDraw,
                    s32 arg5, s32 arg6) {
-    func_80138050(this, globalCtx, skin, callback, arg4, arg5, arg6, 0);
+    Skin_DrawImpl(actor, globalCtx, skin, postLimbDraw, overrideLimbDraw, arg5, arg6, 0);
 }
 
-void func_801382C4(Actor* this, GlobalContext* globalCtx, PSkinAwb* skin, SkinCallback callback, SkinCallback2 arg4,
+void func_801382C4(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinPostLimbDraw postLimbDraw, SkinOverrideLimbDraw overrideLimbDraw,
                    s32 arg5, s32 arg6, s32 arg7) {
-    func_80138050(this, globalCtx, skin, callback, arg4, arg5, arg6, arg7);
+    Skin_DrawImpl(actor, globalCtx, skin, postLimbDraw, overrideLimbDraw, arg5, arg6, arg7);
 }
 
 void func_80138300(PSkinAwb* skin, s32 joint, Vec3f* arg2, Vec3f* arg3) {

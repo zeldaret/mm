@@ -2126,7 +2126,7 @@ asm/non_matchings/code/z_skin/func_80137970.s,func_80137970,0x80137970,0x71
 asm/non_matchings/code/z_skin/func_80137B34.s,func_80137B34,0x80137B34,0xE2
 asm/non_matchings/code/z_skin/func_80137EBC.s,func_80137EBC,0x80137EBC,0x27
 asm/non_matchings/code/z_skin/func_80137F58.s,func_80137F58,0x80137F58,0x3E
-asm/non_matchings/code/z_skin/func_80138050.s,func_80138050,0x80138050,0x76
+asm/non_matchings/code/z_skin/Skin_DrawImpl.s,Skin_DrawImpl,0x80138050,0x76
 asm/non_matchings/code/z_skin/func_80138228.s,func_80138228,0x80138228,0xC
 asm/non_matchings/code/z_skin/func_80138258.s,func_80138258,0x80138258,0xD
 asm/non_matchings/code/z_skin/func_8013828C.s,func_8013828C,0x8013828C,0xE
@@ -2135,8 +2135,8 @@ asm/non_matchings/code/z_skin/func_80138300.s,func_80138300,0x80138300,0x17
 asm/non_matchings/code/z_skin/func_8013835C.s,func_8013835C,0x8013835C,0x2D
 asm/non_matchings/code/z_skin_awb/func_80138410.s,func_80138410,0x80138410,0x5
 asm/non_matchings/code/z_skin_awb/func_80138424.s,func_80138424,0x80138424,0x5E
-asm/non_matchings/code/z_skin_awb/func_8013859C.s,func_8013859C,0x8013859C,0x59
-asm/non_matchings/code/z_skin_awb/func_80138700.s,func_80138700,0x80138700,0x35
+asm/non_matchings/code/z_skin_awb/Skin_Init.s,Skin_Init,0x8013859C,0x59
+asm/non_matchings/code/z_skin_awb/Skin_Free.s,Skin_Free,0x80138700,0x35
 asm/non_matchings/code/z_skin_awb/func_801387D4.s,func_801387D4,0x801387D4,0x44
 asm/non_matchings/code/z_skin_awb/func_801388E4.s,func_801388E4,0x801388E4,0xAF
 asm/non_matchings/code/z_skin_matrix/SkinMatrix_Vec3fMtxFMultXYZW.s,SkinMatrix_Vec3fMtxFMultXYZW,0x80138BA0,0x3A

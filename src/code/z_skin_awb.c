@@ -36,7 +36,7 @@ void func_80138424(GameState* gameState, PSkinAwb* skin, s32 limbIndex) {
 }
 
 #ifdef NON_MATCHING
-void func_8013859C(GameState* gameState, PSkinAwb* skin, SkeletonHeader* skeletonHeader,
+void Skin_Init(GameState* gameState, PSkinAwb* skin, SkeletonHeader* skeletonHeader,
                    AnimationHeader* animationHeader) {
     s32 limbCount;
     s32 i;
@@ -76,11 +76,11 @@ void func_8013859C(GameState* gameState, PSkinAwb* skin, SkeletonHeader* skeleto
     SkelAnime_InitSkin(gameState, &skin->skelAnime, skeletonHeader, animationHeader);
 }
 #else
-void func_8013859C(GameState* gameState, PSkinAwb* skin, SkeletonHeader* skeletonHeader, AnimationHeader* animationHeader);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_skin_awb/func_8013859C.s")
+void Skin_Init(GameState* gameState, PSkinAwb* skin, SkeletonHeader* skeletonHeader, AnimationHeader* animationHeader);
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_skin_awb/Skin_Init.s")
 #endif
 
-void func_80138700(GameState* gameState, PSkinAwb* skin) {
+void Skin_Free(GameState* gameState, PSkinAwb* skin) {
     if (skin->avbTbl != NULL) {
         s32 i;
 
