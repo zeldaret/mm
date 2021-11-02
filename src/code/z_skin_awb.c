@@ -35,7 +35,6 @@ void func_80138424(GameState* gameState, PSkinAwb* skin, s32 limbIndex) {
     }
 }
 
-#ifdef NON_MATCHING
 void Skin_Init(GameState* gameState, PSkinAwb* skin, SkeletonHeader* skeletonHeader,
                    AnimationHeader* animationHeader) {
     s32 limbCount;
@@ -61,37 +60,31 @@ void Skin_Init(GameState* gameState, PSkinAwb* skin, SkeletonHeader* skeletonHea
         } else {
             Struct_800A5E28* temp_s1 = Lib_SegmentedToVirtual((((SkinLimb*)Lib_SegmentedToVirtual(skeleton[i]))->segment));
 
-            dummy_label_17759: ;
-            if (1) { } if (1) { } if (1) { } if (1) { } if (1) { } 
-
+            {
+                s32 tmp;
+            }
             avbEntry->index = 0;
             avbEntry->buf[0] = ZeldaArena_Malloc(temp_s1->vtxCount * sizeof(Vtx));
-            if (1) { }
             avbEntry->buf[1] = ZeldaArena_Malloc(temp_s1->vtxCount * sizeof(Vtx));
-            if (1) { }
 
             func_80138424(gameState, skin, i);
         }
     }
     SkelAnime_InitSkin(gameState, &skin->skelAnime, skeletonHeader, animationHeader);
 }
-#else
-void Skin_Init(GameState* gameState, PSkinAwb* skin, SkeletonHeader* skeletonHeader, AnimationHeader* animationHeader);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_skin_awb/Skin_Init.s")
-#endif
 
 void Skin_Free(GameState* gameState, PSkinAwb* skin) {
     if (skin->avbTbl != NULL) {
         s32 i;
 
         for (i = 0; i < skin->avbCount; i++) {
-            if (skin->avbTbl[i].buf[0] != 0) {
+            if (skin->avbTbl[i].buf[0] != NULL) {
                 ZeldaArena_Free(skin->avbTbl[i].buf[0]);
-                skin->avbTbl[i].buf[0] = 0;
+                skin->avbTbl[i].buf[0] = NULL;
             }
-            if (skin->avbTbl[i].buf[1] != 0) {
+            if (skin->avbTbl[i].buf[1] != NULL) {
                 ZeldaArena_Free(skin->avbTbl[i].buf[1]);
-                skin->avbTbl[i].buf[1] = 0;
+                skin->avbTbl[i].buf[1] = NULL;
             }
         }
 
