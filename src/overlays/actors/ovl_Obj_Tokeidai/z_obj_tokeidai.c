@@ -420,7 +420,37 @@ void func_80AB4080(ObjTokeidai* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB4160.s")
+void func_80AB4160(ObjTokeidai* this, GlobalContext* globalCtx) {
+    s32 type;
+
+    if (func_80AB3C50(this, globalCtx) != 0) {
+        this->unk_16C = 0;
+        if ((this->actor.child == NULL)) {
+            type = OBJ_TOKEIDAI_TYPE(&this->actor);
+            if (type == 3 || type == 6) {
+                this->actor.child =
+                    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_HANABI, this->actor.world.pos.x,
+                                this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0);
+            }
+        }
+        if (this->actor.child != NULL) {
+            if (OBJ_TOKEIDAI_TYPE(&this->actor) == 6) {
+                this->actor.child->home.rot.x = 0x384;
+            } else {
+                this->actor.child->home.rot.x = 0x12C;
+            }
+        }
+    } else {
+        this->actor.shape.rot.y += -0x40;
+        if (gSaveContext.isNight != 0) {
+            if (this->unk_16C < 0x64) {
+                this->unk_16C += +4;
+            }
+        } else if (this->unk_16C > 0) {
+            this->unk_16C -= 4;
+        }
+    }
+}
 
 void ObjTokeidai_Update(Actor* thisx, GlobalContext* globalCtx) {
     ObjTokeidai* this = THIS;
