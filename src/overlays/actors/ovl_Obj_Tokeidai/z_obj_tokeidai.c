@@ -326,7 +326,13 @@ void func_80AB3240(ObjTokeidai* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB3A7C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB3B34.s")
+void func_80AB3B34(ObjTokeidai* this, GlobalContext* globalCtx) {
+    if ((func_800EE29C(globalCtx, 0x84) != 0 &&
+         globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x84)]->unk0 == 4) ||
+        ((gSaveContext.weekEventReg[8] & 0x40) != 0)) {
+        this->actionFunc = func_80AB3A7C;
+    }
+}
 
 void func_80AB3BB0(ObjTokeidai* this) {
     this->actionFunc = func_80AB3B34;
