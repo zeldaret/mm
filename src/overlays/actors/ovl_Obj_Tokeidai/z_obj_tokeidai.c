@@ -316,7 +316,11 @@ void func_80AB363C(ObjTokeidai* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB365C.s")
+void func_80AB365C(ObjTokeidai* this, GlobalContext* globalCtx) {
+    if (func_800EE29C(globalCtx, 0x84) != 0 && globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x84)]->unk0 == 1) {
+        this->actionFunc = func_80AB363C;
+    }
+}
 
 void func_80AB36C4(ObjTokeidai* this, GlobalContext* globalCtx) {
     if (func_800EE29C(globalCtx, 0x84) != 0 && globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x84)]->unk0 == 5) {
