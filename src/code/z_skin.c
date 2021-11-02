@@ -88,7 +88,7 @@ void func_80137B34(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 a
             spAC.z = temp_s3[0].z;
 
             SkinMatrix_Vec3fMtxFMultXYZ(&D_801F5AC0[temp_s3[0].unk_0], &spAC, &spDC);
-        } else if (arg3 != 0) {
+        } else if (arg3) {
             phi_s0 = &temp_s3[phi_s6->unk_4];
 
             spA0.x = phi_s0->x;
@@ -125,7 +125,7 @@ void func_80137B34(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 a
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_skin/func_80137B34.s")
 #endif
 
-// Skin_DrawLimb
+// Skin_DrawLimb?
 void func_80137EBC(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 arg3, s32 arg4) {
     SkinLimb** skeleton;
     s32 pad[3];
@@ -220,14 +220,15 @@ void Skin_DrawImpl(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinP
 #endif
 
 void func_80138228(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinPostLimbDraw postLimbDraw, s32 arg4) {
-    Skin_DrawImpl(actor, globalCtx, skin, postLimbDraw, NULL, arg4, 0, 0);
+    Skin_DrawImpl(actor, globalCtx, skin, postLimbDraw, NULL, arg4, false, 0);
 }
 
 void func_80138258(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinPostLimbDraw postLimbDraw, SkinOverrideLimbDraw overrideLimbDraw,
                    s32 arg5) {
-    Skin_DrawImpl(actor, globalCtx, skin, postLimbDraw, overrideLimbDraw, arg5, 0, 0);
+    Skin_DrawImpl(actor, globalCtx, skin, postLimbDraw, overrideLimbDraw, arg5, false, 0);
 }
 
+// Unused
 void func_8013828C(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinPostLimbDraw postLimbDraw, SkinOverrideLimbDraw overrideLimbDraw,
                    s32 arg5, s32 arg6) {
     Skin_DrawImpl(actor, globalCtx, skin, postLimbDraw, overrideLimbDraw, arg5, arg6, 0);
