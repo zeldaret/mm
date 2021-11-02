@@ -51,7 +51,7 @@ An *actor* is any thing in the game that moves or performs actions or interactio
 You should [join the Discord](https://discord.zelda64.dev/) to say hello and get suggestions on where to start on the `#mm-decomp` channel.
 
 We track who is working on what on the [Google Sheets reservation board](https://docs.google.com/spreadsheets/d/1X83YCPRa532v-Zo0WgUsJ2kB1X9RxBta5_p9aWA8uro).
-After joining the Discord, ask to be added to the Google Sheets reservation board so you can claim your code file and avoid duplicate work. You may need to add a card if a card for your file does not currently exist.
+After joining the Discord, open the Google Sheets reservation board so you can claim your code file and avoid duplicate work.
 
 The work flow is: Reserve a file, decompile it, submit a PR, and then repeat while addressing review comments. The expectation is that one reservation goes to one file which ends up in a one file PR.
 
@@ -159,4 +159,4 @@ Once all comments are addressed, it is courteous to ping the reviewer on either 
 After all the comments are addressed and at least one contributor has approved the review, the project lead can then review and merge the code.
 The project lead is also responsible for ensuring that all of these procedures are followed.
 
-Throughout the PR process, you (the author) should update the card on [Google Sheets reservation board](https://docs.google.com/spreadsheets/d/1X83YCPRa532v-Zo0WgUsJ2kB1X9RxBta5_p9aWA8uro) with the appropriate column and labels.
+Throughout the PR process, you (the author) should update the row on [Google Sheets reservation board](https://docs.google.com/spreadsheets/d/1X83YCPRa532v-Zo0WgUsJ2kB1X9RxBta5_p9aWA8uro) with the appropriate information as the decompilation process progresses.
