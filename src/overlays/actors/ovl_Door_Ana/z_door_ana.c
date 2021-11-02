@@ -92,7 +92,7 @@ void DoorAna_WaitClosed(DoorAna* this, GlobalContext* globalCtx) {
 
     if (grottoType == DOORANA_TYPE_UNK) {
         // in OOT decomp its marked as open with storms, but does not seem to open with storms in MM
-        if ((this->actor.xyzDistToPlayerSq < 40000.0f) && (Flags_GetEnv(globalCtx, 5))) {
+        if ((this->actor.xyzDistToPlayerSq < 40000.0f) && (EnvFlags_Get(globalCtx, 5))) {
             grottoIsOpen = 1;
             this->actor.flags &= ~0x10; // always update OFF
         }

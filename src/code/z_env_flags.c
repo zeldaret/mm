@@ -1,6 +1,6 @@
 #include "global.h"
 
-void Flags_UnsetAllEnv(GlobalContext* globalCtx) {
+void EnvFlags_UnsetAll(GlobalContext* globalCtx) {
     u8 i;
 
     for (i = 0; i < ARRAY_COUNT(globalCtx->envFlags); i++) {
@@ -8,7 +8,7 @@ void Flags_UnsetAllEnv(GlobalContext* globalCtx) {
     }
 }
 
-void Flags_SetEnv(GlobalContext* globalCtx, s16 flag) {
+void EnvFlags_Set(GlobalContext* globalCtx, s16 flag) {
     s16 index = flag / 16;
     s16 bit = flag % 16;
     s16 mask = 1 << bit;
@@ -16,7 +16,7 @@ void Flags_SetEnv(GlobalContext* globalCtx, s16 flag) {
     globalCtx->envFlags[index] |= mask;
 }
 
-void Flags_UnsetEnv(GlobalContext* globalCtx, s16 flag) {
+void EnvFlags_Unset(GlobalContext* globalCtx, s16 flag) {
     s16 index = flag / 16;
     s16 bit = flag % 16;
     s16 mask = (1 << bit) ^ 0xFFFF;
@@ -24,7 +24,7 @@ void Flags_UnsetEnv(GlobalContext* globalCtx, s16 flag) {
     globalCtx->envFlags[index] &= mask;
 }
 
-s32 Flags_GetEnv(GlobalContext* globalCtx, s16 flag) {
+s32 EnvFlags_Get(GlobalContext* globalCtx, s16 flag) {
     s16 index = flag / 16;
     s16 bit = flag % 16;
     s16 mask = 1 << bit;

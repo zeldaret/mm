@@ -1656,10 +1656,10 @@ void Audio_PlaySoundAtPosition(GlobalContext* globalCtx, Vec3f* position, s32 pa
 // void func_800F10AC(void);
 // void func_800F112C(void);
 u16 Text_GetFaceReaction(GlobalContext* globalCtx, u32 reactionSet);
-void Flags_UnsetAllEnv(GlobalContext* globalCtx);
-void Flags_SetEnv(GlobalContext* globalCtx, s16 flag);
-void Flags_UnsetEnv(GlobalContext* globalCtx, s16 flag);
-s32 Flags_GetEnv(GlobalContext* globalCtx, s16 flag);
+void EnvFlags_UnsetAll(GlobalContext* globalCtx);
+void EnvFlags_Set(GlobalContext* globalCtx, s16 flag);
+void EnvFlags_Unset(GlobalContext* globalCtx, s16 flag);
+s32 EnvFlags_Get(GlobalContext* globalCtx, s16 flag);
 s16 func_800F1460(s16 param_1);
 ActorCutscene* ActorCutscene_GetCutsceneImpl(s16 index);
 void ActorCutscene_Init(GlobalContext* globalCtx, ActorCutscene* cutscenes, s32 num);
