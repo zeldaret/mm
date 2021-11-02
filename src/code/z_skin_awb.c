@@ -7,13 +7,13 @@ void func_80138410(PSkinAwb* skin) {
     skin->avbTbl = NULL;
 }
 
-void func_80138424(GameState* gameState, PSkinAwb* skin, s32 limbIndex) {
+void Skin_InitAnimatedLimb(GameState* gameState, PSkinAwb* skin, s32 limbIndex) {
     s32 i;
     SkinLimb** skeleton = Lib_SegmentedToVirtual(skin->skeletonHeader->segment);
-    Struct_800A5E28* temp_v1 = Lib_SegmentedToVirtual(((SkinLimb*)Lib_SegmentedToVirtual(skeleton[limbIndex]))->limbData);
+    SkinAnimatedLimbData* temp_v1 = Lib_SegmentedToVirtual(((SkinLimb*)Lib_SegmentedToVirtual(skeleton[limbIndex]))->limbData);
     Struct_800A598C* temp_v0 = Lib_SegmentedToVirtual(temp_v1->unk_4);
 
-    for (i = 0; i < 2; i++) {
+    for (i = 0; i < ARRAY_COUNT(skin->avbTbl->buf); i++) {
         Vtx* temp2 = skin->avbTbl[limbIndex].buf[i];
         Struct_800A598C* phi_s0;
         Struct_800A57C0* temp_s1;
@@ -52,13 +52,13 @@ void Skin_Init(GameState* gameState, PSkinAwb* skin, SkeletonHeader* skeletonHea
     for (i = 0; i < limbCount; i++) {
         SkinAvb* avbEntry = &skin->avbTbl[i];
 
-        if ((((SkinLimb*)Lib_SegmentedToVirtual(skeleton[i]))->segmentType != 4) || (((SkinLimb*)Lib_SegmentedToVirtual(skeleton[i]))->segment == NULL)) {
+        if ((((SkinLimb*)Lib_SegmentedToVirtual(skeleton[i]))->segmentType != SKIN_LIMB_TYPE_ANIMATED) || (((SkinLimb*)Lib_SegmentedToVirtual(skeleton[i]))->segment == NULL)) {
             avbEntry->index = 0;
 
             avbEntry->buf[0] = NULL;
             avbEntry->buf[1] = NULL;
         } else {
-            Struct_800A5E28* temp_s1 = Lib_SegmentedToVirtual((((SkinLimb*)Lib_SegmentedToVirtual(skeleton[i]))->limbData));
+            SkinAnimatedLimbData* temp_s1 = Lib_SegmentedToVirtual((((SkinLimb*)Lib_SegmentedToVirtual(skeleton[i]))->limbData));
 
             {
                 s32 tmp;
@@ -67,7 +67,7 @@ void Skin_Init(GameState* gameState, PSkinAwb* skin, SkeletonHeader* skeletonHea
             avbEntry->buf[0] = ZeldaArena_Malloc(temp_s1->vtxCount * sizeof(Vtx));
             avbEntry->buf[1] = ZeldaArena_Malloc(temp_s1->vtxCount * sizeof(Vtx));
 
-            func_80138424(gameState, skin, i);
+            Skin_InitAnimatedLimb(gameState, skin, i);
         }
     }
 

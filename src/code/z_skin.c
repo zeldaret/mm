@@ -43,7 +43,7 @@ void func_80137B34(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 a
     s32 temp_1;
     SkinLimb** skeleton;
     SkinLimb* limb;
-    Struct_800A5E28* data;
+    SkinAnimatedLimbData* data;
     s32 pad;
     s32 pad2;
     s32 pad3;
@@ -125,15 +125,14 @@ void func_80137B34(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 a
     CLOSE_DISPS(gfxCtx);
 }
 
-// Skin_DrawDynamicLimb? Skin_DrawAnimatedLimb?
 /**
- * Draw a limb of type 4, of the skeleton `skin` at index `limbIndex`.
- * The vertices of this limb are modified dinamically
+ * Draw a limb of type SKIN_LIMB_TYPE_ANIMATED, of the skeleton `skin` at index `limbIndex`.
+ * The vertices of this limb are modified dynamically
  */
-void func_80137EBC(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 arg3, s32 arg4) {
+void Skin_DrawAnimatedLimb(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 arg3, s32 arg4) {
     SkinLimb** skeleton;
     s32 pad[3];
-    Struct_800A5E28* temp_t9;
+    SkinAnimatedLimbData* temp_t9;
 
     OPEN_DISPS(gfxCtx);
     skeleton = Lib_SegmentedToVirtual(skin->skeletonHeader->segment);
@@ -145,8 +144,10 @@ void func_80137EBC(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 a
     CLOSE_DISPS(gfxCtx);
 }
 
-// Skin_DrawStaticLimb?
-void func_80137F58(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, Gfx* dlistOverride, s32 arg4) {
+/**
+ * Draw a limb of type SKIN_LIMB_TYPE_NORMAL, of the skeleton `skin` at index `limbIndex`.
+ */
+void Skin_DrawLimb(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, Gfx* dlistOverride, s32 arg4) {
     Gfx* gfx = dlistOverride;
     SkinLimb** skeleton;
 
@@ -181,7 +182,7 @@ void Skin_DrawImpl(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinP
     OPEN_DISPS(gfxCtx);
 
     if (!(arg7 & 1)) {
-        func_801388E4(skin, &D_801F5AC0[0], actor, arg5);
+        func_801388E4(skin, D_801F5AC0, actor, arg5);
     }
 
     skeleton = Lib_SegmentedToVirtual(skin->skeletonHeader->segment);
@@ -206,10 +207,10 @@ void Skin_DrawImpl(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinP
         }
 
         segmentType = ((SkinLimb*)Lib_SegmentedToVirtual(skeleton[i]))->segmentType;
-        if (segmentType == 4 && shouldDraw) {
-            func_80137EBC(gfxCtx, skin, i, arg6, arg7);
-        } else if (segmentType == 0xB && shouldDraw) {
-            func_80137F58(gfxCtx, skin, i, NULL, arg7);
+        if (segmentType == SKIN_LIMB_TYPE_ANIMATED && shouldDraw) {
+            Skin_DrawAnimatedLimb(gfxCtx, skin, i, arg6, arg7);
+        } else if (segmentType == SKIN_LIMB_TYPE_NORMAL && shouldDraw) {
+            Skin_DrawLimb(gfxCtx, skin, i, NULL, arg7);
         }
     }
 

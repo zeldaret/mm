@@ -33,11 +33,19 @@ typedef struct {
 
 typedef struct {
     /* 0x000 */ u16 vtxCount;
-    /* 0x002 */ u16 unk_2;
-    /* 0x004 */ Struct_800A598C* unk_4;
+    /* 0x002 */ u16 unk_2; // count of unk_4
+    /* 0x004 */ Struct_800A598C* unk_4; 
     /* 0x008 */ Gfx* dlist;
-} Struct_800A5E28; // size = 0xC
+} SkinAnimatedLimbData; // size = 0xC
 
+
+// ZAPD compatibility typedefs
+typedef SkinAnimatedLimbData Struct_800A5E28;
+
+typedef enum {
+    /* 04 */ SKIN_LIMB_TYPE_ANIMATED = 4,
+    /* 11 */ SKIN_LIMB_TYPE_NORMAL = 11,
+} SkinLimbType;
 
 typedef struct {
     /* 0x00 */ Vec3s jointPos; // Root is position in model space, children are relative to parent
@@ -47,7 +55,7 @@ typedef struct {
     /* 0x0C */ union {
         void* segment;
         Gfx* dlist;
-        Struct_800A5E28* limbData;
+        SkinAnimatedLimbData* limbData;
     };
 } SkinLimb; // size = 0x10
 
@@ -70,8 +78,8 @@ typedef s32 (*SkinOverrideLimbDraw)(struct Actor*, struct GlobalContext*, s32, P
 
 void func_80137970(MtxF* mtx, Struct_800A57C0* arg1, Struct_800A598C* arg2, Vtx* arg3, Vec3f* arg4);
 void func_80137B34(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 arg3);
-void func_80137EBC(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 arg3, s32 arg4);
-void func_80137F58(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, Gfx* arg3, s32 arg4);
+void Skin_DrawAnimatedLimb(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 arg3, s32 arg4);
+void Skin_DrawLimb(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, Gfx* arg3, s32 arg4);
 //void Skin_DrawImpl(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinPostLimbDraw postLimbDraw, SkinOverrideLimbDraw arg4, s32 arg5, s32 arg6, s32 arg7);
 void func_80138228(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinPostLimbDraw postLimbDraw, s32 arg4);
 void func_80138258(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinPostLimbDraw postLimbDraw, SkinOverrideLimbDraw arg4, s32 arg5);
@@ -81,7 +89,7 @@ void func_80138300(PSkinAwb* skin, s32 joint, Vec3f* arg2, Vec3f* arg3);
 void func_8013835C(PSkinAwb* arg0, s32 arg1, s32 arg2, Vec3f* arg3);
 
 void func_80138410(PSkinAwb* skin);
-void func_80138424(GameState* gameState, PSkinAwb* skin, s32 limbIndex);
+//void Skin_InitAnimatedLimb(GameState* gameState, PSkinAwb* skin, s32 limbIndex);
 void Skin_Init(GameState* gameState, PSkinAwb* skin, SkeletonHeader* skeletonHeader, AnimationHeader* animationHeader);
 void Skin_Free(GameState* gameState, PSkinAwb* skin);
 s32 func_801387D4(PSkinAwb* skin, SkinLimb** skeleton, MtxF* mf, u8 parentIndex, u8 limbIndex);
