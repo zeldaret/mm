@@ -5,9 +5,40 @@ extern MtxF D_801F5AC0[60];
 //MtxF D_801F5AC0[60];
 //char D_80160FC0[0x10];
 
+void func_80137970(MtxF* mtx, Struct_800A57C0* arg1, Struct_800A598C* arg2, Vtx* arg3, Vec3f* arg4) {
+    Struct_800A57C0* phi_s0;
+    Vtx* temp_s1;
+    f32 sp64;
+    f32 sp60;
+    f32 sp5C;
+    Vec3f sp50;
+    Vec3f sp44;
 
-void func_80137970(MtxF* mtx, Struct_800A57C0* arg1, Struct_800A598C* arg2, Vtx* arg3, Vec3f* arg4);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_skin/func_80137970.s")
+    sp5C = mtx->mf[3][0];
+    sp60 = mtx->mf[3][1];
+    sp64 = mtx->mf[3][2];
+    mtx->mf[3][0] = 0.0f;
+    mtx->mf[3][1] = 0.0f;
+    mtx->mf[3][2] = 0.0f;
+
+    for (phi_s0 = arg1; phi_s0 < &arg1[arg2->unk_0]; phi_s0++) {
+        temp_s1 = &arg3[phi_s0->unk_0];
+        temp_s1->v.ob[0] = (s16) (s32) arg4->x;
+        temp_s1->v.ob[1] = (s16) (s32) arg4->y;
+        temp_s1->v.ob[2] = (s16) (s32) arg4->z;
+        sp44.x = (f32) phi_s0->unk_6;
+        sp44.y = (f32) phi_s0->unk_7;
+        sp44.z = (f32) phi_s0->unk_8;
+        SkinMatrix_Vec3fMtxFMultXYZ(mtx, &sp44, &sp50);
+        temp_s1->v.cn[0] = (u8) (s32) sp50.x;
+        temp_s1->v.cn[1] = (u8) (s32) sp50.y;
+        temp_s1->v.cn[2] = (u8) (s32) sp50.z;
+    }
+
+    mtx->mf[3][0] = sp5C;
+    mtx->mf[3][1] = sp60;
+    mtx->mf[3][2] = sp64;
+}
 
 #ifdef NON_MATCHING
 void func_80137B34(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 arg3) {
