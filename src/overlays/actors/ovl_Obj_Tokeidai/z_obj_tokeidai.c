@@ -308,7 +308,17 @@ void func_80AB3240(ObjTokeidai* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB3544.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tokeidai/func_80AB3598.s")
+void func_80AB3598(ObjTokeidai* this, GlobalContext* globalCtx) {
+    if (func_800EE29C(globalCtx, 0x84) != 0) {
+        if (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x84)]->unk0 == 3) {
+            this->actionFunc = func_80AB3544;
+            this->unk_160 = 0;
+            this->actor.velocity.y = 0.0f;
+            this->actor.minVelocityY = this->actor.scale.y * -50.0f;
+            this->actor.gravity = this->actor.scale.y * -5.0f;
+        }
+    }
+}
 
 void func_80AB363C(ObjTokeidai* this, GlobalContext* globalCtx) {
     if (this->actor.shape.rot.x < 0x4000) {
