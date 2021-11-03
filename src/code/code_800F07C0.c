@@ -243,7 +243,7 @@ s32 EnHy_PlayWalkingSound(EnHy* enHy, GlobalContext* globalCtx, f32 distAboveThr
     u8 isFootOnGround;
 
     if (enHy->actor.bgCheckFlags & 0x20) {
-        sfxId = ((enHy->actor.yDistToWater < 20.0f) ? (NA_SE_PL_WALK_WATER0 - SFX_FLAG)
+        sfxId = ((enHy->actor.depthInWater < 20.0f) ? (NA_SE_PL_WALK_WATER0 - SFX_FLAG)
                                                     : (NA_SE_PL_WALK_WATER1 - SFX_FLAG)) +
                 SFX_FLAG;
     } else {
