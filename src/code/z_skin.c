@@ -18,7 +18,7 @@ void func_80137970(MtxF* mtx, SkinVtx* skinVertices, Struct_800A598C* arg2, Vtx*
     mtx->mf[3][1] = 0.0f;
     mtx->mf[3][2] = 0.0f;
 
-    for (skinVtxEntry = skinVertices; skinVtxEntry < &skinVertices[arg2->unk_0]; skinVtxEntry++) {
+    for (skinVtxEntry = skinVertices; skinVtxEntry < &skinVertices[arg2->skinVerticesCount]; skinVtxEntry++) {
         vtx = &verticesDst[skinVtxEntry->vtxIndex];
 
         vtx->n.ob[0] = arg4->x;
@@ -52,15 +52,15 @@ void func_80137B34(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 a
     Struct_800A598C* phi_s6;
     SkinAvb* avb;
     s32 pad6;
-    s32 temp_a0_2;
+    s32 limbsModificationsCount;
     f32 temp_f20;
-    SkinVtx* temp_v0;
+    SkinVtx* skinVertices;
     Vec3f sp88;
     Vtx* spEC;
-    Struct_800A598C_2* temp_s3;
+    SkinLimbModif* limbsModifications;
     Vec3f spDC;
     Vec3f spD0;
-    Struct_800A598C_2* phi_s0;
+    SkinLimbModif* modifEntry;
     SkinLimb *new_var;
     Struct_800A598C* temp_2;
 
@@ -80,42 +80,42 @@ void func_80137B34(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 a
         Vec3f spAC;
         Vec3f spA0;
 
-        temp_v0 = (SkinVtx*)Lib_SegmentedToVirtual(phi_s6->unk_8);
-        temp_s3 = (Struct_800A598C_2*)Lib_SegmentedToVirtual(phi_s6->unk_C);
-        temp_a0_2 = phi_s6->unk_2;
+        skinVertices = (SkinVtx*)Lib_SegmentedToVirtual(phi_s6->skinVertices);
+        limbsModifications = (SkinLimbModif*)Lib_SegmentedToVirtual(phi_s6->limbsModifications);
+        limbsModificationsCount = phi_s6->limbsModificationsCount;
 
-        if (temp_a0_2 == 1) {
-            spAC.x = temp_s3[0].x;
-            spAC.y = temp_s3[0].y;
-            spAC.z = temp_s3[0].z;
+        if (limbsModificationsCount == 1) {
+            spAC.x = limbsModifications[0].x;
+            spAC.y = limbsModifications[0].y;
+            spAC.z = limbsModifications[0].z;
 
-            SkinMatrix_Vec3fMtxFMultXYZ(&D_801F5AC0[temp_s3[0].unk_0], &spAC, &spDC);
+            SkinMatrix_Vec3fMtxFMultXYZ(&D_801F5AC0[limbsModifications[0].limbIndex], &spAC, &spDC);
         } else if (arg3) {
-            phi_s0 = &temp_s3[phi_s6->unk_4];
+            modifEntry = &limbsModifications[phi_s6->unk_4];
 
-            spA0.x = phi_s0->x;
-            spA0.y = phi_s0->y;
-            spA0.z = phi_s0->z;
-            SkinMatrix_Vec3fMtxFMultXYZ(&D_801F5AC0[phi_s0->unk_0], &spA0, &spDC);
+            spA0.x = modifEntry->x;
+            spA0.y = modifEntry->y;
+            spA0.z = modifEntry->z;
+            SkinMatrix_Vec3fMtxFMultXYZ(&D_801F5AC0[modifEntry->limbIndex], &spA0, &spDC);
         } else {
             spDC.x = 0.0f;
             spDC.y = 0.0f;
             spDC.z = 0.0f;
 
-            for (phi_s0 = &temp_s3[0]; phi_s0 < &temp_s3[temp_a0_2]; phi_s0++) {
-                temp_f20 = phi_s0->scale * 0.01f;
+            for (modifEntry = limbsModifications; modifEntry < &limbsModifications[limbsModificationsCount]; modifEntry++) {
+                temp_f20 = modifEntry->scale * 0.01f;
 
-                sp88.x = phi_s0->x;
-                sp88.y = phi_s0->y;
-                sp88.z = phi_s0->z;
-                SkinMatrix_Vec3fMtxFMultXYZ(&D_801F5AC0[phi_s0->unk_0], &sp88, &spD0);
+                sp88.x = modifEntry->x;
+                sp88.y = modifEntry->y;
+                sp88.z = modifEntry->z;
+                SkinMatrix_Vec3fMtxFMultXYZ(&D_801F5AC0[modifEntry->limbIndex], &sp88, &spD0);
                 spDC.x += spD0.x * temp_f20;
                 spDC.y += spD0.y * temp_f20;
                 spDC.z += spD0.z * temp_f20;
             }
         }
 
-        func_80137970(&D_801F5AC0[temp_s3[phi_s6->unk_4].unk_0], temp_v0, phi_s6, spEC, &spDC);
+        func_80137970(&D_801F5AC0[limbsModifications[phi_s6->unk_4].limbIndex], skinVertices, phi_s6, spEC, &spDC);
     }
 
     gSPSegment(POLY_OPA_DISP++, 0x08, avb->buf[avb->index]);
@@ -245,20 +245,19 @@ void func_801382C4(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinP
     Skin_DrawImpl(actor, globalCtx, skin, postLimbDraw, overrideLimbDraw, arg5, arg6, arg7);
 }
 
-void func_80138300(PSkinAwb* skin, s32 joint, Vec3f* arg2, Vec3f* arg3) {
-    MtxF sp18;
+void func_80138300(PSkinAwb* skin, s32 joint, Vec3f* arg2, Vec3f* dst) {
+    MtxF mtxf;
 
-    SkinMatrix_MtxFMtxFMult(&skin->mtx, &D_801F5AC0[joint], &sp18);
-    SkinMatrix_Vec3fMtxFMultXYZ(&sp18, arg2, arg3);
+    SkinMatrix_MtxFMtxFMult(&skin->mtx, &D_801F5AC0[joint], &mtxf);
+    SkinMatrix_Vec3fMtxFMultXYZ(&mtxf, arg2, dst);
 }
 
-void func_8013835C(PSkinAwb* arg0, s32 arg1, s32 arg2, Vec3f* arg3) {
-    Vec3f sp24;
-    Vtx* temp_v0;
+void func_8013835C(PSkinAwb* skin, s32 limbIndex, s32 vtxIndex, Vec3f* dst) {
+    Vec3f sp24; // pos?
+    Vtx* vtx = &skin->avbTbl[limbIndex].buf[skin->avbTbl[0].index][vtxIndex];
 
-    temp_v0 = &arg0->avbTbl[arg1].buf[arg0->avbTbl->index][arg2];
-    sp24.x = temp_v0->v.ob[0];
-    sp24.y = temp_v0->v.ob[1];
-    sp24.z = temp_v0->v.ob[2];
-    SkinMatrix_Vec3fMtxFMultXYZ(&arg0->mtx, &sp24, arg3);
+    sp24.x = vtx->n.ob[0];
+    sp24.y = vtx->n.ob[1];
+    sp24.z = vtx->n.ob[2];
+    SkinMatrix_Vec3fMtxFMultXYZ(&skin->mtx, &sp24, dst);
 }

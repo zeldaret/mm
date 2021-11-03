@@ -13,20 +13,23 @@ typedef struct {
     /* 0x09 */ u8 alpha;
 } SkinVtx; // size = 0xA
 
+/**
+ * Describes a position displacement and a scale to be applied to a limb at index `limbIndex`
+ */
 typedef struct {
-    /* 0x00 */ u8  unk_0; // index of D_801F5AC0? limb index?
+    /* 0x00 */ u8  limbIndex; // the limb to apply this modifications
     /* 0x02 */ s16 x;
     /* 0x04 */ s16 y;
     /* 0x06 */ s16 z;
     /* 0x08 */ u8  scale;
-} Struct_800A598C_2; // size = 0xA
+} SkinLimbModif; // size = 0xA
 
 typedef struct {
-    /* 0x00 */ u16 unk_0; // count of unk_8
-    /* 0x02 */ u16 unk_2; // count of unk_C
-    /* 0x04 */ u16 unk_4; // index of unk_C?
-    /* 0x08 */ SkinVtx* unk_8;
-    /* 0x0C */ Struct_800A598C_2* unk_C;
+    /* 0x00 */ u16 skinVerticesCount; // count of skinVertices
+    /* 0x02 */ u16 limbsModificationsCount; // count of limbsModifications
+    /* 0x04 */ u16 unk_4; // index of limbsModifications?
+    /* 0x08 */ SkinVtx* skinVertices;
+    /* 0x0C */ SkinLimbModif* limbsModifications;
 } Struct_800A598C; // size = 0x10
 
 typedef struct {
@@ -38,6 +41,7 @@ typedef struct {
 
 // ZAPD compatibility typedefs
 typedef SkinVtx Struct_800A57C0;
+typedef SkinLimbModif Struct_800A598C_2;
 typedef SkinAnimatedLimbData Struct_800A5E28;
 
 typedef enum {

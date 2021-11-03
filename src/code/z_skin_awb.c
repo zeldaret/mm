@@ -18,10 +18,10 @@ void Skin_InitAnimatedLimb(GameState* gameState, PSkinAwb* skin, s32 limbIndex) 
         Struct_800A598C* phi_s0;
 
         for (phi_s0 = temp_v0; phi_s0 < temp_v0 + animatedLimbData->unk_2; phi_s0++) {
-            SkinVtx* skinVertices = Lib_SegmentedToVirtual(phi_s0->unk_8);
+            SkinVtx* skinVertices = Lib_SegmentedToVirtual(phi_s0->skinVertices);
             SkinVtx* skinVtxEntry;
 
-            for (skinVtxEntry = skinVertices; skinVtxEntry < skinVertices + phi_s0->unk_0; ) {
+            for (skinVtxEntry = skinVertices; skinVtxEntry < skinVertices + phi_s0->skinVerticesCount; ) {
                 Vtx* vtx = &vertices[skinVtxEntry->vtxIndex];
 
                 skinVtxEntry++;
