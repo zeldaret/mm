@@ -1,3 +1,9 @@
+/*
+ * File: z_en_tubo_trap.c
+ * Overlay: ovl_En_Tubo_Trap
+ * Description: Flying Pot Trap Enemy
+ */
+
 #include "z_en_tubo_trap.h"
 
 #define FLAGS 0x00000000

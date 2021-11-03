@@ -1,3 +1,9 @@
+/*
+ * File: z_door_ana.c
+ * Overlay: ovl_Door_Ana
+ * Description: Grotto Hole Entrance
+ */
+
 #include "z_door_ana.h"
 
 #define FLAGS 0x02000000

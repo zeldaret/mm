@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_f40_block.c
+ * Overlay: ovl_Bg_F40_Block
+ * Description: Stone Tower Block
+ */
+
 #include "z_bg_f40_block.h"
 
 #define FLAGS 0x00000010

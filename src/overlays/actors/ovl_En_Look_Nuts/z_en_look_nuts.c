@@ -1,3 +1,9 @@
+/*
+ * File: z_en_look_nuts.c
+ * Overlay: ovl_En_Look_Nuts
+ * Description: Deku Palace - Patrolling Deku Guard
+ */
+
 #include "z_en_look_nuts.h"
 
 #define FLAGS 0x80000000

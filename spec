@@ -2192,8 +2192,7 @@ beginseg
     name "ovl_En_Wf"
     compress
     include "build/src/overlays/actors/ovl_En_Wf/z_en_wf.o"
-    include "build/data/ovl_En_Wf/ovl_En_Wf.data.o"
-    include "build/data/ovl_En_Wf/ovl_En_Wf.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Wf/ovl_En_Wf_reloc.o"
 endseg
 
 beginseg
@@ -3577,8 +3576,7 @@ beginseg
     name "ovl_En_Elforg"
     compress
     include "build/src/overlays/actors/ovl_En_Elforg/z_en_elforg.o"
-    include "build/data/ovl_En_Elforg/ovl_En_Elforg.data.o"
-    include "build/data/ovl_En_Elforg/ovl_En_Elforg.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Elforg/ovl_En_Elforg_reloc.o"
 endseg
 
 beginseg
@@ -3976,8 +3974,7 @@ beginseg
     name "ovl_En_Po_Sisters"
     compress
     include "build/src/overlays/actors/ovl_En_Po_Sisters/z_en_po_sisters.o"
-    include "build/data/ovl_En_Po_Sisters/ovl_En_Po_Sisters.data.o"
-    include "build/data/ovl_En_Po_Sisters/ovl_En_Po_Sisters.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Po_Sisters/ovl_En_Po_Sisters_reloc.o"
 endseg
 
 beginseg

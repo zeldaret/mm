@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_grass_unit.c
+ * Overlay: ovl_Obj_Grass_Unit
+ * Description:
+ */
+
 #include "z_obj_grass_unit.h"
 
 #define FLAGS 0x00000000

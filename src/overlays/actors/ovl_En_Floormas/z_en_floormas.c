@@ -1,3 +1,9 @@
+/*
+ * File: z_en_floormas.c
+ * Overlay: ovl_En_Floormas
+ * Description: Floormaster
+ */
+
 #include "z_en_floormas.h"
 
 #define FLAGS 0x00000405

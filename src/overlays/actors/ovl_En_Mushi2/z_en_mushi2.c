@@ -1,7 +1,7 @@
 /*
  * File: z_en_mushi2.c
  * Overlay: ovl_En_Mushi2
- * Description: Burrowing Bugs
+ * Description: Group of three bugs that burrow underground
  */
 
 #include "overlays/actors/ovl_Obj_Bean/z_obj_bean.h"

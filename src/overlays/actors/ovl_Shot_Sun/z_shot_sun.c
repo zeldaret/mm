@@ -1,3 +1,9 @@
+/*
+ * File: z_shot_sun.c
+ * Overlay: ovl_Shot_Sun
+ * Description:
+ */
+
 #include "z_shot_sun.h"
 
 #define FLAGS 0x00000009

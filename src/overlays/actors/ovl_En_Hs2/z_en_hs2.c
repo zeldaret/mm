@@ -1,3 +1,9 @@
+/*
+ * File: z_en_hs2.c
+ * Overlay: ovl_En_Hs2
+ * Description: Blue Target Spot
+ */
+
 #include "z_en_hs2.h"
 
 #define FLAGS 0x00000009

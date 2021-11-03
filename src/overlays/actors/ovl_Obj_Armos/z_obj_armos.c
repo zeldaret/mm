@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_armos.c
+ * Overlay: ovl_Obj_Armos
+ * Description: Non-hostile Armos statues
+ */
+
 #include "z_obj_armos.h"
 
 #define FLAGS 0x04000010

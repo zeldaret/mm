@@ -1,3 +1,9 @@
+/*
+ * File: z_dm_char02.c
+ * Overlay: ovl_Dm_Char02
+ * Description:
+ */
+
 #include "z_dm_char02.h"
 
 #define FLAGS 0x00000030

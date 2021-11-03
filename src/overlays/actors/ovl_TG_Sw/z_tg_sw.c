@@ -1,3 +1,9 @@
+/*
+ * File: z_tg_sw.c
+ * Overlay: ovl_TG_Sw
+ * Description: Skulltula spider bonk detector
+ */
+
 #include "z_tg_sw.h"
 
 #define FLAGS 0x00000010
