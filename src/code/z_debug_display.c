@@ -116,7 +116,7 @@ void func_800E992C(GlobalContext* globalCtx, s32 arg1) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C560(globalCtx->state.gfxCtx);
-    gSPMatrix(POLY_XLU_DISP++, &D_801D1DE0, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_XLU_DISP++, &gMtxClear, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, func_800E99B0(globalCtx->state.gfxCtx, arg1));
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
