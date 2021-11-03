@@ -2,7 +2,7 @@
 #include "global.h"
 
 static s32 D_801FD040[4];
-static OSIoMesg D_801FD050;
+static OSIoMesg framDeviceInfoQuery;
 static OSMesgQueue __osFlashMessageQ;
 static OSPiHandle __osFlashHandler;
 static OSMesg __osFlashMsgBuf;
