@@ -1684,6 +1684,16 @@ typedef struct {
     /* 0x20 */ u16 fracPart[4][4];
 } MatrixInternal; // size = 0x40
 
+typedef struct DebugDispObject {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3s rot;
+    /* 0x14 */ Vec3f scale;
+    /* 0x20 */ Color_RGBA8 color;
+    /* 0x24 */ s16   type;
+    /* 0x28 */ struct DebugDispObject* next;
+    /* 0x2C */ s32 pad; //Padding not in the OOT version
+} DebugDispObject; // size = 0x30
+
 typedef struct {
     /* 0x00 */ u8* value;
     /* 0x04 */ const char* name;
