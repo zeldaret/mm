@@ -98,18 +98,18 @@ void osFlashReadId(u32* flashType, u32* flashVendor) {
                  FRAM_COMMAND_SET_MODE_STATUS_AND_STATUS);
 
     // read silicon id using DMA
-    D_801FD050.hdr.pri = 0;
-    D_801FD050.hdr.retQueue = &__osFlashMessageQ;
-    D_801FD050.dramAddr = D_801FD040;
-    D_801FD050.devAddr = 0;
-    D_801FD050.size = 8;
+    framDeviceInfoQuery.hdr.pri = 0;
+    framDeviceInfoQuery.hdr.retQueue = &__osFlashMessageQ;
+    framDeviceInfoQuery.dramAddr = framDeviceInfo;
+    framDeviceInfoQuery.devAddr = 0;
+    framDeviceInfoQuery.size = 8;
 
-    osInvalDCache(D_801FD040, sizeof(D_801FD040));
-    osEPiStartDma(&__osFlashHandler, &D_801FD050, OS_READ);
+    osInvalDCache(framDeviceInfo, sizeof(framDeviceInfo));
+    osEPiStartDma(&__osFlashHandler, &framDeviceInfoQuery, OS_READ);
     osRecvMesg(&__osFlashMessageQ, NULL, OS_MESG_BLOCK);
 
-    *flashType = D_801FD040[0];
-    *flashVendor = D_801FD040[1];
+    *flashType = framDeviceInfo[0];
+    *flashVendor = framDeviceInfo[1];
 
     return;
 }
