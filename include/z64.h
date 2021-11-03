@@ -213,14 +213,9 @@ typedef struct {
 } FireObjInitParams; // size = 0xD
 
 typedef struct {
-    /* 0x0 */ u8 unk0;
-    /* 0x1 */ u8 unk1;
-    /* 0x2 */ u8 unk2;
-    /* 0x3 */ u8 unk3;
+    /* 0x0 */ Color_RGBA8 primColor;
     /* 0x4 */ u8 unk4;
-    /* 0x5 */ u8 unk5;
-    /* 0x6 */ u8 unk6;
-    /* 0x7 */ u8 unk7;
+    /* 0x5 */ Color_RGB8 envColor;
 } FireObjLightParams; // size = 0x8
 
 //! @TODO: Make this use `sizeof(AnyFontTextureSymbol)`

@@ -1691,19 +1691,12 @@ void SkelCurve_SetAnim(SkelAnimeCurve* skelCurve, TransformUpdateIndex* transUpd
 s32 SkelCurve_Update(GlobalContext* globalCtx, SkelAnimeCurve* skelCurve);
 void SkelCurve_Draw(Actor* actor, GlobalContext* globalCtx, SkelAnimeCurve* skelCurve,
                     OverrideCurveLimbDraw overrideLimbDraw, PostCurveLimbDraw postLimbDraw, s32 lod, Actor* thisx);
-void FireObj_InitWithParams(GlobalContext* globalCtx, FireObj* fire, FireObjInitParams* init);
-void FireObj_SetState(FireObj* fire, f32 dynamicSizeStep, u8 newState);
 void FireObj_SetPosition(FireObj* fire, Vec3f* pos);
-void FireObj_StepSize(FireObj* fire);
-void FireObj_UpdateStateTransitions(GlobalContext* globalCtx, FireObj* fire);
 void FireObj_Draw(GlobalContext* globalCtx, FireObj* fire);
-void FireObj_InitLight(GlobalContext* globalCtx, FireObjLight* light, u8* param_3, Vec3f* pos);
-void FireObj_FiniLight(GlobalContext* globalCtx, FireObjLight* light);
-void FireObj_UpdateLight(GlobalContext* globalCtx, FireObjLight* light, FireObj* fire);
 void FireObj_Init(GlobalContext* globalCtx, FireObj* fire, FireObjInitParams* init, Actor* actor);
-void FireObj_Fini(GlobalContext* globalCtx, FireObj* fire);
+void FireObj_Destroy(GlobalContext* globalCtx, FireObj* fire);
 void FireObj_SetState2(FireObj* fire, f32 dynamicSizeStep, u8 newState);
-void FireObj_Update(GlobalContext* globalCtx, FireObj* fire);
+void FireObj_Update(GlobalContext* globalCtx, FireObj* fire, Actor* actor);
 // void func_800F3940(void);
 // void func_800F39B4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_800F3A64(void);
