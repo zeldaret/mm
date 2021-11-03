@@ -869,8 +869,6 @@ Gfx* SkelAnime_DrawFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jointT
  * Unpacks frame data for the animation at the given frame into frameTable
  * Used by the legacy animation format
  */
-#ifdef NON_MATCHING
-// equivalent, minor reordering
 s16 SkelAnime_GetFrameDataLegacy(LegacyAnimationHeader* animation, s32 frame, Vec3s* frameTable) {
     LegacyAnimationHeader* animHeader = Lib_SegmentedToVirtual(animation);
     s16 limbCount = animHeader->limbCount;
@@ -880,59 +878,21 @@ s16 SkelAnime_GetFrameDataLegacy(LegacyAnimationHeader* animation, s32 frame, Ve
     s16* dynamicData = &frameData[frame];
     s32 i;
 
-    /**
-     *Equivalent to the following, but the compiler optimizes the loop in a way I can't replicate
-     */
-    /*
-         for(i = 0, frameTable++, key++; i < limbCount + 1; i++, key++, frameTable++) {
-             frameTable->x = frame < key->xMax ? dynamicData[key->x] : staticData[key->x];
-             frameTable->y = frame < key->yMax ? dynamicData[key->y] : staticData[key->y];
-             frameTable->z = frame < key->zMax ? dynamicData[key->z] : staticData[key->z];
-         }
-    */
     frameTable->x = frame < key->xMax ? dynamicData[key->x] : staticData[key->x];
     frameTable->y = frame < key->yMax ? dynamicData[key->y] : staticData[key->y];
     frameTable->z = frame < key->zMax ? dynamicData[key->z] : staticData[key->z];
 
-    i = 1;
     frameTable++;
     key++;
 
-    if (limbCount & 1) {}
-
-    if (limbCount > 0) {
-        if (limbCount & 1) {
-            i++;
-            frameTable->x = frame < key->xMax ? dynamicData[key->x] : staticData[key->x];
-            frameTable->y = frame < key->yMax ? dynamicData[key->y] : staticData[key->y];
-            frameTable->z = frame < key->zMax ? dynamicData[key->z] : staticData[key->z];
-            key++;
-            frameTable++;
-            if (limbCount + 1 == i) {
-                goto ret;
-            }
-        }
-        do {
-            i += 2;
-            frameTable->x = frame < key->xMax ? dynamicData[key->x] : staticData[key->x];
-            frameTable->y = frame < key->yMax ? dynamicData[key->y] : staticData[key->y];
-            frameTable->z = frame < key->zMax ? dynamicData[key->z] : staticData[key->z];
-            key++;
-            frameTable++;
-            frameTable->x = frame < key->xMax ? dynamicData[key->x] : staticData[key->x];
-            frameTable->y = frame < key->yMax ? dynamicData[key->y] : staticData[key->y];
-            frameTable->z = frame < key->zMax ? dynamicData[key->z] : staticData[key->z];
-            key++;
-            frameTable++;
-        } while (i != limbCount + 1);
+    for (i = 1; i <= limbCount; i++, key++, frameTable++) {
+        frameTable->x = frame < key->xMax ? dynamicData[key->x] : staticData[key->x];
+        frameTable->y = frame < key->yMax ? dynamicData[key->y] : staticData[key->y];
+        frameTable->z = frame < key->zMax ? dynamicData[key->z] : staticData[key->z];
     }
 
-ret:
     return limbCount;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_skelanime/SkelAnime_GetFrameData2.s")
-#endif
 
 /**
  * Used by legacy animation format

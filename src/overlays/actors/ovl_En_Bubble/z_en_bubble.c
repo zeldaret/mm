@@ -1,3 +1,9 @@
+/*
+ * File z_en_bubble.c
+ * Overlay: ovl_En_Bubble
+ * Description: Bubble (flying skull enemy)
+ */
+
 #include "z_en_bubble.h"
 
 #define FLAGS 0x00000001

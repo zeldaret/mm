@@ -1,3 +1,9 @@
+/*
+ * File: z_en_racedog.c
+ * Overlay: ovl_En_Racedog
+ * Description: Racetrack Dog
+ */
+
 #include "z_en_racedog.h"
 
 #define FLAGS 0x80000010

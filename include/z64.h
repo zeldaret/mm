@@ -942,7 +942,7 @@ typedef struct {
     /* 0xEC */ u8 unk_EC;
     /* 0xED */ u8 unk_ED;
     /* 0xEE */ u8 unk_EE[4];
-    /* 0xF2 */ u8 unk_F2[8];
+    /* 0xF2 */ u8 unk_F2[8]; // [3] is used by both DemoKankyo and ObjectKankyo particle count
     /* 0xFA */ u8 unk_FA[4];
 } EnvironmentContext; // size = 0x100
 
@@ -1683,6 +1683,16 @@ typedef struct {
     /* 0x00 */ u16 intPart[4][4];
     /* 0x20 */ u16 fracPart[4][4];
 } MatrixInternal; // size = 0x40
+
+typedef struct DebugDispObject {
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ Vec3s rot;
+    /* 0x14 */ Vec3f scale;
+    /* 0x20 */ Color_RGBA8 color;
+    /* 0x24 */ s16   type;
+    /* 0x28 */ struct DebugDispObject* next;
+    /* 0x2C */ s32 pad; //Padding not in the OOT version
+} DebugDispObject; // size = 0x30
 
 typedef struct {
     /* 0x00 */ u8* value;

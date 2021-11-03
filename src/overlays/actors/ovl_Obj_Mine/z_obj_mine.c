@@ -1,3 +1,9 @@
+/*
+ * File: z_obj_mine.c
+ * Overlay: ovl_Obj_Mine
+ * Description: Spike metal Mine
+ */
+
 #include "z_obj_mine.h"
 
 #define FLAGS 0x00000000

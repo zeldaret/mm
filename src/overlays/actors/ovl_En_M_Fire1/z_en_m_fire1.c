@@ -1,3 +1,9 @@
+/*
+ * File: z_en_m_fire1.c
+ * Overlay: ovl_En_M_Fire1
+ * Description: Deku Nut Effect
+ */
+
 #include "z_en_m_fire1.h"
 
 #define FLAGS 0x00000000

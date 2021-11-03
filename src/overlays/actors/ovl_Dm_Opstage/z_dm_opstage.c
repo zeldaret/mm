@@ -1,3 +1,9 @@
+/*
+ * File: z_dm_opstage.c
+ * Overlay: ovl_Dm_Opstage
+ * Description: Lost Woods cutscene objects
+ */
+
 #include "z_dm_opstage.h"
 
 #define FLAGS 0x00000030

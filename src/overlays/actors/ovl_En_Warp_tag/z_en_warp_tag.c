@@ -1,3 +1,9 @@
+/*
+ * File: z_en_warp_tag.c
+ * Overlay: ovl_En_Warp_tag
+ * Description: Warp to Trial Entrance
+ */
+
 #include "z_en_warp_tag.h"
 
 #define FLAGS 0x0A000011
