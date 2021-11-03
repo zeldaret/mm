@@ -7,7 +7,7 @@ static OSMesgQueue __osFlashMessageQ;
 static OSPiHandle __osFlashHandler;
 static OSMesg __osFlashMsgBuf;
 static s32 __osFlashVersion;
-static char D_801FD0FC[0x14];
+static UNK_TYPE1 D_801FD0FC[0x14];
 
 typedef enum {
     FLASH_OLD,
