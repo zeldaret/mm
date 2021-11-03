@@ -225,8 +225,7 @@ s32 Sched_TaskCheckFramebuffers(SchedContext* sched, OSScTask* task) {
     void* nextFB = osViGetNextFramebuffer();
     void* curFB = osViGetCurrentFramebuffer();
 
-    if (task == NULL || sched->pendingSwapBuf1 != NULL ||
-        (curFB == TASK_FRAMEBUFFER(task)->fb1 && curFB != nextFB)) {
+    if (task == NULL || sched->pendingSwapBuf1 != NULL || (curFB == TASK_FRAMEBUFFER(task)->fb1 && curFB != nextFB)) {
         return 0;
     }
     return 1;
