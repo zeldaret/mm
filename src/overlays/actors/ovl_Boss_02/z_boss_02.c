@@ -1,3 +1,9 @@
+/*
+ * File: z_boss_02.c
+ * Overlay: ovl_Boss_02
+ * Description: Twinmold
+ */
+
 #include "z_boss_02.h"
 
 #define FLAGS 0x00000035

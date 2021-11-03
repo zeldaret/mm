@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_numa_hana.c
+ * Overlay: ovl_Bg_Numa_Hana
+ * Description: Big wooden flower in Woodfall Temple
+ */
+
 #include "z_bg_numa_hana.h"
 
 #define FLAGS 0x00000410

@@ -1,3 +1,9 @@
+/*
+ * File: z_en_hidden_nuts.c
+ * Overlay: ovl_En_Hidden_Nuts
+ * Description: Swamp Spider House - Sleeping Deku Scrub
+ */
+
 #include "z_en_hidden_nuts.h"
 
 #define FLAGS 0x02000009

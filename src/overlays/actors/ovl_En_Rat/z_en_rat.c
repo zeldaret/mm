@@ -1,3 +1,9 @@
+/*
+ * File: z_en_rat.c
+ * Overlay: ovl_En_Rat
+ * Description: Real Bombchu
+ */
+
 #include "z_en_rat.h"
 
 #define FLAGS 0x00000205

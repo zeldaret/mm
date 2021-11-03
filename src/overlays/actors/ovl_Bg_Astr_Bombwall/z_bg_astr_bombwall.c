@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_astr_bombwall.c
+ * Overlay: ovl_Bg_Astr_Bombwall
+ * Description: Astral Observatory - Bombable Wall
+ */
+
 #include "z_bg_astr_bombwall.h"
 
 #define FLAGS 0x00000000
