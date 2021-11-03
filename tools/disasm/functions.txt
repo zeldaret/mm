@@ -2536,7 +2536,7 @@
     0x80134990:("SkelAnime_Draw",),
     0x80134B54:("SkelAnime_DrawFlexLimb",),
     0x80134DBC:("SkelAnime_DrawFlex",),
-    0x80134FFC:("SkelAnime_GetFrameData2",),
+    0x80134FFC:("SkelAnime_GetFrameDataLegacy",),
     0x801353D4:("Animation_GetLimbCount2",),
     0x801353F8:("Animation_GetLength2",),
     0x8013541C:("Animation_GetLastFrame2",),
