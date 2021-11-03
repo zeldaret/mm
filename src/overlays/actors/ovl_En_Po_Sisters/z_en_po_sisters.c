@@ -344,7 +344,7 @@ void func_80B1ACB8(EnPoSisters* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((this->actor.xzDistToPlayer < 600.0f) && (fabsf(this->actor.yDistToPlayer + 5.0f) < 30.0f)) {
+    if ((this->actor.xzDistToPlayer < 600.0f) && (fabsf(this->actor.playerHeightRel + 5.0f) < 30.0f)) {
         func_80B1AE28(this);
     } else if ((this->unk_192 == 0) && Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f)) {
         func_80B1AB5C(this);
@@ -377,7 +377,7 @@ void func_80B1AE3C(EnPoSisters* this, GlobalContext* globalCtx) {
         Math_ScaledStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0x71C);
     }
 
-    if ((this->actor.xzDistToPlayer < 320.0f) && (fabsf(this->actor.yDistToPlayer + 5.0f) < 30.0f)) {
+    if ((this->actor.xzDistToPlayer < 320.0f) && (fabsf(this->actor.playerHeightRel + 5.0f) < 30.0f)) {
         func_80B1AF8C(this);
     } else if (this->actor.xzDistToPlayer > 720.0f) {
         func_80B1AC40(this);
