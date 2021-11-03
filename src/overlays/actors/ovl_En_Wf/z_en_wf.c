@@ -1,7 +1,7 @@
 /*
  * File: z_en_wf.c
  * Overlay: ovl_En_Wf
- * Description: Wolfos
+ * Description: Wolfos and White Wolfos
  */
 
 #include "z_en_wf.h"

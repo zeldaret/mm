@@ -1,7 +1,7 @@
 /*
  * File: z_en_scopecoin.c
  * Overlay: ovl_En_Scopecoin
- * Description: Telescope Coin
+ * Description: Termina Field rupees visible from the telescope
  */
 
 #include "z_en_scopecoin.h"

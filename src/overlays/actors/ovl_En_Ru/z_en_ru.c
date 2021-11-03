@@ -1,7 +1,7 @@
 /*
  * File: z_en_ru.c
  * Overlay: ovl_En_Ru
- * Description: Ruto
+ * Description: (OoT's Adult) Ruto (unused)
  */
 
 #include "z_en_ru.h"

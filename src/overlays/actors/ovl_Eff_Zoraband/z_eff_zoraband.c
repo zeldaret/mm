@@ -1,7 +1,7 @@
 /*
  * File z_eff_zoraband.c
  * Overlay: ovl_Eff_Zoraband
- * Description:
+ * Description: Indigo-Go's (Mikau's healing cutscene)
  */
 
 #include "z_eff_zoraband.h"

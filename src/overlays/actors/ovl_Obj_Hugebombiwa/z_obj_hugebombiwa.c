@@ -1,7 +1,7 @@
 /*
  * File: z_obj_hugebombiwa.c
  * Overlay: ovl_Obj_Hugebombiwa
- * Description: Boulder Blocking Goron Racetrack
+ * Description: Boulder Blocking Goron Racetrack/Milk Road
  */
 
 #include "z_obj_hugebombiwa.h"

@@ -1,7 +1,7 @@
 /*
  * File: z_oceff_wipe2.c
  * Overlay: ovl_Oceff_Wipe2
- * Description:
+ * Description: Epona's Song Ocarina Effect
  */
 
 #include "z_oceff_wipe2.h"

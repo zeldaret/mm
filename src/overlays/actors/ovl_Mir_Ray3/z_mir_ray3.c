@@ -1,7 +1,7 @@
 /*
  * File: z_mir_ray3.c
  * Overlay: ovl_Mir_Ray3
- * Description:
+ * Description: Mirror shield reflection and glow
  */
 
 #include "z_mir_ray3.h"

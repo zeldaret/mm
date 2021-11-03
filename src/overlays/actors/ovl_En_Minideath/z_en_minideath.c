@@ -1,7 +1,7 @@
 /*
  * File: z_en_minideath.c
  * Overlay: ovl_En_Minideath
- * Description: Bats Surrounding Gomess?
+ * Description: Gomess's bats
  */
 
 #include "z_en_minideath.h"

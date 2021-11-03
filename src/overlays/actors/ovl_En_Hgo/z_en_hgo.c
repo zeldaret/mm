@@ -1,7 +1,7 @@
 /*
  * File: z_en_hgo.c
  * Overlay: ovl_En_Hgo
- * Description: Pamela's Father As a Gibdo
+ * Description: Pamela's Father (Gibdo)
  */
 
 #include "z_en_hgo.h"

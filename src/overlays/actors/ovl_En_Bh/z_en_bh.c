@@ -1,7 +1,7 @@
 /*
  * File z_en_bh.c
  * Overlay: ovl_En_Bh
- * Description: Brown Bird
+ * Description: Brown Bird (on the Moon)
  */
 
 #include "z_en_bh.h"

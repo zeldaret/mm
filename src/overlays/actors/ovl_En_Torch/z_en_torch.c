@@ -1,7 +1,7 @@
 /*
  * File: z_en_torch.c
  * Overlay: ovl_En_Torch
- * Description: Treasure chest (grotto)
+ * Description: Grotto chest spawner
  */
 
 #include "z_en_torch.h"

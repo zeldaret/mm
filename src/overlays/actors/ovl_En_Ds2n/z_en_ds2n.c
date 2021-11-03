@@ -1,7 +1,7 @@
 /*
  * File: z_en_ds2n.c
  * Overlay: ovl_En_Ds2n
- * Description:
+ * Description: Medicine Shop Owner from OoT (unused)
  */
 
 #include "z_en_ds2n.h"

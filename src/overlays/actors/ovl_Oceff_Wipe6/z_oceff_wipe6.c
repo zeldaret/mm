@@ -1,7 +1,7 @@
 /*
  * File: z_oceff_wipe6.c
  * Overlay: ovl_Oceff_Wipe6
- * Description:
+ * Description: Song of Soaring Ocarina Effect
  */
 
 #include "z_oceff_wipe6.h"

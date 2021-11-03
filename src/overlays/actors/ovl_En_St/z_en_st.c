@@ -1,7 +1,7 @@
 /*
  * File: z_en_st.c
  * Overlay: ovl_En_St
- * Description: Skulltula
+ * Description: Skulltula (large suspended one)
  */
 
 #include "z_en_st.h"

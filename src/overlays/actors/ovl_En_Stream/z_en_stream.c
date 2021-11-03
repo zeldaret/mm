@@ -1,7 +1,7 @@
 /*
  * File: z_en_stream.c
  * Overlay: ovl_En_Stream
- * Description:
+ * Description: Unused water vortex from OoT
  */
 
 #include "z_en_stream.h"

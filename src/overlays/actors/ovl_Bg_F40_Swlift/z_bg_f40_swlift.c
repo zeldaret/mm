@@ -1,7 +1,7 @@
 /*
  * File: z_bg_f40_swlift.c
  * Overlay: ovl_Bg_F40_Swlift
- * Description:
+ * Description: Unused oscillating platform
  */
 
 #include "z_bg_f40_swlift.h"

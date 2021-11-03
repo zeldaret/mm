@@ -1,7 +1,7 @@
 /*
  * File: z_en_heishi.c
  * Overlay: ovl_En_Heishi
- * Description: Soldier
+ * Description: Soldier (Mayor's Residence only)
  */
 
 #include "z_en_heishi.h"

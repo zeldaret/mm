@@ -1,7 +1,7 @@
 /*
  * File: z_oceff_wipe4.c
  * Overlay: ovl_Oceff_Wipe4
- * Description:
+ * Description: Scarecrow's Song Ocarina Effect
  */
 
 #include "z_oceff_wipe4.h"

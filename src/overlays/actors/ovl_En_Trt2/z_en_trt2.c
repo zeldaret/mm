@@ -1,7 +1,7 @@
 /*
  * File: z_en_trt2.c
  * Overlay: ovl_En_Trt2
- * Description:
+ * Description: Kotake outside of her shop
  */
 
 #include "z_en_trt2.h"

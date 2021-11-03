@@ -1,7 +1,7 @@
 /*
  * File: z_en_test6.c
  * Overlay: ovl_En_Test6
- * Description:
+ * Description: Song of Time effects (Return to DoTFD, invert, skip forward)
  */
 
 #include "z_en_test6.h"

@@ -1,7 +1,7 @@
 /*
  * File: z_en_test.c
  * Overlay: ovl_En_Test
- * Description:
+ * Description: Goron crater mark
  */
 
 #include "z_en_test.h"

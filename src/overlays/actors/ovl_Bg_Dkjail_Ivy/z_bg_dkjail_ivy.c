@@ -1,7 +1,7 @@
 /*
  * File: z_bg_dkjail_ivy.c
  * Overlay: ovl_Bg_Dkjail_Ivy
- * Description: Ivy in Deku Jail
+ * Description: Cuttable Ivy wall (beneath Woodfall Temple, Swamp Spider House)
  */
 
 #include "z_bg_dkjail_ivy.h"

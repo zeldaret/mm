@@ -1,7 +1,7 @@
 /*
  * File: z_en_ge2.c
  * Overlay: ovl_En_Ge2
- * Description: Patrolling Pirate
+ * Description: Purple-clad Gerudo Pirate
  */
 
 #include "z_en_ge2.h"

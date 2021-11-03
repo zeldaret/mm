@@ -1,7 +1,7 @@
 /*
  * File z_en_bom_bowl_man.c
  * Overlay: ovl_En_Bom_Bowl_Man
- * Description: Line of Bombers?
+ * Description: Line of Bombers when they teach you the password
  */
 
 #include "z_en_bom_bowl_man.h"

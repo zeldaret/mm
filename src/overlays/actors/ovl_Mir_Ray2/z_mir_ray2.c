@@ -1,7 +1,7 @@
 /*
  * File: z_mir_ray2.c
  * Overlay: ovl_Mir_Ray2
- * Description:
+ * Description: Reflectable light ray (static beam)
  */
 
 #include "z_mir_ray2.h"

@@ -1,7 +1,7 @@
 /*
  * File: z_obj_makekinsuta.c
  * Overlay: ovl_Obj_Makekinsuta
- * Description: Dirt Patch with Skulltula hiding in it
+ * Description: Soft soil with Skulltula hiding in it
  */
 
 #include "z_obj_makekinsuta.h"

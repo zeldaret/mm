@@ -1,7 +1,7 @@
 /*
  * File: z_dm_statue.c
  * Overlay: ovl_Dm_Statue
- * Description: Elegy of Emptiness - Beam of Light When Creating Statue
+ * Description: Pillars of water in Giant's Chamber
  */
 
 #include "z_dm_statue.h"

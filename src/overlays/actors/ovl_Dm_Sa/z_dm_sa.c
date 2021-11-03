@@ -1,7 +1,7 @@
 /*
  * File: z_dm_sa.c
  * Overlay: ovl_Dm_Sa
- * Description:
+ * Description: Glitched early version of Skull Kid stuck in a T-pose
  */
 
 #include "z_dm_sa.h"

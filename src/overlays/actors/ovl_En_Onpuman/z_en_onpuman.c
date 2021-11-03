@@ -1,7 +1,7 @@
 /*
  * File: z_en_onpuman.c
  * Overlay: ovl_En_Onpuman
- * Description: Monkey Instrument Prompt
+ * Description: Monkey Instrument Prompt (unused)
  */
 
 #include "z_en_onpuman.h"

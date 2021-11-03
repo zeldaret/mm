@@ -1,7 +1,7 @@
 /*
  * File: z_bg_market_step.c
  * Overlay: ovl_Bg_Market_Step
- * Description: West Clocktown - Stairs
+ * Description: West Clocktown - most scenery
  */
 
 #include "z_bg_market_step.h"

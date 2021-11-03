@@ -1,7 +1,7 @@
 /*
  * File: z_obj_spinyroll.c
  * Overlay: ovl_Obj_Spinyroll
- * Description: Spike-Covered Log
+ * Description: Horizontal Spike-Covered Log
  */
 
 #include "z_obj_spinyroll.h"

@@ -1,7 +1,7 @@
 /*
  * File: z_en_ssh.c
  * Overlay: ovl_En_Ssh
- * Description: Cursed Man
+ * Description: Cursed Man (Swamp Spider House)
  */
 
 #include "z_en_ssh.h"

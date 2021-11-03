@@ -1,7 +1,7 @@
 /*
  * File z_en_col_man.c
  * Overlay: ovl_En_Col_Man
- * Description: Gives you a Piece of Heart when you touch it?
+ * Description: Piece of Heart spawned by Fish2
  */
 
 #include "z_en_col_man.h"

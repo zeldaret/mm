@@ -1,7 +1,7 @@
 /*
  * File z_en_bomjimb.c
  * Overlay: ovl_En_Bomjimb
- * Description: Bomber Jim B
+ * Description: Bombers when chasing them
  */
 
 #include "z_en_bomjimb.h"

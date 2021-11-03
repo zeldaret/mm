@@ -1,7 +1,7 @@
 /*
  * File: z_en_encount3.c
  * Overlay: ovl_En_Encount3
- * Description:
+ * Description: Garo spawner
  */
 
 #include "z_en_encount3.h"

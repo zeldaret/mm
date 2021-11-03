@@ -1,7 +1,7 @@
 /*
  * File: z_dm_char06.c
  * Overlay: ovl_Dm_Char06
- * Description: Some unseen Mountain Village cutscene actor?
+ * Description: Thawing landscape fadeout in Mountain Village
  */
 
 #include "z_dm_char06.h"

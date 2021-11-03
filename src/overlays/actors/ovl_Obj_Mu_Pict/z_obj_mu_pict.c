@@ -1,7 +1,7 @@
 /*
  * File: z_obj_mu_pict.c
  * Overlay: ovl_Obj_Mu_Pict
- * Description:
+ * Description: Garo/Gibdo poster in the Music Box House
  */
 
 #include "z_obj_mu_pict.h"

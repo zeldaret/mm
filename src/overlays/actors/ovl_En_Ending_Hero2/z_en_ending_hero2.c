@@ -1,7 +1,7 @@
 /*
  * File: z_en_ending_hero2.c
  * Overlay: ovl_En_Ending_Hero2
- * Description:
+ * Description: Viscen watching moon disappearance and wedding
  */
 
 #include "z_en_ending_hero2.h"

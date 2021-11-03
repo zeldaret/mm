@@ -1,7 +1,7 @@
 /*
  * File: z_obj_chikuwa.c
  * Overlay: ovl_Obj_Chikuwa
- * Description: Falling Block Row
+ * Description: Falling row of blocks
  */
 
 #include "z_obj_chikuwa.h"

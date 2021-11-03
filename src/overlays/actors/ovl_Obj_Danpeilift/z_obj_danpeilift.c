@@ -1,7 +1,7 @@
 /*
  * File: z_obj_danpeilift.c
  * Overlay: ovl_Obj_Danpeilift
- * Description: Deku Shrine & Snowhead Temple Elevator
+ * Description: Deku Shrine & Snowhead Temple floating blocks
  */
 
 #include "z_obj_danpeilift.h"

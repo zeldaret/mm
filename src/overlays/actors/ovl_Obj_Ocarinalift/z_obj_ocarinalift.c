@@ -1,7 +1,7 @@
 /*
  * File: z_obj_ocarinalift.c
  * Overlay: ovl_Obj_Ocarinalift
- * Description: Elevator With Triforce Texture
+ * Description: Elevator With Triforce Texture (unused?)
  */
 
 #include "z_obj_ocarinalift.h"

@@ -1,7 +1,7 @@
 /*
  * File: z_oceff_wipe3.c
  * Overlay: ovl_Oceff_Wipe3
- * Description:
+ * Description: Unused OoT Saria's Song Ocarina Effect
  */
 
 #include "z_oceff_wipe3.h"

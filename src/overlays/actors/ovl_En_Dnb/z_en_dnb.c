@@ -1,7 +1,7 @@
 /*
  * File: z_en_dnb.c
  * Overlay: ovl_En_Dnb
- * Description:
+ * Description: Unused invisible snowy mountain that explodes?
  */
 
 #include "z_en_dnb.h"
