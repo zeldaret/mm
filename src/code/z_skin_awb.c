@@ -104,7 +104,7 @@ s32 func_801387D4(PSkinAwb* skin, SkinLimb** skeleton, MtxF* mf, u8 parentIndex,
     s32 temp_ret;
     MtxF sp28;
 
-    if (parentIndex == 0xFF) {
+    if (parentIndex == LIMB_DONE) {
         SkinMatrix_GetClear(&mtx);
     } else {
         mtx = &mf[(s32)parentIndex];
@@ -113,14 +113,14 @@ s32 func_801387D4(PSkinAwb* skin, SkinLimb** skeleton, MtxF* mf, u8 parentIndex,
     SkinMatrix_MtxFMtxFMult(mtx, &mf[limbIndex], &sp28);
     SkinMatrix_MtxFCopy(&sp28, &mf[limbIndex]);
 
-    if (limb->child != 0xFF) {
+    if (limb->child != LIMB_DONE) {
         temp_ret = func_801387D4(skin, skeleton, mf, limbIndex, limb->child);
         if (temp_ret) { // func_801387D4 only returns false
             return temp_ret;
         }
     }
 
-    if (limb->sibling != 0xFF) {
+    if (limb->sibling != LIMB_DONE) {
         temp_ret = func_801387D4(skin, skeleton, mf, parentIndex, limb->sibling);
         if (temp_ret) { // func_801387D4 only returns false
             return temp_ret;
@@ -141,24 +141,25 @@ s32 func_801388E4(PSkinAwb* skin, MtxF* arg1, Actor* actor, s32 arg3) {
     f32 xTransl;
     f32 zTransl;
     SkinLimb** skeleton = Lib_SegmentedToVirtual(skin->skeletonHeader->segment);
-    Vec3s* jointRot = &skin->skelAnime.jointTable[0];
+    Vec3s* jointRot = skin->skelAnime.jointTable;
 
     jointRot++;
-    xRot = jointRot[0].x;
-    yRot = jointRot[0].y;
-    zRot = jointRot[0].z;
+    xRot = jointRot->x;
+    yRot = jointRot->y;
+    zRot = jointRot->z;
 
-    if (arg3 != 0) {
+    if (arg3) {
         jointRot--;
-        xTransl = jointRot[0].x;
-        yTransl = jointRot[0].y;
-        zTransl = jointRot[0].z;
+        xTransl = jointRot->x;
+        yTransl = jointRot->y;
+        zTransl = jointRot->z;
         jointRot++;
 
         SkinMatrix_SetRotateRPYTranslate(arg1, xRot, yRot, zRot, xTransl, yTransl, zTransl);
     } else {
         SkinMatrix_SetRotateRPYTranslate(arg1, xRot, yRot, zRot, 0.0f, 0.0f, 0.0f);
     }
+
     jointRot++;
 
     for (i = 1; i < skin->skeletonHeader->limbCount; i++) {
@@ -179,9 +180,10 @@ s32 func_801388E4(PSkinAwb* skin, MtxF* arg1, Actor* actor, s32 arg3) {
         actor->shape.rot.z, actor->world.pos.x, actor->world.pos.y + (actor->shape.yOffset * actor->scale.y),
         actor->world.pos.z);
 
-    temp_ret = func_801387D4(skin, Lib_SegmentedToVirtual(skin->skeletonHeader->segment), arg1, 0xFF, 0);
+    temp_ret = func_801387D4(skin, Lib_SegmentedToVirtual(skin->skeletonHeader->segment), arg1, LIMB_DONE, 0);
     if (!temp_ret) { // func_801387D4 only returns false
         return temp_ret;
     }
+
     return false;
 }

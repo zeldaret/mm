@@ -17,11 +17,11 @@ typedef struct {
  * Describes a position displacement and a scale to be applied to a limb at index `limbIndex`
  */
 typedef struct {
-    /* 0x00 */ u8  limbIndex; // the limb to apply this modifications
+    /* 0x00 */ u8 limbIndex; // the limb to apply this modifications
     /* 0x02 */ s16 x;
     /* 0x04 */ s16 y;
     /* 0x06 */ s16 z;
-    /* 0x08 */ u8  scale;
+    /* 0x08 */ u8 scale;
 } SkinLimbModif; // size = 0xA
 
 typedef struct {
@@ -78,7 +78,11 @@ typedef struct {
 typedef void (*SkinPostLimbDraw)(struct Actor*, struct GlobalContext*, PSkinAwb*);
 typedef s32 (*SkinOverrideLimbDraw)(struct Actor*, struct GlobalContext*, s32, PSkinAwb*);
 
-void func_80137970(MtxF* mtx, SkinVtx* arg1, Struct_800A598C* arg2, Vtx* verticesDst, Vec3f* arg4);
+#define SKIN_DRAW_FLAG_NONE          0
+#define SKIN_DRAW_FLAG_1             (1 << 0)
+#define SKIN_DRAW_FLAG_CUSTOM_MATRIX (1 << 1)
+
+//void func_80137970(MtxF* mtx, SkinVtx* arg1, Struct_800A598C* arg2, Vtx* verticesDst, Vec3f* arg4);
 void func_80137B34(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 arg3);
 void Skin_DrawAnimatedLimb(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 arg3, s32 arg4);
 void Skin_DrawLimb(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, Gfx* arg3, s32 arg4);

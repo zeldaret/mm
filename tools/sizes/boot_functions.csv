@@ -162,7 +162,7 @@ asm/non_matchings/boot/boot_800862E0/func_8008641C.s,func_8008641C,0x8008641C,0x
 asm/non_matchings/boot/boot_800862E0/func_800864EC.s,func_800864EC,0x800864EC,0x27
 asm/non_matchings/boot/boot_800862E0/func_80086588.s,func_80086588,0x80086588,0x1C
 asm/non_matchings/boot/boot_800862E0/SystemArena_Init.s,SystemArena_Init,0x800865F8,0xA
-asm/non_matchings/boot/padsetup/func_80086620.s,func_80086620,0x80086620,0x50
+asm/non_matchings/boot/padsetup/PadSetup_Init.s,PadSetup_Init,0x80086620,0x50
 asm/non_matchings/boot/boot_80086760/func_80086760.s,func_80086760,0x80086760,0xD
 asm/non_matchings/boot/boot_80086760/func_80086794.s,func_80086794,0x80086794,0x8
 asm/non_matchings/boot/boot_80086760/func_800867B4.s,func_800867B4,0x800867B4,0x8

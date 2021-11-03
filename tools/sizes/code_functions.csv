@@ -1034,7 +1034,7 @@ asm/non_matchings/code/code_800E8EA0/func_800E9138.s,func_800E9138,0x800E9138,0x
 asm/non_matchings/code/code_800E8EA0/func_800E9250.s,func_800E9250,0x800E9250,0x44
 asm/non_matchings/code/z_common_data/func_800E9360.s,func_800E9360,0x800E9360,0x20
 asm/non_matchings/code/z_debug/GameInfo_Init.s,GameInfo_Init,0x800E93E0,0x24
-asm/non_matchings/code/z_debug_display/func_800E9470.s,func_800E9470,0x800E9470,0x6
+asm/non_matchings/code/z_debug_display/DebugDisplay_Init.s,DebugDisplay_Init,0x800E9470,0x6
 asm/non_matchings/code/z_debug_display/DebugDisplay_AddObject.s,DebugDisplay_AddObject,0x800E9488,0x37
 asm/non_matchings/code/z_debug_display/DebugDisplay_DrawObjects.s,DebugDisplay_DrawObjects,0x800E9564,0x24
 asm/non_matchings/code/z_debug_display/func_800E95F4.s,func_800E95F4,0x800E95F4,0x79
