@@ -649,11 +649,11 @@ s32 Actor_HasNoParent(Actor* actor, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8C50.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8C78.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_IsMounted.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8C9C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8CEC.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_NotMounted.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/func_800B8D10.s")
 

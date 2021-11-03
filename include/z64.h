@@ -1733,4 +1733,15 @@ enum fram_mode {
     FRAM_MODE_STATUS
 };
 
+typedef struct {
+    /* 0x000 */ SkeletonHeader* skeletonHeader;
+    /* 0x004 */ MtxF mtx;
+    /* 0x044 */ s32 avbCount;
+    /* 0x048 */ void* avbTbl;
+    /* 0x04C */ SkelAnime skelAnime;
+} PSkinAwb; // size = 0x90
+
+typedef void (*PSkinCallback1)(Actor*, GlobalContext*, PSkinAwb*);
+typedef s32 (*PSkinCallback2)(Actor*, GlobalContext*, s32, PSkinAwb*);
+
 #endif

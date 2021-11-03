@@ -844,8 +844,11 @@ beginseg
     name "ovl_En_Horse"
     compress
     include "build/src/overlays/actors/ovl_En_Horse/z_en_horse.o"
-    include "build/data/ovl_En_Horse/ovl_En_Horse.data.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_En_Horse/ovl_En_Horse_reloc.o"
+#else
     include "build/data/ovl_En_Horse/ovl_En_Horse.reloc.o"
+#endif
 endseg
 
 beginseg

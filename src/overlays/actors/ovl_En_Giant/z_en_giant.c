@@ -352,9 +352,9 @@ void EnGiant_PlaySound(EnGiant* this) {
 
 void EnGiant_UpdatePosition(EnGiant* this, GlobalContext* globalCtx, u32 actionIndex) {
     CsCmdActorAction* actorAction = globalCtx->csCtx.npcActions[actionIndex];
-    f32 floatUnk10 = actorAction->unk10;
+    f32 floatUnk10 = actorAction->startPos.y;
     s32 pad[2];
-    f32 floatUnk1C = actorAction->unk1C;
+    f32 floatUnk1C = actorAction->endPos.y;
     f32 functionTemp;
 
     functionTemp = func_800F5A8C(actorAction->endFrame, actorAction->startFrame, globalCtx->csCtx.frames, globalCtx);

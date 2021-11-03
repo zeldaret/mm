@@ -922,7 +922,7 @@ extern s32 graphNumGameStates;
 // extern UNK_TYPE2 D_801BDA7C;
 extern s32 D_801BDA9C;
 extern UNK_TYPE4 D_801BDAA0;
-// extern UNK_TYPE4 D_801BDAA4;
+extern s32 D_801BDAA4;
 // extern UNK_TYPE2 D_801BDAA8;
 // extern UNK_TYPE2 D_801BDAAA;
 // extern UNK_TYPE2 D_801BDAAC;
