@@ -1,7 +1,7 @@
 #include "ultra64.h"
 #include "global.h"
 
-static s32 D_801FD040[4];
+static s32 framDeviceInfo[4];
 static OSIoMesg framDeviceInfoQuery;
 static OSMesgQueue __osFlashMessageQ;
 static OSPiHandle __osFlashHandler;
