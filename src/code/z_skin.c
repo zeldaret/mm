@@ -2,7 +2,7 @@
 #include "z64skin.h"
 
 extern MtxF D_801F5AC0[60];
-//char D_80160FC0[0x10];
+// char D_80160FC0[0x10];
 
 void func_80137970(MtxF* mtx, SkinVtx* skinVertices, Struct_800A598C* arg2, Vtx* verticesDst, Vec3f* arg4) {
     SkinVtx* skinVtxEntry;
@@ -61,13 +61,13 @@ void func_80137B34(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 a
     Vec3f spDC;
     Vec3f spD0;
     SkinLimbModif* modifEntry;
-    SkinLimb *new_var;
+    SkinLimb* new_var;
     Struct_800A598C* temp_2;
 
     OPEN_DISPS(gfxCtx);
 
     skeleton = (SkinLimb**)Lib_SegmentedToVirtual(skin->skeletonHeader->segment);
-    new_var = (SkinLimb *) Lib_SegmentedToVirtual(skeleton[limbIndex]);
+    new_var = (SkinLimb*)Lib_SegmentedToVirtual(skeleton[limbIndex]);
     data = Lib_SegmentedToVirtual(new_var->limbData);
     temp_2 = (Struct_800A598C*)Lib_SegmentedToVirtual(data->unk_4);
 
@@ -102,7 +102,8 @@ void func_80137B34(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, s32 a
             spDC.y = 0.0f;
             spDC.z = 0.0f;
 
-            for (modifEntry = limbsModifications; modifEntry < &limbsModifications[limbsModificationsCount]; modifEntry++) {
+            for (modifEntry = limbsModifications; modifEntry < &limbsModifications[limbsModificationsCount];
+                 modifEntry++) {
                 temp_f20 = modifEntry->scale * 0.01f;
 
                 sp88.x = modifEntry->x;
@@ -173,8 +174,8 @@ void Skin_DrawLimb(GraphicsContext* gfxCtx, PSkinAwb* skin, s32 limbIndex, Gfx* 
     CLOSE_DISPS(gfxCtx);
 }
 
-void Skin_DrawImpl(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinPostLimbDraw postLimbDraw, SkinOverrideLimbDraw overrideLimbDraw,
-                   s32 arg5, s32 arg6, s32 arg7) {
+void Skin_DrawImpl(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinPostLimbDraw postLimbDraw,
+                   SkinOverrideLimbDraw overrideLimbDraw, s32 arg5, s32 arg6, s32 arg7) {
     s32 i;
     SkinLimb** skeleton;
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
@@ -228,20 +229,20 @@ void func_80138228(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinP
 }
 
 // Skin_Draw... Something?
-void func_80138258(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinPostLimbDraw postLimbDraw, SkinOverrideLimbDraw overrideLimbDraw,
-                   s32 arg5) {
+void func_80138258(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinPostLimbDraw postLimbDraw,
+                   SkinOverrideLimbDraw overrideLimbDraw, s32 arg5) {
     Skin_DrawImpl(actor, globalCtx, skin, postLimbDraw, overrideLimbDraw, arg5, false, 0);
 }
 
 // Skin_Draw... Something?
-void func_8013828C(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinPostLimbDraw postLimbDraw, SkinOverrideLimbDraw overrideLimbDraw,
-                   s32 arg5, s32 arg6) {
+void func_8013828C(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinPostLimbDraw postLimbDraw,
+                   SkinOverrideLimbDraw overrideLimbDraw, s32 arg5, s32 arg6) {
     Skin_DrawImpl(actor, globalCtx, skin, postLimbDraw, overrideLimbDraw, arg5, arg6, 0);
 }
 
 // Skin_Draw?
-void func_801382C4(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinPostLimbDraw postLimbDraw, SkinOverrideLimbDraw overrideLimbDraw,
-                   s32 arg5, s32 arg6, s32 arg7) {
+void func_801382C4(Actor* actor, GlobalContext* globalCtx, PSkinAwb* skin, SkinPostLimbDraw postLimbDraw,
+                   SkinOverrideLimbDraw overrideLimbDraw, s32 arg5, s32 arg6, s32 arg7) {
     Skin_DrawImpl(actor, globalCtx, skin, postLimbDraw, overrideLimbDraw, arg5, arg6, arg7);
 }
 

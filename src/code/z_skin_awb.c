@@ -10,7 +10,8 @@ void func_80138410(PSkinAwb* skin) {
 void Skin_InitAnimatedLimb(GameState* gameState, PSkinAwb* skin, s32 limbIndex) {
     s32 i;
     SkinLimb** skeleton = Lib_SegmentedToVirtual(skin->skeletonHeader->segment);
-    SkinAnimatedLimbData* animatedLimbData = Lib_SegmentedToVirtual(((SkinLimb*)Lib_SegmentedToVirtual(skeleton[limbIndex]))->limbData);
+    SkinAnimatedLimbData* animatedLimbData =
+        Lib_SegmentedToVirtual(((SkinLimb*)Lib_SegmentedToVirtual(skeleton[limbIndex]))->limbData);
     Struct_800A598C* temp_v0 = Lib_SegmentedToVirtual(animatedLimbData->unk_4);
 
     for (i = 0; i < ARRAY_COUNT(skin->avbTbl->buf); i++) {
@@ -21,7 +22,7 @@ void Skin_InitAnimatedLimb(GameState* gameState, PSkinAwb* skin, s32 limbIndex) 
             SkinVtx* skinVertices = Lib_SegmentedToVirtual(phi_s0->skinVertices);
             SkinVtx* skinVtxEntry;
 
-            for (skinVtxEntry = skinVertices; skinVtxEntry < skinVertices + phi_s0->skinVerticesCount; ) {
+            for (skinVtxEntry = skinVertices; skinVtxEntry < skinVertices + phi_s0->skinVerticesCount;) {
                 Vtx* vtx = &vertices[skinVtxEntry->vtxIndex];
 
                 skinVtxEntry++;
@@ -35,8 +36,7 @@ void Skin_InitAnimatedLimb(GameState* gameState, PSkinAwb* skin, s32 limbIndex) 
     }
 }
 
-void Skin_Init(GameState* gameState, PSkinAwb* skin, SkeletonHeader* skeletonHeader,
-                   AnimationHeader* animationHeader) {
+void Skin_Init(GameState* gameState, PSkinAwb* skin, SkeletonHeader* skeletonHeader, AnimationHeader* animationHeader) {
     s32 limbCount;
     s32 i;
     SkinLimb** skeleton;
@@ -52,17 +52,17 @@ void Skin_Init(GameState* gameState, PSkinAwb* skin, SkeletonHeader* skeletonHea
     for (i = 0; i < limbCount; i++) {
         SkinAvb* avbEntry = &skin->avbTbl[i];
 
-        if ((((SkinLimb*)Lib_SegmentedToVirtual(skeleton[i]))->segmentType != SKIN_LIMB_TYPE_ANIMATED) || (((SkinLimb*)Lib_SegmentedToVirtual(skeleton[i]))->segment == NULL)) {
+        if ((((SkinLimb*)Lib_SegmentedToVirtual(skeleton[i]))->segmentType != SKIN_LIMB_TYPE_ANIMATED) ||
+            (((SkinLimb*)Lib_SegmentedToVirtual(skeleton[i]))->segment == NULL)) {
             avbEntry->index = 0;
 
             avbEntry->buf[0] = NULL;
             avbEntry->buf[1] = NULL;
         } else {
-            SkinAnimatedLimbData* temp_s1 = Lib_SegmentedToVirtual((((SkinLimb*)Lib_SegmentedToVirtual(skeleton[i]))->limbData));
+            SkinAnimatedLimbData* temp_s1 =
+                Lib_SegmentedToVirtual((((SkinLimb*)Lib_SegmentedToVirtual(skeleton[i]))->limbData));
 
-            {
-                s32 tmp;
-            }
+            { s32 tmp; }
             avbEntry->index = 0;
             avbEntry->buf[0] = ZeldaArena_Malloc(temp_s1->vtxCount * sizeof(Vtx));
             avbEntry->buf[1] = ZeldaArena_Malloc(temp_s1->vtxCount * sizeof(Vtx));
