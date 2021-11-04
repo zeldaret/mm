@@ -1646,6 +1646,38 @@ typedef struct {
     /* 0x8 */ s32 unk8;
 } struct_80133038_arg2; // size = 0xC
 
+typedef s32 (*func_8013E748_arg6)(struct GlobalContext*, Actor*, Vec3s*);
+
+typedef s32 (*func_8013E640_arg6)(struct GlobalContext*, Actor*, Actor*, void*);
+
+struct struct_8013DF3C_arg1;
+typedef void (*struct_8013DF3C_arg1_unk_func1)(struct GlobalContext*, struct struct_8013DF3C_arg1*);
+typedef s32 (*struct_8013DF3C_arg1_unk_func2)(struct GlobalContext*, struct struct_8013DF3C_arg1*);
+
+typedef struct struct_8013DF3C_arg1 {
+    /* 0x00 */ Path* setupPathList;
+    /* 0x04 */ s32 pathIndex;
+    /* 0x08 */ Vec3s* points;
+    /* 0x0C */ s32 count;
+    /* 0x10 */ s32 unk_10;
+    /* 0x14 */ s32 unk_14;
+    /* 0x18 */ s32 unk_18;
+    /* 0x1C */ u8 unk_1C;
+    /* 0x1D */ u8 unk_1D;
+    /* 0x20 */ Vec3f unk_20;
+    /* 0x2C */ Vec3f unk_2C;
+    /* 0x38 */ Vec3f unk_38;
+    /* 0x44 */ Vec3f* unk_44;
+    /* 0x48 */ Actor* actor;
+    /* 0x4C */ f32 unk_4C;
+    /* 0x50 */ f32 unk_50;
+    /* 0x54 */ Vec3s unk_54;
+    /* 0x5C */ struct_8013DF3C_arg1_unk_func1 unk_5C;
+    /* 0x60 */ struct_8013DF3C_arg1_unk_func2 unk_60;
+    /* 0x64 */ struct_8013DF3C_arg1_unk_func2 unk_64;
+    /* 0x68 */ struct_8013DF3C_arg1_unk_func2 unk_68;
+} struct_8013DF3C_arg1; // size = 0x6C
+
 typedef struct {
     /* 0x00 */ u32 type;
     /* 0x04 */ u32 setScissor;

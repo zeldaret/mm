@@ -215,6 +215,8 @@ typedef void (*PostLimbDrawFlex)(struct GlobalContext* globalCtx, s32 limbIndex,
 
 typedef void (*UnkActorDraw)(struct GlobalContext* globalCtx, s32 limbIndex, struct Actor* actor);
 
+typedef void (*UnkActorDraw2)(struct GlobalContext* globalCtx, s32 limbIndex, struct Actor* actor, Gfx** gfx);
+
 typedef void (*AnimationEntryCallback)(struct GlobalContext*, AnimationEntryData*);
 
 extern u32 link_animetion_segment;
