@@ -1143,16 +1143,13 @@ for segment in files_spec:
                 i += 1
                 dmadata_entry = dmadata[i*0x10:(i+1)*0x10]
 
-print("Disassembling Segments")
-
-# Textual disassembly for each segment
-for segment in files_spec:
+def disassemble_segment(segment):
     if segment[2] == 'makerom':
         os.makedirs(f"{ASM_OUT}/makerom/", exist_ok=True)
         rom_header = segment[3][0][4]
         ipl3 = segment[3][1][4]
         entry = segment[3][2][4]
-        
+
         pi_dom1_reg, clockrate, entrypoint, revision, \
             chksum1, chksum2, pad1, pad2, \
                 rom_name, pad3, cart, cart_id, \
@@ -1216,7 +1213,7 @@ for segment in files_spec:
         #with open(ASM_OUT + "/makerom/entry.s", "w") as outfile:
         #    outfile.write(out)
 
-        continue
+        return
     elif segment[2] == 'dmadata':
         os.makedirs(f"{ASM_OUT}/dmadata/", exist_ok=True)
         out = f""".include "macro.inc"
@@ -1262,7 +1259,7 @@ glabel {variables_ast[0x8009F8B0][0]}
 """
         with open(ASM_OUT + "/dmadata/dmadata.s", "w") as outfile:
             outfile.write(out)
-        continue
+        return
 
     for section in segment[3]:
         if (section[0] == section[1] and section[2] != 'reloc') or (section[2] != 'bss' and len(section[4]) == 0):
@@ -1298,6 +1295,12 @@ glabel {variables_ast[0x8009F8B0][0]}
             os.makedirs(f"{DATA_OUT}/{segment_dirname}/", exist_ok=True)
             with open(f"{DATA_OUT}/{segment_dirname}/{segment[0]}.reloc.s", "w") as outfile:
                 outfile.write(result)
+
+print("Disassembling Segments")
+
+# Textual disassembly for each segment
+for segment in files_spec:
+    disassemble_segment(segment)
 
 print("Splitting text and migrating rodata")
 
