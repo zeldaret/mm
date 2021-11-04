@@ -7,6 +7,9 @@ void func_80138410(PSkinAwb* skin) {
     skin->avbTbl = NULL;
 }
 
+/**
+ * Initialises the Vtx buffers used for limb at index `limbIndex`
+ */
 void Skin_InitAnimatedLimb(GameState* gameState, PSkinAwb* skin, s32 limbIndex) {
     s32 i;
     SkinLimb** skeleton = Lib_SegmentedToVirtual(skin->skeletonHeader->segment);
@@ -36,6 +39,10 @@ void Skin_InitAnimatedLimb(GameState* gameState, PSkinAwb* skin, s32 limbIndex) 
     }
 }
 
+/**
+ * Initializes a skin skeleton to looping animation, dynamically allocating the frame tables,
+ * and dynamically allocating and initializing the Vtx buffers for its animated limbs
+ */
 void Skin_Init(GameState* gameState, PSkinAwb* skin, SkeletonHeader* skeletonHeader, AnimationHeader* animationHeader) {
     s32 limbCount;
     s32 i;
@@ -75,6 +82,9 @@ void Skin_Init(GameState* gameState, PSkinAwb* skin, SkeletonHeader* skeletonHea
     SkelAnime_InitSkin(gameState, &skin->skelAnime, skeletonHeader, animationHeader);
 }
 
+/**
+ * Frees the dynamically allocated Vtx buffers and tables
+ */
 void Skin_Free(GameState* gameState, PSkinAwb* skin) {
     if (skin->avbTbl != NULL) {
         s32 i;
