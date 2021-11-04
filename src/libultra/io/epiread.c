@@ -1,3 +1,11 @@
 #include "global.h"
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/epiread/osEPiReadIo.s")
+s32 osEPiReadIo(OSPiHandle* handle, u32 devAddr, u32* data) {
+    register s32 ret;
+
+    __osPiGetAccess();
+    ret = __osEPiRawReadIo(handle, devAddr, data);
+    __osPiRelAccess();
+
+    return ret;
+}
