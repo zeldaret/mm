@@ -1,3 +1,9 @@
+/*
+ * File: z_boss_04.c
+ * Overlay: ovl_Boss_04
+ * Description: Wart
+ */
+
 #include "z_boss_04.h"
 
 #define FLAGS 0x00000035

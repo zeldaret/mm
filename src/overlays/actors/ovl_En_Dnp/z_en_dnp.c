@@ -102,38 +102,38 @@ static s32 D_80B3DE58[] = {
 
 s32 func_80B3CA20(EnDnp* this) {
     if ((this->unk_340 == 2) || (this->unk_340 == 9)) {
-        if (func_801378B8(&this->skelAnime, 1.0f) || func_801378B8(&this->skelAnime, 5.0f) ||
-            func_801378B8(&this->skelAnime, 9.0f) || func_801378B8(&this->skelAnime, 13.0f)) {
+        if (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 5.0f) ||
+            Animation_OnFrame(&this->skelAnime, 9.0f) || Animation_OnFrame(&this->skelAnime, 13.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_DEKUHIME_TURN);
         }
     } else if ((this->unk_340 == 24) || (this->unk_340 == 7)) {
-        if (func_801378B8(&this->skelAnime, 1.0f)) {
+        if (Animation_OnFrame(&this->skelAnime, 1.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_DEKUHIME_TURN);
         }
     } else if (this->unk_340 == 14) {
-        if (func_801378B8(&this->skelAnime, 7.0f)) {
+        if (Animation_OnFrame(&this->skelAnime, 7.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_DEKUHIME_GREET);
         }
-        if (func_801378B8(&this->skelAnime, 22.0f)) {
+        if (Animation_OnFrame(&this->skelAnime, 22.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_DEKUHIME_GREET2);
         }
     } else if (this->unk_340 == 8) {
-        if (func_801378B8(&this->skelAnime, 9.0f)) {
+        if (Animation_OnFrame(&this->skelAnime, 9.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_DEKUHIME_GREET);
         }
-        if (func_801378B8(&this->skelAnime, 18.0f)) {
+        if (Animation_OnFrame(&this->skelAnime, 18.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_DEKUHIME_GREET2);
         }
     } else if ((this->unk_340 == 17) && (this->unk_340 == 18)) {
-        if (func_801378B8(&this->skelAnime, 7.0f) || func_801378B8(&this->skelAnime, 15.0f)) {
+        if (Animation_OnFrame(&this->skelAnime, 7.0f) || Animation_OnFrame(&this->skelAnime, 15.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_DEKUHIME_WALK);
         }
     } else if (this->unk_340 == 21) {
-        if (func_801378B8(&this->skelAnime, 17.0f)) {
+        if (Animation_OnFrame(&this->skelAnime, 17.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_DEKUHIME_WALK);
         }
     } else if (this->unk_340 == 23) {
-        if (func_801378B8(&this->skelAnime, 3.0f)) {
+        if (Animation_OnFrame(&this->skelAnime, 3.0f)) {
             Audio_PlayActorSound2(&this->actor, NA_SE_EN_DEKUHIME_WALK);
         }
     }
@@ -172,7 +172,7 @@ void func_80B3CD1C(EnDnp* this) {
 }
 
 s32 func_80B3CDA4(EnDnp* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s16 temp_s0 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
     Vec3f sp3C;
     Vec3f sp30;
@@ -289,7 +289,7 @@ void func_80B3D11C(EnDnp* this, GlobalContext* globalCtx) {
         this->unk_324 = val;
         if (((this->unk_340 == 10) || (this->unk_340 == 12) || (this->unk_340 == 5) || (this->unk_340 == 19) ||
              (this->unk_340 == 22) || (this->unk_340 == 24)) &&
-            func_801378B8(&this->skelAnime, this->skelAnime.animFrameCount)) {
+            Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             func_80B3CC38(this, this->unk_340 + 1);
         }
         func_800EDF24(&this->actor, globalCtx, temp_v0);
@@ -305,7 +305,7 @@ void func_80B3D2D4(EnDnp* this, GlobalContext* globalCtx) {
 }
 
 void func_80B3D338(EnDnp* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if ((this->unk_32E != 0) && (func_80152498(&globalCtx->msgCtx) == 2)) {
         Actor_MarkForDeath(&this->actor);
@@ -321,7 +321,7 @@ void func_80B3D338(EnDnp* this, GlobalContext* globalCtx) {
 }
 
 void func_80B3D3F8(EnDnp* this, GlobalContext* globalCtx) {
-    if (func_8010BF58(&this->actor, globalCtx, D_80B3DE58, 0, &this->unk_328)) {
+    if (func_8010BF58(&this->actor, globalCtx, D_80B3DE58, NULL, &this->unk_328)) {
         func_8013AED4(&this->unk_322, 3, 7);
         this->unk_322 &= ~8;
         this->actionFunc = func_80B3D2D4;
@@ -358,7 +358,7 @@ void EnDnp_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnDnp* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 16.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06010D60, NULL, this->jointTable, this->morphTable, 26);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06010D60, NULL, this->jointTable, this->morphTable, 26);
     this->unk_340 = -1;
     func_80B3CC38(this, 15);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -405,12 +405,12 @@ void EnDnp_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (!func_80B3CF60(this, globalCtx) && func_80B3D044(this, globalCtx)) {
         func_80B3D11C(this, globalCtx);
-        SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+        SkelAnime_Update(&this->skelAnime);
         func_80B3CD1C(this);
         func_80B3CEC0(this, globalCtx);
     } else {
         this->actionFunc(this, globalCtx);
-        SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+        SkelAnime_Update(&this->skelAnime);
         func_80B3CD1C(this);
         func_80B3CEC0(this, globalCtx);
         Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
@@ -435,8 +435,8 @@ s32 func_80B3D974(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4, s32 ar
     Vec3s sp6C;
     MtxF sp2C;
 
-    SysMatrix_MultiplyVector3fByState(&D_801D15B0, &sp74);
-    SysMatrix_CopyCurrentState(&sp2C);
+    Matrix_MultiplyVector3fByState(&D_801D15B0, &sp74);
+    Matrix_CopyCurrentState(&sp2C);
     func_8018219C(&sp2C, &sp6C, 0);
     *arg2 = sp74;
     if (arg4 == 0) {
@@ -478,13 +478,13 @@ void func_80B3DAA0(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     if (limbIndex == 12) {
         func_80B3D974(this->unk_330 + 0x4000, this->unk_332 + this->actor.shape.rot.y + 0x4000, &this->unk_1D8,
                       &this->unk_1E4, phi_v1, phi_v0);
-        SysMatrix_StatePop();
-        SysMatrix_InsertTranslation(this->unk_1D8.x, this->unk_1D8.y, this->unk_1D8.z, MTXMODE_NEW);
+        Matrix_StatePop();
+        Matrix_InsertTranslation(this->unk_1D8.x, this->unk_1D8.y, this->unk_1D8.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateY(this->unk_1E4.y, MTXMODE_APPLY);
-        SysMatrix_InsertXRotation_s(this->unk_1E4.x, MTXMODE_APPLY);
-        SysMatrix_InsertZRotation_s(this->unk_1E4.z, MTXMODE_APPLY);
-        SysMatrix_StatePush();
+        Matrix_InsertXRotation_s(this->unk_1E4.x, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(this->unk_1E4.z, MTXMODE_APPLY);
+        Matrix_StatePush();
     }
 }
 
@@ -504,8 +504,8 @@ void EnDnp_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B3DEAC[this->unk_336]));
 
-        func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount,
-                      NULL, func_80B3DA88, func_80B3DAA0, &this->actor);
+        func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
+                      func_80B3DA88, func_80B3DAA0, &this->actor);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }

@@ -1,6 +1,8 @@
 #include "global.h"
 #include "vt.h"
 
+extern const u32 sFaultDrawerFont[];
+
 FaultDrawer* sFaultDrawContext = &sFaultDrawerStruct;
 FaultDrawer sFaultDrawerDefault = {
     (u16*)0x803DA800,                   // fb - TODO map out buffers in this region and avoid hard-coded pointer
@@ -14,7 +16,7 @@ FaultDrawer sFaultDrawerDefault = {
     GPACK_RGBA5551(0, 0, 0, 0),         // backColor
     22,                                 // cursorX
     16,                                 // cursorY
-    (u32*)&sFaultDrawerFont,            // font
+    (u32*)sFaultDrawerFont,             // font
     8,                                  // charW
     8,                                  // charH
     0,                                  // charWPad
@@ -142,7 +144,7 @@ void FaultDrawer_FillScreen() {
 
 #pragma GLOBAL_ASM("asm/non_matchings/boot/fault_drawer/FaultDrawer_FormatStringFunc.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/boot/fault_drawer/D_80099080.s")
+const char D_80099080[] = "(null)";
 
 void FaultDrawer_VPrintf(const char* str, char* args) { // va_list
     _Printf((PrintCallback)FaultDrawer_FormatStringFunc, sFaultDrawContext, str, args);
@@ -153,6 +155,8 @@ void FaultDrawer_Printf(const char* fmt, ...) {
     va_start(args, fmt);
 
     FaultDrawer_VPrintf(fmt, args);
+
+    va_end(args);
 }
 
 void FaultDrawer_DrawText(s32 x, s32 y, const char* fmt, ...) {
@@ -161,6 +165,8 @@ void FaultDrawer_DrawText(s32 x, s32 y, const char* fmt, ...) {
 
     FaultDrawer_SetCursor(x, y);
     FaultDrawer_VPrintf(fmt, args);
+
+    va_end(args);
 }
 
 void FaultDrawer_SetDrawerFB(void* fb, u16 w, u16 h) {
@@ -169,7 +175,7 @@ void FaultDrawer_SetDrawerFB(void* fb, u16 w, u16 h) {
     sFaultDrawContext->h = h;
 }
 
-void FaultDrawer_SetInputCallback(void (*callback)()) {
+void FaultDrawer_SetInputCallback(void* callback) {
     sFaultDrawContext->inputCallback = callback;
 }
 

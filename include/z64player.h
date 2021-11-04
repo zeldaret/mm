@@ -176,7 +176,7 @@ typedef struct Player {
     /* 0x386 */ u16 unk_386;
     /* 0x388 */ Actor* unk_388;
     /* 0x38C */ s16 unk_38C;
-    /* 0x390 */ Actor* unk_390;
+    /* 0x390 */ Actor* rideActor;
     /* 0x394 */ u8 unk_394;
     /* 0x395 */ u8 unk_395;
     /* 0x396 */ u8 unk_396;
@@ -251,7 +251,7 @@ typedef struct Player {
     /* 0xAEC */ f32 unk_AEC;
     /* 0xAF0 */ Vec3f unk_AF0[2];
     /* 0xB08 */ f32 unk_B08[8];
-    /* 0xB28 */ s16 unk_B28;
+    /* 0xB28 */ s16 unk_B28; //Burning stick timer?
     /* 0xB2A */ s8 unk_B2A;
     /* 0xB2B */ s8 unk_B2B;
     /* 0xB2C */ f32 windSpeed;

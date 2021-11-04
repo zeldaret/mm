@@ -1,3 +1,9 @@
+/*
+ * File: z_en_okarina_effect.c
+ * Overlay: ovl_En_Okarina_Effect
+ * Description:
+ */
+
 #include "z_en_okarina_effect.h"
 
 #define FLAGS 0x02000010

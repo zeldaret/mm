@@ -1,3 +1,9 @@
+/*
+ * File z_elf_msg5.c
+ * Overlay: ovl_Elf_Msg5
+ * Description: Tatl Message (Another proximity-activated dialogue?)
+ */
+
 #include "z_elf_msg5.h"
 
 #define FLAGS 0x00000010

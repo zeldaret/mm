@@ -1,3 +1,9 @@
+/*
+ * File z_en_box.c
+ * Overlay: ovl_En_Box
+ * Description: Chest
+ */
+
 #include "z_en_box.h"
 
 #define FLAGS 0x00000000

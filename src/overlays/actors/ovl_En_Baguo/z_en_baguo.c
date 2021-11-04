@@ -1,3 +1,9 @@
+/*
+ * File z_en_baguo.c
+ * Overlay: ovl_En_Baguo
+ * Description: Nejiron
+ */
+
 #include "z_en_baguo.h"
 
 #define FLAGS 0x00000005

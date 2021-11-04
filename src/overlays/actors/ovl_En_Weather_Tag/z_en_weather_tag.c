@@ -1,3 +1,9 @@
+/*
+ * File: z_en_weather_tag.c
+ * Overlay: ovl_En_Weather_Tag
+ * Description: Local weather changes
+ */
+
 #include "z_en_weather_tag.h"
 
 #define FLAGS 0x00000010
@@ -44,7 +50,6 @@ const ActorInit En_Weather_Tag_InitVars = {
 extern f32 D_801F4E74;
 extern u8 D_801BDBB8;
 extern u8 D_801BDBB4;
-extern u8 D_801BDBB0;
 extern u8 D_801F4E30;
 extern s16 D_801F4E7A;
 
@@ -111,7 +116,7 @@ void EnWeatherTag_Init(Actor* thisx, GlobalContext* globalCtx) {
 // called WeatherTag_CheckEnableWeatherEffect in OOT, that's where "weatherMode" came from
 u8 func_80966608(EnWeatherTag* this, GlobalContext* globalCtx, UNK_TYPE a3, UNK_TYPE a4, u8 new1F, u8 new20, u16 new24,
                  u8 weatherMode) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     u8 returnVal = 0;
 
     if (WEATHER_TAG_RANGE100(this) > Actor_XZDistanceBetweenActors(&player->actor, &this->actor)) {
@@ -141,7 +146,7 @@ u8 func_80966608(EnWeatherTag* this, GlobalContext* globalCtx, UNK_TYPE a3, UNK_
 // called WeatherTag_CheckRestoreWeather in OOT
 u8 func_80966758(EnWeatherTag* this, GlobalContext* globalCtx, UNK_TYPE a3, UNK_TYPE a4, u8 new1F, u8 new20,
                  u16 new24) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     u8 returnVal = 0;
 
     if (WEATHER_TAG_RANGE100(this) < Actor_XZDistanceBetweenActors(&player->actor, &this->actor)) {
@@ -167,7 +172,7 @@ u8 func_80966758(EnWeatherTag* this, GlobalContext* globalCtx, UNK_TYPE a3, UNK_
 
 // modify wind?
 void func_8096689C(EnWeatherTag* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     f32 distance;
     f32 partialResult;
 
@@ -411,13 +416,14 @@ void EnWeatherTag_Unused_80967250(EnWeatherTag* this, GlobalContext* globalCtx) 
 
 // WEATHERTAG_TYPE_WATERMURK: (pinnacle rock, zora cape, zora coast)
 void func_809672DC(EnWeatherTag* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 pad;
     f32 distance;
     f32 range;
     f32 strength = 0.0f;
 
-    func_800BCCDC(this->pathPoints, this->pathCount, &PLAYER->actor.world.pos, &this->actor.world.pos, 0);
+    func_800BCCDC(this->pathPoints, this->pathCount, &GET_PLAYER(globalCtx)->actor.world.pos, &this->actor.world.pos,
+                  0);
 
     distance = Actor_XZDistanceBetweenActors(&player->actor, &this->actor);
     range = WEATHER_TAG_RANGE100(this);
@@ -442,7 +448,7 @@ void func_809672DC(EnWeatherTag* this, GlobalContext* globalCtx) {
 // WEATHERTAG_TYPE_LOCALDAY2RAIN: rain proximity as approaching rainy scene
 // (milk road day 2 approaching ranch it rains, walking away towards termfield no rain)
 void func_809674C8(EnWeatherTag* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (Actor_XZDistanceBetweenActors(&player->actor, &this->actor) < WEATHER_TAG_RANGE100(this)) {
         if (CURRENT_DAY == 2) {
@@ -466,7 +472,8 @@ void func_809674C8(EnWeatherTag* this, GlobalContext* globalCtx) {
 
 // WEATHERTAG_TYPE_LOCALDAY2RAIN 2
 void func_80967608(EnWeatherTag* this, GlobalContext* globalCtx) {
-    if ((WEATHER_TAG_RANGE100(this) + 10.0f) < Actor_XZDistanceBetweenActors(&PLAYER->actor, &this->actor)) {
+    if ((WEATHER_TAG_RANGE100(this) + 10.0f) <
+        Actor_XZDistanceBetweenActors(&GET_PLAYER(globalCtx)->actor, &this->actor)) {
         D_801BDBB0 = 0;
         EnWeatherTag_SetupAction(this, func_809674C8);
     }

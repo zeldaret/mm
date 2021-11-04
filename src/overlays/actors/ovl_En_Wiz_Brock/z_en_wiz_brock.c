@@ -1,3 +1,9 @@
+/*
+ * File: z_en_wiz_brock.c
+ * Overlay: ovl_En_Wiz_Brock
+ * Description: Wizzrobe Warp Platform
+ */
+
 #include "z_en_wiz_brock.h"
 
 #define FLAGS 0x08000010

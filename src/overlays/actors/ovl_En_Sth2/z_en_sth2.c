@@ -1,3 +1,9 @@
+/*
+ * File: z_en_sth2.c
+ * Overlay: ovl_En_Sth2
+ * Description:
+ */
+
 #include "z_en_sth2.h"
 
 #define FLAGS 0x00000009

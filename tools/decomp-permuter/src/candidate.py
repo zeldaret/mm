@@ -1,65 +1,60 @@
-from typing import List, Dict, Optional, Callable, Optional, Tuple, Iterable
 import copy
+from dataclasses import dataclass, field
 import functools
-import os
+from typing import Optional, Tuple
 
-import attr
-from pycparser import CParser, c_ast as ca
+from pycparser import c_ast as ca
 
 from .compiler import Compiler
 from .randomizer import Randomizer
 from .scorer import Scorer
-from .perm.perm import EvalState, Perm
+from .perm.perm import EvalState
+from .perm.ast import apply_ast_perms
 from .helpers import try_remove
 from .profiler import Profiler
-from . import perm
 from . import ast_util
 
 
-@attr.s
+@dataclass
 class CandidateResult:
-    """
-    Represents the result of scoring a candidate, and is sent from child to
-    parent processes.
-    """
+    """Represents the result of scoring a candidate, and is sent from child to
+    parent processes, or server to client with p@h."""
 
-    score: int = attr.ib()
-    hash: str = attr.ib()
-    source: Optional[str] = attr.ib()
-    profiler: Profiler = attr.ib(factory=Profiler)
+    score: int
+    hash: Optional[str]
+    source: Optional[str]
+    profiler: Optional[Profiler] = None
 
 
-@attr.s
+@dataclass
 class Candidate:
     """
     Represents a AST candidate created from a source which can be randomized
     (possibly multiple times), compiled, and scored.
     """
 
-    ast: ca.FileAST = attr.ib()
+    ast: ca.FileAST
 
-    orig_fn: ca.FuncDef = attr.ib()
-    fn_index: int = attr.ib()
-    rng_seed: int = attr.ib()
-    randomizer: Randomizer = attr.ib()
-    score_value: Optional[int] = attr.ib(init=False, default=None)
-    score_hash: Optional[str] = attr.ib(init=False, default=None)
-    _cache_source: Optional[str] = attr.ib(init=False, default=None)
+    fn_index: int
+    rng_seed: int
+    randomizer: Randomizer
+    score_value: Optional[int] = field(init=False, default=None)
+    score_hash: Optional[str] = field(init=False, default=None)
+    _cache_source: Optional[str] = field(init=False, default=None)
 
     @staticmethod
     @functools.lru_cache(maxsize=16)
     def _cached_shared_ast(
         source: str, fn_name: str
     ) -> Tuple[ca.FuncDef, int, ca.FileAST]:
-        parser = CParser()
-        ast = parser.parse(source)
+        ast = ast_util.parse_c(source)
         orig_fn, fn_index = ast_util.extract_fn(ast, fn_name)
         ast_util.normalize_ast(orig_fn, ast)
         return orig_fn, fn_index, ast
 
     @staticmethod
     def from_source(
-        source: str, fn_name: str, cparser: CParser, rng_seed: int
+        source: str, eval_state: EvalState, fn_name: str, rng_seed: int
     ) -> "Candidate":
         # Use the same AST for all instances of the same original source, but
         # with the target function deeply copied. Since we never change the
@@ -68,10 +63,11 @@ class Candidate:
         orig_fn, fn_index, ast = Candidate._cached_shared_ast(source, fn_name)
         ast = copy.copy(ast)
         ast.ext = copy.copy(ast.ext)
-        ast.ext[fn_index] = copy.deepcopy(orig_fn)
+        fn_copy = copy.deepcopy(orig_fn)
+        ast.ext[fn_index] = fn_copy
+        apply_ast_perms(fn_copy, eval_state)
         return Candidate(
             ast=ast,
-            orig_fn=orig_fn,
             fn_index=fn_index,
             rng_seed=rng_seed,
             randomizer=Randomizer(rng_seed),

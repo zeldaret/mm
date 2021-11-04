@@ -403,7 +403,7 @@ void func_800A6780(EnItem00* this, GlobalContext* globalCtx) {
 }
 
 void func_800A6A40(EnItem00* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->unk14A != 0) {
         if (Actor_HasParent(&this->actor, globalCtx) == 0) {
@@ -434,15 +434,13 @@ void func_800A6A40(EnItem00* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
-// Minor regalloc issue where it uses v1 instead of v0
 void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnItem00* this = THIS;
     s32 pad;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 sp38 = player->stateFlags3 & 0x1000;
     s32 getItemId = GI_NONE;
-    s32 pad2;
+    s32 params;
 
     if (this->unk152 > 0) {
         this->unk152--;
@@ -471,8 +469,8 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 
-    if ((this->actor.params == ITEM00_SHIELD_HERO) || (this->actor.params == ITEM00_MAP) ||
-        (this->actor.params == ITEM00_COMPASS)) {
+    params = this->actor.params;
+    if ((params == ITEM00_SHIELD_HERO) || (params == ITEM00_MAP) || (params == ITEM00_COMPASS)) {
         this->actor.shape.yOffset = fabsf(Math_CosS(this->actor.shape.rot.x) * 37.0f);
     }
 
@@ -480,10 +478,10 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
 
-    if (!((sp38 != 0) && (this->actor.xzDistToPlayer <= 60.0f) && (this->actor.yDistToPlayer >= -100.0f) &&
-          (this->actor.yDistToPlayer <= 100.0f)) &&
-        !((sp38 == 0) && (this->actor.xzDistToPlayer <= 30.0f) && (this->actor.yDistToPlayer >= -50.0f) &&
-          (this->actor.yDistToPlayer <= 50.0f))) {
+    if (!((sp38 != 0) && (this->actor.xzDistToPlayer <= 60.0f) && (this->actor.playerHeightRel >= -100.0f) &&
+          (this->actor.playerHeightRel <= 100.0f)) &&
+        !((sp38 == 0) && (this->actor.xzDistToPlayer <= 30.0f) && (this->actor.playerHeightRel >= -50.0f) &&
+          (this->actor.playerHeightRel <= 50.0f))) {
         if (!Actor_HasParent(&this->actor, globalCtx)) {
             return;
         }
@@ -622,9 +620,6 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->unk14A = 0;
     this->actionFunc = func_800A6A40;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_en_item00/EnItem00_Update.s")
-#endif
 
 void EnItem00_DrawRupee(EnItem00* this, GlobalContext* globalCtx);
 void EnItem00_DrawSprite(EnItem00* this, GlobalContext* globalCtx);
@@ -660,7 +655,7 @@ void EnItem00_Draw(Actor* thisx, GlobalContext* globalCtx) {
                             this->unk152 = -2;
                         }
                     } else {
-                        Matrix_Scale(16.0f, 16.0f, 16.0f, 1);
+                        Matrix_Scale(16.0f, 16.0f, 16.0f, MTXMODE_APPLY);
                         GetItem_Draw(globalCtx, 8);
                     }
                     break;
@@ -785,7 +780,7 @@ void EnItem00_DrawHeartContainer(EnItem00* actor, GlobalContext* globalCtx) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         func_8012C2DC(globalCtx->state.gfxCtx);
-        Matrix_Scale(20.0f, 20.0f, 20.0f, 1);
+        Matrix_Scale(20.0f, 20.0f, 20.0f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
 
@@ -871,7 +866,7 @@ EnItem00* Item_DropCollectible(GlobalContext* globalCtx, Vec3f* spawnPos, u32 pa
                 (EnItem00*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f,
                                        spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) << 9) & 0xFE00) | 0x102);
             if (!Actor_GetCollectibleFlag(globalCtx, (param7F00 >> 8) & 0x7F)) {
-                func_800F0568(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
+                Audio_PlaySoundAtPosition(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
             }
         } else {
             // TODO: fix cast, this actor is not an EnItem00
@@ -880,7 +875,7 @@ EnItem00* Item_DropCollectible(GlobalContext* globalCtx, Vec3f* spawnPos, u32 pa
                                                   ((((param7F00 >> 8) & 0x7F) & 0x7F) << 9) | 7);
             if (param20000 == 0) {
                 if (!Actor_GetCollectibleFlag(globalCtx, (param7F00 >> 8) & 0x7F)) {
-                    func_800F0568(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
+                    Audio_PlaySoundAtPosition(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
                 }
             }
         }
@@ -947,7 +942,7 @@ Actor* Item_DropCollectible2(GlobalContext* globalCtx, Vec3f* spawnPos, u32 para
                             spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) & 0x7F) << 9) | 7);
         }
         if (Actor_GetCollectibleFlag(globalCtx, (param7F00 >> 8) & 0x7F) == 0) {
-            func_800F0568(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
+            Audio_PlaySoundAtPosition(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
         }
     } else {
         params = func_800A7650(params);
@@ -1105,7 +1100,7 @@ void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3
             if (gSaveContext.health < 0x11) {
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f,
                             spawnPos->z, 0, 0, 0, 2);
-                func_800F0568(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
+                Audio_PlaySoundAtPosition(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
                 return;
             }
 
