@@ -1161,8 +1161,7 @@ beginseg
     name "ovl_En_Floormas"
     compress
     include "build/src/overlays/actors/ovl_En_Floormas/z_en_floormas.o"
-    include "build/data/ovl_En_Floormas/ovl_En_Floormas.data.o"
-    include "build/data/ovl_En_Floormas/ovl_En_Floormas.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Floormas/ovl_En_Floormas_reloc.o"
 endseg
 
 beginseg
