@@ -1437,8 +1437,7 @@ s32 func_80AF9D04(EnPm* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80AF9E7C(EnPm* this, GlobalContext* globalCtx) {
-    s32 pad[0x106];
-    Vec3f sp7C;
+    f32 sp7C[265];
     Vec3f sp70;
     Vec3f sp64;
     Vec3f sp58;
