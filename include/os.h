@@ -34,8 +34,8 @@ typedef struct {
 } __OSTranxInfo; // size = 0x60
 
 
-typedef struct OSPiHandle_s {
-    /* 0x00 */ struct OSPiHandle_s* next;
+typedef struct OSPiHandle {
+    /* 0x00 */ struct OSPiHandle* next;
     /* 0x04 */ u8 type;
     /* 0x05 */ u8 latency;
     /* 0x06 */ u8 pageSize;
