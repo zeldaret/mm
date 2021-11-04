@@ -235,7 +235,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, GlobalContext* globalCtx
                 if (phi_f26 <= 10.0f) {
                     actor->shape.feetFloorFlags |= spB8;
 
-                    if ((actor->yDistToWater < 0.0f) && (spF4 == 0x32) && ((actor->shape.unk_17 & spB8) != 0)) {
+                    if ((actor->depthInWater < 0.0f) && (spF4 == 0x32) && ((actor->shape.unk_17 & spB8) != 0)) {
                         if (func_800C9C24(&globalCtx->colCtx, spF8, spF4, 1) != 0) {
                             SkinMatrix_MtxFCopy(&sp13C, &spFC);
                             SkinMatrix_MulYRotation(&spFC, actor->shape.rot.y);
@@ -1465,7 +1465,7 @@ s32 Actor_IsFacingAndNearPlayer(Actor* actor, f32 range, s16 tolerance) {
 
     if (ABS_ALT(yaw) < tolerance) {
     label:;
-        if (sqrtf(SQ(actor->xzDistToPlayer) + SQ(actor->yDistToPlayer)) < range) {
+        if (sqrtf(SQ(actor->xzDistToPlayer) + SQ(actor->playerHeightRel)) < range) {
             return true;
         }
     }
@@ -1620,8 +1620,8 @@ void Actor_UpdateBgCheckInfo(GlobalContext* globalCtx, Actor* actor, f32 wallChe
         y = actor->world.pos.y;
 
         if (func_800CA1AC(globalCtx, &globalCtx->colCtx, actor->world.pos.x, actor->world.pos.z, &y, &waterbox) != 0) {
-            actor->yDistToWater = y - actor->world.pos.y;
-            if (actor->yDistToWater <= 0.0f) {
+            actor->depthInWater = y - actor->world.pos.y;
+            if (actor->depthInWater <= 0.0f) {
                 actor->bgCheckFlags &= ~(0x40 | 0x20);
             } else if ((actor->bgCheckFlags & 0x20) == 0) {
                 actor->bgCheckFlags |= (0x40 | 0x20);
@@ -1641,7 +1641,7 @@ void Actor_UpdateBgCheckInfo(GlobalContext* globalCtx, Actor* actor, f32 wallChe
             }
         } else {
             actor->bgCheckFlags &= ~(0x40 | 0x20);
-            actor->yDistToWater = BGCHECK_Y_MIN;
+            actor->depthInWater = BGCHECK_Y_MIN;
         }
     }
 
@@ -1650,9 +1650,9 @@ void Actor_UpdateBgCheckInfo(GlobalContext* globalCtx, Actor* actor, f32 wallChe
         f32 y = actor->world.pos.y;
 
         if (func_800CA1AC(globalCtx, &globalCtx->colCtx, actor->world.pos.x, actor->world.pos.z, &y, &waterbox) != 0) {
-            actor->yDistToWater = y - actor->world.pos.y;
+            actor->depthInWater = y - actor->world.pos.y;
 
-            if (actor->yDistToWater < 0.0f) {
+            if (actor->depthInWater < 0.0f) {
                 actor->bgCheckFlags &= ~(0x40 | 0x20);
             } else if (!(actor->bgCheckFlags & 0x20)) {
                 actor->bgCheckFlags |= (0x40 | 0x20);
@@ -1672,7 +1672,7 @@ void Actor_UpdateBgCheckInfo(GlobalContext* globalCtx, Actor* actor, f32 wallChe
             }
         } else {
             actor->bgCheckFlags &= ~(0x40 | 0x20);
-            actor->yDistToWater = BGCHECK_Y_MIN;
+            actor->depthInWater = BGCHECK_Y_MIN;
         }
     }
 }
@@ -1855,7 +1855,7 @@ s32 func_800B8500(Actor* actor, GameState* gameState, f32 xzRange, f32 yRange, s
 
     if ((player->actor.flags & ACTOR_FLAG_100) || ((exchangeItemId > EXCH_ITEM_NONE) && Player_InCsMode(gameState)) ||
         (!actor->isTargeted &&
-         ((fabsf(actor->yDistToPlayer) > fabsf(yRange)) || ((actor->xzDistToPlayer > player->targetActorDistance)) ||
+         ((fabsf(actor->playerHeightRel) > fabsf(yRange)) || ((actor->xzDistToPlayer > player->targetActorDistance)) ||
           (xzRange < actor->xzDistToPlayer)))) {
         return false;
     }
@@ -1932,7 +1932,7 @@ s32 func_800B874C(Actor* actor, GameState* gameState, f32 xzRange, f32 yRange) {
     Player* player = GET_PLAYER(gameState);
 
     if ((player->actor.flags & ACTOR_FLAG_20000000) || Player_InCsMode(gameState) ||
-        (yRange < fabsf(actor->yDistToPlayer)) || ((player->unk_A94 < actor->xzDistToPlayer)) ||
+        (yRange < fabsf(actor->playerHeightRel)) || ((player->unk_A94 < actor->xzDistToPlayer)) ||
         (xzRange < actor->xzDistToPlayer)) {
         return false;
     }
@@ -1999,7 +1999,7 @@ s32 Actor_PickUp(Actor* actor, GlobalContext* globalCtx, s32 getItemId, f32 xzRa
     Player* player = GET_PLAYER(globalCtx);
 
     if (!(player->stateFlags1 & 0x3C7080) && Player_GetExplosiveHeld(player) < 0) {
-        if ((actor->xzDistToPlayer <= xzRange) && (fabsf(actor->yDistToPlayer) <= fabsf(yRange))) {
+        if ((actor->xzDistToPlayer <= xzRange) && (fabsf(actor->playerHeightRel) <= fabsf(yRange))) {
             if ((getItemId == GI_MASK_CIRCUS_LEADER || getItemId == GI_PENDANT_OF_MEMORIES ||
                  getItemId == GI_LAND_TITLE_DEED ||
                  (((player->heldActor != NULL) || (actor == player->targetActor)) &&
@@ -2140,7 +2140,7 @@ void func_800B8EF4(GlobalContext* globalCtx, Actor* actor) {
     u32 sfxId;
 
     if (actor->bgCheckFlags & 0x20) {
-        if (actor->yDistToWater < 20.0f) {
+        if (actor->depthInWater < 20.0f) {
             sfxId = NA_SE_PL_WALK_WATER0 - SFX_FLAG;
         } else {
             sfxId = NA_SE_PL_WALK_WATER1 - SFX_FLAG;
@@ -2344,8 +2344,8 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
             } else {
                 Math_Vec3f_Copy(&actor->prevPos, &actor->world.pos);
                 actor->xzDistToPlayer = Actor_XZDistanceBetweenActors(actor, &params->player->actor);
-                actor->yDistToPlayer = Actor_HeightDiff(actor, &params->player->actor);
-                actor->xyzDistToPlayerSq = SQ(actor->xzDistToPlayer) + SQ(actor->yDistToPlayer);
+                actor->playerHeightRel = Actor_HeightDiff(actor, &params->player->actor);
+                actor->xyzDistToPlayerSq = SQ(actor->xzDistToPlayer) + SQ(actor->playerHeightRel);
 
                 actor->yawTowardsPlayer = Actor_YawBetweenActors(actor, &params->player->actor);
                 actor->flags &= ~ACTOR_FLAG_1000000;
