@@ -32,29 +32,29 @@ Check for new warnings created.
 
 Optional arguments:
     -h    Display this message and exit.
-    -a    Run full build process
+    -f    Run full build process
     -j N  use N jobs (does not support plain -j because you shouldn't use it anyway)
 "
 }
 
 jobs=1
-all=
+full=
 run="make clean
     make uncompressed"
 
 
 
-while getopts "hj:" opt
+while getopts "hfj:" opt
 do
     case $opt in
     h)  show_help
         exit 0
         ;;
-    a)  all="true"
+    f)  full="true"
         run="make distclean
-            make setup
-            make disasm
-            make all"
+    make setup
+    make disasm
+    make all"
         ;;
     j)  j_option_arg="$OPTARG"
         if [[ ! "${j_option_arg}" =~ ^[0-9]*$ ]]
@@ -99,7 +99,7 @@ make_warnings () {
     && rm tools/warnings_count/warnings_temp.txt
 }
 
-if [[ $all ]]; then
+if [[ $full ]]; then
     make distclean
     make_warnings setup setup
     make_warnings disasm disasm
@@ -113,7 +113,7 @@ echo "
 $(tput ${TPUTTERM} setaf 3)(lots of make output ${TPUTTERM} here...) 
 $RST"
 
-if [[ $all ]]; then
+if [[ $full ]]; then
     $COMPARE_WARNINGS setup
     $COMPARE_WARNINGS disasm
 fi
